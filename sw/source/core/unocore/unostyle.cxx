@@ -5312,15 +5312,131 @@ css::uno::Sequence<css::beans::PropertyState> SAL_CALL SwXTextCellStyle::getProp
         const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(sPropName);
         if(pEntry)
         {
+            uno::Any aAny1, aAny2;
             switch(pEntry->nWID)
             {
+                case RES_BACKGROUND:
+                    m_pBoxAutoFormat->GetBackground().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetBackground().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case RES_BOX:
+                    m_pBoxAutoFormat->GetBox().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetBox().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
                 case RES_VERT_ORIENT:
-                    if (m_pBoxAutoFormat->GetVerticalAlignment() == rDefaultBoxFormat.GetVerticalAlignment())
-                        pStates[i] = beans::PropertyState_DEFAULT_VALUE;
+                    m_pBoxAutoFormat->GetVerticalAlignment().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetVerticalAlignment().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case RES_FRAMEDIR:
+                    m_pBoxAutoFormat->GetTextOrientation().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetTextOrientation().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case RES_BOXATR_FORMAT:
+                {
+                    OUString sFormat;
+                    LanguageType eLng, eSys;
+                    m_pBoxAutoFormat->GetValueFormat(sFormat, eLng, eSys);
+                    pStates[i] = sFormat.isEmpty() ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
+                }
+                case RES_PARATR_ADJUST:
+                    m_pBoxAutoFormat->GetAdjust().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetAdjust().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case RES_CHRATR_COLOR:
+                    m_pBoxAutoFormat->GetColor().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetColor().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case RES_CHRATR_SHADOWED:
+                    m_pBoxAutoFormat->GetShadowed().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetShadowed().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case RES_CHRATR_CONTOUR:
+                    m_pBoxAutoFormat->GetContour().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetContour().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case RES_CHRATR_CROSSEDOUT:
+                    m_pBoxAutoFormat->GetCrossedOut().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetCrossedOut().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case RES_CHRATR_UNDERLINE:
+                    m_pBoxAutoFormat->GetUnderline().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetUnderline().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case RES_CHRATR_FONTSIZE:
+                    m_pBoxAutoFormat->GetHeight().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetHeight().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case RES_CHRATR_WEIGHT:
+                    m_pBoxAutoFormat->GetWeight().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetWeight().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case RES_CHRATR_POSTURE:
+                    m_pBoxAutoFormat->GetPosture().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetPosture().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case RES_CHRATR_FONT:
+                    m_pBoxAutoFormat->GetFont().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetFont().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case RES_CHRATR_CJK_FONTSIZE:
+                    m_pBoxAutoFormat->GetCJKHeight().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetCJKHeight().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case RES_CHRATR_CJK_WEIGHT:
+                    m_pBoxAutoFormat->GetCJKWeight().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetCJKWeight().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case RES_CHRATR_CJK_POSTURE:
+                    m_pBoxAutoFormat->GetCJKPosture().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetCJKPosture().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case RES_CHRATR_CJK_FONT:
+                    m_pBoxAutoFormat->GetCJKFont().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetCJKFont().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case RES_CHRATR_CTL_FONTSIZE:
+                    m_pBoxAutoFormat->GetCTLHeight().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetCTLHeight().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case RES_CHRATR_CTL_WEIGHT:
+                    m_pBoxAutoFormat->GetCTLWeight().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetCTLWeight().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case RES_CHRATR_CTL_POSTURE:
+                    m_pBoxAutoFormat->GetCTLPosture().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetCTLPosture().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case RES_CHRATR_CTL_FONT:
+                    m_pBoxAutoFormat->GetCTLFont().QueryValue(aAny1, pEntry->nMemberId);
+                    rDefaultBoxFormat.GetCTLFont().QueryValue(aAny2, pEntry->nMemberId);
+                    pStates[i] = aAny1 == aAny2 ? beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
                     break;
                 default:
                     // falltrough to DIRECT_VALUE, to export properties for which getPropertyStates is not implemented
                     pStates[i] = beans::PropertyState_DIRECT_VALUE;
+                    SAL_WARN("sw.uno", "SwXTextCellStyle getPropertyStates unknown nWID");
             }
         }
         else
