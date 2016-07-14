@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_2f4f8093",
+        "filename": "svx/README",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-07-14T08:51:44Z",
+      "side": 1,
+      "message": "I\u0027d simply remove the numerical relation here. ViewObjectContact and Views have a conceptual 1:1 relationship.\n\nText description below is correct though",
+      "revId": "2dfc3cadc79c4a000ac2dc2de7e31116f91e38f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
