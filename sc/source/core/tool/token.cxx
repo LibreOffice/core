@@ -19,6 +19,7 @@
 
 #include <cstddef>
 #include <cstdio>
+#include <functional>
 
 #include <string.h>
 #include <tools/mempool.hxx>
@@ -1672,7 +1673,7 @@ void ScTokenArray::GenHash()
                 {
                     // Constant value.
                     double fVal = p->GetDouble();
-                    nHash += static_cast<size_t>(fVal);
+                    nHash += std::hash<double>()(fVal);
                 }
                 break;
                 case svString:
