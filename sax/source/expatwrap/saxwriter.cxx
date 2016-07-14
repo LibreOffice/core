@@ -80,7 +80,7 @@ class SaxWriterHelper
 {
 #ifdef DBG_UTIL
 public:
-    ::std::stack<OUString> m_DebugStartedElements;
+    std::stack<OUString> m_DebugStartedElements;
 #endif
 
 private:
@@ -555,7 +555,7 @@ inline SaxInvalidCharacterError SaxWriterHelper::startElement(const OUString& rN
 
 #ifdef DBG_UTIL
     m_DebugStartedElements.push(rName);
-    ::std::set<OUString> DebugAttributes;
+    std::set<OUString> DebugAttributes;
 #endif
 
     mp_Sequence[nCurrentPos] = '<';

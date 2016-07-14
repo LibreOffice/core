@@ -26,7 +26,7 @@
 
 namespace basegfx2d {
 
-double getRandomOrdinal( const ::std::size_t n );
+double getRandomOrdinal( const std::size_t n );
 
 }
 

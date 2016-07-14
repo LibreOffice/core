@@ -231,7 +231,7 @@ namespace drawinglayer
                     const Color aColor(static_cast<const XLineColorItem&>(rSet.Get(XATTR_LINECOLOR)).GetColorValue());
                     const css::drawing::LineJoint eJoint(static_cast<const XLineJointItem&>(rSet.Get(XATTR_LINEJOINT)).GetValue());
                     const css::drawing::LineCap eCap(static_cast<const XLineCapItem&>(rSet.Get(XATTR_LINECAP)).GetValue());
-                    ::std::vector< double > aDotDashArray;
+                    std::vector< double > aDotDashArray;
                     double fFullDotDashLen(0.0);
 
                     if(drawing::LineStyle_DASH == eStyle)
@@ -920,7 +920,7 @@ namespace drawinglayer
         attribute::SdrLightingAttribute createNewSdrLightingAttribute(const SfxItemSet& rSet)
         {
             // extract lights from given SfxItemSet (from scene)
-            ::std::vector< attribute::Sdr3DLightAttribute > aLightVector;
+            std::vector< attribute::Sdr3DLightAttribute > aLightVector;
 
             if(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue())
             {

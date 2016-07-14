@@ -276,7 +276,7 @@ OUString SfxOleStringHelper::ImplLoadString8( SvStream& rStrm ) const
     if( (0 < nSize) && (nSize <= 0xFFFF) )
     {
         // load character buffer
-        ::std::vector< sal_Char > aBuffer( static_cast< size_t >( nSize + 1 ), 0 );
+        std::vector< sal_Char > aBuffer( static_cast< size_t >( nSize + 1 ), 0 );
         rStrm.ReadBytes(&aBuffer.front(), static_cast<sal_Size>(nSize));
         // create string from encoded character array
         aValue = OUString( &aBuffer.front(), strlen( &aBuffer.front() ), GetTextEncoding() );
@@ -295,7 +295,7 @@ OUString SfxOleStringHelper::ImplLoadString16( SvStream& rStrm )
     if( (0 < nSize) && (nSize <= 0xFFFF) )
     {
         // load character buffer
-        ::std::vector< sal_Unicode > aBuffer;
+        std::vector< sal_Unicode > aBuffer;
         aBuffer.reserve( static_cast< size_t >( nSize + 1 ) );
         sal_uInt16 cChar;
         for( sal_Int32 nIdx = 0; nIdx < nSize; ++nIdx )
@@ -930,7 +930,7 @@ void SfxOleSection::SetPropertyName( sal_Int32 nPropId, const OUString& rPropNam
     maDictProp.SetPropertyName( nPropId, rPropName );
 }
 
-void SfxOleSection::GetPropertyIds( ::std::vector< sal_Int32 >& rPropIds ) const
+void SfxOleSection::GetPropertyIds( std::vector< sal_Int32 >& rPropIds ) const
 {
     rPropIds.clear();
     for( SfxOlePropMap::const_iterator aIt = maPropMap.begin(), aEnd = maPropMap.end(); aIt != aEnd; ++aIt )
@@ -951,7 +951,7 @@ void SfxOleSection::ImplLoad( SvStream& rStrm )
     rStrm.ReadUInt32( nSize ).ReadInt32( nPropCount );
 
     // read property ID/position pairs
-    typedef ::std::map< sal_Int32, sal_uInt32 > SfxOlePropPosMap;
+    typedef std::map< sal_Int32, sal_uInt32 > SfxOlePropPosMap;
     SfxOlePropPosMap aPropPosMap;
     for( sal_Int32 nPropIdx = 0; (nPropIdx < nPropCount) && (rStrm.GetErrorCode() == SVSTREAM_OK) && !rStrm.IsEof(); ++nPropIdx )
     {

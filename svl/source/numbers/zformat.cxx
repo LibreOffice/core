@@ -1751,7 +1751,7 @@ void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUString& rOutString)
 
     if ( fabs(fNumber) > EXP_ABS_UPPER_BOUND )
     {
-        nStandardPrec = ::std::min(nStandardPrec, static_cast<sal_uInt16>(14)); // limits to 14 decimals
+        nStandardPrec = std::min(nStandardPrec, static_cast<sal_uInt16>(14)); // limits to 14 decimals
         rOutString = ::rtl::math::doubleToUString( fNumber,
                                                   rtl_math_StringFormat_E2, nStandardPrec /*2*/,
                                                   GetFormatter().GetNumDecimalSep()[0]);
@@ -1765,7 +1765,7 @@ void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUString& rOutString)
 void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, OUString& rOutString, sal_uInt16 nPrecision) const
 {
     // Make sure the precision doesn't go over the maximum allowable precision.
-    nPrecision = ::std::min(UPPER_PRECISION, nPrecision);
+    nPrecision = std::min(UPPER_PRECISION, nPrecision);
 
 #if 0
 {
@@ -1958,7 +1958,7 @@ void lcl_GetOutputStringScientific(double fNumber, sal_uInt16 nCharCount,
         // Make room for the negative sign.
         --nPrec;
     }
-    nPrec = ::std::min(nPrec, static_cast<sal_uInt16>(14)); // limit to 14 decimals.
+    nPrec = std::min(nPrec, static_cast<sal_uInt16>(14)); // limit to 14 decimals.
 
     rOutString = ::rtl::math::doubleToUString(fNumber, rtl_math_StringFormat_E2,
                                               nPrec, rFormatter.GetNumDecimalSep()[0], true );

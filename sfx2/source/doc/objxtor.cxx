@@ -119,7 +119,7 @@ class theCurrentComponent : public rtl::Static< WeakReference< XInterface >, the
 #if HAVE_FEATURE_SCRIPTING
 
 // remember all registered components for VBA compatibility, to be able to remove them on disposing the model
-typedef ::std::map< XInterface*, OUString > VBAConstantNameMap;
+typedef std::map< XInterface*, OUString > VBAConstantNameMap;
 static VBAConstantNameMap s_aRegisteredVBAConstants;
 
 OUString lclGetVBAGlobalConstName( const Reference< XInterface >& rxComponent )

@@ -191,12 +191,12 @@ template <typename T, T base> T lcl_round(T value)
 bool GeometryHandler::impl_isDataField(const OUString& _sName) const
 {
     const OUString* pEnd = m_aFieldNames.getConstArray() + m_aFieldNames.getLength();
-    bool bIsField = ( ::std::find( m_aFieldNames.getConstArray(), pEnd, _sName ) != pEnd );
+    bool bIsField = ( std::find( m_aFieldNames.getConstArray(), pEnd, _sName ) != pEnd );
 
     if ( !bIsField )
     {
         pEnd = m_aParamNames.getConstArray() + m_aParamNames.getLength();
-        bIsField = ( ::std::find( m_aParamNames.getConstArray(), pEnd, _sName ) != pEnd );
+        bIsField = ( std::find( m_aParamNames.getConstArray(), pEnd, _sName ) != pEnd );
     }
     return bIsField;
 }
@@ -677,7 +677,7 @@ void GeometryHandler::implCreateListLikeControl(
         ,bool _bTrueIfListBoxFalseIfComboBox
     )
 {
-    ::std::vector< OUString > aList;
+    std::vector< OUString > aList;
     tools::StringListResource aRes(ModuleRes(_nResId),aList);
 
     implCreateListLikeControl(_rxControlFactory,out_Descriptor,aList,_bReadOnlyControl,_bTrueIfListBoxFalseIfComboBox);
@@ -686,7 +686,7 @@ void GeometryHandler::implCreateListLikeControl(
 void GeometryHandler::implCreateListLikeControl(
         const uno::Reference< inspection::XPropertyControlFactory >& _rxControlFactory
         ,inspection::LineDescriptor & out_Descriptor
-        ,const ::std::vector< OUString>& _aEntries
+        ,const std::vector< OUString>& _aEntries
         ,bool _bReadOnlyControl
         ,bool _bTrueIfListBoxFalseIfComboBox
     )
@@ -725,21 +725,21 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
             break;
         case PROPERTY_ID_FORMULALIST:
             {
-                ::std::vector< OUString > aList;
+                std::vector< OUString > aList;
                 impl_fillFormulaList_nothrow(aList);
                 implCreateListLikeControl(_xControlFactory,aOut,aList,false,true);
             }
             break;
         case PROPERTY_ID_SCOPE:
             {
-                ::std::vector< OUString > aList;
+                std::vector< OUString > aList;
                 impl_fillScopeList_nothrow(aList);
                 implCreateListLikeControl(_xControlFactory,aOut,aList,false,true);
             }
             break;
         case PROPERTY_ID_MIMETYPE:
             {
-                ::std::vector< OUString > aList;
+                std::vector< OUString > aList;
                 impl_fillMimeTypes_nothrow(aList);
                 implCreateListLikeControl(_xControlFactory,aOut,aList,false,true);
             }
@@ -798,7 +798,7 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
                 if ( m_nDataFieldType == USER_DEF_FUNCTION )
                 {
                     // add function names
-                    ::std::for_each(m_aFunctionNames.begin(), m_aFunctionNames.end(),
+                    std::for_each(m_aFunctionNames.begin(), m_aFunctionNames.end(),
                                     [&xListControl] (const TFunctions::value_type& func) {
                                         xListControl->appendListEntry(func.first);
                                     });
@@ -908,7 +908,7 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
                 for (sal_Int32 i = 0; i < nCount; ++i)
                 {
                     uno::Reference<drawing::XShape> xShape(xSection->getByIndex(i),uno::UNO_QUERY);
-                    nHeight = ::std::max<sal_Int32>(nHeight,xShape->getPosition().Y + xShape->getSize().Height);
+                    nHeight = std::max<sal_Int32>(nHeight,xShape->getPosition().Y + xShape->getSize().Height);
                 }
                 xNumericControl->setMinValue(beans::Optional<double>(true,nHeight ));
             }
@@ -922,7 +922,7 @@ beans::Property GeometryHandler::getProperty(const OUString & PropertyName)
     uno::Sequence< beans::Property > aProps = getSupportedProperties();
     const beans::Property* pIter = aProps.getConstArray();
     const beans::Property* pEnd  = pIter + aProps.getLength();
-    const beans::Property* pFind = ::std::find_if(pIter, pEnd,
+    const beans::Property* pFind = std::find_if(pIter, pEnd,
             [&PropertyName] (const beans::Property& x) -> bool {
                 return x.Name.equals(PropertyName);
             });
@@ -932,7 +932,7 @@ beans::Property GeometryHandler::getProperty(const OUString & PropertyName)
 }
 uno::Any GeometryHandler::getConstantValue(bool _bToControlValue,sal_uInt16 _nResId,const uno::Any& _aValue,const OUString& _sConstantName,const OUString & PropertyName )
 {
-    ::std::vector< OUString > aList;
+    std::vector< OUString > aList;
     tools::StringListResource aRes(ModuleRes(_nResId),aList);
     uno::Sequence< OUString > aSeq(comphelper::containerToSequence(aList));
 
@@ -1069,9 +1069,9 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
             {
                 OUString sValue;
                 _rControlValue >>= sValue;
-                ::std::vector< OUString > aList;
+                std::vector< OUString > aList;
                 tools::StringListResource aRes(ModuleRes(RID_STR_TYPE_CONST),aList);
-                ::std::vector< OUString >::const_iterator aFind = ::std::find(aList.begin(),aList.end(),sValue);
+                std::vector< OUString >::const_iterator aFind = std::find(aList.begin(),aList.end(),sValue);
                 if ( aFind != aList.end() )
                     aPropertyValue <<= static_cast<sal_uInt32>(aFind - aList.begin());
             }
@@ -1083,9 +1083,9 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
             {
                 OUString sValue;
                 _rControlValue >>= sValue;
-                ::std::vector< OUString > aList;
+                std::vector< OUString > aList;
                 tools::StringListResource aRes(ModuleRes(RID_STR_VERTICAL_ALIGN_CONST),aList);
-                ::std::vector< OUString >::const_iterator aFind = ::std::find(aList.begin(),aList.end(),sValue);
+                std::vector< OUString >::const_iterator aFind = std::find(aList.begin(),aList.end(),sValue);
                 if ( aFind != aList.end() )
                     aPropertyValue <<= static_cast<style::VerticalAlignment>(aFind - aList.begin());
             }
@@ -1094,9 +1094,9 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
             {
                 OUString sValue;
                 _rControlValue >>= sValue;
-                ::std::vector< OUString > aList;
+                std::vector< OUString > aList;
                 tools::StringListResource aRes(ModuleRes(RID_STR_PARAADJUST_CONST),aList);
-                ::std::vector< OUString >::const_iterator aFind = ::std::find(aList.begin(),aList.end(),sValue);
+                std::vector< OUString >::const_iterator aFind = std::find(aList.begin(),aList.end(),sValue);
                 if ( aFind != aList.end() )
                     aPropertyValue <<= static_cast<sal_Int16>(aFind - aList.begin());
             }
@@ -1212,7 +1212,7 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const OUString & Proper
             break;
         case PROPERTY_ID_TYPE:
             {
-                ::std::vector< OUString > aList;
+                std::vector< OUString > aList;
                 tools::StringListResource aRes(ModuleRes(RID_STR_TYPE_CONST),aList);
                 if ( m_nDataFieldType < aList.size() )
                     aControlValue <<= aList[m_nDataFieldType];
@@ -1222,7 +1222,7 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const OUString & Proper
             {
                 style::VerticalAlignment nParagraphVertAlign = style::VerticalAlignment_TOP;
                 aPropertyValue >>= nParagraphVertAlign;
-                ::std::vector< OUString > aList;
+                std::vector< OUString > aList;
                 tools::StringListResource aRes(ModuleRes(RID_STR_VERTICAL_ALIGN_CONST),aList);
                 if ( static_cast<sal_Int16>(nParagraphVertAlign) < static_cast<sal_Int16>(aList.size()) )
                     aControlValue <<= aList[nParagraphVertAlign];
@@ -1232,7 +1232,7 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const OUString & Proper
             {
                 sal_Int16 nParagraphAdjust = style::ParagraphAdjust_LEFT;
                 aPropertyValue >>= nParagraphAdjust;
-                ::std::vector< OUString > aList;
+                std::vector< OUString > aList;
                 tools::StringListResource aRes(ModuleRes(RID_STR_PARAADJUST_CONST),aList);
                 if ( nParagraphAdjust < static_cast<sal_Int16>(aList.size()) )
                     aControlValue <<= aList[nParagraphAdjust];
@@ -1268,7 +1268,7 @@ void SAL_CALL GeometryHandler::removePropertyChangeListener(const uno::Reference
 
 uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedProperties() throw (uno::RuntimeException, std::exception)
 {
-    ::std::vector< beans::Property > aNewProps;
+    std::vector< beans::Property > aNewProps;
     aNewProps.reserve(20); // only a guess
     rptui::OPropertyInfoService::getExcludeProperties( aNewProps, m_xFormComponentHandler );
 
@@ -1314,7 +1314,7 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
     {
         const beans::Property* pIter = aSeq.getConstArray();
         const beans::Property* pEnd  = pIter + aSeq.getLength();
-        const beans::Property* pFind = ::std::find_if(pIter, pEnd,
+        const beans::Property* pFind = std::find_if(pIter, pEnd,
             [&rIncludeProp] (const beans::Property& x) -> bool {
                 return x.Name.equals(rIncludeProp);
             });
@@ -1636,7 +1636,7 @@ void GeometryHandler::checkPosAndSize(  const awt::Point& _aNewPos,
     }
 }
 
-void GeometryHandler::impl_fillFormulaList_nothrow(::std::vector< OUString >& out_rList) const
+void GeometryHandler::impl_fillFormulaList_nothrow(std::vector< OUString >& out_rList) const
 {
     if ( m_nDataFieldType == FUNCTION )
     {
@@ -1646,18 +1646,18 @@ void GeometryHandler::impl_fillFormulaList_nothrow(::std::vector< OUString >& ou
         }
     }
     else if ( m_nDataFieldType == USER_DEF_FUNCTION )
-        ::std::transform( m_aFunctionNames.begin(),
+        std::transform( m_aFunctionNames.begin(),
                           m_aFunctionNames.end(),
-                          ::std::back_inserter(out_rList),
+                          std::back_inserter(out_rList),
                           ::o3tl::select1st< TFunctions::value_type >() );
 }
 
 OUString GeometryHandler::impl_ConvertUIToMimeType_nothrow(const OUString& _sUIName) const
 {
-    ::std::vector< OUString > aList;
+    std::vector< OUString > aList;
     impl_fillMimeTypes_nothrow(aList);
     OUString sRet;
-    ::std::vector< OUString >::const_iterator aFind = ::std::find(aList.begin(),aList.end(),_sUIName);
+    std::vector< OUString >::const_iterator aFind = std::find(aList.begin(),aList.end(),_sUIName);
     if ( aFind != aList.end() )
     {
         const sal_Size nPos = aFind - aList.begin();
@@ -1683,7 +1683,7 @@ OUString GeometryHandler::impl_ConvertMimeTypeToUI_nothrow(const OUString& _sMim
     return sRet;
 }
 
-void GeometryHandler::impl_fillMimeTypes_nothrow(::std::vector< OUString >& _out_rList) const
+void GeometryHandler::impl_fillMimeTypes_nothrow(std::vector< OUString >& _out_rList) const
 {
     try
     {
@@ -1707,7 +1707,7 @@ void GeometryHandler::impl_fillMimeTypes_nothrow(::std::vector< OUString >& _out
     }
 }
 
-void GeometryHandler::impl_fillScopeList_nothrow(::std::vector< OUString >& _out_rList) const
+void GeometryHandler::impl_fillScopeList_nothrow(std::vector< OUString >& _out_rList) const
 {
     try
     {
@@ -1814,7 +1814,7 @@ bool GeometryHandler::isDefaultFunction( const OUString& _sQuotedFunction
         const uno::Reference< report::XSection> xSection(xSourceReportComponent->getParent(),uno::UNO_QUERY_THROW);
         const uno::Reference< report::XReportDefinition> xReportDefinition = xSection->getReportDefinition();
 
-        ::std::pair<TFunctions::const_iterator,TFunctions::const_iterator> aFind = m_aFunctionNames.equal_range(_sQuotedFunction);
+        std::pair<TFunctions::const_iterator,TFunctions::const_iterator> aFind = m_aFunctionNames.equal_range(_sQuotedFunction);
         while ( aFind.first != aFind.second )
         {
             if ( !_xFunctionsSupplier.is() || _xFunctionsSupplier == aFind.first->second.second )
@@ -1864,8 +1864,8 @@ bool GeometryHandler::impl_isDefaultFunction_nothrow( const uno::Reference< repo
         util::SearchOptions2 aSearchOptions;
         aSearchOptions.AlgorithmType2 = util::SearchAlgorithms2::REGEXP;
         aSearchOptions.searchFlag = 0x00000100;
-        ::std::vector< DefaultFunction >::const_iterator aIter = m_aDefaultFunctions.begin();
-        ::std::vector< DefaultFunction >::const_iterator aDeEnd = m_aDefaultFunctions.end();
+        std::vector< DefaultFunction >::const_iterator aIter = m_aDefaultFunctions.begin();
+        std::vector< DefaultFunction >::const_iterator aDeEnd = m_aDefaultFunctions.end();
         for (; aIter != aDeEnd; ++aIter)
         {
             aSearchOptions.searchString = aIter->m_sSearchString;
@@ -1938,8 +1938,8 @@ void GeometryHandler::createDefaultFunction(::osl::ResettableMutexGuard& _aGuard
         OUString sNamePostfix;
         const uno::Reference< report::XFunctionsSupplier> xFunctionsSupplier = fillScope_throw(sNamePostfix);
 
-        ::std::vector< DefaultFunction >::const_iterator aIter = m_aDefaultFunctions.begin();
-        ::std::vector< DefaultFunction >::const_iterator aDeEnd = m_aDefaultFunctions.end();
+        std::vector< DefaultFunction >::const_iterator aIter = m_aDefaultFunctions.begin();
+        std::vector< DefaultFunction >::const_iterator aDeEnd = m_aDefaultFunctions.end();
         for (; aIter != aDeEnd; ++aIter)
         {
             if ( aIter->m_sName == _sFunction )
@@ -1951,7 +1951,7 @@ void GeometryHandler::createDefaultFunction(::osl::ResettableMutexGuard& _aGuard
                 aEvent.PropertyName = PROPERTY_SCOPE;
                 aEvent.OldValue <<= m_sScope;
 
-                ::std::pair<TFunctions::const_iterator,TFunctions::const_iterator> aFind = m_aFunctionNames.equal_range(sQuotedFunctionName);
+                std::pair<TFunctions::const_iterator,TFunctions::const_iterator> aFind = m_aFunctionNames.equal_range(sQuotedFunctionName);
                 while ( aFind.first != aFind.second )
                 {
                     if ( xFunctionsSupplier == aFind.first->second.second )
@@ -1986,7 +1986,7 @@ void GeometryHandler::removeFunction()
     if ( m_xFunction.is() )
     {
         const OUString sQuotedFunctionName(lcl_getQuotedFunctionName(m_xFunction));
-        ::std::pair<TFunctions::iterator,TFunctions::iterator> aFind = m_aFunctionNames.equal_range(sQuotedFunctionName);
+        std::pair<TFunctions::iterator,TFunctions::iterator> aFind = m_aFunctionNames.equal_range(sQuotedFunctionName);
         while ( aFind.first != aFind.second )
         {
             if ( aFind.first->second.first == m_xFunction )
@@ -2073,7 +2073,7 @@ void GeometryHandler::impl_initFieldList_nothrow( uno::Sequence< OUString >& _rF
 
 bool GeometryHandler::impl_isCounterFunction_throw(const OUString& _sQuotedFunctionName,OUString& Out_sScope) const
 {
-    ::std::pair<TFunctions::const_iterator,TFunctions::const_iterator> aFind = m_aFunctionNames.equal_range(_sQuotedFunctionName);
+    std::pair<TFunctions::const_iterator,TFunctions::const_iterator> aFind = m_aFunctionNames.equal_range(_sQuotedFunctionName);
     while ( aFind.first != aFind.second )
     {
         const beans::Optional< OUString> aInitalFormula = aFind.first->second.first->getInitialFormula();

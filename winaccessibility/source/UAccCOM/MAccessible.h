@@ -58,7 +58,7 @@ class ATL_NO_VTABLE CMAccessible :
             public IServiceProvider,
             public IAccessibleApplication
 {
-    typedef ::std::map<const GUID, CComPtr<IUnknown>, ltComp> XGUIDToComObjHash;
+    typedef std::map<const GUID, CComPtr<IUnknown>, ltComp> XGUIDToComObjHash;
 
 public:
     CMAccessible();

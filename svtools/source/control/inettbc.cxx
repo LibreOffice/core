@@ -241,7 +241,7 @@ IMPL_LINK_NOARG_TYPED( SvtMatchContext_Impl, Select_Impl, void*, void )
         {
             OUString sUpperURL( sURL.toAsciiUpperCase() );
 
-            if ( ::std::none_of( pBox->pImpl->m_aFilters.begin(),
+            if ( std::none_of( pBox->pImpl->m_aFilters.begin(),
                                  pBox->pImpl->m_aFilters.end(),
                                  FilterMatch( sUpperURL ) ) )
             {   // this URL is not allowed
@@ -959,7 +959,7 @@ void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
                             OUString aUpperURL( aURL );
                             aUpperURL = aUpperURL.toAsciiUpperCase();
 
-                            bFound = ::std::any_of(pImpl->m_aFilters.begin(),
+                            bFound = std::any_of(pImpl->m_aFilters.begin(),
                                                    pImpl->m_aFilters.end(),
                                                    FilterMatch( aUpperURL ) );
                         }

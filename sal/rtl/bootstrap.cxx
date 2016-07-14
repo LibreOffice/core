@@ -644,7 +644,7 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open (
         if (iFind == p_bootstrap_map->end())
         {
             ++that->_nRefCount;
-            ::std::pair< bootstrap_map::t::iterator, bool > insertion(
+            std::pair< bootstrap_map::t::iterator, bool > insertion(
                 p_bootstrap_map->insert(
                     bootstrap_map::t::value_type( iniName, that ) ) );
             (void) insertion; // WaE: unused variable
@@ -685,7 +685,7 @@ void SAL_CALL rtl_bootstrap_args_close (
         std::size_t const nLeaking = 8; // only hold up to 8 files statically
         if (p_bootstrap_map->size() > nLeaking)
         {
-            ::std::size_t erased = p_bootstrap_map->erase( that->_iniName );
+            std::size_t erased = p_bootstrap_map->erase( that->_iniName );
             if (erased != 1) {
                 OSL_ASSERT( false );
             }

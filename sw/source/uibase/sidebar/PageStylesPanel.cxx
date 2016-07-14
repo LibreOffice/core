@@ -144,7 +144,7 @@ void PageStylesPanel::Initialize()
     aCustomEntry = mpCustomEntry->GetText();
     mpColumnCount->SetSelectHdl( LINK(this, PageStylesPanel, ModifyColumnCountHdl) );
 
-    SvxNumOptionsTabPageHelper::GetI18nNumbering( *mpNumberSelectLB, ::std::numeric_limits<sal_uInt16>::max());
+    SvxNumOptionsTabPageHelper::GetI18nNumbering( *mpNumberSelectLB, std::numeric_limits<sal_uInt16>::max());
     mpNumberSelectLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyNumberingHdl) );
 
     mpLayoutSelectLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyLayoutHdl) );

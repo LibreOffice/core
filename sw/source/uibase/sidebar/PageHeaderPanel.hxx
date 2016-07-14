@@ -92,10 +92,10 @@ private:
     void UpdateSpacingControl();
     void UpdateLayoutControl();
 
-    ::std::unique_ptr<SfxBoolItem>        mpHeaderItem;
-    ::std::unique_ptr<SvxLongLRSpaceItem> mpHeaderLRMarginItem;
-    ::std::unique_ptr<SvxLongULSpaceItem> mpHeaderSpacingItem;
-    ::std::unique_ptr<SfxInt16Item>       mpHeaderLayoutItem;
+    std::unique_ptr<SfxBoolItem>          mpHeaderItem;
+    std::unique_ptr<SvxLongLRSpaceItem> mpHeaderLRMarginItem;
+    std::unique_ptr<SvxLongULSpaceItem> mpHeaderSpacingItem;
+    std::unique_ptr<SfxInt16Item>         mpHeaderLayoutItem;
 
     DECL_LINK_TYPED( HeaderToggleHdl, Button*, void );
     DECL_LINK_TYPED( HeaderLRMarginHdl, ListBox&, void);

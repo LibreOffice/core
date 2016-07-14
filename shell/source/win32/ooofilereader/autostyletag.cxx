@@ -63,16 +63,16 @@ void CAutoStyleTag::addAttributes(const XmlTagAttributes_t& attributes)
         // if style:properties | fo:language or style:language-asian is exist,
         // set the locale field, otherwise clear the style-locale pair;
         if ( ( iter_lan!= attributes.end() ) && ( iter_con != attributes.end() ) )
-            setLocale( ::std::make_pair( iter_lan->second,iter_con->second ) );
+            setLocale( std::make_pair( iter_lan->second,iter_con->second ) );
         else if ( ( iter_lan_asain!= attributes.end() ) && ( iter_con_asain != attributes.end() ) )
-                setLocale( ::std::make_pair( iter_lan_asain->second,iter_con_asain->second ) );
+                setLocale( std::make_pair( iter_lan_asain->second,iter_con_asain->second ) );
         else
             clearStyleLocalePair();
     }
 
 }
 
-void CAutoStyleTag::setStyle( ::std::wstring const & Style )
+void CAutoStyleTag::setStyle( std::wstring const & Style )
 {
     m_CurrentStyleLocalePair.first = Style;
 }

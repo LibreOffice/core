@@ -42,7 +42,7 @@ namespace svt { namespace table
     class GridTableRenderer : public ITableRenderer
     {
     private:
-        ::std::unique_ptr< GridTableRenderer_Impl >   m_pImpl;
+        std::unique_ptr< GridTableRenderer_Impl >     m_pImpl;
 
     public:
         /** creates a table renderer associated with the given model

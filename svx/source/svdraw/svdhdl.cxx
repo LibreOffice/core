@@ -82,7 +82,7 @@ class SdrHdlBitmapSet
     BitmapEx                    maMarkersBitmap;
 
     // the cropped Bitmaps for reusage
-    ::std::vector< BitmapEx >   maRealMarkers;
+    std::vector< BitmapEx >     maRealMarkers;
 
     // helpers
     BitmapEx& impGetOrCreateTargetBitmap(sal_uInt16 nIndex, const Rectangle& rRectangle);
@@ -1061,18 +1061,18 @@ Bitmap SdrHdlColor::CreateColorDropper(Color aCol)
 
         // draw lighter UpperLeft
         const Color aLightColor(
-            (sal_uInt8)(::std::min((sal_Int16)((sal_Int16)aCol.GetRed() + (sal_Int16)0x0040), (sal_Int16)0x00ff)),
-            (sal_uInt8)(::std::min((sal_Int16)((sal_Int16)aCol.GetGreen() + (sal_Int16)0x0040), (sal_Int16)0x00ff)),
-            (sal_uInt8)(::std::min((sal_Int16)((sal_Int16)aCol.GetBlue() + (sal_Int16)0x0040), (sal_Int16)0x00ff)));
+            (sal_uInt8)(std::min((sal_Int16)((sal_Int16)aCol.GetRed() + (sal_Int16)0x0040), (sal_Int16)0x00ff)),
+            (sal_uInt8)(std::min((sal_Int16)((sal_Int16)aCol.GetGreen() + (sal_Int16)0x0040), (sal_Int16)0x00ff)),
+            (sal_uInt8)(std::min((sal_Int16)((sal_Int16)aCol.GetBlue() + (sal_Int16)0x0040), (sal_Int16)0x00ff)));
         pWrite->SetLineColor(aLightColor);
         pWrite->DrawLine(Point(1, 1), Point(1, nHeight - 2));
         pWrite->DrawLine(Point(2, 1), Point(nWidth - 2, 1));
 
         // draw darker LowerRight
         const Color aDarkColor(
-            (sal_uInt8)(::std::max((sal_Int16)((sal_Int16)aCol.GetRed() - (sal_Int16)0x0040), (sal_Int16)0x0000)),
-            (sal_uInt8)(::std::max((sal_Int16)((sal_Int16)aCol.GetGreen() - (sal_Int16)0x0040), (sal_Int16)0x0000)),
-            (sal_uInt8)(::std::max((sal_Int16)((sal_Int16)aCol.GetBlue() - (sal_Int16)0x0040), (sal_Int16)0x0000)));
+            (sal_uInt8)(std::max((sal_Int16)((sal_Int16)aCol.GetRed() - (sal_Int16)0x0040), (sal_Int16)0x0000)),
+            (sal_uInt8)(std::max((sal_Int16)((sal_Int16)aCol.GetGreen() - (sal_Int16)0x0040), (sal_Int16)0x0000)),
+            (sal_uInt8)(std::max((sal_Int16)((sal_Int16)aCol.GetBlue() - (sal_Int16)0x0040), (sal_Int16)0x0000)));
         pWrite->SetLineColor(aDarkColor);
         pWrite->DrawLine(Point(2, nHeight - 2), Point(nWidth - 2, nHeight - 2));
         pWrite->DrawLine(Point(nWidth - 2, 2), Point(nWidth - 2, nHeight - 3));

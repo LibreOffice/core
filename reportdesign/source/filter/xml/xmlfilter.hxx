@@ -69,18 +69,18 @@ private:
 
     TGroupFunctionMap                               m_aFunctions;
 
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pDocElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pReportElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pGroupElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pSectionElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pComponentElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pControlElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pFunctionElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pSubDocumentElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pFormatElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pColumnTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pCellElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pDocElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pReportElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pGroupElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pSectionElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pComponentElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pControlElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pFunctionElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pSubDocumentElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pFormatElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pColumnTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pCellElemTokenMap;
 
     rtl::Reference < XMLPropertyHandlerFactory >      m_xPropHdlFactory;
     rtl::Reference < XMLPropertySetMapper >           m_xCellStylesPropertySetMapper;

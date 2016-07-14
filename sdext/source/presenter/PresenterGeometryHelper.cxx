@@ -108,10 +108,10 @@ awt::Rectangle PresenterGeometryHelper::Intersection (
     const css::awt::Rectangle& rBox1,
     const css::awt::Rectangle& rBox2)
 {
-    const sal_Int32 nLeft (::std::max(rBox1.X, rBox2.X));
-    const sal_Int32 nTop (::std::max(rBox1.Y, rBox2.Y));
-    const sal_Int32 nRight (::std::min(Right(rBox1), Right(rBox2)));
-    const sal_Int32 nBottom (::std::min(Bottom(rBox1), Bottom(rBox2)));
+    const sal_Int32 nLeft (std::max(rBox1.X, rBox2.X));
+    const sal_Int32 nTop (std::max(rBox1.Y, rBox2.Y));
+    const sal_Int32 nRight (std::min(Right(rBox1), Right(rBox2)));
+    const sal_Int32 nBottom (std::min(Bottom(rBox1), Bottom(rBox2)));
     if (nLeft >= nRight || nTop >= nBottom)
         return awt::Rectangle();
     else
@@ -122,10 +122,10 @@ geometry::RealRectangle2D PresenterGeometryHelper::Intersection (
     const geometry::RealRectangle2D& rBox1,
     const geometry::RealRectangle2D& rBox2)
 {
-    const double nLeft (::std::max(rBox1.X1, rBox2.X1));
-    const double nTop (::std::max(rBox1.Y1, rBox2.Y1));
-    const double nRight (::std::min(rBox1.X2, rBox2.X2));
-    const double nBottom (::std::min(rBox1.Y2, rBox2.Y2));
+    const double nLeft (std::max(rBox1.X1, rBox2.X1));
+    const double nTop (std::max(rBox1.Y1, rBox2.Y1));
+    const double nRight (std::min(rBox1.X2, rBox2.X2));
+    const double nBottom (std::min(rBox1.Y2, rBox2.Y2));
     if (nLeft >= nRight || nTop >= nBottom)
         return geometry::RealRectangle2D(0,0,0,0);
     else
@@ -156,10 +156,10 @@ geometry::RealRectangle2D PresenterGeometryHelper::Union (
     const geometry::RealRectangle2D& rBox1,
     const geometry::RealRectangle2D& rBox2)
 {
-    const double nLeft (::std::min(rBox1.X1, rBox2.X1));
-    const double nTop (::std::min(rBox1.Y1, rBox2.Y1));
-    const double nRight (::std::max(rBox1.X2, rBox2.X2));
-    const double nBottom (::std::max(rBox1.Y2, rBox2.Y2));
+    const double nLeft (std::min(rBox1.X1, rBox2.X1));
+    const double nTop (std::min(rBox1.Y1, rBox2.Y1));
+    const double nRight (std::max(rBox1.X2, rBox2.X2));
+    const double nBottom (std::max(rBox1.Y2, rBox2.Y2));
     if (nLeft >= nRight || nTop >= nBottom)
         return geometry::RealRectangle2D(0,0,0,0);
     else
@@ -221,7 +221,7 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
 }
 
 Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
-    const ::std::vector<css::awt::Rectangle>& rBoxes,
+    const std::vector<css::awt::Rectangle>& rBoxes,
     const Reference<rendering::XGraphicDevice>& rxDevice)
 {
     if ( ! rxDevice.is())

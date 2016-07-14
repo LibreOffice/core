@@ -364,10 +364,10 @@ removeFile(struct DocumentMetadataAccess_Impl & i_rImpl,
     }
 }
 
-static ::std::vector< uno::Reference< rdf::XURI > >
+static std::vector< uno::Reference< rdf::XURI > >
 getAllParts(struct DocumentMetadataAccess_Impl & i_rImpl)
 {
-    ::std::vector< uno::Reference< rdf::XURI > > ret;
+    std::vector< uno::Reference< rdf::XURI > > ret;
     try {
         const uno::Reference<container::XEnumeration> xEnum(
             i_rImpl.m_xManifest->getStatements( i_rImpl.m_xBaseURI.get(),
@@ -880,11 +880,11 @@ throw (uno::RuntimeException, lang::IllegalArgumentException, std::exception)
             "type is null", *this, 0);
     }
 
-    ::std::vector< uno::Reference< rdf::XURI > > ret;
-    const ::std::vector< uno::Reference< rdf::XURI > > parts(
+    std::vector< uno::Reference< rdf::XURI > > ret;
+    const std::vector< uno::Reference< rdf::XURI > > parts(
         getAllParts(*m_pImpl) );
-    ::std::remove_copy_if(parts.begin(), parts.end(),
-        ::std::back_inserter(ret),
+    std::remove_copy_if(parts.begin(), parts.end(),
+        std::back_inserter(ret),
         [this, &i_xType](uno::Reference< rdf::XURI > aPart) {
             return !isPartOfType(*m_pImpl, aPart, i_xType);
         } );
@@ -1093,7 +1093,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     std::vector< OUString > MfstMetadataFiles;
 
     try {
-        const ::std::vector< uno::Reference< rdf::XURI > > parts(
+        const std::vector< uno::Reference< rdf::XURI > > parts(
             getAllParts(*m_pImpl) );
         const uno::Reference<rdf::XURI> xContentFile(
             getURI<rdf::URIs::ODF_CONTENTFILE>(m_pImpl->m_xContext));
@@ -1102,7 +1102,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         const uno::Reference<rdf::XURI> xMetadataFile(
             getURI<rdf::URIs::PKG_METADATAFILE>(m_pImpl->m_xContext));
         const sal_Int32 len( baseURI.getLength() );
-        for (::std::vector< uno::Reference< rdf::XURI > >::const_iterator it
+        for (std::vector< uno::Reference< rdf::XURI > >::const_iterator it
                 = parts.begin();
                 it != parts.end(); ++it) {
             const OUString name((*it)->getStringValue());

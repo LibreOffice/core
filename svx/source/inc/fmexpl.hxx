@@ -189,7 +189,7 @@ public:
 };
 
 
-typedef ::std::vector< FmEntryData* > FmEntryDataBaseList;
+typedef std::vector< FmEntryData* > FmEntryDataBaseList;
 
 class FmEntryDataList
 {
@@ -458,7 +458,7 @@ namespace svxform
         void SynchronizeMarkList();
             // umgekehrte Richtung von SynchronizeMarkList : markiert in der View alle der aktuellen Selektion entsprechenden Controls
 
-        void CollectObjects(FmFormData* pFormData, bool bDeep, ::std::set< css::uno::Reference< css::form::XFormComponent > >& _rObjects);
+        void CollectObjects(FmFormData* pFormData, bool bDeep, std::set< css::uno::Reference< css::form::XFormComponent > >& _rObjects);
 
         // im Select aktualisiere ich normalerweise die Marklist der zugehoerigen View, mit folgenden Funktionen
         // kann ich das Locking dieses Verhaltens steuern

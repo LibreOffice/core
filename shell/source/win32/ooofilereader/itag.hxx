@@ -37,8 +37,8 @@ class ITag
         virtual void endTag() = 0;
         virtual void addCharacters(const std::wstring& characters) = 0;
         virtual void addAttributes(const XmlTagAttributes_t& attributes) = 0;
-        virtual ::std::wstring getTagContent() = 0;
-        virtual ::std::wstring const getTagAttribute( ::std::wstring  const & attrname ) = 0;
+        virtual std::wstring getTagContent() = 0;
+        virtual std::wstring const getTagAttribute( std::wstring      const & attrname ) = 0;
 };
 
 #endif

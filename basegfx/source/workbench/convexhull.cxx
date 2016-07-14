@@ -43,7 +43,7 @@ template <class PointType> double theta( const PointType& p1, const PointType& p
 /* Model of LessThanComparable for theta sort.
  * Uses the theta function from Sedgewick: Algorithms in XXX, chapter 24
  */
-template <class PointType> class ThetaCompare : public ::std::binary_function< const PointType&, const PointType&, bool >
+template <class PointType> class ThetaCompare : public std::binary_function< const PointType&, const PointType&, bool >
 {
 public:
     explicit ThetaCompare( const PointType& rRefPoint ) : maRefPoint( rRefPoint ) {}
@@ -152,7 +152,7 @@ Polygon2D convexHull( const Polygon2D& rPoly )
 {
     const Polygon2D::size_type N( rPoly.size() );
     Polygon2D result( N + 1 );
-    ::std::copy(rPoly.begin(), rPoly.end(), result.begin()+1 );
+    std::copy(rPoly.begin(), rPoly.end(), result.begin()+1 );
     Polygon2D::size_type min, i;
 
     // determine safe point on hull (smallest y value)
@@ -173,12 +173,12 @@ Polygon2D convexHull( const Polygon2D& rPoly )
     }
 
     // TODO: add inner elimination optimization from Sedgewick: Algorithms in XXX, chapter 25
-    // TODO: use radix sort instead of ::std::sort(), calc theta only once and store
+    // TODO: use radix sort instead of std::sort(), calc theta only once and store
 
     // setup first point and sort
-    ::std::swap( result[1], result[min] );
+    std::swap( result[1], result[min] );
     ThetaCompare<Point2D> cmpFunc(result[1]);
-    ::std::sort( result.begin()+1, result.end(), cmpFunc );
+    std::sort( result.begin()+1, result.end(), cmpFunc );
 
     // setup sentinel
     result[0] = result[N];
@@ -191,7 +191,7 @@ Polygon2D convexHull( const Polygon2D& rPoly )
             --M;
 
         ++M;
-        ::std::swap( result[M], result[i] );
+        std::swap( result[M], result[i] );
     }
 
     // copy range [1,M] to output

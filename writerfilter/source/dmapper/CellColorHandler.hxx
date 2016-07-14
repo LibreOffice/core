@@ -52,7 +52,7 @@ public:
     CellColorHandler( );
     virtual ~CellColorHandler();
 
-    ::std::shared_ptr<TablePropertyMap>            getProperties();
+    std::shared_ptr<TablePropertyMap>              getProperties();
 
     void setOutputFormat( OutputFormat format ) { m_OutputFormat = format; }
 

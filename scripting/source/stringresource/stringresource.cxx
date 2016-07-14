@@ -665,14 +665,14 @@ LocaleItem* StringResourceImpl::getClosestMatchItemForLocale( const Locale& loca
 {
     LocaleItem* pRetItem = nullptr;
 
-    ::std::vector< Locale > aLocales( m_aLocaleItemVector.size());
+    std::vector< Locale > aLocales( m_aLocaleItemVector.size());
     size_t i = 0;
     for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it, ++i )
     {
         LocaleItem* pLocaleItem = *it;
         aLocales[i] = (pLocaleItem ? pLocaleItem->m_locale : Locale());
     }
-    ::std::vector< Locale >::const_iterator iFound( LanguageTag::getMatchingFallback( aLocales, locale));
+    std::vector< Locale >::const_iterator iFound( LanguageTag::getMatchingFallback( aLocales, locale));
     if (iFound != aLocales.end())
         pRetItem = *(m_aLocaleItemVector.begin() + (iFound - aLocales.begin()));
 

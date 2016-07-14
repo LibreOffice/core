@@ -153,7 +153,7 @@ private:
 public:
     SotStorageRefWrapper mxRootStorage; //< root storage of the OLE2
     OLEStorageMap_t maStorageMap; //< map of all sub storages by name
-    ::std::vector< OLEStreamData > maStreams; //< list of streams and their names
+    std::vector< OLEStreamData > maStreams; //< list of streams and their names
     NameMap_t maNameMap; //< map of stream names to indexes (into @c maStreams)
     bool mbInitialized;
 };
@@ -304,7 +304,7 @@ private:
 
 public:
     Reference<container::XNameAccess> mxContainer; //< root of the Zip
-    ::std::vector< ZipStreamData > maStreams; //< list of streams and their names
+    std::vector< ZipStreamData > maStreams; //< list of streams and their names
     NameMap_t maNameMap; //< map of stream names to indexes (into @c maStreams)
     bool mbInitialized;
 };

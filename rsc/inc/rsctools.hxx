@@ -52,7 +52,7 @@ int rsc_strnicmp( const char *string1, const char *string2, size_t count );
 int rsc_stricmp( const char *string1, const char *string2 );
 char* rsc_strdup( const char* );
 
-typedef ::std::vector< OString* > RscStrList;
+typedef std::vector< OString* > RscStrList;
 
 class RscChar
 {

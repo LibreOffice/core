@@ -90,7 +90,7 @@ namespace rptui
         if (nCount)
         {
             long nHeight = m_aConditions[0]->get_preferred_size().Height();
-            size_t nVisibleConditions = ::std::min(nCount, MAX_CONDITIONS);
+            size_t nVisibleConditions = std::min(nCount, MAX_CONDITIONS);
             nHeight *= nVisibleConditions;
             if (nHeight != m_pScrollWindow->get_height_request())
             {
@@ -541,7 +541,7 @@ namespace rptui
 
     size_t ConditionalFormattingDialog::impl_getLastVisibleConditionIndex() const
     {
-        return ::std::min( impl_getFirstVisibleConditionIndex() + MAX_CONDITIONS, impl_getConditionCount() ) - 1;
+        return std::min( impl_getFirstVisibleConditionIndex() + MAX_CONDITIONS, impl_getConditionCount() ) - 1;
     }
 
 

@@ -27,7 +27,7 @@ using namespace ::dbtools;
 namespace svxform { namespace charset_helper
 {
 
-    sal_Int32 getSupportedTextEncodings( ::std::vector< rtl_TextEncoding >& _rEncs )
+    sal_Int32 getSupportedTextEncodings( std::vector< rtl_TextEncoding >& _rEncs )
     {
         OCharsetMap aCharsetInfo;
         _rEncs.clear();

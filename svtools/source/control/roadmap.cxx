@@ -792,7 +792,7 @@ void RoadmapItem::ImplUpdatePosSize()
     // calculate widths
     long nIDWidth = mpID->GetTextWidth( mpID->GetText() );
     long nMaxIDWidth = mpID->GetTextWidth( "100." );
-    nIDWidth = ::std::min( nIDWidth, nMaxIDWidth );
+    nIDWidth = std::min( nIDWidth, nMaxIDWidth );
 
     // check how many space the description would need
     Size aDescriptionSize = mpDescription->CalcMinimumSize( m_aItemPlayground.Width() - nIDWidth );

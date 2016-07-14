@@ -1144,7 +1144,7 @@ void HeaderBar::InsertItem( sal_uInt16 nItemId, const OUString& rText,
     pItem->maText       = rText;
     if ( nPos < mpItemList->size() ) {
         ImplHeadItemList::iterator it = mpItemList->begin();
-        ::std::advance( it, nPos );
+        std::advance( it, nPos );
         mpItemList->insert( it, pItem );
     } else {
         mpItemList->push_back( pItem );
@@ -1161,7 +1161,7 @@ void HeaderBar::RemoveItem( sal_uInt16 nItemId )
     {
         if ( nPos < mpItemList->size() ) {
             ImplHeadItemList::iterator it = mpItemList->begin();
-            ::std::advance( it, nPos );
+            std::advance( it, nPos );
             delete *it;
             mpItemList->erase( it );
         }
@@ -1176,13 +1176,13 @@ void HeaderBar::MoveItem( sal_uInt16 nItemId, sal_uInt16 nNewPos )
         if ( nPos != nNewPos )
         {
             ImplHeadItemList::iterator it = mpItemList->begin();
-            ::std::advance( it, nPos );
+            std::advance( it, nPos );
             ImplHeadItem* pItem = *it;
             mpItemList->erase( it );
             if ( nNewPos < nPos )
                 nPos = nNewPos;
             it = mpItemList->begin();
-            ::std::advance( it, nNewPos );
+            std::advance( it, nNewPos );
             mpItemList->insert( it, pItem );
             ImplUpdate( nPos, true);
         }

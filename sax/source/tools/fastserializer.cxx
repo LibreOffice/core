@@ -32,7 +32,7 @@
 #include <set>
 #endif
 
-using ::std::vector;
+using std::vector;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::io::XOutputStream;
 
@@ -253,7 +253,7 @@ namespace sax_fastparser {
     void FastSaxSerializer::writeTokenValueList()
     {
 #ifdef DBG_UTIL
-        ::std::set<OString> DebugAttributes;
+        std::set<OString> DebugAttributes;
 #endif
         for (const TokenValue & rTokenValue : maTokenValues)
         {
@@ -281,7 +281,7 @@ namespace sax_fastparser {
     void FastSaxSerializer::writeFastAttributeList(FastAttributeList& rAttrList)
     {
 #ifdef DBG_UTIL
-        ::std::set<OString> DebugAttributes;
+        std::set<OString> DebugAttributes;
 #endif
         const std::vector< sal_Int32 >& Tokens = rAttrList.getFastAttributeTokens();
         for (size_t j = 0; j < Tokens.size(); j++)
@@ -429,8 +429,8 @@ namespace sax_fastparser {
         }
 
 #ifdef DBG_UTIL
-        ::std::deque<sal_Int32> topDebugStartedElements(maMarkStack.top()->m_DebugStartedElements);
-        ::std::deque<sal_Int32> topDebugEndedElements(maMarkStack.top()->m_DebugEndedElements);
+        std::deque<sal_Int32> topDebugStartedElements(maMarkStack.top()->m_DebugStartedElements);
+        std::deque<sal_Int32> topDebugEndedElements(maMarkStack.top()->m_DebugEndedElements);
 #endif
         const Int8Sequence aMerge( maMarkStack.top()->getData() );
         maMarkStack.pop();

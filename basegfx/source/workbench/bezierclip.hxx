@@ -63,7 +63,7 @@ template <typename DataType> DataType calcLineDistance( const DataType& a,
     return a*x + b*y + c;
 }
 
-typedef ::std::vector< Point2D > Polygon2D;
+typedef std::vector< Point2D > Polygon2D;
 
 /* little abs template */
 template <typename NumType> NumType absval( NumType x )
@@ -73,7 +73,7 @@ template <typename NumType> NumType absval( NumType x )
 
 Polygon2D convexHull( const Polygon2D& rPoly );
 
-// TODO: find proper epsilon here (try ::std::numeric_limits<NumType>::epsilon()?)!
+// TODO: find proper epsilon here (try std::numeric_limits<NumType>::epsilon()?)!
 #define DBL_EPSILON 1.0e-100
 
 /* little approximate comparisons */

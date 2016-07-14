@@ -182,7 +182,7 @@ private:
     LayoutMode meLayoutMode;
     bool mbIsSlideSorterActive;
     bool mbIsHelpViewActive;
-    typedef ::std::vector<css::uno::Reference<css::document::XEventListener> >
+    typedef std::vector<css::uno::Reference<css::document::XEventListener> >
         LayoutListenerContainer;
     LayoutListenerContainer maLayoutListeners;
     bool mbIsMouseClickPending;

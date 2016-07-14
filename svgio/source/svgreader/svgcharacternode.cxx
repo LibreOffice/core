@@ -283,7 +283,7 @@ namespace svgio
                 aTextLayouterDevice.setFontAttribute(aFontAttribute, fFontWidth, fFontHeight, aLocale);
 
                 // prepare TextArray
-                ::std::vector< double > aTextArray(rSvgTextPosition.getX());
+                std::vector< double > aTextArray(rSvgTextPosition.getX());
 
                 if(!aTextArray.empty() && aTextArray.size() < nLength)
                 {
@@ -302,7 +302,7 @@ namespace svgio
                             fStartX = aTextArray[nArray - 1];
                         }
 
-                        ::std::vector< double > aExtendArray(aTextLayouterDevice.getTextArray(getText(), nArray, nLength - nArray));
+                        std::vector< double > aExtendArray(aTextLayouterDevice.getTextArray(getText(), nArray, nLength - nArray));
                         aTextArray.reserve(nLength);
 
                         for(size_t a(0); a < aExtendArray.size(); a++)

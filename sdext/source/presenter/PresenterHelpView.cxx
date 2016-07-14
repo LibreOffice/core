@@ -37,7 +37,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
-using ::std::vector;
+using std::vector;
 
 namespace sdext { namespace presenter {
 
@@ -345,7 +345,7 @@ void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
                 aRenderState,
                 mpFont->mxFont));
 
-        nY += ::std::max(nLeftHeight,nRightHeight);
+        nY += std::max(nLeftHeight,nRightHeight);
     }
 
     Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
@@ -402,7 +402,7 @@ void PresenterHelpView::CheckFontSize()
         TextContainer::iterator iBlock (mpTextContainer->begin());
         TextContainer::const_iterator iBlockEnd (mpTextContainer->end());
         for ( ; iBlock!=iBlockEnd; ++iBlock)
-            nY += ::std::max(
+            nY += std::max(
                 (*iBlock)->maLeft.GetHeight(),
                 (*iBlock)->maRight.GetHeight());
 

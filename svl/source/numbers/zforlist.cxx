@@ -159,7 +159,7 @@ static sal_uInt32 const indexTable[NF_INDEX_TABLE_ENTRIES] = {
     also handles one instance of the SysLocale options
  */
 
-typedef ::std::vector< SvNumberFormatter* > SvNumberFormatterList_impl;
+typedef std::vector< SvNumberFormatter* > SvNumberFormatterList_impl;
 
 class SvNumberFormatterRegistry_Impl : public utl::ConfigurationListener
 {
@@ -253,8 +253,8 @@ sal_uInt16 SvNumberFormatter::nSystemCurrencyPosition = 0;
 // language dependent.
 #define NF_BANKSYMBOL_FIX_POSITION 1
 
-const sal_uInt16 SvNumberFormatter::UNLIMITED_PRECISION   = ::std::numeric_limits<sal_uInt16>::max();
-const sal_uInt16 SvNumberFormatter::INPUTSTRING_PRECISION = ::std::numeric_limits<sal_uInt16>::max()-1;
+const sal_uInt16 SvNumberFormatter::UNLIMITED_PRECISION   = std::numeric_limits<sal_uInt16>::max();
+const sal_uInt16 SvNumberFormatter::INPUTSTRING_PRECISION = std::numeric_limits<sal_uInt16>::max()-1;
 
 SvNumberFormatter::SvNumberFormatter( const Reference< XComponentContext >& rxContext,
                                       LanguageType eLang )

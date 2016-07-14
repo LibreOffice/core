@@ -48,7 +48,7 @@ struct ToolbarMenu_Impl;
 class ToolbarMenu;
 class ToolbarMenuEntry;
 
-typedef ::std::vector< css::uno::Reference< css::accessibility::XAccessibleEventListener > > EventListenerVector;
+typedef std::vector< css::uno::Reference< css::accessibility::XAccessibleEventListener > > EventListenerVector;
 typedef std::vector< std::unique_ptr< ToolbarMenuEntry > > ToolbarMenuEntryVector;
 
 const int SEPARATOR_HEIGHT = 4;

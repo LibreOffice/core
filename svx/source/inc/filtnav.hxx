@@ -79,7 +79,7 @@ public:
 class FmParentData : public FmFilterData
 {
 protected:
-    ::std::vector< FmFilterData* >  m_aChildren;
+    std::vector< FmFilterData* >    m_aChildren;
 
 public:
     FmParentData(FmParentData* pParent, const OUString& rText)
@@ -87,7 +87,7 @@ public:
     {}
     virtual ~FmParentData();
 
-    ::std::vector< FmFilterData* >& GetChildren() { return m_aChildren; }
+    std::vector< FmFilterData* >& GetChildren() { return m_aChildren; }
 };
 
 
@@ -181,17 +181,17 @@ public:
     void EnsureEmptyFilterRows( FmParentData& _rItem );
 
 protected:
-    void Insert(const ::std::vector<FmFilterData*>::iterator& rPos, FmFilterData* pFilterItem);
-    void Remove( const ::std::vector<FmFilterData*>::iterator& rPos );
-    FmFormItem* Find(const ::std::vector<FmFilterData*>& rItems, const css::uno::Reference< css::form::runtime::XFormController > & xController) const;
-    FmFormItem* Find(const ::std::vector<FmFilterData*>& rItems, const css::uno::Reference< css::form::XForm >& xForm) const;
+    void Insert(const std::vector<FmFilterData*>::iterator& rPos, FmFilterData* pFilterItem);
+    void Remove( const std::vector<FmFilterData*>::iterator& rPos );
+    FmFormItem* Find(const std::vector<FmFilterData*>& rItems, const css::uno::Reference< css::form::runtime::XFormController > & xController) const;
+    FmFormItem* Find(const std::vector<FmFilterData*>& rItems, const css::uno::Reference< css::form::XForm >& xForm) const;
     void Update(const css::uno::Reference< css::container::XIndexAccess > & xControllers, FmParentData* pParent);
 };
 
 
 class OFilterItemExchange : public OLocalExchange
 {
-    ::std::vector<FmFilterItem*>    m_aDraggedEntries;
+    std::vector<FmFilterItem*>      m_aDraggedEntries;
     FmFormItem*             m_pFormItem;        // ensure that we drop on the same form
 
 public:
@@ -200,8 +200,8 @@ public:
     static SotClipboardFormatId getFormatId( );
     inline static bool  hasFormat( const DataFlavorExVector& _rFormats );
 
-    const ::std::vector<FmFilterItem*>& getDraggedEntries() const { return m_aDraggedEntries; }
-    void setDraggedEntries(const ::std::vector<FmFilterItem*>& _rList) { m_aDraggedEntries = _rList; }
+    const std::vector<FmFilterItem*>& getDraggedEntries() const { return m_aDraggedEntries; }
+    void setDraggedEntries(const std::vector<FmFilterItem*>& _rList) { m_aDraggedEntries = _rList; }
     FmFormItem* getFormItem() const { return m_pFormItem; }
 
     void setFormItem( FmFormItem* _pItem ) { m_pFormItem = _pItem; }
@@ -282,7 +282,7 @@ private:
         @return
             The first form item.
     */
-    FmFormItem* getSelectedFilterItems(::std::vector<FmFilterItem*>& _rItemList);
+    FmFormItem* getSelectedFilterItems(std::vector<FmFilterItem*>& _rItemList);
     /**
      * inserts the filter items into the tree model and creates new FilterItems if needed.
      *    @param  _rFilterList
@@ -292,7 +292,7 @@ private:
      *    @param  _bCopy
      *        If <TRUE/> the items will not be removed from the model, otherwise they will.
      */
-    void insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems, bool _bCopy = false);
+    void insertFilterItem(const std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems, bool _bCopy = false);
     SvTreeListEntry* getPrevEntry(SvTreeListEntry* _pStartWith = nullptr);
     SvTreeListEntry* getNextEntry(SvTreeListEntry* _pStartWith = nullptr);
 

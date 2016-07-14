@@ -84,7 +84,7 @@ struct ObjectInfo
     }
 };
 
-typedef ::std::map< Reference< XPropertySet >, ObjectInfo, ::comphelper::OInterfaceCompare< XPropertySet > >    PropertySetInfoCache;
+typedef std::map< Reference< XPropertySet >, ObjectInfo, ::comphelper::OInterfaceCompare< XPropertySet > >      PropertySetInfoCache;
 
 
 class OXUndoEnvironmentImpl
@@ -95,7 +95,7 @@ public:
     FormatNormalizer                                    m_aFormatNormalizer;
     ConditionUpdater                                    m_aConditionUpdater;
     ::osl::Mutex                                        m_aMutex;
-    ::std::vector< uno::Reference< container::XChild> > m_aSections;
+    std::vector< uno::Reference< container::XChild> > m_aSections;
     Reference< XIntrospection >                         m_xIntrospection;
     oslInterlockedCount                                 m_nLocks;
     bool                                            m_bReadOnly;
@@ -340,12 +340,12 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     pController->InvalidateAll();
 }
 
-::std::vector< uno::Reference< container::XChild> >::const_iterator OXUndoEnvironment::getSection(const Reference<container::XChild>& _xContainer) const
+std::vector< uno::Reference< container::XChild> >::const_iterator OXUndoEnvironment::getSection(const Reference<container::XChild>& _xContainer) const
 {
-    ::std::vector< uno::Reference< container::XChild> >::const_iterator aFind = m_pImpl->m_aSections.end();
+    std::vector< uno::Reference< container::XChild> >::const_iterator aFind = m_pImpl->m_aSections.end();
     if ( _xContainer.is() )
     {
-        aFind = ::std::find(m_pImpl->m_aSections.begin(),m_pImpl->m_aSections.end(),_xContainer);
+        aFind = std::find(m_pImpl->m_aSections.begin(),m_pImpl->m_aSections.end(),_xContainer);
 
         if ( aFind == m_pImpl->m_aSections.end() )
         {
@@ -371,7 +371,7 @@ void SAL_CALL OXUndoEnvironment::elementInserted(const ContainerEvent& evt) thro
         {
             Reference< report::XSection > xContainer(evt.Source,uno::UNO_QUERY);
 
-            ::std::vector< uno::Reference< container::XChild> >::const_iterator aFind = getSection(xContainer.get());
+            std::vector< uno::Reference< container::XChild> >::const_iterator aFind = getSection(xContainer.get());
 
             if ( aFind != m_pImpl->m_aSections.end() )
             {
@@ -439,7 +439,7 @@ void SAL_CALL OXUndoEnvironment::elementRemoved(const ContainerEvent& evt) throw
     if ( !IsLocked() )
     {
         Reference< report::XSection > xContainer(evt.Source,uno::UNO_QUERY);
-        ::std::vector< uno::Reference< container::XChild> >::const_iterator aFind = getSection(xContainer.get());
+        std::vector< uno::Reference< container::XChild> >::const_iterator aFind = getSection(xContainer.get());
 
         Reference< report::XReportComponent >  xReportComponent( xIface, UNO_QUERY );
         if ( aFind != m_pImpl->m_aSections.end() && xReportComponent.is() )
@@ -505,7 +505,7 @@ void OXUndoEnvironment::RemoveSection(const Reference< report::XSection > & _xSe
     try
     {
         uno::Reference<container::XChild> xChild(_xSection.get());
-        m_pImpl->m_aSections.erase(::std::remove(m_pImpl->m_aSections.begin(),m_pImpl->m_aSections.end(),
+        m_pImpl->m_aSections.erase(std::remove(m_pImpl->m_aSections.begin(),m_pImpl->m_aSections.end(),
             xChild), m_pImpl->m_aSections.end());
         Reference< XInterface >  xInt(_xSection);
         RemoveElement(xInt);

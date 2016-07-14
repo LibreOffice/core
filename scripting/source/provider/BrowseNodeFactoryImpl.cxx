@@ -284,7 +284,7 @@ private:
             }
         }
         // sort children alphabetically
-        ::std::sort( m_vStr.begin(), m_vStr.end(), alphaSort() );
+        std::sort( m_vStr.begin(), m_vStr.end(), alphaSort() );
     }
 };
 
@@ -356,7 +356,7 @@ std::vector< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Referen
 
 } // namespace
 
-typedef ::std::vector< Reference< browse::XBrowseNode > > vXBrowseNodes;
+typedef std::vector< Reference< browse::XBrowseNode > > vXBrowseNodes;
 
 struct alphaSortForBNodes
 {
@@ -439,7 +439,7 @@ public:
                     aVNodes.push_back( new DefaultBrowseNode( m_xCtx, xBrowseNode ) );
             }
 
-            ::std::sort( aVNodes.begin(), aVNodes.end(), alphaSortForBNodes() );
+            std::sort( aVNodes.begin(), aVNodes.end(), alphaSortForBNodes() );
             Sequence < Reference< browse::XBrowseNode > > children( aVNodes.size() );
             vXBrowseNodes::const_iterator it = aVNodes.begin();
             for ( sal_Int32 i=0; it != aVNodes.end() && i<children.getLength(); i++, ++it )
@@ -551,7 +551,7 @@ public:
     throw ( RuntimeException, std::exception ) override
     {
         // no need to sort user, share, doc1...docN
-        //::std::sort( m_vNodes.begin(), m_vNodes.end(), alphaSortForBNodes() );
+        //std::sort( m_vNodes.begin(), m_vNodes.end(), alphaSortForBNodes() );
         Sequence < Reference< browse::XBrowseNode > > children( m_vNodes.size() );
         vXBrowseNodes::const_iterator it = m_vNodes.begin();
         for ( sal_Int32 i=0; it != m_vNodes.end() && i<children.getLength(); i++, ++it )

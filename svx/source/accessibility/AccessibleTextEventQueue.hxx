@@ -41,7 +41,7 @@ namespace accessibility
     class AccessibleTextEventQueue
     {
     public:
-        typedef ::std::list< SfxHint* > EventQueue;
+        typedef std::list< SfxHint* > EventQueue;
 
         AccessibleTextEventQueue();
         ~AccessibleTextEventQueue();
@@ -59,7 +59,7 @@ namespace accessibility
 
             return first queue element, ownership transfers to caller
         */
-        ::std::unique_ptr< SfxHint > PopFront();
+        std::unique_ptr< SfxHint > PopFront();
 
         /** Apply functor to every queue member
 
@@ -70,7 +70,7 @@ namespace accessibility
         template < typename Functor > void ForEach( Functor& rFunctor ) const
         {
             // #109864# Make sure results are put back into rFunctor
-            rFunctor = ::std::for_each( maEventQueue.begin(), maEventQueue.end(), rFunctor );
+            rFunctor = std::for_each( maEventQueue.begin(), maEventQueue.end(), rFunctor );
         }
 
         /// Query whether queue is empty

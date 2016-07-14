@@ -218,7 +218,7 @@ private:
             return p1 < p2;
         }
     };
-    typedef ::std::map< const SdrObject*, rtl::Reference<accessibility::AccessibleShape>, SdrObjectCompareLess > ShapesMapType;
+    typedef std::map< const SdrObject*, rtl::Reference<accessibility::AccessibleShape>, SdrObjectCompareLess > ShapesMapType;
     ShapesMapType mxShapes;
 
     VclPtr<GraphCtrl>  mpControl;

@@ -141,7 +141,7 @@ namespace svxform
             OUString sLabel( _rBaseLabel );
             try
             {
-                typedef ::std::set< OUString > StringBag;
+                typedef std::set< OUString > StringBag;
                 StringBag aUsedLabels;
 
                 Reference< XFormComponent > xFormComponent( _rxControlModel, UNO_QUERY_THROW );

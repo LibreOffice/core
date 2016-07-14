@@ -46,12 +46,12 @@ std::wstring CSimpleTag::getTagContent( )
     return m_SimpleContent;
 }
 
-::std::wstring const CSimpleTag::getTagAttribute( ::std::wstring const & attrname )
+std::wstring const CSimpleTag::getTagAttribute( std::wstring const & attrname )
 {
     if  ( m_SimpleAttributes.find(attrname) != m_SimpleAttributes.end())
         return m_SimpleAttributes[attrname];
     else
-        return ( ::std::wstring( EMPTY_STRING ) );
+        return ( std::wstring( EMPTY_STRING ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

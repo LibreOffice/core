@@ -285,7 +285,7 @@ namespace sdr
             impApplyRemoveActions(rOverlayObject);
 
             // remove from vector
-            const OverlayObjectVector::iterator aFindResult = ::std::find(maOverlayObjects.begin(), maOverlayObjects.end(), &rOverlayObject);
+            const OverlayObjectVector::iterator aFindResult = std::find(maOverlayObjects.begin(), maOverlayObjects.end(), &rOverlayObject);
             const bool bFound(aFindResult != maOverlayObjects.end());
             OSL_ENSURE(bFound, "OverlayObject NOT found at OverlayManager (!)");
 

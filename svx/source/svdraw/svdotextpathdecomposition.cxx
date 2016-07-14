@@ -75,7 +75,7 @@ namespace
         sal_Int32                                   mnTextLength;
         sal_Int32                                   mnParagraph;
         SvxFont                                     maFont;
-        ::std::vector< double >                     maDblDXArray;   // double DXArray, font size independent -> unit coordinate system
+        std::vector< double >                       maDblDXArray;   // double DXArray, font size independent -> unit coordinate system
         css::lang::Locale                           maLocale;
 
         // bitfield
@@ -104,7 +104,7 @@ namespace
             }
         }
 
-        // for ::std::sort
+        // for std::sort
         bool operator<(const impPathTextPortion& rComp) const
         {
             if(mnParagraph < rComp.mnParagraph)
@@ -126,7 +126,7 @@ namespace
         sal_Int32 getParagraph() const { return mnParagraph; }
         const SvxFont& getFont() const { return maFont; }
         bool isRTL() const { return mbRTL; }
-        const ::std::vector< double >& getDoubleDXArray() const { return maDblDXArray; }
+        const std::vector< double >& getDoubleDXArray() const { return maDblDXArray; }
         const css::lang::Locale& getLocale() const { return maLocale; }
 
         sal_Int32 getPortionIndex(sal_Int32 nIndex, sal_Int32 nLength) const
@@ -168,7 +168,7 @@ namespace
     class impTextBreakupHandler
     {
         SdrOutliner&                                mrOutliner;
-        ::std::vector< impPathTextPortion >         maPathTextPortions;
+        std::vector< impPathTextPortion >           maPathTextPortions;
 
         DECL_LINK_TYPED(decompositionPathTextPrimitive, DrawPortionInfo*, void );
 
@@ -178,7 +178,7 @@ namespace
         {
         }
 
-        const ::std::vector< impPathTextPortion >& decompositionPathTextPrimitive()
+        const std::vector< impPathTextPortion >& decompositionPathTextPrimitive()
         {
             // strip portions to maPathTextPortions
             mrOutliner.SetDrawPortionHdl(LINK(this, impTextBreakupHandler, decompositionPathTextPrimitive));
@@ -187,7 +187,7 @@ namespace
             if(!maPathTextPortions.empty())
             {
                 // sort portions by paragraph, x and y
-                ::std::sort(maPathTextPortions.begin(), maPathTextPortions.end());
+                std::sort(maPathTextPortions.begin(), maPathTextPortions.end());
             }
 
             return maPathTextPortions;
@@ -212,7 +212,7 @@ namespace
         std::vector< drawinglayer::primitive2d::BasePrimitive2D* >& mrShadowDecomposition;  // destination primitive list for shadow
         Reference < css::i18n::XBreakIterator >                     mxBreak;                // break iterator
 
-        static double getParagraphTextLength(const ::std::vector< const impPathTextPortion* >& rTextPortions)
+        static double getParagraphTextLength(const std::vector< const impPathTextPortion* >& rTextPortions)
         {
             drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
             double fRetval(0.0);
@@ -257,7 +257,7 @@ namespace
             mxBreak = css::i18n::BreakIterator::create(xContext);
         }
 
-        void HandlePair(const basegfx::B2DPolygon& rPolygonCandidate, const ::std::vector< const impPathTextPortion* >& rTextPortions)
+        void HandlePair(const basegfx::B2DPolygon& rPolygonCandidate, const std::vector< const impPathTextPortion* >& rTextPortions)
         {
             // prepare polygon geometry, take into account as many parameters as possible
             basegfx::B2DPolygon aPolygonCandidate(rPolygonCandidate);
@@ -476,7 +476,7 @@ namespace
                         if(!pCandidate->getText().isEmpty() && nNextGlyphLen)
                         {
                             const sal_Int32 nPortionIndex(pCandidate->getPortionIndex(nUsedTextLength, nNextGlyphLen));
-                            ::std::vector< double > aNewDXArray;
+                            std::vector< double > aNewDXArray;
 
                             if(nNextGlyphLen > 1 && pCandidate->getDoubleDXArray().size())
                             {
@@ -490,17 +490,17 @@ namespace
                                 {
                                     // adapt to portion start
                                     double fDXOffset= *(pCandidate->getDoubleDXArray().begin() + (nPortionIndex - 1));
-                                    ::std::transform(
+                                    std::transform(
                                         aNewDXArray.begin(), aNewDXArray.end(),
-                                        aNewDXArray.begin(), ::std::bind2nd(::std::minus<double>(), fDXOffset));
+                                        aNewDXArray.begin(), std::bind2nd(std::minus<double>(), fDXOffset));
                                 }
 
                                 if(bAutosizeScale)
                                 {
                                     // when autosize scaling, adapt to DXArray, too
-                                    ::std::transform(
+                                    std::transform(
                                         aNewDXArray.begin(), aNewDXArray.end(),
-                                        aNewDXArray.begin(), ::std::bind2nd(::std::multiplies<double>(), fAutosizeScaleFactor));
+                                        aNewDXArray.begin(), std::bind2nd(std::multiplies<double>(), fAutosizeScaleFactor));
                                 }
                             }
 
@@ -686,7 +686,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
 
     // now break up to text portions
     impTextBreakupHandler aConverter(rOutliner);
-    const ::std::vector< impPathTextPortion > rPathTextPortions = aConverter.decompositionPathTextPrimitive();
+    const std::vector< impPathTextPortion > rPathTextPortions = aConverter.decompositionPathTextPrimitive();
 
     if(!rPathTextPortions.empty())
     {
@@ -716,7 +716,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
             for(a = 0L; a < nLoopCount; a++)
             {
                 // filter text portions for this paragraph
-                ::std::vector< const impPathTextPortion* > aParagraphTextPortions;
+                std::vector< const impPathTextPortion* > aParagraphTextPortions;
 
                 for(const auto & rCandidate : rPathTextPortions)
                 {

@@ -210,7 +210,7 @@ void SAL_CALL GalleryTheme::update(  )
         {
             const INetURLObject aURL( rURL );
 
-            nIndex = ::std::max( ::std::min( nIndex, getCount() ), sal_Int32( 0 ) );
+            nIndex = std::max( std::min( nIndex, getCount() ), sal_Int32( 0 ) );
 
             if( ( aURL.GetProtocol() != INetProtocol::NotValid ) && mpTheme->InsertURL( aURL, nIndex ) )
             {
@@ -242,7 +242,7 @@ void SAL_CALL GalleryTheme::update(  )
         {
             const Graphic aGraphic( rxGraphic );
 
-            nIndex = ::std::max( ::std::min( nIndex, getCount() ), sal_Int32( 0 ) );
+            nIndex = std::max( std::min( nIndex, getCount() ), sal_Int32( 0 ) );
 
             if( mpTheme->InsertGraphic( aGraphic, nIndex ) )
                 nRet = nIndex;
@@ -270,7 +270,7 @@ void SAL_CALL GalleryTheme::update(  )
         if( pModel && pModel->GetDoc() && dynamic_cast<const FmFormModel*>(pModel->GetDoc()) != nullptr )
         {
             // Here we're inserting something that's already a gallery theme drawing
-            nIndex = ::std::max( ::std::min( nIndex, getCount() ), sal_Int32( 0 ) );
+            nIndex = std::max( std::min( nIndex, getCount() ), sal_Int32( 0 ) );
 
             if( mpTheme->InsertModel( *static_cast< FmFormModel* >( pModel->GetDoc() ), nIndex ) )
                 nRet = nIndex;

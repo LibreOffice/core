@@ -1032,7 +1032,7 @@ Sequence< Reference< XInterface > > OServiceManager::queryServiceFactories(
     Sequence< Reference< XInterface > > ret;
 
     MutexGuard aGuard( m_mutex );
-    ::std::pair<
+    std::pair<
           HashMultimap_OWString_Interface::iterator,
           HashMultimap_OWString_Interface::iterator> p(
               m_ServiceMap.equal_range( aServiceName ) );
@@ -1050,7 +1050,7 @@ Sequence< Reference< XInterface > > OServiceManager::queryServiceFactories(
     }
     else
     {
-        ::std::vector< Reference< XInterface > > vec;
+        std::vector< Reference< XInterface > > vec;
         vec.reserve( 4 );
         while (p.first != p.second)
         {

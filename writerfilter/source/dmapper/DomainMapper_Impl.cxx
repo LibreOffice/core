@@ -123,7 +123,7 @@ void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >& rxFie
 
         const FFDataHandler::DropDownEntries_t& rEntries = pFFDataHandler->getDropDownEntries();
         uno::Sequence< OUString > sItems( rEntries.size() );
-        ::std::copy( rEntries.begin(), rEntries.end(), sItems.begin());
+        std::copy( rEntries.begin(), rEntries.end(), sItems.begin());
         if ( sItems.getLength() )
             rxFieldProps->setPropertyValue( "Items", uno::makeAny( sItems ) );
 
@@ -158,7 +158,7 @@ struct FieldConversion
     FieldId             eFieldId;
 };
 
-typedef ::std::map< OUString, FieldConversion>
+typedef std::map< OUString, FieldConversion>
             FieldConversionMap_t;
 
 uno::Any FloatingTableInfo::getPropertyValue(const OUString &propertyName)
@@ -589,8 +589,8 @@ void DomainMapper_Impl::InitTabStopFromStyle( const uno::Sequence< style::TabSto
 
 void DomainMapper_Impl::IncorporateTabStop( const DeletableTabStop &  rTabStop )
 {
-    ::std::vector<DeletableTabStop>::iterator aIt = m_aCurrentTabStops.begin();
-    ::std::vector<DeletableTabStop>::iterator aEndIt = m_aCurrentTabStops.end();
+    std::vector<DeletableTabStop>::iterator aIt = m_aCurrentTabStops.begin();
+    std::vector<DeletableTabStop>::iterator aEndIt = m_aCurrentTabStops.end();
     sal_Int32 nConverted = rTabStop.Position;
     bool bFound = false;
     for( ; aIt != aEndIt; ++aIt)
@@ -2689,9 +2689,9 @@ void FieldContext::AppendCommand(const OUString& rPart)
     m_sCommand += rPart;
 }
 
-::std::vector<OUString> FieldContext::GetCommandParts() const
+std::vector<OUString> FieldContext::GetCommandParts() const
 {
-    ::std::vector<OUString> aResult;
+    std::vector<OUString> aResult;
     sal_Int32 nIndex = 0;
     bool bInString = false;
     OUString sPart;
@@ -3807,7 +3807,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_GOTOBUTTON   : break;
                     case FIELD_HYPERLINK:
                     {
-                        ::std::vector<OUString> aParts = pContext->GetCommandParts();
+                        std::vector<OUString> aParts = pContext->GetCommandParts();
 
                         // Syntax is either:
                         // HYPERLINK "" \l "link"
@@ -3817,8 +3817,8 @@ void DomainMapper_Impl::CloseFieldCommand()
                         if (!aParts.empty() && aParts[0] == "HYPERLINK")
                             aParts.erase(aParts.begin());
 
-                        ::std::vector<OUString>::const_iterator aItEnd = aParts.end();
-                        ::std::vector<OUString>::const_iterator aPartIt = aParts.begin();
+                        std::vector<OUString>::const_iterator aItEnd = aParts.end();
+                        std::vector<OUString>::const_iterator aPartIt = aParts.begin();
 
                         OUString sURL;
 

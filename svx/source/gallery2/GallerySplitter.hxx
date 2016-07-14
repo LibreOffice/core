@@ -29,13 +29,13 @@ public:
     GallerySplitter(
         vcl::Window* pParent,
         WinBits nStyle,
-        const ::std::function<void ()>& rDataChangeFunctor);
+        const std::function<void ()>& rDataChangeFunctor);
 
 protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 private:
-    ::std::function<void ()> maDataChangeFunctor;
+    std::function<void ()> maDataChangeFunctor;
 };
 
 

@@ -54,7 +54,7 @@ namespace sfx2
         FileDialogHelper*           mpAntiImpl;
         VclPtr<vcl::Window>         mpPreferredParentWindow;
 
-        ::std::vector< OUString > mlLastURLs;
+        std::vector< OUString > mlLastURLs;
 
         OUString             maPath;
         OUString             maFileName;

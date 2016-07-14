@@ -247,7 +247,7 @@ private:
         const OUString & i_rIdref) const override;
 
     struct XmlIdRegistry_Impl;
-    ::std::unique_ptr<XmlIdRegistry_Impl> m_pImpl;
+    std::unique_ptr<XmlIdRegistry_Impl> m_pImpl;
 };
 
 // MetadatableUndo ---------------------------------------------------
@@ -337,7 +337,7 @@ private:
         const bool i_isInContent);
 
     struct XmlIdRegistry_Impl;
-    ::std::unique_ptr<XmlIdRegistry_Impl> m_pImpl;
+    std::unique_ptr<XmlIdRegistry_Impl> m_pImpl;
 };
 
 
@@ -423,11 +423,11 @@ template< typename T >
 // Document XML ID Registry (_Impl)
 
 /// element list
-typedef ::std::list< Metadatable* > XmlIdList_t;
+typedef std::list< Metadatable* > XmlIdList_t;
 
 /// Idref -> (content.xml element list, styles.xml element list)
 typedef std::unordered_map< OUString,
-    ::std::pair< XmlIdList_t, XmlIdList_t >, OUStringHash > XmlIdMap_t;
+    std::pair< XmlIdList_t, XmlIdList_t >, OUStringHash > XmlIdMap_t;
 
 /// pointer hash template
 template<typename T> struct PtrHash
@@ -440,7 +440,7 @@ template<typename T> struct PtrHash
 
 /// element -> (stream name, idref)
 typedef std::unordered_map< const Metadatable*,
-    ::std::pair< OUString, OUString>, PtrHash<Metadatable> >
+    std::pair< OUString, OUString>, PtrHash<Metadatable> >
     XmlIdReverseMap_t;
 
 struct XmlIdRegistryDocument::XmlIdRegistry_Impl
@@ -527,7 +527,7 @@ XmlIdRegistryDocument::XmlIdRegistry_Impl::LookupElement(
     if (pList)
     {
         const XmlIdList_t::const_iterator iter(
-            ::std::find_if(pList->begin(), pList->end(),
+            std::find_if(pList->begin(), pList->end(),
                 [](Metadatable* item)->bool {
                     return !(item->IsInUndo() || item->IsInClipboard());
                     } ) ) ;
@@ -584,7 +584,7 @@ XmlIdRegistryDocument::XmlIdRegistry_Impl::TryInsertMetadatable(
             // this is only called from TryRegister now, so check
             // if all elements in the list are deleted (in undo) or
             // placeholders, then "steal" the id from them
-            if ( pList->end() == ::std::find_if(pList->begin(), pList->end(),
+            if ( pList->end() == std::find_if(pList->begin(), pList->end(),
                 [](Metadatable* item)->bool {
                     return !(item->IsInUndo() || item->IsInClipboard());
                     } ) )
@@ -600,9 +600,9 @@ XmlIdRegistryDocument::XmlIdRegistry_Impl::TryInsertMetadatable(
     }
     else
     {
-        m_XmlIdMap.insert(::std::make_pair(i_rIdref, bContent
-            ? ::std::make_pair( XmlIdList_t( 1, &i_rObject ), XmlIdList_t() )
-            : ::std::make_pair( XmlIdList_t(), XmlIdList_t( 1, &i_rObject ) )));
+        m_XmlIdMap.insert(std::make_pair(i_rIdref, bContent
+            ? std::make_pair( XmlIdList_t( 1, &i_rObject ), XmlIdList_t() )
+            : std::make_pair( XmlIdList_t(), XmlIdList_t( 1, &i_rObject ) )));
         return true;
     }
 }
@@ -703,7 +703,7 @@ XmlIdRegistryDocument::TryRegisterMetadatable(Metadatable & i_rObject,
     {
         rmIter(m_pImpl->m_XmlIdMap, old_id, old_path, i_rObject);
         m_pImpl->m_XmlIdReverseMap[&i_rObject] =
-            ::std::make_pair(i_rStreamName, i_rIdref);
+            std::make_pair(i_rStreamName, i_rIdref);
         return true;
     }
     else
@@ -750,10 +750,10 @@ XmlIdRegistryDocument::RegisterMetadatableAndCreateID(Metadatable & i_rObject)
     const OUString id( create_id(m_pImpl->m_XmlIdMap) );
     OSL_ENSURE(m_pImpl->m_XmlIdMap.find(id) == m_pImpl->m_XmlIdMap.end(),
         "created id is in use");
-    m_pImpl->m_XmlIdMap.insert(::std::make_pair(id, isInContent
-        ? ::std::make_pair( XmlIdList_t( 1, &i_rObject ), XmlIdList_t() )
-        : ::std::make_pair( XmlIdList_t(), XmlIdList_t( 1, &i_rObject ) )));
-    m_pImpl->m_XmlIdReverseMap[&i_rObject] = ::std::make_pair(stream, id);
+    m_pImpl->m_XmlIdMap.insert(std::make_pair(id, isInContent
+        ? std::make_pair( XmlIdList_t( 1, &i_rObject ), XmlIdList_t() )
+        : std::make_pair( XmlIdList_t(), XmlIdList_t( 1, &i_rObject ) )));
+    m_pImpl->m_XmlIdReverseMap[&i_rObject] = std::make_pair(stream, id);
 }
 
 void XmlIdRegistryDocument::UnregisterMetadatable(const Metadatable& i_rObject)
@@ -810,10 +810,10 @@ void XmlIdRegistryDocument::RegisterCopy(Metadatable const& i_rSource,
         return;
     }
     XmlIdList_t * pList ( m_pImpl->LookupElementList(path, idref) );
-    OSL_ENSURE( ::std::find( pList->begin(), pList->end(), &i_rCopy )
+    OSL_ENSURE( std::find( pList->begin(), pList->end(), &i_rCopy )
         == pList->end(), "copy already registered???");
     XmlIdList_t::iterator srcpos(
-        ::std::find( pList->begin(), pList->end(), &i_rSource ) );
+        std::find( pList->begin(), pList->end(), &i_rSource ) );
     OSL_ENSURE(srcpos != pList->end(), "source not in list???");
     if (srcpos == pList->end())
     {
@@ -828,8 +828,8 @@ void XmlIdRegistryDocument::RegisterCopy(Metadatable const& i_rSource,
         // for undo push_back does not work! must insert right after source
         pList->insert( ++srcpos, &i_rCopy );
     }
-    m_pImpl->m_XmlIdReverseMap.insert(::std::make_pair(&i_rCopy,
-        ::std::make_pair(path, idref)));
+    m_pImpl->m_XmlIdReverseMap.insert(std::make_pair(&i_rCopy,
+        std::make_pair(path, idref)));
 }
 
 std::shared_ptr<MetadatableUndo>
@@ -912,7 +912,7 @@ typedef std::unordered_map< const Metadatable*,
 
 /// Idref -> (content.xml element, styles.xml element)
 typedef std::unordered_map< OUString,
-    ::std::pair< Metadatable*, Metadatable* >, OUStringHash >
+    std::pair< Metadatable*, Metadatable* >, OUStringHash >
     ClipboardXmlIdMap_t;
 
 struct XmlIdRegistryClipboard::XmlIdRegistry_Impl
@@ -1051,9 +1051,9 @@ XmlIdRegistryClipboard::XmlIdRegistry_Impl::TryInsertMetadatable(
     }
     else
     {
-        m_XmlIdMap.insert(::std::make_pair(i_rIdref, bContent
-            ? ::std::make_pair( &i_rObject, static_cast<Metadatable*>(nullptr) )
-            : ::std::make_pair( static_cast<Metadatable*>(nullptr), &i_rObject )));
+        m_XmlIdMap.insert(std::make_pair(i_rIdref, bContent
+            ? std::make_pair( &i_rObject, static_cast<Metadatable*>(nullptr) )
+            : std::make_pair( static_cast<Metadatable*>(nullptr), &i_rObject )));
         return true;
     }
 }
@@ -1168,9 +1168,9 @@ XmlIdRegistryClipboard::RegisterMetadatableAndCreateID(Metadatable & i_rObject)
     const OUString id( create_id(m_pImpl->m_XmlIdMap) );
     OSL_ENSURE(m_pImpl->m_XmlIdMap.find(id) == m_pImpl->m_XmlIdMap.end(),
         "created id is in use");
-    m_pImpl->m_XmlIdMap.insert(::std::make_pair(id, isInContent
-        ? ::std::make_pair( &i_rObject, static_cast<Metadatable*>(nullptr) )
-        : ::std::make_pair( static_cast<Metadatable*>(nullptr), &i_rObject )));
+    m_pImpl->m_XmlIdMap.insert(std::make_pair(id, isInContent
+        ? std::make_pair( &i_rObject, static_cast<Metadatable*>(nullptr) )
+        : std::make_pair( static_cast<Metadatable*>(nullptr), &i_rObject )));
     // N.B.: if i_rObject had a latent XmlId, then we implicitly delete the
     // MetadatableClipboard and thus the latent XmlId here
     m_pImpl->m_XmlIdReverseMap[&i_rObject] = RMapEntry(stream, id);
@@ -1253,7 +1253,7 @@ XmlIdRegistryClipboard::RegisterCopyClipboard(Metadatable & i_rCopy,
     }
     const std::shared_ptr<MetadatableClipboard> xLink(
         CreateClipboard( isContentFile(i_rReference.First)) );
-    m_pImpl->m_XmlIdReverseMap.insert(::std::make_pair(&i_rCopy,
+    m_pImpl->m_XmlIdReverseMap.insert(std::make_pair(&i_rCopy,
         RMapEntry(i_rReference.First, i_rReference.Second, xLink)));
     return *xLink.get();
 }

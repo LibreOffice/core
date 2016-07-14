@@ -437,7 +437,7 @@ INetContentType Registration::RegisterContentType(OUString const & rTypeName,
     pTypeIDMapEntry->m_aPresentation = rPresentation;
     if (pSystemFileType)
         pTypeIDMapEntry->m_aSystemFileType = *pSystemFileType;
-    rRegistration.m_aTypeIDMap.insert( ::std::make_pair( eTypeID, pTypeIDMapEntry ) );
+    rRegistration.m_aTypeIDMap.insert( std::make_pair( eTypeID, pTypeIDMapEntry ) );
 
     rRegistration.m_aTypeNameMap.insert(std::make_pair(aTheTypeName,
                 TypeNameMapEntry(eTypeID, pExtension)));

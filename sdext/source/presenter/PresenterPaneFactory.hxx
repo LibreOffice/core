@@ -95,7 +95,7 @@ private:
     css::uno::WeakReference<css::drawing::framework::XConfigurationController>
         mxConfigurationControllerWeak;
     ::rtl::Reference<PresenterController> mpPresenterController;
-    typedef ::std::map<OUString, css::uno::Reference<css::drawing::framework::XResource> >
+    typedef std::map<OUString, css::uno::Reference<css::drawing::framework::XResource> >
         ResourceContainer;
     std::unique_ptr<ResourceContainer> mpResourceCache;
 

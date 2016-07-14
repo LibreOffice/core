@@ -61,7 +61,7 @@ namespace sdr
     {
         class TimerEventHandler : public Idle
         {
-            ::std::vector< BaseEvent* >  maVector;
+            std::vector< BaseEvent* >    maVector;
 
             // to allow BaseEvents to use the add/remove functionality
             friend class BaseEvent;

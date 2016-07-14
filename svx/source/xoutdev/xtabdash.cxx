@@ -100,7 +100,7 @@ Bitmap XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
         fLineWidth);
 
     // prepare StrokeAttribute
-    ::std::vector< double > aDotDashArray;
+    std::vector< double > aDotDashArray;
     double fFullDotDashLen(0.0);
 
     if(pDash && (pDash->GetDots() || pDash->GetDashes()))

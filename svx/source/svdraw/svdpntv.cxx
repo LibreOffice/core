@@ -95,7 +95,7 @@ void SdrPaintView::AppendPaintWindow(SdrPaintWindow& rNew)
 
 void SdrPaintView::RemovePaintWindow(SdrPaintWindow& rOld)
 {
-    const SdrPaintWindowVector::iterator aFindResult = ::std::find(maPaintWindows.begin(), maPaintWindows.end(), &rOld);
+    const SdrPaintWindowVector::iterator aFindResult = std::find(maPaintWindows.begin(), maPaintWindows.end(), &rOld);
 
     if(aFindResult != maPaintWindows.end())
     {

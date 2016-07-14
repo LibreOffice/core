@@ -54,8 +54,8 @@ namespace rptui
     } ;
 
     class OPropertyInfoService;
-    typedef ::std::pair< css::uno::Reference< css::report::XFunction>, css::uno::Reference< css::report::XFunctionsSupplier> > TFunctionPair;
-    typedef ::std::multimap< OUString,TFunctionPair, ::comphelper::UStringMixLess > TFunctions;
+    typedef std::pair< css::uno::Reference< css::report::XFunction>, css::uno::Reference< css::report::XFunctionsSupplier> > TFunctionPair;
+    typedef std::multimap< OUString,TFunctionPair, ::comphelper::UStringMixLess > TFunctions;
     typedef ::comphelper::OSimpleListenerContainer  <   css::beans::XPropertyChangeListener
                                                     ,   css::beans::PropertyChangeEvent
                                                     >   PropertyChangeListeners;
@@ -101,7 +101,7 @@ namespace rptui
         static void implCreateListLikeControl(
                 const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory
                 ,css::inspection::LineDescriptor & out_Descriptor
-                ,const ::std::vector< OUString>& _aEntries
+                ,const std::vector< OUString>& _aEntries
                 ,bool _bReadOnlyControl
                 ,bool _bTrueIfListBoxFalseIfComboBox
             );
@@ -148,19 +148,19 @@ namespace rptui
         *
         * \param _rList the localized function names
         */
-        void impl_fillFormulaList_nothrow(::std::vector< OUString >& _out_rList) const;
+        void impl_fillFormulaList_nothrow(std::vector< OUString >& _out_rList) const;
 
         /** return all group names in a semicolon separated list starting with the group where this control is contained in.
         *
         * \param _rList fills the list with all scope names.
         */
-        void impl_fillScopeList_nothrow(::std::vector< OUString >& _out_rList) const;
+        void impl_fillScopeList_nothrow(std::vector< OUString >& _out_rList) const;
 
         /** return all supported output formats of the report definition
         *
         * \param _rList fills the list with all mime types
         */
-        void impl_fillMimeTypes_nothrow(::std::vector< OUString >& _out_rList) const;
+        void impl_fillMimeTypes_nothrow(std::vector< OUString >& _out_rList) const;
 
         /** return the one supported output formats of the report definition
         *
@@ -288,7 +288,7 @@ namespace rptui
         css::uno::Sequence< OUString >                            m_aFieldNames;
         css::uno::Sequence< OUString >                            m_aParamNames;
         TFunctions                                                m_aFunctionNames;
-        ::std::vector< DefaultFunction >                          m_aDefaultFunctions;
+        std::vector< DefaultFunction >                            m_aDefaultFunctions;
         DefaultFunction                                           m_aCounterFunction;
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
         mutable css::uno::Reference< css::report::XFunction>      m_xFunction;

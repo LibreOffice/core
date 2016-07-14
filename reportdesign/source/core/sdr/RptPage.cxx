@@ -166,8 +166,8 @@ void OReportPage::removeTempObject(SdrObject *_pToRemoveObj)
 void OReportPage::resetSpecialMode()
 {
     const bool bChanged = rModel.IsChanged();
-    ::std::vector<SdrObject*>::const_iterator aIter = m_aTemporaryObjectList.begin();
-    ::std::vector<SdrObject*>::const_iterator aEnd = m_aTemporaryObjectList.end();
+    std::vector<SdrObject*>::const_iterator aIter = m_aTemporaryObjectList.begin();
+    std::vector<SdrObject*>::const_iterator aEnd = m_aTemporaryObjectList.end();
 
     for (; aIter != aEnd; ++aIter)
     {

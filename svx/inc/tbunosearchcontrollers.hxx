@@ -76,8 +76,8 @@ public:
 
 private:
 
-    typedef ::std::vector< css::beans::PropertyValue > SearchToolbarControllersVec;
-    typedef ::std::map< css::uno::Reference< css::frame::XFrame >, SearchToolbarControllersVec > SearchToolbarControllersMap;
+    typedef std::vector< css::beans::PropertyValue > SearchToolbarControllersVec;
+    typedef std::map< css::uno::Reference< css::frame::XFrame >, SearchToolbarControllersVec > SearchToolbarControllersMap;
     SearchToolbarControllersMap aSearchToolbarControllersMap;
     std::vector<OUString> m_aSearchStrings;
 

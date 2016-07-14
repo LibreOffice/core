@@ -119,9 +119,9 @@ private:
         mxConfigurationController;
     css::uno::WeakReference<css::frame::XController> mxControllerWeak;
     ::rtl::Reference<PresenterController> mpPresenterController;
-    typedef ::std::pair<css::uno::Reference<css::drawing::framework::XView>,
+    typedef std::pair<css::uno::Reference<css::drawing::framework::XView>,
         css::uno::Reference<css::drawing::framework::XPane> > ViewResourceDescriptor;
-    typedef ::std::map<OUString, ViewResourceDescriptor> ResourceContainer;
+    typedef std::map<OUString, ViewResourceDescriptor> ResourceContainer;
     std::unique_ptr<ResourceContainer> mpResourceCache;
 
     PresenterViewFactory (

@@ -796,7 +796,7 @@ void PresenterWindowManager::LayoutHelpMode()
     awt::Rectangle aWindowBox = mxParentWindow->getPosSize();
     const double nGap (20);
     const double nGoldenRatio ((1 + sqrt(5.0)) / 2);
-    const double nWidth = ::std::min(aWindowBox.Width - 2*nGap, aWindowBox.Width/nGoldenRatio);
+    const double nWidth = std::min(aWindowBox.Width - 2*nGap, aWindowBox.Width/nGoldenRatio);
     SetPanePosSizeAbsolute(
         mpPaneContainer->GetPaneURLForViewURL(PresenterViewFactory::msHelpViewURL),
         (aWindowBox.Width - nWidth)/2,
@@ -1078,7 +1078,7 @@ Reference<rendering::XPolyPolygon2D> PresenterWindowManager::CreateClipPolyPolyg
     // Create a clip polygon that includes the whole update area but has the
     // content windows as holes.
     const sal_Int32 nPaneCount (mpPaneContainer->maPanes.size());
-    ::std::vector<awt::Rectangle> aRectangles;
+    std::vector<awt::Rectangle> aRectangles;
     aRectangles.reserve(1+nPaneCount);
     aRectangles.push_back(mxParentWindow->getPosSize());
     PresenterPaneContainer::PaneList::const_iterator iPane;

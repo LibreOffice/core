@@ -67,7 +67,7 @@ namespace basegfx
             double getCut() const { return mfCut; }
         };
 
-        typedef ::std::vector< temporaryPoint > temporaryPointVector;
+        typedef std::vector< temporaryPoint > temporaryPointVector;
 
         class temporaryPolygonData
         {
@@ -97,7 +97,7 @@ namespace basegfx
                 if(nCount)
                 {
                     // sort temp points to assure increasing fCut values and increasing indices
-                    ::std::sort(rTempPoints.begin(), rTempPoints.end());
+                    std::sort(rTempPoints.begin(), rTempPoints.end());
 
                     // prepare loop
                     B2DCubicBezier aEdge;

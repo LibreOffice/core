@@ -82,7 +82,7 @@ protected:
 
 private:
 
-    typedef ::std::list< ::unogallery::GalleryItem* > GalleryItemList;
+    typedef std::list< ::unogallery::GalleryItem* > GalleryItemList;
 
     GalleryItemList maItemList;
     ::Gallery*      mpGallery;

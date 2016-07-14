@@ -345,7 +345,7 @@ void ChildrenManagerImpl::RemoveNonVisibleChildren (
     ChildDescriptorListType::const_iterator aEnd = rOldChildList.end();
     for (ChildDescriptorListType::iterator I=rOldChildList.begin(); I != aEnd; ++I)
     {
-        if (::std::find(rNewChildList.begin(), rNewChildList.end(), *I) == rNewChildList.end())
+        if (std::find(rNewChildList.begin(), rNewChildList.end(), *I) == rNewChildList.end())
         {
             // The child is disposed when there is a UNO shape from which
             // the accessible shape can be created when the shape becomes
@@ -489,7 +489,7 @@ void ChildrenManagerImpl::RemoveShape (const Reference<drawing::XShape>& rxShape
 
         // Search shape in list of visible children.
         ChildDescriptorListType::iterator I (
-            ::std::find (maVisibleChildren.begin(), maVisibleChildren.end(),
+            std::find (maVisibleChildren.begin(), maVisibleChildren.end(),
                 ChildDescriptor (rxShape)));
         if (I != maVisibleChildren.end())
         {
@@ -640,7 +640,7 @@ void SAL_CALL
 
         // Find the descriptor for the given shape.
         ChildDescriptorListType::iterator I (
-            ::std::find (maVisibleChildren.begin(), maVisibleChildren.end(),
+            std::find (maVisibleChildren.begin(), maVisibleChildren.end(),
                 ChildDescriptor (xShape)));
         if (I != maVisibleChildren.end())
         {

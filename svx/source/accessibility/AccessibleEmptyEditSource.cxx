@@ -264,7 +264,7 @@ namespace accessibility
         if( mrObj.GetModel() )
             EndListening( *mrObj.GetModel() );
 
-        ::std::unique_ptr< SvxEditSource > pProxySource( new AccessibleProxyEditSource_Impl(mrObj, mrView, mrViewWindow) );
+        std::unique_ptr< SvxEditSource > pProxySource( new AccessibleProxyEditSource_Impl(mrObj, mrView, mrViewWindow) );
         mpEditSource.swap(pProxySource);
 
         // register as listener

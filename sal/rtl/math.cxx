@@ -221,7 +221,7 @@ inline void doubleToString(StringT ** pResult,
             if (nDecPlaces == rtl_math_DecimalPlaces_Max)
                 nDecPlaces = 0;
             else
-                nDecPlaces = ::std::max<sal_Int32>( ::std::min<sal_Int32>( nDecPlaces, 15), -15);
+                nDecPlaces = std::max<sal_Int32>( std::min<sal_Int32>( nDecPlaces, 15), -15);
             if (bEraseTrailingDecZeros && nDecPlaces > 0)
                 nDecPlaces = 0;
 
@@ -270,7 +270,7 @@ inline void doubleToString(StringT ** pResult,
             sal_Int32 n = (p - pBuf) / 2;
             for (sal_Int32 i=0; i < n; ++i)
             {
-                ::std::swap( pBuf[i], p[-i-1]);
+                std::swap( pBuf[i], p[-i-1]);
             }
             // Append decimals.
             if (nDecPlaces > 0)

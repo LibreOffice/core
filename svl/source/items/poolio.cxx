@@ -203,7 +203,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
                     aWhichIdsRec.NewContent(nSlotId, 0);
                     rStream.WriteUInt16( (*ppDefItem)->Which() );
                     rStream.WriteUInt16( nItemVersion );
-                    const sal_uInt32 nCount = ::std::min<size_t>( (*itrArr)->size(), SAL_MAX_UINT32 );
+                    const sal_uInt32 nCount = std::min<size_t>( (*itrArr)->size(), SAL_MAX_UINT32 );
                     DBG_ASSERT(nCount, "ItemArr is empty");
                     rStream.WriteUInt32( nCount );
 

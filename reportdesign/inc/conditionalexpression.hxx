@@ -85,7 +85,7 @@ namespace rptui
     };
 
     typedef std::shared_ptr< ConditionalExpression >                PConditionalExpression;
-    typedef ::std::map< ComparisonOperation, PConditionalExpression >   ConditionalExpressions;
+    typedef std::map< ComparisonOperation, PConditionalExpression >     ConditionalExpressions;
 
 
     // = ConditionalExpressionFactory

@@ -47,7 +47,7 @@ public:
         OString aLangName;         // language name
         OString aOutputRc;         // target file
         OString aLangSearchPath;   // language specific search path
-        ::std::list< OString >    aSysSearchDirs;    // paths to search for images
+        std::list< OString >      aSysSearchDirs;    // paths to search for images
 
         OutputFile() {}
     };

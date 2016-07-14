@@ -104,7 +104,7 @@ namespace basegfx
         }
 
         // it is a bezier
-        ::std::vector< double >::const_iterator aIter = ::std::lower_bound(maLengthArray.begin(), maLengthArray.end(), fDistance);
+        std::vector< double >::const_iterator aIter = std::lower_bound(maLengthArray.begin(), maLengthArray.end(), fDistance);
         const sal_uInt32 nIndex(aIter - maLengthArray.begin());
         const double fHighBound(maLengthArray[nIndex]);
         const double fLowBound(nIndex ?  maLengthArray[nIndex - 1] : 0.0);

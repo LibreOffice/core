@@ -64,7 +64,7 @@ namespace sdext { namespace presenter {
 PresenterTextView::PresenterTextView (
     const Reference<XComponentContext>& rxContext,
     const Reference<rendering::XCanvas>& rxCanvas,
-    const ::std::function<void (const css::awt::Rectangle&)>& rInvalidator)
+    const std::function<void (const css::awt::Rectangle&)>& rInvalidator)
     : mxCanvas(rxCanvas),
       mxBreakIterator(),
       mxScriptTypeDetector(),
@@ -136,7 +136,7 @@ void PresenterTextView::SetText (const Reference<text::XText>& rxText)
 }
 
 void PresenterTextView::SetTextChangeBroadcaster (
-    const ::std::function<void ()>& rBroadcaster)
+    const std::function<void ()>& rBroadcaster)
 {
     maTextChangeBroadcaster = rBroadcaster;
 }
@@ -145,7 +145,7 @@ void PresenterTextView::SetLocation (const css::geometry::RealPoint2D& rLocation
 {
     maLocation = rLocation;
 
-    for (::std::vector<SharedPresenterTextParagraph>::iterator
+    for (std::vector<SharedPresenterTextParagraph>::iterator
              iParagraph(maParagraphs.begin()),
              iEnd(maParagraphs.end());
          iParagraph!=iEnd;
@@ -174,7 +174,7 @@ double PresenterTextView::GetTotalTextHeight()
         Format();
     }
 
-    for (::std::vector<SharedPresenterTextParagraph>::iterator
+    for (std::vector<SharedPresenterTextParagraph>::iterator
              iParagraph(maParagraphs.begin()),
              iEnd(maParagraphs.end());
          iParagraph!=iEnd;
@@ -304,13 +304,13 @@ void PresenterTextView::Paint (
     const sal_Int32 nAdditionalRightBorder (5);
     double nX (maLocation.X - mnLeftOffset);
     double nY (maLocation.Y - mnTopOffset);
-    const sal_Int32 nClipLeft (::std::max(
+    const sal_Int32 nClipLeft (std::max(
         PresenterGeometryHelper::Round(maLocation.X)-nAdditionalLeftBorder, rUpdateBox.X));
-    const sal_Int32 nClipTop (::std::max(
+    const sal_Int32 nClipTop (std::max(
         PresenterGeometryHelper::Round(maLocation.Y), rUpdateBox.Y));
-    const sal_Int32 nClipRight (::std::min(
+    const sal_Int32 nClipRight (std::min(
         PresenterGeometryHelper::Round(maLocation.X+maSize.Width)+nAdditionalRightBorder, rUpdateBox.X+rUpdateBox.Width));
-    const sal_Int32 nClipBottom (::std::min(
+    const sal_Int32 nClipBottom (std::min(
         PresenterGeometryHelper::Round(maLocation.Y+maSize.Height), rUpdateBox.Y+rUpdateBox.Height));
     if (nClipLeft>=nClipRight || nClipTop>=nClipBottom)
         return;
@@ -334,7 +334,7 @@ void PresenterTextView::Paint (
         rendering::CompositeOperation::SOURCE);
     PresenterCanvasHelper::SetDeviceColor(aRenderState, mpFont->mnColor);
 
-    for (::std::vector<SharedPresenterTextParagraph>::const_iterator
+    for (std::vector<SharedPresenterTextParagraph>::const_iterator
              iParagraph(maParagraphs.begin()),
              iEnd(maParagraphs.end());
          iParagraph!=iEnd;
@@ -418,7 +418,7 @@ void PresenterTextView::Format()
     mbIsFormatPending = false;
 
     double nY (0);
-    for (::std::vector<SharedPresenterTextParagraph>::const_iterator
+    for (std::vector<SharedPresenterTextParagraph>::const_iterator
              iParagraph(maParagraphs.begin()),
              iEnd(maParagraphs.end());
          iParagraph!=iEnd;
@@ -827,7 +827,7 @@ TextSegment PresenterTextParagraph::GetTextSegment (
 
         case AccessibleTextType::LINE:
         {
-            for (::std::vector<Line>::const_iterator
+            for (std::vector<Line>::const_iterator
                      iLine(maLines.begin()),
                      iEnd(maLines.end());
                  iLine!=iEnd;
@@ -946,7 +946,7 @@ awt::Rectangle PresenterTextParagraph::GetCharacterBounds (
         // the current line.  Therefore we have to add the absolute
         // position of the line.
         geometry::RealRectangle2D rCellBox (rLine.maCellBoxes[
-            ::std::min(nCellIndex, rLine.maCellBoxes.getLength()-1)]);
+            std::min(nCellIndex, rLine.maCellBoxes.getLength()-1)]);
 
         double nLeft = nX + rCellBox.X1;
         double nRight = nX + rCellBox.X2;
@@ -1077,8 +1077,8 @@ void PresenterTextParagraph::SetupCellArray (
 //===== PresenterTextCaret ================================================----
 
 PresenterTextCaret::PresenterTextCaret (
-    const ::std::function<css::awt::Rectangle (const sal_Int32,const sal_Int32)>& rCharacterBoundsAccess,
-    const ::std::function<void (const css::awt::Rectangle&)>& rInvalidator)
+    const std::function<css::awt::Rectangle (const sal_Int32,const sal_Int32)>& rCharacterBoundsAccess,
+    const std::function<void (const css::awt::Rectangle&)>& rInvalidator)
     : mnParagraphIndex(-1),
       mnCharacterIndex(-1),
       mnCaretBlinkTaskId(0),
@@ -1156,7 +1156,7 @@ void PresenterTextCaret::SetPosition (
 
 
 void PresenterTextCaret::SetCaretMotionBroadcaster (
-    const ::std::function<void (sal_Int32,sal_Int32,sal_Int32,sal_Int32)>& rBroadcaster)
+    const std::function<void (sal_Int32,sal_Int32,sal_Int32,sal_Int32)>& rBroadcaster)
 {
     maBroadcaster = rBroadcaster;
 }

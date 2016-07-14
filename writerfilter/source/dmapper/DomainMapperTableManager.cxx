@@ -555,7 +555,7 @@ void DomainMapperTableManager::endOfRowAction()
     IntVectorPtr pCellWidths = getCurrentCellWidths( );
     if(!m_nTableWidth && pTableGrid->size())
     {
-        ::std::vector<sal_Int32>::const_iterator aCellIter = pTableGrid->begin();
+        std::vector<sal_Int32>::const_iterator aCellIter = pTableGrid->begin();
 
 #ifdef DEBUG_WRITERFILTER
         TagLogger::getInstance().startElement("tableWidth");
@@ -594,8 +594,8 @@ void DomainMapperTableManager::endOfRowAction()
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().startElement("gridSpans");
     {
-        ::std::vector<sal_Int32>::const_iterator aGridSpanIter = pCurrentSpans->begin();
-        ::std::vector<sal_Int32>::const_iterator aGridSpanIterEnd = pCurrentSpans->end();
+        std::vector<sal_Int32>::const_iterator aGridSpanIter = pCurrentSpans->begin();
+        std::vector<sal_Int32>::const_iterator aGridSpanIterEnd = pCurrentSpans->end();
 
         while (aGridSpanIter != aGridSpanIterEnd)
         {
@@ -611,7 +611,7 @@ void DomainMapperTableManager::endOfRowAction()
 
     //calculate number of used grids - it has to match the size of m_aTableGrid
     size_t nGrids = 0;
-    ::std::vector<sal_Int32>::const_iterator aGridSpanIter = pCurrentSpans->begin();
+    std::vector<sal_Int32>::const_iterator aGridSpanIter = pCurrentSpans->begin();
     for( ; aGridSpanIter != pCurrentSpans->end(); ++aGridSpanIter)
         nGrids += *aGridSpanIter;
 
@@ -656,7 +656,7 @@ void DomainMapperTableManager::endOfRowAction()
             if (nFullWidthRelative == 0)
                 throw o3tl::divide_by_zero();
 
-            ::std::vector< sal_Int32 >::const_iterator aSpansIter = pCurrentSpans->begin( );
+            std::vector< sal_Int32 >::const_iterator aSpansIter = pCurrentSpans->begin( );
             for( size_t nBorder = 0; nBorder < nWidthsBound; ++nBorder )
             {
                 double fGridWidth = 0.;

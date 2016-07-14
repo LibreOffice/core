@@ -27,7 +27,7 @@ namespace svx { namespace sidebar {
 
 Popup::Popup (
     vcl::Window* pParent,
-    const ::std::function<PopupControl* (PopupContainer*)>& rControlCreator,
+    const std::function<PopupControl* (PopupContainer*)>& rControlCreator,
     const ::rtl::OUString& rsAccessibleName)
     : mxControl(),
       mpParent(pParent),

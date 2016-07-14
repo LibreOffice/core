@@ -147,7 +147,7 @@ public:
     sal_Int32   GetNumber() const  { return lId;      }
 };
 
-typedef ::std::vector< RscDefine* > RscSubDefList;
+typedef std::vector< RscDefine* > RscSubDefList;
 
 class RscDefineList
 {
@@ -194,7 +194,7 @@ public:
     sal_uLong   GetFileKey(){ return lKey; }
 };
 
-typedef ::std::vector< RscDepend* > RscDependList;
+typedef std::vector< RscDepend* > RscDependList;
 
 // table containing al file names
 class RscFile

@@ -103,8 +103,8 @@ bool GalleryThemeListBox::PreNotify( NotifyEvent& rNEvt )
 GalleryBrowser1::GalleryBrowser1(
     vcl::Window* pParent,
     Gallery* pGallery,
-    const ::std::function<sal_Bool (const KeyEvent&,Window*)>& rKeyInputHandler,
-    const ::std::function<void ()>& rThemeSlectionHandler)
+    const std::function<sal_Bool (const KeyEvent&,Window*)>& rKeyInputHandler,
+    const std::function<void ()>& rThemeSlectionHandler)
     :
     Control               ( pParent, WB_TABSTOP ),
     maNewTheme            ( VclPtr<GalleryButton>::Create(this, WB_3DLOOK) ),
@@ -218,7 +218,7 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
     }
 }
 
-void GalleryBrowser1::ImplGetExecuteVector(::std::vector< sal_uInt16 >& o_aExec)
+void GalleryBrowser1::ImplGetExecuteVector(std::vector< sal_uInt16 >& o_aExec)
 {
     GalleryTheme*           pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
 
@@ -513,7 +513,7 @@ bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
 
     if( !bRet )
     {
-        ::std::vector< sal_uInt16 > aExecVector;
+        std::vector< sal_uInt16 > aExecVector;
         ImplGetExecuteVector(aExecVector);
         sal_uInt16                  nExecuteId = 0;
         bool                    bMod1 = rKEvt.GetKeyCode().IsMod1();
@@ -564,7 +564,7 @@ bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
             break;
         }
 
-        if( nExecuteId && ( ::std::find( aExecVector.begin(), aExecVector.end(), nExecuteId ) != aExecVector.end() ) )
+        if( nExecuteId && ( std::find( aExecVector.begin(), aExecVector.end(), nExecuteId ) != aExecVector.end() ) )
         {
             ImplExecute( nExecuteId );
             bRet = true;
@@ -576,18 +576,18 @@ bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
 
 IMPL_LINK_NOARG_TYPED(GalleryBrowser1, ShowContextMenuHdl, void*, void)
 {
-    ::std::vector< sal_uInt16 > aExecVector;
+    std::vector< sal_uInt16 > aExecVector;
     ImplGetExecuteVector(aExecVector);
 
     if( !aExecVector.empty() )
     {
         ScopedVclPtrInstance<PopupMenu> aMenu( GAL_RES( RID_SVXMN_GALLERY1 ) );
 
-        aMenu->EnableItem( MN_ACTUALIZE, ::std::find( aExecVector.begin(), aExecVector.end(), MN_ACTUALIZE ) != aExecVector.end() );
-        aMenu->EnableItem( MN_RENAME, ::std::find( aExecVector.begin(), aExecVector.end(), MN_RENAME ) != aExecVector.end() );
-        aMenu->EnableItem( MN_DELETE, ::std::find( aExecVector.begin(), aExecVector.end(), MN_DELETE ) != aExecVector.end() );
-        aMenu->EnableItem( MN_ASSIGN_ID, ::std::find( aExecVector.begin(), aExecVector.end(), MN_ASSIGN_ID ) != aExecVector.end() );
-        aMenu->EnableItem( MN_PROPERTIES, ::std::find( aExecVector.begin(), aExecVector.end(), MN_PROPERTIES ) != aExecVector.end() );
+        aMenu->EnableItem( MN_ACTUALIZE, std::find( aExecVector.begin(), aExecVector.end(), MN_ACTUALIZE ) != aExecVector.end() );
+        aMenu->EnableItem( MN_RENAME, std::find( aExecVector.begin(), aExecVector.end(), MN_RENAME ) != aExecVector.end() );
+        aMenu->EnableItem( MN_DELETE, std::find( aExecVector.begin(), aExecVector.end(), MN_DELETE ) != aExecVector.end() );
+        aMenu->EnableItem( MN_ASSIGN_ID, std::find( aExecVector.begin(), aExecVector.end(), MN_ASSIGN_ID ) != aExecVector.end() );
+        aMenu->EnableItem( MN_PROPERTIES, std::find( aExecVector.begin(), aExecVector.end(), MN_PROPERTIES ) != aExecVector.end() );
         aMenu->SetSelectHdl( LINK( this, GalleryBrowser1, PopupMenuHdl ) );
         aMenu->RemoveDisabledEntries();
 

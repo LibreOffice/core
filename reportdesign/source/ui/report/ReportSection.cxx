@@ -124,7 +124,7 @@ void OReportSection::dispose()
     m_pFunc.reset();
 
     {
-        ::std::unique_ptr<OSectionView> aTemp( m_pView);
+        std::unique_ptr<OSectionView> aTemp( m_pView);
         if ( m_pView )
             m_pView->EndListening( *m_pModel );
         m_pView = nullptr;
@@ -347,7 +347,7 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
     const SdrMarkList& rMarkedList = m_pView->GetMarkedObjectList();
     const size_t nMark = rMarkedList.GetMarkCount();
 
-    ::std::vector< uno::Reference<report::XReportComponent> > aCopies;
+    std::vector< uno::Reference<report::XReportComponent> > aCopies;
     aCopies.reserve(nMark);
 
     SdrUndoFactory& rUndo = m_pView->GetModel()->GetSdrUndoFactory();
@@ -379,7 +379,7 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
 
     if ( !aCopies.empty() )
     {
-        ::std::reverse(aCopies.begin(),aCopies.end());
+        std::reverse(aCopies.begin(),aCopies.end());
         const sal_Int32 nLength = _rAllreadyCopiedObjects.getLength();
         _rAllreadyCopiedObjects.realloc( nLength + 1);
         beans::NamedValue* pNewValue = _rAllreadyCopiedObjects.getArray() + nLength;
@@ -702,7 +702,7 @@ uno::Reference< report::XReportComponent > OReportSection::getCurrentControlMode
     return xModel;
 }
 
-void OReportSection::fillControlModelSelection(::std::vector< uno::Reference< uno::XInterface > >& _rSelection) const
+void OReportSection::fillControlModelSelection(std::vector< uno::Reference< uno::XInterface > >& _rSelection) const
 {
     if ( m_pView )
     {

@@ -125,7 +125,7 @@ void FocusManager::SetPanels (const SharedPanelContainer& rPanels)
     }
 }
 
-void FocusManager::SetButtons (const ::std::vector<Button*>& rButtons)
+void FocusManager::SetButtons (const std::vector<Button*>& rButtons)
 {
     ClearButtons();
     for (auto iButton = rButtons.begin(); iButton != rButtons.end(); ++iButton)
@@ -279,7 +279,7 @@ void FocusManager::ClickButton (const sal_Int32 nButtonIndex)
 
 void FocusManager::RemoveWindow (vcl::Window& rWindow)
 {
-    auto iPanel (::std::find(maPanels.begin(), maPanels.end(), &rWindow));
+    auto iPanel (std::find(maPanels.begin(), maPanels.end(), &rWindow));
     if (iPanel != maPanels.end())
     {
         UnregisterWindow(rWindow);
@@ -292,7 +292,7 @@ void FocusManager::RemoveWindow (vcl::Window& rWindow)
         return;
     }
 
-    auto iButton (::std::find(maButtons.begin(), maButtons.end(), &rWindow));
+    auto iButton (std::find(maButtons.begin(), maButtons.end(), &rWindow));
     if (iButton != maButtons.end())
     {
         UnregisterWindow(rWindow);

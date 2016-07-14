@@ -696,7 +696,7 @@ void PresenterScreen::ProcessLayout (
                 "Layout"),
             UNO_QUERY_THROW);
 
-        ::std::vector<OUString> aProperties (6);
+        std::vector<OUString> aProperties (6);
         aProperties[0] = "PaneURL";
         aProperties[1] = "ViewURL";
         aProperties[2] = "RelativeX";
@@ -726,7 +726,7 @@ void PresenterScreen::ProcessViewDescriptions (
             rConfiguration.GetConfigurationNode("Presenter/Views"),
             UNO_QUERY_THROW);
 
-        ::std::vector<OUString> aProperties (4);
+        std::vector<OUString> aProperties (4);
         aProperties[0] = "ViewURL";
         aProperties[1] = "Title";
         aProperties[2] = "AccessibleTitle";
@@ -748,7 +748,7 @@ void PresenterScreen::ProcessViewDescriptions (
 
 void PresenterScreen::ProcessComponent (
     const OUString& rsKey,
-    const ::std::vector<Any>& rValues,
+    const std::vector<Any>& rValues,
     const Reference<XComponentContext>& rxContext,
     const Reference<XResourceId>& rxAnchorId)
 {
@@ -794,7 +794,7 @@ void PresenterScreen::ProcessComponent (
 
 void PresenterScreen::ProcessViewDescription (
     const OUString& rsKey,
-    const ::std::vector<Any>& rValues)
+    const std::vector<Any>& rValues)
 {
     (void)rsKey;
 

@@ -66,9 +66,9 @@ namespace accessibility
         maEventQueue.push_back( new SvxEditSourceHint( rHint ) );
     }
 
-    ::std::unique_ptr< SfxHint > AccessibleTextEventQueue::PopFront()
+    std::unique_ptr< SfxHint > AccessibleTextEventQueue::PopFront()
     {
-        ::std::unique_ptr< SfxHint > aRes( *(maEventQueue.begin()) );
+        std::unique_ptr< SfxHint > aRes( *(maEventQueue.begin()) );
         maEventQueue.pop_front();
         return aRes;
     }

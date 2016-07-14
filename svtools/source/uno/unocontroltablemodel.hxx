@@ -82,7 +82,7 @@ namespace svt { namespace table
         virtual ::boost::optional< ::Color >    getInactiveSelectionTextColor() const override;
         virtual ::boost::optional< ::Color >    getTextColor() const override;
         virtual ::boost::optional< ::Color >    getTextLineColor() const override;
-        virtual ::boost::optional< ::std::vector< ::Color > >
+        virtual ::boost::optional< std::vector< ::Color > >
                                                 getRowBackgroundColors() const override;
         virtual css::style::VerticalAlignment
                                                 getVerticalAlign() const override;

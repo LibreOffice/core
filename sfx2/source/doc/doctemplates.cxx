@@ -121,7 +121,7 @@ using namespace ::com::sun::star::util;
 using namespace ::ucbhelper;
 using namespace ::comphelper;
 
-using ::std::vector;
+using std::vector;
 
 namespace {
 

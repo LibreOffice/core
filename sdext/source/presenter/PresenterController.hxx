@@ -199,7 +199,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    typedef ::std::map<css::uno::Reference<css::frame::XFrame>,rtl::Reference<PresenterController> > InstanceContainer;
+    typedef std::map<css::uno::Reference<css::frame::XFrame>,rtl::Reference<PresenterController> > InstanceContainer;
     static InstanceContainer maInstances;
 
     css::uno::WeakReference<css::lang::XEventListener> mxScreen;

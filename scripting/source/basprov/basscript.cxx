@@ -50,7 +50,7 @@ namespace basprov
 
 #define BASSCRIPT_DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT
 
-    typedef ::std::map< sal_Int16, Any, ::std::less< sal_Int16 > > OutParamMap;
+    typedef std::map< sal_Int16, Any, std::less< sal_Int16 > > OutParamMap;
 
 
     // BasicScriptImpl

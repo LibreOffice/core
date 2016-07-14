@@ -125,7 +125,7 @@ namespace svx
     class SvxShowCharSetAcc : public ::comphelper::OAccessibleSelectionHelper,
                               public OAccessibleHelper_Base
     {
-        ::std::vector< css::uno::Reference< css::accessibility::XAccessible > > m_aChildren;
+        std::vector< css::uno::Reference< css::accessibility::XAccessible > > m_aChildren;
         SvxShowCharSetVirtualAcc* m_pParent; // the virtual parent
     protected:
         virtual void SAL_CALL disposing() override;

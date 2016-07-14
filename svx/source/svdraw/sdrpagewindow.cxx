@@ -221,7 +221,7 @@ void SdrPageWindow::PrepareRedraw(const vcl::Region& rReg)
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 
-// for ::std::sort
+// for std::sort
 #include <algorithm>
 
 namespace

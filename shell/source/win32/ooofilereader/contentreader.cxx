@@ -106,7 +106,7 @@ ITag* CContentReader::chooseTagReader( const std::wstring& tag_name, const XmlTa
 
 /** get style of the current content.
 */
-::std::wstring CContentReader::getCurrentContentStyle()
+std::wstring CContentReader::getCurrentContentStyle()
 {
     assert( !m_TagBuilderStack.empty() );
     ITag* pTagBuilder = m_TagBuilderStack.top();
@@ -188,11 +188,11 @@ void CContentReader::end_element(const std::wstring& /*raw_name*/, const std::ws
     }
     if (( local_name == CONTENT_TEXT_A )||( local_name == CONTENT_TEXT_SPAN ) ||
         ( local_name == CONTENT_TEXT_SEQUENCE )||( local_name == CONTENT_TEXT_BOOKMARK_REF ))
-        addChunk( getLocale( getCurrentContentStyle() ), ::std::wstring( SPACE ) );
+        addChunk( getLocale( getCurrentContentStyle() ), std::wstring( SPACE ) );
     if ((( local_name == CONTENT_TEXT_P )||( local_name == CONTENT_TEXT_H ) ||
          ( local_name == CONTENT_TEXT_INDEX_TITLE_TEMPLATE ) )&&
         ( EMPTY_STRING != pTagBuilder->getTagContent( ) ) )
-        addChunk( getLocale( getCurrentContentStyle() ), ::std::wstring( LF ) );
+        addChunk( getLocale( getCurrentContentStyle() ), std::wstring( LF ) );
 
     m_TagBuilderStack.pop();
     pTagBuilder->endTag();
@@ -208,7 +208,7 @@ void CContentReader::characters( const std::wstring& character )
 {
     if ( character.length() > 0 && !HasOnlySpaces( character ) )
     {
-        addChunk( getLocale( getCurrentContentStyle() ), ::std::wstring( character ) );
+        addChunk( getLocale( getCurrentContentStyle() ), std::wstring( character ) );
 
         ITag* pTagBuilder = m_TagBuilderStack.top();
         pTagBuilder->addCharacters( character );

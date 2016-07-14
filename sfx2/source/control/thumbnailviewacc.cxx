@@ -48,7 +48,7 @@ void ThumbnailViewAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOld
 {
     if( nEventId )
     {
-        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > > aTmpListeners( mxEventListeners );
+        std::vector< uno::Reference< accessibility::XAccessibleEventListener > > aTmpListeners( mxEventListeners );
         accessibility::AccessibleEventObject aEvtObject;
 
         aEvtObject.EventId = nEventId;
@@ -56,7 +56,7 @@ void ThumbnailViewAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOld
         aEvtObject.NewValue = rNewValue;
         aEvtObject.OldValue = rOldValue;
 
-        for (::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter( aTmpListeners.begin() ), aEnd( aTmpListeners.end() );
+        for (std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter( aTmpListeners.begin() ), aEnd( aTmpListeners.end() );
             aIter != aEnd ; ++aIter)
         {
             try
@@ -537,7 +537,7 @@ sal_Int64 SAL_CALL ThumbnailViewAcc::getSomething( const uno::Sequence< sal_Int8
 
 void SAL_CALL ThumbnailViewAcc::disposing()
 {
-    ::std::vector<uno::Reference<accessibility::XAccessibleEventListener> > aListenerListCopy;
+    std::vector<uno::Reference<accessibility::XAccessibleEventListener> > aListenerListCopy;
 
     {
         // Make a copy of the list and clear the original.
@@ -552,7 +552,7 @@ void SAL_CALL ThumbnailViewAcc::disposing()
     }
 
     // Inform all listeners that this objects is disposing.
-    ::std::vector<uno::Reference<accessibility::XAccessibleEventListener> >::const_iterator
+    std::vector<uno::Reference<accessibility::XAccessibleEventListener> >::const_iterator
           aListenerIterator (aListenerListCopy.begin());
     lang::EventObject aEvent (static_cast<accessibility::XAccessible*>(this));
     while (aListenerIterator != aListenerListCopy.end())
@@ -610,7 +610,7 @@ void ThumbnailViewItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& 
 {
     if( nEventId )
     {
-        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > > aTmpListeners( mxEventListeners );
+        std::vector< uno::Reference< accessibility::XAccessibleEventListener > > aTmpListeners( mxEventListeners );
         accessibility::AccessibleEventObject aEvtObject;
 
         aEvtObject.EventId = nEventId;
@@ -618,7 +618,7 @@ void ThumbnailViewItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& 
         aEvtObject.NewValue = rNewValue;
         aEvtObject.OldValue = rOldValue;
 
-        for (::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter( aTmpListeners.begin() ), aEnd( aTmpListeners.end() );
+        for (std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter( aTmpListeners.begin() ), aEnd( aTmpListeners.end() );
             aIter != aEnd ; ++aIter)
         {
             try
@@ -829,7 +829,7 @@ void SAL_CALL ThumbnailViewItemAcc::addAccessibleEventListener( const uno::Refer
 
     if( rxListener.is() )
     {
-           ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter = mxEventListeners.begin();
+           std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter = mxEventListeners.begin();
         bool bFound = false;
 
         while( !bFound && ( aIter != mxEventListeners.end() ) )

@@ -69,7 +69,7 @@ void HelpInterceptor_Impl::addURL( const OUString& rURL )
         {
             delete m_pHistory->at( i );
             HelpHistoryList_Impl::iterator it = m_pHistory->begin();
-            ::std::advance( it, i );
+            std::advance( it, i );
             m_pHistory->erase( it );
         }
     }

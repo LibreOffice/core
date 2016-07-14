@@ -42,7 +42,7 @@ class SvdProgressInfo;
 class ImpSdrGDIMetaFileImport
 {
 protected:
-    ::std::vector< SdrObject* > maTmpList;
+    std::vector< SdrObject* > maTmpList;
     ScopedVclPtr<VirtualDevice> mpVD;
     Rectangle                   maScaleRect;
     size_t                      mnMapScalingOfs; // from here on, not edited with MapScaling

@@ -145,7 +145,7 @@ void SAL_CALL ParaLRSpacingControl::notifyContextChangeEvent(const css::ui::Cont
 }
 
 ::css::uno::Any SAL_CALL ParaLRSpacingControl::queryInterface(const ::css::uno::Type& aType)
-        throw (::css::uno::RuntimeException, ::std::exception)
+        throw (::css::uno::RuntimeException, std::exception)
 {
     ::css::uno::Any a(SfxToolBoxControl::queryInterface(aType));
     if (a.hasValue())
@@ -160,7 +160,7 @@ void SAL_CALL ParaLRSpacingControl::acquire() throw ()
 }
 
 void SAL_CALL ParaLRSpacingControl::disposing(const ::css::lang::EventObject&)
-    throw (::css::uno::RuntimeException, ::std::exception)
+    throw (::css::uno::RuntimeException, std::exception)
 {
     SfxToolBoxControl::disposing();
 }

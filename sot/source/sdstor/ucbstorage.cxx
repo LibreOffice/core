@@ -462,7 +462,7 @@ public:
 typedef tools::SvRef<UCBStorageStream_Impl> UCBStorageStream_ImplRef;
 
 struct UCBStorageElement_Impl;
-typedef ::std::vector< UCBStorageElement_Impl* > UCBStorageElementList_Impl;
+typedef std::vector< UCBStorageElement_Impl* > UCBStorageElementList_Impl;
 
 class UCBStorage_Impl : public SvRefBase
 {
@@ -2315,7 +2315,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                 if ( pInnerElement->m_bIsRemoved )
                 {
                     UCBStorageElementList_Impl::iterator it = m_aChildrenList.begin();
-                    ::std::advance( it, i );
+                    std::advance( it, i );
                     delete *it;
                     m_aChildrenList.erase( it );
                 }
@@ -2343,7 +2343,7 @@ bool UCBStorage_Impl::Revert()
         if ( pElement->m_bIsInserted )
         {
             UCBStorageElementList_Impl::iterator it = m_aChildrenList.begin();
-            ::std::advance( it, i );
+            std::advance( it, i );
             delete *it;
             m_aChildrenList.erase( it );
         }

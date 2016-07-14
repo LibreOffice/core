@@ -136,7 +136,7 @@ namespace svgio
 
         };
 
-        typedef ::std::vector< SvgNumber > SvgNumberVector;
+        typedef std::vector< SvgNumber > SvgNumberVector;
 
         enum SvgAlign
         {
@@ -207,11 +207,11 @@ namespace svgio
         bool readSvgPaint(const OUString& rCandidate, SvgPaint& rSvgPaint, OUString& rURL, bool bCaseIndependent, SvgNumber& rOpacity);
 
         bool readSvgNumberVector(const OUString& rCandidate, SvgNumberVector& rSvgNumberVector);
-        ::std::vector< double > solveSvgNumberVector(const SvgNumberVector& rInput, const InfoProvider& rInfoProvider);
+        std::vector< double > solveSvgNumberVector(const SvgNumberVector& rInput, const InfoProvider& rInfoProvider);
 
         SvgAspectRatio readSvgAspectRatio(const OUString& rCandidate);
 
-        typedef ::std::vector< OUString > SvgStringVector;
+        typedef std::vector< OUString > SvgStringVector;
         bool readSvgStringVector(const OUString& rCandidate, SvgStringVector& rSvgStringVector);
 
         void readImageLink(const OUString& rCandidate, OUString& rXLink, OUString& rUrl, OUString& rMimeType, OUString& rData);

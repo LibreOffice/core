@@ -91,7 +91,7 @@ void SfxItemPool::AddSfxItemPoolUser(SfxItemPoolUser& rNewUser)
 
 void SfxItemPool::RemoveSfxItemPoolUser(SfxItemPoolUser& rOldUser)
 {
-    const std::vector<SfxItemPoolUser*>::iterator aFindResult = ::std::find(
+    const std::vector<SfxItemPoolUser*>::iterator aFindResult = std::find(
         pImpl->maSfxItemPoolUsers.begin(), pImpl->maSfxItemPoolUsers.end(), &rOldUser);
     if(aFindResult != pImpl->maSfxItemPoolUsers.end())
     {

@@ -80,9 +80,9 @@ class RscTypCont
     RscTop  *           pRoot;              // pointer to the root of type tree
     RSCINST             aVersion;           // version control instance
 
-    ::std::vector< RscTop* >
+    std::vector< RscTop* >
                         aBaseLst;           // list of simple resource class
-    ::std::vector< RscSysEntry* >
+    std::vector< RscSysEntry* >
                         aSysLst;            // list of system resources
 
     Atom                nWinBitVarId;       // name of the winbit variable

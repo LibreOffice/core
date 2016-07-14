@@ -178,7 +178,7 @@ namespace svt
     class FileViewContentEnumerator: public salhelper::Thread
     {
     public:
-        typedef ::std::vector< SortingData_Impl* >  ContentData;
+        typedef std::vector< SortingData_Impl* >    ContentData;
 
     private:
         ContentData&                    m_rContent;

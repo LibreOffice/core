@@ -34,7 +34,7 @@ ContextList::~ContextList()
 
 const ContextList::Entry* ContextList::GetMatch (const Context& rContext) const
 {
-    const ::std::vector<Entry>::const_iterator iEntry = FindBestMatch(rContext);
+    const std::vector<Entry>::const_iterator iEntry = FindBestMatch(rContext);
     if (iEntry != maEntries.end())
         return &*iEntry;
     else
@@ -43,19 +43,19 @@ const ContextList::Entry* ContextList::GetMatch (const Context& rContext) const
 
 ContextList::Entry* ContextList::GetMatch (const Context& rContext)
 {
-    const ::std::vector<Entry>::const_iterator iEntry = FindBestMatch(rContext);
+    const std::vector<Entry>::const_iterator iEntry = FindBestMatch(rContext);
     if (iEntry != maEntries.end())
         return const_cast<Entry*>(&*iEntry);
     else
         return nullptr;
 }
 
-::std::vector<ContextList::Entry>::const_iterator ContextList::FindBestMatch (const Context& rContext) const
+std::vector<ContextList::Entry>::const_iterator ContextList::FindBestMatch (const Context& rContext) const
 {
     sal_Int32 nBestMatch (Context::NoMatch);
-    ::std::vector<Entry>::const_iterator iBestMatch (maEntries.end());
+    std::vector<Entry>::const_iterator iBestMatch (maEntries.end());
 
-    for (::std::vector<Entry>::const_iterator
+    for (std::vector<Entry>::const_iterator
              iEntry(maEntries.begin()),
              iEnd(maEntries.end());
          iEntry!=iEnd;

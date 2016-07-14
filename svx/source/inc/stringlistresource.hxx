@@ -38,7 +38,7 @@ namespace svx
         SVX_DLLPUBLIC StringListResource( const ResId& _rResId );
         SVX_DLLPUBLIC ~StringListResource();
 
-        inline void get( ::std::vector< OUString >& _rStrings )
+        inline void get( std::vector< OUString >& _rStrings )
         {
             _rStrings = m_aStrings;
         }
@@ -46,7 +46,7 @@ namespace svx
         const OUString& operator[]( size_t _index ) const { return m_aStrings[ _index ]; }
 
     private:
-        ::std::vector< OUString > m_aStrings;
+        std::vector< OUString > m_aStrings;
     };
 
 

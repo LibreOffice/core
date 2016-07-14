@@ -81,7 +81,7 @@ namespace svxform
     // helper
 
 
-    typedef ::std::map< Reference< XInterface >, SdrObject*, ::comphelper::OInterfaceCompare< XInterface > >
+    typedef std::map< Reference< XInterface >, SdrObject*, ::comphelper::OInterfaceCompare< XInterface > >
             MapModelToShape;
     typedef MapModelToShape::value_type ModelShapePair;
 
@@ -103,7 +103,7 @@ namespace svxform
             Reference< XInterface > xNormalizedModel( pFormObject->GetUnoControlModel(), UNO_QUERY );
                 // note that this is normalized (i.e. queried for XInterface explicitly)
 
-            ::std::pair< MapModelToShape::iterator, bool > aPos =
+            std::pair< MapModelToShape::iterator, bool > aPos =
                   _rMapping.insert( ModelShapePair( xNormalizedModel, pSdrObject ) );
             DBG_ASSERT( aPos.second, "collectShapeModelMapping: model was already existent!" );
                 // if this asserts, this would mean we have 2 shapes pointing to the same model
@@ -2060,7 +2060,7 @@ namespace svxform
             return;
 
         // first collect all sdrobjects
-        ::std::set< Reference< XFormComponent > > aObjects;
+        std::set< Reference< XFormComponent > > aObjects;
         CollectObjects(pFormData,bDeep,aObjects);
 
 
@@ -2098,7 +2098,7 @@ namespace svxform
         } // for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
     }
 
-    void NavigatorTree::CollectObjects(FmFormData* pFormData, bool bDeep, ::std::set< Reference< XFormComponent > >& _rObjects)
+    void NavigatorTree::CollectObjects(FmFormData* pFormData, bool bDeep, std::set< Reference< XFormComponent > >& _rObjects)
     {
         FmEntryDataList* pChildList = pFormData->GetChildList();
         FmControlData* pControlData;

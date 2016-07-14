@@ -97,16 +97,16 @@ typedef std::deque< Buf_t > RTFBuffer_t;
 struct TableRowBuffer
 {
     RTFBuffer_t buffer;
-    ::std::deque<RTFSprms> cellsSprms;
-    ::std::deque<RTFSprms> cellsAttributes;
+    std::deque<RTFSprms> cellsSprms;
+    std::deque<RTFSprms> cellsAttributes;
     int nCells;
     writerfilter::Reference<Properties>::Pointer_t pParaProperties;
     writerfilter::Reference<Properties>::Pointer_t pFrameProperties;
     writerfilter::Reference<Properties>::Pointer_t pRowProperties;
 
     TableRowBuffer(RTFBuffer_t const& rBuffer,
-                   ::std::deque<RTFSprms> const& rSprms,
-                   ::std::deque<RTFSprms> const& rAttributes,
+                   std::deque<RTFSprms> const& rSprms,
+                   std::deque<RTFSprms> const& rAttributes,
                    int const i_nCells)
         : buffer(rBuffer)
         , cellsSprms(rSprms), cellsAttributes(rAttributes)
@@ -343,7 +343,7 @@ class RTFDocumentImpl
     : public RTFDocument, public RTFListener
 {
 public:
-    typedef ::std::shared_ptr<RTFDocumentImpl> Pointer_t;
+    typedef std::shared_ptr<RTFDocumentImpl> Pointer_t;
     RTFDocumentImpl(css::uno::Reference<css::uno::XComponentContext> const& xContext,
                     css::uno::Reference<css::io::XInputStream> const& xInputStream,
                     css::uno::Reference<css::lang::XComponent> const& xDstDoc,
@@ -449,8 +449,8 @@ private:
         writerfilter::Reference<Properties>::Pointer_t const&,
         writerfilter::Reference<Properties>::Pointer_t const&);
     void replayRowBuffer(RTFBuffer_t& rBuffer,
-                         ::std::deque<RTFSprms>& rCellsSrpms,
-                         ::std::deque<RTFSprms>& rCellsAttributes,
+                         std::deque<RTFSprms>& rCellsSrpms,
+                         std::deque<RTFSprms>& rCellsAttributes,
                          int const nCells);
     void replayBuffer(RTFBuffer_t& rBuffer,
                       RTFSprms*      const pSprms,

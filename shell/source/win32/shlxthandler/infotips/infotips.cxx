@@ -105,7 +105,7 @@ std::wstring getFileTypeInfo(const std::string& file_extension)
 {
     char extKeyValue[MAX_STRING];
     char typeKeyValue[MAX_STRING];
-    ::std::string sDot(".");
+    std::string sDot(".");
     if (QueryRegistryKey(HKEY_CLASSES_ROOT, (sDot.append(file_extension)).c_str(), "", extKeyValue, MAX_STRING))
         if (QueryRegistryKey( HKEY_CLASSES_ROOT, extKeyValue, "",typeKeyValue, MAX_STRING))
             return StringToWString(typeKeyValue);
@@ -154,9 +154,9 @@ std::wstring formatSizeOfFile( DWORD dwSize )
 
     buffer = _fcvt( dFileSize, 1, &decimal, &sign );
 
-    ::std::wstring wsTemp = StringToWString( buffer );
+    std::wstring wsTemp = StringToWString( buffer );
     int  pos=decimal % 3;
-    ::std::wstring wsBuffer = wsTemp.substr( 0,pos);
+    std::wstring wsBuffer = wsTemp.substr( 0,pos);
 
     if ( decimal )
         for (;decimal - pos > 2;pos += 3)

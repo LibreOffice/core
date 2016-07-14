@@ -45,7 +45,7 @@ namespace rptui
         OReportPage*                        m_pPage;
         OSectionView*                       m_pView;
         VclPtr<OSectionWindow>              m_pParent;
-        ::std::unique_ptr<DlgEdFunc>        m_pFunc;
+        std::unique_ptr<DlgEdFunc>          m_pFunc;
         std::shared_ptr<OReportModel>       m_pModel;
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                           m_pMulti;
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                           m_pReportListener;
@@ -134,7 +134,7 @@ namespace rptui
         /** fills the vector with all selected control models
             /param  _rSelection The vector will be filled and will not be cleared before.
         */
-        void fillControlModelSelection(::std::vector< css::uno::Reference< css::uno::XInterface > >& _rSelection) const;
+        void fillControlModelSelection(std::vector< css::uno::Reference< css::uno::XInterface > >& _rSelection) const;
 
         /** creates a default object (custom shape)
         *

@@ -1777,7 +1777,7 @@ OUString DbPatternField::impl_formatText( const OUString& _rText )
 OUString DbPatternField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
 {
     bool bIsForPaint = _rxField != m_rColumn.GetField();
-    ::std::unique_ptr< FormattedColumnValue >& rpFormatter = bIsForPaint ? m_pPaintFormatter : m_pValueFormatter;
+    std::unique_ptr< FormattedColumnValue >& rpFormatter = bIsForPaint ? m_pPaintFormatter : m_pValueFormatter;
 
     if ( !rpFormatter.get() )
     {
@@ -3058,7 +3058,7 @@ void DbFilterField::Update()
             }
 
             sal_Int16 i = 0;
-            ::std::vector< OUString >   aStringList;
+            std::vector< OUString >     aStringList;
             aStringList.reserve(16);
             OUString aStr;
             css::util::Date aNullDate = m_rColumn.GetParent().getNullDate();
@@ -3074,7 +3074,7 @@ void DbFilterField::Update()
             }
 
             // filling the entries for the combobox
-            for (::std::vector< OUString >::const_iterator iter = aStringList.begin();
+            for (std::vector< OUString >::const_iterator iter = aStringList.begin();
                  iter != aStringList.end(); ++iter)
                 static_cast<ComboBox*>(m_pWindow.get())->InsertEntry(*iter);
         }

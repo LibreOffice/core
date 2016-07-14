@@ -69,7 +69,7 @@ namespace rptui
         static OUString                     getPropertyTranslation(sal_Int32 _nId);
         static OString                      getPropertyHelpId(sal_Int32 _nId);
         static PropUIFlags                  getPropertyUIFlags(sal_Int32 _nId);
-        static void                         getExcludeProperties(::std::vector< css::beans::Property >& _rExcludeProperties,const css::uno::Reference< css::inspection::XPropertyHandler >& _xFormComponentHandler);
+        static void                         getExcludeProperties(std::vector< css::beans::Property >& _rExcludeProperties,const css::uno::Reference< css::inspection::XPropertyHandler >& _xFormComponentHandler);
 
         static bool                         isComposable(
                                                 const OUString& _rPropertyName,

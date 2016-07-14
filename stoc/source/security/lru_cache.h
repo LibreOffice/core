@@ -47,7 +47,7 @@ class lru_cache
     };
     typedef std::unordered_map< t_key, Entry *, t_hashKey, t_equalKey > t_key2element;
     t_key2element m_key2element;
-    ::std::size_t m_size;
+    std::size_t m_size;
 
     Entry * m_block;
     mutable Entry * m_head;
@@ -81,12 +81,12 @@ public:
 
         @param cacheSize number of elements to be cached
     */
-    inline void setSize( ::std::size_t size );
+    inline void setSize( std::size_t size );
 };
 
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
 inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::setSize(
-    ::std::size_t size )
+    std::size_t size )
 {
     m_key2element.clear();
     delete [] m_block;
@@ -98,7 +98,7 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::setSize(
         m_block = new Entry[ m_size ];
         m_head = m_block;
         m_tail = m_block + m_size -1;
-        for ( ::std::size_t nPos = m_size; nPos--; )
+        for ( std::size_t nPos = m_size; nPos--; )
         {
             m_block[ nPos ].m_pred = m_block + nPos -1;
             m_block[ nPos ].m_succ = m_block + nPos +1;
@@ -196,7 +196,7 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
 #endif
             m_key2element.erase( entry->m_key );
             entry->m_key = key;
-            ::std::pair< typename t_key2element::iterator, bool > insertion(
+            std::pair< typename t_key2element::iterator, bool > insertion(
                 m_key2element.insert( typename t_key2element::value_type( key, entry ) ) );
 #ifdef __CACHE_DIAGNOSE
             OSL_ENSURE( insertion.second, "### inserting new cache entry failed?!" );

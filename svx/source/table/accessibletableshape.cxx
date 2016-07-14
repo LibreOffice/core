@@ -543,7 +543,7 @@ Reference< XAccessibleTable > SAL_CALL AccessibleTableShape::getAccessibleColumn
 Sequence< sal_Int32 > SAL_CALL AccessibleTableShape::getSelectedAccessibleRows(  ) throw (RuntimeException, std::exception)
 {
     sal_Int32 nRow = getAccessibleRowCount();
-    ::std::vector<bool> aSelected( nRow, true );
+    std::vector<bool> aSelected( nRow, true );
     sal_Int32 nCount = nRow;
     for( sal_Int32 i = 0; i < nRow; i++ )
     {
@@ -579,7 +579,7 @@ Sequence< sal_Int32 > SAL_CALL AccessibleTableShape::getSelectedAccessibleRows( 
 Sequence< sal_Int32 > SAL_CALL AccessibleTableShape::getSelectedAccessibleColumns(  ) throw (RuntimeException, std::exception)
 {
     sal_Int32 nColumn = getAccessibleColumnCount();
-    ::std::vector<bool> aSelected( nColumn, true );
+    std::vector<bool> aSelected( nColumn, true );
     sal_Int32 nCount = nColumn;
     for( sal_Int32 i = 0; i < nColumn; i++ )
     {
@@ -1176,7 +1176,7 @@ Reference< XAccessibleTable > SAL_CALL AccessibleTableHeaderShape::getAccessible
 Sequence< sal_Int32 > SAL_CALL AccessibleTableHeaderShape::getSelectedAccessibleRows(  ) throw (RuntimeException, std::exception)
 {
     sal_Int32 nRow = getAccessibleRowCount();
-    ::std::vector<bool> aSelected( nRow, true );
+    std::vector<bool> aSelected( nRow, true );
     sal_Int32 nCount = nRow;
     for( sal_Int32 i = 0; i < nRow; i++ )
     {
@@ -1211,7 +1211,7 @@ Sequence< sal_Int32 > SAL_CALL AccessibleTableHeaderShape::getSelectedAccessible
 Sequence< sal_Int32 > SAL_CALL AccessibleTableHeaderShape::getSelectedAccessibleColumns(  ) throw (RuntimeException, std::exception)
 {
     sal_Int32 nColumn = getAccessibleColumnCount();
-    ::std::vector<bool> aSelected( nColumn, true );
+    std::vector<bool> aSelected( nColumn, true );
     sal_Int32 nCount = nColumn;
     for( sal_Int32 i = 0; i < nColumn; i++ )
     {

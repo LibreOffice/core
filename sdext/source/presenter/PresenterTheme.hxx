@@ -68,7 +68,7 @@ public:
     void ProvideCanvas (const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
 
     OUString GetStyleName (const OUString& rsResourceURL) const;
-    ::std::vector<sal_Int32> GetBorderSize (
+    std::vector<sal_Int32> GetBorderSize (
         const OUString& rsStyleName,
         const bool bOuter) const;
 

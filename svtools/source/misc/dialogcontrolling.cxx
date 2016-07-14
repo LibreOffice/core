@@ -49,7 +49,7 @@ namespace svt
     struct DialogController_Data
     {
         VclPtr<vcl::Window>                  xInstigator;
-        ::std::vector< VclPtr<vcl::Window> > aConcernedWindows;
+        std::vector< VclPtr<vcl::Window> > aConcernedWindows;
         PWindowEventFilter          pEventFilter;
         PWindowOperator             pOperator;
 
@@ -129,7 +129,7 @@ namespace svt
 
     struct ControlDependencyManager_Data
     {
-        ::std::vector< std::shared_ptr<DialogController> >  aControllers;
+        std::vector< std::shared_ptr<DialogController> >    aControllers;
     };
 
 
@@ -149,7 +149,7 @@ namespace svt
 
     namespace
     {
-        struct ResetDialogController : public ::std::unary_function< const std::shared_ptr<DialogController>&, void >
+        struct ResetDialogController : public std::unary_function< const std::shared_ptr<DialogController>&, void >
         {
             void operator()( const std::shared_ptr<DialogController>& _pController )
             {
@@ -161,7 +161,7 @@ namespace svt
 
     void ControlDependencyManager::clear()
     {
-        ::std::for_each( m_pImpl->aControllers.begin(), m_pImpl->aControllers.end(), ResetDialogController() );
+        std::for_each( m_pImpl->aControllers.begin(), m_pImpl->aControllers.end(), ResetDialogController() );
         m_pImpl->aControllers.clear();
     }
 

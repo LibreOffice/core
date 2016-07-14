@@ -45,9 +45,9 @@ class CAutoStyleTag : public ITag
         virtual void addCharacters(const std::wstring& characters);
         virtual void addAttributes(const XmlTagAttributes_t& attributes);
         virtual std::wstring getTagContent(){ return EMPTY_STRING; };
-        virtual ::std::wstring const getTagAttribute( ::std::wstring  const & /*attrname*/ ){ return ::std::wstring() ; }
+        virtual std::wstring const getTagAttribute( std::wstring      const & /*attrname*/ ){ return std::wstring() ; }
 
-        void setStyle( ::std::wstring const & Style );
+        void setStyle( std::wstring const & Style );
         void setLocale(const LocaleSet_t& Locale);
         void clearStyleLocalePair();
         inline StyleLocalePair_t getStyleLocalePair() const{ return m_CurrentStyleLocalePair; }

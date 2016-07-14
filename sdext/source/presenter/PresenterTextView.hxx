@@ -41,9 +41,9 @@ class PresenterTextCaret
 {
 public:
     PresenterTextCaret (
-        const ::std::function<css::awt::Rectangle (const sal_Int32,const sal_Int32)>&
+        const std::function<css::awt::Rectangle (const sal_Int32,const sal_Int32)>&
             rCharacterBoundsAccess,
-        const ::std::function<void (const css::awt::Rectangle&)>&
+        const std::function<void (const css::awt::Rectangle&)>&
             rInvalidator);
     ~PresenterTextCaret();
 
@@ -64,7 +64,7 @@ public:
         when the caret changes position.
     */
     void SetCaretMotionBroadcaster (
-        const ::std::function<void (sal_Int32,sal_Int32,sal_Int32,sal_Int32)>& rBroadcaster);
+        const std::function<void (sal_Int32,sal_Int32,sal_Int32,sal_Int32)>& rBroadcaster);
 
     const css::awt::Rectangle& GetBounds() const;
 
@@ -73,9 +73,9 @@ private:
     sal_Int32 mnCharacterIndex;
     sal_Int32 mnCaretBlinkTaskId;
     bool mbIsCaretVisible;
-    const ::std::function<css::awt::Rectangle (const sal_Int32,const sal_Int32)> maCharacterBoundsAccess;
-    const ::std::function<void (const css::awt::Rectangle&)> maInvalidator;
-    ::std::function<void (sal_Int32,sal_Int32,sal_Int32,sal_Int32)> maBroadcaster;
+    const std::function<css::awt::Rectangle (const sal_Int32,const sal_Int32)> maCharacterBoundsAccess;
+    const std::function<void (const css::awt::Rectangle&)> maInvalidator;
+    std::function<void (sal_Int32,sal_Int32,sal_Int32,sal_Int32)> maBroadcaster;
     css::awt::Rectangle maCaretBounds;
 
     void InvertCaret();
@@ -180,8 +180,8 @@ private:
 
     css::uno::Reference<css::i18n::XBreakIterator> mxBreakIterator;
     css::uno::Reference<css::i18n::XScriptTypeDetector> mxScriptTypeDetector;
-    ::std::vector<Line> maLines;
-    ::std::vector<sal_Int32> maWordBoundaries;
+    std::vector<Line> maLines;
+    std::vector<sal_Int32> maWordBoundaries;
     // Offset of the top of the paragraph with respect to the origin of the
     // whole text (specified by mnXOrigin and mnYOrigin).
     double mnVerticalOffset;
@@ -196,7 +196,7 @@ private:
     /// The index of the first character in this paragraph with respect to
     /// the whole text.
     sal_Int32 mnCharacterOffset;
-    ::std::vector<Cell> maCells;
+    std::vector<Cell> maCells;
 
     void AddWord (
         const double nWidth,
@@ -219,9 +219,9 @@ public:
     PresenterTextView (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-        const ::std::function<void (const css::awt::Rectangle&)>& rInvalidator);
+        const std::function<void (const css::awt::Rectangle&)>& rInvalidator);
     void SetText (const css::uno::Reference<css::text::XText>& rxText);
-    void SetTextChangeBroadcaster(const ::std::function<void ()>& rBroadcaster);
+    void SetTextChangeBroadcaster(const std::function<void ()>& rBroadcaster);
 
     void SetLocation (const css::geometry::RealPoint2D& rLocation);
     void SetSize (const css::geometry::RealSize2D& rSize);
@@ -259,12 +259,12 @@ private:
     css::geometry::RealPoint2D maLocation;
     css::geometry::RealSize2D maSize;
     PresenterTheme::SharedFontDescriptor mpFont;
-    ::std::vector<SharedPresenterTextParagraph> maParagraphs;
+    std::vector<SharedPresenterTextParagraph> maParagraphs;
     SharedPresenterTextCaret mpCaret;
     double mnLeftOffset;
     double mnTopOffset;
     bool mbIsFormatPending;
-    ::std::function<void ()> maTextChangeBroadcaster;
+    std::function<void ()> maTextChangeBroadcaster;
 
     void RequestFormat();
     void Format();

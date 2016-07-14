@@ -131,7 +131,7 @@ void SfxUndoAction::dumpAsXml(xmlTextWriterPtr pWriter) const
 struct MarkedUndoAction
 {
     SfxUndoAction*                  pAction;
-    ::std::vector< UndoStackMark >  aMarks;
+    std::vector< UndoStackMark >    aMarks;
 
     explicit MarkedUndoAction( SfxUndoAction* i_action )
         :pAction( i_action )
@@ -204,7 +204,7 @@ void SfxUndoActions::Insert( SfxUndoAction* i_action, size_t i_pos )
         mpImpl->maActions.begin() + i_pos, MarkedUndoAction( i_action ) );
 }
 
-typedef ::std::vector< SfxUndoListener* >   UndoListeners;
+typedef std::vector< SfxUndoListener* >     UndoListeners;
 
 struct SVL_DLLPRIVATE SfxUndoManager_Data
 {
@@ -267,7 +267,7 @@ namespace svl { namespace undo { namespace impl
     typedef void ( SfxUndoListener::*UndoListenerVoidMethod )();
     typedef void ( SfxUndoListener::*UndoListenerStringMethod )( const OUString& );
 
-    struct SVL_DLLPRIVATE NotifyUndoListener : public ::std::unary_function< SfxUndoListener*, void >
+    struct SVL_DLLPRIVATE NotifyUndoListener : public std::unary_function< SfxUndoListener*, void >
     {
         explicit NotifyUndoListener( UndoListenerVoidMethod i_notificationMethod )
             :m_notificationMethod( i_notificationMethod )
@@ -364,8 +364,8 @@ namespace svl { namespace undo { namespace impl
     private:
         SfxUndoManager_Data&                m_rManagerData;
         ::osl::ResettableMutexGuard         m_aGuard;
-        ::std::list< SfxUndoAction* >       m_aUndoActionsCleanup;
-        ::std::list< NotifyUndoListener >   m_notifiers;
+        std::list< SfxUndoAction* >         m_aUndoActionsCleanup;
+        std::list< NotifyUndoListener >     m_notifiers;
     };
 
     UndoManagerGuard::~UndoManagerGuard()
@@ -385,13 +385,13 @@ namespace svl { namespace undo { namespace impl
         }
 
         // handle scheduled notification
-        for (   ::std::list< NotifyUndoListener >::const_iterator notifier = m_notifiers.begin();
+        for (   std::list< NotifyUndoListener >::const_iterator notifier = m_notifiers.begin();
                 notifier != m_notifiers.end();
                 ++notifier
              )
         {
             if ( notifier->is() )
-                ::std::for_each( aListenersCopy.begin(), aListenersCopy.end(), *notifier );
+                std::for_each( aListenersCopy.begin(), aListenersCopy.end(), *notifier );
         }
     }
 } } }
@@ -413,7 +413,7 @@ SfxUndoManager::~SfxUndoManager()
         aListenersCopy = m_xData->aListeners;
     }
 
-    ::std::for_each( aListenersCopy.begin(), aListenersCopy.end(),
+    std::for_each( aListenersCopy.begin(), aListenersCopy.end(),
         NotifyUndoListener( &SfxUndoListener::undoManagerDying ) );
 }
 
@@ -1186,7 +1186,7 @@ void SfxUndoManager::RemoveMark( UndoStackMark const i_mark )
     for ( size_t i=0; i<m_xData->pUndoArray->aUndoActions.size(); ++i )
     {
         MarkedUndoAction& rAction = m_xData->pUndoArray->aUndoActions[i];
-        for (   ::std::vector< UndoStackMark >::iterator markPos = rAction.aMarks.begin();
+        for (   std::vector< UndoStackMark >::iterator markPos = rAction.aMarks.begin();
                 markPos != rAction.aMarks.end();
                 ++markPos
             )
@@ -1216,7 +1216,7 @@ bool SfxUndoManager::HasTopUndoActionMark( UndoStackMark const i_mark )
 
     const MarkedUndoAction& rAction =
             m_xData->pUndoArray->aUndoActions[ nActionPos-1 ];
-    for (   ::std::vector< UndoStackMark >::const_iterator markPos = rAction.aMarks.begin();
+    for (   std::vector< UndoStackMark >::const_iterator markPos = rAction.aMarks.begin();
             markPos != rAction.aMarks.end();
             ++markPos
         )

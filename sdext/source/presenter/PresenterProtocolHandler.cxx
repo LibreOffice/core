@@ -232,7 +232,7 @@ private:
     OUString msURLPath;
     std::unique_ptr<Command> mpCommand;
     ::rtl::Reference<PresenterController> mpPresenterController;
-    typedef ::std::vector<Reference<frame::XStatusListener> > StatusListenerContainer;
+    typedef std::vector<Reference<frame::XStatusListener> > StatusListenerContainer;
     StatusListenerContainer maStatusListenerContainer;
     bool mbIsListeningToWindowManager;
 
@@ -500,7 +500,7 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::removeStatusListener (
     if (rURL.Path == msURLPath)
     {
         StatusListenerContainer::iterator iListener (
-            ::std::find(
+            std::find(
                 maStatusListenerContainer.begin(),
                 maStatusListenerContainer.end(),
                 rxListener));

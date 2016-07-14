@@ -192,7 +192,7 @@ void FormulaDialog::ReleaseFocus( RefEdit* /*pEdit*/)
 
 void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
 {
-    ::std::pair<RefButton*,RefEdit*> aPair = RefInputStartBefore( _pEdit, _pButton );
+    std::pair<RefButton*,RefEdit*> aPair = RefInputStartBefore( _pEdit, _pButton );
     m_pEdit = aPair.second;
     if ( m_pEdit )
         m_pEdit->Hide();
@@ -254,9 +254,9 @@ table::CellAddress FormulaDialog::getReferencePosition() const
     return table::CellAddress();
 }
 
-::std::unique_ptr<formula::FormulaTokenArray> FormulaDialog::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)
+std::unique_ptr<formula::FormulaTokenArray> FormulaDialog::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)
 {
-    ::std::unique_ptr<formula::FormulaTokenArray> pArray(new FormulaTokenArray());
+    std::unique_ptr<formula::FormulaTokenArray> pArray(new FormulaTokenArray());
     pArray->Fill(_aTokenList, mrStringPool, nullptr);
     return pArray;
 }

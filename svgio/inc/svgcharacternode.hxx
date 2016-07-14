@@ -86,9 +86,9 @@ namespace svgio
         {
         private:
             SvgTextPosition*            mpParent;
-            ::std::vector< double >     maX;
-            ::std::vector< double >     maY;
-            ::std::vector< double >     maRotate;
+            std::vector< double >       maX;
+            std::vector< double >       maY;
+            std::vector< double >       maRotate;
             double                      mfTextLength;
 
             // absolute, current, advancing position
@@ -109,7 +109,7 @@ namespace svgio
 
             // data read access
             const SvgTextPosition* getParent() const { return mpParent; }
-            const ::std::vector< double >& getX() const { return maX; }
+            const std::vector< double >& getX() const { return maX; }
             double getTextLength() const { return mfTextLength; }
             bool getLengthAdjust() const { return mbLengthAdjust; }
             bool getAbsoluteX() const { return mbAbsoluteX; }

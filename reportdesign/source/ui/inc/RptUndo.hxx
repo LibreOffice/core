@@ -38,9 +38,9 @@ namespace rptui
         OSectionUndo(const OSectionUndo&) = delete;
         void operator =(const OSectionUndo&) = delete;
     protected:
-        ::std::vector< css::uno::Reference< css::drawing::XShape> >
+        std::vector< css::uno::Reference< css::drawing::XShape> >
                                                     m_aControls;
-        ::std::vector< ::std::pair< OUString ,css::uno::Any> >
+        std::vector< std::pair< OUString ,css::uno::Any> >
                                                     m_aValues;
         Action                                      m_eAction;
         sal_uInt16                                  m_nSlot;
@@ -66,7 +66,7 @@ namespace rptui
     class OReportSectionUndo : public OSectionUndo
     {
         OReportHelper                               m_aReportHelper;
-        ::std::mem_fun_t< css::uno::Reference< css::report::XSection >
+        std::mem_fun_t< css::uno::Reference< css::report::XSection >
                                     ,OReportHelper> m_pMemberFunction;
 
         void    implReInsert( ) override;
@@ -77,7 +77,7 @@ namespace rptui
         //OReportSectionUndo(    const css::uno::Reference< css::report::XSection >& _xSection
         OReportSectionUndo( OReportModel& rMod
                             ,sal_uInt16 _nSlot
-                            ,::std::mem_fun_t< css::uno::Reference< css::report::XSection >
+                            ,std::mem_fun_t< css::uno::Reference< css::report::XSection >
                                 ,OReportHelper> _pMemberFunction
                             ,const css::uno::Reference< css::report::XReportDefinition >& _xReport
                             ,Action _eAction);
@@ -89,7 +89,7 @@ namespace rptui
     class OGroupSectionUndo : public OSectionUndo
     {
         OGroupHelper                                m_aGroupHelper;
-        ::std::mem_fun_t< css::uno::Reference< css::report::XSection >
+        std::mem_fun_t< css::uno::Reference< css::report::XSection >
                                     ,OGroupHelper> m_pMemberFunction;
 
         mutable OUString                     m_sName;
@@ -102,7 +102,7 @@ namespace rptui
         //OGroupSectionUndo(     const css::uno::Reference< css::report::XSection >& _xSection
         OGroupSectionUndo(  OReportModel& rMod
                             ,sal_uInt16 _nSlot
-                            ,::std::mem_fun_t< css::uno::Reference< css::report::XSection >
+                            ,std::mem_fun_t< css::uno::Reference< css::report::XSection >
                                             ,OGroupHelper> _pMemberFunction
                             ,const css::uno::Reference< css::report::XGroup >& _xGroup
                             ,Action _eAction

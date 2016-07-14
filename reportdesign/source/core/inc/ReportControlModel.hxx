@@ -78,7 +78,7 @@ namespace reportdesign
         OReportComponentProperties                          aComponent;
         OFormatProperties                                   aFormatProperties;
         css::container::XContainer*                         m_pOwner;
-        ::std::vector< css::uno::Reference< css::report::XFormatCondition> >
+        std::vector< css::uno::Reference< css::report::XFormatCondition> >
                                                             m_aFormatConditions;
         osl::Mutex&                                         m_rMutex;
         OUString                                            aDataField;

@@ -98,7 +98,7 @@ namespace svxform
                 );
 
     private:
-        ::std::unique_ptr< FormControlFactory_Data >  m_pData;
+        std::unique_ptr< FormControlFactory_Data >    m_pData;
     };
 
 

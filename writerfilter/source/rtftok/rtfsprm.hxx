@@ -53,7 +53,7 @@ enum class RTFOverwrite
 class RTFSprms
 {
 public:
-    typedef ::std::shared_ptr<RTFSprms> Pointer_t;
+    typedef std::shared_ptr<RTFSprms> Pointer_t;
     typedef std::pair<Id, RTFValue::Pointer_t> Entry_t;
     typedef std::vector<Entry_t>::iterator Iterator_t;
     typedef std::vector<Entry_t>::reverse_iterator ReverseIterator_t;

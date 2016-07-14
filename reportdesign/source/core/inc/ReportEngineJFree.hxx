@@ -45,7 +45,7 @@ namespace reportdesign
                     public ReportEngineBase,
                     public ReportEnginePropertySet
     {
-        typedef ::std::multimap< OUString, css::uno::Any , ::comphelper::UStringMixLess>            TComponentMap;
+        typedef std::multimap< OUString, css::uno::Any , ::comphelper::UStringMixLess>              TComponentMap;
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
         css::uno::Reference< css::report::XReportDefinition >     m_xReport;
         css::uno::Reference< css::task::XStatusIndicator>         m_StatusIndicator;

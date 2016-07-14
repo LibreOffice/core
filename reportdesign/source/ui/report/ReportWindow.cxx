@@ -187,7 +187,7 @@ void OReportWindow::Resize()
         aPageSize.Height() = m_aHRuler->GetSizePixel().Height();
 
         const long nTermp(m_aViewsWindow->getTotalHeight() + aPageSize.Height());
-        long nSectionsHeight = ::std::max<long>(nTermp,aTotalOutputSize.Height());
+        long nSectionsHeight = std::max<long>(nTermp,aTotalOutputSize.Height());
 
         m_aHRuler->SetPosSizePixel(aStartPoint,aPageSize);
         m_aHRuler->SetNullOffset(nLeftMargin);
@@ -339,7 +339,7 @@ void OReportWindow::markSection(const sal_uInt16 _nPos)
     m_aViewsWindow->markSection(_nPos);
 }
 
-void OReportWindow::fillCollapsedSections(::std::vector<sal_uInt16>& _rCollapsedPositions) const
+void OReportWindow::fillCollapsedSections(std::vector<sal_uInt16>& _rCollapsedPositions) const
 {
 
     m_aViewsWindow->fillCollapsedSections(_rCollapsedPositions);
@@ -389,7 +389,7 @@ void OReportWindow::zoom(const Fraction& _aZoom)
     Invalidate(InvalidateFlags::NoErase | InvalidateFlags::NoChildren | InvalidateFlags::Transparent);
 }
 
-void OReportWindow::fillControlModelSelection(::std::vector< uno::Reference< uno::XInterface > >& _rSelection) const
+void OReportWindow::fillControlModelSelection(std::vector< uno::Reference< uno::XInterface > >& _rSelection) const
 {
     m_aViewsWindow->fillControlModelSelection(_rSelection);
 }
@@ -418,7 +418,7 @@ sal_uInt16 OReportWindow::getZoomFactor(SvxZoomType _eType) const
                 nZoom = (sal_uInt16)(long)Fraction(aSize.Width()*100,impl_getRealPixelWidth());
                 MapMode aMap( MAP_100TH_MM );
                 const Size aHeight = m_aViewsWindow->LogicToPixel(m_aViewsWindow->PixelToLogic(Size(0,GetTotalHeight() + m_aHRuler->GetSizePixel().Height())),aMap);
-                nZoom = ::std::min(nZoom,(sal_uInt16)(long)Fraction(aSize.Height()*100,aHeight.Height()));
+                nZoom = std::min(nZoom,(sal_uInt16)(long)Fraction(aSize.Height()*100,aHeight.Height()));
             }
             break;
         case SvxZoomType::PAGEWIDTH:

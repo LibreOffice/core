@@ -53,7 +53,7 @@ class PresenterScrollBar
       public PresenterScrollBarInterfaceBase
 {
 public:
-    typedef ::std::function<void (double)> ThumbMotionListener;
+    typedef std::function<void (double)> ThumbMotionListener;
     virtual ~PresenterScrollBar();
     PresenterScrollBar(const PresenterScrollBar&) = delete;
     PresenterScrollBar& operator=(const PresenterScrollBar&) = delete;
@@ -169,7 +169,7 @@ protected:
     double mnThumbSize;
     double mnLineHeight;
     css::geometry::RealPoint2D maDragAnchor;
-    ::std::function<void (double)> maThumbMotionListener;
+    std::function<void (double)> maThumbMotionListener;
     Area meButtonDownArea;
     Area meMouseMoveArea;
     css::geometry::RealRectangle2D maBox[AreaCount];
@@ -203,7 +203,7 @@ protected:
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const std::shared_ptr<PresenterPaintManager>& rpPaintManager,
-        const ::std::function<void (double)>& rThumbMotionListener);
+        const std::function<void (double)>& rThumbMotionListener);
 
     void Repaint (
         const css::geometry::RealRectangle2D& rBox,
@@ -243,7 +243,7 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const std::shared_ptr<PresenterPaintManager>& rpPaintManager,
-        const ::std::function<void (double)>& rThumbMotionListener);
+        const std::function<void (double)>& rThumbMotionListener);
     virtual ~PresenterVerticalScrollBar();
     virtual sal_Int32 GetSize() const override;
 

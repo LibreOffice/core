@@ -769,12 +769,12 @@ SvTreeListEntry* SvTreeListBox::GetEntry( sal_uLong nRootPos ) const
     return pModel->GetEntry(nRootPos);
 }
 
-SvTreeListEntry* SvTreeListBox::GetEntryFromPath( const ::std::deque< sal_Int32 >& _rPath ) const
+SvTreeListEntry* SvTreeListBox::GetEntryFromPath( const std::deque< sal_Int32 >& _rPath ) const
 {
 
     SvTreeListEntry* pEntry = nullptr;
     SvTreeListEntry* pParent = nullptr;
-    for( ::std::deque< sal_Int32 >::const_iterator pItem = _rPath.begin(); pItem != _rPath.end(); ++pItem )
+    for( std::deque< sal_Int32 >::const_iterator pItem = _rPath.begin(); pItem != _rPath.end(); ++pItem )
     {
         pEntry = GetEntry( pParent, *pItem );
         if ( !pEntry )
@@ -785,7 +785,7 @@ SvTreeListEntry* SvTreeListBox::GetEntryFromPath( const ::std::deque< sal_Int32 
     return pEntry;
 }
 
-void SvTreeListBox::FillEntryPath( SvTreeListEntry* pEntry, ::std::deque< sal_Int32 >& _rPath ) const
+void SvTreeListBox::FillEntryPath( SvTreeListEntry* pEntry, std::deque< sal_Int32 >& _rPath ) const
 {
 
     if ( pEntry )

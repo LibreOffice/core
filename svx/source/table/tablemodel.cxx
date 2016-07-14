@@ -777,7 +777,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
                     else if( nColSpan > (nIndex - nCol) )
                     {
                         // current cells spans inside the removed columns, so adjust
-                        const sal_Int32 nRemove = ::std::min( nCount, nCol + nColSpan - nIndex );
+                        const sal_Int32 nRemove = std::min( nCount, nCol + nColSpan - nIndex );
                         if( bUndo )
                             xCell->AddUndo();
                         xCell->merge( nColSpan - nRemove, xCell->getRowSpan() );
@@ -936,7 +936,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
                     else if( nRowSpan > (nIndex - nRow) )
                     {
                         // current cells spans inside the removed rows, so adjust
-                        const sal_Int32 nRemove = ::std::min( nCount, nRow + nRowSpan - nIndex );
+                        const sal_Int32 nRemove = std::min( nCount, nRow + nRowSpan - nIndex );
                         if( bUndo )
                             xCell->AddUndo();
                         xCell->merge( xCell->getColumnSpan(), nRowSpan - nRemove );

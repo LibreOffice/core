@@ -138,7 +138,7 @@ Image FmFilterData::GetImage() const
 
 FmParentData::~FmParentData()
 {
-    for (::std::vector<FmFilterData*>::const_iterator i = m_aChildren.begin();
+    for (std::vector<FmFilterData*>::const_iterator i = m_aChildren.begin();
          i != m_aChildren.end(); ++i)
         delete (*i);
 }
@@ -153,7 +153,7 @@ Image FmFormItem::GetImage() const
 
 FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) const
 {
-    for (   ::std::vector< FmFilterData* >::const_iterator i = m_aChildren.begin();
+    for (   std::vector< FmFilterData* >::const_iterator i = m_aChildren.begin();
             i != m_aChildren.end();
             ++i
         )
@@ -437,7 +437,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& Event 
     if ( !pFormItem )
         return;
 
-    ::std::vector< FmFilterData* >& rTermItems = pFormItem->GetChildren();
+    std::vector< FmFilterData* >& rTermItems = pFormItem->GetChildren();
     const bool bValidIndex = ( Event.DisjunctiveTerm >= 0 ) && ( (size_t)Event.DisjunctiveTerm < rTermItems.size() );
     OSL_ENSURE( bValidIndex, "FmFilterAdapter::disjunctiveTermRemoved: invalid term index!" );
     if ( !bValidIndex )
@@ -480,7 +480,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& Event ) 
         return;
     }
 
-    const ::std::vector< FmFilterData* >::iterator insertPos = pFormItem->GetChildren().begin() + nInsertPos;
+    const std::vector< FmFilterData* >::iterator insertPos = pFormItem->GetChildren().begin() + nInsertPos;
 
     FmFilterItems* pFilterItems = new FmFilterItems(pFormItem, SVX_RESSTR(RID_STR_FILTER_FILTER_OR));
     m_pModel->Insert( insertPos, pFilterItems );
@@ -518,7 +518,7 @@ void FmFilterModel::Clear()
     m_xController    = nullptr;
     m_xControllers   = nullptr;
 
-    for (::std::vector<FmFilterData*>::const_iterator i = m_aChildren.begin();
+    for (std::vector<FmFilterData*>::const_iterator i = m_aChildren.begin();
          i != m_aChildren.end(); ++i)
         delete (*i);
 
@@ -626,9 +626,9 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmPar
 }
 
 
-FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, const Reference< XFormController > & xController) const
+FmFormItem* FmFilterModel::Find(const std::vector<FmFilterData*>& rItems, const Reference< XFormController > & xController) const
 {
-    for (::std::vector<FmFilterData*>::const_iterator i = rItems.begin();
+    for (std::vector<FmFilterData*>::const_iterator i = rItems.begin();
          i != rItems.end(); ++i)
     {
         FmFormItem* pForm = dynamic_cast<FmFormItem*>( *i );
@@ -648,9 +648,9 @@ FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, cons
 }
 
 
-FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, const Reference< XForm >& xForm) const
+FmFormItem* FmFilterModel::Find(const std::vector<FmFilterData*>& rItems, const Reference< XForm >& xForm) const
 {
-    for (::std::vector<FmFilterData*>::const_iterator i = rItems.begin();
+    for (std::vector<FmFilterData*>::const_iterator i = rItems.begin();
          i != rItems.end(); ++i)
     {
         FmFormItem* pForm = dynamic_cast<FmFormItem*>( *i );
@@ -700,8 +700,8 @@ void FmFilterModel::SetCurrentController(const Reference< XFormController > & xC
 void FmFilterModel::AppendFilterItems( FmFormItem& _rFormItem )
 {
     // insert the condition behind the last filter items
-    ::std::vector<FmFilterData*>::const_reverse_iterator aEnd = _rFormItem.GetChildren().rend();
-    ::std::vector<FmFilterData*>::reverse_iterator iter;
+    std::vector<FmFilterData*>::const_reverse_iterator aEnd = _rFormItem.GetChildren().rend();
+    std::vector<FmFilterData*>::reverse_iterator iter;
     for (   iter = _rFormItem.GetChildren().rbegin();
             iter != aEnd;
             ++iter
@@ -726,9 +726,9 @@ void FmFilterModel::AppendFilterItems( FmFormItem& _rFormItem )
 }
 
 
-void FmFilterModel::Insert(const ::std::vector<FmFilterData*>::iterator& rPos, FmFilterData* pData)
+void FmFilterModel::Insert(const std::vector<FmFilterData*>::iterator& rPos, FmFilterData* pData)
 {
-    ::std::vector<FmFilterData*>& rItems = pData->GetParent()->GetChildren();
+    std::vector<FmFilterData*>& rItems = pData->GetParent()->GetChildren();
     sal_uLong nPos = rPos == rItems.end() ? CONTAINER_APPEND : rPos - rItems.begin();
     if (nPos == CONTAINER_APPEND)
     {
@@ -748,10 +748,10 @@ void FmFilterModel::Insert(const ::std::vector<FmFilterData*>::iterator& rPos, F
 void FmFilterModel::Remove(FmFilterData* pData)
 {
     FmParentData* pParent = pData->GetParent();
-    ::std::vector<FmFilterData*>& rItems = pParent->GetChildren();
+    std::vector<FmFilterData*>& rItems = pParent->GetChildren();
 
     // erase the item from the model
-    ::std::vector<FmFilterData*>::iterator i = ::std::find(rItems.begin(), rItems.end(), pData);
+    std::vector<FmFilterData*>::iterator i = std::find(rItems.begin(), rItems.end(), pData);
     DBG_ASSERT(i != rItems.end(), "FmFilterModel::Remove(): unknown Item");
     // position within the parent
     sal_Int32 nPos = i - rItems.begin();
@@ -767,10 +767,10 @@ void FmFilterModel::Remove(FmFilterData* pData)
             if ( bEmptyLastTerm )
             {
                 // remove all children (by setting an empty predicate expression)
-                ::std::vector< FmFilterData* >& rChildren = static_cast<FmFilterItems*>(pData)->GetChildren();
+                std::vector< FmFilterData* >& rChildren = static_cast<FmFilterItems*>(pData)->GetChildren();
                 while ( !rChildren.empty() )
                 {
-                    ::std::vector< FmFilterData* >::iterator removePos = rChildren.end() - 1;
+                    std::vector< FmFilterData* >::iterator removePos = rChildren.end() - 1;
                     if (FmFilterItem* pFilterItem = dynamic_cast<FmFilterItem*>( *removePos))
                     {
                         FmFilterAdapter::setText( nPos, pFilterItem, OUString() );
@@ -798,8 +798,8 @@ void FmFilterModel::Remove(FmFilterData* pData)
         else
         {
             // find the position of the father within his father
-            ::std::vector<FmFilterData*>& rParentParentItems = pData->GetParent()->GetParent()->GetChildren();
-            ::std::vector<FmFilterData*>::iterator j = ::std::find(rParentParentItems.begin(), rParentParentItems.end(), rFilterItem.GetParent());
+            std::vector<FmFilterData*>& rParentParentItems = pData->GetParent()->GetParent()->GetChildren();
+            std::vector<FmFilterData*>::iterator j = std::find(rParentParentItems.begin(), rParentParentItems.end(), rFilterItem.GetParent());
             DBG_ASSERT(j != rParentParentItems.end(), "FmFilterModel::Remove(): unknown Item");
             sal_Int32 nParentPos = j - rParentParentItems.begin();
 
@@ -810,7 +810,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
     }
 }
 
-void FmFilterModel::Remove( const ::std::vector<FmFilterData*>::iterator& rPos )
+void FmFilterModel::Remove( const std::vector<FmFilterData*>::iterator& rPos )
 {
     // remove from parent's child list
     FmFilterData* pData = *rPos;
@@ -876,8 +876,8 @@ void FmFilterModel::Append(FmFilterItems* pItems, FmFilterItem* pFilterItem)
 
 void FmFilterModel::SetTextForItem(FmFilterItem* pItem, const OUString& rText)
 {
-    ::std::vector<FmFilterData*>& rItems = pItem->GetParent()->GetParent()->GetChildren();
-    ::std::vector<FmFilterData*>::const_iterator i = ::std::find(rItems.begin(), rItems.end(), pItem->GetParent());
+    std::vector<FmFilterData*>& rItems = pItem->GetParent()->GetParent()->GetChildren();
+    std::vector<FmFilterData*>::const_iterator i = std::find(rItems.begin(), rItems.end(), pItem->GetParent());
     sal_Int32 nParentPos = i - rItems.begin();
 
     FmFilterAdapter::setText(nParentPos, pItem, rText);
@@ -903,8 +903,8 @@ void FmFilterModel::SetCurrentItems(FmFilterItems* pCurrent)
     if (pCurrent)
     {
         FmFormItem* pFormItem = static_cast<FmFormItem*>(pCurrent->GetParent());
-        ::std::vector<FmFilterData*>& rItems = pFormItem->GetChildren();
-        ::std::vector<FmFilterData*>::const_iterator i = ::std::find(rItems.begin(), rItems.end(), pCurrent);
+        std::vector<FmFilterData*>& rItems = pFormItem->GetChildren();
+        std::vector<FmFilterData*>::const_iterator i = std::find(rItems.begin(), rItems.end(), pCurrent);
 
         if (i != rItems.end())
         {
@@ -942,11 +942,11 @@ void FmFilterModel::SetCurrentItems(FmFilterItems* pCurrent)
 void FmFilterModel::EnsureEmptyFilterRows( FmParentData& _rItem )
 {
     // checks whether for each form there's one free level for input
-    ::std::vector< FmFilterData* >& rChildren = _rItem.GetChildren();
+    std::vector< FmFilterData* >& rChildren = _rItem.GetChildren();
     bool bAppendLevel = dynamic_cast<const FmFormItem*>(&_rItem) !=  nullptr;
-    ::std::vector<FmFilterData*>::const_iterator aEnd = rChildren.end();
+    std::vector<FmFilterData*>::const_iterator aEnd = rChildren.end();
 
-    for (   ::std::vector<FmFilterData*>::iterator i = rChildren.begin();
+    for (   std::vector<FmFilterData*>::iterator i = rChildren.begin();
             i != aEnd;
             ++i
         )
@@ -1496,7 +1496,7 @@ void FmFilterNavigator::Remove(FmFilterData* pItem)
         GetModel()->Remove( pEntry );
 }
 
-FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem*>& _rItemList)
+FmFormItem* FmFilterNavigator::getSelectedFilterItems(std::vector<FmFilterItem*>& _rItemList)
 {
     // be sure that the data is only used within only one form!
     FmFormItem* pFirstItem = nullptr;
@@ -1530,10 +1530,10 @@ FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem
     return pFirstItem;
 }
 
-void FmFilterNavigator::insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems,bool _bCopy)
+void FmFilterNavigator::insertFilterItem(const std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems,bool _bCopy)
 {
-    ::std::vector<FmFilterItem*>::const_iterator aEnd = _rFilterList.end();
-    for (   ::std::vector< FmFilterItem* >::const_iterator i = _rFilterList.begin();
+    std::vector<FmFilterItem*>::const_iterator aEnd = _rFilterList.end();
+    for (   std::vector< FmFilterItem* >::const_iterator i = _rFilterList.begin();
             i != aEnd;
             ++i
         )
@@ -1568,7 +1568,7 @@ void FmFilterNavigator::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPi
     // be sure that the data is only used within a only one form!
     m_aControlExchange.prepareDrag();
 
-    ::std::vector<FmFilterItem*> aItemList;
+    std::vector<FmFilterItem*> aItemList;
     if ( FmFormItem* pFirstItem = getSelectedFilterItems(aItemList) )
     {
         m_aControlExchange->setDraggedEntries(aItemList);
@@ -1610,7 +1610,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
                 aWhere = GetEntryPosition( pClicked );
             }
 
-            ::std::vector<FmFilterData*> aSelectList;
+            std::vector<FmFilterData*> aSelectList;
             for (SvTreeListEntry* pEntry = FirstSelected();
                  pEntry != nullptr;
                  pEntry = NextSelected(pEntry))
@@ -1716,13 +1716,13 @@ void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
         if ( !rKeyCode.IsMod1() || !rKeyCode.IsMod2() || rKeyCode.IsShift() )
             break;
 
-        ::std::vector<FmFilterItem*> aItemList;
+        std::vector<FmFilterItem*> aItemList;
         if ( !getSelectedFilterItems( aItemList ) )
             break;
 
-        ::std::mem_fun1_t<SvTreeListEntry*,FmFilterNavigator,SvTreeListEntry*> getter = ::std::mem_fun(&FmFilterNavigator::getNextEntry);
+        std::mem_fun1_t<SvTreeListEntry*,FmFilterNavigator,SvTreeListEntry*> getter = std::mem_fun(&FmFilterNavigator::getNextEntry);
         if ( rKeyCode.GetCode() == KEY_UP )
-            getter = ::std::mem_fun(&FmFilterNavigator::getPrevEntry);
+            getter = std::mem_fun(&FmFilterNavigator::getPrevEntry);
 
         SvTreeListEntry* pTarget = getter( this, nullptr );
         if ( !pTarget )
@@ -1732,11 +1732,11 @@ void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
         if ( !pTargetItems )
             break;
 
-        ::std::vector<FmFilterItem*>::const_iterator aEnd = aItemList.end();
+        std::vector<FmFilterItem*>::const_iterator aEnd = aItemList.end();
         bool bNextTargetItem = true;
         while ( bNextTargetItem )
         {
-            ::std::vector<FmFilterItem*>::const_iterator i = aItemList.begin();
+            std::vector<FmFilterItem*>::const_iterator i = aItemList.begin();
             for (; i != aEnd; ++i)
             {
                 if ( (*i)->GetParent() == pTargetItems )
@@ -1792,7 +1792,7 @@ void FmFilterNavigator::DeleteSelection()
 {
     // to avoid the deletion of an entry twice (e.g. deletion of a parent and afterward
     // the deletion of its child, I have to shrink the selecton list
-    ::std::vector<SvTreeListEntry*> aEntryList;
+    std::vector<SvTreeListEntry*> aEntryList;
     for (SvTreeListEntry* pEntry = FirstSelected();
          pEntry != nullptr;
          pEntry = NextSelected(pEntry))
@@ -1809,7 +1809,7 @@ void FmFilterNavigator::DeleteSelection()
     // Remove the selection
     SelectAll(false);
 
-    for (::std::vector<SvTreeListEntry*>::reverse_iterator i = aEntryList.rbegin();
+    for (std::vector<SvTreeListEntry*>::reverse_iterator i = aEntryList.rbegin();
         // link problems with operator ==
         i.base() != aEntryList.rend().base(); ++i)
     {

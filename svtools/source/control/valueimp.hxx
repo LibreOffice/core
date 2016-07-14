@@ -146,7 +146,7 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw( css::uno::RuntimeException, std::exception ) override;
 
 private:
-    ::std::vector< css::uno::Reference<
+    std::vector< css::uno::Reference<
         css::accessibility::XAccessibleEventListener > >                mxEventListeners;
     VclPtr<ValueSet>                                                    mpParent;
     bool                                                                mbIsTransientChildrenDisabled;
@@ -200,7 +200,7 @@ class ValueItemAcc : public ::cppu::WeakImplHelper< css::accessibility::XAccessi
 {
 private:
 
-    ::std::vector< css::uno::Reference<
+    std::vector< css::uno::Reference<
         css::accessibility::XAccessibleEventListener > >                mxEventListeners;
     ::osl::Mutex                                                        maMutex;
     ValueSetItem*                                                       mpParent;

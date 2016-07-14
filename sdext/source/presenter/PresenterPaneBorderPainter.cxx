@@ -131,7 +131,7 @@ public:
 
 private:
     std::shared_ptr<PresenterTheme> mpTheme;
-    typedef ::std::map<OUString, std::shared_ptr<RendererPaneStyle> > RendererPaneStyleContainer;
+    typedef std::map<OUString, std::shared_ptr<RendererPaneStyle> > RendererPaneStyleContainer;
     RendererPaneStyleContainer maRendererPaneStyles;
     Reference<rendering::XCanvas> mxCanvas;
     Reference<drawing::XPresenterHelper> mxPresenterHelper;
@@ -739,7 +739,7 @@ void PresenterPaneBorderPainter::Renderer::SetupClipping (
     {
         awt::Rectangle aInnerBox (
             pStyle->RemoveBorder(rOuterBox, drawing::framework::BorderType_TOTAL_BORDER));
-        ::std::vector<awt::Rectangle> aRectangles;
+        std::vector<awt::Rectangle> aRectangles;
         aRectangles.push_back(PresenterGeometryHelper::Intersection(rUpdateBox, rOuterBox));
         aRectangles.push_back(PresenterGeometryHelper::Intersection(rUpdateBox, aInnerBox));
         mxViewStateClip = PresenterGeometryHelper::CreatePolygon(
@@ -821,14 +821,14 @@ RendererPaneStyle::RendererPaneStyle (
         // Get border sizes.
         try
         {
-            ::std::vector<sal_Int32> aInnerBorder (rpTheme->GetBorderSize(rsStyleName, false));
+            std::vector<sal_Int32> aInnerBorder (rpTheme->GetBorderSize(rsStyleName, false));
             OSL_ASSERT(aInnerBorder.size()==4);
             maInnerBorderSize.mnLeft = aInnerBorder[0];
             maInnerBorderSize.mnTop = aInnerBorder[1];
             maInnerBorderSize.mnRight = aInnerBorder[2];
             maInnerBorderSize.mnBottom = aInnerBorder[3];
 
-            ::std::vector<sal_Int32> aOuterBorder (rpTheme->GetBorderSize(rsStyleName, true));
+            std::vector<sal_Int32> aOuterBorder (rpTheme->GetBorderSize(rsStyleName, true));
             OSL_ASSERT(aOuterBorder.size()==4);
             maOuterBorderSize.mnLeft = aOuterBorder[0];
             maOuterBorderSize.mnTop = aOuterBorder[1];

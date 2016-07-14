@@ -183,7 +183,7 @@ RscDefine * RscDefineList::New( sal_uLong lFileKey, const OString& rDefName,
     if ( lPos < maList.size() )
     {
         RscSubDefList::iterator it = maList.begin();
-        ::std::advance( it, lPos );
+        std::advance( it, lPos );
         maList.insert( it, pDef );
     }
     else
@@ -203,7 +203,7 @@ RscDefine * RscDefineList::New( sal_uLong lFileKey, const OString& rDefName,
     if ( lPos < maList.size() )
     {
         RscSubDefList::iterator it = maList.begin();
-        ::std::advance( it, lPos );
+        std::advance( it, lPos );
         maList.insert( it, pDef );
     }
     else
@@ -404,7 +404,7 @@ void RscFile::InsertDependFile( sal_uLong lIncFile, size_t lPos )
     else
     {
         RscDependList::iterator it = aDepLst.begin();
-        ::std::advance( it, lPos );
+        std::advance( it, lPos );
         aDepLst.insert( it, new RscDepend( lIncFile ) );
     }
 }

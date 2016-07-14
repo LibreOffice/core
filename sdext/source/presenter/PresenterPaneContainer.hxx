@@ -66,7 +66,7 @@ public:
 
     virtual void SAL_CALL disposing() override;
 
-    typedef ::std::function<void (const css::uno::Reference<css::drawing::framework::XView>&)>
+    typedef std::function<void (const css::uno::Reference<css::drawing::framework::XView>&)>
         ViewInitializationFunction;
 
     /** Each pane descriptor holds references to one pane and the view
@@ -80,8 +80,8 @@ public:
     class PaneDescriptor
     {
     public:
-        typedef ::std::function<void (bool)> Activator;
-        typedef ::std::function<std::shared_ptr<PresenterSprite> ()> SpriteProvider;
+        typedef std::function<void (bool)> Activator;
+        typedef std::function<std::shared_ptr<PresenterSprite> ()> SpriteProvider;
         css::uno::Reference<css::drawing::framework::XResourceId> mxPaneId;
         OUString msViewURL;
         ::rtl::Reference<PresenterPaneBase> mxPane;
@@ -108,7 +108,7 @@ public:
         void SetActivationState (const bool bIsActive);
     };
     typedef std::shared_ptr<PaneDescriptor> SharedPaneDescriptor;
-    typedef ::std::vector<SharedPaneDescriptor> PaneList;
+    typedef std::vector<SharedPaneDescriptor> PaneList;
     PaneList maPanes;
 
     void PreparePane (

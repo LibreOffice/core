@@ -192,7 +192,7 @@ class SVX_DLLPUBLIC FmXFormShell   : public FmXFormShell_BASE
     ::osl::Mutex    m_aMutex;
     ImplSVEvent *   m_nInvalidationEvent;
     ImplSVEvent *   m_nActivationEvent;
-    ::std::queue< FmLoadAction >
+    std::queue< FmLoadAction >
                     m_aLoadingPages;
 
     FmFormShell*                m_pShell;
@@ -297,7 +297,7 @@ public:
     SAL_DLLPRIVATE void        viewDeactivated( FmFormView& _rCurrentView, bool _bDeactivateController = true );
 
     // IControllerFeatureInvalidation
-    SAL_DLLPRIVATE virtual void invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatures ) override;
+    SAL_DLLPRIVATE virtual void invalidateFeatures( const std::vector< sal_Int32 >& _rFeatures ) override;
 
     SAL_DLLPRIVATE void ExecuteTabOrderDialog(         // execute SID_FM_TAB_DIALOG
         const css::uno::Reference< css::awt::XTabControllerModel >& _rxForForm
@@ -343,7 +343,7 @@ protected:
         const css::uno::Reference< css::uno::XInterface>& _rxStartingPoint,
         const OUString& _rCurrentLevelPrefix,
         FmFormArray& _out_rForms,
-        ::std::vector< OUString >& _out_rNames );
+        std::vector< OUString >& _out_rNames );
 
     /** checks whenever the instance is already disposed, if so, this is reported as assertion error (debug
         builds only) and <TRUE/> is returned.

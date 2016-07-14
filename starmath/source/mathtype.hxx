@@ -48,7 +48,7 @@ struct LessMathTypeFont
     }
 };
 
-typedef ::std::set< MathTypeFont, LessMathTypeFont > MathTypeFontSet;
+typedef std::set< MathTypeFont, LessMathTypeFont > MathTypeFontSet;
 
 class MathType
 {

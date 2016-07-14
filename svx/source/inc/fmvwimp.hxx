@@ -89,7 +89,7 @@ class FormViewPageWindowAdapter : public FormViewPageWindowAdapter_Base
 {
     friend class FmXFormView;
 
-    ::std::vector< css::uno::Reference< css::form::runtime::XFormController > >   m_aControllerList;
+    std::vector< css::uno::Reference< css::form::runtime::XFormController > >     m_aControllerList;
     css::uno::Reference< css::awt::XControlContainer >                            m_xControlContainer;
     css::uno::Reference<css::uno::XComponentContext>                              m_xContext;
     FmXFormView*                m_pViewImpl;
@@ -114,7 +114,7 @@ public:
     // XFormControllerContext
     virtual void SAL_CALL makeVisible( const css::uno::Reference< css::awt::XControl >& Control ) throw (css::uno::RuntimeException, std::exception) override;
 
-    const ::std::vector< css::uno::Reference< css::form::runtime::XFormController > >& GetList() {return m_aControllerList;}
+    const std::vector< css::uno::Reference< css::form::runtime::XFormController > >& GetList() {return m_aControllerList;}
 
 protected:
     css::uno::Reference< css::form::runtime::XFormController >  getController( const css::uno::Reference< css::form::XForm >& xForm ) const;
@@ -128,11 +128,11 @@ protected:
 };
 
 typedef ::rtl::Reference< FormViewPageWindowAdapter >   PFormViewPageWindowAdapter;
-typedef ::std::vector< PFormViewPageWindowAdapter >     PageWindowAdapterList;
-typedef ::std::set  <   css::uno::Reference< css::form::XForm >
+typedef std::vector< PFormViewPageWindowAdapter >       PageWindowAdapterList;
+typedef std::set    <   css::uno::Reference< css::form::XForm >
                     ,   ::comphelper::OInterfaceCompare< css::form::XForm >
                     >   SetOfForms;
-typedef ::std::map  <   css::uno::Reference< css::awt::XControlContainer >
+typedef std::map    <   css::uno::Reference< css::awt::XControlContainer >
                     ,   SetOfForms
                     ,   ::comphelper::OInterfaceCompare< css::awt::XControlContainer >
                     >   MapControlContainerToSetOfForms;

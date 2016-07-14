@@ -44,7 +44,7 @@ namespace rptui
     class OSectionView;
 
 
-    struct RectangleLess : public ::std::binary_function< Rectangle, Rectangle, bool>
+    struct RectangleLess : public std::binary_function< Rectangle, Rectangle, bool>
     {
         enum CompareMode { POS_LEFT,POS_RIGHT,POS_UPPER,POS_DOWN,POS_CENTER_HORIZONTAL,POS_CENTER_VERTICAL };
         CompareMode m_eCompareMode;
@@ -75,9 +75,9 @@ namespace rptui
                         ,   public utl::ConfigurationListener
                         ,   public IMarkedSection
     {
-        typedef ::std::multimap<Rectangle,::std::pair<SdrObject*,OSectionView*>,RectangleLess>      TRectangleMap;
+        typedef std::multimap<Rectangle,std::pair<SdrObject*,OSectionView*>,RectangleLess>          TRectangleMap;
     public:
-        typedef ::std::vector< VclPtr<OSectionWindow> >                                TSectionsMap;
+        typedef std::vector< VclPtr<OSectionWindow> >                                  TSectionsMap;
 
     private:
         TSectionsMap                            m_aSections;
@@ -244,7 +244,7 @@ namespace rptui
         void BegDragObj_createInvisibleObjectAtPosition(const Rectangle& _aRect, const OSectionView& _rSection);
         void EndDragObj_removeInvisibleObjects();
         Point m_aDragDelta;
-        ::std::vector<SdrObject*> m_aBegDragTempList;
+        std::vector<SdrObject*> m_aBegDragTempList;
         bool isObjectInMyTempList(SdrObject *);
     public:
         void BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionView* _pSection);
@@ -273,7 +273,7 @@ namespace rptui
         *
         * \param _rCollapsedPositions Out parameter which holds afterwards all positions of the collapsed sections.
         */
-        void fillCollapsedSections(::std::vector<sal_uInt16>& _rCollapsedPositions) const;
+        void fillCollapsedSections(std::vector<sal_uInt16>& _rCollapsedPositions) const;
 
         /** collpase all sections given by their position
         *
@@ -290,7 +290,7 @@ namespace rptui
         /** fills the vector with all selected control models
             /param  _rSelection The vector will be filled and will not be cleared before.
         */
-        void fillControlModelSelection(::std::vector< css::uno::Reference< css::uno::XInterface > >& _rSelection) const;
+        void fillControlModelSelection(std::vector< css::uno::Reference< css::uno::XInterface > >& _rSelection) const;
     };
 
 } // rptui

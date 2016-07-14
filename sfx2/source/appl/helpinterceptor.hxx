@@ -39,7 +39,7 @@ struct HelpHistoryEntry_Impl
         aURL( rURL ), aViewData(rViewData) {}
 };
 
-typedef ::std::vector< HelpHistoryEntry_Impl* > HelpHistoryList_Impl;
+typedef std::vector< HelpHistoryEntry_Impl* > HelpHistoryList_Impl;
 
 class SfxHelpWindow_Impl;
 class HelpInterceptor_Impl : public ::cppu::WeakImplHelper<

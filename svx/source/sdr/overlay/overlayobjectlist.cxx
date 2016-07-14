@@ -25,7 +25,7 @@
 #include <tools/gen.hxx>
 
 // for SOLARIS compiler include of algorithm part of _STL is necessary to
-// get access to basic algos like ::std::find
+// get access to basic algos like std::find
 #include <algorithm>
 
 #include <drawinglayer/processor2d/hittestprocessor2d.hxx>

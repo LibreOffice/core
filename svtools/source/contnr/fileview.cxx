@@ -134,7 +134,7 @@ namespace
 }
 
 
-void FilterMatch::createWildCardFilterList(const OUString& _rFilterList,::std::vector< WildCard >& _rFilters)
+void FilterMatch::createWildCardFilterList(const OUString& _rFilterList,std::vector< WildCard >& _rFilters)
 {
     if( _rFilterList.getLength() )
     {
@@ -329,7 +329,7 @@ protected:
 
 public:
 
-    ::std::vector< SortingData_Impl* >  maContent;
+    std::vector< SortingData_Impl* >    maContent;
     ::osl::Mutex                        maMutex;
 
     VclPtr<SvTreeListBox>               mpCurView;
@@ -1347,9 +1347,9 @@ OUString SvtFileView::GetConfigString() const
     return sRet;
 }
 
-::std::vector< SvtContentEntry > SvtFileView::GetContent()
+std::vector< SvtContentEntry > SvtFileView::GetContent()
 {
-    ::std::vector< SvtContentEntry > aContent;
+    std::vector< SvtContentEntry > aContent;
 
     for(SortingData_Impl* i : mpImpl->maContent)
     {
@@ -1665,12 +1665,12 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
             ++nTokens;
 
     // collect the filter tokens
-    ::std::vector< WildCard > aFilters;
+    std::vector< WildCard > aFilters;
     FilterMatch::createWildCardFilterList(rFilter,aFilters);
 
 
     // do the filtering
-    ::std::vector< SortingData_Impl* >::iterator aContentLoop = maContent.begin();
+    std::vector< SortingData_Impl* >::iterator aContentLoop = maContent.begin();
     OUString sCompareString;
     do
     {
@@ -1687,7 +1687,7 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
                 bDelete = true;
             else
             {
-                bDelete = ::std::none_of( aFilters.begin(), aFilters.end(),
+                bDelete = std::none_of( aFilters.begin(), aFilters.end(),
                                           FilterMatch( sCompareString ) );
             }
 

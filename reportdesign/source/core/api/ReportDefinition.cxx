@@ -460,7 +460,7 @@ struct OReportDefinitionImpl
     ::comphelper::OInterfaceContainerHelper2                      m_aModifyListeners;
     ::comphelper::OInterfaceContainerHelper2                      m_aLegacyEventListeners;
     ::comphelper::OInterfaceContainerHelper2                      m_aDocEventListeners;
-    ::std::vector< uno::Reference< frame::XController> >    m_aControllers;
+    std::vector< uno::Reference< frame::XController> >      m_aControllers;
     uno::Sequence< beans::PropertyValue >                   m_aArgs;
 
     uno::Reference< report::XGroups >                       m_xGroups;
@@ -1080,9 +1080,9 @@ throw (util::CloseVetoException, uno::RuntimeException, std::exception)
     aGuard.reset();
 
 
-    ::std::vector< uno::Reference< frame::XController> > aCopy = m_pImpl->m_aControllers;
-    ::std::vector< uno::Reference< frame::XController> >::iterator aIter = aCopy.begin();
-    ::std::vector< uno::Reference< frame::XController> >::const_iterator aEnd = aCopy.end();
+    std::vector< uno::Reference< frame::XController> > aCopy = m_pImpl->m_aControllers;
+    std::vector< uno::Reference< frame::XController> >::iterator aIter = aCopy.begin();
+    std::vector< uno::Reference< frame::XController> >::const_iterator aEnd = aCopy.end();
     for (;aIter != aEnd ; ++aIter)
     {
         if ( aIter->is() )
@@ -1181,7 +1181,7 @@ void SAL_CALL OReportDefinition::disconnectController( const uno::Reference< fra
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
-    ::std::vector< uno::Reference< frame::XController> >::iterator aFind = ::std::find(m_pImpl->m_aControllers.begin(),m_pImpl->m_aControllers.end(),_xController);
+    std::vector< uno::Reference< frame::XController> >::iterator aFind = std::find(m_pImpl->m_aControllers.begin(),m_pImpl->m_aControllers.end(),_xController);
     if ( aFind != m_pImpl->m_aControllers.end() )
         m_pImpl->m_aControllers.erase(aFind);
     if ( m_pImpl->m_xCurrentController == _xController )
@@ -1220,7 +1220,7 @@ void SAL_CALL OReportDefinition::setCurrentController( const uno::Reference< fra
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
-    if ( ::std::find(m_pImpl->m_aControllers.begin(),m_pImpl->m_aControllers.end(),_xController) == m_pImpl->m_aControllers.end() )
+    if ( std::find(m_pImpl->m_aControllers.begin(),m_pImpl->m_aControllers.end(),_xController) == m_pImpl->m_aControllers.end() )
         throw container::NoSuchElementException();
     m_pImpl->m_xCurrentController = _xController;
 }
@@ -1884,8 +1884,8 @@ uno::Reference< container::XIndexAccess > SAL_CALL OReportDefinition::getViewDat
     {
         m_pImpl->m_xViewData.set( document::IndexedPropertyValues::create(m_aProps->m_xContext), uno::UNO_QUERY);
         uno::Reference< container::XIndexContainer > xContainer(m_pImpl->m_xViewData,uno::UNO_QUERY);
-        ::std::vector< uno::Reference< frame::XController> >::const_iterator aIter = m_pImpl->m_aControllers.begin();
-        ::std::vector< uno::Reference< frame::XController> >::const_iterator aEnd = m_pImpl->m_aControllers.end();
+        std::vector< uno::Reference< frame::XController> >::const_iterator aIter = m_pImpl->m_aControllers.begin();
+        std::vector< uno::Reference< frame::XController> >::const_iterator aEnd = m_pImpl->m_aControllers.end();
         for (;aIter != aEnd ; ++aIter)
         {
             if ( aIter->is() )
@@ -1968,7 +1968,7 @@ void SAL_CALL OReportDefinition::setMimeType( const OUString& _mimetype ) throw 
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     uno::Sequence< OUString > aList = getAvailableMimeTypes();
     const OUString* pEnd = aList.getConstArray()+aList.getLength();
-    if ( ::std::find(aList.getConstArray(),pEnd,_mimetype) == pEnd )
+    if ( std::find(aList.getConstArray(),pEnd,_mimetype) == pEnd )
         throwIllegallArgumentException("getAvailableMimeTypes()"
                         ,*this
                         ,1
@@ -2285,9 +2285,9 @@ typedef ::cppu::WeakImplHelper< container::XNameContainer,
 class OStylesHelper:
     public cppu::BaseMutex, public TStylesBASE
 {
-    typedef ::std::map< OUString, uno::Any  , ::comphelper::UStringMixLess> TStyleElements;
+    typedef std::map< OUString, uno::Any    , ::comphelper::UStringMixLess> TStyleElements;
     TStyleElements                                  m_aElements;
-    ::std::vector<TStyleElements::iterator>         m_aElementsPos;
+    std::vector<TStyleElements::iterator>           m_aElementsPos;
     uno::Type                                       m_aType;
 
 protected:
@@ -2367,8 +2367,8 @@ uno::Sequence< OUString > SAL_CALL OStylesHelper::getElementNames(  ) throw(uno:
     uno::Sequence< OUString > aNameList(m_aElementsPos.size());
 
     OUString* pStringArray = aNameList.getArray();
-    ::std::vector<TStyleElements::iterator>::const_iterator aEnd = m_aElementsPos.end();
-    for(::std::vector<TStyleElements::iterator>::const_iterator aIter = m_aElementsPos.begin();         aIter != aEnd;++aIter,++pStringArray)
+    std::vector<TStyleElements::iterator>::const_iterator aEnd = m_aElementsPos.end();
+    for(std::vector<TStyleElements::iterator>::const_iterator aIter = m_aElementsPos.begin();           aIter != aEnd;++aIter,++pStringArray)
         *pStringArray = (*aIter)->first;
 
     return aNameList;
@@ -2399,7 +2399,7 @@ void SAL_CALL OStylesHelper::removeByName( const OUString& aName ) throw(contain
     TStyleElements::const_iterator aFind = m_aElements.find(aName);
     if ( aFind != m_aElements.end() )
         throw container::NoSuchElementException();
-    m_aElementsPos.erase(::std::find(m_aElementsPos.begin(),m_aElementsPos.end(),aFind));
+    m_aElementsPos.erase(std::find(m_aElementsPos.begin(),m_aElementsPos.end(),aFind));
     m_aElements.erase(aFind);
 }
 

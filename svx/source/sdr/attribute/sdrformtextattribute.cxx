@@ -122,7 +122,7 @@ namespace
     {
         const css::drawing::LineStyle eLineStyle = (static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE))).GetValue();
         double fFullDotDashLen(0.0);
-        ::std::vector< double > aDotDashArray;
+        std::vector< double > aDotDashArray;
 
         if(css::drawing::LineStyle_DASH == eLineStyle)
         {

@@ -83,8 +83,8 @@ void RscLangEnum::Init( RscNameTable& rNames )
     sal_Int32 nIndex = 0;
     mnLangId = 0x400; // stay away from selfdefined...
 
-    const ::std::vector< MsLangId::LanguagetagMapping > aList( MsLangId::getDefinedLanguagetags());
-    for (::std::vector< MsLangId::LanguagetagMapping >::const_iterator iTag( aList.begin()); iTag != aList.end(); ++iTag)
+    const std::vector< MsLangId::LanguagetagMapping > aList( MsLangId::getDefinedLanguagetags());
+    for (std::vector< MsLangId::LanguagetagMapping >::const_iterator iTag( aList.begin()); iTag != aList.end(); ++iTag)
     {
 #if OSL_DEBUG_LEVEL > 2
         fprintf( stderr, "ISO Language in : %d, 0x%04x, %s\n",
@@ -94,8 +94,8 @@ void RscLangEnum::Init( RscNameTable& rNames )
         fprintf( stderr, "ISO Language out:");
 #endif
         LanguageTag aLanguageTag( (*iTag).maBcp47);
-        ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings( true));
-        for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
+        std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings( true));
+        for (std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
         {
             OString aLang( OUStringToOString( *it, RTL_TEXTENCODING_ASCII_US));
             SetConstant( rNames.Put( aLang.getStr(), CONSTNAME, mnLangId ), mnLangId );

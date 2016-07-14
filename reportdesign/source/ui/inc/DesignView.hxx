@@ -212,7 +212,7 @@ namespace rptui
         *
         * \param _rCollapsedPositions Out parameter which holds afterwards all positions of the collapsed sections.
         */
-        void fillCollapsedSections(::std::vector<sal_uInt16>& _rCollapsedPositions) const;
+        void fillCollapsedSections(std::vector<sal_uInt16>& _rCollapsedPositions) const;
 
         /** collpase all sections given by their position
         *
@@ -252,7 +252,7 @@ namespace rptui
         /** fills the vector with all selected control models
             /param  _rSelection The vector will be filled and will not be cleared before.
         */
-        void fillControlModelSelection(::std::vector< css::uno::Reference< css::uno::XInterface > >& _rSelection) const;
+        void fillControlModelSelection(std::vector< css::uno::Reference< css::uno::XInterface > >& _rSelection) const;
 
         /** calculates the zoom factor.
             @param  _eType  which kind of zoom is needed

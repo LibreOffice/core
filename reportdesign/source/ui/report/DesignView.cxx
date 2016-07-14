@@ -560,7 +560,7 @@ void ODesignView::markSection(const sal_uInt16 _nPos)
     m_aScrollWindow->markSection(_nPos);
 }
 
-void ODesignView::fillCollapsedSections(::std::vector<sal_uInt16>& _rCollapsedPositions) const
+void ODesignView::fillCollapsedSections(std::vector<sal_uInt16>& _rCollapsedPositions) const
 {
     m_aScrollWindow->fillCollapsedSections(_rCollapsedPositions);
 }
@@ -631,11 +631,11 @@ uno::Any ODesignView::getCurrentlyShownProperty() const
     OSectionWindow* pSectionWindow = getMarkedSection();
     if ( pSectionWindow )
     {
-        ::std::vector< uno::Reference< uno::XInterface > > aSelection;
+        std::vector< uno::Reference< uno::XInterface > > aSelection;
         pSectionWindow->getReportSection().fillControlModelSelection(aSelection);
         if ( !aSelection.empty() )
         {
-            ::std::vector< uno::Reference< uno::XInterface > >::const_iterator aIter = aSelection.begin();
+            std::vector< uno::Reference< uno::XInterface > >::const_iterator aIter = aSelection.begin();
             uno::Sequence< uno::Reference< report::XReportComponent > > aSeq(aSelection.size());
             for(sal_Int32 i = 0; i < aSeq.getLength(); ++i,++aIter)
             {
@@ -647,7 +647,7 @@ uno::Any ODesignView::getCurrentlyShownProperty() const
     return aRet;
 }
 
-void ODesignView::fillControlModelSelection(::std::vector< uno::Reference< uno::XInterface > >& _rSelection) const
+void ODesignView::fillControlModelSelection(std::vector< uno::Reference< uno::XInterface > >& _rSelection) const
 {
     m_aScrollWindow->fillControlModelSelection(_rSelection);
 }

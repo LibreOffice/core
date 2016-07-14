@@ -103,7 +103,7 @@ namespace svxform
     class ControlBorderManager
     {
     private:
-        struct ControlDataCompare : public ::std::binary_function< ControlData, ControlData, bool >
+        struct ControlDataCompare : public std::binary_function< ControlData, ControlData, bool >
         {
            bool operator()( const ControlData& _rLHS, const ControlData& _rRHS ) const
            {
@@ -111,8 +111,8 @@ namespace svxform
            }
         };
 
-        typedef ::std::set< ControlData, ControlDataCompare > ControlBag;
-        typedef ::std::set< css::uno::Reference< css::awt::XVclWindowPeer >,
+        typedef std::set< ControlData, ControlDataCompare > ControlBag;
+        typedef std::set< css::uno::Reference< css::awt::XVclWindowPeer >,
                             ::comphelper::OInterfaceCompare< css::awt::XVclWindowPeer > >  PeerBag;
 
         PeerBag     m_aColorableControls;

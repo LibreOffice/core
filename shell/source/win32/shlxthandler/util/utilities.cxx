@@ -176,7 +176,7 @@ std::wstring getShortPathName( const std::wstring& aLongName )
     @returns
         Windows Locale Identifier corresponding to input LocaleSet.
     @Usage Sample
-        LocaleSet_t myDefaultLocale( ::std::wstring( L"zh" ),::std::wstring(L"HK") );
+        LocaleSet_t myDefaultLocale( std::wstring( L"zh" ),std::wstring(L"HK") );
         DWORD myLCID = LocaleSetToLCID( myDefaultLocale );
         wchar_t  buffer[20];
         _ultow( myLCID, buffer, 16 );
@@ -191,8 +191,8 @@ LCID LocaleSetToLCID( const LocaleSet_t & Locale )
     USHORT usPrimaryLang= LANG_NEUTRAL;
     USHORT usSubLang=SUBLANG_DEFAULT;
 
-    ::std::wstring wsLanguage(Locale.first);
-    ::std::wstring wsCountry(Locale.second);
+    std::wstring wsLanguage(Locale.first);
+    std::wstring wsCountry(Locale.second);
 
     if  ( wsLanguage == L"ar" )
     {

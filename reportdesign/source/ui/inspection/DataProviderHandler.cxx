@@ -361,7 +361,7 @@ void SAL_CALL DataProviderHandler::removePropertyChangeListener(const uno::Refer
 
 uno::Sequence< beans::Property > SAL_CALL DataProviderHandler::getSupportedProperties() throw (uno::RuntimeException, std::exception)
 {
-    ::std::vector< beans::Property > aNewProps;
+    std::vector< beans::Property > aNewProps;
     if( m_xChartModel.is() )
     {
         rptui::OPropertyInfoService::getExcludeProperties( aNewProps, m_xFormComponentHandler );

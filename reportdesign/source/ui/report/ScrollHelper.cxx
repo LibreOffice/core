@@ -315,7 +315,7 @@ void OScrollWindowHelper::markSection(const sal_uInt16 _nPos)
     m_aReportWindow->markSection(_nPos);
 }
 
-void OScrollWindowHelper::fillCollapsedSections(::std::vector<sal_uInt16>& _rCollapsedPositions) const
+void OScrollWindowHelper::fillCollapsedSections(std::vector<sal_uInt16>& _rCollapsedPositions) const
 {
     m_aReportWindow->fillCollapsedSections(_rCollapsedPositions);
 }
@@ -399,7 +399,7 @@ void OScrollWindowHelper::zoom(const Fraction& _aZoom)
     Invalidate(InvalidateFlags::NoChildren|InvalidateFlags::Transparent);
 }
 
-void OScrollWindowHelper::fillControlModelSelection(::std::vector< uno::Reference< uno::XInterface > >& _rSelection) const
+void OScrollWindowHelper::fillControlModelSelection(std::vector< uno::Reference< uno::XInterface > >& _rSelection) const
 {
     m_aReportWindow->fillControlModelSelection(_rSelection);
 }

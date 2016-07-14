@@ -527,7 +527,7 @@ void SAL_CALL Theme::removePropertyChangeListener(
     ChangeListenerContainer* pContainer = GetChangeListeners(eItem, false);
     if (pContainer != nullptr)
     {
-        ChangeListenerContainer::iterator iListener (::std::find(pContainer->begin(), pContainer->end(), rxListener));
+        ChangeListenerContainer::iterator iListener (std::find(pContainer->begin(), pContainer->end(), rxListener));
         if (iListener != pContainer->end())
         {
             pContainer->erase(iListener);
@@ -587,7 +587,7 @@ void SAL_CALL Theme::removeVetoableChangeListener(
     VetoableListenerContainer* pContainer = GetVetoableListeners(eItem, false);
     if (pContainer != nullptr)
     {
-        VetoableListenerContainer::iterator iListener (::std::find(pContainer->begin(), pContainer->end(), rxListener));
+        VetoableListenerContainer::iterator iListener (std::find(pContainer->begin(), pContainer->end(), rxListener));
         if (iListener != pContainer->end())
         {
             pContainer->erase(iListener);
@@ -601,7 +601,7 @@ void SAL_CALL Theme::removeVetoableChangeListener(
 css::uno::Sequence<css::beans::Property> SAL_CALL Theme::getProperties()
     throw(css::uno::RuntimeException, std::exception)
 {
-    ::std::vector<beans::Property> aProperties;
+    std::vector<beans::Property> aProperties;
 
     for (sal_Int32 nItem(Begin_),nEnd(End_); nItem!=nEnd; ++nItem)
     {

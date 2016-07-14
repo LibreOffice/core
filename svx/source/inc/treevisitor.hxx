@@ -52,8 +52,8 @@ private:
     ELEMENT         m_current;
     const NODEINFO  m_nodeInfo;
 
-    ::std::stack< size_t >  m_pathToCurrent;
-    ::std::stack< ELEMENT > m_currentAncestors;
+    std::stack< size_t >    m_pathToCurrent;
+    std::stack< ELEMENT > m_currentAncestors;
 };
 
 template< class ELEMENT, class NODEINFO, class PROCESSOR >

@@ -93,7 +93,7 @@ public:
     virtual css::uno::Reference< css::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const override;
     virtual css::table::CellAddress getReferencePosition() const override;
 
-    virtual ::std::unique_ptr<formula::FormulaTokenArray> convertToTokenArray(const css::uno::Sequence< css::sheet::FormulaToken >& _aTokenList) override;
+    virtual std::unique_ptr<formula::FormulaTokenArray> convertToTokenArray(const css::uno::Sequence< css::sheet::FormulaToken >& _aTokenList) override;
 
     // IControlReferenceHandler
     virtual void ShowReference(const OUString& _sRef) override;
