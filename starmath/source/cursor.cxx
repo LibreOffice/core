@@ -988,10 +988,8 @@ void SmCursor::InsertText(const OUString& aString)
     token.aText = aString;
 
     SmTextNode* pText = new SmTextNode(token, FNT_VARIABLE);
-
-    //Prepare the new node
-    pText->Prepare(mpDocShell->GetFormat(), *mpDocShell);
     pText->AdjustFontDesc();
+    pText->Prepare(mpDocShell->GetFormat(), *mpDocShell);
 
     SmNodeList* pList = new SmNodeList();
     pList->push_front(pText);
