@@ -2682,7 +2682,9 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             OpCode          eOp;
         };
         static const FunctionName aOoxmlAliases[] = {
-            { "EFFECTIVE",  ocEffective }   // EFFECTIVE -> EFFECT
+            { "EFFECTIVE",  ocEffective },  // EFFECTIVE -> EFFECT
+            // LibreOffice 5.3 will correctly write this, be able to read it.
+            { "_xlfn.ORG.OPENOFFICE.ERRORTYPE",  ocErrorType }   // _xlfn.ORG.OPENOFFICE.ERRORTYPE -> ERRORTYPE
         };
         for (const FunctionName& rOoxmlAlias : aOoxmlAliases)
         {
