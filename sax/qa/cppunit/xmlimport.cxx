@@ -82,7 +82,7 @@ private:
 
 public:
     TestDocumentHandler() {}
-    const OUString& getString() { return m_aStr; }
+    const OUString getString() { return m_aStr; }
 
     // XDocumentHandler
     virtual void SAL_CALL startDocument() throw (SAXException, RuntimeException, exception) override;
@@ -140,7 +140,9 @@ void SAL_CALL TestDocumentHandler::startDocument()
         throw(SAXException, RuntimeException, exception)
 {
     m_aStr.clear();
+    m_aNamespaceStack.clear();
     m_aNamespaceStack.emplace_back( make_pair( OUString( "default" ), OUString() ) );
+    m_aCountStack = stack<sal_uInt16>();
     m_aCountStack.emplace(0);
 }
 
@@ -306,7 +308,7 @@ void XMLImportTest::parse()
 {
     OUString fileNames[] = {"simple.xml", "defaultns.xml", "inlinens.xml",
                             "multiplens.xml", "multiplepfx.xml",
-                            "nstoattributes.xml", "nestedns.xml"};
+                            "nstoattributes.xml", "nestedns.xml", "testthreading.xml"};
 
     for (sal_uInt16 i = 0; i < sizeof( fileNames ) / sizeof( OUString ); i++)
     {
