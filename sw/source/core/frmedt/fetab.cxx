@@ -1175,6 +1175,21 @@ bool SwFEShell::IsAdjustCellWidthAllowed( bool bBalance ) const
     return false;
 }
 
+bool SwFEShell::SetTableStyle(const OUString& rStyleName)
+{
+    // make sure SwDoc has the style
+    SwTableAutoFormat *pTableFormat = GetDoc()->GetTableStyles().FindAutoFormat(rStyleName);
+    if (!pTableFormat)
+        return false;
+
+    SwTableNode *pTableNode = const_cast<SwTableNode*>(IsCursorInTable());
+    if (!pTableNode)
+        return false;
+
+    // set the name & update
+    return UpdateTableStyleFormatting(pTableNode, false, &rStyleName);
+}
+
     // AutoFormat for the table/table selection
 bool SwFEShell::SetTableStyle(const SwTableAutoFormat& rStyle)
 {

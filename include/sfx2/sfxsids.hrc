@@ -312,6 +312,8 @@
 #define SID_STYLE_FAMILY3                   (SID_STYLE_FAMILY_START + 2)
 #define SID_STYLE_FAMILY4                   (SID_STYLE_FAMILY_START + 3)
 #define SID_STYLE_FAMILY5                   (SID_STYLE_FAMILY_START + 4)
+#define SID_STYLE_FAMILY6                   (SID_STYLE_FAMILY_START + 5)
+#define SID_STYLE_FAMILY_END                SID_STYLE_FAMILY6
 
 #define SID_STYLE_NEW                       (SID_SFX_START + 549)
 #define SID_STYLE_EDIT                      (SID_SFX_START + 550)

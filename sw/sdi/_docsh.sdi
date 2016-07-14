@@ -1,3 +1,4 @@
+
 /*
  * This file is part of the LibreOffice project.
  *
@@ -104,6 +105,12 @@ interface BaseTextDocument
         StateMethod = StateStyleSheet ;
     ]
     SID_STYLE_FAMILY5
+    [
+        Export = FALSE ;
+        StateMethod = StateStyleSheet ;
+    ]
+
+    SID_STYLE_FAMILY6
     [
         Export = FALSE ;
         StateMethod = StateStyleSheet ;
