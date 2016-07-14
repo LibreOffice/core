@@ -235,9 +235,9 @@ private:
 
     void ShowPopupMenu (
         const Rectangle& rButtonBox,
-        const ::std::vector<TabBar::DeckMenuData>& rMenuData) const;
+        const std::vector<TabBar::DeckMenuData>& rMenuData) const;
     VclPtr<PopupMenu> CreatePopupMenu (
-        const ::std::vector<TabBar::DeckMenuData>& rMenuData) const;
+        const std::vector<TabBar::DeckMenuData>& rMenuData) const;
     DECL_LINK_TYPED(OnMenuItemSelected, Menu*, bool);
     void BroadcastPropertyChange();
 

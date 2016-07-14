@@ -50,7 +50,7 @@ typedef std::set<SvLinkSource*> SvLinkSources;
 
 class SFX2_DLLPUBLIC LinkManager
 {
-    typedef ::std::vector< css::uno::Reference< css::lang::XComponent > >
+    typedef std::vector< css::uno::Reference< css::lang::XComponent > >
         CompVector;
     CompVector maCachedComps;
 

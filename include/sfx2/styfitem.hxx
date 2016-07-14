@@ -32,7 +32,7 @@ struct SfxFilterTupel {
     OUString aName;
     sal_uInt16 nFlags;
 };
-typedef ::std::vector< SfxFilterTupel* > SfxStyleFilter;
+typedef std::vector< SfxFilterTupel* > SfxStyleFilter;
 
 // CLASS -----------------------------------------------------------------
 
@@ -61,7 +61,7 @@ public:
 
 class SFX2_DLLPUBLIC SfxStyleFamilies: public Resource
 {
-    ::std::vector< SfxStyleFamilyItem* >  aEntryList;
+    std::vector< SfxStyleFamilyItem* >    aEntryList;
 
 public:
                         SfxStyleFamilies( const ResId &);

@@ -117,7 +117,7 @@ public:
     //SvxAdjust GetAdjust() const;                      // <P,TH,TD ALIGN=>
 };
 
-typedef ::std::vector<HTMLOption> HTMLOptions;
+typedef std::vector<HTMLOption> HTMLOptions;
 
 class SVT_DLLPUBLIC HTMLParser : public SvParser
 {

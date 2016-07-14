@@ -274,7 +274,7 @@ namespace canvas
          */
         CANVASTOOLS_DLLPUBLIC bool clipScrollArea( ::basegfx::B2IRange&                  io_rSourceArea,
                              ::basegfx::B2IPoint&                  io_rDestPoint,
-                             ::std::vector< ::basegfx::B2IRange >& o_ClippedAreas,
+                             std::vector< ::basegfx::B2IRange >& o_ClippedAreas,
                              const ::basegfx::B2IRange&            rBounds );
 
         /** Clip a blit between two differently surfaces.
@@ -366,8 +366,8 @@ namespace canvas
         template< typename Target, typename Source > inline Target numeric_cast( Source arg )
         {
             // typedefs abbreviating respective trait classes
-            typedef ::std::numeric_limits< Source > SourceLimits;
-            typedef ::std::numeric_limits< Target > TargetLimits;
+            typedef std::numeric_limits< Source > SourceLimits;
+            typedef std::numeric_limits< Target > TargetLimits;
 
 #undef min
 #undef max
@@ -447,7 +447,7 @@ namespace canvas
                 must be lowercase!
             */
             ValueMap( const MapEntry*   pMap,
-                      ::std::size_t     nEntries,
+                      std::size_t       nEntries,
                       bool              bCaseSensitive ) :
                 mpMap( pMap ),
                 mnEntries( nEntries ),
@@ -467,7 +467,7 @@ namespace canvas
 
                 if( mnEntries > 1 )
                 {
-                    for( ::std::size_t i=0; i<mnEntries-1; ++i, ++pMap )
+                    for( std::size_t i=0; i<mnEntries-1; ++i, ++pMap )
                     {
                         if( !mapComparator(pMap[0], pMap[1]) &&
                             mapComparator(pMap[1], pMap[0]) )
@@ -520,7 +520,7 @@ namespace canvas
 
                 const MapEntry* pRes;
                 const MapEntry* pEnd = mpMap+mnEntries;
-                if( (pRes=::std::lower_bound( mpMap,
+                if( (pRes=std::lower_bound( mpMap,
                                               pEnd,
                                               aSearchKey,
                                               &mapComparator )) != pEnd )
@@ -548,7 +548,7 @@ namespace canvas
             }
 
             const MapEntry*     mpMap;
-            ::std::size_t       mnEntries;
+            std::size_t         mnEntries;
             bool                mbCaseSensitive;
         };
 

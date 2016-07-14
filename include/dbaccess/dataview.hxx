@@ -53,7 +53,7 @@ namespace dbaui
     protected:
         rtl::Reference<IController> m_xController;  // the controller in where we resides in
         VclPtr<FixedLine>   m_aSeparator;
-        ::std::unique_ptr< ::svt::AcceleratorExecute> m_pAccel;
+        std::unique_ptr< ::svt::AcceleratorExecute> m_pAccel;
 
     public:
         ODataView(  vcl::Window* pParent,

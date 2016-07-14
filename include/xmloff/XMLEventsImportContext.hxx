@@ -37,11 +37,11 @@ namespace com { namespace sun { namespace star {
     namespace document { class XEventsSupplier; }
 } } }
 
-typedef ::std::pair<
+typedef std::pair<
             OUString,
             css::uno::Sequence<css::beans::PropertyValue> > EventNameValuesPair;
 
-typedef ::std::vector< EventNameValuesPair > EventsVector;
+typedef std::vector< EventNameValuesPair > EventsVector;
 
 /**
  * Import <script:events> element.

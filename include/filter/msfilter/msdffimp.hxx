@@ -105,7 +105,7 @@ public:
 
 #define COL_DEFAULT RGB_COLORDATA( 0xFA, 0xFB, 0xFC )
 
-typedef ::std::map< sal_Int32, SdrObject* > SvxMSDffShapeIdContainer;
+typedef std::map< sal_Int32, SdrObject* > SvxMSDffShapeIdContainer;
 
 #define SVEXT_PERSIST_STREAM "\002OlePres000"
 
@@ -124,9 +124,9 @@ struct MSFILTER_DLLPUBLIC CompareSvxMSDffShapeInfoByTxBxComp
 };
 
 // the following will be sorted explicitly:
-typedef ::std::set< std::shared_ptr<SvxMSDffShapeInfo>,
+typedef std::set< std::shared_ptr<SvxMSDffShapeInfo>,
             CompareSvxMSDffShapeInfoById > SvxMSDffShapeInfos_ById;
-typedef ::std::multiset< std::shared_ptr<SvxMSDffShapeInfo>,
+typedef std::multiset< std::shared_ptr<SvxMSDffShapeInfo>,
             CompareSvxMSDffShapeInfoByTxBxComp> SvxMSDffShapeInfos_ByTxBxComp;
 
 #define SVXMSDFF_SETTINGS_CROP_BITMAPS      1
@@ -183,7 +183,7 @@ struct SvxMSDffConnectorRule
 
 struct MSFILTER_DLLPUBLIC SvxMSDffSolverContainer
 {
-    ::std::vector< SvxMSDffConnectorRule* > aCList;
+    std::vector< SvxMSDffConnectorRule* > aCList;
 
     SvxMSDffSolverContainer();
     ~SvxMSDffSolverContainer();

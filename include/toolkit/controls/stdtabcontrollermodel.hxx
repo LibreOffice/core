@@ -36,7 +36,7 @@
 #include <vector>
 
 struct UnoControlModelEntry;
-typedef ::std::vector< UnoControlModelEntry* > UnoControlModelEntryListBase;
+typedef std::vector< UnoControlModelEntry* > UnoControlModelEntryListBase;
 
 class UnoControlModelEntryList
 {
@@ -75,7 +75,7 @@ struct ComponentEntry
     Point                               aPos;
 };
 
-typedef ::std::vector< ComponentEntry* > ComponentEntryList;
+typedef std::vector< ComponentEntry* > ComponentEntryList;
 
 #define CONTROLPOS_NOTFOUND 0xFFFFFFFF
 

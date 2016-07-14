@@ -196,7 +196,7 @@ namespace connectivity
                 the type of the exception to throw. This type <em>must</em> specify
                 an exception class derived from css::sdbc::SQLException.
 
-            @throws ::std::bad_cast
+            @throws std::bad_cast
                 if <arg>_rExceptionType</arg> does not specify an exception class derived from
                 css::sdbc::SQLException.
 

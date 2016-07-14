@@ -78,7 +78,7 @@ class SVX_DLLPUBLIC SdrObjList
     SdrObjList &operator=(const SdrObjList& rSrcList) = delete;
 
 private:
-    ::std::vector<SdrObject*> maList;
+    std::vector<SdrObject*> maList;
 
 protected:
 friend class SdrObjListIter;

@@ -27,7 +27,7 @@
 
 class SOT_DLLPUBLIC FileList : public SvDataCopyStream
 {
-    ::std::vector< OUString >  aStrList;
+    std::vector< OUString >    aStrList;
 
 protected:
 

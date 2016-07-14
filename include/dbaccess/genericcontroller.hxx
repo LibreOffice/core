@@ -171,13 +171,13 @@ namespace dbaui
     };
 
 
-    typedef ::std::map  <   OUString
+    typedef std::map    <   OUString
                         ,   ControllerFeature
-                        ,   ::std::less< OUString >
+                        ,   std::less< OUString >
                         >   SupportedFeatures;
 
 
-    struct CompareFeatureById : ::std::binary_function< SupportedFeatures::value_type, sal_Int32, bool >
+    struct CompareFeatureById : std::binary_function< SupportedFeatures::value_type, sal_Int32, bool >
     {
 
         inline bool operator()( const SupportedFeatures::value_type& _aType, sal_Int32 _nId ) const
@@ -196,10 +196,10 @@ namespace dbaui
     };
 
 
-    typedef ::std::deque< FeatureListener > FeatureListeners;
+    typedef std::deque< FeatureListener > FeatureListeners;
 
 
-    struct FindFeatureListener : ::std::binary_function< FeatureListener, css::uno::Reference< css::frame::XStatusListener >, bool >
+    struct FindFeatureListener : std::binary_function< FeatureListener, css::uno::Reference< css::frame::XStatusListener >, bool >
     {
 
         inline bool operator()( const FeatureListener& lhs, const css::uno::Reference< css::frame::XStatusListener >& rhs ) const
@@ -236,7 +236,7 @@ namespace dbaui
         ::comphelper::NamedValueCollection
                                         m_aInitParameters;
 
-        ::std::unique_ptr< OGenericUnoController_Data >
+        std::unique_ptr< OGenericUnoController_Data >
                                         m_pData;
         VclPtr<ODataView>               m_pView;                // our (VCL) "main window"
 

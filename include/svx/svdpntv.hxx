@@ -103,7 +103,7 @@ private:
 
 /// Typedefs for a list of SdrPaintWindows
 class SdrPaintWindow;
-typedef ::std::vector< SdrPaintWindow* > SdrPaintWindowVector;
+typedef std::vector< SdrPaintWindow* > SdrPaintWindowVector;
 
 
 /**

@@ -274,7 +274,7 @@ public:
                             const css::uno::Reference< css::task::XInteractionHandler >& rxInteractHandler,
                             const OUString& rDocumentUrl,
                             DocPasswordRequestType eRequestType,
-                            const ::std::vector< OUString >* pDefaultPasswords = nullptr,
+                            const std::vector< OUString >* pDefaultPasswords = nullptr,
                             bool* pbIsDefaultPassword = nullptr );
 
 private:

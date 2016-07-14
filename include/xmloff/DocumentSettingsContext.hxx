@@ -31,7 +31,7 @@ struct XMLDocumentSettingsContext_Data;
 
 class XMLOFF_DLLPUBLIC XMLDocumentSettingsContext : public SvXMLImportContext
 {
-    ::std::unique_ptr< XMLDocumentSettingsContext_Data >  m_pData;
+    std::unique_ptr< XMLDocumentSettingsContext_Data >    m_pData;
 
 public:
     XMLDocumentSettingsContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,

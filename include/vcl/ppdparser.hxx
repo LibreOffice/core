@@ -141,7 +141,7 @@ public:
 private:
     hash_type                                   m_aKeys;
     value_type                                  m_aOrderedKeys;
-    ::std::list< PPDConstraint >                m_aConstraints;
+    std::list< PPDConstraint >                  m_aConstraints;
 
     // some identifying fields
     OUString                                    m_aPrinterName;
@@ -199,7 +199,7 @@ public:
     int             getKeys() const { return m_aKeys.size(); }
     bool            hasKey( const PPDKey* ) const;
 
-    const ::std::list< PPDConstraint >& getConstraints() const { return m_aConstraints; }
+    const std::list< PPDConstraint >& getConstraints() const { return m_aConstraints; }
 
     bool            isColorDevice() const { return m_bColorDevice; }
     bool            isType42Capable() const { return m_bType42Capable; }

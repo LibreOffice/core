@@ -33,7 +33,7 @@ namespace svt
     {
     public:
         typedef sal_Int16                                   PathId;
-        typedef ::std::vector< WizardTypes::WizardState >   WizardPath;
+        typedef std::vector< WizardTypes::WizardState >     WizardPath;
         typedef VclPtr<TabPage> (* RoadmapPageFactory)( RoadmapWizard& );
     };
 

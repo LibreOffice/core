@@ -84,7 +84,7 @@ private:
         OUString maItemText2;
     };
 
-    typedef ::std::vector< ValueSetWithTextItem > tItemList;
+    typedef std::vector< ValueSetWithTextItem > tItemList;
 
     const tControlType meControlType;
     tItemList maItems;

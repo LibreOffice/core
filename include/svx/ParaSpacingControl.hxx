@@ -62,12 +62,12 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
     virtual ::css::uno::Any SAL_CALL queryInterface(const ::css::uno::Type& aType)
-        throw (::css::uno::RuntimeException, ::std::exception) override;
+        throw (::css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL acquire() throw () override;
 
     virtual void SAL_CALL disposing(const ::css::lang::EventObject&)
-        throw (::css::uno::RuntimeException, ::std::exception) override;
+        throw (::css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL release() throw () override;
 

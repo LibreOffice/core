@@ -49,7 +49,7 @@ namespace oox { namespace ppt {
     class TimeNode
     {
     public:
-        typedef ::std::map< OUString, css::uno::Any > UserDataMap;
+        typedef std::map< OUString, css::uno::Any > UserDataMap;
 
         TimeNode( sal_Int16 nNodeType );
         virtual ~TimeNode();

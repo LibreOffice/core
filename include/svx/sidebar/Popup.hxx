@@ -51,7 +51,7 @@ public:
     */
     Popup (
         vcl::Window* pParent,
-        const ::std::function<PopupControl*(PopupContainer*)>& rControlCreator,
+        const std::function<PopupControl*(PopupContainer*)>& rControlCreator,
         const ::rtl::OUString& rsAccessibleName);
     virtual ~Popup();
 
@@ -87,8 +87,8 @@ protected:
 
 private:
     VclPtr<vcl::Window> mpParent;
-    ::std::function<VclPtr<PopupControl>(PopupContainer*)> maControlCreator;
-    ::std::function<void()> maPopupModeEndCallback;
+    std::function<VclPtr<PopupControl>(PopupContainer*)> maControlCreator;
+    std::function<void()> maPopupModeEndCallback;
     const ::rtl::OUString msAccessibleName;
     VclPtr<PopupContainer> mxContainer;
 

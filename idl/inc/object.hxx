@@ -25,7 +25,7 @@
 #include <vector>
 
 class SvMetaClass;
-typedef ::std::vector< SvMetaClass* > SvMetaClassList;
+typedef std::vector< SvMetaClass* > SvMetaClassList;
 
 class SvClassElement
 {

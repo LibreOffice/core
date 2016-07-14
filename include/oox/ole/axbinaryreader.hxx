@@ -90,10 +90,10 @@ private:
 
 
 /** A pair of integer values as a property. */
-typedef ::std::pair< sal_Int32, sal_Int32 > AxPairData;
+typedef std::pair< sal_Int32, sal_Int32 > AxPairData;
 
 /** An array of string values as a property. */
-typedef ::std::vector< OUString > AxArrayString;
+typedef std::vector< OUString > AxArrayString;
 
 
 /** Import helper to read simple and complex ActiveX form control properties

@@ -404,7 +404,7 @@ struct Columns
           int *tmp = data;
           if (nTotal + ADD_AMOUNT < nTotal) // overflow
           {
-              throw ::std::bad_alloc();
+              throw std::bad_alloc();
           }
           data = new int[nTotal + ADD_AMOUNT];
           for (size_t i = 0 ; i < nTotal ; i++)
@@ -465,7 +465,7 @@ struct Rows
           int *tmp = data;
           if (nTotal + ADD_AMOUNT < nTotal) // overflow
           {
-              throw ::std::bad_alloc();
+              throw std::bad_alloc();
           }
           data = new int[nTotal + ADD_AMOUNT];
           for (size_t i = 0 ; i < nTotal ; i++)

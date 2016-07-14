@@ -134,7 +134,7 @@ private:
 
         explicit            Transformation( sal_Int32 nToken, sal_Int32 nValue ) : mnToken( nToken ), mnValue( nValue ) {}
     };
-    typedef ::std::vector< Transformation > TransformVec;
+    typedef std::vector< Transformation > TransformVec;
 
     mutable ColorMode   meMode;         /// Current color mode.
     mutable TransformVec maTransforms;  /// Color transformations.

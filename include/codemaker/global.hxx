@@ -38,9 +38,9 @@ struct LessString
     }
 };
 
-typedef ::std::list< ::rtl::OString >               StringList;
-typedef ::std::vector< ::rtl::OString >             StringVector;
-typedef ::std::set< ::rtl::OString, LessString >    StringSet;
+typedef std::list< ::rtl::OString >                 StringList;
+typedef std::vector< ::rtl::OString >               StringVector;
+typedef std::set< ::rtl::OString, LessString >      StringSet;
 
 
 // FileStream

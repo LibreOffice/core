@@ -91,7 +91,7 @@ namespace drawinglayer
                 const rtl::OUString& rText,
                 sal_uInt32 nIndex,
                 sal_uInt32 nLength,
-                const ::std::vector< double >& rDXArray) const;
+                const std::vector< double >& rDXArray) const;
 
             basegfx::B2DRange getTextBoundRect(
                 const rtl::OUString& rText,
@@ -107,7 +107,7 @@ namespace drawinglayer
                 DrawTextFlags nStyle,
                 GDIMetaFile& rGDIMetaFile) const;
 
-            ::std::vector< double > getTextArray(
+            std::vector< double > getTextArray(
                 const rtl::OUString& rText,
                 sal_uInt32 nIndex,
                 sal_uInt32 nLength) const;

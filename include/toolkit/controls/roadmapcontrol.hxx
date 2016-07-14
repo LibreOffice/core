@@ -74,7 +74,7 @@ namespace toolkit
     private:
 //        PropertyChangeListenerMultiplexer                 maPropertyListeners;
 
-        typedef ::std::vector< css::uno::Reference< XInterface > >    RoadmapItemHolderList;
+        typedef std::vector< css::uno::Reference< XInterface > >      RoadmapItemHolderList;
 
         ContainerListenerMultiplexer        maContainerListeners;
         RoadmapItemHolderList               maRoadmapItems;

@@ -47,7 +47,7 @@ class SVL_DLLPUBLIC SvAddressParser
     friend class SvAddressParser_Impl;
 
     SvAddressEntry_Impl m_aFirst;
-    ::std::vector< SvAddressEntry_Impl* >
+    std::vector< SvAddressEntry_Impl* >
                         m_aRest;
     bool                m_bHasFirst;
 

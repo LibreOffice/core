@@ -33,7 +33,7 @@ namespace comphelper
 {
 
     // comparing two property instances
-    struct PropertyCompareByName : public ::std::binary_function< css::beans::Property, css::beans::Property, bool >
+    struct PropertyCompareByName : public std::binary_function< css::beans::Property, css::beans::Property, bool >
     {
         bool operator() (const css::beans::Property& x, const css::beans::Property& y) const
         {

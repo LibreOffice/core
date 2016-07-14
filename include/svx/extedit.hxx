@@ -24,7 +24,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC ExternalToolEdit
 protected:
     OUString m_aFileName;
 
-    ::std::unique_ptr<FileChangedChecker> m_pChecker;
+    std::unique_ptr<FileChangedChecker> m_pChecker;
 
 public:
 

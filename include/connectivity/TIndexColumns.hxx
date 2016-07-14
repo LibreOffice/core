@@ -36,7 +36,7 @@ namespace connectivity
     public:
         OIndexColumns(  OIndexHelper* _pIndex,
                         ::osl::Mutex& _rMutex,
-                        const ::std::vector< OUString> &_rVector);
+                        const std::vector< OUString> &_rVector);
     };
 }
 #endif // INCLUDED_CONNECTIVITY_TINDEXCOLUMNS_HXX

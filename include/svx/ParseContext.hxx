@@ -34,7 +34,7 @@ namespace svxform
     {
     private:
 
-        ::std::vector< OUString > m_aLocalizedKeywords;
+        std::vector< OUString > m_aLocalizedKeywords;
 
     public:
         OSystemParseContext();

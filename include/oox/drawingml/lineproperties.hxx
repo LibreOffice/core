@@ -49,8 +49,8 @@ struct LineArrowProperties
 
 struct OOX_DLLPUBLIC LineProperties
 {
-    typedef ::std::pair< sal_Int32, sal_Int32 > DashStop;
-    typedef ::std::vector< DashStop >           DashStopVector;
+    typedef std::pair< sal_Int32, sal_Int32 > DashStop;
+    typedef std::vector< DashStop >             DashStopVector;
 
     LineArrowProperties maStartArrow;       /// Start line arrow style.
     LineArrowProperties maEndArrow;         /// End line arrow style.

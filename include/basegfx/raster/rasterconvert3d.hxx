@@ -132,10 +132,10 @@ namespace basegfx
     class InterpolatorProvider3D
     {
     private:
-        ::std::vector< ip_triple >                  maColorInterpolators;
-        ::std::vector< ip_triple >                  maNormalInterpolators;
-        ::std::vector< ip_double >                  maTextureInterpolators;
-        ::std::vector< ip_triple >                  maInverseTextureInterpolators;
+        std::vector< ip_triple >                    maColorInterpolators;
+        std::vector< ip_triple >                    maNormalInterpolators;
+        std::vector< ip_double >                    maTextureInterpolators;
+        std::vector< ip_triple >                    maInverseTextureInterpolators;
 
     protected:
         sal_uInt32 addColorInterpolator(const BColor& rA, const BColor& rB, double fInvYDelta)
@@ -299,10 +299,10 @@ namespace basegfx
     public:
         InterpolatorProvider3D() {}
 
-        ::std::vector< ip_triple >& getColorInterpolators() { return maColorInterpolators; }
-        ::std::vector< ip_triple >& getNormalInterpolators() { return maNormalInterpolators; }
-        ::std::vector< ip_double >& getTextureInterpolators() { return maTextureInterpolators; }
-        ::std::vector< ip_triple >& getInverseTextureInterpolators() { return maInverseTextureInterpolators; }
+        std::vector< ip_triple >& getColorInterpolators() { return maColorInterpolators; }
+        std::vector< ip_triple >& getNormalInterpolators() { return maNormalInterpolators; }
+        std::vector< ip_double >& getTextureInterpolators() { return maTextureInterpolators; }
+        std::vector< ip_triple >& getInverseTextureInterpolators() { return maInverseTextureInterpolators; }
     };
 } // end of namespace basegfx
 
@@ -413,7 +413,7 @@ namespace basegfx
     {
     private:
         // the line entries for an area conversion run
-        ::std::vector< RasterConversionLineEntry3D >            maLineEntries;
+        std::vector< RasterConversionLineEntry3D >              maLineEntries;
 
         struct lineComparator
         {

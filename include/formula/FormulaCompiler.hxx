@@ -275,7 +275,7 @@ protected:
     virtual void fillFromAddInCollectionUpperName( const NonConstOpCodeMapPtr& xMap ) const;
     virtual void fillFromAddInMap( const NonConstOpCodeMapPtr& xMap, FormulaGrammar::Grammar _eGrammar ) const;
     virtual void fillFromAddInCollectionEnglishName( const NonConstOpCodeMapPtr& xMap ) const;
-    virtual void fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry >& _rVec, bool _bIsEnglish) const;
+    virtual void fillAddInToken(std::vector< css::sheet::FormulaOpCodeMapEntry >& _rVec, bool _bIsEnglish) const;
 
     virtual void SetError(sal_uInt16 nError);
     virtual FormulaTokenRef ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2 );

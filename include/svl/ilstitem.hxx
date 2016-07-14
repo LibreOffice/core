@@ -32,7 +32,7 @@ class SVL_DLLPUBLIC SfxIntegerListItem : public SfxPoolItem
 public:
     static SfxPoolItem* CreateDefault();
     SfxIntegerListItem();
-    SfxIntegerListItem( sal_uInt16 nWhich, const ::std::vector < sal_Int32 >& rList );
+    SfxIntegerListItem( sal_uInt16 nWhich, const std::vector < sal_Int32 >& rList );
     SfxIntegerListItem( sal_uInt16 nWhich, const css::uno::Sequence < sal_Int32 >& rList );
     SfxIntegerListItem( const SfxIntegerListItem& rItem );
     virtual ~SfxIntegerListItem();

@@ -72,14 +72,14 @@ enum class InetMessageMime
 
 class TOOLS_DLLPUBLIC INetMIMEMessage
 {
-    ::std::vector< INetMessageHeader* >
+    std::vector< INetMessageHeader* >
                     m_aHeaderList;
 
     SvLockBytesRef  m_xDocLB;
 
-    ::std::map<InetMessageMime, sal_uIntPtr>  m_nMIMEIndex;
+    std::map<InetMessageMime, sal_uIntPtr>    m_nMIMEIndex;
     INetMIMEMessage*                          pParent;
-    ::std::vector< INetMIMEMessage* >         aChildren;
+    std::vector< INetMIMEMessage* >           aChildren;
     OString                 m_aBoundary;
 
     OUString GetHeaderValue_Impl (

@@ -83,7 +83,7 @@ public:
 
     /** Fills the passed vector with the names of all direct elements of this
         storage. */
-    void                getElementNames( ::std::vector< OUString >& orElementNames ) const;
+    void                getElementNames( std::vector< OUString >& orElementNames ) const;
 
     /** Opens and returns the specified sub storage from the storage.
 
@@ -152,7 +152,7 @@ private:
                         implGetXStorage() const = 0;
 
     /** Returns the names of all elements of this storage. */
-    virtual void        implGetElementNames( ::std::vector< OUString >& orElementNames ) const = 0;
+    virtual void        implGetElementNames( std::vector< OUString >& orElementNames ) const = 0;
 
     /** Implementation of opening a storage element. */
     virtual StorageRef  implOpenSubStorage( const OUString& rElementName, bool bCreate ) = 0;

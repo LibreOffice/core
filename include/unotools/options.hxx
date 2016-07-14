@@ -45,7 +45,7 @@ namespace utl {
 
         virtual void ConfigurationChanged( ConfigurationBroadcaster* p, sal_uInt32 nHint=0 ) = 0;
     };
-    typedef ::std::vector< ConfigurationListener* > IMPL_ConfigurationListenerList;
+    typedef std::vector< ConfigurationListener* > IMPL_ConfigurationListenerList;
 
     // complete broadcasting implementation
     class UNOTOOLS_DLLPUBLIC ConfigurationBroadcaster

@@ -136,7 +136,7 @@ private:
 };
 
 
-typedef ::std::pair< OString, OString > sPair_t;
+typedef std::pair< OString, OString > sPair_t;
 sal_Int32 compileFile(const OString * pathname);
     // a null pathname means stdin
 sal_Int32 produceFile(const OString& filenameBase,

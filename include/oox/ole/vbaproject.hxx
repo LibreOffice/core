@@ -186,7 +186,7 @@ private:
 
 private:
     typedef RefVector< VbaMacroAttacherBase >           MacroAttacherVector;
-    typedef ::std::map< OUString, sal_Int32 >    DummyModuleMap;
+    typedef std::map< OUString, sal_Int32 >      DummyModuleMap;
 
     css::uno::Reference< css::uno::XComponentContext >
                         mxContext;          ///< Component context with service manager.

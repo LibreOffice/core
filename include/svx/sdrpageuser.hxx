@@ -43,7 +43,7 @@ namespace sdr
     };
 
     // typedef for PageUserVector
-    typedef ::std::vector< PageUser* > PageUserVector;
+    typedef std::vector< PageUser* > PageUserVector;
 } // end of namespace sdr
 
 #endif // INCLUDED_SVX_SDRPAGEUSER_HXX

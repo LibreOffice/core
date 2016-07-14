@@ -52,7 +52,7 @@ public:
     sal_Int16 getDepth() const { return nDepth; }
 };
 
-typedef ::std::vector< ParagraphData > ParagraphDataVector;
+typedef std::vector< ParagraphData > ParagraphDataVector;
 
 #endif // INCLUDED_EDITENG_PARAGRAPHDATA_HXX
 

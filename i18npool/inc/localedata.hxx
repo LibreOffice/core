@@ -76,7 +76,7 @@ public:
     static OUString getFirstLocaleServiceName( const css::lang::Locale & rLocale );
     /** Generates fallback strings suitable as parts of service names,
         excluding the one obtained via getFirstLocaleServiceName() */
-    static ::std::vector< OUString > getFallbackLocaleServiceNames( const css::lang::Locale & rLocale );
+    static std::vector< OUString > getFallbackLocaleServiceNames( const css::lang::Locale & rLocale );
 
     virtual LanguageCountryInfo SAL_CALL getLanguageCountryInfo( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
     virtual LocaleDataItem SAL_CALL getLocaleItem( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
@@ -118,7 +118,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 
 private:
-    ::std::unique_ptr< LocaleDataLookupTableItem > cachedItem;
+    std::unique_ptr< LocaleDataLookupTableItem > cachedItem;
     css::i18n::Calendar2 ref_cal;
     OUString ref_name;
 

@@ -162,7 +162,7 @@ private:
         call the addShapeTypeList method.  After that no modifications of
         the list take place.
     */
-    ::std::vector<ShapeTypeDescriptor> maShapeTypeDescriptorList;
+    std::vector<ShapeTypeDescriptor> maShapeTypeDescriptorList;
 
     /** This hash map allows the fast look up of a type descriptor for a
         given service name.

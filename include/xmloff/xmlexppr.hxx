@@ -70,13 +70,13 @@ protected:
     /** Application-specific filter. By default do nothing. */
     virtual void ContextFilter(
             bool bEnableFoFontFamily,
-            ::std::vector< XMLPropertyState >& rProperties,
+            std::vector< XMLPropertyState >& rProperties,
             const css::uno::Reference<css::beans::XPropertySet >& rPropSet ) const;
 
     /** fills the given attribute list with the items in the given set */
     void _exportXML( sal_uInt16 nPropType, sal_uInt16& rPropTypeFlags,
                      SvXMLAttributeList& rAttrList,
-                     const ::std::vector< XMLPropertyState >& rProperties,
+                     const std::vector< XMLPropertyState >& rProperties,
                      const SvXMLUnitConverter& rUnitConverter,
                      const SvXMLNamespaceMap& rNamespaceMap,
                      SvXmlExportFlags nFlags,
@@ -88,12 +88,12 @@ protected:
                      const SvXMLUnitConverter& rUnitConverter,
                      const SvXMLNamespaceMap& rNamespaceMap,
                      SvXmlExportFlags nFlags,
-                     const ::std::vector< XMLPropertyState > *pProperties = nullptr,
+                     const std::vector< XMLPropertyState > *pProperties = nullptr,
                      sal_uInt32 nIdx = 0 ) const;
 
     void exportElementItems(
             SvXMLExport& rExport,
-            const ::std::vector< XMLPropertyState >& rProperties,
+            const std::vector< XMLPropertyState >& rProperties,
             SvXmlExportFlags nFlags,
             const std::vector<sal_uInt16>& rIndexArray ) const;
 
@@ -127,12 +127,12 @@ public:
         const css::uno::Reference<css::beans::XPropertySet>& rPropSet ) const;
 
     /** Compare to arrays of XMLPropertyState */
-    bool Equals( const ::std::vector< XMLPropertyState >& aProperties1,
-                     const ::std::vector< XMLPropertyState >& aProperties2 ) const;
+    bool Equals( const std::vector< XMLPropertyState >& aProperties1,
+                     const std::vector< XMLPropertyState >& aProperties2 ) const;
 
     void exportXML(
             SvXMLExport& rExport,
-            const ::std::vector< XMLPropertyState >& rProperties,
+            const std::vector< XMLPropertyState >& rProperties,
             SvXmlExportFlags nFlags = SvXmlExportFlags::NONE,
             bool bUseExtensionNamespaceForGraphicProperties = false ) const;
 
@@ -143,7 +143,7 @@ public:
      */
     void exportXML(
             SvXMLExport& rExport,
-            const ::std::vector< XMLPropertyState >& rProperties,
+            const std::vector< XMLPropertyState >& rProperties,
             sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx,
             SvXmlExportFlags nFlags = SvXmlExportFlags::NONE, bool bExtensionNamespace = false ) const;
 
@@ -153,7 +153,7 @@ public:
             SvXMLExport& rExport,
             const XMLPropertyState& rProperty,
             SvXmlExportFlags nFlags,
-            const ::std::vector< XMLPropertyState > *pProperties = nullptr,
+            const std::vector< XMLPropertyState > *pProperties = nullptr,
             sal_uInt32 nIdx = 0 ) const;
 
     /** this method is called for every item that has the
@@ -163,7 +163,7 @@ public:
             const XMLPropertyState& rProperty,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,
-            const ::std::vector< XMLPropertyState > *pProperties = nullptr,
+            const std::vector< XMLPropertyState > *pProperties = nullptr,
             sal_uInt32 nIdx = 0 ) const;
 
     const rtl::Reference<XMLPropertySetMapper>& getPropertySetMapper() const;

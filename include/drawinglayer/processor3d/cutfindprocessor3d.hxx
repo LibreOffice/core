@@ -42,7 +42,7 @@ namespace drawinglayer
             basegfx::B3DPoint                       maBack;
 
             /// the found cut points
-            ::std::vector< basegfx::B3DPoint >      maResult;
+            std::vector< basegfx::B3DPoint >        maResult;
 
             /*  #i102956# the transformation change from TransformPrimitive3D processings
                 needs to be remembered to be able to transform found cuts to the
@@ -65,7 +65,7 @@ namespace drawinglayer
                 bool bAnyHit);
 
             /// data read access
-            const ::std::vector< basegfx::B3DPoint >& getCutPoints() const { return maResult; }
+            const std::vector< basegfx::B3DPoint >& getCutPoints() const { return maResult; }
             bool getAnyHit() const { return mbAnyHit; }
         };
     } // end of namespace processor3d

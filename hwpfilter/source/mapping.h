@@ -382,9 +382,9 @@ hchar_string getMathMLEntity(const char *tex)
 }
 
 #else
-::std::string getMathMLEntity(const char *tex)
+std::string getMathMLEntity(const char *tex)
 {
-     ::std::string buf;
+     std::string buf;
      buf.append(tex);
      return buf;
 }

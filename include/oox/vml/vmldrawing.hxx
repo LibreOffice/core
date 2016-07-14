@@ -183,9 +183,9 @@ public:
                             const ShapeBase& rShape, bool bGroupChild );
 
 private:
-    typedef ::std::vector< sal_Int32 >                      BlockIdVector;
-    typedef ::std::map< OUString, OleObjectInfo >    OleObjectInfoMap;
-    typedef ::std::map< OUString, ControlInfo >      ControlInfoMap;
+    typedef std::vector< sal_Int32 >                        BlockIdVector;
+    typedef std::map< OUString, OleObjectInfo >      OleObjectInfoMap;
+    typedef std::map< OUString, ControlInfo >        ControlInfoMap;
 
     ::oox::core::XmlFilterBase& mrFilter;   ///< Filter object that imports/exports the VML drawing.
     css::uno::Reference< css::drawing::XDrawPage >

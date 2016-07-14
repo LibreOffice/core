@@ -97,7 +97,7 @@ struct TItemInfo
     EItem eItem;
 };
 
-typedef ::std::vector< TItemInfo > TItems;
+typedef std::vector< TItemInfo > TItems;
 
 #endif // INCLUDED_UNOTOOLS_ITEMHOLDERBASE_HXX
 

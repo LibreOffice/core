@@ -33,7 +33,7 @@ protected:
     sal_Int32 mnStartIdx;
     sal_Int32 mnEndIdx;
     sal_uInt32 mnFamily;
-    ::std::vector< XMLPropertyState > &mrProperties;
+    std::vector< XMLPropertyState > &mrProperties;
     rtl::Reference < SvXMLImportPropertyMapper >   mxMapper;
 
 public:
@@ -43,7 +43,7 @@ public:
             const OUString& rLName,
             const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
             sal_uInt32 nFamily,
-            ::std::vector< XMLPropertyState > &rProps,
+            std::vector< XMLPropertyState > &rProps,
             const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
               sal_Int32 nStartIdx = -1, sal_Int32 nEndIdx = -1 );
 
@@ -59,7 +59,7 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-                                   ::std::vector< XMLPropertyState > &rProperties,
+                                   std::vector< XMLPropertyState > &rProperties,
                                    const XMLPropertyState& rProp );
 
 };

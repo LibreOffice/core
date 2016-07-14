@@ -48,7 +48,7 @@ protected:
     virtual void exportStyleAttributes(
             SvXMLAttributeList& rAttrList,
             sal_Int32 nFamily,
-            const ::std::vector< XMLPropertyState >& rProperties,
+            const std::vector< XMLPropertyState >& rProperties,
             const SvXMLExportPropertyMapper& rPropExp,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap
@@ -58,7 +58,7 @@ protected:
     virtual void exportStyleContent(
             const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler,
             sal_Int32 nFamily,
-            const ::std::vector< XMLPropertyState >& rProperties,
+            const std::vector< XMLPropertyState >& rProperties,
             const SvXMLExportPropertyMapper& rPropExp,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap
@@ -98,16 +98,16 @@ public:
         css::uno::Sequence<OUString>& aNames );
 
     /// Add an item set to the pool and return its generated name.
-    OUString Add( sal_Int32 nFamily, const ::std::vector< XMLPropertyState >& rProperties );
-    OUString Add( sal_Int32 nFamily, const OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties, bool bDontSeek = false );
-    bool        Add( OUString& rName, sal_Int32 nFamily, const OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties );
+    OUString Add( sal_Int32 nFamily, const std::vector< XMLPropertyState >& rProperties );
+    OUString Add( sal_Int32 nFamily, const OUString& rParent, const std::vector< XMLPropertyState >& rProperties, bool bDontSeek = false );
+    bool        Add( OUString& rName, sal_Int32 nFamily, const OUString& rParent, const std::vector< XMLPropertyState >& rProperties );
 
     /// Add an item set with a pre-defined name (needed for saving sheets separately in Calc).
     bool        AddNamed( const OUString& rName, sal_Int32 nFamily, const OUString& rParent,
-                              const ::std::vector< XMLPropertyState >& rProperties );
+                              const std::vector< XMLPropertyState >& rProperties );
 
     /// Find an item set's name.
-    OUString Find( sal_Int32 nFamily, const OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties ) const;
+    OUString Find( sal_Int32 nFamily, const OUString& rParent, const std::vector< XMLPropertyState >& rProperties ) const;
 
     /** Export all item sets ofs a certain class in the order in that they have been added. */
     void exportXML( sal_Int32 nFamily,

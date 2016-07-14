@@ -34,7 +34,7 @@ namespace chart {
 
 struct DataSequenceModel
 {
-    typedef ::std::map< sal_Int32, css::uno::Any > AnyMap;
+    typedef std::map< sal_Int32, css::uno::Any > AnyMap;
 
     AnyMap              maData;             /// Map of values, indexed by point identifier.
     OUString     maFormula;          /// Formula reference, e.g. into a spreadsheet.

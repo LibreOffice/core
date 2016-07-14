@@ -83,7 +83,7 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     rtl::Reference < SvXMLExportPropertyMapper > xSectionPropMapper;
     rtl::Reference < SvXMLExportPropertyMapper > xRubyPropMapper;
 
-    const ::std::unique_ptr< ::xmloff::BoundFrameSets > pBoundFrameSets;
+    const std::unique_ptr< ::xmloff::BoundFrameSets > pBoundFrameSets;
     XMLTextFieldExport          *pFieldExport;
     std::vector<OUString>  *pListElements;
     XMLTextListAutoStylePool    *pListAutoPool;
@@ -103,7 +103,7 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     bool                        bOpenRuby;
 
     XMLTextListsHelper* mpTextListsHelper;
-    ::std::vector< XMLTextListsHelper* > maTextListsHelperStack;
+    std::vector< XMLTextListsHelper* > maTextListsHelperStack;
 
     enum class FrameType { Text, Graphic, Embedded, Shape };
 public:

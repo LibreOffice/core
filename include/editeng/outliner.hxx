@@ -387,7 +387,7 @@ protected:
 bool EDITENG_DLLPUBLIC  GetStatusValueForThesaurusFromContext( OUString &rStatusVal, LanguageType &rLang, const EditView &rEditView );
 void EDITENG_DLLPUBLIC  ReplaceTextWithSynonym( EditView &rEditView, const OUString &rSynonmText );
 
-typedef ::std::vector< OutlinerView* > ViewList;
+typedef std::vector< OutlinerView* > ViewList;
 
 class EDITENG_DLLPUBLIC DrawPortionInfo
 {

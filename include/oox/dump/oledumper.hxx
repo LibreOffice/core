@@ -358,7 +358,7 @@ private:
         explicit     LargeProperty( LargePropertyType ePropType, const String& rItemName, sal_uInt32 nDataSize, OUString* pItemValue = nullptr ) :
                                 mePropType( ePropType ), maItemName( rItemName ), mnDataSize( nDataSize ), mpItemValue( pItemValue ) {}
     };
-    typedef ::std::vector< LargeProperty > LargePropertyVector;
+    typedef std::vector< LargeProperty > LargePropertyVector;
 
     struct StreamProperty
     {
@@ -367,7 +367,7 @@ private:
         explicit     StreamProperty( const String& rItemName, sal_uInt16 nData ) :
                                 maItemName( rItemName ), mnData( nData ) {}
     };
-    typedef ::std::vector< StreamProperty > StreamPropertyVector;
+    typedef std::vector< StreamProperty > StreamPropertyVector;
 
     LargePropertyVector maLargeProps;
     StreamPropertyVector maStreamProps;
@@ -549,7 +549,7 @@ struct VbaFormSiteInfo
     VbaFormSiteInfo() : mnId( 0 ), mnLength( 0 ), mbInStream( false ) {}
 };
 
-typedef ::std::vector< VbaFormSiteInfo > VbaFormSiteInfoVector;
+typedef std::vector< VbaFormSiteInfo > VbaFormSiteInfoVector;
 
 
 struct VbaFormSharedData
@@ -708,7 +708,7 @@ private:
 
 struct VbaSharedData
 {
-    typedef ::std::map< OUString, sal_Int32 > StreamOffsetMap;
+    typedef std::map< OUString, sal_Int32 > StreamOffsetMap;
 
     StreamOffsetMap     maStrmOffsets;
     rtl_TextEncoding    meTextEnc;

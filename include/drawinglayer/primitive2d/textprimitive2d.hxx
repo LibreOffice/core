@@ -113,7 +113,7 @@ namespace drawinglayer
             sal_Int32                               mnTextLength;
 
             /// The DX array in logic units
-            ::std::vector< double >                 maDXArray;
+            std::vector< double >                   maDXArray;
 
             /// The font definition
             attribute::FontAttribute                maFontAttribute;
@@ -144,7 +144,7 @@ namespace drawinglayer
                 const OUString& rText,
                 sal_Int32 nTextPosition,
                 sal_Int32 nTextLength,
-                const ::std::vector< double >& rDXArray,
+                const std::vector< double >& rDXArray,
                 const attribute::FontAttribute& rFontAttribute,
                 const css::lang::Locale& rLocale,
                 const basegfx::BColor& rFontColor,
@@ -163,7 +163,7 @@ namespace drawinglayer
             const OUString& getText() const { return maText; }
             sal_Int32 getTextPosition() const { return mnTextPosition; }
             sal_Int32 getTextLength() const { return mnTextLength; }
-            const ::std::vector< double >& getDXArray() const { return maDXArray; }
+            const std::vector< double >& getDXArray() const { return maDXArray; }
             const attribute::FontAttribute& getFontAttribute() const { return maFontAttribute; }
             const css::lang::Locale& getLocale() const { return  maLocale; }
             const basegfx::BColor& getFontColor() const { return maFontColor; }

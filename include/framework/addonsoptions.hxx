@@ -54,7 +54,7 @@ struct FWE_DLLPUBLIC MergeMenuInstruction
     OUString     aMergeContext;
     css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aMergeMenu;
 };
-typedef ::std::vector< MergeMenuInstruction > MergeMenuInstructionContainer;
+typedef std::vector< MergeMenuInstruction > MergeMenuInstructionContainer;
 
 struct FWE_DLLPUBLIC MergeToolbarInstruction
 {
@@ -67,7 +67,7 @@ struct FWE_DLLPUBLIC MergeToolbarInstruction
     css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aMergeToolbarItems;
 };
 
-typedef ::std::vector< MergeToolbarInstruction > MergeToolbarInstructionContainer;
+typedef std::vector< MergeToolbarInstruction > MergeToolbarInstructionContainer;
 
 struct FWE_DLLPUBLIC MergeStatusbarInstruction
 {
@@ -79,7 +79,7 @@ struct FWE_DLLPUBLIC MergeStatusbarInstruction
     css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aMergeStatusbarItems;
 };
 
-typedef ::std::vector< MergeStatusbarInstruction > MergeStatusbarInstructionContainer;
+typedef std::vector< MergeStatusbarInstruction > MergeStatusbarInstructionContainer;
 
 /*-************************************************************************************************************
     @short          forward declaration to our private date container implementation

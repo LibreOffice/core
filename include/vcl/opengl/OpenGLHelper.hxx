@@ -22,7 +22,7 @@
     do { \
         if (SAL_DETAIL_ENABLE_LOG_INFO && OpenGLHelper::isVCLOpenGLEnabled()) \
         { \
-            ::std::ostringstream detail_stream; \
+            std::ostringstream detail_stream; \
             detail_stream << stream;            \
             OpenGLHelper::debugMsgStream(detail_stream); \
         } \

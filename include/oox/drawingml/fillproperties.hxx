@@ -48,7 +48,7 @@ class ShapePropertyMap;
 
 struct GradientFillProperties
 {
-    typedef ::std::map< double, Color > GradientStopMap;
+    typedef std::map< double, Color > GradientStopMap;
 
     GradientStopMap     maGradientStops;        /// Gradient stops (colors/transparence).
     OptValue< css::geometry::IntegerRectangle2D > moFillToRect;

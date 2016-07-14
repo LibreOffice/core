@@ -204,7 +204,7 @@ protected:
     SvXMLImport& mrImport;
 
     // list for local light contexts
-    ::std::vector< SdXML3DLightContext* >
+    std::vector< SdXML3DLightContext* >
                                 maList;
 
     // local parameters which need to be read

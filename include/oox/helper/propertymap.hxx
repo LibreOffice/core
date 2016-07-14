@@ -39,8 +39,8 @@ namespace oox {
 struct PropertyNameVector;
 
 
-typedef ::std::map< sal_Int32, css::uno::Any > PropertyMapType;
-typedef ::std::map< OUString, css::uno::Any > PropertyNameMap;
+typedef std::map< sal_Int32, css::uno::Any > PropertyMapType;
+typedef std::map< OUString, css::uno::Any > PropertyNameMap;
 
 /** A helper that maps property identifiers to property values.
 

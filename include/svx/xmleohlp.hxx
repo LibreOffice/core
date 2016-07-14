@@ -45,7 +45,7 @@ class OutputStorageWrapper_Impl;
 class SVX_DLLPUBLIC SvXMLEmbeddedObjectHelper :
     public ::cppu::WeakComponentImplHelper2< css::document::XEmbeddedObjectResolver, css::container::XNameAccess >
 {
-    typedef ::std::map< OUString, OutputStorageWrapper_Impl*,
+    typedef std::map< OUString, OutputStorageWrapper_Impl*,
                          OUStringLess > SvXMLEmbeddedObjectHelper_Impl;
 private:
 

@@ -103,13 +103,13 @@ const sal_Int8 API_ESCAPEHEIGHT_DEFAULT     = 58;       ///< Relative character 
 template< typename ReturnType, typename Type >
 inline ReturnType getLimitedValue( Type nValue, Type nMin, Type nMax )
 {
-    return static_cast< ReturnType >( ::std::min( ::std::max( nValue, nMin ), nMax ) );
+    return static_cast< ReturnType >( std::min( std::max( nValue, nMin ), nMax ) );
 }
 
 template< typename ReturnType, typename Type >
 inline ReturnType getIntervalValue( Type nValue, Type nBegin, Type nEnd )
 {
-    static_assert(::std::numeric_limits< Type >::is_integer, "is integer");
+    static_assert(std::numeric_limits< Type >::is_integer, "is integer");
     Type nInterval = nEnd - nBegin;
     Type nCount = (nValue < nBegin) ? -((nBegin - nValue - 1) / nInterval + 1) : ((nValue - nBegin) / nInterval);
     return static_cast< ReturnType >( nValue - nCount * nInterval );
@@ -272,21 +272,21 @@ inline void ByteOrderConverter::convertLittleEndianArray( Type* pnArray, size_t 
 
 inline void ByteOrderConverter::swap2( sal_uInt8* pnData )
 {
-    ::std::swap( pnData[ 0 ], pnData[ 1 ] );
+    std::swap( pnData[ 0 ], pnData[ 1 ] );
 }
 
 inline void ByteOrderConverter::swap4( sal_uInt8* pnData )
 {
-    ::std::swap( pnData[ 0 ], pnData[ 3 ] );
-    ::std::swap( pnData[ 1 ], pnData[ 2 ] );
+    std::swap( pnData[ 0 ], pnData[ 3 ] );
+    std::swap( pnData[ 1 ], pnData[ 2 ] );
 }
 
 inline void ByteOrderConverter::swap8( sal_uInt8* pnData )
 {
-    ::std::swap( pnData[ 0 ], pnData[ 7 ] );
-    ::std::swap( pnData[ 1 ], pnData[ 6 ] );
-    ::std::swap( pnData[ 2 ], pnData[ 5 ] );
-    ::std::swap( pnData[ 3 ], pnData[ 4 ] );
+    std::swap( pnData[ 0 ], pnData[ 7 ] );
+    std::swap( pnData[ 1 ], pnData[ 6 ] );
+    std::swap( pnData[ 2 ], pnData[ 5 ] );
+    std::swap( pnData[ 3 ], pnData[ 4 ] );
 }
 #endif
 

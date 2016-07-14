@@ -27,7 +27,7 @@
 #include <vector>
 
 struct ImplStatusItem;
-typedef ::std::vector< ImplStatusItem* > ImplStatusItemList;
+typedef std::vector< ImplStatusItem* > ImplStatusItemList;
 
 
 void VCL_DLLPUBLIC DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, const Point& rPos,

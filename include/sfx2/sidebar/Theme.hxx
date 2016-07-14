@@ -220,7 +220,7 @@ private:
     PropertyNameToIdMap maPropertyNameToIdMap;
     typedef std::vector<rtl::OUString> PropertyIdToNameMap;
     PropertyIdToNameMap maPropertyIdToNameMap;
-    typedef ::std::vector<css::uno::Any> RawValueContainer;
+    typedef std::vector<css::uno::Any> RawValueContainer;
     RawValueContainer maRawValues;
 
     typedef std::vector<css::uno::Reference<css::beans::XPropertyChangeListener> > ChangeListenerContainer;

@@ -34,7 +34,7 @@ namespace service_decl {
 class ServiceDecl;
 
 namespace detail {
-typedef ::std::function<
+typedef std::function<
     css::uno::Reference<css::uno::XInterface> /* return */
     (ServiceDecl const&,
      css::uno::Sequence<css::uno::Any> const&,

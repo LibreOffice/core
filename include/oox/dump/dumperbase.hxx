@@ -91,10 +91,10 @@ const sal_Unicode OOX_DUMP_EMPTYVALUE       = '~';
 const sal_Unicode OOX_DUMP_CMDPROMPT        = '?';
 const sal_Unicode OOX_DUMP_PLACEHOLDER      = '\x01';
 
-typedef ::std::pair< OUString, OUString > OUStringPair;
+typedef std::pair< OUString, OUString > OUStringPair;
 
-typedef ::std::vector< OUString >         OUStringVector;
-typedef ::std::vector< sal_Int64 >        Int64Vector;
+typedef std::vector< OUString >           OUStringVector;
+typedef std::vector< sal_Int64 >          Int64Vector;
 
 
 /** Static helper functions for system file and stream access. */
@@ -508,7 +508,7 @@ typedef std::shared_ptr< NameListBase > NameListRef;
 class NameListBase : public Base, public ConfigItemBase
 {
 public:
-    typedef ::std::map< sal_Int64, OUString >    OUStringMap;
+    typedef std::map< sal_Int64, OUString >      OUStringMap;
     typedef OUStringMap::const_iterator                 const_iterator;
 
 public:
@@ -678,7 +678,7 @@ private:
     struct ExtItemFormatKey
     {
         sal_Int64           mnKey;
-        ::std::pair< sal_Int64, sal_Int64 >  maFilter;
+        std::pair< sal_Int64, sal_Int64 >    maFilter;
         explicit            ExtItemFormatKey( sal_Int64 nKey ) : mnKey( nKey ), maFilter( 0, 0 ) {}
         bool                operator<( const ExtItemFormatKey& rRight ) const;
 
@@ -688,7 +688,7 @@ private:
         bool                mbShiftValue;
                             ExtItemFormat() : mbShiftValue( true ) {}
     };
-    typedef ::std::map< ExtItemFormatKey, ExtItemFormat > ExtItemFormatMap;
+    typedef std::map< ExtItemFormatKey, ExtItemFormat > ExtItemFormatMap;
     ExtItemFormatMap    maFmtMap;
 };
 
@@ -739,14 +739,14 @@ static const NameListWrapper NO_LIST;
 class ItemFormatMap
 {
 private:
-    ::std::map< sal_Int64, ItemFormat > maMap;
+    std::map< sal_Int64, ItemFormat > maMap;
 
 public:
     ItemFormatMap() : maMap() {}
     explicit     ItemFormatMap( const NameListRef& rxNameList ) { insertFormats( rxNameList ); }
 
-    ::std::map< sal_Int64, ItemFormat >::const_iterator end() const { return maMap.end(); }
-    ::std::map< sal_Int64, ItemFormat >::const_iterator find(sal_Int64 nId) const
+    std::map< sal_Int64, ItemFormat >::const_iterator end() const { return maMap.end(); }
+    std::map< sal_Int64, ItemFormat >::const_iterator find(sal_Int64 nId) const
     {
         return maMap.find(nId);
     }
@@ -796,9 +796,9 @@ private:
     void                createUnitConverter( const OUString& rData );
 
 private:
-    typedef ::std::set< OUString >                   ConfigFileSet;
-    typedef ::std::map< OUString, OUString >  ConfigDataMap;
-    typedef ::std::map< OUString, NameListRef >      NameListMap;
+    typedef std::set< OUString >                     ConfigFileSet;
+    typedef std::map< OUString, OUString >    ConfigDataMap;
+    typedef std::map< OUString, NameListRef >        NameListMap;
 
     css::uno::Reference< css::uno::XComponentContext > mxContext;
     StorageRef          mxRootStrg;
@@ -995,7 +995,7 @@ private:
     void                writeItemName( const String& rItemName );
 
 private:
-    typedef ::std::vector< sal_Int32 > StringLenVec;
+    typedef std::vector< sal_Int32 > StringLenVec;
 
     css::uno::Reference< css::io::XTextOutputStream2 > mxStrm;
     OUString            maIndent;
@@ -1189,7 +1189,7 @@ private:
         explicit     PreferredItem( const OUString& rName, bool bStorage ) :
                                 maName( rName ), mbStorage( bStorage ) {}
     };
-    typedef ::std::vector< PreferredItem > PreferredItemVector;
+    typedef std::vector< PreferredItem > PreferredItemVector;
 
     StorageRef          mxStrg;
     OUString     maSysPath;

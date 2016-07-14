@@ -424,7 +424,7 @@ namespace svt { namespace table
             If value is a non-empty sequence, then rows will have the background colors as specified in the sequence,
             in alternating order.
         */
-        virtual ::boost::optional< ::std::vector< ::Color > >
+        virtual ::boost::optional< std::vector< ::Color > >
                                                 getRowBackgroundColors() const = 0;
 
         /** determines the vertical alignment of content within a cell

@@ -47,7 +47,7 @@ namespace drawinglayer
         public:
             /// constructors/assignmentoperator/destructor
             explicit StrokeAttribute(
-                const ::std::vector< double >& rDotDashArray,
+                const std::vector< double >& rDotDashArray,
                 double fFullDotDashLen = 0.0);
             StrokeAttribute();
             StrokeAttribute(const StrokeAttribute& rCandidate);
@@ -61,7 +61,7 @@ namespace drawinglayer
             bool operator==(const StrokeAttribute& rCandidate) const;
 
             // data read access
-            const ::std::vector< double >& getDotDashArray() const;
+            const std::vector< double >& getDotDashArray() const;
             double getFullDotDashLen() const;
         };
     } // end of namespace attribute

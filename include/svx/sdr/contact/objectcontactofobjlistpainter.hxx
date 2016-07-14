@@ -43,7 +43,7 @@ public:
 };
 
 // typedef for transferring SdrObject
-typedef ::std::vector< SdrObject* > SdrObjectVector;
+typedef std::vector< SdrObject* > SdrObjectVector;
 
 class SVX_DLLPUBLIC ObjectContactOfObjListPainter : public ObjectContactPainter
 {

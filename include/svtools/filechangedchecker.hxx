@@ -29,7 +29,7 @@ private:
     Idle                    mIdle;
     OUString            mFileName;
     TimeValue                mLastModTime;
-    ::std::function<void ()> mpCallback;
+    std::function<void ()> mpCallback;
 
     bool SVT_DLLPRIVATE getCurrentModTime(TimeValue& o_rValue) const;
     DECL_LINK_TYPED(TimerHandler, Idle *, void);
@@ -38,7 +38,7 @@ public:
     void resetTimer();
     bool hasFileChanged();
     FileChangedChecker(const OUString& rFilename,
-            const ::std::function<void ()>& rCallback);
+            const std::function<void ()>& rCallback);
 };
 
 #endif

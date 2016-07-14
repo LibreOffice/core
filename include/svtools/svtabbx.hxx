@@ -125,7 +125,7 @@ namespace svt {
 class SVT_DLLPUBLIC SvHeaderTabListBox : public SvTabListBox, public svt::IAccessibleTableProvider
 {
 private:
-    typedef ::std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
+    typedef std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
 
     bool                            m_bFirstPaint;
     std::unique_ptr<::svt::SvHeaderTabListBoxImpl>  m_pImpl;

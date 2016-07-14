@@ -529,7 +529,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 /**
     Use as follows:
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        \::std::auto_ptr<X> ...
+        \std::auto_ptr<X> ...
         SAL_WNODEPRECATED_DECLARATIONS_POP
 */
 

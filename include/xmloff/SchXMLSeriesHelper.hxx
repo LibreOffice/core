@@ -35,10 +35,10 @@
 class XMLOFF_DLLPUBLIC SchXMLSeriesHelper
 {
 public:
-    static ::std::vector< css::uno::Reference< css::chart2::XDataSeries > >
+    static std::vector< css::uno::Reference< css::chart2::XDataSeries > >
             getDataSeriesFromDiagram(
                 const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
-    static ::std::map< css::uno::Reference< css::chart2::XDataSeries >, sal_Int32 >
+    static std::map< css::uno::Reference< css::chart2::XDataSeries >, sal_Int32 >
             getDataSeriesIndexMapFromDiagram(
                 const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 

@@ -38,10 +38,10 @@ namespace oox {
     check the passed index before.
  */
 template< typename ObjType >
-class RefVector : public ::std::vector< std::shared_ptr< ObjType > >
+class RefVector : public std::vector< std::shared_ptr< ObjType > >
 {
 public:
-    typedef ::std::vector< std::shared_ptr< ObjType > > container_type;
+    typedef std::vector< std::shared_ptr< ObjType > > container_type;
     typedef typename container_type::value_type             value_type;
     typedef typename container_type::size_type              size_type;
 
@@ -59,7 +59,7 @@ public:
     template< typename FunctorType >
     void                forEach( FunctorType aFunctor ) const
                         {
-                            ::std::for_each( this->begin(), this->end(), ForEachFunctor< FunctorType >( aFunctor ) );
+                            std::for_each( this->begin(), this->end(), ForEachFunctor< FunctorType >( aFunctor ) );
                         }
 
     /** Calls the passed member function of ObjType on every contained object,
@@ -67,7 +67,7 @@ public:
     template< typename FuncType >
     void                forEachMem( FuncType pFunc ) const
                         {
-                            forEach( ::std::bind( pFunc, std::placeholders::_1 ) );
+                            forEach( std::bind( pFunc, std::placeholders::_1 ) );
                         }
 
     /** Calls the passed member function of ObjType on every contained object,
@@ -75,7 +75,7 @@ public:
     template< typename FuncType, typename ParamType >
     void                forEachMem( FuncType pFunc, ParamType aParam ) const
                         {
-                            forEach( ::std::bind( pFunc, std::placeholders::_1, aParam ) );
+                            forEach( std::bind( pFunc, std::placeholders::_1, aParam ) );
                         }
 
     /** Calls the passed member function of ObjType on every contained object,
@@ -83,7 +83,7 @@ public:
     template< typename FuncType, typename ParamType1, typename ParamType2 >
     void                forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
                         {
-                            forEach( ::std::bind( pFunc, std::placeholders::_1, aParam1, aParam2 ) );
+                            forEach( std::bind( pFunc, std::placeholders::_1, aParam1, aParam2 ) );
                         }
 
     /** Calls the passed member function of ObjType on every contained object,
@@ -91,7 +91,7 @@ public:
     template< typename FuncType, typename ParamType1, typename ParamType2, typename ParamType3 >
     void                forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3 ) const
                         {
-                            forEach( ::std::bind( pFunc, std::placeholders::_1, aParam1, aParam2, aParam3 ) );
+                            forEach( std::bind( pFunc, std::placeholders::_1, aParam1, aParam2, aParam3 ) );
                         }
 
     /** Calls the passed functor for every contained object. Passes the index as
@@ -99,7 +99,7 @@ public:
     template< typename FunctorType >
     void                forEachWithIndex( const FunctorType& rFunctor ) const
                         {
-                            ::std::for_each( this->begin(), this->end(), ForEachFunctorWithIndex< FunctorType >( rFunctor ) );
+                            std::for_each( this->begin(), this->end(), ForEachFunctorWithIndex< FunctorType >( rFunctor ) );
                         }
 
     /** Calls the passed member function of ObjType on every contained object.
@@ -107,7 +107,7 @@ public:
     template< typename FuncType, typename ParamType1, typename ParamType2 >
     void                forEachMemWithIndex( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
                         {
-                            forEachWithIndex( ::std::bind( pFunc, std::placeholders::_2, std::placeholders::_1, aParam1, aParam2 ) );
+                            forEachWithIndex( std::bind( pFunc, std::placeholders::_2, std::placeholders::_1, aParam1, aParam2 ) );
                         }
 
     /** Searches for an element by using the passed functor that takes a
@@ -115,7 +115,7 @@ public:
     template< typename FunctorType >
     value_type          findIf( const FunctorType& rFunctor ) const
                         {
-                            typename container_type::const_iterator aIt = ::std::find_if( this->begin(), this->end(), FindFunctor< FunctorType >( rFunctor ) );
+                            typename container_type::const_iterator aIt = std::find_if( this->begin(), this->end(), FindFunctor< FunctorType >( rFunctor ) );
                             return (aIt == this->end()) ? value_type() : *aIt;
                         }
 

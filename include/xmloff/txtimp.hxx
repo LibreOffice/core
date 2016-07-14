@@ -648,7 +648,7 @@ public:
 
     virtual void endAppletOrPlugin(
         const css::uno::Reference< css::beans::XPropertySet> &rPropSet,
-        ::std::map < const OUString, OUString > &rParamMap );
+        std::map < const OUString, OUString > &rParamMap );
 
     // applet helper methods
     // implemented in sw/filter/xml/txtparai.hxx

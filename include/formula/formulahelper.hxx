@@ -37,7 +37,7 @@ namespace formula
 
     class FORMULA_DLLPUBLIC FormulaHelper
     {
-        ::std::unique_ptr<SvtSysLocale> m_pSysLocale;
+        std::unique_ptr<SvtSysLocale> m_pSysLocale;
         const CharClass*                m_pCharClass;
         const IFunctionManager*         m_pFunctionManager;
         const sal_Unicode open;
@@ -55,7 +55,7 @@ namespace formula
                                                sal_Int32&    rFStart, // Ein- und Ausgabe
                                                sal_Int32*    pFEnd = nullptr,
                                          const IFunctionDescription** ppFDesc = nullptr,
-                                               ::std::vector< OUString>*      pArgs = nullptr ) const;
+                                               std::vector< OUString>*        pArgs = nullptr ) const;
 
         sal_Int32           GetFunctionStart( const OUString& rFormula, sal_Int32 nStart,
                                                         bool bBack, OUString* pFuncName = nullptr ) const;
@@ -65,7 +65,7 @@ namespace formula
         sal_Int32           GetArgStart     ( const OUString& rFormula, sal_Int32 nStart,
                                                       sal_uInt16 nArg ) const;
 
-        void                GetArgStrings   ( ::std::vector< OUString >& _rArgs,
+        void                GetArgStrings   ( std::vector< OUString >& _rArgs,
                                                       const OUString&   rFormula,
                                                       sal_Int32         nFuncPos,
                                                       sal_uInt16        nArgs ) const;
@@ -73,7 +73,7 @@ namespace formula
         void                FillArgStrings  ( const OUString& rFormula,
                                                       sal_Int32         nFuncPos,
                                                       sal_uInt16        nArgs,
-                                                      ::std::vector< OUString >&      _rArgs ) const;
+                                                      std::vector< OUString >&        _rArgs ) const;
     };
 
 } // formula

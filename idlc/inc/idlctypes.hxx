@@ -38,9 +38,9 @@ struct LessString
     }
 };
 
-typedef ::std::list< OString >               StringList;
-typedef ::std::vector< OString >             StringVector;
-typedef ::std::set< OString, LessString >    StringSet;
+typedef std::list< OString >                 StringList;
+typedef std::vector< OString >               StringVector;
+typedef std::set< OString, LessString >      StringSet;
 
 class AstDeclaration;
 

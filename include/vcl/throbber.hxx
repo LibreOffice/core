@@ -62,10 +62,10 @@ public:
     void stop();
     bool isRunning() const;
 
-    void setImageList( ::std::vector< Image > const& i_images );
+    void setImageList( std::vector< Image > const& i_images );
 
     // default images
-    static ::std::vector< OUString >
+    static std::vector< OUString >
         getDefaultImageURLs( const ImageSet i_imageSet );
 
 protected:
@@ -76,7 +76,7 @@ private:
     SAL_DLLPRIVATE void initImages();
 
 private:
-    ::std::vector< Image >  maImageList;
+    std::vector< Image >    maImageList;
 
     bool    mbRepeat;
     sal_Int32   mnStepTime;

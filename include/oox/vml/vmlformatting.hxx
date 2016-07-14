@@ -45,8 +45,8 @@ namespace oox {
 namespace vml {
 
 
-typedef ::std::pair< sal_Int32, sal_Int32 > Int32Pair;
-typedef ::std::pair< double, double >       DoublePair;
+typedef std::pair< sal_Int32, sal_Int32 > Int32Pair;
+typedef std::pair< double, double >         DoublePair;
 
 
 namespace ConversionHelper
@@ -157,8 +157,8 @@ namespace ConversionHelper
         @param rGraphicHelper  See above.
     */
     OOX_DLLPUBLIC void         decodeVmlPath(
-                            ::std::vector< ::std::vector< css::awt::Point > >& rPoints,
-                            ::std::vector< ::std::vector< css::drawing::PolygonFlags > >& rFlags,
+                            std::vector< std::vector< css::awt::Point > >& rPoints,
+                            std::vector< std::vector< css::drawing::PolygonFlags > >& rFlags,
                             const OUString& rPath );
 }
 

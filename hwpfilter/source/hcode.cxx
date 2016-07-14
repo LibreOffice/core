@@ -1183,9 +1183,9 @@ hchar_string hstr2ucsstr(hchar const* hstr)
 /**
  * Convert 'Hangul and Computer' strings to the completion code(KSC5601-87)
  */
-::std::string hstr2ksstr(hchar const* hstr)
+std::string hstr2ksstr(hchar const* hstr)
 {
-    ::std::string ret;
+    std::string ret;
     int j;
      hchar dest[3];
     for( ; *hstr ; )
@@ -1301,9 +1301,9 @@ char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
 }
 
 
-::std::string urltounix(const char *src)
+std::string urltounix(const char *src)
 {
-    ::std::string ret;
+    std::string ret;
     unsigned int i = 0;
     if( src[0] == 'C' && src[1] == ':' && src[2] == '\\' ) // Home Dir
     {
@@ -1353,7 +1353,7 @@ char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
 }
 
 #ifdef _WIN32
-::std::string urltowin(const char *src)
+std::string urltowin(const char *src)
 {
     std::string ret;
     if( !_strnicmp(src, "http", 4))

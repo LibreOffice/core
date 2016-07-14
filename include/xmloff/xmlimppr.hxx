@@ -83,7 +83,7 @@ public:
       * [nStartIdx, nEndIdx[
       */
     void importXML(
-            ::std::vector< XMLPropertyState >& rProperties,
+            std::vector< XMLPropertyState >& rProperties,
             const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,
@@ -93,28 +93,28 @@ public:
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
     virtual bool handleSpecialItem(
             XMLPropertyState& rProperty,
-            ::std::vector< XMLPropertyState >& rProperties,
+            std::vector< XMLPropertyState >& rProperties,
             const OUString& rValue,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap ) const;
 
     /** This method is called when all attributes have benn processed. It may be used to remove items that are incomplete */
     virtual void finished(
-            ::std::vector< XMLPropertyState >& rProperties,
+            std::vector< XMLPropertyState >& rProperties,
             sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const;
 
     void CheckSpecialContext(
-            const ::std::vector< XMLPropertyState >& rProperties,
+            const std::vector< XMLPropertyState >& rProperties,
             const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
             ContextID_Index_Pair* pSpecialContextIds ) const;
 
     bool FillPropertySet(
-            const ::std::vector< XMLPropertyState >& rProperties,
+            const std::vector< XMLPropertyState >& rProperties,
             const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
             ContextID_Index_Pair* pSpecialContextIds = nullptr ) const;
 
     void FillPropertySequence(
-            const ::std::vector< XMLPropertyState >& aProperties,
+            const std::vector< XMLPropertyState >& aProperties,
             css::uno::Sequence< css::beans::PropertyValue >& rValues )
             const;
 
@@ -125,7 +125,7 @@ public:
     /** implementation helper for FillPropertySet: fill an XPropertySet.
      * Exceptions will be asserted. */
     static bool FillPropertySet_(
-        const ::std::vector<XMLPropertyState> & rProperties,
+        const std::vector<XMLPropertyState> & rProperties,
         const css::uno::Reference< css::beans::XPropertySet> & rPropSet,
         const css::uno::Reference< css::beans::XPropertySetInfo> & rPropSetInfo,
         const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
@@ -138,7 +138,7 @@ public:
     /** implementation helper for FillPropertySet: fill an XMultiPropertySet.
      * If unsuccessul, set return value. */
     static bool FillMultiPropertySet_(
-        const ::std::vector<XMLPropertyState> & rProperties,
+        const std::vector<XMLPropertyState> & rProperties,
         const css::uno::Reference< css::beans::XMultiPropertySet> & rMultiPropSet,
         const css::uno::Reference< css::beans::XPropertySetInfo> & rPropSetInfo,
         const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
@@ -150,7 +150,7 @@ public:
     /** implementation helper for FillPropertySet: fill an XTolerantMultiPropertySet.
      * If unsuccessul, set return value. */
     static bool FillTolerantMultiPropertySet_(
-        const ::std::vector<XMLPropertyState> & rProperties,
+        const std::vector<XMLPropertyState> & rProperties,
         const css::uno::Reference< css::beans::XTolerantMultiPropertySet> & rTolPropSet,
         const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
         SvXMLImport& rImport,
@@ -161,7 +161,7 @@ public:
 
 
     static void PrepareForMultiPropertySet_(
-        const ::std::vector<XMLPropertyState> & rProperties,
+        const std::vector<XMLPropertyState> & rProperties,
         const css::uno::Reference< css::beans::XPropertySetInfo> & rPropSetInfo,
         const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
         ContextID_Index_Pair* pSpecialContextIds,

@@ -78,7 +78,7 @@ namespace dbtools
             css::uno::Reference< css::beans::XPropertySet >
                                         xComposerColumn;
             /// the indices of inner parameters which need to be filled when this concrete parameter is set
-            ::std::vector< sal_Int32 >  aInnerIndexes;
+            std::vector< sal_Int32 >    aInnerIndexes;
 
             /// ctor with composer column
             ParameterMetaData( const css::uno::Reference< css::beans::XPropertySet >& _rxColumn )
@@ -88,7 +88,7 @@ namespace dbtools
             }
         };
 
-        typedef ::std::map< OUString, ParameterMetaData >    ParameterInformation;
+        typedef std::map< OUString, ParameterMetaData >      ParameterInformation;
 
     private:
         ::osl::Mutex&                       m_rMutex;
@@ -122,7 +122,7 @@ namespace dbtools
         OUString                            m_sSpecialCharacters;
         css::uno::Reference< css::sdbc::XDatabaseMetaData > m_xConnectionMetadata;
 
-        ::std::vector< bool >               m_aParametersVisited;
+        std::vector< bool >                 m_aParametersVisited;
 
         bool                                m_bUpToDate;
 
@@ -302,7 +302,7 @@ namespace dbtools
         void    classifyLinks(
                     const css::uno::Reference< css::container::XNameAccess >& _rxParentColumns,
                     const css::uno::Reference< css::container::XNameAccess >& _rxColumns,
-                    ::std::vector< OUString >& _out_rAdditionalFilterComponents
+                    std::vector< OUString >& _out_rAdditionalFilterComponents
                 );
 
         /** finalizes our <member>m_pOuterParameters</member> so that it can be used for

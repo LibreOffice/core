@@ -57,7 +57,7 @@ namespace formula
         };
         virtual sal_uInt32 getCount() const = 0;
         virtual const IFunctionCategory* getCategory(sal_uInt32 nPos) const = 0;
-        virtual void fillLastRecentlyUsedFunctions(::std::vector< const IFunctionDescription*>& _rLastRUFunctions) const = 0;
+        virtual void fillLastRecentlyUsedFunctions(std::vector< const IFunctionDescription*>& _rLastRUFunctions) const = 0;
 
         virtual sal_Unicode getSingleToken(const EToken _eToken) const = 0;
 
@@ -88,9 +88,9 @@ namespace formula
         // GetSuppressedArgCount
         virtual sal_Int32 getSuppressedArgumentCount() const = 0;
         // GetFormulaString
-        virtual OUString getFormula(const ::std::vector< OUString >& _aArguments) const = 0;
+        virtual OUString getFormula(const std::vector< OUString >& _aArguments) const = 0;
         // GetVisibleArgMapping
-        virtual void fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const = 0;
+        virtual void fillVisibleArgumentMapping(std::vector<sal_uInt16>& _rArguments) const = 0;
         virtual void initArgumentInfo() const = 0;
         virtual OUString getSignature() const = 0;
         virtual OString getHelpId() const = 0;
@@ -139,7 +139,7 @@ namespace formula
         virtual void deleteFormData() = 0;
 
         virtual IFunctionManager*   getFunctionManager() = 0;
-        virtual ::std::unique_ptr<FormulaTokenArray> convertToTokenArray(const css::uno::Sequence< css::sheet::FormulaToken >& _aTokenList) = 0;
+        virtual std::unique_ptr<FormulaTokenArray> convertToTokenArray(const css::uno::Sequence< css::sheet::FormulaToken >& _aTokenList) = 0;
 
         virtual css::uno::Reference< css::sheet::XFormulaParser> getFormulaParser() const = 0;
         virtual css::uno::Reference< css::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const = 0;

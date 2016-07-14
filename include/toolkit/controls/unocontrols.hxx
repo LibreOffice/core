@@ -872,8 +872,8 @@ private:
                 ::osl::ClearableMutexGuard& i_rClearBeforeNotify
             );
 
-    void    impl_getStringItemList( ::std::vector< OUString >& o_rStringItems ) const;
-    void    impl_setStringItemList_nolck( const ::std::vector< OUString >& i_rStringItems );
+    void    impl_getStringItemList( std::vector< OUString >& o_rStringItems ) const;
+    void    impl_setStringItemList_nolck( const std::vector< OUString >& i_rStringItems );
 
 protected:
     std::unique_ptr<UnoControlListBoxModel_Data>  m_xData;

@@ -562,7 +562,7 @@ namespace dbtools
                             const css::uno::Reference< css::sdbc::XParameters>& _xParameters,
                             const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
                             const css::uno::Reference< css::task::XInteractionHandler >& _rxHandler,
-                            const ::std::vector<bool, std::allocator<bool> >& _aParametersSet = ::std::vector<bool, std::allocator<bool> >());
+                            const std::vector<bool, std::allocator<bool> >& _aParametersSet = std::vector<bool, std::allocator<bool> >());
 
     /** call the appropriate set method for the specific sql type @see css::sdbc::DataType
         @param  _xParams        the parameters where to set the value
@@ -740,9 +740,9 @@ namespace dbtools
                                  const OUString& _sSchema,
                                  const OUString& _sTable);
 
-    typedef ::std::pair<bool,bool> TBoolPair;
-    typedef ::std::pair< TBoolPair,sal_Int32 > ColumnInformation;
-    typedef ::std::multimap< OUString, ColumnInformation, ::comphelper::UStringMixLess> ColumnInformationMap;
+    typedef std::pair<bool,bool> TBoolPair;
+    typedef std::pair< TBoolPair,sal_Int32 > ColumnInformation;
+    typedef std::multimap< OUString, ColumnInformation, ::comphelper::UStringMixLess> ColumnInformationMap;
     /** collects the information about auto increment, currency and data type for the given column name.
         The column must be quoted, * is also valid.
         @param  _xConnection

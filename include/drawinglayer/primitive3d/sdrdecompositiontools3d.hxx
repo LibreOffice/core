@@ -50,16 +50,16 @@ namespace drawinglayer
     namespace primitive3d
     {
         // #i98295#
-        basegfx::B3DRange DRAWINGLAYER_DLLPUBLIC getRangeFrom3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill);
-        void DRAWINGLAYER_DLLPUBLIC applyNormalsKindSphereTo3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill, const basegfx::B3DRange& rRange);
-        void DRAWINGLAYER_DLLPUBLIC applyNormalsKindFlatTo3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill);
-        void DRAWINGLAYER_DLLPUBLIC applyNormalsInvertTo3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill);
+        basegfx::B3DRange DRAWINGLAYER_DLLPUBLIC getRangeFrom3DGeometry(std::vector< basegfx::B3DPolyPolygon >& rFill);
+        void DRAWINGLAYER_DLLPUBLIC applyNormalsKindSphereTo3DGeometry(std::vector< basegfx::B3DPolyPolygon >& rFill, const basegfx::B3DRange& rRange);
+        void DRAWINGLAYER_DLLPUBLIC applyNormalsKindFlatTo3DGeometry(std::vector< basegfx::B3DPolyPolygon >& rFill);
+        void DRAWINGLAYER_DLLPUBLIC applyNormalsInvertTo3DGeometry(std::vector< basegfx::B3DPolyPolygon >& rFill);
 
         // #i98314#
         void DRAWINGLAYER_DLLPUBLIC applyTextureTo3DGeometry(
             css::drawing::TextureProjectionMode eModeX,
             css::drawing::TextureProjectionMode eModeY,
-            ::std::vector< basegfx::B3DPolyPolygon >& rFill,
+            std::vector< basegfx::B3DPolyPolygon >& rFill,
             const basegfx::B3DRange& rRange,
             const basegfx::B2DVector& rTextureSize);
 
@@ -69,7 +69,7 @@ namespace drawinglayer
             const attribute::SdrLineAttribute& rLine);
 
         Primitive3DContainer DRAWINGLAYER_DLLPUBLIC create3DPolyPolygonFillPrimitives(
-            const ::std::vector< basegfx::B3DPolyPolygon >& r3DPolyPolygonVector,
+            const std::vector< basegfx::B3DPolyPolygon >& r3DPolyPolygonVector,
             const basegfx::B3DHomMatrix& rObjectTransform,
             const basegfx::B2DVector& rTextureSize,
             const attribute::Sdr3DObjectAttribute& aSdr3DObjectAttribute,
@@ -82,7 +82,7 @@ namespace drawinglayer
             bool bShadow3D);
 
         Primitive3DContainer DRAWINGLAYER_DLLPUBLIC createHiddenGeometryPrimitives3D(
-            const ::std::vector< basegfx::B3DPolyPolygon >& r3DPolyPolygonVector,
+            const std::vector< basegfx::B3DPolyPolygon >& r3DPolyPolygonVector,
             const basegfx::B3DHomMatrix& rObjectTransform,
             const basegfx::B2DVector& rTextureSize,
             const attribute::Sdr3DObjectAttribute& aSdr3DObjectAttribute);

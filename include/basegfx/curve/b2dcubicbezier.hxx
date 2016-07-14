@@ -187,7 +187,7 @@ namespace basegfx
             anymore. Since there is an upper maximum of 4 values, it makes
             sense to use reserve(4) at the vector as preparation.
         */
-        void getAllExtremumPositions(::std::vector< double >& rResults) const;
+        void getAllExtremumPositions(std::vector< double >& rResults) const;
 
         /// apply transformation given in matrix form
         void transform(const basegfx::B2DHomMatrix& rMatrix);

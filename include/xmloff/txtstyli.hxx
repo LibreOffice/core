@@ -99,7 +99,7 @@ public:
     inline bool HasCombinedCharactersLetter()
         { return bHasCombinedCharactersLetter; }
 
-    const ::std::vector< XMLPropertyState > & GetProperties_() { return GetProperties(); }
+    const std::vector< XMLPropertyState > & GetProperties_() { return GetProperties(); }
 };
 
 #endif

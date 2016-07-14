@@ -51,7 +51,7 @@ SAL_DLLPUBLIC bool SAL_CALL osl_detail_ObjectRegistry_storeAddresses(
     SAL_THROW_EXTERN_C();
 
 SAL_DLLPUBLIC bool SAL_CALL osl_detail_ObjectRegistry_checkObjectCount(
-    ::osl::detail::ObjectRegistryData const& rData, ::std::size_t nExpected )
+    ::osl::detail::ObjectRegistryData const& rData, std::size_t nExpected )
     SAL_THROW_EXTERN_C();
 
 SAL_DLLPUBLIC void SAL_CALL osl_detail_ObjectRegistry_registerObject(
@@ -85,18 +85,18 @@ namespace osl {
 
 namespace detail {
 
-struct VoidPtrHash : ::std::unary_function<void const*, ::std::size_t> {
-    ::std::size_t operator()( void const* p ) const {
-        ::std::size_t const d = static_cast< ::std::size_t >(
-            reinterpret_cast< ::std::ptrdiff_t >(p) );
+struct VoidPtrHash : std::unary_function<void const*, std::size_t> {
+    std::size_t operator()( void const* p ) const {
+        std::size_t const d = static_cast< std::size_t >(
+            reinterpret_cast< std::ptrdiff_t >(p) );
         return d + (d >> 3);
     }
 };
 
-typedef ::std::unordered_set<void const*, VoidPtrHash > VoidPointerSet;
+typedef std::unordered_set<void const*, VoidPtrHash > VoidPointerSet;
 
 struct ObjectRegistryData {
-    ObjectRegistryData( ::std::type_info const& rTypeInfo )
+    ObjectRegistryData( std::type_info const& rTypeInfo )
         : m_pName(rTypeInfo.name()), m_nCount(0), m_addresses(),
           m_bStoreAddresses(osl_detail_ObjectRegistry_storeAddresses(m_pName)){}
 
@@ -113,7 +113,7 @@ public:
     ObjectRegistry() : m_data( typeid(T) ) {}
     ~ObjectRegistry() { checkObjectCount(0); }
 
-    bool checkObjectCount( ::std::size_t nExpected ) const {
+    bool checkObjectCount( std::size_t nExpected ) const {
         bool const bRet = osl_detail_ObjectRegistry_checkObjectCount(
             m_data, nExpected );
         if (!bRet && m_data.m_bStoreAddresses) {
@@ -171,12 +171,12 @@ class DebugBase
 {
 public:
 #if OSL_DEBUG_LEVEL <= 0
-    static bool checkObjectCount( ::std::size_t = 0 ) { return true; }
+    static bool checkObjectCount( std::size_t = 0 ) { return true; }
 #else // OSL_DEBUG_LEVEL > 0
     /** @return whether the expected number of objects is alive,
                 else this function SAL_WARNs
     */
-    static bool checkObjectCount( ::std::size_t nExpected = 0 ) {
+    static bool checkObjectCount( std::size_t nExpected = 0 ) {
         return StaticObjectRegistry::get().checkObjectCount(nExpected);
     }
 

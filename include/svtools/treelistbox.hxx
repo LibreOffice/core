@@ -398,8 +398,8 @@ public:
     SvTreeListEntry* GetEntry( SvTreeListEntry* pParent, sal_uLong nPos ) const;
     SvTreeListEntry* GetEntry( sal_uLong nRootPos ) const;
 
-    SvTreeListEntry*    GetEntryFromPath( const ::std::deque< sal_Int32 >& _rPath ) const;
-    void            FillEntryPath( SvTreeListEntry* pEntry, ::std::deque< sal_Int32 >& _rPath ) const;
+    SvTreeListEntry*    GetEntryFromPath( const std::deque< sal_Int32 >& _rPath ) const;
+    void            FillEntryPath( SvTreeListEntry* pEntry, std::deque< sal_Int32 >& _rPath ) const;
 
     using Window::GetParent;
     const SvTreeListEntry* GetParent( const SvTreeListEntry* pEntry ) const;

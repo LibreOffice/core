@@ -70,15 +70,15 @@ public:
 
     size_t size() const { return maMap.size(); }
     size_t count( const OUString& rId ) const { return maMap.count( rId ); }
-    ::std::map< OUString, Relation >::const_iterator begin() const
+    std::map< OUString, Relation >::const_iterator begin() const
     {
         return maMap.begin();
     }
-    ::std::map< OUString, Relation >::const_iterator end() const
+    std::map< OUString, Relation >::const_iterator end() const
     {
         return maMap.end();
     }
-    void insert( const ::std::map< OUString, Relation >::value_type& rVal )
+    void insert( const std::map< OUString, Relation >::value_type& rVal )
     {
         maMap.insert( rVal );
     }
@@ -107,7 +107,7 @@ public:
     OUString     getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& rType ) const;
 
 private:
-    ::std::map< OUString, Relation > maMap;
+    std::map< OUString, Relation > maMap;
     OUString     maFragmentPath;
 };
 

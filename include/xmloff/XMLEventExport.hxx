@@ -38,8 +38,8 @@ namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }
 } } }
 
-typedef ::std::map< OUString, XMLEventExportHandler* > HandlerMap;
-typedef ::std::map< OUString, XMLEventName > NameMap;
+typedef std::map< OUString, XMLEventExportHandler* > HandlerMap;
+typedef std::map< OUString, XMLEventName > NameMap;
 
 /**
  * Export instances of EventsSupplier services. To use this class you

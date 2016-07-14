@@ -296,7 +296,7 @@ namespace drawinglayer
             // compare operator
             virtual bool operator==(const GeoTexSvx& rGeoTexSvx) const override;
 
-            void appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices);
+            void appendTransformations(std::vector< basegfx::B2DHomMatrix >& rMatrices);
             double getDistanceToHatch(const basegfx::B2DPoint& rUV) const;
             const basegfx::B2DHomMatrix& getBackTextureTransform() const;
         };
@@ -325,7 +325,7 @@ namespace drawinglayer
             double                          mfOffsetY;
 
         private:
-            sal_Int32 iterateTiles(::std::vector< basegfx::B2DHomMatrix >* pMatrices) const;
+            sal_Int32 iterateTiles(std::vector< basegfx::B2DHomMatrix >* pMatrices) const;
 
         public:
             GeoTexSvxTiled(
@@ -337,7 +337,7 @@ namespace drawinglayer
             // compare operator
             virtual bool operator==(const GeoTexSvx& rGeoTexSvx) const override;
 
-            void appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices) const;
+            void appendTransformations(std::vector< basegfx::B2DHomMatrix >& rMatrices) const;
             sal_uInt32 getNumberOfTiles() const;
         };
     } // end of namespace texture

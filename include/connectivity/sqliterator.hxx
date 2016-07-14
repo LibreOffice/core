@@ -63,7 +63,7 @@ namespace connectivity
     class OSQLParseNode;
     class OSQLParser;
 
-    typedef ::std::pair<const OSQLParseNode*,const OSQLParseNode* > TNodePair;
+    typedef std::pair<const OSQLParseNode*,const OSQLParseNode* > TNodePair;
 
     enum class OSQLStatementType {
         Unknown,
@@ -90,7 +90,7 @@ namespace connectivity
         ::rtl::Reference<OSQLColumns>                       m_aOrderColumns;    // the order by columns
         ::rtl::Reference<OSQLColumns>                       m_aCreateColumns;   // the columns for Create table clause
 
-        ::std::unique_ptr< OSQLParseTreeIteratorImpl >  m_pImpl;
+        std::unique_ptr< OSQLParseTreeIteratorImpl >    m_pImpl;
 
         void                traverseParameter(const OSQLParseNode* _pParseNode,const OSQLParseNode* _pColumnRef,const OUString& _aColumnName, OUString& _aTableRange, const OUString& _rColumnAlias);
         // inserts a table into the map
@@ -288,7 +288,7 @@ namespace connectivity
         sal_Int32 getFunctionReturnType(const OSQLParseNode* _pNode );
 
         // returns a lis of all joined columns
-        ::std::vector< TNodePair >& getJoinConditions() const;
+        std::vector< TNodePair >& getJoinConditions() const;
 
     private:
         // helper to implement getColumnTableRange

@@ -290,7 +290,7 @@ public:
                 obtains the fallbacks only if the full tag did not lead to a
                 match, so subsequent tries need not to include it again.
      */
-    ::std::vector< OUString >       getFallbackStrings( bool bIncludeFullBcp47 ) const;
+    std::vector< OUString >         getFallbackStrings( bool bIncludeFullBcp47 ) const;
 
 
     /** @short  Search for an equal or at least for a similar locale in a list
@@ -328,7 +328,7 @@ public:
                 locale list. If no matching locale could be found it points to
                 the beginning of the list.
      */
-    static ::std::vector< OUString >::const_iterator getFallback( const ::std::vector< OUString > & rList,
+    static std::vector< OUString >::const_iterator getFallback( const std::vector< OUString > & rList,
                                                                   const OUString & rReference );
 
 
@@ -354,8 +354,8 @@ public:
                 locale list. If no matching locale could be found it points to
                 the end of the list.
      */
-    static ::std::vector< css::lang::Locale >::const_iterator getMatchingFallback(
-            const ::std::vector< css::lang::Locale > & rList,
+    static std::vector< css::lang::Locale >::const_iterator getMatchingFallback(
+            const std::vector< css::lang::Locale > & rList,
             const css::lang::Locale & rReference );
 
 

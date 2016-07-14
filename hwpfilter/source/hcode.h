@@ -39,7 +39,7 @@ DLLEXPORT hchar_string hstr2ucsstr(hchar const* hstr);
 /**
  * 한컴스트링을 완성형스트링으로 변환한다.
  */
-DLLEXPORT ::std::string hstr2ksstr(hchar const* hstr);
+DLLEXPORT std::string hstr2ksstr(hchar const* hstr);
 
 /**
  * 한글을 포함할 수 있는 char형스트링을 한컴스트링으로 변환한다.
@@ -49,13 +49,13 @@ DLLEXPORT hchar_string kstr2hstr(uchar const* src);
 /**
  * hwp의 경로를 unix형태로 바꾼다.
  */
-DLLEXPORT ::std::string urltounix(const char *src);
+DLLEXPORT std::string urltounix(const char *src);
 
 /**
  * hwp의 경로를 windows형태로 바꾼다.
  */
 #ifdef _WIN32
-DLLEXPORT ::std::string urltowin(const char *src);
+DLLEXPORT std::string urltowin(const char *src);
 #endif
 /**
  *  Transfer integer to string following format

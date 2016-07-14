@@ -89,11 +89,11 @@ namespace accessibility
     {
     public:
         typedef WeakCppRef < css::accessibility::XAccessible, AccessibleEditableTextPara > WeakPara;
-        typedef ::std::pair< WeakPara, css::awt::Rectangle > WeakChild;
-        typedef ::std::pair< css::uno::Reference<
+        typedef std::pair< WeakPara, css::awt::Rectangle > WeakChild;
+        typedef std::pair< css::uno::Reference<
             css::accessibility::XAccessible > , css::awt::Rectangle > Child;
-        typedef ::std::vector< WeakChild > VectorOfChildren;
-        typedef ::std::vector< sal_Int16 > VectorOfStates;
+        typedef std::vector< WeakChild > VectorOfChildren;
+        typedef std::vector< sal_Int16 > VectorOfStates;
 
         AccessibleParaManager();
         ~AccessibleParaManager();
@@ -190,7 +190,7 @@ namespace accessibility
             void operator() ( AccessibleEditablePara& )
 
         */
-        template < typename Functor > class WeakChildAdapter : public ::std::unary_function< const WeakChild&, void >
+        template < typename Functor > class WeakChildAdapter : public std::unary_function< const WeakChild&, void >
         {
         public:
             WeakChildAdapter( Functor& rFunctor ) : mrFunctor(rFunctor) {}
@@ -216,7 +216,7 @@ namespace accessibility
             Create with pointer to member function of
             AccessibleEditableTextPara and the corresponding argument.
          */
-        template < typename Argument > class MemFunAdapter : public ::std::unary_function< const WeakChild&, void >
+        template < typename Argument > class MemFunAdapter : public std::unary_function< const WeakChild&, void >
         {
         public:
             typedef void (::accessibility::AccessibleEditableTextPara::*FunctionPointer)( Argument );

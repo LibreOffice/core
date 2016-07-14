@@ -35,7 +35,7 @@ namespace comphelper
 
 // comparison functors
 
-struct UStringMixLess : public ::std::binary_function< OUString, OUString, bool>
+struct UStringMixLess : public std::binary_function< OUString, OUString, bool>
 {
     bool m_bCaseSensitive;
 public:
@@ -64,7 +64,7 @@ public:
     bool isCaseSensitive() const {return m_bCaseSensitive;}
 };
 
-class TPropertyValueEqualFunctor : public ::std::binary_function< css::beans::PropertyValue,OUString,bool>
+class TPropertyValueEqualFunctor : public std::binary_function< css::beans::PropertyValue,OUString,bool>
 {
 public:
     TPropertyValueEqualFunctor()
@@ -77,7 +77,7 @@ public:
 
 /// by-value less functor for std::set<std::unique_ptr<T>>
 template<class T> struct UniquePtrValueLess
-    : public ::std::binary_function<std::unique_ptr<T>, std::unique_ptr<T>, bool>
+    : public std::binary_function<std::unique_ptr<T>, std::unique_ptr<T>, bool>
 {
         bool operator()(std::unique_ptr<T> const& lhs,
                         std::unique_ptr<T> const& rhs) const
@@ -115,7 +115,7 @@ bool ContainerUniquePtrEquals(
 */
 template < class IAFCE >
 struct OInterfaceCompare
-    :public ::std::binary_function  <   css::uno::Reference< IAFCE >
+    :public std::binary_function    <   css::uno::Reference< IAFCE >
                                     ,   css::uno::Reference< IAFCE >
                                     ,   bool
                                     >
@@ -131,7 +131,7 @@ struct OInterfaceCompare
 };
 
 template <class Tp, class Arg>
-class mem_fun1_t : public ::std::binary_function<Tp*,Arg,void>
+class mem_fun1_t : public std::binary_function<Tp*,Arg,void>
 {
     typedef void (Tp::*_fun_type)(Arg);
 public:
@@ -150,11 +150,11 @@ inline mem_fun1_t<Tp,Arg> mem_fun(void (Tp::*f)(Arg))
 /** output iterator that appends OUStrings into an OUStringBuffer.
  */
 class OUStringBufferAppender :
-    public ::std::iterator< ::std::output_iterator_tag, void, void, void, void>
+    public std::iterator< std::output_iterator_tag, void, void, void, void>
 {
 public:
     typedef OUStringBufferAppender Self;
-    typedef ::std::output_iterator_tag iterator_category;
+    typedef std::output_iterator_tag iterator_category;
     typedef void value_type;
     typedef void reference;
     typedef void pointer;

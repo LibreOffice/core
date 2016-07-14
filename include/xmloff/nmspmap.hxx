@@ -57,7 +57,7 @@ struct uInt32lt
         return r1 < r2;
     }
 };
-typedef ::std::pair < sal_uInt16, OUString > QNamePair;
+typedef std::pair < sal_uInt16, OUString > QNamePair;
 
 struct QNamePairHash
 {

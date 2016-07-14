@@ -73,7 +73,7 @@ namespace svx
         bool    prepareCommit();
 
     private:
-        ::std::unique_ptr< DatabaseLocationInputController_Impl >
+        std::unique_ptr< DatabaseLocationInputController_Impl >
                 m_pImpl;
     };
 

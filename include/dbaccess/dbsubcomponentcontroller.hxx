@@ -68,7 +68,7 @@ namespace dbaui
     class DBACCESS_DLLPUBLIC DBSubComponentController : public DBSubComponentController_Base
     {
     private:
-        ::std::unique_ptr<DBSubComponentController_Impl> m_pImpl;
+        std::unique_ptr<DBSubComponentController_Impl> m_pImpl;
 
     private:
         /** forces usage of a connection which we do not own

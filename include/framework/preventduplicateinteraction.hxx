@@ -88,7 +88,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
                 {}
         };
 
-        typedef ::std::vector< InteractionInfo > InteractionList;
+        typedef std::vector< InteractionInfo > InteractionList;
 
 
     // member

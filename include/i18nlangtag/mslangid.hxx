@@ -211,7 +211,7 @@ public:
         defined mapping between MS-LangID and ISO codes or tags) as BCP 47
         language tag strings.
      */
-    static ::std::vector< LanguagetagMapping > getDefinedLanguagetags();
+    static std::vector< LanguagetagMapping > getDefinedLanguagetags();
 
 
     /** Encapsulated conversion methods used by LanguageTag and conversions,

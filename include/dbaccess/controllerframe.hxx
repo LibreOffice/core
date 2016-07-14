@@ -67,7 +67,7 @@ namespace dbaui
         void    frameAction( css::frame::FrameAction _eAction );
 
     private:
-        ::std::unique_ptr< ControllerFrame_Data > m_pData;
+        std::unique_ptr< ControllerFrame_Data > m_pData;
     };
 
 

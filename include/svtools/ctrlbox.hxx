@@ -36,9 +36,9 @@ class FontList;
 class ImplColorListData;
 class ImpLineListData;
 
-typedef ::std::vector< ImplColorListData*    > ImpColorList;
-typedef ::std::vector< ImpLineListData*      > ImpLineList;
-typedef ::std::vector< FontMetric         > ImplFontList;
+typedef std::vector< ImplColorListData*      > ImpColorList;
+typedef std::vector< ImpLineListData*        > ImpLineList;
+typedef std::vector< FontMetric           > ImplFontList;
 
 /*************************************************************************
 

@@ -58,7 +58,7 @@ class SVL_DLLPUBLIC SvCommandList
  */
 {
 private:
-    ::std::vector< SvCommand >  aCommandList;
+    std::vector< SvCommand >    aCommandList;
 
 public:
     void           Append( const OUString & rCommand, const OUString & rArg );

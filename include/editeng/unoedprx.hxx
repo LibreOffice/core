@@ -151,7 +151,7 @@ public:
     virtual void                                UpdateData() override;
     virtual SfxBroadcaster&                     GetBroadcaster() const override;
 
-    void        SetEditSource( ::std::unique_ptr< SvxEditSource > && pAdaptee );
+    void        SetEditSource( std::unique_ptr< SvxEditSource > && pAdaptee );
 
     bool        IsValid() const { return mbEditSourceValid;}
 
@@ -159,7 +159,7 @@ private:
     SvxEditSourceAdapter( const SvxEditSourceAdapter& ) = delete;
     SvxEditSourceAdapter& operator= ( const SvxEditSourceAdapter& ) = delete;
 
-    ::std::unique_ptr< SvxEditSource >    mpAdaptee;
+    std::unique_ptr< SvxEditSource >      mpAdaptee;
 
     SvxAccessibleTextAdapter            maTextAdapter;
     SvxAccessibleTextEditViewAdapter    maEditViewAdapter;

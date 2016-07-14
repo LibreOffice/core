@@ -65,7 +65,7 @@ public:
 
     void SetDeckTitle(DeckTitleBar* pDeckTitleBar);
     void SetPanels(const SharedPanelContainer& rPanels);
-    void SetButtons(const ::std::vector<Button*>& rButtons);
+    void SetButtons(const std::vector<Button*>& rButtons);
 
 private:
     VclPtr<DeckTitleBar> mpDeckTitleBar;

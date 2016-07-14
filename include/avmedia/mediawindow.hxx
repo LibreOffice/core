@@ -45,7 +45,7 @@ struct ExecuteDropEvent;
 
 namespace avmedia
 {
-    typedef ::std::vector< ::std::pair< OUString, OUString > > FilterNameVector;
+    typedef std::vector< std::pair< OUString, OUString > > FilterNameVector;
 
     class MediaItem;
 

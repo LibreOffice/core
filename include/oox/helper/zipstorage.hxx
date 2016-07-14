@@ -65,7 +65,7 @@ private:
                         implGetXStorage() const override;
 
     /** Returns the names of all elements of this storage. */
-    virtual void        implGetElementNames( ::std::vector< OUString >& orElementNames ) const override;
+    virtual void        implGetElementNames( std::vector< OUString >& orElementNames ) const override;
 
     /** Opens and returns the specified sub storage from the storage. */
     virtual StorageRef  implOpenSubStorage( const OUString& rElementName, bool bCreateMissing ) override;

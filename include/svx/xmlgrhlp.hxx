@@ -48,11 +48,11 @@ class SVX_DLLPUBLIC SvXMLGraphicHelper : public ::cppu::WeakComponentImplHelper2
 {
 private:
 
-    typedef ::std::pair< OUString, OUString >                                             URLPair;
-    typedef ::std::vector< URLPair >                                                                    URLPairVector;
-    typedef ::std::vector< GraphicObject >                                                              GraphicObjectVector;
-    typedef ::std::set< OUString >                                                               URLSet;
-    typedef ::std::vector< css::uno::Reference< css::io::XOutputStream > >    GraphicOutputStreamVector;
+    typedef std::pair< OUString, OUString >                                               URLPair;
+    typedef std::vector< URLPair >                                                                      URLPairVector;
+    typedef std::vector< GraphicObject >                                                                GraphicObjectVector;
+    typedef std::set< OUString >                                                                 URLSet;
+    typedef std::vector< css::uno::Reference< css::io::XOutputStream > >      GraphicOutputStreamVector;
 
     ::osl::Mutex                maMutex;
     css::uno::Reference < css::embed::XStorage > mxRootStorage;

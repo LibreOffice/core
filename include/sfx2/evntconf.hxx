@@ -49,7 +49,7 @@ struct SFX2_DLLPUBLIC SfxEventName
 class SFX2_DLLPUBLIC SfxEventNamesList
 {
 private:
-    ::std::vector< SfxEventName* > aEventNamesList;
+    std::vector< SfxEventName* > aEventNamesList;
     void DelDtor();
 
 public:

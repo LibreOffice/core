@@ -19,7 +19,7 @@
 namespace comphelper
 {
     inline css::uno::Sequence< css::beans::PropertyValue > InitPropertySequence(
-        ::std::initializer_list< ::std::pair< OUString, css::uno::Any > > vInit)
+        std::initializer_list< std::pair< OUString, css::uno::Any > > vInit)
     {
         css::uno::Sequence< css::beans::PropertyValue> vResult{static_cast<sal_Int32>(vInit.size())};
         size_t nCount{0};

@@ -71,7 +71,7 @@ public:
 
         @return the translated hint
      */
-    static ::std::unique_ptr<SfxHint> EENotification2Hint( EENotify* aNotify );
+    static std::unique_ptr<SfxHint> EENotification2Hint( EENotify* aNotify );
 
     /** Calculate attribute run for EditEngines
 

@@ -376,7 +376,7 @@ namespace basegfx
     class BASEGFX_DLLPUBLIC BColorModifierStack
     {
     protected:
-        ::std::vector< BColorModifierSharedPtr >        maBColorModifiers;
+        std::vector< BColorModifierSharedPtr >          maBColorModifiers;
 
     public:
         sal_uInt32 count() const

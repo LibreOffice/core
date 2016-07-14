@@ -121,7 +121,7 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
                     ::sal::detail::unwrapStream( \
                         ::sal::detail::StreamStart() << stream)); \
             } else { \
-                ::std::ostringstream sal_detail_stream; \
+                std::ostringstream sal_detail_stream; \
                 sal_detail_stream << stream; \
                 ::sal::detail::log( \
                     (level), (area), (where), sal_detail_stream); \
@@ -159,10 +159,10 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
 */
 #ifdef _LIBCPP_VERSION
 #define SAL_STREAM(stream) \
-    (::std::ostringstream() << stream).str()
+    (std::ostringstream() << stream).str()
 #else
 #define SAL_STREAM(stream) \
-    (dynamic_cast< ::std::ostringstream & >(::std::ostringstream() << stream).str())
+    (dynamic_cast< std::ostringstream & >(std::ostringstream() << stream).str())
 #endif
 
 /**

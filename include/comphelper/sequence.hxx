@@ -226,7 +226,7 @@ namespace comphelper
     inline css::uno::Sequence< DstType > arrayToSequence( const SrcType* i_pArray, sal_Int32 nNum )
     {
         css::uno::Sequence< DstType > result( nNum );
-        ::std::copy( i_pArray, i_pArray+nNum, result.getArray() );
+        std::copy( i_pArray, i_pArray+nNum, result.getArray() );
         return result;
     }
 
@@ -256,7 +256,7 @@ namespace comphelper
     template < typename DstType, typename SrcType >
     inline DstType* sequenceToArray( DstType* io_pArray, const css::uno::Sequence< SrcType >& i_Sequence )
     {
-        ::std::copy( i_Sequence.begin(), i_Sequence.end(), io_pArray );
+        std::copy( i_Sequence.begin(), i_Sequence.end(), io_pArray );
         return io_pArray;
     }
 
@@ -287,13 +287,13 @@ namespace comphelper
     inline css::uno::Sequence< DstType > containerToSequence( const SrcType& i_Container )
     {
         css::uno::Sequence< DstType > result( i_Container.size() );
-        ::std::copy( i_Container.begin(), i_Container.end(), result.getArray() );
+        std::copy( i_Container.begin(), i_Container.end(), result.getArray() );
         return result;
     }
 
     template <typename T>
     inline css::uno::Sequence<T> containerToSequence(
-        ::std::vector<T> const& v )
+        std::vector<T> const& v )
     {
         return css::uno::Sequence<T>(
             v.data(), static_cast<sal_Int32>(v.size()) );
@@ -327,7 +327,7 @@ namespace comphelper
     inline DstType sequenceToContainer( const css::uno::Sequence< SrcType >& i_Sequence )
     {
         DstType result( i_Sequence.getLength() );
-        ::std::copy( i_Sequence.begin(), i_Sequence.end(), result.begin() );
+        std::copy( i_Sequence.begin(), i_Sequence.end(), result.begin() );
         return result;
     }
 
@@ -365,7 +365,7 @@ namespace comphelper
     inline DstType& sequenceToContainer( DstType& o_Output, const css::uno::Sequence< SrcType >& i_Sequence )
     {
         o_Output.resize( i_Sequence.getLength() );
-        ::std::copy( i_Sequence.begin(), i_Sequence.end(), o_Output.begin() );
+        std::copy( i_Sequence.begin(), i_Sequence.end(), o_Output.begin() );
         return o_Output;
     }
 

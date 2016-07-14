@@ -254,7 +254,7 @@ protected:
         @return
             the accumulated count of all settings in all groups
     */
-    virtual sal_Int32 GetDocumentSpecificSettings( ::std::list< SettingsGroup >& _out_rSettings );
+    virtual sal_Int32 GetDocumentSpecificSettings( std::list< SettingsGroup >& _out_rSettings );
 
     const css::uno::Reference< css::document::XEmbeddedObjectResolver >& GetEmbeddedResolver() const { return mxEmbeddedResolver; }
     inline void SetEmbeddedResolver( css::uno::Reference< css::document::XEmbeddedObjectResolver >& _xEmbeddedResolver );

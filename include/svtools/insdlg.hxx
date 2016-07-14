@@ -43,7 +43,7 @@ public:
     const OUString &        GetHumanName() const { return aHumanName; }
 };
 
-typedef ::std::vector< SvObjectServer > SvObjectServerList_impl;
+typedef std::vector< SvObjectServer > SvObjectServerList_impl;
 
 class SVT_DLLPUBLIC SvObjectServerList
 {

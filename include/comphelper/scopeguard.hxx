@@ -50,7 +50,7 @@ private:
     ScopeGuard(const ScopeGuard&) = delete;
     ScopeGuard& operator=(const ScopeGuard&) = delete;
 
-    ::std::function<void ()> m_func;
+    std::function<void ()> m_func;
 };
 
 } // namespace comphelper

@@ -44,7 +44,7 @@ namespace comphelper
     class COMPHELPER_DLLPUBLIC NamedValueCollection
     {
     private:
-        ::std::unique_ptr< NamedValueCollection_Impl >    m_pImpl;
+        std::unique_ptr< NamedValueCollection_Impl >      m_pImpl;
 
     public:
         NamedValueCollection();
@@ -107,7 +107,7 @@ namespace comphelper
 
         /** returns the names of all elements in the collection
         */
-        ::std::vector< OUString >
+        std::vector< OUString >
                 getNames() const;
 
         /** merges the content of another collection into |this|

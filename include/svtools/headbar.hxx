@@ -173,7 +173,7 @@ HeaderBarItemBits::CLICKABLE, but HeaderBarItemBits::FIXEDPOS.
 class Accelerator;
 class ImplHeadItem;
 
-typedef ::std::vector< ImplHeadItem* > ImplHeadItemList;
+typedef std::vector< ImplHeadItem* > ImplHeadItemList;
 
 #define WB_BOTTOMBORDER         ((WinBits)0x0400)
 #define WB_BUTTONSTYLE          ((WinBits)0x0800)

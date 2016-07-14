@@ -68,7 +68,7 @@ namespace drawinglayer
             }
         };
 
-        typedef ::std::vector< SvgGradientEntry > SvgGradientEntryVector;
+        typedef std::vector< SvgGradientEntry > SvgGradientEntryVector;
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

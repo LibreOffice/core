@@ -106,7 +106,7 @@ enum NfKeywordIndex
 
 class NfKeywordTable
 {
-    typedef ::std::vector<OUString> Keywords_t;
+    typedef std::vector<OUString> Keywords_t;
     Keywords_t m_keywords;
 
 public:

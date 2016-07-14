@@ -93,7 +93,7 @@ namespace connectivity
     class OSQLParseNodesContainer
     {
         ::osl::Mutex m_aMutex;
-        ::std::vector< OSQLParseNode* > m_aNodes;
+        std::vector< OSQLParseNode* > m_aNodes;
     public:
         OSQLParseNodesContainer();
         ~OSQLParseNodesContainer();
@@ -128,7 +128,7 @@ namespace connectivity
         friend struct SQLParseNodeParameter;
 
     private:
-        typedef ::std::map< sal_uInt32, OSQLParseNode::Rule >   RuleIDMap;
+        typedef std::map< sal_uInt32, OSQLParseNode::Rule >     RuleIDMap;
     //  static parts for parsers
         static sal_uInt32           s_nRuleIDs[OSQLParseNode::rule_count + 1];
         static RuleIDMap            s_aReverseRuleIDLookup;
@@ -141,7 +141,7 @@ namespace connectivity
     // information on the current parse action
         const IParseContext*        m_pContext;
         OSQLParseNode*              m_pParseTree;   // result from parsing
-        ::std::unique_ptr< OSQLParser_Data >
+        std::unique_ptr< OSQLParser_Data >
                                     m_pData;
         OUString                     m_sFieldName;   // current field name for a predicate
         OUString                     m_sErrorMessage;// current error msg

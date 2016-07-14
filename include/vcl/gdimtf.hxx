@@ -57,7 +57,7 @@ typedef BitmapEx (*BmpExchangeFnc)( const BitmapEx& rBmpEx, const void* pBmpPara
 class VCL_DLLPUBLIC GDIMetaFile
 {
 private:
-    ::std::vector< MetaAction* > m_aList;
+    std::vector< MetaAction* > m_aList;
     size_t          m_nCurrentActionElement;
 
     MapMode         m_aPrefMapMode;

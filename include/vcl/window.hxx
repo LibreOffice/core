@@ -746,7 +746,7 @@ private:
     SAL_DLLPRIVATE long                 ImplGetUnmirroredOutOffX();
 
     // retrieves the list of owner draw decorated windows for this window hiearchy
-    SAL_DLLPRIVATE ::std::vector<VclPtr<vcl::Window> >& ImplGetOwnerDrawList();
+    SAL_DLLPRIVATE std::vector<VclPtr<vcl::Window> >& ImplGetOwnerDrawList();
 
     SAL_DLLPRIVATE vcl::Window*         ImplGetTopmostFrameWindow();
 
@@ -1196,7 +1196,7 @@ public:
     bool                                IsWindowOrChild( const vcl::Window* pWindow, bool bSystemWindow = false  ) const;
 
     /// Add all children to rAllChildren recursively.
-    SAL_DLLPRIVATE void                 CollectChildren(::std::vector<vcl::Window *>& rAllChildren );
+    SAL_DLLPRIVATE void                 CollectChildren(std::vector<vcl::Window *>& rAllChildren );
 
     virtual void                        ShowFocus(const Rectangle& rRect);
     void                                HideFocus();

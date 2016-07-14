@@ -63,7 +63,7 @@ public:
     static ResultT exec( FuncT const& func )
     {
         typedef GenericSolarThreadExecutor<FuncT, ResultT> ExecutorT;
-        ::std::unique_ptr<ExecutorT> const pExecutor( new ExecutorT(func) );
+        std::unique_ptr<ExecutorT> const pExecutor( new ExecutorT(func) );
         pExecutor->execute();
         if (pExecutor->m_exc.hasValue())
             ::cppu::throwException( pExecutor->m_exc );

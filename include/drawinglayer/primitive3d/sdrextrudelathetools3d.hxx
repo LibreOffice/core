@@ -70,7 +70,7 @@ namespace drawinglayer
         };
 
         /// typedef for a group of Slice3Ds
-        typedef ::std::vector< Slice3D > Slice3DVector;
+        typedef std::vector< Slice3D > Slice3DVector;
 
         /// helpers for creation
         void DRAWINGLAYER_DLLPUBLIC createLatheSlices(
@@ -99,7 +99,7 @@ namespace drawinglayer
         basegfx::B3DPolyPolygon DRAWINGLAYER_DLLPUBLIC extractVerticalLinesFromSlice(const Slice3DVector& rSliceVector);
 
         void DRAWINGLAYER_DLLPUBLIC extractPlanesFromSlice(
-            ::std::vector< basegfx::B3DPolyPolygon >& rFill,
+            std::vector< basegfx::B3DPolyPolygon >& rFill,
             const Slice3DVector& rSliceVector,
             bool bCreateNormals,
             bool bSmoothHorizontalNormals,

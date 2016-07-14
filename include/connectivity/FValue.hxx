@@ -469,7 +469,7 @@ namespace connectivity
 
 
     /// TSetBound is a unary_function to set the bound value with e.q. for_each call
-    struct OOO_DLLPUBLIC_DBTOOLS TSetBound : ::std::unary_function<ORowSetValue,void>
+    struct OOO_DLLPUBLIC_DBTOOLS TSetBound : std::unary_function<ORowSetValue,void>
     {
         bool m_bBound;
         TSetBound(bool _bBound) : m_bBound(_bBound){}
@@ -479,7 +479,7 @@ namespace connectivity
 
 
     /// TSetBound is a unary_function to set the bound value with e.q. for_each call
-    struct OOO_DLLPUBLIC_DBTOOLS TSetRefBound : ::std::unary_function<ORowSetValueDecoratorRef,void>
+    struct OOO_DLLPUBLIC_DBTOOLS TSetRefBound : std::unary_function<ORowSetValueDecoratorRef,void>
     {
         bool m_bBound;
         TSetRefBound(bool _bBound) : m_bBound(_bBound){}
@@ -517,7 +517,7 @@ namespace connectivity
 #define SQL_NO_PARAMETER (SAL_MAX_UINT32)
     class OAssignValues : public OValueRefVector
     {
-        ::std::vector<sal_Int32> m_nParameterIndexes;
+        std::vector<sal_Int32> m_nParameterIndexes;
     public:
         OAssignValues(Vector::size_type n) : OValueRefVector(n),m_nParameterIndexes(n+1,SQL_NO_PARAMETER){}
 

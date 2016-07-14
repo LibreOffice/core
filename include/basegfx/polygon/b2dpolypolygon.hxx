@@ -127,7 +127,7 @@ namespace basegfx
     };
 
     // typedef for a vector of B2DPolyPolygons
-    typedef ::std::vector< B2DPolyPolygon > B2DPolyPolygonVector;
+    typedef std::vector< B2DPolyPolygon > B2DPolyPolygonVector;
 
 } // end of namespace basegfx
 

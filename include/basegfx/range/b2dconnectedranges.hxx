@@ -63,8 +63,8 @@ namespace basegfx
     {
     public:
         /// Type of the basic entity (rect + user data)
-        typedef ::std::pair< B2DRange, UserData > ComponentType;
-        typedef ::std::list< ComponentType >      ComponentListType;
+        typedef std::pair< B2DRange, UserData > ComponentType;
+        typedef std::list< ComponentType >        ComponentListType;
 
         /// List of (intersecting) components, plus overall bounds
         struct ConnectedComponents
@@ -73,7 +73,7 @@ namespace basegfx
             B2DRange            maTotalBounds;
         };
 
-        typedef ::std::list< ConnectedComponents > ConnectedComponentsType;
+        typedef std::list< ConnectedComponents > ConnectedComponentsType;
 
 
         /// Create the range calculator
@@ -216,7 +216,7 @@ namespace basegfx
          */
         template< typename UnaryFunctor > UnaryFunctor forEachAggregate( UnaryFunctor aFunctor ) const
         {
-            return ::std::for_each( maDisjunctAggregatesList.begin(),
+            return std::for_each( maDisjunctAggregatesList.begin(),
                                     maDisjunctAggregatesList.end(),
                                     aFunctor );
         }

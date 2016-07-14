@@ -449,7 +449,7 @@ protected:
     PptDocumentAtom     aDocAtom;
     DffRecordManager    aDocRecManager;             // contains all first level container and atoms of the document container
 
-    ::std::vector< PPTOleEntry* > aOleObjectList;
+    std::vector< PPTOleEntry* > aOleObjectList;
 
     PptFontCollection*  m_pFonts;
 
@@ -518,7 +518,7 @@ struct ProcessData
 {
     PptSlidePersistEntry&       rPersistEntry;
     SdPageCapsule               pPage;
-    ::std::vector< SdrObject* > aBackgroundColoredObjects;
+    std::vector< SdrObject* > aBackgroundColoredObjects;
     std::unique_ptr<sal_uInt32[]> pTableRowProperties;
 
     ProcessData( PptSlidePersistEntry& rP, SdPageCapsule pP ) :
@@ -541,7 +541,7 @@ protected:
     bool                    bOk;
     PptUserEditAtom         aUserEditAtom;
     PptColorSchemeAtom      aPageColors;
-    ::std::vector< SdHyperlinkEntry* > aHyperList;
+    std::vector< SdHyperlinkEntry* > aHyperList;
     sal_uInt32*             pPersistPtr;
     sal_uLong               nPersistPtrAnz;
 
@@ -670,7 +670,7 @@ struct PPTTextSpecInfo
 struct  PPTTextSpecInfoAtomInterpreter
 {
     bool                bValid;
-    ::std::vector< PPTTextSpecInfo* > aList;
+    std::vector< PPTTextSpecInfo* > aList;
 
                     PPTTextSpecInfoAtomInterpreter();
                     ~PPTTextSpecInfoAtomInterpreter();
@@ -716,7 +716,7 @@ struct PPTBuGraEntry
 
 class PPTExtParaProv
 {
-    ::std::vector< PPTBuGraEntry* > aBuGraList;
+    std::vector< PPTBuGraEntry* > aBuGraList;
 
 public:
     bool                bStyles;
@@ -1162,7 +1162,7 @@ public:
     bool                    mbTab;          // if true, this paragraph has tabulators in text
 
     sal_uInt32              mnCurrentObject;
-    ::std::vector<std::unique_ptr<PPTPortionObj>> m_PortionList;
+    std::vector<std::unique_ptr<PPTPortionObj>> m_PortionList;
 
     void                    UpdateBulletRelSize( sal_uInt32& nBulletRelSize ) const;
     bool                    GetAttrib( sal_uInt32 nAttr, sal_uInt32& nVal, TSS_Type nInstanceInSheet );

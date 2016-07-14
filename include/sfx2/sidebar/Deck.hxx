@@ -76,7 +76,7 @@ public:
     public:
         ScrollContainerWindow(vcl::Window* pParentWindow);
         virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) override;
-        void SetSeparators(const ::std::vector<sal_Int32>& rSeparators);
+        void SetSeparators(const std::vector<sal_Int32>& rSeparators);
     private:
         std::vector<sal_Int32> maSeparators;
     };

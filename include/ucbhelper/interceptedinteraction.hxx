@@ -121,7 +121,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
 
         /** @short  these list contains the requests, which should be intercepted.
          */
-        ::std::vector< InterceptedRequest > m_lInterceptions;
+        std::vector< InterceptedRequest > m_lInterceptions;
 
 
     // native interface
@@ -156,7 +156,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
             @param  lInterceptions
                     the list of intercepted requests.
          */
-        void setInterceptions(const ::std::vector< InterceptedRequest >& lInterceptions);
+        void setInterceptions(const std::vector< InterceptedRequest >& lInterceptions);
 
 
         /** @short  extract a requested continuation from the list of available ones.

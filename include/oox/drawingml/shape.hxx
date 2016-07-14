@@ -66,7 +66,7 @@ struct Shape3DProperties;
 class CustomShapeProperties;
 typedef std::shared_ptr< CustomShapeProperties > CustomShapePropertiesPtr;
 
-typedef ::std::map< OUString, ShapePtr > ShapeIdMap;
+typedef std::map< OUString, ShapePtr > ShapeIdMap;
 
 struct ShapeStyleRef
 {
@@ -75,7 +75,7 @@ struct ShapeStyleRef
     ShapeStyleRef() : mnThemedIdx(0) {}
 };
 
-typedef ::std::map< sal_Int32, ShapeStyleRef > ShapeStyleRefMap;
+typedef std::map< sal_Int32, ShapeStyleRef > ShapeStyleRefMap;
 
 /** Additional information for a chart embedded in a drawing shape. */
 struct ChartShapeInfo
@@ -193,7 +193,7 @@ public:
                         getXShape() const { return mxShape; }
 
     virtual void        applyShapeReference( const Shape& rReferencedShape, bool bUseText = true );
-    const ::std::vector<OUString>&
+    const std::vector<OUString>&
                         getExtDrawings() { return maExtDrawings; }
     void                addExtDrawingRelId( const OUString &rRelId ) { maExtDrawings.push_back( rRelId ); }
     // Set font color only for extdrawings.
@@ -289,7 +289,7 @@ protected:
 
     css::awt::Size              maSize;
     css::awt::Point             maPosition;
-    ::std::vector<OUString>     maExtDrawings;
+    std::vector<OUString>       maExtDrawings;
     Color                       maFontRefColorForNodes;
 
 private:

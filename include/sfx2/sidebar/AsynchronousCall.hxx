@@ -33,7 +33,7 @@ namespace sfx2 { namespace sidebar {
 class AsynchronousCall
 {
 public:
-    typedef ::std::function<void()> Action;
+    typedef std::function<void()> Action;
 
     AsynchronousCall();
     AsynchronousCall (const Action& rAction);

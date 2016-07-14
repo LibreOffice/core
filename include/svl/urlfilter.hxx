@@ -24,7 +24,7 @@
 #include <functional>
 #include <vector>
 
-struct FilterMatch : public ::std::unary_function< bool, WildCard >
+struct FilterMatch : public std::unary_function< bool, WildCard >
 {
 private:
     const OUString&   m_rCompareString;
@@ -36,7 +36,7 @@ public:
         return _rMatcher.Matches( m_rCompareString );
     }
 
-    static void createWildCardFilterList(const OUString& _rFilterList,::std::vector< WildCard >& _rFilters);
+    static void createWildCardFilterList(const OUString& _rFilterList,std::vector< WildCard >& _rFilters);
 };
 
 #endif // INCLUDED_SVL_URLFILTER_HXX

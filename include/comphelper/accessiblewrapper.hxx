@@ -310,7 +310,7 @@ namespace comphelper
     //= OWrappedAccessibleChildrenManager
 
 
-    typedef ::std::map  <   css::uno::Reference< css::accessibility::XAccessible >
+    typedef std::map    <   css::uno::Reference< css::accessibility::XAccessible >
                         ,   css::uno::Reference< css::accessibility::XAccessible >
                         ,   OInterfaceCompare< css::accessibility::XAccessible >
                         >   AccessibleMap;

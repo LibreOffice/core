@@ -82,7 +82,7 @@ private:
     SvXMLUnitConverter& operator=(const SvXMLUnitConverter&) = delete;
 
     struct Impl;
-    ::std::unique_ptr<Impl> m_pImpl;
+    std::unique_ptr<Impl> m_pImpl;
 
 public:
     /** constructs a SvXMLUnitConverter. The core measure unit is the

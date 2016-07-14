@@ -129,7 +129,7 @@ protected:
         inline /*implicit*/ EventQueueEntry( sal_Int32 nEventId ) : mnEventId( nEventId ) {}
         inline EventQueueEntry( sal_Int32 nEventId, const css::uno::Sequence< css::uno::Any >& rArgs ) : mnEventId( nEventId ), maArgs( rArgs ) {}
     };
-    typedef ::std::deque< EventQueueEntry > EventQueue;
+    typedef std::deque< EventQueueEntry > EventQueue;
 
     /** Derived classes do additional prpeparations and return whether the
         event handler has to be called. */
@@ -158,7 +158,7 @@ protected:
                    css::uno::RuntimeException) = 0;
 
 private:
-    typedef ::std::map< sal_Int32, OUString > ModulePathMap;
+    typedef std::map< sal_Int32, OUString > ModulePathMap;
 
     /** Starts listening at the document model. */
     void startListening();

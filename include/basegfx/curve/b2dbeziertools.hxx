@@ -38,7 +38,7 @@ namespace basegfx
     class BASEGFX_DLLPUBLIC B2DCubicBezierHelper
     {
     private:
-        ::std::vector< double >         maLengthArray;
+        std::vector< double >           maLengthArray;
         sal_uInt32                      mnEdgeCount;
 
     public:

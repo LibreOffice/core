@@ -35,7 +35,7 @@ using namespace U_ICU_NAMESPACE;
 typedef U_ICU_NAMESPACE::UnicodeString IcuUniString;
 
 class WLevDistance;
-typedef ::std::map< sal_Unicode, sal_Int32 > TextSearchJumpTable;
+typedef std::map< sal_Unicode, sal_Int32 > TextSearchJumpTable;
 
 class TextSearch: public cppu::WeakImplHelper
 <

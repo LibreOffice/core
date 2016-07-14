@@ -36,7 +36,7 @@ namespace sdr
         class SVX_DLLPUBLIC OverlayObjectCell : public OverlayObject
         {
         public:
-            typedef ::std::vector< basegfx::B2DRange > RangeVector;
+            typedef std::vector< basegfx::B2DRange > RangeVector;
 
         private:
             CellOverlayType mePaintType;

@@ -73,12 +73,12 @@ private:
     const RecordInfo*   getEndRecordInfo( sal_Int32 nRecId ) const;
 
 private:
-    typedef ::std::map< sal_Int32, RecordInfo > RecordInfoMap;
+    typedef std::map< sal_Int32, RecordInfo > RecordInfoMap;
 
     RecordInputSource   maSource;
     ::rtl::Reference< FragmentHandler > mxHandler;
     ::rtl::Reference< prv::Locator > mxLocator;
-    ::std::unique_ptr< prv::ContextStack > mxStack;
+    std::unique_ptr< prv::ContextStack > mxStack;
     RecordInfoMap       maStartMap;
     RecordInfoMap       maEndMap;
 };

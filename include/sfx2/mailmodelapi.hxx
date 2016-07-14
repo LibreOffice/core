@@ -29,7 +29,7 @@
 #include <memory>
 
 // class AddressList_Impl ------------------------------------------------
-typedef ::std::vector< OUString > AddressList_Impl;
+typedef std::vector< OUString > AddressList_Impl;
 
 // class SfxMailModel_Impl -----------------------------------------------
 
@@ -65,7 +65,7 @@ protected:
         SAVE_CANCELLED,
         SAVE_ERROR
     };
-    ::std::vector< OUString > maAttachedDocuments;
+    std::vector< OUString > maAttachedDocuments;
     static SaveResult   SaveDocumentAsFormat( const OUString& aSaveFileName,
                                               const css::uno::Reference< css::uno::XInterface >& xFrameOrModel,
                                               const OUString& rType,

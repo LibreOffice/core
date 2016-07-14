@@ -216,9 +216,9 @@ enum NfEvalDateFormat
 typedef std::map<sal_uInt32, SvNumberformat*> SvNumberFormatTable;
 typedef std::map<sal_uInt16, sal_uInt32> SvNumberFormatterIndexTable;
 
-typedef ::std::map< sal_uInt32, sal_uInt32> SvNumberFormatterMergeMap;
+typedef std::map< sal_uInt32, sal_uInt32> SvNumberFormatterMergeMap;
 
-typedef ::std::set< LanguageType > NfInstalledLocales;
+typedef std::set< LanguageType > NfInstalledLocales;
 
 
 /** Language/country dependent currency entries
@@ -595,7 +595,7 @@ public:
     sal_uInt32 GetMergeFormatIndex( sal_uInt32 nOldFmt ) const;
 
     /** Convert the ugly old tools' Table type bloated with new'ed sal_uInt32
-        entries merge table to ::std::map with old index key and new index key.
+        entries merge table to std::map with old index key and new index key.
         @ATTENTION! Also clears the old table using ClearMergeTable() */
     SvNumberFormatterMergeMap ConvertMergeTableToMap();
 

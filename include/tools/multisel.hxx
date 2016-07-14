@@ -26,7 +26,7 @@
 #include <vector>
 #include <set>
 
-typedef ::std::vector< Range* > ImpSelList;
+typedef std::vector< Range* > ImpSelList;
 
 #define SFX_ENDOFSELECTION      ULONG_MAX
 

@@ -40,7 +40,7 @@ protected:
 
     css::uno::Reference< css::uno::XInterface>    m_xCurrentObject;
         // The current object
-    ::std::vector<sal_Int32>                      m_arrChildIndizies;
+    std::vector<sal_Int32>                        m_arrChildIndizies;
 
         // I'm moving through a tree, but its elements have no GetNextSibling,
         // so I have to remember where each child is in relation to its parent.

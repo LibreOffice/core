@@ -172,7 +172,7 @@ class SVX_DLLPUBLIC XPropertyList : public cppu::OWeakObject
  protected:
     SAL_DLLPRIVATE void operator delete(void *);
 protected:
-    typedef ::std::vector< XPropertyEntry* > XPropertyEntryList_impl;
+    typedef std::vector< XPropertyEntry* > XPropertyEntryList_impl;
 
     XPropertyListType   meType;
     OUString            maName; // not persistent
@@ -194,7 +194,7 @@ public:
     XPropertyListType Type() const { return meType; }
     long Count() const;
 
-    void Insert(XPropertyEntry* pEntry, long nIndex = ::std::numeric_limits<long>::max());
+    void Insert(XPropertyEntry* pEntry, long nIndex = std::numeric_limits<long>::max());
     XPropertyEntry* Replace(XPropertyEntry* pEntry, long nIndex);
     XPropertyEntry* Remove(long nIndex);
 

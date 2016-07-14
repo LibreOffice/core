@@ -70,12 +70,12 @@ public:
     virtual void dispose() override;
 
 private:
-    ::std::unique_ptr<FormulaDlg_Impl> m_pImpl;
+    std::unique_ptr<FormulaDlg_Impl> m_pImpl;
 
 protected:
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = nullptr );
+    std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = nullptr );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = nullptr );
     void            RefInputDoneAfter();
 
@@ -105,7 +105,7 @@ public:
     virtual ~FormulaDlg();
     virtual void dispose() override;
 private:
-    ::std::unique_ptr<FormulaDlg_Impl> m_pImpl;
+    std::unique_ptr<FormulaDlg_Impl> m_pImpl;
 
     DECL_LINK_TYPED( UpdateFocusHdl, Idle*, void );
 protected:
@@ -114,7 +114,7 @@ protected:
 protected:
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = nullptr );
+    std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = nullptr );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = nullptr );
     void            RefInputDoneAfter( bool bForced = false );
 

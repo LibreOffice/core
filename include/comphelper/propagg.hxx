@@ -55,7 +55,7 @@ namespace internal
         bool operator <(const OPropertyAccessor& rOb) const { return nPos < rOb.nPos; }
     };
 
-    typedef std::map< sal_Int32, OPropertyAccessor, ::std::less< sal_Int32 > >  PropertyAccessorMap;
+    typedef std::map< sal_Int32, OPropertyAccessor, std::less< sal_Int32 > >    PropertyAccessorMap;
     typedef PropertyAccessorMap::iterator           PropertyAccessorMapIterator;
     typedef PropertyAccessorMap::const_iterator     ConstPropertyAccessorMapIterator;
 }

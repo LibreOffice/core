@@ -44,7 +44,7 @@ class XMLOFF_DLLPUBLIC XMLPropStyleContext : public SvXMLStyleContext
 private:
     const OUString msIsPhysical;
     const OUString msFollowStyle;
-    ::std::vector< XMLPropertyState >          maProperties;
+    std::vector< XMLPropertyState >            maProperties;
     css::uno::Reference < css::style::XStyle > mxStyle;
     SvXMLImportContextRef                      mxStyles;
 
@@ -87,7 +87,7 @@ protected:
                                const OUString& rLocalName,
                                const OUString& rValue ) override;
     SvXMLStylesContext *GetStyles() { return static_cast<SvXMLStylesContext *>(&mxStyles); }
-    ::std::vector< XMLPropertyState > & GetProperties() { return maProperties; }
+    std::vector< XMLPropertyState > & GetProperties() { return maProperties; }
 
     // Override this method to create a new style. It's called by
     // CreateInsert to create a style if a style with the requested family and
@@ -113,7 +113,7 @@ public:
             const css::uno::Reference< css::beans::XPropertySet > & rPropSet );
 
     const SvXMLStylesContext *GetStyles() const { return static_cast<const SvXMLStylesContext *>(&mxStyles); }
-    const ::std::vector< XMLPropertyState > & GetProperties() const { return maProperties; }
+    const std::vector< XMLPropertyState > & GetProperties() const { return maProperties; }
 
     const css::uno::Reference< css::style::XStyle >&
                GetStyle() const { return mxStyle; }

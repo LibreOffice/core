@@ -41,7 +41,7 @@ class ImageMap;
 \************************************************************************/
 
 class Graphic;
-typedef ::std::vector< OUString > TargetList;
+typedef std::vector< OUString > TargetList;
 
 class SVX_DLLPUBLIC SvxIMapDlgChildWindow : public SfxChildWindow
 {

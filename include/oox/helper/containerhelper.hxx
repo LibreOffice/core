@@ -54,7 +54,7 @@ struct ValueRange
 };
 
 
-typedef ::std::vector< ValueRange > ValueRangeVector;
+typedef std::vector< ValueRange > ValueRangeVector;
 
 
 /** An ordered list of value ranges. The insertion operation will merge
@@ -78,14 +78,14 @@ private:
 
 /** Template for a 2-dimensional array of objects.
 
-    This class template provides a similar interface to the ::std::vector
+    This class template provides a similar interface to the std::vector
     template.
  */
 template< typename Type >
 class Matrix
 {
 public:
-    typedef ::std::vector< Type >                       container_type;
+    typedef std::vector< Type >                         container_type;
     typedef typename container_type::value_type         value_type;
     typedef typename container_type::pointer            pointer;
     typedef typename container_type::reference          reference;

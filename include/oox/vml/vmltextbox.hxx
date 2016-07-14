@@ -98,7 +98,7 @@ public:
     OUString msNextTextbox;
 
 private:
-    typedef ::std::vector< TextPortionModel > PortionVector;
+    typedef std::vector< TextPortionModel > PortionVector;
 
     PortionVector       maPortions;
 };

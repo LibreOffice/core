@@ -192,7 +192,7 @@ bool isRowSetAlive(const css::uno::Reference< css::uno::XInterface>& _rxRowSet);
     // checks if the css::sdbcx::XColumnsSupplier provided by _rxRowSet supplies any columns
 
 
-typedef ::std::set  < css::uno::Reference< css::uno::XInterface >
+typedef std::set    < css::uno::Reference< css::uno::XInterface >
                     , ::comphelper::OInterfaceCompare< css::uno::XInterface >
                     > InterfaceBag;
 

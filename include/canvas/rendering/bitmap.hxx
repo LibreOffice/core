@@ -211,7 +211,7 @@ namespace canvas
             const css::rendering::ViewState&                                viewState,
             const css::rendering::RenderState&                              renderState,
             const css::uno::Sequence< css::rendering::Texture >&            textures,
-            const ::std::vector< std::shared_ptr<Bitmap> >&                 textureAnnotations,
+            const std::vector< std::shared_ptr<Bitmap> >&                   textureAnnotations,
             const css::rendering::StrokeAttributes&                         strokeAttributes );
         /** See XCanvas interface
 
@@ -226,7 +226,7 @@ namespace canvas
             const css::rendering::ViewState&                                viewState,
             const css::rendering::RenderState&                              renderState,
             const css::uno::Sequence< css::rendering::Texture >&            textures,
-            const ::std::vector< std::shared_ptr<Bitmap> >&                 textureAnnotations,
+            const std::vector< std::shared_ptr<Bitmap> >&                   textureAnnotations,
             const css::uno::Reference< css::geometry::XMapping2D >&         xMapping,
             const css::rendering::StrokeAttributes&                         strokeAttributes );
         /// See XCanvas interface
@@ -247,7 +247,7 @@ namespace canvas
             const css::rendering::ViewState&                                viewState,
             const css::rendering::RenderState&                              renderState,
             const css::uno::Sequence< css::rendering::Texture >&            textures,
-            const ::std::vector< std::shared_ptr<Bitmap> >&                 textureAnnotations );
+            const std::vector< std::shared_ptr<Bitmap> >&                   textureAnnotations );
         /** See XCanvas interface
 
             @param textureAnnotations
@@ -261,7 +261,7 @@ namespace canvas
             const css::rendering::ViewState&                                viewState,
             const css::rendering::RenderState&                              renderState,
             const css::uno::Sequence< css::rendering::Texture >&            textures,
-            const ::std::vector< std::shared_ptr<Bitmap> >&                 textureAnnotations,
+            const std::vector< std::shared_ptr<Bitmap> >&                   textureAnnotations,
             const css::uno::Reference< css::geometry::XMapping2D >&         xMapping );
 
         /// See XCanvas interface

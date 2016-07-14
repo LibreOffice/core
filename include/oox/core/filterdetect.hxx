@@ -86,7 +86,7 @@ private:
     void                parseContentTypesOverride( const AttributeList& rAttribs );
 
 private:
-    typedef ::std::vector< sal_Int32 > ContextVector;
+    typedef std::vector< sal_Int32 > ContextVector;
 
     OUString&           mrFilterName;
     ContextVector       maContextStack;

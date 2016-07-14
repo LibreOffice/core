@@ -63,7 +63,7 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
                     long,
                     TNumberedItem  > TNumberedItemHash;
 
-        typedef ::std::vector< long > TDeadItemList;
+        typedef std::vector< long > TDeadItemList;
 
 
     // interface

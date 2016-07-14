@@ -33,7 +33,7 @@ class HelpEvent;
 class KeyEvent;
 class DataChangedEvent;
 class ScrollBar;
-typedef ::std::vector< ThumbnailViewItem* > ThumbnailValueItemList;
+typedef std::vector< ThumbnailViewItem* > ThumbnailValueItemList;
 
 struct ThumbnailItemAttributes;
 class ThumbnailViewAcc;

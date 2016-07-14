@@ -96,10 +96,10 @@ public:
 protected:
     OUString _name;
 
-    ::std::vector< OUString > _attrNames;
-    ::std::vector< OUString > _attrValues;
+    std::vector< OUString > _attrNames;
+    std::vector< OUString > _attrValues;
 
-    ::std::vector< css::uno::Reference<
+    std::vector< css::uno::Reference<
                       css::xml::sax::XAttributeList > > _subElems;
 };
 

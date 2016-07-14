@@ -56,7 +56,7 @@ namespace sdr
 
 // typedefs for a list of SdrPageWindow
 class SdrPageWindow;
-typedef ::std::vector< SdrPageWindow* > SdrPageWindowVector;
+typedef std::vector< SdrPageWindow* > SdrPageWindowVector;
 
 
 class SVX_DLLPUBLIC SdrPageView

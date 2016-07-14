@@ -73,7 +73,7 @@ private:
 };
 
 /** A pair of integer values as a property. */
-typedef ::std::pair< sal_Int32, sal_Int32 > AxPairData;
+typedef std::pair< sal_Int32, sal_Int32 > AxPairData;
 
 /** Export helper to write simple and complex ActiveX form control properties
     to a binary input stream. */

@@ -55,7 +55,7 @@ namespace drawinglayer
             /// constructors/assignmentoperator/destructor
             SdrLightingAttribute(
                 const basegfx::BColor& rAmbientLight,
-                const ::std::vector< Sdr3DLightAttribute >& rLightVector);
+                const std::vector< Sdr3DLightAttribute >& rLightVector);
             SdrLightingAttribute();
             SdrLightingAttribute(const SdrLightingAttribute& rCandidate);
             SdrLightingAttribute& operator=(const SdrLightingAttribute& rCandidate);
@@ -68,7 +68,7 @@ namespace drawinglayer
             bool operator==(const SdrLightingAttribute& rCandidate) const;
 
             // data read access
-            const ::std::vector< Sdr3DLightAttribute >& getLightVector() const;
+            const std::vector< Sdr3DLightAttribute >& getLightVector() const;
 
             // color model solver
             basegfx::BColor solveColorModel(

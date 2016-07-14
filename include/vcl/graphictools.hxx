@@ -76,7 +76,7 @@ public:
         /// Width of stroke start/end arrow to exactly fit the joining stroke
         normalizedArrowWidth=65536
     };
-    typedef ::std::vector< double > DashArray;
+    typedef std::vector< double > DashArray;
 
     SvtGraphicStroke();
     /** All in one constructor

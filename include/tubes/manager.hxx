@@ -29,8 +29,8 @@ class TeleManagerImpl;
 typedef struct _TpAccount TpAccount;
 typedef struct _TpContact TpContact;
 
-typedef ::std::pair< TpAccount *, TpContact * > AccountContactPair;
-typedef ::std::vector< AccountContactPair > AccountContactPairV;
+typedef std::pair< TpAccount *, TpContact * > AccountContactPair;
+typedef std::vector< AccountContactPair > AccountContactPairV;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 /** Interface to Telepathy DBus Tubes.

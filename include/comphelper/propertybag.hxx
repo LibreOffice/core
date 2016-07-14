@@ -42,7 +42,7 @@ namespace comphelper
     class COMPHELPER_DLLPUBLIC PropertyBag : protected OPropertyContainerHelper
     {
     private:
-        ::std::unique_ptr< PropertyBag_Impl > m_pImpl;
+        std::unique_ptr< PropertyBag_Impl > m_pImpl;
 
     public:
         PropertyBag();

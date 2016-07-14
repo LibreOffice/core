@@ -62,16 +62,16 @@ public:
     enum ChildOperation { Insert = 0, Remove };
     // would like to make this typedef private, too, but the Forte 7 compiler does have
     // problems with this .....
-    typedef ::std::pair< css::uno::Reference< css::awt::XControlModel >, OUString >
+    typedef std::pair< css::uno::Reference< css::awt::XControlModel >, OUString >
                                                         UnoControlModelHolder;
 private:
-    typedef ::std::list< UnoControlModelHolder >        UnoControlModelHolderList;
+    typedef std::list< UnoControlModelHolder >          UnoControlModelHolderList;
 
 public:
     // for grouping control models (XTabControllerModel::getGroupXXX)
-    typedef ::std::vector< css::uno::Reference< css::awt::XControlModel > >
+    typedef std::vector< css::uno::Reference< css::awt::XControlModel > >
                                                         ModelGroup;
-    typedef ::std::vector< ModelGroup >                 AllGroups;
+    typedef std::vector< ModelGroup >                   AllGroups;
 
     friend struct CloneControlModel;
     friend struct FindControlModel;

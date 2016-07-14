@@ -91,7 +91,7 @@ namespace drawinglayer
         {
         protected:
             double                                      mfDuration;
-            ::std::vector< AnimationEntry* >            maEntries;
+            std::vector< AnimationEntry* >              maEntries;
 
             // helpers
             sal_uInt32 impGetIndexAtTime(double fTime, double &rfAddedTime) const;

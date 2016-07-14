@@ -308,7 +308,7 @@ namespace basegfx
 
         @return the input vector
      */
-    BASEGFX_DLLPUBLIC ::std::vector< B2DRange >& computeSetDifference( ::std::vector< B2DRange >&   o_rResult,
+    BASEGFX_DLLPUBLIC std::vector< B2DRange >& computeSetDifference( std::vector< B2DRange >&       o_rResult,
                                                      const B2DRange&            rFirst,
                                                      const B2DRange&            rSecond );
 

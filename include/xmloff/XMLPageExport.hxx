@@ -58,7 +58,7 @@ class XMLOFF_DLLPUBLIC XMLPageExport : public salhelper::SimpleReferenceObject
 
     css::uno::Reference< css::container::XNameAccess > xPageStyles;
 
-    ::std::vector< XMLPageExportNameEntry > aNameVector;
+    std::vector< XMLPageExportNameEntry > aNameVector;
     SAL_DLLPRIVATE bool findPageMasterName( const OUString& rStyleName, OUString& rPMName ) const;
 
     rtl::Reference < XMLPropertyHandlerFactory > xPageMasterPropHdlFactory;

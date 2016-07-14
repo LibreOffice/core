@@ -125,7 +125,7 @@ namespace canvas
 
             void swap( VCLObject& rOther )
             {
-                ::std::swap( mpWrappee, rOther.mpWrappee );
+                std::swap( mpWrappee, rOther.mpWrappee );
             }
 
         private:

@@ -195,7 +195,7 @@ struct ClientData
 
 struct ShapeModel
 {
-    typedef ::std::vector< css::awt::Point >   PointVector;
+    typedef std::vector< css::awt::Point >     PointVector;
 
     OUString     maType;             ///< Shape template with default properties.
     PointVector         maPoints;           ///< Points for the polyline shape.

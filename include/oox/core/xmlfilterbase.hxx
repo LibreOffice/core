@@ -252,7 +252,7 @@ private:
                             const css::uno::Reference< css::io::XStream >& rxOutStream ) const override;
 
 private:
-    ::std::unique_ptr< XmlFilterBaseImpl > mxImpl;
+    std::unique_ptr< XmlFilterBaseImpl > mxImpl;
     sal_Int32 mnRelId;
     sal_Int32 mnMaxDocId;
     bool mbMSO2007;

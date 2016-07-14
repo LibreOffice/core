@@ -70,7 +70,7 @@ namespace drawinglayer
                 const OUString& rText,
                 sal_Int32 nTextPosition,
                 sal_Int32 nTextLength,
-                const ::std::vector< double >& rDXArray,
+                const std::vector< double >& rDXArray,
                 const attribute::FontAttribute& rFontAttribute) const;
 
         protected:
@@ -85,7 +85,7 @@ namespace drawinglayer
                 const OUString& rText,
                 sal_Int32 nTextPosition,
                 sal_Int32 nTextLength,
-                const ::std::vector< double >& rDXArray,
+                const std::vector< double >& rDXArray,
                 const attribute::FontAttribute& rFontAttribute,
                 const css::lang::Locale& rLocale,
                 const basegfx::BColor& rFontColor,

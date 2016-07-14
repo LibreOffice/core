@@ -59,7 +59,7 @@ namespace drawinglayer
         };
 
         /// typedef for a vector of that helper data
-        typedef ::std::vector< TextAsPolygonDataNode > TextAsPolygonDataNodeVector;
+        typedef std::vector< TextAsPolygonDataNode > TextAsPolygonDataNodeVector;
 
         /** TextAsPolygonExtractor2D class
 

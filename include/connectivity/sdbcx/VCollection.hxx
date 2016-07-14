@@ -90,7 +90,7 @@ namespace connectivity
             public OCollectionBase
         {
         protected:
-            ::std::unique_ptr<IObjectCollection>    m_pElements;
+            std::unique_ptr<IObjectCollection>      m_pElements;
 
             ::comphelper::OInterfaceContainerHelper2       m_aContainerListeners;
             ::comphelper::OInterfaceContainerHelper2       m_aRefreshListeners;

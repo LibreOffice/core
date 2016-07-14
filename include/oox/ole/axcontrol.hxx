@@ -799,7 +799,7 @@ public: // direct access needed for legacy VML drawing controls
 };
 
 
-typedef ::std::vector< OUString > AxClassTable;
+typedef std::vector< OUString > AxClassTable;
 
 /** Base class for ActiveX container controls. */
 class OOX_DLLPUBLIC AxContainerModelBase : public AxFontDataModel

@@ -56,12 +56,12 @@ public:
         const ::rtl::OUString& rsMenuCommand);
 
     void ToggleVisibilityForContext( const Context& rContext,const bool bIsInitiallyVisible );
-    const ::std::vector<Entry>& GetEntries() const {return maEntries;};
+    const std::vector<Entry>& GetEntries() const {return maEntries;};
 
 private:
-    ::std::vector<Entry> maEntries;
+    std::vector<Entry> maEntries;
 
-    ::std::vector<Entry>::const_iterator FindBestMatch (const Context& rContext) const;
+    std::vector<Entry>::const_iterator FindBestMatch (const Context& rContext) const;
 };
 
 } } // end of namespace sfx2::sidebar

@@ -60,7 +60,7 @@ private:
     bool                updateChunk();
 
 private:
-    typedef ::std::vector< sal_uInt8 > ChunkBuffer;
+    typedef std::vector< sal_uInt8 > ChunkBuffer;
 
     BinaryInputStream*  mpInStrm;
     ChunkBuffer         maChunk;

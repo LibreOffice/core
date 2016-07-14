@@ -93,7 +93,7 @@ class OOX_DLLPUBLIC ChartExport : public DrawingML {
 
 public:
     // first: data sequence for label, second: data sequence for values.
-    typedef ::std::vector< AxisIdPair > AxisVector;
+    typedef std::vector< AxisIdPair > AxisVector;
 
 private:
     sal_Int32           mnXmlNamespace;

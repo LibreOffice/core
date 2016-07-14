@@ -62,7 +62,7 @@ namespace connectivity
     class OSQLParseNode;
     class IParseContext;
 
-    typedef ::std::vector< OSQLParseNode* >                  OSQLParseNodes;
+    typedef std::vector< OSQLParseNode* >                    OSQLParseNodes;
 
     enum class SQLNodeType { Rule, ListRule, CommaListRule,
                          Keyword, Comparison, Name,
@@ -70,7 +70,7 @@ namespace connectivity
                          Equal, Less, Great, LessEq, GreatEq, NotEqual,
                          Punctuation, AMMSC, AccessDate, Date, Concat};
 
-    typedef ::std::set< OUString >   QueryNameSet;
+    typedef std::set< OUString >     QueryNameSet;
 
     //= SQLParseNodeParameter
 

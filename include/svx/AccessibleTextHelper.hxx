@@ -110,7 +110,7 @@ namespace accessibility
     {
 
     public:
-        typedef ::std::vector< sal_Int16 > VectorOfStates;
+        typedef std::vector< sal_Int16 > VectorOfStates;
 
         /** Create accessible text object for given edit source
 
@@ -122,7 +122,7 @@ namespace accessibility
             model) contained in the given SvxEditSource.
 
         */
-        explicit AccessibleTextHelper( ::std::unique_ptr< SvxEditSource > && pEditSource );
+        explicit AccessibleTextHelper( std::unique_ptr< SvxEditSource > && pEditSource );
 
         virtual ~AccessibleTextHelper();
 
@@ -177,14 +177,14 @@ namespace accessibility
             This class does not have a dispose method, since it is not
             a UNO component. Nevertheless, it holds C++ references to
             several core objects, so you should issue a
-            SetEditSource(::std::unique_ptr<SvxEditSource>()) in
+            SetEditSource(std::unique_ptr<SvxEditSource>()) in
             your dispose() method.
 
             @param pEditSource
             The new edit source to set. Object ownership is transferred
             from the caller to the callee.
         */
-        void SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource );
+        void SetEditSource( std::unique_ptr< SvxEditSource > && pEditSource );
 
         /** Set the event source
 

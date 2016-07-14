@@ -51,7 +51,7 @@ inline ByteSequence::ByteSequence( const sal_Int8 * pElements, sal_Int32 len )
 {
     ::rtl_byte_sequence_constructFromArray( &_pSequence, pElements, len );
     if (_pSequence == NULL)
-        throw ::std::bad_alloc();
+        throw std::bad_alloc();
 }
 
 inline ByteSequence::ByteSequence( sal_Int32 len, enum __ByteSequence_NoDefault )
@@ -59,7 +59,7 @@ inline ByteSequence::ByteSequence( sal_Int32 len, enum __ByteSequence_NoDefault 
 {
     ::rtl_byte_sequence_constructNoDefault( &_pSequence, len );
     if (_pSequence == NULL)
-        throw ::std::bad_alloc();
+        throw std::bad_alloc();
 }
 
 inline ByteSequence::ByteSequence( sal_Sequence *pSequence, enum __ByteSequence_NoAcquire )
@@ -72,7 +72,7 @@ inline ByteSequence::ByteSequence( sal_Int32 len )
 {
     ::rtl_byte_sequence_construct( &_pSequence, len );
     if (_pSequence == NULL)
-        throw ::std::bad_alloc();
+        throw std::bad_alloc();
 }
 
 inline ByteSequence::~ByteSequence()
@@ -95,7 +95,7 @@ inline sal_Int8 * ByteSequence::getArray()
 {
     ::rtl_byte_sequence_reference2One( &_pSequence );
     if (_pSequence == NULL)
-        throw ::std::bad_alloc();
+        throw std::bad_alloc();
     return reinterpret_cast<sal_Int8 *>(_pSequence->elements);
 }
 
@@ -103,7 +103,7 @@ inline void ByteSequence::realloc( sal_Int32 nSize )
 {
     ::rtl_byte_sequence_realloc( &_pSequence, nSize );
     if (_pSequence == NULL)
-        throw ::std::bad_alloc();
+        throw std::bad_alloc();
 }
 
 inline sal_Int8 & ByteSequence::operator [] ( sal_Int32 nIndex )

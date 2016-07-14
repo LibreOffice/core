@@ -63,7 +63,7 @@ enum GridRowStatus
 class DbGridRow : public SvRefBase
 {
     css::uno::Any  m_aBookmark;        // Bookmark of the row, can be set
-    ::std::vector< ::svxform::DataColumn* >
+    std::vector< ::svxform::DataColumn* >
                                 m_aVariants;
     GridRowStatus               m_eStatus;
     bool                        m_bIsNew;
@@ -96,7 +96,7 @@ typedef tools::SvRef<DbGridRow> DbGridRowRef;
 // DbGridControl
 
 class DbGridColumn;
-typedef ::std::vector< DbGridColumn* > DbGridColumns;
+typedef std::vector< DbGridColumn* > DbGridColumns;
 
 
 class FmGridListener

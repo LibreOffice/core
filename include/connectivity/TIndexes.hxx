@@ -39,7 +39,7 @@ namespace connectivity
     public:
         OIndexesHelper(OTableHelper* _pTable,
                  ::osl::Mutex& _rMutex,
-                 const ::std::vector< OUString> &_rVector
+                 const std::vector< OUString> &_rVector
                  );
 
     };

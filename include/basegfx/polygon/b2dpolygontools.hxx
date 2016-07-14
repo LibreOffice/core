@@ -192,7 +192,7 @@ namespace basegfx
         */
         BASEGFX_DLLPUBLIC void applyLineDashing(
             const B2DPolygon& rCandidate,
-            const ::std::vector<double>& rDotDashArray,
+            const std::vector<double>& rDotDashArray,
             B2DPolyPolygon* pLineTarget,
             B2DPolyPolygon* pGapTarget = nullptr,
             double fFullDashDotLen = 0.0);

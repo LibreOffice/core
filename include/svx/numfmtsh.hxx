@@ -208,9 +208,9 @@ private:
     SVX_DLLPRIVATE short FillEListWithUserCurrencys( std::vector<OUString>& rList,short nSelPos);
     SVX_DLLPRIVATE short FillEListWithUsD_Impl( std::vector<OUString>& rList, sal_uInt16 nPrivCat, short Pos );
 
-    SVX_DLLPRIVATE ::std::vector<sal_uInt32>::iterator GetRemoved_Impl( size_t nKey );
+    SVX_DLLPRIVATE std::vector<sal_uInt32>::iterator GetRemoved_Impl( size_t nKey );
     SVX_DLLPRIVATE bool                                IsRemoved_Impl( size_t nKey );
-    SVX_DLLPRIVATE ::std::vector<sal_uInt32>::iterator GetAdded_Impl( size_t nKey );
+    SVX_DLLPRIVATE std::vector<sal_uInt32>::iterator GetAdded_Impl( size_t nKey );
     SVX_DLLPRIVATE bool                                IsAdded_Impl( size_t nKey );
 
     SVX_DLLPRIVATE void  GetPreviewString_Impl( OUString& rString,

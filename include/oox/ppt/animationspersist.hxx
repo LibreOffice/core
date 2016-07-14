@@ -113,7 +113,7 @@ namespace oox { namespace ppt {
         css::uno::Any       maValue;
     };
 
-    typedef ::std::list< TimeAnimationValue > TimeAnimationValueList;
+    typedef std::list< TimeAnimationValue > TimeAnimationValueList;
 
 } }
 

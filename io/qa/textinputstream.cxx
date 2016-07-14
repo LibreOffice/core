@@ -54,7 +54,7 @@ private:
         throw (
             css::io::NotConnectedException,
             css::io::BufferSizeExceededException, css::io::IOException,
-            css::uno::RuntimeException, ::std::exception) override
+            css::uno::RuntimeException, std::exception) override
     {
         assert(nMaxBytesToRead >= 0);
         osl::MutexGuard g(mutex_);

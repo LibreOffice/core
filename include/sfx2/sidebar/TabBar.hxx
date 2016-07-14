@@ -62,13 +62,13 @@ public:
         bool mbIsActive;
         bool mbIsEnabled;
     };
-    typedef ::std::function<void (
+    typedef std::function<void (
             const Rectangle&,
-            const ::std::vector<DeckMenuData>& rMenuData)> PopupMenuProvider;
+            const std::vector<DeckMenuData>& rMenuData)> PopupMenuProvider;
     TabBar (
         vcl::Window* pParentWindow,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        const ::std::function<void (const OUString& rsDeckId)>& rDeckActivationFunctor,
+        const std::function<void (const OUString& rsDeckId)>& rDeckActivationFunctor,
         const PopupMenuProvider& rPopupMenuProvider,
         SidebarController* rParentSidebarController);
 
@@ -100,13 +100,13 @@ private:
         DECL_LINK_TYPED(HandleClick, Button*, void);
         VclPtr<RadioButton> mpButton;
         OUString msDeckId;
-        ::std::function<void (const OUString& rsDeckId)> maDeckActivationFunctor;
+        std::function<void (const OUString& rsDeckId)> maDeckActivationFunctor;
         bool mbIsHidden;
         bool mbIsHiddenByDefault;
     };
-    typedef ::std::vector<Item> ItemContainer;
+    typedef std::vector<Item> ItemContainer;
     ItemContainer maItems;
-    const ::std::function<void (const OUString& rsDeckId)> maDeckActivationFunctor;
+    const std::function<void (const OUString& rsDeckId)> maDeckActivationFunctor;
     sal_Int32 mnMenuSeparatorY;
     PopupMenuProvider maPopupMenuProvider;
 

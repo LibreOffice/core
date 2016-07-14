@@ -62,7 +62,7 @@ namespace param
         /// the most recently set value of the parameter
         ::connectivity::ORowSetValue    m_aValue;
         /// the positions (in our m_xValueDestination) at which the value should be set (0-based!)
-        ::std::vector< sal_Int32 >      m_aIndexes;
+        std::vector< sal_Int32 >        m_aIndexes;
 
         /// the "delegator" column to which standard property requests are forwarded
         css::uno::Reference< css::beans::XPropertySet >       m_xDelegator;
@@ -71,7 +71,7 @@ namespace param
         /// the component taking the value
         css::uno::Reference< css::sdbc::XParameters >         m_xValueDestination;
         /// helper for implementing XPropertySetInfo
-        ::std::unique_ptr< ::cppu::OPropertyArrayHelper >     m_pInfoHelper;
+        std::unique_ptr< ::cppu::OPropertyArrayHelper >       m_pInfoHelper;
 
 
     public:
@@ -86,7 +86,7 @@ namespace param
         ParameterWrapper(
             const css::uno::Reference< css::beans::XPropertySet >& _rxColumn,
             const css::uno::Reference< css::sdbc::XParameters >& _rxAllParameters,
-            const ::std::vector< sal_Int32 >& _rIndexes
+            const std::vector< sal_Int32 >& _rIndexes
         );
 
         DECLARE_XINTERFACE()
@@ -119,7 +119,7 @@ namespace param
 
     //= ParameterWrapper
 
-    typedef ::std::vector< ::rtl::Reference< ParameterWrapper > >   Parameters;
+    typedef std::vector< ::rtl::Reference< ParameterWrapper > >     Parameters;
 
 
     //= ParameterWrapperContainer

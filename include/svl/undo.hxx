@@ -69,7 +69,7 @@ private:
 
 /// is a mark on the Undo stack
 typedef sal_Int32 UndoStackMark;
-#define MARK_INVALID    ::std::numeric_limits< UndoStackMark >::max()
+#define MARK_INVALID    std::numeric_limits< UndoStackMark >::max()
 
 class SVL_DLLPUBLIC SfxUndoActions
 {

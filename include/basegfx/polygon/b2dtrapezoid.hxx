@@ -68,7 +68,7 @@ namespace basegfx
         B2DPolygon getB2DPolygon() const;
     };
 
-    typedef ::std::vector< B2DTrapezoid > B2DTrapezoidVector;
+    typedef std::vector< B2DTrapezoid > B2DTrapezoidVector;
 
 } // end of namespace basegfx
 

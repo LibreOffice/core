@@ -37,7 +37,7 @@ class EDITENG_DLLPUBLIC SvxItemPropertySet
 {
     SfxItemPropertyMap          m_aPropertyMap;
     mutable css::uno::Reference<css::beans::XPropertySetInfo> m_xInfo;
-    ::std::vector< SvxIDPropertyCombine* > aCombineList;
+    std::vector< SvxIDPropertyCombine* > aCombineList;
     SfxItemPool&                    mrItemPool;
 
 public:

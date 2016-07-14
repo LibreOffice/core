@@ -51,7 +51,7 @@ struct GalleryObject
 };
 
 
-typedef ::std::vector< GalleryObject* > GalleryObjectList;
+typedef std::vector< GalleryObject* > GalleryObjectList;
 
 class GalleryThemeEntry;
 class SgaObject;

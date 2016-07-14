@@ -50,14 +50,14 @@ class FORMULA_DLLPUBLIC FormulaOpCodeMapperObj : public ::cppu::WeakImplHelper2<
                             css::sheet::XFormulaOpCodeMapper,
                             css::lang::XServiceInfo >
 {
-    ::std::unique_ptr<FormulaCompiler> m_pCompiler;
+    std::unique_ptr<FormulaCompiler> m_pCompiler;
 public:
     static OUString  getImplementationName_Static();
     static css::uno::Sequence< OUString> getSupportedServiceNames_Static();
     static css::uno::Reference< css::uno::XInterface > create(const css::uno::Reference< css::uno::XComponentContext >& _xContext);
 
 protected:
-                            FormulaOpCodeMapperObj(::std::unique_ptr<FormulaCompiler> && _pCompiler);
+                            FormulaOpCodeMapperObj(std::unique_ptr<FormulaCompiler> && _pCompiler);
     virtual                 ~FormulaOpCodeMapperObj();
 
 private:

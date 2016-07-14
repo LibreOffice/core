@@ -185,12 +185,12 @@ namespace canvas
             ::basegfx::B2DRange maUpdateArea;
         };
 
-        typedef ::std::vector< SpriteChangeRecord >             VectorOfChangeRecords;
-        typedef ::std::list< Sprite::Reference >                ListOfSprites;
+        typedef std::vector< SpriteChangeRecord >               VectorOfChangeRecords;
+        typedef std::list< Sprite::Reference >                  ListOfSprites;
         typedef ::basegfx::B2DConnectedRanges< SpriteInfo >     SpriteConnectedRanges;
         typedef SpriteConnectedRanges::ComponentType            AreaComponent;
         typedef SpriteConnectedRanges::ConnectedComponents      UpdateArea;
-        typedef ::std::vector< Sprite::Reference >              VectorOfSprites;
+        typedef std::vector< Sprite::Reference >                VectorOfSprites;
 
         SpriteRedrawManager();
         SpriteRedrawManager(const SpriteRedrawManager&) = delete;
@@ -235,9 +235,9 @@ namespace canvas
                                ::basegfx::B2DRange& o_rMoveEnd,
                                UpdateArea           aUpdateArea );
             void opaqueUpdate( const ::basegfx::B2DRange&                          rTotalArea,
-                               const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
+                               const std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
             void genericUpdate( const ::basegfx::B2DRange&                          rTotalArea,
-                                const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
+                                const std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
             </pre>
             The backgroundPaint() method is called to simply repaint
             background content, the scrollUpdate() method is used to
@@ -269,7 +269,7 @@ namespace canvas
          */
         template< typename Functor > void forEachSprite( const Functor& rFunc ) const
         {
-            ::std::for_each( maSprites.begin(),
+            std::for_each( maSprites.begin(),
                              maSprites.end(),
                              rFunc );
         }
@@ -318,7 +318,7 @@ namespace canvas
                     // cache number of sprites in this area (it's a
                     // list, and both isAreaUpdateScroll() and
                     // isAreaUpdateOpaque() need it).
-                    const ::std::size_t nNumSprites(
+                    const std::size_t nNumSprites(
                         rUpdateArea.maComponentList.size() );
 
                     if( isAreaUpdateScroll( aMoveStart,
@@ -349,7 +349,7 @@ namespace canvas
                             ++aCurr;
                         }
 
-                        ::std::sort( aSortedUpdateSprites.begin(),
+                        std::sort( aSortedUpdateSprites.begin(),
                                      aSortedUpdateSprites.end(),
                                      SpriteWeakOrder() );
 
@@ -381,7 +381,7 @@ namespace canvas
                                     const AreaComponent&        rComponent ) const;
 
         bool isAreaUpdateOpaque( const UpdateArea&  rUpdateArea,
-                                 ::std::size_t      nNumSprites ) const;
+                                 std::size_t        nNumSprites ) const;
 
         /** Check whether given update area can be handled by a simple
             scroll
@@ -399,7 +399,7 @@ namespace canvas
         bool isAreaUpdateScroll( ::basegfx::B2DRange&   o_rMoveStart,
                                  ::basegfx::B2DRange&   o_rMoveEnd,
                                  const UpdateArea&      rUpdateArea,
-                                 ::std::size_t          nNumSprites ) const;
+                                 std::size_t            nNumSprites ) const;
 
 
         ListOfSprites                   maSprites; // list of active

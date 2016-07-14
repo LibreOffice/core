@@ -38,7 +38,7 @@ namespace dbtools
     */
     class OOO_DLLPUBLIC_DBTOOLS StatementComposer
     {
-        ::std::unique_ptr< StatementComposer_Data >   m_pData;
+        std::unique_ptr< StatementComposer_Data >     m_pData;
 
     public:
         /** constructs an instance

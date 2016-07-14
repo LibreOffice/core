@@ -162,7 +162,7 @@ namespace sdr
         };
 
         // typedefs for a vector of OverlayObjects
-        typedef ::std::vector< OverlayObject* > OverlayObjectVector;
+        typedef std::vector< OverlayObject* > OverlayObjectVector;
 
     } // end of namespace overlay
 } // end of namespace sdr

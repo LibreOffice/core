@@ -139,7 +139,7 @@ public:
 };
 
 // typedefs for a list of SdrPaintWindows
-typedef ::std::vector< SdrPaintWindow* > SdrPaintWindowVector;
+typedef std::vector< SdrPaintWindow* > SdrPaintWindowVector;
 
 #endif // INCLUDED_SVX_SDRPAINTWINDOW_HXX
 

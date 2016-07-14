@@ -31,7 +31,7 @@ class SfxMedium;
 class SfxItemSet;
 enum class FileDialogFlags;
 
-typedef ::std::vector< SfxMedium* > SfxMediumList;
+typedef std::vector< SfxMedium* > SfxMediumList;
 
 namespace sfx2 {
 

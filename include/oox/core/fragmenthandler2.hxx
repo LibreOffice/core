@@ -58,7 +58,7 @@ protected:
         MCE_STARTED,
         MCE_FOUND_CHOICE
     };
-    ::std::vector<MCE_STATE>           aMceState;
+    std::vector<MCE_STATE>             aMceState;
 
     bool                prepareMceContext( sal_Int32 nElement, const AttributeList& rAttribs );
 

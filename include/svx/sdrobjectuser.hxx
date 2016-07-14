@@ -43,7 +43,7 @@ namespace sdr
     };
 
     // typedef for ObjectUserVector
-    typedef ::std::vector< ObjectUser* > ObjectUserVector;
+    typedef std::vector< ObjectUser* > ObjectUserVector;
 } // end of namespace sdr
 
 #endif // INCLUDED_SVX_SDROBJECTUSER_HXX

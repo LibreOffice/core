@@ -79,7 +79,7 @@ public:
     void                    SetId( sal_uInt32 nNewId, bool bResetThemeName );
 };
 
-typedef ::std::vector< GalleryThemeEntry* > GalleryThemeList;
+typedef std::vector< GalleryThemeEntry* > GalleryThemeList;
 
 class SfxListener;
 class GalleryTheme;

@@ -504,7 +504,7 @@ public:
     sal_uLong GetDataChangeTimeStamp() const { return mnDataChangeTimeStamp; }
 };
 
-typedef ::std::vector< GraphicObject* > GraphicObjectList_impl;
+typedef std::vector< GraphicObject* > GraphicObjectList_impl;
 
 class SVT_DLLPUBLIC GraphicManager
 {

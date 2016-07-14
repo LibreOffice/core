@@ -77,7 +77,7 @@ E3dScene* fillViewInformation3DForCompoundObject(
 SVX_DLLPUBLIC void getAllHit3DObjectsSortedFrontToBack(
     const basegfx::B2DPoint& rPoint,
     const E3dScene& rScene,
-    ::std::vector< const E3dCompoundObject* >& o_rResult);
+    std::vector< const E3dCompoundObject* >& o_rResult);
 
 /** support for checking if the single given 3d object is hit at position
 

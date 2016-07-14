@@ -75,7 +75,7 @@ public:
     template< typename FuncType >
     void                forEachMem( FuncType pFunc ) const
                         {
-                            forEach( ::std::bind( pFunc, std::placeholders::_1 ) );
+                            forEach( std::bind( pFunc, std::placeholders::_1 ) );
                         }
 
     /** Calls the passed member function of ObjType on every contained object,
@@ -83,7 +83,7 @@ public:
     template< typename FuncType, typename ParamType1, typename ParamType2 >
     void                forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
                         {
-                            forEach( ::std::bind( pFunc, std::placeholders::_1, aParam1, aParam2 ) );
+                            forEach( std::bind( pFunc, std::placeholders::_1, aParam1, aParam2 ) );
                         }
 
     /** Calls the passed member function of ObjType on every contained object,
@@ -91,7 +91,7 @@ public:
     template< typename FuncType, typename ParamType1, typename ParamType2, typename ParamType3 >
     void                forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3 ) const
                         {
-                            forEach( ::std::bind( pFunc, std::placeholders::_1, aParam1, aParam2, aParam3 ) );
+                            forEach( std::bind( pFunc, std::placeholders::_1, aParam1, aParam2, aParam3 ) );
                         }
 
 
@@ -108,7 +108,7 @@ public:
     template< typename FuncType >
     void                forEachMemWithKey( FuncType pFunc ) const
                         {
-                            forEachWithKey( ::std::bind( pFunc, std::placeholders::_2, std::placeholders::_1 ) );
+                            forEachWithKey( std::bind( pFunc, std::placeholders::_2, std::placeholders::_1 ) );
                         }
 
 

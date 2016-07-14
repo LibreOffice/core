@@ -326,7 +326,7 @@ namespace svt
 
         /** retrieves a copy of the state history, i.e. all states we already visited
         */
-        void                    getStateHistory( ::std::vector< WizardState >& _out_rHistory );
+        void                    getStateHistory( std::vector< WizardState >& _out_rHistory );
 
     public:
         class AccessGuard

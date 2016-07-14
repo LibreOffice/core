@@ -137,7 +137,7 @@ public:
             Number of vector elements really read (NOT byte count).
      */
     template< typename Type >
-    sal_Int32           readArray( ::std::vector< Type >& orVector, sal_Int32 nElemCount );
+    sal_Int32           readArray( std::vector< Type >& orVector, sal_Int32 nElemCount );
 
     /** Reads a NUL-terminated Unicode character array and returns the string.
      */
@@ -242,7 +242,7 @@ sal_Int32 BinaryInputStream::readArray( Type* opnArray, sal_Int32 nElemCount )
 }
 
 template< typename Type >
-sal_Int32 BinaryInputStream::readArray( ::std::vector< Type >& orVector, sal_Int32 nElemCount )
+sal_Int32 BinaryInputStream::readArray( std::vector< Type >& orVector, sal_Int32 nElemCount )
 {
     orVector.resize( static_cast< size_t >( nElemCount ) );
     return orVector.empty() ? 0 : readArray( &orVector.front(), nElemCount );

@@ -76,7 +76,7 @@ namespace vcl
         void    SetEnabled( bool b );
 
     private:
-        ::std::unique_ptr< QuickSelectionEngine_Data >    m_pData;
+        std::unique_ptr< QuickSelectionEngine_Data >      m_pData;
         bool bEnabled;
 
     private:

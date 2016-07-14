@@ -396,7 +396,7 @@ public:
 
     typedef key keyType;
 private:
-    typedef ::std::vector< std::pair < key , void* > > InterfaceMap;
+    typedef std::vector< std::pair < key , void* > > InterfaceMap;
     InterfaceMap *m_pMap;
     ::osl::Mutex &  rMutex;
 

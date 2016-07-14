@@ -102,7 +102,7 @@ class ErrorRecord;
 class XMLErrors
 {
     /// definition of type for error list
-    typedef ::std::vector<ErrorRecord> ErrorList;
+    typedef std::vector<ErrorRecord> ErrorList;
 
     ErrorList aErrors;  /// list of error records
 

@@ -74,7 +74,7 @@ protected:
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
 private:
     TabPageListenerMultiplexer m_aTabPageListeners;
-    ::std::vector< css::uno::Reference< css::awt::tab::XTabPage > > m_aTabPages;
+    std::vector< css::uno::Reference< css::awt::tab::XTabPage > > m_aTabPages;
 };
 #endif // INCLUDED_TOOLKIT_AWT_VCLXTABPAGECONTAINER_HXX
 

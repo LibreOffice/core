@@ -182,7 +182,7 @@ public:
 
     void                    EndInplaceEditing();
 
-    ::std::vector< SvtContentEntry > GetContent();
+    std::vector< SvtContentEntry > GetContent();
 
 protected:
     virtual void            StateChanged( StateChangedType nStateChange ) override;

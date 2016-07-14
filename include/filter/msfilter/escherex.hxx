@@ -714,8 +714,8 @@ struct EscherShapeListEntry;
 
 class MSFILTER_DLLPUBLIC EscherSolverContainer
 {
-    ::std::vector< EscherShapeListEntry* >     maShapeList;
-    ::std::vector< EscherConnectorListEntry* > maConnectorList;
+    std::vector< EscherShapeListEntry* >       maShapeList;
+    std::vector< EscherConnectorListEntry* > maConnectorList;
 
 public:
 
@@ -957,7 +957,7 @@ class MSFILTER_DLLPUBLIC EscherPersistTable
 {
 
 public:
-    ::std::vector< EscherPersistEntry* > maPersistTable;
+    std::vector< EscherPersistEntry* > maPersistTable;
 
     bool        PtIsID( sal_uInt32 nID );
     void        PtInsert( sal_uInt32 nID, sal_uInt32 nOfs );
@@ -1116,7 +1116,7 @@ private:
         sal_uInt32          mnNextShapeId;      /// Next free shape identifier in this cluster.
         inline explicit     ClusterEntry( sal_uInt32 nDrawingId ) : mnDrawingId( nDrawingId ), mnNextShapeId( 0 ) {}
     };
-    typedef ::std::vector< ClusterEntry > ClusterTable;
+    typedef std::vector< ClusterEntry > ClusterTable;
 
     struct DrawingInfo
     {
@@ -1125,7 +1125,7 @@ private:
         sal_uInt32          mnLastShapeId;      /// Last shape identifier generated for this drawing.
         inline explicit     DrawingInfo( sal_uInt32 nClusterId ) : mnClusterId( nClusterId ), mnShapeCount( 0 ), mnLastShapeId( 0 ) {}
     };
-    typedef ::std::vector< DrawingInfo > DrawingInfoVector;
+    typedef std::vector< DrawingInfo > DrawingInfoVector;
 
     ClusterTable        maClusterTable;     /// List with cluster IDs (used object IDs in drawings).
     DrawingInfoVector   maDrawingInfos;     /// Data about all used drawings.
@@ -1142,7 +1142,7 @@ class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
 {
     protected:
         std::shared_ptr<EscherExGlobal>           mxGlobal;
-        ::std::unique_ptr< ImplEscherExSdr > mpImplEscherExSdr;
+        std::unique_ptr< ImplEscherExSdr > mpImplEscherExSdr;
         SvStream*                   mpOutStrm;
         bool                        mbOwnsStrm;
         sal_uInt32                  mnStrmStartOfs;

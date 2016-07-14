@@ -35,7 +35,7 @@ class SVT_DLLPUBLIC ImageMap
 {
 private:
 
-    ::std::vector< IMapObject* > maList;
+    std::vector< IMapObject* > maList;
     OUString                     aName;
 
 protected:

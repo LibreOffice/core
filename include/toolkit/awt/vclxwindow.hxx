@@ -106,7 +106,7 @@ protected:
     ::comphelper::OInterfaceContainerHelper2&  GetTopWindowListeners();
 
 public:
-    typedef ::std::function<void ()>  Callback;
+    typedef std::function<void ()>    Callback;
 
 protected:
     /** executes the given callback asynchronously

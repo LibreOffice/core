@@ -31,7 +31,7 @@
 namespace comphelper
 {
 
-typedef ::std::map< OUString, css::uno::Reference< css::uno::XInterface > > IdMap_t;
+typedef std::map< OUString, css::uno::Reference< css::uno::XInterface > > IdMap_t;
 
 class XMLOFF_DLLPUBLIC UnoInterfaceToUniqueIdentifierMapper
 {

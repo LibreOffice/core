@@ -36,7 +36,7 @@ namespace connectivity
     public:
         OKeyColumnsHelper(  OTableKeyHelper* _pKey,
                         ::osl::Mutex& _rMutex,
-                        const ::std::vector< OUString> &_rVector);
+                        const std::vector< OUString> &_rVector);
     };
 }
 #endif // INCLUDED_CONNECTIVITY_TKEYCOLUMNS_HXX

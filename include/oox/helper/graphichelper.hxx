@@ -149,9 +149,9 @@ public:
 
 
 private:
-    typedef ::std::map< sal_Int32, sal_Int32 > SystemPalette;
-    typedef ::std::deque< css::uno::Reference< css::graphic::XGraphicObject > > GraphicObjectDeque;
-    typedef ::std::map< OUString, css::uno::Reference< css::graphic::XGraphic > > EmbeddedGraphicMap;
+    typedef std::map< sal_Int32, sal_Int32 > SystemPalette;
+    typedef std::deque< css::uno::Reference< css::graphic::XGraphicObject > > GraphicObjectDeque;
+    typedef std::map< OUString, css::uno::Reference< css::graphic::XGraphic > > EmbeddedGraphicMap;
 
     css::uno::Reference< css::uno::XComponentContext > mxContext;
     css::uno::Reference< css::graphic::XGraphicProvider > mxGraphicProvider;
