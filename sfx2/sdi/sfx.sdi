@@ -4441,6 +4441,23 @@ SfxTemplateItem ListStyle SID_STYLE_FAMILY5
     GroupId = GID_DOCUMENT;
 ]
 
+SfxTemplateItem TableStyle SID_STYLE_FAMILY6
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_DOCUMENT;
+]
 
 SfxBoolItem TipsDialog SID_TIPWINDOW
 

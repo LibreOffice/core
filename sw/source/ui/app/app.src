@@ -74,9 +74,9 @@ ImageList RID_DEFAULTIMAGELIST_LC
     MaskColor = IMAGE_MASK_COLOR ; \
     IdList = \
     { \
-        1; 2; 3; 4; 5; \
+        1; 2; 3; 4; 5; 5;\
     }; \
-    IdCount = 5;
+    IdCount = 6;
 
 SfxStyleFamilies DLG_STYLE_DESIGNER
 {
@@ -149,6 +149,17 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
                 < "Custom Styles"   ; SFXSTYLEBIT_USERDEF   ; > ;
             };
             Text [ en-US ] = "List Styles" ;
+        };
+        SfxStyleFamilyItem
+        {
+            Text [ en-US ] = "Table Styles" ;
+            StyleFamily = SfxStyleFamily::Table ;
+            FilterList [ en-US ] =
+            {
+                < "All"             ; SFXSTYLEBIT_ALL_VISIBLE ; > ;
+                < "Applied Styles"  ; SFXSTYLEBIT_USED      ; > ;
+                < "Custom Styles"   ; SFXSTYLEBIT_USERDEF   ; > ;
+            };
         };
     };
 

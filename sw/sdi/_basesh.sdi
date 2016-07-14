@@ -361,6 +361,11 @@ interface BaseTextSelection
         StateMethod = StateStyle ;
     ]
 
+    SID_STYLE_FAMILY6 // status(fina|play)
+    [
+        StateMethod = StateStyle ;
+    ]
+
     SID_CLASSIFICATION_APPLY
     [
         ExecMethod = Execute ;
