@@ -33,7 +33,7 @@
 namespace dbaui
 {
     struct BooleanSettingDesc;
-    typedef ::std::vector< BooleanSettingDesc > BooleanSettingDescs;
+    typedef std::vector< BooleanSettingDesc > BooleanSettingDescs;
 
     // SpecialSettingsPage
     // implements the "Special Settings" page of the advanced database settings
@@ -84,10 +84,10 @@ namespace dbaui
         virtual void implInitControls (const SfxItemSet& _rSet, bool _bSaveValue ) override;
 
         // <method>OGenericAdministrationPage::fillControls</method>
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillControls(std::vector< ISaveValueWrapper* >& _rControlList) override;
 
         // <method>OGenericAdministrationPage::fillWindows</method>
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(std::vector< ISaveValueWrapper* >& _rControlList) override;
 
     private:
         void    impl_initBooleanSettings();
@@ -123,10 +123,10 @@ namespace dbaui
         virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
 
         // <method>OGenericAdministrationPage::fillControls</method>
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillControls(std::vector< ISaveValueWrapper* >& _rControlList) override;
 
         // <method>OGenericAdministrationPage::fillWindows</method>
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(std::vector< ISaveValueWrapper* >& _rControlList) override;
     };
 
 }

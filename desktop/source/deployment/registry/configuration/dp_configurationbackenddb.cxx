@@ -126,11 +126,11 @@ ConfigurationBackendDb::getEntry(OUString const & url)
     }
 }
 
-::std::list<OUString> ConfigurationBackendDb::getAllDataUrls()
+std::list<OUString> ConfigurationBackendDb::getAllDataUrls()
 {
     try
     {
-        ::std::list<OUString> listRet;
+        std::list<OUString> listRet;
         Reference<css::xml::dom::XDocument> doc = getDocument();
         Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 

@@ -189,7 +189,7 @@ namespace dbaui
             @param  _rNames
                 The list will be filled.
         */
-        void getSelectionElementNames( ::std::vector< OUString>& _rNames ) const;
+        void getSelectionElementNames( std::vector< OUString>& _rNames ) const;
 
         /** describes the current selection for the given control
         */

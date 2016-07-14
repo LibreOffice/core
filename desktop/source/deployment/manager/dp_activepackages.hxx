@@ -61,7 +61,7 @@ public:
         OUString failedPrerequisites;
     };
 
-    typedef ::std::vector< ::std::pair< OUString, Data > > Entries;
+    typedef std::vector< std::pair< OUString, Data > > Entries;
 
     ActivePackages();
 

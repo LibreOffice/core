@@ -615,7 +615,7 @@ namespace drawinglayer
                 && mnSteps == pCompare->mnSteps);
         }
 
-        void GeoTexSvxHatch::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
+        void GeoTexSvxHatch::appendTransformations(std::vector< basegfx::B2DHomMatrix >& rMatrices)
         {
             if(mbDefinitionRangeEqualsOutputRange)
             {
@@ -641,7 +641,7 @@ namespace drawinglayer
                 // calculate vertical start value and a security maximum integer value to avoid death loops
                 double fStart(basegfx::snapToNearestMultiple(aBackUnitRange.getMinY(), mfDistance));
                 const sal_uInt32 nNeededIntegerSteps(basegfx::fround((aBackUnitRange.getHeight() / mfDistance) + 0.5));
-                sal_uInt32 nMaxIntegerSteps(::std::min(nNeededIntegerSteps, sal_uInt32(10000)));
+                sal_uInt32 nMaxIntegerSteps(std::min(nNeededIntegerSteps, sal_uInt32(10000)));
 
                 while(fStart < aBackUnitRange.getMaxY() && nMaxIntegerSteps)
                 {
@@ -725,12 +725,12 @@ namespace drawinglayer
             return iterateTiles(nullptr);
         }
 
-        void GeoTexSvxTiled::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices) const
+        void GeoTexSvxTiled::appendTransformations(std::vector< basegfx::B2DHomMatrix >& rMatrices) const
         {
             iterateTiles(&rMatrices);
         }
 
-        sal_Int32 GeoTexSvxTiled::iterateTiles(::std::vector< basegfx::B2DHomMatrix >* pMatrices) const
+        sal_Int32 GeoTexSvxTiled::iterateTiles(std::vector< basegfx::B2DHomMatrix >* pMatrices) const
         {
             const double fWidth(maRange.getWidth());
             sal_Int32 nTiles = 0;

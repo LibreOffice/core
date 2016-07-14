@@ -121,7 +121,7 @@ OUString OTableFieldDesc::GetCriteria( sal_uInt16 nIdx ) const
 
 namespace
 {
-    struct SelectPropertyValueAsString : public ::std::unary_function< PropertyValue, OUString >
+    struct SelectPropertyValueAsString : public std::unary_function< PropertyValue, OUString >
     {
         OUString operator()( const PropertyValue& i_rPropValue ) const
         {
@@ -154,7 +154,7 @@ void OTableFieldDesc::Load( const css::beans::PropertyValue& i_rSettings, const 
     {
         const Sequence< PropertyValue > aCriteria( aFieldDesc.getOrDefault( "Criteria", Sequence< PropertyValue >() ) );
         m_aCriteria.resize( aCriteria.getLength() );
-        ::std::transform(
+        std::transform(
             aCriteria.getConstArray(),
             aCriteria.getConstArray() + aCriteria.getLength(),
             m_aCriteria.begin(),
@@ -185,7 +185,7 @@ void OTableFieldDesc::Save( ::comphelper::NamedValueCollection& o_rSettings, con
         {
             sal_Int32 c = 0;
             Sequence< PropertyValue > aCriteria( m_aCriteria.size() );
-            for (   ::std::vector< OUString >::const_iterator crit = m_aCriteria.begin();
+            for (   std::vector< OUString >::const_iterator crit = m_aCriteria.begin();
                     crit != m_aCriteria.end();
                     ++crit, ++c
                 )

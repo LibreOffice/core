@@ -75,8 +75,8 @@ public:
     {
         Data(): javaTypeLibrary(false) {};
 
-        ::std::list< OUString> implementationNames;
-        ::std::vector< ::std::pair< OUString, OUString> >singletons;
+        std::list< OUString> implementationNames;
+        std::vector< std::pair< OUString, OUString> >singletons;
             // map from singleton names to implementation names
         bool javaTypeLibrary;
     };

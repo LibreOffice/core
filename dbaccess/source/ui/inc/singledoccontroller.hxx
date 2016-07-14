@@ -70,7 +70,7 @@ namespace dbaui
         virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) override;
 
     private:
-        ::std::unique_ptr< OSingleDocumentController_Data >   m_pData;
+        std::unique_ptr< OSingleDocumentController_Data >     m_pData;
     };
 
 } // namespace dbaui

@@ -56,7 +56,7 @@ class OQuery    :public OContentHelper
     friend struct TRelease;
 
 public:
-    typedef ::std::map< OUString,OColumn*,::comphelper::UStringMixLess> TNameColumnMap;
+    typedef std::map< OUString,OColumn*,::comphelper::UStringMixLess> TNameColumnMap;
 
 protected:
 //  TNameColumnMap      m_aColumnMap; // contains all columnnames to columns

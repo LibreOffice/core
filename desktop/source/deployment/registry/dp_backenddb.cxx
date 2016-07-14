@@ -265,7 +265,7 @@ Reference<css::xml::dom::XNode> BackendDb::getKeyElement(
 
 //Only writes the data if there is at least one entry
 void BackendDb::writeVectorOfPair(
-    ::std::vector< ::std::pair< OUString, OUString > > const & vecPairs,
+    std::vector< std::pair< OUString, OUString > > const & vecPairs,
     OUString const & sVectorTagName,
     OUString const & sPairTagName,
     OUString const & sFirstTagName,
@@ -287,7 +287,7 @@ void BackendDb::writeVectorOfPair(
         xParent->appendChild(
             Reference<css::xml::dom::XNode>(
                 vectorNode, css::uno::UNO_QUERY_THROW));
-        typedef ::std::vector< ::std::pair< OUString, OUString > >::const_iterator CIT;
+        typedef std::vector< std::pair< OUString, OUString > >::const_iterator CIT;
         for (CIT i = vecPairs.begin(); i != vecPairs.end(); ++i)
         {
             const Reference<css::xml::dom::XElement> pairNode(
@@ -335,7 +335,7 @@ void BackendDb::writeVectorOfPair(
     }
 }
 
-::std::vector< ::std::pair< OUString, OUString > >
+std::vector< std::pair< OUString, OUString > >
 BackendDb::readVectorOfPair(
     Reference<css::xml::dom::XNode> const & parent,
     OUString const & sListTagName,
@@ -353,7 +353,7 @@ BackendDb::readVectorOfPair(
         const Reference<css::xml::dom::XNodeList> listPairs =
             xpathApi->selectNodeList(parent, sExprPairs);
 
-        ::std::vector< ::std::pair< OUString, OUString > > retVector;
+        std::vector< std::pair< OUString, OUString > > retVector;
         sal_Int32 length = listPairs->getLength();
         for (sal_Int32 i = 0; i < length; i++)
         {
@@ -367,7 +367,7 @@ BackendDb::readVectorOfPair(
                 xpathApi->selectSingleNode(aPair, sExprSecond);
             OSL_ASSERT(first.is() && second.is());
 
-            retVector.push_back(::std::make_pair(
+            retVector.push_back(std::make_pair(
                                     first->getNodeValue(), second->getNodeValue()));
         }
         return retVector;
@@ -383,7 +383,7 @@ BackendDb::readVectorOfPair(
 
 //Only writes the data if there is at least one entry
 void BackendDb::writeSimpleList(
-    ::std::list< OUString> const & list,
+    std::list< OUString> const & list,
     OUString const & sListTagName,
     OUString const & sMemberTagName,
     Reference<css::xml::dom::XNode> const & xParent)
@@ -403,7 +403,7 @@ void BackendDb::writeSimpleList(
             Reference<css::xml::dom::XNode>(
                 listNode, css::uno::UNO_QUERY_THROW));
 
-        typedef ::std::list<OUString>::const_iterator ITC_ITEMS;
+        typedef std::list<OUString>::const_iterator ITC_ITEMS;
         for (ITC_ITEMS i = list.begin(); i != list.end(); ++i)
         {
             const Reference<css::xml::dom::XNode> memberNode(
@@ -533,7 +533,7 @@ OUString BackendDb::readSimpleElement(
 }
 
 
-::std::list< OUString> BackendDb::readList(
+std::list< OUString> BackendDb::readList(
     Reference<css::xml::dom::XNode> const & parent,
     OUString const & sListTagName,
     OUString const & sMemberTagName)
@@ -548,7 +548,7 @@ OUString BackendDb::readSimpleElement(
         const Reference<css::xml::dom::XNodeList> list =
             xpathApi->selectNodeList(parent, sExprList);
 
-        ::std::list<OUString > retList;
+        std::list<OUString > retList;
         sal_Int32 length = list->getLength();
         for (sal_Int32 i = 0; i < length; i++)
         {
@@ -566,12 +566,12 @@ OUString BackendDb::readSimpleElement(
     }
 }
 
-::std::list<OUString> BackendDb::getOneChildFromAllEntries(
+std::list<OUString> BackendDb::getOneChildFromAllEntries(
     OUString const & name)
 {
     try
     {
-        ::std::list<OUString> listRet;
+        std::list<OUString> listRet;
         Reference<css::xml::dom::XDocument> doc = getDocument();
         Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 

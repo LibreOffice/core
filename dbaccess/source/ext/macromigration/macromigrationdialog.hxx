@@ -68,7 +68,7 @@ namespace dbmm
         DECL_LINK_TYPED( OnStartMigration, void*, void );
 
     private:
-        ::std::unique_ptr< MacroMigrationDialog_Data >    m_pData;
+        std::unique_ptr< MacroMigrationDialog_Data >      m_pData;
     };
 
 } // namespace dbmm

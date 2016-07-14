@@ -97,7 +97,7 @@ namespace dbaccess
         {
         private:
             Reference< XDesktop2 >               m_xDesktop;
-            ::std::list< const ODatabaseModelImpl* >  m_aDatabaseDocuments;
+            std::list< const ODatabaseModelImpl* >    m_aDatabaseDocuments;
 
         public:
             explicit DatabaseDocumentLoader( const Reference<XComponentContext> & rxContext);
@@ -132,7 +132,7 @@ namespace dbaccess
 
         void SAL_CALL DatabaseDocumentLoader::queryTermination( const lang::EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException, std::exception)
         {
-            ::std::list< const ODatabaseModelImpl* > aCpy(m_aDatabaseDocuments);
+            std::list< const ODatabaseModelImpl* > aCpy(m_aDatabaseDocuments);
             for( const auto& pCopy : aCpy )
             {
                 try

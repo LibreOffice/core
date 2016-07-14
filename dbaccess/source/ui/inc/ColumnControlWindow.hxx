@@ -35,7 +35,7 @@ namespace dbaui
         mutable css::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
 
         OTypeInfoMap                m_aDestTypeInfo;
-        ::std::vector<OTypeInfoMap::iterator> m_aDestTypeInfoIndex;
+        std::vector<OTypeInfoMap::iterator> m_aDestTypeInfoIndex;
 
         mutable TOTypeInfoSP        m_pTypeInfo; // default type
         OUString                    m_sTypeNames;       // these type names are the ones out of the resource file

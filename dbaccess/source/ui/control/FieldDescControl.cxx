@@ -253,7 +253,7 @@ namespace
         if (_pWindow)
         {
             long nTemp = _pWindow->GetSizePixel().Width() + _pWindow->GetPosPixel().X();
-            _rnMaxXPosition = ::std::max(_rnMaxXPosition, nTemp);
+            _rnMaxXPosition = std::max(_rnMaxXPosition, nTemp);
         }
     }
 }
@@ -666,7 +666,7 @@ void OFieldDescControl::ArrangeAggregates()
     {
         if (adAggregate.pctrlTextControl)
         {
-            nMaxWidth = ::std::max<long>(OutputDevice::GetTextWidth(adAggregate.pctrlTextControl->GetText()),nMaxWidth);
+            nMaxWidth = std::max<long>(OutputDevice::GetTextWidth(adAggregate.pctrlTextControl->GetText()),nMaxWidth);
         }
     }
 
@@ -1133,7 +1133,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         if (pFieldType->nPrecision)
         {
             ActivateAggregate( tpLength );
-            pLength->SetMax(::std::max<sal_Int32>(pFieldType->nPrecision,pFieldDescr->GetPrecision()));
+            pLength->SetMax(std::max<sal_Int32>(pFieldType->nPrecision,pFieldDescr->GetPrecision()));
             pLength->SetSpecialReadOnly(pFieldType->aCreateParams.isEmpty());
         }
         else
@@ -1142,7 +1142,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         if (pFieldType->nMaximumScale)
         {
             ActivateAggregate( tpScale );
-            pScale->SetMax(::std::max<sal_Int32>(pFieldType->nMaximumScale,pFieldDescr->GetScale()));
+            pScale->SetMax(std::max<sal_Int32>(pFieldType->nMaximumScale,pFieldDescr->GetScale()));
             pScale->SetMin(pFieldType->nMinimumScale);
             static const char s_sPRECISION[] = "PRECISION";
             pScale->SetSpecialReadOnly(pFieldType->aCreateParams.isEmpty() || pFieldType->aCreateParams == s_sPRECISION);
@@ -1164,7 +1164,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
                 if (pFieldType->nPrecision)
                 {
                     ActivateAggregate( tpTextLen );
-                    pTextLen->SetMax(::std::max<sal_Int32>(pFieldType->nPrecision,pFieldDescr->GetPrecision()));
+                    pTextLen->SetMax(std::max<sal_Int32>(pFieldType->nPrecision,pFieldDescr->GetPrecision()));
                     pTextLen->SetSpecialReadOnly(pFieldType->aCreateParams.isEmpty());
                 }
                 else

@@ -191,7 +191,7 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
 
     guard.reset();
 
-    ::std::pair< t_string2ref::iterator, bool > insertion(
+    std::pair< t_string2ref::iterator, bool > insertion(
         m_bound.insert( t_string2ref::value_type( url, xNewPackage ) ) );
     if (insertion.second)
     { // first insertion
@@ -254,7 +254,7 @@ void PackageRegistryBackend::deleteTempFolder(
 //If the folderURL has no '_' then there is no corresponding tmp file.
 void PackageRegistryBackend::deleteUnusedFolders(
     OUString const & relUrl,
-    ::std::list< OUString> const & usedFolders)
+    std::list< OUString> const & usedFolders)
 {
     try
     {
@@ -266,7 +266,7 @@ void PackageRegistryBackend::deleteUnusedFolders(
                  StrTitle::createCursor( tempFolder, ::ucbhelper::INCLUDE_FOLDERS_ONLY ) );
 
         // get all temp directories:
-        ::std::vector<OUString> tempEntries;
+        std::vector<OUString> tempEntries;
 
         const char tmp[] = ".tmp";
 
@@ -284,7 +284,7 @@ void PackageRegistryBackend::deleteUnusedFolders(
 
         for (OUString & tempEntrie : tempEntries)
         {
-            if (::std::find( usedFolders.begin(), usedFolders.end(), tempEntrie ) ==
+            if (std::find( usedFolders.begin(), usedFolders.end(), tempEntrie ) ==
                 usedFolders.end())
             {
                 deleteTempFolder(tempEntrie);

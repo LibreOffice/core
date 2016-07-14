@@ -109,7 +109,7 @@ namespace dbaui
                 if ( xChild.is() )
                     xStore.set( getDataSourceOrModel(xChild->getParent()), UNO_QUERY );
                 // check for the concrete type
-                if ( xStore.is() && !xStore->isReadonly() && ::std::any_of(_rFlavors.begin(),_rFlavors.end(),TAppSupportedSotFunctor(E_TABLE)) )
+                if ( xStore.is() && !xStore->isReadonly() && std::any_of(_rFlavors.begin(),_rFlavors.end(),TAppSupportedSotFunctor(E_TABLE)) )
                     return DND_ACTION_COPY;
             }
         }

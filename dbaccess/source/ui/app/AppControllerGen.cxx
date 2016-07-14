@@ -633,7 +633,7 @@ bool OApplicationController::isRenameDeleteAllowed(ElementType _eType, bool _bDe
             bCompareRes = getContainer()->getSelectionCount() == 1;
             if ( bEnabled && bCompareRes && E_TABLE == eType )
             {
-                ::std::vector< OUString> aList;
+                std::vector< OUString> aList;
                 getSelectionElementNames(aList);
 
                 try
@@ -690,7 +690,7 @@ void OApplicationController::onLoadedMenu(const Reference< css::frame::XLayoutMa
 
 void OApplicationController::doAction(sal_uInt16 _nId, const ElementOpenMode _eOpenMode)
 {
-    ::std::vector< OUString> aList;
+    std::vector< OUString> aList;
     getSelectionElementNames(aList);
     ElementType eType = getContainer()->getElementType();
     ::comphelper::NamedValueCollection aArguments;
@@ -701,16 +701,16 @@ void OApplicationController::doAction(sal_uInt16 _nId, const ElementOpenMode _eO
         eOpenMode = E_OPEN_NORMAL;
     }
 
-    ::std::vector< ::std::pair< OUString ,Reference< XModel > > > aComponents;
-    ::std::vector< OUString>::const_iterator aEnd = aList.end();
-    for (::std::vector< OUString>::const_iterator aIter = aList.begin(); aIter != aEnd; ++aIter)
+    std::vector< std::pair< OUString ,Reference< XModel > > > aComponents;
+    std::vector< OUString>::const_iterator aEnd = aList.end();
+    for (std::vector< OUString>::const_iterator aIter = aList.begin(); aIter != aEnd; ++aIter)
     {
         if ( SID_DB_APP_CONVERTTOVIEW == _nId )
             convertToView(*aIter);
         else
         {
             Reference< XModel > xModel( openElementWithArguments( *aIter, eType, eOpenMode, _nId,aArguments ), UNO_QUERY );
-            aComponents.push_back( ::std::pair< OUString, Reference< XModel > >( *aIter, xModel ) );
+            aComponents.push_back( std::pair< OUString, Reference< XModel > >( *aIter, xModel ) );
         }
     }
 
@@ -718,8 +718,8 @@ void OApplicationController::doAction(sal_uInt16 _nId, const ElementOpenMode _eO
     if ( _eOpenMode == E_OPEN_FOR_MAIL )
     {
 
-        ::std::vector< ::std::pair< OUString ,Reference< XModel > > >::const_iterator componentIter = aComponents.begin();
-        ::std::vector< ::std::pair< OUString ,Reference< XModel > > >::const_iterator componentEnd = aComponents.end();
+        std::vector< std::pair< OUString ,Reference< XModel > > >::const_iterator componentIter = aComponents.begin();
+        std::vector< std::pair< OUString ,Reference< XModel > > >::const_iterator componentEnd = aComponents.end();
         OUString aDocTypeString;
         SfxMailModel aSendMail;
         SfxMailModel::SendMailResult eResult = SfxMailModel::SEND_MAIL_OK;

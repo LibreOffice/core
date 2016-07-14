@@ -39,7 +39,7 @@ namespace dbaccess
 
 
     OPropertyForward::OPropertyForward( const Reference< XPropertySet>& _xSource, const Reference< XNameAccess>& _xDestContainer,
-            const OUString& _sName, const ::std::vector< OUString>& _aPropertyList )
+            const OUString& _sName, const std::vector< OUString>& _aPropertyList )
         :m_xSource( _xSource, UNO_SET_THROW )
         ,m_xDestContainer( _xDestContainer, UNO_SET_THROW )
         ,m_sName( _sName )
@@ -53,8 +53,8 @@ namespace dbaccess
                 _xSource->addPropertyChangeListener( OUString(), this );
             else
             {
-                ::std::vector< OUString >::const_iterator aIter = _aPropertyList.begin();
-                ::std::vector< OUString >::const_iterator aEnd = _aPropertyList.end();
+                std::vector< OUString >::const_iterator aIter = _aPropertyList.begin();
+                std::vector< OUString >::const_iterator aEnd = _aPropertyList.end();
                 for (; aIter != aEnd ; ++aIter )
                     _xSource->addPropertyChangeListener( *aIter, this );
             }

@@ -111,14 +111,14 @@ namespace
         bool bCreateTextureCoordinates)
     {
         OSL_ENSURE(rPolA.count() == rPolB.count(), "impAddInBetweenFill: unequally sized polygons (!)");
-        const sal_uInt32 nPolygonCount(::std::min(rPolA.count(), rPolB.count()));
+        const sal_uInt32 nPolygonCount(std::min(rPolA.count(), rPolB.count()));
 
         for(sal_uInt32 a(0L); a < nPolygonCount; a++)
         {
             const basegfx::B3DPolygon aSubA(rPolA.getB3DPolygon(a));
             const basegfx::B3DPolygon aSubB(rPolB.getB3DPolygon(a));
             OSL_ENSURE(aSubA.count() == aSubB.count(), "impAddInBetweenFill: unequally sized polygons (!)");
-            const sal_uInt32 nPointCount(::std::min(aSubA.count(), aSubB.count()));
+            const sal_uInt32 nPointCount(std::min(aSubA.count(), aSubB.count()));
 
             if(nPointCount)
             {
@@ -208,14 +208,14 @@ namespace
         bool bSmoothHorizontalNormals)
     {
         OSL_ENSURE(rPolA.count() == rPolB.count(), "sdrExtrudePrimitive3D: unequally sized polygons (!)");
-        const sal_uInt32 nPolygonCount(::std::min(rPolA.count(), rPolB.count()));
+        const sal_uInt32 nPolygonCount(std::min(rPolA.count(), rPolB.count()));
 
         for(sal_uInt32 a(0L); a < nPolygonCount; a++)
         {
             basegfx::B3DPolygon aSubA(rPolA.getB3DPolygon(a));
             basegfx::B3DPolygon aSubB(rPolB.getB3DPolygon(a));
             OSL_ENSURE(aSubA.count() == aSubB.count(), "sdrExtrudePrimitive3D: unequally sized polygons (!)");
-            const sal_uInt32 nPointCount(::std::min(aSubA.count(), aSubB.count()));
+            const sal_uInt32 nPointCount(std::min(aSubA.count(), aSubB.count()));
 
             if(nPointCount)
             {
@@ -292,14 +292,14 @@ namespace
     {
         const double fWeightB(1.0 - fWeightA);
         OSL_ENSURE(rPolA.count() == rPolB.count(), "sdrExtrudePrimitive3D: unequally sized polygons (!)");
-        const sal_uInt32 nPolygonCount(::std::min(rPolA.count(), rPolB.count()));
+        const sal_uInt32 nPolygonCount(std::min(rPolA.count(), rPolB.count()));
 
         for(sal_uInt32 a(0L); a < nPolygonCount; a++)
         {
             basegfx::B3DPolygon aSubA(rPolA.getB3DPolygon(a));
             const basegfx::B3DPolygon aSubB(rPolB.getB3DPolygon(a));
             OSL_ENSURE(aSubA.count() == aSubB.count(), "sdrExtrudePrimitive3D: unequally sized polygons (!)");
-            const sal_uInt32 nPointCount(::std::min(aSubA.count(), aSubB.count()));
+            const sal_uInt32 nPointCount(std::min(aSubA.count(), aSubB.count()));
 
             for(sal_uInt32 b(0L); b < nPointCount; b++)
             {
@@ -572,7 +572,7 @@ namespace drawinglayer
         }
 
         void extractPlanesFromSlice(
-            ::std::vector< basegfx::B3DPolyPolygon >& rFill,
+            std::vector< basegfx::B3DPolyPolygon >& rFill,
             const Slice3DVector& rSliceVector,
             bool bCreateNormals,
             bool bSmoothHorizontalNormals,
@@ -595,7 +595,7 @@ namespace drawinglayer
 
                 // texture parameters
                 double fInvTexHeight(1.0);
-                ::std::vector<double> aTexHeightArray;
+                std::vector<double> aTexHeightArray;
                 basegfx::B3DRange aTexRangeFront;
                 basegfx::B3DRange aTexRangeBack;
 
@@ -624,7 +624,7 @@ namespace drawinglayer
                         aCenter = aNextCenter;
                     }
 
-                    const double fTexHeight(::std::accumulate(aTexHeightArray.begin(), aTexHeightArray.end(), 0.0));
+                    const double fTexHeight(std::accumulate(aTexHeightArray.begin(), aTexHeightArray.end(), 0.0));
 
                     if(!basegfx::fTools::equalZero(fTexHeight))
                     {

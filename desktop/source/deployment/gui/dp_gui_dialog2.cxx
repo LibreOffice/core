@@ -92,7 +92,7 @@ struct StrAllFiles : public rtl::StaticWithInit< OUString, StrAllFiles >
 {
     const OUString operator () () {
         const SolarMutexGuard guard;
-        ::std::unique_ptr< ResMgr > const resmgr( ResMgr::CreateResMgr( "fps_office" ) );
+        std::unique_ptr< ResMgr > const resmgr( ResMgr::CreateResMgr( "fps_office" ) );
         OSL_ASSERT( resmgr.get() != nullptr );
         return ResId(STR_FILTERNAME_ALL, *resmgr.get()).toString();
     }
@@ -885,7 +885,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
         xFilePicker->setDisplayDirectory( m_sLastFolderURL );
 
     // collect and set filter list:
-    typedef ::std::map< OUString, OUString > t_string2string;
+    typedef std::map< OUString, OUString > t_string2string;
     t_string2string title2filter;
     OUString sDefaultFilter( StrAllFiles::get() );
 
@@ -899,7 +899,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
         if (!filter.isEmpty())
         {
             const OUString title( xPackageType->getShortDescription() );
-            const ::std::pair< t_string2string::iterator, bool > insertion(
+            const std::pair< t_string2string::iterator, bool > insertion(
                 title2filter.insert( t_string2string::value_type( title, filter ) ) );
             if ( ! insertion.second )
             { // already existing, append extensions:

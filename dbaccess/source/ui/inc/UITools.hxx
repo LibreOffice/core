@@ -121,7 +121,7 @@ namespace dbaui
     void fillTypeInfo(  const css::uno::Reference< css::sdbc::XConnection>& _rxConnection,
                         const OUString& _rsTypeNames,
                         OTypeInfoMap& _rTypeInfoMap,
-                        ::std::vector<OTypeInfoMap::iterator>& _rTypeInfoIters);
+                        std::vector<OTypeInfoMap::iterator>& _rTypeInfoIters);
 
     /** fill a column with data of a field description
         @param  _rxColumn   the column which should be filled

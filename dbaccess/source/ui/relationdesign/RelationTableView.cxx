@@ -98,7 +98,7 @@ void ORelationTableView::ReSync()
     // Tables could have been hidden in the database, which are part of a relation. Or a table was in layout
     // (quite often without a relation) and does not exist anymore. In both cases creation of TabWins will fail
     // and all TabWinDatas and related ConnDates should be deleted.
-    ::std::vector< OUString> arrInvalidTables;
+    std::vector< OUString> arrInvalidTables;
 
     // create and insert windows
     TTableWindowData& rTabWinDataList = m_pView->getController().getTableWindowData();
@@ -116,7 +116,7 @@ void ORelationTableView::ReSync()
             pTabWin.disposeAndClear();
             arrInvalidTables.push_back(pData->GetTableName());
 
-            rTabWinDataList.erase( ::std::remove(rTabWinDataList.begin(), rTabWinDataList.end(), *aIter), rTabWinDataList.end());
+            rTabWinDataList.erase( std::remove(rTabWinDataList.begin(), rTabWinDataList.end(), *aIter), rTabWinDataList.end());
             continue;
         }
 
@@ -139,14 +139,14 @@ void ORelationTableView::ReSync()
         {
             // do the tables to the  connection exist?
             OUString strTabExistenceTest = pTabConnData->getReferencingTable()->GetTableName();
-            bool bInvalid = ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
+            bool bInvalid = std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
             strTabExistenceTest = pTabConnData->getReferencedTable()->GetTableName();
-            bInvalid = bInvalid || ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
+            bInvalid = bInvalid || std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
 
             if (bInvalid)
             {
                 // no -> bad luck, the connection is gone
-                rTabConnDataList.erase( ::std::remove(rTabConnDataList.begin(), rTabConnDataList.end(), *aConIter), rTabConnDataList.end() );
+                rTabConnDataList.erase( std::remove(rTabConnDataList.begin(), rTabConnDataList.end(), *aConIter), rTabConnDataList.end() );
                 continue;
             }
         }

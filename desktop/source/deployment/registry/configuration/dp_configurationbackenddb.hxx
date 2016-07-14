@@ -70,7 +70,7 @@ public:
     void addEntry(OUString const & url, Data const & data);
 
     ::boost::optional<Data> getEntry(OUString const & url);
-    ::std::list< OUString> getAllDataUrls();
+    std::list< OUString> getAllDataUrls();
 };
 
 

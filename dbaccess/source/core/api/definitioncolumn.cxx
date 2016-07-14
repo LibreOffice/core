@@ -429,7 +429,7 @@ Sequence< OUString > OTableColumnDescriptorWrapper::getSupportedServiceNames(  )
     const sal_Int32 nHaveAlways = 7;
 
     // Which optional properties are contained?
-    const sal_Int32 nHaveOptionally (::std::bitset<7>(nId).count());
+    const sal_Int32 nHaveOptionally (std::bitset<7>(nId).count());
 
     BEGIN_PROPERTY_SEQUENCE( nHaveAlways + nHaveOptionally )
 

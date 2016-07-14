@@ -699,7 +699,7 @@ void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& r
 
                 if(!xField.is())
                     break;
-                ::std::vector< std::shared_ptr<OTableRow> > vClipboardList;
+                std::vector< std::shared_ptr<OTableRow> > vClipboardList;
                 // send it to the clipboard
                 vClipboardList.push_back(std::make_shared<OTableRow>(xField));
                 OTableRowExchange* pData = new OTableRowExchange(vClipboardList);
@@ -1252,7 +1252,7 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
 }
 
 /// unary_function Functor object for class ZZ returntype is void
-    struct SbaGridControlPrec : ::std::unary_function<DataFlavorExVector::value_type,bool>
+    struct SbaGridControlPrec : std::unary_function<DataFlavorExVector::value_type,bool>
     {
         inline bool operator()(const DataFlavorExVector::value_type& _aType)
         {
@@ -1356,7 +1356,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
     if(nAction != DND_ACTION_COPY && GetEmptyRow().Is())
     {
         const DataFlavorExVector& _rFlavors = GetDataFlavors();
-        if(::std::any_of(_rFlavors.begin(),_rFlavors.end(),SbaGridControlPrec()))
+        if(std::any_of(_rFlavors.begin(),_rFlavors.end(),SbaGridControlPrec()))
             nAction = DND_ACTION_COPY;
     }
 
@@ -1417,7 +1417,7 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
     if(GetEmptyRow().Is())
     {
         const DataFlavorExVector& _rFlavors = GetDataFlavors();
-        if( ::std::any_of(_rFlavors.begin(),_rFlavors.end(), SbaGridControlPrec()) )
+        if( std::any_of(_rFlavors.begin(),_rFlavors.end(), SbaGridControlPrec()) )
         {
             TransferableDataHelper aDropped( rEvt.maDropEvent.Transferable );
             m_aDataDescriptor = ODataAccessObjectTransferable::extractObjectDescriptor(aDropped);

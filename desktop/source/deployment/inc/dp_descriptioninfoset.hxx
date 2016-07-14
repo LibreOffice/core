@@ -115,7 +115,7 @@ public:
 
         In case there is no publisher element then a pair of two empty strings is returned.
     */
-    ::std::pair< OUString, OUString > getLocalizedPublisherNameAndURL() const;
+    std::pair< OUString, OUString > getLocalizedPublisherNameAndURL() const;
 
     /**
         Returns the URL for the release notes corresponding to the office's locale.

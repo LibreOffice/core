@@ -29,7 +29,7 @@ namespace dbaui
     class ORelationController : public OJoinController
     {
         css::uno::Reference< css::container::XNameAccess >    m_xTables;
-        ::std::unique_ptr<WaitObject> m_pWaitObject;
+        std::unique_ptr<WaitObject> m_pWaitObject;
         sal_uLong       m_nThreadEvent;
         bool            m_bRelationsPossible;
     protected:

@@ -398,8 +398,8 @@ void ORowSetCache::setFetchSize(sal_Int32 _nSize)
     else
     {
         // now correct the iterator in our iterator vector
-        ::std::vector<sal_Int32> aPositions;
-        ::std::map<sal_Int32,bool> aCacheIterToChange;
+        std::vector<sal_Int32> aPositions;
+        std::map<sal_Int32,bool> aCacheIterToChange;
         // first get the positions where they stand now
         ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
         ORowSetCacheMap::const_iterator aCacheEnd = m_aCacheIterators.end();
@@ -424,8 +424,8 @@ void ORowSetCache::setFetchSize(sal_Int32 _nSize)
         m_aMatrixEnd = m_pMatrix->end();
 
         // now adjust their positions because a resize invalidates all iterators
-        ::std::vector<sal_Int32>::const_iterator aIter = aPositions.begin();
-        ::std::map<sal_Int32,bool>::const_iterator aPosChangeIter = aCacheIterToChange.begin();
+        std::vector<sal_Int32>::const_iterator aIter = aPositions.begin();
+        std::map<sal_Int32,bool>::const_iterator aPosChangeIter = aCacheIterToChange.begin();
         for(    aCacheIter = m_aCacheIterators.begin();
                 aPosChangeIter != aCacheIterToChange.end();
                 ++aPosChangeIter,++aCacheIter)
@@ -565,7 +565,7 @@ sal_Int32 ORowSetCache::hashBookmark( const Any& bookmark )
 
 // XRowUpdate
 void ORowSetCache::updateNull(sal_Int32 columnIndex,ORowSetValueVector::Vector& io_aRow
-                              ,::std::vector<sal_Int32>& o_ChangedColumns
+                              ,std::vector<sal_Int32>& o_ChangedColumns
                               )
 {
     checkUpdateConditions(columnIndex);
@@ -585,7 +585,7 @@ void ORowSetCache::updateNull(sal_Int32 columnIndex,ORowSetValueVector::Vector& 
 
 void ORowSetCache::updateValue(sal_Int32 columnIndex,const ORowSetValue& x
                                ,ORowSetValueVector::Vector& io_aRow
-                               ,::std::vector<sal_Int32>& o_ChangedColumns
+                               ,std::vector<sal_Int32>& o_ChangedColumns
                                )
 {
     checkUpdateConditions(columnIndex);
@@ -605,7 +605,7 @@ void ORowSetCache::updateValue(sal_Int32 columnIndex,const ORowSetValue& x
 
 void ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference< css::io::XInputStream >& x
                                          , sal_Int32 length,ORowSetValueVector::Vector& io_aRow
-                                         ,::std::vector<sal_Int32>& o_ChangedColumns
+                                         ,std::vector<sal_Int32>& o_ChangedColumns
                                          )
 {
     checkUpdateConditions(columnIndex);
@@ -626,7 +626,7 @@ void ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference
 
 void ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x
                                 ,ORowSetValueVector::Vector& io_aRow
-                                ,::std::vector<sal_Int32>& o_ChangedColumns
+                                ,std::vector<sal_Int32>& o_ChangedColumns
                                 )
 {
     checkUpdateConditions(columnIndex);
@@ -648,7 +648,7 @@ void ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x
 
 void ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 /*scale*/
                                        ,ORowSetValueVector::Vector& io_aRow
-                                       ,::std::vector<sal_Int32>& o_ChangedColumns
+                                       ,std::vector<sal_Int32>& o_ChangedColumns
                                        )
 {
     checkUpdateConditions(columnIndex);
@@ -808,7 +808,7 @@ bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos, sal_Int32 &_nNewEndPos)
                 bCheck = m_pCacheSet->next();
             }
             if(aIter != aEnd)
-                ::std::rotate(m_pMatrix->begin(),aEnd,aIter);
+                std::rotate(m_pMatrix->begin(),aEnd,aIter);
             break;
         }
         bCheck = m_pCacheSet->next();
@@ -925,7 +925,7 @@ void ORowSetCache::moveWindow()
                     fill(aIter, aNewEnd, nPos, bCheck);
                 }
 
-                ::std::rotate(m_pMatrix->begin(), aEnd, aNewEnd);
+                std::rotate(m_pMatrix->begin(), aEnd, aNewEnd);
                 // now correct the iterator in our iterator vector
                 //  rotateCacheIterator(aEnd-m_pMatrix->begin()); //can't be used because they decrement and here we need to increment
                 ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
@@ -1007,7 +1007,7 @@ void ORowSetCache::moveWindow()
             {
                 OSL_ENSURE(aIter == aEnd, "fill() said went till end, but did not.");
                 // rotate the end to the front
-                ::std::rotate(m_pMatrix->begin(), aIter, aDataEnd);
+                std::rotate(m_pMatrix->begin(), aIter, aDataEnd);
                 // now correct the iterator in our iterator vector
                 rotateCacheIterator( nNewStartPosInMatrix );
                 m_nStartPos = nNewStartPos;
@@ -1041,7 +1041,7 @@ void ORowSetCache::moveWindow()
                 nPos -= 1;
                 m_nStartPos += nFetchedRows;
                 m_nEndPos = nPos;
-                ::std::rotate(m_pMatrix->begin(), aIter, aDataEnd);
+                std::rotate(m_pMatrix->begin(), aIter, aDataEnd);
                 // now correct the iterator in our iterator vector
                 rotateCacheIterator( nFetchedRows );
 
@@ -1284,7 +1284,7 @@ bool ORowSetCache::rowInserted(  )
 }
 
 // XResultSetUpdate
-bool ORowSetCache::insertRow(::std::vector< Any >& o_aBookmarks)
+bool ORowSetCache::insertRow(std::vector< Any >& o_aBookmarks)
 {
     if ( !m_bNew || !m_aInsertRow->is() )
         throw SQLException(DBACORE_RESSTRING(RID_STR_NO_MOVETOINSERTROW_CALLED),nullptr,SQLSTATE_GENERAL,1000,Any() );
@@ -1340,7 +1340,7 @@ void ORowSetCache::cancelRowModification()
     resetInsertRow(false);
 }
 
-void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow,::std::vector< Any >& o_aBookmarks )
+void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow,std::vector< Any >& o_aBookmarks )
 {
     if(isAfterLast() || isBeforeFirst())
         throw SQLException(DBACORE_RESSTRING(RID_STR_NO_UPDATEROW),nullptr,SQLSTATE_GENERAL,1000,Any() );
@@ -1581,7 +1581,7 @@ bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
     OUString sSql = _xAnalyzer->getQuery();
     OUString sErrorMsg;
     ::connectivity::OSQLParser aSqlParser( m_aContext );
-    ::std::unique_ptr< ::connectivity::OSQLParseNode> pSqlParseNode( aSqlParser.parseTree(sErrorMsg,sSql));
+    std::unique_ptr< ::connectivity::OSQLParseNode> pSqlParseNode( aSqlParser.parseTree(sErrorMsg,sSql));
     if ( pSqlParseNode.get() && SQL_ISRULE(pSqlParseNode, select_statement) )
     {
         OSQLParseNode* pTableRefCommalist = pSqlParseNode->getByRule(::connectivity::OSQLParseNode::table_ref_commalist);
@@ -1732,7 +1732,7 @@ void ORowSetCache::reset(const Reference< XResultSet>& _xDriverSet)
 }
 
 void ORowSetCache::impl_updateRowFromCache_throw(ORowSetValueVector::Vector& io_aRow
-                                           ,::std::vector<sal_Int32>& o_ChangedColumns)
+                                           ,std::vector<sal_Int32>& o_ChangedColumns)
 {
     if ( o_ChangedColumns.size() > 1 )
     {

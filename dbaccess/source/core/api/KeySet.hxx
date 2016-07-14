@@ -61,7 +61,7 @@ namespace dbaccess
         {
         }
     };
-    typedef ::std::map< OUString, SelectColumnDescription, ::comphelper::UStringMixLess >    SelectColumnsMetaData;
+    typedef std::map< OUString, SelectColumnDescription, ::comphelper::UStringMixLess >      SelectColumnsMetaData;
 
     // the elements of _rxQueryColumns must have the properties PROPERTY_REALNAME and PROPERTY_TABLENAME
     void getColumnPositions(const css::uno::Reference< css::container::XNameAccess >& _rxQueryColumns,
@@ -70,9 +70,9 @@ namespace dbaccess
                             SelectColumnsMetaData& o_rColumnNames /* out */,
                             bool i_bAppendTableName = false);
 
-    typedef ::std::pair<ORowSetRow,::std::pair<sal_Int32,css::uno::Reference< css::sdbc::XRow> > > OKeySetValue;
-    typedef ::std::map<sal_Int32,OKeySetValue > OKeySetMatrix;
-    typedef ::std::map<sal_Int32, rtl::Reference<ORowSetValueVector> > OUpdatedParameter;
+    typedef std::pair<ORowSetRow,std::pair<sal_Int32,css::uno::Reference< css::sdbc::XRow> > > OKeySetValue;
+    typedef std::map<sal_Int32,OKeySetValue > OKeySetMatrix;
+    typedef std::map<sal_Int32, rtl::Reference<ORowSetValueVector> > OUpdatedParameter;
     // is used when the source supports keys
     class OKeySet : public OCacheSet
     {
@@ -80,22 +80,22 @@ namespace dbaccess
         OKeySetMatrix                                           m_aKeyMap;
         OKeySetMatrix::iterator                                 m_aKeyIter;
 
-        ::std::vector< OUString >                               m_aAutoColumns;  // contains all columns which are autoincrement ones
+        std::vector< OUString >                                 m_aAutoColumns;  // contains all columns which are autoincrement ones
 
         OUpdatedParameter                                       m_aUpdatedParameter;    // contains all parameter which have been updated and are needed for refetching
         rtl::Reference<ORowSetValueVector>                      m_aParameterValueForCache;
-        ::std::unique_ptr<SelectColumnsMetaData>                m_pKeyColumnNames;      // contains all key column names
-        ::std::unique_ptr<SelectColumnsMetaData>                m_pColumnNames;         // contains all column names
-        ::std::unique_ptr<SelectColumnsMetaData>                m_pParameterNames;      // contains all parameter names
-        ::std::unique_ptr<SelectColumnsMetaData>                m_pForeignColumnNames;  // contains all column names of the rest
+        std::unique_ptr<SelectColumnsMetaData>                  m_pKeyColumnNames;      // contains all key column names
+        std::unique_ptr<SelectColumnsMetaData>                  m_pColumnNames;         // contains all column names
+        std::unique_ptr<SelectColumnsMetaData>                  m_pParameterNames;      // contains all parameter names
+        std::unique_ptr<SelectColumnsMetaData>                  m_pForeignColumnNames;  // contains all column names of the rest
         connectivity::OSQLTable                                 m_xTable; // reference to our table
         css::uno::Reference< css::container::XIndexAccess>      m_xTableKeys;
         // we need a different SQL (statement) for each different combination
         // of NULLness of key & foreign columns;
         // each subclause is either "colName = ?" or "colName IS NULL"
         // (we avoid the standard "colName IS NOT DISTINCT FROM ?" because it is not widely supported)
-        typedef ::std::vector< bool > FilterColumnsNULL_t;
-        typedef ::std::map< FilterColumnsNULL_t,
+        typedef std::vector< bool > FilterColumnsNULL_t;
+        typedef std::map< FilterColumnsNULL_t,
                             css::uno::Reference< css::sdbc::XPreparedStatement > >
                 vStatements_t;
         vStatements_t                                           m_vStatements;
@@ -104,7 +104,7 @@ namespace dbaccess
         css::uno::Reference< css::sdbc::XRow>                   m_xRow;
         css::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >   m_xComposer;
         const OUString                                          m_sUpdateTableName;
-        ::std::vector< OUString >                               m_aFilterColumns;
+        std::vector< OUString >                                 m_aFilterColumns;
         sal_Int32&                                              m_rRowCount;
 
         bool m_bRowCountFinal;
@@ -129,7 +129,7 @@ namespace dbaccess
                                              const OUString& i_rUpdateTableName,
                                              const css::uno::Reference< css::sdbc::XDatabaseMetaData>& i_xMeta,
                                              const css::uno::Reference< css::container::XNameAccess>& i_xQueryColumns,
-                                             ::std::unique_ptr<SelectColumnsMetaData>& o_pKeyColumnNames);
+                                             std::unique_ptr<SelectColumnsMetaData>& o_pKeyColumnNames);
         void ensureStatement( );
         virtual void makeNewStatement( );
         static void setOneKeyColumnParameter( sal_Int32 &nPos,
@@ -140,7 +140,7 @@ namespace dbaccess
         OUStringBuffer createKeyFilter( );
         bool doTryRefetch_throw() throw(css::sdbc::SQLException, css::uno::RuntimeException);
         void tryRefetch(const ORowSetRow& _rInsertRow,bool bRefetch);
-        void executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const OUString& i_sSQL,const OUString& i_sTableName,const ::std::vector<sal_Int32>& _aIndexColumnPositions = ::std::vector<sal_Int32>());
+        void executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const OUString& i_sSQL,const OUString& i_sTableName,const std::vector<sal_Int32>& _aIndexColumnPositions = std::vector<sal_Int32>());
         void executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQL,const OUString& i_sTableName = OUString(),bool bRefetch = false);
         void executeStatement(OUStringBuffer& io_aFilter, css::uno::Reference< css::sdb::XSingleSelectQueryComposer>& io_xAnalyzer);
 

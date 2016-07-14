@@ -227,11 +227,11 @@ namespace dbaui
         if ( !m_pImpl->documentHasScriptSupport() )
         {
             Sequence< Type > aStrippedTypes( aTypes.getLength() - 1 );
-            ::std::remove_copy_if(
+            std::remove_copy_if(
                 aTypes.getConstArray(),
                 aTypes.getConstArray() + aTypes.getLength(),
                 aStrippedTypes.getArray(),
-                ::std::bind2nd( ::std::equal_to< Type >(), cppu::UnoType<XScriptInvocationContext>::get() )
+                std::bind2nd( std::equal_to< Type >(), cppu::UnoType<XScriptInvocationContext>::get() )
             );
             aTypes = aStrippedTypes;
         }

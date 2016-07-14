@@ -41,7 +41,7 @@ namespace dbaui
             @param  _out_rDetailsIds
                 Will be filled.
         */
-        static void getSupportedIndirectSettings( const OUString& _sURLPrefix,const css::uno::Reference< css::uno::XComponentContext >& _xContext,::std::vector< sal_Int32>& _out_rDetailsIds );
+        static void getSupportedIndirectSettings( const OUString& _sURLPrefix,const css::uno::Reference< css::uno::XComponentContext >& _xContext,std::vector< sal_Int32>& _out_rDetailsIds );
 
         /** Creates the detail page for ado
         */

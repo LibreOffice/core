@@ -300,7 +300,7 @@ void ODbaseIndexDialog::Init()
     OUString aIndexExt("ndx");
     OUString aTableExt("dbf");
 
-    ::std::vector< OUString > aUsedIndexes;
+    std::vector< OUString > aUsedIndexes;
 
     const OUString *pBegin = aFolderContent.getConstArray();
     const OUString *pEnd   = pBegin + aFolderContent.getLength();
@@ -353,7 +353,7 @@ void ODbaseIndexDialog::Init()
         }
     }
 
-    for (   ::std::vector< OUString >::const_iterator aUsedIndex = aUsedIndexes.begin();
+    for (   std::vector< OUString >::const_iterator aUsedIndex = aUsedIndexes.begin();
             aUsedIndex != aUsedIndexes.end();
             ++aUsedIndex
         )

@@ -61,7 +61,7 @@ namespace dbaui
         ::dbaccess::ODsnTypeCollection*
                             m_pCollection;  /// the DSN type collection instance
 
-        ::std::vector< OUString>
+        std::vector< OUString>
                             m_aURLPrefixes;
 
     public:
@@ -83,9 +83,9 @@ namespace dbaui
         virtual bool approveDatasourceType( ::dbaccess::DATASOURCE_TYPE eType, OUString& _inout_rDisplayName );
 
         // <method>OGenericAdministrationPage::fillControls</method>
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillControls(std::vector< ISaveValueWrapper* >& _rControlList) override;
         // <method>OGenericAdministrationPage::fillWindows</method>
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(std::vector< ISaveValueWrapper* >& _rControlList) override;
 
         void onTypeSelected(const OUString& _sURLPrefix);
         void initializeTypeList();
@@ -178,7 +178,7 @@ namespace dbaui
         virtual OUString getDatasourceName( const SfxItemSet& _rSet ) override;
         virtual bool approveDatasourceType( ::dbaccess::DATASOURCE_TYPE eType, OUString& _inout_rDisplayName ) override;
 
-        ::std::vector< OUString>
+        std::vector< OUString>
                             m_aEmbeddedURLPrefixes;
 
         OUString getEmbeddedDBName( const SfxItemSet& _rSet );

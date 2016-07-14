@@ -100,7 +100,7 @@ namespace drawinglayer
             if(fLogicDashLength > 0.0 && !getRGBColorA().equal(getRGBColorB()))
             {
                 // apply dashing; get line and gap snippets
-                ::std::vector< double > aDash;
+                std::vector< double > aDash;
                 basegfx::B2DPolyPolygon aDashedPolyPolyA;
                 basegfx::B2DPolyPolygon aDashedPolyPolyB;
 

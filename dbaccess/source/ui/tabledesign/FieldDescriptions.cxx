@@ -189,13 +189,13 @@ void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,bool _bForce
                     sal_Int32 nPrec = DEFAULT_VARCHAR_PRECISION;
                     if ( GetPrecision() )
                         nPrec = GetPrecision();
-                    SetPrecision(::std::min<sal_Int32>(nPrec,_pType->nPrecision));
+                    SetPrecision(std::min<sal_Int32>(nPrec,_pType->nPrecision));
                 }
                 break;
             case DataType::TIMESTAMP:
                 if ( bForce && _pType->nMaximumScale)
                 {
-                    SetScale(::std::min<sal_Int32>(GetScale() ? GetScale() : DEFAULT_NUMERIC_SCALE,_pType->nMaximumScale));
+                    SetScale(std::min<sal_Int32>(GetScale() ? GetScale() : DEFAULT_NUMERIC_SCALE,_pType->nMaximumScale));
                 }
                 break;
             default:
@@ -216,9 +216,9 @@ void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,bool _bForce
                     }
 
                     if ( _pType->nPrecision )
-                        SetPrecision(::std::min<sal_Int32>(nPrec ? nPrec : DEFAULT_NUMERIC_PRECISION,_pType->nPrecision));
+                        SetPrecision(std::min<sal_Int32>(nPrec ? nPrec : DEFAULT_NUMERIC_PRECISION,_pType->nPrecision));
                     if ( _pType->nMaximumScale )
-                        SetScale(::std::min<sal_Int32>(GetScale() ? GetScale() : DEFAULT_NUMERIC_SCALE,_pType->nMaximumScale));
+                        SetScale(std::min<sal_Int32>(GetScale() ? GetScale() : DEFAULT_NUMERIC_SCALE,_pType->nMaximumScale));
                 }
         }
         if ( _pType->aCreateParams.isEmpty() )

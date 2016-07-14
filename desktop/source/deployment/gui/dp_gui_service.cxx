@@ -214,7 +214,7 @@ void ServiceImpl::startExecuteModal(
     throw (RuntimeException, std::exception)
 {
     bool bCloseDialog = true;  // only used if m_bShowUpdateOnly is true
-    ::std::unique_ptr<Application> app;
+    std::unique_ptr<Application> app;
     //ToDo: synchronize access to s_dialog !!!
     if (! dp_gui::TheExtensionManager::s_ExtMgr.is())
     {

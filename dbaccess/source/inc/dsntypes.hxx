@@ -176,7 +176,7 @@ public:
     /// get access to the (last + 1st) element of the types collection
     inline TypeIterator    end() const;
 
-    void fillPageIds(const OUString& _sURL,::std::vector<sal_Int16>& _rOutPathIds) const;
+    void fillPageIds(const OUString& _sURL,std::vector<sal_Int16>& _rOutPathIds) const;
 
     DATASOURCE_TYPE determineType(const OUString& _rDsn) const;
 

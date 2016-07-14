@@ -194,7 +194,7 @@ extern "C" int unopkg_main()
     OUString logFile;
     OUString repository;
     OUString cmdArg;
-    ::std::vector<OUString> cmdPackages;
+    std::vector<OUString> cmdPackages;
 
     OptionInfo const * info_shared = getOptionInfo(
         s_option_infos, "shared" );
@@ -406,7 +406,7 @@ extern "C" int unopkg_main()
         }
         else if ( subCommand == "list" )
         {
-            ::std::vector<Reference<deployment::XPackage> > vecExtUnaccepted;
+            std::vector<Reference<deployment::XPackage> > vecExtUnaccepted;
             ::comphelper::sequenceToContainer(vecExtUnaccepted,
                     xExtensionManager->getExtensionsWithUnacceptedLicenses(
                         repository, xCmdEnv));
@@ -421,24 +421,24 @@ extern "C" int unopkg_main()
                     packages = xExtensionManager->getDeployedExtensions(
                         repository, Reference<task::XAbortChannel>(), xCmdEnv );
 
-                ::std::vector<Reference<deployment::XPackage> > vec_packages;
+                std::vector<Reference<deployment::XPackage> > vec_packages;
                 ::comphelper::sequenceToContainer(vec_packages, packages);
 
                 //First copy the extensions with the unaccepted license
                 //to vector allExtensions.
                 allExtensions.resize(vecExtUnaccepted.size() + vec_packages.size());
 
-                ::std::vector<Reference<deployment::XPackage> >::iterator i_all_ext =
-                      ::std::copy(vecExtUnaccepted.begin(), vecExtUnaccepted.end(),
+                std::vector<Reference<deployment::XPackage> >::iterator i_all_ext =
+                      std::copy(vecExtUnaccepted.begin(), vecExtUnaccepted.end(),
                                   allExtensions.begin());
                 //Now copy those we got from getDeployedExtensions
-                ::std::copy(vec_packages.begin(), vec_packages.end(), i_all_ext);
+                std::copy(vec_packages.begin(), vec_packages.end(), i_all_ext);
 
                 //Now prepare the vector which tells what extension has an
                 //unaccepted license
                 vecUnaccepted.resize(vecExtUnaccepted.size() + vec_packages.size());
-                ::std::fill_n(vecUnaccepted.begin(), vecExtUnaccepted.size(), true);
-                ::std::fill_n(vecUnaccepted.begin() + vecExtUnaccepted.size(),
+                std::fill_n(vecUnaccepted.begin(), vecExtUnaccepted.size(), true);
+                std::fill_n(vecUnaccepted.begin() + vecExtUnaccepted.size(),
                       vec_packages.size(), false);
 
                 dp_misc::writeConsole(
@@ -466,8 +466,8 @@ extern "C" int unopkg_main()
                     bool bUnacceptedLic = false;
                     if (!extension.is())
                     {
-                        ::std::vector<Reference<deployment::XPackage> >::const_iterator
-                            i = ::std::find_if(
+                        std::vector<Reference<deployment::XPackage> >::const_iterator
+                            i = std::find_if(
                                 vecExtUnaccepted.begin(),
                                 vecExtUnaccepted.end(), ExtensionName(cmdPackage));
                         if (i != vecExtUnaccepted.end())
@@ -495,7 +495,7 @@ extern "C" int unopkg_main()
         }
         else if ( subCommand == "validate" )
         {
-            ::std::vector<Reference<deployment::XPackage> > vecExtUnaccepted;
+            std::vector<Reference<deployment::XPackage> > vecExtUnaccepted;
             ::comphelper::sequenceToContainer(
                 vecExtUnaccepted, xExtensionManager->getExtensionsWithUnacceptedLicenses(
                     repository, xCmdEnv));
@@ -516,8 +516,8 @@ extern "C" int unopkg_main()
 
                 if (!extension.is())
                 {
-                    ::std::vector<Reference<deployment::XPackage> >::const_iterator
-                        i = ::std::find_if(
+                    std::vector<Reference<deployment::XPackage> >::const_iterator
+                        i = std::find_if(
                             vecExtUnaccepted.begin(),
                             vecExtUnaccepted.end(), ExtensionName(cmdPackage));
                     if (i != vecExtUnaccepted.end())

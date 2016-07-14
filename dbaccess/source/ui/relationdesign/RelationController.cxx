@@ -274,7 +274,7 @@ namespace
 {
     class RelationLoader : public ::osl::Thread
     {
-        typedef std::map<OUString, ::std::shared_ptr<OTableWindowData>, ::comphelper::UStringMixLess> TTableDataHelper;
+        typedef std::map<OUString, std::shared_ptr<OTableWindowData>, ::comphelper::UStringMixLess> TTableDataHelper;
         TTableDataHelper                    m_aTableData;
         TTableConnectionData                m_vTableConnectionData;
         const Sequence< OUString>    m_aTableList;
@@ -442,7 +442,7 @@ void ORelationController::mergeData(const TTableConnectionData& _aConnectionData
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
-    ::std::copy( _aConnectionData.begin(), _aConnectionData.end(), ::std::back_inserter( m_vTableConnectionData ));
+    std::copy( _aConnectionData.begin(), _aConnectionData.end(), std::back_inserter( m_vTableConnectionData ));
     // here we are finished, so we can collect the table from connection data
     TTableConnectionData::const_iterator aConnDataIter = m_vTableConnectionData.begin();
     TTableConnectionData::const_iterator aConnDataEnd = m_vTableConnectionData.end();
@@ -501,7 +501,7 @@ void ORelationController::loadData()
         if ( aMeta.supportsThreads() )
         {
             const sal_Int32 nMaxElements = (nCount / MAX_THREADS) +1;
-            sal_Int32 nStart = 0,nEnd = ::std::min(nMaxElements,nCount);
+            sal_Int32 nStart = 0,nEnd = std::min(nMaxElements,nCount);
             while(nStart != nEnd)
             {
                 ++m_nThreadEvent;
@@ -511,7 +511,7 @@ void ORelationController::loadData()
                 pThread->resume();
                 nStart = nEnd;
                 nEnd += nMaxElements;
-                nEnd = ::std::min(nEnd,nCount);
+                nEnd = std::min(nEnd,nCount);
             }
         }
         else

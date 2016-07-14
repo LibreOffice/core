@@ -182,7 +182,7 @@ namespace dbaui
         m_aGetExtensionHandler.Call(this);
     }
 
-    void OTextConnectionHelper::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
+    void OTextConnectionHelper::fillControls(std::vector< ISaveValueWrapper* >& _rControlList)
     {
         _rControlList.push_back(new OSaveValueWrapper<ComboBox>(m_pFieldSeparator));
         _rControlList.push_back(new OSaveValueWrapper<ComboBox>(m_pTextSeparator));
@@ -192,7 +192,7 @@ namespace dbaui
         _rControlList.push_back(new OSaveValueWrapper<ListBox>(m_pCharSet));
     }
 
-    void OTextConnectionHelper::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+    void OTextConnectionHelper::fillWindows(std::vector< ISaveValueWrapper* >& _rControlList)
     {
         _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFieldSeparatorLabel));
         _rControlList.push_back(new ODisableWrapper<FixedText>(m_pTextSeparatorLabel));

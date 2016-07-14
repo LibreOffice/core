@@ -974,7 +974,7 @@ namespace drawinglayer
             if(mfOffsetA > mfOffsetB)
             {
                 OSL_ENSURE(false, "Wrong offset order (!)");
-                ::std::swap(mfOffsetA, mfOffsetB);
+                std::swap(mfOffsetA, mfOffsetB);
             }
         }
 
@@ -1081,18 +1081,18 @@ namespace drawinglayer
             }
 
             // scale A and B have to be positive
-            mfScaleA = ::std::max(mfScaleA, 0.0);
-            mfScaleB = ::std::max(mfScaleB, 0.0);
+            mfScaleA = std::max(mfScaleA, 0.0);
+            mfScaleB = std::max(mfScaleB, 0.0);
 
             // scale B has to be bigger than scale A; swap if different
             if(mfScaleA > mfScaleB)
             {
                 OSL_ENSURE(false, "Wrong offset order (!)");
-                ::std::swap(mfScaleA, mfScaleB);
+                std::swap(mfScaleA, mfScaleB);
 
                 if(mpTranslate)
                 {
-                    ::std::swap(mpTranslate->maTranslateA, mpTranslate->maTranslateB);
+                    std::swap(mpTranslate->maTranslateA, mpTranslate->maTranslateB);
                 }
             }
         }
@@ -1108,14 +1108,14 @@ namespace drawinglayer
             mpTranslate(nullptr)
         {
             // scale A and B have to be positive
-            mfScaleA = ::std::max(mfScaleA, 0.0);
-            mfScaleB = ::std::max(mfScaleB, 0.0);
+            mfScaleA = std::max(mfScaleA, 0.0);
+            mfScaleB = std::max(mfScaleB, 0.0);
 
             // scale B has to be bigger than scale A; swap if different
             if(mfScaleA > mfScaleB)
             {
                 OSL_ENSURE(false, "Wrong offset order (!)");
-                ::std::swap(mfScaleA, mfScaleB);
+                std::swap(mfScaleA, mfScaleB);
             }
         }
 

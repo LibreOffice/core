@@ -55,7 +55,7 @@ namespace dbmm
         virtual ~ProgressCapture();
 
     private:
-        ::std::unique_ptr< ProgressCapture_Data > m_pData;
+        std::unique_ptr< ProgressCapture_Data > m_pData;
     };
 
 } // namespace dbmm
