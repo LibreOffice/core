@@ -157,6 +157,9 @@ public:
             void SetFontSize(const Fraction &rRelSize, FontSizeType nType);
             void SetSize(const Fraction &rScale);
 
+    /** Prepare preliminary settings about font and text
+     *  (e.g. maFace, meRectHorAlign, mnFlags, mnAttributes, etc.)
+     */
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     void PrepareAttributes();
 
