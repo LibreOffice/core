@@ -672,6 +672,8 @@ comphelper::ThreadPool* getLocalThreadPool()
     return pLocalPool;
 }
 
+namespace { class DeflateThread; }
+
 /// Holder for local data for a parallely-executed task to load a chart model
 class DeflateData
 {
@@ -730,6 +732,8 @@ public:
     }
 };
 
+namespace {
+
 /// Task for parallely-executed task to load a chart model
 class DeflateThread : public comphelper::ThreadTask
 {
@@ -767,6 +771,8 @@ private:
         }
     }
 };
+
+}
 
 //////////////////////////////////////////////////////////////////////////////
 
