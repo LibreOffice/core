@@ -366,8 +366,7 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                             aHelpText = pVar->GetName();
                             if ( aHelpText.isEmpty() )     // name is not copied with the passed parameters
                                 aHelpText = aWord;
-                            aHelpText += "=";
-                            aHelpText += pVar->GetOUString();
+                            aHelpText   += "=" + pVar->GetOUString();
                         }
                     }
                     if ( !aHelpText.isEmpty() )
@@ -1737,8 +1736,7 @@ void WatchWindow::AddWatch( const OUString& rVName )
     lcl_SeparateNameAndIndex( rVName, aVar, aIndex );
     WatchItem* pWatchItem = new WatchItem(aVar);
 
-    OUString aWatchStr_( aVar );
-    aWatchStr_ += "\t\t";
+    OUString aWatchStr_ = aVar + "\t\t";
     SvTreeListEntry* pNewEntry = aTreeListBox->InsertEntry( aWatchStr_, nullptr, true );
     pNewEntry->SetUserData( pWatchItem );
 

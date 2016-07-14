@@ -893,9 +893,7 @@ void LibPage::InsertLib()
                                          ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) && !xDlgLibContainer->isLibraryLink( aLibName ) ) )
                                     {
                                         OUString aErrStr( IDE_RESSTR(RID_STR_REPLACELIB) );
-                                        aErrStr = aErrStr.replaceAll("XX", aLibName);
-                                        aErrStr += "\n";
-                                        aErrStr += IDE_RESSTR(RID_STR_LIBISREADONLY);
+                                        aErrStr = aErrStr.replaceAll("XX", aLibName) + "\n" + IDE_RESSTR(RID_STR_LIBISREADONLY);
                                         ScopedVclPtrInstance<MessageDialog>::Create(this, aErrStr)->Execute();
                                         continue;
                                     }
@@ -910,9 +908,7 @@ void LibPage::InsertLib()
                                         aErrStr = IDE_RESSTR(RID_STR_REFNOTPOSSIBLE);
                                     else
                                         aErrStr = IDE_RESSTR(RID_STR_IMPORTNOTPOSSIBLE);
-                                    aErrStr = aErrStr.replaceAll("XX", aLibName);
-                                    aErrStr += "\n" ;
-                                    aErrStr += IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED);
+                                    aErrStr = aErrStr.replaceAll("XX", aLibName) + "\n" +IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED);
                                     ScopedVclPtrInstance<MessageDialog>::Create(this, aErrStr)->Execute();
                                     continue;
                                 }
