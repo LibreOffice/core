@@ -65,6 +65,8 @@
 #include <poolfmt.hrc>
 #include <GetMetricVal.hxx>
 #include <numrule.hxx>
+#include <swtable.hxx>
+#include <tblafmt.hxx>
 #include <svx/xdef.hxx>
 
 //UUUU
@@ -131,6 +133,20 @@ bool SwDoc::IsUsed( const SwModify& rModify ) const
     // (also indirect ones for derived Formats)
     SwAutoFormatGetDocNode aGetHt( &GetNodes() );
     return !rModify.GetInfo( aGetHt );
+}
+
+// See if Table style is in use
+bool SwDoc::IsUsed( const SwTableAutoFormat& rTableAutoFormat) const
+{
+    size_t nTableCount = GetTableFrameFormatCount(true);
+    for (sal_Int32 i=0; i < nTableCount; ++i)
+    {
+        SwFrameFormat* pFrameFormat = &GetTableFrameFormat(i, true);
+        SwTable* pTable = SwTable::FindTable(pFrameFormat);
+        if (pTable->GetTableStyleName() == rTableAutoFormat.GetName())
+            return true;
+    }
+    return false;
 }
 
 // See if the NumRule is used

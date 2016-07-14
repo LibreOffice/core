@@ -1151,6 +1151,7 @@ RscTop * RscTypCont::InitClassSfxStyleFamilyItem( RscTop * pSuper,
         SETCONST( pSfxStyleFamily, "SfxStyleFamily::Frame",SfxStyleFamily::Frame);
         SETCONST( pSfxStyleFamily, "SfxStyleFamily::Page", SfxStyleFamily::Page );
         SETCONST( pSfxStyleFamily, "SfxStyleFamily::Pseudo", SfxStyleFamily::Pseudo );
+        SETCONST( pSfxStyleFamily, "SfxStyleFamily::Table", SfxStyleFamily::Table );
         aBaseLst.push_back( pSfxStyleFamily );
 
         nId = aNmTb.Put( "StyleFamily", VARNAME );
