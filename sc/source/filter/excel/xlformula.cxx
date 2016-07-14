@@ -614,6 +614,16 @@ static const XclFunctionInfo saFuncTable_OOoLO[] =
 {
     EXC_FUNCENTRY_OOO( ocErrorType,     1,  1,  0,  "ORG.OPENOFFICE.ERRORTYPE" ),
     EXC_FUNCENTRY_OOO_IBR( ocErrorType, 1,  1,  0,  "ERRORTYPE" ),      // was written wrongly, read it
+    EXC_FUNCENTRY_OOO( ocMultiArea,     1, MX,  0,  "ORG.OPENOFFICE.MULTIRANGE" ),
+    EXC_FUNCENTRY_OOO_IBR( ocMultiArea, 1, MX,  0,  "MULTIRANGE" ),     // was written wrongly, read it
+    EXC_FUNCENTRY_OOO( ocBackSolver,    3,  3,  0,  "ORG.OPENOFFICE.GOALSEEK" ),
+    EXC_FUNCENTRY_OOO_IBR( ocBackSolver,3,  3,  0,  "GOALSEEK" ),       // was written wrongly, read it
+    EXC_FUNCENTRY_OOO( ocEasterSunday,  1,  1,  0,  "ORG.OPENOFFICE.EASTERSUNDAY" ),
+    EXC_FUNCENTRY_OOO_IBR( ocEasterSunday,1,1,  0,  "EASTERSUNDAY" ),   // was written wrongly, read it
+    EXC_FUNCENTRY_OOO( ocCurrent,       0,  0,  0,  "ORG.OPENOFFICE.CURRENT" ),
+    EXC_FUNCENTRY_OOO_IBR( ocCurrent,   0,  0,  0,  "CURRENT" ),        // was written wrongly, read it
+    EXC_FUNCENTRY_OOO( ocStyle,         3,  3,  0,  "ORG.OPENOFFICE.STYLE" ),
+    EXC_FUNCENTRY_OOO_IBR( ocStyle,     3,  3,  0,  "STYLE" ),          // was written wrongly, read it
     EXC_FUNCENTRY_OOO( ocConvert,       3,  3,  0,  "ORG.OPENOFFICE.CONVERT" ),
     EXC_FUNCENTRY_OOO( ocColor,         3,  4,  0,  "ORG.LIBREOFFICE.COLOR" ),
     EXC_FUNCENTRY_OOO( ocRawSubtract,   2, MX,  0,  "ORG.LIBREOFFICE.RAWSUBTRACT" ),
