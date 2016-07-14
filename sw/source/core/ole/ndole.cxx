@@ -748,7 +748,7 @@ public:
     }
 
 private:
-    virtual void doWork() override
+    virtual void doWork() SAL_OVERRIDE
     {
         try
         {
