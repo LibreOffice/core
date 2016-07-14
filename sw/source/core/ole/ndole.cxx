@@ -678,7 +678,7 @@ namespace { class DeflateThread; }
 class DeflateData
 {
 private:
-    friend class DeflateThread;
+    friend DeflateThread;
     friend class SwOLEObj;
 
     uno::Reference< frame::XModel >                     maXModel;
