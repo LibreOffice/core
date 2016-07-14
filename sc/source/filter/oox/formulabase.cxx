@@ -220,11 +220,7 @@ const sal_uInt16 FUNCFLAG_MACROCALL_NEW     = FUNCFLAG_MACROCALL | FUNCFLAG_MACR
 const sal_uInt16 FUNCFLAG_BIFFIMPORTONLY    = 0x0800;   /// Only used in BIFF binary import filter.
 const sal_uInt16 FUNCFLAG_BIFFEXPORTONLY    = 0x1000;   /// Only used in BIFF binary export filter.
 const sal_uInt16 FUNCFLAG_INTERNAL          = 0x2000;   /// Function is internal in Calc.
-
-/// Converts a function library index (value of enum FunctionLibraryType) to function flags.
-#define FUNCLIB_TO_FUNCFLAGS( funclib_index ) static_cast< sal_uInt16 >( static_cast< sal_uInt8 >( funclib_index ) << 12 )
-/// Extracts a function library index (value of enum FunctionLibraryType) from function flags.
-#define FUNCFLAGS_TO_FUNCLIB( func_flags ) extractValue< FunctionLibraryType >( func_flags, 12, 4 )
+const sal_uInt16 FUNCFLAG_EUROTOOL          = 0x4000;   /// function of euro tool lib, FUNCLIB_EUROTOOL
 
 typedef std::shared_ptr< FunctionInfo > FunctionInfoRef;
 
@@ -679,8 +675,7 @@ static const FunctionData saFuncTableBiff5[] =
     { "ROMAN",                  "ROMAN",                354,    354,    1,  2,  V, { VR }, 0 },
 
     // *** EuroTool add-in ***
-
-    { "EUROCONVERT",            "EUROCONVERT",          NOID,   NOID,   3,  5,  V, { VR }, FUNCLIB_TO_FUNCFLAGS( FUNCLIB_EUROTOOL ) },
+    { "EUROCONVERT",            "EUROCONVERT",          NOID,   NOID,   3,  5,  V, { VR }, FUNCFLAG_EUROTOOL },
 
     // *** macro sheet commands ***
 
@@ -1117,8 +1112,7 @@ void FunctionProviderImpl::initFunc( const FunctionData& rFuncData, sal_uInt8 nM
         OSL_ENSURE( !xFuncInfo->maOdfFuncName.isEmpty(), "FunctionProviderImpl::initFunc - missing ODF function name" );
         xFuncInfo->maBiffMacroName = "_xlfnodf." + xFuncInfo->maOdfFuncName;
     }
-
-    xFuncInfo->meFuncLibType = FUNCFLAGS_TO_FUNCLIB( rFuncData.mnFlags );
+    xFuncInfo->meFuncLibType = (rFuncData.mnFlags & FUNCFLAG_EUROTOOL) ? FUNCLIB_EUROTOOL : FUNCLIB_UNKNOWN;
     xFuncInfo->mnApiOpCode = -1;
     xFuncInfo->mnBiff12FuncId = rFuncData.mnBiff12FuncId;
     xFuncInfo->mnBiffFuncId = rFuncData.mnBiffFuncId;
@@ -1189,13 +1183,10 @@ const FunctionInfo* FunctionProvider::getFuncInfoFromMacroName( const OUString& 
 
 FunctionLibraryType FunctionProvider::getFuncLibTypeFromLibraryName( const OUString& rLibraryName )
 {
-#define OOX_XLS_IS_LIBNAME( libname, basename ) (libname.equalsIgnoreAsciiCase( basename ".XLA" ) || libname.equalsIgnoreAsciiCase( basename ".XLAM" ))
-
     // the EUROTOOL add-in containing the EUROCONVERT function
-    if( OOX_XLS_IS_LIBNAME( rLibraryName, "EUROTOOL" ) )
+    if(   rLibraryName.equalsIgnoreAsciiCase("EUROTOOL.XLA")
+       || rLibraryName.equalsIgnoreAsciiCase("EUROTOOL.XLAM"))
         return FUNCLIB_EUROTOOL;
-
-#undef OOX_XLS_IS_LIBNAME
 
     // default: unknown library
     return FUNCLIB_UNKNOWN;
