@@ -856,7 +856,7 @@ FormulaToken* FormulaTokenArray::ReplaceToken( sal_uInt16 nOffset, FormulaToken*
     }
 }
 
-void FormulaTokenArray::RemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount )
+sal_uInt16 FormulaTokenArray::RemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount )
 {
     if (nOffset < nLen)
     {
@@ -903,10 +903,12 @@ void FormulaTokenArray::RemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount )
             else
                 nIndex -= nStop - nOffset;
         }
+        return nCount;
     }
     else
     {
         SAL_WARN("formula.core","FormulaTokenArray::RemoveToken - nOffset " << nOffset << " >= nLen " << nLen);
+        return 0;
     }
 }
 

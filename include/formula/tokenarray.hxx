@@ -166,8 +166,10 @@ protected:
                 Start offset into pCode.
         @param  nCount
                 Count of tokens to remove.
+
+        @return Count of tokens removed.
      */
-    void                    RemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount );
+    sal_uInt16              RemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount );
 
     inline  void            SetCombinedBitsRecalcMode( ScRecalcMode nBits )
                                 { nMode |= (nBits & ~RECALCMODE_EMASK); }
