@@ -613,10 +613,7 @@ static void createVariableURL( OUString& rStr, const OUString& rLibName,
     {
         rStr = "$(INST)/" LIBO_SHARE_FOLDER "/basic/";
     }
-    rStr += rLibName;
-    rStr += "/";
-    rStr += rInfoFileName;
-    rStr += ".xlb/";
+    rStr += rLibName + "/" + rInfoFileName + ".xlb/";
 }
 
 void SfxLibraryContainer::init( const OUString& rInitialDocumentURL, const uno::Reference< embed::XStorage >& rxInitialStorage )
@@ -730,9 +727,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
 
                 if ( xLibrariesStor.is() )
                 {
-                    aFileName = maInfoFileName;
-                    aFileName += "-lc.xml";
-
+                    aFileName = maInfoFileName + "-lc.xml";
                     try
                     {
                         xStream = xLibrariesStor->openStreamElement( aFileName, embed::ElementModes::READ );
@@ -745,9 +740,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                         mbOldInfoFormat = true;
 
                         // Check old version
-                        aFileName = maOldInfoFileName;
-                        aFileName += ".xml";
-
+                        aFileName = maOldInfoFileName + ".xml";
                         try
                         {
                             xStream = xLibrariesStor->openStreamElement( aFileName, embed::ElementModes::READ );
@@ -758,8 +751,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                         if( !xStream.is() )
                         {
                             // Check for EA2 document version with wrong extensions
-                            aFileName = maOldInfoFileName;
-                            aFileName += ".xli";
+                            aFileName = maOldInfoFileName + ".xli";
                             xStream = xLibrariesStor->openStreamElement( aFileName, embed::ElementModes::READ );
                         }
                     }
