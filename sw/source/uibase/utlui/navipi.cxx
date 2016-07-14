@@ -972,21 +972,21 @@ void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
 {
     if(&rBrdc == m_pCreateView)
     {
-        if(dynamic_cast<const SfxSimpleHint*>(&rHint) && static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING)
+        const SfxSimpleHint* pHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+        if (pHint && pHint->GetId() == SFX_HINT_DYING)
         {
             m_pCreateView = nullptr;
         }
     }
     else
     {
-        if(dynamic_cast<const SfxEventHint*>(&rHint))
+        if (const SfxEventHint* pHint = dynamic_cast<const SfxEventHint*>(&rHint))
         {
-            if( m_pxObjectShell &&
-                        static_cast<const SfxEventHint&>( rHint).GetEventId() == SFX_EVENT_CLOSEAPP)
+            if (m_pxObjectShell && pHint->GetEventId() == SFX_EVENT_CLOSEAPP)
             {
                 DELETEZ(m_pxObjectShell);
             }
-            else if(static_cast<const SfxEventHint&>( rHint).GetEventId() == SFX_EVENT_OPENDOC)
+            else if (pHint->GetEventId() == SFX_EVENT_OPENDOC)
             {
 
                 SwView *pActView = GetCreateView();
