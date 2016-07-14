@@ -748,6 +748,8 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
                 nSlot = SID_STYLE_FAMILY4; break;
             case SfxStyleFamily::Pseudo:
                 nSlot = SID_STYLE_FAMILY5; break;
+            case SfxStyleFamily::Table:
+                nSlot = SID_STYLE_FAMILY6; break;
             default: OSL_FAIL("unknown StyleFamily"); break;
         }
         pBoundItems[i] =
@@ -887,6 +889,7 @@ namespace SfxTemplate
             case SfxStyleFamily::Frame:  return 3;
             case SfxStyleFamily::Page:   return 4;
             case SfxStyleFamily::Pseudo: return 5;
+            case SfxStyleFamily::Table:  return 6;
             default:                      return 0;
         }
     }
@@ -900,6 +903,7 @@ namespace SfxTemplate
             case 3: return SfxStyleFamily::Frame;
             case 4: return SfxStyleFamily::Page;
             case 5: return SfxStyleFamily::Pseudo;
+            case 6: return SfxStyleFamily::Table;
             default: return SfxStyleFamily::All;
         }
     }
@@ -2259,6 +2263,7 @@ void SfxTemplateDialog_Impl::InsertFamilyItem(sal_uInt16 nId,const SfxStyleFamil
         case SfxStyleFamily::Frame:    sHelpId = ".uno:FrameStyle"; break;
         case SfxStyleFamily::Page:     sHelpId = ".uno:PageStyle"; break;
         case SfxStyleFamily::Pseudo:   sHelpId = ".uno:ListStyle"; break;
+        case SfxStyleFamily::Table:    sHelpId = ".uno:TableStyle"; break;
         default: OSL_FAIL("unknown StyleFamily"); break;
     }
     m_aActionTbL->InsertItem( nId, pItem->GetImage(), pItem->GetText(), ToolBoxItemBits::NONE, 0);

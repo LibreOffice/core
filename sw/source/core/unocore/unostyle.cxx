@@ -4865,12 +4865,11 @@ OUString SAL_CALL SwXTextCellStyle::getParentStyle() throw (css::uno::RuntimeExc
     return m_sParentStyle;
 }
 
-void SAL_CALL SwXTextCellStyle::setParentStyle(const OUString& sParentStyle) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception)
+void SAL_CALL SwXTextCellStyle::setParentStyle(const OUString& /*sParentStyle*/) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     // Changing parent to one which is unaware of it will lead to a something unexcpected. getName() rely on a parent.
     SAL_INFO("sw.uno", "Changing SwXTextCellStyle parent");
-    m_sParentStyle = sParentStyle;
 }
 
 //XNamed
