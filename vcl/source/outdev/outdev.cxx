@@ -107,13 +107,6 @@ OutputDevice::OutputDevice() :
     mnOutOffY                       = 0;
     mnOutWidth                      = 0;
     mnOutHeight                     = 0;
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        // Device size isn't set later in this case, and with zero size, we
-        // miss paint events.
-        mnOutWidth = 1;
-        mnOutHeight = 1;
-    }
     mnDPIX                          = 0;
     mnDPIY                          = 0;
     mnDPIScaleFactor                = 1;
