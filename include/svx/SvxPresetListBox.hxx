@@ -47,7 +47,7 @@ public:
     virtual void Resize() override;
     virtual void Command( const CommandEvent& rEvt ) override;
     sal_uInt32 getColumnCount() const { return nColCount; }
-    Size GetIconSize() const { return aIconSize; }
+    Size const & GetIconSize() const { return aIconSize; }
 
     void setColumnCount( const sal_uInt32 nCount ) { nColCount = nCount; }
     void setRowCount( const sal_uInt32 nRow ) { nRowCount = nRow; }
