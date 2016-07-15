@@ -40,8 +40,10 @@
 #include <sc.hrc>
 #include <scresid.hxx>
 #include <scitems.hxx>
+#include <map>
 
 using namespace css;
+typedef std::map< OString, sal_uInt32 > mapType;
 
 static const char* DATA_DIRECTORY = "/sc/qa/unit/screenshots/data/";
 
@@ -72,9 +74,19 @@ private:
 
     std::unique_ptr<ScImportStringStream> pStream;
     std::unique_ptr<SfxItemSet> pItemSet;
+
+    /// the set of known dialogs and their ID for usage in createDialogByID
+    mapType                                 maKnownDialogs;
 };
 
 ScScreenshotTest::ScScreenshotTest()
+:   mxComponent(),
+    pFoundShell(nullptr),
+    xDocSh(),
+    pViewShell(nullptr),
+    pFact(nullptr),
+    pStream(),
+    maKnownDialogs()
 {
 }
 
@@ -97,7 +109,29 @@ void ScScreenshotTest::initializeWithDoc(const char* pName)
     CPPUNIT_ASSERT_MESSAGE("Failed to create dialog factory", pFact);
 
     const OUString aCsv("some, strings, here, separated, by, commas");
-    pStream.reset( new ScImportStringStream( aCsv) );
+    pStream.reset(new ScImportStringStream(aCsv));
+
+    if (maKnownDialogs.empty())
+    {
+        // fill map of unknown dilogs. Use a set here to allow later
+        // to 'find' a ID for construction based on the UIXMLDescription
+        // string (currently not yet used)
+        maKnownDialogs["modules/scalc/ui/insertsheet.ui"] = 0;
+            maKnownDialogs["modules/scalc/ui/deletecells.ui"] = 1;
+        maKnownDialogs["modules/scalc/ui/pastespecial.ui"] = 2;
+        maKnownDialogs["modules/scalc/ui/changesourcedialog.ui"] = 3;
+        maKnownDialogs["modules/scalc/ui/selectdatasource.ui"] = 4;
+        maKnownDialogs["modules/scalc/ui/selectsource.ui"] = 5;
+        maKnownDialogs["modules/scalc/ui/deletecontents.ui"] = 6;
+        maKnownDialogs["modules/scalc/ui/createnamesdialog.ui"] = 7;
+        maKnownDialogs["modules/scalc/ui/inputstringdialog.ui"] = 8;
+        maKnownDialogs["modules/scalc/ui/tabcolordialog.ui"] = 9;
+        maKnownDialogs["modules/scalc/ui/textimportoptions.ui"] = 10;
+        maKnownDialogs["modules/scalc/ui/dataform.ui"] = 11;
+        maKnownDialogs["modules/scalc/ui/movecopysheet.ui"] = 12;
+        maKnownDialogs["modules/scalc/ui/textimportcsv.ui"] = 13;
+        maKnownDialogs["modules/scalc/ui/formatcellsdialog.ui"] = 14;
+    }
 }
 
 VclAbstractDialog* ScScreenshotTest::createDialogByID( sal_uInt32 nID )
@@ -108,7 +142,7 @@ VclAbstractDialog* ScScreenshotTest::createDialogByID( sal_uInt32 nID )
 
     switch ( nID )
     {
-        case 0:
+        case 0: // "modules/scalc/ui/insertsheet.ui"
         {
             ScViewData& rViewData = pViewShell->GetViewData();
             SCTAB nTabSelCount = rViewData.GetMarkData().GetSelectCount();
@@ -119,43 +153,42 @@ VclAbstractDialog* ScScreenshotTest::createDialogByID( sal_uInt32 nID )
             break;
         }
 
-        case 1:
+        case 1: // "modules/scalc/ui/deletecells.ui"
         {
             pReturnDialog = pFact->CreateScDeleteCellDlg( pViewShell->GetDialogParent(), false );
             break;
         }
 
-        case 2:
+        case 2: // "modules/scalc/ui/pastespecial.ui"
         {
             pReturnDialog = pFact->CreateScInsertContentsDlg( pViewShell->GetDialogParent() );
             break;
         }
 
-        case 3:
+        case 3: // "modules/scalc/ui/changesourcedialog.ui"
         {
             pReturnDialog = pFact->CreateScColRowLabelDlg( pViewShell->GetDialogParent(), true, false );
             break;
         }
 
-        case 4:
+        case 4: // "modules/scalc/ui/selectdatasource.ui"
         {
             pReturnDialog = pFact->CreateScDataPilotDatabaseDlg( pViewShell->GetDialogParent() );
             break;
         }
-        case 5:
+        case 5: // "modules/scalc/ui/selectsource.ui"
         {
-
             pReturnDialog = pFact->CreateScDataPilotSourceTypeDlg(pViewShell->GetDialogParent(), true );
             break;
         }
 
-        case 6:
+        case 6: // "modules/scalc/ui/deletecontents.ui"
         {
             pReturnDialog = pFact->CreateScDeleteContentsDlg( pViewShell->GetDialogParent() );
             break;
         }
 
-        case 7:
+        case 7: // "modules/scalc/ui/createnamesdialog.ui"
         {
             //// just fake some flags
             sal_uInt16 nFlags = NAME_LEFT | NAME_TOP;
@@ -163,7 +196,7 @@ VclAbstractDialog* ScScreenshotTest::createDialogByID( sal_uInt32 nID )
             break;
         }
 
-        case 8:
+        case 8: // "modules/scalc/ui/inputstringdialog.ui"
         {
             const OString aEmpty("");
             pReturnDialog = pFact->CreateScStringInputDlg( pViewShell->GetDialogParent(),
@@ -172,7 +205,7 @@ VclAbstractDialog* ScScreenshotTest::createDialogByID( sal_uInt32 nID )
             break;
         }
 
-        case 9:
+        case 9: // "modules/scalc/ui/tabcolordialog.ui"
         {
             pReturnDialog = pFact->CreateScTabBgColorDlg( pViewShell->GetDialogParent(),
                                 OUString(ScResId(SCSTR_SET_TAB_BG_COLOR)),
@@ -180,13 +213,13 @@ VclAbstractDialog* ScScreenshotTest::createDialogByID( sal_uInt32 nID )
             break;
         }
 
-        case 10:
+        case 10: // "modules/scalc/ui/textimportoptions.ui"
         {
             pReturnDialog = pFact->CreateScTextImportOptionsDlg();
             break;
         }
 
-        case 11:
+        case 11: // "modules/scalc/ui/dataform.ui"
         {
             ////FIXME: looks butt-ugly w/ empty file, move it elsewhere, where
             ////we actually have some data
@@ -194,18 +227,18 @@ VclAbstractDialog* ScScreenshotTest::createDialogByID( sal_uInt32 nID )
             break;
         }
 
-        case 12:
+        case 12: // "modules/scalc/ui/movecopysheet.ui"
         {
             pReturnDialog = pFact->CreateScMoveTableDlg( pViewShell->GetDialogParent(), aDefaultSheetName );
             break;
         }
 
-        case 13:
+        case 13: // "modules/scalc/ui/textimportcsv.ui"
         {
             pReturnDialog = pFact->CreateScImportAsciiDlg( OUString(), pStream.get(), SC_PASTETEXT );
             break;
         }
-        case 14:
+        case 14: // "modules/scalc/ui/formatcellsdialog.ui"
         {
             ScViewData& rViewData = pViewShell->GetViewData();
             ScDocument *pDoc = rViewData.GetDocument();
@@ -239,13 +272,26 @@ void ScScreenshotTest::testOpeningModalDialogs()
 {
     initializeWithDoc("empty.ods");
 
-    const sal_uInt32 nDialogs = 15;
+    static bool bDumpAllKnownDialogs = true;
 
-    for ( sal_uInt32 i = 0; i < nDialogs; i++ )
+    if (bDumpAllKnownDialogs)
     {
-        std::unique_ptr<VclAbstractDialog> pDialog( createDialogByID( i ) );
+        for (mapType::const_iterator i = maKnownDialogs.begin(); i != maKnownDialogs.end(); i++)
+        {
+            std::unique_ptr<VclAbstractDialog> pDlg(createDialogByID((*i).second));
 
-        dumpDialogToPath( *pDialog );
+            if (pDlg)
+            {
+                // known dialog, dump screenshot to path
+                dumpDialogToPath(*pDlg);
+            }
+            else
+            {
+                // unknown dialog, should not happen in this basic loop.
+                // You have probably forgotten to add a case and
+                // implementastion to createDialogByID, please do this
+            }
+        }
     }
 }
 
