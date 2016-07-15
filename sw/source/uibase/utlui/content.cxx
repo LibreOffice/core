@@ -394,18 +394,17 @@ void SwContentType::Init(bool* pbInvalidateWindow)
             {
                 for(SwPostItMgr::const_iterator i = aMgr->begin(); i != aMgr->end(); ++i)
                 {
-                    if ( dynamic_cast< const SwFormatField *>( (*i)->GetBroadCaster() ) != nullptr ) // SwPostit
+                    if (const SwFormatField* pFormatField = dynamic_cast<const SwFormatField *>((*i)->GetBroadCaster())) // SwPostit
                     {
-                        const SwFormatField* aFormatField = static_cast<const SwFormatField*>((*i)->GetBroadCaster());
-                        if (aFormatField->GetTextField() && aFormatField->IsFieldInDoc() &&
+                        if (pFormatField->GetTextField() && pFormatField->IsFieldInDoc() &&
                             (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
                         {
-                            OUString sEntry = aFormatField->GetField()->GetPar2();
+                            OUString sEntry = pFormatField->GetField()->GetPar2();
                             sEntry = RemoveNewline(sEntry);
                             SwPostItContent* pCnt = new SwPostItContent(
                                                 this,
                                                 sEntry,
-                                                aFormatField,
+                                                pFormatField,
                                                 nMemberCount);
                             pMember->insert(pCnt);
                             nMemberCount++;
@@ -508,8 +507,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     // with the same number and existing "pOldMember" the
                     // old one is compared with the new OutlinePos.
                     // cast for Win16
-                    if (nOldMemberCount > nPos &&
-                        static_cast<SwOutlineContent*>((*pOldMember)[nPos])->GetOutlineLevel() != nLevel)
+                    if (nOldMemberCount > nPos && static_cast<SwOutlineContent*>((*pOldMember)[nPos])->GetOutlineLevel() != nLevel)
                         *pbLevelOrVisibilityChanged = true;
 
                     nPos++;
@@ -699,18 +697,17 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             {
                 for(SwPostItMgr::const_iterator i = aMgr->begin(); i != aMgr->end(); ++i)
                 {
-                    if ( dynamic_cast< const SwFormatField *>( (*i)->GetBroadCaster() ) != nullptr ) // SwPostit
+                    if (const SwFormatField* pFormatField = dynamic_cast<const SwFormatField *>((*i)->GetBroadCaster())) // SwPostit
                     {
-                        const SwFormatField* aFormatField = static_cast<const SwFormatField*>((*i)->GetBroadCaster());
-                        if (aFormatField->GetTextField() && aFormatField->IsFieldInDoc() &&
+                        if (pFormatField->GetTextField() && pFormatField->IsFieldInDoc() &&
                             (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
                         {
-                            OUString sEntry = aFormatField->GetField()->GetPar2();
+                            OUString sEntry = pFormatField->GetField()->GetPar2();
                             sEntry = RemoveNewline(sEntry);
                             SwPostItContent* pCnt = new SwPostItContent(
                                                 this,
                                                 sEntry,
-                                                aFormatField,
+                                                pFormatField,
                                                 nMemberCount);
                             pMember->insert(pCnt);
                             nMemberCount++;
@@ -1111,8 +1108,7 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
         pSubPop2->InsertItem( i + 201, m_aContextStrings[
                 STR_HYPERLINK - STR_CONTEXT_FIRST + i]);
     }
-    pSubPop2->CheckItem( 201 +
-                    static_cast<int>(GetParentWindow()->GetRegionDropMode()));
+    pSubPop2->CheckItem(201 + static_cast<int>(GetParentWindow()->GetRegionDropMode()));
     // Insert the list of the open files
     sal_uInt16 nId = 301;
     const SwView* pActiveView = ::GetActiveView();
@@ -2208,8 +2204,7 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
         return;
     }
 
-    SfxViewEventHint const*const pVEHint(
-            dynamic_cast<SfxViewEventHint const*>(&rHint));
+    SfxViewEventHint const*const pVEHint(dynamic_cast<SfxViewEventHint const*>(&rHint));
     SwXTextView* pDyingShell = nullptr;
     if (m_pActiveShell && pVEHint && pVEHint->GetEventName() == "OnViewClosed")
         pDyingShell = dynamic_cast<SwXTextView*>(pVEHint->GetController().get());
