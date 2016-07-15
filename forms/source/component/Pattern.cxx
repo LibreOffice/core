@@ -41,13 +41,6 @@ OPatternControl::OPatternControl(const Reference<XComponentContext>& _rxFactory)
 {
 }
 
-
-Sequence<Type> OPatternControl::_getTypes()
-{
-    return OBoundControl::_getTypes();
-}
-
-
 css::uno::Sequence<OUString> OPatternControl::getSupportedServiceNames() throw(std::exception)
 {
     css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();

@@ -434,11 +434,7 @@ public:
     virtual void SAL_CALL enterGroup(  ) throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL leaveGroup(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // XServiceInfo
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
-
     // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;
 };
 #include <com/sun/star/drawing/XConnectorShape.hpp>
@@ -473,9 +469,6 @@ public:
     virtual void SAL_CALL connectEnd( const css::uno::Reference< css::drawing::XConnectableShape >& xShape, css::drawing::ConnectionType nPos ) throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL disconnectBegin( const css::uno::Reference< css::drawing::XConnectableShape >& xShape ) throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL disconnectEnd( const css::uno::Reference< css::drawing::XConnectableShape >& xShape ) throw(css::uno::RuntimeException, std::exception) override;
-
-    // XServiceInfo
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -524,9 +517,6 @@ public:
     virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getControl() throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setControl( const css::uno::Reference< css::awt::XControlModel >& xControl ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // XServiceInfo
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
-
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -540,9 +530,6 @@ class SvxShapeDimensioning : public SvxShapeText
 public:
     SvxShapeDimensioning( SdrObject* pObj ) throw();
     virtual ~SvxShapeDimensioning() throw();
-
-    // XServiceInfo
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
 };
 
 /***********************************************************************
@@ -553,9 +540,6 @@ class SvxShapeCircle : public SvxShapeText
 public:
     SvxShapeCircle( SdrObject* pObj ) throw ();
     virtual ~SvxShapeCircle() throw ();
-
-    // XServiceInfo
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
 };
 
 /***********************************************************************
@@ -613,9 +597,6 @@ public:
     css::drawing::PolygonKind GetPolygonKind() const throw() { return mePolygonKind;}
     void SetPolygon(const basegfx::B2DPolyPolygon& rNew) throw(css::uno::RuntimeException);
     basegfx::B2DPolyPolygon GetPolygon() const throw();
-
-    // XServiceInfo
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
 };
 
 /***********************************************************************
@@ -643,9 +624,6 @@ public:
     css::drawing::PolygonKind GetPolygonKind() const throw() { return mePolygonKind;}
     void SetPolygon(const basegfx::B2DPolyPolygon & rNew) throw(css::uno::RuntimeException);
     basegfx::B2DPolyPolygon GetPolygon() const throw();
-
-    // XServiceInfo
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
 };
 
 /***********************************************************************
@@ -716,7 +694,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;
 };
 

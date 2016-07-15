@@ -113,11 +113,4 @@ sal_Bool SAL_CALL SvxFmDrawPage::hasForms() throw( css::uno::RuntimeException, s
     return bHas;
 }
 
-// css::lang::XServiceInfo
-css::uno::Sequence< OUString > SAL_CALL SvxFmDrawPage::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
-{
-    return SvxDrawPage::getSupportedServiceNames();
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

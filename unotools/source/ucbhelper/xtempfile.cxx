@@ -88,11 +88,6 @@ throw ( css::uno::RuntimeException, std::exception )
     }
     return pTypeCollection->getTypes();
 };
-css::uno::Sequence< sal_Int8 > SAL_CALL OTempFileService::getImplementationId(  )
-throw ( css::uno::RuntimeException, std::exception )
-{
-    return OTempFileBase::getImplementationId();
-}
 
 //  XTempFile
 

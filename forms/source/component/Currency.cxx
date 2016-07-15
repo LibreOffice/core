@@ -45,12 +45,6 @@ OCurrencyControl::OCurrencyControl(const Reference<XComponentContext>& _rxFactor
 {
 }
 
-Sequence<Type> OCurrencyControl::_getTypes()
-{
-    return OBoundControl::_getTypes();
-}
-
-
 css::uno::Sequence<OUString> SAL_CALL OCurrencyControl::getSupportedServiceNames() throw(std::exception)
 {
     css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();

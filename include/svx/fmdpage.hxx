@@ -59,9 +59,6 @@ public:
 
     // XFormsSupplier2
     virtual sal_Bool SAL_CALL hasForms() throw( css::uno::RuntimeException, std::exception ) override;
-
-    // css::lang::XServiceInfo
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 };
 
 #endif // INCLUDED_SVX_FMDPAGE_HXX

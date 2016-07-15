@@ -75,9 +75,6 @@ protected:
 
 class OPatternControl: public OBoundControl
 {
-protected:
-    virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
-
 public:
     explicit OPatternControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
 

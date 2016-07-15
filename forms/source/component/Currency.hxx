@@ -69,9 +69,6 @@ protected:
 
 class OCurrencyControl: public OBoundControl
 {
-protected:
-    virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
-
 public:
     explicit OCurrencyControl(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
     // css::lang::XServiceInfo
