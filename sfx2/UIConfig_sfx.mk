@@ -37,6 +37,7 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/notebookbar \
 	sfx2/uiconfig/ui/optprintpage \
 	sfx2/uiconfig/ui/password \
+	sfx2/uiconfig/ui/notebookbarpopup \
 	sfx2/uiconfig/ui/printeroptionsdialog \
 	sfx2/uiconfig/ui/querysavedialog \
 	sfx2/uiconfig/ui/searchdialog \
