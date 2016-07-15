@@ -622,8 +622,8 @@ static const XclFunctionInfo saFuncTable_OOoLO[] =
     EXC_FUNCENTRY_OOO_IBR( ocEasterSunday,1,1,  0,  "EASTERSUNDAY" ),   // was written wrongly, read it
     EXC_FUNCENTRY_OOO( ocCurrent,       0,  0,  0,  "ORG.OPENOFFICE.CURRENT" ),
     EXC_FUNCENTRY_OOO_IBR( ocCurrent,   0,  0,  0,  "CURRENT" ),        // was written wrongly, read it
-    EXC_FUNCENTRY_OOO( ocStyle,         3,  3,  0,  "ORG.OPENOFFICE.STYLE" ),
-    EXC_FUNCENTRY_OOO_IBR( ocStyle,     3,  3,  0,  "STYLE" ),          // was written wrongly, read it
+    EXC_FUNCENTRY_OOO( ocStyle,         1,  3,  0,  "ORG.OPENOFFICE.STYLE" ),
+    EXC_FUNCENTRY_OOO_IBR( ocStyle,     1,  3,  0,  "STYLE" ),          // was written wrongly, read it
     EXC_FUNCENTRY_OOO( ocConvert,       3,  3,  0,  "ORG.OPENOFFICE.CONVERT" ),
     EXC_FUNCENTRY_OOO( ocColor,         3,  4,  0,  "ORG.LIBREOFFICE.COLOR" ),
     EXC_FUNCENTRY_OOO( ocRawSubtract,   2, MX,  0,  "ORG.LIBREOFFICE.RAWSUBTRACT" ),
