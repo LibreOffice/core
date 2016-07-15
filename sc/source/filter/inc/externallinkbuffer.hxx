@@ -85,11 +85,6 @@ public:
     /** Imports the DDEITEM_STRING record containing a string in a link result. */
     void                importDdeItemString( SequenceInputStream& rStrm );
 
-#if 0
-    /** Returns the sheet cache index if this is a sheet-local external name. */
-    sal_Int32           getSheetCacheIndex() const;
-#endif
-
     /** Returns the DDE item info needed by the XML formula parser. */
     bool                getDdeItemInfo(
                             css::sheet::DDEItemInfo& orItemInfo ) const;

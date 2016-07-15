@@ -169,46 +169,6 @@ void ExternalName::importDdeItemString( SequenceInputStream& rStrm )
     appendResultValue( BiffHelper::readString( rStrm ) );
 }
 
-#if 0
-sal_Int32 ExternalName::getSheetCacheIndex() const
-{
-    OSL_ENSURE( mrParentLink.getLinkType() == LINKTYPE_DDE, "ExternalName::getSheetCacheIndex - unexpected link type" );
-    sal_Int32 nCacheIdx = -1;
-    switch( getFilterType() )
-    {
-        case FILTER_OOXML:
-            // OOXML/BIFF12: zero-based index into sheet list, -1 means global name
-            if( maModel.mnSheet >= 0 )
-                nCacheIdx = mrParentLink.getSheetIndex( maModel.mnSheet );
-        break;
-        case FILTER_BIFF:
-            switch( getBiff() )
-            {
-                case BIFF2:
-                case BIFF3:
-                case BIFF4:
-                break;
-                case BIFF5:
-                    if( maModel.mnSheet > 0 )
-                        if( const ExternalLink* pExtLink = getExternalLinks().getExternalLink( maModel.mnSheet ).get() )
-                            if( pExtLink->getLinkType() == LINKTYPE_EXTERNAL )
-                                nCacheIdx = pExtLink->getSheetIndex();
-                break;
-                case BIFF8:
-                    if( maModel.mnSheet > 0 )
-                        nCacheIdx = mrParentLink.getSheetIndex( maModel.mnSheet - 1 );
-                break;
-                case BIFF_UNKNOWN:
-                break;
-            }
-        break;
-        case FILTER_UNKNOWN:
-        break;
-    }
-    return nCacheIdx;
-}
-#endif
-
 bool ExternalName::getDdeItemInfo( DDEItemInfo& orItemInfo ) const
 {
     if( (mrParentLink.getLinkType() == LINKTYPE_DDE) && !maModel.maName.isEmpty() )
