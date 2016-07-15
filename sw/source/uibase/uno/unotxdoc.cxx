@@ -3105,16 +3105,14 @@ void SwXTextDocument::paintTile( VirtualDevice &rDevice,
                                  int nTilePosX, int nTilePosY,
                                  long nTileWidth, long nTileHeight )
 {
-    SwDoc* pDoc = pDocShell->GetDoc();
-    SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = pDocShell->GetWrtShell();
     pViewShell->PaintTile(rDevice, nOutputWidth, nOutputHeight,
                           nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 }
 
 Size SwXTextDocument::getDocumentSize()
 {
-    SwDoc* pDoc = pDocShell->GetDoc();
-    SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = pDocShell->GetWrtShell();
     Size aDocSize = pViewShell->GetDocSize();
 
     return Size(aDocSize.Width()  + 2L * DOCUMENTBORDER,
@@ -3235,8 +3233,7 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
 {
     SolarMutexGuard aGuard;
 
-    SwDoc* pDoc = pDocShell->GetDoc();
-    SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = pDocShell->GetWrtShell();
 
     bool      bBookMode = false;
     sal_Int16 nColumns = 1;
