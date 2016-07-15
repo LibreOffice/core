@@ -366,7 +366,7 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                             aHelpText = pVar->GetName();
                             if ( aHelpText.isEmpty() )     // name is not copied with the passed parameters
                                 aHelpText = aWord;
-                            aHelpText   += "=" + pVar->GetOUString();
+                            aHelpText += "=" + pVar->GetOUString();
                         }
                     }
                     if ( !aHelpText.isEmpty() )
