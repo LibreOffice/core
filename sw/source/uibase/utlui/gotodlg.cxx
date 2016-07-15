@@ -46,6 +46,8 @@ SwGotoPageDlg::SwGotoPageDlg( vcl::Window* pParent, SfxBindings* _pBindings):
     }
     mpMtrPageCtrl->SetModifyHdl(LINK(this, SwGotoPageDlg, PageModifiedHdl));
     mpMtrPageCtrl->SetCursorAtLast();
+    Selection aSel(0, EDIT_NOLIMIT);
+    mpMtrPageCtrl->SetSelection(aSel);
 }
 
 SwGotoPageDlg::~SwGotoPageDlg()
