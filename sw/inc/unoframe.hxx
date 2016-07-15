@@ -114,7 +114,7 @@ public:
     virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
-   //XShape
+    //XShape
     virtual css::awt::Point SAL_CALL getPosition(  ) throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setPosition( const css::awt::Point& aPosition ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::awt::Size SAL_CALL getSize(  ) throw(css::uno::RuntimeException, std::exception) override;

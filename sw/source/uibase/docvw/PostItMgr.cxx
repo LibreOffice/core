@@ -1790,21 +1790,21 @@ bool SwPostItMgr::ScrollbarHit(const unsigned long aPage,const Point &aPoint)
 
 void SwPostItMgr::CorrectPositions()
 {
-   if ( mbWaitingForCalcRects || mbLayouting || mvPostItFields.empty() )
-       return;
+    if ( mbWaitingForCalcRects || mbLayouting || mvPostItFields.empty() )
+        return;
 
-   // find first valid note
-   SwSidebarWin *pFirstPostIt = nullptr;
-   for(SwSidebarItem_iterator i = mvPostItFields.begin(); i != mvPostItFields.end() ; ++i)
-   {
-       pFirstPostIt = (*i)->pPostIt;
-       if (pFirstPostIt)
-           break;
-   }
+    // find first valid note
+    SwSidebarWin *pFirstPostIt = nullptr;
+    for(SwSidebarItem_iterator i = mvPostItFields.begin(); i != mvPostItFields.end() ; ++i)
+    {
+        pFirstPostIt = (*i)->pPostIt;
+        if (pFirstPostIt)
+            break;
+    }
 
-   //if we have not found a valid note, forget about it and leave
-   if (!pFirstPostIt)
-       return;
+    //if we have not found a valid note, forget about it and leave
+    if (!pFirstPostIt)
+        return;
 
     // yeah, I know,    if this is a left page it could be wrong, but finding the page and the note is probably not even faster than just doing it
     // check, if anchor overlay object exists.

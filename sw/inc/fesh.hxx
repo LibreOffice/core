@@ -414,7 +414,7 @@ public:
     bool GotoPrevFly( GotoObjFlags eType = GotoObjFlags::FlyAny)
                                 { return GotoObj( false, eType); }
 
-   /// Iterate over flys  - for Basic-collections.
+    /// Iterate over flys  - for Basic-collections.
     size_t GetFlyCount( FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false ) const;
     const SwFrameFormat* GetFlyNum(size_t nIdx, FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false) const;
 

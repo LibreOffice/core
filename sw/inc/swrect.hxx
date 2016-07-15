@@ -72,16 +72,16 @@ public:
 
     void Justify();
 
-           SwRect &Union( const SwRect& rRect );
-           SwRect &Intersection( const SwRect& rRect );
+    SwRect &Union( const SwRect& rRect );
+    SwRect &Intersection( const SwRect& rRect );
 
-   // Same as Intersection, only assume that Rects are overlapping!
-           SwRect &Intersection_( const SwRect &rRect );
+    // Same as Intersection, only assume that Rects are overlapping!
+    SwRect &Intersection_( const SwRect &rRect );
 
-           bool IsInside( const Point& rPOINT ) const;
-           bool IsNear(const Point& rPoint, long nTolerance ) const;
-           bool IsInside( const SwRect& rRect ) const;
-           bool IsOver( const SwRect& rRect ) const;
+    bool IsInside( const Point& rPOINT ) const;
+    bool IsNear(const Point& rPoint, long nTolerance ) const;
+    bool IsInside( const SwRect& rRect ) const;
+    bool IsOver( const SwRect& rRect ) const;
     inline bool HasArea() const;
     inline bool IsEmpty() const;
     inline void Clear();

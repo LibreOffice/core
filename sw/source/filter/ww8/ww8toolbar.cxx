@@ -53,9 +53,9 @@ MSOWordCommandConvertor::MSOWordCommandConvertor()
     msoToOOcmd[ 0x20b ] = ".uno:CloseDoc";
     msoToOOcmd[ 0x50 ] = ".uno:Open";
 
-   // mso tcid to ooo command string
+    // mso tcid to ooo command string
     // #FIXME and *HUNDREDS* of id's to added here
-   tcidToOOcmd[ 0x9d9 ] = ".uno:Print";
+    tcidToOOcmd[ 0x9d9 ] = ".uno:Print";
 }
 
 OUString MSOWordCommandConvertor::MSOCommandToOOCommand( sal_Int16 key )

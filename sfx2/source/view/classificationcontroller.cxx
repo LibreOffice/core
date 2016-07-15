@@ -233,9 +233,9 @@ void ClassificationCategoriesController::removeEntries()
     }
 }
 
+// WB_NOLABEL means here that the control won't be replaced with a label
+// when it wouldn't fit the available space.
 ClassificationControl::ClassificationControl(vcl::Window* pParent)
-    // WB_NOLABEL means here that the control won't be replaced with a label
-    // when it wouldn't fit the available space.
     : Window(pParent, WB_DIALOGCONTROL | WB_NOLABEL)
 {
     m_pLabels[SfxClassificationPolicyType::IntellectualProperty] = VclPtr<FixedText>::Create(this, WB_CENTER);
