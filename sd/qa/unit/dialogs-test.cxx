@@ -54,8 +54,10 @@
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotest/macros_test.hxx>
+#include <map>
 
 using namespace ::com::sun::star;
+typedef std::map< OString, sal_uInt32 > mapType;
 
 /// Test opening a dialog in sd
 class SdDialogsTest : public ScreenshotTest
@@ -76,6 +78,9 @@ private:
     std::unique_ptr<SfxItemSet>             mpSfxItemSetFromSdrObject;
     std::unique_ptr<SfxItemSet>             mpEmptySfxItemSet;
     std::unique_ptr<SfxItemSet>             mpEmptyFillStyleSfxItemSet;
+
+    /// the set of known dialogs and their ID for usage in createDialogByID
+    mapType                                 maKnownDialogs;
 
     /// helpers
     SdAbstractDialogFactory* getSdAbstractDialogFactory();
@@ -113,7 +118,8 @@ SdDialogsTest::SdDialogsTest()
     mpDrawView(nullptr),
     mpSfxItemSetFromSdrObject(nullptr),
     mpEmptySfxItemSet(nullptr),
-    mpEmptyFillStyleSfxItemSet(nullptr)
+    mpEmptyFillStyleSfxItemSet(nullptr),
+    maKnownDialogs()
 {
 }
 
@@ -131,6 +137,36 @@ void SdDialogsTest::setUp()
 
     mpImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(mpImpressDocument);
+
+    if (maKnownDialogs.empty())
+    {
+        // fill map of unknown dilogs. Use a set here to allow later
+        // to 'find' a ID for construction based on the UIXMLDescription
+        // string (currently not yet used)
+        maKnownDialogs["modules/simpress/ui/publishingdialog.ui"] = 0;
+        maKnownDialogs["modules/sdraw/ui/breakdialog.ui"] = 1;
+        maKnownDialogs["modules/sdraw/ui/copydlg.ui"] = 2;
+        maKnownDialogs["modules/simpress/ui/customslideshows.ui"] = 3;
+        maKnownDialogs["modules/sdraw/ui/drawchardialog.ui"] = 4;
+        maKnownDialogs["modules/sdraw/ui/drawpagedialog.ui"] = 5;
+        maKnownDialogs["modules/simpress/ui/dlgfield.ui"] = 6;
+        maKnownDialogs["modules/sdraw/ui/dlgsnap.ui"] = 7;
+        maKnownDialogs["modules/sdraw/ui/insertlayer.ui"] = 8;
+        maKnownDialogs["modules/sdraw/ui/insertslidesdialog.ui"] = 9;
+        maKnownDialogs["modules/sdraw/ui/crossfadedialog.ui"] = 10;
+        maKnownDialogs["modules/sdraw/ui/bulletsandnumbering.ui"] = 11;
+        maKnownDialogs["modules/sdraw/ui/drawparadialog.ui"] = 12;
+        maKnownDialogs["modules/simpress/ui/presentationdialog.ui"] = 13;
+        maKnownDialogs["modules/simpress/ui/remotedialog.ui"] = 14;
+        maKnownDialogs["modules/sdraw/ui/drawprtldialog.ui"] = 15;
+        maKnownDialogs["modules/simpress/ui/slidedesigndialog.ui"] = 16;
+        maKnownDialogs["modules/sdraw/ui/drawprtldialog.ui"] = 17;
+        maKnownDialogs["modules/simpress/ui/interactiondialog.ui"] = 18;
+        maKnownDialogs["modules/sdraw/ui/vectorize.ui"] = 19;
+        maKnownDialogs["modules/simpress/ui/photoalbum.ui"] = 20;
+        maKnownDialogs["modules/simpress/ui/masterlayoutdlg.ui"] = 21;
+        maKnownDialogs["modules/simpress/ui/headerfooterdialog.ui"] = 22;
+    }
 }
 
 SdAbstractDialogFactory* SdDialogsTest::getSdAbstractDialogFactory()
@@ -307,11 +343,6 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
         }
         case 6:
         {
-            // CreateAssistentDlg(bool bAutoPilot) has been dropped
-            break;
-        }
-        case 7:
-        {
             // CreateSdModifyFieldDlg(vcl::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet) override;
             pRetval = getSdAbstractDialogFactory()->CreateSdModifyFieldDlg(
                 Application::GetDefDialogParent(),
@@ -319,7 +350,7 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 getEmptySfxItemSet());
             break;
         }
-        case 8:
+        case 7:
         {
             // CreateSdSnapLineDlg(const SfxItemSet& rInAttrs, ::sd::View* pView) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
@@ -333,7 +364,7 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 getDrawView());
             break;
         }
-        case 9:
+        case 8:
         {
             // CreateSdInsertLayerDlg(const SfxItemSet& rInAttrs, bool bDeletable, const OUString& aStr) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
@@ -354,7 +385,7 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 SD_RESSTR(STR_INSERTLAYER) /* alternative: STR_MODIFYLAYER */);
             break;
         }
-        case 10:
+        case 9:
         {
             // CreateSdInsertPagesObjsDlg(const SdDrawDocument* pDoc, SfxMedium* pSfxMedium, const OUString& rFileName) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
@@ -367,7 +398,7 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 aFileName);
             break;
         }
-        case 11:
+        case 10:
         {
             // CreateMorphDlg(vcl::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
@@ -383,7 +414,7 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 pSdrObj);
             break;
         }
-        case 12:
+        case 11:
         {
             // CreateSdOutlineBulletTabDlg(const SfxItemSet* pAttr, ::sd::View* pView = nullptr) override;
             pRetval = getSdAbstractDialogFactory()->CreateSdOutlineBulletTabDlg(
@@ -392,7 +423,7 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 getDrawView());
             break;
         }
-        case 13:
+        case 12:
         {
             // CreateSdParagraphTabDlg(const SfxItemSet* pAttr) override;
             pRetval = getSdAbstractDialogFactory()->CreateSdParagraphTabDlg(
@@ -400,7 +431,7 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 &getEmptySfxItemSet());
             break;
         }
-        case 14:
+        case 13:
         {
             // CreateSdStartPresentationDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs, const std::vector<OUString> &rPageNames, SdCustomShowList* pCSList) override;
             const std::vector<OUString> aPageNames;
@@ -430,14 +461,14 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 nullptr);
             break;
         }
-        case 15:
+        case 14:
         {
             // CreateRemoteDialog(vcl::Window* pWindow) override; // ad for RemoteDialog
             pRetval = getSdAbstractDialogFactory()->CreateRemoteDialog(
                 Application::GetDefDialogParent());
             break;
         }
-        case 16:
+        case 15:
         {
             // CreateSdPresLayoutTemplateDlg(SfxObjectShell* pDocSh, vcl::Window* pParent, const SdResId& DlgId, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool) override;
             // use STR_PSEUDOSHEET_TITLE configuration, see futempl.cxx for more possible configurations
@@ -455,7 +486,7 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 pStyleSheetPool);
             break;
         }
-        case 17:
+        case 16:
         {
             // CreateSdPresLayoutDlg(::sd::DrawDocShell* pDocShell, vcl::Window* pWindow, const SfxItemSet& rInAttrs) override;
             pRetval = getSdAbstractDialogFactory()->CreateSdPresLayoutDlg(
@@ -464,7 +495,7 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 getEmptySfxItemSet());
             break;
         }
-        case 18:
+        case 17:
         {
             // CreateSdTabTemplateDlg(const SfxObjectShell* pDocShell, SfxStyleSheetBase& rStyleBase, SdrModel* pModel, SdrView* pView) override;
             // pretty similar to CreateSdPresLayoutTemplateDlg, see above
@@ -483,7 +514,7 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 getDrawView());
             break;
         }
-        case 19:
+        case 18:
         {
             // CreatSdActionDialog(const SfxItemSet* pAttr, ::sd::View* pView) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
@@ -511,7 +542,7 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 getDrawView());
             break;
         }
-        case 20:
+        case 19:
         {
             // CreateSdVectorizeDlg(vcl::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell) override;
             // works well with empty Bitmap, but my be nicer with setting one
@@ -522,7 +553,7 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 getDocShell());
             break;
         }
-        case 21:
+        case 20:
         {
             // CreateSdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pDoc) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
@@ -532,7 +563,7 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 pDrawDoc);
             break;
         }
-        case 22:
+        case 21:
         {
             // CreateMasterLayoutDialog(vcl::Window* pParent, SdDrawDocument* pDoc, SdPage*) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
@@ -545,7 +576,7 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 pSdPage);
             break;
         }
-        case 23:
+        case 22:
         {
             // CreateHeaderFooterDialog(sd::ViewShell* pViewShell, vcl::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage) override;
             // This is a hard case, for two reasons:
@@ -575,24 +606,47 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
 
 void SdDialogsTest::openAnyDialog()
 {
-    // example for SfxTabDialog: 5
-    // example for TabDialog: 23
-    // example for self-adapted wizard: 0
-    static sal_uInt32 nStartValue(0);
-    static sal_uInt32 nEndValue(24);
+    static bool bDumpAllKnownDialogs = true;
 
-    // loop and dump all Dialogs from SD for now
-    for (sal_uInt32 a(nStartValue); a < nEndValue; a++)
+    if (bDumpAllKnownDialogs)
     {
-        std::unique_ptr<VclAbstractDialog> pDlg( createDialogByID(a) );
-
-        if (pDlg)
+        // example for SfxTabDialog: 5 -> "modules/sdraw/ui/drawpagedialog.ui"
+        // example for TabDialog: 22 -> "modules/simpress/ui/headerfooterdialog.ui"
+        // example for self-adapted wizard: 0 -> "modules/simpress/ui/publishingdialog.ui"
+        for (mapType::const_iterator i = maKnownDialogs.begin(); i != maKnownDialogs.end(); i++)
         {
-            dumpDialogToPath(*pDlg);
+            std::unique_ptr<VclAbstractDialog> pDlg(createDialogByID((*i).second));
+
+            if (pDlg)
+            {
+                // known dialog, dump screenshot to path
+                dumpDialogToPath(*pDlg);
+            }
+            else
+            {
+                // unknown dialog, should not happen in this basic loop.
+                // You have probably forgotten to add a case and
+                // implementastion to createDialogByID, please do this
+            }
         }
     }
 
+    static bool bCheckFallbackDialog = false;
 
+    if (bCheckFallbackDialog)
+    {
+        // unknown dialog, try fallback to generic created
+        // VclBuilder-generated instance. Keep in mind that Dialogs
+        // using this mechanism will probably not be layouted well
+        // since the setup/initialization part is missing. Thus,
+        // only use for fallback when only the UI file is available.
+        //
+        // Take any example here, it's only for demonstration - using
+        // even a known one to demonstrate the fallback possibility
+        const OString aUIXMLDescription("modules/sdraw/ui/breakdialog.ui");
+
+        dumpDialogToPath(aUIXMLDescription);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdDialogsTest);
