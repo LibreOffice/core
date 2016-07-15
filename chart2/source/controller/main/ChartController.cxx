@@ -1050,7 +1050,7 @@ void SAL_CALL ChartController::layoutEvent(
 namespace
 {
 
-bool lcl_isFormatObjectCommand( const OString& aCommand )
+bool lcl_isFormatObjectCommand( const OUString& aCommand )
 {
     if(    aCommand == "MainTitle"
         || aCommand == "SubTitle"
@@ -1146,8 +1146,7 @@ void SAL_CALL ChartController::dispatch(
     const uno::Sequence< beans::PropertyValue >& rArgs )
         throw (uno::RuntimeException, std::exception)
 {
-    //@todo avoid OString
-    OString aCommand( OUStringToOString( rURL.Path, RTL_TEXTENCODING_ASCII_US ) );
+    OUString aCommand = rURL.Path;
 
     if(aCommand == "Paste")
         this->executeDispatch_Paste();
