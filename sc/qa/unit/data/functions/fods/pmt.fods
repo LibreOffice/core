@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
- <office:meta><meta:creation-date>2016-07-04T22:00:46.986577082</meta:creation-date><meta:editing-duration>P0D</meta:editing-duration><meta:editing-cycles>1</meta:editing-cycles><meta:generator>LibreOfficeDev/5.2.0.1.0$Linux_X86_64 LibreOffice_project/aaeeb0288dfeeeed9beb33efc0a693bc1a025986</meta:generator><meta:document-statistic meta:table-count="2" meta:cell-count="148" meta:object-count="0"/></office:meta>
+ <office:meta><meta:creation-date>2016-07-04T22:00:46.986577082</meta:creation-date><meta:editing-duration>P0D</meta:editing-duration><meta:editing-cycles>1</meta:editing-cycles><meta:generator>LibreOfficeDev/5.3.0.0.alpha0$Linux_X86_64 LibreOffice_project/800a196718abbfd38d93c845e563e055ef778b04</meta:generator><meta:document-statistic meta:table-count="2" meta:cell-count="148" meta:object-count="0"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
    <config:config-item config:name="VisibleAreaTop" config:type="int">0</config:config-item>
    <config:config-item config:name="VisibleAreaLeft" config:type="int">0</config:config-item>
-   <config:config-item config:name="VisibleAreaWidth" config:type="int">44448</config:config-item>
-   <config:config-item config:name="VisibleAreaHeight" config:type="int">26483</config:config-item>
+   <config:config-item config:name="VisibleAreaWidth" config:type="int">47425</config:config-item>
+   <config:config-item config:name="VisibleAreaHeight" config:type="int">26398</config:config-item>
    <config:config-item-map-indexed config:name="Views">
     <config:config-item-map-entry>
      <config:config-item config:name="ViewId" config:type="string">view1</config:config-item>
      <config:config-item-map-named config:name="Tables">
       <config:config-item-map-entry config:name="Sheet1">
-       <config:config-item config:name="CursorPositionX" config:type="int">2</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">8</config:config-item>
+       <config:config-item config:name="CursorPositionX" config:type="int">1</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">7</config:config-item>
        <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="VerticalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
@@ -28,10 +28,11 @@
        <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
        <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
        <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
+       <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
       </config:config-item-map-entry>
       <config:config-item-map-entry config:name="Sheet2">
        <config:config-item config:name="CursorPositionX" config:type="int">2</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">28</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">27</config:config-item>
        <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="VerticalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
@@ -40,15 +41,16 @@
        <config:config-item config:name="PositionLeft" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionRight" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionTop" config:type="int">0</config:config-item>
-       <config:config-item config:name="PositionBottom" config:type="int">13</config:config-item>
+       <config:config-item config:name="PositionBottom" config:type="int">6</config:config-item>
        <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
        <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
        <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
        <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
+       <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
       </config:config-item-map-entry>
      </config:config-item-map-named>
      <config:config-item config:name="ActiveTable" config:type="string">Sheet2</config:config-item>
-     <config:config-item config:name="HorizontalScrollbarWidth" config:type="int">1241</config:config-item>
+     <config:config-item config:name="HorizontalScrollbarWidth" config:type="int">1280</config:config-item>
      <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
      <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
      <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
@@ -69,6 +71,7 @@
      <config:config-item config:name="RasterSubdivisionX" config:type="int">1</config:config-item>
      <config:config-item config:name="RasterSubdivisionY" config:type="int">1</config:config-item>
      <config:config-item config:name="IsRasterAxisSynchronized" config:type="boolean">true</config:config-item>
+     <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
     </config:config-item-map-entry>
    </config:config-item-map-indexed>
   </config:config-item-set>
@@ -122,7 +125,7 @@
    <config:config-item config:name="HasColumnRowHeaders" config:type="boolean">true</config:config-item>
    <config:config-item config:name="RasterSubdivisionY" config:type="int">1</config:config-item>
    <config:config-item config:name="AutoCalculate" config:type="boolean">true</config:config-item>
-   <config:config-item config:name="PrinterSetup" config:type="base64Binary">qQH+/0xleG1hcmstRTM1MmRuAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpMZXhtYXJrLUUzNTJkbgAAAAAAAAAAAAAAAAAWAAMAzwAAAAAAAAAEAAhSAAAEdAAASm9iRGF0YSAxCnByaW50ZXI9TGV4bWFyay1FMzUyZG4Kb3JpZW50YXRpb249UG9ydHJhaXQKY29waWVzPTEKY29sbGF0ZT1mYWxzZQptYXJnaW5kYWp1c3RtZW50PTAsMCwwLDAKY29sb3JkZXB0aD0yNApwc2xldmVsPTAKcGRmZGV2aWNlPTEKY29sb3JkZXZpY2U9MApQUERDb250ZXhEYXRhClBhZ2VTaXplOkE0AElucHV0U2xvdDpUcmF5MQBEdXBsZXg6Tm9uZQAAEgBDT01QQVRfRFVQTEVYX01PREUKAERVUExFWF9PRkY=</config:config-item>
+   <config:config-item config:name="PrinterSetup" config:type="base64Binary">qQH+/0xleG1hcmstRTM1MmRuAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpMZXhtYXJrLUUzNTJkbgAAAAAAAAAAAAAAAAAWAAMAzwAAAAAAAAAEAAhSAAAEdAAASm9iRGF0YSAxCnByaW50ZXI9TGV4bWFyay1FMzUyZG4Kb3JpZW50YXRpb249UG9ydHJhaXQKY29waWVzPTEKY29sbGF0ZT1mYWxzZQptYXJnaW5kYWp1c3RtZW50PTAsMCwwLDAKY29sb3JkZXB0aD0yNApwc2xldmVsPTAKcGRmZGV2aWNlPTEKY29sb3JkZXZpY2U9MApQUERDb250ZXhEYXRhCkR1cGxleDpOb25lAElucHV0U2xvdDpUcmF5MQBQYWdlU2l6ZTpBNAAAEgBDT01QQVRfRFVQTEVYX01PREUKAERVUExFWF9PRkY=</config:config-item>
    <config:config-item config:name="ApplyUserData" config:type="boolean">false</config:config-item>
    <config:config-item config:name="CharacterCompressionType" config:type="short">0</config:config-item>
   </config:config-item-set>
@@ -136,6 +139,7 @@
  </office:scripts>
  <office:font-face-decls>
   <style:font-face style:name="Liberation Mono" svg:font-family="&apos;Liberation Mono&apos;, &apos;Courier New&apos;, &apos;DejaVu Sans Mono&apos;, Courier, &apos;Lucida Sans Typewriter&apos;" style:font-family-generic="modern" style:font-pitch="fixed"/>
+  <style:font-face style:name="Liberation Mono1" svg:font-family="&apos;Liberation Mono&apos;, &apos;Courier New&apos;, &apos;Nimbus Mono L&apos;, &apos;DejaVu Sans Mono&apos;" style:font-family-generic="modern" style:font-pitch="fixed"/>
   <style:font-face style:name="Liberation Serif" svg:font-family="&apos;Liberation Serif&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
   <style:font-face style:name="Times New Roman1" svg:font-family="&apos;Times New Roman&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
   <style:font-face style:name="Arial" svg:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable"/>
@@ -1295,7 +1299,7 @@
    <style:table-column-properties fo:break-before="auto" style:column-width="140.94pt"/>
   </style:style>
   <style:style style:name="co9" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="32.94pt"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="117.35pt"/>
   </style:style>
   <style:style style:name="co10" style:family="table-column">
    <style:table-column-properties fo:break-before="auto" style:column-width="46.46pt"/>
@@ -1354,30 +1358,29 @@
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <style:map style:condition="value()&gt;=0" style:apply-style-name="N104P0"/>
   </number:currency-style>
+  <style:style style:name="ce1" style:family="table-cell" style:parent-style-name="Default"/>
   <style:style style:name="ce2" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="start" fo:margin-left="0pt"/>
-   <style:text-properties style:text-position="" fo:font-size="20pt" fo:font-weight="bold" style:font-size-asian="20pt" style:font-weight-asian="bold" style:font-size-complex="20pt" style:font-weight-complex="bold"/>
+   <style:text-properties fo:font-size="20pt" fo:font-weight="bold" style:font-size-asian="20pt" style:font-weight-asian="bold" style:font-size-complex="20pt" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="ce3" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:text-properties style:text-position="" fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold"/>
+   <style:text-properties fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="ce4" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:text-properties style:text-position="" fo:font-size="12pt" fo:font-weight="bold" style:font-size-asian="12pt" style:font-weight-asian="bold" style:font-size-complex="12pt" style:font-weight-complex="bold"/>
+   <style:text-properties fo:font-size="12pt" fo:font-weight="bold" style:font-size-asian="12pt" style:font-weight-asian="bold" style:font-size-complex="12pt" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="ce5" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:text-properties style:text-position=""/>
   </style:style>
   <style:style style:name="ce6" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:text-properties style:text-position=""/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B3"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B3"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B3"/>
@@ -1385,7 +1388,6 @@
   <style:style style:name="ce7" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:text-properties style:text-position=""/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
@@ -1393,143 +1395,97 @@
   <style:style style:name="ce8" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:text-properties style:text-position=""/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
   </style:style>
   <style:style style:name="ce9" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties fo:wrap-option="wrap"/>
-   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:text-position="" style:font-name="Liberation Serif" fo:font-size="10pt" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-size-asian="10pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="10pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
-  </style:style>
-  <style:style style:name="ce10" style:family="table-cell" style:parent-style-name="Default"/>
-  <style:style style:name="ce11" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="start" fo:margin-left="0pt"/>
-   <style:text-properties fo:font-size="20pt" fo:font-weight="bold" style:font-size-asian="20pt" style:font-weight-asian="bold" style:font-size-complex="20pt" style:font-weight-complex="bold"/>
-  </style:style>
-  <style:style style:name="ce12" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:text-properties fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold"/>
-  </style:style>
-  <style:style style:name="ce13" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:text-properties fo:font-size="12pt" fo:font-weight="bold" style:font-size-asian="12pt" style:font-weight-asian="bold" style:font-size-complex="12pt" style:font-weight-complex="bold"/>
-  </style:style>
-  <style:style style:name="ce14" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-  </style:style>
-  <style:style style:name="ce15" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B3"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B3"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B3"/>
-  </style:style>
-  <style:style style:name="ce16" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
-  </style:style>
-  <style:style style:name="ce17" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
-  </style:style>
-  <style:style style:name="ce18" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties fo:wrap-option="wrap"/>
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Serif" fo:font-size="10pt" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-size-asian="10pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="10pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
-  <style:style style:name="ce19" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce10" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
   </style:style>
-  <style:style style:name="ce20" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N162">
+  <style:style style:name="ce11" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N162">
    <style:table-cell-properties fo:wrap-option="wrap"/>
    <style:text-properties style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-size="10pt" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-size-asian="10pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="10pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
-  <style:style style:name="ce21" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N104"/>
-  <style:style style:name="ce22" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99"/>
-  <style:style style:name="ce23" style:family="table-cell" style:parent-style-name="Normal_20_2">
+  <style:style style:name="ce12" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N104"/>
+  <style:style style:name="ce13" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99"/>
+  <style:style style:name="ce14" style:family="table-cell" style:parent-style-name="Normal_20_2">
    <style:table-cell-properties fo:padding="2.01pt"/>
   </style:style>
-  <style:style style:name="ce24" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+  <style:style style:name="ce15" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C2"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C2"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C2"/>
   </style:style>
-  <style:style style:name="ce25" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+  <style:style style:name="ce16" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C6"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C6"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C6"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C4"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C4"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C4"/>
   </style:style>
-  <style:style style:name="ce26" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce17" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C41"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C41"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C41"/>
   </style:style>
-  <style:style style:name="ce27" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce18" style:family="table-cell" style:parent-style-name="Default">
    <style:text-properties style:font-name="Liberation Serif" style:font-name-asian="Microsoft YaHei" style:font-name-complex="Mangal"/>
   </style:style>
-  <style:style style:name="ce28" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce19" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties fo:wrap-option="wrap"/>
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Mono" fo:font-size="10pt" fo:language="en" fo:country="US" fo:font-style="italic" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-size-asian="10pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="10pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
-  <style:style style:name="ce29" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce20" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties fo:wrap-option="wrap"/>
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Serif" fo:font-size="6.80000019073486pt" fo:language="en" fo:country="US" fo:font-style="italic" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-name-asian="Segoe UI" style:font-size-asian="6.80000019073486pt" style:language-asian="en" style:country-asian="US" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Tahoma" style:font-size-complex="6.80000019073486pt" style:language-complex="en" style:country-complex="US" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
-  <style:style style:name="ce30" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce21" style:family="table-cell" style:parent-style-name="Default">
    <style:text-properties fo:color="#000000" style:font-name="Arial" fo:font-size="10pt" style:font-name-asian="Times New Roman1" style:font-size-asian="12pt" style:language-asian="ar" style:country-asian="SA"/>
   </style:style>
-  <style:style style:name="ce31" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce22" style:family="table-cell" style:parent-style-name="Default">
    <style:text-properties fo:color="#000000" style:font-name="Arial" fo:font-size="10pt" fo:language="none" fo:country="none" style:font-name-asian="Times New Roman" style:font-size-asian="12pt" style:language-asian="none" style:country-asian="none"/>
   </style:style>
-  <style:style style:name="ce32" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce23" style:family="table-cell" style:parent-style-name="Default">
    <style:text-properties fo:color="#000000" style:font-name="Arial" fo:font-size="10pt" fo:language="en" fo:country="US" style:font-name-asian="Times New Roman1" style:font-size-asian="12pt" style:language-asian="ar" style:country-asian="SA" style:font-name-complex="Tahoma" style:font-size-complex="9pt" style:language-complex="en" style:country-complex="US"/>
   </style:style>
-  <style:style style:name="ce33" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce24" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties fo:wrap-option="wrap"/>
+   <style:text-properties style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+  </style:style>
+  <style:style style:name="ce25" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties fo:padding="2.01pt"/>
    <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Bitstream Vera Sans" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Bitstream Vera Sans" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
   </style:style>
-  <style:style style:name="ce34" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce26" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties fo:wrap-option="wrap"/>
    <style:text-properties style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
-  <style:style style:name="ce35" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N11">
+  <style:style style:name="ce27" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N11">
    <style:table-cell-properties fo:wrap-option="wrap"/>
    <style:text-properties style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
-  <style:style style:name="ce36" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties fo:wrap-option="wrap"/>
+  <style:style style:name="ce28" style:family="table-cell" style:parent-style-name="Default">
    <style:text-properties style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
-  <style:style style:name="ce37" style:family="table-cell" style:parent-style-name="Default">
-   <style:text-properties style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
-  </style:style>
-  <style:style style:name="ce38" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce29" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:glyph-orientation-vertical="0" style:text-align-source="value-type" style:repeat-content="false" fo:wrap-option="wrap" style:direction="ltr" fo:padding="2.01pt" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="middle" loext:vertical-justify="auto"/>
    <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0pt" style:writing-mode="page"/>
    <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Calibri" fo:font-size="11pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="11pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
   </style:style>
-  <style:style style:name="ce39" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce30" style:family="table-cell" style:parent-style-name="Default">
    <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
   </style:style>
-  <style:style style:name="ce40" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce31" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:glyph-orientation-vertical="0" style:text-align-source="value-type" style:repeat-content="false" fo:wrap-option="wrap" style:direction="ltr" fo:padding="2.01pt" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="middle" loext:vertical-justify="auto"/>
    <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0pt" style:writing-mode="page"/>
   </style:style>
@@ -1624,7 +1580,7 @@
      <text:p><text:sheet-name>???</text:sheet-name> (<text:title>???</text:title>)</text:p>
     </style:region-left>
     <style:region-right>
-     <text:p><text:date style:data-style-name="N2" text:date-value="2016-07-14">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="16:39:43.681511258">00:00:00</text:time></text:p>
+     <text:p><text:date style:data-style-name="N2" text:date-value="2016-07-17">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="14:41:11.205584007">00:00:00</text:time></text:p>
     </style:region-right>
    </style:header>
    <style:header-left style:display="false"/>
@@ -1652,10 +1608,10 @@
    <table:table table:name="Sheet1" table:style-name="ta1">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <table:table-column table:style-name="co1" table:default-cell-style-name="Default"/>
-    <table:table-column table:style-name="co1" table:default-cell-style-name="ce14"/>
+    <table:table-column table:style-name="co1" table:default-cell-style-name="ce5"/>
     <table:table-column table:style-name="co2" table:default-cell-style-name="Default"/>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce11" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce2" office:value-type="string" calcext:value-type="string">
       <text:p>PMT Function</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="2"/>
@@ -1664,10 +1620,10 @@
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro3">
-     <table:table-cell table:style-name="ce12" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce3" office:value-type="string" calcext:value-type="string">
       <text:p>Result</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce15" table:formula="of:=AND([.B8:.B95])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce6" table:formula="of:=AND([.B8:.B95])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell/>
@@ -1676,13 +1632,13 @@
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro4">
-     <table:table-cell table:style-name="ce13" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce4" office:value-type="string" calcext:value-type="string">
       <text:p>Sheet</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce13" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce4" office:value-type="string" calcext:value-type="string">
       <text:p>Result</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce13" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce4" office:value-type="string" calcext:value-type="string">
       <text:p>Description</text:p>
      </table:table-cell>
     </table:table-row>
@@ -1690,7 +1646,7 @@
      <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
       <text:p>1</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" table:formula="of:=AND([Sheet2.C2:.C49])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce7" table:formula="of:=AND([Sheet2.C2:.C49])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -1699,27 +1655,27 @@
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="3">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce17"/>
+     <table:table-cell table:style-name="ce8"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce18"/>
+     <table:table-cell table:style-name="ce8"/>
+     <table:table-cell table:style-name="ce9"/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="9">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce17"/>
+     <table:table-cell table:style-name="ce8"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce17"/>
+     <table:table-cell table:style-name="ce8"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="16">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce17"/>
+     <table:table-cell table:style-name="ce8"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="1048537">
@@ -1745,7 +1701,7 @@
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <table:table-column table:style-name="co4" table:default-cell-style-name="Default"/>
     <table:table-column table:style-name="co5" table:default-cell-style-name="Default"/>
-    <table:table-column table:style-name="co6" table:default-cell-style-name="ce14"/>
+    <table:table-column table:style-name="co6" table:default-cell-style-name="ce5"/>
     <table:table-column table:style-name="co7" table:default-cell-style-name="Default"/>
     <table:table-column table:style-name="co8" table:default-cell-style-name="Default"/>
     <table:table-column table:style-name="co9" table:default-cell-style-name="Default"/>
@@ -1756,280 +1712,281 @@
     <table:table-column table:style-name="co13" table:number-columns-repeated="2" table:default-cell-style-name="Default"/>
     <table:table-column table:style-name="co3" table:number-columns-repeated="8" table:default-cell-style-name="Default"/>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce19" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
       <text:p>Function</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce19" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
       <text:p>Expected</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce19" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
       <text:p>Correct</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce19" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
       <text:p>FunctionString</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce19" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
       <text:p>Comment</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="3"/>
-     <table:table-cell table:style-name="ce34" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce26" office:value-type="string" calcext:value-type="string">
       <text:p>Data </text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce34" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce26" office:value-type="string" calcext:value-type="string">
       <text:p>Description </text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce34" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce26" office:value-type="string" calcext:value-type="string">
       <text:p>Data </text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce34" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce26" office:value-type="string" calcext:value-type="string">
       <text:p>Description </text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce37" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce34" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce34" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce26" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce28"/>
+     <table:table-cell table:style-name="ce26" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce28"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=PMT(0.0199/12;36;25000;0;0)" office:value-type="float" office:value="-715.955334437392" calcext:value-type="float">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PMT(0.0199/12;36;25000;0;0)" office:value-type="float" office:value="-715.955334437392" calcext:value-type="float">
       <text:p>-715.9553</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-715.955334437392" calcext:value-type="float">
       <text:p>-715.955334437392</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce24" table:formula="of:=ROUND([.A2];12)=ROUND([.B2];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce15" table:formula="of:=ROUND([.A2];10)=ROUND([.B2];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A2])" office:value-type="string" office:string-value="=PMT(0.0199/12,36,25000,0,0)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce18" table:formula="of:=FORMULA([.A2])" office:value-type="string" office:string-value="=PMT(0.0199/12,36,25000,0,0)" calcext:value-type="string">
       <text:p>=PMT(0.0199/12,36,25000,0,0)</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce28"/>
-     <table:table-cell table:style-name="ce33" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce19"/>
+     <table:table-cell table:style-name="ce24"/>
+     <table:table-cell table:style-name="ce25"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce35" office:value-type="percentage" office:value="0.08" calcext:value-type="percentage">
+     <table:table-cell table:style-name="ce27" office:value-type="percentage" office:value="0.08" calcext:value-type="percentage">
       <text:p>8.00%</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Annual interest rate</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce35" office:value-type="percentage" office:value="0.06" calcext:value-type="percentage">
+     <table:table-cell table:style-name="ce27" office:value-type="percentage" office:value="0.06" calcext:value-type="percentage">
       <text:p>6.00%</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Annual interest rate</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce37" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce36" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce36" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce24" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce28"/>
+     <table:table-cell table:style-name="ce24" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce28"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=PMT(0.0199/12;36;25000;0;)" office:value-type="float" office:value="-715.955334437392" calcext:value-type="float">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PMT(0.0199/12;36;25000;0;)" office:value-type="float" office:value="-715.955334437392" calcext:value-type="float">
       <text:p>-715.9553</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-715.955334437392" calcext:value-type="float">
       <text:p>-715.955334437392</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce24" table:formula="of:=ROUND([.A3];12)=ROUND([.B3];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce15" table:formula="of:=ROUND([.A3];10)=ROUND([.B3];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A3])" office:value-type="string" office:string-value="=PMT(0.0199/12,36,25000,0,)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce18" table:formula="of:=FORMULA([.A3])" office:value-type="string" office:string-value="=PMT(0.0199/12,36,25000,0,)" calcext:value-type="string">
       <text:p>=PMT(0.0199/12,36,25000,0,)</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce29"/>
-     <table:table-cell table:style-name="ce33" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce20"/>
+     <table:table-cell table:style-name="ce25" table:number-columns-repeated="2"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce36" office:value-type="float" office:value="10" calcext:value-type="float">
+     <table:table-cell table:style-name="ce24" office:value-type="float" office:value="10" calcext:value-type="float">
       <text:p>10</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Number of months of payments</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce36" office:value-type="float" office:value="18" calcext:value-type="float">
+     <table:table-cell table:style-name="ce24" office:value-type="float" office:value="18" calcext:value-type="float">
       <text:p>18</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Number of months of payments</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce37" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce36" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce36" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce24" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce28"/>
+     <table:table-cell table:style-name="ce24" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce28"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=PMT(0.0199/12;36;25000;0)" office:value-type="float" office:value="-715.955334437392" calcext:value-type="float">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PMT(0.0199/12;36;25000;0)" office:value-type="float" office:value="-715.955334437392" calcext:value-type="float">
       <text:p>-715.9553</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-715.955334437392" calcext:value-type="float">
       <text:p>-715.955334437392</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce24" table:formula="of:=ROUND([.A4];12)=ROUND([.B4];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce15" table:formula="of:=ROUND([.A4];10)=ROUND([.B4];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A4])" office:value-type="string" office:string-value="=PMT(0.0199/12,36,25000,0)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce18" table:formula="of:=FORMULA([.A4])" office:value-type="string" office:string-value="=PMT(0.0199/12,36,25000,0)" calcext:value-type="string">
       <text:p>=PMT(0.0199/12,36,25000,0)</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce33" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce25" table:number-columns-repeated="2"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce36" office:value-type="float" office:value="10000" calcext:value-type="float">
+     <table:table-cell table:style-name="ce24" office:value-type="float" office:value="10000" calcext:value-type="float">
       <text:p>10000</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Amount of loan</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce36" office:value-type="float" office:value="50000" calcext:value-type="float">
+     <table:table-cell table:style-name="ce24" office:value-type="float" office:value="50000" calcext:value-type="float">
       <text:p>50000</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Amount of loan</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce36" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce36" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce24" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce28"/>
+     <table:table-cell table:style-name="ce24" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce28"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=PMT(0.0199/12;36;25000;)" office:value-type="float" office:value="-715.955334437392" calcext:value-type="float">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PMT(0.0199/12;36;25000;)" office:value-type="float" office:value="-715.955334437392" calcext:value-type="float">
       <text:p>-715.9553</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-715.955334437392" calcext:value-type="float">
       <text:p>-715.955334437392</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce24" table:formula="of:=ROUND([.A5];12)=ROUND([.B5];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce15" table:formula="of:=ROUND([.A5];10)=ROUND([.B5];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A5])" office:value-type="string" office:string-value="=PMT(0.0199/12,36,25000,)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce18" table:formula="of:=FORMULA([.A5])" office:value-type="string" office:string-value="=PMT(0.0199/12,36,25000,)" calcext:value-type="string">
       <text:p>=PMT(0.0199/12,36,25000,)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="4"/>
-     <table:table-cell table:style-name="ce34"/>
+     <table:table-cell table:style-name="ce26"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce34"/>
+     <table:table-cell table:style-name="ce26"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce34"/>
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce36" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce36" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce26"/>
+     <table:table-cell table:style-name="ce28"/>
+     <table:table-cell table:style-name="ce24" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce28"/>
+     <table:table-cell table:style-name="ce24" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce28"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=PMT(0.0199/12;36;25000)" office:value-type="float" office:value="-715.955334437392" calcext:value-type="float">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PMT(0.0199/12;36;25000)" office:value-type="float" office:value="-715.955334437392" calcext:value-type="float">
       <text:p>-715.9553</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-715.955334437392" calcext:value-type="float">
       <text:p>-715.955334437392</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce24" table:formula="of:=ROUND([.A6];12)=ROUND([.B6];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce15" table:formula="of:=ROUND([.A6];10)=ROUND([.B6];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A6])" office:value-type="string" office:string-value="=PMT(0.0199/12,36,25000)" calcext:value-type="string">
       <text:p>=PMT(0.0199/12,36,25000)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="8"/>
-     <table:table-cell table:style-name="ce36"/>
-     <table:table-cell table:style-name="ce34" table:number-columns-repeated="4"/>
-     <table:table-cell table:style-name="ce36" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce24"/>
+     <table:table-cell table:style-name="ce26" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce24" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce28"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=PMT(0.0199/12;36;25000;0;1)" office:value-type="float" office:value="-714.770007508274" calcext:value-type="float">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PMT(0.0199/12;36;25000;0;1)" office:value-type="float" office:value="-714.770007508274" calcext:value-type="float">
       <text:p>-714.7700</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-714.770007508274" calcext:value-type="float">
       <text:p>-714.770007508274</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce24" table:formula="of:=ROUND([.A7];12)=ROUND([.B7];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce15" table:formula="of:=ROUND([.A7];10)=ROUND([.B7];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A7])" office:value-type="string" office:string-value="=PMT(0.0199/12,36,25000,0,1)" calcext:value-type="string">
       <text:p>=PMT(0.0199/12,36,25000,0,1)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce36"/>
+     <table:table-cell table:style-name="ce24"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce36" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce24" table:number-columns-repeated="2"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce36" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce34" table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce24" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce26" table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=PMT(0.0199/12;36;25000;0;2)" office:value-type="float" office:value="-714.770007508274" calcext:value-type="float">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PMT(0.0199/12;36;25000;0;2)" office:value-type="float" office:value="-714.770007508274" calcext:value-type="float">
       <text:p>-714.7700</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-714.770007508274" calcext:value-type="float">
       <text:p>-714.770007508274</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce24" table:formula="of:=ROUND([.A8];12)=ROUND([.B8];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce15" table:formula="of:=ROUND([.A8];10)=ROUND([.B8];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A8])" office:value-type="string" office:string-value="=PMT(0.0199/12,36,25000,0,2)" calcext:value-type="string">
       <text:p>=PMT(0.0199/12,36,25000,0,2)</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce30" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce21" office:value-type="string" calcext:value-type="string">
       <text:p>PayType: the type of payment, defaults to 0. It is 0 if payments are due at the end of the period; 1 if they are due at the beginning of the period. With PayType=1 the first payment is made on the same day the loan is taken out. <text:s/>TDF#100689</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce36" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce24" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="4"/>
-     <table:table-cell table:style-name="ce36" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce24" table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=PMT(0.0199/12;36;25000;0;-20)" office:value-type="float" office:value="-715.955334437392" calcext:value-type="float">
-      <text:p>-715.9553</text:p>
+     <table:table-cell table:style-name="ce11" table:formula="of:=PMT(0.0199/12;36;25000;0;-20)" office:value-type="float" office:value="-714.770007508274" calcext:value-type="float">
+      <text:p>-714.7700</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="-715.955334437392" calcext:value-type="float">
-      <text:p>-715.955334437392</text:p>
+     <table:table-cell office:value-type="float" office:value="-714.770007508274" calcext:value-type="float">
+      <text:p>-714.770007508274</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce24" table:formula="of:=ROUND([.A9];12)=ROUND([.B9];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce15" table:formula="of:=ROUND([.A9];10)=ROUND([.B9];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A9])" office:value-type="string" office:string-value="=PMT(0.0199/12,36,25000,0,-20)" calcext:value-type="string">
       <text:p>=PMT(0.0199/12,36,25000,0,-20)</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce30" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce21" office:value-type="string" calcext:value-type="string">
       <text:p>Tdf#100689 <text:s/>PayType: the type of payment, defaults to 0. It is 0 if payments are due at the end of the period; 1 if they are due at the beginning of the period. With PayType=1 the first payment is made on the same day the loan is taken out.</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce38" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce28"/>
+     <table:table-cell table:style-name="ce29" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="7"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=PMT(0.0199/12;36;25000;-11;0)" office:value-type="float" office:value="-715.658555756906" calcext:value-type="float">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PMT(0.0199/12;36;25000;-11;0)" office:value-type="float" office:value="-715.658555756906" calcext:value-type="float">
       <text:p>-715.6586</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-715.658555756906" calcext:value-type="float">
       <text:p>-715.658555756906</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce24" table:formula="of:=ROUND([.A10];12)=ROUND([.B10];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce15" table:formula="of:=ROUND([.A10];10)=ROUND([.B10];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="=PMT(0.0199/12,36,25000,-11,0)" calcext:value-type="string">
       <text:p>=PMT(0.0199/12,36,25000,-11,0)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce40"/>
-     <table:table-cell table:style-name="ce39"/>
+     <table:table-cell table:style-name="ce31"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="6"/>
     </table:table-row>
     <table:table-row table:style-name="ro7">
-     <table:table-cell table:style-name="ce20" table:formula="of:=PMT(0.0199/12;0;25000;0;0)" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PMT(0.0199/12;0;25000;0;0)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>#NUM!</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>error</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=ISERROR([.A11])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ISERROR([.A11])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="=PMT(0.0199/12,0,25000,0,0)" calcext:value-type="string">
@@ -2038,386 +1995,386 @@
      <table:table-cell office:value-type="string" calcext:value-type="string"><text:p><text:a xlink:href="https://lists.oasis-open.org/archives/office-comment/201607/msg00002.html" xlink:type="simple">https://lists.oasis-open.org/archives/office-comment/201607/msg00002.html</text:a></text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=PMT(0.0199/12;-36;25000;0;0)" office:value-type="float" office:value="674.497001104058" calcext:value-type="float">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PMT(0.0199/12;-36;25000;0;0)" office:value-type="float" office:value="674.497001104058" calcext:value-type="float">
       <text:p>674.4970</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="674.497001104058" calcext:value-type="float">
       <text:p>674.497001104058</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=ROUND([.A12];12)=ROUND([.B12];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A12];10)=ROUND([.B12];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=PMT(0.0199/12,-36,25000,0,0)" calcext:value-type="string">
       <text:p>=PMT(0.0199/12,-36,25000,0,0)</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce31" office:value-type="string" calcext:value-type="string"><text:p><text:span text:style-name="T9">Constraints:</text:span><text:span text:style-name="T10"> Nper &gt; 0; tdf#100689</text:span></text:p>
+     <table:table-cell table:style-name="ce22" office:value-type="string" calcext:value-type="string"><text:p><text:span text:style-name="T9">Constraints:</text:span><text:span text:style-name="T10"> Nper &gt; 0; tdf#100689</text:span></text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=PMT(0.0199/12;36;-25000;0;0)" office:value-type="float" office:value="715.955334437392" calcext:value-type="float">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PMT(0.0199/12;36;-25000;0;0)" office:value-type="float" office:value="715.955334437392" calcext:value-type="float">
       <text:p>715.9553</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="715.955334437392" calcext:value-type="float">
       <text:p>715.955334437392</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=ROUND([.A13];12)=ROUND([.B13];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A13];10)=ROUND([.B13];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A13])" office:value-type="string" office:string-value="=PMT(0.0199/12,36,-25000,0,0)" calcext:value-type="string">
       <text:p>=PMT(0.0199/12,36,-25000,0,0)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce39" table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce28"/>
+     <table:table-cell table:style-name="ce30" table:number-columns-repeated="3"/>
      <table:table-cell table:number-columns-repeated="6"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=PMT(0;36;25000;0;0)" office:value-type="float" office:value="-694.444444444444" calcext:value-type="float">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PMT(0;36;25000;0;0)" office:value-type="float" office:value="-694.444444444444" calcext:value-type="float">
       <text:p>-694.4444</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-694.444444444444" calcext:value-type="float">
       <text:p>-694.444444444444</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=ROUND([.A14];12)=ROUND([.B14];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A14];10)=ROUND([.B14];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A14])" office:value-type="string" office:string-value="=PMT(0,36,25000,0,0)" calcext:value-type="string">
       <text:p>=PMT(0,36,25000,0,0)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=PMT(-1;36;25000;0;0)" office:value-type="float" office:value="-0" calcext:value-type="float">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PMT(-1;36;25000;0;0)" office:value-type="float" office:value="-0" calcext:value-type="float">
       <text:p>0.0000</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-0" calcext:value-type="float">
       <text:p>0</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=ROUND([.A15];12)=ROUND([.B15];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A15];10)=ROUND([.B15];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A15])" office:value-type="string" office:string-value="=PMT(-1,36,25000,0,0)" calcext:value-type="string">
       <text:p>=PMT(-1,36,25000,0,0)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=PMT(-1;36;25000;0;0)" office:value-type="float" office:value="-0" calcext:value-type="float">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PMT(-1;36;25000;0;0)" office:value-type="float" office:value="-0" calcext:value-type="float">
       <text:p>0.0000</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-0" calcext:value-type="float">
       <text:p>0</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=ROUND([.A16];12)=ROUND([.B16];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A16];10)=ROUND([.B16];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A16])" office:value-type="string" office:string-value="=PMT(-1,36,25000,0,0)" calcext:value-type="string">
       <text:p>=PMT(-1,36,25000,0,0)</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32"/>
+     <table:table-cell table:style-name="ce23"/>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce39" table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce28"/>
+     <table:table-cell table:style-name="ce30" table:number-columns-repeated="3"/>
      <table:table-cell table:number-columns-repeated="6"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=PMT(1E-016;10;1000;0;0)" office:value-type="float" office:value="-100" calcext:value-type="float">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PMT(1E-016;10;1000;0;0)" office:value-type="float" office:value="-100" calcext:value-type="float">
       <text:p>-100.0000</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-100" calcext:value-type="float">
       <text:p>-100</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=ROUND([.A17];12)=ROUND([.B17];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A17];10)=ROUND([.B17];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A17])" office:value-type="string" office:string-value="=PMT(1E-016,10,1000,0,0)" calcext:value-type="string">
       <text:p>=PMT(1E-016,10,1000,0,0)</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce23" office:value-type="string" calcext:value-type="string">
       <text:p>AOO#91870</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=PMT(4.567E-015;10;1000;0;0)" office:value-type="float" office:value="-100.000000000003" calcext:value-type="float">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PMT(4.567E-015;10;1000;0;0)" office:value-type="float" office:value="-100.000000000003" calcext:value-type="float">
       <text:p>-100.0000</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-100.000000000003" calcext:value-type="float">
       <text:p>-100.000000000003</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=ROUND([.A18];12)=ROUND([.B18];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A18];10)=ROUND([.B18];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A18])" office:value-type="string" office:string-value="=PMT(4.567E-015,10,1000,0,0)" calcext:value-type="string">
       <text:p>=PMT(4.567E-015,10,1000,0,0)</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32"/>
+     <table:table-cell table:style-name="ce23"/>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=PMT(0.075/12; 2*12; 5000; 0;1)" office:value-type="float" office:value="-223.600460380743" calcext:value-type="float">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PMT(0.075/12; 2*12; 5000; 0;1)" office:value-type="float" office:value="-223.600460380743" calcext:value-type="float">
       <text:p>-223.6005</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-223.600460380743" calcext:value-type="float">
       <text:p>-223.600460380743</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=ROUND([.A19];12)=ROUND([.B19];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A19];10)=ROUND([.B19];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A19])" office:value-type="string" office:string-value="=PMT(0.075/12, 2*12, 5000, 0,1)" calcext:value-type="string">
       <text:p>=PMT(0.075/12, 2*12, 5000, 0,1)</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32"/>
+     <table:table-cell table:style-name="ce23"/>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=PMT(0.06/52; 4*52; 8000; 0; 0)" office:value-type="float" office:value="-43.2834404364871" calcext:value-type="float">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PMT(0.06/52; 4*52; 8000; 0; 0)" office:value-type="float" office:value="-43.2834404364871" calcext:value-type="float">
       <text:p>-43.2834</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-43.2834404364871" calcext:value-type="float">
       <text:p>-43.2834404364871</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=ROUND([.A20];12)=ROUND([.B20];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A20];10)=ROUND([.B20];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A20])" office:value-type="string" office:string-value="=PMT(0.06/52, 4*52, 8000, 0, 0)" calcext:value-type="string">
       <text:p>=PMT(0.06/52, 4*52, 8000, 0, 0)</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32"/>
+     <table:table-cell table:style-name="ce23"/>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=PMT(0.0025/1; 10*1; 6500; 0;0)" office:value-type="float" office:value="-658.970973448874" calcext:value-type="float">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PMT(0.0025/1; 10*1; 6500; 0;0)" office:value-type="float" office:value="-658.970973448874" calcext:value-type="float">
       <text:p>-658.9710</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-658.970973448874" calcext:value-type="float">
       <text:p>-658.970973448874</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=ROUND([.A21];12)=ROUND([.B21];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A21];10)=ROUND([.B21];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A21])" office:value-type="string" office:string-value="=PMT(0.0025/1, 10*1, 6500, 0,0)" calcext:value-type="string">
       <text:p>=PMT(0.0025/1, 10*1, 6500, 0,0)</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32"/>
+     <table:table-cell table:style-name="ce23"/>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=PMT(0.08/12; 3*12; 5000; -1000; 0)" office:value-type="float" office:value="-132.01212851239" calcext:value-type="float">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PMT(0.08/12; 3*12; 5000; -1000; 0)" office:value-type="float" office:value="-132.01212851239" calcext:value-type="float">
       <text:p>-132.0121</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-132.01212851239" calcext:value-type="float">
       <text:p>-132.01212851239</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=ROUND([.A22];12)=ROUND([.B22];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A22];10)=ROUND([.B22];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A22])" office:value-type="string" office:string-value="=PMT(0.08/12, 3*12, 5000, -1000, 0)" calcext:value-type="string">
       <text:p>=PMT(0.08/12, 3*12, 5000, -1000, 0)</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32"/>
+     <table:table-cell table:style-name="ce23"/>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce21" table:formula="of:=PMT([.I2]/12;[.I3];[.I4])" office:value-type="currency" office:currency="USD" office:value="-1037.03208935915" calcext:value-type="currency">
+     <table:table-cell table:style-name="ce12" table:formula="of:=PMT([.I2]/12;[.I3];[.I4])" office:value-type="currency" office:currency="USD" office:value="-1037.03208935915" calcext:value-type="currency">
       <text:p>-$1,037.03</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-1037.03208935915" calcext:value-type="float">
       <text:p>-1037.03208935915</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=ROUND([.A23];12)=ROUND([.B23];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A23];10)=ROUND([.B23];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A23])" office:value-type="string" office:string-value="=PMT(I2/12,I3,I4)" calcext:value-type="string">
       <text:p>=PMT(I2/12,I3,I4)</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32"/>
+     <table:table-cell table:style-name="ce23"/>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce21" table:formula="of:=PMT([.I2]/12;[.I3];[.I4])" office:value-type="currency" office:currency="USD" office:value="-1037.03208935915" calcext:value-type="currency">
+     <table:table-cell table:style-name="ce12" table:formula="of:=PMT([.I2]/12;[.I3];[.I4])" office:value-type="currency" office:currency="USD" office:value="-1037.03208935915" calcext:value-type="currency">
       <text:p>-$1,037.03</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-1037.03208935915" calcext:value-type="float">
       <text:p>-1037.03208935915</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=ROUND([.A24];12)=ROUND([.B24];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A24];10)=ROUND([.B24];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A24])" office:value-type="string" office:string-value="=PMT(I2/12,I3,I4)" calcext:value-type="string">
       <text:p>=PMT(I2/12,I3,I4)</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32"/>
+     <table:table-cell table:style-name="ce23"/>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce21" table:formula="of:=PMT([.K2]/12;[.K3]*12; 0;[.K4])" office:value-type="currency" office:currency="USD" office:value="-129.081160867991" calcext:value-type="currency">
+     <table:table-cell table:style-name="ce12" table:formula="of:=PMT([.K2]/12;[.K3]*12; 0;[.K4])" office:value-type="currency" office:currency="USD" office:value="-129.081160867991" calcext:value-type="currency">
       <text:p>-$129.08</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-129.081160867991" calcext:value-type="float">
       <text:p>-129.081160867991</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=ROUND([.A25];12)=ROUND([.B25];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A25];10)=ROUND([.B25];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A25])" office:value-type="string" office:string-value="=PMT(K2/12,K3*12, 0,K4)" calcext:value-type="string">
       <text:p>=PMT(K2/12,K3*12, 0,K4)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
-    <table:table-row table:style-name="ro7">
-     <table:table-cell table:style-name="ce22" table:formula="of:=ABS(PMT(0.05;12;1000)+112.82541)&lt;0.005" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:style-name="ce13" table:formula="of:=ABS(PMT(0.05;12;1000)+112.82541)&lt;0.005" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
       <text:p>1</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=[.A26]=[.B26]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A26];10)=ROUND([.B26];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A26])" office:value-type="string" office:string-value="=ABS(PMT(0.05,12,1000)+112.82541)&lt;0.005" calcext:value-type="string">
       <text:p>=ABS(PMT(0.05,12,1000)+112.82541)&lt;0.005</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
-    <table:table-row table:style-name="ro7">
-     <table:table-cell table:style-name="ce22" table:formula="of:=ABS(PMT(0.05;12;1000;100)+119.10795)&lt;0.005" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:style-name="ce13" table:formula="of:=ABS(PMT(0.05;12;1000;100)+119.10795)&lt;0.005" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
       <text:p>1</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=[.A27]=[.B27]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A27];10)=ROUND([.B27];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A27])" office:value-type="string" office:string-value="=ABS(PMT(0.05,12,1000,100)+119.10795)&lt;0.005" calcext:value-type="string">
       <text:p>=ABS(PMT(0.05,12,1000,100)+119.10795)&lt;0.005</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
-    <table:table-row table:style-name="ro7">
-     <table:table-cell table:style-name="ce22" table:formula="of:=ABS(PMT(0.05;12;1000;100;1)+113.43614)&lt;0.005" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:style-name="ce13" table:formula="of:=ABS(PMT(0.05;12;1000;100;1)+113.43614)&lt;0.005" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
       <text:p>1</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=[.A28]=[.B28]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A28];10)=ROUND([.B28];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A28])" office:value-type="string" office:string-value="=ABS(PMT(0.05,12,1000,100,1)+113.43614)&lt;0.005" calcext:value-type="string">
       <text:p>=ABS(PMT(0.05,12,1000,100,1)+113.43614)&lt;0.005</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
-    <table:table-row table:style-name="ro7">
-     <table:table-cell table:style-name="ce21" table:formula="of:=PMT(0;10;1000)" office:value-type="currency" office:currency="USD" office:value="-100" calcext:value-type="currency">
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:style-name="ce12" table:formula="of:=PMT(0;10;1000)" office:value-type="currency" office:currency="USD" office:value="-100" calcext:value-type="currency">
       <text:p>-$100.00</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-100" calcext:value-type="float">
       <text:p>-100</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=[.A29]=[.B29]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A29];10)=ROUND([.B29];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A29])" office:value-type="string" office:string-value="=PMT(0,10,1000)" calcext:value-type="string">
       <text:p>=PMT(0,10,1000)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell/>
      <table:table-cell table:style-name="Normal_20_2"/>
-     <table:table-cell table:style-name="ce23"/>
+     <table:table-cell table:style-name="ce14"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce23"/>
+     <table:table-cell table:style-name="ce14"/>
      <table:table-cell table:style-name="Normal_20_2" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:style-name="Normal_20_2" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce23"/>
+     <table:table-cell table:style-name="ce14"/>
      <table:table-cell table:number-columns-repeated="7"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:style-name="Normal_20_2" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce23" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce14" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce23" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce14" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6" table:number-rows-repeated="6">
-     <table:table-cell table:style-name="ce23" table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce14" table:number-columns-repeated="5"/>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro8">
-     <table:table-cell table:style-name="ce23" table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce14" table:number-columns-repeated="3"/>
      <table:table-cell office:value-type="string" calcext:value-type="string"><text:p><text:span text:style-name="T1">PMT</text:span></text:p><text:p><text:span text:style-name="T2">Summary:</text:span><text:span text:style-name="T3"> Compute the payment made each period for an investment.</text:span></text:p><text:p><text:span text:style-name="T4">Syntax:</text:span><text:span text:style-name="T5"> PMT( </text:span><text:span text:style-name="T6">Number</text:span><text:span text:style-name="T5"> Rate ; </text:span><text:span text:style-name="T7">Integer</text:span><text:span text:style-name="T5"> Nper ; </text:span><text:span text:style-name="T7">Number</text:span><text:span text:style-name="T5"> Pv [ ; [ </text:span><text:span text:style-name="T7">Number</text:span><text:span text:style-name="T5"> Fv = 0 ] [ ; </text:span><text:span text:style-name="T7">Number</text:span><text:span text:style-name="T5"> PayType = 0 ] ] )</text:span></text:p><text:p><text:span text:style-name="T2">Returns:</text:span><text:span text:style-name="T3"> Currency</text:span></text:p><text:p><text:span text:style-name="T2">Constraints:</text:span><text:span text:style-name="T3"> Nper &gt; 0</text:span></text:p><text:p><text:span text:style-name="T2">Semantics:</text:span><text:span text:style-name="T3"> Computes the payment made each period for an investment. The parameters are:</text:span></text:p><text:p><text:span text:style-name="T8">Rate: the interest rate per period.</text:span></text:p><text:p><text:span text:style-name="T8">Nper: the total number of payment periods.</text:span></text:p><text:p><text:span text:style-name="T8">Pv: the present value of the investment.</text:span></text:p><text:p><text:span text:style-name="T8">Fv: the future value of the investment; default is 0.</text:span></text:p><text:p><text:span text:style-name="T8">PayType: the type of payment, defaults to 0. It is 0 if payments are due at the end of the period; 1 if they are due at the beginning of the period. With PayType=1 the first payment is made on the same day the loan is taken out.</text:span></text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce23"/>
+     <table:table-cell table:style-name="ce14"/>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6" table:number-rows-repeated="60">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce26"/>
+     <table:table-cell table:style-name="ce17"/>
      <table:table-cell table:number-columns-repeated="7"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6" table:number-rows-repeated="158">
      <table:table-cell table:number-columns-repeated="10"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6" table:number-rows-repeated="31">
@@ -2441,21 +2398,21 @@
       <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C2"/>
      </calcext:conditional-format>
      <calcext:conditional-format calcext:target-range-address="Sheet2.C4:Sheet2.C29">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C6"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C6"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C6"/>
+      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C4"/>
+      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C4"/>
+      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C4"/>
      </calcext:conditional-format>
     </calcext:conditional-formats>
    </table:table>
-   <table:table table:name="&apos;file:///home/zdenek/Dokumenty/LO/sc-unit-test/Project%20Calc%20functions%20tests/fods/pmt.fods/function_based_test_Example.fods/function_based_test_Example_reference.fods&apos;#Sheet2" table:print="false" table:style-name="ta_extref">
-    <table:table-source xlink:type="simple" xlink:href="function_based_test_Example.fods/function_based_test_Example_reference.fods" table:table-name="Sheet2" table:mode="copy-results-only"/>
+   <table:table table:name="&apos;file:///Dokumenty/LO/sc-unit-test/Project%20Calc%20functions%20tests/fods/pmt.fods/pmt.fods/function_based_test_Example.fods/function_based_test_Example_reference.fods&apos;#Sheet2" table:print="false" table:style-name="ta_extref">
+    <table:table-source xlink:type="simple" xlink:href="/Dokumenty/LO/sc-unit-test/Project%20Calc%20functions%20tests/fods/pmt.fods/pmt.fods/function_based_test_Example.fods/function_based_test_Example_reference.fods" table:table-name="Sheet2" table:mode="copy-results-only"/>
     <table:table-column table:number-columns-repeated="8"/>
     <table:table-row table:number-rows-repeated="2">
      <table:table-cell table:number-columns-repeated="8"/>
     </table:table-row>
     <table:table-row>
      <table:table-cell table:number-columns-repeated="7"/>
-     <table:table-cell table:style-name="ce10" office:value-type="float" office:value="4">
+     <table:table-cell table:style-name="ce1" office:value-type="float" office:value="4">
       <text:p>4</text:p>
      </table:table-cell>
     </table:table-row>
