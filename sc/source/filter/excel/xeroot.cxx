@@ -240,9 +240,7 @@ void XclExpRoot::InitializeGlobals()
                 break;
             }
             uno::Reference< lang::XMultiServiceFactory > xModelFactory( xComponent, uno::UNO_QUERY);
-            // OOXML is also BIFF8 function-wise
-            oox::xls::OpCodeProvider aOpCodeProvider( xModelFactory,
-                    oox::xls::FILTER_OOXML, oox::xls::BIFF8, false);
+            oox::xls::OpCodeProvider aOpCodeProvider(xModelFactory, false);
             // Compiler mocks about non-matching ctor or conversion from
             // Sequence<...> to Sequence<const ...> if directly created or passed,
             // conversion through Any works around.
