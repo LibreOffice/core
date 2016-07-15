@@ -28,7 +28,7 @@
 # OOO_EXTRAS=http://ooo-extras.apache-extras.org.codespot.com/files/
 # OOO_EXTRAS=http://sourceforge.net/projects/oooextras.mirror/files/
 # Use a specific mirror to avoid HTTPS redirections.
-OOO_EXTRAS=http://iweb.dl.sourceforge.net/project/oooextras.mirror/
+OOO_EXTRAS=http://pilotfiber.dl.sourceforge.net/project/oooextras.mirror/
 
 # Must not fallback to svn
 # SVN_TRUNK=http://svn.apache.org/repos/asf/!svn/bc/1336449/incubator/ooo/trunk/ext_sources/
