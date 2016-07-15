@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
- <office:meta><meta:creation-date>2016-06-25T07:16:38.437590147</meta:creation-date><meta:editing-duration>P0D</meta:editing-duration><meta:editing-cycles>1</meta:editing-cycles><meta:generator>LibreOfficeDev/5.2.0.1.0$Linux_X86_64 LibreOffice_project/aaeeb0288dfeeeed9beb33efc0a693bc1a025986</meta:generator><meta:document-statistic meta:table-count="2" meta:cell-count="76" meta:object-count="0"/></office:meta>
+ <office:meta><meta:creation-date>2016-06-25T07:16:38.437590147</meta:creation-date><meta:editing-duration>P0D</meta:editing-duration><meta:editing-cycles>1</meta:editing-cycles><meta:generator>LibreOfficeDev/5.3.0.0.alpha0$Linux_X86_64 LibreOffice_project/800a196718abbfd38d93c845e563e055ef778b04</meta:generator><meta:document-statistic meta:table-count="2" meta:cell-count="76" meta:object-count="0"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
    <config:config-item config:name="VisibleAreaTop" config:type="int">0</config:config-item>
@@ -28,10 +28,11 @@
        <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
        <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
        <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
+       <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
       </config:config-item-map-entry>
       <config:config-item-map-entry config:name="Sheet2">
-       <config:config-item config:name="CursorPositionX" config:type="int">1</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">6</config:config-item>
+       <config:config-item config:name="CursorPositionX" config:type="int">2</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">12</config:config-item>
        <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="VerticalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
@@ -45,6 +46,7 @@
        <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
        <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
        <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
+       <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
       </config:config-item-map-entry>
      </config:config-item-map-named>
      <config:config-item config:name="ActiveTable" config:type="string">Sheet2</config:config-item>
@@ -69,6 +71,7 @@
      <config:config-item config:name="RasterSubdivisionX" config:type="int">1</config:config-item>
      <config:config-item config:name="RasterSubdivisionY" config:type="int">1</config:config-item>
      <config:config-item config:name="IsRasterAxisSynchronized" config:type="boolean">true</config:config-item>
+     <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
     </config:config-item-map-entry>
    </config:config-item-map-indexed>
   </config:config-item-set>
@@ -1755,7 +1758,7 @@
      <text:p><text:sheet-name>???</text:sheet-name> (<text:title>???</text:title>)</text:p>
     </style:region-left>
     <style:region-right>
-     <text:p><text:date style:data-style-name="N2" text:date-value="2016-07-14">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="17:06:52.342292172">00:00:00</text:time></text:p>
+     <text:p><text:date style:data-style-name="N2" text:date-value="2016-07-16">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="08:53:07.885684830">00:00:00</text:time></text:p>
     </style:region-right>
    </style:header>
    <style:header-left style:display="false"/>
@@ -1889,7 +1892,7 @@
      <table:table-cell office:value-type="float" office:value="0.318309886183791" calcext:value-type="float">
       <text:p>0.318309886183791</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce20" table:formula="of:=ROUND([.A2];12)=ROUND([.B2];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce20" table:formula="of:=ROUND([.A2];11)=ROUND([.B2];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce26" table:formula="of:=FORMULA([.A2])" office:value-type="string" office:string-value="=COSH(0)/PI()" calcext:value-type="string">
@@ -1913,7 +1916,7 @@
      <table:table-cell office:value-type="float" office:value="1.54308063481524" calcext:value-type="float">
       <text:p>1.54308063481524</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce20" table:formula="of:=ROUND([.A3];12)=ROUND([.B3];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce20" table:formula="of:=ROUND([.A3];11)=ROUND([.B3];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce26" table:formula="of:=FORMULA([.A3])" office:value-type="string" office:string-value="=COSH(1)" calcext:value-type="string">
@@ -1935,7 +1938,7 @@
      <table:table-cell office:value-type="float" office:value="0.491177821240452" calcext:value-type="float">
       <text:p>0.491177821240452</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce21" table:formula="of:=ROUND([.A4];12)=ROUND([.B4];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce20" table:formula="of:=ROUND([.A4];11)=ROUND([.B4];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce26" table:formula="of:=FORMULA([.A4])" office:value-type="string" office:string-value="=COSH(-1)/PI()" calcext:value-type="string">
@@ -1952,7 +1955,7 @@
      <table:table-cell office:value-type="float" office:value="1.54308063481524" calcext:value-type="float">
       <text:p>1.54308063481524</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce21" table:formula="of:=ROUND([.A5];12)=ROUND([.B5];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce20" table:formula="of:=ROUND([.A5];11)=ROUND([.B5];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce26" table:formula="of:=FORMULA([.A5])" office:value-type="string" office:string-value="=COSH(1-K20/J18)" calcext:value-type="string">
@@ -1969,7 +1972,7 @@
      <table:table-cell office:value-type="float" office:value="1.12762596520638" calcext:value-type="float">
       <text:p>1.12762596520638</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce21" table:formula="of:=ROUND([.A6];12)=ROUND([.B6];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce20" table:formula="of:=ROUND([.A6];11)=ROUND([.B6];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce26" table:formula="of:=FORMULA([.A6])" office:value-type="string" office:string-value="=COSH(-0.5)" calcext:value-type="string">
@@ -1990,7 +1993,7 @@
      <table:table-cell office:value-type="float" office:value="64.6082086756914" calcext:value-type="float">
       <text:p>64.6082086756914</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce21" table:formula="of:=ROUND([.A7];12)=ROUND([.B7];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce20" table:formula="of:=ROUND([.A7];11)=ROUND([.B7];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce26" table:formula="of:=FORMULA([.A7])" office:value-type="string" office:string-value="=COSH(-0.5)*180/PI()" calcext:value-type="string">
@@ -2009,7 +2012,7 @@
      <table:table-cell office:value-type="float" office:value="64.6082086756914" calcext:value-type="float">
       <text:p>64.6082086756914</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce21" table:formula="of:=ROUND([.A8];12)=ROUND([.B8];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce20" table:formula="of:=ROUND([.A8];11)=ROUND([.B8];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce26" table:formula="of:=FORMULA([.A8])" office:value-type="string" office:string-value="=DEGREES(COSH(-0.5))" calcext:value-type="string">
@@ -2046,7 +2049,7 @@
      <table:table-cell office:value-type="float" office:value="1.54308063481524" calcext:value-type="float">
       <text:p>1.54308063481524</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce21" table:formula="of:=ROUND([.A10];12)=ROUND([.B10];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce21" table:formula="of:=ROUND([.A10];11)=ROUND([.B10];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce26" table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="=COSH(J6)" calcext:value-type="string">
@@ -2086,7 +2089,7 @@
      <table:table-cell table:style-name="ce18" office:value-type="float" office:value="1" calcext:value-type="float">
       <text:p>1</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce21" table:formula="of:=ROUND([.A12];12)=ROUND([.B12];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce21" table:formula="of:=ROUND([.A12];11)=ROUND([.B12];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce26" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=COSH(F1)" calcext:value-type="string">
@@ -2387,8 +2390,8 @@
      </calcext:conditional-format>
     </calcext:conditional-formats>
    </table:table>
-   <table:table table:name="&apos;file:///home/zdenek/Dokumenty/LO/sc-unit-test/Project%20Calc%20functions%20tests/fods/cosh.fods/cosh.fods/cos.fods/atan.fods/asinh.fods/asin.fods/acos.fods/abs.fods/abs.fods/xor.fods/xor.fods/not.fods/ifna.fods/ifna.fods/iferror.fods/iferror.fods/if.fods/and.fods/and.fods/and.fods/and.fods/type.fods/isna.fods/isna.fods/islogical.fods/isformula.fods/iserr.fods/isblank.fods/info.fods/formula.fods/formula.fods/current.fods/cell.fods/cell.fods/minute.fods/minute.fods/year.fods/function_based_test_Example.fods/function_based_test_Example_reference.fods&apos;#Sheet2" table:print="false" table:style-name="ta_extref">
-    <table:table-source xlink:type="simple" xlink:href="cosh.fods/cosh.fods/cos.fods/atan.fods/asinh.fods/asin.fods/acos.fods/abs.fods/abs.fods/xor.fods/xor.fods/not.fods/ifna.fods/ifna.fods/iferror.fods/iferror.fods/if.fods/and.fods/and.fods/and.fods/and.fods/type.fods/isna.fods/isna.fods/islogical.fods/isformula.fods/iserr.fods/isblank.fods/info.fods/formula.fods/formula.fods/current.fods/cell.fods/cell.fods/minute.fods/minute.fods/year.fods/function_based_test_Example.fods/function_based_test_Example_reference.fods" table:table-name="Sheet2" table:mode="copy-results-only"/>
+   <table:table table:name="&apos;file:///home/zdenek/Dokumenty/LO/sc-unit-test/Project%20Calc%20functions%20tests/fods/cosh.fods/cosh.fods/cosh.fods/cosh.fods/cos.fods/atan.fods/asinh.fods/asin.fods/acos.fods/abs.fods/abs.fods/xor.fods/xor.fods/not.fods/ifna.fods/ifna.fods/iferror.fods/iferror.fods/if.fods/and.fods/and.fods/and.fods/and.fods/type.fods/isna.fods/isna.fods/islogical.fods/isformula.fods/iserr.fods/isblank.fods/info.fods/formula.fods/formula.fods/current.fods/cell.fods/cell.fods/minute.fods/minute.fods/year.fods/function_based_test_Example.fods/function_based_test_Example_reference.fods&apos;#Sheet2" table:print="false" table:style-name="ta_extref">
+    <table:table-source xlink:type="simple" xlink:href="cosh.fods/cosh.fods/cosh.fods/cos.fods/atan.fods/asinh.fods/asin.fods/acos.fods/abs.fods/abs.fods/xor.fods/xor.fods/not.fods/ifna.fods/ifna.fods/iferror.fods/iferror.fods/if.fods/and.fods/and.fods/and.fods/and.fods/type.fods/isna.fods/isna.fods/islogical.fods/isformula.fods/iserr.fods/isblank.fods/info.fods/formula.fods/formula.fods/current.fods/cell.fods/cell.fods/minute.fods/minute.fods/year.fods/function_based_test_Example.fods/function_based_test_Example_reference.fods" table:table-name="Sheet2" table:mode="copy-results-only"/>
     <table:table-column table:number-columns-repeated="8"/>
     <table:table-row table:number-rows-repeated="2">
      <table:table-cell table:number-columns-repeated="8"/>
@@ -2400,8 +2403,8 @@
      </table:table-cell>
     </table:table-row>
    </table:table>
-   <table:table table:name="&apos;file:///home/zdenek/Dokumenty/LO/sc-unit-test/Project%20Calc%20functions%20tests/fods/cosh.fods/cosh.fods/cos.fods/atan.fods/asinh.fods/asin.fods/acos.fods/abs.fods/abs.fods/xor.fods/xor.fods/not.fods/ifna.fods/ifna.fods/iferror.fods/iferror.fods/if.fods/and.fods/and.fods/and.fods/and.fods/type.fods/isna.fods/isna.fods/islogical.fods/isformula.fods/sc-unit-test/information-functions.ods&apos;#Information" table:print="false" table:style-name="ta_extref">
-    <table:table-source xlink:type="simple" xlink:href="cosh.fods/cosh.fods/cos.fods/atan.fods/asinh.fods/asin.fods/acos.fods/abs.fods/abs.fods/xor.fods/xor.fods/not.fods/ifna.fods/ifna.fods/iferror.fods/iferror.fods/if.fods/and.fods/and.fods/and.fods/and.fods/type.fods/isna.fods/isna.fods/islogical.fods/isformula.fods/sc-unit-test/information-functions.ods" table:table-name="Information" table:mode="copy-results-only"/>
+   <table:table table:name="&apos;file:///home/zdenek/Dokumenty/LO/sc-unit-test/Project%20Calc%20functions%20tests/fods/cosh.fods/cosh.fods/cosh.fods/cosh.fods/cos.fods/atan.fods/asinh.fods/asin.fods/acos.fods/abs.fods/abs.fods/xor.fods/xor.fods/not.fods/ifna.fods/ifna.fods/iferror.fods/iferror.fods/if.fods/and.fods/and.fods/and.fods/and.fods/type.fods/isna.fods/isna.fods/islogical.fods/isformula.fods/sc-unit-test/information-functions.ods&apos;#Information" table:print="false" table:style-name="ta_extref">
+    <table:table-source xlink:type="simple" xlink:href="cosh.fods/cosh.fods/cosh.fods/cos.fods/atan.fods/asinh.fods/asin.fods/acos.fods/abs.fods/abs.fods/xor.fods/xor.fods/not.fods/ifna.fods/ifna.fods/iferror.fods/iferror.fods/if.fods/and.fods/and.fods/and.fods/and.fods/type.fods/isna.fods/isna.fods/islogical.fods/isformula.fods/sc-unit-test/information-functions.ods" table:table-name="Information" table:mode="copy-results-only"/>
     <table:table-column table:number-columns-repeated="15"/>
     <table:table-row table:number-rows-repeated="6">
      <table:table-cell table:number-columns-repeated="15"/>
