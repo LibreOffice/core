@@ -68,9 +68,6 @@ protected:
 
 class ONumericControl: public OBoundControl
 {
-protected:
-    virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
-
 public:
     explicit ONumericControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
 

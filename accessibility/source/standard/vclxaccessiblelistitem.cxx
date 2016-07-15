@@ -153,11 +153,6 @@ Any SAL_CALL VCLXAccessibleListItem::queryInterface( Type const & rType ) throw 
 
 // XTypeProvider
 
-Sequence< Type > SAL_CALL VCLXAccessibleListItem::getTypes(  ) throw (RuntimeException, std::exception)
-{
-    return VCLXAccessibleListItem_BASE::getTypes();
-}
-
 Sequence< sal_Int8 > VCLXAccessibleListItem::getImplementationId() throw (RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();

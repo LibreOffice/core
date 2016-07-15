@@ -53,13 +53,6 @@ css::uno::Sequence<OUString> ONumericControl::getSupportedServiceNames() throw(s
     return aSupported;
 }
 
-
-Sequence<Type> ONumericControl::_getTypes()
-{
-    return OBoundControl::_getTypes();
-}
-
-
 // ONumericModel
 
 Sequence<Type> ONumericModel::_getTypes()

@@ -105,13 +105,6 @@ void SAL_CALL Svx3DSceneObject::release() throw ( )
 
 // XTypeProvider
 
-uno::Sequence< uno::Type > SAL_CALL Svx3DSceneObject::getTypes()
-    throw (uno::RuntimeException, std::exception)
-{
-
-    return SvxShape::getTypes();
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL Svx3DSceneObject::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
