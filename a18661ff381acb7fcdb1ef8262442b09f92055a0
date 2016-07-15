@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "9a89bdaa_df6dfbcd",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-07-15T10:24:22Z",
+      "side": 1,
+      "message": "Well, it could be useful in some cases to be able to handle some e,g, text documents (native to MS) in MS Office, and others (say ODTs) in LO. MS made a bad decision when it put application-names into \u003cscheme-name\u003e. I don\u0027t like \"libreoffice\" either, for the same reason; better would be something like \"office:ofe|mime|application/vnd.....|u|http://bla-bla-bla/file.odt\" - but we need a scheme that is possible to use with current SharePoint infrastructure. I\u0027m not sure if we could just use MIME names directly in \u003cscheme-name\u003e.",
+      "parentUuid": "9a89bdaa_bf2af77c",
+      "revId": "a18661ff381acb7fcdb1ef8262442b09f92055a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a89bdaa_df1fbb59",
         "filename": "desktop/source/app/cmdlineargs.cxx",
         "patchSetId": 5
@@ -115,6 +133,24 @@
       "writtenOn": "2016-07-15T08:42:35Z",
       "side": 1,
       "message": "If you need access to these lib-internal entities from a CppUnit test, please check whether it is possible to use gb_CppunitTest_use_library_objects to link the lib\u0027s objects statically into the test code, instead of unconditionally exposing those entities.",
+      "revId": "a18661ff381acb7fcdb1ef8262442b09f92055a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a89bdaa_5f4bab59",
+        "filename": "desktop/source/app/cmdlineargs.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-07-15T10:24:22Z",
+      "side": 1,
+      "message": "I tried this first. This gives 405 unresolved externals for a start. Do you think it\u0027s a good way to try to find all possible dependencies?",
+      "parentUuid": "9a89bdaa_7f1a2f70",
       "revId": "a18661ff381acb7fcdb1ef8262442b09f92055a0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
