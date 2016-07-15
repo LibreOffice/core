@@ -38,7 +38,7 @@ int shellToView(SfxViewShell* pViewShell)
 
 int SfxLokHelper::createView()
 {
-    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
     SfxRequest aRequest(pViewFrame, SID_NEWWINDOW);
     pViewFrame->ExecView_Impl(aRequest);
 
@@ -91,21 +91,8 @@ int SfxLokHelper::getView(SfxViewShell* pViewShell)
 
 std::size_t SfxLokHelper::getViews()
 {
-    std::size_t nRet = 0;
-
-    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-    if (!pViewFrame)
-        return nRet;
-
-    SfxObjectShell* pObjectShell = pViewFrame->GetObjectShell();
     SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
-    for (SfxViewShell* i : rViewArr)
-    {
-        if (i->GetObjectShell() == pObjectShell)
-            ++nRet;
-    }
-
-    return nRet;
+    return rViewArr.size();
 }
 
 void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OString& rKey, const OString& rPayload)
