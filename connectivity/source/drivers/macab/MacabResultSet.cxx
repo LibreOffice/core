@@ -1007,7 +1007,7 @@ IPropertyArrayHelper* MacabResultSet::createArrayHelper() const
 
 IPropertyArrayHelper & MacabResultSet::getInfoHelper()
 {
-    return *static_cast<MacabResultSet*>(this)->getArrayHelper();
+    return *getArrayHelper();
 }
 
 sal_Bool MacabResultSet::convertFastPropertyValue(

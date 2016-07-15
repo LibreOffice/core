@@ -710,7 +710,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
             /* Get the keys and values */
             dictKeys = static_cast<CFStringRef *>(malloc(sizeof(CFStringRef)*numRecords));
             dictValues = static_cast<CFTypeRef *>(malloc(sizeof(CFTypeRef)*numRecords));
-            CFDictionaryGetKeysAndValues(static_cast<CFDictionaryRef>(_propertyValue), reinterpret_cast<const void **>(dictKeys), static_cast<const void **>(dictValues));
+            CFDictionaryGetKeysAndValues(static_cast<CFDictionaryRef>(_propertyValue), reinterpret_cast<const void **>(dictKeys), dictValues);
 
             propertyNameString = CFStringToOUString(_propertyName);
 
@@ -792,7 +792,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                  */
                 for(i = 0; i < arrLength; i++)
                 {
-                    arrValue = static_cast<CFTypeRef>(CFArrayGetValueAtIndex(static_cast<CFArrayRef>(_propertyValue), i));
+                    arrValue = CFArrayGetValueAtIndex(static_cast<CFArrayRef>(_propertyValue), i);
                     arrType = (ABPropertyType) getABTypeFromCFType( CFGetTypeID(arrValue) );
                     arrLabelString = propertyNameString + OUString::number(i);
                     arrLabel = OUStringToCFString(arrLabelString);
@@ -1021,7 +1021,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
                 CFTypeRef *dictValues;
                 dictKeys = static_cast<CFStringRef *>(malloc(sizeof(CFStringRef)*numRecords));
                 dictValues = static_cast<CFTypeRef *>(malloc(sizeof(CFTypeRef)*numRecords));
-                CFDictionaryGetKeysAndValues(static_cast<CFDictionaryRef>(_propertyValue), reinterpret_cast<const void **>(dictKeys), static_cast<const void **>(dictValues));
+                CFDictionaryGetKeysAndValues(static_cast<CFDictionaryRef>(_propertyValue), reinterpret_cast<const void **>(dictKeys), dictValues);
 
                 /* Going through each element... */
                 for(i = 0; i < numRecords; i++)
