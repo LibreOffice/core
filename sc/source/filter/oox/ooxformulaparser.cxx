@@ -50,7 +50,7 @@ private:
 };
 
 OOXMLFormulaParserImpl::OOXMLFormulaParserImpl( const Reference< XMultiServiceFactory >& rxModelFactory ) :
-    FormulaFinalizer( OpCodeProvider( rxModelFactory, FILTER_OOXML, BIFF_UNKNOWN, true ) ),
+    FormulaFinalizer( OpCodeProvider( rxModelFactory, true ) ),
     maApiParser( rxModelFactory, *this )
 {
 }

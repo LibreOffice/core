@@ -236,21 +236,14 @@ struct FunctionData
     FunctionParamInfo   mpParamInfos[ FUNCINFO_PARAMINFOCOUNT ]; /// Information about all parameters.
     sal_uInt16          mnFlags;            /// Additional flags.
 
-    inline bool         isSupported( bool bImportFilter, FilterType eFilter ) const;
+    inline bool         isSupported(bool bImportFilter) const;
 };
 
-inline bool FunctionData::isSupported( bool bImportFilter, FilterType eFilter ) const
+inline bool FunctionData::isSupported(bool bImportFilter) const
 {
-    /*  For import filters: the FUNCFLAG_EXPORTONLY and FUNCFLAG_BIFFEXPORTONLY flag must not be set.
-        For OOXML import:   the FUNCFLAG_BIFFIMPORTONLY flag must not be set.
-        For export filters: the FUNCFLAG_IMPORTONLY and FUNCFLAG_BIFFIMPORTONLY flag must not be set.
+    /*  For OOXML import:   the FUNCFLAG_BIFFIMPORTONLY flag must not be set.
         For OOXML export:   the FUNCFLAG_BIFFEXPORTONLY flag must not be set. */
-    bool bSupported = !getFlag( mnFlags, static_cast<sal_uInt16>(bImportFilter ?
-                (FUNCFLAG_EXPORTONLY | FUNCFLAG_BIFFEXPORTONLY) :
-                (FUNCFLAG_IMPORTONLY | FUNCFLAG_BIFFIMPORTONLY)));
-    if (bSupported && eFilter == FILTER_OOXML)
-        bSupported = !getFlag( mnFlags, bImportFilter ? FUNCFLAG_BIFFIMPORTONLY : FUNCFLAG_BIFFEXPORTONLY );
-    return bSupported;
+    return !(mnFlags & (bImportFilter ? FUNCFLAG_BIFFIMPORTONLY : FUNCFLAG_BIFFEXPORTONLY));
 }
 
 const sal_uInt16 NOID = SAL_MAX_UINT16;     /// No BIFF function identifier available.
@@ -1013,67 +1006,35 @@ struct FunctionProviderImpl
     FuncIdMap           maBiffFuncs;        /// Maps BIFF2-BIFF8 function indexes to function data.
     FuncNameMap         maMacroFuncs;       /// Maps macro function names to function data.
 
-    explicit            FunctionProviderImpl( FilterType eFilter, BiffType eBiff, bool bImportFilter,
-                                              bool bCallerKnowsAboutMacroExport );
+    explicit            FunctionProviderImpl(bool bImportFilter);
 
 private:
     /** Creates and inserts a function info struct from the passed function data. */
-    void                initFunc( const FunctionData& rFuncData, sal_uInt8 nMaxParam );
+    void                initFunc(const FunctionData& rFuncData);
 
     /** Initializes the members from the passed function data list. */
-    void                initFuncs(
-                            const FunctionData* pBeg, const FunctionData* pEnd,
-                            sal_uInt8 nMaxParam, bool bImportFilter, FilterType eFilter );
+    void                initFuncs(const FunctionData* pBeg, const FunctionData* pEnd, bool bImportFilter);
 };
 
-FunctionProviderImpl::FunctionProviderImpl( FilterType eFilter, BiffType eBiff, bool bImportFilter,
-        bool bCallerKnowsAboutMacroExport )
+FunctionProviderImpl::FunctionProviderImpl( bool bImportFilter )
 {
-    // NOTE: this warning is only applicable if called for not yet existing
-    // external export filter, not the Calc internal conversion from binary to
-    // OOXML that also uses this mapping. Which is the only reason for
-    // bCallerKnowsAboutMacroExport, to suppress this warning then.
-    OSL_ENSURE( bImportFilter || bCallerKnowsAboutMacroExport,
-            "FunctionProviderImpl::FunctionProviderImpl - need special handling for macro call functions" );
-    (void)bCallerKnowsAboutMacroExport;
-    sal_uInt8 nMaxParam = 0;
-    switch( eFilter )
-    {
-        case FILTER_OOXML:
-            nMaxParam = OOX_MAX_PARAMCOUNT;
-            eBiff = BIFF8;  // insert all BIFF function tables, then the OOXML table
-        break;
-        case FILTER_BIFF:
-            nMaxParam = BIFF_MAX_PARAMCOUNT;
-        break;
-        case FILTER_UNKNOWN:
-            OSL_FAIL( "FunctionProviderImpl::FunctionProviderImpl - invalid filter type" );
-        break;
-    }
-    OSL_ENSURE( eBiff != BIFF_UNKNOWN, "FunctionProviderImpl::FunctionProviderImpl - invalid BIFF type" );
-
     /*  Add functions supported in the current BIFF version only. Function
         tables from later BIFF versions may overwrite single functions from
         earlier tables. */
-    if( eBiff >= BIFF2 )
-        initFuncs( saFuncTableBiff2, ::std::end( saFuncTableBiff2 ), nMaxParam, bImportFilter, eFilter );
-    if( eBiff >= BIFF3 )
-        initFuncs( saFuncTableBiff3, ::std::end( saFuncTableBiff3 ), nMaxParam, bImportFilter, eFilter );
-    if( eBiff >= BIFF4 )
-        initFuncs( saFuncTableBiff4, ::std::end( saFuncTableBiff4 ), nMaxParam, bImportFilter, eFilter );
-    if( eBiff >= BIFF5 )
-        initFuncs( saFuncTableBiff5, ::std::end( saFuncTableBiff5 ), nMaxParam, bImportFilter, eFilter );
-    if( eBiff >= BIFF8 )
-        initFuncs( saFuncTableBiff8, ::std::end( saFuncTableBiff8 ), nMaxParam, bImportFilter, eFilter );
-    initFuncs( saFuncTableOox, ::std::end( saFuncTableOox ), nMaxParam, bImportFilter, eFilter );
-    initFuncs( saFuncTable2010, ::std::end( saFuncTable2010 ), nMaxParam, bImportFilter, eFilter );
-    initFuncs( saFuncTable2013, ::std::end( saFuncTable2013 ), nMaxParam, bImportFilter, eFilter );
-    initFuncs( saFuncTable2016, ::std::end( saFuncTable2016 ), nMaxParam, bImportFilter, eFilter );
-    initFuncs( saFuncTableOdf, ::std::end( saFuncTableOdf ), nMaxParam, bImportFilter, eFilter );
-    initFuncs( saFuncTableOOoLO, ::std::end( saFuncTableOOoLO ), nMaxParam, bImportFilter, eFilter );
+    initFuncs( saFuncTableBiff2, std::end( saFuncTableBiff2 ), bImportFilter );
+    initFuncs( saFuncTableBiff3, std::end( saFuncTableBiff3 ), bImportFilter );
+    initFuncs( saFuncTableBiff4, std::end( saFuncTableBiff4 ), bImportFilter );
+    initFuncs( saFuncTableBiff5, std::end( saFuncTableBiff5 ), bImportFilter );
+    initFuncs( saFuncTableBiff8, std::end( saFuncTableBiff8 ), bImportFilter );
+    initFuncs( saFuncTableOox,   std::end( saFuncTableOox   ), bImportFilter );
+    initFuncs( saFuncTable2010,  std::end( saFuncTable2010  ), bImportFilter );
+    initFuncs( saFuncTable2013,  std::end( saFuncTable2013  ), bImportFilter );
+    initFuncs( saFuncTable2016,  std::end( saFuncTable2016  ), bImportFilter );
+    initFuncs( saFuncTableOdf,   std::end( saFuncTableOdf   ), bImportFilter );
+    initFuncs( saFuncTableOOoLO, std::end( saFuncTableOOoLO ), bImportFilter );
 }
 
-void FunctionProviderImpl::initFunc( const FunctionData& rFuncData, sal_uInt8 nMaxParam )
+void FunctionProviderImpl::initFunc(const FunctionData& rFuncData)
 {
     // create a function info object
     FunctionInfoRef xFuncInfo( new FunctionInfo );
@@ -1103,7 +1064,7 @@ void FunctionProviderImpl::initFunc( const FunctionData& rFuncData, sal_uInt8 nM
     xFuncInfo->mnBiff12FuncId = rFuncData.mnBiff12FuncId;
     xFuncInfo->mnBiffFuncId = rFuncData.mnBiffFuncId;
     xFuncInfo->mnMinParamCount = rFuncData.mnMinParamCount;
-    xFuncInfo->mnMaxParamCount = (rFuncData.mnMaxParamCount == MX) ? nMaxParam : rFuncData.mnMaxParamCount;
+    xFuncInfo->mnMaxParamCount = (rFuncData.mnMaxParamCount == MX) ? OOX_MAX_PARAMCOUNT : rFuncData.mnMaxParamCount;
     xFuncInfo->mnRetClass = rFuncData.mnRetClass;
     xFuncInfo->mpParamInfos = rFuncData.mpParamInfos;
     xFuncInfo->mbParamPairs = getFlag( rFuncData.mnFlags, FUNCFLAG_PARAMPAIRS );
@@ -1129,17 +1090,15 @@ void FunctionProviderImpl::initFunc( const FunctionData& rFuncData, sal_uInt8 nM
         maMacroFuncs[ xFuncInfo->maBiffMacroName ] = xFuncInfo;
 }
 
-void FunctionProviderImpl::initFuncs( const FunctionData* pBeg, const FunctionData* pEnd, sal_uInt8 nMaxParam,
-        bool bImportFilter, FilterType eFilter )
+void FunctionProviderImpl::initFuncs(const FunctionData* pBeg, const FunctionData* pEnd, bool bImportFilter)
 {
     for( const FunctionData* pIt = pBeg; pIt != pEnd; ++pIt )
-        if( pIt->isSupported( bImportFilter, eFilter ) )
-            initFunc( *pIt, nMaxParam );
+        if( pIt->isSupported(bImportFilter) )
+            initFunc(*pIt);
 }
 
-FunctionProvider::FunctionProvider( FilterType eFilter, BiffType eBiff, bool bImportFilter,
-        bool bCallerKnowsAboutMacroExport ) :
-    mxFuncImpl( new FunctionProviderImpl( eFilter, eBiff, bImportFilter, bCallerKnowsAboutMacroExport ) )
+FunctionProvider::FunctionProvider(  bool bImportFilter ) :
+    mxFuncImpl( new FunctionProviderImpl( bImportFilter ) )
 {
 }
 
@@ -1470,8 +1429,8 @@ bool OpCodeProviderImpl::initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, c
 }
 
 OpCodeProvider::OpCodeProvider( const Reference< XMultiServiceFactory >& rxModelFactory,
-        FilterType eFilter, BiffType eBiff, bool bImportFilter ) :
-    FunctionProvider( eFilter, eBiff, bImportFilter, true/*bCallerKnowsAboutMacroExport*/ ),
+         bool bImportFilter ) :
+    FunctionProvider( bImportFilter ),
     mxOpCodeImpl( new OpCodeProviderImpl( getFuncs(), rxModelFactory ) )
 {
 }
@@ -1607,7 +1566,7 @@ TokenToRangeListState lclProcessClose( sal_Int32& ornParenLevel )
 } // namespace
 
 FormulaProcessorBase::FormulaProcessorBase( const WorkbookHelper& rHelper ) :
-    OpCodeProvider( rHelper.getBaseFilter().getModelFactory(), FILTER_OOXML, rHelper.getBiff(), rHelper.getBaseFilter().isImportFilter() ),
+    OpCodeProvider( rHelper.getBaseFilter().getModelFactory(), rHelper.getBaseFilter().isImportFilter() ),
     ApiOpCodes( getOpCodes() ),
     WorkbookHelper( rHelper )
 {
