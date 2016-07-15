@@ -240,7 +240,7 @@ bool AccessibleBase::ImplUpdateChildren()
 
         ::std::sort( aModelChildren.begin(), aModelChildren.end());
 
-        ::std::vector< ObjectHierarchy::tOID > aChildrenToRemove, aChildrenToAdd;
+        ::std::vector< ObjectIdentifier > aChildrenToRemove, aChildrenToAdd;
         ::std::set_difference( aModelChildren.begin(), aModelChildren.end(),
                                aAccChildren.begin(), aAccChildren.end(),
                                ::std::back_inserter( aChildrenToAdd ));
@@ -248,7 +248,7 @@ bool AccessibleBase::ImplUpdateChildren()
                                aModelChildren.begin(), aModelChildren.end(),
                                ::std::back_inserter( aChildrenToRemove ));
 
-        ::std::vector< ObjectHierarchy::tOID >::const_iterator aIt( aChildrenToRemove.begin());
+        ::std::vector< ObjectIdentifier >::const_iterator aIt( aChildrenToRemove.begin());
         for( ; aIt != aChildrenToRemove.end(); ++aIt )
         {
             RemoveChildByOId( *aIt );

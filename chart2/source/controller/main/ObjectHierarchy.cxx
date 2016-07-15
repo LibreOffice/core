@@ -127,11 +127,11 @@ public:
         ExplicitValueProvider* pExplicitValueProvider,
         bool bFlattenDiagram, bool bOrderingForElementSelector );
 
-    bool                              hasChildren( const ObjectHierarchy::tOID& rParent );
-    ObjectHierarchy::tChildContainer  getChildren( const ObjectHierarchy::tOID& rParent );
-    ObjectHierarchy::tChildContainer  getSiblings( const ObjectHierarchy::tOID& rNode );
+    bool                              hasChildren( const ObjectIdentifier& rParent );
+    ObjectHierarchy::tChildContainer  getChildren( const ObjectIdentifier& rParent );
+    ObjectHierarchy::tChildContainer  getSiblings( const ObjectIdentifier& rNode );
 
-    ObjectHierarchy::tOID             getParent( const ObjectHierarchy::tOID& rOID );
+    ObjectIdentifier getParent( const ObjectIdentifier& rOID );
 
 private:
     void createTree( const Reference< XChartDocument > & xChartDocument );
@@ -155,11 +155,11 @@ private:
         const Reference< XDiagram > & xDiagram  );
     void createAdditionalShapesTree( ObjectHierarchy::tChildContainer& rContainer );
 
-    ObjectHierarchy::tOID getParentImpl(
-        const ObjectHierarchy::tOID& rParentOID,
-        const ObjectHierarchy::tOID& rOID );
+    ObjectIdentifier getParentImpl(
+        const ObjectIdentifier& rParentOID,
+        const ObjectIdentifier& rOID );
 
-    typedef ::std::map< ObjectHierarchy::tOID, ObjectHierarchy::tChildContainer >
+    typedef ::std::map< ObjectIdentifier, ObjectHierarchy::tChildContainer >
         tChildMap;
     tChildMap m_aChildMap;
     ExplicitValueProvider* m_pExplicitValueProvider;
@@ -191,7 +191,7 @@ void ImplObjectHierarchy::createTree( const Reference< XChartDocument >& xChartD
     //@todo: change ObjectIdentifier to take an XChartDocument rather than XModel
     Reference< frame::XModel > xModel( xChartDocument, uno::UNO_QUERY );
     Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartDocument ) );
-    ObjectHierarchy::tOID aDiaOID;
+    ObjectIdentifier aDiaOID;
     if( xDiagram.is() )
         aDiaOID = ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForObject( xDiagram, xModel ) );
     ObjectHierarchy::tChildContainer aTopLevelContainer;
@@ -279,7 +279,7 @@ void ImplObjectHierarchy::createLegendTree(
 {
     if( xDiagram.is() && LegendHelper::hasLegend( xDiagram ) )
     {
-        ObjectHierarchy::tOID aLegendOID( ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForObject( xDiagram->getLegend(), Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ) ) ) );
+        ObjectIdentifier aLegendOID( ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForObject( xDiagram->getLegend(), Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ) ) ) );
         rContainer.push_back( aLegendOID );
 
         // iterate over child shapes of legend and search for matching CIDs
@@ -431,7 +431,7 @@ void ImplObjectHierarchy::createDataSeriesTree(
                     OUString aSeriesParticle(
                         ObjectIdentifier::createParticleForSeries(
                             nDiagramIndex, nCooSysIdx, nCTIdx, nSeriesIdx ));
-                    ObjectHierarchy::tOID aSeriesOID(
+                    ObjectIdentifier aSeriesOID(
                         ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForParticle( aSeriesParticle ) ) );
                     rOutDiagramSubContainer.push_back( aSeriesOID );
 
@@ -548,7 +548,7 @@ void ImplObjectHierarchy::createAdditionalShapesTree( ObjectHierarchy::tChildCon
     }
 }
 
-bool ImplObjectHierarchy::hasChildren( const ObjectHierarchy::tOID& rParent )
+bool ImplObjectHierarchy::hasChildren( const ObjectIdentifier& rParent )
 {
     if ( rParent.isValid() )
     {
@@ -559,7 +559,7 @@ bool ImplObjectHierarchy::hasChildren( const ObjectHierarchy::tOID& rParent )
     return false;
 }
 
-ObjectHierarchy::tChildContainer ImplObjectHierarchy::getChildren( const ObjectHierarchy::tOID& rParent )
+ObjectHierarchy::tChildContainer ImplObjectHierarchy::getChildren( const ObjectIdentifier& rParent )
 {
     if ( rParent.isValid() )
     {
@@ -570,7 +570,7 @@ ObjectHierarchy::tChildContainer ImplObjectHierarchy::getChildren( const ObjectH
     return ObjectHierarchy::tChildContainer();
 }
 
-ObjectHierarchy::tChildContainer ImplObjectHierarchy::getSiblings( const ObjectHierarchy::tOID& rNode )
+ObjectHierarchy::tChildContainer ImplObjectHierarchy::getSiblings( const ObjectIdentifier& rNode )
 {
     if ( rNode.isValid() && !ObjectHierarchy::isRootNode( rNode ) )
     {
@@ -586,9 +586,9 @@ ObjectHierarchy::tChildContainer ImplObjectHierarchy::getSiblings( const ObjectH
     return ObjectHierarchy::tChildContainer();
 }
 
-ObjectHierarchy::tOID ImplObjectHierarchy::getParentImpl(
-    const ObjectHierarchy::tOID & rParentOID,
-    const ObjectHierarchy::tOID & rOID )
+ObjectIdentifier ImplObjectHierarchy::getParentImpl(
+    const ObjectIdentifier & rParentOID,
+    const ObjectIdentifier & rOID )
 {
     // search children
     ObjectHierarchy::tChildContainer aChildren( getChildren( rParentOID ));
@@ -601,7 +601,7 @@ ObjectHierarchy::tOID ImplObjectHierarchy::getParentImpl(
     for( aIt = aChildren.begin(); aIt != aChildren.end(); ++aIt )
     {
         // recursion
-        ObjectHierarchy::tOID aTempParent( getParentImpl( *aIt, rOID ));
+        ObjectIdentifier aTempParent( getParentImpl( *aIt, rOID ));
         if ( aTempParent.isValid() )
         {
             // exit on success
@@ -610,11 +610,11 @@ ObjectHierarchy::tOID ImplObjectHierarchy::getParentImpl(
     }
 
     // exit on fail
-    return ObjectHierarchy::tOID();
+    return ObjectIdentifier();
 }
 
-ObjectHierarchy::tOID ImplObjectHierarchy::getParent(
-    const ObjectHierarchy::tOID & rOID )
+ObjectIdentifier ImplObjectHierarchy::getParent(
+    const ObjectIdentifier & rOID )
 {
     return getParentImpl( ObjectHierarchy::getRootNodeOID(), rOID );
 }
@@ -632,12 +632,12 @@ ObjectHierarchy::ObjectHierarchy(
 ObjectHierarchy::~ObjectHierarchy()
 {}
 
-ObjectHierarchy::tOID ObjectHierarchy::getRootNodeOID()
+ObjectIdentifier ObjectHierarchy::getRootNodeOID()
 {
     return ObjectIdentifier( "ROOT" );
 }
 
-bool ObjectHierarchy::isRootNode( const ObjectHierarchy::tOID& rOID )
+bool ObjectHierarchy::isRootNode( const ObjectIdentifier& rOID )
 {
     return ( rOID == ObjectHierarchy::getRootNodeOID() );
 }
@@ -647,13 +647,13 @@ ObjectHierarchy::tChildContainer ObjectHierarchy::getTopLevelChildren() const
     return m_apImpl->getChildren( ObjectHierarchy::getRootNodeOID());
 }
 
-bool ObjectHierarchy::hasChildren( const tOID& rParent ) const
+bool ObjectHierarchy::hasChildren( const ObjectIdentifier& rParent ) const
 {
     return m_apImpl->hasChildren( rParent );
 }
 
 ObjectHierarchy::tChildContainer ObjectHierarchy::getChildren(
-    const ObjectHierarchy::tOID& rParent ) const
+    const ObjectIdentifier& rParent ) const
 {
     if ( rParent.isValid() )
         return m_apImpl->getChildren( rParent );
@@ -662,7 +662,7 @@ ObjectHierarchy::tChildContainer ObjectHierarchy::getChildren(
 }
 
 ObjectHierarchy::tChildContainer ObjectHierarchy::getSiblings(
-    const ObjectHierarchy::tOID& rNode ) const
+    const ObjectIdentifier& rNode ) const
 {
     if ( rNode.isValid() && !isRootNode( rNode ) )
         return m_apImpl->getSiblings( rNode );
@@ -670,16 +670,16 @@ ObjectHierarchy::tChildContainer ObjectHierarchy::getSiblings(
     return ObjectHierarchy::tChildContainer();
 }
 
-ObjectHierarchy::tOID ObjectHierarchy::getParent(
-    const ObjectHierarchy::tOID& rNode ) const
+ObjectIdentifier ObjectHierarchy::getParent(
+    const ObjectIdentifier& rNode ) const
 {
     return m_apImpl->getParent( rNode );
 }
 
 sal_Int32 ObjectHierarchy::getIndexInParent(
-    const ObjectHierarchy::tOID& rNode ) const
+    const ObjectIdentifier& rNode ) const
 {
-    tOID aParentOID( m_apImpl->getParent( rNode ));
+    ObjectIdentifier aParentOID( m_apImpl->getParent( rNode ));
     tChildContainer aChildren( m_apImpl->getChildren( aParentOID ) );
     tChildContainer::const_iterator aIt( aChildren.begin() );
     for( sal_Int32 nIndex = 0; aIt != aChildren.end(); ++nIndex, ++aIt )
@@ -691,7 +691,7 @@ sal_Int32 ObjectHierarchy::getIndexInParent(
 }
 
 ObjectKeyNavigation::ObjectKeyNavigation(
-    const ObjectHierarchy::tOID & rCurrentOID,
+    const ObjectIdentifier & rCurrentOID,
     const Reference< chart2::XChartDocument > & xChartDocument,
     ExplicitValueProvider * pExplicitValueProvider /* = 0 */ ) :
         m_aCurrentOID( rCurrentOID ),
@@ -740,7 +740,7 @@ bool ObjectKeyNavigation::handleKeyEvent(
     return bResult;
 }
 
-void ObjectKeyNavigation::setCurrentSelection( const ObjectHierarchy::tOID& rOID )
+void ObjectKeyNavigation::setCurrentSelection( const ObjectIdentifier& rOID )
 {
     m_aCurrentOID = rOID;
 }

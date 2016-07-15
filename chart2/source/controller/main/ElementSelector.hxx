@@ -33,7 +33,7 @@ namespace chart
 struct ListBoxEntryData
 {
     OUString UIName;
-    ObjectHierarchy::tOID OID;
+    ObjectIdentifier OID;
     sal_Int32 nHierarchyDepth;
 
     ListBoxEntryData() : nHierarchyDepth(0)
