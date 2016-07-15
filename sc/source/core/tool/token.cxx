@@ -4250,7 +4250,10 @@ void checkBounds(
     if (pDeletedRange && aAbs.aStart.Row() <= pDeletedRange->aStart.Row())
     {
         SCROW nOffset = pDeletedRange->aStart.Row() - aAbs.aStart.Row();
-        rBounds.push_back(rPos.Row()+nOffset);
+        SCROW nRow = rPos.Row() + nOffset;
+        // Unlike for rCheckRange, for pDeletedRange nRow can be anywhere>=0.
+        if (ValidRow(nRow))
+            rBounds.push_back(nRow);
     }
 
     if (aAbs.aEnd.Row() >= rCheckRange.aEnd.Row())
@@ -4272,7 +4275,10 @@ void checkBounds(
     if (pDeletedRange && aAbs.aEnd.Row() >= pDeletedRange->aEnd.Row())
     {
         SCROW nOffset = pDeletedRange->aEnd.Row() + 1 - aAbs.aStart.Row();
-        rBounds.push_back(rPos.Row()+nOffset);
+        SCROW nRow = rPos.Row() + nOffset;
+        // Unlike for rCheckRange, for pDeletedRange nRow can be ~anywhere.
+        if (ValidRow(nRow))
+            rBounds.push_back(nRow);
     }
 }
 
