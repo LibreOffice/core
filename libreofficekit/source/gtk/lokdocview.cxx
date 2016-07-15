@@ -155,6 +155,9 @@ struct LOKDocViewPrivateImpl
     GdkRectangle m_aVisibleArea;
     bool m_bVisibleAreaSet;
 
+    /// Event source ID for handleTimeout() of this widget.
+    guint m_nTimeoutId;
+
     LOKDocViewPrivateImpl()
         : m_aLOPath(nullptr),
         m_pUserProfileURL(nullptr),
@@ -196,10 +199,16 @@ struct LOKDocViewPrivateImpl
         m_nViewId(0),
         m_nTileSizeTwips(0),
         m_aVisibleArea({0, 0, 0, 0}),
-        m_bVisibleAreaSet(false)
+        m_bVisibleAreaSet(false),
+        m_nTimeoutId(0)
     {
         memset(&m_aGraphicHandleRects, 0, sizeof(m_aGraphicHandleRects));
         memset(&m_bInDragGraphicHandles, 0, sizeof(m_bInDragGraphicHandles));
+    }
+
+    ~LOKDocViewPrivateImpl()
+    {
+        g_source_remove(m_nTimeoutId);
     }
 };
 
@@ -863,7 +872,7 @@ static gboolean postDocumentLoad(gpointer pData)
     priv->m_pDocument->pClass->getDocumentSize(priv->m_pDocument, &priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
     priv->m_nParts = priv->m_pDocument->pClass->getParts(priv->m_pDocument);
     aGuard.unlock();
-    g_timeout_add(600, handleTimeout, pLOKDocView);
+    priv->m_nTimeoutId = g_timeout_add(600, handleTimeout, pLOKDocView);
 
     float zoom = priv->m_fZoom;
     long nDocumentWidthTwips = priv->m_nDocumentWidthTwips;
@@ -2370,10 +2379,17 @@ static void lok_doc_view_finalize (GObject* object)
     LOKDocView* pDocView = LOK_DOC_VIEW (object);
     LOKDocViewPrivate& priv = getPrivate(pDocView);
 
-    if (priv->m_pDocument)
-        priv->m_pDocument->pClass->destroy (priv->m_pDocument);
-    if (priv->m_pOffice)
-        priv->m_pOffice->pClass->destroy (priv->m_pOffice);
+    if (priv->m_pDocument && priv->m_pDocument->pClass->getViews(priv->m_pDocument) > 1)
+    {
+        priv->m_pDocument->pClass->destroyView(priv->m_pDocument, priv->m_nViewId);
+    }
+    else
+    {
+        if (priv->m_pDocument)
+            priv->m_pDocument->pClass->destroy (priv->m_pDocument);
+        if (priv->m_pOffice)
+            priv->m_pOffice->pClass->destroy (priv->m_pOffice);
+    }
     delete priv.m_pImpl;
     priv.m_pImpl = nullptr;
 

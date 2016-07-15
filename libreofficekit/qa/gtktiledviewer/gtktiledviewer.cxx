@@ -1206,7 +1206,7 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     GtkWidget *pWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(pWindow), "LibreOfficeKit GTK Tiled Viewer");
     gtk_window_set_default_size(GTK_WINDOW(pWindow), 1280, 720);
-    g_signal_connect(pWindow, "destroy", G_CALLBACK(gtk_main_quit), 0);
+    g_signal_connect(pWindow, "destroy", G_CALLBACK(gtk_widget_destroy), pWindow);
 
     rWindow.m_pVBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_container_add(GTK_CONTAINER(pWindow), rWindow.m_pVBox);
