@@ -172,6 +172,24 @@
       "revId": "a18661ff381acb7fcdb1ef8262442b09f92055a0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a89bdaa_7f5f8f0e",
+        "filename": "desktop/source/app/cmdlineargs.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-15T10:34:30Z",
+      "side": 1,
+      "message": "You generally need to copy most of the gb_Library_* settings from the Library_*.mk as gb_CppunitTest_* settings into the CppunitTest_*.mk.  It\u0027s all quite awkward (and sometimes just doesn\u0027t work at all), but IMO still better than the alternative.",
+      "parentUuid": "9a89bdaa_3f6507e1",
+      "revId": "a18661ff381acb7fcdb1ef8262442b09f92055a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
