@@ -1309,7 +1309,14 @@ static void AddConversionsToDispatchList(
 
     OUString aOutDir( rParamOut.trim() );
     OUString aPWD;
-    ::tools::getProcessWorkingDir( aPWD );
+    if (cwdUrl)
+    {
+        aPWD = *cwdUrl;
+    }
+    else
+    {
+        ::tools::getProcessWorkingDir( aPWD );
+    }
 
     if( !::osl::FileBase::getAbsoluteFileURL( aPWD, rParamOut, aOutDir ) )
         ::osl::FileBase::getSystemPathFromFileURL( aOutDir, aOutDir );
