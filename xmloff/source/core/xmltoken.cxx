@@ -2201,6 +2201,8 @@ namespace xmloff { namespace token {
         TOKEN( "regression-period",               XML_REGRESSION_PERIOD ),
         TOKEN( "regression-force-intercept",      XML_REGRESSION_FORCE_INTERCEPT ),
         TOKEN( "regression-intercept-value",      XML_REGRESSION_INTERCEPT_VALUE ),
+        TOKEN( "regression-x-name",               XML_REGRESSION_X_NAME ),
+        TOKEN( "regression-y-name",               XML_REGRESSION_Y_NAME ),
 
         TOKEN( "error-indicator",                 XML_ERROR_INDICATOR ),
 

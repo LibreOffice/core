@@ -129,6 +129,8 @@ class XclRoot;
 #define EXC_CHPROP_VARYCOLORSBY             "VaryColorsByPoint"
 #define EXC_CHPROP_WEIGHT                   "Weight"
 #define EXC_CHPROP_WHITEDAY                 "WhiteDay"
+#define EXC_CHPROP_XNAME                    "XName"
+#define EXC_CHPROP_YNAME                    "YName"
 
 // data series roles
 #define EXC_CHPROP_ROLE_CATEG               "categories"
