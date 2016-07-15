@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a89bdaa_9fcff3b2",
+        "filename": "xmloff/source/chart/PropertyMap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-07-15T11:37:21Z",
+      "side": 1,
+      "message": "Why do we need this? As far as I know there was never a LibreOffice version that wrote the wrong namespace.",
+      "revId": "3f15f80fc8f9bdcc8096e0d8c1448222e324b44b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
