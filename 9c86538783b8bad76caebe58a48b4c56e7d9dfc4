@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a89bdaa_1fce8383",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-07-15T13:25:25Z",
+      "side": 1,
+      "message": "I just fail to come up with a meaningful \"FOO\" :) Creativity isn\u0027t my strong side",
+      "parentUuid": "9a89bdaa_3fe4270c",
+      "revId": "9c86538783b8bad76caebe58a48b4c56e7d9dfc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a89bdaa_ffe1dfff",
         "filename": "desktop/source/app/cmdlineargs.cxx",
         "patchSetId": 6
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9a89bdaa_3fcb4774",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-07-15T13:25:25Z",
+      "side": 1,
+      "message": "Well, as to two calls into one, that\u0027s fine.\nBut I suppose assert is only meaningful in debug builds, while the throw allows for catching in release builds.",
+      "parentUuid": "9a89bdaa_ffe1dfff",
+      "revId": "9c86538783b8bad76caebe58a48b4c56e7d9dfc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a89bdaa_1fe76313",
         "filename": "desktop/source/app/cmdlineargs.cxx",
         "patchSetId": 6
@@ -47,6 +83,24 @@
       "writtenOn": "2016-07-15T13:05:41Z",
       "side": 1,
       "message": "given the only place that throws Supplier::Exception in OfficeURISchemeCommandLineSupplier is redundant, this try--catch is also redundant",
+      "revId": "9c86538783b8bad76caebe58a48b4c56e7d9dfc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a89bdaa_7fc5cf59",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-07-15T13:25:25Z",
+      "side": 1,
+      "message": "I\u0027ll remove it just because I already check for the only cause of the exception above. I inserted it just in case if later some other causes of exceptions could emerge.",
+      "parentUuid": "9a89bdaa_1fe76313",
       "revId": "9c86538783b8bad76caebe58a48b4c56e7d9dfc4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
