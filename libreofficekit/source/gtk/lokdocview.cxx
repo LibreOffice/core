@@ -2379,6 +2379,15 @@ static void lok_doc_view_finalize (GObject* object)
     LOKDocView* pDocView = LOK_DOC_VIEW (object);
     LOKDocViewPrivate& priv = getPrivate(pDocView);
 
+    // Ignore notifications sent to this view on shutdown.
+    std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::stringstream ss;
+    ss << "lok::Document::setView(" << priv->m_nViewId << ")";
+    g_info("%s", ss.str().c_str());
+    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
+    priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, nullptr, nullptr);
+    aGuard.unlock();
+
     if (priv->m_pDocument && priv->m_pDocument->pClass->getViews(priv->m_pDocument) > 1)
     {
         priv->m_pDocument->pClass->destroyView(priv->m_pDocument, priv->m_nViewId);
