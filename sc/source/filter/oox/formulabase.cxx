@@ -487,7 +487,7 @@ static const FunctionData saFuncTableBiff4[] =
     { "RANK",                   "RANK",                 216,    216,    2,  3,  V, { VR, RO, VR }, 0 },
     { "DB",                     "DB",                   247,    247,    4,  5,  V, { VR }, 0 },
     { "FREQUENCY",              "FREQUENCY",            252,    252,    2,  2,  A, { RA }, 0 },
-    { "ORG.OPENOFFICE.ERRORTYPE","ERROR.TYPE",          261,    261,    1,  1,  V, { VR }, 0 },
+    { "ERROR.TYPE",             "ERROR.TYPE",           261,    261,    1,  1,  V, { VR }, 0 },
     { "AVEDEV",                 "AVEDEV",               269,    269,    1,  MX, V, { RX }, 0 },
     { "BETADIST",               "BETADIST",             270,    270,    3,  5,  V, { VR }, 0 },
     { "GAMMALN",                "GAMMALN",              271,    271,    1,  1,  V, { VR }, 0 },
