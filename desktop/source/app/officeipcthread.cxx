@@ -1048,6 +1048,12 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
         pRequest->aPrintToList = aCmdLineArgs->GetPrintToList();
         pRequest->aPrinterName = aCmdLineArgs->GetPrinterName();
         bDocRequestSent |= !( pRequest->aPrintToList.empty() || pRequest->aPrinterName.isEmpty() );
+        pRequest->aConversionList = aCmdLineArgs->GetConversionList();
+        pRequest->aConversionParams = aCmdLineArgs->GetConversionParams();
+        pRequest->aConversionOut = aCmdLineArgs->GetConversionOut();
+        pRequest->aInFilter = aCmdLineArgs->GetInFilter();
+        pRequest->bTextCat = aCmdLineArgs->IsTextCat();
+        bDocRequestSent |= !pRequest->aConversionList.empty();
 
         if ( !rCurrentCmdLineArgs.IsInvisible() )
         {
