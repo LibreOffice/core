@@ -26,6 +26,7 @@
 #include "DrawViewWrapper.hxx"
 #include "ResId.hxx"
 #include "Strings.hrc"
+#include "ObjectIdentifier.hxx"
 
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -57,14 +58,14 @@ SelectorListBox::SelectorListBox( vcl::Window* pParent, WinBits nStyle )
 {
 }
 
-void lcl_addObjectsToList( const ObjectHierarchy& rHierarchy, const ObjectHierarchy::tOID & rParent, std::vector< ListBoxEntryData >& rEntries
+void lcl_addObjectsToList( const ObjectHierarchy& rHierarchy, const  ObjectIdentifier & rParent, std::vector< ListBoxEntryData >& rEntries
                           , const sal_Int32 nHierarchyDepth, const Reference< chart2::XChartDocument >& xChartDoc )
 {
     ObjectHierarchy::tChildContainer aChildren( rHierarchy.getChildren(rParent) );
     ObjectHierarchy::tChildContainer::const_iterator aIt( aChildren.begin());
     while( aIt != aChildren.end() )
     {
-        ObjectHierarchy::tOID aOID = *aIt;
+        ObjectIdentifier aOID = *aIt;
         OUString aCID = aOID.getObjectCID();
         ListBoxEntryData aEntry;
         aEntry.OID = aOID;
@@ -90,7 +91,7 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
     if( xChartController.is() )
     {
         Reference< view::XSelectionSupplier > xSelectionSupplier( xChartController, uno::UNO_QUERY);
-        ObjectHierarchy::tOID aSelectedOID;
+        ObjectIdentifier aSelectedOID;
         OUString aSelectedCID;
         if( xSelectionSupplier.is() )
         {
@@ -191,7 +192,7 @@ void SelectorListBox::Select()
         const sal_Int32 nPos = GetSelectEntryPos();
         if( static_cast<size_t>(nPos) < m_aEntries.size() )
         {
-            ObjectHierarchy::tOID aOID = m_aEntries[nPos].OID;
+            ObjectIdentifier aOID = m_aEntries[nPos].OID;
             Reference< view::XSelectionSupplier > xSelectionSupplier( m_xChartController.get(), uno::UNO_QUERY );
             if( xSelectionSupplier.is() )
                 xSelectionSupplier->select( aOID.getAny() );
