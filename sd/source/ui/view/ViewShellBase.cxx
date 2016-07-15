@@ -86,6 +86,8 @@
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
 #include <tools/diagnose_ex.h>
+#include <sfx2/lokhelper.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include "fubullet.hxx"
 
@@ -270,6 +272,11 @@ ViewShellBase::ViewShellBase (
 */
 ViewShellBase::~ViewShellBase()
 {
+    // Notify other LOK views that we are going away.
+    SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", "false");
+    SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "");
+    SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY");
+
     sfx2::SfxNotebookBar::CloseMethod(GetFrame()->GetBindings());
 
     rtl::Reference<SlideShow> xSlideShow(SlideShow::GetSlideShow(*this));

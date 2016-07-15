@@ -114,6 +114,8 @@
 
 #include <svl/cjkoptions.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1017,6 +1019,11 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
 SwView::~SwView()
 {
+    // Notify other LOK views that we are going away.
+    SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", "false");
+    SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "");
+    SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY");
+
     GetViewFrame()->GetWindow().RemoveChildEventListener( LINK( this, SwView, WindowChildEventListener ) );
     delete m_pPostItMgr;
     m_pPostItMgr = nullptr;
