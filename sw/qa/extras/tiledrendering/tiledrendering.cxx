@@ -55,6 +55,7 @@ public:
     void testViewCursors();
     void testMissingInvalidation();
     void testViewCursorVisibility();
+    void testViewCursorCleanup();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -76,6 +77,7 @@ public:
     CPPUNIT_TEST(testViewCursors);
     CPPUNIT_TEST(testMissingInvalidation);
     CPPUNIT_TEST(testViewCursorVisibility);
+    CPPUNIT_TEST(testViewCursorCleanup);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -557,6 +559,7 @@ public:
     bool m_bViewSelectionSet;
     bool m_bTilesInvalidated;
     bool m_bViewCursorVisible;
+    bool m_bGraphicViewSelection;
 
     ViewCallback()
         : m_bOwnCursorInvalidated(false),
@@ -564,7 +567,8 @@ public:
           m_bOwnSelectionSet(false),
           m_bViewSelectionSet(false),
           m_bTilesInvalidated(false),
-          m_bViewCursorVisible(false)
+          m_bViewCursorVisible(false),
+          m_bGraphicViewSelection(false)
     {
     }
 
@@ -605,6 +609,14 @@ public:
         case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
         {
             m_bViewCursorVisible = OString("true") == pPayload;
+        }
+        break;
+        case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
+        {
+            std::stringstream aStream(pPayload);
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+            m_bGraphicViewSelection = aTree.get_child("selection").get_value<std::string>() != "EMPTY";
         }
         break;
         }
@@ -714,6 +726,43 @@ void SwTiledRenderingTest::testViewCursorVisibility()
     Scheduler::ProcessEventsToIdle();
     // Make sure the "view/text" cursor of the first view gets a notification.
     CPPUNIT_ASSERT(!aView1.m_bViewCursorVisible);
+    mxComponent->dispose();
+    mxComponent.clear();
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testViewCursorCleanup()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    // Load a document that has a shape and create two views.
+    SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    int nView2 = SfxLokHelper::createView();
+    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ViewCallback aView2;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+
+    // Click on the shape in the second view.
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+    Point aCenter = pObject->GetSnapRect().Center();
+    aView1.m_bGraphicViewSelection = false;
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aCenter.getX(), aCenter.getY(), 1);
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aCenter.getX(), aCenter.getY(), 1);
+    Scheduler::ProcessEventsToIdle();
+    // Make sure there is a graphic view selection on the first view.
+    CPPUNIT_ASSERT(aView1.m_bGraphicViewSelection);
+
+    // Now destroy the second view.
+    SfxLokHelper::destroyView(nView2);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), SfxLokHelper::getViews());
+    // Make sure that the graphic view selection on the first view is cleaned up.
+    CPPUNIT_ASSERT(!aView1.m_bGraphicViewSelection);
     mxComponent->dispose();
     mxComponent.clear();
 
