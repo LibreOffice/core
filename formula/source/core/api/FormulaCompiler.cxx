@@ -1424,7 +1424,7 @@ void FormulaCompiler::Factor()
                     {
                         // Remove the ocPush/svDouble just removed also from
                         // the compiler local RPN array.
-                        --pCode, --pc;
+                        --pCode; --pc;
                         (*pCode)->DecRef(); // may be dead now
                         pFacToken->SetByte( nSepCount - 1 );
                     }
