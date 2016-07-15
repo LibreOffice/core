@@ -111,10 +111,4 @@ sal_Bool SAL_CALL SvxAccessibleTextPropertySet::supportsService (const OUString&
     return cppu::supportsService(this, sServiceName);
 }
 
-uno::Sequence< OUString> SAL_CALL SvxAccessibleTextPropertySet::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
-{
-    // TODO
-    return SvxUnoTextRangeBase::getSupportedServiceNames();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

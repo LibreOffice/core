@@ -129,12 +129,6 @@ void SAL_CALL SvxShapeGroup::release() throw ( )
     SvxShape::release();
 }
 
-uno::Sequence< uno::Type > SAL_CALL SvxShapeGroup::getTypes()
-    throw (uno::RuntimeException, std::exception)
-{
-    return SvxShape::getTypes();
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SvxShapeGroup::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
@@ -367,14 +361,6 @@ sal_Bool SAL_CALL SvxShapeGroup::hasElements() throw( uno::RuntimeException, std
     return mpObj.is() && mpObj->GetSubList() && (mpObj->GetSubList()->GetObjCount() > 0);
 }
 
-
-// css::lang::XServiceInfo
-
-uno::Sequence< OUString > SAL_CALL SvxShapeGroup::getSupportedServiceNames()
-    throw(uno::RuntimeException, std::exception)
-{
-    return SvxShape::getSupportedServiceNames();
-}
 SvxShapeConnector::SvxShapeConnector( SdrObject* pObj )  throw() :
     SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_CONNECTOR), getSvxMapProvider().GetPropertySet(SVXMAP_CONNECTOR, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
@@ -519,14 +505,6 @@ void SAL_CALL SvxShapeConnector::disconnectEnd( const uno::Reference< drawing::X
         mpModel->SetChanged();
 }
 
-
-// css::lang::XServiceInfo
-
-uno::Sequence< OUString > SAL_CALL SvxShapeConnector::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
-{
-    return SvxShapeText::getSupportedServiceNames();
-}
-
 SvxShapeControl::SvxShapeControl( SdrObject* pObj )  throw() :
     SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_CONTROL), getSvxMapProvider().GetPropertySet(SVXMAP_CONTROL, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
@@ -641,12 +619,6 @@ void SAL_CALL SvxShapeControl::setControl( const Reference< awt::XControlModel >
 
     if( mpModel )
         mpModel->SetChanged();
-}
-
-// XServiceInfo
-uno::Sequence< OUString > SAL_CALL SvxShapeControl::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
-{
-    return SvxShapeText::getSupportedServiceNames();
 }
 
 static struct
@@ -991,11 +963,6 @@ SvxShapeDimensioning::~SvxShapeDimensioning() throw()
 {
 }
 
-// css::lang::XServiceInfo
-uno::Sequence< OUString > SAL_CALL SvxShapeDimensioning::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
-{
-    return SvxShapeText::getSupportedServiceNames();
-}
 SvxShapeCircle::SvxShapeCircle( SdrObject* pObj ) throw()
 :   SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_CIRCLE), getSvxMapProvider().GetPropertySet(SVXMAP_CIRCLE, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
@@ -1005,14 +972,6 @@ SvxShapeCircle::SvxShapeCircle( SdrObject* pObj ) throw()
 SvxShapeCircle::~SvxShapeCircle() throw()
 {
 }
-
-// css::lang::XServiceInfo
-// XServiceInfo
-uno::Sequence< OUString > SAL_CALL SvxShapeCircle::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
-{
-    return SvxShapeText::getSupportedServiceNames();
-}
-
 
 SvxShapePolyPolygon::SvxShapePolyPolygon( SdrObject* pObj , drawing::PolygonKind eNew )
  throw( css::beans::PropertyVetoException, css::lang::IllegalArgumentException)
@@ -1263,12 +1222,6 @@ basegfx::B2DPolyPolygon SvxShapePolyPolygon::GetPolygon() const throw()
     }
 }
 
-// css::lang::XServiceInfo
-uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygon::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
-{
-    return SvxShapeText::getSupportedServiceNames();
-}
-
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
 
@@ -1384,13 +1337,6 @@ basegfx::B2DPolyPolygon SvxShapePolyPolygonBezier::GetPolygon() const throw()
     {
         return basegfx::B2DPolyPolygon();
     }
-}
-
-
-// css::lang::XServiceInfo
-uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygonBezier::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
-{
-    return SvxShapeText::getSupportedServiceNames();
 }
 
 SvxGraphicObject::SvxGraphicObject( SdrObject* pObj, OUString const & referer ) throw()

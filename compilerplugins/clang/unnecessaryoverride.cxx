@@ -12,6 +12,8 @@
 #include <iostream>
 #include <fstream>
 #include <set>
+
+#include "compat.hxx"
 #include "plugin.hxx"
 
 /**
@@ -67,16 +69,61 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
 
     const CXXMethodDecl* overriddenMethodDecl = *methodDecl->begin_overridden_methods();
 
+    if (compat::getReturnType(*methodDecl).getCanonicalType()
+        != compat::getReturnType(*overriddenMethodDecl).getCanonicalType())
+    {
+        return true;
+    }
+    //TODO: check for identical exception specifications
+
     const CompoundStmt* compoundStmt = dyn_cast<CompoundStmt>(methodDecl->getBody());
     if (!compoundStmt || compoundStmt->size() != 1)
         return true;
-    const Stmt* firstStmt = compoundStmt->body_front();
-    if (const ReturnStmt* returnStmt = dyn_cast<ReturnStmt>(firstStmt)) {
-        firstStmt = returnStmt->getRetValue();
-    }
-    if (!firstStmt)
+    auto returnStmt = dyn_cast<ReturnStmt>(compoundStmt->body_front());
+    if (returnStmt == nullptr) {
         return true;
-    const CXXMemberCallExpr* callExpr = dyn_cast<CXXMemberCallExpr>(firstStmt);
+    }
+    auto returnExpr = returnStmt->getRetValue();
+    if (returnExpr == nullptr) {
+        return true;
+    }
+    returnExpr = returnExpr->IgnoreImplicit();
+
+    // In something like
+    //
+    //  Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(
+    //      const rtl::OUString& sql)
+    //      throw(SQLException, RuntimeException, std::exception)
+    //  {
+    //      return OCommonStatement::executeQuery( sql );
+    //  }
+    //
+    // look down through all the
+    //
+    //   ReturnStmt
+    //   `-ExprWithCleanups
+    //     `-CXXConstructExpr
+    //      `-MaterializeTemporaryExpr
+    //       `-ImplicitCastExpr
+    //        `-CXXBindTemporaryExpr
+    //         `-CXXMemberCallExpr
+    //
+    // where the fact that the overriding and overridden function have identical
+    // return types makes us confident that all we need to check here is whether
+    // there's an (arbitrary, one-argument) CXXConstructorExpr and
+    // CXXBindTemporaryExpr in between:
+    if (auto ctorExpr = dyn_cast<CXXConstructExpr>(returnExpr)) {
+        if (ctorExpr->getNumArgs() == 1) {
+            if (auto tempExpr = dyn_cast<CXXBindTemporaryExpr>(
+                    ctorExpr->getArg(0)->IgnoreImplicit()))
+            {
+                returnExpr = tempExpr->getSubExpr();
+            }
+        }
+    }
+
+    const CXXMemberCallExpr* callExpr = dyn_cast<CXXMemberCallExpr>(
+        returnExpr->IgnoreParenImpCasts());
     if (!callExpr || callExpr->getMethodDecl() != overriddenMethodDecl)
         return true;
     const ImplicitCastExpr* expr1 = dyn_cast_or_null<ImplicitCastExpr>(callExpr->getImplicitObjectArgument());
@@ -92,9 +139,10 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
     }
 
     report(
-        DiagnosticsEngine::Warning, "method just calls parent method",
+        DiagnosticsEngine::Warning, "%0 virtual function just calls %1 parent",
         methodDecl->getSourceRange().getBegin())
-      << methodDecl->getSourceRange();
+        << methodDecl->getAccess() << overriddenMethodDecl->getAccess()
+        << methodDecl->getSourceRange();
     if (methodDecl->getCanonicalDecl()->getLocation() != methodDecl->getLocation()) {
         const CXXMethodDecl* pOther = methodDecl->getCanonicalDecl();
         report(
