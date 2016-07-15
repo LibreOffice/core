@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
- <office:meta><meta:creation-date>2016-07-14T16:48:37.094759640</meta:creation-date><meta:editing-duration>P0D</meta:editing-duration><meta:editing-cycles>1</meta:editing-cycles><meta:generator>LibreOfficeDev/5.2.0.1.0$Linux_X86_64 LibreOffice_project/aaeeb0288dfeeeed9beb33efc0a693bc1a025986</meta:generator><meta:document-statistic meta:table-count="2" meta:cell-count="86" meta:object-count="0"/></office:meta>
+ <office:meta><meta:creation-date>2016-07-14T16:48:37.094759640</meta:creation-date><meta:editing-duration>P0D</meta:editing-duration><meta:editing-cycles>1</meta:editing-cycles><meta:generator>LibreOfficeDev/5.3.0.0.alpha0$Linux_X86_64 LibreOffice_project/800a196718abbfd38d93c845e563e055ef778b04</meta:generator><meta:document-statistic meta:table-count="2" meta:cell-count="87" meta:object-count="0"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
    <config:config-item config:name="VisibleAreaTop" config:type="int">0</config:config-item>
    <config:config-item config:name="VisibleAreaLeft" config:type="int">0</config:config-item>
    <config:config-item config:name="VisibleAreaWidth" config:type="int">36949</config:config-item>
-   <config:config-item config:name="VisibleAreaHeight" config:type="int">16218</config:config-item>
+   <config:config-item config:name="VisibleAreaHeight" config:type="int">16060</config:config-item>
    <config:config-item-map-indexed config:name="Views">
     <config:config-item-map-entry>
      <config:config-item config:name="ViewId" config:type="string">view1</config:config-item>
@@ -28,10 +28,11 @@
        <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
        <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
        <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
+       <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
       </config:config-item-map-entry>
       <config:config-item-map-entry config:name="Sheet2">
-       <config:config-item config:name="CursorPositionX" config:type="int">3</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">8</config:config-item>
+       <config:config-item config:name="CursorPositionX" config:type="int">4</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">10</config:config-item>
        <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="VerticalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
@@ -45,6 +46,7 @@
        <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
        <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
        <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
+       <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
       </config:config-item-map-entry>
      </config:config-item-map-named>
      <config:config-item config:name="ActiveTable" config:type="string">Sheet2</config:config-item>
@@ -69,6 +71,7 @@
      <config:config-item config:name="RasterSubdivisionX" config:type="int">1</config:config-item>
      <config:config-item config:name="RasterSubdivisionY" config:type="int">1</config:config-item>
      <config:config-item config:name="IsRasterAxisSynchronized" config:type="boolean">true</config:config-item>
+     <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
     </config:config-item-map-entry>
    </config:config-item-map-indexed>
   </config:config-item-set>
@@ -122,7 +125,7 @@
    <config:config-item config:name="HasColumnRowHeaders" config:type="boolean">true</config:config-item>
    <config:config-item config:name="RasterSubdivisionY" config:type="int">1</config:config-item>
    <config:config-item config:name="AutoCalculate" config:type="boolean">true</config:config-item>
-   <config:config-item config:name="PrinterSetup" config:type="base64Binary">kQH+/0xleG1hcmstRTM1MmRuAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpMZXhtYXJrLUUzNTJkbgAAAAAAAAAAAAAAAAAWAAMAtwAAAAAAAAAIAFZUAAAkbQAASm9iRGF0YSAxCnByaW50ZXI9TGV4bWFyay1FMzUyZG4Kb3JpZW50YXRpb249UG9ydHJhaXQKY29waWVzPTEKY29sbGF0ZT1mYWxzZQptYXJnaW5kYWp1c3RtZW50PTAsMCwwLDAKY29sb3JkZXB0aD0yNApwc2xldmVsPTAKcGRmZGV2aWNlPTEKY29sb3JkZXZpY2U9MApQUERDb250ZXhEYXRhClBhZ2VTaXplOkxldHRlcgAAEgBDT01QQVRfRFVQTEVYX01PREUKAERVUExFWF9PRkY=</config:config-item>
+   <config:config-item config:name="PrinterSetup" config:type="base64Binary">rQH+/0xleG1hcmstRTM1MmRuAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpMZXhtYXJrLUUzNTJkbgAAAAAAAAAAAAAAAAAWAAMA0wAAAAAAAAAIAFZUAAAkbQAASm9iRGF0YSAxCnByaW50ZXI9TGV4bWFyay1FMzUyZG4Kb3JpZW50YXRpb249UG9ydHJhaXQKY29waWVzPTEKY29sbGF0ZT1mYWxzZQptYXJnaW5kYWp1c3RtZW50PTAsMCwwLDAKY29sb3JkZXB0aD0yNApwc2xldmVsPTAKcGRmZGV2aWNlPTEKY29sb3JkZXZpY2U9MApQUERDb250ZXhEYXRhCkR1cGxleDpOb25lAElucHV0U2xvdDpUcmF5MQBQYWdlU2l6ZTpMZXR0ZXIAABIAQ09NUEFUX0RVUExFWF9NT0RFCgBEVVBMRVhfT0ZG</config:config-item>
    <config:config-item config:name="ApplyUserData" config:type="boolean">false</config:config-item>
    <config:config-item config:name="CharacterCompressionType" config:type="short">0</config:config-item>
   </config:config-item-set>
@@ -1773,7 +1776,7 @@
      <text:p><text:sheet-name>???</text:sheet-name> (<text:title>???</text:title>)</text:p>
     </style:region-left>
     <style:region-right>
-     <text:p><text:date style:data-style-name="N2" text:date-value="2016-07-14">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="16:48:17.210338229">00:00:00</text:time></text:p>
+     <text:p><text:date style:data-style-name="N2" text:date-value="2016-07-15">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="15:55:18.843239387">00:00:00</text:time></text:p>
     </style:region-right>
    </style:header>
    <style:header-left style:display="false"/>
@@ -2157,20 +2160,22 @@
      <table:table-cell table:style-name="ce37" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="7"/>
     </table:table-row>
-    <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce11" table:formula="of:=PRICEMAT(&quot;1999-02-15&quot;;&quot;1999-04-13&quot;;&quot;1998-11-11&quot;; 0.061; ;0)" office:value-type="float" office:value="100.982777777778" calcext:value-type="float">
-      <text:p>100.9828</text:p>
+    <table:table-row table:style-name="ro7">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PRICEMAT(&quot;1999-02-15&quot;;&quot;1999-04-13&quot;;&quot;1998-11-11&quot;; 0.061; ;0)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="100.982777777778" calcext:value-type="float">
-      <text:p>100.982777777778</text:p>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce15" table:formula="of:=ROUND([.A10];12)=ROUND([.B10];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce15" table:formula="of:=ISERROR([.A10])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="=PRICEMAT(&quot;1999-02-15&quot;,&quot;1999-04-13&quot;,&quot;1998-11-11&quot;, 0.061, ,0)" calcext:value-type="string">
       <text:p>=PRICEMAT(&quot;1999-02-15&quot;,&quot;1999-04-13&quot;,&quot;1998-11-11&quot;, 0.061, ,0)</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce27"/>
+     <table:table-cell table:style-name="ce27" office:value-type="string" calcext:value-type="string">
+      <text:p>tDf#100759</text:p>
+     </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
      <table:table-cell table:style-name="ce35"/>
      <table:table-cell/>
@@ -2178,7 +2183,7 @@
      <table:table-cell table:style-name="ce38"/>
      <table:table-cell table:number-columns-repeated="6"/>
     </table:table-row>
-    <table:table-row table:style-name="ro5">
+    <table:table-row table:style-name="ro7">
      <table:table-cell table:style-name="ce11" table:formula="of:=PRICEMAT(&quot;1999-02-15&quot;;&quot;1999-04-13&quot;;&quot;1998-11-11&quot;; 0.061; -0.061;0)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>Err:502</text:p>
      </table:table-cell>
@@ -2196,14 +2201,14 @@
      <table:table-cell table:style-name="ce35"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
-    <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce11" table:formula="of:=PRICEMAT(&quot;1999-02-15&quot;;&quot;1999-04-13&quot;;&quot;1998-11-11&quot;; ; 0.061;0)" office:value-type="float" office:value="99.0267867458148" calcext:value-type="float">
-      <text:p>99.0268</text:p>
+    <table:table-row table:style-name="ro7">
+     <table:table-cell table:style-name="ce11" table:formula="of:=PRICEMAT(&quot;1999-02-15&quot;;&quot;1999-04-13&quot;;&quot;1998-11-11&quot;; ; 0.061;0)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="99.0267867458148" calcext:value-type="float">
-      <text:p>99.0267867458148</text:p>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce15" table:formula="of:=ROUND([.A12];12)=ROUND([.B12];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce15" table:formula="of:=ISERROR([.A12])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=PRICEMAT(&quot;1999-02-15&quot;,&quot;1999-04-13&quot;,&quot;1998-11-11&quot;, , 0.061,0)" calcext:value-type="string">
@@ -2457,8 +2462,8 @@
      </calcext:conditional-format>
     </calcext:conditional-formats>
    </table:table>
-   <table:table table:name="&apos;file:///home/zdenek/Dokumenty/LO/sc-unit-test/Project%20Calc%20functions%20tests/fods/function_based_test_Example.fods/function_based_test_Example_reference.fods&apos;#Sheet2" table:print="false" table:style-name="ta_extref">
-    <table:table-source xlink:type="simple" xlink:href="function_based_test_Example.fods/function_based_test_Example_reference.fods" table:table-name="Sheet2" table:mode="copy-results-only"/>
+   <table:table table:name="&apos;file:///home/zdenek/Dokumenty/LO/sc-unit-test/Project%20Calc%20functions%20tests/fods/pricemat.fods/function_based_test_Example.fods/function_based_test_Example_reference.fods&apos;#Sheet2" table:print="false" table:style-name="ta_extref">
+    <table:table-source xlink:type="simple" xlink:href="pricemat.fods/function_based_test_Example.fods/function_based_test_Example_reference.fods" table:table-name="Sheet2" table:mode="copy-results-only"/>
     <table:table-column table:number-columns-repeated="8"/>
     <table:table-row table:number-rows-repeated="2">
      <table:table-cell table:number-columns-repeated="8"/>

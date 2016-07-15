@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
- <office:meta><meta:creation-date>2016-06-22T20:50:52.936000000</meta:creation-date><meta:editing-duration>P0D</meta:editing-duration><meta:editing-cycles>1</meta:editing-cycles><meta:generator>LibreOfficeDev/5.3.0.0.alpha0$Linux_X86_64 LibreOffice_project/54f2a4184d1296814e64cfeab1d06ae90d002357</meta:generator><meta:document-statistic meta:table-count="2" meta:cell-count="109" meta:object-count="0"/></office:meta>
+ <office:meta><meta:creation-date>2016-06-22T20:50:52.936000000</meta:creation-date><meta:editing-duration>P0D</meta:editing-duration><meta:editing-cycles>1</meta:editing-cycles><meta:generator>LibreOfficeDev/5.3.0.0.alpha0$Linux_X86_64 LibreOffice_project/800a196718abbfd38d93c845e563e055ef778b04</meta:generator><meta:document-statistic meta:table-count="2" meta:cell-count="109" meta:object-count="0"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
    <config:config-item config:name="VisibleAreaTop" config:type="int">0</config:config-item>
    <config:config-item config:name="VisibleAreaLeft" config:type="int">0</config:config-item>
-   <config:config-item config:name="VisibleAreaWidth" config:type="int">22009</config:config-item>
-   <config:config-item config:name="VisibleAreaHeight" config:type="int">4367</config:config-item>
+   <config:config-item config:name="VisibleAreaWidth" config:type="int">38833</config:config-item>
+   <config:config-item config:name="VisibleAreaHeight" config:type="int">16541</config:config-item>
    <config:config-item-map-indexed config:name="Views">
     <config:config-item-map-entry>
      <config:config-item config:name="ViewId" config:type="string">view1</config:config-item>
@@ -32,7 +32,7 @@
       </config:config-item-map-entry>
       <config:config-item-map-entry config:name="Sheet2">
        <config:config-item config:name="CursorPositionX" config:type="int">2</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">19</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">1</config:config-item>
        <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="VerticalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
@@ -125,7 +125,7 @@
    <config:config-item config:name="HasColumnRowHeaders" config:type="boolean">true</config:config-item>
    <config:config-item config:name="RasterSubdivisionY" config:type="int">1</config:config-item>
    <config:config-item config:name="AutoCalculate" config:type="boolean">true</config:config-item>
-   <config:config-item config:name="PrinterSetup" config:type="base64Binary">qQH+/0xleG1hcmstRTM1MmRuAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpMZXhtYXJrLUUzNTJkbgAAAAAAAAAAAAAAAAAWAAMAzwAAAAAAAAAEAAhSAAAEdAAASm9iRGF0YSAxCnByaW50ZXI9TGV4bWFyay1FMzUyZG4Kb3JpZW50YXRpb249UG9ydHJhaXQKY29waWVzPTEKY29sbGF0ZT1mYWxzZQptYXJnaW5kYWp1c3RtZW50PTAsMCwwLDAKY29sb3JkZXB0aD0yNApwc2xldmVsPTAKcGRmZGV2aWNlPTEKY29sb3JkZXZpY2U9MApQUERDb250ZXhEYXRhClBhZ2VTaXplOkE0AElucHV0U2xvdDpUcmF5MQBEdXBsZXg6Tm9uZQAAEgBDT01QQVRfRFVQTEVYX01PREUKAERVUExFWF9PRkY=</config:config-item>
+   <config:config-item config:name="PrinterSetup" config:type="base64Binary">qQH+/0xleG1hcmstRTM1MmRuAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpMZXhtYXJrLUUzNTJkbgAAAAAAAAAAAAAAAAAWAAMAzwAAAAAAAAAEAAhSAAAEdAAASm9iRGF0YSAxCnByaW50ZXI9TGV4bWFyay1FMzUyZG4Kb3JpZW50YXRpb249UG9ydHJhaXQKY29waWVzPTEKY29sbGF0ZT1mYWxzZQptYXJnaW5kYWp1c3RtZW50PTAsMCwwLDAKY29sb3JkZXB0aD0yNApwc2xldmVsPTAKcGRmZGV2aWNlPTEKY29sb3JkZXZpY2U9MApQUERDb250ZXhEYXRhCkR1cGxleDpOb25lAElucHV0U2xvdDpUcmF5MQBQYWdlU2l6ZTpBNAAAEgBDT01QQVRfRFVQTEVYX01PREUKAERVUExFWF9PRkY=</config:config-item>
    <config:config-item config:name="ApplyUserData" config:type="boolean">false</config:config-item>
    <config:config-item config:name="CharacterCompressionType" config:type="short">0</config:config-item>
   </config:config-item-set>
@@ -749,10 +749,10 @@
    <style:table-column-properties fo:break-before="auto" style:column-width="64.01pt"/>
   </style:style>
   <style:style style:name="co4" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="142.44pt"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="158.91pt"/>
   </style:style>
   <style:style style:name="co5" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="53.29pt"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="149.1pt"/>
   </style:style>
   <style:style style:name="co6" style:family="table-column">
    <style:table-column-properties fo:break-before="auto" style:column-width="74.21pt"/>
@@ -797,18 +797,15 @@
    <style:table-row-properties style:row-height="25.34pt" fo:break-before="auto" style:use-optimal-row-height="true"/>
   </style:style>
   <style:style style:name="ro8" style:family="table-row">
-   <style:table-row-properties style:row-height="30.76pt" fo:break-before="auto" style:use-optimal-row-height="true"/>
-  </style:style>
-  <style:style style:name="ro9" style:family="table-row">
    <style:table-row-properties style:row-height="17.01pt" fo:break-before="auto" style:use-optimal-row-height="true"/>
   </style:style>
-  <style:style style:name="ro10" style:family="table-row">
+  <style:style style:name="ro9" style:family="table-row">
    <style:table-row-properties style:row-height="61.91pt" fo:break-before="auto" style:use-optimal-row-height="true"/>
   </style:style>
-  <style:style style:name="ro11" style:family="table-row">
+  <style:style style:name="ro10" style:family="table-row">
    <style:table-row-properties style:row-height="35.04pt" fo:break-before="auto" style:use-optimal-row-height="true"/>
   </style:style>
-  <style:style style:name="ro12" style:family="table-row">
+  <style:style style:name="ro11" style:family="table-row">
    <style:table-row-properties style:row-height="24.01pt" fo:break-before="auto" style:use-optimal-row-height="true"/>
   </style:style>
   <style:style style:name="ta1" style:family="table" style:master-page-name="Default">
@@ -835,30 +832,29 @@
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <style:map style:condition="value()&gt;=0" style:apply-style-name="N104P0"/>
   </number:currency-style>
+  <style:style style:name="ce1" style:family="table-cell" style:parent-style-name="Default"/>
   <style:style style:name="ce2" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="start" fo:margin-left="0pt"/>
-   <style:text-properties style:text-position="" fo:font-size="20pt" fo:font-weight="bold" style:font-size-asian="20pt" style:font-weight-asian="bold" style:font-size-complex="20pt" style:font-weight-complex="bold"/>
+   <style:text-properties fo:font-size="20pt" fo:font-weight="bold" style:font-size-asian="20pt" style:font-weight-asian="bold" style:font-size-complex="20pt" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="ce3" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:text-properties style:text-position="" fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold"/>
+   <style:text-properties fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="ce4" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:text-properties style:text-position="" fo:font-size="12pt" fo:font-weight="bold" style:font-size-asian="12pt" style:font-weight-asian="bold" style:font-size-complex="12pt" style:font-weight-complex="bold"/>
+   <style:text-properties fo:font-size="12pt" fo:font-weight="bold" style:font-size-asian="12pt" style:font-weight-asian="bold" style:font-size-complex="12pt" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="ce5" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:text-properties style:text-position=""/>
   </style:style>
   <style:style style:name="ce6" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:text-properties style:text-position=""/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B3"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B3"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B3"/>
@@ -866,7 +862,6 @@
   <style:style style:name="ce7" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:text-properties style:text-position=""/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
@@ -874,150 +869,104 @@
   <style:style style:name="ce8" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:text-properties style:text-position=""/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
   </style:style>
   <style:style style:name="ce9" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties fo:wrap-option="wrap"/>
-   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:text-position="" style:font-name="Liberation Serif" fo:font-size="10pt" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-size-asian="10pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="10pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
-  </style:style>
-  <style:style style:name="ce10" style:family="table-cell" style:parent-style-name="Default"/>
-  <style:style style:name="ce11" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="start" fo:margin-left="0pt"/>
-   <style:text-properties fo:font-size="20pt" fo:font-weight="bold" style:font-size-asian="20pt" style:font-weight-asian="bold" style:font-size-complex="20pt" style:font-weight-complex="bold"/>
-  </style:style>
-  <style:style style:name="ce12" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:text-properties fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold"/>
-  </style:style>
-  <style:style style:name="ce13" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:text-properties fo:font-size="12pt" fo:font-weight="bold" style:font-size-asian="12pt" style:font-weight-asian="bold" style:font-size-complex="12pt" style:font-weight-complex="bold"/>
-  </style:style>
-  <style:style style:name="ce14" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-  </style:style>
-  <style:style style:name="ce15" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B3"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B3"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B3"/>
-  </style:style>
-  <style:style style:name="ce16" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
-  </style:style>
-  <style:style style:name="ce17" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
-  </style:style>
-  <style:style style:name="ce18" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties fo:wrap-option="wrap"/>
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Serif" fo:font-size="10pt" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-size-asian="10pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="10pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
-  <style:style style:name="ce19" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce10" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
   </style:style>
-  <style:style style:name="ce20" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N122"/>
-  <style:style style:name="ce21" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N122">
-   <style:table-cell-properties fo:wrap-option="wrap"/>
-   <style:text-properties style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
-  </style:style>
-  <style:style style:name="ce22" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N104"/>
-  <style:style style:name="ce23" style:family="table-cell" style:parent-style-name="Normal_20_2">
+  <style:style style:name="ce11" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N156"/>
+  <style:style style:name="ce12" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N122"/>
+  <style:style style:name="ce13" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N104"/>
+  <style:style style:name="ce14" style:family="table-cell" style:parent-style-name="Normal_20_2">
    <style:table-cell-properties fo:padding="2.01pt"/>
   </style:style>
-  <style:style style:name="ce24" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce15" style:family="table-cell" style:parent-style-name="Default">
    <style:text-properties fo:font-size="12pt" fo:language="en" fo:country="US" style:font-name-asian="Segoe UI" style:font-size-asian="12pt" style:language-asian="en" style:country-asian="US" style:font-name-complex="Tahoma" style:font-size-complex="12pt" style:language-complex="en" style:country-complex="US"/>
   </style:style>
-  <style:style style:name="ce25" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0"/>
-  <style:style style:name="ce26" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+  <style:style style:name="ce16" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N156">
+   <style:text-properties fo:font-size="12pt" fo:language="en" fo:country="US" style:font-name-asian="Segoe UI" style:font-size-asian="12pt" style:language-asian="en" style:country-asian="US" style:font-name-complex="Tahoma" style:font-size-complex="12pt" style:language-complex="en" style:country-complex="US"/>
+  </style:style>
+  <style:style style:name="ce17" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0"/>
+  <style:style style:name="ce18" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C2"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C2"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C2"/>
   </style:style>
-  <style:style style:name="ce27" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+  <style:style style:name="ce19" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C17"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C17"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C17"/>
   </style:style>
-  <style:style style:name="ce28" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce20" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C17"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C17"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C17"/>
   </style:style>
-  <style:style style:name="ce29" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce21" style:family="table-cell" style:parent-style-name="Default">
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C2"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C2"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C2"/>
   </style:style>
-  <style:style style:name="ce30" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce22" style:family="table-cell" style:parent-style-name="Default">
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C17"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C17"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C17"/>
   </style:style>
-  <style:style style:name="ce31" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce23" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C17"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C17"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C17"/>
   </style:style>
-  <style:style style:name="ce32" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce24" style:family="table-cell" style:parent-style-name="Default">
    <style:text-properties style:font-name="Liberation Serif" style:font-name-asian="Microsoft YaHei" style:font-name-complex="Mangal"/>
   </style:style>
-  <style:style style:name="ce33" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce25" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties fo:wrap-option="wrap"/>
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Mono" fo:font-size="10pt" fo:language="en" fo:country="US" fo:font-style="italic" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-size-asian="10pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="10pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
-  <style:style style:name="ce34" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce26" style:family="table-cell" style:parent-style-name="Default">
    <style:text-properties style:use-window-font-color="true" style:font-name="Arial" fo:font-size="10pt" style:font-name-asian="Times New Roman1" style:font-size-asian="12pt" style:language-asian="ar" style:country-asian="SA" style:font-name-complex="Tahoma" style:font-size-complex="6.80000019073486pt" style:language-complex="en" style:country-complex="US"/>
   </style:style>
-  <style:style style:name="ce35" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce27" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties fo:wrap-option="wrap"/>
    <style:text-properties style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
-  <style:style style:name="ce36" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce28" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties fo:wrap-option="wrap"/>
    <style:text-properties style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
-  <style:style style:name="ce37" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce29" style:family="table-cell" style:parent-style-name="Default">
    <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
   </style:style>
-  <style:style style:name="ce38" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N36">
+  <style:style style:name="ce30" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N36">
    <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
   </style:style>
-  <style:style style:name="ce39" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N36"/>
-  <style:style style:name="ce40" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce31" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N36"/>
+  <style:style style:name="ce32" style:family="table-cell" style:parent-style-name="Default">
    <style:text-properties style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
-  <style:style style:name="ce41" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce33" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:glyph-orientation-vertical="0" style:text-align-source="value-type" style:repeat-content="false" fo:wrap-option="wrap" style:direction="ltr" fo:padding="2.01pt" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="middle" loext:vertical-justify="auto"/>
    <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0pt" style:writing-mode="page"/>
    <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Calibri" fo:font-size="11pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="11pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
   </style:style>
-  <style:style style:name="ce42" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce34" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:glyph-orientation-vertical="0" style:text-align-source="value-type" style:repeat-content="false" fo:wrap-option="wrap" style:direction="ltr" fo:padding="2.01pt" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="middle" loext:vertical-justify="auto"/>
    <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0pt" style:writing-mode="page"/>
   </style:style>
@@ -1115,7 +1064,7 @@
      <text:p><text:sheet-name>???</text:sheet-name> (<text:title>???</text:title>)</text:p>
     </style:region-left>
     <style:region-right>
-     <text:p><text:date style:data-style-name="N2" text:date-value="2016-07-12">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="20:59:35.308624803">00:00:00</text:time></text:p>
+     <text:p><text:date style:data-style-name="N2" text:date-value="2016-07-16">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="15:49:38.696291226">00:00:00</text:time></text:p>
     </style:region-right>
    </style:header>
    <style:header-left style:display="false"/>
@@ -1143,10 +1092,10 @@
    <table:table table:name="Sheet1" table:style-name="ta1">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <table:table-column table:style-name="co1" table:default-cell-style-name="Default"/>
-    <table:table-column table:style-name="co1" table:default-cell-style-name="ce14"/>
+    <table:table-column table:style-name="co1" table:default-cell-style-name="ce5"/>
     <table:table-column table:style-name="co2" table:default-cell-style-name="Default"/>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce11" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce2" office:value-type="string" calcext:value-type="string">
       <text:p>CUMIPMT Function</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="2"/>
@@ -1155,10 +1104,10 @@
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro3">
-     <table:table-cell table:style-name="ce12" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce3" office:value-type="string" calcext:value-type="string">
       <text:p>Result</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce15" table:formula="of:=AND([.B8:.B95])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce6" table:formula="of:=AND([.B8:.B95])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell/>
@@ -1167,13 +1116,13 @@
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro4">
-     <table:table-cell table:style-name="ce13" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce4" office:value-type="string" calcext:value-type="string">
       <text:p>Sheet</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce13" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce4" office:value-type="string" calcext:value-type="string">
       <text:p>Result</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce13" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce4" office:value-type="string" calcext:value-type="string">
       <text:p>Description</text:p>
      </table:table-cell>
     </table:table-row>
@@ -1181,7 +1130,7 @@
      <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
       <text:p>1</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" table:formula="of:=AND([Sheet2.C2:.C149])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce7" table:formula="of:=AND([Sheet2.C2:.C149])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -1190,17 +1139,17 @@
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="3">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce17"/>
+     <table:table-cell table:style-name="ce8"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce18"/>
+     <table:table-cell table:style-name="ce8"/>
+     <table:table-cell table:style-name="ce9"/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="26">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce17"/>
+     <table:table-cell table:style-name="ce8"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="1048537">
@@ -1226,7 +1175,7 @@
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <table:table-column table:style-name="co4" table:default-cell-style-name="Default"/>
     <table:table-column table:style-name="co5" table:default-cell-style-name="Default"/>
-    <table:table-column table:style-name="co6" table:default-cell-style-name="ce14"/>
+    <table:table-column table:style-name="co6" table:default-cell-style-name="ce5"/>
     <table:table-column table:style-name="co7" table:default-cell-style-name="Default"/>
     <table:table-column table:style-name="co8" table:default-cell-style-name="Default"/>
     <table:table-column table:style-name="co9" table:default-cell-style-name="Default"/>
@@ -1237,423 +1186,423 @@
     <table:table-column table:style-name="co12" table:number-columns-repeated="2" table:default-cell-style-name="Default"/>
     <table:table-column table:style-name="co3" table:number-columns-repeated="2" table:default-cell-style-name="Default"/>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce19" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
       <text:p>Function</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce19" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
       <text:p>Expected</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce19" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
       <text:p>Correct</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce19" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
       <text:p>FunctionString</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce19" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
       <text:p>Comment</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="3"/>
-     <table:table-cell table:style-name="ce35" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce27" office:value-type="string" calcext:value-type="string">
       <text:p>Data </text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce35" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce27" office:value-type="string" calcext:value-type="string">
       <text:p>Description </text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce40"/>
-     <table:table-cell table:style-name="ce41" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce32"/>
+     <table:table-cell table:style-name="ce33" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce29"/>
     </table:table-row>
     <table:table-row table:style-name="ro7">
-     <table:table-cell table:style-name="ce20" table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;1)" office:value-type="currency" office:currency="CZK" office:value="-57.5412415342252" calcext:value-type="currency">
-      <text:p>-57.54 Kč</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce24" office:value-type="float" office:value="-57.5412415342252" calcext:value-type="float">
+     <table:table-cell table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;1)" office:value-type="float" office:value="-57.5412415342252" calcext:value-type="float">
       <text:p>-57.5412415342252</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce26" table:formula="of:=[.A2]=[.B2]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce15" office:value-type="float" office:value="-57.5412415342252" calcext:value-type="float">
+      <text:p>-57.5412415342252</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=ROUND([.A2];10)=ROUND([.B2];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A2])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,1)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A2])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,1)" calcext:value-type="string">
       <text:p>=CUMIPMT(0.055/12,24,5000,4,6,1)</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce33"/>
+     <table:table-cell table:style-name="ce25"/>
      <table:table-cell table:number-columns-repeated="3"/>
-     <table:table-cell table:style-name="ce36" office:value-type="float" office:value="0.09" calcext:value-type="float">
+     <table:table-cell table:style-name="ce28" office:value-type="float" office:value="0.09" calcext:value-type="float">
       <text:p>0.09</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce36" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce28" office:value-type="string" calcext:value-type="string">
       <text:p>Annual interest rate</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce40"/>
-     <table:table-cell table:style-name="ce42" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce32"/>
+     <table:table-cell table:style-name="ce34" table:number-columns-repeated="2"/>
      <table:table-cell/>
     </table:table-row>
-    <table:table-row table:style-name="ro8">
-     <table:table-cell table:style-name="ce21" table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;1)" office:value-type="currency" office:currency="CZK" office:value="-57.5412415342252" calcext:value-type="currency">
-      <text:p>-57.54 Kč</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce24" office:value-type="float" office:value="-57.5412415342252" calcext:value-type="float">
+    <table:table-row table:style-name="ro7">
+     <table:table-cell table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;1)" office:value-type="float" office:value="-57.5412415342252" calcext:value-type="float">
       <text:p>-57.5412415342252</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce26" table:formula="of:=[.A3]=[.B3]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce15" office:value-type="float" office:value="-57.5412415342252" calcext:value-type="float">
+      <text:p>-57.5412415342252</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=ROUND([.A3];10)=ROUND([.B3];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A3])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,1)" calcext:value-type="string">
       <text:p>=CUMIPMT(0.055/12,24,5000,4,6,1)</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce33"/>
+     <table:table-cell table:style-name="ce25"/>
      <table:table-cell table:number-columns-repeated="3"/>
-     <table:table-cell table:style-name="ce36" office:value-type="float" office:value="30" calcext:value-type="float">
+     <table:table-cell table:style-name="ce28" office:value-type="float" office:value="30" calcext:value-type="float">
       <text:p>30</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce36" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce28" office:value-type="string" calcext:value-type="string">
       <text:p>Years of the loan</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce40"/>
-     <table:table-cell table:style-name="ce42" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce32"/>
+     <table:table-cell table:style-name="ce34" table:number-columns-repeated="2"/>
      <table:table-cell/>
     </table:table-row>
-    <table:table-row table:style-name="ro9">
-     <table:table-cell table:style-name="ce21" table:formula="of:=CUMIPMT([.I2]/12;[.I3]*12;[.I4];13;24;0)" office:value-type="currency" office:currency="CZK" office:value="-11135.2321307508" calcext:value-type="currency">
-      <text:p>-11,135.23 Kč</text:p>
+    <table:table-row table:style-name="ro8">
+     <table:table-cell table:style-name="ce11" table:formula="of:=CUMIPMT([.I2]/12;[.I3]*12;[.I4];13;24;0)" office:value-type="float" office:value="-11135.2321307508" calcext:value-type="float">
+      <text:p>-11135.232130750800000</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce24" office:value-type="float" office:value="-11135.2321307508" calcext:value-type="float">
-      <text:p>-11135.2321307508</text:p>
+     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="-11135.2321307508" calcext:value-type="float">
+      <text:p>-11135.232130750800000</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce26" table:formula="of:=[.A4]=[.B4]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce18" table:formula="of:=ROUND([.A4];10)=ROUND([.B4];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A4])" office:value-type="string" office:string-value="=CUMIPMT(I2/12,I3*12,I4,13,24,0)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A4])" office:value-type="string" office:string-value="=CUMIPMT(I2/12,I3*12,I4,13,24,0)" calcext:value-type="string">
       <text:p>=CUMIPMT(I2/12,I3*12,I4,13,24,0)</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce33"/>
+     <table:table-cell table:style-name="ce25"/>
      <table:table-cell table:number-columns-repeated="3"/>
-     <table:table-cell table:style-name="ce36" office:value-type="float" office:value="125000" calcext:value-type="float">
+     <table:table-cell table:style-name="ce28" office:value-type="float" office:value="125000" calcext:value-type="float">
       <text:p>125000</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce36" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce28" office:value-type="string" calcext:value-type="string">
       <text:p>Present value</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce40"/>
-     <table:table-cell table:style-name="ce42" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce32"/>
+     <table:table-cell table:style-name="ce34" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce29"/>
     </table:table-row>
-    <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce21" table:formula="of:=CUMIPMT([.I2]/12;[.I3]*12;[.I4];1;1;0)" office:value-type="currency" office:currency="CZK" office:value="-937.5" calcext:value-type="currency">
-      <text:p>-937.50 Kč</text:p>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=CUMIPMT([.I2]/12;[.I3]*12;[.I4];1;1;0)" office:value-type="float" office:value="-937.5" calcext:value-type="float">
+      <text:p>-937.5</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-937.5" calcext:value-type="float">
       <text:p>-937.5</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce26" table:formula="of:=[.A5]=[.B5]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce18" table:formula="of:=ROUND([.A5];10)=ROUND([.B5];10)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A5])" office:value-type="string" office:string-value="=CUMIPMT(I2/12,I3*12,I4,1,1,0)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A5])" office:value-type="string" office:string-value="=CUMIPMT(I2/12,I3*12,I4,1,1,0)" calcext:value-type="string">
       <text:p>=CUMIPMT(I2/12,I3*12,I4,1,1,0)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="4"/>
-     <table:table-cell table:style-name="ce35" table:number-columns-repeated="3"/>
-     <table:table-cell table:style-name="ce42" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce27" table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce34" table:number-columns-repeated="2"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=CUMIPMT(0.055/12;24;-5000;4;6;1)" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:style-name="ce12" table:formula="of:=CUMIPMT(0.055/12;24;-5000;4;6;1)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>error</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce26" table:formula="of:=ISERROR([.A6])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce18" table:formula="of:=ISERROR([.A6])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A6])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,-5000,4,6,1)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A6])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,-5000,4,6,1)" calcext:value-type="string">
       <text:p>=CUMIPMT(0.055/12,24,-5000,4,6,1)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce36" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce42" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce28" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce34" table:number-columns-repeated="2"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=CUMIPMT(0.055/12;24;5000;-4;6;1)" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:style-name="ce12" table:formula="of:=CUMIPMT(0.055/12;24;5000;-4;6;1)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>error</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce26" table:formula="of:=ISERROR([.A7])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce18" table:formula="of:=ISERROR([.A7])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A7])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,-4,6,1)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A7])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,-4,6,1)" calcext:value-type="string">
       <text:p>=CUMIPMT(0.055/12,24,5000,-4,6,1)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce36" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce42" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce28" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce34" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce29"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=CUMIPMT(0.055/12;24;5000;4;-6;1)" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:style-name="ce12" table:formula="of:=CUMIPMT(0.055/12;24;5000;4;-6;1)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>error</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce26" table:formula="of:=ISERROR([.A8])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce18" table:formula="of:=ISERROR([.A8])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A8])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,-6,1)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A8])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,-6,1)" calcext:value-type="string">
       <text:p>=CUMIPMT(0.055/12,24,5000,4,-6,1)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce39"/>
-     <table:table-cell table:style-name="ce42" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31"/>
+     <table:table-cell table:style-name="ce34" table:number-columns-repeated="2"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;-1)" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:style-name="ce12" table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;-1)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>error</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce26" table:formula="of:=ISERROR([.A9])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce18" table:formula="of:=ISERROR([.A9])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A9])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,-1)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A9])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,-1)" calcext:value-type="string">
       <text:p>=CUMIPMT(0.055/12,24,5000,4,6,-1)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>type can by 0 or 1 , ODFF ; tdf#100542</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce39"/>
-     <table:table-cell table:style-name="ce41" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31"/>
+     <table:table-cell table:style-name="ce33" table:number-columns-repeated="2"/>
      <table:table-cell/>
     </table:table-row>
-    <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;0)" office:value-type="currency" office:currency="CZK" office:value="-57.8049722245903" calcext:value-type="currency">
-      <text:p>-57.80 Kč</text:p>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;0)" office:value-type="float" office:value="-57.8049722245903" calcext:value-type="float">
+      <text:p>-57.8049722245903</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="-57.8049722245903" calcext:value-type="float">
       <text:p>-57.8049722245903</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce26" table:formula="of:=[.A10]=[.B10]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce18" table:formula="of:=ROUND([.A10];12)=ROUND([.B10];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,0)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,0)" calcext:value-type="string">
       <text:p>=CUMIPMT(0.055/12,24,5000,4,6,0)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce39"/>
+     <table:table-cell table:style-name="ce29"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce42"/>
-     <table:table-cell table:style-name="ce37"/>
+     <table:table-cell table:style-name="ce34"/>
+     <table:table-cell table:style-name="ce29"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;)" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:style-name="ce12" table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>error</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce26" table:formula="of:=ISERROR([.A11])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce18" table:formula="of:=ISERROR([.A11])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,)" calcext:value-type="string">
       <text:p>=CUMIPMT(0.055/12,24,5000,4,6,)</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce34" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce26" office:value-type="string" calcext:value-type="string">
       <text:p>last parametr missing, not allowed; tdf#100542</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce39"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=CUMIPMT(0.055/12;24;5000;4;0;1)" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:style-name="ce12" table:formula="of:=CUMIPMT(0.055/12;24;5000;4;0;1)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>error</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce26" table:formula="of:=ISERROR([.A12])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce18" table:formula="of:=ISERROR([.A12])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,0,1)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,0,1)" calcext:value-type="string">
       <text:p>=CUMIPMT(0.055/12,24,5000,4,0,1)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="10"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=CUMIPMT(0;24;5000;4;6;1)" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:style-name="ce12" table:formula="of:=CUMIPMT(0;24;5000;4;6;1)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>error</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce26" table:formula="of:=ISERROR([.A13])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce18" table:formula="of:=ISERROR([.A13])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A13])" office:value-type="string" office:string-value="=CUMIPMT(0,24,5000,4,6,1)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A13])" office:value-type="string" office:string-value="=CUMIPMT(0,24,5000,4,6,1)" calcext:value-type="string">
       <text:p>=CUMIPMT(0,24,5000,4,6,1)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce39"/>
-     <table:table-cell table:style-name="ce37" table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce29"/>
+     <table:table-cell table:style-name="ce31"/>
+     <table:table-cell table:style-name="ce29" table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce20" table:formula="of:=CUMIPMT(0.055/12;0;5000;4;6;1)" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:style-name="ce12" table:formula="of:=CUMIPMT(0.055/12;0;5000;4;6;1)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>error</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce26" table:formula="of:=ISERROR([.A14])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce18" table:formula="of:=ISERROR([.A14])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A14])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,0,5000,4,6,1)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A14])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,0,5000,4,6,1)" calcext:value-type="string">
       <text:p>=CUMIPMT(0.055/12,0,5000,4,6,1)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="10"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce20" table:formula="of:=CUMIPMT(0.055/12;24;0;4;6;1)" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:style-name="ce12" table:formula="of:=CUMIPMT(0.055/12;24;0;4;6;1)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>error</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce26" table:formula="of:=ISERROR([.A15])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce18" table:formula="of:=ISERROR([.A15])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A15])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,0,4,6,1)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A15])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,0,4,6,1)" calcext:value-type="string">
       <text:p>=CUMIPMT(0.055/12,24,0,4,6,1)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce39"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce22" table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;-1)" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:style-name="ce13" table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;-1)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=#NUM!" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:style-name="ce17" table:formula="of:=#NUM!" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>#NUM!</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce26" table:formula="of:=ISERROR([.A16])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce18" table:formula="of:=ISERROR([.A16])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A16])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,-1)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A16])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,-1)" calcext:value-type="string">
       <text:p>=CUMIPMT(0.055/12,24,5000,4,6,-1)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce38"/>
-     <table:table-cell table:style-name="ce39"/>
-     <table:table-cell table:style-name="ce37" table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce30"/>
+     <table:table-cell table:style-name="ce31"/>
+     <table:table-cell table:style-name="ce29" table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce22" table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;)" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:style-name="ce13" table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=#NUM!" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:style-name="ce17" table:formula="of:=#NUM!" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>#NUM!</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce27" table:formula="of:=ISERROR([.A17])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce19" table:formula="of:=ISERROR([.A17])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A17])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A17])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,)" calcext:value-type="string">
       <text:p>=CUMIPMT(0.055/12,24,5000,4,6,)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce39"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce22" table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;1)" office:value-type="currency" office:currency="USD" office:value="-57.5412415342252" calcext:value-type="currency">
-      <text:p>-$57.54</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce25" office:value-type="float" office:value="-57.5412415342252" calcext:value-type="float">
+     <table:table-cell table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;1)" office:value-type="float" office:value="-57.5412415342252" calcext:value-type="float">
       <text:p>-57.5412415342252</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce27" table:formula="of:=ROUND([.A18];12)=ROUND([.B18];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce17" office:value-type="float" office:value="-57.5412415342252" calcext:value-type="float">
+      <text:p>-57.5412415342252</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=ROUND([.A18];12)=ROUND([.B18];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A18])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,1)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A18])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,1)" calcext:value-type="string">
       <text:p>=CUMIPMT(0.055/12,24,5000,4,6,1)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="10"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce22" table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;[.G19])" office:value-type="currency" office:currency="USD" office:value="-57.8049722245903" calcext:value-type="currency">
-      <text:p>-$57.80</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce25" office:value-type="float" office:value="-57.8049722245903" calcext:value-type="float">
+     <table:table-cell table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;[.G19])" office:value-type="float" office:value="-57.8049722245903" calcext:value-type="float">
       <text:p>-57.8049722245903</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce27" table:formula="of:=ROUND([.A19];12)=ROUND([.B19];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce17" office:value-type="float" office:value="-57.8049722245903" calcext:value-type="float">
+      <text:p>-57.8049722245903</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=ROUND([.A19];12)=ROUND([.B19];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A19])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,G19)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A19])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,G19)" calcext:value-type="string">
       <text:p>=CUMIPMT(0.055/12,24,5000,4,6,G19)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="10"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce22" table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;[.G20])" office:value-type="currency" office:currency="USD" office:value="-57.8049722245903" calcext:value-type="currency">
-      <text:p>-$57.80</text:p>
+     <table:table-cell table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;[.G20])" office:value-type="float" office:value="-57.8049722245903" calcext:value-type="float">
+      <text:p>-57.8049722245903</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" office:value-type="float" office:value="-57.8049722245904" calcext:value-type="float">
+     <table:table-cell table:style-name="ce17" office:value-type="float" office:value="-57.8049722245904" calcext:value-type="float">
       <text:p>-57.8049722245904</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce27" table:formula="of:=ROUND([.A20];12)=ROUND([.B20];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce19" table:formula="of:=ROUND([.A20];12)=ROUND([.B20];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A20])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,G20)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A20])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,G20)" calcext:value-type="string">
       <text:p>=CUMIPMT(0.055/12,24,5000,4,6,G20)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="10"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce22" table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;0)" office:value-type="currency" office:currency="USD" office:value="-57.8049722245903" calcext:value-type="currency">
-      <text:p>-$57.80</text:p>
+     <table:table-cell table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;0)" office:value-type="float" office:value="-57.8049722245903" calcext:value-type="float">
+      <text:p>-57.8049722245903</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" office:value-type="float" office:value="-57.8049722245904" calcext:value-type="float">
+     <table:table-cell table:style-name="ce17" office:value-type="float" office:value="-57.8049722245904" calcext:value-type="float">
       <text:p>-57.8049722245904</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce27" table:formula="of:=ROUND([.A21];12)=ROUND([.B21];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce19" table:formula="of:=ROUND([.A21];12)=ROUND([.B21];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A21])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,0)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A21])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,0)" calcext:value-type="string">
       <text:p>=CUMIPMT(0.055/12,24,5000,4,6,0)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="10"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce22" table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;1.13)" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:style-name="ce13" table:formula="of:=CUMIPMT(0.055/12;24;5000;4;6;1.13)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=#NUM!" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:style-name="ce17" table:formula="of:=#NUM!" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>#NUM!</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce27" table:formula="of:=ISERROR([.A22])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce19" table:formula="of:=ISERROR([.A22])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A22])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,1.13)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A22])" office:value-type="string" office:string-value="=CUMIPMT(0.055/12,24,5000,4,6,1.13)" calcext:value-type="string">
       <text:p>=CUMIPMT(0.055/12,24,5000,4,6,1.13)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="10"/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce28"/>
+     <table:table-cell table:style-name="ce20"/>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
-    <table:table-row table:style-name="ro10">
+    <table:table-row table:style-name="ro9">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce28"/>
+     <table:table-cell table:style-name="ce20"/>
      <table:table-cell/>
      <table:table-cell office:value-type="string" calcext:value-type="string"><text:p><text:span text:style-name="T1">CUMIPMT</text:span></text:p><text:p><text:span text:style-name="T2">Summary:</text:span><text:span text:style-name="T3"> Calculates a cumulative interest payment.</text:span></text:p><text:p><text:span text:style-name="T4">Syntax:</text:span><text:span text:style-name="T5"> CUMIPMT( </text:span><text:span text:style-name="T6">Number</text:span><text:span text:style-name="T5"> rate ; </text:span><text:span text:style-name="T7">Number</text:span><text:span text:style-name="T5"> periods ; </text:span><text:span text:style-name="T7">Number</text:span><text:span text:style-name="T5"> value ; </text:span><text:span text:style-name="T7">Integer</text:span><text:span text:style-name="T5"> start ; </text:span><text:span text:style-name="T7">Integer</text:span><text:span text:style-name="T5"> end ; </text:span><text:span text:style-name="T7">Integer</text:span><text:span text:style-name="T5"> type )</text:span></text:p><text:p><text:span text:style-name="T2">Returns:</text:span><text:span text:style-name="T3"> Currency</text:span></text:p><text:p><text:span text:style-name="T2">Constraints:</text:span><text:span text:style-name="T3"> </text:span><text:span text:style-name="T8">rate</text:span><text:span text:style-name="T3"> &gt; 0; </text:span><text:span text:style-name="T8">value</text:span><text:span text:style-name="T9"> &gt; 0; 1 &lt;= </text:span><text:span text:style-name="T10">start</text:span><text:span text:style-name="T11"> &lt;= </text:span><text:span text:style-name="T10">end</text:span><text:span text:style-name="T11"> &lt;= </text:span><text:span text:style-name="T10">periods</text:span></text:p>
      </table:table-cell>
@@ -1661,39 +1610,39 @@
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce28"/>
+     <table:table-cell table:style-name="ce20"/>
+     <table:table-cell table:number-columns-repeated="11"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro10">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce20"/>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce31"/>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro11">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce21"/>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro11">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce28"/>
-     <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce39"/>
-     <table:table-cell table:number-columns-repeated="4"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro12">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce29"/>
-     <table:table-cell table:number-columns-repeated="11"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro12">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce30"/>
+     <table:table-cell table:style-name="ce22"/>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce23" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce14" table:number-columns-repeated="4"/>
      <table:table-cell table:style-name="Normal_20_2" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="7"/>
     </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="10">
-     <table:table-cell table:style-name="ce23" table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce14" table:number-columns-repeated="5"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="60">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce31"/>
+     <table:table-cell table:style-name="ce23"/>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="1048475">
@@ -1715,15 +1664,15 @@
      </calcext:conditional-format>
     </calcext:conditional-formats>
    </table:table>
-   <table:table table:name="&apos;file:///home/zdenek/Dokumenty/LO/sc-unit-test/Project%20Calc%20functions%20tests/fods/cumipmt.fods/function_based_test_Example.fods/function_based_test_Example_reference.fods&apos;#Sheet2" table:print="false" table:style-name="ta_extref">
-    <table:table-source xlink:type="simple" xlink:href="function_based_test_Example.fods/function_based_test_Example_reference.fods" table:table-name="Sheet2" table:mode="copy-results-only"/>
+   <table:table table:name="&apos;file:///home/zdenek/Dokumenty/LO/sc-unit-test/Project%20Calc%20functions%20tests/fods/cumipmt.fods/cumipmt.fods/function_based_test_Example.fods/function_based_test_Example_reference.fods&apos;#Sheet2" table:print="false" table:style-name="ta_extref">
+    <table:table-source xlink:type="simple" xlink:href="cumipmt.fods/cumipmt.fods/function_based_test_Example.fods/function_based_test_Example_reference.fods" table:table-name="Sheet2" table:mode="copy-results-only"/>
     <table:table-column table:number-columns-repeated="8"/>
     <table:table-row table:number-rows-repeated="2">
      <table:table-cell table:number-columns-repeated="8"/>
     </table:table-row>
     <table:table-row>
      <table:table-cell table:number-columns-repeated="7"/>
-     <table:table-cell table:style-name="ce10" office:value-type="float" office:value="4">
+     <table:table-cell table:style-name="ce1" office:value-type="float" office:value="4">
       <text:p>4</text:p>
      </table:table-cell>
     </table:table-row>
