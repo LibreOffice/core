@@ -75,6 +75,7 @@ OString readStringFromPipe(osl::StreamPipe & pipe) {
         char buf[1024];
         sal_Int32 n = pipe.recv(buf, SAL_N_ELEMENTS(buf));
         if (n <= 0) {
+            SAL_INFO("desktop.app", "read empty string");
             return "";
         }
         bool end = false;
@@ -85,7 +86,9 @@ OString readStringFromPipe(osl::StreamPipe & pipe) {
         str.append(buf, n);
             //TODO: how does OStringBuffer.append handle overflow?
         if (end) {
-            return str.makeStringAndClear();
+            auto s = str.makeStringAndClear();
+            SAL_INFO("desktop.app", "read <" << s << ">");
+            return s;
         }
     }
 }
@@ -893,6 +896,7 @@ RequestHandler::Status PipeIpcThread::enable(rtl::Reference<IpcThread> * thread)
         }
         aArguments.append('\0');
         // finally, write the string onto the pipe
+        SAL_INFO("desktop.app", "writing <" << aArguments.getStr() << ">");
         sal_Int32 n = aStreamPipe.write(
             aArguments.getStr(), aArguments.getLength());
         if (n != aArguments.getLength()) {
@@ -1204,6 +1208,7 @@ void PipeIpcThread::execute()
             }
 
             // notify client we're ready to process its args:
+            SAL_INFO("desktop.app", "writing <" << SEND_ARGUMENTS << ">");
             sal_Int32 n = aStreamPipe.write(
                 SEND_ARGUMENTS, SAL_N_ELEMENTS(SEND_ARGUMENTS));
                 // incl. terminating NUL
@@ -1229,6 +1234,7 @@ void PipeIpcThread::execute()
             if (waitProcessed)
                 handler_->cProcessed.wait();
             // processing finished, inform the requesting end:
+            SAL_INFO("desktop.app", "writing <" << PROCESSING_DONE << ">");
             n = aStreamPipe.write(
                 PROCESSING_DONE, SAL_N_ELEMENTS(PROCESSING_DONE));
                 // incl. terminating NUL
