@@ -229,24 +229,6 @@ Reference< XConnection > SAL_CALL OPreparedStatement::getConnection()
     return m_pConnection;
 }
 
-Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(const rtl::OUString& sql)
-    throw(SQLException, RuntimeException, std::exception)
-{
-    return OCommonStatement::executeQuery( sql );
-}
-
-sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(const rtl::OUString& sql)
-    throw(SQLException, RuntimeException, std::exception)
-{
-    return OCommonStatement::executeUpdate( sql );
-}
-
-sal_Bool SAL_CALL OPreparedStatement::execute( const rtl::OUString& sql )
-    throw(SQLException, RuntimeException, std::exception)
-{
-    return OCommonStatement::execute( sql );
-}
-
 Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery()
     throw(SQLException, RuntimeException, std::exception)
 {

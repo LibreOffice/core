@@ -90,12 +90,9 @@ namespace connectivity
             Reference< css::sdbc::XConnection > SAL_CALL getConnection() throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XStatement
-            css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery(const rtl::OUString& sql)
-                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            sal_Int32 SAL_CALL executeUpdate(const rtl::OUString& sql)
-                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            sal_Bool SAL_CALL execute( const rtl::OUString& sql )
-                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            using OCommonStatement::executeQuery;
+            using OCommonStatement::executeUpdate;
+            using OCommonStatement::execute;
 
             // XParameters
             void SAL_CALL setNull(sal_Int32 parameter, sal_Int32 sqlType)           throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
