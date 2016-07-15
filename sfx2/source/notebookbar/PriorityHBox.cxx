@@ -21,6 +21,7 @@
 #include <vcl/layout.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/viewfrm.hxx>
+#include "DropdownBox.hxx"
 
 #include <vector>
 
@@ -75,16 +76,17 @@ public:
         auto pChild = m_aSortedChilds.begin();
         while (nCurrentWidth > nWidth && pChild != m_aSortedChilds.end())
         {
-            VclContainer* pContainer = static_cast<VclContainer*>(*pChild);
+            DropdownBox* pContainer = static_cast<DropdownBox*>(*pChild);
             nCurrentWidth -= pContainer->GetSizePixel().Width() + get_spacing();
-            pContainer->Hide();
+            pContainer->HideContent();
+            nCurrentWidth += pContainer->GetSizePixel().Width() + get_spacing();
             pChild++;
         }
 
         // Show higher priority controls if we already have enough space
         while (pChild != m_aSortedChilds.end())
         {
-            static_cast<VclContainer*>(*pChild)->Show();
+            static_cast<DropdownBox*>(*pChild)->ShowContent();
             pChild++;
         }
 
@@ -93,7 +95,7 @@ public:
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override
     {
-        if (!m_bInitialized)
+        if (!m_bInitialized && SfxViewFrame::Current())
         {
             m_bInitialized = true;
 
