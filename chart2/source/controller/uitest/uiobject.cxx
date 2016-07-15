@@ -12,6 +12,7 @@
 #include "ChartWindow.hxx"
 #include "ChartController.hxx"
 #include "ObjectHierarchy.hxx"
+#include "chartview/ExplicitValueProvider.hxx"
 
 #include <algorithm>
 
@@ -63,21 +64,41 @@ std::unique_ptr<UIObject> ChartWindowUIObject::get_child(const OUString& /*rID*/
     return nullptr;
 }
 
-std::set<OUString> ChartWindowUIObject::get_children() const
-{
-    std::set<OUString> aChildren;
+namespace {
 
-    css::uno::Reference< css::chart2::XChartDocument > xChartDoc( mxChartWindow->GetController()->getModel(), css::uno::UNO_QUERY );
-    chart::ObjectHierarchy aHierarchy(xChartDoc, nullptr, true);
-    chart::ObjectIdentifier aIdentifier = aHierarchy.getRootNodeOID();
-    aChildren.insert(aIdentifier.getObjectCID());
-    std::vector<chart::ObjectIdentifier> aChildIndentifiers = aHierarchy.getChildren(aIdentifier);
-    std::transform(aChildIndentifiers.begin(), aChildIndentifiers.end(), std::inserter(aChildren, aChildren.begin()),
+void recursiveAdd(chart::ObjectIdentifier& rID, std::set<OUString>& rChildren, const chart::ObjectHierarchy& rHierarchy)
+{
+    std::vector<chart::ObjectIdentifier> aChildIndentifiers = rHierarchy.getChildren(rID);
+    std::transform(aChildIndentifiers.begin(), aChildIndentifiers.end(), std::inserter(rChildren, rChildren.begin()),
                 [](const chart::ObjectIdentifier& rObject)
                 {
                     return rObject.getObjectCID();
                 }
             );
+
+    for (chart::ObjectIdentifier& ID: aChildIndentifiers)
+        recursiveAdd(ID, rChildren, rHierarchy);
+}
+
+}
+
+std::set<OUString> ChartWindowUIObject::get_children() const
+{
+    std::set<OUString> aChildren;
+
+    chart::ChartController* pController = mxChartWindow->GetController();
+    if (!pController)
+        return aChildren;
+
+    css::uno::Reference< css::chart2::XChartDocument > xChartDoc( pController->getModel(), css::uno::UNO_QUERY );
+
+    css::uno::Reference<css::uno::XInterface> xChartView = pController->getChartView();
+    chart::ExplicitValueProvider* pValueProvider = chart::ExplicitValueProvider::getExplicitValueProvider( xChartView );
+    chart::ObjectHierarchy aHierarchy(xChartDoc, pValueProvider, true);
+    chart::ObjectIdentifier aIdentifier = aHierarchy.getRootNodeOID();
+    aChildren.insert(aIdentifier.getObjectCID());
+
+    recursiveAdd(aIdentifier, aChildren, aHierarchy);
 
     return aChildren;
 }

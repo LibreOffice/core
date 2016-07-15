@@ -1969,6 +1969,11 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
         m_pChartWindow->SetPointer( Pointer( PointerStyle::Arrow ));
 }
 
+css::uno::Reference<css::uno::XInterface> ChartController::getChartView()
+{
+    return m_xChartView;
+}
+
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
