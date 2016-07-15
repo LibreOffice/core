@@ -66,14 +66,6 @@ namespace xls {
 
 class ExcelFilter;
 
-/** An enumeration for all supported spreadsheet filter types. */
-enum FilterType
-{
-    FILTER_OOXML,       /// MS Excel OOXML (Office Open XML) or BIFF12.
-    FILTER_BIFF,        /// MS Excel BIFF2-BIFF8 (Binary Interchange File Format).
-    FILTER_UNKNOWN      /// Unknown filter type.
-};
-
 /** Functor for case-insensitive string comparison, usable in maps etc. */
 struct IgnoreCaseCompare
 {
