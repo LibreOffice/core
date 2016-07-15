@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9a89bdaa_ffa9dfe0",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-15T10:40:15Z",
+      "side": 1,
+      "message": "URI schemes should be registered with IANA.  What we did in other cases where we invent \"internal\" URI schemse we don\u0027t intent to register is to use a \"vnd.libreoffice.\" prefix in the scheme.  (And \"vnd.openofficeorg.\" and \"vnd.sun.star.\" in the past.)",
+      "parentUuid": "9a89bdaa_df6dfbcd",
+      "revId": "a18661ff381acb7fcdb1ef8262442b09f92055a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a89bdaa_df1fbb59",
         "filename": "desktop/source/app/cmdlineargs.cxx",
         "patchSetId": 5
