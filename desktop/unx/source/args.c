@@ -39,6 +39,7 @@ static struct {
     { "quickstart", 1, 0, 0, 0, NULL },
     { "minimized",  1, 0, 0, 0, NULL },
     { "convert-to", 1, 0, 0, 0, NULL },
+    { "cat",        1, 0, 0, 0, NULL },
 
     /* pagein bits */
     { "writer",     0, 0, 0, 0, "pagein-writer"  },

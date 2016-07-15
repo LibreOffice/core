@@ -198,6 +198,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 m_conversionparams = "txt:Text";
                 bOpenEvent = false;
                 bConversionEvent = true;
+                setHeadless();
             }
             else if ( oArg == "quickstart" )
             {
