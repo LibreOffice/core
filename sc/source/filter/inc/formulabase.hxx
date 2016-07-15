@@ -554,8 +554,7 @@ struct FunctionProviderImpl;
 class FunctionProvider  // not derived from WorkbookHelper to make it usable in file dumpers
 {
 public:
-    explicit            FunctionProvider( FilterType eFilter, BiffType eBiff, bool bImportFilter,
-                                          bool bCallerKnowsAboutMacroExport );
+    explicit            FunctionProvider(bool bImportFilter);
     virtual             ~FunctionProvider();
 
     /** Returns the function info for an OOXML function name, or 0 on error. */
@@ -594,9 +593,8 @@ struct OpCodeProviderImpl;
 class OpCodeProvider : public FunctionProvider // not derived from WorkbookHelper to make it usable as UNO service
 {
 public:
-    explicit            OpCodeProvider(
-                            const css::uno::Reference< css::lang::XMultiServiceFactory >& rxModelFactory,
-                            FilterType eFilter, BiffType eBiff, bool bImportFilter );
+    explicit            OpCodeProvider(const css::uno::Reference<css::lang::XMultiServiceFactory>& rxModelFactory,
+                                       bool bImportFilter);
     virtual             ~OpCodeProvider();
 
     /** Returns the structure containing all token op-codes for operators and
