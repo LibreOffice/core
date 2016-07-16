@@ -478,6 +478,7 @@ private:
     VclPtr<Slider>             m_pSliderAngle;
     VclPtr<ListBox>            m_pLbLineType;
     VclPtr<ColorLB>            m_pLbLineColor;
+    VclPtr<CheckBox>           m_pCbBackgroundColor;
     VclPtr<ColorLB>            m_pLbBackgroundColor;
     VclPtr<SvxPresetListBox>   m_pHatchLB;
     VclPtr<SvxXRectPreview>    m_pCtlPreview;
@@ -507,6 +508,7 @@ private:
     void ChangeHatchHdl_Impl();
     DECL_LINK_TYPED( ModifiedEditHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( ModifiedListBoxHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( ToggleHatchBackgroundColor_Impl, CheckBox&, void );
     DECL_LINK_TYPED( ModifiedBackgroundHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ModifiedSliderHdl_Impl, Slider*, void );
     void ModifiedHdl_Impl(void*);
