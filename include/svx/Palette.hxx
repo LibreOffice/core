@@ -29,12 +29,13 @@ class SvFileStream;
 typedef std::pair<Color, OUString> NamedColor;
 typedef std::vector< NamedColor > ColorList;
 
-class Palette
+class SVX_DLLPUBLIC Palette
 {
 public:
     virtual ~Palette();
 
     virtual const OUString&     GetName() = 0;
+    virtual const OUString&     GetPath() = 0;
     virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) = 0;
 
     virtual bool                IsValid() = 0;
@@ -42,7 +43,7 @@ public:
 
 // ASE = Adobe Swatch Exchange
 
-class PaletteASE : public Palette
+class SVX_DLLPUBLIC PaletteASE : public Palette
 {
     bool        mbValidPalette;
     OUString    maFPath;
@@ -55,6 +56,7 @@ public:
     virtual ~PaletteASE();
 
     virtual const OUString&     GetName() override;
+    virtual const OUString&     GetPath() override;
     virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) override;
 
     virtual bool                IsValid() override;
@@ -62,7 +64,7 @@ public:
 
 // GPL - this is *not* GNU Public License, but is the Gimp PaLette
 
-class PaletteGPL : public Palette
+class SVX_DLLPUBLIC PaletteGPL : public Palette
 {
     bool        mbLoadedPalette;
     bool        mbValidPalette;
@@ -79,6 +81,7 @@ public:
     virtual ~PaletteGPL();
 
     virtual const OUString&     GetName() override;
+    virtual const OUString&     GetPath() override;
     virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) override;
 
     virtual bool                IsValid() override;
@@ -86,7 +89,7 @@ public:
 
 // SOC - Star Office Color-table
 
-class PaletteSOC : public Palette
+class SVX_DLLPUBLIC PaletteSOC : public Palette
 {
     bool            mbLoadedPalette;
     OUString        maFPath;
@@ -97,6 +100,7 @@ public:
     virtual ~PaletteSOC();
 
     virtual const OUString&     GetName() override;
+    virtual const OUString&     GetPath() override;
     virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) override;
 
     virtual bool                IsValid() override;
