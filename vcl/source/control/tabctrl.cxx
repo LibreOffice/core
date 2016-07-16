@@ -1199,7 +1199,7 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& 
         {
             ImplTabItem* pItem = &mpTabCtrlData->maItemList[idx];
 
-            if(!mbHideDisabledTabs || (mbHideDisabledTabs && pItem->mbEnabled))
+            if (!mbHideDisabledTabs || pItem->mbEnabled)
             {
                 if (pItem != pCurItem)
                 {
