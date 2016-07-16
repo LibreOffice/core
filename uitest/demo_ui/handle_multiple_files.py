@@ -48,4 +48,19 @@ class HandleFiles(UITestCase):
 
         self.ui_test.close_doc()
 
+    def test_select_frame(self):
+        calc_file = self.ui_test.load_file(get_url_for_data_file("test.ods"))
+
+        calc_file2 = self.ui_test.load_file(get_url_for_data_file("test2.ods"))
+        frames = self.ui_test.get_frames()
+        self.assertEqual(len(frames), 2)
+        frames[0].activate()
+
+        self.ui_test.close_doc()
+
+        frames = self.ui_test.get_frames()
+        self.assertEqual(len(frames), 1)
+
+        self.assertTrue(frames[0].getTitle().startswith("test2.ods"))
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
