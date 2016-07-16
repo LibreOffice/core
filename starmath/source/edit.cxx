@@ -88,6 +88,7 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     aModifyIdle         ("SmEditWindow ModifyIdle"),
     aCursorMoveIdle     ("SmEditWindow CursorMoveIdle")
 {
+    set_id("math_edit");
     SetHelpId(HID_SMA_COMMAND_WIN_EDIT);
     SetMapMode(MAP_PIXEL);
 
