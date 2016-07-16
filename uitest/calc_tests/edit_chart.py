@@ -48,8 +48,6 @@ class CalcChartEditUIDemo(UITestCase):
 
         xNextBtn = xChartDlg.getChild("finish")
         xNextBtn.executeAction("CLICK", tuple())
-        xNextBtn = None
-        xChartDlg = None
 
         xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
 
@@ -59,11 +57,8 @@ class CalcChartEditUIDemo(UITestCase):
 
         xChartMainTop = self.xUITest.getTopFocusWindow()
         xChartMain = xChartMainTop.getChild("chart_window")
-        print(xChartMainTop.getChildren())
-        print(xChartMain.getChildren())
 
         xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
-        # xChartMain.executeAction("SELECT", mkPropertyValues({"NAME": "CID/D=0:CS=0:CT=0:Series=0"}))
         self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatDataSeries"}))
 
         xSeriesFormatDlg = self.xUITest.getTopFocusWindow()
