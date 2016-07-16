@@ -235,7 +235,7 @@ void PivotCacheItem::readIndex( SequenceInputStream& rStrm )
 
 void PivotCacheItem::readString( BiffInputStream& rStrm, const WorkbookHelper& rHelper )
 {
-    maValue <<= (rHelper.getBiff() == BIFF8) ? rStrm.readUniString() : rStrm.readByteStringUC( true, rHelper.getTextEncoding() );
+    maValue <<= rStrm.readByteStringUC( true, rHelper.getTextEncoding() );
     mnType = XML_s;
 }
 
@@ -634,7 +634,7 @@ void PivotCacheField::importPCDField( BiffInputStream& rStrm )
     maFieldGroupModel.mnBaseField    = rStrm.readuInt16();
     rStrm.skip( 2 );    // number of unique items (either shared or group)
     rStrm >> nGroupItems >> nBaseItems >> nSharedItems;
-    maFieldModel.maName = (getBiff() == BIFF8) ? rStrm.readUniString() : rStrm.readByteStringUC( true, getTextEncoding() );
+    maFieldModel.maName = rStrm.readByteStringUC( true, getTextEncoding() );
 
     maFieldModel.mbServerField          = getFlag( nFlags, BIFF_PCDFIELD_SERVERFIELD );
     maFieldModel.mbUniqueList           = !getFlag( nFlags, BIFF_PCDFIELD_NOUNIQUEITEMS );
@@ -1176,9 +1176,7 @@ void PivotCache::importPCDefinition( BiffInputStream& rStrm )
     rStrm.skip( 6 );    // total field count, report record count, (repeated) cache type
     rStrm >> nUserNameLen;
     if( nUserNameLen != BIFF_PC_NOSTRING )
-        maDefModel.maRefreshedBy = (getBiff() == BIFF8) ?
-            rStrm.readUniString( nUserNameLen ) :
-            rStrm.readCharArrayUC( nUserNameLen, getTextEncoding() );
+        maDefModel.maRefreshedBy = rStrm.readCharArrayUC( nUserNameLen, getTextEncoding() );
 
     maDefModel.mbInvalid          = getFlag( nFlags, BIFF_PCDEFINITION_INVALID );
     maDefModel.mbSaveData         = getFlag( nFlags, BIFF_PCDEFINITION_SAVEDATA );

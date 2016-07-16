@@ -246,16 +246,14 @@ const sal_Int32 BIFF12_ID_XF                = 0x002F;
 
 // BIFF2-BIFF8 record identifiers =============================================
 
-/** An enumeration for all binary Excel file format types (BIFF types). */
-enum BiffType
-{
-    BIFF2 = 0,                  /// MS Excel 2.1.
-    BIFF3,                      /// MS Excel 3.0.
-    BIFF4,                      /// MS Excel 4.0.
-    BIFF5,                      /// MS Excel 5.0, MS Excel 7.0 (95).
-    BIFF8,                      /// MS Excel 8.0 (97), 9.0 (2000), 10.0 (XP), 11.0 (2003).
-    BIFF_UNKNOWN                /// Unknown BIFF version.
-};
+/** all binary Excel file format types (BIFF types).
+    BIFF2                      /// MS Excel 2.1.
+    BIFF3                      /// MS Excel 3.0.
+    BIFF4                      /// MS Excel 4.0.
+    BIFF5                      /// MS Excel 5.0, MS Excel 7.0 (95).
+    BIFF8                      /// MS Excel 8.0 (97), 9.0 (2000), 10.0 (XP), 11.0 (2003).
+    BIFF_UNKNOWN               /// Unknown BIFF version.
+*/
 
 /** unused -- keep for documentation */
 //const sal_uInt16 BIFF2_MAXRECSIZE           = 2080;
