@@ -39,5 +39,15 @@ class SimpleMathTest(UITestCase):
 
         self.ui_test.close_doc()
 
+    def test_math_edit(self):
+        self.ui_test.create_doc_in_start_center("math")
+
+        xMathDoc = self.xUITest.getTopFocusWindow()
+
+        xMathEdit = xMathDoc.getChild("math_edit")
+
+        xMathEdit.executeAction("TYPE", mkPropertyValues({"TEXT": "E=mc^2"}))
+
+        self.ui_test.close_doc()
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
