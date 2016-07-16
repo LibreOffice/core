@@ -2020,6 +2020,19 @@ OUString lcl_GetFractionIntegerString(const ImpSvNumberformatInfo &rInfo, sal_uI
     return aIntegerString.makeStringAndClear();
 }
 
+OUString lcl_GetIntegerFractionDelimiterString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nAnz)
+{
+    sal_Int16 i;
+    for( i = 0; i < nAnz; i++ )
+    {
+        if( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_FRACBLANK )
+        {
+            return rInfo.sStrArray[i];
+        }
+    }
+    return OUString();
+}
+
 }
 
 OUString SvNumberformat::GetDenominatorString( sal_uInt16 nNumFor ) const
@@ -2034,6 +2047,13 @@ OUString SvNumberformat::GetNumeratorString( sal_uInt16 nNumFor ) const
     const ImpSvNumberformatInfo& rInfo = NumFor[nNumFor].Info();
     sal_uInt16 nAnz = NumFor[nNumFor].GetCount();
     return lcl_GetNumeratorString( rInfo, nAnz );
+}
+
+OUString SvNumberformat::GetIntegerFractionDelimiterString( sal_uInt16 nNumFor ) const
+{
+    const ImpSvNumberformatInfo& rInfo = NumFor[nNumFor].Info();
+    sal_uInt16 nAnz = NumFor[nNumFor].GetCount();
+    return lcl_GetIntegerFractionDelimiterString( rInfo, nAnz );
 }
 
 bool SvNumberformat::GetOutputString(double fNumber, sal_uInt16 nCharCount, OUString& rOutString) const

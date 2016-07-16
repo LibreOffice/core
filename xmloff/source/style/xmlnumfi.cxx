@@ -108,6 +108,7 @@ struct SvXMLNumberInfo
     bool        bExpSign;
     bool        bDecAlign;
     double      fDisplayFactor;
+    OUString    aIntegerFractionDelimiter;
     std::map<sal_Int32, OUString> m_EmbeddedElements;
 
     SvXMLNumberInfo()
@@ -270,6 +271,7 @@ enum SvXMLStyleElemAttrTokens
     XML_TOK_ELEM_ATTR_MAX_DENOMINATOR_VALUE,
     XML_TOK_ELEM_ATTR_ZEROS_NUMERATOR_DIGITS,
     XML_TOK_ELEM_ATTR_ZEROS_DENOMINATOR_DIGITS,
+    XML_TOK_ELEM_ATTR_INTEGER_FRACTION_DELIMITER,
     XML_TOK_ELEM_ATTR_RFC_LANGUAGE_TAG,
     XML_TOK_ELEM_ATTR_LANGUAGE,
     XML_TOK_ELEM_ATTR_SCRIPT,
@@ -577,6 +579,8 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemAttrTokenMap()
             { XML_NAMESPACE_NUMBER, XML_ZEROS_NUMERATOR_DIGITS,  XML_TOK_ELEM_ATTR_ZEROS_NUMERATOR_DIGITS },
             { XML_NAMESPACE_LO_EXT, XML_ZEROS_DENOMINATOR_DIGITS,XML_TOK_ELEM_ATTR_ZEROS_DENOMINATOR_DIGITS },
             { XML_NAMESPACE_NUMBER, XML_ZEROS_DENOMINATOR_DIGITS,XML_TOK_ELEM_ATTR_ZEROS_DENOMINATOR_DIGITS },
+            { XML_NAMESPACE_LO_EXT, XML_INTEGER_FRACTION_DELIMITER, XML_TOK_ELEM_ATTR_INTEGER_FRACTION_DELIMITER },
+            { XML_NAMESPACE_NUMBER, XML_INTEGER_FRACTION_DELIMITER, XML_TOK_ELEM_ATTR_INTEGER_FRACTION_DELIMITER },
             { XML_NAMESPACE_NUMBER, XML_RFC_LANGUAGE_TAG,        XML_TOK_ELEM_ATTR_RFC_LANGUAGE_TAG     },
             { XML_NAMESPACE_NUMBER, XML_LANGUAGE,                XML_TOK_ELEM_ATTR_LANGUAGE             },
             { XML_NAMESPACE_NUMBER, XML_SCRIPT,                  XML_TOK_ELEM_ATTR_SCRIPT               },
@@ -1019,6 +1023,9 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
             case XML_TOK_ELEM_ATTR_ZEROS_DENOMINATOR_DIGITS:
                 if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
                     aNumInfo.nZerosDenomDigits = nAttrVal;
+                 break;
+            case XML_TOK_ELEM_ATTR_INTEGER_FRACTION_DELIMITER:
+                aNumInfo.aIntegerFractionDelimiter = sValue;
                 break;
             case XML_TOK_ELEM_ATTR_RFC_LANGUAGE_TAG:
                 aLanguageTagODF.maRfcLanguageTag = sValue;
@@ -1091,6 +1098,9 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
         if ( nElementLang == LANGUAGE_DONTKNOW )
             nElementLang = LANGUAGE_SYSTEM;         //! error handling for unknown locales?
     }
+
+    if ( aNumInfo.aIntegerFractionDelimiter.isEmpty() )
+        aNumInfo.aIntegerFractionDelimiter = " ";
 }
 
 SvXMLNumFmtElementContext::~SvXMLNumFmtElementContext()
@@ -1274,7 +1284,9 @@ void SvXMLNumFmtElementContext::EndElement()
                     // add integer part only if min-integer-digits attribute is there
                     aNumInfo.nDecimals = 0;
                     rParent.AddNumber( aNumInfo );      // number without decimals
-                    rParent.AddToCode( ' ' );
+                    OUStringBuffer sIntegerFractionDelimiter = aNumInfo.aIntegerFractionDelimiter;
+                    lcl_EnquoteIfNecessary( sIntegerFractionDelimiter, rParent );
+                    rParent.AddToCode( sIntegerFractionDelimiter.makeStringAndClear() ); // default is ' '
                 }
 
                 //! build string and add at once

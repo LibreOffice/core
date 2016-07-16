@@ -70,7 +70,7 @@ private:
     SAL_DLLPRIVATE void WriteScientificElement_Impl( sal_Int32 nDecimals, sal_Int32 nMinDecimals, sal_Int32 nInteger,
                                         bool bGrouping, sal_Int32 nExp, sal_Int32 nExpInterval, bool bExpSign );
     SAL_DLLPRIVATE void WriteFractionElement_Impl( sal_Int32 nInteger, bool bGrouping,
-                                                   const OUString& aNumeratorString, const OUString& aDenominatorString );
+                                                   const SvNumberformat& rFormat, sal_uInt16 nPart );
     SAL_DLLPRIVATE void WriteCurrencyElement_Impl( const OUString& rString,
                                         const OUString& rExt );
     SAL_DLLPRIVATE void WriteBooleanElement_Impl();
