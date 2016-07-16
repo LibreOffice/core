@@ -1186,8 +1186,7 @@ void FastSaxParserImpl::sendPendingCharacters()
 {
     Entity& rEntity = getEntity();
     Event& rEvent = rEntity.getEvent( CHARACTERS );
-    rEvent.msChars = pendingCharacters;
-    pendingCharacters.clear();
+    rEvent.msChars = std::move(pendingCharacters);
     if (rEntity.mbEnableThreads)
         produce();
     else

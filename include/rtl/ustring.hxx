@@ -413,10 +413,7 @@ public:
     */
     OUString & operator=( OUString && str )
     {
-        rtl_uString_release( pData );
-        pData = str.pData;
-        str.pData = nullptr;
-        rtl_uString_new( &str.pData );
+        rtl_uString_move( &pData, &str.pData );
         return *this;
     }
 #endif

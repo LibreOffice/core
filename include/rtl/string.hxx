@@ -308,10 +308,7 @@ public:
     */
     OString & operator=( OString && str )
     {
-        rtl_string_release( pData );
-        pData = str.pData;
-        str.pData = nullptr;
-        rtl_string_new( &str.pData );
+        rtl_string_move( &pData, &str.pData );
         return *this;
     }
 #endif
