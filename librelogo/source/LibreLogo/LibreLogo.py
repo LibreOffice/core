@@ -392,9 +392,9 @@ def __translate__(arg = None):
         pagebreak = False
         selection.setString(text)
     # convert to paragraphs
-    __dispatcher__(".uno:ExecuteSearch", (__getprop__("SearchItem.SearchString", r"\n"), __getprop__("SearchItem.ReplaceString", r"\n"), \
+    __dispatcher__(".uno:ExecuteSearch", (__getprop__("SearchItem.SearchString", r"\n"), __getprop__("SearchItem.ReplaceString", "\n"), \
         __getprop__("Quiet", True), __getprop__("SearchItem.Command", 3), __getprop__("SearchItem.StyleFamily", 2), \
-        __getprop__("SearchItem.AlgorithmType", 1), __getprop__("SearchItem.RowDirection", 1), __getprop__("SearchItem.SearchFlags", 65536)))
+        __getprop__("SearchItem.AlgorithmType2", 1), __getprop__("SearchItem.SearchFlags", 0)))
     # set 2-page layout
     if pagebreak:
         selection.getStart().BreakType = 4
