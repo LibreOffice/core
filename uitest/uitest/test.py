@@ -49,6 +49,21 @@ class UITest(object):
 
         raise DialogNotExecutedException(command)
 
+    def execute_dialog_through_action(self, ui_object, action, parameters = None):
+        if parameters is None:
+            parameters = tuple()
+
+        with EventListener(self._xContext, "DialogExecute") as event:
+            ui_object.executeAction(action, parameters)
+            time_ = 0
+            while time_ < 30:
+                if event.executed:
+                    time.sleep(DEFAULT_SLEEP)
+                    return
+                time_ += DEFAULT_SLEEP
+                time.sleep(DEFAULT_SLEEP)
+        raise DialogNotExecutedException(command)
+
     def create_doc_in_start_center(self, app):
         xStartCenter = self._xUITest.getTopFocusWindow()
         xBtn = xStartCenter.getChild(app + "_all")
