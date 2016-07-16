@@ -2111,6 +2111,15 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_convertStringToUString(
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_uString_ensureCapacity( rtl_uString ** str, sal_Int32 size ) SAL_THROW_EXTERN_C();
 
+#if defined LIBO_INTERNAL_ONLY
+/** Move a strings data from a source string to a dest string.
+ *
+ @since LibreOffice 5.3
+ @internal
+ */
+SAL_DLLPUBLIC void SAL_CALL rtl_uString_move( rtl_uString ** ppDest, rtl_uString ** ppSource ) SAL_THROW_EXTERN_C();
+#endif
+
 #ifdef __cplusplus
 }
 #endif
