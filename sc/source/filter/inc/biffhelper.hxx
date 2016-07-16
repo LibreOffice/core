@@ -583,7 +583,6 @@ const sal_uInt8 BIFF_DATATYPE_ERROR         = 16;
 
 const sal_uInt8 BIFF_BOOLERR_BOOL           = 0;
 const sal_uInt8 BIFF_BOOLERR_ERROR          = 1;
-*/
 
 // BIFF8 unicode strings ------------------------------------------------------
 
@@ -591,6 +590,7 @@ const sal_uInt8 BIFF_STRF_16BIT             = 0x01;
 const sal_uInt8 BIFF_STRF_PHONETIC          = 0x04;
 const sal_uInt8 BIFF_STRF_RICH              = 0x08;
 const sal_uInt8 BIFF_STRF_UNKNOWN           = 0xF2;
+*/
 
 /** Static helper functions for BIFF filters. */
 class BiffHelper
@@ -613,22 +613,6 @@ public:
 
     /** Returns true, if the current record of the stream is a BOF record. */
     static bool         isBofRecord( BiffInputStream& rStrm );
-
-    /** Skips a block of records up to the specified end record.
-
-        Skips all records until next end record. When this function returns,
-        the stream points to the end record, and the next call of the function
-        startNextRecord() at the stream will start the record following the end
-        record.
-
-        The identifier of the record that is active while this function is
-        called is used as start record identifier. This identifier is used to
-        correctly skip embedded record blocks with the same start and end
-        record identifier.
-
-        @return  True = stream points to the end record.
-     */
-    static bool         skipRecordBlock( BiffInputStream& rStrm, sal_uInt16 nEndRecId );
 
 private:
                         BiffHelper() = delete;

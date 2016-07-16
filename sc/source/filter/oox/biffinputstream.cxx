@@ -329,51 +329,6 @@ OUString BiffInputStream::readByteStringUC( bool b16BitLen, rtl_TextEncoding eTe
     return OStringToOUString( readByteString( b16BitLen, bAllowNulChars ), eTextEnc );
 }
 
-// Unicode strings ------------------------------------------------------------
-
-OUString BiffInputStream::readUniStringChars( sal_uInt16 nChars, bool b16BitChars, bool bAllowNulChars )
-{
-    OUStringBuffer aBuffer;
-    aBuffer.ensureCapacity( nChars );
-
-    /*  This function has to react on CONTINUE records which repeat the flags
-        field in their first byte and may change the 8bit/16bit character mode,
-        thus a plain call to readCompressedUnicodeArray() cannot be used here. */
-    sal_Int32 nCharsLeft = nChars;
-    while( !mbEof && (nCharsLeft > 0) )
-    {
-        /*  Read the character array from the remaining part of the current raw
-            record. First, calculate the maximum number of characters that can
-            be read without triggering to start a following CONTINUE record. */
-        sal_Int32 nRawChars = b16BitChars ? (getMaxRawReadSize( nCharsLeft * 2, 2 ) / 2) : getMaxRawReadSize( nCharsLeft, 1 );
-        aBuffer.append( readCompressedUnicodeArray( nRawChars, !b16BitChars, bAllowNulChars ) );
-
-        /*  Prepare for next CONTINUE record. Calling jumpToNextStringContinue()
-            reads the leading byte in the following CONTINUE record and updates
-            the b16BitChars flag. */
-        nCharsLeft -= nRawChars;
-        if( nCharsLeft > 0 )
-            jumpToNextStringContinue( b16BitChars );
-    }
-
-    return aBuffer.makeStringAndClear();
-}
-
-OUString BiffInputStream::readUniStringBody( sal_uInt16 nChars, bool bAllowNulChars )
-{
-    bool b16BitChars;
-    sal_Int32 nAddSize;
-    readUniStringHeader( b16BitChars, nAddSize );
-    OUString aString = readUniStringChars( nChars, b16BitChars, bAllowNulChars );
-    skip( nAddSize );
-    return aString;
-}
-
-OUString BiffInputStream::readUniString( bool bAllowNulChars )
-{
-    return readUniStringBody( readuInt16(), bAllowNulChars );
-}
-
 // private --------------------------------------------------------------------
 
 void BiffInputStream::setupRecord()
@@ -422,30 +377,6 @@ bool BiffInputStream::jumpToNextContinue()
     return !mbEof;
 }
 
-bool BiffInputStream::jumpToNextStringContinue( bool& rb16BitChars )
-{
-    OSL_ENSURE( maRecBuffer.getRecLeft() == 0, "BiffInputStream::jumpToNextStringContinue - alignment error" );
-
-    if( mbCont && (getRemaining() > 0) )
-    {
-        jumpToNextContinue();
-    }
-    else if( mnRecId == BIFF_ID_CONT )
-    {
-        /*  CONTINUE handling is off, but we have started reading in a CONTINUE
-            record -> start next CONTINUE for TXO import. We really start a new
-            record here - no chance to return to string origin. */
-        mbEof = mbEof || (maRecBuffer.getNextRecId() != BIFF_ID_CONT) || !maRecBuffer.startNextRecord();
-        if( !mbEof )
-            setupRecord();
-    }
-
-    // trying to read the flags invalidates stream, if no CONTINUE record has been found
-    sal_uInt8 nFlags = readuInt8();
-    rb16BitChars = getFlag( nFlags, BIFF_STRF_16BIT );
-    return !mbEof;
-}
-
 void BiffInputStream::calcRecordLength()
 {
     sal_Int64 nCurrPos = tell();            // save current position in record
@@ -466,16 +397,6 @@ sal_uInt16 BiffInputStream::getMaxRawReadSize( sal_Int32 nBytes, size_t nAtomSiz
         nMaxSize = nMaxSize - nPadding;
     }
     return nMaxSize;
-}
-
-void BiffInputStream::readUniStringHeader( bool& orb16BitChars, sal_Int32& ornAddSize )
-{
-    sal_uInt8 nFlags = readuInt8();
-    OSL_ENSURE( !getFlag( nFlags, BIFF_STRF_UNKNOWN ), "BiffInputStream::readUniStringHeader - unknown flags" );
-    orb16BitChars = getFlag( nFlags, BIFF_STRF_16BIT );
-    sal_uInt16 nFontCount = getFlag( nFlags, BIFF_STRF_RICH ) ? readuInt16() : 0;
-    sal_Int32 nPhoneticSize = getFlag( nFlags, BIFF_STRF_PHONETIC ) ? readInt32() : 0;
-    ornAddSize = 4 * nFontCount + ::std::max< sal_Int32 >( 0, nPhoneticSize );
 }
 
 } // namespace xls
