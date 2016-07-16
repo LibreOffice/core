@@ -243,36 +243,6 @@ public:
      */
     OUString     readByteStringUC( bool b16BitLen, rtl_TextEncoding eTextEnc, bool bAllowNulChars = false );
 
-    // Unicode strings --------------------------------------------------------
-
-    /** Reads nChars characters of a BIFF8 string, and returns the string.
-        @param nChars  Number of characters to read from the stream.
-        @param b16BitChars
-            True = The character array contains 16-bit characters.
-            False = The character array contains truncated 8-bit characters.
-        @param bAllowNulChars
-            True = NUL characters are inserted into the imported string.
-            False = NUL characters are replaced by question marks (default).
-     */
-    OUString     readUniStringChars( sal_uInt16 nChars, bool b16BitChars, bool bAllowNulChars = false );
-
-    /** Reads 8-bit flags, extended header, nChar characters, extended data of
-        a BIFF8 string, and returns the string.
-        @param nChars  Number of characters to read from the stream.
-        @param bAllowNulChars
-            True = NUL characters are inserted into the imported string.
-            False = NUL characters are replaced by question marks (default).
-     */
-    OUString     readUniStringBody( sal_uInt16 nChars, bool bAllowNulChars = false );
-
-    /** Reads 16-bit character count, 8-bit flags, extended header, character
-        array, extended data of a BIFF8 string, and returns the string.
-        @param bAllowNulChars
-            True = NUL characters are inserted into the imported string.
-            False = NUL characters are replaced by question marks (default).
-     */
-    OUString     readUniString( bool bAllowNulChars = false );
-
 private:
     /** Initializes all members after base stream has been sought to new record. */
     void                setupRecord();
@@ -290,23 +260,12 @@ private:
         of CONTINUE records must be enabled.
         @return  True if next CONTINUE record has been found and initialized. */
     bool                jumpToNextContinue();
-    /** Goes to start of the next CONTINUE record while reading strings.
-        @descr  Stream must be located at the end of a raw record. If reading
-        has been started in a CONTINUE record, jumps to an existing following
-        CONTINUE record, even if handling of CONTINUE records is disabled (this
-        is a special handling for TXO string data). Reads additional Unicode
-        flag byte at start of the new raw record and sets or resets rb16BitChars.
-        @return  True if next CONTINUE record has been found and initialized. */
-    bool                jumpToNextStringContinue( bool& rb16BitChars );
     /** Calculates the complete length of the current record including CONTINUE
         records, stores the length in mnComplRecSize. */
     void                calcRecordLength();
 
     /** Returns the maximum size of raw data possible to read in one block. */
     sal_uInt16          getMaxRawReadSize( sal_Int32 nBytes, size_t nAtomSize ) const;
-
-    /** Reads the BIFF8 Unicode string header fields. */
-    void                readUniStringHeader( bool& orb16BitChars, sal_Int32& ornAddSize );
 
 private:
     prv::BiffInputRecordBuffer maRecBuffer; /// Raw record data buffer.

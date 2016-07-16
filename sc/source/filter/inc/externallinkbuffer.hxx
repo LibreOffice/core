@@ -312,8 +312,6 @@ public:
     /** Returns the external link for the passed reference identifier. */
     ExternalLinkRef     getExternalLink( sal_Int32 nRefId, bool bUseRefSheets = true ) const;
 
-    /** Returns the sheet range for the specified reference (BIFF2-BIFF5 only). */
-    LinkSheetRange      getSheetRange( sal_Int32 nRefId, sal_Int16 nTabId1, sal_Int16 nTabId2 ) const;
     /** Returns the sheet range for the specified reference (BIFF8 only). */
     LinkSheetRange      getSheetRange( sal_Int32 nRefId ) const;
 

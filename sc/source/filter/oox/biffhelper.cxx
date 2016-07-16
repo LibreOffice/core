@@ -119,15 +119,6 @@ union DecodedDouble
         (rStrm.getRecId() == BIFF5_ID_BOF);
 }
 
-/*static*/ bool BiffHelper::skipRecordBlock( BiffInputStream& rStrm, sal_uInt16 nEndRecId )
-{
-    sal_uInt16 nStartRecId = rStrm.getRecId();
-    while( rStrm.startNextRecord() && (rStrm.getRecId() != nEndRecId) )
-        if( rStrm.getRecId() == nStartRecId )
-            skipRecordBlock( rStrm, nEndRecId );
-    return !rStrm.isEof() && (rStrm.getRecId() == nEndRecId);
-}
-
 } // namespace xls
 } // namespace oox
 
