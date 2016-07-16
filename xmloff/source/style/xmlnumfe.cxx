@@ -727,9 +727,12 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
 
 void SvXMLNumFmtExport::WriteFractionElement_Impl(
                             sal_Int32 nInteger, bool bGrouping,
-                            const OUString& aNumeratorString , const OUString& aDenominatorString )
+                            const SvNumberformat& rFormat, sal_uInt16 nPart )
 {
     FinishTextElement_Impl();
+    const OUString aNumeratorString = rFormat.GetNumeratorString( nPart );
+    const OUString aDenominatorString = rFormat.GetDenominatorString( nPart );
+    const OUString aIntegerFractionDelimiterString = rFormat.GetIntegerFractionDelimiterString( nPart );
     sal_Int32 nMaxNumeratorDigits = aNumeratorString.getLength();
     // As '0' cannot (yet) be saved in extended ODF, replace them by '?'
     sal_Int32 nMinNumeratorDigits = aNumeratorString.replaceAll("0","?").indexOf('?');
@@ -756,6 +759,13 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
     if ( bGrouping )
     {
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_GROUPING, XML_TRUE );
+    }
+
+    // integer/fraction delimiter
+    if ( aIntegerFractionDelimiterString.getLength() > 0 && aIntegerFractionDelimiterString != " " )
+    {
+        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_INTEGER_FRACTION_DEL,
+                              aIntegerFractionDelimiterString );
     }
 
     //  numerator digits
@@ -1524,7 +1534,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                         //  min-integer-digits attribute must be written.
                                         nInteger = -1;
                                     }
-                                    WriteFractionElement_Impl( nInteger, bThousand,  rFormat.GetNumeratorString( nPart ), rFormat.GetDenominatorString( nPart ) );
+                                    WriteFractionElement_Impl( nInteger, bThousand,  rFormat , nPart );
                                     bAnyContent = true;
                                 }
                                 break;
