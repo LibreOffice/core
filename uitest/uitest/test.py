@@ -23,6 +23,27 @@ class UITest(object):
         self._xUITest = xUITest
         self._xContext = xContext
 
+    def get_desktop(self):
+        desktop = self._xContext.ServiceManager.createInstanceWithContext("com.sun.star.frame.Desktop", self._xContext)
+        return desktop
+
+    def get_frames(self):
+        desktop = self.get_desktop()
+        frames = desktop.getFrames()
+        return frames
+
+    def load_file(self, url):
+        desktop = self.get_desktop()
+        with EventListener(self._xContext, "OnLoad") as event:
+            component = desktop.loadComponentFromURL(url, "_default", 0, tuple())
+            time_ = 0
+            while time_ < 30:
+                if event.executed:
+                    time.sleep(DEFAULT_SLEEP)
+                    return component
+                time_ += DEFAULT_SLEEP
+                time.sleep(DEFAULT_SLEEP)
+
     def execute_dialog_through_command(self, command):
         with EventListener(self._xContext, "DialogExecute") as event:
             self._xUITest.executeCommand(command)
