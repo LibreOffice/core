@@ -1247,6 +1247,18 @@ void SAL_CALL IMPL_RTL_STRINGNAME( new )( IMPL_RTL_STRINGDATA** ppThis )
 
 /* ----------------------------------------------------------------------- */
 
+void SAL_CALL IMPL_RTL_STRINGNAME( move )( IMPL_RTL_STRINGDATA** ppDest, IMPL_RTL_STRINGDATA** ppSource )
+    SAL_THROW_EXTERN_C()
+{
+    assert(ppDest);
+    assert(ppSource);
+    IMPL_RTL_STRINGNAME( release )( *ppDest );
+    *ppDest = *ppSource;
+    *ppSource = const_cast<IMPL_RTL_STRINGDATA*>(&IMPL_RTL_EMPTYSTRING);
+}
+
+/* ----------------------------------------------------------------------- */
+
 IMPL_RTL_STRINGDATA* SAL_CALL IMPL_RTL_STRINGNAME( alloc )( sal_Int32 nLen )
     SAL_THROW_EXTERN_C()
 {
