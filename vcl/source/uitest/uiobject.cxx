@@ -722,6 +722,8 @@ StringMap ListBoxUIObject::get_state()
     aMap["MultiSelect"] = OUString::boolean(mxListBox->IsMultiSelectionEnabled());
     aMap["EntryCount"] = OUString::number(mxListBox->GetEntryCount());
     aMap["SelectEntryCount"] = OUString::number(mxListBox->GetSelectEntryCount());
+    aMap["SelectEntryPos"] = OUString::number(mxListBox->GetSelectEntryPos());
+    aMap["SelectEntryText"] = mxListBox->GetSelectEntry();
 
     return aMap;
 }
