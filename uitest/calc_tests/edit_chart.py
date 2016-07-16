@@ -33,7 +33,7 @@ class CalcChartEditUIDemo(UITestCase):
 
         xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C2"}))
 
-    def test_activate_chart(self):
+    def test_select_secondary_axis(self):
 
         self.ui_test.create_doc_in_start_center("calc")
 
@@ -62,9 +62,16 @@ class CalcChartEditUIDemo(UITestCase):
         print(xChartMainTop.getChildren())
         print(xChartMain.getChildren())
 
-        xChartMain.executeAction("SELECT", mkPropertyValues({"NAME": "CID/D=0:CS=0:CT=0:Series=0"}))
+        xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
+        # xChartMain.executeAction("SELECT", mkPropertyValues({"NAME": "CID/D=0:CS=0:CT=0:Series=0"}))
+        self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatDataSeries"}))
 
-        time.sleep(10)
+        xSeriesFormatDlg = self.xUITest.getTopFocusWindow()
+        xAxis2 = xSeriesFormatDlg.getChild("RBT_OPT_AXIS_2")
+        xAxis2.executeAction("CLICK", tuple())
+
+        xCancelBtn = xSeriesFormatDlg.getChild("ok")
+        xCancelBtn.executeAction("CLICK", tuple())
 
         xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
 
