@@ -13,14 +13,24 @@ from uitest.framework import UITestCase
 from uitest.debug import sleep
 
 import time
+import os
+import pathlib
+
+def get_data_dir():
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    return os.path.join(current_dir, "data")
+
+def get_url_for_data_file(file_name):
+    path = os.path.join(get_data_dir(), file_name)
+    return pathlib.Path(path).as_uri()
 
 class HandleFiles(UITestCase):
 
     def test_load_file(self):
 
-        calc_file = self.ui_test.load_file("file:///home/moggi/devel/libo9/uitest/data/test.ods")
+        calc_file = self.ui_test.load_file(get_url_for_data_file("test.ods"))
 
-        calc_file2 = self.ui_test.load_file("file:///home/moggi/devel/libo9/uitest/data/test2.ods")
+        calc_file2 = self.ui_test.load_file(get_url_for_data_file("test2.ods"))
 
         frames = self.ui_test.get_frames()
         self.assertEqual(len(frames), 2)
