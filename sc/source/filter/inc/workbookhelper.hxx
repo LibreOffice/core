@@ -265,9 +265,6 @@ public:
 
     // BIFF2-BIFF8 specific (MUST NOT be called in OOXML/BIFF12 filter) -------
 
-    /** Returns the BIFF type in binary filter. */
-    BiffType            getBiff() const;
-
     /** Returns the text encoding used to import/export byte strings. */
     rtl_TextEncoding    getTextEncoding() const;
 
