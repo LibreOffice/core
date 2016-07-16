@@ -224,8 +224,6 @@ public:
 
     // BIFF2-BIFF8 specific ---------------------------------------------------
 
-    /** Returns the BIFF type in binary filter. */
-    inline BiffType     getBiff() const { return meBiff; }
     /** Returns the text encoding used to import/export byte strings. */
     inline rtl_TextEncoding getTextEncoding() const { return meTextEnc; }
     /** Returns the codec helper that stores the encoder/decoder object. */
@@ -303,7 +301,6 @@ private:
 
     // BIFF2-BIFF8 specific
     BiffCodecHelperPtr  mxCodecHelper;          /// Encoder/decoder helper.
-    BiffType            meBiff;                 /// BIFF version for BIFF import/export.
     rtl_TextEncoding    meTextEnc;              /// BIFF byte string text encoding.
     ScDocument* mpDoc;
     ScDocShell* mpDocShell;
@@ -314,7 +311,6 @@ WorkbookGlobals::WorkbookGlobals( ExcelFilter& rFilter ) :
     mrBaseFilter( rFilter ),
     mrExcelFilter( rFilter ),
     mpOoxFilter( &rFilter ),
-    meBiff( BIFF_UNKNOWN ),
     mpDoc(nullptr),
     mpDocShell(nullptr)
 {
@@ -973,11 +969,6 @@ bool WorkbookHelper::importOoxFragment( const rtl::Reference<FragmentHandler>& r
 }
 
 // BIFF specific --------------------------------------------------------------
-
-BiffType WorkbookHelper::getBiff() const
-{
-    return mrBookGlob.getBiff();
-}
 
 rtl_TextEncoding WorkbookHelper::getTextEncoding() const
 {
