@@ -3269,6 +3269,7 @@ namespace xmloff { namespace token {
         XML_MIN_DECIMAL_PLACES,
         XML_MAX_DENOMINATOR_VALUE,
         XML_MAX_NUMERATOR_DIGITS,
+        XML_INTEGER_FRACTION_DELIMITER,
 
         XML_TOKEN_END
     };
