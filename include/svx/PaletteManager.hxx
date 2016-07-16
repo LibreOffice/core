@@ -36,12 +36,13 @@
 #include <vector>
 #include <memory>
 
-class PaletteManager
+class SVX_DLLPUBLIC PaletteManager
 {
     const sal_uInt16        mnMaxRecentColors;
 
     sal_uInt16              mnNumOfPalettes;
     sal_uInt16              mnCurrentPalette;
+    sal_uInt16              mnUserPalette;
 
     long                    mnColorCount;
     svx::ToolboxButtonColorUpdater* mpBtnUpdater;
@@ -63,9 +64,11 @@ public:
     void        SetPalette( sal_Int32 nPos );
     sal_Int32   GetPalette();
     OUString    GetPaletteName();
+    OUString    GetSelectedPalettePath();
 
     long        GetColorCount();
     long        GetRecentColorCount();
+    long        GetPaletteCount() { return mnNumOfPalettes; }
 
     const Color& GetLastColor();
     void        SetLastColor(const Color& rLastColor);

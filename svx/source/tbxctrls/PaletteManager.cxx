@@ -183,7 +183,19 @@ sal_Int32 PaletteManager::GetPalette()
 
 OUString PaletteManager::GetPaletteName()
 {
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    if(pDocSh)
+    {
+        const SfxPoolItem* pItem = nullptr;
+        if( nullptr != ( pItem = pDocSh->GetItem(SID_COLOR_TABLE) ) )
+            pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
+    }
     return pColorList->GetName();
+}
+
+OUString PaletteManager::GetSelectedPalettePath()
+{
+    return m_Palettes[mnCurrentPalette]->GetPath();
 }
 
 long PaletteManager::GetColorCount()

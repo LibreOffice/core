@@ -31,6 +31,8 @@
 #include <svx/hexcolorcontrol.hxx>
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/SvxPresetListBox.hxx>
+#include <svx/Palette.hxx>
+#include <svx/PaletteManager.hxx>
 
 class SdrModel;
 class SdrView;
@@ -671,28 +673,17 @@ class SvxColorTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    static const XPropertyListType meType = XCOLOR_LIST;
+    XPropertyListType   meType;
 
     VclPtr<Window>             mpTopDlg;
-    VclPtr<CheckBox>           m_pBoxEmbed;
-    VclPtr<PushButton>         m_pBtnLoad;
-    VclPtr<PushButton>         m_pBtnSave;
-    VclPtr<FixedText>          m_pTableName;
-
-    DECL_LINK_TYPED( EmbedToggleHdl_Impl, CheckBox&, void );
-    DECL_LINK_TYPED( ClickLoadHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickSaveHdl_Impl, Button*, void  );
-
-    XPropertyListRef GetList();
-    bool GetEmbed();
-    void SetEmbed( bool bEmbed );
-    void UpdateTableName();
-    void EnableSave( bool bCanSave );
 
     SvxColorTabPageShadow *pShadow;
-    VclPtr<ColorLB>            m_pLbColor;
 
+    std::vector< std::unique_ptr<Palette> > m_Palettes;
+    PaletteManager             mrPaletteManager;
+    VclPtr<ListBox>            m_pSelectPalette;
     VclPtr<SvxColorValueSet>   m_pValSetColorList;
+    VclPtr<SvxColorValueSet>   m_pValSetCustomList;
 
     VclPtr<SvxXRectPreview>    m_pCtlPreviewOld;
     VclPtr<SvxXRectPreview>    m_pCtlPreviewNew;
@@ -725,16 +716,17 @@ private:
     VclPtr<PushButton>         m_pBtnAdd;
     VclPtr<PushButton>         m_pBtnModify;
     VclPtr<PushButton>         m_pBtnWorkOn;
-    VclPtr<PushButton>         m_pBtnDelete;
 
     const SfxItemSet&   rOutAttrs;
 
     XColorListRef         pColorList;
+    XColorListRef         pUserColorList;
 
     ChangeType*         pnColorListState;
     sal_uInt16*         pPageType;
     sal_uInt16          nDlgType;
     sal_Int32*          pPos;
+    sal_Int32           nUserPos;
     bool*               pbAreaTP;
 
     XFillStyleItem      aXFStyleItem;
@@ -754,14 +746,14 @@ private:
     sal_uInt16  PercentToColor_Impl( sal_uInt16 nPercent );
 
     void ImpColorCountChanged();
-
+    void LoadPalettes();
+    void FillPaletteLB();
 
     DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickWorkOnHdl_Impl, Button*, void );
 
-    DECL_LINK_TYPED( SelectColorLBHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( SelectPaletteLBHdl, ListBox&, void );
+    void SelectPaletteLBHdl_Impl();
     DECL_LINK_TYPED( SelectValSetHdl_Impl, ValueSet*, void );
     DECL_LINK_TYPED( SelectColorModeHdl_Impl, RadioButton&, void );
     void ChangeColor(const Color &rNewColor);
