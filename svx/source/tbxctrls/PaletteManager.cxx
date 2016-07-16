@@ -33,7 +33,7 @@
 
 PaletteManager::PaletteManager() :
     mnMaxRecentColors(Application::GetSettings().GetStyleSettings().GetColorValueSetColumnCount()),
-    mnNumOfPalettes(2),
+    mnNumOfPalettes(1),
     mnCurrentPalette(0),
     mnColorCount(0),
     mpBtnUpdater(nullptr),
@@ -106,29 +106,7 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
 
-    if( mnCurrentPalette == 0 )
-    {
-        XColorListRef pColorList;
-
-        if ( pDocSh )
-        {
-            const SfxPoolItem* pItem = nullptr;
-            if ( nullptr != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
-                pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
-        }
-
-        if ( !pColorList.is() )
-            pColorList = XColorList::CreateStdColorList();
-
-
-        if ( pColorList.is() )
-        {
-            mnColorCount = pColorList->Count();
-            rColorSet.Clear();
-            rColorSet.addEntriesForXColorList(*pColorList);
-        }
-    }
-    else if( mnCurrentPalette == mnNumOfPalettes - 1 )
+    if( mnCurrentPalette == mnNumOfPalettes - 1 )
     {
         // Add doc colors to palette
         std::set<Color> aColors = pDocSh->GetDocColors();
@@ -138,7 +116,7 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
     }
     else
     {
-        m_Palettes[mnCurrentPalette-1]->LoadColorSet( rColorSet );
+        m_Palettes[mnCurrentPalette]->LoadColorSet( rColorSet );
         mnColorCount = rColorSet.GetItemCount();
     }
 }
@@ -158,8 +136,6 @@ void PaletteManager::ReloadRecentColorSet(SvxColorValueSet& rColorSet)
 std::vector<OUString> PaletteManager::GetPaletteList()
 {
     std::vector<OUString> aPaletteNames;
-
-    aPaletteNames.push_back( SVX_RESSTR( RID_SVXSTR_DEFAULT_PAL ) );
 
     for (auto const& it : m_Palettes)
     {
