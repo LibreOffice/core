@@ -1236,10 +1236,10 @@ CustomPropertiesYesNoButton::CustomPropertiesYesNoButton( vcl::Window* pParent, 
     m_aNoButton ( VclPtr<RadioButton>::Create(this, ResId( RB_PROPERTY_NO, *rResId.GetResMgr() )) )
 {
     FreeResource();
-    Wallpaper aWall( Color( COL_TRANSPARENT ) );
-    SetBackground( aWall );
+    SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFieldColor() ) );
     SetBorderStyle( WindowBorderStyle::MONO  );
     CheckNo();
+    Wallpaper aWall( Color( COL_TRANSPARENT ) );
     m_aYesButton->SetBackground( aWall );
     m_aNoButton->SetBackground( aWall );
 }
