@@ -14,7 +14,81 @@
 #include "ObjectHierarchy.hxx"
 #include "chartview/ExplicitValueProvider.hxx"
 
+#include <vcl/svapp.hxx>
+
 #include <algorithm>
+
+ChartUIObject::ChartUIObject(VclPtr<chart::ChartWindow> xChartWindow,
+        const OUString& rCID):
+    maCID(rCID),
+    mxChartWindow(xChartWindow)
+{
+}
+
+StringMap ChartUIObject::get_state()
+{
+    StringMap aMap;
+    aMap["CID"] = maCID;
+
+    return aMap;
+}
+
+void ChartUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    if (rAction == "SELECT")
+    {
+        std::unique_ptr<UIObject> pWindow = mxChartWindow->GetUITestFactory()(mxChartWindow.get());
+
+        StringMap aParams;
+        aParams["NAME"] = maCID;
+        pWindow->execute(rAction, aParams);
+    }
+    else if (rAction == "COMMAND")
+    {
+        // first select object
+        std::unique_ptr<UIObject> pWindow = mxChartWindow->GetUITestFactory()(mxChartWindow.get());
+
+        StringMap aParams;
+        aParams["NAME"] = maCID;
+        pWindow->execute("SELECT", aParams);
+
+        auto itr = rParameters.find("COMMAND");
+        if (itr == rParameters.end())
+            throw css::uno::RuntimeException("missing COMMAND parameter");
+
+        maCommands.emplace_back(new OUString(itr->second));
+        OUString* pCommand = maCommands.rbegin()->get();
+
+        Application::PostUserEvent(LINK(this, ChartUIObject, PostCommand), pCommand);
+    }
+}
+
+IMPL_LINK_TYPED(ChartUIObject, PostCommand, void*, pCommand, void)
+{
+        css::util::URL aURL;
+        aURL.Path = *static_cast<OUString*>(pCommand);
+        mxChartWindow->GetController()->dispatch(aURL, css::uno::Sequence<css::beans::PropertyValue>());
+}
+
+std::unique_ptr<UIObject> ChartUIObject::get_child(const OUString& rID)
+{
+    std::unique_ptr<UIObject> pWindow = mxChartWindow->GetUITestFactory()(mxChartWindow.get());
+
+    return pWindow->get_child(rID);
+}
+
+std::set<OUString> ChartUIObject::get_children() const
+{
+    std::unique_ptr<UIObject> pWindow = mxChartWindow->GetUITestFactory()(mxChartWindow.get());
+
+    return pWindow->get_children();
+}
+
+OUString ChartUIObject::get_type() const
+{
+    return OUString("ChartUIObject for type: ");
+}
 
 ChartWindowUIObject::ChartWindowUIObject(VclPtr<chart::ChartWindow> xChartWindow):
     WindowUIObject(xChartWindow),
@@ -59,9 +133,12 @@ void ChartWindowUIObject::execute(const OUString& rAction,
         WindowUIObject::execute(rAction, rParameters);
 }
 
-std::unique_ptr<UIObject> ChartWindowUIObject::get_child(const OUString& /*rID*/)
+std::unique_ptr<UIObject> ChartWindowUIObject::get_child(const OUString& rID)
 {
-    return nullptr;
+    if (chart::ObjectIdentifier::isCID(rID))
+        return std::unique_ptr<UIObject>(new ChartUIObject(mxChartWindow, rID));
+
+    throw css::uno::RuntimeException("unknown child");
 }
 
 namespace {

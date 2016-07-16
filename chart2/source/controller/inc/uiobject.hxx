@@ -14,6 +14,33 @@
 
 #include "ChartWindow.hxx"
 
+class ChartUIObject : public UIObject
+{
+public:
+
+    ChartUIObject(VclPtr<chart::ChartWindow> xChartWindow,
+            const OUString& rCID);
+
+    StringMap get_state() override;
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    virtual std::unique_ptr<UIObject> get_child(const OUString& rID) override;
+
+    virtual std::set<OUString> get_children() const override;
+
+    virtual OUString get_type() const override;
+
+private:
+
+    OUString maCID;
+    VclPtr<chart::ChartWindow> mxChartWindow;
+    std::vector<std::unique_ptr<OUString>> maCommands;
+
+    DECL_LINK_TYPED(PostCommand, void*, void);
+};
+
 class ChartWindowUIObject : public WindowUIObject
 {
     VclPtr<chart::ChartWindow> mxChartWindow;
@@ -35,7 +62,7 @@ public:
 
 protected:
 
-    virtual OUString get_name() const;
+    virtual OUString get_name() const override;
 };
 
 #endif
