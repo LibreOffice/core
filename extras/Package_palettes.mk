@@ -29,6 +29,7 @@ $(eval $(call gb_Package_add_files,extras_palettes,$(LIBO_SHARE_FOLDER)/palette,
 	standard.sop \
 	styles.sod \
 	tango.soc \
+	user.soc \
 	web.soc \
 ))
 
