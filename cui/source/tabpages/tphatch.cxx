@@ -73,6 +73,7 @@ SvxHatchTabPage::SvxHatchTabPage
     get(m_pSliderAngle, "angleslider");
     get(m_pLbLineType, "linetypelb");
     get(m_pLbLineColor, "linecolorlb");
+    get(m_pCbBackgroundColor, "backgroundcolor");
     get(m_pLbBackgroundColor, "backgroundcolorlb");
     get(m_pHatchLB , "hatchpresetlist");
     Size aSize = getDrawListBoxOptimalSize(this);
@@ -119,6 +120,7 @@ SvxHatchTabPage::SvxHatchTabPage
     m_pSliderAngle->SetSlideHdl( LINK( this, SvxHatchTabPage, ModifiedSliderHdl_Impl ) );
     m_pLbLineType->SetSelectHdl( aLink2 );
     m_pLbLineColor->SetSelectHdl( aLink2 );
+    m_pCbBackgroundColor->SetToggleHdl( LINK( this, SvxHatchTabPage, ToggleHatchBackgroundColor_Impl ) );
     m_pLbBackgroundColor->SetSelectHdl( LINK( this, SvxHatchTabPage, ModifiedBackgroundHdl_Impl ) );
 
     m_pBtnAdd->SetClickHdl( LINK( this, SvxHatchTabPage, ClickAddHdl_Impl ) );
@@ -221,19 +223,28 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
     }
 
     XFillBackgroundItem aBckItem( static_cast<const XFillBackgroundItem&>(rSet.Get(XATTR_FILLBACKGROUND)));
-    XFillColorItem aColorItem( static_cast<const XFillColorItem&>(rSet.Get(XATTR_FILLCOLOR)) );
-    Color aColor(COL_WHITE);
-    if(aBckItem.GetValue())
-        aColor = aColorItem.GetColorValue();
-    m_pLbBackgroundColor->SelectEntry(aColor);
-    if( m_pLbBackgroundColor->GetSelectEntryCount() == 0 )
-    {
-        m_pLbBackgroundColor->InsertEntry( aColor , OUString() );
-        m_pLbBackgroundColor->SelectEntry( aColor );
-    }
-
     m_rXFSet.Put( aBckItem );
-    m_rXFSet.Put( aColorItem );
+
+    if(aBckItem.GetValue())
+    {
+        m_pCbBackgroundColor->SetState(TRISTATE_TRUE);
+        XFillColorItem aColorItem( static_cast<const XFillColorItem&>(rSet.Get(XATTR_FILLCOLOR)) );
+        Color aColor(aColorItem.GetColorValue());
+        m_pLbBackgroundColor->Enable();
+        m_pLbBackgroundColor->SelectEntry(aColor);
+
+        if( m_pLbBackgroundColor->GetSelectEntryCount() == 0 )
+        {
+            m_pLbBackgroundColor->InsertEntry( aColor , OUString() );
+            m_pLbBackgroundColor->SelectEntry( aColor );
+        }
+        m_rXFSet.Put( aColorItem );
+    }
+    else
+    {
+        m_pCbBackgroundColor->SetState(TRISTATE_FALSE);
+        m_pLbBackgroundColor->Disable();
+    }
 
     m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlPreview->Invalidate();
@@ -344,12 +355,10 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
             rSet->Put( XFillStyleItem( drawing::FillStyle_HATCH ) );
             rSet->Put( XFillHatchItem( aString, *pXHatch ) );
 
-            sal_uInt32 nPosBckColor = m_pLbBackgroundColor->GetSelectEntryPos();
-            XFillBackgroundItem aItem( m_pLbBackgroundColor->GetSelectEntryColor() != COL_WHITE );
-            aItem.SetWhich( XATTR_FILLBACKGROUND );
-            rSet->Put( aItem );
-            if(aItem.GetValue())
+            rSet->Put( XFillBackgroundItem( m_pCbBackgroundColor->IsChecked() ) );
+            if(m_pCbBackgroundColor->IsChecked())
             {
+                sal_uInt32 nPosBckColor = m_pLbBackgroundColor->GetSelectEntryPos();
                 OUString aBckColorString;
                 if( nPosBckColor != LISTBOX_ENTRY_NOTFOUND )
                     aBckColorString = m_pLbBackgroundColor->GetSelectEntry();
@@ -367,8 +376,17 @@ void SvxHatchTabPage::Reset( const SfxItemSet* rSet )
 {
     ChangeHatchHdl_Impl();
 
-    m_rXFSet.Put( static_cast<const XFillColorItem&>(     rSet->Get(XATTR_FILLCOLOR)) );
-    m_rXFSet.Put( static_cast<const XFillBackgroundItem&>(rSet->Get(XATTR_FILLBACKGROUND)) );
+    XFillBackgroundItem aBckItem( static_cast<const XFillBackgroundItem&>(rSet->Get(XATTR_FILLBACKGROUND)) );
+    if(aBckItem.GetValue())
+        m_pCbBackgroundColor->SetState(TRISTATE_TRUE);
+    else
+        m_pCbBackgroundColor->SetState(TRISTATE_FALSE);
+    m_rXFSet.Put( aBckItem );
+
+    XFillColorItem aColItem( static_cast<const XFillColorItem&>(rSet->Get(XATTR_FILLCOLOR)) );
+    m_pLbBackgroundColor->SelectEntry(aColItem.GetColorValue());
+    m_rXFSet.Put( aColItem );
+
     m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlPreview->Invalidate();
 }
@@ -385,14 +403,37 @@ IMPL_LINK_TYPED( SvxHatchTabPage, ModifiedListBoxHdl_Impl, ListBox&, rListBox, v
 {
     ModifiedHdl_Impl(&rListBox);
 }
-IMPL_LINK_TYPED( SvxHatchTabPage, ModifiedBackgroundHdl_Impl, ListBox&, rListBox, void )
+
+IMPL_LINK_NOARG_TYPED( SvxHatchTabPage, ToggleHatchBackgroundColor_Impl, CheckBox&, void )
 {
-    ModifiedHdl_Impl(&rListBox);
+    if(m_pCbBackgroundColor->IsChecked())
+        m_pLbBackgroundColor->Enable();
+    else
+        m_pLbBackgroundColor->Disable();
+    m_rXFSet.Put( XFillBackgroundItem( m_pCbBackgroundColor->IsChecked() ) );
+    ModifiedBackgroundHdl_Impl(*m_pLbBackgroundColor);
 }
+
+IMPL_LINK_NOARG_TYPED( SvxHatchTabPage, ModifiedBackgroundHdl_Impl, ListBox&, void )
+{
+    Color aColor(COL_TRANSPARENT);
+    if(m_pCbBackgroundColor->IsChecked())
+    {
+        aColor = m_pLbBackgroundColor->GetSelectEntryColor();
+        m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
+        m_pCtlPreview->Invalidate();
+    }
+    m_rXFSet.Put(XFillColorItem( OUString(), m_pLbBackgroundColor->GetSelectEntryColor() ));
+
+    m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
+    m_pCtlPreview->Invalidate();
+}
+
 IMPL_LINK_TYPED( SvxHatchTabPage, ModifiedEditHdl_Impl, Edit&, rEdit, void )
 {
     ModifiedHdl_Impl(&rEdit);
 }
+
 IMPL_LINK_TYPED( SvxHatchTabPage, ModifiedSliderHdl_Impl, Slider*, rSlider, void )
 {
     ModifiedHdl_Impl(rSlider);
@@ -412,13 +453,7 @@ void SvxHatchTabPage::ModifiedHdl_Impl( void* p )
 
     m_rXFSet.Put( XFillHatchItem( OUString(), aXHatch ) );
 
-    XFillBackgroundItem aItem( m_pLbBackgroundColor->GetSelectEntryColor() != COL_WHITE );
-    aItem.SetWhich( XATTR_FILLBACKGROUND );
-    m_rXFSet.Put( aItem );
-    if(aItem.GetValue())
-        m_rXFSet.Put( XFillColorItem( OUString(), m_pLbBackgroundColor->GetSelectEntryColor() ) );
     m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
-
     m_pCtlPreview->Invalidate();
 }
 
