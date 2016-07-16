@@ -435,7 +435,7 @@ sal_Int32 ExternalLink::getDocumentLinkIndex() const
 sal_Int32 ExternalLink::getSheetCacheIndex( sal_Int32 nTabId ) const
 {
     OSL_ENSURE( meLinkType == LINKTYPE_EXTERNAL, "ExternalLink::getSheetCacheIndex - invalid link type" );
-    OSL_ENSURE( (nTabId == 0) || (getBiff() == BIFF8),
+    OSL_ENSURE( nTabId == 0,
         "ExternalLink::getSheetCacheIndex - invalid sheet index" );
     return ContainerHelper::getVectorElement( maSheetCaches, nTabId, -1 );
 }
@@ -649,7 +649,6 @@ ExternalLinkRef ExternalLinkBuffer::getExternalLink( sal_Int32 nRefId, bool bUse
 
 LinkSheetRange ExternalLinkBuffer::getSheetRange( sal_Int32 nRefId, sal_Int16 nTabId1, sal_Int16 nTabId2 ) const
 {
-    OSL_ENSURE( getBiff() <= BIFF5, "ExternalLinkBuffer::getSheetRange - wrong BIFF version" );
     LinkSheetRange aSheetRange;
     if( const ExternalLink* pExtLink = getExternalLink( nRefId ).get() )
         pExtLink->getSheetRange( aSheetRange, nTabId1, nTabId2 );
@@ -658,7 +657,7 @@ LinkSheetRange ExternalLinkBuffer::getSheetRange( sal_Int32 nRefId, sal_Int16 nT
 
 LinkSheetRange ExternalLinkBuffer::getSheetRange( sal_Int32 nRefId ) const
 {
-    OSL_ENSURE( mbUseRefSheets || (getBiff() == BIFF8), "ExternalLinkBuffer::getSheetRange - wrong BIFF version" );
+    OSL_ENSURE( mbUseRefSheets, "ExternalLinkBuffer::getSheetRange - wrong BIFF version" );
     LinkSheetRange aSheetRange;
     if( const ExternalLink* pExtLink = getExternalLink( nRefId ).get() )
         if( const RefSheetsModel* pRefSheets = getRefSheets( nRefId ) )
