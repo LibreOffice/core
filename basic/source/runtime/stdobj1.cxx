@@ -127,13 +127,6 @@ SbStdPicture::~SbStdPicture()
 }
 
 
-SbxVariable* SbStdPicture::Find( const OUString& rName, SbxClassType t )
-{
-    // entered already?
-    return SbxObject::Find( rName, t );
-}
-
-
 void SbStdPicture::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 {
@@ -251,11 +244,6 @@ SbStdFont::SbStdFont()
 
 SbStdFont::~SbStdFont()
 {
-}
-
-SbxVariable* SbStdFont::Find( const OUString& rName, SbxClassType t )
-{
-    return SbxObject::Find( rName, t );
 }
 
 void SbStdFont::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -412,13 +400,6 @@ SbStdClipboard::SbStdClipboard() :
 SbStdClipboard::~SbStdClipboard()
 {
 }
-
-
-SbxVariable* SbStdClipboard::Find( const OUString& rName, SbxClassType t )
-{
-    return SbxObject::Find( rName, t );
-}
-
 
 void SbStdClipboard::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {

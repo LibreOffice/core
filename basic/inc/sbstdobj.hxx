@@ -40,7 +40,7 @@ class BASIC_DLLPUBLIC SbStdPicture : public SbxObject
 protected:
     Graphic     aGraphic;
 
-   virtual ~SbStdPicture();
+    virtual ~SbStdPicture();
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     void    PropType( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
@@ -50,7 +50,6 @@ protected:
 public:
 
     SbStdPicture();
-    virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
 
     const Graphic& GetGraphic() const { return aGraphic; }
     void    SetGraphic( const Graphic& rGrf ) { aGraphic = rGrf; }
@@ -67,7 +66,7 @@ protected:
     sal_uInt16  nSize;
     OUString  aName;
 
-   virtual ~SbStdFont();
+    virtual ~SbStdFont();
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     void    PropBold( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
@@ -80,7 +79,6 @@ protected:
 public:
 
     SbStdFont();
-    virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
 
     void     SetBold( bool bB ) { bBold = bB; }
     bool     IsBold() const { return bBold; }
@@ -114,7 +112,6 @@ protected:
 public:
 
     SbStdClipboard();
-    virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
 };
 
 #endif // INCLUDED_BASIC_INC_SBSTDOBJ_HXX
