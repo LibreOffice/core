@@ -687,14 +687,6 @@ ExternalLinkRef ExternalLinkBuffer::getExternalLink( sal_Int32 nRefId, bool bUse
     return xExtLink;
 }
 
-LinkSheetRange ExternalLinkBuffer::getSheetRange( sal_Int32 nRefId, sal_Int16 nTabId1, sal_Int16 nTabId2 ) const
-{
-    LinkSheetRange aSheetRange;
-    if( const ExternalLink* pExtLink = getExternalLink( nRefId ).get() )
-        pExtLink->getSheetRange( aSheetRange, nTabId1, nTabId2 );
-    return aSheetRange;
-}
-
 LinkSheetRange ExternalLinkBuffer::getSheetRange( sal_Int32 nRefId ) const
 {
     OSL_ENSURE( mbUseRefSheets, "ExternalLinkBuffer::getSheetRange - wrong BIFF version" );
