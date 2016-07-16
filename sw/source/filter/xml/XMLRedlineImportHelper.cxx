@@ -511,29 +511,8 @@ void XMLRedlineImportHelper::InsertWithinParagraph(const OUString& rParaPos, boo
     {
         // RedlineInfo found; now set Cursor
         RedlineInfo* pInfo = aFind->second;
-        if (bIsOutsideOfParagraph)
-        {
-            // outside of paragraph: remember SwNodeIndex
-            if (bStart)
-            {
-                pInfo->aAnchorStart.SetAsNodeIndex(rRange);
-            }
-            else
-            {
-                pInfo->aAnchorEnd.SetAsNodeIndex(rRange);
-            }
-
-            // also remember that we expect an adjustment for this redline
-            pInfo->bNeedsAdjustment = true;
-        }
-        else
-        {
-            // inside of a paragraph: use regular XTextRanges (bookmarks)
-            if (bStart)
-                pInfo->aAnchorStart.Set(rRange);
-            else
-                pInfo->aAnchorEnd.Set(rRange);
-        }
+        pInfo->aAnchorStart.Set(rRange);
+        pInfo->aAnchorEnd.Set(rRange);
 
         // if this Cursor was the last missing info, we insert the
         // node into the document
@@ -722,7 +701,6 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
             pRedline->SetMark();
             *(pRedline->GetMark()) = *aPaM.GetMark();
         }
-
         // set content node (if necessary)
         if (nullptr != pRedlineInfo->pContentIndex)
         {

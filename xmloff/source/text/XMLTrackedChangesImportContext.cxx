@@ -108,10 +108,15 @@ SvXMLImportContext* XMLTrackedChangesImportContext::CreateChildContext(
         // from the ODF 1.2 standard :
         // The <text:changed-region> element has the following child elements:
         // <text:deletion>, <text:format-change> and <text:insertion>.
+        OUString sChangeType;
         if ( IsXMLToken( rLocalName, XML_INSERTION ) ||
              IsXMLToken( rLocalName, XML_DELETION ) ||
              IsXMLToken( rLocalName, XML_FORMAT_CHANGE ) )
         {
+            if( rLocalName == GetXMLToken( XML_INSERTION ) )
+                sChangeType = GetXMLToken( XML_DELETION );
+            else
+                sChangeType = GetXMLToken( XML_INSERTION );
             sal_Int16 nLength = xAttrList->getLength();
             for( sal_Int16 i = 0; i < nLength; i++ )
             {
@@ -121,7 +126,7 @@ SvXMLImportContext* XMLTrackedChangesImportContext::CreateChildContext(
                 const OUString sValue = xAttrList->getValueByIndex(i);
                 if (XML_NAMESPACE_C == nPrefix)
                 {
-                    if (IsXMLToken(sLocalName, xmloff::token::XML_START))
+                    if (IsXMLToken(sLocalName, XML_START))
                     {
                         sStart = sValue.pData->buffer + 1;
                         if(sStart.indexOf('/') != -1)
@@ -156,12 +161,12 @@ SvXMLImportContext* XMLTrackedChangesImportContext::CreateChildContext(
                     }
                 }
             }
-            SetChangeInfo( rLocalName, sAuthor, sComment, sDate, sStartParaPos, sStartTextPos );
+            SetChangeInfo( sChangeType, sAuthor, sComment, sDate, sStartParaPos, sStartTextPos );
 
             // create XMLChangeElementImportContext for all kinds of changes
             pContext = new XMLChangeElementImportContext(
-                GetImport(), nPrefix, rLocalName,
-                IsXMLToken( rLocalName, XML_DELETION ),
+                GetImport(), nPrefix, sChangeType,
+                IsXMLToken( sChangeType, XML_DELETION ),
                 *this);
         }
         // else: it may be a text element, see below
