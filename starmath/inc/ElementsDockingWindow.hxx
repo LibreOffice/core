@@ -29,6 +29,7 @@
 
 class SmDocShell;
 class SmNode;
+class ElementSelectorUIObject;
 
 class SmElement
 {
@@ -72,6 +73,9 @@ public:
 
 class SmElementsControl : public Control
 {
+    friend class ElementSelectorUIObject;
+    friend class ElementUIObject;
+
     static const sal_uInt16 aUnaryBinaryOperatorsList[][2];
     static const sal_uInt16 aRelationsList[][2];
     static const sal_uInt16 aSetOperations[][2];
@@ -125,6 +129,8 @@ public:
     void DoScroll(long nDelta);
 
     void SetSelectHdl(const Link<SmElement&,void>& rLink) { maSelectHdlLink = rLink; }
+
+    virtual FactoryFunction GetUITestFactory() const override;
 };
 
 class SmElementsDockingWindow : public SfxDockingWindow

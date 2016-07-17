@@ -25,6 +25,7 @@
 #include <visitors.hxx>
 #include "document.hxx"
 #include "node.hxx"
+#include "uiobject.hxx"
 
 #include <o3tl/make_unique.hxx>
 #include <svl/stritem.hxx>
@@ -227,6 +228,7 @@ SmElementsControl::SmElementsControl(vcl::Window *pParent)
     , mbVerticalMode(true)
     , mxScroll(VclPtr<ScrollBar>::Create(this, WB_VERT))
 {
+    set_id("element_selector");
     SetMapMode( MapMode(MAP_100TH_MM) );
     SetDrawMode( DrawModeFlags::Default );
     SetLayoutMode( ComplexTextLayoutFlags::Default );
@@ -681,6 +683,11 @@ void SmElementsControl::build()
 Size SmElementsControl::GetOptimalSize() const
 {
     return LogicToPixel(Size(100, 100), MapMode(MAP_APPFONT));
+}
+
+FactoryFunction SmElementsControl::GetUITestFactory() const
+{
+    return ElementSelectorUIObject::create;
 }
 
 const sal_uInt16 SmElementsDockingWindow::aCategories[] = {
