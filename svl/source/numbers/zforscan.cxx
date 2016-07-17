@@ -1065,8 +1065,9 @@ bool ImpSvNumberformatScan::IsLastBlankBeforeFrac(sal_uInt16 i)
             {
                 bStop = true;
             }
-            else if ( nTypeArray[i] == NF_SYMBOLTYPE_DEL &&
-                      sStrArray[i][0] == ' ')
+            else if ( ( nTypeArray[i] == NF_SYMBOLTYPE_DEL  &&
+                        sStrArray[i][0] == ' ')             ||
+                        nTypeArray[i] == NF_SYMBOLTYPE_STRING ) // integer/fraction delimiter can also be a string
             {
                 res = false;
             }
