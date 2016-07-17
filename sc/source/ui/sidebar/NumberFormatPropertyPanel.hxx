@@ -67,7 +67,10 @@ private:
     //ui controls
     VclPtr<ListBox>                                mpLbCategory;
     VclPtr<ToolBox>                                mpTBCategory;
+    VclPtr<FixedText>                              mpFtDecimals;
     VclPtr<NumericField>                           mpEdDecimals;
+    VclPtr<FixedText>                              mpFtDenominator;
+    VclPtr<NumericField>                           mpEdDenominator;
     VclPtr<NumericField>                           mpEdLeadZeroes;
     VclPtr<CheckBox>                               mpBtnNegRed;
     VclPtr<CheckBox>                               mpBtnThousand;
@@ -86,6 +89,7 @@ private:
     DECL_LINK_TYPED(NumFormatValueClickHdl, Button*, void);
 
     void Initialize();
+    void DisableControls();
 };
 
 } } // end of namespace ::sc::sidebar
