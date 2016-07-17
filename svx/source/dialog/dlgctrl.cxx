@@ -1106,8 +1106,7 @@ void SvxPixelCtl::Reset()
 // Constructor: BitmapCtl for SvxPixelCtl
 
 SvxBitmapCtl::SvxBitmapCtl()
-    : nLines(0)
-    , pBmpArray(nullptr)
+    : pBmpArray(nullptr)
 {
 }
 

@@ -148,7 +148,6 @@ public:
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBitmapCtl
 {
 protected:
-    sal_uInt16      nLines;
     Color           aPixelColor, aBackgroundColor;
     const sal_uInt16*   pBmpArray;
 
@@ -159,7 +158,6 @@ public:
     BitmapEx GetBitmapEx();
 
     void    SetBmpArray( const sal_uInt16* pPixel ) { pBmpArray = pPixel; }
-    void    SetLines( sal_uInt16 nLns ) { nLines = nLns; }
     void    SetPixelColor( Color aColor ) { aPixelColor = aColor; }
     void    SetBackgroundColor( Color aColor ) { aBackgroundColor = aColor; }
 };

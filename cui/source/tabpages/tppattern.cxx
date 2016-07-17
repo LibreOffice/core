@@ -263,9 +263,6 @@ bool SvxPatternTabPage::FillItemSet( SfxItemSet* _rOutAttrs )
 
 void SvxPatternTabPage::Reset( const SfxItemSet*  )
 {
-    // aLbBitmaps.SelectEntryPos( 0 );
-
-    m_pBitmapCtl->SetLines( m_pCtlPixel->GetLineCount() );
     m_pBitmapCtl->SetPixelColor( m_pLbColor->GetSelectEntryColor() );
     m_pBitmapCtl->SetBackgroundColor( m_pLbBackgroundColor->GetSelectEntryColor() );
     m_pBitmapCtl->SetBmpArray( m_pCtlPixel->GetBitmapPixelPtr() );
