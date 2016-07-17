@@ -3265,6 +3265,8 @@ namespace xmloff { namespace token {
         TOKEN( "min-decimal-places",              XML_MIN_DECIMAL_PLACES ),
         TOKEN( "max-denominator-value",           XML_MAX_DENOMINATOR_VALUE ),
         TOKEN( "max-numerator-digits",            XML_MAX_NUMERATOR_DIGITS ),
+        TOKEN( "zeros-numerator-digits",          XML_ZEROS_NUMERATOR_DIGITS ),
+        TOKEN( "zeros-denominator-digits",        XML_ZEROS_DENOMINATOR_DIGITS ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, nullptr,                       XML_TOKEN_END }

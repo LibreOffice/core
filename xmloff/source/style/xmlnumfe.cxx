@@ -731,18 +731,28 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
 {
     FinishTextElement_Impl();
     sal_Int32 nMaxNumeratorDigits = aNumeratorString.getLength();
-    // As '0' cannot (yet) be saved in extended ODF, replace them by '?'
+    // Count '0' as '?'
     sal_Int32 nMinNumeratorDigits = aNumeratorString.replaceAll("0","?").indexOf('?');
+    sal_Int32 nZerosNumeratorDigits = aNumeratorString.indexOf('0');
     if ( nMinNumeratorDigits >= 0 )
         nMinNumeratorDigits = nMaxNumeratorDigits - nMinNumeratorDigits;
     else
         nMinNumeratorDigits = 0;
+    if ( nZerosNumeratorDigits >= 0 )
+        nZerosNumeratorDigits = nMaxNumeratorDigits - nZerosNumeratorDigits;
+    else
+        nZerosNumeratorDigits = 0;
     sal_Int32 nMaxDenominatorDigits = aDenominatorString.getLength();
     sal_Int32 nMinDenominatorDigits = aDenominatorString.replaceAll("0","?").indexOf('?');
+    sal_Int32 nZerosDenominatorDigits = aDenominatorString.indexOf('0');
     if ( nMinDenominatorDigits >= 0 )
         nMinDenominatorDigits = nMaxDenominatorDigits - nMinDenominatorDigits;
     else
         nMinDenominatorDigits = 0;
+    if ( nZerosDenominatorDigits >= 0 )
+        nZerosDenominatorDigits = nMaxDenominatorDigits - nZerosDenominatorDigits;
+    else
+        nZerosDenominatorDigits = 0;
     sal_Int32 nDenominator = aDenominatorString.toInt32();
 
     //  integer digits
@@ -771,6 +781,9 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
         rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_MAX_NUMERATOR_DIGITS,
                               OUString::number( nMaxNumeratorDigits ) );
     }
+    if ( nZerosNumeratorDigits && ((eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0) )
+        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_ZEROS_NUMERATOR_DIGITS,
+                              OUString::number( nZerosNumeratorDigits ) );
 
     if ( nDenominator )
     {
@@ -793,6 +806,9 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
                                  XML_MAX_DENOMINATOR_VALUE,
                                  OUString::number( pow ( 10.0, nMaxDenominatorDigits ) - 1 ) ); // 9, 99 or 999
         }
+        if ( nZerosDenominatorDigits && ((eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0) )
+            rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_ZEROS_DENOMINATOR_DIGITS,
+                                  OUString::number( nZerosDenominatorDigits ) );
     }
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_FRACTION,
