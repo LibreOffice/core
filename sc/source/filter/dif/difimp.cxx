@@ -47,8 +47,8 @@ const sal_Unicode pKeyNA[]      = { 'N', 'A', 0 };
 const sal_Unicode pKeyV[]       = { 'V', 0 };
 const sal_Unicode pKey1_0[]     = { '1', ',', '0', 0 };
 
-FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
-                        const rtl_TextEncoding eVon, sal_uInt32 nDifOption )
+FltError ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
+                        const rtl_TextEncoding eVon, DifOptions nDifOption )
 {
     DifParser   aDifParser( rIn, nDifOption, *pDoc, eVon );
 
@@ -230,7 +230,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
         return eERR_OK;
 }
 
-DifParser::DifParser( SvStream& rNewIn, const sal_uInt32 nOption, ScDocument& rDoc, rtl_TextEncoding e )
+DifParser::DifParser(SvStream& rNewIn, DifOptions nOption, ScDocument& rDoc, rtl_TextEncoding e )
     : fVal(0.0)
     , nVector(0)
     , nVal(0)
@@ -245,7 +245,7 @@ DifParser::DifParser( SvStream& rNewIn, const sal_uInt32 nOption, ScDocument& rD
     }
     rIn.StartReadingUnicodeText( eCharSet );
 
-    bPlain = ( nOption == SC_DIFOPT_PLAIN );
+    bPlain = ( nOption == DifOptions::Plain );
 
     if( bPlain )
         pNumFormatter = nullptr;
