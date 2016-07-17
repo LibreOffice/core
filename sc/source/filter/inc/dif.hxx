@@ -57,6 +57,7 @@ enum DATASET { D_BOT, D_EOD, D_NUMERIC, D_STRING, D_UNKNOWN, D_SYNT_ERROR };
 
 class DifAttrCache;
 class ScPatternAttr;
+enum class DifOptions;
 
 class DifParser
 {
@@ -80,7 +81,7 @@ private:
     static inline bool  IsEOD( const sal_Unicode* pRef );
     static inline bool  Is1_0( const sal_Unicode* pRef );
 public:
-                        DifParser( SvStream&, const sal_uInt32 nOption, ScDocument&, rtl_TextEncoding );
+                        DifParser( SvStream&, DifOptions nOption, ScDocument&, rtl_TextEncoding );
 
     TOPIC               GetNextTopic();
 
