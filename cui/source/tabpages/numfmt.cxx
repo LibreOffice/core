@@ -255,6 +255,8 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(vcl::Window* pParent,
     get(m_pFtOptions, "optionsft");
     get(m_pFtDecimals, "decimalsft");
     get(m_pEdDecimals, "decimalsed");
+    get(m_pFtDenominator, "denominatorft");
+    get(m_pEdDenominator, "denominatored");
     get(m_pBtnNegRed, "negnumred");
     get(m_pFtLeadZeroes, "leadzerosft");
     get(m_pEdLeadZeroes, "leadzerosed");
@@ -300,6 +302,8 @@ void SvxNumberFormatTabPage::dispose()
     m_pFtOptions.clear();
     m_pFtDecimals.clear();
     m_pEdDecimals.clear();
+    m_pFtDenominator.clear();
+    m_pEdDenominator.clear();
     m_pBtnNegRed.clear();
     m_pFtLeadZeroes.clear();
     m_pEdLeadZeroes.clear();
@@ -344,6 +348,7 @@ void SvxNumberFormatTabPage::Init_Impl()
     Link<Edit&,void> aLink = LINK( this, SvxNumberFormatTabPage, OptEditHdl_Impl );
 
     m_pEdDecimals->SetModifyHdl( aLink );
+    m_pEdDenominator->SetModifyHdl( aLink );
     m_pEdLeadZeroes->SetModifyHdl( aLink );
 
     m_pBtnNegRed->SetClickHdl( LINK( this, SvxNumberFormatTabPage, OptClickHdl_Impl ) );
@@ -355,6 +360,7 @@ void SvxNumberFormatTabPage::Init_Impl()
     m_pIbRemove->SetClickHdl( HDL( ClickHdl_Impl ) );
     m_pIbInfo->SetClickHdl( HDL( ClickHdl_Impl ) );
     UpdateThousandEngineeringCheckBox();
+    UpdateDecimalsDenominatorEditBox();
 
     m_pEdComment->SetLoseFocusHdl( LINK( this, SvxNumberFormatTabPage, LostFocusHdl_Impl) );
     aResetWinTimer.SetTimeoutHdl(LINK( this, SvxNumberFormatTabPage, TimeHdl_Impl));
@@ -636,8 +642,10 @@ void SvxNumberFormatTabPage::Obstructing()
     m_pBtnEngineering->Disable();
     m_pFtLeadZeroes->Disable();
     m_pFtDecimals->Disable();
+    m_pFtDenominator->Disable();
     m_pEdLeadZeroes->Disable();
     m_pEdDecimals->Disable();
+    m_pEdDenominator->Disable();
     m_pFtOptions->Disable();
     m_pEdDecimals->SetText( OUString() );
     m_pEdLeadZeroes->SetText( OUString() );
@@ -673,6 +681,8 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
     m_pLbLanguage->Enable( bEnable );
     m_pFtDecimals->Enable( bEnable );
     m_pEdDecimals->Enable( bEnable );
+    m_pFtDenominator->Enable( bEnable );
+    m_pEdDenominator->Enable( bEnable );
     m_pFtLeadZeroes->Enable( bEnable );
     m_pEdLeadZeroes->Enable( bEnable );
     m_pBtnNegRed->Enable( bEnable );
@@ -962,6 +972,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
     }
 
     UpdateThousandEngineeringCheckBox();
+    UpdateDecimalsDenominatorEditBox();
     switch ( nCategory )
     {
         case CAT_SCIENTIFIC: // bThousand is for Engineering notation
@@ -978,19 +989,31 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
         case CAT_NUMBER:
         case CAT_PERCENT:
         case CAT_CURRENCY:
+        case CAT_FRACTION:
             m_pFtOptions->Enable();
-            m_pFtDecimals->Enable();
-            m_pEdDecimals->Enable();
+            if ( nCategory == CAT_FRACTION )
+            {
+                m_pFtDenominator->Enable();
+                m_pEdDenominator->Enable();
+            }
+            else
+            {
+                m_pFtDecimals->Enable();
+                m_pEdDecimals->Enable();
+            }
             m_pFtLeadZeroes->Enable();
             m_pEdLeadZeroes->Enable();
             m_pBtnNegRed->Enable();
             if ( nCategory == CAT_NUMBER && m_pLbFormat->GetSelectEntryPos() == 0 )
                 m_pEdDecimals->SetText( "" ); //General format tdf#44399
             else
-                m_pEdDecimals->SetText( OUString::number( nDecimals ) );
+                if ( nCategory == CAT_FRACTION )
+                    m_pEdDenominator->SetText( OUString::number( nDecimals ) );
+                else
+                    m_pEdDecimals->SetText( OUString::number( nDecimals ) );
             m_pEdLeadZeroes->SetText( OUString::number( nZeroes ) );
             m_pBtnNegRed->Check( bNegRed );
-            if ( nCategory != CAT_SCIENTIFIC )
+            if ( nCategory != CAT_SCIENTIFIC && nCategory != CAT_FRACTION )
             {
                 m_pBtnThousand->Enable();
                 m_pBtnThousand->Check( bThousand );
@@ -1003,11 +1026,12 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
         case CAT_DATE:
         case CAT_TIME:
         case CAT_BOOLEAN:
-        case CAT_FRACTION:
         default:
             m_pFtOptions->Disable();
             m_pFtDecimals->Disable();
             m_pEdDecimals->Disable();
+            m_pFtDenominator->Disable();
+            m_pEdDenominator->Disable();
             m_pFtLeadZeroes->Disable();
             m_pEdLeadZeroes->Disable();
             m_pBtnNegRed->Disable();
@@ -1147,6 +1171,29 @@ void SvxNumberFormatTabPage::UpdateThousandEngineeringCheckBox()
     bool bIsScientific = m_pLbCategory->GetSelectEntryPos() == CAT_SCIENTIFIC;
     m_pBtnThousand->Show( !bIsScientific );
     m_pBtnEngineering->Show( bIsScientific );
+}
+
+
+/*************************************************************************
+#*  Method:        UpdateDecimalsDenominatorEditBox
+#*------------------------------------------------------------------------
+#*
+#*  Class:      SvxNumberFormatTabPage
+#*  Function:   Change visible Edit box and Fixed text according to category format
+#*              if fraction format "Denominator places"
+#*              else "Decimal places"
+#*  Input:      ---
+#*  Output:     ---
+#*
+#************************************************************************/
+
+void SvxNumberFormatTabPage::UpdateDecimalsDenominatorEditBox()
+{
+    bool bIsFraction = m_pLbCategory->GetSelectEntryPos() == CAT_FRACTION;
+    m_pFtDecimals->Show( !bIsFraction );
+    m_pEdDecimals->Show( !bIsFraction );
+    m_pFtDenominator->Show( bIsFraction );
+    m_pEdDenominator->Show( bIsFraction );
 }
 
 
@@ -1589,6 +1636,7 @@ void SvxNumberFormatTabPage::OptHdl_Impl( void* pOptCtrl )
 {
     if (   (pOptCtrl == m_pEdLeadZeroes)
         || (pOptCtrl == m_pEdDecimals)
+        || (pOptCtrl == m_pEdDenominator)
         || (pOptCtrl == m_pBtnNegRed)
         || (pOptCtrl == m_pBtnThousand)
         || (pOptCtrl == m_pBtnEngineering) )
@@ -1597,9 +1645,11 @@ void SvxNumberFormatTabPage::OptHdl_Impl( void* pOptCtrl )
         bool          bThousand  = ( m_pBtnThousand->IsVisible() && m_pBtnThousand->IsEnabled() && m_pBtnThousand->IsChecked() )
                                 || ( m_pBtnEngineering->IsVisible() && m_pBtnEngineering->IsEnabled() && m_pBtnEngineering->IsChecked() );
         bool          bNegRed    =   m_pBtnNegRed->IsEnabled() && m_pBtnNegRed->IsChecked();
-        sal_uInt16    nPrecision = (m_pEdDecimals->IsEnabled())
+        sal_uInt16    nPrecision = (m_pEdDecimals->IsEnabled() && m_pEdDecimals->IsVisible())
                                  ? (sal_uInt16)m_pEdDecimals->GetValue()
-                                 : (sal_uInt16)0;
+                                 : ( (m_pEdDenominator->IsEnabled() && m_pEdDenominator->IsVisible())
+                                   ? (sal_uInt16)m_pEdDenominator->GetValue()
+                                   : (sal_uInt16)0 );
         sal_uInt16    nLeadZeroes = (m_pEdLeadZeroes->IsEnabled())
                                  ? (sal_uInt16)m_pEdLeadZeroes->GetValue()
                                  : (sal_uInt16)0;

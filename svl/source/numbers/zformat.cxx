@@ -4351,7 +4351,13 @@ void SvNumberformat::GetNumForInfo( sal_uInt16 nNumFor, short& rScannedType,
     const ImpSvNumberformatInfo& rInfo = NumFor[nNumFor].Info();
     rScannedType = rInfo.eScannedType;
     bThousand = rInfo.bThousand;
-    nPrecision = rInfo.nCntPost;
+    nPrecision = (rInfo.eScannedType == css::util::NumberFormat::FRACTION)
+                    ? rInfo.nCntExp  // number of denominator digits for fraction
+                    : rInfo.nCntPost;
+    sal_Int32 nPosHash = 1;
+    if ( rInfo.eScannedType == css::util::NumberFormat::FRACTION
+        && ( (nPosHash += GetDenominatorString(nNumFor).indexOf('#')) > 0 ) )
+        nPrecision -= nPosHash;
     if (bStandard && rInfo.eScannedType == css::util::NumberFormat::NUMBER)
     {
         // StandardFormat
