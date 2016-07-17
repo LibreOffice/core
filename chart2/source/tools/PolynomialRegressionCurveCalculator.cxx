@@ -264,7 +264,7 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
                 nCharMin += 3; // " + "
             if ( i > 0 )
             {
-                 nCharMin += mXName.getLength(); // "x"
+                nCharMin += mXName.getLength() + 1; // " x"
                 if ( i > 1 )
                     nCharMin +=1; // "^i"
                 if ( i >= 10 )
@@ -304,7 +304,11 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
         sal_Int32* pValueLength = nValueLength ? &nValueLength : nullptr;
         OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, aValue, pValueLength );
         if ( i == 0 || aValueString != "1" )  // aValueString may be rounded to 1 if nValueLength is small
+        {
             aTmpBuf.append( aValueString );
+            if ( i > 0 ) // insert blank between coefficient and x
+                aTmpBuf.append( " " );
+        }
 
         if(i > 0)
         {
