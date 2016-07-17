@@ -11,8 +11,43 @@
 #include "globalnames.hxx"
 #include "document.hxx"
 #include "cellvalue.hxx"
+#include "column.hxx"
 
 namespace sc {
+
+CellStoreEvent::CellStoreEvent() : mpCol(nullptr) {}
+
+CellStoreEvent::CellStoreEvent(ScColumn* pCol) : mpCol(pCol) {}
+
+void CellStoreEvent::element_block_acquired(const mdds::mtv::base_element_block* block)
+{
+    if (!mpCol)
+        return;
+
+    switch (mdds::mtv::get_block_type(*block))
+    {
+        case sc::element_type_formula:
+            ++mpCol->mnBlkCountFormula;
+            break;
+        default:
+            ;
+    }
+}
+
+void CellStoreEvent::element_block_released(const mdds::mtv::base_element_block* block)
+{
+    if (!mpCol)
+        return;
+
+    switch (mdds::mtv::get_block_type(*block))
+    {
+        case sc::element_type_formula:
+            --mpCol->mnBlkCountFormula;
+            break;
+        default:
+            ;
+    }
+}
 
 ColumnBlockPositionSet::ColumnBlockPositionSet(ScDocument& rDoc) : mrDoc(rDoc) {}
 

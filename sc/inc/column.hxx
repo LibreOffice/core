@@ -130,6 +130,8 @@ class ScColumn
     // Broadcasters for formula cells.
     sc::BroadcasterStoreType maBroadcasters;
 
+    sc::CellStoreEvent maCellsEvent;
+
     // Cell values.
     sc::CellStoreType maCells;
 
@@ -139,6 +141,8 @@ class ScColumn
     ScAttrArray*          pAttrArray;
     ScDocument*           pDocument;
     bool mbDirtyGroups;     /// formula groups are dirty.
+
+    size_t mnBlkCountFormula;
 
 friend class ScDocument;                    // for FillInfo
 friend class ScTable;
@@ -158,6 +162,7 @@ friend class sc::ColumnSpanSet;
 friend class sc::EditTextIterator;
 friend class sc::CellValues;
 friend class sc::TableValues;
+friend class sc::CellStoreEvent;
 
     ScColumn(const ScColumn&) = delete;
     ScColumn& operator= (const ScColumn&) = delete;
@@ -339,6 +344,7 @@ public:
 
     bool SetFormulaCells( SCROW nRow, std::vector<ScFormulaCell*>& rCells );
 
+    bool HasFormulaCell() const;
     bool HasFormulaCell( SCROW nRow1, SCROW nRow2 ) const;
 
     void CloneFormulaCell(

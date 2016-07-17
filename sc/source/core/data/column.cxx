@@ -84,13 +84,16 @@ ScColumn::ScColumn() :
     maCellTextAttrs(MAXROWCOUNT),
     maCellNotes(MAXROWCOUNT),
     maBroadcasters(MAXROWCOUNT),
-    maCells(MAXROWCOUNT),
+    maCellsEvent(this),
+    maCells(maCellsEvent),
     nCol( 0 ),
     nTab( 0 ),
     pAttrArray( nullptr ),
     pDocument( nullptr ),
-    mbDirtyGroups(true)
+    mbDirtyGroups(true),
+    mnBlkCountFormula(0)
 {
+    maCells.resize(MAXROWCOUNT);
 }
 
 ScColumn::~ScColumn()

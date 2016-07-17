@@ -1142,6 +1142,11 @@ void ScColumn::CollectFormulaCells( std::vector<ScFormulaCell*>& rCells, SCROW n
     sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
 }
 
+bool ScColumn::HasFormulaCell() const
+{
+    return mnBlkCountFormula != 0;
+}
+
 namespace {
 
 struct FindAnyFormula
@@ -1158,6 +1163,9 @@ bool ScColumn::HasFormulaCell( SCROW nRow1, SCROW nRow2 ) const
 {
     if (nRow2 < nRow1 || !ValidRow(nRow1) || !ValidRow(nRow2))
         return false;
+
+    if (nRow1 == 0 && nRow2 == MAXROW)
+        return HasFormulaCell();
 
     FindAnyFormula aFunc;
     std::pair<sc::CellStoreType::const_iterator, size_t> aRet =
@@ -1344,6 +1352,9 @@ void ScColumn::StartListeningFormulaCells(
     sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt,
     SCROW nRow1, SCROW nRow2 )
 {
+    if (!HasFormulaCell())
+        return;
+
     StartListeningFormulaCellsHandler aFunc(rStartCxt, rEndCxt);
     sc::ProcessBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
 }
@@ -1352,6 +1363,9 @@ void ScColumn::EndListeningFormulaCells(
     sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2,
     SCROW* pStartRow, SCROW* pEndRow )
 {
+    if (!HasFormulaCell())
+        return;
+
     EndListeningFormulaCellsHandler aFunc(rCxt);
     sc::ProcessBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
 
