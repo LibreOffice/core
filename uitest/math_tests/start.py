@@ -11,8 +11,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.framework import UITestCase
 
-import time
-import unittest
+from uitest.debug import sleep
 
 class SimpleMathTest(UITestCase):
 
@@ -59,6 +58,31 @@ class SimpleMathTest(UITestCase):
 
         xElement = xMathSelector.getChild("1")
         xElement.executeAction("SELECT", tuple())
+
+        self.ui_test.close_doc()
+
+    def test_complete_math(self):
+        self.ui_test.create_doc_in_start_center("math")
+
+        xMathDoc = self.xUITest.getTopFocusWindow()
+
+        xList = xMathDoc.getChild("listbox")
+        state = get_state_as_dict(xList)
+        self.assertEqual(state["SelectEntryText"], "Unary/Binary Operators")
+        xList.executeAction("SELECT", mkPropertyValues({"POS": "1"}))
+
+        xMathSelector = xMathDoc.getChild("element_selector")
+
+        xElement = xMathSelector.getChild("1")
+        xElement.executeAction("SELECT", tuple())
+
+        xMathEdit = xMathDoc.getChild("math_edit")
+        xMathEdit.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
+        xMathEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"F4"}))
+        xMathEdit.executeAction("TYPE", mkPropertyValues({"TEXT":"2"}))
+
+        edit_state = get_state_as_dict(xMathEdit)
+        self.assertEqual("1 <> 2 ", edit_state["Text"])
 
         self.ui_test.close_doc()
 
