@@ -12,6 +12,12 @@
 
 class SfxTabDialog;
 
+namespace sfx2 { namespace sidebar {
+
+class Panel;
+
+} }
+
 class SfxTabDialogUIObject : public WindowUIObject
 {
 private:
@@ -23,6 +29,28 @@ public:
     SfxTabDialogUIObject(VclPtr<SfxTabDialog> xTabDialog);
 
     virtual ~SfxTabDialogUIObject();
+
+    virtual StringMap get_state() override;
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
+protected:
+
+    virtual OUString get_name() const override;
+};
+
+class PanelUIObject : public WindowUIObject
+{
+private:
+
+    VclPtr<sfx2::sidebar::Panel> mxPanel;
+
+public:
+
+    PanelUIObject(VclPtr<sfx2::sidebar::Panel> xPanel);
 
     virtual StringMap get_state() override;
 

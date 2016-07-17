@@ -8,6 +8,7 @@
  */
 
 #include <uitest/sfx_uiobject.hxx>
+#include <sfx2/sidebar/Panel.hxx>
 
 #include <sfx2/tabdlg.hxx>
 
@@ -85,6 +86,40 @@ std::unique_ptr<UIObject> SfxTabDialogUIObject::create(vcl::Window* pWindow)
 OUString SfxTabDialogUIObject::get_name() const
 {
     return OUString("SfxTabDialogUIObject");
+}
+
+PanelUIObject::PanelUIObject(VclPtr<sfx2::sidebar::Panel> xPanel):
+    WindowUIObject(xPanel),
+    mxPanel(xPanel)
+{
+}
+
+StringMap PanelUIObject::get_state()
+{
+    StringMap aMap = WindowUIObject::get_state();
+
+    aMap["Expanded"] = OUString::boolean(mxPanel->IsExpanded());
+    aMap["PanelID"] = mxPanel->GetId();
+
+    return aMap;
+}
+
+void PanelUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    WindowUIObject::execute(rAction, rParameters);
+}
+
+OUString PanelUIObject::get_name() const
+{
+    return OUString("SidebarPanelUIObject");
+}
+
+std::unique_ptr<UIObject> PanelUIObject::create(vcl::Window* pWindow)
+{
+    sfx2::sidebar::Panel* pPanel = dynamic_cast<sfx2::sidebar::Panel*>(pWindow);
+    assert(pPanel);
+    return std::unique_ptr<UIObject>(new PanelUIObject(pPanel));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

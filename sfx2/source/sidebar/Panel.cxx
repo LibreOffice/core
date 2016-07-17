@@ -39,6 +39,8 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/ui/XToolPanel.hpp>
 
+#include "uitest/sfx_uiobject.hxx"
+
 using namespace css;
 using namespace css::uno;
 
@@ -167,6 +169,11 @@ Reference<awt::XWindow> Panel::GetElementWindow()
     }
 
     return nullptr;
+}
+
+FactoryFunction Panel::GetUITestFactory() const
+{
+    return PanelUIObject::create;
 }
 
 } } // end of namespace sfx2::sidebar
