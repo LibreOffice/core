@@ -152,7 +152,7 @@ void Chart2TrendCalculators::testLinearRegression1()
         xValues[i] = d;
         yValues[i] = - 2.0 * d - 5.0 ;
     }
-    checkCalculator( xValues, yValues, "f(x) = "+ OUString(aMinusSign) +" 2x "+ OUString(aMinusSign) +" 5");
+    checkCalculator( xValues, yValues, "f(x) = "+ OUString(aMinusSign) +" 2 x "+ OUString(aMinusSign) +" 5");
 }
 
 // test y = A x ^ B
@@ -168,7 +168,7 @@ void Chart2TrendCalculators::testPolynomialRegression1()
         xValues[i] = d;
         yValues[i] =  - 2.0 * d * d + 4 * d - 5;
     }
-    OUString sExpectedFormula( "f(x) = "+ OUString(aMinusSign) +" 2x" + OUString( aSuperscriptFigures[2] ) + " + 4x "+ OUString(aMinusSign) +" 5" );
+    OUString sExpectedFormula( "f(x) = "+ OUString(aMinusSign) +" 2 x" + OUString( aSuperscriptFigures[2] ) + " + 4 x "+ OUString(aMinusSign) +" 5" );
     checkCalculator( xValues, yValues, sExpectedFormula );
 }
 
