@@ -101,6 +101,8 @@ private:
     VclPtr<FixedText>              m_pFtOptions;
     VclPtr<FixedText>              m_pFtDecimals;
     VclPtr<NumericField>           m_pEdDecimals;
+    VclPtr<FixedText>              m_pFtDenominator;
+    VclPtr<NumericField>           m_pEdDenominator;
     VclPtr<CheckBox>               m_pBtnNegRed;
     VclPtr<FixedText>              m_pFtLeadZeroes;
     VclPtr<NumericField>           m_pEdLeadZeroes;
@@ -137,6 +139,7 @@ private:
     void    UpdateOptions_Impl( bool bCheckCatChange );
     void    UpdateFormatListBox_Impl( bool bCat, bool bUpdateEdit );
     void    UpdateThousandEngineeringCheckBox();
+    void    UpdateDecimalsDenominatorEditBox();
     void    Obstructing();
     void    EnableBySourceFormat_Impl();
     void    SetCategory( sal_uInt16 nPos );

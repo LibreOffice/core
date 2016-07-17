@@ -2858,7 +2858,7 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
             }
         }
     }
-    if (nPrecision > 0)
+    if (nPrecision > 0 && eType != css::util::NumberFormat::FRACTION )
     {
         sString.append(GetNumDecimalSep());
         padToLength(sString, sString.getLength() + nPrecision, '0');
@@ -2930,6 +2930,24 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
             sString.append(';');
         }
         sString.append(sNegStr.makeStringAndClear());
+    }
+    else if (eType == css::util::NumberFormat::FRACTION)
+    {
+        OUString aIntegerFractionDelimiterString = pFormat->GetIntegerFractionDelimiterString( 0 );
+        if ( aIntegerFractionDelimiterString == " " )
+            sString.append( pFormat->GetIntegerFractionDelimiterString( 0 ) );
+        else
+        {
+            sString.append( '"' );
+            sString.append( pFormat->GetIntegerFractionDelimiterString( 0 ) );
+            sString.append( '"' );
+        }
+        sString.append( pFormat->GetNumeratorString( 0 ) );
+        sString.append( '/' );
+        if ( nPrecision > 0 )
+            padToLength(sString, sString.getLength() + nPrecision, '?');
+        else
+            sString.append( '#' );
     }
     if (eType != css::util::NumberFormat::CURRENCY)
     {
