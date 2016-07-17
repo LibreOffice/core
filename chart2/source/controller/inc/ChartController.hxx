@@ -378,7 +378,7 @@ public:
 
     DECL_LINK_TYPED( NotifyUndoActionHdl, SdrUndoAction*, void );
 
-    css::uno::Reference<css::uno::XInterface> getChartView();
+    css::uno::Reference<css::uno::XInterface> const & getChartView();
 
 private:
     DrawViewWrapper* GetDrawViewWrapper();
