@@ -35,6 +35,7 @@
 #include <unordered_map>
 
 class ScDocument;
+class ScColumn;
 struct ScRefCellValue;
 
 namespace sc {
@@ -86,6 +87,17 @@ MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(SharedString, sc::element_type_string, SharedS
 
 namespace sc {
 
+class CellStoreEvent
+{
+    ScColumn* mpCol;
+public:
+    CellStoreEvent();
+    CellStoreEvent(ScColumn* pCol);
+
+    void element_block_acquired(const mdds::mtv::base_element_block* block);
+    void element_block_released(const mdds::mtv::base_element_block* block);
+};
+
 /// Cell note container
 typedef mdds::mtv::custom_block_func1<sc::cellnote_block> CNoteFunc;
 typedef mdds::multi_type_vector<CNoteFunc> CellNoteStoreType;
@@ -100,7 +112,7 @@ typedef mdds::multi_type_vector<CTAttrFunc> CellTextAttrStoreType;
 
 /// Cell container
 typedef mdds::mtv::custom_block_func3<sc::string_block, sc::edittext_block, sc::formula_block> CellFunc;
-typedef mdds::multi_type_vector<CellFunc> CellStoreType;
+typedef mdds::multi_type_vector<CellFunc, CellStoreEvent> CellStoreType;
 
 /**
  * Store position data for column array storage.
