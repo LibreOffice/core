@@ -50,4 +50,16 @@ class SimpleMathTest(UITestCase):
 
         self.ui_test.close_doc()
 
+    def test_math_selector(self):
+        self.ui_test.create_doc_in_start_center("math")
+
+        xMathDoc = self.xUITest.getTopFocusWindow()
+
+        xMathSelector = xMathDoc.getChild("element_selector")
+
+        xElement = xMathSelector.getChild("1")
+        xElement.executeAction("SELECT", tuple())
+
+        self.ui_test.close_doc()
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
