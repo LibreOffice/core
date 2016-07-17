@@ -29,7 +29,7 @@ public:
     virtual StringMap get_state() override;
 
     virtual void execute(const OUString& rAction,
-            const StringMap& rParameters);
+            const StringMap& rParameters) override;
 
 private:
     SmElement* get_element();
@@ -57,7 +57,7 @@ public:
 
 protected:
 
-    virtual OUString get_name() const;
+    virtual OUString get_name() const override;
 };
 
 #endif
