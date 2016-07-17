@@ -172,7 +172,7 @@ std::set<OUString> ChartWindowUIObject::get_children() const
     css::uno::Reference<css::uno::XInterface> xChartView = pController->getChartView();
     chart::ExplicitValueProvider* pValueProvider = chart::ExplicitValueProvider::getExplicitValueProvider( xChartView );
     chart::ObjectHierarchy aHierarchy(xChartDoc, pValueProvider, true);
-    chart::ObjectIdentifier aIdentifier = aHierarchy.getRootNodeOID();
+    chart::ObjectIdentifier aIdentifier = chart::ObjectHierarchy::getRootNodeOID();
     aChildren.insert(aIdentifier.getObjectCID());
 
     recursiveAdd(aIdentifier, aChildren, aHierarchy);
