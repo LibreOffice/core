@@ -36,6 +36,7 @@
 #include <editeng/prntitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <editeng/lineitem.hxx>
 
 #include <formula/token.hxx>
 #include <tools/datetime.hxx>
@@ -877,16 +878,33 @@ SvxBoxItemLine getDirection(os::border_direction_t dir)
 
 void ScOrcusStyles::border::applyToItemSet(SfxItemSet& rSet) const
 {
-    SvxBoxItem aItem(ATTR_BORDER);
+    SvxBoxItem aBoxItem(ATTR_BORDER);
+    SvxLineItem aDiagonal_TLBR(ATTR_BORDER_TLBR);
+    SvxLineItem aDiagonal_BLTR(ATTR_BORDER_BLTR);
 
     for (auto& current_border_line : border_lines)
     {
         SvxBoxItemLine eDir = getDirection(current_border_line.first);
-        editeng::SvxBorderLine aLine(&current_border_line.second.maColor, current_border_line.second.mnWidth, current_border_line.second.mestyle);
-        aItem.SetLine(&aLine, eDir);
-    }
 
-    rSet.Put(aItem);
+        if (current_border_line.first == orcus::spreadsheet::border_direction_t::diagonal_tl_br)
+        {
+            editeng::SvxBorderLine aLine(&current_border_line.second.maColor, current_border_line.second.mnWidth, current_border_line.second.mestyle);
+            aDiagonal_BLTR.SetLine(&aLine);
+        }
+        if (current_border_line.first == orcus::spreadsheet::border_direction_t::diagonal_bl_tr)
+        {
+            editeng::SvxBorderLine aLine(&current_border_line.second.maColor, current_border_line.second.mnWidth, current_border_line.second.mestyle);
+            aDiagonal_TLBR.SetLine(&aLine);
+        }
+        else
+        {
+            editeng::SvxBorderLine aLine(&current_border_line.second.maColor, current_border_line.second.mnWidth, current_border_line.second.mestyle);
+            aBoxItem.SetLine(&aLine, eDir);
+        }
+    }
+    rSet.Put(aDiagonal_BLTR);
+    rSet.Put(aDiagonal_TLBR);
+    rSet.Put(aBoxItem);
 }
 
 void ScOrcusStyles::number_format::applyToItemSet(SfxItemSet& rSet) const
