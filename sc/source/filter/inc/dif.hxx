@@ -80,7 +80,7 @@ private:
     static inline bool  IsEOD( const sal_Unicode* pRef );
     static inline bool  Is1_0( const sal_Unicode* pRef );
 public:
-                        DifParser( SvStream&, const sal_uInt32 nOption, ScDocument&, rtl_TextEncoding );
+                        DifParser( SvStream&, ScDocument&, rtl_TextEncoding );
 
     TOPIC               GetNextTopic();
 

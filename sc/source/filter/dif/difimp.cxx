@@ -47,10 +47,10 @@ const sal_Unicode pKeyNA[]      = { 'N', 'A', 0 };
 const sal_Unicode pKeyV[]       = { 'V', 0 };
 const sal_Unicode pKey1_0[]     = { '1', ',', '0', 0 };
 
-FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
-                        const rtl_TextEncoding eVon, sal_uInt32 nDifOption )
+FltError ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc,
+                         const ScAddress& rInsPos, const rtl_TextEncoding eVon )
 {
-    DifParser   aDifParser( rIn, nDifOption, *pDoc, eVon );
+    DifParser   aDifParser( rIn, *pDoc, eVon );
 
     const bool bPlain = aDifParser.IsPlain();
 
@@ -230,12 +230,13 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
         return eERR_OK;
 }
 
-DifParser::DifParser( SvStream& rNewIn, const sal_uInt32 nOption, ScDocument& rDoc, rtl_TextEncoding e )
+DifParser::DifParser( SvStream& rNewIn, ScDocument& rDoc, rtl_TextEncoding e )
     : fVal(0.0)
     , nVector(0)
     , nVal(0)
     , nNumFormat(0)
     , eCharSet(e)
+    , pNumFormatter(rDoc.GetFormatTable())
     , rIn(rNewIn)
 {
     if ( rIn.GetStreamCharSet() != eCharSet )
@@ -244,13 +245,6 @@ DifParser::DifParser( SvStream& rNewIn, const sal_uInt32 nOption, ScDocument& rD
         rIn.SetStreamCharSet( eCharSet );
     }
     rIn.StartReadingUnicodeText( eCharSet );
-
-    bPlain = ( nOption == SC_DIFOPT_PLAIN );
-
-    if( bPlain )
-        pNumFormatter = nullptr;
-    else
-        pNumFormatter = rDoc.GetFormatTable();
 }
 
 TOPIC DifParser::GetNextTopic()

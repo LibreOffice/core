@@ -59,14 +59,6 @@ enum EXCIMPFORMAT { EIF_AUTO, EIF_BIFF5, EIF_BIFF8, EIF_BIFF_LE4 };
 enum ExportFormatLotus { ExpWK1, ExpWK3, ExpWK4 };
 enum ExportFormatExcel { ExpBiff2, ExpBiff3, ExpBiff4, ExpBiff4W, ExpBiff5, ExpBiff8, Exp2007Xml };
 
-// options for DIF im-/export (combine with '|')
-#define SC_DIFOPT_PLAIN     0x00000000
-#define SC_DIFOPT_DATE      0x00000001
-#define SC_DIFOPT_TIME      0x00000002
-#define SC_DIFOPT_CURRENCY  0x00000004
-
-#define SC_DIFOPT_EXCEL     (SC_DIFOPT_DATE|SC_DIFOPT_TIME|SC_DIFOPT_CURRENCY)
-
 // These are implemented inside the scfilt library and lazy loaded
 
 class ScEEAbsImport {
@@ -91,7 +83,7 @@ class SAL_DLLPUBLIC_RTTI ScFormatFilterPlugin {
         // eFormat == EIF_BIFF_LE4 -> only non storage files _might_ be read successfully
     virtual FltError ScImportStarCalc10( SvStream&, ScDocument* ) = 0;
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
-                 const rtl_TextEncoding eSrc = RTL_TEXTENCODING_DONTKNOW, sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) = 0;
+                 const rtl_TextEncoding eSrc = RTL_TEXTENCODING_DONTKNOW, DifOptions nDifOption = DifOptions::Excel ) = 0;
     virtual FltError ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange ) = 0;
     virtual FltError ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor = 1.0,
                                    bool bCalcWidthHeight = true, SvNumberFormatter* pFormatter = nullptr, bool bConvertDate = true ) = 0;

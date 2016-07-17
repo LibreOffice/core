@@ -276,7 +276,7 @@ public:
         // eFormat == EIF_BIFF_LE4 -> nur Nicht-Storage-Dateien _koennen_ zum Erfolg fuehren
     virtual FltError ScImportStarCalc10( SvStream&, ScDocument* ) override;
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
-                 const rtl_TextEncoding eSrc = RTL_TEXTENCODING_DONTKNOW, sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) override;
+                 const rtl_TextEncoding eSrc = RTL_TEXTENCODING_DONTKNOW ) override;
     virtual FltError ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange ) override;
     virtual FltError ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange,
                                    double nOutputFactor = 1.0, bool bCalcWidthHeight = true,

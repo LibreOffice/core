@@ -2221,7 +2221,7 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
     virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) override { return eERR_INTERN; }
     virtual FltError ScImportStarCalc10( SvStream&, ScDocument* ) override { return eERR_INTERN; }
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress&,
-                 const rtl_TextEncoding, sal_uInt32 ) override { return eERR_INTERN; }
+                 const rtl_TextEncoding ) override { return eERR_INTERN; }
     virtual FltError ScImportRTF( SvStream&, const OUString&, ScDocument*, ScRange& ) override { return eERR_INTERN; }
     virtual FltError ScImportHTML( SvStream&, const OUString&, ScDocument*, ScRange&, double, bool, SvNumberFormatter*, bool ) override { return eERR_INTERN; }
 
