@@ -93,19 +93,6 @@ public:
     virtual void        importRecord( BiffInputStream& rStrm ) = 0;
 };
 
-/** An enumeration for all types of fragments in a BIFF workbook stream. */
-enum BiffFragmentType
-{
-    BIFF_FRAGMENT_GLOBALS,      /// Workbook globals fragment.
-    BIFF_FRAGMENT_WORKSHEET,    /// Worksheet fragment.
-    BIFF_FRAGMENT_CHARTSHEET,   /// Chart sheet fragment.
-    BIFF_FRAGMENT_MACROSHEET,   /// Macro sheet fragment.
-    BIFF_FRAGMENT_MODULESHEET,  /// BIFF5 VB module fragment.
-    BIFF_FRAGMENT_EMPTYSHEET,   /// Sheet fragment of unsupported type.
-    BIFF_FRAGMENT_WORKSPACE,    /// BIFF4 workspace/workbook globals.
-    BIFF_FRAGMENT_UNKNOWN       /// Unknown fragment/error.
-};
-
 class BiffFragmentHandler
 {
 public:
