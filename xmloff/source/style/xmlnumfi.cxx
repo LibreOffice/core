@@ -101,6 +101,8 @@ struct SvXMLNumberInfo
     sal_Int32   nMaxDenomDigits;
     sal_Int32   nFracDenominator;
     sal_Int32   nMinDecimalDigits;
+    sal_Int32   nZerosNumerDigits;
+    sal_Int32   nZerosDenomDigits;
     bool        bGrouping;
     bool        bDecReplace;
     bool        bExpSign;
@@ -111,7 +113,7 @@ struct SvXMLNumberInfo
     SvXMLNumberInfo()
     {
         nDecimals = nInteger = nExpDigits = nExpInterval = nMinNumerDigits = nMinDenomDigits = nMaxNumerDigits = nMaxDenomDigits =
-            nFracDenominator = nMinDecimalDigits = -1;
+            nFracDenominator = nMinDecimalDigits = nZerosNumerDigits = nZerosDenomDigits = -1;
         bGrouping = bDecReplace = bDecAlign = false;
         bExpSign = true;
         fDisplayFactor = 1.0;
@@ -266,6 +268,8 @@ enum SvXMLStyleElemAttrTokens
     XML_TOK_ELEM_ATTR_MIN_DENOMINATOR_DIGITS,
     XML_TOK_ELEM_ATTR_MAX_NUMERATOR_DIGITS,
     XML_TOK_ELEM_ATTR_MAX_DENOMINATOR_VALUE,
+    XML_TOK_ELEM_ATTR_ZEROS_NUMERATOR_DIGITS,
+    XML_TOK_ELEM_ATTR_ZEROS_DENOMINATOR_DIGITS,
     XML_TOK_ELEM_ATTR_RFC_LANGUAGE_TAG,
     XML_TOK_ELEM_ATTR_LANGUAGE,
     XML_TOK_ELEM_ATTR_SCRIPT,
@@ -569,6 +573,10 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemAttrTokenMap()
             { XML_NAMESPACE_LO_EXT, XML_MAX_NUMERATOR_DIGITS,    XML_TOK_ELEM_ATTR_MAX_NUMERATOR_DIGITS },
             { XML_NAMESPACE_LO_EXT, XML_MAX_DENOMINATOR_VALUE,   XML_TOK_ELEM_ATTR_MAX_DENOMINATOR_VALUE },
             { XML_NAMESPACE_NUMBER, XML_MAX_DENOMINATOR_VALUE,   XML_TOK_ELEM_ATTR_MAX_DENOMINATOR_VALUE },
+            { XML_NAMESPACE_LO_EXT, XML_ZEROS_NUMERATOR_DIGITS,  XML_TOK_ELEM_ATTR_ZEROS_NUMERATOR_DIGITS },
+            { XML_NAMESPACE_NUMBER, XML_ZEROS_NUMERATOR_DIGITS,  XML_TOK_ELEM_ATTR_ZEROS_NUMERATOR_DIGITS },
+            { XML_NAMESPACE_LO_EXT, XML_ZEROS_DENOMINATOR_DIGITS,XML_TOK_ELEM_ATTR_ZEROS_DENOMINATOR_DIGITS },
+            { XML_NAMESPACE_NUMBER, XML_ZEROS_DENOMINATOR_DIGITS,XML_TOK_ELEM_ATTR_ZEROS_DENOMINATOR_DIGITS },
             { XML_NAMESPACE_NUMBER, XML_RFC_LANGUAGE_TAG,        XML_TOK_ELEM_ATTR_RFC_LANGUAGE_TAG     },
             { XML_NAMESPACE_NUMBER, XML_LANGUAGE,                XML_TOK_ELEM_ATTR_LANGUAGE             },
             { XML_NAMESPACE_NUMBER, XML_SCRIPT,                  XML_TOK_ELEM_ATTR_SCRIPT               },
@@ -1003,7 +1011,15 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                     aNumInfo.nFracDenominator = nAttrVal;
                     bIsMaxDenominator = true;
                 }
-                 break;
+                break;
+            case XML_TOK_ELEM_ATTR_ZEROS_NUMERATOR_DIGITS:
+                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
+                    aNumInfo.nZerosNumerDigits = nAttrVal;
+                break;
+            case XML_TOK_ELEM_ATTR_ZEROS_DENOMINATOR_DIGITS:
+                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
+                    aNumInfo.nZerosDenomDigits = nAttrVal;
+                break;
             case XML_TOK_ELEM_ATTR_RFC_LANGUAGE_TAG:
                 aLanguageTagODF.maRfcLanguageTag = sValue;
                 break;
@@ -1036,9 +1052,23 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
         else
             aNumInfo.nMinDecimalDigits = aNumInfo.nDecimals;
     }
+    if ( aNumInfo.nZerosDenomDigits > 0 )
+    {   // nMin = count of '0' and '?'
+        if ( aNumInfo.nMinDenomDigits < aNumInfo.nZerosDenomDigits )
+            aNumInfo.nMinDenomDigits = aNumInfo.nZerosDenomDigits;
+    }
+    else
+        aNumInfo.nZerosDenomDigits = 0;
     if ( aNumInfo.nMinDenomDigits >= 0 )
         if ( aNumInfo.nMaxDenomDigits < aNumInfo.nMinDenomDigits )
             aNumInfo.nMaxDenomDigits = ( aNumInfo.nMinDenomDigits ? aNumInfo.nMinDenomDigits : 1 );
+    if ( aNumInfo.nZerosNumerDigits > 0 )
+    {
+        if ( aNumInfo.nMinNumerDigits < aNumInfo.nZerosNumerDigits )
+            aNumInfo.nMinNumerDigits = aNumInfo.nZerosNumerDigits;
+    }
+    else
+        aNumInfo.nZerosNumerDigits = 0;
     if ( aNumInfo.nMinNumerDigits >= 0 )
         if ( aNumInfo.nMaxNumerDigits < aNumInfo.nMinNumerDigits )
             aNumInfo.nMaxNumerDigits = ( aNumInfo.nMinNumerDigits ? aNumInfo.nMinNumerDigits : 1 );
@@ -1254,8 +1284,10 @@ void SvXMLNumFmtElementContext::EndElement()
                 {
                     if ( i > aNumInfo.nMinNumerDigits )
                         rParent.AddToCode( '#' );
-                    else
+                    else if ( i > aNumInfo.nZerosNumerDigits )
                         rParent.AddToCode( '?' );
+                    else
+                        rParent.AddToCode( '0' );
                 }
                 rParent.AddToCode( '/' );
                 if ( aNumInfo.nFracDenominator > 0 )
@@ -1268,8 +1300,10 @@ void SvXMLNumFmtElementContext::EndElement()
                     {
                         if ( i > aNumInfo.nMinDenomDigits )
                             rParent.AddToCode( '#' );
-                        else
+                        else if ( i > aNumInfo.nZerosDenomDigits )
                             rParent.AddToCode( '?' );
+                        else
+                            rParent.AddToCode( '0' );
                     }
                 }
             }
