@@ -156,16 +156,6 @@ inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, BinRangeList
     return rStrm;
 }
 
-/** Different target types that can be encoded in a BIFF URL. */
-enum BiffTargetType
-{
-    BIFF_TARGETTYPE_URL,            /// URL, URL with sheet name, or sheet name.
-    BIFF_TARGETTYPE_SAMESHEET,      /// Target for special '!A1' syntax to refer to current sheet.
-    BIFF_TARGETTYPE_LIBRARY,        /// Library directory in application installation.
-    BIFF_TARGETTYPE_DDE_OLE,        /// DDE server/topic or OLE class/target.
-    BIFF_TARGETTYPE_UNKNOWN         /// Unknown/unsupported target type.
-};
-
 /** Converter for cell addresses and cell ranges for OOXML and BIFF filters.
  */
 class AddressConverter : public WorkbookHelper
