@@ -34,6 +34,7 @@
 
 class SdrModel;
 class SdrView;
+class SvxBitmapCtl;
 
 /************************************************************************/
 

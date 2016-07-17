@@ -49,6 +49,36 @@
 
 using namespace com::sun::star;
 
+/*************************************************************************
+|* Preview control for the display of bitmaps
+\************************************************************************/
+
+class SvxBitmapCtl
+{
+private:
+    Color           aPixelColor, aBackgroundColor;
+    const sal_uInt16*   pBmpArray;
+
+public:
+    // Constructor: BitmapCtl for SvxPixelCtl
+    SvxBitmapCtl()
+        : pBmpArray(nullptr)
+    {
+    }
+
+    // BitmapCtl: Returns the Bitmap
+    BitmapEx GetBitmapEx()
+    {
+        const Bitmap aRetval(createHistorical8x8FromArray(pBmpArray, aPixelColor, aBackgroundColor));
+
+        return BitmapEx(aRetval);
+    }
+
+    void SetBmpArray( const sal_uInt16* pPixel ) { pBmpArray = pPixel; }
+    void SetPixelColor( Color aColor ) { aPixelColor = aColor; }
+    void SetBackgroundColor( Color aColor ) { aBackgroundColor = aColor; }
+};
+
 SvxPatternTabPage::SvxPatternTabPage(  vcl::Window* pParent, const SfxItemSet& rInAttrs) :
 
     SvxTabPage          ( pParent,

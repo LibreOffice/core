@@ -1103,26 +1103,6 @@ void SvxPixelCtl::Reset()
     Invalidate();
 }
 
-// Constructor: BitmapCtl for SvxPixelCtl
-
-SvxBitmapCtl::SvxBitmapCtl()
-    : pBmpArray(nullptr)
-{
-}
-
-SvxBitmapCtl::~SvxBitmapCtl()
-{
-}
-
-// BitmapCtl: Returns the Bitmap
-
-BitmapEx SvxBitmapCtl::GetBitmapEx()
-{
-    const Bitmap aRetval(createHistorical8x8FromArray(pBmpArray, aPixelColor, aBackgroundColor));
-
-    return BitmapEx(aRetval);
-}
-
 VCL_BUILDER_DECL_FACTORY(ColorLB)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);
