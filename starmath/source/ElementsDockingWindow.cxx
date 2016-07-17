@@ -632,7 +632,6 @@ void SmElementsControl::build()
 
     switch(maCurrentSetId)
     {
-        // we need to divide by 2 because of the matrix of two dimensions
         case RID_CATEGORY_UNARY_BINARY_OPERATORS:
             addElements(aUnaryBinaryOperatorsList, SAL_N_ELEMENTS(aUnaryBinaryOperatorsList));
         break;
