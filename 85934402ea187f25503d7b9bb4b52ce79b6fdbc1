@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_c03b609b",
+        "filename": "download.lst",
+        "patchSetId": 39
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-07-17T18:25:13Z",
+      "side": 1,
+      "message": "It would also be nice to resolve conflicts in this file to make it easier to apply your patch.",
+      "revId": "85934402ea187f25503d7b9bb4b52ce79b6fdbc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
