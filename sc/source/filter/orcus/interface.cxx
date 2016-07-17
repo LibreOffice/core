@@ -22,6 +22,7 @@
 #include "scitems.hxx"
 #include "patattr.hxx"
 #include "docpool.hxx"
+#include "attrib.hxx"
 
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>
@@ -827,22 +828,7 @@ ScOrcusStyles::protection::protection():
 
 void ScOrcusStyles::protection::applyToItemSet(SfxItemSet& rSet) const
 {
-    if (mbHidden)
-        rSet.Put(SvxCharHiddenItem(mbHidden, ATTR_PROTECTION));
-
-    if (!mbLocked)
-    {
-        SvxProtectItem aItem(ATTR_PROTECTION);
-
-        aItem.SetContentProtect (false);
-        aItem.SetSizeProtect (false);
-        aItem.SetPosProtect (false);
-
-        rSet.Put(aItem);
-    }
-
-    if (!mbPrintContent)
-        rSet.Put(SvxPrintItem(ATTR_PROTECTION, mbPrintContent));
+    rSet.Put(ScProtectionAttr(mbLocked, mbFormulaHidden, mbHidden, mbPrintContent));
 }
 
 ScOrcusStyles::border::border():
