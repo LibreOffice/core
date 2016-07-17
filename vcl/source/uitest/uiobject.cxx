@@ -128,12 +128,39 @@ sal_uInt16 get_key(sal_Unicode cChar, bool& bShift)
     return cChar;
 }
 
+bool isFunctionKey(const OUString& rStr, sal_uInt16& rKeyCode)
+{
+    std::map<OUString, sal_uInt16> aFunctionKeyMap = {
+        {"F1", KEY_F1},
+        {"F2", KEY_F2},
+        {"F3", KEY_F3},
+        {"F4", KEY_F4},
+        {"F5", KEY_F5},
+        {"F6", KEY_F6},
+        {"F7", KEY_F7},
+        {"F8", KEY_F8},
+        {"F9", KEY_F9},
+        {"F10", KEY_F10},
+        {"F11", KEY_F11},
+        {"F12", KEY_F12}
+    };
+
+    rKeyCode = 0;
+    auto itr = aFunctionKeyMap.find(rStr);
+    if (itr == aFunctionKeyMap.end())
+        return false;
+
+    rKeyCode = itr->second;
+    return true;
+}
+
 std::vector<KeyEvent> generate_key_events_from_keycode(const OUString& rStr)
 {
     std::vector<KeyEvent> aEvents;
 
     std::map<OUString, sal_uInt16> aKeyMap = {
         {"ESC", KEY_ESCAPE},
+        {"TAB", KEY_TAB},
         {"DOWN", KEY_DOWN},
         {"UP", KEY_UP},
         {"LEFT", KEY_LEFT},
@@ -175,7 +202,13 @@ std::vector<KeyEvent> generate_key_events_from_keycode(const OUString& rStr)
             aRemainingText = aToken;
     }
 
-    if (aKeyMap.find(aRemainingText) != aKeyMap.end())
+    sal_uInt16 nFunctionKey = 0;
+    if (isFunctionKey(aRemainingText, nFunctionKey))
+    {
+        vcl::KeyCode aCode(nFunctionKey, bShift, bMod1, bMod2, false);
+        aEvents.push_back(KeyEvent(0, aCode));
+    }
+    else if (aKeyMap.find(aRemainingText) != aKeyMap.end())
     {
         sal_uInt16 nKey = aKeyMap[aRemainingText];
         vcl::KeyCode aCode(nKey, bShift, bMod1, bMod2, false);
