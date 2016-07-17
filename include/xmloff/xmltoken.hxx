@@ -3269,6 +3269,8 @@ namespace xmloff { namespace token {
         XML_MIN_DECIMAL_PLACES,
         XML_MAX_DENOMINATOR_VALUE,
         XML_MAX_NUMERATOR_DIGITS,
+        XML_ZEROS_NUMERATOR_DIGITS,
+        XML_ZEROS_DENOMINATOR_DIGITS,
 
         XML_TOKEN_END
     };
