@@ -60,6 +60,8 @@ public:
     virtual void DataChanged (const DataChangedEvent& rEvent) override;
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
+    FactoryFunction GetUITestFactory() const override;
+
 private:
     const OUString msPanelId;
     VclPtr<PanelTitleBar> mpTitleBar;
