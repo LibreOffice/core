@@ -82,7 +82,7 @@ private:
 
 public:
     TestDocumentHandler() {}
-    const OUString getString() { return m_aStr; }
+    const OUString & getString() { return m_aStr; }
 
     // XDocumentHandler
     virtual void SAL_CALL startDocument() throw (SAXException, RuntimeException, exception) override;
