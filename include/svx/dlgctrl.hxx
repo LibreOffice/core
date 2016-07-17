@@ -145,15 +145,15 @@ public:
 |* Preview control for the display of bitmaps
 \************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBitmapCtl
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBitmapCtl final
 {
-protected:
+private:
     Color           aPixelColor, aBackgroundColor;
     const sal_uInt16*   pBmpArray;
 
 public:
-            SvxBitmapCtl();
-            ~SvxBitmapCtl();
+    SvxBitmapCtl();
+    ~SvxBitmapCtl();
 
     BitmapEx GetBitmapEx();
 
