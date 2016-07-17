@@ -66,6 +66,7 @@ SvxGradientTabPage::SvxGradientTabPage
     m_aXFillAttr          ( rInAttrs.GetPool() ),
     m_rXFSet              ( m_aXFillAttr.GetItemSet() )
 {
+    get(m_pCbIncrement,    "autoincrement");
     get(m_pMtrIncrement,   "incrementmtr");
     get(m_pSliderIncrement,"incrementslider");
     get(m_pLbGradientType, "gradienttypelb");
@@ -113,8 +114,9 @@ SvxGradientTabPage::SvxGradientTabPage
     Link<Edit&,void> aLink = LINK( this, SvxGradientTabPage, ModifiedEditHdl_Impl );
     Link<ListBox&,void> aLink2 = LINK( this, SvxGradientTabPage, ModifiedListBoxHdl_Impl );
     m_pLbGradientType->SetSelectHdl( aLink2 );
+    m_pCbIncrement->SetToggleHdl( LINK( this, SvxGradientTabPage, ChangeAutoStepHdl_Impl ) );
     m_pMtrIncrement->SetModifyHdl( aLink );
-    m_pSliderIncrement->SetSlideHdl( LINK( this, SvxGradientTabPage, ModifiedSliderHdl_Impl )  );
+    m_pSliderIncrement->SetSlideHdl( LINK( this, SvxGradientTabPage, ModifiedSliderHdl_Impl ) );
     m_pMtrCenterX->SetModifyHdl( aLink );
     m_pMtrCenterY->SetModifyHdl( aLink );
     m_pMtrAngle->SetModifyHdl( aLink );
@@ -138,6 +140,7 @@ SvxGradientTabPage::~SvxGradientTabPage()
 
 void SvxGradientTabPage::dispose()
 {
+    m_pCbIncrement.clear();
     m_pMtrIncrement.clear();
     m_pSliderIncrement.clear();
     m_pLbGradientType.clear();
@@ -329,7 +332,6 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
         std::unique_ptr<XGradient> pXGradient;
         OUString      aString;
         size_t        nPos = m_pGradientLB->GetSelectItemPos();
-        sal_uInt16     nValue = m_pMtrIncrement->GetValue();
         if( nPos != VALUESET_ITEM_NOTFOUND )
         {
             pXGradient.reset(new XGradient( m_pGradientList->GetGradient( static_cast<sal_uInt16>(nPos) )->GetGradient() ));
@@ -348,6 +350,11 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
                         (sal_uInt16) m_pMtrColorFrom->GetValue(),
                         (sal_uInt16) m_pMtrColorTo->GetValue() ));
         }
+
+        sal_uInt16 nValue = 0;
+        if( !m_pCbIncrement->IsChecked() )
+            nValue = m_pMtrIncrement->GetValue();
+
         assert( pXGradient && "XGradient could not be created" );
         rSet->Put( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
         rSet->Put( XFillGradientItem( aString, *pXGradient ) );
@@ -359,6 +366,8 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
 
 void SvxGradientTabPage::Reset( const SfxItemSet* )
 {
+    m_pMtrIncrement->SetValue(DEFAULT_GRADIENTSTEP);
+    m_pSliderIncrement->SetThumbPos(DEFAULT_GRADIENTSTEP);
     ChangeGradientHdl_Impl();
 
     // determine state of the buttons
@@ -380,14 +389,32 @@ IMPL_LINK_TYPED( SvxGradientTabPage, ModifiedListBoxHdl_Impl, ListBox&, rListBox
 {
     ModifiedHdl_Impl(&rListBox);
 }
+
 IMPL_LINK_TYPED( SvxGradientTabPage, ModifiedEditHdl_Impl, Edit&, rBox, void )
 {
     ModifiedHdl_Impl(&rBox);
 }
+
 IMPL_LINK_TYPED( SvxGradientTabPage, ModifiedSliderHdl_Impl, Slider*, rSlider, void )
 {
     ModifiedHdl_Impl(rSlider);
 }
+
+IMPL_LINK_NOARG_TYPED( SvxGradientTabPage, ChangeAutoStepHdl_Impl, CheckBox&, void )
+{
+    if(m_pCbIncrement->IsChecked())
+    {
+        m_pSliderIncrement->Disable();
+        m_pMtrIncrement->Disable();
+    }
+    else
+    {
+        m_pSliderIncrement->Enable();
+        m_pMtrIncrement->Enable();
+    }
+    ModifiedHdl_Impl(m_pMtrIncrement);
+}
+
 void SvxGradientTabPage::ModifiedHdl_Impl( void* pControl )
 {
     if( pControl == m_pMtrBorder )
@@ -415,7 +442,9 @@ void SvxGradientTabPage::ModifiedHdl_Impl( void* pControl )
     if( pControl == m_pLbGradientType || pControl == this )
         SetControlState_Impl( eXGS );
 
-    sal_uInt16 nValue = (sal_uInt16)m_pMtrIncrement->GetValue();
+    sal_uInt16 nValue = 0;
+    if(!m_pCbIncrement->IsChecked())
+        nValue = (sal_uInt16)m_pMtrIncrement->GetValue();
     m_rXFSet.Put( XGradientStepCountItem( nValue ) );
 
     // displaying in XOutDev
@@ -644,10 +673,19 @@ void SvxGradientTabPage::ChangeGradientHdl_Impl()
         css::awt::GradientStyle eXGS = pGradient->GetGradientStyle();
         sal_uInt16 nValue = static_cast<const XGradientStepCountItem&>( m_rOutAttrs.Get( XATTR_GRADIENTSTEPCOUNT ) ).GetValue();
         if(nValue == 0)
-            nValue = DEFAULT_GRADIENTSTEP;
-
-        m_pMtrIncrement->SetValue( nValue );
-        m_pSliderIncrement->SetThumbPos( nValue );
+        {
+            m_pCbIncrement->SetState(TRISTATE_TRUE);
+            m_pMtrIncrement->Disable();
+            m_pSliderIncrement->Disable();
+        }
+        else
+        {
+            m_pCbIncrement->SetState(TRISTATE_FALSE);
+            m_pMtrIncrement->Enable();
+            m_pMtrIncrement->SetValue( nValue );
+            m_pSliderIncrement->Enable();
+            m_pSliderIncrement->SetThumbPos( nValue );
+        }
         m_pLbGradientType->SelectEntryPos(
             sal::static_int_cast< sal_Int32 >( eXGS ) );
         // if the entry is not in the listbox,

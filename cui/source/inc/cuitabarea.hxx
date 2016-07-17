@@ -400,6 +400,7 @@ private:
     VclPtr<GradientLB>         m_pLbGradients;
     VclPtr<SvxPresetListBox>   m_pGradientLB;
     VclPtr<NumericField>       m_pMtrIncrement;
+    VclPtr<CheckBox>           m_pCbIncrement;
     VclPtr<Slider>             m_pSliderIncrement;
     VclPtr<SvxXRectPreview>    m_pCtlPreview;
     VclPtr<PushButton>         m_pBtnAdd;
@@ -429,6 +430,7 @@ private:
     DECL_LINK_TYPED( ClickDeleteHdl_Impl, SvxPresetListBox*, void );
     DECL_LINK_TYPED( ModifiedEditHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( ModifiedListBoxHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( ChangeAutoStepHdl_Impl, CheckBox&, void );
     DECL_LINK_TYPED( ModifiedSliderHdl_Impl, Slider*, void );
     void ModifiedHdl_Impl(void*);
 
