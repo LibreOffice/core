@@ -278,10 +278,12 @@ public:
 
     XMLImportTest() : BootstrapFixture(true, false) {}
     void parse();
+    void testMissingNamespaceDeclaration();
     void testIllegalNamespaceUse();
 
     CPPUNIT_TEST_SUITE( XMLImportTest );
     CPPUNIT_TEST( parse );
+    CPPUNIT_TEST( testMissingNamespaceDeclaration );
     CPPUNIT_TEST( testIllegalNamespaceUse );
     CPPUNIT_TEST_SUITE_END();
 };
@@ -317,15 +319,42 @@ void XMLImportTest::parse()
 
         source.aInputStream = createStreamFromFile( m_sDirPath + fileNames[i] );
         m_xParser->parseStream(source);
-        const OUString& rParserStr = m_xDocumentHandler->getString();
+        const OUString rParserStr = m_xDocumentHandler->getString();
 
         source.aInputStream = createStreamFromFile( m_sDirPath + fileNames[i] );
         m_xLegacyFastParser->parseStream(source);
-        const OUString& rLegacyFastParserStr = m_xDocumentHandler->getString();
+        const OUString rLegacyFastParserStr = m_xDocumentHandler->getString();
 
         CPPUNIT_ASSERT_EQUAL( rParserStr, rLegacyFastParserStr );
         // OString o = OUStringToOString( Str, RTL_TEXTENCODING_ASCII_US );
         // CPPUNIT_ASSERT_MESSAGE( string(o.pData->buffer), false );
+    }
+}
+
+void XMLImportTest::testMissingNamespaceDeclaration()
+{
+    OUString fileNames[] = { "manifestwithnsdecl.xml", "manifestwithoutnsdecl.xml" };
+
+    uno::Reference<lang::XInitialization> const xInit(m_xLegacyFastParser,
+                            uno::UNO_QUERY_THROW);
+    uno::Sequence<uno::Any> args(1);
+    args[0] <<= OUString("IgnoreMissingNSDecl");
+    xInit->initialize( args );
+
+    for (sal_uInt16 i = 0; i < sizeof( fileNames ) / sizeof( OUString ); i++)
+    {
+        InputSource source;
+        source.sSystemId    = "internal";
+
+        source.aInputStream = createStreamFromFile( m_sDirPath + fileNames[i] );
+        m_xParser->parseStream(source);
+        const OUString rParserStr = m_xDocumentHandler->getString();
+
+        source.aInputStream = createStreamFromFile( m_sDirPath + fileNames[i] );
+        m_xLegacyFastParser->parseStream(source);
+        const OUString rLegacyFastParserStr = m_xDocumentHandler->getString();
+
+        CPPUNIT_ASSERT_EQUAL( rParserStr, rLegacyFastParserStr );
     }
 }
 

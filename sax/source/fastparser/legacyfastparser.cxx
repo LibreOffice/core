@@ -280,9 +280,12 @@ SaxLegacyFastParser::SaxLegacyFastParser( ) : m_aNamespaceHandler( new Namespace
     m_xParser->setNamespaceHandler( m_aNamespaceHandler.get() );
 }
 
-void SAL_CALL SaxLegacyFastParser::initialize(Sequence< Any > const&/* rArguments */)
+void SAL_CALL SaxLegacyFastParser::initialize(Sequence< Any > const& rArguments )
     throw (RuntimeException, Exception, exception)
 {
+    uno::Reference<lang::XInitialization> const xInit(m_xParser,
+                            uno::UNO_QUERY_THROW);
+    xInit->initialize( rArguments );
 }
 
 void SaxLegacyFastParser::parseStream( const InputSource& structSource )
