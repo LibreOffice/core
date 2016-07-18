@@ -1,6 +1,5 @@
-diff -ur misc/nss-3.25/nss/coreconf/FreeBSD.mk misc/build/nss-3.25/nss/coreconf/FreeBSD.mk
---- misc/nss-3.25/nss/coreconf/FreeBSD.mk	2016-06-20 10:11:28.000000000 -0700
-+++ misc/build/nss-3.25/nss/coreconf/FreeBSD.mk	2016-07-14 23:50:31.177316000 -0700
+--- misc/nss-3.14.4/mozilla/security/coreconf/FreeBSD.mk	2012-05-03 09:42:51.000000000 +0000
++++ misc/build/nss-3.14.4/mozilla/security/coreconf/FreeBSD.mk	2015-07-13 23:42:44.915864000 +0000
 @@ -5,9 +5,8 @@
  
  include $(CORE_DEPTH)/coreconf/UNIX.mk
