@@ -1246,7 +1246,7 @@ static void lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, ScCo
             uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
             pTransferObj->SetDragSourceObj( pObject, nTab );
-            pTransferObj->SetDragSourceFlags( SC_DROP_NAVIGATOR );
+            pTransferObj->SetDragSourceFlags(ScDragSrc::Navigator);
 
             SC_MOD()->SetDragObject( nullptr, pTransferObj );
             pWin->ReleaseMouse();
@@ -1255,7 +1255,7 @@ static void lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, ScCo
     }
 }
 
-static void lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, sal_uInt16 nFlags, vcl::Window* pWin )
+static void lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, ScDragSrc nFlags, vcl::Window* pWin )
 {
     ScMarkData aMark;
     aMark.SelectTable( rRange.aStart.Tab(), true );
@@ -1394,7 +1394,7 @@ void ScContentTree::DoDrag()
                             ScRange aRange;
                             if ( lcl_GetRange( &rSrcDoc, nType, aText, aRange ) )
                             {
-                                lcl_DoDragCells( pSrcShell, aRange, SC_DROP_NAVIGATOR, this );
+                                lcl_DoDragCells( pSrcShell, aRange, ScDragSrc::Navigator, this );
                             }
                         }
                         else if ( nType == ScContentId::TABLE )
@@ -1403,7 +1403,7 @@ void ScContentTree::DoDrag()
                             if ( rSrcDoc.GetTable( aText, nTab ) )
                             {
                                 ScRange aRange( 0,0,nTab, MAXCOL,MAXROW,nTab );
-                                lcl_DoDragCells( pSrcShell, aRange, SC_DROP_NAVIGATOR | SC_DROP_TABLE, this );
+                                lcl_DoDragCells( pSrcShell, aRange, (ScDragSrc::Navigator | ScDragSrc::Table), this );
                             }
                         }
                         else if ( nType == ScContentId::GRAPHIC || nType == ScContentId::OLEOBJECT ||

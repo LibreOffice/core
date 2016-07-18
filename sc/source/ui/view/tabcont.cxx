@@ -488,7 +488,7 @@ void ScTabControl::DoDrag( const vcl::Region& /* rRegion */ )
     ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable( pTransferObj );
 
-    pTransferObj->SetDragSourceFlags( SC_DROP_TABLE );
+    pTransferObj->SetDragSourceFlags(ScDragSrc::Table);
 
     pTransferObj->SetDragSource( pDocSh, aTabMark );
 
@@ -525,7 +525,7 @@ sal_Int8 ScTabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     ScDocument* pDoc = pViewData->GetDocument();
     const ScDragData& rData = SC_MOD()->GetDragData();
-    if ( rData.pCellTransfer && ( rData.pCellTransfer->GetDragSourceFlags() & SC_DROP_TABLE ) &&
+    if ( rData.pCellTransfer && (rData.pCellTransfer->GetDragSourceFlags() & ScDragSrc::Table) &&
             rData.pCellTransfer->GetSourceDocument() == pDoc )
     {
         // moving of tables within the document
@@ -564,7 +564,7 @@ sal_Int8 ScTabControl::AcceptDrop( const AcceptDropEvent& rEvt )
 
     const ScDocument* pDoc = pViewData->GetDocument();
     const ScDragData& rData = SC_MOD()->GetDragData();
-    if ( rData.pCellTransfer && ( rData.pCellTransfer->GetDragSourceFlags() & SC_DROP_TABLE ) &&
+    if ( rData.pCellTransfer && (rData.pCellTransfer->GetDragSourceFlags() & ScDragSrc::Table) &&
             rData.pCellTransfer->GetSourceDocument() == pDoc )
     {
         // moving of tables within the document

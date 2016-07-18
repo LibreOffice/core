@@ -27,6 +27,7 @@
 class ScDocShell;
 class ScMarkData;
 class SfxObjectShell;
+enum class ScDragSrc;
 
 namespace com { namespace sun { namespace star {
     namespace sheet {
@@ -51,7 +52,7 @@ private:
     SCCOL                           nSourceCursorX;
     SCROW                           nSourceCursorY;
     SCTAB                           nVisibleTab;
-    sal_uInt16                      nDragSourceFlags;
+    ScDragSrc                       nDragSourceFlags;
     bool                            bDragWasInternal;
     bool                            bUsedForLink;
     bool                            bHasFiltered;       // if has filtered rows
@@ -88,7 +89,7 @@ public:
     SCCOL               GetSourceCursorX() const  { return nSourceCursorX; }
     SCROW               GetSourceCursorY() const  { return nSourceCursorY; }
     SCTAB               GetVisibleTab() const   { return nVisibleTab; }
-    sal_uInt16          GetDragSourceFlags() const  { return nDragSourceFlags; }
+    ScDragSrc           GetDragSourceFlags() const  { return nDragSourceFlags; }
     bool                HasFilteredRows() const { return bHasFiltered; }
     bool                GetUseInApi() const     { return bUseInApi; }
     ScDocShell*         GetSourceDocShell();
@@ -100,7 +101,7 @@ public:
     void                SetSourceCursorPos( SCCOL nX, SCROW nY );
     void                SetVisibleTab( SCTAB nNew );
     void                SetDragSource( ScDocShell* pSourceShell, const ScMarkData& rMark );
-    void                SetDragSourceFlags( sal_uInt16 nFlags );
+    void                SetDragSourceFlags( ScDragSrc nFlags );
     void                SetDragWasInternal();
     SC_DLLPUBLIC void   SetUseInApi( bool bSet );
 

@@ -121,7 +121,7 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     nDragHandleY( 0 ),
     nSourceCursorX( MAXCOL + 1 ),
     nSourceCursorY( MAXROW + 1 ),
-    nDragSourceFlags( 0 ),
+    nDragSourceFlags( ScDragSrc::Undefined ),
     bDragWasInternal( false ),
     bUsedForLink( false ),
     bUseInApi( false )
@@ -498,7 +498,7 @@ void ScTransferObj::ObjectReleased()
 
 void ScTransferObj::DragFinished( sal_Int8 nDropAction )
 {
-    if ( nDropAction == DND_ACTION_MOVE && !bDragWasInternal && !(nDragSourceFlags & SC_DROP_NAVIGATOR) )
+    if ( nDropAction == DND_ACTION_MOVE && !bDragWasInternal && !(nDragSourceFlags & ScDragSrc::Navigator) )
     {
         //  move: delete source data
         ScDocShell* pSourceSh = GetSourceDocShell();
@@ -556,7 +556,7 @@ void ScTransferObj::SetDragSource( ScDocShell* pSourceShell, const ScMarkData& r
     xDragSourceRanges = new ScCellRangesObj( pSourceShell, aRanges );
 }
 
-void ScTransferObj::SetDragSourceFlags( sal_uInt16 nFlags )
+void ScTransferObj::SetDragSourceFlags(ScDragSrc nFlags)
 {
     nDragSourceFlags = nFlags;
 }
