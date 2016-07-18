@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_60db6c1c",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-07-18T09:08:24Z",
+      "side": 1,
+      "message": "Thanks! Actually, I considered this, but was afraid of using such general term. Will change as soon as my Windows build finishes (a long story)",
+      "parentUuid": "5a8bc5a2_a0b574d1",
+      "revId": "1d388638e0dbc7d998c785967ff9d331304cdb70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_20cec483",
         "filename": "desktop/source/app/cmdlineargs.cxx",
         "patchSetId": 15
@@ -108,6 +126,24 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_00ec68c6",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-07-18T09:08:24Z",
+      "side": 1,
+      "message": "I see, but is this specific case worth the extra coding, as it\u0027s not some tight loop, and currently the code looks more neat?",
+      "parentUuid": "5a8bc5a2_c0ba80c0",
+      "revId": "1d388638e0dbc7d998c785967ff9d331304cdb70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_a0a014a7",
         "filename": "desktop/source/app/cmdlineargs.cxx",
         "patchSetId": 15
@@ -155,6 +191,24 @@
       "side": 1,
       "message": "In the first case, it\u0027ll keep ignoring the --display and :0 args on e.g. Windows (\"--display\" and its argument is handled \"out of line\" in Unix-only desktop/unx/source/splashx.c and vcl/unx/*, and just ignored here in cmdlineargs.cxx), and view test.odt, which is odd behavior given the order of args on the cmd line.\n\nIn the second case, it will view instead of print test.odt, which is also somewhat surprising (but at the same time somewhat logical).",
       "parentUuid": "5a8bc5a2_60ad2c88",
+      "revId": "1d388638e0dbc7d998c785967ff9d331304cdb70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_e0e69ce7",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-07-18T09:08:24Z",
+      "side": 1,
+      "message": "Do you mean that --display should have higher priority?\nI intended to cleanup the code a little after the patch gets in. I think this specific change should go there. So, your first example SHOULD be handled like \"soffice :0\"? I don\u0027t understand what would it mean.\nAnyway, I intended to make additions to the command line documentation as soon as it is committed (I already proposed changes to current one to catch up current state), so special handling of Office URIs could be discussed there. Or if you prefer, --display will suppress it.\nIn the second case, I suppose, -p should suppress any Office URI command, I\u0027ll do this.",
+      "parentUuid": "5a8bc5a2_00b548cc",
       "revId": "1d388638e0dbc7d998c785967ff9d331304cdb70",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
