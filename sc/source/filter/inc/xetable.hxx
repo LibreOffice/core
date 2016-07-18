@@ -740,6 +740,7 @@ private:
 
 private:
     XclExpXFId          maXFId;             /// The XF identifier for column default format.
+    bool                mbCustomWidth;      /// Column width is different from default
     sal_uInt16          mnWidth;            /// Excel width of the column.
     sal_uInt16          mnScWidth;          /// Calc width of the column.
     sal_uInt16          mnFlags;            /// Additional column flags.
