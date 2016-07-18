@@ -3807,6 +3807,8 @@ uno::Reference<accessibility::XAccessibleEditableText>
             if (xText.is())
                 return xText;
         }
+        if (xState->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS))
+            return uno::Reference< accessibility::XAccessibleEditableText >();
     }
 
     for (sal_Int32 i = 0; i < xContext->getAccessibleChildCount(); ++i)
