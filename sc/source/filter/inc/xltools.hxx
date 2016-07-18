@@ -143,6 +143,7 @@ public:
     static sal_Int32    GetHmmFromTwips( sal_Int32 nTwips );
 
     /** Returns the Calc column width (twips) for the passed Excel width.
+     *  Excel Column width is stored as 1/256th of a character.
         @param nScCharWidth  Width of the '0' character in Calc (twips). */
     static sal_uInt16       GetScColumnWidth( sal_uInt16 nXclWidth, long nScCharWidth );
     /** Returns the Excel column width for the passed Calc width (twips).
