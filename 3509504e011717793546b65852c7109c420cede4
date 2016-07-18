@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_00038874",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-18T09:27:33Z",
+      "side": 1,
+      "message": "please name is something more descriptive like\n   m_bIgnoreMissingNSDecl",
+      "revId": "3509504e011717793546b65852c7109c420cede4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_60f28c9c",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1313,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-18T09:27:33Z",
+      "side": 1,
+      "message": "I think you should throw a lang::IllegalArgumentException if the string does not match \"NSDeclMissing\"\n\nAlso please change that argument to \"IgnoreMissingNSDecl\"",
+      "revId": "3509504e011717793546b65852c7109c420cede4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
