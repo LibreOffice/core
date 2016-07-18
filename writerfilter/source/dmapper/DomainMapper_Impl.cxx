@@ -266,10 +266,12 @@ DomainMapper_Impl::~DomainMapper_Impl()
     // Don't remove last paragraph when pasting, sw expects that empty paragraph.
     if (m_bIsNewDoc)
         RemoveLastParagraph();
-    getTableManager( ).endLevel();
-    popTableManager( );
+    if (hasTableManager())
+    {
+        getTableManager().endLevel();
+        popTableManager();
+    }
 }
-
 
 uno::Reference< container::XNameContainer >    DomainMapper_Impl::GetPageStyles()
 {
@@ -1034,7 +1036,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
     TagLogger::getInstance().attribute("isTextAppend", sal_uInt32(xTextAppend.is()));
 #endif
 
-    if (xTextAppend.is() && !getTableManager( ).isIgnore() && pParaContext != nullptr)
+    if (xTextAppend.is() && pParaContext != nullptr && !getTableManager().isIgnore())
     {
         try
         {
