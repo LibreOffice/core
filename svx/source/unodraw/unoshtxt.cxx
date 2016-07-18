@@ -317,11 +317,7 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     // #i105988 keep reference to this object
     rtl::Reference< SvxTextEditSourceImpl > xThis( this );
 
-    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
-    const SvxViewHint* pViewHint = dynamic_cast<const SvxViewHint*>(&rHint);
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-
-    if (pSimpleHint)
+    if (const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint))
     {
         if (SFX_HINT_DYING == pSimpleHint->GetId())
         {
@@ -336,7 +332,7 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             }
         }
     }
-    else if( pViewHint )
+    else if (const SvxViewHint* pViewHint = dynamic_cast<const SvxViewHint*>(&rHint))
     {
         switch( pViewHint->GetHintType() )
         {
@@ -345,7 +341,7 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                 break;
         }
     }
-    else if( pSdrHint )
+    else if (const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint))
     {
         switch( pSdrHint->GetKind() )
         {

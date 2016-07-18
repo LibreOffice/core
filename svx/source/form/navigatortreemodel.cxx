@@ -672,9 +672,9 @@ namespace svxform
             if (rText == aEntryText)
                 return pEntryData;
 
-            if( bRecurs && dynamic_cast<const FmFormData*>( pEntryData) !=  nullptr )
+            if (FmFormData* pFormData = bRecurs ? dynamic_cast<FmFormData*>(pEntryData) : nullptr)
             {
-                pChildData = FindData( rText, static_cast<FmFormData*>(pEntryData) );
+                pChildData = FindData(rText, pFormData);
                 if( pChildData )
                     return pChildData;
             }
@@ -683,11 +683,10 @@ namespace svxform
         return nullptr;
     }
 
-
     void NavigatorTreeModel::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
         const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
-        if( pSdrHint )
+        if (pSdrHint)
         {
             switch( pSdrHint->GetKind() )
             {
@@ -702,17 +701,17 @@ namespace svxform
             }
         }
         // is shell gone?
-        else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) && static_cast<const SfxSimpleHint*>(&rHint)->GetId() == SFX_HINT_DYING)
-            UpdateContent(nullptr);
-
-        // changed mark of controls?
-        else if (dynamic_cast<const FmNavViewMarksChanged*>(&rHint))
+        else if (const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint))
         {
-            const FmNavViewMarksChanged* pvmcHint = static_cast<const FmNavViewMarksChanged*>(&rHint);
-            BroadcastMarkedObjects( pvmcHint->GetAffectedView()->GetMarkedObjectList() );
+            if (pSimpleHint->GetId() == SFX_HINT_DYING)
+                UpdateContent(nullptr);
+        }
+        // changed mark of controls?
+        else if (const FmNavViewMarksChanged* pvmcHint = dynamic_cast<const FmNavViewMarksChanged*>(&rHint))
+        {
+            BroadcastMarkedObjects(pvmcHint->GetAffectedView()->GetMarkedObjectList());
         }
     }
-
 
     void NavigatorTreeModel::InsertSdrObj( const SdrObject* pObj )
     {

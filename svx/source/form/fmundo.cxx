@@ -184,7 +184,6 @@ FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
     }
 }
 
-
 FmXUndoEnvironment::~FmXUndoEnvironment()
 {
     if ( !m_bDisposed )   // i120746, call FormScriptingEnvironment::dispose to avoid memory leak
@@ -193,7 +192,6 @@ FmXUndoEnvironment::~FmXUndoEnvironment()
     if (m_pPropertySetCache)
         delete static_cast<PropertySetInfoCache*>(m_pPropertySetCache);
 }
-
 
 void FmXUndoEnvironment::dispose()
 {
@@ -288,10 +286,9 @@ void FmXUndoEnvironment::ModeChanged()
 
 void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
-    if (pSdrHint)
+    if (const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint))
     {
-        switch( pSdrHint->GetKind() )
+        switch (pSdrHint->GetKind())
         {
             case HINT_OBJINSERTED:
             {
@@ -308,9 +305,9 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 break;
         }
     }
-    else if (dynamic_cast<const SfxSimpleHint*>(&rHint))
+    else if (const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint))
     {
-        switch ( static_cast<const SfxSimpleHint*>(&rHint)->GetId() )
+        switch (pSimpleHint->GetId())
         {
             case SFX_HINT_DYING:
                 dispose();
@@ -321,19 +318,17 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 break;
         }
     }
-    else if (dynamic_cast<const SfxEventHint*>(&rHint))
+    else if (const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&rHint))
     {
-        switch ( static_cast<const SfxEventHint*>(&rHint)->GetEventId() )
+        switch (pEventHint->GetEventId())
         {
-        case SFX_EVENT_CREATEDOC:
+            case SFX_EVENT_CREATEDOC:
             case SFX_EVENT_OPENDOC:
                 ModeChanged();
                 break;
         }
     }
-
 }
-
 
 void FmXUndoEnvironment::Inserted(SdrObject* pObj)
 {
