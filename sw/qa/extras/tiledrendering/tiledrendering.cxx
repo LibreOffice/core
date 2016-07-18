@@ -657,6 +657,8 @@ void SwTiledRenderingTest::testMissingInvalidation()
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
     CPPUNIT_ASSERT(aView2.m_bTilesInvalidated);
+    mxComponent->dispose();
+    mxComponent.clear();
 
     comphelper::LibreOfficeKit::setActive(false);
 }
@@ -698,6 +700,8 @@ void SwTiledRenderingTest::testViewCursors()
     CPPUNIT_ASSERT(aView1.m_bViewSelectionSet);
     CPPUNIT_ASSERT(aView2.m_bOwnSelectionSet);
     CPPUNIT_ASSERT(!aView2.m_bViewSelectionSet);
+    mxComponent->dispose();
+    mxComponent.clear();
 
     comphelper::LibreOfficeKit::setActive(false);
 }
