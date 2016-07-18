@@ -57,7 +57,7 @@ using namespace ::comphelper;
 #define EDITMASK_ALLCHAR       'x'
 #define EDITMASK_UPPERALLCHAR  'X'
 
-uno::Reference< i18n::XCharacterClassification > ImplGetCharClass()
+uno::Reference< i18n::XCharacterClassification > const & ImplGetCharClass()
 {
     static uno::Reference< i18n::XCharacterClassification > xCharClass;
     if ( !xCharClass.is() )

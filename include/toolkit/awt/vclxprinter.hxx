@@ -67,7 +67,7 @@ public:
     virtual ~VCLXPrinterPropertySet();
 
     Printer*                    GetPrinter() const { return mxPrinter.get(); }
-    css::uno::Reference< css::awt::XDevice >  GetDevice();
+    css::uno::Reference< css::awt::XDevice > const &  GetDevice();
 
     // css::uno::XInterface
     DECLARE_XINTERFACE();

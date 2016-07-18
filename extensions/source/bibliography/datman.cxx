@@ -744,7 +744,7 @@ Reference< awt::XControlModel > BibDataManager::updateGridModel()
     return updateGridModel( m_xForm );
 }
 
-Reference< awt::XControlModel > BibDataManager::updateGridModel(const Reference< XForm > & xDbForm)
+Reference< awt::XControlModel > const & BibDataManager::updateGridModel(const Reference< XForm > & xDbForm)
 {
     try
     {
@@ -1595,7 +1595,7 @@ void BibDataManager::SetToolbar(BibToolBar* pSet)
         pToolbar->SetDatMan(*this);
 }
 
-uno::Reference< form::runtime::XFormController > BibDataManager::GetFormController()
+uno::Reference< form::runtime::XFormController > const & BibDataManager::GetFormController()
 {
     if(!m_xFormCtrl.is())
     {

@@ -189,7 +189,7 @@ SbxErrObject::~SbxErrObject()
     OSL_TRACE("SbxErrObject::~SbxErrObject dtor");
 }
 
-uno::Reference< vba::XErrObject >
+uno::Reference< vba::XErrObject > const &
 SbxErrObject::getUnoErrObject()
 {
     SbxVariable* pVar = getErrObject();
@@ -197,7 +197,7 @@ SbxErrObject::getUnoErrObject()
     return pGlobErr->m_xErr;
 }
 
-SbxVariableRef
+SbxVariableRef const &
 SbxErrObject::getErrObject()
 {
     static SbxVariableRef pGlobErr = new SbxErrObject( OUString("Err"), uno::makeAny( uno::Reference< vba::XErrObject >( new ErrObject() ) ) );

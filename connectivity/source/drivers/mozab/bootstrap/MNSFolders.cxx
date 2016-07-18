@@ -90,7 +90,7 @@ namespace
     };
 
 
-    OUString lcl_guessProfileRoot( MozillaProductType _product )
+    OUString const & lcl_guessProfileRoot( MozillaProductType _product )
     {
         size_t productIndex = _product - 1;
 

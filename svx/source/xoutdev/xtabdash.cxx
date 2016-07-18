@@ -189,7 +189,7 @@ Bitmap XDashList::CreateBitmapForUI( long nIndex )
     return ImpCreateBitmapForXDash(&rDash);
 }
 
-Bitmap XDashList::GetBitmapForUISolidLine() const
+Bitmap const & XDashList::GetBitmapForUISolidLine() const
 {
     if(maBitmapSolidLine.IsEmpty())
     {
@@ -199,7 +199,7 @@ Bitmap XDashList::GetBitmapForUISolidLine() const
     return maBitmapSolidLine;
 }
 
-OUString XDashList::GetStringForUiSolidLine() const
+OUString const & XDashList::GetStringForUiSolidLine() const
 {
     if(maStringSolidLine.isEmpty())
     {
@@ -209,7 +209,7 @@ OUString XDashList::GetStringForUiSolidLine() const
     return maStringSolidLine;
 }
 
-OUString XDashList::GetStringForUiNoLine() const
+OUString const & XDashList::GetStringForUiNoLine() const
 {
     if(maStringNoLine.isEmpty())
     {

@@ -496,7 +496,7 @@ class OServiceManagerWrapper : public OServiceManagerMutex, public t_OServiceMan
 {
     Reference< XComponentContext > m_xContext;
     Reference< XMultiComponentFactory > m_root;
-    inline Reference< XMultiComponentFactory > getRoot()
+    Reference< XMultiComponentFactory > const & getRoot()
     {
         if (! m_root.is())
         {

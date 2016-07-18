@@ -235,14 +235,14 @@ Reference< XNameContainer > VbaProject::openLibrary( sal_Int32 nPropId, bool bCr
     return xLibrary;
 }
 
-Reference< XNameContainer > VbaProject::createBasicLibrary()
+Reference< XNameContainer > const & VbaProject::createBasicLibrary()
 {
     if( !mxBasicLib.is() )
         mxBasicLib = openLibrary( PROP_BasicLibraries, true );
     return mxBasicLib;
 }
 
-Reference< XNameContainer > VbaProject::createDialogLibrary()
+Reference< XNameContainer > const & VbaProject::createDialogLibrary()
 {
     if( !mxDialogLib.is() )
         mxDialogLib = openLibrary( PROP_DialogLibraries, true );

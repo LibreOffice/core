@@ -24,7 +24,7 @@
 
 using comphelper::ConfigurationListener;
 
-static rtl::Reference<ConfigurationListener> getMiscListener()
+static rtl::Reference<ConfigurationListener> const & getMiscListener()
 {
     static rtl::Reference<ConfigurationListener> xListener;
     if (!xListener.is())

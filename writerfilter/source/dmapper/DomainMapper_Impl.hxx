@@ -457,7 +457,7 @@ private:
     void GetCurrentLocale(css::lang::Locale& rLocale);
     void SetNumberFormat(const OUString& rCommand, css::uno::Reference<css::beans::XPropertySet> const& xPropertySet, bool bDetectFormat = false);
     css::uno::Reference<css::beans::XPropertySet> FindOrCreateFieldMaster(const sal_Char* pFieldMasterService, const OUString& rFieldMasterName) throw(css::uno::Exception);
-    css::uno::Reference<css::beans::XPropertySet> GetDocumentSettings();
+    css::uno::Reference<css::beans::XPropertySet> const & GetDocumentSettings();
 
     std::map<sal_Int32, css::uno::Any> deferredCharacterProperties;
     SmartTagHandler m_aSmartTagHandler;
@@ -480,8 +480,8 @@ public:
         return dynamic_cast< SectionPropertyMap* >( m_pLastSectionContext.get( ) );
     }
 
-    css::uno::Reference<css::container::XNameContainer> GetPageStyles();
-    css::uno::Reference<css::text::XText> GetBodyText();
+    css::uno::Reference<css::container::XNameContainer> const & GetPageStyles();
+    css::uno::Reference<css::text::XText> const & GetBodyText();
     const css::uno::Reference<css::lang::XMultiServiceFactory>& GetTextFactory() const
     {
         return m_xTextFactory;
@@ -569,34 +569,34 @@ public:
     css::uno::Reference<css::text::XTextAppend> GetTopTextAppend();
     FieldContextPtr GetTopFieldContext();
 
-    FontTablePtr GetFontTable()
+    FontTablePtr const & GetFontTable()
     {
         if(!m_pFontTable)
             m_pFontTable.reset(new FontTable());
          return m_pFontTable;
     }
-    StyleSheetTablePtr GetStyleSheetTable()
+    StyleSheetTablePtr const & GetStyleSheetTable()
     {
         if(!m_pStyleSheetTable)
             m_pStyleSheetTable.reset(new StyleSheetTable( m_rDMapper, m_xTextDocument, m_bIsNewDoc ));
         return m_pStyleSheetTable;
     }
-    ListsManager::Pointer GetListTable();
-    ThemeTablePtr GetThemeTable()
+    ListsManager::Pointer const & GetListTable();
+    ThemeTablePtr const & GetThemeTable()
     {
         if(!m_pThemeTable)
             m_pThemeTable.reset( new ThemeTable );
         return m_pThemeTable;
     }
 
-    SettingsTablePtr GetSettingsTable()
+    SettingsTablePtr const & GetSettingsTable()
     {
         if( !m_pSettingsTable )
             m_pSettingsTable.reset( new SettingsTable );
         return m_pSettingsTable;
     }
 
-    GraphicImportPtr GetGraphicImport( GraphicImportType eGraphicImportType );
+    GraphicImportPtr const & GetGraphicImport( GraphicImportType eGraphicImportType );
     void            ResetGraphicImport();
     // this method deletes the current m_pGraphicImport after import
     void    ImportGraphic(const writerfilter::Reference< Properties>::Pointer_t&, GraphicImportType eGraphicImportType );

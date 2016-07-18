@@ -71,7 +71,7 @@ public:
     ~xdictionary();
     Boundary nextWord( const OUString& rText, sal_Int32 nPos, sal_Int16 wordType);
     Boundary previousWord( const OUString& rText, sal_Int32 nPos, sal_Int16 wordType);
-    Boundary getWordBoundary( const OUString& rText, sal_Int32 nPos, sal_Int16 wordType, bool bDirection );
+    Boundary const & getWordBoundary( const OUString& rText, sal_Int32 nPos, sal_Int16 wordType, bool bDirection );
     void setJapaneseWordBreak();
 
 private:

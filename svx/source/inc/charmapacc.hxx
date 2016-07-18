@@ -108,8 +108,8 @@ namespace svx
         SvxShowCharSetItem( SvxShowCharSet& rParent,SvxShowCharSetAcc*  _pParent,sal_uInt16 _nPos );
         ~SvxShowCharSetItem();
 
-        css::uno::Reference< css::accessibility::XAccessible >    GetAccessible();
-         void                                                                                       ClearAccessible();
+        css::uno::Reference< css::accessibility::XAccessible > const &    GetAccessible();
+         void                                                             ClearAccessible();
     };
 
 

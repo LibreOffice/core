@@ -160,7 +160,7 @@ std::pair<MergeDataHashMap::iterator,bool> MergeDataHashMap::insert(const OStrin
     return aTemp;
 }
 
-MergeDataHashMap::iterator MergeDataHashMap::find(const OString& rKey)
+MergeDataHashMap::iterator const & MergeDataHashMap::find(const OString& rKey)
 {
     iterator aHint = m_aHashMap.end();
 

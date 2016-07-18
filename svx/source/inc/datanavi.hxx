@@ -161,7 +161,7 @@ namespace svxform
 
         /** convert submission replace string from API value to UI value.
             Use 'none' as default. */
-        OUString toUI( const OUString& rStr ) const
+        OUString const & toUI( const OUString& rStr ) const
         {
             if( rStr == m_sDoc_API )
                 return m_sDoc_UI;
@@ -173,7 +173,7 @@ namespace svxform
 
         /** convert submission replace string from UI to API.
             Use 'none' as default. */
-        OUString toAPI( const OUString& rStr ) const
+        OUString const & toAPI( const OUString& rStr ) const
         {
             if( rStr == m_sDoc_UI )
                 return m_sDoc_API;
@@ -209,7 +209,7 @@ namespace svxform
         }
 
         /** convert from API to UI; put is default. */
-        OUString toUI( const OUString& rStr ) const
+        OUString const & toUI( const OUString& rStr ) const
         {
             if( rStr == m_sGet_API )
                 return m_sGet_UI;
@@ -220,7 +220,7 @@ namespace svxform
         }
 
         /** convert from UI to API; put is default */
-        OUString toAPI( const OUString& rStr ) const
+        OUString const & toAPI( const OUString& rStr ) const
         {
             if( rStr == m_sGet_UI )
                 return m_sGet_API;

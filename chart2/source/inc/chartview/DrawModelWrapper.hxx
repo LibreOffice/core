@@ -51,11 +51,11 @@ public:
     css::uno::Reference< css::lang::XMultiServiceFactory > getShapeFactory();
 
     // the main page will contain the normal view objects
-    css::uno::Reference< css::drawing::XDrawPage > getMainDrawPage();
+    css::uno::Reference< css::drawing::XDrawPage > const & getMainDrawPage();
     SAL_DLLPRIVATE void clearMainDrawPage();
 
     // the extra page is not visible, but contains some extras like the symbols for data points
-    css::uno::Reference< css::drawing::XDrawPage > getHiddenDrawPage();
+    css::uno::Reference< css::drawing::XDrawPage > const & getHiddenDrawPage();
 
     static css::uno::Reference< css::drawing::XShapes >
          getChartRootShape( const css::uno::Reference< css::drawing::XDrawPage>& xPage );

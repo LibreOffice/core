@@ -136,7 +136,7 @@ void ScViewOptions::SetDefaults()
     aGridOpt.SetDefaults();
 }
 
-Color ScViewOptions::GetGridColor( OUString* pStrName ) const
+Color const & ScViewOptions::GetGridColor( OUString* pStrName ) const
 {
     if ( pStrName )
         *pStrName = aGridColName;

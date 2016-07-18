@@ -245,31 +245,31 @@ namespace connectivity
         // some methods to get already defined ORowSetValues
         // this increase the reuse of ORowSetValues
         /// return an empty ORowSetValueDecorator
-        static ORowSetValueDecoratorRef getEmptyValue();
+        static ORowSetValueDecoratorRef const & getEmptyValue();
         /// return an ORowSetValueDecorator with 0 as value
-        static ORowSetValueDecoratorRef get0Value();
+        static ORowSetValueDecoratorRef const & get0Value();
         /// return an ORowSetValueDecorator with 1 as value
-        static ORowSetValueDecoratorRef get1Value();
+        static ORowSetValueDecoratorRef const & get1Value();
         /// return an ORowSetValueDecorator with ColumnSearch::BASIC as value
-        static ORowSetValueDecoratorRef getBasicValue();
+        static ORowSetValueDecoratorRef const & getBasicValue();
         /// return an ORowSetValueDecorator with string SELECT as value
-        static ORowSetValueDecoratorRef getSelectValue();
+        static ORowSetValueDecoratorRef const & getSelectValue();
         /// return an ORowSetValueDecorator with string INSERT as value
-        static ORowSetValueDecoratorRef getInsertValue();
+        static ORowSetValueDecoratorRef const & getInsertValue();
         /// return an ORowSetValueDecorator with string DELETE as value
-        static ORowSetValueDecoratorRef getDeleteValue();
+        static ORowSetValueDecoratorRef const & getDeleteValue();
         /// return an ORowSetValueDecorator with string UPDATE as value
-        static ORowSetValueDecoratorRef getUpdateValue();
+        static ORowSetValueDecoratorRef const & getUpdateValue();
         /// return an ORowSetValueDecorator with string CREATE as value
-        static ORowSetValueDecoratorRef getCreateValue();
+        static ORowSetValueDecoratorRef const & getCreateValue();
         /// return an ORowSetValueDecorator with string READ as value
-        static ORowSetValueDecoratorRef getReadValue();
+        static ORowSetValueDecoratorRef const & getReadValue();
         /// return an ORowSetValueDecorator with string ALTER as value
-        static ORowSetValueDecoratorRef getAlterValue();
+        static ORowSetValueDecoratorRef const & getAlterValue();
         /// return an ORowSetValueDecorator with string DROP as value
-        static ORowSetValueDecoratorRef getDropValue();
+        static ORowSetValueDecoratorRef const & getDropValue();
         /// return an ORowSetValueDecorator with string ' as value
-        static ORowSetValueDecoratorRef getQuoteValue();
+        static ORowSetValueDecoratorRef const & getQuoteValue();
 
     };
 }

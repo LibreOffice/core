@@ -397,7 +397,7 @@ ScModelObj::~ScModelObj()
     delete pPrinterOptions;
 }
 
-uno::Reference< uno::XAggregation> ScModelObj::GetFormatter()
+uno::Reference< uno::XAggregation> const & ScModelObj::GetFormatter()
 {
     // pDocShell may be NULL if this is the base of a ScDocOptionsObj
     if ( !xNumberAgg.is() && pDocShell )

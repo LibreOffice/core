@@ -2271,14 +2271,14 @@ short MessageDialog::Execute()
     return Dialog::Execute();
 }
 
-OUString MessageDialog::get_primary_text() const
+OUString const & MessageDialog::get_primary_text() const
 {
     const_cast<MessageDialog*>(this)->setDeferredProperties();
 
     return m_sPrimaryString;
 }
 
-OUString MessageDialog::get_secondary_text() const
+OUString const & MessageDialog::get_secondary_text() const
 {
     const_cast<MessageDialog*>(this)->setDeferredProperties();
 

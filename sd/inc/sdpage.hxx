@@ -295,13 +295,13 @@ public:
     void getAlienAttributes( css::uno::Any& rAttributes );
 
     /** @return the main animation node */
-    css::uno::Reference< css::animations::XAnimationNode > getAnimationNode() throw (css::uno::RuntimeException);
+    css::uno::Reference< css::animations::XAnimationNode > const & getAnimationNode() throw (css::uno::RuntimeException);
 
     /** sets the main animation node */
     void setAnimationNode( css::uno::Reference< css::animations::XAnimationNode >& xNode ) throw (css::uno::RuntimeException);
 
     /// @return a helper class to manipulate effects inside the main sequence
-    std::shared_ptr< sd::MainSequence > getMainSequence();
+    std::shared_ptr< sd::MainSequence > const & getMainSequence();
 
     /** quick check if this slide has an animation node.
         This can be used to have a cost free check if there are no animations ad this slide.

@@ -208,7 +208,7 @@ namespace dbaui
 
     private:
         void    impl_ensureColumnInfo_throw();
-        ::utl::SharedUNOComponent< css::sdbc::XPreparedStatement >
+        ::utl::SharedUNOComponent< css::sdbc::XPreparedStatement > const &
                 impl_ensureStatement_throw();
     };
 

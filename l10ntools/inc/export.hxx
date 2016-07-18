@@ -257,7 +257,7 @@ class MergeDataHashMap
         typedef HashMap_t::const_iterator const_iterator;
 
         std::pair<iterator,bool> insert(const OString& rKey, MergeData* pMergeData);
-        iterator find(const OString& rKey);
+        iterator const & find(const OString& rKey);
 
         iterator begin() {return m_aHashMap.begin();}
         iterator end() {return m_aHashMap.end();}

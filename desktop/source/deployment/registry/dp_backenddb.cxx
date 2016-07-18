@@ -63,7 +63,7 @@ void BackendDb::save()
     ucbDb.writeStream(xData, true /*replace existing*/);
 }
 
-css::uno::Reference<css::xml::dom::XDocument> BackendDb::getDocument()
+css::uno::Reference<css::xml::dom::XDocument> const & BackendDb::getDocument()
 {
     if (!m_doc.is())
     {
@@ -106,7 +106,7 @@ css::uno::Reference<css::xml::dom::XDocument> BackendDb::getDocument()
     return m_doc;
 }
 
-Reference<css::xml::xpath::XXPathAPI> BackendDb::getXPathAPI()
+Reference<css::xml::xpath::XXPathAPI> const & BackendDb::getXPathAPI()
 {
     if (!m_xpathApi.is())
     {

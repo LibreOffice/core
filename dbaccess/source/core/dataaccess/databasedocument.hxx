@@ -267,7 +267,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     // ModelDependentComponent overridables
     virtual css::uno::Reference< css::uno::XInterface > getThis() const override;
 
-    css::uno::Reference< css::frame::XTitle >             impl_getTitleHelper_throw();
+    css::uno::Reference< css::frame::XTitle > const &     impl_getTitleHelper_throw();
     css::uno::Reference< css::frame::XUntitledNumbers >   impl_getUntitledHelper_throw(
         const css::uno::Reference< css::uno::XInterface >& _xComponent = css::uno::Reference< css::uno::XInterface >());
 
@@ -466,7 +466,7 @@ public:
     }
 
 private:
-    css::uno::Reference< css::ui::XUIConfigurationManager2 > getUIConfigurationManager2() throw (css::uno::RuntimeException);
+    css::uno::Reference< css::ui::XUIConfigurationManager2 > const & getUIConfigurationManager2() throw (css::uno::RuntimeException);
 
     /** returns whether the model is currently being initialized
     */

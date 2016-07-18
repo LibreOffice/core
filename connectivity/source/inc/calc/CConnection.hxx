@@ -70,7 +70,7 @@ namespace connectivity
             virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
             // no interface methods
-            css::uno::Reference< css::sheet::XSpreadsheetDocument> acquireDoc();
+            css::uno::Reference< css::sheet::XSpreadsheetDocument> const & acquireDoc();
             void releaseDoc();
 
             class ODocHolder

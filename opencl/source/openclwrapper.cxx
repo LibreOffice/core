@@ -85,7 +85,7 @@ OString generateMD5(const void* pData, size_t length)
     return aBuffer.makeStringAndClear();
 }
 
-OString getCacheFolder()
+OString const & getCacheFolder()
 {
     static OString aCacheFolder;
 

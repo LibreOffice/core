@@ -665,8 +665,8 @@ public:
     virtual short Execute() override;
     ///Emitted when an action widget is clicked
     virtual void response(short nResponseId);
-    OUString get_primary_text() const;
-    OUString get_secondary_text() const;
+    OUString const & get_primary_text() const;
+    OUString const & get_secondary_text() const;
     void set_primary_text(const OUString &rPrimaryString);
     void set_secondary_text(const OUString &rSecondaryString);
     virtual ~MessageDialog();

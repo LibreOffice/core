@@ -330,7 +330,7 @@ void NamedTableCopySource::impl_ensureColumnInfo_throw()
     }
 }
 
-::utl::SharedUNOComponent< XPreparedStatement > NamedTableCopySource::impl_ensureStatement_throw()
+::utl::SharedUNOComponent< XPreparedStatement > const & NamedTableCopySource::impl_ensureStatement_throw()
 {
     if ( !m_xStatement.is() )
         m_xStatement.set( m_xConnection->prepareStatement( getSelectStatement() ), UNO_SET_THROW );

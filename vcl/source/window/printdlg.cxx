@@ -1356,7 +1356,7 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
     }
 }
 
-Size PrintDialog::getJobPageSize()
+Size const & PrintDialog::getJobPageSize()
 {
     if( maFirstPageSize.Width() == 0 && maFirstPageSize.Height() == 0)
     {

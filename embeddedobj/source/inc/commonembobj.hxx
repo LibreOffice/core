@@ -186,7 +186,7 @@ private:
 
     void SwitchStateTo_Impl( sal_Int32 nNextState );
 
-    css::uno::Sequence< sal_Int32 > GetIntermediateStatesSequence_Impl( sal_Int32 nNewState );
+    css::uno::Sequence< sal_Int32 > const & GetIntermediateStatesSequence_Impl( sal_Int32 nNewState );
 
     OUString GetFilterName( sal_Int32 nVersion ) const;
     css::uno::Reference< css::util::XCloseable > LoadDocumentFromStorage_Impl();

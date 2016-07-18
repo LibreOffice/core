@@ -406,7 +406,7 @@ namespace svxform
         virtual void SAL_CALL invalidateAllFeatures(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 // method for registration
-        static  css::uno::Sequence< OUString >  getSupportedServiceNames_Static();
+        static  css::uno::Sequence< OUString > const &  getSupportedServiceNames_Static();
 
         // comphelper::OPropertyArrayUsageHelper
         virtual void fillProperties(

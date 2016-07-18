@@ -95,7 +95,7 @@ private:
     OOXMLDocumentImpl* mpDocument;
     sal_Int32 mnXNoteId;
     mutable rtl::Reference<OOXMLFastContextHandler> mxContextHandler;
-    rtl::Reference<OOXMLFastContextHandler> getContextHandler() const;
+    rtl::Reference<OOXMLFastContextHandler> const & getContextHandler() const;
 };
 }}
 

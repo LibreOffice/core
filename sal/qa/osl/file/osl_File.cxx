@@ -4812,7 +4812,7 @@ namespace osl_Directory
 
 #define TEST_PATH_POSTFIX "hello/world"
 
-    OUString get_test_path()
+    OUString const & get_test_path()
     {
         static OUString test_path;
         if (test_path.isEmpty())

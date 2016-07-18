@@ -61,7 +61,7 @@ void RichStringPortion::setText( const OUString& rText )
     maText = rText;
 }
 
-FontRef RichStringPortion::createFont()
+FontRef const & RichStringPortion::createFont()
 {
     mxFont.reset( new Font( *this, false ) );
     return mxFont;

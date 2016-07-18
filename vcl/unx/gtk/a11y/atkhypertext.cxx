@@ -29,7 +29,7 @@ typedef struct {
     uno::Reference< accessibility::XAccessibleHyperlink > xLink;
 } HyperLink;
 
-static uno::Reference< accessibility::XAccessibleHyperlink >
+static uno::Reference< accessibility::XAccessibleHyperlink > const &
     getHyperlink( AtkHyperlink *pHyperlink )
 {
     HyperLink *pLink = reinterpret_cast<HyperLink *>(pHyperlink);

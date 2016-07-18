@@ -368,7 +368,7 @@ private:
                                    const double P3x, const double P3y,
                                    const double P4x, const double P4y );
 
-    css::uno::Reference < css::i18n::XBreakIterator > Impl_GetBreakIterator();
+    css::uno::Reference < css::i18n::XBreakIterator > const & Impl_GetBreakIterator();
 
 private:
     css::uno::Reference< css::i18n::XBreakIterator > mxBreakIterator;
