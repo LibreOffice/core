@@ -683,6 +683,9 @@ private:
     if the '0' character fits 10 times into a cell in a column with default
     width.
 
+    Half of character width is reserved for non character display.
+    It is margin padding (two on each side) and padding for the gridlines.
+
     The IsDefWidth() function returns true, if the passed width (measured in
     1/256 of the width of the '0' character) could be converted exactly to the
     default width. If the passed width is rounded up or down to get the default
@@ -740,6 +743,7 @@ private:
 
 private:
     XclExpXFId          maXFId;             /// The XF identifier for column default format.
+    bool                mbCustomWidth;      /// True = Column width is different from default width
     sal_uInt16          mnWidth;            /// Excel width of the column.
     sal_uInt16          mnScWidth;          /// Calc width of the column.
     sal_uInt16          mnFlags;            /// Additional column flags.
