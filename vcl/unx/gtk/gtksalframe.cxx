@@ -3795,7 +3795,7 @@ uno::Reference<accessibility::XAccessibleEditableText>
     FindFocus(const uno::Reference< accessibility::XAccessibleContext >& xContext)
 {
     if (!xContext.is())
-        uno::Reference< accessibility::XAccessibleEditableText >();
+        return uno::Reference< accessibility::XAccessibleEditableText >();
 
     uno::Reference<accessibility::XAccessibleStateSet> xState = xContext->getAccessibleStateSet();
     if (xState.is())
