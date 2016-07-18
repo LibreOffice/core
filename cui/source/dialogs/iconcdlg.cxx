@@ -412,7 +412,17 @@ void IconChoiceDialog::ActivatePageImpl ()
     {
         if ( !pData->pPage )
         {
-            pData->pPage = (pData->fnCreatePage)( m_pTabContainer, this, *CreateInputItemSet( mnCurrentPageId ) );
+            const SfxItemSet* pTmpSet = nullptr;
+
+            if ( pSet )
+            {
+                pTmpSet = pSet;
+            }
+
+            if ( pTmpSet )
+                pData->pPage = (pData->fnCreatePage)( m_pTabContainer, this, *pTmpSet );
+            else
+                pData->pPage = (pData->fnCreatePage)( m_pTabContainer, this, *CreateInputItemSet( mnCurrentPageId ) );
 
             pData->pPage->Reset( *pSet );
 
