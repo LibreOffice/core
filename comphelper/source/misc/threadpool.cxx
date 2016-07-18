@@ -341,7 +341,7 @@ void ThreadTaskTag::waitUntilDone()
     assert(rv != osl_cond_result_timeout);
 #else
     // 10 minute timeout in production so the app eventually throws some kind of error
-    if (maTasksComplete.wait(TimeValue { 10*60, 0 }) == osl_cond_result_timeout)
+    if (maTasksComplete.wait(TimeValue { 10*60, 0 }) == osl::Condition::Result::result_timeout)
         throw std::runtime_error("timeout waiting for threadpool tasks");
 #endif
 }
