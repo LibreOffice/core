@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_6049acd0",
+        "filename": "sc/source/filter/dif/difimp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-18T09:43:53Z",
+      "side": 1,
+      "message": "this can just be:\n     DifAttrCache        aAttrCache;",
+      "revId": "8ca6e3fbbc33e4582a533b36effb9bda5b30c9e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
