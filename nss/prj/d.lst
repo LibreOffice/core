@@ -6,7 +6,8 @@ mkdir: %_DEST%\inc%_EXT%\mozilla\nss
 ..\%__SRC%\inc\include\obsolete\protypes.h %_DEST%\inc%_EXT%\mozilla\nspr\obsolete\protypes.h
 ..\%__SRC%\inc\nss\*.h %_DEST%\inc%_EXT%\mozilla\nss
 
-..\%__SRC%\lib\libfreebl3.* %_DEST%\lib%_EXT%\libfreebl.*
+..\%__SRC%\lib\libfreebl3.* %_DEST%\lib%_EXT%\libfreebl3.*
+..\%__SRC%\lib\libfreeblpriv3.* %_DEST%\lib%_EXT%\libfreeblpriv3.*
 ..\%__SRC%\lib\libfreebl_32fpu_3.* %_DEST%\lib%_EXT%\libfreebl_32fpu_3.*
 ..\%__SRC%\lib\libfreebl_32int64_3.* %_DEST%\lib%_EXT%\libfreebl_32int64_3.*
 ..\%__SRC%\lib\libfreebl_32int_3.* %_DEST%\lib%_EXT%\libfreebl_32int_3.*
