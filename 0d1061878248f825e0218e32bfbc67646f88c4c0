@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_8073184d",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-18T08:18:15Z",
+      "side": 1,
+      "message": "Given the move assignment op is #ifndef _MSC_VER only, dropping the explicit\n\n  pendingCharacters.clear()\n\nis wrong.  (And even if the op were universally available, I\u0027m undecided whether it\u0027d be good or bad to implicitly rely on a moved-from OUString being empty.)",
+      "revId": "0d1061878248f825e0218e32bfbc67646f88c4c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
