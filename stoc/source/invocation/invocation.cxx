@@ -992,7 +992,7 @@ Sequence< Type > SAL_CALL Invocation_Impl::getTypes() throw( RuntimeException, s
     static Sequence< Type > const * s_pTypes = nullptr;
     if (! s_pTypes)
     {
-        Sequence< Type > types( 4 +8 );
+        Sequence< Type > types( 4 + 10 );
         Type * pTypes = types.getArray();
         sal_Int32 n = 0;
 
