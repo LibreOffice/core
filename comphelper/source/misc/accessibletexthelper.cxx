@@ -54,7 +54,7 @@ namespace comphelper
     }
 
 
-    Reference < i18n::XBreakIterator > OCommonAccessibleText::implGetBreakIterator()
+    Reference < i18n::XBreakIterator > const & OCommonAccessibleText::implGetBreakIterator()
     {
         if ( !m_xBreakIter.is() )
         {
@@ -66,7 +66,7 @@ namespace comphelper
     }
 
 
-    Reference < i18n::XCharacterClassification > OCommonAccessibleText::implGetCharacterClassification()
+    Reference < i18n::XCharacterClassification > const & OCommonAccessibleText::implGetCharacterClassification()
     {
         if ( !m_xCharClass.is() )
         {

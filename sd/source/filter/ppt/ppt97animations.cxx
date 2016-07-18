@@ -239,12 +239,12 @@ sal_Int16 Ppt97Animation::GetTextAnimationType() const
     }
     return nRet;
 }
-OUString Ppt97Animation::GetPresetId() const
+OUString const & Ppt97Animation::GetPresetId() const
 {
     UpdateCacheData();
     return m_aPresetId;
 }
-OUString Ppt97Animation::GetPresetSubType() const
+OUString const & Ppt97Animation::GetPresetSubType() const
 {
     UpdateCacheData();
     return m_aSubType;

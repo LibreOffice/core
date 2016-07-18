@@ -182,7 +182,7 @@ public:
 private:
 
     /** Returns the local or global link manager, depending on current context. */
-    XclExpRootData::XclExpLinkMgrRef GetLocalLinkMgrRef() const;
+    XclExpRootData::XclExpLinkMgrRef const & GetLocalLinkMgrRef() const;
 
 private:
     XclExpRootData& mrExpData;      /// Reference to the global export data struct.

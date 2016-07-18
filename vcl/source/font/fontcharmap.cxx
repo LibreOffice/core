@@ -63,7 +63,7 @@ ImplFontCharMap::ImplFontCharMap( const CmapResult& rCR )
     }
 }
 
-ImplFontCharMapPtr ImplFontCharMap::getDefaultMap( bool bSymbols )
+ImplFontCharMapPtr const & ImplFontCharMap::getDefaultMap( bool bSymbols )
 {
     const sal_UCS4* pRangeCodes = aDefaultUnicodeRanges;
     int nCodesCount = sizeof(aDefaultUnicodeRanges) / sizeof(*pRangeCodes);

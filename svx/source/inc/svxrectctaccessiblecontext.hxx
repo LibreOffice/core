@@ -427,7 +427,7 @@ public:
 protected:
     Rectangle GetBoundingBoxOnScreen() throw( css::uno::RuntimeException );
 
-    Rectangle GetBoundingBox() throw( css::uno::RuntimeException );
+    Rectangle const & GetBoundingBox() throw( css::uno::RuntimeException );
 
     void CommitChange( const css::accessibility::AccessibleEventObject& rEvent );
 

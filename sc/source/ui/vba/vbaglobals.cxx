@@ -58,13 +58,13 @@ ScVbaGlobals::~ScVbaGlobals()
 
 // XGlobals
 
-uno::Reference<excel::XApplication >
+uno::Reference<excel::XApplication > const &
 ScVbaGlobals::getApplication() throw (uno::RuntimeException)
 {
 //  OSL_TRACE("In ScVbaGlobals::getApplication");
-        if ( !mxApplication.is() )
+    if ( !mxApplication.is() )
         mxApplication.set( new ScVbaApplication( mxContext) );
-       return mxApplication;
+    return mxApplication;
 }
 
 uno::Reference<excel::XApplication > SAL_CALL

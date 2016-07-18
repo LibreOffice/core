@@ -1942,7 +1942,7 @@ void TabControl::SetPageText( sal_uInt16 nPageId, const OUString& rText )
     }
 }
 
-OUString TabControl::GetPageText( sal_uInt16 nPageId ) const
+OUString const & TabControl::GetPageText( sal_uInt16 nPageId ) const
 {
     ImplTabItem* pItem = ImplGetItem( nPageId );
 

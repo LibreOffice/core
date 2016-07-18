@@ -68,7 +68,7 @@ namespace
         {
         }
 
-        Image getImage() const
+        Image const & getImage() const
         {
             if ( !m_defaultImage )
                 m_defaultImage = Image( ModuleRes( m_defaultImageID ) );
@@ -107,7 +107,7 @@ namespace
         {
         }
 
-        std::shared_ptr< ImageProvider >   getImageProvider( SQLExceptionInfo::TYPE _eType ) const
+        std::shared_ptr< ImageProvider > const & getImageProvider( SQLExceptionInfo::TYPE _eType ) const
         {
             std::shared_ptr< ImageProvider >* ppProvider( &m_pErrorImage );
             sal_uInt16 nNormalImageID( BMP_EXCEPTION_ERROR );
@@ -133,7 +133,7 @@ namespace
             return *ppProvider;
         }
 
-        std::shared_ptr< LabelProvider >   getLabelProvider( SQLExceptionInfo::TYPE _eType, bool _bSubLabel ) const
+        std::shared_ptr< LabelProvider > const & getLabelProvider( SQLExceptionInfo::TYPE _eType, bool _bSubLabel ) const
         {
             std::shared_ptr< LabelProvider >* ppProvider( &m_pErrorLabel );
             sal_uInt16 nLabelID( STR_EXCEPTION_ERROR );

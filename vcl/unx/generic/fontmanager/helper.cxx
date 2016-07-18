@@ -37,7 +37,7 @@ using ::rtl::Bootstrap;
 
 namespace psp {
 
-OUString getOfficePath( whichOfficePath ePath )
+OUString const & getOfficePath( whichOfficePath ePath )
 {
     static OUString aInstallationRootPath;
     static OUString aUserPath;
@@ -185,7 +185,7 @@ void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSub
     }
 }
 
-OUString psp::getFontPath()
+OUString const & psp::getFontPath()
 {
     static OUString aPath;
 

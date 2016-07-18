@@ -2094,7 +2094,7 @@ void SfxHelpTextWindow_Impl::SetOnStartupBoxPosition()
 }
 
 
-Reference< XBreakIterator > SfxHelpTextWindow_Impl::GetBreakIterator()
+Reference< XBreakIterator > const & SfxHelpTextWindow_Impl::GetBreakIterator()
 {
     if ( !xBreakIterator.is() )
         xBreakIterator = vcl::unohelper::CreateBreakIterator();

@@ -239,25 +239,25 @@ ScrollBarManager& SlideSorterController::GetScrollBarManager()
     return *mpScrollBarManager.get();
 }
 
-std::shared_ptr<CurrentSlideManager> SlideSorterController::GetCurrentSlideManager() const
+std::shared_ptr<CurrentSlideManager> const & SlideSorterController::GetCurrentSlideManager() const
 {
     OSL_ASSERT(mpCurrentSlideManager.get()!=nullptr);
     return mpCurrentSlideManager;
 }
 
-std::shared_ptr<SlotManager> SlideSorterController::GetSlotManager() const
+std::shared_ptr<SlotManager> const & SlideSorterController::GetSlotManager() const
 {
     OSL_ASSERT(mpSlotManager.get()!=nullptr);
     return mpSlotManager;
 }
 
-std::shared_ptr<SelectionManager> SlideSorterController::GetSelectionManager() const
+std::shared_ptr<SelectionManager> const & SlideSorterController::GetSelectionManager() const
 {
     OSL_ASSERT(mpSelectionManager.get()!=nullptr);
     return mpSelectionManager;
 }
 
-std::shared_ptr<InsertionIndicatorHandler>
+std::shared_ptr<InsertionIndicatorHandler> const &
     SlideSorterController::GetInsertionIndicatorHandler() const
 {
     OSL_ASSERT(mpInsertionIndicatorHandler.get()!=nullptr);

@@ -72,7 +72,7 @@ namespace sdr
             return rViewContact.impCreateWithGivenPrimitive3DContainer(getPrimitive3DContainer(rDisplayInfo));
         }
 
-        drawinglayer::primitive3d::Primitive3DContainer ViewObjectContactOfE3d::getPrimitive3DContainer(const DisplayInfo& rDisplayInfo) const
+        drawinglayer::primitive3d::Primitive3DContainer const & ViewObjectContactOfE3d::getPrimitive3DContainer(const DisplayInfo& rDisplayInfo) const
         {
             drawinglayer::primitive3d::Primitive3DContainer xNewPrimitive3DSeq(createPrimitive3DContainer(rDisplayInfo));
 

@@ -221,7 +221,7 @@ void PresenterButton::SetCanvas (
     }
 }
 
-css::geometry::IntegerSize2D PresenterButton::GetSize()
+css::geometry::IntegerSize2D const & PresenterButton::GetSize()
 {
     if (maButtonSize.Width < 0)
         CalculateButtonSize();

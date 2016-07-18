@@ -145,7 +145,7 @@ namespace sdr
             return rtl::Reference<OverlayManager>(new OverlayManager(rOutputDevice));
         }
 
-        const drawinglayer::geometry::ViewInformation2D OverlayManager::getCurrentViewInformation2D() const
+        drawinglayer::geometry::ViewInformation2D const & OverlayManager::getCurrentViewInformation2D() const
         {
             if(getOutputDevice().GetViewTransformation() != maViewTransformation)
             {

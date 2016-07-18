@@ -77,7 +77,7 @@ namespace oox { namespace ppt {
             const css::uno::Reference< css::animations::XAnimationNode >& xNode,
             const SlidePersistPtr & pSlide );
 
-        AnimTargetElementPtr getTarget()
+        AnimTargetElementPtr const & getTarget()
             {
                 if( !mpTarget )
                     mpTarget.reset( new AnimTargetElement );

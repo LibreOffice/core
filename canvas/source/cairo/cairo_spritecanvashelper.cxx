@@ -481,7 +481,7 @@ namespace cairocanvas
         cairo_paint( pWindowCairo.get() );
     }
 
-    ::cairo::SurfaceSharedPtr SpriteCanvasHelper::getCompositingSurface( const ::basegfx::B2ISize& rNeededSize )
+    ::cairo::SurfaceSharedPtr const & SpriteCanvasHelper::getCompositingSurface( const ::basegfx::B2ISize& rNeededSize )
     {
         if( rNeededSize.getX() > maCompositingSurfaceSize.getX() ||
             rNeededSize.getY() > maCompositingSurfaceSize.getY() )
@@ -501,7 +501,7 @@ namespace cairocanvas
         return mpCompositingSurface;
     }
 
-    ::cairo::SurfaceSharedPtr SpriteCanvasHelper::getTemporarySurface()
+    ::cairo::SurfaceSharedPtr const & SpriteCanvasHelper::getTemporarySurface()
     {
         if ( !mpTemporarySurface )
             mpTemporarySurface = createSurface( maCompositingSurfaceSize );

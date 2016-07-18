@@ -232,10 +232,10 @@ public:
             GetLngSvcEvtListener();
     void    CreateLngSvcEvtListener();
 
-    css::uno::Reference< css::scanner::XScannerManager2 >
+    css::uno::Reference< css::scanner::XScannerManager2 > const &
             GetScannerManager();
 
-    css::uno::Reference< css::linguistic2::XLanguageGuessing >
+    css::uno::Reference< css::linguistic2::XLanguageGuessing > const &
             GetLanguageGuesser();
 };
 

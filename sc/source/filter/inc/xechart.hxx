@@ -86,7 +86,7 @@ public:
     /** Returns this root instance - for code readability in derived classes. */
     inline const XclExpChRoot& GetChRoot() const { return *this; }
     /** Returns the API Chart document model. */
-    css::uno::Reference< css::chart2::XChartDocument >
+    css::uno::Reference< css::chart2::XChartDocument > const &
                         GetChartDocument() const;
     /** Returns a reference to the parent chart data object. */
     XclExpChChart&      GetChartData() const;

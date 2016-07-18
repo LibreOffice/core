@@ -446,7 +446,7 @@ namespace cmis
         return m_pSession;
     }
 
-    libcmis::ObjectTypePtr Content::getObjectType( const uno::Reference< ucb::XCommandEnvironment >& xEnv )
+    libcmis::ObjectTypePtr const & Content::getObjectType( const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
         if ( nullptr == m_pObjectType.get( ) && m_bTransient )
         {
@@ -496,7 +496,7 @@ namespace cmis
     }
 
 
-    libcmis::ObjectPtr Content::getObject( const uno::Reference< ucb::XCommandEnvironment >& xEnv ) throw (css::uno::RuntimeException, css::ucb::CommandFailedException, libcmis::Exception)
+    libcmis::ObjectPtr const & Content::getObject( const uno::Reference< ucb::XCommandEnvironment >& xEnv ) throw (css::uno::RuntimeException, css::ucb::CommandFailedException, libcmis::Exception)
     {
         // can't get the session for some reason
         // the recent file opening at start up is an example.

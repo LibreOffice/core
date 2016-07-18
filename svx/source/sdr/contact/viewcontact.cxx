@@ -233,7 +233,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContact::createViewIndepende
     return drawinglayer::primitive2d::Primitive2DContainer { xReference };
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContact::getViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer const & ViewContact::getViewIndependentPrimitive2DSequence() const
 {
     // local up-to-date checks. Create new list and compare.
     drawinglayer::primitive2d::Primitive2DContainer xNew(createViewIndependentPrimitive2DSequence());

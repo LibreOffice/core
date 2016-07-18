@@ -108,7 +108,7 @@ using boost::polymorphic_downcast;
 /**
  * @short   get text of paragraph
  */
-OUString LwpPara::GetContentText(bool bAllText)
+OUString const & LwpPara::GetContentText(bool bAllText)
 {
 //  rFont = m_FontID;
     if (bAllText)

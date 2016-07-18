@@ -98,7 +98,7 @@ Reference< chart2::XDiagram > Chart2ModelContact::getChart2Diagram() const
     return ChartModelHelper::findDiagram( this->getChartModel() );
 }
 
-uno::Reference< lang::XUnoTunnel > Chart2ModelContact::getChartView() const
+uno::Reference< lang::XUnoTunnel > const & Chart2ModelContact::getChartView() const
 {
     if(!m_xChartView.is())
     {

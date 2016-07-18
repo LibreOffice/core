@@ -117,8 +117,8 @@ namespace cairocanvas
                             const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
 
     private:
-        ::cairo::SurfaceSharedPtr getCompositingSurface( const ::basegfx::B2ISize& rNeededSize );
-        ::cairo::SurfaceSharedPtr getTemporarySurface();
+        ::cairo::SurfaceSharedPtr const & getCompositingSurface( const ::basegfx::B2ISize& rNeededSize );
+        ::cairo::SurfaceSharedPtr const & getTemporarySurface();
         ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rNeededSize ) const;
 
         /// Set from the SpriteCanvas: instance coordinating sprite redraw

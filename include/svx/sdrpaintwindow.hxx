@@ -100,7 +100,7 @@ public:
     vcl::Window* GetWindow() const { return mpWindow; }
 
     // OVERLAYMANAGER
-    rtl::Reference< sdr::overlay::OverlayManager > GetOverlayManager() const;
+    rtl::Reference< sdr::overlay::OverlayManager > const & GetOverlayManager() const;
 
     // #i73602# add flag if buffer shall be used
     void DrawOverlay(const vcl::Region& rRegion);

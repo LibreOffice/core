@@ -62,7 +62,7 @@ ScDPLabelData::Member::Member() :
     mbShowDetails(true)
 {}
 
-OUString ScDPLabelData::Member::getDisplayName() const
+OUString const & ScDPLabelData::Member::getDisplayName() const
 {
     if (!maLayoutName.isEmpty())
         return maLayoutName;
@@ -83,7 +83,7 @@ ScDPLabelData::ScDPLabelData() :
     mbRepeatItemLabels(false)
 {}
 
-OUString ScDPLabelData::getDisplayName() const
+OUString const & ScDPLabelData::getDisplayName() const
 {
     if (!maLayoutName.isEmpty())
         return maLayoutName;

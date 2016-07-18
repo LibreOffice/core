@@ -275,9 +275,9 @@ public:
 
     void FreeDocumentProps();
 
-    uno::Reference< frame::XModel > GetModel();
-    uno::Reference< frame::XStorable > GetStorable();
-    uno::Reference< frame::XStorable2 > GetStorable2();
+    uno::Reference< frame::XModel > const & GetModel();
+    uno::Reference< frame::XStorable > const & GetStorable();
+    uno::Reference< frame::XStorable2 > const & GetStorable2();
 
     ::comphelper::SequenceAsHashMap& GetMediaDescr() { return m_aMediaDescrHM; }
 
@@ -285,7 +285,7 @@ public:
 
     const ::comphelper::SequenceAsHashMap& GetDocProps();
 
-    OUString GetModuleName();
+    OUString const & GetModuleName();
     const ::comphelper::SequenceAsHashMap& GetModuleProps();
 
     void CheckInteractionHandler();
@@ -382,7 +382,7 @@ void ModelData_Impl::FreeDocumentProps()
 }
 
 
-uno::Reference< frame::XModel > ModelData_Impl::GetModel()
+uno::Reference< frame::XModel > const & ModelData_Impl::GetModel()
 {
     if ( !m_xModel.is() )
         throw uno::RuntimeException();
@@ -391,7 +391,7 @@ uno::Reference< frame::XModel > ModelData_Impl::GetModel()
 }
 
 
-uno::Reference< frame::XStorable > ModelData_Impl::GetStorable()
+uno::Reference< frame::XStorable > const & ModelData_Impl::GetStorable()
 {
     if ( !m_xStorable.is() )
     {
@@ -404,7 +404,7 @@ uno::Reference< frame::XStorable > ModelData_Impl::GetStorable()
 }
 
 
-uno::Reference< frame::XStorable2 > ModelData_Impl::GetStorable2()
+uno::Reference< frame::XStorable2 > const & ModelData_Impl::GetStorable2()
 {
     if ( !m_xStorable2.is() )
     {
@@ -426,7 +426,7 @@ const ::comphelper::SequenceAsHashMap& ModelData_Impl::GetDocProps()
 }
 
 
-OUString ModelData_Impl::GetModuleName()
+OUString const & ModelData_Impl::GetModuleName()
 {
     if ( m_aModuleName.isEmpty() )
     {
@@ -1265,7 +1265,7 @@ SfxStoringHelper::SfxStoringHelper()
 }
 
 
-uno::Reference< container::XNameAccess > SfxStoringHelper::GetFilterConfiguration()
+uno::Reference< container::XNameAccess > const & SfxStoringHelper::GetFilterConfiguration()
 {
     if ( !m_xFilterCFG.is() )
     {
@@ -1280,7 +1280,7 @@ uno::Reference< container::XNameAccess > SfxStoringHelper::GetFilterConfiguratio
 }
 
 
-uno::Reference< container::XContainerQuery > SfxStoringHelper::GetFilterQuery()
+uno::Reference< container::XContainerQuery > const & SfxStoringHelper::GetFilterQuery()
 {
     if ( !m_xFilterQuery.is() )
     {
@@ -1293,7 +1293,7 @@ uno::Reference< container::XContainerQuery > SfxStoringHelper::GetFilterQuery()
 }
 
 
-uno::Reference< css::frame::XModuleManager2 > SfxStoringHelper::GetModuleManager()
+uno::Reference< css::frame::XModuleManager2 > const & SfxStoringHelper::GetModuleManager()
 {
     if ( !m_xModuleManager.is() )
     {

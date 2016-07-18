@@ -2238,21 +2238,21 @@ Dxf::Dxf( const WorkbookHelper& rHelper ) :
 {
 }
 
-FontRef Dxf::createFont( bool bAlwaysNew )
+FontRef const & Dxf::createFont( bool bAlwaysNew )
 {
     if( bAlwaysNew || !mxFont )
         mxFont.reset( new Font( *this, true ) );
     return mxFont;
 }
 
-BorderRef Dxf::createBorder( bool bAlwaysNew )
+BorderRef const & Dxf::createBorder( bool bAlwaysNew )
 {
     if( bAlwaysNew || !mxBorder )
         mxBorder.reset( new Border( *this, true ) );
     return mxBorder;
 }
 
-FillRef Dxf::createFill( bool bAlwaysNew )
+FillRef const & Dxf::createFill( bool bAlwaysNew )
 {
     if( bAlwaysNew || !mxFill )
         mxFill.reset( new Fill( *this, true ) );

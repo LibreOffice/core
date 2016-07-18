@@ -186,7 +186,7 @@ protected:
     SharedBitmapDescriptor mpThumbEndDescriptor;
     bool maEnabledState[AreaCount];
 
-    css::geometry::RealRectangle2D GetRectangle (const Area eArea) const;
+    css::geometry::RealRectangle2D const & GetRectangle (const Area eArea) const;
     virtual double GetDragDistance (const sal_Int32 nX, const sal_Int32 nY) const = 0;
     virtual void UpdateDragAnchor (const double nDragDistance) = 0;
     virtual double GetMinor (const double nX, const double nY) const = 0;

@@ -568,7 +568,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
     // normal methods
-    css::uno::Reference< css::util::XNumberFormatsSupplier >
+    css::uno::Reference< css::util::XNumberFormatsSupplier > const &
         getNumberFormatsSupplier();
 
     const css::uno::Reference< css::uno::XInterface >& getChartView() { return xChartView;}

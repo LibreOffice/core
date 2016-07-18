@@ -122,7 +122,7 @@ public:
     RefEdit*        GetCurrRefEdit();
 
     const FormulaHelper& GetFormulaHelper() const { return m_aFormulaHelper;}
-    uno::Reference< sheet::XFormulaOpCodeMapper > GetFormulaOpCodeMapper() const;
+    uno::Reference< sheet::XFormulaOpCodeMapper > const & GetFormulaOpCodeMapper() const;
 
     DECL_LINK_TYPED( ModifyHdl, ParaWin&, void );
     DECL_LINK_TYPED( FxHdl, ParaWin&, void );
@@ -404,7 +404,7 @@ void FormulaDlg_Impl::PreNotify( NotifyEvent& rNEvt )
     pData->SetFocusWindow(pWin);
 }
 
-uno::Reference< sheet::XFormulaOpCodeMapper > FormulaDlg_Impl::GetFormulaOpCodeMapper() const
+uno::Reference< sheet::XFormulaOpCodeMapper > const & FormulaDlg_Impl::GetFormulaOpCodeMapper() const
 {
     if ( !m_xOpCodeMapper.is() )
     {

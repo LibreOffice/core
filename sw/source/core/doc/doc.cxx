@@ -1744,7 +1744,7 @@ void SwDoc::ChkCondColls()
      }
 }
 
-uno::Reference< script::vba::XVBAEventProcessor >
+uno::Reference< script::vba::XVBAEventProcessor > const &
 SwDoc::GetVbaEventProcessor()
 {
 #if HAVE_FEATURE_SCRIPTING

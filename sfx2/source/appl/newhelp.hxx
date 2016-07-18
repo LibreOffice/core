@@ -447,7 +447,7 @@ private:
     void                    InitOnStartupBox();
     void                    SetOnStartupBoxPosition();
 
-    css::uno::Reference< css::i18n::XBreakIterator >
+    css::uno::Reference< css::i18n::XBreakIterator > const &
                             GetBreakIterator();
     css::uno::Reference< css::text::XTextRange >
                             getCursor() const;

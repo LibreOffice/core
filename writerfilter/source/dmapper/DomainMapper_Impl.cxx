@@ -274,7 +274,7 @@ DomainMapper_Impl::~DomainMapper_Impl()
     }
 }
 
-uno::Reference< container::XNameContainer >    DomainMapper_Impl::GetPageStyles()
+uno::Reference< container::XNameContainer > const &  DomainMapper_Impl::GetPageStyles()
 {
     if(!m_xPageStyles.is())
     {
@@ -286,7 +286,7 @@ uno::Reference< container::XNameContainer >    DomainMapper_Impl::GetPageStyles(
 }
 
 
-uno::Reference< text::XText > DomainMapper_Impl::GetBodyText()
+uno::Reference< text::XText > const & DomainMapper_Impl::GetBodyText()
 {
     if(!m_xBodyText.is())
     {
@@ -299,7 +299,7 @@ uno::Reference< text::XText > DomainMapper_Impl::GetBodyText()
 }
 
 
-uno::Reference< beans::XPropertySet > DomainMapper_Impl::GetDocumentSettings()
+uno::Reference< beans::XPropertySet > const & DomainMapper_Impl::GetDocumentSettings()
 {
     if( !m_xDocumentSettings.is() && m_xTextFactory.is())
     {
@@ -662,7 +662,7 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
 }
 
 
-ListsManager::Pointer DomainMapper_Impl::GetListTable()
+ListsManager::Pointer const & DomainMapper_Impl::GetListTable()
 {
     if(!m_pListTable)
         m_pListTable.reset(
@@ -4678,7 +4678,7 @@ void DomainMapper_Impl::AddAnnotationPosition(
     m_aAnnotationPositions[ nAnnotationId ] = aAnnotationPosition;
 }
 
-GraphicImportPtr DomainMapper_Impl::GetGraphicImport(GraphicImportType eGraphicImportType)
+GraphicImportPtr const & DomainMapper_Impl::GetGraphicImport(GraphicImportType eGraphicImportType)
 {
     if(!m_pGraphicImport)
         m_pGraphicImport.reset( new GraphicImport( m_xComponentContext, m_xTextFactory, m_rDMapper, eGraphicImportType, m_aPositionOffsets, m_aAligns, m_aPositivePercentages ) );

@@ -143,7 +143,7 @@ public:
     */
     void InvalidatePageObjectVisibilities();
 
-    std::shared_ptr<cache::PageCache> GetPreviewCache();
+    std::shared_ptr<cache::PageCache> const & GetPreviewCache();
 
     /** Return the range of currently visible page objects including the
         first and last one in that range.
@@ -151,7 +151,7 @@ public:
             The returned pair of page object indices is empty when the
             second index is lower than the first.
     */
-    Pair GetVisiblePageRange();
+    Pair const & GetVisiblePageRange();
 
     /** Add a shape to the page.  Typically used from inside
         PostModelChange().
@@ -187,7 +187,7 @@ public:
 
     void UpdateOrientation();
 
-    std::shared_ptr<PageObjectPainter> GetPageObjectPainter();
+    std::shared_ptr<PageObjectPainter> const & GetPageObjectPainter();
     const std::shared_ptr<LayeredDevice>& GetLayeredDevice() const { return mpLayeredDevice;}
 
     class DrawLock
