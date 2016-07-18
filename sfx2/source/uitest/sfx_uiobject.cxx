@@ -9,6 +9,7 @@
 
 #include <uitest/sfx_uiobject.hxx>
 #include <sfx2/sidebar/Panel.hxx>
+#include <sfx2/sidebar/Deck.hxx>
 
 #include <sfx2/tabdlg.hxx>
 
@@ -86,6 +87,51 @@ std::unique_ptr<UIObject> SfxTabDialogUIObject::create(vcl::Window* pWindow)
 OUString SfxTabDialogUIObject::get_name() const
 {
     return OUString("SfxTabDialogUIObject");
+}
+
+DeckUIObject::DeckUIObject(VclPtr<sfx2::sidebar::Deck> xDeck):
+    WindowUIObject(xDeck),
+    mxDeck(xDeck)
+{
+}
+
+StringMap DeckUIObject::get_state()
+{
+    StringMap aMap = WindowUIObject::get_state();
+
+    aMap["DeckID"] = mxDeck->GetId();
+
+    return aMap;
+}
+
+void DeckUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    if (rAction == "SHOW")
+    {
+        auto itr = rParameters.find("PANEL");
+        if (itr == rParameters.end())
+            throw css::uno::RuntimeException("missing parameter PANEL");
+
+        const OUString& rPanelID = itr->second;
+        sfx2::sidebar::Panel* pPanel = mxDeck->GetPanel(rPanelID);
+        if (pPanel)
+            mxDeck->ShowPanel(*pPanel);
+    }
+    else
+        WindowUIObject::execute(rAction, rParameters);
+}
+
+std::unique_ptr<UIObject> DeckUIObject::create(vcl::Window* pWindow)
+{
+    sfx2::sidebar::Deck* pDeck = dynamic_cast<sfx2::sidebar::Deck*>(pWindow);
+    assert(pDeck);
+    return std::unique_ptr<UIObject>(new DeckUIObject(pDeck));
+}
+
+OUString DeckUIObject::get_name() const
+{
+    return OUString("DeckUIObject");
 }
 
 PanelUIObject::PanelUIObject(VclPtr<sfx2::sidebar::Panel> xPanel):

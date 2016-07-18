@@ -15,6 +15,7 @@ class SfxTabDialog;
 namespace sfx2 { namespace sidebar {
 
 class Panel;
+class Deck;
 
 } }
 
@@ -29,6 +30,27 @@ public:
     SfxTabDialogUIObject(VclPtr<SfxTabDialog> xTabDialog);
 
     virtual ~SfxTabDialogUIObject();
+
+    virtual StringMap get_state() override;
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
+protected:
+
+    virtual OUString get_name() const override;
+};
+
+class DeckUIObject : public WindowUIObject
+{
+private:
+
+    VclPtr<sfx2::sidebar::Deck> mxDeck;
+public:
+
+    DeckUIObject(VclPtr<sfx2::sidebar::Deck> xDeck);
 
     virtual StringMap get_state() override;
 
