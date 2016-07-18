@@ -1162,7 +1162,6 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText )
             // re-draw item if StatusBar is visible and UpdateMode active
             if ( pItem->mbVisible && !mbFormat && ImplIsItemUpdate() )
             {
-                Update();
                 Rectangle aRect = ImplGetItemRectPos(nPos);
                 Invalidate(aRect);
                 Flush();
@@ -1216,7 +1215,6 @@ void StatusBar::SetItemData( sal_uInt16 nItemId, void* pNewData )
         if ( (pItem->mnBits & StatusBarItemBits::UserDraw) && pItem->mbVisible &&
              !mbFormat && ImplIsItemUpdate() )
         {
-            Update();
             Rectangle aRect = ImplGetItemRectPos(nPos);
             Invalidate(aRect, InvalidateFlags::NoErase);
             Flush();
@@ -1247,7 +1245,6 @@ void StatusBar::RedrawItem(sal_uInt16 nItemId)
     if (pItem && (pItem->mnBits & StatusBarItemBits::UserDraw) &&
         pItem->mbVisible && ImplIsItemUpdate())
     {
-        Update();
         Rectangle aRect = ImplGetItemRectPos(nPos);
         Invalidate(aRect);
         Flush();
@@ -1342,7 +1339,6 @@ void StatusBar::StartProgressMode( const OUString& rText )
     if ( IsReallyVisible() )
     {
         Invalidate();
-        Update();
         Flush();
     }
 }
@@ -1356,8 +1352,7 @@ void StatusBar::SetProgressValue( sal_uInt16 nNewPercent )
     &&   IsReallyVisible()
     &&   (!mnPercent || (mnPercent != nNewPercent)) )
     {
-        Update();
-        Invalidate();
+        Invalidate(maPrgsFrameRect, InvalidateFlags::NONE);
         Flush();
     }
     mnPercent = nNewPercent;
@@ -1373,7 +1368,6 @@ void StatusBar::EndProgressMode()
     if ( IsReallyVisible() )
     {
         Invalidate();
-        Update();
         Flush();
     }
 }
@@ -1389,9 +1383,8 @@ void StatusBar::SetText(const OUString& rText)
         }
         else
         {
-            Update();
-            Window::SetText(rText);
             Invalidate();
+            Window::SetText(rText);
             Flush();
         }
     }
@@ -1401,7 +1394,6 @@ void StatusBar::SetText(const OUString& rText)
         if (IsReallyVisible())
         {
             Invalidate();
-            Update();
             Flush();
         }
     }
