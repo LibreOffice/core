@@ -159,7 +159,7 @@ protected:
     // gets not exported. First and second parameter swapped to have a different signatur.
     SAL_DLLPRIVATE TextPaM  ImpInsertText( sal_Unicode c, const TextSelection& rSel, bool bOverwrite = false, bool bIsUserInput = false );
     // some other new functions needed that must not be exported to remain compatible
-    SAL_DLLPRIVATE css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > GetInputSequenceChecker();
+    SAL_DLLPRIVATE css::uno::Reference< css::i18n::XExtendedInputSequenceChecker > const & GetInputSequenceChecker();
     SAL_DLLPRIVATE bool IsInputSequenceCheckingRequired( sal_Unicode c, const TextSelection& rCurSel ) const;
 
     // broadcast or adjust selections
@@ -306,8 +306,8 @@ public:
     void                Draw( OutputDevice* pDev, const Point& rPos );
 
     void                SetLocale( const css::lang::Locale& rLocale );
-    css::lang::Locale   GetLocale();
-    css::uno::Reference< css::i18n::XBreakIterator > GetBreakIterator();
+    css::lang::Locale const & GetLocale();
+    css::uno::Reference< css::i18n::XBreakIterator > const & GetBreakIterator();
 
     static bool         DoesKeyChangeText( const KeyEvent& rKeyEvent );
     static bool         IsSimpleCharInput( const KeyEvent& rKeyEvent );

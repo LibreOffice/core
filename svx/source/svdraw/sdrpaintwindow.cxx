@@ -253,7 +253,7 @@ SdrPaintWindow::~SdrPaintWindow()
     DestroyPreRenderDevice();
 }
 
-rtl::Reference< sdr::overlay::OverlayManager > SdrPaintWindow::GetOverlayManager() const
+rtl::Reference< sdr::overlay::OverlayManager > const & SdrPaintWindow::GetOverlayManager() const
 {
     if(!mxOverlayManager.is())
     {

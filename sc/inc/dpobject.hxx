@@ -151,7 +151,7 @@ public:
     const ScImportSourceDesc* GetImportSourceDesc() const   { return pImpDesc; }
     const ScDPServiceDesc* GetDPServiceDesc() const { return pServDesc; }
 
-    css::uno::Reference<css::sheet::XDimensionsSupplier> GetSource();
+    css::uno::Reference<css::sheet::XDimensionsSupplier> const & GetSource();
 
     bool                IsSheetData() const;
     bool                IsImportData() const { return(pImpDesc != nullptr); }

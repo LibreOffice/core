@@ -125,7 +125,7 @@ namespace connectivity
 
             ONDXPage* CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent = nullptr, bool bLoad = false);
             void Collect(ONDXPage*);
-            ONDXPagePtr getRoot();
+            ONDXPagePtr const & getRoot();
 
             bool isUnique() const { return m_IsUnique; }
             bool UseCollector() const {return m_bUseCollector;}

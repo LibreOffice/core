@@ -344,7 +344,7 @@ public:
         sal_Int16 nComponentType ) throw (uno::RuntimeException);
 
 protected:
-    uno::Reference< container::XIndexContainer > createForm() throw (uno::RuntimeException);
+    uno::Reference< container::XIndexContainer > const & createForm() throw (uno::RuntimeException);
 
     virtual bool implPickShape( const uno::Reference< drawing::XShape >& rxShape ) const override;
     virtual OUString implGetShapeServiceName() const override;
@@ -372,7 +372,7 @@ ScVbaControlContainer::ScVbaControlContainer(
 {
 }
 
-uno::Reference< container::XIndexContainer > ScVbaControlContainer::createForm() throw (uno::RuntimeException)
+uno::Reference< container::XIndexContainer > const & ScVbaControlContainer::createForm() throw (uno::RuntimeException)
 {
     if( !mxFormIC.is() )
     {

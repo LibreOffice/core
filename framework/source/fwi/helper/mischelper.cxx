@@ -43,7 +43,7 @@ using namespace ::com::sun::star::lang;
 namespace framework
 {
 
-uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGuesser() const
+uno::Reference< linguistic2::XLanguageGuessing > const & LanguageGuessingHelper::GetGuesser() const
 {
     if (!m_xLanguageGuesser.is())
     {

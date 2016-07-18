@@ -60,7 +60,7 @@ protected:
     css::uno::Reference< css::frame::XModel > m_xModel;
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
-    css::uno::Reference< css::drawing::XShapes > getShapes() throw (css::uno::RuntimeException) ;
+    css::uno::Reference< css::drawing::XShapes > const & getShapes() throw (css::uno::RuntimeException) ;
 public:
     ScVbaShapeRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xShapes, const css::uno::Reference< css::drawing::XDrawPage>& xDrawShape, const css::uno::Reference< css::frame::XModel >& xModel );
 

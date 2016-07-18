@@ -163,7 +163,7 @@ uno::Reference< lang::XMultiServiceFactory > DrawModelWrapper::getShapeFactory()
     return xShapeFactory;
 }
 
-uno::Reference< drawing::XDrawPage > DrawModelWrapper::getMainDrawPage()
+uno::Reference< drawing::XDrawPage > const & DrawModelWrapper::getMainDrawPage()
 {
     if (m_xMainDrawPage.is())
         return m_xMainDrawPage;
@@ -192,7 +192,7 @@ uno::Reference< drawing::XDrawPage > DrawModelWrapper::getMainDrawPage()
     // AbstractShapeFactory::getOrCreateShapeFactory(this->getShapeFactory())->getOrCreateChartRootShape( m_xMainDrawPage );
     return m_xMainDrawPage;
 }
-uno::Reference< drawing::XDrawPage > DrawModelWrapper::getHiddenDrawPage()
+uno::Reference< drawing::XDrawPage > const & DrawModelWrapper::getHiddenDrawPage()
 {
     if( !m_xHiddenDrawPage.is() )
     {

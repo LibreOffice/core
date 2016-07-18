@@ -242,7 +242,7 @@ public:
 
     void                        RemoveTimer (SalTimer *pTimer);
 
-    std::shared_ptr<vcl::unx::GtkPrintWrapper> getPrintWrapper() const;
+    std::shared_ptr<vcl::unx::GtkPrintWrapper> const & getPrintWrapper() const;
 
 private:
     std::vector<GtkSalTimer *>  m_aTimers;

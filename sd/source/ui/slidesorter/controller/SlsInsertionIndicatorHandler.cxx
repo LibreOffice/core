@@ -171,7 +171,7 @@ void InsertionIndicatorHandler::SetPosition (
     }
 }
 
-std::shared_ptr<view::InsertAnimator> InsertionIndicatorHandler::GetInsertAnimator()
+std::shared_ptr<view::InsertAnimator> const & InsertionIndicatorHandler::GetInsertAnimator()
 {
     if ( ! mpInsertAnimator)
         mpInsertAnimator.reset(new view::InsertAnimator(mrSlideSorter));

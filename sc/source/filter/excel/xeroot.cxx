@@ -364,7 +364,7 @@ uno::Sequence< beans::NamedValue > XclExpRoot::GenerateDefaultEncryptionData() c
     return aEncryptionData;
 }
 
-XclExpRootData::XclExpLinkMgrRef XclExpRoot::GetLocalLinkMgrRef() const
+XclExpRootData::XclExpLinkMgrRef const & XclExpRoot::GetLocalLinkMgrRef() const
 {
     return IsInGlobals() ? mrExpData.mxGlobLinkMgr : mrExpData.mxLocLinkMgr;
 }

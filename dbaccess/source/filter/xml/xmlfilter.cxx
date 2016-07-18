@@ -734,7 +734,7 @@ SvXMLImportContext* ODBFilter::CreateScriptContext( const OUString& _rLocalName 
 }
 
 
-rtl::Reference < XMLPropertySetMapper > ODBFilter::GetTableStylesPropertySetMapper() const
+rtl::Reference < XMLPropertySetMapper > const & ODBFilter::GetTableStylesPropertySetMapper() const
 {
     if ( !m_xTableStylesPropertySetMapper.is() )
     {
@@ -744,7 +744,7 @@ rtl::Reference < XMLPropertySetMapper > ODBFilter::GetTableStylesPropertySetMapp
 }
 
 
-rtl::Reference < XMLPropertySetMapper > ODBFilter::GetColumnStylesPropertySetMapper() const
+rtl::Reference < XMLPropertySetMapper > const & ODBFilter::GetColumnStylesPropertySetMapper() const
 {
     if ( !m_xColumnStylesPropertySetMapper.is() )
     {
@@ -754,7 +754,7 @@ rtl::Reference < XMLPropertySetMapper > ODBFilter::GetColumnStylesPropertySetMap
 }
 
 
-rtl::Reference < XMLPropertySetMapper > ODBFilter::GetCellStylesPropertySetMapper() const
+rtl::Reference < XMLPropertySetMapper > const & ODBFilter::GetCellStylesPropertySetMapper() const
 {
     if ( !m_xCellStylesPropertySetMapper.is() )
     {

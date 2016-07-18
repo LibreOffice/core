@@ -173,7 +173,7 @@ namespace tools
             addPolyPolygon(rPolyPoly,XOR);
         }
 
-        B2DPolyPolygon getClipPoly() const
+        B2DPolyPolygon const & getClipPoly() const
         {
             commitPendingRanges();
             commitPendingPolygons();

@@ -72,7 +72,7 @@ private:
                                        bool *pGraphicRepl=nullptr,
                                        bool *pOasisFormat=nullptr ) const;
 
-    SVX_DLLPRIVATE css::uno::Reference < css::embed::XStorage > ImplGetContainerStorage(
+    SVX_DLLPRIVATE css::uno::Reference < css::embed::XStorage > const & ImplGetContainerStorage(
                                     const OUString& rStorageName );
 
     SVX_DLLPRIVATE void                 ImplReadObject(

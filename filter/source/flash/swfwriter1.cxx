@@ -1987,7 +1987,7 @@ void Writer::Impl_quadBezierApprox( BitStream& rBits,
     }
 }
 
-Reference < XBreakIterator > Writer::Impl_GetBreakIterator()
+Reference < XBreakIterator > const & Writer::Impl_GetBreakIterator()
 {
     if ( !mxBreakIterator.is() )
     {

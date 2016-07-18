@@ -36,7 +36,7 @@ public:
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
     // When warning about function params of primitive type that could be passed
-    // by value instead of by reference, make sure not to warn if the paremeter
+    // by value instead of by reference, make sure not to warn if the parameter
     // is ever bound to a reference; on the one hand, this needs scaffolding in
     // all Traverse*Decl functions (indirectly) derived from FunctionDecl; and
     // on the other hand, use a hack of ignoring just the DeclRefExprs nested in
@@ -51,9 +51,8 @@ public:
     bool TraverseImplicitCastExpr(ImplicitCastExpr * expr);
     bool VisitDeclRefExpr(const DeclRefExpr * expr);
 
-    bool VisitCallExpr(const CallExpr * ) { if (mbInsideFunctionDecl) mbFoundDisqualifier = true; return true; }
-    bool VisitMaterializeTemporaryExpr(const MaterializeTemporaryExpr * ) { if (mbInsideFunctionDecl) mbFoundDisqualifier = true; return true; }
-    bool VisitDeclStmt(const DeclStmt * ) { if (mbInsideFunctionDecl) mbFoundDisqualifier = true; return true; }
+    bool VisitReturnStmt(const ReturnStmt * );
+    bool VisitVarDecl(const VarDecl * );
 
 private:
     template<typename T> bool traverseAnyFunctionDecl(
@@ -62,6 +61,8 @@ private:
     void checkReturnValue(const FunctionDecl * functionDecl, const CXXMethodDecl * methodDecl);
     bool isFat(QualType type);
     bool isPrimitiveConstRef(QualType type);
+    bool isReturnExprDisqualified(const Expr* expr);
+
     bool mbInsideFunctionDecl;
     bool mbFoundDisqualifier;
 
@@ -228,10 +229,10 @@ void PassStuffByRef::checkParams(const FunctionDecl * functionDecl) {
 
 void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const CXXMethodDecl * methodDecl) {
 
-    if (methodDecl && methodDecl->isVirtual()) {
+    if (methodDecl && (methodDecl->isVirtual() || methodDecl->hasAttr<OverrideAttr>())) {
         return;
     }
-    if( !functionDecl->hasBody()) {
+    if( !functionDecl->doesThisDeclarationHaveABody()) {
         return;
     }
 
@@ -258,7 +259,8 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
         || (dc.MemberFunction().Class("Model").Namespace("xforms")
             .GlobalNamespace())
         || (dc.MemberFunction().Class("Submission").Namespace("xforms")
-            .GlobalNamespace()))
+            .GlobalNamespace())
+        || (dc.Function("TopLeft").Class("SwRect").GlobalNamespace()))
     {
         return;
     }
@@ -274,8 +276,12 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
         return;
     // depends on a define
     if (dc.Function("GetSharedFileURL").Class("SfxObjectShell")
-        .GlobalNamespace())
-    {
+        .GlobalNamespace()) {
+        return;
+    }
+    // some compilers (MSVC, GCC) get otherwise when I combine a 'const &' return value and a DLLPUBLIC specifier.
+    if (dc.Function("getOfficePath").Namespace("psp").GlobalNamespace()
+        || dc.Function("getFontPath").Namespace("psp").GlobalNamespace()) {
         return;
     }
     mbInsideFunctionDecl = true;
@@ -297,10 +303,83 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
     {
         report(
                 DiagnosticsEngine::Note,
-                "rather return by const& than by value",
+                "decl here",
                 functionDecl->getCanonicalDecl()->getSourceRange().getBegin())
             << functionDecl->getCanonicalDecl()->getSourceRange();
     }
+}
+
+bool PassStuffByRef::VisitReturnStmt(const ReturnStmt * returnStmt)
+{
+    if (!mbInsideFunctionDecl)
+        return true;
+    const Expr* expr = dyn_cast<Expr>(*returnStmt->child_begin())->IgnoreParenCasts();
+
+    if (isReturnExprDisqualified(expr)) {
+        mbFoundDisqualifier = true;
+        return true;
+    }
+    return true;
+}
+
+bool PassStuffByRef::isReturnExprDisqualified(const Expr* expr)
+{
+    if (isa<ExprWithCleanups>(expr)) {
+        return true;
+    }
+    if (const CXXConstructExpr* constructExpr = dyn_cast<CXXConstructExpr>(expr)) {
+        if (constructExpr->getNumArgs()==1) {
+            expr = constructExpr->getArg(0)->IgnoreParenCasts();
+        }
+    }
+    if (isa<CXXConstructExpr>(expr)) {
+        return true;
+    }
+    if (const ArraySubscriptExpr* childExpr = dyn_cast<ArraySubscriptExpr>(expr)) {
+        expr = childExpr->getLHS();
+    }
+    if (const MemberExpr* memberExpr = dyn_cast<MemberExpr>(expr)) {
+        expr = memberExpr->getBase();
+    }
+    if (const DeclRefExpr* declRef = dyn_cast<DeclRefExpr>(expr)) {
+        const VarDecl* varDecl = dyn_cast<VarDecl>(declRef->getDecl());
+        if (varDecl) {
+            if (varDecl->getStorageDuration() == SD_Automatic
+                || varDecl->getStorageDuration() == SD_FullExpression ) {
+                return true;
+            }
+            return false;
+        }
+    }
+    if (const ConditionalOperator* condOper = dyn_cast<ConditionalOperator>(expr)) {
+        return isReturnExprDisqualified(condOper->getTrueExpr())
+            || isReturnExprDisqualified(condOper->getFalseExpr());
+    }
+    if (const CallExpr* callExpr = dyn_cast<CallExpr>(expr)) {
+        return !loplugin::TypeCheck(callExpr->getType()).Const().LvalueReference();
+    }
+    return true;
+}
+
+bool PassStuffByRef::VisitVarDecl(const VarDecl * varDecl)
+{
+    if (!mbInsideFunctionDecl)
+        return true;
+    // things guarded by locking are probably best left alone
+    loplugin::TypeCheck dc(varDecl->getType());
+    if (dc.Class("Guard").Namespace("osl").GlobalNamespace())
+        mbFoundDisqualifier = true;
+    if (dc.Class("ClearableGuard").Namespace("osl").GlobalNamespace())
+        mbFoundDisqualifier = true;
+    if (dc.Class("ResettableGuard").Namespace("osl").GlobalNamespace())
+        mbFoundDisqualifier = true;
+    else if (dc.Class("SolarMutexGuard").GlobalNamespace())
+        mbFoundDisqualifier = true;
+    else if (dc.Class("SfxModelGuard").GlobalNamespace())
+        mbFoundDisqualifier = true;
+    else if (dc.Class("ReadWriteGuard").Namespace("utl").GlobalNamespace())
+        mbFoundDisqualifier = true;
+    return true;
 }
 
 // Would produce a wrong recommendation for

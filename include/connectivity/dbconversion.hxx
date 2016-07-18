@@ -67,7 +67,7 @@ namespace dbtools
 {
     namespace DBTypeConversion
     {
-        OOO_DLLPUBLIC_DBTOOLS css::util::Date getStandardDate();
+        OOO_DLLPUBLIC_DBTOOLS css::util::Date const & getStandardDate();
         OOO_DLLPUBLIC_DBTOOLS void setValue(const css::uno::Reference< css::sdb::XColumnUpdate>& xVariant,
                                     const css::uno::Reference< css::util::XNumberFormatter>& xFormatter,
                                     const css::util::Date& rNullDate,

@@ -192,7 +192,7 @@ bool SfxStyleSheetBase::SetName(const OUString& rName, bool bReIndexNow)
     return true;
 }
 
-OUString SfxStyleSheetBase::GetDisplayName() const
+OUString const & SfxStyleSheetBase::GetDisplayName() const
 {
     if( maDisplayName.isEmpty() )
     {

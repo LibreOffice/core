@@ -85,7 +85,7 @@ VCLXPrinterPropertySet::~VCLXPrinterPropertySet()
     mxPrinter.reset();
 }
 
-css::uno::Reference< css::awt::XDevice >  VCLXPrinterPropertySet::GetDevice()
+css::uno::Reference< css::awt::XDevice > const &  VCLXPrinterPropertySet::GetDevice()
 {
     if ( !mxPrnDevice.is() )
     {

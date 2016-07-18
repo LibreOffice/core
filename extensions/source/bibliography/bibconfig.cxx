@@ -37,7 +37,7 @@ using namespace ::com::sun::star::sdb;
 
 const char cDataSourceHistory[] = "DataSourceHistory";
 
-Sequence<OUString> BibConfig::GetPropertyNames()
+Sequence<OUString> const & BibConfig::GetPropertyNames()
 {
     static Sequence<OUString> aNames;
     if(!aNames.getLength())

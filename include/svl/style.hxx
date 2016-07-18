@@ -112,7 +112,7 @@ public:
 
     /** returns the display name of this style, it is used at the user interface.
         If the display name is empty, this method returns the internal name. */
-    OUString GetDisplayName() const;
+    OUString const & GetDisplayName() const;
 
     virtual const OUString& GetParent() const;
     virtual bool SetParent( const OUString& );

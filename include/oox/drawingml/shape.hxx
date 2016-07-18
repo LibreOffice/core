@@ -123,7 +123,7 @@ public:
     Shape3DProperties&              get3DProperties() { return *mp3DPropertiesPtr; }
     const Shape3DProperties&        get3DProperties() const { return *mp3DPropertiesPtr; }
 
-    table::TablePropertiesPtr       getTableProperties();
+    table::TablePropertiesPtr const & getTableProperties();
 
     EffectProperties&               getEffectProperties() { return *mpEffectPropertiesPtr; }
 
@@ -216,7 +216,7 @@ public:
 
 protected:
 
-    css::uno::Reference< css::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape > const &
                         createAndInsert(
                             ::oox::core::XmlFilterBase& rFilterBase,
                             const OUString& rServiceName,

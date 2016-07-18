@@ -221,7 +221,7 @@ static bool GetBooleanValue(const char *pValue)
            || !strcmp(pValue, "On");
 }
 
-OOXMLValue::Pointer_t OOXMLBooleanValue::Create(bool bValue)
+OOXMLValue::Pointer_t const & OOXMLBooleanValue::Create(bool bValue)
 {
     static OOXMLValue::Pointer_t False(new OOXMLBooleanValue (false));
     static OOXMLValue::Pointer_t True(new OOXMLBooleanValue (true));

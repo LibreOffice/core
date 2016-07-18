@@ -99,7 +99,7 @@ public:
     virtual ~SvxRubyData_Impl();
 
     void SetController(const Reference<XController>& xCtrl);
-    Reference<XModel> GetModel()
+    Reference<XModel> const & GetModel()
     {
         if (!xController.is())
             xModel = nullptr;
@@ -111,7 +111,7 @@ public:
     {
         return bHasSelectionChanged;
     }
-    Reference<XRubySelection> GetRubySelection()
+    Reference<XRubySelection> const & GetRubySelection()
     {
         xSelection.set(xController, UNO_QUERY);
         return xSelection;

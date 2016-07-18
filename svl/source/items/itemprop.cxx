@@ -311,7 +311,7 @@ PropertyState   SfxItemPropertySet::getPropertyState(const OUString& rName, cons
     return eRet;
 }
 
-Reference<XPropertySetInfo> SfxItemPropertySet::getPropertySetInfo() const
+Reference<XPropertySetInfo> const & SfxItemPropertySet::getPropertySetInfo() const
 {
     if( !m_xInfo.is() )
         m_xInfo = new SfxItemPropertySetInfo( m_aMap );

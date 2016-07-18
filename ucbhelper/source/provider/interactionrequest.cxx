@@ -88,7 +88,7 @@ void InteractionRequest::setContinuations(
 }
 
 
-rtl::Reference< InteractionContinuation >
+rtl::Reference< InteractionContinuation > const &
 InteractionRequest::getSelection() const
 {
     return m_pImpl->m_xSelection;

@@ -67,7 +67,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::sheet;
 using namespace com::sun::star::uno;
 
-static Reference< XCalendar4 > getLocaleCalendar()
+static Reference< XCalendar4 > const & getLocaleCalendar()
 {
     static Reference< XCalendar4 > xCalendar;
     if( !xCalendar.is() )

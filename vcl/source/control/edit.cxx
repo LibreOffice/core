@@ -785,7 +785,7 @@ uno::Reference < i18n::XBreakIterator > Edit::ImplGetBreakIterator() const
     return i18n::BreakIterator::create(xContext);
 }
 
-uno::Reference < i18n::XExtendedInputSequenceChecker > Edit::ImplGetInputSequenceChecker()
+uno::Reference < i18n::XExtendedInputSequenceChecker > const & Edit::ImplGetInputSequenceChecker()
 {
     if ( !mxISC.is() )
     {

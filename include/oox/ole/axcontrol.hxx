@@ -985,7 +985,7 @@ public:
 
 private:
     /** Creates the form that will hold the form controls. */
-    css::uno::Reference< css::container::XIndexContainer >
+    css::uno::Reference< css::container::XIndexContainer > const &
                         createXForm();
 
 private:

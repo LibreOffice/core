@@ -190,7 +190,7 @@ ModulWindow::ModulWindow (ModulWindowLayout* pParent, ScriptDocument const& rDoc
     SetBackground();
 }
 
-SbModuleRef ModulWindow::XModule()
+SbModuleRef const & ModulWindow::XModule()
 {
     // ModuleWindows can now be created as a result of the
     // modules getting created via the api. This is a result of an
