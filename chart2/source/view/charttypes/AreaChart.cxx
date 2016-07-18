@@ -101,11 +101,6 @@ double AreaChart::getMaximumX()
     return fMax;
 }
 
-bool AreaChart::isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex )
-{
-    return VSeriesPlotter::isExpandIfValuesCloseToBorder( nDimensionIndex );
-}
-
 bool AreaChart::isSeparateStackingForDifferentSigns( sal_Int32 /*nDimensionIndex*/ )
 {
     // no separate stacking in all types of line/area charts

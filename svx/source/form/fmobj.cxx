@@ -700,11 +700,4 @@ SdrLayerID FmFormObj::GetLayer() const
     return SdrUnoObj::GetLayer();
 }
 
-void FmFormObj::NbcSetLayer(SdrLayerID nLayer)
-{
-    // #i72535#
-    // See above. To fix, use parent functionality
-    return SdrUnoObj::NbcSetLayer(nLayer);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -132,6 +132,7 @@ ScVbaFormatCondition::Operator( bool bVal ) throw (script::BasicErrorException )
 {
     return ScVbaFormatCondition_BASE::Operator( bVal );
 }
+
 ::sal_Int32 SAL_CALL
 ScVbaFormatCondition::Operator(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {

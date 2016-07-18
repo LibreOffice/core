@@ -220,11 +220,6 @@ public:
             bool bOverwrite );
     virtual ~ScMasterPageContext();
 
-    virtual SvXMLImportContext *CreateChildContext(
-            sal_uInt16 nPrefix,
-            const OUString& rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
-
     virtual SvXMLImportContext *CreateHeaderFooterContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,

@@ -221,18 +221,6 @@ double SAL_CALL PolynomialRegressionCurveCalculator::getCurveValue( double x )
     return fResult;
 }
 
-uno::Sequence< geometry::RealPoint2D > SAL_CALL PolynomialRegressionCurveCalculator::getCurveValues(
-    double min, double max, sal_Int32 nPointCount,
-    const uno::Reference< chart2::XScaling >& xScalingX,
-    const uno::Reference< chart2::XScaling >& xScalingY,
-    sal_Bool bMaySkipPointsInCalculation )
-    throw (lang::IllegalArgumentException,
-           uno::RuntimeException, std::exception)
-{
-
-    return RegressionCurveCalculator::getCurveValues( min, max, nPointCount, xScalingX, xScalingY, bMaySkipPointsInCalculation );
-}
-
 OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
     sal_Int32 nNumberFormatKey, sal_Int32* pFormulaMaxWidth /* = nullptr */ ) const
