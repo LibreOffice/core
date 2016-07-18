@@ -43,26 +43,26 @@ class SwXTextSearch : public cppu::WeakImplHelper
 {
     friend class SwXTextDocument;
 
-    OUString                sSearchText;
-    OUString                sReplaceText;
+    OUString                m_sSearchText;
+    OUString                m_sReplaceText;
 
-    SwSearchProperties_Impl*    pSearchProperties;
-    SwSearchProperties_Impl*    pReplaceProperties;
+    SwSearchProperties_Impl*    m_pSearchProperties;
+    SwSearchProperties_Impl*    m_pReplaceProperties;
 
     const SfxItemPropertySet*   m_pPropSet;
-    bool                    bAll  : 1;
-    bool                    bWord : 1;
-    bool                    bBack : 1;
-    bool                    bExpr : 1;
-    bool                    bCase : 1;
-    bool                    bStyles:1;
-    bool                    bSimilarity : 1;
-    bool                    bLevRelax       :1;
-    sal_Int16                   nLevExchange;
-    sal_Int16                   nLevAdd;
-    sal_Int16                   nLevRemove;
+    bool                    m_bAll  : 1;
+    bool                    m_bWord : 1;
+    bool                    m_bBack : 1;
+    bool                    m_bExpr : 1;
+    bool                    m_bCase : 1;
+    bool                    m_bStyles:1;
+    bool                    m_bSimilarity : 1;
+    bool                    m_bLevRelax       :1;
+    sal_Int16                   m_nLevExchange;
+    sal_Int16                   m_nLevAdd;
+    sal_Int16                   m_nLevRemove;
 
-    bool                    bIsValueSearch :1;
+    bool                    m_bIsValueSearch :1;
 protected:
     virtual ~SwXTextSearch();
 public:
