@@ -1022,7 +1022,7 @@ OUString SwOLEObj::GetDescription()
     return SW_RESSTR(STR_OLE);
 }
 
-drawinglayer::primitive2d::Primitive2DContainer SwOLEObj::tryToGetChartContentAsPrimitive2DSequence(
+drawinglayer::primitive2d::Primitive2DContainer const & SwOLEObj::tryToGetChartContentAsPrimitive2DSequence(
     basegfx::B2DRange& rRange,
     bool bSynchron)
 {

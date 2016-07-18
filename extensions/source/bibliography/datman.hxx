@@ -106,7 +106,7 @@ protected:
         void                        SetMeAsUidListener();
         void                        RemoveMeAsUidListener();
 
-        css::uno::Reference< css::awt::XControlModel >
+        css::uno::Reference< css::awt::XControlModel > const &
                                     updateGridModel(const css::uno::Reference< css::form::XForm > & xDbForm);
         static css::uno::Reference< css::awt::XControlModel >
                                     createGridModel( const OUString& rName );
@@ -172,7 +172,7 @@ public:
         const OUString&             GetIdentifierMapping();
         void                        ResetIdentifierMapping() {sIdentifierMapping.clear();}
 
-        css::uno::Reference< css::form::runtime::XFormController > GetFormController();
+        css::uno::Reference< css::form::runtime::XFormController > const & GetFormController();
         void                        RegisterInterceptor( ::bib::BibBeamer* pBibBeamer);
 
         bool                        HasActiveConnection();

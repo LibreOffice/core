@@ -40,7 +40,7 @@ void VCL_DLLPUBLIC getPrinterPathList( std::list< OUString >& rPathList, const c
 
 // note: gcc 3.4.1 warns about visibility if we retunr a const OUString& here
 // seems to be a bug in gcc, now we return an object instead of a reference
-OUString VCL_DLLPUBLIC getFontPath();
+VCL_DLLPUBLIC OUString const & getFontPath();
 
 bool VCL_DLLPUBLIC convertPfbToPfa( osl::File& rInFile, osl::File& rOutFile );
 
@@ -54,7 +54,7 @@ void VCL_DLLPUBLIC splitPath( OString& rOrgPath, OString& rDir, OString& rBase )
 enum class whichOfficePath { InstallationRootPath, UserPath, ConfigPath };
 // note: gcc 3.4.1 warns about visibility if we retunr a const OUString& here
 // seems to be a bug in gcc, now we return an object instead of a reference
-OUString VCL_DLLPUBLIC getOfficePath( whichOfficePath ePath );
+VCL_DLLPUBLIC OUString const & getOfficePath( whichOfficePath ePath );
 
 } // namespace
 

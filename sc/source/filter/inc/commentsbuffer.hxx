@@ -58,7 +58,7 @@ public:
     void                importComment( SequenceInputStream& rStrm );
 
     /** Creates and returns a new rich-string object for the comment text. */
-    RichStringRef       createText();
+    RichStringRef const & createText();
 
     /** Finalizes the formatted string of the comment. */
     void                finalizeImport();

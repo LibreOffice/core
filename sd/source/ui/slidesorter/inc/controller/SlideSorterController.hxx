@@ -116,10 +116,10 @@ public:
     */
     ScrollBarManager& GetScrollBarManager();
 
-    std::shared_ptr<CurrentSlideManager> GetCurrentSlideManager() const;
-    std::shared_ptr<SlotManager> GetSlotManager() const;
-    std::shared_ptr<SelectionManager> GetSelectionManager() const;
-    std::shared_ptr<InsertionIndicatorHandler> GetInsertionIndicatorHandler() const;
+    std::shared_ptr<CurrentSlideManager> const & GetCurrentSlideManager() const;
+    std::shared_ptr<SlotManager> const & GetSlotManager() const;
+    std::shared_ptr<SelectionManager> const & GetSelectionManager() const;
+    std::shared_ptr<InsertionIndicatorHandler> const & GetInsertionIndicatorHandler() const;
 
     /** This method forwards the call to the SlideSorterView and executes
         pending operations like moving selected pages into the visible area.

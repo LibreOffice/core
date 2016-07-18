@@ -48,8 +48,8 @@ namespace comphelper
         OCommonAccessibleText();
         virtual ~OCommonAccessibleText();
 
-        css::uno::Reference < css::i18n::XBreakIterator >             implGetBreakIterator();
-        css::uno::Reference < css::i18n::XCharacterClassification >   implGetCharacterClassification();
+        css::uno::Reference < css::i18n::XBreakIterator > const &            implGetBreakIterator();
+        css::uno::Reference < css::i18n::XCharacterClassification > const &  implGetCharacterClassification();
         static bool                      implIsValidBoundary( css::i18n::Boundary& rBoundary, sal_Int32 nLength );
         static bool                      implIsValidIndex( sal_Int32 nIndex, sal_Int32 nLength );
         static bool                      implIsValidRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex, sal_Int32 nLength );

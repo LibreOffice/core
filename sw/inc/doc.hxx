@@ -1606,7 +1606,7 @@ public:
     const css::uno::Reference<css::container::XNameContainer>&
         getXForms() const { return mxXForms;}
 
-    css::uno::Reference< css::linguistic2::XProofreadingIterator > GetGCIterator() const;
+    css::uno::Reference< css::linguistic2::XProofreadingIterator > const & GetGCIterator() const;
 
     // #i31958# is this an XForms document?
     bool isXForms() const;
@@ -1621,7 +1621,7 @@ public:
     void SetDefaultPageMode(bool bSquaredPageMode);
     bool IsSquaredPageMode() const;
 
-    css::uno::Reference< css::script::vba::XVBAEventProcessor > GetVbaEventProcessor();
+    css::uno::Reference< css::script::vba::XVBAEventProcessor > const & GetVbaEventProcessor();
     void SetVBATemplateToProjectCache( css::uno::Reference< css::container::XNameContainer >& xCache ) { m_xTemplateToProjectCache = xCache; };
     const css::uno::Reference< css::container::XNameContainer >& GetVBATemplateToProjectCache() { return m_xTemplateToProjectCache; };
     ::sfx2::IXmlIdRegistry& GetXmlIdRegistry();

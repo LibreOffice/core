@@ -977,7 +977,7 @@ const FontCharMapPtr ServerFont::GetFontCharMap() const
     return xFCMap;
 }
 
-const FontCharMapPtr FreetypeFontInfo::GetFontCharMap()
+const FontCharMapPtr& FreetypeFontInfo::GetFontCharMap()
 {
     // check if the charmap is already cached
     if( mxFontCharMap )

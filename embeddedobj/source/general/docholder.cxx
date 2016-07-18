@@ -818,7 +818,7 @@ bool DocumentHolder::HideUI( const uno::Reference< css::frame::XLayoutManager >&
 }
 
 
-uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
+uno::Reference< frame::XFrame > const & DocumentHolder::GetDocFrame()
 {
     // the frame for outplace activation
     if ( !m_xFrame.is() )

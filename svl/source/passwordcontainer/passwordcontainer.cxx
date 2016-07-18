@@ -818,7 +818,7 @@ OUString PasswordContainer::RequestPasswordFromUser( PasswordRequestMode aRMode,
 }
 
 
-OUString PasswordContainer::GetMasterPassword( const Reference< XInteractionHandler >& aHandler ) throw(RuntimeException, std::exception)
+OUString const & PasswordContainer::GetMasterPassword( const Reference< XInteractionHandler >& aHandler ) throw(RuntimeException, std::exception)
 {
     PasswordRequestMode aRMode = PasswordRequestMode_PASSWORD_ENTER;
     if( !m_pStorageFile || !m_pStorageFile->useStorage() )

@@ -53,13 +53,13 @@ struct FormControlHelper::FormControlHelper_Impl
     uno::Reference<lang::XMultiServiceFactory> rServiceFactory;
     uno::Reference<text::XTextDocument> rTextDocument;
 
-    uno::Reference<drawing::XDrawPage> getDrawPage();
-    uno::Reference<lang::XMultiServiceFactory> getServiceFactory();
-    uno::Reference<form::XForm> getForm();
+    uno::Reference<drawing::XDrawPage> const & getDrawPage();
+    uno::Reference<lang::XMultiServiceFactory> const & getServiceFactory();
+    uno::Reference<form::XForm> const & getForm();
     uno::Reference<container::XIndexContainer> getFormComps();
 };
 
-uno::Reference<drawing::XDrawPage> FormControlHelper::FormControlHelper_Impl::getDrawPage()
+uno::Reference<drawing::XDrawPage> const & FormControlHelper::FormControlHelper_Impl::getDrawPage()
 {
     if (! rDrawPage.is())
     {
@@ -72,7 +72,7 @@ uno::Reference<drawing::XDrawPage> FormControlHelper::FormControlHelper_Impl::ge
     return rDrawPage;
 }
 
-uno::Reference<lang::XMultiServiceFactory> FormControlHelper::FormControlHelper_Impl::getServiceFactory()
+uno::Reference<lang::XMultiServiceFactory> const & FormControlHelper::FormControlHelper_Impl::getServiceFactory()
 {
     if (! rServiceFactory.is())
         rServiceFactory.set(rTextDocument, uno::UNO_QUERY);
@@ -80,7 +80,7 @@ uno::Reference<lang::XMultiServiceFactory> FormControlHelper::FormControlHelper_
     return rServiceFactory;
 }
 
-uno::Reference<form::XForm> FormControlHelper::FormControlHelper_Impl::getForm()
+uno::Reference<form::XForm> const & FormControlHelper::FormControlHelper_Impl::getForm()
 {
     if (! rForm.is())
     {

@@ -135,7 +135,7 @@ public:
 
     Rectangle GetBoundingBoxOnScreen() throw( css::uno::RuntimeException );
 
-    Rectangle GetBoundingBox() throw( css::uno::RuntimeException );
+    Rectangle const & GetBoundingBox() throw( css::uno::RuntimeException );
 
     /// @returns true if it's disposed or in disposing
     inline bool IsAlive() const;

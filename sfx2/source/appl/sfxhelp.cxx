@@ -98,7 +98,7 @@ void NoHelpErrorBox::RequestHelp( const HelpEvent& )
 static bool impl_hasHelpInstalled( const OUString &rLang );
 
 /// Return the locale we prefer for displaying help
-static OUString HelpLocaleString()
+static OUString const & HelpLocaleString()
 {
     static OUString aLocaleStr;
     if (aLocaleStr.isEmpty())

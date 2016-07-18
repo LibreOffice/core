@@ -128,7 +128,7 @@ public:
     bool     isProxyModule() { return bIsProxyModule; }
     void     AddVarName( const OUString& aName );
     void     RemoveVars();
-    css::uno::Reference< css::script::XInvocation > GetUnoModule();
+    css::uno::Reference< css::script::XInvocation > const & GetUnoModule();
     bool     createCOMWrapperForIface( css::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
     void     GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache);
     const SbxArrayRef& GetMethods() { return pMethods;}

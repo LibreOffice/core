@@ -101,7 +101,7 @@ class BibConfig : public utl::ConfigItem
 
     OUString               aColumnDefaults[COLUMN_COUNT];
 
-    static css::uno::Sequence<OUString> GetPropertyNames();
+    static css::uno::Sequence<OUString> const & GetPropertyNames();
 
     virtual void    ImplCommit() override;
 

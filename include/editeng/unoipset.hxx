@@ -57,7 +57,7 @@ public:
     void AddUsrAnyForID(const css::uno::Any& rAny, sal_uInt16 nWID);
     void ClearAllUsrAny();
 
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() const;
+    css::uno::Reference< css::beans::XPropertySetInfo > const & getPropertySetInfo() const;
     const SfxItemPropertyMap& getPropertyMap() const { return m_aPropertyMap;}
     const SfxItemPropertySimpleEntry* getPropertyMapEntry(const OUString &rName) const;
 };

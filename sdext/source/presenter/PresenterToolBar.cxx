@@ -150,7 +150,7 @@ namespace {
         virtual void Paint (
             const Reference<rendering::XCanvas>& rxCanvas,
             const rendering::ViewState& rViewState) = 0;
-        awt::Size GetBoundingSize (
+        awt::Size const & GetBoundingSize (
             const Reference<rendering::XCanvas>& rxCanvas);
         awt::Rectangle GetBoundingBox() const;
         virtual bool SetState (const bool bIsOver, const bool bIsPressed);
@@ -474,7 +474,7 @@ void PresenterToolBar::RequestLayout()
     xManager->Invalidate(mxWindow);
 }
 
-geometry::RealSize2D PresenterToolBar::GetMinimalSize()
+geometry::RealSize2D const & PresenterToolBar::GetMinimalSize()
 {
     if (mbIsLayoutPending)
         Layout(mxCanvas);
@@ -1244,7 +1244,7 @@ void Element::disposing()
 {
 }
 
-awt::Size Element::GetBoundingSize (
+awt::Size const & Element::GetBoundingSize (
     const Reference<rendering::XCanvas>& rxCanvas)
 {
     maSize = CreateBoundingSize(rxCanvas);

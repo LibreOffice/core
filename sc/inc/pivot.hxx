@@ -92,7 +92,7 @@ struct ScDPLabelData
          * when the layout name is present, use it, or else use the original
          * name.
          */
-        OUString SC_DLLPUBLIC getDisplayName() const;
+        SC_DLLPUBLIC OUString const & getDisplayName() const;
     };
     std::vector<Member>                    maMembers;
     css::uno::Sequence<OUString>           maHiers;        ///< Hierarchies.
@@ -106,7 +106,7 @@ struct ScDPLabelData
      * @return the name that should be displayed in the dp dialogs i.e. when
      * the layout name is present, use it, or else use the original name.
      */
-    OUString SC_DLLPUBLIC getDisplayName() const;
+    SC_DLLPUBLIC OUString const & getDisplayName() const;
 };
 
 typedef std::vector< std::unique_ptr<ScDPLabelData> > ScDPLabelDataVector;

@@ -4226,7 +4226,7 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_Int32 nPara, 
     ImplInitDigitMode( pOutDev, eLang );
 }
 
-Reference < i18n::XBreakIterator > ImpEditEngine::ImplGetBreakIterator() const
+Reference < i18n::XBreakIterator > const & ImpEditEngine::ImplGetBreakIterator() const
 {
     if ( !xBI.is() )
     {
@@ -4236,7 +4236,7 @@ Reference < i18n::XBreakIterator > ImpEditEngine::ImplGetBreakIterator() const
     return xBI;
 }
 
-Reference < i18n::XExtendedInputSequenceChecker > ImpEditEngine::ImplGetInputSequenceChecker() const
+Reference < i18n::XExtendedInputSequenceChecker > const & ImpEditEngine::ImplGetInputSequenceChecker() const
 {
     if ( !xISC.is() )
     {

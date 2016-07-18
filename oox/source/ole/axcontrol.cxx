@@ -2711,7 +2711,7 @@ Reference< XControlModel > EmbeddedForm::convertAndInsert( const EmbeddedControl
     return xRet;
 }
 
-Reference< XIndexContainer > EmbeddedForm::createXForm()
+Reference< XIndexContainer > const & EmbeddedForm::createXForm()
 {
     if( mxFormsSupp.is() )
     {

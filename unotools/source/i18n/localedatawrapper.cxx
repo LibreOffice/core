@@ -498,7 +498,7 @@ void LocaleDataWrapper::getDefaultCalendarImpl()
     }
 }
 
-const std::shared_ptr< css::i18n::Calendar2 > LocaleDataWrapper::getDefaultCalendar() const
+const std::shared_ptr< css::i18n::Calendar2 >& LocaleDataWrapper::getDefaultCalendar() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
     if (!xDefaultCalendar)

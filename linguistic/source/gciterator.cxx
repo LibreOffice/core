@@ -988,7 +988,7 @@ throw (uno::RuntimeException, std::exception)
 }
 
 
-uno::Reference< util::XChangesBatch > GrammarCheckingIterator::GetUpdateAccess() const
+uno::Reference< util::XChangesBatch > const & GrammarCheckingIterator::GetUpdateAccess() const
 {
     if (!m_xUpdateAccess.is())
     {

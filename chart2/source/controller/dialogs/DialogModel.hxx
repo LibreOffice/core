@@ -76,7 +76,7 @@ public:
     void setTemplate(
         const css::uno::Reference< css::chart2::XChartTypeTemplate > & xTemplate );
 
-    std::shared_ptr< RangeSelectionHelper >
+    std::shared_ptr< RangeSelectionHelper > const &
         getRangeSelectionHelper() const;
 
     css::uno::Reference< css::frame::XModel >

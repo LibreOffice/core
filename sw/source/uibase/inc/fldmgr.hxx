@@ -110,7 +110,7 @@ private:
     SAL_DLLPRIVATE sal_uInt16            GetCurrLanguage() const;
 
     css::uno::Reference<css::text::XNumberingTypeInfo> xNumberingInfo;
-    SAL_DLLPRIVATE css::uno::Reference<css::text::XNumberingTypeInfo> GetNumberingInfo()const;
+    SAL_DLLPRIVATE css::uno::Reference<css::text::XNumberingTypeInfo> const & GetNumberingInfo()const;
 
 public:
     explicit SwFieldMgr(SwWrtShell* pSh = nullptr);

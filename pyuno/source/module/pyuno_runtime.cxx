@@ -1025,7 +1025,7 @@ PyThreadDetach::~PyThreadDetach()
 }
 
 
-PyRef RuntimeCargo::getUnoModule()
+PyRef const & RuntimeCargo::getUnoModule()
 {
     if( ! dictUnoModule.is() )
     {

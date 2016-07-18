@@ -175,7 +175,7 @@ public:
     MeasurementSystem   mapMeasurementStringToEnum( const OUString& rMS ) const;
 
     /// Convenience method to obtain the default calendar.
-    const std::shared_ptr< css::i18n::Calendar2 > getDefaultCalendar() const;
+    const std::shared_ptr< css::i18n::Calendar2 >& getDefaultCalendar() const;
 
     /// Convenience method to obtain the day names of the default calendar.
     const css::uno::Sequence< css::i18n::CalendarItem2 > getDefaultCalendarDays() const;

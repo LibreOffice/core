@@ -405,7 +405,7 @@ void FormattedField::SetTextFormatted(const OUString& rStr)
     m_ValueState = valueString;
 }
 
-OUString FormattedField::GetTextValue() const
+OUString const & FormattedField::GetTextValue() const
 {
     if (m_ValueState != valueString )
     {

@@ -145,7 +145,7 @@ public:
 
     void scanForButtonSets( const OUString& rPath );
 
-    Reference< XGraphicProvider > getGraphicProvider();
+    Reference< XGraphicProvider > const & getGraphicProvider();
 
     std::vector< std::shared_ptr< ButtonsImpl > >  maButtons;
     Reference< XGraphicProvider > mxGraphicProvider;
@@ -250,7 +250,7 @@ bool ButtonSetImpl::exportButton( int nSet, const OUString& rPath, const OUStrin
     return false;
 }
 
-Reference< XGraphicProvider > ButtonSetImpl::getGraphicProvider()
+Reference< XGraphicProvider > const & ButtonSetImpl::getGraphicProvider()
 {
     if( !mxGraphicProvider.is() )
     {

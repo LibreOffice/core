@@ -1815,7 +1815,7 @@ void StarBASIC::SetGlobalBreakHdl( const Link<StarBASIC*,sal_uInt16>& rLink )
     GetSbData()->aBreakHdl = rLink;
 }
 
-SbxArrayRef StarBASIC::getUnoListeners()
+SbxArrayRef const & StarBASIC::getUnoListeners()
 {
     if( !xUnoListeners.Is() )
     {

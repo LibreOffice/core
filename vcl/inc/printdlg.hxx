@@ -212,7 +212,7 @@ namespace vcl
 
         bool                                mbShowLayoutPage;
 
-        Size getJobPageSize();
+        Size const & getJobPageSize();
         void updateNup();
         void updateNupFromPages();
         void preparePreview( bool i_bPrintChanged = true, bool i_bMayUseCache = false );
