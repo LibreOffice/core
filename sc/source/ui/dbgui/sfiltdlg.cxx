@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/dispatch.hxx>
+#include <vcl/idle.hxx>
 
 #include "uiitems.hxx"
 #include "rangenam.hxx"
@@ -56,7 +57,8 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
         pViewData       ( nullptr ),
         pDoc            ( nullptr ),
         pRefInputEdit   ( nullptr ),
-        bRefInputMode   ( false )
+        bRefInputMode   ( false ),
+        pIdle          ( nullptr )
 {
         get(pLbFilterArea,"lbfilterarea");
         get(pEdFilterArea,"edfilterarea");
@@ -83,6 +85,12 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
     Init( rArgSet );
     pEdFilterArea->GrabFocus();
 
+    // Hack: RefInput-Kontrolle
+    pIdle = new Idle;
+    // FIXME: this is an abomination
+    pIdle->SetPriority( SchedulerPriority::LOWEST );
+    pIdle->SetIdleHdl( LINK( this, ScSpecialFilterDlg, TimeOutHdl ) );
+    pIdle->Start();
 
     pLbCopyArea->SetAccessibleName(pBtnCopyResult->GetText());
     pEdCopyArea->SetAccessibleName(pBtnCopyResult->GetText());
@@ -103,6 +111,10 @@ void ScSpecialFilterDlg::dispose()
     delete pOptionsMgr;
 
     delete pOutItem;
+
+    // Hack: RefInput-Kontrolle
+    pIdle->Stop();
+    delete pIdle;
 
     pLbFilterArea.clear();
     pEdFilterArea.clear();
@@ -216,7 +228,6 @@ bool ScSpecialFilterDlg::Close()
 
 void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
-    SyncFocusState();
     if ( bRefInputMode && pRefInputEdit )       // Nur moeglich, wenn im Referenz-Editmodus
     {
         if ( rRef.aStart != rRef.aEnd )
@@ -236,7 +247,6 @@ void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 void ScSpecialFilterDlg::SetActive()
 {
-    SyncFocusState();
     if ( bRefInputMode )
     {
         if ( pRefInputEdit == pEdCopyArea )
@@ -389,27 +399,30 @@ IMPL_LINK_TYPED( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
     }
 }
 
-
-void ScSpecialFilterDlg::SyncFocusState()
+IMPL_LINK_TYPED( ScSpecialFilterDlg, TimeOutHdl, Idle*, _pIdle, void )
 {
-    if (!IsActive())
-        return;
+    // every 50ms check whether RefInputMode is still true
 
-    if( pEdCopyArea->HasFocus() || pRbCopyArea->HasFocus() )
+    if( (_pIdle == pIdle) && IsActive() )
     {
-        pRefInputEdit = pEdCopyArea;
-        bRefInputMode = true;
+        if( pEdCopyArea->HasFocus() || pRbCopyArea->HasFocus() )
+        {
+            pRefInputEdit = pEdCopyArea;
+            bRefInputMode = true;
+        }
+        else if( pEdFilterArea->HasFocus() || pRbFilterArea->HasFocus() )
+        {
+            pRefInputEdit = pEdFilterArea;
+            bRefInputMode = true;
+        }
+        else if( bRefInputMode )
+        {
+            pRefInputEdit = nullptr;
+            bRefInputMode = false;
+        }
     }
-    else if( pEdFilterArea->HasFocus() || pRbFilterArea->HasFocus() )
-    {
-        pRefInputEdit = pEdFilterArea;
-        bRefInputMode = true;
-    }
-    else if( bRefInputMode )
-    {
-        pRefInputEdit = nullptr;
-        bRefInputMode = false;
-    }
+
+    pIdle->Start();
 }
 
 IMPL_LINK_TYPED( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox&, rLb, void )
