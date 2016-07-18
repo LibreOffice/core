@@ -766,9 +766,9 @@ SfxPoolItem* ScPageHFItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
     else if ( nVer < 2 ) {} // nothing to do: SvxFileField is not exchanged for SvxExtFileField
 
     ScPageHFItem* pItem = new ScPageHFItem( Which() );
-    pItem->SetArea( pLeft,    SC_HF_LEFTAREA   );
-    pItem->SetArea( pCenter, SC_HF_CENTERAREA );
-    pItem->SetArea( pRight,  SC_HF_RIGHTAREA  );
+    pItem->SetLeftArea(   *pLeft   );
+    pItem->SetCenterArea( *pCenter );
+    pItem->SetRightArea(  *pRight  );
 
     return pItem;
 }
@@ -789,18 +789,6 @@ void ScPageHFItem::SetRightArea( const EditTextObject& rNew )
 {
     delete pRightArea;
     pRightArea = rNew.Clone();
-}
-
-void ScPageHFItem::SetArea( EditTextObject *pNew, int nArea )
-{
-    switch ( nArea )
-    {
-        case SC_HF_LEFTAREA:    delete pLeftArea;   pLeftArea   = pNew; break;
-        case SC_HF_CENTERAREA:  delete pCenterArea; pCenterArea = pNew; break;
-        case SC_HF_RIGHTAREA:   delete pRightArea;  pRightArea  = pNew; break;
-        default:
-            OSL_FAIL( "New Area?" );
-    }
 }
 
 /**

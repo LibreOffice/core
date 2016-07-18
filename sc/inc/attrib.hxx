@@ -222,11 +222,6 @@ inline ScTableListItem::ScTableListItem( const sal_uInt16 nWhichP )
 {}
 
 // page format item: contents of header and footer
-
-#define SC_HF_LEFTAREA   1
-#define SC_HF_CENTERAREA 2
-#define SC_HF_RIGHTAREA  3
-
 class SC_DLLPUBLIC ScPageHFItem : public SfxPoolItem
 {
     EditTextObject* pLeftArea;
@@ -253,9 +248,6 @@ public:
     void SetLeftArea( const EditTextObject& rNew );
     void SetCenterArea( const EditTextObject& rNew );
     void SetRightArea( const EditTextObject& rNew );
-
-    // Set method with pointer assignment, nArea see defines above
-    void SetArea( EditTextObject *pNew, int nArea );
 };
 
 // page format item: contents of header and footer
