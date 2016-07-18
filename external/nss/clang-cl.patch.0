@@ -63,9 +63,9 @@
  #define CERTDB_VALID_PEER CERTDB_TERMINAL_RECORD
 --- nss/lib/util/pkcs11n.h
 +++ nss/lib/util/pkcs11n.h
-@@ -390,7 +390,7 @@
+@@ -426,7 +426,7 @@
  /* keep the old value for compatibility reasons*/
- #define CKT_NSS_MUST_VERIFY ((__CKT_NSS_MUST_VERIFY)(CKT_NSS +4))
+ #define CKT_NSS_MUST_VERIFY ((__CKT_NSS_MUST_VERIFY)(CKT_NSS + 4))
  #else
 -#ifdef _WIN32
 +#if defined _WIN32 && !defined __clang__

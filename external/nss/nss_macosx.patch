@@ -13,7 +13,7 @@ diff -ru a/nspr/configure b/nspr/configure
 diff -ru a/nss/coreconf/Darwin.mk b/nss/coreconf/Darwin.mk
 --- a/a/nss/coreconf/Darwin.mk	2014-09-29 16:50:22.992304799 +0100
 +++ b/b/nss/coreconf/Darwin.mk	2014-09-29 16:51:59.214931953 +0100
-@@ -7,8 +7,12 @@
+@@ -8,8 +8,12 @@
  
  DEFAULT_COMPILER = gcc
  
@@ -28,23 +28,25 @@ diff -ru a/nss/coreconf/Darwin.mk b/nss/coreconf/Darwin.mk
  RANLIB		= ranlib
  
  ifndef CPU_ARCH
-@@ -19,11 +23,15 @@
+@@ -20,13 +24,17 @@
  
  ifeq (,$(filter-out i%86,$(CPU_ARCH)))
  ifdef USE_64
 +ifeq (,$(findstring -arch ,$(CC)))
  CC              += -arch x86_64
+ CCC             += -arch x86_64
 +endif
  override CPU_ARCH	= x86_64
  else
  OS_REL_CFLAGS	= -Di386
 +ifeq (,$(findstring -arch ,$(CC)))
  CC              += -arch i386
+ CCC             += -arch i386
 +endif
  override CPU_ARCH	= x86
  endif
  else
-@@ -31,12 +39,16 @@
+@@ -40,12 +48,16 @@
  endif
  
  ifneq (,$(MACOS_SDK_DIR))
@@ -62,7 +64,7 @@ diff -ru a/nss/coreconf/Darwin.mk b/nss/coreconf/Darwin.mk
          # GCC <= 3
          DARWIN_SDK_FRAMEWORKS = -F$(MACOS_SDK_DIR)/System/Library/Frameworks
          ifneq (,$(shell find $(MACOS_SDK_DIR)/Library/Frameworks -maxdepth 0))
-@@ -104,7 +115,7 @@
+@@ -108,7 +120,7 @@
  # May override this with different compatibility and current version numbers.
  DARWIN_DYLIB_VERSIONS = -compatibility_version 1 -current_version 1
  # May override this with -bundle to create a loadable module.
