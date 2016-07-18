@@ -149,7 +149,6 @@ protected:
     virtual void                    ExportContent_() override;
     virtual void                    ExportMasterStyles_() override;
     virtual void                    ExportFontDecls_() override;
-    virtual sal_uInt32              exportDoc( enum ::xmloff::token::XMLTokenEnum eClass ) override;
     virtual SvXMLAutoStylePoolP*    CreateAutoStylePool() override;
     virtual XMLShapeExport*         CreateShapeExport() override;
 

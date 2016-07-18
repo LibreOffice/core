@@ -101,7 +101,6 @@ protected:
 
     // #i70852# override Layer interface to force to FormControl layer
     SAL_DLLPRIVATE virtual SdrLayerID GetLayer() const override;
-    SAL_DLLPRIVATE virtual void NbcSetLayer(SdrLayerID nLayer) override;
 
 private:
     /** isolates the control model from its form component hierarchy, i.e. removes it from

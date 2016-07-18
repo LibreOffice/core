@@ -52,9 +52,6 @@ public:
 
     void            LateInit( const css::uno::Reference< css::frame::XFrame >& _rxFrame );
 
-protected:
-    virtual bool    FillItemSet( SfxItemSet* ) override;
-
 private:
     void    ImplInitDocument();
 };

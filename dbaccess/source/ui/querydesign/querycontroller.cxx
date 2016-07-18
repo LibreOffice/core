@@ -365,11 +365,6 @@ Reference< XPropertySetInfo > SAL_CALL OQueryController::getPropertySetInfo() th
     return xInfo;
 }
 
-sal_Bool SAL_CALL OQueryController::convertFastPropertyValue( Any& o_rConvertedValue, Any& o_rOldValue, sal_Int32 i_nHandle, const Any& i_rValue ) throw (IllegalArgumentException)
-{
-    return OPropertyContainer::convertFastPropertyValue( o_rConvertedValue, o_rOldValue, i_nHandle, i_rValue );
-}
-
 void SAL_CALL OQueryController::setFastPropertyValue_NoBroadcast( sal_Int32 i_nHandle, const Any& i_rValue ) throw ( Exception, std::exception )
 {
     OPropertyContainer::setFastPropertyValue_NoBroadcast( i_nHandle, i_rValue );

@@ -191,12 +191,6 @@ namespace dbaui
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
         // OPropertySetHelper
-        virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                                    css::uno::Any& rConvertedValue,
-                                    css::uno::Any& rOldValue,
-                                    sal_Int32 nHandle,
-                                    const css::uno::Any& rValue
-                                ) throw (css::lang::IllegalArgumentException) override;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
                                     const css::uno::Any& rValue

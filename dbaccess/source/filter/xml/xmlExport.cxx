@@ -1265,11 +1265,6 @@ void ODBExport::ExportStyles_(bool bUsed)
     SvXMLExport::ExportStyles_(bUsed);
 }
 
-sal_uInt32 ODBExport::exportDoc(enum ::xmloff::token::XMLTokenEnum eClass)
-{
-    return SvXMLExport::exportDoc( eClass );
-}
-
 void ODBExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 {
     Reference<XQueryDefinitionsSupplier> xSup(getDataSource(),UNO_QUERY);

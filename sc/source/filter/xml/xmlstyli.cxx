@@ -987,14 +987,6 @@ ScMasterPageContext::~ScMasterPageContext()
 {
 }
 
-SvXMLImportContext *ScMasterPageContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference< XAttributeList > & xAttrList )
-{
-    return XMLTextMasterPageContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
-}
-
 SvXMLImportContext *ScMasterPageContext::CreateHeaderFooterContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,

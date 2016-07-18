@@ -3110,16 +3110,6 @@ void SAL_CALL LayoutManager::elementReplaced( const ui::ConfigurationEvent& Even
     }
 }
 
-//      OPropertySetHelper
-
-sal_Bool SAL_CALL LayoutManager::convertFastPropertyValue( Any&       aConvertedValue,
-                                                           Any&       aOldValue,
-                                                           sal_Int32  nHandle,
-                                                           const Any& aValue ) throw( lang::IllegalArgumentException )
-{
-    return LayoutManager_PBase::convertFastPropertyValue( aConvertedValue, aOldValue, nHandle, aValue );
-}
-
 void SAL_CALL LayoutManager::setFastPropertyValue_NoBroadcast( sal_Int32       nHandle,
                                                                const uno::Any& aValue  ) throw( uno::Exception, std::exception )
 {
