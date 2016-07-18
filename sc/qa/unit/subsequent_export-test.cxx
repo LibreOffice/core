@@ -110,6 +110,7 @@ public:
     void testCellNoteExportXLS();
     void testFormatExportODS();
 
+    void testCustomColumnWidthExportXLSX();
     void testOutlineExportXLSX();
     void testHiddenEmptyRowsXLSX();
     void testLandscapeOrientationXLSX();
@@ -197,6 +198,7 @@ public:
     CPPUNIT_TEST(testCellNoteExportXLS);
     CPPUNIT_TEST(testFormatExportODS);
 
+    CPPUNIT_TEST(testCustomColumnWidthExportXLSX);
     CPPUNIT_TEST(testOutlineExportXLSX);
     CPPUNIT_TEST(testHiddenEmptyRowsXLSX);
     CPPUNIT_TEST(testLandscapeOrientationXLSX);
@@ -478,6 +480,108 @@ void ScExportTest::testFormatExportODS()
 
     xDocSh->DoClose();
 }
+
+
+void ScExportTest::testCustomColumnWidthExportXLSX()
+{
+    //tdf#100946 FILESAVE Excel on OS X ignored column widths in XLSX last saved by LO
+    ScDocShellRef xShell = loadDoc("custom_column_width.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    // First column, has everything default
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]", "hidden", "false");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]", "outlineLevel", "0");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]", "customWidth", "false");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]", "collapsed", "false");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]", "min", "1");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]", "max", "1");
+
+    // Second column, has custom width
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]", "hidden", "false");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]", "outlineLevel", "0");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]", "customWidth", "true");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]", "collapsed", "false");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]", "min", "2");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]", "max", "2");
+
+    // Third column, has everything default
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]", "hidden", "false");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]", "outlineLevel", "0");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]", "customWidth", "false");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]", "collapsed", "false");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]", "min", "3");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]", "max", "3");
+
+    // Fourth column has custom width. Columns from 4 to 7 are hidden
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]", "hidden", "true");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]", "outlineLevel", "0");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]", "customWidth", "true");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]", "collapsed", "false");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]", "min", "4");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]", "max", "4");
+
+    // 5th column has custom width. Columns from 4 to 7 are hidden
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]", "hidden", "true");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]", "outlineLevel", "0");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]", "customWidth", "true");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]", "collapsed", "false");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]", "min", "5");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]", "max", "5");
+
+    // 6th and 7th columns has default width and it are hidden
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[6]", "hidden", "true");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[6]", "outlineLevel", "0");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[6]", "customWidth", "false");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[6]", "collapsed", "false");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[6]", "min", "6");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[6]", "max", "7");
+
+    // 8th column has everything default
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[7]", "hidden", "false");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[7]", "outlineLevel", "0");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[7]", "customWidth", "false");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[7]", "collapsed", "false");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[7]", "min", "8");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[7]", "max", "8");
+
+    // 9th column has custom width
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[8]", "hidden", "false");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[8]", "outlineLevel", "0");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[8]", "customWidth", "true");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[8]", "collapsed", "false");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[8]", "min", "9");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[8]", "max", "9");
+
+    // Rest of columns are default
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[9]", "hidden", "false");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[9]", "outlineLevel", "0");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[9]", "customWidth", "false");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[9]", "collapsed", "false");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[9]", "min", "10");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[9]", "max", "1025");
+
+    // We expected that exactly 9 unique Nodes will be produced
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col", 9);
+
+    // Data is available only in second row
+    // FIXME On Windows the r=1. On Linux and OS X r=2
+    //assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]", "r", "2");
+
+    // FIXME We expected that exactly 1 Row Nodes will be produced. On Windows 2 rows are produced.
+    //assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row", 1);
+
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]", "hidden", "false");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]", "outlineLevel", "0");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]", "collapsed", "false");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]", "customFormat", "false");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]", "customHeight", "false");
+
+}
+
 
 void ScExportTest::testOutlineExportXLSX()
 {
