@@ -1,6 +1,7 @@
---- misc/nss-3.14.4/mozilla/nsprpub/config/rules.mk	2009-12-09 22:24:37.000000000 +0100
-+++ misc/build/nss-3.14.4/mozilla/nsprpub/config/rules.mk	2010-06-11 16:35:54.946870871 +0200
-@@ -377,7 +377,12 @@
+diff -ur misc/nss-3.25/nspr/config/rules.mk misc/build/nss-3.25/nspr/config/rules.mk
+--- misc/nss-3.25/nspr/config/rules.mk	2016-02-12 05:51:25.000000000 -0800
++++ misc/build/nss-3.25/nspr/config/rules.mk	2016-07-14 23:47:54.492034000 -0700
+@@ -382,7 +382,12 @@
  ifdef NS_USE_GCC
  	$(RC) $(RCFLAGS) $(filter-out -U%,$(DEFINES)) $(INCLUDES:-I%=--include-dir %) -o $@ $<
  else
@@ -14,9 +15,10 @@
  endif # GCC
  	@echo $(RES) finished
  endif
---- misc/nss-3.14.4/mozilla/nsprpub/configure	2010-02-08 19:41:35.000000000 +0100
-+++ misc/build/nss-3.14.4/mozilla/nsprpub/configure	2010-06-11 16:35:54.960188991 +0200
-@@ -4443,7 +4443,7 @@
+diff -ur misc/nss-3.25/nspr/configure misc/build/nss-3.25/nspr/configure
+--- misc/nss-3.25/nspr/configure	2016-02-12 05:51:25.000000000 -0800
++++ misc/build/nss-3.25/nspr/configure	2016-07-14 23:47:54.531323000 -0700
+@@ -6992,7 +6992,7 @@
      PR_MD_CSRCS=linux.c
      MKSHLIB='$(CC) $(DSO_LDOPTS) -o $@'
      DSO_CFLAGS=-fPIC
@@ -25,114 +27,35 @@
      _OPTIMIZE_FLAGS=-O2
      _DEBUG_FLAGS="-g -fno-inline"  # most people on linux use gcc/gdb, and that
                                     # combo is not yet good at debugging inlined
---- misc/nss-3.14.4/mozilla/security/coreconf/Darwin.mk	2010-02-04 19:59:10.000000000 +0100
-+++ misc/build/nss-3.14.4/mozilla/security/coreconf/Darwin.mk	2010-06-11 16:35:54.966185975 +0200
-@@ -5,10 +5,12 @@
+diff -ur misc/nss-3.25/nspr/pr/include/pratom.h misc/build/nss-3.25/nspr/pr/include/pratom.h
+--- misc/nss-3.25/nspr/pr/include/pratom.h	2016-02-12 05:51:25.000000000 -0800
++++ misc/build/nss-3.25/nspr/pr/include/pratom.h	2016-07-14 23:47:54.538325000 -0700
+@@ -81,7 +81,9 @@
+ #if defined(_WIN32) && !defined(_WIN32_WCE) && \
+     (!defined(_MSC_VER) || (_MSC_VER >= 1310))
  
- include $(CORE_DEPTH)/coreconf/UNIX.mk
++PR_END_EXTERN_C
+ #include <intrin.h>
++PR_BEGIN_EXTERN_C
  
--DEFAULT_COMPILER = gcc
-+DEFAULT_COMPILER = cc
-+
-+# CC is taken from environment automatically.
-+#CC		= cc
-+CCC		= $(CXX)
- 
--CC		= gcc
--CCC		= g++
- RANLIB		= ranlib
- 
- ifndef CPU_ARCH
---- misc/nss-3.14.4/mozilla/security/coreconf/Linux.mk	2010-01-15 23:19:00.000000000 +0100
-+++ misc/build/nss-3.14.4/mozilla/security/coreconf/Linux.mk	2010-06-11 16:35:54.981151732 +0200
-@@ -16,8 +16,11 @@
- 	IMPL_STRATEGY = _PTH
+ #ifdef _MSC_VER
+ #pragma intrinsic(_InterlockedIncrement)
+diff -ur misc/nss-3.25/nss/Makefile misc/build/nss-3.25/nss/Makefile
+--- misc/nss-3.25/nss/Makefile	2016-06-20 10:11:28.000000000 -0700
++++ misc/build/nss-3.25/nss/Makefile	2016-07-14 23:47:54.544021000 -0700
+@@ -76,6 +76,9 @@
+ ifeq ($(OS_TARGET),WIN95)
+ NSPR_CONFIGURE_OPTS += --enable-win32-target=WIN95
  endif
- 
--CC			= gcc
--CCC			= g++
-+# CC is taken from environment automatically.
-+#CC			= gcc
-+# Use CCC from environment.
-+#CCC			= g++
-+CCC		= $(CXX)
- RANLIB			= ranlib
- 
- DEFAULT_COMPILER = gcc
-@@ -143,7 +146,7 @@
- # incorrectly reports undefined references in the libraries we link with, so
- # we don't use -z defs there.
- ZDEFS_FLAG		= -Wl,-z,defs
--DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG))
-+DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG)) '-Wl,-rpath,$$ORIGIN'
- LDFLAGS			+= $(ARCHFLAG)
- 
- # On Maemo, we need to use the -rpath-link flag for even the standard system
-@@ -174,8 +177,13 @@
- endif
- endif
- 
-+ifeq ($(SYSTEM_ZLIB),YES)  
-+# Currently (3.12.4) only the tools modutil and signtool are linked with libz
-+# If USE_SYSTEM_ZLIB is not set then the tools link statically libzlib.a which
-+# is also build in nss.
- USE_SYSTEM_ZLIB = 1
- ZLIB_LIBS = -lz
++ifdef MACOS_SDK_DIR
++NSPR_CONFIGURE_OPTS += --with-macos-sdk=$(MACOS_SDK_DIR)
 +endif
- 
- # The -rpath '$$ORIGIN' linker option instructs this library to search for its
- # dependencies in the same directory where it resides.
---- misc/nss-3.14.4/mozilla/security/coreconf/SunOS5.mk	2009-06-11 02:55:32.000000000 +0200
-+++ misc/build/nss-3.14.4/mozilla/security/coreconf/SunOS5.mk	2010-06-11 16:35:54.985571182 +0200
-@@ -48,8 +48,12 @@
- 	    # OPTIMIZER += -mno-omit-leaf-frame-pointer -fno-omit-frame-pointer
- 	endif
- else
--	CC         = cc
--	CCC        = CC
-+# CC is taken from environment automatically.
-+#	CC         = cc
-+# Use CXX from environment.
-+#	CCC        = CC
-+        CCC       = $(CXX)
-+
- 	ASFLAGS   += -Wa,-P
- 	OS_CFLAGS += $(NOMD_OS_CFLAGS) $(ARCHFLAG)
- 	ifndef BUILD_OPT
---- misc/nss-3.14.4/mozilla/security/coreconf/arch.mk	2009-06-05 04:14:49.000000000 +0200
-+++ misc/build/nss-3.14.4/mozilla/security/coreconf/arch.mk	2010-06-11 16:35:54.990913282 +0200
-@@ -302,7 +302,12 @@
- # IMPL_STRATEGY may be defined too.
- #
- 
--OBJDIR_NAME = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(COMPILER_TAG)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG).OBJ
-+# OBJDIR_NAME is used to build the directory containing the built objects, for 
-+# example mozilla/dist/Linux2.6_x86_glibc_PTH_DBG.OBJ
-+# We need to deliver the contents of that folder into the solver. To make that easier
-+# in the makefile we rename this directory to "out". 
-+#OBJDIR_NAME = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(COMPILER_TAG)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG).OBJ
-+OBJDIR_NAME = out
- 
- ifeq (,$(filter-out WIN%,$(OS_TARGET)))
- ifndef BUILD_OPT
---- misc/nss-3.14.4/mozilla/security/coreconf/rules.mk	2009-12-08 02:33:36.000000000 +0100
-+++ misc/build/nss-3.14.4/mozilla/security/coreconf/rules.mk	2010-06-11 16:35:54.996448704 +0200
-@@ -318,7 +318,12 @@
- ifdef NS_USE_GCC
- 	$(RC) $(filter-out -U%,$(DEFINES)) $(INCLUDES:-I%=--include-dir %) -o $@ $<
- else
--	$(RC) $(filter-out -U%,$(DEFINES)) $(INCLUDES) -Fo$@ $<
-+        #We remove stl from the paths to avoid that rc.exe finds the stlport of
-+        #OOo. stlport includes the system stl which will fail. By removing it,
-+        #rc will use the stl from the system if the path is in the INCLUDE
-+        #variable.
-+	INCLUDE="$(subst /stl,,$(INCLUDE))" $(RC) $(filter-out -U%,$(DEFINES)) $(INCLUDES) -Fo$@ $<
-+
+ ifdef USE_DEBUG_RTL
+ NSPR_CONFIGURE_OPTS += --enable-debug-rtl
  endif
- 	@echo $(RES) finished
- endif
---- misc/nss-3.14.4/mozilla/security/nss/cmd/platlibs.mk	2010-02-04 19:59:10.000000000 +0100
-+++ misc/build/nss-3.14.4/mozilla/security/nss/cmd/platlibs.mk	2010-06-11 16:35:55.004869805 +0200
+diff -ur misc/nss-3.25/nss/cmd/platlibs.mk misc/build/nss-3.25/nss/cmd/platlibs.mk
+--- misc/nss-3.25/nss/cmd/platlibs.mk	2016-06-20 10:11:28.000000000 -0700
++++ misc/build/nss-3.25/nss/cmd/platlibs.mk	2016-07-14 23:47:54.549839000 -0700
 @@ -10,17 +10,18 @@
  
  ifeq ($(OS_ARCH), SunOS) 
@@ -156,19 +79,20 @@
  endif
  endif
  
---- misc/nss-3.14.4/mozilla/security/nss/cmd/shlibsign/Makefile	2009-08-07 21:06:37.000000000 +0200
-+++ misc/build/nss-3.14.4/mozilla/security/nss/cmd/shlibsign/Makefile	2010-06-11 16:35:55.009851148 +0200
-@@ -46,10 +46,15 @@
- 
- # sign any and all shared libraries that contain the word freebl
- 
+diff -ur misc/nss-3.25/nss/cmd/shlibsign/Makefile misc/build/nss-3.25/nss/cmd/shlibsign/Makefile
+--- misc/nss-3.25/nss/cmd/shlibsign/Makefile	2016-06-20 10:11:28.000000000 -0700
++++ misc/build/nss-3.25/nss/cmd/shlibsign/Makefile	2016-07-14 23:47:54.554784000 -0700
+@@ -49,10 +49,15 @@
+ CHECKLIBS =
+ CHECKLOC =
+ else
 -CHECKLIBS = $(DIST)/lib/$(DLL_PREFIX)softokn3.$(DLL_SUFFIX)
 -CHECKLIBS += $(wildcard $(DIST)/lib/$(DLL_PREFIX)freebl*3.$(DLL_SUFFIX))
 +# Signing causes loading of some system library which in turn loads
 +# libsqlite3. Then it loads libsqulite3 from nss, which does not have the proper
 +# version. Therefore signing fails.
 +# We cannot build with the system sqlite3, because it is too old (SDK
-+# 10.4). Otherwise one could set NSS_USE_SYSTEM_SQLITE=1 and use the system lib. 
++# 10.4). Otherwise one could set NSS_USE_SYSTEM_SQLITE=1 and use the system lib.
 +#CHECKLIBS = $(DIST)/lib/$(DLL_PREFIX)softokn3.$(DLL_SUFFIX)
 +#CHECKLIBS += $(wildcard $(DIST)/lib/$(DLL_PREFIX)freebl*3.$(DLL_SUFFIX))
  ifndef NSS_DISABLE_DBM
@@ -177,3 +101,162 @@
  endif
  CHECKLOC = $(CHECKLIBS:.$(DLL_SUFFIX)=.chk)
  
+diff -ur misc/nss-3.25/nss/coreconf/Darwin.mk misc/build/nss-3.25/nss/coreconf/Darwin.mk
+--- misc/nss-3.25/nss/coreconf/Darwin.mk	2016-06-20 10:11:28.000000000 -0700
++++ misc/build/nss-3.25/nss/coreconf/Darwin.mk	2016-07-14 23:47:54.560325000 -0700
+@@ -6,10 +6,12 @@
+ include $(CORE_DEPTH)/coreconf/UNIX.mk
+ include $(CORE_DEPTH)/coreconf/Werror.mk
+ 
+-DEFAULT_COMPILER = gcc
++DEFAULT_COMPILER = cc
++
++# CC is taken from environment automatically.
++#CC		= cc
++CCC		= $(CXX)
+ 
+-CC		= gcc
+-CCC		= g++
+ RANLIB		= ranlib
+ 
+ ifndef CPU_ARCH
+diff -ur misc/nss-3.25/nss/coreconf/FreeBSD.mk misc/build/nss-3.25/nss/coreconf/FreeBSD.mk
+--- misc/nss-3.25/nss/coreconf/FreeBSD.mk	2016-06-20 10:11:28.000000000 -0700
++++ misc/build/nss-3.25/nss/coreconf/FreeBSD.mk	2016-07-14 23:47:54.564724000 -0700
+@@ -5,9 +5,8 @@
+ 
+ include $(CORE_DEPTH)/coreconf/UNIX.mk
+ 
+-DEFAULT_COMPILER	= gcc
+-CC			= gcc
+-CCC			= g++
++DEFAULT_COMPILER	= $(CC)
++CCC			= $(CXX)
+ RANLIB			= ranlib
+ 
+ CPU_ARCH		= $(OS_TEST)
+@@ -21,7 +20,7 @@
+ CPU_ARCH		= x86_64
+ endif
+ 
+-OS_CFLAGS		= $(DSO_CFLAGS) -Wall -Wno-switch -DFREEBSD -DHAVE_STRERROR -DHAVE_BSD_FLOCK
++OS_CFLAGS		= $(DSO_CFLAGS) -Wall -Wno-switch -DFREEBSD -DHAVE_STRERROR -DHAVE_UNISTD_H -DHAVE_BSD_FLOCK
+ 
+ DSO_CFLAGS		= -fPIC
+ DSO_LDOPTS		= -shared -Wl,-soname -Wl,$(notdir $@)
+diff -ur misc/nss-3.25/nss/coreconf/Linux.mk misc/build/nss-3.25/nss/coreconf/Linux.mk
+--- misc/nss-3.25/nss/coreconf/Linux.mk	2016-06-20 10:11:28.000000000 -0700
++++ misc/build/nss-3.25/nss/coreconf/Linux.mk	2016-07-14 23:47:54.569918000 -0700
+@@ -16,8 +16,11 @@
+ 	IMPL_STRATEGY = _PTH
+ endif
+ 
+-CC			= gcc
+-CCC			= g++
++# CC is taken from environment automatically.
++#CC			= gcc
++# Use CCC from environment.
++#CCC			= g++
++CCC		= $(CXX)
+ RANLIB			= ranlib
+ 
+ DEFAULT_COMPILER = gcc
+@@ -139,7 +142,7 @@
+ OS_PTHREAD = -lpthread 
+ endif
+ 
+-OS_CFLAGS		= $(DSO_CFLAGS) $(OS_REL_CFLAGS) $(ARCHFLAG) -pipe -ffunction-sections -fdata-sections -DLINUX -Dlinux -DHAVE_STRERROR
++OS_CFLAGS		= $(DSO_CFLAGS) $(OS_REL_CFLAGS) $(ARCHFLAG) -pipe -ffunction-sections -fdata-sections -DLINUX -Dlinux -DHAVE_STRERROR -DHAVE_UNISTD_H
+ OS_LIBS			= $(OS_PTHREAD) -ldl -lc
+ 
+ ifdef USE_PTHREADS
+@@ -149,7 +152,7 @@
+ ARCH			= linux
+ 
+ DSO_CFLAGS		= -fPIC
+-DSO_LDOPTS		= -shared $(ARCHFLAG) -Wl,--gc-sections
++DSO_LDOPTS		= -shared $(ARCHFLAG) -Wl,--gc-sections '-Wl,-rpath,$$ORIGIN'
+ # The linker on Red Hat Linux 7.2 and RHEL 2.1 (GNU ld version 2.11.90.0.8)
+ # incorrectly reports undefined references in the libraries we link with, so
+ # we don't use -z defs there.
+@@ -189,8 +192,13 @@
+ endif
+ endif
+ 
++ifeq ($(SYSTEM_ZLIB),YES)  
++# Currently (3.12.4) only the tools modutil and signtool are linked with libz
++# If USE_SYSTEM_ZLIB is not set then the tools link statically libzlib.a which
++# is also build in nss.
+ USE_SYSTEM_ZLIB = 1
+ ZLIB_LIBS = -lz
++endif
+ 
+ # The -rpath '$$ORIGIN' linker option instructs this library to search for its
+ # dependencies in the same directory where it resides.
+diff -ur misc/nss-3.25/nss/coreconf/SunOS5.mk misc/build/nss-3.25/nss/coreconf/SunOS5.mk
+--- misc/nss-3.25/nss/coreconf/SunOS5.mk	2016-06-20 10:11:28.000000000 -0700
++++ misc/build/nss-3.25/nss/coreconf/SunOS5.mk	2016-07-14 23:47:54.575211000 -0700
+@@ -48,8 +48,12 @@
+ 	    # OPTIMIZER += -mno-omit-leaf-frame-pointer -fno-omit-frame-pointer
+ 	endif
+ else
+-	CC         = cc
+-	CCC        = CC
++# CC is taken from environment automatically.
++#	CC         = cc
++# Use CXX from environment.
++#	CCC        = CC
++        CCC       = $(CXX)
++
+ 	ASFLAGS   += -Wa,-P
+ 	OS_CFLAGS += $(NOMD_OS_CFLAGS) $(ARCHFLAG)
+ 	ifndef BUILD_OPT
+diff -ur misc/nss-3.25/nss/coreconf/arch.mk misc/build/nss-3.25/nss/coreconf/arch.mk
+--- misc/nss-3.25/nss/coreconf/arch.mk	2016-06-20 10:11:28.000000000 -0700
++++ misc/build/nss-3.25/nss/coreconf/arch.mk	2016-07-14 23:47:54.579901000 -0700
+@@ -294,7 +294,12 @@
+ ifdef CROSS_COMPILE
+ OBJDIR_NAME = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG).OBJ
+ else
+-OBJDIR_NAME = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(COMPILER_TAG)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG).OBJ
++# OBJDIR_NAME is used to build the directory containing the built objects, for
++# example mozilla/dist/Linux2.6_x86_glibc_PTH_DBG.OBJ
++# We need to deliver the contents of that folder into the solver. To make that easier
++# in the makefile we rename this directory to "out".
++#OBJDIR_NAME = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(COMPILER_TAG)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG).OBJ
++OBJDIR_NAME = out
+ endif
+ 
+ 
+diff -ur misc/nss-3.25/nss/coreconf/rules.mk misc/build/nss-3.25/nss/coreconf/rules.mk
+--- misc/nss-3.25/nss/coreconf/rules.mk	2016-06-20 10:11:28.000000000 -0700
++++ misc/build/nss-3.25/nss/coreconf/rules.mk	2016-07-14 23:47:54.586736000 -0700
+@@ -322,7 +322,12 @@
+ ifdef NS_USE_GCC
+ 	$(RC) $(filter-out -U%,$(DEFINES)) $(INCLUDES:-I%=--include-dir %) -o $@ $<
+ else
+-	$(RC) $(filter-out -U%,$(DEFINES)) $(INCLUDES) -Fo$@ $<
++        #We remove stl from the paths to avoid that rc.exe finds the stlport of
++        #OOo. stlport includes the system stl which will fail. By removing it,
++        #rc will use the stl from the system if the path is in the INCLUDE
++        #variable.
++	INCLUDE="$(subst /stl,,$(INCLUDE))" $(RC) $(filter-out -U%,$(DEFINES)) $(INCLUDES) -Fo$@ $<
++
+ endif
+ 	@echo $(RES) finished
+ endif
+diff -ur misc/nss-3.25/nss/lib/zlib/inflate.c misc/build/nss-3.25/nss/lib/zlib/inflate.c
+--- misc/nss-3.25/nss/lib/zlib/inflate.c	2016-06-20 10:11:28.000000000 -0700
++++ misc/build/nss-3.25/nss/lib/zlib/inflate.c	2016-07-14 23:47:54.598199000 -0700
+@@ -1472,9 +1472,9 @@
+ {
+     struct inflate_state FAR *state;
+ 
+-    if (strm == Z_NULL || strm->state == Z_NULL) return -1L << 16;
++    if (strm == Z_NULL || strm->state == Z_NULL) return ~0UL << 16;
+     state = (struct inflate_state FAR *)strm->state;
+-    return ((long)(state->back) << 16) +
++    return ((unsigned long)(state->back) << 16) +
+         (state->mode == COPY ? state->length :
+             (state->mode == MATCH ? state->was - state->length : 0));
+ }
