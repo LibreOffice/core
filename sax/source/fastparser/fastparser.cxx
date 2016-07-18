@@ -233,6 +233,7 @@ public:
     Entity& getEntity()             { return *mpTop; }
     void parse();
     void produce( bool bForceFlush = false );
+    bool m_bIgnoreMissingNSDecl;
 
 private:
     bool consume(EventList *);
@@ -619,6 +620,7 @@ FastSaxParserImpl::FastSaxParserImpl( FastSaxParser* ) :
 #if 0
     mpFront(pFront),
 #endif
+    m_bIgnoreMissingNSDecl(false),
     mpTop(nullptr)
 {
     mxDocumentLocator.set( new FastLocatorImpl( this ) );
@@ -668,7 +670,7 @@ sal_Int32 FastSaxParserImpl::GetTokenWithPrefix( const xmlChar* pPrefix, int nPr
             break;
         }
 
-        if( !nNamespace )
+        if( !nNamespace && !m_bIgnoreMissingNSDecl )
             throw SAXException("No namespace defined for " + OUString(XML_CAST(pPrefix),
                     nPrefixLen, RTL_TEXTENCODING_UTF8), Reference< XInterface >(), Any());
     }
@@ -1129,7 +1131,8 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
         {
             if( prefix != nullptr )
             {
-                sNamespace = OUString( XML_CAST( URI ), strlen( XML_CAST( URI )), RTL_TEXTENCODING_UTF8 );
+                if ( !m_bIgnoreMissingNSDecl || URI != nullptr )
+                    sNamespace = OUString( XML_CAST( URI ), strlen( XML_CAST( URI )), RTL_TEXTENCODING_UTF8 );
                 nNamespaceToken = GetNamespaceToken( sNamespace );
                 rEvent.msNamespace = OUString( XML_CAST( prefix ), strlen( XML_CAST( prefix )), RTL_TEXTENCODING_UTF8 );
             }
@@ -1298,6 +1301,24 @@ FastSaxParser::FastSaxParser() : mpImpl(new FastSaxParserImpl(this)) {}
 
 FastSaxParser::~FastSaxParser()
 {
+}
+
+void SAL_CALL
+FastSaxParser::initialize(css::uno::Sequence< css::uno::Any > const& rArguments)
+    throw (css::uno::RuntimeException, css::uno::Exception, std::exception)
+{
+    if (rArguments.getLength())
+    {
+        OUString str;
+        if ( ( rArguments[0] >>= str ) && "IgnoreMissingNSDecl" == str )
+            mpImpl->m_bIgnoreMissingNSDecl = true;
+        else if ( str == "DoSmeplease" )
+        {
+            //just ignore as this is already immune to billon laughs
+        }
+        else
+            throw IllegalArgumentException();
+    }
 }
 
 void FastSaxParser::parseStream( const xml::sax::InputSource& aInputSource )
