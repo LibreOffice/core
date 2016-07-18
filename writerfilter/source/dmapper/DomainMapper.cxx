@@ -1040,8 +1040,8 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
 
 void DomainMapper::lcl_sprm(Sprm & rSprm)
 {
-    if( !m_pImpl->getTableManager().sprm(rSprm))
-        sprmWithProps( rSprm, m_pImpl->GetTopContext() );
+    if (!m_pImpl->hasTableManager() || !m_pImpl->getTableManager().sprm(rSprm))
+        sprmWithProps(rSprm, m_pImpl->GetTopContext());
 }
 
 sal_Int32 lcl_getCurrentNumberingProperty(
@@ -2795,7 +2795,8 @@ void DomainMapper::lcl_endSectionGroup()
 
 void DomainMapper::lcl_startParagraphGroup()
 {
-    m_pImpl->getTableManager().startParagraphGroup();
+    if (m_pImpl->hasTableManager())
+        m_pImpl->getTableManager().startParagraphGroup();
     /*
      * Add new para properties only if paragraph is not split
      * or the top context is not of paragraph properties
@@ -2832,7 +2833,8 @@ void DomainMapper::lcl_startParagraphGroup()
 void DomainMapper::lcl_endParagraphGroup()
 {
     m_pImpl->PopProperties(CONTEXT_PARAGRAPH);
-    m_pImpl->getTableManager().endParagraphGroup();
+    if (m_pImpl->hasTableManager())
+       m_pImpl->getTableManager().endParagraphGroup();
     //frame conversion has to be executed after table conversion
     m_pImpl->ExecuteFrameConversion();
     m_pImpl->SetIsOutsideAParagraph(true);
