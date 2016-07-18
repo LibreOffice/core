@@ -3018,13 +3018,14 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
 
         {
             VclPtr<PopupMenu> pPopup = pView->CreateContextMenu();
-            if( pPopup )
+            if (pPopup)
             {
                 // do action for selected entry in popup menu
                 sal_uInt16 nMenuAction = pPopup->Execute( pView, aPopupPos );
                 if ( nMenuAction )
                     pView->ExecuteContextMenuAction( nMenuAction );
                 lcl_DeleteSubPopups(pPopup.get());
+                pPopup.disposeAndClear();
             }
         }
 
