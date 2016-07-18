@@ -110,16 +110,16 @@ diff -ru a/nss/coreconf/Linux.mk b/nss/coreconf/Linux.mk
  RANLIB			= ranlib
  
  DEFAULT_COMPILER = gcc
-@@ -145,7 +148,7 @@
- # incorrectly reports undefined references in the libraries we link with, so
- # we don't use -z defs there.
+@@ -157,7 +160,7 @@
+ # against the libsanitizer runtime built into the main executable.
  ZDEFS_FLAG		= -Wl,-z,defs
+ ifneq ($(USE_ASAN),1)
 -DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG))
-+DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG)) -Wl,-z,origin '-Wl,-rpath,$$ORIGIN'
++DSO_LDOPTS             += $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG)) -Wl,-z,origin '-Wl,-rpath,$$ORIGIN'
+ endif
  LDFLAGS			+= $(ARCHFLAG)
  
- # On Maemo, we need to use the -rpath-link flag for even the standard system
-@@ -176,8 +179,13 @@
+@@ -189,8 +192,13 @@
  endif
  endif
  
@@ -175,13 +175,13 @@ diff -ru a/nss/Makefile b/nss/Makefile
 diff -ru nss.orig/nss/coreconf/Werror.mk nss/nss/coreconf/Werror.mk
 --- a/nss.orig/nss/coreconf/Werror.mk	2016-02-12 15:36:18.000000000 +0100
 +++ b/nss/nss/coreconf/Werror.mk	2016-02-23 23:58:15.119584046 +0100
-@@ -60,7 +60,8 @@
-   endif #ndef NSS_ENABLE_WERROR
+@@ -94,7 +94,8 @@
+     endif #ndef NSS_ENABLE_WERROR
  
-   ifeq ($(NSS_ENABLE_WERROR),1)
--    WARNING_CFLAGS += -Werror
+     ifeq ($(NSS_ENABLE_WERROR),1)
+-      WARNING_CFLAGS += -Werror
 +# We do not treat warnings as errors.
 +#    WARNING_CFLAGS += -Werror
-   else
-     # Old versions of gcc (< 4.8) don't support #pragma diagnostic in functions.
-     # Use this to disable use of that #pragma and the warnings it suppresses.
+     else
+       # Old versions of gcc (< 4.8) don't support #pragma diagnostic in functions.
+       # Use this to disable use of that #pragma and the warnings it suppresses.
