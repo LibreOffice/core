@@ -103,7 +103,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="rmadjcellborders">
+                      <object class="GtkCheckButton" id="rmadjcellborders:wrap">
                         <property name="label" translatable="yes">Remove border from adjacent cells as well</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
