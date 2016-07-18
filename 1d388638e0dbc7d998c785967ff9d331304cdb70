@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_00b9c8e9",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-18T07:34:29Z",
+      "side": 1,
+      "message": "Isn\u0027t this more about actions or commands rather than locations?  (\"These URI schemes allow for office productivity applications to be invoked with various commands.\" \u003chttps://msdn.microsoft.com/en-us/library/dn906146#Anchor_1\u003e)  But naming is nitpicking, at least to some degree, of course.",
+      "revId": "1d388638e0dbc7d998c785967ff9d331304cdb70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_20cec483",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-18T07:34:29Z",
+      "side": 1,
+      "message": "I\u0027d capture the return value of this IsOfficeURI call, and assert on that, instead of the additional call to IsOfficeURI.",
+      "revId": "1d388638e0dbc7d998c785967ff9d331304cdb70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_a0a014a7",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-18T07:34:29Z",
+      "side": 1,
+      "message": "This causes\n\n  soffice --display ms-word:test.odt :0\n\nto behave \"rather oddly\" and\n\n  soffice -p ms-word:test.odt\n\nto behave \"somewhat oddly\".",
+      "revId": "1d388638e0dbc7d998c785967ff9d331304cdb70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
