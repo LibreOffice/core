@@ -144,6 +144,24 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_e0fdbc6f",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-18T09:26:29Z",
+      "side": 1,
+      "message": "I\u0027d do the change anyway, as then the code no longer implicitly relies on IsOfficeURI having no side effects, but, of course, YMMV.",
+      "parentUuid": "5a8bc5a2_00ec68c6",
+      "revId": "1d388638e0dbc7d998c785967ff9d331304cdb70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_a0a014a7",
         "filename": "desktop/source/app/cmdlineargs.cxx",
         "patchSetId": 15
@@ -209,6 +227,24 @@
       "side": 1,
       "message": "Do you mean that --display should have higher priority?\nI intended to cleanup the code a little after the patch gets in. I think this specific change should go there. So, your first example SHOULD be handled like \"soffice :0\"? I don\u0027t understand what would it mean.\nAnyway, I intended to make additions to the command line documentation as soon as it is committed (I already proposed changes to current one to catch up current state), so special handling of Office URIs could be discussed there. Or if you prefer, --display will suppress it.\nIn the second case, I suppose, -p should suppress any Office URI command, I\u0027ll do this.",
       "parentUuid": "5a8bc5a2_00b548cc",
+      "revId": "1d388638e0dbc7d998c785967ff9d331304cdb70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_20f8847c",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-18T09:26:29Z",
+      "side": 1,
+      "message": "* The command line argument following --display should always be treated as the argument of --display.\n\n* For switches like -p, --view, --convert-to, etc., I\u0027m not sure what the interpretation of following \"office URLs\" should be, but you need a decision about it that is reflected in the code.\n\n* \"Additions to the command line documentation\" would be in the helpcontent2 sub-repo?",
+      "parentUuid": "5a8bc5a2_e0e69ce7",
       "revId": "1d388638e0dbc7d998c785967ff9d331304cdb70",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
