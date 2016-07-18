@@ -388,9 +388,6 @@ IMPL_LINK_TYPED( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
 
 void ScSpecialFilterDlg::SyncFocusState()
 {
-    if (!IsActive())
-        return;
-
     if( pEdCopyArea->HasFocus() || pRbCopyArea->HasFocus() )
     {
         pRefInputEdit = pEdCopyArea;
