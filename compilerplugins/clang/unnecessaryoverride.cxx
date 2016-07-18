@@ -79,7 +79,7 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
     const CompoundStmt* compoundStmt = dyn_cast<CompoundStmt>(methodDecl->getBody());
     if (!compoundStmt || compoundStmt->size() != 1)
         return true;
-    auto returnStmt = dyn_cast<ReturnStmt>(compoundStmt->body_front());
+    auto returnStmt = dyn_cast<ReturnStmt>(*compoundStmt->body_begin());
     if (returnStmt == nullptr) {
         return true;
     }
