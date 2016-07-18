@@ -653,7 +653,11 @@ void SvxColorTabPage::Reset( const SfxItemSet* rSet )
         aPreviousColor = aColorItem.GetColorValue();
         aNewColor = aColorItem.GetColorValue();
         m_pLbColor->SelectEntry(aNewColor);
-        m_pValSetColorList->SelectItem( m_pLbColor->GetSelectEntryPos() + 1 );
+        auto pos = m_pLbColor->GetSelectEntryPos();
+        if (pos != LISTBOX_ENTRY_NOTFOUND)
+        {
+            m_pValSetColorList->SelectItem( pos + 1 );
+        }
     }
 
     // set color model
