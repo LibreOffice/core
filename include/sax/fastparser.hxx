@@ -22,7 +22,9 @@
 
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <com/sun/star/lang/XInitialization.hpp>
 
 #include <sax/fastsaxdllapi.h>
 #include <memory>
@@ -42,7 +44,8 @@ class FastSaxParserImpl;
 
 // This class implements the external Parser interface
 class FASTSAX_DLLPUBLIC FastSaxParser
-    : public ::cppu::WeakImplHelper2<
+    : public ::cppu::WeakImplHelper<
+                css::lang::XInitialization,
                 css::xml::sax::XFastParser,
                 css::lang::XServiceInfo >
 {
@@ -51,6 +54,9 @@ class FASTSAX_DLLPUBLIC FastSaxParser
 public:
     FastSaxParser();
     virtual ~FastSaxParser();
+
+    // css::lang::XInitialization:
+    virtual void SAL_CALL initialize(css::uno::Sequence<css::uno::Any> const& rArguments) throw (css::uno::RuntimeException, css::uno::Exception, std::exception) override;
 
     // XFastParser
     virtual void SAL_CALL parseStream( const css::xml::sax::InputSource& aInputSource ) throw (css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
