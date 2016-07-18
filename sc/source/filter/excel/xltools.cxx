@@ -310,13 +310,13 @@ sal_Int32 XclTools::GetHmmFromTwips( sal_Int32 nTwips )
 
 sal_uInt16 XclTools::GetScColumnWidth( sal_uInt16 nXclWidth, long nScCharWidth )
 {
-    double fScWidth = static_cast< double >( nXclWidth ) / 256.0 * nScCharWidth + 0.5;
+    double fScWidth = static_cast< double >( nXclWidth ) / 256.0 * nScCharWidth - 0.5;
     return limit_cast< sal_uInt16 >( fScWidth );
 }
 
 sal_uInt16 XclTools::GetXclColumnWidth( sal_uInt16 nScWidth, long nScCharWidth )
 {
-    double fXclWidth = static_cast< double >( nScWidth ) * 256.0 / nScCharWidth + 0.5;
+    double fXclWidth = static_cast< double >( nScWidth + 0.5 ) * 256.0 / nScCharWidth;
     return limit_cast< sal_uInt16 >( fXclWidth );
 }
 
@@ -627,6 +627,7 @@ bool XclTools::GetBuiltInStyleId( sal_uInt8& rnStyleId, sal_uInt8& rnLevel, cons
             return true;
         }
     }
+
     rnStyleId = EXC_STYLE_USERDEF;
     rnLevel = EXC_STYLE_NOLEVEL;
     return false;
