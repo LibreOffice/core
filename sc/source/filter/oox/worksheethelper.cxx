@@ -1193,11 +1193,10 @@ sal_Int32 getColumnWidth(UnitConverter& rConverter, double nWidth)
 
     long nPixel = aDev->LogicToPixel(Point(nCoeff, 0), MapMode(MAP_100TH_MM)).getX();
 
-
     // the 1.047 has been experimentally chosen based on measurements with a screen ruler
     // TODO: fix the display of cells so that it no longer requires this hack
     // algorithm from OOXML spec part1: 18.3.1.13
-    sal_Int32 nColWidthPixel= std::floor(((256*nWidth + std::floor(128.0/nPixel))/256.0)*nPixel) * 1.047;
+    sal_Int32 nColWidthPixel= std::floor( ( ( 256 * nWidth + std::floor( 128.0 / nPixel ) ) / 256.0 ) * nPixel ) * 1.047;
 
     return aDev->PixelToLogic(Point(nColWidthPixel, 0), MapMode(MAP_100TH_MM)).getX();
 }
