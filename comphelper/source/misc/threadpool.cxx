@@ -342,12 +342,7 @@ void ThreadTaskTag::waitUntilDone()
 #else
     // 10 minute timeout in production so the app eventually throws some kind of error
     if (maTasksComplete.wait(TimeValue { 10*60, 0 }) == osl_cond_result_timeout)
-    {
-        SAL_DEBUG_TRACE("comphelper::ThreadTaskTag::waitUntilDone() " 
-                         << "tasksWorking " << mnTasksWorking
-                         << "noThreads " << ThreadPool::getPreferredConcurrency());
         throw std::runtime_error("timeout waiting for threadpool tasks");
-    }
 #endif
 }
 
