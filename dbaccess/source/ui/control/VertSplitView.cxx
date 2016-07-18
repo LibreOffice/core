@@ -139,8 +139,8 @@ void OSplitterView::Resize()
 
     if ( m_pRight )
     {
-        m_pRight->setPosSizePixel( aSplitPos.X() + aSplitSize.Width(), aPlaygroundPos.Y(),
-                              aPlaygroundSize.Width() - aSplitSize.Width() - aSplitPos.X(), aPlaygroundSize.Height());
+        m_pRight->setPosSizePixel( aSplitPos.X(), aPlaygroundPos.Y() + aSplitPos.Y() + aSplitSize.Height(),
+                               aPlaygroundSize.Width() , aPlaygroundSize.Height() - aSplitSize.Height() - aSplitPos.Y());
     }
 
 }
