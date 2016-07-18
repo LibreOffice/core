@@ -23,6 +23,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <tools/debug.hxx>
+#include <vcl/checksum.hxx>
 #include <vcl/salgtype.hxx>
 #include <tools/color.hxx>
 #include <tools/helpers.hxx>
@@ -152,6 +153,10 @@ public:
 
     SAL_DLLPRIVATE inline BitmapColor* ImplGetColorBuffer() const;
 
+    BitmapChecksum GetChecksum() const
+    {
+        return vcl_get_checksum(0, mpBitmapColor, mnCount * sizeof(BitmapColor));
+    }
 
 public:
 

@@ -103,7 +103,8 @@ protected:
         BitmapBuffer* pBuf = pThis->AcquireBuffer(BitmapAccessMode::Read);
         if (pBuf)
         {
-            nCrc = vcl_get_checksum(0, pBuf->mpBits, pBuf->mnScanlineSize * pBuf->mnHeight);
+            nCrc = pBuf->maPalette.GetChecksum();
+            nCrc = vcl_get_checksum(nCrc, pBuf->mpBits, pBuf->mnScanlineSize * pBuf->mnHeight);
             pThis->ReleaseBuffer(pBuf, BitmapAccessMode::Read);
             pThis->mnChecksum = nCrc;
             pThis->mbChecksumValid = true;
