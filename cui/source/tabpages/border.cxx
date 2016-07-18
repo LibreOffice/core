@@ -137,6 +137,16 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     get(m_pMergeAdjacentBordersCB, "mergeadjacent");
     get(m_pRemoveAdjcentCellBordersCB, "rmadjcellborders");
 
+    //tdf#99963, we need height-for-width support here, but for now we can
+    //bodge it
+    Size aPrefSize(m_pRemoveAdjcentCellBordersCB->get_preferred_size());
+    Size aSize(m_pRemoveAdjcentCellBordersCB->CalcMinimumSize(36*approximate_char_width()));
+    if (aPrefSize.Width() > aSize.Width())
+    {
+        m_pRemoveAdjcentCellBordersCB->set_width_request(aSize.Width());
+        m_pRemoveAdjcentCellBordersCB->set_height_request(aSize.Height());
+    }
+
     if ( GetDPIScaleFactor() > 1 )
     {
         for (short i = 0; i < aBorderImgLst.GetImageCount(); i++)
