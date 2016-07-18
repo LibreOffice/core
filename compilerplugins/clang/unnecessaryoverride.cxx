@@ -66,6 +66,9 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
     // not sure what is happening here
     if (aFileName == SRCDIR "/extensions/source/bibliography/datman.cxx")
         return true;
+    // some very creative method hiding going on here
+    if (aFileName == SRCDIR "/svx/source/dialog/checklbx.cxx")
+        return true;
 
     const CXXMethodDecl* overriddenMethodDecl = *methodDecl->begin_overridden_methods();
 
@@ -133,7 +136,8 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
     if (!expr2)
         return true;
     for (unsigned i = 0; i<callExpr->getNumArgs(); ++i) {
-        const DeclRefExpr * declRefExpr = dyn_cast<DeclRefExpr>(callExpr->getArg(i));
+        // ignore ImplicitCastExpr
+        const DeclRefExpr * declRefExpr = dyn_cast<DeclRefExpr>(callExpr->getArg(i)->IgnoreImplicit());
         if (!declRefExpr || declRefExpr->getDecl() != methodDecl->getParamDecl(i))
             return true;
     }

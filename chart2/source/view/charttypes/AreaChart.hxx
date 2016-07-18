@@ -45,7 +45,6 @@ public:
 
     // MinimumAndMaximumSupplier
     virtual double getMaximumX() override;
-    virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex ) override;
     virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) override;
 
     virtual LegendSymbolStyle getLegendSymbolStyle() override;

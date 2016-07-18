@@ -248,10 +248,6 @@ namespace framework
 
             //  OPropertySetHelper
 
-            virtual sal_Bool                                            SAL_CALL convertFastPropertyValue        ( css::uno::Any&        aConvertedValue ,
-                                                                                                                css::uno::Any&        aOldValue       ,
-                                                                                                                sal_Int32                        nHandle         ,
-                                                                                                                const css::uno::Any&  aValue          ) throw( css::lang::IllegalArgumentException ) override;
             virtual void                                                SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32                        nHandle         ,
                                                                                                                 const css::uno::Any&  aValue          ) throw( css::uno::Exception, std::exception                 ) override;
             using cppu::OPropertySetHelper::getFastPropertyValue;

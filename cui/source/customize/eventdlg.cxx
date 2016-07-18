@@ -209,9 +209,4 @@ IMPL_LINK_NOARG_TYPED( SvxEventConfigPage, SelectHdl_Impl, ListBox&, void )
     mpImpl->pEventLB->SetUpdateMode( true );
 }
 
-bool SvxEventConfigPage::FillItemSet( SfxItemSet* rSet )
-{
-    return SvxMacroTabPage_::FillItemSet( rSet );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

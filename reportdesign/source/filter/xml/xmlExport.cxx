@@ -1367,11 +1367,6 @@ void ORptExport::ExportStyles_(bool bUsed)
     GetShapeExport()->ExportGraphicDefaults();
 }
 
-sal_uInt32 ORptExport::exportDoc(enum ::xmloff::token::XMLTokenEnum eClass)
-{
-    return SvXMLExport::exportDoc( eClass );
-}
-
 OUString ORptExport::implConvertNumber(sal_Int32 _nValue)
 {
     OUStringBuffer aBuffer;

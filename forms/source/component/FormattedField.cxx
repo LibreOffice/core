@@ -381,12 +381,6 @@ void OFormattedModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const 
     OEditBaseModel::setFastPropertyValue_NoBroadcast(nHandle, rValue);
 }
 
-sal_Bool OFormattedModel::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
-                                                        throw( IllegalArgumentException )
-{
-    return OEditBaseModel::convertFastPropertyValue(rConvertedValue, rOldValue, nHandle, rValue);
-}
-
 void OFormattedModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
 {
     if (nHandle == PROPERTY_ID_FORMATSSUPPLIER)

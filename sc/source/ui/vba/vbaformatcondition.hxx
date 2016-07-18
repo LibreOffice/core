@@ -53,7 +53,6 @@ public:
     virtual void SAL_CALL Delete(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL Modify( ::sal_Int32 Type, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2 ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
     virtual ::sal_Int32 SAL_CALL Type(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 Operator( bool  ) throw (css::script::BasicErrorException) override;
     virtual ::sal_Int32 SAL_CALL Operator(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) override;
     virtual void setFormula1( const css::uno::Any& _aFormula1) throw ( css::script::BasicErrorException ) override;
     virtual css::uno::Reference< ::ooo::vba::excel::XInterior > SAL_CALL Interior(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
