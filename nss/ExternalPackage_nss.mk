@@ -90,5 +90,10 @@ $(eval $(call gb_ExternalPackage_add_files,nss,lib/sqlite,\
 	    dist/out/lib/libsqlite3.so \
 ))
 endif
+ifeq ($(OS),LINUX)
+$(eval $(call gb_ExternalPackage_add_libraries_for_install,nss,lib,\
+		dist/out/lib/libfreeblpriv3.so \
+))
+endif
 
 # vim: set noet sw=4 ts=4:

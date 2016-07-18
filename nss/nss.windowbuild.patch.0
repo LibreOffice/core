@@ -1,0 +1,55 @@
+--- ./nss/external_tests/ssl_gtest/tls_connect.cc
++++ ./nss/external_tests/ssl_gtest/tls_connect.cc
+@@ -375,6 +375,12 @@
+   }
+ }
+ 
++// A simple value of "a", "b".  Note that the preferred value of "a" is placed
++// at the end, because the NSS API follows the now defunct NPN specification,
++// which places the preferred (and default) entry at the end of the list.
++// NSS will move this final entry to the front when used with ALPN.
++const uint8_t alpn_dummy_val_[4] = { 0x01, 0x62, 0x01, 0x61 };
++
+ void TlsConnectTestBase::EnableAlpn() {
+   client_->EnableAlpn(alpn_dummy_val_, sizeof(alpn_dummy_val_));
+   server_->EnableAlpn(alpn_dummy_val_, sizeof(alpn_dummy_val_));
+--- ./nss/external_tests/ssl_gtest/tls_connect.h
++++ ./nss/external_tests/ssl_gtest/tls_connect.h
+@@ -113,12 +113,6 @@
+   SessionResumptionMode expected_resumption_mode_;
+   std::vector<std::vector<uint8_t>> session_ids_;
+ 
+-  // A simple value of "a", "b".  Note that the preferred value of "a" is placed
+-  // at the end, because the NSS API follows the now defunct NPN specification,
+-  // which places the preferred (and default) entry at the end of the list.
+-  // NSS will move this final entry to the front when used with ALPN.
+-  const uint8_t alpn_dummy_val_[4] = {0x01, 0x62, 0x01, 0x61};
+-
+  private:
+   void CheckResumption(SessionResumptionMode expected);
+   void CheckExtendedMasterSecret();
+--- ./nss/external_tests/ssl_gtest/ssl_loopback_unittest.cc
++++ ./nss/external_tests/ssl_gtest/ssl_loopback_unittest.cc
+@@ -51,6 +51,12 @@
+   CheckAlpn("a");
+ }
+ 
++// A simple value of "a", "b".  Note that the preferred value of "a" is placed
++// at the end, because the NSS API follows the now defunct NPN specification,
++// which places the preferred (and default) entry at the end of the list.
++// NSS will move this final entry to the front when used with ALPN.
++const uint8_t alpn_dummy_val_[4] = { 0x01, 0x62, 0x01, 0x61 };
++
+ TEST_P(TlsConnectGeneric, ConnectAlpnClone) {
+   EnsureModelSockets();
+   client_model_->EnableAlpn(alpn_dummy_val_, sizeof(alpn_dummy_val_));
+--- ./nss/external_tests/ssl_gtest/databuffer.h
++++ ./nss/external_tests/ssl_gtest/databuffer.h
+@@ -10,6 +10,7 @@
+ #include <algorithm>
+ #include <cassert>
+ #include <cstring>
++#include <cstdint>
+ #include <iomanip>
+ #include <iostream>
+ #if defined(WIN32) || defined(WIN64)
