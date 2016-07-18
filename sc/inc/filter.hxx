@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_INC_FILTER_HXX
 #define INCLUDED_SC_INC_FILTER_HXX
 
-#include <o3tl/typed_flags_set.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
@@ -59,20 +58,6 @@ enum EXCIMPFORMAT { EIF_AUTO, EIF_BIFF5, EIF_BIFF8, EIF_BIFF_LE4 };
 // for export
 enum ExportFormatLotus { ExpWK1, ExpWK3, ExpWK4 };
 enum ExportFormatExcel { ExpBiff2, ExpBiff3, ExpBiff4, ExpBiff4W, ExpBiff5, ExpBiff8, Exp2007Xml };
-
-// options for DIF im-/export (combine with '|')
-enum class DifOptions
-{
-    Plain    = 0x00000000,
-    Date     = 0x00000001,
-    Time     = 0x00000002,
-    Currency = 0x00000004,
-
-    Excel    = (Date|Time|Currency)
-};
-namespace o3tl {
-     template<> struct typed_flags<DifOptions> : is_typed_flags<DifOptions, 0x00000007> {};
-}
 
 // These are implemented inside the scfilt library and lazy loaded
 
