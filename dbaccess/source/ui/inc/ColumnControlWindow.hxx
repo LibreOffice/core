@@ -61,7 +61,7 @@ namespace dbaui
         virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() override;
         virtual css::uno::Reference< css::sdbc::XConnection> getConnection() override;
         virtual const OTypeInfoMap* getTypeInfo() const override;
-        TOTypeInfoSP getDefaultTyp() const;
+        TOTypeInfoSP const & getDefaultTyp() const;
     };
 }   // namespace dbaui
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_COLUMNCONTROLWINDOW_HXX

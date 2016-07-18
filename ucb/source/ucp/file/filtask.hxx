@@ -110,7 +110,7 @@ namespace fileaccess
                 return m_nMinorCode;
             }
 
-            css::uno::Reference< css::task::XInteractionHandler > SAL_CALL
+            css::uno::Reference< css::task::XInteractionHandler > const & SAL_CALL
             getInteractionHandler()
             {
                 if( ! m_xInteractionHandler.is() && m_xCommandEnvironment.is() )

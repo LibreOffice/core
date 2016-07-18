@@ -126,7 +126,7 @@ namespace treeview {
                                     RTL_TEXTENCODING_UTF8 );
         }
 
-        OUString getTargetURL()
+        OUString const & getTargetURL()
         {
             if( targetURL.isEmpty() )
             {

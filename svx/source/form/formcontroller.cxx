@@ -688,7 +688,7 @@ void SAL_CALL FormController::resetted(const EventObject& rEvent) throw( Runtime
 }
 
 
-Sequence< OUString> FormController::getSupportedServiceNames_Static()
+Sequence< OUString> const & FormController::getSupportedServiceNames_Static()
 {
     static Sequence< OUString> aServices;
     if (!aServices.getLength())

@@ -511,7 +511,7 @@ void OWriteStream_Impl::DisposeWrappers()
     }
 }
 
-OUString OWriteStream_Impl::GetFilledTempFileIfNo( const uno::Reference< io::XInputStream >& xStream )
+OUString const & OWriteStream_Impl::GetFilledTempFileIfNo( const uno::Reference< io::XInputStream >& xStream )
 {
     if ( !m_aTempURL.getLength() )
     {
@@ -560,7 +560,7 @@ OUString OWriteStream_Impl::GetFilledTempFileIfNo( const uno::Reference< io::XIn
     return m_aTempURL;
 }
 
-OUString OWriteStream_Impl::FillTempGetFileName()
+OUString const & OWriteStream_Impl::FillTempGetFileName()
 {
     // should try to create cache first, if the amount of contents is too big, the temp file should be taken
     if ( !m_xCacheStream.is() && m_aTempURL.isEmpty() )
@@ -955,7 +955,7 @@ void OWriteStream_Impl::Revert()
     }
 }
 
-uno::Sequence< beans::PropertyValue > OWriteStream_Impl::GetStreamProperties()
+uno::Sequence< beans::PropertyValue > const & OWriteStream_Impl::GetStreamProperties()
 {
     if ( !m_aProps.getLength() )
         m_aProps = ReadPackageStreamProperties();

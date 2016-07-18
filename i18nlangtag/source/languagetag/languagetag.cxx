@@ -280,12 +280,12 @@ private:
     mutable bool                            mbCachedCountry     : 1;
     mutable bool                            mbCachedVariants    : 1;
 
-    const OUString &    getBcp47() const;
-    OUString            getLanguage() const;
-    OUString            getScript() const;
-    OUString            getCountry() const;
+    OUString const &    getBcp47() const;
+    OUString const &    getLanguage() const;
+    OUString const &    getScript() const;
+    OUString const &    getCountry() const;
     OUString            getRegion() const;
-    OUString            getVariants() const;
+    OUString const &    getVariants() const;
     bool                hasScript() const;
 
     bool                isIsoLocale() const;
@@ -996,7 +996,7 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
 }
 
 
-LanguageTag::ImplPtr LanguageTag::getImpl() const
+LanguageTag::ImplPtr const & LanguageTag::getImpl() const
 {
     if (!mpImpl)
     {
@@ -1802,7 +1802,7 @@ bool LanguageTag::isIsoScript( const OUString& rScript )
 }
 
 
-OUString LanguageTagImpl::getLanguage() const
+OUString const & LanguageTagImpl::getLanguage() const
 {
     if (!mbCachedLanguage)
     {
@@ -1824,7 +1824,7 @@ OUString LanguageTag::getLanguage() const
 }
 
 
-OUString LanguageTagImpl::getScript() const
+OUString const & LanguageTagImpl::getScript() const
 {
     if (!mbCachedScript)
     {
@@ -1858,7 +1858,7 @@ OUString LanguageTag::getLanguageAndScript() const
 }
 
 
-OUString LanguageTagImpl::getCountry() const
+OUString const & LanguageTagImpl::getCountry() const
 {
     if (!mbCachedCountry)
     {
@@ -1888,7 +1888,7 @@ OUString LanguageTagImpl::getRegion() const
 }
 
 
-OUString LanguageTagImpl::getVariants() const
+OUString const & LanguageTagImpl::getVariants() const
 {
     if (!mbCachedVariants)
     {

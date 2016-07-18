@@ -48,9 +48,9 @@ namespace connectivity
             StreamHelper(const css::uno::Reference< css::io::XStream>& _xStream);
             ~StreamHelper();
 
-            css::uno::Reference< css::io::XInputStream>   getInputStream();
-            css::uno::Reference< css::io::XOutputStream>  getOutputStream();
-            css::uno::Reference< css::io::XSeekable>      getSeek();
+            css::uno::Reference< css::io::XInputStream> const &   getInputStream();
+            css::uno::Reference< css::io::XOutputStream> const &  getOutputStream();
+            css::uno::Reference< css::io::XSeekable> const &      getSeek();
         };
 
 

@@ -1301,7 +1301,7 @@ Sequence< OUString > SAL_CALL ChartModel::getAvailableServiceNames()
     return aResult;
 }
 
-Reference< util::XNumberFormatsSupplier > ChartModel::getNumberFormatsSupplier()
+Reference< util::XNumberFormatsSupplier > const & ChartModel::getNumberFormatsSupplier()
 {
     if( !m_xNumberFormatsSupplier.is() )
     {

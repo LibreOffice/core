@@ -117,7 +117,7 @@ throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 #endif
 }
 
-rtl::Reference< OOXMLFastContextHandler >
+rtl::Reference< OOXMLFastContextHandler > const &
 OOXMLFastDocumentHandler::getContextHandler() const
 {
     if (!mxContextHandler.is())

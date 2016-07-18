@@ -122,7 +122,7 @@ public:
 
     // access to the local primitive. This will ensure that the primitive is
     // current in comparing the local one with a fresh created incarnation
-    drawinglayer::primitive2d::Primitive2DContainer getViewIndependentPrimitive2DSequence() const;
+    drawinglayer::primitive2d::Primitive2DContainer const & getViewIndependentPrimitive2DSequence() const;
 
     // add Gluepoints (if available)
     virtual drawinglayer::primitive2d::Primitive2DContainer createGluePointPrimitive2DSequence() const;

@@ -167,7 +167,7 @@ class HtmlExport
     bool    checkForExistingFiles();
     bool    checkFileExists( css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess, OUString const & aFileName );
 
-    OUString getDocumentTitle();
+    OUString const & getDocumentTitle();
     bool    SavePresentation();
 
     static OUString CreateLink( const OUString& aLink, const OUString& aText,

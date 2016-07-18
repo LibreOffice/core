@@ -211,7 +211,7 @@ struct FactoryInfo
         };
 
     private:
-        css::uno::Reference< css::util::XStringSubstitution > getStringSubstitution()
+        css::uno::Reference< css::util::XStringSubstitution > const & getStringSubstitution()
         {
             if ( !xSubstVars.is() )
             {

@@ -171,7 +171,7 @@ Shape::~Shape()
 {
 }
 
-table::TablePropertiesPtr Shape::getTableProperties()
+table::TablePropertiesPtr const & Shape::getTableProperties()
 {
     if ( !mpTablePropertiesPtr.get() )
         mpTablePropertiesPtr.reset( new table::TableProperties() );
@@ -398,7 +398,7 @@ void Shape::addChildren(
     }
 }
 
-Reference< XShape > Shape::createAndInsert(
+Reference< XShape > const & Shape::createAndInsert(
         ::oox::core::XmlFilterBase& rFilterBase,
         const OUString& rServiceName,
         const Theme* pTheme,

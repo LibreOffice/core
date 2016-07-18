@@ -109,7 +109,7 @@ class PasteCellsWarningReseter
 {
 private:
     bool bInitialWarningState;
-    static uno::Reference< sheet::XGlobalSheetSettings > getGlobalSheetSettings() throw ( uno::RuntimeException )
+    static uno::Reference< sheet::XGlobalSheetSettings > const & getGlobalSheetSettings() throw ( uno::RuntimeException )
     {
         static uno::Reference< sheet::XGlobalSheetSettings > xProps = sheet::GlobalSheetSettings::create( comphelper::getProcessComponentContext() );
         return xProps;

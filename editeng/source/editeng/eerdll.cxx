@@ -175,7 +175,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
     return ppDefItems;
 }
 
-rtl::Reference<SvxForbiddenCharactersTable> GlobalEditData::GetForbiddenCharsTable()
+rtl::Reference<SvxForbiddenCharactersTable> const & GlobalEditData::GetForbiddenCharsTable()
 {
     if ( !xForbiddenCharsTable.is() )
     {
@@ -184,7 +184,7 @@ rtl::Reference<SvxForbiddenCharactersTable> GlobalEditData::GetForbiddenCharsTab
     return xForbiddenCharsTable;
 }
 
-uno::Reference< linguistic2::XLanguageGuessing > GlobalEditData::GetLanguageGuesser()
+uno::Reference< linguistic2::XLanguageGuessing > const & GlobalEditData::GetLanguageGuesser()
 {
     if (!xLanguageGuesser.is())
     {

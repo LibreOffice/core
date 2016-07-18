@@ -123,7 +123,7 @@ DocTemplLocaleHelper::~DocTemplLocaleHelper()
 }
 
 
-std::vector< beans::StringPair > DocTemplLocaleHelper::GetParsingResult()
+std::vector< beans::StringPair > const & DocTemplLocaleHelper::GetParsingResult()
 {
     if ( !m_aElementsSeq.empty() )
         throw uno::RuntimeException(); // the parsing has still not finished!

@@ -43,7 +43,7 @@ public:
     /** Sets text data for this portion. */
     void                setText( const OUString& rText );
     /** Creates and returns a new font formatting object. */
-    FontRef             createFont();
+    FontRef const &     createFont();
     /** Links this portion to a font object from the global font list. */
     void                setFontId( sal_Int32 nFontId );
 

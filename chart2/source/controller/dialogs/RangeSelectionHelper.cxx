@@ -54,7 +54,7 @@ bool RangeSelectionHelper::hasRangeSelection()
     return getRangeSelection().is();
 }
 
-Reference< sheet::XRangeSelection > RangeSelectionHelper::getRangeSelection()
+Reference< sheet::XRangeSelection > const & RangeSelectionHelper::getRangeSelection()
 {
     if( !m_xRangeSelection.is() &&
         m_xChartDocument.is() )

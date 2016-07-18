@@ -119,10 +119,10 @@ public:
     CommandInfoProvider();
     ~CommandInfoProvider();
 
-    css::uno::Reference<css::ui::XAcceleratorConfiguration> GetDocumentAcceleratorConfiguration();
-    css::uno::Reference<css::ui::XAcceleratorConfiguration> GetModuleAcceleratorConfiguration();
-    css::uno::Reference<css::ui::XAcceleratorConfiguration> GetGlobalAcceleratorConfiguration();
-    OUString GetModuleIdentifier();
+    css::uno::Reference<css::ui::XAcceleratorConfiguration> const & GetDocumentAcceleratorConfiguration();
+    css::uno::Reference<css::ui::XAcceleratorConfiguration> const & GetModuleAcceleratorConfiguration();
+    css::uno::Reference<css::ui::XAcceleratorConfiguration> const & GetGlobalAcceleratorConfiguration();
+    OUString const & GetModuleIdentifier();
     css::uno::Sequence<css::beans::PropertyValue> GetCommandProperties (
         const OUString& rsCommandName);
     OUString GetCommandProperty(const OUString& rsProperty, const OUString& rsCommandName);

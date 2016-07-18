@@ -152,7 +152,7 @@ bool SAL_CALL CharacterClassificationImpl::createLocaleSpecificCharacterClassifi
     return false;
 }
 
-Reference < XCharacterClassification > SAL_CALL
+Reference < XCharacterClassification > const & SAL_CALL
 CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Locale& rLocale)
         throw(RuntimeException)
 {

@@ -106,7 +106,7 @@ void ThumbnailViewItem::setTitle (const OUString& rTitle)
         maTitle = rTitle;
 }
 
-uno::Reference< accessibility::XAccessible > ThumbnailViewItem::GetAccessible( bool bIsTransientChildrenDisabled )
+uno::Reference< accessibility::XAccessible > const & ThumbnailViewItem::GetAccessible( bool bIsTransientChildrenDisabled )
 {
     if( !mxAcc.is() )
         mxAcc = new ThumbnailViewItemAcc( this, bIsTransientChildrenDisabled );

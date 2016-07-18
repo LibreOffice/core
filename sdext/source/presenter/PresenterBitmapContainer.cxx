@@ -342,7 +342,7 @@ const css::uno::Reference<css::rendering::XBitmap>&
     return mxNormalBitmap;
 }
 
-css::uno::Reference<css::rendering::XBitmap>
+css::uno::Reference<css::rendering::XBitmap> const &
     PresenterBitmapContainer::BitmapDescriptor::GetBitmap(const Mode eMode) const
 {
     switch (eMode)

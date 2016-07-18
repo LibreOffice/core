@@ -95,7 +95,7 @@ namespace sdr
             static rtl::Reference<OverlayManager> create(OutputDevice& rOutputDevice);
 
             // access to current ViewInformation2D; this call checks and evtl. updates ViewInformation2D
-            const drawinglayer::geometry::ViewInformation2D getCurrentViewInformation2D() const;
+            drawinglayer::geometry::ViewInformation2D const & getCurrentViewInformation2D() const;
 
             // complete redraw
             virtual void completeRedraw(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice = nullptr) const;

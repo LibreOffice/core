@@ -405,7 +405,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
 }
 
 
-Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine() const
+Reference< XCustomShapeEngine > const & SdrObjCustomShape::GetCustomShapeEngine() const
 {
     if (mxCustomShapeEngine.is())
         return mxCustomShapeEngine;

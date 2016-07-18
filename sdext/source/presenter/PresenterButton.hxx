@@ -72,7 +72,7 @@ public:
     void SetCanvas (
         const css::uno::Reference<css::rendering::XCanvas>& rxParentCanvas,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow);
-    css::geometry::IntegerSize2D GetSize();
+    css::geometry::IntegerSize2D const & GetSize();
 
     // XWindowListener
 

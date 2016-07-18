@@ -41,7 +41,7 @@ ScVbaChartObject::ScVbaChartObject( const css::uno::Reference< ov::XHelperInterf
         oShapeHelper.reset(new ShapeHelper(xShape));
 }
 
-OUString ScVbaChartObject::getPersistName()
+OUString const & ScVbaChartObject::getPersistName()
 {
     if ( sPersistName.isEmpty() )
         sPersistName = xNamed->getName();

@@ -147,7 +147,7 @@ public:
         @see GetWindow
         @see SetWindow
     */
-    css::uno::Reference< css::awt::XControlContainer >
+    css::uno::Reference< css::awt::XControlContainer > const &
                     GetWindowControlContainer();
 
     void            SetScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll );

@@ -124,7 +124,7 @@ void Comment::importComment( SequenceInputStream& rStrm )
     AddressConverter::convertToCellRangeUnchecked( maModel.maRange, aBinRange, getSheetIndex() );
 }
 
-RichStringRef Comment::createText()
+RichStringRef const & Comment::createText()
 {
     maModel.mxText.reset( new RichString( *this ) );
     return maModel.mxText;

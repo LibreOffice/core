@@ -167,7 +167,7 @@ Reference< XIdlReflection > getCoreReflection_Impl()
 }
 
 // save CoreReflection statically
-Reference< XHierarchicalNameAccess > getCoreReflection_HierarchicalNameAccess_Impl()
+Reference< XHierarchicalNameAccess > const & getCoreReflection_HierarchicalNameAccess_Impl()
 {
     static Reference< XHierarchicalNameAccess > xCoreReflection_HierarchicalNameAccess;
 
@@ -184,7 +184,7 @@ Reference< XHierarchicalNameAccess > getCoreReflection_HierarchicalNameAccess_Im
 }
 
 // Hold TypeProvider statically
-Reference< XHierarchicalNameAccess > getTypeProvider_Impl()
+Reference< XHierarchicalNameAccess > const & getTypeProvider_Impl()
 {
     static Reference< XHierarchicalNameAccess > xAccess;
 
@@ -210,7 +210,7 @@ Reference< XHierarchicalNameAccess > getTypeProvider_Impl()
 }
 
 // Hold TypeConverter statically
-Reference< XTypeConverter > getTypeConverter_Impl()
+Reference< XTypeConverter > const & getTypeConverter_Impl()
 {
     static Reference< XTypeConverter > xTypeConverter;
 
