@@ -162,6 +162,24 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_a02ad4e5",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-07-18T09:31:07Z",
+      "side": 1,
+      "message": "Got it. Will fix.",
+      "parentUuid": "5a8bc5a2_e0fdbc6f",
+      "revId": "1d388638e0dbc7d998c785967ff9d331304cdb70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_a0a014a7",
         "filename": "desktop/source/app/cmdlineargs.cxx",
         "patchSetId": 15
@@ -245,6 +263,24 @@
       "side": 1,
       "message": "* The command line argument following --display should always be treated as the argument of --display.\n\n* For switches like -p, --view, --convert-to, etc., I\u0027m not sure what the interpretation of following \"office URLs\" should be, but you need a decision about it that is reflected in the code.\n\n* \"Additions to the command line documentation\" would be in the helpcontent2 sub-repo?",
       "parentUuid": "5a8bc5a2_e0e69ce7",
+      "revId": "1d388638e0dbc7d998c785967ff9d331304cdb70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_c02fe0f4",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-07-18T09:31:07Z",
+      "side": 1,
+      "message": "1st - Understood. Will fix.\n2nd - for now, the decision is cleasly reflected, and the comment says \"add the file according its command, ignore current event\".\nAdditions - I didn\u0027t look for the repo, I just wrote the text and sent to bugzilla as new report with proposed \"patch\".",
+      "parentUuid": "5a8bc5a2_20f8847c",
       "revId": "1d388638e0dbc7d998c785967ff9d331304cdb70",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
