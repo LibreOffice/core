@@ -611,6 +611,11 @@ public:
 
     void AddAnnotationPosition(const bool bStart);
 
+    bool hasTableManager() const
+    {
+        return !m_aTableManagers.empty();
+    }
+
     DomainMapperTableManager& getTableManager()
     {
         boost::shared_ptr< DomainMapperTableManager > pMngr = m_aTableManagers.top();
@@ -632,8 +637,8 @@ public:
 
     void popTableManager( )
     {
-        if ( m_aTableManagers.size( ) > 0 )
-            m_aTableManagers.pop( );
+        if (hasTableManager())
+            m_aTableManagers.pop();
     }
 
     void SetLineNumbering( sal_Int32 nLnnMod, sal_Int32 nLnc, sal_Int32 ndxaLnn );

@@ -221,11 +221,13 @@ DomainMapper_Impl::DomainMapper_Impl(
 DomainMapper_Impl::~DomainMapper_Impl()
 {
     RemoveLastParagraph( );
-    getTableManager( ).endLevel();
-    popTableManager( );
+    if (hasTableManager())
+    {
+        getTableManager().endLevel();
+        popTableManager();
+    }
     delete m_pSdtHelper;
 }
-
 
 uno::Reference< container::XNameContainer >    DomainMapper_Impl::GetPageStyles()
 {
@@ -1037,7 +1039,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
     dmapper_logger->attribute("isTextAppend", xTextAppend.is());
 #endif
 
-    if(xTextAppend.is() && ! getTableManager( ).isIgnore() && pParaContext != NULL)
+    if (xTextAppend.is() && pParaContext != NULL && !getTableManager().isIgnore())
     {
         try
         {
