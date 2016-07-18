@@ -1561,20 +1561,28 @@ XclExpDefcolwidth::XclExpDefcolwidth( const XclExpRoot& rRoot ) :
 bool XclExpDefcolwidth::IsDefWidth( sal_uInt16 nXclColWidth ) const
 {
     double fNewColWidth = lclGetCorrectedColWidth( GetRoot(), nXclColWidth );
+    // This formula is taking number of characters with GetValue()
+    // and it is translating it into default column width. 0.5 means half character.
+    // https://msdn.microsoft.com/en-us/library/documentformat.openxml.spreadsheet.column.aspx
+    long defaultColumnWidth = static_cast< long >( 256.0 * ( GetValue() + 0.5 ) );
+
     // exactly matched, if difference is less than 1/16 of a character to the left or to the right
-    return std::abs( static_cast< long >( GetValue() * 256.0 - fNewColWidth + 0.5 ) ) < 16;
+    return std::abs( defaultColumnWidth - fNewColWidth ) < 16;
 }
 
 void XclExpDefcolwidth::SetDefWidth( sal_uInt16 nXclColWidth )
 {
     double fNewColWidth = lclGetCorrectedColWidth( GetRoot(), nXclColWidth );
-    SetValue( limit_cast< sal_uInt16 >( fNewColWidth / 256.0 + 0.5 ) );
+    // This function is taking width and translate it into number of characters
+    // Next this number of characters are stored. 0.5 means half character.
+    SetValue( limit_cast< sal_uInt16 >( fNewColWidth / 256.0 - 0.5 ) );
 }
 
 XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
         SCCOL nScCol, SCROW nLastScRow, XclExpColOutlineBuffer& rOutlineBfr ) :
     XclExpRecord( EXC_ID_COLINFO, 12 ),
     XclExpRoot( rRoot ),
+    mbCustomWidth( false ),
     mnWidth( 0 ),
     mnScWidth( 0 ),
     mnFlags( 0 ),
@@ -1593,8 +1601,13 @@ XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
     sal_uInt16 nScWidth = rDoc.GetColWidth( nScCol, nScTab, false );
     mnWidth = XclTools::GetXclColumnWidth( nScWidth, GetCharWidth() );
     mnScWidth =  sc::TwipsToHMM( nScWidth );
+
     // column flags
     ::set_flag( mnFlags, EXC_COLINFO_HIDDEN, rDoc.ColHidden(nScCol, nScTab) );
+
+    // TODO Do we need to save customWidth information also for .xls (with mnFlags)?
+    XclExpDefcolwidth defColWidth = XclExpDefcolwidth( rRoot );
+    mbCustomWidth = !defColWidth.IsDefWidth( mnWidth );
 
     // outline data
     rOutlineBfr.Update( nScCol );
@@ -1655,7 +1668,7 @@ void XclExpColinfo::SaveXml( XclExpXmlStream& rStrm )
     rStrm.GetCurrentStream()->singleElement( XML_col,
             // OOXTODO: XML_bestFit,
             XML_collapsed,      XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_COLINFO_COLLAPSED ) ),
-            // OOXTODO: XML_customWidth,
+            XML_customWidth,    XclXmlUtils::ToPsz( mbCustomWidth ),
             XML_hidden,         XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_COLINFO_HIDDEN ) ),
             XML_outlineLevel,   OString::number( mnOutlineLevel ).getStr(),
             XML_max,            OString::number( (nLastXclCol + 1) ).getStr(),
