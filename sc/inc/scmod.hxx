@@ -73,11 +73,6 @@ class ScMarkData;
 struct ScDragData;
 struct ScClipData;
 
-//      for internal Drag&Drop:
-
-#define SC_DROP_NAVIGATOR       1
-#define SC_DROP_TABLE           2
-
 class ScModule: public SfxModule, public SfxListener, public utl::ConfigurationListener
 {
     Timer               aIdleTimer;

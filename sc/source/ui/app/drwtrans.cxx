@@ -83,7 +83,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     bGrIsBit( false ),
     bOleObj( false ),
     pDragSourceView( nullptr ),
-    nDragSourceFlags( 0 ),
+    nDragSourceFlags( ScDragSrc::Undefined ),
     bDragWasInternal( false ),
     nSourceDocID( 0 ),
     maShellID(SfxObjectShell::CreateShellID(pContainerShell))
@@ -599,7 +599,7 @@ void ScDrawTransferObj::ObjectReleased()
 
 void ScDrawTransferObj::DragFinished( sal_Int8 nDropAction )
 {
-    if ( nDropAction == DND_ACTION_MOVE && !bDragWasInternal && !(nDragSourceFlags & SC_DROP_NAVIGATOR) )
+    if ( nDropAction == DND_ACTION_MOVE && !bDragWasInternal && !(nDragSourceFlags & ScDragSrc::Navigator) )
     {
         //  move: delete source objects
 
@@ -658,7 +658,7 @@ void ScDrawTransferObj::SetDragSourceObj( SdrObject* pObj, SCTAB nTab )
     //! add as listener with document, delete pDragSourceView if document gone
 }
 
-void ScDrawTransferObj::SetDragSourceFlags( sal_uInt16 nFlags )
+void ScDrawTransferObj::SetDragSourceFlags(ScDragSrc nFlags)
 {
     nDragSourceFlags = nFlags;
 }

@@ -3547,7 +3547,7 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
             }
         }
 
-        if ( rData.pCellTransfer->GetDragSourceFlags() & SC_DROP_TABLE )        // whole sheet?
+        if (rData.pCellTransfer->GetDragSourceFlags() & ScDragSrc::Table) // whole sheet?
         {
             bool bOk = pThisDoc->IsDocEditable();
             return bOk ? rEvt.mnAction : 0;                     // don't draw selection frame
@@ -4021,9 +4021,9 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
     ScDocument* pThisDoc   = pViewData->GetDocument();
     ScViewFunc* pView      = pViewData->GetView();
     SCTAB       nThisTab   = pViewData->GetTabNo();
-    sal_uInt16 nFlags = pTransObj->GetDragSourceFlags();
+    ScDragSrc   nFlags     = pTransObj->GetDragSourceFlags();
 
-    bool bIsNavi = ( nFlags & SC_DROP_NAVIGATOR ) != 0;
+    bool bIsNavi = (nFlags & ScDragSrc::Navigator) == ScDragSrc::Navigator;
     bool bIsMove = ( nDndAction == DND_ACTION_MOVE && !bIsNavi );
 
     // workaround for wrong nDndAction on Windows when pressing solely
@@ -4061,7 +4061,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
     bool bFiltered = (bIsMove && pTransObj->HasFilteredRows());
     if (!bFiltered)
     {
-        if (pSourceDoc != pThisDoc && ((nFlags & SC_DROP_TABLE) ||
+        if (pSourceDoc != pThisDoc && ((nFlags & ScDragSrc::Table) ||
                     (!bIsLink && meDragInsertMode == INS_NONE)))
         {
             // Nothing. Either entire sheet to be dropped, or the one case
@@ -4078,7 +4078,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
 
     if (!bFiltered && pSourceDoc == pThisDoc)
     {
-        if ( nFlags & SC_DROP_TABLE )           // whole sheet?
+        if (nFlags & ScDragSrc::Table) // whole sheet?
         {
             if ( pThisDoc->IsDocEditable() )
             {
@@ -4228,7 +4228,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
     }
     else if ( !bFiltered && pSourceDoc )                        // between documents
     {
-        if ( nFlags & SC_DROP_TABLE )           // copy/link sheets between documents
+        if (nFlags & ScDragSrc::Table)          // copy/link sheets between documents
         {
             if ( pThisDoc->IsDocEditable() )
             {
@@ -4421,9 +4421,9 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     if (!bIsLink && rData.pDrawTransfer)
     {
-        sal_uInt16 nFlags = rData.pDrawTransfer->GetDragSourceFlags();
+        ScDragSrc nFlags = rData.pDrawTransfer->GetDragSourceFlags();
 
-        bool bIsNavi = ( nFlags & SC_DROP_NAVIGATOR ) != 0;
+        bool bIsNavi = (nFlags & ScDragSrc::Navigator) == ScDragSrc::Navigator;
         bool bIsMove = ( rEvt.mnAction == DND_ACTION_MOVE && !bIsNavi );
 
         bPasteIsMove = bIsMove;

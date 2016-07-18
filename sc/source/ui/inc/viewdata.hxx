@@ -26,6 +26,7 @@
 #include "docsh.hxx"
 
 #include <memory>
+#include <o3tl/typed_flags_set.hxx>
 
 #define SC_SIZE_NONE        65535
 const SCCOL SC_TABSTART_NONE = SCCOL_MAX;
@@ -83,6 +84,16 @@ enum ScPasteFlags
     SC_PASTE_MODE   = 1,    // Enable paste-mode
     SC_PASTE_BORDER = 2,    // Show a border around the source cells
 };
+
+// for internal Drag&Drop:
+enum class ScDragSrc{
+    Undefined = 0,
+    Navigator = 1,
+    Table     = 2
+};
+namespace o3tl {
+    template<> struct typed_flags<ScDragSrc> : is_typed_flags<ScDragSrc, 0x00000003> {};
+}
 
 class ScDocFunc;
 class ScDocShell;
