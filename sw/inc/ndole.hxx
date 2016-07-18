@@ -71,7 +71,7 @@ public:
 
     // try to get OLE visualization in form of a Primitive2DSequence
     // and the corresponding B2DRange. This data may be locally buffered
-    drawinglayer::primitive2d::Primitive2DContainer tryToGetChartContentAsPrimitive2DSequence(
+    drawinglayer::primitive2d::Primitive2DContainer const & tryToGetChartContentAsPrimitive2DSequence(
         basegfx::B2DRange& rRange,
         bool bSynchron);
     void resetBufferedData();

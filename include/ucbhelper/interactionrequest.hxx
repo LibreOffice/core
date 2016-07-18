@@ -122,7 +122,7 @@ public:
       * @return the continuation chosen by an interaction handler or an empty
       *         reference, if the request was not (yet) handled.
       */
-    rtl::Reference< InteractionContinuation > getSelection() const;
+    rtl::Reference< InteractionContinuation > const & getSelection() const;
 
     /**
       * This method sets a continuation for the request. It also can be used

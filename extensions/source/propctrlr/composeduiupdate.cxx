@@ -746,7 +746,7 @@ namespace pcr
     }
 
 
-    Reference< XObjectInspectorUI > ComposedPropertyUIUpdate::getDelegatorUI() const
+    Reference< XObjectInspectorUI > const & ComposedPropertyUIUpdate::getDelegatorUI() const
     {
         impl_checkDisposed();
         return m_xDelegatorUI;

@@ -524,7 +524,7 @@ public:
     bool GetDisableTextEditUsesCommonUndoManager() const { return mbDisableTextEditUsesCommonUndoManager; }
     void SetDisableTextEditUsesCommonUndoManager(bool bNew) { mbDisableTextEditUsesCommonUndoManager = bNew; }
 
-    css::uno::Reference< css::uno::XInterface > getUnoModel();
+    css::uno::Reference< css::uno::XInterface > const & getUnoModel();
     void setUnoModel( const css::uno::Reference< css::uno::XInterface >& xModel );
 
     // these functions are used by the api to disable repaints during a

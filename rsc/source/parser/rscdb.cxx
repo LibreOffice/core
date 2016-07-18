@@ -403,13 +403,13 @@ public:
             aEnumObj.fOutput  = fOutput;
             pRoot             = pR;
         }
-    ERRTYPE WriteRc()
+    ERRTYPE const & WriteRc()
         {
             aEnumObj.aError.Clear();
             pRoot->EnumNodes( LINK( this, RscEnumerateRef, CallBackWriteRc ) );
             return aEnumObj.aError;
         }
-    ERRTYPE WriteSrc( sal_uLong lFileKey )
+    ERRTYPE const & WriteSrc( sal_uLong lFileKey )
         {
             aEnumObj.lFileKey = lFileKey;
 

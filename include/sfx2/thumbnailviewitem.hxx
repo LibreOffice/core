@@ -109,7 +109,7 @@ public:
 
     void setTitle (const OUString& rTitle);
 
-    css::uno::Reference< css::accessibility::XAccessible >
+    css::uno::Reference< css::accessibility::XAccessible > const &
                         GetAccessible( bool bIsTransientChildrenDisabled );
 
     void setDrawArea (const Rectangle &area);

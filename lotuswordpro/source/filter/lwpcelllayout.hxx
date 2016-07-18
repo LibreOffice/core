@@ -111,7 +111,7 @@ protected:
     void ApplyWatermark(XFCellStyle* pCellStyle);
     void ApplyProtect(XFCell * pCell, LwpObjectID aTableID);
     void ApplyFmtStyle(XFCellStyle *pCellStyle);
-    OUString GetCellStyleName(sal_uInt16 nRow, sal_uInt16 nCol, LwpTableLayout * pTableLayout);
+    OUString const & GetCellStyleName(sal_uInt16 nRow, sal_uInt16 nCol, LwpTableLayout * pTableLayout);
     void RegisterDefaultCell();
     virtual LwpCellBorderType GetCellBorderType(sal_uInt16 nRow, sal_uInt16 nCol, LwpTableLayout * pTableLayout);
     static LwpCellLayout * GetCellByRowCol(sal_uInt16 nRow, sal_uInt16 nCol, LwpTableLayout * pTableLayout);

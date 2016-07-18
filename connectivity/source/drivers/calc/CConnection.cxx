@@ -101,7 +101,7 @@ void OCalcConnection::construct(const OUString& url,const Sequence< PropertyValu
     acquireDoc();
 }
 
-Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
+Reference< XSpreadsheetDocument> const & OCalcConnection::acquireDoc()
 {
     if ( m_xDoc.is() )
     {

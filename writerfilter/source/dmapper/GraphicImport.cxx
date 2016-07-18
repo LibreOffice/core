@@ -404,7 +404,7 @@ public:
     }
 
     /// Getter for m_aInteropGrabBag, but also merges in the values from other members if they are set.
-    comphelper::SequenceAsHashMap getInteropGrabBag()
+    comphelper::SequenceAsHashMap const & getInteropGrabBag()
     {
         comphelper::SequenceAsHashMap aEffectExtent;
         if (m_oEffectExtentLeft)

@@ -121,7 +121,7 @@ private:
     void SetPosition (
         const Point& rPoint,
         const Mode eMode);
-    std::shared_ptr<view::InsertAnimator> GetInsertAnimator();
+    std::shared_ptr<view::InsertAnimator> const & GetInsertAnimator();
 
     /** Make the insertion indicator visible (that is the show part) and
         keep it visible, even when the mouse leaves the window (that is the

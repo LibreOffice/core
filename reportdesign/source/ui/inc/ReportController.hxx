@@ -431,7 +431,7 @@ namespace rptui
             The caller is allowed to hold a reference to the RowSet - it is kept alive as long
             as the controller lives, and it's settings will follow the report definition's settings.
         */
-        css::uno::Reference< css::sdbc::XRowSet > getRowSet();
+        css::uno::Reference< css::sdbc::XRowSet > const & getRowSet();
 
         /** returns the number formatter
         */
@@ -460,7 +460,7 @@ namespace rptui
 
         OSectionWindow* getSectionWindow(const css::uno::Reference< css::report::XSection>& _xSection) const;
 
-        css::uno::Reference< css::container::XNameAccess > getColumns() const;
+        css::uno::Reference< css::container::XNameAccess > const & getColumns() const;
         OUString getColumnLabel_throw(const OUString& i_sColumnName) const;
 
         SfxUndoManager& getUndoManager() const;

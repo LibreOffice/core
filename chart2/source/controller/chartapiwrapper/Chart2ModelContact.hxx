@@ -126,7 +126,7 @@ public:
 
 private: //methods
     ExplicitValueProvider* getExplicitValueProvider() const;
-    css::uno::Reference< css::lang::XUnoTunnel > getChartView() const;
+    css::uno::Reference< css::lang::XUnoTunnel > const & getChartView() const;
 
 public: //member
     css::uno::Reference< css::uno::XComponentContext >  m_xContext;

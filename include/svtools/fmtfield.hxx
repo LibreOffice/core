@@ -181,7 +181,7 @@ public:
     //If someone does not care about all the double handling and just wants to print the text formatted.
     //(((The text will be formatted, using the Formatter, and then set)
     void SetTextFormatted(const OUString& rText);
-    OUString  GetTextValue() const;
+    OUString const & GetTextValue() const;
 
     void      SetDefaultText(const OUString& rDefault) { m_sDefaultText = rDefault; }
     const OUString& GetDefaultText() const { return m_sDefaultText; }

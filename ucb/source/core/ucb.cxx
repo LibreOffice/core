@@ -941,7 +941,7 @@ bool UniversalContentBroker::getContentProviderData(
 // ProviderListEntry_Impl implementation.
 
 
-Reference< XContentProvider > ProviderListEntry_Impl::resolveProvider() const
+Reference< XContentProvider > const & ProviderListEntry_Impl::resolveProvider() const
 {
     if ( !m_xResolvedProvider.is() )
     {

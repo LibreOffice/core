@@ -205,7 +205,7 @@ private:
 
     void impl_deleteFrame();
 
-    static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
+    static const css::uno::Sequence< css::beans::Property >& impl_getStaticPropertyDescriptor();
 
 //  private variables
 

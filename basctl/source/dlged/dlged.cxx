@@ -251,7 +251,7 @@ DlgEditor::~DlgEditor()
 }
 
 
-Reference< awt::XControlContainer > DlgEditor::GetWindowControlContainer()
+Reference< awt::XControlContainer > const & DlgEditor::GetWindowControlContainer()
 {
     if (!m_xControlContainer.is())
         m_xControlContainer = VCLUnoHelper::CreateControlContainer(&rWindow);

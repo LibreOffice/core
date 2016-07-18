@@ -139,9 +139,9 @@ public:
     const SvXMLTokenMap& GetQueryElemTokenMap() const;
     const SvXMLTokenMap& GetColumnElemTokenMap() const;
 
-    rtl::Reference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() const;
-    rtl::Reference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper() const;
-    rtl::Reference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() const;
+    rtl::Reference < XMLPropertySetMapper > const & GetTableStylesPropertySetMapper() const;
+    rtl::Reference < XMLPropertySetMapper > const & GetColumnStylesPropertySetMapper() const;
+    rtl::Reference < XMLPropertySetMapper > const & GetCellStylesPropertySetMapper() const;
 
     /** add a Info to the sequence which will be appended to the data source
         @param  _rInfo The property to append.

@@ -94,8 +94,8 @@ public:
 
     bool        hasPropertyMapping( const OUString& rPropName ) const;
 
-    css::uno::Sequence< double > getAllX() const;
-    css::uno::Sequence< double > getAllY() const;
+    css::uno::Sequence< double > const & getAllX() const;
+    css::uno::Sequence< double > const & getAllY() const;
 
     double getXMeanValue() const;
     double getYMeanValue() const;

@@ -669,7 +669,7 @@ Sequence< OUString > SAL_CALL OConnection::getAvailableServiceNames(  ) throw (R
     return aRet;
 }
 
-Reference< XTablesSupplier > OConnection::getMasterTables()
+Reference< XTablesSupplier > const & OConnection::getMasterTables()
 {
 // check if out "master connection" can supply tables
     if(!m_xMasterTables.is())

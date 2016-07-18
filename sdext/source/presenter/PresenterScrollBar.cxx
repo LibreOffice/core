@@ -447,7 +447,7 @@ void SAL_CALL PresenterScrollBar::disposing (const css::lang::EventObject& rEven
 }
 
 
-geometry::RealRectangle2D PresenterScrollBar::GetRectangle (const Area eArea) const
+geometry::RealRectangle2D const & PresenterScrollBar::GetRectangle (const Area eArea) const
 {
     OSL_ASSERT(eArea>=0 && eArea<AreaCount);
 

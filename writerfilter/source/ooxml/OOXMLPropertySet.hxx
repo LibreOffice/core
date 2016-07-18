@@ -93,7 +93,7 @@ protected:
     bool mbValue;
     explicit OOXMLBooleanValue(bool bValue);
 public:
-    static OOXMLValue::Pointer_t Create (bool bValue);
+    static OOXMLValue::Pointer_t const & Create (bool bValue);
     static OOXMLValue::Pointer_t Create (const char *pValue);
 
     virtual ~OOXMLBooleanValue();

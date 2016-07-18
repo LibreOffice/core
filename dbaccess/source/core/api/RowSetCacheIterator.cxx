@@ -22,6 +22,7 @@
 #include "RowSetBase.hxx"
 
 using namespace dbaccess;
+
 ORowSetCacheIterator::ORowSetCacheIterator(const ORowSetCacheIterator& _rRH)
 : m_aIter(_rRH.m_aIter)
 , m_pCache(_rRH.m_pCache)
@@ -29,7 +30,7 @@ ORowSetCacheIterator::ORowSetCacheIterator(const ORowSetCacheIterator& _rRH)
 {
 }
 
-ORowSetCacheIterator::operator ORowSetMatrix::iterator()
+ORowSetCacheIterator::operator ORowSetMatrix::iterator const &()
 {
     return m_aIter->second.aIterator;
 }

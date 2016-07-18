@@ -118,7 +118,7 @@ class FWI_DLLPUBLIC LanguageGuessingHelper
 public:
     LanguageGuessingHelper(const css::uno::Reference< css::uno::XComponentContext >& _xContext) : m_xContext(_xContext){}
 
-    css::uno::Reference< css::linguistic2::XLanguageGuessing >  GetGuesser() const;
+    css::uno::Reference< css::linguistic2::XLanguageGuessing > const &  GetGuesser() const;
 };
 
 FWI_DLLPUBLIC void FillLangItems( std::set< OUString > &rLangItems,

@@ -40,9 +40,9 @@ public:
 
     SfxPoolItem**   GetDefItems();
 
-    rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable();
+    rtl::Reference<SvxForbiddenCharactersTable> const & GetForbiddenCharsTable();
     void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> const & xForbiddenChars ) { xForbiddenCharsTable = xForbiddenChars; }
-    css::uno::Reference< css::linguistic2::XLanguageGuessing > GetLanguageGuesser();
+    css::uno::Reference< css::linguistic2::XLanguageGuessing > const & GetLanguageGuesser();
 };
 
 #endif // INCLUDED_EDITENG_SOURCE_EDITENG_EERDLL2_HXX

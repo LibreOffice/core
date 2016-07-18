@@ -833,7 +833,7 @@ SdrObject* CreateSdrObjectFromParagraphOutlines( const FWData& rFWData, const Sd
 
 Reference < i18n::XBreakIterator > EnhancedCustomShapeFontWork::mxBreakIterator = nullptr;
 
-Reference < i18n::XBreakIterator > EnhancedCustomShapeFontWork::GetBreakIterator()
+Reference < i18n::XBreakIterator > const & EnhancedCustomShapeFontWork::GetBreakIterator()
 {
     if ( !mxBreakIterator.is() )
     {

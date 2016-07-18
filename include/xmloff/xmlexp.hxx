@@ -425,27 +425,27 @@ public:
     }
 
     // get export helper for text
-    inline rtl::Reference< XMLTextParagraphExport > GetTextParagraphExport();
+    inline rtl::Reference< XMLTextParagraphExport > const & GetTextParagraphExport();
 
     // get export helper for shapes
-    inline rtl::Reference< XMLShapeExport > GetShapeExport();
+    inline rtl::Reference< XMLShapeExport > const & GetShapeExport();
 
     // get auto style pool
-    inline rtl::Reference< SvXMLAutoStylePoolP > GetAutoStylePool();
+    inline rtl::Reference< SvXMLAutoStylePoolP > const & GetAutoStylePool();
 
     // get Page Export
-    inline rtl::Reference< XMLPageExport > GetPageExport();
+    inline rtl::Reference< XMLPageExport > const & GetPageExport();
 
     // get chart export helper
-    inline rtl::Reference< SchXMLExportHelper > GetChartExport();
+    inline rtl::Reference< SchXMLExportHelper > const & GetChartExport();
 
     // get font auto style pool
-    inline rtl::Reference< XMLFontAutoStylePool > GetFontAutoStylePool();
+    inline rtl::Reference< XMLFontAutoStylePool > const & GetFontAutoStylePool();
 
     ProgressBarHelper*  GetProgressBarHelper();
 
     // get Formlayer Export
-    inline rtl::Reference< xmloff::OFormLayerXMLExport > GetFormExport();
+    inline rtl::Reference< xmloff::OFormLayerXMLExport > const & GetFormExport();
     inline bool HasFormExport();
 
     // get XPropertySet with export information
@@ -564,7 +564,7 @@ public:
     bool SetNullDateOnUnitConverter();
 };
 
-inline rtl::Reference< XMLTextParagraphExport > SvXMLExport::GetTextParagraphExport()
+inline rtl::Reference< XMLTextParagraphExport > const & SvXMLExport::GetTextParagraphExport()
 {
     if( !mxTextParagraphExport.is() )
         mxTextParagraphExport = CreateTextParagraphExport();
@@ -572,7 +572,7 @@ inline rtl::Reference< XMLTextParagraphExport > SvXMLExport::GetTextParagraphExp
     return mxTextParagraphExport;
 }
 
-inline rtl::Reference< XMLShapeExport > SvXMLExport::GetShapeExport()
+inline rtl::Reference< XMLShapeExport > const & SvXMLExport::GetShapeExport()
 {
     if( !mxShapeExport.is() )
         mxShapeExport = CreateShapeExport();
@@ -580,7 +580,7 @@ inline rtl::Reference< XMLShapeExport > SvXMLExport::GetShapeExport()
     return mxShapeExport;
 }
 
-inline rtl::Reference< SvXMLAutoStylePoolP > SvXMLExport::GetAutoStylePool()
+inline rtl::Reference< SvXMLAutoStylePoolP > const & SvXMLExport::GetAutoStylePool()
 {
     if( !mxAutoStylePool.is() )
         mxAutoStylePool = CreateAutoStylePool();
@@ -588,7 +588,7 @@ inline rtl::Reference< SvXMLAutoStylePoolP > SvXMLExport::GetAutoStylePool()
     return mxAutoStylePool;
 }
 
-inline rtl::Reference< SchXMLExportHelper > SvXMLExport::GetChartExport()
+inline rtl::Reference< SchXMLExportHelper > const & SvXMLExport::GetChartExport()
 {
     if( !mxChartExport.is() )
         mxChartExport = CreateChartExport();
@@ -596,7 +596,7 @@ inline rtl::Reference< SchXMLExportHelper > SvXMLExport::GetChartExport()
     return mxChartExport;
 }
 
-inline rtl::Reference< XMLPageExport > SvXMLExport::GetPageExport()
+inline rtl::Reference< XMLPageExport > const & SvXMLExport::GetPageExport()
 {
     if( !mxPageExport.is() )
         mxPageExport = CreatePageExport();
@@ -604,7 +604,7 @@ inline rtl::Reference< XMLPageExport > SvXMLExport::GetPageExport()
     return mxPageExport;
 }
 
-inline rtl::Reference< XMLFontAutoStylePool > SvXMLExport::GetFontAutoStylePool()
+inline rtl::Reference< XMLFontAutoStylePool > const & SvXMLExport::GetFontAutoStylePool()
 {
     if( !mxFontAutoStylePool.is() )
         mxFontAutoStylePool = CreateFontAutoStylePool();
@@ -612,7 +612,7 @@ inline rtl::Reference< XMLFontAutoStylePool > SvXMLExport::GetFontAutoStylePool(
     return mxFontAutoStylePool;
 }
 
-inline rtl::Reference< xmloff::OFormLayerXMLExport > SvXMLExport::GetFormExport()
+inline rtl::Reference< xmloff::OFormLayerXMLExport > const & SvXMLExport::GetFormExport()
 {
     if( !mxFormExport.is() )
         mxFormExport = CreateFormExport();

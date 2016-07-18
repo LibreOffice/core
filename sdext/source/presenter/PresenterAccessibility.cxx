@@ -509,7 +509,7 @@ private:
 class AccessibleFocusManager
 {
 public:
-    static std::shared_ptr<AccessibleFocusManager> Instance();
+    static std::shared_ptr<AccessibleFocusManager> const & Instance();
 
     void AddFocusableObject (const ::rtl::Reference<PresenterAccessible::AccessibleObject>& rpObject);
     void RemoveFocusableObject (const ::rtl::Reference<PresenterAccessible::AccessibleObject>& rpObject);
@@ -1990,7 +1990,7 @@ void AccessibleNotes::HandleTextChange()
 
 std::shared_ptr<AccessibleFocusManager> AccessibleFocusManager::mpInstance;
 
-std::shared_ptr<AccessibleFocusManager> AccessibleFocusManager::Instance()
+std::shared_ptr<AccessibleFocusManager> const & AccessibleFocusManager::Instance()
 {
     if ( ! mpInstance)
     {

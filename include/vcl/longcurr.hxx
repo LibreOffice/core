@@ -55,7 +55,7 @@ public:
     bool                    IsUseThousandSep() const { return mbThousandSep; }
 
     void                    SetCurrencySymbol( const OUString& rStr );
-    OUString                GetCurrencySymbol() const;
+    OUString const &        GetCurrencySymbol() const;
 
     void                    SetMin(const BigInt& rNewMin);
     const BigInt&           GetMin() const { return mnMin; }

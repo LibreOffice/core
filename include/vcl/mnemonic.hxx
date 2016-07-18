@@ -65,7 +65,7 @@ public:
 
     void                RegisterMnemonic( const OUString& rKey );
     OUString            CreateMnemonic( const OUString& rKey );
-    css::uno::Reference< css::i18n::XCharacterClassification > GetCharClass();
+    css::uno::Reference< css::i18n::XCharacterClassification > const & GetCharClass();
 
     // returns a string where all '~'-characters and CJK mnemonics of the form (~A) are completely removed
     static OUString EraseAllMnemonicChars( const OUString& rStr );

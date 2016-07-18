@@ -82,7 +82,7 @@ public:
     void                  CacheGlyphIndex( sal_UCS4 cChar, int nGI ) const;
 
     bool                  GetFontCodeRanges( CmapResult& ) const;
-    const FontCharMapPtr  GetFontCharMap();
+    const FontCharMapPtr& GetFontCharMap();
 
 private:
     FT_FaceRec_*    maFaceFT;

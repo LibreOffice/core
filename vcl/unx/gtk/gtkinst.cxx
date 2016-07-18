@@ -469,7 +469,7 @@ GenPspGraphics *GtkInstance::CreatePrintGraphics()
     return new GenPspGraphics();
 }
 
-std::shared_ptr<vcl::unx::GtkPrintWrapper>
+std::shared_ptr<vcl::unx::GtkPrintWrapper> const &
 GtkInstance::getPrintWrapper() const
 {
     if (!m_xPrintWrapper)

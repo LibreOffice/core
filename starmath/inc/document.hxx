@@ -182,7 +182,7 @@ public:
 
     const std::set< OUString > &    GetUsedSymbols() const  { return maUsedSymbols; }
 
-    OUString        GetAccessibleText();
+    OUString const & GetAccessibleText();
 
     EditEngine &    GetEditEngine();
     SfxItemPool &   GetEditEngineItemPool();

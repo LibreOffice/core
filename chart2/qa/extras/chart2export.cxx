@@ -200,7 +200,7 @@ public:
     }
 };
 
-OUString findChartFile(const OUString& rDir, uno::Reference< container::XNameAccess > const & xNames )
+OUString const & findChartFile(const OUString& rDir, uno::Reference< container::XNameAccess > const & xNames )
 {
     uno::Sequence<OUString> rNames = xNames->getElementNames();
     OUString* pElement = std::find_if(rNames.begin(), rNames.end(), CheckForChartName(rDir));

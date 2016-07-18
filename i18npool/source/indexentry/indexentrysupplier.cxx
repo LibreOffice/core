@@ -110,7 +110,7 @@ bool SAL_CALL IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(const O
     return false;
 }
 
-Reference < css::i18n::XExtendedIndexEntrySupplier > SAL_CALL
+Reference < css::i18n::XExtendedIndexEntrySupplier > const & SAL_CALL
 IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, const OUString& rSortAlgorithm) throw (RuntimeException)
 {
     if (xIES.is() && rSortAlgorithm == aSortAlgorithm && rLocale.Language == aLocale.Language &&

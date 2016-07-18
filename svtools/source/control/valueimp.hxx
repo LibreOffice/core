@@ -64,7 +64,7 @@ struct ValueSetItem
     explicit ValueSetItem( ValueSet& rParent );
     ~ValueSetItem();
 
-    css::uno::Reference< css::accessibility::XAccessible >
+    css::uno::Reference< css::accessibility::XAccessible > const &
                         GetAccessible( bool bIsTransientChildrenDisabled );
 };
 

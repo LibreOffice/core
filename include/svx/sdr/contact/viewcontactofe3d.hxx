@@ -81,7 +81,7 @@ protected:
 public:
     // access to the local primitive without the object's local 3D transform. This is e.g. needed
     // to get the not-yet transformed BoundVolume for e.g. interactions
-    drawinglayer::primitive3d::Primitive3DContainer getVIP3DSWithoutObjectTransform() const;
+    drawinglayer::primitive3d::Primitive3DContainer const & getVIP3DSWithoutObjectTransform() const;
 
     // access to the local primitive. This will ensure that the list is
     // current in comparing the local list content with a fresh created incarnation. It will

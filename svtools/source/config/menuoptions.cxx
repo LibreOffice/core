@@ -125,7 +125,7 @@ class SvtMenuOptions_Impl : public ConfigItem
             @return     A list of needed configuration keys is returned.
         *//*-*****************************************************************************************************/
 
-        static Sequence< OUString > impl_GetPropertyNames();
+        static Sequence< OUString > const & impl_GetPropertyNames();
 };
 
 //  constructor
@@ -299,7 +299,7 @@ void SvtMenuOptions_Impl::ImplCommit()
 
 //  private method
 
-Sequence< OUString > SvtMenuOptions_Impl::impl_GetPropertyNames()
+Sequence< OUString > const & SvtMenuOptions_Impl::impl_GetPropertyNames()
 {
     // Build static list of configuration key names.
     static const OUString pProperties[] =

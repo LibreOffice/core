@@ -1052,7 +1052,7 @@ std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionari
     return aRes;
 }
 
-uno::Reference< util::XChangesBatch > SvtLinguConfig::GetMainUpdateAccess() const
+uno::Reference< util::XChangesBatch > const & SvtLinguConfig::GetMainUpdateAccess() const
 {
     if (!m_xMainUpdateAccess.is())
     {

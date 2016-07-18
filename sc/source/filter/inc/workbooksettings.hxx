@@ -98,7 +98,7 @@ public:
     /** Returns the show objects mode (considered a view setting in Calc). */
     sal_Int16           getApiShowObjectMode() const;
     /** Returns the nulldate of this workbook. */
-    css::util::Date     getNullDate() const;
+    css::util::Date const & getNullDate() const;
 
 private:
     /** Updates date mode and unit converter nulldate. */

@@ -117,8 +117,8 @@ public: //public methods
 private: //private methods
 
     //read methods
-    OUString GetPresetId() const;
-    OUString GetPresetSubType() const;
+    OUString const & GetPresetId() const;
+    OUString const & GetPresetSubType() const;
     bool HasAfterEffect() const;
     bool HasAfterEffect_ChangeColor() const;
     bool HasAfterEffect_DimAtNextEffect() const;

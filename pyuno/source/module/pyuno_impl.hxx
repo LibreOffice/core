@@ -318,7 +318,7 @@ struct RuntimeCargo
     FILE *logFile;
     sal_Int32 logLevel;
 
-    PyRef getUnoModule();
+    PyRef const & getUnoModule();
 };
 
 struct stRuntimeImpl

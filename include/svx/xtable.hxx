@@ -321,12 +321,12 @@ public:
     // Special call to get a bitmap for the solid line representation. It
     // creates a bitmap fitting in size and style to the ones you get by
     // using GetUiBitmap for existing entries.
-    Bitmap GetBitmapForUISolidLine() const;
+    Bitmap const & GetBitmapForUISolidLine() const;
 
     // Special calls to get the translated strings for the UI entry for no
     // line style (XLINE_NONE) and solid line style (XLINE_SOLID) for dialogs
-    OUString GetStringForUiSolidLine() const;
-    OUString GetStringForUiNoLine() const;
+    OUString const & GetStringForUiSolidLine() const;
+    OUString const & GetStringForUiNoLine() const;
 };
 
 class SVX_DLLPUBLIC XHatchList : public XPropertyList

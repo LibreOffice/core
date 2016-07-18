@@ -398,7 +398,7 @@ void XSecController::addSignature( sal_Int32 nSignatureId )
     m_bVerifyCurrentSignature = true;
 }
 
-cssu::Reference< cssxs::XDocumentHandler > XSecController::createSignatureReader(sal_Int32 nType)
+cssu::Reference< cssxs::XDocumentHandler > const & XSecController::createSignatureReader(sal_Int32 nType)
 {
     if (nType == embed::StorageFormats::OFOPXML)
         m_xSecParser = new OOXMLSecParser(this);

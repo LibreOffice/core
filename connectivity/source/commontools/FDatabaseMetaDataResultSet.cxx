@@ -666,82 +666,82 @@ const ORowSetValue& ODatabaseMetaDataResultSet::getValue(sal_Int32 columnIndex)
 }
 
 /// return an empty ORowSetValueDecorator
-ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getEmptyValue()
+ORowSetValueDecoratorRef const & ODatabaseMetaDataResultSet::getEmptyValue()
 {
     static ORowSetValueDecoratorRef aEmptyValueRef = new ORowSetValueDecorator();
     return aEmptyValueRef;
 }
 
 /// return an ORowSetValueDecorator with 0 as value
-ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::get0Value()
+ORowSetValueDecoratorRef const & ODatabaseMetaDataResultSet::get0Value()
 {
     static ORowSetValueDecoratorRef a0ValueRef = new ORowSetValueDecorator((sal_Int32)0);
     return a0ValueRef;
 }
 
 /// return an ORowSetValueDecorator with 1 as value
-ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::get1Value()
+ORowSetValueDecoratorRef const & ODatabaseMetaDataResultSet::get1Value()
 {
     static ORowSetValueDecoratorRef a1ValueRef = new ORowSetValueDecorator((sal_Int32)1);
     return a1ValueRef;
 }
 
 /// return an ORowSetValueDecorator with ColumnSearch::BASIC as value
-ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getBasicValue()
+ORowSetValueDecoratorRef const & ODatabaseMetaDataResultSet::getBasicValue()
 {
     static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(ColumnSearch::BASIC);
     return aValueRef;
 }
 
-ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getSelectValue()
+ORowSetValueDecoratorRef const & ODatabaseMetaDataResultSet::getSelectValue()
 {
     static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(OUString("SELECT"));
     return aValueRef;
 }
 
-ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getInsertValue()
+ORowSetValueDecoratorRef const & ODatabaseMetaDataResultSet::getInsertValue()
 {
     static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(OUString("INSERT"));
     return aValueRef;
 }
 
-ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getDeleteValue()
+ORowSetValueDecoratorRef const & ODatabaseMetaDataResultSet::getDeleteValue()
 {
     static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(OUString("DELETE"));
     return aValueRef;
 }
 
-ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getUpdateValue()
+ORowSetValueDecoratorRef const & ODatabaseMetaDataResultSet::getUpdateValue()
 {
     static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(OUString("UPDATE"));
     return aValueRef;
 }
 
-ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getCreateValue()
+ORowSetValueDecoratorRef const & ODatabaseMetaDataResultSet::getCreateValue()
 {
     static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(OUString("CREATE"));
     return aValueRef;
 }
 
-ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getReadValue()
+ORowSetValueDecoratorRef const & ODatabaseMetaDataResultSet::getReadValue()
 {
     static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(OUString("READ"));
     return aValueRef;
 }
 
-ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getAlterValue()
+ORowSetValueDecoratorRef const & ODatabaseMetaDataResultSet::getAlterValue()
 {
     static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(OUString("ALTER"));
     return aValueRef;
 }
 
-ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getDropValue()
+ORowSetValueDecoratorRef const & ODatabaseMetaDataResultSet::getDropValue()
 {
     static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(OUString("DROP"));
     return aValueRef;
 }
 
-ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getQuoteValue()
+ORowSetValueDecoratorRef const & ODatabaseMetaDataResultSet::getQuoteValue()
 {
     static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(OUString("'"));
     return aValueRef;

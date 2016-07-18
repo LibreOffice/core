@@ -304,7 +304,7 @@ OUString SAL_CALL DummyXShape::getImplementationName()
 
 namespace {
 
-uno::Sequence< OUString > listSupportedServices()
+uno::Sequence< OUString > const & listSupportedServices()
 {
     static const uno::Sequence< OUString > aSupportedServices{
         "com.sun.star.drawing.Shape",

@@ -52,7 +52,7 @@ SwVbaGlobals::~SwVbaGlobals()
 
 // XGlobals
 
-uno::Reference<word::XApplication >
+uno::Reference<word::XApplication > const &
 SwVbaGlobals::getApplication() throw (uno::RuntimeException)
 {
     OSL_TRACE("In SwVbaGlobals::getApplication");

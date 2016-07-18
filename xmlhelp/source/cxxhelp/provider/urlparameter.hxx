@@ -121,7 +121,7 @@ namespace chelp {
         bool isRoot() const { return m_aModule.isEmpty(); }
         bool isErrorDocument();
 
-        OUString get_id();
+        OUString const & get_id();
 
         OUString get_tag();
 
@@ -139,7 +139,7 @@ namespace chelp {
 
         const OUString& get_module() const { return m_aModule; }
 
-        OUString get_dbpar() const
+        OUString const & get_dbpar() const
         {
             if( !m_aDbPar.isEmpty() )
                 return m_aDbPar;
@@ -149,9 +149,9 @@ namespace chelp {
 
         const OUString& get_prefix() const { return m_aPrefix; }
 
-        OUString get_language();
+        OUString const & get_language();
 
-        OUString get_program();
+        OUString const & get_program();
 
         const OUString& get_query() const { return m_aQuery; }
 

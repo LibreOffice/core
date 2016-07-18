@@ -2978,7 +2978,7 @@ uno::Reference< frame::XModel >  SAL_CALL OReportController::getModel() throw( u
     return m_xReportDefinition.get();
 }
 
-uno::Reference< sdbc::XRowSet > OReportController::getRowSet()
+uno::Reference< sdbc::XRowSet > const & OReportController::getRowSet()
 {
     OSL_PRECOND( m_xReportDefinition.is(), "OReportController::getRowSet: no report definition?!" );
 
@@ -4318,7 +4318,7 @@ embed::VisualRepresentation SAL_CALL OReportController::getPreferredVisualRepres
     return embed::EmbedMapUnits::ONE_100TH_MM;
 }
 
-uno::Reference< container::XNameAccess > OReportController::getColumns() const
+uno::Reference< container::XNameAccess > const & OReportController::getColumns() const
 {
     if ( !m_xColumns.is() && m_xReportDefinition.is() && !m_xReportDefinition->getCommand().isEmpty() )
     {

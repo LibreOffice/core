@@ -135,7 +135,7 @@ ViewContactOfE3d::~ViewContactOfE3d()
 {
 }
 
-drawinglayer::primitive3d::Primitive3DContainer ViewContactOfE3d::getVIP3DSWithoutObjectTransform() const
+drawinglayer::primitive3d::Primitive3DContainer const & ViewContactOfE3d::getVIP3DSWithoutObjectTransform() const
 {
     // local up-to-date checks. Create new list and compare.
     drawinglayer::primitive3d::Primitive3DContainer xNew(createViewIndependentPrimitive3DContainer());

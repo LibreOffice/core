@@ -241,7 +241,7 @@ SvxShowCharSetItem::~SvxShowCharSetItem()
 }
 
 
-uno::Reference< css::accessibility::XAccessible > SvxShowCharSetItem::GetAccessible()
+uno::Reference< css::accessibility::XAccessible > const & SvxShowCharSetItem::GetAccessible()
 {
     if( !m_xAcc.is() )
     {

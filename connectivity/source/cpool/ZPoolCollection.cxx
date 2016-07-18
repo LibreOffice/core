@@ -249,7 +249,7 @@ bool OPoolCollection::isPoolingEnabled()
     return bEnabled;
 }
 
-Reference<XInterface> OPoolCollection::getConfigPoolRoot()
+Reference<XInterface> const & OPoolCollection::getConfigPoolRoot()
 {
     if(!m_xConfigNode.is())
         m_xConfigNode = createWithServiceFactory(getConnectionPoolNodeName());

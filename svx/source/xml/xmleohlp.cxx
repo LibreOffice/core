@@ -329,7 +329,7 @@ bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
     return true;
 }
 
-uno::Reference < embed::XStorage > SvXMLEmbeddedObjectHelper::ImplGetContainerStorage(
+uno::Reference < embed::XStorage > const & SvXMLEmbeddedObjectHelper::ImplGetContainerStorage(
         const OUString& rStorageName )
 {
     DBG_ASSERT( -1 == rStorageName.indexOf( '/' ) &&

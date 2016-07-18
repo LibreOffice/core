@@ -76,7 +76,7 @@ public:
     void SetTop (const sal_Int32 nTop);
     void SetText (const OUString& Text);
     sal_Int32 ParseDistance (const OUString& rsDistance) const;
-    Reference<rendering::XBitmap> GetBitmap();
+    Reference<rendering::XBitmap> const & GetBitmap();
     sal_Int32 GetTotalHeight();
 
 private:
@@ -445,7 +445,7 @@ sal_Int32 PresenterTextView::Implementation::ParseDistance (const OUString& rsDi
     return nDistance;
 }
 
-Reference<rendering::XBitmap> PresenterTextView::Implementation::GetBitmap()
+Reference<rendering::XBitmap> const & PresenterTextView::Implementation::GetBitmap()
 {
     DBG_ASSERT(mpEditEngine!=nullptr, "EditEngine missing");
 

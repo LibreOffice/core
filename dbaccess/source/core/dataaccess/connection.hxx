@@ -203,7 +203,7 @@ protected:
             throw css::lang::DisposedException();
     }
 
-    css::uno::Reference< css::sdbcx::XTablesSupplier > getMasterTables();
+    css::uno::Reference< css::sdbcx::XTablesSupplier > const & getMasterTables();
 
 private:
     /** checks whether or not there are naming conflicts between tables and queries

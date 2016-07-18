@@ -411,7 +411,7 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const OUString
     return xDriver;
 }
 
-Reference< XPropertySet > ODbDataSourceAdministrationHelper::getCurrentDataSource()
+Reference< XPropertySet > const & ODbDataSourceAdministrationHelper::getCurrentDataSource()
 {
     if ( !m_xDatasource.is() )
     {

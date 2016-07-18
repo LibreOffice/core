@@ -1669,7 +1669,7 @@ void SdrPage::SetUnoPage(uno::Reference<drawing::XDrawPage> const& xNewPage)
     mxUnoPage = xNewPage;
 }
 
-uno::Reference< uno::XInterface > SdrPage::getUnoPage()
+uno::Reference< uno::XInterface > const & SdrPage::getUnoPage()
 {
     if( !mxUnoPage.is() )
     {

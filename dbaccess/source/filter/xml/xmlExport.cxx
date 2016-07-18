@@ -1360,7 +1360,7 @@ OUString ODBExport::implConvertAny(const Any& _rValue)
     return aBuffer.makeStringAndClear();
 }
 
-rtl::Reference < XMLPropertySetMapper > ODBExport::GetTableStylesPropertySetMapper() const
+rtl::Reference < XMLPropertySetMapper > const & ODBExport::GetTableStylesPropertySetMapper() const
 {
     if ( !m_xTableStylesPropertySetMapper.is() )
     {
@@ -1369,7 +1369,7 @@ rtl::Reference < XMLPropertySetMapper > ODBExport::GetTableStylesPropertySetMapp
     return m_xTableStylesPropertySetMapper;
 }
 
-rtl::Reference < XMLPropertySetMapper > ODBExport::GetCellStylesPropertySetMapper() const
+rtl::Reference < XMLPropertySetMapper > const & ODBExport::GetCellStylesPropertySetMapper() const
 {
     if ( !m_xCellStylesPropertySetMapper.is() )
     {
@@ -1378,7 +1378,7 @@ rtl::Reference < XMLPropertySetMapper > ODBExport::GetCellStylesPropertySetMappe
     return m_xCellStylesPropertySetMapper;
 }
 
-rtl::Reference < XMLPropertySetMapper > ODBExport::GetColumnStylesPropertySetMapper() const
+rtl::Reference < XMLPropertySetMapper > const & ODBExport::GetColumnStylesPropertySetMapper() const
 {
     if ( !m_xColumnStylesPropertySetMapper.is() )
     {

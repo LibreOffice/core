@@ -72,7 +72,7 @@ namespace connectivity
                 @return
                     The driver which was currently selected.
             */
-            css::uno::Reference< css::sdbc::XDriver > loadDriver( );
+            css::uno::Reference< css::sdbc::XDriver > const & loadDriver( );
 
             /** shut down the connection and revoke the storage from the map
                 @param  _aIter

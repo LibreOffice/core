@@ -176,7 +176,7 @@ public:
     void SetBulletFlag(bool bFlag);
     void SetIndent(LwpIndentOverride* pIndentOverride);
     void SetFirstFrib(const OUString& Content,sal_uInt32 FontID);
-    OUString GetContentText(bool bAllText = false);
+    OUString const & GetContentText(bool bAllText = false);
 
     void SetParaDropcap(bool bFlag);
     void SetDropcapLines(sal_uInt16 number);

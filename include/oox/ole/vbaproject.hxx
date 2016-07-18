@@ -166,10 +166,10 @@ private:
     css::uno::Reference< css::container::XNameContainer >
                         openLibrary( sal_Int32 nPropId, bool bCreateMissing );
     /** Creates and returns the Basic library of the document used for import. */
-    css::uno::Reference< css::container::XNameContainer >
+    css::uno::Reference< css::container::XNameContainer > const &
                         createBasicLibrary();
     /** Creates and returns the dialog library of the document used for import. */
-    css::uno::Reference< css::container::XNameContainer >
+    css::uno::Reference< css::container::XNameContainer > const &
                         createDialogLibrary();
 
     /** Imports the VBA code modules and forms. */

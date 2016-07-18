@@ -24,7 +24,7 @@ namespace writerfilter
 
 QNameToString::Pointer_t QNameToString::pInstance;
 
-QNameToString::Pointer_t QNameToString::Instance()
+QNameToString::Pointer_t const & QNameToString::Instance()
 {
     if (pInstance.get() == nullptr)
         pInstance = QNameToString::Pointer_t(new QNameToString());

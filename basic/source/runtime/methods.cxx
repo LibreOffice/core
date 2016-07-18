@@ -160,7 +160,7 @@ OUString getFullPath( const OUString& aRelPath )
 }
 
 // TODO: -> SbiGlobals
-static uno::Reference< ucb::XSimpleFileAccess3 > getFileAccess()
+static uno::Reference< ucb::XSimpleFileAccess3 > const & getFileAccess()
 {
     static uno::Reference< ucb::XSimpleFileAccess3 > xSFI;
     if( !xSFI.is() )

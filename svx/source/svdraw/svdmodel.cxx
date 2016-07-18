@@ -1759,7 +1759,7 @@ void SdrModel::SetStarDrawPreviewMode(bool bPreview)
     }
 }
 
-uno::Reference< uno::XInterface > SdrModel::getUnoModel()
+uno::Reference< uno::XInterface > const & SdrModel::getUnoModel()
 {
     if( !mxUnoModel.is() )
         mxUnoModel = createUnoModel();

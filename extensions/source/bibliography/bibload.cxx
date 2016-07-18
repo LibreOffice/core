@@ -88,9 +88,9 @@ private:
                                 const Reference< XLoadEventListener > & aListener);
 
     BibDataManager*         GetDataManager()const;
-    Reference< XNameAccess >            GetDataColumns() const;
-    Reference< XResultSet >             GetDataCursor() const;
-    Reference< sdb::XColumn >               GetIdentifierColumn() const;
+    Reference< XNameAccess > const &    GetDataColumns() const;
+    Reference< XResultSet > const &     GetDataCursor() const;
+    Reference< sdb::XColumn >           GetIdentifierColumn() const;
 
 public:
                             BibliographyLoader();
@@ -336,7 +336,7 @@ BibDataManager* BibliographyLoader::GetDataManager()const
     return m_pDatMan;
 }
 
-Reference< XNameAccess >  BibliographyLoader::GetDataColumns() const
+Reference< XNameAccess > const & BibliographyLoader::GetDataColumns() const
 {
     if (!m_xColumns.is())
     {
@@ -406,7 +406,7 @@ Reference< sdb::XColumn >  BibliographyLoader::GetIdentifierColumn() const
     return xReturn;
 }
 
-Reference< XResultSet >  BibliographyLoader::GetDataCursor() const
+Reference< XResultSet > const &  BibliographyLoader::GetDataCursor() const
 {
     if (!m_xCursor.is())
         GetDataColumns();

@@ -149,7 +149,7 @@ void ZipPackageStream::CloseOwnStreamIfAny()
     }
 }
 
-uno::Reference< io::XInputStream > ZipPackageStream::GetOwnSeekStream()
+uno::Reference< io::XInputStream > const & ZipPackageStream::GetOwnSeekStream()
 {
     if ( !m_bHasSeekable && m_xStream.is() )
     {

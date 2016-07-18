@@ -181,11 +181,11 @@ public:
     /** Return a collection of properties that are used throughout the slide
         sorter.
     */
-    std::shared_ptr<controller::Properties> GetProperties() const;
+    std::shared_ptr<controller::Properties> const & GetProperties() const;
 
     /** Return the active theme which gives access to colors and fonts.
     */
-    std::shared_ptr<view::Theme> GetTheme() const;
+    std::shared_ptr<view::Theme> const & GetTheme() const;
 
 protected:
     /** This virtual method makes it possible to create a specialization of

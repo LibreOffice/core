@@ -57,7 +57,7 @@ namespace sdr
             // access to the local primitive sequence. This will ensure that the list is
             // current in comparing the local list content with a fresh created incarnation
             // This method will not handle included hierarchies or visibility.
-            drawinglayer::primitive3d::Primitive3DContainer getPrimitive3DContainer(const DisplayInfo& rDisplayInfo) const;
+            drawinglayer::primitive3d::Primitive3DContainer const & getPrimitive3DContainer(const DisplayInfo& rDisplayInfo) const;
         };
     } // end of namespace contact
 } // end of namespace sdr

@@ -40,7 +40,7 @@ public:
     void add(PropertyMapEntry const * pMap) throw();
     void remove( const OUString& aName ) throw();
 
-    std::vector< Property > getProperties() throw();
+    std::vector< Property > const & getProperties() throw();
 
     const PropertyMap& getPropertyMap() const throw() { return maPropertyMap;}
 
@@ -83,7 +83,7 @@ void PropertyMapImpl::remove( const OUString& aName ) throw()
     maProperties.clear();
 }
 
-std::vector< Property > PropertyMapImpl::getProperties() throw()
+std::vector< Property > const & PropertyMapImpl::getProperties() throw()
 {
     // maybe we have to generate the properties after
     // a change in the property map or at first call

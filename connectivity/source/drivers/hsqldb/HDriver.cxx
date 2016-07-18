@@ -124,7 +124,7 @@ namespace connectivity
         cppu::WeakComponentImplHelperBase::disposing();
     }
 
-    Reference< XDriver > ODriverDelegator::loadDriver( )
+    Reference< XDriver > const & ODriverDelegator::loadDriver( )
     {
         if ( !m_xDriver.is() )
         {

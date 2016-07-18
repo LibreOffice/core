@@ -289,7 +289,7 @@ PoEntry& PoEntry::operator=(const PoEntry& rPo)
     return *this;
 }
 
-OString PoEntry::getSourceFile() const
+OString const & PoEntry::getSourceFile() const
 {
     assert( m_bIsInitialized );
     return m_pGenPo->getReference();
@@ -343,14 +343,14 @@ bool PoEntry::isFuzzy() const
 }
 
 // Get translation string in merge format
-OString PoEntry::getMsgId() const
+OString const & PoEntry::getMsgId() const
 {
     assert( m_bIsInitialized );
     return m_pGenPo->getMsgId();
 }
 
 // Get translated string in merge format
-OString PoEntry::getMsgStr() const
+const OString& PoEntry::getMsgStr() const
 {
     assert( m_bIsInitialized );
     return m_pGenPo->getMsgStr();

@@ -59,7 +59,7 @@ public:
 
     css::uno::Reference< css::chart2::data::XDataSequence > getOriginalCategories();
 
-    css::uno::Sequence< OUString > getSimpleCategories();
+    css::uno::Sequence< OUString > const & getSimpleCategories();
     const std::vector<ComplexCategory>* getCategoriesByLevel( sal_Int32 nLevel );
 
     static OUString getCategoryByIndex(

@@ -110,7 +110,7 @@ public:
     // access to the local primitive. This will ensure that the local primitive is
     // current in comparing the local one with a fresh created incarnation
     // This method will not handle included hierarchies and not check visibility.
-    drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
+    drawinglayer::primitive2d::Primitive2DContainer const & getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
 
     // test this VOC for visibility concerning model-view stuff like e.g. Layer
     virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const;

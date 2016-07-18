@@ -88,9 +88,9 @@ public:
     SCROW                               GetCurrentRow() const { return (maCurrentCellPos.Row() >= 0) ? maCurrentCellPos.Row() : 0; }
     const css::uno::Reference< css::sheet::XSpreadsheet >&
                                         GetCurrentXSheet() const { return xCurrentSheet; }
-    css::uno::Reference< css::drawing::XDrawPage >
+    css::uno::Reference< css::drawing::XDrawPage > const &
                                         GetCurrentXDrawPage();
-    css::uno::Reference< css::drawing::XShapes >
+    css::uno::Reference< css::drawing::XShapes > const &
                                         GetCurrentXShapes();
     bool                                HasDrawPage();
     bool                                HasXShapes();

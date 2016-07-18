@@ -136,7 +136,7 @@ const sal_Char sGrfCollStr[] = "Graphikformatvorlage";
 /*
  * global functions...
  */
- uno::Reference< linguistic2::XProofreadingIterator > SwDoc::GetGCIterator() const
+ uno::Reference< linguistic2::XProofreadingIterator > const & SwDoc::GetGCIterator() const
 {
     if (!m_xGCIterator.is() && SvtLinguConfig().HasGrammarChecker())
     {

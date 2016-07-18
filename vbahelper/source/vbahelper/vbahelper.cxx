@@ -109,7 +109,7 @@ getIntrospectionAccess( const uno::Any& aObject ) throw (uno::RuntimeException)
     return xIntrospection->inspect( aObject );
 }
 
-uno::Reference< script::XTypeConverter >
+uno::Reference< script::XTypeConverter > const &
 getTypeConverter( const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
 {
     static uno::Reference< script::XTypeConverter > xTypeConv( script::Converter::create(xContext) );

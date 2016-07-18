@@ -555,7 +555,7 @@ void writeDevicesLog(std::unique_ptr<ds_profile>& rProfile, OUString const & sPr
 
 } // end anonymous namespace
 
-ds_device getDeviceSelection(
+ds_device const & getDeviceSelection(
     OUString const & sProfilePath, bool bForceSelection)
 {
     /* Run only if device is not yet selected */

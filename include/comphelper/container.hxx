@@ -51,7 +51,7 @@ public:
 
     virtual ~IndexAccessIterator();
 
-    css::uno::Reference< css::uno::XInterface>    Next();
+    css::uno::Reference< css::uno::XInterface> const &    Next();
 
     virtual void Invalidate() { m_xCurrentObject = nullptr; }
 

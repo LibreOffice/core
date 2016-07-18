@@ -2322,7 +2322,7 @@ bool SwDBManager::OpenDataSource(const OUString& rDataSource, const OUString& rT
     return pFound->xResultSet.is();
 }
 
-uno::Reference< sdbc::XConnection> SwDBManager::RegisterConnection(OUString const& rDataSource)
+uno::Reference< sdbc::XConnection> const & SwDBManager::RegisterConnection(OUString const& rDataSource)
 {
     SwDSParam* pFound = SwDBManager::FindDSConnection(rDataSource, true);
     uno::Reference< sdbc::XDataSource> xSource;

@@ -344,7 +344,7 @@ public:
                             OUString& rResult, double* pNumber);
     /** create and store or find an already stored connection to a data source for use
     in SwFieldMgr and SwDBTreeList */
-    css::uno::Reference< css::sdbc::XConnection>
+    css::uno::Reference< css::sdbc::XConnection> const &
                     RegisterConnection(OUString const& rSource);
 
     void            CreateDSData(const SwDBData& rData)

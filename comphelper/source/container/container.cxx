@@ -39,7 +39,7 @@ IndexAccessIterator::IndexAccessIterator(css::uno::Reference< css::uno::XInterfa
 IndexAccessIterator::~IndexAccessIterator() {}
 
 
-css::uno::Reference< css::uno::XInterface> IndexAccessIterator::Next()
+css::uno::Reference< css::uno::XInterface> const & IndexAccessIterator::Next()
 {
     bool bCheckingStartingPoint = !m_xCurrentObject.is();
         // Is the current node the starting point?

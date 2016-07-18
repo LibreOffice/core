@@ -314,7 +314,7 @@ private:
     static void         GoOnTop();
 
     sal_Int32           FormatAndPrint( Printer* pPrinter, sal_Int32 nPage = -1 );
-    SbModuleRef         XModule();
+    SbModuleRef const & XModule();
 protected:
     virtual void    Resize() override;
     virtual void    GetFocus() override;

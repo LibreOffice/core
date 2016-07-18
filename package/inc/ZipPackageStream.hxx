@@ -72,7 +72,7 @@ private:
     bool m_bRawStream;
 
     /// Check that m_xStream implements io::XSeekable and return it
-    css::uno::Reference< css::io::XInputStream > GetOwnSeekStream();
+    css::uno::Reference< css::io::XInputStream > const & GetOwnSeekStream();
     css::uno::Reference< css::io::XInputStream > SAL_CALL getRawData()
         throw(css::uno::RuntimeException);
 

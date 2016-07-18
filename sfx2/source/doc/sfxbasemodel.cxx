@@ -3410,7 +3410,7 @@ Reference< script::provider::XScriptProvider > SAL_CALL SfxBaseModel::getScriptP
 //  XUIConfigurationManagerSupplier
 
 
-OUString SfxBaseModel::getRuntimeUID() const
+OUString const & SfxBaseModel::getRuntimeUID() const
 {
     OSL_ENSURE( !m_pData->m_sRuntimeUID.isEmpty(),
                 "SfxBaseModel::getRuntimeUID - ID is empty!" );

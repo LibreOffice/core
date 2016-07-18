@@ -2198,7 +2198,7 @@ void HtmlExport::CreateFileNames()
     }
 }
 
-OUString HtmlExport::getDocumentTitle()
+OUString const & HtmlExport::getDocumentTitle()
 {
     // check for a title object in this page, if its the first
     // title it becomes this documents title for the content

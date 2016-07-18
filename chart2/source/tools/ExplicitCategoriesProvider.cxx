@@ -504,7 +504,7 @@ void ExplicitCategoriesProvider::init()
     }
 }
 
-Sequence< OUString > ExplicitCategoriesProvider::getSimpleCategories()
+Sequence< OUString > const & ExplicitCategoriesProvider::getSimpleCategories()
 {
     if( !m_bIsExplicitCategoriesInited )
     {

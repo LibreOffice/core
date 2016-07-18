@@ -2645,7 +2645,7 @@ const std::shared_ptr<const SfxFilter>& SfxMedium::GetFilter() const
 }
 
 
-std::shared_ptr<const SfxFilter> SfxMedium::GetOrigFilter() const
+std::shared_ptr<const SfxFilter> const & SfxMedium::GetOrigFilter() const
 {
     return pImpl->pOrigFilter ? pImpl->pOrigFilter : pImpl->m_pFilter;
 }

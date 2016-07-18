@@ -428,7 +428,7 @@ Boundary xdictionary::nextWord(const OUString& rText, sal_Int32 anyPos, sal_Int1
         return getWordBoundary(rText, anyPos, wordType, true);
 }
 
-Boundary xdictionary::getWordBoundary(const OUString& rText, sal_Int32 anyPos, sal_Int16 wordType, bool bDirection)
+Boundary const & xdictionary::getWordBoundary(const OUString& rText, sal_Int32 anyPos, sal_Int16 wordType, bool bDirection)
 {
         const sal_Unicode *text=rText.getStr();
         sal_Int32 len=rText.getLength();

@@ -689,7 +689,7 @@ void SlideSorterView::ConfigurationChanged (
 
 }
 
-std::shared_ptr<cache::PageCache> SlideSorterView::GetPreviewCache()
+std::shared_ptr<cache::PageCache> const & SlideSorterView::GetPreviewCache()
 {
     sd::Window *pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow && mpPreviewCache.get() == nullptr)
@@ -704,7 +704,7 @@ std::shared_ptr<cache::PageCache> SlideSorterView::GetPreviewCache()
     return mpPreviewCache;
 }
 
-Pair SlideSorterView::GetVisiblePageRange()
+Pair const & SlideSorterView::GetVisiblePageRange()
 {
     if ( ! mbPageObjectVisibilitiesValid)
         DeterminePageObjectVisibilities();
@@ -827,7 +827,7 @@ bool SlideSorterView::SetState (
     return bModified;
 }
 
-std::shared_ptr<PageObjectPainter> SlideSorterView::GetPageObjectPainter()
+std::shared_ptr<PageObjectPainter> const & SlideSorterView::GetPageObjectPainter()
 {
     if ( ! mpPageObjectPainter)
         mpPageObjectPainter.reset(new PageObjectPainter(mrSlideSorter));

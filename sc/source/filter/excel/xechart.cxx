@@ -304,7 +304,7 @@ XclExpChRoot::~XclExpChRoot()
 {
 }
 
-Reference< XChartDocument > XclExpChRoot::GetChartDocument() const
+Reference< XChartDocument > const & XclExpChRoot::GetChartDocument() const
 {
     return mxChData->mxChartDoc;
 }

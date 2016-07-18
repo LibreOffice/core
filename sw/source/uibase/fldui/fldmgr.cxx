@@ -1679,7 +1679,7 @@ sal_uLong SwFieldMgr::GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumbe
     return pFormatter->GetStandardFormat(nDefFormat, GetCurrLanguage());
 }
 
-Reference<XNumberingTypeInfo> SwFieldMgr::GetNumberingInfo() const
+Reference<XNumberingTypeInfo> const & SwFieldMgr::GetNumberingInfo() const
 {
     if(!xNumberingInfo.is())
     {

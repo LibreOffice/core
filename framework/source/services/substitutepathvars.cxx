@@ -274,7 +274,7 @@ protected:
         throw (css::container::NoSuchElementException, css::uno::RuntimeException);
     OUString impl_reSubstituteVariables( const OUString& aText )
         throw (css::uno::RuntimeException);
-    OUString impl_getSubstituteVariableValue( const OUString& variable )
+    OUString const & impl_getSubstituteVariableValue( const OUString& variable )
         throw (css::container::NoSuchElementException, css::uno::RuntimeException);
 
 private:
@@ -1147,7 +1147,7 @@ throw ( RuntimeException )
 }
 
 // This method support both request schemes "$("<varname>")" or "<varname>".
-OUString SubstitutePathVariables::impl_getSubstituteVariableValue( const OUString& rVariable )
+OUString const & SubstitutePathVariables::impl_getSubstituteVariableValue( const OUString& rVariable )
 throw ( NoSuchElementException, RuntimeException )
 {
     OUString aVariable;

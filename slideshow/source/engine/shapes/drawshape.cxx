@@ -77,7 +77,7 @@ namespace slideshow
         // Private methods
 
 
-        GDIMetaFileSharedPtr DrawShape::forceScrollTextMetaFile()
+        GDIMetaFileSharedPtr const & DrawShape::forceScrollTextMetaFile()
         {
             if ((mnCurrMtfLoadFlags & MTF_LOAD_SCROLL_TEXT_MTF) != MTF_LOAD_SCROLL_TEXT_MTF)
             {

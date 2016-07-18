@@ -130,7 +130,7 @@ sal_Int64 ODbaseIndex::getSomething( const Sequence< sal_Int8 > & rId ) throw (R
                 : ODbaseIndex_BASE::getSomething(rId);
 }
 
-ONDXPagePtr ODbaseIndex::getRoot()
+ONDXPagePtr const & ODbaseIndex::getRoot()
 {
     openIndexFile();
     if (!m_aRoot.Is())

@@ -107,7 +107,7 @@ public:
     // #i37011# render geometry shadow
     SdrObject*                                          mpLastShadowGeometry;
 
-    css::uno::Reference< css::drawing::XCustomShapeEngine > GetCustomShapeEngine() const;
+    css::uno::Reference< css::drawing::XCustomShapeEngine > const & GetCustomShapeEngine() const;
 
 //  SVX_DLLPRIVATE css::uno::Sequence< css::uno::Reference< css::drawing::XCustomShapeHandle > >
 //      SdrObjCustomShape::GetInteraction( const SdrObjCustomShape* pCustomShape ) const;

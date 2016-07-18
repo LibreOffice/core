@@ -1449,7 +1449,7 @@ css::lang::Locale ImpEditEngine::GetLocale( const EditPaM& rPaM ) const
     return LanguageTag( GetLanguage( rPaM ) ).getLocale();
 }
 
-Reference< XSpellChecker1 > ImpEditEngine::GetSpeller()
+Reference< XSpellChecker1 > const & ImpEditEngine::GetSpeller()
 {
     if ( !xSpeller.is() )
         xSpeller = LinguMgr::GetSpellChecker();

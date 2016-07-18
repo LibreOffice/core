@@ -145,7 +145,7 @@ struct SwTOXSortTabBase
 
     virtual OUString  GetURL() const;
 
-    inline TextAndReading GetText() const;
+    inline TextAndReading const & GetText() const;
     inline const css::lang::Locale& GetLocale() const;
 
 private:
@@ -155,7 +155,7 @@ private:
     virtual TextAndReading GetText_Impl() const = 0;
 };
 
-inline TextAndReading SwTOXSortTabBase::GetText() const
+inline TextAndReading const & SwTOXSortTabBase::GetText() const
 {
     if( !bValidText )
     {

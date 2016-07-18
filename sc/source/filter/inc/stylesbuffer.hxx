@@ -676,11 +676,11 @@ public:
     explicit            Dxf( const WorkbookHelper& rHelper );
 
     /** Creates a new empty font object. */
-    FontRef             createFont( bool bAlwaysNew = true );
+    FontRef const &     createFont( bool bAlwaysNew = true );
     /** Creates a new empty border object. */
-    BorderRef           createBorder( bool bAlwaysNew = true );
+    BorderRef const &   createBorder( bool bAlwaysNew = true );
     /** Creates a new empty fill object. */
-    FillRef             createFill( bool bAlwaysNew = true );
+    FillRef const &     createFill( bool bAlwaysNew = true );
 
     /** Inserts a new number format code. */
     void                importNumFmt( const AttributeList& rAttribs );

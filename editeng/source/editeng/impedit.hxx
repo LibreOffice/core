@@ -679,8 +679,8 @@ private:
 
     void                SetValidPaperSize( const Size& rSz );
 
-    css::uno::Reference < css::i18n::XBreakIterator > ImplGetBreakIterator() const;
-    css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > ImplGetInputSequenceChecker() const;
+    css::uno::Reference < css::i18n::XBreakIterator > const & ImplGetBreakIterator() const;
+    css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > const & ImplGetInputSequenceChecker() const;
 
     void ImplUpdateOverflowingParaNum( sal_uInt32 );
     void ImplUpdateOverflowingLineNum( sal_uInt32, sal_uInt32, sal_uInt32 );
@@ -899,7 +899,7 @@ public:
     EditView*           GetActiveView() const   { return pActiveView; }
     void                SetActiveView( EditView* pView );
 
-    css::uno::Reference< css::linguistic2::XSpellChecker1 >
+    css::uno::Reference< css::linguistic2::XSpellChecker1 > const &
                         GetSpeller();
     void                SetSpeller( css::uno::Reference< css::linguistic2::XSpellChecker1 > const &xSpl )
                             { xSpeller = xSpl; }

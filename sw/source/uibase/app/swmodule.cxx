@@ -192,7 +192,7 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
         GetColorConfig();
     }
 }
-uno::Reference< scanner::XScannerManager2 >
+uno::Reference< scanner::XScannerManager2 > const &
 SwModule::GetScannerManager()
 {
     if (!m_xScannerManager.is())
@@ -202,7 +202,7 @@ SwModule::GetScannerManager()
     return m_xScannerManager;
 }
 
-uno::Reference< linguistic2::XLanguageGuessing > SwModule::GetLanguageGuesser()
+uno::Reference< linguistic2::XLanguageGuessing > const & SwModule::GetLanguageGuesser()
 {
     if (!m_xLanguageGuesser.is())
     {

@@ -101,7 +101,7 @@ void RootAccess::release() throw () {
     Access::release();
 }
 
-OUString RootAccess::getAbsolutePathRepresentation() {
+OUString const & RootAccess::getAbsolutePathRepresentation() {
     getNode(); // turn pathRepresentation_ into canonic form
     return pathRepresentation_;
 }

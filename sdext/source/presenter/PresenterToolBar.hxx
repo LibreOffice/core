@@ -98,7 +98,7 @@ public:
         const bool bSynchronous);
 
     void RequestLayout();
-    css::geometry::RealSize2D GetMinimalSize();
+    css::geometry::RealSize2D const & GetMinimalSize();
     const ::rtl::Reference<PresenterController>& GetPresenterController() const;
     const css::uno::Reference<css::uno::XComponentContext>& GetComponentContext() const;
 

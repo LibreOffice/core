@@ -836,7 +836,7 @@ namespace accessibility
         }
     }
 
-    static uno::Sequence< OUString > getAttributeNames()
+    static uno::Sequence< OUString > const & getAttributeNames()
     {
         static uno::Sequence< OUString >* pNames = nullptr;
 

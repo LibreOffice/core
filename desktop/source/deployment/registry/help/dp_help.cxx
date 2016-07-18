@@ -106,7 +106,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     void revokeEntryFromDb(OUString const & url);
     bool activateEntry(OUString const & url);
 
-    Reference< ucb::XSimpleFileAccess3 > getFileAccess();
+    Reference< ucb::XSimpleFileAccess3 > const & getFileAccess();
     Reference< ucb::XSimpleFileAccess3 > m_xSFA;
 
     const Reference<deployment::XPackageTypeInfo> m_xHelpTypeInfo;
@@ -601,7 +601,7 @@ void BackendImpl::implCollectXhpFiles( const OUString& aDir,
     }
 }
 
-Reference< ucb::XSimpleFileAccess3 > BackendImpl::getFileAccess()
+Reference< ucb::XSimpleFileAccess3 > const & BackendImpl::getFileAccess()
 {
     if( !m_xSFA.is() )
     {

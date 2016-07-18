@@ -323,7 +323,7 @@ void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
     }
 }
 
-Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetDocumentAcceleratorConfiguration()
+Reference<ui::XAcceleratorConfiguration> const & CommandInfoProvider::GetDocumentAcceleratorConfiguration()
 {
     if ( ! mxCachedDocumentAcceleratorConfiguration.is())
     {
@@ -354,7 +354,7 @@ Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetDocumentAcceler
     return mxCachedDocumentAcceleratorConfiguration;
 }
 
-Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetModuleAcceleratorConfiguration()
+Reference<ui::XAcceleratorConfiguration> const & CommandInfoProvider::GetModuleAcceleratorConfiguration()
 {
     if ( ! mxCachedModuleAcceleratorConfiguration.is())
     {
@@ -375,7 +375,7 @@ Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetModuleAccelerat
     return mxCachedModuleAcceleratorConfiguration;
 }
 
-Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetGlobalAcceleratorConfiguration()
+Reference<ui::XAcceleratorConfiguration> const & CommandInfoProvider::GetGlobalAcceleratorConfiguration()
 {
     // Get the global accelerator configuration.
     if ( ! mxCachedGlobalAcceleratorConfiguration.is())
@@ -386,7 +386,7 @@ Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetGlobalAccelerat
     return mxCachedGlobalAcceleratorConfiguration;
 }
 
-OUString CommandInfoProvider::GetModuleIdentifier()
+OUString const & CommandInfoProvider::GetModuleIdentifier()
 {
     if (msCachedModuleIdentifier.getLength() == 0)
     {

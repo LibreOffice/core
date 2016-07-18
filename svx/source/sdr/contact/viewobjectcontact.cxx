@@ -359,7 +359,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::createPrimiti
     return xRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
+drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
 {
     drawinglayer::primitive2d::Primitive2DContainer xNewPrimitiveSequence;
 

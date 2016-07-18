@@ -71,7 +71,7 @@ ScVbaShapeRange::Group() throw (uno::RuntimeException, std::exception)
     return uno::Reference< msforms::XShape >( new ScVbaShape( getParent(), mxContext, xShape, getShapes(), m_xModel, office::MsoShapeType::msoGroup ) );
 }
 
-uno::Reference< drawing::XShapes >
+uno::Reference< drawing::XShapes > const &
 ScVbaShapeRange::getShapes() throw (uno::RuntimeException)
 {
     if ( !m_xShapes.is() )

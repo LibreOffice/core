@@ -822,7 +822,7 @@ protected:
 
     /* returns a unique id for the model that is valid as long as the document
        is loaded. The id is not saved across document close/reload. */
-    OUString getRuntimeUID() const;
+    OUString const & getRuntimeUID() const;
 
     /* returns true if the document signatures are valid, otherwise false */
     bool hasValidSignatures() const;

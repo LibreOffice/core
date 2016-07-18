@@ -40,7 +40,7 @@ using namespace ::com::sun::star::presentation;
 using ::com::sun::star::drawing::XShape;
 
 /** returns a helper class to manipulate effects inside the main sequence */
-sd::MainSequencePtr SdPage::getMainSequence()
+sd::MainSequencePtr const & SdPage::getMainSequence()
 {
     if( nullptr == mpMainSequence.get() )
         mpMainSequence.reset( new sd::MainSequence( getAnimationNode() ) );
@@ -49,7 +49,7 @@ sd::MainSequencePtr SdPage::getMainSequence()
 }
 
 /** returns the main animation node */
-Reference< XAnimationNode > SdPage::getAnimationNode() throw (RuntimeException)
+Reference< XAnimationNode > const & SdPage::getAnimationNode() throw (RuntimeException)
 {
     if( !mxAnimationNode.is() )
     {

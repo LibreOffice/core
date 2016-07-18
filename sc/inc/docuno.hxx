@@ -106,7 +106,7 @@ private:
     bool                    FillRenderMarkData( const css::uno::Any& aSelection,
                                                 const css::uno::Sequence< css::beans::PropertyValue >& rOptions,
                                                 ScMarkData& rMark, ScPrintSelectionStatus& rStatus, OUString& rPagesStr ) const;
-    css::uno::Reference<css::uno::XAggregation> GetFormatter();
+    css::uno::Reference<css::uno::XAggregation> const & GetFormatter();
     void                    HandleCalculateEvents();
 
     css::uno::Reference<css::uno::XInterface> create(

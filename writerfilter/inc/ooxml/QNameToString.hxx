@@ -47,7 +47,7 @@ protected:
     QNameToString();
 
 public:
-    static Pointer_t Instance();
+    static Pointer_t const & Instance();
 
     std::string operator()(Id qName);
 };

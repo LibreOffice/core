@@ -92,7 +92,7 @@ public:
     ScVObjMode              GetObjMode( ScVObjType eObj ) const             { return aModeArr[eObj]; }
 
     void                    SetGridColor( const Color& rCol, const OUString& rName ) { aGridCol = rCol; aGridColName = rName;}
-    Color                   GetGridColor( OUString* pStrName = nullptr ) const;
+    Color const &           GetGridColor( OUString* pStrName = nullptr ) const;
 
     const ScGridOptions&    GetGridOptions() const                      { return aGridOpt; }
     void                    SetGridOptions( const ScGridOptions& rNew ) { aGridOpt = rNew; }

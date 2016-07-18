@@ -89,7 +89,7 @@ namespace pcr
         /** returns the delegator UI
             @throw css::lang::DisposedException
         */
-        css::uno::Reference< css::inspection::XObjectInspectorUI > getDelegatorUI() const;
+        css::uno::Reference< css::inspection::XObjectInspectorUI > const & getDelegatorUI() const;
 
         /** returns a ->XObjectInspectorUI instance belonging to a given property handler
 

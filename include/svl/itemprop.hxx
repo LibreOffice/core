@@ -149,7 +149,7 @@ public:
         getPropertyState(const SfxItemPropertySimpleEntry& rEntry, const SfxItemSet& rSet) const
                                     throw();
 
-    css::uno::Reference<css::beans::XPropertySetInfo>
+    css::uno::Reference<css::beans::XPropertySetInfo> const &
         getPropertySetInfo() const;
     const SfxItemPropertyMap& getPropertyMap() const {return m_aMap;}
 };

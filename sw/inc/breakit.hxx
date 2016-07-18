@@ -63,7 +63,7 @@ public:
 public:
     static SwBreakIt * Get();
 
-    css::uno::Reference< css::i18n::XBreakIterator > GetBreakIter()
+    css::uno::Reference< css::i18n::XBreakIterator > const & GetBreakIter()
     {
         createBreakIterator();
         return xBreak;

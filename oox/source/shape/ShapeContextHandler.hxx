@@ -169,13 +169,13 @@ private:
     css::uno::Reference<css::drawing::XDrawPage> mxDrawPage;
     OUString msRelationFragmentPath;
 
-    css::uno::Reference<XFastContextHandler> getGraphicShapeContext(::sal_Int32 Element);
-    css::uno::Reference<XFastContextHandler> getChartShapeContext(::sal_Int32 Element);
-    css::uno::Reference<XFastContextHandler> getDrawingShapeContext();
-    css::uno::Reference<XFastContextHandler> getDiagramShapeContext();
-    css::uno::Reference<XFastContextHandler> getLockedCanvasContext(sal_Int32 nElement);
-    css::uno::Reference<XFastContextHandler> getWpsContext(sal_Int32 nStartElement, sal_Int32 nElement);
-    css::uno::Reference<XFastContextHandler> getWpgContext(sal_Int32 nElement);
+    css::uno::Reference<XFastContextHandler> const & getGraphicShapeContext(::sal_Int32 Element);
+    css::uno::Reference<XFastContextHandler> const & getChartShapeContext(::sal_Int32 Element);
+    css::uno::Reference<XFastContextHandler> const & getDrawingShapeContext();
+    css::uno::Reference<XFastContextHandler> const & getDiagramShapeContext();
+    css::uno::Reference<XFastContextHandler> const & getLockedCanvasContext(sal_Int32 nElement);
+    css::uno::Reference<XFastContextHandler> const & getWpsContext(sal_Int32 nStartElement, sal_Int32 nElement);
+    css::uno::Reference<XFastContextHandler> const & getWpgContext(sal_Int32 nElement);
     css::uno::Reference<XFastContextHandler> getContextHandler(sal_Int32 nElement = 0);
 };
 

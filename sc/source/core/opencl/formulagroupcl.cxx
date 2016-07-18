@@ -3694,7 +3694,7 @@ public:
     void CodeGen();
 
     /// Produce kernel hash
-    std::string GetMD5();
+    std::string const & GetMD5();
 
     /// Create program, build, and create kernel
     /// TODO cache results based on kernel body hash
@@ -3792,7 +3792,7 @@ void DynamicKernel::CodeGen()
         << " program to be compiled:\n" << linenumberify(mFullProgramSrc));
 }
 
-std::string DynamicKernel::GetMD5()
+std::string const & DynamicKernel::GetMD5()
 {
     if (mKernelHash.empty())
     {

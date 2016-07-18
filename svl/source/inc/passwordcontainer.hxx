@@ -260,7 +260,7 @@ css::task::UrlRecord find(
                     css::task::PasswordRequestMode aRMode,
                     const css::uno::Reference< css::task::XInteractionHandler >& xHandler );
 
-    OUString GetMasterPassword( const css::uno::Reference< css::task::XInteractionHandler >& Handler )
+    OUString const & GetMasterPassword( const css::uno::Reference< css::task::XInteractionHandler >& Handler )
                                                         throw(css::uno::RuntimeException, std::exception);
 
     void UpdateVector( const OUString& url, ::std::list< NamePassRecord >& toUpdate, NamePassRecord& rec, bool writeFile )

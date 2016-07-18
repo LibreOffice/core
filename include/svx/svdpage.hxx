@@ -508,7 +508,7 @@ public:
     /// otherwise the visible pages
     virtual const SdrPageGridFrameList* GetGridFrameList(const SdrPageView* pPV, const Rectangle* pRect) const;
 
-    css::uno::Reference< css::uno::XInterface > getUnoPage();
+    css::uno::Reference< css::uno::XInterface > const & getUnoPage();
 
     virtual SfxStyleSheet* GetTextStyleSheetForObject( SdrObject* pObj ) const;
 

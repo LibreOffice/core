@@ -213,7 +213,7 @@ void SmDocShell::SetFormat(SmFormat& rFormat)
     }
 }
 
-OUString SmDocShell::GetAccessibleText()
+OUString const & SmDocShell::GetAccessibleText()
 {
     ArrangeFormula();
     if (maAccText.isEmpty())

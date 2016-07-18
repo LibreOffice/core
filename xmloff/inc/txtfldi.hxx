@@ -160,7 +160,7 @@ protected:
     const OUString& GetServiceName() { return sServiceName; }
     inline void SetServiceName(const OUString& sStr) { sServiceName = sStr; }
 
-    OUString GetContent();
+    OUString const & GetContent();
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,

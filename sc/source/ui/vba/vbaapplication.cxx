@@ -850,7 +850,7 @@ ScVbaApplication::Calculate() throw(  script::BasicErrorException , uno::Runtime
     xCalculatable->calculateAll();
 }
 
-static uno::Reference< util::XPathSettings > lcl_getPathSettingsService( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::RuntimeException )
+static uno::Reference< util::XPathSettings > const & lcl_getPathSettingsService( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::RuntimeException )
 {
     static uno::Reference< util::XPathSettings >  xPathSettings;
     if ( !xPathSettings.is() )

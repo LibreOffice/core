@@ -41,7 +41,7 @@ void RscTop::SetCallPar(const OString& rPar1, const OString& rPar2,
     aCallParType = rParType;
 }
 
-RSCINST RscTop::GetDefault()
+RSCINST const & RscTop::GetDefault()
 {
     if( !aDfltInst.IsInst() )
         aDfltInst = this->Create( nullptr, RSCINST() );

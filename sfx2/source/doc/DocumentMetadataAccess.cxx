@@ -208,7 +208,7 @@ struct DocumentMetadataAccess_Impl
 
 // this is... a hack.
 template<sal_Int16 Constant>
-/*static*/ uno::Reference<rdf::XURI>
+/*static*/ uno::Reference<rdf::XURI> const &
 getURI(uno::Reference< uno::XComponentContext > const & i_xContext)
 {
     static uno::Reference< rdf::XURI > xURI(

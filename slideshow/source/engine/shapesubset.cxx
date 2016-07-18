@@ -88,7 +88,7 @@ namespace slideshow
             }
         }
 
-        AttributableShapeSharedPtr ShapeSubset::getSubsetShape() const
+        AttributableShapeSharedPtr const & ShapeSubset::getSubsetShape() const
         {
             return mpSubsetShape ? mpSubsetShape : mpOriginalShape;
         }

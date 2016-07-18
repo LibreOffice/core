@@ -127,7 +127,7 @@ OString URLParameter::getByName( const char* par )
 }
 
 
-OUString URLParameter::get_id()
+OUString const & URLParameter::get_id()
 {
     if( m_aId == "start" )
     {   // module is set
@@ -171,7 +171,7 @@ OUString URLParameter::get_title()
 }
 
 
-OUString URLParameter::get_language()
+OUString const & URLParameter::get_language()
 {
     if( m_aLanguage.isEmpty() )
         return m_aDefaultLanguage;
@@ -180,7 +180,7 @@ OUString URLParameter::get_language()
 }
 
 
-OUString URLParameter::get_program()
+OUString const & URLParameter::get_program()
 {
     if( m_aProgram.isEmpty() )
     {

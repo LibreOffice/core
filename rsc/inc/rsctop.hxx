@@ -61,7 +61,7 @@ public:
                                 const OString& rParType );
             RscTop* GetRefClass() const { return pRefClass; }
     virtual RSCCLASS_TYPE GetClassType() const = 0;
-            RSCINST GetDefault();
+            RSCINST const & GetDefault();
 
                     // preparation fro the destructor call
                     // given that classes can have mutual dependencies,

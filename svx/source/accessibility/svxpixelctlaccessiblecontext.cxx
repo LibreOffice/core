@@ -830,7 +830,7 @@ Rectangle SvxPixelCtlAccessibleChild::GetBoundingBoxOnScreen() throw( RuntimeExc
     return Rectangle( mrParentWindow.OutputToAbsoluteScreenPixel( aRect.TopLeft() ), aRect.GetSize() );
 }
 
-Rectangle SvxPixelCtlAccessibleChild::GetBoundingBox() throw( RuntimeException )
+Rectangle const & SvxPixelCtlAccessibleChild::GetBoundingBox() throw( RuntimeException )
 {
     // no guard necessary, because no one changes mpBoundingBox after creating it
     ThrowExceptionIfNotAlive();

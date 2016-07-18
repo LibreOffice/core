@@ -49,7 +49,7 @@ protected:
     bool mbCheckAmbiguoity;
     bool mbAddIndent;
     bool isAmbiguous(const OUString& _sPropertyName) throw ( css::script::BasicErrorException );
-    css::uno::Reference< css::beans::XPropertyState > getXPropertyState() throw ( css::uno::RuntimeException );
+    css::uno::Reference< css::beans::XPropertyState > const &  getXPropertyState() throw ( css::uno::RuntimeException );
     void initializeNumberFormats() throw ( css::script::BasicErrorException, css::uno::RuntimeException );
     SfxItemSet*  getCurrentDataSet( ) throw (css::uno::RuntimeException, std::exception);
 protected:

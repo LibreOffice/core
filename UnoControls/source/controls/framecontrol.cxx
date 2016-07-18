@@ -491,7 +491,7 @@ void FrameControl::impl_deleteFrame()
 
 //  private method
 
-const Sequence< Property > FrameControl::impl_getStaticPropertyDescriptor()
+const Sequence< Property >& FrameControl::impl_getStaticPropertyDescriptor()
 {
     // All Properties of this implementation. The array must be sorted!
     static const Property pPropertys[PROPERTY_COUNT] =

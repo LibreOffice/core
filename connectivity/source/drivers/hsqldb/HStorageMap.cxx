@@ -79,21 +79,21 @@ namespace connectivity
             }
         }
 
-        Reference< XInputStream> StreamHelper::getInputStream()
+        Reference< XInputStream> const & StreamHelper::getInputStream()
         {
             if ( !m_xInputStream.is() )
                 m_xInputStream = m_xStream->getInputStream();
             return m_xInputStream;
         }
 
-        Reference< XOutputStream> StreamHelper::getOutputStream()
+        Reference< XOutputStream> const & StreamHelper::getOutputStream()
         {
             if ( !m_xOutputStream.is() )
                 m_xOutputStream = m_xStream->getOutputStream();
             return m_xOutputStream;
         }
 
-        Reference< XSeekable> StreamHelper::getSeek()
+        Reference< XSeekable> const & StreamHelper::getSeek()
         {
             if ( !m_xSeek.is() )
                 m_xSeek.set(m_xStream,UNO_QUERY);

@@ -124,8 +124,8 @@ struct OWriteStream_Impl : public MutexHolder
     sal_Int32 m_nRelId;
 
 private:
-    OUString GetFilledTempFileIfNo( const css::uno::Reference< css::io::XInputStream >& xStream );
-    OUString FillTempGetFileName();
+    OUString const & GetFilledTempFileIfNo( const css::uno::Reference< css::io::XInputStream >& xStream );
+    OUString const & FillTempGetFileName();
     css::uno::Reference< css::io::XStream >       GetTempFileAsStream();
     css::uno::Reference< css::io::XInputStream >  GetTempFileAsInputStream();
 
@@ -187,7 +187,7 @@ public:
     void Commit();
     void Revert();
 
-    css::uno::Sequence< css::beans::PropertyValue > GetStreamProperties();
+    css::uno::Sequence< css::beans::PropertyValue > const & GetStreamProperties();
 
     css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > GetAllRelationshipsIfAny();
 

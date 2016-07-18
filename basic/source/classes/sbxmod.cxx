@@ -492,7 +492,7 @@ SbModule::~SbModule()
     mxWrapper = nullptr;
 }
 
-uno::Reference< script::XInvocation >
+uno::Reference< script::XInvocation > const &
 SbModule::GetUnoModule()
 {
     if ( !mxWrapper.is() )

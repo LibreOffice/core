@@ -297,7 +297,7 @@ void LwpCellLayout::ApplyFmtStyle(XFCellStyle *pCellStyle)
  * @param   nCol - default cell position col number
  * @return  OUString - registered cell style name
  */
-OUString LwpCellLayout::GetCellStyleName(sal_uInt16 nRow, sal_uInt16 nCol, LwpTableLayout * pTableLayout)
+OUString const & LwpCellLayout::GetCellStyleName(sal_uInt16 nRow, sal_uInt16 nCol, LwpTableLayout * pTableLayout)
 {
     // judge cell border type
     LwpCellBorderType eType = GetCellBorderType(nRow, nCol, pTableLayout);

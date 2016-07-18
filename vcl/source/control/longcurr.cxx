@@ -309,7 +309,7 @@ void LongCurrencyFormatter::SetCurrencySymbol( const OUString& rStr )
     ReformatAll();
 }
 
-OUString LongCurrencyFormatter::GetCurrencySymbol() const
+OUString const & LongCurrencyFormatter::GetCurrencySymbol() const
 {
     return !maCurrencySymbol.isEmpty() ? maCurrencySymbol : GetLocaleDataWrapper().getCurrSymbol();
 }

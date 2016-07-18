@@ -40,7 +40,7 @@ class DocTemplLocaleHelper : public cppu::WeakImplHelper < css::xml::sax::XDocum
     std::vector< OUString > m_aElementsSeq; // stack of elements being parsed
 
     DocTemplLocaleHelper();
-    std::vector< css::beans::StringPair > GetParsingResult();
+    std::vector< css::beans::StringPair > const & GetParsingResult();
 
     static std::vector< css::beans::StringPair > SAL_CALL ReadLocalizationSequence_Impl( const css::uno::Reference< css::io::XInputStream >& xInStream, const OUString& aStringID, const css::uno::Reference< css::uno::XComponentContext >& xContext )
     throw( css::uno::Exception );

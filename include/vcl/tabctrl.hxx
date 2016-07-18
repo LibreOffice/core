@@ -141,7 +141,7 @@ public:
     TabPage*            GetTabPage( sal_uInt16 nPageId ) const;
 
     void                SetPageText( sal_uInt16 nPageId, const OUString& rText );
-    OUString            GetPageText( sal_uInt16 nPageId ) const;
+    OUString const &    GetPageText( sal_uInt16 nPageId ) const;
 
     void                SetHelpText( sal_uInt16 nPageId, const OUString& rText );
     const OUString&     GetHelpText( sal_uInt16 nPageId ) const;

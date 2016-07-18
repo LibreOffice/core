@@ -144,7 +144,7 @@ public:
 
     static void     SetGlobalBreakHdl( const Link<StarBASIC*,sal_uInt16>& rNewHdl );
 
-    SbxArrayRef     getUnoListeners();
+    SbxArrayRef const & getUnoListeners();
 
     static SbxBase* FindSBXInCurrentScope( const OUString& rName );
     static SbMethod* GetActiveMethod( sal_uInt16 nLevel = 0 );

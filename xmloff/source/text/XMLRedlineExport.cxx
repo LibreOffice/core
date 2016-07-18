@@ -421,7 +421,7 @@ void XMLRedlineExport::ExportChangedRegion(
 }
 
 
-const OUString XMLRedlineExport::ConvertTypeName(
+OUString const & XMLRedlineExport::ConvertTypeName(
     const OUString& sApiName)
 {
     if (sApiName == sDelete)

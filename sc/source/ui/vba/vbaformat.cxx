@@ -773,7 +773,7 @@ ScVbaFormat< Ifc... >::initializeNumberFormats() throw ( script::BasicErrorExcep
 }
 
 template< typename... Ifc >
-uno::Reference< beans::XPropertyState >
+uno::Reference< beans::XPropertyState > const &
 ScVbaFormat< Ifc... >::getXPropertyState() throw ( uno::RuntimeException )
 {
     if ( !xPropertyState.is() )

@@ -525,7 +525,7 @@ bool ScDPObject::IsDataDescriptionCell(const ScAddress& rPos)
     return (rPos == aTabRange.aStart);
 }
 
-uno::Reference<sheet::XDimensionsSupplier> ScDPObject::GetSource()
+uno::Reference<sheet::XDimensionsSupplier> const & ScDPObject::GetSource()
 {
     CreateObjects();
     return xSource;

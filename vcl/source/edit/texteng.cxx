@@ -615,7 +615,7 @@ void TextEngine::ImpRemoveParagraph( sal_uInt32 nPara )
     ImpParagraphRemoved( nPara );
 }
 
-uno::Reference < i18n::XExtendedInputSequenceChecker > TextEngine::GetInputSequenceChecker()
+uno::Reference < i18n::XExtendedInputSequenceChecker > const & TextEngine::GetInputSequenceChecker()
 {
     if ( !mxISC.is() )
     {
@@ -2793,7 +2793,7 @@ void TextEngine::SetLeftMargin( sal_uInt16 n )
     mpDoc->SetLeftMargin( n );
 }
 
-uno::Reference< i18n::XBreakIterator > TextEngine::GetBreakIterator()
+uno::Reference< i18n::XBreakIterator > const & TextEngine::GetBreakIterator()
 {
     if ( !mxBreakIterator.is() )
         mxBreakIterator = vcl::unohelper::CreateBreakIterator();
@@ -2808,7 +2808,7 @@ void TextEngine::SetLocale( const css::lang::Locale& rLocale )
     mpLocaleDataWrapper = nullptr;
 }
 
-css::lang::Locale TextEngine::GetLocale()
+css::lang::Locale const & TextEngine::GetLocale()
 {
     if ( maLocale.Language.isEmpty() )
     {

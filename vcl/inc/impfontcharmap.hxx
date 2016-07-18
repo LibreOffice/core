@@ -41,7 +41,7 @@ private:
                         ImplFontCharMap( const ImplFontCharMap& ) = delete;
     void                operator=( const ImplFontCharMap& ) = delete;
 
-    static ImplFontCharMapPtr getDefaultMap( bool bSymbols=false);
+    static ImplFontCharMapPtr const & getDefaultMap( bool bSymbols=false);
     bool                isDefaultMap() const;
 
 private:

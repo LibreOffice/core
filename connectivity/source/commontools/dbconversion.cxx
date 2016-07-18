@@ -58,7 +58,7 @@ namespace dbtools
     using namespace ::com::sun::star::beans;
 
 
-    css::util::Date DBTypeConversion::getStandardDate()
+    css::util::Date const & DBTypeConversion::getStandardDate()
     {
         static css::util::Date STANDARD_DB_DATE(1,1,1900);
         return STANDARD_DB_DATE;

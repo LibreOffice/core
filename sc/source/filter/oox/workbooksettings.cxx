@@ -239,7 +239,7 @@ sal_Int16 WorkbookSettings::getApiShowObjectMode() const
     return API_SHOWMODE_SHOW;
 }
 
-css::util::Date WorkbookSettings::getNullDate() const
+css::util::Date const & WorkbookSettings::getNullDate() const
 {
     static const css::util::Date saDate1900                 ( 30, 12, 1899 );
     static const css::util::Date saDate1904                 ( 1, 1, 1904 );

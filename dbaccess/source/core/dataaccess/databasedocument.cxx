@@ -1729,7 +1729,7 @@ Reference< XUIConfigurationManager > SAL_CALL ODatabaseDocument::getUIConfigurat
     return Reference< XUIConfigurationManager >( getUIConfigurationManager2(), UNO_QUERY_THROW );
 }
 
-Reference< XUIConfigurationManager2 > ODatabaseDocument::getUIConfigurationManager2(  ) throw (RuntimeException)
+Reference< XUIConfigurationManager2 > const & ODatabaseDocument::getUIConfigurationManager2(  ) throw (RuntimeException)
 {
     DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
 
@@ -2090,7 +2090,7 @@ Reference< XController2 > SAL_CALL ODatabaseDocument::createViewController( cons
     return xController;
 }
 
-Reference< XTitle > ODatabaseDocument::impl_getTitleHelper_throw()
+Reference< XTitle > const & ODatabaseDocument::impl_getTitleHelper_throw()
 {
     if ( ! m_xTitleHelper.is ())
     {

@@ -118,7 +118,7 @@ public:
      */
     void                SetFilter(const std::shared_ptr<const SfxFilter>& pFilter);
     const std::shared_ptr<const SfxFilter>& GetFilter() const;
-    std::shared_ptr<const SfxFilter>    GetOrigFilter() const;
+    std::shared_ptr<const SfxFilter> const & GetOrigFilter() const;
     const OUString&     GetOrigURL() const;
 
     SfxItemSet  *       GetItemSet() const;

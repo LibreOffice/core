@@ -70,7 +70,7 @@ public:
 
     virtual void SAL_CALL release() throw () override;
 
-    OUString getAbsolutePathRepresentation();
+    OUString const & getAbsolutePathRepresentation();
 
     const OUString& getLocale() const { return locale_;}
 

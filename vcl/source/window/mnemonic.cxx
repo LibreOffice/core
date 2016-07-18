@@ -296,7 +296,7 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
     return rKey;
 }
 
-uno::Reference< i18n::XCharacterClassification > MnemonicGenerator::GetCharClass()
+uno::Reference< i18n::XCharacterClassification > const & MnemonicGenerator::GetCharClass()
 {
     if ( !mxCharClass.is() )
         mxCharClass = vcl::unohelper::CreateCharacterClassification();

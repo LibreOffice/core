@@ -143,7 +143,7 @@ struct OLEStorageImpl
     void initialize(SvStream *pStream);
 
     tools::SvRef<SotStorageStream> getStream(const rtl::OUString &rPath);
-    tools::SvRef<SotStorageStream> getStream(std::size_t nId);
+    tools::SvRef<SotStorageStream> const & getStream(std::size_t nId);
 
 private:
     void traverse(const tools::SvRef<SotStorage> &rStorage, const rtl::OUString &rPath);
@@ -202,7 +202,7 @@ tools::SvRef<SotStorageStream> OLEStorageImpl::getStream(const rtl::OUString &rP
     return maStreams[aIt->second].stream.ref;
 }
 
-tools::SvRef<SotStorageStream> OLEStorageImpl::getStream(const std::size_t nId)
+tools::SvRef<SotStorageStream> const & OLEStorageImpl::getStream(const std::size_t nId)
 {
     if (!maStreams[nId].stream.ref.Is())
         maStreams[nId].stream.ref = createStream(rtl::OStringToOUString(maStreams[nId].name, RTL_TEXTENCODING_UTF8));
