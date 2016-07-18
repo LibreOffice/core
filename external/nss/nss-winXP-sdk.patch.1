@@ -1,9 +1,12 @@
 diff -ur nss.org/nss/coreconf/config.mk nss/nss/coreconf/config.mk
 --- nss.org/nss/coreconf/config.mk	2016-03-15 14:52:19.706093300 +0100
 +++ nss/nss/coreconf/config.mk	2016-03-15 14:56:51.549914800 +0100
-@@ -188,3 +188,5 @@
+@@ -203,6 +203,8 @@
  
  # Hide old, deprecated, TLS cipher suite names when building NSS
  DEFINES += -DSSL_DISABLE_DEPRECATED_CIPHER_SUITE_NAMES
 +# build with 7.1A SDK for winXP compatibility
 +DEFINES += -D_USING_V110_SDK71_
+ 
+ # Mozilla's mozilla/modules/zlib/src/zconf.h adds the MOZ_Z_ prefix to zlib
+ # exported symbols, which causes problem when NSS is built as part of Mozilla.
