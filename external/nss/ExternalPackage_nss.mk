@@ -56,5 +56,10 @@ $(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
 		dist/out/lib/libsqlite3.so \
 ))
 endif
+ifeq ($(OS),LINUX)
+$(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
+		dist/out/lib/libfreeblpriv3.so \
+))
+endif
 
 # vim: set noet sw=4 ts=4:
