@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_c6861865",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-19T12:43:26Z",
+      "side": 1,
+      "message": "* enum class?\n\n* \"CommandLine\" prefix in these enum names is rather redundant within this function.\n\n* Have you considered combining the two enums into a single state machine? My gut feeling is that that would lead to cleaner code (but I haven\u0027t thought it through fully and may well be wrong).",
+      "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_4693e8a3",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-19T12:43:26Z",
+      "side": 1,
+      "message": "A missing required argument should probably cause an error.",
+      "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_2696dc94",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-19T12:43:26Z",
+      "side": 1,
+      "message": "I\u0027d\n\n  assert(false); // cannot happen\n\nhere",
+      "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_6690e496",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-19T12:43:26Z",
+      "side": 1,
+      "message": "A bit odd to handle --display inline, while all the other cases with a required argument are handled via eCurrentEventParam above.",
+      "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_06f800e5",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-19T12:43:26Z",
+      "side": 1,
+      "message": "The arg following --language used to be skipped, too.  (Whatever the original intent when this got added with d47dd2bf33b0a2a9a5251a871bb7fe0573724274 \"native0: #161679# Additional parameter and ini file entry to define startup language - transplanted from d9611cb63127@native0\".)",
+      "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_26ddfc70",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-19T12:43:26Z",
+      "side": 1,
+      "message": "I guess it would be better to generate an error if --outdir is specified not following a conversion/batch-print option.",
+      "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
