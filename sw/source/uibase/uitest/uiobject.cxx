@@ -20,7 +20,7 @@ SwEditWinUIObject::SwEditWinUIObject(VclPtr<SwEditWin> xEditWin):
 
 namespace {
 
-SwWrtShell& getWrtShell(VclPtr<SwEditWin> xEditWin)
+SwWrtShell& getWrtShell(VclPtr<SwEditWin> const & xEditWin)
 {
     return xEditWin->GetView().GetWrtShell();
 }

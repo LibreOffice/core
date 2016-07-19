@@ -90,7 +90,7 @@ void WW8Export::OutputGrfNode( const SwGrfNode& /*rNode*/ )
 }
 
 bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
-    tools::SvRef<SotStorage> xOleStg, tools::SvRef<SotStorage> xObjStg, OUString &rStorageName,
+    tools::SvRef<SotStorage> const & xOleStg, tools::SvRef<SotStorage> xObjStg, OUString &rStorageName,
     SwOLENode *pOLENd)
 {
     bool bGraphicNeeded = false;

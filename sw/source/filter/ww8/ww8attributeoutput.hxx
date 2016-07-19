@@ -482,7 +482,7 @@ protected:
     void OutputWW8AttributeCTL( sal_uInt8 nId, bool bVal );
 
     void TableCellBorders(
-        ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
+        ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner );
 
 };
 

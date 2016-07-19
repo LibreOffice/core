@@ -39,7 +39,7 @@ SwRetrievedInputStreamDataManager& SwRetrievedInputStreamDataManager::GetManager
 }
 
 SwRetrievedInputStreamDataManager::tDataKey SwRetrievedInputStreamDataManager::ReserveData(
-                        std::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > pThreadConsumer )
+                        std::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > const & pThreadConsumer )
 {
     osl::MutexGuard aGuard(maMutex);
 

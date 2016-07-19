@@ -2379,12 +2379,12 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
     }
 }
 
-ww8::GridColsPtr AttributeOutputBase::GetGridCols( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+ww8::GridColsPtr AttributeOutputBase::GetGridCols( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner )
 {
     return pTableTextNodeInfoInner->getGridColsOfRow(*this);
 }
 
-ww8::WidthsPtr AttributeOutputBase::GetColumnWidths( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+ww8::WidthsPtr AttributeOutputBase::GetColumnWidths( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner )
 {
     // Get the column widths based on ALL the rows, not just the current row
     return pTableTextNodeInfoInner->getGridColsOfRow(*this, true);
@@ -2494,7 +2494,7 @@ void WW8AttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Pointe
 }
 
 void WW8AttributeOutput::TableCellBorders(
-    ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+    ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner )
 {
     const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
     const SwTableLine * pTabLine = pTabBox->GetUpper();

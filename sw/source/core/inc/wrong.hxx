@@ -187,7 +187,7 @@ class SwWrongList
     { if( rPos > nStart ) rPos = rPos > nEnd ? rPos - nEnd + nStart : nStart; }
     void Invalidate_( sal_Int32 nBegin, sal_Int32 nEnd );
 
-    void Insert(sal_uInt16 nWhere, std::vector<SwWrongArea>::iterator startPos, std::vector<SwWrongArea>::iterator endPos);
+    void Insert(sal_uInt16 nWhere, std::vector<SwWrongArea>::iterator startPos, std::vector<SwWrongArea>::iterator const & endPos);
     void Remove( sal_uInt16 nIdx, sal_uInt16 nLen );
 
     SwWrongList& operator= (const SwWrongList &) = delete;

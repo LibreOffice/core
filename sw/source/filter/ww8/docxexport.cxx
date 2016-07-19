@@ -351,7 +351,7 @@ void DocxExport::DoFormText(const SwInputField* /*pField*/)
     OSL_TRACE( "TODO DocxExport::ForFormText()" );
 }
 
-OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_Int32 nCount, ::sax_fastparser::FSHelperPtr m_pSerializer )
+OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_Int32 nCount, ::sax_fastparser::FSHelperPtr const & m_pSerializer )
 {
     OUString aFileName = "charts/chart" + OUString::number(nCount) + ".xml";
     OUString sId = m_pFilter->addRelation( m_pSerializer->getOutputStream(),
@@ -1428,7 +1428,7 @@ void DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTy
     }
 }
 
-void DocxExport::SetFS( ::sax_fastparser::FSHelperPtr pFS )
+void DocxExport::SetFS( ::sax_fastparser::FSHelperPtr const & pFS )
 {
     mpFS = pFS;
 }

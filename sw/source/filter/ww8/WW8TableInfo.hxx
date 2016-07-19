@@ -246,9 +246,9 @@ public:
     CellInfoMultiSet::const_iterator begin() const;
     CellInfoMultiSet::const_iterator end() const;
 
-    void setTableBoxVector(TableBoxVectorPtr pTableBoxVector);
-    void setWidths(WidthsPtr pGridCols);
-    void setRowSpans(RowSpansPtr pRowSpans);
+    void setTableBoxVector(TableBoxVectorPtr const & pTableBoxVector);
+    void setWidths(WidthsPtr const & pGridCols);
+    void setRowSpans(RowSpansPtr const & pRowSpans);
 
     const TableBoxVectorPtr& getTableBoxVector() const { return m_pTableBoxVector;}
     const WidthsPtr& getWidths() const { return m_pWidths;}

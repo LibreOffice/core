@@ -411,7 +411,7 @@ namespace SwLangHelper
         return GetLanguage(aSet,nLangWhichId);
     }
 
-    LanguageType GetLanguage( SfxItemSet aSet, sal_uInt16 nLangWhichId )
+    LanguageType GetLanguage( SfxItemSet const & aSet, sal_uInt16 nLangWhichId )
     {
 
         LanguageType nLang = LANGUAGE_SYSTEM;
@@ -490,7 +490,7 @@ namespace SwLangHelper
     ///     'In use' means the language(s) matching the script type(s) of the
     ///     selected text. Or in other words, the language a spell checker would use.
     ///     If there is more than one language LANGUAGE_DONTKNOW will be returned.
-    LanguageType GetCurrentLanguage( SfxItemSet aSet, SvtScriptType nScriptType )
+    LanguageType GetCurrentLanguage( SfxItemSet const & aSet, SvtScriptType nScriptType )
     {
         //set language attribute to use according to the script type
         sal_uInt16 nLangWhichId = 0;

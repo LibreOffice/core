@@ -114,7 +114,7 @@ public:
     void clear() { maMap.clear(); }
     iterator find(const key_type& key) { return maMap.find(key); }
     std::pair<iterator,bool> insert(const value_type& value ) { return maMap.insert(value); }
-    iterator erase(const_iterator pos) { return maMap.erase(pos); }
+    iterator erase(const_iterator const & pos) { return maMap.erase(pos); }
 };
 
 class SwDrawModellListener_Impl : public SfxListener,
@@ -261,7 +261,7 @@ public:
     bool empty() const { return maMap.empty(); }
     iterator find(const key_type& key) { return maMap.find(key); }
     std::pair<iterator,bool> insert(const value_type& value ) { return maMap.insert(value); }
-    iterator erase(const_iterator pos) { return maMap.erase(pos); }
+    iterator erase(const_iterator const & pos) { return maMap.erase(pos); }
 };
 
 SwAccessibleShapeMap_Impl::~SwAccessibleShapeMap_Impl()
@@ -598,7 +598,7 @@ public:
     iterator end() { return maMap.end(); }
     iterator find(const key_type& key) { return maMap.find(key); }
     std::pair<iterator,bool> insert(const value_type& value ) { return maMap.insert(value); }
-    iterator erase(const_iterator pos) { return maMap.erase(pos); }
+    iterator erase(const_iterator const & pos) { return maMap.erase(pos); }
 };
 
 struct SwAccessibleParaSelection
@@ -638,7 +638,7 @@ public:
     iterator end() { return maMap.end(); }
     iterator find(const key_type& key) { return maMap.find(key); }
     std::pair<iterator,bool> insert(const value_type& value ) { return maMap.insert(value); }
-    iterator erase(const_iterator pos) { return maMap.erase(pos); }
+    iterator erase(const_iterator const & pos) { return maMap.erase(pos); }
 };
 
 // helper class that stores preview data

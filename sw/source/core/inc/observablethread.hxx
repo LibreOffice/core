@@ -43,7 +43,7 @@ class ObservableThread : public osl::Thread,
 
         virtual ~ObservableThread();
 
-        void SetListener( std::weak_ptr< IFinishedThreadListener > pThreadListener,
+        void SetListener( std::weak_ptr< IFinishedThreadListener > const & pThreadListener,
                           const oslInterlockedCount nThreadID );
 
         static inline void * operator new(std::size_t size)

@@ -712,7 +712,7 @@ void DocxAttributeOutput::EndSdtBlock()
 
 #define MAX_CELL_IN_WORD 62
 
-void DocxAttributeOutput::SyncNodelessCells(ww8::WW8TableNodeInfoInner::Pointer_t pInner, sal_Int32 nCell, sal_uInt32 nRow)
+void DocxAttributeOutput::SyncNodelessCells(ww8::WW8TableNodeInfoInner::Pointer_t const & pInner, sal_Int32 nCell, sal_uInt32 nRow)
 {
     sal_Int32 nOpenCell = lastOpenCell.back();
     if (nOpenCell != -1 && nOpenCell != nCell && nOpenCell < MAX_CELL_IN_WORD)
@@ -733,7 +733,7 @@ void DocxAttributeOutput::SyncNodelessCells(ww8::WW8TableNodeInfoInner::Pointer_
     }
 }
 
-void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer_t pInner, bool bForceEmptyParagraph )
+void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer_t const & pInner, bool bForceEmptyParagraph )
 {
     if ( pInner.get() )
     {
@@ -1921,7 +1921,7 @@ boost::optional<sal_Int32> lclGetElementIdForName(const OUString& rName)
     return boost::optional<sal_Int32>();
 }
 
-void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<css::beans::PropertyValue>& rElements, sax_fastparser::FSHelperPtr pSerializer)
+void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<css::beans::PropertyValue>& rElements, sax_fastparser::FSHelperPtr const & pSerializer)
 {
     css::uno::Sequence<css::beans::PropertyValue> aAttributes;
     FastAttributeList* pAttributes = FastSerializerHelper::createAttrList();
@@ -2122,7 +2122,7 @@ void DocxAttributeOutput::FootnoteEndnoteRefTag()
     1, meaning that it skips one character after the text.  This is to make
     the switch in DocxAttributeOutput::RunText() nicer ;-)
  */
-static bool impl_WriteRunText( FSHelperPtr pSerializer, sal_Int32 nTextToken,
+static bool impl_WriteRunText( FSHelperPtr const & pSerializer, sal_Int32 nTextToken,
         const sal_Unicode* &rBegin, const sal_Unicode* pEnd, bool bMove = true )
 {
     const sal_Unicode *pBegin = rBegin;
@@ -2604,7 +2604,7 @@ void DocxAttributeOutput::ParagraphStyle( sal_uInt16 nStyle )
     m_pSerializer->singleElementNS( XML_w, XML_pStyle, FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
 }
 
-static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, const SvxBorderLine* pBorderLine, sal_uInt16 nDist,
+static void impl_borderLine( FSHelperPtr const & pSerializer, sal_Int32 elementToken, const SvxBorderLine* pBorderLine, sal_uInt16 nDist,
                              bool bWriteShadow = false, const table::BorderLine2* rStyleProps = nullptr )
 {
     // Compute val attribute value
@@ -2777,7 +2777,7 @@ static bool boxHasLineLargerThan31(const SvxBoxItem& rBox)
             );
 }
 
-static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const OutputBorderOptions& rOptions, PageMargins* pageMargins,
+static void impl_borders( FSHelperPtr const & pSerializer, const SvxBoxItem& rBox, const OutputBorderOptions& rOptions, PageMargins* pageMargins,
                           std::map<SvxBoxItemLine, css::table::BorderLine2> &rTableStyleConf )
 {
     static const SvxBoxItemLine aBorders[] =
@@ -2901,7 +2901,7 @@ static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const
     }
 }
 
-static void impl_cellMargins( FSHelperPtr pSerializer, const SvxBoxItem& rBox, sal_Int32 tag, bool bUseStartEnd = false, const SvxBoxItem* pDefaultMargins = nullptr)
+static void impl_cellMargins( FSHelperPtr const & pSerializer, const SvxBoxItem& rBox, sal_Int32 tag, bool bUseStartEnd = false, const SvxBoxItem* pDefaultMargins = nullptr)
 {
     static const SvxBoxItemLine aBorders[] =
     {
@@ -2951,7 +2951,7 @@ static void impl_cellMargins( FSHelperPtr pSerializer, const SvxBoxItem& rBox, s
     }
 }
 
-void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner, sal_uInt32 nCell, sal_uInt32 nRow )
+void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner, sal_uInt32 nCell, sal_uInt32 nRow )
 {
     m_pSerializer->startElementNS( XML_w, XML_tcPr, FSEND );
 
@@ -3032,7 +3032,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     m_pSerializer->endElementNS( XML_w, XML_tcPr );
 }
 
-void DocxAttributeOutput::InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+void DocxAttributeOutput::InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner )
 {
     const SwTable* pTable = pTableTextNodeInfoInner->getTable();
     if (m_xTableWrt && pTable == m_xTableWrt->GetTable())
@@ -3054,7 +3054,7 @@ void DocxAttributeOutput::InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t
         m_xTableWrt.reset(new SwWriteTable(pTable, pTable->GetTabLines(), nPageSize, nTableSz, false));
 }
 
-void DocxAttributeOutput::StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+void DocxAttributeOutput::StartTable( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner )
 {
     // In case any paragraph SDT's are open, close them here.
     EndParaSdtBlock();
@@ -3092,7 +3092,7 @@ void DocxAttributeOutput::EndTable()
     m_aTableStyleConf.clear();
 }
 
-void DocxAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+void DocxAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner )
 {
     m_pSerializer->startElementNS( XML_w, XML_tr, FSEND );
 
@@ -3134,7 +3134,7 @@ void DocxAttributeOutput::EndTableRow( )
     lastClosedCell.back() = -1;
 }
 
-void DocxAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner, sal_uInt32 nCell, sal_uInt32 nRow )
+void DocxAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner, sal_uInt32 nCell, sal_uInt32 nRow )
 {
     lastOpenCell.back() = nCell;
 
@@ -3148,7 +3148,7 @@ void DocxAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t 
     m_tableReference->m_bTableCellOpen = true;
 }
 
-void DocxAttributeOutput::EndTableCell(ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/, sal_uInt32 nCell, sal_uInt32 /*nRow*/)
+void DocxAttributeOutput::EndTableCell(ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/ const &, sal_uInt32 nCell, sal_uInt32 /*nRow*/)
 {
     lastClosedCell.back() = nCell;
     lastOpenCell.back() = -1;
@@ -3479,7 +3479,7 @@ void DocxAttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Point
     }
 }
 
-void DocxAttributeOutput::TableDefaultCellMargins( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+void DocxAttributeOutput::TableDefaultCellMargins( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner )
 {
     const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
     const SwFrameFormat * pFrameFormat = pTabBox->GetFrameFormat();
@@ -5363,7 +5363,7 @@ void DocxAttributeOutput::EndStyleProperties( bool bParProp )
 namespace
 {
 
-void lcl_OutlineLevel(sax_fastparser::FSHelperPtr pSerializer, sal_uInt16 nLevel)
+void lcl_OutlineLevel(sax_fastparser::FSHelperPtr const & pSerializer, sal_uInt16 nLevel)
 {
     if (nLevel >= WW8ListManager::nMaxLevel)
         nLevel = WW8ListManager::nMaxLevel - 1;
@@ -6927,7 +6927,7 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
 
 }
 
-void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr fs, int tag,
+void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr const & fs, int tag,
     const SwEndNoteInfo& info, int listtag )
 {
     fs->startElementNS( XML_w, tag, FSEND );
@@ -7081,7 +7081,7 @@ void DocxAttributeOutput::ParaWidows( const SvxWidowsItem& rWidows )
         m_pSerializer->singleElementNS( XML_w, XML_widowControl, FSNS( XML_w, XML_val ), "false", FSEND );
 }
 
-static void impl_WriteTabElement( FSHelperPtr pSerializer,
+static void impl_WriteTabElement( FSHelperPtr const & pSerializer,
                                   const SvxTabStop& rTab, long /* nCurrentLeft */ )
 {
     FastAttributeList *pTabElementAttrList = FastSerializerHelper::createAttrList();
@@ -8508,7 +8508,7 @@ DocxExport& DocxAttributeOutput::GetExport()
     return m_rExport;
 }
 
-void DocxAttributeOutput::SetSerializer( ::sax_fastparser::FSHelperPtr pSerializer )
+void DocxAttributeOutput::SetSerializer( ::sax_fastparser::FSHelperPtr const & pSerializer )
 {
     m_pSerializer = pSerializer;
     m_pTableStyleExport->SetSerializer(pSerializer);

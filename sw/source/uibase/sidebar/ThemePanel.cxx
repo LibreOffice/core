@@ -115,7 +115,7 @@ public:
         : maStyles()
     {}
 
-    void add(StyleRedefinition aRedefinition)
+    void add(StyleRedefinition const & aRedefinition)
     {
         maStyles.push_back(aRedefinition);
     }

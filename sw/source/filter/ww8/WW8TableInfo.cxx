@@ -1443,19 +1443,19 @@ CellInfoMultiSet::const_iterator WW8TableCellGridRow::end() const
     return m_pCellInfos->end();
 }
 
-void WW8TableCellGridRow::setTableBoxVector(TableBoxVectorPtr pTableBoxVector)
+void WW8TableCellGridRow::setTableBoxVector(TableBoxVectorPtr const & pTableBoxVector)
 {
     if (pTableBoxVector->size() > MAXTABLECELLS)
         pTableBoxVector->resize(MAXTABLECELLS);
     m_pTableBoxVector = pTableBoxVector;
 }
 
-void WW8TableCellGridRow::setWidths(WidthsPtr pWidths)
+void WW8TableCellGridRow::setWidths(WidthsPtr const & pWidths)
 {
     m_pWidths = pWidths;
 }
 
-void WW8TableCellGridRow::setRowSpans(RowSpansPtr pRowSpans)
+void WW8TableCellGridRow::setRowSpans(RowSpansPtr const & pRowSpans)
 {
     m_pRowSpans = pRowSpans;
 }

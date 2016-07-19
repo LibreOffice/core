@@ -169,7 +169,7 @@ public:
     virtual sal_uLong ReplaceCr( sal_uInt8 nChar ) override;
 
     /// Returns the relationd id
-    OString OutputChart( css::uno::Reference< css::frame::XModel >& xModel, sal_Int32 nCount, ::sax_fastparser::FSHelperPtr m_pSerializer );
+    OString OutputChart( css::uno::Reference< css::frame::XModel >& xModel, sal_Int32 nCount, ::sax_fastparser::FSHelperPtr const & m_pSerializer );
     OString WriteOLEObject(SwOLEObj& rObject, OUString & io_rProgID);
 
     /// Writes the shape using drawingML syntax.
@@ -270,7 +270,7 @@ public:
 
     const ::sax_fastparser::FSHelperPtr& GetFS() { return mpFS; }
 
-    void SetFS(::sax_fastparser::FSHelperPtr mpFS);
+    void SetFS(::sax_fastparser::FSHelperPtr const & mpFS);
 
 private:
     DocxExport( const DocxExport& ) = delete;
