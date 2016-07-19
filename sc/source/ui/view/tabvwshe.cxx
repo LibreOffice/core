@@ -107,7 +107,7 @@ OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
 
             if ( bInFormatDialog || bWholeWord || aRange.aEnd.Row() == aRange.aStart.Row() )
             {
-                aStrSelection = aStrSelection.replaceAll(OUStringLiteral1<CHAR_CR>(), " ");
+                aStrSelection = aStrSelection.replaceAll("\r", " ");
                 aStrSelection = aStrSelection.replaceAll("\t", " ");
                 aStrSelection = comphelper::string::stripEnd(aStrSelection, ' ');
             }

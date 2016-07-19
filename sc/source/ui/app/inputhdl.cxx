@@ -3347,10 +3347,10 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                 if (bDoEnter)
                 {
                     if (pTableView)
-                        if( pTableView->PostKeyEvent( KeyEvent( CHAR_CR, vcl::KeyCode(KEY_RETURN) ) ) )
+                        if( pTableView->PostKeyEvent( KeyEvent( '\r', vcl::KeyCode(KEY_RETURN) ) ) )
                             bUsed = true;
                     if (pTopView)
-                        if( pTopView->PostKeyEvent( KeyEvent( CHAR_CR, vcl::KeyCode(KEY_RETURN) ) ) )
+                        if( pTopView->PostKeyEvent( KeyEvent( '\r', vcl::KeyCode(KEY_RETURN) ) ) )
                             bUsed = true;
                 }
                 else if ( nAutoPar && nChar == ')' && CursorAtClosingPar() )

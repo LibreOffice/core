@@ -237,7 +237,7 @@ void XclImpStringHelper::SetToDocument(
     else
     {
         const OUString& aStr = rString.GetText();
-        if (aStr.indexOf('\n') != -1 || aStr.indexOf(CHAR_CR) != -1)
+        if (aStr.indexOf('\n') != -1 || aStr.indexOf('\r') != -1)
         {
             // Multiline content.
             ScFieldEditEngine& rEngine = rDoc.getDoc().GetEditEngine();

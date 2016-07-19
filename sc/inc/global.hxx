@@ -54,9 +54,6 @@ enum class SvtScriptType;
 
 // characters
 
-//  '\r' does not work on a Mac...
-#define CHAR_CR     char(13)
-
 const sal_Unicode CHAR_NBSP     = 0x00A0;
 const sal_Unicode CHAR_SHY      = 0x00AD;
 const sal_Unicode CHAR_ZWSP     = 0x200B;
