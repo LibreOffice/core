@@ -263,6 +263,24 @@
       "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_865250dc",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-07-19T13:31:13Z",
+      "side": 1,
+      "message": "Sorry, my English is awful. I needed second read to comprehend. But actually, if --outdir comes outside of conversion/batch print, then error *is* emitted right below - where \"m_unknown \u003d aArg\" is done.",
+      "parentUuid": "5a8bc5a2_26c41c91",
+      "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
