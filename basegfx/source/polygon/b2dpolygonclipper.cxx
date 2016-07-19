@@ -426,14 +426,6 @@ namespace basegfx
                                 // both are ranges
                                 bBothRectangle = true;
                             }
-                            else
-                            {
-                                // rCandidate is rectangle -> clip rClip on rRectangle, use the much
-                                // cheaper and numerically more stable clipping against a range
-                                // This simplification (exchanging content and clip) is valid
-                                // since we do a logical AND operation
-                                return clipPolyPolygonOnRange(rClip, rCandidate.getB2DRange(), bInside, bStroke);
-                            }
                         }
                         else if(basegfx::tools::isRectangle(rClip))
                         {
