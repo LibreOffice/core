@@ -102,19 +102,19 @@ void SvxSwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
 {
     aPage.SetSize(GetOutputSizePixel());
 
-    sal_uIntPtr nOutWPix = aPage.GetWidth();
-    sal_uIntPtr nOutHPix = aPage.GetHeight();
+    sal_uInt32 nOutWPix = aPage.GetWidth();
+    sal_uInt32 nOutHPix = aPage.GetHeight();
 
     // PrintArea
-    sal_uIntPtr nLBorder;
-    sal_uIntPtr nRBorder;
-    sal_uIntPtr nTBorder;
-    sal_uIntPtr nBBorder;
+    sal_uInt32 nLBorder;
+    sal_uInt32 nRBorder;
+    sal_uInt32 nTBorder;
+    sal_uInt32 nBBorder;
 
-    sal_uIntPtr nLTxtBorder;
-    sal_uIntPtr nRTxtBorder;
-    sal_uIntPtr nTTxtBorder;
-    sal_uIntPtr nBTxtBorder;
+    sal_uInt32 nLTxtBorder;
+    sal_uInt32 nRTxtBorder;
+    sal_uInt32 nTTxtBorder;
+    sal_uInt32 nBTxtBorder;
 
     if (nAnchor != TextContentAnchorType_AS_CHARACTER)
     {
@@ -199,8 +199,8 @@ void SvxSwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
     // Size of the frame to be positioned
     if (nAnchor != TextContentAnchorType_AS_CHARACTER)
     {
-        sal_uIntPtr nLFBorder = nAnchor == TextContentAnchorType_AT_PAGE ? nLBorder : nLTxtBorder;
-        sal_uIntPtr nRFBorder = nAnchor == TextContentAnchorType_AT_PAGE ? nRBorder : nRTxtBorder;
+        sal_uInt32 nLFBorder = nAnchor == TextContentAnchorType_AT_PAGE ? nLBorder : nLTxtBorder;
+        sal_uInt32 nRFBorder = nAnchor == TextContentAnchorType_AT_PAGE ? nRBorder : nRTxtBorder;
 
         switch (nHRel)
         {
@@ -223,7 +223,7 @@ void SvxSwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
     }
     else
     {
-        sal_uIntPtr nFreeWidth = aPagePrtArea.GetWidth() - GetTextWidth(DEMOTEXT);
+        sal_uInt32 nFreeWidth = aPagePrtArea.GetWidth() - GetTextWidth(DEMOTEXT);
 
         aFrmSize = Size(nFreeWidth / 2, (aTextLine.GetHeight() + 2) * 3);
         aDrawObj.SetSize(Size(std::max(5L, (long)nFreeWidth / 3L), std::max(5L, aFrmSize.Height() * 3L)));
@@ -676,7 +676,7 @@ void SvxSwFrameExample::Paint(vcl::RenderContext& rRenderContext, const Rectangl
         if (nAnchor != TextContentAnchorType_AT_FRAME && aTxt.Bottom() > aParaPrtArea.Bottom())
         {
             // Text has been replaced by frame, so adjust parameters height
-            sal_uIntPtr nDiff = aTxt.Bottom() - aParaPrtArea.Bottom();
+            sal_uInt32 nDiff = aTxt.Bottom() - aParaPrtArea.Bottom();
             aParaPrtArea.Bottom() += nDiff;
             aPara.Bottom() += nDiff;
 
