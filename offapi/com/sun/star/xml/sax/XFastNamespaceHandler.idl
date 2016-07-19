@@ -23,6 +23,7 @@
 
 module com {  module sun {  module star {  module xml {  module sax {
 
+/** @since LibreOffice 5.3 */
 interface XFastNamespaceHandler: com::sun::star::uno::XInterface
 {
     void registerNamespace( [in] string NamespacePrefix, [in] string NamespaceURI );
