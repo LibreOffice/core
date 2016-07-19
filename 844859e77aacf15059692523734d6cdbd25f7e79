@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_8648905d",
+        "filename": "sc/source/filter/lotus/lotattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-19T10:42:38Z",
+      "side": 1,
+      "message": "(But also note that much filter import code in LO is unfortunately written in a very sloppy style, where poor assumptions are made about data read from user-provided files.  So for the \"right\" fix, one would need to verify that the asserted condition indeed holds for all calls to this function, and if not, address those cases programmatically---e.g., by making file import fail with an error message to the user.)",
+      "parentUuid": "ba84c18e_23ced483",
+      "revId": "844859e77aacf15059692523734d6cdbd25f7e79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_23209449",
         "filename": "sc/source/filter/lotus/lotform.cxx",
         "patchSetId": 2
@@ -72,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_a64cac77",
+        "filename": "sc/source/filter/lotus/lotform.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-19T10:42:38Z",
+      "side": 1,
+      "message": "Hard to tell what should be done here.  From just looking at the code in this function, nAnz is used to fill eParam, which is of length 256, so nAnz \u003e 256 would cause undefined behavior, but nAnz being of type sal_uInt8 (with portable range 0--255), that\u0027s ruled out anyway.",
+      "parentUuid": "ba84c18e_691a7d19",
+      "revId": "844859e77aacf15059692523734d6cdbd25f7e79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_431d980e",
         "filename": "sc/source/filter/lotus/lotform.cxx",
         "patchSetId": 2
@@ -101,6 +137,24 @@
       "side": 1,
       "message": "Surely the condition nAnz \u003c 2 must be correct here. If the comment is true that ocIndex needs at least w parameters!? Warn if condition is true right? So if nAnz is less than 2 then warn.",
       "parentUuid": "ba84c18e_431d980e",
+      "revId": "844859e77aacf15059692523734d6cdbd25f7e79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_a673ccb3",
+        "filename": "sc/source/filter/lotus/lotform.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-19T10:42:38Z",
+      "side": 1,
+      "message": "Yeah, the original code looks like it probably meant to check nAnz \u003e\u003d 2 instead.",
+      "parentUuid": "ba84c18e_491db90e",
       "revId": "844859e77aacf15059692523734d6cdbd25f7e79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
