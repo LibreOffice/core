@@ -943,7 +943,7 @@ void XclImpDrawObjBase::ImplReadObj8( XclImpStream& rStrm )
     }
 }
 
-void XclImpDrawObjVector::InsertGrouped( XclImpDrawObjRef xDrawObj )
+void XclImpDrawObjVector::InsertGrouped( XclImpDrawObjRef const & xDrawObj )
 {
     if( !mObjs.empty() )
         if( XclImpGroupObj* pGroupObj = dynamic_cast< XclImpGroupObj* >( mObjs.back().get() ) )
@@ -972,7 +972,7 @@ XclImpGroupObj::XclImpGroupObj( const XclImpRoot& rRoot ) :
 {
 }
 
-bool XclImpGroupObj::TryInsert( XclImpDrawObjRef xDrawObj )
+bool XclImpGroupObj::TryInsert( XclImpDrawObjRef const & xDrawObj )
 {
     if( xDrawObj->GetObjId() == mnFirstUngrouped )
         return false;

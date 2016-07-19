@@ -425,7 +425,7 @@ public:
 private:
     /** Initializes the record contents. Called from constructors. */
     void                Init( const XclExpRoot& rRoot,
-                            const ScPatternAttr* pPattern, XclExpStringRef xText );
+                            const ScPatternAttr* pPattern, XclExpStringRef const & xText );
 
     virtual void        WriteContents( XclExpStream& rStrm ) override;
 
@@ -848,7 +848,7 @@ public:
     inline bool         IsEnabled() const { return mbEnabled; }
 
     /** Appends the passed cell object to this row. */
-    void                AppendCell( XclExpCellRef xCell, bool bIsMergedBase );
+    void                AppendCell( XclExpCellRef const & xCell, bool bIsMergedBase );
 
     /** Converts all XF identifiers into the Excel XF indexes. */
     void                Finalize( const ScfUInt16Vec& rColXFIndexes,
@@ -915,7 +915,7 @@ public:
     explicit            XclExpRowBuffer( const XclExpRoot& rRoot );
 
     /** Appends the passed cell object to the row that the cell specifies. */
-    void                AppendCell( XclExpCellRef xCell, bool bIsMergedBase );
+    void                AppendCell( XclExpCellRef const & xCell, bool bIsMergedBase );
     /** Forces insertion of all ROW records before the passed row. */
     void                CreateRows( SCROW nFirstFreeScRow );
 

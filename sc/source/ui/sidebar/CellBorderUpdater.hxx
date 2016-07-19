@@ -33,7 +33,7 @@ public:
     CellBorderUpdater(sal_uInt16 nTbxBtnId, ToolBox& rTbx);
     ~CellBorderUpdater();
 
-    void UpdateCellBorder(bool bTop, bool bBot, bool bLeft, bool bRight, Image aImg, bool bVer, bool bHor);
+    void UpdateCellBorder(bool bTop, bool bBot, bool bLeft, bool bRight, Image const &  aImg, bool bVer, bool bHor);
 };
 
 } } // end of namespace svx::sidebar

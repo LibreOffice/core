@@ -225,7 +225,7 @@ class WorkerThread : public comphelper::ThreadTask
     rtl::Reference<FragmentHandler> mxHandler;
 
 public:
-    WorkerThread( const std::shared_ptr<comphelper::ThreadTaskTag> pTag,
+    WorkerThread( const std::shared_ptr<comphelper::ThreadTaskTag> & pTag,
                   WorkbookFragment& rWorkbookHandler,
                   const rtl::Reference<FragmentHandler>& xHandler,
                   sal_Int32 &rSheetsLeft ) :

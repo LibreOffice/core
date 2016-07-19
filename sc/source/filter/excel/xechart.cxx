@@ -126,7 +126,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclChRectangle& rRect )
     return rStrm << rRect.mnX << rRect.mnY << rRect.mnWidth << rRect.mnHeight;
 }
 
-inline void lclSaveRecord( XclExpStream& rStrm, XclExpRecordRef xRec )
+inline void lclSaveRecord( XclExpStream& rStrm, XclExpRecordRef const & xRec )
 {
     if( xRec )
         xRec->Save( rStrm );
@@ -134,7 +134,7 @@ inline void lclSaveRecord( XclExpStream& rStrm, XclExpRecordRef xRec )
 
 /** Saves the passed record (group) together with a leading value record. */
 template< typename Type >
-void lclSaveRecord( XclExpStream& rStrm, XclExpRecordRef xRec, sal_uInt16 nRecId, Type nValue )
+void lclSaveRecord( XclExpStream& rStrm, XclExpRecordRef const & xRec, sal_uInt16 nRecId, Type nValue )
 {
     if( xRec )
     {
@@ -3391,7 +3391,7 @@ void XclExpChChart::RemoveLastSeries()
         maSeries.RemoveRecord( maSeries.GetSize() - 1 );
 }
 
-void XclExpChChart::SetDataLabel( XclExpChTextRef xText )
+void XclExpChChart::SetDataLabel( XclExpChTextRef const & xText )
 {
     if( xText )
         maLabels.AppendRecord( xText );

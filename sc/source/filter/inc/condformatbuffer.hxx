@@ -215,7 +215,7 @@ public:
     void                setReadyForFinalize() { mbReadyForFinalize = true; }
 private:
     CondFormatRuleRef   createRule();
-    void                insertRule( CondFormatRuleRef xRule );
+    void                insertRule( CondFormatRuleRef const & xRule );
 
 private:
     typedef RefMap< sal_Int32, CondFormatRule > CondFormatRuleMap;

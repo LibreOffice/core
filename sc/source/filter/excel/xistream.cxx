@@ -475,7 +475,7 @@ void XclImpStream::RewindRecord()
     mbValid = mbValidRec = false;
 }
 
-void XclImpStream::SetDecrypter( XclImpDecrypterRef xDecrypter )
+void XclImpStream::SetDecrypter( XclImpDecrypterRef const & xDecrypter )
 {
     mxDecrypter = xDecrypter;
     EnableDecryption();

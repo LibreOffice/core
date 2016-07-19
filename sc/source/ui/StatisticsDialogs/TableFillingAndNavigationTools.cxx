@@ -53,7 +53,7 @@ void FormulaTemplate::autoReplaceRange(const OUString& aVariable, const ScRange&
     mRangeReplacementMap[aVariable] = rRange;
 }
 
-void FormulaTemplate::autoReplaceAddress(const OUString& aVariable, ScAddress aAddress)
+void FormulaTemplate::autoReplaceAddress(const OUString& aVariable, ScAddress const & aAddress)
 {
 
     mAddressReplacementMap[aVariable] = aAddress;

@@ -1080,7 +1080,7 @@ CondFormatRuleRef CondFormat::createRule()
     return std::make_shared<CondFormatRule>( *this, mpFormat );
 }
 
-void CondFormat::insertRule( CondFormatRuleRef xRule )
+void CondFormat::insertRule( CondFormatRuleRef const & xRule )
 {
     if( xRule.get() && (xRule->getPriority() > 0) )
     {

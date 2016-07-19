@@ -136,7 +136,7 @@ const char *ToVertAlign( SdrTextVertAdjust eAdjust )
     }
 }
 
-void lcl_WriteAnchorVertex( sax_fastparser::FSHelperPtr rComments, Rectangle &aRect )
+void lcl_WriteAnchorVertex( sax_fastparser::FSHelperPtr const & rComments, Rectangle &aRect )
 {
     rComments->startElement( FSNS( XML_xdr, XML_col ), FSEND );
     rComments->writeEscaped( OUString::number( aRect.Left() ) );

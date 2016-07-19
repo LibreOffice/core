@@ -252,7 +252,7 @@ ScVbaInterior::GetAttributeContainer()
     return uno::Reference < container::XNameContainer > ( m_xProps->getPropertyValue("UserDefinedAttributes"), uno::UNO_QUERY_THROW );
 }
 sal_Int32
-ScVbaInterior::GetAttributeData( uno::Any aValue )
+ScVbaInterior::GetAttributeData( uno::Any const & aValue )
 {
     xml::AttributeData aDataValue;
     if( aValue >>= aDataValue )

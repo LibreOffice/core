@@ -25,7 +25,7 @@ xmlDocPtr XPathHelper::parseExport(ScDocShell& rShell, uno::Reference<lang::XMul
     return parseExport(pTempFile, xSFactory, rFile);
 }
 
-xmlDocPtr XPathHelper::parseExport(std::shared_ptr<utl::TempFile> pTempFile, uno::Reference<lang::XMultiServiceFactory> const & xSFactory, const OUString& rFile)
+xmlDocPtr XPathHelper::parseExport(std::shared_ptr<utl::TempFile> const & pTempFile, uno::Reference<lang::XMultiServiceFactory> const & xSFactory, const OUString& rFile)
 {
     // Read the XML stream we're interested in.
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(xSFactory), pTempFile->GetURL());

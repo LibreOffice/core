@@ -717,7 +717,7 @@ bool XclExpLabelCell::IsMultiLineText() const
 }
 
 void XclExpLabelCell::Init( const XclExpRoot& rRoot,
-        const ScPatternAttr* pPattern, XclExpStringRef xText )
+        const ScPatternAttr* pPattern, XclExpStringRef const & xText )
 {
     OSL_ENSURE( xText && xText->Len(), "XclExpLabelCell::XclExpLabelCell - empty string passed" );
     mxText = xText;
@@ -1842,7 +1842,7 @@ XclExpRow::XclExpRow( const XclExpRoot& rRoot, sal_uInt32 nXclRow,
     rProgress.Progress();
 }
 
-void XclExpRow::AppendCell( XclExpCellRef xCell, bool bIsMergedBase )
+void XclExpRow::AppendCell( XclExpCellRef const & xCell, bool bIsMergedBase )
 {
     OSL_ENSURE( !mbAlwaysEmpty, "XclExpRow::AppendCell - row is marked to be always empty" );
     // try to merge with last existing cell
@@ -2098,7 +2098,7 @@ XclExpRowBuffer::XclExpRowBuffer( const XclExpRoot& rRoot ) :
 {
 }
 
-void XclExpRowBuffer::AppendCell( XclExpCellRef xCell, bool bIsMergedBase )
+void XclExpRowBuffer::AppendCell( XclExpCellRef const & xCell, bool bIsMergedBase )
 {
     OSL_ENSURE( xCell, "XclExpRowBuffer::AppendCell - missing cell" );
     GetOrCreateRow( xCell->GetXclRow(), false ).AppendCell( xCell, bIsMergedBase );
@@ -2116,7 +2116,7 @@ class RowFinalizeTask : public comphelper::ThreadTask
     const ScfUInt16Vec& mrColXFIndexes;
     std::vector< XclExpRow * > maRows;
 public:
-             RowFinalizeTask( const std::shared_ptr<comphelper::ThreadTaskTag> pTag,
+             RowFinalizeTask( const std::shared_ptr<comphelper::ThreadTaskTag> & pTag,
                               const ScfUInt16Vec& rColXFIndexes,
                               bool bProgress ) :
                  comphelper::ThreadTask( pTag ),

@@ -82,7 +82,7 @@ public:
     void testEnhancedProtectionXLSX();
     void testSortWithSharedFormulasODS();
     void testSortWithSheetExternalReferencesODS();
-    void testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef xDocShRef, SCROW nRow1, SCROW nRow2,
+    void testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef const & xDocShRef, SCROW nRow1, SCROW nRow2,
             bool bCheckRelativeInSheet );
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
@@ -700,7 +700,7 @@ void ScFiltersTest::testSortWithSheetExternalReferencesODS()
     xDocSh->DoClose();
 }
 
-void ScFiltersTest::testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef xDocSh, SCROW nRow1, SCROW nRow2,
+void ScFiltersTest::testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef const & xDocSh, SCROW nRow1, SCROW nRow2,
         bool bCheckRelativeInSheet )
 {
     ScDocument& rDoc = xDocSh->GetDocument();

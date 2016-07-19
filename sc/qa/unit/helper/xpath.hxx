@@ -53,7 +53,7 @@ namespace XPathHelper
      * Should be used when the same exported file is used for testing different files in
      * the same zip file.
      */
-    SCQAHELPER_DLLPUBLIC xmlDocPtr parseExport(std::shared_ptr<utl::TempFile> pTempFile, uno::Reference< lang::XMultiServiceFactory> const & xSFactory,
+    SCQAHELPER_DLLPUBLIC xmlDocPtr parseExport(std::shared_ptr<utl::TempFile> const & pTempFile, uno::Reference< lang::XMultiServiceFactory> const & xSFactory,
             const OUString& rFile);
 }
 

@@ -3042,7 +3042,7 @@ void flushParagraph(
     ScXMLExport& rExport, const OUString& rParaText,
     rtl::Reference<XMLPropertySetMapper> const & xMapper, rtl::Reference<SvXMLAutoStylePoolP> const & xStylePool,
     const ScXMLEditAttributeMap& rAttrMap,
-    std::vector<editeng::Section>::const_iterator it, std::vector<editeng::Section>::const_iterator itEnd )
+    std::vector<editeng::Section>::const_iterator it, std::vector<editeng::Section>::const_iterator const & itEnd )
 {
     OUString aElemName = rExport.GetNamespaceMap().GetQNameByKey(
         XML_NAMESPACE_TEXT, GetXMLToken(XML_P));

@@ -94,7 +94,7 @@ sal_Int32 ScCsvSplits::GetPos( sal_uInt32 nIndex ) const
     return (nIndex < Count()) ? maVec[ nIndex ] : CSV_POS_INVALID;
 }
 
-sal_uInt32 ScCsvSplits::GetIterIndex( const_iterator aIter ) const
+sal_uInt32 ScCsvSplits::GetIterIndex( const_iterator const & aIter ) const
 {
     return (aIter == maVec.end()) ? CSV_VEC_NOTFOUND : (aIter - maVec.begin());
 }

@@ -1134,7 +1134,7 @@ public:
     /** Removes the last created data series object from the series list. */
     void                RemoveLastSeries();
     /** Stores a CHTEXT group that describes a data point label. */
-    void                SetDataLabel( XclExpChTextRef xText );
+    void                SetDataLabel( XclExpChTextRef const & xText );
     /** Sets the plot area position and size to manual mode. */
     void                SetManualPlotArea();
 

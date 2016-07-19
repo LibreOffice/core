@@ -724,8 +724,8 @@ public:
     void                ReadChSerErrorBar( XclImpStream& rStrm );
     /** Sets link and formatting information for the error bars. */
     void                SetSeriesData(
-                            XclImpChSourceLinkRef xValueLink,
-                            XclImpChDataFormatRef xDataFmt );
+                            XclImpChSourceLinkRef const & xValueLink,
+                            XclImpChDataFormatRef const & xDataFmt );
 
     /** Returns the type of this error bar (X/Y, plus/minus). */
     inline sal_uInt8    GetBarType() const { return maData.mnBarType; }
@@ -967,7 +967,7 @@ public:
     void                Finalize();
 
     /** Inserts a series attached to this chart type group.*/
-    void                AddSeries( XclImpChSeriesRef xSeries );
+    void                AddSeries( XclImpChSeriesRef const & xSeries );
     /** Marks the passed format index as used. PopUnusedFormatIndex() will not return this index. */
     void                SetUsedFormatIndex( sal_uInt16 nFormatIdx );
     /** Returns the next unused format index and marks it as used. */
@@ -1242,7 +1242,7 @@ private:
     css::uno::Reference< css::chart2::XCoordinateSystem >
                         CreateCoordSystem( css::uno::Reference< css::chart2::XDiagram > const & xDiagram ) const;
     /** Creates and inserts an axis into the container and registers the coordinate system. */
-    void                ConvertAxis( XclImpChAxisRef xChAxis, XclImpChTextRef xChAxisTitle,
+    void                ConvertAxis( XclImpChAxisRef const & xChAxis, XclImpChTextRef const & xChAxisTitle,
                                      css::uno::Reference< css::chart2::XCoordinateSystem > const & xCoordSystem,
                                      const XclImpChAxis* pCrossingAxis ) const;
     /** Creates and returns an API axis object. */

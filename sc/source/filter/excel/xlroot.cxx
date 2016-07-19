@@ -238,7 +238,7 @@ bool XclRoot::HasVbaStorage() const
     return xRootStrg.Is() && xRootStrg->IsContained( EXC_STORAGE_VBA_PROJECT );
 }
 
-tools::SvRef<SotStorage> XclRoot::OpenStorage( tools::SvRef<SotStorage> xStrg, const OUString& rStrgName ) const
+tools::SvRef<SotStorage> XclRoot::OpenStorage( tools::SvRef<SotStorage> const & xStrg, const OUString& rStrgName ) const
 {
     return mrData.mbExport ?
         ScfTools::OpenStorageWrite( xStrg, rStrgName ) :
@@ -250,7 +250,7 @@ tools::SvRef<SotStorage> XclRoot::OpenStorage( const OUString& rStrgName ) const
     return OpenStorage( GetRootStorage(), rStrgName );
 }
 
-tools::SvRef<SotStorageStream> XclRoot::OpenStream( tools::SvRef<SotStorage> xStrg, const OUString& rStrmName ) const
+tools::SvRef<SotStorageStream> XclRoot::OpenStream( tools::SvRef<SotStorage> const & xStrg, const OUString& rStrmName ) const
 {
     return mrData.mbExport ?
         ScfTools::OpenStorageStreamWrite( xStrg, rStrmName ) :

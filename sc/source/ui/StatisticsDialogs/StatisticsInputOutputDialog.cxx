@@ -25,7 +25,7 @@
 
 #include "StatisticsInputOutputDialog.hxx"
 
-ScRangeList ScStatisticsInputOutputDialog::MakeColumnRangeList(SCTAB aTab, ScAddress aStart, ScAddress aEnd)
+ScRangeList ScStatisticsInputOutputDialog::MakeColumnRangeList(SCTAB aTab, ScAddress const & aStart, ScAddress const & aEnd)
 {
     ScRangeList aRangeList;
     for (SCCOL inCol = aStart.Col(); inCol <= aEnd.Col(); inCol++)
@@ -39,7 +39,7 @@ ScRangeList ScStatisticsInputOutputDialog::MakeColumnRangeList(SCTAB aTab, ScAdd
     return aRangeList;
 }
 
-ScRangeList ScStatisticsInputOutputDialog::MakeRowRangeList(SCTAB aTab, ScAddress aStart, ScAddress aEnd)
+ScRangeList ScStatisticsInputOutputDialog::MakeRowRangeList(SCTAB aTab, ScAddress const & aStart, ScAddress const & aEnd)
 {
     ScRangeList aRangeList;
     for (SCROW inRow = aStart.Row(); inRow <= aEnd.Row(); inRow++)

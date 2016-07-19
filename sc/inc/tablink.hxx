@@ -95,7 +95,7 @@ public:
     /** Create SfxMedium for stream read with SfxFilter and filter options set
         at the medium's SfxItemSet.
      */
-    static SfxMedium*   CreateMedium( const OUString& rFileName, std::shared_ptr<const SfxFilter> pFilter, const OUString& rOptions );
+    static SfxMedium*   CreateMedium( const OUString& rFileName, std::shared_ptr<const SfxFilter> const & pFilter, const OUString& rOptions );
 
     static OUString     GetOptions( SfxMedium& rMedium );
 

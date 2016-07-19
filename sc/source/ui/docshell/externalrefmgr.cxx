@@ -278,7 +278,7 @@ bool ScExternalRefCache::Table::isReferenced() const
     return meReferenced != UNREFERENCED;
 }
 
-void ScExternalRefCache::Table::setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uLong nFmtIndex, bool bSetCacheRange)
+void ScExternalRefCache::Table::setCell(SCCOL nCol, SCROW nRow, TokenRef const & pToken, sal_uLong nFmtIndex, bool bSetCacheRange)
 {
     using ::std::pair;
     RowsDataType::iterator itrRow = maRows.find(nRow);
@@ -787,7 +787,7 @@ void ScExternalRefCache::setRangeName(sal_uInt16 nFileId, const OUString& rName)
 }
 
 void ScExternalRefCache::setCellData(sal_uInt16 nFileId, const OUString& rTabName, SCCOL nCol, SCROW nRow,
-                                     TokenRef pToken, sal_uLong nFmtIndex)
+                                     TokenRef const & pToken, sal_uLong nFmtIndex)
 {
     if (!isDocInitialized(nFileId))
         return;

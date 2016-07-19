@@ -153,7 +153,7 @@ public:
          *                       false _only when_ adding a range of cell
          *                       values, for performance reasons.
          */
-        SC_DLLPUBLIC void setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uLong nFmtIndex = 0, bool bSetCacheRange = true);
+        SC_DLLPUBLIC void setCell(SCCOL nCol, SCROW nRow, TokenRef const & pToken, sal_uLong nFmtIndex = 0, bool bSetCacheRange = true);
         SC_DLLPUBLIC TokenRef getCell(SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex = nullptr) const;
         bool hasRow( SCROW nRow ) const;
         /** Set/clear referenced status flag only if current status is not
@@ -237,7 +237,7 @@ public:
     void setRangeName(sal_uInt16 nFileId, const OUString& rName);
 
     void setCellData(sal_uInt16 nFileId, const OUString& rTabName,
-                     SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uLong nFmtIndex);
+                     SCCOL nCol, SCROW nRow, TokenRef const & pToken, sal_uLong nFmtIndex);
 
     struct SingleRangeData
     {

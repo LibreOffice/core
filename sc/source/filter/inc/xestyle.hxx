@@ -664,11 +664,11 @@ private:
 
     /** Inserts a built-in XF record without a STYLE record and returns the XF ID.
         @param bCreateStyleRec  true = Creates the related STYLE record. */
-    sal_uInt32          AppendBuiltInXF( XclExpXFRef xXF,
+    sal_uInt32          AppendBuiltInXF( XclExpXFRef const & xXF,
                             sal_uInt8 nStyleId, sal_uInt8 nLevel = EXC_STYLE_NOLEVEL );
     /** Inserts a built-in XF and STYLE record and returns the XF ID.
         @param bCreateStyleRec  true = Creates the related STYLE record. */
-    sal_uInt32          AppendBuiltInXFWithStyle( XclExpXFRef xXF,
+    sal_uInt32          AppendBuiltInXFWithStyle( XclExpXFRef const & xXF,
                             sal_uInt8 nStyleId, sal_uInt8 nLevel = EXC_STYLE_NOLEVEL );
 
     /** Inserts all default XF and STYLE records. */

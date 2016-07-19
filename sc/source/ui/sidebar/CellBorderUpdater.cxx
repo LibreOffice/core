@@ -36,7 +36,7 @@ CellBorderUpdater::~CellBorderUpdater()
 {
 }
 
-void CellBorderUpdater::UpdateCellBorder(bool bTop, bool bBot, bool bLeft, bool bRight, Image aImg, bool bVer, bool bHor)
+void CellBorderUpdater::UpdateCellBorder(bool bTop, bool bBot, bool bLeft, bool bRight, Image const & aImg, bool bVer, bool bHor)
 {
     BitmapEx            aBmpEx( aImg.GetBitmapEx() );
     Bitmap              aBmp( aBmpEx.GetBitmap() );

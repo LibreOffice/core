@@ -222,7 +222,7 @@ public:
     void push_back(const XclImpDrawObjRef& rObj) { mObjs.push_back(rObj); }
 
     /** Tries to insert the passed object into the last group or appends it. */
-    void                InsertGrouped( XclImpDrawObjRef xDrawObj );
+    void                InsertGrouped( XclImpDrawObjRef const & xDrawObj );
 
     /** Returns the needed size on the progress bar for all contained objects. */
     sal_Size            GetProgressSize() const;
@@ -242,7 +242,7 @@ public:
     explicit            XclImpGroupObj( const XclImpRoot& rRoot );
 
     /** Tries to insert the drawing object into this or a nested group. */
-    bool                TryInsert( XclImpDrawObjRef xDrawObj );
+    bool                TryInsert( XclImpDrawObjRef const & xDrawObj );
 
 protected:
     /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */

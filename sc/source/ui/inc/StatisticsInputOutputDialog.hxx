@@ -65,8 +65,8 @@ protected:
     ScAddress           mOutputAddress;
     GroupedBy           mGroupedBy;
 
-    static ScRangeList MakeColumnRangeList(SCTAB aTab, ScAddress aStart, ScAddress aEnd);
-    static ScRangeList MakeRowRangeList(SCTAB aTab, ScAddress aStart, ScAddress aEnd);
+    static ScRangeList MakeColumnRangeList(SCTAB aTab, ScAddress const & aStart, ScAddress const & aEnd);
+    static ScRangeList MakeRowRangeList(SCTAB aTab, ScAddress const & aStart, ScAddress const & aEnd);
 
 private:
     // Widgets

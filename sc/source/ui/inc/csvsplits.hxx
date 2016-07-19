@@ -77,7 +77,7 @@ public:
 
 private:
     /** Returns the vector index of an iterator. */
-    sal_uInt32                  GetIterIndex( const_iterator aIter ) const;
+    sal_uInt32                  GetIterIndex( const_iterator const &  aIter ) const;
 };
 
 #endif

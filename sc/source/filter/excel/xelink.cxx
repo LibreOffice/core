@@ -314,7 +314,7 @@ public:
     sal_uInt16          GetTabCount() const;
 
     /** Inserts a new sheet name into the SUPBOOK and returns the SUPBOOK internal sheet index. */
-    sal_uInt16          InsertTabName( const OUString& rTabName, ScExternalRefCache::TableTypeRef xCacheTable );
+    sal_uInt16          InsertTabName( const OUString& rTabName, ScExternalRefCache::TableTypeRef const & xCacheTable );
     /** Finds or inserts an EXTERNNAME record for add-ins.
         @return  The 1-based EXTERNNAME record index; or 0, if the record list is full. */
     sal_uInt16          InsertAddIn( const OUString& rName );
@@ -468,7 +468,7 @@ private:
 
     /** Appends a new SUPBOOK to the list.
         @return  The list index of the SUPBOOK record. */
-    sal_uInt16          Append( XclExpSupbookRef xSupbook );
+    sal_uInt16          Append( XclExpSupbookRef const & xSupbook );
 
 private:
     XclExpSupbookList   maSupbookList;      /// List of all SUPBOOK records.
@@ -582,7 +582,7 @@ private:
     sal_uInt16          GetExtSheetCount() const;
 
     /** Appends an internal EXTERNSHEET record and returns the one-based index. */
-    sal_uInt16          AppendInternal( XclExpExtSheetRef xExtSheet );
+    sal_uInt16          AppendInternal( XclExpExtSheetRef const & xExtSheet );
     /** Creates all EXTERNSHEET records for internal sheets on first call. */
     void                CreateInternal();
 
@@ -1614,7 +1614,7 @@ sal_uInt16 XclExpSupbook::GetTabCount() const
     return ulimit_cast<sal_uInt16>(maXctList.GetSize());
 }
 
-sal_uInt16 XclExpSupbook::InsertTabName( const OUString& rTabName, ScExternalRefCache::TableTypeRef xCacheTable )
+sal_uInt16 XclExpSupbook::InsertTabName( const OUString& rTabName, ScExternalRefCache::TableTypeRef const & xCacheTable )
 {
     OSL_ENSURE( meType == EXC_SBTYPE_EXTERN, "XclExpSupbook::InsertTabName - don't insert sheet names here" );
     sal_uInt16 nSBTab = ulimit_cast< sal_uInt16 >( maXctList.GetSize() );
@@ -2160,7 +2160,7 @@ bool XclExpSupbookBuffer::GetSupbookDde( XclExpSupbookRef& rxSupbook,
     return false;
 }
 
-sal_uInt16 XclExpSupbookBuffer::Append( XclExpSupbookRef xSupbook )
+sal_uInt16 XclExpSupbookBuffer::Append( XclExpSupbookRef const & xSupbook )
 {
     maSupbookList.AppendRecord( xSupbook );
     return ulimit_cast< sal_uInt16 >( maSupbookList.GetSize() - 1 );
@@ -2282,7 +2282,7 @@ sal_uInt16 XclExpLinkManagerImpl5::GetExtSheetCount() const
     return static_cast< sal_uInt16 >( maExtSheetList.GetSize() );
 }
 
-sal_uInt16 XclExpLinkManagerImpl5::AppendInternal( XclExpExtSheetRef xExtSheet )
+sal_uInt16 XclExpLinkManagerImpl5::AppendInternal( XclExpExtSheetRef const & xExtSheet )
 {
     if( GetExtSheetCount() < 0x7FFF )
     {

@@ -279,7 +279,7 @@ public:
     void                RewindRecord();
 
     /** Enables decryption of record contents for the rest of the stream. */
-    void                SetDecrypter( XclImpDecrypterRef xDecrypter );
+    void                SetDecrypter( XclImpDecrypterRef const & xDecrypter );
     /** Sets decrypter from another stream. */
     void                CopyDecrypterFrom( const XclImpStream& rStrm );
     /** Returns true, if a valid decrypter is set at the stream. */

@@ -2847,7 +2847,7 @@ void XclExpXFBuffer::InsertUserStyles()
             InsertStyleXF( *pStyleSheet );
 }
 
-sal_uInt32 XclExpXFBuffer::AppendBuiltInXF( XclExpXFRef xXF, sal_uInt8 nStyleId, sal_uInt8 nLevel )
+sal_uInt32 XclExpXFBuffer::AppendBuiltInXF( XclExpXFRef const & xXF, sal_uInt8 nStyleId, sal_uInt8 nLevel )
 {
     sal_uInt32 nXFId = static_cast< sal_uInt32 >( maXFList.GetSize() );
     maXFList.AppendRecord( xXF );
@@ -2858,7 +2858,7 @@ sal_uInt32 XclExpXFBuffer::AppendBuiltInXF( XclExpXFRef xXF, sal_uInt8 nStyleId,
     return nXFId;
 }
 
-sal_uInt32 XclExpXFBuffer::AppendBuiltInXFWithStyle( XclExpXFRef xXF, sal_uInt8 nStyleId, sal_uInt8 nLevel )
+sal_uInt32 XclExpXFBuffer::AppendBuiltInXFWithStyle( XclExpXFRef const & xXF, sal_uInt8 nStyleId, sal_uInt8 nLevel )
 {
     sal_uInt32 nXFId = AppendBuiltInXF( xXF, nStyleId, nLevel );
     maStyleList.AppendNewRecord( new XclExpStyle( nXFId, nStyleId, nLevel ) );

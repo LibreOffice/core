@@ -341,7 +341,7 @@ void XclExpStream::WriteCharBuffer( const ScfUInt8Vec& rBuffer )
     Write( &rBuffer[ 0 ], rBuffer.size() );
 }
 
-void XclExpStream::SetEncrypter( XclExpEncrypterRef xEncrypter )
+void XclExpStream::SetEncrypter( XclExpEncrypterRef const & xEncrypter )
 {
     mxEncrypter = xEncrypter;
 }
@@ -942,7 +942,7 @@ sax_fastparser::FSHelperPtr& XclExpXmlStream::GetCurrentStream()
     return maStreams.top();
 }
 
-void XclExpXmlStream::PushStream( sax_fastparser::FSHelperPtr aStream )
+void XclExpXmlStream::PushStream( sax_fastparser::FSHelperPtr const & aStream )
 {
     maStreams.push( aStream );
 }

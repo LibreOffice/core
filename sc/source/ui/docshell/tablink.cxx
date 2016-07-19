@@ -489,7 +489,7 @@ void ScDocumentLoader::RemoveAppPrefix( OUString& rFilterName )
         rFilterName = rFilterName.copy( aAppPrefix.getLength());
 }
 
-SfxMedium* ScDocumentLoader::CreateMedium( const OUString& rFileName, std::shared_ptr<const SfxFilter> pFilter,
+SfxMedium* ScDocumentLoader::CreateMedium( const OUString& rFileName, std::shared_ptr<const SfxFilter> const & pFilter,
         const OUString& rOptions )
 {
     // Always create SfxItemSet so ScDocShell can set options.

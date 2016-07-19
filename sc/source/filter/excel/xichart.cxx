@@ -1678,7 +1678,7 @@ void XclImpChSerErrorBar::ReadChSerErrorBar( XclImpStream& rStrm )
     maData.mnValueCount = rStrm.ReaduInt16();
 }
 
-void XclImpChSerErrorBar::SetSeriesData( XclImpChSourceLinkRef xValueLink, XclImpChDataFormatRef xDataFmt )
+void XclImpChSerErrorBar::SetSeriesData( XclImpChSourceLinkRef const & xValueLink, XclImpChDataFormatRef const & xDataFmt )
 {
     mxValueLink = xValueLink;
     mxDataFmt = xDataFmt;
@@ -2699,7 +2699,7 @@ void XclImpChTypeGroup::Finalize()
         mxGroupFmt->UpdateGroupFormat( maTypeInfo );
 }
 
-void XclImpChTypeGroup::AddSeries( XclImpChSeriesRef xSeries )
+void XclImpChTypeGroup::AddSeries( XclImpChSeriesRef const & xSeries )
 {
     if( xSeries )
         maSeries.push_back( xSeries );
@@ -3723,7 +3723,7 @@ Reference< XCoordinateSystem > XclImpChAxesSet::CreateCoordSystem( Reference< XD
 }
 
 void XclImpChAxesSet::ConvertAxis(
-        XclImpChAxisRef xChAxis, XclImpChTextRef xChAxisTitle,
+        XclImpChAxisRef const & xChAxis, XclImpChTextRef const & xChAxisTitle,
         Reference< XCoordinateSystem > const & xCoordSystem, const XclImpChAxis* pCrossingAxis ) const
 {
     if( xChAxis )

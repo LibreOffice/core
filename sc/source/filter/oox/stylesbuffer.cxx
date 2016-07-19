@@ -2663,7 +2663,7 @@ OUString CellStyleBuffer::createCellStyle( sal_Int32 nXfId ) const
 
 // private --------------------------------------------------------------------
 
-void CellStyleBuffer::insertCellStyle( CellStyleRef xCellStyle )
+void CellStyleBuffer::insertCellStyle( CellStyleRef const & xCellStyle )
 {
     const CellStyleModel& rModel = xCellStyle->getModel();
     if( rModel.mnXfId >= 0 )

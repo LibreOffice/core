@@ -107,7 +107,7 @@ sal_Unicode lcl_getSheetSeparator(ScDocument* pDoc)
 }
 
 ScTypedCaseStrSet::const_iterator findText(
-    const ScTypedCaseStrSet& rDataSet, ScTypedCaseStrSet::const_iterator itPos,
+    const ScTypedCaseStrSet& rDataSet, ScTypedCaseStrSet::const_iterator const & itPos,
     const OUString& rStart, OUString& rResult, bool bBack)
 {
     if (bBack) // Backwards
@@ -182,7 +182,7 @@ OUString getExactMatch(const ScTypedCaseStrSet& rDataSet, const OUString& rStrin
 }
 
 ScTypedCaseStrSet::const_iterator findTextAll(
-    const ScTypedCaseStrSet& rDataSet, ScTypedCaseStrSet::const_iterator itPos,
+    const ScTypedCaseStrSet& rDataSet, ScTypedCaseStrSet::const_iterator const & itPos,
     const OUString& rStart, ::std::vector< OUString > &rResultVec, bool bBack)
 {
     rResultVec.clear(); // clear contents

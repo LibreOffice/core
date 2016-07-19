@@ -7054,7 +7054,7 @@ public:
     {}
 
     void operator() ( SCCOL nColumn, const OUString& rFormula,
-                      std::function<double(SCROW )> lExpected ) const
+                      std::function<double(SCROW )> const & lExpected ) const
     {
         ScDocument aClipDoc(SCDOCMODE_CLIP);
         ScMarkData aMark;

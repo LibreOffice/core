@@ -747,7 +747,7 @@ std::string to_std_string(const OUString& rStr)
 
 }
 
-void checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* expected, const char* msg, CppUnit::SourceLine sourceLine)
+void checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* expected, const char* msg, CppUnit::SourceLine const & sourceLine)
 {
     ScTokenArray* pCode = getTokens(rDoc, rPos);
     if (!pCode)

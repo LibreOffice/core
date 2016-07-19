@@ -139,7 +139,7 @@ public:
     /** Returns the absolute position of the system stream. */
     inline sal_uInt64   GetSvStreamPos() const { return mrStrm.Tell(); }
 
-    void                SetEncrypter( XclExpEncrypterRef xEncrypter );
+    void                SetEncrypter( XclExpEncrypterRef const & xEncrypter );
 
     bool                HasValidEncrypter() const;
 
@@ -298,7 +298,7 @@ public:
     inline const XclExpRoot& GetRoot() const { return *mpRoot; }
 
     sax_fastparser::FSHelperPtr& GetCurrentStream();
-    void PushStream( sax_fastparser::FSHelperPtr aStream );
+    void PushStream( sax_fastparser::FSHelperPtr const & aStream );
     void PopStream();
 
     sax_fastparser::FSHelperPtr     GetStreamForPath( const OUString& rPath );

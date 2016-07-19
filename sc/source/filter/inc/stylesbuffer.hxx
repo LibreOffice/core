@@ -779,7 +779,7 @@ public:
 
 private:
     /** Inserts the passed cell style object into the internal maps. */
-    void                insertCellStyle( CellStyleRef xCellStyle );
+    void                insertCellStyle( CellStyleRef const & xCellStyle );
     /** Creates the style sheet described by the passed cell style object. */
     static OUString     createCellStyle( const CellStyleRef& rxCellStyle );
     static ::ScStyleSheet* getCellStyleSheet( const CellStyleRef& rxCellStyle );

@@ -174,19 +174,19 @@ void ScGridWinUIObject::execute(const OUString& rAction,
 
 namespace {
 
-ScDrawLayer* get_draw_layer(VclPtr<ScGridWindow> xGridWindow)
+ScDrawLayer* get_draw_layer(VclPtr<ScGridWindow> const & xGridWindow)
 {
     return xGridWindow->getViewData()->GetDocument()->GetDrawLayer();
 }
 
-SdrPage* get_draw_page(VclPtr<ScGridWindow> xGridWindow, SCTAB nTab)
+SdrPage* get_draw_page(VclPtr<ScGridWindow> const & xGridWindow, SCTAB nTab)
 {
     ScDrawLayer* pDrawLayer = get_draw_layer(xGridWindow);
 
     return pDrawLayer->GetPage(nTab);
 }
 
-std::set<OUString> collect_charts(VclPtr<ScGridWindow> xGridWindow)
+std::set<OUString> collect_charts(VclPtr<ScGridWindow> const & xGridWindow)
 {
     SCTAB nTab = xGridWindow->getViewData()->GetTabNo();
     SdrPage* pPage = get_draw_page(xGridWindow, nTab);
