@@ -1442,6 +1442,10 @@ namespace svgio
                         {
                             setStrokeOpacity(aNum);
                         }
+                        else
+                        {
+                            setStrokeOpacity(0.0);
+                        }
                     }
                     break;
                 }
