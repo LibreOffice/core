@@ -397,6 +397,9 @@ public:
 
 class SVX_DLLPUBLIC XPatternList : public XPropertyList
 {
+private:
+    Bitmap CreateBitmap( long nIndex, const Size& rSize ) const;
+
 protected:
     virtual Bitmap CreateBitmapForUI(long nIndex) override;
 
@@ -406,9 +409,9 @@ public:
 
     using XPropertyList::Replace;
     using XPropertyList::Remove;
-
     XBitmapEntry* Remove(long nIndex);
     XBitmapEntry* GetBitmap(long nIndex) const;
+    Bitmap GetBitmapForPreview(long nIndex, const Size& rSize);
 
     virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
