@@ -906,7 +906,7 @@ void ScOrcusStyles::number_format::applyToItemSet(SfxItemSet& rSet, ScDocument& 
     {
         if (nCheckPos == 0)
         {
-            rSet.Put(SfxUInt32Item(nKey, ATTR_VALUE_FORMAT));
+            rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nKey));
         }
     }
     else
