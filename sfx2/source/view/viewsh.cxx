@@ -1496,6 +1496,11 @@ bool SfxViewShell::isTiledSearching() const
     return pImpl->m_bTiledSearching;
 }
 
+int SfxViewShell::getPart() const
+{
+    return 0;
+}
+
 bool SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
 
 /*  [Description]
