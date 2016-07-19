@@ -70,6 +70,7 @@
 #if HAVE_FEATURE_OPENCL
 #include <opencl/platforminfo.hxx>
 #endif
+#include <sfx2/lokhelper.hxx>
 
 #include "cellsuno.hxx"
 #include <columnspanset.hxx>
@@ -860,6 +861,7 @@ void ScModelObj::resetSelection()
 
     // and hide the cell and text selection
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "");
+    SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "");
 }
 
 void ScModelObj::setClipboard(const uno::Reference<datatransfer::clipboard::XClipboard>& xClipboard)

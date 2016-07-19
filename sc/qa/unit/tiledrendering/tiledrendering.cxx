@@ -14,6 +14,7 @@
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/DispatchHelper.hpp>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -53,6 +54,7 @@ public:
     void testPartHash();
     void testDocumentSize();
     void testViewCursors();
+    void testTextViewSelection();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -60,6 +62,7 @@ public:
     CPPUNIT_TEST(testPartHash);
     CPPUNIT_TEST(testDocumentSize);
     CPPUNIT_TEST(testViewCursors);
+    CPPUNIT_TEST(testTextViewSelection);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -335,10 +338,12 @@ class ViewCallback
 public:
     bool m_bOwnCursorInvalidated;
     bool m_bViewCursorInvalidated;
+    bool m_bTextViewSelectionInvalidated;
 
     ViewCallback()
         : m_bOwnCursorInvalidated(false),
-          m_bViewCursorInvalidated(false)
+          m_bViewCursorInvalidated(false),
+          m_bTextViewSelectionInvalidated(false)
     {
     }
 
@@ -359,6 +364,11 @@ public:
         case LOK_CALLBACK_CELL_VIEW_CURSOR:
         {
             m_bViewCursorInvalidated = true;
+        }
+        break;
+        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
+        {
+            m_bTextViewSelectionInvalidated = true;
         }
         break;
         }
@@ -384,6 +394,45 @@ void ScTiledRenderingTest::testViewCursors()
     mxComponent->dispose();
     mxComponent.clear();
 
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand)
+{
+    uno::Reference<frame::XController> xController = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY)->getCurrentController();
+    CPPUNIT_ASSERT(xController.is());
+    uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFrame.is());
+
+    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
+    CPPUNIT_ASSERT(xDispatchHelper.is());
+
+    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, {});
+}
+
+void ScTiledRenderingTest::testTextViewSelection()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    // Create two views, and leave the second one current.
+    ScModelObj* pModelObj = createDoc("select-row-cols.ods");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+
+    // Create a selection on two cells in the second view, that's a text selection in LOK terms.
+    aView1.m_bTextViewSelectionInvalidated = false;
+    lcl_dispatchCommand(mxComponent, ".uno:GoRightSel");
+    Scheduler::ProcessEventsToIdle();
+    // Make sure the first view got its notification.
+    CPPUNIT_ASSERT(aView1.m_bTextViewSelectionInvalidated);
+
+    mxComponent->dispose();
+    mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
 }
 
