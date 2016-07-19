@@ -894,15 +894,15 @@ void ScOrcusStyles::border::applyToItemSet(SfxItemSet& rSet) const
     rSet.Put(aBoxItem);
 }
 
-void ScOrcusStyles::number_format::applyToItemSet(SfxItemSet& rSet) const
+void ScOrcusStyles::number_format::applyToItemSet(SfxItemSet& rSet, ScDocument& rDoc) const
 {
     sal_uInt32 nKey;
     sal_Int32 nCheckPos;
-    SvNumberFormatter NumberFormatter(comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US);
+    SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
     OUString Code = maCode; /* <-- Done because the SvNumberFormatter::PutEntry demands a non const NumFormat Code*/
     sal_Int16 type = css::util::NumberFormat::ALL;
 
-    if (NumberFormatter.PutEntry(Code, nCheckPos, type, nKey, LANGUAGE_ENGLISH_US))
+    if (pFormatter->PutEntry(Code, nCheckPos, type, nKey, LANGUAGE_ENGLISH_US))
     {
         if (nCheckPos == 0)
         {
@@ -981,7 +981,7 @@ void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, const xf& rXf)
     }
     const number_format& rFormat = maNumberFormats[nNumberFormatId];
     if (rFormat.mbHasNumberFormatAttr)
-        rFormat.applyToItemSet(rSet);
+        rFormat.applyToItemSet(rSet, mrDoc);
 }
 
 void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, size_t xfId)
