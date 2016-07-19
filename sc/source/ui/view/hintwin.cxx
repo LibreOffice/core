@@ -47,7 +47,7 @@ ScHintWindow::ScHintWindow( vcl::Window* pParent, const OUString& rTit, const OU
     sal_Int32 nIndex = 0;
     while ( nIndex != -1 )
     {
-        OUString aLine = aMessage.getToken( 0, CHAR_CR, nIndex );
+        OUString aLine = aMessage.getToken( 0, '\r', nIndex );
         Size aLineSize( GetTextWidth( aLine ), GetTextHeight() );
         nTextHeight = aLineSize.Height();
         aTextSize.Height() += nTextHeight;
@@ -78,7 +78,7 @@ void ScHintWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangl
     Point aLineStart = aTextStart;
     while ( nIndex != -1 )
     {
-        OUString aLine = aMessage.getToken( 0, CHAR_CR, nIndex );
+        OUString aLine = aMessage.getToken( 0, '\r', nIndex );
         DrawText( aLineStart, aLine );
         aLineStart.Y() += nTextHeight;
     }

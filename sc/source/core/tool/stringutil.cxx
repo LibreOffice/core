@@ -477,7 +477,7 @@ bool ScStringUtil::isMultiline( const OUString& rStr )
     if (rStr.indexOf('\n') != -1)
         return true;
 
-    if (rStr.indexOf(CHAR_CR) != -1)
+    if (rStr.indexOf('\r') != -1)
         return true;
 
     return false;
