@@ -48,6 +48,32 @@
 /// This is expected to be locked during setView(), doSomethingElse() LOK calls.
 std::mutex g_aLOKMutex;
 
+/// Same as a GdkRectangle, but also tracks in which part the rectangle is.
+struct ViewRectangle
+{
+    int m_nPart;
+    GdkRectangle m_aRectangle;
+
+    ViewRectangle(int nPart = 0, const GdkRectangle& rRectangle = GdkRectangle())
+        : m_nPart(nPart),
+        m_aRectangle(rRectangle)
+    {
+    }
+};
+
+/// Same as a list of GdkRectangles, but also tracks in which part the rectangle is.
+struct ViewRectangles
+{
+    int m_nPart;
+    std::vector<GdkRectangle> m_aRectangles;
+
+    ViewRectangles(int nPart = 0, const std::vector<GdkRectangle>& rRectangles = std::vector<GdkRectangle>())
+        : m_nPart(nPart),
+        m_aRectangles(rRectangles)
+    {
+    }
+};
+
 /// Private struct used by this GObject type
 struct LOKDocViewPrivateImpl
 {
@@ -78,7 +104,7 @@ struct LOKDocViewPrivateImpl
     GdkRectangle m_aVisibleCursor;
     /// Position and size of the view cursors. The current view can only see
     /// them, can't modify them. Key is the view id.
-    std::map<int, GdkRectangle> m_aViewCursors;
+    std::map<int, ViewRectangle> m_aViewCursors;
     /// Cursor overlay is visible or hidden (for blinking).
     gboolean m_bCursorOverlayVisible;
     /// Cursor is visible or hidden (e.g. for graphic selection).
@@ -98,7 +124,7 @@ struct LOKDocViewPrivateImpl
     std::vector<GdkRectangle> m_aTextSelectionRectangles;
     /// Rectangles of view selections. The current view can only see
     /// them, can't modify them. Key is the view id.
-    std::map<int, std::vector<GdkRectangle>> m_aTextViewSelectionRectangles;
+    std::map<int, ViewRectangles> m_aTextViewSelectionRectangles;
     /// Position and size of the selection start (as if there would be a cursor caret there).
     GdkRectangle m_aTextSelectionStart;
     /// Position and size of the selection end.
@@ -106,11 +132,11 @@ struct LOKDocViewPrivateImpl
     GdkRectangle m_aGraphicSelection;
     /// Position and size of the graphic view selections. The current view can only
     /// see them, can't modify them. Key is the view id.
-    std::map<int, GdkRectangle> m_aGraphicViewSelections;
+    std::map<int, ViewRectangle> m_aGraphicViewSelections;
     GdkRectangle m_aCellCursor;
     /// Position and size of the cell view cursors. The current view can only
     /// see them, can't modify them. Key is the view id.
-    std::map<int, GdkRectangle> m_aCellViewCursors;
+    std::map<int, ViewRectangle> m_aCellViewCursors;
     gboolean m_bInDragGraphicSelection;
 
     /// @name Start/middle/end handle.
@@ -145,6 +171,9 @@ struct LOKDocViewPrivateImpl
 
     /// View ID, returned by createView() or 0 by default.
     int m_nViewId;
+
+    /// Part ID, returned by getPart().
+    int m_nPartId;
 
     /**
      * Contains a freshly set zoom level: logic size of a tile.
@@ -197,6 +226,7 @@ struct LOKDocViewPrivateImpl
         m_aHandleEndRect({0, 0, 0, 0}),
         m_bInDragEndHandle(false),
         m_nViewId(0),
+        m_nPartId(0),
         m_nTileSizeTwips(0),
         m_aVisibleArea({0, 0, 0, 0}),
         m_bVisibleAreaSet(false),
@@ -840,7 +870,9 @@ static void reportError(LOKDocView* /*pDocView*/, const std::string& rString)
 static void
 setPart(LOKDocView* pDocView, const std::string& rString)
 {
-    g_signal_emit(pDocView, doc_view_signals[PART_CHANGED], 0, std::stoi(rString));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
+    priv->m_nPartId = std::stoi(rString);
+    g_signal_emit(pDocView, doc_view_signals[PART_CHANGED], 0, priv->m_nPartId);
 }
 
 static void
@@ -1127,9 +1159,10 @@ callback (gpointer pData)
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
         int nViewId = aTree.get<int>("viewId");
+        int nPart = aTree.get<int>("part");
         const std::string& rRectangle = aTree.get<std::string>("selection");
         if (rRectangle != "EMPTY")
-            priv->m_aGraphicViewSelections[nViewId] = payloadToRectangle(pDocView, rRectangle.c_str());
+            priv->m_aGraphicViewSelections[nViewId] = ViewRectangle(nPart, payloadToRectangle(pDocView, rRectangle.c_str()));
         else
         {
             auto it = priv->m_aGraphicViewSelections.find(nViewId);
@@ -1214,8 +1247,9 @@ callback (gpointer pData)
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
         int nViewId = aTree.get<int>("viewId");
+        int nPart = aTree.get<int>("part");
         const std::string& rRectangle = aTree.get<std::string>("rectangle");
-        priv->m_aViewCursors[nViewId] = payloadToRectangle(pDocView, rRectangle.c_str());
+        priv->m_aViewCursors[nViewId] = ViewRectangle(nPart, payloadToRectangle(pDocView, rRectangle.c_str()));
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
         break;
     }
@@ -1225,8 +1259,9 @@ callback (gpointer pData)
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
         int nViewId = aTree.get<int>("viewId");
+        int nPart = aTree.get<int>("part");
         const std::string& rSelection = aTree.get<std::string>("selection");
-        priv->m_aTextViewSelectionRectangles[nViewId] = payloadToRectangles(pDocView, rSelection.c_str());
+        priv->m_aTextViewSelectionRectangles[nViewId] = ViewRectangles(nPart, payloadToRectangles(pDocView, rSelection.c_str()));
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
         break;
     }
@@ -1248,9 +1283,10 @@ callback (gpointer pData)
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
         int nViewId = aTree.get<int>("viewId");
+        int nPart = aTree.get<int>("part");
         const std::string& rRectangle = aTree.get<std::string>("rectangle");
         if (rRectangle != "EMPTY")
-            priv->m_aCellViewCursors[nViewId] = payloadToRectangle(pDocView, rRectangle.c_str());
+            priv->m_aCellViewCursors[nViewId] = ViewRectangle(nPart, payloadToRectangle(pDocView, rRectangle.c_str()));
         else
         {
             auto it = priv->m_aCellViewCursors.find(nViewId);
@@ -1550,7 +1586,10 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
             if (itVisibility != priv->m_aViewCursorVisibilities.end() && !itVisibility->second)
                 continue;
 
-            GdkRectangle& rCursor = rPair.second;
+            if (rPair.second.m_nPart != priv->m_nPartId)
+                continue;
+
+            GdkRectangle& rCursor = rPair.second.m_aRectangle;
             if (rCursor.width < 30)
                 // Set a minimal width if it would be 0.
                 rCursor.width = 30;
@@ -1621,9 +1660,12 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
     }
 
     // Selections of other views.
-    for (std::pair<const int, std::vector<GdkRectangle>>& rPair : priv->m_aTextViewSelectionRectangles)
+    for (auto& rPair : priv->m_aTextViewSelectionRectangles)
     {
-        for (GdkRectangle& rRectangle : rPair.second)
+        if (rPair.second.m_nPart != priv->m_nPartId)
+            continue;
+
+        for (GdkRectangle& rRectangle : rPair.second.m_aRectangles)
         {
             const GdkRGBA& rDark = getDarkColor(rPair.first);
             // 75% transparency.
@@ -1644,10 +1686,14 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
     }
 
     // Graphic selections of other views.
-    for (std::pair<const int, GdkRectangle>& rPair : priv->m_aGraphicViewSelections)
+    for (auto& rPair : priv->m_aGraphicViewSelections)
     {
+        const ViewRectangle& rRectangle = rPair.second;
+        if (rRectangle.m_nPart != priv->m_nPartId)
+            continue;
+
         const GdkRGBA& rDark = getDarkColor(rPair.first);
-        renderGraphicHandle(pDocView, pCairo, rPair.second, rDark);
+        renderGraphicHandle(pDocView, pCairo, rRectangle.m_aRectangle, rDark);
     }
 
     // Draw the cell cursor.
@@ -1659,10 +1705,6 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
                         twipToPixel(priv->m_aCellCursor.y, priv->m_fZoom),
                         twipToPixel(priv->m_aCellCursor.width, priv->m_fZoom),
                         twipToPixel(priv->m_aCellCursor.height, priv->m_fZoom));
-                        // priv->m_aCellCursor.x - 1,
-                        // priv->m_aCellCursor.y - 1,
-                        // priv->m_aCellCursor.width + 2,
-                        // priv->m_aCellCursor.height + 2);
         cairo_set_line_width(pCairo, 2.0);
         cairo_stroke(pCairo);
     }
@@ -1670,15 +1712,17 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
     // Cell view cursors: they are colored.
     for (auto& rPair : priv->m_aCellViewCursors)
     {
-        GdkRectangle& rCursor = rPair.second;
+        const ViewRectangle& rCursor = rPair.second;
+        if (rCursor.m_nPart != priv->m_nPartId)
+            continue;
 
         const GdkRGBA& rDark = getDarkColor(rPair.first);
         cairo_set_source_rgb(pCairo, rDark.red, rDark.green, rDark.blue);
         cairo_rectangle(pCairo,
-                        twipToPixel(rCursor.x, priv->m_fZoom),
-                        twipToPixel(rCursor.y, priv->m_fZoom),
-                        twipToPixel(rCursor.width, priv->m_fZoom),
-                        twipToPixel(rCursor.height, priv->m_fZoom));
+                        twipToPixel(rCursor.m_aRectangle.x, priv->m_fZoom),
+                        twipToPixel(rCursor.m_aRectangle.y, priv->m_fZoom),
+                        twipToPixel(rCursor.m_aRectangle.width, priv->m_fZoom),
+                        twipToPixel(rCursor.m_aRectangle.height, priv->m_fZoom));
         cairo_set_line_width(pCairo, 2.0);
         cairo_stroke(pCairo);
     }
@@ -3104,6 +3148,7 @@ lok_doc_view_set_part (LOKDocView* pDocView, int nPart)
         g_clear_error(&error);
     }
     g_object_unref(task);
+    priv->m_nPartId = nPart;
 }
 
 SAL_DLLPUBLIC_EXPORT gchar*
