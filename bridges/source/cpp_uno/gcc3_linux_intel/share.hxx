@@ -27,9 +27,8 @@
 #ifndef _GLIBCXX_CDTOR_CALLABI // new in GCC 4.7 cxxabi.h
 #define _GLIBCXX_CDTOR_CALLABI
 #endif
-#include <unwind.h>
 
-#include "config_cxxabi.h"
+#include "config_gcc.h"
 #include <uno/any2.h>
 #include "uno/mapping.h"
 
@@ -38,7 +37,15 @@ namespace CPPU_CURRENT_NAMESPACE
 
 void dummy_can_throw_anything( char const * );
 
-// ----- following decl from libstdc++-v3/libsupc++/unwind-cxx.h
+// ----- following decl from libstdc++-v3/libsupc++/unwind-cxx.h and unwind.h
+
+struct _Unwind_Exception
+{
+    unsigned exception_class __attribute__((__mode__(__DI__)));
+    void * exception_cleanup;
+    unsigned private_1 __attribute__((__mode__(__word__)));
+    unsigned private_2 __attribute__((__mode__(__word__)));
+} __attribute__((__aligned__));
 
 struct __cxa_exception
 {
@@ -80,17 +87,17 @@ struct __cxa_eh_globals
 // __cxa_allocate_exception and __cxa_throw, though they do not have the
 // additional problem of an incompletely declared return type:
 
-#if !HAVE_CXXABI_H_CXA_GET_GLOBALS
+#if !HAVE_GCC_CXXABI_H_CXA_GET_GLOBALS
 namespace __cxxabiv1 { extern "C" void * __cxa_get_globals() throw(); }
 #endif
 
-#if !HAVE_CXXABI_H_CXA_ALLOCATE_EXCEPTION
+#if !HAVE_GCC_CXXABI_H_CXA_ALLOCATE_EXCEPTION
 namespace __cxxabiv1 {
 extern "C" void * __cxa_allocate_exception(std::size_t thrown_size) throw();
 }
 #endif
 
-#if !HAVE_CXXABI_H_CXA_THROW
+#if !HAVE_GCC_CXXABI_H_CXA_THROW
 namespace __cxxabiv1 {
 extern "C" void __cxa_throw(
     void * thrown_exception, void * tinfo, void (* dest)(void *))

@@ -171,9 +171,6 @@ class GtkSalFrame : public SalFrame
 
     SalX11Screen                    m_nXScreen;
     GtkWidget*                      m_pWindow;
-#if GTK_CHECK_VERSION(3,0,0)
-    GtkGrid*                        m_pTopLevelGrid;
-#endif
     GtkEventBox*                    m_pEventBox;
     GtkFixed*                       m_pFixedContainer;
     GdkWindow*                      m_pForeignParent;
@@ -372,9 +369,6 @@ public:
     GtkFixed*   getFixedContainer() const { return m_pFixedContainer; }
     GtkEventBox* getEventBox() const { return m_pEventBox; }
     GtkWidget*  getMouseEventWidget() const;
-#if GTK_CHECK_VERSION(3,0,0)
-    GtkGrid*    getTopLevelGridWidget() const { return m_pTopLevelGrid; }
-#endif
     GdkWindow*  getForeignParent() const { return m_pForeignParent; }
     GdkNativeWindow getForeignParentWindow() const { return m_aForeignParentWindow; }
     GdkWindow*  getForeignTopLevel() const { return m_pForeignTopLevel; }

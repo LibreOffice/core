@@ -819,8 +819,6 @@ GtkSalFrame::~GtkSalFrame()
         gtk_widget_destroy( GTK_WIDGET( m_pFixedContainer ) );
     if( m_pEventBox )
         gtk_widget_destroy( GTK_WIDGET(m_pEventBox) );
-    if( m_pTopLevelGrid )
-        gtk_widget_destroy( GTK_WIDGET(m_pTopLevelGrid) );
     {
         SolarMutexGuard aGuard;
 #if defined ENABLE_GMENU_INTEGRATION
@@ -966,15 +964,13 @@ void GtkSalFrame::InitCommon()
     m_aDamageHandler.handle = this;
     m_aDamageHandler.damaged = ::damaged;
 
-    m_pTopLevelGrid = GTK_GRID(gtk_grid_new());
-    gtk_container_add(GTK_CONTAINER(m_pWindow), GTK_WIDGET(m_pTopLevelGrid));
 
     m_pEventBox = GTK_EVENT_BOX(gtk_event_box_new());
     gtk_widget_add_events( GTK_WIDGET(m_pEventBox),
                            GDK_ALL_EVENTS_MASK );
     gtk_widget_set_vexpand(GTK_WIDGET(m_pEventBox), true);
     gtk_widget_set_hexpand(GTK_WIDGET(m_pEventBox), true);
-    gtk_grid_attach(m_pTopLevelGrid, GTK_WIDGET(m_pEventBox), 0, 0, 1, 1);
+    gtk_container_add(GTK_CONTAINER(m_pWindow), GTK_WIDGET(m_pEventBox));
 
     // add the fixed container child,
     // fixed is needed since we have to position plugin windows
@@ -1074,7 +1070,7 @@ void GtkSalFrame::InitCommon()
                            );
 
     // show the widgets
-    gtk_widget_show_all(GTK_WIDGET(m_pTopLevelGrid));
+    gtk_widget_show_all(GTK_WIDGET(m_pEventBox));
 
     // realize the window, we need an XWindow id
     gtk_widget_realize( m_pWindow );
@@ -3462,7 +3458,6 @@ void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )
     {
         pThis->m_pFixedContainer = nullptr;
         pThis->m_pEventBox = nullptr;
-        pThis->m_pTopLevelGrid = nullptr;
         pThis->m_pWindow = nullptr;
         pThis->InvalidateGraphics();
     }

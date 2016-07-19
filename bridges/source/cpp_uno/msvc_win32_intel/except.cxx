@@ -28,7 +28,6 @@
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
 #include <sal/log.hxx>
-#include <osl/mutex.hxx>
 
 #include "com/sun/star/uno/Any.hxx"
 #include <unordered_map>
