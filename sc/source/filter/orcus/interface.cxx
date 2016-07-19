@@ -797,8 +797,9 @@ void ScOrcusStyles::font::applyToItemSet(SfxItemSet& rSet) const
 
     if (mbHasUnderlineAttr)
     {
-        rSet.Put(SvxUnderlineItem(meUnderline, ATTR_FONT_UNDERLINE));
-        rSet.Put(SvxColorItem(maUnderlineColor, ATTR_FONT_UNDERLINE));
+        SvxUnderlineItem aUnderline(meUnderline, ATTR_FONT_UNDERLINE);
+        aUnderline.SetColor(maUnderlineColor);
+        rSet.Put(aUnderline);
     }
 
     rSet.Put( SvxColorItem(maColor, ATTR_FONT_COLOR));
