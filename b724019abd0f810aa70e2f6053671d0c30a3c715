@@ -160,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_c63b789b",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-07-19T13:17:04Z",
+      "side": 1,
+      "message": "By the way, the --protector is only handled \"properly\" in debug builds, because in release ones the asserts will turn into nops, so the arguments won\u0027t be skipped. Well, it seems not an issue given that it is only used in unit tests, but maybe then move that code to #ifdef DEBUG?",
+      "parentUuid": "5a8bc5a2_e6c954ae",
+      "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_06f800e5",
         "filename": "desktop/source/app/cmdlineargs.cxx",
         "patchSetId": 2
