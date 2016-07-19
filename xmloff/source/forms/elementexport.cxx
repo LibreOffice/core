@@ -2065,7 +2065,7 @@ namespace xmloff
                 AddAttribute(
                     OAttributeMetaData::getCommonControlAttributeNamespace(CCAFlags::TargetLocation),
                     OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TargetLocation),
-                    sPropValue);
+                    m_rContext.getGlobalContext().GetRelativeReference(sPropValue));
             if ( m_rContext.getGlobalContext().GetAttrList().getLength() )
             {
                 SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, xmloff::token::XML_CONNECTION_RESOURCE, true, true);
