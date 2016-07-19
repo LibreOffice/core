@@ -148,7 +148,7 @@ namespace desktop
         aHelpMessage_head = aHelpMessage_head.replaceFirst( "%CMDNAME", "soffice" );
         if (!unknown.isEmpty())
         {
-            aHelpMessage_head = "Unknown option: " + unknown + "\n\n"
+            aHelpMessage_head = "Error in option: " + unknown + "\n\n"
                 + aHelpMessage_head;
         }
 #ifdef UNX
