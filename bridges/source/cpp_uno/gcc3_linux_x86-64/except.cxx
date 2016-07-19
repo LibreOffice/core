@@ -81,7 +81,7 @@ static OUString toUNOname( char const * p )
 extern "C" {
 static void _GLIBCXX_CDTOR_CALLABI deleteException( void * pExc )
 {
-    __cxa_exception const * header = (static_cast<__cxa_exception const *>(pExc) - 1);
+    __cxxabiv1::__cxa_exception const * header = (static_cast<__cxxabiv1::__cxa_exception const *>(pExc) - 1);
     typelib_TypeDescription * pTD = nullptr;
     OUString unoName( toUNOname( header->exceptionType->name() ) );
     ::typelib_typedescription_getByName( &pTD, unoName.pData );
@@ -138,7 +138,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     __cxxabiv1::__cxa_throw( pCppExc, rtti, deleteException );
 }
 
-void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno )
+void fillUnoException( __cxxabiv1::__cxa_exception * header, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno )
 {
     if (! header)
     {
