@@ -5876,6 +5876,7 @@ static void updateLibreOfficeKitSelection(ScViewData* pViewData, const std::vect
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aSelection.getStr());
+    SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", aSelection.getStr());
 }
 
 void ScGridWindow::UpdateCursorOverlay()
@@ -6120,6 +6121,7 @@ void ScGridWindow::UpdateSelectionOverlay()
     {
         ScTabViewShell* pViewShell = pViewData->GetViewShell();
         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY");
+        SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "EMPTY");
     }
 
     if ( aOldMode != aDrawMode )
