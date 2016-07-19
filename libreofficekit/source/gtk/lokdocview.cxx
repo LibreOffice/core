@@ -172,8 +172,11 @@ struct LOKDocViewPrivateImpl
     /// View ID, returned by createView() or 0 by default.
     int m_nViewId;
 
-    /// Part ID, returned by getPart().
+    /// Cached part ID, returned by getPart().
     int m_nPartId;
+
+    /// Cached document type, returned by getDocumentType().
+    LibreOfficeKitDocumentType m_eDocumentType;
 
     /**
      * Contains a freshly set zoom level: logic size of a tile.
@@ -1586,7 +1589,8 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
             if (itVisibility != priv->m_aViewCursorVisibilities.end() && !itVisibility->second)
                 continue;
 
-            if (rPair.second.m_nPart != priv->m_nPartId)
+            // Show view cursors when in Writer or when the part matches.
+            if (rPair.second.m_nPart != priv->m_nPartId && priv->m_eDocumentType != LOK_DOCTYPE_TEXT)
                 continue;
 
             GdkRectangle& rCursor = rPair.second.m_aRectangle;
@@ -1662,7 +1666,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
     // Selections of other views.
     for (auto& rPair : priv->m_aTextViewSelectionRectangles)
     {
-        if (rPair.second.m_nPart != priv->m_nPartId)
+        if (rPair.second.m_nPart != priv->m_nPartId && priv->m_eDocumentType != LOK_DOCTYPE_TEXT)
             continue;
 
         for (GdkRectangle& rRectangle : rPair.second.m_aRectangles)
@@ -1689,7 +1693,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
     for (auto& rPair : priv->m_aGraphicViewSelections)
     {
         const ViewRectangle& rRectangle = rPair.second;
-        if (rRectangle.m_nPart != priv->m_nPartId)
+        if (rRectangle.m_nPart != priv->m_nPartId && priv->m_eDocumentType != LOK_DOCTYPE_TEXT)
             continue;
 
         const GdkRGBA& rDark = getDarkColor(rPair.first);
@@ -2046,6 +2050,7 @@ openDocumentInThread (gpointer data)
 
     priv->m_pOffice->pClass->registerCallback(priv->m_pOffice, globalCallbackWorker, pDocView);
     priv->m_pDocument = priv->m_pOffice->pClass->documentLoad( priv->m_pOffice, priv->m_aDocPath );
+    priv->m_eDocumentType = static_cast<LibreOfficeKitDocumentType>(priv->m_pDocument->pClass->getDocumentType(priv->m_pDocument));
     if ( !priv->m_pDocument )
     {
         char *pError = priv->m_pOffice->pClass->getError( priv->m_pOffice );
@@ -2319,6 +2324,7 @@ static void lok_doc_view_set_property (GObject* object, guint propId, const GVal
         break;
     case PROP_DOC_POINTER:
         priv->m_pDocument = static_cast<LibreOfficeKitDocument*>(g_value_get_pointer(value));
+        priv->m_eDocumentType = static_cast<LibreOfficeKitDocumentType>(priv->m_pDocument->pClass->getDocumentType(priv->m_pDocument));
         break;
     case PROP_EDITABLE:
         lok_doc_view_set_edit (pDocView, g_value_get_boolean (value));
