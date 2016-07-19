@@ -1281,6 +1281,7 @@ cairo_t* SvpSalGraphics::getCairoContext(bool bXorModeAllowed) const
     else
         cr = cairo_create(m_pSurface);
     cairo_set_line_width(cr, 1);
+    cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
     if (m_ePaintMode == INVERT)
         cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
     else
