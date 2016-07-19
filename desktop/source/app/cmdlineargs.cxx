@@ -208,22 +208,12 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 {
     m_cwdUrl = supplier.getCwdUrl();
 
-    // parse command line arguments
-    bool bOpenEvent(true);
-    bool bPrintEvent(false);
-    bool bViewEvent(false);
-    bool bStartEvent(false);
-    bool bPrintToEvent(false);
-    bool bPrinterName(false);
-    bool bForceOpenEvent(false);
-    bool bForceNewEvent(false);
-    bool bDisplaySpec(false);
-    bool bOpenDoc(false);
-    bool bConversionEvent(false);
-    bool bConversionParamsEvent(false);
-    bool bBatchPrintEvent(false);
-    bool bBatchPrinterNameEvent(false);
-    bool bConversionOutEvent(false);
+    enum CommandLineEvent { evtOpen, evtPrint, evtView, evtStart, evtPrintTo,
+                            evtForceOpen, evtForceNew, evtConversion, evtBatchPrint };
+    CommandLineEvent eCurrentEvent = evtOpen;
+
+    enum CommandLineEventParam { prmNone, prmPrinterName, prmConversionParams, prmBatchPrinterName, prmConversionOut };
+    CommandLineEventParam eCurrentEventParam = prmNone;
 
     for (;;)
     {
@@ -236,6 +226,40 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
         if ( !aArg.isEmpty() )
         {
             m_bEmpty = false;
+
+            if (eCurrentEventParam != prmNone)
+            {
+                // This is an argument after a command like --pt {printername},
+                // --convert-to {output_file_extension[:output_filter_name]},
+                // --outdir {output_dir}, --printer-name {printer_name}
+                // It should always be treated as parameter to that argument
+
+                switch (eCurrentEventParam)
+                {
+                case prmPrinterName:
+                    // first argument after "-pt" this must be the printer name
+                    m_printername = aArg;
+                    break;
+                case prmConversionParams:
+                    // first argument must be the params
+                    m_conversionparams = aArg;
+                    break;
+                case prmBatchPrinterName:
+                    // first argument is the printer name
+                    m_printername = aArg;
+                    break;
+                case prmConversionOut:
+                    m_conversionout = aArg;
+                    break;
+                default:
+                    // to make [-Werror=switch] happy
+                    break;
+                }
+
+                eCurrentEventParam = prmNone;
+                continue;
+            }
+
             OUString oArg;
             bool bDeprecated = !aArg.startsWith("--", &oArg)
                 && aArg.startsWith("-", &oArg) && aArg.getLength() > 2;
@@ -270,8 +294,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             {
                 m_textcat = true;
                 m_conversionparams = "txt:Text";
-                bOpenEvent = false;
-                bConversionEvent = true;
+                eCurrentEvent = evtConversion;
                 setHeadless();
             }
             else if ( oArg == "quickstart" )
@@ -446,120 +469,66 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             else if ( aArg == "-n" )
             {
                 // force new documents based on the following documents
-                bForceNewEvent  = true;
-                bOpenEvent      = false;
-                bForceOpenEvent = false;
-                bPrintToEvent   = false;
-                bPrintEvent     = false;
-                bViewEvent      = false;
-                bStartEvent     = false;
-                bDisplaySpec    = false;
+                eCurrentEvent = evtForceNew;
             }
             else if ( aArg == "-o" )
             {
                 // force open documents regardless if they are templates or not
-                bForceOpenEvent = true;
-                bOpenEvent      = false;
-                bForceNewEvent  = false;
-                bPrintToEvent   = false;
-                bPrintEvent     = false;
-                bViewEvent      = false;
-                bStartEvent     = false;
-                bDisplaySpec    = false;
+                eCurrentEvent = evtForceOpen;
             }
             else if ( oArg == "pt" )
             {
                 // Print to special printer
-                bPrintToEvent   = true;
-                bPrinterName    = true;
-                bPrintEvent     = false;
-                bOpenEvent      = false;
-                bForceNewEvent  = false;
-                bViewEvent      = false;
-                bStartEvent     = false;
-                bDisplaySpec    = false;
-                bForceOpenEvent = false;
+                eCurrentEvent = evtPrintTo;
+                eCurrentEventParam = prmPrinterName;
             }
             else if ( aArg == "-p" )
             {
                 // Print to default printer
-                bPrintEvent     = true;
-                bPrintToEvent   = false;
-                bOpenEvent      = false;
-                bForceNewEvent  = false;
-                bForceOpenEvent = false;
-                bViewEvent      = false;
-                bStartEvent     = false;
-                bDisplaySpec    = false;
+                eCurrentEvent = evtPrint;
             }
             else if ( oArg == "view")
             {
                 // open in viewmode
-                bOpenEvent      = false;
-                bPrintEvent     = false;
-                bPrintToEvent   = false;
-                bForceNewEvent  = false;
-                bForceOpenEvent = false;
-                bViewEvent      = true;
-                bStartEvent     = false;
-                bDisplaySpec    = false;
+                eCurrentEvent = evtView;
             }
             else if ( oArg == "show" )
             {
                 // open in viewmode
-                bOpenEvent      = false;
-                bViewEvent      = false;
-                bStartEvent     = true;
-                bPrintEvent     = false;
-                bPrintToEvent   = false;
-                bForceNewEvent  = false;
-                bForceOpenEvent = false;
-                bDisplaySpec    = false;
+                eCurrentEvent = evtStart;
             }
             else if ( oArg == "display" )
             {
-                // set display
-                bOpenEvent      = false;
-                bPrintEvent     = false;
-                bForceOpenEvent = false;
-                bPrintToEvent   = false;
-                bForceNewEvent  = false;
-                bViewEvent      = false;
-                bStartEvent     = false;
-                bDisplaySpec    = true;
+                // The command line argument following --display should
+                // always be treated as the argument of --display.
+                // --display and its argument are handled "out of line"
+                // in Unix-only desktop/unx/source/splashx.c and vcl/unx/*,
+                // and just ignored here
+                supplier.next(&aArg);
             }
             else if ( oArg == "language" )
             {
-                bOpenEvent      = false;
-                bPrintEvent     = false;
-                bForceOpenEvent = false;
-                bPrintToEvent   = false;
-                bForceNewEvent  = false;
-                bViewEvent      = false;
-                bStartEvent     = false;
-                bDisplaySpec    = false;
+                // just skip it
             }
             else if ( oArg == "convert-to" )
             {
-                bOpenEvent = false;
-                bConversionEvent = true;
-                bConversionParamsEvent = true;
+                eCurrentEvent = evtConversion;
+                eCurrentEventParam = prmConversionParams;
                 // It doesn't make sense to use convert-to without headless.
                 setHeadless();
             }
             else if ( oArg == "print-to-file" )
             {
-                bOpenEvent = false;
-                bBatchPrintEvent = true;
+                eCurrentEvent = evtBatchPrint;
             }
-            else if ( oArg == "printer-name" && bBatchPrintEvent )
+            else if ( eCurrentEvent == evtBatchPrint && oArg == "printer-name" )
             {
-                bBatchPrinterNameEvent = true;
+                eCurrentEventParam = prmBatchPrinterName;
             }
-            else if ( oArg == "outdir" &&
-                      (bConversionEvent || bBatchPrintEvent) )
+            else if ( (eCurrentEvent == evtConversion || eCurrentEvent == evtBatchPrint)
+                      && oArg == "outdir" )
             {
-                bConversionOutEvent = true;
+                eCurrentEventParam = prmConversionOut;
             }
             else if ( aArg.startsWith("-") )
             {
@@ -586,82 +555,49 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             }
             else
             {
-                if ( bPrinterName && bPrintToEvent )
-                {
-                    // first argument after "-pt" this must be the printer name
-                    m_printername = aArg;
-                    bPrinterName = false;
-                }
-                else if ( bConversionParamsEvent && bConversionEvent )
-                {
-                    // first argument must be the params
-                    m_conversionparams = aArg;
-                    bConversionParamsEvent = false;
-                }
-                else if ( bBatchPrinterNameEvent && bBatchPrintEvent )
-                {
-                    // first argument is the printer name
-                    m_printername = aArg;
-                    bBatchPrinterNameEvent = false;
-                }
-                else if ( (bConversionEvent || bBatchPrintEvent) && bConversionOutEvent )
-                {
-                    m_conversionout = aArg;
-                    bConversionOutEvent = false;
-                }
-                else
-                {
-                    // handle this argument as a filename
+                // handle this argument as a filename
 
-                    // 1. Check if this is an Office URI
-                    if (!bDisplaySpec && OfficeURISchemeCommandLineSupplier::IsOfficeURI(aArg))
-                    {
-                        OfficeURISchemeCommandLineSupplier OfficeURISupplier(getCwdUrl(), aArg);
-                        // Add the file according its command, ignore current event
-                        ParseCommandLine_Impl(OfficeURISupplier);
-                    }
-                    else if ( bOpenEvent )
-                    {
-                        m_openlist.push_back(aArg);
-                        bOpenDoc = true;
-                    }
-                    else if ( bViewEvent )
-                    {
-                        m_viewlist.push_back(aArg);
-                        bOpenDoc = true;
-                    }
-                    else if ( bStartEvent )
-                    {
-                        m_startlist.push_back(aArg);
-                        bOpenDoc = true;
-                    }
-                    else if ( bPrintEvent )
-                    {
-                        m_printlist.push_back(aArg);
-                        bOpenDoc = true;
-                    }
-                    else if ( bPrintToEvent )
-                    {
-                        m_printtolist.push_back(aArg);
-                        bOpenDoc = true;
-                    }
-                    else if ( bForceNewEvent )
-                    {
-                        m_forcenewlist.push_back(aArg);
-                        bOpenDoc = true;
-                    }
-                    else if ( bForceOpenEvent )
-                    {
-                        m_forceopenlist.push_back(aArg);
-                        bOpenDoc = true;
-                    }
-                    else if ( bDisplaySpec )
-                    {
-                        bDisplaySpec = false; // only one display, not a list
-                        bOpenEvent = true;    // set back to standard
-                    }
-                    else if ( bConversionEvent || bBatchPrintEvent )
-                        m_conversionlist.push_back(aArg);
+                // 1. Check if this is an Office URI
+                if (OfficeURISchemeCommandLineSupplier::IsOfficeURI(aArg))
+                {
+                    OfficeURISchemeCommandLineSupplier OfficeURISupplier(getCwdUrl(), aArg);
+                    // Add the file according its command, ignore current event
+                    ParseCommandLine_Impl(OfficeURISupplier);
+                }
+                else switch (eCurrentEvent)
+                {
+                case evtOpen:
+                    m_openlist.push_back(aArg);
+                    m_bDocumentArgs = true;
+                    break;
+                case evtView:
+                    m_viewlist.push_back(aArg);
+                    m_bDocumentArgs = true;
+                    break;
+                case evtStart:
+                    m_startlist.push_back(aArg);
+                    m_bDocumentArgs = true;
+                    break;
+                case evtPrint:
+                    m_printlist.push_back(aArg);
+                    m_bDocumentArgs = true;
+                    break;
+                case evtPrintTo:
+                    m_printtolist.push_back(aArg);
+                    m_bDocumentArgs = true;
+                    break;
+                case evtForceNew:
+                    m_forcenewlist.push_back(aArg);
+                    m_bDocumentArgs = true;
+                    break;
+                case evtForceOpen:
+                    m_forceopenlist.push_back(aArg);
+                    m_bDocumentArgs = true;
+                    break;
+                case evtConversion:
+                case evtBatchPrint:
+                    m_conversionlist.push_back(aArg);
+                    break;
                 }
             }
 
@@ -672,9 +608,6 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             }
         }
     }
-
-    if ( bOpenDoc )
-        m_bDocumentArgs = true;
 }
 
 void CommandLineArgs::InitParamValues()
