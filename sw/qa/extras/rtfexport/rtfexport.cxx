@@ -1050,6 +1050,26 @@ DECLARE_RTFEXPORT_TEST(testTdf98806, "tdf98806.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("BBB"), xBookmark->getAnchor()->getString());
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf61901, "tdf61901.rtf")
+{
+    // Test the file directly, as current RTF import gives the correct font name with and without the fix.
+    if (mbExported)
+    {
+        SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+        OString sLine;
+        while (pStream->ReadLine(sLine))
+        {
+            sal_Int32 nIndex = sLine.indexOf("\\loch\\loch");
+            if (nIndex != -1)
+            {
+                // Make sure that \hich is always written after a \loch\loch.
+                OString sRemaining = sLine.copy(nIndex);
+                CPPUNIT_ASSERT(sRemaining.indexOf("\\hich") != -1);
+            }
+        }
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

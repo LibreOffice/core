@@ -2284,6 +2284,16 @@ void RtfAttributeOutput::CharFont(const SvxFontItem& rFont)
     m_aStylesEnd.append(OOO_STRING_SVTOOLS_RTF_LOCH);
     m_aStylesEnd.append(OOO_STRING_SVTOOLS_RTF_F);
     m_aStylesEnd.append((sal_Int32)m_rExport.m_aFontHelper.GetId(rFont));
+
+    if (!m_rExport.HasItem(RES_CHRATR_CJK_FONT) && !m_rExport.HasItem(RES_CHRATR_CTL_FONT))
+    {
+        // Be explicit about that the given font should be used everywhere, not
+        // just for the loch range.
+        m_aStylesEnd.append(OOO_STRING_SVTOOLS_RTF_HICH);
+        m_aStylesEnd.append(OOO_STRING_SVTOOLS_RTF_AF);
+        m_aStylesEnd.append((sal_Int32)m_rExport.m_aFontHelper.GetId(rFont));
+    }
+
     // FIXME: this may be a tad expensive... but the charset needs to be
     // consistent with what wwFont::WriteRtf() does
     sw::util::FontMapExport aTmp(rFont.GetFamilyName());
