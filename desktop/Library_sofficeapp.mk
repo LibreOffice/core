@@ -23,11 +23,10 @@ $(eval $(call gb_Library_add_libs,sofficeapp,\
     ) \
 ))
 
-$(eval $(call gb_Library_use_external,sofficeapp,boost_headers))
-
-ifeq ($(ENABLE_BREAKPAD),TRUE)
-$(eval $(call gb_Library_use_external,sofficeapp,breakpad))
-endif
+$(eval $(call gb_Library_use_externals,sofficeapp, \
+	$(if $(ENABLE_BREAKPAD),breakpad) \
+    boost_headers \
+))
 
 $(eval $(call gb_Library_use_custom_headers,sofficeapp,\
 	officecfg/registry \
@@ -49,7 +48,7 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     comphelper \
     cppu \
     cppuhelper \
-    $(if $(filter TRUE,$(ENABLE_BREAKPAD)), \
+    $(if $(ENABLE_BREAKPAD), \
         crashreport \
     ) \
     deploymentmisc \
