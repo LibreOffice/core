@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_26725c7d",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-19T13:49:26Z",
+      "side": 1,
+      "message": "Yes, sorry, that\u0027s what I meant.  (Which should be even easier/more obvious when handling all the required arguments in place instead of with that eCurrentEventParam state, as discussed below.)",
+      "parentUuid": "5a8bc5a2_86bb300e",
+      "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_2696dc94",
         "filename": "desktop/source/app/cmdlineargs.cxx",
         "patchSetId": 2
@@ -178,6 +196,42 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_666c649d",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-19T13:49:26Z",
+      "side": 1,
+      "message": "I\u0027d make \"--protector x y\" consistently be ignored (regardless of DEBUG), and make it an error (instead of assert) if it doesn\u0027t have two arguments.",
+      "parentUuid": "5a8bc5a2_c63b789b",
+      "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_466f6892",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-19T13:49:26Z",
+      "side": 1,
+      "message": "Yes, I\u0027d do that in place.",
+      "parentUuid": "5a8bc5a2_e6c954ae",
+      "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_06f800e5",
         "filename": "desktop/source/app/cmdlineargs.cxx",
         "patchSetId": 2
@@ -231,6 +285,24 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_8669708e",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-19T13:49:26Z",
+      "side": 1,
+      "message": "Oh, yeah, what a crap.  Maybe use this cleanup commit to finally get rid of that odd --language handling for good.",
+      "parentUuid": "5a8bc5a2_06464023",
+      "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_26ddfc70",
         "filename": "desktop/source/app/cmdlineargs.cxx",
         "patchSetId": 2
@@ -278,6 +350,24 @@
       "side": 1,
       "message": "Sorry, my English is awful. I needed second read to comprehend. But actually, if --outdir comes outside of conversion/batch print, then error *is* emitted right below - where \"m_unknown \u003d aArg\" is done.",
       "parentUuid": "5a8bc5a2_26c41c91",
+      "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_a604acc6",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-19T13:49:26Z",
+      "side": 1,
+      "message": "ah, true; missed that",
+      "parentUuid": "5a8bc5a2_865250dc",
       "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
