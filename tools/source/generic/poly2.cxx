@@ -198,6 +198,7 @@ void PolyPolygon::Remove( sal_uInt16 nPos )
 {
     DBG_CHKTHIS( PolyPolygon, NULL );
     DBG_ASSERT( nPos < Count(), "PolyPolygon::Remove(): nPos >= nSize" );
+    if ( nPos >= Count() ) return; // not removable
 
     if ( mpImplPolyPolygon->mnRefCount > 1 )
     {
@@ -218,6 +219,7 @@ void PolyPolygon::Replace( const Polygon& rPoly, sal_uInt16 nPos )
 {
     DBG_CHKTHIS( PolyPolygon, NULL );
     DBG_ASSERT( nPos < Count(), "PolyPolygon::Replace(): nPos >= nSize" );
+    if ( nPos >= Count() ) return; // not replaceable
 
     if ( mpImplPolyPolygon->mnRefCount > 1 )
     {
