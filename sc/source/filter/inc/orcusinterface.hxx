@@ -333,7 +333,7 @@ private:
         bool mbHasNumberFormatAttr;
 
         number_format();
-        void applyToItemSet(SfxItemSet& rSet) const;
+        void applyToItemSet(SfxItemSet& rSet, ScDocument& rDoc) const;
     };
 
     number_format maCurrentNumberFormat;
