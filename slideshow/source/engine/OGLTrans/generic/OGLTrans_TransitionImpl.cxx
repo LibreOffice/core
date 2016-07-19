@@ -310,12 +310,66 @@ OGLTransitionImpl::displaySlide(
     CHECK_GL_ERROR();
 }
 
+void
+OGLTransitionImpl::displayUnbufferedSlide(
+        const double nTime,
+        const sal_Int32 glSlideTex, const Primitives_t& primitives,
+        double SlideWidthScale, double SlideHeightScale )
+{
+    CHECK_GL_ERROR();
+    glPushMatrix();
+    CHECK_GL_ERROR();
+    glBindTexture(GL_TEXTURE_2D, glSlideTex);
+    CHECK_GL_ERROR();
+    glBindVertexArray(0);
+    CHECK_GL_ERROR();
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    CHECK_GL_ERROR();
+    if (m_nSceneTransformLocation != -1) {
+        glUniformMatrix4fv(m_nSceneTransformLocation, 1, false, glm::value_ptr(glm::mat4()));
+        CHECK_GL_ERROR();
+    }
+    for (const Primitive& primitive: primitives)
+        primitive.display(m_nPrimitiveTransformLocation, nTime, SlideWidthScale, SlideHeightScale);
+    CHECK_GL_ERROR();
+    glBindVertexArray(m_nVertexArrayObject);
+    CHECK_GL_ERROR();
+    glBindBuffer(GL_ARRAY_BUFFER, m_nVertexBufferObject);
+    CHECK_GL_ERROR();
+    glPopMatrix();
+    CHECK_GL_ERROR();
+}
+
 void OGLTransitionImpl::displayScene( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight )
 {
     const SceneObjects_t& rSceneObjects(maScene.getSceneObjects());
     CHECK_GL_ERROR();
     for(size_t i(0); i != rSceneObjects.size(); ++i)
         rSceneObjects[i]->display(m_nSceneTransformLocation, m_nPrimitiveTransformLocation, nTime, SlideWidth, SlideHeight, DispWidth, DispHeight);
+    CHECK_GL_ERROR();
+}
+
+void Primitive::display(GLint primitiveTransformLocation, double nTime, double WidthScale, double HeightScale) const
+{
+    glm::mat4 matrix;
+    applyOperations( matrix, nTime, WidthScale, HeightScale );
+
+    CHECK_GL_ERROR();
+    if (primitiveTransformLocation != -1) {
+        glUniformMatrix4fv(primitiveTransformLocation, 1, false, glm::value_ptr(matrix));
+        CHECK_GL_ERROR();
+    }
+
+    glPushClientAttrib(GL_CLIENT_VERTEX_ARRAY_BIT);
+    CHECK_GL_ERROR();
+    glEnableClientState( GL_VERTEX_ARRAY );
+    CHECK_GL_ERROR();
+    glVertexPointer( 3, GL_FLOAT, sizeof(Vertex), &Vertices[0] );
+    CHECK_GL_ERROR();
+    glDrawArrays( GL_TRIANGLES, 0, getVerticesSize() );
+    CHECK_GL_ERROR();
+    glPopClientAttrib();
+
     CHECK_GL_ERROR();
 }
 
