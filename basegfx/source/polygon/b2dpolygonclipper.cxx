@@ -414,35 +414,10 @@ namespace basegfx
                     // check for simplification with ranges if !bStroke (handling as stroke is more simple),
                     // but also only when bInside, else the simplification may lead to recursive calls (see
                     // calls to clipPolyPolygonOnPolyPolygon in clipPolyPolygonOnRange and clipPolygonOnRange)
-                    if(bInside)
+                    if (bInside && basegfx::tools::isRectangle(rClip))
                     {
                         // #i125349# detect if both given PolyPolygons are indeed ranges
-                        bool bBothRectangle(false);
-
-                        if(basegfx::tools::isRectangle(rCandidate))
-                        {
-                            if(basegfx::tools::isRectangle(rClip))
-                            {
-                                // both are ranges
-                                bBothRectangle = true;
-                            }
-                        }
-                        else if(basegfx::tools::isRectangle(rClip))
-                        {
-                            if(basegfx::tools::isRectangle(rCandidate))
-                            {
-                                // both are ranges
-                                bBothRectangle = true;
-                            }
-                            else
-                            {
-                                // rClip is rectangle -> clip rCandidate on rRectangle, use the much
-                                // cheaper and numerically more stable clipping against a range
-                                return clipPolyPolygonOnRange(rCandidate, rClip.getB2DRange(), bInside, bStroke);
-                            }
-                        }
-
-                        if(bBothRectangle)
+                        if (basegfx::tools::isRectangle(rCandidate))
                         {
                             // both are rectangle
                             if(rCandidate.getB2DRange().equal(rClip.getB2DRange()))
@@ -471,6 +446,12 @@ namespace basegfx
                                         basegfx::tools::createPolygonFromRect(aIntersectionRange));
                                 }
                             }
+                        }
+                        else
+                        {
+                            // rClip is rectangle -> clip rCandidate on rRectangle, use the much
+                            // cheaper and numerically more stable clipping against a range
+                            return clipPolyPolygonOnRange(rCandidate, rClip.getB2DRange(), bInside, bStroke);
                         }
                     }
 
