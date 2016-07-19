@@ -4369,14 +4369,18 @@ StackVar ScInterpreter::Interpret()
             {
                 if (nLevel == 1)
                     aErrorFunctionStack.push( nErrorFunction);
-                bGotResult = JumpMatrix( nLevel );
-                if (aErrorFunctionStack.empty())
-                    assert(!"ScInterpreter::Interpret - aErrorFunctionStack empty in JumpMatrix context");
-                else
+                // Restrict nLevel==1 to not prematurely discard a path result.
+                if (nLevel == 2 || (!aCode.HasStacked() || aCode.IsEndOfPath()))
                 {
-                    nErrorFunction = aErrorFunctionStack.top();
-                    if (bGotResult)
-                        aErrorFunctionStack.pop();
+                    bGotResult = JumpMatrix( nLevel );
+                    if (aErrorFunctionStack.empty())
+                        assert(!"ScInterpreter::Interpret - aErrorFunctionStack empty in JumpMatrix context");
+                    else
+                    {
+                        nErrorFunction = aErrorFunctionStack.top();
+                        if (bGotResult)
+                            aErrorFunctionStack.pop();
+                    }
                 }
             }
             else
