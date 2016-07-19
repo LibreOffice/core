@@ -323,7 +323,16 @@ bool OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const OUStr
         aNewValue.Name = pProperty->sPropertyName;
 
         // convert the value string into the target type
-        aNewValue.Value = PropertyConversion::convertString(pProperty->aPropertyType, _rValue, pProperty->pEnumMap, pProperty->bInverseSemantics);
+        if (token::IsXMLToken(_rLocalName, token::XML_HREF))
+        {
+            aNewValue.Value <<= m_rContext.getGlobalContext().GetAbsoluteReference(_rValue);
+        }
+        else
+        {
+            aNewValue.Value = PropertyConversion::convertString(
+                pProperty->aPropertyType, _rValue, pProperty->pEnumMap,
+                pProperty->bInverseSemantics);
+        }
         implPushBackPropertyValue( aNewValue );
         return true;
     }
