@@ -60,12 +60,12 @@ class EDITENG_DLLPUBLIC SvxNumberType
 public:
     explicit SvxNumberType(sal_Int16 nType = css::style::NumberingType::ARABIC);
     SvxNumberType(const SvxNumberType& rType);
-    virtual ~SvxNumberType();
+    ~SvxNumberType();
 
     OUString        GetNumStr( sal_uLong nNo ) const;
     OUString        GetNumStr( sal_uLong nNo, const css::lang::Locale& rLocale ) const;
 
-    virtual void    SetNumberingType(sal_Int16 nSet) {nNumType = nSet;}
+    void            SetNumberingType(sal_Int16 nSet) {nNumType = nSet;}
     sal_Int16       GetNumberingType() const {return nNumType;}
 
     void            SetShowSymbol(bool bSet) {bShowSymbol = bSet;}
@@ -99,7 +99,6 @@ private:
     OUString       sSuffix;
 
     SvxAdjust           eNumAdjust;
-    bool                mbNumAdjustChanged;
 
     sal_uInt8           nInclUpperLevels;   // Take over numbers from the previous level.
     sal_uInt16          nStart;             // Start of counting
@@ -155,8 +154,7 @@ public:
     bool            operator==( const SvxNumberFormat&  ) const;
     bool            operator!=( const SvxNumberFormat& rFmt) const {return !(*this == rFmt);}
 
-    void            SetNumberingType(sal_Int16 nSet) override;
-    void            SetNumAdjust(SvxAdjust eSet);
+    void            SetNumAdjust(SvxAdjust eSet) {eNumAdjust = eSet;}
     SvxAdjust       GetNumAdjust() const {return eNumAdjust;}
     void            SetPrefix(const OUString& rSet) { sPrefix = rSet;}
     const OUString&   GetPrefix() const { return sPrefix;}
