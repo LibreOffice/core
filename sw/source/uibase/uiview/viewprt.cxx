@@ -246,6 +246,18 @@ void SwView::ExecutePrint(SfxRequest& rReq)
     }
 }
 
+int SwView::getPart() const
+{
+    if (!m_pWrtShell)
+        return 0;
+
+    sal_uInt16 nPage, nLogPage;
+    OUString sDisplay;
+    m_pWrtShell->GetPageNumber(-1, m_pWrtShell->IsCursorVisible(), nPage, nLogPage, sDisplay);
+
+    return nPage - 1;
+}
+
 // Create page printer/additions for SwView and SwPagePreview
 
 VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window *pParent,

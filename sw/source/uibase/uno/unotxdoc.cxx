@@ -3203,15 +3203,11 @@ int SwXTextDocument::getPart()
 {
     SolarMutexGuard aGuard;
 
-    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
-    if (!pWrtShell)
+    SwView* pView = pDocShell->GetView();
+    if (!pView)
         return 0;
 
-    sal_uInt16 nPage, nLogPage;
-    OUString sDisplay;
-    pWrtShell->GetPageNumber(-1, pWrtShell->IsCursorVisible(), nPage, nLogPage, sDisplay);
-
-    return nPage - 1;
+    return pView->getPart();
 }
 
 OUString SwXTextDocument::getPartName(int nPart)

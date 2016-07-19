@@ -1032,6 +1032,19 @@ OUString ViewShellBase::RetrieveLabelFromCommand( const OUString& aCmdURL ) cons
     return ImplRetrieveLabelFromCommand( xFrame, aCmdURL );
 }
 
+int ViewShellBase::getPart() const
+{
+    ViewShell* pViewShell = framework::FrameworkHelper::Instance(*const_cast<ViewShellBase*>(this))->GetViewShell(FrameworkHelper::msCenterPaneURL).get();
+
+    if (DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pViewShell))
+    {
+        // curPageId seems to start at 1
+        return pDrawViewShell->GetCurPageId() - 1;
+    }
+
+    return 0;
+}
+
 //===== ViewShellBase::Implementation =========================================
 
 ViewShellBase::Implementation::Implementation (ViewShellBase& rBase)

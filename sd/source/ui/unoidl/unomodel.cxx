@@ -2312,8 +2312,7 @@ int SdXImpressDocument::getPart()
     if (!pViewSh)
         return 0;
 
-    // curPageId seems to start at 1
-    return pViewSh->GetCurPageId() - 1;
+    return pViewSh->GetViewShellBase().getPart();
 }
 
 OUString SdXImpressDocument::getPartName( int nPart )

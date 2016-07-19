@@ -331,6 +331,8 @@ public:
     void setTiledSearching(bool bTiledSearching);
     /// Are we doing tiled searching?
     bool isTiledSearching() const;
+    /// See lok::Document::getPart().
+    virtual int getPart() const;
 };
 
 

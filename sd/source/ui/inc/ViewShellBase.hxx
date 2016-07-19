@@ -220,6 +220,8 @@ public:
     /** returns the ui descriptive name for the given uno slot. The result is taken from the configuration
         and not cached, so do not use it excessive (f.e. in status updates) */
     OUString RetrieveLabelFromCommand( const OUString& aCmdURL ) const;
+    /// See SfxViewShell::getPart().
+    int getPart() const override;
 
 protected:
 

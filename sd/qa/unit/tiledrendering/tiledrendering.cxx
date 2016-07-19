@@ -64,6 +64,7 @@ public:
     void testResizeTable();
     void testResizeTableColumn();
     void testViewCursors();
+    void testViewCursorParts();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -84,6 +85,7 @@ public:
     CPPUNIT_TEST(testResizeTable);
     CPPUNIT_TEST(testResizeTableColumn);
     CPPUNIT_TEST(testViewCursors);
+    CPPUNIT_TEST(testViewCursorParts);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -814,10 +816,13 @@ class ViewCallback
 public:
     bool m_bGraphicSelectionInvalidated;
     bool m_bGraphicViewSelectionInvalidated;
+    /// Our current part, to be able to decide if a view cursor/selection is relevant for us.
+    int m_nPart;
 
     ViewCallback()
         : m_bGraphicSelectionInvalidated(false),
-          m_bGraphicViewSelectionInvalidated(false)
+          m_bGraphicViewSelectionInvalidated(false),
+          m_nPart(0)
     {
     }
 
@@ -826,7 +831,7 @@ public:
         static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
     }
 
-    void callbackImpl(int nType, const char* /*pPayload*/)
+    void callbackImpl(int nType, const char* pPayload)
     {
         switch (nType)
         {
@@ -837,7 +842,12 @@ public:
         break;
         case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
         {
-            m_bGraphicViewSelectionInvalidated = true;
+            std::stringstream aStream(pPayload);
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+            if (aTree.get_child("part").get_value<int>() == m_nPart)
+                // Ignore callbacks which are for a different part.
+                m_bGraphicViewSelectionInvalidated = true;
         }
         break;
         }
@@ -871,6 +881,47 @@ void SdTiledRenderingTest::testViewCursors()
     mxComponent->dispose();
     mxComponent.clear();
 
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testViewCursorParts()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    // Create two views.
+    SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    SfxLokHelper::createView();
+    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ViewCallback aView2;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+
+    // Select the shape in the second view.
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(0);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    Scheduler::ProcessEventsToIdle();
+    // First view notices that there was a selection change in the other view.
+    CPPUNIT_ASSERT(aView1.m_bGraphicViewSelectionInvalidated);
+    pView->UnmarkAllObj(pView->GetSdrPageView());
+
+    // Now switch to the second part in the second view.
+    pXImpressDocument->setPart(1);
+    aView2.m_nPart = 1;
+    aView1.m_bGraphicViewSelectionInvalidated = false;
+    pActualPage = pViewShell->GetActualPage();
+    pObject = pActualPage->GetObj(0);
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    Scheduler::ProcessEventsToIdle();
+    // First view ignores view selection, as it would be for part 1, and it's in part 0.
+    // This failed when the "part" was always 0 in the callback.
+    CPPUNIT_ASSERT(!aView1.m_bGraphicViewSelectionInvalidated);
+
+    mxComponent->dispose();
+    mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
 }
 

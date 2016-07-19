@@ -385,6 +385,8 @@ public:
     // #i123629#
     bool    GetForceFocusOnCurCell() const { return bForceFocusOnCurCell; }
     void SetForceFocusOnCurCell(bool bFlag) { bForceFocusOnCurCell=bFlag; }
+    /// See SfxViewShell::getPart().
+    int getPart() const override;
 };
 
 #endif

@@ -536,4 +536,9 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
     return pResult;
 }
 
+int ScTabViewShell::getPart() const
+{
+    return GetViewData().GetTabNo();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
