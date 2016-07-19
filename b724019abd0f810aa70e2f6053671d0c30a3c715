@@ -213,6 +213,24 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_06464023",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-07-19T13:20:33Z",
+      "side": 1,
+      "message": "Oh, I see, but it skipped not a single argument, but all following filenames until next event started... I suppose it\u0027s not good. Probably I should just skip one next argument, shouldn\u0027t I?",
+      "parentUuid": "5a8bc5a2_06cf20b1",
+      "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_26ddfc70",
         "filename": "desktop/source/app/cmdlineargs.cxx",
         "patchSetId": 2
