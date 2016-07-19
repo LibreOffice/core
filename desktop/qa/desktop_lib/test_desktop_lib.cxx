@@ -957,7 +957,7 @@ namespace {
     }
 
     boost::optional<boost::property_tree::ptree>
-    getContextMenuItem(boost::property_tree::ptree& aMenu, std::string unoSelector)
+    getContextMenuItem(boost::property_tree::ptree& aMenu, std::string const & unoSelector)
     {
         boost::optional<boost::property_tree::ptree> aMenuItem;
         for (const auto& aItemPair: aMenu)
