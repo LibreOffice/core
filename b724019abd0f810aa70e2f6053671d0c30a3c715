@@ -108,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_26f97cc9",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-07-19T13:54:51Z",
+      "side": 1,
+      "message": "Please one more question before you leave: is it enough to put \"--arg \u003cwithout required parameter\u003e\" to m_unknown, or should I create some new error mechanism?",
+      "parentUuid": "5a8bc5a2_26725c7d",
+      "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_2696dc94",
         "filename": "desktop/source/app/cmdlineargs.cxx",
         "patchSetId": 2
