@@ -78,7 +78,7 @@ std::shared_ptr<SvStream> wrapStream(css::uno::Reference< css::io::XInputStream 
     return s;
 }
 
-void loadImageFromStream(std::shared_ptr<SvStream> xStream, OUString const & rPath, BitmapEx & rBitmap)
+void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString const & rPath, BitmapEx & rBitmap)
 {
     if (rPath.endsWith(".png"))
     {
@@ -359,7 +359,7 @@ void ImplImageTree::loadImageLinks()
     }
 }
 
-void ImplImageTree::parseLinkFile(std::shared_ptr<SvStream> xStream)
+void ImplImageTree::parseLinkFile(std::shared_ptr<SvStream> const & xStream)
 {
     OString aLine;
     OUString aLink, aOriginal;

@@ -231,7 +231,7 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
 }
 
 bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
-                long nWidth, long nHeight, basegfx::B2DSize aPPI, bool bGreys,
+                long nWidth, long nHeight, basegfx::B2DSize const & aPPI, bool bGreys,
                 long nQualityPercent, long aChromaSubsampling,
                 css::uno::Reference<css::task::XStatusIndicator> const & status )
 {

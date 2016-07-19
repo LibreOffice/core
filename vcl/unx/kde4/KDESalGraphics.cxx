@@ -116,7 +116,7 @@ bool KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart par
 /// helper drawing methods
 namespace
 {
-    void draw( QStyle::ControlElement element, QStyleOption* option, QImage* image, QStyle::State state, QRect rect = QRect())
+    void draw( QStyle::ControlElement element, QStyleOption* option, QImage* image, QStyle::State const & state, QRect rect = QRect())
     {
         option->state |= state;
         option->rect = !rect.isNull() ? rect : image->rect();
@@ -125,7 +125,7 @@ namespace
         QApplication::style()->drawControl(element, option, &painter);
     }
 
-    void draw( QStyle::PrimitiveElement element, QStyleOption* option, QImage* image, QStyle::State state, QRect rect = QRect())
+    void draw( QStyle::PrimitiveElement element, QStyleOption* option, QImage* image, QStyle::State const & state, QRect rect = QRect())
     {
         option->state |= state;
         option->rect = !rect.isNull() ? rect : image->rect();
@@ -134,7 +134,7 @@ namespace
         QApplication::style()->drawPrimitive(element, option, &painter);
     }
 
-    void draw( QStyle::ComplexControl element, QStyleOptionComplex* option, QImage* image, QStyle::State state )
+    void draw( QStyle::ComplexControl element, QStyleOptionComplex* option, QImage* image, QStyle::State const & state )
     {
         option->state |= state;
         option->rect = image->rect();
@@ -143,7 +143,7 @@ namespace
         QApplication::style()->drawComplexControl(element, option, &painter);
     }
 
-    void lcl_drawFrame(QStyle::PrimitiveElement element, QImage* image, QStyle::State state)
+    void lcl_drawFrame(QStyle::PrimitiveElement element, QImage* image, QStyle::State const & state)
     {
     #if ( QT_VERSION >= QT_VERSION_CHECK( 4, 5, 0 ) )
         QStyleOptionFrameV3 option;

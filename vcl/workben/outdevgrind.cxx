@@ -580,7 +580,7 @@ void setupMethodStubs( functor_vector_type& res )
 }
 
 void grindFunc( OutputDevice&                       rTarget,
-                functor_vector_type::const_iterator iter,
+                functor_vector_type::const_iterator const & iter,
                 sal_Int32                           nTurns,
                 const char*                         pMsg )
 {

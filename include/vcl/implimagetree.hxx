@@ -104,7 +104,7 @@ private:
 
     void loadImageLinks();
 
-    void parseLinkFile(std::shared_ptr<SvStream> stream);
+    void parseLinkFile(std::shared_ptr<SvStream> const & stream);
 
     /// Return name of a real .png according to links.txt.
     OUString const & getRealImageName(OUString const & name);

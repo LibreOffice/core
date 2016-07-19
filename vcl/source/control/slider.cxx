@@ -823,7 +823,7 @@ void Slider::Resize()
     Invalidate(InvalidateFlags::NoChildren | InvalidateFlags::NoErase);
 }
 
-void Slider::SetLinkedField(VclPtr<NumericField> pField)
+void Slider::SetLinkedField(VclPtr<NumericField> const & pField)
 {
     if (mpLinkedField)
     {

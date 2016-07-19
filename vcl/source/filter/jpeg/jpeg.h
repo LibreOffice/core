@@ -40,7 +40,7 @@ void jpeg_svstream_src (j_decompress_ptr cinfo, void* infile);
 void jpeg_svstream_dest (j_compress_ptr cinfo, void* outfile);
 
 bool    WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
-                   long nWidth, long nHeight, basegfx::B2DSize aPPI, bool bGreyScale,
+                   long nWidth, long nHeight, basegfx::B2DSize const &  aPPI, bool bGreyScale,
                    long nQualityPercent, long aChromaSubsampling,
                    css::uno::Reference<css::task::XStatusIndicator> const & status);
 

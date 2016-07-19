@@ -165,12 +165,12 @@ void checkAndInsert(CRCHash &rHash, sal_uInt64 nCRC, const char *pLocation)
     rHash[nCRC] = pLocation;
 }
 
-void checkAndInsert(CRCHash &rHash, Bitmap rBmp, const char *pLocation)
+void checkAndInsert(CRCHash &rHash, Bitmap const & rBmp, const char *pLocation)
 {
     checkAndInsert(rHash, rBmp.GetChecksum(), pLocation);
 }
 
-Bitmap getAsBitmap(VclPtr<OutputDevice> pOut)
+Bitmap getAsBitmap(VclPtr<OutputDevice> const & pOut)
 {
     return pOut->GetBitmap(Point(), pOut->GetOutputSizePixel());
 }

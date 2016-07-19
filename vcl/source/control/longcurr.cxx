@@ -259,7 +259,7 @@ inline bool ImplLongCurrencyGetValue( const OUString& rStr, BigInt& rValue,
     return ImplNumericGetValue( rStr, rValue, nDecDigits, rLocaleDataWrapper, true );
 }
 
-bool ImplLongCurrencyReformat( const OUString& rStr, BigInt nMin, BigInt nMax,
+bool ImplLongCurrencyReformat( const OUString& rStr, BigInt const & nMin, BigInt const & nMax,
                                sal_uInt16 nDecDigits,
                                const LocaleDataWrapper& rLocaleDataWrapper, OUString& rOutStr,
                                LongCurrencyFormatter& rFormatter )

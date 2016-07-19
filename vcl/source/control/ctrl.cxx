@@ -311,7 +311,7 @@ void Control::AppendLayoutData( const Control& rSubControl ) const
     }
 }
 
-bool Control::ImplCallEventListenersAndHandler( sal_uLong nEvent, std::function<void()> callHandler )
+bool Control::ImplCallEventListenersAndHandler( sal_uLong nEvent, std::function<void()> const & callHandler )
 {
     VclPtr<Control> xThis(this);
 
