@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_a6cf4cb2",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-07-19T13:06:57Z",
+      "side": 1,
+      "message": "1. Fine, I\u0027ll do that.\n2. I\u0027m going to move the enum out of the function when it\u0027ll be considered in Office URI parser, so it\u0027ll be useful there\n3. For the reason 2. above, it\u0027s unnecessary: the \"event\" will be relevant in the parser, while param won\u0027t.",
+      "parentUuid": "5a8bc5a2_c6861865",
+      "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_4693e8a3",
         "filename": "desktop/source/app/cmdlineargs.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2016-07-19T12:43:26Z",
       "side": 1,
       "message": "A missing required argument should probably cause an error.",
+      "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_66e70441",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-07-19T13:06:57Z",
+      "side": 1,
+      "message": "I\u0027m sorry, I don\u0027t understand what missing argument you mean...",
+      "parentUuid": "5a8bc5a2_4693e8a3",
       "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_c6d45849",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-07-19T13:06:57Z",
+      "side": 1,
+      "message": "Fine.",
+      "parentUuid": "5a8bc5a2_2696dc94",
+      "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_6690e496",
         "filename": "desktop/source/app/cmdlineargs.cxx",
         "patchSetId": 2
@@ -64,6 +118,24 @@
       "writtenOn": "2016-07-19T12:43:26Z",
       "side": 1,
       "message": "A bit odd to handle --display inline, while all the other cases with a required argument are handled via eCurrentEventParam above.",
+      "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_e6c954ae",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-07-19T13:06:57Z",
+      "side": 1,
+      "message": "Well, it\u0027s just as \"--protector\" is handled above. Actually, I\u0027d rather do the same with eCurrentEventParam (and remove it altogether), but I wanted to emphasize the behaviour change (that you mentioned in your comment) and mark that it\u0027s intentional. If it\u0027s OK, I\u0027ll do all eCurrentEventParam processing in place.",
+      "parentUuid": "5a8bc5a2_6690e496",
       "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_06cf20b1",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-07-19T13:06:57Z",
+      "side": 1,
+      "message": "Well, do I need to skip it? I just mimicked current behaviour (without strange event reset), but I can skip next if necessary.",
+      "parentUuid": "5a8bc5a2_06f800e5",
+      "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_26ddfc70",
         "filename": "desktop/source/app/cmdlineargs.cxx",
         "patchSetId": 2
@@ -98,6 +188,24 @@
       "writtenOn": "2016-07-19T12:43:26Z",
       "side": 1,
       "message": "I guess it would be better to generate an error if --outdir is specified not following a conversion/batch-print option.",
+      "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_26c41c91",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-07-19T13:06:57Z",
+      "side": 1,
+      "message": "Actually, it isn\u0027t necessarily right after the switches: they may have output_file_extension or --printer-name before it. But I\u0027ll check that these both come before any following other arguments.",
+      "parentUuid": "5a8bc5a2_26ddfc70",
       "revId": "b724019abd0f810aa70e2f6053671d0c30a3c715",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
