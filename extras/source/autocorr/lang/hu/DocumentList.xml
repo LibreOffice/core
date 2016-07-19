@@ -648,7 +648,6 @@
   <block-list:block block-list:abbreviated-name=":bőrszín4:" block-list:name="🏽"/>
   <block-list:block block-list:abbreviated-name=":bőrszín5:" block-list:name="🏾"/>
   <block-list:block block-list:abbreviated-name=":bőrszín6:" block-list:name="🏿"/>
-  <block-list:block block-list:abbreviated-name=":^C:" block-list:name="ᴰ"/>
   <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
   <block-list:block block-list:abbreviated-name=":100:" block-list:name="💯"/>
@@ -877,6 +876,7 @@
   <block-list:block block-list:abbreviated-name=":dango:" block-list:name="🍡"/>
   <block-list:block block-list:abbreviated-name=":Dávid-csillag:" block-list:name="✡"/>
   <block-list:block block-list:abbreviated-name=":^d:" block-list:name="ᵈ"/>
+  <block-list:block block-list:abbreviated-name=":^D:" block-list:name="ᴰ"/>
   <block-list:block block-list:abbreviated-name=":D:" block-list:name="↓"/>
   <block-list:block block-list:abbreviated-name=":delfin:" block-list:name="🐬"/>
   <block-list:block block-list:abbreviated-name=":^delta:" block-list:name="ᵟ"/>
