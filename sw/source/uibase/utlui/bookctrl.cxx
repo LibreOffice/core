@@ -76,14 +76,14 @@ void SwBookmarkControl::StateChanged(
 {
     if( eState != SfxItemState::DEFAULT || dynamic_cast< const SfxVoidItem *>( pState ) !=  nullptr )
         GetStatusBar().SetItemText( GetId(), OUString() );
-    else if ( dynamic_cast< const SfxStringItem *>( pState ) !=  nullptr )
+    else if (const SfxStringItem* pStringItem = dynamic_cast<const SfxStringItem*>(pState))
     {
-        sPageNumber = static_cast<const SfxStringItem*>(pState)->GetValue();
-        GetStatusBar().SetItemText( GetId(), sPageNumber );
+        sPageNumber = pStringItem->GetValue();
+        GetStatusBar().SetItemText(GetId(), sPageNumber);
     }
-    else if ( dynamic_cast< const SfxBoolItem *>( pState ) !=  nullptr )
+    else if (const SfxBoolItem* pBoolItem = dynamic_cast<const SfxBoolItem*>(pState))
     {
-        if (static_cast<const SfxBoolItem*>(pState)->GetValue()) // Indicates whether to show extended tooltip
+        if (pBoolItem->GetValue()) // Indicates whether to show extended tooltip
             GetStatusBar().SetQuickHelpText(GetId(), SW_RESSTR(STR_BOOKCTRL_HINT_EXTENDED));
         else
             GetStatusBar().SetQuickHelpText(GetId(), SW_RESSTR(STR_BOOKCTRL_HINT));
