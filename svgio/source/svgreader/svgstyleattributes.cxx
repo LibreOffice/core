@@ -1434,14 +1434,12 @@ namespace svgio
                 }
                 case SVGTokenStrokeOpacity:
                 {
+
                     SvgNumber aNum;
 
                     if(readSingleNumber(aContent, aNum))
                     {
-                        if(aNum.isPositive())
-                        {
-                            setStrokeOpacity(aNum);
-                        }
+                        setStrokeOpacity(SvgNumber(basegfx::clamp(aNum.getNumber(), 0.0, 1.0), aNum.getUnit(), aNum.isSet()));
                     }
                     break;
                 }
