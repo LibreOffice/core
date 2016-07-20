@@ -43,6 +43,7 @@
 #define SV_RESID_BITMAP_CLOSEDOC                     1052
 #define SV_RESID_BITMAP_INDEX                        1053
 #define SV_RESID_BITMAP_REFRESH                      1054
+#define SV_RESID_BITMAP_NOTEBOOKBAR                  1055
 
 #define SV_DISCLOSURE_PLUS                           1060
 #define SV_DISCLOSURE_MINUS                          1061

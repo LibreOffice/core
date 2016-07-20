@@ -818,8 +818,8 @@
     <glade-widget-class title="Show Text" name="cuilo-SvxShowText"
                         generic-name="ShowText" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Notebookbar with context" name="vcllo-ContextTabControl"
-                        generic-name="ContextTabControl" parent="GtkNotebook"
+    <glade-widget-class title="Notebook switching tabs depending on context" name="vcllo-NotebookbarTabControl"
+                        generic-name="NotebookbarTabControl" parent="GtkNotebook"
                         icon-name="widget-gtk-notebook"/>
     <glade-widget-class title="Slide Transition Pane" name="sdlo-SlideTransitionBox"
                         generic-name="ShowText" parent="GtkToolButton"

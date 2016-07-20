@@ -13,20 +13,40 @@
 #include <unotools/viewoptions.hxx>
 #include <vcl/notebookbar.hxx>
 #include <vcl/syswin.hxx>
+#include <vcl/menu.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
+#include "NotebookBarPopupMenu.hxx"
 
 using namespace sfx2;
 using namespace css::uno;
 using namespace css::ui;
+
+#define MENUBAR_STR "private:resource/menubar/menubar"
+
+bool SfxNotebookBar::m_bLock = false;
+Reference<css::frame::XLayoutManager> SfxNotebookBar::m_xLayoutManager;
+css::uno::Reference<css::frame::XFrame> SfxNotebookBar::m_xFrame;
 
 void SfxNotebookBar::CloseMethod(SfxBindings& rBindings)
 {
     SfxFrame& rFrame = rBindings.GetDispatcher_Impl()->GetFrame()->GetFrame();
     if (rFrame.GetSystemWindow()->GetNotebookBar())
         rFrame.GetSystemWindow()->CloseNotebookBar();
+    m_xLayoutManager.clear();
+    m_xFrame.clear();
+}
+
+void SfxNotebookBar::CloseMethod(SystemWindow* pSysWindow)
+{
+    if (pSysWindow && pSysWindow->GetNotebookBar())
+        pSysWindow->CloseNotebookBar();
+    m_xLayoutManager.clear();
+    m_xFrame.clear();
 }
 
 void SfxNotebookBar::ExecMethod(SfxBindings& rBindings)
@@ -51,6 +71,19 @@ void SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 {
     assert(pSysWindow);
 
+    m_xFrame = xFrame;
+
+    if (!m_xLayoutManager.is())
+    {
+        Reference<css::beans::XPropertySet> xPropSet(xFrame, UNO_QUERY);
+
+        if (xPropSet.is())
+        {
+            Any aValue = xPropSet->getPropertyValue("LayoutManager");
+            aValue >>= m_xLayoutManager;
+        }
+    }
+
     SvtViewOptions aViewOpt(E_WINDOW, "notebookbar");
 
     if (aViewOpt.IsVisible())
@@ -61,6 +94,7 @@ void SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         pSysWindow->SetNotebookBar(rUIFile, xFrame);
 
         pSysWindow->GetNotebookBar()->Show();
+        pSysWindow->GetNotebookBar()->SetIconClickHdl(LINK(nullptr, SfxNotebookBar, ToggleMenubar));
 
         SfxViewFrame* pView = SfxViewFrame::Current();
 
@@ -92,6 +126,33 @@ void SfxNotebookBar::RemoveListeners(SystemWindow* pSysWindow)
     {
         xMultiplexer->removeAllContextChangeEventListeners(
                            pSysWindow->GetNotebookBar()->getContextChangeEventListener());
+    }
+}
+
+IMPL_STATIC_LINK_TYPED(SfxNotebookBar, ToggleMenubar, NotebookBar*, pNotebookbar, void)
+{
+    if (pNotebookbar)
+    {
+        VclPtr<NotebookBarPopupMenu> pMenu = VclPtr<NotebookBarPopupMenu>::Create(SfxResId(RID_MENU_NOTEBOOKBAR));
+        pMenu->Execute(pNotebookbar, m_xFrame);
+        pMenu->Clear();
+    }
+}
+
+void SfxNotebookBar::ShowMenubar(bool bShow)
+{
+    if (!m_bLock && m_xLayoutManager.is())
+    {
+        m_bLock = true;
+        m_xLayoutManager->lock();
+
+        if (m_xLayoutManager->getElement(MENUBAR_STR).is() && !bShow)
+            m_xLayoutManager->destroyElement(MENUBAR_STR);
+        else if(!m_xLayoutManager->getElement(MENUBAR_STR).is() && bShow)
+            m_xLayoutManager->createElement(MENUBAR_STR);
+
+        m_xLayoutManager->unlock();
+        m_bLock = false;
     }
 }
 

@@ -132,10 +132,10 @@ public:
     sal_uInt16          GetPageId( const TabPage& rPage ) const;
     sal_uInt16          GetPageId( const OString& rName ) const;
 
-    void                SetCurPageId( sal_uInt16 nPageId );
+    virtual void        SetCurPageId( sal_uInt16 nPageId );
     sal_uInt16          GetCurPageId() const;
 
-    void                SelectTabPage( sal_uInt16 nPageId );
+    virtual void        SelectTabPage( sal_uInt16 nPageId );
 
     void                SetTabPage( sal_uInt16 nPageId, TabPage* pPage );
     TabPage*            GetTabPage( sal_uInt16 nPageId ) const;
@@ -194,14 +194,19 @@ public:
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 };
 
+class NotebookBar;
+
 class VCL_DLLPUBLIC NotebookbarTabControl : public TabControl
 {
 public:
     NotebookbarTabControl( vcl::Window* pParent, WinBits nStyle = WB_STDTABCONTROL );
 
     void SetContext( vcl::EnumContext::Context eContext );
+    void SetIconClickHdl( Link<NotebookBar*, void> aHdl );
 
     virtual sal_uInt16  GetPageId( const Point& rPos ) const override;
+    virtual void        SelectTabPage( sal_uInt16 nPageId ) override;
+    virtual void        SetCurPageId( sal_uInt16 nPageId ) override;
 
 protected:
     virtual bool ImplPlaceTabs( long nWidth ) override;
@@ -209,6 +214,7 @@ protected:
 
 private:
     vcl::EnumContext::Context eLastContext;
+    Link<NotebookBar*,void> m_aIconClickHdl;
 };
 
 #endif // INCLUDED_VCL_TABCTRL_HXX
