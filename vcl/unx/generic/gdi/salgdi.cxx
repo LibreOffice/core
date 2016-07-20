@@ -91,9 +91,10 @@ X11SalGraphics::X11SalGraphics():
     bWindow_(false),
     bPrinter_(false),
     bVirDev_(false),
-    bFontGC_(false)
+    bFontGC_(false),
+    m_bOpenGL(OpenGLHelper::isVCLOpenGLEnabled())
 {
-    if (OpenGLHelper::isVCLOpenGLEnabled())
+    if (m_bOpenGL)
     {
         mxImpl.reset(new X11OpenGLSalGraphicsImpl(*this));
         mxTextRenderImpl.reset((new OpenGLX11CairoTextRender(*this)));
@@ -598,7 +599,7 @@ bool X11SalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rOrigPolyPo
 #if ENABLE_CAIRO_CANVAS
     static bool bUseCairoForPolygons = false;
 
-    if(bUseCairoForPolygons && SupportsCairo())
+    if (!m_bOpenGL && bUseCairoForPolygons && SupportsCairo())
     {
         // snap to raster if requested
         basegfx::B2DPolyPolygon aPolyPoly(rOrigPolyPoly);
@@ -729,7 +730,7 @@ bool X11SalGraphics::drawPolyLine(
 #if ENABLE_CAIRO_CANVAS
     static bool bUseCairoForFatLines = true;
 
-    if(bUseCairoForFatLines && SupportsCairo())
+    if (!m_bOpenGL && bUseCairoForFatLines && SupportsCairo())
     {
         cairo_t* cr = getCairoContext();
         clipRegion(cr);
