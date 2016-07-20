@@ -86,6 +86,7 @@
 #include <rowheightcontext.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include "MergeCellsDialog.hxx"
 
 #include <vector>
 #include <memory>
@@ -1075,19 +1076,32 @@ bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bCenter )
     }
 
     bool bOk = true;
+    bool bEmptyMergedCells = false;
 
     if (bAskDialog)
     {
         if (!bApi)
         {
-            ScopedVclPtrInstance<MessBox> aBox( GetViewData().GetDialogParent(),
-                            WinBits(WB_YES_NO_CANCEL | WB_DEF_NO),
-                            ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),
-                            ScGlobal::GetRscString( STR_MERGE_NOTEMPTY ) );
-            sal_uInt16 nRetVal = aBox->Execute();
+            ScMergeCellsDialog aBox( GetViewData().GetDialogParent() );
+            sal_uInt16 nRetVal = aBox.Execute();
 
-            if ( nRetVal == RET_YES )
-                rDoContents = true;
+            if ( nRetVal == RET_OK )
+            {
+                switch ( aBox.GetMergeCellsOption() )
+                {
+                    case MoveContentHiddenCells:
+                        rDoContents = true;
+                        break;
+                    case KeepContentHiddenCells:
+                        break; // keep default values
+                    case EmptyContentHiddenCells:
+                        bEmptyMergedCells = true;
+                        break;
+                    default:
+                        OSL_FAIL("Unknown option for merge cells.");
+                        break;
+                }
+            }
             else if ( nRetVal == RET_CANCEL )
                 bOk = false;
         }
@@ -1095,7 +1109,7 @@ bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bCenter )
 
     if (bOk)
     {
-        bOk = pDocSh->GetDocFunc().MergeCells( aMergeOption, rDoContents, true/*bRecord*/, bApi );
+        bOk = pDocSh->GetDocFunc().MergeCells( aMergeOption, rDoContents, true/*bRecord*/, bApi, bEmptyMergedCells );
 
         if (bOk)
         {

@@ -473,6 +473,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/miscdlgs/crnrdlg \
     sc/source/ui/miscdlgs/datastreamdlg \
     sc/source/ui/miscdlgs/highred \
+    sc/source/ui/miscdlgs/MergeCellsDialog \
     sc/source/ui/miscdlgs/optsolver \
     sc/source/ui/miscdlgs/protectiondlg \
     sc/source/ui/miscdlgs/redcom \
