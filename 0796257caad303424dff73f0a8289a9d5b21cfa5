@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_31e7f813",
+        "filename": "svx/source/xoutdev/xtabptrn.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-07-20T20:21:30Z",
+      "side": 1,
+      "message": "Can you just use an assert here please?",
+      "revId": "0796257caad303424dff73f0a8289a9d5b21cfa5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
