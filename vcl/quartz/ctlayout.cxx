@@ -25,9 +25,10 @@
 #include <sal/types.h>
 #include <tools/debug.hxx>
 
-#include "ctfonts.hxx"
+#include "quartz/ctfonts.hxx"
 #include "CTRunData.hxx"
 #include "quartz/utils.h"
+#include "CommonSalLayout.hxx"
 
 
 class CTLayout : public SalLayout
@@ -781,7 +782,14 @@ void CTLayout::Simplify( bool /*bIsBase*/ ) {}
 
 SalLayout* CoreTextStyle::GetTextLayout() const
 {
-    return new CTLayout( this);
+    if( getenv("SAL_USE_COMMON_LAYOUT") )
+    {
+        return new CommonSalLayout( *this );
+    }
+    else
+    {
+        return new CTLayout( this);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -111,6 +111,8 @@ private:
     CFMutableDictionaryRef  mpStyleDict;
 
     friend class CTLayout;
+    friend class AquaSalGraphics;
+    friend class CommonSalLayout;
     CFMutableDictionaryRef  GetStyleDict( void ) const { return mpStyleDict; }
 };
 

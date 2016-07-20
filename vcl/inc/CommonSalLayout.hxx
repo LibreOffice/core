@@ -23,6 +23,7 @@
 #elif defined(MACOSX) || defined(IOS)
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include "quartz/ctfonts.hxx"
+#include <hb-coretext.h>
 
 #else
 #include "unx/freetype_glyphcache.hxx"
