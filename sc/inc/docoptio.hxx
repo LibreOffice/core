@@ -106,6 +106,8 @@ public:
     {
         bFormulaRegexEnabled = bVal;
         eFormulaSearchType = eSearchTypeUnknown;
+        if (bVal)
+            bFormulaWildcardsEnabled = false;
     }
     bool    IsFormulaRegexEnabled() const       { return GetFormulaSearchType() == utl::SearchParam::SRCH_REGEXP; }
 
@@ -113,6 +115,8 @@ public:
     {
         bFormulaWildcardsEnabled = bVal;
         eFormulaSearchType = eSearchTypeUnknown;
+        if (bVal)
+            bFormulaRegexEnabled = false;
     }
     bool    IsFormulaWildcardsEnabled() const       { return GetFormulaSearchType() == utl::SearchParam::SRCH_WILDCARD; }
 
