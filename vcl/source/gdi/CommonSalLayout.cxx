@@ -57,7 +57,7 @@ static hb_blob_t *getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
 
     hb_blob_t* pBlob = nullptr;
     if (pBuffer != nullptr)
-#if defined(_WIN32)
+#if defined(_WIN32) || defined(MACOSX) || defined(IOS)
         pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY,
                                const_cast<unsigned char*>(pBuffer), [](void* data){ delete[] reinterpret_cast<unsigned char*>(data); } );
 #else
@@ -97,7 +97,13 @@ CommonSalLayout::CommonSalLayout(const CoreTextStyle& rCoreTextStyle)
     maFontSelData(rCoreTextStyle.maFontSelData),
     mrCoreTextStyle(rCoreTextStyle)
 {
-    mpHbFace = hb_face_create_for_tables(getFontTable, const_cast<CoreTextFontFace*>(rCoreTextStyle.mpFontData), nullptr);
+    CTFontRef pCTFont = static_cast<CTFontRef>(CFDictionaryGetValue(rCoreTextStyle.GetStyleDict(), kCTFontAttributeName));
+    CGFontRef pCGFont = CTFontCopyGraphicsFont(pCTFont, NULL);
+    if (pCGFont)
+        mpHbFace = hb_coretext_face_create(pCGFont);
+    else
+        mpHbFace = hb_face_create_for_tables(getFontTable, const_cast<CoreTextFontFace*>(rCoreTextStyle.mpFontData), nullptr);
+    CGFontRelease(pCGFont);
 }
 
 #else
