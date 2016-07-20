@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_3141b83a",
+        "filename": "dtrans/source/win32/ftransl/ftransl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-20T12:16:08Z",
+      "side": 1,
+      "message": "Should get UNO appended as well?\nhttp://ci.libreoffice.org/job/lo_gerrit_master/18864/Gerrit\u003dGerrit,Platform\u003dWindows/console\nftransl.cxx(215) : error C2653: \u0027CDataFormatTranslator\u0027 : is not a class or namespace name",
+      "revId": "7d427384098ba116dd43a03ad174cb76063d4fa4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
