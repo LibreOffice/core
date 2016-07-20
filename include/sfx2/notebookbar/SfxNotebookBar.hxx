@@ -11,6 +11,7 @@
 #define INCLUDED_SFX2_NOTEBOOKBAR_SFXNOTEBOOKBAR_HXX
 
 #include <sfx2/dllapi.h>
+#include <com/sun/star/frame/XLayoutManager.hpp>
 
 class SfxBindings;
 
@@ -22,6 +23,7 @@ class SFX2_DLLPUBLIC SfxNotebookBar
 {
 public:
     static void CloseMethod(SfxBindings& rBindings);
+    static void CloseMethod(SystemWindow* pSysWindow);
 
     /// Function to be called from the sdi's ExecMethod.
     static void ExecMethod(SfxBindings& rBindings);
@@ -33,6 +35,14 @@ public:
                             const OUString& rUIFile);
 
     static void RemoveListeners(SystemWindow* pSysWindow);
+
+    static void ShowMenubar(bool bShow);
+
+private:
+    static bool m_bLock;
+    static css::uno::Reference<css::frame::XLayoutManager> m_xLayoutManager;
+
+    DECL_STATIC_LINK_TYPED(SfxNotebookBar, ToggleMenubar, LinkParamNone*, void);
 };
 
 } // namespace sfx2

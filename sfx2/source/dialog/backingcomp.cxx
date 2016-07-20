@@ -435,6 +435,8 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     if (pSysWindow)
     {
         sfx2::SfxNotebookBar::StateMethod(pSysWindow, m_xFrame, "sfx/ui/notebookbar.ui");
+        if (pSysWindow->GetNotebookBar())
+            sfx2::SfxNotebookBar::ShowMenubar(false);
     }
 
     // Set a minimum size for Start Center
@@ -603,9 +605,7 @@ void SAL_CALL BackingComp::dispose()
         VclPtr< WorkWindow > pParent = static_cast<WorkWindow*>(VCLUnoHelper::GetWindow(xParentWindow).get());
 
         // hide NotebookBar
-        SystemWindow* pSysWindow = static_cast<SystemWindow*>(pParent);
-        if (pSysWindow && pSysWindow->GetNotebookBar())
-            pSysWindow->GetNotebookBar()->Hide();
+        sfx2::SfxNotebookBar::CloseMethod(static_cast<SystemWindow*>(pParent));
     }
 
     // stop listening at the window

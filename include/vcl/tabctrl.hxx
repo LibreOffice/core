@@ -132,10 +132,10 @@ public:
     sal_uInt16          GetPageId( const TabPage& rPage ) const;
     sal_uInt16          GetPageId( const OString& rName ) const;
 
-    void                SetCurPageId( sal_uInt16 nPageId );
+    virtual void        SetCurPageId( sal_uInt16 nPageId );
     sal_uInt16          GetCurPageId() const;
 
-    void                SelectTabPage( sal_uInt16 nPageId );
+    virtual void        SelectTabPage( sal_uInt16 nPageId );
 
     void                SetTabPage( sal_uInt16 nPageId, TabPage* pPage );
     TabPage*            GetTabPage( sal_uInt16 nPageId ) const;
@@ -200,8 +200,11 @@ public:
     NotebookbarTabControl( vcl::Window* pParent, WinBits nStyle = WB_STDTABCONTROL );
 
     void SetContext( vcl::EnumContext::Context eContext );
+    void SetIconClickHdl( Link<LinkParamNone*,void> aHdl );
 
     virtual sal_uInt16  GetPageId( const Point& rPos ) const override;
+    virtual void        SelectTabPage( sal_uInt16 nPageId ) override;
+    virtual void        SetCurPageId( sal_uInt16 nPageId ) override;
 
 protected:
     virtual bool ImplPlaceTabs( long nWidth ) override;
@@ -209,6 +212,7 @@ protected:
 
 private:
     vcl::EnumContext::Context eLastContext;
+    Link<LinkParamNone*,void> m_aIconClickHdl;
 };
 
 #endif // INCLUDED_VCL_TABCTRL_HXX

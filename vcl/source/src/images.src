@@ -284,4 +284,9 @@ Bitmap SV_DISCLOSURE_MINUS
     File = "minus.png";
 };
 
+Bitmap SV_RESID_BITMAP_NOTEBOOKBAR
+{
+    File = "notebookbar.png";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
