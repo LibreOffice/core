@@ -977,7 +977,7 @@ void FuText::Activate()
     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
     if (pOLV)
-        pOLV->ShowCursor();
+        pOLV->ShowCursor(/*bGotoCursor=*/true, /*bActivate=*/true);
 
     FuConstruct::Activate();
 
@@ -990,7 +990,7 @@ void FuText::Deactivate()
     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
     if (pOLV)
-        pOLV->HideCursor();
+        pOLV->HideCursor(/*bDeactivate=*/true);
 
     mpView->SetHitTolerancePixel( HITPIX );
 

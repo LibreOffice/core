@@ -385,7 +385,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
         }
     }
 
-    rOutlView.ShowCursor();
+    rOutlView.ShowCursor(/*bGotoCursor=*/true, /*bActivate=*/true);
 }
 
 void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView& rOutlView) const

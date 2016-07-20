@@ -1234,14 +1234,14 @@ bool OutlinerView::HasSelection() const
     return pEditView->HasSelection();
 }
 
-void OutlinerView::ShowCursor( bool bGotoCursor )
+void OutlinerView::ShowCursor( bool bGotoCursor, bool bActivate )
 {
-    pEditView->ShowCursor( bGotoCursor );
+    pEditView->ShowCursor( bGotoCursor, /*bForceVisCursor=*/true, bActivate );
 }
 
-void OutlinerView::HideCursor()
+void OutlinerView::HideCursor(bool bDeactivate)
 {
-    pEditView->HideCursor();
+    pEditView->HideCursor(bDeactivate);
 }
 
 void OutlinerView::SetWindow( vcl::Window* pWin )

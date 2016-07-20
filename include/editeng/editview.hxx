@@ -111,8 +111,8 @@ public:
     void            Invalidate();
     Pair            Scroll( long nHorzScroll, long nVertScroll, ScrollRangeCheck nRangeCheck = ScrollRangeCheck::NoNegative );
 
-    void            ShowCursor( bool bGotoCursor = true, bool bForceVisCursor = true );
-    void            HideCursor();
+    void            ShowCursor( bool bGotoCursor = true, bool bForceVisCursor = true, bool bActivate = false );
+    void            HideCursor( bool bDeactivate = false );
 
     void            SetSelectionMode( EESelectionMode eMode );
 
