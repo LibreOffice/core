@@ -270,24 +270,6 @@ private:
 
 /************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC PatternLB : public ListBox
-{
-public:
-    explicit PatternLB(vcl::Window* pParent, WinBits aWB);
-
-    void Fill(const XPatternListRef &pList);
-
-    void Append(const Size& rSize, const XBitmapEntry& rEntry);
-    void Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_Int32 nPos);
-
-private:
-    BitmapEx        maBitmapEx;
-
-    XPatternListRef  mpList;
-};
-
-/************************************************************************/
-
 class SAL_WARN_UNUSED SVX_DLLPUBLIC FillAttrLB : public ColorListBox
 {
 private:
