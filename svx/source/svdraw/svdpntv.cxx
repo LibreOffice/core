@@ -180,6 +180,7 @@ void SdrPaintView::ImpClearVars()
     mnGraphicManagerDrawMode = GraphicManagerDrawFlags::STANDARD;
     maComeBackIdle.SetPriority(SchedulerPriority::REPAINT);
     maComeBackIdle.SetIdleHdl(LINK(this,SdrPaintView,ImpComeBackHdl));
+    maComeBackIdle.SetDebugName( "svx::SdrPaintView aComeBackIdle" );
 
     if (mpModel)
         SetDefaultStyleSheet(mpModel->GetDefaultStyleSheet(), true);

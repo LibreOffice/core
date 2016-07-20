@@ -178,8 +178,11 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
 
     aSpellIdle.SetPriority(SchedulerPriority::LOWER);
     aSpellIdle.SetIdleHdl( LINK( this, ScModule, SpellTimerHdl ) );
+    aSpellIdle.SetDebugName( "sc::ScModule aSpellIdle" );
+
     aIdleTimer.SetTimeout(SC_IDLE_MIN);
     aIdleTimer.SetTimeoutHdl( LINK( this, ScModule, IdleHandler ) );
+    aIdleTimer.SetDebugName( "sc::ScModule aIdleTimer" );
     aIdleTimer.Start();
 
     pMessagePool = new ScMessagePool;
