@@ -45,7 +45,9 @@ $(BUILDDIR)/config_host.mk : $(wildcard \
 		$(BUILDDIR)/autogen.input \
 		$(BUILDDIR)/autogen.lastrun \
 		$(BUILDDIR)/autogen.sh \
-		)
+		) \
+		$(shell source $(SRCDIR)/bin/get_config_variables JAVA_HOME && \
+			if test -n "$${JAVA_HOME}" -a ! -d "$${JAVA_HOME}"; then echo force-restart; fi)
 	sh -c $(SRCDIR)/autogen.sh
 
 else # MAKE_RESTARTS
