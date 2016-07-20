@@ -1063,9 +1063,15 @@ bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bCenter )
         SCTAB i = *itr;
         aMergeOption.maTabs.insert(i);
 
-        if (!rDoc.IsBlockEmpty(i, nStartCol, nStartRow+1, nStartCol, nEndRow) ||
-            !rDoc.IsBlockEmpty(i, nStartCol+1, nStartRow, nEndCol, nEndRow))
-            bAskDialog = true;
+        if ( nEndRow == nStartRow )
+        {
+            if (!rDoc.IsBlockEmpty(i, nStartCol+1, nStartRow, nEndCol, nEndRow))
+                bAskDialog = true;
+        }
+        else
+            if (!rDoc.IsBlockEmpty(i, nStartCol, nStartRow+1, nStartCol, nEndRow) ||
+                !rDoc.IsBlockEmpty(i, nStartCol+1, nStartRow, nEndCol, nEndRow))
+                bAskDialog = true;
     }
 
     bool bOk = true;
