@@ -229,8 +229,8 @@ public:
     void        ReleaseMouse();
     bool        MouseMove( const MouseEvent& );
 
-    void        ShowCursor( bool bGotoCursor = true );
-    void        HideCursor();
+    void        ShowCursor( bool bGotoCursor = true, bool bActivate = false );
+    void        HideCursor( bool bDeactivate = false );
 
     Outliner*   GetOutliner() const { return pOwner; }
 

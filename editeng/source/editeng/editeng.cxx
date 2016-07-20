@@ -1432,7 +1432,7 @@ void EditEngine::SetUpdateMode( bool bUpdate )
 {
     pImpEditEngine->SetUpdateMode( bUpdate );
     if ( pImpEditEngine->pActiveView )
-        pImpEditEngine->pActiveView->ShowCursor( false, false );
+        pImpEditEngine->pActiveView->ShowCursor( false, false, /*bActivate=*/true );
 }
 
 bool EditEngine::GetUpdateMode() const
