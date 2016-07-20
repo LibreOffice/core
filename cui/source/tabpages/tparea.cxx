@@ -44,8 +44,6 @@
 #include "sfx2/opengrf.hxx"
 #include <vcl/layout.hxx>
 
-#define DEFAULT_GRADIENTSTEP 64
-
 using namespace com::sun::star;
 
 // static ----------------------------------------------------------------
@@ -115,6 +113,10 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     get(m_pLbBitmap,"LB_BITMAP");
     get(m_pCtlBitmapPreview,"CTL_BITMAP_PREVIEW");
 
+    get(m_pTsbStepCount,"TSB_STEPCOUNT");
+    get(m_pFlStepCount,"FL_STEPCOUNT");
+    get(m_pNumFldStepCount,"NUM_FLD_STEPCOUNT");
+
     get(m_pFlHatchBckgrd,"FL_HATCHCOLORS");
     get(m_pLbHatchBckgrdColor,"LB_HATCHBCKGRDCOLOR");
     get(m_pCbxHatchBckgrd,"CB_HATCHBCKGRD");
@@ -151,11 +153,12 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     //size required for any of the areas which might be selected
     //later, so that there's sufficient space
     VclContainer *pMainFrame = get<VclContainer>("mainframe");
+    Size aIncrementsSize(m_pFlStepCount->get_preferred_size());
     Size aHatchSize(m_pFlHatchBckgrd->get_preferred_size());
     Size aBitmapSize(m_pBxBitmap->get_preferred_size());
     Size aMainFrame(
-        std::max(aHatchSize.Width(), aBitmapSize.Width()),
-        std::max(aHatchSize.Height(), aBitmapSize.Height()));
+        std::max(std::max(aIncrementsSize.Width(), aHatchSize.Width()), aBitmapSize.Width()),
+        std::max(std::max(aIncrementsSize.Height(), aHatchSize.Height()), aBitmapSize.Height()));
     pMainFrame->set_width_request(aMainFrame.Width());
     pMainFrame->set_height_request(aMainFrame.Height());
 
@@ -163,6 +166,8 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     // groups that overlay each other
     m_pLbBitmap->Hide();
     m_pCtlBitmapPreview->Hide();
+
+    m_pFlStepCount->Hide();
 
     m_pBxBitmap->Hide();
 
@@ -208,6 +213,9 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     m_pLbGradient->SetSelectHdl( LINK( this, SvxAreaTabPage, ModifyGradientHdl_Impl ) );
     m_pLbHatching->SetSelectHdl( LINK( this, SvxAreaTabPage, ModifyHatchingHdl_Impl ) );
     m_pLbBitmap->SetSelectHdl(   LINK( this, SvxAreaTabPage, ModifyBitmapHdl_Impl ) );
+
+    m_pTsbStepCount->SetClickHdl( LINK( this, SvxAreaTabPage, ModifyStepCountClickHdl_Impl ) );
+    m_pNumFldStepCount->SetModifyHdl( LINK( this, SvxAreaTabPage, ModifyStepCountEditHdl_Impl ) );
 
     Link<Edit&,void> aLink( LINK( this, SvxAreaTabPage, ModifyTileHdl_Impl ) );
     Link<Button*,void> aClickLink( LINK( this, SvxAreaTabPage, ModifyTileClickHdl_Impl ) );
@@ -264,6 +272,9 @@ void SvxAreaTabPage::dispose()
     m_pLbHatching.clear();
     m_pLbBitmap.clear();
     m_pCtlBitmapPreview.clear();
+    m_pTsbStepCount.clear();
+    m_pFlStepCount.clear();
+    m_pNumFldStepCount.clear();
     m_pFlHatchBckgrd.clear();
     m_pCbxHatchBckgrd.clear();
     m_pLbHatchBckgrdColor.clear();
@@ -683,6 +694,39 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
            break;
        }
 
+        // step size
+        if( m_pTsbStepCount->IsEnabled() )
+        {
+            sal_uInt16 nValue = 0;
+            bool   bValueModified = false;
+            TriState eState = m_pTsbStepCount->GetState();
+            if( eState == TRISTATE_TRUE )
+            {
+                if( m_pTsbStepCount->IsValueChangedFromSaved() )
+                    bValueModified = true;
+            }
+            else
+            {
+                // condition != Disabled ?
+                if( !m_pNumFldStepCount->GetText().isEmpty() )
+                {
+                    nValue = (sal_uInt16) m_pNumFldStepCount->GetValue();
+                    if( m_pNumFldStepCount->IsValueChangedFromSaved() )
+                        bValueModified = true;
+                }
+            }
+            if( bValueModified )
+            {
+                XGradientStepCountItem aFillBitmapItem( nValue );
+                pOld = GetOldItem( *rAttrs, XATTR_GRADIENTSTEPCOUNT );
+                if ( !pOld || !( *static_cast<const XGradientStepCountItem*>(pOld) == aFillBitmapItem ) )
+                {
+                    rAttrs->Put( aFillBitmapItem );
+                    bModified = true;
+                }
+            }
+        }
+
         if( m_pTsbTile->IsEnabled() )
         {
             TriState eState = m_pTsbTile->GetState();
@@ -1034,6 +1078,30 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
         m_pTypeLB->SetNoSelection();
     }
 
+    // step size
+    if( ( rAttrs->GetItemState( XATTR_GRADIENTSTEPCOUNT ) != SfxItemState::DONTCARE ) ||
+        ( rAttrs->GetItemState( XATTR_FILLSTYLE ) != SfxItemState::DONTCARE ) )
+    {
+        m_pTsbStepCount->EnableTriState( false );
+        sal_uInt16 nValue = static_cast<const XGradientStepCountItem&>( rAttrs->Get( XATTR_GRADIENTSTEPCOUNT ) ).GetValue();
+        if( nValue == 0 )
+        {
+            m_pTsbStepCount->SetState( TRISTATE_TRUE );
+            m_pNumFldStepCount->SetText( "" );
+        }
+        else
+        {
+            m_pTsbStepCount->SetState( TRISTATE_FALSE );
+            m_pNumFldStepCount->SetValue( nValue );
+        }
+        ModifyStepCountHdl_Impl( m_pTsbStepCount );
+    }
+    else
+    {
+        m_pTsbStepCount->SetState( TRISTATE_INDET );
+        m_pNumFldStepCount->SetText( "" );
+    }
+
     // attributes for the bitmap filling
 
     if( rAttrs->GetItemState( XATTR_FILLBMP_TILE ) != SfxItemState::DONTCARE )
@@ -1208,6 +1276,8 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
     m_pLbHatchBckgrdColor->SaveValue();
     if (!isMissingBitmap)
         m_pLbBitmap->SaveValue();
+    m_pTsbStepCount->SaveValue();
+    m_pNumFldStepCount->SaveValue();
     m_pTsbTile->SaveValue();
     m_pTsbStretch->SaveValue();
     m_pTsbScale->SaveValue();
@@ -1228,6 +1298,8 @@ void SvxAreaTabPage::ChangesApplied()
     m_pLbHatching->SaveValue();
     m_pLbHatchBckgrdColor->SaveValue();
     m_pLbBitmap->SaveValue();
+    m_pTsbStepCount->SaveValue();
+    m_pNumFldStepCount->SaveValue();
     m_pTsbTile->SaveValue();
     m_pTsbStretch->SaveValue();
     m_pTsbScale->SaveValue();
@@ -1268,6 +1340,8 @@ void SvxAreaTabPage::ClickInvisibleHdl_Impl()
     m_pCtlXRectPreview->Hide();
     m_pCtlBitmapPreview->Hide();
 
+    m_pFlStepCount->Hide();
+
     // Controls for Hatch-Background
     m_pFlHatchBckgrd->Hide();
 
@@ -1293,6 +1367,8 @@ void SvxAreaTabPage::ClickColorHdl_Impl()
     m_pCtlXRectPreview->Enable();
     m_pCtlXRectPreview->Show();
     m_pCtlBitmapPreview->Hide();
+
+    m_pFlStepCount->Hide();
 
     // Controls for Hatch-Background
     m_pFlHatchBckgrd->Hide();
@@ -1340,10 +1416,17 @@ void SvxAreaTabPage::ClickGradientHdl_Impl()
     m_pCtlXRectPreview->Show();
     m_pCtlBitmapPreview->Hide();
 
+    m_pFlStepCount->Enable();
+    m_pFlStepCount->Show();
+    m_pTsbStepCount->Enable();
+    m_pTsbStepCount->Show();
+    m_pNumFldStepCount->Show();
+
     // Controls for Hatch-Background
     m_pFlHatchBckgrd->Hide();
 
     ModifyGradientHdl_Impl( *m_pLbGradient );
+    ModifyStepCountHdl_Impl( m_pTsbStepCount );
 }
 
 
@@ -1367,11 +1450,6 @@ IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyGradientHdl_Impl, ListBox&, void)
     else
         m_rXFSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
 
-    sal_uInt16 nValue = static_cast<const XGradientStepCountItem&>( m_rOutAttrs.Get( XATTR_GRADIENTSTEPCOUNT ) ).GetValue();
-    if( nValue == 0 )
-        nValue = DEFAULT_GRADIENTSTEP;
-    m_rXFSet.Put( XGradientStepCountItem( nValue ) );
-
     m_pCtlXRectPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlXRectPreview->Invalidate();
 }
@@ -1388,6 +1466,8 @@ void SvxAreaTabPage::ClickHatchingHdl_Impl()
     m_pCtlXRectPreview->Enable();
     m_pCtlXRectPreview->Show();
     m_pCtlBitmapPreview->Hide();
+
+    m_pFlStepCount->Hide();
 
     m_pBxBitmap->Hide();
 
@@ -1496,6 +1576,8 @@ void SvxAreaTabPage::ClickBitmapHdl_Impl()
     m_pCtlBitmapPreview->Show();
     m_pCtlXRectPreview->Hide();
 
+    m_pFlStepCount->Hide();
+
     m_pBxTile->Enable();
 
     m_pFlSize->Enable();
@@ -1542,6 +1624,42 @@ IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyBitmapHdl_Impl, ListBox&, void)
 
     m_pCtlBitmapPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlBitmapPreview->Invalidate();
+}
+
+
+IMPL_LINK_TYPED( SvxAreaTabPage, ModifyStepCountClickHdl_Impl, Button*, p, void )
+{
+    ModifyStepCountHdl_Impl(p);
+}
+IMPL_LINK_TYPED( SvxAreaTabPage, ModifyStepCountEditHdl_Impl, Edit&, r, void )
+{
+    ModifyStepCountHdl_Impl(&r);
+}
+void SvxAreaTabPage::ModifyStepCountHdl_Impl( void* p )
+{
+    if( p == m_pTsbStepCount )
+    {
+        if( m_pTsbStepCount->GetState() == TRISTATE_FALSE )
+        {
+            if( m_pNumFldStepCount->GetText().isEmpty() )
+                m_pNumFldStepCount->SetText("64");
+
+            m_pNumFldStepCount->Enable();
+        }
+        else
+            m_pNumFldStepCount->Disable();
+    }
+
+    sal_uInt16 nValue = 0;
+    if( m_pTsbStepCount->GetState() != TRISTATE_TRUE )
+    {
+        // condition != Disabled ?
+        if( !m_pNumFldStepCount->GetText().isEmpty() )
+            nValue = (sal_uInt16) m_pNumFldStepCount->GetValue();
+    }
+    m_rXFSet.Put( XGradientStepCountItem( nValue ) );
+    m_pCtlXRectPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
+    m_pCtlXRectPreview->Invalidate();
 }
 
 IMPL_LINK_NOARG_TYPED( SvxAreaTabPage, ClickImportHdl_Impl, Button*, void )
