@@ -185,6 +185,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
 
     m_aAsyncUpdateControllersTimer.SetTimeout( 50 );
     m_aAsyncUpdateControllersTimer.SetTimeoutHdl( LINK( this, ToolBarManager, AsyncUpdateControllersHdl ) );
+    m_aAsyncUpdateControllersTimer.SetDebugName( "framework::ToolBarManager m_aAsyncUpdateControllersTimer" );
 
     SvtMiscOptions().AddListenerLink( LINK( this, ToolBarManager, MiscOptionsChanged ) );
 }

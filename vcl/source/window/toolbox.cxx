@@ -1393,13 +1393,14 @@ void ToolBox::ImplInitToolBoxData()
     mnImagesRotationAngle = 0;
     mpStatusListener  = new VclStatusListener<ToolBox>(this, ".uno:ImageOrientation");
 
-    mpIdle = new Idle("toolbox update");
+    mpIdle = new Idle("vcl::ToolBox maIdle update");
     mpIdle->SetPriority( SchedulerPriority::RESIZE );
     mpIdle->SetIdleHdl( LINK( this, ToolBox, ImplUpdateHdl ) );
 
     // set timeout and handler for dropdown items
     mpData->maDropdownTimer.SetTimeout( 250 );
     mpData->maDropdownTimer.SetTimeoutHdl( LINK( this, ToolBox, ImplDropdownLongClickHdl ) );
+    mpData->maDropdownTimer.SetDebugName( "vcl::ToolBox mpData->maDropdownTimer" );
 }
 
 void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )

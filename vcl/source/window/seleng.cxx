@@ -44,6 +44,7 @@ SelectionEngine::SelectionEngine( vcl::Window* pWindow, FunctionSet* pFuncSet ) 
 
     aWTimer.SetTimeoutHdl( LINK( this, SelectionEngine, ImpWatchDog ) );
     aWTimer.SetTimeout( nUpdateInterval );
+    aWTimer.SetDebugName( "vcl::SelectionEngine aWTimer" );
 }
 
 SelectionEngine::~SelectionEngine()
