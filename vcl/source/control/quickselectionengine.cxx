@@ -44,6 +44,7 @@ namespace vcl
         {
             aSearchTimeout.SetTimeout( 2500 );
             aSearchTimeout.SetTimeoutHdl( LINK( this, QuickSelectionEngine_Data, SearchStringTimeout ) );
+            aSearchTimeout.SetDebugName( "vcl::QuickSelectionEngine_Data aSearchTimeout" );
         }
 
         ~QuickSelectionEngine_Data()

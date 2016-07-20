@@ -41,6 +41,8 @@ void WorkWindow::ImplInitWorkWindowData()
     mbPresentationVisible   = false;
     mbPresentationFull      = false;
     mbFullScreenMode        = false;
+
+    maLayoutIdle.SetDebugName( "vcl::WorkWindow maLayoutIdle" );
 }
 
 void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
