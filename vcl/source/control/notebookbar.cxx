@@ -90,6 +90,11 @@ void NotebookBar::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, P
         VclContainer::setLayoutAllocation(*pChild, Point(0, 0), Size(nWidth, nHeight));
 }
 
+void NotebookBar::SetIconClickHdl(Link<NotebookBar*, void> aHdl)
+{
+    m_pTabControl->SetIconClickHdl(aHdl);
+}
+
 void NotebookBar::StateChanged(StateChangedType nType)
 {
     if (nType == StateChangedType::Visible)
@@ -104,7 +109,8 @@ void NotebookBar::StateChanged(StateChangedType nType)
 void SAL_CALL NotebookBarContextChangeEventListener::notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent)
         throw (css::uno::RuntimeException, std::exception)
 {
-    mpParent->m_pTabControl->SetContext(vcl::EnumContext::GetContextEnum(rEvent.ContextName));
+    if (mpParent && mpParent->m_pTabControl)
+        mpParent->m_pTabControl->SetContext(vcl::EnumContext::GetContextEnum(rEvent.ContextName));
 }
 
 
