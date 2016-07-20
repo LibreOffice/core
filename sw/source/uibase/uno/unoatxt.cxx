@@ -763,8 +763,7 @@ void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
 {
     if ( &_rBC == &xDocSh )
     {   // it's our document
-        const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &_rHint );
-        if ( pSimpleHint )
+        if (const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&_rHint))
         {
             if ( SFX_HINT_DEINITIALIZING == pSimpleHint->GetId() )
             {
@@ -776,9 +775,9 @@ void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
                 xDocSh.Clear();
             }
         }
-        else if(dynamic_cast<const SfxEventHint*>(&_rHint))
+        else if (const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&_rHint))
         {
-            if(SFX_EVENT_PREPARECLOSEDOC == static_cast< const SfxEventHint& >( _rHint ).GetEventId())
+            if (SFX_EVENT_PREPARECLOSEDOC == pEventHint->GetEventId())
             {
                 implFlushDocument();
                 xBodyText = nullptr;

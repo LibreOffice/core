@@ -102,10 +102,10 @@ void SwView::ExecDraw(SfxRequest& rReq)
             }
         }
     }
-    else if( nSlotId == SID_FM_CREATE_FIELDCONTROL)
+    else if (nSlotId == SID_FM_CREATE_FIELDCONTROL)
     {
-        FmFormView* pFormView = dynamic_cast<FmFormView*>( pSdrView  );
-        if ( pFormView )
+        FmFormView* pFormView = dynamic_cast<FmFormView*>(pSdrView);
+        if (pFormView)
         {
             const SfxUnoAnyItem* pDescriptorItem = rReq.GetArg<SfxUnoAnyItem>(SID_FM_DATACCESS_DESCRIPTOR);
             OSL_ENSURE( pDescriptorItem, "SwView::ExecDraw(SID_FM_CREATE_FIELDCONTROL): invalid request args!" );
@@ -541,9 +541,8 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
     // OutlinerView.
     Point aNewTextEditOffset(0, 0);
 
-    if(dynamic_cast< const SwDrawVirtObj *>( pObj ) !=  nullptr)
+    if (SwDrawVirtObj* pVirtObj = dynamic_cast<SwDrawVirtObj *>(pObj))
     {
-        SwDrawVirtObj* pVirtObj = static_cast<SwDrawVirtObj*>(pObj);
         pToBeActivated = &const_cast<SdrObject&>(pVirtObj->GetReferencedObj());
         aNewTextEditOffset = pVirtObj->GetOffset();
     }
