@@ -306,7 +306,7 @@ class MergeDataFile
         MergeDataHashMap aMap;
         std::set<OString> aLanguageSet;
 
-        MergeData *GetMergeData( ResData *pResData , bool bCaseSensitve = false );
+        MergeData *GetMergeData( ResData *pResData , bool bCaseSensitive = false );
         void InsertEntry(const OString &rTYP, const OString &rGID,
             const OString &rLID, const OString &nLang,
             const OString &rTEXT, const OString &rQHTEXT,

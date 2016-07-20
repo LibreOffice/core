@@ -465,7 +465,7 @@ void SAL_CALL OPoolCollection::propertyChange( const css::beans::PropertyChangeE
         {
             OUString sThisDriverName;
             getNodeValue(getDriverNameNodeName(),evt.Source) >>= sThisDriverName;
-            // 1nd relase the driver
+            // 1nd release the driver
             // look if we already have a proxy for this driver
             MapDriver2DriverRef::iterator aLookup = m_aDriverProxies.begin();
             while(  aLookup != m_aDriverProxies.end())

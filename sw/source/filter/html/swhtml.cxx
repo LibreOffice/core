@@ -2265,7 +2265,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
             m_pPam->GetNode().GetTextNode()->ResetAttr( RES_PARATR_NUMRULE );
     }
 
-    // Attrubute im Absatz davor sollte man jetzt setzen (wegen JavaScript)
+    // Attribute im Absatz davor sollte man jetzt setzen (wegen JavaScript)
     SetAttr();
 
     // Now it is time to get rid of all script dependent hints that are

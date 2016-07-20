@@ -2708,7 +2708,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
     else if (mxSymbols->isODFF())
     {
         // ODFF names that are not written in the current mapping but to be
-        // recognized. New names will be written in a future relase, then
+        // recognized. New names will be written in a future release, then
         // exchange (!) with the names in
         // formula/source/core/resource/core_resource.src to be able to still
         // read the old names as well.

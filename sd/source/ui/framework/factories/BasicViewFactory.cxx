@@ -111,7 +111,7 @@ void SAL_CALL BasicViewFactory::disposing()
         mpFrameView = nullptr;
     }
 
-    // Relase the view cache.
+    // Release the view cache.
     ViewShellContainer::const_iterator iView;
     for (iView=mpViewCache->begin(); iView!=mpViewCache->end(); ++iView)
     {
