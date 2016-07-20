@@ -76,6 +76,7 @@ DocumentStatisticsManager::DocumentStatisticsManager( SwDoc& i_rSwdoc ) : m_rDoc
     maStatsUpdateTimer.SetTimeout( 1 );
     maStatsUpdateTimer.SetPriority( SchedulerPriority::LOWEST );
     maStatsUpdateTimer.SetTimeoutHdl( LINK( this, DocumentStatisticsManager, DoIdleStatsUpdate ) );
+    maStatsUpdateTimer.SetDebugName( "sw::DocumentStatisticsManager maStatsUpdateTimer" );
 }
 
 void DocumentStatisticsManager::DocInfoChgd(bool const isEnableSetModified)

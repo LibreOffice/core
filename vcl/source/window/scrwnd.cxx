@@ -77,6 +77,7 @@ ImplWheelWindow::ImplWheelWindow( vcl::Window* pParent ) :
     mpTimer = new Timer("WheelWindowTimer");
     mpTimer->SetTimeoutHdl( LINK( this, ImplWheelWindow, ImplScrollHdl ) );
     mpTimer->SetTimeout( mnTimeout );
+    mpTimer->SetDebugName( "vcl::ImplWheelWindow mpTimer" );
     mpTimer->Start();
 
     CaptureMouse();
