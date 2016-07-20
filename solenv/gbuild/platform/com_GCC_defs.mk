@@ -218,11 +218,13 @@ ifneq ($(UPDATE_FILES),)
 gb_COMPILER_PLUGINS += -Xclang -plugin-arg-loplugin -Xclang --scope=$(UPDATE_FILES)
 endif
 endif
-# extra EF variable to make the command line shorter (just like is done with $(SRCDIR) etc.)
-gb_COMPILER_PLUGINS_SETUP := EF=$(SRCDIR)/include/sal/log-areas.dox && ICECC_EXTRAFILES=$$EF CCACHE_EXTRAFILES=$$EF CCACHE_CPP2=1
+# set CCACHE_CPP2=1 to prevent clang generating spurious warnings
+gb_COMPILER_SETUP := CCACHE_CPP2=1
+gb_COMPILER_PLUGINS_SETUP := ICECC_EXTRAFILES=$(SRCDIR)/include/sal/log-areas.dox CCACHE_EXTRAFILES=$(SRCDIR)/include/sal/log-areas.dox
 gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS := \
     -Xclang -plugin-arg-loplugin -Xclang --warnings-as-errors
 else
+gb_COMPILER_SETUP :=
 gb_COMPILER_PLUGINS :=
 gb_COMPILER_PLUGINS_SETUP :=
 gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS :=
