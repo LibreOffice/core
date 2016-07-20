@@ -180,6 +180,7 @@ SfxBindings::SfxBindings()
     // create the list of caches
     pImpl->pCaches = new SfxStateCacheArr_Impl;
     pImpl->aTimer.SetTimeoutHdl( LINK(this, SfxBindings, NextJob) );
+    pImpl->aTimer.SetDebugName( "sfx::SfxBindings aTimer" );
 }
 
 
