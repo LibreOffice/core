@@ -458,6 +458,7 @@ void GraphicObject::SetSwapStreamHdl(const Link<const GraphicObject*, SvStream*>
         {
             mpSwapOutTimer = new Timer("SwapOutTimer");
             mpSwapOutTimer->SetTimeoutHdl( LINK( this, GraphicObject, ImplAutoSwapOutHdl ) );
+            mpSwapOutTimer->SetDebugName( "svtools::GraphicObject mpSwapOutTimer" );
         }
 
         mpSwapOutTimer->SetTimeout( nSwapOutTimeout );

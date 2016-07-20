@@ -58,7 +58,7 @@ class IcnViewEdit_Impl : public MultiLineEdit
     Link<LinkParamNone*,void> aCallBackHdl;
     Accelerator     aAccReturn;
     Accelerator     aAccEscape;
-    Idle            aIdle;
+    Idle            maLoseFocusIdle;
     bool            bCanceled;
     bool            bAlreadyInCallback;
     bool            bGrabFocus;
@@ -141,15 +141,23 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
 
     aEditIdle.SetPriority( SchedulerPriority::LOWEST );
     aEditIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,EditTimeoutHdl));
+    aEditIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aEditIdle" );
+
     aAutoArrangeIdle.SetPriority( SchedulerPriority::LOW );
     aAutoArrangeIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,AutoArrangeHdl));
+    aAutoArrangeIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aAutoArrangeIdle" );
+
     aCallSelectHdlIdle.SetPriority( SchedulerPriority::LOWEST );
     aCallSelectHdlIdle.SetIdleHdl( LINK(this,SvxIconChoiceCtrl_Impl,CallSelectHdlHdl));
+    aCallSelectHdlIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aCallSelectHdlIdle" );
 
     aDocRectChangedIdle.SetPriority( SchedulerPriority::MEDIUM );
     aDocRectChangedIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,DocRectChangedHdl));
+    aDocRectChangedIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aDocRectChangedIdle" );
+
     aVisRectChangedIdle.SetPriority( SchedulerPriority::MEDIUM );
     aVisRectChangedIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,VisRectChangedHdl));
+    aVisRectChangedIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aVisRectChangedIdle" );
 
     Clear( true );
     Size gridSize(100,70);
@@ -3029,6 +3037,10 @@ IcnViewEdit_Impl::IcnViewEdit_Impl( SvtIconChoiceCtrl* pParent, const Point& rPo
     bAlreadyInCallback( false ),
     bGrabFocus( false )
 {
+    maLoseFocusIdle.SetPriority(SchedulerPriority::REPAINT);
+    maLoseFocusIdle.SetIdleHdl(LINK(this,IcnViewEdit_Impl,Timeout_Impl));
+    maLoseFocusIdle.SetDebugName( "svx::IcnViewEdit_Impl maLoseFocusIdle" );
+
     // FIXME: Outside of Paint Hierarchy
     vcl::Font aFont(pParent->GetPointFont(*this));
     aFont.SetTransparent( false );
@@ -3068,7 +3080,7 @@ void IcnViewEdit_Impl::dispose()
 
 void IcnViewEdit_Impl::CallCallBackHdl_Impl()
 {
-    aIdle.Stop();
+    maLoseFocusIdle.Stop();
     if ( !bAlreadyInCallback )
     {
         bAlreadyInCallback = true;
@@ -3130,9 +3142,7 @@ bool IcnViewEdit_Impl::PreNotify( NotifyEvent& rNEvt )
             ((!Application::GetFocusWindow()) || !IsChild(Application::GetFocusWindow())))
         {
             bCanceled = false;
-            aIdle.SetPriority(SchedulerPriority::REPAINT);
-            aIdle.SetIdleHdl(LINK(this,IcnViewEdit_Impl,Timeout_Impl));
-            aIdle.Start();
+            maLoseFocusIdle.Start();
         }
     }
     return false;

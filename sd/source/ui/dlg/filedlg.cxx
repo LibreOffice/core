@@ -214,6 +214,7 @@ SdFileDialog_Imp::SdFileDialog_Imp() :
     mbLabelPlaying(false)
 {
     maUpdateIdle.SetIdleHdl(LINK(this, SdFileDialog_Imp, IsMusicStoppedHdl));
+    maUpdateIdle.SetDebugName( "SdFileDialog_Imp maUpdateIdle" );
 
     css::uno::Reference < css::ui::dialogs::XFilePicker2 > xFileDlg = GetFilePicker();
 
