@@ -523,7 +523,7 @@ OUString SAL_CALL Thesaurus::getServiceDisplayName( const Locale& /*rLocale*/ )
         throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return OUString( "OpenOffice.org New Thesaurus" );
+    return OUString( "Mythes Thesaurus" );
 }
 
 void SAL_CALL Thesaurus::initialize( const Sequence< Any >& rArguments )
