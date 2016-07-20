@@ -142,6 +142,7 @@ void SvxHatchTabPage::dispose()
     m_pSliderAngle.clear();
     m_pLbLineType.clear();
     m_pLbLineColor.clear();
+    m_pCbBackgroundColor.clear();
     m_pLbBackgroundColor.clear();
     m_pHatchLB.clear();
     m_pCtlPreview.clear();

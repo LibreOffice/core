@@ -398,7 +398,6 @@ private:
     VclPtr<MetricField>        m_pMtrColorFrom;
     VclPtr<ColorLB>            m_pLbColorTo;
     VclPtr<MetricField>        m_pMtrColorTo;
-    VclPtr<GradientLB>         m_pLbGradients;
     VclPtr<SvxPresetListBox>   m_pGradientLB;
     VclPtr<NumericField>       m_pMtrIncrement;
     VclPtr<CheckBox>           m_pCbIncrement;
