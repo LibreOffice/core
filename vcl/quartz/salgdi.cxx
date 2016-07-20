@@ -36,7 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 
-#include "ctfonts.hxx"
+#include "quartz/ctfonts.hxx"
 #include "fontsubset.hxx"
 #include "impfont.hxx"
 #include "impfontcharmap.hxx"
@@ -414,8 +414,39 @@ bool AquaSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect 
     return bRC;
 }
 
-void AquaSalGraphics::DrawSalLayout( const CommonSalLayout& )
+void AquaSalGraphics::DrawSalLayout( const CommonSalLayout& rLayout )
 {
+    CGContextRef context = mrContext;
+    SAL_INFO( "vcl.ct", "CGContextSaveGState(" << context << ")" );
+    CGContextSaveGState( context );
+    SAL_INFO( "vcl.ct", "CGContextScaleCTM(" << context << ",1.0,-1.0)" );
+    const CoreTextStyle& rCTStyle = rLayout.getFontData();
+
+    CTFontRef pFont = static_cast<CTFontRef>(CFDictionaryGetValue( rCTStyle.GetStyleDict(), kCTFontAttributeName ));
+    CGContextScaleCTM(context, 1.0, -1.0);
+    CGContextSetShouldAntialias(context, !mbNonAntialiasedText);
+    // rotate the matrix
+    const CGFloat fRadians = rCTStyle.mfFontRotation;
+    CGContextRotateCTM( context, +fRadians );
+    const CGAffineTransform aInvMatrix = CGAffineTransformMakeRotation( -fRadians );
+    CGContextSetFillColor( context, maTextColor.AsArray() );
+
+    // draw the text
+    Point aPos;
+    sal_GlyphId aGlyphId;
+    std::vector<CGGlyph> aGlyphIds;
+    std::vector<CGPoint> aGlyphPos;
+    int nStart = 0;
+    for(; rLayout.GetNextGlyphs( 1, &aGlyphId, aPos, nStart ); )
+    {
+        aGlyphIds.push_back( aGlyphId & GF_IDXMASK );
+        aGlyphPos.push_back( CGPointApplyAffineTransform( CGPointMake( aPos.X(), -1*aPos.Y() ), aInvMatrix ) );
+    }
+    CTFontDrawGlyphs( pFont, aGlyphIds.data(), aGlyphPos.data(), nStart, context);
+
+    // restore the original graphic context transformations
+    SAL_INFO( "vcl.ct", "CGContextRestoreGState(" << context << ")" );
+    CGContextRestoreGState( context );
 }
 
 void AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbackLevel*/ )
