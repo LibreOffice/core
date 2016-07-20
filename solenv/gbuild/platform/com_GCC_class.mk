@@ -46,6 +46,7 @@ endef
 define gb_CObject__command_pattern
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && cd $(SRCDIR) && \
+	$(gb_COMPILER_SETUP) \
 	$(if $(5),$(gb_COMPILER_PLUGINS_SETUP)) \
 	$(if $(filter %.c %.m,$(3)), $(gb_CC), $(gb_CXX)) \
 		$(DEFS) \
