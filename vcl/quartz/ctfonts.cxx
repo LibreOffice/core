@@ -25,7 +25,7 @@
 #include <vcl/settings.hxx>
 
 
-#include "ctfonts.hxx"
+#include "quartz/ctfonts.hxx"
 #include "impfont.hxx"
 #ifdef MACOSX
 #include "osx/saldata.hxx"
