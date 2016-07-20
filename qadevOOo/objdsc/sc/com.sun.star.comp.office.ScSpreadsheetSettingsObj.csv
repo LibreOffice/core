@@ -22,3 +22,4 @@
 "ScSpreadsheetSettingsObj";"com::sun::star::sheet::SpreadsheetDocumentSettings";"CharLocale#optional"
 "ScSpreadsheetSettingsObj";"com::sun::star::sheet::SpreadsheetDocumentSettings";"CharLocaleAsian#optional"
 "ScSpreadsheetSettingsObj";"com::sun::star::sheet::SpreadsheetDocumentSettings";"CharLocaleComplex#optional"
+"ScSpreadsheetSettingsObj";"com::sun::star::sheet::SpreadsheetDocumentSettings";"Wildcards#optional"

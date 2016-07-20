@@ -73,6 +73,7 @@
 "ScModelObj";"com::sun::star::sheet::SpreadsheetDocumentSettings#optional";"CharLocale#optional"
 "ScModelObj";"com::sun::star::sheet::SpreadsheetDocumentSettings#optional";"CharLocaleAsian#optional"
 "ScModelObj";"com::sun::star::sheet::SpreadsheetDocumentSettings#optional";"CharLocaleComplex#optional"
+"ScModelObj";"com::sun::star::sheet::SpreadsheetDocumentSettings#optional";"Wildcards#optional"
 "ScModelObj";"com::sun::star::document::OfficeDocument";"AutomaticControlFocus#optional"
 "ScModelObj";"com::sun::star::document::OfficeDocument";"ApplyFormDesignMode#optional"
 "ScModelObj";"com::sun::star::document::OfficeDocument";"RuntimeUID#optional"
