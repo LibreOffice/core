@@ -415,6 +415,9 @@ TabBarEdit::TabBarEdit( TabBar* pParent, WinBits nWinStyle ) :
     Edit( pParent, nWinStyle )
 {
     mbPostEvt = false;
+    maLoseFocusIdle.SetPriority( SchedulerPriority::REPAINT );
+    maLoseFocusIdle.SetIdleHdl( LINK( this, TabBarEdit, ImplEndTimerHdl ) );
+    maLoseFocusIdle.SetDebugName( "svtools::TabBarEdit maLoseFocusIdle" );
 }
 
 bool TabBarEdit::PreNotify( NotifyEvent& rNEvt )
@@ -468,8 +471,6 @@ IMPL_LINK_TYPED( TabBarEdit, ImplEndEditHdl, void*, pCancel, void )
     // when it shows the context menu or the insert symbol dialog
     if ( !HasFocus() && HasChildPathFocus( true ) )
     {
-        maLoseFocusIdle.SetPriority( SchedulerPriority::REPAINT );
-        maLoseFocusIdle.SetIdleHdl( LINK( this, TabBarEdit, ImplEndTimerHdl ) );
         maLoseFocusIdle.Start();
     }
     else

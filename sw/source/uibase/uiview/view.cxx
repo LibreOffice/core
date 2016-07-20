@@ -1001,6 +1001,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     }
 
     m_aTimer.SetTimeoutHdl(LINK(this, SwView, TimeoutHdl));
+    m_aTimer.SetDebugName( "sw::SwView m_aTimer" );
     m_bAttrChgNotified = m_bAttrChgNotifiedWithRegistrations = false;
     if (bOldModifyFlag)
         rDocSh.EnableSetModified();

@@ -87,6 +87,7 @@ void SystemWindow::Init()
     //To-Do, reuse maResizeTimer
     maLayoutIdle.SetPriority(SchedulerPriority::RESIZE);
     maLayoutIdle.SetIdleHdl( LINK( this, SystemWindow, ImplHandleLayoutTimerHdl ) );
+    maLayoutIdle.SetDebugName( "vcl::SystemWindow maLayoutIdle" );
 }
 
 SystemWindow::SystemWindow(WindowType nType)

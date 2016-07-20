@@ -192,6 +192,8 @@ protected:
     virtual void settingOptimalLayoutSize(Window *pBox);
 
     SAL_DLLPRIVATE void DoInitialLayout();
+
+    SAL_DLLPRIVATE void SetIdleDebugName( const sal_Char *pDebugName );
 public:
     virtual         ~SystemWindow();
     virtual void    dispose() override;
@@ -292,6 +294,11 @@ public:
 
     virtual        void    doDeferredInit(WinBits nBits);
 };
+
+inline void SystemWindow::SetIdleDebugName( const sal_Char *pDebugName )
+{
+    maLayoutIdle.SetDebugName( pDebugName );
+}
 
 #endif // INCLUDED_VCL_SYSWIN_HXX
 

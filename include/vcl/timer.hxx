@@ -56,7 +56,7 @@ public:
 class VCL_DLLPUBLIC AutoTimer : public Timer
 {
 public:
-                    AutoTimer();
+                    AutoTimer( const sal_Char *pDebugName = nullptr );
                     AutoTimer( const AutoTimer& rTimer );
 
     AutoTimer&      operator=( const AutoTimer& rTimer );

@@ -439,6 +439,7 @@ void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
 
     xImp->aIdle.SetPriority(SchedulerPriority::MEDIUM);
     xImp->aIdle.SetIdleHdl( LINK(this, SfxDispatcher, EventHdl_Impl ) );
+    xImp->aIdle.SetDebugName( "sfx::SfxDispatcher_Impl aIdle" );
 }
 
 SfxDispatcher::SfxDispatcher( SfxDispatcher* pParent )

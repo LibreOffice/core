@@ -428,6 +428,7 @@ friend class SfxDockingWindow;
                         { eDockAlignment = eAlign; }
 };
 
+
 /*  [Description]
 
     This virtual method of the class FloatingWindow keeps track of changes in
@@ -842,6 +843,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImpl->SetLastAlignment(SfxChildAlignment::NOALIGNMENT);
     pImpl->aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
     pImpl->aMoveIdle.SetIdleHdl(LINK(this,SfxDockingWindow,TimerHdl));
+    pImpl->aMoveIdle.SetDebugName( "sfx::SfxDockingWindow_Impl aMoveIdle" );
 }
 
 /** Constructor for the SfxDockingWindow class. A SfxChildWindow will be

@@ -45,9 +45,12 @@ BreakDlg::BreakDlg(
     sal_uLong nSumActionCount,
     sal_uLong nObjCount )
     : SfxModalDialog(pWindow, "BreakDialog", "modules/sdraw/ui/breakdialog.ui")
-    , aIdle("sd BreakDlg Idle")
     , mpProgress( nullptr )
 {
+    m_aUpdateIdle.SetPriority( SchedulerPriority::REPAINT );
+    m_aUpdateIdle.SetIdleHdl( LINK( this, BreakDlg, InitialUpdate ) );
+    m_aUpdateIdle.SetDebugName( "sd::BreakDlg m_aUpdateIdle" );
+
     get(m_pFiObjInfo, "metafiles");
     get(m_pFiActInfo, "metaobjects");
     get(m_pFiInsInfo, "drawingobjects");
@@ -155,9 +158,7 @@ IMPL_LINK_TYPED( BreakDlg, UpDate, void*, nInit, bool )
  */
 short BreakDlg::Execute()
 {
-  aIdle.SetPriority( SchedulerPriority::REPAINT );
-  aIdle.SetIdleHdl( LINK( this, BreakDlg, InitialUpdate ) );
-  aIdle.Start();
+  m_aUpdateIdle.Start();
 
   return SfxModalDialog::Execute();
 }
