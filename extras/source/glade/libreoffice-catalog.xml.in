@@ -150,17 +150,6 @@
         </property>
       </properties>
     </glade-widget-class>
-    <glade-widget-class title="Pattern ListBox" name="svxlo-PatternLB"
-                        generic-name="PatternListBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox">
-      <properties>
-        <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
-          <parameter-spec>
-            <type>GParamBoolean</type>
-          </parameter-spec>
-        </property>
-      </properties>
-    </glade-widget-class>
     <glade-widget-class title="Font Name ListBox" name="svtlo-FontNameBox"
                         generic-name="Font name ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox">
