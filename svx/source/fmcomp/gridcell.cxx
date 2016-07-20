@@ -3535,17 +3535,24 @@ void FmXTextCell::PaintFieldToCell(OutputDevice& rDev,
             nStyle |= DrawTextFlags::Left;
     }
 
-    Color* pColor = nullptr;
-    OUString aText = GetText(_rxField, xFormatter, &pColor);
-    if (pColor != nullptr)
+    try
     {
-        Color aOldTextColor( rDev.GetTextColor() );
-        rDev.SetTextColor( *pColor );
-        rDev.DrawText(rRect, aText, nStyle);
-        rDev.SetTextColor( aOldTextColor );
+        Color* pColor = nullptr;
+        OUString aText = GetText(_rxField, xFormatter, &pColor);
+        if (pColor != nullptr)
+        {
+            Color aOldTextColor( rDev.GetTextColor() );
+            rDev.SetTextColor( *pColor );
+            rDev.DrawText(rRect, aText, nStyle);
+            rDev.SetTextColor( aOldTextColor );
+        }
+        else
+            rDev.DrawText(rRect, aText, nStyle);
     }
-    else
-        rDev.DrawText(rRect, aText, nStyle);
+    catch (const Exception& e)
+    {
+        SAL_WARN("svx.form", "PaintFieldToCell: caught an exception: " << e.Message);
+    }
 }
 
 FmXEditCell::FmXEditCell( DbGridColumn* pColumn, DbCellControl& _rControl )
