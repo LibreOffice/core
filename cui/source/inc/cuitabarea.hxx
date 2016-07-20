@@ -193,6 +193,10 @@ private:
     VclPtr<BitmapLB>           m_pLbBitmap;
     VclPtr<SvxXRectPreview>    m_pCtlBitmapPreview;
 
+    VclPtr<VclFrame>           m_pFlHatchBckgrd;
+    VclPtr<CheckBox>           m_pCbxHatchBckgrd;
+    VclPtr<ColorLB>            m_pLbHatchBckgrdColor;
+
     VclPtr<VclBox>             m_pBxBitmap;
 
     VclPtr<VclFrame>           m_pFlSize;
@@ -260,8 +264,10 @@ private:
 
     DECL_LINK_TYPED(SelectDialogTypeHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED( ModifyColorHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( ModifyHatchBckgrdColorHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ModifyGradientHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ModifyHatchingHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( ToggleHatchBckgrdColorHdl_Impl, CheckBox&, void );
     DECL_LINK_TYPED( ModifyBitmapHdl_Impl, ListBox&, void );
     void ModifyStepCountHdl_Impl(void*);
 
@@ -467,10 +473,9 @@ class SvxHatchTabPage : public SvxTabPage
 private:
     VclPtr<MetricField>        m_pMtrDistance;
     VclPtr<MetricField>        m_pMtrAngle;
-    VclPtr<Slider>             m_pSliderAngle;
+    VclPtr<SvxRectCtl>         m_pCtlAngle;
     VclPtr<ListBox>            m_pLbLineType;
     VclPtr<ColorLB>            m_pLbLineColor;
-    VclPtr<ColorLB>            m_pLbBackgroundColor;
     VclPtr<HatchingLB>         m_pLbHatchings;
     VclPtr<SvxXRectPreview>    m_pCtlPreview;
     VclPtr<PushButton>         m_pBtnAdd;
@@ -501,8 +506,6 @@ private:
     DECL_LINK_TYPED( ChangeHatchHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ModifiedEditHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( ModifiedListBoxHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ModifiedBackgroundHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ModifiedSliderHdl_Impl, Slider*, void );
     void ModifiedHdl_Impl(void*);
     DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
