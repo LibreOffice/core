@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_91bb6c0e",
+        "filename": "svx/source/svdraw/svdetc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-07-20T15:56:45Z",
+      "side": 1,
+      "message": "you need to adapt the declarations of these member functions as well, in the SvdProgressInfo class declaration",
+      "revId": "2db0bb8f309b06f90bef16f5fda20373b9c05887",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
