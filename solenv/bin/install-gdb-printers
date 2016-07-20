@@ -123,7 +123,7 @@ if [[ ${DESTDIR}${pythondir} != ${GDBDIR} ]]; then
 fi
 
 if [[ -n "${MERGELIBS}" ]]; then
-    make_autoload merged program libmergedlo."$DYLIB" merge svl tl basegfx
+    make_autoload merged program libmergedlo."$DYLIB" merge svl tl basegfx vcl
     make_autoload cppu program libuno_cppu."$DYLIB".3
     make_autoload sal program libuno_sal."$DYLIB".3
     make_autoload sw program libswlo."$DYLIB"
@@ -134,6 +134,7 @@ else
     make_autoload svl program libsvllo."$DYLIB"
     make_autoload sw program libswlo."$DYLIB"
     make_autoload tl program libtllo."$DYLIB"
+    make_autoload vcl program libvcllo."$DYLIB"
 fi
 make_autoload writerfilter program libwriterfilterlo."$DYLIB"
 
