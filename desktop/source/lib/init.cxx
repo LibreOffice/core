@@ -1515,8 +1515,6 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     }
 
     bool bResult = false;
-
-    std::size_t nView = SfxLokHelper::getView();
     if (bNotifyWhenFinished && pDocument->mpCallbackFlushHandlers[nView])
     {
         bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector),
