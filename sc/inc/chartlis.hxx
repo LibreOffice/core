@@ -149,6 +149,9 @@ private:
 
     ScChartListenerCollection& operator=( const ScChartListenerCollection& ) = delete;
 
+protected:
+    void Init();
+
 public:
     ScChartListenerCollection( ScDocument* pDoc );
     ScChartListenerCollection( const ScChartListenerCollection& );
