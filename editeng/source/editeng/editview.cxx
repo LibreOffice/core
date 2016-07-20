@@ -392,7 +392,7 @@ void EditView::Command( const CommandEvent& rCEvt )
     pImpEditView->Command( rCEvt );
 }
 
-void EditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
+void EditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bActivate )
 {
     if ( pImpEditView->pEditEngine->HasView( this ) )
     {
@@ -401,18 +401,18 @@ void EditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             bGotoCursor = false;
         pImpEditView->ShowCursor( bGotoCursor, bForceVisCursor );
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::LibreOfficeKit::isActive() && !bActivate)
         {
             pImpEditView->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(true).getStr());
         }
     }
 }
 
-void EditView::HideCursor()
+void EditView::HideCursor(bool bDeactivate)
 {
     pImpEditView->GetCursor()->Hide();
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::LibreOfficeKit::isActive() && !bDeactivate)
     {
         pImpEditView->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(false).getStr());
     }

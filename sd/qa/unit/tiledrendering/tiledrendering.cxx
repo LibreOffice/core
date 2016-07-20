@@ -65,6 +65,7 @@ public:
     void testResizeTableColumn();
     void testViewCursors();
     void testViewCursorParts();
+    void testCursorViews();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -86,6 +87,7 @@ public:
     CPPUNIT_TEST(testResizeTableColumn);
     CPPUNIT_TEST(testViewCursors);
     CPPUNIT_TEST(testViewCursorParts);
+    CPPUNIT_TEST(testCursorViews);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -818,11 +820,13 @@ public:
     bool m_bGraphicViewSelectionInvalidated;
     /// Our current part, to be able to decide if a view cursor/selection is relevant for us.
     int m_nPart;
+    bool m_bCursorVisibleChanged;
 
     ViewCallback()
         : m_bGraphicSelectionInvalidated(false),
           m_bGraphicViewSelectionInvalidated(false),
-          m_nPart(0)
+          m_nPart(0),
+          m_bCursorVisibleChanged(false)
     {
     }
 
@@ -848,6 +852,11 @@ public:
             if (aTree.get_child("part").get_value<int>() == m_nPart)
                 // Ignore callbacks which are for a different part.
                 m_bGraphicViewSelectionInvalidated = true;
+        }
+        break;
+        case LOK_CALLBACK_CURSOR_VISIBLE:
+        {
+            m_bCursorVisibleChanged = true;
         }
         break;
         }
@@ -919,6 +928,35 @@ void SdTiledRenderingTest::testViewCursorParts()
     // First view ignores view selection, as it would be for part 1, and it's in part 0.
     // This failed when the "part" was always 0 in the callback.
     CPPUNIT_ASSERT(!aView1.m_bGraphicViewSelectionInvalidated);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testCursorViews()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    // Create the first view.
+    SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+
+    // Begin text edit on the only object on the slide.
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(0);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pObject);
+
+    // Make sure that cursor state is not changed just because we create a second view.
+    aView1.m_bCursorVisibleChanged = false;
+    SfxLokHelper::createView();
+    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!aView1.m_bCursorVisibleChanged);
 
     mxComponent->dispose();
     mxComponent.clear();
