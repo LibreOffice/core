@@ -385,6 +385,7 @@ namespace sdr
             // Init timer
             maBufferIdle.SetPriority( SchedulerPriority::POST_PAINT );
             maBufferIdle.SetIdleHdl(LINK(this, OverlayManagerBuffered, ImpBufferTimerHandler));
+            maBufferIdle.SetDebugName( "sdr::overlay::OverlayManagerBuffered maBufferIdle" );
         }
 
         rtl::Reference<OverlayManager> OverlayManagerBuffered::create(

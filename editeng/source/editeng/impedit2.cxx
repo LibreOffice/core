@@ -146,12 +146,15 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
 
     aStatusTimer.SetTimeout( 200 );
     aStatusTimer.SetTimeoutHdl( LINK( this, ImpEditEngine, StatusTimerHdl ) );
+    aStatusTimer.SetDebugName( "editeng::ImpEditEngine aStatusTimer" );
 
     aIdleFormatter.SetPriority( SchedulerPriority::REPAINT );
     aIdleFormatter.SetIdleHdl( LINK( this, ImpEditEngine, IdleFormatHdl ) );
+    aIdleFormatter.SetDebugName( "editeng::ImpEditEngine aIdleFormatter" );
 
     aOnlineSpellTimer.SetTimeout( 100 );
     aOnlineSpellTimer.SetTimeoutHdl( LINK( this, ImpEditEngine, OnlineSpellHdl ) );
+    aOnlineSpellTimer.SetDebugName( "editeng::ImpEditEngine aOnlineSpellTimer" );
 
     // Access data already from here on!
     SetRefDevice( nullptr );

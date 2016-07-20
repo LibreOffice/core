@@ -331,6 +331,7 @@ SwDoc::SwDoc()
 
     maOLEModifiedIdle.SetPriority( SchedulerPriority::LOWEST );
     maOLEModifiedIdle.SetIdleHdl( LINK( this, SwDoc, DoUpdateModifiedOLE ));
+    maOLEModifiedIdle.SetDebugName( "sw::SwDoc maOLEModifiedIdle" );
 
 #if HAVE_FEATURE_DBCONNECTIVITY
     // Create DBManager

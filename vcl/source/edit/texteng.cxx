@@ -92,6 +92,7 @@ TextEngine::TextEngine()
 
     mpIdleFormatter = new IdleFormatter;
     mpIdleFormatter->SetIdleHdl( LINK( this, TextEngine, IdleFormatHdl ) );
+    mpIdleFormatter->SetDebugName( "vcl::TextEngine mpIdleFormatter" );
 
     mpRefDev = VclPtr<VirtualDevice>::Create();
 

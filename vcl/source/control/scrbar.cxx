@@ -94,6 +94,7 @@ void ScrollBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
     {
         mpData = new ImplScrollBarData;
         mpData->maTimer.SetTimeoutHdl( LINK( this, ScrollBar, ImplAutoTimerHdl ) );
+        mpData->maTimer.SetDebugName( "vcl::ScrollBar mpData->maTimer" );
         mpData->mbHide = false;
     }
 
