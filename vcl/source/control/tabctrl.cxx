@@ -33,6 +33,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/builderfactory.hxx>
+#include <svids.hrc>
 
 #include "controldata.hxx"
 #include "svdata.hxx"
@@ -2206,6 +2207,15 @@ NotebookbarTabControl::NotebookbarTabControl(vcl::Window* pParent, WinBits nStyl
     : TabControl(pParent, nStyle)
     , eLastContext( vcl::EnumContext::Context::Context_Any )
 {
+    LanguageTag aLocale( Application::GetSettings().GetUILanguageTag());
+    ResMgr* pResMgr = ResMgr::SearchCreateResMgr( "vcl", aLocale );
+
+    Bitmap aBitmap;
+    if( pResMgr )
+        aBitmap = Bitmap( ResId( SV_RESID_BITMAP_NOTEBOOKBAR, *pResMgr ) );
+
+    InsertPage(1, "");
+    SetPageImage(1, Image(aBitmap));
 }
 
 void NotebookbarTabControl::SetContext( vcl::EnumContext::Context eContext )
@@ -2217,16 +2227,21 @@ void NotebookbarTabControl::SetContext( vcl::EnumContext::Context eContext )
             TabPage* pPage = static_cast<TabPage*>(GetChild(nChild));
 
             if (pPage->HasContext(eContext) || pPage->HasContext(vcl::EnumContext::Context::Context_Any))
-                EnablePage(nChild + 1);
+                EnablePage(nChild + 2);
             else
-                EnablePage(nChild + 1, false);
+                EnablePage(nChild + 2, false);
 
             if (pPage->HasContext(eContext) && eContext != vcl::EnumContext::Context::Context_Any)
-                SetCurPageId(nChild + 1);
+                SetCurPageId(nChild + 2);
         }
 
         eLastContext = eContext;
     }
+}
+
+void NotebookbarTabControl::SetIconClickHdl( Link<NotebookBar*, void> aHdl )
+{
+    m_aIconClickHdl = aHdl;
 }
 
 sal_uInt16 NotebookbarTabControl::GetPageId( const Point& rPos ) const
@@ -2234,11 +2249,25 @@ sal_uInt16 NotebookbarTabControl::GetPageId( const Point& rPos ) const
     for( size_t i = 0; i < mpTabCtrlData->maItemList.size(); ++i )
     {
         if ( const_cast<NotebookbarTabControl*>(this)->ImplGetTabRect( static_cast<sal_uInt16>(i) ).IsInside( rPos ) )
-            if (  mpTabCtrlData->maItemList[ i ].mbEnabled )
+            if ( mpTabCtrlData->maItemList[ i ].mbEnabled )
                 return mpTabCtrlData->maItemList[ i ].mnId;
     }
 
     return 0;
+}
+
+void NotebookbarTabControl::SelectTabPage( sal_uInt16 nPageId )
+{
+    if ( nPageId == 1 )
+        m_aIconClickHdl.Call( static_cast<NotebookBar*>(GetParent()) );
+    else
+        TabControl::SelectTabPage( nPageId );
+}
+
+void NotebookbarTabControl::SetCurPageId( sal_uInt16 nPageId )
+{
+    if ( nPageId != 1 )
+        TabControl::SetCurPageId( nPageId );
 }
 
 bool NotebookbarTabControl::ImplPlaceTabs( long nWidth )

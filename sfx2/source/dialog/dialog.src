@@ -121,4 +121,53 @@ String STR_FONT_TABPAGE
   Text [ en-US ] = "Font" ;
 };
 
+Menu RID_MENU_NOTEBOOKBAR
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_OPENDOC;
+            Command = ".uno:Open";
+            Text [ en-US ] = "Open..." ;
+        };
+        MenuItem
+        {
+            Identifier = SID_SAVEDOC;
+            Command = ".uno:Save";
+            Text [ en-US ] = "Save" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_UNDO;
+            Command = ".uno:Undo";
+            Text [ en-US ] = "Undo" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_REDO;
+            Command = ".uno:Redo";
+            Text [ en-US ] = "Redo" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_PRINTDOC;
+            Command = ".uno:Print";
+            Text [ en-US ] = "Print" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_OPTIONS;
+            Command = ".uno:OptionsTreeDialog";
+            Text [ en-US ] = "Options" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_CLOSEDOC;
+            Command = ".uno:CloseDoc";
+            Text [ en-US ] = "Close" ;
+        };
+    };
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

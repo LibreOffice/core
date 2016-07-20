@@ -17,7 +17,7 @@
 #include <com/sun/star/ui/XContextChangeEventListener.hpp>
 
 /// This implements Widget Layout-based notebook-like menu bar.
-class NotebookBar : public Control, public VclBuilderContainer
+class VCL_DLLPUBLIC NotebookBar : public Control, public VclBuilderContainer
 {
 friend class NotebookBarContextChangeEventListener;
 public:
@@ -27,6 +27,8 @@ public:
 
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
     virtual void setPosSizePixel(long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All) SAL_OVERRIDE;
+
+    void SetIconClickHdl(Link<NotebookBar*, void> aHdl);
 
     virtual void StateChanged(StateChangedType nType) override;
 
