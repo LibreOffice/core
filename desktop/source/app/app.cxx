@@ -525,6 +525,9 @@ Desktop::Desktop()
     , m_aBootstrapError(BE_OK)
     , m_aBootstrapStatus(BS_OK)
 {
+    m_firstRunTimer.SetTimeout(3000); // 3 sec.
+    m_firstRunTimer.SetTimeoutHdl(LINK(this, Desktop, AsyncInitFirstRun));
+    m_firstRunTimer.SetDebugName( "desktop::Desktop m_firstRunTimer" );
 }
 
 Desktop::~Desktop()
@@ -2665,8 +2668,6 @@ void Desktop::CheckFirstRun( )
     {
         // use VCL timer, which won't trigger during shutdown if the
         // application exits before timeout
-        m_firstRunTimer.SetTimeout(3000); // 3 sec.
-        m_firstRunTimer.SetTimeoutHdl(LINK(this, Desktop, AsyncInitFirstRun));
         m_firstRunTimer.Start();
 
 #ifdef _WIN32

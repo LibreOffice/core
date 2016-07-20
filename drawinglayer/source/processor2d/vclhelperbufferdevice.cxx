@@ -71,6 +71,7 @@ namespace
         maUsedBuffers()
     {
         SetTimeout(10L * 1000L); // ten seconds
+        SetDebugName("drawinglayer::VDevBuffer via Invoke()");
     }
 
     VDevBuffer::~VDevBuffer()
