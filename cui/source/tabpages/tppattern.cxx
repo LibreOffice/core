@@ -101,27 +101,18 @@ SvxPatternTabPage::SvxPatternTabPage(  vcl::Window* pParent, const SfxItemSet& r
     m_aXFillAttr          ( rInAttrs.GetPool() ),
     m_rXFSet              ( m_aXFillAttr.GetItemSet() )
 {
-    get(m_pBxPixelEditor,"maingrid");
     get(m_pCtlPixel,"CTL_PIXEL");
     get(m_pLbColor,"LB_COLOR");
     get(m_pLbBackgroundColor,"LB_BACKGROUND_COLOR");
     get(m_pCtlPreview,"CTL_PREVIEW");
-    get(m_pLbPatterns,"LB_PATTERN");
+    get(m_pPatternLB, "patternpresetlist");
     get(m_pBtnAdd,"BTN_ADD");
     get(m_pBtnModify,"BTN_MODIFY");
-    get(m_pBtnDelete,"BTN_DELETE");
-    get(m_pBtnLoad,"BTN_LOAD");
-    get(m_pBtnSave,"BTN_SAVE");
-
-    // size of the bitmap listbox
-    Size aSize = getDrawListBoxOptimalSize(this);
-    m_pLbPatterns->set_width_request(aSize.Width());
-    m_pLbPatterns->set_height_request(aSize.Height());
 
     // size of the bitmap display
-    Size aSize2 = getDrawPreviewOptimalSize(this);
-    m_pCtlPreview->set_width_request(aSize2.Width());
-    m_pCtlPreview->set_height_request(aSize2.Height());
+    Size aSize = getDrawPreviewOptimalSize(this);
+    m_pCtlPreview->set_width_request(aSize.Width());
+    m_pCtlPreview->set_height_request(aSize.Height());
 
     m_pBitmapCtl = new SvxBitmapCtl;
 
@@ -134,11 +125,10 @@ SvxPatternTabPage::SvxPatternTabPage(  vcl::Window* pParent, const SfxItemSet& r
 
     m_pBtnAdd->SetClickHdl( LINK( this, SvxPatternTabPage, ClickAddHdl_Impl ) );
     m_pBtnModify->SetClickHdl( LINK( this, SvxPatternTabPage, ClickModifyHdl_Impl ) );
-    m_pBtnDelete->SetClickHdl( LINK( this, SvxPatternTabPage, ClickDeleteHdl_Impl ) );
-    m_pBtnLoad->SetClickHdl( LINK( this, SvxPatternTabPage, ClickLoadHdl_Impl ) );
-    m_pBtnSave->SetClickHdl( LINK( this, SvxPatternTabPage, ClickSaveHdl_Impl ) );
 
-    m_pLbPatterns->SetSelectHdl( LINK( this, SvxPatternTabPage, ChangePatternHdl_Impl ) );
+    m_pPatternLB->SetSelectHdl( LINK( this, SvxPatternTabPage, ChangePatternHdl_Impl ) );
+    m_pPatternLB->SetRenameHdl( LINK( this, SvxPatternTabPage, ClickRenameHdl_Impl ) );
+    m_pPatternLB->SetDeleteHdl( LINK( this, SvxPatternTabPage, ClickDeleteHdl_Impl ) );
     m_pLbColor->SetSelectHdl( LINK( this, SvxPatternTabPage, ChangeColorHdl_Impl ) );
     m_pLbBackgroundColor->SetSelectHdl( LINK( this, SvxPatternTabPage, ChangeColorHdl_Impl ) );
 
@@ -154,17 +144,12 @@ void SvxPatternTabPage::dispose()
 {
     delete m_pBitmapCtl;
     m_pBitmapCtl = nullptr;
-    m_pBxPixelEditor.clear();
     m_pCtlPixel.clear();
     m_pLbColor.clear();
     m_pLbBackgroundColor.clear();
-    m_pLbPatterns.clear();
     m_pCtlPreview.clear();
     m_pBtnAdd.clear();
     m_pBtnModify.clear();
-    m_pBtnDelete.clear();
-    m_pBtnLoad.clear();
-    m_pBtnSave.clear();
     SvxTabPage::dispose();
 }
 
@@ -172,7 +157,7 @@ void SvxPatternTabPage::Construct()
 {
     m_pLbColor->Fill( m_pColorList );
     m_pLbBackgroundColor->CopyEntries( *m_pLbColor );
-    m_pLbPatterns->Fill( m_pPatternList );
+    m_pPatternLB->FillPresetListBox( *m_pPatternList );
 }
 
 
@@ -239,10 +224,11 @@ void SvxPatternTabPage::ActivatePage( const SfxItemSet&  )
 
             if( *m_pPageType == PT_BITMAP && *m_pPos != LISTBOX_ENTRY_NOTFOUND )
             {
-                m_pLbPatterns->SelectEntryPos( *m_pPos );
+                sal_uInt16 nId = m_pPatternLB->GetItemId( static_cast<size_t>( *m_pPos ) );
+                m_pPatternLB->SelectItem( nId );
             }
             // colors could have been deleted
-            ChangePatternHdl_Impl( *m_pLbPatterns );
+            ChangePatternHdl_Impl( m_pPatternLB );
 
             *m_pPageType = PT_BITMAP;
             *m_pPos = LISTBOX_ENTRY_NOTFOUND;
@@ -270,11 +256,11 @@ bool SvxPatternTabPage::FillItemSet( SfxItemSet* _rOutAttrs )
         if(PT_BITMAP == *m_pPageType)
         {
             _rOutAttrs->Put(XFillStyleItem(drawing::FillStyle_BITMAP));
-            sal_Int32 nPos = m_pLbPatterns->GetSelectEntryPos();
-            if(LISTBOX_ENTRY_NOTFOUND != nPos)
+            size_t nPos = m_pPatternLB->GetSelectItemPos();
+            if(VALUESET_ITEM_NOTFOUND != nPos)
             {
-                const XBitmapEntry* pXBitmapEntry = m_pPatternList->GetBitmap(nPos);
-                const OUString aString(m_pLbPatterns->GetSelectEntry());
+                const XBitmapEntry* pXBitmapEntry = m_pPatternList->GetBitmap( static_cast<sal_uInt16>(nPos) );
+                const OUString aString( m_pPatternLB->GetItemText( m_pPatternLB->GetSelectItemId() ) );
 
                 _rOutAttrs->Put(XFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject()));
             }
@@ -303,21 +289,17 @@ void SvxPatternTabPage::Reset( const SfxItemSet*  )
     m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlPreview->Invalidate();
 
-    ChangePatternHdl_Impl( *m_pLbPatterns );
+    ChangePatternHdl_Impl( m_pPatternLB );
 
     // determine button state
     if( m_pPatternList.is() && m_pPatternList->Count() )
     {
         m_pBtnAdd->Enable();
         m_pBtnModify->Enable();
-        m_pBtnDelete->Enable();
-        m_pBtnSave->Enable();
     }
     else
     {
         m_pBtnModify->Disable();
-        m_pBtnDelete->Disable();
-        m_pBtnSave->Disable();
     }
 }
 
@@ -329,14 +311,14 @@ VclPtr<SfxTabPage> SvxPatternTabPage::Create( vcl::Window* pWindow,
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ChangePatternHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ChangePatternHdl_Impl, ValueSet*, void)
 {
     std::unique_ptr<GraphicObject> pGraphicObject;
-    int nPos(m_pLbPatterns->GetSelectEntryPos());
+    size_t nPos = m_pPatternLB->GetSelectItemPos();
 
-    if(LISTBOX_ENTRY_NOTFOUND != nPos)
+    if(VALUESET_ITEM_NOTFOUND != nPos)
     {
-        pGraphicObject.reset(new GraphicObject(m_pPatternList->GetBitmap(nPos)->GetGraphicObject()));
+        pGraphicObject.reset(new GraphicObject(m_pPatternList->GetBitmap( static_cast<sal_uInt16>(nPos) )->GetGraphicObject()));
     }
     else
     {
@@ -354,12 +336,11 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ChangePatternHdl_Impl, ListBox&, void)
 
         if(!pGraphicObject)
         {
-            m_pLbPatterns->SelectEntryPos(0);
-            nPos = m_pLbPatterns->GetSelectEntryPos();
-
-            if(LISTBOX_ENTRY_NOTFOUND != nPos)
+            sal_uInt16 nPosition = m_pPatternLB->GetItemId( 0 );
+            m_pPatternLB->SelectItem( nPosition );
+            if( nPosition != 0 )
             {
-                pGraphicObject.reset(new GraphicObject(m_pPatternList->GetBitmap(nPos)->GetGraphicObject()));
+                pGraphicObject.reset(new GraphicObject(m_pPatternList->GetBitmap(0)->GetGraphicObject()));
             }
         }
     }
@@ -376,7 +357,6 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ChangePatternHdl_Impl, ListBox&, void)
         if(bIs8x8)
         {
             m_pCtlPixel->SetPaintable( true );
-            m_pBxPixelEditor->Enable();
             m_pBtnModify->Enable();
             m_pBtnAdd->Enable();
 
@@ -426,7 +406,6 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ChangePatternHdl_Impl, ListBox&, void)
         {
             m_pCtlPixel->Reset();
             m_pCtlPixel->SetPaintable( false );
-            m_pBxPixelEditor->Disable();
             m_pBtnModify->Disable();
             m_pBtnAdd->Disable();
         }
@@ -440,8 +419,8 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ChangePatternHdl_Impl, ListBox&, void)
 
 long SvxPatternTabPage::CheckChanges_Impl()
 {
-    sal_Int32 nPos = m_pLbPatterns->GetSelectEntryPos();
-    if( nPos != LISTBOX_ENTRY_NOTFOUND )
+    size_t nPos = m_pPatternLB->GetSelectItemPos();
+    if( nPos != VALUESET_ITEM_NOTFOUND )
     {
         if( m_bPtrnChanged )
         {
@@ -476,9 +455,9 @@ long SvxPatternTabPage::CheckChanges_Impl()
             }
         }
     }
-    nPos = m_pLbPatterns->GetSelectEntryPos();
-    if( nPos != LISTBOX_ENTRY_NOTFOUND )
-        *m_pPos = nPos;
+    nPos = m_pPatternLB->GetSelectItemPos();
+    if( nPos != VALUESET_ITEM_NOTFOUND )
+        *m_pPos = static_cast<sal_Int32>(nPos);
     return 0L;
 }
 
@@ -565,14 +544,15 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickAddHdl_Impl, Button*, void)
 
         if( pEntry )
         {
-            m_pPatternList->Insert( pEntry );
-            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-            m_pLbPatterns->Append(rStyleSettings.GetListBoxPreviewDefaultPixelSize(), *pEntry );
-            m_pLbPatterns->SelectEntryPos( m_pLbPatterns->GetEntryCount() - 1 );
+            m_pPatternList->Insert( pEntry, nCount );
+            sal_Int32 nId = m_pPatternLB->GetItemId( nCount - 1 );
+            Bitmap aBitmap = m_pPatternList->GetBitmapForPreview( nCount, m_pPatternLB->GetIconSize() );
+            m_pPatternLB->InsertItem( nId + 1, Image(aBitmap), aName );
+            m_pPatternLB->SelectItem( nId + 1 );
 
             *m_pnPatternListState |= ChangeType::MODIFIED;
 
-            ChangePatternHdl_Impl( *m_pLbPatterns );
+            ChangePatternHdl_Impl( m_pPatternLB  );
         }
     }
 
@@ -580,8 +560,6 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickAddHdl_Impl, Button*, void)
     if( m_pPatternList->Count() )
     {
         m_pBtnModify->Enable();
-        m_pBtnDelete->Enable();
-        m_pBtnSave->Enable();
     }
 }
 
@@ -592,9 +570,37 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickAddHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickModifyHdl_Impl, Button*, void)
 {
-    sal_Int32 nPos = m_pLbPatterns->GetSelectEntryPos();
+    sal_uInt16 nId = m_pPatternLB->GetSelectItemId();
+    size_t nPos = m_pPatternLB->GetSelectItemPos();
 
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+    if ( nPos != VALUESET_ITEM_NOTFOUND )
+    {
+        OUString aName( m_pPatternList->GetBitmap( static_cast<sal_uInt16>(nPos) )->GetName() );
+
+        const BitmapEx aBitmapEx(m_pBitmapCtl->GetBitmapEx());
+
+        // #i123497# Need to replace the existing entry with a new one (old returned needs to be deleted)
+        XBitmapEntry* pEntry = new XBitmapEntry(Graphic(aBitmapEx), aName);
+        delete m_pPatternList->Replace(pEntry, nPos);
+
+        Bitmap aBitmap = m_pPatternList->GetBitmapForPreview( static_cast<sal_uInt16>( nPos ), m_pPatternLB->GetIconSize() );
+        m_pPatternLB->RemoveItem(nId);
+        m_pPatternLB->InsertItem( nId, Image(aBitmap), aName, static_cast<sal_uInt16>(nPos) );
+        m_pPatternLB->SelectItem( nId );
+
+        *m_pnPatternListState |= ChangeType::MODIFIED;
+
+        m_bPtrnChanged = false;
+    }
+}
+
+
+IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
+{
+    size_t nPos = m_pPatternLB->GetSelectItemPos();
+    sal_Int32 nId = m_pPatternLB->GetSelectItemId();
+
+    if ( nPos != VALUESET_ITEM_NOTFOUND )
     {
         ResMgr& rMgr = CUI_MGR();
         OUString aDesc( ResId( RID_SVXSTR_DESC_NEW_PATTERN, rMgr ) );
@@ -608,7 +614,6 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickModifyHdl_Impl, Button*, void)
 
         long nCount = m_pPatternList->Count();
         bool bLoop = true;
-        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
         while( bLoop && pDlg->Execute() == RET_OK )
         {
@@ -617,8 +622,8 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickModifyHdl_Impl, Button*, void)
 
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
-                if( aName == m_pPatternList->GetBitmap( i )->GetName() &&
-                    aName != aOldName )
+                if( aName == m_pPatternList->GetBitmap( i )->GetName()
+                    && aName != aOldName )
                     bDifferent = false;
             }
 
@@ -626,14 +631,11 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickModifyHdl_Impl, Button*, void)
             {
                 bLoop = false;
 
-                const BitmapEx aBitmapEx(m_pBitmapCtl->GetBitmapEx());
+                XBitmapEntry* pEntry = m_pPatternList->GetBitmap( static_cast<sal_uInt16>(nPos) );
+                pEntry->SetName( aName );
 
-                // #i123497# Need to replace the existing entry with a new one (old returned needs to be deleted)
-                XBitmapEntry* pEntry = new XBitmapEntry(Graphic(aBitmapEx), aName);
-                delete m_pPatternList->Replace(pEntry, nPos);
-
-                m_pLbPatterns->Modify( rStyleSettings.GetListBoxPreviewDefaultPixelSize(), *pEntry, nPos );
-                m_pLbPatterns->SelectEntryPos( nPos );
+                m_pPatternLB->SetItemText( nId, aName );
+                m_pPatternLB->SelectItem( nId );
 
                 *m_pnPatternListState |= ChangeType::MODIFIED;
 
@@ -652,24 +654,26 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickModifyHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickDeleteHdl_Impl, Button*, void)
+IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
 {
-    sal_Int32 nPos = m_pLbPatterns->GetSelectEntryPos();
+    sal_uInt16 nId = m_pPatternLB->GetSelectItemId();
+    size_t nPos = m_pPatternLB->GetSelectItemPos();
 
-    if( nPos != LISTBOX_ENTRY_NOTFOUND )
+    if( nPos != VALUESET_ITEM_NOTFOUND )
     {
         ScopedVclPtrInstance< MessageDialog > aQueryBox( GetParentDialog(),"AskDelBitmapDialog","cui/ui/querydeletebitmapdialog.ui" );
 
         if( aQueryBox->Execute() == RET_YES )
         {
-            delete m_pPatternList->Remove( nPos );
-            m_pLbPatterns->RemoveEntry( nPos );
-            m_pLbPatterns->SelectEntryPos( 0 );
+            delete m_pPatternList->Remove( static_cast<sal_uInt16>(nPos) );
+            m_pPatternLB->RemoveItem( nId );
+            nId = m_pPatternLB->GetItemId(0);
+            m_pPatternLB->SelectItem( nId );
 
             m_pCtlPreview->Invalidate();
             m_pCtlPixel->Invalidate();
 
-            ChangePatternHdl_Impl( *m_pLbPatterns );
+            ChangePatternHdl_Impl( m_pPatternLB );
 
             *m_pnPatternListState |= ChangeType::MODIFIED;
         }
@@ -678,178 +682,8 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickDeleteHdl_Impl, Button*, void)
     if( !m_pPatternList->Count() )
     {
         m_pBtnModify->Disable();
-        m_pBtnDelete->Disable();
-        m_pBtnSave->Disable();
     }
 }
-
-
-IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickLoadHdl_Impl, Button*, void)
-{
-    sal_uInt16 nReturn = RET_YES;
-    ResMgr& rMgr = CUI_MGR();
-
-    if ( *m_pnPatternListState & ChangeType::MODIFIED )
-    {
-        nReturn = ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
-                                ,"AskSaveList"
-                                ,"cui/ui/querysavelistdialog.ui")->Execute();
-
-        if ( nReturn == RET_YES )
-            m_pPatternList->Save();
-    }
-
-    if ( nReturn != RET_CANCEL )
-    {
-        ::sfx2::FileDialogHelper aDlg( css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
-        OUString aStrFilterType( "*.sop" );
-        aDlg.AddFilter( aStrFilterType, aStrFilterType );
-        OUString aPalettePath(SvtPathOptions().GetPalettePath());
-        OUString aLastDir;
-        sal_Int32 nIndex = 0;
-        do
-        {
-            aLastDir = aPalettePath.getToken(0, ';', nIndex);
-        }
-        while (nIndex >= 0);
-
-        INetURLObject aFile(aLastDir);
-        aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
-
-        if ( aDlg.Execute() == ERRCODE_NONE )
-        {
-            EnterWait();
-            INetURLObject aURL( aDlg.GetPath() );
-            INetURLObject aPathURL( aURL );
-
-            aPathURL.removeSegment();
-            aPathURL.removeFinalSlash();
-
-            // save table
-            XPatternListRef pBmpList = XPropertyList::AsPatternList(
-                XPropertyList::CreatePropertyList(
-                    XPATTERN_LIST, aPathURL.GetMainURL(INetURLObject::NO_DECODE),
-                    ""));
-            pBmpList->SetName( aURL.getName() );
-            if( pBmpList->Load() )
-            {
-                m_pPatternList = pBmpList;
-                static_cast<SvxAreaTabDialog*>( GetParentDialog() )->SetNewPatternList( m_pPatternList );
-
-                m_pLbPatterns->Clear();
-                m_pLbPatterns->Fill( m_pPatternList );
-                Reset( &m_rOutAttrs );
-
-                m_pPatternList->SetName( aURL.getName() );
-
-                // determining (possibly cutting) the name
-                // displaying it in the GroupBox
-                OUString aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
-                aString += ": ";
-
-                if ( aURL.getBase().getLength() > 18 )
-                {
-                    aString += aURL.getBase().copy( 0, 15 );
-                    aString += "...";
-                }
-                else
-                    aString += aURL.getBase();
-
-                *m_pnPatternListState |= ChangeType::CHANGED;
-                *m_pnPatternListState &= ~ChangeType::MODIFIED;
-                LeaveWait();
-            }
-            else
-            {
-                LeaveWait();
-                ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
-                              ,"NoLoadedFileDialog"
-                              ,"cui/ui/querynoloadedfiledialog.ui")->Execute();
-            }
-        }
-    }
-
-    // determine button state
-    if( m_pPatternList->Count() )
-    {
-        m_pBtnModify->Enable();
-        m_pBtnDelete->Enable();
-        m_pBtnSave->Enable();
-    }
-    else
-    {
-        m_pBtnModify->Disable();
-        m_pBtnDelete->Disable();
-        m_pBtnSave->Disable();
-    }
-}
-
-
-IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickSaveHdl_Impl, Button*, void)
-{
-    ::sfx2::FileDialogHelper aDlg( css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE );
-    OUString aStrFilterType( "*.sop" );
-    aDlg.AddFilter( aStrFilterType, aStrFilterType );
-
-    OUString aPalettePath(SvtPathOptions().GetPalettePath());
-    OUString aLastDir;
-    sal_Int32 nIndex = 0;
-    do
-    {
-        aLastDir = aPalettePath.getToken(0, ';', nIndex);
-    }
-    while (nIndex >= 0);
-
-    INetURLObject aFile(aLastDir);
-    SAL_WARN_IF( aFile.GetProtocol() == INetProtocol::NotValid, "cui.tabpages", "invalid URL" );
-
-    if( !m_pPatternList->GetName().isEmpty() )
-    {
-        aFile.Append( m_pPatternList->GetName() );
-
-        if( aFile.getExtension().isEmpty() )
-            aFile.SetExtension( "sop" );
-    }
-
-    aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
-    if ( aDlg.Execute() == ERRCODE_NONE )
-    {
-        INetURLObject   aURL( aDlg.GetPath() );
-        INetURLObject   aPathURL( aURL );
-
-        aPathURL.removeSegment();
-        aPathURL.removeFinalSlash();
-
-        m_pPatternList->SetName( aURL.getName() );
-        m_pPatternList->SetPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
-
-        if( m_pPatternList->Save() )
-        {
-            // determining (possibly cutting) the name
-            // displaying it in the GroupBox
-            OUString aString( CUI_RES( RID_SVXSTR_TABLE ) );
-            aString += ": ";
-
-            if ( aURL.getBase().getLength() > 18 )
-            {
-                aString += aURL.getBase().copy( 0, 15 );
-                aString += "...";
-            }
-            else
-                aString += aURL.getBase();
-
-            *m_pnPatternListState |= ChangeType::SAVED;
-            *m_pnPatternListState &= ~ChangeType::MODIFIED;
-        }
-        else
-        {
-            ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
-                          ,"NoSaveFileDialog"
-                          ,"cui/ui/querynosavefiledialog.ui")->Execute();
-        }
-    }
-}
-
 
 IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ChangeColorHdl_Impl, ListBox&, void)
 {

@@ -563,12 +563,11 @@ private:
     VclPtr<ColorLB>            m_pLbColor;
     VclPtr<ColorLB>            m_pLbBackgroundColor;
     VclPtr<PatternLB>          m_pLbPatterns;
+    VclPtr<SvxPresetListBox>   m_pPatternLB;
     VclPtr<SvxXRectPreview>    m_pCtlPreview;
     VclPtr<PushButton>         m_pBtnAdd;
     VclPtr<PushButton>         m_pBtnModify;
     VclPtr<PushButton>         m_pBtnDelete;
-    VclPtr<PushButton>         m_pBtnLoad;
-    VclPtr<PushButton>         m_pBtnSave;
 
     SvxBitmapCtl*       m_pBitmapCtl;
 
@@ -593,11 +592,10 @@ private:
 
     DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ChangePatternHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( ChangePatternHdl_Impl, ValueSet*, void );
     DECL_LINK_TYPED( ChangeColorHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ClickLoadHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickSaveHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickRenameHdl_Impl, SvxPresetListBox*, void );
+    DECL_LINK_TYPED( ClickDeleteHdl_Impl, SvxPresetListBox*, void );
 
     long CheckChanges_Impl();
 
