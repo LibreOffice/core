@@ -2000,6 +2000,19 @@ void ScDocument::DoMergeContents( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
     SetString(nStartCol,nStartRow,nTab,aTotal.makeStringAndClear());
 }
 
+void ScDocument::DoEmptyBlock( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
+                               SCCOL nEndCol, SCROW nEndRow )
+{
+    SCCOL nCol;
+    SCROW nRow;
+    for (nRow=nStartRow; nRow<=nEndRow; nRow++)
+        for (nCol=nStartCol; nCol<=nEndCol; nCol++)
+        {  // empty block except first cell
+            if (nCol != nStartCol || nRow != nStartRow)
+                SetString(nCol,nRow,nTab,"");
+        }
+}
+
 void ScDocument::DoMerge( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                     SCCOL nEndCol, SCROW nEndRow, bool bDeleteCaptions )
 {
