@@ -41,8 +41,6 @@
 #include <svx/dialogs.hrc>
 #include "paragrph.hrc"
 
-#define DEFAULT_GRADIENTSTEP 64
-
 using namespace com::sun::star;
 
 SvxGradientTabPage::SvxGradientTabPage
@@ -66,16 +64,14 @@ SvxGradientTabPage::SvxGradientTabPage
     m_aXFillAttr          ( rInAttrs.GetPool() ),
     m_rXFSet              ( m_aXFillAttr.GetItemSet() )
 {
-    get(m_pMtrIncrement,   "incrementmtr");
-    get(m_pSliderIncrement,"incrementslider");
     get(m_pLbGradientType, "gradienttypelb");
-    get(m_pFtCenter,       "centerft");
+    get(m_pFtCenterX,      "centerxft");
     get(m_pMtrCenterX,     "centerxmtr");
+    get(m_pFtCenterY,      "centeryft");
     get(m_pMtrCenterY,     "centerymtr");
     get(m_pFtAngle,        "angleft");
     get(m_pMtrAngle,       "anglemtr");
     get(m_pMtrBorder,      "bordermtr");
-    get(m_pSliderBorder,   "borderslider");
     get(m_pLbColorFrom,    "colorfromlb");
     get(m_pMtrColorFrom,   "colorfrommtr");
     get(m_pLbColorTo,      "colortolb");
@@ -102,10 +98,8 @@ SvxGradientTabPage::SvxGradientTabPage
 
     // as long as NOT supported by the item
 
-    m_pSliderIncrement->SetRange(Range(3,256));
     m_pMtrColorTo->SetValue( 100 );
     m_pMtrColorFrom->SetValue( 100 );
-    m_pSliderBorder->SetRange(Range(0,100));
 
     // setting the output device
     m_rXFSet.Put( m_aXFStyleItem );
@@ -124,13 +118,10 @@ SvxGradientTabPage::SvxGradientTabPage
     Link<Edit&,void> aLink = LINK( this, SvxGradientTabPage, ModifiedEditHdl_Impl );
     Link<ListBox&,void> aLink2 = LINK( this, SvxGradientTabPage, ModifiedListBoxHdl_Impl );
     m_pLbGradientType->SetSelectHdl( aLink2 );
-    m_pMtrIncrement->SetModifyHdl( aLink );
-    m_pSliderIncrement->SetSlideHdl( LINK( this, SvxGradientTabPage, ModifiedSliderHdl_Impl )  );
     m_pMtrCenterX->SetModifyHdl( aLink );
     m_pMtrCenterY->SetModifyHdl( aLink );
     m_pMtrAngle->SetModifyHdl( aLink );
     m_pMtrBorder->SetModifyHdl( aLink );
-    m_pSliderBorder->SetSlideHdl( LINK( this, SvxGradientTabPage, ModifiedSliderHdl_Impl ) );
     m_pMtrColorFrom->SetModifyHdl( aLink );
     m_pLbColorFrom->SetSelectHdl( aLink2 );
     m_pMtrColorTo->SetModifyHdl( aLink );
@@ -154,16 +145,14 @@ SvxGradientTabPage::~SvxGradientTabPage()
 
 void SvxGradientTabPage::dispose()
 {
-    m_pMtrIncrement.clear();
-    m_pSliderIncrement.clear();
     m_pLbGradientType.clear();
-    m_pFtCenter.clear();
+    m_pFtCenterX.clear();
     m_pMtrCenterX.clear();
+    m_pFtCenterY.clear();
     m_pMtrCenterY.clear();
     m_pFtAngle.clear();
     m_pMtrAngle.clear();
     m_pMtrBorder.clear();
-    m_pSliderBorder.clear();
     m_pLbColorFrom.clear();
     m_pMtrColorFrom.clear();
     m_pLbColorTo.clear();
@@ -350,7 +339,6 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
         std::unique_ptr<XGradient> pXGradient;
         OUString      aString;
         sal_Int32      nPos = m_pLbGradients->GetSelectEntryPos();
-        sal_uInt16     nValue = m_pMtrIncrement->GetValue();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             pXGradient.reset(new XGradient( m_pGradientList->GetGradient( nPos )->GetGradient() ));
@@ -373,7 +361,6 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
         DBG_ASSERT( pXGradient, "XGradient konnte nicht erzeugt werden" );
         rSet->Put( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
         rSet->Put( XFillGradientItem( aString, *pXGradient ) );
-        rSet->Put( XGradientStepCountItem( nValue ) );
     }
     return true;
 }
@@ -415,21 +402,8 @@ IMPL_LINK_TYPED( SvxGradientTabPage, ModifiedEditHdl_Impl, Edit&, rBox, void )
 {
     ModifiedHdl_Impl(&rBox);
 }
-IMPL_LINK_TYPED( SvxGradientTabPage, ModifiedSliderHdl_Impl, Slider*, rSlider, void )
-{
-    ModifiedHdl_Impl(rSlider);
-}
 void SvxGradientTabPage::ModifiedHdl_Impl( void* pControl )
 {
-    if( pControl == m_pMtrBorder )
-        m_pSliderBorder->SetThumbPos( m_pMtrBorder->GetValue() );
-    if( pControl == m_pSliderBorder )
-        m_pMtrBorder->SetValue( m_pSliderBorder->GetThumbPos() );
-    if( pControl == m_pMtrIncrement )
-        m_pSliderIncrement->SetThumbPos( m_pMtrIncrement->GetValue() );
-    if(pControl == m_pSliderIncrement)
-        m_pMtrIncrement->SetValue( m_pSliderIncrement->GetThumbPos() );
-
     css::awt::GradientStyle eXGS = (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos();
 
     XGradient aXGradient( m_pLbColorFrom->GetSelectEntryColor(),
@@ -445,9 +419,6 @@ void SvxGradientTabPage::ModifiedHdl_Impl( void* pControl )
     // enable/disable controls
     if( pControl == m_pLbGradientType || pControl == this )
         SetControlState_Impl( eXGS );
-
-    sal_uInt16 nValue = (sal_uInt16)m_pMtrIncrement->GetValue();
-    m_rXFSet.Put( XGradientStepCountItem( nValue ) );
 
     // displaying in XOutDev
     m_rXFSet.Put( XFillGradientItem( OUString(), aXGradient ) );
@@ -856,12 +827,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ChangeGradientHdl_Impl, ListBox&, void
     if( pGradient )
     {
         css::awt::GradientStyle eXGS = pGradient->GetGradientStyle();
-        sal_uInt16 nValue = static_cast<const XGradientStepCountItem&>( m_rOutAttrs.Get( XATTR_GRADIENTSTEPCOUNT ) ).GetValue();
-        if(nValue == 0)
-            nValue = DEFAULT_GRADIENTSTEP;
 
-        m_pMtrIncrement->SetValue( nValue );
-        m_pSliderIncrement->SetThumbPos( nValue );
         m_pLbGradientType->SelectEntryPos(
             sal::static_int_cast< sal_Int32 >( eXGS ) );
         // if the entry is not in the listbox,
@@ -886,7 +852,6 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ChangeGradientHdl_Impl, ListBox&, void
 
         m_pMtrAngle->SetValue( pGradient->GetAngle() / 10 ); // should be changed in resource
         m_pMtrBorder->SetValue( pGradient->GetBorder() );
-        m_pSliderBorder->SetThumbPos( pGradient->GetBorder() );
         m_pMtrCenterX->SetValue( pGradient->GetXOffset() );
         m_pMtrCenterY->SetValue( pGradient->GetYOffset() );
         m_pMtrColorFrom->SetValue( pGradient->GetStartIntens() );
@@ -897,7 +862,6 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ChangeGradientHdl_Impl, ListBox&, void
 
         // fill ItemSet and pass it on to aCtlPreview
         m_rXFSet.Put( XFillGradientItem( OUString(), *pGradient ) );
-        m_rXFSet.Put( XGradientStepCountItem( nValue ) );
         m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
 
         m_pCtlPreview->Invalidate();
@@ -911,24 +875,27 @@ void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )
     {
         case css::awt::GradientStyle_LINEAR:
         case css::awt::GradientStyle_AXIAL:
-            m_pFtCenter->Disable();
+            m_pFtCenterX->Disable();
             m_pMtrCenterX->Disable();
+            m_pFtCenterY->Disable();
             m_pMtrCenterY->Disable();
             m_pFtAngle->Enable();
             m_pMtrAngle->Enable();
             break;
 
         case css::awt::GradientStyle_RADIAL:
-            m_pFtCenter->Enable();
+            m_pFtCenterX->Enable();
             m_pMtrCenterX->Enable();
+            m_pFtCenterY->Enable();
             m_pMtrCenterY->Enable();
             m_pFtAngle->Disable();
             m_pMtrAngle->Disable();
             break;
 
         case css::awt::GradientStyle_ELLIPTICAL:
-            m_pFtCenter->Enable();
+            m_pFtCenterX->Enable();
             m_pMtrCenterX->Enable();
+            m_pFtCenterY->Enable();
             m_pMtrCenterY->Enable();
             m_pFtAngle->Enable();
             m_pMtrAngle->Enable();
@@ -936,8 +903,9 @@ void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )
 
         case css::awt::GradientStyle_SQUARE:
         case css::awt::GradientStyle_RECT:
-            m_pFtCenter->Enable();
+            m_pFtCenterX->Enable();
             m_pMtrCenterX->Enable();
+            m_pFtCenterY->Enable();
             m_pMtrCenterY->Enable();
             m_pFtAngle->Enable();
             m_pMtrAngle->Enable();
