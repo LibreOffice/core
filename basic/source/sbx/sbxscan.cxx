@@ -160,6 +160,13 @@ SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
                     eScanType = SbxDOUBLE;
                 aBuf[ p - pStart ] = 'E';
                 p++;
+                if (*p == '+')
+                    ++p;
+                else if (*p == '-')
+                {
+                    aBuf.append('-');
+                    ++p;
+                }
             }
             else
             {
