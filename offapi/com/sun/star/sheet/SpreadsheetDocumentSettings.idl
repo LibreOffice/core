@@ -126,8 +126,8 @@ published service SpreadsheetDocumentSettings
         e.g., for functions which look up spreadsheet contents.
 
         <p>RegularExpressions and Wildcards are mutually exclusive, only
-        one can have the value `TRUE`. Internally, if both are true then
-        Wildcards takes precedence over RegularExpressions.</p>
+        one can have the value `TRUE`. If both are set to `TRUE` via API
+        calls then the last one set takes precedence.</p>
      */
     [property] boolean RegularExpressions;
 
@@ -217,8 +217,8 @@ published service SpreadsheetDocumentSettings
         e.g., for functions which look up spreadsheet contents.
 
         <p>Wildcards and RegularExpressions are mutually exclusive, only
-        one can have the value `TRUE`. Internally, if both are true then
-        Wildcards takes precedence over RegularExpressions.</p>
+        one can have the value `TRUE`. If both are set to `TRUE` via API
+        calls then the last one set takes precedence.</p>
 
         @since LibreOffice 5.2
      */
