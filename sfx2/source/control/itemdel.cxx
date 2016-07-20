@@ -42,7 +42,7 @@ public:
 
 SfxItemDisruptor_Impl::SfxItemDisruptor_Impl(SfxPoolItem *const pItemToDisrupt)
     : pItem(pItemToDisrupt)
-    , m_Idle("SfxItemDisruptor_Impl")
+    , m_Idle("sfx SfxItemDisruptor_Impl::Delete")
 {
     m_Idle.SetIdleHdl(LINK(this, SfxItemDisruptor_Impl, Delete));
     m_Idle.SetPriority(SchedulerPriority::DEFAULT_IDLE);

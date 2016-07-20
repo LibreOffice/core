@@ -113,7 +113,8 @@ Timer& Timer::operator=( const Timer& rTimer )
     return *this;
 }
 
-AutoTimer::AutoTimer()
+AutoTimer::AutoTimer( const sal_Char *pDebugName )
+    : Timer( pDebugName )
 {
     mbAuto = true;
 }

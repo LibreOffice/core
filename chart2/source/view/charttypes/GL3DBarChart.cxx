@@ -560,6 +560,7 @@ GL3DBarChart::GL3DBarChart(
         }
         maIdle.SetPriority(SchedulerPriority::REPAINT);
         maIdle.SetIdleHdl(LINK(this, GL3DBarChart, UpdateTimerHdl));
+        maIdle.SetDebugName( "charttypes::GL3DBarChart maIdle" );
         maIdle.Start();
         osl_getSystemTime(&maFPSRenderStartTime);
         osl_getSystemTime(&maFPSRenderEndTime);
