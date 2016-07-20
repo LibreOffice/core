@@ -96,8 +96,8 @@ void ScDocOptions::ResetDocOptions()
     bMatchWholeCell     = true;
     bDoAutoSpell        = false;
     bLookUpColRowNames  = true;
-    bFormulaRegexEnabled= true;
-    bFormulaWildcardsEnabled= false;
+    bFormulaRegexEnabled= false;
+    bFormulaWildcardsEnabled= true;
     eFormulaSearchType  = eSearchTypeUnknown;
     bWriteCalcConfig    = true;
 }
