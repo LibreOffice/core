@@ -4670,7 +4670,7 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
     return true;
 }
 
-bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bool bRecord, bool bApi )
+bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bool bRecord, bool bApi, bool bEmptyMergedCells /*=false*/ )
 {
     using ::std::set;
 
@@ -4718,9 +4718,12 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
     for (set<SCTAB>::const_iterator itr = itrBeg; itr != itrEnd; ++itr)
     {
         SCTAB nTab = *itr;
-        bool bNeedContents = bContents &&
-                ( !rDoc.IsBlockEmpty( nTab, nStartCol,nStartRow+1, nStartCol,nEndRow, true ) ||
-                  !rDoc.IsBlockEmpty( nTab, nStartCol+1,nStartRow, nEndCol,nEndRow, true ) );
+        bool bIsBlockEmpty = ( nStartRow == nEndRow )
+                             ? rDoc.IsBlockEmpty( nTab, nStartCol+1,nStartRow, nEndCol,nEndRow, true )
+                             : rDoc.IsBlockEmpty( nTab, nStartCol,nStartRow+1, nStartCol,nEndRow, true ) &&
+                               rDoc.IsBlockEmpty( nTab, nStartCol+1,nStartRow, nEndCol,nEndRow, true );
+        bool bNeedContents = bContents && !bIsBlockEmpty;
+        bool bNeedEmpty = bEmptyMergedCells && !bIsBlockEmpty && !bNeedContents; // if DoMergeContents then cells are emptyed
 
         if (bRecord)
         {
@@ -4744,6 +4747,8 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
 
         if (bNeedContents)
             rDoc.DoMergeContents( nTab, nStartCol,nStartRow, nEndCol,nEndRow );
+        else if ( bNeedEmpty )
+            rDoc.DoEmptyBlock( nTab, nStartCol,nStartRow, nEndCol,nEndRow );
         rDoc.DoMerge( nTab, nStartCol,nStartRow, nEndCol,nEndRow );
 
         if (rOption.mbCenter)

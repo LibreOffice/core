@@ -140,6 +140,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/namerangesdialog \
 	sc/uiconfig/scalc/ui/notebookbar \
 	sc/uiconfig/scalc/ui/managenamesdialog \
+	sc/uiconfig/scalc/ui/mergecellsdialog \
 	sc/uiconfig/scalc/ui/movecopysheet \
 	sc/uiconfig/scalc/ui/movingaveragedialog \
 	sc/uiconfig/scalc/ui/multipleoperationsdialog \

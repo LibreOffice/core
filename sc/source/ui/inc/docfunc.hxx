@@ -188,7 +188,7 @@ public:
     void            ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd );
 
     bool            MergeCells( const ScCellMergeOption& rOption, bool bContents,
-                                        bool bRecord, bool bApi );
+                                        bool bRecord, bool bApi, bool bEmptyMergedCells = false );
     bool            UnmergeCells( const ScRange& rRange, bool bRecord );
     bool            UnmergeCells( const ScCellMergeOption& rOption, bool bRecord );
 
