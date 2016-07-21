@@ -893,9 +893,9 @@ void SwUiWriterTest::testCommentedWord()
 
 // Chinese conversion tests
 
-static const OUString CHINESE_TRADITIONAL_CONTENT(sal_Unicode(0x9F8D));
-static const OUString CHINESE_SIMPLIFIED_CONTENT(sal_Unicode(0x9F99));
-static const OUString NON_CHINESE_CONTENT ("Hippopotamus");
+static const sal_Unicode CHINESE_TRADITIONAL_CONTENT(0x9F8D);
+static const sal_Unicode CHINESE_SIMPLIFIED_CONTENT(0x9F99);
+static const OUStringLiteral NON_CHINESE_CONTENT("Hippopotamus");
 
 // Tests that a blank document is still blank after conversion
 void SwUiWriterTest::testChineseConversionBlank()
@@ -940,7 +940,7 @@ void SwUiWriterTest::testChineseConversionNonChineseText()
 
     // Then
     SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
-    CPPUNIT_ASSERT_EQUAL(NON_CHINESE_CONTENT, pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString(NON_CHINESE_CONTENT), pTextNode->GetText());
 
 }
 
@@ -954,7 +954,7 @@ void SwUiWriterTest::testChineseConversionTraditionalToSimplified()
     const uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
-    pDoc->getIDocumentContentOperations().InsertString(aPaM, CHINESE_TRADITIONAL_CONTENT);
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(CHINESE_TRADITIONAL_CONTENT));
 
     // When
     SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_TRADITIONAL, LANGUAGE_CHINESE_SIMPLIFIED, nullptr,
@@ -964,7 +964,7 @@ void SwUiWriterTest::testChineseConversionTraditionalToSimplified()
 
     // Then
     SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
-    CPPUNIT_ASSERT_EQUAL(CHINESE_SIMPLIFIED_CONTENT, pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString(CHINESE_SIMPLIFIED_CONTENT), pTextNode->GetText());
 
 }
 
@@ -978,7 +978,7 @@ void SwUiWriterTest::testChineseConversionSimplifiedToTraditional()
     const uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
-    pDoc->getIDocumentContentOperations().InsertString(aPaM, CHINESE_SIMPLIFIED_CONTENT);
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(CHINESE_SIMPLIFIED_CONTENT));
 
     // When
     SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_SIMPLIFIED, LANGUAGE_CHINESE_TRADITIONAL, nullptr,
@@ -988,7 +988,7 @@ void SwUiWriterTest::testChineseConversionSimplifiedToTraditional()
 
     // Then
     SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
-    CPPUNIT_ASSERT_EQUAL(CHINESE_TRADITIONAL_CONTENT, pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString(CHINESE_TRADITIONAL_CONTENT), pTextNode->GetText());
 
 }
 

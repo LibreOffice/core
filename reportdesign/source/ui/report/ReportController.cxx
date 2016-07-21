@@ -2069,15 +2069,15 @@ void OReportController::onLoadedMenu(const Reference< frame::XLayoutManager >& _
 {
     if ( _xLayoutManager.is() )
     {
-        static const OUString s_sMenu[] = {
-             OUString("private:resource/statusbar/statusbar")
-            ,OUString("private:resource/toolbar/reportcontrols")
-            ,OUString("private:resource/toolbar/drawbar")
-            ,OUString("private:resource/toolbar/Formatting")
-            ,OUString("private:resource/toolbar/alignmentbar")
-            ,OUString("private:resource/toolbar/sectionalignmentbar")
-            ,OUString("private:resource/toolbar/resizebar")
-            ,OUString("private:resource/toolbar/sectionshrinkbar")
+        static const OUStringLiteral s_sMenu[] = {
+             OUStringLiteral("private:resource/statusbar/statusbar")
+            ,OUStringLiteral("private:resource/toolbar/reportcontrols")
+            ,OUStringLiteral("private:resource/toolbar/drawbar")
+            ,OUStringLiteral("private:resource/toolbar/Formatting")
+            ,OUStringLiteral("private:resource/toolbar/alignmentbar")
+            ,OUStringLiteral("private:resource/toolbar/sectionalignmentbar")
+            ,OUStringLiteral("private:resource/toolbar/resizebar")
+            ,OUStringLiteral("private:resource/toolbar/sectionshrinkbar")
         };
         for (const auto & i : s_sMenu)
         {
@@ -4063,9 +4063,7 @@ OUString SAL_CALL OReportController::getMode(  ) throw (css::uno::RuntimeExcepti
 }
 css::uno::Sequence< OUString > SAL_CALL OReportController::getSupportedModes(  ) throw (css::uno::RuntimeException, std::exception)
 {
-    static const OUString s_sModes[] = { OUString("remote"),
-                                          OUString("normal") };
-    return uno::Sequence< OUString> (&s_sModes[0],SAL_N_ELEMENTS(s_sModes));
+    return uno::Sequence< OUString> { OUString("remote"), OUString("normal") };
 }
 sal_Bool SAL_CALL OReportController::supportsMode( const OUString& aMode ) throw (css::uno::RuntimeException, std::exception)
 {

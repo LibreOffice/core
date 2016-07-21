@@ -62,27 +62,27 @@ SAL_WNOUNREACHABLE_CODE_POP
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL SvxFmMSFactory::getAvailableServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
-    static const OUString aSvxComponentServiceNameList[] =
+    static const OUStringLiteral aSvxComponentServiceNameList[] =
     {
-        OUString(FM_SUN_COMPONENT_TEXTFIELD),
-        OUString(FM_SUN_COMPONENT_FORM),
-        OUString(FM_SUN_COMPONENT_LISTBOX),
-        OUString(FM_SUN_COMPONENT_COMBOBOX),
-        OUString(FM_SUN_COMPONENT_RADIOBUTTON),
-        OUString(FM_SUN_COMPONENT_GROUPBOX),
-        OUString(FM_SUN_COMPONENT_FIXEDTEXT),
-        OUString(FM_SUN_COMPONENT_COMMANDBUTTON),
-        OUString(FM_SUN_COMPONENT_CHECKBOX),
-        OUString(FM_SUN_COMPONENT_GRIDCONTROL),
-        OUString(FM_SUN_COMPONENT_IMAGEBUTTON),
-        OUString(FM_SUN_COMPONENT_FILECONTROL),
-        OUString(FM_SUN_COMPONENT_TIMEFIELD),
-        OUString(FM_SUN_COMPONENT_DATEFIELD),
-        OUString(FM_SUN_COMPONENT_NUMERICFIELD),
-        OUString(FM_SUN_COMPONENT_CURRENCYFIELD),
-        OUString(FM_SUN_COMPONENT_PATTERNFIELD),
-        OUString(FM_SUN_COMPONENT_HIDDENCONTROL),
-        OUString(FM_SUN_COMPONENT_IMAGECONTROL)
+        OUStringLiteral(FM_SUN_COMPONENT_TEXTFIELD),
+        OUStringLiteral(FM_SUN_COMPONENT_FORM),
+        OUStringLiteral(FM_SUN_COMPONENT_LISTBOX),
+        OUStringLiteral(FM_SUN_COMPONENT_COMBOBOX),
+        OUStringLiteral(FM_SUN_COMPONENT_RADIOBUTTON),
+        OUStringLiteral(FM_SUN_COMPONENT_GROUPBOX),
+        OUStringLiteral(FM_SUN_COMPONENT_FIXEDTEXT),
+        OUStringLiteral(FM_SUN_COMPONENT_COMMANDBUTTON),
+        OUStringLiteral(FM_SUN_COMPONENT_CHECKBOX),
+        OUStringLiteral(FM_SUN_COMPONENT_GRIDCONTROL),
+        OUStringLiteral(FM_SUN_COMPONENT_IMAGEBUTTON),
+        OUStringLiteral(FM_SUN_COMPONENT_FILECONTROL),
+        OUStringLiteral(FM_SUN_COMPONENT_TIMEFIELD),
+        OUStringLiteral(FM_SUN_COMPONENT_DATEFIELD),
+        OUStringLiteral(FM_SUN_COMPONENT_NUMERICFIELD),
+        OUStringLiteral(FM_SUN_COMPONENT_CURRENCYFIELD),
+        OUStringLiteral(FM_SUN_COMPONENT_PATTERNFIELD),
+        OUStringLiteral(FM_SUN_COMPONENT_HIDDENCONTROL),
+        OUStringLiteral(FM_SUN_COMPONENT_IMAGECONTROL)
     };
 
     static const sal_uInt16 nSvxComponentServiceNameListCount = SAL_N_ELEMENTS(aSvxComponentServiceNameList);

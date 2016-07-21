@@ -51,8 +51,6 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYHANDLE_SHOWICONSINMENUES        2
 #define PROPERTYHANDLE_SYSTEMICONSINMENUES      3
 
-#define PROPERTYCOUNT                           4
-
 #include <tools/link.hxx>
 
 //  private declarations!
@@ -301,18 +299,12 @@ void SvtMenuOptions_Impl::ImplCommit()
 
 Sequence< OUString > SvtMenuOptions_Impl::impl_GetPropertyNames()
 {
-    // Build static list of configuration key names.
-    static const OUString pProperties[] =
-    {
+    return Sequence<OUString> {
         OUString(PROPERTYNAME_DONTHIDEDISABLEDENTRIES)    ,
         OUString(PROPERTYNAME_FOLLOWMOUSE)                ,
         OUString(PROPERTYNAME_SHOWICONSINMENUES)          ,
         OUString(PROPERTYNAME_SYSTEMICONSINMENUES)
     };
-    // Initialize return sequence with these list ...
-    static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
-    // ... and return it.
-    return seqPropertyNames;
 }
 
 namespace {

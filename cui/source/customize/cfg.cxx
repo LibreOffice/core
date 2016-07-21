@@ -583,28 +583,19 @@ ConvertSvxConfigEntry(
     const uno::Reference< container::XNameAccess >& xCommandToLabelMap,
     const SvxConfigEntry* pEntry )
 {
-    static const OUString aDescriptorCommandURL (
-        ITEM_DESCRIPTOR_COMMANDURL  );
-
-    static const OUString aDescriptorType(
-            ITEM_DESCRIPTOR_TYPE  );
-
-    static const OUString aDescriptorLabel(
-            ITEM_DESCRIPTOR_LABEL  );
-
     uno::Sequence< beans::PropertyValue > aPropSeq( 3 );
 
-    aPropSeq[0].Name = aDescriptorCommandURL;
+    aPropSeq[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
     aPropSeq[0].Value <<= OUString( pEntry->GetCommand() );
 
-    aPropSeq[1].Name = aDescriptorType;
+    aPropSeq[1].Name = ITEM_DESCRIPTOR_TYPE;
     aPropSeq[1].Value <<= css::ui::ItemType::DEFAULT;
 
     // If the name has not been changed and the name is the same as
     // in the default command to label map then the label can be stored
     // as an empty string.
     // It will be initialised again later using the command to label map.
-    aPropSeq[2].Name = aDescriptorLabel;
+    aPropSeq[2].Name = ITEM_DESCRIPTOR_LABEL;
     if ( !pEntry->HasChangedName() && !pEntry->GetCommand().isEmpty() )
     {
         bool isDefaultName = false;
@@ -616,7 +607,7 @@ ConvertSvxConfigEntry(
             {
                 for ( sal_Int32 i = 0; i < tmpPropSeq.getLength(); ++i )
                 {
-                    if ( tmpPropSeq[i].Name.equals( aDescriptorLabel ) )
+                    if ( tmpPropSeq[i].Name == ITEM_DESCRIPTOR_LABEL )
                     {
                         OUString tmpLabel;
                         tmpPropSeq[i].Value >>= tmpLabel;
@@ -658,31 +649,19 @@ ConvertToolbarEntry(
     const uno::Reference< container::XNameAccess >& xCommandToLabelMap,
     const SvxConfigEntry* pEntry )
 {
-    static const OUString aDescriptorCommandURL (
-        ITEM_DESCRIPTOR_COMMANDURL  );
-
-    static const OUString aDescriptorType(
-            ITEM_DESCRIPTOR_TYPE  );
-
-    static const OUString aDescriptorLabel(
-            ITEM_DESCRIPTOR_LABEL  );
-
-    static const OUString aIsVisible(
-            ITEM_DESCRIPTOR_ISVISIBLE  );
-
     uno::Sequence< beans::PropertyValue > aPropSeq( 4 );
 
-    aPropSeq[0].Name = aDescriptorCommandURL;
+    aPropSeq[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
     aPropSeq[0].Value <<= OUString( pEntry->GetCommand() );
 
-    aPropSeq[1].Name = aDescriptorType;
+    aPropSeq[1].Name = ITEM_DESCRIPTOR_TYPE;
     aPropSeq[1].Value <<= css::ui::ItemType::DEFAULT;
 
     // If the name has not been changed and the name is the same as
     // in the default command to label map then the label can be stored
     // as an empty string.
     // It will be initialised again later using the command to label map.
-    aPropSeq[2].Name = aDescriptorLabel;
+    aPropSeq[2].Name = ITEM_DESCRIPTOR_LABEL;
     if ( !pEntry->HasChangedName() && !pEntry->GetCommand().isEmpty() )
     {
         bool isDefaultName = false;
@@ -694,7 +673,7 @@ ConvertToolbarEntry(
             {
                 for ( sal_Int32 i = 0; i < tmpPropSeq.getLength(); ++i )
                 {
-                    if ( tmpPropSeq[i].Name.equals( aDescriptorLabel ) )
+                    if ( tmpPropSeq[i].Name == ITEM_DESCRIPTOR_LABEL )
                     {
                         OUString tmpLabel;
                         tmpPropSeq[i].Value >>= tmpLabel;
@@ -728,7 +707,7 @@ ConvertToolbarEntry(
         aPropSeq[2].Value <<= OUString( pEntry->GetName() );
     }
 
-    aPropSeq[3].Name = aIsVisible;
+    aPropSeq[3].Name = ITEM_DESCRIPTOR_ISVISIBLE;
     aPropSeq[3].Value <<= pEntry->IsVisible();
 
     return aPropSeq;

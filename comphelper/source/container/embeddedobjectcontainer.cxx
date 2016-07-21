@@ -990,7 +990,7 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed
                     //             the media type will be provided with object insertion
                     OUString aOrigStorMediaType;
                     uno::Reference< beans::XPropertySet > xStorProps( pImpl->mxStorage, uno::UNO_QUERY_THROW );
-                    static const OUString s_sMediaType("MediaType");
+                    static const OUStringLiteral s_sMediaType("MediaType");
                     xStorProps->getPropertyValue( s_sMediaType ) >>= aOrigStorMediaType;
 
                     SAL_WARN_IF( aOrigStorMediaType.isEmpty(), "comphelper.container", "No valuable media type in the storage!\n" );
