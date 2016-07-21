@@ -224,9 +224,9 @@ bool SwFlowFrame::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldKee
                 {
                     const SwAttrSet* pSet = nullptr;
 
-                    if ( pNxt->IsInTab() )
+                    SwTabFrame* pTab = pNxt->IsInTab() ? pNxt->FindTabFrame() : nullptr;
+                    if (pTab)
                     {
-                        SwTabFrame* pTab = pNxt->FindTabFrame();
                         if ( ! m_rThis.IsInTab() || m_rThis.FindTabFrame() != pTab )
                             pSet = &pTab->GetFormat()->GetAttrSet();
                     }
