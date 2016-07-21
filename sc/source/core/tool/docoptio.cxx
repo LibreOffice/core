@@ -102,6 +102,40 @@ void ScDocOptions::ResetDocOptions()
     bWriteCalcConfig    = true;
 }
 
+void ScDocOptions::SetFormulaRegexEnabled( bool bVal )
+{
+    if (bVal)
+    {
+        bFormulaRegexEnabled = true;
+        bFormulaWildcardsEnabled = false;
+        eFormulaSearchType = utl::SearchParam::SRCH_REGEXP;
+    }
+    else if (!bFormulaRegexEnabled)
+        ;   // nothing changes for setting false to false
+    else
+    {
+        bFormulaRegexEnabled = false;
+        eFormulaSearchType = eSearchTypeUnknown;
+    }
+}
+
+void ScDocOptions::SetFormulaWildcardsEnabled( bool bVal )
+{
+    if (bVal)
+    {
+        bFormulaRegexEnabled = false;
+        bFormulaWildcardsEnabled = true;
+        eFormulaSearchType = utl::SearchParam::SRCH_WILDCARD;
+    }
+    else if (!bFormulaWildcardsEnabled)
+        ;   // nothing changes for setting false to false
+    else
+    {
+        bFormulaWildcardsEnabled = false;
+        eFormulaSearchType = eSearchTypeUnknown;
+    }
+}
+
 //      ScTpCalcItem - Daten fuer die CalcOptions-TabPage
 
 ScTpCalcItem::ScTpCalcItem( sal_uInt16 nWhichP, const ScDocOptions& rOpt )

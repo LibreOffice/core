@@ -102,41 +102,11 @@ public:
         return eFormulaSearchType;
     }
 
-    void    SetFormulaRegexEnabled( bool bVal )
-    {
-        if (bVal)
-        {
-            bFormulaRegexEnabled = true;
-            bFormulaWildcardsEnabled = false;
-            eFormulaSearchType = utl::SearchParam::SRCH_REGEXP;
-        }
-        else if (!bFormulaRegexEnabled)
-            ;   // nothing changes for setting false to false
-        else
-        {
-            bFormulaRegexEnabled = false;
-            eFormulaSearchType = eSearchTypeUnknown;
-        }
-    }
+    void    SetFormulaRegexEnabled( bool bVal );
     bool    IsFormulaRegexEnabled() const       { return GetFormulaSearchType() == utl::SearchParam::SRCH_REGEXP; }
 
-    void    SetFormulaWildcardsEnabled( bool bVal )
-    {
-        if (bVal)
-        {
-            bFormulaRegexEnabled = false;
-            bFormulaWildcardsEnabled = true;
-            eFormulaSearchType = utl::SearchParam::SRCH_WILDCARD;
-        }
-        else if (!bFormulaWildcardsEnabled)
-            ;   // nothing changes for setting false to false
-        else
-        {
-            bFormulaWildcardsEnabled = false;
-            eFormulaSearchType = eSearchTypeUnknown;
-        }
-    }
-    bool    IsFormulaWildcardsEnabled() const       { return GetFormulaSearchType() == utl::SearchParam::SRCH_WILDCARD; }
+    void    SetFormulaWildcardsEnabled( bool bVal );
+    bool    IsFormulaWildcardsEnabled() const   { return GetFormulaSearchType() == utl::SearchParam::SRCH_WILDCARD; }
 
     void    SetWriteCalcConfig( bool bVal ) { bWriteCalcConfig = bVal; }
     bool    IsWriteCalcConfig() const       { return bWriteCalcConfig; }
