@@ -40,17 +40,36 @@
 #include <sc.hrc>
 #include <scresid.hxx>
 #include <scitems.hxx>
-#include <map>
 
 using namespace css;
-typedef std::map< OString, sal_uInt32 > mapType;
-
 static const char* DATA_DIRECTORY = "/sc/qa/unit/screenshots/data/";
 
 class ScScreenshotTest : public ScreenshotTest
 {
+private:
+    /// members
+    uno::Reference<lang::XComponent>        mxComponent;
+    SfxObjectShell*                         mpFoundShell;
+    ScDocShellRef                           mxDocSh;
+    ScTabViewShell*                         mpViewShell;
+    ScAbstractDialogFactory*                mpFact;
+    std::unique_ptr<ScImportStringStream>   mpStream;
+    std::unique_ptr<SfxItemSet>             mpItemSet;
+
+    /// helper
+    void initializeWithDoc(const char* pName);
+
+    /// helper method to populate KnownDialogs, called in setUp(). Needs to be
+    /// written and has to add entries to KnownDialogs
+    virtual void registerKnownDialogsByID(mapType& rKnownDialogs) override;
+
+    /// dialog creation for known dialogs by ID. Has to be implemented for
+    /// each registered known dialog
+    virtual VclAbstractDialog* createDialogByID(sal_uInt32 nID) override;
+
 public:
     ScScreenshotTest();
+    virtual ~ScScreenshotTest();
 
     void testOpeningModalDialogs();
     //void testOpeningModelessDialogs();
@@ -59,34 +78,20 @@ public:
     CPPUNIT_TEST(testOpeningModalDialogs);
     //CPPUNIT_TEST(testOpeningModelessDialogs);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    void initializeWithDoc(const char* pName);
-
-    VclAbstractDialog* createDialogByID( sal_uInt32 nID);
-
-
-    uno::Reference<lang::XComponent> mxComponent;
-    SfxObjectShell* pFoundShell;
-    ScDocShellRef xDocSh;
-    ScTabViewShell* pViewShell;
-    ScAbstractDialogFactory* pFact;
-
-    std::unique_ptr<ScImportStringStream> pStream;
-    std::unique_ptr<SfxItemSet> pItemSet;
-
-    /// the set of known dialogs and their ID for usage in createDialogByID
-    mapType                                 maKnownDialogs;
 };
 
 ScScreenshotTest::ScScreenshotTest()
 :   mxComponent(),
-    pFoundShell(nullptr),
-    xDocSh(),
-    pViewShell(nullptr),
-    pFact(nullptr),
-    pStream(),
-    maKnownDialogs()
+    mpFoundShell(nullptr),
+    mxDocSh(),
+    mpViewShell(nullptr),
+    mpFact(nullptr),
+    mpStream(),
+    mpItemSet()
+{
+}
+
+ScScreenshotTest::~ScScreenshotTest()
 {
 }
 
@@ -96,45 +101,43 @@ void ScScreenshotTest::initializeWithDoc(const char* pName)
         mxComponent->dispose();
     mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY) + OUString::createFromAscii(pName), "com.sun.star.sheet.SpreadsheetDocument");
 
-    pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    mpFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", mpFoundShell);
 
-    xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(xDocSh != nullptr);
+    mxDocSh = dynamic_cast<ScDocShell*>(mpFoundShell);
+    CPPUNIT_ASSERT(mxDocSh != nullptr);
 
-    pViewShell = xDocSh->GetBestViewShell(false);
-    CPPUNIT_ASSERT(pViewShell != nullptr);
+    mpViewShell = mxDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(mpViewShell != nullptr);
 
-    pFact = ScAbstractDialogFactory::Create();
-    CPPUNIT_ASSERT_MESSAGE("Failed to create dialog factory", pFact);
+    mpFact = ScAbstractDialogFactory::Create();
+    CPPUNIT_ASSERT_MESSAGE("Failed to create dialog factory", mpFact);
 
     const OUString aCsv("some, strings, here, separated, by, commas");
-    pStream.reset(new ScImportStringStream(aCsv));
-
-    if (maKnownDialogs.empty())
-    {
-        // fill map of unknown dilogs. Use a set here to allow later
-        // to 'find' a ID for construction based on the UIXMLDescription
-        // string (currently not yet used)
-        maKnownDialogs["modules/scalc/ui/insertsheet.ui"] = 0;
-            maKnownDialogs["modules/scalc/ui/deletecells.ui"] = 1;
-        maKnownDialogs["modules/scalc/ui/pastespecial.ui"] = 2;
-        maKnownDialogs["modules/scalc/ui/changesourcedialog.ui"] = 3;
-        maKnownDialogs["modules/scalc/ui/selectdatasource.ui"] = 4;
-        maKnownDialogs["modules/scalc/ui/selectsource.ui"] = 5;
-        maKnownDialogs["modules/scalc/ui/deletecontents.ui"] = 6;
-        maKnownDialogs["modules/scalc/ui/createnamesdialog.ui"] = 7;
-        maKnownDialogs["modules/scalc/ui/inputstringdialog.ui"] = 8;
-        maKnownDialogs["modules/scalc/ui/tabcolordialog.ui"] = 9;
-        maKnownDialogs["modules/scalc/ui/textimportoptions.ui"] = 10;
-        maKnownDialogs["modules/scalc/ui/dataform.ui"] = 11;
-        maKnownDialogs["modules/scalc/ui/movecopysheet.ui"] = 12;
-        maKnownDialogs["modules/scalc/ui/textimportcsv.ui"] = 13;
-        maKnownDialogs["modules/scalc/ui/formatcellsdialog.ui"] = 14;
-    }
+    mpStream.reset(new ScImportStringStream(aCsv));
 }
 
-VclAbstractDialog* ScScreenshotTest::createDialogByID( sal_uInt32 nID )
+void ScScreenshotTest::registerKnownDialogsByID(mapType& rKnownDialogs)
+{
+    // fill map of unknown dilogs
+    rKnownDialogs["modules/scalc/ui/insertsheet.ui"] = 0;
+    rKnownDialogs["modules/scalc/ui/deletecells.ui"] = 1;
+    rKnownDialogs["modules/scalc/ui/pastespecial.ui"] = 2;
+    rKnownDialogs["modules/scalc/ui/changesourcedialog.ui"] = 3;
+    rKnownDialogs["modules/scalc/ui/selectdatasource.ui"] = 4;
+    rKnownDialogs["modules/scalc/ui/selectsource.ui"] = 5;
+    rKnownDialogs["modules/scalc/ui/deletecontents.ui"] = 6;
+    rKnownDialogs["modules/scalc/ui/createnamesdialog.ui"] = 7;
+    rKnownDialogs["modules/scalc/ui/inputstringdialog.ui"] = 8;
+    rKnownDialogs["modules/scalc/ui/tabcolordialog.ui"] = 9;
+    rKnownDialogs["modules/scalc/ui/textimportoptions.ui"] = 10;
+    rKnownDialogs["modules/scalc/ui/dataform.ui"] = 11;
+    rKnownDialogs["modules/scalc/ui/movecopysheet.ui"] = 12;
+    rKnownDialogs["modules/scalc/ui/textimportcsv.ui"] = 13;
+    rKnownDialogs["modules/scalc/ui/formatcellsdialog.ui"] = 14;
+}
+
+VclAbstractDialog* ScScreenshotTest::createDialogByID(sal_uInt32 nID)
 {
     VclAbstractDialog *pReturnDialog = nullptr;
     ////FIXME: translatable string here
@@ -144,47 +147,47 @@ VclAbstractDialog* ScScreenshotTest::createDialogByID( sal_uInt32 nID )
     {
         case 0: // "modules/scalc/ui/insertsheet.ui"
         {
-            ScViewData& rViewData = pViewShell->GetViewData();
+            ScViewData& rViewData = mpViewShell->GetViewData();
             SCTAB nTabSelCount = rViewData.GetMarkData().GetSelectCount();
 
-            pReturnDialog = pFact->CreateScInsertTableDlg(
-                   pViewShell->GetDialogParent(), rViewData, nTabSelCount, false);
+            pReturnDialog = mpFact->CreateScInsertTableDlg(
+                mpViewShell->GetDialogParent(), rViewData, nTabSelCount, false);
 
             break;
         }
 
         case 1: // "modules/scalc/ui/deletecells.ui"
         {
-            pReturnDialog = pFact->CreateScDeleteCellDlg( pViewShell->GetDialogParent(), false );
+            pReturnDialog = mpFact->CreateScDeleteCellDlg(mpViewShell->GetDialogParent(), false);
             break;
         }
 
         case 2: // "modules/scalc/ui/pastespecial.ui"
         {
-            pReturnDialog = pFact->CreateScInsertContentsDlg( pViewShell->GetDialogParent() );
+            pReturnDialog = mpFact->CreateScInsertContentsDlg(mpViewShell->GetDialogParent());
             break;
         }
 
         case 3: // "modules/scalc/ui/changesourcedialog.ui"
         {
-            pReturnDialog = pFact->CreateScColRowLabelDlg( pViewShell->GetDialogParent(), true, false );
+            pReturnDialog = mpFact->CreateScColRowLabelDlg(mpViewShell->GetDialogParent(), true, false);
             break;
         }
 
         case 4: // "modules/scalc/ui/selectdatasource.ui"
         {
-            pReturnDialog = pFact->CreateScDataPilotDatabaseDlg( pViewShell->GetDialogParent() );
+            pReturnDialog = mpFact->CreateScDataPilotDatabaseDlg(mpViewShell->GetDialogParent());
             break;
         }
         case 5: // "modules/scalc/ui/selectsource.ui"
         {
-            pReturnDialog = pFact->CreateScDataPilotSourceTypeDlg(pViewShell->GetDialogParent(), true );
+            pReturnDialog = mpFact->CreateScDataPilotSourceTypeDlg(mpViewShell->GetDialogParent(), true);
             break;
         }
 
         case 6: // "modules/scalc/ui/deletecontents.ui"
         {
-            pReturnDialog = pFact->CreateScDeleteContentsDlg( pViewShell->GetDialogParent() );
+            pReturnDialog = mpFact->CreateScDeleteContentsDlg(mpViewShell->GetDialogParent());
             break;
         }
 
@@ -192,14 +195,14 @@ VclAbstractDialog* ScScreenshotTest::createDialogByID( sal_uInt32 nID )
         {
             //// just fake some flags
             sal_uInt16 nFlags = NAME_LEFT | NAME_TOP;
-            pReturnDialog = pFact->CreateScNameCreateDlg( pViewShell->GetDialogParent(), nFlags );
+            pReturnDialog = mpFact->CreateScNameCreateDlg(mpViewShell->GetDialogParent(), nFlags);
             break;
         }
 
         case 8: // "modules/scalc/ui/inputstringdialog.ui"
         {
             const OString aEmpty("");
-            pReturnDialog = pFact->CreateScStringInputDlg( pViewShell->GetDialogParent(),
+            pReturnDialog = mpFact->CreateScStringInputDlg(mpViewShell->GetDialogParent(),
                                 OUString(ScResId(SCSTR_APDTABLE)), OUString(ScResId(SCSTR_NAME)),
                                 aDefaultSheetName, aEmpty, aEmpty );
             break;
@@ -207,7 +210,7 @@ VclAbstractDialog* ScScreenshotTest::createDialogByID( sal_uInt32 nID )
 
         case 9: // "modules/scalc/ui/tabcolordialog.ui"
         {
-            pReturnDialog = pFact->CreateScTabBgColorDlg( pViewShell->GetDialogParent(),
+            pReturnDialog = mpFact->CreateScTabBgColorDlg(mpViewShell->GetDialogParent(),
                                 OUString(ScResId(SCSTR_SET_TAB_BG_COLOR)),
                                 OUString(ScResId(SCSTR_NO_TAB_BG_COLOR)), Color(0xff00ff) );
             break;
@@ -215,7 +218,7 @@ VclAbstractDialog* ScScreenshotTest::createDialogByID( sal_uInt32 nID )
 
         case 10: // "modules/scalc/ui/textimportoptions.ui"
         {
-            pReturnDialog = pFact->CreateScTextImportOptionsDlg();
+            pReturnDialog = mpFact->CreateScTextImportOptionsDlg();
             break;
         }
 
@@ -223,43 +226,43 @@ VclAbstractDialog* ScScreenshotTest::createDialogByID( sal_uInt32 nID )
         {
             ////FIXME: looks butt-ugly w/ empty file, move it elsewhere, where
             ////we actually have some data
-            pReturnDialog = pFact->CreateScDataFormDlg( pViewShell->GetDialogParent(), pViewShell );
+            pReturnDialog = mpFact->CreateScDataFormDlg(mpViewShell->GetDialogParent(), mpViewShell);
             break;
         }
 
         case 12: // "modules/scalc/ui/movecopysheet.ui"
         {
-            pReturnDialog = pFact->CreateScMoveTableDlg( pViewShell->GetDialogParent(), aDefaultSheetName );
+            pReturnDialog = mpFact->CreateScMoveTableDlg(mpViewShell->GetDialogParent(), aDefaultSheetName);
             break;
         }
 
         case 13: // "modules/scalc/ui/textimportcsv.ui"
         {
-            pReturnDialog = pFact->CreateScImportAsciiDlg( OUString(), pStream.get(), SC_PASTETEXT );
+            pReturnDialog = mpFact->CreateScImportAsciiDlg(OUString(), mpStream.get(), SC_PASTETEXT);
             break;
         }
         case 14: // "modules/scalc/ui/formatcellsdialog.ui"
         {
-            ScViewData& rViewData = pViewShell->GetViewData();
+            ScViewData& rViewData = mpViewShell->GetViewData();
             ScDocument *pDoc = rViewData.GetDocument();
 
-            const ScPatternAttr *pAttr = pViewShell->GetSelectionPattern();
+            const ScPatternAttr *pAttr = mpViewShell->GetSelectionPattern();
             std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem;
 
-            pItemSet.reset( new SfxItemSet( pAttr->GetItemSet() ) );
-            pItemSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT,
+            mpItemSet.reset(new SfxItemSet(pAttr->GetItemSet()));
+            mpItemSet->Put(SfxUInt32Item(ATTR_VALUE_FORMAT,
                            pAttr->GetNumberFormat( pDoc->GetFormatTable() ) ) );
 
-            pNumberInfoItem.reset( pViewShell->MakeNumberInfoItem(pDoc, &rViewData) );
+            pNumberInfoItem.reset(mpViewShell->MakeNumberInfoItem(pDoc, &rViewData));
 
-            pItemSet->MergeRange( SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO );
-            pItemSet->Put(*pNumberInfoItem );
+            mpItemSet->MergeRange(SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO);
+            mpItemSet->Put(*pNumberInfoItem);
 
-            pReturnDialog = pFact->CreateScAttrDlg( pViewShell->GetDialogParent(), pItemSet.get() );
+            pReturnDialog = mpFact->CreateScAttrDlg(mpViewShell->GetDialogParent(), mpItemSet.get());
             break;
         }
-           //ScopedVclPtrInstance<ScShareDocumentDlg> pDlg14( pViewShell->GetDialogParent(), &rViewData );
-            //ScopedVclPtrInstance<ScTableProtectionDlg> pDlg16(pViewShell->GetDialogParent());
+           //ScopedVclPtrInstance<ScShareDocumentDlg> pDlg14( mpViewShell->GetDialogParent(), &rViewData );
+            //ScopedVclPtrInstance<ScTableProtectionDlg> pDlg16(mpViewShell->GetDialogParent());
         default:
             break;
     }
@@ -272,11 +275,45 @@ void ScScreenshotTest::testOpeningModalDialogs()
 {
     initializeWithDoc("empty.ods");
 
-    static bool bDumpAllKnownDialogs = true;
-
-    if (bDumpAllKnownDialogs)
+    /// example how to process an input file containing the UXMLDescriptions of the dialogs
+    /// to dump
+    if (true)
     {
-        for (mapType::const_iterator i = maKnownDialogs.begin(); i != maKnownDialogs.end(); i++)
+        test::Directories aDirectories;
+        OUString aURL = aDirectories.getURLFromSrc("sc/qa/unit/screenshots/data/screenshots.txt");
+        SvFileStream aStream(aURL, StreamMode::READ);
+        OString aNextUIFile;
+        OString aComment("#");
+
+        while (aStream.ReadLine(aNextUIFile))
+        {
+            if (!aNextUIFile.isEmpty() && !aNextUIFile.startsWith(aComment))
+            {
+                // first check if it's a known dialog
+                std::unique_ptr<VclAbstractDialog> pDlg(createDialogByName(aNextUIFile));
+
+                if (pDlg)
+                {
+                    // known dialog, dump screenshot to path
+                    dumpDialogToPath(*pDlg);
+                }
+                else
+                {
+                    // unknown dialog, try fallback to generic created
+                    // VclBuilder-generated instance. Keep in mind that Dialogs
+                    // using this mechanism will probably not be layouted well
+                    // since the setup/initialization part is missing. Thus,
+                    // only use for fallback when only the UI file is available.
+                    dumpDialogToPath(aNextUIFile);
+                }
+            }
+        }
+    }
+
+    /// example how to dump all known dialogs
+    if (false)
+    {
+        for (mapType::const_iterator i = getKnownDialogs().begin(); i != getKnownDialogs().end(); i++)
         {
             std::unique_ptr<VclAbstractDialog> pDlg(createDialogByID((*i).second));
 

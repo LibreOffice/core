@@ -54,10 +54,8 @@
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotest/macros_test.hxx>
-#include <map>
 
 using namespace ::com::sun::star;
-typedef std::map< OString, sal_uInt32 > mapType;
 
 /// Test opening a dialog in sd
 class SdDialogsTest : public ScreenshotTest
@@ -79,9 +77,6 @@ private:
     std::unique_ptr<SfxItemSet>             mpEmptySfxItemSet;
     std::unique_ptr<SfxItemSet>             mpEmptyFillStyleSfxItemSet;
 
-    /// the set of known dialogs and their ID for usage in createDialogByID
-    mapType                                 maKnownDialogs;
-
     /// helpers
     SdAbstractDialogFactory* getSdAbstractDialogFactory();
     SdXImpressDocument* getSdXImpressDocument();
@@ -92,12 +87,17 @@ private:
     const SfxItemSet& getEmptySfxItemSet();
     const SfxItemSet& getEmptyFillStyleSfxItemSet();
 
-    /// central method: dialog creation and dumping to target directory (path)
-    VclAbstractDialog* createDialogByID(sal_uInt32 nID);
+    /// helper method to populate KnownDialogs, called in setUp(). Needs to be
+    /// written and has to add entries to KnownDialogs
+    virtual void registerKnownDialogsByID(mapType& rKnownDialogs) override;
+
+    /// dialog creation for known dialogs by ID. Has to be implemented for
+    /// each registered known dialog
+    virtual VclAbstractDialog* createDialogByID(sal_uInt32 nID) override;
 
 public:
     SdDialogsTest();
-    ~SdDialogsTest();
+    virtual ~SdDialogsTest();
 
     virtual void setUp() override;
 
@@ -118,8 +118,7 @@ SdDialogsTest::SdDialogsTest()
     mpDrawView(nullptr),
     mpSfxItemSetFromSdrObject(nullptr),
     mpEmptySfxItemSet(nullptr),
-    mpEmptyFillStyleSfxItemSet(nullptr),
-    maKnownDialogs()
+    mpEmptyFillStyleSfxItemSet(nullptr)
 {
 }
 
@@ -137,37 +136,8 @@ void SdDialogsTest::setUp()
 
     mpImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(mpImpressDocument);
-
-    if (maKnownDialogs.empty())
-    {
-        // fill map of unknown dilogs. Use a set here to allow later
-        // to 'find' a ID for construction based on the UIXMLDescription
-        // string (currently not yet used)
-        maKnownDialogs["modules/simpress/ui/publishingdialog.ui"] = 0;
-        maKnownDialogs["modules/sdraw/ui/breakdialog.ui"] = 1;
-        maKnownDialogs["modules/sdraw/ui/copydlg.ui"] = 2;
-        maKnownDialogs["modules/simpress/ui/customslideshows.ui"] = 3;
-        maKnownDialogs["modules/sdraw/ui/drawchardialog.ui"] = 4;
-        maKnownDialogs["modules/sdraw/ui/drawpagedialog.ui"] = 5;
-        maKnownDialogs["modules/simpress/ui/dlgfield.ui"] = 6;
-        maKnownDialogs["modules/sdraw/ui/dlgsnap.ui"] = 7;
-        maKnownDialogs["modules/sdraw/ui/insertlayer.ui"] = 8;
-        maKnownDialogs["modules/sdraw/ui/insertslidesdialog.ui"] = 9;
-        maKnownDialogs["modules/sdraw/ui/crossfadedialog.ui"] = 10;
-        maKnownDialogs["modules/sdraw/ui/bulletsandnumbering.ui"] = 11;
-        maKnownDialogs["modules/sdraw/ui/drawparadialog.ui"] = 12;
-        maKnownDialogs["modules/simpress/ui/presentationdialog.ui"] = 13;
-        maKnownDialogs["modules/simpress/ui/remotedialog.ui"] = 14;
-        maKnownDialogs["modules/sdraw/ui/drawprtldialog.ui"] = 15;
-        maKnownDialogs["modules/simpress/ui/slidedesigndialog.ui"] = 16;
-        maKnownDialogs["modules/sdraw/ui/drawprtldialog.ui"] = 17;
-        maKnownDialogs["modules/simpress/ui/interactiondialog.ui"] = 18;
-        maKnownDialogs["modules/sdraw/ui/vectorize.ui"] = 19;
-        maKnownDialogs["modules/simpress/ui/photoalbum.ui"] = 20;
-        maKnownDialogs["modules/simpress/ui/masterlayoutdlg.ui"] = 21;
-        maKnownDialogs["modules/simpress/ui/headerfooterdialog.ui"] = 22;
-    }
 }
+
 
 SdAbstractDialogFactory* SdDialogsTest::getSdAbstractDialogFactory()
 {
@@ -255,6 +225,34 @@ const SfxItemSet& SdDialogsTest::getEmptyFillStyleSfxItemSet()
     }
 
     return *mpEmptyFillStyleSfxItemSet;
+}
+
+void SdDialogsTest::registerKnownDialogsByID(mapType& rKnownDialogs)
+{
+    // fill map of known dilogs
+    rKnownDialogs["modules/simpress/ui/publishingdialog.ui"] = 0;
+    rKnownDialogs["modules/sdraw/ui/breakdialog.ui"] = 1;
+    rKnownDialogs["modules/sdraw/ui/copydlg.ui"] = 2;
+    rKnownDialogs["modules/simpress/ui/customslideshows.ui"] = 3;
+    rKnownDialogs["modules/sdraw/ui/drawchardialog.ui"] = 4;
+    rKnownDialogs["modules/sdraw/ui/drawpagedialog.ui"] = 5;
+    rKnownDialogs["modules/simpress/ui/dlgfield.ui"] = 6;
+    rKnownDialogs["modules/sdraw/ui/dlgsnap.ui"] = 7;
+    rKnownDialogs["modules/sdraw/ui/insertlayer.ui"] = 8;
+    rKnownDialogs["modules/sdraw/ui/insertslidesdialog.ui"] = 9;
+    rKnownDialogs["modules/sdraw/ui/crossfadedialog.ui"] = 10;
+    rKnownDialogs["modules/sdraw/ui/bulletsandnumbering.ui"] = 11;
+    rKnownDialogs["modules/sdraw/ui/drawparadialog.ui"] = 12;
+    rKnownDialogs["modules/simpress/ui/presentationdialog.ui"] = 13;
+    rKnownDialogs["modules/simpress/ui/remotedialog.ui"] = 14;
+    rKnownDialogs["modules/sdraw/ui/drawprtldialog.ui"] = 15;
+    rKnownDialogs["modules/simpress/ui/slidedesigndialog.ui"] = 16;
+    rKnownDialogs["modules/simpress/ui/templatedialog.ui"] = 17;
+    rKnownDialogs["modules/simpress/ui/interactiondialog.ui"] = 18;
+    rKnownDialogs["modules/sdraw/ui/vectorize.ui"] = 19;
+    rKnownDialogs["modules/simpress/ui/photoalbum.ui"] = 20;
+    rKnownDialogs["modules/simpress/ui/masterlayoutdlg.ui"] = 21;
+    rKnownDialogs["modules/simpress/ui/headerfooterdialog.ui"] = 22;
 }
 
 VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
@@ -606,14 +604,48 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
 
 void SdDialogsTest::openAnyDialog()
 {
-    static bool bDumpAllKnownDialogs = true;
+    /// example how to process an input file containing the UXMLDescriptions of the dialogs
+    /// to dump
+    if (true)
+    {
+        test::Directories aDirectories;
+        OUString aURL = aDirectories.getURLFromSrc("sd/qa/unit/data/dialogs-test.txt");
+        SvFileStream aStream(aURL, StreamMode::READ);
+        OString aNextUIFile;
+        OString aComment("#");
 
-    if (bDumpAllKnownDialogs)
+        while (aStream.ReadLine(aNextUIFile))
+        {
+            if (!aNextUIFile.isEmpty() && !aNextUIFile.startsWith(aComment))
+            {
+                // first check if it's a known dialog
+                std::unique_ptr<VclAbstractDialog> pDlg(createDialogByName(aNextUIFile));
+
+                if (pDlg)
+                {
+                    // known dialog, dump screenshot to path
+                    dumpDialogToPath(*pDlg);
+                }
+                else
+                {
+                    // unknown dialog, try fallback to generic created
+                    // VclBuilder-generated instance. Keep in mind that Dialogs
+                    // using this mechanism will probably not be layouted well
+                    // since the setup/initialization part is missing. Thus,
+                    // only use for fallback when only the UI file is available.
+                    dumpDialogToPath(aNextUIFile);
+                }
+            }
+        }
+    }
+
+    /// example how to dump all known dialogs
+    if (false)
     {
         // example for SfxTabDialog: 5 -> "modules/sdraw/ui/drawpagedialog.ui"
         // example for TabDialog: 22 -> "modules/simpress/ui/headerfooterdialog.ui"
         // example for self-adapted wizard: 0 -> "modules/simpress/ui/publishingdialog.ui"
-        for (mapType::const_iterator i = maKnownDialogs.begin(); i != maKnownDialogs.end(); i++)
+        for (mapType::const_iterator i = getKnownDialogs().begin(); i != getKnownDialogs().end(); i++)
         {
             std::unique_ptr<VclAbstractDialog> pDlg(createDialogByID((*i).second));
 
@@ -631,9 +663,8 @@ void SdDialogsTest::openAnyDialog()
         }
     }
 
-    static bool bCheckFallbackDialog = false;
-
-    if (bCheckFallbackDialog)
+    /// example how to dump a dialog using fallback functionality
+    if (false)
     {
         // unknown dialog, try fallback to generic created
         // VclBuilder-generated instance. Keep in mind that Dialogs
