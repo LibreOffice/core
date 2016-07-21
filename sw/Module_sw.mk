@@ -79,11 +79,10 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
 ))
 endif
 
-ifneq ($(DISABLE_CVE_TESTS),TRUE)
 $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_filters_test \
+    CppunitTest_sw_dialogs_test \
 ))
-endif
 
 ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,sw,\

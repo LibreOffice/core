@@ -1,0 +1,203 @@
+# -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# This file contains all dialogs that the test dialogs-test
+# will test. It will read one-by-one, try to open it and create a
+# screenshot that will be saved in workdir/screenshots using the
+# pattern of the ui-file name.
+#
+# You may use empty lines, or lines starrting with '#' which are treated
+# as comments. All other lines have to end with <CR> and will be interpreted
+# as ui-files.
+
+#
+# The known dialogs which have a hard-coded representation
+#
+
+#
+# Dialogs without a hard-coded representation. These will
+# be visualized using a fallback based on VclBuilder
+#
+
+# deactivated, leads to problems and the test to not work
+# modules/swriter/ui/templatedialog(nRegion).ui
+# modules/swriter/ui/autoformattable.ui
+# modules/swriter/ui/endnotepage.ui
+# modules/swriter/ui/footnotesendnotestabpage.ui
+# modules/swriter/ui/linenumbering.ui
+# modules/swriter/ui/footnotepage.ui
+# modules/swriter/ui/outlinenumberingpage.ui
+
+modules/swriter/ui/abstractdialog.ui
+modules/swriter/ui/addentrydialog.ui
+modules/swriter/ui/addressblockdialog.ui
+modules/swriter/ui/alreadyexistsdialog.ui
+modules/swriter/ui/asciifilterdialog.ui
+modules/swriter/ui/asksearchdialog.ui
+modules/swriter/ui/assignfieldsdialog.ui
+modules/swriter/ui/assignstylesdialog.ui
+modules/swriter/ui/attachnamedialog.ui
+modules/swriter/ui/authenticationsettingsdialog.ui
+modules/swriter/ui/autotext.ui
+modules/swriter/ui/bibliographyentry.ui
+modules/swriter/ui/bulletsandnumbering.ui
+modules/swriter/ui/businessdatapage.ui
+modules/swriter/ui/cannotsavelabeldialog.ui
+modules/swriter/ui/captiondialog.ui
+modules/swriter/ui/captionoptions.ui
+modules/swriter/ui/cardformatpage.ui
+modules/swriter/ui/cardmediumpage.ui
+modules/swriter/ui/ccdialog.ui
+modules/swriter/ui/characterproperties.ui
+modules/swriter/ui/charurlpage.ui
+modules/swriter/ui/columndialog.ui
+modules/swriter/ui/columnpage.ui
+modules/swriter/ui/columnwidth.ui
+modules/swriter/ui/conditionpage.ui
+modules/swriter/ui/converttexttable.ui
+modules/swriter/ui/createaddresslist.ui
+modules/swriter/ui/createauthorentry.ui
+modules/swriter/ui/createautomarkdialog.ui
+modules/swriter/ui/customizeaddrlistdialog.ui
+modules/swriter/ui/datasourcesunavailabledialog.ui
+modules/swriter/ui/dropcapspage.ui
+modules/swriter/ui/dropdownfielddialog.ui
+modules/swriter/ui/editcategories.ui
+modules/swriter/ui/editfielddialog.ui
+modules/swriter/ui/editsectiondialog.ui
+modules/swriter/ui/envaddresspage.ui
+modules/swriter/ui/envdialog.ui
+modules/swriter/ui/envformatpage.ui
+modules/swriter/ui/envprinterpage.ui
+modules/swriter/ui/exchangedatabases.ui
+modules/swriter/ui/fielddialog.ui
+modules/swriter/ui/findentrydialog.ui
+modules/swriter/ui/flddbpage.ui
+modules/swriter/ui/flddocinfopage.ui
+modules/swriter/ui/flddocumentpage.ui
+modules/swriter/ui/fldfuncpage.ui
+modules/swriter/ui/fldrefpage.ui
+modules/swriter/ui/fldvarpage.ui
+modules/swriter/ui/floatingsync.ui
+modules/swriter/ui/footendnotedialog.ui
+modules/swriter/ui/footnoteareapage.ui
+modules/swriter/ui/formatsectiondialog.ui
+modules/swriter/ui/formattablepage.ui
+modules/swriter/ui/frmaddpage.ui
+modules/swriter/ui/frmtypepage.ui
+modules/swriter/ui/frmurlpage.ui
+modules/swriter/ui/indentpage.ui
+modules/swriter/ui/indexentry.ui
+modules/swriter/ui/infonotfounddialog.ui
+modules/swriter/ui/inforeadonlydialog.ui
+modules/swriter/ui/inputfielddialog.ui
+modules/swriter/ui/insertautotextdialog.ui
+modules/swriter/ui/insertbookmark.ui
+modules/swriter/ui/insertbreak.ui
+modules/swriter/ui/insertcaption.ui
+modules/swriter/ui/insertdbcolumnsdialog.ui
+modules/swriter/ui/insertfootnote.ui
+modules/swriter/ui/insertscript.ui
+modules/swriter/ui/insertsectiondialog.ui
+modules/swriter/ui/inserttable.ui
+modules/swriter/ui/labeldialog.ui
+modules/swriter/ui/labelformatpage.ui
+modules/swriter/ui/labeloptionspage.ui
+modules/swriter/ui/mailconfigpage.ui
+modules/swriter/ui/mailmerge.ui
+modules/swriter/ui/mailmergedialog.ui
+modules/swriter/ui/managechangessidebar.ui
+modules/swriter/ui/mergeconnectdialog.ui
+modules/swriter/ui/mergetabledialog.ui
+modules/swriter/ui/mmaddressblockpage.ui
+modules/swriter/ui/mmcreatingdialog.ui
+modules/swriter/ui/mmlayoutpage.ui
+modules/swriter/ui/mmmailbody.ui
+modules/swriter/ui/mmoutputtypepage.ui
+modules/swriter/ui/mmresultemaildialog.ui
+modules/swriter/ui/mmresultprintdialog.ui
+modules/swriter/ui/mmresultsavedialog.ui
+modules/swriter/ui/mmsalutationpage.ui
+modules/swriter/ui/mmselectpage.ui
+modules/swriter/ui/mmsendmails.ui
+modules/swriter/ui/newuserindexdialog.ui
+modules/swriter/ui/notebookbar.ui
+modules/swriter/ui/numberingnamedialog.ui
+modules/swriter/ui/numparapage.ui
+modules/swriter/ui/optcaptionpage.ui
+modules/swriter/ui/optcomparison.ui
+modules/swriter/ui/optcompatpage.ui
+modules/swriter/ui/optfonttabpage.ui
+modules/swriter/ui/optformataidspage.ui
+modules/swriter/ui/optgeneralpage.ui
+modules/swriter/ui/optredlinepage.ui
+modules/swriter/ui/opttablepage.ui
+modules/swriter/ui/opttestpage.ui
+modules/swriter/ui/outlinenumbering.ui
+modules/swriter/ui/outlinepositionpage.ui
+modules/swriter/ui/paradialog.ui
+modules/swriter/ui/picturepage.ui
+modules/swriter/ui/previewzoomdialog.ui
+modules/swriter/ui/printeroptions.ui
+modules/swriter/ui/printmergedialog.ui
+modules/swriter/ui/printmonitordialog.ui
+modules/swriter/ui/printoptionspage.ui
+modules/swriter/ui/privateuserpage.ui
+modules/swriter/ui/querycontinuebegindialog.ui
+modules/swriter/ui/querycontinueenddialog.ui
+modules/swriter/ui/querydefaultcompatdialog.ui
+modules/swriter/ui/queryrotateintostandarddialog.ui
+modules/swriter/ui/querysavelabeldialog.ui
+modules/swriter/ui/queryshowchangesdialog.ui
+modules/swriter/ui/renameautotextdialog.ui
+modules/swriter/ui/renameentrydialog.ui
+modules/swriter/ui/renameobjectdialog.ui
+modules/swriter/ui/rowheight.ui
+modules/swriter/ui/saveashtmldialog.ui
+modules/swriter/ui/savelabeldialog.ui
+modules/swriter/ui/sectionpage.ui
+modules/swriter/ui/selectaddressdialog.ui
+modules/swriter/ui/selectautotextdialog.ui
+modules/swriter/ui/selectblockdialog.ui
+modules/swriter/ui/selectindexdialog.ui
+modules/swriter/ui/selecttabledialog.ui
+modules/swriter/ui/sidebarpage.ui
+modules/swriter/ui/sidebarstylepresets.ui
+modules/swriter/ui/sidebartheme.ui
+modules/swriter/ui/sidebarwrap.ui
+modules/swriter/ui/sortdialog.ui
+modules/swriter/ui/splittable.ui
+modules/swriter/ui/statisticsinfopage.ui
+modules/swriter/ui/stringinput.ui
+modules/swriter/ui/subjectdialog.ui
+modules/swriter/ui/tablecolumnpage.ui
+modules/swriter/ui/tablepreviewdialog.ui
+modules/swriter/ui/tableproperties.ui
+modules/swriter/ui/tabletextflowpage.ui
+modules/swriter/ui/testmailsettings.ui
+modules/swriter/ui/textgridpage.ui
+modules/swriter/ui/titlepage.ui
+modules/swriter/ui/tocdialog.ui
+modules/swriter/ui/tocentriespage.ui
+modules/swriter/ui/tocindexpage.ui
+modules/swriter/ui/tocstylespage.ui
+modules/swriter/ui/tokenwidget.ui
+modules/swriter/ui/viewoptionspage.ui
+modules/swriter/ui/warndatasourcedialog.ui
+modules/swriter/ui/warnemaildialog.ui
+modules/swriter/ui/wordcount.ui
+modules/swriter/ui/wrapdialog.ui
+modules/swriter/ui/wrappage.ui
+modules/swriter/ui/indexentry.ui
+modules/swriter/ui/bibliographyentry.ui
+modules/swriter/ui/inforeadonlydialog.ui
+modules/swriter/ui/inforeadonlydialog.ui
+modules/swriter/ui/inforeadonlydialog.ui
+modules/swriter/ui/floatingnavigation.ui
+modules/swriter/ui/queryrotateintostandarddialog.ui

@@ -612,7 +612,7 @@ void SdDialogsTest::openAnyDialog()
         OUString aURL = aDirectories.getURLFromSrc("sd/qa/unit/data/dialogs-test.txt");
         SvFileStream aStream(aURL, StreamMode::READ);
         OString aNextUIFile;
-        OString aComment("#");
+        const OString aComment("#");
 
         while (aStream.ReadLine(aNextUIFile))
         {
