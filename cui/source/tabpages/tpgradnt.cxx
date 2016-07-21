@@ -520,6 +520,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickAddHdl_Impl, Button*, void)
         Bitmap aBitmap = m_pGradientList->GetBitmapForPreview( nCount, m_pGradientLB->GetIconSize() );
         m_pGradientLB->InsertItem( nId + 1, Image(aBitmap), aName );
         m_pGradientLB->SelectItem( nId + 1 );
+        m_pGradientLB->Resize();
 
         *m_pnGradientListState |= ChangeType::MODIFIED;
 
@@ -579,6 +580,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*
             m_pGradientLB->RemoveItem( nId );
             nId = m_pGradientLB->GetItemId( 0 );
             m_pGradientLB->SelectItem( nId );
+            m_pGradientLB->Resize();
 
             m_pCtlPreview->Invalidate();
 

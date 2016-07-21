@@ -32,7 +32,7 @@ SvxPresetListBox::SvxPresetListBox(vcl::Window* pParent, WinBits nWinStyle)
     : ValueSet(pParent, nWinStyle),
       nColCount(2),
       nRowCount(5),
-      aIconSize( Size(100,60) )
+      aIconSize( Size(80,60) )
 {
     SetEdgeBlending(true);
     SetExtraSpacing(4);
@@ -45,13 +45,19 @@ VCL_BUILDER_DECL_FACTORY(SvxPresetListBox)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if(!sBorder.isEmpty())
         nWinBits |= WB_BORDER;
-    nWinBits |= (WB_ITEMBORDER| WB_3DLOOK|WB_OWNERDRAWDECORATION|WB_VSCROLL);
+    nWinBits |= (WB_ITEMBORDER| WB_3DLOOK|WB_OWNERDRAWDECORATION);
     rRet = VclPtr<SvxPresetListBox>::Create(pParent, nWinBits);
 }
 
 void SvxPresetListBox::Resize()
 {
     DrawLayout();
+    WinBits aWinBits(GetStyle());
+    if( nColCount*nRowCount <  static_cast<sal_Int32>(GetItemCount()) )
+        aWinBits |= WB_VSCROLL;
+    else
+        aWinBits &= ~WB_VSCROLL;
+    SetStyle(aWinBits);
     ValueSet::Resize();
 }
 

@@ -549,6 +549,7 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickAddHdl_Impl, Button*, void)
             Bitmap aBitmap = m_pPatternList->GetBitmapForPreview( nCount, m_pPatternLB->GetIconSize() );
             m_pPatternLB->InsertItem( nId + 1, Image(aBitmap), aName );
             m_pPatternLB->SelectItem( nId + 1 );
+            m_pPatternLB->Resize();
 
             *m_pnPatternListState |= ChangeType::MODIFIED;
 
@@ -669,6 +670,7 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*,
             m_pPatternLB->RemoveItem( nId );
             nId = m_pPatternLB->GetItemId(0);
             m_pPatternLB->SelectItem( nId );
+            m_pPatternLB->Resize();
 
             m_pCtlPreview->Invalidate();
             m_pCtlPixel->Invalidate();

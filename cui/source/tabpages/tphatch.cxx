@@ -584,6 +584,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
         // Insert the new entry at the next ID
         m_pHatchLB->InsertItem( nId + 1, Image(aBitmap), aName );
         m_pHatchLB->SelectItem( nId + 1 );
+        m_pHatchLB->Resize();
 
         *m_pnHatchingListState |= ChangeType::MODIFIED;
 
@@ -640,6 +641,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, v
             m_pHatchLB->RemoveItem( nId );
             nId = m_pHatchLB->GetItemId(0);
             m_pHatchLB->SelectItem( nId );
+            m_pHatchLB->Resize();
 
             m_pCtlPreview->Invalidate();
 
