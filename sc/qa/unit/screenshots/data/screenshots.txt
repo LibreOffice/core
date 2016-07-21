@@ -41,8 +41,9 @@ modules/scalc/ui/formatcellsdialog.ui
 # be visualized using a fallback based on VclBuilder
 #
 
-# modules/scalc/ui/headerfootercontent.ui <- deactivated, leads to problems and the test to not work
-# modules/scalc/ui/pivottablelayoutdialog.ui <- deactivated, leads to problems and the test to not work
+# deactivated, leads to problems and the test to not work
+# modules/scalc/ui/headerfootercontent.ui
+# modules/scalc/ui/pivottablelayoutdialog.ui
 
 modules/scalc/ui/autoformattable.ui
 modules/scalc/ui/sortwarning.ui
