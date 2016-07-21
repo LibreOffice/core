@@ -1051,7 +1051,7 @@ void SdrTableObj::setTableStyleSettings( const TableStyleSettings& rStyle )
 }
 
 
-TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_Int32& rnY ) const
+TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_Int32& rnY, const sal_uInt16 aTol ) const
 {
     if( !mpImpl.is() || !mpImpl->mxTable.is() )
         return SDRTABLEHIT_NONE;
@@ -1077,7 +1077,7 @@ TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_
         {
             while( rnX <= nColCount )
             {
-                if( nX <= 0 )
+                if( nX - aTol <= 0 )
                 {
                     bVrtHit = true;
                     break;
@@ -1097,7 +1097,7 @@ TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_
             rnX = nColCount;
             while( rnX >= 0 )
             {
-                if( nX <= 0 )
+                if( nX - aTol <= 0 )
                 {
                     bVrtHit = true;
                     break;
@@ -1122,7 +1122,7 @@ TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_
     {
         while( rnY <= nRowCount )
         {
-            if( nY <= 0 )
+            if( nY - aTol <= 0 )
             {
                 bHrzHit = true;
                 break;
