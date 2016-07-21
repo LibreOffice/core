@@ -2113,78 +2113,77 @@ bool ScTable::HasBlockMatrixFragment( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
 {
     using namespace sc;
 
-    sal_uInt16 nEdges = 0;
+    MatrixEdge nEdges = MatrixEdge::Nothing;
 
     if ( nCol1 == nCol2 )
     {   // left and right column
-        const sal_uInt16 n = MatrixEdgeLeft | MatrixEdgeRight;
+        const MatrixEdge n = MatrixEdge::Left | MatrixEdge::Right;
         nEdges = aCol[nCol1].GetBlockMatrixEdges( nRow1, nRow2, n );
-        // not (4 and 16) or 1 or 32
-        if (nEdges && (((nEdges & n) != n) || (nEdges & (MatrixEdgeInside|MatrixEdgeOpen))))
+        if ((nEdges != MatrixEdge::Nothing) && (((nEdges & n)!=n) || (nEdges & (MatrixEdge::Inside|MatrixEdge::Open))))
             return true;        // left or right edge is missing or open
     }
     else
     {   // left column
-        nEdges = aCol[nCol1].GetBlockMatrixEdges(nRow1, nRow2, MatrixEdgeLeft);
-        // not 4 or 1 or 32
-        if (nEdges && (((nEdges & MatrixEdgeLeft) != MatrixEdgeLeft) || (nEdges & (MatrixEdgeInside|MatrixEdgeOpen))))
+        nEdges = aCol[nCol1].GetBlockMatrixEdges(nRow1, nRow2, MatrixEdge::Left);
+        if ((nEdges != MatrixEdge::Nothing) && ((!(nEdges & MatrixEdge::Left)) || (nEdges & (MatrixEdge::Inside|MatrixEdge::Open))))
             return true;        // left edge missing or open
         // right column
-        nEdges = aCol[nCol2].GetBlockMatrixEdges(nRow1, nRow2, MatrixEdgeRight);
-        // not 16 or 1 or 32
-        if (nEdges && (((nEdges & MatrixEdgeRight) != MatrixEdgeRight) || (nEdges & (MatrixEdgeInside|MatrixEdgeOpen))))
+        nEdges = aCol[nCol2].GetBlockMatrixEdges(nRow1, nRow2, MatrixEdge::Right);
+        if ((nEdges == MatrixEdge::Nothing) && ((!(nEdges & MatrixEdge::Right)) || (nEdges & (MatrixEdge::Inside|MatrixEdge::Open))))
             return true;        // right edge is missing or open
     }
 
     if ( nRow1 == nRow2 )
     {   // Row on top and on bottom
         bool bOpen = false;
-        const sal_uInt16 n = MatrixEdgeBottom | MatrixEdgeTop;
+        const MatrixEdge n = MatrixEdge::Bottom | MatrixEdge::Top;
         for ( SCCOL i=nCol1; i<=nCol2; i++)
         {
             nEdges = aCol[i].GetBlockMatrixEdges( nRow1, nRow1, n );
-            if ( nEdges )
+            if (nEdges != MatrixEdge::Nothing)
             {
                 if ( (nEdges & n) != n )
                     return true;        // Top or bottom edge missing
-                if (nEdges & MatrixEdgeLeft)
+                if (nEdges & MatrixEdge::Left)
                     bOpen = true;       // left edge open, continue
                 else if ( !bOpen )
                     return true;        // Something exist that has not been opened
-                if (nEdges & MatrixEdgeRight)
+                if (nEdges & MatrixEdge::Right)
                     bOpen = false;      // Close right edge
             }
         }
         if ( bOpen )
-            return true;                // continue
+            return true;
     }
     else
     {
-        sal_uInt16 j, n;
+        int j;
+        MatrixEdge n;
         SCROW nR;
-        // first rop row, then bottom row
-        for ( j=0, nR=nRow1, n=8; j<2; j++, nR=nRow2, n=2 )
+        // first top row, then bottom row
+        for ( j=0, n = MatrixEdge::Top,    nR=nRow1; j<2;
+              j++, n = MatrixEdge::Bottom, nR=nRow2)
         {
             bool bOpen = false;
             for ( SCCOL i=nCol1; i<=nCol2; i++)
             {
                 nEdges = aCol[i].GetBlockMatrixEdges( nR, nR, n );
-                if ( nEdges )
+                if ( nEdges != MatrixEdge::Nothing)
                 {
                     // in top row no top edge respectively
                     // in bottom row no bottom edge
                     if ( (nEdges & n) != n )
                         return true;
-                    if (nEdges & MatrixEdgeLeft)
+                    if (nEdges & MatrixEdge::Left)
                         bOpen = true;       // open left edge, continue
                     else if ( !bOpen )
                         return true;        // Something exist that has not been opened
-                    if (nEdges & MatrixEdgeRight)
+                    if (nEdges & MatrixEdge::Right)
                         bOpen = false;      // Close right edge
                 }
             }
             if ( bOpen )
-                return true;                // continue
+                return true;
         }
     }
     return false;

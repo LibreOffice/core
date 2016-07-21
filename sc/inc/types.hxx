@@ -13,6 +13,7 @@
 #include <sal/types.h>
 
 #include <boost/intrusive_ptr.hpp>
+#include <o3tl/typed_flags_set.hxx>
 
 class ScMatrix;
 
@@ -60,13 +61,15 @@ enum ScFormulaVectorState
 
 namespace sc {
 
-const sal_uInt16 MatrixEdgeNothing = 0;
-const sal_uInt16 MatrixEdgeInside  = 1;
-const sal_uInt16 MatrixEdgeBottom  = 2;
-const sal_uInt16 MatrixEdgeLeft    = 4;
-const sal_uInt16 MatrixEdgeTop     = 8;
-const sal_uInt16 MatrixEdgeRight   = 16;
-const sal_uInt16 MatrixEdgeOpen    = 32;
+enum class MatrixEdge{
+    Nothing = 0,
+    Inside  = 1,
+    Bottom  = 2,
+    Left    = 4,
+    Top     = 8,
+    Right   = 16,
+    Open    = 32
+}; // typed_flags, template outside of sc namespace
 
 enum GroupCalcState
 {
@@ -119,6 +122,10 @@ enum StartListeningType
     NoListening
 };
 
+}
+
+namespace o3tl{
+    template<> struct typed_flags<sc::MatrixEdge> : o3tl::is_typed_flags<sc::MatrixEdge, 63> {};
 }
 
 #endif
