@@ -700,7 +700,7 @@ void SfxObjectShell::SetTitle
 
     SfxApplication *pSfxApp = SfxGetpApp();
 
-    // If possible relase the unnamed number.
+    // If possible release the unnamed number.
     if ( pImpl->bIsNamedVisible && USHRT_MAX != pImpl->nVisualDocumentNumber )
     {
         pSfxApp->ReleaseIndex(pImpl->nVisualDocumentNumber);
