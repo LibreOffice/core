@@ -188,7 +188,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="row_spacing">3</property>
-                    <property name="column_spacing">3</property>
+                    <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="incrementft">
                         <property name="visible">True</property>
@@ -268,7 +268,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="row_spacing">3</property>
-                    <property name="column_spacing">3</property>
+                    <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="angleft">
                         <property name="visible">True</property>
@@ -370,7 +370,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="row_spacing">3</property>
-                    <property name="column_spacing">3</property>
+                    <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="borderft">
                         <property name="visible">True</property>
@@ -433,7 +433,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="row_spacing">3</property>
-                    <property name="column_spacing">3</property>
+                    <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="colorfromft">
                         <property name="visible">True</property>
@@ -493,7 +493,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="row_spacing">3</property>
-                    <property name="column_spacing">3</property>
+                    <property name="column_spacing">6</property>
                     <child>
                       <object class="svxlo-ColorLB" id="colortolb">
                         <property name="visible">True</property>
