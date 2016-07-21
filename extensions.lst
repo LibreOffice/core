@@ -39,115 +39,115 @@
 
 # English dictionary
 [ language=en.* || language=de || language=it ]
-    f5f6aab4cc5d92a34ab13ad15332770c http://iweb.dl.sourceforge.net/project/aoo-extensions/17102/21/dict-en.oxt "dict-en.oxt"
+    f5f6aab4cc5d92a34ab13ad15332770c http://sourceforge.net/projects/aoo-extensions/files/17102/21/dict-en.oxt/download "dict-en.oxt"
 
 # English (USA, en_US) dictionary
 [ language==nl || language==ru ]
-    e2eab80772ab1aa09716954219351a80 http://iweb.dl.sourceforge.net/project/aoo-extensions/1470/1/en_US.oxt "en_US.oxt"
+    e2eab80772ab1aa09716954219351a80 http://sourceforge.net/projects/aoo-extensions/files/1470/1/en_US.oxt/download "en_US.oxt"
 
 # German dictionary.
 [ language=de || language=de_DE || language=nl || language=ru ]
-    a9328ce36b272a034b4706721345076d http://iweb.dl.sourceforge.net/project/aoo-extensions/1075/13/dict-de_de-frami_2013-12-06.oxt "dict-de_DE-frami_2012-06-17.oxt"
+    a9328ce36b272a034b4706721345076d http://sourceforge.net/projects/aoo-extensions/files/1075/13/dict-de_de-frami_2013-12-06.oxt/download "dict-de_DE-frami_2012-06-17.oxt"
 
 # Dutch dictionary.
 [ language=nl ]
-    5c0de383ef649cffefc128cfb36b4d43 http://iweb.dl.sourceforge.net/project/aoo-extensions/1456/6/nl-dict-v2.00g.oxt "nl-dict-v2.00g.oxt"
+    5c0de383ef649cffefc128cfb36b4d43 http://sourceforge.net/projects/aoo-extensions/files/1456/6/nl-dict-v2.00g.oxt/download "nl-dict-v2.00g.oxt"
 
 # French dictionary.
 [ language=fr || language=nl || language=de || language=de_DE || language=ca || language=ca_XV ]
-    48343ddb4f020f1c335189ba56f8f50c http://iweb.dl.sourceforge.net/project/aoo-extensions/17340/3/lo-oo-ressources-linguistiques-fr-v5.1.oxt "dict-fr.oxt"
+    48343ddb4f020f1c335189ba56f8f50c http://sourceforge.net/projects/aoo-extensions/files/17340/3/lo-oo-ressources-linguistiques-fr-v5.1.oxt/download "dict-fr.oxt"
 
 # Italian dictionary.
 [ language=it || language=de || language=de_DE ]
-    b20c2bf3114bdca5749606ad707e19be http://iweb.dl.sourceforge.net/project/aoo-extensions/1204/14/dict-it.oxt "dict-it.oxt"
+    b20c2bf3114bdca5749606ad707e19be http://sourceforge.net/projects/aoo-extensions/files/1204/14/dict-it.oxt/download "dict-it.oxt"
 
 # Spanish dictionary.
 [ language=es || language=ca || language=ca_XV ]
-    59dd45e6785ed644adbbd73f4f126182 http://iweb.dl.sourceforge.net/project/aoo-extensions/1657/3/es_es.oxt "es_es.oxt"
+    59dd45e6785ed644adbbd73f4f126182 http://sourceforge.net/projects/aoo-extensions/files/1657/3/es_es.oxt/download "es_es.oxt"
 
 # Danish dictionary.
 [ language=da ]
-    b38cba04b6513dd42b031199d617cce6 http://iweb.dl.sourceforge.net/project/aoo-extensions/1388/12/DanskeSynonymer.oxt "DanskeSynonymer.oxt"
-    6ee1e24fb17e44577d8e3200f3e44adc http://iweb.dl.sourceforge.net/project/aoo-extensions/1429/6/dict-da-current.oxt "dict-da-current.oxt"
+    b38cba04b6513dd42b031199d617cce6 http://sourceforge.net/projects/aoo-extensions/files/1388/12/DanskeSynonymer.oxt/download "DanskeSynonymer.oxt"
+    6ee1e24fb17e44577d8e3200f3e44adc http://sourceforge.net/projects/aoo-extensions/files/1429/6/dict-da-current.oxt/download "dict-da-current.oxt"
 
 # Lithuanian dictionary.
 [ language=lt ]
-    d8d4a3d5c6abfde1b4c81cc1ddd1afa0 http://iweb.dl.sourceforge.net/project/aoo-extensions/17703/0/openoffice-spellcheck-lt-1.3.oxt "openoffice-spellcheck-lt-1.3.oxt"
+    d8d4a3d5c6abfde1b4c81cc1ddd1afa0 http://sourceforge.net/projects/aoo-extensions/files/17703/0/openoffice-spellcheck-lt-1.3.oxt/download "openoffice-spellcheck-lt-1.3.oxt"
 
 # Romanian dictionary.
 [ language=ro ]
-    b05941b975afc0321df0cd48a4d295c8 http://iweb.dl.sourceforge.net/project/aoo-extensions/1392/8/dict-ro.1.5.oxt "dict-ro.1.5.oxt"
+    b05941b975afc0321df0cd48a4d295c8 http://sourceforge.net/projects/aoo-extensions/files/1392/8/dict-ro.1.5.oxt/download "dict-ro.1.5.oxt"
 
 # Russian dictionary.
 [ language=ru ]
-    93921f14809a22770f1bd89af65015bc http://iweb.dl.sourceforge.net/project/aoo-extensions/3233/3/dict_ru_ru-0.3.7.oxt "dict-ru.oxt"
+    93921f14809a22770f1bd89af65015bc http://sourceforge.net/projects/aoo-extensions/files/3233/3/dict_ru_ru-0.3.7.oxt/download "dict-ru.oxt"
 
 # Slovak dictionary.
 [ language=sk ]
-    5a7cec122a215c9f6a906ecb8ad46ee6 http://iweb.dl.sourceforge.net/project/aoo-extensions/1143/11/dict-sk.oxt "dict-sk.oxt"
+    5a7cec122a215c9f6a906ecb8ad46ee6 http://sourceforge.net/projects/aoo-extensions/files/1143/11/dict-sk.oxt/download "dict-sk.oxt"
 
 # Slovenian dictionary.
 [ language=sl ]
-    26b6cebb0534dfd8dc47ea2b746202ce http://iweb.dl.sourceforge.net/project/aoo-extensions/3280/7/pack-sl.oxt "dict-sl.oxt"
+    26b6cebb0534dfd8dc47ea2b746202ce http://sourceforge.net/projects/aoo-extensions/files/3280/7/pack-sl.oxt/download "dict-sl.oxt"
 
 # German (Austria) dictionary.
 [ language=de || language=de_AT || language=de_DE ]
-  47b868a8949faba36b8f0ff351940967 http://iweb.dl.sourceforge.net/project/aoo-extensions/1697/10/dict-de_at-frami_2013-12-06.oxt "dict-de_AT-frami_2012-06-17.oxt"
+  47b868a8949faba36b8f0ff351940967 http://sourceforge.net/projects/aoo-extensions/files/1697/10/dict-de_at-frami_2013-12-06.oxt/download "dict-de_AT-frami_2012-06-17.oxt"
 
 # German (Switzerland) dictionary.
 [ language=de || language=de_CH || language=de_DE ]
-    f4ab5c31fa394f05dab58ab773ab5012 http://iweb.dl.sourceforge.net/project/aoo-extensions/1699/10/dict-de_ch-frami_2013-12-06.oxt "dict-de_CH-frami_2012-06-17.oxt"
+    f4ab5c31fa394f05dab58ab773ab5012 http://sourceforge.net/projects/aoo-extensions/files/1699/10/dict-de_ch-frami_2013-12-06.oxt/download "dict-de_CH-frami_2012-06-17.oxt"
 
 # Khmer dictionary.
 [ language=km ]
-    a22266cfa40fb23a79be27a239321a3f http://iweb.dl.sourceforge.net/project/aoo-extensions/1009/1/km_spellchecker_OOo30_V_1.0.2.oxt "km_spellchecker_OOo30_V_1.0.2.oxt"
+    a22266cfa40fb23a79be27a239321a3f http://sourceforge.net/projects/aoo-extensions/files/1009/1/km_spellchecker_OOo30_V_1.0.2.oxt/download "km_spellchecker_OOo30_V_1.0.2.oxt"
 
 # Scottish Gaelic.
 [ language=gd ]
-    3a26a49794077643e802cf2cb738ec18 http://iweb.dl.sourceforge.net/project/aoo-extensions/4587/10/hunspell-gd-2.8.oxt "hunspell-gd-2.8.oxt"
+    3a26a49794077643e802cf2cb738ec18 http://sourceforge.net/projects/aoo-extensions/files/4587/10/hunspell-gd-2.8.oxt/download "hunspell-gd-2.8.oxt"
 
 # Basque.
 [ language=eu ]
-    f408bb4a333bea2aec86bffaa4ffa229 http://iweb.dl.sourceforge.net/project/aoo-extensions/1383/2/xuxen_4_OOo3.oxt "xuxen_4_OOo3.oxt"
+    f408bb4a333bea2aec86bffaa4ffa229 http://sourceforge.net/projects/aoo-extensions/files/1383/2/xuxen_4_OOo3.oxt/download "xuxen_4_OOo3.oxt"
 
 # Hungarian.
 [ language=hu ]
-    76345f925e34fef2d29bade4f29108e9 http://iweb.dl.sourceforge.net/project/aoo-extensions/3423/4/lightproof-hu_HU-1.3.oxt "lightproof-hu_HU-1.3.oxt"
-    d320e43e815c2dfd599dbfb7cd0e41fb http://iweb.dl.sourceforge.net/project/aoo-extensions/1283/9/dict-hu.oxt "dict-hu.oxt"
+    76345f925e34fef2d29bade4f29108e9 http://sourceforge.net/projects/aoo-extensions/files/3423/4/lightproof-hu_HU-1.3.oxt/download "lightproof-hu_HU-1.3.oxt"
+    d320e43e815c2dfd599dbfb7cd0e41fb http://sourceforge.net/projects/aoo-extensions/files/1283/9/dict-hu.oxt/download "dict-hu.oxt"
 
 # Asturian.
 [ language=ast ]
-    ed5702f25c8f5e36f97cafc606470c42 http://iweb.dl.sourceforge.net/project/aoo-extensions/3932/1/asturianu.oxt "asturianu.oxt"
+    ed5702f25c8f5e36f97cafc606470c42 http://sourceforge.net/projects/aoo-extensions/files/3932/1/asturianu.oxt/download "asturianu.oxt"
 
 # Norwegian.
 [ language=nb ]
-    e6ca009bc6aa3d70d8b7d66138b1c28d http://iweb.dl.sourceforge.net/project/aoo-extensions/1216/6/dictionary-no-NO-2.1.oxt "dictionary-no-NO-2.1.oxt"
+    e6ca009bc6aa3d70d8b7d66138b1c28d http://sourceforge.net/projects/aoo-extensions/files/1216/6/dictionary-no-NO-2.1.oxt/download "dictionary-no-NO-2.1.oxt"
 
 # Swedish.
 [ language=sv ]
-    32ab4edf1496a7cf5469ee1643eb0128 http://iweb.dl.sourceforge.net/project/aoo-extensions/5959/1/dict-sv.oxt "dict-sv.oxt"
+    32ab4edf1496a7cf5469ee1643eb0128 http://sourceforge.net/projects/aoo-extensions/files/5959/1/dict-sv.oxt/download "dict-sv.oxt"
 
 # Korean.
 [ language=ko ]
-    c20c155c47174c1b0ec0a53618044ac3 http://iweb.dl.sourceforge.net/project/aoo-extensions/5968/0/Korean_spell-checker-0.5.6_OOo.oxt "Korean_spell-checker-0.5.6_OOo.oxt"
+    c20c155c47174c1b0ec0a53618044ac3 http://sourceforge.net/projects/aoo-extensions/files/5968/0/Korean_spell-checker-0.5.6_OOo.oxt/download "Korean_spell-checker-0.5.6_OOo.oxt"
 
 # Polish.
 [ language=pl ]
-    a69f9221864b1360e38ff3f0b0cc9222 http://iweb.dl.sourceforge.net/project/aoo-extensions/806/4/pl-dict.oxt "pl-dict.oxt"
+    a69f9221864b1360e38ff3f0b0cc9222 http://sourceforge.net/projects/aoo-extensions/files/806/4/pl-dict.oxt/download "pl-dict.oxt"
 
 # Portuguese (European).
 [ language=pt || language=pt_PT ]
-    290d182dfad2c65ae2103228a8ed355f http://iweb.dl.sourceforge.net/project/aoo-extensions/1196/36/oo3x-pt-pt-15.10.3.1.oxt "dict-pt.oxt"
+    290d182dfad2c65ae2103228a8ed355f http://sourceforge.net/projects/aoo-extensions/files/1196/36/oo3x-pt-pt-15.10.3.1.oxt/download "dict-pt.oxt"
 
 # Catalan.
 [ language=ca ]
-    ed1c612a462490b541297a8522f667d0 http://iweb.dl.sourceforge.net/project/aoo-extensions/1205/3/catalan.oxt "dict-ca.oxt"
+    ed1c612a462490b541297a8522f667d0 http://sourceforge.net/projects/aoo-extensions/files/1205/3/catalan.oxt/download "dict-ca.oxt"
 
 # Valencian AVL (this is incompatible with Catalan).
 [ language=ca_XV ]
-    3b87a28bf1ff2a8beb76a5b501f40d1c http://iweb.dl.sourceforge.net/project/aoo-extensions/1475/0/avl.oxt "dict-ca-xv.oxt"
+    3b87a28bf1ff2a8beb76a5b501f40d1c http://sourceforge.net/projects/aoo-extensions/files/1475/0/avl.oxt/download "dict-ca-xv.oxt"
 
 # Valencian RACV (this is incompatible with Catalan).
 [ language=ca_XR ]
-    6112a73444a1ad3cf70736649e228f0f http://iweb.dl.sourceforge.net/project/aoo-extensions/1395/0/dict_valencian_llit.oxt "dict-ca-xr.oxt"
+    6112a73444a1ad3cf70736649e228f0f http://sourceforge.net/projects/aoo-extensions/files/1395/0/dict_valencian_llit.oxt/download "dict-ca-xr.oxt"
 
