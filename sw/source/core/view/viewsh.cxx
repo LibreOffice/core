@@ -1010,8 +1010,8 @@ void SwViewShell::SizeChgNotify()
                     Size aDocSize = GetDocSize();
                     std::stringstream ss;
                     ss << aDocSize.Width() + 2L * DOCUMENTBORDER << ", " << aDocSize.Height() + 2L * DOCUMENTBORDER;
-                    OString sRect = ss.str().c_str();
-                    GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, sRect.getStr());
+                    OString sSize = ss.str().c_str();
+                    GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, sSize.getStr());
                 }
             }
         }
