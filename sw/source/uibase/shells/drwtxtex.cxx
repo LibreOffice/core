@@ -1058,13 +1058,13 @@ void SwDrawTextShell::StateInsert(SfxItemSet &rSet)
 
                     if (pFieldItem)
                     {
-                        const SvxFieldData* pField = pFieldItem->GetField();
+                        const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pFieldItem->GetField());
 
-                        if (dynamic_cast< const SvxURLField *>( pField ) !=  nullptr)
+                        if (pURLField)
                         {
-                            aHLinkItem.SetName(static_cast<const SvxURLField*>( pField)->GetRepresentation());
-                            aHLinkItem.SetURL(static_cast<const SvxURLField*>( pField)->GetURL());
-                            aHLinkItem.SetTargetFrame(static_cast<const SvxURLField*>( pField)->GetTargetFrame());
+                            aHLinkItem.SetName(pURLField->GetRepresentation());
+                            aHLinkItem.SetURL(pURLField->GetURL());
+                            aHLinkItem.SetTargetFrame(pURLField->GetTargetFrame());
                         }
                     }
                     else

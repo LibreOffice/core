@@ -775,15 +775,15 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     {
         pExistingSh = pOldSh;
         // determine type of existing view
-        if( dynamic_cast<const SwPagePreview *>(pExistingSh) != nullptr )
+        if (SwPagePreview* pPagePreview = dynamic_cast<SwPagePreview *>(pExistingSh))
         {
-            m_sSwViewData = static_cast<SwPagePreview*>(pExistingSh)->GetPrevSwViewData();
-            m_sNewCursorPos = static_cast<SwPagePreview*>(pExistingSh)->GetNewCursorPos();
-            m_nNewPage = static_cast<SwPagePreview*>(pExistingSh)->GetNewPage();
+            m_sSwViewData = pPagePreview->GetPrevSwViewData();
+            m_sNewCursorPos = pPagePreview->GetNewCursorPos();
+            m_nNewPage = pPagePreview->GetNewPage();
             m_bOldShellWasPagePreview = true;
             m_bIsPreviewDoubleClick = !m_sNewCursorPos.isEmpty() || m_nNewPage != USHRT_MAX;
         }
-        else if( dynamic_cast<const SwSrcView *>(pExistingSh) != nullptr )
+        else if (dynamic_cast<const SwSrcView *>(pExistingSh) != nullptr)
             bOldShellWasSrcView = true;
     }
 
@@ -1566,9 +1566,9 @@ SwGlossaryHdl* SwView::GetGlosHdl()
 void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     bool bCallBase = true;
-    if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
+    if (const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint))
     {
-        sal_uInt32 nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
+        sal_uInt32 nId = pSimpleHint->GetId();
         switch ( nId )
         {
             // sub shells will be destroyed by the
@@ -1628,8 +1628,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     bCallBase = false;
                     if ( GetFormShell() )
                     {
-                        GetFormShell()->SetView(
-                            dynamic_cast<FmFormView*>( GetWrtShell().GetDrawView())  );
+                        GetFormShell()->SetView(dynamic_cast<FmFormView*>(GetWrtShell().GetDrawView()));
                         SfxBoolItem aItem( SID_FM_DESIGN_MODE, !GetDocShell()->IsReadOnly());
                         GetDispatcher().ExecuteList(SID_FM_DESIGN_MODE,
                                 SfxCallMode::SYNCHRON, { &aItem });

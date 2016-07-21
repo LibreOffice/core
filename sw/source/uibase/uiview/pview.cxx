@@ -1210,13 +1210,13 @@ SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
 
     SwViewShell *pVS, *pNew;
 
-    if( pOldSh && dynamic_cast<const SwPagePreview *>(pOldSh) != nullptr )
-        pVS = static_cast<SwPagePreview*>(pOldSh)->GetViewShell();
+    if (SwPagePreview* pPagePreview = dynamic_cast<SwPagePreview*>(pOldSh))
+        pVS = pPagePreview->GetViewShell();
     else
     {
-        if( pOldSh && dynamic_cast<const SwView *>(pOldSh) != nullptr )
+        if (SwView* pView = dynamic_cast<SwView *>(pOldSh))
         {
-            pVS = static_cast<SwView*>(pOldSh)->GetWrtShellPtr();
+            pVS = pView->GetWrtShellPtr();
             // save the current ViewData of the previous SwView
             pOldSh->WriteUserData( sSwViewData );
         }
