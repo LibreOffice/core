@@ -317,6 +317,7 @@ class SwMailMergeWizardExecutor : public salhelper::SimpleReferenceObject
     SwView*                  m_pView;       // never owner
     SwView*                  m_pView2Close; // never owner
     AbstractMailMergeWizard* m_pWizard;     // always owner
+    bool                     m_bDestroyMMToolbarOnCancel;
 
     DECL_LINK_TYPED( EndDialogHdl, Dialog&, void );
     DECL_LINK_TYPED( DestroyDialogHdl, void*, void );
@@ -337,7 +338,8 @@ public:
 SwMailMergeWizardExecutor::SwMailMergeWizardExecutor()
     : m_pView( nullptr ),
       m_pView2Close( nullptr ),
-      m_pWizard( nullptr )
+      m_pWizard( nullptr ),
+      m_bDestroyMMToolbarOnCancel( false )
 {
 }
 
@@ -443,6 +445,25 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     m_pWizard = pFact->CreateMailMergeWizard(*m_pView, *pMMConfig);
 
+    uno::Reference<beans::XPropertySet> xPropSet(m_pView->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY);
+    if (!xPropSet.is())
+        return;
+
+    uno::Reference<frame::XLayoutManager> xLayoutManager;
+    uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
+    aValue >>= xLayoutManager;
+    if (!xLayoutManager.is())
+        return;
+
+    const OUString sResourceURL( "private:resource/toolbar/mailmerge" );
+    uno::Reference<ui::XUIElement> xUIElement = xLayoutManager->getElement(sResourceURL);
+    if (!xUIElement.is())
+    {
+        // ensure the mail-merge toolbar is displayed and remember if it was before
+        m_bDestroyMMToolbarOnCancel = true;
+        xLayoutManager->createElement(sResourceURL);
+        xLayoutManager->showElement(sResourceURL);
+    }
     ExecuteWizard();
 }
 
@@ -600,8 +621,23 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, CancelHdl, void*, void)
             pMMConfig->SetTargetView(nullptr);
         }
         if (pMMConfig->GetSourceView())
-            pMMConfig->GetSourceView()->GetViewFrame()->GetFrame().AppearWithUpdate();
-
+        {
+            auto pViewFrame(pMMConfig->GetSourceView()->GetViewFrame());
+            pViewFrame->GetFrame().AppearWithUpdate();
+            uno::Reference<beans::XPropertySet> xPropSet(pViewFrame->GetFrame().GetFrameInterface(), uno::UNO_QUERY);
+            if (xPropSet.is() && m_bDestroyMMToolbarOnCancel)
+            {
+                // hide mailmerge toolbar if it hasnt been there before
+                uno::Reference<frame::XLayoutManager> xLayoutManager;
+                uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
+                aValue >>= xLayoutManager;
+                if (xLayoutManager.is())
+                {
+                    const OUString sResourceURL( "private:resource/toolbar/mailmerge" );
+                    xLayoutManager->destroyElement( sResourceURL );
+                }
+            }
+        }
         pMMConfig->Commit();
     }
 
@@ -685,30 +721,6 @@ void SwModule::ExecOther(SfxRequest& rReq)
             // show the mailmerge wizard
             rtl::Reference< SwMailMergeWizardExecutor > xEx( new SwMailMergeWizardExecutor );
             xEx->ExecuteMailMergeWizard( pArgs );
-
-            // show the mailmerge toolbar
-            SwView* pView = ::GetActiveView();
-            if (!pView)
-                return;
-
-            uno::Reference<beans::XPropertySet> xPropSet(pView->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY);
-            if (!xPropSet.is())
-                return;
-
-            uno::Reference<frame::XLayoutManager> xLayoutManager;
-            uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
-            aValue >>= xLayoutManager;
-            if (!xLayoutManager.is())
-                return;
-
-            const OUString sResourceURL( "private:resource/toolbar/mailmerge" );
-            uno::Reference<ui::XUIElement> xUIElement = xLayoutManager->getElement(sResourceURL);
-            if (!xUIElement.is())
-            {
-                // do the work, finally
-                xLayoutManager->createElement(sResourceURL);
-                xLayoutManager->showElement(sResourceURL);
-            }
         }
         break;
         case FN_MAILMERGE_FIRST_ENTRY:
