@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_4c48672e",
+        "filename": "sfx2/source/control/emojiview.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2016-07-21T15:47:33Z",
+      "side": 1,
+      "message": "Error occurs when trying to read the settings from common.xcs. Can anyone tell me what\u0027s not right here?",
+      "range": {
+        "startLine": 85,
+        "startChar": 4,
+        "endLine": 85,
+        "endChar": 82
+      },
+      "revId": "59a5fb3ba663e3f3907d511fe3bd1ee09905a30e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
