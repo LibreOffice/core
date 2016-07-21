@@ -187,19 +187,24 @@ namespace
             static inline void SetRightMarkPos(MarkBase* pMark, bool bOther, const SwPosition* const pPos)
                 { bOther ? pMark->SetOtherMarkPos(*pPos) : pMark->SetMarkPos(*pPos); };
     };
-    inline void lcl_ChkPaM( std::vector<PaMEntry>& rPaMEntries, const sal_uLong nNode, const sal_Int32 nContent, SwPaM& rPaM, const bool bPoint)
+    inline void lcl_ChkPaM( std::vector<PaMEntry>& rPaMEntries, const sal_uLong nNode, const sal_Int32 nContent, SwPaM& rPaM, const bool bGetPoint, bool bSetMark)
     {
-        const SwPosition* pPos = &rPaM.GetBound( bPoint );
+        const SwPosition* pPos = &rPaM.GetBound(bGetPoint);
         if( pPos->nNode.GetIndex() == nNode && pPos->nContent.GetIndex() < nContent )
         {
-            const PaMEntry aEntry = { &rPaM, bPoint, pPos->nContent.GetIndex() };
+            const PaMEntry aEntry = { &rPaM, bSetMark, pPos->nContent.GetIndex() };
             rPaMEntries.push_back(aEntry);
         }
     }
     inline void lcl_ChkPaMBoth( std::vector<PaMEntry>& rPaMEntries, const sal_uLong nNode, const sal_Int32 nContent, SwPaM& rPaM)
     {
-        lcl_ChkPaM(rPaMEntries, nNode, nContent, rPaM, true);
-        lcl_ChkPaM(rPaMEntries, nNode, nContent, rPaM, false);
+        lcl_ChkPaM(rPaMEntries, nNode, nContent, rPaM, true, true);
+        lcl_ChkPaM(rPaMEntries, nNode, nContent, rPaM, false, false);
+    }
+    inline void lcl_ChkUnoCrsrPaMBoth(std::vector<PaMEntry>& rPaMEntries, const sal_uLong nNode, const sal_Int32 nContent, SwPaM& rPaM)
+    {
+        lcl_ChkPaM(rPaMEntries, nNode, nContent, rPaM, true, false);
+        lcl_ChkPaM(rPaMEntries, nNode, nContent, rPaM, false, true);
     }
 
 #if 0
@@ -386,14 +391,14 @@ void ContentIdxStoreImpl::SaveUnoCursors(SwDoc* pDoc, sal_uLong nNode, sal_Int32
             continue;
         for(SwPaM& rPaM : pUnoCursor.get()->GetRingContainer())
         {
-            lcl_ChkPaMBoth( m_aUnoCursorEntries, nNode, nContent, rPaM);
+            lcl_ChkUnoCrsrPaMBoth(m_aUnoCursorEntries, nNode, nContent, rPaM);
         }
         const SwUnoTableCursor* pUnoTableCursor = dynamic_cast<const SwUnoTableCursor*>(pUnoCursor.get());
         if( pUnoTableCursor )
         {
             for(SwPaM& rPaM : (&(const_cast<SwUnoTableCursor*>(pUnoTableCursor))->GetSelRing())->GetRingContainer())
             {
-                lcl_ChkPaMBoth( m_aUnoCursorEntries, nNode, nContent, rPaM);
+                lcl_ChkUnoCrsrPaMBoth(m_aUnoCursorEntries, nNode, nContent, rPaM);
             }
         }
     }
