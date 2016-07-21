@@ -651,14 +651,16 @@ static void AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon, b
 
             // tdf#99165 if the control points are 'empty', create the mathematical
             // correct replacement ones to avoid problems with the graphical sub-system
-            if(aCP1.equal(aLast))
+            // tdf#101026 The 1st attempt to create a mathematically correct replacement control
+            // vector was wrong. Best alternative is one as close as possible which means short.
+            if (aCP1.equal(aLast))
             {
-                aCP1 = aLast + ((aCP2 - aLast) * 0.3);
+                aCP1 = aLast + ((aCP2 - aLast) * 0.0005);
             }
 
             if(aCP2.equal(aPoint))
             {
-                aCP2 = aPoint + ((aCP1 - aPoint) * 0.3);
+                aCP2 = aPoint + ((aCP1 - aPoint) * 0.0005);
             }
 
             cairo_curve_to(cr, aCP1.getX(), aCP1.getY(), aCP2.getX(), aCP2.getY(),

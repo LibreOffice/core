@@ -825,14 +825,16 @@ bool X11SalGraphics::drawPolyLine(
                     // miter graphics (and maybe others) when empty control points
                     // are used, so fallback to the mathematical 'default' control
                     // points in that case
-                    if(aStart.equal(aCP1))
+                    // tdf#101026 The 1st attempt to create a mathematically correct replacement control
+                    // vector was wrong. Best alternative is one as close as possible which means short.
+                    if (aStart.equal(aCP1))
                     {
-                        aCP1 = aStart + ((aCP2 - aStart) * 0.3);
+                        aCP1 = aStart + ((aCP2 - aStart) * 0.0005);
                     }
 
                     if(aEnd.equal(aCP2))
                     {
-                        aCP2 = aEnd + ((aCP1 - aEnd) * 0.3);
+                        aCP2 = aEnd + ((aCP1 - aEnd) * 0.0005);
                     }
 
                     cairo_curve_to(cr,
