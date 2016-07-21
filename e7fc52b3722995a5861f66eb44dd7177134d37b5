@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_91e28c9e",
+        "filename": "offapi/com/sun/star/frame/XDispatch.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-07-21T10:57:41Z",
+      "side": 1,
+      "message": "move that down to the optional property - the method itself is available since forever",
+      "revId": "e7fc52b3722995a5861f66eb44dd7177134d37b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_b1edc890",
+        "filename": "offapi/com/sun/star/frame/XDispatch.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-07-21T10:57:41Z",
+      "side": 1,
+      "message": "I think there\u0027s even markup for see - @see or something",
+      "revId": "e7fc52b3722995a5861f66eb44dd7177134d37b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_d1f2546f",
+        "filename": "offapi/com/sun/star/frame/XDispatch.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-07-21T10:57:41Z",
+      "side": 1,
+      "message": "stick it all into one comment section please, no need to open/close here (not even sure doxygen will handle that)",
+      "revId": "e7fc52b3722995a5861f66eb44dd7177134d37b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
