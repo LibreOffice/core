@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_f134b04b",
+        "filename": "svx/source/xoutdev/xtabptrn.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-07-21T09:02:00Z",
+      "side": 1,
+      "message": "I think you can just remove the message.",
+      "revId": "81edad3d64cb41c8df4423281614622bec04883a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
