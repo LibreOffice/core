@@ -57,6 +57,7 @@
 /lo.xcent
 /bin/bffvalidator.sh
 /bin/odfvalidator.sh
+/bin/officeotron.sh
 /Makefile
 /NEWS
 /TODO

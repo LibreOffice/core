@@ -115,6 +115,7 @@ export ODFGEN_MD5SUM := 32572ea48d9021bbd6fa317ddb697abc
 export ODFGEN_VERSION_MICRO := 6
 export ODFGEN_TARBALL := libodfgen-0.1.$(ODFGEN_VERSION_MICRO).tar.bz2
 export ODFVALIDATOR_JAR := e7f181c1d969dbd553644b191cb0a6d3-odfvalidator-1.1.8-incubating-SNAPSHOT-jar-with-dependencies.jar
+export OFFICEOTRON_JAR := c038af04c1431525e3fdee57d32b865e-officeotron-0.7.4-master.jar
 export OPENCOLLADA_MD5SUM := 4ca8a6ef0afeefc864e9ef21b9f14bd6
 export OPENCOLLADA_TARBALL := OpenCOLLADA-master-6509aa13af.tar.bz2
 export OPENLDAP_TARBALL := 804c6cb5698db30b75ad0ff1c25baefd-openldap-2.4.31.tgz
