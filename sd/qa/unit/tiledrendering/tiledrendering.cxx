@@ -294,7 +294,7 @@ void SdTiledRenderingTest::testPostKeyEvent()
     pView->MarkObj(pTextObj, pView->GetSdrPageView());
     SfxStringItem aInputString(SID_ATTR_CHAR, "x");
     pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR,
-            SfxCallMode::SYNCHRON, { &aInputString });
+            SfxCallMode::SYNCHRON, &aInputString, nullptr);
 
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
@@ -322,7 +322,7 @@ void SdTiledRenderingTest::testPostMouseEvent()
     pView->MarkObj(pTextObj, pView->GetSdrPageView());
     SfxStringItem aInputString(SID_ATTR_CHAR, "x");
     pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR,
-            SfxCallMode::SYNCHRON, { &aInputString });
+            SfxCallMode::SYNCHRON, &aInputString, nullptr);
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
     // Did we manage to go after the first character?
