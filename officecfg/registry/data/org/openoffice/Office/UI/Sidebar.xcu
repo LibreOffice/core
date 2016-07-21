@@ -398,6 +398,29 @@
         </prop>
       </node>
 
+      <node oor:name="MediaPlaybackPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Media Playback</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>MediaPlaybackPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>PropertyDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            any, Media,  visible ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SvxPanelFactory/MediaPlaybackPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>700</value>
+        </prop>
+      </node>
+
       <node oor:name="PageStylesPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Styles</value>
