@@ -41,6 +41,7 @@ $(eval $(call gb_Library_add_defs,svx,\
 $(eval $(call gb_Library_set_precompiled_header,svx,$(SRCDIR)/svx/inc/pch/precompiled_svx))
 
 $(eval $(call gb_Library_use_libraries,svx,\
+    $(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
     sb \
     comphelper \
@@ -200,6 +201,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/sidebar/line/LinePropertyPanelBase \
     svx/source/sidebar/line/LineWidthValueSet \
     svx/source/sidebar/line/LineWidthPopup \
+    svx/source/sidebar/media/MediaPlaybackPanel \
     svx/source/sidebar/possize/PosSizePropertyPanel \
     svx/source/sidebar/possize/SidebarDialControl \
     svx/source/sidebar/shapes/DefaultShapesPanel \
