@@ -98,7 +98,7 @@ void ScDocOptions::ResetDocOptions()
     bLookUpColRowNames  = true;
     bFormulaRegexEnabled= false;
     bFormulaWildcardsEnabled= true;
-    eFormulaSearchType  = eSearchTypeUnknown;
+    eFormulaSearchType  = utl::SearchParam::SRCH_WILDCARD;
     bWriteCalcConfig    = true;
 }
 

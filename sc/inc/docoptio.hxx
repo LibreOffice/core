@@ -97,26 +97,44 @@ public:
 
     utl::SearchParam::SearchType GetFormulaSearchType() const
     {
-        if (eFormulaSearchType == eSearchTypeUnknown)
+        if (eFormulaSearchType == eSearchTypeUnknown || (bFormulaRegexEnabled && bFormulaWildcardsEnabled))
             eFormulaSearchType = utl::SearchParam::ConvertToSearchType( bFormulaWildcardsEnabled, bFormulaRegexEnabled);
         return eFormulaSearchType;
     }
 
     void    SetFormulaRegexEnabled( bool bVal )
     {
-        bFormulaRegexEnabled = bVal;
-        eFormulaSearchType = eSearchTypeUnknown;
         if (bVal)
+        {
+            bFormulaRegexEnabled = true;
             bFormulaWildcardsEnabled = false;
+            eFormulaSearchType = utl::SearchParam::SRCH_REGEXP;
+        }
+        else if (!bFormulaRegexEnabled)
+            ;   // nothing changes for setting false to false
+        else
+        {
+            bFormulaRegexEnabled = false;
+            eFormulaSearchType = eSearchTypeUnknown;
+        }
     }
     bool    IsFormulaRegexEnabled() const       { return GetFormulaSearchType() == utl::SearchParam::SRCH_REGEXP; }
 
     void    SetFormulaWildcardsEnabled( bool bVal )
     {
-        bFormulaWildcardsEnabled = bVal;
-        eFormulaSearchType = eSearchTypeUnknown;
         if (bVal)
+        {
             bFormulaRegexEnabled = false;
+            bFormulaWildcardsEnabled = true;
+            eFormulaSearchType = utl::SearchParam::SRCH_WILDCARD;
+        }
+        else if (!bFormulaWildcardsEnabled)
+            ;   // nothing changes for setting false to false
+        else
+        {
+            bFormulaWildcardsEnabled = false;
+            eFormulaSearchType = eSearchTypeUnknown;
+        }
     }
     bool    IsFormulaWildcardsEnabled() const       { return GetFormulaSearchType() == utl::SearchParam::SRCH_WILDCARD; }
 
