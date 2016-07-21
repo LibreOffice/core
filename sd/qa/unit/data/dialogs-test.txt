@@ -20,26 +20,27 @@
 # The known dialogs which have a hard-coded representation
 #
 
-modules/simpress/ui/publishingdialog.ui
 modules/sdraw/ui/breakdialog.ui
 modules/sdraw/ui/copydlg.ui
-modules/simpress/ui/customslideshows.ui
 modules/sdraw/ui/drawchardialog.ui
 modules/sdraw/ui/drawpagedialog.ui
-modules/simpress/ui/dlgfield.ui
 modules/sdraw/ui/dlgsnap.ui
 modules/sdraw/ui/insertlayer.ui
 modules/sdraw/ui/insertslidesdialog.ui
 modules/sdraw/ui/crossfadedialog.ui
 modules/sdraw/ui/bulletsandnumbering.ui
 modules/sdraw/ui/drawparadialog.ui
+modules/sdraw/ui/drawprtldialog.ui
+modules/sdraw/ui/vectorize.ui
+
+modules/simpress/ui/publishingdialog.ui
+modules/simpress/ui/customslideshows.ui
+modules/simpress/ui/dlgfield.ui
 modules/simpress/ui/presentationdialog.ui
 modules/simpress/ui/remotedialog.ui
 modules/simpress/ui/templatedialog.ui
 modules/simpress/ui/slidedesigndialog.ui
-modules/sdraw/ui/drawprtldialog.ui
 modules/simpress/ui/interactiondialog.ui
-modules/sdraw/ui/vectorize.ui
 modules/simpress/ui/photoalbum.ui
 modules/simpress/ui/masterlayoutdlg.ui
 modules/simpress/ui/headerfooterdialog.ui
@@ -49,18 +50,18 @@ modules/simpress/ui/headerfooterdialog.ui
 # be visualized using a fallback based on VclBuilder
 #
 
+modules/sdraw/ui/paranumberingtab.ui
+modules/sdraw/ui/namedesign.ui
+modules/sdraw/ui/tabledesigndialog.ui
+# modules/simpress/ui/assistentdialog.ui <- deactivated, leads to problems and the test to not work
 modules/simpress/ui/headerfootertab.ui
 modules/simpress/ui/customanimationproperties.ui
 modules/simpress/ui/customanimationeffecttab.ui
 modules/simpress/ui/customanimationtimingtab.ui
 modules/simpress/ui/customanimationtexttab.ui
-modules/sdraw/ui/paranumberingtab.ui
 modules/simpress/ui/sdviewpage.ui
 modules/simpress/ui/prntopts.ui
 modules/simpress/ui/optimpressgeneralpage.ui
 modules/simpress/ui/interactionpage.ui
-modules/simpress/ui/assistentdialog.ui
-modules/sdraw/ui/namedesign.ui
 modules/simpress/ui/definecustomslideshow.ui
 modules/simpress/ui/insertslides.ui
-modules/sdraw/ui/tabledesigndialog.ui

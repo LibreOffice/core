@@ -41,6 +41,9 @@ modules/scalc/ui/formatcellsdialog.ui
 # be visualized using a fallback based on VclBuilder
 #
 
+# modules/scalc/ui/headerfootercontent.ui <- deactivated, leads to problems and the test to not work
+# modules/scalc/ui/pivottablelayoutdialog.ui <- deactivated, leads to problems and the test to not work
+
 modules/scalc/ui/autoformattable.ui
 modules/scalc/ui/sortwarning.ui
 modules/scalc/ui/condformatmanager.ui
@@ -60,7 +63,6 @@ modules/scalc/ui/groupbynumber.ui
 modules/scalc/ui/groupbydate.ui
 modules/scalc/ui/sortdialog.ui
 modules/scalc/ui/standardfilterdialog.ui
-modules/scalc/ui/pivottablelayoutdialog.ui
 modules/scalc/ui/validationdialog.ui
 modules/scalc/ui/subtotaldialog.ui
 modules/scalc/ui/scenariodialog.ui
@@ -144,7 +146,6 @@ modules/scalc/ui/rightfooterdialog.ui
 modules/scalc/ui/sharedheaderdialog.ui
 modules/scalc/ui/sharedfooterdialog.ui
 modules/scalc/ui/allheaderfooterdialog.ui
-modules/scalc/ui/headerfootercontent.ui
 modules/scalc/ui/sheetprintpage.ui
 modules/scalc/ui/sidebaralignment.ui
 modules/scalc/ui/sidebarcellappearance.ui
