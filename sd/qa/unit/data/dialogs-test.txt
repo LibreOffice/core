@@ -53,7 +53,10 @@ modules/simpress/ui/headerfooterdialog.ui
 modules/sdraw/ui/paranumberingtab.ui
 modules/sdraw/ui/namedesign.ui
 modules/sdraw/ui/tabledesigndialog.ui
-# modules/simpress/ui/assistentdialog.ui <- deactivated, leads to problems and the test to not work
+
+# deactivated, leads to problems and the test to not work
+# modules/simpress/ui/assistentdialog.ui
+
 modules/simpress/ui/headerfootertab.ui
 modules/simpress/ui/customanimationproperties.ui
 modules/simpress/ui/customanimationeffecttab.ui

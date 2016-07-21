@@ -283,7 +283,7 @@ void ScScreenshotTest::testOpeningModalDialogs()
         OUString aURL = aDirectories.getURLFromSrc("sc/qa/unit/screenshots/data/screenshots.txt");
         SvFileStream aStream(aURL, StreamMode::READ);
         OString aNextUIFile;
-        OString aComment("#");
+        const OString aComment("#");
 
         while (aStream.ReadLine(aNextUIFile))
         {
