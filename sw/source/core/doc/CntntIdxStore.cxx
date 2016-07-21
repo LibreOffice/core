@@ -187,33 +187,24 @@ namespace
             static inline void SetRightMarkPos(MarkBase* pMark, bool bOther, const SwPosition* const pPos)
                 { bOther ? pMark->SetOtherMarkPos(*pPos) : pMark->SetMarkPos(*pPos); };
     };
-    static void lcl_ChkUnoCrsrPaM(std::vector<PaMEntry>& rPamEntries, const sal_uLong nNode, const sal_Int32 nContent, SwPaM& rPaM, bool bPoint)
+    inline void lcl_ChkPaM( std::vector<PaMEntry>& rPaMEntries, const sal_uLong nNode, const sal_Int32 nContent, SwPaM& rPaM, const bool bGetPoint, bool bSetMark)
     {
-        const SwPosition* pPos = &rPaM.GetBound(bPoint);
+        const SwPosition* pPos = &rPaM.GetBound(bGetPoint);
         if( pPos->nNode.GetIndex() == nNode && pPos->nContent.GetIndex() < nContent )
         {
-            const PaMEntry aEntry = { &rPaM, !bPoint, pPos->nContent.GetIndex() };
-            rPamEntries.push_back(aEntry);
-        }
-    }
-    static void lcl_ChkUnoCrsrPaMBoth(std::vector<PaMEntry>& rPaMEntries, const sal_uLong nNode, const sal_Int32 nContent, SwPaM& rPaM)
-    {
-        lcl_ChkUnoCrsrPaM(rPaMEntries, nNode, nContent, rPaM, true);
-        lcl_ChkUnoCrsrPaM(rPaMEntries, nNode, nContent, rPaM, false);
-    }
-    inline void lcl_ChkPaM( std::vector<PaMEntry>& rPaMEntries, const sal_uLong nNode, const sal_Int32 nContent, SwPaM& rPaM, const bool bPoint)
-    {
-        const SwPosition* pPos = &rPaM.GetBound( bPoint );
-        if( pPos->nNode.GetIndex() == nNode && pPos->nContent.GetIndex() < nContent )
-        {
-            const PaMEntry aEntry = { &rPaM, bPoint, pPos->nContent.GetIndex() };
+            const PaMEntry aEntry = { &rPaM, bSetMark, pPos->nContent.GetIndex() };
             rPaMEntries.push_back(aEntry);
         }
     }
     inline void lcl_ChkPaMBoth( std::vector<PaMEntry>& rPaMEntries, const sal_uLong nNode, const sal_Int32 nContent, SwPaM& rPaM)
     {
-        lcl_ChkPaM(rPaMEntries, nNode, nContent, rPaM, true);
-        lcl_ChkPaM(rPaMEntries, nNode, nContent, rPaM, false);
+        lcl_ChkPaM(rPaMEntries, nNode, nContent, rPaM, true, true);
+        lcl_ChkPaM(rPaMEntries, nNode, nContent, rPaM, false, false);
+    }
+    inline void lcl_ChkUnoCrsrPaMBoth(std::vector<PaMEntry>& rPaMEntries, const sal_uLong nNode, const sal_Int32 nContent, SwPaM& rPaM)
+    {
+        lcl_ChkPaM(rPaMEntries, nNode, nContent, rPaM, true, false);
+        lcl_ChkPaM(rPaMEntries, nNode, nContent, rPaM, false, true);
     }
 
 #if 0
