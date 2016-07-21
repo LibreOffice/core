@@ -75,6 +75,7 @@ endif
 
 $(eval $(call gb_Library_add_exception_objects,avmedia,\
 	avmedia/source/framework/mediacontrol \
+	avmedia/source/framework/MediaControlHelper \
 	avmedia/source/framework/mediaitem \
 	avmedia/source/framework/mediamisc \
 	avmedia/source/framework/mediaplayer \
