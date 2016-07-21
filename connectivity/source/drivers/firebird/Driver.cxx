@@ -57,10 +57,12 @@ namespace connectivity
     }
 }
 
-// Static const member variables
-const OUString FirebirdDriver::our_sFirebirdTmpVar("FIREBIRD_TMP");
-const OUString FirebirdDriver::our_sFirebirdLockVar("FIREBIRD_LOCK");
-const OUString FirebirdDriver::our_sFirebirdMsgVar("FIREBIRD_MSG");
+// Static const variables
+namespace {
+const char our_sFirebirdTmpVar[] = "FIREBIRD_TMP";
+const char our_sFirebirdLockVar[] = "FIREBIRD_LOCK";
+const char our_sFirebirdMsgVar[] = "FIREBIRD_MSG";
+};
 
 FirebirdDriver::FirebirdDriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext)
     : ODriver_BASE(m_aMutex)
@@ -79,10 +81,10 @@ FirebirdDriver::FirebirdDriver(const css::uno::Reference< css::uno::XComponentCo
     // we can create directories for firebird at will.
 
     // Overrides firebird's default of /tmp or c:\temp
-    osl_setEnvironment(our_sFirebirdTmpVar.pData, m_firebirdTMPDirectory.GetFileName().pData);
+    osl_setEnvironment(OUString(our_sFirebirdTmpVar).pData, m_firebirdTMPDirectory.GetFileName().pData);
 
     // Overrides firebird's default of /tmp/firebird or c:\temp\firebird
-    osl_setEnvironment(our_sFirebirdLockVar.pData, m_firebirdLockDirectory.GetFileName().pData);
+    osl_setEnvironment(OUString(our_sFirebirdLockVar).pData, m_firebirdLockDirectory.GetFileName().pData);
 
 #ifndef SYSTEM_FIREBIRD
     // Overrides firebird's hardcoded default of /usr/local/firebird on *nix,
@@ -91,7 +93,7 @@ FirebirdDriver::FirebirdDriver(const css::uno::Reference< css::uno::XComponentCo
     ::rtl::Bootstrap::expandMacros(sMsgURL);
     OUString sMsgPath;
     ::osl::FileBase::getSystemPathFromFileURL(sMsgURL, sMsgPath);
-    osl_setEnvironment(our_sFirebirdMsgVar.pData, sMsgPath.pData);
+    osl_setEnvironment(OUString(our_sFirebirdMsgVar).pData, sMsgPath.pData);
 #endif
 }
 
@@ -113,11 +115,11 @@ void FirebirdDriver::disposing()
     }
     m_xConnections.clear();
 
-    osl_clearEnvironment(our_sFirebirdTmpVar.pData);
-    osl_clearEnvironment(our_sFirebirdLockVar.pData);
+    osl_clearEnvironment(OUString(our_sFirebirdTmpVar).pData);
+    osl_clearEnvironment(OUString(our_sFirebirdLockVar).pData);
 
 #ifndef SYSTEM_FIREBIRD
-    osl_clearEnvironment(our_sFirebirdMsgVar.pData);
+    osl_clearEnvironment(OUString(our_sFirebirdMsgVar).pData);
 #endif
 
     OSL_VERIFY(fb_shutdown(0, 1));
