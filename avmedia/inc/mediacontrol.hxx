@@ -28,6 +28,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/image.hxx>
+#include <avmedia/MediaControlBase.hxx>
 
 #define AVMEDIA_CONTROLOFFSET 6
 
@@ -36,17 +37,9 @@ class ListBox;
 namespace avmedia
 {
 
-
-enum MediaControlStyle
-{
-    MEDIACONTROLSTYLE_SINGLELINE = 0,
-    MEDIACONTROLSTYLE_MULTILINE = 1
-};
-
-
 class MediaItem;
 
-class MediaControl : public Control
+class MediaControl : public Control, public MediaControlBase
 {
 public:
 
@@ -67,12 +60,6 @@ protected:
 
 private:
 
-    void                implUpdateToolboxes();
-    void                implUpdateTimeSlider();
-    void                implUpdateVolumeSlider();
-    void                implUpdateTimeField( double fCurTime );
-    Image               implGetImage( sal_Int32 nImageId ) const;
-
                         DECL_LINK_TYPED( implTimeHdl, Slider*, void );
                         DECL_LINK_TYPED( implTimeEndHdl, Slider*, void );
                         DECL_LINK_TYPED( implVolumeHdl, Slider*, void );
@@ -80,18 +67,10 @@ private:
                         DECL_LINK_TYPED( implZoomSelectHdl, ListBox&, void );
                         DECL_LINK_TYPED(implTimeoutHdl, Idle *, void);
 
-    ImageList           maImageList;
     Idle                maIdle;
     MediaItem           maItem;
-    VclPtr<ToolBox>     maPlayToolBox;
-    VclPtr<Slider>      maTimeSlider;
-    VclPtr<ToolBox>     maMuteToolBox;
-    VclPtr<Slider>      maVolumeSlider;
-    VclPtr<ToolBox>     maZoomToolBox;
-    VclPtr<ListBox>     mpZoomListBox;
-    VclPtr<Edit>        maTimeEdit;
+    VclPtr<ToolBox>     mpZoomToolBox;
     Size                maMinSize;
-    MediaControlStyle   meControlStyle;
     bool                mbLocked;
 };
 
