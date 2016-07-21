@@ -1351,7 +1351,7 @@ void DateField::ImplDateSpinArea( bool bUp )
                 for ( sal_Int8 i = 1; i <= 3; i++ )
                 {
                     nPos = aText.indexOf( aDateSep, nPos );
-                    if ( nPos >= (sal_Int32)aSelection.Max() )
+                    if (nPos < 0 || nPos >= (sal_Int32)aSelection.Max())
                     {
                         nDateArea = i;
                         break;
