@@ -23,33 +23,33 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static const OUString aStringList[]=
+static const OUStringLiteral aStringList[]=
 {
-    OUString( ".uno:Open" ),
-    OUString( ".uno:FormatCellDialog" ),
-    OUString( ".uno:InsertCell" ),
-    OUString( ".uno:Print" ),
-    OUString( ".uno:PasteSpecial" ),
-    OUString( ".uno:ToolProtectionDocument" ),
-    OUString( ".uno:ColumnWidth" ),
-    OUString( ".uno:DefineName" ),
-    OUString( ".uno:ConfigureDialog" ),
-    OUString( ".uno:HyperlinkDialog" ),
-    OUString( ".uno:InsertGraphic" ),
-    OUString( ".uno:InsertObject" ),
-    OUString( ".uno:PageFormatDialog" ),
-    OUString( ".uno:DataSort" ),
-    OUString( ".uno:RowHeight" ),
-    OUString( ".uno:AutoCorrectDlg" ),
-    OUString( ".uno:ConditionalFormatDialog" ),
-    OUString( ".uno:DataConsolidate" ),
-    OUString( ".uno:CreateNames" ),
-    OUString( ".uno:FillSeries" ),
-    OUString( ".uno:Validation"),
-    OUString( ".uno:DefineLabelRange" ),
-    OUString( ".uno:DataFilterAutoFilter" ),
-    OUString( ".uno:DataFilterSpecialFilter" ),
-    OUString( ".uno:AutoFormat" )
+    OUStringLiteral( ".uno:Open" ),
+    OUStringLiteral( ".uno:FormatCellDialog" ),
+    OUStringLiteral( ".uno:InsertCell" ),
+    OUStringLiteral( ".uno:Print" ),
+    OUStringLiteral( ".uno:PasteSpecial" ),
+    OUStringLiteral( ".uno:ToolProtectionDocument" ),
+    OUStringLiteral( ".uno:ColumnWidth" ),
+    OUStringLiteral( ".uno:DefineName" ),
+    OUStringLiteral( ".uno:ConfigureDialog" ),
+    OUStringLiteral( ".uno:HyperlinkDialog" ),
+    OUStringLiteral( ".uno:InsertGraphic" ),
+    OUStringLiteral( ".uno:InsertObject" ),
+    OUStringLiteral( ".uno:PageFormatDialog" ),
+    OUStringLiteral( ".uno:DataSort" ),
+    OUStringLiteral( ".uno:RowHeight" ),
+    OUStringLiteral( ".uno:AutoCorrectDlg" ),
+    OUStringLiteral( ".uno:ConditionalFormatDialog" ),
+    OUStringLiteral( ".uno:DataConsolidate" ),
+    OUStringLiteral( ".uno:CreateNames" ),
+    OUStringLiteral( ".uno:FillSeries" ),
+    OUStringLiteral( ".uno:Validation"),
+    OUStringLiteral( ".uno:DefineLabelRange" ),
+    OUStringLiteral( ".uno:DataFilterAutoFilter" ),
+    OUStringLiteral( ".uno:DataFilterSpecialFilter" ),
+    OUStringLiteral( ".uno:AutoFormat" )
 };
 
 const sal_Int32 nDialogSize = SAL_N_ELEMENTS(aStringList);

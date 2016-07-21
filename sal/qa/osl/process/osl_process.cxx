@@ -67,9 +67,9 @@
 #endif
 
 #if defined(_WIN32)
-    const rtl::OUString EXECUTABLE_NAME ("osl_process_child.exe");
+    const rtl::OUStringLiteral EXECUTABLE_NAME ("osl_process_child.exe");
 #else
-    const rtl::OUString EXECUTABLE_NAME ("osl_process_child");
+    const rtl::OUStringLiteral EXECUTABLE_NAME ("osl_process_child");
 #endif
 
 using namespace osl;
