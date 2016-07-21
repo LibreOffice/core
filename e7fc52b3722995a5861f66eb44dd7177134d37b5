@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_2c687bba",
+        "filename": "offapi/com/sun/star/frame/XDispatch.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-07-21T14:25:19Z",
+      "side": 1,
+      "message": "Oh - then move it down, and add the correct version it was added.",
+      "parentUuid": "5a8bc5a2_1172fce5",
+      "revId": "e7fc52b3722995a5861f66eb44dd7177134d37b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_b1edc890",
         "filename": "offapi/com/sun/star/frame/XDispatch.idl",
         "patchSetId": 1
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "That i have copy from XNotifyDispatch.idl, would look alike XNofifyDispatch Docu.\n\nI think when we make @see then we get a \"See also\" section, but is your decision.",
       "parentUuid": "5a8bc5a2_b1edc890",
+      "revId": "e7fc52b3722995a5861f66eb44dd7177134d37b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_4c65c7df",
+        "filename": "offapi/com/sun/star/frame/XDispatch.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-07-21T14:25:19Z",
+      "side": 1,
+      "message": "Ah ok, your call then",
+      "parentUuid": "5a8bc5a2_3177f8d5",
       "revId": "e7fc52b3722995a5861f66eb44dd7177134d37b5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
