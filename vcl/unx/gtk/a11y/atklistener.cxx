@@ -519,8 +519,22 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
         }
 
         case accessibility::AccessibleEventId::TABLE_COLUMN_HEADER_CHANGED:
-            g_signal_emit_by_name( G_OBJECT( atk_obj ), "property_change::accessible-table-column-header");
+        {
+            accessibility::AccessibleTableModelChange aChange;
+            aEvent.NewValue >>= aChange;
+
+            AtkPropertyValues values;
+            memset(&values,  0, sizeof(AtkPropertyValues));
+            g_value_init (&values.new_value, G_TYPE_INT);
+            values.property_name = "accessible-table-column-header";
+
+            for (sal_Int32 nChangedColumn = aChange.FirstColumn; nChangedColumn <= aChange.LastColumn; ++nChangedColumn)
+            {
+                g_value_set_int (&values.new_value, nChangedColumn);
+                g_signal_emit_by_name(G_OBJECT(atk_obj), "property_change::accessible-table-column-header", &values, nullptr);
+            }
             break;
+        }
 
         case accessibility::AccessibleEventId::TABLE_CAPTION_CHANGED:
             g_signal_emit_by_name( G_OBJECT( atk_obj ), "property_change::accessible-table-caption");
