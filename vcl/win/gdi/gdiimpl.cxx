@@ -1925,19 +1925,18 @@ void impAddB2DPolygonToGDIPlusGraphicsPathReal(
                     // tdf#99165 MS Gdiplus cannot handle creating correct extra geometry for fat lines
                     // with LineCap or LineJoin when a bezier segment starts or ends trivial, e.g. has
                     // no 1st or 2nd control point, despite that these are mathematicaly correct definitions
-                    // (basegfx can handle that). To solve, create replacement vectors to thre resp. next
-                    // control point with 1/3rd of length (the default control vector for these cases).
-                    // Only one of this can happen here, else the is(Next|Prev)ControlPointUsed wopuld have
-                    // both been false.
+                    // (basegfx can handle that).
                     // Caution: This error (and it's correction) might be necessary for other graphical
-                    // sub-systems in a similar way
+                    // sub-systems in a similar way.
+                    // tdf#101026 The 1st attempt to create a mathematically corcet replacement control
+                    // vector was wrong. Best alternative is one as close as possible which means short.
                     if(!b1stControlPointUsed)
                     {
-                        aCa = aCurr + ((aCb - aCurr) * 0.3);
+                        aCa = aCurr + ((aCb - aCurr) * 0.0005);
                     }
                     else if(!b2ndControlPointUsed)
                     {
-                        aCb = aNext + ((aCa - aNext) * 0.3);
+                        aCb = aNext + ((aCa - aNext) * 0.0005);
                     }
 
                     rGraphicsPath.AddBezier(

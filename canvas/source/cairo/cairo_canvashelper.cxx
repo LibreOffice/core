@@ -1026,16 +1026,18 @@ namespace cairocanvas
 
                             // tdf#99165 if the control points are 'empty', create the mathematical
                             // correct replacement ones to avoid problems with the graphical sub-system
-                            if(basegfx::fTools::equal(nAX, nLastX) && basegfx::fTools::equal(nAY, nLastY))
+                            // tdf#101026 The 1st attempt to create a mathematically corcet replacement control
+                            // vector was wrong. Best alternative is one as close as possible which means short.
+                            if (basegfx::fTools::equal(nAX, nLastX) && basegfx::fTools::equal(nAY, nLastY))
                             {
-                                nAX = nLastX + ((nBX - nLastX) * 0.3);
-                                nAY = nLastY + ((nBY - nLastY) * 0.3);
+                                nAX = nLastX + ((nBX - nLastX) * 0.0005);
+                                nAY = nLastY + ((nBY - nLastY) * 0.0005);
                             }
 
                             if(basegfx::fTools::equal(nBX, nX) && basegfx::fTools::equal(nBY, nY))
                             {
-                                nBX = nX + ((nAX - nX) * 0.3);
-                                nBY = nY + ((nAY - nY) * 0.3);
+                                nBX = nX + ((nAX - nX) * 0.0005);
+                                nBY = nY + ((nAY - nY) * 0.0005);
                             }
 
                             cairo_curve_to( pCairo, nAX, nAY, nBX, nBY, nX, nY );
