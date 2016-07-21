@@ -529,7 +529,8 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             accessibility::AccessibleTableModelChange aChange;
             aEvent.NewValue >>= aChange;
 
-            AtkPropertyValues values = {};
+            AtkPropertyValues values;
+            memset(&values,  0, sizeof(AtkPropertyValues));
             g_value_init (&values.new_value, G_TYPE_INT);
             values.property_name = "accessible-table-column-header";
 
