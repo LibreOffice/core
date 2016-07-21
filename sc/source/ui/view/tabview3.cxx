@@ -322,7 +322,12 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
 
                 if (pDocSh)
                 {
-                    aViewData.GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+                    // Provide size in the payload, so clients don't have to
+                    // call lok::Document::getDocumentSize().
+                    std::stringstream ss;
+                    ss << aNewSize.Width() << ", " << aNewSize.Height();
+                    OString sSize = ss.str().c_str();
+                    aViewData.GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, sSize.getStr());
 
                     // New area extended to the right of the sheet after last column
                     // including overlapping area with aNewRowArea
