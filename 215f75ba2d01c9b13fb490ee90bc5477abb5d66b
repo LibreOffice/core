@@ -1,0 +1,147 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_ac62cb14",
+        "filename": "include/xmloff/xmltoken.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3272,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-21T20:41:02Z",
+      "side": 1,
+      "message": "Better call it XML_INTEGER_FRACTION_DELIMITER, might be easier to grep for as the attribute\u0027s name is integer-fraction-delimiter",
+      "range": {
+        "startLine": 3272,
+        "startChar": 8,
+        "endLine": 3272,
+        "endChar": 32
+      },
+      "revId": "215f75ba2d01c9b13fb490ee90bc5477abb5d66b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_ccc0f7e3",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-21T20:41:02Z",
+      "side": 1,
+      "message": "That instead should be\n\n !aIntegerFractionDelimiterString.isEmpty()",
+      "range": {
+        "startLine": 765,
+        "startChar": 9,
+        "endLine": 765,
+        "endChar": 56
+      },
+      "revId": "215f75ba2d01c9b13fb490ee90bc5477abb5d66b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_acbbab74",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 768,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-21T20:41:02Z",
+      "side": 1,
+      "message": "When writing extension namespaces please always check the target ODF version as outlined in https://wiki.documentfoundation.org/Development/ODF_Implementer_Notes#ODF_Version_Choice",
+      "revId": "215f75ba2d01c9b13fb490ee90bc5477abb5d66b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_cc671724",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-21T20:41:02Z",
+      "side": 1,
+      "message": "Nitpick: blank before comma is ugly ;-)",
+      "range": {
+        "startLine": 1537,
+        "startChar": 92,
+        "endLine": 1537,
+        "endChar": 93
+      },
+      "revId": "215f75ba2d01c9b13fb490ee90bc5477abb5d66b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_6c9363fb",
+        "filename": "xmloff/source/style/xmlnumfi.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-21T20:41:02Z",
+      "side": 1,
+      "message": "This is unnecessary, the default OUString ctor already contructs an empty string.\n\nBtw, to clear use OUString::clear() instead of \u003d\"\". I think there\u0027s even a clang plugin that mocks about this in some tinderbox build.",
+      "revId": "215f75ba2d01c9b13fb490ee90bc5477abb5d66b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_0cbbbf73",
+        "filename": "xmloff/source/style/xmlnumfi.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-21T20:41:02Z",
+      "side": 1,
+      "message": "Prepare for the future ;-) in case the extension gets accepted by the ODF-TC and also add\n\n { XML_NAMESPACE_NUMBER, XML_INTEGER_FRACTION_DEL,    XML_TOK_ELEM_ATTR_INTEGER_FRACTION_DEL },",
+      "revId": "215f75ba2d01c9b13fb490ee90bc5477abb5d66b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_8c90afee",
+        "filename": "xmloff/source/style/xmlnumfi.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-21T20:41:02Z",
+      "side": 1,
+      "message": "That should be .isEmpty() instead.",
+      "range": {
+        "startLine": 1072,
+        "startChar": 43,
+        "endLine": 1072,
+        "endChar": 60
+      },
+      "revId": "215f75ba2d01c9b13fb490ee90bc5477abb5d66b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
