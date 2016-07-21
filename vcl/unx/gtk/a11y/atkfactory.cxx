@@ -109,7 +109,11 @@ wrapper_factory_create_accessible( GObject *obj )
     if (!pEventBox)
         return atk_noop_object_wrapper_new();
 
-    GtkWidget* pTopLevel = gtk_widget_get_parent(pEventBox);
+    GtkWidget* pTopLevelGrid = gtk_widget_get_parent(pEventBox);
+    if (!pTopLevelGrid)
+        return atk_noop_object_wrapper_new();
+
+    GtkWidget* pTopLevel = gtk_widget_get_parent(pTopLevelGrid);
     if (!pTopLevel)
         return atk_noop_object_wrapper_new();
 #else
