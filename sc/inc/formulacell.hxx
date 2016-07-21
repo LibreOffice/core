@@ -295,7 +295,7 @@ public:
     const ScMatrix* GetMatrix();
     bool            GetMatrixOrigin( ScAddress& rPos ) const;
     void            GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows );
-    sal_uInt16 GetMatrixEdge( ScAddress& rOrgPos ) const;
+    sc::MatrixEdge  GetMatrixEdge( ScAddress& rOrgPos ) const;
     sal_uInt16      GetErrCode();   // interpret first if necessary
     sal_uInt16      GetRawError();  // don't interpret, just return code or result error
     bool GetErrorOrValue( sal_uInt16& rErr, double& rVal );

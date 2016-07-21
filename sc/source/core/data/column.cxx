@@ -115,12 +115,12 @@ SCsROW ScColumn::GetNextUnprotected( SCROW nRow, bool bUp ) const
     return pAttrArray->GetNextUnprotected(nRow, bUp);
 }
 
-sal_uInt16 ScColumn::GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
+sc::MatrixEdge ScColumn::GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, sc::MatrixEdge nMask ) const
 {
     using namespace sc;
 
     if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
-        return 0;
+        return MatrixEdge::Nothing;
 
     ScAddress aOrigin(ScAddress::INITIALIZE_INVALID);
 
@@ -128,17 +128,17 @@ sal_uInt16 ScColumn::GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, sal_uInt16 n
     {
         std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nRow1);
         if (aPos.first->type != sc::element_type_formula)
-            return 0;
+            return MatrixEdge::Nothing;
 
         const ScFormulaCell* pCell = sc::formula_block::at(*aPos.first->data, aPos.second);
         if (!pCell->GetMatrixFlag())
-            return 0;
+            return MatrixEdge::Nothing;
 
         return pCell->GetMatrixEdge(aOrigin);
     }
 
     bool bOpen = false;
-    sal_uInt16 nEdges = 0;
+    MatrixEdge nEdges = MatrixEdge::Nothing;
 
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nRow1);
     sc::CellStoreType::const_iterator it = aPos.first;
@@ -165,29 +165,27 @@ sal_uInt16 ScColumn::GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, sal_uInt16 n
                 continue;
 
             nEdges = pCell->GetMatrixEdge(aOrigin);
-            if (!nEdges)
+            if (nEdges == MatrixEdge::Nothing)
                 continue;
 
-            if (nEdges & MatrixEdgeTop)
+            if (nEdges & MatrixEdge::Top)
                 bOpen = true;       // top edge opens, keep on looking
             else if (!bOpen)
-                return nEdges | MatrixEdgeOpen; // there's something that wasn't opened
-            else if (nEdges & MatrixEdgeInside)
+                return nEdges | MatrixEdge::Open; // there's something that wasn't opened
+            else if (nEdges & MatrixEdge::Inside)
                 return nEdges;      // inside
-            // (nMask & 16 and  (4 and not 16)) or
-            // (nMask & 4  and (16 and not 4))
-            if (((nMask & MatrixEdgeRight) && (nEdges & MatrixEdgeLeft)  && !(nEdges & MatrixEdgeRight)) ||
-                ((nMask & MatrixEdgeLeft)  && (nEdges & MatrixEdgeRight) && !(nEdges & MatrixEdgeLeft)))
+            if (((nMask & MatrixEdge::Right) && (nEdges & MatrixEdge::Left)  && !(nEdges & MatrixEdge::Right)) ||
+                ((nMask & MatrixEdge::Left)  && (nEdges & MatrixEdge::Right) && !(nEdges & MatrixEdge::Left)))
                 return nEdges;      // only left/right edge
 
-            if (nEdges & MatrixEdgeBottom)
+            if (nEdges & MatrixEdge::Bottom)
                 bOpen = false;      // bottom edge closes
         }
 
         nRow += nEnd;
     }
     if (bOpen)
-        nEdges |= MatrixEdgeOpen; // not closed, matrix continues
+        nEdges |= MatrixEdge::Open; // not closed, matrix continues
 
     return nEdges;
 }
@@ -241,24 +239,24 @@ bool ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
                     // cell is not a part of a matrix.
                     continue;
 
-                sal_uInt16 nEdges = pCell->GetMatrixEdge(aOrigin);
-                if (!nEdges)
+                MatrixEdge nEdges = pCell->GetMatrixEdge(aOrigin);
+                if (nEdges == MatrixEdge::Nothing)
                     continue;
 
                 bool bFound = false;
 
-                if (nEdges & MatrixEdgeTop)
+                if (nEdges & MatrixEdge::Top)
                     bOpen = true;   // top edge opens, keep on looking
                 else if (!bOpen)
                     return true;    // there's something that wasn't opened
-                else if (nEdges & MatrixEdgeInside)
+                else if (nEdges & MatrixEdge::Inside)
                     bFound = true;  // inside, all selected?
 
-                if ((((nEdges & MatrixEdgeLeft) | MatrixEdgeRight) ^ ((nEdges & MatrixEdgeRight) | MatrixEdgeLeft)))
+                if ((((nEdges & MatrixEdge::Left) | MatrixEdge::Right) ^ ((nEdges & MatrixEdge::Right) | MatrixEdge::Left)))
                     // either left or right, but not both.
                     bFound = true;  // only left/right edge, all selected?
 
-                if (nEdges & MatrixEdgeBottom)
+                if (nEdges & MatrixEdge::Bottom)
                     bOpen = false;  // bottom edge closes
 
                 if (bFound)
