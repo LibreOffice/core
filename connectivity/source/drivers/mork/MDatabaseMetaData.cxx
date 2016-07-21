@@ -837,10 +837,10 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates(  ) throw(SQLException
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLException, RuntimeException, std::exception)
 {
     // there exists no possibility to get table types so we have to check
-    static const OUString sTableTypes[] =
+    static const OUStringLiteral sTableTypes[] =
     {
-        OUString("TABLE"),
-        OUString("VIEW")
+        OUStringLiteral("TABLE"),
+        OUStringLiteral("VIEW")
         // Currently we only support a 'TABLE' and 'VIEW' nothing more complex
 
         // OUString("SYSTEM TABLE"),
@@ -858,7 +858,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
     {
         ODatabaseMetaDataResultSet::ORow aRow;
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator(sTableType));
+        aRow.push_back(new ORowSetValueDecorator(OUString(sTableType)));
         // bound row
         aRows.push_back(aRow);
     }
