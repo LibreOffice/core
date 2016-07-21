@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_8c5fcf0d",
+        "filename": "offapi/com/sun/star/frame/XDispatch.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-07-21T14:26:55Z",
+      "side": 1,
+      "message": "the /** there still looks wrong",
+      "revId": "4a5f24e02a88a786da57384ca6fbf8b5a0ad8b01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
