@@ -77,8 +77,7 @@ private:
     ReturnFallback(const std::vector<IconThemeInfo>& installedThemes);
 
     /** The name of the icon theme which is used as fallback */
-    static const OUString
-    FALLBACK_ICON_THEME_ID;
+    static const OUStringLiteral FALLBACK_ICON_THEME_ID;
 
 
     static OUString

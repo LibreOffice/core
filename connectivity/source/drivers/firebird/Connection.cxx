@@ -75,7 +75,11 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::uno;
 
-const OUString Connection::our_sDBLocation( "firebird.fdb" );
+/**
+ * Location within the .odb that an embedded .fdb will be stored.
+ * Only relevant for embedded dbs.
+ */
+static const OUStringLiteral our_sDBLocation( "firebird.fdb" );
 
 Connection::Connection(FirebirdDriver*    _pDriver)
     : Connection_BASE(m_aMutex)

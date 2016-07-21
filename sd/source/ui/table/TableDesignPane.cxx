@@ -77,19 +77,15 @@ static const sal_Int32 nCellHeight = 7; // one pixel is shared with the next cel
 static const sal_Int32 nBitmapWidth = (nCellWidth * nPreviewColumns) - (nPreviewColumns - 1);
 static const sal_Int32 nBitmapHeight = (nCellHeight * nPreviewRows) - (nPreviewRows - 1);
 
-static const OUString* getPropertyNames()
+static const OUStringLiteral gPropNames[ CB_COUNT ] =
 {
-    static const OUString gPropNames[ CB_COUNT ] =
-    {
-        OUString("UseFirstRowStyle") ,
-        OUString("UseLastRowStyle") ,
-        OUString("UseBandingRowStyle") ,
-        OUString("UseFirstColumnStyle") ,
-        OUString("UseLastColumnStyle") ,
-        OUString("UseBandingColumnStyle")
-    };
-    return &gPropNames[0];
-}
+    OUStringLiteral("UseFirstRowStyle") ,
+    OUStringLiteral("UseLastRowStyle") ,
+    OUStringLiteral("UseBandingRowStyle") ,
+    OUStringLiteral("UseFirstColumnStyle") ,
+    OUStringLiteral("UseLastColumnStyle") ,
+    OUStringLiteral("UseBandingColumnStyle")
+};
 
 TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBase& rBase, bool bModal )
     : mrBase(rBase)
@@ -112,10 +108,9 @@ TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBas
     }
     m_pValueSet->SetSelectHdl (LINK(this, TableDesignWidget, implValueSetHdl));
 
-    const OUString* pPropNames = getPropertyNames();
     for (sal_uInt16 i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i)
     {
-        pParent->get(m_aCheckBoxes[i], OUStringToOString(pPropNames[i], RTL_TEXTENCODING_UTF8));
+        pParent->get(m_aCheckBoxes[i], OUStringToOString(gPropNames[i], RTL_TEXTENCODING_UTF8));
         m_aCheckBoxes[i]->SetClickHdl( LINK( this, TableDesignWidget, implCheckBoxHdl ) );
     }
 
@@ -378,14 +373,13 @@ void TableDesignWidget::updateControls()
     static const bool gDefaults[CB_COUNT] = { true, false, true, false, false, false };
 
     const bool bHasTable = mxSelectedTable.is();
-    const OUString* pPropNames = getPropertyNames();
 
     for (sal_uInt16 i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i)
     {
         bool bUse = gDefaults[i];
         if( bHasTable ) try
         {
-            mxSelectedTable->getPropertyValue( *pPropNames++ ) >>= bUse;
+            mxSelectedTable->getPropertyValue( gPropNames[i] ) >>= bUse;
         }
         catch( Exception& )
         {

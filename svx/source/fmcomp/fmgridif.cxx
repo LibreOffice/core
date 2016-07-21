@@ -1594,24 +1594,22 @@ Reference< XIndexContainer >  FmXGridPeer::getColumns() throw( RuntimeException,
 
 void FmXGridPeer::addColumnListeners(const Reference< XPropertySet >& xCol)
 {
-    static const OUString aPropsListenedTo[] =
+    static const OUStringLiteral aPropsListenedTo[] =
     {
-        OUString(FM_PROP_LABEL), OUString(FM_PROP_WIDTH), OUString(FM_PROP_HIDDEN), OUString(FM_PROP_ALIGN), OUString(FM_PROP_FORMATKEY)
+        OUStringLiteral(FM_PROP_LABEL), OUStringLiteral(FM_PROP_WIDTH), OUStringLiteral(FM_PROP_HIDDEN),
+        OUStringLiteral(FM_PROP_ALIGN), OUStringLiteral(FM_PROP_FORMATKEY)
     };
 
     // as not all properties have to be supported by all columns we have to check this
     // before adding a listener
     Reference< XPropertySetInfo > xInfo = xCol->getPropertySetInfo();
-    Property aPropDesc;
-    const OUString* pProps = aPropsListenedTo;
-    const OUString* pPropsEnd = pProps + SAL_N_ELEMENTS( aPropsListenedTo );
-    for (; pProps != pPropsEnd; ++pProps)
+    for (unsigned i=0; i<SAL_N_ELEMENTS(aPropsListenedTo); ++i)
     {
-        if ( xInfo->hasPropertyByName( *pProps ) )
+        if ( xInfo->hasPropertyByName( aPropsListenedTo[i] ) )
         {
-            aPropDesc = xInfo->getPropertyByName( *pProps );
+            Property aPropDesc = xInfo->getPropertyByName( aPropsListenedTo[i] );
             if ( 0 != ( aPropDesc.Attributes & PropertyAttribute::BOUND ) )
-                xCol->addPropertyChangeListener( *pProps, this );
+                xCol->addPropertyChangeListener( aPropsListenedTo[i], this );
         }
     }
 }
@@ -1621,9 +1619,10 @@ void FmXGridPeer::removeColumnListeners(const Reference< XPropertySet >& xCol)
 {
     // the same props as in addColumnListeners ... linux has problems with global static UStrings, so
     // we have to do it this way ....
-    static const OUString aPropsListenedTo[] =
+    static const OUStringLiteral aPropsListenedTo[] =
     {
-        OUString(FM_PROP_LABEL), OUString(FM_PROP_WIDTH), OUString(FM_PROP_HIDDEN), OUString(FM_PROP_ALIGN), OUString(FM_PROP_FORMATKEY)
+        OUStringLiteral(FM_PROP_LABEL), OUStringLiteral(FM_PROP_WIDTH), OUStringLiteral(FM_PROP_HIDDEN),
+        OUStringLiteral(FM_PROP_ALIGN), OUStringLiteral(FM_PROP_FORMATKEY)
     };
 
     Reference< XPropertySetInfo >  xInfo = xCol->getPropertySetInfo();

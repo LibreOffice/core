@@ -535,13 +535,13 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             return;
 
         // if it's a "default value" property of a control model, set the according "value" property
-        static const OUString pDefaultValueProperties[] = {
-            OUString(FM_PROP_DEFAULT_TEXT), OUString(FM_PROP_DEFAULTCHECKED), OUString(FM_PROP_DEFAULT_DATE), OUString(FM_PROP_DEFAULT_TIME),
-            OUString(FM_PROP_DEFAULT_VALUE), OUString(FM_PROP_DEFAULT_SELECT_SEQ), OUString(FM_PROP_EFFECTIVE_DEFAULT)
+        static const OUStringLiteral pDefaultValueProperties[] = {
+            OUStringLiteral(FM_PROP_DEFAULT_TEXT), OUStringLiteral(FM_PROP_DEFAULTCHECKED), OUStringLiteral(FM_PROP_DEFAULT_DATE), OUStringLiteral(FM_PROP_DEFAULT_TIME),
+            OUStringLiteral(FM_PROP_DEFAULT_VALUE), OUStringLiteral(FM_PROP_DEFAULT_SELECT_SEQ), OUStringLiteral(FM_PROP_EFFECTIVE_DEFAULT)
         };
-        const OUString aValueProperties[] = {
-            OUString(FM_PROP_TEXT), OUString(FM_PROP_STATE), OUString(FM_PROP_DATE), OUString(FM_PROP_TIME),
-            OUString(FM_PROP_VALUE), OUString(FM_PROP_SELECT_SEQ), OUString(FM_PROP_EFFECTIVE_VALUE)
+        static const OUStringLiteral aValueProperties[] = {
+            OUStringLiteral(FM_PROP_TEXT), OUStringLiteral(FM_PROP_STATE), OUStringLiteral(FM_PROP_DATE), OUStringLiteral(FM_PROP_TIME),
+            OUStringLiteral(FM_PROP_VALUE), OUStringLiteral(FM_PROP_SELECT_SEQ), OUStringLiteral(FM_PROP_EFFECTIVE_VALUE)
         };
         sal_Int32 nDefaultValueProps = SAL_N_ELEMENTS(pDefaultValueProperties);
         OSL_ENSURE(SAL_N_ELEMENTS(aValueProperties) == nDefaultValueProps,

@@ -163,7 +163,7 @@ IconThemeSelectorTest::FallbackThemeIsReturnedForEmptyInput()
     vcl::IconThemeSelector s;
     OUString selected = s.SelectIconTheme(std::vector<vcl::IconThemeInfo>(), "oxygen");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("fallback is returned for empty input",
-            vcl::IconThemeSelector::FALLBACK_ICON_THEME_ID, selected);
+            OUString(vcl::IconThemeSelector::FALLBACK_ICON_THEME_ID), selected);
 }
 
 void

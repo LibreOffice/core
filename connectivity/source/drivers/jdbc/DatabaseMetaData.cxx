@@ -431,14 +431,14 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
             {
                 // here we know that the count of column doesn't match
                 ::std::map<sal_Int32,sal_Int32> aColumnMatching;
-                static const OUString sPrivs[] = {
-                                            OUString("TABLE_CAT"),
-                                            OUString("TABLE_SCHEM"),
-                                            OUString("TABLE_NAME"),
-                                            OUString("GRANTOR"),
-                                            OUString("GRANTEE"),
-                                            OUString("PRIVILEGE"),
-                                            OUString("IS_GRANTABLE")
+                static const OUStringLiteral sPrivs[] = {
+                                            OUStringLiteral("TABLE_CAT"),
+                                            OUStringLiteral("TABLE_SCHEM"),
+                                            OUStringLiteral("TABLE_NAME"),
+                                            OUStringLiteral("GRANTOR"),
+                                            OUStringLiteral("GRANTEE"),
+                                            OUStringLiteral("PRIVILEGE"),
+                                            OUStringLiteral("IS_GRANTABLE")
                                         };
 
                 OUString sColumnName;

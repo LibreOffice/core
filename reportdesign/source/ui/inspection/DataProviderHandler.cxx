@@ -366,15 +366,15 @@ uno::Sequence< beans::Property > SAL_CALL DataProviderHandler::getSupportedPrope
     {
         rptui::OPropertyInfoService::getExcludeProperties( aNewProps, m_xFormComponentHandler );
         beans::Property aValue;
-        static const OUString s_pProperties[] =
+        static const OUStringLiteral s_pProperties[] =
         {
-             OUString(PROPERTY_CHARTTYPE)
-            ,OUString(PROPERTY_MASTERFIELDS)
-            ,OUString(PROPERTY_DETAILFIELDS)
-            ,OUString(PROPERTY_PREVIEW_COUNT)
+             OUStringLiteral(PROPERTY_CHARTTYPE)
+            ,OUStringLiteral(PROPERTY_MASTERFIELDS)
+            ,OUStringLiteral(PROPERTY_DETAILFIELDS)
+            ,OUStringLiteral(PROPERTY_PREVIEW_COUNT)
         };
 
-        for (const OUString & rName : s_pProperties)
+        for (const auto & rName : s_pProperties)
         {
             aValue.Name = rName;
             aNewProps.push_back(aValue);

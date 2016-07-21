@@ -176,7 +176,7 @@ OUString PotentialRegressionCurveCalculator::ImplGetRepresentation(
         // if nValueLength not calculated then nullptr
         sal_Int32* pValueLength = nValueLength ? &nValueLength : nullptr;
         if ( m_fIntercept < 0.0 )    // add intercept value
-            aTmpBuf.append( aMinusSign+" " );
+            aTmpBuf.append(aMinusSign).append(" ");
         if( bHasIntercept )
         {
             OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fIntercept), pValueLength );

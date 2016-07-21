@@ -71,12 +71,6 @@ namespace connectivity
         {
             friend class connectivity::OSubComponent<Connection, Connection_BASE>;
 
-             /**
-             * Location within the .odb that an embedded .fdb will be stored.
-             * Only relevant for embedded dbs.
-             */
-            static const OUString our_sDBLocation;
-
             ::osl::Mutex        m_aMutex;
 
             TTypeInfoVector     m_aTypeInfo;    //  vector containing an entry
