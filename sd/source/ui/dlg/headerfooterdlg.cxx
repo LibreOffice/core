@@ -796,25 +796,28 @@ void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangl
     rRenderContext.DrawRect(maOutRect);
 
     // paint presentation objects from masterpage
-    SdrTextObj* pMasterTitle = static_cast<SdrTextObj*>(mpMaster->GetPresObj( PRESOBJ_TITLE ));
-    SdrTextObj* pMasterOutline = static_cast<SdrTextObj*>(mpMaster->GetPresObj( mpMaster->GetPageKind()==PK_NOTES ? PRESOBJ_NOTES : PRESOBJ_OUTLINE ));
-    SdrTextObj* pHeader = static_cast<SdrTextObj*>(mpMaster->GetPresObj( PRESOBJ_HEADER ));
-    SdrTextObj* pFooter = static_cast<SdrTextObj*>(mpMaster->GetPresObj( PRESOBJ_FOOTER ));
-    SdrTextObj* pDate   = static_cast<SdrTextObj*>(mpMaster->GetPresObj( PRESOBJ_DATETIME ));
-    SdrTextObj* pNumber = static_cast<SdrTextObj*>(mpMaster->GetPresObj( PRESOBJ_SLIDENUMBER ));
+    if (nullptr != mpMaster)
+    {
+        SdrTextObj* pMasterTitle = static_cast<SdrTextObj*>(mpMaster->GetPresObj(PRESOBJ_TITLE));
+        SdrTextObj* pMasterOutline = static_cast<SdrTextObj*>(mpMaster->GetPresObj(mpMaster->GetPageKind() == PK_NOTES ? PRESOBJ_NOTES : PRESOBJ_OUTLINE));
+        SdrTextObj* pHeader = static_cast<SdrTextObj*>(mpMaster->GetPresObj(PRESOBJ_HEADER));
+        SdrTextObj* pFooter = static_cast<SdrTextObj*>(mpMaster->GetPresObj(PRESOBJ_FOOTER));
+        SdrTextObj* pDate = static_cast<SdrTextObj*>(mpMaster->GetPresObj(PRESOBJ_DATETIME));
+        SdrTextObj* pNumber = static_cast<SdrTextObj*>(mpMaster->GetPresObj(PRESOBJ_SLIDENUMBER));
 
-    if (pMasterTitle)
-        Paint(rRenderContext, pMasterTitle, true, true);
-    if (pMasterOutline)
-        Paint(rRenderContext, pMasterOutline, true, true);
-    if (pHeader)
-        Paint(rRenderContext, pHeader, maSettings.mbHeaderVisible);
-    if (pFooter)
-        Paint(rRenderContext, pFooter, maSettings.mbFooterVisible);
-    if (pDate)
-        Paint(rRenderContext, pDate, maSettings.mbDateTimeVisible);
-    if (pNumber)
-        Paint(rRenderContext, pNumber, maSettings.mbSlideNumberVisible);
+        if (pMasterTitle)
+            Paint(rRenderContext, pMasterTitle, true, true);
+        if (pMasterOutline)
+            Paint(rRenderContext, pMasterOutline, true, true);
+        if (pHeader)
+            Paint(rRenderContext, pHeader, maSettings.mbHeaderVisible);
+        if (pFooter)
+            Paint(rRenderContext, pFooter, maSettings.mbFooterVisible);
+        if (pDate)
+            Paint(rRenderContext, pDate, maSettings.mbDateTimeVisible);
+        if (pNumber)
+            Paint(rRenderContext, pNumber, maSettings.mbSlideNumberVisible);
+    }
 
     rRenderContext.Pop();
 }
