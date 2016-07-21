@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+    /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -33,7 +33,12 @@ using namespace css;
 using namespace css::uno;
 
 ScreenshotTest::ScreenshotTest()
-      : m_aScreenshotDirectory("/workdir/screenshots/")
+:   m_aScreenshotDirectory("/workdir/screenshots/"),
+    maKnownDialogs()
+{
+}
+
+ScreenshotTest::~ScreenshotTest()
 {
 }
 
@@ -46,6 +51,12 @@ void ScreenshotTest::setUp()
 
     osl::FileBase::RC err = osl::Directory::create( m_directories.getURLFromSrc( m_aScreenshotDirectory ) );
     CPPUNIT_ASSERT_MESSAGE( "Failed to create screenshot directory", (err == osl::FileBase::E_None || err == osl::FileBase::E_EXIST) );
+
+    // initialize maKnownDialogs
+    if (maKnownDialogs.empty())
+    {
+        registerKnownDialogsByID(maKnownDialogs);
+    }
 }
 
 void ScreenshotTest::tearDown()
@@ -99,6 +110,19 @@ void ScreenshotTest::saveScreenshot(Dialog& rDialog)
             implSaveScreenshot(aScreenshot, aScreenshotId);
         }
     }
+}
+
+VclAbstractDialog* ScreenshotTest::createDialogByName(const OString& rName)
+{
+    VclAbstractDialog* pRetval = nullptr;
+    const mapType::const_iterator aHit = maKnownDialogs.find(rName);
+
+    if (aHit != maKnownDialogs.end())
+    {
+        return createDialogByID((*aHit).second);
+    }
+
+    return pRetval;
 }
 
 void ScreenshotTest::dumpDialogToPath(VclAbstractDialog& rDialog)

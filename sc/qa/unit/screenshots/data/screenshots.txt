@@ -1,0 +1,154 @@
+# -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# This file contains all dialogs that the test dialogs-test
+# will test. It will read one-by-one, try to open it and create a
+# screenshot that will be saved in workdir/screenshots using the
+# pattern of the ui-file name.
+#
+# You may use empty lines, or lines starrting with '#' which are treated
+# as comments. All other lines have to end with <CR> and will be interpreted
+# as ui-files.
+
+#
+# The known dialogs which have a hard-coded representation
+#
+
+modules/scalc/ui/insertsheet.ui
+modules/scalc/ui/deletecells.ui
+modules/scalc/ui/pastespecial.ui
+modules/scalc/ui/changesourcedialog.ui
+modules/scalc/ui/selectdatasource.ui
+modules/scalc/ui/selectsource.ui
+modules/scalc/ui/deletecontents.ui
+modules/scalc/ui/createnamesdialog.ui
+modules/scalc/ui/inputstringdialog.ui
+modules/scalc/ui/tabcolordialog.ui
+modules/scalc/ui/textimportoptions.ui
+modules/scalc/ui/dataform.ui
+modules/scalc/ui/movecopysheet.ui
+modules/scalc/ui/textimportcsv.ui
+modules/scalc/ui/formatcellsdialog.ui
+
+#
+# Dialogs without a hard-coded representation. These will
+# be visualized using a fallback based on VclBuilder
+#
+
+modules/scalc/ui/autoformattable.ui
+modules/scalc/ui/sortwarning.ui
+modules/scalc/ui/condformatmanager.ui
+modules/scalc/ui/pagetemplatedialog.ui
+modules/scalc/ui/paratemplatedialog.ui
+modules/scalc/ui/databaroptions.ui
+modules/scalc/ui/advancedfilterdialog.ui
+modules/scalc/ui/datafielddialog.ui
+modules/scalc/ui/pivotfielddialog.ui
+modules/scalc/ui/datafieldoptionsdialog.ui
+modules/scalc/ui/showdetaildialog.ui
+modules/scalc/ui/consolidatedialog.ui
+modules/scalc/ui/dapiservicedialog.ui
+modules/scalc/ui/imoptdialog.ui
+modules/scalc/ui/pivotfilterdialog.ui
+modules/scalc/ui/groupbynumber.ui
+modules/scalc/ui/groupbydate.ui
+modules/scalc/ui/sortdialog.ui
+modules/scalc/ui/standardfilterdialog.ui
+modules/scalc/ui/pivottablelayoutdialog.ui
+modules/scalc/ui/validationdialog.ui
+modules/scalc/ui/subtotaldialog.ui
+modules/scalc/ui/scenariodialog.ui
+modules/scalc/ui/searchresults.ui
+modules/scalc/ui/definename.ui
+modules/scalc/ui/insertname.ui
+modules/scalc/ui/tpviewpage.ui
+modules/scalc/ui/scgeneralpage.ui
+modules/scalc/ui/optformula.ui
+modules/scalc/ui/formulacalculationoptions.ui
+modules/scalc/ui/optdlg.ui
+modules/scalc/ui/optcompatibilitypage.ui
+modules/scalc/ui/optchangespage.ui
+modules/scalc/ui/optdefaultpage.ui
+modules/scalc/ui/optsortlists.ui
+modules/scalc/ui/optcalculatepage.ui
+modules/scalc/ui/movingaveragedialog.ui
+modules/scalc/ui/analysisofvariancedialog.ui
+modules/scalc/ui/covariancedialog.ui
+modules/scalc/ui/correlationdialog.ui
+modules/scalc/ui/ttestdialog.ui
+modules/scalc/ui/ztestdialog.ui
+modules/scalc/ui/chisquaretestdialog.ui
+modules/scalc/ui/regressiondialog.ui
+modules/scalc/ui/exponentialsmoothingdialog.ui
+modules/scalc/ui/descriptivestatisticsdialog.ui
+modules/scalc/ui/samplingdialog.ui
+modules/scalc/ui/goalseekdlg.ui
+modules/scalc/ui/selectrange.ui
+modules/scalc/ui/protectsheetdlg.ui
+modules/scalc/ui/namerangesdialog.ui
+modules/scalc/ui/sharedocumentdlg.ui
+modules/scalc/ui/solverdlg.ui
+modules/scalc/ui/solveroptionsdialog.ui
+modules/scalc/ui/externaldata.ui
+modules/scalc/ui/datastreams.ui
+modules/scalc/ui/statisticsinfopage.ui
+modules/scalc/ui/cellprotectionpage.ui
+modules/scalc/ui/printareasdialog.ui
+modules/scalc/ui/headerfooterdialog.ui
+modules/scalc/ui/conditionalformatdialog.ui
+modules/scalc/ui/definedatabaserangedialog.ui
+modules/scalc/ui/sortkey.ui
+modules/scalc/ui/sortcriteriapage.ui
+modules/scalc/ui/sortoptionspage.ui
+modules/scalc/ui/subtotalgrppage.ui
+modules/scalc/ui/subtotaloptionspage.ui
+modules/scalc/ui/validationcriteriapage.ui
+modules/scalc/ui/validationhelptabpage.ui
+modules/scalc/ui/erroralerttabpage.ui
+modules/scalc/ui/conflictsdialog.ui
+modules/scalc/ui/colorrowdialog.ui
+modules/scalc/ui/filldlg.ui
+modules/scalc/ui/ungroupdialog.ui
+modules/scalc/ui/groupdialog.ui
+modules/scalc/ui/showchangesdialog.ui
+modules/scalc/ui/insertcells.ui
+modules/scalc/ui/RowHeightDialog.ui
+modules/scalc/ui/OptimalRowHeightDialog.ui
+modules/scalc/ui/ColWidthDialog.ui
+modules/scalc/ui/OptimalColWidthDialog.ui
+modules/scalc/ui/solverprogressdialog.ui
+modules/scalc/ui/nosolutiondialog.ui
+modules/scalc/ui/solversuccessdialog.ui
+modules/scalc/ui/retypepassdialog.ui
+modules/scalc/ui/retypepassworddialog.ui
+modules/scalc/ui/showsheetdialog.ui
+modules/scalc/ui/simplerefdialog.ui
+modules/scalc/ui/integerdialog.ui
+modules/scalc/ui/doubledialog.ui
+modules/scalc/ui/multipleoperationsdialog.ui
+modules/scalc/ui/chardialog.ui
+modules/scalc/ui/paradialog.ui
+modules/scalc/ui/managenamesdialog.ui
+modules/scalc/ui/headerdialog.ui
+modules/scalc/ui/footerdialog.ui
+modules/scalc/ui/leftheaderdialog.ui
+modules/scalc/ui/rightheaderdialog.ui
+modules/scalc/ui/leftfooterdialog.ui
+modules/scalc/ui/rightfooterdialog.ui
+modules/scalc/ui/sharedheaderdialog.ui
+modules/scalc/ui/sharedfooterdialog.ui
+modules/scalc/ui/allheaderfooterdialog.ui
+modules/scalc/ui/headerfootercontent.ui
+modules/scalc/ui/sheetprintpage.ui
+modules/scalc/ui/sidebaralignment.ui
+modules/scalc/ui/sidebarcellappearance.ui
+modules/scalc/ui/sidebarnumberformat.ui
+modules/scalc/ui/randomnumbergenerator.ui
+modules/scalc/ui/printeroptions.ui
+modules/scalc/ui/xmlsourcedialog.ui

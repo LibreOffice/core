@@ -16,17 +16,45 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <osl/file.hxx>
 #include <vcl/dialog.hxx>
+#include <map>
 
 class VclAbstractDialog;
-
+typedef std::map< OString, sal_uInt32 > mapType;
 
 class OOO_DLLPUBLIC_TEST ScreenshotTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
+private:
+    /// the target directory for screenshots
+    OUString    m_aScreenshotDirectory;
+
+    /// the set of known dialogs and their ID for usage in createDialogByID
+    mapType     maKnownDialogs;
+
+private:
+    /// helpers
+    void implSaveScreenshot(const Bitmap& rScreenshot, const OString& rScreenshotId);
+    void saveScreenshot(VclAbstractDialog& rDialog);
+    void saveScreenshot(Dialog& rDialog);
+
+    /// helper method to populate maKnownDialogs, called in setUp(). Needs to be
+    /// written and has to add entries to maKnownDialogs
+    virtual void registerKnownDialogsByID(mapType& rKnownDialogs) = 0;
+
+    /// dialog creation for known dialogs by ID. Has to be implemented for
+    /// each registered known dialog
+    virtual VclAbstractDialog* createDialogByID(sal_uInt32 nID) = 0;
+
 public:
     ScreenshotTest();
+    virtual ~ScreenshotTest();
 
     virtual void setUp() override;
     virtual void tearDown() override;
+
+    /// Dialog creation for known dialogs by Name (path and UIXMLDescription, *.ui file).
+    /// This uses maKnownDialogs to check if known, and if so, calls createDialogByID
+    /// with the ID from the map
+    VclAbstractDialog* createDialogByName(const OString& rName);
 
     /// version for AbstractDialogs, the ones created in AbstractDialogFactories
     void dumpDialogToPath(VclAbstractDialog& rDialog);
@@ -40,12 +68,8 @@ public:
     /// compared to the active dialog (can be compared with dialog previewer)
     void dumpDialogToPath(const OString& rUIXMLDescription);
 
-private:
-    void implSaveScreenshot(const Bitmap& rScreenshot, const OString& rScreenshotId);
-    void saveScreenshot(VclAbstractDialog& rDialog);
-    void saveScreenshot(Dialog& rDialog);
-
-    OUString m_aScreenshotDirectory;
+    /// const access to known dialogs
+    const mapType& getKnownDialogs() const { return maKnownDialogs; }
 };
 
 #endif // INCLUDED_TEST_SCREENSHOT_TEST_HXX
