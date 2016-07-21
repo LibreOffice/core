@@ -1059,7 +1059,7 @@ void SdrTableObj::setTableStyleSettings( const TableStyleSettings& rStyle )
 }
 
 
-TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_Int32& rnY, int nTol ) const
+TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_Int32& rnY, const sal_uInt16 aTol ) const
 {
     if( !mpImpl || !mpImpl->mxTable.is() )
         return SDRTABLEHIT_NONE;
@@ -1070,10 +1070,10 @@ TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_
     const sal_Int32 nColCount = mpImpl->getColumnCount();
     const sal_Int32 nRowCount = mpImpl->getRowCount();
 
-    sal_Int32 nX = rPos.X() + nTol - maRect.Left();
-    sal_Int32 nY = rPos.Y() + nTol - maRect.Top();
+    sal_Int32 nX = rPos.X() - maRect.Left();
+    sal_Int32 nY = rPos.Y() - maRect.Top();
 
-    if( (nX < 0) || (nX > (maRect.GetWidth() + nTol)) || (nY < 0) || (nY > (maRect.GetHeight() + nTol) ) )
+    if( (nX < 0) || (nX > maRect.GetWidth()) || (nY < 0) || (nY > maRect.GetHeight()) )
         return SDRTABLEHIT_NONE;
 
     // get vertical edge number and check for a hit
@@ -1085,7 +1085,7 @@ TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_
         {
             while( rnX <= nColCount )
             {
-                if( nX <= (2*nTol) )
+                if( nX - aTol <= 0 )
                 {
                     bVrtHit = true;
                     break;
@@ -1105,7 +1105,7 @@ TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_
             rnX = nColCount;
             while( rnX >= 0 )
             {
-                if( nX <= (2*nTol) )
+                if( nX - aTol <= 0 )
                 {
                     bVrtHit = true;
                     break;
@@ -1130,7 +1130,7 @@ TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_
     {
         while( rnY <= nRowCount )
         {
-            if( nY <= (2*nTol) )
+            if( nY - aTol <= 0 )
             {
                 bHrzHit = true;
                 break;
