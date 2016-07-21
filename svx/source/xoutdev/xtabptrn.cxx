@@ -88,7 +88,7 @@ bool XPatternList::Create()
 
 Bitmap XPatternList::CreateBitmap( long nIndex, const Size& rSize ) const
 {
-    OSL_ENSURE( nIndex < Count(), "Access out of range" );
+    assert( nIndex < Count(), "Access out of range" );
 
     if(nIndex < Count())
     {
