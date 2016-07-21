@@ -178,16 +178,24 @@ void ScreenshotTest::dumpDialogToPath(const OString& rUIXMLDescription)
     if (!rUIXMLDescription.isEmpty())
     {
         VclPtrInstance<Dialog> pDialog(Application::GetDefDialogParent(), WB_STDDIALOG | WB_SIZEABLE, Dialog::InitFlag::NoParent);
-        VclBuilder aBuilder(pDialog, VclBuilderContainer::getUIRootDir(), OStringToOUString(rUIXMLDescription, RTL_TEXTENCODING_UTF8));
-        vcl::Window *pRoot = aBuilder.get_widget_root();
-        Dialog *pRealDialog = dynamic_cast<Dialog*>(pRoot);
 
-        if (!pRealDialog)
-            pRealDialog = pDialog;
+        {
+            VclBuilder aBuilder(pDialog, VclBuilderContainer::getUIRootDir(), OStringToOUString(rUIXMLDescription, RTL_TEXTENCODING_UTF8));
+            vcl::Window *pRoot = aBuilder.get_widget_root();
+            Dialog *pRealDialog = dynamic_cast<Dialog*>(pRoot);
 
-        pRealDialog->SetText("LibreOffice DialogScreenshot");
-        pRealDialog->SetStyle(pDialog->GetStyle() | WB_CLOSEABLE);
-        dumpDialogToPath(*pRealDialog);
+            if (!pRealDialog)
+            {
+                pRealDialog = pDialog;
+            }
+
+            pRealDialog->SetText("LibreOffice DialogScreenshot");
+            pRealDialog->SetStyle(pDialog->GetStyle() | WB_CLOSEABLE);
+
+            dumpDialogToPath(*pRealDialog);
+        }
+
+        pDialog.disposeAndClear();
     }
 }
 
