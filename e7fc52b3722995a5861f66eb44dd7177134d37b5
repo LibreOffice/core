@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_1172fce5",
+        "filename": "offapi/com/sun/star/frame/XDispatch.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-07-21T12:03:29Z",
+      "side": 1,
+      "message": "Done\nBut this flag exist a long time before",
+      "parentUuid": "5a8bc5a2_91e28c9e",
+      "revId": "e7fc52b3722995a5861f66eb44dd7177134d37b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_b1edc890",
         "filename": "offapi/com/sun/star/frame/XDispatch.idl",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_3177f8d5",
+        "filename": "offapi/com/sun/star/frame/XDispatch.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-07-21T12:03:29Z",
+      "side": 1,
+      "message": "That i have copy from XNotifyDispatch.idl, would look alike XNofifyDispatch Docu.\n\nI think when we make @see then we get a \"See also\" section, but is your decision.",
+      "parentUuid": "5a8bc5a2_b1edc890",
+      "revId": "e7fc52b3722995a5861f66eb44dd7177134d37b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_d1f2546f",
         "filename": "offapi/com/sun/star/frame/XDispatch.idl",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2016-07-21T10:57:41Z",
       "side": 1,
       "message": "stick it all into one comment section please, no need to open/close here (not even sure doxygen will handle that)",
+      "revId": "e7fc52b3722995a5861f66eb44dd7177134d37b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_f16cb00a",
+        "filename": "offapi/com/sun/star/frame/XDispatch.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-07-21T12:03:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a8bc5a2_d1f2546f",
       "revId": "e7fc52b3722995a5861f66eb44dd7177134d37b5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
