@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_11b03cf4",
+        "filename": "connectivity/source/cpool/ZPoolCollection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-07-21T00:55:53Z",
+      "side": 1,
+      "message": "“1nd” → “1st”",
+      "range": {
+        "startLine": 468,
+        "startChar": 15,
+        "endLine": 468,
+        "endChar": 18
+      },
+      "revId": "5344dd6cd1978460505d1881daba294a1d41b7eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_31953840",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2268,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-07-21T00:55:53Z",
+      "side": 1,
+      "message": "Better translate this sentence from the German, if you can.",
+      "revId": "5344dd6cd1978460505d1881daba294a1d41b7eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
