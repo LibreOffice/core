@@ -351,7 +351,7 @@
  *   void DeclaredFunction() MOZ_FUNCTION_ATTRIBUTE;
  *   void SomeFunction() MOZ_FUNCTION_ATTRIBUTE {}
  *   void PureFunction() const MOZ_FUNCTION_ATTRIBUTE = 0;
- *   void OverriddenFunction() MOZ_FUNCTION_ATTIRBUTE override;
+ *   void OverriddenFunction() MOZ_FUNCTION_ATTRIBUTE override;
  *
  * Attributes that apply to variables or parameters follow the variable's name:
  *

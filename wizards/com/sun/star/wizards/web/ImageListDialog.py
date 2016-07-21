@@ -215,7 +215,7 @@ class ImageListDialog(UnoDialog2):
     class ARenderer(IRenderer):
 
         '''
-        @param aTempalte a template for this renderer.
+        @param aTemplate is a template for this renderer.
         The strings %START, %END ,%TOTAL will be replaced
         with the actual values.
         '''
