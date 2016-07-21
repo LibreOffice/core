@@ -187,9 +187,8 @@ namespace
             static inline void SetRightMarkPos(MarkBase* pMark, bool bOther, const SwPosition* const pPos)
                 { bOther ? pMark->SetOtherMarkPos(*pPos) : pMark->SetMarkPos(*pPos); };
     };
-    static void lcl_ChkUnoCrsrPaM( std::vector<PaMEntry>& rMarkEntries, sal_uLong nNode, sal_Int32 nCntnt,
-                    const SwPaM& rPam,
-                    bool bChkSelDirection )
+    static void lcl_ChkUnoCrsrPaM( std::vector<PaMEntry>& rMarkEntries, const sal_uLong nNode, const sal_Int32 nContent,
+                    SwPaM& rPam, bool bChkSelDirection )
     {
         // Respect direction of selection
         bool bBound1IsStart = !bChkSelDirection ||
@@ -199,20 +198,20 @@ namespace
 
         const SwPosition* pPos = &rPam.GetBound( true );
         if( pPos->nNode.GetIndex() == nNode &&
-            ( bBound1IsStart ? pPos->nContent.GetIndex() < nCntnt
-                                : pPos->nContent.GetIndex() <= nCntnt ))
+            ( bBound1IsStart ? pPos->nContent.GetIndex() < nContent
+                                : pPos->nContent.GetIndex() <= nContent ))
         {
-            const PaMEntry aEntry = { const_cast<SwPaM*>(&rPam), false, pPos->nContent.GetIndex() };
+            const PaMEntry aEntry = { &rPam, false, pPos->nContent.GetIndex() };
             rMarkEntries.push_back(aEntry);
         }
 
         pPos = &rPam.GetBound( false );
         if( pPos->nNode.GetIndex() == nNode &&
             ( (bBound1IsStart && bChkSelDirection)
-                        ? pPos->nContent.GetIndex() <= nCntnt
-                        : pPos->nContent.GetIndex() < nCntnt ))
+                        ? pPos->nContent.GetIndex() <= nContent
+                        : pPos->nContent.GetIndex() < nContent ))
         {
-            const PaMEntry aEntry = { const_cast<SwPaM*>(&rPam), true, pPos->nContent.GetIndex() };
+            const PaMEntry aEntry = { &rPam, true, pPos->nContent.GetIndex() };
             rMarkEntries.push_back(aEntry);
         }
     }
