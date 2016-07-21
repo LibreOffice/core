@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_d7788492",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1567,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-21T21:30:04Z",
+      "side": 1,
+      "message": "First, there\u0027s some error in placement of parentheses or something is omitted or superfluous. This effectively calculates abs(value) \u003c 256 / 16, so abs(value) \u003c 16. Which also the previous code did, but I guess meant was ((abs(value) / 256) \u003c 16) instead.\n\nThen, you\u0027re citing the expression to \"translate the value of width in the file into the column width value at runtime\". But the implementation does something different, so it would be nice to document what it actually does and why.\n\nAre you sure that 256.0*(GetValue()+0.5) is correct? Shouldn\u0027t that be\n\n 256.0 * static_cast\u003clong\u003e(static_cast\u003cdouble\u003e(GetValue()) + 0.5)\n\ninstead, if it really was meant to multiply a rounded value by 256? I didn\u0027t investigate that deeply.",
+      "revId": "e4b9c8e07841657734d5beeba2ff5855abd40a55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_f76d80cd",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1673,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-21T21:30:04Z",
+      "side": 1,
+      "message": "It\u0027s preferable to write the attributes in the same order Excel does, so likely at the place where the comment previously was. I didn\u0027t check.",
+      "revId": "e4b9c8e07841657734d5beeba2ff5855abd40a55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
