@@ -179,7 +179,7 @@ public:
         @return true if any has a value, false otherwise
     */
     inline bool SAL_CALL hasValue() const
-        { return (typelib_TypeClass_VOID != pType->eTypeClass); }
+        { return pType->eTypeClass != typelib_TypeClass_VOID; }
 
     /** Gets a pointer to the set value.
 

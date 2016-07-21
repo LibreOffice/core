@@ -955,7 +955,7 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
     {
         // max 20 decimals, we don't have unlimited precision
         // #38810# and no overflow on fValue*=fFac
-        if ( nDecPlaces < -20 || 20 < nDecPlaces || fValue > (DBL_MAX / 1e20) )
+        if ( nDecPlaces < -20 || nDecPlaces > 20 || fValue > (DBL_MAX / 1e20) )
             return bSign ? -fValue : fValue;
 
         fFac = getN10Exp( nDecPlaces );

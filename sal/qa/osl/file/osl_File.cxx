@@ -193,7 +193,7 @@ inline void createTestFile( const ::rtl::OUString& filename )
     File aFile(aPathURL);
     nError = aFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
     //CPPUNIT_ASSERT_MESSAGE( "In createTestFile Function: creation ", ( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_EXIST ) );
-    if ( ( ::osl::FileBase::E_None != nError ) && ( nError != ::osl::FileBase::E_EXIST ))
+    if ( ( nError != ::osl::FileBase::E_None ) && ( nError != ::osl::FileBase::E_EXIST ))
     {
         printf("createTestFile failed!\n");
     }
@@ -250,7 +250,7 @@ inline void createTestDirectory( const ::rtl::OUString& dirname )
         ::osl::FileBase::getFileURLFromSystemPath( dirname, aPathURL ); //convert if not full qualified URL
     nError = ::osl::Directory::create( aPathURL );
     //CPPUNIT_ASSERT_MESSAGE( "In createTestDirectory Function: creation: ", ( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_EXIST ) );
-    if ( ( ::osl::FileBase::E_None != nError ) && ( nError != ::osl::FileBase::E_EXIST ))
+    if ( ( nError != ::osl::FileBase::E_None ) && ( nError != ::osl::FileBase::E_EXIST ))
       printf("createTestDirectory failed!\n");
 }
 
@@ -307,7 +307,7 @@ enum class oslCheckMode {
 inline bool ifFileExist( const ::rtl::OUString & str )
 {
     ::osl::File testFile( str );
-    return ( osl::FileBase::E_None == testFile.open( osl_File_OpenFlag_Read ) );
+    return ( testFile.open( osl_File_OpenFlag_Read ) == osl::FileBase::E_None  );
 }
 
 //check if the file can be written
@@ -327,7 +327,7 @@ inline bool ifFileCanWrite( const ::rtl::OUString & str )
      //on UNX, just test if open success with osl_File_OpenFlag_Write
 #else
     ::osl::File testFile( str );
-    bool bCheckResult = (osl::FileBase::E_None == testFile.open( osl_File_OpenFlag_Write ));
+    bool bCheckResult = (testFile.open( osl_File_OpenFlag_Write ) == osl::FileBase::E_None);
 #endif
     return bCheckResult;
 }
@@ -342,7 +342,7 @@ inline bool checkDirectory( const ::rtl::OUString & str, oslCheckMode nCheckMode
     Directory aDir( str );
     rc = aDir.open();
 
-    if ( ( ::osl::FileBase::E_NOENT != rc ) && ( ::osl::FileBase::E_ACCES != rc ) ){
+    if ( ( rc != ::osl::FileBase::E_NOENT ) && ( rc != ::osl::FileBase::E_ACCES ) ){
 
         switch ( nCheckMode ) {
             case oslCheckMode::Exist:
@@ -1163,7 +1163,7 @@ namespace osl_FileBase
             nError1 = FileBase::createTempFile( pUStr_DirURL, pHandle, pUStr_FileURL );
             ::osl::File testFile( *pUStr_FileURL );
             nError2 = testFile.open( osl_File_OpenFlag_Create );
-            if ( osl::FileBase::E_EXIST == nError2 )  {
+            if ( nError2 == osl::FileBase::E_EXIST )  {
                 osl_closeFile( *pHandle );
                 deleteTestFile( *pUStr_FileURL );
             }
@@ -1184,7 +1184,7 @@ namespace osl_FileBase
                 ( osl::FileBase::E_EXIST == nError2 ) );
 
             //check file if have the write permission
-            if ( osl::FileBase::E_EXIST == nError2 )  {
+            if ( nError2 == osl::FileBase::E_EXIST )  {
                 bOK = ifFileCanWrite( *pUStr_FileURL );
                 osl_closeFile( *pHandle );
                 deleteTestFile( *pUStr_FileURL );
@@ -1448,7 +1448,7 @@ namespace osl_FileStatus
             bool bOk = false;
             while (true) {
                 osl::FileBase::RC nError1 = testDirectory.getNextItem( rItem_link, 4 );
-                if (::osl::FileBase::E_None == nError1) {
+                if (nError1 == ::osl::FileBase::E_None) {
                     sal_uInt32 mask_link = osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_LinkTargetURL;
                     ::osl::FileStatus   rFileStatus( mask_link );
                     rItem_link.getFileStatus( rFileStatus );
@@ -2228,7 +2228,7 @@ namespace osl_File
             ::osl::File testFile( aTestFile );
 
             nError1 = testFile.open( osl_File_OpenFlag_Create );
-            bool bOK = ( File::E_ACCES == nError1 );
+            bool bOK = ( nError1 == File::E_ACCES );
 #ifdef _WIN32
             bOK = true;  /// in Windows, you can create file in c:/ any way.
             testFile.close();
@@ -4009,7 +4009,7 @@ namespace osl_Directory
 
             //open a directory
             nError1 = testDirectory.open();
-             if ( ::osl::FileBase::E_None == nError1 )
+             if ( nError1 == ::osl::FileBase::E_None )
             {
                 nError2 = testDirectory.close();
                 CPPUNIT_ASSERT_EQUAL( nError2, ::osl::FileBase::E_None );
@@ -4025,7 +4025,7 @@ namespace osl_Directory
 
             //open a directory
             nError1 = testDirectory.open();
-             if ( ::osl::FileBase::E_None == nError1 )
+            if ( nError1 == ::osl::FileBase::E_None )
             {
                 nError2 = testDirectory.close();
                 CPPUNIT_ASSERT_EQUAL( nError2, ::osl::FileBase::E_None );
@@ -4041,7 +4041,7 @@ namespace osl_Directory
 
             //open a directory
             nError1 = testDirectory.open();
-             if ( ::osl::FileBase::E_None == nError1 )
+            if ( nError1 == ::osl::FileBase::E_None )
             {
                 nError2 = testDirectory.close();
                 CPPUNIT_ASSERT_EQUAL( nError2, ::osl::FileBase::E_None );
@@ -4422,13 +4422,13 @@ namespace osl_Directory
 
             while (true) {
                 nError1 = testDirectory.getNextItem( rItem, 4 );
-                if (::osl::FileBase::E_None == nError1) {
+                if (nError1 == ::osl::FileBase::E_None) {
                     ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_Type );
                     rItem.getFileStatus( rFileStatus );
                     if ( compareFileName( rFileStatus.getFileName(), aFileName) )
                     {
                         bFoundOK = true;
-                        if ( FileStatus::Link == rFileStatus.getFileType())
+                        if ( rFileStatus.getFileType() == FileStatus::Link )
                         {
                             bLnkOK = true;
                             break;
@@ -4746,7 +4746,7 @@ namespace osl_Directory
              //check for existence
             ::osl::Directory rDirectory( aTmpName3 );
             nError2 = rDirectory.open();
-            if ( osl::FileBase::E_NOENT != nError2 )
+            if ( nError2 != osl::FileBase::E_NOENT )
                 ::osl::Directory::remove( aTmpName3 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for remove function: remove a directory by its system path, and check its existence.",

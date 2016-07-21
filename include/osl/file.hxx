@@ -470,7 +470,7 @@ public:
 
     inline bool getRemoteFlag() const
     {
-        return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_Remote);
+        return (_aInfo.uAttributes & osl_Volume_Attribute_Remote) != 0;
     }
 
     /** Check the removeable flag.
@@ -481,7 +481,7 @@ public:
 
     inline bool getRemoveableFlag() const
     {
-        return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_Removeable);
+        return (_aInfo.uAttributes & osl_Volume_Attribute_Removeable) != 0;
     }
 
     /** Check the compact disc flag.
@@ -492,7 +492,7 @@ public:
 
     inline bool getCompactDiscFlag() const
     {
-        return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_CompactDisc);
+        return (_aInfo.uAttributes & osl_Volume_Attribute_CompactDisc) != 0;
     }
 
     /** Check the floppy disc flag.
@@ -503,7 +503,7 @@ public:
 
     inline bool getFloppyDiskFlag() const
     {
-        return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_FloppyDisk);
+        return (_aInfo.uAttributes & osl_Volume_Attribute_FloppyDisk) != 0;
     }
 
     /** Check the fixed disk flag.
@@ -514,7 +514,7 @@ public:
 
     inline bool getFixedDiskFlag() const
     {
-        return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_FixedDisk);
+        return (_aInfo.uAttributes & osl_Volume_Attribute_FixedDisk) != 0;
     }
 
     /** Check the RAM disk flag.
@@ -525,7 +525,7 @@ public:
 
     inline bool getRAMDiskFlag() const
     {
-        return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_RAMDisk);
+        return (_aInfo.uAttributes & osl_Volume_Attribute_RAMDisk) != 0;
     }
 
     /** Determine the total space of a volume device.

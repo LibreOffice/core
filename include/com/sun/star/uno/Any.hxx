@@ -282,7 +282,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, C & value )
 template<>
 inline bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny, sal_Bool & value )
 {
-    if (typelib_TypeClass_BOOLEAN == rAny.pType->eTypeClass)
+    if (rAny.pType->eTypeClass == typelib_TypeClass_BOOLEAN)
     {
         value = bool(* static_cast< const sal_Bool * >( rAny.pData ));
         return true;
@@ -293,7 +293,7 @@ inline bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny, sal
 template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const sal_Bool & value )
 {
-    return (typelib_TypeClass_BOOLEAN == rAny.pType->eTypeClass &&
+    return (rAny.pType->eTypeClass == typelib_TypeClass_BOOLEAN &&
             bool(value) == bool(* static_cast< const sal_Bool * >( rAny.pData )));
 }
 
@@ -323,7 +323,7 @@ inline bool SAL_CALL operator == ( Any const & rAny, bool const & value )
 template<>
 inline bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny, sal_Int8 & value )
 {
-    if (typelib_TypeClass_BYTE == rAny.pType->eTypeClass)
+    if (rAny.pType->eTypeClass == typelib_TypeClass_BYTE)
     {
         value = * static_cast< const sal_Int8 * >( rAny.pData );
         return true;
@@ -531,7 +531,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, double & value )
 template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, ::rtl::OUString & value )
 {
-    if (typelib_TypeClass_STRING == rAny.pType->eTypeClass)
+    if (rAny.pType->eTypeClass == typelib_TypeClass_STRING)
     {
         value = * static_cast< const ::rtl::OUString * >( rAny.pData );
         return true;
@@ -542,7 +542,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, ::rtl::OUString & value )
 template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const ::rtl::OUString & value )
 {
-    return (typelib_TypeClass_STRING == rAny.pType->eTypeClass &&
+    return (rAny.pType->eTypeClass == typelib_TypeClass_STRING &&
             value.equals( * static_cast< const ::rtl::OUString * >( rAny.pData ) ));
 }
 // type
@@ -550,7 +550,7 @@ inline bool SAL_CALL operator == ( const Any & rAny, const ::rtl::OUString & val
 template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, Type & value )
 {
-    if (typelib_TypeClass_TYPE == rAny.pType->eTypeClass)
+    if (rAny.pType->eTypeClass == typelib_TypeClass_TYPE)
     {
         value = * static_cast< const Type * >( rAny.pData );
         return true;
@@ -561,7 +561,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, Type & value )
 template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const Type & value )
 {
-    return (typelib_TypeClass_TYPE == rAny.pType->eTypeClass &&
+    return (rAny.pType->eTypeClass == typelib_TypeClass_TYPE &&
             value.equals( * static_cast< const Type * >( rAny.pData ) ));
 }
 // any
@@ -582,7 +582,7 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, Any & value )
 template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const BaseReference & value )
 {
-    if (typelib_TypeClass_INTERFACE == rAny.pType->eTypeClass)
+    if (rAny.pType->eTypeClass == typelib_TypeClass_INTERFACE)
     {
         return static_cast< const BaseReference * >( rAny.pData )->operator == ( value );
     }

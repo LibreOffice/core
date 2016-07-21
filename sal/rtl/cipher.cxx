@@ -743,7 +743,7 @@ static rtlCipherError BF_update (
     if ((pData == nullptr) || (pBuffer == nullptr))
         return rtl_Cipher_E_Argument;
 
-    if (!((0 < nDatLen) && (nDatLen <= nBufLen)))
+    if (!((nDatLen > 0) && (nDatLen <= nBufLen)))
         return rtl_Cipher_E_BufferSize;
 
     /* Update. */
@@ -1218,7 +1218,7 @@ static rtlCipherError rtl_cipherARCFOUR_update_Impl (
     if ((pData == nullptr) || (pBuffer == nullptr))
         return rtl_Cipher_E_Argument;
 
-    if (!((0 < nDatLen) && (nDatLen <= nBufLen)))
+    if (!((nDatLen > 0) && (nDatLen <= nBufLen)))
         return rtl_Cipher_E_BufferSize;
 
     /* Update. */
