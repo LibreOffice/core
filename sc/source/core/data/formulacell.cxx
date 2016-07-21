@@ -2664,19 +2664,7 @@ bool ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
     return false;
 }
 
-/*
- Edge-Values:
-
-   8
- 4   16
-   2
-
- inside: 1
- outside: 0
- (reserved: open: 32)
- */
-
-sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
+sc::MatrixEdge ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
 {
     switch ( cMatrixFlag )
     {
@@ -2687,7 +2675,7 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
             static SCROW nR;
             ScAddress aOrg;
             if ( !GetMatrixOrigin( aOrg ) )
-                return 0;               // bad luck..
+                return sc::MatrixEdge::Nothing;
             if ( aOrg != rOrgPos )
             {   // First time or a different matrix than last time.
                 rOrgPos = aOrg;
@@ -2752,25 +2740,25 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
                     aMsg.append(OUStringToOString(aTmp, RTL_TEXTENCODING_ASCII_US));
                     OSL_FAIL(aMsg.getStr());
 #endif
-                    return 0;           // bad luck ...
+                    return sc::MatrixEdge::Nothing;
                 }
             }
             // here we are, healthy and clean, somewhere in between
             SCsCOL dC = aPos.Col() - aOrg.Col();
             SCsROW dR = aPos.Row() - aOrg.Row();
-            sal_uInt16 nEdges = 0;
+            sc::MatrixEdge nEdges = sc::MatrixEdge::Nothing;
             if ( dC >= 0 && dR >= 0 && dC < nC && dR < nR )
             {
                 if ( dC == 0 )
-                    nEdges |= sc::MatrixEdgeLeft;            // left edge
+                    nEdges |= sc::MatrixEdge::Left;
                 if ( dC+1 == nC )
-                    nEdges |= sc::MatrixEdgeRight;           // right edge
+                    nEdges |= sc::MatrixEdge::Right;
                 if ( dR == 0 )
-                    nEdges |= sc::MatrixEdgeTop;            // top edge
+                    nEdges |= sc::MatrixEdge::Top;
                 if ( dR+1 == nR )
-                    nEdges |= sc::MatrixEdgeBottom;            // bottom edge
-                if ( !nEdges )
-                    nEdges = sc::MatrixEdgeInside;             // inside
+                    nEdges |= sc::MatrixEdge::Bottom;
+                if ( nEdges == sc::MatrixEdge::Nothing )
+                    nEdges = sc::MatrixEdge::Inside;
             }
 #if OSL_DEBUG_LEVEL > 0
             else
@@ -2795,7 +2783,7 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
             return nEdges;
         }
         default:
-            return 0;
+            return sc::MatrixEdge::Nothing;
     }
 }
 
