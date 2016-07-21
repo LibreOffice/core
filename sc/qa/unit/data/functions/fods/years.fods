@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
- <office:meta><meta:creation-date>2016-06-16T21:00:15.480415068</meta:creation-date><meta:editing-duration>P0D</meta:editing-duration><meta:editing-cycles>1</meta:editing-cycles><meta:generator>LibreOfficeDev/5.3.0.0.alpha0$Linux_X86_64 LibreOffice_project/83d5a4a9c256eaef4c04f799db38b373d9cff4d5</meta:generator><meta:document-statistic meta:table-count="2" meta:cell-count="84" meta:object-count="0"/></office:meta>
+ <office:meta><meta:creation-date>2016-06-16T21:00:15.480415068</meta:creation-date><meta:editing-duration>P0D</meta:editing-duration><meta:editing-cycles>1</meta:editing-cycles><meta:generator>LibreOfficeDev/5.3.0.0.alpha0$Linux_X86_64 LibreOffice_project/800a196718abbfd38d93c845e563e055ef778b04</meta:generator><meta:document-statistic meta:table-count="2" meta:cell-count="85" meta:object-count="0"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
    <config:config-item config:name="VisibleAreaTop" config:type="int">0</config:config-item>
    <config:config-item config:name="VisibleAreaLeft" config:type="int">0</config:config-item>
    <config:config-item config:name="VisibleAreaWidth" config:type="int">33007</config:config-item>
-   <config:config-item config:name="VisibleAreaHeight" config:type="int">15307</config:config-item>
+   <config:config-item config:name="VisibleAreaHeight" config:type="int">15264</config:config-item>
    <config:config-item-map-indexed config:name="Views">
     <config:config-item-map-entry>
      <config:config-item config:name="ViewId" config:type="string">view1</config:config-item>
@@ -32,7 +32,7 @@
       </config:config-item-map-entry>
       <config:config-item-map-entry config:name="Sheet2">
        <config:config-item config:name="CursorPositionX" config:type="int">2</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">11</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">12</config:config-item>
        <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="VerticalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
@@ -50,7 +50,7 @@
       </config:config-item-map-entry>
      </config:config-item-map-named>
      <config:config-item config:name="ActiveTable" config:type="string">Sheet2</config:config-item>
-     <config:config-item config:name="HorizontalScrollbarWidth" config:type="int">567</config:config-item>
+     <config:config-item config:name="HorizontalScrollbarWidth" config:type="int">1241</config:config-item>
      <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
      <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
      <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
@@ -91,12 +91,10 @@
    <config:config-item config:name="ShowPageBreaks" config:type="boolean">true</config:config-item>
    <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
    <config:config-item config:name="ShowNotes" config:type="boolean">true</config:config-item>
-   <config:config-item config:name="IsOutlineSymbolsSet" config:type="boolean">true</config:config-item>
-   <config:config-item config:name="ShowZeroValues" config:type="boolean">true</config:config-item>
    <config:config-item config:name="SaveVersionOnClose" config:type="boolean">false</config:config-item>
    <config:config-item config:name="GridColor" config:type="long">12632256</config:config-item>
    <config:config-item config:name="RasterIsVisible" config:type="boolean">false</config:config-item>
-   <config:config-item config:name="PrinterName" config:type="string">Generic Printer</config:config-item>
+   <config:config-item config:name="PrinterName" config:type="string">Lexmark-E352dn</config:config-item>
    <config:config-item-map-indexed config:name="ForbiddenCharacters">
     <config:config-item-map-entry>
      <config:config-item config:name="Language" config:type="string">cs</config:config-item>
@@ -120,12 +118,14 @@
      <config:config-item config:name="EndLine" config:type="string"/>
     </config:config-item-map-entry>
    </config:config-item-map-indexed>
+   <config:config-item config:name="IsOutlineSymbolsSet" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="ShowZeroValues" config:type="boolean">true</config:config-item>
    <config:config-item config:name="LinkUpdateMode" config:type="short">3</config:config-item>
    <config:config-item config:name="RasterSubdivisionX" config:type="int">1</config:config-item>
    <config:config-item config:name="HasColumnRowHeaders" config:type="boolean">true</config:config-item>
    <config:config-item config:name="RasterSubdivisionY" config:type="int">1</config:config-item>
    <config:config-item config:name="AutoCalculate" config:type="boolean">true</config:config-item>
-   <config:config-item config:name="PrinterSetup" config:type="base64Binary">kAH+/0dlbmVyaWMgUHJpbnRlcgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU0dFTlBSVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAMAtgAAAAAAAAAIAFZUAAAkbQAASm9iRGF0YSAxCnByaW50ZXI9R2VuZXJpYyBQcmludGVyCm9yaWVudGF0aW9uPVBvcnRyYWl0CmNvcGllcz0xCm1hcmdpbmRhanVzdG1lbnQ9MCwwLDAsMApjb2xvcmRlcHRoPTI0CnBzbGV2ZWw9MApwZGZkZXZpY2U9MApjb2xvcmRldmljZT0wClBQRENvbnRleERhdGEKRHVwbGV4Ok5vbmUAUGFnZVNpemU6TGV0dGVyAAASAENPTVBBVF9EVVBMRVhfTU9ERQoARFVQTEVYX09GRg==</config:config-item>
+   <config:config-item config:name="PrinterSetup" config:type="base64Binary">qQH+/0xleG1hcmstRTM1MmRuAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpMZXhtYXJrLUUzNTJkbgAAAAAAAAAAAAAAAAAWAAMAzwAAAAAAAAAEAAhSAAAEdAAASm9iRGF0YSAxCnByaW50ZXI9TGV4bWFyay1FMzUyZG4Kb3JpZW50YXRpb249UG9ydHJhaXQKY29waWVzPTEKY29sbGF0ZT1mYWxzZQptYXJnaW5kYWp1c3RtZW50PTAsMCwwLDAKY29sb3JkZXB0aD0yNApwc2xldmVsPTAKcGRmZGV2aWNlPTEKY29sb3JkZXZpY2U9MApQUERDb250ZXhEYXRhCkR1cGxleDpOb25lAElucHV0U2xvdDpUcmF5MQBQYWdlU2l6ZTpBNAAAEgBDT01QQVRfRFVQTEVYX01PREUKAERVUExFWF9PRkY=</config:config-item>
    <config:config-item config:name="ApplyUserData" config:type="boolean">false</config:config-item>
    <config:config-item config:name="CharacterCompressionType" config:type="short">0</config:config-item>
   </config:config-item-set>
@@ -148,7 +148,6 @@
  </office:font-face-decls>
  <office:styles>
   <style:default-style style:family="table-cell">
-   <style:table-cell-properties style:decimal-places="2"/>
    <style:paragraph-properties style:tab-stop-distance="36pt"/>
    <style:text-properties style:font-name="Liberation Sans" fo:language="en" fo:country="US" style:font-name-asian="DejaVu Sans" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="DejaVu Sans" style:language-complex="hi" style:country-complex="IN"/>
   </style:default-style>
@@ -592,7 +591,6 @@
   <style:style style:name="ce15" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:text-properties style:font-name="Liberation Sans" style:font-name-asian="Droid Sans Fallback" style:font-name-complex="Droid Sans Devanagari"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C3"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C3"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C3"/>
@@ -600,9 +598,9 @@
   <style:style style:name="ce16" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C3"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C3"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C3"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C7"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C7"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C7"/>
   </style:style>
   <style:style style:name="ce17" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
@@ -612,82 +610,70 @@
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C7"/>
   </style:style>
   <style:style style:name="ce18" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C7"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C7"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C7"/>
-  </style:style>
-  <style:style style:name="ce19" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C10"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C10"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C10"/>
   </style:style>
-  <style:style style:name="ce20" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce19" style:family="table-cell" style:parent-style-name="Default">
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C3"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C3"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C3"/>
   </style:style>
-  <style:style style:name="ce21" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+  <style:style style:name="ce20" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C2"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C2"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C2"/>
   </style:style>
-  <style:style style:name="ce22" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+  <style:style style:name="ce21" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="start" fo:margin-left="0pt"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C16"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C16"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C16"/>
   </style:style>
-  <style:style style:name="ce23" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C18"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C18"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C18"/>
-  </style:style>
-  <style:style style:name="ce24" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+  <style:style style:name="ce22" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C19"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C19"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C19"/>
   </style:style>
-  <style:style style:name="ce25" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce23" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C2"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C2"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C2"/>
+  </style:style>
+  <style:style style:name="ce24" style:family="table-cell" style:parent-style-name="Default">
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C2"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C2"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C2"/>
+  </style:style>
+  <style:style style:name="ce25" style:family="table-cell" style:parent-style-name="Default">
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C2"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C2"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C2"/>
   </style:style>
   <style:style style:name="ce26" style:family="table-cell" style:parent-style-name="Default">
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C2"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C2"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C2"/>
-  </style:style>
-  <style:style style:name="ce27" style:family="table-cell" style:parent-style-name="Default">
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C2"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C2"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C2"/>
-  </style:style>
-  <style:style style:name="ce28" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C2"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C2"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C2"/>
   </style:style>
-  <style:style style:name="ce29" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce27" style:family="table-cell" style:parent-style-name="Default">
    <style:text-properties style:font-name="Liberation Serif" style:font-name-asian="Microsoft YaHei" style:font-name-complex="Mangal"/>
   </style:style>
-  <style:style style:name="ce30" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce28" style:family="table-cell" style:parent-style-name="Default">
    <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
   </style:style>
-  <style:style style:name="ce31" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N36">
+  <style:style style:name="ce29" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N36">
    <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
   </style:style>
-  <style:style style:name="ce32" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N36"/>
+  <style:style style:name="ce30" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N36"/>
   <style:style style:name="ta_extref" style:family="table">
    <style:table-properties table:display="false"/>
   </style:style>
@@ -731,7 +717,7 @@
      <text:p><text:sheet-name>???</text:sheet-name> (<text:title>???</text:title>)</text:p>
     </style:region-left>
     <style:region-right>
-     <text:p><text:date style:data-style-name="N2" text:date-value="2016-07-13">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="00:25:00.029007930">00:00:00</text:time></text:p>
+     <text:p><text:date style:data-style-name="N2" text:date-value="2016-07-16">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="16:34:52.437011940">00:00:00</text:time></text:p>
     </style:region-right>
    </style:header>
    <style:header-left style:display="false"/>
@@ -855,17 +841,17 @@
       <text:p>Comment</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="4"/>
-     <table:table-cell table:style-name="ce30"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>DATA</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce30"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce5" table:number-matrix-columns-spanned="1" table:number-matrix-rows-spanned="7" table:formula="of:={1|0|0|0|0|0|1}" office:value-type="float" office:value="1" calcext:value-type="float">
       <text:p>1</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce30"/>
+     <table:table-cell table:style-name="ce28"/>
     </table:table-row>
-    <table:table-row table:style-name="ro5">
+    <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=ORG.OPENOFFICE.YEARS([.K2];[.K3];[.K4:.K6])" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>#VALUE!</text:p>
      </table:table-cell>
@@ -875,11 +861,11 @@
      <table:table-cell table:style-name="ce14" table:formula="of:=ISERROR([.A2])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce29" table:formula="of:=FORMULA([.A2])" office:value-type="string" office:string-value="=YEARS(K2,K3,K4:K6)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A2])" office:value-type="string" office:string-value="=YEARS(K2,K3,K4:K6)" calcext:value-type="string">
       <text:p>=YEARS(K2,K3,K4:K6)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce32" office:value-type="date" office:date-value="2014-11-01" calcext:value-type="date">
+     <table:table-cell table:style-name="ce30" office:value-type="date" office:date-value="2014-11-01" calcext:value-type="date">
       <text:p>11/01/2014</text:p>
      </table:table-cell>
      <table:table-cell/>
@@ -895,14 +881,14 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>err</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce15" table:formula="of:=ISERROR([.A2])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce14" table:formula="of:=ISERROR([.A3])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce29" table:formula="of:=FORMULA([.A3])" office:value-type="string" office:string-value="=YEARS(K2,K2,K2)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A3])" office:value-type="string" office:string-value="=YEARS(K2,K2,K2)" calcext:value-type="string">
       <text:p>=YEARS(K2,K2,K2)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce32" office:value-type="date" office:date-value="2017-11-30" calcext:value-type="date">
+     <table:table-cell table:style-name="ce30" office:value-type="date" office:date-value="2017-11-30" calcext:value-type="date">
       <text:p>11/30/2017</text:p>
      </table:table-cell>
      <table:table-cell/>
@@ -911,29 +897,29 @@
      </table:table-cell>
      <table:table-cell/>
     </table:table-row>
-    <table:table-row table:style-name="ro5">
+    <table:table-row table:style-name="ro2">
      <table:table-cell table:style-name="ce11" table:formula="of:=ORG.OPENOFFICE.YEARS([.K2];[.K3];[.L2])" office:value-type="float" office:value="3" calcext:value-type="float">
       <text:p>3</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
       <text:p>3</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" table:formula="of:=[.A4]=[.B4]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce15" table:formula="of:=[.A4]=[.B4]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce29" table:formula="of:=FORMULA([.A4])" office:value-type="string" office:string-value="=YEARS(K2,K3,L2)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A4])" office:value-type="string" office:string-value="=YEARS(K2,K3,L2)" calcext:value-type="string">
       <text:p>=YEARS(K2,K3,L2)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce30"/>
-     <table:table-cell table:style-name="ce32" office:value-type="date" office:date-value="2014-11-11" calcext:value-type="date">
+     <table:table-cell table:style-name="ce28"/>
+     <table:table-cell table:style-name="ce30" office:value-type="date" office:date-value="2014-11-11" calcext:value-type="date">
       <text:p>11/11/2014</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce30"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce5" office:value-type="float" office:value="0" calcext:value-type="float">
       <text:p>0</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce30"/>
+     <table:table-cell table:style-name="ce28"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:style-name="ce11" table:formula="of:=ORG.OPENOFFICE.YEARS([.K2];[.K3];)" office:value-type="string" office:string-value="" calcext:value-type="error">
@@ -945,11 +931,11 @@
      <table:table-cell table:style-name="ce16" table:formula="of:=ISERROR([.A5])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce29" table:formula="of:=FORMULA([.A5])" office:value-type="string" office:string-value="=YEARS(K2,K3,)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A5])" office:value-type="string" office:string-value="=YEARS(K2,K3,)" calcext:value-type="string">
       <text:p>=YEARS(K2,K3,)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce32" office:value-type="date" office:date-value="2014-11-27" calcext:value-type="date">
+     <table:table-cell table:style-name="ce30" office:value-type="date" office:date-value="2014-11-27" calcext:value-type="date">
       <text:p>11/27/2014</text:p>
      </table:table-cell>
      <table:table-cell/>
@@ -968,11 +954,11 @@
      <table:table-cell table:style-name="ce16" table:formula="of:=ISERROR([.A6])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce29" table:formula="of:=FORMULA([.A6])" office:value-type="string" office:string-value="=YEARS(K3,K2,)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A6])" office:value-type="string" office:string-value="=YEARS(K3,K2,)" calcext:value-type="string">
       <text:p>=YEARS(K3,K2,)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce32" office:value-type="date" office:date-value="2014-11-28" calcext:value-type="date">
+     <table:table-cell table:style-name="ce30" office:value-type="date" office:date-value="2014-11-28" calcext:value-type="date">
       <text:p>11/28/2014</text:p>
      </table:table-cell>
      <table:table-cell/>
@@ -981,29 +967,29 @@
      </table:table-cell>
      <table:table-cell/>
     </table:table-row>
-    <table:table-row table:style-name="ro5">
+    <table:table-row table:style-name="ro2">
      <table:table-cell table:style-name="ce11" table:formula="of:=ORG.OPENOFFICE.YEARS([.K2];[.K2]+6;;{1|0|1|0|1|0|1})" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>Err:504</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>err</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce17" table:formula="of:=ISERROR([.A7])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ISERROR([.A7])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce29" table:formula="of:=FORMULA([.A7])" office:value-type="string" office:string-value="=YEARS(K2,K2+6,,{1;0;1;0;1;0;1})" calcext:value-type="string">
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A7])" office:value-type="string" office:string-value="=YEARS(K2,K2+6,,{1;0;1;0;1;0;1})" calcext:value-type="string">
       <text:p>=YEARS(K2,K2+6,,{1;0;1;0;1;0;1})</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce30"/>
-     <table:table-cell table:style-name="ce32" office:value-type="date" office:date-value="2001-12-24" calcext:value-type="date">
+     <table:table-cell table:style-name="ce28"/>
+     <table:table-cell table:style-name="ce30" office:value-type="date" office:date-value="2001-12-24" calcext:value-type="date">
       <text:p>12/24/2001</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce30"/>
+     <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce5" office:value-type="float" office:value="1" calcext:value-type="float">
       <text:p>1</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce30"/>
+     <table:table-cell table:style-name="ce28"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:formula="of:=ORG.OPENOFFICE.YEARS(day1;day2;one)" office:value-type="float" office:value="3" calcext:value-type="float">
@@ -1012,14 +998,14 @@
      <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
       <text:p>3</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce18" table:formula="of:=[.A8]=[.B8]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce17" table:formula="of:=[.A8]=[.B8]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce29" table:formula="of:=FORMULA([.A8])" office:value-type="string" office:string-value="=YEARS(day1,day2,one)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A8])" office:value-type="string" office:string-value="=YEARS(day1,day2,one)" calcext:value-type="string">
       <text:p>=YEARS(day1,day2,one)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce32" office:value-type="date" office:date-value="2001-12-25" calcext:value-type="date">
+     <table:table-cell table:style-name="ce30" office:value-type="date" office:date-value="2001-12-25" calcext:value-type="date">
       <text:p>12/25/2001</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="3"/>
@@ -1031,14 +1017,14 @@
      <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
       <text:p>2</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" table:formula="of:=[.A9]=[.B9]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce15" table:formula="of:=[.A9]=[.B9]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce29" table:formula="of:=FORMULA([.A9])" office:value-type="string" office:string-value="=YEARS(DATE(2014,1,15),DATE(2016,4,1),0)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A9])" office:value-type="string" office:string-value="=YEARS(DATE(2014,1,15),DATE(2016,4,1),0)" calcext:value-type="string">
       <text:p>=YEARS(DATE(2014,1,15),DATE(2016,4,1),0)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce32" office:value-type="date" office:date-value="2001-12-26" calcext:value-type="date">
+     <table:table-cell table:style-name="ce30" office:value-type="date" office:date-value="2001-12-26" calcext:value-type="date">
       <text:p>12/26/2001</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="3"/>
@@ -1050,21 +1036,21 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Err</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce19" table:formula="of:=ISERROR([.A10])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce18" table:formula="of:=ISERROR([.A10])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce29" table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="=WEEKS(DATE(2014,11,1),DATE(2014,11,30),{&quot;Hello&quot;;&quot;Eike&quot;;&quot;!&quot;})" calcext:value-type="string">
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="=WEEKS(DATE(2014,11,1),DATE(2014,11,30),{&quot;Hello&quot;;&quot;Eike&quot;;&quot;!&quot;})" calcext:value-type="string">
       <text:p>=WEEKS(DATE(2014,11,1),DATE(2014,11,30),{&quot;Hello&quot;;&quot;Eike&quot;;&quot;!&quot;})</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>TDF#100409</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="4"/>
-     <table:table-cell table:style-name="ce30"/>
-     <table:table-cell table:style-name="ce32" office:value-type="date" office:date-value="2001-12-31" calcext:value-type="date">
+     <table:table-cell table:style-name="ce28"/>
+     <table:table-cell table:style-name="ce30" office:value-type="date" office:date-value="2001-12-31" calcext:value-type="date">
       <text:p>12/31/2001</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce30" table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce28" table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:style-name="ce13" table:formula="of:=ORG.OPENOFFICE.YEARS([.K16];[.K17];0)" office:value-type="float" office:value="115" calcext:value-type="float">
@@ -1073,74 +1059,15 @@
      <table:table-cell office:value-type="float" office:value="115" calcext:value-type="float">
       <text:p>115</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce19" table:formula="of:=[.A11]=[.B11]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce18" table:formula="of:=[.A11]=[.B11]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce29" table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="=YEARS(K16,K17,0)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="=YEARS(K16,K17,0)" calcext:value-type="string">
       <text:p>=YEARS(K16,K17,0)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce32" office:value-type="date" office:date-value="2002-01-01" calcext:value-type="date">
+     <table:table-cell table:style-name="ce30" office:value-type="date" office:date-value="2002-01-01" calcext:value-type="date">
       <text:p>01/01/2002</text:p>
-     </table:table-cell>
-     <table:table-cell table:number-columns-repeated="3"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce20"/>
-     <table:table-cell table:number-columns-repeated="7"/>
-     <table:table-cell office:value-type="float" office:value="17" calcext:value-type="float">
-      <text:p>17</text:p>
-     </table:table-cell>
-     <table:table-cell table:number-columns-repeated="3"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce20"/>
-     <table:table-cell table:style-name="ce29"/>
-     <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce30"/>
-     <table:table-cell table:style-name="ce32" office:value-type="date" office:date-value="2001-12-01" calcext:value-type="date">
-      <text:p>12/01/2001</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce30" table:number-columns-repeated="3"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce21"/>
-     <table:table-cell table:style-name="ce29"/>
-     <table:table-cell table:number-columns-repeated="10"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce21"/>
-     <table:table-cell table:style-name="ce29"/>
-     <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce32" office:value-type="date" office:date-value="1899-12-30" calcext:value-type="date">
-      <text:p>12/30/1899</text:p>
-     </table:table-cell>
-     <table:table-cell table:number-columns-repeated="3"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce22"/>
-     <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce31"/>
-     <table:table-cell table:style-name="ce32" office:value-type="date" office:date-value="1899-12-30" calcext:value-type="date">
-      <text:p>12/30/1899</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce30" table:number-columns-repeated="3"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce22"/>
-     <table:table-cell/>
-     <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Tdf#96756 bug</text:p>
-     </table:table-cell>
-     <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce32" office:value-type="date" office:date-value="2015-01-02" calcext:value-type="date">
-      <text:p>01/02/2015</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
@@ -1149,31 +1076,92 @@
       <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>err</text:p>
+      <text:p>Err</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce23"/>
-     <table:table-cell table:style-name="ce29" table:formula="of:=FORMULA([.A18])" office:value-type="string" office:string-value="=YEARS(DATE(2014,1,15),DATE(2016,4,1),2)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce18" table:formula="of:=ISERROR([.A12])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=YEARS(DATE(2014,1,15),DATE(2016,4,1),2)" calcext:value-type="string">
       <text:p>=YEARS(DATE(2014,1,15),DATE(2016,4,1),2)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Tdf#100440</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="9"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell office:value-type="float" office:value="17" calcext:value-type="float">
+      <text:p>17</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce24"/>
+     <table:table-cell table:style-name="ce19"/>
+     <table:table-cell table:style-name="ce27"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce28"/>
+     <table:table-cell table:style-name="ce30" office:value-type="date" office:date-value="2001-12-01" calcext:value-type="date">
+      <text:p>12/01/2001</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce28" table:number-columns-repeated="3"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce20"/>
+     <table:table-cell table:style-name="ce27"/>
+     <table:table-cell table:number-columns-repeated="10"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce20"/>
+     <table:table-cell table:style-name="ce27"/>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce30" office:value-type="date" office:date-value="1899-12-30" calcext:value-type="date">
+      <text:p>12/30/1899</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce21"/>
+     <table:table-cell table:number-columns-repeated="6"/>
      <table:table-cell table:style-name="ce29"/>
+     <table:table-cell table:style-name="ce30" office:value-type="date" office:date-value="1899-12-30" calcext:value-type="date">
+      <text:p>12/30/1899</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce28" table:number-columns-repeated="3"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce21"/>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Tdf#96756 bug</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce30" office:value-type="date" office:date-value="2015-01-02" calcext:value-type="date">
+      <text:p>01/02/2015</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="Default"/>
+     <table:table-cell table:number-columns-repeated="11"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce22"/>
+     <table:table-cell table:style-name="ce27"/>
      <table:table-cell table:number-columns-repeated="10"/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="4">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce25"/>
+     <table:table-cell table:style-name="ce23"/>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce25"/>
+     <table:table-cell table:style-name="ce23"/>
      <table:table-cell table:number-columns-repeated="6"/>
      <table:table-cell office:value-type="string" calcext:value-type="string"><text:p>YEARS</text:p><text:p/><text:p>Calculates the difference in years between two dates.</text:p><text:p>Syntax</text:p><text:p/><text:p>YEARS(StartDate; EndDate; Type)</text:p><text:p/><text:p>StartDate is the first date</text:p><text:p/><text:p>EndDate is the second date</text:p><text:p/><text:p>Type calculates the type of difference. Possible values are 0 (interval) and 1 (in calendar years).</text:p>
      </table:table-cell>
@@ -1181,44 +1169,44 @@
     </table:table-row>
     <table:table-row table:style-name="ro7">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce25"/>
+     <table:table-cell table:style-name="ce23"/>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro8">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce25"/>
+     <table:table-cell table:style-name="ce23"/>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro9">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce25"/>
+     <table:table-cell table:style-name="ce23"/>
      <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce32"/>
+     <table:table-cell table:style-name="ce30"/>
      <table:table-cell table:number-columns-repeated="4"/>
     </table:table-row>
     <table:table-row table:style-name="ro10">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce20"/>
+     <table:table-cell table:style-name="ce19"/>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro10">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce26"/>
+     <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro11">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce27"/>
+     <table:table-cell table:style-name="ce25"/>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce27"/>
+     <table:table-cell table:style-name="ce25"/>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="69">
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce28"/>
+     <table:table-cell table:style-name="ce26"/>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="1048475">
@@ -1228,7 +1216,7 @@
      <table:table-cell table:number-columns-repeated="14"/>
     </table:table-row>
     <calcext:conditional-formats>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C29:Sheet2.C100 Sheet2.C20:Sheet2.C27 Sheet2.C2:Sheet2.C2 Sheet2.C14:Sheet2.C15">
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C29:Sheet2.C100 Sheet2.C20:Sheet2.C27 Sheet2.C2:Sheet2.C3 Sheet2.C14:Sheet2.C15">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C2"/>
@@ -1243,35 +1231,30 @@
       <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C19"/>
       <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C19"/>
      </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C7:Sheet2.C7">
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C5:Sheet2.C7">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C7"/>
       <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C7"/>
       <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C7"/>
      </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C7:Sheet2.C8">
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C5:Sheet2.C8">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C7"/>
       <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C7"/>
       <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C7"/>
      </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C19:Sheet2.C29 Sheet2.C3:Sheet2.C9 Sheet2.C12:Sheet2.C17">
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C19:Sheet2.C29 Sheet2.C13:Sheet2.C17 Sheet2.C4:Sheet2.C9">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C3"/>
       <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C3"/>
       <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C3"/>
      </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C18:Sheet2.C18">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C18"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C18"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C18"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C10:Sheet2.C11">
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C10:Sheet2.C12">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C10"/>
       <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C10"/>
       <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C10"/>
      </calcext:conditional-format>
     </calcext:conditional-formats>
    </table:table>
-   <table:table table:name="&apos;file:///home/zdenek/Dokumenty/LO/sc-unit-test/Project%20Calc%20functions%20tests/fods/years.fods/function_based_test_Example.fods/function_based_test_Example_reference.fods&apos;#Sheet2" table:print="false" table:style-name="ta_extref">
-    <table:table-source xlink:type="simple" xlink:href="/home/zdenek/Dokumenty/LO/sc-unit-test/Project%20Calc%20functions%20tests/fods/years.fods/function_based_test_Example.fods/function_based_test_Example_reference.fods" table:table-name="Sheet2" table:mode="copy-results-only"/>
+   <table:table table:name="&apos;file:///home/zdenek/Dokumenty/LO/sc-unit-test/Project%20Calc%20functions%20tests/fods/years.fods/years.fods/years.fods/years.fods/years.fods/function_based_test_Example.fods/function_based_test_Example_reference.fods&apos;#Sheet2" table:print="false" table:style-name="ta_extref">
+    <table:table-source xlink:type="simple" xlink:href="years.fods/years.fods/years.fods/years.fods/function_based_test_Example.fods/function_based_test_Example_reference.fods" table:table-name="Sheet2" table:mode="copy-results-only"/>
     <table:table-column table:number-columns-repeated="8"/>
     <table:table-row table:number-rows-repeated="2">
      <table:table-cell table:number-columns-repeated="8"/>
