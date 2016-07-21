@@ -28,6 +28,7 @@
 #include <svl/srchitem.hxx>
 
 #include <comphelper/lok.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <sfx2/lokhelper.hxx>
 
 #include <tabvwsh.hxx>
@@ -55,6 +56,7 @@ public:
     void testDocumentSize();
     void testViewCursors();
     void testTextViewSelection();
+    void testDocumentSizeChanged();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -63,6 +65,7 @@ public:
     CPPUNIT_TEST(testDocumentSize);
     CPPUNIT_TEST(testViewCursors);
     CPPUNIT_TEST(testTextViewSelection);
+    CPPUNIT_TEST(testDocumentSizeChanged);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -72,6 +75,7 @@ private:
 
     /// document size changed callback.
     osl::Condition m_aDocSizeCondition;
+    Size m_aDocumentSize;
 
     uno::Reference<lang::XComponent> mxComponent;
     // TODO various test-related members - when needed
@@ -142,12 +146,18 @@ static void lcl_convertRectangle(const OUString& rString, Rectangle& rRectangle)
 }
 */
 
-void ScTiledRenderingTest::callbackImpl(int nType, const char* /*pPayload*/)
+void ScTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
 {
     switch (nType)
     {
     case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
     {
+        OString aPayload(pPayload);
+        sal_Int32 nIndex = 0;
+        OString aToken = aPayload.getToken(0, ',', nIndex);
+        m_aDocumentSize.setWidth(aToken.toInt32());
+        aToken = aPayload.getToken(0, ',', nIndex);
+        m_aDocumentSize.setHeight(aToken.toInt32());
         m_aDocSizeCondition.set();
     }
     break;
@@ -397,7 +407,7 @@ void ScTiledRenderingTest::testViewCursors()
     comphelper::LibreOfficeKit::setActive(false);
 }
 
-void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand)
+void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand, const uno::Sequence<beans::PropertyValue>& rArguments)
 {
     uno::Reference<frame::XController> xController = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY)->getCurrentController();
     CPPUNIT_ASSERT(xController.is());
@@ -408,7 +418,7 @@ void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, con
     uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
     CPPUNIT_ASSERT(xDispatchHelper.is());
 
-    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, {});
+    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rArguments);
 }
 
 void ScTiledRenderingTest::testTextViewSelection()
@@ -426,10 +436,34 @@ void ScTiledRenderingTest::testTextViewSelection()
 
     // Create a selection on two cells in the second view, that's a text selection in LOK terms.
     aView1.m_bTextViewSelectionInvalidated = false;
-    lcl_dispatchCommand(mxComponent, ".uno:GoRightSel");
+    lcl_dispatchCommand(mxComponent, ".uno:GoRightSel", {});
     Scheduler::ProcessEventsToIdle();
     // Make sure the first view got its notification.
     CPPUNIT_ASSERT(aView1.m_bTextViewSelectionInvalidated);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testDocumentSizeChanged()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    // Load a document that doesn't have much content.
+    createDoc("small.ods");
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ScTiledRenderingTest::callback, this);
+
+    // Go to the A30 cell -- that will extend the document size.
+    uno::Sequence<beans::PropertyValue> aPropertyValues =
+    {
+        comphelper::makePropertyValue("ToPoint", OUString("$A$30")),
+    };
+    lcl_dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+    // Assert that the size in the payload is not 0.
+    CPPUNIT_ASSERT(m_aDocumentSize.getWidth() > 0);
+    CPPUNIT_ASSERT(m_aDocumentSize.getHeight() > 0);
 
     mxComponent->dispose();
     mxComponent.clear();
