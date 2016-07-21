@@ -460,10 +460,7 @@ void OCalcTable::fillColumns()
         switch ( eType )
         {
             case DataType::VARCHAR:
-                {
-                    static const OUString s_sType("VARCHAR");
-                    aTypeName = s_sType;
-                }
+                aTypeName = "VARCHAR";
                 break;
             case DataType::DECIMAL:
                 aTypeName = "DECIMAL";
