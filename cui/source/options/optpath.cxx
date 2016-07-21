@@ -711,7 +711,6 @@ IMPL_LINK_TYPED( SvxPathTabPage, DialogClosedHdl, DialogClosedEvent*, pEvt, void
         OUString sURL = xFolderPicker->getDirectory();
         ChangeCurrentEntry( sURL );
     }
-    xFolderPicker.clear();
 }
 
 void SvxPathTabPage::GetPathList(
