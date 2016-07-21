@@ -354,16 +354,17 @@ SmNodeList::iterator SmCursor::FindPositionInLineList(SmNodeList* pLineList,
                 if(rCaretPos.Index > 0)
                 {
                     SmTextNode* pText = static_cast<SmTextNode*>(rCaretPos.pSelectedNode);
+                    if (rCaretPos.Index == pText->GetText().getLength())
+                        return ++it;
                     OUString str1 = pText->GetText().copy(0, rCaretPos.Index);
                     OUString str2 = pText->GetText().copy(rCaretPos.Index);
                     pText->ChangeText(str1);
                     ++it;
                     //Insert str2 as new text node
-                    if(!str2.isEmpty()){
-                        SmTextNode* pNewText = new SmTextNode(pText->GetToken(), pText->GetFontDesc());
-                        pNewText->ChangeText(str2);
-                        it = pLineList->insert(it, pNewText);
-                    }
+                    assert(!str2.isEmpty());
+                    SmTextNode* pNewText = new SmTextNode(pText->GetToken(), pText->GetFontDesc());
+                    pNewText->ChangeText(str2);
+                    it = pLineList->insert(it, pNewText);
                 }
             }else
                 ++it;
