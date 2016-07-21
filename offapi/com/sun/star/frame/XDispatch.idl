@@ -53,7 +53,7 @@ module com {  module sun {  module star {  module frame {
  */
 published interface XDispatch: com::sun::star::uno::XInterface
 {
-    /** dispatches (executes) an URL asynchronously.
+    /** dispatches (executes) an URL
 
         <p>
         It is only allowed to dispatch URLs for which this XDispatch
@@ -64,10 +64,22 @@ published interface XDispatch: com::sun::star::uno::XInterface
             fully parsed URL describing the feature which should be dispatched (=executed)
 
         @param Arguments
-            optional arguments for this request.
+    /** @since LibreOffice 5.3
+            optional arguments for this request
+            (see com::sun::star::document::MediaDescriptor)
             They depend on the real implementation of the dispatch object.
 
-            <i>some code for a click-handler (Java)</i>
+            The execution of synchron or asynchron will control with
+
+            <p>
+            By default, the "SychronMode" is `FALSE` and the execution is asynchronously.
+            But when is set to `TRUE`, the execution is synchronously and the further processing
+            must occur synchronically.
+            </p>
+         */
+        [attribute, readonly] boolean SynchronMode;
+
+        /** <i>some code for a click-handler (Java)</i>
             @code{.java}
             void myOnClick(String sURL,String sTargetFrame,
                            com.sun.star.beans.PropertyValue[] lArguments)
