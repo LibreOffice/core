@@ -2195,27 +2195,27 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
 
 uno::Sequence< OUString > SAL_CALL OReportDefinition::getAvailableServiceNames() throw( uno::RuntimeException, std::exception )
 {
-    static const OUString aSvxComponentServiceNameList[] =
+    static const OUStringLiteral aSvxComponentServiceNameList[] =
     {
-        OUString("com.sun.star.form.component.FixedText"),
-        OUString("com.sun.star.form.component.DatabaseImageControl"),
-        OUString("com.sun.star.style.PageStyle"),
-        OUString("com.sun.star.style.GraphicStyle"),
-        OUString("com.sun.star.style.FrameStyle"),
-        OUString("com.sun.star.drawing.Defaults"),
-        OUString("com.sun.star.document.ImportEmbeddedObjectResolver"),
-        OUString("com.sun.star.document.ExportEmbeddedObjectResolver"),
-        OUString("com.sun.star.document.ImportGraphicObjectResolver"),
-        OUString("com.sun.star.document.ExportGraphicObjectResolver"),
-        OUString("com.sun.star.chart2.data.DataProvider"),
-        OUString("com.sun.star.xml.NamespaceMap"),
-        OUString("com.sun.star.document.Settings"),
-        OUString("com.sun.star.drawing.GradientTable"),
-        OUString("com.sun.star.drawing.HatchTable"),
-        OUString("com.sun.star.drawing.BitmapTable"),
-        OUString("com.sun.star.drawing.TransparencyGradientTable"),
-        OUString("com.sun.star.drawing.DashTable"),
-        OUString("com.sun.star.drawing.MarkerTable")
+        OUStringLiteral("com.sun.star.form.component.FixedText"),
+        OUStringLiteral("com.sun.star.form.component.DatabaseImageControl"),
+        OUStringLiteral("com.sun.star.style.PageStyle"),
+        OUStringLiteral("com.sun.star.style.GraphicStyle"),
+        OUStringLiteral("com.sun.star.style.FrameStyle"),
+        OUStringLiteral("com.sun.star.drawing.Defaults"),
+        OUStringLiteral("com.sun.star.document.ImportEmbeddedObjectResolver"),
+        OUStringLiteral("com.sun.star.document.ExportEmbeddedObjectResolver"),
+        OUStringLiteral("com.sun.star.document.ImportGraphicObjectResolver"),
+        OUStringLiteral("com.sun.star.document.ExportGraphicObjectResolver"),
+        OUStringLiteral("com.sun.star.chart2.data.DataProvider"),
+        OUStringLiteral("com.sun.star.xml.NamespaceMap"),
+        OUStringLiteral("com.sun.star.document.Settings"),
+        OUStringLiteral("com.sun.star.drawing.GradientTable"),
+        OUStringLiteral("com.sun.star.drawing.HatchTable"),
+        OUStringLiteral("com.sun.star.drawing.BitmapTable"),
+        OUStringLiteral("com.sun.star.drawing.TransparencyGradientTable"),
+        OUStringLiteral("com.sun.star.drawing.DashTable"),
+        OUStringLiteral("com.sun.star.drawing.MarkerTable")
     };
 
     static const sal_uInt16 nSvxComponentServiceNameListCount = SAL_N_ELEMENTS(aSvxComponentServiceNameList);

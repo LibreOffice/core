@@ -1099,11 +1099,7 @@ OString XMLUtil::QuotHTML( const OString &rString )
     UErrorCode nIcuErr = U_ZERO_ERROR;
     static const sal_uInt32 nSearchFlags =
         UREGEX_DOTALL | UREGEX_CASE_INSENSITIVE;
-    static const OUString sPattern(
-        "<[/]\?\?[a-z_-]+?(?:| +[a-z]+?=\".*?\") *[/]\?\?>");
-    static const UnicodeString sSearchPat(
-        reinterpret_cast<const UChar*>(sPattern.getStr()),
-        sPattern.getLength() );
+    static const UnicodeString sSearchPat( "<[/]\?\?[a-z_-]+?(?:| +[a-z]+?=\".*?\") *[/]\?\?>" );
 
     const OUString sOUSource = OStringToOUString(rString, RTL_TEXTENCODING_UTF8);
     icu::UnicodeString sSource(
