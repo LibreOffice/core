@@ -382,7 +382,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         if( pTableObj )
         {
             sal_Int32 nX = 0, nY = 0;
-            switch( pTableObj->CheckTableHit( aLocalLogicPosition, nX, nY ) )
+            switch( pTableObj->CheckTableHit( aLocalLogicPosition, nX, nY, mnHitTolLog ) )
             {
                 case sdr::table::SDRTABLEHIT_CELL:
                     eHit = SDRHIT_CELL;
