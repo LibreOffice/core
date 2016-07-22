@@ -262,8 +262,6 @@ private:
         bool mbHasUnderlineAttr;
 
         FontLineStyle meUnderline;
-        FontLineStyle meUnderlineType;
-        FontLineStyle meUnderlineWidth;
         Color maUnderlineColor;
 
         font();
