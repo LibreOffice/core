@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a8bc5a2_57ff1434",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2016-07-22T12:33:36Z",
+      "side": 1,
+      "message": "These all customWidths are set according to expectation.\nPreviously the default width was wrongly calculated, and results were really bad (for example all columnt have customWidths set to true)",
+      "revId": "e4b9c8e07841657734d5beeba2ff5855abd40a55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_f734a04b",
         "filename": "sc/qa/unit/subsequent_export-test.cxx",
         "patchSetId": 8
@@ -172,6 +189,24 @@
       "side": 1,
       "message": "I\u0027m not such a big fan of that. They are in the whole XLSX code sorted by name and you will never be able to match the excel export.\nIn the end attribute order is undefined and I can easily imagine that there are also small differences in each Excel version.\nMy preferred option would be to leave that as is unless there are real bugs with our order.",
       "parentUuid": "5a8bc5a2_b7813850",
+      "revId": "e4b9c8e07841657734d5beeba2ff5855abd40a55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_d7f2446f",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1673,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2016-07-22T12:33:36Z",
+      "side": 1,
+      "message": "From my perspective keeping Excel order is easier to compare .xlsx files. But I could leave with it.",
+      "parentUuid": "5a8bc5a2_5792b458",
       "revId": "e4b9c8e07841657734d5beeba2ff5855abd40a55",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
