@@ -1381,7 +1381,7 @@ class CopyByCloneHandler
     InsertDeleteFlags mnCopyFlags;
 
     sc::StartListeningType meListenType;
-    int mnFormulaCellCloneFlags;
+    ScCloneFlags mnFormulaCellCloneFlags;
 
     void setDefaultAttrToDest(size_t nRow)
     {
@@ -1502,7 +1502,7 @@ public:
         mpSharedStringPool(pSharedStringPool),
         mnCopyFlags(nCopyFlags),
         meListenType(sc::SingleCellListening),
-        mnFormulaCellCloneFlags(bGlobalNamesToLocal ? SC_CLONECELL_NAMES_TO_LOCAL : 0)
+        mnFormulaCellCloneFlags(bGlobalNamesToLocal ? ScCloneFlags::NamesToLocal : ScCloneFlags::Default)
     {
         if (mpDestPos)
             maDestPos = *mpDestPos;
@@ -1763,9 +1763,6 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
             UpdateReferenceOnCopy(aRefCxt);
             UpdateCompile();
         }
-
-        //TODO: make CopyToColumn "const" !!! (obsolete comment ?)
-
         pPattern = aAttrIter.Next( nStart, nEnd );
     }
 }
@@ -1784,8 +1781,6 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
             sc::CopyToDocContext aCxt(*rDestCol.pDocument);
             CopyToColumn(aCxt, nStart, nEnd, InsertDeleteFlags::CONTENTS, false, rDestCol);
 
-            //  UpdateUsed not needed, is already done in TestCopyScenario (obsolete comment ?)
-
             sc::RefUpdateContext aRefCxt(*pDocument);
             aRefCxt.meMode = URM_COPY;
             aRefCxt.maRange = ScRange(rDestCol.nCol, nStart, rDestCol.nTab, rDestCol.nCol, nEnd, rDestCol.nTab);
@@ -1793,9 +1788,6 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
             rDestCol.UpdateReferenceOnCopy(aRefCxt);
             rDestCol.UpdateCompile();
         }
-
-        //TODO: make CopyToColumn "const" !!! (obsolete comment ?)
-
         pPattern = aAttrIter.Next( nStart, nEnd );
     }
 }

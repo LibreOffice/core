@@ -220,27 +220,33 @@ enum class ScEnterMode {
 #define SUBTOTAL_IGN_HIDDEN        0x02
 #define SUBTOTAL_IGN_FILTERED      0x01
 
+enum class ScCloneFlags{
 /** Default cell clone flags: do not start listening, do not adjust 3D refs to
     old position, clone note captions of cell notes. */
-const int SC_CLONECELL_DEFAULT          = 0x0000;
+    Default          = 0x0000,
 
 /** If set, cloned formula cells will start to listen to the document. */
-const int SC_CLONECELL_STARTLISTENING   = 0x0001;
+    StartListening   = 0x0001,
 
 /** If set, relative 3D references of cloned formula cells will be adjusted to
     old position (used while swapping cells for sorting a cell range). */
-const int SC_CLONECELL_ADJUST3DREL      = 0x0002;
+    Adjust3Drel      = 0x0002,
 
 /** If set, the caption object of a cell note will not be cloned (used while
     copying cells to undo document, where captions are handled in drawing undo). */
-const int SC_CLONECELL_NOCAPTION        = 0x0004;
+    NoCaption        = 0x0004,
 
 /** If set, absolute refs will not transformed to external references */
-const int SC_CLONECELL_NOMAKEABS_EXTERNAL = 0x0008;
+    NoMakeAbsExternal = 0x0008,
 
 /** If set, global named expressions will be converted to sheet-local named
     expressions. */
-const int SC_CLONECELL_NAMES_TO_LOCAL   = 0x0010;
+    NamesToLocal   = 0x0010
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ScCloneFlags> : is_typed_flags<ScCloneFlags, 0x1f> {};
+}
 
 #ifndef DELETEZ
 #define DELETEZ(pPtr) { delete pPtr; pPtr = 0; }

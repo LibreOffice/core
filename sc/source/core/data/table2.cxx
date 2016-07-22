@@ -806,7 +806,7 @@ public:
         }
 
         ScFormulaCell* pNew = new ScFormulaCell(
-            *p, mrClipTab.GetDoc(), getDestPos(nRow), SC_CLONECELL_STARTLISTENING);
+            *p, mrClipTab.GetDoc(), getDestPos(nRow), ScCloneFlags::StartListening);
 
         //  rotate reference
         //  for Cut, the referneces are later adjusted through UpdateTranspose

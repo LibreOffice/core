@@ -804,7 +804,7 @@ ScFormulaCell::ScFormulaCell(
         pDocument->AddSubTotalCell(this);
 }
 
-ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, const ScAddress& rPos, int nCloneFlags ) :
+ScFormulaCell::ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const ScAddress& rPos, ScCloneFlags nCloneFlags) :
     SvtListener(),
     aResult( rCell.aResult ),
     eTempGrammar( rCell.eTempGrammar),
@@ -852,7 +852,7 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     {
         if (!pDocument->IsClipboardSource() || aPos.Tab() != rCell.aPos.Tab())
         {
-            bool bGlobalNamesToLocal = ((nCloneFlags & SC_CLONECELL_NAMES_TO_LOCAL) != 0);
+            bool bGlobalNamesToLocal = ((nCloneFlags & ScCloneFlags::NamesToLocal) != ScCloneFlags::Default);
             formula::FormulaToken* pToken = nullptr;
             while((pToken = pCode->GetNextName())!= nullptr)
             {
@@ -865,7 +865,7 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
         }
 
         bool bCopyBetweenDocs = pDocument->GetPool() != rCell.pDocument->GetPool();
-        if (bCopyBetweenDocs && !(nCloneFlags & SC_CLONECELL_NOMAKEABS_EXTERNAL))
+        if (bCopyBetweenDocs && !(nCloneFlags & ScCloneFlags::NoMakeAbsExternal))
         {
             pCode->ReadjustAbsolute3DReferences( rCell.pDocument, &rDoc, rCell.aPos);
         }
@@ -880,7 +880,7 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
         pCode->AdjustReferenceOnCopy( aPos);
     }
 
-    if ( nCloneFlags & SC_CLONECELL_ADJUST3DREL )
+    if ( nCloneFlags & ScCloneFlags::Adjust3Drel )
         pCode->ReadjustRelative3DReferences( rCell.aPos, aPos );
 
     if( !bCompile )
@@ -930,7 +930,7 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
         }
     }
 
-    if( nCloneFlags & SC_CLONECELL_STARTLISTENING )
+    if( nCloneFlags & ScCloneFlags::StartListening )
         StartListeningTo( &rDoc );
 
     if (bSubTotal)
@@ -962,7 +962,7 @@ ScFormulaCell* ScFormulaCell::Clone() const
 
 ScFormulaCell* ScFormulaCell::Clone( const ScAddress& rPos ) const
 {
-    return new ScFormulaCell(*this, *pDocument, rPos, SC_CLONECELL_DEFAULT);
+    return new ScFormulaCell(*this, *pDocument, rPos, ScCloneFlags::Default);
 }
 
 size_t ScFormulaCell::GetHash() const

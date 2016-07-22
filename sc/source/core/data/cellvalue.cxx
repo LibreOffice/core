@@ -308,7 +308,7 @@ void ScCellValue::assign( const ScDocument& rDoc, const ScAddress& rPos )
     }
 }
 
-void ScCellValue::assign( const ScCellValue& rOther, ScDocument& rDestDoc, int nCloneFlags )
+void ScCellValue::assign(const ScCellValue& rOther, ScDocument& rDestDoc, ScCloneFlags nCloneFlags)
 {
     clear();
 

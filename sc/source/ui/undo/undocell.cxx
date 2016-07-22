@@ -230,7 +230,7 @@ void ScUndoEnterData::Undo()
     for (Value & rVal : maOldValues)
     {
         ScCellValue aNewCell;
-        aNewCell.assign(rVal.maCell, rDoc, SC_CLONECELL_STARTLISTENING);
+        aNewCell.assign(rVal.maCell, rDoc, ScCloneFlags::StartListening);
         ScAddress aPos = maPos;
         aPos.SetTab(rVal.mnTab);
         aNewCell.release(rDoc, aPos);
@@ -342,7 +342,7 @@ void ScUndoEnterValue::Undo()
 
     ScDocument& rDoc = pDocShell->GetDocument();
     ScCellValue aNewCell;
-    aNewCell.assign(maOldCell, rDoc, SC_CLONECELL_STARTLISTENING);
+    aNewCell.assign(maOldCell, rDoc, ScCloneFlags::StartListening);
     aNewCell.release(rDoc, aPos);
 
     pDocShell->PostPaintCell( aPos );
