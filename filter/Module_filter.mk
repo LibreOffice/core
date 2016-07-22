@@ -84,4 +84,8 @@ endif
 	JunitTest_filter_complex \
 ))
 
+$(eval $(call gb_Module_add_slowcheck_targets,filter,\
+    CppunitTest_filter_dialogs_test \
+))
+
 # vim: set noet sw=4 ts=4:
