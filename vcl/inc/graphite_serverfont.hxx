@@ -76,7 +76,7 @@ public:
         {
             return maImpl.FillDXArray(dxa);
         }
-        virtual sal_Int32 GetTextBreak(DeviceCoordinate max_width, DeviceCoordinate extra, int factor) const override
+        virtual sal_Int32 GetTextBreak(DeviceCoordinate max_width, DeviceCoordinate extra=0, int factor=1) const override
         {
             return maImpl.GetTextBreak(max_width, extra, factor);
         }

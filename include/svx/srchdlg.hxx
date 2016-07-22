@@ -141,7 +141,7 @@ public:
     void SetSrchFlag( bool bSuccess ) { mbSuccess = bSuccess; }
     bool GetSrchFlag() { return mbSuccess; }
     virtual css::uno::Reference< css::awt::XWindowPeer >
-        GetComponentInterface( bool bCreate ) override;
+        GetComponentInterface( bool bCreate = true ) override;
 
     void            SetSaveToModule(bool b);
 

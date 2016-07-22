@@ -198,8 +198,8 @@ protected:
 
     virtual void    QueryObjAreaPixel( Rectangle& rRect ) const override;
 
-    virtual OUString GetSelectionText( bool bWholeWord ) override;
-    virtual bool     HasSelection( bool bText ) const override;
+    virtual OUString GetSelectionText( bool bWholeWord = false ) override;
+    virtual bool     HasSelection( bool bText = true ) const override;
 
     virtual void    WriteUserData(OUString &, bool bBrowse = false) override;
     virtual void    ReadUserData(const OUString &, bool bBrowse = false) override;

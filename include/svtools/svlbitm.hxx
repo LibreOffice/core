@@ -113,7 +113,7 @@ public:
     virtual sal_uInt16 GetType() const override;
     virtual void InitViewData(SvTreeListBox* pView,
                               SvTreeListEntry* pEntry,
-                              SvViewDataItem* pViewData) override;
+                              SvViewDataItem* pViewData = nullptr) override;
 
     const OUString& GetText() const
     {
@@ -140,7 +140,7 @@ public:
     SvLBoxBmp();
     virtual ~SvLBoxBmp();
     virtual sal_uInt16 GetType() const override;
-    virtual void InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) override;
+    virtual void InitViewData( SvTreeListBox* ,SvTreeListEntry*, SvViewDataItem* = nullptr ) override;
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev,  vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
     virtual SvLBoxItem* Create() const override;
@@ -167,7 +167,7 @@ public:
     virtual ~SvLBoxButton();
     virtual void InitViewData(SvTreeListBox* pView,
                               SvTreeListEntry* pEntry,
-                              SvViewDataItem* pViewData) override;
+                              SvViewDataItem* pViewData = nullptr) override;
 
     virtual sal_uInt16 GetType() const override;
     bool ClickHdl(SvTreeListBox* pView, SvTreeListEntry* );
@@ -252,7 +252,7 @@ public:
     virtual sal_uInt16 GetType() const override;
     virtual void InitViewData(SvTreeListBox* pView,
                               SvTreeListEntry* pEntry,
-                              SvViewDataItem* pViewData) override;
+                              SvViewDataItem* pViewData = nullptr) override;
     virtual void Paint(const Point& rPos,
                        SvTreeListBox& rOutDev,
                        vcl::RenderContext& rRenderContext,

@@ -95,7 +95,7 @@ public:
 
     virtual void InitViewData(SvTreeListBox* pView,
                               SvTreeListEntry* pEntry,
-                              SvViewDataItem* pViewData) override;
+                              SvViewDataItem* pViewData = nullptr) override;
 };
 
 

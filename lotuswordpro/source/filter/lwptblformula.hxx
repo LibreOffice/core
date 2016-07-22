@@ -196,7 +196,7 @@ class LwpFormulaInfo : public LwpCellList
 public:
     LwpFormulaInfo(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     OUString Convert(LwpTableLayout* pCellsMap);
-    void Convert(XFCell * pCell, LwpTableLayout* pCellsMap) override;
+    void Convert(XFCell * pCell, LwpTableLayout* pCellsMap=nullptr) override;
 protected:
     void Read() override;
     bool ReadCellID();

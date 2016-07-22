@@ -100,7 +100,7 @@ public:
     // Clone() operator, normally just calls the local copy constructor
     BaseProperties& Clone(SdrObject& rObj) const override;
 
-    virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem) override;
+    virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
 };
 
 TableProperties::TableProperties(SdrObject& rObj)

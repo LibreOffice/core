@@ -201,7 +201,7 @@ public:
     virtual void    PrepareReload() override;
     virtual void    LoadStyles( SfxObjectShell &rSource ) override;
 
-    virtual bool    DoSaveCompleted( SfxMedium * pNewStor, bool bRegisterRecent ) override;     // SfxObjectShell
+    virtual bool    DoSaveCompleted( SfxMedium * pNewStor=nullptr, bool bRegisterRecent=true ) override;     // SfxObjectShell
     virtual bool    QuerySlotExecutable( sal_uInt16 nSlotId ) override;
 
     virtual void    Draw( OutputDevice *, const JobSetup & rSetup,

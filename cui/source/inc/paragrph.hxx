@@ -95,7 +95,7 @@ private:
     DECL_LINK_TYPED( AutoHdl_Impl, Button*, void );
 
 protected:
-    virtual DeactivateRC    DeactivatePage( SfxItemSet* pSet = nullptr ) override;
+    virtual DeactivateRC    DeactivatePage( SfxItemSet* pSet ) override;
 
 
 public:
@@ -162,7 +162,7 @@ class SvxParaAlignTabPage : public SfxTabPage
                             SvxParaAlignTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
 protected:
-    virtual DeactivateRC    DeactivatePage( SfxItemSet* pSet = nullptr ) override;
+    virtual DeactivateRC    DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
     virtual ~SvxParaAlignTabPage();
@@ -214,7 +214,7 @@ public:
     void                DisablePageBreak();
 
 protected:
-    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet = nullptr ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 private:
                         SvxExtParagraphTabPage( vcl::Window* pParent, const SfxItemSet& rSet );

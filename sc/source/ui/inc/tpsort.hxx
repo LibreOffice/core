@@ -64,7 +64,7 @@ protected:
     virtual void        ActivatePage    ( const SfxItemSet& rSet ) override;
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
-    virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet = nullptr) override;
+    virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet ) override;
 
 private:
     OUString            aStrUndefined;
@@ -120,7 +120,7 @@ protected:
     virtual void        ActivatePage    ( const SfxItemSet& rSet ) override;
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
-    virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet = nullptr) override;
+    virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet ) override;
 
 private:
 

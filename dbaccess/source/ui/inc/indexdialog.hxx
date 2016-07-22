@@ -54,7 +54,7 @@ namespace dbaui
 
         void SetEndEditHdl(const Link<SvTreeListEntry*,bool>& _rHdl) { m_aEndEditHdl = _rHdl; }
 
-        virtual bool Select(SvTreeListEntry* pEntry, bool bSelect) override;
+        virtual bool Select(SvTreeListEntry* pEntry, bool bSelect = true) override;
 
         void enableSelectHandler();
         void disableSelectHandler();

@@ -200,7 +200,7 @@ public:
     void        GetState(SfxItemSet &);
 
     virtual void SetVisArea (const Rectangle & rVisArea) override;
-    virtual void SetModified(bool bModified) override;
+    virtual void SetModified(bool bModified = true) override;
 
     /** Get a cursor for modifying this document
      * @remarks Don't store this reference, a new cursor may be made...

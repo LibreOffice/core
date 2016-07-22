@@ -268,7 +268,7 @@ public:
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const override;
     virtual long            CalcTitleWidth() const override;
-    virtual void            DrawWindow(vcl::RenderContext& rRenderContext, BorderWindowDraw nDrawFlags, const Point* pOffset) override;
+    virtual void            DrawWindow(vcl::RenderContext& rRenderContext, BorderWindowDraw nDrawFlags, const Point* pOffset = nullptr) override;
 };
 
 class ImplSmallBorderWindowView : public ImplBorderWindowView
@@ -290,7 +290,7 @@ public:
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const override;
     virtual long            CalcTitleWidth() const override;
-    virtual void            DrawWindow(vcl::RenderContext& rRenderContext, BorderWindowDraw nDrawFlags, const Point* pOffset) override;
+    virtual void            DrawWindow(vcl::RenderContext& rRenderContext, BorderWindowDraw nDrawFlags, const Point* pOffset = nullptr) override;
 };
 
 class ImplStdBorderWindowView : public ImplBorderWindowView
@@ -313,7 +313,7 @@ public:
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const override;
     virtual long            CalcTitleWidth() const override;
-    virtual void            DrawWindow(vcl::RenderContext& rRenderContext, BorderWindowDraw nDrawFlags, const Point* pOffset) override;
+    virtual void            DrawWindow(vcl::RenderContext& rRenderContext, BorderWindowDraw nDrawFlags, const Point* pOffset = nullptr) override;
 };
 
 #endif // INCLUDED_VCL_INC_BRDWIN_HXX

@@ -1361,7 +1361,7 @@ void SmViewShell::Insert( SfxMedium& rMedium )
         }
 
         pDoc->Parse();
-        pDoc->SetModified(true);
+        pDoc->SetModified();
 
         SfxBindings &rBnd = GetViewFrame()->GetBindings();
         rBnd.Invalidate(SID_GAPHIC_SM);
@@ -1396,7 +1396,7 @@ void SmViewShell::InsertFrom(SfxMedium &rMedium)
             SAL_WARN( "starmath", "EditWindow missing" );
 
         pDoc->Parse();
-        pDoc->SetModified(true);
+        pDoc->SetModified();
 
         SfxBindings& rBnd = GetViewFrame()->GetBindings();
         rBnd.Invalidate(SID_GAPHIC_SM);

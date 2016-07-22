@@ -86,7 +86,7 @@ public:
             ScMergeFlagAttr(ScMF nFlags);
             virtual ~ScMergeFlagAttr();
 
-    SfxPoolItem * Clone(SfxItemPool * pPool) const override;
+    SfxPoolItem * Clone(SfxItemPool * pPool = nullptr) const override;
 
     ScMF    GetValue() const { return (ScMF) SfxInt16Item::GetValue(); }
 

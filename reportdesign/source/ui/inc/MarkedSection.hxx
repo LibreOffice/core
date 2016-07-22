@@ -36,7 +36,7 @@ namespace rptui
     public:
         /** returns the section which is currently marked.
         */
-        virtual OSectionWindow* getMarkedSection(NearSectionAccess nsa) const =0;
+        virtual OSectionWindow* getMarkedSection(NearSectionAccess nsa = CURRENT) const =0;
 
         /** mark the section on the given position .
         *

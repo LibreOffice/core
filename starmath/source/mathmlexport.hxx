@@ -106,7 +106,7 @@ public:
     void ExportAutoStyles_() override {}
     void ExportMasterStyles_() override {}
     void ExportContent_() override;
-    sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass) override;
+    sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID) override;
 
     virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
     virtual void GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;

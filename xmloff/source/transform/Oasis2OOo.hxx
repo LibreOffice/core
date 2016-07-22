@@ -55,7 +55,7 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
 
     virtual OUString GetEventName( const OUString& rName,
-                                             bool bForm ) override;
+                                             bool bForm = false ) override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_OASIS2OOO_HXX

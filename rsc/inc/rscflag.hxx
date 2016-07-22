@@ -35,7 +35,7 @@ class RscFlag : public RscConst
     RSCINST         CreateBasic( RSCINST * pInst );
 public:
                     RscFlag( Atom nId, sal_uInt32 nTypId );
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool ) override;
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnClass = false ) override;
     RSCINST         CreateClient( RSCINST * pInst, const RSCINST & rDflt,
                                   bool bOwnClass, Atom nConsId );
     sal_uInt32      Size() override;
@@ -70,7 +70,7 @@ public:
                     RscClient( Atom nId, sal_uInt32 nTypId, RscFlag * pClass,
                                Atom nConstantId );
     virtual RSCCLASS_TYPE   GetClassType() const override;
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool ) override;
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnClass = false ) override;
     sal_uInt32      Size() override { return pRefClass->Size(); }
 
                     // an assignment to a variable

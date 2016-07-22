@@ -119,7 +119,7 @@ public:
     inline GdkDisplay *GetGdkDisplay();
 
     virtual void ErrorTrapPush() override;
-    virtual bool ErrorTrapPop( bool bIgnoreError ) override;
+    virtual bool ErrorTrapPop( bool bIgnoreError = true ) override;
 
     inline GtkSalDisplay *GetGtkDisplay() const;
     bool BlockIdleTimeout() const { return blockIdleTimeout; }

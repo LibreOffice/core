@@ -76,7 +76,7 @@ public:
 
     // X errors
     virtual void            ErrorTrapPush() override;
-    virtual bool            ErrorTrapPop( bool bIgnoreError ) override;
+    virtual bool            ErrorTrapPop( bool bIgnoreError = true ) override;
     void                    XError( Display *pDisp, XErrorEvent *pEvent );
     bool                    HasXErrorOccurred() const
                                 { return m_aXErrorHandlerStack.back().m_bWas; }

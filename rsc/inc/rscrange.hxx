@@ -38,7 +38,7 @@ protected:
 public:
                     RscRange( Atom nId, sal_uInt32 nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const override;
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool ) override;
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool bOwnClass = false ) override;
                     // sets the allowed range
     void            SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum );
                     // returns the class size in bytes
@@ -76,7 +76,7 @@ protected:
 public:
                     RscLongRange( Atom nId, sal_uInt32 nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const override;
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool ) override;
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool bOwnClass = false ) override;
                     // sets the allowed range
     void            SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum );
                     // returns the class size in bytes
@@ -125,7 +125,7 @@ public:
                             nMin = nMinimum;
                             nMax = nMaximum;
                         }
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool ) override;
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool bOwnClass = false ) override;
     void            Destroy( const RSCINST & rInst ) override;
     sal_uInt32          Size() override { return nSize; }
     virtual void    SetToDefault( const RSCINST & rInst ) override
@@ -176,7 +176,7 @@ class RscBreakRange : public RscRange
 public:
                     RscBreakRange( Atom nId, sal_uInt32 nTypId );
     void            SetOutRange( sal_Int32 nNumber ) { nOutRange = nNumber; }
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool ) override;
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool bOwnClass = false ) override;
     ERRTYPE         SetNumber( const RSCINST &, sal_Int32 ) override;
 };
 

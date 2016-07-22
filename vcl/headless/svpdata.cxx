@@ -15,7 +15,7 @@ class SvpSalData : public SalGenericData
 public:
     explicit SvpSalData( SalInstance *pInstance ) : SalGenericData( SAL_DATA_SVP, pInstance ) {}
     virtual void ErrorTrapPush() override {}
-    virtual bool ErrorTrapPop( bool ) override { return false; }
+    virtual bool ErrorTrapPop( bool /*bIgnoreError*/ = true ) override { return false; }
 };
 
 // plugin factory function

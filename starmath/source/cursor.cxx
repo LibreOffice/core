@@ -1422,7 +1422,7 @@ void SmCursor::EndEdit(){
     if ( mbIsEnabledSetModifiedSmDocShell )
         mpDocShell->EnableSetModified( mbIsEnabledSetModifiedSmDocShell );
     //I think this notifies people around us that we've modified this document...
-    mpDocShell->SetModified(true);
+    mpDocShell->SetModified();
     //I think SmDocShell uses this value when it sends an update graphics event
     //Anyway comments elsewhere suggests it need to be updated...
     mpDocShell->mnModifyCount++;
