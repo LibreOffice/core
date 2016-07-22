@@ -2580,7 +2580,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
                       || sNumeratorFormat.indexOf('?') >= 0
                       || sDenominatorFormat.indexOf('?') >= 0 )
                     {
-                        for (sal_uInt16 i = 0; i < rInfo.sStrArray[j].getLength(); i++)
+                        for (sal_Int32 i = 0; i < rInfo.sStrArray[j].getLength(); i++)
                             sFrac.insert(0, ' ');
                     }
                 }
@@ -2593,7 +2593,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
                         if ( sIntegerFormat.indexOf('?') >= 0
                           || sNumeratorFormat.indexOf('?') >= 0 )
                         {
-                            for (sal_uInt16 i = 0; i < rInfo.sStrArray[j].getLength(); i++)
+                            for (sal_Int32 i = 0; i < rInfo.sStrArray[j].getLength(); i++)
                                 sFrac.insert(0, ' ');
                         }
                     }
