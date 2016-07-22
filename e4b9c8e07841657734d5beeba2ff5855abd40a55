@@ -142,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_97f99c50",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2016-07-22T12:37:22Z",
+      "side": 1,
+      "message": "I mean:\nIf SetDefWidth method is using following formula:\nnumberOfCharacters \u003d limit_cast\u003c sal_uInt16 \u003e( width / 256.0 - 0.5 ) \nThen IsDefWidth method should use \nwidth \u003d static_cast\u003c long \u003e( 256.0 * ( numberOfCharacters + 0.5 )",
+      "parentUuid": "5a8bc5a2_97e27c9e",
+      "revId": "e4b9c8e07841657734d5beeba2ff5855abd40a55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_f76d80cd",
         "filename": "sc/source/filter/excel/xetable.cxx",
         "patchSetId": 8
