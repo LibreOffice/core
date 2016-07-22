@@ -129,4 +129,9 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
 	CppunitTest_vcl_blocklistparser_test \
 ))
 endif
+
+$(eval $(call gb_Module_add_slowcheck_targets,vcl,\
+    CppunitTest_vcl_dialogs_test \
+))
+
 # vim: set noet sw=4 ts=4:
