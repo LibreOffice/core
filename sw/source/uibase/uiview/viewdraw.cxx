@@ -438,7 +438,7 @@ static bool lcl_isTextBox(SdrObject* pObject)
     if (SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(pObject->GetUserCall()))
     {
         if (SwFrameFormat* pFormat = pDrawContact->GetFormat())
-            return SwTextBoxHelper::findTextBox(pFormat);
+            return SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT);
     }
     return false;
 }
