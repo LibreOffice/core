@@ -966,7 +966,7 @@ void SwDrawView::DeleteMarked()
         SdrObject *pObject = rMarkList.GetMark(i)->GetMarkedSdrObj();
         SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(GetUserCall(pObject));
         SwFrameFormat* pFormat = pDrawContact->GetFormat();
-        if (SwFrameFormat* pTextBox = SwTextBoxHelper::findTextBox(pFormat))
+        if (SwFrameFormat* pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT))
             aTextBoxesToDelete.push_back(pTextBox);
     }
 
