@@ -753,18 +753,19 @@ ScOrcusStyles::ScOrcusStyles(ScDocument& rDoc):
 ScOrcusStyles::font::font():
     mbBold(false),
     mbItalic(false),
+    mnSize(10),
+    maColor(COL_WHITE),
     mbHasFontAttr(false),
     mbHasUnderlineAttr(false),
-    mnSize(10),
     meUnderline(LINESTYLE_NONE),
-    maColor(COL_WHITE, COL_WHITE, COL_WHITE, COL_WHITE)
+    maUnderlineColor(COL_WHITE)
 {
 }
 
 ScOrcusStyles::fill::fill():
     maPattern(""),
-    maFgColor(Color(COL_WHITE, COL_WHITE, COL_WHITE)),
-    maBgColor(Color(COL_WHITE, COL_WHITE, COL_WHITE)),
+    maFgColor(COL_WHITE),
+    maBgColor(COL_WHITE),
     mbHasFillAttr(false)
 {
 }
