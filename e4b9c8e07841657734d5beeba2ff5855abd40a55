@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a8bc5a2_f734a04b",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-22T11:31:03Z",
+      "side": 1,
+      "message": "If you have to disable a test then clearly something is wrong with the change that causes this failure.",
+      "revId": "e4b9c8e07841657734d5beeba2ff5855abd40a55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_d7788492",
         "filename": "sc/source/filter/excel/xetable.cxx",
         "patchSetId": 8
@@ -31,6 +48,24 @@
       "side": 1,
       "message": "1. In description it was stated that comparison is made to 1/16\nI think original author would like to write:\n   ((abs(value) / 256) \u003c 1/16)\nIs it more clear for you? Should I change it in that way?\n\n2. Yes I was not stated it clear here. I will update comment \n\n3. I didn investigating rounding issue. I fixed most obvious bug (additional 0.5) which causing wrong results, after export to .xlsx. With that fix, the customWidth flags are set correctly according to expectations.\n\nDuring .xlsx import it is calculated with following formula:\n    sal_Int32 nColWidthPixel\u003d std::floor(((256*nWidth + std::floor(128.0/nPixel))/256.0)*nPixel) * 1.047;\n\n(sc/source/filter/oox/worksheethelper.cxx)\nI assume that nPixel/{Maximum Digit Width} is 1\nI don know for what is 1.047 value. I suspect that it is for visualization fit. I think it could cause tdf#91475, but I haven investigated it yet.",
       "parentUuid": "5a8bc5a2_d7788492",
+      "revId": "e4b9c8e07841657734d5beeba2ff5855abd40a55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_9746fcbd",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1567,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-22T11:31:03Z",
+      "side": 1,
+      "message": "The ((abs(value) / 256) \u003c 1/16) would be yet something different. So what units is the GetValue() in?\n\nNote also that integer 1/16 is always 0. I believe the original \u003c16 is actually correct, otherwise all Excel exports would had been wrong.\n\nFor the rounding, calculating 256.0*(value+0.5) gives a value by 128 larger than 256.0*value+0.5\n\nSo you really should be sure what you\u0027re actually doing here.",
+      "parentUuid": "5a8bc5a2_97b6fc3b",
       "revId": "e4b9c8e07841657734d5beeba2ff5855abd40a55",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
