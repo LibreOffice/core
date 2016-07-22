@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_d7a5e4b5",
+        "filename": "sc/inc/global.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-07-22T09:16:44Z",
+      "side": 1,
+      "message": "this is never set\nbut it\u0027s checked in one ScFormulaCell ctor\nperhaps sorting is done differently now?\nremove it?",
+      "range": {
+        "startLine": 231,
+        "startChar": 0,
+        "endLine": 233,
+        "endChar": 30
+      },
+      "revId": "0206239334909bc014caf16dc97edf0b89f684ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_37952840",
+        "filename": "sc/inc/global.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-07-22T09:16:44Z",
+      "side": 1,
+      "message": "never used, should I remove it?",
+      "range": {
+        "startLine": 235,
+        "startChar": 0,
+        "endLine": 237,
+        "endChar": 30
+      },
+      "revId": "0206239334909bc014caf16dc97edf0b89f684ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_b7877811",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 883,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-07-22T09:16:44Z",
+      "side": 1,
+      "message": "always false",
+      "range": {
+        "startLine": 883,
+        "startChar": 4,
+        "endLine": 883,
+        "endChar": 50
+      },
+      "revId": "0206239334909bc014caf16dc97edf0b89f684ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_d78c0438",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-07-22T09:16:44Z",
+      "side": 1,
+      "message": "only use of this method, is it obsolete?",
+      "range": {
+        "startLine": 884,
+        "startChar": 15,
+        "endLine": 884,
+        "endChar": 63
+      },
+      "revId": "0206239334909bc014caf16dc97edf0b89f684ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
