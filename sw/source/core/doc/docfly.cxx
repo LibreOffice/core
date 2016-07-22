@@ -79,15 +79,11 @@ size_t SwDoc::GetFlyCount( FlyCntType eType, bool bIgnoreTextBoxes ) const
     size_t nCount = 0;
     const SwNodeIndex* pIdx;
 
-    std::set<const SwFrameFormat*> aTextBoxes;
-    if (bIgnoreTextBoxes)
-        aTextBoxes = SwTextBoxHelper::findTextBoxes(this);
-
     for ( size_t i = 0; i < nSize; ++i)
     {
         const SwFrameFormat* pFlyFormat = rFormats[ i ];
 
-        if (bIgnoreTextBoxes && aTextBoxes.find(pFlyFormat) != aTextBoxes.end())
+        if (bIgnoreTextBoxes && SwTextBoxHelper::isTextBox(pFlyFormat, RES_FLYFRMFMT))
             continue;
 
         if( RES_FLYFRMFMT == pFlyFormat->Which()
@@ -131,15 +127,11 @@ SwFrameFormat* SwDoc::GetFlyNum( size_t nIdx, FlyCntType eType, bool bIgnoreText
     const SwNodeIndex* pIdx;
     size_t nCount = 0;
 
-    std::set<const SwFrameFormat*> aTextBoxes;
-    if (bIgnoreTextBoxes)
-        aTextBoxes = SwTextBoxHelper::findTextBoxes(this);
-
     for( size_t i = 0; !pRetFormat && i < nSize; ++i )
     {
         SwFrameFormat* pFlyFormat = rFormats[ i ];
 
-        if (bIgnoreTextBoxes && aTextBoxes.find(pFlyFormat) != aTextBoxes.end())
+        if (bIgnoreTextBoxes && SwTextBoxHelper::isTextBox(pFlyFormat, RES_FLYFRMFMT))
             continue;
 
         if( RES_FLYFRMFMT == pFlyFormat->Which()
@@ -177,10 +169,6 @@ std::vector<SwFrameFormat const*> SwDoc::GetFlyFrameFormats(
     SwFrameFormats& rFormats = *GetSpzFrameFormats();
     const size_t nSize = rFormats.size();
 
-    std::set<const SwFrameFormat*> aTextBoxes;
-    if (bIgnoreTextBoxes)
-        aTextBoxes = SwTextBoxHelper::findTextBoxes(this);
-
     std::vector<SwFrameFormat const*> ret;
     ret.reserve(nSize);
 
@@ -188,7 +176,7 @@ std::vector<SwFrameFormat const*> SwDoc::GetFlyFrameFormats(
     {
         SwFrameFormat const*const pFlyFormat = rFormats[ i ];
 
-        if (bIgnoreTextBoxes && aTextBoxes.find(pFlyFormat) != aTextBoxes.end())
+        if (bIgnoreTextBoxes && SwTextBoxHelper::isTextBox(pFlyFormat, RES_FLYFRMFMT))
         {
             continue;
         }

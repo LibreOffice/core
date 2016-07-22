@@ -165,19 +165,18 @@ struct FrameClientSortListLess
 
 namespace
 {
-    void lcl_CollectFrameAtNodeWithLayout(SwDoc* pDoc, const SwContentFrame* pCFrame,
+    void lcl_CollectFrameAtNodeWithLayout(const SwContentFrame* pCFrame,
             FrameClientSortList_t& rFrames,
             const sal_uInt16 nAnchorType)
     {
         auto pObjs = pCFrame->GetDrawObjs();
         if(!pObjs)
             return;
-        const auto aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
         for(const auto pAnchoredObj : *pObjs)
         {
             SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
             // Filter out textboxes, which are not interesting at an UNO level.
-            if(aTextBoxes.find(&rFormat) != aTextBoxes.end())
+            if(SwTextBoxHelper::isTextBox(&rFormat, RES_FLYFRMFMT))
                 continue;
             if(rFormat.GetAnchor().GetAnchorId() == nAnchorType)
             {
@@ -211,7 +210,7 @@ void CollectFrameAtNode( const SwNodeIndex& rIdx,
         nullptr != (pCNd = rIdx.GetNode().GetContentNode()) &&
         nullptr != (pCFrame = pCNd->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout())) )
     {
-        lcl_CollectFrameAtNodeWithLayout(pDoc, pCFrame, rFrames, nChkType);
+        lcl_CollectFrameAtNodeWithLayout(pCFrame, rFrames, nChkType);
     }
     else
     {
