@@ -17,6 +17,7 @@
 #include <vcl/svapp.hxx>
 
 #include <algorithm>
+#include <iterator>
 
 ChartUIObject::ChartUIObject(VclPtr<chart::ChartWindow> xChartWindow,
         const OUString& rCID):
