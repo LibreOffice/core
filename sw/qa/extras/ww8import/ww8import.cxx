@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -606,6 +607,12 @@ DECLARE_WW8IMPORT_TEST(testTdf95576, "tdf95576.doc")
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nIndentAt);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nFirstLineIndent);
     }
+}
+
+DECLARE_WW8IMPORT_TEST(testTdf59896, "tdf59896.doc")
+{
+    // This was awt::FontWeight::NORMAL, i.e. the first run wasn't bold, when it should be bold
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(1), 1), "CharWeight"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

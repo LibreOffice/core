@@ -2159,11 +2159,13 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
             failure = true;
             // construct FC entries
             // first FC entry of each Fkp
-            if (checkSeek(rSt, ( nPN + i ) << 9 ))
-                continue;
+            if (!checkSeek(rSt, (nPN + i) << 9))
+                break;
+
             WW8_CP nFc(0);
             rSt.ReadInt32( nFc );
             pPLCF_PosArray[i] = nFc;
+
             failure = rSt.GetError();
         }
     }
