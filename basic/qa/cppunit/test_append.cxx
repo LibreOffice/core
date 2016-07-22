@@ -53,7 +53,7 @@ void EnableTest::testEnableRuntime()
     myMacro.Compile();
     CPPUNIT_ASSERT_MESSAGE("testEnableRuntime fails with compile error",!myMacro.HasError() );
     SbxVariableRef pNew = myMacro.Run();
-    CPPUNIT_ASSERT(pNew->GetInteger() == 3 );
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(3), pNew->GetInteger());
 }
 
 void EnableTest::testDimEnable()
