@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_77aa501b",
+        "filename": "sfx2/source/control/emojiview.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2016-07-22T13:15:55Z",
+      "side": 1,
+      "message": "@caolan, Hi.. I\u0027ve tried to filter unicodes for which the control font has a glyph.. but somehow it removes most of the unicodes for which glyphs which are present. Any idea what\u0027s wrong here?",
+      "range": {
+        "startLine": 147,
+        "startChar": 15,
+        "endLine": 147,
+        "endChar": 106
+      },
+      "revId": "67a11b367de1d63aecaef0b749f5b02e60d51e12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
