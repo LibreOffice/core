@@ -142,6 +142,22 @@ void TestBreakIterator::testLineBreaking()
             CPPUNIT_ASSERT_MESSAGE("Expected a break at the start of the line, not at ]", aResult.breakIndex == 0);
         }
     }
+
+    //this is an example sequence from tdf92993-1.docx caught by the load crashtesting
+    {
+        const sal_Unicode WEIRD1[] = { 0xd83c, 0xdf56, 0xd83c, 0xdf57, 0xd83c, 0xdf46,
+                                       0xd83c, 0xdf64, 0x2668, 0xfe0f, 0xd83c, 0xdfc6};
+
+        OUString aTest(WEIRD1, SAL_N_ELEMENTS(WEIRD1));
+
+        aLocale.Language = "en";
+        aLocale.Country = "US";
+
+        {
+            //This must not assert/crash
+            (void)m_xBreak->getLineBreak(aTest, 0, aLocale, 0, aHyphOptions, aUserOptions);
+        }
+    }
 }
 
 //See https://bugs.libreoffice.org/show_bug.cgi?id=49629

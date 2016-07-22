@@ -423,7 +423,7 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
         GlueSpace=false;
         if (lbr.breakType == BreakType::WORDBOUNDARY) {
             nStartPos = lbr.breakIndex;
-            if (Text[nStartPos--] == WJ)
+            if (nStartPos >= 0 && Text[nStartPos--] == WJ)
                 GlueSpace=true;
             while (nStartPos >= 0 &&
                     (u_isWhitespace(Text.iterateCodePoints(&nStartPos, 0)) || Text[nStartPos] == WJ)) {
