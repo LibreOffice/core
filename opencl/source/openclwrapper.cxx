@@ -49,7 +49,7 @@
 #define CHECK_OPENCL(status,name) \
 if( status != CL_SUCCESS )  \
 { \
-    SAL_WARN( "opencl", "OpenCL error code " << status << " at " SAL_DETAIL_WHERE " from " name ); \
+    SAL_WARN( "opencl", "OpenCL error code " << status << " at " SAL_DETAIL_WHERE "from " name ); \
     return false; \
 }
 
