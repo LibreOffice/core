@@ -81,7 +81,7 @@ void VBATest::testMiscVBAFunctions()
             fprintf(stderr, "macro returned:\n%s\n", OUStringToOString( pReturn->GetOUString(), RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn != nullptr );
-        CPPUNIT_ASSERT_MESSAGE("Result not as expected", pReturn->GetOUString() == "OK" );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Result not as expected", OUString("OK"), pReturn->GetOUString() );
     }
 }
 

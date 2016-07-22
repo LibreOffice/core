@@ -173,7 +173,7 @@ void Nested_Struct::testAssign1()
     myMacro.Compile();
     CPPUNIT_ASSERT_MESSAGE("testAssign1 fails with compile error",!myMacro.HasError() );
     SbxVariableRef pNew = myMacro.Run();
-    CPPUNIT_ASSERT(pNew->GetInteger() == 9 );
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(9), pNew->GetInteger());
 }
 
 void Nested_Struct::testAssign1Alt()
@@ -196,7 +196,7 @@ void Nested_Struct::testOldAssign()
     myMacro.Compile();
     CPPUNIT_ASSERT_MESSAGE("testOldAssign fails with compile error",!myMacro.HasError() );
     SbxVariableRef pNew = myMacro.Run();
-    CPPUNIT_ASSERT(pNew->GetInteger() == 9 );
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(9), pNew->GetInteger());
 }
 
 void Nested_Struct::testOldAssignAlt()
@@ -220,7 +220,7 @@ void Nested_Struct::testUnfixedVarAssign()
     CPPUNIT_ASSERT_MESSAGE("testUnfixedVarAssign fails with compile error",!myMacro.HasError() );
     // forces a broadcast
     SbxVariableRef pNew = myMacro.Run();
-    CPPUNIT_ASSERT(pNew->GetInteger() == 13 );
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(13), pNew->GetInteger());
 }
 
 void Nested_Struct::testUnfixedVarAssignAlt()
@@ -256,7 +256,7 @@ void Nested_Struct::testFixedVarAssign()
     myMacro.Compile();
     CPPUNIT_ASSERT_MESSAGE("testFixedVarAssign fails with compile error",!myMacro.HasError() );
     SbxVariableRef pNew = myMacro.Run();
-    CPPUNIT_ASSERT(pNew->GetInteger() == 13 );
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(13), pNew->GetInteger());
 }
 
 void Nested_Struct::testFixedVarAssignAlt()
