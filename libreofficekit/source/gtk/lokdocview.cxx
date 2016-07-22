@@ -190,6 +190,10 @@ struct LOKDocViewPrivateImpl
     /// Event source ID for handleTimeout() of this widget.
     guint m_nTimeoutId;
 
+    /// Rectangles of view locks. The current view can only see
+    /// them, can't modify them. Key is the view id.
+    std::map<int, ViewRectangle> m_aViewLockRectangles;
+
     LOKDocViewPrivateImpl()
         : m_aLOPath(nullptr),
         m_pUserProfileURL(nullptr),
@@ -411,6 +415,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_CELL_VIEW_CURSOR";
     case LOK_CALLBACK_CELL_FORMULA:
         return "LOK_CALLBACK_CELL_FORMULA";
+    case LOK_CALLBACK_VIEW_LOCK:
+        return "LOK_CALLBACK_VIEW_LOCK";
     }
     g_assert(false);
     return nullptr;
@@ -1299,6 +1305,25 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
         break;
     }
+    case LOK_CALLBACK_VIEW_LOCK:
+    {
+        std::stringstream aStream(pCallback->m_aPayload);
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        int nViewId = aTree.get<int>("viewId");
+        int nPart = aTree.get<int>("part");
+        const std::string& rRectangle = aTree.get<std::string>("rectangle");
+        if (rRectangle != "EMPTY")
+            priv->m_aViewLockRectangles[nViewId] = ViewRectangle(nPart, payloadToRectangle(pDocView, rRectangle.c_str()));
+        else
+        {
+            auto it = priv->m_aViewLockRectangles.find(nViewId);
+            if (it != priv->m_aViewLockRectangles.end())
+                priv->m_aViewLockRectangles.erase(it);
+        }
+        gtk_widget_queue_draw(GTK_WIDGET(pDocView));
+        break;
+    }
     default:
         g_assert(false);
         break;
@@ -1728,6 +1753,40 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
                         twipToPixel(rCursor.m_aRectangle.width, priv->m_fZoom),
                         twipToPixel(rCursor.m_aRectangle.height, priv->m_fZoom));
         cairo_set_line_width(pCairo, 2.0);
+        cairo_stroke(pCairo);
+    }
+
+    // View locks: they are colored.
+    for (auto& rPair : priv->m_aViewLockRectangles)
+    {
+        const ViewRectangle& rRectangle = rPair.second;
+        if (rRectangle.m_nPart != priv->m_nPartId)
+            continue;
+
+        // Draw a rectangle.
+        const GdkRGBA& rDark = getDarkColor(rPair.first);
+        cairo_set_source_rgb(pCairo, rDark.red, rDark.green, rDark.blue);
+        cairo_rectangle(pCairo,
+                        twipToPixel(rRectangle.m_aRectangle.x, priv->m_fZoom),
+                        twipToPixel(rRectangle.m_aRectangle.y, priv->m_fZoom),
+                        twipToPixel(rRectangle.m_aRectangle.width, priv->m_fZoom),
+                        twipToPixel(rRectangle.m_aRectangle.height, priv->m_fZoom));
+        cairo_set_line_width(pCairo, 2.0);
+        cairo_stroke(pCairo);
+
+        // Cross it.
+        cairo_move_to(pCairo,
+                      twipToPixel(rRectangle.m_aRectangle.x, priv->m_fZoom),
+                      twipToPixel(rRectangle.m_aRectangle.y, priv->m_fZoom));
+        cairo_line_to(pCairo,
+                      twipToPixel(rRectangle.m_aRectangle.x + rRectangle.m_aRectangle.width, priv->m_fZoom),
+                      twipToPixel(rRectangle.m_aRectangle.y + rRectangle.m_aRectangle.height, priv->m_fZoom));
+        cairo_move_to(pCairo,
+                      twipToPixel(rRectangle.m_aRectangle.x, priv->m_fZoom),
+                      twipToPixel(rRectangle.m_aRectangle.y + rRectangle.m_aRectangle.height, priv->m_fZoom));
+        cairo_line_to(pCairo,
+                      twipToPixel(rRectangle.m_aRectangle.x + rRectangle.m_aRectangle.width, priv->m_fZoom),
+                      twipToPixel(rRectangle.m_aRectangle.y, priv->m_fZoom));
         cairo_stroke(pCairo);
     }
 

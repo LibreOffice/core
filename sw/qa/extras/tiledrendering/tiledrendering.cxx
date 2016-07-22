@@ -26,6 +26,7 @@
 #include <drawdoc.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
+#include <view.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/lokhelper.hxx>
 
@@ -56,6 +57,7 @@ public:
     void testMissingInvalidation();
     void testViewCursorVisibility();
     void testViewCursorCleanup();
+    void testViewLock();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -78,6 +80,7 @@ public:
     CPPUNIT_TEST(testMissingInvalidation);
     CPPUNIT_TEST(testViewCursorVisibility);
     CPPUNIT_TEST(testViewCursorCleanup);
+    CPPUNIT_TEST(testViewLock);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -560,6 +563,7 @@ public:
     bool m_bTilesInvalidated;
     bool m_bViewCursorVisible;
     bool m_bGraphicViewSelection;
+    bool m_bViewLock;
 
     ViewCallback()
         : m_bOwnCursorInvalidated(false),
@@ -568,7 +572,8 @@ public:
           m_bViewSelectionSet(false),
           m_bTilesInvalidated(false),
           m_bViewCursorVisible(false),
-          m_bGraphicViewSelection(false)
+          m_bGraphicViewSelection(false),
+          m_bViewLock(false)
     {
     }
 
@@ -617,6 +622,14 @@ public:
             boost::property_tree::ptree aTree;
             boost::property_tree::read_json(aStream, aTree);
             m_bGraphicViewSelection = aTree.get_child("selection").get_value<std::string>() != "EMPTY";
+        }
+        break;
+        case LOK_CALLBACK_VIEW_LOCK:
+        {
+            std::stringstream aStream(pPayload);
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+            m_bViewLock = aTree.get_child("rectangle").get_value<std::string>() != "EMPTY";
         }
         break;
         }
@@ -767,6 +780,40 @@ void SwTiledRenderingTest::testViewCursorCleanup()
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), SfxLokHelper::getViews());
     // Make sure that the graphic view selection on the first view is cleaned up.
     CPPUNIT_ASSERT(!aView1.m_bGraphicViewSelection);
+    mxComponent->dispose();
+    mxComponent.clear();
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testViewLock()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    // Load a document that has a shape and create two views.
+    SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    SfxLokHelper::createView();
+    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ViewCallback aView2;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+
+    // Begin text edit in the second view and assert that the first gets a lock
+    // notification.
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+    SdrView* pView = pWrtShell->GetDrawView();
+    aView1.m_bViewLock = false;
+    pWrtShell->GetView().BeginTextEdit(pObject, pView->GetSdrPageView(), pWrtShell->GetWin());
+    CPPUNIT_ASSERT(aView1.m_bViewLock);
+
+    // End text edit in the second view, and assert that the lock is removed in
+    // the first view.
+    pWrtShell->EndTextEdit();
+    CPPUNIT_ASSERT(!aView1.m_bViewLock);
+
     mxComponent->dispose();
     mxComponent.clear();
 

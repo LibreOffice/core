@@ -68,6 +68,9 @@
 #include <svx/svdpagv.hxx>
 #include <svx/extrusionbar.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace ::com::sun::star;
 
@@ -600,6 +603,12 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
         if (pView)
         {
             pView->SetSelection(aNewSelection);
+
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                OString sRect = pView->GetOutputArea().toString();
+                SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_VIEW_LOCK, "rectangle", sRect);
+            }
         }
     }
 

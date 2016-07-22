@@ -81,6 +81,9 @@
 #include <sortedobjs.hxx>
 #include <HandleAnchorNodeChg.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <calbck.hxx>
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
@@ -1057,6 +1060,10 @@ void SwFEShell::EndTextEdit()
     }
     else
         pView->SdrEndTextEdit();
+
+    if (comphelper::LibreOfficeKit::isActive())
+        SfxLokHelper::notifyOtherViews(GetSfxViewShell(), LOK_CALLBACK_VIEW_LOCK, "rectangle", "EMPTY");
+
     EndAllAction();
 }
 

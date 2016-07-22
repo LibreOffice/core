@@ -390,6 +390,22 @@ typedef enum
      */
     LOK_CALLBACK_VIEW_CURSOR_VISIBLE,
 
+    /**
+     * The size and/or the position of a lock rectangle in one of the other
+     * views has changed.
+     *
+     * The payload format:
+     *
+     * {
+     *     "viewId": "..."
+     *     "rectangle": "..."
+     * }
+     *
+     * - viewId is a value returned earlier by lok::Document::createView()
+     * - rectangle uses the format of LOK_CALLBACK_INVALIDATE_TILES.
+     */
+    LOK_CALLBACK_VIEW_LOCK,
+
 }
 LibreOfficeKitCallbackType;
 
