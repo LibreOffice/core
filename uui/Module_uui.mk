@@ -18,4 +18,8 @@ $(eval $(call gb_Module_add_l10n_targets,uui,\
 	UIConfig_uui \
 ))
 
+$(eval $(call gb_Module_add_slowcheck_targets,uui,\
+    CppunitTest_uui_dialogs_test \
+))
+
 # vim: set noet sw=4 ts=4:
