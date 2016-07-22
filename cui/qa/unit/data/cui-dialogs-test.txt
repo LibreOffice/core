@@ -1,0 +1,226 @@
+# -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# This file contains all dialogs that the unit tests in the module
+# will work on if it is in script mode. It will read one-by-one,
+# try to open it and create a screenshot that will be saved in
+# workdir/screenshots using the pattern of the ui-file name.
+#
+# Syntax:
+# - emty lines are allowed
+# - lines starting with '#' are treated as comment
+# - all other lines should contain a *.ui filename in the same
+#   notation as in the dialog constructors (see code)
+
+#
+# The 'known' dialogs which have a hard-coded representation
+# in registerKnownDialogsByID/createDialogByID
+#
+
+# No known dialogs in cui for now
+
+#
+# Dialogs without a hard-coded representation. These will
+# be visualized using a fallback based on VclBuilder
+#
+
+# currently deactivated, leads to problems and the test to not work
+# This is typically a hint that these should be hard-coded in the
+# test case since they need some document and model data to work
+#
+# cui/ui/bitmaptabpage.ui
+
+cui/ui/customizedialog.ui
+cui/ui/gallerythemedialog.ui
+cui/ui/formatcellsdialog.ui
+cui/ui/searchformatdialog.ui
+cui/ui/autocorrectdialog.ui
+cui/ui/borderareatransparencydialog.ui
+cui/ui/borderbackgrounddialog.ui
+cui/ui/calloutdialog.ui
+cui/ui/areadialog.ui
+cui/ui/linedialog.ui
+cui/ui/textdialog.ui
+cui/ui/positionsizedialog.ui
+cui/ui/accelconfigpage.ui
+cui/ui/menuassignpage.ui
+cui/ui/gallerygeneralpage.ui
+cui/ui/galleryfilespage.ui
+cui/ui/connpooloptions.ui
+cui/ui/dbregisterpage.ui
+cui/ui/optfontspage.ui
+cui/ui/optaccessibilitypage.ui
+cui/ui/optasianpage.ui
+cui/ui/optbasicidepage.ui
+cui/ui/optchartcolorspage.ui
+cui/ui/optappearancepage.ui
+cui/ui/optctlpage.ui
+cui/ui/optfltrpage.ui
+cui/ui/optfltrembedpage.ui
+cui/ui/optgeneralpage.ui
+cui/ui/optviewpage.ui
+cui/ui/optlanguagespage.ui
+cui/ui/optuserpage.ui
+cui/ui/opthtmlpage.ui
+cui/ui/optproxypage.ui
+cui/ui/optsecuritypage.ui
+cui/ui/optemailpage.ui
+cui/ui/optadvancedpage.ui
+cui/ui/optjsearchpage.ui
+cui/ui/optlingupage.ui
+cui/ui/optmemorypage.ui
+cui/ui/optopenclpage.ui
+cui/ui/optpathspage.ui
+cui/ui/optsavepage.ui
+cui/ui/optonlineupdatepage.ui
+cui/ui/personalization_tab.ui
+cui/ui/cellalignment.ui
+cui/ui/acoroptionspage.ui
+cui/ui/applyautofmtpage.ui
+cui/ui/acorreplacepage.ui
+cui/ui/acorexceptpage.ui
+cui/ui/applylocalizedpage.ui
+cui/ui/wordcompletionpage.ui
+cui/ui/smarttagoptionspage.ui
+cui/ui/borderpage.ui
+cui/ui/connectortabpage.ui
+cui/ui/croppage.ui
+cui/ui/calloutpage.ui
+cui/ui/eventassignpage.ui
+cui/ui/numberingformatpage.ui
+cui/ui/picknumberingpage.ui
+cui/ui/pickbulletpage.ui
+cui/ui/pickoutlinepage.ui
+cui/ui/pickgraphicpage.ui
+cui/ui/numberingoptionspage.ui
+cui/ui/numberingpositionpage.ui
+cui/ui/pageformatpage.ui
+cui/ui/paraindentspacing.ui
+cui/ui/paragalignpage.ui
+cui/ui/textflowpage.ui
+cui/ui/asiantypography.ui
+cui/ui/swpossizepage.ui
+cui/ui/paratabspage.ui
+cui/ui/textanimtabpage.ui
+cui/ui/colorpage.ui
+cui/ui/gradientpage.ui
+cui/ui/linestyletabpage.ui
+cui/ui/lineendstabpage.ui
+cui/ui/eventsconfigpage.ui
+cui/ui/macroassignpage.ui
+cui/ui/backgroundpage.ui
+cui/ui/dimensionlinestabpage.ui
+cui/ui/textattrtabpage.ui
+cui/ui/areatabpage.ui
+cui/ui/hatchpage.ui
+cui/ui/linetabpage.ui
+cui/ui/shadowtabpage.ui
+cui/ui/rotationtabpage.ui
+cui/ui/slantcornertabpage.ui
+cui/ui/possizetabpage.ui
+cui/ui/transparencytabpage.ui
+cui/ui/distributionpage.ui
+cui/ui/hyperlinknewdocpage.ui
+cui/ui/hyperlinkdocpage.ui
+cui/ui/hyperlinkinternetpage.ui
+cui/ui/hyperlinkmailpage.ui
+cui/ui/charnamepage.ui
+cui/ui/effectspage.ui
+cui/ui/positionpage.ui
+cui/ui/twolinespage.ui
+cui/ui/movemenu.ui
+cui/ui/newtoolbardialog.ui
+cui/ui/iconselectordialog.ui
+cui/ui/iconchangedialog.ui
+cui/ui/assigncomponentdialog.ui
+cui/ui/aboutdialog.ui
+cui/ui/colorpickerdialog.ui
+cui/ui/specialcharacters.ui
+cui/ui/fmsearchdialog.ui
+cui/ui/gallerysearchprogress.ui
+cui/ui/galleryapplyprogress.ui
+cui/ui/galleryupdateprogress.ui
+cui/ui/gallerytitledialog.ui
+cui/ui/gallerythemeiddialog.ui
+cui/ui/cuiimapdlg.ui
+cui/ui/recordnumberdialog.ui
+cui/ui/namedialog.ui
+cui/ui/objectnamedialog.ui
+cui/ui/objecttitledescdialog.ui
+cui/ui/messbox.ui
+cui/ui/hangulhanjaconversiondialog.ui
+cui/ui/hangulhanjaoptdialog.ui
+cui/ui/hangulhanjaadddialog.ui
+cui/ui/hangulhanjaeditdictdialog.ui
+cui/ui/hyperlinkmarkdialog.ui
+cui/ui/hyphenate.ui
+cui/ui/insertrowcolumn.ui
+cui/ui/baselinksdialog.ui
+cui/ui/multipathdialog.ui
+cui/ui/selectpathdialog.ui
+cui/ui/newtabledialog.ui
+cui/ui/password.ui
+cui/ui/pastespecial.ui
+cui/ui/comment.ui
+cui/ui/newlibdialog.ui
+cui/ui/scriptorganizer.ui
+cui/ui/showcoldialog.ui
+cui/ui/searchattrdialog.ui
+cui/ui/similaritysearchdialog.ui
+cui/ui/zoomdialog.ui
+cui/ui/certdialog.ui
+cui/ui/databaselinkdialog.ui
+cui/ui/aboutconfigvaluedialog.ui
+cui/ui/optnewdictionarydialog.ui
+cui/ui/editdictionarydialog.ui
+cui/ui/javastartparametersdialog.ui
+cui/ui/javaclasspathdialog.ui
+cui/ui/breaknumberoption.ui
+cui/ui/editmodulesdialog.ui
+cui/ui/blackorwhitelistentrydialog.ui
+cui/ui/select_persona_dialog.ui
+cui/ui/securityoptionsdialog.ui
+cui/ui/optionsdialog.ui
+cui/ui/optionsdialog.ui
+cui/ui/tsaurldialog.ui
+cui/ui/storedwebconnectiondialog.ui
+cui/ui/percentdialog.ui
+cui/ui/macroassigndialog.ui
+cui/ui/spelloptionsdialog.ui
+cui/ui/distributiondialog.ui
+cui/ui/eventassigndialog.ui
+cui/ui/mosaicdialog.ui
+cui/ui/smoothdialog.ui
+cui/ui/solarizedialog.ui
+cui/ui/agingdialog.ui
+cui/ui/posterdialog.ui
+cui/ui/embossdialog.ui
+cui/ui/hyperlinkdialog.ui
+cui/ui/insertoleobject.ui
+cui/ui/insertfloatingframe.ui
+cui/ui/splitcellsdialog.ui
+cui/ui/thesaurus.ui
+cui/ui/macroselectordialog.ui
+cui/ui/spellingdialog.ui
+cui/ui/aboutconfigdialog.ui
+cui/ui/queryupdategalleryfilelistdialog.ui
+cui/ui/querydeletechartcolordialog.ui
+cui/ui/querydeletedictionarydialog.ui
+cui/ui/queryduplicatedialog.ui
+cui/ui/querynoloadedfiledialog.ui
+cui/ui/querydeletebitmapdialog.ui
+cui/ui/querysavelistdialog.ui
+cui/ui/querynosavefiledialog.ui
+cui/ui/querydeletecolordialog.ui
+cui/ui/querydeletegradientdialog.ui
+cui/ui/querydeletehatchdialog.ui
+cui/ui/querydeletelinestyledialog.ui
+cui/ui/querychangelineenddialog.ui
+cui/ui/querydeletelineenddialog.ui
+cui/ui/colorconfigwin.ui

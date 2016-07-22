@@ -16,8 +16,8 @@
 
 using namespace ::com::sun::star;
 
-/// Test opening a dialog in svx
-class SvxDialogsTest : public ScreenshotTest
+/// Test opening a dialog in cui
+class CuiDialogsTest : public ScreenshotTest
 {
 private:
     /// helper method to populate KnownDialogs, called in setUp(). Needs to be
@@ -29,50 +29,50 @@ private:
     virtual VclAbstractDialog* createDialogByID(sal_uInt32 nID) override;
 
 public:
-    SvxDialogsTest();
-    virtual ~SvxDialogsTest();
+    CuiDialogsTest();
+    virtual ~CuiDialogsTest();
 
     virtual void setUp() override;
 
     // try to open a dialog
     void openAnyDialog();
 
-    CPPUNIT_TEST_SUITE(SvxDialogsTest);
+    CPPUNIT_TEST_SUITE(CuiDialogsTest);
     CPPUNIT_TEST(openAnyDialog);
     CPPUNIT_TEST_SUITE_END();
 };
 
-SvxDialogsTest::SvxDialogsTest()
+CuiDialogsTest::CuiDialogsTest()
 {
 }
 
-SvxDialogsTest::~SvxDialogsTest()
+CuiDialogsTest::~CuiDialogsTest()
 {
 }
 
-void SvxDialogsTest::setUp()
+void CuiDialogsTest::setUp()
 {
     ScreenshotTest::setUp();
 }
 
-void SvxDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
+void CuiDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {
     // fill map of known dilogs
 }
 
-VclAbstractDialog* SvxDialogsTest::createDialogByID(sal_uInt32 /*nID*/)
+VclAbstractDialog* CuiDialogsTest::createDialogByID(sal_uInt32 /*nID*/)
 {
     return nullptr;
 }
 
-void SvxDialogsTest::openAnyDialog()
+void CuiDialogsTest::openAnyDialog()
 {
     /// example how to process an input file containing the UXMLDescriptions of the dialogs
     /// to dump
     if (true)
     {
         test::Directories aDirectories;
-        OUString aURL = aDirectories.getURLFromSrc("svx/qa/unit/data/svx-dialogs-test.txt");
+        OUString aURL = aDirectories.getURLFromSrc("cui/qa/unit/data/cui-dialogs-test.txt");
         SvFileStream aStream(aURL, StreamMode::READ);
         OString aNextUIFile;
         const OString aComment("#");
@@ -137,13 +137,13 @@ void SvxDialogsTest::openAnyDialog()
         //
         // Take any example here, it's only for demonstration - using
         // even a known one to demonstrate the fallback possibility
-        const OString aUIXMLDescription("svx/ui/textcontrolchardialog.ui");
+        const OString aUIXMLDescription("modules/swriter/ui/abstractdialog.ui");
 
         dumpDialogToPath(aUIXMLDescription);
     }
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(SvxDialogsTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(CuiDialogsTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
