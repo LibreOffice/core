@@ -7017,7 +7017,8 @@ you must use the "--with-jdk-home" configure option explicitly])
     fi
 else
     dnl Java disabled
-    JAVA_HOME=NO_JAVA_HOME ; export JAVA_HOME
+    JAVA_HOME=
+    export JAVA_HOME
 fi
 AC_SUBST([HAVE_JAVA6])
 AC_SUBST([HAVE_JAVA9])
@@ -12633,7 +12634,7 @@ fi
 ILIB1=
 if test "$build_os" = "cygwin"; then
     ILIB="."
-    if test -n "$JAVA_HOME" -a "$JAVA_HOME" != "NO_JAVA_HOME"; then
+    if test -n "$JAVA_HOME"; then
         ILIB="$ILIB;$JAVA_HOME/lib"
     fi
     ILIB1=-link
