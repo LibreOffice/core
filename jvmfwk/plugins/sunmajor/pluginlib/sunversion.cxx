@@ -135,9 +135,9 @@ bool SunVersion::init(const char *szVersion)
             {
                 if ( ! isdigit(*pCur))
                 {
-                    //1.4.1_01-, 1.4.1_01a, the numerical part may only be 2 chars.
-                    int len = pCur - pLast;
-                    if (len > 2)
+                    //1.8.0_102-, 1.8.0_01a,
+                    size_t len = pCur - pLast;
+                    if (len > sizeof(buf) - 1)
                         return false;
                     //we've got the update: 01, 02 etc
                     strncpy(buf, pLast, len);
