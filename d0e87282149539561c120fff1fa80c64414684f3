@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_d7e164d2",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-22T10:14:21Z",
+      "side": 1,
+      "message": "Please always let writing extension namespaces depend on the ODF version target, see https://wiki.documentfoundation.org/Development/ODF_Implementer_Notes#ODF_Version_Choice",
+      "revId": "d0e87282149539561c120fff1fa80c64414684f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_f7e660e7",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-22T10:14:21Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "d0e87282149539561c120fff1fa80c64414684f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_17ecacc6",
+        "filename": "xmloff/source/style/xmlnumfi.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-22T10:14:21Z",
+      "side": 1,
+      "message": "Prepare for the future and enable reading also the XML_NAMESPACE_NUMBER namespace.",
+      "revId": "d0e87282149539561c120fff1fa80c64414684f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
