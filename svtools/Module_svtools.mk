@@ -49,6 +49,10 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,svtools,\
 ))
 endif
 
+$(eval $(call gb_Module_add_slowcheck_targets,svtools,\
+    CppunitTest_svtools_dialogs_test \
+))
+
 #todo: javapatchres
 #todo: jpeg on mac in svtools/util/makefile.mk
 #todo: deliver errtxt.src as ehdl.srs
