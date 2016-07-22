@@ -66,6 +66,7 @@ public:
     void testViewCursors();
     void testViewCursorParts();
     void testCursorViews();
+    void testViewLock();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -88,6 +89,7 @@ public:
     CPPUNIT_TEST(testViewCursors);
     CPPUNIT_TEST(testViewCursorParts);
     CPPUNIT_TEST(testCursorViews);
+    CPPUNIT_TEST(testViewLock);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -821,12 +823,14 @@ public:
     /// Our current part, to be able to decide if a view cursor/selection is relevant for us.
     int m_nPart;
     bool m_bCursorVisibleChanged;
+    bool m_bViewLock;
 
     ViewCallback()
         : m_bGraphicSelectionInvalidated(false),
           m_bGraphicViewSelectionInvalidated(false),
           m_nPart(0),
-          m_bCursorVisibleChanged(false)
+          m_bCursorVisibleChanged(false),
+          m_bViewLock(false)
     {
     }
 
@@ -857,6 +861,14 @@ public:
         case LOK_CALLBACK_CURSOR_VISIBLE:
         {
             m_bCursorVisibleChanged = true;
+        }
+        break;
+        case LOK_CALLBACK_VIEW_LOCK:
+        {
+            std::stringstream aStream(pPayload);
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+            m_bViewLock = aTree.get_child("rectangle").get_value<std::string>() != "EMPTY";
         }
         break;
         }
@@ -957,6 +969,37 @@ void SdTiledRenderingTest::testCursorViews()
     pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(!aView1.m_bCursorVisibleChanged);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testViewLock()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    // Load a document that has a shape and create two views.
+    SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    SfxLokHelper::createView();
+    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    // Begin text edit in the second view and assert that the first gets a lock
+    // notification.
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(0);
+    SdrView* pView = pViewShell->GetView();
+    aView1.m_bViewLock = false;
+    pView->SdrBeginTextEdit(pObject);
+    CPPUNIT_ASSERT(aView1.m_bViewLock);
+
+    // End text edit in the second view, and assert that the lock is removed in
+    // the first view.
+    pView->SdrEndTextEdit();
+    CPPUNIT_ASSERT(!aView1.m_bViewLock);
 
     mxComponent->dispose();
     mxComponent.clear();
