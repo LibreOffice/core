@@ -54,8 +54,8 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Compress Image</property>
-    <property name="modal">True</property>
     <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -147,10 +147,11 @@
                         <property name="column_spacing">6</property>
                         <child>
                           <object class="GtkRadioButton" id="radio-jpeg">
-                            <property name="label" translatable="yes">JPEG (lossy compression)</property>
+                            <property name="label" translatable="yes">JPEG Compression</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="tooltip_text" translatable="yes">Lossy compression</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">radio-lossless</property>
@@ -162,10 +163,11 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="radio-lossless">
-                            <property name="label" translatable="yes">PNG (lossless compression)</property>
+                            <property name="label" translatable="yes">PNG Quality</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="tooltip_text" translatable="yes">Lossless compression</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
