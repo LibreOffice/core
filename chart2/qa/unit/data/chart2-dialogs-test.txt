@@ -1,0 +1,69 @@
+# -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# This file contains all dialogs that the unit tests in the module
+# will work on if it is in script mode. It will read one-by-one,
+# try to open it and create a screenshot that will be saved in
+# workdir/screenshots using the pattern of the ui-file name.
+#
+# Syntax:
+# - emty lines are allowed
+# - lines starting with '#' are treated as comment
+# - all other lines should contain a *.ui filename in the same
+#   notation as in the dialog constructors (see code)
+
+#
+# The 'known' dialogs which have a hard-coded representation
+# in registerKnownDialogsByID/createDialogByID
+#
+
+# No known dialogs in chart2 for now
+
+#
+# Dialogs without a hard-coded representation. These will
+# be visualized using a fallback based on VclBuilder
+#
+
+# currently deactivated, leads to problems and the test to not work
+# This is typically a hint that these should be hard-coded in the
+# test case since they need some document and model data to work
+
+modules/schart/ui/datarangedialog.ui
+modules/schart/ui/attributedialog.ui
+modules/schart/ui/chardialog.ui
+modules/schart/ui/paradialog.ui
+modules/schart/ui/3dviewdialog.ui
+modules/schart/ui/tp_3D_SceneAppearance.ui
+modules/schart/ui/tp_3D_SceneGeometry.ui
+modules/schart/ui/tp_3D_SceneIllumination.ui
+modules/schart/ui/tp_axisLabel.ui
+modules/schart/ui/tp_AxisPositions.ui
+modules/schart/ui/tp_DataLabel.ui
+modules/schart/ui/tp_ErrorBars.ui
+modules/schart/ui/tp_LegendPosition.ui
+modules/schart/ui/tp_ChartType.ui
+modules/schart/ui/tp_PolarOptions.ui
+modules/schart/ui/tp_Scale.ui
+modules/schart/ui/tp_SeriesToAxis.ui
+modules/schart/ui/titlerotationtabpage.ui
+modules/schart/ui/tp_Trendline.ui
+modules/schart/ui/tp_ChartType.ui
+modules/schart/ui/tp_DataSource.ui
+modules/schart/ui/tp_RangeChooser.ui
+modules/schart/ui/wizelementspage.ui
+modules/schart/ui/charttypedialog.ui
+modules/schart/ui/chartdatadialog.ui
+modules/schart/ui/insertaxisdlg.ui
+modules/schart/ui/insertgriddlg.ui
+modules/schart/ui/dlg_DataLabel.ui
+modules/schart/ui/dlg_InsertErrorBars.ui
+modules/schart/ui/dlg_InsertLegend.ui
+modules/schart/ui/inserttitledlg.ui
+modules/schart/ui/smoothlinesdlg.ui
+modules/schart/ui/steppedlinesdlg.ui

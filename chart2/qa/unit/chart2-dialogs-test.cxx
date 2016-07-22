@@ -16,8 +16,8 @@
 
 using namespace ::com::sun::star;
 
-/// Test opening a dialog in cui
-class CuiDialogsTest : public ScreenshotTest
+/// Test opening a dialog in chart2
+class Chart2DialogsTest : public ScreenshotTest
 {
 private:
     /// helper method to populate KnownDialogs, called in setUp(). Needs to be
@@ -29,50 +29,50 @@ private:
     virtual VclAbstractDialog* createDialogByID(sal_uInt32 nID) override;
 
 public:
-    CuiDialogsTest();
-    virtual ~CuiDialogsTest();
+    Chart2DialogsTest();
+    virtual ~Chart2DialogsTest();
 
     virtual void setUp() override;
 
     // try to open a dialog
     void openAnyDialog();
 
-    CPPUNIT_TEST_SUITE(CuiDialogsTest);
+    CPPUNIT_TEST_SUITE(Chart2DialogsTest);
     CPPUNIT_TEST(openAnyDialog);
     CPPUNIT_TEST_SUITE_END();
 };
 
-CuiDialogsTest::CuiDialogsTest()
+Chart2DialogsTest::Chart2DialogsTest()
 {
 }
 
-CuiDialogsTest::~CuiDialogsTest()
+Chart2DialogsTest::~Chart2DialogsTest()
 {
 }
 
-void CuiDialogsTest::setUp()
+void Chart2DialogsTest::setUp()
 {
     ScreenshotTest::setUp();
 }
 
-void CuiDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
+void Chart2DialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {
     // fill map of known dilogs
 }
 
-VclAbstractDialog* CuiDialogsTest::createDialogByID(sal_uInt32 /*nID*/)
+VclAbstractDialog* Chart2DialogsTest::createDialogByID(sal_uInt32 /*nID*/)
 {
     return nullptr;
 }
 
-void CuiDialogsTest::openAnyDialog()
+void Chart2DialogsTest::openAnyDialog()
 {
     /// example how to process an input file containing the UXMLDescriptions of the dialogs
     /// to dump
     if (true)
     {
         test::Directories aDirectories;
-        OUString aURL = aDirectories.getURLFromSrc("cui/qa/unit/data/cui-dialogs-test.txt");
+        OUString aURL = aDirectories.getURLFromSrc("chart2/qa/unit/data/chart2-dialogs-test.txt");
         SvFileStream aStream(aURL, StreamMode::READ);
         OString aNextUIFile;
         const OString aComment("#");
@@ -137,13 +137,13 @@ void CuiDialogsTest::openAnyDialog()
         //
         // Take any example here, it's only for demonstration - using
         // even a known one to demonstrate the fallback possibility
-        const OString aUIXMLDescription("cui/ui/customizedialog.ui");
+        const OString aUIXMLDescription("modules/schart/ui/datarangedialog.ui");
 
         dumpDialogToPath(aUIXMLDescription);
     }
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(CuiDialogsTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(Chart2DialogsTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
