@@ -55,6 +55,8 @@ namespace basegfx
         B2DPolygon();
         B2DPolygon(const B2DPolygon& rPolygon);
         B2DPolygon(const B2DPolygon& rPolygon, sal_uInt32 nIndex, sal_uInt32 nCount);
+        B2DPolygon(std::initializer_list<basegfx::B2DPoint> rPoints);
+
         ~B2DPolygon();
 
         /// assignment operator

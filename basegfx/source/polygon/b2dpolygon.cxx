@@ -1105,6 +1105,15 @@ namespace basegfx
     :   mpPolygon(DefaultPolygon::get())
     {}
 
+    B2DPolygon::B2DPolygon(std::initializer_list<basegfx::B2DPoint> aPoints)
+        : mpPolygon(DefaultPolygon::get())
+    {
+        for (const basegfx::B2DPoint& rPoint : aPoints)
+        {
+            append(rPoint);
+        }
+    }
+
     B2DPolygon::B2DPolygon(const B2DPolygon& rPolygon)
     :   mpPolygon(rPolygon.mpPolygon)
     {}
