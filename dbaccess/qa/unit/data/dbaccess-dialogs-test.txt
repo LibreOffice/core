@@ -1,0 +1,102 @@
+# -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# This file contains all dialogs that the unit tests in the module
+# will work on if it is in script mode. It will read one-by-one,
+# try to open it and create a screenshot that will be saved in
+# workdir/screenshots using the pattern of the ui-file name.
+#
+# Syntax:
+# - emty lines are allowed
+# - lines starting with '#' are treated as comment
+# - all other lines should contain a *.ui filename in the same
+#   notation as in the dialog constructors (see code)
+
+#
+# The 'known' dialogs which have a hard-coded representation
+# in registerKnownDialogsByID/createDialogByID
+#
+
+# No known dialogs in dbaccess for now
+
+#
+# Dialogs without a hard-coded representation. These will
+# be visualized using a fallback based on VclBuilder
+#
+
+# currently deactivated, leads to problems and the test to not work
+# This is typically a hint that these should be hard-coded in the
+# test case since they need some document and model data to work
+# dbaccess/ui/rtfcopytabledialog.ui -> hangs execution, seems to wait for interaction somehow (?)
+
+dbaccess/ui/advancedsettingsdialog.ui
+dbaccess/ui/admindialog.ui
+dbaccess/ui/fielddialog.ui
+dbaccess/ui/useradmindialog.ui
+dbaccess/ui/mysqlnativesettings.ui
+dbaccess/ui/textpage.ui
+dbaccess/ui/applycolpage.ui
+dbaccess/ui/copytablepage.ui
+dbaccess/ui/namematchingpage.ui
+dbaccess/ui/typeselectpage.ui
+dbaccess/ui/preparepage.ui
+dbaccess/ui/backuppage.ui
+dbaccess/ui/migratepage.ui
+dbaccess/ui/summarypage.ui
+dbaccess/ui/specialsettingspage.ui
+dbaccess/ui/generatedvaluespage.ui
+dbaccess/ui/ldapconnectionpage.ui
+dbaccess/ui/dbwizmysqlintropage.ui
+dbaccess/ui/dbwizmysqlnativepage.ui
+dbaccess/ui/specialjdbcconnectionpage.ui
+dbaccess/ui/authentificationpage.ui
+dbaccess/ui/finalpagewizard.ui
+dbaccess/ui/tablesfilterpage.ui
+dbaccess/ui/useradminpage.ui
+dbaccess/ui/connectionpage.ui
+dbaccess/ui/dbwizconnectionpage.ui
+dbaccess/ui/dbwiztextpage.ui
+dbaccess/ui/jdbcconnectionpage.ui
+dbaccess/ui/dbwizspreadsheetpage.ui
+dbaccess/ui/dbasepage.ui
+dbaccess/ui/autocharsetpage.ui
+dbaccess/ui/odbcpage.ui
+dbaccess/ui/userdetailspage.ui
+dbaccess/ui/autocharsetpage.ui
+dbaccess/ui/generalspecialjdbcdetailspage.ui
+dbaccess/ui/mysqlnativepage.ui
+dbaccess/ui/ldappage.ui
+dbaccess/ui/emptypage.ui
+dbaccess/ui/generalpagedialog.ui
+dbaccess/ui/generalpagewizard.ui
+dbaccess/ui/collectionviewdialog.ui
+dbaccess/ui/dbaseindexdialog.ui
+dbaccess/ui/directsqldialog.ui
+dbaccess/ui/savedialog.ui
+dbaccess/ui/savedialog.ui
+dbaccess/ui/rowheightdialog.ui
+dbaccess/ui/colwidthdialog.ui
+dbaccess/ui/choosedatasourcedialog.ui
+dbaccess/ui/indexdesigndialog.ui
+dbaccess/ui/parametersdialog.ui
+dbaccess/ui/queryfilterdialog.ui
+dbaccess/ui/sortdialog.ui
+dbaccess/ui/querypropertiesdialog.ui
+dbaccess/ui/relationdialog.ui
+dbaccess/ui/sqlexception.ui
+dbaccess/ui/textconnectionsettings.ui
+dbaccess/ui/password.ui
+dbaccess/ui/joindialog.ui
+dbaccess/ui/tablesfilterdialog.ui
+dbaccess/ui/tablesjoindialog.ui
+dbaccess/ui/savemodifieddialog.ui
+dbaccess/ui/saveindexdialog.ui
+dbaccess/ui/designsavemodifieddialog.ui
+dbaccess/ui/tabledesignsavemodifieddialog.ui
+dbaccess/ui/deleteallrowsdialog.ui
