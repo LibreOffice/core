@@ -1653,6 +1653,10 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Home</property>
                 <property name="use_underline">True</property>
+                <style>
+                  <class name="context-default"/>
+                  <class name="context-any"/>
+                </style>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -3281,6 +3285,523 @@
               </object>
               <packing>
                 <property name="position">6</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="sfxlo-PriorityHBox" id="ImageBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="sfxlo-DropdownBox" id="box68">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkBox" id="box99">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="sfxlo-SidebarToolBox" id="brightnes">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="GrafLuminance">
+                                <property name="use_action_appearance">False</property>
+                                <property name="width_request">135</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="is_important">True</property>
+                                <property name="action_name">.uno:GrafLuminance</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="sfxlo-SidebarToolBox" id="contrast">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="GrafContrast">
+                                <property name="use_action_appearance">False</property>
+                                <property name="width_request">135</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="is_important">True</property>
+                                <property name="action_name">.uno:GrafContrast</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="sfxlo-DropdownBox" id="box69">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkBox" id="box100">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="sfxlo-SidebarToolBox" id="gamma">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="GrafGamma">
+                                <property name="use_action_appearance">False</property>
+                                <property name="width_request">135</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="is_important">True</property>
+                                <property name="action_name">.uno:GrafGamma</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="sfxlo-SidebarToolBox" id="transparence">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="GrafTransparence">
+                                <property name="use_action_appearance">False</property>
+                                <property name="width_request">135</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="is_important">True</property>
+                                <property name="action_name">.uno:GrafTransparence</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <style>
+                      <class name="priority-1"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparator" id="separator29">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="sfxlo-DropdownBox" id="box70">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkBox" id="box101">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="sfxlo-SidebarToolBox" id="mode">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="GrafMode">
+                                <property name="use_action_appearance">False</property>
+                                <property name="width_request">135</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="is_important">True</property>
+                                <property name="action_name">.uno:GrafMode</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="sfxlo-SidebarToolBox" id="red">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="GrafRed">
+                                <property name="use_action_appearance">False</property>
+                                <property name="width_request">135</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="is_important">True</property>
+                                <property name="action_name">.uno:GrafRed</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="sfxlo-DropdownBox" id="box71">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkBox" id="box102">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="sfxlo-SidebarToolBox" id="green">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="GrafGreen">
+                                <property name="use_action_appearance">False</property>
+                                <property name="width_request">135</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="is_important">True</property>
+                                <property name="action_name">.uno:GrafGreen</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="sfxlo-SidebarToolBox" id="blue">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="GrafBlue">
+                                <property name="use_action_appearance">False</property>
+                                <property name="width_request">135</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="is_important">True</property>
+                                <property name="action_name">.uno:GrafBlue</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparator" id="separator28">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="sfxlo-DropdownBox" id="box72">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkBox" id="box103">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="sfxlo-SidebarToolBox" id="flip">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="FlipVertical">
+                                <property name="use_action_appearance">False</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="is_important">True</property>
+                                <property name="action_name">.uno:FlipVertical</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="sfxlo-SidebarToolBox" id="flip1">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="FlipHorizontal">
+                                <property name="use_action_appearance">False</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="is_important">True</property>
+                                <property name="action_name">.uno:FlipHorizontal</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="sfxlo-DropdownBox" id="box74">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkBox" id="box105">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="sfxlo-SidebarToolBox" id="crop">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="Crop">
+                                <property name="use_action_appearance">False</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="is_important">True</property>
+                                <property name="action_name">.uno:Crop</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="sfxlo-SidebarToolBox" id="filter">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="GraphicFilterToolbox">
+                                <property name="use_action_appearance">False</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="is_important">True</property>
+                                <property name="action_name">.uno:GraphicFilterToolbox</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">8</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="position">7</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="ImageLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Image</property>
+                <property name="use_underline">True</property>
+                <style>
+                  <class name="context-Graphic"/>
+                </style>
+              </object>
+              <packing>
+                <property name="position">7</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
