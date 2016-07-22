@@ -7,25 +7,33 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-# This file contains all dialogs that the test dialogs-test
-# will test. It will read one-by-one, try to open it and create a
-# screenshot that will be saved in workdir/screenshots using the
-# pattern of the ui-file name.
+# This file contains all dialogs that the unit tests in the module
+# will work on if it is in script mode. It will read one-by-one,
+# try to open it and create a screenshot that will be saved in
+# workdir/screenshots using the pattern of the ui-file name.
 #
-# You may use empty lines, or lines starrting with '#' which are treated
-# as comments. All other lines have to end with <CR> and will be interpreted
-# as ui-files.
+# Syntax:
+# - emty lines are allowed
+# - lines starting with '#' are treated as comment
+# - all other lines should contain a *.ui filename in the same
+#   notation as in the dialog constructors (see code)
 
 #
-# The known dialogs which have a hard-coded representation
+# The 'known' dialogs which have a hard-coded representation
+# in registerKnownDialogsByID/createDialogByID
 #
+
+# No known dialogs in writer for now
 
 #
 # Dialogs without a hard-coded representation. These will
 # be visualized using a fallback based on VclBuilder
 #
 
-# deactivated, leads to problems and the test to not work
+# currently deactivated, leads to problems and the test to not work
+# This is typically a hint that these should be hard-coded in the
+# test case since they need some document and model data to work
+#
 # modules/swriter/ui/templatedialog(nRegion).ui
 # modules/swriter/ui/autoformattable.ui
 # modules/swriter/ui/endnotepage.ui
