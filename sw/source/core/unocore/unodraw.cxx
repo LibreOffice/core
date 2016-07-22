@@ -400,10 +400,9 @@ SwXShapesEnumeration::SwXShapesEnumeration(SwXDrawPage* const pDrawPage)
     SolarMutexGuard aGuard;
     ::std::insert_iterator<shapescontainer_t> pInserter = ::std::insert_iterator<shapescontainer_t>(m_aShapes, m_aShapes.begin());
     sal_Int32 nCount = pDrawPage->getCount();
-    std::set<const SwFrameFormat*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDrawPage->GetDoc());
     for(sal_Int32 nIdx = 0; nIdx < nCount; nIdx++)
     {
-        uno::Reference<drawing::XShape> xShape(pDrawPage->getByIndex(nIdx, &aTextBoxes), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(pDrawPage->getByIndex(nIdx), uno::UNO_QUERY);
         *pInserter++ = uno::makeAny(xShape);
     }
 }
@@ -526,25 +525,13 @@ sal_Int32 SwXDrawPage::getCount() throw( uno::RuntimeException, std::exception )
     else
     {
         static_cast<SwXDrawPage*>(this)->GetSvxPage();
-
-        std::set<const SwFrameFormat*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
-
-        if (aTextBoxes.empty())
-            return pDrawPage->getCount();
-        else
-            return SwTextBoxHelper::getCount(pDrawPage->GetSdrPage(), aTextBoxes);
+        return SwTextBoxHelper::getCount(pDrawPage->GetSdrPage());
     }
 }
 
 uno::Any SwXDrawPage::getByIndex(sal_Int32 nIndex)
         throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                uno::RuntimeException, std::exception )
-{
-    return getByIndex(nIndex, nullptr);
-}
-
-uno::Any SwXDrawPage::getByIndex(sal_Int32 nIndex, std::set<const SwFrameFormat*>* pTextBoxes)
-    throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if(!pDoc)
@@ -553,17 +540,7 @@ uno::Any SwXDrawPage::getByIndex(sal_Int32 nIndex, std::set<const SwFrameFormat*
         throw lang::IndexOutOfBoundsException();
 
     static_cast<SwXDrawPage*>(this)->GetSvxPage();
-    std::set<const SwFrameFormat*> aTextBoxes;
-    if (!pTextBoxes)
-    {
-        // We got no set, so let's generate one.
-        aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
-        pTextBoxes = &aTextBoxes;
-    }
-    if (pTextBoxes->empty())
-        return pDrawPage->getByIndex( nIndex );
-    else
-        return SwTextBoxHelper::getByIndex(pDrawPage->GetSdrPage(), nIndex, *pTextBoxes);
+    return SwTextBoxHelper::getByIndex(pDrawPage->GetSdrPage(), nIndex);
 }
 
 uno::Type  SwXDrawPage::getElementType() throw( uno::RuntimeException, std::exception )
@@ -1564,7 +1541,7 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                 }
                 else if (pEntry->nWID == FN_TEXT_BOX)
                 {
-                    bool bValue = SwTextBoxHelper::findTextBox(pFormat);
+                    bool bValue = SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT);
                     aRet <<= bValue;
                 }
                 else if (pEntry->nWID == RES_CHAIN)
@@ -1770,8 +1747,7 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                                 bConvert = false;
                         if (bConvert)
                         {
-                            std::set<const SwFrameFormat*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pFormat->GetDoc());
-                            aRet <<= SwTextBoxHelper::getOrdNum(pObj, aTextBoxes);
+                            aRet <<= SwTextBoxHelper::getOrdNum(pObj);
                         }
                     }
                 }
@@ -1852,7 +1828,7 @@ uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
                 else if (pEntry->nWID == FN_TEXT_BOX)
                 {
                     // The TextBox property is set, if we can find a textbox for this shape.
-                    if (pFormat && SwTextBoxHelper::findTextBox(pFormat))
+                    if (pFormat && SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT))
                         pRet[nProperty] = beans::PropertyState_DIRECT_VALUE;
                     else
                         pRet[nProperty] = beans::PropertyState_DEFAULT_VALUE;

@@ -162,6 +162,28 @@ std::set<const SwFrameFormat*> SwTextBoxHelper::findTextBoxes(const SwDoc* pDoc)
     return aTextBoxes;
 }
 
+bool SwTextBoxHelper::isTextBox(const SwFrameFormat* pShape, sal_uInt16 nType)
+{
+   assert(nType == RES_FLYFRMFMT || nType == RES_DRAWFRMFMT);
+   if (!pShape || pShape->Which() != nType || !pShape->GetAttrSet().HasItem(RES_CNTNT))
+       return false;
+
+   sal_uInt16 nOtherType = (pShape->Which() == RES_FLYFRMFMT) ? RES_DRAWFRMFMT : RES_FLYFRMFMT;
+   SwFrameFormat* pFormat = pShape->GetOtherTextBoxFormat();
+   if (!pFormat)
+       return false;
+
+   assert(pFormat->Which() == nOtherType);
+   if (pFormat->Which() != nOtherType)
+       return false;
+
+   const SwFormatContent& rContent = pShape->GetContent();
+   if (!pFormat->GetAttrSet().HasItem(RES_CNTNT) || pFormat->GetContent() != rContent)
+       return false;
+
+   return true;
+}
+
 std::set<const SwFrameFormat*> SwTextBoxHelper::findTextBoxes(const SwNode& rNode)
 {
     const SwDoc* pDoc = rNode.GetDoc();
@@ -205,35 +227,39 @@ std::map<SwFrameFormat*, SwFrameFormat*> SwTextBoxHelper::findShapes(const SwDoc
     return aRet;
 }
 
-/// If the passed SdrObject is in fact a TextFrame, that is used as a TextBox.
-bool lcl_isTextBox(SdrObject* pSdrObject, std::set<const SwFrameFormat*>& rTextBoxes)
-{
-    SwVirtFlyDrawObj* pObject = dynamic_cast<SwVirtFlyDrawObj*>(pSdrObject);
-    return pObject && rTextBoxes.find(pObject->GetFormat()) != rTextBoxes.end();
-}
-
 bool SwTextBoxHelper::isTextBox(const SdrObject* pObject)
 {
     const SwVirtFlyDrawObj* pVirtFlyDrawObj = dynamic_cast<const SwVirtFlyDrawObj*>(pObject);
     if (!pVirtFlyDrawObj)
         return false;
-    std::set<const SwFrameFormat*> aTextBoxes = findTextBoxes(pVirtFlyDrawObj->GetFormat()->GetDoc());
-    return aTextBoxes.find(pVirtFlyDrawObj->GetFormat()) != aTextBoxes.end();
+    return isTextBox(pVirtFlyDrawObj->GetFormat(), RES_FLYFRMFMT);
 }
 
-sal_Int32 SwTextBoxHelper::getCount(SdrPage* pPage, std::set<const SwFrameFormat*>& rTextBoxes)
+sal_Int32 SwTextBoxHelper::getCount(SdrPage* pPage)
 {
     sal_Int32 nRet = 0;
     for (std::size_t i = 0; i < pPage->GetObjCount(); ++i)
     {
-        if (lcl_isTextBox(pPage->GetObj(i), rTextBoxes))
+        if (isTextBox(pPage->GetObj(i)))
             continue;
         ++nRet;
     }
     return nRet;
 }
 
-uno::Any SwTextBoxHelper::getByIndex(SdrPage* pPage, sal_Int32 nIndex, std::set<const SwFrameFormat*>& rTextBoxes) throw(lang::IndexOutOfBoundsException)
+sal_Int32 SwTextBoxHelper::getCount(const SwDoc* pDoc)
+{
+    sal_Int32 nRet = 0;
+    const SwFrameFormats& rSpzFrameFormats = *pDoc->GetSpzFrameFormats();
+    for (SwFrameFormats::const_iterator it = rSpzFrameFormats.begin(); it != rSpzFrameFormats.end(); ++it)
+    {
+        if (isTextBox(*it, RES_FLYFRMFMT))
+            ++nRet;
+    }
+    return nRet;
+}
+
+uno::Any SwTextBoxHelper::getByIndex(SdrPage* pPage, sal_Int32 nIndex) throw(lang::IndexOutOfBoundsException)
 {
     if (nIndex < 0)
         throw lang::IndexOutOfBoundsException();
@@ -242,7 +268,7 @@ uno::Any SwTextBoxHelper::getByIndex(SdrPage* pPage, sal_Int32 nIndex, std::set<
     sal_Int32 nCount = 0; // Current logical index.
     for (std::size_t i = 0; i < pPage->GetObjCount(); ++i)
     {
-        if (lcl_isTextBox(pPage->GetObj(i), rTextBoxes))
+        if (isTextBox(pPage->GetObj(i)))
             continue;
         if (nCount == nIndex)
         {
@@ -258,14 +284,14 @@ uno::Any SwTextBoxHelper::getByIndex(SdrPage* pPage, sal_Int32 nIndex, std::set<
     return uno::makeAny(uno::Reference<drawing::XShape>(pRet->getUnoShape(), uno::UNO_QUERY));
 }
 
-sal_Int32 SwTextBoxHelper::getOrdNum(const SdrObject* pObject, std::set<const SwFrameFormat*>& rTextBoxes)
+sal_Int32 SwTextBoxHelper::getOrdNum(const SdrObject* pObject)
 {
     if (const SdrPage* pPage = pObject->GetPage())
     {
         sal_Int32 nOrder = 0; // Current logical order.
         for (std::size_t i = 0; i < pPage->GetObjCount(); ++i)
         {
-            if (lcl_isTextBox(pPage->GetObj(i), rTextBoxes))
+            if (isTextBox(pPage->GetObj(i)))
                 continue;
             if (pPage->GetObj(i) == pObject)
                 return nOrder;

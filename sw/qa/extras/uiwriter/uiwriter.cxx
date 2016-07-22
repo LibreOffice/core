@@ -858,9 +858,8 @@ void SwUiWriterTest::testFdo82191()
 {
     SwDoc* pDoc = createDoc("fdo82191.odt");
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-    std::set<const SwFrameFormat*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
     // Make sure we have a single draw shape.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), SwTextBoxHelper::getCount(pPage, aTextBoxes));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), SwTextBoxHelper::getCount(pPage));
 
     SwDoc aClipboard;
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -870,9 +869,8 @@ void SwUiWriterTest::testFdo82191()
     pWrtShell->Copy(&aClipboard);
     pWrtShell->Paste(&aClipboard);
 
-    aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
     // This was one: the textbox of the shape wasn't copied.
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aTextBoxes.size());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), SwTextBoxHelper::getCount(pDoc));
 }
 
 void SwUiWriterTest::testCommentedWord()
@@ -3389,15 +3387,20 @@ void SwUiWriterTest::testTdf92648()
 {
     SwDoc* pDoc = createDoc("tdf92648.docx");
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-    std::set<const SwFrameFormat*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
     // Make sure we have ten draw shapes.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), SwTextBoxHelper::getCount(pPage, aTextBoxes));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), SwTextBoxHelper::getCount(pPage));
     // and the text boxes haven't got zero height
-    for (std::set<const SwFrameFormat*>::iterator it=aTextBoxes.begin(); it!=aTextBoxes.end(); ++it)
+    sal_Int32 nCount = 0;
+    for (const SwFrameFormat* pFormat : *pDoc->GetSpzFrameFormats())
     {
-        SwFormatFrameSize aSize((*it)->GetFrameSize());
+        if (!SwTextBoxHelper::isTextBox(pFormat, RES_FLYFRMFMT))
+            continue;
+        SwFormatFrameSize aSize(pFormat->GetFrameSize());
         CPPUNIT_ASSERT(aSize.GetHeight() != 0);
+        ++nCount;
     }
+    // and we have had five of them.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), nCount);
 }
 
 void SwUiWriterTest::testTdf96515()
@@ -3721,8 +3724,7 @@ void SwUiWriterTest::testTdf78727()
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     // This was 1: make sure we don't loose the TextBox anchored inside the
     // table that is moved inside a text frame.
-    std::set<const SwFrameFormat*> aSet;
-    CPPUNIT_ASSERT(SwTextBoxHelper::getCount(pPage, aSet) > 1);
+    CPPUNIT_ASSERT(SwTextBoxHelper::getCount(pPage) > 1);
 }
 
 // accepting change tracking gets stuck on change

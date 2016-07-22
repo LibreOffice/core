@@ -505,7 +505,7 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
                     pFrameFormat->SetFormatAttr(aSize);
                 }
                 nAdjustedRelPosY = nProposedRelPosY;
-            } else if ( SwTextBoxHelper::findTextBox(pFormat) )
+            } else if ( SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT) )
                 // when the shape has a textbox, use only the proposed vertical position
                 nAdjustedRelPosY = nProposedRelPosY;
         }
