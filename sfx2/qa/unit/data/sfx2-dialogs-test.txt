@@ -1,0 +1,71 @@
+# -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# This file contains all dialogs that the unit tests in the module
+# will work on if it is in script mode. It will read one-by-one,
+# try to open it and create a screenshot that will be saved in
+# workdir/screenshots using the pattern of the ui-file name.
+#
+# Syntax:
+# - emty lines are allowed
+# - lines starting with '#' are treated as comment
+# - all other lines should contain a *.ui filename in the same
+#   notation as in the dialog constructors (see code)
+
+#
+# The 'known' dialogs which have a hard-coded representation
+# in registerKnownDialogsByID/createDialogByID
+#
+
+# No known dialogs in sfx2 for now
+
+#
+# Dialogs without a hard-coded representation. These will
+# be visualized using a fallback based on VclBuilder
+#
+
+# currently deactivated, leads to problems and the test to not work
+# This is typically a hint that these should be hard-coded in the
+# test case since they need some document and model data to work
+
+sfx/ui/documentpropertiesdialog.ui
+sfx/ui/descriptioninfopage.ui
+sfx/ui/documentinfopage.ui
+sfx/ui/custominfopage.ui
+sfx/ui/cmisinfopage.ui
+sfx/ui/documentfontspage.ui
+sfx/ui/managestylepage.ui
+sfx/ui/optprintpage.ui
+sfx/ui/securityinfopage.ui
+sfx/ui/helpcontentpage.ui
+sfx/ui/helpindexpage.ui
+sfx/ui/helpsearchpage.ui
+sfx/ui/helpbookmarkpage.ui
+sfx/ui/licensedialog.ui
+sfx/ui/linkeditdialog.ui
+sfx/ui/bookmarkdialog.ui
+sfx/ui/checkin.ui
+sfx/ui/editdurationdialog.ui
+sfx/ui/inputdialog.ui
+sfx/ui/newstyle.ui
+sfx/ui/password.ui
+sfx/ui/versionsofdialog.ui
+sfx/ui/versioncommentdialog.ui
+sfx/ui/versionscmis.ui
+sfx/ui/loadtemplatedialog.ui
+sfx/ui/templatedlg.ui
+sfx/ui/printeroptionsdialog.ui
+sfx/ui/searchdialog.ui
+sfx/ui/alienwarndialog.ui
+sfx/ui/errorfindemaildialog.ui
+sfx/ui/querysavedialog.ui
+sfx/ui/floatingrecord.ui
+sfx/ui/helpcontrol.ui
+sfx/ui/startcenter.ui
+sfx/ui/cmisline.ui

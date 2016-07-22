@@ -60,4 +60,8 @@ endif
 #todo: clean up quickstarter stuff in both libraries
 #todo: move standard pool to svl
 
+$(eval $(call gb_Module_add_slowcheck_targets,sfx2,\
+    CppunitTest_sfx2_dialogs_test \
+))
+
 # vim: set noet sw=4 ts=4:
