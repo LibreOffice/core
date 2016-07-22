@@ -73,8 +73,6 @@ public:
     static SwFrameFormat* getOtherTextBoxFormat(const SwFrameFormat* pFormat, sal_uInt16 nType);
     /// If we have an associated TextFrame, then return that.
     static SwFrameFormat* getOtherTextBoxFormat(css::uno::Reference<css::drawing::XShape> xShape);
-    static SwFrameFormat* findTextBox(const SwFrameFormat* pShape);
-    static SwFrameFormat* findTextBox(const css::uno::Reference<css::drawing::XShape>& xShape);
     /// Return the textbox rectangle of a draw shape (in twips).
     static Rectangle getTextRectangle(SwFrameFormat* pShape, bool bAbsolute = true);
 
@@ -91,17 +89,6 @@ public:
     /// Is pObject a textbox of a drawinglayer shape?
     static bool isTextBox(const SdrObject* pObject);
 
-    /// Look up TextFrames in a document, which are in fact TextBoxes.
-    static std::set<const SwFrameFormat*> findTextBoxes(const SwDoc* pDoc);
-    /**
-     * Look up TextFrames in a document, which are in fact TextBoxes.
-     *
-     * If rNode has a matching SwContentFrame, then only TextBoxes of rNode are
-     * returned.
-     */
-    static std::set<const SwFrameFormat*> findTextBoxes(const SwNode& rNode);
-    /// Build a textbox -> shape format map.
-    static std::map<SwFrameFormat*, SwFrameFormat*> findShapes(const SwDoc* pDoc);
     /// Count number of shapes in the document, excluding TextBoxes.
     static sal_Int32 getCount(const SwDoc* pDoc);
     /// Count number of shapes on the page, excluding TextBoxes.
