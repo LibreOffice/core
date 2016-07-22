@@ -151,7 +151,9 @@ void Default::setPropertyValue(OUString const &, css::uno::Any const &)
         static_cast< cppu::OWeakObject * >(this), -1);
 }
 
-static OUString xdg_user_dir_lookup (const char *type)
+namespace {
+
+OUString xdg_user_dir_lookup (const char *type)
 {
     char *config_home;
     char *p;
@@ -166,12 +168,12 @@ static OUString xdg_user_dir_lookup (const char *type)
 
     if (!aSecurity.getHomeDir( aHomeDirURL ) )
     {
-        osl::FileBase::getFileURLFromSystemPath(OUString("/tmp"), aDocumentsDirURL);
+        osl::FileBase::getFileURLFromSystemPath("/tmp", aDocumentsDirURL);
         return aDocumentsDirURL;
     }
 
     config_home = getenv ("XDG_CONFIG_HOME");
-    if (config_home == NULL || config_home[0] == 0)
+    if (config_home == nullptr || config_home[0] == 0)
     {
         aConfigFileURL = aHomeDirURL + "/.config/user-dirs.dirs";
     }
@@ -249,6 +251,8 @@ static OUString xdg_user_dir_lookup (const char *type)
     /* Use fallbacks historical compatibility if nothing else exists */
     return aHomeDirURL + "/" + OUString::createFromAscii(type);
 }
+
+} // namespace
 
 css::uno::Any Default::getPropertyValue(OUString const & PropertyName)
     throw (
