@@ -59,7 +59,7 @@ struct SC_DLLPUBLIC ScCellValue
      */
     void assign( const ScDocument& rDoc, const ScAddress& rPos );
 
-    void assign( const ScCellValue& rOther, ScDocument& rDestDoc, int nCloneFlags = SC_CLONECELL_DEFAULT );
+    void assign(const ScCellValue& rOther, ScDocument& rDestDoc, ScCloneFlags nCloneFlags = ScCloneFlags::Default);
 
     /**
      * Set cell value at specified position in specified document.

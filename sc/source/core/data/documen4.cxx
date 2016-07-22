@@ -297,7 +297,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
             maTabs[*itr]->SetFormulaCell(
                 nCol1, nRow1,
                 new ScFormulaCell(
-                    *pCell, *this, ScAddress(nCol1, nRow1, *itr), SC_CLONECELL_STARTLISTENING));
+                    *pCell, *this, ScAddress(nCol1, nRow1, *itr), ScCloneFlags::StartListening));
     }
 
     ScAddress aBasePos(nCol1, nRow1, nTab1);
@@ -435,7 +435,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,  // multiple (repeate
                 for (; itr != itrEnd && *itr < nMax; ++itr)
                 if( maTabs[*itr] )
                     maTabs[*itr]->SetFormulaCell(
-                        j, k, new ScFormulaCell(aRefCell, *this, ScAddress(j, k, *itr), SC_CLONECELL_STARTLISTENING));
+                        j, k, new ScFormulaCell(aRefCell, *this, ScAddress(j, k, *itr), ScCloneFlags::StartListening));
             }
 }
 
