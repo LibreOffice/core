@@ -1476,6 +1476,10 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Home</property>
                 <property name="use_underline">True</property>
+                <style>
+                  <class name="context-default"/>
+                  <class name="context-any"/>
+                </style>
               </object>
               <packing>
                 <property name="position">1</property>
