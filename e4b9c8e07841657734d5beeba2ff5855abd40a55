@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a8bc5a2_971d1cc0",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2016-07-22T12:19:08Z",
+      "side": 1,
+      "message": "This bug is already present in LibreOffice, and this comment is to just show inconsistency between operating systems.\nFor OSX and Linux it´s producing one row.\nFor Windows it is producing two lines.\nI would like to focus only on this particular bug, and fix only issues which is connected with that (to make the commit small).\n\nIs it will be ok, if I remove that comment (this assertXPath is not really necessary)? I would submit bug report for LibreOffice instead.",
+      "parentUuid": "5a8bc5a2_f734a04b",
+      "revId": "e4b9c8e07841657734d5beeba2ff5855abd40a55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8bc5a2_d7788492",
         "filename": "sc/source/filter/excel/xetable.cxx",
         "patchSetId": 8
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "The ((abs(value) / 256) \u003c 1/16) would be yet something different. So what units is the GetValue() in?\n\nNote also that integer 1/16 is always 0. I believe the original \u003c16 is actually correct, otherwise all Excel exports would had been wrong.\n\nFor the rounding, calculating 256.0*(value+0.5) gives a value by 128 larger than 256.0*value+0.5\n\nSo you really should be sure what you\u0027re actually doing here.",
       "parentUuid": "5a8bc5a2_97b6fc3b",
+      "revId": "e4b9c8e07841657734d5beeba2ff5855abd40a55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_b7c69814",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1567,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2016-07-22T12:19:08Z",
+      "side": 1,
+      "message": "Hi Eike.\nYou have right. I should write (abs(value) / 256.0) \u003c 1.0/16.0).\nBut it looks like it is very cpu costly (operations on floats instead of integers).\n\nI have made many experiments and all default width values was too small (about by 128). \nIn IsDefWidth function there is comparison if default width for cell (static_cast\u003c long \u003e( 256.0 * ( GetValue() + 0.5 ) ) is similar to checked width (fNewColWidth variable). If difference is smaller than 1/16 then width is treaten as default.\n\nI have taken this formula from SetDefWidth method:\nnumberOfCharacters \u003d limit_cast\u003c sal_uInt16 \u003e( width / 256.0 + 0.5 ) \n\nAfter mathematical operation to get ¨width¨, I got:\nwidth \u003d static_cast\u003c long \u003e( 256.0 * ( numberOfCharacters + 0.5 ) \n\nThis formula I have used in IsDefWidth function.\nFrom my perspective SetDefWidth should use opposite formulas than IsDefWidth, as the first is translating to number of characters and second one is translating from number of characters.",
+      "parentUuid": "5a8bc5a2_9746fcbd",
       "revId": "e4b9c8e07841657734d5beeba2ff5855abd40a55",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
