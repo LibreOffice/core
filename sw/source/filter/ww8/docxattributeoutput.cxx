@@ -5142,7 +5142,7 @@ void DocxAttributeOutput::WriteTextBox(uno::Reference<drawing::XShape> xShape)
     DocxTableExportContext aTableExportContext;
     pushToTableExportContext(aTableExportContext);
 
-    SwFrameFormat* pTextBox = SwTextBoxHelper::findTextBox(xShape);
+    SwFrameFormat* pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(xShape);
     const SwPosition* pAnchor = pTextBox->GetAnchor().GetContentAnchor();
     ww8::Frame aFrame(*pTextBox, *pAnchor);
     m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++, /*bTextBoxOnly=*/true);
@@ -5155,7 +5155,7 @@ void DocxAttributeOutput::WriteVMLTextBox(uno::Reference<drawing::XShape> xShape
     DocxTableExportContext aTableExportContext;
     pushToTableExportContext(aTableExportContext);
 
-    SwFrameFormat* pTextBox = SwTextBoxHelper::findTextBox(xShape);
+    SwFrameFormat* pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(xShape);
     const SwPosition* pAnchor = pTextBox->GetAnchor().GetContentAnchor();
     ww8::Frame aFrame(*pTextBox, *pAnchor);
     m_rExport.SdrExporter().writeVMLTextFrame(&aFrame, /*bTextBoxOnly=*/true);
