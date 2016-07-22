@@ -442,7 +442,8 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                 Graphic   aGraphic( mGraphics.front() );
 
                 mGraphics.pop_front();
-                mParaInts.pop_front(); //Transparency
+                sal_Int32 nTransparency = mParaInts.front();
+                mParaInts.pop_front();
                 aOutputRect = mParaRects.front();
                 mParaRects.pop_front();
                 aVisibleOutputRect = mParaRects.front();
@@ -463,7 +464,15 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                                                        aVisibleOutputRect.Right(), aVisibleOutputRect.Bottom() ) ) );
                             rWriter.SetClipRegion( aRect);
                         }
+
                         Bitmap aMask;
+                        if (nTransparency)
+                        {
+                            AlphaMask aAlphaMask(aGraphic.GetSizePixel());
+                            aAlphaMask.Erase(nTransparency);
+                            aMask = aAlphaMask.GetBitmap();
+                        }
+
                         SvMemoryStream aTmp;
                         const sal_uInt8* pData = aGfxLink.GetData();
                         sal_uInt32 nBytes = aGfxLink.GetDataSize();
