@@ -2264,66 +2264,6 @@ bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
     return false;
 }
 
-void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
-        const ScAddress& rNewPos )
-{
-    TokenPointers aPtrs( pCode, nLen, pRPN, nRPN, false);
-    for (size_t j=0; j<2; ++j)
-    {
-        FormulaToken** pp = aPtrs.maPointerRange[j].mpStart;
-        FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
-        for (; pp != pEnd; ++pp)
-        {
-            FormulaToken* p = aPtrs.getHandledToken(j,pp);
-            if (!p)
-                continue;
-
-            switch ( p->GetType() )
-            {
-                case svDoubleRef :
-                    {
-                        ScSingleRefData& rRef2 = *p->GetSingleRef2();
-                        // Also adjust if the reference is of the form Sheet1.A2:A3
-                        if ( rRef2.IsFlag3D() || p->GetSingleRef()->IsFlag3D() )
-                        {
-                            ScAddress aAbs = rRef2.toAbs(rOldPos);
-                            rRef2.SetAddress(aAbs, rNewPos);
-                        }
-                    }
-                    SAL_FALLTHROUGH;
-                case svSingleRef :
-                    {
-                        ScSingleRefData& rRef1 = *p->GetSingleRef();
-                        if ( rRef1.IsFlag3D() )
-                        {
-                            ScAddress aAbs = rRef1.toAbs(rOldPos);
-                            rRef1.SetAddress(aAbs, rNewPos);
-                        }
-                    }
-                    break;
-                case svExternalDoubleRef :
-                    {
-                        ScSingleRefData& rRef2 = *p->GetSingleRef2();
-                        ScAddress aAbs = rRef2.toAbs(rOldPos);
-                        rRef2.SetAddress(aAbs, rNewPos);
-                    }
-                    SAL_FALLTHROUGH;
-                case svExternalSingleRef :
-                    {
-                        ScSingleRefData& rRef1 = *p->GetSingleRef();
-                        ScAddress aAbs = rRef1.toAbs(rOldPos);
-                        rRef1.SetAddress(aAbs, rNewPos);
-                    }
-                    break;
-                default:
-                    {
-                        // added to avoid warnings
-                    }
-            }
-        }
-    }
-}
-
 namespace {
 
 void GetExternalTableData(const ScDocument* pOldDoc, const ScDocument* pNewDoc, const SCTAB nTab, OUString& rTabName, sal_uInt16& rFileId)

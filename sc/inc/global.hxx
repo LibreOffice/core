@@ -228,24 +228,16 @@ enum class ScCloneFlags{
 /** If set, cloned formula cells will start to listen to the document. */
     StartListening   = 0x0001,
 
-/** If set, relative 3D references of cloned formula cells will be adjusted to
-    old position (used while swapping cells for sorting a cell range). */
-    Adjust3Drel      = 0x0002,
-
-/** If set, the caption object of a cell note will not be cloned (used while
-    copying cells to undo document, where captions are handled in drawing undo). */
-    NoCaption        = 0x0004,
-
 /** If set, absolute refs will not transformed to external references */
-    NoMakeAbsExternal = 0x0008,
+    NoMakeAbsExternal = 0x0002,
 
 /** If set, global named expressions will be converted to sheet-local named
     expressions. */
-    NamesToLocal   = 0x0010
+    NamesToLocal   = 0x0004
 };
 namespace o3tl
 {
-    template<> struct typed_flags<ScCloneFlags> : is_typed_flags<ScCloneFlags, 0x1f> {};
+    template<> struct typed_flags<ScCloneFlags> : is_typed_flags<ScCloneFlags, 0x0007> {};
 }
 
 #ifndef DELETEZ

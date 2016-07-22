@@ -880,9 +880,6 @@ ScFormulaCell::ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const
         pCode->AdjustReferenceOnCopy( aPos);
     }
 
-    if ( nCloneFlags & ScCloneFlags::Adjust3Drel )
-        pCode->ReadjustRelative3DReferences( rCell.aPos, aPos );
-
     if( !bCompile )
     {   // Name references with references and ColRowNames
         pCode->Reset();
