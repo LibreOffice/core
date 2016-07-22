@@ -146,7 +146,6 @@ struct DocxSdrExport::Impl
     rtl::Reference<sax_fastparser::FastAttributeList> m_pDashLineStyleAttr;
     bool m_bDMLAndVMLDrawingOpen;
     /// List of TextBoxes in this document: they are exported as part of their shape, never alone.
-    std::set<const SwFrameFormat*> m_aTextBoxes;
     /// Preserved rotation for TextFrames.
     sal_Int32 m_nDMLandVMLTextFrameRotation;
 
@@ -166,7 +165,6 @@ struct DocxSdrExport::Impl
           m_pFlyWrapAttrList(nullptr),
           m_pBodyPrAttrList(nullptr),
           m_bDMLAndVMLDrawingOpen(false),
-          m_aTextBoxes(SwTextBoxHelper::findTextBoxes(m_rExport.m_pDoc)),
           m_nDMLandVMLTextFrameRotation(0)
     {
     }
@@ -1783,7 +1781,7 @@ bool DocxSdrExport::Impl::checkFrameBtlr(SwNode* pStartNode, bool bDML)
 
 bool DocxSdrExport::isTextBox(const SwFrameFormat& rFrameFormat)
 {
-    return m_pImpl->m_aTextBoxes.find(&rFrameFormat) != m_pImpl->m_aTextBoxes.end();
+    return SwTextBoxHelper::isTextBox(&rFrameFormat, RES_FLYFRMFMT);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -640,7 +640,7 @@ void RtfSdrExport::AddSdrObject(const SdrObject& rObj)
 
 bool RtfSdrExport::isTextBox(const SwFrameFormat& rFrameFormat)
 {
-    return m_aTextBoxes.find(&rFrameFormat) != m_aTextBoxes.end();
+    return SwTextBoxHelper::isTextBox(&rFrameFormat, RES_FLYFRMFMT);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
