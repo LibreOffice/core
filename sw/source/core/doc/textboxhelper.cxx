@@ -28,6 +28,7 @@
 #include <sortedobjs.hxx>
 #include <cntfrm.hxx>
 #include <fmtsrnd.hxx>
+#include <frmfmt.hxx>
 
 #include <editeng/unoprnms.hxx>
 #include <editeng/charrotateitem.hxx>
@@ -54,6 +55,18 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape)
         uno::Reference<text::XTextDocument> xTextDocument(pShape->GetDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
         uno::Reference<text::XTextContentAppend> xTextContentAppend(xTextDocument->getText(), uno::UNO_QUERY);
         xTextContentAppend->appendTextContent(xTextFrame, uno::Sequence<beans::PropertyValue>());
+
+        // Link FLY and DRAW formats, so it becomes a text box (needed for syncProperty calls).
+        uno::Reference<text::XTextFrame> xRealTextFrame(xTextFrame, uno::UNO_QUERY);
+        SwXTextFrame* pTextFrame = dynamic_cast<SwXTextFrame *>(xRealTextFrame.get());
+        assert(nullptr != pTextFrame);
+        SwFrameFormat* pFormat = pTextFrame->GetFrameFormat();
+
+        assert(nullptr != dynamic_cast<SwDrawFrameFormat*>(pShape));
+        assert(nullptr != dynamic_cast<SwFlyFrameFormat*>(pFormat));
+
+        pShape->SetOtherTextBoxFormat(pFormat);
+        pFormat->SetOtherTextBoxFormat(pShape);
 
         // Initialize properties.
         uno::Reference<beans::XPropertySet> xPropertySet(xTextFrame, uno::UNO_QUERY);
