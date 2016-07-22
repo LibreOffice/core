@@ -82,7 +82,7 @@ OpenJDK at least, but probably not true for Lemotes JDK */
 #endif // SPARC, INTEL, POWERPC, MIPS, MIPS64, ARM, IA64, M68K, HPPA, ALPHA
 
 
-class MalformedVersionException
+class MalformedVersionException : public std::exception
 {
 public:
     MalformedVersionException();
