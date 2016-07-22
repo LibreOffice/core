@@ -1097,8 +1097,7 @@ void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
     sal_uInt16 nPrefix = XML_NAMESPACE_TABLE;
     if (const SwFrameFormat* pFlyFormat = rTableNd.GetFlyFormat())
     {
-        std::set<const SwFrameFormat*> aTextBoxes = SwTextBoxHelper::findTextBoxes(rTableNd.GetDoc());
-        if (aTextBoxes.find(pFlyFormat) != aTextBoxes.end())
+        if (SwTextBoxHelper::isTextBox(pFlyFormat, RES_FLYFRMFMT))
             nPrefix = XML_NAMESPACE_LO_EXT;
     }
 

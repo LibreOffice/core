@@ -1151,7 +1151,7 @@ class NestedUserCallHdl
 /// Notify the format's textbox that it should reconsider its position / size.
 void lcl_textBoxSizeNotify(SwFrameFormat* pFormat)
 {
-    if (SwTextBoxHelper::findTextBox(pFormat))
+    if (SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT))
     {
         // Just notify the textbox that the size has changed, the actual object size is not interesting.
         SfxItemSet aResizeSet(pFormat->GetDoc()->GetAttrPool(), RES_FRM_SIZE, RES_FRM_SIZE, 0);
