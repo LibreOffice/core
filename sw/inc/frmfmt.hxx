@@ -41,11 +41,14 @@ class SW_DLLPUBLIC SwFrameFormat: public SwFormat
     friend class SwDoc;
     friend class SwPageDesc;    ///< Is allowed to call protected CTor.
     friend class ::sw::DocumentLayoutManager; ///< Is allowed to call protected CTor.
+    friend class SwTextBoxHelper;
 
     css::uno::WeakReference<css::uno::XInterface> m_wXObject;
 
     //UUUU DrawingLayer FillAttributes in a preprocessed form for primitive usage
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maFillAttributes;
+
+    SwFrameFormat *m_pOtherTextBoxFormat;
 
 protected:
     SwFrameFormat(
@@ -63,6 +66,9 @@ protected:
         const sal_uInt16* pWhichRange = nullptr);
 
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) override;
+
+    SwFrameFormat* GetOtherTextBoxFormat() const { return m_pOtherTextBoxFormat; }
+    void SetOtherTextBoxFormat( SwFrameFormat *pFormat );
 
 public:
     virtual ~SwFrameFormat();
