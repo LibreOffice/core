@@ -8,6 +8,7 @@
  */
 
 #include <swmodeltestbase.hxx>
+#include <config_features.h>
 
 #include <initializer_list>
 
@@ -810,12 +811,14 @@ DECLARE_ODFEXPORT_TEST(testCellUserDefineAttr, "userdefattr-tablecell.odt")
     getUserDefineAttribute(uno::makeAny(xCellC1), "proName", "v3");
 }
 
+#if HAVE_FEATURE_PDFIMPORT
 DECLARE_ODFEXPORT_TEST(testEmbeddedPdf, "embedded-pdf.odt")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // This failed, pdf+svm replacement graphics pair didn't survive an ODT roundtrip.
     CPPUNIT_ASSERT(!getProperty<OUString>(xShape, "ReplacementGraphicURL").isEmpty());
 }
+#endif
 
 DECLARE_ODFEXPORT_TEST(testTableStyles1, "table_styles_1.odt")
 {

@@ -32,6 +32,7 @@ public:
 
 void XOutdevTest::testPdfGraphicExport()
 {
+#if HAVE_FEATURE_PDFIMPORT
     // Import the graphic.
     Graphic aGraphic;
     test::Directories aDirectories;
@@ -58,6 +59,7 @@ void XOutdevTest::testPdfGraphicExport()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>('D'), sFirstBytes[2]);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>('F'), sFirstBytes[3]);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>('-'), sFirstBytes[4]);
+#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(XOutdevTest);
