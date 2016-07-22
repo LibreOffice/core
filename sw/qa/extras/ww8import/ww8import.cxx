@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -551,6 +552,12 @@ DECLARE_WW8IMPORT_TEST(testTdf99120, "tdf99120.doc")
     // This failed: the header was empty on the 3rd page, as the first page header was shown.
     CPPUNIT_ASSERT_EQUAL(OUString("Section 2, odd."),  parseDump("/root/page[3]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("Section 2, even."),  parseDump("/root/page[4]/header/txt/text()"));
+}
+
+DECLARE_WW8IMPORT_TEST(testTdf59896, "tdf59896.doc")
+{
+    // This was awt::FontWeight::NORMAL, i.e. the first run wasn't bold, when it should be bold
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(1), 1), "CharWeight"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
