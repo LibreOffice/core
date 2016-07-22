@@ -16,8 +16,8 @@
 
 using namespace ::com::sun::star;
 
-/// Test opening a dialog in sw
-class SwDialogsTest : public ScreenshotTest
+/// Test opening a dialog in svx
+class SvxDialogsTest : public ScreenshotTest
 {
 private:
     /// helper method to populate KnownDialogs, called in setUp(). Needs to be
@@ -29,50 +29,50 @@ private:
     virtual VclAbstractDialog* createDialogByID(sal_uInt32 nID) override;
 
 public:
-    SwDialogsTest();
-    virtual ~SwDialogsTest();
+    SvxDialogsTest();
+    virtual ~SvxDialogsTest();
 
     virtual void setUp() override;
 
     // try to open a dialog
     void openAnyDialog();
 
-    CPPUNIT_TEST_SUITE(SwDialogsTest);
+    CPPUNIT_TEST_SUITE(SvxDialogsTest);
     CPPUNIT_TEST(openAnyDialog);
     CPPUNIT_TEST_SUITE_END();
 };
 
-SwDialogsTest::SwDialogsTest()
+SvxDialogsTest::SvxDialogsTest()
 {
 }
 
-SwDialogsTest::~SwDialogsTest()
+SvxDialogsTest::~SvxDialogsTest()
 {
 }
 
-void SwDialogsTest::setUp()
+void SvxDialogsTest::setUp()
 {
     ScreenshotTest::setUp();
 }
 
-void SwDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
+void SvxDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {
     // fill map of known dilogs
 }
 
-VclAbstractDialog* SwDialogsTest::createDialogByID(sal_uInt32 /*nID*/)
+VclAbstractDialog* SvxDialogsTest::createDialogByID(sal_uInt32 /*nID*/)
 {
     return nullptr;
 }
 
-void SwDialogsTest::openAnyDialog()
+void SvxDialogsTest::openAnyDialog()
 {
     /// example how to process an input file containing the UXMLDescriptions of the dialogs
     /// to dump
     if (true)
     {
         test::Directories aDirectories;
-        OUString aURL = aDirectories.getURLFromSrc("sw/qa/unit/data/sw-dialogs-test.txt");
+        OUString aURL = aDirectories.getURLFromSrc("svx/qa/unit/data/svx-dialogs-test.txt");
         SvFileStream aStream(aURL, StreamMode::READ);
         OString aNextUIFile;
         const OString aComment("#");
@@ -143,7 +143,7 @@ void SwDialogsTest::openAnyDialog()
     }
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(SwDialogsTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(SvxDialogsTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
