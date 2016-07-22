@@ -2205,7 +2205,8 @@ VCL_BUILDER_FACTORY(NotebookbarTabControl);
 
 NotebookbarTabControl::NotebookbarTabControl(vcl::Window* pParent, WinBits nStyle)
     : TabControl(pParent, nStyle)
-    , eLastContext( vcl::EnumContext::Context::Context_Any )
+    , bLastContextWasSupported(true)
+    , eLastContext(vcl::EnumContext::Context::Context_Any)
 {
     LanguageTag aLocale( Application::GetSettings().GetUILanguageTag());
     ResMgr* pResMgr = ResMgr::SearchCreateResMgr( "vcl", aLocale );
@@ -2222,6 +2223,8 @@ void NotebookbarTabControl::SetContext( vcl::EnumContext::Context eContext )
 {
     if (eLastContext != eContext)
     {
+        bool bHandled = false;
+
         for (int nChild = 0; nChild < GetChildCount(); ++nChild)
         {
             TabPage* pPage = static_cast<TabPage*>(GetChild(nChild));
@@ -2231,10 +2234,22 @@ void NotebookbarTabControl::SetContext( vcl::EnumContext::Context eContext )
             else
                 EnablePage(nChild + 2, false);
 
-            if (pPage->HasContext(eContext) && eContext != vcl::EnumContext::Context::Context_Any)
+            if (!bHandled && bLastContextWasSupported
+                && pPage->HasContext(vcl::EnumContext::Context::Context_Default))
+            {
                 SetCurPageId(nChild + 2);
+            }
+
+            if (pPage->HasContext(eContext) && eContext != vcl::EnumContext::Context::Context_Any)
+            {
+                SetCurPageId(nChild + 2);
+                bHandled = true;
+                bLastContextWasSupported = true;
+            }
         }
 
+        if (!bHandled)
+            bLastContextWasSupported = false;
         eLastContext = eContext;
     }
 }

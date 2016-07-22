@@ -213,6 +213,7 @@ protected:
     virtual void ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 
 private:
+    bool bLastContextWasSupported;
     vcl::EnumContext::Context eLastContext;
     Link<NotebookBar*,void> m_aIconClickHdl;
 };
