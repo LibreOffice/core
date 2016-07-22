@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_b75db8ee",
+        "filename": "canvas/source/cairo/cairo_canvashelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1029,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-22T07:07:04Z",
+      "side": 1,
+      "message": "corcet-\u003ecorrect",
+      "revId": "47f4b37c21d8cefb4fa2398dd89a44baadc73880",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_d76244ad",
+        "filename": "vcl/headless/svpgdi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-22T07:07:04Z",
+      "side": 1,
+      "message": "corcet-correct",
+      "revId": "47f4b37c21d8cefb4fa2398dd89a44baadc73880",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_f75740c8",
+        "filename": "vcl/unx/generic/gdi/salgdi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-22T07:07:04Z",
+      "side": 1,
+      "message": "corcet-\u003ecorrect",
+      "revId": "47f4b37c21d8cefb4fa2398dd89a44baadc73880",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_175d8ce9",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1931,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-22T07:07:04Z",
+      "side": 1,
+      "message": "corcet-\u003ecorrect",
+      "revId": "47f4b37c21d8cefb4fa2398dd89a44baadc73880",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
