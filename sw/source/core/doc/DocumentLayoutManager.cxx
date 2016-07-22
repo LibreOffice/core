@@ -510,6 +510,10 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         SwFormatContent aContent(pDestTextBox->GetContent().GetContentIdx()->GetNode().GetStartNode());
         aSet.Put(aContent);
         pDest->SetFormatAttr(aSet);
+
+        // Link FLY and DRAW formats, so it becomes a text box
+        pDest->SetOtherTextBoxFormat(pDestTextBox);
+        pDestTextBox->SetOtherTextBoxFormat(pDest);
     }
 
     return pDest;
