@@ -32,4 +32,8 @@ $(eval $(call gb_Module_add_targets,fpicker,\
 ))
 endif
 
+$(eval $(call gb_Module_add_slowcheck_targets,fpicker,\
+    CppunitTest_fpicker_dialogs_test \
+))
+
 # vim: set noet sw=4 ts=4:
