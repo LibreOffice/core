@@ -91,6 +91,9 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <svx/unoapi.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include "DrawController.hxx"
 
 #include <memory>
@@ -700,6 +703,18 @@ bool View::SdrBeginTextEdit(
     if ( mpViewSh )
     {
         mpViewSh->GetViewShellBase().GetDrawController().FireSelectionChangeListener();
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            if (OutlinerView* pView = GetTextEditOutlinerView())
+            {
+                Rectangle aRectangle = pView->GetOutputArea();
+                if (pWin && pWin->GetMapMode().GetMapUnit() == MAP_100TH_MM)
+                    aRectangle = OutputDevice::LogicToLogic(aRectangle, MAP_100TH_MM, MAP_TWIP);
+                OString sRectangle = aRectangle.toString();
+                SfxLokHelper::notifyOtherViews(&mpViewSh->GetViewShellBase(), LOK_CALLBACK_VIEW_LOCK, "rectangle", sRectangle);
+            }
+        }
     }
 
     if (bReturn)
@@ -790,6 +805,10 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
         if ( mpViewSh )
         {
             mpViewSh->GetViewShellBase().GetDrawController().FireSelectionChangeListener();
+
+            if (comphelper::LibreOfficeKit::isActive())
+                SfxLokHelper::notifyOtherViews(&mpViewSh->GetViewShellBase(), LOK_CALLBACK_VIEW_LOCK, "rectangle", "EMPTY");
+
         }
 
         SdPage* pPage = dynamic_cast< SdPage* >( xObj->GetPage() );
