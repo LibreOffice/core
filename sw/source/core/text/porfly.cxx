@@ -359,7 +359,7 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
     if (rAnchor.GetAnchorId() == FLY_AS_CHAR)
     {
         // This is an inline draw shape, see if it has a textbox.
-        SwFrameFormat* pTextBox = SwTextBoxHelper::findTextBox(pShape);
+        SwFrameFormat* pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT);
         if (pTextBox)
         {
             // It has, so look up its text rectangle, and adjust the position
