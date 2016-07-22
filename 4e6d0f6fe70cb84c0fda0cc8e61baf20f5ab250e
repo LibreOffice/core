@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_d793244e",
+        "filename": "sc/source/core/data/column.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1768,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-22T09:29:01Z",
+      "side": 0,
+      "message": "Please don\u0027t mix such cosmetic changes with real changes.\n\nIt\u0027s ok this time, but please avoid in future.",
+      "revId": "4e6d0f6fe70cb84c0fda0cc8e61baf20f5ab250e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
