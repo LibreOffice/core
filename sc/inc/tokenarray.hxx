@@ -116,11 +116,6 @@ public:
     /// Assignment with references to FormulaToken entries (not copied!)
     ScTokenArray& operator=( const ScTokenArray& );
 
-    /// Make 3D references point to old referenced position even if relative
-    void            ReadjustRelative3DReferences(
-                                const ScAddress& rOldPos,
-                                const ScAddress& rNewPos );
-
     /**
      * Make all absolute references external references pointing to the old document
      *
