@@ -36,6 +36,10 @@ $(eval $(call gb_Module_add_check_targets,svx,\
 	CppunitTest_svx_unit \
 ))
 
+$(eval $(call gb_Module_add_slowcheck_targets,svx,\
+    CppunitTest_svx_dialogs_test \
+))
+
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,svx,\
     Executable_gengal \

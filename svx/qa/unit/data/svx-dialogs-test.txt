@@ -1,0 +1,80 @@
+# -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# This file contains all dialogs that the unit tests in the module
+# will work on if it is in script mode. It will read one-by-one,
+# try to open it and create a screenshot that will be saved in
+# workdir/screenshots using the pattern of the ui-file name.
+#
+# Syntax:
+# - emty lines are allowed
+# - lines starting with '#' are treated as comment
+# - all other lines should contain a *.ui filename in the same
+#   notation as in the dialog constructors (see code)
+
+#
+# The 'known' dialogs which have a hard-coded representation
+# in registerKnownDialogsByID/createDialogByID
+#
+
+# No known dialogs in svx for now
+
+#
+# Dialogs without a hard-coded representation. These will
+# be visualized using a fallback based on VclBuilder
+#
+
+# currently deactivated, leads to problems and the test to not work
+# This is typically a hint that these should be hard-coded in the
+# test case since they need some document and model data to work
+#
+
+svx/ui/textcontrolchardialog.ui
+svx/ui/textcontrolparadialog.ui
+svx/ui/datanavigator.ui
+svx/ui/redlineviewpage.ui
+svx/ui/redlinefilterpage.ui
+svx/ui/headfootformatpage.ui
+svx/ui/optgridpage.ui
+svx/ui/xformspage.ui
+svx/ui/compressgraphicdialog.ui
+svx/ui/compressgraphicdialog.ui
+svx/ui/docrecoveryprogressdialog.ui
+svx/ui/docrecoverybrokendialog.ui
+svx/ui/passwd.ui
+svx/ui/adddataitemdialog.ui
+svx/ui/addconditiondialog.ui
+svx/ui/namespacedialog.ui
+svx/ui/addnamespacedialog.ui
+svx/ui/addsubmissiondialog.ui
+svx/ui/addmodeldialog.ui
+svx/ui/addinstancedialog.ui
+svx/ui/extrustiondepthdialog.ui
+svx/ui/fontworkgallerydialog.ui
+svx/ui/fontworkspacingdialog.ui
+svx/ui/chinesedictionary.ui
+svx/ui/chineseconversiondialog.ui
+svx/ui/imapdialog.ui
+svx/ui/asianphoneticguidedialog.ui
+svx/ui/findreplacedialog.ui
+svx/ui/crashreportdlg.ui
+svx/ui/docrecoverysavedialog.ui
+svx/ui/docrecoveryrecoverdialog.ui
+svx/ui/querysavecontchangesdialog.ui
+svx/ui/querydeletecontourdialog.ui
+svx/ui/queryunlinkgraphicsdialog.ui
+svx/ui/querynewcontourdialog.ui
+svx/ui/querymodifyimagemapchangesdialog.ui
+svx/ui/querysaveimagemapchangesdialog.ui
+svx/ui/querysaveimagemapchangesdialog.ui
+svx/ui/linkwarndialog.ui
+svx/ui/formlinkwarndialog.ui
+svx/ui/savemodifieddialog.ui
+svx/ui/querydeletethemedialog.ui
+svx/ui/querydeleteobjectdialog.ui
