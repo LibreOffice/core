@@ -3511,7 +3511,7 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
             SdXMLPluginShapeContext* pPluginContext = dynamic_cast<SdXMLPluginShapeContext*>(pShapeContext);
             if( pPluginContext && pPluginContext->getMimeType() == "model/vnd.gltf+json" )
             {
-                 mxImplContext = 0;
+                 mxImplContext = nullptr;
                  return this;
             }
         }
