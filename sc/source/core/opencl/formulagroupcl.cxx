@@ -4054,7 +4054,7 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray&
     {
         // I think OpenCLError exceptions are actually exceptional (unexpected), so do use SAL_WARN
         // here.
-        SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCLError from " << oce.mFunction << ": " << ::opencl::errorString(oce.mError) << "at " << oce.mFile << ":" << oce.mLineNumber);
+        SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCLError from " << oce.mFunction << ": " << ::opencl::errorString(oce.mError) << " at " << oce.mFile << ":" << oce.mLineNumber);
 
         // OpenCLError used to go to the catch-all below, and not delete pDynamicKernel. Was that
         // intentional, should we not do it here then either?
