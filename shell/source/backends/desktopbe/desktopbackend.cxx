@@ -209,11 +209,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
 
     // Fall back to the default if the specific backend is not available:
     css::uno::Reference< css::uno::XInterface > backend;
-    if ( desktop == "GNOME" ) {
-        backend = createBackend(
-            context,
-            "com.sun.star.configuration.backend.GconfBackend");
-    } else if ( desktop == "KDE" ) {
+    if ( desktop == "KDE" ) {
         backend = createBackend(
             context,
             "com.sun.star.configuration.backend.KDEBackend");
