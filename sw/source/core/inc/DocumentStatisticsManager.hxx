@@ -38,9 +38,9 @@ public:
     void DocInfoChgd(bool isEnableSetModified) override;
     const SwDocStat &GetDocStat() const override;
     void SetDocStatModified(bool bSet);
-    const SwDocStat &GetUpdatedDocStat(bool bCompleteAsync = false, bool bFields = true) override;
+    const SwDocStat &GetUpdatedDocStat(bool bCompleteAsync, bool bFields) override;
     void SetDocStat(const SwDocStat& rStat) override;
-    void UpdateDocStat(bool bCompleteAsync = false, bool bFields = true) override;
+    void UpdateDocStat(bool bCompleteAsync, bool bFields) override;
     virtual ~DocumentStatisticsManager();
 
 private:

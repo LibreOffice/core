@@ -105,7 +105,7 @@ public:
     virtual SfxShell* CreateShell (
         ::sd::ShellId nId,
         vcl::Window* pParentWindow,
-        ::sd::FrameView* pFrameView) override;
+        ::sd::FrameView* pFrameView = nullptr) override;
     virtual void ReleaseShell (SfxShell* pShell) override;
 private:
     ::sd::ViewShell& mrViewShell;

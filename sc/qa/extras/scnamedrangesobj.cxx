@@ -27,7 +27,7 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    virtual uno::Reference< uno::XInterface > init(sal_Int32 nSheet) override;
+    virtual uno::Reference< uno::XInterface > init(sal_Int32 nSheet = 0) override;
 
     ScNamedRangesObj();
 

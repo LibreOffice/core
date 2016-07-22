@@ -64,7 +64,7 @@ public:
 
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 protected:
-    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet = nullptr ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 private:
     SvxBackgroundTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet );

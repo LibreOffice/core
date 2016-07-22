@@ -511,7 +511,7 @@ protected:
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
-    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet = nullptr ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
     SfxCustomPropertiesPage( vcl::Window* pParent, const SfxItemSet& );
@@ -630,7 +630,7 @@ private:
 protected:
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet* ) override;
-    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet = nullptr ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
     SfxCmisPropertiesPage( vcl::Window* pParent, const SfxItemSet& );

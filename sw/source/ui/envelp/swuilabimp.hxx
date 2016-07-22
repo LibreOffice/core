@@ -67,7 +67,7 @@ public:
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
-    virtual DeactivateRC DeactivatePage(SfxItemSet* pSet = nullptr) override;
+    virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
             void FillItem(SwLabItem& rItem);
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
@@ -119,7 +119,7 @@ public:
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
-    virtual DeactivateRC DeactivatePage(SfxItemSet* pSet = nullptr) override;
+    virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
 };
@@ -158,7 +158,7 @@ public:
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
-    virtual DeactivateRC DeactivatePage(SfxItemSet* pSet = nullptr) override;
+    virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
 };
@@ -195,7 +195,7 @@ public:
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet) override;
-    virtual DeactivateRC DeactivatePage(SfxItemSet* pSet = nullptr) override;
+    virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
 };

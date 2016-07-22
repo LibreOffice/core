@@ -65,7 +65,7 @@ public:
     virtual void EndRunProperties( const SwRedlineData* pRedlineData ) override;
 
     /// Output text.
-    virtual void RunText( const OUString& rText, rtl_TextEncoding eCharSet ) override;
+    virtual void RunText( const OUString& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8 ) override;
 
     /// Output text (without markup).
     virtual void RawText(const OUString& rText, rtl_TextEncoding eCharSet) override;
@@ -111,7 +111,7 @@ public:
     virtual void TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner ) override;
     virtual void TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) override;
     virtual void TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) override;
-    virtual void TableRowEnd( sal_uInt32 nDepth = 1 ) override;
+    virtual void TableRowEnd( sal_uInt32 nDepth ) override;
 
     /// Start of the styles table.
     virtual void StartStyles() override;

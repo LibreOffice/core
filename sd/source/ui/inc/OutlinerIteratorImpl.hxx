@@ -144,7 +144,7 @@ public:
 
     virtual void GotoNextText() override;
     virtual const IteratorPosition& GetPosition() override;
-    virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const override;
+    virtual IteratorImplBase* Clone (IteratorImplBase* pObject = nullptr) const override;
     virtual bool operator== (const IteratorImplBase& rIterator) const override;
 
 private:
@@ -191,7 +191,7 @@ public:
     virtual ~ViewIteratorImpl();
 
     virtual void GotoNextText() override;
-    virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const override;
+    virtual IteratorImplBase* Clone (IteratorImplBase* pObject = nullptr) const override;
     virtual void Reverse() override;
 
 protected:
@@ -234,7 +234,7 @@ public:
     virtual ~DocumentIteratorImpl();
 
     virtual void GotoNextText() override;
-    virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const override;
+    virtual IteratorImplBase* Clone (IteratorImplBase* pObject = nullptr) const override;
 
 private:
     /// Number of pages in the view that is specified by <member>maPosition</member>.

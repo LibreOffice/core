@@ -55,7 +55,7 @@ class RscEnum : public RscConst
     sal_uInt32      nSize;
 public:
                     RscEnum( Atom nId, sal_uInt32 nTypId );
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool ) override;
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool bOwnClass = false ) override;
     sal_uInt32      Size() override { return nSize; }
 
     virtual void    SetToDefault( const RSCINST & rInst ) override

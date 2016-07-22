@@ -43,7 +43,7 @@ namespace sdr
             virtual void ItemSetChanged(const SfxItemSet& rSet) override;
 
             // react on Item change
-            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem) override;
+            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
 
             // Called after ItemChange() is done for all items. Allows local reactions on
             // specific item changes

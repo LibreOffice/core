@@ -42,8 +42,8 @@ namespace xmloff
             const XMLPropertyState&                     _rProperty,
             const SvXMLUnitConverter&                   _rUnitConverter,
             const SvXMLNamespaceMap&                    _rNamespaceMap,
-            const ::std::vector< XMLPropertyState >*    _pProperties,
-            sal_uInt32                                  _nIdx
+            const ::std::vector< XMLPropertyState >*    _pProperties = nullptr,
+            sal_uInt32                                  _nIdx = 0
         ) const override;
     };
 

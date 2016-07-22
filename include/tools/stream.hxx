@@ -669,7 +669,21 @@ public:
     SvScriptStream(const OUString& rUrl);
     virtual ~SvScriptStream();
 
-    virtual bool ReadLine(OString &rStr, sal_Int32) override;
+    /** Read a line of bytes.
+
+        @param nMaxBytesToRead
+                   Maximum of bytes to read, if line is longer it will be
+                   truncated.
+
+        @note NOTE that the default is one character less than STRING_MAXLEN to
+              prevent problems after conversion to String that may be lurking
+              in various places doing something like
+              @code
+                for (sal_uInt16 i=0; i < aString.Len(); ++i)
+              @endcode
+              causing endless loops ...
+    */
+    virtual bool ReadLine(OString& rStr, sal_Int32 nMaxBytesToRead = 0xFFFE ) override;
     virtual bool good() const override;
 };
 

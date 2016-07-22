@@ -341,7 +341,7 @@ public:
 
     const OUString&   GetStyle() const        { return aStyleName; }
     void            UpdateStyleName(const OUString& rNew)  { aStyleName=rNew; }
-    virtual ScFormatEntry* Clone(ScDocument* pDoc) const override;
+    virtual ScFormatEntry* Clone(ScDocument* pDoc = nullptr) const override;
 
 protected:
     virtual void    DataChanged( const ScRange* pModified ) const override;

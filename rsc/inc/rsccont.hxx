@@ -64,7 +64,7 @@ public:
                             pTypeClass = pClass;
                             pTypeClass1 = pClass1;
                         }
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool ) override;
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnClass = false ) override;
     void            Destroy( const RSCINST & rInst ) override;
     ERRTYPE         GetElement( const RSCINST & rInst, const RscId & rEleName,
                                 RscTop * pCreateClass, const RSCINST & rCreateInst,

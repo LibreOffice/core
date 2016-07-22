@@ -187,7 +187,7 @@ private:
 
 protected:
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
-    virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet = nullptr ) override;
+    virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );

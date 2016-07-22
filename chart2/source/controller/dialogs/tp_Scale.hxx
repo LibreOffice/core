@@ -40,7 +40,7 @@ public:
     virtual bool FillItemSet( SfxItemSet* rOutAttrs ) override;
     virtual void Reset( const SfxItemSet* rInAttrs ) override;
     using TabPage::DeactivatePage;
-    virtual DeactivateRC DeactivatePage( SfxItemSet* pItemSet = nullptr ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pItemSet ) override;
 
     void SetNumFormatter( SvNumberFormatter* pFormatter );
     void SetNumFormat();

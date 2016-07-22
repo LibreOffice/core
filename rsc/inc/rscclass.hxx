@@ -65,15 +65,15 @@ public:
     ERRTYPE         SetVariable( Atom nVarName, RscTop * pClass,
                                  RSCINST * pDflt,
                                  RSCVAR nVarType, SfxStyleItem nMask,
-                                 Atom nDataBaseName ) override;
+                                 Atom nDataBaseName = InvalidAtom ) override;
     ERRTYPE         SetVariable( Atom nVarName, RscTop * pClass,
                                  RSCINST * pDflt,
                                  RSCVAR nVarType, SfxSlotInfo nMask,
-                                 Atom nDataBaseName ) override;
+                                 Atom nDataBaseName = InvalidAtom ) override;
     ERRTYPE         SetVariable( Atom nVarName, RscTop * pClass,
-                                 RSCINST * pDflt,
-                                 RSCVAR nVarType, sal_uInt32 nMask,
-                                 Atom nDataBaseName ) override;
+                                 RSCINST * pDflt = nullptr,
+                                 RSCVAR nVarType = 0, sal_uInt32 nMask = 0,
+                                 Atom nDataBaseName = InvalidAtom ) override;
     virtual void    EnumVariables( void * pData, VarEnumCallbackProc ) override;
     RSCINST         GetVariable( const RSCINST & rInst, Atom nVarName,
                                  const RSCINST & rInitInst,
@@ -92,7 +92,7 @@ public:
     using RscTop::GetDefault;
     RSCINST         GetDefault( Atom nVarId ) override;
 
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool ) override;
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnClass = false ) override;
     void            Destroy( const RSCINST & rInst ) override;
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * ) override;

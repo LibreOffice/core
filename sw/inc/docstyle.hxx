@@ -204,7 +204,7 @@ public:
     SwDocStyleSheetPool( SwDoc&, bool bOrganizer = false );
 
     virtual SfxStyleSheetBase& Make(const OUString&, SfxStyleFamily,
-            sal_uInt16 nMask) override;
+            sal_uInt16 nMask = SFXSTYLEBIT_ALL) override;
 
     virtual SfxStyleSheetBase* Find( const OUString&, SfxStyleFamily eFam,
                                     sal_uInt16 n=SFXSTYLEBIT_ALL ) override;

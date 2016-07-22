@@ -108,7 +108,7 @@ public:
     virtual void onAsyncOperationFinished() override;
     virtual void UpdateControls( const OUString& rURL ) override;
 
-    virtual void EnableAutocompletion( bool ) override;
+    virtual void EnableAutocompletion( bool = true) override;
 
     virtual sal_Int32 getTargetColorDepth() override;
     virtual sal_Int32 getAvailableWidth() override;

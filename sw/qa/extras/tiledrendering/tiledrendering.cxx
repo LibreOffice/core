@@ -218,8 +218,8 @@ void SwTiledRenderingTest::testPostMouseEvent()
 
     Point aStart = pShellCursor->GetSttPos();
     aStart.setX(aStart.getX() - 1000);
-    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aStart.getX(), aStart.getY(), 1);
-    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aStart.getX(), aStart.getY(), 1);
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
     // The new cursor position must be before the first word.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), pShellCursor->GetPoint()->nContent.GetIndex());
     comphelper::LibreOfficeKit::setActive(false);
@@ -724,8 +724,8 @@ void SwTiledRenderingTest::testViewCursorVisibility()
     SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
     Point aCenter = pObject->GetSnapRect().Center();
-    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aCenter.getX(), aCenter.getY(), 1);
-    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aCenter.getX(), aCenter.getY(), 1);
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aCenter.getX(), aCenter.getY(), 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aCenter.getX(), aCenter.getY(), 1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
     // Make sure the "view/text" cursor of the first view gets a notification.
     CPPUNIT_ASSERT(!aView1.m_bViewCursorVisible);
@@ -754,8 +754,8 @@ void SwTiledRenderingTest::testViewCursorCleanup()
     SdrObject* pObject = pPage->GetObj(0);
     Point aCenter = pObject->GetSnapRect().Center();
     aView1.m_bGraphicViewSelection = false;
-    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aCenter.getX(), aCenter.getY(), 1);
-    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aCenter.getX(), aCenter.getY(), 1);
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aCenter.getX(), aCenter.getY(), 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aCenter.getX(), aCenter.getY(), 1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
     // Make sure there is a graphic view selection on the first view.
     CPPUNIT_ASSERT(aView1.m_bGraphicViewSelection);

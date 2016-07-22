@@ -141,7 +141,7 @@ public:
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberUd ) const override;
+    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
 
     ScViewData*         GetViewData () const { return pViewData; }
     const ScSortParam&  GetSortData () const { return theSortData; }
@@ -191,7 +191,7 @@ public:
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberUd ) const override;
+    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
 
     ScViewData*             GetViewData () const { return pViewData; }
     const ScSubTotalParam&  GetSubTotalData() const { return theSubTotalData; }

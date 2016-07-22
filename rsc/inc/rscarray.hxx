@@ -65,7 +65,7 @@ public:
     virtual RSCCLASS_TYPE   GetClassType() const override;
 
     virtual RscTop *    GetTypeClass() const override;
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool ) override;
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnClass = false ) override;
     void            Destroy( const RSCINST & rInst ) override;
     virtual ERRTYPE GetValueEle( const RSCINST & rInst, sal_Int32 lValue,
                                  RscTop * pCreateClass,

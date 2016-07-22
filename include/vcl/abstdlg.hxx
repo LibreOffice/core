@@ -47,7 +47,7 @@ public:
 class VCL_DLLPUBLIC VclAbstractTerminatedDialog : public VclAbstractDialog
 {
 public:
-    virtual void        EndDialog(long nResult =0) = 0;
+    virtual void        EndDialog(long nResult) = 0;
 };
 
 class VCL_DLLPUBLIC VclAbstractRefreshableDialog : public VclAbstractDialog

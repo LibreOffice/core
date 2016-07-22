@@ -176,7 +176,7 @@ void SmDocShell::SetText(const OUString& rBuffer)
 
         if ( bIsEnabled )
             EnableSetModified( bIsEnabled );
-        SetModified(true);
+        SetModified();
 
         // launch accessible event if necessary
         SmGraphicAccessible *pAcc = pViewSh ? pViewSh->GetGraphicWindow().GetAccessible_Impl() : nullptr;
@@ -199,7 +199,7 @@ void SmDocShell::SetFormat(SmFormat& rFormat)
 {
     maFormat = rFormat;
     SetFormulaArranged( false );
-    SetModified( true );
+    SetModified();
 
     mnModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
 
@@ -614,7 +614,7 @@ void SmDocShell::OnDocumentPrinterChanged( Printer *pPrt )
     Size aOldSize = GetVisArea().GetSize();
     Repaint();
     if( aOldSize != GetVisArea().GetSize() && !maText.isEmpty() )
-        SetModified( true );
+        SetModified();
     mpTmpPrinter = nullptr;
 }
 

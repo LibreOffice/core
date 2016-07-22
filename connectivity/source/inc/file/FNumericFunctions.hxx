@@ -250,7 +250,7 @@ namespace connectivity
         class OOp_Cos : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const override;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** SIN(X)
@@ -263,7 +263,7 @@ namespace connectivity
         class OOp_Sin : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const override;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
         /** TAN(X)
             Returns the tangent of X, where X is given in radians:
@@ -274,7 +274,7 @@ namespace connectivity
         class OOp_Tan : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const override;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** ACOS(X)
@@ -290,7 +290,7 @@ namespace connectivity
         class OOp_ACos : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const override;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** ASIN(X)
@@ -304,7 +304,7 @@ namespace connectivity
         class OOp_ASin : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const override;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** ATAN(X)
@@ -318,7 +318,7 @@ namespace connectivity
         class OOp_ATan : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const override;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** ATAN2(Y,X)
@@ -345,7 +345,7 @@ namespace connectivity
         class OOp_Degrees : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const override;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
 
         /** RADIANS(X)
@@ -358,7 +358,7 @@ namespace connectivity
         class OOp_Radians : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const override;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
         };
     }
 }

@@ -39,7 +39,7 @@ public:
     virtual RSCCLASS_TYPE   GetClassType() const override;
 
     void            SetRefClass( RscTop * pClass ) { pRefClass = pClass; }
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool ) override;
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool bOwnClass = false ) override;
                     // sets the allowed range
     void            Destroy( const RSCINST & rInst ) override;
     sal_uInt32      Size() override { return nSize; }

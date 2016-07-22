@@ -963,7 +963,7 @@ void SmEditWindow::UpdateStatus( bool bSetDocModified )
     if (pMod && pMod->GetConfig()->IsAutoRedraw())
         Flush();
     if ( bSetDocModified )
-        GetDoc()->SetModified(true);
+        GetDoc()->SetModified();
 }
 
 void SmEditWindow::Cut()

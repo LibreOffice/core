@@ -168,7 +168,7 @@ namespace sdr
 
             void ItemSetChanged(const SfxItemSet& rSet) override;
 
-            void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem) override;
+            void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
 
             void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) override;
 

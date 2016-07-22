@@ -108,7 +108,7 @@ class UnoTreeListItem : public SvLBoxString
 public:
                     UnoTreeListItem();
     virtual         ~UnoTreeListItem();
-    void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) override;
+    void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem * = nullptr ) override;
     void            SetImage( const Image& rImage );
     const OUString& GetGraphicURL() const { return maGraphicURL;}
     void            SetGraphicURL( const OUString& rGraphicURL );

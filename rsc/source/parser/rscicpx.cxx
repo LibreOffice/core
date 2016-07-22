@@ -448,7 +448,7 @@ RscTop * RscTypCont::InitClassListBox( RscTop * pSuper, RscArray * pStrLst )
     INS_WINBIT(pClassListBox,DDExtraWidth)
 
     {
-        RSCINST aDflt = aUShort.Create( nullptr, RSCINST(), false );
+        RSCINST aDflt = aUShort.Create( nullptr, RSCINST() );
         aDflt.pClass->SetNumber( aDflt, (sal_uInt16)0xFFFF );
         nId = aNmTb.Put( "CurPos", VARNAME );
         pClassListBox->SetVariable( nId, &aUShort, &aDflt );

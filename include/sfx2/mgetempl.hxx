@@ -93,7 +93,7 @@ protected:
     using TabPage::ActivatePage;
         virtual void        ActivatePage(const SfxItemSet &) override;
         using TabPage::DeactivatePage;
-    virtual DeactivateRC DeactivatePage(SfxItemSet * = nullptr) override;
+    virtual DeactivateRC DeactivatePage(SfxItemSet *) override;
 
 public:
     SfxManageStyleSheetPage(vcl::Window *pParent, const SfxItemSet &rAttrSet );

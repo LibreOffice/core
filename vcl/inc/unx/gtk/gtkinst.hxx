@@ -217,7 +217,7 @@ public:
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics*,
                                                      long &nDX, long &nDY,
                                                      DeviceFormat eFormat,
-                                                     const SystemGraphicsData* ) override;
+                                                     const SystemGraphicsData* = nullptr ) override;
     virtual SalBitmap*          CreateSalBitmap() override;
 
     virtual SalYieldResult      DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) override;

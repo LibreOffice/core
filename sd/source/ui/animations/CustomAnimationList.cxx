@@ -204,7 +204,7 @@ public:
     CustomAnimationListEntryItem(const OUString& aDescription,
                                  CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent);
     virtual ~CustomAnimationListEntryItem();
-    void InitViewData(SvTreeListBox*,SvTreeListEntry*,SvViewDataItem*) override;
+    void InitViewData(SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* = nullptr) override;
     SvLBoxItem* Create() const override;
     void Clone(SvLBoxItem* pSource) override;
 
@@ -376,7 +376,7 @@ class CustomAnimationTriggerEntryItem : public SvLBoxString
 public:
     explicit        CustomAnimationTriggerEntryItem( const OUString& aDescription );
     virtual         ~CustomAnimationTriggerEntryItem();
-    void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) override;
+    void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* = nullptr ) override;
     SvLBoxItem*     Create() const override;
     void            Clone( SvLBoxItem* pSource ) override;
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,

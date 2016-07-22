@@ -331,8 +331,12 @@ void SdTiledRenderingTest::testPostMouseEvent()
     vcl::Cursor* pCursor = rEditView.GetCursor();
     Point aPosition = pCursor->GetPos();
     aPosition.setX(aPosition.getX() - 1000);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, convertMm100ToTwip(aPosition.getX()), convertMm100ToTwip(aPosition.getY()), 1);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, convertMm100ToTwip(aPosition.getX()), convertMm100ToTwip(aPosition.getY()), 1);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      convertMm100ToTwip(aPosition.getX()), convertMm100ToTwip(aPosition.getY()),
+                                      1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      convertMm100ToTwip(aPosition.getX()), convertMm100ToTwip(aPosition.getY()),
+                                      1, MOUSE_LEFT, 0);
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     // The new cursor position must be before the first word.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), rEditView.GetSelection().nStartPos);

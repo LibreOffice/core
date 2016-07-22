@@ -217,7 +217,7 @@ public:
     void EndRedline( const SwRedlineData * pRedlineData );
 
     virtual void SetStateOfFlyFrame( FlyProcessingState nStateOfFlyFrame ) override;
-    virtual void SetAnchorIsLinkedToNode( bool bAnchorLinkedToNode = false ) override;
+    virtual void SetAnchorIsLinkedToNode( bool bAnchorLinkedToNode ) override;
     virtual bool IsFlyProcessingPostponed() override;
     virtual void ResetFlyProcessingFlag() override;
 
@@ -241,7 +241,7 @@ public:
     virtual void TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner ) override;
     virtual void TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) override;
     virtual void TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) override;
-    virtual void TableRowEnd( sal_uInt32 nDepth = 1 ) override;
+    virtual void TableRowEnd( sal_uInt32 nDepth ) override;
 
     /// Start of the styles table.
     virtual void StartStyles() override;

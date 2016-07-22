@@ -112,7 +112,7 @@ private:
     virtual void        AdjustPosSizePixel( const Point &rPos, const Size &rSize ) override;
     virtual void        OuterResizePixel( const Point &rPos, const Size &rSize ) override;
     sal_uInt16          InsertWindowInTable (BaseWindow* pNewWin);
-    virtual bool        PrepareClose( bool bUI ) override;
+    virtual bool        PrepareClose( bool bUI = true ) override;
 
     void                SetCurWindow (BaseWindow* pNewWin, bool bUpdateTabBar = false, bool bRememberAsCurrent = true);
     void                ManageToolbars();
@@ -169,10 +169,10 @@ public:
     virtual css::uno::Reference< css::view::XRenderable > GetRenderable() override;
 
     // virtual sal_uInt16           Print( SfxProgress &rProgress, sal_Bool bIsAPI, PrintDialog *pPrintDialog = 0 );
-    virtual SfxPrinter*     GetPrinter( bool bCreate ) override;
+    virtual SfxPrinter*     GetPrinter( bool bCreate = false ) override;
     virtual sal_uInt16      SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL ) override;
-    virtual OUString        GetSelectionText( bool bCompleteWords ) override;
-    virtual bool            HasSelection( bool bText ) const override;
+    virtual OUString        GetSelectionText( bool bCompleteWords = false ) override;
+    virtual bool            HasSelection( bool bText = true ) const override;
 
     void                GetState( SfxItemSet& );
     void                ExecuteGlobal( SfxRequest& rReq );

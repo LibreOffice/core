@@ -234,12 +234,12 @@ class VCL_PLUGIN_PUBLIC MultiSalLayout : public SalLayout
 {
 public:
     virtual void    DrawText( SalGraphics& ) const override;
-    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
+    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra=0, int nFactor=1) const override;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const override;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const override;
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos,
-                                   int&, DeviceCoordinate* pGlyphAdvAry, int* pCharPosAry,
-                                   const PhysicalFontFace** pFallbackFonts ) const override;
+                                   int&, DeviceCoordinate* pGlyphAdvAry = nullptr, int* pCharPosAry = nullptr,
+                                   const PhysicalFontFace** pFallbackFonts = nullptr ) const override;
     virtual bool    GetOutline( SalGraphics&, basegfx::B2DPolyPolygonVector& ) const override;
 
     // used only by OutputDevice::ImplLayout, TODO: make friend
@@ -336,7 +336,7 @@ public:
     // used by upper layers
     virtual DeviceCoordinate GetTextWidth() const override;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const override;
-    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
+    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra=0, int nFactor=1) const override;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const override;
 
     // used by display layers
