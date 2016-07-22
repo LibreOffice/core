@@ -311,6 +311,7 @@ void GraphicObjectTest::testTdf88935()
 
 void GraphicObjectTest::testPdf()
 {
+#if HAVE_FEATURE_PDFIMPORT
     uno::Reference<lang::XComponent> xComponent = loadFromDesktop(m_directories.getURLFromSrc("svtools/qa/unit/data/pdf.odt"), "com.sun.star.text.TextDocument");
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument*>(xComponent.get());
     CPPUNIT_ASSERT(pTxtDoc);
@@ -339,6 +340,7 @@ void GraphicObjectTest::testPdf()
     CPPUNIT_ASSERT(pGraphicObject->GetGraphic().getPdfData().hasElements());
 
     xComponent->dispose();
+#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(GraphicObjectTest);

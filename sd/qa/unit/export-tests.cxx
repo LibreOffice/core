@@ -517,6 +517,7 @@ void SdExportTest::testTdf62176()
 
 void SdExportTest::testEmbeddedPdf()
 {
+#if HAVE_FEATURE_PDFIMPORT
     sd::DrawDocShellRef xShell = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/embedded-pdf.odp"), ODP);
     xShell = saveAndReload(xShell, ODP);
     uno::Reference<drawing::XDrawPage> xPage = getPage(0, xShell);
@@ -525,6 +526,7 @@ void SdExportTest::testEmbeddedPdf()
     xShape->getPropertyValue("ReplacementGraphicURL") >>= aReplacementGraphicURL;
     CPPUNIT_ASSERT(!aReplacementGraphicURL.isEmpty());
     xShell->DoClose();
+#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);

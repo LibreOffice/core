@@ -174,4 +174,9 @@
  */
 #define HAVE_FEATURE_UI 1
 
+/*
+ * Whether PDF import is available
+ */
+#define HAVE_FEATURE_PDFIMPORT 0
+
 #endif

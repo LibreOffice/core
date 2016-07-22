@@ -10623,6 +10623,7 @@ ENABLE_PDFIMPORT=
 if test $_os != Android -a $_os != iOS -a \( -z "$enable_pdfimport" -o "$enable_pdfimport" = yes \); then
     AC_MSG_RESULT([yes])
     ENABLE_PDFIMPORT=TRUE
+    AC_DEFINE(HAVE_FEATURE_PDFIMPORT)
 
     dnl ===================================================================
     dnl Check for system poppler
