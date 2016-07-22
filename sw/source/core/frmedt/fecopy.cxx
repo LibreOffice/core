@@ -902,7 +902,6 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
                 if( !Imp()->GetDrawView() )
                     MakeDrawView();
 
-                std::set<const SwFrameFormat*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pClpDoc);
                 for ( auto pCpyFormat : *pClpDoc->GetSpzFrameFormats() )
                 {
                     bool bInsWithFormat = true;
@@ -972,7 +971,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
                             }
 
                             // Ignore TextBoxes, they are already handled in sw::DocumentLayoutManager::CopyLayoutFormat().
-                            if (aTextBoxes.find(pCpyFormat) != aTextBoxes.end())
+                            if (SwTextBoxHelper::isTextBox(pCpyFormat, RES_FLYFRMFMT))
                                 continue;
 
                             aAnchor.SetAnchor( pPos );

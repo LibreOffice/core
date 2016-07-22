@@ -68,6 +68,19 @@ public:
     /// Return the textbox rectangle of a draw shape (in twips).
     static Rectangle getTextRectangle(SwFrameFormat* pShape, bool bAbsolute = true);
 
+    /**
+     * Is the frame format a text box?
+     *
+     * A text box consists of a coupled fly and draw format. Most times you
+     * just want to check for a single type, otherwise you get duplicate results.
+     *
+     * @param nType Expected frame format input type.
+     *              Valid types are RES_DRAWFRMFMT and RES_FLYFRMFMT.
+     */
+    static bool isTextBox(const SwFrameFormat* pFormat, sal_uInt16 nType);
+    /// Is pObject a textbox of a drawinglayer shape?
+    static bool isTextBox(const SdrObject* pObject);
+
     /// Look up TextFrames in a document, which are in fact TextBoxes.
     static std::set<const SwFrameFormat*> findTextBoxes(const SwDoc* pDoc);
     /**
@@ -77,16 +90,16 @@ public:
      * returned.
      */
     static std::set<const SwFrameFormat*> findTextBoxes(const SwNode& rNode);
-    /// Is pObject a textbox of a drawinglayer shape?
-    static bool isTextBox(const SdrObject* pObject);
     /// Build a textbox -> shape format map.
     static std::map<SwFrameFormat*, SwFrameFormat*> findShapes(const SwDoc* pDoc);
     /// Count number of shapes in the document, excluding TextBoxes.
-    static sal_Int32 getCount(SdrPage* pPage, std::set<const SwFrameFormat*>& rTextBoxes);
+    static sal_Int32 getCount(const SwDoc* pDoc);
+    /// Count number of shapes on the page, excluding TextBoxes.
+    static sal_Int32 getCount(SdrPage* pPage);
     /// Get a shape by index, excluding TextBoxes.
-    static css::uno::Any getByIndex(SdrPage* pPage, sal_Int32 nIndex, std::set<const SwFrameFormat*>& rTextBoxes) throw(css::lang::IndexOutOfBoundsException);
+    static css::uno::Any getByIndex(SdrPage* pPage, sal_Int32 nIndex) throw(css::lang::IndexOutOfBoundsException);
     /// Get the order of the shape, excluding TextBoxes.
-    static sal_Int32 getOrdNum(const SdrObject* pObject, std::set<const SwFrameFormat*>& rTextBoxes);
+    static sal_Int32 getOrdNum(const SdrObject* pObject);
     /// If pTextBox is a textbox, then set rWrapThrough to the surround of its shape.
     static void getShapeWrapThrough(const SwFrameFormat* pTextBox, bool& rWrapThrough);
 
