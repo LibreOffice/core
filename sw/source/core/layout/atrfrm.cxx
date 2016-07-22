@@ -2502,7 +2502,8 @@ SwFrameFormat::SwFrameFormat(
     const sal_uInt16* pWhichRange)
 :   SwFormat(rPool, pFormatNm, (pWhichRange ? pWhichRange : aFrameFormatSetRange), pDrvdFrame, nFormatWhich),
     m_wXObject(),
-    maFillAttributes()
+    maFillAttributes(),
+    m_pOtherTextBoxFormat(nullptr)
 {
 }
 
@@ -2514,7 +2515,8 @@ SwFrameFormat::SwFrameFormat(
     const sal_uInt16* pWhichRange)
 :   SwFormat(rPool, rFormatNm, (pWhichRange ? pWhichRange : aFrameFormatSetRange), pDrvdFrame, nFormatWhich),
     m_wXObject(),
-    maFillAttributes()
+    maFillAttributes(),
+    m_pOtherTextBoxFormat(nullptr)
 {
 }
 
@@ -2528,6 +2530,27 @@ SwFrameFormat::~SwFrameFormat()
             rAnchor.GetContentAnchor()->nNode.GetNode().RemoveAnchoredFly(this);
         }
     }
+
+    if( nullptr != m_pOtherTextBoxFormat )
+    {
+        m_pOtherTextBoxFormat->SetOtherTextBoxFormat( nullptr );
+        m_pOtherTextBoxFormat = nullptr;
+    }
+}
+
+void SwFrameFormat::SetOtherTextBoxFormat( SwFrameFormat *pFormat )
+{
+    if( nullptr != pFormat )
+    {
+        assert( (Which() == RES_DRAWFRMFMT && pFormat->Which() == RES_FLYFRMFMT)
+             || (Which() == RES_FLYFRMFMT && pFormat->Which() == RES_DRAWFRMFMT) );
+        assert( nullptr == m_pOtherTextBoxFormat );
+    }
+    else
+    {
+        assert( nullptr != m_pOtherTextBoxFormat );
+    }
+    m_pOtherTextBoxFormat = pFormat;
 }
 
 bool SwFrameFormat::supportsFullDrawingLayerFillAttributeSet() const
