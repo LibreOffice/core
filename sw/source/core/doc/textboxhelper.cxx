@@ -126,27 +126,6 @@ void SwTextBoxHelper::destroy(SwFrameFormat* pShape)
     }
 }
 
-std::set<const SwFrameFormat*> SwTextBoxHelper::findTextBoxes(const SwDoc* pDoc)
-{
-    std::set<const SwFrameFormat*> aTextBoxes;
-
-    const SwFrameFormats& rSpzFrameFormats = *pDoc->GetSpzFrameFormats();
-    for (SwFrameFormats::const_iterator it = rSpzFrameFormats.begin(); it != rSpzFrameFormats.end(); ++it)
-    {
-        const SwFrameFormat* pFormat = *it;
-
-        // A TextBox in the context of this class is a fly frame that has a
-        // matching (same RES_CNTNT) draw frame.
-        if (!pFormat->GetAttrSet().HasItem(RES_CNTNT) || !pFormat->GetContent().GetContentIdx())
-            continue;
-
-        if (pFormat->Which() == RES_FLYFRMFMT && nullptr != pFormat->GetOtherTextBoxFormat())
-            aTextBoxes.insert(pFormat);
-    }
-
-    return aTextBoxes;
-}
-
 bool SwTextBoxHelper::isTextBox(const SwFrameFormat* pShape, sal_uInt16 nType)
 {
    assert(nType == RES_FLYFRMFMT || nType == RES_DRAWFRMFMT);
@@ -167,49 +146,6 @@ bool SwTextBoxHelper::isTextBox(const SwFrameFormat* pShape, sal_uInt16 nType)
        return false;
 
    return true;
-}
-
-std::set<const SwFrameFormat*> SwTextBoxHelper::findTextBoxes(const SwNode& rNode)
-{
-    const SwDoc* pDoc = rNode.GetDoc();
-    const SwContentNode* pContentNode = nullptr;
-    const SwContentFrame* pContentFrame = nullptr;
-    bool bHaveViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
-    if (bHaveViewShell && (pContentNode = rNode.GetContentNode()) && (pContentFrame = pContentNode->getLayoutFrame(pDoc->getIDocumentLayoutAccess().GetCurrentLayout())))
-    {
-        // We can use the layout information to iterate over only the frames which are anchored to us.
-        std::set<const SwFrameFormat*> aRet;
-        const SwSortedObjs* pSortedObjs = pContentFrame->GetDrawObjs();
-        if (pSortedObjs)
-        {
-            for (SwAnchoredObject* pAnchoredObject : *pSortedObjs)
-            {
-                SwFrameFormat* pTextBox = getOtherTextBoxFormat(&pAnchoredObject->GetFrameFormat(), RES_DRAWFRMFMT);
-                if (pTextBox)
-                    aRet.insert(pTextBox);
-            }
-        }
-        return aRet;
-    }
-    else
-        // If necessary, here we could manually limit the returned set to the
-        // ones which are anchored to rNode, but currently no need to do so.
-        return findTextBoxes(pDoc);
-}
-
-std::map<SwFrameFormat*, SwFrameFormat*> SwTextBoxHelper::findShapes(const SwDoc* pDoc)
-{
-    std::map<SwFrameFormat*, SwFrameFormat*> aRet;
-
-    const SwFrameFormats& rSpzFrameFormats = *pDoc->GetSpzFrameFormats();
-    for (SwFrameFormats::const_iterator it = rSpzFrameFormats.begin(); it != rSpzFrameFormats.end(); ++it)
-    {
-        SwFrameFormat* pTextBox = getOtherTextBoxFormat(*it, RES_DRAWFRMFMT);
-        if (pTextBox)
-            aRet[pTextBox] = *it;
-    }
-
-    return aRet;
 }
 
 bool SwTextBoxHelper::isTextBox(const SdrObject* pObject)
@@ -310,39 +246,6 @@ SwFrameFormat* SwTextBoxHelper::getOtherTextBoxFormat(uno::Reference<drawing::XS
 
     SwFrameFormat *pFormat = pShape->GetFrameFormat();
     return getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT);
-}
-
-SwFrameFormat* SwTextBoxHelper::findTextBox(const uno::Reference<drawing::XShape>& xShape)
-{
-    SwXShape* pShape = dynamic_cast<SwXShape*>(xShape.get());
-    if (!pShape)
-        return nullptr;
-
-    return findTextBox(pShape->GetFrameFormat());
-}
-
-SwFrameFormat* SwTextBoxHelper::findTextBox(const SwFrameFormat* pShape)
-{
-    SwFrameFormat* pRet = nullptr;
-
-    // Only draw frames can have TextBoxes.
-    if (pShape && pShape->Which() == RES_DRAWFRMFMT && pShape->GetAttrSet().HasItem(RES_CNTNT))
-    {
-        const SwFormatContent& rContent = pShape->GetContent();
-        const SwFrameFormats& rSpzFrameFormats = *pShape->GetDoc()->GetSpzFrameFormats();
-        for (SwFrameFormats::const_iterator it = rSpzFrameFormats.begin(); it != rSpzFrameFormats.end(); ++it)
-        {
-            SwFrameFormat* pFormat = *it;
-            // Only a fly frame can be a TextBox.
-            if (pFormat->Which() == RES_FLYFRMFMT && pFormat->GetAttrSet().HasItem(RES_CNTNT) && pFormat->GetContent() == rContent)
-            {
-                pRet = pFormat;
-                break;
-            }
-        }
-    }
-
-    return pRet;
 }
 
 template < typename T >
