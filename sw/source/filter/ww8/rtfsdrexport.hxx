@@ -56,9 +56,6 @@ class RtfSdrExport : public EscherEx
     /// Remember which shape types we had already written.
     bool* m_pShapeTypeWritten;
 
-    /// List of TextBoxes in this document: they are exported as part of their shape, never alone.
-    std::set<const SwFrameFormat*> m_aTextBoxes;
-
 public:
     explicit RtfSdrExport(RtfExport& rExport);
     virtual             ~RtfSdrExport();

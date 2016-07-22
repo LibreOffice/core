@@ -62,7 +62,17 @@ public:
     /// Similar to syncProperty(), but used by the internal API (e.g. for UI purposes).
     static void syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet& rSet);
 
+    /**
+     * If we have an associated TextFrame, then return that.
+     *
+     * @param nType Expected frame format type.
+     *              Valid types are RES_DRAWFRMFMT and RES_FLYFRMFMT.
+     *
+     * @see isTextBox
+     */
+    static SwFrameFormat* getOtherTextBoxFormat(const SwFrameFormat* pFormat, sal_uInt16 nType);
     /// If we have an associated TextFrame, then return that.
+    static SwFrameFormat* getOtherTextBoxFormat(css::uno::Reference<css::drawing::XShape> xShape);
     static SwFrameFormat* findTextBox(const SwFrameFormat* pShape);
     static SwFrameFormat* findTextBox(const css::uno::Reference<css::drawing::XShape>& xShape);
     /// Return the textbox rectangle of a draw shape (in twips).

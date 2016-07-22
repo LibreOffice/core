@@ -115,7 +115,7 @@ void SwTextBoxHelper::destroy(SwFrameFormat* pShape)
     // If a TextBox was enabled previously
     if (pShape->GetAttrSet().HasItem(RES_CNTNT))
     {
-        SwFrameFormat* pFormat = findTextBox(pShape);
+        SwFrameFormat* pFormat = pShape->GetOtherTextBoxFormat();
 
         // Unlink the TextBox's text range from the original shape.
         pShape->ResetFormatAttr(RES_CNTNT);
@@ -129,7 +129,6 @@ void SwTextBoxHelper::destroy(SwFrameFormat* pShape)
 std::set<const SwFrameFormat*> SwTextBoxHelper::findTextBoxes(const SwDoc* pDoc)
 {
     std::set<const SwFrameFormat*> aTextBoxes;
-    std::map<SwNodeIndex, const SwFrameFormat*> aFlyFormats, aDrawFormats;
 
     const SwFrameFormats& rSpzFrameFormats = *pDoc->GetSpzFrameFormats();
     for (SwFrameFormats::const_iterator it = rSpzFrameFormats.begin(); it != rSpzFrameFormats.end(); ++it)
@@ -141,22 +140,8 @@ std::set<const SwFrameFormat*> SwTextBoxHelper::findTextBoxes(const SwDoc* pDoc)
         if (!pFormat->GetAttrSet().HasItem(RES_CNTNT) || !pFormat->GetContent().GetContentIdx())
             continue;
 
-        const SwNodeIndex& rIndex = *pFormat->GetContent().GetContentIdx();
-
-        if (pFormat->Which() == RES_FLYFRMFMT)
-        {
-            if (aDrawFormats.find(rIndex) != aDrawFormats.end())
-                aTextBoxes.insert(pFormat);
-            else
-                aFlyFormats[rIndex] = pFormat;
-        }
-        else if (pFormat->Which() == RES_DRAWFRMFMT)
-        {
-            if (aFlyFormats.find(rIndex) != aFlyFormats.end())
-                aTextBoxes.insert(aFlyFormats[rIndex]);
-            else
-                aDrawFormats[rIndex] = pFormat;
-        }
+        if (pFormat->Which() == RES_FLYFRMFMT && nullptr != pFormat->GetOtherTextBoxFormat())
+            aTextBoxes.insert(pFormat);
     }
 
     return aTextBoxes;
@@ -199,7 +184,7 @@ std::set<const SwFrameFormat*> SwTextBoxHelper::findTextBoxes(const SwNode& rNod
         {
             for (SwAnchoredObject* pAnchoredObject : *pSortedObjs)
             {
-                SwFrameFormat* pTextBox = findTextBox(&pAnchoredObject->GetFrameFormat());
+                SwFrameFormat* pTextBox = getOtherTextBoxFormat(&pAnchoredObject->GetFrameFormat(), RES_DRAWFRMFMT);
                 if (pTextBox)
                     aRet.insert(pTextBox);
             }
@@ -219,7 +204,7 @@ std::map<SwFrameFormat*, SwFrameFormat*> SwTextBoxHelper::findShapes(const SwDoc
     const SwFrameFormats& rSpzFrameFormats = *pDoc->GetSpzFrameFormats();
     for (SwFrameFormats::const_iterator it = rSpzFrameFormats.begin(); it != rSpzFrameFormats.end(); ++it)
     {
-        SwFrameFormat* pTextBox = findTextBox(*it);
+        SwFrameFormat* pTextBox = getOtherTextBoxFormat(*it, RES_DRAWFRMFMT);
         if (pTextBox)
             aRet[pTextBox] = *it;
     }
@@ -305,11 +290,26 @@ sal_Int32 SwTextBoxHelper::getOrdNum(const SdrObject* pObject)
 
 void SwTextBoxHelper::getShapeWrapThrough(const SwFrameFormat* pTextBox, bool& rWrapThrough)
 {
-    std::map<SwFrameFormat*, SwFrameFormat*> aMap = findShapes(pTextBox->GetDoc());
-    std::map<SwFrameFormat*, SwFrameFormat*>::iterator it = aMap.find(const_cast<SwFrameFormat*>(pTextBox));
-    if (it != aMap.end())
-        // pTextBox is indeed a TextBox, it->second is its shape.
-        rWrapThrough = it->second->GetSurround().GetSurround() == SURROUND_THROUGHT;
+    SwFrameFormat *pShape = SwTextBoxHelper::getOtherTextBoxFormat(pTextBox, RES_FLYFRMFMT);
+    if (pShape)
+        rWrapThrough = pShape->GetSurround().GetSurround() == SURROUND_THROUGHT;
+}
+
+SwFrameFormat* SwTextBoxHelper::getOtherTextBoxFormat(const SwFrameFormat* pFormat, sal_uInt16 nType)
+{
+    if (!isTextBox(pFormat, nType))
+        return nullptr;
+    return pFormat->GetOtherTextBoxFormat();
+}
+
+SwFrameFormat* SwTextBoxHelper::getOtherTextBoxFormat(uno::Reference<drawing::XShape> xShape)
+{
+    SwXShape* pShape = dynamic_cast<SwXShape*>(xShape.get());
+    if (!pShape)
+        return nullptr;
+
+    SwFrameFormat *pFormat = pShape->GetFrameFormat();
+    return getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT);
 }
 
 SwFrameFormat* SwTextBoxHelper::findTextBox(const uno::Reference<drawing::XShape>& xShape)
@@ -348,7 +348,7 @@ SwFrameFormat* SwTextBoxHelper::findTextBox(const SwFrameFormat* pShape)
 template < typename T >
 void lcl_queryInterface(SwFrameFormat* pShape, uno::Any& rAny)
 {
-    if (SwFrameFormat* pFormat = SwTextBoxHelper::findTextBox(pShape))
+    if (SwFrameFormat* pFormat = SwTextBoxHelper::getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT))
     {
         uno::Reference<T> const xInterface(
             SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat),
@@ -426,7 +426,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, const OUString& rPrope
             syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_POSITION, uno::makeAny(static_cast<sal_Int32>(convertTwipToMm100(aRectangle.Top()))));
         }
 
-        if (SwFrameFormat* pFormat = findTextBox(pShape))
+        if (SwFrameFormat* pFormat = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT))
         {
             comphelper::SequenceAsHashMap aCustomShapeGeometry(rValue);
             // That would be the btLr text direction which we don't support at a frame level, so do it at a character level.
@@ -460,7 +460,7 @@ void SwTextBoxHelper::getProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uI
 
     nMemberId &= ~CONVERT_TWIPS;
 
-    if (SwFrameFormat* pFormat = findTextBox(pShape))
+    if (SwFrameFormat* pFormat = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT))
     {
         if (nWID == RES_CHAIN)
         {
@@ -490,7 +490,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
     uno::Any aValue(rValue);
     nMemberId &= ~CONVERT_TWIPS;
 
-    if (SwFrameFormat* pFormat = findTextBox(pShape))
+    if (SwFrameFormat* pFormat = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT))
     {
         OUString aPropertyName;
         bool bAdjustX = false;
@@ -631,9 +631,7 @@ void SwTextBoxHelper::saveLinks(const SwFrameFormats& rFormats, std::map<const S
     for (std::size_t i = 0; i < rFormats.size(); ++i)
     {
         const SwFrameFormat* pFormat = rFormats[i];
-        if (pFormat->Which() != RES_DRAWFRMFMT)
-            continue;
-        if (SwFrameFormat* pTextBox = findTextBox(pFormat))
+        if (SwFrameFormat* pTextBox = getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT))
             rLinks[pFormat] = pTextBox;
     }
 }
@@ -670,7 +668,7 @@ void SwTextBoxHelper::restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrame
 
 void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet& rSet)
 {
-    if (SwFrameFormat* pFormat = findTextBox(&rShape))
+    if (SwFrameFormat* pFormat = getOtherTextBoxFormat(&rShape, RES_DRAWFRMFMT))
     {
         SfxItemSet aTextBoxSet(pFormat->GetDoc()->GetAttrPool(), aFrameFormatSetRange);
 

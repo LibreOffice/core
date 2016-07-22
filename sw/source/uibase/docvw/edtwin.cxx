@@ -204,7 +204,7 @@ static bool lcl_goIntoTextBox(SwEditWin& rEditWin, SwWrtShell& rSh)
 {
     SdrObject* pSdrObject = rSh.GetDrawView()->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
     SwFrameFormat* pObjectFormat = ::FindFrameFormat(pSdrObject);
-    if (SwFrameFormat* pTextBoxFormat = SwTextBoxHelper::findTextBox(pObjectFormat))
+    if (SwFrameFormat* pTextBoxFormat = SwTextBoxHelper::getOtherTextBoxFormat(pObjectFormat, RES_DRAWFRMFMT))
     {
         SdrObject* pTextBox = pTextBoxFormat->FindRealSdrObject();
         SdrView* pSdrView = rSh.GetDrawView();
@@ -4402,10 +4402,9 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             SdrPageView* pPV;
             if (pSdrView && pSdrView->PickObj(aDocPos, pSdrView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER ))
             {
-                std::map<SwFrameFormat*, SwFrameFormat*> aTextBoxShapes = SwTextBoxHelper::findShapes(rSh.GetDoc());
-                auto pDrawContact = GetUserCall(pObj);
-                SwFrameFormat* pFormat = pDrawContact->GetFormat();
-                if (aTextBoxShapes.find(pFormat) == aTextBoxShapes.end())
+                SwFrameFormat* pFormat = GetUserCall(pObj)->GetFormat();
+                SwFrameFormat* pShapeFormat = SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_FLYFRMFMT);
+                if (!pShapeFormat)
                 {
                     pSdrView->UnmarkAllObj();
                     pSdrView->MarkObj(pObj,pPV);
@@ -4413,7 +4412,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 else
                 {
                     // If the fly frame is a textbox of a shape, then select the shape instead.
-                    SdrObject* pShape = aTextBoxShapes[pFormat]->FindSdrObject();
+                    SdrObject* pShape = pShapeFormat->FindSdrObject();
                     pSdrView->UnmarkAllObj();
                     pSdrView->MarkObj(pShape, pPV);
                 }
