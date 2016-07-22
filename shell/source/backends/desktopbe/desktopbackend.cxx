@@ -42,9 +42,12 @@
 #include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/diagnose.h"
+#include "osl/file.hxx"
+#include "osl/security.hxx"
 #include "rtl/string.h"
 #include "rtl/textenc.h"
 #include "rtl/ustring.h"
+#include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "uno/current_context.hxx"
@@ -148,17 +151,132 @@ void Default::setPropertyValue(OUString const &, css::uno::Any const &)
         static_cast< cppu::OWeakObject * >(this), -1);
 }
 
+namespace {
+
+OUString xdg_user_dir_lookup (const char *type)
+{
+    char *config_home;
+    char *p;
+    bool bError = false;
+
+    osl::Security aSecurity;
+    oslFileHandle handle;
+    OUString aHomeDirURL;
+    OUString aDocumentsDirURL;
+    OUString aConfigFileURL;
+    OUStringBuffer aUserDirBuf;
+
+    if (!aSecurity.getHomeDir( aHomeDirURL ) )
+    {
+        osl::FileBase::getFileURLFromSystemPath("/tmp", aDocumentsDirURL);
+        return aDocumentsDirURL;
+    }
+
+    config_home = getenv ("XDG_CONFIG_HOME");
+    if (config_home == nullptr || config_home[0] == 0)
+    {
+        aConfigFileURL = aHomeDirURL + "/.config/user-dirs.dirs";
+    }
+    else
+    {
+        aConfigFileURL = OUString::createFromAscii(config_home) + "/user-dirs.dirs";
+    }
+
+    if(osl_File_E_None == osl_openFile(aConfigFileURL.pData, &handle, osl_File_OpenFlag_Read))
+    {
+        rtl::ByteSequence seq;
+        while (osl_File_E_None == osl_readLine(handle , reinterpret_cast<sal_Sequence **>(&seq)))
+        {
+            /* Remove newline at end */
+            int relative = 0;
+            int len = seq.getLength();
+            if(len>0 && seq[len-1] == '\n')
+                seq[len-1] = 0;
+
+            p = reinterpret_cast<char *>(seq.getArray());
+            while (*p == ' ' || *p == '\t')
+                p++;
+            if (strncmp (p, "XDG_", 4) != 0)
+                continue;
+            p += 4;
+            if (strncmp (p, type, strlen (type)) != 0)
+                continue;
+            p += strlen (type);
+            if (strncmp (p, "_DIR", 4) != 0)
+                continue;
+            p += 4;
+            while (*p == ' ' || *p == '\t')
+                p++;
+            if (*p != '=')
+                continue;
+            p++;
+            while (*p == ' ' || *p == '\t')
+                p++;
+            if (*p != '"')
+                continue;
+            p++;
+            if (strncmp (p, "$HOME/", 6) == 0)
+            {
+                p += 6;
+                relative = 1;
+            }
+            else if (*p != '/')
+                continue;
+            if (relative)
+            {
+                aUserDirBuf = OUStringBuffer(aHomeDirURL + "/");
+            }
+            else
+            {
+                aUserDirBuf = OUStringBuffer();
+            }
+            while (*p && *p != '"')
+            {
+                if ((*p == '\\') && (*(p+1) != 0))
+                    p++;
+                aUserDirBuf.append((sal_Unicode)*p++);
+            }
+        }//end of while
+        osl_closeFile(handle);
+    }
+    else
+        bError = true;
+    if (aUserDirBuf.getLength()>0 && !bError)
+    {
+        aDocumentsDirURL = aUserDirBuf.makeStringAndClear();
+        osl::Directory aDocumentsDir( aDocumentsDirURL );
+        if( osl::FileBase::E_None == aDocumentsDir.open() )
+            return aDocumentsDirURL;
+    }
+    /* Use fallbacks historical compatibility if nothing else exists */
+    return aHomeDirURL + "/" + OUString::createFromAscii(type);
+}
+
+} // namespace
+
 css::uno::Any Default::getPropertyValue(OUString const & PropertyName)
     throw (
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
         css::uno::RuntimeException, std::exception)
 {
+    if (PropertyName == "TemplatePathVariable")
+    {
+        OUString aDirURL = xdg_user_dir_lookup("Templates");
+        css::uno::Any aValue(aDirURL);
+        return css::uno::makeAny(css::beans::Optional<css::uno::Any>(true, aValue));
+    }
+
+    if (PropertyName == "WorkPathVariable")
+    {
+        OUString aDirURL = xdg_user_dir_lookup("Documents");
+        css::uno::Any aValue(aDirURL);
+        return css::uno::makeAny(css::beans::Optional<css::uno::Any>(true, aValue));
+    }
+
     if ( PropertyName == "EnableATToolSupport" ||
          PropertyName == "ExternalMailer" ||
          PropertyName == "SourceViewFontHeight" ||
          PropertyName == "SourceViewFontName" ||
-         PropertyName == "TemplatePathVariable" ||
-         PropertyName == "WorkPathVariable" ||
          PropertyName == "ooInetFTPProxyName" ||
          PropertyName == "ooInetFTPProxyPort" ||
          PropertyName == "ooInetHTTPProxyName" ||
@@ -172,6 +290,7 @@ css::uno::Any Default::getPropertyValue(OUString const & PropertyName)
     {
         return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
     }
+
     throw css::beans::UnknownPropertyException(
         PropertyName, static_cast< cppu::OWeakObject * >(this));
 }
@@ -209,11 +328,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
 
     // Fall back to the default if the specific backend is not available:
     css::uno::Reference< css::uno::XInterface > backend;
-    if ( desktop == "GNOME" ) {
-        backend = createBackend(
-            context,
-            "com.sun.star.configuration.backend.GconfBackend");
-    } else if ( desktop == "KDE" ) {
+    if ( desktop == "KDE" ) {
         backend = createBackend(
             context,
             "com.sun.star.configuration.backend.KDEBackend");
