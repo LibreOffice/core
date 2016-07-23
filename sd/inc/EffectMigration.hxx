@@ -24,6 +24,7 @@
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/presentation/FadeEffect.hpp>
 
+class SdDrawDocument;
 class SdPage;
 class SvxShape;
 class SdAnimationInfo;
@@ -68,6 +69,7 @@ public:
 
     static void SetAnimationPath( SvxShape* pShape, SdrPathObj* pPathObj );
     static void CreateAnimatedGroup(SdrObjGroup& rGroupObj, SdPage& rPage);
+    static void DocumentLoaded(SdDrawDocument & rDoc);
 };
 
 } // end of namespace sd
