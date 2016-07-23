@@ -1427,4 +1427,29 @@ void EffectMigration::CreateAnimatedGroup(SdrObjGroup& rGroupObj, SdPage& rPage)
     }
 }
 
+void EffectMigration::DocumentLoaded(SdDrawDocument & rDoc)
+{
+    if (DOCUMENT_TYPE_DRAW == rDoc.GetDocumentType())
+        return; // no animations in Draw
+    for (sal_uInt16 n = 0; n < rDoc.GetSdPageCount(PK_STANDARD); ++n)
+    {
+        SdPage *const pPage = rDoc.GetSdPage(n, PK_STANDARD);
+        if (pPage->hasAnimationNode())
+        {
+            // this will force the equivalent of the MainSequence::onTimerHdl
+            // so that the animations are present in export-able representation
+            // *before* the import is finished
+            pPage->getMainSequence()->getRootNode();
+        }
+    }
+    for (sal_uInt16 n = 0; n < rDoc.GetMasterSdPageCount(PK_STANDARD); ++n)
+    {
+        SdPage *const pPage = rDoc.GetMasterSdPage(n, PK_STANDARD);
+        if (pPage->hasAnimationNode())
+        {
+            pPage->getMainSequence()->getRootNode();
+        }
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
