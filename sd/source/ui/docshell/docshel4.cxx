@@ -62,6 +62,7 @@
 #include "ViewShell.hxx"
 #include "sdmod.hxx"
 #include "View.hxx"
+#include "EffectMigration.hxx"
 #include "CustomAnimationEffect.hxx"
 #include "sdpage.hxx"
 #include "sdresid.hxx"
@@ -300,6 +301,8 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
 
     if( bRet )
     {
+        // for legacy markup in OOoXML filter, convert the animations now
+        EffectMigration::DocumentLoaded(*GetDoc());
         UpdateTablePointers();
 
         // If we're an embedded OLE object, use tight bounds
