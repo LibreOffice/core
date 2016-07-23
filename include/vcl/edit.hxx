@@ -205,7 +205,7 @@ public:
     void                SetInsertMode( bool bInsert );
     bool                IsInsertMode() const;
 
-    virtual void        SetMaxTextLen( sal_Int32 nMaxLen = EDIT_NOLIMIT );
+    virtual void        SetMaxTextLen( sal_Int32 nMaxLen );
     virtual sal_Int32   GetMaxTextLen() const { return mnMaxTextLen; }
 
     void                SetWidthInChars(sal_Int32 nWidthInChars);

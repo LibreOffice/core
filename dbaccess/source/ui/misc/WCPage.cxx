@@ -70,7 +70,7 @@ OCopyTable::OCopyTable(vcl::Window * pParent)
     get(m_pFT_KeyName, "keynamelabel");
     get(m_pEdKeyName, "keyname");
 
-    m_pEdTableName->SetMaxTextLen();
+    m_pEdTableName->SetMaxTextLen(EDIT_NOLIMIT);
 
     if ( m_pParent->m_xDestConnection.is() )
     {
