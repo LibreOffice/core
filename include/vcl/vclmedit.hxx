@@ -80,7 +80,7 @@ public:
 
     void            EnableFocusSelectionHide( bool bHide );
 
-    virtual void    SetMaxTextLen(sal_Int32 nMaxLen = 0) override;
+    virtual void    SetMaxTextLen(sal_Int32 nMaxLen) override;
     virtual sal_Int32 GetMaxTextLen() const override;
 
     void            SetMaxTextWidth( sal_uLong nMaxWidth );
