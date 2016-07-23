@@ -215,6 +215,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsFirstParaInSection( true ),
         m_bDummyParaAddedForTableInSection( false ),
         m_bTextFrameInserted(false),
+        m_bIsLastParagraphFramed( false ),
         m_bIsLastParaInSection( false ),
         m_bIsLastSectionGroup( false ),
         m_bIsInComments( false ),
@@ -1185,6 +1186,16 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
         {
             SAL_WARN( "writerfilter", "finishParagraph() exception: " << e.Message );
         }
+    }
+
+    if(    (pParaContext && pParaContext->IsFrameMode())
+        || (IsInHeaderFooter() && GetIsLastParagraphFramed()) )
+    {
+        SetIsLastParagraphFramed(true);
+    }
+    else
+    {
+        SetIsLastParagraphFramed(false);
     }
 
     m_bParaChanged = false;

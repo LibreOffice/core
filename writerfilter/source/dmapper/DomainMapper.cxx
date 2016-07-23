@@ -3217,7 +3217,10 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             bool bSingleParagraph = m_pImpl->GetIsFirstParagraphInSection() && m_pImpl->GetIsLastParagraphInSection();
             // If the paragraph contains only the section properties and it has
             // no runs, we should not create a paragraph for it in Writer, unless that would remove the whole section.
-            bool bRemove = !m_pImpl->GetParaChanged() && m_pImpl->GetParaSectpr() && !bSingleParagraph && !m_pImpl->GetIsDummyParaAddedForTableInSection();
+            bool bRemove = !m_pImpl->GetParaChanged() && m_pImpl->GetParaSectpr()
+                           && !bSingleParagraph
+                           && !m_pImpl->GetIsDummyParaAddedForTableInSection()
+                           && !m_pImpl->GetIsLastParagraphFramed();
             if (bRemove)
             {
                 // tdf#97417 delete numbering of the paragraph
