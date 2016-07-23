@@ -532,23 +532,23 @@ SalLayout* CairoTextRender::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackL
     if( mpServerFont[ nFallbackLevel ]
     && !(rArgs.mnFlags & SalLayoutFlags::DisableGlyphProcessing) )
     {
-#if ENABLE_GRAPHITE
-        // Is this a Graphite font?
-        if (!bDisableGraphite_ &&
-            GraphiteServerFontLayout::IsGraphiteEnabledFont(*mpServerFont[nFallbackLevel]))
+        if(getenv("SAL_USE_COMMON_LAYOUT"))
         {
-            pLayout = new GraphiteServerFontLayout(*mpServerFont[nFallbackLevel]);
+            pLayout = new CommonSalLayout( *mpServerFont[ nFallbackLevel ] );
         }
         else
-#endif
-            if(getenv("SAL_USE_COMMON_LAYOUT"))
+        {
+#if ENABLE_GRAPHITE
+            // Is this a Graphite font?
+            if (!bDisableGraphite_ &&
+                GraphiteServerFontLayout::IsGraphiteEnabledFont(*mpServerFont[nFallbackLevel]))
             {
-                pLayout = new CommonSalLayout( *mpServerFont[ nFallbackLevel ] );
+                pLayout = new GraphiteServerFontLayout(*mpServerFont[nFallbackLevel]);
             }
             else
-            {
+#endif
                 pLayout = new ServerFontLayout( *mpServerFont[ nFallbackLevel ] );
-            }
+        }
     }
 
     return pLayout;
