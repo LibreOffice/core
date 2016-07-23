@@ -8503,10 +8503,8 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (rDoc.IsScenario(nTab))
             {
-                OUString aComment;
-                Color  aColor;
                 ScScenarioFlags nFlags;
-                rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
+                rDoc.GetScenarioFlags(nTab, nFlags);
 
                 rAny <<= ((nFlags & ScScenarioFlags::Protected) != ScScenarioFlags::NONE);
             }
@@ -8515,10 +8513,8 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (rDoc.IsScenario(nTab))
             {
-                OUString aComment;
-                Color  aColor;
                 ScScenarioFlags nFlags;
-                rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
+                rDoc.GetScenarioFlags(nTab, nFlags);
 
                 rAny <<= ((nFlags & ScScenarioFlags::ShowFrame) != ScScenarioFlags::NONE);
             }
@@ -8527,10 +8523,8 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (rDoc.IsScenario(nTab))
             {
-                OUString aComment;
-                Color  aColor;
                 ScScenarioFlags nFlags;
-                rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
+                rDoc.GetScenarioFlags(nTab, nFlags);
 
                 rAny <<= ((nFlags & ScScenarioFlags::PrintFrame) != ScScenarioFlags::NONE);
             }
@@ -8539,10 +8533,8 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (rDoc.IsScenario(nTab))
             {
-                OUString aComment;
-                Color  aColor;
                 ScScenarioFlags nFlags;
-                rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
+                rDoc.GetScenarioFlags(nTab, nFlags);
 
                 rAny <<= ((nFlags & ScScenarioFlags::TwoWay) != ScScenarioFlags::NONE);
             }
@@ -8551,10 +8543,8 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (rDoc.IsScenario(nTab))
             {
-                OUString aComment;
-                Color  aColor;
                 ScScenarioFlags nFlags;
-                rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
+                rDoc.GetScenarioFlags(nTab, nFlags);
 
                 rAny <<= ((nFlags & ScScenarioFlags::Attrib) != ScScenarioFlags::NONE);
             }
@@ -8563,10 +8553,8 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (rDoc.IsScenario(nTab))
             {
-                OUString aComment;
-                Color  aColor;
                 ScScenarioFlags nFlags;
-                rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
+                rDoc.GetScenarioFlags(nTab, nFlags);
 
                 rAny <<= !(nFlags & ScScenarioFlags::Value);
             }
