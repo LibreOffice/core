@@ -129,28 +129,8 @@ extern const SwTable   *g_pRowCacheLastTable;
 extern const SwTabFrame  *g_pRowCacheLastTabFrame;
 extern const SwFrame     *g_pRowCacheLastCellFrame;
 
-//return the SwTabFrame (if any) that this SwTabFrame is a follow flow line for
-SwTabFrame* SwTabFrame::GetFollowFlowLineFor()
-{
-    SwFlowFrame *pPrec = GetPrecede();
-    if (pPrec && pPrec->GetFrame().IsTabFrame())
-    {
-        SwTabFrame *pPrevTabFrame = static_cast<SwTabFrame*>(pPrec);
-        assert(this == pPrevTabFrame->GetFollow());
-        if (pPrevTabFrame->HasFollowFlowLine() && pPrevTabFrame->GetFollow() == this)
-            return pPrevTabFrame;
-    }
-    return nullptr;
-}
-
 void SwTabFrame::DestroyImpl()
 {
-    //rhbz#907933, we are a follow flow line for something and have been
-    //deleted, remove ourself as a follow flowline
-    SwTabFrame* pFlowFrameFor = GetFollowFlowLineFor();
-    if (pFlowFrameFor)
-        pFlowFrameFor->RemoveFollowFlowLine();
-
     // There is some terrible code in fetab.cxx, that
     // makes use of these global pointers. Obviously
     // this code did not consider that a TabFrame can be
@@ -838,7 +818,8 @@ static long lcl_GetMaximumLayoutRowSpan( const SwRowFrame& rRow )
 bool SwTabFrame::RemoveFollowFlowLine()
 {
     // find FollowFlowLine
-    SwRowFrame* pFollowFlowLine = GetFollow()->GetFirstNonHeadlineRow();
+    SwTabFrame *pFoll = GetFollow();
+    SwRowFrame* pFollowFlowLine = pFoll ? pFoll->GetFirstNonHeadlineRow() : nullptr;
 
     // find last row in master
     SwFrame* pLastLine = GetLastLower();
@@ -1270,7 +1251,7 @@ bool SwTabFrame::Join()
 
     SwTabFrame *pFoll = GetFollow();
 
-    if ( !pFoll->IsJoinLocked() )
+    if (pFoll && !pFoll->IsJoinLocked())
     {
         SWRECTFN( this )
         pFoll->Cut();   //Cut out first to avoid unnecessary notifications.

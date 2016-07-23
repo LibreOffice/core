@@ -156,8 +156,6 @@ public:
 
     bool HasFollowFlowLine() const { return m_bHasFollowFlowLine; }
     void SetFollowFlowLine(bool bNew) { m_bHasFollowFlowLine = bNew; }
-    //return the SwTabFrame (if any) that this SwTabFrame is a follow flow line for
-    SwTabFrame* GetFollowFlowLineFor();
 
     bool IsRebuildLastLine() const { return m_bIsRebuildLastLine; }
     void SetRebuildLastLine(bool bNew) { m_bIsRebuildLastLine = bNew; }
