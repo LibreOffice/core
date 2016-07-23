@@ -120,6 +120,7 @@ public:
     void testFdo83751();
     void testFdo79731();
     void testSwappedOutImageExport();
+    void testOOoXMLAnimations();
     void testTdf80020();
     void testLinkedGraphicRT();
     void testImageWithSpecialID();
@@ -164,6 +165,7 @@ public:
     CPPUNIT_TEST(testFdo83751);
     CPPUNIT_TEST(testFdo79731);
     CPPUNIT_TEST(testSwappedOutImageExport);
+    CPPUNIT_TEST(testOOoXMLAnimations);
     CPPUNIT_TEST(testTdf80020);
     CPPUNIT_TEST(testLinkedGraphicRT);
     CPPUNIT_TEST(testImageWithSpecialID);
@@ -198,10 +200,12 @@ public:
         struct { char const * pPrefix; char const * pURI; } namespaces[] =
         {
             // ODF
+            { "anim", "urn:oasis:names:tc:opendocument:xmlns:animation:1.0" },
             { "draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" },
             { "fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" },
             { "number", "urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" },
             { "office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0" },
+            { "presentation", "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" },
             { "style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0" },
             { "svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" },
             { "table", "urn:oasis:names:tc:opendocument:xmlns:table:1.0" },
@@ -712,6 +716,28 @@ void SdExportTest::testSwappedOutImageExport()
         }
         xDocShRef->DoClose();
     }
+}
+
+void SdExportTest::testOOoXMLAnimations()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/sxi/ooo41061-1.sxi"), SXI);
+
+    uno::Reference<lang::XComponent> xComponent(xDocShRef->GetModel(), uno::UNO_QUERY);
+    uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(getFormat(ODP)->pFilterName), RTL_TEXTENCODING_UTF8);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    xDocShRef->DoClose();
+
+    // the problem was that legacy OOoXML animations were lost if store
+    // immediately follows load because they were "converted" async by a timer
+    xmlDocPtr pXmlDoc = parseExport(aTempFile, "content.xml");
+    assertXPath(pXmlDoc, "//anim:par[@presentation:node-type='timing-root']", 26);
+    // currently getting 52 of these without the fix (depends on timing)
+    assertXPath(pXmlDoc, "//anim:par", 223);
 }
 
 void SdExportTest::testTdf80020()
