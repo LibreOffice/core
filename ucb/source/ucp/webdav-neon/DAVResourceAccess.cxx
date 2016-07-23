@@ -1197,7 +1197,11 @@ bool DAVResourceAccess::handleException( const DAVException & e, int errorCount 
     // if we have a bad connection try again. Up to three times.
     case DAVException::DAV_HTTP_ERROR:
         // retry up to three times, if not a client-side error.
+        // exception: error 501, server side error that
+        // tells us the used method is not implemented
+        // on the server, it's nonsense to insist...
         if ( ( e.getStatus() < 400 || e.getStatus() >= 500 ) &&
+             ( e.getStatus() != 501 ) &&
              errorCount < 3 )
         {
             return true;
