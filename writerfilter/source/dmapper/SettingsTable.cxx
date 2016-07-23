@@ -147,8 +147,11 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
         m_pImpl->m_pCurrentCompatSetting[2].Value <<= sStringValue;
         break;
     case NS_ooxml::LN_CT_DocProtect_edit:
-        m_pImpl->m_bProtectForm = val.getInt() == NS_ooxml::LN_Value_doc_ST_DocProtect_forms;
-    break;
+        m_pImpl->m_bProtectForm = (nIntValue == NS_ooxml::LN_Value_doc_ST_DocProtect_forms);
+        break;
+    case NS_ooxml::LN_CT_DocProtect_enforcement:
+        m_pImpl->m_bProtectForm &= (bool)nIntValue;
+        break;
     default:
     {
 #ifdef DEBUG_WRITERFILTER
