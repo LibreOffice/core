@@ -147,7 +147,7 @@
                         <property name="column_spacing">6</property>
                         <child>
                           <object class="GtkRadioButton" id="radio-jpeg">
-                            <property name="label" translatable="yes">JPEG Compression</property>
+                            <property name="label" translatable="yes">JPEG Quality</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -163,7 +163,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="radio-lossless">
-                            <property name="label" translatable="yes">PNG Quality</property>
+                            <property name="label" translatable="yes">PNG Compression</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
