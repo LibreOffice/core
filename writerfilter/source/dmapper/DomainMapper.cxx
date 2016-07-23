@@ -693,8 +693,13 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_FramePr_hSpace:
         case NS_ooxml::LN_CT_FramePr_vSpace:
         {
-            ParagraphProperties* pParaProperties = dynamic_cast< ParagraphProperties*>(
-                    m_pImpl->GetTopContextOfType( CONTEXT_PARAGRAPH ).get() );
+            ParagraphProperties* pParaProperties = nullptr;
+            // handle frame properties at styles
+            if( m_pImpl->GetTopContextType() == CONTEXT_STYLESHEET )
+                pParaProperties = dynamic_cast< ParagraphProperties*>( m_pImpl->GetTopContextOfType( CONTEXT_STYLESHEET ).get() );
+            else
+                pParaProperties = dynamic_cast< ParagraphProperties*>( m_pImpl->GetTopContextOfType( CONTEXT_PARAGRAPH ).get() );
+
             if( pParaProperties )
             {
                 switch( nName )
@@ -821,10 +826,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     break;
                     default:;
                 }
-            }
-            else
-            {
-                //TODO: how to handle frame properties at styles
             }
         }
         break;
