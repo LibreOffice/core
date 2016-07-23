@@ -1739,7 +1739,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf75573, "tdf75573_page1frame.docx")
     lcl_countTextFrames( mxComponent, 1 );
 
     // the frame should be on page 1
-//    CPPUNIT_ASSERT_EQUAL( OUString("lorem ipsum"), parseDump("/root/page[1]/body/section/txt/anchored/fly/txt[1]/text()") );
+    CPPUNIT_ASSERT_EQUAL( OUString("lorem ipsum"), parseDump("/root/page[1]/body/section/txt/anchored/fly/txt[1]/text()") );
 
     // the "Proprietary" style should set the vertical and horizontal anchors to the page
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
