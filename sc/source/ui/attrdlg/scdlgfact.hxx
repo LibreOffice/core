@@ -321,10 +321,10 @@ class AbstractScNewScenarioDlg_Impl : public AbstractScNewScenarioDlg
 {
     DECL_ABSTDLG_BASE( AbstractScNewScenarioDlg_Impl, ScNewScenarioDlg )
     virtual void SetScenarioData( const OUString& rName, const OUString& rComment,
-                            const Color& rColor, sal_uInt16 nFlags ) override;
+                            const Color& rColor, ScScenarioFlags nFlags ) override;
 
     virtual void GetScenarioData( OUString& rName, OUString& rComment,
-                            Color& rColor, sal_uInt16& rFlags ) const override;
+                            Color& rColor, ScScenarioFlags& rFlags ) const override;
 };
 
 class AbstractScShowTabDlg_Impl : public AbstractScShowTabDlg

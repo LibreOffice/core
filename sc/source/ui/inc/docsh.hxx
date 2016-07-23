@@ -278,11 +278,11 @@ public:
     void            RefreshPivotTables( const ScRange& rSource );
     void            DoConsolidate( const ScConsolidateParam& rParam, bool bRecord = true );
     void            UseScenario( SCTAB nTab, const OUString& rName, bool bRecord = true );
-    SCTAB           MakeScenario( SCTAB nTab, const OUString& rName, const OUString& rComment,
-                                    const Color& rColor, sal_uInt16 nFlags,
-                                    ScMarkData& rMark, bool bRecord = true );
-    void            ModifyScenario( SCTAB nTab, const OUString& rName, const OUString& rComment,
-                                    const Color& rColor, sal_uInt16 nFlags );
+    SCTAB           MakeScenario(SCTAB nTab, const OUString& rName, const OUString& rComment,
+                                    const Color& rColor, ScScenarioFlags nFlags,
+                                    ScMarkData& rMark, bool bRecord = true);
+    void            ModifyScenario(SCTAB nTab, const OUString& rName, const OUString& rComment,
+                                    const Color& rColor, ScScenarioFlags nFlags);
     sal_uLong TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
                                 SCTAB nDestPos, bool bInsertNew,
                                 bool bNotifyAndPaint );

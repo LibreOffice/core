@@ -275,10 +275,10 @@ class AbstractScNewScenarioDlg : public VclAbstractDialog
 public:
 
     virtual void SetScenarioData( const OUString& rName, const OUString& rComment,
-                            const Color& rColor, sal_uInt16 nFlags ) = 0;
+                            const Color& rColor, ScScenarioFlags nFlags ) = 0;
 
     virtual void GetScenarioData( OUString& rName, OUString& rComment,
-                            Color& rColor, sal_uInt16& rFlags ) const = 0;
+                            Color& rColor, ScScenarioFlags& rFlags ) const = 0;
 };
 
 class AbstractScShowTabDlg : public VclAbstractDialog

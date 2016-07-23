@@ -3023,7 +3023,7 @@ void ScPrintFunc::CalcPages()               // calculates aPageRect and pages fr
     for (SCCOL i=nStartCol; i<=nEndCol; i++)
     {
         bool bHidden = pDoc->ColHidden(i, nPrintTab);
-        bool bPageBreak = (pDoc->HasColBreak(i, nPrintTab) & BREAK_PAGE);
+        bool bPageBreak = (pDoc->HasColBreak(i, nPrintTab) & ScBreakType::Page) != ScBreakType::None;
         if ( i>nStartCol && bVisCol && bPageBreak )
         {
             OSL_ENSURE(nPagesX < maPageEndX.size(), "vector access error for maPageEndX (!)");

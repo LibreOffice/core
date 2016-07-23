@@ -455,7 +455,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         OUString aName;
                         OUString aComment;
                         Color  aColor;
-                        sal_uInt16 nFlags;
+                        ScScenarioFlags nFlags;
 
                         OUString aTmp;
                         pDoc->GetName(nTab, aTmp);
@@ -496,7 +496,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                 aArgComment = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
                             aColor = Color( COL_LIGHTGRAY );        // Default
-                            nFlags = 0;                             // not-TwoWay
+                            nFlags = ScScenarioFlags::Undefined;    // not-TwoWay
 
                             pTabViewShell->MakeScenario( aArgName, aArgComment, aColor, nFlags );
                             if( ! rReq.IsAPI() )

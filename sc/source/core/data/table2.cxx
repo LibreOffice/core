@@ -1289,7 +1289,7 @@ void ScTable::CopyScenarioFrom( const ScTable* pSrcTab )
         aCol[i].CopyScenarioFrom( pSrcTab->aCol[i] );
 }
 
-void ScTable::MarkScenarioIn( ScMarkData& rDestMark, sal_uInt16 nNeededBits ) const
+void ScTable::MarkScenarioIn( ScMarkData& rDestMark, ScScenarioFlags nNeededBits ) const
 {
     OSL_ENSURE( bScenario, "bScenario == FALSE" );
 
@@ -1337,7 +1337,7 @@ const ScRangeList* ScTable::GetScenarioRanges() const
     {
         const_cast<ScTable*>(this)->pScenarioRanges = new ScRangeList;
         ScMarkData aMark;
-        MarkScenarioIn( aMark, 0 );     // always
+        MarkScenarioIn( aMark, ScScenarioFlags::Undefined );     // always
         aMark.FillRangeListWithMarks( pScenarioRanges, false );
     }
     return pScenarioRanges;
@@ -2239,9 +2239,9 @@ bool ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
                 ScRange aEditRange(nCol1, nRow1, nScenTab, nCol2, nRow2, nScenTab);
                 if(pDocument->IsActiveScenario(nScenTab) && pDocument->HasScenarioRange(nScenTab, aEditRange))
                 {
-                    sal_uInt16 nFlags;
+                    ScScenarioFlags nFlags;
                     pDocument->GetScenarioFlags(nScenTab,nFlags);
-                    bIsEditable = !((nFlags & SC_SCENARIO_PROTECT) && (nFlags & SC_SCENARIO_TWOWAY));
+                    bIsEditable = !((nFlags & ScScenarioFlags::Protected) && (nFlags & ScScenarioFlags::TwoWay));
                     break;
                 }
                 nScenTab++;
@@ -2263,9 +2263,9 @@ bool ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
             ScRange aEditRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab);
             if(pDocument->HasScenarioRange(nTab, aEditRange))
             {
-                sal_uInt16 nFlags;
+                ScScenarioFlags nFlags;
                 pDocument->GetScenarioFlags(nTab,nFlags);
-                bIsEditable = !(nFlags & SC_SCENARIO_PROTECT);
+                bIsEditable = !(nFlags & ScScenarioFlags::Protected);
             }
         }
     }
@@ -2317,9 +2317,9 @@ bool ScTable::IsSelectionEditable( const ScMarkData& rMark,
                         ScRange aRange = *aRanges[ i ];
                         if(pDocument->HasScenarioRange(nScenTab, aRange))
                         {
-                            sal_uInt16 nFlags;
+                            ScScenarioFlags nFlags;
                             pDocument->GetScenarioFlags(nScenTab,nFlags);
-                            bIsEditable = !((nFlags & SC_SCENARIO_PROTECT) && (nFlags & SC_SCENARIO_TWOWAY));
+                            bIsEditable = !((nFlags & ScScenarioFlags::Protected) && (nFlags & ScScenarioFlags::TwoWay));
                         }
                     }
                 }
@@ -2346,9 +2346,9 @@ bool ScTable::IsSelectionEditable( const ScMarkData& rMark,
                 ScRange aRange = *aRanges[ i ];
                 if(pDocument->HasScenarioRange(nTab, aRange))
                 {
-                    sal_uInt16 nFlags;
+                    ScScenarioFlags nFlags;
                     pDocument->GetScenarioFlags(nTab,nFlags);
-                    bIsEditable = !(nFlags & SC_SCENARIO_PROTECT);
+                    bIsEditable = !(nFlags & ScScenarioFlags::Protected);
                 }
             }
         }

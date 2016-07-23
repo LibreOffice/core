@@ -7947,7 +7947,7 @@ OUString SAL_CALL ScTableSheetObj::getScenarioComment() throw(uno::RuntimeExcept
     {
         OUString aComment;
         Color  aColor;
-        sal_uInt16 nFlags;
+        ScScenarioFlags nFlags;
         pDocSh->GetDocument().GetScenarioData( GetTab_Impl(), aComment, aColor, nFlags );
         return aComment;
     }
@@ -7967,7 +7967,7 @@ void SAL_CALL ScTableSheetObj::setScenarioComment( const OUString& aScenarioComm
         OUString aName;
         OUString aComment;
         Color  aColor;
-        sal_uInt16 nFlags;
+        ScScenarioFlags nFlags;
         rDoc.GetName( nTab, aName );
         rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
 
@@ -8184,7 +8184,7 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                     OUString aName;
                     OUString aComment;
                     Color  aColor;
-                    sal_uInt16 nFlags;
+                    ScScenarioFlags nFlags;
                     rDoc.GetName( nTab, aName );
                     rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
 
@@ -8201,24 +8201,24 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                 OUString aName;
                 OUString aComment;
                 Color  aColor;
-                sal_uInt16 nFlags;
+                ScScenarioFlags nFlags;
                 rDoc.GetName( nTab, aName );
                 rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
                 bool bModify(false);
 
                 if (ScUnoHelpFunctions::GetBoolFromAny( aValue ))
                 {
-                    if (!(nFlags & SC_SCENARIO_PROTECT))
+                    if (!(nFlags & ScScenarioFlags::Protected))
                     {
-                        nFlags |= SC_SCENARIO_PROTECT;
+                        nFlags |= ScScenarioFlags::Protected;
                         bModify = true;
                     }
                 }
                 else
                 {
-                    if (nFlags & SC_SCENARIO_PROTECT)
+                    if (nFlags & ScScenarioFlags::Protected)
                     {
-                        nFlags -= SC_SCENARIO_PROTECT;
+                        nFlags &= ~ScScenarioFlags::Protected;
                         bModify = true;
                     }
                 }
@@ -8234,24 +8234,24 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                 OUString aName;
                 OUString aComment;
                 Color  aColor;
-                sal_uInt16 nFlags;
+                ScScenarioFlags nFlags;
                 rDoc.GetName( nTab, aName );
                 rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
                 bool bModify(false);
 
                 if (ScUnoHelpFunctions::GetBoolFromAny( aValue ))
                 {
-                    if (!(nFlags & SC_SCENARIO_SHOWFRAME))
+                    if (!(nFlags & ScScenarioFlags::ShowFrame))
                     {
-                        nFlags |= SC_SCENARIO_SHOWFRAME;
+                        nFlags |= ScScenarioFlags::ShowFrame;
                         bModify = true;
                     }
                 }
                 else
                 {
-                    if (nFlags & SC_SCENARIO_SHOWFRAME)
+                    if (nFlags & ScScenarioFlags::ShowFrame)
                     {
-                        nFlags -= SC_SCENARIO_SHOWFRAME;
+                        nFlags &= ~ScScenarioFlags::ShowFrame;
                         bModify = true;
                     }
                 }
@@ -8267,24 +8267,24 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                 OUString aName;
                 OUString aComment;
                 Color  aColor;
-                sal_uInt16 nFlags;
+                ScScenarioFlags nFlags;
                 rDoc.GetName( nTab, aName );
                 rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
                 bool bModify(false);
 
                 if (ScUnoHelpFunctions::GetBoolFromAny( aValue ))
                 {
-                    if (!(nFlags & SC_SCENARIO_PRINTFRAME))
+                    if (!(nFlags & ScScenarioFlags::PrintFrame))
                     {
-                        nFlags |= SC_SCENARIO_PRINTFRAME;
+                        nFlags |= ScScenarioFlags::PrintFrame;
                         bModify = true;
                     }
                 }
                 else
                 {
-                    if (nFlags & SC_SCENARIO_PRINTFRAME)
+                    if (nFlags & ScScenarioFlags::PrintFrame)
                     {
-                        nFlags -= SC_SCENARIO_PRINTFRAME;
+                        nFlags &= ~ScScenarioFlags::PrintFrame;
                         bModify = true;
                     }
                 }
@@ -8300,24 +8300,24 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                 OUString aName;
                 OUString aComment;
                 Color  aColor;
-                sal_uInt16 nFlags;
+                ScScenarioFlags nFlags;
                 rDoc.GetName( nTab, aName );
                 rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
                 bool bModify(false);
 
                 if (ScUnoHelpFunctions::GetBoolFromAny( aValue ))
                 {
-                    if (!(nFlags & SC_SCENARIO_TWOWAY))
+                    if (!(nFlags & ScScenarioFlags::TwoWay))
                     {
-                        nFlags |= SC_SCENARIO_TWOWAY;
+                        nFlags |= ScScenarioFlags::TwoWay;
                         bModify = true;
                     }
                 }
                 else
                 {
-                    if (nFlags & SC_SCENARIO_TWOWAY)
+                    if (nFlags & ScScenarioFlags::TwoWay)
                     {
-                        nFlags -= SC_SCENARIO_TWOWAY;
+                        nFlags &= ~ScScenarioFlags::TwoWay;
                         bModify = true;
                     }
                 }
@@ -8333,24 +8333,24 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                 OUString aName;
                 OUString aComment;
                 Color  aColor;
-                sal_uInt16 nFlags;
+                ScScenarioFlags nFlags;
                 rDoc.GetName( nTab, aName );
                 rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
                 bool bModify(false);
 
                 if (ScUnoHelpFunctions::GetBoolFromAny( aValue ))
                 {
-                    if (!(nFlags & SC_SCENARIO_ATTRIB))
+                    if (!(nFlags & ScScenarioFlags::Attrib))
                     {
-                        nFlags |= SC_SCENARIO_ATTRIB;
+                        nFlags |= ScScenarioFlags::Attrib;
                         bModify = true;
                     }
                 }
                 else
                 {
-                    if (nFlags & SC_SCENARIO_ATTRIB)
+                    if (nFlags & ScScenarioFlags::Attrib)
                     {
-                        nFlags -= SC_SCENARIO_ATTRIB;
+                        nFlags &= ~ScScenarioFlags::Attrib;
                         bModify = true;
                     }
                 }
@@ -8366,24 +8366,24 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                 OUString aName;
                 OUString aComment;
                 Color  aColor;
-                sal_uInt16 nFlags;
+                ScScenarioFlags nFlags;
                 rDoc.GetName( nTab, aName );
                 rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
                 bool bModify(false);
 
                 if (ScUnoHelpFunctions::GetBoolFromAny( aValue ))
                 {
-                    if (nFlags & SC_SCENARIO_VALUE)
+                    if (nFlags & ScScenarioFlags::Value)
                     {
-                        nFlags -= SC_SCENARIO_VALUE;
+                        nFlags &= ~ScScenarioFlags::Value;
                         bModify = true;
                     }
                 }
                 else
                 {
-                    if (!(nFlags & SC_SCENARIO_VALUE))
+                    if (!(nFlags & ScScenarioFlags::Value))
                     {
-                        nFlags |= SC_SCENARIO_VALUE;
+                        nFlags |= ScScenarioFlags::Value;
                         bModify = true;
                     }
                 }
@@ -8493,7 +8493,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
             {
                 OUString aComment;
                 Color  aColor;
-                sal_uInt16 nFlags;
+                ScScenarioFlags nFlags;
                 rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
 
                 rAny <<= static_cast<sal_Int32>(aColor.GetColor());
@@ -8505,10 +8505,10 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
             {
                 OUString aComment;
                 Color  aColor;
-                sal_uInt16 nFlags;
+                ScScenarioFlags nFlags;
                 rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
 
-                rAny <<= ((nFlags & SC_SCENARIO_PROTECT) != 0);
+                rAny <<= ((nFlags & ScScenarioFlags::Protected) != ScScenarioFlags::Undefined);
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_SHOWBORD )
@@ -8517,10 +8517,10 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
             {
                 OUString aComment;
                 Color  aColor;
-                sal_uInt16 nFlags;
+                ScScenarioFlags nFlags;
                 rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
 
-                rAny <<= ((nFlags & SC_SCENARIO_SHOWFRAME) != 0);
+                rAny <<= ((nFlags & ScScenarioFlags::ShowFrame) != ScScenarioFlags::Undefined);
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_PRINTBORD )
@@ -8529,10 +8529,10 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
             {
                 OUString aComment;
                 Color  aColor;
-                sal_uInt16 nFlags;
+                ScScenarioFlags nFlags;
                 rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
 
-                rAny <<= ((nFlags & SC_SCENARIO_PRINTFRAME) != 0);
+                rAny <<= ((nFlags & ScScenarioFlags::PrintFrame) != ScScenarioFlags::Undefined);
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_COPYBACK )
@@ -8541,10 +8541,10 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
             {
                 OUString aComment;
                 Color  aColor;
-                sal_uInt16 nFlags;
+                ScScenarioFlags nFlags;
                 rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
 
-                rAny <<= ((nFlags & SC_SCENARIO_TWOWAY) != 0);
+                rAny <<= ((nFlags & ScScenarioFlags::TwoWay) != ScScenarioFlags::Undefined);
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_COPYSTYL )
@@ -8553,10 +8553,10 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
             {
                 OUString aComment;
                 Color  aColor;
-                sal_uInt16 nFlags;
+                ScScenarioFlags nFlags;
                 rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
 
-                rAny <<= ((nFlags & SC_SCENARIO_ATTRIB) != 0);
+                rAny <<= ((nFlags & ScScenarioFlags::Attrib) != ScScenarioFlags::Undefined);
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_COPYFORM )
@@ -8565,10 +8565,10 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
             {
                 OUString aComment;
                 Color  aColor;
-                sal_uInt16 nFlags;
+                ScScenarioFlags nFlags;
                 rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
 
-                rAny <<= !(nFlags & SC_SCENARIO_VALUE);
+                rAny <<= !(nFlags & ScScenarioFlags::Value);
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_TABLAYOUT )
