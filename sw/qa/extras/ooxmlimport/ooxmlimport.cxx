@@ -1749,6 +1749,13 @@ DECLARE_OOXMLIMPORT_TEST(testTdf75573, "tdf75573_page1frame.docx")
     // the frame should be located near the bottom[23186]/center[2955] of the page
     CPPUNIT_ASSERT(sal_Int32(20000) < getProperty<sal_Int32>(xPropertySet, "VertOrientPosition"));
     CPPUNIT_ASSERT(sal_Int32(2500) < getProperty<sal_Int32>(xPropertySet, "HoriOrientPosition"));
+
+    css::uno::Reference<css::lang::XMultiServiceFactory> m_xTextFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySet > xSettings(m_xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+    uno::Any aProtect = xSettings->getPropertyValue("ProtectForm");
+    bool bProt = true;
+    aProtect >>= bProt;
+    CPPUNIT_ASSERT(!bProt);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testFdo43093, "fdo43093.docx")
