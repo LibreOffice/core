@@ -242,7 +242,7 @@ namespace svgio
                                     << e.getMessage() << "\"");
                         }
 
-                        if (!aAbsUrl.isEmpty())
+                        if (!aAbsUrl.isEmpty() && !rPath.equals(aAbsUrl))
                         {
                             SvFileStream aStream(aAbsUrl, STREAM_STD_READ);
                             Graphic aGraphic;
