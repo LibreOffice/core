@@ -1573,7 +1573,7 @@ ParagraphProperties::ParagraphProperties() :
     m_h(-1),
     m_nWrap(-1),
     m_hAnchor(-1),
-    m_vAnchor(text::RelOrientation::FRAME),
+    m_vAnchor(-1),
     m_x(-1),
     m_bxValid( false ),
     m_y(-1),
@@ -1653,7 +1653,7 @@ void ParagraphProperties::ResetFrameProperties()
     m_h = -1;
     m_nWrap = -1;
     m_hAnchor = -1;
-    m_vAnchor = text::RelOrientation::FRAME;
+    m_vAnchor = -1;
     m_x = -1;
     m_bxValid = false;
     m_y = -1;
