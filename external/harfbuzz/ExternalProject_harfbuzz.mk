@@ -23,19 +23,22 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 	$(call gb_ExternalProject_run,build,\
 		$(if $(CROSS_COMPILING),ICU_CONFIG=$(SRCDIR)/external/icu/cross-bin/icu-config) \
 		$(if $(SYSTEM_ICU),,ICU_CONFIG=$(SRCDIR)/external/icu/cross-bin/icu-config) \
+		GRAPHITE2_CFLAGS="$(GRAPHITE_CFLAGS)" \
+		GRAPHITE2_LIBS="$(GRAPHITE_LIBS)" \
 		./configure \
 			--enable-static \
 			--disable-shared \
 			--disable-gtk-doc \
 			--with-pic \
-			--with-icu=yes \
+			--with-icu=builtin \
 			--with-freetype=no \
 			--with-cairo=no \
 			--with-glib=no \
+			--with-graphite2=yes \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter LINUX,$(OS)),CXXFLAGS="$(CXXFLAGS) -fvisibility=hidden") \
-		&& (cd $(EXTERNAL_WORKDIR)/src && $(MAKE)) \
+		&& (cd $(EXTERNAL_WORKDIR)/src && $(MAKE) lib) \
 	)
 
 # vim: set noet sw=4 ts=4:
