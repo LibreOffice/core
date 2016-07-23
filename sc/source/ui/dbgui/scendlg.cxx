@@ -127,7 +127,7 @@ void ScNewScenarioDlg::dispose()
 }
 
 void ScNewScenarioDlg::GetScenarioData( OUString& rName, OUString& rComment,
-                                        Color& rColor, sal_uInt16& rFlags ) const
+                                        Color& rColor, ScScenarioFlags& rFlags ) const
 {
     rComment = m_pEdComment->GetText();
     rName    = m_pEdName->GetText();
@@ -136,30 +136,30 @@ void ScNewScenarioDlg::GetScenarioData( OUString& rName, OUString& rComment,
         rName = aDefScenarioName;
 
     rColor = m_pLbColor->GetSelectEntryColor();
-    sal_uInt16 nBits = 0;
+    ScScenarioFlags nBits = ScScenarioFlags::Undefined;
     if (m_pCbShowFrame->IsChecked())
-        nBits |= SC_SCENARIO_SHOWFRAME;
+        nBits |= ScScenarioFlags::ShowFrame;
     if (m_pCbTwoWay->IsChecked())
-        nBits |= SC_SCENARIO_TWOWAY;
+        nBits |= ScScenarioFlags::TwoWay;
     if (m_pCbCopyAll->IsChecked())
-        nBits |= SC_SCENARIO_COPYALL;
+        nBits |= ScScenarioFlags::CopyAll;
     if (m_pCbProtect->IsChecked())
-        nBits |= SC_SCENARIO_PROTECT;
+        nBits |= ScScenarioFlags::Protected;
     rFlags = nBits;
 }
 
-void ScNewScenarioDlg::SetScenarioData( const OUString& rName, const OUString& rComment,
-                                        const Color& rColor, sal_uInt16 nFlags )
+void ScNewScenarioDlg::SetScenarioData(const OUString& rName, const OUString& rComment,
+                                        const Color& rColor, ScScenarioFlags nFlags)
 {
     m_pEdComment->SetText(rComment);
     m_pEdName->SetText(rName);
     m_pLbColor->SelectEntry(rColor);
 
-    m_pCbShowFrame->Check ( (nFlags & SC_SCENARIO_SHOWFRAME)  != 0 );
+    m_pCbShowFrame->Check ( (nFlags & ScScenarioFlags::ShowFrame) != ScScenarioFlags::Undefined );
     EnableHdl(m_pCbShowFrame);
-    m_pCbTwoWay->Check    ( (nFlags & SC_SCENARIO_TWOWAY)     != 0 );
+    m_pCbTwoWay->Check    ( (nFlags & ScScenarioFlags::TwoWay)    != ScScenarioFlags::Undefined );
     //  CopyAll nicht
-    m_pCbProtect->Check    ( (nFlags & SC_SCENARIO_PROTECT)     != 0 );
+    m_pCbProtect->Check   ( (nFlags & ScScenarioFlags::Protected) != ScScenarioFlags::Undefined );
 }
 
 IMPL_LINK_NOARG_TYPED(ScNewScenarioDlg, OkHdl, Button*, void)

@@ -1330,7 +1330,7 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
     OUString  sTmpComm;
     OUString aTmp;
     Color   aDummyCol;
-    sal_uInt16  nFlags;
+    ScScenarioFlags nFlags;
 
     ScDocument& rDoc = rRoot.GetDoc();
     rDoc.GetName(nTab, aTmp);
@@ -1343,7 +1343,7 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
     sComment.Assign( sTmpComm, EXC_STR_DEFAULT, 255 );
     if( sComment.Len() )
         nRecLen += sComment.GetSize();
-    bProtected = (nFlags & SC_SCENARIO_PROTECT);
+    bProtected = (nFlags & ScScenarioFlags::Protected) != ScScenarioFlags::Undefined;
 
     sUserName.Assign( rRoot.GetUserName(), EXC_STR_DEFAULT, 255 );
     nRecLen += sUserName.GetSize();

@@ -528,13 +528,13 @@ OUString AbstractScDPShowDetailDlg_Impl::GetDimensionName() const
 }
 
 void AbstractScNewScenarioDlg_Impl::SetScenarioData(
-    const OUString& rName, const OUString& rComment, const Color& rColor, sal_uInt16 nFlags )
+    const OUString& rName, const OUString& rComment, const Color& rColor, ScScenarioFlags nFlags )
 {
     pDlg->SetScenarioData(rName, rComment, rColor, nFlags);
 }
 
 void AbstractScNewScenarioDlg_Impl::GetScenarioData(
-    OUString& rName, OUString& rComment, Color& rColor, sal_uInt16& rFlags ) const
+    OUString& rName, OUString& rComment, Color& rColor, ScScenarioFlags& rFlags ) const
 {
     pDlg->GetScenarioData(rName, rComment, rColor, rFlags);
 }

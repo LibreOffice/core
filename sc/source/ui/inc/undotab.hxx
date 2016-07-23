@@ -231,7 +231,7 @@ public:
                             ScDocShell* pNewDocShell,
                             SCTAB nSrc, SCTAB nDest,
                             const OUString& rN, const OUString& rC,
-                            const Color& rCol, sal_uInt16 nF,
+                            const Color& rCol, ScScenarioFlags nF,
                             const ScMarkData& rMark );
     virtual         ~ScUndoMakeScenario();
 
@@ -249,7 +249,7 @@ private:
     OUString    aName;
     OUString    aComment;
     Color       aColor;
-    sal_uInt16      nFlags;
+    ScScenarioFlags nFlags;
     SdrUndoAction* pDrawUndo;
 };
 
@@ -402,7 +402,7 @@ public:
                             const OUString& rON, const OUString& rNN,
                             const OUString& rOC, const OUString& rNC,
                             const Color& rOCol, const Color& rNCol,
-                            sal_uInt16 nOF, sal_uInt16 nNF );
+                            ScScenarioFlags nOF, ScScenarioFlags nNF);
 
     virtual         ~ScUndoScenarioFlags();
 
@@ -421,8 +421,8 @@ private:
     OUString    aNewComment;
     Color       aOldColor;
     Color       aNewColor;
-    sal_uInt16  nOldFlags;
-    sal_uInt16  nNewFlags;
+    ScScenarioFlags nOldFlags;
+    ScScenarioFlags nNewFlags;
 };
 
 class ScUndoRenameObject: public ScSimpleUndo

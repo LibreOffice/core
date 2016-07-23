@@ -686,13 +686,13 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
                         pUndoDoc->SetScenario( i, true );
                         OUString aComment;
                         Color  aColor;
-                        sal_uInt16 nScenFlags;
+                        ScScenarioFlags nScenFlags;
                         aDocument.GetScenarioData( i, aComment, aColor, nScenFlags );
                         pUndoDoc->SetScenarioData( i, aComment, aColor, nScenFlags );
                         bool bActive = aDocument.IsActiveScenario( i );
                         pUndoDoc->SetActiveScenario( i, bActive );
                         //  Bei Zurueckkopier-Szenarios auch Inhalte
-                        if ( nScenFlags & SC_SCENARIO_TWOWAY )
+                        if ( nScenFlags & ScScenarioFlags::TwoWay )
                             aDocument.CopyToDocument( 0,0,i, MAXCOL,MAXROW,i,
                                                         InsertDeleteFlags::ALL,false, pUndoDoc );
                     }
@@ -735,19 +735,19 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
 }
 
 void ScDocShell::ModifyScenario( SCTAB nTab, const OUString& rName, const OUString& rComment,
-                                    const Color& rColor, sal_uInt16 nFlags )
+                                    const Color& rColor, ScScenarioFlags nFlags )
 {
     //  Undo
     OUString aOldName;
     aDocument.GetName( nTab, aOldName );
     OUString aOldComment;
     Color aOldColor;
-    sal_uInt16 nOldFlags;
+    ScScenarioFlags nOldFlags;
     aDocument.GetScenarioData( nTab, aOldComment, aOldColor, nOldFlags );
     GetUndoManager()->AddUndoAction(
-        new ScUndoScenarioFlags( this, nTab,
+        new ScUndoScenarioFlags(this, nTab,
                 aOldName, rName, aOldComment, rComment,
-                aOldColor, rColor, nOldFlags, nFlags ) );
+                aOldColor, rColor, nOldFlags, nFlags) );
 
     //  ausfuehren
     ScDocShellModificator aModificator( *this );
@@ -765,7 +765,7 @@ void ScDocShell::ModifyScenario( SCTAB nTab, const OUString& rName, const OUStri
 }
 
 SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUString& rComment,
-                                    const Color& rColor, sal_uInt16 nFlags,
+                                    const Color& rColor, ScScenarioFlags nFlags,
                                     ScMarkData& rMark, bool bRecord )
 {
     rMark.MarkToMulti();
@@ -775,7 +775,7 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUStrin
         while (aDocument.IsScenario(nNewTab))
             ++nNewTab;
 
-        bool bCopyAll = ( (nFlags & SC_SCENARIO_COPYALL) != 0 );
+        bool bCopyAll = ( (nFlags & ScScenarioFlags::CopyAll) != ScScenarioFlags::Undefined );
         const ScMarkData* pCopyMark = nullptr;
         if (!bCopyAll)
             pCopyMark = &rMark;
@@ -818,7 +818,7 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUStrin
             //  dies ist dann das aktive Szenario
             aDocument.CopyScenario( nNewTab, nTab, true );  // sal_True - nicht aus Szenario kopieren
 
-            if (nFlags & SC_SCENARIO_SHOWFRAME)
+            if (nFlags & ScScenarioFlags::ShowFrame)
                 PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID );  // Rahmen painten
             PostPaintExtras();                                          // Tabellenreiter
             aModificator.SetDocumentModified();
@@ -854,7 +854,7 @@ sal_uLong ScDocShell::TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
     {
         OUString aComment;
         Color  aColor;
-        sal_uInt16 nFlags;
+        ScScenarioFlags nFlags;
 
         rSrcDoc.GetScenarioData( nSrcPos, aComment,aColor, nFlags);
         aDocument.SetScenario(nDestPos,true);
