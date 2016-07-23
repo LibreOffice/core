@@ -9,7 +9,7 @@
         <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:non-business" Name="Non-Business">
             <baf:LabelingRules/>
             <baf:ImpactLevel>
-                <baf:Scale>NL Overheid</baf:Scale>
+                <baf:Scale>UK-Cabinet</baf:Scale>
                 <baf:ConfidentalityValue>0</baf:ConfidentalityValue>
             </baf:ImpactLevel>
         </baf:BusinessAuthorizationCategory>
@@ -21,7 +21,7 @@
                 </baf:VisualMarkingPart>
             </baf:LabelingRules>
             <baf:ImpactLevel>
-                <baf:Scale>NL Overheid</baf:Scale>
+                <baf:Scale>UK-Cabinet</baf:Scale>
                 <baf:ConfidentalityValue>1</baf:ConfidentalityValue>
             </baf:ImpactLevel>
         </baf:BusinessAuthorizationCategory>
@@ -41,7 +41,7 @@
                 </baf:VisualMarkingPart>
             </baf:LabelingRules>
             <baf:ImpactLevel>
-                <baf:Scale>NL Overheid</baf:Scale>
+                <baf:Scale>UK-Cabinet</baf:Scale>
                 <baf:ConfidentalityValue>2</baf:ConfidentalityValue>
             </baf:ImpactLevel>
         </baf:BusinessAuthorizationCategory>
@@ -61,7 +61,7 @@
                 </baf:VisualMarkingPart>
             </baf:LabelingRules>
             <baf:ImpactLevel>
-                <baf:Scale>NL Overheid</baf:Scale>
+                <baf:Scale>UK-Cabinet</baf:Scale>
                 <baf:ConfidentalityValue>3</baf:ConfidentalityValue>
             </baf:ImpactLevel>
         </baf:BusinessAuthorizationCategory>
