@@ -23,6 +23,8 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 	$(call gb_ExternalProject_run,build,\
 		$(if $(CROSS_COMPILING),ICU_CONFIG=$(SRCDIR)/external/icu/cross-bin/icu-config) \
 		$(if $(SYSTEM_ICU),,ICU_CONFIG=$(SRCDIR)/external/icu/cross-bin/icu-config) \
+		GRAPHITE2_CFLAGS="$(GRAPHITE_CFLAGS)" \
+		GRAPHITE2_LIBS="$(GRAPHITE_LIBS)" \
 		./configure \
 			--enable-static \
 			--disable-shared \
@@ -33,6 +35,7 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 			--with-fontconfig=no \
 			--with-cairo=no \
 			--with-glib=no \
+			--with-graphite2=yes \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter LINUX,$(OS)),CXXFLAGS="$(CXXFLAGS) -fvisibility=hidden") \

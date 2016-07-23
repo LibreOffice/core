@@ -9252,10 +9252,14 @@ if test $_os != Darwin -a $_os != Android -a $_os != iOS -a \( -z "$enable_graph
     AC_MSG_RESULT([yes])
     ENABLE_GRAPHITE="TRUE"
     AC_DEFINE(ENABLE_GRAPHITE)
-    libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3])
+    libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3],["-I${WORKDIR}/UnpackedTarball/graphite/include"],["-L${WORKDIR}/LinkTarget/StaticLibrary -lgraphite"])
     if test "$with_system_graphite" = "yes"; then
         libo_MINGW_CHECK_DLL([libgraphite2])
     fi
+    if test "$COM" = "MSC"; then # override the above
+        GRAPHITE_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/graphite.lib"
+    fi
+
 else
     AC_MSG_RESULT([no])
 fi
@@ -9347,6 +9351,16 @@ if test "$with_harfbuzz" = "yes" -o \( $_os != WINNT -a $_os != Darwin -a $_os !
     fi
     if test "$COM" = "MSC"; then # override the above
         HARFBUZZ_LIBS="${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz.lib"
+    fi
+    if test "$with_system_harfbuzz" = "yes"; then
+        AC_MSG_CHECKING([whether system Harfbuzz is built with Graphite support])
+        _save_libs="$LIBS"
+        _save_cflags="$CFLAGS"
+        LIBS="$LIBS $HARFBUZZ_LIBS"
+        CFLAGS="$CFLAGS $HARFBUZZ_CFLAGS"
+        AC_CHECK_FUNC(hb_graphite2_face_get_gr_face,,[AC_MSG_ERROR([Harfbuzz needs to be built with Graphite support.])])
+        LIBS="$_save_libs"
+        CFLAGS="$_save_cflags"
     fi
 else
     AC_MSG_RESULT([no])
