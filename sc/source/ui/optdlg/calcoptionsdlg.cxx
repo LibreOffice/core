@@ -279,10 +279,14 @@ struct Area
     OUString msTitle;
     int mnRows;
 
+    OUString msFuncArg;
+
     Area(const OUString& rTitle, int nRows = ScInterpreter::GetGlobalConfig().mnOpenCLMinimumFormulaGroupSize + 2) :
         msTitle(rTitle),
         mnRows(nRows)
     {
+        OUString sArrayCol, sArrayRow;
+        ScFormulaOptions::GetDefaultFormulaSeparators(msFuncArg, sArrayCol, sArrayRow);
     }
 
     virtual ~Area()
@@ -346,7 +350,7 @@ struct OpenCLTester
                         "=IF(SUM(" +
                         ScRange(ScAddress(1,1,0),
                                 ScAddress(1,1+mnTestAreas-1,0)).Format(ScRefFlags::VALID|ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
-                        ")=0,\"PASS\",\"FAIL\")");
+                        ")=0" + rArea.msFuncArg + "\"PASS\"" + rArea.msFuncArg + "\"FAIL\")");
     }
 };
 
@@ -425,7 +429,7 @@ struct UnOp : Op
                             "-" + ScAddress(2,1+nRow,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
                             ")/" + ScAddress(2,1+nRow,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
                             ")<=" + OUString::number(-mnEpsilon) +
-                            ",0,1)");
+                            msFuncArg + "0" + msFuncArg + "1)");
         }
         else
         {
@@ -434,7 +438,7 @@ struct UnOp : Op
                             "=IF(ABS(" + ScAddress(1,1+nRow,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
                             "-" + ScAddress(2,1+nRow,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
                             ")<=" + OUString::number(mnEpsilon) +
-                            ",0,1)");
+                            msFuncArg + "0" + msFuncArg + "1)");
         }
     }
 
@@ -498,7 +502,7 @@ struct BinOp : Op
                         "=IF(ABS(" + ScAddress(2,1+nRow,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
                         "-" + ScAddress(3,1+nRow,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
                         ")<=" + OUString::number(mnEpsilon) +
-                        ",0,1)");
+                        msFuncArg + "0" + msFuncArg + "1)");
     }
 
     virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const override
@@ -539,7 +543,7 @@ struct Round : Area
 
         pDoc->SetString(ScAddress(2,1+nRow,nTab),
                         "=ROUND(" + ScAddress(0,1+nRow,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
-                        "," + ScAddress(1,1+nRow,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
+                        msFuncArg + ScAddress(1,1+nRow,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
                         ")");
 
         pDoc->SetValue(ScAddress(3,1+nRow,nTab), ::rtl::math::round(nX, (short) nN));
@@ -547,8 +551,8 @@ struct Round : Area
         pDoc->SetString(ScAddress(4,1+nRow,nTab),
                         "=IF(ABS(" + ScAddress(2,1+nRow,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
                         "-" + ScAddress(3,1+nRow,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
-                        ")<=3e-10"
-                        ",0,1)");
+                        ")<=3e-10" +
+                        msFuncArg + "0" + msFuncArg + "1)");
     }
 
     virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const override
@@ -596,9 +600,9 @@ struct Normdist : Area
 
         pDoc->SetString(ScAddress(4,1+nRow,nTab),
                         "=NORMDIST(" + ScAddress(0,1+nRow,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
-                        "," + ScAddress(1,1+nRow,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
-                        "," + ScAddress(2,1+nRow,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
-                        "," + ScAddress(3,1+nRow,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
+                        msFuncArg + ScAddress(1,1+nRow,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
+                        msFuncArg + ScAddress(2,1+nRow,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
+                        msFuncArg + ScAddress(3,1+nRow,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
                         ")");
 
         if (nType == 1)
@@ -609,8 +613,8 @@ struct Normdist : Area
         pDoc->SetString(ScAddress(6,1+nRow,nTab),
                         "=IF(ABS(" + ScAddress(4,1+nRow,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
                         "-" + ScAddress(5,1+nRow,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
-                        ")<=3e-10"
-                        ",0,1)");
+                        ")<=3e-10" +
+                        msFuncArg + "0" + msFuncArg + "1)");
     }
 
     virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const override
@@ -683,12 +687,12 @@ struct Reduction : Op
                                 "=IF(ABS(" + ScAddress(1,1+nRow-mnRows/2+1,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
                                 "-" + ScAddress(2,1+nRow-mnRows/2+1,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
                                 ")<=" + OUString::number(mnEpsilon) +
-                                ",0,1)");
+                                msFuncArg + "0" + msFuncArg + "1)");
             else
                 pDoc->SetString(ScAddress(3,1+nRow-mnRows/2+1,nTab),
                                 "=IF(" + ScAddress(1,1+nRow-mnRows/2+1,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
                                 "=" + ScAddress(2,1+nRow-mnRows/2+1,nTab).Format(ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID) +
-                                ",0,1)");
+                                msFuncArg + "0" + msFuncArg + "1)");
         }
     }
 
