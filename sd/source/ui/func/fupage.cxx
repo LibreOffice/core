@@ -152,7 +152,6 @@ void FuPage::DoExecute( SfxRequest& )
         if( mpArgs )
         {
             ApplyItemSet( mpArgs );
-            mpView->SetAttributes( *mpArgs );
         }
     }
 }
