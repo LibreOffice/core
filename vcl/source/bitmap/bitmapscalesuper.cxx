@@ -937,7 +937,7 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
 
     Bitmap::ScopedReadAccess pReadAccess(rBitmap);
 
-    Bitmap aOutBmp(Size(nDstW, nDstH), 24);
+    Bitmap aOutBmp(Size(nDstW, nDstH), rBitmap.GetBitCount());
     Bitmap::ScopedWriteAccess pWriteAccess(aOutBmp);
 
     const long nStartY = 0;
