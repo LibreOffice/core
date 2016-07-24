@@ -58,6 +58,7 @@ namespace
         CPPUNIT_ASSERT_EQUAL( false, aDavType.isClass1() );
         CPPUNIT_ASSERT_EQUAL( false, aDavType.isClass2() );
         CPPUNIT_ASSERT_EQUAL( false, aDavType.isClass3() );
+        CPPUNIT_ASSERT_EQUAL( false, aDavType.isLocked() );
         CPPUNIT_ASSERT_EQUAL( true, aDavType.getAllowedMethods().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( false, aDavType.isLockAllowed() );
         CPPUNIT_ASSERT_EQUAL( true, aDavType.getURL().isEmpty() );
@@ -191,6 +192,7 @@ namespace
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass1() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass2() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass3() );
+        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isLocked() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getAllowedMethods().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isLockAllowed() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getURL().isEmpty() );
@@ -204,6 +206,7 @@ namespace
         aDavOpt.setClass1();
         aDavOpt.setClass2();
         aDavOpt.setClass3();
+        aDavOpt.setLocked();
         aDavOpt.setAllowedMethods( aAllowedMethods );
         aDavOpt.setStaleTime( 1234567 );
         aDavOpt.setURL( aURL );
@@ -228,6 +231,11 @@ namespace
         aDavOpt.setClass3();
         CPPUNIT_ASSERT_EQUAL( false , aDavOpt == aDavOptTarget );
         aDavOpt.setClass3( false );
+        CPPUNIT_ASSERT_EQUAL( true , aDavOpt == aDavOptTarget );
+
+        aDavOpt.setLocked();
+        CPPUNIT_ASSERT_EQUAL( false , aDavOpt == aDavOptTarget );
+        aDavOpt.setLocked( false );
         CPPUNIT_ASSERT_EQUAL( true , aDavOpt == aDavOptTarget );
 
         aDavOpt.setResourceFound();
