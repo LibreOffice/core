@@ -24,6 +24,7 @@ DAVOptions::DAVOptions() :
     m_isClass1( false ),
     m_isClass2( false ),
     m_isClass3( false ),
+    m_isLocked( false ),
     m_aAllowedMethods(),
     m_nStaleTime( 0 ),
     m_sURL(),
@@ -37,6 +38,7 @@ DAVOptions::DAVOptions( const DAVOptions & rOther ) :
     m_isClass1( rOther.m_isClass1 ),
     m_isClass2( rOther.m_isClass2 ),
     m_isClass3( rOther.m_isClass3 ),
+    m_isLocked( rOther.m_isLocked ),
     m_aAllowedMethods( rOther.m_aAllowedMethods ),
     m_nStaleTime( rOther.m_nStaleTime ),
     m_sURL( rOther.m_sURL ),
@@ -57,6 +59,7 @@ bool DAVOptions::operator==( const DAVOptions& rOpts ) const
         m_isClass1 == rOpts.m_isClass1 &&
         m_isClass2 == rOpts.m_isClass2 &&
         m_isClass3 == rOpts.m_isClass3 &&
+        m_isLocked == rOpts.m_isLocked &&
         m_aAllowedMethods == rOpts.m_aAllowedMethods &&
         m_nStaleTime == rOpts.m_nStaleTime &&
         m_sURL == rOpts.m_sURL &&

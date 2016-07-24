@@ -81,6 +81,9 @@ namespace webdav_ucp
         bool    m_isClass1;
         bool    m_isClass2;
         bool    m_isClass3;
+        // Internally used to maintain locked stated of the resource, only
+        // if it's a Class 2 resource
+        bool    m_isLocked;
         // contains the methods allowed on this resource
         OUString    m_aAllowedMethods;
 
@@ -122,11 +125,15 @@ namespace webdav_ucp
         bool isLockAllowed() { return ( m_aAllowedMethods.indexOf( "LOCK" ) != -1 ); };
         bool isUnlockAllowed() { return ( m_aAllowedMethods.indexOf( "UNLOCK" ) != -1 ); };
 
+        void setLocked( bool isLocked = true ) { m_isLocked = isLocked; } ;
+        bool isLocked() { return m_isLocked; };
+
         void reset() {
             m_isResourceFound = false;
             m_isClass1 = false;
             m_isClass2 = false;
             m_isClass3 = false;
+            m_isLocked = false;
             m_aAllowedMethods.clear();
             m_nStaleTime = 0;
             m_sURL.clear();
