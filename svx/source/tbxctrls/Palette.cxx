@@ -53,6 +53,11 @@ const OUString& PaletteASE::GetName()
     return maASEPaletteName;
 }
 
+const OUString& PaletteASE::GetPath()
+{
+    return maFPath;
+}
+
 bool PaletteASE::IsValid()
 {
     return mbValidPalette;
@@ -184,6 +189,11 @@ PaletteGPL::~PaletteGPL()
 const OUString& PaletteGPL::GetName()
 {
     return maGPLPaletteName;
+}
+
+const OUString& PaletteGPL::GetPath()
+{
+    return maFPath;
 }
 
 void PaletteGPL::LoadColorSet( SvxColorValueSet& rColorSet )
@@ -325,6 +335,11 @@ PaletteSOC::~PaletteSOC()
 const OUString& PaletteSOC::GetName()
 {
     return maSOCPaletteName;
+}
+
+const OUString& PaletteSOC::GetPath()
+{
+    return maFPath;
 }
 
 void PaletteSOC::LoadColorSet( SvxColorValueSet& rColorSet )

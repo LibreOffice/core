@@ -1331,7 +1331,8 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     {
         mpPaletteListBox->InsertEntry( *it );
     }
-    mpPaletteListBox->SelectEntryPos(mrPaletteManager.GetPalette());
+    mpPaletteListBox->SelectEntry(mrPaletteManager.GetPaletteName());
+    SelectPaletteHdl( *mpPaletteListBox );
 
     mpButtonAutoColor->SetClickHdl( LINK( this, SvxColorWindow_Impl, AutoColorClickHdl ) );
     mpButtonPicker->SetClickHdl( LINK( this, SvxColorWindow_Impl, OpenPickerClickHdl ) );
