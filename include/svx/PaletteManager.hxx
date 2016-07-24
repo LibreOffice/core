@@ -46,6 +46,7 @@ class PaletteManager
     long                    mnColorCount;
     svx::ToolboxButtonColorUpdater* mpBtnUpdater;
 
+    XColorListRef           pColorList;
     Color                   mLastColor;
     std::deque<Color>       maRecentColors;
     std::vector<std::unique_ptr<Palette>> m_Palettes;
@@ -61,6 +62,7 @@ public:
     std::vector<OUString> GetPaletteList();
     void        SetPalette( sal_Int32 nPos );
     sal_Int32   GetPalette();
+    OUString    GetPaletteName();
 
     long        GetColorCount();
     long        GetRecentColorCount();
