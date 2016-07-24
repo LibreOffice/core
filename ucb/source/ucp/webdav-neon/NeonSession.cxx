@@ -939,6 +939,18 @@ void NeonSession::OPTIONS( const OUString & inPath,
             }
         }
         rOptions.setResourceFound();
+        // if applicable, check for lock state:
+        if( rOptions.isClass2() || rOptions.isClass3() )
+        {
+            //dav with lock possible, check for locked state
+            if ( m_aNeonLockStore.findByUri(
+                     makeAbsoluteURL( inPath ) ) != nullptr )
+            {
+                // we own a lock for this URL,
+                // set locked state
+                rOptions.setLocked();
+            }
+        }
     }
 
     ne_request_destroy(req);
