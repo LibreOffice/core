@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
- <office:meta><meta:creation-date>2016-06-10T20:02:06.652576343</meta:creation-date><meta:editing-duration>P0D</meta:editing-duration><meta:editing-cycles>1</meta:editing-cycles><meta:generator>LibreOfficeDev/5.3.0.0.alpha0$Linux_X86_64 LibreOffice_project/131e604073f89e6c1dd54be88b94b7befd881f2e</meta:generator><meta:document-statistic meta:table-count="2" meta:cell-count="42" meta:object-count="0"/></office:meta>
+ <office:meta><meta:creation-date>2016-06-10T20:02:06.652576343</meta:creation-date><meta:editing-duration>P0D</meta:editing-duration><meta:editing-cycles>1</meta:editing-cycles><meta:generator>LibreOfficeDev/5.3.0.0.alpha0$Linux_X86_64 LibreOffice_project/a2c557d80ac68c06ea59586245a7431e061938f0</meta:generator><meta:document-statistic meta:table-count="2" meta:cell-count="75" meta:object-count="0"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
    <config:config-item config:name="VisibleAreaTop" config:type="int">0</config:config-item>
    <config:config-item config:name="VisibleAreaLeft" config:type="int">0</config:config-item>
-   <config:config-item config:name="VisibleAreaWidth" config:type="int">26699</config:config-item>
-   <config:config-item config:name="VisibleAreaHeight" config:type="int">4515</config:config-item>
+   <config:config-item config:name="VisibleAreaWidth" config:type="int">32333</config:config-item>
+   <config:config-item config:name="VisibleAreaHeight" config:type="int">8128</config:config-item>
    <config:config-item-map-indexed config:name="Views">
     <config:config-item-map-entry>
      <config:config-item config:name="ViewId" config:type="string">view1</config:config-item>
@@ -28,10 +28,11 @@
        <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
        <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
        <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
+       <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
       </config:config-item-map-entry>
       <config:config-item-map-entry config:name="Sheet2">
-       <config:config-item config:name="CursorPositionX" config:type="int">3</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">17</config:config-item>
+       <config:config-item config:name="CursorPositionX" config:type="int">9</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">18</config:config-item>
        <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="VerticalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
@@ -45,6 +46,7 @@
        <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
        <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
        <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
+       <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
       </config:config-item-map-entry>
      </config:config-item-map-named>
      <config:config-item config:name="ActiveTable" config:type="string">Sheet2</config:config-item>
@@ -69,6 +71,7 @@
      <config:config-item config:name="RasterSubdivisionX" config:type="int">1</config:config-item>
      <config:config-item config:name="RasterSubdivisionY" config:type="int">1</config:config-item>
      <config:config-item config:name="IsRasterAxisSynchronized" config:type="boolean">true</config:config-item>
+     <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
     </config:config-item-map-entry>
    </config:config-item-map-indexed>
   </config:config-item-set>
@@ -108,7 +111,7 @@
    <config:config-item config:name="HasColumnRowHeaders" config:type="boolean">true</config:config-item>
    <config:config-item config:name="RasterSubdivisionY" config:type="int">1</config:config-item>
    <config:config-item config:name="AutoCalculate" config:type="boolean">true</config:config-item>
-   <config:config-item config:name="PrinterSetup" config:type="base64Binary">qQH+/0xleG1hcmstRTM1MmRuAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpMZXhtYXJrLUUzNTJkbgAAAAAAAAAAAAAAAAAWAAMAzwAAAAAAAAAEAAhSAAAEdAAASm9iRGF0YSAxCnByaW50ZXI9TGV4bWFyay1FMzUyZG4Kb3JpZW50YXRpb249UG9ydHJhaXQKY29waWVzPTEKY29sbGF0ZT1mYWxzZQptYXJnaW5kYWp1c3RtZW50PTAsMCwwLDAKY29sb3JkZXB0aD0yNApwc2xldmVsPTAKcGRmZGV2aWNlPTEKY29sb3JkZXZpY2U9MApQUERDb250ZXhEYXRhClBhZ2VTaXplOkE0AElucHV0U2xvdDpUcmF5MQBEdXBsZXg6Tm9uZQAAEgBDT01QQVRfRFVQTEVYX01PREUKAERVUExFWF9PRkY=</config:config-item>
+   <config:config-item config:name="PrinterSetup" config:type="base64Binary">qQH+/0xleG1hcmstRTM1MmRuAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpMZXhtYXJrLUUzNTJkbgAAAAAAAAAAAAAAAAAWAAMAzwAAAAAAAAAEAAhSAAAEdAAASm9iRGF0YSAxCnByaW50ZXI9TGV4bWFyay1FMzUyZG4Kb3JpZW50YXRpb249UG9ydHJhaXQKY29waWVzPTEKY29sbGF0ZT1mYWxzZQptYXJnaW5kYWp1c3RtZW50PTAsMCwwLDAKY29sb3JkZXB0aD0yNApwc2xldmVsPTAKcGRmZGV2aWNlPTEKY29sb3JkZXZpY2U9MApQUERDb250ZXhEYXRhCkR1cGxleDpOb25lAElucHV0U2xvdDpUcmF5MQBQYWdlU2l6ZTpBNAAAEgBDT01QQVRfRFVQTEVYX01PREUKAERVUExFWF9PRkY=</config:config-item>
    <config:config-item config:name="ApplyUserData" config:type="boolean">false</config:config-item>
    <config:config-item config:name="CharacterCompressionType" config:type="short">0</config:config-item>
   </config:config-item-set>
@@ -136,785 +139,770 @@
  </office:font-face-decls>
  <office:styles>
   <style:default-style style:family="table-cell">
-   <style:paragraph-properties style:tab-stop-distance="12.7mm"/>
+   <style:paragraph-properties style:tab-stop-distance="36pt"/>
    <style:text-properties style:font-name="Liberation Sans" fo:language="en" fo:country="US" style:font-name-asian="DejaVu Sans" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="DejaVu Sans" style:language-complex="hi" style:country-complex="IN"/>
   </style:default-style>
   <number:number-style style:name="N0">
    <number:number number:min-integer-digits="1"/>
   </number:number-style>
-  <number:currency-style style:name="N108P0" style:volatile="true">
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text> </number:text>
-   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
-  </number:currency-style>
-  <number:currency-style style:name="N108">
-   <style:text-properties fo:color="#ff0000"/>
-   <number:text>-</number:text>
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text> </number:text>
-   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N108P0"/>
-  </number:currency-style>
-  <number:currency-style style:name="N110P0" style:volatile="true">
-   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-  </number:currency-style>
-  <number:currency-style style:name="N110">
-   <number:text>-</number:text>
-   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N110P0"/>
-  </number:currency-style>
-  <number:currency-style style:name="N112P0" style:volatile="true">
-   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-  </number:currency-style>
-  <number:currency-style style:name="N112">
-   <number:text>-</number:text>
-   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N112P0"/>
-  </number:currency-style>
-  <number:currency-style style:name="N113P0" style:volatile="true">
-   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-  </number:currency-style>
-  <number:currency-style style:name="N113">
-   <style:text-properties fo:color="#ff0000"/>
-   <number:text>-</number:text>
-   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N113P0"/>
-  </number:currency-style>
-  <number:currency-style style:name="N114P0" style:volatile="true">
-   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-  </number:currency-style>
-  <number:currency-style style:name="N114">
-   <style:text-properties fo:color="#ff0000"/>
-   <number:text>-</number:text>
-   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N114P0"/>
-  </number:currency-style>
-  <number:currency-style style:name="N116P0" style:volatile="true">
-   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
-   <number:number number:decimal-places="2" loext:min-decimal-places="0" number:min-integer-digits="1" number:decimal-replacement="--" number:grouping="true"/>
-  </number:currency-style>
-  <number:currency-style style:name="N116">
-   <style:text-properties fo:color="#ff0000"/>
-   <number:text>-</number:text>
-   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
-   <number:number number:decimal-places="2" loext:min-decimal-places="0" number:min-integer-digits="1" number:decimal-replacement="--" number:grouping="true"/>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N116P0"/>
-  </number:currency-style>
-  <number:number-style style:name="N118P0" style:volatile="true">
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text> </number:text>
-  </number:number-style>
-  <number:number-style style:name="N118">
-   <number:text>(</number:text>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text>)</number:text>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N118P0"/>
-  </number:number-style>
-  <number:number-style style:name="N120P0" style:volatile="true">
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text> </number:text>
-  </number:number-style>
-  <number:number-style style:name="N120">
-   <number:text>(</number:text>
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text>)</number:text>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N120P0"/>
-  </number:number-style>
   <number:currency-style style:name="N122P0" style:volatile="true">
-   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
-   <loext:fill-character> </loext:fill-character>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
   </number:currency-style>
   <number:currency-style style:name="N122">
+   <style:text-properties fo:color="#ff0000"/>
    <number:text>-</number:text>
-   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
-   <loext:fill-character> </loext:fill-character>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
    <style:map style:condition="value()&gt;=0" style:apply-style-name="N122P0"/>
   </number:currency-style>
   <number:currency-style style:name="N124P0" style:volatile="true">
    <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
-   <loext:fill-character> </loext:fill-character>
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
   </number:currency-style>
   <number:currency-style style:name="N124">
    <number:text>-</number:text>
    <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
-   <loext:fill-character> </loext:fill-character>
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <style:map style:condition="value()&gt;=0" style:apply-style-name="N124P0"/>
   </number:currency-style>
   <number:currency-style style:name="N126P0" style:volatile="true">
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text> </number:text>
-   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
   </number:currency-style>
   <number:currency-style style:name="N126">
    <number:text>-</number:text>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text> </number:text>
-   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <style:map style:condition="value()&gt;=0" style:apply-style-name="N126P0"/>
   </number:currency-style>
   <number:currency-style style:name="N127P0" style:volatile="true">
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text> </number:text>
-   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
   </number:currency-style>
   <number:currency-style style:name="N127">
+   <style:text-properties fo:color="#ff0000"/>
    <number:text>-</number:text>
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text> </number:text>
-   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <style:map style:condition="value()&gt;=0" style:apply-style-name="N127P0"/>
   </number:currency-style>
   <number:currency-style style:name="N128P0" style:volatile="true">
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text> </number:text>
-   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
   </number:currency-style>
   <number:currency-style style:name="N128">
    <style:text-properties fo:color="#ff0000"/>
    <number:text>-</number:text>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text> </number:text>
-   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <style:map style:condition="value()&gt;=0" style:apply-style-name="N128P0"/>
   </number:currency-style>
   <number:currency-style style:name="N130P0" style:volatile="true">
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
    <number:number number:decimal-places="2" loext:min-decimal-places="0" number:min-integer-digits="1" number:decimal-replacement="--" number:grouping="true"/>
-   <number:text> </number:text>
-   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
   </number:currency-style>
   <number:currency-style style:name="N130">
    <style:text-properties fo:color="#ff0000"/>
    <number:text>-</number:text>
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <number:number number:decimal-places="2" loext:min-decimal-places="0" number:min-integer-digits="1" number:decimal-replacement="--" number:grouping="true"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N130P0"/>
+  </number:currency-style>
+  <number:number-style style:name="N132P0" style:volatile="true">
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+  </number:number-style>
+  <number:number-style style:name="N132">
+   <number:text>(</number:text>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text>)</number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N132P0"/>
+  </number:number-style>
+  <number:number-style style:name="N134P0" style:volatile="true">
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+  </number:number-style>
+  <number:number-style style:name="N134">
+   <number:text>(</number:text>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text>)</number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N134P0"/>
+  </number:number-style>
+  <number:currency-style style:name="N136P0" style:volatile="true">
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <loext:fill-character> </loext:fill-character>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+  </number:currency-style>
+  <number:currency-style style:name="N136">
+   <number:text>-</number:text>
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <loext:fill-character> </loext:fill-character>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N136P0"/>
+  </number:currency-style>
+  <number:currency-style style:name="N138P0" style:volatile="true">
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <loext:fill-character> </loext:fill-character>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+  </number:currency-style>
+  <number:currency-style style:name="N138">
+   <number:text>-</number:text>
+   <number:currency-symbol number:language="en" number:country="GB">£</number:currency-symbol>
+   <loext:fill-character> </loext:fill-character>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N138P0"/>
+  </number:currency-style>
+  <number:currency-style style:name="N140P0" style:volatile="true">
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+  </number:currency-style>
+  <number:currency-style style:name="N140">
+   <number:text>-</number:text>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N140P0"/>
+  </number:currency-style>
+  <number:currency-style style:name="N141P0" style:volatile="true">
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+  </number:currency-style>
+  <number:currency-style style:name="N141">
+   <number:text>-</number:text>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N141P0"/>
+  </number:currency-style>
+  <number:currency-style style:name="N142P0" style:volatile="true">
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+  </number:currency-style>
+  <number:currency-style style:name="N142">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N142P0"/>
+  </number:currency-style>
+  <number:currency-style style:name="N144P0" style:volatile="true">
    <number:number number:decimal-places="2" loext:min-decimal-places="0" number:min-integer-digits="1" number:decimal-replacement="--" number:grouping="true"/>
    <number:text> </number:text>
    <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N130P0"/>
   </number:currency-style>
-  <number:number-style style:name="N131">
+  <number:currency-style style:name="N144">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="2" loext:min-decimal-places="0" number:min-integer-digits="1" number:decimal-replacement="--" number:grouping="true"/>
+   <number:text> </number:text>
+   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N144P0"/>
+  </number:currency-style>
+  <number:number-style style:name="N145">
    <number:number number:decimal-places="9" loext:min-decimal-places="9" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N132">
+  <number:number-style style:name="N146">
    <number:number number:decimal-places="8" loext:min-decimal-places="8" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N133">
+  <number:number-style style:name="N147">
    <number:number number:decimal-places="10" loext:min-decimal-places="10" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N134">
+  <number:number-style style:name="N148">
    <number:number number:decimal-places="11" loext:min-decimal-places="11" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N135">
+  <number:number-style style:name="N149">
    <number:number number:decimal-places="12" loext:min-decimal-places="12" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N136">
+  <number:number-style style:name="N150">
    <number:number number:decimal-places="13" loext:min-decimal-places="13" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N137">
+  <number:number-style style:name="N151">
    <number:number number:decimal-places="14" loext:min-decimal-places="14" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N138">
+  <number:number-style style:name="N152">
    <number:number number:decimal-places="15" loext:min-decimal-places="15" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N139">
+  <number:number-style style:name="N153">
    <number:number number:decimal-places="16" loext:min-decimal-places="16" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N140">
+  <number:number-style style:name="N154">
    <number:number number:decimal-places="17" loext:min-decimal-places="17" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N141">
+  <number:number-style style:name="N155">
    <number:number number:decimal-places="18" loext:min-decimal-places="18" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N143P0" style:volatile="true">
+  <number:number-style style:name="N157P0" style:volatile="true">
    <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> €</number:text>
   </number:number-style>
-  <number:number-style style:name="N143">
+  <number:number-style style:name="N157">
    <number:text>-</number:text>
    <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> €</number:text>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N143P0"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N157P0"/>
   </number:number-style>
-  <number:number-style style:name="N144P0" style:volatile="true">
+  <number:number-style style:name="N158P0" style:volatile="true">
    <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> €</number:text>
   </number:number-style>
-  <number:number-style style:name="N144">
+  <number:number-style style:name="N158">
    <style:text-properties fo:color="#ff0000"/>
    <number:text>-</number:text>
    <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> €</number:text>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N144P0"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N158P0"/>
   </number:number-style>
-  <number:number-style style:name="N146P0" style:volatile="true">
+  <number:number-style style:name="N160P0" style:volatile="true">
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> €</number:text>
   </number:number-style>
-  <number:number-style style:name="N146">
+  <number:number-style style:name="N160">
    <number:text>-</number:text>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> €</number:text>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N146P0"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N160P0"/>
   </number:number-style>
-  <number:number-style style:name="N147P0" style:volatile="true">
+  <number:number-style style:name="N161P0" style:volatile="true">
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> €</number:text>
   </number:number-style>
-  <number:number-style style:name="N147">
+  <number:number-style style:name="N161">
    <style:text-properties fo:color="#ff0000"/>
    <number:text>-</number:text>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> €</number:text>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N147P0"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N161P0"/>
   </number:number-style>
-  <number:number-style style:name="N151P0" style:volatile="true">
+  <number:number-style style:name="N165P0" style:volatile="true">
    <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text>    </number:text>
   </number:number-style>
-  <number:number-style style:name="N151P1" style:volatile="true">
+  <number:number-style style:name="N165P1" style:volatile="true">
    <number:text>-</number:text>
    <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text>    </number:text>
   </number:number-style>
-  <number:number-style style:name="N151P2" style:volatile="true">
+  <number:number-style style:name="N165P2" style:volatile="true">
    <number:text> -    </number:text>
   </number:number-style>
-  <number:text-style style:name="N151">
+  <number:text-style style:name="N165">
    <number:text-content/>
    <number:text> </number:text>
-   <style:map style:condition="value()&gt;0" style:apply-style-name="N151P0"/>
-   <style:map style:condition="value()&lt;0" style:apply-style-name="N151P1"/>
-   <style:map style:condition="value()=0" style:apply-style-name="N151P2"/>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N165P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N165P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N165P2"/>
   </number:text-style>
-  <number:number-style style:name="N155P0" style:volatile="true">
+  <number:number-style style:name="N169P0" style:volatile="true">
    <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> € </number:text>
   </number:number-style>
-  <number:number-style style:name="N155P1" style:volatile="true">
+  <number:number-style style:name="N169P1" style:volatile="true">
    <number:text>-</number:text>
    <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> € </number:text>
   </number:number-style>
-  <number:number-style style:name="N155P2" style:volatile="true">
+  <number:number-style style:name="N169P2" style:volatile="true">
    <number:text> - € </number:text>
   </number:number-style>
-  <number:text-style style:name="N155">
+  <number:text-style style:name="N169">
    <number:text-content/>
    <number:text> </number:text>
-   <style:map style:condition="value()&gt;0" style:apply-style-name="N155P0"/>
-   <style:map style:condition="value()&lt;0" style:apply-style-name="N155P1"/>
-   <style:map style:condition="value()=0" style:apply-style-name="N155P2"/>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N169P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N169P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N169P2"/>
   </number:text-style>
-  <number:number-style style:name="N159P0" style:volatile="true">
+  <number:number-style style:name="N173P0" style:volatile="true">
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text>    </number:text>
   </number:number-style>
-  <number:number-style style:name="N159P1" style:volatile="true">
+  <number:number-style style:name="N173P1" style:volatile="true">
    <number:text>-</number:text>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text>    </number:text>
   </number:number-style>
-  <number:number-style style:name="N159P2" style:volatile="true">
+  <number:number-style style:name="N173P2" style:volatile="true">
    <number:text> -</number:text>
    <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="0"/>
    <number:text>    </number:text>
   </number:number-style>
-  <number:text-style style:name="N159">
+  <number:text-style style:name="N173">
    <number:text-content/>
    <number:text> </number:text>
-   <style:map style:condition="value()&gt;0" style:apply-style-name="N159P0"/>
-   <style:map style:condition="value()&lt;0" style:apply-style-name="N159P1"/>
-   <style:map style:condition="value()=0" style:apply-style-name="N159P2"/>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N173P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N173P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N173P2"/>
   </number:text-style>
-  <number:number-style style:name="N163P0" style:volatile="true">
+  <number:number-style style:name="N177P0" style:volatile="true">
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> € </number:text>
   </number:number-style>
-  <number:number-style style:name="N163P1" style:volatile="true">
+  <number:number-style style:name="N177P1" style:volatile="true">
    <number:text>-</number:text>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> € </number:text>
   </number:number-style>
-  <number:number-style style:name="N163P2" style:volatile="true">
+  <number:number-style style:name="N177P2" style:volatile="true">
    <number:text> -</number:text>
    <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="0"/>
    <number:text> € </number:text>
   </number:number-style>
-  <number:text-style style:name="N163">
+  <number:text-style style:name="N177">
    <number:text-content/>
    <number:text> </number:text>
-   <style:map style:condition="value()&gt;0" style:apply-style-name="N163P0"/>
-   <style:map style:condition="value()&lt;0" style:apply-style-name="N163P1"/>
-   <style:map style:condition="value()=0" style:apply-style-name="N163P2"/>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N177P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N177P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N177P2"/>
   </number:text-style>
-  <number:time-style style:name="N164">
+  <number:time-style style:name="N178">
    <number:minutes number:style="long"/>
    <number:text>:</number:text>
    <number:seconds number:style="long"/>
   </number:time-style>
-  <number:time-style style:name="N165" number:truncate-on-overflow="false">
+  <number:time-style style:name="N179" number:truncate-on-overflow="false">
    <number:hours/>
    <number:text>:</number:text>
    <number:minutes number:style="long"/>
    <number:text>:</number:text>
    <number:seconds number:style="long"/>
   </number:time-style>
-  <number:time-style style:name="N166">
+  <number:time-style style:name="N180">
    <number:minutes number:style="long"/>
    <number:text>:</number:text>
    <number:seconds number:style="long" number:decimal-places="1"/>
   </number:time-style>
-  <number:number-style style:name="N167">
+  <number:number-style style:name="N181">
    <number:scientific-number number:decimal-places="1" loext:min-decimal-places="1" number:min-integer-digits="3" number:min-exponent-digits="1" loext:exponent-interval="3" loext:forced-exponent-sign="true"/>
   </number:number-style>
-  <number:number-style style:name="N168">
+  <number:number-style style:name="N182">
    <number:number number:decimal-places="1" loext:min-decimal-places="1" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N169">
+  <number:number-style style:name="N183">
    <number:number number:decimal-places="3" loext:min-decimal-places="3" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N170">
+  <number:number-style style:name="N184">
    <number:number number:decimal-places="4" loext:min-decimal-places="4" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N171">
+  <number:number-style style:name="N185">
    <number:number number:decimal-places="5" loext:min-decimal-places="5" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N172">
+  <number:number-style style:name="N186">
    <number:number number:decimal-places="6" loext:min-decimal-places="6" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N173">
+  <number:number-style style:name="N187">
    <number:number number:decimal-places="7" loext:min-decimal-places="7" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N175P0" style:volatile="true">
+  <number:number-style style:name="N189P0" style:volatile="true">
    <number:text>$</number:text>
    <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> </number:text>
   </number:number-style>
-  <number:number-style style:name="N175">
+  <number:number-style style:name="N189">
    <number:text>($</number:text>
    <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text>)</number:text>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N175P0"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N189P0"/>
   </number:number-style>
-  <number:number-style style:name="N176P0" style:volatile="true">
+  <number:number-style style:name="N190P0" style:volatile="true">
    <number:text>$</number:text>
    <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> </number:text>
   </number:number-style>
-  <number:number-style style:name="N176">
+  <number:number-style style:name="N190">
    <style:text-properties fo:color="#ff0000"/>
    <number:text>($</number:text>
    <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text>)</number:text>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N176P0"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N190P0"/>
   </number:number-style>
-  <number:number-style style:name="N178P0" style:volatile="true">
+  <number:number-style style:name="N192P0" style:volatile="true">
    <number:text>$</number:text>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> </number:text>
   </number:number-style>
-  <number:number-style style:name="N178">
+  <number:number-style style:name="N192">
    <number:text>($</number:text>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text>)</number:text>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N178P0"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N192P0"/>
   </number:number-style>
-  <number:number-style style:name="N179P0" style:volatile="true">
+  <number:number-style style:name="N193P0" style:volatile="true">
    <number:text>$</number:text>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> </number:text>
   </number:number-style>
-  <number:number-style style:name="N179">
+  <number:number-style style:name="N193">
    <style:text-properties fo:color="#ff0000"/>
    <number:text>($</number:text>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text>)</number:text>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N179P0"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N193P0"/>
   </number:number-style>
-  <number:number-style style:name="N183P0" style:volatile="true">
-   <loext:fill-character> </loext:fill-character>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text> </number:text>
-  </number:number-style>
-  <number:number-style style:name="N183P1" style:volatile="true">
-   <loext:fill-character> </loext:fill-character>
-   <number:text>(</number:text>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text>)</number:text>
-  </number:number-style>
-  <number:number-style style:name="N183P2" style:volatile="true">
-   <loext:fill-character> </loext:fill-character>
-   <number:text>- </number:text>
-  </number:number-style>
-  <number:text-style style:name="N183">
-   <number:text-content/>
-   <number:text> </number:text>
-   <style:map style:condition="value()&gt;0" style:apply-style-name="N183P0"/>
-   <style:map style:condition="value()&lt;0" style:apply-style-name="N183P1"/>
-   <style:map style:condition="value()=0" style:apply-style-name="N183P2"/>
-  </number:text-style>
-  <number:number-style style:name="N187P0" style:volatile="true">
-   <loext:text> $</loext:text>
-   <loext:fill-character> </loext:fill-character>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text> </number:text>
-  </number:number-style>
-  <number:number-style style:name="N187P1" style:volatile="true">
-   <loext:text> $</loext:text>
-   <loext:fill-character> </loext:fill-character>
-   <number:text>(</number:text>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text>)</number:text>
-  </number:number-style>
-  <number:number-style style:name="N187P2" style:volatile="true">
-   <loext:text> $</loext:text>
-   <loext:fill-character> </loext:fill-character>
-   <number:text>- </number:text>
-  </number:number-style>
-  <number:text-style style:name="N187">
-   <number:text-content/>
-   <number:text> </number:text>
-   <style:map style:condition="value()&gt;0" style:apply-style-name="N187P0"/>
-   <style:map style:condition="value()&lt;0" style:apply-style-name="N187P1"/>
-   <style:map style:condition="value()=0" style:apply-style-name="N187P2"/>
-  </number:text-style>
-  <number:number-style style:name="N191P0" style:volatile="true">
-   <loext:fill-character> </loext:fill-character>
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text> </number:text>
-  </number:number-style>
-  <number:number-style style:name="N191P1" style:volatile="true">
-   <loext:fill-character> </loext:fill-character>
-   <number:text>(</number:text>
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text>)</number:text>
-  </number:number-style>
-  <number:number-style style:name="N191P2" style:volatile="true">
-   <loext:fill-character> </loext:fill-character>
-   <number:text>-</number:text>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="0"/>
-   <number:text> </number:text>
-  </number:number-style>
-  <number:text-style style:name="N191">
-   <number:text-content/>
-   <number:text> </number:text>
-   <style:map style:condition="value()&gt;0" style:apply-style-name="N191P0"/>
-   <style:map style:condition="value()&lt;0" style:apply-style-name="N191P1"/>
-   <style:map style:condition="value()=0" style:apply-style-name="N191P2"/>
-  </number:text-style>
-  <number:number-style style:name="N195P0" style:volatile="true">
-   <loext:text> $</loext:text>
-   <loext:fill-character> </loext:fill-character>
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text> </number:text>
-  </number:number-style>
-  <number:number-style style:name="N195P1" style:volatile="true">
-   <loext:text> $</loext:text>
-   <loext:fill-character> </loext:fill-character>
-   <number:text>(</number:text>
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text>)</number:text>
-  </number:number-style>
-  <number:number-style style:name="N195P2" style:volatile="true">
-   <loext:text> $</loext:text>
-   <loext:fill-character> </loext:fill-character>
-   <number:text>-</number:text>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="0"/>
-   <number:text> </number:text>
-  </number:number-style>
-  <number:text-style style:name="N195">
-   <number:text-content/>
-   <number:text> </number:text>
-   <style:map style:condition="value()&gt;0" style:apply-style-name="N195P0"/>
-   <style:map style:condition="value()&lt;0" style:apply-style-name="N195P1"/>
-   <style:map style:condition="value()=0" style:apply-style-name="N195P2"/>
-  </number:text-style>
   <number:number-style style:name="N197P0" style:volatile="true">
-   <number:text>Yes</number:text>
+   <loext:fill-character> </loext:fill-character>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
   </number:number-style>
   <number:number-style style:name="N197P1" style:volatile="true">
-   <number:text>Yes</number:text>
+   <loext:fill-character> </loext:fill-character>
+   <number:text>(</number:text>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text>)</number:text>
   </number:number-style>
-  <number:number-style style:name="N197">
-   <number:text>No</number:text>
+  <number:number-style style:name="N197P2" style:volatile="true">
+   <loext:fill-character> </loext:fill-character>
+   <number:text>- </number:text>
+  </number:number-style>
+  <number:text-style style:name="N197">
+   <number:text-content/>
+   <number:text> </number:text>
    <style:map style:condition="value()&gt;0" style:apply-style-name="N197P0"/>
    <style:map style:condition="value()&lt;0" style:apply-style-name="N197P1"/>
-  </number:number-style>
-  <number:number-style style:name="N199P0" style:volatile="true">
-   <number:text>True</number:text>
-  </number:number-style>
-  <number:number-style style:name="N199P1" style:volatile="true">
-   <number:text>True</number:text>
-  </number:number-style>
-  <number:number-style style:name="N199">
-   <number:text>False</number:text>
-   <style:map style:condition="value()&gt;0" style:apply-style-name="N199P0"/>
-   <style:map style:condition="value()&lt;0" style:apply-style-name="N199P1"/>
-  </number:number-style>
+   <style:map style:condition="value()=0" style:apply-style-name="N197P2"/>
+  </number:text-style>
   <number:number-style style:name="N201P0" style:volatile="true">
-   <number:text>On</number:text>
+   <loext:text> $</loext:text>
+   <loext:fill-character> </loext:fill-character>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
   </number:number-style>
   <number:number-style style:name="N201P1" style:volatile="true">
-   <number:text>On</number:text>
+   <loext:text> $</loext:text>
+   <loext:fill-character> </loext:fill-character>
+   <number:text>(</number:text>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text>)</number:text>
   </number:number-style>
-  <number:number-style style:name="N201">
-   <number:text>Off</number:text>
+  <number:number-style style:name="N201P2" style:volatile="true">
+   <loext:text> $</loext:text>
+   <loext:fill-character> </loext:fill-character>
+   <number:text>- </number:text>
+  </number:number-style>
+  <number:text-style style:name="N201">
+   <number:text-content/>
+   <number:text> </number:text>
    <style:map style:condition="value()&gt;0" style:apply-style-name="N201P0"/>
    <style:map style:condition="value()&lt;0" style:apply-style-name="N201P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N201P2"/>
+  </number:text-style>
+  <number:number-style style:name="N205P0" style:volatile="true">
+   <loext:fill-character> </loext:fill-character>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
   </number:number-style>
-  <number:currency-style style:name="N203P0" style:volatile="true">
+  <number:number-style style:name="N205P1" style:volatile="true">
+   <loext:fill-character> </loext:fill-character>
+   <number:text>(</number:text>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text>)</number:text>
+  </number:number-style>
+  <number:number-style style:name="N205P2" style:volatile="true">
+   <loext:fill-character> </loext:fill-character>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="0"/>
+   <number:text> </number:text>
+  </number:number-style>
+  <number:text-style style:name="N205">
+   <number:text-content/>
+   <number:text> </number:text>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N205P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N205P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N205P2"/>
+  </number:text-style>
+  <number:number-style style:name="N209P0" style:volatile="true">
+   <loext:text> $</loext:text>
+   <loext:fill-character> </loext:fill-character>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+  </number:number-style>
+  <number:number-style style:name="N209P1" style:volatile="true">
+   <loext:text> $</loext:text>
+   <loext:fill-character> </loext:fill-character>
+   <number:text>(</number:text>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text>)</number:text>
+  </number:number-style>
+  <number:number-style style:name="N209P2" style:volatile="true">
+   <loext:text> $</loext:text>
+   <loext:fill-character> </loext:fill-character>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="0"/>
+   <number:text> </number:text>
+  </number:number-style>
+  <number:text-style style:name="N209">
+   <number:text-content/>
+   <number:text> </number:text>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N209P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N209P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N209P2"/>
+  </number:text-style>
+  <number:number-style style:name="N211P0" style:volatile="true">
+   <number:text>Yes</number:text>
+  </number:number-style>
+  <number:number-style style:name="N211P1" style:volatile="true">
+   <number:text>Yes</number:text>
+  </number:number-style>
+  <number:number-style style:name="N211">
+   <number:text>No</number:text>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N211P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N211P1"/>
+  </number:number-style>
+  <number:number-style style:name="N213P0" style:volatile="true">
+   <number:text>True</number:text>
+  </number:number-style>
+  <number:number-style style:name="N213P1" style:volatile="true">
+   <number:text>True</number:text>
+  </number:number-style>
+  <number:number-style style:name="N213">
+   <number:text>False</number:text>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N213P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N213P1"/>
+  </number:number-style>
+  <number:number-style style:name="N215P0" style:volatile="true">
+   <number:text>On</number:text>
+  </number:number-style>
+  <number:number-style style:name="N215P1" style:volatile="true">
+   <number:text>On</number:text>
+  </number:number-style>
+  <number:number-style style:name="N215">
+   <number:text>Off</number:text>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N215P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N215P1"/>
+  </number:number-style>
+  <number:currency-style style:name="N217P0" style:volatile="true">
    <number:currency-symbol>€</number:currency-symbol>
    <number:text> </number:text>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> </number:text>
   </number:currency-style>
-  <number:currency-style style:name="N203">
+  <number:currency-style style:name="N217">
    <style:text-properties fo:color="#ff0000"/>
    <number:text>(</number:text>
    <number:currency-symbol>€</number:currency-symbol>
    <number:text> </number:text>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text>)</number:text>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N203P0"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N217P0"/>
   </number:currency-style>
-  <number:number-style style:name="N205P0" style:volatile="true">
-   <number:text>\</number:text>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-  </number:number-style>
-  <number:number-style style:name="N205">
-   <number:text>\-</number:text>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N205P0"/>
-  </number:number-style>
-  <number:number-style style:name="N206P0" style:volatile="true">
-   <number:text>\</number:text>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-  </number:number-style>
-  <number:number-style style:name="N206">
-   <style:text-properties fo:color="#ff0000"/>
-   <number:text>\-</number:text>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N206P0"/>
-  </number:number-style>
-  <number:number-style style:name="N208P0" style:volatile="true">
-   <number:text>\</number:text>
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-  </number:number-style>
-  <number:number-style style:name="N208">
-   <number:text>\-</number:text>
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N208P0"/>
-  </number:number-style>
-  <number:number-style style:name="N209P0" style:volatile="true">
-   <number:text>\</number:text>
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-  </number:number-style>
-  <number:number-style style:name="N209">
-   <style:text-properties fo:color="#ff0000"/>
-   <number:text>\-</number:text>
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N209P0"/>
-  </number:number-style>
-  <number:number-style style:name="N213P0" style:volatile="true">
-   <loext:text> \</loext:text>
-   <loext:fill-character> </loext:fill-character>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text> </number:text>
-  </number:number-style>
-  <number:number-style style:name="N213P1" style:volatile="true">
-   <loext:text> \</loext:text>
-   <loext:fill-character> </loext:fill-character>
-   <number:text>-</number:text>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text> </number:text>
-  </number:number-style>
-  <number:number-style style:name="N213P2" style:volatile="true">
-   <loext:text> \</loext:text>
-   <loext:fill-character> </loext:fill-character>
-   <number:text>- </number:text>
-  </number:number-style>
-  <number:text-style style:name="N213">
-   <number:text-content/>
-   <number:text> </number:text>
-   <style:map style:condition="value()&gt;0" style:apply-style-name="N213P0"/>
-   <style:map style:condition="value()&lt;0" style:apply-style-name="N213P1"/>
-   <style:map style:condition="value()=0" style:apply-style-name="N213P2"/>
-  </number:text-style>
-  <number:number-style style:name="N215P0" style:volatile="true">
-   <loext:fill-character> </loext:fill-character>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text> </number:text>
-  </number:number-style>
-  <number:number-style style:name="N215P1" style:volatile="true">
-   <loext:fill-character> </loext:fill-character>
-   <number:text>-</number:text>
-   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
-   <number:text> </number:text>
-  </number:number-style>
-  <number:number-style style:name="N215P2" style:volatile="true">
-   <loext:fill-character> </loext:fill-character>
-   <number:text>- </number:text>
-  </number:number-style>
-  <number:text-style style:name="N215">
-   <number:text-content/>
-   <number:text> </number:text>
-   <style:map style:condition="value()&gt;0" style:apply-style-name="N215P0"/>
-   <style:map style:condition="value()&lt;0" style:apply-style-name="N215P1"/>
-   <style:map style:condition="value()=0" style:apply-style-name="N215P2"/>
-  </number:text-style>
   <number:number-style style:name="N219P0" style:volatile="true">
+   <number:text>\</number:text>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+  </number:number-style>
+  <number:number-style style:name="N219">
+   <number:text>\-</number:text>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N219P0"/>
+  </number:number-style>
+  <number:number-style style:name="N220P0" style:volatile="true">
+   <number:text>\</number:text>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+  </number:number-style>
+  <number:number-style style:name="N220">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>\-</number:text>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N220P0"/>
+  </number:number-style>
+  <number:number-style style:name="N222P0" style:volatile="true">
+   <number:text>\</number:text>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+  </number:number-style>
+  <number:number-style style:name="N222">
+   <number:text>\-</number:text>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N222P0"/>
+  </number:number-style>
+  <number:number-style style:name="N223P0" style:volatile="true">
+   <number:text>\</number:text>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+  </number:number-style>
+  <number:number-style style:name="N223">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>\-</number:text>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N223P0"/>
+  </number:number-style>
+  <number:number-style style:name="N227P0" style:volatile="true">
+   <loext:text> \</loext:text>
+   <loext:fill-character> </loext:fill-character>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+  </number:number-style>
+  <number:number-style style:name="N227P1" style:volatile="true">
+   <loext:text> \</loext:text>
+   <loext:fill-character> </loext:fill-character>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+  </number:number-style>
+  <number:number-style style:name="N227P2" style:volatile="true">
+   <loext:text> \</loext:text>
+   <loext:fill-character> </loext:fill-character>
+   <number:text>- </number:text>
+  </number:number-style>
+  <number:text-style style:name="N227">
+   <number:text-content/>
+   <number:text> </number:text>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N227P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N227P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N227P2"/>
+  </number:text-style>
+  <number:number-style style:name="N229P0" style:volatile="true">
+   <loext:fill-character> </loext:fill-character>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+  </number:number-style>
+  <number:number-style style:name="N229P1" style:volatile="true">
+   <loext:fill-character> </loext:fill-character>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+  </number:number-style>
+  <number:number-style style:name="N229P2" style:volatile="true">
+   <loext:fill-character> </loext:fill-character>
+   <number:text>- </number:text>
+  </number:number-style>
+  <number:text-style style:name="N229">
+   <number:text-content/>
+   <number:text> </number:text>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N229P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N229P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N229P2"/>
+  </number:text-style>
+  <number:number-style style:name="N233P0" style:volatile="true">
    <loext:text> \</loext:text>
    <loext:fill-character> </loext:fill-character>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> </number:text>
   </number:number-style>
-  <number:number-style style:name="N219P1" style:volatile="true">
+  <number:number-style style:name="N233P1" style:volatile="true">
    <loext:text> \</loext:text>
    <loext:fill-character> </loext:fill-character>
    <number:text>-</number:text>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> </number:text>
   </number:number-style>
-  <number:number-style style:name="N219P2" style:volatile="true">
+  <number:number-style style:name="N233P2" style:volatile="true">
    <loext:text> \</loext:text>
    <loext:fill-character> </loext:fill-character>
    <number:text>-</number:text>
    <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="0"/>
    <number:text> </number:text>
   </number:number-style>
-  <number:text-style style:name="N219">
+  <number:text-style style:name="N233">
    <number:text-content/>
    <number:text> </number:text>
-   <style:map style:condition="value()&gt;0" style:apply-style-name="N219P0"/>
-   <style:map style:condition="value()&lt;0" style:apply-style-name="N219P1"/>
-   <style:map style:condition="value()=0" style:apply-style-name="N219P2"/>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N233P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N233P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N233P2"/>
   </number:text-style>
-  <number:number-style style:name="N221P0" style:volatile="true">
+  <number:number-style style:name="N235P0" style:volatile="true">
    <loext:fill-character> </loext:fill-character>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> </number:text>
   </number:number-style>
-  <number:number-style style:name="N221P1" style:volatile="true">
+  <number:number-style style:name="N235P1" style:volatile="true">
    <loext:fill-character> </loext:fill-character>
    <number:text>-</number:text>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> </number:text>
   </number:number-style>
-  <number:number-style style:name="N221P2" style:volatile="true">
+  <number:number-style style:name="N235P2" style:volatile="true">
    <loext:fill-character> </loext:fill-character>
    <number:text>-</number:text>
    <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="0"/>
    <number:text> </number:text>
   </number:number-style>
-  <number:text-style style:name="N221">
+  <number:text-style style:name="N235">
    <number:text-content/>
    <number:text> </number:text>
-   <style:map style:condition="value()&gt;0" style:apply-style-name="N221P0"/>
-   <style:map style:condition="value()&lt;0" style:apply-style-name="N221P1"/>
-   <style:map style:condition="value()=0" style:apply-style-name="N221P2"/>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N235P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N235P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N235P2"/>
   </number:text-style>
-  <number:date-style style:name="N222">
+  <number:date-style style:name="N236">
    <number:month number:style="long"/>
    <number:text>-</number:text>
    <number:day number:style="long"/>
    <number:text>-</number:text>
    <number:year number:style="long"/>
   </number:date-style>
-  <number:date-style style:name="N223">
+  <number:date-style style:name="N237">
    <number:month number:style="long"/>
    <number:text>-</number:text>
    <number:day/>
    <number:text>-</number:text>
    <number:year/>
   </number:date-style>
-  <number:date-style style:name="N224">
+  <number:date-style style:name="N238">
    <number:day number:style="long"/>
    <number:text>-</number:text>
    <number:month number:style="long"/>
   </number:date-style>
-  <number:date-style style:name="N225">
+  <number:date-style style:name="N239">
    <number:month number:style="long"/>
    <number:text>-</number:text>
    <number:year/>
   </number:date-style>
-  <number:currency-style style:name="N227P0" style:volatile="true">
-   <number:currency-symbol number:language="en" number:country="US">$</number:currency-symbol>
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-  </number:currency-style>
-  <number:currency-style style:name="N227">
-   <style:text-properties fo:color="#ff0000"/>
-   <number:text>-</number:text>
-   <number:currency-symbol number:language="en" number:country="US">$</number:currency-symbol>
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N227P0"/>
-  </number:currency-style>
-  <number:percentage-style style:name="N228">
-   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1"/>
-   <number:text>%</number:text>
-  </number:percentage-style>
-  <number:currency-style style:name="N230P0" style:volatile="true">
+  <number:currency-style style:name="N242P0" style:volatile="true">
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> </number:text>
    <number:currency-symbol number:language="de" number:country="DE">€</number:currency-symbol>
   </number:currency-style>
-  <number:currency-style style:name="N230">
+  <number:currency-style style:name="N242">
    <style:text-properties fo:color="#ff0000"/>
    <number:text>-</number:text>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> </number:text>
    <number:currency-symbol number:language="de" number:country="DE">€</number:currency-symbol>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N230P0"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N242P0"/>
   </number:currency-style>
-  <number:date-style style:name="N231">
+  <number:date-style style:name="N243">
    <number:month number:style="long"/>
    <number:text>.</number:text>
    <number:year number:style="long"/>
   </number:date-style>
-  <number:date-style style:name="N232">
+  <number:date-style style:name="N244">
    <number:month number:style="long"/>
    <number:text>/</number:text>
    <number:year number:style="long"/>
   </number:date-style>
-  <number:currency-style style:name="N234P0" style:volatile="true">
+  <number:currency-style style:name="N246P0" style:volatile="true">
    <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> </number:text>
    <number:currency-symbol number:language="de" number:country="DE">€</number:currency-symbol>
   </number:currency-style>
-  <number:currency-style style:name="N234">
+  <number:currency-style style:name="N246">
    <style:text-properties fo:color="#ff0000"/>
    <number:text>-</number:text>
    <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> </number:text>
    <number:currency-symbol number:language="de" number:country="DE">€</number:currency-symbol>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N234P0"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N246P0"/>
   </number:currency-style>
-  <number:date-style style:name="N235">
+  <number:date-style style:name="N247">
    <number:year number:style="long"/>
   </number:date-style>
-  <number:date-style style:name="N236">
+  <number:date-style style:name="N248">
    <number:text>⌀ </number:text>
    <number:year number:style="long"/>
   </number:date-style>
-  <number:currency-style style:name="N238P0" style:volatile="true">
+  <number:currency-style style:name="N250P0" style:volatile="true">
    <number:currency-symbol number:language="es" number:country="MX">$</number:currency-symbol>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
   </number:currency-style>
-  <number:currency-style style:name="N238">
+  <number:currency-style style:name="N250">
    <style:text-properties fo:color="#ff0000"/>
    <number:text>-</number:text>
    <number:currency-symbol number:language="es" number:country="MX">$</number:currency-symbol>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N238P0"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N250P0"/>
   </number:currency-style>
   <number:date-style style:name="N10121" number:language="en" number:country="US">
    <number:month/>
@@ -1057,7 +1045,7 @@
   <style:style style:name="Result" style:family="table-cell" style:parent-style-name="Default">
    <style:text-properties fo:font-style="italic" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color" fo:font-weight="bold"/>
   </style:style>
-  <style:style style:name="Result2" style:family="table-cell" style:parent-style-name="Result" style:data-style-name="N108"/>
+  <style:style style:name="Result2" style:family="table-cell" style:parent-style-name="Result" style:data-style-name="N122"/>
   <style:style style:name="Heading" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center"/>
@@ -1075,46 +1063,46 @@
  </office:styles>
  <office:automatic-styles>
   <style:style style:name="co1" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="65.51mm"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="185.7pt"/>
   </style:style>
   <style:style style:name="co2" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="89.08mm"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="252.51pt"/>
   </style:style>
   <style:style style:name="co3" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="22.58mm"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="64.01pt"/>
   </style:style>
   <style:style style:name="co4" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="43.74mm"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="123.99pt"/>
   </style:style>
   <style:style style:name="co5" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="26.18mm"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="74.21pt"/>
   </style:style>
   <style:style style:name="co6" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="79.2mm"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="224.5pt"/>
   </style:style>
   <style:style style:name="co7" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="51.05mm"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="144.71pt"/>
   </style:style>
   <style:style style:name="co8" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="23.09mm"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="65.45pt"/>
   </style:style>
   <style:style style:name="co9" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="5.8mm"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="16.44pt"/>
   </style:style>
   <style:style style:name="co10" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="38.93mm"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="110.35pt"/>
   </style:style>
   <style:style style:name="ro1" style:family="table-row">
-   <style:table-row-properties style:row-height="8.63mm" fo:break-before="auto" style:use-optimal-row-height="true"/>
+   <style:table-row-properties style:row-height="24.46pt" fo:break-before="auto" style:use-optimal-row-height="true"/>
   </style:style>
   <style:style style:name="ro2" style:family="table-row">
-   <style:table-row-properties style:row-height="4.52mm" fo:break-before="auto" style:use-optimal-row-height="true"/>
+   <style:table-row-properties style:row-height="12.81pt" fo:break-before="auto" style:use-optimal-row-height="true"/>
   </style:style>
   <style:style style:name="ro3" style:family="table-row">
-   <style:table-row-properties style:row-height="6.12mm" fo:break-before="auto" style:use-optimal-row-height="true"/>
+   <style:table-row-properties style:row-height="17.35pt" fo:break-before="auto" style:use-optimal-row-height="true"/>
   </style:style>
   <style:style style:name="ro4" style:family="table-row">
-   <style:table-row-properties style:row-height="5.29mm" fo:break-before="auto" style:use-optimal-row-height="true"/>
+   <style:table-row-properties style:row-height="15pt" fo:break-before="auto" style:use-optimal-row-height="true"/>
   </style:style>
   <style:style style:name="ta1" style:family="table" style:master-page-name="Default">
    <style:table-properties table:display="true" style:writing-mode="lr-tb"/>
@@ -1122,6 +1110,10 @@
   <number:number-style style:name="N3">
    <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
   </number:number-style>
+  <number:percentage-style style:name="N11">
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1"/>
+   <number:text>%</number:text>
+  </number:percentage-style>
   <number:time-style style:name="N40">
    <number:hours number:style="long"/>
    <number:text>:</number:text>
@@ -1161,6 +1153,17 @@
   <number:boolean-style style:name="N99">
    <number:boolean/>
   </number:boolean-style>
+  <number:currency-style style:name="N104P0" style:volatile="true">
+   <number:currency-symbol number:language="en" number:country="US">$</number:currency-symbol>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+  </number:currency-style>
+  <number:currency-style style:name="N104">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>-</number:text>
+   <number:currency-symbol number:language="en" number:country="US">$</number:currency-symbol>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N104P0"/>
+  </number:currency-style>
   <number:boolean-style style:name="N10099" number:language="en" number:country="US">
    <number:boolean/>
   </number:boolean-style>
@@ -1170,40 +1173,40 @@
   <style:style style:name="ce1" style:family="table-cell" style:parent-style-name="Default"/>
   <style:style style:name="ce2" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="start" fo:margin-left="0mm"/>
+   <style:paragraph-properties fo:text-align="start" fo:margin-left="0pt"/>
    <style:text-properties fo:font-size="20pt" fo:font-weight="bold" style:font-size-asian="20pt" style:font-weight-asian="bold" style:font-size-complex="20pt" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="ce3" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:text-properties fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="ce4" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:text-properties fo:font-size="12pt" fo:font-weight="bold" style:font-size-asian="12pt" style:font-weight-asian="bold" style:font-size-complex="12pt" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="ce5" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
   </style:style>
   <style:style style:name="ce6" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B3"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B3"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B3"/>
   </style:style>
   <style:style style:name="ce7" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
   </style:style>
   <style:style style:name="ce8" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
@@ -1214,12 +1217,12 @@
   </style:style>
   <style:style style:name="ce10" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="ce11" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N10099"/>
   <style:style style:name="ce12" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99"/>
-  <style:style style:name="ce13" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce13" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:text-properties style:font-name="Liberation Sans" style:font-name-asian="Droid Sans Fallback" style:font-name-complex="Droid Sans Devanagari"/>
   </style:style>
   <style:style style:name="ce14" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
@@ -1238,32 +1241,32 @@
   </style:style>
   <style:style style:name="ce18" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C2"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C2"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C2"/>
   </style:style>
   <style:style style:name="ce19" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C2"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C2"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C2"/>
   </style:style>
   <style:style style:name="ce20" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C2"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C2"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C2"/>
   </style:style>
   <style:style style:name="ce21" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
   </style:style>
   <style:style style:name="ce22" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C37"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet2.C37"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet2.C37"/>
@@ -1296,9 +1299,9 @@
   <style:style style:name="ce32" style:family="table-cell" style:parent-style-name="Default">
    <style:text-properties fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
   </style:style>
-  <style:style style:name="ce33" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N227"/>
+  <style:style style:name="ce33" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N104"/>
   <style:style style:name="ce34" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N61"/>
-  <style:style style:name="ce35" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N228">
+  <style:style style:name="ce35" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N11">
    <style:text-properties fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="ce36" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N82"/>
@@ -1312,21 +1315,21 @@
   <style:page-layout style:name="pm1">
    <style:page-layout-properties style:writing-mode="lr-tb"/>
    <style:header-style>
-    <style:header-footer-properties fo:min-height="7.5mm" fo:margin-left="0mm" fo:margin-right="0mm" fo:margin-bottom="2.5mm"/>
+    <style:header-footer-properties fo:min-height="21.26pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-bottom="7.09pt"/>
    </style:header-style>
    <style:footer-style>
-    <style:header-footer-properties fo:min-height="7.5mm" fo:margin-left="0mm" fo:margin-right="0mm" fo:margin-top="2.5mm"/>
+    <style:header-footer-properties fo:min-height="21.26pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-top="7.09pt"/>
    </style:footer-style>
   </style:page-layout>
   <style:page-layout style:name="pm2">
    <style:page-layout-properties style:writing-mode="lr-tb"/>
    <style:header-style>
-    <style:header-footer-properties fo:min-height="7.5mm" fo:margin-left="0mm" fo:margin-right="0mm" fo:margin-bottom="2.5mm" fo:border="2.49pt solid #000000" fo:padding="0.18mm" fo:background-color="#c0c0c0">
+    <style:header-footer-properties fo:min-height="21.26pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-bottom="7.09pt" fo:border="2.49pt solid #000000" fo:padding="0.51pt" fo:background-color="#c0c0c0">
      <style:background-image/>
     </style:header-footer-properties>
    </style:header-style>
    <style:footer-style>
-    <style:header-footer-properties fo:min-height="7.5mm" fo:margin-left="0mm" fo:margin-right="0mm" fo:margin-top="2.5mm" fo:border="2.49pt solid #000000" fo:padding="0.18mm" fo:background-color="#c0c0c0">
+    <style:header-footer-properties fo:min-height="21.26pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-top="7.09pt" fo:border="2.49pt solid #000000" fo:padding="0.51pt" fo:background-color="#c0c0c0">
      <style:background-image/>
     </style:header-footer-properties>
    </style:footer-style>
@@ -1349,7 +1352,7 @@
      <text:p><text:sheet-name>???</text:sheet-name> (<text:title>???</text:title>)</text:p>
     </style:region-left>
     <style:region-right>
-     <text:p><text:date style:data-style-name="N2" text:date-value="2016-06-19">00.00.0000</text:date>, <text:time style:data-style-name="N2" text:time-value="22:53:16.904710509">00:00:00</text:time></text:p>
+     <text:p><text:date style:data-style-name="N2" text:date-value="2016-07-24">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="17:47:57.344299530">00:00:00</text:time></text:p>
     </style:region-right>
    </style:header>
    <style:header-left style:display="false"/>
@@ -1381,7 +1384,7 @@
       <text:p>Result</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce6" table:formula="of:=AND([.B8:.B95])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <text:p>PRAVDA</text:p>
+      <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell/>
     </table:table-row>
@@ -1404,7 +1407,7 @@
       <text:p>1</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce7" table:formula="of:=AND([Sheet2.C2:.C90])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <text:p>PRAVDA</text:p>
+      <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Simple ISLOGICAL formulas with local references and values</text:p>
@@ -1476,68 +1479,87 @@
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce11" table:formula="of:=ISLOGICAL(2)" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
-      <text:p>FALSE</text:p>
+     <table:table-cell table:style-name="ce11" table:formula="of:=ISNA(NA())" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce12" table:formula="of:=FALSE()" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
-      <text:p>NEPRAVDA</text:p>
+     <table:table-cell table:style-name="ce12" table:formula="of:=TRUE()" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce18" table:formula="of:=[.A2]=[.B2]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <text:p>PRAVDA</text:p>
+      <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A2])" office:value-type="string" office:string-value="=ISLOGICAL(2)" calcext:value-type="string">
-      <text:p>=ISLOGICAL(2)</text:p>
+     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A2])" office:value-type="string" office:string-value="=ISNA(NA())" calcext:value-type="string">
+      <text:p>=ISNA(NA())</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce11" table:formula="of:=ISBLANK([.I2])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <text:p>TRUE</text:p>
+     <table:table-cell table:style-name="ce11" table:formula="of:=ISBLANK([.D1])" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
+      <text:p>FALSE</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce11" table:formula="of:=ISLOGICAL(1)" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce11" table:formula="of:=ISNA([.F2])" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
       <text:p>FALSE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce12" table:formula="of:=FALSE()" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
-      <text:p>NEPRAVDA</text:p>
+      <text:p>FALSE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce18" table:formula="of:=[.A3]=[.B3]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <text:p>PRAVDA</text:p>
+      <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A3])" office:value-type="string" office:string-value="=ISLOGICAL(1)" calcext:value-type="string">
-      <text:p>=ISLOGICAL(1)</text:p>
+     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A3])" office:value-type="string" office:string-value="=ISNA(F2)" calcext:value-type="string">
+      <text:p>=ISNA(F2)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce11" table:formula="of:=ISLOGICAL(&quot;FALSE&quot;)" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce11" table:formula="of:=ISNA([.B8])" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
       <text:p>FALSE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce12" table:formula="of:=FALSE()" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
-      <text:p>NEPRAVDA</text:p>
+      <text:p>FALSE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce19" table:formula="of:=[.A4]=[.B4]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <text:p>PRAVDA</text:p>
+      <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A4])" office:value-type="string" office:string-value="=ISLOGICAL(&quot;FALSE&quot;)" calcext:value-type="string">
-      <text:p>=ISLOGICAL(&quot;FALSE&quot;)</text:p>
+     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A4])" office:value-type="string" office:string-value="=ISNA(B8)" calcext:value-type="string">
+      <text:p>=ISNA(B8)</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:style-name="ce12"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce11" table:formula="of:=ISLOGICAL([.F2])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce11" table:formula="of:=ISNA(1/0)" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
+      <text:p>FALSE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce12" table:formula="of:=FALSE()" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
+      <text:p>FALSE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=[.A5]=[.B5]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A5])" office:value-type="string" office:string-value="=ISNA(1/0)" calcext:value-type="string">
+      <text:p>=ISNA(1/0)</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce12"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce27"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce11" table:formula="of:=ISNA(NA()=NA())" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce12" table:formula="of:=TRUE()" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <text:p>PRAVDA</text:p>
+      <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce19" table:formula="of:=[.A5]=[.B5]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <text:p>PRAVDA</text:p>
+     <table:table-cell table:style-name="ce19" table:formula="of:=[.A6]=[.B6]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A5])" office:value-type="string" office:string-value="=ISLOGICAL(F2)" calcext:value-type="string">
-      <text:p>=ISLOGICAL(F2)</text:p>
+     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A6])" office:value-type="string" office:string-value="=ISNA(NA()=NA())" calcext:value-type="string">
+      <text:p>=ISNA(NA()=NA())</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:style-name="ce12"/>
@@ -1546,52 +1568,51 @@
      <table:table-cell table:number-columns-repeated="5"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce11"/>
-     <table:table-cell table:style-name="ce12"/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:style-name="ce23"/>
-     <table:table-cell/>
-     <table:table-cell table:style-name="ce12"/>
-     <table:table-cell table:number-columns-repeated="3"/>
-     <table:table-cell table:style-name="ce27"/>
-     <table:table-cell table:number-columns-repeated="5"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce12" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:style-name="ce23"/>
-     <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce27"/>
-     <table:table-cell table:number-columns-repeated="5"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce12" table:number-matrix-columns-spanned="1" table:number-matrix-rows-spanned="3" table:formula="of:=ISLOGICAL({TRUE|&quot;cat&quot;|&quot;dog&quot;})" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
-      <text:p>NEPRAVDA</text:p>
+     <table:table-cell table:style-name="ce12" table:formula="of:=ISNA(1)" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
+      <text:p>FALSE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce12" table:formula="of:=FALSE()" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
-      <text:p>NEPRAVDA</text:p>
+      <text:p>FALSE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A8])" office:value-type="string" office:string-value="{=ISLOGICAL({TRUE;&quot;cat&quot;;&quot;dog&quot;})}" calcext:value-type="string">
-      <text:p>{=ISLOGICAL({TRUE;&quot;cat&quot;;&quot;dog&quot;})}</text:p>
+     <table:table-cell table:style-name="ce19" table:formula="of:=[.A7]=[.B7]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>AOO #87219</text:p>
+     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A7])" office:value-type="string" office:string-value="=ISNA(1)" calcext:value-type="string">
+      <text:p>=ISNA(1)</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:number-columns-repeated="5"/>
      <table:table-cell table:style-name="ce27"/>
      <table:table-cell table:number-columns-repeated="5"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce12" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <text:p>PRAVDA</text:p>
+     <table:table-cell table:style-name="ce12" table:formula="of:=ISNA(5+NA())" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce12" table:formula="of:=FALSE()" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
-      <text:p>NEPRAVDA</text:p>
+     <table:table-cell table:style-name="ce12" table:formula="of:=TRUE()" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A9])" office:value-type="string" office:string-value="{=ISLOGICAL({TRUE;&quot;cat&quot;;&quot;dog&quot;})}" calcext:value-type="string">
-      <text:p>{=ISLOGICAL({TRUE;&quot;cat&quot;;&quot;dog&quot;})}</text:p>
+     <table:table-cell table:style-name="ce19" table:formula="of:=[.A8]=[.B8]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A8])" office:value-type="string" office:string-value="=ISNA(5+NA())" calcext:value-type="string">
+      <text:p>=ISNA(5+NA())</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce27"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce12" table:formula="of:=ISNA(MAX(NA()))" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce12" table:formula="of:=TRUE()" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=[.A9]=[.B9]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A9])" office:value-type="string" office:string-value="=ISNA(MAX(NA()))" calcext:value-type="string">
+      <text:p>=ISNA(MAX(NA()))</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=&quot;&quot;">
@@ -1600,54 +1621,106 @@
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce12" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <text:p>PRAVDA</text:p>
+     <table:table-cell table:style-name="ce12" table:number-matrix-columns-spanned="1" table:number-matrix-rows-spanned="3" table:formula="of:=ISNA([.F10:.F12])" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
+      <text:p>FALSE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce12" table:formula="of:=FALSE()" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
-      <text:p>NEPRAVDA</text:p>
+      <text:p>FALSE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="{=ISLOGICAL({TRUE;&quot;cat&quot;;&quot;dog&quot;})}" calcext:value-type="string">
-      <text:p>{=ISLOGICAL({TRUE;&quot;cat&quot;;&quot;dog&quot;})}</text:p>
+     <table:table-cell table:style-name="ce19" table:formula="of:=[.A10]=[.B10]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="{=ISNA(F10:F12)}" calcext:value-type="string">
+      <text:p>{=ISNA(F10:F12)}</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce12" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:style-name="ce23"/>
-     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce12" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce12" table:formula="of:=TRUE()" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=[.A11]=[.B11]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="{=ISNA(F10:F12)}" calcext:value-type="string">
+      <text:p>{=ISNA(F10:F12)}</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell table:formula="of:=NA()" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell table:style-name="ce29" table:number-columns-repeated="4"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce12" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:style-name="ce23"/>
+     <table:table-cell table:style-name="ce12" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
+      <text:p>FALSE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce12" table:formula="of:=FALSE()" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
+      <text:p>FALSE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=[.A12]=[.B12]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="{=ISNA(F10:F12)}" calcext:value-type="string">
+      <text:p>{=ISNA(F10:F12)}</text:p>
+     </table:table-cell>
      <table:table-cell table:style-name="ce17"/>
      <table:table-cell table:number-columns-repeated="10"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce13"/>
-     <table:table-cell/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:style-name="ce23"/>
-     <table:table-cell table:number-columns-repeated="11"/>
+     <table:table-cell table:style-name="ce13" table:number-matrix-columns-spanned="1" table:number-matrix-rows-spanned="3" table:formula="of:=ISLOGICAL([.J1:.J3])" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
+      <text:p>FALSE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce12" table:formula="of:=FALSE()" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
+      <text:p>FALSE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=[.A13]=[.B13]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A13])" office:value-type="string" office:string-value="{=ISLOGICAL(J1:J3)}" calcext:value-type="string">
+      <text:p>{=ISLOGICAL(J1:J3)}</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>AOO#87219</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="10"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce12" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:style-name="ce23"/>
+     <table:table-cell table:style-name="ce12" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
+      <text:p>FALSE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce12" table:formula="of:=FALSE()" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
+      <text:p>FALSE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=[.A14]=[.B14]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A14])" office:value-type="string" office:string-value="{=ISLOGICAL(J1:J3)}" calcext:value-type="string">
+      <text:p>{=ISLOGICAL(J1:J3)}</text:p>
+     </table:table-cell>
      <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:number-columns-repeated="5"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce14"/>
-     <table:table-cell table:style-name="ce12"/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:style-name="ce23"/>
+     <table:table-cell table:style-name="ce12" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
+      <text:p>FALSE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce12" table:formula="of:=FALSE()" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
+      <text:p>FALSE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=[.A15]=[.B15]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A15])" office:value-type="string" office:string-value="{=ISLOGICAL(J1:J3)}" calcext:value-type="string">
+      <text:p>{=ISLOGICAL(J1:J3)}</text:p>
+     </table:table-cell>
      <table:table-cell table:style-name="ce17"/>
      <table:table-cell table:number-columns-repeated="5"/>
      <table:table-cell table:style-name="ce29" table:number-columns-repeated="5"/>
@@ -1676,7 +1749,9 @@
      <table:table-cell table:style-name="ce19"/>
      <table:table-cell table:style-name="ce23"/>
      <table:table-cell table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce30"/>
+     <table:table-cell table:style-name="ce30" office:value-type="string" calcext:value-type="string">
+      <text:p>+</text:p>
+     </table:table-cell>
      <table:table-cell table:style-name="ce29" table:number-columns-repeated="4"/>
      <table:table-cell/>
     </table:table-row>
@@ -1866,12 +1941,12 @@
      <table:table-cell table:number-columns-repeated="15"/>
     </table:table-row>
     <calcext:conditional-formats>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C21:Sheet2.C32 Sheet2.C7:Sheet2.C19 Sheet2.C2:Sheet2.C16">
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C21:Sheet2.C32 Sheet2.C2:Sheet2.C19">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C2"/>
      </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C21:Sheet2.C29 Sheet2.C7:Sheet2.C19 Sheet2.C4:Sheet2.C16">
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C21:Sheet2.C29 Sheet2.C4:Sheet2.C19">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C4"/>
       <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C4"/>
       <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C4"/>
@@ -1883,8 +1958,8 @@
      </calcext:conditional-format>
     </calcext:conditional-formats>
    </table:table>
-   <table:table table:name="&apos;file:///home/zdenek/Dokumenty/LO/sc-unit-test/Project%20Calc%20functions%20tests/fods/isformula.fods/iserr.fods/isblank.fods/info.fods/formula.fods/formula.fods/current.fods/cell.fods/cell.fods/minute.fods/minute.fods/year.fods/function_based_test_Example.fods/function_based_test_Example_reference.fods&apos;#Sheet2" table:print="false" table:style-name="ta_extref">
-    <table:table-source xlink:type="simple" xlink:href="isformula.fods/iserr.fods/isblank.fods/info.fods/formula.fods/formula.fods/current.fods/cell.fods/cell.fods/minute.fods/minute.fods/year.fods/function_based_test_Example.fods/function_based_test_Example_reference.fods" table:table-name="Sheet2" table:mode="copy-results-only"/>
+   <table:table table:name="&apos;file:///home/zdenek/Dokumenty/LO/sc-unit-test/Project%20Calc%20functions%20tests/fods/islogical.fods/islogical.fods/isformula.fods/iserr.fods/isblank.fods/info.fods/formula.fods/formula.fods/current.fods/cell.fods/cell.fods/minute.fods/minute.fods/year.fods/function_based_test_Example.fods/function_based_test_Example_reference.fods&apos;#Sheet2" table:print="false" table:style-name="ta_extref">
+    <table:table-source xlink:type="simple" xlink:href="islogical.fods/isformula.fods/iserr.fods/isblank.fods/info.fods/formula.fods/formula.fods/current.fods/cell.fods/cell.fods/minute.fods/minute.fods/year.fods/function_based_test_Example.fods/function_based_test_Example_reference.fods" table:table-name="Sheet2" table:mode="copy-results-only"/>
     <table:table-column table:number-columns-repeated="8"/>
     <table:table-row table:number-rows-repeated="2">
      <table:table-cell table:number-columns-repeated="8"/>
@@ -1896,8 +1971,8 @@
      </table:table-cell>
     </table:table-row>
    </table:table>
-   <table:table table:name="&apos;file:///home/zdenek/Dokumenty/LO/sc-unit-test/Project%20Calc%20functions%20tests/fods/isformula.fods/sc-unit-test/information-functions.ods&apos;#Information" table:print="false" table:style-name="ta_extref">
-    <table:table-source xlink:type="simple" xlink:href="isformula.fods/sc-unit-test/information-functions.ods" table:table-name="Information" table:mode="copy-results-only"/>
+   <table:table table:name="&apos;file:///home/zdenek/Dokumenty/LO/sc-unit-test/Project%20Calc%20functions%20tests/fods/islogical.fods/islogical.fods/isformula.fods/sc-unit-test/information-functions.ods&apos;#Information" table:print="false" table:style-name="ta_extref">
+    <table:table-source xlink:type="simple" xlink:href="islogical.fods/isformula.fods/sc-unit-test/information-functions.ods" table:table-name="Information" table:mode="copy-results-only"/>
     <table:table-column table:number-columns-repeated="15"/>
     <table:table-row table:number-rows-repeated="6">
      <table:table-cell table:number-columns-repeated="15"/>
