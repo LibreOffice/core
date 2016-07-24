@@ -51,8 +51,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::sheet::TablePageBreakData;
 using ::std::set;
 
-#define GET_SCALEVALUE(set,id)  static_cast<const SfxUInt16Item&>(set.Get( id )).GetValue()
-
 void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 {
     if ( pDocument->IsImportingXML() )
@@ -1132,15 +1130,17 @@ void ScTable::SetPageStyle( const OUString& rName )
         if ( aPageStyle != aStrNew )
         {
             SfxStyleSheetBase* pOldStyle = pStylePool->Find( aPageStyle, SfxStyleFamily::Page );
-
             if ( pOldStyle && pNewStyle )
             {
                 SfxItemSet&  rOldSet          = pOldStyle->GetItemSet();
                 SfxItemSet&  rNewSet          = pNewStyle->GetItemSet();
-                const sal_uInt16 nOldScale        = GET_SCALEVALUE(rOldSet,ATTR_PAGE_SCALE);
-                const sal_uInt16 nOldScaleToPages = GET_SCALEVALUE(rOldSet,ATTR_PAGE_SCALETOPAGES);
-                const sal_uInt16 nNewScale        = GET_SCALEVALUE(rNewSet,ATTR_PAGE_SCALE);
-                const sal_uInt16 nNewScaleToPages = GET_SCALEVALUE(rNewSet,ATTR_PAGE_SCALETOPAGES);
+                auto getScaleValue = [](const SfxItemSet& rSet, sal_uInt16 nId)
+                    { return static_cast<const SfxUInt16Item&>(rSet.Get(nId)).GetValue(); };
+
+                const sal_uInt16 nOldScale        = getScaleValue(rOldSet,ATTR_PAGE_SCALE);
+                const sal_uInt16 nOldScaleToPages = getScaleValue(rOldSet,ATTR_PAGE_SCALETOPAGES);
+                const sal_uInt16 nNewScale        = getScaleValue(rNewSet,ATTR_PAGE_SCALE);
+                const sal_uInt16 nNewScaleToPages = getScaleValue(rNewSet,ATTR_PAGE_SCALETOPAGES);
 
                 if ( (nOldScale != nNewScale) || (nOldScaleToPages != nNewScaleToPages) )
                     InvalidateTextWidth(nullptr, nullptr, false, false);
