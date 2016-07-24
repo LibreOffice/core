@@ -778,47 +778,52 @@ public:
             tools::createPolygonFromRect(
                 B2DRange(0,0,1,1) ) );
 
-        B2DPolygon aRect2;
-        aRect2.append( B2DPoint(0,0) );
-        aRect2.append( B2DPoint(1,0) );
-        aRect2.append( B2DPoint(1,.5));
-        aRect2.append( B2DPoint(1,1) );
-        aRect2.append( B2DPoint(0,1) );
+        B2DPolygon aRect2 {
+            {0, 0},
+            {1, 0},
+            {1, 0.5},
+            {1, 1},
+            {0, 1}
+        };
         aRect2.setClosed(true);
 
-        B2DPolygon aNonRect1;
-        aNonRect1.append( B2DPoint(0,0) );
-        aNonRect1.append( B2DPoint(1,0) );
-        aNonRect1.append( B2DPoint(1,1) );
-        aNonRect1.append( B2DPoint(0.5,1) );
-        aNonRect1.append( B2DPoint(0.5,0) );
+        B2DPolygon aNonRect1 {
+            {0, 0},
+            {1, 0},
+            {0.5, 1},
+            {0.5, 0}
+        };
         aNonRect1.setClosed(true);
 
-        B2DPolygon aNonRect2;
-        aNonRect2.append( B2DPoint(0,0) );
-        aNonRect2.append( B2DPoint(1,1) );
-        aNonRect2.append( B2DPoint(1,0) );
-        aNonRect2.append( B2DPoint(0,1) );
+        B2DPolygon aNonRect2 {
+            {0, 0},
+            {1, 1},
+            {1, 0},
+            {0, 1}
+        };
         aNonRect2.setClosed(true);
 
-        B2DPolygon aNonRect3;
-        aNonRect3.append( B2DPoint(0,0) );
-        aNonRect3.append( B2DPoint(1,0) );
-        aNonRect3.append( B2DPoint(1,1) );
+        B2DPolygon aNonRect3 {
+            {0, 0},
+            {1, 0},
+            {1, 1}
+        };
         aNonRect3.setClosed(true);
 
-        B2DPolygon aNonRect4;
-        aNonRect4.append( B2DPoint(0,0) );
-        aNonRect4.append( B2DPoint(1,0) );
-        aNonRect4.append( B2DPoint(1,1) );
-        aNonRect4.append( B2DPoint(0,1) );
+        B2DPolygon aNonRect4 {
+            {0, 0},
+            {1, 0},
+            {1, 1},
+            {0, 1}
+        };
 
-        B2DPolygon aNonRect5;
-        aNonRect5.append( B2DPoint(0,0) );
-        aNonRect5.append( B2DPoint(1,0) );
-        aNonRect5.append( B2DPoint(1,1) );
-        aNonRect5.append( B2DPoint(0,1) );
-        aNonRect5.setControlPoints(1,B2DPoint(1,0),B2DPoint(-11,0));
+        B2DPolygon aNonRect5 {
+            {0, 0},
+            {1, 0},
+            {1, 1},
+            {0, 1}
+        };
+        aNonRect5.setControlPoints(1, B2DPoint(1,0), B2DPoint(-11,0));
         aNonRect5.setClosed(true);
 
         CPPUNIT_ASSERT_MESSAGE("checking rectangle-ness of rectangle 1",

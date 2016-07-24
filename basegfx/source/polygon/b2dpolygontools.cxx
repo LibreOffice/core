@@ -1590,25 +1590,24 @@ namespace basegfx
 
             if(rtl::math::approxEqual(fZero, fRadiusX) || rtl::math::approxEqual(fZero, fRadiusY))
             {
-                B2DPolygon aRetval;
-
                 // at least in one direction no radius, use rectangle.
                 // Do not use createPolygonFromRect() here since original
                 // creator (historical reasons) still creates a start point at the
                 // bottom center, so do the same here to get the same line patterns.
                 // Due to this the order of points is different, too.
                 const B2DPoint aBottomCenter(rRect.getCenter().getX(), rRect.getMaxY());
-                aRetval.append(aBottomCenter);
-
-                aRetval.append( B2DPoint( rRect.getMinX(), rRect.getMaxY() ) );
-                aRetval.append( B2DPoint( rRect.getMinX(), rRect.getMinY() ) );
-                aRetval.append( B2DPoint( rRect.getMaxX(), rRect.getMinY() ) );
-                aRetval.append( B2DPoint( rRect.getMaxX(), rRect.getMaxY() ) );
+                B2DPolygon aPolygon {
+                    aBottomCenter,
+                    { rRect.getMinX(), rRect.getMaxY() },
+                    { rRect.getMinX(), rRect.getMinY() },
+                    { rRect.getMaxX(), rRect.getMinY() },
+                    { rRect.getMaxX(), rRect.getMaxY() }
+                };
 
                 // close
-                aRetval.setClosed( true );
+                aPolygon.setClosed( true );
 
-                return aRetval;
+                return aPolygon;
             }
             else if(rtl::math::approxEqual(fOne, fRadiusX) && rtl::math::approxEqual(fOne, fRadiusY))
             {
@@ -1684,17 +1683,17 @@ namespace basegfx
 
         B2DPolygon createPolygonFromRect( const B2DRectangle& rRect )
         {
-            B2DPolygon aRetval;
-
-            aRetval.append( B2DPoint( rRect.getMinX(), rRect.getMinY() ) );
-            aRetval.append( B2DPoint( rRect.getMaxX(), rRect.getMinY() ) );
-            aRetval.append( B2DPoint( rRect.getMaxX(), rRect.getMaxY() ) );
-            aRetval.append( B2DPoint( rRect.getMinX(), rRect.getMaxY() ) );
+            B2DPolygon aPolygon {
+                { rRect.getMinX(), rRect.getMinY() },
+                { rRect.getMaxX(), rRect.getMinY() },
+                { rRect.getMaxX(), rRect.getMaxY() },
+                { rRect.getMinX(), rRect.getMaxY() }
+            };
 
             // close
-            aRetval.setClosed( true );
+            aPolygon.setClosed( true );
 
-            return aRetval;
+            return aPolygon;
         }
 
         namespace
@@ -1704,12 +1703,12 @@ namespace basegfx
             {
                 B2DPolygon operator () ()
                 {
-                    B2DPolygon aRetval;
-
-                    aRetval.append( B2DPoint( 0.0, 0.0 ) );
-                    aRetval.append( B2DPoint( 1.0, 0.0 ) );
-                    aRetval.append( B2DPoint( 1.0, 1.0 ) );
-                    aRetval.append( B2DPoint( 0.0, 1.0 ) );
+                    B2DPolygon aPolygon {
+                        { 0.0, 0.0 },
+                        { 1.0, 0.0 },
+                        { 1.0, 1.0 },
+                        { 0.0, 1.0 }
+                    };
 
                     // close
                     aRetval.setClosed( true );
