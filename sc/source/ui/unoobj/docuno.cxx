@@ -1125,23 +1125,6 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
         }
     }
-    else if ( dynamic_cast<const ScPointerChangedHint*>(&rHint) )
-    {
-        sal_uInt16 nFlags = static_cast<const ScPointerChangedHint&>(rHint).GetFlags();
-        if (nFlags & SC_POINTERCHANGED_NUMFMT)
-        {
-            //  NumberFormatter-Pointer am Uno-Objekt neu setzen
-
-            if (GetFormatter().is())
-            {
-                SvNumberFormatsSupplierObj* pNumFmt =
-                    SvNumberFormatsSupplierObj::getImplementation(
-                        uno::Reference<util::XNumberFormatsSupplier>(xNumberAgg, uno::UNO_QUERY) );
-                if ( pNumFmt && pDocShell )
-                    pNumFmt->SetNumberFormatter( pDocShell->GetDocument().GetFormatTable() );
-            }
-        }
-    }
 
     // always call parent - SfxBaseModel might need to handle the same hints again
     SfxBaseModel::Notify( rBC, rHint );     // SfxBaseModel is derived from SfxListener

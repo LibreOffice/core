@@ -66,19 +66,6 @@ public:
     SCsTAB          GetDz() const           { return nDz; }
 };
 
-#define SC_POINTERCHANGED_NUMFMT    1
-
-class ScPointerChangedHint : public SfxHint
-{
-    sal_uInt16          nFlags;
-
-public:
-
-                    virtual ~ScPointerChangedHint();
-
-    sal_uInt16          GetFlags() const            { return nFlags; }
-};
-
 //! move ScLinkRefreshedHint to a different file?
 enum class ScLinkRefType {
     NONE, SHEET, AREA, DDE

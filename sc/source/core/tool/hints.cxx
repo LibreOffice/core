@@ -48,12 +48,6 @@ ScUpdateRefHint::~ScUpdateRefHint()
 {
 }
 
-// ScPointerChangedHint - pointer has become invalid
-
-ScPointerChangedHint::~ScPointerChangedHint()
-{
-}
-
 //      ScLinkRefreshedHint - a link has been refreshed
 
 ScLinkRefreshedHint::ScLinkRefreshedHint() :
