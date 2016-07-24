@@ -1099,6 +1099,11 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "54:23:03 02/01/00";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
+    {  // tdf#101096: correct detection of month before H
+        sCode = "D.M. - HH:MM";
+        sExpected = "2.1. - 03:23";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+    }
     {  // tdf#99996: better algorithm for fraction representation
         sCode = "# ?/???";
         sExpected = "-575 540/697";
