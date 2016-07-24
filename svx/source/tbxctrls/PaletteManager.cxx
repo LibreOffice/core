@@ -33,13 +33,22 @@
 
 PaletteManager::PaletteManager() :
     mnMaxRecentColors(Application::GetSettings().GetStyleSettings().GetColorValueSetColumnCount()),
-    mnNumOfPalettes(2),
+    mnNumOfPalettes(1),
     mnCurrentPalette(0),
     mnColorCount(0),
     mpBtnUpdater(nullptr),
     mLastColor(COL_AUTO),
     maColorSelectFunction(PaletteManager::DispatchColorCommand)
 {
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    if(pDocSh)
+    {
+        const SfxPoolItem* pItem = nullptr;
+        if( nullptr != ( pItem = pDocSh->GetItem(SID_COLOR_TABLE) ) )
+            pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
+    }
+    if(!pColorList.is())
+        pColorList = XColorList::CreateStdColorList();
     LoadPalettes();
     mnNumOfPalettes += m_Palettes.size();
 }
@@ -82,19 +91,21 @@ void PaletteManager::LoadPalettes()
                 if(aFileStat.isRegular() || aFileStat.isLink())
                 {
                     OUString aFName = aFileStat.getFileName();
+                    INetURLObject aURLObj( aFileStat.getFileURL() );
+                    OUString aFNameWithoutExt = aURLObj.GetBase();
                     if (aNames.find(aFName) == aNames.end())
                     {
                         std::unique_ptr<Palette> pPalette;
                         if( aFName.endsWithIgnoreAsciiCase(".gpl") )
-                            pPalette.reset(new PaletteGPL(aFileStat.getFileURL(), aFName));
+                            pPalette.reset(new PaletteGPL(aFileStat.getFileURL(), aFNameWithoutExt));
                         else if( aFName.endsWithIgnoreAsciiCase(".soc") )
-                            pPalette.reset(new PaletteSOC(aFileStat.getFileURL(), aFName));
+                            pPalette.reset(new PaletteSOC(aFileStat.getFileURL(), aFNameWithoutExt));
                         else if ( aFName.endsWithIgnoreAsciiCase(".ase") )
-                            pPalette.reset(new PaletteASE(aFileStat.getFileURL(), aFName));
+                            pPalette.reset(new PaletteASE(aFileStat.getFileURL(), aFNameWithoutExt));
 
                         if( pPalette && pPalette->IsValid() )
                             m_Palettes.push_back( std::move(pPalette) );
-                        aNames.insert(aFName);
+                        aNames.insert(aFNameWithoutExt);
                     }
                 }
             }
@@ -106,29 +117,7 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
 
-    if( mnCurrentPalette == 0 )
-    {
-        XColorListRef pColorList;
-
-        if ( pDocSh )
-        {
-            const SfxPoolItem* pItem = nullptr;
-            if ( nullptr != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
-                pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
-        }
-
-        if ( !pColorList.is() )
-            pColorList = XColorList::CreateStdColorList();
-
-
-        if ( pColorList.is() )
-        {
-            mnColorCount = pColorList->Count();
-            rColorSet.Clear();
-            rColorSet.addEntriesForXColorList(*pColorList);
-        }
-    }
-    else if( mnCurrentPalette == mnNumOfPalettes - 1 )
+    if( mnCurrentPalette == mnNumOfPalettes - 1 )
     {
         // Add doc colors to palette
         std::set<Color> aColors = pDocSh->GetDocColors();
@@ -138,7 +127,7 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
     }
     else
     {
-        m_Palettes[mnCurrentPalette-1]->LoadColorSet( rColorSet );
+        m_Palettes[mnCurrentPalette]->LoadColorSet( rColorSet );
         mnColorCount = rColorSet.GetItemCount();
     }
 }
@@ -159,8 +148,6 @@ std::vector<OUString> PaletteManager::GetPaletteList()
 {
     std::vector<OUString> aPaletteNames;
 
-    aPaletteNames.push_back( SVX_RESSTR( RID_SVXSTR_DEFAULT_PAL ) );
-
     for (auto const& it : m_Palettes)
     {
         aPaletteNames.push_back( (*it).GetName() );
@@ -173,12 +160,30 @@ std::vector<OUString> PaletteManager::GetPaletteList()
 
 void PaletteManager::SetPalette( sal_Int32 nPos )
 {
+    if( nPos != mnNumOfPalettes - 1 )
+    {
+        pColorList = XPropertyList::AsColorList(
+                            XPropertyList::CreatePropertyListFromURL(
+                            XCOLOR_LIST, m_Palettes[nPos]->GetPath()));
+        pColorList->SetName(m_Palettes[nPos]->GetName());
+        if(pColorList->Load())
+        {
+            SfxObjectShell* pShell = SfxObjectShell::Current();
+            SvxColorListItem aColorItem(pColorList, SID_COLOR_TABLE);
+            pShell->PutItem( aColorItem );
+        }
+    }
     mnCurrentPalette = nPos;
 }
 
 sal_Int32 PaletteManager::GetPalette()
 {
     return mnCurrentPalette;
+}
+
+OUString PaletteManager::GetPaletteName()
+{
+    return pColorList->GetName();
 }
 
 long PaletteManager::GetColorCount()

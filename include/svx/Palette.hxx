@@ -35,6 +35,7 @@ public:
     virtual ~Palette();
 
     virtual const OUString&     GetName() = 0;
+    virtual const OUString&     GetPath() = 0;
     virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) = 0;
 
     virtual bool                IsValid() = 0;
@@ -55,6 +56,7 @@ public:
     virtual ~PaletteASE();
 
     virtual const OUString&     GetName() override;
+    virtual const OUString&     GetPath() override;
     virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) override;
 
     virtual bool                IsValid() override;
@@ -79,6 +81,7 @@ public:
     virtual ~PaletteGPL();
 
     virtual const OUString&     GetName() override;
+    virtual const OUString&     GetPath() override;
     virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) override;
 
     virtual bool                IsValid() override;
@@ -97,6 +100,7 @@ public:
     virtual ~PaletteSOC();
 
     virtual const OUString&     GetName() override;
+    virtual const OUString&     GetPath() override;
     virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) override;
 
     virtual bool                IsValid() override;
