@@ -1131,9 +1131,25 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "-12.00 ;";
         checkPreviewString(aFormatter, sCode, -12.0, eLang, sExpected);
     }
-    {  // tdf#995339: detect SSMM as second minute
-        sCode = "SS:MM:HH DD/MM/YY"; // Month not detected by Excel, but we do not follow that.
+    {  // tdf#95339: detect SSMM as second minute
+        sCode =     "SS:MM:HH DD/MM/YY"; // Month not detected by Excel, but we do not follow that.
         sExpected = "54:23:03 02/01/00";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+    }
+    {  // tdf#101147: detect SSMM as second month
+        sCode =     "HH:MM:SS MM/DD";
+        sExpected = "03:23:54 01/02";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+    }
+    {  // tdf#101096: different detection of month/minute with Excel
+        sCode =     "HH DD MM"; // month detectected because of previous DD
+        sExpected = "03 02 01";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        sCode =     "HH:MM HH DD/MM"; // month detected because of previous DD
+        sExpected = "03:23 03 02/01";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        sCode =     "SS:DD-MM-YY SS:MM"; // 1st is month, because of previous DD; 2nd is minute as SS has not minute
+        sExpected = "54:02-01-00 54:23";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
     {  // tdf#99996: better algorithm for fraction representation
