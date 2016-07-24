@@ -139,6 +139,9 @@ void ImageAryData::Load(const OUString &rPrefix)
         aMessage.append( "ImageAryData::Load: failed to load image '" );
         aMessage.append( OUStringToOString( aFileName, RTL_TEXTENCODING_UTF8 ).getStr() );
         aMessage.append( "'" );
+        aMessage.append( " from icon theme '" );
+        aMessage.append( OUStringToOString( aIconTheme, RTL_TEXTENCODING_UTF8 ).getStr() );
+        aMessage.append( "'" );
         OSL_FAIL( aMessage.makeStringAndClear().getStr() );
     }
 #endif
