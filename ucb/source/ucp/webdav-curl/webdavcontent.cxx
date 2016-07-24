@@ -3041,6 +3041,8 @@ void Content::lock(
         aURL = m_xIdentifier->getContentIdentifier();
     }
 
+    OUString    aTargetUrl = aURL;
+
     try
     {
         std::unique_ptr< DAVResourceAccess > xResAccess;
@@ -3062,7 +3064,12 @@ void Content::lock(
             //-1, // infinite lock
             uno::Sequence< OUString >() );
 
+        //  update the URL
+        aTargetUrl = xResAccess->getURL();
+
         xResAccess->LOCK( aLock, Environment );
+        // OPTIONS may have changed as a consequence of the lock operation
+        aStaticDAVOptionsCache.removeDAVOptions( aTargetUrl );
 
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -3071,6 +3078,7 @@ void Content::lock(
     }
     catch ( DAVException const & e )
     {
+        aStaticDAVOptionsCache.removeDAVOptions( aTargetUrl );
         // check if the exception thrown is 'already locked'
         // this exception is mapped directly to the ucb correct one, without
         // going into the cancelCommandExecution() user interaction
@@ -3166,6 +3174,9 @@ void Content::lock(
 void Content::unlock(
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
 {
+    // save the URL to clean cache
+    OUString    aTargetUrl = m_xIdentifier->getContentIdentifier();
+
     try
     {
         std::unique_ptr< DAVResourceAccess > xResAccess;
@@ -3174,7 +3185,12 @@ void Content::unlock(
             xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
         }
 
+        // update the URL
+        aTargetUrl = xResAccess->getURL();
         xResAccess->UNLOCK( Environment );
+        // remove options from cache, unlock may change it
+        // it will be refreshed when needed
+        aStaticDAVOptionsCache.removeDAVOptions( aTargetUrl );
 
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -3213,6 +3229,9 @@ void Content::unlock(
                 }
                 break;
             default:
+                // remove options from cache,
+                // it will be refreshed when needed
+                aStaticDAVOptionsCache.removeDAVOptions( aTargetUrl );
                 //fallthrough
                 ;
         }
@@ -3753,7 +3772,12 @@ void Content::getResourceOptions(
                                      rDAVOptions.isClass3() ) ?
                 m_nOptsCacheLifeDAV : // a WebDAV site
                 m_nOptsCacheLifeImplWeb;  // a site implementing OPTIONS but
-                                             // it's not DAV
+                                          // it's not DAV
+            // if resource is locked, will use a
+            // different lifetime
+            if( rDAVOptions.isLocked() )
+                nLifeTime = m_nOptsCacheLifeDAVLocked;
+
             // check if redirected
             aRedirURL = rResAccess->getURL();
             if( aRedirURL == aTargetURL)
