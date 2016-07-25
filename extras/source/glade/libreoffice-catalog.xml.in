@@ -787,6 +787,9 @@
     <glade-widget-class title="Template Search View" name="sfxlo-TemplateSearchView"
                         generic-name="Template Icon View" parent="GtkIconView"
                         icon-name="widget-gtk-iconview"/>
+    <glade-widget-class title="Template Default Search View" name="sfxlo-BackingWindowTemplateSearchView"
+                        generic-name="Template Icon View" parent="GtkIconView"
+                        icon-name="widget-gtk-iconview"/>
 
     <glade-widget-class title="Driver List Control" name="cuilo-DriverListControl"
                         generic-name="DriverListControl" parent="GtkEntry"

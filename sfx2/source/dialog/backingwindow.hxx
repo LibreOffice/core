@@ -48,6 +48,7 @@
 #include <set>
 
 class ToolBox;
+class BackingWindowTemplateSearchView;
 
 class BackingWindow : public vcl::Window, public VclBuilderContainer
 {
@@ -64,6 +65,8 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
     VclPtr<MenuToggleButton> mpTemplateButton;
 
     VclPtr<FixedText>  mpCreateLabel;
+    VclPtr<ListBox>    mpCBApp;
+    VclPtr<Edit>       mpSearchFilter;
 
     VclPtr<PushButton> mpWriterAllButton;
     VclPtr<PushButton> mpCalcAllButton;
@@ -81,6 +84,7 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
 
     VclPtr<RecentDocsView> mpAllRecentThumbnails;
     VclPtr<TemplateDefaultView> mpLocalView;
+    VclPtr<BackingWindowTemplateSearchView> mpSearchView;
     bool mbLocalViewInitialized;
 
     std::vector< VclPtr<vcl::Window> > maDndWindows;
@@ -102,16 +106,22 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
 
     DECL_LINK_TYPED(ClickHdl, Button*, void);
     DECL_LINK_TYPED(MenuSelectHdl, MenuButton*, void);
+    DECL_LINK_TYPED(SearchUpdateHdl, Edit&, void);
     DECL_LINK_TYPED(ExtLinkClickHdl, Button*, void);
     DECL_LINK_TYPED(CreateContextMenuHdl, ThumbnailViewItem*, void);
     DECL_LINK_TYPED(OpenTemplateHdl, ThumbnailViewItem*, void);
     DECL_LINK_TYPED(EditTemplateHdl, ThumbnailViewItem*, void);
+    DECL_LINK_TYPED(SelectApplicationHdl, ListBox&, void);
+    DECL_LINK_TYPED(GetFocusHdl, Control&, void);
 
     void initControls();
 
     void initializeLocalView();
 
     void checkInstalledModules();
+
+    /// Return filter according to the currently selected application filter.
+    FILTER_APPLICATION getCurrentApplicationFilter();
 
 public:
     explicit BackingWindow(vcl::Window* pParent);

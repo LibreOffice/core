@@ -90,55 +90,45 @@ static bool lcl_getServiceName (const OUString &rFileURL, OUString &rName );
 
 static std::vector<OUString> lcl_getAllFactoryURLs ();
 
-class SearchView_Keyword
+SearchView_Keyword::SearchView_Keyword (const OUString &rKeyword, FILTER_APPLICATION App)
+    : maKeyword(rKeyword.toAsciiLowerCase()), meApp(App)
+{}
+
+bool SearchView_Keyword::operator() (const TemplateItemProperties &rItem)
 {
-public:
+    bool bRet = true;
 
-    SearchView_Keyword (const OUString &rKeyword, FILTER_APPLICATION App)
-        : maKeyword(rKeyword.toAsciiLowerCase()), meApp(App)
-    {}
+    INetURLObject aUrl(rItem.aPath);
+    OUString aExt = aUrl.getExtension();
 
-    bool operator() (const TemplateItemProperties &rItem)
+    if (meApp == FILTER_APPLICATION::WRITER)
     {
-        bool bRet = true;
-
-        INetURLObject aUrl(rItem.aPath);
-        OUString aExt = aUrl.getExtension();
-
-        if (meApp == FILTER_APPLICATION::WRITER)
-        {
-            bRet = aExt == "ott" || aExt == "stw" || aExt == "oth" || aExt == "dot" || aExt == "dotx";
-        }
-        else if (meApp == FILTER_APPLICATION::CALC)
-        {
-            bRet = aExt == "ots" || aExt == "stc" || aExt == "xlt" || aExt == "xltm" || aExt == "xltx";
-        }
-        else if (meApp == FILTER_APPLICATION::IMPRESS)
-        {
-            bRet = aExt == "otp" || aExt == "sti" || aExt == "pot" || aExt == "potm" || aExt == "potx";
-        }
-        else if (meApp == FILTER_APPLICATION::DRAW)
-        {
-            bRet = aExt == "otg" || aExt == "std";
-        }
-
-        return bRet && MatchSubstring(rItem.aName);
+        bRet = aExt == "ott" || aExt == "stw" || aExt == "oth" || aExt == "dot" || aExt == "dotx";
+    }
+    else if (meApp == FILTER_APPLICATION::CALC)
+    {
+        bRet = aExt == "ots" || aExt == "stc" || aExt == "xlt" || aExt == "xltm" || aExt == "xltx";
+    }
+    else if (meApp == FILTER_APPLICATION::IMPRESS)
+    {
+        bRet = aExt == "otp" || aExt == "sti" || aExt == "pot" || aExt == "potm" || aExt == "potx";
+    }
+    else if (meApp == FILTER_APPLICATION::DRAW)
+    {
+        bRet = aExt == "otg" || aExt == "std";
     }
 
-    bool MatchSubstring( OUString const & sItemName )
-    {
-        if(maKeyword.isEmpty())
-            return false;
-        if(sItemName.toAsciiLowerCase().indexOf(maKeyword) >= 0)
-            return true;
+    return bRet && MatchSubstring(rItem.aName);
+}
+
+bool SearchView_Keyword::MatchSubstring( OUString const & sItemName )
+{
+    if(maKeyword.isEmpty())
         return false;
-    }
-
-private:
-
-    OUString maKeyword;
-    FILTER_APPLICATION meApp;
-};
+    if(sItemName.toAsciiLowerCase().indexOf(maKeyword) >= 0)
+        return true;
+    return false;
+}
 
 /***
  *

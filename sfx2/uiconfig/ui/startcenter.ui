@@ -3,20 +3,33 @@
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkListStore" id="applist">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">All Applications</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Documents</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Spreadsheets</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Presentations</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Drawings</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkImage" id="calc_all_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">res/ods_32_8.png</property>
-  </object>
-  <object class="GtkImage" id="database_all_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/odb_32_8.png</property>
-  </object>
-  <object class="GtkImage" id="draw_all_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/odg_32_8.png</property>
   </object>
   <object class="GtkMenu" id="clearmenu">
     <property name="visible">True</property>
@@ -28,6 +41,16 @@
         <property name="label" translatable="yes">Clear Recent Documents</property>
       </object>
     </child>
+  </object>
+  <object class="GtkImage" id="database_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/odb_32_8.png</property>
+  </object>
+  <object class="GtkImage" id="draw_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/odg_32_8.png</property>
   </object>
   <object class="GtkMenu" id="filtermenu">
     <property name="visible">True</property>
@@ -227,8 +250,8 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="margin_bottom">6</property>
-                    <property name="label" translatable="yes">Create:</property>
                     <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Create:</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -460,7 +483,58 @@
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
+              <object class="GtkBox" id="filter_box">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkEntry" id="search_filter">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="placeholder_text" translatable="yes">Search...</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="filter_application">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="resize_mode">queue</property>
+                    <property name="model">applist</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="sfxlo-RecentDocsView" id="all_recent">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="margin">0</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="sfxlo-TemplateDefaultView" id="local_view">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="margin">0</property>
@@ -474,9 +548,10 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-TemplateDefaultView" id="local_view">
-                <property name="visible">True</property>
+              <object class="sfxlo-BackingWindowTemplateSearchView" id="search_view">
                 <property name="can_focus">True</property>
+                <property name="no_show_all">True</property>
+                <property name="visible">False</property>
                 <property name="margin">0</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>

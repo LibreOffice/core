@@ -23,6 +23,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include "backingwindowsearchview.hxx"
+#include "templatesearchviewitem.hxx"
 
 #include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/historyoptions.hxx>
@@ -33,9 +35,10 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/templatecontaineritem.hxx>
+#include <sfx2/templatedlg.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/toolbox.hxx>
-
+#include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -56,6 +59,13 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include <officecfg/Office/Common.hxx>
+
+#define MNI_WRITER           1
+#define MNI_CALC             2
+#define MNI_IMPRESS          3
+#define MNI_DRAW             4
+
+class SearchView_Keyword;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -81,6 +91,10 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     get(mpRemoteButton, "open_remote");
     get(mpRecentButton, "open_recent");
     get(mpTemplateButton, "templates_all");
+
+    get(mpSearchFilter, "search_filter");
+    get(mpCBApp, "filter_application");
+    get(mpSearchView, "search_view");
 
     get(mpCreateLabel, "create_label");
 
@@ -206,6 +220,9 @@ void BackingWindow::dispose()
     mpExtensionsButton.clear();
     mpAllButtonsBox.clear();
     mpButtonsBox.clear();
+    mpSearchFilter.clear();
+    mpSearchView.clear();
+    mpCBApp.clear();
     mpSmallButtonsBox.clear();
     mpAllRecentThumbnails.clear();
     mpLocalView.clear();
@@ -259,6 +276,9 @@ void BackingWindow::initControls()
     mpAllRecentThumbnails->ShowTooltips( true );
     mpRecentButton->SetActive(true);
 
+    mpCBApp->SelectEntryPos(0);
+    mpCBApp->SetSelectHdl(LINK(this, BackingWindow, SelectApplicationHdl));
+
     //initialize Template view
     mpLocalView->SetStyle( mpLocalView->GetStyle() | WB_VSCROLL);
     mpLocalView->Hide();
@@ -271,6 +291,20 @@ void BackingWindow::initControls()
     mpLocalView->setOpenTemplateHdl(LINK(this, BackingWindow, OpenTemplateHdl));
     mpLocalView->setEditTemplateHdl(LINK(this, BackingWindow, EditTemplateHdl));
     mpLocalView->ShowTooltips( true );
+
+    //initialize Template view
+    mpSearchView->SetStyle( mpLocalView->GetStyle() | WB_VSCROLL);
+    mpSearchView->Hide();
+
+    mpSearchView->setCreateContextMenuHdl(LINK(this,BackingWindow, CreateContextMenuHdl));
+    mpSearchView->setOpenTemplateHdl(LINK(this,BackingWindow,OpenTemplateHdl));
+    mpSearchView->setEditTemplateHdl(LINK(this,BackingWindow, EditTemplateHdl));
+
+    mpSearchView->ShowTooltips(true);
+
+    mpSearchFilter->SetUpdateDataHdl(LINK(this, BackingWindow, SearchUpdateHdl));
+    mpSearchFilter->EnableUpdateData();
+    mpSearchFilter->SetGetFocusHdl(LINK( this, BackingWindow, GetFocusHdl ));
 
     setupButton( mpOpenButton );
     setupButton( mpRemoteButton );
@@ -465,6 +499,86 @@ bool BackingWindow::PreNotify( NotifyEvent& rNEvt )
 
     return Window::PreNotify( rNEvt );
 }
+
+FILTER_APPLICATION BackingWindow::getCurrentApplicationFilter()
+{
+    const sal_Int16 nCurAppId = mpCBApp->GetSelectEntryPos();
+
+    if (nCurAppId == MNI_WRITER)
+        return FILTER_APPLICATION::WRITER;
+    else if (nCurAppId == MNI_IMPRESS)
+        return FILTER_APPLICATION::IMPRESS;
+    else if (nCurAppId == MNI_CALC)
+        return FILTER_APPLICATION::CALC;
+    else if (nCurAppId == MNI_DRAW)
+        return FILTER_APPLICATION::DRAW;
+
+    return FILTER_APPLICATION::NONE;
+}
+
+IMPL_LINK_NOARG_TYPED(BackingWindow, SelectApplicationHdl, ListBox&, void)
+{
+    if(mpLocalView->IsVisible())
+    {
+        mpLocalView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
+        mpLocalView->showAllTemplates();
+    }
+
+    if(mpSearchView->IsVisible())
+        SearchUpdateHdl(*mpSearchFilter);
+}
+
+IMPL_LINK_NOARG_TYPED(BackingWindow, GetFocusHdl, Control&, void)
+{
+    mpLocalView->deselectItems();
+    mpSearchView->deselectItems();
+}
+
+IMPL_LINK_NOARG_TYPED(BackingWindow, SearchUpdateHdl, Edit&, void)
+{
+    OUString aKeyword = mpSearchFilter->GetText();
+
+    if (!aKeyword.isEmpty())
+    {
+        mpSearchView->Clear();
+
+        // if the search view is hidden, hide the folder view and display search one
+        if (!mpSearchView->IsVisible())
+        {
+            mpLocalView->deselectItems();
+            mpSearchView->Show();
+            mpLocalView->Hide();
+        }
+
+        std::vector<TemplateItemProperties> aItems =
+                mpLocalView->getFilteredItems(SearchView_Keyword(aKeyword, getCurrentApplicationFilter()));
+
+        for (TemplateItemProperties& rItem : aItems)
+        {
+            OUString aFolderName;
+
+            aFolderName = mpLocalView->getRegionName(rItem.nRegionId);
+
+            mpSearchView->AppendItem(rItem.nId,mpLocalView->getRegionId(rItem.nRegionId),
+                                     rItem.nDocId,
+                                     rItem.aName,
+                                     aFolderName,
+                                     rItem.aPath,
+                                     rItem.aThumbnail);
+        }
+
+        mpSearchView->Invalidate();
+    }
+    else
+    {
+        mpSearchView->deselectItems();
+        mpSearchView->Hide();
+        mpLocalView->Show();
+        mpLocalView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
+        mpLocalView->reload();
+    }
+}
+
 
 void BackingWindow::GetFocus()
 {
