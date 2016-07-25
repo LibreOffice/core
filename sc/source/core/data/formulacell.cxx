@@ -4014,9 +4014,8 @@ bool ScFormulaCell::InterpretFormulaGroup()
 #ifdef _WIN32
     // Heuristic: Certain old low-end OpenCL implementations don't
     // work for us with too large group lengths. 1000 was determined
-    // empirically to be a good compromise. Looking at the preferred
-    // float vector width seems to be a way to detect these devices.
-    if (opencl::gpuEnv.mnPreferredVectorWidthFloat == 4)
+    // empirically to be a good compromise.
+    if (opencl::gpuEnv.mbNeedsTDRAvoidance)
         nMaxGroupLength = 1000;
 #endif
 

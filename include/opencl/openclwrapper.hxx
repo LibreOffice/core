@@ -47,7 +47,7 @@ struct OPENCL_DLLPUBLIC GPUEnv
     int mnCmdQueuePos;
     bool mnKhrFp64Flag;
     bool mnAmdFp64Flag;
-    cl_uint mnPreferredVectorWidthFloat;
+    bool mbNeedsTDRAvoidance;
 
     static bool isOpenCLEnabled();
 };
