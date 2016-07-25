@@ -158,7 +158,7 @@ void Desktop::CheckOpenCLCompute(const Reference< XDesktop2 > &xDesktop)
         // OpenCL device changed - sanity check it and disable if bad.
 
         boost::optional<sal_Int32> nOrigMinimumSize = officecfg::Office::Calc::Formula::Calculation::OpenCLMinimumDataSize::get();
-        { // set the group size to something small for quick testing.
+        { // set the minumum group size to something small for quick testing.
             std::shared_ptr<comphelper::ConfigurationChanges> xBatch(comphelper::ConfigurationChanges::create());
             officecfg::Office::Calc::Formula::Calculation::OpenCLMinimumDataSize::set(3 /* small */, xBatch);
             xBatch->commit();
@@ -166,11 +166,9 @@ void Desktop::CheckOpenCLCompute(const Reference< XDesktop2 > &xDesktop)
 
         bool bSucceeded = testOpenCLCompute(xDesktop, aURL);
 
-        // it passed -> save the device.
-        {
+        { // restore the minimum group size
             std::shared_ptr<comphelper::ConfigurationChanges> xBatch(comphelper::ConfigurationChanges::create());
             officecfg::Office::Calc::Formula::Calculation::OpenCLMinimumDataSize::set(nOrigMinimumSize, xBatch);
-            // allow the user to subsequently manually enable it.
             officecfg::Office::Common::Misc::SelectedOpenCLDeviceIdentifier::set(aSelectedCLDeviceVersionID, xBatch);
             xBatch->commit();
         }
