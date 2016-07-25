@@ -53,7 +53,7 @@ namespace comphelper
             @param i_isAllowed
                 iff true, empty property name will be allowed
          */
-        void setAllowEmptyPropertyName(bool i_isAllowed = true);
+        void setAllowEmptyPropertyName(bool i_isAllowed);
 
         /** adds a property to the bag
 

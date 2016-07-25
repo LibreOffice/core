@@ -33,7 +33,7 @@ namespace formula
         virtual void ShowReference(const OUString& _sRef) = 0;
         virtual void HideReference( bool bDoneRefMode = true ) = 0;
         virtual void ReleaseFocus( RefEdit* pEdit ) = 0;
-        virtual void ToggleCollapsed( RefEdit* pEdit, RefButton* pButton = nullptr ) = 0;
+        virtual void ToggleCollapsed( RefEdit* pEdit, RefButton* pButton ) = 0;
 
     protected:
         ~IControlReferenceHandler() {}

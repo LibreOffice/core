@@ -39,7 +39,7 @@ class SbModule;
 class SbiFactory : public SbxFactory
 {
 public:
-    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX ) override;
+    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
     virtual SbxObject* CreateObject( const OUString& ) override;
 };
 
@@ -72,7 +72,7 @@ public:
     void AddClassModule( SbModule* pClassModule );
     void RemoveClassModule( SbModule* pClassModule );
 
-    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX ) override;
+    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
     virtual SbxObject* CreateObject( const OUString& ) override;
 
     SbModule* FindClass( const OUString& rClassName );

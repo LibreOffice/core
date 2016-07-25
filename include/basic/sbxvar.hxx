@@ -174,7 +174,7 @@ public:
     bool Convert( SbxDataType );
     bool Compute( SbxOperator, const SbxValue& );
     bool Compare( SbxOperator, const SbxValue& ) const;
-    bool Scan( const OUString&, sal_uInt16* = nullptr );
+    bool Scan( const OUString&, sal_uInt16* );
     void Format( OUString&, const OUString* = nullptr ) const;
 
     // The following operators are definied for easier handling.
@@ -246,7 +246,7 @@ public:
     SbxVariable( const SbxVariable& );
     SbxVariable& operator=( const SbxVariable& );
 
-    void Dump( SvStream&, bool bDumpAll=false );
+    void Dump( SvStream&, bool bDumpAll );
 
     void SetName( const OUString& );
     const OUString& GetName( SbxNameType = SbxNAME_NONE ) const;

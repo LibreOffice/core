@@ -68,7 +68,7 @@ public:
         @throws     SaxException
                     If the used Sax parser returns an error. The SaxException
                     contains detailed information about the error.  */
-    void parse(const char* XmlData, size_t Length, bool IsFinal = true);
+    void parse(const char* XmlData, size_t Length, bool IsFinal);
 
     /** Set a document handler
 

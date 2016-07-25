@@ -339,7 +339,7 @@ namespace comphelper
         /** specifies if the children are to be considered transient (i.e.: not cached)
             <p>to be called only once per lifetime</p>
         */
-        void    setTransientChildren( bool _bSet = true );
+        void    setTransientChildren( bool _bSet );
 
         /** sets the XAccessible which belongs to the XAccessibleContext which we work for
             <p>to be called only once per lifetime</p>

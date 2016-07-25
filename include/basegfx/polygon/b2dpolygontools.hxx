@@ -132,13 +132,13 @@ namespace basegfx
         BASEGFX_DLLPUBLIC B2VectorContinuity getContinuityInPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndex);
 
         // Subdivide all contained curves. Use distanceBound value if given.
-        BASEGFX_DLLPUBLIC B2DPolygon adaptiveSubdivideByDistance(const B2DPolygon& rCandidate, double fDistanceBound = 0.0);
+        BASEGFX_DLLPUBLIC B2DPolygon adaptiveSubdivideByDistance(const B2DPolygon& rCandidate, double fDistanceBound);
 
         // Subdivide all contained curves. Use angleBound value if given.
         BASEGFX_DLLPUBLIC B2DPolygon adaptiveSubdivideByAngle(const B2DPolygon& rCandidate, double fAngleBound = 0.0);
 
         // #i37443# Subdivide all contained curves.
-        BASEGFX_DLLPUBLIC B2DPolygon adaptiveSubdivideByCount(const B2DPolygon& rCandidate, sal_uInt32 nCount = 0L);
+        BASEGFX_DLLPUBLIC B2DPolygon adaptiveSubdivideByCount(const B2DPolygon& rCandidate, sal_uInt32 nCount);
 
         // This version works with two points and vectors to define the
         // edges for the cut test.
@@ -344,17 +344,17 @@ namespace basegfx
         BASEGFX_DLLPUBLIC B2VectorOrientation getOrientationForIndex(const B2DPolygon& rCandidate, sal_uInt32 nIndex);
 
         // calculates if given point is on given line, taking care of the numerical epsilon
-        BASEGFX_DLLPUBLIC bool isPointOnLine(const B2DPoint& rStart, const B2DPoint& rEnd, const B2DPoint& rCandidate, bool bWithPoints = false);
+        BASEGFX_DLLPUBLIC bool isPointOnLine(const B2DPoint& rStart, const B2DPoint& rEnd, const B2DPoint& rCandidate, bool bWithPoints);
 
         // calculates if given point is on given polygon, taking care of the numerical epsilon. Uses
         // isPointOnLine internally
         BASEGFX_DLLPUBLIC bool isPointOnPolygon(const B2DPolygon& rCandidate, const B2DPoint& rPoint, bool bWithPoints = true);
 
         // test if candidate is inside triangle
-        BASEGFX_DLLPUBLIC bool isPointInTriangle(const B2DPoint& rA, const B2DPoint& rB, const B2DPoint& rC, const B2DPoint& rCandidate, bool bWithBorder = false);
+        BASEGFX_DLLPUBLIC bool isPointInTriangle(const B2DPoint& rA, const B2DPoint& rB, const B2DPoint& rC, const B2DPoint& rCandidate, bool bWithBorder);
 
         // test if candidateA and candidateB are on the same side of the given line
-        BASEGFX_DLLPUBLIC bool arePointsOnSameSideOfLine(const B2DPoint& rStart, const B2DPoint& rEnd, const B2DPoint& rCandidateA, const B2DPoint& rCandidateB, bool bWithLine = false);
+        BASEGFX_DLLPUBLIC bool arePointsOnSameSideOfLine(const B2DPoint& rStart, const B2DPoint& rEnd, const B2DPoint& rCandidateA, const B2DPoint& rCandidateB, bool bWithLine);
 
         // add triangles for given rCandidate to rTarget. For each triangle, 3 points will be added to rCandidate.
         // All triangles will go from the start point of rCandidate to two consecutive points, building (rCandidate.count() - 2)
@@ -463,7 +463,7 @@ namespace basegfx
         B2DPolygon UnoPolygonBezierCoordsToB2DPolygon(
             const css::drawing::PointSequence& rPointSequenceSource,
             const css::drawing::FlagSequence& rFlagSequenceSource,
-            bool bCheckClosed = true);
+            bool bCheckClosed);
         void B2DPolygonToUnoPolygonBezierCoords(
             const B2DPolygon& rPolyPolygon,
             css::drawing::PointSequence& rPointSequenceRetval,

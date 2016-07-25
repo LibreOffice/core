@@ -8,12 +8,6 @@ definitionSet = set()
 definitionToSourceLocationMap = dict()
 callSet = set()
 
-# things we need to exclude for reasons like :
-# - it's a weird template thingy that confuses the plugin
-exclusionSet = set([
-    "class boost::intrusive_ptr<class FontCharMap> FontCharMap::GetDefaultMap(_Bool)"
-])
-
 # clang does not always use exactly the same numbers in the type-parameter vars it generates
 # so I need to substitute them to ensure we can match correctly.
 normalizeTypeParamsRegex = re.compile(r"type-parameter-\d+-\d+")
@@ -56,12 +50,14 @@ for k, definitions in sourceLocationToDefinitionMap.iteritems():
     
 tmp1set = set()
 for d in definitionSet:
-    clazz = d[0] + " " + d[1]
-    if clazz in exclusionSet:
+    methodSignature = d[0] + " " + d[1]
+    if (methodSignature == "class boost::intrusive_ptr<class FontCharMap> FontCharMap::GetDefaultMap(_Bool)"
+        # bunch of methods in here all with the same signature
+        or "SwAttrSet::" in d[1] or "SwFormat::" in d[1]):
         continue
     if d in callSet:
         continue
-    tmp1set.add((clazz, definitionToSourceLocationMap[d]))
+    tmp1set.add((methodSignature, definitionToSourceLocationMap[d]))
 
 # sort the results using a "natural order" so sequences like [item1,item2,item10] sort nicely
 def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):

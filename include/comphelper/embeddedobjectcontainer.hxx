@@ -57,7 +57,7 @@ class COMPHELPER_DLLPUBLIC EmbeddedObjectContainer
 
     css::uno::Reference < css::embed::XEmbeddedObject > Get_Impl( const OUString&,
             const css::uno::Reference < css::embed::XEmbeddedObject >& xCopy,
-            OUString const* pBaseURL = nullptr);
+            OUString const* pBaseURL);
 
 public:
     // add an embedded object to the container storage

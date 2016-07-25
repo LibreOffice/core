@@ -174,10 +174,10 @@ public:
     SfxItemSet          GetAttribs();
     void                SetAttribs( const SfxItemSet& rSet );
     void                RemoveAttribs( bool bRemoveParaAttribs = false, sal_uInt16 nWhich = 0 );
-    void                RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich = 0 );
-    void                RemoveAttribsKeepLanguages( bool bRemoveParaAttribs = false );
+    void                RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich );
+    void                RemoveAttribsKeepLanguages( bool bRemoveParaAttribs );
 
-    sal_uInt32          Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
+    sal_uInt32          Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs );
 
     void            SetBackgroundColor( const Color& rColor );
     Color           GetBackgroundColor() const;
@@ -217,7 +217,7 @@ public:
 
     bool            IsCursorAtWrongSpelledWord();
     bool            IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWrong = false );
-    void            ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void>* pCallBack = nullptr );
+    void            ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void>* pCallBack );
 
     void                InsertField( const SvxFieldItem& rFld );
     const SvxFieldItem* GetFieldUnderMousePointer() const;

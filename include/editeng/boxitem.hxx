@@ -106,7 +106,7 @@ public:
     void    SetDistance( sal_uInt16 nNew, SvxBoxItemLine nLine );
     inline void SetAllDistances( sal_uInt16 nNew );
 
-    void SetRemoveAdjacentCellBorder( bool bSet = true ) { bRemoveAdjCellBorder = bSet; }
+    void SetRemoveAdjacentCellBorder( bool bSet ) { bRemoveAdjCellBorder = bSet; }
 
     // Line width plus Space plus inward distance
     // bIgnoreLine = TRUE -> Also return distance, when no Line is set

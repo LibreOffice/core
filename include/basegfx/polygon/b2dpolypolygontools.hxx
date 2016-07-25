@@ -52,7 +52,7 @@ namespace basegfx
         BASEGFX_DLLPUBLIC B2DPolyPolygon correctOutmostPolygon(const B2DPolyPolygon& rCandidate);
 
         // Subdivide all contained curves. Use distanceBound value if given.
-        BASEGFX_DLLPUBLIC B2DPolyPolygon adaptiveSubdivideByDistance(const B2DPolyPolygon& rCandidate, double fDistanceBound = 0.0);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon adaptiveSubdivideByDistance(const B2DPolyPolygon& rCandidate, double fDistanceBound);
 
         // Subdivide all contained curves. Use distanceBound value if given. Else, a convenient one
         // is created.
@@ -265,7 +265,7 @@ namespace basegfx
             are 'lit' for the given number. Return un-lit segments
             otherwise.
          */
-        B2DPolyPolygon createSevenSegmentPolyPolygon(sal_Char cNumber, bool bLitSegments=true);
+        B2DPolyPolygon createSevenSegmentPolyPolygon(sal_Char cNumber, bool bLitSegments);
 
         /** snap some polygon coordinates to discrete coordinates
 
