@@ -1774,19 +1774,19 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
         cairo_set_line_width(pCairo, 2.0);
         cairo_stroke(pCairo);
 
-        // Cross it.
-        cairo_move_to(pCairo,
-                      twipToPixel(rRectangle.m_aRectangle.x, priv->m_fZoom),
-                      twipToPixel(rRectangle.m_aRectangle.y, priv->m_fZoom));
-        cairo_line_to(pCairo,
-                      twipToPixel(rRectangle.m_aRectangle.x + rRectangle.m_aRectangle.width, priv->m_fZoom),
-                      twipToPixel(rRectangle.m_aRectangle.y + rRectangle.m_aRectangle.height, priv->m_fZoom));
-        cairo_move_to(pCairo,
-                      twipToPixel(rRectangle.m_aRectangle.x, priv->m_fZoom),
-                      twipToPixel(rRectangle.m_aRectangle.y + rRectangle.m_aRectangle.height, priv->m_fZoom));
-        cairo_line_to(pCairo,
-                      twipToPixel(rRectangle.m_aRectangle.x + rRectangle.m_aRectangle.width, priv->m_fZoom),
-                      twipToPixel(rRectangle.m_aRectangle.y, priv->m_fZoom));
+        // And a lock.
+        cairo_rectangle(pCairo,
+                        twipToPixel(rRectangle.m_aRectangle.x + rRectangle.m_aRectangle.width, priv->m_fZoom) - 25,
+                        twipToPixel(rRectangle.m_aRectangle.y + rRectangle.m_aRectangle.height, priv->m_fZoom) - 15,
+                        20,
+                        10);
+        cairo_fill(pCairo);
+        cairo_arc(pCairo,
+                  twipToPixel(rRectangle.m_aRectangle.x + rRectangle.m_aRectangle.width, priv->m_fZoom) - 15,
+                  twipToPixel(rRectangle.m_aRectangle.y + rRectangle.m_aRectangle.height, priv->m_fZoom) - 15,
+                  5,
+                  180.0 * (M_PI/180.0),
+                  360.0 * (M_PI/180.0));
         cairo_stroke(pCairo);
     }
 
