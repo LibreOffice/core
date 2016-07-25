@@ -38,6 +38,22 @@ namespace com {
     }   }   }
 }
 
+class SearchView_Keyword
+{
+public:
+
+    SearchView_Keyword (const OUString &rKeyword, FILTER_APPLICATION App);
+
+    bool operator() (const TemplateItemProperties &rItem);
+    bool MatchSubstring( OUString const & sItemName );
+
+private:
+
+    OUString maKeyword;
+    FILTER_APPLICATION meApp;
+};
+
+
 class SFX2_DLLPUBLIC SfxTemplateManagerDlg : public ModalDialog
 {
     typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*,const ThumbnailViewItem*);
