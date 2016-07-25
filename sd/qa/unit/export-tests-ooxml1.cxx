@@ -9,8 +9,6 @@
 #include <officecfg/Office/Common.hxx>
 #include "sdmodeltestbase.hxx"
 #include "Outliner.hxx"
-#include <test/xmltesttools.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/editobj.hxx>
@@ -40,7 +38,6 @@
 #include <svx/xflclit.hxx>
 #include <animations/animationnodehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <rtl/ustring.hxx>
 
 #include <vcl/opengl/OpenGLWrapper.hxx>
@@ -67,7 +64,6 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -81,7 +77,7 @@
 using namespace css;
 using namespace css::animations;
 
-class SdOOXMLExportTest1 : public SdModelTestBase, public XmlTestTools
+class SdOOXMLExportTest1 : public SdModelTestBaseXML
 {
 public:
     void testFdo90607();

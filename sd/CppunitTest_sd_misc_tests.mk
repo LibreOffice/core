@@ -11,7 +11,10 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sd_misc_tests))
 
-$(eval $(call gb_CppunitTest_use_external,sd_misc_tests,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,sd_misc_tests,\
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_misc_tests, \
     sd/qa/unit/misc-tests \

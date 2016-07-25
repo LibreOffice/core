@@ -9,8 +9,6 @@
 #include <officecfg/Office/Common.hxx>
 #include "sdmodeltestbase.hxx"
 #include "Outliner.hxx"
-#include <test/xmltesttools.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/editobj.hxx>
@@ -40,7 +38,6 @@
 #include <svx/xflclit.hxx>
 #include <animations/animationnodehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <rtl/ustring.hxx>
 
 #include <vcl/opengl/OpenGLWrapper.hxx>
@@ -67,7 +64,6 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -82,7 +78,7 @@
 using namespace css;
 using namespace css::animations;
 
-class SdExportTest : public SdModelTestBase, public XmlTestTools
+class SdExportTest : public SdModelTestBaseXML
 {
 public:
     void testN821567();
@@ -138,21 +134,6 @@ public:
         }
     }
 
-    xmlDocPtr parseExport(utl::TempFile & rTempFile, OUString const& rStreamName)
-    {
-        OUString const url(rTempFile.GetURL());
-        uno::Reference<packages::zip::XZipFileAccess2> const xZipNames(
-            packages::zip::ZipFileAccess::createWithURL(
-                comphelper::getComponentContext(m_xSFactory), url));
-        uno::Reference<io::XInputStream> const xInputStream(
-            xZipNames->getByName(rStreamName), uno::UNO_QUERY);
-        std::unique_ptr<SvStream> const pStream(
-            utl::UcbStreamHelper::CreateStream(xInputStream, true));
-        xmlDocPtr const pXmlDoc = parseXmlStream(pStream.get());
-        pXmlDoc->name = reinterpret_cast<char *>(xmlStrdup(
-            reinterpret_cast<xmlChar const *>(OUStringToOString(url, RTL_TEXTENCODING_UTF8).getStr())));
-        return pXmlDoc;
-    }
 };
 
 void SdExportTest::testN821567()

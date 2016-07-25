@@ -12,14 +12,17 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <test/xmldiff.hxx>
+#include <test/xmltesttools.hxx>
 
 #include <unotest/filters-test.hxx>
 #include <unotest/macros_test.hxx>
 
 #include "drawdoc.hxx"
 #include "../source/ui/inc/DrawDocShell.hxx"
-#include "unotools/tempfile.hxx"
+#include <unotools/tempfile.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 #include <tools/color.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <rtl/strbuf.hxx>
 #include <sfx2/docfile.hxx>
@@ -27,6 +30,7 @@
 #include <svl/itemset.hxx>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <drawinglayer/XShapeDumper.hxx>
 #include <com/sun/star/text/XTextField.hpp>
 
@@ -358,6 +362,30 @@ protected:
         xPropSet->getPropertyValue("TextField") >>= xField;
         return xField;
     }
+
+};
+
+class SdModelTestBaseXML
+    : public SdModelTestBase, public XmlTestTools
+{
+
+public:
+    xmlDocPtr parseExport(utl::TempFile & rTempFile, OUString const& rStreamName)
+    {
+        OUString const url(rTempFile.GetURL());
+        uno::Reference<packages::zip::XZipFileAccess2> const xZipNames(
+            packages::zip::ZipFileAccess::createWithURL(
+                comphelper::getComponentContext(m_xSFactory), url));
+        uno::Reference<io::XInputStream> const xInputStream(
+            xZipNames->getByName(rStreamName), uno::UNO_QUERY);
+        std::unique_ptr<SvStream> const pStream(
+            utl::UcbStreamHelper::CreateStream(xInputStream, true));
+        xmlDocPtr const pXmlDoc = parseXmlStream(pStream.get());
+        pXmlDoc->name = reinterpret_cast<char *>(xmlStrdup(
+            reinterpret_cast<xmlChar const *>(OUStringToOString(url, RTL_TEXTENCODING_UTF8).getStr())));
+        return pXmlDoc;
+    }
+
 };
 
 CPPUNIT_NS_BEGIN
