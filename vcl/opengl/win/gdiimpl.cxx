@@ -615,6 +615,37 @@ bool WinOpenGLContext::ImplInit()
         return false;
     }
 
+    if (bFirstCall)
+    {
+        // Checking texture size
+        GLint nMaxTextureSize;
+        glGetIntegerv(GL_MAX_TEXTURE_SIZE, &nMaxTextureSize);
+        if (nMaxTextureSize <= 4096)
+            SAL_WARN("vcl.opengl", "Max texture size is " << nMaxTextureSize
+                                    << ". This may not be enough for normal operation.");
+        else
+            VCL_GL_INFO("Max texture size: " << nMaxTextureSize);
+
+        // Trying to make a texture and check its size
+        for (GLint nWidthHeight = 1023; nWidthHeight < nMaxTextureSize; nWidthHeight += (nWidthHeight + 1))
+        {
+            glTexImage2D(GL_PROXY_TEXTURE_2D, 0, 4, nWidthHeight, nWidthHeight, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8, nullptr);
+            CHECK_GL_ERROR();
+            if (glGetError() == GL_NO_ERROR)
+            {
+                GLint nWidth = 0;
+                GLint nHeight = 0;
+                glGetTexLevelParameteriv(GL_PROXY_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &nWidth);
+                glGetTexLevelParameteriv(GL_PROXY_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &nHeight);
+                VCL_GL_INFO("Created texture " << nWidthHeight << "," << nWidthHeight << " reports size: " << nWidth << ", " << nHeight);
+            }
+            else
+            {
+                SAL_WARN("vcl.opengl", "Error when creating a " << nWidthHeight << ", " << nWidthHeight << " test texture.");
+            }
+        }
+    }
+
     InitGLEWDebugging();
 
     g_vShareList.push_back(m_aGLWin.hRC);
