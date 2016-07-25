@@ -1018,11 +1018,15 @@ bool OpenGLWrapper::isVCLOpenGLEnabled()
 
 void OpenGLHelper::debugMsgStream(std::ostringstream const &pStream)
 {
-    debugMsgPrint ("%x: %s", osl_getThreadIdentifier(nullptr),
-                   pStream.str().c_str());
+    debugMsgPrint(0, "%x: %s", osl_getThreadIdentifier(nullptr), pStream.str().c_str());
 }
 
-void OpenGLHelper::debugMsgPrint(const char *pFormat, ...)
+void OpenGLHelper::debugMsgStreamWarn(std::ostringstream const &pStream)
+{
+    debugMsgPrint(1, "%x: %s", osl_getThreadIdentifier(nullptr), pStream.str().c_str());
+}
+
+void OpenGLHelper::debugMsgPrint(const int nType, const char *pFormat, ...)
 {
     va_list aArgs;
     va_start (aArgs, pFormat);
@@ -1038,7 +1042,14 @@ void OpenGLHelper::debugMsgPrint(const char *pFormat, ...)
     if (!bHasContext)
         strcat(pStr, "- no GL context");
 
-    SAL_INFO("vcl.opengl", pStr);
+    if (nType == 0)
+    {
+        SAL_INFO("vcl.opengl", pStr);
+    }
+    else if (nType == 1)
+    {
+        SAL_WARN("vcl.opengl", pStr);
+    }
 
     if (bHasContext)
     {

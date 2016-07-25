@@ -28,6 +28,17 @@
         } \
     } while (false)
 
+/// Helper to do a SAL_WARN as well as a GL log.
+#define VCL_GL_WARN(stream) \
+    do { \
+        if (SAL_DETAIL_ENABLE_LOG_INFO && OpenGLHelper::isVCLOpenGLEnabled()) \
+        { \
+            ::std::ostringstream detail_stream; \
+            detail_stream << stream;            \
+            OpenGLHelper::debugMsgStreamWarn(detail_stream); \
+        } \
+    } while (false)
+
 // All member functions static and VCL_DLLPUBLIC. Basically a glorified namespace.
 struct VCL_DLLPUBLIC OpenGLHelper
 {
@@ -77,8 +88,9 @@ public:
      * Insert a glDebugMessage into the queue - helpful for debugging
      * with apitrace to annotate the output and correlate it with code.
      */
-    static void debugMsgPrint(const char *pFormat, ...);
+    static void debugMsgPrint(const int nType, const char *pFormat, ...);
     static void debugMsgStream(std::ostringstream const &pStream);
+    static void debugMsgStreamWarn(std::ostringstream const &pStream);
 
     /**
      * checks if the device/driver pair is on our OpenGL blacklist
