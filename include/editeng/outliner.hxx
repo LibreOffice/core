@@ -256,7 +256,7 @@ public:
 
     void        AdjustHeight( long nDY );
 
-    sal_uLong   Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
+    sal_uLong   Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs );
 
     void        InsertText( const OUString& rNew, bool bSelect = false );
     void        InsertText( const OutlinerParaObject& rParaObj );
@@ -307,7 +307,7 @@ public:
     void        SetSelection( const ESelection& );
     void GetSelectionRectangles(std::vector<Rectangle>& rLogicRects) const;
 
-    void        RemoveAttribs( bool bRemoveParaAttribs = false, bool bKeepLanguages = false );
+    void        RemoveAttribs( bool bRemoveParaAttribs, bool bKeepLanguages = false );
     void        RemoveAttribsKeepLanguages( bool bRemoveParaAttribs );
     bool        HasSelection() const;
 
@@ -323,7 +323,7 @@ public:
     void ToggleBulletsNumbering(
         const bool bToggle,
         const bool bHandleBullets,
-        const SvxNumRule* pNumRule = nullptr );
+        const SvxNumRule* pNumRule );
 
     /** apply bullets/numbering for paragraphs
 
@@ -360,7 +360,7 @@ public:
 
     bool        IsCursorAtWrongSpelledWord();
     bool        IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWrong = false );
-    void        ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void>* pCallBack = nullptr );
+    void        ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void>* pCallBack );
 
     void        SetInvalidateMore( sal_uInt16 nPixel );
     sal_uInt16  GetInvalidateMore() const;
@@ -942,7 +942,7 @@ public:
     sal_uLong       GetTextHeight( sal_Int32 nParagraph ) const;
     Point           GetDocPosTopLeft( sal_Int32 nParagraph );
     Point           GetDocPos( const Point& rPaperPos ) const;
-    bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder = 0 );
+    bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder );
     bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder, bool* pbBulletPos );
 
     void            SetGlobalCharStretching( sal_uInt16 nX = 100, sal_uInt16 nY = 100 );

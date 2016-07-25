@@ -51,7 +51,7 @@ namespace drawinglayer
         */
         Primitive2DContainer create2DColorModifierEmbeddingsAsNeeded(
             const Primitive2DContainer& rChildren,
-            GraphicDrawMode aGraphicDrawMode = GRAPHICDRAWMODE_STANDARD,
+            GraphicDrawMode aGraphicDrawMode,
             double fLuminance = 0.0,        // [-1.0 .. 1.0]
             double fContrast = 0.0,         // [-1.0 .. 1.0]
             double fRed = 0.0,              // [-1.0 .. 1.0]

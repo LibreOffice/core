@@ -253,7 +253,7 @@ COMPHELPER_DLLPUBLIC OUString setToken(const OUString& rIn, sal_Int32 nToken, sa
             or -1 if none of the code units occur in the string
  */
 COMPHELPER_DLLPUBLIC sal_Int32 indexOfAny(OUString const& rIn,
-        sal_Unicode const*const pChars, sal_Int32 const nPos = 0);
+        sal_Unicode const*const pChars, sal_Int32 const nPos);
 
 /** Convert a sequence of strings to a single comma separated string.
 

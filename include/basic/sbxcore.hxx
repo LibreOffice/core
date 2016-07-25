@@ -91,7 +91,7 @@ public:
     static void AddFactory( SbxFactory* );
     static void RemoveFactory( SbxFactory* );
 
-    static SbxBase* Create( sal_uInt16, sal_uInt32=SBXCR_SBX );
+    static SbxBase* Create( sal_uInt16, sal_uInt32 );
     static SbxObject* CreateObject( const OUString& );
 };
 

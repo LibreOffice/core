@@ -688,7 +688,7 @@ public:
     sal_uInt32  GetBlibStoreContainerSize( SvStream* pMergePicStreamBSE = nullptr ) const;
     void        WriteBlibStoreContainer( SvStream& rStrm, SvStream* pMergePicStreamBSE = nullptr  );
     void        WriteBlibStoreEntry(SvStream& rStrm, sal_uInt32 nBlipId,
-                    bool bWritePictureOffset, sal_uInt32 nResize = 0);
+                    bool bWritePictureOffset, sal_uInt32 nResize);
     sal_uInt32  GetBlibID(
                     SvStream& rPicOutStream,
                     const OString& rGraphicId,
@@ -1233,7 +1233,7 @@ public:
     void AddChildAnchor( const Rectangle& rRectangle );
     void AddClientAnchor( const Rectangle& rRectangle );
 
-    virtual sal_uInt32 EnterGroup( const OUString& rShapeName, const Rectangle* pBoundRect = nullptr );
+    virtual sal_uInt32 EnterGroup( const OUString& rShapeName, const Rectangle* pBoundRect );
     sal_uInt32  EnterGroup( const Rectangle* pBoundRect = nullptr );
     sal_uInt32  GetGroupLevel() const { return mnGroupLevel; };
     void SetGroupSnapRect( sal_uInt32 nGroupLevel, const Rectangle& rRect );
@@ -1246,7 +1246,7 @@ public:
     virtual void Commit( EscherPropertyContainer& rProps, const Rectangle& rRect);
 
     static sal_uInt32  GetColor( const sal_uInt32 nColor );
-    static sal_uInt32  GetColor( const Color& rColor, bool bSwap = true );
+    static sal_uInt32  GetColor( const Color& rColor, bool bSwap );
 
                 // ...Sdr... implemented in eschesdo.cxx
 

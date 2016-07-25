@@ -115,7 +115,7 @@ public:
 
     inline void   SetTextFirstLineOfst( const short nF, const sal_uInt16 nProp = 100 );
     inline short  GetTextFirstLineOfst() const { return nFirstLineOfst; }
-    inline void SetPropTextFirstLineOfst( const sal_uInt16 nProp = 100 )
+    inline void SetPropTextFirstLineOfst( const sal_uInt16 nProp )
                     { nPropFirstLineOfst = nProp; }
     inline sal_uInt16 GetPropTextFirstLineOfst() const
                     { return nPropFirstLineOfst; }

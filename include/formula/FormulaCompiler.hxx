@@ -317,7 +317,7 @@ protected:
     void NotLine();
     OpCode Expression();
     void PopTokenArray();
-    void PushTokenArray( FormulaTokenArray*, bool = false );
+    void PushTokenArray( FormulaTokenArray*, bool );
 
     bool MergeRangeReference( FormulaToken * * const pCode1, FormulaToken * const * const pCode2 );
 

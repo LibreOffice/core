@@ -75,8 +75,8 @@ private:
 protected:
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = nullptr );
-    void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = nullptr );
+    ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
+    void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton );
     void            RefInputDoneAfter();
 
     void            SetMeText(const OUString& _sText);
@@ -114,9 +114,9 @@ protected:
 protected:
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = nullptr );
-    void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = nullptr );
-    void            RefInputDoneAfter( bool bForced = false );
+    ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
+    void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton );
+    void            RefInputDoneAfter( bool bForced );
 
     void            SetMeText(const OUString& _sText);
     FormulaDlgMode SetMeText(const OUString& _sText, sal_Int32 PrivStart, sal_Int32 PrivEnd, bool bMatrix, bool _bSelect, bool _bUpdate);

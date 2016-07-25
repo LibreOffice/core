@@ -100,7 +100,7 @@ public:
     void SetDefaultPropSet( SvStream& rIn, sal_uInt32 nOffDgg ) const;
     void ApplyAttributes( SvStream& rIn, SfxItemSet& rSet ) const;
     void ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObjData& rObjData ) const;
-    void ImportGradientColor( SfxItemSet& aSet, MSO_FillType eMSO_FillType, double dTrans = 1.0 , double dBackTrans = 1.0 ) const;
+    void ImportGradientColor( SfxItemSet& aSet, MSO_FillType eMSO_FillType, double dTrans, double dBackTrans = 1.0 ) const;
 };
 
 #define COL_DEFAULT RGB_COLORDATA( 0xFA, 0xFB, 0xFC )
@@ -501,13 +501,13 @@ protected:
                                    DffObjData& rData,
                                    void* pData,
                                    Rectangle& rTextRect,
-                                   SdrObject* pObj = nullptr);
+                                   SdrObject* pObj);
 
     /** Object finalization, used by the Excel filter to correctly
         compute the object anchoring after nested objects have been imported.
     */
     virtual SdrObject* FinalizeObj(DffObjData& rData,
-                                   SdrObject* pObj = nullptr);
+                                   SdrObject* pObj);
 
     virtual bool GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const;
 
@@ -555,7 +555,7 @@ public:
 
     static OUString MSDFFReadZString( SvStream& rIn,
                                            sal_uInt32 nMaxLen,
-                                           bool bUniCode = false);
+                                           bool bUniCode);
 
     static bool ReadCommonRecordHeader( SvStream& rSt,
                                         sal_uInt8& rVer,
@@ -661,14 +661,14 @@ public:
                             void* pData,
                             Rectangle& rClientRect,
                             const Rectangle& rGlobalChildRect,
-                            int nCalledByGroup = 0,
+                            int nCalledByGroup,
                             sal_Int32* pShapeId = nullptr );
     SdrObject* ImportShape( const DffRecordHeader& rHd,
                             SvStream& rSt,
                             void* pData,
                             Rectangle& rClientRect,
                             const Rectangle& rGlobalChildRect,
-                            int nCalledByGroup = 0,
+                            int nCalledByGroup,
                             sal_Int32* pShapeId = nullptr);
 
     Rectangle GetGlobalChildAnchor( const DffRecordHeader& rHd,
@@ -724,7 +724,7 @@ public:
         const css::uno::Any& rAny,
         const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
         const OUString& rPropertyName,
-        bool bTestPropertyAvailability = false
+        bool bTestPropertyAvailability
     );
 
     void insertShapeId( sal_Int32 nShapeId, SdrObject* pShape );

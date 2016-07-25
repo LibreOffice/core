@@ -979,12 +979,12 @@ private:
                             DffObjData& rDffObjData,
                             void* pClientData,
                             Rectangle& rTextRect,
-                            SdrObject* pOldSdrObj = nullptr ) override;
+                            SdrObject* pOldSdrObj ) override;
 
     /** Finalize a DFF object, sets anchor after nested objs have been loaded. */
     virtual SdrObject*  FinalizeObj(
                             DffObjData& rDffObjData,
-                            SdrObject* pOldSdrObj = nullptr ) override;
+                            SdrObject* pOldSdrObj ) override;
 
     // virtual functions of SvxMSConvertOCXControls
 

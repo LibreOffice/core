@@ -32,7 +32,7 @@ namespace comphelper
     /** search the given string within the given sequence, return the positions where it was found.
         if _bOnlyFirst is sal_True, only the first occurrence will be returned.
     */
-    COMPHELPER_DLLPUBLIC css::uno::Sequence<sal_Int16> findValue(const css::uno::Sequence< OUString >& _rList, const OUString& _rValue, bool _bOnlyFirst = false);
+    COMPHELPER_DLLPUBLIC css::uno::Sequence<sal_Int16> findValue(const css::uno::Sequence< OUString >& _rList, const OUString& _rValue, bool _bOnlyFirst);
 
     namespace internal
     {
