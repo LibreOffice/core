@@ -844,7 +844,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             {
                                 OUString aComment;
                                 Color aColor;
-                                sal_uInt16 nFlags;
+                                ScScenarioFlags nFlags;
                                 aDocument.GetScenarioData( nTab, aComment, aColor, nFlags );
 
                                 // Determine if the Sheet that the Scenario was created on

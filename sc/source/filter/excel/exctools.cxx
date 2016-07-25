@@ -229,7 +229,10 @@ void ExcScenario::Apply( const XclImpRoot& rRoot, const bool bLast )
 
     r.SetScenario( nNewTab, true );
     // do not show scenario frames
-    r.SetScenarioData( nNewTab, aComment, COL_LIGHTGRAY, /*SC_SCENARIO_SHOWFRAME|*/SC_SCENARIO_COPYALL|(nProtected ? SC_SCENARIO_PROTECT : 0) );
+    const ScScenarioFlags nFlags = ScScenarioFlags::CopyAll
+                                 | (nProtected ? ScScenarioFlags::Protected : ScScenarioFlags::NONE);
+                              /* | ScScenarioFlags::ShowFrame*/
+    r.SetScenarioData( nNewTab, aComment, COL_LIGHTGRAY, nFlags);
 
     std::vector<ExcScenarioCell>::const_iterator iter;
     for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)

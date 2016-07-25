@@ -4320,7 +4320,8 @@ void SAL_CALL ScScenariosObj::addNewByName( const OUString& aName,
         }
 
         Color aColor( COL_LIGHTGRAY );  // Default
-        sal_uInt16 nFlags = SC_SCENARIO_SHOWFRAME | SC_SCENARIO_PRINTFRAME | SC_SCENARIO_TWOWAY | SC_SCENARIO_PROTECT;
+        ScScenarioFlags nFlags = ScScenarioFlags::ShowFrame | ScScenarioFlags::PrintFrame
+                               | ScScenarioFlags::TwoWay    | ScScenarioFlags::Protected;
 
         pDocShell->MakeScenario( nTab, aName, aComment, aColor, nFlags, aMarkData );
     }

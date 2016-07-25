@@ -184,7 +184,7 @@ private:
     ScRangeList*    pScenarioRanges;
     Color           aScenarioColor;
     Color           aTabBgColor;
-    sal_uInt16          nScenarioFlags;
+    ScScenarioFlags nScenarioFlags;
     ScDBData*       pDBDataNoName;
     mutable ScRangeName* mpRangeName;
 
@@ -279,8 +279,8 @@ public:
     void         SetScenarioColor(const Color& rNew)         { aScenarioColor = rNew; }
     const Color& GetTabBgColor() const                       { return aTabBgColor; }
     void         SetTabBgColor(const Color& rColor);
-    sal_uInt16  GetScenarioFlags() const                     { return nScenarioFlags; }
-    void        SetScenarioFlags(sal_uInt16 nNew)            { nScenarioFlags = nNew; }
+    ScScenarioFlags GetScenarioFlags() const                 { return nScenarioFlags; }
+    void        SetScenarioFlags(ScScenarioFlags nNew)       { nScenarioFlags = nNew; }
     void        SetActiveScenario(bool bSet)                 { bActiveScenario = bSet; }
     bool        IsActiveScenario() const                     { return bActiveScenario; }
 
@@ -475,7 +475,7 @@ public:
     void        CopyScenarioFrom( const ScTable* pSrcTab );
     void        CopyScenarioTo( ScTable* pDestTab ) const;
     bool        TestCopyScenarioTo( const ScTable* pDestTab ) const;
-    void        MarkScenarioIn( ScMarkData& rMark, sal_uInt16 nNeededBits ) const;
+    void        MarkScenarioIn(ScMarkData& rMark, ScScenarioFlags nNeededBits) const;
     bool        HasScenarioRange( const ScRange& rRange ) const;
     void        InvalidateScenarioRanges();
     const ScRangeList* GetScenarioRanges() const;

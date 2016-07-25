@@ -2013,15 +2013,15 @@ void ScViewFunc::TabOp( const ScTabOpParam& rParam, bool bRecord )
 }
 
 void ScViewFunc::MakeScenario( const OUString& rName, const OUString& rComment,
-                                    const Color& rColor, sal_uInt16 nFlags )
+                                    const Color& rColor, ScScenarioFlags nFlags )
 {
     ScDocShell* pDocSh  = GetViewData().GetDocShell();
     ScMarkData& rMark   = GetViewData().GetMarkData();
     SCTAB       nTab    = GetViewData().GetTabNo();
 
     SCTAB nNewTab = pDocSh->MakeScenario( nTab, rName, rComment, rColor, nFlags, rMark );
-    if (nFlags & SC_SCENARIO_COPYALL)
-        SetTabNo( nNewTab, true );          // SC_SCENARIO_COPYALL -> visible
+    if (nFlags & ScScenarioFlags::CopyAll)
+        SetTabNo( nNewTab, true );          // ScScenarioFlags::CopyAll -> visible
     else
     {
         SfxBindings& rBindings = GetViewData().GetBindings();
@@ -2253,7 +2253,7 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
                 pUndoDoc->SetScenario( nTab, true );
                 OUString aComment;
                 Color  aColor;
-                sal_uInt16 nScenFlags;
+                ScScenarioFlags nScenFlags;
                 rDoc.GetScenarioData( nTab, aComment, aColor, nScenFlags );
                 pUndoDoc->SetScenarioData( nTab, aComment, aColor, nScenFlags );
                 bool bActive = rDoc.IsActiveScenario( nTab );
@@ -2807,7 +2807,7 @@ void ScViewFunc::MoveTable(
             {
                 OUString aComment;
                 Color  aColor;
-                sal_uInt16 nFlags;
+                ScScenarioFlags nFlags;
 
                 pDoc->GetScenarioData(nMovTab, aComment,aColor, nFlags);
                 pDoc->SetScenario(nDestTab1,true);

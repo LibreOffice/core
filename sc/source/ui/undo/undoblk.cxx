@@ -1594,18 +1594,18 @@ void ScUndoUseScenario::Undo()
         // Flags always
         OUString aComment;
         Color  aColor;
-        sal_uInt16 nScenFlags;
+        ScScenarioFlags nScenFlags;
         pUndoDoc->GetScenarioData( i, aComment, aColor, nScenFlags );
         rDoc.SetScenarioData( i, aComment, aColor, nScenFlags );
         bool bActive = pUndoDoc->IsActiveScenario( i );
         rDoc.SetActiveScenario( i, bActive );
         //  For copy-back scenario also consider content
-        if ( nScenFlags & SC_SCENARIO_TWOWAY )
+        if ( nScenFlags & ScScenarioFlags::TwoWay )
         {
             rDoc.DeleteAreaTab( 0,0, MAXCOL,MAXROW, i, InsertDeleteFlags::ALL );
             pUndoDoc->CopyToDocument( 0,0,i, MAXCOL,MAXROW,i, InsertDeleteFlags::ALL,false, &rDoc );
         }
-        if ( nScenFlags & SC_SCENARIO_SHOWFRAME )
+        if ( nScenFlags & ScScenarioFlags::ShowFrame )
             bFrame = true;
     }
 
