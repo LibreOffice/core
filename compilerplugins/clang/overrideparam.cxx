@@ -144,7 +144,7 @@ bool OverrideParam::hasSameDefaultParams(const ParmVarDecl * parmVarDecl, const 
 {
     // don't know what this means, but it prevents a clang crash
     if (parmVarDecl->hasUninstantiatedDefaultArg() || superParmVarDecl->hasUninstantiatedDefaultArg()) {
-        return false;
+        return true;
     }
     const Expr* defaultArgExpr = parmVarDecl->getDefaultArg();
     const Expr* superDefaultArgExpr = superParmVarDecl->getDefaultArg();
