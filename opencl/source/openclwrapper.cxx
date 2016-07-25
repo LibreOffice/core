@@ -42,6 +42,10 @@
 #define OPENCL_DLL_NAME "libOpenCL.so.1"
 #endif
 
+#ifdef _WIN32_WINNT_WINBLUE
+#include <VersionHelpers.h>
+#endif
+
 #define DEVICE_NAME_LENGTH 1024
 #define DRIVER_VERSION_LENGTH 1024
 #define PLATFORM_VERSION_LENGTH 1024
@@ -455,6 +459,8 @@ void checkDeviceForDoubleSupport(cl_device_id deviceId, bool& bKhrFp64, bool& bA
 bool initOpenCLRunEnv( GPUEnv *gpuInfo )
 {
     OpenCLZone zone;
+    cl_uint nPreferredVectorWidthFloat;
+    char pName[64];
 
     bool bKhrFp64 = false;
     bool bAmdFp64 = false;
@@ -464,11 +470,40 @@ bool initOpenCLRunEnv( GPUEnv *gpuInfo )
     gpuInfo->mnKhrFp64Flag = bKhrFp64;
     gpuInfo->mnAmdFp64Flag = bAmdFp64;
 
-    gpuInfo->mnPreferredVectorWidthFloat = 0;
+    gpuInfo->mbNeedsTDRAvoidance = false;
 
     clGetDeviceInfo(gpuInfo->mpDevID, CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT, sizeof(cl_uint),
-                    &gpuInfo->mnPreferredVectorWidthFloat, nullptr);
-    SAL_INFO("opencl", "CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT=" << gpuInfo->mnPreferredVectorWidthFloat);
+                    &nPreferredVectorWidthFloat, nullptr);
+    SAL_INFO("opencl", "CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT=" << nPreferredVectorWidthFloat);
+
+    clGetPlatformInfo(gpuInfo->mpPlatformID, CL_PLATFORM_NAME, 64,
+             pName, nullptr);
+
+    bool bIsNotWinOrIsWin8OrGreater = true;
+
+// the Win32 SDK 8.1 deprecates GetVersionEx()
+#ifdef _WIN32_WINNT_WINBLUE
+    bIsNotWinOrIsWin8OrGreater = IsWindows8OrGreater();
+#elif defined (_WIN32)
+    OSVERSIONINFO aVersionInfo;
+    memset( &aVersionInfo, 0, sizeof(aVersionInfo) );
+    aVersionInfo.dwOSVersionInfoSize = sizeof( aVersionInfo );
+    if (GetVersionEx( &aVersionInfo ))
+    {
+        // Windows 7 or lower?
+        if (aVersionInfo.dwMajorVersion < 6 ||
+           (aVersionInfo.dwMajorVersion == 6 && aVersionInfo.dwMinorVersion < 2))
+            bIsNotWinOrIsWin8OrGreater = false;
+    }
+#endif
+
+    // Heuristic: Certain old low-end OpenCL implementations don't
+    // work for us with too large group lengths. Looking at the preferred
+    // float vector width seems to be a way to detect these devices, except
+    // the non-working NVIDIA cards on Windows older than version 8.
+    gpuInfo->mbNeedsTDRAvoidance = ( nPreferredVectorWidthFloat == 4 ) ||
+        ( !bIsNotWinOrIsWin8OrGreater &&
+          OUString::createFromAscii(pName).indexOf("NVIDIA") > -1 );
 
     size_t nMaxParameterSize;
     clGetDeviceInfo(gpuInfo->mpDevID, CL_DEVICE_MAX_PARAMETER_SIZE, sizeof(size_t),
