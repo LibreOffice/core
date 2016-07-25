@@ -32,7 +32,7 @@ class CustomAnimationBox : public VclVBox
     bool m_bIsInitialized;
 
 public:
-    CustomAnimationBox(vcl::Window* pParent);
+    explicit CustomAnimationBox(vcl::Window* pParent);
     ~CustomAnimationBox() override;
 
     virtual void dispose() override;

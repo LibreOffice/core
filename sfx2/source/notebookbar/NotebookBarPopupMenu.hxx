@@ -15,7 +15,7 @@
 class NotebookBarPopupMenu : public PopupMenu
 {
 public:
-    NotebookBarPopupMenu(ResId aRes);
+    explicit NotebookBarPopupMenu(ResId aRes);
     void Execute(NotebookBar* pNotebookbar,
                 css::uno::Reference<css::frame::XFrame>& xFrame);
 };

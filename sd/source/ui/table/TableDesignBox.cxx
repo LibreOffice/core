@@ -32,7 +32,7 @@ class TableDesignBox : public VclVBox
     bool m_bIsInitialized;
 
 public:
-    TableDesignBox(vcl::Window* pParent);
+    explicit TableDesignBox(vcl::Window* pParent);
     ~TableDesignBox() override;
 
     virtual void dispose() override;

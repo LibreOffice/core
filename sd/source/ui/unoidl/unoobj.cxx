@@ -1113,7 +1113,7 @@ private:
     SdXShape*   mpShape;
 
 public:
-    SdUnoEventsAccess( SdXShape* pShape ) throw();
+    explicit SdUnoEventsAccess(SdXShape* pShape) throw();
 
     // XNameReplace
     virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;

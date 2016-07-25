@@ -33,7 +33,7 @@ class SlideTransitionBox : public VclVBox
     bool m_bIsInitialized;
 
 public:
-    SlideTransitionBox(vcl::Window* pParent);
+    explicit SlideTransitionBox(vcl::Window* pParent);
     ~SlideTransitionBox() override;
 
     virtual void dispose() override;

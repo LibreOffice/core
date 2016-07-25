@@ -42,7 +42,7 @@ private:
 
 public:
 
-    ElementSelectorUIObject(VclPtr<SmElementsControl> xElementSelector);
+    explicit ElementSelectorUIObject(VclPtr<SmElementsControl> xElementSelector);
 
     virtual StringMap get_state() override;
 

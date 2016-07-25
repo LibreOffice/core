@@ -104,7 +104,7 @@ namespace
         ScDocument& m_rDoc;
         bool m_bUndoEnabled;
     public:
-        DisableUndoGuard(ScDocShell *pDocShell)
+        explicit DisableUndoGuard(ScDocShell *pDocShell)
             : m_rDoc(pDocShell->GetDocument())
             , m_bUndoEnabled(m_rDoc.IsUndoEnabled())
         {

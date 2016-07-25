@@ -146,7 +146,7 @@ extern "C" typedef vcl::Window* (SAL_CALL *FN_SvtCreateWindow)(
 class Pause : public Idle
 {
 public:
-    Pause(sal_Int32 nPauseMilliseconds) :
+    explicit Pause(sal_Int32 nPauseMilliseconds) :
         Idle("pause"),
         m_nPauseMilliseconds(nPauseMilliseconds)
     {

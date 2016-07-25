@@ -38,7 +38,7 @@ private:
     VclPtr<Popup> m_pPopup;
 
 public:
-    DropdownBox(vcl::Window *pParent);
+    explicit DropdownBox(vcl::Window *pParent);
     virtual ~DropdownBox() override;
     virtual void dispose() override;
 

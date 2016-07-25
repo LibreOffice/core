@@ -45,7 +45,7 @@ private:
     std::vector<IPrioritable*> m_aSortedChilds;
 
 public:
-    PriorityHBox(vcl::Window *pParent)
+    explicit PriorityHBox(vcl::Window *pParent)
         : VclHBox(pParent)
         , m_bInitialized(false)
         , m_nNeededWidth(0)

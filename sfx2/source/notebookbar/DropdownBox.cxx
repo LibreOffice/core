@@ -37,7 +37,7 @@ private:
     ScopedVclPtr<DropdownBox> m_pParent;
 
 public:
-    Popup(VclPtr<DropdownBox> pParent)
+    explicit Popup(VclPtr<DropdownBox> pParent)
     : FloatingWindow(pParent, "Popup", "sfx/ui/notebookbarpopup.ui")
     , m_pParent(pParent)
     {

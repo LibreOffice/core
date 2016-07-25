@@ -34,7 +34,7 @@ private:
 
 public:
 
-    UIObjectUnoObj(std::unique_ptr<UIObject> pObj);
+    explicit UIObjectUnoObj(std::unique_ptr<UIObject> pObj);
     virtual ~UIObjectUnoObj();
 
     css::uno::Reference<css::ui::test::XUIObject> SAL_CALL getChild(const OUString& rID)

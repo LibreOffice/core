@@ -664,7 +664,7 @@ private:
     std::shared_ptr<comphelper::ThreadTaskTag>          mpTag;
 
 public:
-    DeflateData(const uno::Reference< frame::XModel >& rXModel)
+    explicit DeflateData(const uno::Reference< frame::XModel >& rXModel)
     :   maXModel(rXModel),
         maPrimitive2DSequence(),
         maRange(),
@@ -712,7 +712,7 @@ class DeflateThread : public comphelper::ThreadTask
     DeflateData&            mrDeflateData;
 
 public:
-    DeflateThread(DeflateData& rDeflateData)
+    explicit DeflateThread(DeflateData& rDeflateData)
     :   comphelper::ThreadTask(rDeflateData.mpTag), mrDeflateData(rDeflateData)
     {
     }
