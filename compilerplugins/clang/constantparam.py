@@ -15,7 +15,7 @@ def normalizeTypeParams( line ):
     return normalizeTypeParamsRegex.sub("type-parameter-?-?", line)
 
 # reading as binary (since we known it is pure ascii) is much faster than reading as unicode
-with io.open(sys.argv[1], "rb", buffering=1024*1024) as txt:
+with io.open("loplugin.constantparam.log", "rb", buffering=1024*1024) as txt:
     for line in txt:
         idx1 = line.find("\t")
         idx2 = line.find("\t",idx1+1)
@@ -57,7 +57,7 @@ def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
 tmp1list.sort(key=lambda v: natural_sort_key(v[2]))
 
 # print out the results
-with open("unused.constantparams", "wt") as f:
+with open("loplugin.constantparams.report", "wt") as f:
     for v in tmp1list:
         f.write(v[2] + "\n")
         f.write("    " + v[0] + "\n")

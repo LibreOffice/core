@@ -24,7 +24,7 @@
  The process goes something like this:
   $ make check
   $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='unuseddefaultparams' check
-  $ ./compilerplugins/clang/unuseddefaultparams.py unuseddefaultparams.log
+  $ ./compilerplugins/clang/unuseddefaultparams.py
 */
 
 namespace {
@@ -66,7 +66,7 @@ public:
         for (const MyFuncInfo & s : callSet)
             output += "call:\t" + s.returnType + "\t" + s.nameAndParams + "\n";
         ofstream myfile;
-        myfile.open( SRCDIR "/unuseddefaultparams.log", ios::app | ios::out);
+        myfile.open( SRCDIR "/loplugin.unuseddefaultparams.log", ios::app | ios::out);
         myfile << output;
         myfile.close();
     }

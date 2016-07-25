@@ -22,7 +22,7 @@ def normalizeTypeParams( line ):
 
 # The parsing here is designed to avoid grabbing stuff which is mixed in from gbuild.
 # I have not yet found a way of suppressing the gbuild output.
-with io.open(sys.argv[1], "rb", buffering=1024*1024) as txt:
+with io.open("loplugin.unuseddefaultparams.log", "rb", buffering=1024*1024) as txt:
     for line in txt:
         if line.startswith("defn:\t"):
             idx1 = line.find("\t",6)
@@ -72,7 +72,7 @@ def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
 tmp1list = sorted(tmp1set, key=lambda v: natural_sort_key(v[1]))
 
 # print out the results
-with open("unused.defaultparams", "wt") as f:
+with open("loplugin.unuseddefaultparams.report", "wt") as f:
     for t in tmp1list:
         f.write(t[1] + "\n")
         f.write("    " + t[0] + "\n")

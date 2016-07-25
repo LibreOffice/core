@@ -7,7 +7,7 @@ definitionSet = set()
 parentChildDict = {}
 definitionToFileDict = {}
 
-with open("mergeclasses.log") as txt:
+with open("loplugin.mergeclasses.log") as txt:
     for line in txt:
     
         if line.startswith("instantiated:\t"):
@@ -54,6 +54,7 @@ def extractModuleName(clazz):
     idx = filename.find("/")
     return filename[:idx]
 
+with open("loplugin.mergeclasses.report", "wt") as f:
 for clazz in sorted(definitionSet - instantiatedSet):
     # find uninstantiated classes without any subclasses
     if (not(clazz in parentChildDict)) or (len(parentChildDict[clazz]) != 1):
@@ -70,5 +71,5 @@ for clazz in sorted(definitionSet - instantiatedSet):
     # exclude combinations that span modules because we often use those to make cross-module dependencies more manageable.
     if extractModuleName(clazz) != extractModuleName(otherclazz):
         continue
-    print "merge", clazz, "with", otherclazz
+    f.write( "merge" + clazz + "with" + otherclazz + "\n" )
 

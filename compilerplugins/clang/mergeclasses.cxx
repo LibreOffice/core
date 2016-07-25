@@ -32,7 +32,7 @@ Then
 The process goes something like this:
   $ make check
   $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='mergeclasses' check
-  $ ./compilerplugins/clang/mergeclasses.py > mergeclasses.results
+  $ ./compilerplugins/clang/mergeclasses.py
 
 FIXME exclude 'static-only' classes, which some people may use/have used instead of a namespace to tie together a bunch of functions
 
@@ -65,7 +65,7 @@ public:
         for (const std::pair<std::string,std::string> & s : definitionMap)
             output += "definition:\t" + s.first + "\t" + s.second + "\n";
         ofstream myfile;
-        myfile.open( SRCDIR "/mergeclasses.log", ios::app | ios::out);
+        myfile.open( SRCDIR "/loplugin.mergeclasses.log", ios::app | ios::out);
         myfile << output;
         myfile.close();
     }

@@ -33,7 +33,7 @@ Be warned that it produces around 15G of log file.
 The process goes something like this:
   $ make check
   $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='unusedmethods' check
-  $ ./compilerplugins/clang/unusedmethods.py unusedmethods.log
+  $ ./compilerplugins/clang/unusedmethods.py
 
 and then
   $ for dir in *; do make FORCE_COMPILE_ALL=1 UPDATE_FILES=$dir COMPILER_PLUGIN_TOOL='unusedmethodsremove' $dir; done
@@ -100,7 +100,7 @@ public:
         for (const MyFuncInfo & s : calledFromOutsideSet)
             output += "outside:\t" + s.returnType + "\t" + s.nameAndParams + "\n";
         ofstream myfile;
-        myfile.open( SRCDIR "/unusedmethods.log", ios::app | ios::out);
+        myfile.open( SRCDIR "/loplugin.unusedmethods.log", ios::app | ios::out);
         myfile << output;
         myfile.close();
     }

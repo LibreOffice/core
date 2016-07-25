@@ -21,7 +21,7 @@
  The process goes something like this:
   $ make check
   $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='constantparam' check
-  $ ./compilerplugins/clang/constantparam.py constantparam.log
+  $ ./compilerplugins/clang/constantparam.py
 */
 
 namespace {
@@ -84,7 +84,7 @@ public:
             output += s.returnType + "\t" + s.nameAndParams + "\t" + s.sourceLocation + "\t"
                         + s.paramName + "\t" + s.callValue + "\n";
         ofstream myfile;
-        myfile.open( SRCDIR "/constantparam.log", ios::app | ios::out);
+        myfile.open( SRCDIR "/loplugin.constantparam.log", ios::app | ios::out);
         myfile << output;
         myfile.close();
     }

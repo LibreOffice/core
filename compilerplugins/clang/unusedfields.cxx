@@ -28,7 +28,7 @@ Be warned that it produces around 5G of log file.
 The process goes something like this:
   $ make check
   $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='unusedfields' check
-  $ ./compilerplugins/clang/unusedfields.py unusedfields.log
+  $ ./compilerplugins/clang/unusedfields.py
 
 and then
   $ for dir in *; do make FORCE_COMPILE_ALL=1 UPDATE_FILES=$dir COMPILER_PLUGIN_TOOL='unusedfieldsremove' $dir; done
@@ -83,7 +83,7 @@ public:
             output += "definition:\t" + s.parentClass + "\t" + s.fieldName + "\t" + s.fieldType + "\t" + s.sourceLocation + "\n";
         }
         ofstream myfile;
-        myfile.open( SRCDIR "/unusedfields.log", ios::app | ios::out);
+        myfile.open( SRCDIR "/loplugin.unusedfields.log", ios::app | ios::out);
         myfile << output;
         myfile.close();
     }

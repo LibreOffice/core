@@ -85,7 +85,7 @@ public:
         for (const MyFieldInfo & s : definitionSet)
             output += "defn:\t" + s.parentClass + "\t" + s.fieldName + "\t" + s.sourceLocation + "\n";
         ofstream myfile;
-        myfile.open( SRCDIR "/singlevalfields.log", ios::app | ios::out);
+        myfile.open( SRCDIR "/loplugin.singlevalfields.log", ios::app | ios::out);
         myfile << output;
         myfile.close();
     }

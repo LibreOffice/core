@@ -23,7 +23,7 @@ def normalizeTypeParams( line ):
 
 # The parsing here is designed to avoid grabbing stuff which is mixed in from gbuild.
 # I have not yet found a way of suppressing the gbuild output.
-with io.open(sys.argv[1], "rb", buffering=1024*1024) as txt:
+with io.open("loplugin.unusedfields.log", "rb", buffering=1024*1024) as txt:
     for line in txt:
         if line.startswith("definition:\t"):
             idx1 = line.find("\t",12)
@@ -141,11 +141,11 @@ tmp1list = sorted(untouchedSet, key=lambda v: natural_sort_key(v[1]))
 tmp2list = sorted(writeonlySet, key=lambda v: natural_sort_key(v[1]))
 
 # print out the results
-with open("unusedfields.untouched", "wt") as f:
+with open("loplugin.unusedfields.report-untouched", "wt") as f:
     for t in tmp1list:
         f.write( t[1] + "\n" )
         f.write( "    " + t[0] + "\n" )
-with open("unusedfields.writeonly", "wt") as f:
+with open("loplugin.unusedfields.report-writeonly", "wt") as f:
     for t in tmp2list:
         f.write( t[1] + "\n" )
         f.write( "    " + t[0] + "\n" )

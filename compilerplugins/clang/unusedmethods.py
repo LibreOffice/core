@@ -133,7 +133,7 @@ def normalizeTypeParams( line ):
 
 # The parsing here is designed to avoid grabbing stuff which is mixed in from gbuild.
 # I have not yet found a way of suppressing the gbuild output.
-with io.open(sys.argv[1], "rb", buffering=1024*1024) as txt:
+with io.open("loplugin.unusedmethods.log", "rb", buffering=1024*1024) as txt:
     for line in txt:
         if line.startswith("definition:\t"):
             idx1 = line.find("\t",12)
@@ -278,7 +278,7 @@ for d in definitionSet:
     tmp1set.add((method, definitionToSourceLocationMap[d]))
 
 # print out the results, sorted by name and line number
-with open("unused.methods", "wt") as f:
+with open("loplugin.unusedmethods.report-methods", "wt") as f:
     for t in sort_set_by_natural_key(tmp1set):
         f.write(t[1] + "\n")
         f.write("    " + t[0] + "\n")
@@ -323,7 +323,7 @@ for d in definitionSet:
     tmp2set.add((method, definitionToSourceLocationMap[d]))
 
 # print output, sorted by name and line number
-with open("unused.returns", "wt") as f:
+with open("loplugin.unusedmethods.report-returns", "wt") as f:
     for t in sort_set_by_natural_key(tmp2set):
         f.write(t[1] + "\n")
         f.write("    " +  t[0] + "\n")
@@ -346,7 +346,7 @@ for d in publicDefinitionSet:
     tmp3set.add((method, definitionToSourceLocationMap[d]))
 
 # print output, sorted by name and line number
-with open("unused.public", "wt") as f:
+with open("loplugin.unusedmethods.report-public", "wt") as f:
     for t in sort_set_by_natural_key(tmp3set):
         f.write(t[1] + "\n")
         f.write("    " + t[0] + "\n")
