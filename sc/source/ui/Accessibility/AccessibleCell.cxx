@@ -602,7 +602,7 @@ bool ScAccessibleCell::IsDropdown()
             SCTAB i;
             ScMarkData aMarks;
             for (i=nTab+1; i<nTabCount && mpDoc->IsScenario(i); i++)
-                mpDoc->MarkScenario( i, nTab, aMarks, false, SC_SCENARIO_SHOWFRAME );
+                mpDoc->MarkScenario( i, nTab, aMarks, false, ScScenarioFlags::ShowFrame );
             ScRangeList aRanges;
             aMarks.FillRangeListWithMarks( &aRanges, false );
             bool bHasScenario;

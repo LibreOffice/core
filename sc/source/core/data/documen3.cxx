@@ -418,7 +418,7 @@ bool ScDocument::IsScenario( SCTAB nTab ) const
 }
 
 void ScDocument::SetScenarioData( SCTAB nTab, const OUString& rComment,
-                                        const Color& rColor, sal_uInt16 nFlags )
+                                        const Color& rColor, ScScenarioFlags nFlags )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->IsScenario())
     {
@@ -449,7 +449,7 @@ bool ScDocument::IsDefaultTabBgColor( SCTAB nTab ) const
 }
 
 void ScDocument::GetScenarioData( SCTAB nTab, OUString& rComment,
-                                        Color& rColor, sal_uInt16& rFlags ) const
+                                        Color& rColor, ScScenarioFlags& rFlags ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->IsScenario())
     {
@@ -459,7 +459,7 @@ void ScDocument::GetScenarioData( SCTAB nTab, OUString& rComment,
     }
 }
 
-void ScDocument::GetScenarioFlags( SCTAB nTab, sal_uInt16& rFlags ) const
+void ScDocument::GetScenarioFlags( SCTAB nTab, ScScenarioFlags& rFlags ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->IsScenario())
         rFlags = maTabs[nTab]->GetScenarioFlags();
@@ -813,7 +813,7 @@ void ScDocument::CopyScenario( SCTAB nSrcTab, SCTAB nDestTab, bool bNewScenario 
                 if (bTouched)
                 {
                     maTabs[nTab]->SetActiveScenario(false);
-                    if ( maTabs[nTab]->GetScenarioFlags() & SC_SCENARIO_TWOWAY )
+                    if ( maTabs[nTab]->GetScenarioFlags() & ScScenarioFlags::TwoWay )
                         maTabs[nTab]->CopyScenarioFrom( maTabs[nDestTab] );
                 }
             }
@@ -832,7 +832,7 @@ void ScDocument::CopyScenario( SCTAB nSrcTab, SCTAB nDestTab, bool bNewScenario 
 }
 
 void ScDocument::MarkScenario( SCTAB nSrcTab, SCTAB nDestTab, ScMarkData& rDestMark,
-                                bool bResetMark, sal_uInt16 nNeededBits ) const
+                                bool bResetMark, ScScenarioFlags nNeededBits ) const
 {
     if (bResetMark)
         rDestMark.ResetMark();

@@ -270,8 +270,8 @@ public:
     void            ShowTable( const std::vector<OUString>& rNames );
     void            HideTable( const ScMarkData& rMark );
 
-    void            MakeScenario( const OUString& rName, const OUString& rComment,
-                                    const Color& rColor, sal_uInt16 nFlags );
+    void            MakeScenario(const OUString& rName, const OUString& rComment,
+                                 const Color& rColor, ScScenarioFlags nFlags);
     void            ExtendScenario();
     void            UseScenario( const OUString& rName );
 

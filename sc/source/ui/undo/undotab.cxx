@@ -331,7 +331,7 @@ void ScUndoDeleteTab::Undo()
                 rDoc.SetScenario( nTab, true );
                 OUString aComment;
                 Color  aColor;
-                sal_uInt16 nScenFlags;
+                ScScenarioFlags nScenFlags;
                 pRefUndoDoc->GetScenarioData( nTab, aComment, aColor, nScenFlags );
                 rDoc.SetScenarioData( nTab, aComment, aColor, nScenFlags );
                 bool bActive = pRefUndoDoc->IsActiveScenario( nTab );
@@ -670,7 +670,7 @@ void ScUndoCopyTab::Redo()
             rDoc.SetScenario(nNewTab, true );
             OUString aComment;
             Color  aColor;
-            sal_uInt16 nScenFlags;
+            ScScenarioFlags nScenFlags;
             rDoc.GetScenarioData(nAdjSource, aComment, aColor, nScenFlags );
             rDoc.SetScenarioData(nNewTab, aComment, aColor, nScenFlags );
             bool bActive = rDoc.IsActiveScenario(nAdjSource);
@@ -776,7 +776,7 @@ bool ScUndoTabColor::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 ScUndoMakeScenario::ScUndoMakeScenario( ScDocShell* pNewDocShell,
                         SCTAB nSrc, SCTAB nDest,
                         const OUString& rN, const OUString& rC,
-                        const Color& rCol, sal_uInt16 nF,
+                        const Color& rCol, ScScenarioFlags nF,
                         const ScMarkData& rMark ) :
     ScSimpleUndo( pNewDocShell ),
     mpMarkData(new ScMarkData(rMark)),
@@ -931,7 +931,7 @@ void ScUndoImportTab::Undo()
                 pRedoDoc->SetScenario(nTabPos, true );
                 OUString aComment;
                 Color  aColor;
-                sal_uInt16 nScenFlags;
+                ScScenarioFlags nScenFlags;
                 rDoc.GetScenarioData(nTabPos, aComment, aColor, nScenFlags );
                 pRedoDoc->SetScenarioData(nTabPos, aComment, aColor, nScenFlags );
                 bool bActive = rDoc.IsActiveScenario(nTabPos);
@@ -986,7 +986,7 @@ void ScUndoImportTab::Redo()
             rDoc.SetScenario(nTabPos, true );
             OUString aComment;
             Color  aColor;
-            sal_uInt16 nScenFlags;
+            ScScenarioFlags nScenFlags;
             pRedoDoc->GetScenarioData(nTabPos, aComment, aColor, nScenFlags );
             rDoc.SetScenarioData(nTabPos, aComment, aColor, nScenFlags );
             bool bActive = pRedoDoc->IsActiveScenario(nTabPos);
@@ -1361,9 +1361,9 @@ OUString ScUndoPrintRange::GetComment() const
     return ScGlobal::GetRscString( STR_UNDO_PRINTRANGES );
 }
 
-ScUndoScenarioFlags::ScUndoScenarioFlags( ScDocShell* pNewDocShell, SCTAB nT,
+ScUndoScenarioFlags::ScUndoScenarioFlags(ScDocShell* pNewDocShell, SCTAB nT,
                     const OUString& rON, const OUString& rNN, const OUString& rOC, const OUString& rNC,
-                    const Color& rOCol, const Color& rNCol, sal_uInt16 nOF, sal_uInt16 nNF ) :
+                    const Color& rOCol, const Color& rNCol, ScScenarioFlags nOF, ScScenarioFlags nNF) :
     ScSimpleUndo( pNewDocShell ),
     nTab        ( nT ),
     aOldName    ( rON ),
@@ -1372,8 +1372,8 @@ ScUndoScenarioFlags::ScUndoScenarioFlags( ScDocShell* pNewDocShell, SCTAB nT,
     aNewComment ( rNC ),
     aOldColor   ( rOCol ),
     aNewColor   ( rNCol ),
-    nOldFlags   ( nOF ),
-    nNewFlags   ( nNF )
+    nOldFlags   (nOF),
+    nNewFlags   (nNF)
 {
 }
 

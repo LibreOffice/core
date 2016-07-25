@@ -27,6 +27,8 @@
 #include <svtools/svmedit.hxx>
 #include <svtools/ctrlbox.hxx>
 
+enum class ScScenarioFlags;
+
 class ScNewScenarioDlg : public ModalDialog
 {
 public:
@@ -34,10 +36,10 @@ public:
     virtual ~ScNewScenarioDlg();
     virtual void dispose() override;
     void SetScenarioData( const OUString& rName, const OUString& rComment,
-                          const Color& rColor, sal_uInt16 nFlags );
+                          const Color& rColor, ScScenarioFlags nFlags );
 
-    void GetScenarioData( OUString& rName, OUString& rComment,
-                          Color& rColor, sal_uInt16& rFlags ) const;
+    void GetScenarioData(OUString& rName, OUString& rComment,
+                          Color& rColor, ScScenarioFlags &rFlags) const;
 
 private:
     VclPtr<Edit>               m_pEdName;

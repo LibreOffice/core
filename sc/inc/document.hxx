@@ -825,14 +825,14 @@ public:
     SC_DLLPUBLIC bool           IsNegativePage( SCTAB nTab ) const;
     SC_DLLPUBLIC void           SetScenario( SCTAB nTab, bool bFlag );
     SC_DLLPUBLIC bool           IsScenario( SCTAB nTab ) const;
-    SC_DLLPUBLIC void GetScenarioData( SCTAB nTab, OUString& rComment,
-                                       Color& rColor, sal_uInt16& rFlags ) const;
-    SC_DLLPUBLIC void           SetScenarioData( SCTAB nTab, const OUString& rComment,
-                                        const Color& rColor, sal_uInt16 nFlags );
+    SC_DLLPUBLIC void           GetScenarioData(SCTAB nTab, OUString& rComment,
+                                                Color& rColor, ScScenarioFlags &rFlags) const;
+    SC_DLLPUBLIC void           SetScenarioData(SCTAB nTab, const OUString& rComment,
+                                          const Color& rColor, ScScenarioFlags nFlags);
     SC_DLLPUBLIC Color GetTabBgColor( SCTAB nTab ) const;
     SC_DLLPUBLIC void SetTabBgColor( SCTAB nTab, const Color& rColor );
     SC_DLLPUBLIC bool IsDefaultTabBgColor( SCTAB nTab ) const;
-    void            GetScenarioFlags( SCTAB nTab, sal_uInt16& rFlags ) const;
+    void                        GetScenarioFlags(SCTAB nTab, ScScenarioFlags &rFlags) const;
     SC_DLLPUBLIC bool           IsActiveScenario( SCTAB nTab ) const;
     SC_DLLPUBLIC void           SetActiveScenario( SCTAB nTab, bool bActive );      // only for Undo etc.
     SC_DLLPUBLIC formula::FormulaGrammar::AddressConvention GetAddressConvention() const;
@@ -1502,9 +1502,9 @@ public:
 
     void            CopyScenario( SCTAB nSrcTab, SCTAB nDestTab, bool bNewScenario = false );
     bool            TestCopyScenario( SCTAB nSrcTab, SCTAB nDestTab ) const;
-    void            MarkScenario( SCTAB nSrcTab, SCTAB nDestTab,
-                                    ScMarkData& rDestMark, bool bResetMark = true,
-                                    sal_uInt16 nNeededBits = 0 ) const;
+    void            MarkScenario(SCTAB nSrcTab, SCTAB nDestTab,
+                                ScMarkData& rDestMark, bool bResetMark = true,
+                                ScScenarioFlags nNeededBits = ScScenarioFlags::NONE) const;
     bool            HasScenarioRange( SCTAB nTab, const ScRange& rRange ) const;
     SC_DLLPUBLIC const ScRangeList* GetScenarioRanges( SCTAB nTab ) const;
 

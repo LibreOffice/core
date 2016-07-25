@@ -133,17 +133,17 @@ void ScXMLTableScenarioContext::EndElement()
     if (pDoc)
     {
         pDoc->SetScenario( nCurrTable, true );
-        sal_uInt16 nFlags( 0 );
+        ScScenarioFlags nFlags( ScScenarioFlags::NONE );
         if( bDisplayBorder )
-            nFlags |= SC_SCENARIO_SHOWFRAME;
+            nFlags |= ScScenarioFlags::ShowFrame;
         if( bCopyBack )
-            nFlags |= SC_SCENARIO_TWOWAY;
+            nFlags |= ScScenarioFlags::TwoWay;
         if( bCopyStyles )
-            nFlags |= SC_SCENARIO_ATTRIB;
+            nFlags |= ScScenarioFlags::Attrib;
         if( !bCopyFormulas )
-            nFlags |= SC_SCENARIO_VALUE;
+            nFlags |= ScScenarioFlags::Value;
         if( bProtected )
-            nFlags |= SC_SCENARIO_PROTECT;
+            nFlags |= ScScenarioFlags::Protected;
         pDoc->SetScenarioData( nCurrTable, OUString( sComment ), aBorderColor, nFlags );
         for( size_t i = 0; i < aScenarioRanges.size(); ++i )
         {

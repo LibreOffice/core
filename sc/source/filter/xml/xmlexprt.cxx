@@ -3905,20 +3905,20 @@ void ScXMLExport::WriteScenario()
     {
         OUString sComment;
         Color       aColor;
-        sal_uInt16  nFlags;
+        ScScenarioFlags nFlags;
         pDoc->GetScenarioData(static_cast<SCTAB>(nCurrentTable), sComment, aColor, nFlags);
-        if (!(nFlags & SC_SCENARIO_SHOWFRAME))
+        if (!(nFlags & ScScenarioFlags::ShowFrame))
             AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_BORDER, XML_FALSE);
         OUStringBuffer aBuffer;
         ::sax::Converter::convertColor(aBuffer, aColor.GetColor());
         AddAttribute(XML_NAMESPACE_TABLE, XML_BORDER_COLOR, aBuffer.makeStringAndClear());
-        if (!(nFlags & SC_SCENARIO_TWOWAY))
+        if (!(nFlags & ScScenarioFlags::TwoWay))
             AddAttribute(XML_NAMESPACE_TABLE, XML_COPY_BACK, XML_FALSE);
-        if (!(nFlags & SC_SCENARIO_ATTRIB))
+        if (!(nFlags & ScScenarioFlags::Attrib))
             AddAttribute(XML_NAMESPACE_TABLE, XML_COPY_STYLES, XML_FALSE);
-        if (nFlags & SC_SCENARIO_VALUE)
+        if (nFlags & ScScenarioFlags::Value)
             AddAttribute(XML_NAMESPACE_TABLE, XML_COPY_FORMULAS, XML_FALSE);
-        if (nFlags & SC_SCENARIO_PROTECT)
+        if (nFlags & ScScenarioFlags::Protected)
             AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TRUE);
         ::sax::Converter::convertBool(aBuffer,
                 pDoc->IsActiveScenario(static_cast<SCTAB>(nCurrentTable)));

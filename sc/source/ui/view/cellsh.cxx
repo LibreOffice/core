@@ -839,7 +839,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     if ( !pDoc->IsScenario(nTab) )
                     {
                         OUString aStr;
-                        sal_uInt16 nFlags;
+                        ScScenarioFlags nFlags;
                         SCTAB nScTab = nTab + 1;
                         bool bSheetProtected = pDoc->IsTabProtected(nTab);
 
@@ -850,14 +850,14 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                             pDoc->GetScenarioData( nScTab, aStr, aDummyCol, nFlags );
                             aList.push_back(aStr);
                             // Protection is sal_True if both Sheet and Scenario are protected
-                            aList.push_back((bSheetProtected && (nFlags & SC_SCENARIO_PROTECT)) ? OUString("1") : OUString("0"));
+                            aList.push_back((bSheetProtected && (nFlags & ScScenarioFlags::Protected)) ? OUString("1") : OUString("0"));
                             ++nScTab;
                         }
                     }
                     else
                     {
                         OUString aComment;
-                        sal_uInt16  nDummyFlags;
+                        ScScenarioFlags nDummyFlags;
                         pDoc->GetScenarioData( nTab, aComment, aDummyCol, nDummyFlags );
                         OSL_ENSURE( aList.empty(), "List not empty!" );
                         aList.push_back(aComment);

@@ -206,14 +206,20 @@ enum class ScEnterMode {
                                         //  step = 10pt, max. indention = 100 steps
 #define SC_INDENT_STEP      200
 
-                                        //  scenario flags
-#define SC_SCENARIO_COPYALL     1
-#define SC_SCENARIO_SHOWFRAME   2
-#define SC_SCENARIO_PRINTFRAME  4
-#define SC_SCENARIO_TWOWAY      8
-#define SC_SCENARIO_ATTRIB      16
-#define SC_SCENARIO_VALUE       32
-#define SC_SCENARIO_PROTECT     64
+enum class ScScenarioFlags{             //  scenario flags
+    NONE       = 0,
+    CopyAll    = 1,
+    ShowFrame  = 2,
+    PrintFrame = 4,
+    TwoWay     = 8,
+    Attrib     = 16,
+    Value      = 32,
+    Protected  = 64
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ScScenarioFlags> : is_typed_flags<ScScenarioFlags, 127> {};
+}
 
 #define SUBTOTAL_IGN_NESTED_ST_AG  0x08
 #define SUBTOTAL_IGN_ERR_VAL       0x04
