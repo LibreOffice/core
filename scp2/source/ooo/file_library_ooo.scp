@@ -1643,7 +1643,9 @@ SPECIAL_LIB_FILE( gid_File_Lib_AVMediaWin, avmediawin )
 #ifdef BUNDLE_NSS_LIBS
 
 STD_LIB_FILE( gid_File_Lib_Freebl3, freebl3)
+#ifdef LINUX
 STD_LIB_FILE( gid_File_Lib_Freeblpriv3, freeblpriv3)
+#endif
 STD_LIB_FILE( gid_File_Lib_Nspr4, nspr4)
 STD_LIB_FILE( gid_File_Lib_Nss3, nss3)
 STD_LIB_FILE( gid_File_Lib_Nsckbi, nssckbi)
