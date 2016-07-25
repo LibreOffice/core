@@ -1,0 +1,80 @@
+#!/usr/bin/python
+
+import sys
+import re
+import io
+
+definitionToSourceLocationMap = dict()
+callDict = dict()
+
+# clang does not always use exactly the same numbers in the type-parameter vars it generates
+# so I need to substitute them to ensure we can match correctly.
+normalizeTypeParamsRegex = re.compile(r"type-parameter-\d+-\d+")
+def normalizeTypeParams( line ):
+    return normalizeTypeParamsRegex.sub("type-parameter-?-?", line)
+
+# The parsing here is designed to avoid grabbing stuff which is mixed in from gbuild.
+# I have not yet found a way of suppressing the gbuild output.
+with io.open("loplugin.countusersofdefaultparams.log", "rb", buffering=1024*1024) as txt:
+    for line in txt:
+        if line.startswith("defn:\t"):
+            tokens = line.strip().split("\t")
+            access = tokens[1]
+            returnType = tokens[2]
+            nameAndParams = tokens[3]
+            sourceLocation = tokens[4]
+            funcInfo = normalizeTypeParams(returnType) + " " + normalizeTypeParams(nameAndParams)
+            definitionToSourceLocationMap[funcInfo] = sourceLocation
+            if not funcInfo in callDict:
+                callDict[funcInfo] = set()
+        elif line.startswith("call:\t"):
+            tokens = line.strip().split("\t")
+            returnType = tokens[1]
+            nameAndParams = tokens[2]
+            sourceLocationOfCall = tokens[3]
+            funcInfo = normalizeTypeParams(returnType) + " " + normalizeTypeParams(nameAndParams)
+            if not funcInfo in callDict:
+                callDict[funcInfo] = set()
+            callDict[funcInfo].add(sourceLocationOfCall)
+
+# Invert the definitionToSourceLocationMap.
+sourceLocationToDefinitionMap = {}
+for k, v in definitionToSourceLocationMap.iteritems():
+    sourceLocationToDefinitionMap[v] = sourceLocationToDefinitionMap.get(v, [])
+    sourceLocationToDefinitionMap[v].append(k)
+
+    
+tmp1list = list()
+for k,v in callDict.iteritems():
+    if len(v) >= 1:
+        continue
+    # created by macros
+    if k.endswith("::RegisterInterface(class SfxModule *)"):
+        continue
+    if k.endswith("::RegisterChildWindow(_Bool,class SfxModule *,enum SfxChildWindowFlags)"):
+        continue
+    if k.endswith("::RegisterControl(unsigned short,class SfxModule *)"):
+        continue
+    if k.endswith("::RegisterFactory(unsigned short)"):
+        continue
+    # windows-only stuff
+    if "ShutdownIcon::OpenURL" in k:
+        continue
+    if k in definitionToSourceLocationMap:
+        tmp1list.append((k, definitionToSourceLocationMap[k]))
+
+# sort the results using a "natural order" so sequences like [item1,item2,item10] sort nicely
+def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
+    return [int(text) if text.isdigit() else text.lower()
+            for text in re.split(_nsre, s)]
+
+# sort results by name and line number
+tmp1list.sort(key=lambda v: natural_sort_key(v[1]))
+
+# print out the results
+with open("loplugin.countusersofdefaultparams.report", "wt") as f:
+    for t in tmp1list:
+        f.write(t[1] + "\n")
+        f.write("    " + t[0] + "\n")
+
+

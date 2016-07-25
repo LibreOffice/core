@@ -471,7 +471,7 @@ public:
     PptFontEntityAtom*  GetFontEnityAtom( sal_uInt32 nNum ) const;
     void                RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic& rGraph );
     virtual SdrObject*  ReadObjText( PPTTextObj* pTextObj, SdrObject* pObj, SdPageCapsule pPage ) const;
-    virtual SdrObject*  ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj = nullptr ) override;
+    virtual SdrObject*  ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj ) override;
     virtual void        ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, void* pData, DffObjData& rObj ) override;
     void                ImportHeaderFooterContainer( DffRecordHeader& rHeader, HeaderFooterEntry& rEntry );
 };
@@ -560,8 +560,8 @@ protected:
 protected:
     using SdrEscherImport::ReadObjText;
 
-    bool                    SeekToAktPage(DffRecordHeader* pRecHd=nullptr) const;
-    bool                    SeekToDocument(DffRecordHeader* pRecHd=nullptr) const;
+    bool                    SeekToAktPage(DffRecordHeader* pRecHd) const;
+    bool                    SeekToDocument(DffRecordHeader* pRecHd) const;
     static bool             SeekToContentOfProgTag(
                                 sal_Int32 nVersion,
                                 SvStream& rSt,
@@ -619,7 +619,7 @@ public:
                                 PptPageKind ePageKind = PPT_SLIDEPAGE
                             ) const;
 
-    void                    ImportPage( SdrPage* pPage, const PptSlidePersistEntry* pMasterPersist = nullptr );
+    void                    ImportPage( SdrPage* pPage, const PptSlidePersistEntry* pMasterPersist );
     virtual bool            GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const override;
     virtual bool            SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const override;
     virtual const PptSlideLayoutAtom*   GetSlideLayoutAtom() const override;
@@ -1294,7 +1294,7 @@ public:
         mpPPTImporter           ( pPPTImporter )
     {};
     bool ReadOCXStream( tools::SvRef<SotStorage>& rSrc1,
-        css::uno::Reference<css::drawing::XShape > *pShapeRef=nullptr );
+        css::uno::Reference<css::drawing::XShape > *pShapeRef );
     virtual bool InsertControl(
         const css::uno::Reference< css::form::XFormComponent > &rFComp,
         const css::awt::Size& rSize,

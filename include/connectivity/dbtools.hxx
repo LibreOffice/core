@@ -332,7 +332,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     bool isDataSourcePropertyEnabled(const css::uno::Reference< css::uno::XInterface>& _xProp,
                                      const OUString& _sProperty,
-                                           bool _bDefault = false);
+                                           bool _bDefault);
 
     /** retrieves a particular indirect data source setting
 
@@ -509,7 +509,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS OUString createUniqueName(
         const css::uno::Sequence< OUString >& _rNames,
         const OUString& _rBaseName,
-        bool _bStartWithNumber = true
+        bool _bStartWithNumber
     );
 
     /** create a name which is a valid SQL 92 identifier name
@@ -590,7 +590,7 @@ namespace dbtools
                             sal_Int32 parameterIndex,
                             const ::connectivity::ORowSetValue& x,
                             sal_Int32 sqlType,
-                            sal_Int32 scale=0) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+                            sal_Int32 scale) throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
 
     /** implements <method scope="com.sun.star.sdb">XParameters::setObject</method>
@@ -622,7 +622,7 @@ namespace dbtools
     OUString createStandardCreateStatement(  const css::uno::Reference< css::beans::XPropertySet >& descriptor,
                                                     const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
                                                     ISQLStatementHelper* _pHelper,
-                                                    const OUString& _sCreatePattern = OUString());
+                                                    const OUString& _sCreatePattern);
 
     /** creates the standard sql statement for the key part of a create table statement.
         @param  descriptor
@@ -704,7 +704,7 @@ namespace dbtools
                                 const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
                                 const OUString& _rName,
                                 bool _bCase,
-                                bool _bQueryForInfo = true,
+                                bool _bQueryForInfo,
                                 bool _bIsAutoIncrement = false,
                                 bool _bIsCurrency = false,
                                 sal_Int32 _nDataType = css::sdbc::DataType::OTHER);

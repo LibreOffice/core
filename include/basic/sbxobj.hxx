@@ -78,7 +78,7 @@ public:
     SbxArray* GetProperties()   { return pProps;    }
     SbxArray* GetObjects()      { return pObjs;     }
     // Debugging
-    void Dump( SvStream&, bool bDumpAll=false );
+    void Dump( SvStream&, bool bDumpAll );
 };
 
 #endif // INCLUDED_BASIC_SBXOBJ_HXX

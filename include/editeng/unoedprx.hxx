@@ -147,7 +147,7 @@ public:
     SvxAccessibleTextAdapter*                   GetTextForwarderAdapter(); // covariant return types don't work on MSVC
     virtual SvxViewForwarder*                   GetViewForwarder() override;
     virtual SvxEditViewForwarder*               GetEditViewForwarder( bool bCreate = false ) override;
-    SvxAccessibleTextEditViewAdapter*           GetEditViewForwarderAdapter( bool bCreate = false ); // covariant return types don't work on MSVC
+    SvxAccessibleTextEditViewAdapter*           GetEditViewForwarderAdapter( bool bCreate ); // covariant return types don't work on MSVC
     virtual void                                UpdateData() override;
     virtual SfxBroadcaster&                     GetBroadcaster() const override;
 

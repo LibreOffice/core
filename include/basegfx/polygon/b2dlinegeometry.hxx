@@ -74,7 +74,7 @@ namespace basegfx
             const B2DPolyPolygon& rArrow,
             bool bStart,
             double fWidth,
-            double fCandidateLength = 0.0, // 0.0 -> calculate self
+            double fCandidateLength, // 0.0 -> calculate self
             double fDockingPosition = 0.5, // 0->top, 1->bottom
             double* pConsumedLength = nullptr,
             double fShift = 0.0);
@@ -132,7 +132,7 @@ namespace basegfx
         BASEGFX_DLLPUBLIC B2DPolyPolygon createAreaGeometry(
             const B2DPolygon& rCandidate,
             double fHalfLineWidth,
-            B2DLineJoin eJoin = B2DLineJoin::Round,
+            B2DLineJoin eJoin,
             css::drawing::LineCap eCap = css::drawing::LineCap_BUTT,
             double fMaxAllowedAngle = (12.5 * F_PI180),
             double fMaxPartOfEdge = 0.4,
