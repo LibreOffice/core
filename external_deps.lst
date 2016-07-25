@@ -26,9 +26,7 @@
 
 # The primary fallback site.
 # OOO_EXTRAS=http://ooo-extras.apache-extras.org.codespot.com/files/
-# OOO_EXTRAS=http://sourceforge.net/projects/oooextras.mirror/files/
-# Use a specific mirror to avoid HTTPS redirections.
-OOO_EXTRAS=http://pilotfiber.dl.sourceforge.net/project/oooextras.mirror/
+OOO_EXTRAS=http://sourceforge.net/projects/oooextras.mirror/files/
 
 # Must not fallback to svn
 # SVN_TRUNK=http://svn.apache.org/repos/asf/!svn/bc/1336449/incubator/ooo/trunk/ext_sources/
@@ -315,7 +313,7 @@ if (ENABLE_CATEGORY_B==YES && SOLAR_JAVA==TRUE && ENABLE_JAVASCRIPT==YES)
 if (ENABLE_CATEGORY_B==YES && ENABLE_NSS_MODULE==YES)
     MD5 = 4ec9a36c0f7c9360b149491c013b8d50
     name = nss-3.25-with-nspr-4.12.tar.gz
-    URL1 = http://ftp.mozilla.org/pub/security/nss/releases/NSS_3_25_RTM/src/$(name)
+    URL1 = https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_25_RTM/src/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && SYSTEM_SAXON!=YES && DISABLE_SAXON!=YES && SOLAR_JAVA==TRUE)
