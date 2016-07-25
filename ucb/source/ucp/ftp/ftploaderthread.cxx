@@ -71,7 +71,7 @@ FTPLoaderThread::~FTPLoaderThread() {
 
 
 CURL* FTPLoaderThread::handle() {
-    CURL* ret = osl_getThreadKeyData(m_threadKey);
+    CURL* ret = static_cast<CURL*>(osl_getThreadKeyData(m_threadKey));
     if(!ret) {
         ret = curl_easy_init();
         if (ret != nullptr) {
