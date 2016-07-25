@@ -1150,15 +1150,15 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                 nIndexPre = PreviousKeyword(i);
                 nIndexNex = NextKeyword(i);
                 cChar = PreviousChar(i);
-                if ( nIndexPre == NF_KEY_H  || nIndexPre == NF_KEY_HH       // H | HH before M
-                  || nIndexNex == NF_KEY_S  || nIndexNex == NF_KEY_SS       // S | SS after M
-                  || ( (nIndexPre == NF_KEY_S ||  nIndexPre == NF_KEY_SS)   // S | SS before M tdf#95339
-                      && nIndexNex != NF_KEY_D  && nIndexNex != NF_KEY_DD && nIndexNex != NF_KEY_DDD && nIndexNex != NF_KEY_DDDD
-                      && nIndexNex != NF_KEY_YY && nIndexNex != NF_KEY_YYYY ) // except if day or year after M tdf#101096
-                  || ( (nIndexNex == NF_KEY_H   || nIndexNex == NF_KEY_HH ) // H | HH after M tdf#95339
-                      && nIndexPre != NF_KEY_D  && nIndexPre != NF_KEY_DD && nIndexPre != NF_KEY_DDD && nIndexPre != NF_KEY_DDDD
-                      && nIndexPre != NF_KEY_YY && nIndexPre != NF_KEY_YYYY ) // except if day or year before M tdf#101096
-                  || cChar == '['  )                                        // [M
+                if (nIndexPre == NF_KEY_H   ||      // H
+                    nIndexPre == NF_KEY_HH  ||      // HH
+                    nIndexPre == NF_KEY_S   ||      // S before M tdf#95339
+                    nIndexPre == NF_KEY_SS  ||      // SS
+                    nIndexNex == NF_KEY_H   ||      // H after M tdf#95339
+                    nIndexNex == NF_KEY_HH  ||      // HH
+                    nIndexNex == NF_KEY_S   ||      // S
+                    nIndexNex == NF_KEY_SS  ||      // SS
+                    cChar == '['  )                 // [M
                 {
                     eNewType = css::util::NumberFormat::TIME;
                     nTypeArray[i] -= 2;             // 6 -> 4, 7 -> 5
