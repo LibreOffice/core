@@ -82,7 +82,7 @@ public:
 
     ~XMLAutoStylePoolParent();
 
-    bool Add( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek = false );
+    bool Add( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek );
 
     bool AddNamed( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, const OUString& rName );
 
@@ -151,7 +151,7 @@ public:
 
     void AddFamily( sal_Int32 nFamily, const OUString& rStrName,
         const rtl::Reference < SvXMLExportPropertyMapper > & rMapper,
-        const OUString& rStrPrefix, bool bAsFamily = true );
+        const OUString& rStrPrefix, bool bAsFamily );
     void SetFamilyPropSetMapper( sal_Int32 nFamily,
         const rtl::Reference < SvXMLExportPropertyMapper > & rMapper );
     void RegisterName( sal_Int32 nFamily, const OUString& rName );

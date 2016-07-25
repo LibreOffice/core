@@ -75,7 +75,7 @@ private:
 
     bool            writeFeatureList( osl::File* pFile, const JobData&, bool bDocumentSetup );
     bool            writeSetup( osl::File* pFile, const JobData& );
-    bool            writePageSetup( osl::File* pFile, const JobData&, bool bWriteFeatures = true );
+    bool            writePageSetup( osl::File* pFile, const JobData&, bool bWriteFeatures );
     static void     writeJobPatch( osl::File* File, const JobData& );
     static bool     writeProlog (osl::File* pFile, const JobData& );
 

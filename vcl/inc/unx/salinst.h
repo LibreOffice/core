@@ -51,7 +51,7 @@ public:
     virtual SalFrame*           CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
     virtual void                DestroyFrame( SalFrame* pFrame ) override;
 
-    virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true ) override;
+    virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow ) override;
     virtual void                DestroyObject( SalObject* pObject ) override;
 
     /// Gtk vclplug needs to pass GtkSalGraphics to X11SalVirtualDevice, so create it, and pass as pNewGraphics.

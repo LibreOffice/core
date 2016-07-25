@@ -229,7 +229,7 @@ public:
                     ImplSalBitmapCache();
                     ~ImplSalBitmapCache();
 
-    void            ImplAdd( X11SalBitmap* pBmp, sal_uIntPtr nMemSize = 0UL );
+    void            ImplAdd( X11SalBitmap* pBmp, sal_uIntPtr nMemSize );
     void            ImplRemove( X11SalBitmap* pBmp );
     void            ImplClear();
 };
