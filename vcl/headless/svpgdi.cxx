@@ -684,10 +684,7 @@ void SvpSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
     cairo_t* cr = getCairoContext(false);
     clipRegion(cr);
 
-    bool bAA = getAntiAliasB2DDraw();
-
-    cairo_set_antialias(cr, bAA ? CAIRO_ANTIALIAS_DEFAULT : CAIRO_ANTIALIAS_NONE);
-    AddPolygonToPath(cr, aPoly, aPoly.isClosed(), !bAA, true);
+    AddPolygonToPath(cr, aPoly, aPoly.isClosed(), !getAntiAliasB2DDraw(), true);
 
     applyColor(cr, m_aLineColor);
 
@@ -769,7 +766,6 @@ bool SvpSalGraphics::drawPolyLine(
     cairo_set_line_width(cr, rLineWidths.getX());
     cairo_set_miter_limit(cr, fMiterLimit);
 
-    cairo_set_antialias(cr, getAntiAliasB2DDraw() ? CAIRO_ANTIALIAS_DEFAULT : CAIRO_ANTIALIAS_NONE);
 
     basegfx::B2DRange extents(0, 0, 0, 0);
 
@@ -1286,6 +1282,7 @@ cairo_t* SvpSalGraphics::getCairoContext(bool bXorModeAllowed) const
         cr = cairo_create(m_pSurface);
     cairo_set_line_width(cr, 1);
     cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
+    cairo_set_antialias(cr, getAntiAliasB2DDraw() ? CAIRO_ANTIALIAS_DEFAULT : CAIRO_ANTIALIAS_NONE);
     if (m_ePaintMode == INVERT)
         cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
     else
