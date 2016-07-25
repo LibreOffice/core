@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_a68d877d",
+        "filename": "sc/inc/global.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-25T06:17:39Z",
+      "side": 1,
+      "message": "we normally use NONE for this one. Probably best to stick to that convention.\n\n(We can\u0027t use \"None\" because it conflicts with a #define in the X11 headers)",
+      "revId": "26233e02cf97a14c4fb1cc2b846014b4dcdc459f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
