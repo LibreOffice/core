@@ -2357,12 +2357,12 @@ String RID_SVXSTR_NOTRECOVYET
 
 String RID_SVXSTR_RECOVERY_INPROGRESS
 {
-    Text[ en-US ] = "%PRODUCTNAME %PRODUCTVERSION will start to recover your documents. Depending on the size of the documents this process can take some time." ;
+    Text[ en-US ] = "%PRODUCTNAME %PRODUCTVERSION has begun recovering your documents. Depending on the size of the documents this process can take some time." ;
 };
 
 String RID_SVXSTR_RECOVERYONLY_FINISH_DESCR
 {
-    Text[ en-US ] = "Recovery of your documents was finished.\nClick 'Finish' to see your documents.";
+    Text[ en-US ] = "Recovery of your documents was finished. Click 'Finish' to see your documents.";
 };
 
 String RID_SVXSTR_RECOVERYONLY_FINISH
