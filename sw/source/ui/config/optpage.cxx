@@ -1090,28 +1090,28 @@ void SwStdFontTabPage::PageCreated( const SfxAllItemSet& aSet)
 
 SwTableOptionsTabPage::SwTableOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, "OptTablePage", "modules/swriter/ui/opttablepage.ui", &rSet),
-    pWrtShell(nullptr),
-    bHTMLMode(false)
+    m_pWrtShell(nullptr),
+    m_bHTMLMode(false)
 {
-    get(pHeaderCB,"header");
-    get(pRepeatHeaderCB,"repeatheader");
-    get(pDontSplitCB,"dontsplit");
-    get(pBorderCB,"border");
-    get(pNumFormattingCB,"numformatting");
-    get(pNumFormatFormattingCB,"numfmtformatting");
-    get(pNumAlignmentCB,"numalignment");
-    get(pRowMoveMF,"rowmove");
-    get(pColMoveMF,"colmove");
-    get(pRowInsertMF,"rowinsert");
-    get(pColInsertMF,"colinsert");
-    get(pFixRB,"fix");
-    get(pFixPropRB,"fixprop");
-    get(pVarRB,"var");
+    get(m_pHeaderCB,"header");
+    get(m_pRepeatHeaderCB,"repeatheader");
+    get(m_pDontSplitCB,"dontsplit");
+    get(m_pBorderCB,"border");
+    get(m_pNumFormattingCB,"numformatting");
+    get(m_pNumFormatFormattingCB,"numfmtformatting");
+    get(m_pNumAlignmentCB,"numalignment");
+    get(m_pRowMoveMF,"rowmove");
+    get(m_pColMoveMF,"colmove");
+    get(m_pRowInsertMF,"rowinsert");
+    get(m_pColInsertMF,"colinsert");
+    get(m_pFixRB,"fix");
+    get(m_pFixPropRB,"fixprop");
+    get(m_pVarRB,"var");
 
     Link<Button*,void> aLnk(LINK(this, SwTableOptionsTabPage, CheckBoxHdl));
-    pNumFormattingCB->SetClickHdl(aLnk);
-    pNumFormatFormattingCB->SetClickHdl(aLnk);
-    pHeaderCB->SetClickHdl(aLnk);
+    m_pNumFormattingCB->SetClickHdl(aLnk);
+    m_pNumFormatFormattingCB->SetClickHdl(aLnk);
+    m_pHeaderCB->SetClickHdl(aLnk);
 }
 
 SwTableOptionsTabPage::~SwTableOptionsTabPage()
@@ -1121,20 +1121,20 @@ SwTableOptionsTabPage::~SwTableOptionsTabPage()
 
 void SwTableOptionsTabPage::dispose()
 {
-    pHeaderCB.clear();
-    pRepeatHeaderCB.clear();
-    pDontSplitCB.clear();
-    pBorderCB.clear();
-    pNumFormattingCB.clear();
-    pNumFormatFormattingCB.clear();
-    pNumAlignmentCB.clear();
-    pRowMoveMF.clear();
-    pColMoveMF.clear();
-    pRowInsertMF.clear();
-    pColInsertMF.clear();
-    pFixRB.clear();
-    pFixPropRB.clear();
-    pVarRB.clear();
+    m_pHeaderCB.clear();
+    m_pRepeatHeaderCB.clear();
+    m_pDontSplitCB.clear();
+    m_pBorderCB.clear();
+    m_pNumFormattingCB.clear();
+    m_pNumFormatFormattingCB.clear();
+    m_pNumAlignmentCB.clear();
+    m_pRowMoveMF.clear();
+    m_pColMoveMF.clear();
+    m_pRowInsertMF.clear();
+    m_pColInsertMF.clear();
+    m_pFixRB.clear();
+    m_pFixPropRB.clear();
+    m_pVarRB.clear();
     SfxTabPage::dispose();
 }
 
@@ -1149,22 +1149,22 @@ bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
     bool bRet = false;
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
-    if(pRowMoveMF->IsModified())
-        pModOpt->SetTableHMove( (sal_uInt16)pRowMoveMF->Denormalize( pRowMoveMF->GetValue(FUNIT_TWIP)));
+    if(m_pRowMoveMF->IsModified())
+        pModOpt->SetTableHMove( (sal_uInt16)m_pRowMoveMF->Denormalize( m_pRowMoveMF->GetValue(FUNIT_TWIP)));
 
-    if(pColMoveMF->IsModified())
-        pModOpt->SetTableVMove( (sal_uInt16)pColMoveMF->Denormalize( pColMoveMF->GetValue(FUNIT_TWIP)));
+    if(m_pColMoveMF->IsModified())
+        pModOpt->SetTableVMove( (sal_uInt16)m_pColMoveMF->Denormalize( m_pColMoveMF->GetValue(FUNIT_TWIP)));
 
-    if(pRowInsertMF->IsModified())
-        pModOpt->SetTableHInsert((sal_uInt16)pRowInsertMF->Denormalize( pRowInsertMF->GetValue(FUNIT_TWIP)));
+    if(m_pRowInsertMF->IsModified())
+        pModOpt->SetTableHInsert((sal_uInt16)m_pRowInsertMF->Denormalize( m_pRowInsertMF->GetValue(FUNIT_TWIP)));
 
-    if(pColInsertMF->IsModified())
-        pModOpt->SetTableVInsert((sal_uInt16)pColInsertMF->Denormalize( pColInsertMF->GetValue(FUNIT_TWIP)));
+    if(m_pColInsertMF->IsModified())
+        pModOpt->SetTableVInsert((sal_uInt16)m_pColInsertMF->Denormalize( m_pColInsertMF->GetValue(FUNIT_TWIP)));
 
     TableChgMode eMode;
-    if(pFixRB->IsChecked())
+    if(m_pFixRB->IsChecked())
         eMode = TBLFIX_CHGABS;
-    else if(pFixPropRB->IsChecked())
+    else if(m_pFixPropRB->IsChecked())
         eMode = TBLFIX_CHGPROP;
     else
         eMode = TBLVAR_CHGABS;
@@ -1173,16 +1173,16 @@ bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
         pModOpt->SetTableMode(eMode);
         // the table-keyboard-mode has changed, now the current
         // table should know about that too.
-        if(pWrtShell && nsSelectionType::SEL_TBL & pWrtShell->GetSelectionType())
+        if(m_pWrtShell && nsSelectionType::SEL_TBL & m_pWrtShell->GetSelectionType())
         {
-            pWrtShell->SetTableChgMode(eMode);
+            m_pWrtShell->SetTableChgMode(eMode);
             static sal_uInt16 aInva[] =
                                 {   FN_TABLE_MODE_FIX,
                                     FN_TABLE_MODE_FIX_PROP,
                                     FN_TABLE_MODE_VARIABLE,
                                     0
                                 };
-            pWrtShell->GetView().GetViewFrame()->GetBindings().Invalidate( aInva );
+            m_pWrtShell->GetView().GetViewFrame()->GetBindings().Invalidate( aInva );
         }
 
         bRet = true;
@@ -1190,41 +1190,41 @@ bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
 
     SwInsertTableOptions aInsOpts( 0, 0 );
 
-    if (pHeaderCB->IsChecked())
+    if (m_pHeaderCB->IsChecked())
         aInsOpts.mnInsMode |= tabopts::HEADLINE;
 
-    if (pRepeatHeaderCB->IsEnabled() )
-        aInsOpts.mnRowsToRepeat = pRepeatHeaderCB->IsChecked()? 1 : 0;
+    if (m_pRepeatHeaderCB->IsEnabled() )
+        aInsOpts.mnRowsToRepeat = m_pRepeatHeaderCB->IsChecked()? 1 : 0;
 
-    if (!pDontSplitCB->IsChecked())
+    if (!m_pDontSplitCB->IsChecked())
         aInsOpts.mnInsMode |= tabopts::SPLIT_LAYOUT;
 
-    if (pBorderCB->IsChecked())
+    if (m_pBorderCB->IsChecked())
         aInsOpts.mnInsMode |= tabopts::DEFAULT_BORDER;
 
-    if (pHeaderCB->IsValueChangedFromSaved() ||
-        pRepeatHeaderCB->IsValueChangedFromSaved() ||
-        pDontSplitCB->IsValueChangedFromSaved() ||
-        pBorderCB->IsValueChangedFromSaved())
+    if (m_pHeaderCB->IsValueChangedFromSaved() ||
+        m_pRepeatHeaderCB->IsValueChangedFromSaved() ||
+        m_pDontSplitCB->IsValueChangedFromSaved() ||
+        m_pBorderCB->IsValueChangedFromSaved())
     {
-        pModOpt->SetInsTableFlags(bHTMLMode, aInsOpts);
+        pModOpt->SetInsTableFlags(m_bHTMLMode, aInsOpts);
     }
 
-    if (pNumFormattingCB->IsValueChangedFromSaved())
+    if (m_pNumFormattingCB->IsValueChangedFromSaved())
     {
-        pModOpt->SetInsTableFormatNum(bHTMLMode, pNumFormattingCB->IsChecked());
+        pModOpt->SetInsTableFormatNum(m_bHTMLMode, m_pNumFormattingCB->IsChecked());
         bRet = true;
     }
 
-    if (pNumFormatFormattingCB->IsValueChangedFromSaved())
+    if (m_pNumFormatFormattingCB->IsValueChangedFromSaved())
     {
-        pModOpt->SetInsTableChangeNumFormat(bHTMLMode, pNumFormatFormattingCB->IsChecked());
+        pModOpt->SetInsTableChangeNumFormat(m_bHTMLMode, m_pNumFormatFormattingCB->IsChecked());
         bRet = true;
     }
 
-    if (pNumAlignmentCB->IsValueChangedFromSaved())
+    if (m_pNumAlignmentCB->IsValueChangedFromSaved())
     {
-        pModOpt->SetInsTableAlignNum(bHTMLMode, pNumAlignmentCB->IsChecked());
+        pModOpt->SetInsTableAlignNum(m_bHTMLMode, m_pNumAlignmentCB->IsChecked());
         bRet = true;
     }
 
@@ -1238,64 +1238,64 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
     {
         const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(rSet->Get( SID_ATTR_METRIC ));
         FieldUnit eFieldUnit = (FieldUnit)rItem.GetValue();
-        ::SetFieldUnit( *pRowMoveMF, eFieldUnit );
-        ::SetFieldUnit( *pColMoveMF, eFieldUnit );
-        ::SetFieldUnit( *pRowInsertMF, eFieldUnit );
-        ::SetFieldUnit( *pColInsertMF, eFieldUnit );
+        ::SetFieldUnit( *m_pRowMoveMF, eFieldUnit );
+        ::SetFieldUnit( *m_pColMoveMF, eFieldUnit );
+        ::SetFieldUnit( *m_pRowInsertMF, eFieldUnit );
+        ::SetFieldUnit( *m_pColInsertMF, eFieldUnit );
     }
 
-    pRowMoveMF->SetValue(pRowMoveMF->Normalize(pModOpt->GetTableHMove()), FUNIT_TWIP);
-    pColMoveMF->SetValue(pColMoveMF->Normalize(pModOpt->GetTableVMove()), FUNIT_TWIP);
-    pRowInsertMF->SetValue(pRowInsertMF->Normalize(pModOpt->GetTableHInsert()), FUNIT_TWIP);
-    pColInsertMF->SetValue(pColInsertMF->Normalize(pModOpt->GetTableVInsert()), FUNIT_TWIP);
+    m_pRowMoveMF->SetValue(m_pRowMoveMF->Normalize(pModOpt->GetTableHMove()), FUNIT_TWIP);
+    m_pColMoveMF->SetValue(m_pColMoveMF->Normalize(pModOpt->GetTableVMove()), FUNIT_TWIP);
+    m_pRowInsertMF->SetValue(m_pRowInsertMF->Normalize(pModOpt->GetTableHInsert()), FUNIT_TWIP);
+    m_pColInsertMF->SetValue(m_pColInsertMF->Normalize(pModOpt->GetTableVInsert()), FUNIT_TWIP);
 
     switch(pModOpt->GetTableMode())
     {
-        case TBLFIX_CHGABS:     pFixRB->Check();     break;
-        case TBLFIX_CHGPROP:    pFixPropRB->Check(); break;
-        case TBLVAR_CHGABS:     pVarRB->Check(); break;
+        case TBLFIX_CHGABS:     m_pFixRB->Check();     break;
+        case TBLFIX_CHGPROP:    m_pFixPropRB->Check(); break;
+        case TBLVAR_CHGABS:     m_pVarRB->Check(); break;
     }
     const SfxPoolItem* pItem;
     if(SfxItemState::SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem))
     {
-        bHTMLMode = 0 != (static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON);
+        m_bHTMLMode = 0 != (static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON);
     }
 
     // hide certain controls for html
-    if(bHTMLMode)
+    if(m_bHTMLMode)
     {
-        pRepeatHeaderCB->Hide();
-        pDontSplitCB->Hide();
+        m_pRepeatHeaderCB->Hide();
+        m_pDontSplitCB->Hide();
     }
 
-    SwInsertTableOptions aInsOpts = pModOpt->GetInsTableFlags(bHTMLMode);
+    SwInsertTableOptions aInsOpts = pModOpt->GetInsTableFlags(m_bHTMLMode);
     const sal_uInt16 nInsTableFlags = aInsOpts.mnInsMode;
 
-    pHeaderCB->Check(0 != (nInsTableFlags & tabopts::HEADLINE));
-    pRepeatHeaderCB->Check((!bHTMLMode) && (aInsOpts.mnRowsToRepeat > 0));
-    pDontSplitCB->Check(!(nInsTableFlags & tabopts::SPLIT_LAYOUT));
-    pBorderCB->Check(0 != (nInsTableFlags & tabopts::DEFAULT_BORDER));
+    m_pHeaderCB->Check(0 != (nInsTableFlags & tabopts::HEADLINE));
+    m_pRepeatHeaderCB->Check((!m_bHTMLMode) && (aInsOpts.mnRowsToRepeat > 0));
+    m_pDontSplitCB->Check(!(nInsTableFlags & tabopts::SPLIT_LAYOUT));
+    m_pBorderCB->Check(0 != (nInsTableFlags & tabopts::DEFAULT_BORDER));
 
-    pNumFormattingCB->Check(pModOpt->IsInsTableFormatNum(bHTMLMode));
-    pNumFormatFormattingCB->Check(pModOpt->IsInsTableChangeNumFormat(bHTMLMode));
-    pNumAlignmentCB->Check(pModOpt->IsInsTableAlignNum(bHTMLMode));
+    m_pNumFormattingCB->Check(pModOpt->IsInsTableFormatNum(m_bHTMLMode));
+    m_pNumFormatFormattingCB->Check(pModOpt->IsInsTableChangeNumFormat(m_bHTMLMode));
+    m_pNumAlignmentCB->Check(pModOpt->IsInsTableAlignNum(m_bHTMLMode));
 
-    pHeaderCB->SaveValue();
-    pRepeatHeaderCB->SaveValue();
-    pDontSplitCB->SaveValue();
-    pBorderCB->SaveValue();
-    pNumFormattingCB->SaveValue();
-    pNumFormatFormattingCB->SaveValue();
-    pNumAlignmentCB->SaveValue();
+    m_pHeaderCB->SaveValue();
+    m_pRepeatHeaderCB->SaveValue();
+    m_pDontSplitCB->SaveValue();
+    m_pBorderCB->SaveValue();
+    m_pNumFormattingCB->SaveValue();
+    m_pNumFormatFormattingCB->SaveValue();
+    m_pNumAlignmentCB->SaveValue();
 
     CheckBoxHdl(nullptr);
 }
 
 IMPL_LINK_NOARG_TYPED(SwTableOptionsTabPage, CheckBoxHdl, Button*, void)
 {
-    pNumFormatFormattingCB->Enable(pNumFormattingCB->IsChecked());
-    pNumAlignmentCB->Enable(pNumFormattingCB->IsChecked());
-    pRepeatHeaderCB->Enable(pHeaderCB->IsChecked());
+    m_pNumFormatFormattingCB->Enable(m_pNumFormattingCB->IsChecked());
+    m_pNumAlignmentCB->Enable(m_pNumFormattingCB->IsChecked());
+    m_pRepeatHeaderCB->Enable(m_pHeaderCB->IsChecked());
 }
 
 void SwTableOptionsTabPage::PageCreated( const SfxAllItemSet& aSet)

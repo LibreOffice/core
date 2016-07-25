@@ -196,27 +196,27 @@ public:
 
 class SwTableOptionsTabPage : public SfxTabPage
 {
-    VclPtr<CheckBox>    pHeaderCB;
-    VclPtr<CheckBox>    pRepeatHeaderCB;
-    VclPtr<CheckBox>    pDontSplitCB;
-    VclPtr<CheckBox>    pBorderCB;
+    VclPtr<CheckBox>    m_pHeaderCB;
+    VclPtr<CheckBox>    m_pRepeatHeaderCB;
+    VclPtr<CheckBox>    m_pDontSplitCB;
+    VclPtr<CheckBox>    m_pBorderCB;
 
-    VclPtr<CheckBox>    pNumFormattingCB;
-    VclPtr<CheckBox>    pNumFormatFormattingCB;
-    VclPtr<CheckBox>    pNumAlignmentCB;
+    VclPtr<CheckBox>    m_pNumFormattingCB;
+    VclPtr<CheckBox>    m_pNumFormatFormattingCB;
+    VclPtr<CheckBox>    m_pNumAlignmentCB;
 
-    VclPtr<MetricField> pRowMoveMF;
-    VclPtr<MetricField> pColMoveMF;
+    VclPtr<MetricField> m_pRowMoveMF;
+    VclPtr<MetricField> m_pColMoveMF;
 
-    VclPtr<MetricField> pRowInsertMF;
-    VclPtr<MetricField> pColInsertMF;
+    VclPtr<MetricField> m_pRowInsertMF;
+    VclPtr<MetricField> m_pColInsertMF;
 
-    VclPtr<RadioButton> pFixRB;
-    VclPtr<RadioButton> pFixPropRB;
-    VclPtr<RadioButton> pVarRB;
+    VclPtr<RadioButton> m_pFixRB;
+    VclPtr<RadioButton> m_pFixPropRB;
+    VclPtr<RadioButton> m_pVarRB;
 
-    SwWrtShell* pWrtShell;
-    bool        bHTMLMode;
+    SwWrtShell* m_pWrtShell;
+    bool        m_bHTMLMode;
 
     DECL_LINK_TYPED(CheckBoxHdl, Button*, void);
 
@@ -230,7 +230,7 @@ public:
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
 
-    void SetWrtShell(SwWrtShell* pSh) { pWrtShell = pSh; }
+    void SetWrtShell(SwWrtShell* pSh) { m_pWrtShell = pSh; }
     virtual void PageCreated( const SfxAllItemSet& aSet) override;
 
 };
