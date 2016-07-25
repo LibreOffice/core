@@ -1036,9 +1036,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
             // formatted text is only in Writer
             if(bSWriter || bTextOnly)
             {
-                OUString sEntry(rDouble.sShort);
-                sEntry += "\t";
-                sEntry += rDouble.sLong;
+                OUString sEntry = rDouble.sShort + "\t" + rDouble.sLong;
                 SvTreeListEntry* pEntry = m_pReplaceTLB->InsertEntry(sEntry);
                 m_pTextOnlyCB->Check(bTextOnly);
                 if(!bTextOnly)
@@ -1064,9 +1062,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
             // formatted text is only in Writer
             if(bSWriter || bTextOnly)
             {
-                OUString sEntry(pWordPtr->GetShort());
-                sEntry += "\t";
-                sEntry += pWordPtr->GetLong();
+                OUString sEntry = pWordPtr->GetShort() + "\t" + pWordPtr->GetLong();
                 SvTreeListEntry* pEntry = m_pReplaceTLB->InsertEntry(sEntry);
                 m_pTextOnlyCB->Check(pWordPtr->IsTextOnly());
                 if(!bTextOnly)
@@ -1246,8 +1242,7 @@ bool OfaAutocorrReplacePage::NewDelHdl(void* pBtn)
             NewEntry(m_pShortED->GetText(), m_pReplaceED->GetText(), bKeepSourceFormatting);
             m_pReplaceTLB->SetUpdateMode(false);
             sal_uLong nPos = TREELIST_ENTRY_NOTFOUND;
-            sEntry += "\t";
-            sEntry += m_pReplaceED->GetText();
+            sEntry += "\t" + m_pReplaceED->GetText();
             if(_pNewEntry)
             {
                 nPos = m_pReplaceTLB->GetModel()->GetAbsPos(_pNewEntry);
@@ -1867,10 +1862,8 @@ OfaQuoteTabPage::OfaQuoteTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
         m_pSwCheckLB->SetStyle(m_pSwCheckLB->GetStyle() | WB_HSCROLL| WB_VSCROLL);
 
         m_pSwCheckLB->SvSimpleTable::SetTabs(aStaticTabs);
-        OUString sHeader(get<vcl::Window>("m")->GetText());
-        sHeader += "\t";
-        sHeader += get<vcl::Window>("t")->GetText();
-        sHeader += "\t";
+        OUString sHeader = get<vcl::Window>("m")->GetText() + "\t"
+                         + get<vcl::Window>("t")->GetText() + "\t";
         m_pSwCheckLB->InsertHeaderEntry( sHeader, HEADERBAR_APPEND,
                         HeaderBarItemBits::CENTER | HeaderBarItemBits::VCENTER | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED);
         m_pCheckLB->Hide();

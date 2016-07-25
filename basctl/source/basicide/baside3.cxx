@@ -763,9 +763,7 @@ void DialogWindow::SaveDialog()
                 aURLObj.removeSegment();
                 OUString aURL( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
                 bool bReadOnly = false;
-                OUString aComment( "# " );
-                aComment += aDialogName;
-                aComment += " strings" ;
+                OUString aComment = "# " + aDialogName + " strings" ;
                 Reference< task::XInteractionHandler > xDummyHandler;
 
                 // Remove old properties files in case of overwriting Dialog files

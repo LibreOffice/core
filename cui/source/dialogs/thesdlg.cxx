@@ -546,9 +546,7 @@ void SvxThesaurusDialog::SetWindowTitle( LanguageType nLanguage )
     sal_Int32 nIndex = aStr.indexOf( '(' );
     if( nIndex != -1 )
         aStr = aStr.copy( 0, nIndex - 1 );
-    aStr += " (";
-    aStr += SvtLanguageTable::GetLanguageString( nLanguage );
-    aStr += ")";
+    aStr += " (" + SvtLanguageTable::GetLanguageString( nLanguage ) + ")";
     SetText( aStr );    // set window title
 }
 

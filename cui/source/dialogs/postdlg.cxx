@@ -142,9 +142,7 @@ void SvxPostItDialog::dispose()
 
 void SvxPostItDialog::ShowLastAuthor(const OUString& rAuthor, const OUString& rDate)
 {
-    OUString sTxt( rAuthor );
-    sTxt += ", ";
-    sTxt += rDate;
+    OUString sTxt = rAuthor  + ", " + rDate;
     m_pLastEditFT->SetText( sTxt );
 }
 
@@ -189,13 +187,9 @@ IMPL_LINK_NOARG_TYPED(SvxPostItDialog, Stamp, Button*, void)
 
     if ( !aTmp.isEmpty() )
     {
-        aStr += aTmp;
-        aStr += ", ";
+        aStr += aTmp + ", ";
     }
-    aStr += rLocaleWrapper.getDate(aDate);
-    aStr += ", ";
-    aStr += rLocaleWrapper.getTime(aTime, false);
-    aStr += " ----\n";
+    aStr += rLocaleWrapper.getDate(aDate) + ", " + rLocaleWrapper.getTime(aTime, false) + " ----\n";
 
     aStr = convertLineEnd(aStr, GetSystemLineEnd());
 

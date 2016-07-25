@@ -532,8 +532,7 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
         sal_uLong nPos = GetLBInsertPos( aStr );
         if(pEntry[i]->isNegative())
         {
-            aStr += "\t";
-            aStr += pEntry[i]->getReplacementText();
+            aStr += "\t" + pEntry[i]->getReplacementText();
         }
         pWordsLB->InsertEntry(aStr, nullptr, false, nPos == TREELIST_ENTRY_NOTFOUND ?  TREELIST_APPEND : nPos);
     }
@@ -643,8 +642,7 @@ bool SvxEditDictionaryDialog::NewDelHdl(void* pBtn)
 
             if(pReplaceFT->IsVisible())
             {
-                sEntry += "\t";
-                sEntry += aReplaceStr;
+                sEntry += "\t" + aReplaceStr;
             }
 
             SvTreeListEntry* pNewEntry = nullptr;

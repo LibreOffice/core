@@ -105,11 +105,7 @@ OUString ConvertToUIName_Impl( SvxMacro *pMacro )
         aEntry = aName.getToken( nCount-1, '.' );
         if ( nCount > 2 )
         {
-            aEntry += "(";
-            aEntry += aName.getToken( 0, '.' );
-            aEntry += ".";
-            aEntry += aName.getToken( nCount-2, '.' );
-            aEntry += ")";
+            aEntry += "(" + aName.getToken( 0, '.' ) + "." + aName.getToken( nCount-2, '.' ) + ")";
         }
         return aEntry;
     }
@@ -172,8 +168,7 @@ void SfxMacroTabPage::dispose()
 
 void SfxMacroTabPage::AddEvent( const OUString & rEventName, sal_uInt16 nEventId )
 {
-    OUString sTmp( rEventName );
-    sTmp += "\t";
+    OUString sTmp = rEventName  + "\t";
 
     // if the table is valid already
     SvxMacro* pM = aTbl.Get( nEventId );

@@ -572,9 +572,9 @@ IMPL_LINK_NOARG_TYPED(GalleryIdDialog, ClickOkHdl, Button*, void)
         {
             OUString aStr( CUI_RES( RID_SVXSTR_GALLERY_ID_EXISTS ) );
 
-            aStr += " (";
-            aStr += pInfo->GetThemeName();
-            aStr += ")";
+            aStr += " ("
+                 + pInfo->GetThemeName()
+                 + ")";
 
             ScopedVclPtrInstance< InfoBox > aBox( this, aStr );
             aBox->Execute();
@@ -831,9 +831,9 @@ OUString TPGalleryThemeProperties::addExtension( const OUString& _rDisplayText, 
 
     if ( sRet.indexOf( sAllFilter ) == -1 )
     {
-        sRet += sOpenBracket;
-        sRet += _rExtension;
-        sRet += sCloseBracket;
+        sRet += sOpenBracket
+             + _rExtension
+             + sCloseBracket;
     }
     return sRet;
 }

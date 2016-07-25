@@ -380,8 +380,7 @@ Sequence< OUString > lcl_getExplicitSimpleCategories(
                     if( !aAddText.isEmpty() )
                     {
                         if(!aText.isEmpty())
-                            aText += " ";
-                        aText += aAddText;
+                            aText += " " + aAddText;
                     }
                 }
             }

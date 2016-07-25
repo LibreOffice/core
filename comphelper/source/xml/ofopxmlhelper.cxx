@@ -98,8 +98,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > ReadRelationsInfoSequence(
         const uno::Reference< uno::XComponentContext >& rContext )
     throw( uno::Exception )
 {
-    OUString aStringID = "_rels/";
-    aStringID += aStreamName;
+    OUString aStringID = "_rels/" + aStreamName;
     return ReadSequence_Impl( xInStream, aStringID, RELATIONINFO_FORMAT, rContext );
 }
 

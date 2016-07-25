@@ -1424,8 +1424,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
         for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
         {
             OUString aElementName = pNames[ i ];
-            OUString aStreamName = aElementName;
-            aStreamName += ".xml";
+            OUString aStreamName = aElementName + ".xml";
 
             if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
             {
@@ -1578,8 +1577,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
     uno::Reference< io::XStream > xInfoStream;
     if( bStorage )
     {
-        OUString aStreamName( maInfoFileName );
-        aStreamName += "-lb.xml";
+        OUString aStreamName = maInfoFileName + "-lb.xml";
 
         try
         {
@@ -1681,8 +1679,7 @@ bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
     OUString aLibInfoPath;
     if( bStorage )
     {
-        aLibInfoPath = maInfoFileName;
-        aLibInfoPath += "-lb.xml";
+        aLibInfoPath = maInfoFileName + "-lb.xml";
 
         try
         {
@@ -2100,9 +2097,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     uno::Reference< io::XStream > xInfoStream;
     if( bStorage )
     {
-        OUString aStreamName( maInfoFileName );
-        aStreamName += "-lc.xml";
-
+        OUString aStreamName = maInfoFileName + "-lc.xml";
         try
         {
             xInfoStream = xTargetLibrariesStor->openStreamElement( aStreamName, embed::ElementModes::READWRITE );
@@ -2447,9 +2442,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
             {
                 uno::Reference< io::XStream > xElementStream;
 
-                aFile = aElementName;
-                aFile += ".xml";
-
+                aFile = aElementName + ".xml";
                 try
                 {
                     xElementStream = xLibraryStor->openStreamElement( aFile, embed::ElementModes::READ );
@@ -2460,9 +2453,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                 if( !xElementStream.is() )
                 {
                     // Check for EA2 document version with wrong extensions
-                    aFile = aElementName;
-                    aFile += ".";
-                    aFile += maLibElementFileExtension;
+                    aFile = aElementName + "." + maLibElementFileExtension;
                     try
                     {
                         xElementStream = xLibraryStor->openStreamElement( aFile, embed::ElementModes::READ );

@@ -320,11 +320,8 @@ OUString AboutDialog::GetVersionString()
 
 OUString AboutDialog::GetCopyrightString()
 {
-    OUString aCopyrightString = m_aVendorTextStr;
-    aCopyrightString += "\n";
-
-    aCopyrightString += m_aCopyrightTextStr;
-    aCopyrightString += "\n";
+    OUString aCopyrightString   = m_aVendorTextStr + "\n"
+                                + m_aCopyrightTextStr + "\n";
 
     if (utl::ConfigManager::getProductName() == "LibreOffice")
         aCopyrightString += m_aBasedTextStr;

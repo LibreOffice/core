@@ -2163,9 +2163,7 @@ void SvxConfigPage::AddSubMenusToUI(
 
         if ( pEntryData->IsPopup() )
         {
-            OUString subMenuTitle( rBaseTitle );
-            subMenuTitle += aMenuSeparatorStr;
-            subMenuTitle += stripHotKey( pEntryData->GetName() );
+            OUString subMenuTitle = rBaseTitle  + aMenuSeparatorStr + stripHotKey( pEntryData->GetName() );
 
             const sal_Int32 nPos = m_pTopLevelListBox->InsertEntry( subMenuTitle );
             m_pTopLevelListBox->SetEntryData( nPos, pEntryData );
@@ -5429,8 +5427,7 @@ void SvxIconSelectorDialog::ImportGraphics(
               fPath = rPaths[0].copy(8) + "/";
         for ( sal_Int32 i = 0; i < rejectedCount; ++i )
         {
-            message += fPath + rejected[i];
-            message += newLine;
+            message += fPath + rejected[i] + newLine;
         }
 
         ScopedVclPtrInstance< SvxIconChangeDialog > aDialog(this, message);

@@ -244,8 +244,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
 
             if ( aURL.getBase().getLength() > 18 )
             {
-                aString += aURL.getBase().copy( 0, 15 );
-                aString += "...";
+                aString += aURL.getBase().copy( 0, 15 ) + "...";
             }
             else
                 aString += aURL.getBase();
@@ -703,8 +702,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickLoadHdl_Impl, Button*, void)
 
                 if ( aURL.getBase().getLength() > 18 )
                 {
-                    aString += aURL.getBase().copy( 0, 15 );
-                    aString += "...";
+                    aString += aURL.getBase().copy( 0, 15 ) + "...";
                 }
                 else
                     aString += aURL.getBase();
@@ -787,8 +785,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickSaveHdl_Impl, Button*, void)
 
             if ( aURL.getBase().getLength() > 18 )
             {
-                aString += aURL.getBase().copy( 0, 15 );
-                aString += "...";
+                aString += aURL.getBase().copy( 0, 15 ) + "...";
             }
             else
                 aString += aURL.getBase();

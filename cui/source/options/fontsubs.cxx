@@ -371,9 +371,7 @@ void SvxFontSubstTabPage::CheckEnable()
 
         SvTreeListEntry* pEntry = m_pCheckLB->FirstSelected();
 
-        OUString sEntry = m_pFont1CB->GetText();
-        sEntry += "\t";
-        sEntry += m_pFont2CB->GetText();
+        OUString sEntry = m_pFont1CB->GetText() + "\t" + m_pFont2CB->GetText();
 
         // because of OS/2 optimization error (Bug #56267) a bit more intricate:
         if (m_pFont1CB->GetText().isEmpty() || m_pFont2CB->GetText().isEmpty())
