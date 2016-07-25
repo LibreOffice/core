@@ -18,12 +18,11 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="next">
-                <property name="label" translatable="yes">_Start</property>
+              <object class="GtkButton" id="cancel">
+                <property name="label" translatable="yes">_Discard</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
-                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
               </object>
@@ -34,11 +33,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="cancel">
-                <property name="label" translatable="yes">_Discard</property>
+              <object class="GtkButton" id="next">
+                <property name="label" translatable="yes">_Start</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
               </object>
@@ -69,14 +69,12 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="row_spacing">24</property>
+                <property name="row_spacing">10</property>
                 <child>
                   <object class="GtkLabel" id="desc">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Press 'Start' to start the recovery process of the documents listed below.
-
-Press 'Discard' to abandon attempting recovery of these documents.</property>
+                    <property name="label" translatable="yes">We are deeply sorry but LibreOffice crashed the last time it ran. We will attempt to recover the files that were being modified before the crash. Please press the 'Start' button to begin the recovery process, or press the 'Discard' button to cancel the recovery.</property>
                     <property name="wrap">True</property>
                     <property name="max_width_chars">87</property>
                     <property name="xalign">0</property>
@@ -170,21 +168,6 @@ Press 'Discard' to abandon attempting recovery of these documents.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="row_spacing">6</property>
-                    <child>
-                      <object class="GtkLabel" id="label3">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Recovering document:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">progress</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
                     <child>
                       <object class="GtkHBox" id="progress">
                         <property name="visible">True</property>
@@ -196,7 +179,7 @@ Press 'Discard' to abandon attempting recovery of these documents.</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
+                        <property name="top_attach">0</property>
                       </packing>
                     </child>
                   </object>
@@ -221,8 +204,8 @@ Press 'Discard' to abandon attempting recovery of these documents.</property>
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">next</action-widget>
       <action-widget response="0">cancel</action-widget>
+      <action-widget response="0">next</action-widget>
     </action-widgets>
   </object>
 </interface>
