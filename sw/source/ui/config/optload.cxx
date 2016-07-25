@@ -700,7 +700,7 @@ IMPL_LINK_NOARG_TYPED(SwCaptionOptPage, ShowEntryHdl, SvTreeListBox*, void)
         InsCaptionOpt* pOpt = static_cast<InsCaptionOpt*>(pSelEntry->GetUserData());
 
         m_pCategoryBox->Clear();
-        m_pCategoryBox->InsertEntry(m_sNone);
+        m_pCategoryBox->InsertEntry(m_sNone, 0);
         if (pSh)
         {
             const size_t nCount = pMgr->GetFieldTypeCount();
@@ -727,7 +727,7 @@ IMPL_LINK_NOARG_TYPED(SwCaptionOptPage, ShowEntryHdl, SvTreeListBox*, void)
             m_pCategoryBox->SetText(m_sNone);
         if (!pOpt->GetCategory().isEmpty() &&
             m_pCategoryBox->GetEntryPos(pOpt->GetCategory()) == COMBOBOX_ENTRY_NOTFOUND)
-            m_pCategoryBox->InsertEntry(pOpt->GetCategory());
+            m_pCategoryBox->InsertEntry(pOpt->GetCategory(), 0);
         if (m_pCategoryBox->GetText().isEmpty())
         {
             sal_Int32 nPos = 0;
