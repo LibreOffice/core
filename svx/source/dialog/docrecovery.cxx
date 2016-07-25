@@ -694,9 +694,6 @@ SaveProgressDialog::SaveProgressDialog(vcl::Window* pParent, RecoveryCore* pCore
     , m_pCore(pCore)
 {
     get(m_pProgrParent, "progress");
-    Size aSize(LogicToPixel(Size(SAVEPROGR_CONTROLWIDTH, PROGR_HEIGHT)));
-    m_pProgrParent->set_width_request(aSize.Width());
-    m_pProgrParent->set_height_request(aSize.Height());
 
     PluginProgress* pProgress   = new PluginProgress(m_pProgrParent, pCore->getComponentContext());
     m_xProgress.set(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
@@ -865,7 +862,6 @@ RecoveryDialog::RecoveryDialog(vcl::Window* pParent, RecoveryCore* pCore)
 {
     get(m_pDescrFT, "desc");
     get(m_pProgrParent, "progress");
-    m_pProgrParent->set_height_request(LogicToPixel(Size(0, PROGR_HEIGHT), MAP_APPFONT).Height());
     get(m_pNextBtn, "next");
     get(m_pCancelBtn, "cancel");
 
