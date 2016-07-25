@@ -189,7 +189,7 @@ public:
 private:
     /** Returns the data type of the specified column. */
     SAL_DLLPRIVATE sal_Int32                   GetColumnType( sal_uInt32 nColIndex ) const;
-    /** Returns the data type of the specified column. */
+    /** Sets the data type of the specified column. */
     SAL_DLLPRIVATE void                        SetColumnType( sal_uInt32 nColIndex, sal_Int32 nColType );
 
     /** Scrolls data grid vertically. */
