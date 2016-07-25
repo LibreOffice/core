@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_06ab9b8a",
+        "filename": "sd/source/core/EffectMigration.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1434,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-07-25T10:35:43Z",
+      "side": 1,
+      "message": "i\u0027m assuming that NOTES and HANDOUT pages don\u0027t have animations",
+      "revId": "a4df07d32f8a83ee33411a8082819efb185c15f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
