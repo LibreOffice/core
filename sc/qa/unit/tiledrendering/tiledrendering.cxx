@@ -30,6 +30,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <svx/svdpage.hxx>
 
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
@@ -57,6 +58,7 @@ public:
     void testViewCursors();
     void testTextViewSelection();
     void testDocumentSizeChanged();
+    void testViewLock();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -66,6 +68,7 @@ public:
     CPPUNIT_TEST(testViewCursors);
     CPPUNIT_TEST(testTextViewSelection);
     CPPUNIT_TEST(testDocumentSizeChanged);
+    CPPUNIT_TEST(testViewLock);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -78,11 +81,9 @@ private:
     Size m_aDocumentSize;
 
     uno::Reference<lang::XComponent> mxComponent;
-    // TODO various test-related members - when needed
 };
 
 ScTiledRenderingTest::ScTiledRenderingTest()
-    // TODO various test-related members - when needed
 {
 }
 
@@ -349,11 +350,13 @@ public:
     bool m_bOwnCursorInvalidated;
     bool m_bViewCursorInvalidated;
     bool m_bTextViewSelectionInvalidated;
+    bool m_bViewLock;
 
     ViewCallback()
         : m_bOwnCursorInvalidated(false),
           m_bViewCursorInvalidated(false),
-          m_bTextViewSelectionInvalidated(false)
+          m_bTextViewSelectionInvalidated(false),
+          m_bViewLock(false)
     {
     }
 
@@ -362,7 +365,7 @@ public:
         static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
     }
 
-    void callbackImpl(int nType, const char* /*pPayload*/)
+    void callbackImpl(int nType, const char* pPayload)
     {
         switch (nType)
         {
@@ -379,6 +382,14 @@ public:
         case LOK_CALLBACK_TEXT_VIEW_SELECTION:
         {
             m_bTextViewSelectionInvalidated = true;
+        }
+        break;
+        case LOK_CALLBACK_VIEW_LOCK:
+        {
+            std::stringstream aStream(pPayload);
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+            m_bViewLock = aTree.get_child("rectangle").get_value<std::string>() != "EMPTY";
         }
         break;
         }
@@ -464,6 +475,42 @@ void ScTiledRenderingTest::testDocumentSizeChanged()
     // Assert that the size in the payload is not 0.
     CPPUNIT_ASSERT(m_aDocumentSize.getWidth() > 0);
     CPPUNIT_ASSERT(m_aDocumentSize.getHeight() > 0);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testViewLock()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    // Load a document that has a shape and create two views.
+    ScModelObj* pModelObj = createDoc("shape.ods");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+
+    // Begin text edit in the second view and assert that the first gets a lock
+    // notification.
+    const ScViewData* pViewData = ScDocShell::GetViewData();
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    SdrModel* pDrawModel = pViewData->GetDocument()->GetDrawLayer();
+    SdrPage* pDrawPage = pDrawModel->GetPage(0);
+    SdrObject* pObject = pDrawPage->GetObj(0);
+    SdrView* pView = pViewShell->GetSdrView();
+    aView1.m_bViewLock = false;
+    pView->SdrBeginTextEdit(pObject);
+    CPPUNIT_ASSERT(aView1.m_bViewLock);
+
+    // End text edit in the second view, and assert that the lock is removed in
+    // the first view.
+    pView->SdrEndTextEdit();
+    CPPUNIT_ASSERT(!aView1.m_bViewLock);
 
     mxComponent->dispose();
     mxComponent.clear();
