@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_269ed756",
+        "filename": "sc/source/ui/vba/vbaeventshelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-07-25T12:17:14Z",
+      "side": 1,
+      "message": "isn\u0027t there a nicer way to concat two char pointers?\nsadly (OString(\"Auto_\") + sName).getStr() does not work.\nCould just change the string in the lambda calls, but this won\u0027t work for the worksheets.",
+      "range": {
+        "startLine": 533,
+        "startChar": 60,
+        "endLine": 533,
+        "endChar": 101
+      },
+      "revId": "9485eda17f7bc8063535dfbc8b7438b83d3db71b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a8bc5a2_0699db6e",
+        "filename": "sc/source/ui/vba/vbaeventshelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-07-25T12:17:14Z",
+      "side": 1,
+      "message": "going to rename functions in next patch set",
+      "range": {
+        "startLine": 535,
+        "startChar": 4,
+        "endLine": 536,
+        "endChar": 45
+      },
+      "revId": "9485eda17f7bc8063535dfbc8b7438b83d3db71b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
