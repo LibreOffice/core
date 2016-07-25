@@ -81,6 +81,7 @@ inline bool determineTextureFormat(sal_uInt16 nBits, GLenum& nFormat, GLenum& nT
     default:
         break;
     }
+    SAL_WARN("vcl.opengl", "Could not determine the appropriate texture format for input bits '" << nBits << "'");
     return false;
 }
 
