@@ -2362,7 +2362,7 @@ String RID_SVXSTR_RECOVERY_INPROGRESS
 
 String RID_SVXSTR_RECOVERYONLY_FINISH_DESCR
 {
-    Text[ en-US ] = "Recovery of your documents was finished.\nClick 'Finish' to see your documents.";
+    Text[ en-US ] = "Recovery of your documents was finished. Click 'Finish' to see your documents.";
 };
 
 String RID_SVXSTR_RECOVERYONLY_FINISH
