@@ -219,7 +219,7 @@ void SdExportTest::testMediaEmbedding()
 #else
     // If glTF is not supported, then the fallback image is imported
     SdrGrafObj *pGrafic = dynamic_cast<SdrGrafObj*>( pPage->GetObj( 2 ));
-    CPPUNIT_ASSERT_MESSAGE( "Could not load glTF fallback image", pGrafic != NULL);
+    CPPUNIT_ASSERT_MESSAGE( "Could not load glTF fallback image", pGrafic != nullptr);
     CPPUNIT_ASSERT_EQUAL( OUString( "vnd.sun.star.Package:Models/Fallbacks/duck.png" ), pGrafic->GetGrafStreamURL());
 #endif
 
