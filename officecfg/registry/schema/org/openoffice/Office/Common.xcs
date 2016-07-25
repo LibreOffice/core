@@ -5607,7 +5607,7 @@
       </prop>
       <prop oor:name="SelectedOpenCLDeviceIdentifier" oor:type="xs:string" oor:nillable="false">
         <info>
-          <desc>The OpenCL device identifier of a device that was successfully selected and passed the OpenCL calculation tests.</desc>
+          <desc>A string identifying the OpenCL device that was successfully selected and passed the OpenCL calculation tests. The syntax of this value is purposedly not documented. For LibreOffice internal use only, do not inspect this value or try to modify it from any level of user code.</desc>
         </info>
         <value>none</value>
       </prop>
