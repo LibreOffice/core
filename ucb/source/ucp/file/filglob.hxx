@@ -63,7 +63,7 @@ namespace fileaccess {
 
     extern osl::FileBase::RC osl_File_copy( const OUString& strPath,
                                             const OUString& strDestPath,
-                                            bool test = false );
+                                            bool test );
 
     /**
      *  special move:
@@ -84,7 +84,7 @@ namespace fileaccess {
                                const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
                                const OUString& aUncPath,
                                BaseContent* pContent,
-                               bool isHandled = false);
+                               bool isHandled);
                                    // the physical URL of the object
 
 } // end namespace fileaccess

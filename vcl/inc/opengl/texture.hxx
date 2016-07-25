@@ -59,7 +59,7 @@ public:
         return mnRefCount == 1;
     }
 
-    bool InitializeSlotMechanism(int nInitialSlotSize = 0);
+    bool InitializeSlotMechanism(int nInitialSlotSize);
 
     void SetSlotDeallocateCallback(std::function<void(int)> aCallback)
     {
