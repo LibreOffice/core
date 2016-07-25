@@ -35,6 +35,9 @@
 #include <sfx2/viewfrm.hxx>
 #include <svx/sdrundomanager.hxx>
 #include <svx/xbtmpit.hxx>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include "drawview.hxx"
 #include "global.hxx"
@@ -550,6 +553,19 @@ bool ScDrawView::SdrBeginTextEdit(
         bOnlyOneView, bGrabFocus );
 
     ScTabViewShell* pViewSh = pViewData->GetViewShell();
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if (OutlinerView* pView = GetTextEditOutlinerView())
+        {
+            Rectangle aRectangle = pView->GetOutputArea();
+            if (pWinL && pWinL->GetMapMode().GetMapUnit() == MAP_100TH_MM)
+                aRectangle = OutputDevice::LogicToLogic(aRectangle, MAP_100TH_MM, MAP_TWIP);
+            OString sRectangle = aRectangle.toString();
+            SfxLokHelper::notifyOtherViews(pViewSh, LOK_CALLBACK_VIEW_LOCK, "rectangle", sRectangle);
+        }
+    }
+
     if ( pViewSh->GetViewFrame() )
     {
         SfxFrame& rFrame = pViewSh->GetViewFrame()->GetFrame();
@@ -570,6 +586,10 @@ SdrEndTextEditKind ScDrawView::SdrEndTextEdit( bool bDontDeleteReally )
     const SdrEndTextEditKind eRet = FmFormView::SdrEndTextEdit( bDontDeleteReally );
 
     ScTabViewShell* pViewSh = pViewData->GetViewShell();
+
+    if (comphelper::LibreOfficeKit::isActive())
+        SfxLokHelper::notifyOtherViews(pViewSh, LOK_CALLBACK_VIEW_LOCK, "rectangle", "EMPTY");
+
     if ( pViewSh->GetViewFrame() )
     {
         SfxFrame& rFrame = pViewSh->GetViewFrame()->GetFrame();
