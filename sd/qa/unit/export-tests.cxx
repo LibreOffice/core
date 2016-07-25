@@ -133,6 +133,22 @@ public:
                 reinterpret_cast<xmlChar const *>(namespaces[i].pURI));
         }
     }
+
+    xmlDocPtr parseExport(utl::TempFile & rTempFile, OUString const& rStreamName)
+    {
+        OUString const url(rTempFile.GetURL());
+        uno::Reference<packages::zip::XZipFileAccess2> const xZipNames(
+            packages::zip::ZipFileAccess::createWithURL(
+                comphelper::getComponentContext(m_xSFactory), url));
+        uno::Reference<io::XInputStream> const xInputStream(
+            xZipNames->getByName(rStreamName), uno::UNO_QUERY);
+        std::unique_ptr<SvStream> const pStream(
+            utl::UcbStreamHelper::CreateStream(xInputStream, true));
+        xmlDocPtr const pXmlDoc = parseXmlStream(pStream.get());
+        pXmlDoc->name = reinterpret_cast<char *>(xmlStrdup(
+            reinterpret_cast<xmlChar const *>(OUStringToOString(url, RTL_TEXTENCODING_UTF8).getStr())));
+        return pXmlDoc;
+    }
 };
 
 void SdExportTest::testN821567()
