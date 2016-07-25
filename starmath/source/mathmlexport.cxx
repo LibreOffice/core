@@ -796,7 +796,7 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
 
 void SmXMLExport::ExportMath(const SmNode *pNode, int /*nLevel*/)
 {
-    const SmMathSymbolNode *pTemp = static_cast<const SmMathSymbolNode *>(pNode);
+    const SmTextNode *pTemp = static_cast<const SmTextNode *>(pNode);
     SvXMLElementExport *pMath = nullptr;
 
     if (pNode->GetType() == NMATH || pNode->GetType() == NGLYPH_SPECIAL)
