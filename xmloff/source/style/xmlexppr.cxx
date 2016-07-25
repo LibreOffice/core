@@ -192,7 +192,7 @@ public:
             vector< XMLPropertyState >& rPropStates,
             const Reference< XPropertySet >& xPropSet,
             const rtl::Reference< XMLPropertySetMapper >& maPropMapper,
-            const bool bDefault = false);
+            const bool bDefault);
     sal_uInt32 GetPropertyCount() const { return nCount; }
 };
 

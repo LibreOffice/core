@@ -122,7 +122,7 @@ public:
 
     void DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry, bool blockAA = false );
     void DrawConvexPolygon( const tools::Polygon& rPolygon, bool blockAA = false );
-    void DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoid, bool blockAA = false );
+    void DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoid, bool blockAA );
     void DrawRect( long nX, long nY, long nWidth, long nHeight );
     void DrawRect( const Rectangle& rRect );
     void DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
@@ -132,7 +132,7 @@ public:
     void DrawTextureRect( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false );
     void DrawTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false );
     void DrawTransformedTexture( OpenGLTexture& rTexture, OpenGLTexture& rMask, const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX, const basegfx::B2DPoint& rY );
-    void DrawAlphaTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false, bool pPremultiplied = false );
+    void DrawAlphaTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted, bool pPremultiplied );
     void DrawTextureDiff( OpenGLTexture& rTexture, OpenGLTexture& rMask, const SalTwoRect& rPosAry, bool bInverted = false );
     void DrawTextureWithMask( OpenGLTexture& rTexture, OpenGLTexture& rMask, const SalTwoRect& rPosAry );
     void DrawBlendedTexture( OpenGLTexture& rTexture, OpenGLTexture& rMask, OpenGLTexture& rAlpha, const SalTwoRect& rPosAry );

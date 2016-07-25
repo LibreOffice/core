@@ -430,7 +430,7 @@ namespace chelp {
 
         css::uno::Reference< css::container::XHierarchicalNameAccess >
             nextJarFile( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle,
-                            OUString* o_pExtensionPath = nullptr, OUString* o_pExtensionRegistryPath = nullptr );
+                            OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath );
 
     private:
         css::uno::Reference< css::container::XHierarchicalNameAccess >

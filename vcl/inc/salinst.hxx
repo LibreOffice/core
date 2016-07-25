@@ -81,7 +81,7 @@ public:
     virtual void            DestroyFrame( SalFrame* pFrame ) = 0;
 
     // Object (System Child Window)
-    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true ) = 0;
+    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow ) = 0;
     virtual void            DestroyObject( SalObject* pObject ) = 0;
 
     // VirtualDevice

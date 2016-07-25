@@ -446,8 +446,7 @@ public:
 
     void includes(sal_uInt32 nChar);
 
-    rtl_TextEncoding getPreferredEncoding(rtl_TextEncoding eDefault
-                                              = RTL_TEXTENCODING_DONTKNOW)
+    rtl_TextEncoding getPreferredEncoding(rtl_TextEncoding eDefault)
         const;
 
     void reset();
