@@ -104,7 +104,6 @@ bool OverrideParam::VisitCXXMethodDecl(const CXXMethodDecl * methodDecl) {
             }
             else if (parmVarDecl->hasDefaultArg() && superParmVarDecl->hasDefaultArg()
                 && !hasSameDefaultParams(parmVarDecl, superParmVarDecl)) {
-                /* do nothing for now, will enable this in a later commit
                 report(
                     DiagnosticsEngine::Warning,
                     "overridden method declaration has different default param to super-method",
@@ -115,7 +114,6 @@ bool OverrideParam::VisitCXXMethodDecl(const CXXMethodDecl * methodDecl) {
                     "original param here",
                     superParmVarDecl->getSourceRange().getBegin())
                     << superParmVarDecl->getSourceRange();
-                */
             }
             /* do nothing for now, will enable this in a later commit
             if (methodDecl->isThisDeclarationADefinition() && parmVarDecl->getName().empty()) {
@@ -162,9 +160,20 @@ bool OverrideParam::hasSameDefaultParams(const ParmVarDecl * parmVarDecl, const 
     {
         return x1 == x2;
     }
+    APFloat f1(0.0f), f2(0.0f);
+    if (defaultArgExpr->EvaluateAsFloat(f1, compiler.getASTContext())
+        && superDefaultArgExpr->EvaluateAsFloat(f2, compiler.getASTContext()))
+    {
+        return f1.bitwiseIsEqual(f2);
+    }
     // catch params with defaults like "= OUString()"
     if (isa<MaterializeTemporaryExpr>(defaultArgExpr)
         && isa<MaterializeTemporaryExpr>(superDefaultArgExpr))
+    {
+        return true;
+    }
+    if (isa<CXXBindTemporaryExpr>(defaultArgExpr)
+        && isa<CXXBindTemporaryExpr>(superDefaultArgExpr))
     {
         return true;
     }
