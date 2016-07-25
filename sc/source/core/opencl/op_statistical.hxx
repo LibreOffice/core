@@ -241,7 +241,6 @@ class OpNormsdist:public Normal{
     public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
-    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&) override;
     virtual std::string BinFuncName() const override { return "OpNormsdist"; }
 };
 class OpNorminv:public Normal{
