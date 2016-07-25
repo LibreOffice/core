@@ -1695,7 +1695,7 @@ void ScInterpreter::ScTan()
 
 void ScInterpreter::ScCot()
 {
-    PushDouble(1.0 / ::rtl::math::tan(GetDouble()));
+    PushDouble( div( 1.0, ::rtl::math::tan(GetDouble())));
 }
 
 void ScInterpreter::ScArcSin()
