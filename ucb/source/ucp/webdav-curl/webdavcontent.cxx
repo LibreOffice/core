@@ -2124,6 +2124,7 @@ uno::Any Content::open(
             if ( xDataSink.is() )
             {
                 // PULL: wait for client read
+                OUString aTargetURL =  m_xIdentifier->getContentIdentifier();
                 try
                 {
                     std::unique_ptr< DAVResourceAccess > xResAccess;
@@ -2163,6 +2164,21 @@ uno::Any Content::open(
                 }
                 catch ( DAVException const & e )
                 {
+                    // check if error is SC_NOT_FOUND
+                    // if URL resource not found, set the corresponding resource
+                    // element in option cache and update the cache lifetime accordingly
+                    if( e.getStatus() == SC_NOT_FOUND )
+                    {
+                        DAVOptions aDAVOptions;
+                        if( aStaticDAVOptionsCache.getDAVOptions( aTargetURL, aDAVOptions ) )
+                        {
+                            // get redirected url
+                            aDAVOptions.setResourceFound( false );
+                            aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
+                                                                  m_nOptsCacheLifeNotFound );
+                        }
+                    }
+
                     cancelCommandExecution( e, xEnv );
                     // Unreachable
                 }
@@ -3694,6 +3710,22 @@ Content::ResourceType Content::getResourceType(
                 {
                     *networkAccessAllowed = *networkAccessAllowed
                         && shouldAccessNetworkAfterException(e);
+                }
+                if ( e.getStatus() == SC_NOT_FOUND )
+                {
+                    // arrives here if OPTIONS is still cached for a resource previously available
+                    // operate on the OPTIONS cache:
+                    // if OPTIONS was not found, do nothing
+                    // else OPTIONS returned on a resource not existent  (example a server that allows lock on null resource) set
+                    // not found and adjust lifetime accordingly
+                    DAVOptions aDAVOptionsInner;
+                    if (aStaticDAVOptionsCache.getDAVOptions(rResAccess->getURL(), aDAVOptionsInner))
+                    {
+                        // get redirected url
+                        aDAVOptionsInner.setResourceFound( false );
+                        aStaticDAVOptionsCache.addDAVOptions( aDAVOptionsInner,
+                                                              m_nOptsCacheLifeNotFound );
+                    }
                 }
                 // if the two net events below happen, something
                 // is going on to the connection so break the command flow
