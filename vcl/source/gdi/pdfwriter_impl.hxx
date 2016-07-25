@@ -805,7 +805,7 @@ i12626
     /* writes all gradient patterns */
     bool emitGradients();
     /* writes a builtin font object and returns its objectid (or 0 in case of failure ) */
-    sal_Int32 emitBuiltinFont( const PdfBuiltinFontFace*, sal_Int32 nObject = -1 );
+    sal_Int32 emitBuiltinFont( const PdfBuiltinFontFace*, sal_Int32 nObject );
     /* writes a type1 embedded font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
     std::map< sal_Int32, sal_Int32 > emitEmbeddedFont( const PhysicalFontFace*, EmbedFont& );
     /* writes a type1 system font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
@@ -1165,7 +1165,7 @@ public:
     void emitComment( const char* pComment );
 
     //--->i56629 named destinations
-    sal_Int32 createNamedDest( const OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr = -1, PDFWriter::DestAreaType eType = PDFWriter::XYZ );
+    sal_Int32 createNamedDest( const OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType );
 
     //--->i59651
     //emits output intent
@@ -1175,21 +1175,21 @@ public:
     sal_Int32   emitDocumentMetadata();
 
     // links
-    sal_Int32 createLink( const Rectangle& rRect, sal_Int32 nPageNr = -1 );
+    sal_Int32 createLink( const Rectangle& rRect, sal_Int32 nPageNr );
     sal_Int32 createDest( const Rectangle& rRect, sal_Int32 nPageNr = -1, PDFWriter::DestAreaType eType = PDFWriter::XYZ );
-    sal_Int32 registerDestReference( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr = -1, PDFWriter::DestAreaType eType = PDFWriter::XYZ );
+    sal_Int32 registerDestReference( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType );
     void      setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId );
     void      setLinkURL( sal_Int32 nLinkId, const OUString& rURL );
     void      setLinkPropertyId( sal_Int32 nLinkId, sal_Int32 nPropertyId );
 
     // outline
-    sal_Int32 createOutlineItem( sal_Int32 nParent = 0, const OUString& rText = OUString(), sal_Int32 nDestID = -1 );
+    sal_Int32 createOutlineItem( sal_Int32 nParent, const OUString& rText, sal_Int32 nDestID );
     void      setOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewParent );
     void      setOutlineItemText( sal_Int32 nItem, const OUString& rText );
     void      setOutlineItemDest( sal_Int32 nItem, sal_Int32 nDestID );
 
     // notes
-    void createNote( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr = -1 );
+    void createNote( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr );
     // structure elements
     sal_Int32 beginStructureElement( PDFWriter::StructElement eType, const OUString& rAlias );
     void endStructureElement();
@@ -1201,8 +1201,8 @@ public:
     void setAlternateText( const OUString& rText );
 
     // transitional effects
-    void setAutoAdvanceTime( sal_uInt32 nSeconds, sal_Int32 nPageNr = -1 );
-    void setPageTransition( PDFWriter::PageTransition eType, sal_uInt32 nMilliSec, sal_Int32 nPageNr = -1 );
+    void setAutoAdvanceTime( sal_uInt32 nSeconds, sal_Int32 nPageNr );
+    void setPageTransition( PDFWriter::PageTransition eType, sal_uInt32 nMilliSec, sal_Int32 nPageNr );
 
     // controls
     sal_Int32 createControl( const PDFWriter::AnyWidget& rControl, sal_Int32 nPageNr = -1 );

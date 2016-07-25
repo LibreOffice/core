@@ -122,7 +122,7 @@ namespace psp
 
     static css::lang::Locale normalizeInputLocale(
         const css::lang::Locale& i_rLocale,
-        bool bInsertDefault = false
+        bool bInsertDefault
         )
     {
         css::lang::Locale aLoc( i_rLocale );

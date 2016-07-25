@@ -551,7 +551,7 @@ std::vector< OUString > readAnnotations(
 
 ConstantValue readConstant(
     rtl::Reference< MappedFile > const & file, sal_uInt32 offset,
-    sal_uInt32 * newOffset = nullptr, bool * annotated = nullptr)
+    sal_uInt32 * newOffset, bool * annotated)
 {
     assert(file.is());
     int v = file->read8(offset);
