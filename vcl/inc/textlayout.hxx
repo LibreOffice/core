@@ -91,8 +91,8 @@ namespace vcl
         virtual ~ControlTextRenderer();
 
         Rectangle   DrawText( const Rectangle& _rRect,
-                              const OUString& _rText, DrawTextFlags _nStyle = DrawTextFlags::NONE,
-                              MetricVector* _pVector = nullptr, OUString* _pDisplayText = nullptr );
+                              const OUString& _rText, DrawTextFlags _nStyle,
+                              MetricVector* _pVector, OUString* _pDisplayText );
 
     private:
         ControlTextRenderer( const ControlTextRenderer& ) = delete;

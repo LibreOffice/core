@@ -95,8 +95,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    void createDoc(const OUString& rURL = OUString());
-    void createCalc(const OUString& rURL = OUString());
+    void createDoc(const OUString& rURL);
+    void createCalc(const OUString& rURL);
     uno::Reference<security::XCertificate> getCertificate(XMLSignatureHelper& rSignatureHelper);
 };
 
@@ -161,7 +161,7 @@ uno::Reference<security::XCertificate> SigningTest::getCertificate(XMLSignatureH
 void SigningTest::testDescription()
 {
     // Create an empty document and store it to a tempfile, finally load it as a storage.
-    createDoc();
+    createDoc("");
 
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
@@ -194,7 +194,7 @@ void SigningTest::testDescription()
 void SigningTest::testOOXMLDescription()
 {
     // Create an empty document and store it to a tempfile, finally load it as a storage.
-    createDoc();
+    createDoc("");
 
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();

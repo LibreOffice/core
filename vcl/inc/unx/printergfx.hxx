@@ -374,7 +374,7 @@ public:
     { return maVirtualStatus.mbArtBold; }
     void            DrawText (const Point& rPoint,
                               const sal_Unicode* pStr, sal_Int16 nLen,
-                              const sal_Int32* pDeltaArray = nullptr);
+                              const sal_Int32* pDeltaArray);
     void            SetTextColor (PrinterColor& rTextColor)
     { maTextColor = rTextColor; }
     sal_Int32       GetCharWidth (sal_uInt16 nFrom, sal_uInt16 nTo,

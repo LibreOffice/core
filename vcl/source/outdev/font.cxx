@@ -1095,7 +1095,7 @@ bool OutputDevice::ImplNewFont() const
             pFontInstance->mbInit = true;
 
             pFontInstance->mxFontMetric->SetOrientation( sal::static_int_cast<short>(pFontInstance->maFontSelData.mnOrientation) );
-            pGraphics->GetFontMetric( pFontInstance->mxFontMetric );
+            pGraphics->GetFontMetric( pFontInstance->mxFontMetric, 0 );
 
             pFontInstance->mxFontMetric->ImplInitTextLineSize( this );
             pFontInstance->mxFontMetric->ImplInitAboveTextLineSize();

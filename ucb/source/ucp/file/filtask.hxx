@@ -94,7 +94,7 @@ namespace fileaccess
             }
 
             void SAL_CALL installError( sal_Int32 nErrorCode,
-                                        sal_Int32 nMinorCode = TASKHANDLER_NO_ERROR )
+                                        sal_Int32 nMinorCode )
             {
                 m_nErrorCode = nErrorCode;
                 m_nMinorCode = nMinorCode;
