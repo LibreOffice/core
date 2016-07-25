@@ -160,12 +160,14 @@ bool OverrideParam::hasSameDefaultParams(const ParmVarDecl * parmVarDecl, const 
     {
         return x1 == x2;
     }
+#if CLANG_VERSION >= 30900
     APFloat f1(0.0f), f2(0.0f);
     if (defaultArgExpr->EvaluateAsFloat(f1, compiler.getASTContext())
         && superDefaultArgExpr->EvaluateAsFloat(f2, compiler.getASTContext()))
     {
         return f1.bitwiseIsEqual(f2);
     }
+#endif
     // catch params with defaults like "= OUString()"
     if (isa<MaterializeTemporaryExpr>(defaultArgExpr)
         && isa<MaterializeTemporaryExpr>(superDefaultArgExpr))
@@ -177,7 +179,11 @@ bool OverrideParam::hasSameDefaultParams(const ParmVarDecl * parmVarDecl, const 
     {
         return true;
     }
+#if CLANG_VERSION >= 30900
     return false;
+#else
+    return true; // clang3-8 doesn't have EvaluateAsFloat, so we can't be as precise
+#endif
 }
 
 
