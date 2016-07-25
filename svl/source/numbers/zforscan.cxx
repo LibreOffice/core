@@ -1129,7 +1129,6 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
         {   // keyword
             sal_uInt16 nIndexPre;
             sal_uInt16 nIndexNex;
-            sal_Unicode cChar;
 
             switch (nTypeArray[i])
             {
@@ -1155,14 +1154,13 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                 */
                 nIndexPre = PreviousKeyword(i);
                 nIndexNex = NextKeyword(i);
-                cChar = PreviousChar(i);
                 if (nIndexPre == NF_KEY_H   ||      // H
                     nIndexPre == NF_KEY_HH  ||      // HH
                     nIndexPre == NF_KEY_S   ||      // S before M tdf#95339
                     nIndexPre == NF_KEY_SS  ||      // SS
                     nIndexNex == NF_KEY_S   ||      // S
                     nIndexNex == NF_KEY_SS  ||      // SS
-                    cChar == '['  )                 // [M
+                    PreviousChar(i) == '['  )       // [M
                 {
                     eNewType = css::util::NumberFormat::TIME;
                     nTypeArray[i] -= 2;             // 6 -> 4, 7 -> 5
