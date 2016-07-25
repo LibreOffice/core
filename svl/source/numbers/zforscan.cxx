@@ -1146,7 +1146,13 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                 break;
             case NF_KEY_M:                          // M
             case NF_KEY_MM:                         // MM
-                // minute or month
+                /* Minute or month.
+                   Minute if one of:
+                   * preceded by time keyword H or S (ignoring separators)
+                   * followed by time keyword S (ignoring separators)
+                   * preceded by '[' amount bracket
+                   Else month.
+                */
                 nIndexPre = PreviousKeyword(i);
                 nIndexNex = NextKeyword(i);
                 cChar = PreviousChar(i);
@@ -1154,8 +1160,6 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                     nIndexPre == NF_KEY_HH  ||      // HH
                     nIndexPre == NF_KEY_S   ||      // S before M tdf#95339
                     nIndexPre == NF_KEY_SS  ||      // SS
-                    nIndexNex == NF_KEY_H   ||      // H after M tdf#95339
-                    nIndexNex == NF_KEY_HH  ||      // HH
                     nIndexNex == NF_KEY_S   ||      // S
                     nIndexNex == NF_KEY_SS  ||      // SS
                     cChar == '['  )                 // [M
