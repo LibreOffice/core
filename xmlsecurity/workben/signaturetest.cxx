@@ -294,7 +294,7 @@ IMPL_LINK_NOARG_TYPED(MyWin, VerifyDigitalSignaturesHdl, Button*, void)
         if ( !rInf.SignatureIsValid )
             aText.append( "NOT " );
         aText.append( "valid" );
-        ScopedVclPtr<InfoBox>::Create( this, aText )->Execute();
+        ScopedVclPtrInstance<InfoBox>(this, aText)->Execute();
     }
 }
 

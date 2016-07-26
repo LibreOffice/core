@@ -504,14 +504,14 @@ bool SfxClassificationHelper::ShowPasteInfo(SfxClassificationCheckPasteResult eR
     case SfxClassificationCheckPasteResult::TargetDocNotClassified:
     {
         if (!Application::IsHeadlessModeEnabled())
-            ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SfxResId(STR_TARGET_DOC_NOT_CLASSIFIED), VclMessageType::Info)->Execute();
+            ScopedVclPtrInstance<MessageDialog>(nullptr, SfxResId(STR_TARGET_DOC_NOT_CLASSIFIED), VclMessageType::Info)->Execute();
         return false;
     }
     break;
     case SfxClassificationCheckPasteResult::DocClassificationTooLow:
     {
         if (!Application::IsHeadlessModeEnabled())
-            ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SfxResId(STR_DOC_CLASSIFICATION_TOO_LOW), VclMessageType::Info)->Execute();
+            ScopedVclPtrInstance<MessageDialog>(nullptr, SfxResId(STR_DOC_CLASSIFICATION_TOO_LOW), VclMessageType::Info)->Execute();
         return false;
     }
     break;

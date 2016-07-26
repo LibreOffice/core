@@ -788,7 +788,7 @@ short SvxDicError( vcl::Window *pParent, linguistic::DictionaryError nError )
                 nRid = RID_SVXSTR_DIC_ERR_UNKNOWN;
                 SAL_WARN("editeng", "unexpected case");
         }
-        nRes = ScopedVclPtr<InfoBox>::Create( pParent, EE_RESSTR( nRid ) )->Execute();
+        nRes = ScopedVclPtrInstance<InfoBox>(pParent, EE_RESSTR(nRid))->Execute();
     }
     return nRes;
 }

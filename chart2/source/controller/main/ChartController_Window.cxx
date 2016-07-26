@@ -1516,7 +1516,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         if( ! bReturn )
         {
             SolarMutexGuard aGuard;
-            ScopedVclPtr<InfoBox>::Create( m_pChartWindow, SCH_RESSTR( STR_ACTION_NOTPOSSIBLE ))->Execute();
+            ScopedVclPtrInstance<InfoBox>(m_pChartWindow, SCH_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
         }
     }
 

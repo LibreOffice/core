@@ -101,7 +101,7 @@ void svtools::executeRestartDialog(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     vcl::Window * parent, RestartReason reason)
 {
-    if (ScopedVclPtrInstance<RestartDialog>::Create(parent, reason)->Execute()) {
+    if (ScopedVclPtrInstance<RestartDialog>(parent, reason)->Execute()) {
         css::task::OfficeRestartManager::get(context)->requestRestart(
             css::uno::Reference< css::task::XInteractionHandler >());
     }

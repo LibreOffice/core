@@ -827,7 +827,7 @@ void DialogWindow::SaveDialog()
             }
         }
         else
-            ScopedVclPtrInstance<MessageDialog>::Create(this, IDE_RESSTR(RID_STR_COULDNTWRITE))->Execute();
+            ScopedVclPtrInstance<MessageDialog>(this, IDE_RESSTR(RID_STR_COULDNTWRITE))->Execute();
     }
 }
 

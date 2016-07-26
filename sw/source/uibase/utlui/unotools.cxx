@@ -97,7 +97,7 @@ void SwOneExampleFrame::CreateErrorMessage()
     {
         OUString sInfo(SW_RES(STR_SERVICE_UNAVAILABLE));
         sInfo += cFrameControl;
-        ScopedVclPtr<InfoBox>::Create(nullptr, sInfo)->Execute();
+        ScopedVclPtrInstance<InfoBox>(nullptr, sInfo)->Execute();
         SwOneExampleFrame::bShowServiceNotAvailableMessage = false;
     }
 }

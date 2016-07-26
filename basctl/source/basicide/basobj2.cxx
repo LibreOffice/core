@@ -69,7 +69,7 @@ void Organize( sal_Int16 tabId )
             aDesc = pCurWin->CreateEntryDescriptor();
 
     vcl::Window* pParent = Application::GetDefDialogParent();
-    ScopedVclPtrInstance<OrganizeDialog>::Create(pParent, tabId, aDesc)->Execute();
+    ScopedVclPtrInstance<OrganizeDialog>(pParent, tabId, aDesc)->Execute();
 }
 
 bool IsValidSbxName( const OUString& rName )
@@ -324,7 +324,7 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, 
                     {
                         // error
                         bError = true;
-                        ScopedVclPtrInstance<MessageDialog>::Create(nullptr, IDEResId(RID_STR_ERRORCHOOSEMACRO))->Execute();
+                        ScopedVclPtrInstance<MessageDialog>(nullptr, IDEResId(RID_STR_ERRORCHOOSEMACRO))->Execute();
                     }
                 }
             }

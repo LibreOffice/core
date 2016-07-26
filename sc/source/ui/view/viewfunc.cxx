@@ -438,7 +438,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 {
                     OUString aMessage( ScResId( SCSTR_FORMULA_AUTOCORRECTION ) );
                     aMessage += aCorrectedFormula;
-                    nResult = ScopedVclPtr<QueryBox>::Create( GetViewData().GetDialogParent(),
+                    nResult = ScopedVclPtrInstance<QueryBox>( GetViewData().GetDialogParent(),
                                             WinBits(WB_YES_NO | WB_DEF_YES),
                                             aMessage )->Execute();
                 }

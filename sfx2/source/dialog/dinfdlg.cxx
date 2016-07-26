@@ -1657,7 +1657,7 @@ void CustomPropertiesWindow::ValidateLine( CustomPropertyLine* pLine, bool bIsFr
         if ( bIsFromTypeBox ) // LoseFocus of TypeBox
             pLine->m_bTypeLostFocus = true;
         vcl::Window* pParent = GetParent()->GetParent();
-        if (ScopedVclPtrInstance<MessageDialog>::Create(pParent, SfxResId(STR_SFX_QUERY_WRONG_TYPE), VclMessageType::Question, VCL_BUTTONS_OK_CANCEL)->Execute() == RET_OK)
+        if (ScopedVclPtrInstance<MessageDialog>(pParent, SfxResId(STR_SFX_QUERY_WRONG_TYPE), VclMessageType::Question, VCL_BUTTONS_OK_CANCEL)->Execute() == RET_OK)
             pLine->m_aTypeBox->SelectEntryPos( m_aTypeBox->GetEntryPos( reinterpret_cast<void*>(CUSTOM_TYPE_TEXT) ) );
         else
             pLine->m_aValueEdit->GrabFocus();

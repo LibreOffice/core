@@ -1703,7 +1703,7 @@ bool SwTransferable::PasteFileContent( TransferableDataHelper& rData,
 
     if( bMsg && nResId )
     {
-        ScopedVclPtrInstance<MessageDialog>::Create( nullptr, SW_RES( nResId ), VclMessageType::Info)->Execute();
+        ScopedVclPtrInstance<MessageDialog>(nullptr, SW_RES(nResId), VclMessageType::Info)->Execute();
     }
     return bRet;
 }
@@ -1777,7 +1777,7 @@ bool SwTransferable::PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
         if( !IsError( aReader.Read( *pRead )) )
             bRet = true;
         else if( bMsg )
-            ScopedVclPtrInstance<MessageDialog>::Create( nullptr, SW_RES(STR_ERROR_CLPBRD_READ), VclMessageType::Info )->Execute();
+            ScopedVclPtrInstance<MessageDialog>(nullptr, SW_RES(STR_ERROR_CLPBRD_READ), VclMessageType::Info)->Execute();
     }
     else
     {
@@ -2155,7 +2155,7 @@ bool SwTransferable::PasteDDE( TransferableDataHelper& rData,
                 if (nRows > USHRT_MAX || nCols > USHRT_MAX)
                 {
                     if( bMsg )
-                        ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SW_RESSTR(STR_TABLE_TOO_LARGE), VclMessageType::Info)->Execute();
+                        ScopedVclPtrInstance<MessageDialog>(nullptr, SW_RESSTR(STR_TABLE_TOO_LARGE), VclMessageType::Info)->Execute();
                     pDDETyp = nullptr;
                     break;
                 }
@@ -2164,7 +2164,7 @@ bool SwTransferable::PasteDDE( TransferableDataHelper& rData,
                 if( !nRows || !nCols )
                 {
                     if( bMsg )
-                        ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SW_RESSTR(STR_NO_TABLE), VclMessageType::Info)->Execute();
+                        ScopedVclPtrInstance<MessageDialog>(nullptr, SW_RESSTR(STR_NO_TABLE), VclMessageType::Info)->Execute();
                     pDDETyp = nullptr;
                     break;
                 }
@@ -2707,7 +2707,7 @@ bool SwTransferable::PasteDBData( TransferableDataHelper& rData,
     }
     else if( bMsg )
     {
-        ScopedVclPtrInstance<MessageDialog>::Create( nullptr, SW_RES(STR_CLPBRD_FORMAT_ERROR), VclMessageType::Info)->Execute();
+        ScopedVclPtrInstance<MessageDialog>(nullptr, SW_RES(STR_CLPBRD_FORMAT_ERROR), VclMessageType::Info)->Execute();
     }
     return bRet;
 }
@@ -2746,7 +2746,7 @@ bool SwTransferable::PasteFileList( TransferableDataHelper& rData,
     }
     else if( bMsg )
     {
-        ScopedVclPtrInstance<MessageDialog>::Create( nullptr, SW_RES(STR_CLPBRD_FORMAT_ERROR), VclMessageType::Info)->Execute();
+        ScopedVclPtrInstance<MessageDialog>(nullptr, SW_RES(STR_CLPBRD_FORMAT_ERROR), VclMessageType::Info)->Execute();
     }
     return bRet;
 }

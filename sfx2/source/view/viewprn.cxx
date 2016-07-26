@@ -344,7 +344,7 @@ void SfxPrinterController::jobFinished( css::view::PrintableState nState )
                 // "real" problem (not simply printing cancelled by user)
                 OUString aMsg( SfxResId(STR_NOSTARTPRINTER).toString() );
                 if ( !m_bApi )
-                    ScopedVclPtrInstance<MessageDialog>::Create(mpViewShell->GetWindow(), aMsg)->Execute();
+                    ScopedVclPtrInstance<MessageDialog>(mpViewShell->GetWindow(), aMsg)->Execute();
                 SAL_FALLTHROUGH;
             }
             case view::PrintableState_JOB_ABORTED :
@@ -520,7 +520,7 @@ void SfxViewShell::SetPrinter_Impl( VclPtr<SfxPrinter>& pNewPrinter )
 
     // Ask if possible, if page format should be taken over from printer.
     if ( ( bOriChg  || bPgSzChg ) &&
-        RET_YES == ScopedVclPtrInstance<MessageDialog>::Create(nullptr, aMsg, VclMessageType::Question, VCL_BUTTONS_YES_NO)->Execute() )
+        RET_YES == ScopedVclPtrInstance<MessageDialog>(nullptr, aMsg, VclMessageType::Question, VCL_BUTTONS_YES_NO)->Execute() )
     {
         // Flags with changes for  <SetPrinter(SfxPrinter*)> are maintained
         nChangedFlags |= nNewOpt;
@@ -793,7 +793,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             {
                 // no valid printer either in ItemSet or at the document
                 if ( !bSilent )
-                    ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SfxResId(STR_NODEFPRINTER))->Execute();
+                    ScopedVclPtrInstance<MessageDialog>(nullptr, SfxResId(STR_NODEFPRINTER))->Execute();
 
                 rReq.SetReturnValue(SfxBoolItem(0,false));
 
@@ -805,7 +805,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             {
                 // if printer is busy, abort configuration
                 if ( !bSilent )
-                    ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SfxResId(STR_ERROR_PRINTER_BUSY), VclMessageType::Info)->Execute();
+                    ScopedVclPtrInstance<MessageDialog>(nullptr, SfxResId(STR_ERROR_PRINTER_BUSY), VclMessageType::Info)->Execute();
                 rReq.SetReturnValue(SfxBoolItem(0,false));
 
                 return;

@@ -2346,9 +2346,9 @@ SvTreeListEntry* SvxConfigPage::InsertEntryIntoUI(
 IMPL_LINK_NOARG_TYPED( SvxConfigPage, AsyncInfoMsg, void*, void )
 {
     // Asynchronous msg because of D&D
-    ScopedVclPtr<MessageDialog>::Create( this,
+    ScopedVclPtrInstance<MessageDialog>(this,
         CUI_RES( RID_SVXSTR_MNUCFG_ALREADY_INCLUDED ),
-        VclMessageType::Info )->Execute();
+        VclMessageType::Info)->Execute();
 }
 
 IMPL_LINK_TYPED( SvxConfigPage, MoveHdl, Button *, pButton, void )
@@ -5233,7 +5233,7 @@ IMPL_LINK_NOARG_TYPED( SvxIconSelectorDialog, ImportHdl, Button *, void)
 IMPL_LINK_NOARG_TYPED( SvxIconSelectorDialog, DeleteHdl, Button *, void )
 {
     OUString message = CUI_RES( RID_SVXSTR_DELETE_ICON_CONFIRM );
-    if ( ScopedVclPtr<WarningBox>::Create( this, WinBits(WB_OK_CANCEL), message )->Execute() == RET_OK )
+    if (ScopedVclPtrInstance<WarningBox>(this, WinBits(WB_OK_CANCEL), message)->Execute() == RET_OK)
     {
         sal_uInt16 nCount = pTbSymbol->GetItemCount();
 
@@ -5355,7 +5355,7 @@ void SvxIconSelectorDialog::ImportGraphics(
         {
             aIndex = rPaths[0].lastIndexOf( '/' );
             aIconName = rPaths[0].copy( aIndex+1 );
-            ret = ScopedVclPtr<SvxIconReplacementDialog>::Create( this, aIconName )->ShowDialog();
+            ret = ScopedVclPtrInstance<SvxIconReplacementDialog>(this, aIconName)->ShowDialog();
             if ( ret == 2 )
             {
                 ReplaceGraphicItem( rPaths[0] );
@@ -5383,7 +5383,7 @@ void SvxIconSelectorDialog::ImportGraphics(
             {
                 aIndex = rPaths[i].lastIndexOf( '/' );
                 aIconName = rPaths[i].copy( aIndex+1 );
-                ret = ScopedVclPtr<SvxIconReplacementDialog>::Create( this, aIconName, true )->ShowDialog();
+                ret = ScopedVclPtrInstance<SvxIconReplacementDialog>(this, aIconName, true)->ShowDialog();
                 if ( ret == 2 )
                 {
                     ReplaceGraphicItem( aPath );

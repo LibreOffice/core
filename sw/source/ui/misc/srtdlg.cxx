@@ -364,7 +364,7 @@ void SwSortDlg::Apply()
     }
 
     if( !bRet )
-        ScopedVclPtrInstance<MessageDialog>::Create( this->GetParent(), SW_RES(STR_SRTERR), VclMessageType::Info)->Execute();
+        ScopedVclPtrInstance<MessageDialog>(this->GetParent(), SW_RES(STR_SRTERR), VclMessageType::Info)->Execute();
 }
 
 IMPL_LINK_TYPED( SwSortDlg, DelimHdl, Button*, pButton, void )

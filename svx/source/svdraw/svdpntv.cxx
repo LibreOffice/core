@@ -1015,7 +1015,7 @@ void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, bool bReplaceAll)
         if(bHasEEFeatureItems)
         {
             OUString aMessage("SdrPaintView::SetDefaultAttr(): Setting EE_FEATURE items at the SdrView does not make sense! It only leads to overhead and unreadable documents.");
-            ScopedVclPtr<InfoBox>::Create(nullptr, aMessage)->Execute();
+            ScopedVclPtrInstance<InfoBox>(nullptr, aMessage)->Execute();
         }
     }
 #endif

@@ -183,7 +183,7 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
 
             if( !bDone )
             {
-                ScopedVclPtrInstance<MessageDialog>::Create( nullptr, SW_RES(STR_SCAN_NOSOURCE), VclMessageType::Info )->Execute();
+                ScopedVclPtrInstance<MessageDialog>(nullptr, SW_RES(STR_SCAN_NOSOURCE), VclMessageType::Info)->Execute();
                 rReq.Ignore();
             }
             else

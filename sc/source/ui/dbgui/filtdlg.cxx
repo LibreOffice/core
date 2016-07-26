@@ -680,7 +680,7 @@ IMPL_LINK_TYPED( ScFilterDlg, EndDlgHdl, Button*, pBtn, void )
                 if (!pExpander->get_expanded())
                   pExpander->set_expanded(true);
 
-                ScopedVclPtrInstance<MessageDialog>::Create(this, ScGlobal::GetRscString(STR_INVALID_TABREF))->Execute();
+                ScopedVclPtrInstance<MessageDialog>(this, ScGlobal::GetRscString(STR_INVALID_TABREF))->Execute();
                 pEdCopyArea->GrabFocus();
                 bAreaInputOk = false;
             }

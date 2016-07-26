@@ -423,7 +423,7 @@ public:
 
 IMPL_LINK_NOARG_TYPED( SmFontSizeDialog, DefaultButtonClickHdl, Button *, void )
 {
-    if (ScopedVclPtr<SaveDefaultsQuery>::Create(this)->Execute() == RET_YES)
+    if (ScopedVclPtrInstance<SaveDefaultsQuery>(this)->Execute() == RET_YES)
     {
         SmModule *pp = SM_MOD();
         SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
@@ -523,10 +523,9 @@ IMPL_LINK_TYPED( SmFontTypeDialog, MenuSelectHdl, Menu *, pMenu, bool )
     return false;
 }
 
-
 IMPL_LINK_NOARG_TYPED( SmFontTypeDialog, DefaultButtonClickHdl, Button *, void )
 {
-    if (ScopedVclPtr<SaveDefaultsQuery>::Create(this)->Execute() == RET_YES)
+    if (ScopedVclPtrInstance<SaveDefaultsQuery>(this)->Execute() == RET_YES)
     {
         SmModule *pp = SM_MOD();
         SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
@@ -722,7 +721,7 @@ IMPL_LINK_TYPED( SmDistanceDialog, MenuSelectHdl, Menu *, pMenu, bool )
 
 IMPL_LINK_NOARG_TYPED( SmDistanceDialog, DefaultButtonClickHdl, Button *, void )
 {
-    if (ScopedVclPtr<SaveDefaultsQuery>::Create(this)->Execute() == RET_YES)
+    if (ScopedVclPtrInstance<SaveDefaultsQuery>(this)->Execute() == RET_YES)
     {
         SmModule *pp = SM_MOD();
         SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
@@ -1021,7 +1020,7 @@ void SmDistanceDialog::WriteTo(SmFormat &rFormat) /*const*/
 
 IMPL_LINK_NOARG_TYPED( SmAlignDialog, DefaultButtonClickHdl, Button *, void )
 {
-    if (ScopedVclPtr<SaveDefaultsQuery>::Create(this)->Execute() == RET_YES)
+    if (ScopedVclPtrInstance<SaveDefaultsQuery>(this)->Execute() == RET_YES)
     {
         SmModule *pp = SM_MOD();
         SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );

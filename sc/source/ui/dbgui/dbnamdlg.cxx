@@ -37,7 +37,7 @@ class DBSaveData;
 
 static DBSaveData* pSaveObj = nullptr;
 
-#define ERRORBOX(s) ScopedVclPtrInstance<MessageDialog>::Create(this, s)->Execute()
+#define ERRORBOX(s) ScopedVclPtrInstance<MessageDialog>(this, s)->Execute()
 
 //  class DBSaveData
 

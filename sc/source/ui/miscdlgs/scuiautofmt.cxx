@@ -261,7 +261,7 @@ IMPL_LINK_NOARG_TYPED(ScAutoFormatDlg, AddHdl, Button*, void)
 
                 if ( !bFmtInserted )
                 {
-                    sal_uInt16 nRet = ScopedVclPtr<MessageDialog>::Create(this,
+                    sal_uInt16 nRet = ScopedVclPtrInstance<MessageDialog>(this,
                                             ScGlobal::GetRscString(STR_INVALID_AFNAME),
                                             VclMessageType::Error,
                                             VCL_BUTTONS_OK_CANCEL
@@ -286,7 +286,7 @@ IMPL_LINK_NOARG_TYPED(ScAutoFormatDlg, RemoveHdl, Button*, void)
         aMsg += aStrDelMsg.getToken( 1, '#' );
 
         if ( RET_YES ==
-             ScopedVclPtr<QueryBox>::Create( this, WinBits( WB_YES_NO | WB_DEF_YES ), aMsg )->Execute() )
+             ScopedVclPtrInstance<QueryBox>( this, WinBits( WB_YES_NO | WB_DEF_YES ), aMsg )->Execute() )
         {
             m_pLbFormat->RemoveEntry( nIndex );
             m_pLbFormat->SelectEntryPos( nIndex-1 );
@@ -381,7 +381,7 @@ IMPL_LINK_NOARG_TYPED(ScAutoFormatDlg, RenameHdl, Button*, void)
             }
             if( !bFmtRenamed )
             {
-                bOk = RET_CANCEL == ScopedVclPtr<MessageDialog>::Create( this,
+                bOk = RET_CANCEL == ScopedVclPtrInstance<MessageDialog>( this,
                                       ScGlobal::GetRscString(STR_INVALID_AFNAME),
                                       VclMessageType::Error,
                                       VCL_BUTTONS_OK_CANCEL

@@ -1008,7 +1008,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
                 if(!pGroupInfo->m_pModule)
                 {
                     pGroupInfo->m_bLoadError = true;
-                    ScopedVclPtr<InfoBox>::Create(pBox, sNotLoadedError)->Execute();
+                    ScopedVclPtrInstance<InfoBox>(pBox, sNotLoadedError)->Execute();
                     return;
                 }
                 if(bIdentical)

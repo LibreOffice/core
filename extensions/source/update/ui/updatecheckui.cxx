@@ -586,7 +586,7 @@ IMPL_LINK_NOARG_TYPED(UpdateCheckUI, ClickHdl, MenuBar::MenuBarButtonCallbackArg
             mrJob->execute( aEmpty );
         }
         catch(const uno::Exception&) {
-            ScopedVclPtrInstance<MessageDialog>::Create( nullptr, ResId( STR_NO_WEBBROWSER_FOUND, *mpSfxResMgr ))->Execute();
+            ScopedVclPtrInstance<MessageDialog>(nullptr, ResId( STR_NO_WEBBROWSER_FOUND, *mpSfxResMgr))->Execute();
         }
     }
 

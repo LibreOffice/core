@@ -92,7 +92,7 @@ IMPL_LINK_NOARG_TYPED(SvxMultiPathDialog, AddHdl_Impl, Button*, void)
         {
             OUString sMsg( CUI_RES( RID_MULTIPATH_DBL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sInsPath );
-            ScopedVclPtr<InfoBox>::Create( this, sMsg )->Execute();
+            ScopedVclPtrInstance<InfoBox>(this, sMsg)->Execute();
         }
 
         SelectHdl_Impl( nullptr );
@@ -116,7 +116,7 @@ IMPL_LINK_NOARG_TYPED(SvxPathSelectDialog, AddHdl_Impl, Button*, void)
         {
             OUString sMsg( CUI_RES( RID_MULTIPATH_DBL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sInsPath );
-            ScopedVclPtr<InfoBox>::Create( this, sMsg )->Execute();
+            ScopedVclPtrInstance<InfoBox>(this, sMsg)->Execute();
         }
         else
         {

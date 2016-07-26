@@ -456,7 +456,7 @@ namespace dbaui
         if ( !pWin )
             pWin = getView()->Window::GetParent();
 
-        ScopedVclPtrInstance<MessageDialog>::Create(pWin, aMessage, VclMessageType::Info)->Execute();
+        ScopedVclPtrInstance<MessageDialog>(pWin, aMessage, VclMessageType::Info)->Execute();
     }
     const Reference< XConnection >& DBSubComponentController::getConnection() const
     {
