@@ -489,11 +489,13 @@ void Test::testDateInput()
     const char* aData[][2] = {
         { "Europe/Paris", "1938-10-07" },      // i#76623
         { "Europe/Moscow", "1919-07-01" },     // i#86094
+        { "America/St_Johns", "1935-03-30" },  // i#86094 i#90627
         { "Europe/Tallinn", "1790-03-01" },    // i#105864
         { "Australia/Perth", "2004-04-11" },   // i#17222
         { "America/Sao_Paulo", "1902-04-22" }, // tdf#44286
         { "Europe/Berlin", "1790-07-27" },
         { "US/Mountain", "1790-07-26" },
+        { "Asia/Tehran", "1999-03-22" },
 
         // Data from https://bugs.documentfoundation.org/show_bug.cgi?id=63230
         // https://bugs.documentfoundation.org/attachment.cgi?id=79051
