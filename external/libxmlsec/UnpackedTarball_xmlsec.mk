@@ -13,6 +13,8 @@ xmlsec_patches += xmlsec1-nssdisablecallbacks.patch.1
 xmlsec_patches += xmlsec1-nssmangleciphers.patch.1
 xmlsec_patches += xmlsec1-noverify.patch.1
 xmlsec_patches += xmlsec1-mingw-keymgr-mscrypto.patch.1
+# Upstreamed as <https://github.com/lsh123/xmlsec/pull/37>.
+xmlsec_patches += xmlsec1-win32-fix-undeclared.patch.1
 xmlsec_patches += xmlsec1-vc.patch.1
 xmlsec_patches += xmlsec1-1.2.14_fix_extern_c.patch.1
 xmlsec_patches += xmlsec1-customkeymanage.patch.1

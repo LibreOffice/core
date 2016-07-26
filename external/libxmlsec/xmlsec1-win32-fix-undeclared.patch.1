@@ -1,0 +1,31 @@
+From 9481001992e12300db1a264144569ee1a2c4e24e Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 8 Jul 2016 09:56:59 +0200
+Subject: [PATCH] win32: fix undeclared XMLSEC_DEFAULT_CRYPTO
+
+The problem was that APP_CFLAGS is not used for src/xmlsec.c, but it now
+uses the identifier. This wasn't a problem on Linux, where commit
+29da6cbb8f161ad01ff69ee5f8f6ec5d9f3dfab5 (replace XMLSEC_CRYPTO define
+with xmlSecGetDefaultCrypto() function, 2016-02-06) updated
+src/Makefile.am to include XMLSEC_DEFAULT_CRYPTO in the generic
+AM_CFLAGS.
+---
+ win32/Makefile.msvc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/win32/Makefile.msvc b/win32/Makefile.msvc
+index e3d5262..8c887a1 100644
+--- a/win32/Makefile.msvc
++++ b/win32/Makefile.msvc
+@@ -334,7 +334,7 @@ CFLAGS 			= $(CFLAGS) /DXMLSEC_MSCRYPTO_NT4=1
+ !else 
+ !endif
+ 
+-APP_CFLAGS		= /D "XMLSEC_DEFAULT_CRYPTO=\"$(XMLSEC_DEFAULT_CRYPTO)\""
++CFLAGS			= $(CFLAGS) /D "XMLSEC_DEFAULT_CRYPTO=\"$(XMLSEC_DEFAULT_CRYPTO)\""
+ !if "$(WITH_DL)" == "1"
+ CFLAGS			= $(CFLAGS) /D "XMLSEC_DL_WIN32"
+ APP_CFLAGS		= $(APP_CFLAGS) /D "XMLSEC_CRYPTO_DYNAMIC_LOADING"
+-- 
+2.6.6
+
