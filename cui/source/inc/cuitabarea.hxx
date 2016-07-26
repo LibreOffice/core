@@ -46,7 +46,7 @@ class SvxAreaTabDialog : public SfxTabDialog
     sal_uInt16            m_nColorTabPage;
     sal_uInt16            m_nGradientTabPage;
     sal_uInt16            m_nHatchTabPage;
-    //sal_uInt16            m_nBitmapTabPage;
+    sal_uInt16            m_nBitmapTabPage;
     sal_uInt16            m_nPatternTabPage;
 
 private:
@@ -549,6 +549,65 @@ public:
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
 
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
+};
+
+/************************************************************************/
+
+class SvxBitmapTabPage : public SvxTabPage
+{
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+private:
+
+    VclPtr<SvxPresetListBox>   m_pBitmapLB;
+    VclPtr<PushButton>         m_pBtnImport;
+    VclPtr<SvxXRectPreview>    m_pCtlBitmapPreview;
+
+    const SfxItemSet&          m_rOutAttrs;
+
+    XBitmapListRef             m_pBitmapList;
+    ChangeType*                m_pnBitmapListState;
+    XFillStyleItem             m_aXFStyleItem;
+    XFillBitmapItem            m_aXBitmapItem;
+
+    sal_uInt16*                m_nPageType;
+    sal_uInt16                 m_nDlgType;
+    sal_Int32*                 m_nPos;
+
+    bool*                      m_pbAreaTP;
+
+    XFillAttrSetItem           m_aXFillAttr;
+    SfxItemSet&                m_rXFSet;
+
+    DECL_LINK_TYPED( ModifyBitmapHdl, ValueSet*, void );
+    DECL_LINK_TYPED( ClickRenameHdl, SvxPresetListBox*, void );
+    DECL_LINK_TYPED( ClickDeleteHdl, SvxPresetListBox*, void );
+    DECL_LINK_TYPED( ClickImportHdl, Button*, void );
+    void ClickBitmapHdl_Impl();
+    sal_Int32 SearchBitmapList(const OUString& rBitmapName);
+
+public:
+    SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
+    virtual ~SvxBitmapTabPage();
+    virtual void dispose() override;
+
+    void    Construct();
+
+    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
+
+    virtual bool FillItemSet( SfxItemSet* ) override;
+    virtual void Reset( const SfxItemSet * ) override;
+    virtual void ActivatePage( const SfxItemSet& rSet ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
+    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
+
+    void    SetBitmapList( XBitmapListRef pBmpLst) { m_pBitmapList = pBmpLst; }
+
+    void    SetPageType( sal_uInt16* pInType ) { m_nPageType = pInType; }
+    void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
+    void    SetPos( sal_Int32* pInPos ) { m_nPos = pInPos; }
+    void    SetAreaTP( bool* pIn ) { m_pbAreaTP = pIn; }
+    void    SetBmpChgd( ChangeType* pIn ) { m_pnBitmapListState = pIn; }
 };
 
 /************************************************************************/
