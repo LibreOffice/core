@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a8bc5a2_b225c6af",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1565,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2016-07-26T16:10:16Z",
+      "side": 0,
+      "message": "In this implementation we are adding half pixel to column width, which is wrong as it will be rounded to 0. So in that case we could easily remove 0.5 from previous implementation.\n\nIn MS specification there were added half character (0.5*256 \u003d 128). I made this implementation according to MS specification.",
+      "revId": "b944e498a3053497394963b4e7bda2951ddcbcc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

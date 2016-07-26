@@ -22,6 +22,30 @@
       "revId": "dd73d0efa06bdd333f5d6bb66c5e06ce40d1023a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_fc800949",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2016-07-26T16:10:16Z",
+      "side": 1,
+      "message": "Thanks. Nice catch. I will fix that ASAP",
+      "parentUuid": "3a98d1f4_1c41353a",
+      "range": {
+        "startLine": 497,
+        "startChar": 50,
+        "endLine": 497,
+        "endChar": 53
+      },
+      "revId": "dd73d0efa06bdd333f5d6bb66c5e06ce40d1023a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
