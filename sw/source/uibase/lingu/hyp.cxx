@@ -120,7 +120,7 @@ SwHyphWrapper::~SwHyphWrapper()
     if( nPageCount )
         ::EndProgress( pView->GetDocShell() );
     if( bInfoBox )
-        ScopedVclPtr<InfoBox>::Create( &pView->GetEditWin(), SW_RESSTR(STR_HYP_OK) )->Execute();
+        ScopedVclPtrInstance<InfoBox>(&pView->GetEditWin(), SW_RESSTR(STR_HYP_OK))->Execute();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

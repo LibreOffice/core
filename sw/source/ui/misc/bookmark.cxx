@@ -63,7 +63,7 @@ IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, ModifyHdl, Edit&, void)
     if (sTmp.getLength() != nLen)
     {
         m_pEditBox->SetText(sTmp);
-        ScopedVclPtr<InfoBox>::Create(this, sRemoveWarning + sMsg)->Execute();
+        ScopedVclPtrInstance<InfoBox>(this, sRemoveWarning + sMsg)->Execute();
     }
 
     sal_Int32 nSelectedEntries = 0;

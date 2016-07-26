@@ -404,7 +404,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         }
         {
             SolarMutexGuard guard;
-            short n = ScopedVclPtrInstance<DependencyDialog>::Create( m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr, deps )->Execute();
+            short n = ScopedVclPtrInstance<DependencyDialog>( m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr, deps )->Execute();
             // Distinguish between closing the dialog and programatically
             // canceling the dialog (headless VCL):
             approve = n == RET_OK
@@ -946,7 +946,7 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
         short nDialogResult = RET_OK;
         if ( !dataDownload.empty() )
         {
-            nDialogResult = ScopedVclPtrInstance<UpdateInstallDialog>::Create( m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr, dataDownload, m_xContext )->Execute();
+            nDialogResult = ScopedVclPtrInstance<UpdateInstallDialog>( m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr, dataDownload, m_xContext )->Execute();
             pUpdateDialog->notifyMenubar( false, true ); // Check, if there are still pending updates to be notified via menu bar icon
         }
         else

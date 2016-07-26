@@ -674,7 +674,7 @@ namespace dbaui
                     {
                         OUString sFile = ModuleRes( STR_FILE_DOES_NOT_EXIST );
                         sFile = sFile.replaceFirst("$file$", aTransformer.get(OFileNotation::N_SYSTEM));
-                        ScopedVclPtr<OSQLWarningBox>::Create( this, sFile )->Execute();
+                        ScopedVclPtrInstance<OSQLWarningBox>(this, sFile)->Execute();
                         setURLNoPrefix(sOldPath);
                         SetRoadmapStateValue(false);
                         callModifiedHdl();

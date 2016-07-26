@@ -39,7 +39,7 @@
 
 // DEFINE --------------------------------------------------------------------
 
-#define ERRORBOX(rid) ScopedVclPtrInstance<MessageDialog>::Create(this, ScGlobal::GetRscString(rid))->Execute()
+#define ERRORBOX(rid) ScopedVclPtrInstance<MessageDialog>(this, ScGlobal::GetRscString(rid))->Execute()
 
 //  class ScSpecialFilterDialog
 

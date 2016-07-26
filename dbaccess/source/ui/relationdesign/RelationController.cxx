@@ -160,7 +160,7 @@ void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue
                 if(!::dbaui::checkDataSourceAvailable(::comphelper::getString(getDataSource()->getPropertyValue(PROPERTY_NAME)), getORB()))
                 {
                     OUString aMessage(ModuleRes(STR_DATASOURCE_DELETED));
-                    ScopedVclPtr<OSQLWarningBox>::Create( getView(), aMessage )->Execute();
+                    ScopedVclPtrInstance<OSQLWarningBox>(getView(), aMessage)->Execute();
                 }
                 else
                 {

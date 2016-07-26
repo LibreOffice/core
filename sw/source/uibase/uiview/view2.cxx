@@ -2267,7 +2267,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
             if (!bCompare && !nFound)
             {
                 vcl::Window* pWin = &GetEditWin();
-                ScopedVclPtrInstance<MessageDialog>::Create(pWin, SW_RES(STR_NO_MERGE_ENTRY), VCL_MESSAGE_INFO)->Execute();
+                ScopedVclPtrInstance<MessageDialog>(pWin, SW_RES(STR_NO_MERGE_ENTRY), VCL_MESSAGE_INFO)->Execute();
             }
             if( nRet==2 && xDocSh.Is() )
                 xDocSh->DoClose();

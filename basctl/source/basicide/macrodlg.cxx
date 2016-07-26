@@ -613,7 +613,7 @@ IMPL_LINK_TYPED( MacroChooser, ButtonHdl, Button *, pButton, void )
                 ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
                 if ( aDocument.isDocument() && !aDocument.allowMacros() )
                 {
-                    ScopedVclPtrInstance<MessageDialog>::Create(this, IDEResId(RID_STR_CANNOTRUNMACRO), VCL_MESSAGE_WARNING)->Execute();
+                    ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_CANNOTRUNMACRO), VCL_MESSAGE_WARNING)->Execute();
                     return;
                 }
             }
@@ -622,7 +622,7 @@ IMPL_LINK_TYPED( MacroChooser, ButtonHdl, Button *, pButton, void )
         {
             if ( !IsValidSbxName(m_pMacroNameEdit->GetText()) )
             {
-                ScopedVclPtrInstance<MessageDialog>::Create(this, IDEResId(RID_STR_BADSBXNAME))->Execute();
+                ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_BADSBXNAME))->Execute();
                 m_pMacroNameEdit->SetSelection( Selection( 0, m_pMacroNameEdit->GetText().getLength() ) );
                 m_pMacroNameEdit->GrabFocus();
                 return;
@@ -695,7 +695,7 @@ IMPL_LINK_TYPED( MacroChooser, ButtonHdl, Button *, pButton, void )
             {
                 if ( !IsValidSbxName(m_pMacroNameEdit->GetText()) )
                 {
-                    ScopedVclPtrInstance<MessageDialog>::Create(this, IDEResId(RID_STR_BADSBXNAME))->Execute();
+                    ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_BADSBXNAME))->Execute();
                     m_pMacroNameEdit->SetSelection( Selection( 0, m_pMacroNameEdit->GetText().getLength() ) );
                     m_pMacroNameEdit->GrabFocus();
                     return;

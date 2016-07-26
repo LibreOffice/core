@@ -531,7 +531,7 @@ IMPL_LINK_NOARG_TYPED(SdDefineCustomShowDlg, OKHdl, Button*, void)
     }
     else
     {
-        ScopedVclPtr<WarningBox>::Create( this, WinBits( WB_OK ),
+        ScopedVclPtrInstance<WarningBox>( this, WinBits( WB_OK ),
                     SD_RESSTR( STR_WARN_NAME_DUPLICATE ) )->Execute();
 
         m_pEdtName->GrabFocus();

@@ -340,7 +340,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
             {
                 if (mpView->IsPresObjSelected(false, true, false, true))
                 {
-                    ScopedVclPtr<InfoBox>::Create(mpWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) )->Execute();
+                    ScopedVclPtrInstance<InfoBox>(mpWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
                 }
                 else
                 {

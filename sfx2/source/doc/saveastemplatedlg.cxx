@@ -94,7 +94,7 @@ IMPL_LINK_NOARG_TYPED(SfxSaveAsTemplateDialog, OkClickHdl, Button*, void)
     else
     {
         OUString sText( SfxResId(STR_ERROR_SAVEAS).toString() );
-        ScopedVclPtrInstance<MessageDialog>::Create(this, sText.replaceFirst("$1", msTemplateName))->Execute();
+        ScopedVclPtrInstance<MessageDialog>(this, sText.replaceFirst("$1", msTemplateName))->Execute();
     }
 }
 

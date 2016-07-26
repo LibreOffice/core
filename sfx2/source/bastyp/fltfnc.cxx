@@ -509,7 +509,7 @@ bool SfxFilterMatcher::IsFilterInstalled_Impl( const std::shared_ptr<const SfxFi
         {
 #ifdef DBG_UTIL
             // Start Setup
-            ScopedVclPtr<InfoBox>::Create( nullptr, "Here should the Setup now be starting!" )->Execute();
+            ScopedVclPtrInstance<InfoBox>( nullptr, "Here should the Setup now be starting!" )->Execute();
 #endif
             // Installation must still give feedback if it worked or not,
             // then the  Filterflag be deleted
@@ -521,7 +521,7 @@ bool SfxFilterMatcher::IsFilterInstalled_Impl( const std::shared_ptr<const SfxFi
     {
         OUString aText( SfxResId(STR_FILTER_CONSULT_SERVICE).toString() );
         aText = aText.replaceFirst( "$(FILTER)", pFilter->GetUIName() );
-        ScopedVclPtr<InfoBox>::Create( nullptr, aText )->Execute();
+        ScopedVclPtrInstance<InfoBox>( nullptr, aText )->Execute();
         return false;
     }
     else

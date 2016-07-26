@@ -425,7 +425,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 }
                                 else
                                 {
-                                    nRet = ScopedVclPtr<MessageDialog>::Create(GetDialogParent(),
+                                    nRet = ScopedVclPtrInstance<MessageDialog>(GetDialogParent(),
                                                      aErrMsg
                                                    )->Execute();
                                 }
@@ -595,7 +595,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 {
                     // no parameter given, ask for confirmation
                     bDoIt = ( RET_YES ==
-                              ScopedVclPtr<QueryBox>::Create( GetDialogParent(),
+                              ScopedVclPtrInstance<QueryBox>( GetDialogParent(),
                                         WinBits( WB_YES_NO | WB_DEF_YES ),
                                         ScGlobal::GetRscString(STR_QUERY_DELTAB)
                                   )->Execute() );

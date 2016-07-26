@@ -585,7 +585,7 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
                     {
                         OUString sMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE).toString());
                         sMsg = sMsg.replaceFirst("$1",getRegionName(nTargetRegion));
-                        ScopedVclPtrInstance<MessageDialog>::Create(this, sMsg.replaceFirst( "$2",pViewItem->maTitle))->Execute();
+                        ScopedVclPtrInstance<MessageDialog>(this, sMsg.replaceFirst( "$2",pViewItem->maTitle))->Execute();
 
                         return false; //return if any single move operation fails
                     }

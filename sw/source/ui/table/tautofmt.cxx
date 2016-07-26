@@ -357,7 +357,7 @@ IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, AddHdl, Button*, void)
 
             if( !bFormatInserted )
             {
-                bOk = RET_CANCEL == ScopedVclPtr<MessageDialog>::Create(this, aStrInvalidFormat, VCL_MESSAGE_ERROR, VCL_BUTTONS_OK_CANCEL)
+                bOk = RET_CANCEL == ScopedVclPtrInstance<MessageDialog>(this, aStrInvalidFormat, VCL_MESSAGE_ERROR, VCL_BUTTONS_OK_CANCEL)
                                     ->Execute();
             }
         }
@@ -455,7 +455,7 @@ IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, RenameHdl, Button*, void)
 
             if( !bFormatRenamed )
             {
-                bOk = RET_CANCEL == ScopedVclPtr<MessageDialog>::Create(this, aStrInvalidFormat, VCL_MESSAGE_ERROR, VCL_BUTTONS_OK_CANCEL)
+                bOk = RET_CANCEL == ScopedVclPtrInstance<MessageDialog>(this, aStrInvalidFormat, VCL_MESSAGE_ERROR, VCL_BUTTONS_OK_CANCEL)
                                     ->Execute();
             }
         }

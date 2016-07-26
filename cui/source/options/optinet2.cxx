@@ -132,7 +132,7 @@ void SvxNoSpaceEdit::Modify()
 
         if ( !comphelper::string::isdigitAsciiString(aValue) || (long)aValue.toInt32() > USHRT_MAX )
             // the maximum value of a port number is USHRT_MAX
-            ScopedVclPtrInstance<MessageDialog>::Create( this, CUI_RES( RID_SVXSTR_OPT_PROXYPORTS ) )->Execute();
+            ScopedVclPtrInstance<MessageDialog>(this, CUI_RES( RID_SVXSTR_OPT_PROXYPORTS))->Execute();
     }
 }
 

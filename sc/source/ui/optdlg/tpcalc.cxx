@@ -203,7 +203,7 @@ SfxTabPage::sfxpg ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
 
     if ( nReturn == KEEP_PAGE )
     {
-        ScopedVclPtr<MessageDialog>::Create( this,
+        ScopedVclPtrInstance<MessageDialog>( this,
                   ScGlobal::GetRscString( STR_INVALID_EPS )
                 )->Execute();
 

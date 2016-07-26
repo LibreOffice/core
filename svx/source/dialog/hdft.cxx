@@ -531,9 +531,9 @@ IMPL_LINK_TYPED( SvxHFPage, TurnOnHdl, Button *, pButton, void )
         {
             short nResult;
             if (nId == SID_ATTR_PAGE_HEADERSET)
-                nResult = ScopedVclPtrInstance<DeleteHeaderDialog>::Create(this)->Execute();
+                nResult = ScopedVclPtrInstance<DeleteHeaderDialog>(this)->Execute();
             else
-                nResult = ScopedVclPtrInstance<DeleteFooterDialog>::Create(this)->Execute();
+                nResult = ScopedVclPtrInstance<DeleteFooterDialog>(this)->Execute();
             bDelete = nResult == RET_YES;
         }
 

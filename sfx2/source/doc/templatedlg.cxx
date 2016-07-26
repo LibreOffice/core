@@ -724,7 +724,7 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, ImportClickHdl, Button*, void)
             else
             {
                 OUString aMsg( SfxResId(STR_CREATE_ERROR).toString() );
-                ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$1", sCategory))->Execute();
+                ScopedVclPtrInstance<MessageDialog>(this, aMsg.replaceFirst("$1", sCategory))->Execute();
                 return;
             }
         }
@@ -845,7 +845,7 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, DeleteTemplateHdl, ThumbnailViewItem*, pI
     if (!aDeletedTemplate.isEmpty())
     {
         OUString aMsg( SfxResId(STR_MSG_ERROR_DELETE_TEMPLATE).toString() );
-        ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$1",aDeletedTemplate))->Execute();
+        ScopedVclPtrInstance<MessageDialog>(this, aMsg.replaceFirst("$1",aDeletedTemplate))->Execute();
     }
 }
 
@@ -1067,7 +1067,7 @@ void SfxTemplateManagerDlg::OnTemplateImportCategory(const OUString& sCategory)
                 {
                     OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT).toString());
                     aMsg = aMsg.replaceFirst("$1",pContItem->maTitle);
-                    ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$2",aTemplateList))->Execute();
+                    ScopedVclPtrInstance<MessageDialog>(this, aMsg.replaceFirst("$2",aTemplateList))->Execute();
                 }
             }
         }
@@ -1156,12 +1156,12 @@ void SfxTemplateManagerDlg::OnTemplateExport()
         if (!aTemplateList.isEmpty())
         {
             OUString aText( SfxResId(STR_MSG_ERROR_EXPORT).toString() );
-            ScopedVclPtrInstance<MessageDialog>::Create(this, aText.replaceFirst("$1",aTemplateList))->Execute();
+            ScopedVclPtrInstance<MessageDialog>(this, aText.replaceFirst("$1",aTemplateList))->Execute();
         }
         else
         {
             OUString sText( SfxResId(STR_MSG_EXPORT_SUCCESS).toString() );
-            ScopedVclPtrInstance<MessageDialog>::Create(this, sText.replaceFirst("$1", OUString::number(nCount)), VclMessageType::VCL_MESSAGE_INFO)->Execute();
+            ScopedVclPtrInstance<MessageDialog>(this, sText.replaceFirst("$1", OUString::number(nCount)), VclMessageType::VCL_MESSAGE_INFO)->Execute();
         }
     }
 }
@@ -1221,7 +1221,7 @@ void SfxTemplateManagerDlg::OnCategoryNew()
         else
         {
             OUString aMsg( SfxResId(STR_CREATE_ERROR).toString() );
-            ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$1", aName))->Execute();
+            ScopedVclPtrInstance<MessageDialog>(this, aMsg.replaceFirst("$1", aName))->Execute();
         }
     }
 }
@@ -1251,7 +1251,7 @@ void SfxTemplateManagerDlg::OnCategoryRename()
         else
         {
             OUString aMsg( SfxResId(STR_CREATE_ERROR).toString() );
-            ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$1", aName))->Execute();
+            ScopedVclPtrInstance<MessageDialog>(this, aMsg.replaceFirst("$1", aName))->Execute();
         }
     }
 }
@@ -1279,7 +1279,7 @@ void SfxTemplateManagerDlg::OnCategoryDelete()
         if (!mpLocalView->removeRegion(nItemId))
         {
             OUString sMsg( SfxResId(STR_MSG_ERROR_DELETE_FOLDER).toString() );
-            ScopedVclPtrInstance<MessageDialog>::Create(this, sMsg.replaceFirst("$1",sCategory))->Execute();
+            ScopedVclPtrInstance<MessageDialog>(this, sMsg.replaceFirst("$1",sCategory))->Execute();
         }
         else
         {
@@ -1422,7 +1422,7 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nItemId)
                 OUString sDst = mpLocalView->getRegionItemName(nItemId);
                 OUString sMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE).toString());
                 sMsg = sMsg.replaceFirst("$1",sDst);
-                ScopedVclPtrInstance<MessageDialog>::Create(this, sMsg.replaceFirst( "$2",pItem->maTitle))->Execute();
+                ScopedVclPtrInstance<MessageDialog>(this, sMsg.replaceFirst( "$2",pItem->maTitle))->Execute();
             }
         }
     }
