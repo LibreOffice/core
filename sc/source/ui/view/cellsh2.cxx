@@ -850,7 +850,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     }
 
                     // cell range picker
-                    ScopedVclPtr<ScValidationDlg> pDlg(VclPtr<ScValidationDlg>::Create(nullptr, &aArgSet, pTabViewShell));
+                    ScopedVclPtrInstance<ScValidationDlg> pDlg(nullptr, &aArgSet, pTabViewShell);
 
                     short nResult = pDlg->Execute();
                     if ( nResult == RET_OK )
