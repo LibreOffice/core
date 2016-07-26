@@ -497,14 +497,6 @@ void Test::testDateInput()
         { "US/Mountain", "1790-07-26" },
         { "Asia/Tehran", "1999-03-22" },
 
-        /* FIXME: still failing, see
-         * https://bugs.documentfoundation.org/show_bug.cgi?id=100046#c7 */
-#if 0
-        { "Europe/Gibraltar", "1945-04-02" },
-        { "Europe/Monaco", "1945-04-02" },
-        { "Europe/Paris", "1945-04-02" },
-#endif
-
         // Data from https://bugs.documentfoundation.org/show_bug.cgi?id=63230
         // https://bugs.documentfoundation.org/attachment.cgi?id=79051
         // https://bugs.documentfoundation.org/show_bug.cgi?id=79663
@@ -883,6 +875,7 @@ void Test::testDateInput()
         { "Europe/Gibraltar", "1942-04-05" },
         { "Europe/Gibraltar", "1943-04-04" },
         { "Europe/Gibraltar", "1944-04-02" },
+        { "Europe/Gibraltar", "1945-04-02" },
         { "Europe/Gibraltar", "1947-04-13" },
         { "Europe/Helsinki", "1921-05-01" },
         { "Europe/Istanbul", "1880-01-01" },
@@ -908,12 +901,14 @@ void Test::testDateInput()
         { "Europe/Monaco", "1942-03-09" },
         { "Europe/Monaco", "1943-03-29" },
         { "Europe/Monaco", "1944-04-03" },
+        { "Europe/Monaco", "1945-04-02" },
         { "Europe/Moscow", "1916-07-03" },
         { "Europe/Moscow", "1919-05-31" },
         { "Europe/Moscow", "1930-06-21" },
         { "Europe/Moscow", "1992-01-19" },
         { "Europe/Moscow", "2011-03-27" },
         { "Europe/Oslo", "1895-01-01" },
+        { "Europe/Paris", "1945-04-02" },
         { "Europe/Prague", "1891-10-01" },
         { "Europe/Riga", "1926-05-11" },
         { "Europe/Riga", "1940-08-05" },
