@@ -57,6 +57,7 @@ public:
     void testViewCursorVisibility();
     void testViewCursorCleanup();
     void testViewLock();
+    void testTextEditViewInvalidations();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -80,6 +81,7 @@ public:
     CPPUNIT_TEST(testViewCursorVisibility);
     CPPUNIT_TEST(testViewCursorCleanup);
     CPPUNIT_TEST(testViewLock);
+    CPPUNIT_TEST(testTextEditViewInvalidations);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -816,6 +818,39 @@ void SwTiledRenderingTest::testViewLock()
     mxComponent->dispose();
     mxComponent.clear();
 
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testTextEditViewInvalidations()
+{
+    // Load a document that has a shape and create two views.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    SfxLokHelper::createView();
+    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ViewCallback aView2;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+
+    // Begin text edit in the second view.
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+    SdrView* pView = pWrtShell->GetDrawView();
+    pWrtShell->GetView().BeginTextEdit(pObject, pView->GetSdrPageView(), pWrtShell->GetWin());
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+
+    // Assert that both views are invalidated when pressing a key while in text edit.
+    aView1.m_bTilesInvalidated = false;
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'y', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'y', 0);
+    CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
+
+    pWrtShell->EndTextEdit();
+    mxComponent->dispose();
+    mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
 }
 
