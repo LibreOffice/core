@@ -28,6 +28,7 @@
 #include <tools/resmgr.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/asyncnotification.hxx>
 
 #include <unotools/syslocaleoptions.hxx>
 #include <vcl/svapp.hxx>
@@ -352,6 +353,10 @@ VCLUnoWrapperDeleter::disposing(lang::EventObject const& /* rSource */)
 
 void DeInitVCL()
 {
+    {
+        SolarMutexReleaser r; // unblock threads blocked on that so we can join
+        ::comphelper::JoinAsyncEventNotifiers();
+    }
     ImplSVData* pSVData = ImplGetSVData();
     // lp#1560328: clear cache before disposing rest of VCL
     if(pSVData->mpBlendFrameCache)
