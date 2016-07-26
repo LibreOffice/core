@@ -374,6 +374,8 @@ SwDoc::SwDoc()
     }
     mnRsidRoot = mnRsid;
 
+    mpTableStyles->Load();
+
     getIDocumentState().ResetModified();
 }
 
