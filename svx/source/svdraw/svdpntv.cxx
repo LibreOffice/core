@@ -60,6 +60,7 @@
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <comphelper/lok.hxx>
+#include <svx/svdviter.hxx>
 
 using namespace ::com::sun::star;
 
@@ -747,6 +748,26 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
         if(IsTextEdit() && GetSdrPageView())
         {
             static_cast< SdrView* >(this)->TextEditDrawing(rPaintWindow);
+        }
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            // Look for active text edits in other views showing the same page,
+            // and show them as well.
+            if (SdrPageView* pPageView = GetSdrPageView())
+            {
+                SdrViewIter aIter(pPageView->GetPage());
+                for (SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView())
+                {
+                    if (pView == this)
+                        continue;
+
+                    if (pView->IsTextEdit() && pView->GetSdrPageView())
+                    {
+                        static_cast<SdrView*>(pView)->TextEditDrawing(rPaintWindow);
+                    }
+                }
+            }
         }
 
         // draw Overlay, also to PreRender device if exists
