@@ -24,6 +24,7 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -43,6 +44,7 @@
 #include <swunohelper.hxx>
 #include <dbmgr.hxx>
 #include <view.hxx>
+#include <unodispatch.hxx>
 #include <wrtsh.hxx>
 #include <dbui.hrc>
 #include <vector>
@@ -732,8 +734,25 @@ SwMailMergeConfigItem::SwMailMergeConfigItem() :
     m_pTargetView(nullptr)
 {}
 
+void SwMailMergeConfigItem::stopDBChangeListening()
+{
+    if (m_xDBChangedListener.is())
+    {
+        uno::Reference<view::XSelectionSupplier> xSupplier = m_pSourceView->GetUNOObject();
+        xSupplier->removeSelectionChangeListener(m_xDBChangedListener);
+        m_xDBChangedListener.clear();
+    }
+}
+
+void SwMailMergeConfigItem::updateCurrentDBDataFromDocument()
+{
+    const SwDBData& rDBData = m_pSourceView->GetWrtShell().GetDBDesc();
+    SetCurrentDBData(rDBData);
+}
+
 SwMailMergeConfigItem::~SwMailMergeConfigItem()
 {
+    stopDBChangeListening();
 }
 
 void  SwMailMergeConfigItem::Commit()
@@ -857,6 +876,7 @@ void SwMailMergeConfigItem::SetCurrentDBData( const SwDBData& rDBData)
         m_pImpl->m_aDBData = rDBData;
         m_pImpl->m_xConnection.clear();
         m_pImpl->m_xSource = nullptr;
+        m_pImpl->m_xResultSet = nullptr;
         m_pImpl->m_xColumnsSupplier = nullptr;
         m_pImpl->SetModified();
     }
@@ -1613,16 +1633,63 @@ SwView* SwMailMergeConfigItem::GetSourceView()
     return m_pSourceView;
 }
 
+//This implements XSelectionChangeListener and XDispatch because the
+//broadcaster uses this combo to determine if to send the database-changed
+//update. Its probably that listening to statusChanged at some other level is
+//equivalent to this. See the other call to SwXDispatch::GetDBChangeURL for
+//the broadcaster of the event.
+class DBChangeListener : public cppu::WeakImplHelper<css::view::XSelectionChangeListener, css::frame::XDispatch>
+{
+    SwMailMergeConfigItem& m_rParent;
+public:
+    explicit DBChangeListener(SwMailMergeConfigItem& rParent)
+        : m_rParent(rParent)
+    {
+    }
+
+    virtual void SAL_CALL selectionChanged(const EventObject& /*rEvent*/) throw (css::uno::RuntimeException, std::exception) override
+    {
+    }
+
+    virtual void SAL_CALL disposing(const EventObject&) throw (css::uno::RuntimeException, std::exception) override
+    {
+        m_rParent.stopDBChangeListening();
+    }
+
+    virtual void SAL_CALL dispatch(const css::util::URL& rURL, const css::uno::Sequence< css::beans::PropertyValue >& /*rArgs*/)
+        throw (css::uno::RuntimeException,
+               std::exception) override
+    {
+        if (rURL.Complete.equalsAscii(SwXDispatch::GetDBChangeURL()))
+            m_rParent.updateCurrentDBDataFromDocument();
+    }
+
+    virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener >&, const css::util::URL&) throw(css::uno::RuntimeException, std::exception) override
+    {
+    }
+
+    virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >&, const css::util::URL&) throw(css::uno::RuntimeException, std::exception) override
+    {
+    }
+};
+
 void SwMailMergeConfigItem::SetSourceView(SwView* pView)
 {
+    if (m_xDBChangedListener.is())
+    {
+        uno::Reference<view::XSelectionSupplier> xSupplier = m_pSourceView->GetUNOObject();
+        xSupplier->removeSelectionChangeListener(m_xDBChangedListener);
+        m_xDBChangedListener.clear();
+    }
+
     m_pSourceView = pView;
 
-    if (!pView)
+    if (!m_pSourceView)
         return;
 
     std::vector<OUString> aDBNameList;
     std::vector<OUString> aAllDBNames;
-    pView->GetWrtShell().GetAllUsedDB( aDBNameList, &aAllDBNames );
+    m_pSourceView->GetWrtShell().GetAllUsedDB( aDBNameList, &aAllDBNames );
     if(!aDBNameList.empty())
     {
         // if fields are available there is usually no need of an addressblock and greeting
@@ -1656,6 +1723,14 @@ void SwMailMergeConfigItem::SetSourceView(SwView* pView)
 
         m_pImpl->m_bUserSettingWereOverwritten = false;
     }
+
+    if (!m_xDBChangedListener.is())
+    {
+        m_xDBChangedListener.set(new DBChangeListener(*this));
+    }
+
+    uno::Reference<view::XSelectionSupplier> xSupplier = m_pSourceView->GetUNOObject();
+    xSupplier->addSelectionChangeListener(m_xDBChangedListener);
 }
 
 void SwMailMergeConfigItem::SetCurrentAddressBlockIndex( sal_Int32 nSet )

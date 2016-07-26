@@ -21,6 +21,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <tools/resary.hxx>
 #include <memory>
 #include <set>
@@ -58,6 +59,7 @@ class SW_DLLPUBLIC SwMailMergeConfigItem
     sal_Int32 m_nGreetingMoves;
     OUString m_rAddressBlockFrame;
     std::set<sal_Int32> m_aExcludedRecords;
+    css::uno::Reference<css::view::XSelectionChangeListener> m_xDBChangedListener;
 
     sal_uInt16 m_nStartPrint;
     sal_uInt16 m_nEndPrint;
@@ -253,7 +255,9 @@ public:
     void SetSourceView(SwView* pView);
 
     //helper methods
-    OUString GetAssignedColumn(sal_uInt32 nColumn)const;
+    OUString GetAssignedColumn(sal_uInt32 nColumn) const;
+    void stopDBChangeListening();
+    void updateCurrentDBDataFromDocument();
 };
 
 #endif
