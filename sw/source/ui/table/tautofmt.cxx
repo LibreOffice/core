@@ -32,6 +32,7 @@
 #include <svtools/accessibilityoptions.hxx>
 #include <svx/framelinkarray.hxx>
 #include "app.hrc"
+#include "doc.hxx"
 #include "swmodule.hxx"
 #include "swtypes.hxx"
 #include "view.hxx"
@@ -172,8 +173,7 @@ SwAutoFormatDlg::SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pWrtShell,
 
     m_pWndPreview->DetectRTL(pWrtShell);
 
-    pTableTable = new SwTableAutoFormatTable;
-    pTableTable->Load();
+    pTableTable = &pShell->GetDoc()->GetTableStyles();
 
     Init(pSelFormat);
 }
@@ -185,9 +185,6 @@ SwAutoFormatDlg::~SwAutoFormatDlg()
 
 void SwAutoFormatDlg::dispose()
 {
-    if (bCoreDataChanged)
-        pTableTable->Save();
-    delete pTableTable;
     m_pLbFormat.clear();
     m_pFormatting.clear();
     m_pBtnNumFormat.clear();
