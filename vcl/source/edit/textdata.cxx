@@ -55,33 +55,74 @@ TETextPortionList::~TETextPortionList()
     Reset();
 }
 
+TETextPortion* TETextPortionList::operator[]( size_t nPos )
+{
+    return maPortions[ nPos ];
+}
+
+std::vector<TETextPortion*>::const_iterator TETextPortionList::begin() const
+{
+    return maPortions.begin();
+}
+
+std::vector<TETextPortion*>::const_iterator TETextPortionList::end() const
+{
+    return maPortions.end();
+}
+
+bool TETextPortionList::empty() const
+{
+    return maPortions.empty();
+}
+
+size_t TETextPortionList::size() const
+{
+    return maPortions.size();
+}
+
+std::vector<TETextPortion*>::iterator TETextPortionList::erase( std::vector<TETextPortion*>::iterator aIter )
+{
+    return maPortions.erase( aIter );
+}
+
+std::vector<TETextPortion*>::iterator TETextPortionList::insert( std::vector<TETextPortion*>::iterator aIter,
+                                                                 TETextPortion* pTP )
+{
+    return maPortions.insert( aIter, pTP );
+}
+
+void TETextPortionList::push_back( TETextPortion* pTP )
+{
+    maPortions.push_back( pTP );
+}
+
 void TETextPortionList::Reset()
 {
-    for ( iterator it = begin(); it != end(); ++it )
-        delete *it;
-    clear();
+    for ( auto pTP : maPortions )
+        delete pTP;
+    maPortions.clear();
 }
 
 void TETextPortionList::DeleteFromPortion( sal_uInt16 nDelFrom )
 {
-    SAL_WARN_IF( ( nDelFrom >= size() ) && ( (nDelFrom != 0) || (size() != 0) ), "vcl", "DeleteFromPortion: Out of range" );
-    for ( iterator it = begin() + nDelFrom; it != end(); ++it )
+    SAL_WARN_IF( ( nDelFrom >= maPortions.size() ) && ( (nDelFrom != 0) || (maPortions.size() != 0) ), "vcl", "DeleteFromPortion: Out of range" );
+    for ( auto it = maPortions.begin() + nDelFrom; it != maPortions.end(); ++it )
         delete *it;
-    erase( begin() + nDelFrom, end() );
+    maPortions.erase( maPortions.begin() + nDelFrom, maPortions.end() );
 }
 
 sal_uInt16 TETextPortionList::FindPortion( sal_Int32 nCharPos, sal_Int32& nPortionStart, bool bPreferStartingPortion )
 {
     // find left portion at nCharPos at portion border
     sal_Int32 nTmpPos = 0;
-    for ( size_t nPortion = 0; nPortion < size(); nPortion++ )
+    for ( size_t nPortion = 0; nPortion < maPortions.size(); nPortion++ )
     {
-        TETextPortion* pPortion = operator[]( nPortion );
+        TETextPortion* pPortion = maPortions[ nPortion ];
         nTmpPos += pPortion->GetLen();
         if ( nTmpPos >= nCharPos )
         {
             // take this one if we don't prefer the starting portion, or if it's the last one
-            if ( ( nTmpPos != nCharPos ) || !bPreferStartingPortion || ( nPortion == size() - 1 ) )
+            if ( ( nTmpPos != nCharPos ) || !bPreferStartingPortion || ( nPortion == maPortions.size() - 1 ) )
             {
                 nPortionStart = nTmpPos - pPortion->GetLen();
                 return nPortion;
@@ -89,7 +130,7 @@ sal_uInt16 TETextPortionList::FindPortion( sal_Int32 nCharPos, sal_Int32& nPorti
         }
     }
     OSL_FAIL( "FindPortion: Nicht gefunden!" );
-    return ( size() - 1 );
+    return ( maPortions.size() - 1 );
 }
 
 TEParaPortion::TEParaPortion( TextNode* pN )
