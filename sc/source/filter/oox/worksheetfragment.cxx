@@ -518,6 +518,11 @@ void WorksheetFragment::importSheetFormatPr( const AttributeList& rAttribs )
     setBaseColumnWidth( rAttribs.getInteger( XML_baseColWidth, 8 ) );
     setDefaultColumnWidth( rAttribs.getDouble( XML_defaultColWidth, 0.0 ) );
     // default row settings
+
+    // We don't need to import:
+    // XML_outlineLevelRow
+    // XML_outlineLevelCol
+    // as it will be updated during export to OOXML
     setDefaultRowSettings(
         rAttribs.getDouble( XML_defaultRowHeight, 0.0 ),
         rAttribs.getBool( XML_customHeight, false ),
