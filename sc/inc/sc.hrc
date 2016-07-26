@@ -277,6 +277,8 @@
 #define SID_SEARCH_RESULTS_DIALOG           (SC_MESSAGE_START + 83)
 #define SID_WINDOW_FIX_ROW                  (SC_MESSAGE_START + 84)
 #define SID_WINDOW_FIX_COL                  (SC_MESSAGE_START + 85)
+#define SID_COLUMN_OPERATIONS               (SC_MESSAGE_START + 86)
+#define SID_ROW_OPERATIONS                  (SC_MESSAGE_START + 87)
 
 // functions
 
