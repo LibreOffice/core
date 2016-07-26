@@ -115,9 +115,6 @@ private:
 
     /** Submit fieldSetValue array according to fieldSet. */
     void submitFields() throw(css::uno::RuntimeException);
-    /** Submit fieldSetValue array according to fieldSet, plus YMDhms if >=0,
-        plus zone and DST if != 0 */
-    void submitValues( sal_Int32 nYear, sal_Int32 nMonth, sal_Int32 nDay, sal_Int32 nHour, sal_Int32 nMinute, sal_Int32 nSecond, sal_Int32 nMilliSecond, sal_Int32 nZone, sal_Int32 nDST) throw(css::uno::RuntimeException);
     /** Set fields internally. */
     void setValue() throw(css::uno::RuntimeException);
     /** Obtain combined field values for timezone offset (minutes+secondmillis)
