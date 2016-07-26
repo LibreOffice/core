@@ -153,7 +153,7 @@ struct DocxSdrExport::Impl
     Impl(DocxSdrExport& rSdrExport, DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML)
         : m_rSdrExport(rSdrExport),
           m_rExport(rExport),
-          m_pSerializer(pSerializer),
+          m_pSerializer(std::move(pSerializer)),
           m_pDrawingML(pDrawingML),
           m_pFlyFrameSize(nullptr),
           m_bTextFrameSyntax(false),
