@@ -971,6 +971,20 @@ SfxVoidItem CreateSWDrawView SID_CREATE_SW_DRAWVIEW
     GroupId = GID_INSERT;
 ]
 
+SfxVoidItem ColumnOperations SID_COLUMN_OPERATIONS
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    NoRecord;
+
+    AccelConfig = FALSE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]
 
 SfxObjectItem CurrentRegion SID_RANGE_REGION
 
@@ -2334,6 +2348,21 @@ SfxVoidItem RegressionDialog SID_REGRESSION_DIALOG
     RecordPerSet;
 
     AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]
+
+SfxVoidItem RowOperations SID_ROW_OPERATIONS
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    NoRecord;
+
+    AccelConfig = FALSE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = GID_OPTIONS;

@@ -51,8 +51,8 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertRowsAfter" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertColumnsBefore"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertColumnsAfter" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:DeleteRows"/>
- <toolbar:toolbaritem xlink:href=".uno:DeleteColumns"/>
+ <toolbar:toolbaritem xlink:href=".uno:RowOperations"/>
+ <toolbar:toolbaritem xlink:href=".uno:ColumnOperations"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DataSort"/>
  <toolbar:toolbaritem xlink:href=".uno:SortAscending"/>
