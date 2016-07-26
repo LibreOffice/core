@@ -50,7 +50,7 @@ namespace dbaccess
         ::osl::Mutex&                                           m_rMutex;
         bool                                                    m_bInitialized;
         bool                                                    m_bDisposed;
-        ::rtl::Reference< ::comphelper::AsyncEventNotifier >    m_pEventBroadcaster;
+        ::std::shared_ptr<::comphelper::AsyncEventNotifierAutoJoin> m_pEventBroadcaster;
         ::comphelper::OInterfaceContainerHelper2                      m_aLegacyEventListeners;
         ::comphelper::OInterfaceContainerHelper2                      m_aDocumentEventListeners;
 
@@ -137,7 +137,7 @@ namespace dbaccess
         // SYNCHRONIZED ->
         // cancel any pending asynchronous events
         ::osl::ResettableMutexGuard aGuard( m_rMutex );
-        if ( m_pEventBroadcaster.is() )
+        if (m_pEventBroadcaster)
         {
             m_pEventBroadcaster->removeEventsForProcessor( this );
             m_pEventBroadcaster->terminate();
@@ -147,7 +147,9 @@ namespace dbaccess
                 // in atexit handlers; simply calling join here leads to
                 // deadlock, as this thread holds the solar mutex while the
                 // other thread is typically blocked waiting for the solar mutex
-            m_pEventBroadcaster.clear();
+                // For now, use newAutoJoinAsyncEventNotifier which is
+                // better than nothing.
+            m_pEventBroadcaster.reset();
         }
 
         lang::EventObject aEvent( m_rDocument );
@@ -169,9 +171,11 @@ namespace dbaccess
             throw DoubleInitializationException();
 
         m_bInitialized = true;
-        if ( m_pEventBroadcaster.is() )
+        if (m_pEventBroadcaster)
+        {
             // there are already pending asynchronous events
-            m_pEventBroadcaster->launch();
+            ::comphelper::AsyncEventNotifierAutoJoin::launch(m_pEventBroadcaster);
+        }
     }
 
     void DocumentEventNotifier_Impl::impl_notifyEvent_nothrow( const DocumentEvent& _rEvent )
@@ -199,14 +203,16 @@ namespace dbaccess
 
     void DocumentEventNotifier_Impl::impl_notifyEventAsync_nothrow( const DocumentEvent& _rEvent )
     {
-        if ( !m_pEventBroadcaster.is() )
+        if (!m_pEventBroadcaster)
         {
-            m_pEventBroadcaster.set(
-                new ::comphelper::AsyncEventNotifier("DocumentEventNotifier"));
+            m_pEventBroadcaster = ::comphelper::AsyncEventNotifierAutoJoin
+                ::newAsyncEventNotifierAutoJoin("DocumentEventNotifier");
             if ( m_bInitialized )
+            {
                 // start processing the events if and only if we (our document, respectively) are
                 // already initialized
-                m_pEventBroadcaster->launch();
+                ::comphelper::AsyncEventNotifierAutoJoin::launch(m_pEventBroadcaster);
+            }
         }
         m_pEventBroadcaster->addEvent( new DocumentEventHolder( _rEvent ), this );
     }

@@ -21,10 +21,12 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
+#include <rtl/instance.hxx>
 #include <comphelper/guarding.hxx>
 
 #include <cassert>
 #include <deque>
+#include <vector>
 #include <functional>
 #include <algorithm>
 
@@ -76,6 +78,9 @@ namespace comphelper
         ::osl::Condition    aPendingActions;
         EventQueue          aEvents;
         bool                bTerminate;
+        // only used for AsyncEventNotifierAutoJoin
+        char const*         name;
+        std::shared_ptr<AsyncEventNotifierAutoJoin> pKeepThisAlive;
 
         EventNotifierImpl()
             :bTerminate( false )
@@ -83,18 +88,18 @@ namespace comphelper
         }
     };
 
-    AsyncEventNotifier::AsyncEventNotifier(char const * name):
-        Thread(name), m_xImpl(new EventNotifierImpl)
+    AsyncEventNotifierBase::AsyncEventNotifierBase()
+        : m_xImpl(new EventNotifierImpl)
     {
     }
 
 
-    AsyncEventNotifier::~AsyncEventNotifier()
+    AsyncEventNotifierBase::~AsyncEventNotifierBase()
     {
     }
 
 
-    void AsyncEventNotifier::removeEventsForProcessor( const ::rtl::Reference< IEventProcessor >& _xProcessor )
+    void AsyncEventNotifierBase::removeEventsForProcessor( const ::rtl::Reference< IEventProcessor >& _xProcessor )
     {
         ::osl::MutexGuard aGuard( m_xImpl->aMutex );
 
@@ -103,7 +108,7 @@ namespace comphelper
     }
 
 
-    void SAL_CALL AsyncEventNotifier::terminate()
+    void SAL_CALL AsyncEventNotifierBase::terminate()
     {
         ::osl::MutexGuard aGuard( m_xImpl->aMutex );
 
@@ -115,7 +120,7 @@ namespace comphelper
     }
 
 
-    void AsyncEventNotifier::addEvent( const AnyEventRef& _rEvent, const ::rtl::Reference< IEventProcessor >& _xProcessor )
+    void AsyncEventNotifierBase::addEvent( const AnyEventRef& _rEvent, const ::rtl::Reference< IEventProcessor >& _xProcessor )
     {
         ::osl::MutexGuard aGuard( m_xImpl->aMutex );
 
@@ -128,7 +133,7 @@ namespace comphelper
     }
 
 
-    void AsyncEventNotifier::execute()
+    void AsyncEventNotifierBase::execute()
     {
         for (;;)
         {
@@ -158,6 +163,115 @@ namespace comphelper
                 aEvent.xProcessor->processEvent(*aEvent.aEvent);
             }
         }
+    }
+
+    AsyncEventNotifier::AsyncEventNotifier(char const* name)
+        : salhelper::Thread(name)
+    {
+    }
+
+    AsyncEventNotifier::~AsyncEventNotifier()
+    {
+    }
+
+    void AsyncEventNotifier::execute()
+    {
+        return AsyncEventNotifierBase::execute();
+    }
+
+    void AsyncEventNotifier::terminate()
+    {
+        return AsyncEventNotifierBase::terminate();
+    }
+
+    struct theNotifiersMutex : public rtl::Static<osl::Mutex, theNotifiersMutex> {};
+    static std::vector<std::weak_ptr<AsyncEventNotifierAutoJoin>> g_Notifiers;
+
+    void JoinAsyncEventNotifiers()
+    {
+        std::vector<std::weak_ptr<AsyncEventNotifierAutoJoin>> notifiers;
+        {
+            ::osl::MutexGuard g(theNotifiersMutex::get());
+            notifiers = g_Notifiers;
+        }
+        for (std::weak_ptr<AsyncEventNotifierAutoJoin> const& wNotifier : notifiers)
+        {
+            std::shared_ptr<AsyncEventNotifierAutoJoin> const pNotifier(
+                    wNotifier.lock());
+            if (pNotifier)
+            {
+                pNotifier->terminate();
+                pNotifier->join();
+            }
+        }
+        // note it's possible that g_Notifiers isn't empty now in case of leaks,
+        // particularly since the UNO service manager isn't disposed yet
+    }
+
+    AsyncEventNotifierAutoJoin::AsyncEventNotifierAutoJoin(char const* name)
+    {
+        m_xImpl->name = name;
+    }
+
+    AsyncEventNotifierAutoJoin::~AsyncEventNotifierAutoJoin()
+    {
+        ::osl::MutexGuard g(theNotifiersMutex::get());
+        // note: this doesn't happen atomically with the refcount
+        // hence it's possible this deletes > 1 or 0 elements
+        g_Notifiers.erase(
+            std::remove_if(g_Notifiers.begin(), g_Notifiers.end(),
+                [](std::weak_ptr<AsyncEventNotifierAutoJoin> const& w) {
+                    return w.expired();
+                } ),
+            g_Notifiers.end());
+    }
+
+    std::shared_ptr<AsyncEventNotifierAutoJoin>
+    AsyncEventNotifierAutoJoin::newAsyncEventNotifierAutoJoin(char const* name)
+    {
+        std::shared_ptr<AsyncEventNotifierAutoJoin> const ret(
+                new AsyncEventNotifierAutoJoin(name));
+        ::osl::MutexGuard g(theNotifiersMutex::get());
+        g_Notifiers.push_back(ret);
+        return ret;
+    }
+
+    void AsyncEventNotifierAutoJoin::terminate()
+    {
+        return AsyncEventNotifierBase::terminate();
+    }
+
+    void AsyncEventNotifierAutoJoin::launch(std::shared_ptr<AsyncEventNotifierAutoJoin> const& xThis)
+    {
+        // see salhelper::Thread::launch
+        xThis->m_xImpl->pKeepThisAlive = xThis;
+        try {
+            if (!xThis->create()) {
+                throw std::runtime_error("osl::Thread::create failed");
+            }
+        } catch (...) {
+            xThis->m_xImpl->pKeepThisAlive.reset();
+            throw;
+        }
+    }
+
+    void AsyncEventNotifierAutoJoin::run()
+    {
+        // see salhelper::Thread::run
+        try {
+            setName(m_xImpl->name);
+            execute();
+        } catch (...) {
+            onTerminated();
+            throw;
+        }
+    }
+
+    void AsyncEventNotifierAutoJoin::onTerminated()
+    {
+        // try to delete "this"
+        m_xImpl->pKeepThisAlive.reset();
+        return osl::Thread::onTerminated();
     }
 
 } // namespace comphelper

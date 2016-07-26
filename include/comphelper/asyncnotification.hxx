@@ -95,25 +95,20 @@ namespace comphelper
         events in the queue. As soon as you add an event, the thread is woken up, processes the event,
         and sleeps again.
     */
-    class COMPHELPER_DLLPUBLIC AsyncEventNotifier: public salhelper::Thread
+    class COMPHELPER_DLLPUBLIC AsyncEventNotifierBase
     {
         friend struct EventNotifierImpl;
 
-    private:
+    protected:
         std::unique_ptr<EventNotifierImpl>        m_xImpl;
 
-        SAL_DLLPRIVATE virtual ~AsyncEventNotifier();
+        SAL_DLLPRIVATE virtual ~AsyncEventNotifierBase();
 
         // Thread
-        SAL_DLLPRIVATE virtual void execute() override;
+        SAL_DLLPRIVATE virtual void execute();
 
     public:
-        /** constructs a notifier thread
-
-            @param name the thread name, see ::osl_setThreadName; must not be
-            null
-        */
-        AsyncEventNotifier(char const * name);
+        AsyncEventNotifierBase();
 
         /** terminates the thread
 
@@ -123,7 +118,7 @@ namespace comphelper
             itself, it will return immediately, and the thread will be terminated as soon as
             the current notification is finished.
         */
-        virtual void SAL_CALL terminate() override;
+        virtual void SAL_CALL terminate();
 
         /** adds an event to the queue, together with the instance which is responsible for
             processing it
@@ -141,6 +136,60 @@ namespace comphelper
         /** removes all events for the given event processor from the queue
         */
         void removeEventsForProcessor( const ::rtl::Reference< IEventProcessor >& _xProcessor );
+    };
+
+    /** This class is usable with rtl::Reference.
+        As always, the thread must be joined somewhere.
+     */
+    class COMPHELPER_DLLPUBLIC AsyncEventNotifier
+        : public AsyncEventNotifierBase
+        , public salhelper::Thread
+    {
+
+    private:
+        SAL_DLLPRIVATE virtual ~AsyncEventNotifier();
+
+        SAL_DLLPRIVATE virtual void execute() override;
+
+    public:
+        /** constructs a notifier thread
+
+            @param name the thread name, see ::osl_setThreadName; must not be
+            null
+        */
+        AsyncEventNotifier(char const* name);
+
+        virtual void SAL_CALL terminate() override;
+    };
+
+    /** This is a hack (when proper joining is not possible), use of which
+        should be avoided by good design.
+     */
+    class COMPHELPER_DLLPUBLIC AsyncEventNotifierAutoJoin
+        : public AsyncEventNotifierBase
+        , private osl::Thread
+    {
+
+    private:
+        SAL_DLLPRIVATE AsyncEventNotifierAutoJoin(char const* name);
+
+        SAL_DLLPRIVATE virtual void SAL_CALL run() override;
+        SAL_DLLPRIVATE virtual void SAL_CALL onTerminated() override;
+
+    public:
+        // only public so shared_ptr finds it
+        SAL_DLLPRIVATE virtual ~AsyncEventNotifierAutoJoin();
+
+        static std::shared_ptr<AsyncEventNotifierAutoJoin>
+            newAsyncEventNotifierAutoJoin(char const* name);
+
+        virtual void SAL_CALL terminate() override;
+
+        using osl::Thread::join;
+        using osl::Thread::operator new;
+        using osl::Thread::operator delete; // clang really wants this?
+
+        static void launch(std::shared_ptr<AsyncEventNotifierAutoJoin> const&);
     };
 
 
@@ -166,6 +215,7 @@ namespace comphelper
         inline const EventObjectType& getEventObject() const { return m_aEvent; }
     };
 
+    COMPHELPER_DLLPUBLIC void JoinAsyncEventNotifiers();
 
 } // namespace comphelper
 
