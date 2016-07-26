@@ -490,6 +490,11 @@ void ScExportTest::testOutlineExportXLSX()
     xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheet);
 
+    // Maximum Outline Row should be 4
+    assertXPath(pSheet, "/x:worksheet/x:sheetFormatPr", "outlineLevelRow", "4");
+    // Maximum Outline Column should be 4
+    assertXPath(pSheet, "/x:worksheet/x:sheetFormatPr", "outlineLevelCol", "4");
+
     // First XML node, creates two columns (from min=1 to max=2)
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]", "hidden", "false");
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]", "outlineLevel", "1");
