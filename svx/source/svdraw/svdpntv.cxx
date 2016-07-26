@@ -755,7 +755,7 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
 
                     if (pView->IsTextEdit() && pView->GetSdrPageView())
                     {
-                        static_cast<SdrView*>(pView)->TextEditDrawing(rPaintWindow);
+                        pView->TextEditDrawing(rPaintWindow);
                     }
                 }
             }
