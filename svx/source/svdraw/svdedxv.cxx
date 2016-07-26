@@ -64,6 +64,7 @@
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
+#include <svx/svdviter.hxx>
 
 #include <memory>
 
@@ -811,6 +812,31 @@ bool SdrObjEditView::SdrBeginTextEdit(
                     {
                         OutlinerView* pOutlView = ImpMakeOutlinerView(static_cast<vcl::Window*>(&rOutDev), !bEmpty, nullptr);
                         pTextEditOutliner->InsertView(pOutlView, (sal_uInt16)i);
+                    }
+                }
+
+                if (comphelper::LibreOfficeKit::isActive())
+                {
+                    // Register an outliner view for all other sdr views that
+                    // show the same page, so that when the text edit changes,
+                    // all interested windows get an invalidation.
+                    SdrViewIter aIter(pObj->GetPage());
+                    for (SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView())
+                    {
+                        if (pView == this)
+                            continue;
+
+                        for(sal_uInt32 nViewPaintWindow = 0; nViewPaintWindow < pView->PaintWindowCount(); ++nViewPaintWindow)
+                        {
+                            SdrPaintWindow* pPaintWindow = pView->GetPaintWindow(nViewPaintWindow);
+                            OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
+
+                            if(&rOutDev != pWin && OUTDEV_WINDOW == rOutDev.GetOutDevType())
+                            {
+                                OutlinerView* pOutlView = ImpMakeOutlinerView(static_cast<vcl::Window*>(&rOutDev), !bEmpty, nullptr);
+                                pTextEditOutliner->InsertView(pOutlView);
+                            }
+                        }
                     }
                 }
             }
