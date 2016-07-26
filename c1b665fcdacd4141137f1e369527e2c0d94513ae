@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_fcaf2992",
+        "filename": "sw/source/ui/table/tautofmt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-07-26T14:14:48Z",
+      "side": 0,
+      "message": "Wouldn\u0027t this break a workflow when a user has saved table autoformats in the user profile, and now it\u0027s impossible to access them? Maybe a more conservative approach would be to still load the table autoformats from the user profile in case the document\u0027s table style table is empty? If you don\u0027t see a problem with that, please make Load() conditional here, don\u0027t remove it completely.",
+      "revId": "c1b665fcdacd4141137f1e369527e2c0d94513ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_1c95b53f",
+        "filename": "sw/source/ui/table/tautofmt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-07-26T14:14:48Z",
+      "side": 0,
+      "message": "Same here, in case the document\u0027s table style table is empty, can\u0027t we keep the saving functionality?",
+      "revId": "c1b665fcdacd4141137f1e369527e2c0d94513ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
