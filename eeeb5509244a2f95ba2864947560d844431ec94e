@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_9c2aa5e6",
+        "filename": "sw/source/core/doc/docnew.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-07-26T16:59:51Z",
+      "side": 1,
+      "message": "Binary table formats would be loaded straight into doc here",
+      "revId": "eeeb5509244a2f95ba2864947560d844431ec94e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
