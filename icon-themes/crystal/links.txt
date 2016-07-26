@@ -20,3 +20,8 @@ cmd/lc_mailmergenextentry.png cmd/lc_nextrecord.png
 cmd/sc_mailmergenextentry.png cmd/sc_nextrecord.png
 cmd/lc_mailmergepreventry.png cmd/lc_prevrecord.png
 cmd/sc_mailmergepreventry.png cmd/sc_prevrecord.png
+
+cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
+cmd/sc_columnoperations.png cmd/sc_entirecolumn.png 
+cmd/lc_rowoperations.png cmd/lc_entirerow.png 
+cmd/sc_rowoperations.png cmd/sc_entirerow.png

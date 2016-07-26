@@ -138,3 +138,8 @@ cmd/sc_lastslide.png cmd/sc_lastpage.png
 cmd/sc_previousslide.png cmd/sc_previouspage.png
 cmd/sc_nextslide.png cmd/sc_nextpage.png
 cmd/sc_slidesetup.png cmd/sc_setdocumentproperties.png
+
+cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
+cmd/sc_columnoperations.png cmd/sc_entirecolumn.png 
+cmd/lc_rowoperations.png cmd/lc_entirerow.png 
+cmd/sc_rowoperations.png cmd/sc_entirerow.png
