@@ -1397,7 +1397,7 @@ namespace pcr
         }
         catch(const PropertyVetoException& eVetoException)
         {
-            ScopedVclPtr<InfoBox>::Create(m_pView, eVetoException.Message)->Execute();
+            ScopedVclPtrInstance<InfoBox>(m_pView, eVetoException.Message)->Execute();
             PropertyHandlerRef handler = impl_getHandlerForProperty_throw( rName );
             Any aNormalizedValue = handler->getPropertyValue( rName );
             getPropertyBox().SetPropertyValue( rName, aNormalizedValue, false );

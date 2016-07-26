@@ -357,7 +357,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
 
     if ( (nStartCol != nEndCol) && (nStartRow != nEndRow) )
     {
-        nCellDir = ScopedVclPtr<ScColOrRowDlg>::Create( this, aStrCopyList, aStrCopyFrom )->Execute();
+        nCellDir = ScopedVclPtrInstance<ScColOrRowDlg>(this, aStrCopyList, aStrCopyFrom)->Execute();
     }
     else if ( nStartCol != nEndCol )
         nCellDir = SCRET_ROWS;
@@ -421,7 +421,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
 
         if ( bValueIgnored )
         {
-            ScopedVclPtr<InfoBox>::Create( this, aStrCopyErr )->Execute();
+            ScopedVclPtrInstance<InfoBox>(this, aStrCopyErr)->Execute();
         }
     }
 
@@ -616,7 +616,7 @@ IMPL_LINK_TYPED( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
             aMsg += mpLbLists->GetEntry( nRemovePos );
             aMsg += aStrQueryRemove.getToken( 1, '#' );
 
-            if ( RET_YES == ScopedVclPtr<QueryBox>::Create( this,
+            if ( RET_YES == ScopedVclPtrInstance<QueryBox>( this,
                                       WinBits( WB_YES_NO | WB_DEF_YES ),
                                       aMsg
                                      )->Execute() )
@@ -695,7 +695,7 @@ IMPL_LINK_TYPED( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
         }
         else
         {
-            ScopedVclPtr<MessageDialog>::Create(this,
+            ScopedVclPtrInstance<MessageDialog>(this,
                       ScGlobal::GetRscString( STR_INVALID_TABREF )
                     )->Execute();
             mpEdCopyFrom->GrabFocus();

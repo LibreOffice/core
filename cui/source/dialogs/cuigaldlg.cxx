@@ -986,7 +986,7 @@ IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, SelectFileTypeHdl, ComboBox&, vo
     {
         aLastFilterName = aText;
 
-        if( ScopedVclPtrInstance<MessageDialog>::Create( this, "QueryUpdateFileListDialog","cui/ui/queryupdategalleryfilelistdialog.ui" )->Execute() == RET_YES )
+        if( ScopedVclPtrInstance<MessageDialog>( this, "QueryUpdateFileListDialog","cui/ui/queryupdategalleryfilelistdialog.ui" )->Execute() == RET_YES )
             SearchFiles();
     }
 }

@@ -265,7 +265,7 @@ void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
             }
             else
             {
-                ScopedVclPtrInstance<MessageDialog>::Create(this, "InfoReadonlyDialog",
+                ScopedVclPtrInstance<MessageDialog>(this, "InfoReadonlyDialog",
                     "modules/swriter/ui/inforeadonlydialog.ui")->Execute();
             }
         }

@@ -736,8 +736,8 @@ IMPL_LINK_NOARG_TYPED(SvxIMapDlg, UpdateHdl, Idle *, void)
     if ( pOwnData->pUpdateEditingObject != pCheckObj )
     {
         if ( pIMapWnd->IsChanged() &&
-             ( ScopedVclPtrInstance<MessageDialog>::Create( this,"QuerySaveImageMapChangesDialog",
-             "svx/ui/querysaveimagemapchangesdialog.ui" )->Execute() == RET_YES ) )
+             ( ScopedVclPtrInstance<MessageDialog>(this,"QuerySaveImageMapChangesDialog",
+             "svx/ui/querysaveimagemapchangesdialog.ui")->Execute() == RET_YES ) )
         {
             DoSave();
         }

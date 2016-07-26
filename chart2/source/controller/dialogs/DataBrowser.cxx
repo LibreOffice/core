@@ -135,7 +135,7 @@ void SeriesHeaderEdit::MouseButtonDown( const MouseEvent& rMEvt )
     Edit::MouseButtonDown( rMEvt );
 
     if( m_bShowWarningBox )
-        ScopedVclPtr<WarningBox>::Create(this, WinBits( WB_OK ),
+        ScopedVclPtrInstance<WarningBox>(this, WinBits( WB_OK ),
                    SCH_RESSTR(STR_INVALID_NUMBER))->Execute();
 }
 
@@ -750,7 +750,7 @@ void DataBrowser::MouseButtonDown( const BrowserMouseEvent& rEvt )
 
 void DataBrowser::ShowWarningBox()
 {
-    ScopedVclPtr<WarningBox>::Create(this, WinBits( WB_OK ),
+    ScopedVclPtrInstance<WarningBox>(this, WinBits( WB_OK ),
                                      SCH_RESSTR(STR_INVALID_NUMBER))->Execute();
 }
 

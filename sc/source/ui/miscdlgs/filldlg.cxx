@@ -324,7 +324,7 @@ IMPL_LINK_NOARG_TYPED(ScFillSeriesDlg, OKHdl, Button*, void)
         EndDialog( RET_OK );
     else
     {
-        ScopedVclPtr<MessageDialog>::Create(this, aErrMsgInvalidVal)->Execute();
+        ScopedVclPtrInstance<MessageDialog>(this, aErrMsgInvalidVal)->Execute();
         pEdWrong->GrabFocus();
     }
 }

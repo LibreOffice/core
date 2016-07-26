@@ -391,7 +391,7 @@ The code below would only be part of the solution.
             if(m_pSpellState->m_xStartRange.is())
             {
                 LockFocusNotification( true );
-                sal_uInt16 nRet = ScopedVclPtr<MessageDialog>::Create(GetWindow(), SW_RES(STR_QUERY_SPELL_CONTINUE),
+                sal_uInt16 nRet = ScopedVclPtrInstance<MessageDialog>(GetWindow(), SW_RES(STR_QUERY_SPELL_CONTINUE),
                                                 VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO)->Execute();
                 if(RET_YES == nRet)
                 {
@@ -421,7 +421,7 @@ The code below would only be part of the solution.
                 OUString sInfo(SW_RES(STR_SPELLING_COMPLETED));
                 // #i84610#
                 vcl::Window* pTemp = GetWindow();    // temporary needed for g++ 3.3.5
-                ScopedVclPtrInstance<MessageDialog>::Create(pTemp, sInfo, VCL_MESSAGE_INFO)->Execute();
+                ScopedVclPtrInstance<MessageDialog>(pTemp, sInfo, VCL_MESSAGE_INFO)->Execute();
                 LockFocusNotification( false );
                 // take care that the now valid selection is stored
                 LoseFocus();

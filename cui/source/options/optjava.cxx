@@ -1024,7 +1024,7 @@ IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, AddArchiveHdl_Impl, Button*, void)
         {
             OUString sMsg( CUI_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sFile );
-            ScopedVclPtrInstance<MessageDialog>::Create(this, sMsg)->Execute();
+            ScopedVclPtrInstance<MessageDialog>(this, sMsg)->Execute();
         }
     }
     EnableRemoveButton();
@@ -1059,7 +1059,7 @@ IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, AddPathHdl_Impl, Button*, void)
         {
             OUString sMsg( CUI_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sNewFolder );
-            ScopedVclPtrInstance<MessageDialog>::Create(this, sMsg)->Execute();
+            ScopedVclPtrInstance<MessageDialog>(this, sMsg)->Execute();
         }
     }
     EnableRemoveButton();
