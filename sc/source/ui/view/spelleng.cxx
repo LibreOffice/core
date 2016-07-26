@@ -294,7 +294,7 @@ void ScSpellingEngine::ConvertAll( EditView& rEditView )
     {
         vcl::Window* pParent = GetDialogParent();
         ScWaitCursorOff aWaitOff( pParent );
-        ScopedVclPtr<InfoBox>::Create( pParent, ScGlobal::GetRscString( STR_NOLANGERR ) )->Execute();
+        ScopedVclPtrInstance<InfoBox>( pParent, ScGlobal::GetRscString( STR_NOLANGERR ) )->Execute();
     }
 }
 
@@ -322,7 +322,7 @@ void ScSpellingEngine::ShowFinishDialog()
 {
     vcl::Window* pParent = GetDialogParent();
     ScWaitCursorOff aWaitOff( pParent );
-    ScopedVclPtr<InfoBox>::Create( pParent, ScGlobal::GetRscString( STR_SPELLING_STOP_OK ) )->Execute();
+    ScopedVclPtrInstance<InfoBox>( pParent, ScGlobal::GetRscString( STR_SPELLING_STOP_OK ) )->Execute();
 }
 
 vcl::Window* ScSpellingEngine::GetDialogParent()

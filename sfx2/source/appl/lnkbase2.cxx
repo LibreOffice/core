@@ -518,7 +518,7 @@ bool SvBaseLink::ExecuteEdit( const OUString& _rNewName )
             else
                 return false;
 
-            ScopedVclPtrInstance<MessageDialog>::Create(pImpl->m_pParentWin, sError)->Execute();
+            ScopedVclPtrInstance<MessageDialog>(pImpl->m_pParentWin, sError)->Execute();
         }
     }
     else if( !pImpl->m_bIsConnect )

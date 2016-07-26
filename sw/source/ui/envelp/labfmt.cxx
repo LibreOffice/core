@@ -643,7 +643,7 @@ IMPL_LINK_NOARG_TYPED(SwSaveLabelDlg, OkHdl, Button*, void)
         if ( rCfg.IsPredefinedLabel(sMake, sType) )
         {
             SAL_WARN( "sw.envelp", "label is predefined and cannot be overwritten" );
-            ScopedVclPtrInstance<MessageDialog>::Create(this, "CannotSaveLabelDialog", "modules/swriter/ui/cannotsavelabeldialog.ui")->Execute();
+            ScopedVclPtrInstance<MessageDialog>(this, "CannotSaveLabelDialog", "modules/swriter/ui/cannotsavelabeldialog.ui")->Execute();
             return;
         }
 

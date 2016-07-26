@@ -97,7 +97,7 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                         nActModWindows++;
                 }
 
-                if ( nActModWindows <= 1 || ( !rSearchItem.GetSelection() && ScopedVclPtr<QueryBox>::Create( pCurWin, WB_YES_NO|WB_DEF_YES, IDEResId(RID_STR_SEARCHALLMODULES).toString() )->Execute() == RET_YES ) )
+                if ( nActModWindows <= 1 || ( !rSearchItem.GetSelection() && ScopedVclPtrInstance<QueryBox>(pCurWin, WB_YES_NO|WB_DEF_YES, IDEResId(RID_STR_SEARCHALLMODULES).toString())->Execute() == RET_YES ) )
                 {
                     for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
                     {
@@ -110,7 +110,7 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
 
                 OUString aReplStr(IDE_RESSTR(RID_STR_SEARCHREPLACES));
                 aReplStr = aReplStr.replaceAll("XX", OUString::number(nFound));
-                ScopedVclPtr<InfoBox>::Create( pCurWin, aReplStr )->Execute();
+                ScopedVclPtrInstance<InfoBox>(pCurWin, aReplStr)->Execute();
             }
             else
             {
@@ -177,7 +177,7 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                         SetCurWindow( pWin, true );
                 }
                 if ( !nFound && !bCanceled )
-                    ScopedVclPtr<InfoBox>::Create( pCurWin, IDEResId(RID_STR_SEARCHNOTFOUND).toString() )->Execute();
+                    ScopedVclPtrInstance<InfoBox>(pCurWin, IDEResId(RID_STR_SEARCHNOTFOUND).toString())->Execute();
             }
 
             rReq.Done();

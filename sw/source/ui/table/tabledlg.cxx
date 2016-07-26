@@ -628,7 +628,7 @@ SfxTabPage::sfxpg SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
     OUString sTableName = m_pNameED->GetText();
     if(sTableName.indexOf(' ') != -1)
     {
-        ScopedVclPtrInstance<MessageDialog>::Create(this, SW_RES(STR_WRONG_TABLENAME), VCL_MESSAGE_INFO)->Execute();
+        ScopedVclPtrInstance<MessageDialog>(this, SW_RES(STR_WRONG_TABLENAME), VCL_MESSAGE_INFO)->Execute();
         m_pNameED->GrabFocus();
         return KEEP_PAGE;
     }

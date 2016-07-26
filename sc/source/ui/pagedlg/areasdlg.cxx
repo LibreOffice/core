@@ -52,7 +52,7 @@ enum {
 };
 
 #define HDL(hdl)            LINK( this, ScPrintAreasDlg, hdl )
-#define ERRORBOX(nId)       ScopedVclPtrInstance<MessageDialog>::Create(this, ScGlobal::GetRscString(nId))->Execute()
+#define ERRORBOX(nId)       ScopedVclPtrInstance<MessageDialog>(this, ScGlobal::GetRscString(nId))->Execute()
 
 // globale Funktionen (->am Ende der Datei):
 

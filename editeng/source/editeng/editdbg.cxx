@@ -482,7 +482,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
     }
     fclose( fp );
     if ( bInfoBox )
-        ScopedVclPtr<InfoBox>::Create(nullptr, OUString( "D:\\DEBUG.LOG !" ) )->Execute();
+        ScopedVclPtrInstance<InfoBox>(nullptr, OUString( "D:\\DEBUG.LOG !" ) )->Execute();
 }
 #endif
 

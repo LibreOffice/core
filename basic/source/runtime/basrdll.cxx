@@ -103,7 +103,7 @@ void BasicDLL::BasicBreak()
         {
             bJustStopping = true;
             StarBASIC::Stop();
-            ScopedVclPtr<InfoBox>::Create( nullptr, BasResId(IDS_SBERR_TERMINATED).toString() )->Execute();
+            ScopedVclPtrInstance<InfoBox>(nullptr, BasResId(IDS_SBERR_TERMINATED).toString())->Execute();
             bJustStopping = false;
         }
     }

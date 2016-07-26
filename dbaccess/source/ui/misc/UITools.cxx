@@ -940,7 +940,7 @@ bool appendToFilter(const Reference<XConnection>& _xConnection,
                 if(! ::dbaui::checkDataSourceAvailable(::comphelper::getString(xProp->getPropertyValue(PROPERTY_NAME)),_rxContext))
                 {
                     OUString aMessage(ModuleRes(STR_TABLEDESIGN_DATASOURCE_DELETED));
-                    ScopedVclPtr<OSQLWarningBox>::Create( _pParent, aMessage )->Execute();
+                    ScopedVclPtrInstance<OSQLWarningBox>(_pParent, aMessage)->Execute();
                     bRet = false;
                 }
                 else

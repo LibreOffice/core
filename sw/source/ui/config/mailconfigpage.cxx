@@ -222,7 +222,7 @@ IMPL_LINK_NOARG_TYPED(SwMailConfigPage, AuthenticationHdl, Button*, void)
 
 IMPL_LINK_NOARG_TYPED(SwMailConfigPage, TestHdl, Button*, void)
 {
-    ScopedVclPtrInstance<SwTestAccountSettingsDialog>::Create(this)->Execute();
+    ScopedVclPtrInstance<SwTestAccountSettingsDialog>(this)->Execute();
 }
 
 SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pParent)

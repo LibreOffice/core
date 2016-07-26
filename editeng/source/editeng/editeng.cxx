@@ -1031,7 +1031,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                     bDebugPaint = !bDebugPaint;
                     OStringBuffer aInfo("DebugPaint: ");
                     aInfo.append(bDebugPaint ? "On" : "Off");
-                    ScopedVclPtr<InfoBox>::Create(nullptr, OStringToOUString(aInfo.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US))->Execute();
+                    ScopedVclPtrInstance<InfoBox>(nullptr, OStringToOUString(aInfo.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US))->Execute();
                 }
                 bDone = false;
             }

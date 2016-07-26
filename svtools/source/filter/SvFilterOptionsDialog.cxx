@@ -250,7 +250,7 @@ sal_Int16 SvFilterOptionsDialog::execute()
 
             aFltCallDlgPara.aFilterExt = aGraphicFilter.GetExportFormatShortName( nFormat );
             bool bIsPixelFormat( aGraphicFilter.IsExportPixelFormat( nFormat ) );
-            if ( ScopedVclPtrInstance<ExportDialog>::Create( aFltCallDlgPara, mxContext, mxSourceDocument, mbExportSelection, bIsPixelFormat )->Execute() == RET_OK )
+            if ( ScopedVclPtrInstance<ExportDialog>( aFltCallDlgPara, mxContext, mxSourceDocument, mbExportSelection, bIsPixelFormat )->Execute() == RET_OK )
                 nRet = ui::dialogs::ExecutableDialogResults::OK;
 
             pResMgr.reset();
