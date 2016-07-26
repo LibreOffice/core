@@ -232,8 +232,9 @@ class CheckStyle(unittest.TestCase):
         xTableStyle2 = xDoc.createInstance("com.sun.star.style.TableStyle")
         with self.assertRaises(IllegalArgumentException):       #replace with other family style
             xTableStyle.replaceByName("first-row", xTableStyle2)
-        with self.assertRaises(IllegalArgumentException):       #replace with already assigned cell style
-            xTableStyle.replaceByName("first-row", xTableStyle2.getByName("first-row"))
+        #replace with already assigned cell style
+        xTableStyle.replaceByName("first-row", xTableStyle2.getByName("first-row"))
+        self.assertEqual(xTableStyle.getByName("first-row"), xTableStyle2.getByName("first-row"))
         xDoc.StyleFamilies.getByName("CellStyles").insertByName("Test Cell Style", xCellStyle)
         xTableStyle.replaceByName("first-row", xCellStyle)
         self.assertEqual(xTableStyle.getByName("first-row"), xCellStyle)
