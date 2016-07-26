@@ -490,14 +490,17 @@ void Test::testDateInput()
     const char* aData[][2] = {
         { "Europe/Paris", "1938-10-07" },      // i#76623
         { "Europe/Moscow", "1919-07-01" },     // i#86094
+        { "America/St_Johns", "1935-03-30" },  // i#86094 i#90627
         { "Europe/Tallinn", "1790-03-01" },    // i#105864
         { "Australia/Perth", "2004-04-11" },   // i#17222
         { "America/Sao_Paulo", "1902-04-22" }, // tdf#44286
         { "Europe/Berlin", "1790-07-27" },
         { "US/Mountain", "1790-07-26" },
+        { "Asia/Tehran", "1999-03-22" },
 
         // Data from https://bugs.documentfoundation.org/show_bug.cgi?id=63230
         // https://bugs.documentfoundation.org/attachment.cgi?id=79051
+        // https://bugs.documentfoundation.org/show_bug.cgi?id=79663
         { "Africa/Accra", "1800-01-01" },
         { "Africa/Accra", "1800-04-10" },
         { "Africa/Addis_Ababa", "1870-01-01" },
@@ -617,6 +620,7 @@ void Test::testDateInput()
         { "America/Miquelon", "1911-05-15" },
         { "America/Moncton", "1883-12-09" },
         { "America/Montevideo", "1942-12-14" },
+        { "America/Montevideo", "1974-12-22" },
         { "America/Montreal", "1884-01-01" },
         { "America/Ojinaga", "1930-11-15" },
         { "America/Ojinaga", "1931-10-01" },
@@ -684,6 +688,7 @@ void Test::testDateInput()
         { "Asia/Chungking", "1980-05-01" },
         { "Asia/Colombo", "1880-01-01" },
         { "Asia/Colombo", "1906-01-01" },
+        { "Asia/Colombo", "1942-09-01" },
         { "Asia/Colombo", "1996-05-25" },
         { "Asia/Dacca", "1941-10-01" },
         { "Asia/Dacca", "1942-09-01" },
@@ -815,8 +820,16 @@ void Test::testDateInput()
         { "Asia/Yerevan", "1957-03-01" },
         { "Atlantic/Azores", "1884-01-01" },
         { "Atlantic/Azores", "1911-05-24" },
+        { "Atlantic/Azores", "1942-04-25" },
+        { "Atlantic/Azores", "1943-04-17" },
+        { "Atlantic/Azores", "1944-04-22" },
+        { "Atlantic/Azores", "1945-04-21" },
         { "Atlantic/Cape_Verde", "1907-01-01" },
         { "Atlantic/Jan_Mayen", "1895-01-01" },
+        { "Atlantic/Madeira", "1942-04-25" },
+        { "Atlantic/Madeira", "1943-04-17" },
+        { "Atlantic/Madeira", "1944-04-22" },
+        { "Atlantic/Madeira", "1945-04-21" },
         { "Atlantic/Reykjavik", "1837-01-01" },
         { "Atlantic/Stanley", "1912-03-12" },
         { "Australia/Adelaide", "1899-05-01" },
@@ -859,6 +872,12 @@ void Test::testDateInput()
         { "Europe/Chisinau", "1931-07-24" },
         { "Europe/Copenhagen", "1894-01-01" },
         { "Europe/Dublin", "1880-08-02" },
+        { "Europe/Gibraltar", "1941-05-04" },
+        { "Europe/Gibraltar", "1942-04-05" },
+        { "Europe/Gibraltar", "1943-04-04" },
+        { "Europe/Gibraltar", "1944-04-02" },
+        { "Europe/Gibraltar", "1945-04-02" },
+        { "Europe/Gibraltar", "1947-04-13" },
         { "Europe/Helsinki", "1921-05-01" },
         { "Europe/Istanbul", "1880-01-01" },
         { "Europe/Istanbul", "1910-10-01" },
@@ -869,16 +888,28 @@ void Test::testDateInput()
         { "Europe/Kiev", "1930-06-21" },
         { "Europe/Kiev", "1943-11-06" },
         { "Europe/Luxembourg", "1904-06-01" },
+        { "Europe/Madrid", "1942-05-02" },
+        { "Europe/Madrid", "1943-04-17" },
+        { "Europe/Madrid", "1944-04-15" },
+        { "Europe/Madrid", "1945-04-14" },
+        { "Europe/Madrid", "1946-04-13" },
         { "Europe/Malta", "1893-11-02" },
         { "Europe/Mariehamn", "1921-05-01" },
         { "Europe/Minsk", "1924-05-02" },
         { "Europe/Minsk", "1930-06-21" },
         { "Europe/Minsk", "2011-03-27" },
+        { "Europe/Monaco", "1941-05-05" },
+        { "Europe/Monaco", "1942-03-09" },
+        { "Europe/Monaco", "1943-03-29" },
+        { "Europe/Monaco", "1944-04-03" },
+        { "Europe/Monaco", "1945-04-02" },
         { "Europe/Moscow", "1916-07-03" },
+        { "Europe/Moscow", "1919-05-31" },
         { "Europe/Moscow", "1930-06-21" },
         { "Europe/Moscow", "1992-01-19" },
         { "Europe/Moscow", "2011-03-27" },
         { "Europe/Oslo", "1895-01-01" },
+        { "Europe/Paris", "1945-04-02" },
         { "Europe/Prague", "1891-10-01" },
         { "Europe/Riga", "1926-05-11" },
         { "Europe/Riga", "1940-08-05" },
@@ -936,9 +967,12 @@ void Test::testDateInput()
         { "Mexico/General", "1931-10-01" },
         { "NZ-CHAT", "1957-01-01" },
         { "Pacific/Apia", "1911-01-01" },
+        { "Pacific/Apia", "2011-12-30" },
         { "Pacific/Chatham", "1957-01-01" },
         { "Pacific/Easter", "1932-09-01" },
         { "Pacific/Enderbury", "1901-01-01" },
+        { "Pacific/Enderbury", "1995-01-01" },
+        { "Pacific/Fakaofo", "2011-12-30" },
         { "Pacific/Fiji", "1915-10-26" },
         { "Pacific/Funafuti", "1901-01-01" },
         { "Pacific/Galapagos", "1986-01-01" },
@@ -946,8 +980,10 @@ void Test::testDateInput()
         { "Pacific/Guadalcanal", "1912-10-01" },
         { "Pacific/Guam", "1901-01-01" },
         { "Pacific/Kiritimati", "1901-01-01" },
+        { "Pacific/Kiritimati", "1995-01-01" },
         { "Pacific/Kosrae", "1901-01-01" },
         { "Pacific/Kosrae", "1969-10-01" },
+        { "Pacific/Kwajalein", "1993-08-20" },
         { "Pacific/Majuro", "1969-10-01" },
         { "Pacific/Marquesas", "1912-10-01" },
         { "Pacific/Nauru", "1921-01-15" },
@@ -1006,7 +1042,8 @@ void Test::checkDateInput( SvNumberFormatter& rFormatter, const char* pTimezone,
     sal_uInt32 nIndex = 0;
     double fVal = 0.0;
     bool bVal = rFormatter.IsNumberFormat( aDate, nIndex, fVal);
-    CPPUNIT_ASSERT_MESSAGE("Date not recognized.", bVal);
+    CPPUNIT_ASSERT_MESSAGE( OString("Date not recognized: " +
+                OString(pTimezone) + " " + OString(pIsoDate)).getStr(), bVal);
     CPPUNIT_ASSERT_MESSAGE("Format parsed is not date.",
             (rFormatter.GetType(nIndex) & css::util::NumberFormat::DATE));
     OUString aOutString;
