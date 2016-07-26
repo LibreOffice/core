@@ -2658,7 +2658,13 @@ void ScExternalRefManager::SrcFileData::maybeCreateRealFileName(const OUString& 
     INetURLObject aBaseURL(rOwnDocName);
     aBaseURL.insertName("content.xml");
     bool bWasAbs = false;
+#ifdef UNX
+    maRealFileName = aBaseURL.smartRel2Abs(
+        rRelPath, bWasAbs, false, INetURLObject::WAS_ENCODED, RTL_TEXTENCODING_UTF8,
+        false, INetURLObject::FSYS_DETECT, true).GetMainURL(INetURLObject::NO_DECODE);
+#else
     maRealFileName = aBaseURL.smartRel2Abs(rRelPath, bWasAbs).GetMainURL(INetURLObject::NO_DECODE);
+#endif
 }
 
 void ScExternalRefManager::maybeCreateRealFileName(sal_uInt16 nFileId)
@@ -3029,8 +3035,13 @@ void ScExternalRefManager::resetSrcFileData(const OUString& rBaseFileUrl)
         if (aAbsName.isEmpty())
             aAbsName = itr->maFileName;
 
+#ifdef UNX
+        itr->maRelativeName = URIHelper::simpleNormalizedMakeRelative(
+            INetURLObject(rBaseFileUrl).ResolveFilePath(rBaseFileUrl), aAbsName);
+#else
         itr->maRelativeName = URIHelper::simpleNormalizedMakeRelative(
             rBaseFileUrl, aAbsName);
+#endif
     }
 }
 

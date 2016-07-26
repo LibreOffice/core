@@ -2137,7 +2137,7 @@ void SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
     xFilter->filter( aMediaDesc );
 }
 
-OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
+OUString SvXMLExport::GetRelativeReference(const OUString& rValue, bool bResolveBaseURI)
 {
     OUString sValue( rValue );
     // #i65474# handling of fragment URLs ("#....") is undefined
@@ -2165,7 +2165,9 @@ OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
         //conversion for matching schemes only
         if( xUriRef->getScheme() == mpImpl->msPackageURIScheme )
         {
-            sValue = INetURLObject::GetRelURL( msOrigFileName, sValue );
+            sValue = INetURLObject::GetRelURL(
+                msOrigFileName, sValue, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI,
+                RTL_TEXTENCODING_UTF8, INetURLObject::FSYS_DETECT, bResolveBaseURI );
         }
     }
     return sValue;

@@ -632,7 +632,11 @@ void ScXMLTableRowCellContext::PushParagraphFieldDocTitle(const OUString& rStyle
 void ScXMLTableRowCellContext::PushParagraphFieldURL(
     const OUString& rURL, const OUString& rRep, const OUString& rStyleName)
 {
+#ifdef UNX
+    OUString aAbsURL = GetScImport().GetAbsoluteReference(rURL, true);
+#else
     OUString aAbsURL = GetScImport().GetAbsoluteReference(rURL);
+#endif
     PushParagraphField(new SvxURLField(aAbsURL, rRep, SVXURLFORMAT_REPR), rStyleName);
 }
 

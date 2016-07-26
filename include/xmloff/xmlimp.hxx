@@ -378,7 +378,7 @@ public:
 
     SvXMLImportFlags  getImportFlags() const { return mnImportFlags; }
     bool    IsFormsSupported() const { return mbIsFormsSupported; }
-    OUString GetAbsoluteReference(const OUString& rValue) const;
+    OUString GetAbsoluteReference(const OUString& rValue, bool bResolveBaseURI = false) const;
 
     sal_Unicode ConvStarBatsCharToStarSymbol( sal_Unicode c );
     sal_Unicode ConvStarMathCharToStarSymbol( sal_Unicode c );

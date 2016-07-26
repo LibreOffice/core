@@ -1628,13 +1628,13 @@ const SvXMLStylesContext *SvXMLImport::GetAutoStyles() const
     return static_cast<const SvXMLStylesContext *>(&mxAutoStyles);
 }
 
-OUString SvXMLImport::GetAbsoluteReference(const OUString& rValue) const
+OUString SvXMLImport::GetAbsoluteReference(const OUString& rValue, bool bResolveBaseURI) const
 {
     if( rValue.isEmpty() || rValue[0] == '#' )
         return rValue;
 
     INetURLObject aAbsURL;
-    if( mpImpl->aBaseURL.GetNewAbsURL( rValue, &aAbsURL ) )
+    if( mpImpl->aBaseURL.GetNewAbsURL( rValue, &aAbsURL, bResolveBaseURI ) )
         return aAbsURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
     else
         return rValue;

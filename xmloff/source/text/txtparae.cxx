@@ -3276,7 +3276,11 @@ bool XMLTextParagraphExport::addHyperlinkAttributes(
     if ( bExport )
     {
         GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+#ifdef UNX
+        GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference( sHRef, true ) );
+#else
         GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference( sHRef ) );
+#endif
 
         if( !sName.isEmpty() )
             GetExport().AddAttribute( XML_NAMESPACE_OFFICE, XML_NAME, sName );

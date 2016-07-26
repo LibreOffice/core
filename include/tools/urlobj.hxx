@@ -167,6 +167,8 @@ public:
                                     = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aAbsURIRef, eMechanism, eCharset); }
 
+    OUString ResolveFilePath(OUString rTheAbsURIRef) const;
+
     OUString GetURLNoPass(DecodeMechanism eMechanism = DECODE_TO_IURI,
                            rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
         const;
@@ -321,14 +323,15 @@ public:
                  EncodeMechanism eMechanism = WAS_ENCODED,
                  rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
                  bool bRelativeNonURIs = false,
-                 FSysStyle eStyle = FSYS_DETECT) const;
+                 FSysStyle eStyle = FSYS_DETECT,
+                 bool bResolveBaseURI = false) const;
 
     // Relative URLs:
 
     inline bool
     GetNewAbsURL(OUString const & rTheRelURIRef,
-                 INetURLObject * pTheAbsURIRef)
-        const;
+                 INetURLObject * pTheAbsURIRef,
+                 bool bResolveBaseURI = false) const;
 
     /** @descr  If rTheRelURIRef cannot be converted to an absolute URL
         (because of syntactic reasons), either rTheRelURIRef or an empty
@@ -351,7 +354,8 @@ public:
               EncodeMechanism eEncodeMechanism = WAS_ENCODED,
               DecodeMechanism eDecodeMechanism = DECODE_TO_IURI,
               rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
-              FSysStyle eStyle = FSYS_DETECT);
+              FSysStyle eStyle = FSYS_DETECT,
+              bool bResolveBaseURI = false);
 
     // External URLs:
 
@@ -1224,25 +1228,49 @@ INetURLObject::smartRel2Abs(OUString const & rTheRelURIRef,
                             EncodeMechanism eMechanism,
                             rtl_TextEncoding eCharset,
                             bool bRelativeNonURIs,
-                            FSysStyle eStyle) const
+                            FSysStyle eStyle,
+                            bool bResolveBaseURI) const
 {
     INetURLObject aTheAbsURIRef;
-    convertRelToAbs(rTheRelURIRef, aTheAbsURIRef, rWasAbsolute,
-                    eMechanism, eCharset, bIgnoreFragment, true,
-                    bRelativeNonURIs, eStyle);
+    if (bResolveBaseURI)
+    {
+        OUString rTheResolvedURIRef(ResolveFilePath(m_aAbsURIRef.getStr()));
+        bResolveBaseURI = INetURLObject(rTheResolvedURIRef, WAS_ENCODED, RTL_TEXTENCODING_UTF8).
+            convertRelToAbs(rTheRelURIRef, aTheAbsURIRef, rWasAbsolute,
+                            eMechanism, eCharset, bIgnoreFragment, true,
+                            bRelativeNonURIs, eStyle);
+    }
+    if (!bResolveBaseURI)
+    {
+        convertRelToAbs(rTheRelURIRef, aTheAbsURIRef, rWasAbsolute,
+                        eMechanism, eCharset, bIgnoreFragment, true,
+                        bRelativeNonURIs, eStyle);
+    }
     return aTheAbsURIRef;
 }
 
 inline bool INetURLObject::GetNewAbsURL(OUString const & rTheRelURIRef,
-                                        INetURLObject * pTheAbsURIRef)
+                                        INetURLObject * pTheAbsURIRef,
+                                        bool bResolveBaseURI)
     const
 {
     INetURLObject aTheAbsURIRef;
     bool bWasAbsolute;
-    if (!convertRelToAbs(rTheRelURIRef, aTheAbsURIRef, bWasAbsolute,
+    if (bResolveBaseURI)
+    {
+        OUString rTheResolvedURIRef(ResolveFilePath(m_aAbsURIRef.getStr()));
+        bResolveBaseURI = INetURLObject(rTheResolvedURIRef, WAS_ENCODED, RTL_TEXTENCODING_UTF8).
+            convertRelToAbs(rTheRelURIRef, aTheAbsURIRef, bWasAbsolute,
+                            WAS_ENCODED, RTL_TEXTENCODING_UTF8, false/*bIgnoreFragment*/, false,
+                            false, FSYS_DETECT);
+    }
+    if (!bResolveBaseURI)
+    {
+        if (!convertRelToAbs(rTheRelURIRef, aTheAbsURIRef, bWasAbsolute,
                          WAS_ENCODED, RTL_TEXTENCODING_UTF8, false/*bIgnoreFragment*/, false, false,
                          FSYS_DETECT))
         return false;
+    }
     if (pTheAbsURIRef)
         *pTheAbsURIRef = aTheAbsURIRef;
     return true;
@@ -1254,12 +1282,24 @@ inline OUString INetURLObject::GetRelURL(OUString const & rTheBaseURIRef,
                                           EncodeMechanism eEncodeMechanism,
                                           DecodeMechanism eDecodeMechanism,
                                           rtl_TextEncoding eCharset,
-                                          FSysStyle eStyle)
+                                          FSysStyle eStyle,
+                                          bool bResolveBaseURI)
 {
     OUString aTheRelURIRef;
-    INetURLObject(rTheBaseURIRef, eEncodeMechanism, eCharset).
-        convertAbsToRel(rTheAbsURIRef, aTheRelURIRef, eEncodeMechanism,
-                        eDecodeMechanism, eCharset, eStyle);
+    if (bResolveBaseURI)
+    {
+        OUString aTheResolvedURIRef(rTheBaseURIRef);
+        aTheResolvedURIRef = INetURLObject(rTheBaseURIRef).ResolveFilePath(rTheBaseURIRef);
+        bResolveBaseURI = INetURLObject(aTheResolvedURIRef, eEncodeMechanism, eCharset).
+            convertAbsToRel(rTheAbsURIRef, aTheRelURIRef, eEncodeMechanism,
+                            eDecodeMechanism, eCharset, eStyle);
+    }
+    if (!bResolveBaseURI)
+    {
+        INetURLObject(rTheBaseURIRef, eEncodeMechanism, eCharset).
+            convertAbsToRel(rTheAbsURIRef, aTheRelURIRef, eEncodeMechanism,
+                            eDecodeMechanism, eCharset, eStyle);
+    }
     return aTheRelURIRef;
 }
 

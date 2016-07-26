@@ -3088,7 +3088,11 @@ void XMLUrlFieldImportContext::ProcessAttribute(
     switch (nAttrToken)
     {
         case XML_TOK_TEXTFIELD_HREF:
+#ifdef UNX
+            sURL = GetImport().GetAbsoluteReference( sAttrValue, true );
+#else
             sURL = GetImport().GetAbsoluteReference( sAttrValue );
+#endif
             bValid = true;
             break;
         case XML_TOK_TEXTFIELD_TARGET_FRAME:

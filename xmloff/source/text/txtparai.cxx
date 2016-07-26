@@ -383,7 +383,11 @@ XMLImpHyperlinkContext_Impl::XMLImpHyperlinkContext_Impl(
         switch (rTokenMap.Get( nPrefix, aLocalName ))
         {
         case XML_TOK_TEXT_HYPERLINK_HREF:
+#ifdef UNX
+            mpHint->SetHRef( GetImport().GetAbsoluteReference( rValue, true ) );
+#else
             mpHint->SetHRef( GetImport().GetAbsoluteReference( rValue ) );
+#endif
             break;
         case XML_TOK_TEXT_HYPERLINK_NAME:
             mpHint->SetName( rValue );

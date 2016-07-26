@@ -1681,8 +1681,14 @@ void XMLTextFieldExport::ExportFieldHelper(
     {
         // this field is a special case because it gets mapped onto a
         // hyperlink, rather than one of the regular text field.
+
+#ifdef UNX
+        ProcessString(XML_HREF, GetExport().GetRelativeReference(GetStringProperty(sPropertyURL, rPropSet), true),
+                      false, XML_NAMESPACE_XLINK);
+#else
         ProcessString(XML_HREF, GetExport().GetRelativeReference(GetStringProperty(sPropertyURL, rPropSet)),
                       false, XML_NAMESPACE_XLINK);
+#endif
         ProcessString(XML_TARGET_FRAME_NAME,
                       GetStringProperty(sPropertyTargetFrame,rPropSet),
                       true, XML_NAMESPACE_OFFICE);

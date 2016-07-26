@@ -482,7 +482,7 @@ public:
     void ExportEmbeddedOwnObject(
         css::uno::Reference<css::lang::XComponent >& rComp );
 
-    OUString GetRelativeReference(const OUString& rValue);
+    OUString GetRelativeReference(const OUString& rValue, bool bResolveBaseURI = false);
 
     // methods for accessing the document handler and handling SAX errors
     void StartElement(sal_uInt16 nPrefix,
