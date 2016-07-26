@@ -4646,12 +4646,11 @@ void SAL_CALL SwXTextTableStyle::replaceByName(const OUString& rName, const uno:
         throw lang::IllegalArgumentException();
 
     SwXTextCellStyle* pStyleToReplaceWith = dynamic_cast<SwXTextCellStyle*>(xStyle.get());
-    // replace only with physical ...
-    if (pStyleToReplaceWith && !pStyleToReplaceWith->IsPhysical())
-        throw lang::IllegalArgumentException();
+    if (!pStyleToReplaceWith)
+         throw lang::IllegalArgumentException();
 
-    // ... unassigned cell styles
-    if (!m_pDocShell->GetDoc()->GetCellStyles().GetBoxFormat(xStyle->getName()))
+    // replace only with physical ...
+    if (!pStyleToReplaceWith->IsPhysical())
         throw lang::IllegalArgumentException();
 
     const auto& rTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
@@ -4865,12 +4864,11 @@ OUString SAL_CALL SwXTextCellStyle::getParentStyle() throw (css::uno::RuntimeExc
     return m_sParentStyle;
 }
 
-void SAL_CALL SwXTextCellStyle::setParentStyle(const OUString& sParentStyle) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception)
+void SAL_CALL SwXTextCellStyle::setParentStyle(const OUString& /*sParentStyle*/) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     // Changing parent to one which is unaware of it will lead to a something unexcpected. getName() rely on a parent.
     SAL_INFO("sw.uno", "Changing SwXTextCellStyle parent");
-    m_sParentStyle = sParentStyle;
 }
 
 //XNamed
@@ -5448,9 +5446,205 @@ css::uno::Sequence<css::beans::PropertyState> SAL_CALL SwXTextCellStyle::getProp
     return aRet;
 }
 
-void SAL_CALL SwXTextCellStyle::setPropertyToDefault(const OUString& /*PropertyName*/) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception)
+void SAL_CALL SwXTextCellStyle::setPropertyToDefault(const OUString& rPropertyName) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception)
 {
-    SAL_WARN("sw.uno", "not implemented");
+    SolarMutexGuard aGuard;
+    const SwBoxAutoFormat& rDefaultBoxFormat = SwTableAutoFormat::GetDefaultBoxFormat();
+    const SfxItemPropertyMap& rMap = aSwMapProvider.GetPropertySet(PROPERTY_MAP_CELL_STYLE)->getPropertyMap();
+    const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rPropertyName);
+    if(pEntry)
+    {
+        uno::Any aAny;
+        switch(pEntry->nWID)
+        {
+            case RES_BACKGROUND:
+            {
+                SvxBrushItem rBrush = m_pBoxAutoFormat->GetBackground();
+                rDefaultBoxFormat.GetBackground().QueryValue(aAny, pEntry->nMemberId);
+                rBrush.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetBackground(rBrush);
+                break;
+            }
+            case RES_BOX:
+            {
+                SvxBoxItem rBox = m_pBoxAutoFormat->GetBox();
+                rDefaultBoxFormat.GetBox().QueryValue(aAny, pEntry->nMemberId);
+                rBox.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetBox(rBox);
+                break;
+            }
+            case RES_VERT_ORIENT:
+            {
+                SwFormatVertOrient rVertOrient = m_pBoxAutoFormat->GetVerticalAlignment();
+                rDefaultBoxFormat.GetVerticalAlignment().QueryValue(aAny, pEntry->nMemberId);
+                rVertOrient.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetVerticalAlignment(rVertOrient);
+                break;
+            }
+            case RES_FRAMEDIR:
+            {
+                SvxFrameDirectionItem rFrameDirectionItem = m_pBoxAutoFormat->GetTextOrientation();
+                rDefaultBoxFormat.GetTextOrientation().QueryValue(aAny, pEntry->nMemberId);
+                rFrameDirectionItem.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetTextOrientation(rFrameDirectionItem);
+                break;
+            }
+            case RES_BOXATR_FORMAT:
+            {
+                OUString sFormat;
+                LanguageType eLng, eSys;
+                rDefaultBoxFormat.GetValueFormat(sFormat, eLng, eSys);
+                m_pBoxAutoFormat->SetValueFormat(sFormat, eLng, eSys);
+                break;
+            }
+            case RES_PARATR_ADJUST:
+            {
+                SvxAdjustItem rAdjustItem = m_pBoxAutoFormat->GetAdjust();
+                rDefaultBoxFormat.GetAdjust().QueryValue(aAny, pEntry->nMemberId);
+                rAdjustItem.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetAdjust(rAdjustItem);
+                break;
+            }
+            case RES_CHRATR_COLOR:
+            {
+                SvxColorItem rColorItem = m_pBoxAutoFormat->GetColor();
+                rDefaultBoxFormat.GetColor().QueryValue(aAny, pEntry->nMemberId);
+                rColorItem.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetColor(rColorItem);
+                break;
+            }
+            case RES_CHRATR_SHADOWED:
+            {
+                SvxShadowedItem rShadowedItem = m_pBoxAutoFormat->GetShadowed();
+                rDefaultBoxFormat.GetShadowed().QueryValue(aAny, pEntry->nMemberId);
+                rShadowedItem.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetShadowed(rShadowedItem);
+                break;
+            }
+            case RES_CHRATR_CONTOUR:
+            {
+                SvxContourItem rContourItem = m_pBoxAutoFormat->GetContour();
+                rDefaultBoxFormat.GetContour().QueryValue(aAny, pEntry->nMemberId);
+                rContourItem.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetContour(rContourItem);
+                break;
+            }
+            case RES_CHRATR_CROSSEDOUT:
+            {
+                SvxCrossedOutItem rCrossedOutItem = m_pBoxAutoFormat->GetCrossedOut();
+                rDefaultBoxFormat.GetCrossedOut().QueryValue(aAny, pEntry->nMemberId);
+                rCrossedOutItem.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetCrossedOut(rCrossedOutItem);
+                break;
+            }
+            case RES_CHRATR_UNDERLINE:
+            {
+                SvxUnderlineItem rUnderlineItem = m_pBoxAutoFormat->GetUnderline();
+                rDefaultBoxFormat.GetUnderline().QueryValue(aAny, pEntry->nMemberId);
+                rUnderlineItem.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetUnderline(rUnderlineItem);
+                break;
+            }
+            case RES_CHRATR_FONTSIZE:
+            {
+                SvxFontHeightItem rFontHeightItem = m_pBoxAutoFormat->GetHeight();
+                rDefaultBoxFormat.GetHeight().QueryValue(aAny, pEntry->nMemberId);
+                rFontHeightItem.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetHeight(rFontHeightItem);
+                break;
+            }
+            case RES_CHRATR_WEIGHT:
+            {
+                SvxWeightItem rWeightItem = m_pBoxAutoFormat->GetWeight();
+                rDefaultBoxFormat.GetWeight().QueryValue(aAny, pEntry->nMemberId);
+                rWeightItem.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetWeight(rWeightItem);
+                break;
+            }
+            case RES_CHRATR_POSTURE:
+            {
+                SvxPostureItem rPostureItem = m_pBoxAutoFormat->GetPosture();
+                rDefaultBoxFormat.GetPosture().QueryValue(aAny, pEntry->nMemberId);
+                rPostureItem.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetPosture(rPostureItem);
+                break;
+            }
+            case RES_CHRATR_FONT:
+            {
+                SvxFontItem rFontItem = m_pBoxAutoFormat->GetFont();
+                rDefaultBoxFormat.GetFont().QueryValue(aAny, pEntry->nMemberId);
+                rFontItem.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetFont(rFontItem);
+                break;
+            }
+            case RES_CHRATR_CJK_FONTSIZE:
+            {
+                SvxFontHeightItem rFontHeightItem = m_pBoxAutoFormat->GetCJKHeight();
+                rDefaultBoxFormat.GetCJKHeight().QueryValue(aAny, pEntry->nMemberId);
+                rFontHeightItem.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetCJKHeight(rFontHeightItem);
+                break;
+            }
+            case RES_CHRATR_CJK_WEIGHT:
+            {
+                SvxWeightItem rWeightItem = m_pBoxAutoFormat->GetCJKWeight();
+                rDefaultBoxFormat.GetCJKWeight().QueryValue(aAny, pEntry->nMemberId);
+                rWeightItem.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetCJKWeight(rWeightItem);
+                break;
+            }
+            case RES_CHRATR_CJK_POSTURE:
+            {
+                SvxPostureItem rPostureItem = m_pBoxAutoFormat->GetCJKPosture();
+                rDefaultBoxFormat.GetCJKPosture().QueryValue(aAny, pEntry->nMemberId);
+                rPostureItem.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetCJKPosture(rPostureItem);
+                break;
+            }
+            case RES_CHRATR_CJK_FONT:
+            {
+                SvxFontItem rFontItem = m_pBoxAutoFormat->GetCJKFont();
+                rDefaultBoxFormat.GetCJKFont().QueryValue(aAny, pEntry->nMemberId);
+                rFontItem.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetCJKFont(rFontItem);
+                break;
+            }
+            case RES_CHRATR_CTL_FONTSIZE:
+            {
+                SvxFontHeightItem rFontHeightItem = m_pBoxAutoFormat->GetCTLHeight();
+                rDefaultBoxFormat.GetCTLHeight().QueryValue(aAny, pEntry->nMemberId);
+                rFontHeightItem.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetCTLHeight(rFontHeightItem);
+                break;
+            }
+            case RES_CHRATR_CTL_WEIGHT:
+            {
+                SvxWeightItem rWeightItem = m_pBoxAutoFormat->GetCTLWeight();
+                rDefaultBoxFormat.GetCTLWeight().QueryValue(aAny, pEntry->nMemberId);
+                rWeightItem.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetCTLWeight(rWeightItem);
+                break;
+            }
+            case RES_CHRATR_CTL_POSTURE:
+            {
+                SvxPostureItem rPostureItem = m_pBoxAutoFormat->GetCTLPosture();
+                rDefaultBoxFormat.GetCTLPosture().QueryValue(aAny, pEntry->nMemberId);
+                rPostureItem.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetCTLPosture(rPostureItem);
+                break;
+            }
+            case RES_CHRATR_CTL_FONT:
+            {
+                SvxFontItem rFontItem = m_pBoxAutoFormat->GetCTLFont();
+                rDefaultBoxFormat.GetCTLFont().QueryValue(aAny, pEntry->nMemberId);
+                rFontItem.PutValue(aAny, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetCTLFont(rFontItem);
+                break;
+            }
+            default:
+                SAL_WARN("sw.uno", "SwXTextCellStyle setPropertyToDefault unknown nWID");
+        }
+    }
 }
 
 css::uno::Any SAL_CALL SwXTextCellStyle::getPropertyDefault(const OUString& /*aPropertyName*/) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)

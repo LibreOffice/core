@@ -1123,6 +1123,19 @@ DECLARE_ODFEXPORT_TEST(testTableStyles3, "table_styles_3.odt")
     }
 }
 
+DECLARE_ODFIMPORT_TEST(testTableStyles4, "table_styles_4.odt")
+{
+    // Test if loaded styles overwrite existing styles
+    uno::Reference<style::XStyleFamiliesSupplier> XFamiliesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xFamilies(XFamiliesSupplier->getStyleFamilies());
+    uno::Reference<container::XNameAccess> xTableFamily(xFamilies->getByName("TableStyles"), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTableStyle(xTableFamily->getByName("Green"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xCell1Style;
+
+    xTableStyle->getByName("first-row-start-column") >>= xCell1Style;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00ff00), getProperty<sal_Int32>(xCell1Style, "BackColor"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
