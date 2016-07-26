@@ -35,10 +35,7 @@ css::uno::Reference<css::frame::XFrame> SfxNotebookBar::m_xFrame;
 void SfxNotebookBar::CloseMethod(SfxBindings& rBindings)
 {
     SfxFrame& rFrame = rBindings.GetDispatcher_Impl()->GetFrame()->GetFrame();
-    if (rFrame.GetSystemWindow()->GetNotebookBar())
-        rFrame.GetSystemWindow()->CloseNotebookBar();
-    m_xLayoutManager.clear();
-    m_xFrame.clear();
+    CloseMethod(rFrame.GetSystemWindow());
 }
 
 void SfxNotebookBar::CloseMethod(SystemWindow* pSysWindow)
