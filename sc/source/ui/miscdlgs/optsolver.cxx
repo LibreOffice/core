@@ -793,7 +793,7 @@ IMPL_LINK_TYPED( ScOptSolverDlg, CursorDownHdl, ScCursorRefEdit&, rEdit, void )
 void ScOptSolverDlg::ShowError( bool bCondition, formula::RefEdit* pFocus )
 {
     OUString aMessage = bCondition ? maConditionError : maInputError;
-    ScopedVclPtrInstance<MessageDialog>::Create(this, aMessage)->Execute();
+    ScopedVclPtrInstance<MessageDialog>(this, aMessage)->Execute();
     if (pFocus)
     {
         mpEdActive = pFocus;

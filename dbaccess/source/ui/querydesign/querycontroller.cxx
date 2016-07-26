@@ -1052,7 +1052,7 @@ void OQueryController::impl_initialize()
             m_bGraphicalDesign = false;
             getContainer()->initialize();
             ODataView* pWindow = getView();
-            ScopedVclPtr<OSQLMessageBox>::Create(pWindow,e)->Execute();
+            ScopedVclPtrInstance<OSQLMessageBox>(pWindow,e)->Execute();
         }
         throw;
     }
@@ -1404,7 +1404,7 @@ bool OQueryController::doSaveAsDoc(bool _bSaveAs)
     if ( !editingCommand() && !haveDataSource() )
     {
         OUString aMessage(ModuleRes(STR_DATASOURCE_DELETED));
-        ScopedVclPtr<OSQLWarningBox>::Create( getView(), aMessage )->Execute();
+        ScopedVclPtrInstance<OSQLWarningBox>(getView(), aMessage)->Execute();
         return false;
     }
 

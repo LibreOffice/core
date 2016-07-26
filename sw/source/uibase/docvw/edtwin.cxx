@@ -1865,7 +1865,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     else
                     {
-                        ScopedVclPtrInstance<MessageDialog>::Create(this, "InfoReadonlyDialog",
+                        ScopedVclPtrInstance<MessageDialog>(this, "InfoReadonlyDialog",
                             "modules/swriter/ui/inforeadonlydialog.ui")->Execute();
                         eKeyState = KS_End;
                     }
@@ -2041,7 +2041,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     else
                     {
-                        ScopedVclPtrInstance<MessageDialog>::Create(this, "InfoReadonlyDialog",
+                        ScopedVclPtrInstance<MessageDialog>(this, "InfoReadonlyDialog",
                             "modules/swriter/ui/inforeadonlydialog.ui")->Execute();
                         eKeyState = KS_End;
                     }
@@ -2489,7 +2489,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             }
             else
             {
-                ScopedVclPtrInstance<MessageDialog>::Create(this, "InfoReadonlyDialog",
+                ScopedVclPtrInstance<MessageDialog>(this, "InfoReadonlyDialog",
                     "modules/swriter/ui/inforeadonlydialog.ui")->Execute();
                 eKeyState = KS_End;
             }
