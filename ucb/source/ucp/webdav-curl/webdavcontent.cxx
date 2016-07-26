@@ -2141,26 +2141,51 @@ uno::Any Content::open(
                     DAVResource aResource;
                     std::vector< OUString > aHeaders;
 
-                    uno::Reference< io::XInputStream > xIn
-                        = xResAccess->GET( aHeaders, aResource, xEnv );
-                    m_bDidGetOrHead = true;
-
+                    // check if the resource was present on the server
+                    if( aStaticDAVOptionsCache.isResourceFound( aTargetURL ) )
                     {
-                        osl::MutexGuard aGuard( m_aMutex );
+                        uno::Reference< io::XInputStream > xIn
+                            = xResAccess->GET( aHeaders, aResource, xEnv );
+                        m_bDidGetOrHead = true;
 
-                        // cache headers.
-                        if (!m_xCachedProps)
-                            m_xCachedProps.reset(
-                                new CachableContentProperties( ContentProperties( aResource ) ) );
-                        else
-                            m_xCachedProps->addProperties(
-                                aResource.properties );
+                        {
+                            osl::MutexGuard aGuard( m_aMutex );
 
-                        m_xResAccess.reset(
-                            new DAVResourceAccess( *xResAccess ) );
+                            // cache headers.
+                            if (!m_xCachedProps)
+                                m_xCachedProps.reset(
+                                    new CachableContentProperties( ContentProperties( aResource ) ) );
+                            else
+                                m_xCachedProps->addProperties(
+                                    aResource.properties );
+
+                            m_xResAccess.reset(
+                                new DAVResourceAccess( *xResAccess ) );
+
+                        }
+
+                        xDataSink->setInputStream( xIn );
                     }
+                    else
+                    {
+                        // return exception as if the resource was not found
+                        uno::Sequence< uno::Any > aArgs( 1 );
+                        aArgs[ 0 ] <<= beans::PropertyValue(
+                            "Uri", -1,
+                            uno::makeAny(aTargetURL),
+                            beans::PropertyState_DIRECT_VALUE);
 
-                    xDataSink->setInputStream( xIn );
+                        ucbhelper::cancelCommandExecution(
+                            uno::makeAny(
+                                ucb::InteractiveAugmentedIOException(
+                                    "Not found!",
+                                    static_cast< cppu::OWeakObject * >( this ),
+                                    task::InteractionClassification_ERROR,
+                                    ucb::IOErrorCode_NOT_EXISTING,
+                                    aArgs ) ),
+                            xEnv );
+                // Unreachable
+                    }
                 }
                 catch ( DAVException const & e )
                 {
