@@ -1669,7 +1669,8 @@ void XclExpColinfo::SaveXml( XclExpXmlStream& rStrm )
 XclExpColinfoBuffer::XclExpColinfoBuffer( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     maDefcolwidth( rRoot ),
-    maOutlineBfr( rRoot )
+    maOutlineBfr( rRoot ),
+    maHighestOutlineLevel( 0 )
 {
 }
 
@@ -1677,7 +1678,13 @@ void XclExpColinfoBuffer::Initialize( SCROW nLastScRow )
 {
 
     for( sal_uInt16 nScCol = 0, nLastScCol = GetMaxPos().Col(); nScCol <= nLastScCol; ++nScCol )
+    {
         maColInfos.AppendNewRecord( new XclExpColinfo( GetRoot(), nScCol, nLastScRow, maOutlineBfr ) );
+        if( maOutlineBfr.GetLevel() > maHighestOutlineLevel )
+        {
+           maHighestOutlineLevel = maOutlineBfr.GetLevel();
+        }
+    }
 }
 
 void XclExpColinfoBuffer::Finalize( ScfUInt16Vec& rXFIndexes )
@@ -2094,7 +2101,8 @@ void XclExpRow::SaveXml( XclExpXmlStream& rStrm )
 XclExpRowBuffer::XclExpRowBuffer( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     maOutlineBfr( rRoot ),
-    maDimensions( rRoot )
+    maDimensions( rRoot ),
+    maHighestOutlineLevel( 0 )
 {
 }
 
@@ -2340,6 +2348,10 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
                  ( maOutlineBfr.GetLevel() != 0 ) ||
                  ( rDoc.RowHidden(nFrom, nScTab) ) )
             {
+                if( maOutlineBfr.GetLevel() > maHighestOutlineLevel )
+                {
+                    maHighestOutlineLevel = maOutlineBfr.GetLevel();
+                }
                 RowRef p(new XclExpRow(GetRoot(), nFrom, maOutlineBfr, bRowAlwaysEmpty));
                 maRowMap.insert(RowMap::value_type(nFrom, p));
             }
@@ -2624,7 +2636,16 @@ void XclExpCellTable::SaveXml( XclExpXmlStream& rStrm )
     XclExpDefaultRowData& rDefData = mxDefrowheight->GetDefaultData();
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_sheetFormatPr,
-        XML_defaultRowHeight, OString::number( (double) rDefData.mnHeight / 20.0 ).getStr(), FSEND );
+        // OOXTODO: XML_baseColWidth
+        // OOXTODO: XML_defaultColWidth
+        // OOXTODO: XML_customHeight
+        // OOXTODO: XML_zeroHeight
+        // OOXTODO: XML_thickTop
+        // OOXTODO: XML_thickBottom
+        XML_defaultRowHeight, OString::number( static_cast< double> ( rDefData.mnHeight ) / 20.0 ).getStr(),
+        XML_outlineLevelRow, OString::number( maRowBfr.GetHighestOutlineLevel() ).getStr(),
+        XML_outlineLevelCol, OString::number( maColInfoBfr.GetHighestOutlineLevel() ).getStr(),
+        FSEND );
     rWorksheet->endElement( XML_sheetFormatPr );
 
     maColInfoBfr.SaveXml( rStrm );
