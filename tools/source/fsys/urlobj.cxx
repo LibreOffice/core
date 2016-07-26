@@ -46,6 +46,8 @@
 #include <sax/tools/converter.hxx>
 #include <rtl/uri.hxx>
 
+#include <salhelper/linkhelper.hxx>
+
 using namespace css;
 
 //  INetURLObject
@@ -1468,6 +1470,22 @@ void INetURLObject::changeScheme(INetProtocol eTargetScheme) {
     m_aPath+=delta;
     m_aQuery+=delta;
     m_aFragment+=delta;
+}
+
+OUString INetURLObject::ResolveFilePath( DecodeMechanism eMechanism, rtl_TextEncoding eCharset ) const
+{
+    OUString rTheAbsURIRef(INetURLObject(*this).GetMainURL(eMechanism, eCharset));
+    if (rTheAbsURIRef.endsWith("/content.xml"))
+    {
+        salhelper::LinkResolver aResolver(osl_FileStatus_Mask_FileName);
+        osl::FileBase::RC eStatus = aResolver.fetchFileStatus(rTheAbsURIRef.replaceFirst("/content.xml", ""));
+        if (eStatus == osl::FileBase::E_NOTDIR || eStatus == osl::FileBase::E_None)
+        {
+            rTheAbsURIRef = aResolver.m_aStatus.getFileURL();
+            rTheAbsURIRef += "/content.xml";
+        }
+    }
+    return rTheAbsURIRef;
 }
 
 bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
