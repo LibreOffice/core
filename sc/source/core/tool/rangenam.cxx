@@ -831,7 +831,7 @@ bool ScRangeName::empty() const
     return m_Data.empty();
 }
 
-bool ScRangeName::insert(ScRangeData* p)
+bool ScRangeName::insert( ScRangeData* p, bool bReuseFreeIndex )
 {
     if (!p)
         return false;
@@ -839,17 +839,24 @@ bool ScRangeName::insert(ScRangeData* p)
     if (!p->GetIndex())
     {
         // Assign a new index.  An index must be unique and is never 0.
-        IndexDataType::iterator itr = std::find(
-            maIndexToData.begin(), maIndexToData.end(), static_cast<ScRangeData*>(nullptr));
-        if (itr != maIndexToData.end())
+        if (bReuseFreeIndex)
         {
-            // Empty slot exists.  Re-use it.
-            size_t nPos = std::distance(maIndexToData.begin(), itr);
-            p->SetIndex(nPos + 1);
+            IndexDataType::iterator itr = std::find(
+                    maIndexToData.begin(), maIndexToData.end(), static_cast<ScRangeData*>(nullptr));
+            if (itr != maIndexToData.end())
+            {
+                // Empty slot exists.  Re-use it.
+                size_t nPos = std::distance(maIndexToData.begin(), itr);
+                p->SetIndex(nPos + 1);
+            }
+            else
+                // No empty slot.  Append it to the end.
+                p->SetIndex(maIndexToData.size() + 1);
         }
         else
-            // No empty slot.  Append it to the end.
+        {
             p->SetIndex(maIndexToData.size() + 1);
+        }
     }
 
     OUString aName(p->GetUpperName());

@@ -70,7 +70,7 @@ void ScUndoAllRangeNames::DoChange(const std::map<OUString, std::unique_ptr<ScRa
 {
     ScDocument& rDoc = pDocShell->GetDocument();
 
-    rDoc.PreprocessRangeNameUpdate();
+    rDoc.PreprocessAllRangeNamesUpdate(rNames);
     rDoc.SetAllRangeNames(rNames);
     rDoc.CompileHybridFormula();
 

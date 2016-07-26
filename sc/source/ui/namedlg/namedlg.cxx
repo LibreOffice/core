@@ -405,6 +405,10 @@ void ScNameDlg::NameModified()
     // be safe and check for range data
     if (pData)
     {
+        // Assign new index (0) only if the scope is changed, else keep the
+        // existing index.
+        sal_uInt16 nIndex = (aNewScope != aOldScope ? 0 : pData->GetIndex());
+
         pOldRangeName->erase(*pData);
         mbNeedUpdate = false;
         m_pRangeManagerTable->DeleteSelectedEntries();
@@ -416,7 +420,8 @@ void ScNameDlg::NameModified()
 
         ScRangeData* pNewEntry = new ScRangeData( mpDoc, aNewName, aExpr,
                 maCursorPos, nType);
-        pNewRangeName->insert(pNewEntry);
+        pNewEntry->SetIndex( nIndex);
+        pNewRangeName->insert(pNewEntry, false /*bReuseFreeIndex*/);
         aLine.aName = aNewName;
         aLine.aExpression = aExpr;
         aLine.aScope = aNewScope;

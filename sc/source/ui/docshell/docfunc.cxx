@@ -4908,7 +4908,7 @@ void ScDocFunc::ModifyAllRangeNames(const std::map<OUString, std::unique_ptr<ScR
                 new ScUndoAllRangeNames(&rDocShell, aOldRangeMap, rRangeMap));
     }
 
-    rDoc.PreprocessRangeNameUpdate();
+    rDoc.PreprocessAllRangeNamesUpdate(rRangeMap);
     rDoc.SetAllRangeNames(rRangeMap);
     rDoc.CompileHybridFormula();
 

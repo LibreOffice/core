@@ -60,8 +60,9 @@ public:
     };
 
 private:
-    OUString   aName;
-    OUString   aUpperName;     // #i62977# for faster searching (aName is never modified after ctor)
+    OUString        aName;
+    OUString        aUpperName; // #i62977# for faster searching (aName is never modified after ctor)
+    OUString        maNewName;  ///< used for formulas after changing names in the dialog
     ScTokenArray*   pCode;
     ScAddress       aPos;
     Type            eType;
@@ -106,13 +107,15 @@ public:
 
     bool            operator== (const ScRangeData& rData) const;
 
-    void            GetName( OUString& rName ) const  { rName = aName; }
-    const OUString&   GetName() const           { return aName; }
+    void            GetName( OUString& rName ) const  { rName = maNewName.isEmpty() ? aName : maNewName; }
+    const OUString&   GetName() const           { return maNewName.isEmpty() ? aName : maNewName; }
     const OUString&   GetUpperName() const      { return aUpperName; }
     const ScAddress&  GetPos() const                  { return aPos; }
     // The index has to be unique. If index=0 a new index value is assigned.
     void            SetIndex( sal_uInt16 nInd )         { nIndex = nInd; }
     sal_uInt16      GetIndex() const                { return nIndex; }
+    /// Does not change the name, but sets maNewName for formula update after dialog.
+    void            SetNewName( const OUString& rNewName )  { maNewName = rNewName; }
     ScTokenArray*   GetCode()                       { return pCode; }
     SC_DLLPUBLIC void   SetCode( ScTokenArray& );
     const ScTokenArray* GetCode() const             { return pCode; }
@@ -244,8 +247,15 @@ public:
         @ATTENTION: The underlying ::std::map<std::unique_ptr>::insert(p) takes
         ownership of p and if it can't insert it deletes the object! So, if
         this insert here returns false the object where p pointed to is gone!
+
+        @param  bReuseFreeIndex
+                If the ScRangeData p points to has an index value of 0:
+                If `TRUE` then reuse a free index slot if available.
+                If `FALSE` then assign a new index slot. The Manage Names
+                dialog uses this so that deleting and adding ranges in the same
+                run is guaranteed to not reuse previously assigned indexes.
      */
-    SC_DLLPUBLIC bool insert(ScRangeData* p);
+    SC_DLLPUBLIC bool insert( ScRangeData* p, bool bReuseFreeIndex = true );
 
     void erase(const ScRangeData& r);
     void erase(const OUString& rName);

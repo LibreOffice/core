@@ -235,7 +235,7 @@ void ScNameDefDlg::AddPushed()
             // aExpression valid?
             if ( 0 == pNewEntry->GetErrCode() )
             {
-                if ( !pRangeName->insert( pNewEntry ) )
+                if ( !pRangeName->insert( pNewEntry, false /*bReuseFreeIndex*/ ) )
                     pNewEntry = nullptr;
 
                 if (mbUndo)

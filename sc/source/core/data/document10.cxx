@@ -227,6 +227,54 @@ void ScDocument::SwapNonEmpty( sc::TableValues& rValues )
     aEndCxt.purgeEmptyBroadcasters();
 }
 
+void ScDocument::PreprocessAllRangeNamesUpdate( const std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap )
+{
+    // Update all existing names with new names.
+    // The prerequisites are that the name dialog preserves ScRangeData index
+    // for changes and does not reuse free index slots for new names.
+    // ScDocument::SetAllRangeNames() hereafter then will replace the
+    // ScRangeName containers of ScRangeData instances with empty
+    // ScRangeData::maNewName.
+    std::map<OUString, ScRangeName*> aRangeNameMap;
+    GetRangeNameMap( aRangeNameMap);
+    for (const auto& itTab : aRangeNameMap)
+    {
+        ScRangeName* pOldRangeNames = itTab.second;
+        if (!pOldRangeNames)
+            continue;
+
+        const auto& itNewTab( rRangeMap.find( itTab.first));
+        if (itNewTab == rRangeMap.end())
+            continue;
+
+        const ScRangeName* pNewRangeNames = itNewTab->second.get();
+        if (!pNewRangeNames)
+            continue;
+
+        for (ScRangeName::iterator it( pOldRangeNames->begin()), itEnd( pOldRangeNames->end());
+                it != itEnd; ++it)
+        {
+            ScRangeData* pOldData = it->second.get();
+            if (!pOldData)
+                continue;
+
+            const ScRangeData* pNewData = pNewRangeNames->findByIndex( pOldData->GetIndex());
+            if (pNewData)
+                pOldData->SetNewName( pNewData->GetName());
+        }
+    }
+
+    sc::EndListeningContext aEndListenCxt(*this);
+    sc::CompileFormulaContext aCompileCxt(this);
+
+    TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
+    for (; it != itEnd; ++it)
+    {
+        ScTable* p = *it;
+        p->PreprocessRangeNameUpdate(aEndListenCxt, aCompileCxt);
+    }
+}
+
 void ScDocument::PreprocessRangeNameUpdate()
 {
     sc::EndListeningContext aEndListenCxt(*this);

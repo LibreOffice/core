@@ -648,8 +648,12 @@ public:
     /**
      * Call this immediately before updating all named ranges.
      */
+    SC_DLLPUBLIC void PreprocessAllRangeNamesUpdate( const std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap );
     SC_DLLPUBLIC void PreprocessRangeNameUpdate();
     SC_DLLPUBLIC void PreprocessDBDataUpdate();
+    /**
+     * Call this immediately after updating named ranges.
+     */
     SC_DLLPUBLIC void CompileHybridFormula();
 
     /**
