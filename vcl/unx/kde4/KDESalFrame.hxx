@@ -48,7 +48,7 @@ class KDESalFrame : public X11SalFrame
         virtual void ReleaseGraphics( SalGraphics *pGraphics ) override;
         virtual void updateGraphics( bool bClear ) override;
         virtual void UpdateSettings( AllSettings& rSettings ) override;
-        virtual void Show( bool bVisible, bool bNoActivate ) override;
+        virtual void Show( bool bVisible, bool bNoActivate = false ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
