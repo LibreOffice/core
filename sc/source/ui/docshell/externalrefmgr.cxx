@@ -3029,8 +3029,13 @@ void ScExternalRefManager::resetSrcFileData(const OUString& rBaseFileUrl)
         if (aAbsName.isEmpty())
             aAbsName = itr->maFileName;
 
+#ifdef UNX
+        itr->maRelativeName = URIHelper::simpleNormalizedMakeRelative(
+            INetURLObject(rBaseFileUrl).ResolveFilePath(), aAbsName);
+#else
         itr->maRelativeName = URIHelper::simpleNormalizedMakeRelative(
             rBaseFileUrl, aAbsName);
+#endif
     }
 }
 
