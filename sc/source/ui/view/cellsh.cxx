@@ -609,6 +609,16 @@ void ScCellShell::GetState(SfxItemSet &rSet)
     {
         switch ( nWhich )
         {
+            case SID_COLUMN_OPERATIONS:
+            case SID_ROW_OPERATIONS:
+            {
+                if (rMark.IsRowMarked(nPosY))
+                    rSet.DisableItem(SID_COLUMN_OPERATIONS);
+
+                if (rMark.IsColumnMarked(nPosX))
+                    rSet.DisableItem(SID_ROW_OPERATIONS);
+                break;
+            }
             case SID_DETECTIVE_REFRESH:
                 if (!pDoc->HasDetectiveOperations())
                     rSet.DisableItem( nWhich );
