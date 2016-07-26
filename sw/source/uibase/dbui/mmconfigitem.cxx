@@ -1617,44 +1617,44 @@ void SwMailMergeConfigItem::SetSourceView(SwView* pView)
 {
     m_pSourceView = pView;
 
-    if(pView)
+    if (!pView)
+        return;
+
+    std::vector<OUString> aDBNameList;
+    std::vector<OUString> aAllDBNames;
+    pView->GetWrtShell().GetAllUsedDB( aDBNameList, &aAllDBNames );
+    if(!aDBNameList.empty())
     {
-        std::vector<OUString> aDBNameList;
-        std::vector<OUString> aAllDBNames;
-        pView->GetWrtShell().GetAllUsedDB( aDBNameList, &aAllDBNames );
-        if(!aDBNameList.empty())
+        // if fields are available there is usually no need of an addressblock and greeting
+        if(!m_pImpl->m_bUserSettingWereOverwritten)
         {
-            // if fields are available there is usually no need of an addressblock and greeting
-            if(!m_pImpl->m_bUserSettingWereOverwritten)
+            if( m_pImpl->m_bIsAddressBlock
+                || m_pImpl->m_bIsGreetingLineInMail
+                || m_pImpl->m_bIsGreetingLine )
             {
-                if( m_pImpl->m_bIsAddressBlock
-                    || m_pImpl->m_bIsGreetingLineInMail
-                    || m_pImpl->m_bIsGreetingLine )
-                {
-                    //store user settings
-                    m_pImpl->m_bUserSettingWereOverwritten = true;
-                    m_pImpl->m_bIsAddressBlock_LastUserSetting = m_pImpl->m_bIsAddressBlock;
-                    m_pImpl->m_bIsGreetingLineInMail_LastUserSetting = m_pImpl->m_bIsGreetingLineInMail;
-                    m_pImpl->m_bIsGreetingLine_LastUserSetting = m_pImpl->m_bIsGreetingLine;
+                //store user settings
+                m_pImpl->m_bUserSettingWereOverwritten = true;
+                m_pImpl->m_bIsAddressBlock_LastUserSetting = m_pImpl->m_bIsAddressBlock;
+                m_pImpl->m_bIsGreetingLineInMail_LastUserSetting = m_pImpl->m_bIsGreetingLineInMail;
+                m_pImpl->m_bIsGreetingLine_LastUserSetting = m_pImpl->m_bIsGreetingLine;
 
-                    //set all to false
-                    m_pImpl->m_bIsAddressBlock = false;
-                    m_pImpl->m_bIsGreetingLineInMail = false;
-                    m_pImpl->m_bIsGreetingLine = false;
+                //set all to false
+                m_pImpl->m_bIsAddressBlock = false;
+                m_pImpl->m_bIsGreetingLineInMail = false;
+                m_pImpl->m_bIsGreetingLine = false;
 
-                    m_pImpl->SetModified();
-                }
+                m_pImpl->SetModified();
             }
         }
-        else if( m_pImpl->m_bUserSettingWereOverwritten )
-        {
-            //restore last user settings:
-            m_pImpl->m_bIsAddressBlock = m_pImpl->m_bIsAddressBlock_LastUserSetting;
-            m_pImpl->m_bIsGreetingLineInMail = m_pImpl->m_bIsGreetingLineInMail_LastUserSetting;
-            m_pImpl->m_bIsGreetingLine = m_pImpl->m_bIsGreetingLine_LastUserSetting;
+    }
+    else if( m_pImpl->m_bUserSettingWereOverwritten )
+    {
+        //restore last user settings:
+        m_pImpl->m_bIsAddressBlock = m_pImpl->m_bIsAddressBlock_LastUserSetting;
+        m_pImpl->m_bIsGreetingLineInMail = m_pImpl->m_bIsGreetingLineInMail_LastUserSetting;
+        m_pImpl->m_bIsGreetingLine = m_pImpl->m_bIsGreetingLine_LastUserSetting;
 
-            m_pImpl->m_bUserSettingWereOverwritten = false;
-        }
+        m_pImpl->m_bUserSettingWereOverwritten = false;
     }
 }
 
