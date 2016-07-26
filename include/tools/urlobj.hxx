@@ -264,6 +264,9 @@ public:
     { return decode(m_aAbsURIRef, eMechanism, eCharset); }
 
     OUString GetURLNoPass(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
+    OUString ResolveFilePath(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
+                              rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
+        const;
                            rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
         const;
 
@@ -329,8 +332,7 @@ public:
 
     inline bool
     GetNewAbsURL(OUString const & rTheRelURIRef,
-                 INetURLObject * pTheAbsURIRef)
-        const;
+                 INetURLObject * pTheAbsURIRef) const;
 
     /** @descr  If rTheRelURIRef cannot be converted to an absolute URL
         (because of syntactic reasons), either rTheRelURIRef or an empty
@@ -1220,9 +1222,25 @@ INetURLObject::smartRel2Abs(OUString const & rTheRelURIRef,
                             FSysStyle eStyle) const
 {
     INetURLObject aTheAbsURIRef;
-    convertRelToAbs(rTheRelURIRef, aTheAbsURIRef, rWasAbsolute,
-                    eMechanism, eCharset, bIgnoreFragment, true,
-                    bRelativeNonURIs, eStyle);
+#ifdef UNX
+    bool bResolveBaseURI = rTheRelURIRef.startsWith("../");
+#else
+    bool bResolveBaseURI = false;
+#endif
+    if (bResolveBaseURI)
+    {
+        OUString rTheResolvedURIRef(INetURLObject(m_aAbsURIRef.getStr()).ResolveFilePath());
+        bResolveBaseURI = INetURLObject(rTheResolvedURIRef, eMechanism, eCharset).
+            convertRelToAbs(rTheRelURIRef, aTheAbsURIRef, rWasAbsolute,
+                            eMechanism, eCharset, bIgnoreFragment, true,
+                            bRelativeNonURIs, eStyle);
+    }
+    if (!bResolveBaseURI)
+    {
+        convertRelToAbs(rTheRelURIRef, aTheAbsURIRef, rWasAbsolute,
+                        eMechanism, eCharset, bIgnoreFragment, true,
+                        bRelativeNonURIs, eStyle);
+    }
     return aTheAbsURIRef;
 }
 
@@ -1232,10 +1250,26 @@ inline bool INetURLObject::GetNewAbsURL(OUString const & rTheRelURIRef,
 {
     INetURLObject aTheAbsURIRef;
     bool bWasAbsolute;
-    if (!convertRelToAbs(rTheRelURIRef, aTheAbsURIRef, bWasAbsolute,
-                         EncodeMechanism::WasEncoded, RTL_TEXTENCODING_UTF8, false/*bIgnoreFragment*/, false, false,
-                         FSysStyle::Detect))
-        return false;
+#ifdef UNX
+    bool bResolveBaseURI = rTheRelURIRef.startsWith("../");
+#else
+    bool bResolveBaseURI = false;
+#endif
+    if (bResolveBaseURI)
+    {
+        OUString rTheResolvedURIRef(INetURLObject(m_aAbsURIRef.getStr()).ResolveFilePath());
+        bResolveBaseURI = INetURLObject(rTheResolvedURIRef, WAS_ENCODED, RTL_TEXTENCODING_UTF8).
+            convertRelToAbs(rTheRelURIRef, aTheAbsURIRef, bWasAbsolute,
+                            EncodeMechanism::WasEncoded, RTL_TEXTENCODING_UTF8, false/*bIgnoreFragment*/, false,
+                            false, FSYS_DETECT);
+    }
+    if (!bResolveBaseURI)
+    {
+        if (!convertRelToAbs(rTheRelURIRef, aTheAbsURIRef, bWasAbsolute,
+                            EncodeMechanism::WasEncoded, RTL_TEXTENCODING_UTF8, false/*bIgnoreFragment*/, false, false,
+                            FSYS_DETECT))
+            return false;
+    }
     if (pTheAbsURIRef)
         *pTheAbsURIRef = aTheAbsURIRef;
     return true;
@@ -1250,9 +1284,22 @@ inline OUString INetURLObject::GetRelURL(OUString const & rTheBaseURIRef,
                                           FSysStyle eStyle)
 {
     OUString aTheRelURIRef;
+#ifdef UNX
+    OUString aTheResolvedURIRef(rTheBaseURIRef);
+    aTheResolvedURIRef = INetURLObject(rTheBaseURIRef).ResolveFilePath();
+    if (!INetURLObject(aTheResolvedURIRef, eEncodeMechanism, eCharset).
+         convertAbsToRel(rTheAbsURIRef, aTheRelURIRef, eEncodeMechanism,
+                         eDecodeMechanism, eCharset, eStyle))
+    {
+        INetURLObject(rTheBaseURIRef, eEncodeMechanism, eCharset).
+            convertAbsToRel(rTheAbsURIRef, aTheRelURIRef, eEncodeMechanism,
+                            eDecodeMechanism, eCharset, eStyle);
+    }
+#else
     INetURLObject(rTheBaseURIRef, eEncodeMechanism, eCharset).
         convertAbsToRel(rTheAbsURIRef, aTheRelURIRef, eEncodeMechanism,
                         eDecodeMechanism, eCharset, eStyle);
+#endif
     return aTheRelURIRef;
 }
 
