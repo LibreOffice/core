@@ -1007,7 +1007,8 @@ void Test::checkDateInput( SvNumberFormatter& rFormatter, const char* pTimezone,
     sal_uInt32 nIndex = 0;
     double fVal = 0.0;
     bool bVal = rFormatter.IsNumberFormat( aDate, nIndex, fVal);
-    CPPUNIT_ASSERT_MESSAGE("Date not recognized.", bVal);
+    CPPUNIT_ASSERT_MESSAGE( OString("Date not recognized: " +
+                OString(pTimezone) + " " + OString(pIsoDate)).getStr(), bVal);
     CPPUNIT_ASSERT_MESSAGE("Format parsed is not date.",
             (rFormatter.GetType(nIndex) & css::util::NumberFormat::DATE));
     OUString aOutString;
