@@ -736,7 +736,7 @@ IMPL_LINK_TYPED(FmSearchDialog, OnSearchProgress, const FmSearchProgress*, pProg
             sal_uInt16 nErrorId = (FmSearchProgress::STATE_ERROR == pProgress->aSearchState)
                 ? RID_STR_SEARCH_GENERAL_ERROR
                 : RID_STR_SEARCH_NORECORD;
-            ScopedVclPtrInstance<MessageDialog>::Create(this, CUI_RES(nErrorId))->Execute();
+            ScopedVclPtrInstance<MessageDialog>(this, CUI_RES(nErrorId))->Execute();
             SAL_FALLTHROUGH;
         }
         case FmSearchProgress::STATE_CANCELED:

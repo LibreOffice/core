@@ -726,7 +726,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickLoadHdl_Impl, Button*, void)
 
     if ( *pnDashListState & ChangeType::MODIFIED )
     {
-        nReturn = ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
+        nReturn = ScopedVclPtrInstance<MessageDialog>(GetParentDialog()
                                 ,"AskSaveList"
                                 ,"cui/ui/querysavelistdialog.ui")->Execute();
 
@@ -778,7 +778,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickLoadHdl_Impl, Button*, void)
             }
             else
                 //aIStream.Close();
-                ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
+                ScopedVclPtrInstance<MessageDialog>(GetParentDialog()
                               ,"NoLoadedFileDialog"
                               ,"cui/ui/querynoloadedfiledialog.ui")->Execute();
         }
@@ -845,7 +845,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickSaveHdl_Impl, Button*, void)
         }
         else
         {
-            ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
+            ScopedVclPtrInstance<MessageDialog>(GetParentDialog()
                          ,"NoSaveFileDialog"
                          ,"cui/ui/querynosavefiledialog.ui")->Execute();
         }

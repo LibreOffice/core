@@ -40,7 +40,7 @@ IMPL_LINK_NOARG_TYPED( SfxNewStyleDlg, OKHdl, ComboBox&, void )
     {
         if ( !pStyle->IsUserDefined() )
         {
-            ScopedVclPtrInstance<MessageDialog>::Create( this, SfxResId( STR_POOL_STYLE_NAME ), VCL_MESSAGE_INFO )->Execute();
+            ScopedVclPtrInstance<MessageDialog>( this, SfxResId( STR_POOL_STYLE_NAME ), VCL_MESSAGE_INFO )->Execute();
             return;
         }
 

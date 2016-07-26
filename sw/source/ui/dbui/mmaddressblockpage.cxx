@@ -182,7 +182,7 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeAddressBlockPage, AddressListHdl_Impl, Button*,
     catch (const uno::Exception& e)
     {
         OSL_FAIL(OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
-        ScopedVclPtrInstance<MessageDialog>::Create(this, e.Message)->Execute();
+        ScopedVclPtrInstance<MessageDialog>(this, e.Message)->Execute();
     }
 }
 
