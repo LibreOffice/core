@@ -28,6 +28,9 @@
         <entry os="all" vendor="intel" compare="equal" version="20.19.15.4352">
             <device id="0x1927"/>
         </entry>
+        <entry os="7" vendor="intel">
+            <device id="all"/>
+        </entry>
         <entry os="all" vendor="ati" compare="less" version="15.200.1062.1004"> <!-- 150.200 -->
             <device id="all"/>
         </entry>
