@@ -26,6 +26,7 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/scalc,\
 	sc/uiconfig/scalc/popupmenu/celledit \
 	sc/uiconfig/scalc/popupmenu/chart \
 	sc/uiconfig/scalc/popupmenu/colheader \
+	sc/uiconfig/scalc/popupmenu/column_operations \
 	sc/uiconfig/scalc/popupmenu/conditional \
 	sc/uiconfig/scalc/popupmenu/draw \
 	sc/uiconfig/scalc/popupmenu/drawtext \
@@ -39,6 +40,7 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/scalc,\
 	sc/uiconfig/scalc/popupmenu/pivot \
 	sc/uiconfig/scalc/popupmenu/preview \
 	sc/uiconfig/scalc/popupmenu/rowheader \
+	sc/uiconfig/scalc/popupmenu/row_operations \
 	sc/uiconfig/scalc/popupmenu/sheettab \
 ))
 

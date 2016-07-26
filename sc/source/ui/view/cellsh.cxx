@@ -209,6 +209,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_INS_ROWS_BEFORE:           // insert rows
             case FID_INS_ROWS_AFTER:
             case FID_INS_CELLSDOWN:
+            case SID_ROW_OPERATIONS:
                 bDisable = (!bSimpleArea) || GetViewData()->SimpleColMarked();
                 break;
 
@@ -216,6 +217,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_INS_COLUMNS_BEFORE:        // insert columns
             case FID_INS_COLUMNS_AFTER:
             case FID_INS_CELLSRIGHT:
+            case SID_COLUMN_OPERATIONS:
                 bDisable = (!bSimpleArea) || GetViewData()->SimpleRowMarked();
                 break;
 
