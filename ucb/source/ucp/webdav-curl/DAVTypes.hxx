@@ -149,6 +149,21 @@ namespace http_dav_ucp
         void removeDAVOptions( const OUString & rURL );
         void addDAVOptions( DAVOptions & rDAVOptions, const sal_uInt32 nLifeTime );
 
+        /** Check if the DAV options cached value was found
+            by the last OPTIONS method call.
+            If the cached value is found stale, it is removed.
+
+            @param OUString
+                   the resource URL
+
+            @return bool
+                    true if resource was found or if the Web resource DAV options
+                    are not present (meaning the resource should be checked for
+                    presence anyway)
+                    false if resource was not found
+        */
+        bool isResourceFound( const OUString & rURL );
+
     private:
 
         /// remove the last '/' in aUrl, if it exists
