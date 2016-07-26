@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_3c6511e1",
+        "filename": "opencl/source/openclwrapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-26T09:09:17Z",
+      "side": 1,
+      "message": "Seeing that the previous code initialized gpuInfo-\u003emnPreferredVectorWidthFloat \u003d 0, does clGetDeviceInfo() guarantee to initialize nPreferredVectorWidthFloat?",
+      "range": {
+        "startLine": 463,
+        "startChar": 12,
+        "endLine": 463,
+        "endChar": 38
+      },
+      "revId": "cb309928872735c577d2b59fe9dd8690424410b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
