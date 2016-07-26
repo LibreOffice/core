@@ -200,6 +200,8 @@ interface CellSelection
     SID_CANCEL      [ ExecMethod = Execute; ]
     SID_TOGGLE_REL  [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_POPUP_CONDFRMT []
+    SID_COLUMN_OPERATIONS []
+    SID_ROW_OPERATIONS []
     SID_OPENDLG_CONDFRMT    [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_OPENDLG_COLORSCALE  [ ExecMethod = ExecuteEdit; ]
     SID_OPENDLG_DATABAR     [ ExecMethod = ExecuteEdit; ]

@@ -347,6 +347,34 @@
           <value>anchor</value>
         </prop>
       </node>
+      <node oor:name="c29" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ColumnOperations</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>colum_operations</value>
+        </prop>
+      </node>
+      <node oor:name="c30" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:RowOperations</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>row_operations</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="ToolBar">
       <node oor:name="ZoomToolBox" oor:op="replace">
@@ -1212,6 +1240,28 @@
       <node oor:name="ConditionalFormatControl" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:ConditionalFormatMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+      </node>
+      <node oor:name="ColumnOperationsControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ColumnOperations</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+      </node>
+      <node oor:name="RowOperationsControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:RowOperations</value>
         </prop>
         <prop oor:name="Module">
           <value>com.sun.star.sheet.SpreadsheetDocument</value>
