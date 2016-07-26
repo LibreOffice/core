@@ -67,11 +67,24 @@ public:
     bool            IsRightToLeft() const       { return bRightToLeft; }
 };
 
-class TETextPortionList : public std::vector<TETextPortion*>
+class TETextPortionList
 {
+private:
+    std::vector<TETextPortion*> maPortions;
+
 public:
     TETextPortionList();
     ~TETextPortionList();
+
+    TETextPortion* operator[]( size_t nPos );
+    std::vector<TETextPortion*>::const_iterator begin() const;
+    std::vector<TETextPortion*>::const_iterator end() const;
+    bool empty() const;
+    size_t size() const;
+    std::vector<TETextPortion*>::iterator erase( std::vector<TETextPortion*>::const_iterator aIter );
+    std::vector<TETextPortion*>::iterator insert( std::vector<TETextPortion*>::const_iterator aIter,
+                                                  TETextPortion* pTP );
+    void push_back( TETextPortion* pTP );
 
     void    Reset();
     sal_uInt16  FindPortion( sal_Int32 nCharPos, sal_Int32& rPortionStart, bool bPreferStartingPortion = false );
