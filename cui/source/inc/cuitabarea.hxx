@@ -576,7 +576,7 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
     virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
 
-    void    SetBitmapList( XBitmapListRef pBmpLst) { m_pBitmapList = pBmpLst; }
+    void    SetBitmapList( const XBitmapListRef& pBmpLst) { m_pBitmapList = pBmpLst; }
 
     void    SetPageType( sal_uInt16* pInType ) { m_nPageType = pInType; }
     void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
