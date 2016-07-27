@@ -324,7 +324,7 @@ public:
                         ~SvxIconChoiceCtrl_Impl();
 
     bool                SetChoiceWithCursor() { bool bOld = bChooseWithCursor; bChooseWithCursor = true; return bOld; }
-    void                Clear( bool bInCtor = false );
+    void                Clear( bool bInCtor );
     void                SetStyle( WinBits nWinStyle );
     WinBits             GetStyle() const { return nWinBits; }
     void                InsertEntry( SvxIconChoiceCtrlEntry*, size_t nPos );
@@ -347,7 +347,7 @@ public:
                             SvxIconChoiceCtrlEntry* pNewCursor,
                             bool bMod1,
                             bool bShift,
-                            bool bPaintSync = false
+                            bool bPaintSync
                         );
     bool                KeyInput( const KeyEvent& );
     void                Resize();
@@ -374,9 +374,9 @@ public:
     void                MakeEntryVisible( SvxIconChoiceCtrlEntry* pEntry, bool bBound = true );
 
     void                Arrange(
-                            bool bKeepPredecessors = false,
-                            long nSetMaxVirtWidth =0,
-                            long nSetMaxVirtHeight =0
+                            bool bKeepPredecessors,
+                            long nSetMaxVirtWidth,
+                            long nSetMaxVirtHeight
                         );
 
     Rectangle           CalcFocusRect( SvxIconChoiceCtrlEntry* );
@@ -484,11 +484,11 @@ public:
 
     void                SetEntryHighlightFrame(
                             SvxIconChoiceCtrlEntry* pEntry,
-                            bool bKeepHighlightFlags = false
+                            bool bKeepHighlightFlags
                         );
     void                DrawHighlightFrame(vcl::RenderContext& rRenderContext, const Rectangle& rBmpRect);
 
-    void                CallEventListeners( sal_uLong nEvent, void* pData = nullptr );
+    void                CallEventListeners( sal_uLong nEvent, void* pData );
 
     ::svt::IAccessibleFactory& GetAccessibleFactory()
     {

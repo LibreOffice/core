@@ -408,7 +408,7 @@ void TreeControlPeer::addNode( UnoTreeListBoxImpl& rTree, const Reference< XTree
 {
     if( xNode.is() )
     {
-        UnoTreeListEntry* pEntry = createEntry( xNode, pParentEntry );
+        UnoTreeListEntry* pEntry = createEntry( xNode, pParentEntry, TREELIST_APPEND );
         const sal_Int32 nChildCount = xNode->getChildCount();
         for( sal_Int32 nChild = 0; nChild < nChildCount; nChild++ )
             addNode( rTree, xNode->getChildAt( nChild ), pEntry );

@@ -69,7 +69,7 @@ namespace {
         void setItemSet( const SfxItemSet& rSet ){ maItemSet.push_back( std::shared_ptr<SfxItemSet>( rSet.Clone() ) ); }
         // #i86923#
         Node* findChildNode( const SfxPoolItem& rItem,
-                             const bool bIsItemIgnorable = false );
+                             const bool bIsItemIgnorable );
         Node* nextItemSet( Node* pLast,
                            const bool bSkipUnusedItemSet,
                            const bool bSkipIgnorable );
@@ -396,7 +396,7 @@ std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet
         if ( !xFoundIgnorableItems.get() ||
              (xFoundIgnorableItems->Put( *pItem ) == nullptr ) )
         {
-            pCurNode = pCurNode->findChildNode( *pItem );
+            pCurNode = pCurNode->findChildNode( *pItem, false );
         }
         pItem = aIter.NextItem();
     }
