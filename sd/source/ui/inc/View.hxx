@@ -122,6 +122,7 @@ public:
     inline DrawDocShell* GetDocSh() const { return mpDocSh; }
     inline SdDrawDocument& GetDoc() const;
     inline ViewShell* GetViewShell() const { return mpViewSh; }
+    SfxViewShell* GetSfxViewShell() const override;
 
     virtual bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = nullptr, vcl::Window* pWin = nullptr, bool bIsNewObj = false,
         SdrOutliner* pGivenOutliner = nullptr, OutlinerView* pGivenOutlinerView = nullptr,

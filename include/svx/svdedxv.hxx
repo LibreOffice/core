@@ -35,6 +35,7 @@ class ImpSdrEditPara;
 struct PasteOrDropInfos;
 class SdrUndoManager;
 class TextChainCursorManager;
+class SfxViewShell;
 
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;
@@ -155,6 +156,9 @@ public:
     virtual void BrkAction() override;
     virtual void BckAction() override;
     virtual void TakeActionRect(Rectangle& rRect) const override;
+
+    /// Get access to the view shell owning this draw view, if any.
+    virtual SfxViewShell* GetSfxViewShell() const;
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
     virtual void ModelHasChanged() override;
