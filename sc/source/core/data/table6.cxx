@@ -300,7 +300,10 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
 {
     SCCOL nLastCol;
     SCROW nLastRow;
-    GetLastDataPos(nLastCol, nLastRow);
+    if (rSearchItem.GetCellType() == SvxSearchCellType::NOTE)
+        GetCellArea( nLastCol, nLastRow);
+    else
+        GetLastDataPos(nLastCol, nLastRow);
     return Search(rSearchItem, rCol, rRow, nLastCol, nLastRow, rMark, rUndoStr, pUndoDoc);
 }
 
