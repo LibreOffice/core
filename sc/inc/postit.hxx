@@ -118,6 +118,8 @@ public:
 
     /** Returns the caption text of this note. */
     OUString     GetText() const;
+    /** Returns true, if the caption text of this note contains line breaks. */
+    bool                HasMultiLineText() const;
     /** Changes the caption text of this note. All text formatting will be lost. */
     void                SetText( const ScAddress& rPos, const OUString& rText );
 

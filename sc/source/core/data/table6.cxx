@@ -73,6 +73,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
         return false;
 
     bool bMultiLine = false;
+    ScPostIt* pNote = nullptr;
     CellType eCellType = aCell.meType;
     switch (rSearchItem.GetCellType())
     {
@@ -89,8 +90,8 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 else
                     aCol[nCol].GetString( nRow, aString );
             }
+            break;
         }
-        break;
         case SvxSearchCellType::VALUE:
             if ( eCellType == CELLTYPE_EDIT )
                 bMultiLine = lcl_GetTextWithBreaks(*aCell.mpEditText, pDocument, aString);
@@ -103,7 +104,15 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             }
             break;
         case SvxSearchCellType::NOTE:
-            break; // don't search this case here
+        {
+            pNote = aCol[nCol].GetCellNote(nRow);
+            if (pNote)
+            {
+                aString = pNote->GetText();
+                bMultiLine = pNote->HasMultiLineText();
+            }
+            break;
+        }
         default:
             break;
     }
@@ -212,8 +221,14 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             }
         }
         while (bRepeat);
-
-        if ( cMatrixFlag != MM_NONE )
+        if (rSearchItem.GetCellType() == SvxSearchCellType::NOTE)
+        {
+            // NB: rich text format is lost.
+            // This is also true of Cells.
+            if (pNote)
+                pNote->SetText( ScAddress( nCol, nRow, nTab ), aString );
+        }
+        else if ( cMatrixFlag != MM_NONE )
         {   // don't split Matrix
             if ( aString.getLength() > 2 )
             {   // remove {} here so that "{=" can be replaced by "{=..."
