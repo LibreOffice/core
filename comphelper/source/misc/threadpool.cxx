@@ -336,8 +336,8 @@ void ThreadTaskTag::waitUntilDone()
 #endif
 
 #ifdef DBG_UTIL
-    // 2 minute timeout in debug mode so our tests fail sooner rather than later
-    osl::Condition::Result rv = maTasksComplete.wait(TimeValue { 2*60, 0 });
+    // 3 minute timeout in debug mode so our tests fail sooner rather than later
+    osl::Condition::Result rv = maTasksComplete.wait(TimeValue { 3*60, 0 });
     assert(rv != osl::Condition::result_timeout);
 #else
     // 10 minute timeout in production so the app eventually throws some kind of error
