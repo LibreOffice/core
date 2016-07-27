@@ -143,6 +143,7 @@
                   <object class="GtkEntry" id="search_filter">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="tooltip_text" translatable="yes">Search...</property>
                     <property name="placeholder_text" translatable="yes">Search...</property>
                   </object>
                   <packing>
@@ -290,6 +291,7 @@
                           <object class="GtkToolButton" id="action_menu">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Settings</property>
                             <property name="action_name">action_menu</property>
                             <property name="icon_name">sfx2/imglst/actionaction013.png</property>
                           </object>
