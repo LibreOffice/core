@@ -61,7 +61,6 @@
 #include <vcl/svmain.hxx>
 #include "dbggui.hxx"
 #include "accmgr.hxx"
-#include "idlemgr.hxx"
 #include "outdev.h"
 #include "fontinstance.hxx"
 #include "PhysicalFontCollection.hxx"
@@ -405,11 +404,6 @@ void DeInitVCL()
         pSVData->mpSettingsConfigItem = nullptr;
     }
 
-    if ( pSVData->maAppData.mpIdleMgr )
-    {
-        delete pSVData->maAppData.mpIdleMgr;
-        pSVData->maAppData.mpIdleMgr = nullptr;
-    }
     Scheduler::ImplDeInitScheduler();
 
     if ( pSVData->maWinData.mpMsgBoxImgList )

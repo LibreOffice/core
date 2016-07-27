@@ -63,7 +63,6 @@
 #include "displayconnectiondispatch.hxx"
 #include "window.h"
 #include "accmgr.hxx"
-#include "idlemgr.hxx"
 #include "svids.hrc"
 
 #include <com/sun/star/uno/Reference.h>
@@ -1092,25 +1091,6 @@ void Application::RemoveUserEvent( ImplSVEvent * nUserEvent )
         nUserEvent->mpInstanceRef.clear();
         nUserEvent->mbCall = false;
     }
-}
-
-bool Application::InsertIdleHdl( const Link<Application*,void>& rLink, sal_uInt16 nPrio )
-{
-    ImplSVData* pSVData = ImplGetSVData();
-
-    // create if does not exist
-    if ( !pSVData->maAppData.mpIdleMgr )
-        pSVData->maAppData.mpIdleMgr = new ImplIdleMgr;
-
-    return pSVData->maAppData.mpIdleMgr->InsertIdleHdl( rLink, nPrio );
-}
-
-void Application::RemoveIdleHdl( const Link<Application*,void>& rLink )
-{
-    ImplSVData* pSVData = ImplGetSVData();
-
-    if ( pSVData->maAppData.mpIdleMgr )
-        pSVData->maAppData.mpIdleMgr->RemoveIdleHdl( rLink );
 }
 
 WorkWindow* Application::GetAppWindow()

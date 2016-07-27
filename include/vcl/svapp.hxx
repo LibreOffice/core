@@ -791,24 +791,6 @@ public:
     */
     static void                 RemoveUserEvent( ImplSVEvent * nUserEvent );
 
-    /** Insert an idle handler into the application.
-
-     If the idle event manager doesn't exist, then initialize it.
-
-     @param     rLink           const reference to the idle handler
-     @param     nPriority       The priority of the idle handler - idle handlers of a higher
-                                priority will be processed before this handler.
-
-     @return true if the handler was inserted successfully, false if it couldn't be inserted.
-    */
-    static bool                 InsertIdleHdl( const Link<Application*,void>& rLink, sal_uInt16 nPriority );
-
-    /** Remove an idle handler from the application.
-
-     @param     rLink           const reference to the idle handler to remove
-    */
-    static void                 RemoveIdleHdl( const Link<Application*,void>& rLink );
-
     /*** Get the DisplayConnection.
 
      It is a reference to XDisplayConnection, which allows toolkits to send display
