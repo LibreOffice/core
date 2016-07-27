@@ -89,6 +89,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_uwriter,\
     ucb/source/ucp/file/ucpfile1 \
     unotools/util/utl \
     unoxml/source/service/unoxml \
+    uui/util/uui \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_uwriter))

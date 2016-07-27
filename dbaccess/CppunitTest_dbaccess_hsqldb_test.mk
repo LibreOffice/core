@@ -69,6 +69,7 @@ $(eval $(call gb_CppunitTest_use_components,dbaccess_hsqldb_test,\
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
     unotools/util/utl \
+    uui/util/uui \
     xmloff/util/xo \
 ))
 

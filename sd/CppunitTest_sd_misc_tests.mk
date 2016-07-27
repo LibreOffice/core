@@ -113,6 +113,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_misc_tests,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
+    uui/util/uui \
     xmloff/util/xo \
     xmlsecurity/util/xsec_fw \
     xmlsecurity/util/xmlsecurity \

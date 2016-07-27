@@ -101,6 +101,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_macros_test,\
 	unotools/util/utl \
 	unoxml/source/rdf/unordf \
 	unoxml/source/service/unoxml \
+	uui/util/uui \
 	xmloff/util/xo \
 	xmlsecurity/util/$(if $(filter WNT,$(OS)),xsec_xmlsec.windows,xsec_xmlsec) \
 ))
