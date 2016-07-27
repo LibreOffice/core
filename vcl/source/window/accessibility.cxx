@@ -152,6 +152,8 @@ namespace vcl {
 
 void Window::SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > x )
 {
+    if (mpWindowImpl == nullptr)
+        return;
     mpWindowImpl->mxAccessible = x;
 }
 
