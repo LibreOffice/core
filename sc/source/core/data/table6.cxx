@@ -68,12 +68,22 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
     if (!bDoSearch)
         return false;
 
-    aCell = aCol[nCol].GetCellValue(nRow);
-    if (aCell.isEmpty())
-        return false;
+    ScPostIt* pNote;
+    if (rSearchItem.GetCellType() == SvxSearchCellType::NOTE)
+    {
+        pNote = aCol[nCol].GetCellNote(nRow);
+        if (!pNote)
+            return false;
+    }
+    else
+    {
+        aCell = aCol[nCol].GetCellValue(nRow);
+        if (aCell.isEmpty())
+            return false;
+        pNote = nullptr;
+    }
 
     bool bMultiLine = false;
-    ScPostIt* pNote = nullptr;
     CellType eCellType = aCell.meType;
     switch (rSearchItem.GetCellType())
     {
@@ -105,7 +115,6 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             break;
         case SvxSearchCellType::NOTE:
         {
-            pNote = aCol[nCol].GetCellNote(nRow);
             if (pNote)
             {
                 aString = pNote->GetText();
@@ -300,7 +309,10 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
 {
     SCCOL nLastCol;
     SCROW nLastRow;
-    GetLastDataPos(nLastCol, nLastRow);
+    if (rSearchItem.GetCellType() == SvxSearchCellType::NOTE)
+        GetCellArea( nLastCol, nLastRow);
+    else
+        GetLastDataPos(nLastCol, nLastRow);
     return Search(rSearchItem, rCol, rRow, nLastCol, nLastRow, rMark, rUndoStr, pUndoDoc);
 }
 
@@ -315,6 +327,7 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
     SCROW nRow = rRow;
 
     bool bSkipFiltered = !rSearchItem.IsSearchFiltered();
+    bool bSearchNotes = (rSearchItem.GetCellType() == SvxSearchCellType::NOTE);
     if (!bAll && rSearchItem.GetBackward())
     {
         SCROW nLastNonFilteredRow = MAXROW + 1;
@@ -338,7 +351,12 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                         {
                             nCol--;
                             if ((SCsCOL)nCol >= 0)
-                                bIsEmpty = aCol[nCol].IsEmptyData();
+                            {
+                                if (bSearchNotes)
+                                    bIsEmpty = !aCol[nCol].HasCellNotes();
+                                else
+                                    bIsEmpty = aCol[nCol].IsEmptyData();
+                            }
                             else
                                 bIsEmpty = true;
                         }
@@ -365,8 +383,16 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                     bFound = SearchCell(rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc);
                     if (!bFound)
                     {
-                         if (!aCol[nCol].GetPrevDataPos(nRow))
-                            nRow = -1;
+                        if (bSearchNotes)
+                        {
+                            /* TODO: can we look for the previous cell note instead? */
+                            --nRow;
+                        }
+                        else
+                        {
+                            if (!aCol[nCol].GetPrevDataPos(nRow))
+                                nRow = -1;
+                        }
                     }
                 }
                 if (!bFound)
@@ -379,7 +405,12 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                     {
                         nCol--;
                         if ((SCsCOL)nCol >= 0)
-                            bIsEmpty = aCol[nCol].IsEmptyData();
+                        {
+                            if (bSearchNotes)
+                                bIsEmpty = !aCol[nCol].HasCellNotes();
+                            else
+                                bIsEmpty = aCol[nCol].IsEmptyData();
+                        }
                         else
                             bIsEmpty = true;
                     }
@@ -405,7 +436,9 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                     if (!bFound)
                     {
                         nCol++;
-                        while ((nCol <= nLastCol) && aCol[nCol].IsEmptyData()) nCol++;
+                        while ((nCol <= nLastCol) &&
+                                (bSearchNotes ? !aCol[nCol].HasCellNotes() : aCol[nCol].IsEmptyData()))
+                            nCol++;
                     }
                 }
                 if (!bFound)
@@ -428,8 +461,16 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                     bFound = SearchCell(rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc);
                     if (!bFound)
                     {
-                         if (!aCol[nCol].GetNextDataPos(nRow))
-                            nRow = MAXROW + 1;
+                        if (bSearchNotes)
+                        {
+                            /* TODO: can we look for the next cell note instead? */
+                            ++nRow;
+                        }
+                        else
+                        {
+                            if (!aCol[nCol].GetNextDataPos(nRow))
+                                nRow = MAXROW + 1;
+                        }
                     }
                 }
                 if (!bFound)
@@ -438,7 +479,9 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                     nRow = 0;
                     nLastNonFilteredRow = -1;
                     nCol++;
-                    while ((nCol <= nLastCol) && aCol[nCol].IsEmptyData()) nCol++;
+                    while ((nCol <= nLastCol) &&
+                            (bSearchNotes ? !aCol[nCol].HasCellNotes() : aCol[nCol].IsEmptyData()))
+                        nCol++;
                 }
             }
         }
@@ -461,7 +504,10 @@ bool ScTable::SearchAll(const SvxSearchItem& rSearchItem, const ScMarkData& rMar
 
     SCCOL nLastCol;
     SCROW nLastRow;
-    GetLastDataPos(nLastCol, nLastRow);
+    if (rSearchItem.GetCellType() == SvxSearchCellType::NOTE)
+        GetCellArea( nLastCol, nLastRow);
+    else
+        GetLastDataPos(nLastCol, nLastRow);
 
     do
     {
@@ -520,7 +566,10 @@ bool ScTable::ReplaceAll(
 
     SCCOL nLastCol;
     SCROW nLastRow;
-    GetLastDataPos(nLastCol, nLastRow);
+    if (rSearchItem.GetCellType() == SvxSearchCellType::NOTE)
+        GetCellArea( nLastCol, nLastRow);
+    else
+        GetLastDataPos(nLastCol, nLastRow);
 
     bool bEverFound = false;
     while (true)
