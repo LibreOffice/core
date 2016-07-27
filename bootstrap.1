@@ -61,7 +61,7 @@ fi
 
 if test -n "$DMAKE_URL" -a  ! -x "$SOLARENV/$INPATH/bin/dmake$EXEEXT"; then
 
-    # Assume that the dmake archive has been downloaded by fetch_tarballs.sh
+    # Assume that the dmake archive has been downloaded
     # Determine the name of the downloaded file.
     dmake_package_name=`echo $DMAKE_URL | sed "s/^\(.*\/\)//"`
 
