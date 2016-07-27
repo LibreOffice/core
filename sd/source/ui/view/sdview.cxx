@@ -651,6 +651,16 @@ void OutlinerMasterViewFilter::End()
     }
 }
 
+SfxViewShell* View::GetSfxViewShell() const
+{
+    SfxViewShell* pRet = nullptr;
+
+    if (mpViewSh)
+        pRet = &mpViewSh->GetViewShellBase();
+
+    return pRet;
+}
+
 bool View::SdrBeginTextEdit(
     SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
     bool bIsNewObj,
