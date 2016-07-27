@@ -157,8 +157,8 @@ namespace tdoc_ucp {
         css::uno::Reference< css::frame::XGlobalEventBroadcaster > m_xDocEvtNotifier;
         css::uno::Reference< css::frame::XModuleManager2 >         m_xModuleMgr;
         DocumentList                                        m_aDocs;
-        ContentProvider *                              m_pDocEventListener;
-        ::rtl::Reference<OfficeDocumentsCloseListener> m_xDocCloseListener;
+        ContentProvider * const                             m_pDocEventListener;
+        ::rtl::Reference<OfficeDocumentsCloseListener> const m_xDocCloseListener;
     };
 
 } // namespace tdoc_ucp
