@@ -2,7 +2,9 @@ package org.libreoffice.storage.owncloud;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,8 +40,15 @@ public class OwnCloudFile implements IFile {
     }
 
     @Override
-    public URI getUri() {
-        return URI.create(file.getRemotePath());
+    public URI getUri(){
+
+        try{
+            return URI.create(URLEncoder.encode(file.getRemotePath(),"UTF-8"));
+        }catch(UnsupportedEncodingException e){
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     @Override
