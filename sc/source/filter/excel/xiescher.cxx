@@ -3410,8 +3410,7 @@ SdrObjectPtr XclImpDffConverter::CreateSdrObject( const XclImpPictureObj& rPicOb
                      Reference< XFormComponent >  xFComp;
                      css::awt::Size aSz;  // not used in import
                      ReadOCXCtlsStream( mxCtlsStrm, xFComp, rPicObj.GetCtlsStreamPos(),  rPicObj.GetCtlsStreamSize() );
-                     // recreate the method formally known as
-                     // ReadOCXExcelKludgeStream( )
+                     // recreate the method formerly known as ReadOCXExcelKludgeStream()
                      if ( xFComp.is() )
                      {
                          ScfPropertySet aPropSet( xFComp );

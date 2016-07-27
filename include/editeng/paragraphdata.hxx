@@ -26,7 +26,7 @@
 // Only for internal use, oder some kind like hPara for the few
 // functions where you need it outside ( eg. moving paragraphs... )
 
-// Unfortunately NOT only local (formally in outliner.hxx), but also
+// Unfortunately NOT only local (formerly in outliner.hxx), but also
 // used in outlobj.hxx. Moved to own header
 
 class ParagraphData

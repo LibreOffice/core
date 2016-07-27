@@ -255,7 +255,7 @@ bool PreviewRenderer::Initialize (
         return false;
 
     // #i121224# No need to set SetApplicationBackgroundColor (which is the color
-    // of the area 'behind' the page (formally called 'Wiese') since the page previews
+    // of the area 'behind' the page (formerly called 'Wiese') since the page previews
     // produced exactly cover the page's area, so it would never be visible. What
     // needs to be set is the ApplicationDocumentColor which is derived from
     // svtools::DOCCOLOR normally

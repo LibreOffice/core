@@ -745,7 +745,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 pView->ShowSdrPage( pPage );
 
                 // tdf#96922 completely deactivate EditView PageVisualization, including
-                // PageBackground (formally 'wiese').
+                // PageBackground (formerly 'wiese').
                 pView->SetPagePaintingAllowed(false);
 
                 const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );

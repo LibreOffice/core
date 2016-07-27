@@ -690,12 +690,12 @@ void SdrMarkView::SetMarkHandles()
         // Using a strict return statement is okay here; no handles means *no* handles.
         if(mpMarkedObj)
         {
-            // formally #i33755#: If TextEdit is active the EditEngine will directly paint
+            // formerly #i33755#: If TextEdit is active the EditEngine will directly paint
             // to the window, so suppress Overlay and handles completely; a text frame for
             // the active text edit will be painted by the repaint mechanism in
             // SdrObjEditView::ImpPaintOutlinerView in this case. This needs to be reworked
             // in the future
-            // Also formally #122142#: Pretty much the same for SdrCaptionObj's in calc.
+            // Also formerly #122142#: Pretty much the same for SdrCaptionObj's in calc.
             if(static_cast<SdrView*>(this)->IsTextEdit())
             {
                 const SdrTextObj* pSdrTextObj = dynamic_cast< const SdrTextObj* >(mpMarkedObj);
@@ -715,7 +715,7 @@ void SdrMarkView::SetMarkHandles()
                 }
             }
 
-            // formally #i118524#: if inplace activated OLE is selected, suppress handles
+            // formerly #i118524#: if inplace activated OLE is selected, suppress handles
             const SdrOle2Obj* pSdrOle2Obj = dynamic_cast< const SdrOle2Obj* >(mpMarkedObj);
 
             if(pSdrOle2Obj && (pSdrOle2Obj->isInplaceActive() || pSdrOle2Obj->isUiActive()))
