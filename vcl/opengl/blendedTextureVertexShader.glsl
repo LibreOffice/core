@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#version 130
+
 attribute vec4 position;
 attribute vec2 tex_coord_in;
 attribute vec2 alpha_coord_in;

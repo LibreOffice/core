@@ -9,6 +9,8 @@
 
 /* TODO Use textureOffset for newest version of GLSL */
 
+#version 130
+
 uniform sampler2D sampler;
 uniform int xscale;
 uniform int yscale;
