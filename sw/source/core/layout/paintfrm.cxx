@@ -3821,7 +3821,8 @@ void SwColumnFrame::PaintBreak( ) const
                 //    * Non-printing characters are shown, as this is more consistent
                 //      with other formatting marks
                 if ( !gProp.pSGlobalShell->IsShowHeaderFooterSeparator( Header ) &&
-                     !gProp.pSGlobalShell->IsShowHeaderFooterSeparator( Footer ) )
+                     !gProp.pSGlobalShell->IsShowHeaderFooterSeparator( Footer ) &&
+                      gProp.pSGlobalShell->GetViewOptions()->IsLineBreak() )
                 {
                     SwRect aRect( pCnt->Prt() );
                     aRect.Pos() += pCnt->Frame().Pos();
