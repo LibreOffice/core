@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#version 130
+
 attribute vec2 position;
 attribute vec4 extrusion_vectors;
 #ifdef USE_VERTEX_COLORS

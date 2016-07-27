@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#version 130
+
 varying float fade_factor; // 0->1 fade factor used for AA
 uniform vec4 color;
 
