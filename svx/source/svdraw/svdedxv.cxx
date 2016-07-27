@@ -134,6 +134,76 @@ void SdrObjEditView::BrkAction()
     SdrGlueEditView::BrkAction();
 }
 
+SdrPageView* SdrObjEditView::ShowSdrPage(SdrPage* pPage)
+{
+    SdrPageView* pPageView = SdrGlueEditView::ShowSdrPage(pPage);
+
+    if (comphelper::LibreOfficeKit::isActive() && pPageView)
+    {
+        // Check if other views have an active text edit on the same page as
+        // this one.
+        SdrViewIter aIter(pPageView->GetPage());
+        for (SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView())
+        {
+            if (pView == this || !pView->IsTextEdit())
+                continue;
+
+            OutputDevice* pOutDev = GetFirstOutputDevice();
+            if (!pOutDev || pOutDev->GetOutDevType() != OUTDEV_WINDOW)
+                continue;
+
+            // Found one, so create an outliner view, to get invalidations when
+            // the text edit changes.
+            bool bEmpty = pView->GetTextEditObject()->GetOutlinerParaObject() == nullptr;
+            // Call GetSfxViewShell() to make sure ImpMakeOutlinerView()
+            // registers the view shell of this draw view, and not the view
+            // shell of pView.
+            OutlinerView* pOutlinerView = pView->ImpMakeOutlinerView(static_cast<vcl::Window*>(pOutDev), !bEmpty, nullptr, GetSfxViewShell());
+            pView->GetTextEditOutliner()->InsertView(pOutlinerView);
+        }
+    }
+
+    return pPageView;
+}
+
+/// Removes outliner views registered in other draw views that use pOutputDevice.
+void lcl_RemoveTextEditOutlinerViews(SdrObjEditView* pThis, SdrPageView* pPageView, OutputDevice* pOutputDevice)
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    if (!pPageView)
+        return;
+
+    if (!pOutputDevice || pOutputDevice->GetOutDevType() != OUTDEV_WINDOW)
+        return;
+
+    SdrViewIter aIter(pPageView->GetPage());
+    for (SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView())
+    {
+        if (pView == pThis || !pView->IsTextEdit())
+            continue;
+
+        SdrOutliner* pOutliner = pView->GetTextEditOutliner();
+        for (size_t nView = 0; nView < pOutliner->GetViewCount(); ++nView)
+        {
+            OutlinerView* pOutlinerView = pOutliner->GetView(nView);
+            if (pOutlinerView->GetWindow() != pOutputDevice)
+                continue;
+
+            pOutliner->RemoveView(pOutlinerView);
+            delete pOutlinerView;
+        }
+    }
+}
+
+void SdrObjEditView::HideSdrPage()
+{
+    lcl_RemoveTextEditOutlinerViews(this, GetSdrPageView(), GetFirstOutputDevice());
+
+    SdrGlueEditView::HideSdrPage();
+}
+
 void SdrObjEditView::TakeActionRect(Rectangle& rRect) const
 {
     if (IsMacroObj()) {
@@ -443,7 +513,7 @@ void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView& rOutlView) const
     }
 }
 
-OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, bool /*bNoPaint*/, OutlinerView* pGivenView) const
+OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, bool /*bNoPaint*/, OutlinerView* pGivenView, SfxViewShell* pViewShell) const
 {
     // background
     Color aBackground(GetTextEditBackgroundColor(*this));
@@ -472,7 +542,7 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, bool /*bNoP
     // SfxViewShell::Current() may still point to the old one. So if possible,
     // depend on the application owning this draw view to provide the view
     // shell.
-    SfxViewShell* pSfxViewShell = GetSfxViewShell();
+    SfxViewShell* pSfxViewShell = pViewShell ? pViewShell : GetSfxViewShell();
     pOutlView->registerLibreOfficeKitViewCallback(pSfxViewShell ? pSfxViewShell : SfxViewShell::Current());
 
     if (pText!=nullptr)
@@ -1854,6 +1924,8 @@ void SdrObjEditView::DeleteWindowFromPaintView(OutputDevice* pOldWin)
             }
         }
     }
+
+    lcl_RemoveTextEditOutlinerViews(this, GetSdrPageView(), pOldWin);
 }
 
 bool SdrObjEditView::IsTextEditInSelectionMode() const

@@ -111,7 +111,7 @@ protected:
 
     // Create a new OutlinerView at the heap and initialize all required parameters.
     // pTextEditObj, pTextEditPV and pTextEditOutliner have to be initialized
-    OutlinerView* ImpMakeOutlinerView(vcl::Window* pWin, bool bNoPaint, OutlinerView* pGivenView) const;
+    OutlinerView* ImpMakeOutlinerView(vcl::Window* pWin, bool bNoPaint, OutlinerView* pGivenView, SfxViewShell* pViewShell = 0) const;
     void ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectangle& rRect, OutputDevice& rTargetDevice) const;
     void ImpInvalidateOutlinerView(OutlinerView& rOutlView) const;
 
@@ -157,6 +157,8 @@ public:
     virtual void BckAction() override;
     virtual void TakeActionRect(Rectangle& rRect) const override;
 
+    SdrPageView* ShowSdrPage(SdrPage* pPage) override;
+    void HideSdrPage() override;
     /// Get access to the view shell owning this draw view, if any.
     virtual SfxViewShell* GetSfxViewShell() const;
 

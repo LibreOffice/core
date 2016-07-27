@@ -824,13 +824,15 @@ public:
     int m_nPart;
     bool m_bCursorVisibleChanged;
     bool m_bViewLock;
+    bool m_bTilesInvalidated;
 
     ViewCallback()
         : m_bGraphicSelectionInvalidated(false),
           m_bGraphicViewSelectionInvalidated(false),
           m_nPart(0),
           m_bCursorVisibleChanged(false),
-          m_bViewLock(false)
+          m_bViewLock(false),
+          m_bTilesInvalidated(false)
     {
     }
 
@@ -843,6 +845,11 @@ public:
     {
         switch (nType)
         {
+        case LOK_CALLBACK_INVALIDATE_TILES:
+        {
+            m_bTilesInvalidated = true;
+        }
+        break;
         case LOK_CALLBACK_GRAPHIC_SELECTION:
         {
             m_bGraphicSelectionInvalidated = true;
@@ -951,17 +958,20 @@ void SdTiledRenderingTest::testCursorViews()
     comphelper::LibreOfficeKit::setActive();
 
     // Create the first view.
-    SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
+    SdXImpressDocument* pXImpressDocument = createDoc("title-shape.odp");
     ViewCallback aView1;
+    int nView1 = SfxLokHelper::getView();
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
 
     // Begin text edit on the only object on the slide.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    SdPage* pActualPage = pViewShell->GetActualPage();
-    SdrObject* pObject = pActualPage->GetObj(0);
     SdrView* pView = pViewShell->GetView();
-    pView->MarkObj(pObject, pView->GetSdrPageView());
-    pView->SdrBeginTextEdit(pObject);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pView->IsTextEdit());
 
     // Make sure that cursor state is not changed just because we create a second view.
     aView1.m_bCursorVisibleChanged = false;
@@ -969,6 +979,20 @@ void SdTiledRenderingTest::testCursorViews()
     pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(!aView1.m_bCursorVisibleChanged);
+
+    // Make sure that typing in the first view causes an invalidation in the
+    // second view as well, even if the second view was created after begin
+    // text edit in the first view.
+    ViewCallback aView2;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    SfxLokHelper::setView(nView1);
+    aView2.m_bTilesInvalidated = false;
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+    // This failed: the second view was not invalidated when pressing a key in
+    // the first view.
+    CPPUNIT_ASSERT(aView2.m_bTilesInvalidated);
 
     mxComponent->dispose();
     mxComponent.clear();
