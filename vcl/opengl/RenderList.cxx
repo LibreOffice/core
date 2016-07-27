@@ -308,23 +308,16 @@ void RenderList::addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon,
                                 topX1,    topY, topX2,    topY,
                                 bottomX1, bottomY, bottomX2, bottomY,
                                 nFillColor, fTransparency);
-                if (bUseAA)
-                {
-                    vcl::LineBuilder aBuilder(rLineRenderParameter.maVertices, rLineRenderParameter.maIndices,
-                                         nFillColor, fTransparency, 1.0f, true);
-                    aBuilder.appendLine(glm::vec2(topX1, topY), glm::vec2(topX2, topY));
-                    aBuilder.appendLine(glm::vec2(topX2, topY), glm::vec2(bottomX2, bottomY));
-                    aBuilder.appendLine(glm::vec2(bottomX2, bottomY), glm::vec2(bottomX1, bottomY));
-                    aBuilder.appendLine(glm::vec2(bottomX1, bottomY), glm::vec2(topX1, topY));
-                }
             }
         }
     }
 
-    if (nLineColor != SALCOLOR_NONE && nLineColor != nFillColor)
+    if (nLineColor != SALCOLOR_NONE || bUseAA)
     {
+        SalColor nColor = (nLineColor == SALCOLOR_NONE) ? nFillColor : nLineColor;
+
         vcl::LineBuilder aBuilder(rLineRenderParameter.maVertices, rLineRenderParameter.maIndices,
-                             nLineColor, fTransparency, 1.0f, bUseAA);
+                                  nColor, fTransparency, 1.0f, bUseAA);
 
         for (const basegfx::B2DPolygon& rPolygon : rPolyPolygon)
         {
