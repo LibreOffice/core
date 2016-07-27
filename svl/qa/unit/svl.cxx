@@ -1132,8 +1132,8 @@ void Test::testUserDefinedNumberFormats()
         checkPreviewString(aFormatter, sCode, -12.0, eLang, sExpected);
     }
     {  // tdf#995339: detect SSMM as second minute
-        sCode = "SS:MM:HH DD/MM/YY";
-        sExpected = "54:23:03 02/01/00";
+        sCode = "SS:MM:HH DD/MM/YY"; // Month not detected by Excel, so we do not neither to keep compatibility
+        sExpected = "54:23:03 02/23/00";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
     {  // tdf#99996: better algorithm for fraction representation
