@@ -465,7 +465,7 @@ namespace svgio
             const SvgMarkerNode* accessMarkerEndXLink() const;
 
             // BaselineShift
-            void setBaselineShift(const BaselineShift aBaselineShift = BaselineShift_Baseline) { maBaselineShift = aBaselineShift; }
+            void setBaselineShift(const BaselineShift aBaselineShift) { maBaselineShift = aBaselineShift; }
             BaselineShift getBaselineShift() const { return maBaselineShift; }
             void setBaselineShiftNumber(const SvgNumber& rBaselineShift = SvgNumber()) { maBaselineShiftNumber = rBaselineShift; }
             SvgNumber getBaselineShiftNumber() const;

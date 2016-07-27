@@ -674,7 +674,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                     if (nAnzChars > 0)
                     {
                         short F_Type = css::util::NumberFormat::UNDEFINED;
-                        if (!pISc->IsNumberFormat(sStr,F_Type,fNumber) ||
+                        if (!pISc->IsNumberFormat(sStr, F_Type, fNumber, nullptr) ||
                             ( F_Type != css::util::NumberFormat::NUMBER &&
                               F_Type != css::util::NumberFormat::SCIENTIFIC) )
                         {

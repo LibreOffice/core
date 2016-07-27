@@ -664,7 +664,7 @@ namespace svt { namespace table
             for the given row height. Partially fitting rows are counted, too, if the
             respective parameter says so.
         */
-        TableSize lcl_getRowsFittingInto( long _nOverallHeight, long _nRowHeightPixel, bool _bAcceptPartialRow = false )
+        TableSize lcl_getRowsFittingInto( long _nOverallHeight, long _nRowHeightPixel, bool _bAcceptPartialRow )
         {
             return  _bAcceptPartialRow
                 ?   ( _nOverallHeight + ( _nRowHeightPixel - 1 ) ) / _nRowHeightPixel
@@ -1094,7 +1094,7 @@ namespace svt { namespace table
             m_rAntiImpl,
             m_pVScroll,
             i_verticalScrollbar,
-            lcl_getRowsFittingInto( i_dataCellPlayground.GetHeight(), m_nRowHeightPixel ),
+            lcl_getRowsFittingInto( i_dataCellPlayground.GetHeight(), m_nRowHeightPixel, false ),
                                                                     // visible units
             m_nTopRow,                                              // current position
             1,                                                      // line size

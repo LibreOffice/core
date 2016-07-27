@@ -40,7 +40,7 @@ public:
     virtual ~SvtLanguageTableImpl();
 
     bool            HasType( const LanguageType eType ) const;
-    const OUString  GetString( const LanguageType eType, bool bUserInterfaceSelection = false ) const;
+    const OUString  GetString( const LanguageType eType, bool bUserInterfaceSelection ) const;
     LanguageType    GetType( const OUString& rStr ) const;
     sal_uInt32      GetEntryCount() const;
     LanguageType    GetTypeAtIndex( sal_uInt32 nIndex ) const;
@@ -174,7 +174,7 @@ const OUString SvtLanguageTableImpl::GetString( const LanguageType eType, bool b
 
 OUString SvtLanguageTable::GetLanguageString( const LanguageType eType )
 {
-    return theLanguageTable::get().GetString( eType );
+    return theLanguageTable::get().GetString( eType, false );
 }
 
 OUString SvtLanguageTable::GetLanguageString( const LanguageType eType, bool bUserInterfaceSelection )

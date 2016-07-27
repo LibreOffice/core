@@ -3306,7 +3306,7 @@ void SvTreeListBox::SetAlternatingRowColors( bool bEnable )
             pEntry->SetBackColor( GetBackground().GetColor() );
 
     mbAlternatingRowColors = bEnable;
-    pImpl->UpdateAll();
+    pImpl->UpdateAll(true);
 }
 
 SvLBoxItem* SvTreeListBox::GetItem(SvTreeListEntry* pEntry,long nX,SvLBoxTab** ppTab)
