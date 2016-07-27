@@ -845,7 +845,7 @@ void Window::SetParent( vcl::Window* pNewParent )
     SAL_WARN_IF( !pNewParent, "vcl", "Window::SetParent(): pParent == NULL" );
     SAL_WARN_IF( pNewParent == this, "vcl", "someone tried to reparent a window to itself" );
 
-    if( pNewParent == this )
+    if( !pNewParent || pNewParent == this )
         return;
 
     // check if the taskpanelist would change and move the window pointer accordingly
