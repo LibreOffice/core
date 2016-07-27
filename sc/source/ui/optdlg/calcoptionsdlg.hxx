@@ -40,7 +40,6 @@ public:
 
     DECL_LINK_TYPED( BtnAutomaticSelectHdl, RadioButton&, void );
     DECL_LINK_TYPED( EditModifiedHdl, Edit&, void );
-    DECL_STATIC_LINK_TYPED( ScCalcOptionsDialog, TestClickHdl, Button*, void );
     DECL_LINK_TYPED( AsZeroModifiedHdl, Button*, void);
     DECL_LINK_TYPED( ConversionModifiedHdl, ListBox&, void);
     DECL_LINK_TYPED( SyntaxModifiedHdl, ListBox&, void);
@@ -65,7 +64,6 @@ private:
     VclPtr<CheckBox> mpUseOpenCL;
     VclPtr<NumericField> mpSpinButton;
     VclPtr<VclMultiLineEdit> mpEditField;
-    VclPtr<PushButton> mpTestButton;
 
     ScCalcConfig maConfig;
 
