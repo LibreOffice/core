@@ -174,7 +174,7 @@ namespace svx
         static void     transferFeatureStatesToItemSet(
                             ControlFeatures& _rDispatchers,
                             SfxAllItemSet& _rSet,
-                            bool _bTranslateLatin = false
+                            bool _bTranslateLatin
                         );
 
         /// to be called when a control has been activated

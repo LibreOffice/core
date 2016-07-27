@@ -619,7 +619,7 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
 
             sal_Int32 nRows = getRowCountImpl();
             while( nRows-- )
-                maRows[nRows]->insertColumns( nIndex, nCount );
+                maRows[nRows]->insertColumns( nIndex, nCount, nullptr );
 
             ColumnVector aNewColumns(nCount);
             for( sal_Int32 nOffset = 0; nOffset < nCount; ++nOffset )

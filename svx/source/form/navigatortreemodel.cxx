@@ -674,7 +674,7 @@ namespace svxform
 
             if (FmFormData* pFormData = bRecurs ? dynamic_cast<FmFormData*>(pEntryData) : nullptr)
             {
-                pChildData = FindData(rText, pFormData);
+                pChildData = FindData(rText, pFormData, true);
                 if( pChildData )
                     return pChildData;
             }

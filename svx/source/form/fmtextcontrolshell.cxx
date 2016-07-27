@@ -646,7 +646,7 @@ namespace svx
 
         // put the current states of the items into the set
         std::unique_ptr<SfxAllItemSet> xCurrentItems( new SfxAllItemSet( *xPureItems ) );
-        transferFeatureStatesToItemSet( m_aControlFeatures, *xCurrentItems );
+        transferFeatureStatesToItemSet( m_aControlFeatures, *xCurrentItems, false );
 
         // additional items, which we are not responsible for at the SfxShell level,
         // but which need to be forwarded to the dialog, anyway

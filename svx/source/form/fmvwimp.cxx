@@ -1442,7 +1442,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
             SdrUnoObj* pLabel( nullptr );
             SdrUnoObj* pControl( nullptr );
             if  (   !createControlLabelPair( *pOutDev, 0, 0, nullptr, xNumberFormats, nOBJID, sLabelPostfix,
-                        pLabel, pControl )
+                        pLabel, pControl, nullptr, "", "", -1 )
                 )
             {
                 return nullptr;

@@ -678,7 +678,7 @@ bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
                 // Inserting a gallery item in the document must be dispatched
                 if( bValidURL )
                 {
-                    Dispatch( MN_ADD );
+                    Dispatch( MN_ADD, css::uno::Reference<css::frame::XDispatch>(), css::util::URL() );
                     return true;
                 }
             }

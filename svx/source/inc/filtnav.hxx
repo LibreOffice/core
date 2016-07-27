@@ -292,7 +292,7 @@ private:
      *    @param  _bCopy
      *        If <TRUE/> the items will not be removed from the model, otherwise they will.
      */
-    void insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems, bool _bCopy = false);
+    void insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems, bool _bCopy);
     SvTreeListEntry* getPrevEntry(SvTreeListEntry* _pStartWith = nullptr);
     SvTreeListEntry* getNextEntry(SvTreeListEntry* _pStartWith = nullptr);
 

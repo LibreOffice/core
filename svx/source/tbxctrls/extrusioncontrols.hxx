@@ -58,8 +58,8 @@ private:
     DECL_LINK_TYPED( SelectValueSetHdl, ValueSet*, void );
     void SelectHdl(void*);
 
-    void implSetDirection( sal_Int32 nSkew, bool bEnabled = true );
-    void implSetProjection( sal_Int32 nProjection, bool bEnabled = true );
+    void implSetDirection( sal_Int32 nSkew, bool bEnabled );
+    void implSetProjection( sal_Int32 nProjection, bool bEnabled );
 
 };
 

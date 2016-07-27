@@ -377,7 +377,7 @@ namespace svxform
         FmFormShell*        GetFormShell() const { return m_pFormShell; }
         FmFormPage*         GetFormPage() const { return m_pFormPage; }
         FmEntryData*        FindData( const css::uno::Reference< css::uno::XInterface >& xElement, FmEntryDataList* pDataList, bool bRecurs=true );
-        FmEntryData*        FindData( const OUString& rText, FmFormData* pParentData, bool bRecurs=true );
+        FmEntryData*        FindData( const OUString& rText, FmFormData* pParentData, bool bRecurs );
         FmEntryDataList*    GetRootList() const { return m_pRootList; }
         static css::uno::Reference< css::container::XIndexContainer >   GetFormComponents( FmFormData* pParentFormData );
         SdrObject*          Search(SdrObjListIter& rIter, const css::uno::Reference< css::form::XFormComponent >& xComp);
@@ -429,9 +429,9 @@ namespace svxform
         bool            m_bInitialUpdate        : 1;   // bin ich das erste Mal im UpdateContent ?
         bool            m_bKeyboardCut          : 1;
 
-        FmControlData*  NewControl( const OUString& rServiceName, SvTreeListEntry* pParentEntry, bool bEditName = true );
+        FmControlData*  NewControl( const OUString& rServiceName, SvTreeListEntry* pParentEntry, bool bEditName );
         void            NewForm( SvTreeListEntry* pParentEntry );
-        SvTreeListEntry*    Insert( FmEntryData* pEntryData, sal_uLong nRelPos=TREELIST_APPEND );
+        SvTreeListEntry*    Insert( FmEntryData* pEntryData, sal_uLong nRelPos );
         void            Remove( FmEntryData* pEntryData );
 
 

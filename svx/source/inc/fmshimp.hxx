@@ -438,7 +438,7 @@ public:
 
     SAL_DLLPRIVATE void    ExecuteTextAttribute( SfxRequest& _rReq );
     SAL_DLLPRIVATE void    GetTextAttributeState( SfxItemSet& _rSet );
-    SAL_DLLPRIVATE bool    IsActiveControl( bool _bCountRichTextOnly = false ) const;
+    SAL_DLLPRIVATE bool    IsActiveControl( bool _bCountRichTextOnly ) const;
     SAL_DLLPRIVATE void    ForgetActiveControl();
     SAL_DLLPRIVATE void    SetControlActivationHandler( const Link<LinkParamNone*,void>& _rHdl );
 
@@ -528,7 +528,7 @@ public:
 
     /** determines whether the current form slot is currently enabled
     */
-    SAL_DLLPRIVATE bool    IsFormSlotEnabled( sal_Int32 _nSlot, css::form::runtime::FeatureState* _pCompleteState = nullptr );
+    SAL_DLLPRIVATE bool    IsFormSlotEnabled( sal_Int32 _nSlot, css::form::runtime::FeatureState* _pCompleteState );
 
 protected:
     DECL_DLLPRIVATE_LINK_TYPED( OnLoadForms, void*, void );

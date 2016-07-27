@@ -114,7 +114,7 @@ public:
     virtual void dispose() override;
     virtual void Resize() override;
     virtual void GetFocus() override;
-    void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=nullptr) { aBrowse->SetAttributes(pAttr,p2ndSet); }
+    void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet) { aBrowse->SetAttributes(pAttr,p2ndSet); }
     SdrItemBrowserControl *GetBrowserControl() { return aBrowse.get(); }
 };
 

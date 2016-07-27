@@ -169,8 +169,8 @@ public:
 
     void Execute( sal_uInt16 nId );
     void Dispatch( sal_uInt16 nId,
-                   const css::uno::Reference< css::frame::XDispatch > &rxDispatch = css::uno::Reference< css::frame::XDispatch >(),
-                   const css::util::URL &rURL = css::util::URL() );
+                   const css::uno::Reference< css::frame::XDispatch > &rxDispatch,
+                   const css::util::URL &rURL );
 
     DECL_STATIC_LINK_TYPED( GalleryBrowser2, AsyncDispatch_Impl, void*, void );
 };

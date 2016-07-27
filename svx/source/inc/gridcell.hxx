@@ -327,7 +327,7 @@ protected:
     virtual void _propertyChanged(const css::beans::PropertyChangeEvent& evt) throw(css::uno::RuntimeException) override;
 
 private:
-    void implDoPropertyListening( const OUString& _rPropertyName, bool _bWarnIfNotExistent = true );
+    void implDoPropertyListening( const OUString& _rPropertyName, bool _bWarnIfNotExistent );
 
     /// updates the "readonly" setting on m_pWindow, according to the respective property value in the given model
     void implAdjustReadOnly( const css::uno::Reference< css::beans::XPropertySet >& _rxModel,bool i_bReadOnly );

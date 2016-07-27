@@ -174,7 +174,7 @@ void ExtrusionDirectionWindow::statusChanged(
         {
             sal_Int32 nValue = 0;
             if( Event.State >>= nValue )
-                implSetDirection( nValue );
+                implSetDirection( nValue, true );
         }
     }
     else if( Event.FeatureURL.Main == g_sExtrusionProjection )
@@ -187,7 +187,7 @@ void ExtrusionDirectionWindow::statusChanged(
         {
             sal_Int32 nValue = 0;
             if( Event.State >>= nValue )
-                implSetProjection( nValue );
+                implSetProjection( nValue, true );
         }
     }
 }
@@ -224,7 +224,7 @@ void ExtrusionDirectionWindow::SelectHdl(void* pControl)
             aArgs[0].Value <<= (sal_Int32)nProjection;
 
             mrController.dispatchCommand( g_sExtrusionProjection, aArgs );
-            implSetProjection( nProjection );
+            implSetProjection( nProjection, true );
         }
     }
 }

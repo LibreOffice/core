@@ -1123,7 +1123,7 @@ void SdrItemBrowser::Undirty()
     }
     else
     {
-        SetAttributes(&aSet);
+        SetAttributes(&aSet, nullptr);
     }
 }
 

@@ -89,7 +89,7 @@ public:
                                              const uno::Reference< frame::XFrame >& _xFrame,
                                              FontHeightToolBoxControl& rCtrl );
 
-    void                statusChanged_Impl( long nHeight, bool bErase = false );
+    void                statusChanged_Impl( long nHeight, bool bErase );
     void                UpdateFont( const css::awt::FontDescriptor& rCurrentFont );
     void                SetOptimalSize();
 
@@ -342,7 +342,7 @@ throw ( uno::RuntimeException, std::exception )
                 m_pBox->Enable();
                 frame::status::FontHeight aFontHeight;
                 if ( rEvent.State >>= aFontHeight )
-                    m_pBox->statusChanged_Impl( long( 10. * aFontHeight.Height ) );
+                    m_pBox->statusChanged_Impl( long( 10. * aFontHeight.Height ), false );
                 else
                     m_pBox->statusChanged_Impl( long( -1 ), true );
             }
