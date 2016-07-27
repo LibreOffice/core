@@ -84,12 +84,6 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     , mbWriteConfig(bWriteConfig)
 {
     get(mpTestButton, "test");
-    get(mpOpenclInfoList, "opencl_list");
-    get(mpBtnAutomaticSelectionTrue, "automatic_select_true");
-    get(mpBtnAutomaticSelectionFalse, "automatic_select_false");
-    get(mpFtFrequency, "frequency");
-    get(mpFtComputeUnits, "compute_units");
-    get(mpFtMemory, "memory");
 
     get(mpConversion,"comboConversion");
     mpConversion->SelectEntryPos(static_cast<sal_Int32>(rConfig.meStringConversion));
@@ -122,16 +116,6 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
 
     mpEditField->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
 
-    mpOpenclInfoList->set_height_request(4* mpOpenclInfoList->GetTextHeight());
-    mpOpenclInfoList->SetStyle(mpOpenclInfoList->GetStyle() | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
-    mpOpenclInfoList->SetHighlightRange();
-    mpOpenclInfoList->GetParent()->Hide();
-    mpOpenclInfoList->SetSelectHdl(LINK(this, ScCalcOptionsDialog, DeviceSelHdl));
-
-    mpBtnAutomaticSelectionTrue->SetToggleHdl(LINK(this, ScCalcOptionsDialog, BtnAutomaticSelectHdl));
-
-    maSoftware = get<vcl::Window>("software")->GetText();
-
     mpTestButton->SetClickHdl(LINK(this, ScCalcOptionsDialog, TestClickHdl));
 }
 
@@ -150,56 +134,7 @@ void ScCalcOptionsDialog::dispose()
     mpSpinButton.clear();
     mpEditField.clear();
     mpTestButton.clear();
-    mpFtFrequency.clear();
-    mpFtComputeUnits.clear();
-    mpFtMemory.clear();
-    mpOpenclInfoList.clear();
-    mpBtnAutomaticSelectionTrue.clear();
-    mpBtnAutomaticSelectionFalse.clear();
     ModalDialog::dispose();
-}
-
-void ScCalcOptionsDialog::OpenCLAutomaticSelectionChanged()
-{
-    bool bValue = mpBtnAutomaticSelectionTrue->IsChecked();
-    if(bValue)
-        mpOpenclInfoList->Disable();
-    else
-        mpOpenclInfoList->Enable();
-
-    maConfig.mbOpenCLAutoSelect = bValue;
-}
-
-void ScCalcOptionsDialog::SelectedDeviceChanged()
-{
-#if HAVE_FEATURE_OPENCL
-    SvTreeListEntry* pEntry = mpOpenclInfoList->GetModel()->GetView(0)->FirstSelected();
-    if(!pEntry)
-        return;
-
-    OpenCLDeviceInfo* pInfo = static_cast<OpenCLDeviceInfo*>(pEntry->GetUserData());
-    if(pInfo)
-    {
-        mpFtFrequency->SetText(OUString::number(pInfo->mnFrequency));
-        mpFtComputeUnits->SetText(OUString::number(pInfo->mnComputeUnits));
-        mpFtMemory->SetText(OUString::number(pInfo->mnMemory/1024/1024));
-    }
-    else
-    {
-        mpFtFrequency->SetText(OUString());
-        mpFtComputeUnits->SetText(OUString());
-        mpFtMemory->SetText(OUString());
-    }
-
-    SvLBoxString& rBoxEntry = dynamic_cast<SvLBoxString&>(pEntry->GetItem(1));
-
-    OUString aDevice = rBoxEntry.GetText();
-    // use english string for configuration
-    if(aDevice == maSoftware)
-        aDevice = OPENCL_SOFTWARE_DEVICE_CONFIG_NAME;
-
-    maConfig.maOpenCLDevice = aDevice;
-#endif
 }
 
 void ScCalcOptionsDialog::CoupleEmptyAsZeroToStringConversion()
@@ -255,16 +190,6 @@ IMPL_LINK_TYPED(ScCalcOptionsDialog, CBUseOpenCLHdl, Button*, pCheckBox, void)
 IMPL_LINK_TYPED(ScCalcOptionsDialog, SpinOpenCLMinSizeHdl, Edit&, rEdit, void)
 {
     maConfig.mnOpenCLMinimumFormulaGroupSize = static_cast<NumericField&>(rEdit).GetValue();
-}
-
-IMPL_LINK_NOARG_TYPED(ScCalcOptionsDialog, BtnAutomaticSelectHdl, RadioButton&, void)
-{
-    OpenCLAutomaticSelectionChanged();
-}
-
-IMPL_LINK_NOARG_TYPED(ScCalcOptionsDialog, DeviceSelHdl, SvTreeListBox*, void)
-{
-    SelectedDeviceChanged();
 }
 
 IMPL_LINK_TYPED(ScCalcOptionsDialog, EditModifiedHdl, Edit&, rCtrl, void)

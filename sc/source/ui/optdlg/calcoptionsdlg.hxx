@@ -39,7 +39,6 @@ public:
     virtual void dispose() override;
 
     DECL_LINK_TYPED( BtnAutomaticSelectHdl, RadioButton&, void );
-    DECL_LINK_TYPED( DeviceSelHdl, SvTreeListBox*, void );
     DECL_LINK_TYPED( EditModifiedHdl, Edit&, void );
     DECL_STATIC_LINK_TYPED( ScCalcOptionsDialog, TestClickHdl, Button*, void );
     DECL_LINK_TYPED( AsZeroModifiedHdl, Button*, void);
@@ -67,16 +66,6 @@ private:
     VclPtr<NumericField> mpSpinButton;
     VclPtr<VclMultiLineEdit> mpEditField;
     VclPtr<PushButton> mpTestButton;
-
-    VclPtr<FixedText> mpFtFrequency;
-    VclPtr<FixedText> mpFtComputeUnits;
-    VclPtr<FixedText> mpFtMemory;
-
-    VclPtr<SvTreeListBox> mpOpenclInfoList;
-    VclPtr<RadioButton> mpBtnAutomaticSelectionTrue;
-    VclPtr<RadioButton> mpBtnAutomaticSelectionFalse;
-
-    OUString maSoftware;
 
     ScCalcConfig maConfig;
 
