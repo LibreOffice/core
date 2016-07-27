@@ -5213,6 +5213,9 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
             }
             if( !bGrabFocusToDocument )
                 bForwardKey = !ImplActivateItem( aKeyCode );
+
+            if(!ImplIsInPopupMode())
+                ImplOpenItem( aKeyCode );
         }
         break;
         default:
