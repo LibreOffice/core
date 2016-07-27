@@ -1695,7 +1695,7 @@ void ScInterpreter::ScTan()
 
 void ScInterpreter::ScCot()
 {
-    PushDouble( div( 1.0, ::rtl::math::tan(GetDouble())));
+    PushDouble(div(1.0, ::rtl::math::tan(GetDouble())));
 }
 
 void ScInterpreter::ScArcSin()
@@ -1735,7 +1735,7 @@ void ScInterpreter::ScTanHyp()
 
 void ScInterpreter::ScCotHyp()
 {
-    PushDouble(1.0 / tanh(GetDouble()));
+    PushDouble(div(1.0, tanh(GetDouble())));
 }
 
 void ScInterpreter::ScArcSinHyp()
