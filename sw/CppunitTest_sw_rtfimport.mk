@@ -72,7 +72,8 @@ $(eval $(call gb_CppunitTest_use_components,sw_rtfimport,\
     ucb/source/ucp/file/ucpfile1 \
     unotools/util/utl \
     unoxml/source/service/unoxml \
-	writerfilter/util/writerfilter \
+    uui/util/uui \
+    writerfilter/util/writerfilter \
     xmloff/util/xo \
 ))
 
