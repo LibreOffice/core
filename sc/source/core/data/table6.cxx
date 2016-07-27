@@ -473,7 +473,10 @@ bool ScTable::SearchAll(const SvxSearchItem& rSearchItem, const ScMarkData& rMar
 
     SCCOL nLastCol;
     SCROW nLastRow;
-    GetLastDataPos(nLastCol, nLastRow);
+    if (rSearchItem.GetCellType() == SvxSearchCellType::NOTE)
+        GetCellArea( nLastCol, nLastRow);
+    else
+        GetLastDataPos(nLastCol, nLastRow);
 
     do
     {
@@ -532,7 +535,10 @@ bool ScTable::ReplaceAll(
 
     SCCOL nLastCol;
     SCROW nLastRow;
-    GetLastDataPos(nLastCol, nLastRow);
+    if (rSearchItem.GetCellType() == SvxSearchCellType::NOTE)
+        GetCellArea( nLastCol, nLastRow);
+    else
+        GetLastDataPos(nLastCol, nLastRow);
 
     bool bEverFound = false;
     while (true)
