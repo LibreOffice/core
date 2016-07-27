@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_bfa593b6",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-07-27T12:25:21Z",
+      "side": 1,
+      "message": "You always return true now? Then the return type can also be void.",
+      "revId": "a4d790e59fb255711ca8b8e56ac57b562a823fa8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
