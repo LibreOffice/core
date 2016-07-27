@@ -321,6 +321,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">False</property>
+        <property name="pack_type">end</property>
         <property name="position">2</property>
       </packing>
     </child>
