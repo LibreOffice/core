@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_1f72077d",
+        "filename": "vcl/source/window/toolbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5217,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-07-27T10:25:40Z",
+      "side": 1,
+      "message": "Hm this basically effects all toolbars. What happens with toolbar items that don\u0027t have a dropdown?\n\nI would prefer to have this in a separate patch to allow easy (bi)bisecting in case of trouble.",
+      "revId": "ad8c9e188d1d99f43e6f0cbd7b2c3407ad7d0871",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
