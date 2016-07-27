@@ -327,6 +327,7 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
     SCROW nRow = rRow;
 
     bool bSkipFiltered = !rSearchItem.IsSearchFiltered();
+    bool bSearchNotes = (rSearchItem.GetCellType() == SvxSearchCellType::NOTE);
     if (!bAll && rSearchItem.GetBackward())
     {
         SCROW nLastNonFilteredRow = MAXROW + 1;
@@ -350,7 +351,12 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                         {
                             nCol--;
                             if ((SCsCOL)nCol >= 0)
-                                bIsEmpty = aCol[nCol].IsEmptyData();
+                            {
+                                if (bSearchNotes)
+                                    bIsEmpty = !aCol[nCol].HasCellNotes();
+                                else
+                                    bIsEmpty = aCol[nCol].IsEmptyData();
+                            }
                             else
                                 bIsEmpty = true;
                         }
@@ -377,8 +383,16 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                     bFound = SearchCell(rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc);
                     if (!bFound)
                     {
-                         if (!aCol[nCol].GetPrevDataPos(nRow))
-                            nRow = -1;
+                        if (bSearchNotes)
+                        {
+                            /* TODO: can we look for the previous cell note instead? */
+                            --nRow;
+                        }
+                        else
+                        {
+                            if (!aCol[nCol].GetPrevDataPos(nRow))
+                                nRow = -1;
+                        }
                     }
                 }
                 if (!bFound)
@@ -391,7 +405,12 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                     {
                         nCol--;
                         if ((SCsCOL)nCol >= 0)
-                            bIsEmpty = aCol[nCol].IsEmptyData();
+                        {
+                            if (bSearchNotes)
+                                bIsEmpty = !aCol[nCol].HasCellNotes();
+                            else
+                                bIsEmpty = aCol[nCol].IsEmptyData();
+                        }
                         else
                             bIsEmpty = true;
                     }
@@ -417,7 +436,9 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                     if (!bFound)
                     {
                         nCol++;
-                        while ((nCol <= nLastCol) && aCol[nCol].IsEmptyData()) nCol++;
+                        while ((nCol <= nLastCol) &&
+                                (bSearchNotes ? !aCol[nCol].HasCellNotes() : aCol[nCol].IsEmptyData()))
+                            nCol++;
                     }
                 }
                 if (!bFound)
@@ -440,8 +461,16 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                     bFound = SearchCell(rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc);
                     if (!bFound)
                     {
-                         if (!aCol[nCol].GetNextDataPos(nRow))
-                            nRow = MAXROW + 1;
+                        if (bSearchNotes)
+                        {
+                            /* TODO: can we look for the next cell note instead? */
+                            ++nRow;
+                        }
+                        else
+                        {
+                            if (!aCol[nCol].GetNextDataPos(nRow))
+                                nRow = MAXROW + 1;
+                        }
                     }
                 }
                 if (!bFound)
@@ -450,7 +479,9 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                     nRow = 0;
                     nLastNonFilteredRow = -1;
                     nCol++;
-                    while ((nCol <= nLastCol) && aCol[nCol].IsEmptyData()) nCol++;
+                    while ((nCol <= nLastCol) &&
+                            (bSearchNotes ? !aCol[nCol].HasCellNotes() : aCol[nCol].IsEmptyData()))
+                        nCol++;
                 }
             }
         }
