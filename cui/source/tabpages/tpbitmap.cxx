@@ -137,20 +137,22 @@ bool SvxBitmapTabPage::FillItemSet( SfxItemSet* rAttrs )
     bool bModified = false;
     if( m_nDlgType == 0 && !*m_pbAreaTP )
     {
-        rAttrs->Put(XFillStyleItem(drawing::FillStyle_BITMAP));
-        size_t nPos = m_pBitmapLB->GetSelectItemPos();
-        if(VALUESET_ITEM_NOTFOUND != nPos)
+        if(PT_BITMAP == *m_nPageType)
         {
-            const XBitmapEntry* pXBitmapEntry = m_pBitmapList->GetBitmap( static_cast<sal_uInt16>(nPos) );
-            const OUString aString(m_pBitmapLB->GetItemText( m_pBitmapLB->GetSelectItemId() ));
-            rAttrs->Put(XFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject()));
-            bModified = true;
+            rAttrs->Put(XFillStyleItem(drawing::FillStyle_BITMAP));
+            size_t nPos = m_pBitmapLB->GetSelectItemPos();
+            if(VALUESET_ITEM_NOTFOUND != nPos)
+            {
+                const XBitmapEntry* pXBitmapEntry = m_pBitmapList->GetBitmap( static_cast<sal_uInt16>(nPos) );
+                const OUString aString(m_pBitmapLB->GetItemText( m_pBitmapLB->GetSelectItemId() ));
+                rAttrs->Put(XFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject()));
+                bModified = true;
+            }
+
+            rAttrs->Put (SfxUInt16Item(SID_PAGE_TYPE,*m_nPageType));
+            rAttrs->Put (SfxUInt16Item(SID_TABPAGE_POS,*m_nPos));
         }
-
-        rAttrs->Put (SfxUInt16Item(SID_PAGE_TYPE,*m_nPageType));
-        rAttrs->Put (SfxUInt16Item(SID_TABPAGE_POS,*m_nPos));
     }
-
     return bModified;
 }
 
