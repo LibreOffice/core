@@ -68,12 +68,22 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
     if (!bDoSearch)
         return false;
 
-    aCell = aCol[nCol].GetCellValue(nRow);
-    if (aCell.isEmpty() && rSearchItem.GetCellType() != SvxSearchCellType::NOTE)
-        return false;
+    ScPostIt* pNote;
+    if (rSearchItem.GetCellType() == SvxSearchCellType::NOTE)
+    {
+        pNote = aCol[nCol].GetCellNote(nRow);
+        if (!pNote)
+            return false;
+    }
+    else
+    {
+        aCell = aCol[nCol].GetCellValue(nRow);
+        if (aCell.isEmpty())
+            return false;
+        pNote = nullptr;
+    }
 
     bool bMultiLine = false;
-    ScPostIt* pNote = nullptr;
     CellType eCellType = aCell.meType;
     switch (rSearchItem.GetCellType())
     {
@@ -105,7 +115,6 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             break;
         case SvxSearchCellType::NOTE:
         {
-            pNote = aCol[nCol].GetCellNote(nRow);
             if (pNote)
             {
                 aString = pNote->GetText();
