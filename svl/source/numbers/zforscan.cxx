@@ -1121,6 +1121,7 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
     short eNewType;
     bool bMatchBracket = false;
     bool bHaveGeneral = false; // if General/Standard encountered
+    bool bHaveMinute =false;   // minutes found in format
 
     SkipStrings(i, nPos);
     while (i < nAnzStrings)
@@ -1156,14 +1157,16 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                 nIndexNex = NextKeyword(i);
                 if (nIndexPre == NF_KEY_H   ||      // H
                     nIndexPre == NF_KEY_HH  ||      // HH
-                    nIndexPre == NF_KEY_S   ||      // S before M tdf#95339
-                    nIndexPre == NF_KEY_SS  ||      // SS
+                    ( (nIndexPre == NF_KEY_S   ||   // S before M tdf#95339
+                       nIndexPre == NF_KEY_SS) &&   // SS
+                       !bHaveMinute )       ||      // tdf#101147
                     nIndexNex == NF_KEY_S   ||      // S
                     nIndexNex == NF_KEY_SS  ||      // SS
                     PreviousChar(i) == '['  )       // [M
                 {
                     eNewType = css::util::NumberFormat::TIME;
                     nTypeArray[i] -= 2;             // 6 -> 4, 7 -> 5
+                    bHaveMinute = true;
                 }
                 else
                 {
