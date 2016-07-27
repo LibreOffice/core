@@ -37,18 +37,18 @@ chmod +x "$SRC_ROOT/solenv/bin/build_client.pl"
 chmod +x "$SRC_ROOT/solenv/bin/zipdep.pl"
 chmod +x "$SRC_ROOT/solenv/bin/gccinstlib.pl"
 
+# build the AOOJavaDownloader
+mkdir -p "$SOLARENV/$INPATH/class"
+"$JAVACOMPILER" "$SOLARENV/javadownloader/AOOJavaDownloader.java" -d "$SOLARENV/$INPATH/class"
+if [ "$?" != "0" ]; then
+    echo "*** Failed to build AOOJavaDownloader, aborting! ***"
+    exit 1
+fi
+
 # fetch or update external tarballs
 if [ "$DO_FETCH_TARBALLS" = "yes" ]; then
 # check perl include locations
     "$PERL" -e 'print "\nInclude locations: @INC\n\n"';
-
-    mkdir -p "$SOLARENV/$INPATH/class"
-    "$JAVACOMPILER" "$SOLARENV/javadownloader/AOOJavaDownloader.java" -d "$SOLARENV/$INPATH/class"
-    if [ "$?" != "0" ]; then
-        echo "*** Failed to build AOOJavaDownloader, aborting! ***"
-        exit 1
-    fi
-
     "$PERL" "$SOLARENV/bin/download_external_dependencies.pl" $SRC_ROOT/external_deps.lst
     if [ "$?" != "0" ]; then
         echo "*** Error downloading external dependencies, please fix the previous problems and try again ***"
