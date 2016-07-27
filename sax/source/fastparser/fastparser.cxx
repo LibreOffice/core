@@ -738,9 +738,6 @@ void FastSaxParserImpl::parseStream(const InputSource& maStructSource)
     Entity entity( maData );
     entity.maStructSource = maStructSource;
 
-    if( !entity.mxTokenHandler.is() )
-        throw SAXException("No token handler, use setTokenHandler()", Reference< XInterface >(), Any() );
-
     if( !entity.maStructSource.aInputStream.is() )
         throw SAXException("No input source", Reference< XInterface >(), Any() );
 
@@ -1072,60 +1069,88 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
 
     try
     {
-        /*  #158414# Each element may define new namespaces, also for attribues.
-            First, process all namespaces, second, process the attributes after namespaces
-            have been initialized. */
-
-        // #158414# first: get namespaces
-        for (int i = 0; i < numNamespaces * 2; i += 2)
+        if ( rEntity.mxTokenHandler.is() )
         {
-            // namespaces[] is (prefix/URI)
-            if( namespaces[ i ] != nullptr )
-            {
-                    DefineNamespace( OString( XML_CAST( namespaces[ i ] )),
-                        OUString( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 ));
-                    if( rEntity.mxNamespaceHandler.is() )
-                        rEvent.mxDeclAttributes->addUnknown( OString( XML_CAST( namespaces[ i ] ) ), OString( XML_CAST( namespaces[ i + 1 ] ) ) );
-            }
-            else
-            {
-                // default namespace
-                sNamespace = OUString( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 );
-                nNamespaceToken = GetNamespaceToken( sNamespace );
-                if( rEntity.mxNamespaceHandler.is() )
-                    rEvent.mxDeclAttributes->addUnknown( OString( "" ), OString( XML_CAST( namespaces[ i + 1 ] ) ) );
-            }
-        }
+            /*  #158414# Each element may define new namespaces, also for attribues.
+                First, process all namespaces, second, process the attributes after namespaces
+                have been initialized. */
 
-        // #158414# second: fill attribute list with other attributes
-        for (int i = 0; i < numAttributes * 5; i += 5)
-        {
-            if( attributes[ i + 1 ] != nullptr )
+            // #158414# first: get namespaces
+            for (int i = 0; i < numNamespaces * 2; i += 2)
             {
-                sal_Int32 nAttributeToken = GetTokenWithPrefix( attributes[ i + 1 ], strlen( XML_CAST( attributes[ i + 1 ] )), attributes[ i ], strlen( XML_CAST( attributes[ i ] )));
-                if( nAttributeToken != FastToken::DONTKNOW )
-                    rEvent.mxAttributes->add( nAttributeToken, XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] );
+                // namespaces[] is (prefix/URI)
+                if( namespaces[ i ] != nullptr )
+                {
+                        DefineNamespace( OString( XML_CAST( namespaces[ i ] )),
+                            OUString( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 ));
+                }
                 else
+                {
+                    // default namespace
+                    sNamespace = OUString( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 );
+                    nNamespaceToken = GetNamespaceToken( sNamespace );
+                }
+            }
+
+            // #158414# second: fill attribute list with other attributes
+            for (int i = 0; i < numAttributes * 5; i += 5)
+            {
+                // attributes[] is ( localname / prefix / nsURI / valueBegin / valueEnd )
+                if( attributes[ i + 1 ] != nullptr )
+                {
+                    sal_Int32 nAttributeToken = GetTokenWithPrefix( attributes[ i + 1 ], strlen( XML_CAST( attributes[ i + 1 ] )), attributes[ i ], strlen( XML_CAST( attributes[ i ] )));
+                    if( nAttributeToken != FastToken::DONTKNOW )
+                        rEvent.mxAttributes->add( nAttributeToken, XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] );
+                    else
+                        rEvent.mxAttributes->addUnknown( OUString( XML_CAST( attributes[ i + 1 ] ), strlen( XML_CAST( attributes[ i + 1 ] )), RTL_TEXTENCODING_UTF8 ),
+                                OString( XML_CAST( attributes[ i ] )), OString( XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] ));
+                }
+                else
+                {
+                    sal_Int32 nAttributeToken = GetToken( attributes[ i ], strlen( XML_CAST( attributes[ i ] )));
+                    if( nAttributeToken != FastToken::DONTKNOW )
+                        rEvent.mxAttributes->add( nAttributeToken, XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] );
+                    else
+                        rEvent.mxAttributes->addUnknown( XML_CAST( attributes[ i ] ),
+                            OString( XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] ));
+                }
+            }
+
+            if( prefix != nullptr )
+                rEvent.mnElementToken = GetTokenWithPrefix( prefix, strlen( XML_CAST( prefix )), localName, strlen( XML_CAST( localName )));
+            else if( !sNamespace.isEmpty() )
+                rEvent.mnElementToken = GetTokenWithContextNamespace( nNamespaceToken, localName, strlen( XML_CAST( localName )));
+            else
+                rEvent.mnElementToken = GetToken( localName, strlen( XML_CAST( localName )));
+        }
+        else
+        {
+            for (int i = 0; i < numNamespaces * 2; i += 2)
+            {
+                if( rEntity.mxNamespaceHandler.is() )
+                {
+                    if( namespaces[ i ] != nullptr )
+                        rEvent.mxDeclAttributes->addUnknown( OString( XML_CAST( namespaces[ i ] ) ), OString( XML_CAST( namespaces[ i + 1 ] ) ) );
+                    else
+                    {
+                        sNamespace = OUString( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 );
+                        rEvent.mxDeclAttributes->addUnknown( OString( "" ), OString( XML_CAST( namespaces[ i + 1 ] ) ) );
+                    }
+                }
+            }
+
+            for (int i = 0; i < numAttributes * 5; i += 5)
+            {
+                if( attributes[ i + 1 ] != nullptr )
                     rEvent.mxAttributes->addUnknown( OUString( XML_CAST( attributes[ i + 1 ] ), strlen( XML_CAST( attributes[ i + 1 ] )), RTL_TEXTENCODING_UTF8 ),
                             OString( XML_CAST( attributes[ i ] )), OString( XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] ));
-            }
-            else
-            {
-                sal_Int32 nAttributeToken = GetToken( attributes[ i ], strlen( XML_CAST( attributes[ i ] )));
-                if( nAttributeToken != FastToken::DONTKNOW )
-                    rEvent.mxAttributes->add( nAttributeToken, XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] );
                 else
                     rEvent.mxAttributes->addUnknown( XML_CAST( attributes[ i ] ),
-                        OString( XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] ));
+                            OString( XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] ));
             }
-        }
 
-        if( prefix != nullptr )
-            rEvent.mnElementToken = GetTokenWithPrefix( prefix, strlen( XML_CAST( prefix )), localName, strlen( XML_CAST( localName )));
-        else if( !sNamespace.isEmpty() )
-            rEvent.mnElementToken = GetTokenWithContextNamespace( nNamespaceToken, localName, strlen( XML_CAST( localName )));
-        else
-            rEvent.mnElementToken = GetToken( localName, strlen( XML_CAST( localName )));
+            rEvent.mnElementToken = FastToken::DONTKNOW;
+        }
 
         if( rEvent.mnElementToken == FastToken::DONTKNOW )
         {

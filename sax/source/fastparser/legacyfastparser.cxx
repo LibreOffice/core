@@ -132,21 +132,6 @@ private:
 
 };
 
-class CallbackTokenHandler : public cppu::WeakImplHelper< XFastTokenHandler >
-{
-public:
-    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const Sequence<sal_Int8>& )
-        throw (RuntimeException, exception) override
-    {
-        return FastToken::DONTKNOW;
-    }
-    virtual Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 )
-        throw (RuntimeException, exception) override
-    {
-        return Sequence<sal_Int8>();
-    }
-};
-
 class CallbackDocumentHandler : public WeakImplHelper< XFastDocumentHandler >
 {
 private:
@@ -276,7 +261,6 @@ SaxLegacyFastParser::SaxLegacyFastParser( ) : m_aNamespaceHandler( new Namespace
 {
     m_xParser = FastParser::create(
         ::comphelper::getProcessComponentContext() );
-    m_xParser->setTokenHandler( new CallbackTokenHandler() );
     m_xParser->setNamespaceHandler( m_aNamespaceHandler.get() );
 }
 
