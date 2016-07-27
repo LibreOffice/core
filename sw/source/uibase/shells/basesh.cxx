@@ -1127,25 +1127,24 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             break;
 
         case FN_XFORMS_DESIGN_MODE:
-            if( pArgs != nullptr
-                && pArgs->GetItemState( nSlot, true, &pItem ) == SfxItemState::SET
-                && pItem != nullptr
-                && dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr )
+            if (pArgs && pArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET)
             {
-                bool bDesignMode =
-                    static_cast<const SfxBoolItem*>( pItem )->GetValue();
+                if (const SfxBoolItem* pBoolItem = dynamic_cast<const SfxBoolItem*>(pItem))
+                {
+                    bool bDesignMode = pBoolItem->GetValue();
 
-                // set form design mode
-                OSL_ENSURE( GetView().GetFormShell() != nullptr, "form shell?" );
-                SfxRequest aReq( GetView().GetViewFrame(), SID_FM_DESIGN_MODE );
-                aReq.AppendItem( SfxBoolItem( SID_FM_DESIGN_MODE, bDesignMode ) );
-                GetView().GetFormShell()->Execute( aReq );
-                aReq.Done();
+                    // set form design mode
+                    OSL_ENSURE( GetView().GetFormShell() != nullptr, "form shell?" );
+                    SfxRequest aReq( GetView().GetViewFrame(), SID_FM_DESIGN_MODE );
+                    aReq.AppendItem( SfxBoolItem( SID_FM_DESIGN_MODE, bDesignMode ) );
+                    GetView().GetFormShell()->Execute( aReq );
+                    aReq.Done();
 
-                // also set suitable view options
-                SwViewOption aViewOption = *rSh.GetViewOptions();
-                aViewOption.SetFormView( ! bDesignMode );
-                rSh.ApplyViewOptions( aViewOption );
+                    // also set suitable view options
+                    SwViewOption aViewOption = *rSh.GetViewOptions();
+                    aViewOption.SetFormView( ! bDesignMode );
+                    rSh.ApplyViewOptions( aViewOption );
+                }
             }
             break;
 
@@ -2127,13 +2126,13 @@ void SwBaseShell::GetTextFontCtrlState( SfxItemSet& rSet )
                 if(RES_CHRATR_FONT == nWhich)
                 {
                     vcl::Font aFont;
-                    if(pI && dynamic_cast< const SvxFontItem *>( pI ) !=  nullptr)
+                    if (const SvxFontItem* pFontItem = dynamic_cast<const SvxFontItem*>(pI))
                     {
-                        aFont.SetFamilyName( static_cast<const SvxFontItem*>(pI)->GetFamilyName());
-                        aFont.SetStyleName(static_cast<const SvxFontItem*>(pI)->GetStyleName());
-                        aFont.SetFamily(static_cast<const SvxFontItem*>(pI)->GetFamily());
-                        aFont.SetPitch(static_cast<const SvxFontItem*>(pI)->GetPitch());
-                        aFont.SetCharSet(static_cast<const SvxFontItem*>(pI)->GetCharSet());
+                        aFont.SetFamilyName(pFontItem->GetFamilyName());
+                        aFont.SetStyleName(pFontItem->GetStyleName());
+                        aFont.SetFamily(pFontItem->GetFamily());
+                        aFont.SetPitch(pFontItem->GetPitch());
+                        aFont.SetCharSet(pFontItem->GetCharSet());
                     }
 
                     bool bVertical = rSh.IsInVerticalText();

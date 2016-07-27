@@ -139,9 +139,9 @@ void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
 
                 rSh.StartUndo(UNDO_PASTE_CLIPBOARD);
 
-                if(dynamic_cast< SdrGrafObj* >(&rObject))
+                if (SdrGrafObj* pSdrGrafObj = dynamic_cast<SdrGrafObj*>(&rObject))
                 {
-                    SdrGrafObj* pNewGrafObj = static_cast<SdrGrafObj*>(rObject.Clone());
+                    SdrGrafObj* pNewGrafObj = pSdrGrafObj->Clone();
 
                     pNewGrafObj->SetGraphic(aGraphic);
 
