@@ -383,7 +383,7 @@
 #define RID_SVXITEMS_JUSTMETHOD_DISTRIBUTE      (RID_EDIT_START + 327)
 
 #define RID_SVXSTR_A11Y_PARAGRAPH_DESCRIPTION   (RID_EDIT_START + 328)
-#define RID_SVXSTR_A11Y_PARAGRAPH_NAME          (RID_EDIT_START + 329)
+// unused (RID_EDIT_START + 329)
 
 // Border lines (continued)
 #define RID_DASH_DOT                        (RID_EDIT_START + 330)

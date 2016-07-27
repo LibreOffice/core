@@ -34,9 +34,4 @@ String RID_SVXSTR_A11Y_PARAGRAPH_DESCRIPTION
     Text [ en-US ] = "Paragraph: $(ARG) " ;
 };
 
-String RID_SVXSTR_A11Y_PARAGRAPH_NAME
-{
-    Text [ en-US ] = "Paragraph $(ARG)" ;
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

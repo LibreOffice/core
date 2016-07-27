@@ -785,15 +785,8 @@ namespace accessibility
 
     OUString SAL_CALL AccessibleEditableTextPara::getAccessibleName() throw (uno::RuntimeException, std::exception)
     {
-        SolarMutexGuard aGuard;
-
-        // throws if defunc
-        sal_Int32 nPara( GetParagraphIndex() );
-
-        // Get the string from the resource for the specified id.
-        OUString sStr(EditResId(RID_SVXSTR_A11Y_PARAGRAPH_NAME));
-        OUString sParaIndex = OUString::number(nPara);
-        return sStr.replaceFirst("$(ARG)", sParaIndex);
+        //See tdf#101003 before implementing a body
+        return OUString();
     }
 
     uno::Reference< XAccessibleRelationSet > SAL_CALL AccessibleEditableTextPara::getAccessibleRelationSet() throw (uno::RuntimeException, std::exception)
