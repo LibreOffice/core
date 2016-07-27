@@ -39,13 +39,10 @@ public:
     virtual void dispose() override;
 
     DECL_LINK_TYPED( BtnAutomaticSelectHdl, RadioButton&, void );
-    DECL_LINK_TYPED( EditModifiedHdl, Edit&, void );
     DECL_LINK_TYPED( AsZeroModifiedHdl, Button*, void);
     DECL_LINK_TYPED( ConversionModifiedHdl, ListBox&, void);
     DECL_LINK_TYPED( SyntaxModifiedHdl, ListBox&, void);
     DECL_LINK_TYPED( CurrentDocOnlyHdl, Button*, void);
-    DECL_LINK_TYPED( CBUseOpenCLHdl, Button*, void);
-    DECL_LINK_TYPED( SpinOpenCLMinSizeHdl, Edit&, void);
 
     const ScCalcConfig& GetConfig() const { return maConfig;}
     bool GetWriteCalcConfig() const { return mbWriteConfig;}
@@ -60,10 +57,6 @@ private:
     VclPtr<ListBox> mpConversion;
     VclPtr<ListBox> mpSyntax;
     VclPtr<CheckBox> mpCurrentDocOnly;
-
-    VclPtr<CheckBox> mpUseOpenCL;
-    VclPtr<NumericField> mpSpinButton;
-    VclPtr<VclMultiLineEdit> mpEditField;
 
     ScCalcConfig maConfig;
 

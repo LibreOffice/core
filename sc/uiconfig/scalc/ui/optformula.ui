@@ -269,7 +269,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkRadioButton" id="calccustom">
-                        <property name="label" translatable="yes">Custom (use OpenCL, conversion of text to numbers, and more):</property>
+                        <property name="label" translatable="yes">Custom (conversion of text to numbers and more):</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>

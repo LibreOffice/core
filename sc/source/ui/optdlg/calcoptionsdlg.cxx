@@ -99,20 +99,6 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     get(mpCurrentDocOnly,"current_doc");
     mpCurrentDocOnly->Check(!mbWriteConfig);
     mpCurrentDocOnly->SetClickHdl(LINK(this, ScCalcOptionsDialog, CurrentDocOnlyHdl));
-
-    get(mpUseOpenCL,"CBUseOpenCL");
-    mpUseOpenCL->Check(rConfig.mbOpenCLSubsetOnly);
-    mpUseOpenCL->SetClickHdl(LINK(this, ScCalcOptionsDialog, CBUseOpenCLHdl));
-
-    get(mpSpinButton,"spinOpenCLSize");
-    mpSpinButton->SetValue(rConfig.mnOpenCLMinimumFormulaGroupSize);
-    mpSpinButton->SetModifyHdl(LINK(this, ScCalcOptionsDialog, SpinOpenCLMinSizeHdl));
-
-    get(mpEditField, "entry");
-    mpEditField->SetText(ScOpCodeSetToSymbolicString(maConfig.mpOpenCLSubsetOpCodes));
-    mpEditField->set_height_request(4 * mpEditField->GetTextHeight());
-
-    mpEditField->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
 }
 
 ScCalcOptionsDialog::~ScCalcOptionsDialog()
@@ -126,9 +112,6 @@ void ScCalcOptionsDialog::dispose()
     mpConversion.clear();
     mpSyntax.clear();
     mpCurrentDocOnly.clear();
-    mpUseOpenCL.clear();
-    mpSpinButton.clear();
-    mpEditField.clear();
     ModalDialog::dispose();
 }
 
@@ -175,21 +158,6 @@ IMPL_LINK_TYPED(ScCalcOptionsDialog, SyntaxModifiedHdl, ListBox&, rSyntax, void)
 IMPL_LINK_TYPED(ScCalcOptionsDialog, CurrentDocOnlyHdl, Button*, pCheckBox, void)
 {
     mbWriteConfig = !(static_cast<CheckBox*>(pCheckBox)->IsChecked());
-}
-
-IMPL_LINK_TYPED(ScCalcOptionsDialog, CBUseOpenCLHdl, Button*, pCheckBox, void)
-{
-    maConfig.mbOpenCLSubsetOnly = static_cast<CheckBox*>(pCheckBox)->IsChecked();
-}
-
-IMPL_LINK_TYPED(ScCalcOptionsDialog, SpinOpenCLMinSizeHdl, Edit&, rEdit, void)
-{
-    maConfig.mnOpenCLMinimumFormulaGroupSize = static_cast<NumericField&>(rEdit).GetValue();
-}
-
-IMPL_LINK_TYPED(ScCalcOptionsDialog, EditModifiedHdl, Edit&, rCtrl, void)
-{
-    maConfig.mpOpenCLSubsetOpCodes = ScStringToOpCodeSet(rCtrl.GetText());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
