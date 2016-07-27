@@ -2584,6 +2584,7 @@ void OApplicationController::OnFirstControllerConnected()
 
 void SAL_CALL OApplicationController::attachFrame( const Reference< XFrame > & i_rxFrame ) throw( RuntimeException, std::exception )
 {
+    SolarMutexGuard aSolarGuard; // avoid deadlock in XModel calls
     ::osl::MutexGuard aGuard( getMutex() );
 
     OGenericUnoController::attachFrame( i_rxFrame );
