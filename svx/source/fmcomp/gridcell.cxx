@@ -604,7 +604,7 @@ void DbCellControl::implDoPropertyListening(const OUString& _rPropertyName, bool
 
 void DbCellControl::doPropertyListening(const OUString& _rPropertyName)
 {
-    implDoPropertyListening( _rPropertyName );
+    implDoPropertyListening( _rPropertyName, true );
 }
 
 static void lcl_clearBroadCaster(rtl::Reference<::comphelper::OPropertyChangeMultiplexer>& _pBroadcaster)

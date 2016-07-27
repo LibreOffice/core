@@ -159,7 +159,7 @@ namespace
         return s_nCounter;
     }
 
-    OSystemParseContext* getSharedContext(OSystemParseContext* _pContext = nullptr,bool _bSet = false)
+    OSystemParseContext* getSharedContext(OSystemParseContext* _pContext, bool _bSet)
     {
         static OSystemParseContext* s_pSharedContext = nullptr;
         if ( _pContext && !s_pSharedContext )
@@ -183,7 +183,7 @@ OParseContextClient::OParseContextClient()
     ::osl::MutexGuard aGuard( getSafteyMutex() );
     if ( 1 == osl_atomic_increment( &getCounter() ) )
     {   // first instance
-        getSharedContext( new OSystemParseContext );
+        getSharedContext( new OSystemParseContext, false );
     }
 }
 
@@ -199,7 +199,7 @@ OParseContextClient::~OParseContextClient()
 
 const OSystemParseContext* OParseContextClient::getParseContext() const
 {
-    return getSharedContext();
+    return getSharedContext(nullptr, false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

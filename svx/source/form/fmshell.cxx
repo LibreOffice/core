@@ -1150,7 +1150,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             case SID_FM_SORTDOWN:
             case SID_FM_AUTOFILTER:
             case SID_FM_ORDERCRIT:
-                bEnable = GetImpl()->IsFormSlotEnabled( nWhich );
+                bEnable = GetImpl()->IsFormSlotEnabled( nWhich, nullptr );
                 break;
 
             case SID_FM_FORM_FILTERED:
@@ -1273,7 +1273,7 @@ void FmFormShell::GetTextAttributeState( SfxItemSet& _rSet )
 
 bool FmFormShell::IsActiveControl() const
 {
-    return m_pImpl->IsActiveControl();
+    return m_pImpl->IsActiveControl(false);
 }
 
 

@@ -277,10 +277,10 @@ private:
         const OUString& _rFieldPostfix,
         SdrUnoObj*& _rpLabel,
         SdrUnoObj*& _rpControl,
-        const css::uno::Reference< css::sdbc::XDataSource >& _rxDataSource = nullptr,
-        const OUString& _rDataSourceName = OUString(),
-        const OUString& _rCommand = OUString(),
-        const sal_Int32 _nCommandType = -1
+        const css::uno::Reference< css::sdbc::XDataSource >& _rxDataSource,
+        const OUString& _rDataSourceName,
+        const OUString& _rCommand,
+        const sal_Int32 _nCommandType
     );
 
     void ObjectRemovedInAliveMode(const SdrObject* pObject);

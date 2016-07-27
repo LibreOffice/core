@@ -1767,7 +1767,7 @@ void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
 
         if ( pTargetItems )
         {
-            insertFilterItem( aItemList, pTargetItems );
+            insertFilterItem( aItemList, pTargetItems, false );
             return;
         }
     }

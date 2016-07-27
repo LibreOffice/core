@@ -453,7 +453,7 @@ namespace svxform
                             pFormModel->BegUndo(aUndoStr);
                             // slot was valid for (exactly) one selected form
                             OUString fControlName = FM_COMPONENT_HIDDEN;
-                            NewControl( fControlName, *m_arrCurrentSelection.begin() );
+                            NewControl( fControlName, *m_arrCurrentSelection.begin(), true );
                             pFormModel->EndUndo();
 
                         }   break;
@@ -641,7 +641,7 @@ namespace svxform
         for( size_t i = 0; i < nChildCount; i++ )
         {
             FmEntryData* pChildData = pChildList->at( i );
-            Insert( pChildData );
+            Insert( pChildData, TREELIST_APPEND );
         }
 
         return pNewEntry;
