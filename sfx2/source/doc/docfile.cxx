@@ -72,6 +72,7 @@
 #include <comphelper/fileurl.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/interaction.hxx>
+#include <comphelper/simplefileaccessinteraction.hxx>
 #include <framework/interaction.hxx>
 #include <unotools/streamhelper.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -415,7 +416,16 @@ Reference < XContent > SfxMedium::GetContent() const
     if ( !pImpl->aContent.get().is() )
     {
         Reference < css::ucb::XContent > xContent;
-        Reference < css::ucb::XCommandEnvironment > xEnv;
+
+        // tdf#95144 add a default css::ucb::XCommandEnvironment
+        // in order to have http and https protocol manage certificates correctly
+        css:: uno::Reference< task::XInteractionHandler > xIH(
+                css::task::InteractionHandler::createWithParent( comphelper::getProcessComponentContext(), nullptr ) );
+
+        css::uno::Reference< css::ucb::XProgressHandler > xProgress;
+        ::ucbhelper::CommandEnvironment* pCommandEnv = new ::ucbhelper::CommandEnvironment(new comphelper::SimpleFileAccessInteraction( xIH ), xProgress);
+
+        Reference < css::ucb::XCommandEnvironment > xEnv(static_cast< css::ucb::XCommandEnvironment* >(pCommandEnv), css::uno::UNO_QUERY);
 
         const SfxUnoAnyItem* pItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImpl->m_pSet, SID_CONTENT, false);
         if ( pItem )
