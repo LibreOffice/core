@@ -862,7 +862,7 @@ void Window::SetParent( vcl::Window* pNewParent )
     DBG_ASSERT( pNewParent, "Window::SetParent(): pParent == NULL" );
     DBG_ASSERT( pNewParent != this, "someone tried to reparent a window to itself" );
 
-    if( pNewParent == this )
+    if( pNewParent == this || pNewParent == nullptr)
         return;
 
     // check if the taskpanelist would change and move the window pointer accordingly
@@ -899,7 +899,7 @@ void Window::SetParent( vcl::Window* pNewParent )
     if ( mpWindowImpl->mpParent.get() == pNewParent )
         return;
 
-    if ( mpWindowImpl->mbFrame )
+    if (mpWindowImpl->mbFrame)
         mpWindowImpl->mpFrame->SetParent( pNewParent->mpWindowImpl->mpFrame );
 
     bool bVisible = IsVisible();
