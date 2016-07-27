@@ -813,13 +813,13 @@ template< class T > struct ResourceHolder
     T m_value;
 
     explicit ResourceHolder (T const & value = T()) : m_value (value) {}
-    ~ResourceHolder() { reset(); }
+    ~ResourceHolder() { reset(T()); }
 
     T & get() { return m_value; }
     T const & get() const { return m_value; }
 
     void set (T const & value) { m_value = value; }
-    void reset (T const & value = T())
+    void reset (T const & value)
     {
         T tmp (m_value);
         if (tmp != value)

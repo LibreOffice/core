@@ -1951,7 +1951,7 @@ namespace svgio
                         else
                         {
                             // no BaselineShift or inherit (which is automatically)
-                            setBaselineShift();
+                            setBaselineShift(BaselineShift_Baseline);
                         }
                     }
                     break;

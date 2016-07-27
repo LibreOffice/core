@@ -69,7 +69,7 @@ public:
     ItemIndex       GetItemCount() const;
     ItemId          GetItemID( ItemIndex _nIndex ) const;
 
-    void            InsertRoadmapItem( ItemIndex Index, const OUString& RoadmapItem, ItemId _nUniqueId, bool _bEnabled = true );
+    void            InsertRoadmapItem( ItemIndex Index, const OUString& RoadmapItem, ItemId _nUniqueId, bool _bEnabled );
     void            ReplaceRoadmapItem( ItemIndex Index, const OUString& RoadmapItem, ItemId _nUniqueId, bool _bEnabled );
     void            DeleteRoadmapItem( ItemIndex _nIndex );
 

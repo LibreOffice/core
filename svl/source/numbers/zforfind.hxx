@@ -46,7 +46,7 @@ public:
     bool IsNumberFormat( const OUString& rString,            /// input string
                          short& F_Type,                      /// format type (in + out)
                          double& fOutNumber,                 /// value determined (out)
-                         const SvNumberformat* pFormat = nullptr);  /// optional a number format to which compare against
+                         const SvNumberformat* pFormat);     /// optional a number format to which compare against
 
     /// after IsNumberFormat: get decimal position
     short   GetDecPos() const { return nDecPos; }

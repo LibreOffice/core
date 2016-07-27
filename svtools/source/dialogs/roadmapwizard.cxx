@@ -321,7 +321,8 @@ namespace svt
                 m_pImpl->pRoadmap->InsertRoadmapItem(
                     nItemIndex,
                     getStateDisplayName( nState ),
-                    nState
+                    nState,
+                    true
                 );
             }
 

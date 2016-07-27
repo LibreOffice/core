@@ -159,7 +159,7 @@ public:
 
         static OUString GetIconTheme();
 
-        enum SetModifiedFlag { SET_MODIFIED, DONT_SET_MODIFIED };
+        enum class SetModifiedFlag { SET, DONT_SET };
 
         /** Set the icon theme
          *
@@ -174,7 +174,7 @@ public:
          * during initialization in the constructor.
          */
         void
-        SetIconTheme(const OUString &theme, SetModifiedFlag setModified = SET_MODIFIED );
+        SetIconTheme(const OUString &theme, SetModifiedFlag setModified );
 
         bool IconThemeWasSetAutomatically()
         {return m_bIconThemeWasSetAutomatically;}
@@ -340,7 +340,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             {
                 OUString aIconTheme;
                 if (seqValues[nProperty] >>= aIconTheme)
-                    SetIconTheme(aIconTheme, DONT_SET_MODIFIED);
+                    SetIconTheme(aIconTheme, SetModifiedFlag::DONT_SET);
                 else
                     OSL_FAIL("Wrong type of \"Misc\\SymbolStyle\"!" );
 
@@ -463,7 +463,7 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
             case PROPERTYHANDLE_SYMBOLSTYLE         :   {
                                                             OUString aIconTheme;
                                                             if (seqValues[nProperty] >>= aIconTheme)
-                                                                SetIconTheme(aIconTheme, DONT_SET_MODIFIED);
+                                                                SetIconTheme(aIconTheme, SetModifiedFlag::DONT_SET);
                                                             else
                                                                 OSL_FAIL("Wrong type of \"Misc\\SymbolStyle\"!" );
                                                         }
@@ -546,7 +546,7 @@ SvtMiscOptions_Impl::SetIconTheme(const OUString &rName, SetModifiedFlag setModi
     Application::MergeSystemSettings( aAllSettings );
     Application::SetSettings(aAllSettings);
 
-    if (setModified == SET_MODIFIED) {
+    if (setModified == SetModifiedFlag::SET) {
         SetModified();
     }
     CallListeners();
@@ -784,7 +784,7 @@ OUString SvtMiscOptions::GetIconTheme() const
 
 void SvtMiscOptions::SetIconTheme(const OUString& iconTheme)
 {
-    m_pImpl->SetIconTheme(iconTheme);
+    m_pImpl->SetIconTheme(iconTheme, SvtMiscOptions_Impl::SetModifiedFlag::SET);
 }
 
 bool SvtMiscOptions::DisableUICustomization() const

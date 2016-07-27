@@ -90,7 +90,7 @@ void SvtIconChoiceCtrl::dispose()
 {
     if (_pImpl)
     {
-        _pImpl->CallEventListeners( VCLEVENT_OBJECT_DYING );
+        _pImpl->CallEventListeners( VCLEVENT_OBJECT_DYING, nullptr );
         _pImpl.reset();
     }
     Control::dispose();
@@ -152,7 +152,7 @@ void SvtIconChoiceCtrl::ArrangeIcons()
             aFullSize.setWidth ( aFullSize.getWidth()+aEntryRect.GetWidth() );
         }
 
-        _pImpl->Arrange ( false, aFullSize.getWidth() );
+        _pImpl->Arrange ( false, aFullSize.getWidth(), 0 );
     }
     else if ( GetStyle() & WB_ALIGN_LEFT )
     {
@@ -171,7 +171,7 @@ void SvtIconChoiceCtrl::ArrangeIcons()
     }
     else
     {
-        _pImpl->Arrange();
+        _pImpl->Arrange(false, 0, 0);
     }
     _pImpl->Arrange( false, 0, 1000 );
 }

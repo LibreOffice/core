@@ -164,7 +164,7 @@ SvxIconChoiceCtrl_Impl::~SvxIconChoiceCtrl_Impl()
 {
     pCurEditedEntry = nullptr;
     pEdit.disposeAndClear();
-    Clear();
+    Clear(false);
     StopEditTimer();
     CancelUserEvents();
     delete pZOrderList;
@@ -924,7 +924,7 @@ bool SvxIconChoiceCtrl_Impl::MouseMove( const MouseEvent& rMEvt )
     else if( nWinBits & WB_HIGHLIGHTFRAME )
     {
         SvxIconChoiceCtrlEntry* pEntry = GetEntry( aDocPos, true );
-        SetEntryHighlightFrame( pEntry );
+        SetEntryHighlightFrame( pEntry, false );
     }
     else
         return false;
@@ -992,7 +992,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
         SvxIconChoiceCtrlEntry* pNewCursor = GetEntry( nPos );
         SvxIconChoiceCtrlEntry* pOldCursor = pCursor;
         if ( pNewCursor != pOldCursor )
-            SetCursor_Impl( pOldCursor, pNewCursor, false, false );
+            SetCursor_Impl( pOldCursor, pNewCursor, false, false, false );
         return true;
     }
 
@@ -2657,7 +2657,7 @@ void SvxIconChoiceCtrl_Impl::ClearSelectedRectList()
 IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, AutoArrangeHdl, Idle *, void)
 {
     aAutoArrangeIdle.Stop();
-    Arrange( IsAutoArrange() );
+    Arrange( IsAutoArrange(), 0, 0 );
 }
 
 IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, VisRectChangedHdl, Idle *, void)
@@ -3420,7 +3420,7 @@ void SvxIconChoiceCtrl_Impl::SetColumn( sal_uInt16 nIndex, const SvxIconChoiceCt
         nGridDX = pInfo->GetWidth();
 
     if( GetUpdateMode() )
-        Arrange( IsAutoArrange() );
+        Arrange( IsAutoArrange(), 0, 0 );
 }
 
 const SvxIconChoiceCtrlColumnInfo* SvxIconChoiceCtrl_Impl::GetColumn( sal_uInt16 nIndex ) const
