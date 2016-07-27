@@ -32,7 +32,7 @@ public:
     virtual ~SearchResultsDlg();
     virtual void dispose() override;
 
-    void FillResults( ScDocument* pDoc, const ScRangeList& rMatchedRanges );
+    void FillResults( ScDocument* pDoc, const ScRangeList& rMatchedRanges, bool bCellNotes );
 
     virtual bool Close() override;
 };
