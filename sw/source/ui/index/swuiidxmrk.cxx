@@ -193,17 +193,24 @@ void SwIndexMarkPane::InitControls()
         m_pTypeDCB->InsertEntry( pSh->GetTOXType(TOX_USER, i)->GetTypeName() );
 
     // read keywords primary
-    std::vector<OUString> aArr;
-    pSh->GetTOIKeys( TOI_PRIMARY, aArr );
-    std::sort(aArr.begin(), aArr.end());
-    for (std::vector<OUString>::iterator it = aArr.begin(); it != aArr.end(); ++it)
-        m_pKey1DCB->InsertEntry( *it );
+    {
+        std::vector<OUString> aArr;
+        pSh->GetTOIKeys(TOI_PRIMARY, aArr);
+        std::sort(aArr.begin(), aArr.end());
+        auto last = std::unique(aArr.begin(), aArr.end());
+        for (auto it = aArr.begin(); it != last; ++it)
+            m_pKey1DCB->InsertEntry(*it);
+    }
 
     // read keywords secondary
-    pSh->GetTOIKeys( TOI_SECONDARY, aArr );
-    std::sort(aArr.begin(), aArr.end());
-    for (std::vector<OUString>::iterator it = aArr.begin(); it != aArr.end(); ++it)
-        m_pKey2DCB->InsertEntry( *it );
+    {
+        std::vector<OUString> aArr;
+        pSh->GetTOIKeys( TOI_SECONDARY, aArr );
+        std::sort(aArr.begin(), aArr.end());
+        auto last = std::unique(aArr.begin(), aArr.end());
+        for (auto it = aArr.begin(); it != last; ++it)
+            m_pKey2DCB->InsertEntry(*it);
+    }
 
     UpdateLanguageDependenciesForPhoneticReading();
 
