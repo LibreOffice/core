@@ -1121,6 +1121,8 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
     short eNewType;
     bool bMatchBracket = false;
     bool bHaveGeneral = false; // if General/Standard encountered
+    bool bIsTimeDetected =false;   // hour or second found in format
+    bool bHaveMinute = false;
 
     SkipStrings(i, nPos);
     while (i < nAnzStrings)
@@ -1129,43 +1131,48 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
         {   // keyword
             sal_uInt16 nIndexPre;
             sal_uInt16 nIndexNex;
-            sal_Unicode cChar;
 
             switch (nTypeArray[i])
             {
             case NF_KEY_E:                          // E
                 eNewType = css::util::NumberFormat::SCIENTIFIC;
                 break;
-            case NF_KEY_AMPM:                       // AM,A,PM,P
-            case NF_KEY_AP:
             case NF_KEY_H:                          // H
             case NF_KEY_HH:                         // HH
+                bIsTimeDetected = true;
+                SAL_FALLTHROUGH;
             case NF_KEY_S:                          // S
             case NF_KEY_SS:                         // SS
+                if ( !bHaveMinute )
+                    bIsTimeDetected = true;
+                SAL_FALLTHROUGH;
+            case NF_KEY_AMPM:                       // AM,A,PM,P
+            case NF_KEY_AP:
                 eNewType = css::util::NumberFormat::TIME;
                 break;
             case NF_KEY_M:                          // M
             case NF_KEY_MM:                         // MM
                 /* Minute or month.
                    Minute if one of:
-                   * preceded by time keyword H or S (ignoring separators)
+                   * preceded by time keyword H (ignoring separators)
                    * followed by time keyword S (ignoring separators)
+                   * H or S was detected
                    * preceded by '[' amount bracket
                    Else month.
                 */
                 nIndexPre = PreviousKeyword(i);
                 nIndexNex = NextKeyword(i);
-                cChar = PreviousChar(i);
                 if (nIndexPre == NF_KEY_H   ||      // H
                     nIndexPre == NF_KEY_HH  ||      // HH
-                    nIndexPre == NF_KEY_S   ||      // S before M tdf#95339
-                    nIndexPre == NF_KEY_SS  ||      // SS
                     nIndexNex == NF_KEY_S   ||      // S
                     nIndexNex == NF_KEY_SS  ||      // SS
-                    cChar == '['  )                 // [M
+                    bIsTimeDetected         ||      // tdf#101147
+                    PreviousChar(i) == '['  )       // [M
                 {
                     eNewType = css::util::NumberFormat::TIME;
                     nTypeArray[i] -= 2;             // 6 -> 4, 7 -> 5
+                    bIsTimeDetected = false;        // next M should be month
+                    bHaveMinute = true;
                 }
                 else
                 {
