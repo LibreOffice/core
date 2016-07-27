@@ -142,6 +142,11 @@ void SdrObjEditView::TakeActionRect(Rectangle& rRect) const
     }
 }
 
+SfxViewShell* SdrObjEditView::GetSfxViewShell() const
+{
+    return nullptr;
+}
+
 void SdrObjEditView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     SdrGlueEditView::Notify(rBC,rHint);
@@ -461,7 +466,14 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, bool /*bNoP
     }
     pOutlView->SetControlWord(nStat);
     pOutlView->SetBackgroundColor( aBackground );
-    pOutlView->registerLibreOfficeKitViewCallback(SfxViewShell::Current());
+
+    // In case we're in the process of constructing a new view shell,
+    // SfxViewShell::Current() may still point to the old one. So if possible,
+    // depend on the application owning this draw view to provide the view
+    // shell.
+    SfxViewShell* pSfxViewShell = GetSfxViewShell();
+    pOutlView->registerLibreOfficeKitViewCallback(pSfxViewShell ? pSfxViewShell : SfxViewShell::Current());
+
     if (pText!=nullptr)
     {
         pOutlView->SetAnchorMode((EVAnchorMode)(pText->GetOutlinerViewAnchorMode()));
