@@ -38,7 +38,6 @@ public:
     virtual ~ScCalcOptionsDialog();
     virtual void dispose() override;
 
-    DECL_LINK_TYPED( BtnAutomaticSelectHdl, RadioButton&, void );
     DECL_LINK_TYPED( AsZeroModifiedHdl, Button*, void);
     DECL_LINK_TYPED( ConversionModifiedHdl, ListBox&, void);
     DECL_LINK_TYPED( SyntaxModifiedHdl, ListBox&, void);
