@@ -174,6 +174,7 @@ void SvxAreaTabPage::dispose()
     m_pLbBitmap.clear();
     m_pCtlBitmapPreview.clear();
     m_pCtlXRectPreview.clear();
+    m_pBtnImport.clear();
     SvxTabPage::dispose();
 }
 

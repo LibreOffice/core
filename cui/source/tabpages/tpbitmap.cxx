@@ -95,6 +95,7 @@ void SvxBitmapTabPage::dispose()
 {
     m_pBitmapLB.clear();
     m_pCtlBitmapPreview.clear();
+    m_pBtnImport.clear();
     SvxTabPage::dispose();
 }
 
