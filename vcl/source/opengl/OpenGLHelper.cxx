@@ -1040,7 +1040,7 @@ void OpenGLHelper::debugMsgPrint(const int nType, const char *pFormat, ...)
 
     bool bHasContext = OpenGLContext::hasCurrent();
     if (!bHasContext)
-        strcat(pStr, "- no GL context");
+        strcat(pStr, " (no GL context)");
 
     if (nType == 0)
     {
