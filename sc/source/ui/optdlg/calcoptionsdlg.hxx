@@ -38,16 +38,10 @@ public:
     virtual ~ScCalcOptionsDialog();
     virtual void dispose() override;
 
-    DECL_LINK_TYPED( BtnAutomaticSelectHdl, RadioButton&, void );
-    DECL_LINK_TYPED( DeviceSelHdl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( EditModifiedHdl, Edit&, void );
-    DECL_STATIC_LINK_TYPED( ScCalcOptionsDialog, TestClickHdl, Button*, void );
     DECL_LINK_TYPED( AsZeroModifiedHdl, Button*, void);
     DECL_LINK_TYPED( ConversionModifiedHdl, ListBox&, void);
     DECL_LINK_TYPED( SyntaxModifiedHdl, ListBox&, void);
     DECL_LINK_TYPED( CurrentDocOnlyHdl, Button*, void);
-    DECL_LINK_TYPED( CBUseOpenCLHdl, Button*, void);
-    DECL_LINK_TYPED( SpinOpenCLMinSizeHdl, Edit&, void);
 
     const ScCalcConfig& GetConfig() const { return maConfig;}
     bool GetWriteCalcConfig() const { return mbWriteConfig;}
@@ -62,21 +56,6 @@ private:
     VclPtr<ListBox> mpConversion;
     VclPtr<ListBox> mpSyntax;
     VclPtr<CheckBox> mpCurrentDocOnly;
-
-    VclPtr<CheckBox> mpUseOpenCL;
-    VclPtr<NumericField> mpSpinButton;
-    VclPtr<VclMultiLineEdit> mpEditField;
-    VclPtr<PushButton> mpTestButton;
-
-    VclPtr<FixedText> mpFtFrequency;
-    VclPtr<FixedText> mpFtComputeUnits;
-    VclPtr<FixedText> mpFtMemory;
-
-    VclPtr<SvTreeListBox> mpOpenclInfoList;
-    VclPtr<RadioButton> mpBtnAutomaticSelectionTrue;
-    VclPtr<RadioButton> mpBtnAutomaticSelectionFalse;
-
-    OUString maSoftware;
 
     ScCalcConfig maConfig;
 
