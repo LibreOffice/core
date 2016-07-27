@@ -538,9 +538,13 @@ sub DownloadFile ($$$)
     {
         return 1;
     }
-    else
+    elsif ($? == 1)
     {
         return 0;
+    }
+    else
+    {
+        exit $?;
     }
 }
 
