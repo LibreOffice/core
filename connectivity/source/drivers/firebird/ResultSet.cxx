@@ -442,7 +442,7 @@ Date OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT /*n
         struct tm aCTime;
         isc_decode_sql_date(&aISCDate, &aCTime);
 
-        return Date(aCTime.tm_mday, aCTime.tm_mon, aCTime.tm_year);
+        return Date(aCTime.tm_mday, aCTime.tm_mon + 1, aCTime.tm_year + 1900);
     }
     else
     {
