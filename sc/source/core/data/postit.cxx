@@ -562,6 +562,15 @@ OUString ScPostIt::GetText() const
     return OUString();
 }
 
+bool ScPostIt::HasMultiLineText() const
+{
+    if( const EditTextObject* pEditObj = GetEditTextObject() )
+        return pEditObj->GetParagraphCount() > 1;
+    if( maNoteData.mxInitData.get() )
+        return maNoteData.mxInitData->maSimpleText.indexOf( '\n' ) >= 0;
+    return false;
+}
+
 void ScPostIt::SetText( const ScAddress& rPos, const OUString& rText )
 {
     CreateCaptionFromInitData( rPos );
