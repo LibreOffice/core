@@ -50,24 +50,57 @@ void SearchResultsDlg::dispose()
     ModelessDialog::dispose();
 }
 
-void SearchResultsDlg::FillResults( ScDocument* pDoc, const ScRangeList &rMatchedRanges )
+void SearchResultsDlg::FillResults( ScDocument* pDoc, const ScRangeList &rMatchedRanges, bool bCellNotes )
 {
     mpList->Clear();
     mpList->SetUpdateMode(false);
     std::vector<OUString> aTabNames = pDoc->GetAllTableNames();
     SCTAB nTabCount = aTabNames.size();
-    for (size_t i = 0, n = rMatchedRanges.size(); i < n; ++i)
+    if (bCellNotes)
     {
-        ScCellIterator aIter(pDoc, *rMatchedRanges[i]);
-        for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
+        for (size_t i = 0, n = rMatchedRanges.size(); i < n; ++i)
         {
-            ScAddress aPos = aIter.GetPos();
-            if (aPos.Tab() >= nTabCount)
-                // Out-of-bound sheet index.
-                continue;
+            /* TODO: a CellNotes iterator would come handy and migt speed
+             * things up a little, though we only loop through the
+             * search/replace result positions here. */
+            ScRange aRange( *rMatchedRanges[i] );
+            // Bear in mind that mostly the range is one address position
+            // or a column or a row joined.
+            ScAddress aPos( aRange.aStart );
+            for ( ; aPos.Tab() <= aRange.aEnd.Tab(); aPos.IncTab())
+            {
+                if (aPos.Tab() >= nTabCount)
+                    break;  // can this even happen? we just searched on existing sheets ...
+                for (aPos.SetCol( aRange.aStart.Col()); aPos.Col() <= aRange.aEnd.Col(); aPos.IncCol())
+                {
+                    for (aPos.SetRow( aRange.aStart.Row()); aPos.Row() <= aRange.aEnd.Row(); aPos.IncRow())
+                    {
+                        const ScPostIt* pNote = pDoc->GetNote( aPos);
+                        if (pNote)
+                        {
+                            OUString aPosStr = aPos.Format(ScRefFlags::ADDR_ABS, nullptr, pDoc->GetAddressConvention());
+                            mpList->InsertEntry(aTabNames[aPos.Tab()] + "\t" + aPosStr + "\t" + pNote->GetText());
+                        }
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        for (size_t i = 0, n = rMatchedRanges.size(); i < n; ++i)
+        {
+            ScCellIterator aIter(pDoc, *rMatchedRanges[i]);
+            for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
+            {
+                ScAddress aPos = aIter.GetPos();
+                if (aPos.Tab() >= nTabCount)
+                    // Out-of-bound sheet index.
+                    continue;
 
-            OUString aPosStr = aPos.Format(ScRefFlags::ADDR_ABS, nullptr, pDoc->GetAddressConvention());
-            mpList->InsertEntry(aTabNames[aPos.Tab()] + "\t" + aPosStr + "\t" + pDoc->GetString(aPos));
+                OUString aPosStr = aPos.Format(ScRefFlags::ADDR_ABS, nullptr, pDoc->GetAddressConvention());
+                mpList->InsertEntry(aTabNames[aPos.Tab()] + "\t" + aPosStr + "\t" + pDoc->GetString(aPos));
+            }
         }
     }
     mpList->SetUpdateMode(true);
