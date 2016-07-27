@@ -69,7 +69,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
         return false;
 
     aCell = aCol[nCol].GetCellValue(nRow);
-    if (aCell.isEmpty())
+    if (aCell.isEmpty() && rSearchItem.GetCellType() != SvxSearchCellType::NOTE)
         return false;
 
     bool bMultiLine = false;
