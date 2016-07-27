@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_df817ffd",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1191,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-07-27T12:55:10Z",
+      "side": 1,
+      "message": "\"if(    (\" is a bit strange style, please avoid it in future patches. :-)",
+      "revId": "46d54288e56bd4d6a08d48ac9b5b59cfb924e3cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
