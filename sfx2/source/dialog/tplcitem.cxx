@@ -63,6 +63,7 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
         case SID_STYLE_FAMILY3:
         case SID_STYLE_FAMILY4:
         case SID_STYLE_FAMILY5:
+        case SID_STYLE_FAMILY6:
         {
             bool bAvailable = SfxItemState::DEFAULT == eState;
             if ( !bAvailable )
@@ -87,6 +88,8 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
                     nFamily = 4; break;
                 case SID_STYLE_FAMILY5:
                     nFamily = 5; break;
+                case SID_STYLE_FAMILY6:
+                    nFamily = 6; break;
 
                 default: OSL_FAIL("unknown StyleFamily"); break;
             }

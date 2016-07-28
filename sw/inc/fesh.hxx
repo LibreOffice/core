@@ -725,6 +725,7 @@ public:
     bool IsAdjustCellWidthAllowed( bool bBalance = false ) const;
 
     /// Set table style of the current table.
+    bool SetTableStyle(const OUString& rStyleName);
     bool SetTableStyle(const SwTableAutoFormat& rNew);
 
     /// Update the direct formatting according to the current table style.

@@ -303,6 +303,11 @@ interface Annotation : _Annotation
         StateMethod = StateDisableItems ;
     ]
 
+    SID_STYLE_FAMILY6
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
     SID_STYLE_WATERCAN // status()
     [
         StateMethod = StateDisableItems ;
