@@ -333,6 +333,7 @@ public:
     bool isTiledSearching() const;
     /// See lok::Document::getPart().
     virtual int getPart() const;
+    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 
