@@ -29,30 +29,38 @@
 #include <com/sun/star/security/XCertificateExtension.hpp>
 #include <com/sun/star/security/XSanExtension.hpp>
 #include <com/sun/star/security/CertAltNameEntry.hpp>
+#include "certificateextension_certextn.hxx"
 
 class SanExtensionImpl : public ::cppu::WeakImplHelper<
     css::security::XSanExtension >
 {
     private:
-        bool m_critical ;
-        css::uno::Sequence< sal_Int8 > m_xExtnId ;
-        css::uno::Sequence< sal_Int8 > m_xExtnValue ;
+        CertificateExtension_CertExtn m_Extn;
         css::uno::Sequence< css::security::CertAltNameEntry > m_Entries;
 
         static OString removeOIDFromString( const OString &oid);
 
     public:
-        SanExtensionImpl() ;
-        virtual ~SanExtensionImpl() ;
-
         //Methods from XCertificateExtension
-        virtual sal_Bool SAL_CALL isCritical() throw( css::uno::RuntimeException, std::exception ) override ;
+        virtual sal_Bool SAL_CALL isCritical() throw( css::uno::RuntimeException, std::exception ) override
+        {
+            return m_Extn.m_critical;
+        }
 
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getExtensionId() throw( css::uno::RuntimeException, std::exception ) override ;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getExtensionId() throw( css::uno::RuntimeException, std::exception ) override
+        {
+            return m_Extn.m_xExtnId;
+        }
 
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getExtensionValue() throw( css::uno::RuntimeException, std::exception ) override ;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getExtensionValue() throw( css::uno::RuntimeException, std::exception ) override
+        {
+            return m_Extn.m_xExtnValue;
+        }
 
-        void setCertExtn( unsigned char* value, unsigned int vlen, unsigned char* id, unsigned int idlen, bool critical ) ;
+        void setCertExtn(unsigned char* value, unsigned int vlen, unsigned char* id, unsigned int idlen, bool critical)
+        {
+            m_Extn.setCertExtn(value, vlen, id, idlen, critical);
+        }
 
         //Methods from XSanExtension
 

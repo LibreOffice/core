@@ -38,29 +38,6 @@ using namespace ::com::sun::star::security ;
 
 using ::com::sun::star::security::XCertificateExtension ;
 
-
-SanExtensionImpl::SanExtensionImpl() :
-m_critical( false )
-{
-}
-
-SanExtensionImpl::~SanExtensionImpl() {
-}
-
-
-//Methods from XCertificateExtension
-sal_Bool SAL_CALL SanExtensionImpl::isCritical() throw( css::uno::RuntimeException, std::exception ) {
-    return m_critical ;
-}
-
-css::uno::Sequence< sal_Int8 > SAL_CALL SanExtensionImpl::getExtensionId() throw( css::uno::RuntimeException, std::exception ) {
-    return m_xExtnId ;
-}
-
-css::uno::Sequence< sal_Int8 > SAL_CALL SanExtensionImpl::getExtensionValue() throw( css::uno::RuntimeException, std::exception ) {
-    return m_xExtnValue ;
-}
-
 namespace {
     // Helper functions from nss/lib/certdb/genname.c
     int GetNamesLength(CERTGeneralName *names)
@@ -88,8 +65,8 @@ css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl:
         SECItem item;
 
         item.type = siDERCertBuffer;
-        item.data = reinterpret_cast<unsigned char*>(m_xExtnValue.getArray());
-        item.len = m_xExtnValue.getLength();
+        item.data = reinterpret_cast<unsigned char*>(m_Extn.m_xExtnValue.getArray());
+        item.len = m_Extn.m_xExtnValue.getLength();
 
         PRArenaPool *arena;
         CERTGeneralName *nameList;
@@ -191,31 +168,6 @@ OString SanExtensionImpl::removeOIDFromString( const OString &oidString)
         objID = oidString;
     return objID;
 
-}
-
-void SanExtensionImpl::setCertExtn( unsigned char* value, unsigned int vlen, unsigned char* id, unsigned int idlen, bool critical ) {
-    unsigned int i ;
-    if( value != nullptr && vlen != 0 ) {
-        Sequence< sal_Int8 > extnv( vlen ) ;
-        for( i = 0; i < vlen ; i ++ )
-            extnv[i] = *( value + i ) ;
-
-        m_xExtnValue = extnv ;
-    } else {
-        m_xExtnValue = Sequence<sal_Int8>();
-    }
-
-    if( id != nullptr && idlen != 0 ) {
-        Sequence< sal_Int8 > extnId( idlen ) ;
-        for( i = 0; i < idlen ; i ++ )
-            extnId[i] = *( id + i ) ;
-
-        m_xExtnId = extnId ;
-    } else {
-        m_xExtnId =  Sequence<sal_Int8>();
-    }
-
-    m_critical = critical ;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
