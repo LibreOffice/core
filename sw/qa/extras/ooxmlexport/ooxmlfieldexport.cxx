@@ -490,18 +490,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo78910, "fdo78910.docx")
     assertXPath ( pXmlDoc, "//w:hyperlink[2]/w:r[5]/w:fldChar", "fldCharType", "end" );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFDO78590, "FDO78590.docx")
-{
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-
-    if (!pXmlDoc)
-        return;
-
-    // This is to ensure that the fld starts and ends inside a hyperlink...
-    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "w", "9851" );
-    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "h", "1669" );
-}
-
 DECLARE_OOXMLEXPORT_TEST(testSdtCitationRun, "sdt-citation-run.docx")
 {
     // The problem was that the SDT was around the whole paragraph, not only around the citation field.
