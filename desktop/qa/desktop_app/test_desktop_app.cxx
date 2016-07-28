@@ -73,23 +73,60 @@ void Test::testTdf100837() {
     // Without this we're crashing because callees are using getProcessServiceFactory
     ::comphelper::setProcessServiceFactory(xSM);
 
-    TestSupplier supplier;
-    supplier << "--view" << "foo" << "ms-word:ofe|u|bar1" << "ms-word:ofv|u|bar2" << "ms-word:nft|u|bar3" << "baz";
-    desktop::CommandLineArgs args(supplier);
-    auto vViewList = args.GetViewList();
-    auto vForceOpenList = args.GetForceOpenList();
-    auto vForceNewList = args.GetForceNewList();
-    // 3 documents go to View list: foo; bar2; baz
-    CPPUNIT_ASSERT_EQUAL(decltype(vViewList.size())(3), vViewList.size());
-    CPPUNIT_ASSERT_EQUAL(OUString("foo"),  vViewList[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("bar2"), vViewList[1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("baz"),  vViewList[2]);
-    // 1 document goes to ForceOpen list: bar1
-    CPPUNIT_ASSERT_EQUAL(decltype(vForceOpenList.size())(1), vForceOpenList.size());
-    CPPUNIT_ASSERT_EQUAL(OUString("bar1"), vForceOpenList[0]);
-    // 1 document goes to ForceNew list: bar3
-    CPPUNIT_ASSERT_EQUAL(decltype(vForceNewList.size())(1), vForceNewList.size());
-    CPPUNIT_ASSERT_EQUAL(OUString("bar3"), vForceNewList[0]);
+    {
+        // 1. Test default behaviour: Office URIs define open mode
+        TestSupplier supplier;
+        supplier << "foo" << "ms-word:ofe|u|bar1" << "ms-word:ofv|u|bar2" << "ms-word:nft|u|bar3" << "baz";
+        desktop::CommandLineArgs args(supplier);
+        auto vOpenList      = args.GetOpenList();
+        auto vForceOpenList = args.GetForceOpenList();
+        auto vViewList      = args.GetViewList();
+        auto vForceNewList  = args.GetForceNewList();
+        // 2 documents go to Open list: foo; baz
+        CPPUNIT_ASSERT_EQUAL(decltype(vOpenList.size())(2), vOpenList.size());
+        CPPUNIT_ASSERT_EQUAL(OUString("foo"), vOpenList[0]);
+        CPPUNIT_ASSERT_EQUAL(OUString("baz"), vOpenList[1]);
+        // 1 document goes to ForceOpen list: bar1
+        CPPUNIT_ASSERT_EQUAL(decltype(vForceOpenList.size())(1), vForceOpenList.size());
+        CPPUNIT_ASSERT_EQUAL(OUString("bar1"), vForceOpenList[0]);
+        // 1 document goes to View list: bar2
+        CPPUNIT_ASSERT_EQUAL(decltype(vViewList.size())(1), vViewList.size());
+        CPPUNIT_ASSERT_EQUAL(OUString("bar2"), vViewList[0]);
+        // 1 document goes to ForceNew list: bar3
+        CPPUNIT_ASSERT_EQUAL(decltype(vForceNewList.size())(1), vForceNewList.size());
+        CPPUNIT_ASSERT_EQUAL(OUString("bar3"), vForceNewList[0]);
+    }
+
+    {
+        // 2. Test --view. It overrides everything.
+        TestSupplier supplier;
+        supplier << "--view" << "foo" << "ms-word:ofe|u|bar1" << "ms-word:ofv|u|bar2" << "ms-word:nft|u|bar3" << "baz";
+        desktop::CommandLineArgs args(supplier);
+        auto vViewList = args.GetViewList();
+        // All 5 documents go to View list
+        CPPUNIT_ASSERT_EQUAL(decltype(vViewList.size())(5), vViewList.size());
+    }
+
+    {
+        // 3. Test -o. It doesn't affect ofv and nft
+        TestSupplier supplier;
+        supplier << "-o" << "foo" << "ms-word:ofe|u|bar1" << "ms-word:ofv|u|bar2" << "ms-word:nft|u|bar3" << "baz";
+        desktop::CommandLineArgs args(supplier);
+        auto vViewList      = args.GetViewList();
+        auto vForceOpenList = args.GetForceOpenList();
+        auto vForceNewList  = args.GetForceNewList();
+        // 1 document goes to View list: bar2
+        CPPUNIT_ASSERT_EQUAL(decltype(vViewList.size())(1), vViewList.size());
+        CPPUNIT_ASSERT_EQUAL(OUString("bar2"), vViewList[0]);
+        // 3 documents go to ForceOpen list: foo, bar1, baz
+        CPPUNIT_ASSERT_EQUAL(decltype(vForceOpenList.size())(3), vForceOpenList.size());
+        CPPUNIT_ASSERT_EQUAL(OUString("foo"),  vForceOpenList[0]);
+        CPPUNIT_ASSERT_EQUAL(OUString("bar1"), vForceOpenList[1]);
+        CPPUNIT_ASSERT_EQUAL(OUString("baz"),  vForceOpenList[2]);
+        // 1 document goes to ForceNew list: bar3
+        CPPUNIT_ASSERT_EQUAL(decltype(vForceNewList.size())(1), vForceNewList.size());
+        CPPUNIT_ASSERT_EQUAL(OUString("bar3"), vForceNewList[0]);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
