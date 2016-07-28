@@ -2096,11 +2096,9 @@ void OpenGLSalGraphicsImpl::doFlush()
 
     VCL_GL_INFO( "doFlush - acquire default framebuffer" );
 
-    mpWindowContext->state()->sync();
-
     mpWindowContext->AcquireDefaultFramebuffer();
-    CHECK_GL_ERROR();
 
+    mpWindowContext->state()->sync();
     mpWindowContext->state()->viewport(Rectangle(Point(0, 0), Size(GetWidth(), GetHeight())));
     mpWindowContext->state()->scissor().disable();
     mpWindowContext->state()->stencil().disable();
@@ -2108,53 +2106,29 @@ void OpenGLSalGraphicsImpl::doFlush()
 #if OSL_DEBUG_LEVEL > 0 // random background glClear
     glClearColor((float)rand()/RAND_MAX, (float)rand()/RAND_MAX,
                  (float)rand()/RAND_MAX, 1.0);
-#else
-    glClearColor(1.0, 1.0, 1.0, 1.0);
-#endif
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
     CHECK_GL_ERROR();
+#endif
 
     VCL_GL_INFO( "Texture height " << maOffscreenTex.GetHeight() << " vs. window height " << GetHeight() );
 
-    OpenGLProgram *pProgram =
-        mpWindowContext->UseProgram("combinedTextureVertexShader", "combinedTextureFragmentShader", "// flush shader\n" ); // flush helps profiling
-    if( !pProgram )
-        VCL_GL_INFO( "Can't compile simple copying shader !" );
-    else
+    OpenGLFramebuffer* pFrameBuffer = mpWindowContext->AcquireFramebuffer(maOffscreenTex);
+    CHECK_GL_ERROR();
+    if (pFrameBuffer)
     {
-        pProgram->SetShaderType(TextureShaderType::Normal);
-        pProgram->SetIdentityTransform("transform");
-        pProgram->SetTexture("texture", maOffscreenTex);
+        OpenGLFramebuffer::Unbind(GL_DRAW_FRAMEBUFFER);
+        pFrameBuffer->Bind(GL_READ_FRAMEBUFFER);
 
-        SalTwoRect aPosAry( 0, 0, maOffscreenTex.GetWidth(), maOffscreenTex.GetHeight(),
-                            0, 0, maOffscreenTex.GetWidth(), maOffscreenTex.GetHeight() );
+        glBlitFramebuffer(0, 0, GetWidth(), GetHeight(),
+                          0, 0, GetWidth(), GetHeight(), GL_COLOR_BUFFER_BIT, GL_LINEAR);
+        CHECK_GL_ERROR();
 
-        GLfloat aTexCoord[8];
-        maOffscreenTex.GetCoord( aTexCoord, aPosAry );
-        pProgram->SetTextureCoord(aTexCoord);
-        pProgram->SetMaskCoord(aTexCoord);
-        pProgram->SetAlphaCoord(aTexCoord);
-
-        GLfloat fWidth( maOffscreenTex.GetWidth() );
-        GLfloat fHeight( maOffscreenTex.GetHeight() );
-        std::vector<GLfloat> aVertices {
-            0, fHeight,
-            0, 0,
-            fWidth, 0,
-            fWidth, fHeight
-        };
-
-        pProgram->ApplyMatrix(GetWidth(), GetHeight(), 0.0);
-        pProgram->DrawArrays(GL_TRIANGLE_FAN, aVertices);
-
-        pProgram->Clean();
-
-        maOffscreenTex.Unbind();
-
-        static bool bNoSwap = getenv("SAL_GL_NO_SWAP");
-        if (!bNoSwap)
-            mpWindowContext->swapBuffers();
+        pFrameBuffer->Bind();
     }
+
+    static bool bNoSwap = getenv("SAL_GL_NO_SWAP");
+    if (!bNoSwap)
+        mpWindowContext->swapBuffers();
 
     VCL_GL_INFO( "doFlush - end." );
 }
