@@ -275,61 +275,8 @@ void ScScreenshotTest::testOpeningModalDialogs()
 {
     initializeWithDoc("empty.ods");
 
-    /// example how to process an input file containing the UXMLDescriptions of the dialogs
-    /// to dump
-    if (true)
-    {
-        test::Directories aDirectories;
-        OUString aURL = aDirectories.getURLFromSrc("sc/qa/unit/screenshots/data/screenshots.txt");
-        SvFileStream aStream(aURL, StreamMode::READ);
-        OString aNextUIFile;
-        const OString aComment("#");
-
-        while (aStream.ReadLine(aNextUIFile))
-        {
-            if (!aNextUIFile.isEmpty() && !aNextUIFile.startsWith(aComment))
-            {
-                // first check if it's a known dialog
-                std::unique_ptr<VclAbstractDialog> pDlg(createDialogByName(aNextUIFile));
-
-                if (pDlg)
-                {
-                    // known dialog, dump screenshot to path
-                    dumpDialogToPath(*pDlg);
-                }
-                else
-                {
-                    // unknown dialog, try fallback to generic created
-                    // VclBuilder-generated instance. Keep in mind that Dialogs
-                    // using this mechanism will probably not be layouted well
-                    // since the setup/initialization part is missing. Thus,
-                    // only use for fallback when only the UI file is available.
-                    dumpDialogToPath(aNextUIFile);
-                }
-            }
-        }
-    }
-
-    /// example how to dump all known dialogs
-    if (false)
-    {
-        for (mapType::const_iterator i = getKnownDialogs().begin(); i != getKnownDialogs().end(); i++)
-        {
-            std::unique_ptr<VclAbstractDialog> pDlg(createDialogByID((*i).second));
-
-            if (pDlg)
-            {
-                // known dialog, dump screenshot to path
-                dumpDialogToPath(*pDlg);
-            }
-            else
-            {
-                // unknown dialog, should not happen in this basic loop.
-                // You have probably forgotten to add a case and
-                // implementastion to createDialogByID, please do this
-            }
-        }
-    }
+    /// process input file containing the UXMLDescriptions of the dialogs to dump
+    processDialogBatchFile("sc/qa/unit/screenshots/data/screenshots.txt");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScScreenshotTest);

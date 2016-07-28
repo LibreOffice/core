@@ -608,58 +608,33 @@ void SdDialogsTest::openAnyDialog()
     /// to dump
     if (true)
     {
-        test::Directories aDirectories;
-        OUString aURL = aDirectories.getURLFromSrc("sd/qa/unit/data/dialogs-test.txt");
-        SvFileStream aStream(aURL, StreamMode::READ);
-        OString aNextUIFile;
-        const OString aComment("#");
-
-        while (aStream.ReadLine(aNextUIFile))
-        {
-            if (!aNextUIFile.isEmpty() && !aNextUIFile.startsWith(aComment))
-            {
-                // first check if it's a known dialog
-                std::unique_ptr<VclAbstractDialog> pDlg(createDialogByName(aNextUIFile));
-
-                if (pDlg)
-                {
-                    // known dialog, dump screenshot to path
-                    dumpDialogToPath(*pDlg);
-                }
-                else
-                {
-                    // unknown dialog, try fallback to generic created
-                    // VclBuilder-generated instance. Keep in mind that Dialogs
-                    // using this mechanism will probably not be layouted well
-                    // since the setup/initialization part is missing. Thus,
-                    // only use for fallback when only the UI file is available.
-                    dumpDialogToPath(aNextUIFile);
-                }
-            }
-        }
+        processDialogBatchFile("sd/qa/unit/data/dialogs-test.txt");
     }
 
     /// example how to dump all known dialogs
     if (false)
     {
+        processAllKnownDialogs();
+    }
+
+    /// example how to dump exactly one known dialog
+    if (false)
+    {
         // example for SfxTabDialog: 5 -> "modules/sdraw/ui/drawpagedialog.ui"
         // example for TabDialog: 22 -> "modules/simpress/ui/headerfooterdialog.ui"
         // example for self-adapted wizard: 0 -> "modules/simpress/ui/publishingdialog.ui"
-        for (mapType::const_iterator i = getKnownDialogs().begin(); i != getKnownDialogs().end(); i++)
-        {
-            std::unique_ptr<VclAbstractDialog> pDlg(createDialogByID((*i).second));
+        std::unique_ptr<VclAbstractDialog> pDlg(createDialogByID(5));
 
-            if (pDlg)
-            {
-                // known dialog, dump screenshot to path
-                dumpDialogToPath(*pDlg);
-            }
-            else
-            {
-                // unknown dialog, should not happen in this basic loop.
-                // You have probably forgotten to add a case and
-                // implementastion to createDialogByID, please do this
-            }
+        if (pDlg)
+        {
+            // known dialog, dump screenshot to path
+            dumpDialogToPath(*pDlg);
+        }
+        else
+        {
+            // unknown dialog, should not happen in this basic loop.
+            // You have probably forgotten to add a case and
+            // implementastion to createDialogByID, please do this
         }
     }
 
