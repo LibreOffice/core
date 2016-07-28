@@ -309,19 +309,38 @@ public:
 };
 
 /// An RTF stack is similar to std::stack, except that it has an operator[].
-struct RTFStack : public std::deque<RTFParserState>
+struct RTFStack
 {
+private:
+    std::deque<RTFParserState> m_Impl;
+public:
     RTFParserState& top()
     {
-        return back();
+        return m_Impl.back();
     }
     void pop()
     {
-        return pop_back();
+        return m_Impl.pop_back();
     }
     void push(RTFParserState const& rState)
     {
-        return push_back(rState);
+        return m_Impl.push_back(rState);
+    }
+    bool empty() const
+    {
+        return m_Impl.empty();
+    }
+    size_t size() const
+    {
+        return m_Impl.size();
+    }
+    const RTFParserState& operator[](size_t nIndex) const
+    {
+        return m_Impl[nIndex];
+    }
+    RTFParserState& operator[](size_t nIndex)
+    {
+        return m_Impl[nIndex];
     }
 };
 
