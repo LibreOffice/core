@@ -34,6 +34,7 @@
 # This is typically a hint that these should be hard-coded in the
 # test case since they need some document and model data to work
 #
+# svx/ui/asianphoneticguidedialog.ui <- problems under linux
 
 svx/ui/textcontrolchardialog.ui
 svx/ui/textcontrolparadialog.ui
@@ -61,7 +62,6 @@ svx/ui/fontworkspacingdialog.ui
 svx/ui/chinesedictionary.ui
 svx/ui/chineseconversiondialog.ui
 svx/ui/imapdialog.ui
-svx/ui/asianphoneticguidedialog.ui
 svx/ui/findreplacedialog.ui
 svx/ui/crashreportdlg.ui
 svx/ui/docrecoverysavedialog.ui
