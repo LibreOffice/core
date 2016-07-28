@@ -645,6 +645,8 @@ public:
     static SvxSearchItem* GetSearchItem() { return m_pSrchItem; }
     /// See SfxViewShell::getPart().
     int getPart() const override;
+    /// See SfxViewShell::dumpAsXml().
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
 
 inline long SwView::GetXScroll() const
