@@ -600,6 +600,8 @@ SwTableAutoFormat::SwTableAutoFormat( const OUString& rName )
     , m_bRowSplit( true )
     , m_bCollapsingBorders(true)
     , m_aShadow( RES_SHADOW )
+    , m_bHidden( false )
+    , m_bUserDefined( true )
 {
     bInclFont = true;
     bInclJustify = true;
@@ -655,6 +657,8 @@ SwTableAutoFormat& SwTableAutoFormat::operator=( const SwTableAutoFormat& rNew )
     m_bRowSplit = rNew.m_bRowSplit;
     m_bCollapsingBorders = rNew.m_bCollapsingBorders;
     m_aShadow = rNew.m_aShadow;
+    m_bHidden = rNew.m_bHidden;
+    m_bUserDefined = rNew.m_bUserDefined;
 
     return *this;
 }
@@ -1018,6 +1022,7 @@ bool SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions )
             }
         }
     }
+    m_bUserDefined = false;
     return bRet;
 }
 
@@ -1259,6 +1264,7 @@ SwTableAutoFormatTable::SwTableAutoFormatTable()
         const_cast<SwBoxAutoFormat&>(pNew->GetBoxFormat( i )).SetBox( aBox );
     }
 
+    pNew->SetUserDefined(false);
     m_pImpl->m_AutoFormats.push_back(std::move(pNew));
 }
 
