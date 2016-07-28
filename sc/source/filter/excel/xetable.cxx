@@ -1617,9 +1617,9 @@ XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
     // column flags
     ::set_flag( mnFlags, EXC_COLINFO_HIDDEN, rDoc.ColHidden(nScCol, nScTab) );
 
-    // TODO Do we need to save customWidth information also for .xls (with mnFlags)?
     XclExpDefcolwidth defColWidth = XclExpDefcolwidth( rRoot );
     mbCustomWidth = !defColWidth.IsDefWidth( mnWidth );
+    set_flag(mnFlags, EXC_COLINFO_CUSTOMWIDTH, mbCustomWidth);
 
     // outline data
     rOutlineBfr.Update( nScCol );
