@@ -70,7 +70,11 @@ struct Entity;
 typedef std::unordered_map< OUString, sal_Int32,
         OUStringHash > NamespaceMap;
 
-typedef std::vector<Event> EventList;
+struct EventList
+{
+    std::vector<Event> maEvents;
+    bool mbIsAttributesEmpty;
+};
 
 enum CallbackType { INVALID, START_ELEMENT, END_ELEMENT, CHARACTERS, DONE, EXCEPTION };
 
@@ -531,7 +535,7 @@ EventList* Entity::getEventList()
         if (!mpProducedEvents)
         {
             mpProducedEvents = new EventList();
-            mpProducedEvents->resize(mnEventListSize);
+            mpProducedEvents->maEvents.resize(mnEventListSize);
             mnProducedEventsSize = 0;
         }
     }
@@ -544,7 +548,7 @@ Event& Entity::getEvent( CallbackType aType )
         return maSharedEvent;
 
     EventList* pEventList = getEventList();
-    Event& rEvent = (*pEventList)[mnProducedEventsSize++];
+    Event& rEvent = pEventList->maEvents[mnProducedEventsSize++];
     rEvent.maType = aType;
     return rEvent;
 }
@@ -783,6 +787,24 @@ void FastSaxParserImpl::parseStream(const InputSource& maStructSource)
                         done = true;
 
                     aGuard.reset(); // lock
+
+                    if ( rEntity.maPendingEvents.size() <= rEntity.mnEventLowWater )
+                    {
+                        aGuard.clear();
+                        for (auto aEventIt = pEventList->maEvents.begin();
+                            aEventIt != pEventList->maEvents.end(); ++aEventIt)
+                        {
+                            if (aEventIt->mxAttributes.is())
+                            {
+                                aEventIt->mxAttributes->clear();
+                                if( rEntity.mxNamespaceHandler.is() )
+                                    aEventIt->mxDeclAttributes->clear();
+                            }
+                            pEventList->mbIsAttributesEmpty = true;
+                        }
+                        aGuard.reset();
+                    }
+
                     rEntity.maUsedEvents.push(pEventList);
                 }
             } while (!done);
@@ -926,8 +948,9 @@ void FastSaxParserImpl::produce( bool bForceFlush )
 bool FastSaxParserImpl::consume(EventList *pEventList)
 {
     Entity& rEntity = getEntity();
-    for (EventList::iterator aEventIt = pEventList->begin();
-         aEventIt != pEventList->end(); ++aEventIt)
+    pEventList->mbIsAttributesEmpty = false;
+    for (auto aEventIt = pEventList->maEvents.begin();
+         aEventIt != pEventList->maEvents.end(); ++aEventIt)
     {
         switch ((*aEventIt).maType)
         {
@@ -1042,17 +1065,28 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
     }
 
     // create attribute map and process namespace instructions
-    Event& rEvent = getEntity().getEvent( START_ELEMENT );
+    Event& rEvent = rEntity.getEvent( START_ELEMENT );
+    bool bIsAttributesEmpty = false;
+    if ( rEntity.mbEnableThreads )
+        bIsAttributesEmpty = rEntity.getEventList()->mbIsAttributesEmpty;
+
     if (rEvent.mxAttributes.is())
-        rEvent.mxAttributes->clear();
+    {
+        if( !bIsAttributesEmpty )
+            rEvent.mxAttributes->clear();
+    }
     else
         rEvent.mxAttributes.set(
                 new FastAttributeList( rEntity.mxTokenHandler,
                                        rEntity.mpTokenHandler ) );
+
     if( rEntity.mxNamespaceHandler.is() )
     {
         if (rEvent.mxDeclAttributes.is())
-            rEvent.mxDeclAttributes->clear();
+        {
+            if( !bIsAttributesEmpty )
+                rEvent.mxDeclAttributes->clear();
+        }
         else
             rEvent.mxDeclAttributes.set(
                 new FastAttributeList( rEntity.mxTokenHandler,
