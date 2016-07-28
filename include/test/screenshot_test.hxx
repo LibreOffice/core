@@ -68,6 +68,20 @@ public:
     /// compared to the active dialog (can be compared with dialog previewer)
     void dumpDialogToPath(const OString& rUIXMLDescription);
 
+    /// helper to process all known dialogs
+    void processAllKnownDialogs();
+
+    /// helper to process an input file containing the UXMLDescriptions
+    /// of the dialogs to dump. It will internally try to detect and open
+    /// as known dialog first. If not successful, it will then use the
+    /// fallback version to dump the dialog.
+    /// The syntax of the input file is as follows:
+    /// - emty lines are allowed
+    /// - lines starting with '#' are treated as comment
+    /// - all other lines should contain a *.ui filename in the same
+    ///   notation as in the dialog constructors(see code)
+    void processDialogBatchFile(const OUString& rFile);
+
     /// const access to known dialogs
     const mapType& getKnownDialogs() const { return maKnownDialogs; }
 };
