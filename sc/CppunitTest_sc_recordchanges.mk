@@ -96,6 +96,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_recordchanges,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
+    uui/util/uui \
     xmloff/util/xo \
 	svtools/util/svt \
 ))
