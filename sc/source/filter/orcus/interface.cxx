@@ -1319,10 +1319,10 @@ void ScOrcusStyles::set_border_color(orcus::spreadsheet::border_direction_t dir,
     current_line.maColor = Color(alpha, red, green, blue);
 }
 
-void ScOrcusStyles::set_border_width(orcus::spreadsheet::border_direction_t  dir, orcus::length_t  width )
+void ScOrcusStyles::set_border_width(orcus::spreadsheet::border_direction_t  dir, double val, orcus::length_unit_t  unit )
 {
     border::border_line& current_line = maCurrentBorder.border_lines[dir];
-    current_line.mnWidth = translateToInternal(width.value, width.unit);
+    current_line.mnWidth = translateToInternal(val, unit);
 }
 
 size_t ScOrcusStyles::commit_border()

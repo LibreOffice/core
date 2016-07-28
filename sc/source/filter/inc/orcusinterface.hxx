@@ -417,7 +417,7 @@ public:
             orcus::spreadsheet::color_elem_t red,
             orcus::spreadsheet::color_elem_t green,
             orcus::spreadsheet::color_elem_t blue) override;
-    virtual void set_border_width(orcus::spreadsheet::border_direction_t dir, orcus::length_t width) override;
+    virtual void set_border_width(orcus::spreadsheet::border_direction_t dir, double val, orcus::length_unit_t unit) override;
     virtual size_t commit_border() override;
 
     // cell protection
