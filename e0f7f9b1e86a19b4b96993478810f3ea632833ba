@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_a2173a53",
+        "filename": "sw/inc/tblafmt.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-07-28T14:56:03Z",
+      "side": 1,
+      "message": "I understand that this is work in progress, but if this will be complex later, then it would be good to have this non-inline. Also, please add a\n\n (void)this;\n\nto the definition of the function, so that it\u0027s explicit that this will be a non-static function in the near future.",
+      "revId": "e0f7f9b1e86a19b4b96993478810f3ea632833ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
