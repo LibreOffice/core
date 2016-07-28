@@ -28,7 +28,6 @@
 
 #include <sal/config.h>
 #include <comphelper/servicehelper.hxx>
-#include <rtl/ref.hxx>
 #include "x509certificate_nssimpl.hxx"
 
 #include "certificateextension_xmlsecimpl.hxx"
@@ -179,6 +178,8 @@ css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_NssImpl::getSubjectUniqu
 css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > > SAL_CALL X509Certificate_NssImpl::getExtensions() throw ( css::uno::RuntimeException, std::exception) {
     if( m_pCert != nullptr && m_pCert->extensions != nullptr ) {
         CERTCertExtension** extns ;
+        CertificateExtension_XmlSecImpl* pExtn ;
+        bool crit ;
         int len ;
 
         for( len = 0, extns = m_pCert->extensions; *extns != nullptr; len ++, extns ++ ) ;
@@ -197,21 +198,17 @@ css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > 
                 objID = oidString;
 
             if ( objID.equals("2.5.29.17") )
-                xExtns[len] = reinterpret_cast<CertificateExtension_XmlSecImpl*>(new SanExtensionImpl());
+                pExtn = reinterpret_cast<CertificateExtension_XmlSecImpl*>(new SanExtensionImpl());
             else
-            {
-                CertificateExtension_XmlSecImpl* pExtn
-                    = new CertificateExtension_XmlSecImpl() ;
+                pExtn = new CertificateExtension_XmlSecImpl() ;
 
-                bool crit ;
-                if( (*extns)->critical.data == nullptr )
-                    crit = false ;
-                else
-                    crit = (*extns)->critical.data[0] == 0xFF;
-                pExtn->setCertExtn( (*extns)->value.data, (*extns)->value.len, reinterpret_cast<unsigned char *>(const_cast<char *>(objID.getStr())), objID.getLength(), crit ) ;
+            if( (*extns)->critical.data == nullptr )
+                crit = false ;
+            else
+                crit = (*extns)->critical.data[0] == 0xFF;
+            pExtn->setCertExtn( (*extns)->value.data, (*extns)->value.len, reinterpret_cast<unsigned char *>(const_cast<char *>(objID.getStr())), objID.getLength(), crit ) ;
 
-                xExtns[len] = pExtn ;
-            }
+            xExtns[len] = pExtn ;
         }
 
         return xExtns ;
@@ -222,31 +219,28 @@ css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > 
 
 css::uno::Reference< css::security::XCertificateExtension > SAL_CALL X509Certificate_NssImpl::findCertificateExtension( const css::uno::Sequence< sal_Int8 >& oid ) throw (css::uno::RuntimeException, std::exception) {
     if( m_pCert != nullptr && m_pCert->extensions != nullptr ) {
+        CertificateExtension_XmlSecImpl* pExtn ;
         CERTCertExtension** extns ;
         SECItem idItem ;
+        bool crit ;
 
         idItem.data = reinterpret_cast<unsigned char *>(const_cast<sal_Int8 *>(oid.getConstArray()));
         idItem.len = oid.getLength() ;
 
-        css::uno::Reference<css::security::XCertificateExtension> pExtn;
+        pExtn = nullptr ;
         for( extns = m_pCert->extensions; *extns != nullptr; extns ++ ) {
             if( SECITEM_CompareItem( &idItem, &(*extns)->id ) == SECEqual ) {
                 const SECItem id = (*extns)->id;
                 OString objId(CERT_GetOidString(&id));
                 if ( objId.equals("OID.2.5.29.17") )
-                    pExtn = new SanExtensionImpl();
+                    pExtn = reinterpret_cast<CertificateExtension_XmlSecImpl*>(new SanExtensionImpl());
                 else
-                {
-                    rtl::Reference<CertificateExtension_XmlSecImpl> x(
-                        new CertificateExtension_XmlSecImpl());
-                    bool crit ;
-                    if( (*extns)->critical.data == nullptr )
-                        crit = false ;
-                    else
-                        crit = (*extns)->critical.data[0] == 0xFF;
-                    x->setCertExtn( (*extns)->value.data, (*extns)->value.len, (*extns)->id.data, (*extns)->id.len, crit ) ;
-                    pExtn = x.get();
-                }
+                    pExtn = new CertificateExtension_XmlSecImpl() ;
+                if( (*extns)->critical.data == nullptr )
+                    crit = false ;
+                else
+                    crit = (*extns)->critical.data[0] == 0xFF;
+                pExtn->setCertExtn( (*extns)->value.data, (*extns)->value.len, (*extns)->id.data, (*extns)->id.len, crit ) ;
                 break;
             }
         }

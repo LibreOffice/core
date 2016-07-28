@@ -34,6 +34,7 @@ class SanExtensionImpl : public ::cppu::WeakImplHelper<
     css::security::XSanExtension >
 {
     private:
+        bool m_critical ;
         css::uno::Sequence< sal_Int8 > m_xExtnId ;
         css::uno::Sequence< sal_Int8 > m_xExtnValue ;
         css::uno::Sequence< css::security::CertAltNameEntry > m_Entries;
