@@ -102,81 +102,74 @@ private:
     sal_uInt32 m_index;
 };
 
-// Office URI Schemes : see https://msdn.microsoft.com/en-us/library/dn906146
-class OfficeURISchemeCommandLineSupplier : public CommandLineArgs::Supplier {
-public:
-    static bool IsOfficeURI(const OUString& URI, OUString* rest = nullptr)
-    {
-        return ( URI.startsWithIgnoreAsciiCase("vnd.libreoffice.command:", rest) // Proposed extended schema
-              || URI.startsWithIgnoreAsciiCase("ms-word:",                 rest)
-              || URI.startsWithIgnoreAsciiCase("ms-powerpoint:",           rest)
-              || URI.startsWithIgnoreAsciiCase("ms-excel:",                rest)
-              || URI.startsWithIgnoreAsciiCase("ms-visio:",                rest)
-              || URI.startsWithIgnoreAsciiCase("ms-access:",               rest));
-    }
-    OfficeURISchemeCommandLineSupplier(boost::optional< OUString > cwdUrl, const OUString& URI)
-        : m_cwdUrl(cwdUrl)
-    {
-        // 1. Strip the scheme name
-        OUString rest1;
-        bool isOfficeURI = IsOfficeURI(URI, &rest1);
-        assert(isOfficeURI);
-        (void) isOfficeURI;
-
-        OUString rest2;
-        long nURIlen = -1;
-        // 2. Discriminate by command name (incl. 1st command argument descriptor)
-        //    Extract URI: everything up to possible next argument
-        if (rest1.startsWith("ofv|u|", &rest2))
-        {
-            // Open for view
-            m_args.push_back("--view");
-            nURIlen = rest2.indexOf("|");
-        }
-        else if (rest1.startsWith("ofe|u|", &rest2))
-        {
-            // Open for editing
-            m_args.push_back("-o");
-            nURIlen = rest2.indexOf("|");
-        }
-        else if (rest1.startsWith("nft|u|", &rest2))
-        {
-            // New from template
-            m_args.push_back("-n");
-            nURIlen = rest2.indexOf("|");
-            // TODO: process optional second argument (default save-to location)
-            // For now, we just ignore it
-        }
-        else
-        {
-            // Abbreviated schema: <scheme-name>:URI
-            // "ofv|u|" implied
-            rest2 = rest1;
-            m_args.push_back("--view");
-        }
-        if (nURIlen < 0)
-            nURIlen = rest2.getLength();
-        m_args.push_back(rest2.copy(0, nURIlen));
-    }
-    virtual ~OfficeURISchemeCommandLineSupplier() {}
-    virtual boost::optional< OUString > getCwdUrl() override { return m_cwdUrl; }
-    virtual bool next(OUString * argument) override {
-        assert(argument != nullptr);
-        if (m_index < m_args.size()) {
-            *argument = m_args[m_index++];
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-private:
-    boost::optional< OUString > m_cwdUrl;
-    std::vector< OUString > m_args;
-    std::vector< OUString >::size_type m_index = 0;
+enum class CommandLineEvent {
+    Open, Print, View, Start, PrintTo,
+    ForceOpen, ForceNew, Conversion, BatchPrint
 };
 
+// Office URI Schemes: see https://msdn.microsoft.com/en-us/library/dn906146
+// This functions checks if the arg is an Office URI.
+// If applicable, it updates arg to contain inner URI,
+// and returns possibly updated command line event.
+CommandLineEvent CheckOfficeURI(/* in,out */ OUString& arg, CommandLineEvent curEvt)
+{
+    // 1. Strip the scheme name
+    OUString rest1;
+    bool isOfficeURI = ( arg.startsWithIgnoreAsciiCase("vnd.libreoffice.command:", &rest1) // Proposed extended schema
+                      || arg.startsWithIgnoreAsciiCase("ms-word:",                 &rest1)
+                      || arg.startsWithIgnoreAsciiCase("ms-powerpoint:",           &rest1)
+                      || arg.startsWithIgnoreAsciiCase("ms-excel:",                &rest1)
+                      || arg.startsWithIgnoreAsciiCase("ms-visio:",                &rest1)
+                      || arg.startsWithIgnoreAsciiCase("ms-access:",               &rest1));
+    if (!isOfficeURI)
+        return curEvt;
+
+    OUString rest2;
+    long nURIlen = -1;
+    // 2. Discriminate by command name (incl. 1st command argument descriptor)
+    //    Extract URI: everything up to possible next argument
+    if (rest1.startsWith("ofv|u|", &rest2))
+    {
+        // Open for view - override any attempt to edit it
+        if ( (curEvt == CommandLineEvent::Open)
+          || (curEvt == CommandLineEvent::ForceOpen))
+            curEvt = CommandLineEvent::View;
+        nURIlen = rest2.indexOf("|");
+    }
+    else if (rest1.startsWith("ofe|u|", &rest2))
+    {
+        // Open for editing
+        if (curEvt == CommandLineEvent::Open)
+            curEvt = CommandLineEvent::ForceOpen;
+        nURIlen = rest2.indexOf("|");
+    }
+    else if (rest1.startsWith("nft|u|", &rest2))
+    {
+        // New from template - override any attempt to edit it
+        if ( (curEvt == CommandLineEvent::Open)
+          || (curEvt == CommandLineEvent::ForceOpen))
+            curEvt = CommandLineEvent::ForceNew;
+        nURIlen = rest2.indexOf("|");
+        // TODO: process optional second argument (default save-to location)
+        // For now, we just ignore it
+    }
+    else
+    {
+        // Abbreviated schema: <scheme-name>:URI
+        // "ofv|u|" implied
+        // override any attempt to edit it
+        if ( (curEvt == CommandLineEvent::Open)
+          || (curEvt == CommandLineEvent::ForceOpen))
+            curEvt = CommandLineEvent::View;
+        rest2 = rest1;
+    }
+    if (nURIlen < 0)
+        nURIlen = rest2.getLength();
+    arg = rest2.copy(0, nURIlen);
+    return curEvt;
 }
+
+} // namespase
 
 CommandLineArgs::Supplier::Exception::Exception() {}
 
@@ -207,9 +200,6 @@ CommandLineArgs::CommandLineArgs( Supplier& supplier )
 void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 {
     m_cwdUrl = supplier.getCwdUrl();
-
-    enum class CommandLineEvent { Open, Print, View, Start, PrintTo,
-                                  ForceOpen, ForceNew, Conversion, BatchPrint };
     CommandLineEvent eCurrentEvent = CommandLineEvent::Open;
 
     for (;;)
@@ -534,14 +524,12 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             {
                 // handle this argument as a filename
 
-                // 1. Check if this is an Office URI
-                if (OfficeURISchemeCommandLineSupplier::IsOfficeURI(aArg))
-                {
-                    OfficeURISchemeCommandLineSupplier OfficeURISupplier(getCwdUrl(), aArg);
-                    // Add the file according its command, ignore current event
-                    ParseCommandLine_Impl(OfficeURISupplier);
-                }
-                else switch (eCurrentEvent)
+                // First check if this is an Office URI
+                // This will possibly adjust event for this argument
+                // and put real URI to aArg
+                CommandLineEvent eThisEvent = CheckOfficeURI(aArg, eCurrentEvent);
+
+                switch (eThisEvent)
                 {
                 case CommandLineEvent::Open:
                     m_openlist.push_back(aArg);
