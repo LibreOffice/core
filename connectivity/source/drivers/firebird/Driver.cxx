@@ -61,6 +61,7 @@ namespace connectivity
 const OUString FirebirdDriver::our_sFirebirdTmpVar("FIREBIRD_TMP");
 const OUString FirebirdDriver::our_sFirebirdLockVar("FIREBIRD_LOCK");
 const OUString FirebirdDriver::our_sFirebirdMsgVar("FIREBIRD_MSG");
+const OUString FirebirdDriver::our_sFirebirdLibVar("__LIBO_FBIRD_PATH");
 
 FirebirdDriver::FirebirdDriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext)
     : ODriver_BASE(m_aMutex)
@@ -92,7 +93,16 @@ FirebirdDriver::FirebirdDriver(const css::uno::Reference< css::uno::XComponentCo
     OUString sMsgPath;
     ::osl::FileBase::getSystemPathFromFileURL(sMsgURL, sMsgPath);
     osl_setEnvironment(our_sFirebirdMsgVar.pData, sMsgPath.pData);
-#endif
+#ifdef MACOSX
+    // Set an env. variable to specify library location
+    // for dlopen used in fbclient.
+    OUString sLibURL("$LO_LIB_DIR");
+    ::rtl::Bootstrap::expandMacros(sLibURL);
+    OUString sLibPath;
+    ::osl::FileBase::getSystemPathFromFileURL(sLibURL, sLibPath);
+    osl_setEnvironment(our_sFirebirdLibVar.pData, sLibPath.pData);
+#endif /*MACOSX*/
+#endif /*!SYSTEM_FIREBIRD*/
 }
 
 FirebirdDriver::~FirebirdDriver()
@@ -118,7 +128,10 @@ void FirebirdDriver::disposing()
 
 #ifndef SYSTEM_FIREBIRD
     osl_clearEnvironment(our_sFirebirdMsgVar.pData);
-#endif
+#ifdef MACOSX
+    osl_clearEnvironment(our_sFirebirdLibVar.pData);
+#endif /*MACOSX*/
+#endif /*!SYSTEM_FIREBIRD*/
 
     OSL_VERIFY(fb_shutdown(0, 1));
 
