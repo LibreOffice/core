@@ -534,17 +534,18 @@ sub DownloadFile ($$$)
             $URL);
     }
 
-    if ($? == 0)
+    my $rc = $? >> 8;
+    if ($rc == 0)
     {
         return 1;
     }
-    elsif ($? == 1)
+    elsif ($rc == 1)
     {
         return 0;
     }
     else
     {
-        exit $?;
+        exit $rc;
     }
 }
 
