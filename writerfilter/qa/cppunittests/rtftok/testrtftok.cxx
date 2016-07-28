@@ -74,6 +74,10 @@ bool RtfTest::load(const OUString&,
         }
         throw;
     }
+    catch (const std::exception&)
+    {
+        return false;
+    }
 }
 
 void RtfTest::test()
