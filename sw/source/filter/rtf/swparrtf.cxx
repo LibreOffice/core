@@ -181,7 +181,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportRTF(const OUString &rURL
     }
     SwPaM aPaM( aIdx );
     aPaM.GetPoint()->nContent.Assign(aIdx.GetNode().GetContentNode(), 0);
-    bool bRet = pReader->Read(*pD, OUString(), aPaM, OUString()) == 0;
+    bool bRet = false;
+    try
+    {
+        bRet = pReader->Read(*pD, OUString(), aPaM, OUString()) == 0;
+    }
+    catch (std::exception const& e)
+    {
+    }
     delete pReader;
     return bRet;
 }
