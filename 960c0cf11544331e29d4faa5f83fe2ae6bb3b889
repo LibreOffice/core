@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_a2b9faee",
+        "filename": "sc/source/ui/inc/MergeCellsDialog.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-28T10:30:40Z",
+      "side": 1,
+      "message": "Personally I find CamelCase file names awkward, specifically if they start with a capital letter. Reason is just that lower case and upper case are sorted differently and when doing file name completion one has to try both variants when not remembering how the file name starts.",
+      "revId": "960c0cf11544331e29d4faa5f83fe2ae6bb3b889",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_a2a01aa7",
+        "filename": "sc/source/ui/inc/MergeCellsDialog.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-28T10:30:40Z",
+      "side": 1,
+      "message": "If there are no protected members then the protected keyword isn\u0027t needed.",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 9
+      },
+      "revId": "960c0cf11544331e29d4faa5f83fe2ae6bb3b889",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_e2aa2285",
+        "filename": "sc/source/ui/miscdlgs/MergeCellsDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-28T10:30:40Z",
+      "side": 1,
+      "message": "Please don\u0027t introduce new OSL_FAIL() or OSL_ENSURE() uses, we want to get rid of them. For \"this can\u0027t happen\" states that would indicate a programming error use assert() instead, which exits in debug builds, for warnings use SAL_WARN() and for informational messages SAL_INFO(). Likely it should be assert() here, so\n\n assert(!\"Unknown selection for merge cells.\");",
+      "revId": "960c0cf11544331e29d4faa5f83fe2ae6bb3b889",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_4292f658",
+        "filename": "sc/source/ui/view/viewfun2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-28T10:30:40Z",
+      "side": 1,
+      "message": "Instead,\n\n assert(!\"Unknown option for merge cells.\");",
+      "revId": "960c0cf11544331e29d4faa5f83fe2ae6bb3b889",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
