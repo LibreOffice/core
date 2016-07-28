@@ -19,14 +19,17 @@
 
 #include <basidesh.hrc>
 
-StringArray RID_PRINTDLG_STRLIST
+String RID_STR_PRINTDLG_RANGE
 {
-    ItemList [en-US] =
-    {
-        < "Print range"; >;
-        < "All ~Pages"; >;
-        < "Pa~ges"; >;
-    };
+    Text [ en-US ] = "Print range";
+};
+String RID_STR_PRINTDLG_ALLPAGES
+{
+    Text [ en-US ] = "All ~Pages";
+};
+String RID_STR_PRINTDLG_PAGES
+{
+    Text [ en-US ] = "Pa~ges";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

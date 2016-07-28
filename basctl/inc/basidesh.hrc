@@ -27,7 +27,6 @@
 #define RID_POPUP_BRKDLG                ( RID_BASICIDE_START + 10 )
 #define RID_POPUP_BRKPROPS              ( RID_BASICIDE_START + 11 )
 #define RID_POPUP_TABBAR                ( RID_BASICIDE_START + 12 )
-#define RID_PRINTDLG_STRLIST            ( RID_BASICIDE_START + 78 )
 
 #define RID_IMGBTN_REMOVEWATCH          ( RID_BASICIDE_START +  8 )
 #define RID_IMG_INSTALLATION            ( RID_BASICIDE_START + 20 )
@@ -90,14 +89,14 @@
 #define RID_STR_NEWDLG                  ( RID_BASICIDE_START + 59 )
 #define RID_STR_LIBNAMETOLONG           ( RID_BASICIDE_START + 60 )
 #define RID_STR_ERRORCHOOSEMACRO        ( RID_BASICIDE_START + 61 )
-// free
+//free slot
 #define RID_STR_LIBISREADONLY           ( RID_BASICIDE_START + 63 )
 #define RID_STR_REPLACELIB              ( RID_BASICIDE_START + 64 )
 // free
 #define RID_STR_IMPORTNOTPOSSIBLE       ( RID_BASICIDE_START + 67 )
 #define RID_STR_NOIMPORT                ( RID_BASICIDE_START + 68 )
 #define RID_STR_ENTERPASSWORD           ( RID_BASICIDE_START + 69 )
-// free
+
 #define RID_STR_NEWMETH                 ( RID_BASICIDE_START + 71 )
 #define RID_STR_USERMACROS              ( RID_BASICIDE_START + 72 )
 #define RID_STR_USERDIALOGS             ( RID_BASICIDE_START + 73 )
@@ -105,7 +104,7 @@
 #define RID_STR_SHAREMACROS             ( RID_BASICIDE_START + 75 )
 #define RID_STR_SHAREDIALOGS            ( RID_BASICIDE_START + 76 )
 #define RID_STR_SHAREMACROSDIALOGS      ( RID_BASICIDE_START + 77 )
-// free
+//free slots
 #define RID_STR_QUERYREPLACEMACRO       ( RID_BASICIDE_START + 80 )
 #define RID_STR_FILENAME                ( RID_BASICIDE_START + 81 )
 #define RID_STR_APPENDLIBS              ( RID_BASICIDE_START + 82 )
@@ -142,6 +141,11 @@
 #define RID_STR_USERFORMS               ( RID_BASICIDE_START + 119 )
 #define RID_STR_NORMAL_MODULES          ( RID_BASICIDE_START + 120 )
 #define RID_STR_CLASS_MODULES           ( RID_BASICIDE_START + 121 )
+//free slots
+
+#define RID_STR_PRINTDLG_RANGE          ( RID_BASICIDE_START + 130 )
+#define RID_STR_PRINTDLG_ALLPAGES       ( RID_BASICIDE_START + 131 )
+#define RID_STR_PRINTDLG_PAGES          ( RID_BASICIDE_START + 132 )
 
 #endif
 
