@@ -109,6 +109,12 @@ interface BaseTextDocument
         StateMethod = StateStyleSheet ;
     ]
 
+    SID_STYLE_FAMILY6
+    [
+        Export = FALSE ;
+        StateMethod = StateStyleSheet ;
+    ]
+
     SID_ATTR_YEAR2000
     [
         ExecMethod = Execute ;
