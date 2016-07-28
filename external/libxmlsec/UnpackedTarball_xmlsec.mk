@@ -18,7 +18,9 @@ xmlsec_patches += xmlsec1-win32-fix-undeclared.patch.1
 xmlsec_patches += xmlsec1-vc.patch.1
 xmlsec_patches += xmlsec1-1.2.14_fix_extern_c.patch.1
 xmlsec_patches += xmlsec1-customkeymanage.patch.1
+ifneq ($(OS),WNT)
 xmlsec_patches += xmlsec1-keyinfo-revert.patch.1
+endif
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,xmlsec))
 
