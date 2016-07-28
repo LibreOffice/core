@@ -514,8 +514,13 @@ bool WinOpenGLContext::ImplInit()
 
     //  we must check whether can set the MSAA
     int WindowPix = 0;
-    bool bMultiSampleSupport = InitMultisample(PixelFormatFront, WindowPix,
-            mbUseDoubleBufferedRendering, false);
+    bool bMultiSampleSupport = false;
+
+    if (!mbVCLOnly)
+        bMultiSampleSupport = InitMultisample(PixelFormatFront, WindowPix, mbUseDoubleBufferedRendering, false);
+    else
+        VCL_GL_INFO("Skipping multisample detection for VCL.");
+
     if (bMultiSampleSupport && WindowPix != 0)
     {
         m_aGLWin.bMultiSampleSupported = true;
