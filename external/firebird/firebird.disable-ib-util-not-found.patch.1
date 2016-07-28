@@ -1,19 +1,17 @@
 --- firebird.org/src/jrd/fun.epp	2015-01-23 22:11:26.751475044 +0100
 +++ firebird/src/jrd/fun.epp	2015-01-23 22:16:42.507322568 +0100
-@@ -160,10 +160,14 @@
+@@ -164,10 +164,14 @@
  	if (tryLibrary(LIBNAME, message[3]))
  		return;
  
 +        /* fdo#72543: quote from https://bugs.freedesktop.org/show_bug.cgi?id=72543#c8
 +           "we don't need UDF support for embedded firebird,
-+             hence the lack of ib_util isn't an issue and can safely be ignored"
++            hence the lack of ib_util isn't an issue and can safely be ignored"
  	// all failed - log error
  	gds__log("ib_util init failed, UDFs can't be used - looks like firebird misconfigured\n"
  			 "\t%s\n\t%s\n\t%s\n\t%s", message[0].c_str(), message[1].c_str(),
  									   message[2].c_str(), message[3].c_str());
 +        */
- #endif	// !BOOT_BUILD
  }
  
-Seulement dans firebird/src/misc: codes.cpp
-Seulement dans firebird: temp
+ void* IbUtil::alloc(long size)
