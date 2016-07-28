@@ -1970,7 +1970,7 @@ void ScInterpreter::ScNper()
 }
 
 bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
-                                   double fFv, double fPayType, double & fGuess )
+                                   double fFv, bool bPayType, double & fGuess )
 {
     // See also #i15090#
     // Newton-Raphson method: x(i+1) = x(i) - f(x(i)) / f'(x(i))
@@ -1983,9 +1983,12 @@ bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
     const sal_uInt16 nIterationsMax = 150;
     sal_uInt16 nCount = 0;
     const double fEpsilonSmall = 1.0E-14;
-    // convert any fPayType situation to fPayType == zero situation
-    fFv = fFv - fPayment * fPayType;
-    fPv = fPv + fPayment * fPayType;
+    if ( bPayType )
+    {
+        // payment at beginning of each period
+        fFv = fFv - fPayment;
+        fPv = fPv + fPayment;
+    }
     if (fNper == ::rtl::math::round( fNper ))
     { // Nper is an integer value
         fX = fGuess;
@@ -2070,8 +2073,8 @@ void ScInterpreter::ScRate()
 {
     double fPv, fPayment, fNper;
     // defaults for missing arguments, see ODFF spec
-    double fFv = 0, fPayType = 0, fGuess = 0.1, fOrigGuess = 0.1;
-    bool bValid = true;
+    double fFv = 0, fGuess = 0.1, fOrigGuess = 0.1;
+    bool bPayType = false, bValid = true;
     bool bDefaultGuess = true;
     nFuncFmtType = css::util::NumberFormat::PERCENT;
     sal_uInt8 nParamCount = GetByte();
@@ -2083,7 +2086,7 @@ void ScInterpreter::ScRate()
         bDefaultGuess = false;
     }
     if (nParamCount >= 5)
-        fPayType = GetDouble();
+        bPayType = GetBool();
     if (nParamCount >= 4)
         fFv = GetDouble();
     fPv = GetDouble();
@@ -2094,10 +2097,7 @@ void ScInterpreter::ScRate()
         PushIllegalArgument();
         return;
     }
-    // other values for fPayType might be meaningful,
-    // ODFF spec is not clear yet, enable statement if you want only 0 and 1
-    //if (fPayType != 0.0) fPayType = 1.0;
-    bValid = RateIteration(fNper, fPayment, fPv, fFv, fPayType, fGuess);
+    bValid = RateIteration(fNper, fPayment, fPv, fFv, bPayType, fGuess);
     if (!bValid)
     {
         /* TODO: try also for specified guess values, not only default? As is,
@@ -2115,11 +2115,11 @@ void ScInterpreter::ScRate()
             for (int nStep = 2; nStep <= 10 && !bValid; ++nStep)
             {
                 fGuess = fX * nStep;
-                bValid = RateIteration( fNper, fPayment, fPv, fFv, fPayType, fGuess);
+                bValid = RateIteration( fNper, fPayment, fPv, fFv, bPayType, fGuess);
                 if (!bValid)
                 {
                     fGuess = fX / nStep;
-                    bValid = RateIteration( fNper, fPayment, fPv, fFv, fPayType, fGuess);
+                    bValid = RateIteration( fNper, fPayment, fPv, fFv, bPayType, fGuess);
                 }
             }
         }
