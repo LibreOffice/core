@@ -26,6 +26,8 @@ using namespace ::com::sun::star;
 // ---------------------- AtkHyperlink ----------------------
 
 typedef struct {
+    AtkHyperlink atk_hyper_link;
+
     uno::Reference< accessibility::XAccessibleHyperlink > xLink;
 } HyperLink;
 
