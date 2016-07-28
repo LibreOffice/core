@@ -403,8 +403,14 @@ throw ( RuntimeException, std::exception )
                 //enable some slots hardly, because UNIX clipboard does not notify all changes
                 // Can be removed if follow up task will be fixed directly within applications.
                 // Note: PasteSpecial is handled specifically by calc
-                if ( pMenuItemHandler->aMenuItemURL == ".uno:Paste"
-                    || pMenuItemHandler->aMenuItemURL == ".uno:PasteClipboard" )      // special for draw/impress
+                // Calc also disables Paste under some circumstances, do not override.
+                /* TODO: is this workaround even needed anymore? Was introduced
+                 * in 2009 with commit 426ab2c0e8f6e3fe2b766f74f6b8da873d860260
+                 * as some "metropatch" and the other places it touched seem to
+                 * be gone. */
+                if ( (pMenuItemHandler->aMenuItemURL == ".uno:Paste" &&
+                            m_aModuleIdentifier != "com.sun.star.sheet.SpreadsheetDocument")
+                        || pMenuItemHandler->aMenuItemURL == ".uno:PasteClipboard" )    // special for draw/impress
                     bEnabledItem = true;
                 #endif
 
