@@ -30,6 +30,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/charclass.hxx>
+#include <unotools/fontoptions.hxx>
 
 #include <svtools/sampletext.hxx>
 #include <svtools/svtresid.hxx>
@@ -982,7 +983,11 @@ void FontNameBox::SaveMRUEntries( const OUString& aFontMRUEntriesFile ) const
 
 void FontNameBox::LoadMRUEntries( const OUString& aFontMRUEntriesFile )
 {
-    if( aFontMRUEntriesFile.isEmpty() )
+    if (aFontMRUEntriesFile.isEmpty())
+        return;
+
+    SvtFontOptions aFontOpt;
+    if (!aFontOpt.IsFontHistoryEnabled())
         return;
 
     SvFileStream aStream( aFontMRUEntriesFile, StreamMode::READ );
