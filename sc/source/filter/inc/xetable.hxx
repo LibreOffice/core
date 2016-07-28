@@ -770,7 +770,7 @@ public:
     /** Writes all COLINFO records of this buffer. */
     virtual void        Save( XclExpStream& rStrm ) override;
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
-    sal_uInt8           GetHighestOutlineLevel() { return maHighestOutlineLevel; }
+    sal_uInt8           GetHighestOutlineLevel() { return mnHighestOutlineLevel; }
 
 private:
     typedef XclExpRecordList< XclExpColinfo >   XclExpColinfoList;
@@ -779,7 +779,7 @@ private:
     XclExpColinfoList   maColInfos;         /// List of COLINFO records.
     XclExpDefcolwidth   maDefcolwidth;      /// The DEFCOLWIDTH record.
     XclExpColOutlineBuffer maOutlineBfr;    /// Buffer for column outline groups.
-    sal_uInt8           maHighestOutlineLevel; /// Highest number of outline levels for columns in sheet.
+    sal_uInt8           mnHighestOutlineLevel; /// Highest number of outline levels for columns in sheet.
 };
 
 class XclExpRow;
@@ -931,7 +931,7 @@ public:
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
     XclExpDimensions&   GetDimensions() { return maDimensions; }
-    sal_uInt8           GetHighestOutlineLevel() { return maHighestOutlineLevel; }
+    sal_uInt8           GetHighestOutlineLevel() { return mnHighestOutlineLevel; }
 
 private:
     /** Returns access to the specified ROW record. Inserts preceding missing ROW records.
@@ -946,7 +946,7 @@ private:
     RowMap              maRowMap;
     XclExpRowOutlineBuffer maOutlineBfr;    /// Buffer for row outline groups.
     XclExpDimensions    maDimensions;       /// DIMENSIONS record for used area.
-    sal_uInt8           maHighestOutlineLevel; /// Highest number of outline levels for rows in sheet.
+    sal_uInt8           mnHighestOutlineLevel; /// Highest number of outline levels for rows in sheet.
 };
 
 // Cell Table

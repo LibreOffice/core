@@ -1670,7 +1670,7 @@ XclExpColinfoBuffer::XclExpColinfoBuffer( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     maDefcolwidth( rRoot ),
     maOutlineBfr( rRoot ),
-    maHighestOutlineLevel( 0 )
+    mnHighestOutlineLevel( 0 )
 {
 }
 
@@ -1680,9 +1680,9 @@ void XclExpColinfoBuffer::Initialize( SCROW nLastScRow )
     for( sal_uInt16 nScCol = 0, nLastScCol = GetMaxPos().Col(); nScCol <= nLastScCol; ++nScCol )
     {
         maColInfos.AppendNewRecord( new XclExpColinfo( GetRoot(), nScCol, nLastScRow, maOutlineBfr ) );
-        if( maOutlineBfr.GetLevel() > maHighestOutlineLevel )
+        if( maOutlineBfr.GetLevel() > mnHighestOutlineLevel )
         {
-           maHighestOutlineLevel = maOutlineBfr.GetLevel();
+           mnHighestOutlineLevel = maOutlineBfr.GetLevel();
         }
     }
 }
@@ -2102,7 +2102,7 @@ XclExpRowBuffer::XclExpRowBuffer( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     maOutlineBfr( rRoot ),
     maDimensions( rRoot ),
-    maHighestOutlineLevel( 0 )
+    mnHighestOutlineLevel( 0 )
 {
 }
 
@@ -2351,9 +2351,9 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
                  ( maOutlineBfr.GetLevel() != 0 ) ||
                  ( rDoc.RowHidden(nFrom, nScTab) ) )
             {
-                if( maOutlineBfr.GetLevel() > maHighestOutlineLevel )
+                if( maOutlineBfr.GetLevel() > mnHighestOutlineLevel )
                 {
-                    maHighestOutlineLevel = maOutlineBfr.GetLevel();
+                    mnHighestOutlineLevel = maOutlineBfr.GetLevel();
                 }
                 RowRef p(new XclExpRow(GetRoot(), nFrom, maOutlineBfr, bRowAlwaysEmpty));
                 maRowMap.insert(RowMap::value_type(nFrom, p));
