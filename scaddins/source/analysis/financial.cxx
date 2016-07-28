@@ -79,7 +79,7 @@ double SAL_CALL AnalysisAddIn::getAccrintm( const css::uno::Reference< css::bean
 double SAL_CALL AnalysisAddIn::getReceived( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, double fInvest, double fDisc, const css::uno::Any& rOB ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception )
 {
-    if( fInvest <= 0.0 || fDisc <= 0.0 )
+    if( fInvest <= 0.0 || fDisc <= 0.0 || nSettle >= nMat )
         throw css::lang::IllegalArgumentException();
 
     double fRet = fInvest / ( 1.0 - ( fDisc * GetYearDiff( GetNullDate( xOpt ), nSettle, nMat, getDateMode( xOpt, rOB ) ) ) );
