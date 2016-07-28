@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_22024a3f",
+        "filename": "vcl/source/window/stacking.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 865,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-07-28T13:33:29Z",
+      "side": 1,
+      "message": "This works, but testing for nullptr first is better.\nAlso think about writing \u0027nullptr \u003d\u003d pNewParent\u0027, that will not compile when accidentially using \u0027\u003d\u0027 instead of \u0027\u003d\u003d\u0027",
+      "range": {
+        "startLine": 865,
+        "startChar": 4,
+        "endLine": 865,
+        "endChar": 52
+      },
+      "revId": "e295459936a915d7003ace607727a6bcecc81755",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
