@@ -35,6 +35,7 @@
 # test case since they need some document and model data to work
 #
 # cui/ui/bitmaptabpage.ui
+# cui/ui/thesaurus.ui <- problems under Linux
 
 cui/ui/customizedialog.ui
 cui/ui/gallerythemedialog.ui
@@ -205,7 +206,6 @@ cui/ui/hyperlinkdialog.ui
 cui/ui/insertoleobject.ui
 cui/ui/insertfloatingframe.ui
 cui/ui/splitcellsdialog.ui
-cui/ui/thesaurus.ui
 cui/ui/macroselectordialog.ui
 cui/ui/spellingdialog.ui
 cui/ui/aboutconfigdialog.ui

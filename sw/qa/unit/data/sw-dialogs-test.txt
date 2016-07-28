@@ -41,6 +41,7 @@
 # modules/swriter/ui/linenumbering.ui
 # modules/swriter/ui/footnotepage.ui
 # modules/swriter/ui/outlinenumberingpage.ui
+# modules/swriter/ui/picturepage.ui <- problems under Linux
 
 modules/swriter/ui/abstractdialog.ui
 modules/swriter/ui/addentrydialog.ui
@@ -150,7 +151,6 @@ modules/swriter/ui/opttestpage.ui
 modules/swriter/ui/outlinenumbering.ui
 modules/swriter/ui/outlinepositionpage.ui
 modules/swriter/ui/paradialog.ui
-modules/swriter/ui/picturepage.ui
 modules/swriter/ui/previewzoomdialog.ui
 modules/swriter/ui/printeroptions.ui
 modules/swriter/ui/printmergedialog.ui

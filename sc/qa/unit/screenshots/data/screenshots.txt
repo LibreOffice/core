@@ -50,6 +50,12 @@ modules/scalc/ui/formatcellsdialog.ui
 #
 # modules/scalc/ui/headerfootercontent.ui
 # modules/scalc/ui/pivottablelayoutdialog.ui
+#
+# problems under Linux:
+# modules/scalc/ui/RowHeightDialog.ui
+# modules/scalc/ui/OptimalRowHeightDialog.ui
+# modules/scalc/ui/ColWidthDialog.ui
+# modules/scalc/ui/OptimalColWidthDialog.ui
 
 modules/scalc/ui/autoformattable.ui
 modules/scalc/ui/sortwarning.ui
@@ -127,10 +133,6 @@ modules/scalc/ui/ungroupdialog.ui
 modules/scalc/ui/groupdialog.ui
 modules/scalc/ui/showchangesdialog.ui
 modules/scalc/ui/insertcells.ui
-modules/scalc/ui/RowHeightDialog.ui
-modules/scalc/ui/OptimalRowHeightDialog.ui
-modules/scalc/ui/ColWidthDialog.ui
-modules/scalc/ui/OptimalColWidthDialog.ui
 modules/scalc/ui/solverprogressdialog.ui
 modules/scalc/ui/nosolutiondialog.ui
 modules/scalc/ui/solversuccessdialog.ui
