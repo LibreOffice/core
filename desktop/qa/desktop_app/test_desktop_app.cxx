@@ -47,6 +47,7 @@ public:
 
 class TestSupplier : public desktop::CommandLineArgs::Supplier {
 public:
+    TestSupplier(std::initializer_list<OUString> args) : m_args(args) {}
     virtual ~TestSupplier() {}
     virtual boost::optional< OUString > getCwdUrl() override { return boost::optional< OUString >(); }
     virtual bool next(OUString * argument) override {
@@ -59,7 +60,6 @@ public:
             return false;
         }
     }
-    TestSupplier& operator << (const OUString& arg) { m_args.push_back(arg); return *this; }
 private:
     std::vector< OUString > m_args;
     std::vector< OUString >::size_type m_index = 0;
@@ -73,23 +73,43 @@ void Test::testTdf100837() {
     // Without this we're crashing because callees are using getProcessServiceFactory
     ::comphelper::setProcessServiceFactory(xSM);
 
-    TestSupplier supplier;
-    supplier << "--view" << "foo" << "ms-word:ofe|u|bar1" << "ms-word:ofv|u|bar2" << "ms-word:nft|u|bar3" << "baz";
-    desktop::CommandLineArgs args(supplier);
-    auto vViewList = args.GetViewList();
-    auto vForceOpenList = args.GetForceOpenList();
-    auto vForceNewList = args.GetForceNewList();
-    // 3 documents go to View list: foo; bar2; baz
-    CPPUNIT_ASSERT_EQUAL(decltype(vViewList.size())(3), vViewList.size());
-    CPPUNIT_ASSERT_EQUAL(OUString("foo"),  vViewList[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("bar2"), vViewList[1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("baz"),  vViewList[2]);
-    // 1 document goes to ForceOpen list: bar1
-    CPPUNIT_ASSERT_EQUAL(decltype(vForceOpenList.size())(1), vForceOpenList.size());
-    CPPUNIT_ASSERT_EQUAL(OUString("bar1"), vForceOpenList[0]);
-    // 1 document goes to ForceNew list: bar3
-    CPPUNIT_ASSERT_EQUAL(decltype(vForceNewList.size())(1), vForceNewList.size());
-    CPPUNIT_ASSERT_EQUAL(OUString("bar3"), vForceNewList[0]);
+    {
+        // 1. Test default behaviour: Office URIs define open mode
+        desktop::CommandLineArgs
+            args(TestSupplier{ "foo", "ms-word:ofe|u|bar1", "ms-word:ofv|u|bar2", "ms-word:nft|u|bar3", "baz" });
+        auto vOpenList      = args.GetOpenList();
+        auto vForceOpenList = args.GetForceOpenList();
+        auto vViewList      = args.GetViewList();
+        auto vForceNewList  = args.GetForceNewList();
+        // 2 documents go to Open list: foo; baz
+        CPPUNIT_ASSERT_EQUAL(decltype(vOpenList.size())(2), vOpenList.size());
+        CPPUNIT_ASSERT_EQUAL(OUString("foo"), vOpenList[0]);
+        CPPUNIT_ASSERT_EQUAL(OUString("baz"), vOpenList[1]);
+        // 1 document goes to ForceOpen list: bar1
+        CPPUNIT_ASSERT_EQUAL(decltype(vForceOpenList.size())(1), vForceOpenList.size());
+        CPPUNIT_ASSERT_EQUAL(OUString("bar1"), vForceOpenList[0]);
+        // 1 document goes to View list: bar2
+        CPPUNIT_ASSERT_EQUAL(decltype(vViewList.size())(1), vViewList.size());
+        CPPUNIT_ASSERT_EQUAL(OUString("bar2"), vViewList[0]);
+        // 1 document goes to ForceNew list: bar3
+        CPPUNIT_ASSERT_EQUAL(decltype(vForceNewList.size())(1), vForceNewList.size());
+        CPPUNIT_ASSERT_EQUAL(OUString("bar3"), vForceNewList[0]);
+    }
+
+    {
+        // 2. Test explicit open mode arguments. Office URI commands should have no effect
+        desktop::CommandLineArgs
+            args(TestSupplier{ "--view", "ms-word:ofe|u|foo", "-o", "ms-word:ofv|u|bar", "ms-word:nft|u|baz" });
+        auto vViewList      = args.GetViewList();
+        auto vForceOpenList = args.GetForceOpenList();
+        // 1 document goes to View list: foo
+        CPPUNIT_ASSERT_EQUAL(decltype(vViewList.size())(1), vViewList.size());
+        CPPUNIT_ASSERT_EQUAL(OUString("foo"), vViewList[0]);
+        // 2 documents go to ForceOpen list: bar, baz
+        CPPUNIT_ASSERT_EQUAL(decltype(vForceOpenList.size())(2), vForceOpenList.size());
+        CPPUNIT_ASSERT_EQUAL(OUString("bar"),  vForceOpenList[0]);
+        CPPUNIT_ASSERT_EQUAL(OUString("baz"), vForceOpenList[1]);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
