@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_02870e10",
+        "filename": "cui/source/tabpages/numfmt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-28T11:10:50Z",
+      "side": 1,
+      "message": "Seeing this made me wonder.. actually we can have a fraction format with group separator like\n\n #,### ?/?\n\nand then the \"Thousands\" box is even checked, but it\u0027s disabled. I think that was always wrong. We may not have it implemented though that when toggling the box the format code is modified accordingly.\n\nSomething to follow-up on later, maybe.",
+      "range": {
+        "startLine": 1016,
+        "startChar": 45,
+        "endLine": 1016,
+        "endChar": 73
+      },
+      "revId": "c777c50525920b696d75a22e5a773957d7eca18f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_22a32aa0",
+        "filename": "cui/source/tabpages/numfmt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-28T11:10:50Z",
+      "side": 1,
+      "message": "Arghl.. ;-) please don\u0027t introduce new ascii graphics like this, most information there is superfluous anyway, we do know the class name and the member function name anyway, the only information is the function description. But that should be done in doxygen style just before the function definition, i.e.\n\n /** description\n  */\n\n(note /** instead of /* which makes doxygen pick up the description)",
+      "revId": "c777c50525920b696d75a22e5a773957d7eca18f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_42a03691",
+        "filename": "cui/uiconfig/ui/numberingformatpage.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-28T11:10:50Z",
+      "side": 1,
+      "message": "The _D mnemonic is now assigned twice with \"_Decimal places\".",
+      "range": {
+        "startLine": 311,
+        "startChar": 66,
+        "endLine": 311,
+        "endChar": 68
+      },
+      "revId": "c777c50525920b696d75a22e5a773957d7eca18f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_62ad3288",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2938,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-28T11:10:50Z",
+      "side": 1,
+      "message": "Why obtain this again? There is already aIntegerFractionDelimiterString.",
+      "range": {
+        "startLine": 2938,
+        "startChar": 28,
+        "endLine": 2938,
+        "endChar": 75
+      },
+      "revId": "c777c50525920b696d75a22e5a773957d7eca18f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_82aa3e6f",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2942,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-28T11:10:50Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 2942,
+        "startChar": 28,
+        "endLine": 2942,
+        "endChar": 75
+      },
+      "revId": "c777c50525920b696d75a22e5a773957d7eca18f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_a2b57ad1",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4360,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-28T11:10:50Z",
+      "side": 1,
+      "message": "This indentation of continued if conditions that align with the following single line statement are a little hard to recognize. I\u0027d prefer indenting the continuation one level deeper than the statement that follows, i.e.\n\n if ( rInfo.eScannedType \u003d\u003d css::util::NumberFormat::FRACTION \u0026\u0026\n         ( (nPosHash +\u003d GetDenominatorString(nNumFor).indexOf(\u0027#\u0027)) \u003e 0 ) )\n     nPrecision -\u003d nPosHash;",
+      "range": {
+        "startLine": 4358,
+        "startChar": 0,
+        "endLine": 4360,
+        "endChar": 31
+      },
+      "revId": "c777c50525920b696d75a22e5a773957d7eca18f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
