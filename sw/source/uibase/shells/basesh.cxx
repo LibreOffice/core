@@ -475,7 +475,7 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
 
 void SwBaseShell::ExecUndo(SfxRequest &rReq)
 {
-    SwWrtShell &rSh = GetShell();
+    SwWrtShell &rWrtShell = GetShell();
 
     sal_uInt16 nId = rReq.GetSlot(), nCnt = 1;
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -489,19 +489,19 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
     switch( nId )
     {
         case SID_UNDO:
-            rSh.LockPaint();
-            rSh.Do( SwWrtShell::UNDO, nCnt );
-            rSh.UnlockPaint();
+            rWrtShell.LockPaint();
+            rWrtShell.Do( SwWrtShell::UNDO, nCnt );
+            rWrtShell.UnlockPaint();
             break;
 
         case SID_REDO:
-            rSh.LockPaint();
-            rSh.Do( SwWrtShell::REDO, nCnt );
-            rSh.UnlockPaint();
+            rWrtShell.LockPaint();
+            rWrtShell.Do( SwWrtShell::REDO, nCnt );
+            rWrtShell.UnlockPaint();
             break;
 
         case SID_REPEAT:
-            rSh.Do( SwWrtShell::REPEAT );
+            rWrtShell.Do( SwWrtShell::REPEAT );
             break;
         default:
             OSL_FAIL("wrong Dispatcher");
