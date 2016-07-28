@@ -354,6 +354,9 @@ public:
 
     bool            IsMultiMarked();
 
+                    /// Disallow paste on Ctrl+A all selected. We'd go DOOM.
+    bool            SelectionForbidsPaste();
+
     void            SetFillMode( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
     void            SetDragMode( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     ScFillMode nMode );
