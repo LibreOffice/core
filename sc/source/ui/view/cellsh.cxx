@@ -205,6 +205,14 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 bDisable = (!bSimpleArea);
                 break;
 
+            case SID_PASTE:
+            case SID_PASTE_SPECIAL:
+            case SID_PASTE_ONLY_VALUE:
+            case SID_PASTE_ONLY_TEXT:
+            case SID_PASTE_ONLY_FORMULA:
+                bDisable = GetViewData()->SelectionForbidsPaste();
+                break;
+
             case FID_INS_ROW:
             case FID_INS_ROWS_BEFORE:           // insert rows
             case FID_INS_ROWS_AFTER:
@@ -490,6 +498,9 @@ bool checkDestRanges(ScViewData& rViewData)
             return false;
     }
 
+    if (rViewData.SelectionForbidsPaste())
+        return false;
+
     // Multiple destination ranges.
 
     ScDocument* pDoc = rViewData.GetDocument();
@@ -552,7 +563,7 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
         if (!rDoc.IsBlockEditable( nTab, nCol,nRow, nCol,nRow ))
             bDisable = true;
 
-        if (!checkDestRanges(*GetViewData()))
+        if (!bDisable && !checkDestRanges(*GetViewData()))
             bDisable = true;
     }
 
