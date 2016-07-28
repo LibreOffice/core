@@ -266,6 +266,7 @@ class SW_DLLPUBLIC SwTableAutoFormat
     bool m_bCollapsingBorders;
     SvxShadowItem m_aShadow;
 
+    bool m_bUserDefined;
 public:
     SwTableAutoFormat( const OUString& rName );
     SwTableAutoFormat( const SwTableAutoFormat& rNew );
@@ -296,12 +297,21 @@ public:
     bool IsBackground() const   { return bInclBackground; }
     bool IsValueFormat() const  { return bInclValueFormat; }
 
+    /// Check if style is hidden.
+    /// not implemented yet.
+    bool IsHidden() const       { return false; }
+    /// Check if style is defined by user.
+    bool IsUserDefined() const  { return m_bUserDefined; }
+
     void SetFont( const bool bNew )         { bInclFont = bNew; }
     void SetJustify( const  bool bNew )     { bInclJustify = bNew; }
     void SetFrame( const bool bNew )        { bInclFrame = bNew; }
     void SetBackground( const bool bNew )   { bInclBackground = bNew; }
     void SetValueFormat( const bool bNew )  { bInclValueFormat = bNew; }
     void SetWidthHeight( const bool bNew )  { bInclWidthHeight = bNew; }
+
+    /// Set if style is user defined.
+    void SetUserDefined(bool bUserDefined)   { m_bUserDefined = bUserDefined; }
 
     /// These methods returns what style (row or column) is applied first on given Cell
     bool FirstRowEndColumnIsRow();

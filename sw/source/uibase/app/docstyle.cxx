@@ -1263,9 +1263,9 @@ std::unique_ptr<SfxItemSet> lcl_SwFormatToFlatItemSet(SwFormat *const pFormat)
 
 std::unique_ptr<SfxItemSet> SwDocStyleSheet::GetItemSetForPreview()
 {
-    if (SfxStyleFamily::Page == nFamily || SfxStyleFamily::Pseudo == nFamily)
+    if (SfxStyleFamily::Page == nFamily || SfxStyleFamily::Pseudo == nFamily || SfxStyleFamily::Table == nFamily)
     {
-        SAL_WARN("sw.ui", "GetItemSetForPreview not implemented for page or number style");
+        SAL_WARN("sw.ui", "GetItemSetForPreview not implemented for page or number or table style");
         return std::unique_ptr<SfxItemSet>();
     }
     if (!bPhysical)
@@ -2164,6 +2164,7 @@ void SwDocStyleSheet::PresetNameAndFamily(const OUString& rName)
     case cFRAME:    nFamily = SfxStyleFamily::Frame; break;
     case cPAGE:     nFamily = SfxStyleFamily::Page; break;
     case cNUMRULE:  nFamily = SfxStyleFamily::Pseudo; break;
+    case cTABSTYLE: nFamily = SfxStyleFamily::Table; break;
     default:        nFamily = SfxStyleFamily::Char; break;
     }
     aName = rName.copy(1);
@@ -2211,6 +2212,9 @@ bool  SwDocStyleSheet::IsUsed() const
 
     case SfxStyleFamily::Pseudo:
             return pNumRule && SwDoc::IsUsed( *pNumRule );
+
+    case SfxStyleFamily::Table:
+            return pTableFormat && rDoc.IsUsed( *pTableFormat );
 
     default:
         OSL_ENSURE(false, "unknown style family");
@@ -2980,7 +2984,23 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         const SwTableAutoFormatTable& rTableStyles = rDoc.GetTableStyles();
         for(size_t i = 0; i < rTableStyles.size(); ++i)
         {
-            aLst.Append( cTABSTYLE, rTableStyles[i].GetName() );
+            const SwTableAutoFormat& rTableStyle = rTableStyles[i];
+
+            bool bUsed = bIsSearchUsed && (bOrganizer || rDoc.IsUsed(rTableStyle));
+            if(!bUsed)
+            {
+                if(nSrchMask == SFXSTYLEBIT_HIDDEN && !rTableStyle.IsHidden())
+                    continue;
+
+                if( (!bSearchHidden && rTableStyle.IsHidden() ) ||
+                        ( (nSrchMask & ~SFXSTYLEBIT_USED) == SFXSTYLEBIT_USERDEF
+                    ? !rTableStyle.IsUserDefined()
+                    // searched for used and found none
+                    : bIsSearchUsed ) )
+                    continue;
+            }
+
+            aLst.Append( cTABSTYLE, rTableStyle.GetName() );
         }
     }
 

@@ -162,8 +162,8 @@ private:
     DeletionWatcher* impl_setDeletionWatcher(DeletionWatcher* pNewWatcher);
 
 protected:
-#define MAX_FAMILIES            5
-#define COUNT_BOUND_FUNC        13
+#define MAX_FAMILIES            6
+#define COUNT_BOUND_FUNC        14
 
     friend class DropListBox_Impl;
     friend class SfxTemplateControllerItem;

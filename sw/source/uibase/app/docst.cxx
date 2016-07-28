@@ -227,6 +227,15 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     rSet.Put(SfxTemplateItem(nWhich, aName));
                 }
                 break;
+            case SID_STYLE_FAMILY6:
+                {
+                    const SwTableNode *pTableNd = pShell->IsCursorInTable();
+                    if( pTableNd )
+                        aName = pTableNd->GetTable().GetTableStyleName();
+
+                    rSet.Put(SfxTemplateItem(nWhich, aName));
+                }
+                break;
 
             case SID_STYLE_WATERCAN:
             {
@@ -958,6 +967,11 @@ SfxStyleFamily SwDocShell::ApplyStyles(const OUString &rName, SfxStyleFamily nFa
             const SwNumRule* pNumRule = pStyle->GetNumRule();
             const OUString sListIdForStyle =pNumRule->GetDefaultListId();
             pSh->SetCurNumRule( *pNumRule, false, sListIdForStyle, true );
+            break;
+        }
+        case SfxStyleFamily::Table:
+        {
+            pSh->SetTableStyle(pStyle->GetName());
             break;
         }
         default:

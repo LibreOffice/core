@@ -890,6 +890,8 @@ public:
 
     // Query if style (paragraph- / character- / frame- / page-) is used.
     bool IsUsed( const SwModify& ) const;
+    /// Query if table style is used.
+    bool IsUsed( const SwTableAutoFormat& ) const;
     static bool IsUsed( const SwNumRule& );
 
     // Set name of newly loaded document template.
