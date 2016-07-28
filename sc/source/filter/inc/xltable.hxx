@@ -141,6 +141,7 @@ const sal_uInt16 EXC_DEFCOLWIDTH_DEF        = 10;
 const sal_uInt16 EXC_ID_COLINFO             = 0x007D;
 
 const sal_uInt16 EXC_COLINFO_HIDDEN         = 0x0001;
+const sal_uInt16 EXC_COLINFO_CUSTOMWIDTH    = 0x0002;
 const sal_uInt16 EXC_COLINFO_COLLAPSED      = 0x1000;
 
 // (0x0080) GUTS --------------------------------------------------------------
