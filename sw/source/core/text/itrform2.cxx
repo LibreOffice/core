@@ -466,6 +466,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                         new SwKernPortion( *rInf.GetLast(), nLstHeight,
                                            pLast->InFieldGrp() && pPor->InFieldGrp() );
                     rInf.GetLast()->SetPortion( nullptr );
+                    MergeCharacterBorder(*pKrn, rInf.GetLast()->FindLastPortion(), rInf);
                     InsertPortion( rInf, pKrn );
                 }
             }
@@ -510,7 +511,11 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             }
 
             if ( pGridKernPortion != pPor )
+            {
+                SwLinePortion *pLast = rInf.GetLast()? rInf.GetLast()->FindLastPortion():nullptr ;
+                MergeCharacterBorder(*pGridKernPortion, pLast , rInf);
                 InsertPortion( rInf, pGridKernPortion );
+            }
         }
 
         if( pPor->IsDropPortion() )
@@ -669,7 +674,15 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
         rInf.SetFull( bFull );
 
         if( !pPor->IsDropPortion() )
-            MergeCharacterBorder(*pPor, rInf);
+        {
+            SwLinePortion *pPrev = rInf.GetLast() ? rInf.GetLast()->FindLastPortion() : nullptr;
+            for ( SwLinePortion *pNext = pPor ; pNext!= NULL ; pNext=pNext->GetPortion())
+            {
+                if ( !pNext->IsParaPortion() )
+                    MergeCharacterBorder(*pNext, pPrev, rInf);
+                pPrev = pNext ;
+            }
+        }
 
         // Restportions from fields with multiple lines don't yet have the right ascent
         if ( !pPor->GetLen() && !pPor->IsFlyPortion()
@@ -2578,15 +2591,12 @@ void SwTextFormatter::MergeCharacterBorder( SwDropPortion& rPortion )
     }
 }
 
-void SwTextFormatter::MergeCharacterBorder( SwLinePortion& rPortion, SwTextFormatInfo& rInf )
+void SwTextFormatter::MergeCharacterBorder( SwLinePortion& rPortion, SwLinePortion *pPrev, SwTextFormatInfo& rInf )
 {
     const SwFont aCurFont = *rInf.GetFont();
     if( aCurFont.HasBorder() )
     {
-        // The current portion isn't inserted into the portion chain yet, so the info's
-        // last portion will be the previous one
-        if( rInf.GetLast() && rInf.GetLast() != &rPortion && // For para portion (special case)
-            rInf.GetLast()->GetJoinBorderWithNext() )
+        if (pPrev && pPrev->GetJoinBorderWithNext() )
         {
             // In some case border merge is called twice to the portion
             if( !rPortion.GetJoinBorderWithPrev() )
@@ -2607,9 +2617,10 @@ void SwTextFormatter::MergeCharacterBorder( SwLinePortion& rPortion, SwTextForma
         if( !rInf.IsFull() && // Not the last portion of the line (in case of line break)
             rInf.GetIdx() + rPortion.GetLen() != rInf.GetText().getLength() ) // Not the last portion of the paragraph
             bSeek = Seek(rInf.GetIdx() + rPortion.GetLen());
-
+        // Don't join the next portion if SwKernPortion sits between two different boxes.
+        bool bDisconnect = rPortion.IsKernPortion() && !rPortion.GetJoinBorderWithPrev();
         // If next portion has the same border then merge
-        if( bSeek && GetFnt()->HasBorder() && ::lcl_HasSameBorder(aCurFont, *GetFnt()) )
+        if( bSeek && GetFnt()->HasBorder() && ::lcl_HasSameBorder(aCurFont, *GetFnt()) && !bDisconnect )
         {
             // In some case border merge is called twice to the portion
             if( !rPortion.GetJoinBorderWithNext() )
