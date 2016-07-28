@@ -30,8 +30,9 @@ public:
     int     GetWidth() const { return mnWidth; };
     int     GetHeight() const { return mnHeight; };
 
-    void    Bind();
-    static void Unbind();
+    void    Bind(GLenum eTarget = GL_FRAMEBUFFER);
+
+    static void Unbind(GLenum eTarget = GL_FRAMEBUFFER);
 
     bool    IsFree() const;
     bool    IsAttached( GLuint nTexture ) const;
