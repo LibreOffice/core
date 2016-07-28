@@ -927,6 +927,7 @@
   <block-list:block block-list:abbreviated-name=":日圓:" block-list:name="¥"/>
   <block-list:block block-list:abbreviated-name=":歐圓:" block-list:name="€"/>
   <block-list:block block-list:abbreviated-name=":無限:" block-list:name="∞"/>
+  <block-list:block block-list:abbreviated-name=":男性:" block-list:name="♂"/>
   <block-list:block block-list:abbreviated-name=":短劍2:" block-list:name="‡"/>
   <block-list:block block-list:abbreviated-name=":短劍:" block-list:name="†"/>
   <block-list:block block-list:abbreviated-name=":空集合:" block-list:name="∅"/>

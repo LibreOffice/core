@@ -585,6 +585,8 @@
   <block-list:block block-list:abbreviated-name=":Ožiaragis:" block-list:name="♑"/>
   <block-list:block block-list:abbreviated-name=":ožka:" block-list:name="🐐"/>
   <block-list:block block-list:abbreviated-name=":pačiūža:" block-list:name="⛸"/>
+  <block-list:block block-list:abbreviated-name=":pagyvenęs vyras:" block-list:name="👴"/>
+  <block-list:block block-list:abbreviated-name=":pagyvenusi moteris:" block-list:name="👵"/>
   <block-list:block block-list:abbreviated-name=":palapinė:" block-list:name="⛺"/>
   <block-list:block block-list:abbreviated-name=":paletė:" block-list:name="🎨"/>
   <block-list:block block-list:abbreviated-name=":palmė:" block-list:name="🌴"/>
@@ -640,6 +642,8 @@
   <block-list:block block-list:abbreviated-name=":poaibis:" block-list:name="⊂"/>
   <block-list:block block-list:abbreviated-name=":policininkas:" block-list:name="👮"/>
   <block-list:block block-list:abbreviated-name=":pomidoras:" block-list:name="🍅"/>
+  <block-list:block block-list:abbreviated-name=":pora2:" block-list:name="👬"/>
+  <block-list:block block-list:abbreviated-name=":pora3:" block-list:name="👭"/>
   <block-list:block block-list:abbreviated-name=":pora:" block-list:name="👫"/>
   <block-list:block block-list:abbreviated-name=":priešpilnis:" block-list:name="🌓"/>
   <block-list:block block-list:abbreviated-name=":priklauso:" block-list:name="∈"/>
@@ -742,6 +746,7 @@
   <block-list:block block-list:abbreviated-name=":svaras:" block-list:name="£"/>
   <block-list:block block-list:abbreviated-name=":svarstyklės:" block-list:name="⚖"/>
   <block-list:block block-list:abbreviated-name=":Svarstyklės:" block-list:name="♎"/>
+  <block-list:block block-list:abbreviated-name=":šviesūs plaukai:" block-list:name="👱"/>
   <block-list:block block-list:abbreviated-name=":šypsena2:" block-list:name="☻"/>
   <block-list:block block-list:abbreviated-name=":šypsena:" block-list:name="☺"/>
   <block-list:block block-list:abbreviated-name=":taika:" block-list:name="☮"/>
@@ -776,6 +781,7 @@
   <block-list:block block-list:abbreviated-name=":triušis:" block-list:name="🐇"/>
   <block-list:block block-list:abbreviated-name=":trofėjus:" block-list:name="🏆"/>
   <block-list:block block-list:abbreviated-name=":tulpė:" block-list:name="🌷"/>
+  <block-list:block block-list:abbreviated-name=":turbanas:" block-list:name="👳"/>
   <block-list:block block-list:abbreviated-name=":turi:" block-list:name="∋"/>
   <block-list:block block-list:abbreviated-name=":Turkijos lira:" block-list:name="₺"/>
   <block-list:block block-list:abbreviated-name=":tuščia aibė:" block-list:name="∅"/>
