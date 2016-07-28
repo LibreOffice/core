@@ -202,6 +202,19 @@ IMPL_LINK_NOARG_TYPED(SvxMessDialog, Button2Hdl, Button*, void)
 
 /*************************************************************************/
 
+void SvxMessDialog::DisableButton( SvxMessDialogButton nBtnId )
+{
+    switch( nBtnId )
+    {
+        case SvxMessDialogButton::N1:
+            pBtn1->Disable();
+            break;
+        case SvxMessDialogButton::N2:
+            pBtn2->Disable();
+            break;
+    }
+}
+
 void SvxMessDialog::SetButtonText( SvxMessDialogButton nBtnId, const OUString& rNewTxt )
 {
     switch ( nBtnId )
