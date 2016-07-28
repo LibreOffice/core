@@ -106,7 +106,7 @@ void WinOpenGLContext::makeCurrent()
 bool WinOpenGLContext::init(HDC hDC, HWND hWnd)
 {
     if (isInitialized())
-        return false;
+        return true;
 
     m_aGLWin.hDC = hDC;
     m_aGLWin.hWnd = hWnd;
@@ -164,12 +164,11 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
     }
 }
 
-int InitTempWindow(HWND *hwnd, int width, int height, const PIXELFORMATDESCRIPTOR& inPfd, GLWinWindow& glWin)
+bool InitTempWindow(HWND& hwnd, int width, int height, const PIXELFORMATDESCRIPTOR& inPfd, GLWinWindow& glWin)
 {
     OpenGLZone aZone;
 
     PIXELFORMATDESCRIPTOR  pfd = inPfd;
-    int  pfmt;
     int ret;
     WNDCLASS wc;
     wc.style = 0;
@@ -182,30 +181,41 @@ int InitTempWindow(HWND *hwnd, int width, int height, const PIXELFORMATDESCRIPTO
     wc.lpszMenuName = NULL;
     wc.lpszClassName = (LPCSTR)"GLRenderer";
     RegisterClass(&wc);
-    *hwnd = CreateWindow(wc.lpszClassName, NULL, WS_DISABLED, 0, 0, width, height, NULL, NULL, wc.hInstance, NULL);
-    glWin.hDC = GetDC(*hwnd);
-    pfmt = ChoosePixelFormat(glWin.hDC, &pfd);
-    if (!pfmt)
+    hwnd = CreateWindow(wc.lpszClassName, NULL, WS_DISABLED, 0, 0, width, height, NULL, NULL, wc.hInstance, NULL);
+    glWin.hDC = GetDC(hwnd);
+
+    int nPixelFormat = ChoosePixelFormat(glWin.hDC, &pfd);
+    if (!nPixelFormat)
     {
-        return -1;
+        ReleaseDC(hwnd, glWin.hDC);
+        DestroyWindow(hwnd);
+        return false;
     }
-    ret = SetPixelFormat(glWin.hDC, pfmt, &pfd);
+    ret = SetPixelFormat(glWin.hDC, nPixelFormat, &pfd);
     if(!ret)
     {
-        return -1;
+        ReleaseDC(hwnd, glWin.hDC);
+        DestroyWindow(hwnd);
+        return false;
     }
     glWin.hRC = wglCreateContext(glWin.hDC);
     if(!(glWin.hRC))
     {
-        return -1;
+        ReleaseDC(hwnd, glWin.hDC);
+        DestroyWindow(hwnd);
+        return false;
     }
     ret = wglMakeCurrent(glWin.hDC, glWin.hRC);
     if(!ret)
     {
-        return -1;
+        wglMakeCurrent(NULL, NULL);
+        wglDeleteContext(glWin.hRC);
+        ReleaseDC(hwnd, glWin.hDC);
+        DestroyWindow(hwnd);
+        return false;
     }
 
-    return 0;
+    return true;
 }
 
 bool WGLisExtensionSupported(const char *extension)
@@ -255,7 +265,7 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
     HWND hWnd = NULL;
     GLWinWindow glWin;
     // Create a temp window to check whether support multi-sample, if support, get the format
-    if (InitTempWindow(&hWnd, 1, 1, pfd, glWin) < 0)
+    if (!InitTempWindow(hWnd, 32, 32, pfd, glWin))
     {
         SAL_WARN("vcl.opengl", "Can't create temp window to test");
         return false;
@@ -265,12 +275,20 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
     if (!WGLisExtensionSupported("WGL_ARB_multisample"))
     {
         SAL_WARN("vcl.opengl", "Device doesn't support multisample");
+        wglMakeCurrent(NULL, NULL);
+        wglDeleteContext(glWin.hRC);
+        ReleaseDC(hWnd, glWin.hDC);
+        DestroyWindow(hWnd);
         return false;
     }
     // Get our pixel format
     PFNWGLCHOOSEPIXELFORMATARBPROC fn_wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
     if (!fn_wglChoosePixelFormatARB)
     {
+        wglMakeCurrent(NULL, NULL);
+        wglDeleteContext(glWin.hRC);
+        ReleaseDC(hWnd, glWin.hDC);
+        DestroyWindow(hWnd);
         return false;
     }
     // Get our current device context
@@ -686,7 +704,11 @@ rtl::Reference<OpenGLContext> WinOpenGLSalGraphicsImpl::CreateWinContext()
 {
     rtl::Reference<WinOpenGLContext> xContext(new WinOpenGLContext);
     xContext->setVCLOnly();
-    xContext->init(mrParent.mhLocalDC, mrParent.mhWnd);
+    if (!xContext->init(mrParent.mhLocalDC, mrParent.mhWnd))
+    {
+        SAL_WARN("vcl.opengl", "Context could not be created.");
+        return rtl::Reference<OpenGLContext>();
+    }
     return rtl::Reference<OpenGLContext>(xContext.get());
 }
 
