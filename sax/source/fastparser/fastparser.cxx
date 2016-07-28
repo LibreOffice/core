@@ -82,6 +82,7 @@ struct Event
     OUString msElementName;
     rtl::Reference< FastAttributeList > mxAttributes;
     rtl::Reference< FastAttributeList > mxDeclAttributes;
+    bool mbIsAttributesEmpty;
     OUString msChars;
 };
 
@@ -783,6 +784,22 @@ void FastSaxParserImpl::parseStream(const InputSource& maStructSource)
                         done = true;
 
                     aGuard.reset(); // lock
+
+                    if ( rEntity.maPendingEvents.size() <= rEntity.mnEventLowWater )
+                    {
+                        for (EventList::iterator aEventIt = pEventList->begin();
+                            aEventIt != pEventList->end(); ++aEventIt)
+                        {
+                            if (aEventIt->mxAttributes.is())
+                            {
+                                aEventIt->mxAttributes->clear();
+                                if( rEntity.mxNamespaceHandler.is() )
+                                    aEventIt->mxDeclAttributes->clear();
+                                aEventIt->mbIsAttributesEmpty = true;
+                            }
+                        }
+                    }
+
                     rEntity.maUsedEvents.push(pEventList);
                 }
             } while (!done);
@@ -1044,20 +1061,28 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
     // create attribute map and process namespace instructions
     Event& rEvent = getEntity().getEvent( START_ELEMENT );
     if (rEvent.mxAttributes.is())
-        rEvent.mxAttributes->clear();
+    {
+        if( !rEvent.mbIsAttributesEmpty )
+            rEvent.mxAttributes->clear();
+    }
     else
         rEvent.mxAttributes.set(
                 new FastAttributeList( rEntity.mxTokenHandler,
                                        rEntity.mpTokenHandler ) );
+
     if( rEntity.mxNamespaceHandler.is() )
     {
         if (rEvent.mxDeclAttributes.is())
-            rEvent.mxDeclAttributes->clear();
+        {
+            if( !rEvent.mbIsAttributesEmpty )
+                rEvent.mxDeclAttributes->clear();
+        }
         else
             rEvent.mxDeclAttributes.set(
                 new FastAttributeList( rEntity.mxTokenHandler,
                                        rEntity.mpTokenHandler ) );
     }
+    rEvent.mbIsAttributesEmpty = false;
 
     OUString sNamespace;
     sal_Int32 nNamespaceToken = FastToken::DONTKNOW;
