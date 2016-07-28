@@ -849,6 +849,18 @@ bool ScViewData::IsMultiMarked()
     return (eType & SC_MARK_SIMPLE) != SC_MARK_SIMPLE;
 }
 
+bool ScViewData::SelectionForbidsPaste()
+{
+    SCCOL nCol1, nCol2;
+    SCROW nRow1, nRow2;
+    SCTAB nTab1, nTab2;
+    ScMarkType eMarkType = GetSimpleArea( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+    /* TODO: it is still possible to select one row less than the entire sheet
+     * and fool around. We could narrow this down to some "sane" value, just
+     * what would be sane? At least this helps against the Ctrl+A cases. */
+    return eMarkType != SC_MARK_MULTI && nCol1 == 0 && nCol2 == MAXCOL && nRow1 == 0 && nRow2 == MAXROW;
+}
+
 void ScViewData::SetFillMode( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
 {
     nFillMode   = ScFillMode::FILL;
