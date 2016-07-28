@@ -111,7 +111,7 @@ protected:
 
     // Create a new OutlinerView at the heap and initialize all required parameters.
     // pTextEditObj, pTextEditPV and pTextEditOutliner have to be initialized
-    OutlinerView* ImpMakeOutlinerView(vcl::Window* pWin, bool bNoPaint, OutlinerView* pGivenView, SfxViewShell* pViewShell = 0) const;
+    OutlinerView* ImpMakeOutlinerView(vcl::Window* pWin, bool bNoPaint, OutlinerView* pGivenView, SfxViewShell* pViewShell = nullptr) const;
     void ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectangle& rRect, OutputDevice& rTargetDevice) const;
     void ImpInvalidateOutlinerView(OutlinerView& rOutlView) const;
 
