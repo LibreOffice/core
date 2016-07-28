@@ -1,0 +1,6 @@
+LibTomMath is a free open source portable number theoretic multiple-precision
+integer library written entirely in C.
+
+Used by embedded firebird (external/firebird).
+
+http://www.libtom.org/LibTomMath/
