@@ -1872,8 +1872,6 @@ RTFError RTFDocumentImpl::popState()
     //                         ", dest state: " << m_aStates.top().eDestination);
 
     checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
-    if (m_aStates.empty())
-        return RTFError::GROUP_UNDER;
     RTFParserState aState(m_aStates.top());
     m_bWasInFrame = aState.aFrame.inFrame();
 

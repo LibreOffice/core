@@ -316,10 +316,14 @@ private:
 public:
     RTFParserState& top()
     {
+        if (m_Impl.empty())
+            throw std::out_of_range("empty rtf state stack");
         return m_Impl.back();
     }
     void pop()
     {
+        if (m_Impl.empty())
+            throw std::out_of_range("empty rtf state stack");
         return m_Impl.pop_back();
     }
     void push(RTFParserState const& rState)
