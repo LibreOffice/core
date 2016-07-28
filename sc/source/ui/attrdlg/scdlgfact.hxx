@@ -65,10 +65,10 @@ public:                                             \
                      {}                             \
     virtual         ~Class();                       \
     virtual short   Execute() override ;            \
-    std::vector<OString> getAllPageUIXMLDescriptions() const; \
+    std::vector<OString> getAllPageUIXMLDescriptions() const override; \
     bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override; \
     virtual Bitmap  createScreenshot() const override; \
-    virtual OString GetScreenshotId() const; \
+    virtual OString GetScreenshotId() const override; \
 
 #define DECL_ABSTDLG2_BASE(Class,DialogClass)       \
     ScopedVclPtr<DialogClass> pDlg;                 \

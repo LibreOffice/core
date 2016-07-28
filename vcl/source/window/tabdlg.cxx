@@ -290,12 +290,32 @@ std::vector<OString> TabDialog::getAllPageUIXMLDescriptions() const
 
                 if (pCandidate)
                 {
-                    // use UIXMLDescription (without '.ui', with '/')
-                    // aRetval.push_back(pCandidate->getUIFile());
+                    OString aNewName(pCandidate->getUIFile());
 
-                    // for now, directly use nPageID since we had a case where
-                    // two TabPages had the same ui file (HeaderFooterDialog)
-                    aRetval.push_back(OString::number(nPageId));
+                    if (!aNewName.isEmpty())
+                    {
+                        // we have to check for double entries, this may happen e.g.
+                        // in the HeaderFooterDialog which has two times the same
+                        // tabPage added. Add the PageID as hint to the name, separated
+                        // by a token (using "|" here). Do not do this for 1st ocurrence,
+                        // that is used for detection and is not necessary.
+                        // Use the UIXMLDescription without trailing '.ui', with one trailing '/'
+                        bool bAlreadyAdded(false);
+
+                        for (auto i = aRetval.begin(); !bAlreadyAdded && i != aRetval.end(); i++)
+                        {
+                            bAlreadyAdded = (*i == aNewName);
+                        }
+
+                        if (bAlreadyAdded)
+                        {
+                            // add the PageId to be able to detect the correct tabPage in
+                            // selectPageByUIXMLDescription below
+                            aNewName = aNewName + "|" + OString::number(nPageId);
+                        }
+
+                        aRetval.push_back(aNewName);
+                    }
                 }
             }
         }
@@ -310,6 +330,19 @@ bool TabDialog::selectPageByUIXMLDescription(const OString& rUIXMLDescription)
 
     if (pTabCtrl)
     {
+        sal_uInt32 nTargetPageId(0);
+        OString aTargetName(rUIXMLDescription);
+        const sal_Int32 nIndexOfSeparator(rUIXMLDescription.indexOf("|"));
+
+        if (-1 != nIndexOfSeparator)
+        {
+            // more than one tabPage with that UXMLDescription is added to this dialog,
+            // see getAllPageUIXMLDescriptions() above. Extract target PageId and
+            // strip the UXMLDescription name for comparison
+            nTargetPageId = rUIXMLDescription.copy(nIndexOfSeparator + 1).toUInt32();
+            aTargetName = rUIXMLDescription.copy(0, nIndexOfSeparator);
+        }
+
         for (sal_uInt16 a(0); a < pTabCtrl->GetPageCount(); a++)
         {
             const sal_uInt16 nPageId(pTabCtrl->GetPageId(a));
@@ -320,15 +353,26 @@ bool TabDialog::selectPageByUIXMLDescription(const OString& rUIXMLDescription)
 
                 if (pCandidate)
                 {
-                    // if (pCandidate->getUIFile() == rUIXMLDescription)
-
-                    // for now, directly work with nPageID, see above. Will need to be
-                    // adapted to the schema later planned to be used in rUIXMLDescription
-                    if (rUIXMLDescription.toUInt32() == nPageId)
+                    if (pCandidate->getUIFile() == aTargetName)
                     {
-                        pTabCtrl->SelectTabPage(nPageId);
-
-                        return true;
+                        if (nTargetPageId)
+                        {
+                            // when multiple versions may exist, name is not sufficient. Also
+                            // check for the given PageId to select the correct tabPage
+                            // for cases where the same TabPage is used more than once
+                            // in a tabDialog (e.g. HeaderFooterDialog)
+                            if (nTargetPageId == nPageId)
+                            {
+                                pTabCtrl->SelectTabPage(nPageId);
+                                return true;
+                            }
+                        }
+                        else
+                        {
+                            // select that tabPage
+                            pTabCtrl->SelectTabPage(nPageId);
+                            return true;
+                        }
                     }
                 }
             }

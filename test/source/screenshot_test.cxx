@@ -131,7 +131,7 @@ void ScreenshotTest::dumpDialogToPath(VclAbstractDialog& rDialog)
 
     if (aPageDescriptions.size())
     {
-        for (sal_uInt32 a(0); a < aPageDescriptions.size(); a++)
+        for (size_t a(0); a < aPageDescriptions.size(); a++)
         {
             if (rDialog.selectPageByUIXMLDescription(aPageDescriptions[a]))
             {
@@ -155,7 +155,7 @@ void ScreenshotTest::dumpDialogToPath(Dialog& rDialog)
 
     if (aPageDescriptions.size())
     {
-        for (sal_uInt32 a(0); a < aPageDescriptions.size(); a++)
+        for (size_t a(0); a < aPageDescriptions.size(); a++)
         {
             if (rDialog.selectPageByUIXMLDescription(aPageDescriptions[a]))
             {
