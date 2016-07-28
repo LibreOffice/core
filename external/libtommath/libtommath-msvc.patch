@@ -1,0 +1,12 @@
+--- makefile.msvc	2016-02-05 23:25:32.000000000 +0100
++++ makefile.msvc	2016-07-21 11:34:20.618390100 +0200
+@@ -38,3 +38,9 @@
+ 
+ library: $(OBJECTS)
+ 	lib /out:tommath.lib $(OBJECTS)
++
++.cc.obj:
++	$(CC) /nologo $(CFLAGS) /c $<
++
++.c.obj:
++	$(CC) /nologo $(CFLAGS) /c $<
