@@ -144,6 +144,8 @@ void SwKernPortion::Paint( const SwTextPaintInfo &rInf ) const
             rInf.DrawViewOpt( *this, POR_FLD );
 
         rInf.DrawBackBrush( *this );
+        if (GetJoinBorderWithNext() ||GetJoinBorderWithPrev())
+            rInf.DrawBorder( *this );
 
         // do we have to repaint a post it portion?
         if( rInf.OnWin() && pPortion && !pPortion->Width() )
