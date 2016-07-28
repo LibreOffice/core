@@ -37,11 +37,6 @@ Renderable::Renderable (BaseWindow* pWin)
 : cppu::WeakComponentImplHelper< css::view::XRenderable >( maMutex )
 , mpWindow( pWin )
 {
-    ResStringArray aStrings( IDEResId( RID_PRINTDLG_STRLIST )  );
-    DBG_ASSERT( aStrings.Count() >= 3, "resource incomplete" );
-    if( aStrings.Count() < 3 ) // bad resource ?
-        return;
-
     m_aUIProperties.resize( 3 );
 
     // show Subgroup for print range
@@ -49,16 +44,16 @@ Renderable::Renderable (BaseWindow* pWin)
     aPrintRangeOpt.maGroupHint = "PrintRange" ;
     aPrintRangeOpt.mbInternalOnly = true;
     m_aUIProperties[0].Value = setSubgroupControlOpt("printrange",
-        OUString(aStrings.GetString(0)), OUString(), aPrintRangeOpt);
+        IDE_RESSTR( RID_STR_PRINTDLG_RANGE ), OUString(), aPrintRangeOpt);
 
     // create a choice for the range to print
     OUString aPrintContentName( "PrintContent" );
     Sequence< OUString > aChoices( 2 );
     Sequence< OUString > aHelpIds( 2 );
     Sequence< OUString > aWidgetIds( 2 );
-    aChoices[0] = aStrings.GetString( 1 );
+    aChoices[0] = IDE_RESSTR( RID_STR_PRINTDLG_ALLPAGES );
     aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" ;
-    aChoices[1] = aStrings.GetString( 2 );
+    aChoices[1] = IDE_RESSTR( RID_STR_PRINTDLG_PAGES );
     aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" ;
     aWidgetIds[0] = "printallpages" ;
     aWidgetIds[1] = "printpages" ;
