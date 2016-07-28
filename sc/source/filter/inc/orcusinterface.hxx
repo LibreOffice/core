@@ -260,9 +260,12 @@ private:
 
         bool mbHasFontAttr;
         bool mbHasUnderlineAttr;
+        bool mbHasStrikeout;
 
         FontLineStyle meUnderline;
         Color maUnderlineColor;
+
+        FontStrikeout meStrikeout;
 
         font();
 
@@ -390,6 +393,10 @@ public:
             orcus::spreadsheet::color_elem_t red,
             orcus::spreadsheet::color_elem_t green,
             orcus::spreadsheet::color_elem_t blue) override;
+    virtual void set_strikethrough_style(orcus::spreadsheet::strikethrough_style_t s);
+    virtual void set_strikethrough_type(orcus::spreadsheet::strikethrough_type_t s);
+    virtual void set_strikethrough_width(orcus::spreadsheet::strikethrough_width_t s);
+    virtual void set_strikethrough_text(orcus::spreadsheet::strikethrough_text_t s);
     virtual size_t commit_font() override;
 
     // fill
