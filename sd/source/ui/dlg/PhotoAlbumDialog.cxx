@@ -55,6 +55,7 @@ SdPhotoAlbumDialog::SdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pAc
 
     get(pInsTypeCombo, "opt_combo");
     get(pASRCheck, "asr_check");
+    get(pASRCheckCrop, "asr_check_crop");
     get(pCapCheck, "cap_check");
     get(pInsertAsLinkCheck, "insert_as_link_check");
 
@@ -93,6 +94,7 @@ void SdPhotoAlbumDialog::dispose()
     pImg.clear();
     pInsTypeCombo.clear();
     pASRCheck.clear();
+    pASRCheckCrop.clear();
     pCapCheck.clear();
     pInsertAsLinkCheck.clear();
     ModalDialog::dispose();
@@ -163,15 +165,14 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
                 ::awt::Point aPicPos;
 
-                if(pASRCheck->IsChecked())
+                if(pASRCheck->IsChecked() && !pASRCheckCrop->IsChecked())
                 {
                     // Resize the image, with keeping ASR
                     aPicSize = createASRSize(aPicSize, aPageSize);
                 }
-                else
+                else if(pASRCheckCrop->IsChecked())
                 {
-                    aPicSize.Width = aPageSize.Width;
-                    aPicSize.Height = aPageSize.Height;
+                    aPicSize = createASRSizeCrop(aPicSize, aPageSize);
                 }
 
                 xShape->setSize(aPicSize);
@@ -694,6 +695,45 @@ awt::Size SdPhotoAlbumDialog::createASRSize(const awt::Size& aPicSize, const awt
         aspect = resizeWidth/resizeHeight;
         resizeHeight = aMaxSize.Height;
         resizeWidth = resizeHeight * aspect;
+    }
+    return awt::Size(resizeWidth, resizeHeight);
+}
+
+awt::Size SdPhotoAlbumDialog::createASRSizeCrop(const awt::Size& aPicSize, const awt::Size& aMaxSize)
+{
+    double resizeWidth = aPicSize.Width;
+    double resizeHeight = aPicSize.Height;
+    double imgAspect = resizeWidth / resizeHeight;
+    double windowAspectRatio = aMaxSize.Width / aMaxSize.Height ;
+    
+    
+    //When both sides of an image are bigger than canvas size, image would be downscaled.
+    if( resizeWidth > aMaxSize.Width && resizeHeight > aMaxSize.Height )
+    {
+        if( imgAspect > windowAspectRatio )
+        {
+            resizeHeight = aMaxSize.Height;
+            resizeWidth = aMaxSize.Height * imgAspect;
+        }
+        else
+        {
+            resizeHeight = aMaxSize.Width / imgAspect;
+            resizeWidth = aMaxSize.Width;
+        }
+
+    }
+    //In all other cases image is upscaled
+    else {
+	    if( imgAspect > windowAspectRatio ) 
+	      {
+		    resizeHeight = aMaxSize.Height;
+		    resizeWidth = aMaxSize.Height * imgAspect;
+	      }
+	      else 
+	      {
+		    resizeWidth = aMaxSize.Width;
+		    resizeHeight = aMaxSize.Width / imgAspect;
+	      }
     }
     return awt::Size(resizeWidth, resizeHeight);
 }
