@@ -1772,22 +1772,22 @@ void ScInterpreter::ScArcCotHyp()
 
 void ScInterpreter::ScCosecant()
 {
-    PushDouble(1.0 / ::rtl::math::sin(GetDouble()));
+    PushDouble(div(1.0, ::rtl::math::sin(GetDouble())));
 }
 
 void ScInterpreter::ScSecant()
 {
-    PushDouble(1.0 / ::rtl::math::cos(GetDouble()));
+    PushDouble(div(1.0, ::rtl::math::cos(GetDouble())));
 }
 
 void ScInterpreter::ScCosecantHyp()
 {
-    PushDouble(1.0 / sinh(GetDouble()));
+    PushDouble(div(1.0, sinh(GetDouble())));
 }
 
 void ScInterpreter::ScSecantHyp()
 {
-    PushDouble(1.0 / cosh(GetDouble()));
+    PushDouble(div(1.0, cosh(GetDouble())));
 }
 
 void ScInterpreter::ScExp()
