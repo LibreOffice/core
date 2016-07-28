@@ -760,7 +760,7 @@ static double ScGetZw(double fZins, double fZzr, double fRmz,
 void ScFV();
 void ScNper();
 static bool RateIteration(double fNper, double fPayment, double fPv,
-                                double fFv, double fPayType, double& fGuess);
+                                double fFv, bool bPayType, double& fGuess);
 void ScRate();
 double ScGetCompoundInterest(double fZins, double fZr, double fZzr, double fBw,
                          double fZw, bool bPayInAdvance, double& fRmz);
