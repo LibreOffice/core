@@ -186,7 +186,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportRTF(const OUString &rURL
     {
         bRet = pReader->Read(*pD, OUString(), aPaM, OUString()) == 0;
     }
-    catch (std::exception const& e)
+    catch (std::exception const&)
     {
     }
     delete pReader;
