@@ -48,7 +48,9 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/bitmap.hxx>
 
+#if HAVE_FEATURE_OPENCL
 #include <opencl/openclwrapper.hxx>
+#endif
 #include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -304,6 +306,7 @@ OUString AboutDialog::GetVersionString()
         sVersion += m_aLocaleStr.replaceAll("$LOCALE", aLocaleStr);
     }
 
+#if HAVE_FEATURE_OPENCL
     OUString aCalcMode = "Calc: "; // Calc calculation mode
     bool bSWInterp = officecfg::Office::Common::Misc::UseSwInterpreter::get();
     bool bOpenCL = opencl::GPUEnv::isOpenCLEnabled();
@@ -314,6 +317,7 @@ OUString AboutDialog::GetVersionString()
     else
         aCalcMode += "single";
     sVersion += "; " + aCalcMode;
+#endif
 
     return sVersion;
 }
