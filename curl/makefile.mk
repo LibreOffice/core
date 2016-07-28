@@ -37,15 +37,15 @@ all:
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=curl-7.19.7
-TARFILE_MD5=ecb2e37e45c9933e2a963cabe03670ab
-PATCH_FILES=curl-7.19.7.patch
+TARFILE_NAME=curl-7.49.1
+TARFILE_MD5=2feb3767b958add6a177c6602ff21e8c
+PATCH_FILES=
 
 .IF "$(GUI)"=="WNT"
-    PATCH_FILES+=curl-7.19.7_win.patch
-    .IF "$(COM)"=="GCC"
-        PATCH_FILES+=curl-7.19.7_mingw.patch
-    .ENDIF
+    PATCH_FILES+=curl-7.49.1_win.patch
+#	.IF "$(COM)"=="GCC"
+#		PATCH_FILES+=curl-7.19.7_mingw.patch
+#	.ENDIF
 .ENDIF
 
 
@@ -141,7 +141,7 @@ OUT2INC= \
     include$/curl$/multi.h  		\
     include$/curl$/curl.h  			\
     include$/curl$/curlver.h  		\
-    include$/curl$/types.h  		\
+    include$/curl$/typecheck-gcc.h  	\
     include$/curl$/stdcheaders.h  	\
     include$/curl$/mprintf.h	    \
     include$/curl$/curlbuild.h		\
