@@ -488,15 +488,19 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
     switch( nId )
     {
         case SID_UNDO:
-            rWrtShell.LockPaint();
+            for (SwViewShell& rShell : rWrtShell.GetRingContainer())
+                rShell.LockPaint();
             rWrtShell.Do( SwWrtShell::UNDO, nCnt );
-            rWrtShell.UnlockPaint();
+            for (SwViewShell& rShell : rWrtShell.GetRingContainer())
+                rShell.UnlockPaint();
             break;
 
         case SID_REDO:
-            rWrtShell.LockPaint();
+            for (SwViewShell& rShell : rWrtShell.GetRingContainer())
+                rShell.LockPaint();
             rWrtShell.Do( SwWrtShell::REDO, nCnt );
-            rWrtShell.UnlockPaint();
+            for (SwViewShell& rShell : rWrtShell.GetRingContainer())
+                rShell.UnlockPaint();
             break;
 
         case SID_REPEAT:
