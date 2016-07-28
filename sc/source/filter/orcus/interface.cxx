@@ -38,6 +38,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/lineitem.hxx>
+#include <editeng/crossedoutitem.hxx>
 
 #include <formula/token.hxx>
 #include <tools/datetime.hxx>
@@ -758,8 +759,10 @@ ScOrcusStyles::font::font():
     maColor(COL_WHITE),
     mbHasFontAttr(false),
     mbHasUnderlineAttr(false),
+    mbHasStrikeout(false),
     meUnderline(LINESTYLE_NONE),
-    maUnderlineColor(COL_WHITE)
+    maUnderlineColor(COL_WHITE),
+    meStrikeout(STRIKEOUT_NONE)
 {
 }
 
@@ -791,11 +794,18 @@ std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
 
 void ScOrcusStyles::font::applyToItemSet(SfxItemSet& rSet) const
 {
-    FontItalic eItalic = mbItalic ? ITALIC_NORMAL : ITALIC_NONE;
-    rSet.Put(SvxPostureItem(eItalic, ATTR_FONT_POSTURE));
+    if (mbHasFontAttr)
+    {
+        FontItalic eItalic = mbItalic ? ITALIC_NORMAL : ITALIC_NONE;
+        rSet.Put(SvxPostureItem(eItalic, ATTR_FONT_POSTURE));
 
-    FontWeight eWeight = mbBold ? WEIGHT_BOLD : WEIGHT_NORMAL;
-    rSet.Put(SvxWeightItem(eWeight, ATTR_FONT_WEIGHT));
+        FontWeight eWeight = mbBold ? WEIGHT_BOLD : WEIGHT_NORMAL;
+        rSet.Put(SvxWeightItem(eWeight, ATTR_FONT_WEIGHT));
+
+        rSet.Put( SvxColorItem(maColor, ATTR_FONT_COLOR));
+        rSet.Put( SvxFontItem( FAMILY_DONTKNOW, maName, maName, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ));
+        rSet.Put( SvxFontHeightItem (translateToInternal(mnSize, orcus::length_unit_t::point), 100, ATTR_FONT_HEIGHT));
+    }
 
     if (mbHasUnderlineAttr)
     {
@@ -804,9 +814,8 @@ void ScOrcusStyles::font::applyToItemSet(SfxItemSet& rSet) const
         rSet.Put(aUnderline);
     }
 
-    rSet.Put( SvxColorItem(maColor, ATTR_FONT_COLOR));
-    rSet.Put( SvxFontItem( FAMILY_DONTKNOW, maName, maName, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ));
-    rSet.Put( SvxFontHeightItem (translateToInternal(mnSize, orcus::length_unit_t::point), 100, ATTR_FONT_HEIGHT));
+    if (mbHasStrikeout)
+        rSet.Put(SvxCrossedOutItem(meStrikeout, ATTR_FONT_CROSSEDOUT));
 }
 
 void ScOrcusStyles::fill::applyToItemSet(SfxItemSet& rSet) const
@@ -941,8 +950,7 @@ void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, const xf& rXf)
     }
 
     const font& rFont = maFonts[nFontId];
-    if (rFont.mbHasFontAttr)
-        rFont.applyToItemSet(rSet);
+    rFont.applyToItemSet(rSet);
 
     size_t nFillId = rXf.mnFillId;
     if (nFillId >= maFills.size())
@@ -1140,6 +1148,66 @@ void ScOrcusStyles::set_font_color(orcus::spreadsheet::color_elem_t alpha,
             orcus::spreadsheet::color_elem_t blue)
 {
     maCurrentFont.maColor = Color(alpha, red, green, blue);
+}
+
+void ScOrcusStyles::set_strikethrough_style(orcus::spreadsheet::strikethrough_style_t /*s*/)
+{
+}
+
+void ScOrcusStyles::set_strikethrough_type(orcus::spreadsheet::strikethrough_type_t s)
+{
+    if (maCurrentFont.meStrikeout != STRIKEOUT_BOLD &&
+        maCurrentFont.meStrikeout != STRIKEOUT_SLASH &&
+        maCurrentFont.meStrikeout != STRIKEOUT_X)
+    {
+        switch (s)
+        {
+            case os::strikethrough_type_t::unknown:
+                maCurrentFont.meStrikeout = STRIKEOUT_DONTKNOW;
+                break;
+            case os::strikethrough_type_t::none:
+                maCurrentFont.meStrikeout = STRIKEOUT_NONE;
+                break;
+            case os::strikethrough_type_t::single:
+                maCurrentFont.meStrikeout = STRIKEOUT_SINGLE;
+                break;
+            case os::strikethrough_type_t::double_type:
+                maCurrentFont.meStrikeout = STRIKEOUT_DOUBLE;
+                break;
+            default:
+                ;
+        }
+    }
+    maCurrentFont.mbHasStrikeout = true;
+}
+
+void ScOrcusStyles::set_strikethrough_width(orcus::spreadsheet::strikethrough_width_t s)
+{
+    switch (s)
+    {
+        case os::strikethrough_width_t::bold:
+            maCurrentFont.meStrikeout = STRIKEOUT_BOLD;
+            break;
+        default:
+            ;
+    }
+    maCurrentFont.mbHasStrikeout = true;
+}
+
+void ScOrcusStyles::set_strikethrough_text(orcus::spreadsheet::strikethrough_text_t s)
+{
+    switch (s)
+    {
+        case os::strikethrough_text_t::slash:
+            maCurrentFont.meStrikeout = STRIKEOUT_SLASH;
+            break;
+        case os::strikethrough_text_t::cross:
+            maCurrentFont.meStrikeout = STRIKEOUT_X;
+            break;
+        default:
+            ;
+    }
+    maCurrentFont.mbHasStrikeout = true;
 }
 
 size_t ScOrcusStyles::commit_font()
