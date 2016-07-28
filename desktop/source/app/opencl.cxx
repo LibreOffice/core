@@ -28,7 +28,9 @@
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
+#if HAVE_FEATURE_OPENCL
 #include <opencl/openclwrapper.hxx>
+#endif
 #include <opencl/OpenCLZone.hxx>
 
 #include <osl/file.hxx>
