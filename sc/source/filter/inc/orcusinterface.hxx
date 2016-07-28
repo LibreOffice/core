@@ -15,6 +15,7 @@
 
 #include <tools/color.hxx>
 #include <tools/fontenum.hxx>
+#include <editeng/svxenum.hxx>
 
 #include "sharedformulagroups.hxx"
 
@@ -348,6 +349,10 @@ private:
         size_t mnProtectionId;
         size_t mnNumberFormatId;
         size_t mnStyleXf;
+        bool mbAlignment;
+
+        SvxCellHorJustify meHor_alignment;
+        SvxCellVerJustify meVer_alignment;
 
         xf();
     };

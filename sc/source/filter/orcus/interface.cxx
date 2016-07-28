@@ -39,6 +39,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/crossedoutitem.hxx>
+#include <editeng/justifyitem.hxx>
 
 #include <formula/token.hxx>
 #include <tools/datetime.hxx>
@@ -930,7 +931,10 @@ ScOrcusStyles::xf::xf():
     mnBorderId(0),
     mnProtectionId(0),
     mnNumberFormatId(0),
-    mnStyleXf(0)
+    mnStyleXf(0),
+    mbAlignment(false),
+    meHor_alignment(SVX_HOR_JUSTIFY_LEFT),
+    meVer_alignment(SVX_VER_JUSTIFY_CENTER)
 {
 }
 
@@ -992,6 +996,12 @@ void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, const xf& rXf)
     const number_format& rFormat = maNumberFormats[nNumberFormatId];
     if (rFormat.mbHasNumberFormatAttr)
         rFormat.applyToItemSet(rSet, mrDoc);
+
+    if(rXf.mbAlignment)
+    {
+        rSet.Put(SvxHorJustifyItem(rXf.meHor_alignment, ATTR_HOR_JUSTIFY));
+        rSet.Put(SvxVerJustifyItem(rXf.meVer_alignment, ATTR_VER_JUSTIFY));
+    }
 }
 
 void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, size_t xfId)
@@ -1464,12 +1474,48 @@ void ScOrcusStyles::set_xf_apply_alignment(bool /*b*/)
 {
 }
 
-void ScOrcusStyles::set_xf_horizontal_alignment(orcus::spreadsheet::hor_alignment_t /*align*/)
+void ScOrcusStyles::set_xf_horizontal_alignment(orcus::spreadsheet::hor_alignment_t align)
 {
+    switch (align)
+    {
+        case os::hor_alignment_t::left:
+            maCurrentXF.meHor_alignment = SVX_HOR_JUSTIFY_LEFT;
+        break;
+        case os::hor_alignment_t::right:
+            maCurrentXF.meHor_alignment = SVX_HOR_JUSTIFY_RIGHT;
+        break;
+        case os::hor_alignment_t::center:
+            maCurrentXF.meHor_alignment = SVX_HOR_JUSTIFY_CENTER;
+        break;
+        case os::hor_alignment_t::justified:
+            maCurrentXF.meHor_alignment = SVX_HOR_JUSTIFY_STANDARD;
+        break;
+        default:
+            ;
+    }
+    maCurrentXF.mbAlignment = true;
 }
 
-void ScOrcusStyles::set_xf_vertical_alignment(orcus::spreadsheet::ver_alignment_t /*align*/)
+void ScOrcusStyles::set_xf_vertical_alignment(orcus::spreadsheet::ver_alignment_t align)
 {
+    switch (align)
+    {
+        case os::ver_alignment_t::top:
+            maCurrentXF.meVer_alignment = SVX_VER_JUSTIFY_TOP;
+        break;
+        case os::ver_alignment_t::bottom:
+            maCurrentXF.meVer_alignment = SVX_VER_JUSTIFY_BOTTOM;
+        break;
+        case os::ver_alignment_t::middle:
+            maCurrentXF.meVer_alignment = SVX_VER_JUSTIFY_CENTER;
+        break;
+        case os::ver_alignment_t::justified:
+            maCurrentXF.meVer_alignment = SVX_VER_JUSTIFY_STANDARD;
+        break;
+        default:
+            ;
+    }
+    maCurrentXF.mbAlignment = true;
 }
 
 // cell style entry
