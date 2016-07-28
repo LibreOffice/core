@@ -1210,13 +1210,28 @@ static void openDocumentCallback (GObject* source_object, GAsyncResult* res, gpo
     gtk_widget_hide(rWindow.m_pProgressBar);
 }
 
+/**
+ * Wrapper around gtk_widget_destroy() that quits when the last tiled window is
+ * destroyed.
+ */
+static void destroyWindow(GtkWidget* pWidget)
+{
+    gtk_widget_destroy(pWidget);
+    auto it = g_aWindows.find(pWidget);
+    if (it != g_aWindows.end())
+        g_aWindows.erase(it);
+
+    if (g_aWindows.empty())
+        gtk_main_quit();
+}
+
 /// Creates the GtkWindow that has main widget as children and registers it in the window map.
 static GtkWidget* createWindow(TiledWindow& rWindow)
 {
     GtkWidget *pWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(pWindow), "LibreOfficeKit GTK Tiled Viewer");
     gtk_window_set_default_size(GTK_WINDOW(pWindow), 1024, 768);
-    g_signal_connect(pWindow, "destroy", G_CALLBACK(gtk_widget_destroy), pWindow);
+    g_signal_connect(pWindow, "destroy", G_CALLBACK(destroyWindow), pWindow);
 
     rWindow.m_pVBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_container_add(GTK_CONTAINER(pWindow), rWindow.m_pVBox);
