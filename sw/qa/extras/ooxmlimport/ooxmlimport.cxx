@@ -1732,32 +1732,6 @@ DECLARE_OOXMLIMPORT_TEST(testfdo76583, "fdo76583.docx")
     lcl_countTextFrames( mxComponent, 1 );
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf75573, "tdf75573_page1frame.docx")
-{
-    // the problem was that the frame was discarded
-    // when an unrelated, unused, odd-header was flagged as discardable
-    lcl_countTextFrames( mxComponent, 1 );
-
-    // the frame should be on page 1
-    CPPUNIT_ASSERT_EQUAL( OUString("lorem ipsum"), parseDump("/root/page[1]/body/section/txt/anchored/fly/txt[1]/text()") );
-
-    // the "Proprietary" style should set the vertical and horizontal anchors to the page
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xPropertySet, "VertOrientRelation"));
-    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xPropertySet, "HoriOrientRelation"));
-
-    // the frame should be located near the bottom[23186]/center[2955] of the page
-    CPPUNIT_ASSERT(sal_Int32(20000) < getProperty<sal_Int32>(xPropertySet, "VertOrientPosition"));
-    CPPUNIT_ASSERT(sal_Int32(2500) < getProperty<sal_Int32>(xPropertySet, "HoriOrientPosition"));
-
-    css::uno::Reference<css::lang::XMultiServiceFactory> m_xTextFactory(mxComponent, uno::UNO_QUERY);
-    uno::Reference< beans::XPropertySet > xSettings(m_xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
-    uno::Any aProtect = xSettings->getPropertyValue("ProtectForm");
-    bool bProt = true;
-    aProtect >>= bProt;
-    CPPUNIT_ASSERT(!bProt);
-}
-
 DECLARE_OOXMLIMPORT_TEST(testFdo43093, "fdo43093.docx")
 {
     // The problem was that the direction and alignment are not correct for RTL paragraphs.

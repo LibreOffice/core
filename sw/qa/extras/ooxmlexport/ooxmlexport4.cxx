@@ -978,6 +978,28 @@ DECLARE_OOXMLEXPORT_TEST(testTdf96750_landscapeFollow, "tdf96750_landscapeFollow
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle, "IsLandscape"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf75573, "tdf75573_page1frame.docx")
+{
+    // the frame should be on page 1
+    CPPUNIT_ASSERT_EQUAL( OUString("lorem ipsum"), parseDump("/root/page[1]/body//txt/anchored/fly/txt[1]/text()") );
+
+    // the "Proprietary" style should set the vertical and horizontal anchors to the page
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xPropertySet, "VertOrientRelation"));
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xPropertySet, "HoriOrientRelation"));
+
+    // the frame should be located near the bottom[23186]/center[2955] of the page
+    CPPUNIT_ASSERT(sal_Int32(20000) < getProperty<sal_Int32>(xPropertySet, "VertOrientPosition"));
+    CPPUNIT_ASSERT(sal_Int32(2500) < getProperty<sal_Int32>(xPropertySet, "HoriOrientPosition"));
+
+    css::uno::Reference<css::lang::XMultiServiceFactory> m_xTextFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySet > xSettings(m_xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+    uno::Any aProtect = xSettings->getPropertyValue("ProtectForm");
+    bool bProt = true;
+    aProtect >>= bProt;
+    CPPUNIT_ASSERT(!bProt);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf64372_continuousBreaks,"tdf64372_continuousBreaks.docx")
 {
     //There are no page breaks, so everything should be on the first page.

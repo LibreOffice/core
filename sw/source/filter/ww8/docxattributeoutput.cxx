@@ -597,6 +597,8 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
             popFromTableExportContext(aTableExportContext);
         }
         aFramePrTextbox.clear();
+        // Anchor point for the frame paragraph(s) to attach to
+        EmptyParagraph();
     }
     // Check for end of cell, rows, tables here
     FinishTableRowCell( pTextNodeInfoInner );
