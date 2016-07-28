@@ -3157,6 +3157,9 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         return;
     }
 
+    if (!m_pImpl->hasTableManager())
+        return;
+
     try
     {
         m_pImpl->getTableManager().utext(data_, len);
