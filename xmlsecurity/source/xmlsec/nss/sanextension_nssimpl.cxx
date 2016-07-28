@@ -193,4 +193,29 @@ OString SanExtensionImpl::removeOIDFromString( const OString &oidString)
 
 }
 
+void SanExtensionImpl::setCertExtn( unsigned char* value, unsigned int vlen, unsigned char* id, unsigned int idlen, bool critical ) {
+    unsigned int i ;
+    if( value != nullptr && vlen != 0 ) {
+        Sequence< sal_Int8 > extnv( vlen ) ;
+        for( i = 0; i < vlen ; i ++ )
+            extnv[i] = *( value + i ) ;
+
+        m_xExtnValue = extnv ;
+    } else {
+        m_xExtnValue = Sequence<sal_Int8>();
+    }
+
+    if( id != nullptr && idlen != 0 ) {
+        Sequence< sal_Int8 > extnId( idlen ) ;
+        for( i = 0; i < idlen ; i ++ )
+            extnId[i] = *( id + i ) ;
+
+        m_xExtnId = extnId ;
+    } else {
+        m_xExtnId =  Sequence<sal_Int8>();
+    }
+
+    m_critical = critical ;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
