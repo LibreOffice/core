@@ -2394,12 +2394,6 @@ DECLARE_RTFIMPORT_TEST(testTdf94435, "tdf94435.rtf")
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")));
 }
 
-DECLARE_RTFIMPORT_TEST(testTdf59454, "tdf59454.rtf")
-{
-    // This was 1, section break was ignored right before a table.
-    CPPUNIT_ASSERT_EQUAL(2, getPages());
-}
-
 DECLARE_RTFIMPORT_TEST(testLndscpsxn, "lndscpsxn.rtf")
 {
     // Check landscape flag.
