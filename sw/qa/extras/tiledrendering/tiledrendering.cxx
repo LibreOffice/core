@@ -58,6 +58,7 @@ public:
     void testViewCursorCleanup();
     void testViewLock();
     void testTextEditViewInvalidations();
+    void testUndoInvalidations();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -82,6 +83,7 @@ public:
     CPPUNIT_TEST(testViewCursorCleanup);
     CPPUNIT_TEST(testViewLock);
     CPPUNIT_TEST(testTextEditViewInvalidations);
+    CPPUNIT_TEST(testUndoInvalidations);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -849,6 +851,40 @@ void SwTiledRenderingTest::testTextEditViewInvalidations()
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
 
     pWrtShell->EndTextEdit();
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testUndoInvalidations()
+{
+    // Load a document and create two views.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    SfxLokHelper::createView();
+    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ViewCallback aView2;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+
+    // Insert a character the end of the document.
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->EndDoc();
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+    CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb.c"), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+
+    // Undo and assert that both views are invalidated.
+    aView1.m_bTilesInvalidated = false;
+    aView2.m_bTilesInvalidated = false;
+    comphelper::dispatchCommand(".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
+    // Undo was dispatched on the first view, this second view was not invalidated.
+    CPPUNIT_ASSERT(aView2.m_bTilesInvalidated);
+
     mxComponent->dispose();
     mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
