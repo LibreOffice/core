@@ -32,16 +32,16 @@ OpenGLFramebuffer::~OpenGLFramebuffer()
     CHECK_GL_ERROR();
 }
 
-void OpenGLFramebuffer::Bind()
+void OpenGLFramebuffer::Bind(GLenum eTarget)
 {
     VCL_GL_INFO( "Binding framebuffer " << (int)mnId );
-    glBindFramebuffer( GL_FRAMEBUFFER, mnId );
+    glBindFramebuffer(eTarget, mnId);
     CHECK_GL_ERROR();
 }
 
-void OpenGLFramebuffer::Unbind()
+void OpenGLFramebuffer::Unbind(GLenum eTarget)
 {
-    glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+    glBindFramebuffer(eTarget, 0);
     CHECK_GL_ERROR();
     VCL_GL_INFO( "Binding default framebuffer" );
 }
