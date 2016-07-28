@@ -19,6 +19,7 @@
 
 #include <com/sun/star/text/NotePrintMode.hpp>
 #include <cstdarg>
+#include <libxml/xmlwriter.h>
 #include <cmdid.h>
 #include <sfx2/request.hxx>
 #include <sfx2/progress.hxx>
@@ -256,6 +257,15 @@ int SwView::getPart() const
     m_pWrtShell->GetPageNumber(-1, m_pWrtShell->IsCursorVisible(), nPage, nLogPage, sDisplay);
 
     return nPage - 1;
+}
+
+void SwView::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swView"));
+    SfxViewShell::dumpAsXml(pWriter);
+    if (m_pWrtShell)
+        m_pWrtShell->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
 }
 
 // Create page printer/additions for SwView and SwPagePreview

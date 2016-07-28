@@ -85,6 +85,7 @@
 #include <shellimpl.hxx>
 
 #include <vector>
+#include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1646,6 +1647,13 @@ bool SfxViewShell::isTiledSearching() const
 int SfxViewShell::getPart() const
 {
     return 0;
+}
+
+void SfxViewShell::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sfxViewShell"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    xmlTextWriterEndElement(pWriter);
 }
 
 bool SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )

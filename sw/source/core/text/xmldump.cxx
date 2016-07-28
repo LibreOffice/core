@@ -22,6 +22,7 @@
 #include <anchoredobject.hxx>
 #include <libxml/xmlwriter.h>
 #include <SwPortionHandler.hxx>
+#include <view.hxx>
 #include <svx/svdobj.hxx>
 
 class XmlPortionDumper:public SwPortionHandler
@@ -297,9 +298,14 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
         if (IsRootFrame())
         {
             const SwRootFrame* pRootFrame = static_cast<const SwRootFrame*>(this);
-            xmlTextWriterStartElement(writer, BAD_CAST("shells"));
-            for (SwViewShell& rViewShell : pRootFrame->GetCurrShell()->GetRingContainer())
-                rViewShell.dumpAsXml(writer);
+            xmlTextWriterStartElement(writer, BAD_CAST("sfxViewShells"));
+            SwView* pView = static_cast<SwView*>(SfxViewShell::GetFirst(true, checkSfxViewShell<SwView>));
+            while (pView)
+            {
+                if (pView->GetObjectShell() == pRootFrame->GetCurrShell()->GetSfxViewShell()->GetObjectShell())
+                    pView->dumpAsXml(writer);
+                pView = static_cast<SwView*>(SfxViewShell::GetNext(*pView, true, checkSfxViewShell<SwView>));
+            }
             xmlTextWriterEndElement(writer);
         }
 
