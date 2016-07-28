@@ -51,8 +51,8 @@ public:
     void                SetViewAlign( WindowAlign eAlign ) { meViewAlign = eAlign; }
 
     // Screenshot interface
-    virtual std::vector<OString> getAllPageUIXMLDescriptions() const;
-    virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription);
+    virtual std::vector<OString> getAllPageUIXMLDescriptions() const override;
+    virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override;
 };
 
 #endif // INCLUDED_VCL_TABDLG_HXX

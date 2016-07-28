@@ -32,7 +32,7 @@ public:                                                 \
     virtual std::vector<OString> getAllPageUIXMLDescriptions() const override; \
     virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override; \
     virtual Bitmap createScreenshot() const override;   \
-    virtual OString GetScreenshotId() const;   \
+    virtual OString GetScreenshotId() const override;   \
     virtual         ~Class();                           \
     virtual short   Execute() override ;
 
