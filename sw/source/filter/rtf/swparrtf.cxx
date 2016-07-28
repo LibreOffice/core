@@ -23,6 +23,7 @@
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <IDocumentStylePoolAccess.hxx>
+#include <swdll.hxx>
 #include <swerror.h>
 
 #include <unotextrange.hxx>
@@ -155,6 +156,34 @@ sal_uLong SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rP
 extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportRTF()
 {
     return new SwRTFReader();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportRTF(const OUString &rURL)
+{
+    Reader *pReader = ImportRTF();
+
+    SvFileStream aFileStream(rURL, StreamMode::READ);
+    tools::SvRef<SotStorage> xStorage;
+    pReader->pStrm = &aFileStream;
+    pReader->SetFltName("FILTER_RTF");
+
+    SwGlobals::ensure();
+
+    SfxObjectShellLock xDocSh(new SwDocShell(SfxObjectCreateMode::INTERNAL));
+    xDocSh->DoInitNew();
+    SwDoc *pD =  static_cast<SwDocShell*>((&xDocSh))->GetDoc();
+
+    SwNodeIndex aIdx(
+        *pD->GetNodes().GetEndOfContent().StartOfSectionNode(), 1);
+    if( !aIdx.GetNode().IsTextNode() )
+    {
+        pD->GetNodes().GoNext( &aIdx );
+    }
+    SwPaM aPaM( aIdx );
+    aPaM.GetPoint()->nContent.Assign(aIdx.GetNode().GetContentNode(), 0);
+    bool bRet = pReader->Read(*pD, OUString(), aPaM, OUString()) == 0;
+    delete pReader;
+    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

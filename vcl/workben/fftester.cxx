@@ -369,6 +369,19 @@ try_again:
                 else
                     ret = (int) (*pfnImport)(out, OUString("CWW8"));
             }
+            else if (strcmp(argv[2], "rtf") == 0)
+            {
+                static HFilterCall pfnImport(nullptr);
+                if (!pfnImport)
+                {
+                    osl::Module aLibrary;
+                    aLibrary.loadRelative(&thisModule, "libmswordlo.so", SAL_LOADMODULE_LAZY);
+                    pfnImport = reinterpret_cast<HFilterCall>(
+                        aLibrary.getFunctionSymbol("TestImportRTF"));
+                    aLibrary.release();
+                }
+                ret = (int) (*pfnImport)(out);
+            }
             else if ( (strcmp(argv[2], "xls") == 0) ||
                       (strcmp(argv[2], "wb2") == 0) )
             {
