@@ -200,13 +200,13 @@ public:
     }
 };
 
-OUString const & findChartFile(const OUString& rDir, uno::Reference< container::XNameAccess > const & xNames )
+OUString findChartFile(const OUString& rDir, uno::Reference< container::XNameAccess > const & xNames )
 {
-    uno::Sequence<OUString> rNames = xNames->getElementNames();
-    OUString* pElement = std::find_if(rNames.begin(), rNames.end(), CheckForChartName(rDir));
+    uno::Sequence<OUString> aNames = xNames->getElementNames();
+    OUString* pElement = std::find_if(aNames.begin(), aNames.end(), CheckForChartName(rDir));
 
     CPPUNIT_ASSERT(pElement);
-    CPPUNIT_ASSERT(pElement != rNames.end());
+    CPPUNIT_ASSERT(pElement != aNames.end());
     return *pElement;
 }
 
