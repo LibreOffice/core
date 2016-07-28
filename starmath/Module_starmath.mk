@@ -21,6 +21,7 @@ $(eval $(call gb_Module_add_l10n_targets,starmath,\
 ))
 
 $(eval $(call gb_Module_add_check_targets,starmath,\
+    CppunitTest_starmath_export \
     CppunitTest_starmath_import \
     CppunitTest_starmath_qa_cppunit \
 ))
