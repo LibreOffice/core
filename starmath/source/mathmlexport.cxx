@@ -804,6 +804,13 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int /*nLevel*/)
         // Export NMATH and NGLYPH_SPECIAL symbols as <mo> elements
         pMath = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MO, true, false);
     }
+    else if (pNode->GetType() == NSPECIAL)
+    {
+        bool bIsItalic = IsItalic(pNode->GetFont());
+        if (!bIsItalic)
+            AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, XML_NORMAL);
+        pMath = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MI, true, false);
+    }
     else
     {
         // Export NMATHIDENT and NPLACE symbols as <mi> elements:
