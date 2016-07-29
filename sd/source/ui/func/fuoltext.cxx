@@ -72,12 +72,12 @@ static sal_uInt16 SidArray[] = {
                 SID_SET_SUPER_SCRIPT,
                 SID_SET_SUB_SCRIPT,
                 SID_HYPERLINK_GETLINK,
+                SID_PARASPACE_INCREASE,
+                SID_PARASPACE_DECREASE,
                 SID_STATUS_PAGE,
                 SID_STATUS_LAYOUT,
                 SID_EXPAND_PAGE,
                 SID_SUMMARY_PAGE,
-                SID_PARASPACE_INCREASE,
-                SID_PARASPACE_DECREASE,
                 0 };
 
 
