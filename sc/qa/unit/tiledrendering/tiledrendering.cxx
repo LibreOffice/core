@@ -59,6 +59,7 @@ public:
     void testTextViewSelection();
     void testDocumentSizeChanged();
     void testViewLock();
+    void testColRowResize();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -69,6 +70,7 @@ public:
     CPPUNIT_TEST(testTextViewSelection);
     CPPUNIT_TEST(testDocumentSizeChanged);
     CPPUNIT_TEST(testViewLock);
+    CPPUNIT_TEST(testColRowResize);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -514,6 +516,47 @@ void ScTiledRenderingTest::testViewLock()
 
     mxComponent->dispose();
     mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testColRowResize()
+{
+    comphelper::LibreOfficeKit::setActive();
+    ScModelObj* pModelObj = createDoc("sort-range.ods");
+    ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( pModelObj->GetEmbeddedObject() );
+    CPPUNIT_ASSERT(pDocSh);
+
+    ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pViewShell);
+
+    pViewShell->registerLibreOfficeKitViewCallback(&ScTiledRenderingTest::callback, this);
+
+    uno::Sequence<beans::PropertyValue> aArgs(2);
+    ScDocument& rDoc = pDocSh->GetDocument();
+    // Col 3, Tab 0
+    int nOldWidth = rDoc.GetColWidth(static_cast<SCCOL>(2), static_cast<SCTAB>(0), false);
+
+    aArgs[0].Name = OUString::fromUtf8("Column");
+    aArgs[0].Value <<= static_cast<sal_Int16>(3);
+    aArgs[1].Name = OUString::fromUtf8("Width");
+    aArgs[1].Value <<= static_cast<sal_uInt16>(nOldWidth + 100);
+    comphelper::dispatchCommand(".uno:ColumnWidth", aArgs);
+
+    int nNewWidth = rDoc.GetColWidth(static_cast<SCCOL>(2), static_cast<SCTAB>(0), false);
+    CPPUNIT_ASSERT(nNewWidth > nOldWidth);
+
+    // Row 5, Tab 0
+    int nOldHeight = rDoc.GetRowHeight(static_cast<SCROW>(4), static_cast<SCTAB>(0), false);
+
+    aArgs[0].Name = OUString::fromUtf8("Row");
+    aArgs[0].Value <<= static_cast<sal_Int16>(5);
+    aArgs[1].Name = OUString::fromUtf8("Height");
+    aArgs[1].Value <<= static_cast<sal_uInt16>(nOldHeight + 100);
+    comphelper::dispatchCommand(".uno:RowHeight", aArgs);
+
+    int nNewHeight = rDoc.GetRowHeight(static_cast<SCROW>(4), static_cast<SCTAB>(0), false);
+    CPPUNIT_ASSERT(nNewHeight > nOldHeight);
+
     comphelper::LibreOfficeKit::setActive(false);
 }
 
