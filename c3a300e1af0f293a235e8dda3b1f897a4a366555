@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_302530c2",
+        "filename": "Makefile.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-07-29T23:13:37Z",
+      "side": 1,
+      "message": "make top level makefile reach \"screenshot\" target through",
+      "revId": "c3a300e1af0f293a235e8dda3b1f897a4a366555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_10403456",
+        "filename": "solenv/gbuild/Module.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-07-29T23:13:37Z",
+      "side": 1,
+      "message": "whops?",
+      "revId": "c3a300e1af0f293a235e8dda3b1f897a4a366555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
