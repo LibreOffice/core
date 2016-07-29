@@ -242,11 +242,6 @@ ScPrintUIOptions::ScPrintUIOptions()
     sal_Int32 nContent = rPrintOpt.GetAllSheets() ? 0 : 1;
     bool bSuppress = rPrintOpt.GetSkipEmpty();
 
-    ResStringArray aStrings( ScResId( SCSTR_PRINT_OPTIONS ) );
-    OSL_ENSURE( aStrings.Count() >= 10, "resource incomplete" );
-    if( aStrings.Count() < 10 ) // bad resource ?
-        return;
-
     sal_Int32 nNumProps= 9, nIdx = 0;
 
     m_aUIProperties.resize(nNumProps);
@@ -257,34 +252,34 @@ ScPrintUIOptions::ScPrintUIOptions()
 
     // create Section for spreadsheet (results in an extra tab page in dialog)
     SvtModuleOptions aOpt;
-    OUString aAppGroupname( aStrings.GetString( 9 ) );
+    OUString aAppGroupname( SC_RESSTR( SCSTR_PRINTOPT_PRODNAME ) );
     aAppGroupname = aAppGroupname.replaceFirst( "%s", aOpt.GetModuleName( SvtModuleOptions::EModule::CALC ) );
     m_aUIProperties[nIdx++].Value = setGroupControlOpt("tabcontrol-page2", aAppGroupname, OUString());
 
     // show subgroup for pages
-    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("pages", OUString(aStrings.GetString(0)), OUString());
+    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("pages", SC_RESSTR( SCSTR_PRINTOPT_PAGES ), OUString());
 
     // create a bool option for empty pages
-    m_aUIProperties[nIdx++].Value = setBoolControlOpt("suppressemptypages", OUString( aStrings.GetString( 1 ) ),
+    m_aUIProperties[nIdx++].Value = setBoolControlOpt("suppressemptypages", SC_RESSTR( SCSTR_PRINTOPT_SUPPRESSEMPTY ),
                                                   ".HelpID:vcl:PrintDialog:IsSuppressEmptyPages:CheckBox",
                                                   "IsSuppressEmptyPages",
                                                   bSuppress);
     // show Subgroup for print content
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
     aPrintRangeOpt.maGroupHint = "PrintRange";
-    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("printrange", OUString(aStrings.GetString(2)),
+    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("printrange", SC_RESSTR( SCSTR_PRINTOPT_PRNTCONTENT ),
                                                       OUString(),
                                                       aPrintRangeOpt);
 
     // create a choice for the content to create
     uno::Sequence< OUString > aChoices( 3 ), aHelpIds( 3 ), aWidgetIds( 3 );
-    aChoices[0] = aStrings.GetString( 3 );
+    aChoices[0] = SC_RESSTR( SCSTR_PRINTOPT_ALLSHEETS );
     aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0";
     aWidgetIds[0] = "printallsheets";
-    aChoices[1] = aStrings.GetString( 4 );
+    aChoices[1] = SC_RESSTR( SCSTR_PRINTOPT_SELECTEDSHEETS );
     aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1";
     aWidgetIds[1] = "printselectedsheets";
-    aChoices[2] = aStrings.GetString( 5 );
+    aChoices[2] = SC_RESSTR( SCSTR_PRINTOPT_SELECTEDCELLS );
     aHelpIds[2] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2";
     aWidgetIds[2] = "printselectedcells";
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
@@ -293,7 +288,7 @@ ScPrintUIOptions::ScPrintUIOptions()
 
     // show Subgroup for print range
     aPrintRangeOpt.mbInternalOnly = true;
-    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("fromwhich", OUString(aStrings.GetString(6)),
+    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("fromwhich", SC_RESSTR( SCSTR_PRINTOPT_FROMWHICH ),
                                                       OUString(),
                                                       aPrintRangeOpt);
 
@@ -302,10 +297,10 @@ ScPrintUIOptions::ScPrintUIOptions()
     aChoices.realloc( 2 );
     aHelpIds.realloc( 2 );
     aWidgetIds.realloc( 2 );
-    aChoices[0] = aStrings.GetString( 7 );
+    aChoices[0] = SC_RESSTR( SCSTR_PRINTOPT_ALLPAGES );
     aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:0";
     aWidgetIds[0] = "printallpages";
-    aChoices[1] = aStrings.GetString( 8 );
+    aChoices[1] = SC_RESSTR( SCSTR_PRINTOPT_PAGES_ );
     aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:1";
     aWidgetIds[1] = "printpages";
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
