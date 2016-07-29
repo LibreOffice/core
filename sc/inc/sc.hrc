@@ -826,6 +826,18 @@
 #define SCSTR_AUTHOR                (STR_START + 113)
 #define SCSTR_UNIT                  (STR_START + 114)
 
+// print options
+#define SCSTR_PRINTOPT_PAGES            (STR_START + 120)
+#define SCSTR_PRINTOPT_SUPPRESSEMPTY    (STR_START + 121)
+#define SCSTR_PRINTOPT_PRNTCONTENT      (STR_START + 122)
+#define SCSTR_PRINTOPT_ALLSHEETS        (STR_START + 123)
+#define SCSTR_PRINTOPT_SELECTEDSHEETS   (STR_START + 124)
+#define SCSTR_PRINTOPT_SELECTEDCELLS    (STR_START + 125)
+#define SCSTR_PRINTOPT_FROMWHICH        (STR_START + 126)
+#define SCSTR_PRINTOPT_ALLPAGES         (STR_START + 127)
+#define SCSTR_PRINTOPT_PAGES_           (STR_START + 128)
+#define SCSTR_PRINTOPT_PRODNAME         (STR_START + 129)
+
 // accessibility
 
 // CSV import
@@ -886,7 +898,7 @@
 #define SCSTR_FORMULA_AUTOCORRECTION    (STR_START + 214)
 
 #define SCSTR_RENAMEOBJECT              (STR_START + 215)
-#define SCSTR_PRINT_OPTIONS             (STR_START + 216)
+//free slot
 #define SCSTR_WARN_ME_IN_FUTURE_CHECK   (STR_START + 217)
 
 // header of search result dialog

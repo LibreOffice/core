@@ -703,21 +703,54 @@ String SCSTR_MOREBTN_FEWEROPTIONS
     Text [ en-US ] = "Fewer ~Options";
 };
 
-StringArray SCSTR_PRINT_OPTIONS
+String SCSTR_PRINTOPT_PAGES
 {
-    ItemList [en-US] =
-    {
-        < "Pages"; >;
-        < "~Suppress output of empty pages"; >;
-        < "Print content"; >;
-        < "~All sheets"; >;
-        < "~Selected sheets"; >;
-        < "Selected cells"; >;
-        < "From which print"; >;
-        < "All ~pages"; >;
-        < "Pa~ges"; >;
-        < "%PRODUCTNAME %s"; >;
-    };
+    Text [ en-US ] = "Pages";
+};
+
+String SCSTR_PRINTOPT_SUPPRESSEMPTY
+{
+    Text [ en-US ] = "~Suppress output of empty pages";
+};
+
+String SCSTR_PRINTOPT_PRNTCONTENT
+{
+    Text [ en-US ] = "Print content";
+};
+
+String SCSTR_PRINTOPT_ALLSHEETS
+{
+    Text [ en-US ] = "~All sheets";
+};
+
+String SCSTR_PRINTOPT_SELECTEDSHEETS
+{
+    Text [ en-US ] = "~Selected sheets";
+};
+
+String SCSTR_PRINTOPT_SELECTEDCELLS
+{
+    Text [ en-US ] = "Selected cells";
+};
+
+String SCSTR_PRINTOPT_FROMWHICH
+{
+    Text [ en-US ] = "From which print";
+};
+
+String SCSTR_PRINTOPT_ALLPAGES
+{
+    Text [ en-US ] = "All ~pages";
+};
+
+String SCSTR_PRINTOPT_PAGES_
+{
+    Text [ en-US ] = "Pa~ges";
+};
+
+String SCSTR_PRINTOPT_PRODNAME
+{
+    Text [ en-US ] = "%PRODUCTNAME %s";
 };
 
 String SCSTR_WARN_ME_IN_FUTURE_CHECK
