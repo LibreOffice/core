@@ -129,7 +129,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_FILL_TO_BOTTOM:    // fill to top / bottom
             {
                 bDisable = !bSimpleArea || (nRow1 == 0 && nRow2 == 0);
-                if (!bDisable && GetViewData()->SelectionForbidsPaste())
+                if (!bDisable && GetViewData()->SelectionForbidsCellFill())
                     bDisable = true;
                 if ( !bDisable && bEditable )
                 {   // do not damage matrix
@@ -141,7 +141,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_FILL_TO_TOP:
             {
                 bDisable = (!bSimpleArea) || (nRow1 == MAXROW && nRow2 == MAXROW);
-                if (!bDisable && GetViewData()->SelectionForbidsPaste())
+                if (!bDisable && GetViewData()->SelectionForbidsCellFill())
                     bDisable = true;
                 if ( !bDisable && bEditable )
                 {   // do not damage matrix
@@ -153,7 +153,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_FILL_TO_RIGHT:     // fill to left / right
             {
                 bDisable = !bSimpleArea || (nCol1 == 0 && nCol2 == 0);
-                if (!bDisable && GetViewData()->SelectionForbidsPaste())
+                if (!bDisable && GetViewData()->SelectionForbidsCellFill())
                     bDisable = true;
                 if ( !bDisable && bEditable )
                 {   // do not damage matrix
@@ -165,7 +165,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_FILL_TO_LEFT:
             {
                 bDisable = (!bSimpleArea) || (nCol1 == MAXCOL && nCol2 == MAXCOL);
-                if (!bDisable && GetViewData()->SelectionForbidsPaste())
+                if (!bDisable && GetViewData()->SelectionForbidsCellFill())
                     bDisable = true;
                 if ( !bDisable && bEditable )
                 {   // do not damage matrix
@@ -176,7 +176,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             break;
 
             case SID_RANDOM_NUMBER_GENERATOR_DIALOG:
-                bDisable = !bSimpleArea || GetViewData()->SelectionForbidsPaste();
+                bDisable = !bSimpleArea || GetViewData()->SelectionForbidsCellFill();
             break;
             case SID_SAMPLING_DIALOG:
             case SID_DESCRIPTIVE_STATISTICS_DIALOG:
@@ -195,7 +195,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 else
                     bDisable = (!bSimpleArea) || (nCol1 == nCol2 && nRow1 == nRow2);
 
-                if (!bDisable && GetViewData()->SelectionForbidsPaste())
+                if (!bDisable && GetViewData()->SelectionForbidsCellFill())
                     bDisable = true;
 
                 if ( !bDisable && bEditable && nWhich == FID_FILL_SERIES )
@@ -223,7 +223,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case SID_PASTE_ONLY_VALUE:
             case SID_PASTE_ONLY_TEXT:
             case SID_PASTE_ONLY_FORMULA:
-                bDisable = GetViewData()->SelectionForbidsPaste();
+                bDisable = GetViewData()->SelectionForbidsCellFill();
                 break;
 
             case FID_INS_ROW:
@@ -511,7 +511,7 @@ bool checkDestRanges(ScViewData& rViewData)
             return false;
     }
 
-    if (rViewData.SelectionForbidsPaste())
+    if (rViewData.SelectionForbidsCellFill())
         return false;
 
     // Multiple destination ranges.

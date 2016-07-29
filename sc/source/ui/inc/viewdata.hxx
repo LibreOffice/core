@@ -354,8 +354,11 @@ public:
 
     bool            IsMultiMarked();
 
-                    /// Disallow paste on Ctrl+A all selected. We'd go DOOM.
-    bool            SelectionForbidsPaste();
+                    /** Disallow cell fill (Paste,Fill,...) on Ctrl+A all
+                        selected or another high amount of selected cells.
+                        We'd go DOOM.
+                     */
+    bool            SelectionForbidsCellFill();
                     /// Determine DOOM condition, i.e. from selected range.
     static bool     SelectionFillDOOM( const ScRange& rRange );
 

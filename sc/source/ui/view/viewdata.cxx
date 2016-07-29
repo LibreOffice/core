@@ -854,7 +854,7 @@ bool ScViewData::IsMultiMarked()
     return (eType & SC_MARK_SIMPLE) != SC_MARK_SIMPLE;
 }
 
-bool ScViewData::SelectionForbidsPaste()
+bool ScViewData::SelectionForbidsCellFill()
 {
     ScRange aSelRange( ScAddress::UNINITIALIZED );
     ScMarkType eMarkType = GetSimpleArea( aSelRange);
