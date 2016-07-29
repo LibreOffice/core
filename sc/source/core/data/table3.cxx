@@ -2142,9 +2142,10 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
             aArr.AddOpCode( ocStop );
             ScFormulaCell* pCell = new ScFormulaCell(
                 pDocument, ScAddress(nResCols[nResult], iEntry->nDestRow, nTab), aArr);
+            if ( rParam.bIncludePattern )
+                pCell->SetNeedNumberFormat(true);
 
             SetFormulaCell(nResCols[nResult], iEntry->nDestRow, pCell);
-
             if ( nResCols[nResult] != nGroupCol[iEntry->nGroupNo] )
             {
                 ApplyStyle( nResCols[nResult], iEntry->nDestRow, *pStyle );
