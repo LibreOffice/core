@@ -121,10 +121,7 @@ static sal_uInt16 GetKeyModCode( guint state )
         nCode |= KEY_MOD1;
     if( (state & GDK_MOD1_MASK) )
         nCode |= KEY_MOD2;
-
-    // Map Meta/Super keys to MOD3 modifier on all Unix systems
-    // except Mac OS X
-    if ( (state & GDK_META_MASK ) || ( state & GDK_SUPER_MASK ) )
+    if( (state & GDK_SUPER_MASK) )
         nCode |= KEY_MOD3;
     return nCode;
 }
