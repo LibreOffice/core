@@ -258,7 +258,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
             uno::Exception,
             uno::RuntimeException, std::exception )
 {
-    // the initialization is completelly controlled by user
+    // the initialization is completely controlled by user
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( "No parent storage is provided!",
                                             static_cast< ::cppu::OWeakObject* >(this),

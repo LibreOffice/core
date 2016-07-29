@@ -1917,7 +1917,7 @@ bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, bool bCommit )
 }
 
 
-// TODO/LATER: may be the call must be removed completelly
+// TODO/LATER: may be the call must be removed completely
 bool SfxObjectShell::DoSaveAs( SfxMedium& rMedium )
 {
     // here only root storages are included, which are stored via temp file

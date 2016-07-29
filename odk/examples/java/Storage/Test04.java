@@ -232,7 +232,7 @@ public class Test04 implements StorageTest {
             if ( !m_aTestHelper.disposeStorage( xResSubStorage2 ) )
                 return false;
 
-            // remove element and check that it was removed completelly
+            // remove element and check that it was removed completely
             if ( !m_aTestHelper.removeElement( xResStorage, "SubStorage2" ) )
                 return false;
 
