@@ -1126,17 +1126,8 @@ throw ( css::beans::UnknownPropertyException,
 
     // if no new styles have been created for this section, inherit from the previous section,
     // otherwise apply this section's settings to the new style.
+    // Ensure that FollowPage is inherited first - otherwise GetPageStyle may auto-create a follow when checking FirstPage.
     SectionPropertyMap* pLastContext = rDM_Impl.GetLastSectionContext();
-    if( pLastContext && m_sFirstPageStyleName.isEmpty() )
-        m_sFirstPageStyleName =  pLastContext->GetPageStyleName( /*bFirst=*/true );
-    else
-    {
-        HandleMarginsHeaderFooter( /*bFirst=*/true, rDM_Impl );
-        GetPageStyle( xPageStyles, xTextFactory, /*bFirst=*/true );
-        if( rDM_Impl.IsNewDoc() && m_aFirstPageStyle.is() )
-            ApplyProperties_( m_aFirstPageStyle );
-    }
-
     if( pLastContext && m_sFollowPageStyleName.isEmpty() )
         m_sFollowPageStyleName = pLastContext->GetPageStyleName();
     else
@@ -1145,6 +1136,16 @@ throw ( css::beans::UnknownPropertyException,
         GetPageStyle( xPageStyles, xTextFactory, /*bFirst=*/false );
         if( rDM_Impl.IsNewDoc() && m_aFollowPageStyle.is() )
             ApplyProperties_( m_aFollowPageStyle );
+    }
+
+    if( pLastContext && m_sFirstPageStyleName.isEmpty() )
+        m_sFirstPageStyleName =  pLastContext->GetPageStyleName( /*bFirst=*/true );
+    else
+    {
+        HandleMarginsHeaderFooter( /*bFirst=*/true, rDM_Impl );
+        GetPageStyle( xPageStyles, xTextFactory, /*bFirst=*/true );
+        if( rDM_Impl.IsNewDoc() && m_aFirstPageStyle.is() )
+            ApplyProperties_( m_aFirstPageStyle );
     }
 
     GetPageStyle( xPageStyles, xTextFactory, /*bFirst=*/true );
