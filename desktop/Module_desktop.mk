@@ -140,7 +140,8 @@ $(eval $(call gb_Module_add_check_targets,desktop, \
 ))
 endif
 
-$(eval $(call gb_Module_add_slowcheck_targets,desktop,\
+# screenshots
+$(eval $(call gb_Module_add_screenshot_targets,desktop,\
     CppunitTest_desktop_dialogs_test \
 ))
 

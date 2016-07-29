@@ -84,7 +84,8 @@ endif
 	JunitTest_filter_complex \
 ))
 
-$(eval $(call gb_Module_add_slowcheck_targets,filter,\
+# screenshots
+$(eval $(call gb_Module_add_screenshot_targets,filter,\
     CppunitTest_filter_dialogs_test \
 ))
 

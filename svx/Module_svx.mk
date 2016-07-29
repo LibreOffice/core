@@ -36,7 +36,8 @@ $(eval $(call gb_Module_add_check_targets,svx,\
 	CppunitTest_svx_unit \
 ))
 
-$(eval $(call gb_Module_add_slowcheck_targets,svx,\
+# screenshots
+$(eval $(call gb_Module_add_screenshot_targets,svx,\
     CppunitTest_svx_dialogs_test \
 ))
 

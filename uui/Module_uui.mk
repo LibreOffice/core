@@ -18,7 +18,8 @@ $(eval $(call gb_Module_add_l10n_targets,uui,\
 	UIConfig_uui \
 ))
 
-$(eval $(call gb_Module_add_slowcheck_targets,uui,\
+# screenshots
+$(eval $(call gb_Module_add_screenshot_targets,uui,\
     CppunitTest_uui_dialogs_test \
 ))
 

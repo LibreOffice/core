@@ -49,7 +49,8 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,svtools,\
 ))
 endif
 
-$(eval $(call gb_Module_add_slowcheck_targets,svtools,\
+# screenshots
+$(eval $(call gb_Module_add_screenshot_targets,svtools,\
     CppunitTest_svtools_dialogs_test \
 ))
 

@@ -31,7 +31,8 @@ $(eval $(call gb_Module_add_l10n_targets,xmlsecurity,\
 	CppunitTest_qa_certext \
 ))
 
-$(eval $(call gb_Module_add_slowcheck_targets,xmlsecurity,\
+# screenshots
+$(eval $(call gb_Module_add_screenshot_targets,xmlsecurity,\
     CppunitTest_xmlsecurity_dialogs_test \
 ))
 

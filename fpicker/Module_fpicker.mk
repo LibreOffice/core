@@ -32,7 +32,8 @@ $(eval $(call gb_Module_add_targets,fpicker,\
 ))
 endif
 
-$(eval $(call gb_Module_add_slowcheck_targets,fpicker,\
+# screenshots
+$(eval $(call gb_Module_add_screeshot_targets,fpicker,\
     CppunitTest_fpicker_dialogs_test \
 ))
 
