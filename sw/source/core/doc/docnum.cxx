@@ -1049,7 +1049,7 @@ void SwDoc::ChgNumRuleFormats( const SwNumRule& rRule )
         SwUndoInsNum* pUndo = nullptr;
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            pUndo = new SwUndoInsNum( *pRule, rRule );
+            pUndo = new SwUndoInsNum( *pRule, rRule, this );
             pUndo->GetHistory();
             GetIDocumentUndoRedo().AppendUndo( pUndo );
         }

@@ -4305,7 +4305,7 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
         if (bUndo)
         {
             GetIDocumentUndoRedo().ClearRedo();
-            pUndo = new SwUndoCpyTable;
+            pUndo = new SwUndoCpyTable(this);
         }
 
         {
@@ -4342,7 +4342,7 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
         if (bUndo)
         {
             GetIDocumentUndoRedo().ClearRedo();
-            pUndo = new SwUndoTableCpyTable;
+            pUndo = new SwUndoTableCpyTable(this);
             GetIDocumentUndoRedo().DoUndo(false);
         }
 

@@ -32,6 +32,7 @@ class Graphic;
 class SwGrfNode;
 class SwUndoDelete;
 class SwUndoFormatAttr;
+class SwDoc;
 namespace sw { class DocumentContentOperationsManager; }
 
 class SwUndoInsert: public SwUndo, private SwUndoSaveContent
@@ -185,7 +186,8 @@ public:
                         const OUString& rNumberSeparator, //#i61007# order of captions
                         const bool bBefore, const sal_uInt16 nId,
                         const OUString& rCharacterStyle,
-                        const bool bCpyBrd );
+                        const bool bCpyBrd,
+                        const SwDoc* pDoc );
     virtual ~SwUndoInsertLabel();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;

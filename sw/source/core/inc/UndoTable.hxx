@@ -285,7 +285,7 @@ class SwUndoTableCpyTable : public SwUndo
                 const SwPosition& rPos, bool& rJoin, bool bRedo );
 
 public:
-    SwUndoTableCpyTable();
+    SwUndoTableCpyTable(const SwDoc* pDoc);
 
     virtual ~SwUndoTableCpyTable();
 
@@ -306,7 +306,7 @@ class SwUndoCpyTable : public SwUndo
     sal_uLong nTableNode;
 
 public:
-    SwUndoCpyTable();
+    SwUndoCpyTable(const SwDoc* pDoc);
 
     virtual ~SwUndoCpyTable();
 

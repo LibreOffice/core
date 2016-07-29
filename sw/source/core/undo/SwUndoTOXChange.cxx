@@ -21,8 +21,8 @@
 #include <swundo.hxx>
 #include <doctxm.hxx>
 
-SwUndoTOXChange::SwUndoTOXChange(SwTOXBase * _pTOX, const SwTOXBase & rNew)
-    : SwUndo(UNDO_TOXCHANGE), pTOX(_pTOX), aOld(*_pTOX), aNew(rNew)
+SwUndoTOXChange::SwUndoTOXChange(const SwDoc *pDoc, SwTOXBase * _pTOX, const SwTOXBase & rNew)
+    : SwUndo(UNDO_TOXCHANGE, pDoc), pTOX(_pTOX), aOld(*_pTOX), aNew(rNew)
 {
 }
 

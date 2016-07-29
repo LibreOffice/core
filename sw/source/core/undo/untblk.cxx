@@ -33,7 +33,7 @@
 #include <redline.hxx>
 
 SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
-    : SwUndo( nUndoId ), SwUndRng( rPam ),
+    : SwUndo( nUndoId, rPam.GetDoc() ), SwUndRng( rPam ),
     pTextFormatColl( nullptr ), pLastNdColl(nullptr), pFrameFormats( nullptr ), pRedlData( nullptr ),
     bSttWasTextNd( true ), nNdDiff( 0 ), nSetPos( 0 )
 {

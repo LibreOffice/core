@@ -70,7 +70,7 @@ static SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
 SwUndoInsSection::SwUndoInsSection(
         SwPaM const& rPam, SwSectionData const& rNewData,
         SfxItemSet const*const pSet, SwTOXBase const*const pTOXBase)
-    : SwUndo( UNDO_INSSECTION ), SwUndRng( rPam )
+    : SwUndo( UNDO_INSSECTION, rPam.GetDoc() ), SwUndRng( rPam )
     , m_pSectionData(new SwSectionData(rNewData))
     , m_pTOXBase( (pTOXBase) ? new SwTOXBase(*pTOXBase) : nullptr )
     , m_pAttrSet( (pSet && pSet->Count()) ? new SfxItemSet( *pSet ) : nullptr )
@@ -303,7 +303,7 @@ SwUndo * MakeUndoDelSection(SwSectionFormat const& rFormat)
 SwUndoDelSection::SwUndoDelSection(
             SwSectionFormat const& rSectionFormat, SwSection const& rSection,
             SwNodeIndex const*const pIndex)
-    : SwUndo( UNDO_DELSECTION )
+    : SwUndo( UNDO_DELSECTION, rSectionFormat.GetDoc() )
     , m_pSectionData( new SwSectionData(rSection) )
     , m_pTOXBase( dynamic_cast<const SwTOXBaseSection*>( &rSection) !=  nullptr
             ? new SwTOXBase(static_cast<SwTOXBaseSection const&>(rSection))
@@ -412,7 +412,7 @@ MakeUndoUpdateSection(SwSectionFormat const& rFormat, bool const bOnlyAttr)
 SwUndoUpdateSection::SwUndoUpdateSection(
         SwSection const& rSection, SwNodeIndex const*const pIndex,
         bool const bOnlyAttr)
-    : SwUndo( UNDO_CHGSECTION )
+    : SwUndo( UNDO_CHGSECTION, pIndex->GetNode().GetDoc() )
     , m_pSectionData( new SwSectionData(rSection) )
     , m_pAttrSet( ::lcl_GetAttrSet(rSection) )
     , m_nStartNode( pIndex->GetIndex() )

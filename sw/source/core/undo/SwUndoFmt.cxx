@@ -33,7 +33,7 @@
 
 SwUndoFormatCreate::SwUndoFormatCreate
 (SwUndoId nUndoId, SwFormat * _pNew, SwFormat * _pDerivedFrom, SwDoc * _pDoc)
-    : SwUndo(nUndoId), pNew(_pNew),
+    : SwUndo(nUndoId, _pDoc), pNew(_pNew),
       pDoc(_pDoc), pNewSet(nullptr), nId(0), bAuto(false)
 {
     if (_pDerivedFrom)
@@ -98,7 +98,7 @@ SwRewriter SwUndoFormatCreate::GetRewriter() const
 
 SwUndoFormatDelete::SwUndoFormatDelete
 (SwUndoId nUndoId, SwFormat * _pOld, SwDoc * _pDoc)
-    : SwUndo(nUndoId),
+    : SwUndo(nUndoId, _pDoc),
       pDoc(_pDoc), sOldName(_pOld->GetName()),
       aOldSet(_pOld->GetAttrSet())
 {
@@ -150,7 +150,7 @@ SwUndoRenameFormat::SwUndoRenameFormat(SwUndoId nUndoId,
                                  const OUString & _sOldName,
                                  const OUString & _sNewName,
                                  SwDoc * _pDoc)
-    : SwUndo(nUndoId), sOldName(_sOldName),
+    : SwUndo(nUndoId, _pDoc), sOldName(_sOldName),
       sNewName(_sNewName), pDoc(_pDoc)
 {
 }
@@ -377,7 +377,7 @@ SwFormat * SwUndoRenameFrameFormat::Find(const OUString & rName) const
 
 SwUndoNumruleCreate::SwUndoNumruleCreate(const SwNumRule * _pNew,
                                          SwDoc * _pDoc)
-    : SwUndo(UNDO_NUMRULE_CREATE), pNew(_pNew), aNew(*_pNew), pDoc(_pDoc),
+    : SwUndo(UNDO_NUMRULE_CREATE, _pDoc), pNew(_pNew), aNew(*_pNew), pDoc(_pDoc),
       bInitialized(false)
 {
 }
@@ -415,7 +415,7 @@ SwRewriter SwUndoNumruleCreate::GetRewriter() const
 
 SwUndoNumruleDelete::SwUndoNumruleDelete(const SwNumRule & rRule,
                                          SwDoc * _pDoc)
-    : SwUndo(UNDO_NUMRULE_DELETE), aOld(rRule), pDoc(_pDoc)
+    : SwUndo(UNDO_NUMRULE_DELETE, _pDoc), aOld(rRule), pDoc(_pDoc)
 {
 }
 
@@ -441,7 +441,7 @@ SwRewriter SwUndoNumruleDelete::GetRewriter() const
 SwUndoNumruleRename::SwUndoNumruleRename(const OUString & _aOldName,
                                          const OUString & _aNewName,
                                          SwDoc * _pDoc)
-    : SwUndo(UNDO_NUMRULE_RENAME), aOldName(_aOldName), aNewName(_aNewName),
+    : SwUndo(UNDO_NUMRULE_RENAME, _pDoc), aOldName(_aOldName), aNewName(_aNewName),
       pDoc(_pDoc)
 {
 }
