@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_85f96850",
+        "filename": "sd/source/ui/dlg/PhotoAlbumDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-07-29T07:51:41Z",
+      "side": 1,
+      "message": "Some obvious whitespace errors.",
+      "revId": "862ea68787f8b3b0825779dceceab7286801ecf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_a594a4e8",
+        "filename": "sd/source/ui/dlg/PhotoAlbumDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-07-29T07:51:41Z",
+      "side": 1,
+      "message": "Same here. Including tabs instead of spaces.\n\nHow did you manage to commit and push this? This normally means you don\u0027t have the git hooks or ignored them. I\u0027m not sure which one is worse.",
+      "revId": "862ea68787f8b3b0825779dceceab7286801ecf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
