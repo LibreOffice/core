@@ -231,20 +231,49 @@ String RID_ERR_RIGHTEXPECTED
     Text [ en-US ] = "'RIGHT' expected" ;
 };
 
-StringArray RID_PRINTUIOPTIONS
+String RID_PRINTUIOPT_PRODNAME
 {
-    ItemList [en-US] =
-    {
-        < "%PRODUCTNAME %s"; >;
-        < "Contents"; >;
-        < "~Title"; >;
-        < "~Formula text"; >;
-        < "B~orders"; >;
-        < "Size"; >;
-        < "O~riginal size"; >;
-        < "Fit to ~page"; >;
-        < "~Scaling"; >;
-    };
+    Text [ en-US ] = "%PRODUCTNAME %s" ;
+};
+
+String RID_PRINTUIOPT_CONTENTS
+{
+    Text [ en-US ] = "Contents" ;
+};
+
+String RID_PRINTUIOPT_TITLE
+{
+    Text [ en-US ] = "~Title" ;
+};
+
+String RID_PRINTUIOPT_FRMLTXT
+{
+    Text [ en-US ] = "~Formula text" ;
+};
+
+String RID_PRINTUIOPT_BORDERS
+{
+    Text [ en-US ] = "B~orders" ;
+};
+
+String RID_PRINTUIOPT_SIZE
+{
+    Text [ en-US ] = "Size" ;
+};
+
+String RID_PRINTUIOPT_ORIGSIZE
+{
+    Text [ en-US ] = "O~riginal size" ;
+};
+
+String RID_PRINTUIOPT_FITTOPAGE
+{
+    Text [ en-US ] = "Fit to ~page" ;
+};
+
+String RID_PRINTUIOPT_SCALING
+{
+    Text [ en-US ] = "~Scaling" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
