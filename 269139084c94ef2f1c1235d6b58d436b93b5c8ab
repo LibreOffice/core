@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_706258da",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1904,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-29T10:43:12Z",
+      "side": 1,
+      "message": "Use plain Pop() instead, for two reasons: it doesn\u0027t unnecessarily create a FormulaTokenRef to return, and it doesn\u0027t set nGlobalError if there was an svError which you then have to reset.",
+      "range": {
+        "startLine": 1904,
+        "startChar": 12,
+        "endLine": 1904,
+        "endChar": 20
+      },
+      "revId": "269139084c94ef2f1c1235d6b58d436b93b5c8ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_905fe40d",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2016,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-29T10:43:12Z",
+      "side": 1,
+      "message": "Ditto.",
+      "range": {
+        "startLine": 2016,
+        "startChar": 12,
+        "endLine": 2016,
+        "endChar": 20
+      },
+      "revId": "269139084c94ef2f1c1235d6b58d436b93b5c8ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
