@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_70db381c",
+        "filename": "cui/source/tabpages/tpcolor.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-29T18:25:55Z",
+      "side": 1,
+      "message": "Anyway, this heap allocation leaks. Should be a member instance instead, like in patch set 11, and then named maPaletteManager. A pointer would be mpPaletteManager, mrPaletteManager would be for a reference.",
+      "range": {
+        "startLine": 132,
+        "startChar": 4,
+        "endLine": 132,
+        "endChar": 41
+      },
+      "revId": "ce10018ee4225af4cdc1f7cffb21689f92585d46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
