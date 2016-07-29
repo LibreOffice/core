@@ -60,7 +60,8 @@ endif
 #todo: clean up quickstarter stuff in both libraries
 #todo: move standard pool to svl
 
-$(eval $(call gb_Module_add_slowcheck_targets,sfx2,\
+# screenshots
+$(eval $(call gb_Module_add_screenshot_targets,sfx2,\
     CppunitTest_sfx2_dialogs_test \
 ))
 

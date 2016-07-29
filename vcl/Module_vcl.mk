@@ -130,7 +130,8 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
 ))
 endif
 
-$(eval $(call gb_Module_add_slowcheck_targets,vcl,\
+# screenshots
+$(eval $(call gb_Module_add_screenshot_targets,vcl,\
     CppunitTest_vcl_dialogs_test \
 ))
 

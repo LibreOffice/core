@@ -64,6 +64,10 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_opencl_test \
 	CppunitTest_sc_copypaste \
 	CppunitTest_sc_functions_test \
+))
+
+# screenshots
+$(eval $(call gb_Module_add_screenshot_targets,sc, \
 	CppunitTest_sc_screenshots \
 ))
 

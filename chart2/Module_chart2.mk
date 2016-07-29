@@ -46,7 +46,8 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,chart2,\
     JunitTest_chart2_unoapi \
 ))
 
-$(eval $(call gb_Module_add_slowcheck_targets,chart2,\
+# screenshots
+$(eval $(call gb_Module_add_screenshot_targets,chart2,\
     CppunitTest_chart2_dialogs_test \
 ))
 
