@@ -72,8 +72,7 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
             sal_Int32 nMacro = 1;
             while ( !bValid )
             {
-                aMacroName = "Macro";
-                aMacroName += OUString::number( nMacro );
+                aMacroName = "Macro" + OUString::number( nMacro );
                 // test whether existing...
                 bValid = pModule->FindMethod( aMacroName, SbxClassType::Method ) == nullptr;
                 nMacro++;

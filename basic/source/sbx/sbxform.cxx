@@ -1026,8 +1026,7 @@ OUString SbxBasicFormater::BasicFormat( double dNumber, const OUString& _sFormat
             {
                 if( sNegFormatStrg.isEmpty() && bPosFormatFound )
                 {
-                    sTempStrg = "-";
-                    sTempStrg += sPosFormatStrg;
+                    sTempStrg = "-" + sPosFormatStrg;
                 }
                 else
                 {

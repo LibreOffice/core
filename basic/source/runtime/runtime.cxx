@@ -3576,9 +3576,7 @@ SbxBase* SbiRuntime::FindElementExtern( const OUString& rName )
     if ( !pElem && pMeth )
     {
         // for statics, set the method's name in front
-        OUString aMethName = pMeth->GetName();
-        aMethName += ":";
-        aMethName += rName;
+        OUString aMethName = pMeth->GetName() + ":" + rName;
         pElem = pMod->Find(aMethName, SbxClassType::DontCare);
     }
 
