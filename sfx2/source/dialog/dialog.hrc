@@ -61,6 +61,7 @@
 #define SFX_ST_EDIT                     ( RC_DIALOG_BEGIN + 124 )
 #define STR_STYLE_ELEMTLIST             ( RC_DIALOG_BEGIN + 125 )
 #define STR_FONT_TABPAGE                ( RC_DIALOG_BEGIN + 126 )
+#define STR_PREVIEW_CHECKBOX            ( RC_DIALOG_BEGIN + 127 )
 
 #endif
 
