@@ -515,6 +515,7 @@ bool Printer::ExecutePrintJob(boost::shared_ptr<PrinterController> pController)
     if( pJobNameVal )
         pJobNameVal->Value >>= aJobName;
 
+    pController->setLastPage( sal_False );
     return pController->getPrinter()->StartJob( aJobName, pController );
 }
 
