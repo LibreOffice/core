@@ -282,6 +282,12 @@ public:
     /// point to the buffer of the current destination
     OUStringBuffer* pDestinationText;
 
+    void appendDestinationText(const OUString &rString)
+    {
+        if (pDestinationText)
+            pDestinationText->append(rString);
+    }
+
     /// Index of the current style.
     int nCurrentStyleIndex;
     /// Index of the current character style.
