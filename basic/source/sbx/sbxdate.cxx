@@ -126,8 +126,7 @@ double ImpGetDate( const SbxValues* p )
                 case YMD: aDateStr = "YYYY/MM/DD"; break;
             }
 
-            OUString aStr( aDateStr );
-            aStr += " HH:MM:SS";
+            OUString aStr = aDateStr + " HH:MM:SS";
 
             pFormatter->PutandConvertEntry( aStr, nCheckPos, nType,
                                             nIndex, LANGUAGE_ENGLISH_US, eLangType );

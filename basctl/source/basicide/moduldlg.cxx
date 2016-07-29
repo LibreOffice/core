@@ -953,8 +953,7 @@ void LibDialog::dispose()
 
 void LibDialog::SetStorageName( const OUString& rName )
 {
-    OUString aName( IDE_RESSTR(RID_STR_FILENAME) );
-    aName += rName;
+    OUString aName = IDE_RESSTR(RID_STR_FILENAME) + rName;
     m_pStorageFrame->set_label(aName);
 }
 

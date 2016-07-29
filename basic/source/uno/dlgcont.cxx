@@ -359,8 +359,7 @@ Reference< css::resource::XStringResourcePersistence >
     // get ui locale
     ::com::sun  ::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
 
-    OUString aComment(aResourceFileCommentBase);
-    aComment += aLibName;
+    OUString aComment= aResourceFileCommentBase + aLibName;
 
     bool bStorage = mxStorage.is();
     if( bStorage )
@@ -531,8 +530,7 @@ void SfxDialogLibrary::storeResourcesAsURL
 void SfxDialogLibrary::storeResourcesToURL( const OUString& URL,
     const Reference< task::XInteractionHandler >& xHandler )
 {
-    OUString aComment(aResourceFileCommentBase);
-    aComment += m_aName;
+    OUString aComment = aResourceFileCommentBase + m_aName;
 
     if( m_xStringResourcePersistence.is() )
     {
@@ -543,8 +541,7 @@ void SfxDialogLibrary::storeResourcesToURL( const OUString& URL,
 
 void SfxDialogLibrary::storeResourcesToStorage( const css::uno::Reference< css::embed::XStorage >& xStorage )
 {
-    OUString aComment(aResourceFileCommentBase);
-    aComment += m_aName;
+    OUString aComment = aResourceFileCommentBase + m_aName;
 
     if( m_xStringResourcePersistence.is() )
     {
