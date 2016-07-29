@@ -688,7 +688,7 @@ void SmSetSelectionVisitor::Visit( SmTextNode* pNode ) {
         i2 = maEndPos.Index;
 
     long start, end;
-    pNode->SetSelected();
+    pNode->SetSelected(true);
     if( i1 != -1 && i2 != -1 ) {
         start = i1 < i2 ? i1 : i2; //MIN
         end   = i1 > i2 ? i1 : i2; //MAX

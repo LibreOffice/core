@@ -200,7 +200,7 @@ public:
 
     /** True if this node is selected */
     bool IsSelected() const {return mbIsSelected;}
-    void SetSelected(bool Selected = true) {mbIsSelected = Selected;}
+    void SetSelected(bool Selected) {mbIsSelected = Selected;}
 
     /** Get the parent node of this node */
     SmStructureNode* GetParent(){ return mpParentNode; }

@@ -27,7 +27,7 @@ protected:
     virtual void HandleVerticalStack( const SmNode* pNode, int nLevel ) = 0;
     virtual void HandleText( const SmNode* pNode, int nLevel ) = 0;
     void HandleMath( const SmNode* pNode, int nLevel );
-    virtual void HandleFractions( const SmNode* pNode, int nLevel, const char* type = nullptr ) = 0;
+    virtual void HandleFractions( const SmNode* pNode, int nLevel, const char* type ) = 0;
     void HandleUnaryOperation( const SmUnHorNode* pNode, int nLevel );
     void HandleBinaryOperation( const SmBinHorNode* pNode, int nLevel );
     virtual void HandleRoot( const SmRootNode* pNode, int nLevel ) = 0;

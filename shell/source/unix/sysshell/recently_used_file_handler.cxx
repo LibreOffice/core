@@ -167,7 +167,7 @@ namespace /* private */ {
 
         void write_xml_tag(const string_t& name, const string_t& value, const recently_used_file& file) const
         {
-            write_xml_start_tag(name, file);
+            write_xml_start_tag(name, file, false);
             OString escaped = escape_content (value);
             file.write(escaped.getStr(), escaped.getLength());
             write_xml_end_tag(name, file);
@@ -180,7 +180,7 @@ namespace /* private */ {
             file.write("/>\n", 3);
         }
 
-        void write_xml_start_tag(const string_t& name, const recently_used_file& file, bool linefeed = false) const
+        void write_xml_start_tag(const string_t& name, const recently_used_file& file, bool linefeed) const
         {
             file.write("<", 1);
             file.write(name.c_str(), name.length());

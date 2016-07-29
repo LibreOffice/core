@@ -760,7 +760,7 @@ StgDirStrm::~StgDirStrm()
 
 void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
 {
-    void* p = ( n == STG_FREE ) ? nullptr : GetEntry( n );
+    void* p = ( n == STG_FREE ) ? nullptr : GetEntry( n, false );
     if( p )
     {
         SvStream *pUnderlyingStream = m_rIo.GetStrm();

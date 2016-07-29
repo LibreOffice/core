@@ -495,7 +495,7 @@ Storage::~Storage()
         if( pEntry->m_nRefCnt && pEntry->m_bDirect && (m_nMode & StreamMode::WRITE) )
             Commit();
         if( pEntry->m_nRefCnt == 1 )
-            pEntry->Invalidate();
+            pEntry->Invalidate(false);
     }
     // close the stream is root storage
     if( bIsRoot )
