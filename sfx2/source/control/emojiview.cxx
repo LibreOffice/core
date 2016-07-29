@@ -128,13 +128,13 @@ void EmojiView::Populate ()
                 node prop = value.child(paramVal);
 
                 //get values of parameters in AppendItem() function
-                if(paramVal == (const char*) "unicode")
+                if(paramVal == "unicode")
                 {
-                    sTitle = OUString::createFromAscii(prop.string_value().get());
+                    sTitle = rtl::OStringToOUString(OString( prop.string_value().get(), strlen(prop.string_value().get()) ), RTL_TEXTENCODING_UTF8);
                 }
-                else if(paramVal == (const char*)"category")
+                else if(paramVal == "category")
                 {
-                    sCategory = OUString::createFromAscii(prop.string_value().get());
+                    sCategory = rtl::OStringToOUString(OString( prop.string_value().get(), strlen(prop.string_value().get()) ), RTL_TEXTENCODING_UTF8);
                 }
             }
 
