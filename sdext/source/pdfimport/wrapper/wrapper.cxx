@@ -961,13 +961,6 @@ static bool checkEncryption( const OUString&                               i_rPa
                         OSL_TRACE( "password: %s", bAuthenticated ? "matches" : "does not match" );
                         bSuccess = bAuthenticated;
                     }
-                    if( bAuthenticated )
-                    {
-                        OUStringBuffer aBuf( 128 );
-                        aBuf.append( "_OOO_pdfi_Credentials_" );
-                        aBuf.append( pPDFFile->getDecryptionKey() );
-                        io_rPwd = aBuf.makeStringAndClear();
-                    }
                 }
                 else if( i_xIHdl.is() )
                 {
