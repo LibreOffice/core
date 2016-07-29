@@ -87,7 +87,7 @@ void FValueTest::test_Bool()
     std::cerr << "src_Bool: " << src_Bool << std::endl;
     std::cerr << "trg_Bool: " << trg_Bool << std::endl;
 
-    CPPUNIT_ASSERT_MESSAGE("bool conversion to ORowSetValue didn't work", src_Bool == trg_Bool);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("bool conversion to ORowSetValue didn't work", trg_Bool, src_Bool);
 
     Any any_Bool = v.makeAny();
     ORowSetValue t;
@@ -96,7 +96,7 @@ void FValueTest::test_Bool()
 
     std::cerr << "trg_Bool: " << trg_Bool << std::endl;
 
-    CPPUNIT_ASSERT_MESSAGE("bool conversion from Any didn't work", src_Bool == trg_Bool);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("bool conversion from Any didn't work", trg_Bool, src_Bool);
 }
 
 void FValueTest::test_Int8()
@@ -108,7 +108,7 @@ void FValueTest::test_Int8()
     std::cerr << "src_salInt8: " << static_cast<short>(src_salInt8) << std::endl;
     std::cerr << "trg_salInt8: " << static_cast<short>(trg_salInt8) << std::endl;
 
-    CPPUNIT_ASSERT_MESSAGE("sal_Int8 conversion to ORowSetValue didn't work", src_salInt8 == trg_salInt8);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int8 conversion to ORowSetValue didn't work", trg_salInt8, src_salInt8);
 
     Any any_Int8 = v.makeAny();
     ORowSetValue t;
@@ -117,7 +117,7 @@ void FValueTest::test_Int8()
 
     std::cerr << "trg_salInt8: " << static_cast<short>(trg_salInt8) << std::endl;
 
-    CPPUNIT_ASSERT_MESSAGE("sal_Int8 conversion from Any didn't work", src_salInt8 == trg_salInt8);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int8 conversion from Any didn't work", trg_salInt8, src_salInt8);
 }
 
 void FValueTest::test_uInt8()
@@ -129,7 +129,7 @@ void FValueTest::test_uInt8()
     std::cerr << "src_saluInt8: " << static_cast<short>(src_saluInt8) << std::endl;
     std::cerr << "trg_saluInt8: " << static_cast<short>(trg_saluInt8) << std::endl;
 
-    CPPUNIT_ASSERT_MESSAGE("sal_uInt8 conversion to ORowSetValue didn't work", src_saluInt8 == trg_saluInt8);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_uInt8 conversion to ORowSetValue didn't work", trg_saluInt8, src_saluInt8);
 
     Any any_uInt8 = v.makeAny();
     ORowSetValue t;
@@ -138,7 +138,7 @@ void FValueTest::test_uInt8()
 
     std::cerr << "trg_saluInt8: " << static_cast<short>(trg_saluInt8) << std::endl;
 
-    CPPUNIT_ASSERT_MESSAGE("sal_uInt8 conversion from Any didn't work", src_saluInt8 == trg_saluInt8);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_uInt8 conversion from Any didn't work", trg_saluInt8, src_saluInt8);
 }
 
 void FValueTest::test_Int16()
@@ -150,14 +150,14 @@ void FValueTest::test_Int16()
     std::cerr << "src_salInt16: " << src_salInt16 << std::endl;
     std::cerr << "trg_salInt16: " << trg_salInt16 << std::endl;
 
-    CPPUNIT_ASSERT_MESSAGE("sal_Int16 conversion to ORowSetValue didn't work", src_salInt16 == trg_salInt16);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int16 conversion to ORowSetValue didn't work", trg_salInt16, src_salInt16);
 
     Any any_Int16 = v.makeAny();
     ORowSetValue t;
     t.fill(any_Int16);
     trg_salInt16 = t.getInt16();
 
-    CPPUNIT_ASSERT_MESSAGE("sal_Int16 conversion from Any didn't work", src_salInt16 == trg_salInt16);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int16 conversion from Any didn't work", trg_salInt16, src_salInt16);
 }
 
 void FValueTest::test_uInt16()
@@ -169,14 +169,14 @@ void FValueTest::test_uInt16()
     std::cerr << "src_saluInt16: " << src_saluInt16 << std::endl;
     std::cerr << "trg_saluInt16: " << trg_saluInt16 << std::endl;
 
-    CPPUNIT_ASSERT_MESSAGE("sal_uInt16 conversion to ORowSetValue didn't work", src_saluInt16 == trg_saluInt16);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_uInt16 conversion to ORowSetValue didn't work", trg_saluInt16, src_saluInt16);
 
     Any any_uInt16 = v.makeAny();
     ORowSetValue t;
     t.fill(any_uInt16);
     trg_saluInt16 = t.getUInt16();
 
-    CPPUNIT_ASSERT_MESSAGE("sal_uInt16 conversion from Any didn't work", src_saluInt16 == trg_saluInt16);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_uInt16 conversion from Any didn't work", trg_saluInt16, src_saluInt16);
 }
 
 void FValueTest::test_Int32()
@@ -188,14 +188,14 @@ void FValueTest::test_Int32()
     std::cerr << "src_salInt32: " << src_salInt32 << std::endl;
     std::cerr << "trg_salInt32: " << trg_salInt32 << std::endl;
 
-    CPPUNIT_ASSERT_MESSAGE("sal_Int32 conversion to ORowSetValue didn't work", src_salInt32 == trg_salInt32);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int32 conversion to ORowSetValue didn't work", trg_salInt32, src_salInt32);
 
     Any any_Int32 = v.makeAny();
     ORowSetValue t;
     t.fill(any_Int32);
     trg_salInt32 = t.getInt32();
 
-    CPPUNIT_ASSERT_MESSAGE("sal_Int32 conversion from Any didn't work", src_salInt32 == trg_salInt32);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int32 conversion from Any didn't work", trg_salInt32, src_salInt32);
 }
 
 void FValueTest::test_uInt32()
@@ -207,14 +207,14 @@ void FValueTest::test_uInt32()
     std::cerr << "src_saluInt32: " << src_saluInt32 << std::endl;
     std::cerr << "trg_saluInt32: " << trg_saluInt32 << std::endl;
 
-    CPPUNIT_ASSERT_MESSAGE("sal_uInt32 conversion to ORowSetValue didn't work", src_saluInt32 == trg_saluInt32);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_uInt32 conversion to ORowSetValue didn't work", trg_saluInt32, src_saluInt32);
 
     Any any_uInt32 = v.makeAny();
     ORowSetValue t;
     t.fill(any_uInt32);
     trg_saluInt32 = t.getUInt32();
 
-    CPPUNIT_ASSERT_MESSAGE("sal_uInt32 conversion from Any didn't work", src_saluInt32 == trg_saluInt32);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_uInt32 conversion from Any didn't work", trg_saluInt32, src_saluInt32);
 }
 
 void FValueTest::test_Int64()
@@ -226,14 +226,14 @@ void FValueTest::test_Int64()
     std::cerr << "src_salInt64: " << src_salInt64 << std::endl;
     std::cerr << "trg_salInt64: " << trg_salInt64 << std::endl;
 
-    CPPUNIT_ASSERT_MESSAGE("sal_Int64 conversion to ORowSetValue didn't work", src_salInt64 == trg_salInt64);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int64 conversion to ORowSetValue didn't work", trg_salInt64, src_salInt64);
 
     Any any_Int64 = v.makeAny();
     ORowSetValue t;
     t.fill(any_Int64);
     trg_salInt64 = t.getLong();
 
-    CPPUNIT_ASSERT_MESSAGE("sal_Int64 conversion from Any didn't work", src_salInt64 == trg_salInt64);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int64 conversion from Any didn't work", trg_salInt64, src_salInt64);
 }
 
 void FValueTest::test_uInt64()
@@ -245,14 +245,14 @@ void FValueTest::test_uInt64()
     std::cerr << "src_saluInt64: " << src_saluInt64 << std::endl;
     std::cerr << "trg_saluInt64: " << trg_saluInt64 << std::endl;
 
-    CPPUNIT_ASSERT_MESSAGE("sal_uInt64 conversion to ORowSetValue didn't work", src_saluInt64 == trg_saluInt64);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_uInt64 conversion to ORowSetValue didn't work", trg_saluInt64, src_saluInt64);
 
     Any any_uInt64 = v.makeAny();
     ORowSetValue t;
     t.fill(any_uInt64);
     trg_saluInt64 = t.getULong();
 
-    CPPUNIT_ASSERT_MESSAGE("sal_uInt64 conversion from Any didn't work", src_saluInt64 == trg_saluInt64);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_uInt64 conversion from Any didn't work", trg_saluInt64, src_saluInt64);
 }
 
 void FValueTest::test_float()
@@ -264,14 +264,14 @@ void FValueTest::test_float()
     std::cerr << "src_float: " << src_float << std::endl;
     std::cerr << "trg_float: " << trg_float << std::endl;
 
-    CPPUNIT_ASSERT_MESSAGE("float conversion to ORowSetValue didn't work", src_float == trg_float);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("float conversion to ORowSetValue didn't work", trg_float, src_float);
 
     Any any_float = v.makeAny();
     ORowSetValue t;
     t.fill(any_float);
     trg_float = t.getFloat();
 
-    CPPUNIT_ASSERT_MESSAGE("float conversion from Any didn't work", src_float == trg_float);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("float conversion from Any didn't work", trg_float, src_float);
 }
 
 void FValueTest::test_double()
@@ -283,14 +283,14 @@ void FValueTest::test_double()
     std::cerr << "src_double: " << src_double << std::endl;
     std::cerr << "trg_double: " << trg_double << std::endl;
 
-    CPPUNIT_ASSERT_MESSAGE("double conversion to ORowSetValue didn't work", src_double == trg_double);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("double conversion to ORowSetValue didn't work", trg_double, src_double);
 
     Any any_double = v.makeAny();
     ORowSetValue t;
     t.fill(any_double);
     trg_double = t.getDouble();
 
-    CPPUNIT_ASSERT_MESSAGE("double conversion from Any didn't work", src_double == trg_double);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("double conversion from Any didn't work", trg_double, src_double);
 }
 
 void FValueTest::test_bool_getString()
@@ -302,7 +302,7 @@ void FValueTest::test_bool_getString()
     std::cerr << "src_bool_1: " << src_bool_1 << std::endl;
     std::cerr << "trg_bool_1: " << trg_bool_1 << std::endl;
 
-    CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool to string conversion didn't work", trg_bool_1 == "true");
+    CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool to string conversion didn't work", bool(trg_bool_1 == "true"));
 
     bool src_bool_0 = false;
     ORowSetValue v_0(src_bool_0);
@@ -311,7 +311,7 @@ void FValueTest::test_bool_getString()
     std::cerr << "src_bool_0: " << src_bool_0 << std::endl;
     std::cerr << "trg_bool_0: " << trg_bool_0 << std::endl;
 
-    CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool to string conversion didn't work", trg_bool_0 == "false");
+    CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool to string conversion didn't work", bool(trg_bool_0 == "false"));
 }
 
 void FValueTest::test_bit_getString()
@@ -324,7 +324,7 @@ void FValueTest::test_bit_getString()
     std::cerr << "src_bit_1: " << src_bool_1 << std::endl;
     std::cerr << "trg_bit_1: " << trg_bool_1 << std::endl;
 
-    CPPUNIT_ASSERT_MESSAGE("ORowSetValue bit to string conversion didn't work", trg_bool_1 == "1");
+    CPPUNIT_ASSERT_MESSAGE("ORowSetValue bit to string conversion didn't work", bool(trg_bool_1 == "1"));
 
     bool src_bool_0 = false;
     ORowSetValue v_0(src_bool_0);
@@ -334,7 +334,7 @@ void FValueTest::test_bit_getString()
     std::cerr << "src_bit_0: " << src_bool_0 << std::endl;
     std::cerr << "trg_bit_0: " << trg_bool_0 << std::endl;
 
-    CPPUNIT_ASSERT_MESSAGE("ORowSetValue bit to string conversion didn't work", trg_bool_0 == "0");
+    CPPUNIT_ASSERT_MESSAGE("ORowSetValue bit to string conversion didn't work", bool(trg_bool_0 == "0"));
 }
 
 void FValueTest::test_bool_creation()
@@ -345,37 +345,37 @@ void FValueTest::test_bool_creation()
     {
         ORowSetValue v(OUString("1"));
         v.setTypeKind(DataType::BOOLEAN);
-        CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", v == vTrue);
+        CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", bool(v == vTrue));
     }
 
     {
         ORowSetValue v(OUString("0"));
         v.setTypeKind(DataType::BOOLEAN);
-        CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", v == vFalse);
+        CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", bool(v == vFalse));
     }
 
     {
         ORowSetValue v(OUString("true"));
         v.setTypeKind(DataType::BOOLEAN);
-        CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", v == vTrue);
+        CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", bool(v == vTrue));
     }
 
     {
         ORowSetValue v(OUString("tRuE"));
         v.setTypeKind(DataType::BOOLEAN);
-        CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", v == vTrue);
+        CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", bool(v == vTrue));
     }
 
     {
         ORowSetValue v(OUString("false"));
         v.setTypeKind(DataType::BOOLEAN);
-        CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", v == vFalse);
+        CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", bool(v == vFalse));
     }
 
     {
         ORowSetValue v(OUString("0"));
         v.setTypeKind(DataType::BOOLEAN);
-        CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", v == vFalse);
+        CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", bool(v == vFalse));
     }
 
 }
