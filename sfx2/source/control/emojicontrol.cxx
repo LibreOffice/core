@@ -153,7 +153,7 @@ IMPL_LINK_NOARG_TYPED(SfxEmojiControl, ActivatePageHdl, TabControl*, void)
     mpEmojiView->filterItems(ViewFilter_Category(getCurrentFilter()));
 }
 
-IMPL_LINK_TYPED(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, pItem, void)
+IMPL_STATIC_LINK_TYPED(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, pItem, void)
 {
     OUStringBuffer sHexText = "";
     sHexText.appendUtf32(OUString(pItem->getTitle()).toUInt32(16));

@@ -38,7 +38,7 @@ private:
     FILTER_CATEGORY getCurrentFilter();
 
     DECL_LINK_TYPED(ActivatePageHdl, TabControl*, void);
-    DECL_LINK_TYPED(InsertHdl, ThumbnailViewItem*, void);
+    DECL_STATIC_LINK_TYPED(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, void);
 
     VclPtr<TabControl>   mpTabControl;
     VclPtr<EmojiView>    mpEmojiView;
