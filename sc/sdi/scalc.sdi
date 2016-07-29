@@ -721,7 +721,7 @@ SfxInt16Item Column SID_RANGE_COL
 
 
 SfxUInt16Item ColumnWidth FID_COL_WIDTH
-
+(SfxUInt16Item Column FN_PARAM_1,SfxUInt16Item Width FN_PARAM_2)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -4432,7 +4432,7 @@ SfxInt32Item Row SID_RANGE_ROW
 
 
 SfxUInt16Item RowHeight FID_ROW_HEIGHT
-
+(SfxUInt16Item Row FN_PARAM_1,SfxUInt16Item Height FN_PARAM_2)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
