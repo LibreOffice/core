@@ -216,6 +216,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Font color:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">fontcolorlb</property>
             <property name="xalign">0</property>
           </object>
           <packing>
@@ -228,6 +230,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Effects:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">effectslb</property>
             <property name="xalign">0</property>
           </object>
           <packing>
@@ -240,6 +244,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Relief:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">relieflb</property>
             <property name="xalign">0</property>
           </object>
           <packing>
@@ -252,6 +258,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Overlining:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">overlinelb</property>
             <property name="xalign">0</property>
           </object>
           <packing>
@@ -264,6 +272,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Strikethrough:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">strikeoutlb</property>
             <property name="xalign">0</property>
           </object>
           <packing>
@@ -276,6 +286,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Underlining:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">underlinelb</property>
             <property name="xalign">0</property>
           </object>
           <packing>
@@ -288,6 +300,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Overline color:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">overlinecolorlb</property>
             <property name="xalign">0</property>
           </object>
           <packing>
@@ -300,6 +314,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Underline color:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">underlinecolorlb</property>
             <property name="xalign">0</property>
           </object>
           <packing>
@@ -478,6 +494,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Position:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">positionlb</property>
             <property name="xalign">0</property>
           </object>
           <packing>
@@ -490,6 +508,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Emphasis mark:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">emphasislb</property>
             <property name="xalign">0</property>
           </object>
           <packing>
