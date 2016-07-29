@@ -163,8 +163,19 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
 
     // init background
     SetBackground();
+
+    GetParent()->AddEventListener(LINK(this, BackingWindow, WindowEventListener));
 }
 
+IMPL_LINK_TYPED(BackingWindow, WindowEventListener, VclWindowEvent&, rEvent, void)
+{
+    if (rEvent.GetId() != VCLEVENT_WINDOW_COMMAND)
+        return;
+    CommandEvent* pCmdEvt = static_cast<CommandEvent*>(rEvent.GetData());
+    if (pCmdEvt->GetCommand() != CommandEventId::ModKeyChange)
+        return;
+    Accelerator::ToggleMnemonicsOnHierarchy(*pCmdEvt, this);
+}
 
 BackingWindow::~BackingWindow()
 {
@@ -173,6 +184,7 @@ BackingWindow::~BackingWindow()
 
 void BackingWindow::dispose()
 {
+    GetParent()->RemoveEventListener(LINK(this, BackingWindow, WindowEventListener));
     // deregister drag&drop helper
     if (mxDropTargetListener.is())
     {
@@ -405,7 +417,7 @@ void BackingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
                               *pVDev.get());
 }
 
-bool BackingWindow::PreNotify( NotifyEvent& rNEvt )
+bool BackingWindow::PreNotify(NotifyEvent& rNEvt)
 {
     if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
@@ -461,6 +473,10 @@ bool BackingWindow::PreNotify( NotifyEvent& rNEvt )
         const OUString aCommand = mpAccExec->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rKeyCode));
         if ((aCommand != "vnd.sun.star.findbar:FocusToFindbar") && pEvt && mpAccExec->execute(rKeyCode))
             return true;
+    }
+    else if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
+    {
+        Accelerator::ToggleMnemonicsOnHierarchy(*rNEvt.GetCommandEvent(), this);
     }
 
     return Window::PreNotify( rNEvt );

@@ -106,6 +106,7 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
     DECL_LINK_TYPED(CreateContextMenuHdl, ThumbnailViewItem*, void);
     DECL_LINK_TYPED(OpenTemplateHdl, ThumbnailViewItem*, void);
     DECL_LINK_TYPED(EditTemplateHdl, ThumbnailViewItem*, void);
+    DECL_LINK_TYPED(WindowEventListener, VclWindowEvent&, void);
 
     void initControls();
 
