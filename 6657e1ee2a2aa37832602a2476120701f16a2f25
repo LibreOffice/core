@@ -1,0 +1,261 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_105f5473",
+        "filename": "include/tools/urlobj.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-29T20:40:06Z",
+      "side": 1,
+      "message": "Should be const OUString\u0026 instead.",
+      "range": {
+        "startLine": 170,
+        "startChar": 29,
+        "endLine": 170,
+        "endChar": 37
+      },
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_30545053",
+        "filename": "include/tools/urlobj.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1237,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-29T20:40:06Z",
+      "side": 1,
+      "message": "The r... prefix is used with references, obejct instances get an a... prefix, so aTheResolvedURIRef would be correct.",
+      "range": {
+        "startLine": 1237,
+        "startChar": 17,
+        "endLine": 1237,
+        "endChar": 35
+      },
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_704ed8c2",
+        "filename": "include/tools/urlobj.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1238,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-29T20:40:06Z",
+      "side": 1,
+      "message": "How do we know that WAS_ENCODED and RTL_TEXTENCODING_UTF8 are correct here?",
+      "range": {
+        "startLine": 1238,
+        "startChar": 60,
+        "endLine": 1238,
+        "endChar": 94
+      },
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_b0c6a014",
+        "filename": "include/tools/urlobj.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1261,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-29T20:40:06Z",
+      "side": 1,
+      "message": "Same, aTheResolvedURIRef",
+      "range": {
+        "startLine": 1261,
+        "startChar": 17,
+        "endLine": 1261,
+        "endChar": 35
+      },
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_d0cb2c1d",
+        "filename": "include/tools/urlobj.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-29T20:40:06Z",
+      "side": 1,
+      "message": "Same, WAS_ENCODED and RTL_TEXTENCODING_UTF8?",
+      "range": {
+        "startLine": 1262,
+        "startChar": 60,
+        "endLine": 1262,
+        "endChar": 94
+      },
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_90e2849e",
+        "filename": "sc/source/filter/xml/xmlcelli.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-29T20:40:06Z",
+      "side": 1,
+      "message": "Why not encapsulate this in SvXMLImport::GetAbsoluteReference() instead of sprinkling the same ifdef over several modules?",
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_10ed948b",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2981,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-29T20:40:06Z",
+      "side": 1,
+      "message": "Why not encapsulate this in SvXMLExport::GetRelativeReference() instead of sprinkling the same ifdef over several modules?",
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_f09e6806",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1475,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-29T20:40:06Z",
+      "side": 1,
+      "message": "Should be const OUString\u0026 instead.",
+      "range": {
+        "startLine": 1475,
+        "startChar": 40,
+        "endLine": 1475,
+        "endChar": 48
+      },
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_10a4b455",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-29T20:40:06Z",
+      "side": 1,
+      "message": "Could you please explain what exactly you are doing here?",
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_50ff1c34",
+        "filename": "xmloff/source/text/txtflde.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1691,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-29T20:40:06Z",
+      "side": 1,
+      "message": "Why not encapsulate this in SvXMLExport::GetRelativeReference() instead of sprinkling the same ifdef over several modules?",
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_d0f24c6f",
+        "filename": "xmloff/source/text/txtfldi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3095,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-29T20:40:06Z",
+      "side": 1,
+      "message": "Why not encapsulate this in SvXMLImport::GetAbsoluteReference() instead of sprinkling the same ifdef over several modules?",
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_90f9a450",
+        "filename": "xmloff/source/text/txtparae.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3283,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-29T20:40:06Z",
+      "side": 1,
+      "message": "Why not encapsulate this in SvXMLExport::GetRelativeReference() instead of sprinkling the same ifdef over several modules?",
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_f0e748aa",
+        "filename": "xmloff/source/text/txtparai.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-29T20:40:06Z",
+      "side": 1,
+      "message": "Why not encapsulate this in SvXMLImport::GetAbsoluteReference() instead of sprinkling the same ifdef over several modules?",
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
