@@ -217,6 +217,8 @@
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Font color:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">fontcolorlb</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -229,6 +231,8 @@
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Effects:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">effectslb</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -241,6 +245,8 @@
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Relief:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">relieflb</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -253,6 +259,8 @@
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Overlining:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">overlinelb</property>
           </object>
           <packing>
             <property name="left_attach">2</property>
@@ -265,6 +273,8 @@
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Strikethrough:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">strikeoutlb</property>
           </object>
           <packing>
             <property name="left_attach">2</property>
@@ -277,6 +287,8 @@
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Underlining:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">underlinelb</property>
           </object>
           <packing>
             <property name="left_attach">2</property>
@@ -289,6 +301,8 @@
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Overline color:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">overlinecolorlb</property>
           </object>
           <packing>
             <property name="left_attach">3</property>
@@ -301,6 +315,8 @@
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Underline color:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">underlinecolorlb</property>
           </object>
           <packing>
             <property name="left_attach">3</property>
@@ -479,6 +495,8 @@
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Position:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">positionlb</property>
           </object>
           <packing>
             <property name="left_attach">3</property>
@@ -491,6 +509,8 @@
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Emphasis mark:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">emphasislb</property>
           </object>
           <packing>
             <property name="left_attach">2</property>
