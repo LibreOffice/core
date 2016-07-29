@@ -176,6 +176,8 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             break;
 
             case SID_RANDOM_NUMBER_GENERATOR_DIALOG:
+                bDisable = !bSimpleArea || GetViewData()->SelectionForbidsPaste();
+            break;
             case SID_SAMPLING_DIALOG:
             case SID_DESCRIPTIVE_STATISTICS_DIALOG:
             case SID_ANALYSIS_OF_VARIANCE_DIALOG:
