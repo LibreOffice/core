@@ -253,7 +253,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
 
 IMPL_LINK_NOARG_TYPED( SmEditWindow, ModifyTimerHdl, Idle *, void )
 {
-    UpdateStatus();
+    UpdateStatus(false);
     aModifyIdle.Stop();
 }
 
@@ -707,7 +707,7 @@ void SmEditWindow::GetFocus()
 
     //Let SmViewShell know we got focus
     if(GetView() && IsInlineEditEnabled())
-        GetView()->SetInsertIntoEditWindow();
+        GetView()->SetInsertIntoEditWindow(true);
 }
 
 

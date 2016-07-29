@@ -47,7 +47,7 @@ BaseContainerNode::BaseContainerNode(
 
 void BaseContainerNode::dispose()
 {
-    forEachChildNode( std::mem_fn(&Disposable::dispose) );
+    forEachChildNode( std::mem_fn(&Disposable::dispose), -1 );
     maChildren.clear();
     BaseNode::dispose();
 }

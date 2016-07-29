@@ -385,7 +385,7 @@ void RehearseTimingsActivity::viewChanged( const UnoViewSharedPtr& rView )
     aModifiedEntry->second->move( maSpriteRectangle.getMinimum() );
 
     // sprites changed, need screen update
-    mrScreenUpdater.notifyUpdate( rView );
+    mrScreenUpdater.notifyUpdate( rView, false );
 }
 
 void RehearseTimingsActivity::viewsChanged()

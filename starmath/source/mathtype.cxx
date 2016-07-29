@@ -574,7 +574,7 @@ bool MathType::Parse(SotStorage *pStor)
     if (nVersion > 3)   // allow only supported versions of MathType to be parsed
         return false;
 
-    bool bRet = HandleRecords();
+    bool bRet = HandleRecords(0);
     //little crude hack to close occasionally open expressions
     //a sophisticated system to determine what expressions are
     //opened is required, but this is as much work as rewriting
@@ -1932,7 +1932,7 @@ bool MathType::ConvertFromStarMath( SfxMedium& rMedium )
         sal_uInt32 nSize = pS->Tell();
         nPendingAttributes=0;
 
-        HandleNodes(pTree);
+        HandleNodes(pTree, 0);
         pS->WriteUChar( END );
 
         nSize = pS->Tell()-nSize;

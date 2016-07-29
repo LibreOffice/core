@@ -71,7 +71,7 @@ namespace slideshow
                 implementation 'thinks' it does not need to render
                 something to screen.
             */
-            void notifyUpdate( const UnoViewSharedPtr& rView, bool bViewClobbered=false );
+            void notifyUpdate( const UnoViewSharedPtr& rView, bool bViewClobbered );
 
             /** Commits collected update actions
              */
