@@ -516,13 +516,12 @@ executePasswordDialog(
         {
             if (bIsSimplePasswordRequest)
             {
-                VclPtr< PasswordDialog > pDialog(
-                    VclPtr<PasswordDialog>::Create( pParent, nMode, xManager.get(), aDocName,
-                    bIsPasswordToModify, bIsSimplePasswordRequest ) );
-                pDialog->SetMinLen(0);
+                ScopedVclPtrInstance<PasswordDialog> xDialog(pParent, nMode, xManager.get(), aDocName,
+                    bIsPasswordToModify, bIsSimplePasswordRequest);
+                xDialog->SetMinLen(0);
 
-                rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
-                rInfo.SetPassword( pDialog->GetPassword() );
+                rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
+                rInfo.SetPassword(xDialog->GetPassword());
             }
             else
             {
@@ -540,14 +539,13 @@ executePasswordDialog(
         }
         else // enter password or reenter password
         {
-            VclPtr< PasswordDialog > pDialog(
-                VclPtr<PasswordDialog>::Create( pParent, nMode, xManager.get(), aDocName,
-                bIsPasswordToModify, bIsSimplePasswordRequest ) );
-            pDialog->SetMinLen(0);
+            ScopedVclPtrInstance<PasswordDialog> xDialog(pParent, nMode, xManager.get(), aDocName,
+                bIsPasswordToModify, bIsSimplePasswordRequest);
+            xDialog->SetMinLen(0);
 
-            rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
-            rInfo.SetPassword( bIsPasswordToModify ? OUString() : pDialog->GetPassword() );
-            rInfo.SetPasswordToModify( bIsPasswordToModify ? pDialog->GetPassword() : OUString() );
+            rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
+            rInfo.SetPassword(bIsPasswordToModify ? OUString() : xDialog->GetPassword());
+            rInfo.SetPasswordToModify(bIsPasswordToModify ? xDialog->GetPassword() : OUString());
         }
     }
     catch (std::bad_alloc const &)
