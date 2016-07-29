@@ -258,7 +258,7 @@ void SwDoc::SetFootnoteInfo(const SwFootnoteInfo& rInfo)
 
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            GetIDocumentUndoRedo().AppendUndo( new SwUndoFootNoteInfo(rOld) );
+            GetIDocumentUndoRedo().AppendUndo( new SwUndoFootNoteInfo(rOld, this) );
         }
 
         bool bFootnotePos  = rInfo.ePos != rOld.ePos;
@@ -328,7 +328,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
     {
         if(GetIDocumentUndoRedo().DoesUndo())
         {
-            SwUndo *const pUndo( new SwUndoEndNoteInfo( GetEndNoteInfo() ) );
+            SwUndo *const pUndo( new SwUndoEndNoteInfo( GetEndNoteInfo(), this ) );
             GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
 

@@ -37,7 +37,7 @@ class SwUndoInsNum : public SwUndo, private SwUndRng
 public:
     SwUndoInsNum( const SwPaM& rPam, const SwNumRule& rRule );
     SwUndoInsNum( const SwNumRule& rOldRule, const SwNumRule& rNewRule,
-                  SwUndoId nUndoId = UNDO_INSFMTATTR );
+                  const SwDoc* pDoc, SwUndoId nUndoId = UNDO_INSFMTATTR );
     SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
                             const OUString& rReplaceRule );
 

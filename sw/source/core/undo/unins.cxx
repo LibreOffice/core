@@ -110,7 +110,7 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, sal_Int32 nCnt,
             sal_Int32 nL,
             const SwInsertFlags nInsertFlags,
             bool bWDelim )
-    : SwUndo(UNDO_TYPING), pText( nullptr ), pRedlData( nullptr ),
+    : SwUndo(UNDO_TYPING, rNd.GetNode().GetDoc()), pText( nullptr ), pRedlData( nullptr ),
         nNode( rNd.GetIndex() ), nContent(nCnt), nLen(nL),
         bIsWordDelim( bWDelim ), bIsAppend( false )
     , m_bWithRsid(false)
@@ -120,7 +120,7 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, sal_Int32 nCnt,
 }
 
 SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
-    : SwUndo(UNDO_SPLITNODE), pText( nullptr ),
+    : SwUndo(UNDO_SPLITNODE, rNd.GetNode().GetDoc()), pText( nullptr ),
         pRedlData( nullptr ), nNode( rNd.GetIndex() ), nContent(0), nLen(1),
         bIsWordDelim( false ), bIsAppend( true )
     , m_bWithRsid(false)
@@ -510,7 +510,7 @@ public:
 
 SwUndoReplace::SwUndoReplace(SwPaM const& rPam,
         OUString const& rIns, bool const bRegExp)
-    : SwUndo( UNDO_REPLACE )
+    : SwUndo( UNDO_REPLACE, rPam.GetDoc() )
     , m_pImpl(o3tl::make_unique<Impl>(rPam, rIns, bRegExp))
 {
 }
@@ -787,7 +787,7 @@ void SwUndoReplace::Impl::SetEnd(SwPaM const& rPam)
 }
 
 SwUndoReRead::SwUndoReRead( const SwPaM& rPam, const SwGrfNode& rGrfNd )
-    : SwUndo( UNDO_REREAD ), nPos( rPam.GetPoint()->nNode.GetIndex() )
+    : SwUndo( UNDO_REREAD, rPam.GetDoc() ), nPos( rPam.GetPoint()->nNode.GetIndex() )
 {
     SaveGraphicData( rGrfNd );
 }
@@ -867,8 +867,9 @@ SwUndoInsertLabel::SwUndoInsertLabel( const SwLabelType eTyp,
                                       const bool bBef,
                                       const sal_uInt16 nInitId,
                                       const OUString& rCharacterStyle,
-                                      const bool bCpyBorder )
-    : SwUndo( UNDO_INSERTLABEL ),
+                                      const bool bCpyBorder,
+                                      const SwDoc* pDoc )
+    : SwUndo( UNDO_INSERTLABEL, pDoc ),
       sText( rText ),
       sSeparator( rSeparator ),
       sNumberSeparator( rNumberSeparator ),//#i61007# order of captions

@@ -97,7 +97,7 @@ SwUndoDelete::SwUndoDelete(
     SwPaM& rPam,
     bool bFullPara,
     bool bCalledByTableCpy )
-    : SwUndo(UNDO_DELETE),
+    : SwUndo(UNDO_DELETE, rPam.GetDoc()),
     SwUndRng( rPam ),
     m_pMvStt( nullptr ),
     m_pSttStr(nullptr),

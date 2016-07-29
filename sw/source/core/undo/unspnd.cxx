@@ -37,7 +37,7 @@
 
 SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
                                     bool bChkTable )
-    : SwUndo( UNDO_SPLITNODE ), pHistory( nullptr ), pRedlData( nullptr ), nNode( rPos.nNode.GetIndex() ),
+    : SwUndo( UNDO_SPLITNODE, pDoc ), pHistory( nullptr ), pRedlData( nullptr ), nNode( rPos.nNode.GetIndex() ),
         nContent( rPos.nContent.GetIndex() ),
         bTableFlag( false ), bChkTableStt( bChkTable )
 {

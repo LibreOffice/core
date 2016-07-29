@@ -40,6 +40,7 @@
 #include <undo.hrc>
 #include <comcore.hrc>
 #include <docsh.hxx>
+#include <view.hxx>
 #include <o3tl/make_unique.hxx>
 
 // This class saves the Pam as integers and can recompose those into a PaM
@@ -156,10 +157,24 @@ void SwUndo::RemoveIdxRel( sal_uLong nIdx, const SwPosition& rPos )
     ::PaMCorrRel( aIdx, rPos );
 }
 
-SwUndo::SwUndo(SwUndoId const nId)
+SwUndo::SwUndo(SwUndoId const nId, const SwDoc* pDoc)
     : m_nId(nId), nOrigRedlineMode(nsRedlineMode_t::REDLINE_NONE),
+      m_nViewShellId(CreateViewShellId(pDoc)),
       bCacheComment(true), pComment(nullptr)
 {
+}
+
+sal_Int32 SwUndo::CreateViewShellId(const SwDoc* pDoc)
+{
+    sal_Int32 nRet = -1;
+
+    if (const SwDocShell* pDocShell = pDoc->GetDocShell())
+    {
+        if (const SwView* pView = pDocShell->GetView())
+            nRet = pView->GetViewShellId();
+    }
+
+    return nRet;
 }
 
 bool SwUndo::IsDelBox() const
@@ -279,6 +294,11 @@ OUString SwUndo::GetComment() const
     }
 
     return aResult;
+}
+
+sal_Int32 SwUndo::GetViewShellId() const
+{
+    return m_nViewShellId;
 }
 
 SwRewriter SwUndo::GetRewriter() const

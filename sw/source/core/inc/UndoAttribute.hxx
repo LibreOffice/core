@@ -32,6 +32,7 @@ class SvxTabStopItem;
 class SwFormat;
 class SwFootnoteInfo;
 class SwEndNoteInfo;
+class SwDoc;
 
 class SwUndoAttr : public SwUndo, private SwUndRng
 {
@@ -199,7 +200,7 @@ class SwUndoDefaultAttr : public SwUndo
 
 public:
     // registers at the format and saves old attributes
-    SwUndoDefaultAttr( const SfxItemSet& rOldSet );
+    SwUndoDefaultAttr( const SfxItemSet& rOldSet, const SwDoc* pDoc );
 
     virtual ~SwUndoDefaultAttr();
 
@@ -231,7 +232,7 @@ class SwUndoFootNoteInfo : public SwUndo
     ::std::unique_ptr<SwFootnoteInfo> m_pFootNoteInfo;
 
 public:
-    SwUndoFootNoteInfo( const SwFootnoteInfo &rInfo );
+    SwUndoFootNoteInfo( const SwFootnoteInfo &rInfo, const SwDoc* pDoc );
 
     virtual ~SwUndoFootNoteInfo();
 
@@ -244,7 +245,7 @@ class SwUndoEndNoteInfo : public SwUndo
     ::std::unique_ptr<SwEndNoteInfo> m_pEndNoteInfo;
 
 public:
-    SwUndoEndNoteInfo( const SwEndNoteInfo &rInfo );
+    SwUndoEndNoteInfo( const SwEndNoteInfo &rInfo, const SwDoc* pDoc );
 
     virtual ~SwUndoEndNoteInfo();
 

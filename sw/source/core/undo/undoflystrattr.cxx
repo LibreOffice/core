@@ -25,7 +25,7 @@ SwUndoFlyStrAttr::SwUndoFlyStrAttr( SwFlyFrameFormat& rFlyFrameFormat,
                                     const SwUndoId eUndoId,
                                     const OUString& sOldStr,
                                     const OUString& sNewStr )
-    : SwUndo( eUndoId ),
+    : SwUndo( eUndoId, rFlyFrameFormat.GetDoc() ),
       mrFlyFrameFormat( rFlyFrameFormat ),
       msOldStr( sOldStr ),
       msNewStr( sNewStr )

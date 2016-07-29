@@ -1610,7 +1610,7 @@ void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, bool bIsTable )
         const SwTableNode* pTableNd = rPam.GetPoint()->nNode.GetNode().FindTableNode();
         if( pTableNd )
         {
-            SwUndoCpyTable* pUndo = new SwUndoCpyTable;
+            SwUndoCpyTable* pUndo = new SwUndoCpyTable(this);
             pUndo->SetTableSttIdx( pTableNd->GetIndex() );
             GetIDocumentUndoRedo().AppendUndo( pUndo );
         }
@@ -1629,7 +1629,7 @@ void SwDoc::ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
     {
         GetIDocumentUndoRedo().DelAllUndoObj();
 
-        SwUndo * pUndo = new SwUndoTOXChange(&rTOX, rNew);
+        SwUndo * pUndo = new SwUndoTOXChange(this, &rTOX, rNew);
 
         GetIDocumentUndoRedo().AppendUndo(pUndo);
     }

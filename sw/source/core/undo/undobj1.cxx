@@ -40,7 +40,7 @@
 #include <ndole.hxx>
 
 SwUndoFlyBase::SwUndoFlyBase( SwFrameFormat* pFormat, SwUndoId nUndoId )
-    : SwUndo(nUndoId)
+    : SwUndo(nUndoId, pFormat->GetDoc())
     , pFrameFormat(pFormat)
     , nNdPgPos(0)
     , nCntPos(0)
@@ -454,7 +454,7 @@ void SwUndoDelLayFormat::RedoForRollback()
 }
 
 SwUndoSetFlyFormat::SwUndoSetFlyFormat( SwFrameFormat& rFlyFormat, SwFrameFormat& rNewFrameFormat )
-    : SwUndo( UNDO_SETFLYFRMFMT ), SwClient( &rFlyFormat ), pFrameFormat( &rFlyFormat ),
+    : SwUndo( UNDO_SETFLYFRMFMT, rFlyFormat.GetDoc() ), SwClient( &rFlyFormat ), pFrameFormat( &rFlyFormat ),
     pOldFormat( static_cast<SwFrameFormat*>(rFlyFormat.DerivedFrom()) ), pNewFormat( &rNewFrameFormat ),
     pItemSet( new SfxItemSet( *rFlyFormat.GetAttrSet().GetPool(),
                                 rFlyFormat.GetAttrSet().GetRanges() )),

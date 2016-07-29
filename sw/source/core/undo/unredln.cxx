@@ -34,7 +34,7 @@
 #include <docedt.hxx>
 
 SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
-    : SwUndo( UNDO_REDLINE ), SwUndRng( rRange ),
+    : SwUndo( UNDO_REDLINE, rRange.GetDoc() ), SwUndRng( rRange ),
     mpRedlData( nullptr ), mpRedlSaveData( nullptr ), mnUserId( nUsrId ),
     mbHiddenRedlines( false )
 {
@@ -355,7 +355,7 @@ void SwUndoRejectRedline::RepeatImpl(::sw::RepeatContext & rContext)
 }
 
 SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, bool bIns )
-    : SwUndo( UNDO_COMPAREDOC ), SwUndRng( rRg ), pRedlData( nullptr ),
+    : SwUndo( UNDO_COMPAREDOC, rRg.GetDoc() ), SwUndRng( rRg ), pRedlData( nullptr ),
     pUnDel( nullptr ), pUnDel2( nullptr ), pRedlSaveData( nullptr ), bInsert( bIns )
 {
     SwDoc* pDoc = rRg.GetDoc();
@@ -368,7 +368,7 @@ SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, bool bIns )
 }
 
 SwUndoCompDoc::SwUndoCompDoc( const SwRangeRedline& rRedl )
-    : SwUndo( UNDO_COMPAREDOC ), SwUndRng( rRedl ), pRedlData( nullptr ),
+    : SwUndo( UNDO_COMPAREDOC, rRedl.GetDoc() ), SwUndRng( rRedl ), pRedlData( nullptr ),
     pUnDel( nullptr ), pUnDel2( nullptr ), pRedlSaveData( nullptr ),
     // for MergeDoc the corresponding inverse is needed
     bInsert( nsRedlineType_t::REDLINE_DELETE == rRedl.GetType() )

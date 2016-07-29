@@ -30,6 +30,8 @@ namespace sw {
     }
 }
 
+class SwDoc;
+
 class SwUndoBookmark : public SwUndo
 {
     const ::std::unique_ptr<SwHistoryBookmark> m_pHistoryBookmark;
@@ -82,7 +84,7 @@ class SwUndoRenameBookmark : public SwUndo
     const OUString m_sNewName;
 
 public:
-    SwUndoRenameBookmark( const OUString& rOldName, const OUString& rNewName );
+    SwUndoRenameBookmark( const OUString& rOldName, const OUString& rNewName, const SwDoc* pDoc );
     virtual ~SwUndoRenameBookmark();
 
 private:

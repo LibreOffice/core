@@ -23,6 +23,8 @@
 #include <undobj.hxx>
 #include <tox.hxx>
 
+class SwDoc;
+
 class SwUndoTOXChange : public SwUndo
 {
     SwTOXBase * pTOX, aOld, aNew;
@@ -31,7 +33,7 @@ class SwUndoTOXChange : public SwUndo
     void DoImpl();
 
 public:
-    SwUndoTOXChange(SwTOXBase * pTOX, const SwTOXBase & rNew);
+    SwUndoTOXChange(const SwDoc* pDoc, SwTOXBase * pTOX, const SwTOXBase & rNew);
     virtual ~SwUndoTOXChange();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
