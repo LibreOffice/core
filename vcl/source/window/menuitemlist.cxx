@@ -41,6 +41,7 @@ MenuItemData::~MenuItemData()
     }
     if( pSalMenuItem )
         ImplGetSVData()->mpDefInst->DestroyMenuItem( pSalMenuItem );
+    pSubMenu.disposeAndClear();
 }
 
 MenuItemList::~MenuItemList()
