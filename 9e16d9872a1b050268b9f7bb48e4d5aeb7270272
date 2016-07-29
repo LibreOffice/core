@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_105d94e9",
+        "filename": "sw/inc/tblafmt.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-07-29T12:48:06Z",
+      "side": 1,
+      "message": "This is still hardcoded to return false.",
+      "revId": "9e16d9872a1b050268b9f7bb48e4d5aeb7270272",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
