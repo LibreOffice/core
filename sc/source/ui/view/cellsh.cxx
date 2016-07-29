@@ -129,6 +129,8 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_FILL_TO_BOTTOM:    // fill to top / bottom
             {
                 bDisable = !bSimpleArea || (nRow1 == 0 && nRow2 == 0);
+                if (!bDisable && GetViewData()->SelectionForbidsPaste())
+                    bDisable = true;
                 if ( !bDisable && bEditable )
                 {   // do not damage matrix
                     bDisable = pDoc->HasSelectedBlockMatrixFragment(
@@ -139,6 +141,8 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_FILL_TO_TOP:
             {
                 bDisable = (!bSimpleArea) || (nRow1 == MAXROW && nRow2 == MAXROW);
+                if (!bDisable && GetViewData()->SelectionForbidsPaste())
+                    bDisable = true;
                 if ( !bDisable && bEditable )
                 {   // do not damage matrix
                     bDisable = pDoc->HasSelectedBlockMatrixFragment(
@@ -149,6 +153,8 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_FILL_TO_RIGHT:     // fill to left / right
             {
                 bDisable = !bSimpleArea || (nCol1 == 0 && nCol2 == 0);
+                if (!bDisable && GetViewData()->SelectionForbidsPaste())
+                    bDisable = true;
                 if ( !bDisable && bEditable )
                 {   // do not damage matrix
                     bDisable = pDoc->HasSelectedBlockMatrixFragment(
@@ -159,6 +165,8 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_FILL_TO_LEFT:
             {
                 bDisable = (!bSimpleArea) || (nCol1 == MAXCOL && nCol2 == MAXCOL);
+                if (!bDisable && GetViewData()->SelectionForbidsPaste())
+                    bDisable = true;
                 if ( !bDisable && bEditable )
                 {   // do not damage matrix
                     bDisable = pDoc->HasSelectedBlockMatrixFragment(
@@ -168,6 +176,8 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             break;
 
             case SID_RANDOM_NUMBER_GENERATOR_DIALOG:
+                bDisable = !bSimpleArea || GetViewData()->SelectionForbidsPaste();
+            break;
             case SID_SAMPLING_DIALOG:
             case SID_DESCRIPTIVE_STATISTICS_DIALOG:
             case SID_ANALYSIS_OF_VARIANCE_DIALOG:
@@ -184,6 +194,9 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                     bDisable = true;
                 else
                     bDisable = (!bSimpleArea) || (nCol1 == nCol2 && nRow1 == nRow2);
+
+                if (!bDisable && GetViewData()->SelectionForbidsPaste())
+                    bDisable = true;
 
                 if ( !bDisable && bEditable && nWhich == FID_FILL_SERIES )
                 {   // do not damage matrix
