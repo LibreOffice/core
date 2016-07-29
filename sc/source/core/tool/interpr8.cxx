@@ -2000,7 +2000,15 @@ void ScInterpreter::ScSwitch_MS()
     // push result
     FormulaTokenRef xToken( PopToken() );
     if ( xToken )
+    {
+        // Remove unused arguments of SWITCH from the stack before pushing the result.
+        while ( nParamCount > 1 )
+        {
+            PopToken();
+            nParamCount--;
+        }
         PushTempToken( xToken.get() );
+    }
     else
         PushError( errUnknownStackVariable );
 }
