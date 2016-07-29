@@ -238,9 +238,13 @@ WinBits SvtIconChoiceCtrl::GetStyle() const
 {
     return _pImpl->GetStyle();
 }
-void SvtIconChoiceCtrl::Command( const CommandEvent& rCEvt )
+
+void SvtIconChoiceCtrl::Command(const CommandEvent& rCEvt)
 {
     _pImpl->Command( rCEvt );
+    //pass at least alt press/release to parent impl
+    if (rCEvt.GetCommand() == CommandEventId::ModKeyChange)
+        Control::Command(rCEvt);
 }
 
 #ifdef DBG_UTIL
