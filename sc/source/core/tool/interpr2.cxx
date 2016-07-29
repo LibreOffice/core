@@ -1872,11 +1872,11 @@ double ScInterpreter::ScGetRmz(double fRate, double fNper, double fPv,
     else
     {
         if (bPayInAdvance) // payment in advance
-            fPayment = (fFv + fPv * exp( fNper * ::rtl::math::log1p(fRate) ) ) * fRate /
-                (::rtl::math::expm1( (fNper + 1) * ::rtl::math::log1p(fRate) ) - fRate);
+            fPayment = div((fFv + fPv * exp( fNper * ::rtl::math::log1p(fRate) ) ) * fRate,
+                (::rtl::math::expm1( (fNper + 1) * ::rtl::math::log1p(fRate) ) - fRate));
         else  // payment in arrear
-            fPayment = (fFv + fPv * exp(fNper * ::rtl::math::log1p(fRate) ) ) * fRate /
-                ::rtl::math::expm1( fNper * ::rtl::math::log1p(fRate) );
+            fPayment = div((fFv + fPv * exp(fNper * ::rtl::math::log1p(fRate) ) ) * fRate,
+                ::rtl::math::expm1( fNper * ::rtl::math::log1p(fRate) ));
     }
     return -fPayment;
 }
