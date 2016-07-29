@@ -859,11 +859,16 @@ bool ScViewData::SelectionForbidsPaste()
 // static
 bool ScViewData::SelectionFillDOOM( const ScRange& rRange )
 {
-    /* TODO: it is still possible to select one row less than the entire sheet
-     * and fool around. We could narrow this down to some "sane" value, just
-     * what would be sane? At least this helps against the Ctrl+A cases. */
-    return  rRange.aStart.Col() == 0 && rRange.aEnd.Col() == MAXCOL &&
-            rRange.aStart.Row() == 0 && rRange.aEnd.Row() == MAXROW;
+    // Assume that more than 23 full columns (23M cells) will not be
+    // successful.. Even with only 10 bytes per cell that would already be
+    // 230MB, formula cells would be 100 bytes and more per cell.
+    // rows * columns > 23m => rows > 23m / columns
+    // to not overflow in case number of available columns or rows would be
+    // arbitrarily increased.
+    // We could refine this and take some actual cell size into account,
+    // evaluate available memory and what not, but..
+    const sal_Int32 kMax = 23 * 1024 * 1024;    // current MAXROWCOUNT is 1024*1024=1048576
+    return (rRange.aEnd.Row() - rRange.aStart.Row() + 1) > (kMax / (rRange.aEnd.Col() - rRange.aStart.Col() + 1));
 }
 
 void ScViewData::SetFillMode( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
