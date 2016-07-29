@@ -28,6 +28,7 @@
 
 class ImplAccelData;
 class ImplAccelEntry;
+class CommandEvent;
 
 class VCL_DLLPUBLIC Accelerator : public Resource
 {
@@ -79,6 +80,8 @@ public:
     void                    SetSelectHdl( const Link<Accelerator&,void>& rLink ) { maSelectHdl = rLink; }
 
     Accelerator&            operator=( const Accelerator& rAccel );
+
+    static bool             ToggleMnemonicsOnHierarchy(const CommandEvent& rCEvent, vcl::Window *pWindow);
 };
 
 #endif // INCLUDED_VCL_ACCEL_HXX

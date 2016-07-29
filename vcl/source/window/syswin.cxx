@@ -129,14 +129,14 @@ void ImplHandleControlAccelerator( vcl::Window* pWindow, bool bShow )
     }
 }
 
-bool SystemWindow::ImplHandleCmdEvent( const CommandEvent& rCEvent )
+bool Accelerator::ToggleMnemonicsOnHierarchy(const CommandEvent& rCEvent, vcl::Window *pWindow)
 {
     if (rCEvent.GetCommand() == CommandEventId::ModKeyChange)
     {
-        const CommandModKeyData *pCData = rCEvent.GetModKeyData ();
-        bool bShowAccel =  pCData && pCData->IsMod2();
+        const CommandModKeyData *pCData = rCEvent.GetModKeyData();
+        const bool bShowAccel =  pCData && pCData->IsMod2();
 
-        Window *pGetChild = firstLogicalChildOfParent(this);
+        vcl::Window *pGetChild = firstLogicalChildOfParent(pWindow);
         while (pGetChild)
         {
             if ( pGetChild->GetType() == WINDOW_TABCONTROL )
@@ -144,7 +144,7 @@ bool SystemWindow::ImplHandleCmdEvent( const CommandEvent& rCEvent )
                  // find currently shown tab page
                  TabControl* pTabControl = static_cast<TabControl*>( pGetChild );
                  TabPage* pTabPage = pTabControl->GetTabPage( pTabControl->GetCurPageId() );
-                 vcl::Window* pTabPageChild =  firstLogicalChildOfParent( pTabPage );
+                 vcl::Window* pTabPageChild = firstLogicalChildOfParent( pTabPage );
 
                  // and go through its children
                  while ( pTabPageChild )
@@ -155,7 +155,7 @@ bool SystemWindow::ImplHandleCmdEvent( const CommandEvent& rCEvent )
             }
 
             ImplHandleControlAccelerator( pGetChild, bShowAccel );
-            pGetChild = nextLogicalChildOfParent(this, pGetChild);
+            pGetChild = nextLogicalChildOfParent(pWindow, pGetChild);
         }
         return true;
     }
@@ -187,7 +187,7 @@ bool SystemWindow::Notify( NotifyEvent& rNEvt )
             return true;
         if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
         {
-            if (ImplHandleCmdEvent( *rNEvt.GetCommandEvent()))
+            if (Accelerator::ToggleMnemonicsOnHierarchy(*rNEvt.GetCommandEvent(), this))
                 return true;
         }
     }
