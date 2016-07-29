@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_65061c22",
+        "filename": "sfx2/source/control/emojiview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-07-29T09:13:05Z",
+      "side": 1,
+      "message": "How is using strlen any better? Use the size() method provided by orcus::pstring.",
+      "revId": "49ddbcf2ef0ae1cae9859cbd3856c2d495486cd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
