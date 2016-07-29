@@ -2019,8 +2019,11 @@ void DomainMapper_Impl::UpdateEmbeddedShapeProps(const uno::Reference< drawing::
 
 void DomainMapper_Impl::PopShapeContext()
 {
-    getTableManager().endLevel();
-    popTableManager();
+    if (hasTableManager())
+    {
+        getTableManager().endLevel();
+        popTableManager();
+    }
     if ( m_aAnchoredStack.size() > 0 )
     {
         // For OLE object replacement shape, the text append context was already removed
