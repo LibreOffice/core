@@ -704,7 +704,7 @@ public:
 
     short           GetColumnsCount() const { return nColumns; }
     short           GetEntryHeight() const  { return nEntryHeight; }
-    void            SetEntryHeight( short nHeight );
+    void            SetEntryHeight( short nHeight, bool bForce = false );
     short           GetEntryWidth() const { return nEntryWidth; }
     void            SetEntryWidth( short nWidth );
     Size            GetOutputSizePixel() const;
