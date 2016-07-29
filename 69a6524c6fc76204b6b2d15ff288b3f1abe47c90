@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_05171852",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/Controller.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-07-29T09:25:16Z",
+      "side": 1,
+      "message": "Typo: colum_operations -\u003e column_operations",
+      "range": {
+        "startLine": 361,
+        "startChar": 17,
+        "endLine": 361,
+        "endChar": 33
+      },
+      "revId": "69a6524c6fc76204b6b2d15ff288b3f1abe47c90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
