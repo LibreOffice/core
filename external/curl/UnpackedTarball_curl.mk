@@ -14,11 +14,10 @@ $(eval $(call gb_UnpackedTarball_set_tarball,curl,$(CURL_TARBALL),,curl))
 $(eval $(call gb_UnpackedTarball_set_patchlevel,curl,1))
 
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,curl,\
-	lib/Makefile.vc10 \
+	lib/Makefile.vc12 \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_patches,curl,\
-	external/curl/curl-freebsd.patch.1 \
 	external/curl/curl-msvc.patch.1 \
 	external/curl/curl-msvc-schannel.patch.1 \
 	external/curl/curl-7.26.0_mingw.patch \
