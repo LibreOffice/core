@@ -59,6 +59,8 @@ public:
     virtual OUString    GetComment() const;
     virtual OUString    GetRepeatComment(SfxRepeatTarget&) const;
     virtual sal_uInt16  GetId() const;
+    /// ID of the view shell that created this undo action.
+    virtual sal_Int32 GetViewShellId() const;
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
 private:
