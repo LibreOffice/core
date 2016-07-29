@@ -1212,7 +1212,7 @@ void RTFDocumentImpl::text(OUString& rString)
             rString = rString.copy(0, rString.getLength() - 1);
             bEnd = true;
         }
-        m_aStates.top().pDestinationText->append(rString);
+        m_aStates.top().appendDestinationText(rString);
         if (bEnd)
         {
             // always clear, necessary in case of group-less fonttable
@@ -1318,7 +1318,7 @@ void RTFDocumentImpl::text(OUString& rString)
     case Destination::TOCENTRY:
     case Destination::PROPNAME:
     case Destination::STATICVAL:
-        m_aStates.top().pDestinationText->append(rString);
+        m_aStates.top().appendDestinationText(rString);
         break;
     default:
         bRet = false;
@@ -1347,7 +1347,7 @@ void RTFDocumentImpl::text(OUString& rString)
     // Don't return earlier, a bookmark start has to be in a paragraph group.
     if (m_aStates.top().eDestination == Destination::BOOKMARKSTART)
     {
-        m_aStates.top().pDestinationText->append(rString);
+        m_aStates.top().appendDestinationText(rString);
         return;
     }
 
