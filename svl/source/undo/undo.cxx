@@ -72,6 +72,10 @@ sal_uInt16 SfxUndoAction::GetId() const
     return 0;
 }
 
+sal_Int32 SfxUndoAction::GetViewShellId() const
+{
+    return -1;
+}
 
 OUString SfxUndoAction::GetRepeatComment(SfxRepeatTarget&) const
 {
@@ -125,6 +129,7 @@ void SfxUndoAction::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"), BAD_CAST(typeid(*this).name()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("comment"), BAD_CAST(GetComment().toUtf8().getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("viewShellId"), BAD_CAST(OString::number(GetViewShellId()).getStr()));
     xmlTextWriterEndElement(pWriter);
 }
 
