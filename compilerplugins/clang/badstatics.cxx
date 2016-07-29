@@ -150,9 +150,6 @@ public:
                     // ScAddInAsync* keys if that set is not empty at exit
                 || name == "g_aWindowList"
                     //vcl/unx/gtk/a11y/atkutil.cxx, asserted empty at exit
-                || name=="aViewMap"
-                    // sfx2/source/view/lokhelper.cxx, not owning, leaked by
-                    // (mis-)design
                ) // these variables appear unproblematic
             {
                 return true;
