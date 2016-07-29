@@ -1116,7 +1116,7 @@ KeyEvent Window::GetActivationKey() const
 
 } /* namespace vcl */
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */sal_Unicode getAccel( const OUString& rStr )
+sal_Unicode getAccel( const OUString& rStr )
 {
     sal_Unicode nChar = 0;
     sal_Int32 nPos = 0;
@@ -1131,4 +1131,4 @@ KeyEvent Window::GetActivationKey() const
     return nChar;
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
