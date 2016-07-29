@@ -195,7 +195,7 @@ DomainMapper::~DomainMapper()
 
 void DomainMapper::lcl_attribute(Id nName, Value & val)
 {
-    if (m_pImpl->getTableManager().attribute(nName, val))
+    if (m_pImpl->hasTableManager() && m_pImpl->getTableManager().attribute(nName, val))
         return;
 
     static const int nSingleLineSpacing = 240;
@@ -396,7 +396,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 else
                     aSpacing.Height = sal_Int16(ConversionHelper::convertTwipToMM100( nIntValue ));
 
-                if( m_pImpl->getTableManager().isInCell() )
+                if (m_pImpl->hasTableManager() && m_pImpl->getTableManager().isInCell())
                 {
                     // direct formatting is applied for table cell data
                     TablePropertyMapPtr pTblCellWithDirectFormatting(new TablePropertyMap);
@@ -425,7 +425,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                         aSpacing.Mode = style::LineSpacingMode::FIX;
                     }
 
-                if( m_pImpl->getTableManager().isInCell() )
+                if (m_pImpl->hasTableManager() && m_pImpl->getTableManager().isInCell())
                 {
                     // If the table manager got the line rule after
                     // ooxml::CT_Spacing_line, then it should get the rule
@@ -2884,7 +2884,8 @@ void DomainMapper::lcl_endShape( )
         // empty paragraph at the end of the shape text will cause problems: if
         // the shape text ends with a table, the extra paragraph will be
         // handled as an additional row of the ending table.
-        m_pImpl->getTableManager().endTable();
+        if (m_pImpl->hasTableManager())
+            m_pImpl->getTableManager().endTable();
 
         lcl_endParagraphGroup();
         m_pImpl->PopShapeContext( );
