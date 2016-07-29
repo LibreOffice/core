@@ -30,6 +30,8 @@
 #include <vcl/settings.hxx>
 #include <stack>
 #include <set>
+#include <cppu/unotype.hxx>
+#include <officecfg/Office/Common.hxx>
 
 PaletteManager::PaletteManager() :
     mnMaxRecentColors(Application::GetSettings().GetStyleSettings().GetColorValueSetColumnCount()),
@@ -38,7 +40,8 @@ PaletteManager::PaletteManager() :
     mnColorCount(0),
     mpBtnUpdater(nullptr),
     mLastColor(COL_AUTO),
-    maColorSelectFunction(PaletteManager::DispatchColorCommand)
+    maColorSelectFunction(PaletteManager::DispatchColorCommand),
+    m_context(comphelper::getProcessComponentContext())
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     if(pDocSh)
@@ -134,6 +137,13 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
 
 void PaletteManager::ReloadRecentColorSet(SvxColorValueSet& rColorSet)
 {
+    maRecentColors.clear();
+    css::uno::Sequence< int > Colorlist(officecfg::Office::Common::UserColors::RecentColor::get());
+    for(int i = 0;i < Colorlist.getLength();i++)
+    {
+        Color aColor( Colorlist[i] );
+        maRecentColors.push_back( aColor );
+    }
     rColorSet.Clear();
     int nIx = 1;
     for(std::deque<Color>::const_iterator it = maRecentColors.begin();
@@ -217,6 +227,14 @@ void PaletteManager::AddRecentColor(const Color& rRecentColor)
     maRecentColors.push_front( rRecentColor );
     if( maRecentColors.size() > mnMaxRecentColors )
         maRecentColors.pop_back();
+    css::uno::Sequence< int > aColorList(maRecentColors.size());
+    for(sal_uInt16 i = 0;i < maRecentColors.size();i++)
+    {
+        aColorList[i] = (int)maRecentColors[i].GetColor();
+    }
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
+    officecfg::Office::Common::UserColors::RecentColor::set(aColorList, batch);
+    batch->commit();
 }
 
 void PaletteManager::SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater)

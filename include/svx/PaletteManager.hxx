@@ -52,7 +52,7 @@ class PaletteManager
     std::vector<std::unique_ptr<Palette>> m_Palettes;
 
     std::function<void(const OUString&, const Color&)> maColorSelectFunction;
-
+    css::uno::Reference < css::uno::XComponentContext > m_context;
 public:
     PaletteManager();
     ~PaletteManager();
