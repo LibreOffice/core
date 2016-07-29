@@ -238,6 +238,8 @@ public:
     size_t size() const { return maData.size(); }
 };
 
+sal_uInt32 SfxViewShell_Impl::m_nLastViewShellId = 0;
+
 SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags)
 : aInterceptorContainer( aMutex )
 ,   m_bControllerSet(false)
@@ -252,6 +254,7 @@ SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags)
 ,   m_pLibreOfficeKitViewCallback(nullptr)
 ,   m_pLibreOfficeKitViewData(nullptr)
 ,   m_bTiledSearching(false)
+,   m_nViewShellId(SfxViewShell_Impl::m_nLastViewShellId++)
 {}
 
 SfxViewShell_Impl::~SfxViewShell_Impl()
@@ -1502,10 +1505,16 @@ int SfxViewShell::getPart() const
     return 0;
 }
 
+sal_uInt32 SfxViewShell::GetViewShellId() const
+{
+    return pImpl->m_nViewShellId;
+}
+
 void SfxViewShell::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("sfxViewShell"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("id"), BAD_CAST(OString::number(GetViewShellId()).getStr()));
     xmlTextWriterEndElement(pWriter);
 }
 
