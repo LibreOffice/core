@@ -2220,7 +2220,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     if (eStage != PRE_INIT)
         comphelper::LibreOfficeKit::setStatusIndicatorCallback(lo_status_indicator_callback, pLib);
 
-    if (eStage != SECOND_INIT && pUserProfileUrl)
+    if (pUserProfileUrl)
     {
         OUString url(
             pUserProfileUrl, strlen(pUserProfileUrl), RTL_TEXTENCODING_UTF8);
@@ -2236,6 +2236,8 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 SAL_WARN("lok", "resolving <" << url << "> failed with " << +e);
         }
         rtl::Bootstrap::set("UserInstallation", url);
+        if (eStage == SECOND_INIT)
+            utl::Bootstrap::reloadData();
     }
 
     OUString aAppPath;
