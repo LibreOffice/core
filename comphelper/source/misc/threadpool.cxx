@@ -72,17 +72,7 @@ public:
             {
                 SAL_WARN("comphelper", "exception in thread worker while calling doWork(): " << e.Message);
             }
-            try {
-                delete pTask;
-            }
-            catch (const std::exception &e)
-            {
-                SAL_WARN("comphelper", "exception in thread worker while deleting task: " << e.what());
-            }
-            catch (const css::uno::Exception &e)
-            {
-                SAL_WARN("comphelper", "exception in thread worker while deleting task: " << e.Message);
-            }
+            delete pTask;
             pTag->onTaskWorkerDone();
         }
     }
