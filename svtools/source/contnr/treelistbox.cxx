@@ -2225,9 +2225,9 @@ void SvTreeListBox::SetEntryHeight( SvTreeListEntry* pEntry )
     }
 }
 
-void SvTreeListBox::SetEntryHeight( short nHeight )
+void SvTreeListBox::SetEntryHeight( short nHeight, bool bOverride )
 {
-    if( nHeight > nEntryHeight )
+    if( nHeight > nEntryHeight || bOverride )
     {
         nEntryHeight = nHeight;
         if( nEntryHeight )

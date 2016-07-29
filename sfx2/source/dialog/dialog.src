@@ -121,4 +121,9 @@ String STR_FONT_TABPAGE
   Text [ en-US ] = "Font" ;
 };
 
+String STR_PREVIEW_CHECKBOX
+{
+    Text [ en-US ] = "Show Previews";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

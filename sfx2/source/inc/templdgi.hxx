@@ -187,6 +187,7 @@ protected:
 
     VclPtr<SfxActionListBox> aFmtLb;
     VclPtr<ListBox> aFilterLb;
+    VclPtr<CheckBox> aPreviewCheckbox;
 
     sal_uInt16 nActFamily; // Id in the ToolBox = Position - 1
     sal_uInt16 nActFilter; // FilterIdx
@@ -215,6 +216,7 @@ protected:
     DECL_LINK_TYPED( TreeListApplyHdl, SvTreeListBox*, bool );
     DECL_LINK_TYPED( DropHdl, StyleTreeListBox_Impl&, bool );
     DECL_LINK_TYPED( TimeOut, Idle*, void );
+    DECL_LINK_TYPED( PreviewHdl, Button*, void);
 
     virtual void EnableItem(sal_uInt16 /*nMesId*/, bool /*bCheck*/ = true)
     {}
@@ -272,7 +274,7 @@ protected:
 
     void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    void FamilySelect( sal_uInt16 nId );
+    void FamilySelect( sal_uInt16 nId, bool bPreviewRefresh = false );
     void SetFamily( sal_uInt16 nId );
     void ActionSelect( sal_uInt16 nId );
 

@@ -68,6 +68,9 @@
 #include <sfx2/StyleManager.hxx>
 #include <sfx2/StylePreviewRenderer.hxx>
 #include <o3tl/make_unique.hxx>
+
+#define STD_ENTRY_HEIGHT 17
+
 using namespace css;
 using namespace css::beans;
 using namespace css::frame;
@@ -322,10 +325,10 @@ SfxActionListBox::SfxActionListBox(SfxCommonTemplateDialog_Impl* pParent, WinBit
 void SfxActionListBox::Recalc()
 {
     if (officecfg::Office::Common::StylesAndFormatting::Preview::get())
-    {
         SetEntryHeight(32 * GetDPIScaleFactor());
-        RecalcViewData();
-    }
+    else
+        SetEntryHeight(STD_ENTRY_HEIGHT, true);
+    RecalcViewData();
 }
 
 VclPtr<PopupMenu> SfxActionListBox::CreateContextMenu()
@@ -517,10 +520,10 @@ StyleTreeListBox_Impl::StyleTreeListBox_Impl(SfxCommonTemplateDialog_Impl* pPare
 void StyleTreeListBox_Impl::Recalc()
 {
     if (officecfg::Office::Common::StylesAndFormatting::Preview::get())
-    {
         SetEntryHeight(32 * GetDPIScaleFactor());
-        RecalcViewData();
-    }
+    else
+        SetEntryHeight(STD_ENTRY_HEIGHT, true);
+    RecalcViewData();
 }
 
 /** Internal structure for the establishment of the hierarchical view */
@@ -661,6 +664,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl
 
     , aFmtLb( VclPtr<SfxActionListBox>::Create(this, WB_BORDER | WB_TABSTOP | WB_SORT | WB_QUICK_SEARCH) )
     , aFilterLb( VclPtr<ListBox>::Create(pW, WB_BORDER | WB_DROPDOWN | WB_TABSTOP) )
+    , aPreviewCheckbox( VclPtr<CheckBox>::Create( pW ))
 
     , nActFamily(0xffff)
     , nActFilter(0)
@@ -690,6 +694,8 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl
     vcl::Font aFont = aFmtLb->GetFont();
     aFont.SetWeight( WEIGHT_NORMAL );
     aFmtLb->SetFont( aFont );
+    aPreviewCheckbox->Check(officecfg::Office::Common::StylesAndFormatting::Preview::get());
+    aPreviewCheckbox->SetText( SfxResId(STR_PREVIEW_CHECKBOX) );
 
     memset(pBoundItems, 0, sizeof(pBoundItems));
     memset(pFamilyState, 0, sizeof(pFamilyState));
@@ -855,11 +861,13 @@ void SfxCommonTemplateDialog_Impl::Initialize()
     aFmtLb->SetDoubleClickHdl( LINK( this, SfxCommonTemplateDialog_Impl, TreeListApplyHdl ) );
     aFmtLb->SetSelectHdl( LINK( this, SfxCommonTemplateDialog_Impl, FmtSelectHdl ) );
     aFmtLb->SetSelectionMode(SelectionMode::Multiple);
+    aPreviewCheckbox->SetClickHdl( LINK(this, SfxCommonTemplateDialog_Impl, PreviewHdl));
 
 
     aFilterLb->Show();
     if (!bHierarchical)
         aFmtLb->Show();
+    aPreviewCheckbox->Show();
 }
 
 SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
@@ -882,6 +890,7 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
         m_pDeletionWatcher->signal();
     aFmtLb.disposeAndClear();
     aFilterLb.disposeAndClear();
+    aPreviewCheckbox.disposeAndClear();
 }
 
 namespace SfxTemplate
@@ -1386,8 +1395,7 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
          ppItem+=StyleNrToInfoOffset(n);
 
          nAppFilter = (*ppItem)->GetValue();
-         FamilySelect(  StyleNrToInfoOffset(n)+1 );
-
+         FamilySelect( StyleNrToInfoOffset(n) + 1 );
          pItem = *ppItem;
      }
      else if( bDocChanged )
@@ -1695,9 +1703,9 @@ IMPL_LINK_TYPED( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox&, rBox, 
 }
 
 // Select-Handler for the Toolbox
-void SfxCommonTemplateDialog_Impl::FamilySelect(sal_uInt16 nEntry)
+void SfxCommonTemplateDialog_Impl::FamilySelect(sal_uInt16 nEntry, bool bPreviewRefresh)
 {
-    if( nEntry != nActFamily )
+    if( nEntry != nActFamily || bPreviewRefresh )
     {
         CheckItem( nActFamily, false );
         nActFamily = nEntry;
@@ -2073,6 +2081,30 @@ IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, ApplyHdl, LinkParamNone*, v
     ResetFocus();
 }
 
+IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, PreviewHdl, Button*, void)
+{
+    std::shared_ptr<comphelper::ConfigurationChanges> batch( comphelper::ConfigurationChanges::create() );
+    officecfg::Office::Common::StylesAndFormatting::Preview::set( aPreviewCheckbox->IsChecked(), batch );
+    batch->commit();
+    if(!bHierarchical)
+    {
+        sal_uInt16 nSize = aFmtLb->GetEntryCount();
+        for (sal_uInt16 nPos = 0; nPos < nSize; ++nPos )
+        {
+            SvTreeListEntry* pTreeListEntry = aFmtLb->GetEntry(nPos);
+            OUString aEntryStr = aFmtLb->GetEntryText(pTreeListEntry);
+            const SfxStyleFamily eFam = aPreviewCheckbox->IsChecked() ? GetFamilyItem_Impl()->GetFamily(): SfxStyleFamily::None;
+            pTreeListEntry->ReplaceItem(o3tl::make_unique<StyleLBoxString>(aEntryStr, eFam), 1);
+            aFmtLb->GetModel()->InvalidateEntry(pTreeListEntry);
+            aFmtLb->Recalc();
+        }
+    }
+    else
+    {
+        FamilySelect(nActFamily, true);
+    }
+}
+
 // Selection of a template during the Watercan-Status
 IMPL_LINK_TYPED( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox, void )
 {
@@ -2372,6 +2404,13 @@ void SfxTemplateDialog_Impl::Resize()
     Size aFilterSize(
         m_pFloat->LogicToPixel(Size(nWidth,SFX_TEMPLDLG_FILTERHEIGHT)) );
 
+    Point aCheckBoxPos(
+        m_pFloat->LogicToPixel(Point(SFX_TEMPLDLG_HFRAME,
+            aDlgSize.Height()-SFX_TEMPLDLG_VBOTFRAME-2*nListHeight)) );
+
+    Size aCheckBoxSize(
+        m_pFloat->LogicToPixel(Size(nWidth,SFX_TEMPLDLG_FILTERHEIGHT)) );
+
     Point aFmtPos(
         m_pFloat->LogicToPixel(Point(SFX_TEMPLDLG_HFRAME, SFX_TEMPLDLG_VTOPFRAME +
                             SFX_TEMPLDLG_MIDVSPACE+aSizeATL.Height())) );
@@ -2379,13 +2418,14 @@ void SfxTemplateDialog_Impl::Resize()
         m_pFloat->LogicToPixel(Size(nWidth,
                     aDlgSize.Height() - SFX_TEMPLDLG_VBOTFRAME -
                     SFX_TEMPLDLG_VTOPFRAME - 2*SFX_TEMPLDLG_MIDVSPACE-
-                    nListHeight-aSizeATL.Height())) );
+                    2*nListHeight-aSizeATL.Height())) );
 
     // only change the position of the listbox, when the window is high enough
     if(aDlgSize.Height() >= aMinSize.Height())
     {
         aFilterLb->SetPosPixel(aFilterPos);
         aFmtLb->SetPosPixel( aFmtPos );
+        aPreviewCheckbox->SetPosPixel(aCheckBoxPos);
         if(pTreeBox)
             pTreeBox->SetPosPixel(aFmtPos);
     }
@@ -2394,6 +2434,7 @@ void SfxTemplateDialog_Impl::Resize()
 
     aFilterLb->SetSizePixel(aFilterSize);
     aFmtLb->SetSizePixel( aFmtSize );
+    aPreviewCheckbox->SetSizePixel( aCheckBoxSize );
     if(pTreeBox)
         pTreeBox->SetSizePixel(aFmtSize);
 }
