@@ -18,7 +18,6 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,curl,\
 ))
 
 $(eval $(call gb_UnpackedTarball_add_patches,curl,\
-	external/curl/curl-freebsd.patch.1 \
 	external/curl/curl-msvc.patch.1 \
 	external/curl/curl-msvc-schannel.patch.1 \
 	external/curl/curl-7.26.0_mingw.patch \
