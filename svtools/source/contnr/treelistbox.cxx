@@ -3436,12 +3436,13 @@ void SvTreeListBox::SetHighlightRange( sal_uInt16 nStart, sal_uInt16 nEnd)
     pImpl->RecalcFocusRect();
 }
 
-void SvTreeListBox::Command( const CommandEvent& rCEvt )
+void SvTreeListBox::Command(const CommandEvent& rCEvt)
 {
-    // FIXME gnumake2 resync to DEV300_m84
-    pImpl->Command( rCEvt );
+    pImpl->Command(rCEvt);
+    //pass at least alt press/release to parent impl
+    if (rCEvt.GetCommand() == CommandEventId::ModKeyChange)
+        Control::Command(rCEvt);
 }
-
 
 void SvTreeListBox::RemoveParentKeepChildren( SvTreeListEntry* pParent )
 {
