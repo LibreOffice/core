@@ -356,6 +356,8 @@ public:
 
                     /// Disallow paste on Ctrl+A all selected. We'd go DOOM.
     bool            SelectionForbidsPaste();
+                    /// Determine DOOM condition, i.e. from selected range.
+    static bool     SelectionFillDOOM( const ScRange& rRange );
 
     void            SetFillMode( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
     void            SetDragMode( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
