@@ -232,7 +232,8 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::reload()
     css::uno::Reference< css::io::XStream > xStreamNoLang;
     {
         SolarMutexGuard g;
-        xStream = m_aPresetHandler.openTarget(TARGET_CURRENT); // open or create!
+        xStream = m_aPresetHandler.openTarget(TARGET_CURRENT,
+                css::embed::ElementModes::READ);
         try
         {
             xStreamNoLang = m_aPresetHandler.openPreset(PRESET_DEFAULT);
@@ -273,7 +274,8 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::store()
     css::uno::Reference< css::io::XStream > xStream;
     {
         SolarMutexGuard g;
-        xStream = m_aPresetHandler.openTarget(TARGET_CURRENT); // open or create!
+        xStream = m_aPresetHandler.openTarget(TARGET_CURRENT,
+               css::embed::ElementModes::READWRITE); // open or create!
     }
 
     css::uno::Reference< css::io::XOutputStream > xOut;
@@ -329,7 +331,8 @@ sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::isReadOnly()
     css::uno::Reference< css::io::XStream > xStream;
     {
         SolarMutexGuard g;
-        xStream = m_aPresetHandler.openTarget(TARGET_CURRENT); // open or create!
+        xStream = m_aPresetHandler.openTarget(TARGET_CURRENT,
+                css::embed::ElementModes::READWRITE); // open or create!
     }
 
     css::uno::Reference< css::io::XOutputStream > xOut;
