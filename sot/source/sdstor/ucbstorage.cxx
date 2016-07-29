@@ -507,7 +507,7 @@ public:
     bool                        Revert();
     bool                        Insert( ::ucbhelper::Content *pContent );
     UCBStorage_Impl*            OpenStorage( UCBStorageElement_Impl* pElement, StreamMode nMode, bool bDirect );
-    void                        OpenStream( UCBStorageElement_Impl*, StreamMode, bool, const OString* pKey=nullptr );
+    void                        OpenStream( UCBStorageElement_Impl*, StreamMode, bool, const OString* pKey );
     void                        SetProps( const Sequence < Sequence < PropertyValue > >& rSequence, const OUString& );
     void                        GetProps( sal_Int32&, Sequence < Sequence < PropertyValue > >& rSequence, const OUString& );
     sal_Int32                   GetObjectCount();
@@ -1815,7 +1815,7 @@ void UCBStorage_Impl::ReadContent()
                     else if ( aMediaType.isEmpty() )
                     {
                         // older files didn't have that special content type, so they must be detected
-                        OpenStream( pElement, STREAM_STD_READ, m_bDirect );
+                        OpenStream( pElement, STREAM_STD_READ, m_bDirect, nullptr );
                         if ( Storage::IsStorageFile( pElement->m_xStream ) )
                             pElement->m_bIsStorage = true;
                         else

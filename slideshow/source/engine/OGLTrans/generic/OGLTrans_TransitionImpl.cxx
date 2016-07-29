@@ -2028,7 +2028,7 @@ void GlitterTransition::finish( double, double, double, double, double )
 std::shared_ptr<OGLTransitionImpl>
 makeGlitterTransition(const Primitives_t& rLeavingSlidePrimitives,
                       const Primitives_t& rEnteringSlidePrimitives,
-                      const TransitionSettings& rSettings = TransitionSettings())
+                      const TransitionSettings& rSettings)
 {
     return std::make_shared<GlitterTransition>(TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
                                                rSettings);
@@ -2051,7 +2051,7 @@ std::shared_ptr<OGLTransitionImpl> makeGlitter()
 
     aSlide.push_back(aHexagon);
 
-    return makeGlitterTransition(aSlide, aEmptySlide);
+    return makeGlitterTransition(aSlide, aEmptySlide, TransitionSettings());
 }
 
 namespace

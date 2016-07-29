@@ -89,7 +89,7 @@ namespace slideshow
                                                                        const AnimatableShapeSharedPtr&          rShape,
                                                                        const ShapeManagerSharedPtr&             rShapeManager,
                                                                        const ::basegfx::B2DVector&              rSlideSize,
-                                                                       int                                      nFlags=0 );
+                                                                       int                                      nFlags );
 
             ColorAnimationSharedPtr  createColorPropertyAnimation( const OUString&                rAttrName,
                                                                           const AnimatableShapeSharedPtr&       rShape,
@@ -108,26 +108,26 @@ namespace slideshow
                                                                          const ShapeManagerSharedPtr&           rShapeManager,
                                                                          const ::basegfx::B2DVector&            rSlideSize,
                                                                          sal_Int16                              nTransformType,
-                                                                         int                                    nFlags=0 );
+                                                                         int                                    nFlags );
 
             StringAnimationSharedPtr createStringPropertyAnimation( const OUString&               rAttrName,
                                                                            const AnimatableShapeSharedPtr&      rShape,
                                                                            const ShapeManagerSharedPtr&         rShapeManager,
                                                                            const ::basegfx::B2DVector&          rSlideSize,
-                                                                           int                                  nFlags=0 );
+                                                                           int                                  nFlags );
 
             BoolAnimationSharedPtr   createBoolPropertyAnimation( const OUString&                 rAttrName,
                                                                          const AnimatableShapeSharedPtr&        rShape,
                                                                          const ShapeManagerSharedPtr&           rShapeManager,
                                                                          const ::basegfx::B2DVector&            rSlideSize,
-                                                                         int                                    nFlags=0 );
+                                                                         int                                    nFlags );
 
             NumberAnimationSharedPtr createPathMotionAnimation( const OUString&                   rSVGDPath,
                                                                        sal_Int16                                nAdditive,
                                                                        const AnimatableShapeSharedPtr&          rShape,
                                                                        const ShapeManagerSharedPtr&             rShapeManager,
                                                                        const ::basegfx::B2DVector&              rSlideSize,
-                                                                       int                                      nFlags=0);
+                                                                       int                                      nFlags);
         }
     }
 }
