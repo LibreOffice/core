@@ -924,9 +924,7 @@ inline void EnvironmentsData::getEnvironment(
         *ppEnv = nullptr;
     }
 
-    OUString aKey(
-        OUString::number( reinterpret_cast< sal_IntPtr >(pContext) ) );
-    aKey += rEnvDcp;
+    OUString aKey = OUString::number( reinterpret_cast< sal_IntPtr >(pContext) ) + rEnvDcp;
 
     // try to find registered mapping
     OUString2EnvironmentMap::const_iterator const iFind(

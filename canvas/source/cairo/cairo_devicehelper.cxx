@@ -236,9 +236,7 @@ namespace cairocanvas
 
         if( mpRefDevice )
         {
-            OUString aFilename("dbg_frontbuffer");
-            aFilename += OUString::number(nFilePostfixCount);
-            aFilename += ".bmp";
+            OUString aFilename = "dbg_frontbuffer" + OUString::number(nFilePostfixCount) + ".bmp";
 
             SvFileStream aStream( aFilename, STREAM_STD_READWRITE );
 

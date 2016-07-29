@@ -57,8 +57,7 @@ OUString MimeConfigurationHelper::GetStringClassIDRepresentation( const uno::Seq
 
             sal_Int32 nDigit1 = (sal_Int32)( (sal_uInt8)aClassID[nInd] / 16 );
             sal_Int32 nDigit2 = (sal_uInt8)aClassID[nInd] % 16;
-            aResult += OUString::number( nDigit1, 16 );
-            aResult += OUString::number( nDigit2, 16 );
+            aResult += OUString::number( nDigit1, 16 ) + OUString::number( nDigit2, 16 );
         }
     }
 

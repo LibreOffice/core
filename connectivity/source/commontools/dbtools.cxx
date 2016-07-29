@@ -1396,8 +1396,7 @@ OUString createUniqueName( const Sequence< OUString >& _rNames, const OUString& 
 
     while ( aUsedNames.find( sName ) != aUsedNames.end() )
     {
-        sName = _rBaseName;
-        sName += OUString::number( ++nPos );
+        sName = _rBaseName + OUString::number( ++nPos );
     }
     return sName;
 }

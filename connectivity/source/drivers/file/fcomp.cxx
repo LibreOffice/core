@@ -476,8 +476,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
             (SQL_ISPUNCTUATION(pPredicateNode->getChild(0),"+") || SQL_ISPUNCTUATION(pPredicateNode->getChild(0),"-")) &&
             pPredicateNode->getChild(1)->getNodeType() == SQLNodeType::IntNum)
     { // if -1 or +1 is there
-        OUString aValue(pPredicateNode->getChild(0)->getTokenValue());
-        aValue += pPredicateNode->getChild(1)->getTokenValue();
+        OUString aValue = pPredicateNode->getChild(0)->getTokenValue() + pPredicateNode->getChild(1)->getTokenValue();
         pOperand = new OOperandConst(*pPredicateNode->getChild(1), aValue);
     }
     else if( SQL_ISRULE(pPredicateNode,set_fct_spec) && SQL_ISPUNCTUATION(pPredicateNode->getChild(0),"{") )
