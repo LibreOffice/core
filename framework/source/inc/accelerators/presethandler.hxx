@@ -297,7 +297,8 @@ class PresetHandler
             @return The opened target stream ... or NULL if the target does not exists
                     or couldnt be created as new one.
          */
-        css::uno::Reference< css::io::XStream > openTarget(const OUString& sTarget);
+        css::uno::Reference< css::io::XStream > openTarget(
+                const OUString& sTarget, sal_Int32 nMode);
 
         /** @short  do anything which is necessary to flush all changes
                     back to disk.
