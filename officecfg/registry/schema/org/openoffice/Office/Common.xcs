@@ -3406,6 +3406,16 @@
         </info>
       </prop>
     </group>
+    <group oor:name="UserColors">
+      <info>
+        <desc>Contains recent colors and custom colors</desc>
+      </info>
+      <prop oor:name="RecentColor" oor:type="oor:int-list" oor:nillable="false">
+        <info>
+          <desc>List of Recent colors</desc>
+        </info>
+        <value/>                                                                         </prop>
+    </group>
     <group oor:name="Help">
       <info>
         <desc>Contains settings that specify the common help settings.</desc>
