@@ -189,26 +189,27 @@ static util::DateTime lcl_getDateTime(RTFParserState& aState)
                           aState.nDay, aState.nMonth, aState.nYear, false);
 }
 
-static void lcl_DestinationToMath(OUStringBuffer& rDestinationText, oox::formulaimport::XmlStreamBuilder& rMathBuffer, bool& rMathNor)
+static void lcl_DestinationToMath(OUStringBuffer* pDestinationText, oox::formulaimport::XmlStreamBuilder& rMathBuffer, bool& rMathNor)
 {
-    OUString aStr = rDestinationText.makeStringAndClear();
-    if (!aStr.isEmpty())
+    if (!pDestinationText)
+        return;
+    OUString aStr = pDestinationText->makeStringAndClear();
+    if (aStr.isEmpty())
+        return;
+    rMathBuffer.appendOpeningTag(M_TOKEN(r));
+    if (rMathNor)
     {
-        rMathBuffer.appendOpeningTag(M_TOKEN(r));
-        if (rMathNor)
-        {
-            rMathBuffer.appendOpeningTag(M_TOKEN(rPr));
-            // Same as M_TOKEN(lit)
-            rMathBuffer.appendOpeningTag(M_TOKEN(nor));
-            rMathBuffer.appendClosingTag(M_TOKEN(nor));
-            rMathBuffer.appendClosingTag(M_TOKEN(rPr));
-            rMathNor = false;
-        }
-        rMathBuffer.appendOpeningTag(M_TOKEN(t));
-        rMathBuffer.appendCharacters(aStr);
-        rMathBuffer.appendClosingTag(M_TOKEN(t));
-        rMathBuffer.appendClosingTag(M_TOKEN(r));
+        rMathBuffer.appendOpeningTag(M_TOKEN(rPr));
+        // Same as M_TOKEN(lit)
+        rMathBuffer.appendOpeningTag(M_TOKEN(nor));
+        rMathBuffer.appendClosingTag(M_TOKEN(nor));
+        rMathBuffer.appendClosingTag(M_TOKEN(rPr));
+        rMathNor = false;
     }
+    rMathBuffer.appendOpeningTag(M_TOKEN(t));
+    rMathBuffer.appendCharacters(aStr);
+    rMathBuffer.appendClosingTag(M_TOKEN(t));
+    rMathBuffer.appendClosingTag(M_TOKEN(r));
 }
 
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
@@ -1212,7 +1213,7 @@ void RTFDocumentImpl::text(OUString& rString)
             rString = rString.copy(0, rString.getLength() - 1);
             bEnd = true;
         }
-        m_aStates.top().pDestinationText->append(rString);
+        m_aStates.top().appendDestinationText(rString);
         if (bEnd)
         {
             // always clear, necessary in case of group-less fonttable
@@ -1318,7 +1319,7 @@ void RTFDocumentImpl::text(OUString& rString)
     case Destination::TOCENTRY:
     case Destination::PROPNAME:
     case Destination::STATICVAL:
-        m_aStates.top().pDestinationText->append(rString);
+        m_aStates.top().appendDestinationText(rString);
         break;
     default:
         bRet = false;
@@ -1347,7 +1348,7 @@ void RTFDocumentImpl::text(OUString& rString)
     // Don't return earlier, a bookmark start has to be in a paragraph group.
     if (m_aStates.top().eDestination == Destination::BOOKMARKSTART)
     {
-        m_aStates.top().pDestinationText->append(rString);
+        m_aStates.top().appendDestinationText(rString);
         return;
     }
 
@@ -1765,7 +1766,7 @@ RTFError RTFDocumentImpl::pushState()
         m_aStates.top().eRunType = RTFParserState::LOCH;
 
         if (m_aStates.top().eDestination == Destination::MR)
-            lcl_DestinationToMath(*m_aStates.top().pDestinationText, m_aMathBuffer, m_bMathNor);
+            lcl_DestinationToMath(m_aStates.top().pDestinationText, m_aMathBuffer, m_bMathNor);
         m_aStates.push(m_aStates.top());
     }
     m_aStates.top().aDestinationText.setLength(0); // was copied: always reset!
@@ -2460,7 +2461,7 @@ RTFError RTFDocumentImpl::popState()
     }
     break;
     case Destination::MR:
-        lcl_DestinationToMath(*m_aStates.top().pDestinationText, m_aMathBuffer, m_bMathNor);
+        lcl_DestinationToMath(m_aStates.top().pDestinationText, m_aMathBuffer, m_bMathNor);
         break;
     case Destination::MF:
         m_aMathBuffer.appendClosingTag(M_TOKEN(f));
