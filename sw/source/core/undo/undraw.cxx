@@ -69,14 +69,14 @@ IMPL_LINK_TYPED( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo, void )
         if( pSh && pSh->HasDrawView() )
             pMarkList = &pSh->GetDrawView()->GetMarkedObjectList();
 
-        GetIDocumentUndoRedo().AppendUndo( new SwSdrUndo(pUndo, pMarkList) );
+        GetIDocumentUndoRedo().AppendUndo( new SwSdrUndo(pUndo, pMarkList, this) );
     }
     else
         delete pUndo;
 }
 
-SwSdrUndo::SwSdrUndo( SdrUndoAction* pUndo, const SdrMarkList* pMrkLst )
-    : SwUndo( UNDO_DRAWUNDO ), pSdrUndo( pUndo )
+SwSdrUndo::SwSdrUndo( SdrUndoAction* pUndo, const SdrMarkList* pMrkLst, const SwDoc* pDoc )
+    : SwUndo( UNDO_DRAWUNDO, pDoc ), pSdrUndo( pUndo )
 {
     if( pMrkLst && pMrkLst->GetMarkCount() )
         pMarkList = new SdrMarkList( *pMrkLst );
@@ -184,8 +184,8 @@ static void lcl_RestoreAnchor( SwFrameFormat* pFormat, sal_uLong& rNodePos )
     }
 }
 
-SwUndoDrawGroup::SwUndoDrawGroup( sal_uInt16 nCnt )
-    : SwUndo( UNDO_DRAWGROUP ), nSize( nCnt + 1 ), bDelFormat( true )
+SwUndoDrawGroup::SwUndoDrawGroup( sal_uInt16 nCnt, const SwDoc* pDoc )
+    : SwUndo( UNDO_DRAWGROUP, pDoc ), nSize( nCnt + 1 ), bDelFormat( true )
 {
     pObjArr = new SwUndoGroupObjImpl[ nSize ];
 }
@@ -320,8 +320,8 @@ void SwUndoDrawGroup::SetGroupFormat( SwDrawFrameFormat* pFormat )
     pObjArr->pFormat = pFormat;
 }
 
-SwUndoDrawUnGroup::SwUndoDrawUnGroup( SdrObjGroup* pObj )
-    : SwUndo( UNDO_DRAWUNGROUP ), bDelFormat( false )
+SwUndoDrawUnGroup::SwUndoDrawUnGroup( SdrObjGroup* pObj, const SwDoc* pDoc )
+    : SwUndo( UNDO_DRAWUNGROUP, pDoc ), bDelFormat( false )
 {
     nSize = (sal_uInt16)pObj->GetSubList()->GetObjCount() + 1;
     pObjArr = new SwUndoGroupObjImpl[ nSize ];
@@ -445,8 +445,8 @@ void SwUndoDrawUnGroup::AddObj( sal_uInt16 nPos, SwDrawFrameFormat* pFormat )
     rSave.pObj = nullptr;
 }
 
-SwUndoDrawUnGroupConnectToLayout::SwUndoDrawUnGroupConnectToLayout()
-    : SwUndo( UNDO_DRAWUNGROUP )
+SwUndoDrawUnGroupConnectToLayout::SwUndoDrawUnGroupConnectToLayout(const SwDoc* pDoc)
+    : SwUndo( UNDO_DRAWUNGROUP, pDoc )
 {
 }
 
@@ -493,8 +493,8 @@ void SwUndoDrawUnGroupConnectToLayout::AddFormatAndObj( SwDrawFrameFormat* pDraw
             std::pair< SwDrawFrameFormat*, SdrObject* >( pDrawFrameFormat, pDrawObject ) );
 }
 
-SwUndoDrawDelete::SwUndoDrawDelete( sal_uInt16 nCnt )
-    : SwUndo( UNDO_DRAWDELETE ), nSize( nCnt ), bDelFormat( true )
+SwUndoDrawDelete::SwUndoDrawDelete( sal_uInt16 nCnt, const SwDoc* pDoc )
+    : SwUndo( UNDO_DRAWDELETE, pDoc ), nSize( nCnt ), bDelFormat( true )
 {
     pObjArr = new SwUndoGroupObjImpl[ nSize ];
     pMarkLst = new SdrMarkList();

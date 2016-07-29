@@ -42,7 +42,7 @@ SwSortUndoElement::~SwSortUndoElement()
 }
 
 SwUndoSort::SwUndoSort(const SwPaM& rRg, const SwSortOptions& rOpt)
-    : SwUndo(UNDO_SORT_TXT)
+    : SwUndo(UNDO_SORT_TXT, rRg.GetDoc())
     , SwUndRng(rRg)
     , pUndoTableAttr(nullptr)
     , nTableNd(0)
@@ -52,7 +52,7 @@ SwUndoSort::SwUndoSort(const SwPaM& rRg, const SwSortOptions& rOpt)
 
 SwUndoSort::SwUndoSort( sal_uLong nStt, sal_uLong nEnd, const SwTableNode& rTableNd,
                         const SwSortOptions& rOpt, bool bSaveTable )
-    : SwUndo(UNDO_SORT_TBL), pUndoTableAttr( nullptr )
+    : SwUndo(UNDO_SORT_TBL, rTableNd.GetDoc()), pUndoTableAttr( nullptr )
 {
     nSttNode = nStt;
     nEndNode = nEnd;

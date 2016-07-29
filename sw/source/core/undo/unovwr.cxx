@@ -42,7 +42,7 @@ using namespace ::com::sun::star::uno;
 
 SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
                                     sal_Unicode cIns )
-    : SwUndo(UNDO_OVERWRITE),
+    : SwUndo(UNDO_OVERWRITE, pDoc),
       pRedlSaveData( nullptr ), bGroup( false )
 {
     if( !pDoc->getIDocumentRedlineAccess().IsIgnoreRedline() && !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
@@ -343,7 +343,7 @@ struct UndoTransliterate_Data
 SwUndoTransliterate::SwUndoTransliterate(
     const SwPaM& rPam,
     const utl::TransliterationWrapper& rTrans )
-    : SwUndo( UNDO_TRANSLITERATE ), SwUndRng( rPam ), nType( rTrans.getType() )
+    : SwUndo( UNDO_TRANSLITERATE, rPam.GetDoc() ), SwUndRng( rPam ), nType( rTrans.getType() )
 {
 }
 

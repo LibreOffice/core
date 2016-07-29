@@ -30,6 +30,7 @@ class SdrObject;
 class SdrObjGroup;
 class SdrUndoAction;
 class SwDrawFrameFormat;
+class SwDoc;
 
 // Undo for Draw Objects
 class SwSdrUndo : public SwUndo
@@ -38,7 +39,7 @@ class SwSdrUndo : public SwUndo
     SdrMarkList* pMarkList; // MarkList for all selected SdrObjects
 
 public:
-    SwSdrUndo( SdrUndoAction* , const SdrMarkList* pMarkList );
+    SwSdrUndo( SdrUndoAction* , const SdrMarkList* pMarkList, const SwDoc* pDoc );
 
     virtual ~SwSdrUndo();
 
@@ -55,7 +56,7 @@ class SwUndoDrawGroup : public SwUndo
     bool bDelFormat;
 
 public:
-    SwUndoDrawGroup( sal_uInt16 nCnt );
+    SwUndoDrawGroup( sal_uInt16 nCnt, const SwDoc* pDoc );
 
     virtual ~SwUndoDrawGroup();
 
@@ -84,7 +85,7 @@ class SwUndoDrawUnGroup : public SwUndo
     bool bDelFormat;
 
 public:
-    SwUndoDrawUnGroup( SdrObjGroup* );
+    SwUndoDrawUnGroup( SdrObjGroup*, const SwDoc* pDoc );
 
     virtual ~SwUndoDrawUnGroup();
 
@@ -100,7 +101,7 @@ private:
     std::vector< std::pair< SwDrawFrameFormat*, SdrObject* > > aDrawFormatsAndObjs;
 
 public:
-    SwUndoDrawUnGroupConnectToLayout();
+    SwUndoDrawUnGroupConnectToLayout(const SwDoc* pDoc);
 
     virtual ~SwUndoDrawUnGroupConnectToLayout();
 
@@ -119,7 +120,7 @@ class SwUndoDrawDelete : public SwUndo
     bool bDelFormat;
 
 public:
-    SwUndoDrawDelete( sal_uInt16 nCnt );
+    SwUndoDrawDelete( sal_uInt16 nCnt, const SwDoc* pDoc );
 
     virtual ~SwUndoDrawDelete();
 
