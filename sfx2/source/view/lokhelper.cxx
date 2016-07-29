@@ -17,42 +17,24 @@
 
 #include <shellimpl.hxx>
 
-namespace
-{
-
-/// Assigns a view ID to a view shell.
-int shellToView(SfxViewShell* pViewShell)
-{
-    // Deleted view shells are not removed from this map, so view IDs are not
-    // reused when deleting, then creating a view.
-    static std::map<SfxViewShell*, int> aViewMap;
-    auto it = aViewMap.find(pViewShell);
-    if (it != aViewMap.end())
-        return it->second;
-
-    int nViewId = aViewMap.size();
-    aViewMap[pViewShell] = nViewId;
-    return nViewId;
-}
-}
-
 int SfxLokHelper::createView()
 {
     SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
     SfxRequest aRequest(pViewFrame, SID_NEWWINDOW);
     pViewFrame->ExecView_Impl(aRequest);
 
-    return shellToView(SfxViewShell::Current());
+    return SfxViewShell::Current()->GetViewShellId();
 }
 
 void SfxLokHelper::destroyView(int nId)
 {
+    unsigned nViewShellId = nId;
     SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
 
     for (std::size_t i = 0; i < rViewArr.size(); ++i)
     {
         SfxViewShell* pViewShell = rViewArr[i];
-        if (shellToView(pViewShell) == nId)
+        if (pViewShell->GetViewShellId() == nViewShellId)
         {
             SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
             SfxRequest aRequest(pViewFrame, SID_CLOSEWIN);
@@ -64,12 +46,13 @@ void SfxLokHelper::destroyView(int nId)
 
 void SfxLokHelper::setView(int nId)
 {
+    unsigned nViewShellId = nId;
     SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
 
     for (std::size_t i = 0; i < rViewArr.size(); ++i)
     {
         SfxViewShell* pViewShell = rViewArr[i];
-        if (shellToView(pViewShell) == nId)
+        if (pViewShell->GetViewShellId() == nViewShellId)
         {
             if (pViewShell == SfxViewShell::Current())
                 return;
@@ -86,7 +69,7 @@ int SfxLokHelper::getView(SfxViewShell* pViewShell)
 {
     if (!pViewShell)
         pViewShell = SfxViewShell::Current();
-    return shellToView(pViewShell);
+    return pViewShell->GetViewShellId();
 }
 
 std::size_t SfxLokHelper::getViews()

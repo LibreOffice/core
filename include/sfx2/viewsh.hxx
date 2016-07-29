@@ -334,6 +334,7 @@ public:
     /// See lok::Document::getPart().
     virtual int getPart() const;
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    sal_uInt32 GetViewShellId() const;
 };
 
 
