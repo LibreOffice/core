@@ -3048,14 +3048,12 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
             }
         }
     }
-#ifndef NOCOMMAND
     else
     {
         const Point& rPos = rCEvt.GetMousePosPixel();
         if( rPos.X() < aOutputSize.Width() && rPos.Y() < aOutputSize.Height() )
             aSelEng.Command( rCEvt );
     }
-#endif
 }
 
 void SvImpLBox::BeginScroll()
