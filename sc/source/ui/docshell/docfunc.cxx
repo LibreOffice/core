@@ -4604,6 +4604,11 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
         return false;
     }
 
+    // FID_FILL_... slots should already had been disabled, check here for API
+    // calls, no message.
+    if (ScViewData::SelectionFillDOOM( aDestArea))
+        return false;
+
     WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
     ScDocument* pUndoDoc = nullptr;

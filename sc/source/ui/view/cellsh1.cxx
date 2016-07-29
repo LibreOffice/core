@@ -527,6 +527,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case FID_FILL_SERIES:
             {
+                if (GetViewData()->SelectionForbidsPaste())
+                    // Slot should be already disabled, but in case it wasn't
+                    // don't even attempt to do the evaluation and popup a
+                    // dialog.
+                    break;
+
                 SCCOL nStartCol;
                 SCROW nStartRow;
                 SCTAB nStartTab;
