@@ -44,6 +44,10 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JToolBar;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.BorderFactory;
 
 public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
 
@@ -270,21 +274,28 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
         );
 
         String[] labels = {"Run", "Clear", "Save", "Close","Undo","Redo"};
-        JPanel p = new JPanel();
-        p.setLayout(new FlowLayout());
-
+        JToolBar toolbar = new JToolBar();
+        toolbar.setRollover(true);
         for (String label : labels) {
-            JButton b = new JButton(label);
+            //images are in path libreoffice/core/instdir/program/
+            //images are also in path /libreoffice/core/scripting/java/com/sun/star/script/framework/provider/beanshell/  but this  path not used in the code
+            String pathToImages= label+".png";
+            JButton b = new JButton(new ImageIcon(getClass().getClassLoader().getResource(pathToImages)));
+            b.setBorder(BorderFactory.createEmptyBorder());
+            b.setActionCommand(label);
+            b.setToolTipText(label);
+            b.setFocusPainted(false);
+            b.setBorder(null);
             b.addActionListener(this);
-            p.add(b);
-
+            toolbar.add(b);
+            toolbar.addSeparator();
             if (label.equals("Save") && filename == null) {
                 b.setEnabled(false);
             }
         }
 
         frame.getContentPane().add((JComponent)view, BorderLayout.CENTER);
-        frame.add(p, BorderLayout.NORTH);
+        frame.add(toolbar, BorderLayout.NORTH);
         frame.pack();
         frame.setSize(590, 480);
         frame.setLocation(300, 200);
