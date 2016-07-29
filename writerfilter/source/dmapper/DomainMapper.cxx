@@ -2884,7 +2884,8 @@ void DomainMapper::lcl_endShape( )
         // empty paragraph at the end of the shape text will cause problems: if
         // the shape text ends with a table, the extra paragraph will be
         // handled as an additional row of the ending table.
-        m_pImpl->getTableManager().endTable();
+        if (m_pImpl->hasTableManager())
+            m_pImpl->getTableManager().endTable();
 
         lcl_endParagraphGroup();
         m_pImpl->PopShapeContext( );
