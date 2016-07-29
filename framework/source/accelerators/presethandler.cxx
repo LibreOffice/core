@@ -586,7 +586,8 @@ css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const OUString
     return xStream;
 }
 
-css::uno::Reference< css::io::XStream > PresetHandler::openTarget(const OUString& sTarget)
+css::uno::Reference< css::io::XStream > PresetHandler::openTarget(
+        const OUString& sTarget, sal_Int32 const nMode)
 {
     css::uno::Reference< css::embed::XStorage > xFolder;
     {
@@ -598,26 +599,9 @@ css::uno::Reference< css::io::XStream > PresetHandler::openTarget(const OUString
     if (!xFolder.is())
        return css::uno::Reference< css::io::XStream >();
 
-    OUString sFile(sTarget);
-    sFile += ".xml";
+    OUString const sFile(sTarget + ".xml");
 
-    // try it in read/write mode first and ignore errors.
-    css::uno::Reference< css::io::XStream > xStream;
-    try
-    {
-        xStream = xFolder->openStreamElement(sFile, css::embed::ElementModes::READWRITE);
-        return xStream;
-    }
-    catch(const css::uno::RuntimeException&)
-        { throw; }
-    catch(const css::uno::Exception&)
-        { xStream.clear(); }
-
-    // try it readonly if it failed before.
-    // inform user about errors (use original exceptions!)
-    xStream    = xFolder->openStreamElement(sFile, css::embed::ElementModes::READ);
-
-    return xStream;
+    return xFolder->openStreamElement(sFile, nMode);
 }
 
 void PresetHandler::commitUserChanges()
