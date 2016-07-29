@@ -194,8 +194,7 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
     m_pParameters->get_Count(&nCount);
     if(nCount < (parameterIndex-1))
     {
-        OUString sDefaultName( "parame" );
-        sDefaultName += OUString::number(parameterIndex);
+        OUString sDefaultName = "parame" + OUString::number(parameterIndex);
         ADOParameter* pParam = m_Command.CreateParameter(sDefaultName,_eType,adParamInput,_nSize,_Val);
         if(pParam)
         {
@@ -461,8 +460,7 @@ void OPreparedStatement::replaceParameterNodeName(OSQLParseNode* _pNode,
         {
             OSQLParseNode* pNewNode = new OSQLParseNode(OUString(":") ,SQLNodeType::Punctuation,0);
             delete pChildNode->replace(pChildNode->getChild(0),pNewNode);
-            OUString sParameterName = _sDefaultName;
-            sParameterName += OUString::number(++_rParameterCount);
+            OUString sParameterName = _sDefaultName + OUString::number(++_rParameterCount);
             pChildNode->append(new OSQLParseNode( sParameterName,SQLNodeType::Name,0));
         }
         else

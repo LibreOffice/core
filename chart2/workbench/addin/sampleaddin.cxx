@@ -41,9 +41,7 @@ sal_Bool SAL_CALL component_writeInfo(
     {
         try
         {
-            OUString aImpl( "/" );
-            aImpl += SampleAddIn::getImplementationName_Static();
-            aImpl += "/UNO/SERVICES";
+            OUString aImpl = "/"  + SampleAddIn::getImplementationName_Static() + "/UNO/SERVICES";
 
             uno::Reference< registry::XRegistryKey> xNewKey(
                 reinterpret_cast<registry::XRegistryKey*>( pRegistryKey )->createKey( aImpl ) );

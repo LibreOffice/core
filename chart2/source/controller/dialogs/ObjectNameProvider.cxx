@@ -489,11 +489,9 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
         {
             OUString aNewLine( "\n" );
 
-            aRet=SCH_RESSTR(STR_TIP_DATAPOINT_INDEX);
-            aRet+=aNewLine;
-            aRet+=SCH_RESSTR(STR_TIP_DATASERIES);
-            aRet+=aNewLine;
-            aRet+=SCH_RESSTR(STR_TIP_DATAPOINT_VALUES);
+            aRet= SCH_RESSTR(STR_TIP_DATAPOINT_INDEX) + aNewLine
+                + SCH_RESSTR(STR_TIP_DATASERIES) + aNewLine
+                + SCH_RESSTR(STR_TIP_DATAPOINT_VALUES);
         }
         else
             aRet=SCH_RESSTR(STR_TIP_DATAPOINT);
@@ -637,9 +635,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                 Reference< chart2::XRegressionCurve > xCurve( RegressionCurveHelper::getRegressionCurveAtIndex(xCurveCnt, nCurveIndex) );
                 if( xCurve.is())
                 {
-                    aRet += " (";
-                    aRet += RegressionCurveHelper::getRegressionCurveName(xCurve);
-                    aRet += " )";
+                    aRet += " (" + RegressionCurveHelper::getRegressionCurveName(xCurve) + " )";
                 }
             }
         }
@@ -790,19 +786,15 @@ OUString ObjectNameProvider::getNameForCID(
         case OBJECTTYPE_DATA_CURVE:
         case OBJECTTYPE_DATA_CURVE_EQUATION:
             {
-                OUString aRet = lcl_getFullSeriesName( rObjectCID, xModel );
-                aRet += " ";
+                OUString aRet = lcl_getFullSeriesName( rObjectCID, xModel ) + " ";
                 if( eType == OBJECTTYPE_DATA_POINT || eType == OBJECTTYPE_DATA_LABEL )
                 {
                     aRet += getName( OBJECTTYPE_DATA_POINT  );
                     sal_Int32 nPointIndex = ObjectIdentifier::getIndexFromParticleOrCID( rObjectCID );
-                    aRet += " ";
-                    aRet += OUString::number(nPointIndex+1);
-
+                    aRet += " " + OUString::number(nPointIndex+1);
                     if( eType == OBJECTTYPE_DATA_LABEL )
                     {
-                        aRet += " ";
-                        aRet += getName( OBJECTTYPE_DATA_LABEL  );
+                        aRet += " " + getName( OBJECTTYPE_DATA_LABEL  );
                     }
                 }
                 else if (eType == OBJECTTYPE_DATA_CURVE || eType == OBJECTTYPE_DATA_CURVE_EQUATION)
@@ -810,8 +802,7 @@ OUString ObjectNameProvider::getNameForCID(
                     Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rObjectCID , xModel ));
                     Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
 
-                    aRet += " ";
-                    aRet += getName(eType);
+                    aRet += " " + getName(eType);
 
                     if( xCurveCnt.is())
                     {
@@ -819,9 +810,7 @@ OUString ObjectNameProvider::getNameForCID(
                         Reference< chart2::XRegressionCurve > xCurve( RegressionCurveHelper::getRegressionCurveAtIndex(xCurveCnt, nCurveIndex) );
                         if( xCurve.is())
                         {
-                            aRet += " (";
-                            aRet += RegressionCurveHelper::getRegressionCurveName(xCurve);
-                            aRet += ")";
+                           aRet += " (" + RegressionCurveHelper::getRegressionCurveName(xCurve) + ")";
                         }
                     }
                 }

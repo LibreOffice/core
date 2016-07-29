@@ -323,10 +323,7 @@ namespace connectivity
 
                 Sequence< PropertyValue > aConnectionArgs;
                 aProperties >>= aConnectionArgs;
-
-                OUString sConnectURL("jdbc:hsqldb:");
-
-                sConnectURL += sSystemPath;
+                OUString sConnectURL = "jdbc:hsqldb:" + sSystemPath;
                 Reference<XConnection> xOrig;
                 try
                 {
