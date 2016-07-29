@@ -1801,7 +1801,7 @@ void Window::KeyInput( const KeyEvent& rKEvt )
     if (cod.GetCode () >= 0x200 && cod.GetCode () <= 0x219)
     {
         if (!accel) return;
-        if (autoacc && cod.GetModifier () != 0x4000) return;
+        if (autoacc && cod.GetModifier () != KEY_MOD2) return;
     }
 
     NotifyEvent aNEvt( MouseNotifyEvent::KEYINPUT, this, &rKEvt );
