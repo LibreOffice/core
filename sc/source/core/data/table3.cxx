@@ -2144,7 +2144,8 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                 pDocument, ScAddress(nResCols[nResult], iEntry->nDestRow, nTab), aArr);
 
             SetFormulaCell(nResCols[nResult], iEntry->nDestRow, pCell);
-
+            if ( rParam.bIncludePattern )
+                pCell->SetNeedNumberFormat(true);
             if ( nResCols[nResult] != nGroupCol[iEntry->nGroupNo] )
             {
                 ApplyStyle( nResCols[nResult], iEntry->nDestRow, *pStyle );
