@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_25db34ef",
+        "filename": "basctl/inc/basidesh.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-29T07:18:22Z",
+      "side": 1,
+      "message": "eewww, yucky. Rather just put the new strings at the end of this file.",
+      "revId": "5673b1b3f34e42f49c694d018031b4f36d8ee105",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
