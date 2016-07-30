@@ -924,7 +924,7 @@ void ScFiltersTest::testBorderODS()
     CPPUNIT_ASSERT_EQUAL(
         table::BorderLineStyle::SOLID, pRight->GetBorderLineStyle());
     CPPUNIT_ASSERT_EQUAL(5L, pRight->GetWidth());
-    CPPUNIT_ASSERT(pRight->GetColor() == Color(COL_BLUE));
+    CPPUNIT_ASSERT_EQUAL(Color(COL_BLUE), pRight->GetColor());
 
     xDocSh->DoClose();
 }
