@@ -1924,8 +1924,8 @@ void ScExportTest::testBordersExchangeXLSX()
             rDoc.GetBorderLines(nCol + 2, (nRow * 2) + 8, 0, nullptr, &pLineTop, nullptr, &pLineBottom);
             if((nCol < 5) && (nRow == 6))
             {   // in this range no lines
-                CPPUNIT_ASSERT(pLineTop == nullptr);
-                CPPUNIT_ASSERT(pLineBottom == nullptr);
+                CPPUNIT_ASSERT(!pLineTop);
+                CPPUNIT_ASSERT(!pLineBottom);
                 continue;
             }
             else
@@ -3289,7 +3289,7 @@ void ScExportTest::testMoveCellAnchoredShapes()
 
     // Check cell anchor state
     ScAnchorType oldType = ScDrawLayer::GetAnchorType(*pObj);
-    CPPUNIT_ASSERT_MESSAGE( "Failed to get anchor type", oldType == SCA_CELL );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Failed to get anchor type", SCA_CELL, oldType);
 
     // Get anchor data
     ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
@@ -3351,7 +3351,7 @@ void ScExportTest::testMoveCellAnchoredShapes()
 
     // Check cell anchor state
     oldType = ScDrawLayer::GetAnchorType(*pObj);
-    CPPUNIT_ASSERT_MESSAGE( "Failed to get anchor type", oldType == SCA_CELL );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Failed to get anchor type", SCA_CELL, oldType);
 
     // Get anchor data
     pData = ScDrawLayer::GetObjData(pObj);
@@ -3412,7 +3412,7 @@ void ScExportTest::testMoveCellAnchoredShapes()
 
     // Check cell anchor state
     oldType = ScDrawLayer::GetAnchorType(*pObj);
-    CPPUNIT_ASSERT_MESSAGE( "Failed to get anchor type", oldType == SCA_CELL );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Failed to get anchor type", SCA_CELL, oldType);
 
     // Get anchor data
     pData = ScDrawLayer::GetObjData(pObj);
