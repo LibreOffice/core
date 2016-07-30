@@ -43,7 +43,6 @@ protected:
     ImplSchedulerData*  mpSchedulerData;    /// Pointer to element in scheduler list
     const sal_Char     *mpDebugName;        /// Useful for debugging
     SchedulerPriority   mePriority;         /// Scheduler priority
-    bool                mbActive;           /// Currently in the scheduler
 
     // These should be constexpr static, when supported.
     static const sal_uInt64 ImmediateTimeoutMs = 1;
@@ -80,7 +79,7 @@ public:
     virtual void    Start();
     void            Stop();
 
-    bool            IsActive() const { return mbActive; }
+    inline bool     IsActive() const;
 
     Scheduler&      operator=( const Scheduler& rScheduler );
     static void ImplDeInitScheduler();
@@ -100,6 +99,11 @@ public:
     /// Return the current state of deterministic mode.
     static bool GetDeterministicMode();
 };
+
+inline bool Scheduler::IsActive() const
+{
+    return nullptr != mpSchedulerData;
+}
 
 #endif // INCLUDED_VCL_SCHEDULER_HXX
 
