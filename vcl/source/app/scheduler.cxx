@@ -33,18 +33,21 @@ void ImplSchedulerData::Invoke()
 {
     DBG_TESTSOLARMUTEX();
 
-    if (mbDelete || mbInScheduler )
+    assert( mpScheduler && !mbInScheduler );
+    if ( !mpScheduler || mbInScheduler )
         return;
-
-    // prepare Scheduler Object for deletion after handling
-    mpScheduler->SetDeletionFlags();
 
     // tdf#92036 Reset the period to avoid re-firing immediately.
     mpScheduler->mpSchedulerData->mnUpdateTime = tools::Time::GetSystemTicks();
 
+    Scheduler *sched = mpScheduler;
+
+    // prepare Scheduler Object for deletion after handling
+    mpScheduler->SetDeletionFlags();
+
     // invoke it
     mbInScheduler = true;
-    mpScheduler->Invoke();
+    sched->Invoke();
     mbInScheduler = false;
 }
 
@@ -56,9 +59,7 @@ ImplSchedulerData *ImplSchedulerData::GetMostImportantTask( bool bTimerOnly )
     sal_uInt64 nTimeNow = tools::Time::GetSystemTicks();
     for ( ImplSchedulerData *pSchedulerData = pSVData->mpFirstSchedulerData; pSchedulerData; pSchedulerData = pSchedulerData->mpNext )
     {
-        if ( !pSchedulerData->mpScheduler || pSchedulerData->mbDelete ||
-             !pSchedulerData->mpScheduler->ReadyForSchedule( bTimerOnly, nTimeNow ) ||
-             !pSchedulerData->mpScheduler->IsActive())
+        if ( !pSchedulerData->mpScheduler || !pSchedulerData->mpScheduler->ReadyForSchedule( bTimerOnly, nTimeNow ) )
             continue;
         if (!pMostUrgent)
             pMostUrgent = pSchedulerData;
@@ -77,37 +78,31 @@ ImplSchedulerData *ImplSchedulerData::GetMostImportantTask( bool bTimerOnly )
 
 void Scheduler::SetDeletionFlags()
 {
-    mpSchedulerData->mbDelete = true;
-    mbActive = false;
+    assert( mpSchedulerData );
+    mpSchedulerData->mpScheduler = nullptr;
+    mpSchedulerData = nullptr;
 }
 
 void Scheduler::ImplDeInitScheduler()
 {
     ImplSVData*     pSVData = ImplGetSVData();
-    ImplSchedulerData*  pSchedulerData = pSVData->mpFirstSchedulerData;
     if (pSVData->mpSalTimer)
     {
         pSVData->mpSalTimer->Stop();
     }
 
-    if ( pSchedulerData )
+    ImplSchedulerData *pSchedulerData = pSVData->mpFirstSchedulerData;
+    while ( pSchedulerData )
     {
-        do
-        {
-            ImplSchedulerData* pTempSchedulerData = pSchedulerData;
-            if ( pSchedulerData->mpScheduler )
-            {
-                pSchedulerData->mpScheduler->mbActive = false;
-                pSchedulerData->mpScheduler->mpSchedulerData = nullptr;
-            }
-            pSchedulerData = pSchedulerData->mpNext;
-            delete pTempSchedulerData;
-        }
-        while ( pSchedulerData );
-
-        pSVData->mpFirstSchedulerData = nullptr;
-        pSVData->mnTimerPeriod = 0;
+        if ( pSchedulerData->mpScheduler )
+            pSchedulerData->mpScheduler->mpSchedulerData = nullptr;
+        ImplSchedulerData* pNextSchedulerData = pSchedulerData->mpNext;
+        delete pSchedulerData;
+        pSchedulerData = pNextSchedulerData;
     }
+
+    pSVData->mpFirstSchedulerData = nullptr;
+    pSVData->mnTimerPeriod        = 0;
 
     delete pSVData->mpSalTimer;
     pSVData->mpSalTimer = nullptr;
@@ -220,7 +215,7 @@ sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
 
         // Should Task be released from scheduling?
         if ( !pSchedulerData->mbInScheduler &&
-              pSchedulerData->mbDelete )
+             !pSchedulerData->mpScheduler )
         {
             if ( pPrevSchedulerData )
                 pPrevSchedulerData->mpNext = pSchedulerData->mpNext;
@@ -284,11 +279,14 @@ void Scheduler::Start()
         return;
     }
 
+<<<<<<< HEAD
     DBG_TESTSOLARMUTEX();
 
     // Mark timer active
     mbActive = true;
 
+=======
+>>>>>>> Use mpSchedulerData for delete and active handling
     if ( !mpSchedulerData )
     {
         // insert Scheduler
@@ -310,16 +308,15 @@ void Scheduler::Start()
         else
             pSVData->mpFirstSchedulerData = mpSchedulerData;
     }
-    mpSchedulerData->mbDelete      = false;
     mpSchedulerData->mnUpdateTime  = tools::Time::GetSystemTicks();
 }
 
 void Scheduler::Stop()
 {
-    mbActive = false;
-
-    if ( mpSchedulerData )
-        mpSchedulerData->mbDelete = true;
+    if ( !mpSchedulerData )
+        return;
+    Scheduler::SetDeletionFlags();
+    assert( !mpSchedulerData );
 }
 
 Scheduler& Scheduler::operator=( const Scheduler& rScheduler )
@@ -327,7 +324,6 @@ Scheduler& Scheduler::operator=( const Scheduler& rScheduler )
     if ( IsActive() )
         Stop();
 
-    mbActive = false;
     mePriority = rScheduler.mePriority;
 
     if ( rScheduler.IsActive() )
@@ -339,16 +335,14 @@ Scheduler& Scheduler::operator=( const Scheduler& rScheduler )
 Scheduler::Scheduler(const sal_Char *pDebugName):
     mpSchedulerData(nullptr),
     mpDebugName(pDebugName),
-    mePriority(SchedulerPriority::HIGH),
-    mbActive(false)
+    mePriority(SchedulerPriority::HIGH)
 {
 }
 
 Scheduler::Scheduler( const Scheduler& rScheduler ):
     mpSchedulerData(nullptr),
     mpDebugName(rScheduler.mpDebugName),
-    mePriority(rScheduler.mePriority),
-    mbActive(false)
+    mePriority(rScheduler.mePriority)
 {
     if ( rScheduler.IsActive() )
         Start();
@@ -357,10 +351,7 @@ Scheduler::Scheduler( const Scheduler& rScheduler ):
 Scheduler::~Scheduler()
 {
     if ( mpSchedulerData )
-    {
-        mpSchedulerData->mbDelete = true;
         mpSchedulerData->mpScheduler = nullptr;
-    }
 }
 
 const char *ImplSchedulerData::GetDebugName() const
@@ -368,6 +359,5 @@ const char *ImplSchedulerData::GetDebugName() const
     return mpScheduler && mpScheduler->GetDebugName() ?
         mpScheduler->GetDebugName() : "unknown";
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
