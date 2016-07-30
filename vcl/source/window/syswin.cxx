@@ -1152,8 +1152,8 @@ void SystemWindow::setOptimalLayoutSize()
 
 void SystemWindow::DoInitialLayout()
 {
-    if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
-       ImplWindowAutoMnemonic( this );
+    if (GetSettings().GetStyleSettings().GetAutoMnemonic())
+       Accelerator::GenerateAutoMnemonicsOnHierarchy(this);
 
     if (isLayoutEnabled())
     {

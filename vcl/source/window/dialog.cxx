@@ -189,7 +189,7 @@ vcl::Window * firstLogicalChildOfParent(vcl::Window *pTopLevel)
     return pChild;
 }
 
-void ImplWindowAutoMnemonic( vcl::Window* pWindow )
+void Accelerator::GenerateAutoMnemonicsOnHierarchy(vcl::Window* pWindow)
 {
     MnemonicGenerator   aMnemonicGenerator;
     vcl::Window*                 pGetChild;

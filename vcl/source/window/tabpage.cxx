@@ -104,8 +104,8 @@ void TabPage::StateChanged( StateChangedType nType )
 
     if ( nType == StateChangedType::InitShow )
     {
-        if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
-            ImplWindowAutoMnemonic( this );
+        if (GetSettings().GetStyleSettings().GetAutoMnemonic())
+            Accelerator::GenerateAutoMnemonicsOnHierarchy(this);
         // FIXME: no layouting, workaround some clipping issues
         ImplAdjustNWFSizes();
     }

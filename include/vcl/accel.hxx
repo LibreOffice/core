@@ -82,6 +82,7 @@ public:
     Accelerator&            operator=( const Accelerator& rAccel );
 
     static bool             ToggleMnemonicsOnHierarchy(const CommandEvent& rCEvent, vcl::Window *pWindow);
+    static void             GenerateAutoMnemonicsOnHierarchy(vcl::Window* pWindow);
 };
 
 #endif // INCLUDED_VCL_ACCEL_HXX

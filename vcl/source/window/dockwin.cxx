@@ -697,8 +697,8 @@ void DockingWindow::Resizing( Size& )
 
 void DockingWindow::DoInitialLayout()
 {
-    if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
-       ImplWindowAutoMnemonic( this );
+    if (GetSettings().GetStyleSettings().GetAutoMnemonic())
+       Accelerator::GenerateAutoMnemonicsOnHierarchy(this);
 
     if (isLayoutEnabled())
     {
