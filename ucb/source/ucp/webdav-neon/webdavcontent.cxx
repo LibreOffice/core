@@ -1287,11 +1287,38 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
         // Obtain values from server...
 
+        // save original target URL (not redirected)
+        OUString aTargetURL( xResAccess->getURL() );
 
         // First, identify whether resource is DAV or not
         bool bNetworkAccessAllowed = true;
         ResourceType eType = getResourceType(
             xEnv, xResAccess, &bNetworkAccessAllowed );
+
+        // check if the resource was not found in a former try
+        // the result is cached for a time of 'OptsCacheLifeNotFound' seconds,
+        // normally a short time
+        if ( !aStaticDAVOptionsCache.isResourceFound( aTargetURL ) )
+        {
+            // file was not found during a previous access
+            // return exception as if the resource was not found
+            SAL_WARN( "ucb.ucp.webdav", " URL <" << aTargetURL << "> was not found prevoiusly (was cached)" );
+            uno::Sequence< uno::Any > aArgs( 1 );
+            aArgs[ 0 ] <<= beans::PropertyValue(
+                OUString("Uri"), -1,
+                uno::makeAny(aTargetURL),
+                beans::PropertyState_DIRECT_VALUE);
+
+            ucbhelper::cancelCommandExecution(
+                uno::makeAny(
+                    ucb::InteractiveAugmentedIOException(
+                        OUString("Not found!"),
+                        static_cast< cppu::OWeakObject * >( this ),
+                        task::InteractionClassification_ERROR,
+                        ucb::IOErrorCode_NOT_EXISTING,
+                        aArgs ) ),
+                xEnv );
+        }
 
         if ( eType == DAV )
         {
@@ -1482,6 +1509,20 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     {
                         bNetworkAccessAllowed
                             = shouldAccessNetworkAfterException( e );
+
+                        // check if error is SC_NOT_FOUND
+                        // if URL resource not found, set the corresponding resource
+                        // element in option cache and update the cache lifetime accordingly
+                        if( e.getStatus() == SC_NOT_FOUND )
+                        {
+                            DAVOptions aDAVOptions;
+                            if( aStaticDAVOptionsCache.getDAVOptions( aTargetURL, aDAVOptions ) )
+                            {
+                                aDAVOptions.setResourceFound( false );
+                                aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
+                                                                      m_nOptsCacheLifeNotFound );
+                            }
+                        }
 
                         if ( !bNetworkAccessAllowed )
                         {
