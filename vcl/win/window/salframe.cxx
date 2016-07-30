@@ -5857,13 +5857,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             }
             else if ( (sal_uIntPtr)( wParam ) == IMR_QUERYCHARPOSITION )
             {
-                if ( ImplSalYieldMutexTryToAcquire() )
-                {
-                    nRet = ImplHandleIMEQueryCharPosition( hWnd, lParam );
-                    ImplSalYieldMutexRelease();
-                }
-                else
-                    nRet = FALSE;
+                nRet = ImplHandleIMEQueryCharPosition( hWnd, lParam );
                 rDef = FALSE;
             }
             break;
