@@ -145,6 +145,7 @@ public:
     SvxMessDialog( vcl::Window* pWindow, const OUString& rText, const OUString& rDesc, Image* pImg = nullptr );
     virtual ~SvxMessDialog();
     virtual void dispose() override;
+    void DisableButton( SvxMessDialogButton nBtnId);
 
     void    SetButtonText( SvxMessDialogButton nBtnId, const OUString& rNewTxt );
 };
