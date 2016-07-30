@@ -33,16 +33,15 @@ class ImplSchedulerDataPrinter(object):
                 sched_type = "Idle"
             else:
                 assert sched_type, "Scheduler object neither Timer nor Idle"
-            res = "{:7s}{:10s} active: {:6s}".format( sched_type, str(sched['mePriority']), str(sched['mbActive']) ) 
+            res = "{:7s}{:10s}".format( sched_type, str(sched['mePriority']) )
             name = sched['mpDebugName']
             if not name:
-                res = res + "   (scheduler debug name not set)"
+                res = "{}   (scheduler debug name not set) ({})".format(res, str(sched.dynamic_type))
             else:
                 res = "{} '{}' ({})".format(res, str(name.string()), str(sched.dynamic_type))
             return res
         else:
-            assert gdbobj['mbDelete'], "No scheduler set and not marked for deletion!"
-            return "(no scheduler)"
+            return "(no scheduler - to be deleted)"
 
     def to_string(self):
         return self.typename
@@ -64,7 +63,7 @@ class ImplSchedulerDataPrinter(object):
             return self
 
         def __next__(self):
-            if not self.value['mpNext']:
+            if not self.value:
                 raise StopIteration()
 
             pos = str(self.pos)
