@@ -749,10 +749,10 @@ void ScOpenCLTest::testSystematic()
     CPPUNIT_ASSERT(nBVertBegin != 0);
     CPPUNIT_ASSERT(nAVertEnd > nAVertBegin + 100);
     CPPUNIT_ASSERT(nBVertEnd > nBVertBegin + 100);
-    CPPUNIT_ASSERT((nAVertEnd-nAVertBegin) == (nBVertEnd-nBVertBegin));
+    CPPUNIT_ASSERT_EQUAL(nAVertEnd-nAVertBegin, nBVertEnd-nBVertBegin);
     CPPUNIT_ASSERT(nAHorEnd > 10);
     CPPUNIT_ASSERT(nBHorEnd > 10);
-    CPPUNIT_ASSERT(nAHorEnd == nBHorEnd);
+    CPPUNIT_ASSERT_EQUAL(nAHorEnd, nBHorEnd);
 
     for (SCROW i = nAVertBegin; i < nAVertEnd; ++i)
     {
