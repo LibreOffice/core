@@ -211,7 +211,7 @@ struct SwMergeDescriptor
         bPrintAsync( false ),
         pMailMergeConfigItem( nullptr )
     {
-        if( nType == DBMGR_MERGE_SHELL )
+        if( nType == DBMGR_MERGE_SHELL || nType == DBMGR_MERGE_PRINTER )
             bCreateSingleFile = true;
     }
 };

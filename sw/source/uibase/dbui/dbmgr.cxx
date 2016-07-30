@@ -1103,9 +1103,9 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         assert( bMT_EMAIL && !bCheckSingleFile_ );
         bCheckSingleFile_ = false;
     }
-    else if( bMT_SHELL )
+    else if( bMT_SHELL || bMT_PRINTER )
     {
-        assert( bMT_SHELL && bCheckSingleFile_ );
+        assert( (bMT_SHELL || bMT_PRINTER) && bCheckSingleFile_ );
         bCheckSingleFile_ = true;
     }
     const bool bCreateSingleFile = bCheckSingleFile_;
@@ -1429,25 +1429,6 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         appendedDocStart, "", IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
                     aMergeInfo.nDBRow = nStartRow;
                     rMergeDescriptor.pMailMergeConfigItem->AddMergedDocument( aMergeInfo );
-                }
-            }
-            else if( bMT_PRINTER )
-            {
-                if( !bWorkDocInitialized ) // set up printing only once at the beginning
-                {
-                    uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
-                    lcl_PreparePrinterOptions( rMergeDescriptor.aPrintOptions, false, aOptions );
-
-                    pWorkView->StartPrint( aOptions, bIsMergeSilent, rMergeDescriptor.bPrintAsync );
-                    // some GetPrinter functions have a true default, so keep the false
-                    SfxPrinter* pDocPrt = pWorkView->GetPrinter();
-                    JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : SfxViewShell::GetJobSetup();
-                    if( !Printer::PreparePrintJob( pWorkView->GetPrinterController(), aJobSetup ) )
-                        MergeCancel();
-                }
-                if( IsMergeOk() && !Printer::ExecutePrintJob( pWorkView->GetPrinterController()) )
-                {
-                    m_aMergeStatus = MergeStatus::ERROR;
                 }
             }
             else
