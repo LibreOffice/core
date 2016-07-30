@@ -61,6 +61,7 @@ void Scheduler::ImplDeInitScheduler()
         pSVData->mpSalTimer->Stop();
     }
 
+    // Free active tasks
     ImplSchedulerData *pSchedulerData = pSVData->mpFirstSchedulerData;
     while ( pSchedulerData )
     {
@@ -71,7 +72,18 @@ void Scheduler::ImplDeInitScheduler()
         pSchedulerData = pNextSchedulerData;
     }
 
+    // Free "deleted" tasks
+    pSchedulerData = pSVData->mpFreeSchedulerData;
+    while ( pSchedulerData )
+    {
+        assert( !pSchedulerData->mpScheduler );
+        ImplSchedulerData* pNextSchedulerData = pSchedulerData->mpNext;
+        delete pSchedulerData;
+        pSchedulerData = pNextSchedulerData;
+    }
+
     pSVData->mpFirstSchedulerData = nullptr;
+    pSVData->mpFreeSchedulerData  = nullptr;
     pSVData->mnTimerPeriod        = 0;
 
     delete pSVData->mpSalTimer;
@@ -171,9 +183,9 @@ bool Scheduler::ProcessTaskScheduling( bool bIdle )
                 pPrevSchedulerData->mpNext = pNextSchedulerData;
             else
                 pSVData->mpFirstSchedulerData = pNextSchedulerData;
-            ImplSchedulerData* pTempSchedulerData = pSchedulerData;
-            pSchedulerData = pSchedulerData->mpNext;
-            delete pTempSchedulerData;
+            pSchedulerData->mpNext = pSVData->mpFreeSchedulerData;
+            pSVData->mpFreeSchedulerData = pSchedulerData;
+            pSchedulerData = pNextSchedulerData;
             continue;
         }
 
@@ -233,7 +245,13 @@ void Scheduler::Start()
     if ( !mpSchedulerData )
     {
         // insert Scheduler
-        mpSchedulerData                = new ImplSchedulerData;
+        if ( pSVData->mpFreeSchedulerData )
+        {
+            mpSchedulerData = pSVData->mpFreeSchedulerData;
+            pSVData->mpFreeSchedulerData = mpSchedulerData->mpNext;
+        }
+        else
+            mpSchedulerData = new ImplSchedulerData;
         mpSchedulerData->mpScheduler   = this;
         mpSchedulerData->mbInScheduler = false;
 
