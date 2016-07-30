@@ -228,9 +228,9 @@ void PaletteManager::AddRecentColor(const Color& rRecentColor)
     if( maRecentColors.size() > mnMaxRecentColors )
         maRecentColors.pop_back();
     css::uno::Sequence< sal_Int32 > aColorList(maRecentColors.size());
-    for(sal_uInt16 i = 0;i < maRecentColors.size();i++)
+    for(sal_uInt32 i = 0;i < maRecentColors.size();i++)
     {
-        aColorList[i] = (int)maRecentColors[i].GetColor();
+        aColorList[i] = static_cast<sal_Int32>(maRecentColors[i].GetColor());
     }
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
     officecfg::Office::Common::UserColors::RecentColor::set(aColorList, batch);
