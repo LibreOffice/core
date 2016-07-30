@@ -315,6 +315,7 @@ struct ImplSVData
     VclPtr<WorkWindow>      mpDefaultWin;                   // Default-Window
     bool                    mbDeInit = false;               // Is VCL deinitializing
     ImplSchedulerData*      mpFirstSchedulerData = nullptr; // list of all running tasks
+    ImplSchedulerData*      mpFreeSchedulerData = nullptr;  // list of all deleted tasks for reuse
     SalTimer*               mpSalTimer = nullptr;           // interface to sal event loop/timers
     SalI18NImeStatus*       mpImeStatus = nullptr;          // interface to ime status window
     SalSystem*              mpSalSystem = nullptr;          // SalSystem interface
