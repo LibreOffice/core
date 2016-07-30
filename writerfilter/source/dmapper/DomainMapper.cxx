@@ -3225,14 +3225,15 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                            && !bSingleParagraph
                            && !m_pImpl->GetIsDummyParaAddedForTableInSection()
                            && !m_pImpl->GetIsLastParagraphFramed();
-            if (bRemove)
+            PropertyMapPtr xContext = bRemove ? m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) : PropertyMapPtr();
+            if (xContext)
             {
                 // tdf#97417 delete numbering of the paragraph
                 // it will be deleted anyway, and the numbering would be copied
                 // to the next paragraph in sw SplitNode and then be applied to
                 // every following paragraph
-                m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)->Erase(PROP_NUMBERING_RULES);
-                m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)->Erase(PROP_NUMBERING_LEVEL);
+                xContext->Erase(PROP_NUMBERING_RULES);
+                xContext->Erase(PROP_NUMBERING_LEVEL);
             }
             m_pImpl->SetParaSectpr(false);
             m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH));
