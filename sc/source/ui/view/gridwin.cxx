@@ -2842,6 +2842,12 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
     ScModule* pScMod = SC_MOD();
     OSL_ENSURE( nCmd != CommandEventId::StartDrag, "ScGridWindow::Command called with CommandEventId::StartDrag" );
 
+    if (nCmd == CommandEventId::ModKeyChange)
+    {
+        Window::Command(rCEvt);
+        return;
+    }
+
     if ( nCmd == CommandEventId::StartExtTextInput ||
          nCmd == CommandEventId::EndExtTextInput ||
          nCmd == CommandEventId::ExtTextInput ||

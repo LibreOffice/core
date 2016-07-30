@@ -110,4 +110,11 @@ void PanelLayout::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, P
         VclContainer::setLayoutAllocation(*pChild, Point(0, 0), Size(nWidth, nHeight));
 }
 
+bool PanelLayout::Notify(NotifyEvent& rNEvt)
+{
+    if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
+        Accelerator::ToggleMnemonicsOnHierarchy(*rNEvt.GetCommandEvent(), this);
+    return Control::Notify( rNEvt );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

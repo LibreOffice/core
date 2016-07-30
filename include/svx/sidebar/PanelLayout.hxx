@@ -29,7 +29,7 @@ private:
     bool m_bInClose;
     bool hasPanelPendingLayout() const;
 
-    DECL_DLLPRIVATE_LINK_TYPED( ImplHandlePanelLayoutTimerHdl, Idle*, void );
+    DECL_DLLPRIVATE_LINK_TYPED(ImplHandlePanelLayoutTimerHdl, Idle*, void);
 
 public:
     PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
@@ -40,7 +40,7 @@ public:
     virtual Size GetOptimalSize() const override;
     virtual void setPosSizePixel(long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All) override;
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
-
+    virtual bool Notify(NotifyEvent& rNEvt) override;
 };
 
 #endif

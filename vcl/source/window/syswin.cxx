@@ -164,6 +164,9 @@ bool Accelerator::ToggleMnemonicsOnHierarchy(const CommandEvent& rCEvent, vcl::W
 
 bool SystemWindow::Notify( NotifyEvent& rNEvt )
 {
+    if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
+        Accelerator::ToggleMnemonicsOnHierarchy(*rNEvt.GetCommandEvent(), this);
+
     // capture KeyEvents for menu handling
     if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT ||
         rNEvt.GetType() == MouseNotifyEvent::COMMAND)
@@ -185,11 +188,6 @@ bool SystemWindow::Notify( NotifyEvent& rNEvt )
         }
         if (bDone)
             return true;
-        if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
-        {
-            if (Accelerator::ToggleMnemonicsOnHierarchy(*rNEvt.GetCommandEvent(), this))
-                return true;
-        }
     }
 
     return Window::Notify( rNEvt );

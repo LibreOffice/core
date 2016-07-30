@@ -163,18 +163,6 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
 
     // init background
     SetBackground();
-
-    GetParent()->AddEventListener(LINK(this, BackingWindow, WindowEventListener));
-}
-
-IMPL_LINK_TYPED(BackingWindow, WindowEventListener, VclWindowEvent&, rEvent, void)
-{
-    if (rEvent.GetId() != VCLEVENT_WINDOW_COMMAND)
-        return;
-    CommandEvent* pCmdEvt = static_cast<CommandEvent*>(rEvent.GetData());
-    if (pCmdEvt->GetCommand() != CommandEventId::ModKeyChange)
-        return;
-    Accelerator::ToggleMnemonicsOnHierarchy(*pCmdEvt, this);
 }
 
 BackingWindow::~BackingWindow()
@@ -184,7 +172,6 @@ BackingWindow::~BackingWindow()
 
 void BackingWindow::dispose()
 {
-    GetParent()->RemoveEventListener(LINK(this, BackingWindow, WindowEventListener));
     // deregister drag&drop helper
     if (mxDropTargetListener.is())
     {

@@ -335,6 +335,13 @@ void SmEditWindow::MouseButtonDown(const MouseEvent &rEvt)
 
 void SmEditWindow::Command(const CommandEvent& rCEvt)
 {
+    //pass alt press/release to parent impl
+    if (rCEvt.GetCommand() == CommandEventId::ModKeyChange)
+    {
+        Window::Command(rCEvt);
+        return;
+    }
+
     bool bForwardEvt = true;
     if (rCEvt.GetCommand() == CommandEventId::ContextMenu)
     {

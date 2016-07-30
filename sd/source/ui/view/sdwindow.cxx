@@ -261,8 +261,11 @@ void Window::MouseButtonUp(const MouseEvent& rMEvt)
 
 void Window::Command(const CommandEvent& rCEvt)
 {
-    if ( mpViewShell )
+    if (mpViewShell)
         mpViewShell->Command(rCEvt, this);
+    //pass at least alt press/release to parent impl
+    if (rCEvt.GetCommand() == CommandEventId::ModKeyChange)
+        vcl::Window::Command(rCEvt);
 }
 
 bool Window::Notify( NotifyEvent& rNEvt )
