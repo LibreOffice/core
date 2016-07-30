@@ -5771,7 +5771,8 @@ void ScGridWindow::DeleteCursorOverlay()
 {
     ScDocument* pDoc = pViewData->GetDocument();
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-    pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_CELL_CURSOR, "EMPTY");
+    if (pDrawLayer)
+        pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_CELL_CURSOR, "EMPTY");
     mpOOCursors.reset();
 }
 
