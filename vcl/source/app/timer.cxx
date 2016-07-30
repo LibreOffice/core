@@ -25,10 +25,7 @@ void Timer::SetDeletionFlags()
 {
     // If no AutoTimer, then stop.
     if ( !mbAuto )
-    {
-        mpSchedulerData->mbDelete = true;
-        mbActive = false;
-    }
+        Scheduler::SetDeletionFlags();
 }
 
 bool Timer::ReadyForSchedule( bool /* bTimerOnly */, sal_uInt64 nTimeNow ) const
@@ -98,7 +95,7 @@ void Timer::SetTimeout( sal_uInt64 nNewTimeout )
 {
     mnTimeout = nNewTimeout;
     // If timer is active, then renew clock.
-    if ( mbActive )
+    if ( IsActive() )
     {
         Scheduler::ImplStartTimer(mnTimeout);
     }
