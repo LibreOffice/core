@@ -2343,7 +2343,7 @@ void ScPreviewObj::Notify(SfxBroadcaster&, const SfxHint& rHint)
 uno::Sequence<sal_Int32> ScPreviewObj::getSelectedSheets()
     throw (uno::RuntimeException, std::exception)
 {
-    ScPreview* p = mpViewShell->GetPreview();
+    ScPreview* p = mpViewShell ? mpViewShell->GetPreview() : nullptr;
     if (!p)
         return uno::Sequence<sal_Int32>();
 
