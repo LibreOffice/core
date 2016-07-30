@@ -1183,7 +1183,8 @@ void WorksheetGlobals::convertColumns()
     // close remaining column outlines spanning to end of sheet
     convertOutlines( aColLevels, nMaxCol + 1, 0, false, false );
 }
-
+/*
+// TODO tdf#91475 Adopt algorithm according to MS specification both for importing and exporting algorithm
 namespace {
 
 sal_Int32 getColumnWidth(UnitConverter& rConverter, double nWidth)
@@ -1202,12 +1203,25 @@ sal_Int32 getColumnWidth(UnitConverter& rConverter, double nWidth)
 }
 
 }
+*/
 
 void WorksheetGlobals::convertColumns( OutlineLevelVec& orColLevels,
         const ValueRange& rColRange, const ColumnModel& rModel )
 {
+    // tdf#91475 FILESAVE: Column width is not preserved in XLSX / after round trip.
+    // With commit 16726a1b37df8bdcae02b3c7699df814977222bd the new import algorithm
+    // was introduced. Unfortunately the export algorithm was not adopted.
+    // It is causing regression during .xlsx round trip.
+    // To resolve that we will:
+    // 1. Go back to use for old import algorithm and add new unit test to avoid regression in future (done)
+    // 2. Improve algorithm according to MS specification and apply it to import and export simultaneously
+    // We should be very carefull with introducing new algorithm as there is high risk of damage .xlsx documents
+
     // column width: convert 'number of characters' to column width in 1/100 mm
-    sal_Int32 nWidth = getColumnWidth(getUnitConverter(), rModel.mfWidth);
+    sal_Int32 nWidth = getUnitConverter().scaleToMm100( rModel.mfWidth, UNIT_DIGIT );
+    // new import algorithm:
+    //sal_Int32 nWidth = getColumnWidth(getUnitConverter(), rModel.mfWidth);
+
     // macro sheets have double width
     if( meSheetType == SHEETTYPE_MACROSHEET )
         nWidth *= 2;
