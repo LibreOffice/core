@@ -228,7 +228,7 @@ void PaletteManager::AddRecentColor(const Color& rRecentColor)
     if( maRecentColors.size() > mnMaxRecentColors )
         maRecentColors.pop_back();
     css::uno::Sequence< sal_Int32 > aColorList(maRecentColors.size());
-    for(sal_uInt32 i = 0;i < maRecentColors.size();i++)
+    for(std::deque<Color>::size_type i = 0;i < maRecentColors.size();i++)
     {
         aColorList[i] = static_cast<sal_Int32>(maRecentColors[i].GetColor());
     }
