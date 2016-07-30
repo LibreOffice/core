@@ -171,7 +171,7 @@ namespace unotools
             const bool bClosed(rPoly.isClosed());
 
             // calculate input vertex count
-            const sal_uInt32 nLoopCount(bClosed ? nCount : (nCount ? nCount - 1L : 0 ));
+            const sal_uInt32 nLoopCount(bClosed ? nCount : (nCount ? nCount - 1 : 0 ));
 
             std::vector<awt::Point> aPoints; aPoints.reserve(nLoopCount);
             std::vector<drawing::PolygonFlags> aFlags; aFlags.reserve(nLoopCount);
@@ -237,7 +237,7 @@ namespace unotools
                 else
                 {
                     // add last point as closing point
-                    const basegfx::B2DPoint aClosingPoint(rPoly.getB2DPoint(nCount - 1L));
+                    const basegfx::B2DPoint aClosingPoint(rPoly.getB2DPoint(nCount - 1));
                     const awt::Point aEnd(fround(aClosingPoint.getX()),
                                           fround(aClosingPoint.getY()));
                     aPoints.push_back(aEnd);

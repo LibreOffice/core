@@ -36,11 +36,11 @@ namespace basegfx
         // B3DPolygon tools
         void checkClosed(B3DPolygon& rCandidate)
         {
-            while(rCandidate.count() > 1L
-                && rCandidate.getB3DPoint(0).equal(rCandidate.getB3DPoint(rCandidate.count() - 1L)))
+            while(rCandidate.count() > 1
+                && rCandidate.getB3DPoint(0).equal(rCandidate.getB3DPoint(rCandidate.count() - 1)))
             {
                 rCandidate.setClosed(true);
-                rCandidate.remove(rCandidate.count() - 1L);
+                rCandidate.remove(rCandidate.count() - 1);
             }
         }
 
@@ -48,9 +48,9 @@ namespace basegfx
         {
             OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
 
-            if(nIndex + 1L < rCandidate.count())
+            if(nIndex + 1 < rCandidate.count())
             {
-                return nIndex + 1L;
+                return nIndex + 1;
             }
             else
             {
@@ -77,9 +77,9 @@ namespace basegfx
             double fRetval(0.0);
             const sal_uInt32 nPointCount(rCandidate.count());
 
-            if(nPointCount > 1L)
+            if(nPointCount > 1)
             {
-                const sal_uInt32 nLoopCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1L);
+                const sal_uInt32 nLoopCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1);
 
                 for(sal_uInt32 a(0); a < nLoopCount; a++)
                 {
@@ -436,8 +436,8 @@ namespace basegfx
                         if(fTools::equalZero(aTexCoor.getY()) || fTools::equal(aTexCoor.getY(), fOne))
                         {
                             // get prev, next TexCoor and test for pole
-                            const B2DPoint aPrevTexCoor(aRetval.getTextureCoordinate(a ? a - 1L : nPointCount - 1L));
-                            const B2DPoint aNextTexCoor(aRetval.getTextureCoordinate((a + 1L) % nPointCount));
+                            const B2DPoint aPrevTexCoor(aRetval.getTextureCoordinate(a ? a - 1 : nPointCount - 1));
+                            const B2DPoint aNextTexCoor(aRetval.getTextureCoordinate((a + 1) % nPointCount));
                             const bool bPrevPole(fTools::equalZero(aPrevTexCoor.getY()) || fTools::equal(aPrevTexCoor.getY(), fOne));
                             const bool bNextPole(fTools::equalZero(aNextTexCoor.getY()) || fTools::equal(aNextTexCoor.getY(), fOne));
 
@@ -680,9 +680,9 @@ namespace basegfx
         {
             const sal_uInt32 nPointCount(rCandidate.count());
 
-            if(nPointCount > 1L)
+            if(nPointCount > 1)
             {
-                const sal_uInt32 nLoopCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1L);
+                const sal_uInt32 nLoopCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1);
                 B3DPoint aCurrentPoint(rCandidate.getB3DPoint(0));
 
                 for(sal_uInt32 a(0); a < nLoopCount; a++)

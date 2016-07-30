@@ -145,7 +145,7 @@ namespace basegfx
                                 const B2DPoint& aNewPoint(rTempPoint.getPoint());
 
                                 // do not add points double
-                                if(!aRetval.getB2DPoint(aRetval.count() - 1L).equal(aNewPoint))
+                                if(!aRetval.getB2DPoint(aRetval.count() - 1).equal(aNewPoint))
                                 {
                                     aRetval.append(aNewPoint);
                                 }
@@ -180,7 +180,7 @@ namespace basegfx
             // cut positions in the polygon to relative cut positions on the original bezier
             // segment.
             const sal_uInt32 nTempPointCount(rPointVector.size());
-            const sal_uInt32 nEdgeCount(rPolygon.count() ? rPolygon.count() - 1L : 0);
+            const sal_uInt32 nEdgeCount(rPolygon.count() ? rPolygon.count() - 1 : 0);
 
             if(nTempPointCount && nEdgeCount)
             {
@@ -287,13 +287,13 @@ namespace basegfx
 
                 for(sal_uInt32 a(0); a < nEdgeCountA; a++)
                 {
-                    const B2DPoint aNextA(rCandidateA.getB2DPoint(a + 1L));
+                    const B2DPoint aNextA(rCandidateA.getB2DPoint(a + 1));
                     const B2DRange aRangeA(aCurrA, aNextA);
                     B2DPoint aCurrB(rCandidateB.getB2DPoint(0));
 
                     for(sal_uInt32 b(0); b < nEdgeCountB; b++)
                     {
-                        const B2DPoint aNextB(rCandidateB.getB2DPoint(b + 1L));
+                        const B2DPoint aNextB(rCandidateB.getB2DPoint(b + 1));
                         const B2DRange aRangeB(aCurrB, aNextB);
 
                         if(aRangeA.overlaps(aRangeB))
@@ -496,7 +496,7 @@ namespace basegfx
 
             if(nPointCount)
             {
-                const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1L);
+                const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1);
 
                 if(nEdgeCount)
                 {
@@ -507,7 +507,7 @@ namespace basegfx
                         B2DCubicBezier aCubicA;
                         B2DCubicBezier aCubicB;
 
-                        for(sal_uInt32 a(0); a < nEdgeCount - 1L; a++)
+                        for(sal_uInt32 a(0); a < nEdgeCount - 1; a++)
                         {
                             rCandidate.getBezierSegment(a, aCubicA);
                             aCubicA.testAndSolveTrivialBezier();
@@ -520,7 +520,7 @@ namespace basegfx
                                 findEdgeCutsOneBezier(aCubicA, a, rTempPoints);
                             }
 
-                            for(sal_uInt32 b(a + 1L); b < nEdgeCount; b++)
+                            for(sal_uInt32 b(a + 1); b < nEdgeCount; b++)
                             {
                                 rCandidate.getBezierSegment(b, aCubicB);
                                 aCubicB.testAndSolveTrivialBezier();
@@ -565,15 +565,15 @@ namespace basegfx
                     {
                         B2DPoint aCurrA(rCandidate.getB2DPoint(0));
 
-                        for(sal_uInt32 a(0); a < nEdgeCount - 1L; a++)
+                        for(sal_uInt32 a(0); a < nEdgeCount - 1; a++)
                         {
-                            const B2DPoint aNextA(rCandidate.getB2DPoint(a + 1L == nPointCount ? 0 : a + 1L));
+                            const B2DPoint aNextA(rCandidate.getB2DPoint(a + 1 == nPointCount ? 0 : a + 1));
                             const B2DRange aRangeA(aCurrA, aNextA);
-                            B2DPoint aCurrB(rCandidate.getB2DPoint(a + 1L));
+                            B2DPoint aCurrB(rCandidate.getB2DPoint(a + 1));
 
-                            for(sal_uInt32 b(a + 1L); b < nEdgeCount; b++)
+                            for(sal_uInt32 b(a + 1); b < nEdgeCount; b++)
                             {
-                                const B2DPoint aNextB(rCandidate.getB2DPoint(b + 1L == nPointCount ? 0 : b + 1L));
+                                const B2DPoint aNextB(rCandidate.getB2DPoint(b + 1 == nPointCount ? 0 : b + 1));
                                 const B2DRange aRangeB(aCurrB, aNextB);
 
                                 // consecutive segments touch of course
@@ -683,7 +683,7 @@ namespace basegfx
 
             if(nPointCount && nEdgePointCount)
             {
-                const sal_uInt32 nEdgeCount(rEdgePolygon.isClosed() ? nEdgePointCount : nEdgePointCount - 1L);
+                const sal_uInt32 nEdgeCount(rEdgePolygon.isClosed() ? nEdgePointCount : nEdgePointCount - 1);
                 B2DPoint aCurr(rEdgePolygon.getB2DPoint(0));
 
                 for(sal_uInt32 a(0); a < nEdgeCount; a++)
@@ -738,8 +738,8 @@ namespace basegfx
 
             if(nPointCountA && nPointCountB)
             {
-                const sal_uInt32 nEdgeCountA(rCandidateA.isClosed() ? nPointCountA : nPointCountA - 1L);
-                const sal_uInt32 nEdgeCountB(rCandidateB.isClosed() ? nPointCountB : nPointCountB - 1L);
+                const sal_uInt32 nEdgeCountA(rCandidateA.isClosed() ? nPointCountA : nPointCountA - 1);
+                const sal_uInt32 nEdgeCountB(rCandidateB.isClosed() ? nPointCountB : nPointCountB - 1);
 
                 if(nEdgeCountA && nEdgeCountB)
                 {
@@ -803,13 +803,13 @@ namespace basegfx
 
                         for(sal_uInt32 a(0); a < nEdgeCountA; a++)
                         {
-                            const B2DPoint aNextA(rCandidateA.getB2DPoint(a + 1L == nPointCountA ? 0 : a + 1L));
+                            const B2DPoint aNextA(rCandidateA.getB2DPoint(a + 1 == nPointCountA ? 0 : a + 1));
                             const B2DRange aRangeA(aCurrA, aNextA);
                             B2DPoint aCurrB(rCandidateB.getB2DPoint(0));
 
                             for(sal_uInt32 b(0); b < nEdgeCountB; b++)
                             {
-                                const B2DPoint aNextB(rCandidateB.getB2DPoint(b + 1L == nPointCountB ? 0 : b + 1L));
+                                const B2DPoint aNextB(rCandidateB.getB2DPoint(b + 1 == nPointCountB ? 0 : b + 1));
                                 const B2DRange aRangeB(aCurrB, aNextB);
 
                                 // consecutive segments touch of course
@@ -869,7 +869,7 @@ namespace basegfx
             {
                 B2DPolyPolygon aRetval;
 
-                if(1L == nCount)
+                if(1 == nCount)
                 {
                     if(bSelfIntersections)
                     {
