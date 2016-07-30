@@ -1006,7 +1006,17 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                                 css::ucb::Lock aLock = aLocks[0];
                                 OUString aOwner;
                                 if(aLock.Owner >>= aOwner)
+                                {
+                                    // This solution works right when the LO user name and the WebDAV user
+                                    // name are the same.
+                                    // A better thing to do would be to obtain the 'real' WebDAV user name,
+                                    // but that's not possible from a WebDAV UCP provider client.
+                                    LockFileEntry aOwnData = svt::LockFileCommon::GenerateOwnEntry();
+                                    // use the current LO user name as the system name
+                                    aLockData[LockFileComponent::SYSUSERNAME] = aOwnData[LockFileComponent::SYSUSERNAME];
+                                    // we need to display the WebDAV user name owning the lock, not the local one
                                     aLockData[LockFileComponent::OOOUSERNAME] = aOwner;
+                                }
                             }
 
                             if ( !bResult && !bNoUI )
