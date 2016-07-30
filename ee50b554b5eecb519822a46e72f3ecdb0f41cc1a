@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_abcf15b2",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlfieldexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2016-07-30T13:17:43Z",
+      "side": 1,
+      "message": "It moves from w:p[2] in the original to w:p[1] in the export, but at least it isn\u0027t discarded, and visually the document remains the same.",
+      "range": {
+        "startLine": 501,
+        "startChar": 53,
+        "endLine": 501,
+        "endChar": 56
+      },
+      "revId": "ee50b554b5eecb519822a46e72f3ecdb0f41cc1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
