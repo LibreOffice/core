@@ -261,9 +261,9 @@ namespace basegfx
             bool bVerToBottom(fTools::equal(fVerStop, -F_PI2));
 
             // create horizontal rings
-            const sal_uInt32 nLoopVerInit(bVerFromTop ? 1L : 0);
-            const sal_uInt32 nLoopVerLimit(bVerToBottom ? nVerSeg : nVerSeg + 1L);
-            const sal_uInt32 nLoopHorLimit(bHorClosed ? nHorSeg : nHorSeg + 1L);
+            const sal_uInt32 nLoopVerInit(bVerFromTop ? 1 : 0);
+            const sal_uInt32 nLoopVerLimit(bVerToBottom ? nVerSeg : nVerSeg + 1);
+            const sal_uInt32 nLoopHorLimit(bHorClosed ? nHorSeg : nHorSeg + 1);
 
             for(a = nLoopVerInit; a < nLoopVerLimit; a++)
             {
@@ -459,7 +459,7 @@ namespace basegfx
         {
             const sal_uInt32 nPolygonCount(rCandidate.count());
 
-            if(1L == nPolygonCount)
+            if(1 == nPolygonCount)
             {
                 return isInside(rCandidate.getB3DPolygon(0), rPoint, bWithBorder);
             }
@@ -478,7 +478,7 @@ namespace basegfx
                     }
                 }
 
-                return (nInsideCount % 2L);
+                return (nInsideCount % 2);
             }
         }
 

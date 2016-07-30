@@ -40,7 +40,7 @@
 // #i37443#
 #define ANGLE_BOUND_START_VALUE     (2.25)
 #define ANGLE_BOUND_MINIMUM_VALUE   (0.1)
-#define COUNT_SUBDIVIDE_DEFAULT     (4L)
+#define COUNT_SUBDIVIDE_DEFAULT     (4)
 #ifdef DBG_UTIL
 static double fAngleBoundStartValue = ANGLE_BOUND_START_VALUE;
 #endif
@@ -106,11 +106,11 @@ namespace basegfx
 
             if(nIndex)
             {
-                return nIndex - 1L;
+                return nIndex - 1;
             }
             else if(rCandidate.count())
             {
-                return rCandidate.count() - 1L;
+                return rCandidate.count() - 1;
             }
             else
             {
@@ -122,11 +122,11 @@ namespace basegfx
         {
             OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
 
-            if(nIndex + 1L < rCandidate.count())
+            if(nIndex + 1 < rCandidate.count())
             {
-                return nIndex + 1L;
+                return nIndex + 1;
             }
-            else if(nIndex + 1L == rCandidate.count())
+            else if(nIndex + 1 == rCandidate.count())
             {
                 return 0;
             }
@@ -140,7 +140,7 @@ namespace basegfx
         {
             B2VectorOrientation eRetval(B2VectorOrientation::Neutral);
 
-            if(rCandidate.count() > 2L || rCandidate.areControlPointsUsed())
+            if(rCandidate.count() > 2 || rCandidate.areControlPointsUsed())
             {
                 const double fSignedArea(getSignedArea(rCandidate));
 
@@ -402,7 +402,7 @@ namespace basegfx
 
                 if(nPointCount)
                 {
-                    B2DPoint aCurrentPoint(aCandidate.getB2DPoint(nPointCount - 1L));
+                    B2DPoint aCurrentPoint(aCandidate.getB2DPoint(nPointCount - 1));
 
                     for(sal_uInt32 a(0); a < nPointCount; a++)
                     {
@@ -481,7 +481,7 @@ namespace basegfx
             {
                 for(sal_uInt32 a(0); a < nPointCount; a++)
                 {
-                    const B2DPoint aPreviousPoint(aCandidate.getB2DPoint((!a) ? nPointCount - 1L : a - 1L));
+                    const B2DPoint aPreviousPoint(aCandidate.getB2DPoint((!a) ? nPointCount - 1 : a - 1));
                     const B2DPoint aCurrentPoint(aCandidate.getB2DPoint(a));
 
                     fRetval += aPreviousPoint.getX() * aCurrentPoint.getY();
@@ -558,7 +558,7 @@ namespace basegfx
 
             if(nPointCount)
             {
-                const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1L);
+                const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1);
 
                 if(rCandidate.areControlPointsUsed())
                 {
@@ -599,12 +599,12 @@ namespace basegfx
             B2DPoint aRetval;
             const sal_uInt32 nPointCount(rCandidate.count());
 
-            if( 1L == nPointCount )
+            if( 1 == nPointCount )
             {
                 // only one point (i.e. no edge) - simply take that point
                 aRetval = rCandidate.getB2DPoint(0);
             }
-            else if(nPointCount > 1L)
+            else if(nPointCount > 1)
             {
                 const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1);
                 sal_uInt32 nIndex(0);
@@ -623,7 +623,7 @@ namespace basegfx
                     {
                         // if fDistance < 0.0 increment with multiple of fLength
                         sal_uInt32 nCount(sal_uInt32(-fDistance / fLength));
-                        fDistance += double(nCount + 1L) * fLength;
+                        fDistance += double(nCount + 1) * fLength;
                     }
                     else
                     {
@@ -1530,7 +1530,7 @@ namespace basegfx
 
             if(nPointCount)
             {
-                const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount : nPointCount - 1L);
+                const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount : nPointCount - 1);
                 B2DPoint aCurrent(aCandidate.getB2DPoint(0));
 
                 if(nEdgeCount)
@@ -1968,9 +1968,9 @@ namespace basegfx
             OSL_ENSURE(!rCandidate.areControlPointsUsed(), "hasNeutralPoints: ATM works not for curves (!)");
             const sal_uInt32 nPointCount(rCandidate.count());
 
-            if(nPointCount > 2L)
+            if(nPointCount > 2)
             {
-                B2DPoint aPrevPoint(rCandidate.getB2DPoint(nPointCount - 1L));
+                B2DPoint aPrevPoint(rCandidate.getB2DPoint(nPointCount - 1));
                 B2DPoint aCurrPoint(rCandidate.getB2DPoint(0));
 
                 for(sal_uInt32 a(0); a < nPointCount; a++)
@@ -2003,7 +2003,7 @@ namespace basegfx
             {
                 const sal_uInt32 nPointCount(rCandidate.count());
                 B2DPolygon aRetval;
-                B2DPoint aPrevPoint(rCandidate.getB2DPoint(nPointCount - 1L));
+                B2DPoint aPrevPoint(rCandidate.getB2DPoint(nPointCount - 1));
                 B2DPoint aCurrPoint(rCandidate.getB2DPoint(0));
 
                 for(sal_uInt32 a(0); a < nPointCount; a++)
@@ -2050,9 +2050,9 @@ namespace basegfx
             OSL_ENSURE(!rCandidate.areControlPointsUsed(), "isConvex: ATM works not for curves (!)");
             const sal_uInt32 nPointCount(rCandidate.count());
 
-            if(nPointCount > 2L)
+            if(nPointCount > 2)
             {
-                const B2DPoint aPrevPoint(rCandidate.getB2DPoint(nPointCount - 1L));
+                const B2DPoint aPrevPoint(rCandidate.getB2DPoint(nPointCount - 1));
                 B2DPoint aCurrPoint(rCandidate.getB2DPoint(0));
                 B2DVector aCurrVec(aPrevPoint - aCurrPoint);
                 B2VectorOrientation aOrientation(B2VectorOrientation::Neutral);
@@ -2138,14 +2138,14 @@ namespace basegfx
             const B2DPolygon aCandidate(rCandidate.areControlPointsUsed() ? rCandidate.getDefaultAdaptiveSubdivision() : rCandidate);
             const sal_uInt32 nPointCount(aCandidate.count());
 
-            if(nPointCount > 1L)
+            if(nPointCount > 1)
             {
-                const sal_uInt32 nLoopCount(aCandidate.isClosed() ? nPointCount : nPointCount - 1L);
+                const sal_uInt32 nLoopCount(aCandidate.isClosed() ? nPointCount : nPointCount - 1);
                 B2DPoint aCurrentPoint(aCandidate.getB2DPoint(0));
 
                 for(sal_uInt32 a(0); a < nLoopCount; a++)
                 {
-                    const B2DPoint aNextPoint(aCandidate.getB2DPoint((a + 1L) % nPointCount));
+                    const B2DPoint aNextPoint(aCandidate.getB2DPoint((a + 1) % nPointCount));
 
                     if(isPointOnLine(aCurrentPoint, aNextPoint, rPoint, bWithPoints))
                     {
@@ -2211,12 +2211,12 @@ namespace basegfx
         {
             const sal_uInt32 nCount(rCandidate.count());
 
-            if(nCount > 2L)
+            if(nCount > 2)
             {
                 const B2DPoint aStart(rCandidate.getB2DPoint(0));
-                B2DPoint aLast(rCandidate.getB2DPoint(1L));
+                B2DPoint aLast(rCandidate.getB2DPoint(1));
 
-                for(sal_uInt32 a(2L); a < nCount; a++)
+                for(sal_uInt32 a(2); a < nCount; a++)
                 {
                     const B2DPoint aCurrent(rCandidate.getB2DPoint(a));
                     rTarget.append(aStart);
@@ -2433,10 +2433,10 @@ namespace basegfx
             double fRetval(DBL_MAX);
             const sal_uInt32 nPointCount(rCandidate.count());
 
-            if(nPointCount > 1L)
+            if(nPointCount > 1)
             {
                 const double fZero(0.0);
-                const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1L);
+                const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1);
                 B2DCubicBezier aBezier;
                 aBezier.setStartPoint(rCandidate.getB2DPoint(0));
 
@@ -2493,7 +2493,7 @@ namespace basegfx
                     }
                     else
                     {
-                        if(rEdgeIndex != nEdgeCount - 1L)
+                        if(rEdgeIndex != nEdgeCount - 1)
                         {
                             rEdgeIndex++;
                             rCut = 0.0;
@@ -2784,12 +2784,12 @@ namespace basegfx
 
                     if(nPointCount)
                     {
-                        B2DPoint aPrev(rCandidate.getB2DPoint(nPointCount - 1L));
+                        B2DPoint aPrev(rCandidate.getB2DPoint(nPointCount - 1));
                         B2DPoint aCurrent(rCandidate.getB2DPoint(0));
 
                         for(sal_uInt32 a(0); a < nPointCount; a++)
                         {
-                            const B2DPoint aNext(rCandidate.getB2DPoint(a + 1L == nPointCount ? 0 : a + 1L));
+                            const B2DPoint aNext(rCandidate.getB2DPoint(a + 1 == nPointCount ? 0 : a + 1));
                             const B2DVector aBack(aPrev - aCurrent);
                             const B2DVector aForw(aNext - aCurrent);
                             const B2DVector aPerpBack(getNormalizedPerpendicular(aBack));
@@ -2825,7 +2825,7 @@ namespace basegfx
             if(nPointCount && nSegments)
             {
                 // get current segment count
-                const sal_uInt32 nSegmentCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1L);
+                const sal_uInt32 nSegmentCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1);
 
                 if(nSegmentCount == nSegments)
                 {
@@ -2834,7 +2834,7 @@ namespace basegfx
                 else
                 {
                     const double fLength(getLength(rCandidate));
-                    const sal_uInt32 nLoopCount(rCandidate.isClosed() ? nSegments : nSegments + 1L);
+                    const sal_uInt32 nLoopCount(rCandidate.isClosed() ? nSegments : nSegments + 1);
 
                     for(sal_uInt32 a(0); a < nLoopCount; a++)
                     {
@@ -3548,7 +3548,7 @@ namespace basegfx
                         else
                         {
                             // add last point as closing point
-                            const B2DPoint aClosingPoint(rPolygon.getB2DPoint(nPointCount - 1L));
+                            const B2DPoint aClosingPoint(rPolygon.getB2DPoint(nPointCount - 1));
                             aCollectPoints.push_back(
                                 css::awt::Point(
                                     fround(aClosingPoint.getX()),

@@ -175,7 +175,7 @@ namespace unotools
         osl::MutexGuard const guard( m_aMutex );
         modifying();
 
-        if( index == -1L )
+        if( index == -1 )
         {
             // set all
             maPolyPoly.setClosed( closedState );

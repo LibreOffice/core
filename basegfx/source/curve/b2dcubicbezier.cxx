@@ -670,7 +670,7 @@ namespace basegfx
 
     double B2DCubicBezier::getSmallestDistancePointToBezierSegment(const B2DPoint& rTestPoint, double& rCut) const
     {
-        const sal_uInt32 nInitialDivisions(3L);
+        const sal_uInt32 nInitialDivisions(3);
         B2DPolygon aInitialPolygon;
 
         // as start make a fix division, creates nInitialDivisions + 2L points
@@ -684,7 +684,7 @@ namespace basegfx
         double fNewQuadDist;
         sal_uInt32 nSmallestIndex(0);
 
-        for(sal_uInt32 a(1L); a < nPointCount; a++)
+        for(sal_uInt32 a(1); a < nPointCount; a++)
         {
             aVector = B2DVector(rTestPoint - aInitialPolygon.getB2DPoint(a));
             fNewQuadDist = aVector.getX() * aVector.getX() + aVector.getY() * aVector.getY();
@@ -697,8 +697,8 @@ namespace basegfx
         }
 
         // look right and left for even smaller distances
-        double fStepValue(1.0 / (double)((nPointCount - 1L) * 2L)); // half the edge step width
-        double fPosition((double)nSmallestIndex / (double)(nPointCount - 1L));
+        double fStepValue(1.0 / (double)((nPointCount - 1) * 2)); // half the edge step width
+        double fPosition((double)nSmallestIndex / (double)(nPointCount - 1));
         bool bDone(false);
 
         while(!bDone)

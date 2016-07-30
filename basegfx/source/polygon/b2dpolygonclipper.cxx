@@ -93,7 +93,7 @@ namespace basegfx
                         bParallelToXAxis ? fValueOnOtherAxis : aCandidateRange.getMaxY() + fSmallExtension);
                     const B2DPolygon aCandidate(addPointsAtCuts(rCandidate, aStart, aEnd));
                     const sal_uInt32 nPointCount(aCandidate.count());
-                    const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount : nPointCount - 1L);
+                    const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount : nPointCount - 1);
                     B2DCubicBezier aEdge;
                     B2DPolygon aRun;
 
@@ -247,7 +247,7 @@ namespace basegfx
             if(aRetval.count())
             {
                 // against Y-Axis, lower value
-                if(1L == aRetval.count())
+                if(1 == aRetval.count())
                 {
                     aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0), false, bInside, rRange.getMinX(), bStroke);
                 }
@@ -259,7 +259,7 @@ namespace basegfx
                 if(aRetval.count())
                 {
                     // against X-Axis, higher value
-                    if(1L == aRetval.count())
+                    if(1 == aRetval.count())
                     {
                         aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0), true, !bInside, rRange.getMaxY(), bStroke);
                     }
@@ -271,7 +271,7 @@ namespace basegfx
                     if(aRetval.count())
                     {
                         // against Y-Axis, higher value
-                        if(1L == aRetval.count())
+                        if(1 == aRetval.count())
                         {
                             aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0), false, !bInside, rRange.getMaxX(), bStroke);
                         }
@@ -353,7 +353,7 @@ namespace basegfx
                         // add cuts with clip to polygon, including bezier segments
                         const B2DPolygon aCandidate(addPointsAtCuts(rCandidate.getB2DPolygon(a), rClip));
                         const sal_uInt32 nPointCount(aCandidate.count());
-                        const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount : nPointCount - 1L);
+                        const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount : nPointCount - 1);
                         B2DCubicBezier aEdge;
                         B2DPolygon aRun;
 
