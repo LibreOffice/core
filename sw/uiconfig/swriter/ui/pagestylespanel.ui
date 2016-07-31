@@ -32,12 +32,12 @@
   <object class="GtkGrid" id="PageStylesPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="hexpand">True</property>
-    <property name="vexpand">True</property>
     <child>
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">center</property>
+        <property name="margin_right">12</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="border_width">6</property>
@@ -47,7 +47,7 @@
           <object class="GtkLabel" id="numberslabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">end</property>
+            <property name="xalign">1</property>
             <property name="label" translatable="yes">Number:</property>
           </object>
           <packing>
@@ -61,7 +61,7 @@
           <object class="GtkLabel" id="backgroundlabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">end</property>
+            <property name="xalign">1</property>
             <property name="label" translatable="yes">Background:</property>
           </object>
           <packing>
@@ -87,7 +87,7 @@
           <object class="GtkLabel" id="layoutlabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">end</property>
+            <property name="xalign">1</property>
             <property name="label" translatable="yes">Layout:</property>
           </object>
           <packing>
@@ -101,6 +101,7 @@
           <object class="GtkComboBox" id="layoutbox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="model">liststorePageLayout</property>
           </object>
           <packing>
@@ -114,7 +115,7 @@
           <object class="GtkLabel" id="columnlabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">end</property>
+            <property name="xalign">1</property>
             <property name="label" translatable="yes">Column:</property>
           </object>
           <packing>
