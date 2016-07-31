@@ -314,13 +314,17 @@ struct ImplSVData
     Application*            mpApp = nullptr;                // pApp
     VclPtr<WorkWindow>      mpDefaultWin;                   // Default-Window
     bool                    mbDeInit = false;               // Is VCL deinitializing
+
     ImplSchedulerData*      mpFirstSchedulerData = nullptr; // list of all running tasks
     ImplSchedulerData*      mpFreeSchedulerData = nullptr;  // list of all deleted tasks for reuse
+    bool                    mbNeedsReschedule = false;      // was the list of tasks changed?
+    sal_uInt64              mnTimerPeriod = 0;              // current timer period / sleep time
+    sal_uInt64              mnLastUpdate = 0;               // last scheduler time
     SalTimer*               mpSalTimer = nullptr;           // interface to sal event loop/timers
+
     SalI18NImeStatus*       mpImeStatus = nullptr;          // interface to ime status window
     SalSystem*              mpSalSystem = nullptr;          // SalSystem interface
     ResMgr*                 mpResMgr = nullptr;             // SV-Resource-Manager
-    sal_uInt64              mnTimerPeriod = 0;              // current timer period
     ImplSVAppData           maAppData;                      // indepen data for class Application
     ImplSVGDIData           maGDIData;                      // indepen data for Output classes
     ImplSVWinData           maWinData;                      // indepen data for Windows classes
