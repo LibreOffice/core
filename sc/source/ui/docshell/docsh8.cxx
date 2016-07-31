@@ -461,16 +461,6 @@ sal_uLong ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncodi
 
 namespace {
 
-inline bool IsAsciiDigit( sal_Unicode c )
-{
-    return 0x30 <= c && c <= 0x39;
-}
-
-inline bool IsAsciiAlpha( sal_Unicode c )
-{
-    return (0x41 <= c && c <= 0x5a) || (0x61 <= c && c <= 0x7a);
-}
-
 void lcl_GetColumnTypes(
     ScDocShell& rDocShell, const ScRange& rDataRange, bool bHasFieldNames,
     OUString* pColNames, sal_Int32* pColTypes, sal_Int32* pColLengths,
@@ -567,13 +557,13 @@ void lcl_GetColumnTypes(
             // "_DBASELOCK" is reserved (obsolete because first character is
             // not alphabetical).
             // No duplicated names.
-            if ( !IsAsciiAlpha( aFieldName[0] ) )
+            if ( !rtl::isAsciiAlpha(aFieldName[0]) )
                 aFieldName = "N" + aFieldName;
             OUString aTmpStr;
             sal_Unicode c;
             for ( const sal_Unicode* p = aFieldName.getStr(); ( c = *p ) != 0; p++ )
             {
-                if ( IsAsciiAlpha( c ) || IsAsciiDigit( c ) || c == '_' )
+                if ( rtl::isAsciiAlpha(c) || rtl::isAsciiDigit(c) || c == '_' )
                     aTmpStr += OUString(c);
                 else
                     aTmpStr += "_";
