@@ -158,6 +158,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/crsr/trvltbl \
     sw/source/core/crsr/viscrs \
     sw/source/core/crsr/overlayrangesoutline \
+    sw/source/core/doc/SwDocIdle \
     sw/source/core/doc/SwStyleNameMapper \
     sw/source/core/doc/acmplwrd \
     sw/source/core/doc/CntntIdxStore \
