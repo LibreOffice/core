@@ -31,6 +31,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/borderline.hxx>
+#include <editeng/boxitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/fontitem.hxx>
@@ -61,6 +62,15 @@
 #include <tokenstringcontext.hxx>
 #include <formula/errorcodes.hxx>
 #include "externalrefmgr.hxx"
+#include <stlpool.hxx>
+#include <config_orcus.h>
+
+#if ENABLE_ORCUS
+#include <orcusfiltersimpl.hxx>
+#include "orcusfilters.hxx"
+#include "filter.hxx"
+#include "orcusinterface.hxx"
+#endif
 
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -148,6 +158,10 @@ public:
     void testComplexIconSetsXLSX();
     void testCondFormatParentXLSX();
     void testColorScaleNumWithRefXLSX();
+
+    #if ENABLE_ORCUS
+    void testOrcusODSStyleInterface();
+    #endif
 
     void testLiteralInFormulaXLS();
 
@@ -268,6 +282,11 @@ public:
     CPPUNIT_TEST(testComplexIconSetsXLSX);
     CPPUNIT_TEST(testCondFormatParentXLSX);
     CPPUNIT_TEST(testColorScaleNumWithRefXLSX);
+
+    #if ENABLE_ORCUS
+    CPPUNIT_TEST(testOrcusODSStyleInterface);
+    #endif
+
     CPPUNIT_TEST(testLiteralInFormulaXLS);
 
     CPPUNIT_TEST(testNumberFormatHTML);
@@ -2639,6 +2658,50 @@ void ScFiltersTest::testColorScaleNumWithRefXLSX()
 
     xDocSh->DoClose();
 }
+
+#if ENABLE_ORCUS
+void ScFiltersTest::testOrcusODSStyleInterface()
+{
+    ScDocument aDoc;
+    OUString aValidPath;
+    OUString aFullUrl = m_directories.getURLFromSrc("sc/qa/unit/data/xml/styles.xml");
+
+    /* This loop below trims file:// from the start because orcus doesn't accept such a url */
+
+    for (sal_Int32 i = 7; i < aFullUrl.getLength(); ++i)
+        aValidPath += OUString(aFullUrl[i]);
+
+    ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
+    CPPUNIT_ASSERT(pOrcus);
+
+    pOrcus->importODS_Styles(aDoc, aValidPath);
+    ScStyleSheetPool* pStyleSheetPool = aDoc.GetStyleSheetPool();
+
+    ScStyleSheet* pStyleSheet = pStyleSheetPool->FindCaseIns("Name1", SfxStyleFamily::Para);
+    const SfxPoolItem* pItem = nullptr;
+
+    CPPUNIT_ASSERT_MESSAGE("Style Name1 : Doesn't have Attribute background, but it should have.",
+        pStyleSheet->GetItemSet().HasItem(ATTR_BACKGROUND, &pItem));
+    const SvxBrushItem* pBackground = static_cast<const SvxBrushItem*>(pItem);
+    CPPUNIT_ASSERT_EQUAL(Color(254, 255, 204), pBackground->GetColor());
+
+    CPPUNIT_ASSERT_MESSAGE("Style Name1 : Doesn't have Attribute border, but it should have.",
+        pStyleSheet->GetItemSet().HasItem(ATTR_BORDER, &pItem));
+    const SvxBoxItem* pBoxItem = static_cast<const SvxBoxItem*>(pItem);
+    CPPUNIT_ASSERT_EQUAL(Color(255, 204, 18), pBoxItem->GetLeft()->GetColor());
+    CPPUNIT_ASSERT_EQUAL(Color(255, 204, 18), pBoxItem->GetRight()->GetColor());
+    CPPUNIT_ASSERT_EQUAL(Color(255, 204, 18), pBoxItem->GetTop()->GetColor());
+    CPPUNIT_ASSERT_EQUAL(Color(255, 204, 18), pBoxItem->GetBottom()->GetColor());
+    CPPUNIT_ASSERT_EQUAL(pBoxItem->GetLeft()->GetBorderLineStyle(), ::com::sun::star::table::BorderLineStyle::DOTTED);
+    CPPUNIT_ASSERT_EQUAL(pBoxItem->GetRight()->GetBorderLineStyle(), ::com::sun::star::table::BorderLineStyle::DOTTED);
+    CPPUNIT_ASSERT_EQUAL(pBoxItem->GetTop()->GetBorderLineStyle(), ::com::sun::star::table::BorderLineStyle::DOTTED);
+    CPPUNIT_ASSERT_EQUAL(pBoxItem->GetBottom()->GetBorderLineStyle(), ::com::sun::star::table::BorderLineStyle::DOTTED);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("Error with left width", 1, pBoxItem->GetLeft()->GetWidth());
+    ASSERT_DOUBLES_EQUAL_MESSAGE("Error with right width", 1, pBoxItem->GetRight()->GetWidth());
+    ASSERT_DOUBLES_EQUAL_MESSAGE("Error with top width", 1, pBoxItem->GetTop()->GetWidth());
+    ASSERT_DOUBLES_EQUAL_MESSAGE("Error with bottom width", 1, pBoxItem->GetBottom()->GetWidth());
+}
+#endif
 
 void ScFiltersTest::testLiteralInFormulaXLS()
 {
