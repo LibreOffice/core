@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="16"
+   height="16"
+   id="svg3049"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="lock_16.svg"
+   inkscape:export-filename="/home/uri/.kde/share/icons/NITRUX-KDE/16x16/actions/view-right-new.png"
+   inkscape:export-xdpi="30"
+   inkscape:export-ydpi="30">
+  <defs
+     id="defs3051" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="45.254834"
+     inkscape:cx="6.9917828"
+     inkscape:cy="6.7468032"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1-6"
+     showgrid="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1868"
+     inkscape:window-height="1060"
+     inkscape:window-x="50"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="false"
+     borderlayer="true"
+     inkscape:snap-bbox="true"
+     inkscape:snap-global="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4085" />
+    <sodipodi:guide
+       position="2.0000044,14.00003"
+       orientation="12,0"
+       id="guide4075" />
+    <sodipodi:guide
+       position="2.0000044,2.0000296"
+       orientation="0,12"
+       id="guide4077" />
+    <sodipodi:guide
+       position="14,9"
+       orientation="-12,0"
+       id="guide4079" />
+    <sodipodi:guide
+       position="14.000004,14.00003"
+       orientation="0,-12"
+       id="guide4081" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata3054">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-421.71429,-531.79074)">
+    <g
+       transform="matrix(0.75,0,0,0.74999813,421.46429,-241.22897)"
+       id="layer1-0"
+       inkscape:label="Capa 1">
+      <g
+         transform="translate(6.2937501e-7,-2.041003e-4)"
+         id="layer1-6"
+         inkscape:label="Capa 1">
+        <path
+           style="color:#000000;fill:#4d4d4d;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+           d="M 11.5 2 C 10.671573 2 10 2.6715728 10 3.5 C 10 4.3284272 10.671573 5 11.5 5 C 12.328427 5 13 4.3284272 13 3.5 C 13 2.6715728 12.328427 2 11.5 2 z M 8.5 5 C 8.2238576 5 8 5.2238576 8 5.5 C 8 5.7761424 8.2238576 6 8.5 6 C 8.7761424 6 9 5.7761424 9 5.5 C 9 5.2238576 8.7761424 5 8.5 5 z M 6.5 6 C 6.2238576 6 6 6.2238576 6 6.5 C 6 6.7761424 6.2238576 7 6.5 7 C 6.7761424 7 7 6.7761424 7 6.5 C 7 6.2238576 6.7761424 6 6.5 6 z M 3.5 7 C 2.6715729 7 2 7.6715728 2 8.5 C 2 9.3284272 2.6715729 10 3.5 10 C 4.3284271 10 5 9.3284272 5 8.5 C 5 7.6715728 4.3284271 7 3.5 7 z M 6.5 10 C 6.2238576 10 6 10.223858 6 10.5 C 6 10.776142 6.2238576 11 6.5 11 C 6.7761424 11 7 10.776142 7 10.5 C 7 10.223858 6.7761424 10 6.5 10 z M 8.5 11 C 8.2238576 11 8 11.223858 8 11.5 C 8 11.776142 8.2238576 12 8.5 12 C 8.7761424 12 9 11.776142 9 11.5 C 9 11.223858 8.7761424 11 8.5 11 z M 11.5 11 C 10.671573 11 10 11.671573 10 12.5 C 10 13.328427 10.671573 14 11.5 14 C 12.328427 14 13 13.328427 13 12.5 C 13 11.671573 12.328427 11 11.5 11 z "
+           id="path3137"
+           transform="matrix(1.3333333,0,0,1.3333367,0.3333327,1030.6957)" />
+      </g>
+    </g>
+  </g>
+</svg>
