@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_6bfc2d3f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-07-31T05:27:26Z",
+      "side": 1,
+      "message": "Commit message should contain major information what this change is about and not (only) classify what kind of project it is and who supports it and why.\n\nAt very least, it should mention, that libtomath was externalized by this commit. Another important aspect that I would mention here is that starting with this commit FB supports building on MSVC 14.0, both 32 and 64 bit (is that correct?). FYI: FB is the only external module that prevents us from dropping support for MSVC 12.0 on master.\n\nAll other changes in FB-LO integration should be mentioned here as well.",
+      "revId": "db388586c7a38cb1b0424a367c2e08558be03b09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_ebe75daa",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 1691,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-07-31T05:27:26Z",
+      "side": 1,
+      "message": "Unrelated whitespace change.",
+      "revId": "db388586c7a38cb1b0424a367c2e08558be03b09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_0bed698b",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 2906,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-07-31T05:27:26Z",
+      "side": 1,
+      "message": "Referencing the failure you\u0027ve reported on the dev ML:\n\n  error C1083: Cannot open include file: \u0027ibase.h\u0027: No such file or directory.\n\nThe directory above doesn\u0027t exist; may be try to use the one that exists and contains the missing include:\n\n  -I$(call gb_UnpackedTarball_get_dir,firebird)/src/include \\",
+      "range": {
+        "startLine": 2906,
+        "startChar": 1,
+        "endLine": 2906,
+        "endChar": 75
+      },
+      "revId": "db388586c7a38cb1b0424a367c2e08558be03b09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_4bff7134",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 8795,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-07-31T05:27:26Z",
+      "side": 1,
+      "message": "This directory doesn\u0027t exist on Windows, see my comment in RepositoryExternal.mk.",
+      "range": {
+        "startLine": 8795,
+        "startChar": 25,
+        "endLine": 8795,
+        "endChar": 91
+      },
+      "revId": "db388586c7a38cb1b0424a367c2e08558be03b09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_2b02253f",
+        "filename": "external/firebird/firebird-cygwin-msvc.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-07-31T05:27:26Z",
+      "side": 1,
+      "message": "Can you elaborate, why this rename was necessary? Is lint a keyword on MSVC? How it works then upstream? Also it would be nice to report this problem upstream and upload a fix there as well (And link the upstream issue to the UnpackedTarball_firebird.mk file, so that it could be easily dropped when next FB version would fix the issue upstream; see for example external/boost/UnpackedTarball_boost.mk where you can find many issues that were opened by LO developers upstream, e.g.: https://svn.boost.org/trac/boost/ticket/9885 )? The reason we are trying to do it is: we don\u0027t want to maintain for years the patches for obvious breakages of external projects.",
+      "range": {
+        "startLine": 359,
+        "startChar": 3,
+        "endLine": 360,
+        "endChar": 28
+      },
+      "revId": "db388586c7a38cb1b0424a367c2e08558be03b09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_8bf97950",
+        "filename": "external/libtommath/UnpackedTarball_libtommath.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-07-31T05:27:26Z",
+      "side": 1,
+      "message": "If this condition is strictly needed? Looks like this patch only touches windows specific file anyway and thus the condition abouve could be dropped.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 27
+      },
+      "revId": "db388586c7a38cb1b0424a367c2e08558be03b09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
