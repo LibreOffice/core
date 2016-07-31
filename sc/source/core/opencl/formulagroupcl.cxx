@@ -82,17 +82,6 @@ static const char* publicFunc =
  "double strequal(unsigned a, unsigned b) { return (a==b)?1.0:0; }\n"
  ;
 
-#ifdef _WIN32
-#ifndef NAN
-namespace {
-
-const unsigned long __nan[2] = {0xffffffff, 0x7fffffff};
-
-}
-#define NAN (*(const double*) __nan)
-#endif
-#endif
-
 #include <list>
 #include <map>
 #include <iostream>
@@ -238,7 +227,7 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
             throw OpenCLError("clEnqueueMapBuffer", err, __FILE__, __LINE__);
 
         for (size_t i = 0; i < szHostBuffer / sizeof(double); i++)
-            pNanBuffer[i] = NAN;
+            rtl::math::setNan(&pNanBuffer[i]);
         err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem,
             pNanBuffer, 0, nullptr, nullptr);
         // FIXME: Is it intentional to not throw an OpenCLError even if the clEnqueueUnmapMemObject() fails?
