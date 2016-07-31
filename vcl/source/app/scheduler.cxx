@@ -129,6 +129,8 @@ void Scheduler::ImplStartTimer( sal_uInt64 nMS, bool bForce )
 void Scheduler::CallbackTaskScheduling()
 {
     // this function is for the saltimer callback
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->mbNeedsReschedule = true;
     Scheduler::ProcessTaskScheduling();
 }
 
@@ -155,11 +157,15 @@ inline void Scheduler::UpdateMinPeriod( ImplSchedulerData *pSchedulerData,
 bool Scheduler::ProcessTaskScheduling()
 {
     ImplSVData*        pSVData = ImplGetSVData();
+    sal_uInt64         nTime = tools::Time::GetSystemTicks();
+    if (!pSVData->mbNeedsReschedule &&
+            (nTime < pSVData->mnLastUpdate + pSVData->mnTimerPeriod) )
+        return false;
+    pSVData->mbNeedsReschedule = false;
+
     ImplSchedulerData* pSchedulerData = pSVData->mpFirstSchedulerData;
     ImplSchedulerData* pPrevSchedulerData = nullptr;
     ImplSchedulerData *pMostUrgent = nullptr;
-
-    sal_uInt64         nTime = tools::Time::GetSystemTicks();
     sal_uInt64         nMinPeriod = InfiniteTimeoutMs;
 
     while ( pSchedulerData )
@@ -223,6 +229,7 @@ next_entry:
         pSVData->mpSalTimer->Stop();
 
     pSVData->mnTimerPeriod = nMinPeriod;
+    pSVData->mnLastUpdate = nTime;
 
     return pMostUrgent != nullptr;
 }
@@ -262,7 +269,10 @@ void Scheduler::Start()
         else
             pSVData->mpFirstSchedulerData = mpSchedulerData;
     }
-    mpSchedulerData->mnUpdateTime  = tools::Time::GetSystemTicks();
+
+    assert( mpSchedulerData->mpScheduler == this );
+    mpSchedulerData->mnUpdateTime = tools::Time::GetSystemTicks();
+    pSVData->mbNeedsReschedule = true;
 }
 
 void Scheduler::Stop()
