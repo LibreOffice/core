@@ -1034,7 +1034,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
     TagLogger::getInstance().attribute("isTextAppend", sal_uInt32(xTextAppend.is()));
 #endif
 
-    if (xTextAppend.is() && pParaContext != nullptr && !getTableManager().isIgnore())
+    if (xTextAppend.is() && pParaContext && hasTableManager() && !getTableManager().isIgnore())
     {
         try
         {
@@ -4198,7 +4198,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                  */
                 OUString aCode( pContext->GetCommand().trim() );
                 // Don't waste resources on wrapping shapes inside a fieldmark.
-                if (aCode != "SHAPE")
+                if (aCode != "SHAPE" && m_xTextFactory.is())
                 {
                     xFieldInterface = m_xTextFactory->createInstance("com.sun.star.text.Fieldmark");
                     const uno::Reference<text::XTextContent> xTextContent(xFieldInterface, uno::UNO_QUERY_THROW);
