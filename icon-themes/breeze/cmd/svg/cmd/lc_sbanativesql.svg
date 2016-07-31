@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg7384"
+   height="24"
+   width="24"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="lc_sbanativesql.svg"
+   inkscape:export-filename="/home/uri/Descargas/NITRUX-KDE/NITRUX-KDE/16x16/actions/view-preview.png"
+   inkscape:export-xdpi="30"
+   inkscape:export-ydpi="30">
+  <defs
+     id="defs9" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10000"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1885"
+     inkscape:window-height="1060"
+     id="namedview7"
+     showgrid="true"
+     inkscape:zoom="45.254834"
+     inkscape:cx="13.750634"
+     inkscape:cy="10.508553"
+     inkscape:window-x="-2"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg7384"
+     inkscape:showpageshadow="false"
+     borderlayer="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:snap-bbox="true"
+     inkscape:snap-global="true">
+    <sodipodi:guide
+       position="3,21"
+       orientation="18,0"
+       id="guide4064" />
+    <sodipodi:guide
+       position="3,3"
+       orientation="0,18"
+       id="guide4066" />
+    <sodipodi:guide
+       position="21,3"
+       orientation="-18,0"
+       id="guide4068" />
+    <sodipodi:guide
+       position="21,21"
+       orientation="0,-18"
+       id="guide4070" />
+    <sodipodi:guide
+       position="4,20"
+       orientation="16,0"
+       id="guide4072" />
+    <sodipodi:guide
+       position="4,4"
+       orientation="0,16"
+       id="guide4074" />
+    <sodipodi:guide
+       position="20,4"
+       orientation="-16,0"
+       id="guide4076" />
+    <sodipodi:guide
+       position="20,20"
+       orientation="0,-16"
+       id="guide4078" />
+    <inkscape:grid
+       type="xygrid"
+       id="grid4080"
+       originx="1px"
+       originy="1px" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata90">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Gnome Symbolic Icon Theme</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <title
+     id="title9167">Gnome Symbolic Icon Theme</title>
+  <g
+     transform="translate(18,-1029.3622)"
+     id="layer1"
+     inkscape:label="Capa 1">
+    <path
+       style="fill:#4d4d4d;fill-opacity:1;stroke:none"
+       d="m -13.281254,1044.3637 -0.71875,0.7187 1.78125,1.7813 -1.78125,1.7812 0.71875,0.7188 2.28125,-2.2813 0.21875,-0.2187 -0.21875,-0.2188 -2.28125,-2.2812 z"
+       id="rect4304"
+       inkscape:connector-curvature="0" />
+    <rect
+       y="1048.3622"
+       x="-10"
+       height="0.99998301"
+       width="4"
+       id="rect4335"
+       style="fill:#4d4d4d;fill-opacity:1;stroke:none" />
+  </g>
+  <path
+     style="color:#000000;fill:#4d4d4d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     d="M 12 4 C 8.1340068 4 5 4.8954258 5 6 L 5 10 L 5 14 C 5.0085 14.562558 5.49935 14.726059 5.875 14.9375 C 7.058837 15.562421 9.338316 16 12 16 C 13.709962 16 15.175339 15.807652 16.34375 15.53125 C 16.561899 15.48732 16.743593 15.45891 16.9375 15.40625 C 17.050263 15.37241 17.145468 15.34895 17.25 15.3125 C 17.34114 15.28331 17.415308 15.25054 17.5 15.21875 C 17.677407 15.148687 17.85202 15.078115 18 15 L 18 18 C 18 18.366759 16.795372 18.678619 15 18.84375 L 15 19.78125 C 17.351199 19.460641 19 18.793749 19 18 L 19 14 L 19 12 L 19 11 L 19 10 L 19 6 C 19 4.8954048 15.865993 4 12 4 z M 12 5 C 13.691372 5 15.204093 5.1002856 16.28125 5.28125 C 16.29889 5.28406 16.32631 5.2784 16.34375 5.28125 C 17.381259 5.4612464 18 5.7295898 18 6 C 18 6.2704102 17.381259 6.5387536 16.34375 6.71875 C 15.262254 6.9063776 13.726482 7 12 7 C 10.273518 7 8.7377457 6.9063776 7.65625 6.71875 C 6.6187409 6.5387536 6 6.2704102 6 6 C 6 5.7295898 6.6187409 5.4612464 7.65625 5.28125 C 8.2104535 5.1907678 8.8922151 5.1443528 9.625 5.09375 C 10.346066 5.0431472 11.154314 5 12 5 z M 6 7 C 6.1165847 7.057 6.2404188 7.1028329 6.375 7.15625 C 6.418489 7.174706 6.45463 7.200832 6.5 7.21875 C 6.6464679 7.273578 6.804158 7.3246966 6.96875 7.375 C 7.002174 7.385497 7.028329 7.395996 7.0625 7.40625 C 7.4627293 7.5243538 7.8855627 7.6001424 8.375 7.6875 C 9.4097013 7.8673629 10.637129 8 12 8 C 13.362871 8 14.590299 7.8673629 15.625 7.6875 C 16.608393 7.5119783 17.413481 7.2867575 18 7 L 18 10 C 18 10.270418 17.381259 10.538755 16.34375 10.71875 C 15.262254 10.906376 13.726482 11 12 11 C 11.140583 11 10.3494 10.958805 9.625 10.90625 C 8.926796 10.858036 8.2874868 10.803398 7.75 10.71875 C 6.6819672 10.537182 6.036497 10.273727 6 10 L 6 9 L 6 7 z M 5.875 10.9375 C 5.893922 10.9475 5.918021 10.95886 5.9375 10.96875 C 5.95664 10.97918 5.981649 10.98976 6 11 C 6.2732294 11.133586 6.6009138 11.26258 6.96875 11.375 C 7.002174 11.3855 7.028329 11.396 7.0625 11.40625 C 7.4627293 11.524354 7.8855627 11.600142 8.375 11.6875 C 9.4097013 11.867363 10.637129 12 12 12 C 13.487267 11.9898 14.822197 11.823168 16.1875 11.5625 C 16.295113 11.53845 16.397462 11.52577 16.5 11.5 C 16.755667 11.43787 16.998234 11.38654 17.21875 11.3125 C 17.25025 11.30207 17.28173 11.29186 17.3125 11.28125 C 17.556737 11.19559 17.774645 11.100843 17.96875 11 C 17.97705 10.996 17.99178 11.004 18 11 L 18 12 L 18 14 C 18 14.03176 17.98591 14.06307 17.96875 14.09375 C 17.89742 14.194538 17.715635 14.285287 17.46875 14.375 C 17.30416 14.43481 17.103296 14.509295 16.875 14.5625 C 16.575813 14.62858 16.210188 14.698386 15.8125 14.75 C 15.74244 14.7591 15.697808 14.77264 15.625 14.78125 C 15.400339 14.81135 15.150883 14.81904 14.90625 14.84375 C 14.607185 14.870193 14.330182 14.88735 14 14.90625 C 13.351558 14.948978 12.685832 15 12 15 C 8.617256 15 5.875 14.5523 5.875 14 L 5.875 10.9375 z "
+     id="rect3778-0" />
+</svg>
