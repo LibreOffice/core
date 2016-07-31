@@ -927,6 +927,7 @@ void SidebarController::ShowPopupMenu (
     Rectangle aBox (rButtonBox);
     aBox.Move(mpTabBar->GetPosPixel().X(), 0);
     pMenu->Execute(mpParentWindow, aBox, PopupMenuFlags::ExecuteDown);
+    pMenu.disposeAndClear();
 }
 
 VclPtr<PopupMenu> SidebarController::CreatePopupMenu (
