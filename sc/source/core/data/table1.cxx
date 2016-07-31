@@ -169,6 +169,7 @@ bool SetOptimalHeightsToRows(
     SCROW nRngStart = 0;
     SCROW nRngEnd = 0;
     sal_uInt16 nLast = 0;
+    sal_uInt16 nExtraHeight = rCxt.getExtraHeight();
     for (SCSIZE i=0; i<nCount; i++)
     {
         size_t nIndex;
@@ -181,7 +182,7 @@ bool SetOptimalHeightsToRows(
         bool bAutoSize = ((nRowFlag & CR_MANUALSIZE) == 0);
         if (bAutoSize || rCxt.isForceAutoSize())
         {
-            if (rCxt.getExtraHeight())
+            if (nExtraHeight)
             {
                 if (bAutoSize)
                     pRowFlags->SetValue( nStartRow+i, nRegionEndRow, nRowFlag | CR_MANUALSIZE);
@@ -193,7 +194,7 @@ bool SetOptimalHeightsToRows(
             {
                 if (nLast)
                 {
-                    if (rCxt.getHeightArray()[nInner] + rCxt.getExtraHeight() == nLast)
+                    if (rCxt.getHeightArray()[nInner] + nExtraHeight == nLast)
                         nRngEnd = nStartRow+nInner;
                     else
                     {
