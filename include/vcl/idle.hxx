@@ -27,6 +27,9 @@ class VCL_DLLPUBLIC Idle : public Scheduler
 {
 protected:
     Link<Idle *, void> maIdleHdl;          // Callback Link
+    bool               mbAuto;
+
+    virtual void SetDeletionFlags() override;
 
     virtual bool ReadyForSchedule( const sal_uInt64 nTime, const bool bIdle ) const override;
     virtual void UpdateMinPeriod( const sal_uInt64 nTime, sal_uInt64 &nMinPeriod ) const override;
@@ -43,6 +46,23 @@ public:
     const Link<Idle *, void>& GetIdleHdl() const { return maIdleHdl; }
     virtual void Invoke() override;
     Idle&           operator=( const Idle& rIdle );
+};
+
+/**
+ * An auto-idle is long running task processing small chunks of data, which
+ * is re-scheduled multiple times.
+ *
+ * Remember to stop the Idle when finished, as it would otherwise busy loop the CPU!
+ *
+ * It probably makes sense to re-implement ReadyForSchedule and UpdateMinPeriod,
+ * in case there is a quick check and it can otherwise sleep.
+ */
+class VCL_DLLPUBLIC AutoIdle : public Idle
+{
+public:
+    AutoIdle( const sal_Char *pDebugName = nullptr );
+    AutoIdle( const AutoIdle& rIdle );
+    AutoIdle& operator=( const AutoIdle& rIdle );
 };
 
 #endif // INCLUDED_VCL_IDLE_HXX
