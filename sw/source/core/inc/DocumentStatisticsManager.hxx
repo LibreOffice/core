@@ -20,11 +20,10 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTSTATISTICSMANAGER_HXX
 
 #include <IDocumentStatistics.hxx>
-#include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 
 class SwDoc;
 struct SwDocStat;
-class Timer;
 
 namespace sw {
 
@@ -62,9 +61,9 @@ private:
     DECL_LINK_TYPED( DoIdleStatsUpdate, Timer *, void );
 
 
-    SwDocStat       *mpDocStat;          //< Statistics information.
-    bool            mbInitialized;       // allow first time update
-    Timer       maStatsUpdateTimer;      //< Timer for asynchronous stats calculation
+    SwDocStat       *mpDocStat;          //< Statistics information
+    bool             mbInitialized;      //< allow first time update
+    AutoTimer        maStatsUpdateTimer; //< Timer for asynchronous stats calculation
 };
 
 }
