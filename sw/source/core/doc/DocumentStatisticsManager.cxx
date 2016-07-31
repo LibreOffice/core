@@ -34,6 +34,8 @@
 #include <vector>
 #include <viewsh.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <wrtsh.hxx>
+#include <viewopt.hxx>
 
 using namespace ::com::sun::star;
 
@@ -71,12 +73,13 @@ namespace sw
 
 DocumentStatisticsManager::DocumentStatisticsManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ),
                                                                           mpDocStat( new SwDocStat ),
-                                                                          mbInitialized( false )
+                                                                          mbInitialized( false ),
+                                                                          maStatsUpdateIdle( i_rSwdoc )
+
 {
-    maStatsUpdateTimer.SetTimeout( 1 );
-    maStatsUpdateTimer.SetPriority( TaskPriority::LOWEST );
-    maStatsUpdateTimer.SetInvokeHandler( LINK( this, DocumentStatisticsManager, DoIdleStatsUpdate ) );
-    maStatsUpdateTimer.SetDebugName( "sw::DocumentStatisticsManager maStatsUpdateTimer" );
+    maStatsUpdateIdle.SetPriority( TaskPriority::LOWEST );
+    maStatsUpdateIdle.SetInvokeHandler( LINK( this, DocumentStatisticsManager, DoIdleStatsUpdate ) );
+    maStatsUpdateIdle.SetDebugName( "sw::DocumentStatisticsManager maStatsUpdateIdle" );
 }
 
 void DocumentStatisticsManager::DocInfoChgd(bool const isEnableSetModified)
@@ -120,14 +123,15 @@ void DocumentStatisticsManager::UpdateDocStat( bool bCompleteAsync, bool bFields
     {
         if (!bCompleteAsync)
         {
+            maStatsUpdateIdle.Stop();
             while (IncrementalDocStatCalculate(
                         std::numeric_limits<long>::max(), bFields)) {}
-            maStatsUpdateTimer.Stop();
         }
-        else if (IncrementalDocStatCalculate(5000, bFields))
-            maStatsUpdateTimer.Start();
         else
-            maStatsUpdateTimer.Stop();
+        {
+            if (!maStatsUpdateIdle.IsActive() && IncrementalDocStatCalculate(5000, bFields))
+                maStatsUpdateIdle.Start();
+        }
     }
 }
 
@@ -178,7 +182,7 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
     }
 
     mpDocStat->nPage     = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout() ? m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout()->GetPageNum() : 0;
-    mpDocStat->bModified = false;
+    SetDocStatModified( false );
 
     css::uno::Sequence < css::beans::NamedValue > aStat( mpDocStat->nPage ? 8 : 7);
     sal_Int32 n=0;
@@ -233,11 +237,10 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
     return nChars < 0;
 }
 
-IMPL_LINK_NOARG( DocumentStatisticsManager, DoIdleStatsUpdate, Timer *, void )
+IMPL_LINK( DocumentStatisticsManager, DoIdleStatsUpdate, Timer *, pIdle, void )
 {
-    if (IncrementalDocStatCalculate(32000))
-        maStatsUpdateTimer.Start();
-
+    if (!IncrementalDocStatCalculate(32000))
+        pIdle->Stop();
     SwView* pView = m_rDoc.GetDocShell() ? m_rDoc.GetDocShell()->GetView() : nullptr;
     if( pView )
         pView->UpdateDocStats();
@@ -245,7 +248,7 @@ IMPL_LINK_NOARG( DocumentStatisticsManager, DoIdleStatsUpdate, Timer *, void )
 
 DocumentStatisticsManager::~DocumentStatisticsManager()
 {
-    maStatsUpdateTimer.Stop();
+    maStatsUpdateIdle.Stop();
     delete mpDocStat;
 }
 
