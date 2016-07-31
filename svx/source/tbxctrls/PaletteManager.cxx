@@ -35,7 +35,7 @@
 
 PaletteManager::PaletteManager() :
     mnMaxRecentColors(Application::GetSettings().GetStyleSettings().GetColorValueSetColumnCount()),
-    mnNumOfPalettes(1),
+    mnNumOfPalettes(2),
     mnCurrentPalette(0),
     mnColorCount(0),
     mpBtnUpdater(nullptr),
@@ -53,6 +53,7 @@ PaletteManager::PaletteManager() :
     if(!pColorList.is())
         pColorList = XColorList::CreateStdColorList();
     LoadPalettes();
+    mnCurrentPalette = officecfg::Office::Common::UserColors::PalettePosition::get();
     mnNumOfPalettes += m_Palettes.size();
 }
 
@@ -120,7 +121,21 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
 
-    if( mnCurrentPalette == mnNumOfPalettes - 1 )
+    if( mnCurrentPalette == 0)
+    {
+        rColorSet.Clear();
+        css::uno::Sequence< sal_Int32 > CustomColorList( officecfg::Office::Common::UserColors::CustomColor::get() );
+        css::uno::Sequence< OUString > CustomColorNameList( officecfg::Office::Common::UserColors::CustomColorName::get() );
+        int nIx = 1;
+        for( int i = 0;i < CustomColorList.getLength();i++ )
+        {
+            Color aColor( CustomColorList[i] );
+            OUString aColorName( CustomColorNameList[i] );
+            rColorSet.InsertItem( nIx, aColor, aColorName );
+            ++nIx;
+        }
+    }
+    else if( mnCurrentPalette == mnNumOfPalettes - 1 )
     {
         // Add doc colors to palette
         std::set<Color> aColors = pDocSh->GetDocColors();
@@ -130,7 +145,7 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
     }
     else
     {
-        m_Palettes[mnCurrentPalette]->LoadColorSet( rColorSet );
+        m_Palettes[mnCurrentPalette - 1]->LoadColorSet( rColorSet );
         mnColorCount = rColorSet.GetItemCount();
     }
 }
@@ -158,11 +173,11 @@ std::vector<OUString> PaletteManager::GetPaletteList()
 {
     std::vector<OUString> aPaletteNames;
 
+    aPaletteNames.push_back( SVX_RESSTR( RID_SVXSTR_CUSTOM_PAL ) );
     for (auto const& it : m_Palettes)
     {
         aPaletteNames.push_back( (*it).GetName() );
     }
-
     aPaletteNames.push_back( SVX_RESSTR ( RID_SVXSTR_DOC_COLORS ) );
 
     return aPaletteNames;
@@ -170,12 +185,12 @@ std::vector<OUString> PaletteManager::GetPaletteList()
 
 void PaletteManager::SetPalette( sal_Int32 nPos )
 {
-    if( nPos != mnNumOfPalettes - 1 )
+    if( nPos != mnNumOfPalettes - 1 && nPos != 0)
     {
         pColorList = XPropertyList::AsColorList(
                             XPropertyList::CreatePropertyListFromURL(
-                            XCOLOR_LIST, m_Palettes[nPos]->GetPath()));
-        pColorList->SetName(m_Palettes[nPos]->GetName());
+                            XCOLOR_LIST, m_Palettes[nPos - 1]->GetPath()));
+        pColorList->SetName(m_Palettes[nPos - 1]->GetName());
         if(pColorList->Load())
         {
             SfxObjectShell* pShell = SfxObjectShell::Current();
@@ -184,6 +199,9 @@ void PaletteManager::SetPalette( sal_Int32 nPos )
         }
     }
     mnCurrentPalette = nPos;
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
+    officecfg::Office::Common::UserColors::PalettePosition::set(nPos, batch);
+    batch->commit();
 }
 
 sal_Int32 PaletteManager::GetPalette()
@@ -193,7 +211,30 @@ sal_Int32 PaletteManager::GetPalette()
 
 OUString PaletteManager::GetPaletteName()
 {
-    return pColorList->GetName();
+    if(mnCurrentPalette != mnNumOfPalettes - 1 && mnCurrentPalette != 0)
+    {
+        SfxObjectShell* pDocSh = SfxObjectShell::Current();
+        if(pDocSh)
+        {
+            const SfxPoolItem* pItem = nullptr;
+            if( nullptr != ( pItem = pDocSh->GetItem(SID_COLOR_TABLE) ) )
+                pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
+        }
+        return pColorList->GetName();
+    }
+    else
+    {
+        std::vector<OUString> aNames(GetPaletteList());
+        return aNames[mnCurrentPalette];
+    }
+}
+
+OUString PaletteManager::GetSelectedPalettePath()
+{
+    if(mnCurrentPalette != mnNumOfPalettes - 1 && mnCurrentPalette != 0)
+        return m_Palettes[mnCurrentPalette - 1]->GetPath();
+    else
+        return OUString();
 }
 
 long PaletteManager::GetColorCount()

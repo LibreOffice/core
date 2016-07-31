@@ -36,7 +36,7 @@
 #include <vector>
 #include <memory>
 
-class PaletteManager
+class SVX_DLLPUBLIC PaletteManager
 {
     const sal_uInt16        mnMaxRecentColors;
 
@@ -56,13 +56,17 @@ class PaletteManager
 public:
     PaletteManager();
     ~PaletteManager();
+    PaletteManager(const PaletteManager&) = delete;
+    PaletteManager& operator=(const PaletteManager&) = delete;
     void        LoadPalettes();
     void        ReloadColorSet(SvxColorValueSet& rColorSet);
     void        ReloadRecentColorSet(SvxColorValueSet& rColorSet);
     std::vector<OUString> GetPaletteList();
     void        SetPalette( sal_Int32 nPos );
     sal_Int32   GetPalette();
+    sal_Int32   GetPaletteCount() { return mnNumOfPalettes; }
     OUString    GetPaletteName();
+    OUString    GetSelectedPalettePath();
 
     long        GetColorCount();
     long        GetRecentColorCount();
