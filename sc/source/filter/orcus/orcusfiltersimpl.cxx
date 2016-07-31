@@ -147,22 +147,9 @@ bool ScOrcusFiltersImpl::importODS(ScDocument& rDoc, SfxMedium& rMedium) const
     return true;
 }
 
-bool ScOrcusFiltersImpl::importODS_Styles(ScDocument& rDoc, OUString& aFileName) const
+bool ScOrcusFiltersImpl::importODS_Styles(ScDocument& rDoc, OUString& aPath) const
 {
-    OUString aPath("$BRAND_BASE_DIR/");  /* Read the comment below before changing this */
-    rtl::Bootstrap::expandMacros(aPath);
-    OUString aValidPath;
-
-    /* The Following loop trims 'file://' from start of string and
-     * '../' from the end of string. If you ever happen to change the above macro
-     * please consider changing the following range too, otherwise app would
-     * crash!!
-     */
-    for (sal_Int32 i = 7; i < aPath.getLength() - 3; ++i)
-        aValidPath += OUString(aPath[i]);
-
-    aValidPath += aFileName;
-    OString aUrl = OUStringToOString(aValidPath, RTL_TEXTENCODING_UTF8);
+    OString aUrl = OUStringToOString(aPath, RTL_TEXTENCODING_UTF8);
     const char* path = aUrl.getStr();
 
     try
