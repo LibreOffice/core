@@ -93,9 +93,7 @@ namespace dxcanvas
 
     uno::Sequence< OUString > SAL_CALL CanvasCustomSprite::getSupportedServiceNames()  throw( uno::RuntimeException )
     {
-        uno::Sequence< OUString > aRet { "com.sun.star.rendering.CanvasCustomSprite" };
-
-        return aRet;
+        return { "com.sun.star.rendering.CanvasCustomSprite" };
     }
 
     void CanvasCustomSprite::redraw() const

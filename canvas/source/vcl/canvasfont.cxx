@@ -161,9 +161,7 @@ namespace vclcanvas
 
     uno::Sequence< OUString > SAL_CALL CanvasFont::getSupportedServiceNames()  throw( uno::RuntimeException, std::exception )
     {
-        uno::Sequence< OUString > aRet { "com.sun.star.rendering.CanvasFont" };
-
-        return aRet;
+        return { "com.sun.star.rendering.CanvasFont" };
     }
 
     vcl::Font CanvasFont::getVCLFont() const

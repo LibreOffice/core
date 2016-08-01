@@ -134,9 +134,7 @@ namespace dxcanvas
 
     uno::Sequence< OUString > SAL_CALL CanvasFont::getSupportedServiceNames()  throw( uno::RuntimeException )
     {
-        uno::Sequence< OUString > aRet { "com.sun.star.rendering.CanvasFont" };
-
-        return aRet;
+        return { "com.sun.star.rendering.CanvasFont" };
     }
 
     double CanvasFont::getCellAscent() const

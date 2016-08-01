@@ -585,8 +585,7 @@ sal_Bool AccessibleDialogWindow::supportsService( const OUString& rServiceName )
 
 Sequence< OUString > AccessibleDialogWindow::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
-    Sequence<OUString> aNames { "com.sun.star.awt.AccessibleWindow" };
-    return aNames;
+    return { "com.sun.star.awt.AccessibleWindow" };
 }
 
 // XAccessible

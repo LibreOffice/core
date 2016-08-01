@@ -86,9 +86,7 @@ namespace vclcanvas
 
     uno::Sequence< OUString > SAL_CALL CanvasBitmap::getSupportedServiceNames(  ) throw (uno::RuntimeException, std::exception)
     {
-        uno::Sequence< OUString > aRet { "com.sun.star.rendering.CanvasBitmap" };
-
-        return aRet;
+        return { "com.sun.star.rendering.CanvasBitmap" };
     }
 
     BitmapEx CanvasBitmap::getBitmap() const
