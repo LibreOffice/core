@@ -611,6 +611,7 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
         if (mpDocShell)
         {
             mpDocShell->SetUndoManager(& GetUndoManager());
+            GetUndoManager().SetDocShell(mpDocShell);
         }
 
         getIDocumentLinksAdministration().GetLinkManager().SetPersist( mpDocShell );

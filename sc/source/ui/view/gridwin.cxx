@@ -4116,7 +4116,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                         nSourceTab != nThisTab )
             {
                 OUString aUndo = ScGlobal::GetRscString( bIsMove ? STR_UNDO_MOVE : STR_UNDO_COPY );
-                pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
+                pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pViewData->GetViewShell()->GetViewShellId() );
 
                 SCsCOL nCorrectCursorPosCol = 0;
                 SCsROW nCorrectCursorPosRow = 0;
@@ -4270,7 +4270,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             if (pSourceSh)
             {
                 OUString aUndo = ScGlobal::GetRscString( STR_UNDO_COPY );
-                pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
+                pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pViewData->GetViewShell()->GetViewShellId() );
 
                 bDone = true;
                 if ( meDragInsertMode != INS_NONE )
@@ -4330,7 +4330,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             //! or don't start dragging on a part of a matrix
 
             OUString aUndo = ScGlobal::GetRscString( bIsMove ? STR_UNDO_MOVE : STR_UNDO_COPY );
-            pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
+            pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pViewData->GetViewShell()->GetViewShellId() );
 
             bDone = true;
             if ( meDragInsertMode != INS_NONE )

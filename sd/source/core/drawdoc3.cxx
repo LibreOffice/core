@@ -60,6 +60,7 @@
 #include "../ui/inc/GraphicDocShell.hxx"
 #include "../ui/inc/ViewShell.hxx"
 #include "../ui/inc/View.hxx"
+#include "../ui/inc/ViewShellBase.hxx"
 #include "../ui/inc/cfgids.hxx"
 #include "../ui/inc/strings.hrc"
 
@@ -484,7 +485,10 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     if( mpDocSh )
     {
         pUndoMgr = mpDocSh->GetUndoManager();
-        pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_INSERTPAGES), "", 0);
+        sal_Int32 nViewShellId = -1;
+        if (sd::ViewShell* pViewShell = mpDocSh->GetViewShell())
+            nViewShellId = pViewShell->GetViewShellBase().GetViewShellId();
+        pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_INSERTPAGES), "", 0, nViewShellId);
     }
 
     // Refactored copy'n'pasted layout name collection into IterateBookmarkPages
@@ -1422,7 +1426,10 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
     if (bUndo)
     {
-        pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_SET_PRESLAYOUT), OUString(), 0);
+        sal_Int32 nViewShellId = -1;
+        if (sd::ViewShell* pViewShell = mpDocSh->GetViewShell())
+            nViewShellId = pViewShell->GetViewShellBase().GetViewShellId();
+        pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_SET_PRESLAYOUT), OUString(), 0, nViewShellId);
     }
 
     SdPage* pSelectedPage   = GetSdPage(nSdPageNum, PK_STANDARD);

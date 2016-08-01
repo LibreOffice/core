@@ -444,7 +444,7 @@ bool OFieldExpressionControl::SaveModified(bool _bAppendRow)
             {
                 bAppend = true;
                 OUString sUndoAction(ModuleRes(RID_STR_UNDO_APPEND_GROUP));
-                m_pParent->m_pController->getUndoManager().EnterListAction( sUndoAction, OUString(), 0 );
+                m_pParent->m_pController->getUndoManager().EnterListAction( sUndoAction, OUString(), 0, -1 );
                 xGroup = m_pParent->getGroups()->createGroup();
                 xGroup->setHeaderOn(true);
 
@@ -783,7 +783,7 @@ void OFieldExpressionControl::DeleteRows()
             {
                 bFirstTime = false;
                 OUString sUndoAction(ModuleRes(RID_STR_UNDO_REMOVE_SELECTION));
-                m_pParent->m_pController->getUndoManager().EnterListAction( sUndoAction, OUString(), 0 );
+                m_pParent->m_pController->getUndoManager().EnterListAction( sUndoAction, OUString(), 0, -1 );
             }
 
             sal_Int32 nGroupPos = m_aGroupPositions[nIndex];

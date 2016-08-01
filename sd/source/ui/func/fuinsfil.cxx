@@ -54,6 +54,7 @@
 #include "glob.hrc"
 #include "sdpage.hxx"
 #include "strmname.h"
+#include "ViewShellBase.hxx"
 #include "DrawViewShell.hxx"
 #include "OutlineViewShell.hxx"
 #include "DrawDocShell.hxx"
@@ -629,8 +630,9 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
         nNewPages = 0;
 
+        int nViewShellId = mpViewShell ? mpViewShell->GetViewShellBase().GetViewShellId() : -1;
         rDocliner.GetUndoManager().EnterListAction(
-                                    SD_RESSTR(STR_UNDO_INSERT_FILE), OUString(), 0 );
+                                    SD_RESSTR(STR_UNDO_INSERT_FILE), OUString(), 0, nViewShellId );
 
         sal_Int32 nSourcePos = 0;
         SfxStyleSheet* pStyleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE );

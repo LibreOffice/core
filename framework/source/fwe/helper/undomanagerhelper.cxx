@@ -525,7 +525,7 @@ namespace framework
 
         {
             ::comphelper::FlagGuard aNotificationGuard( m_bAPIActionRunning );
-            rUndoManager.EnterListAction( i_title, OUString(), 0 );
+            rUndoManager.EnterListAction( i_title, OUString(), 0, -1 );
         }
 
         m_aContextVisibilities.push( i_hidden );

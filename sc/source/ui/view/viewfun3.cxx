@@ -1181,7 +1181,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     if ( bRecord )
     {
         OUString aUndo = ScGlobal::GetRscString( pClipDoc->IsCutMode() ? STR_UNDO_MOVE : STR_UNDO_COPY );
-        pUndoMgr->EnterListAction( aUndo, aUndo, 0 );
+        pUndoMgr->EnterListAction( aUndo, aUndo, 0, GetViewData().GetViewShell()->GetViewShellId() );
     }
 
     if (bClipOver)
@@ -1576,7 +1576,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
         ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
         OUString aUndo = ScGlobal::GetRscString(
             pClipDoc->IsCutMode() ? STR_UNDO_CUT : STR_UNDO_COPY);
-        pUndoMgr->EnterListAction(aUndo, aUndo, 0);
+        pUndoMgr->EnterListAction(aUndo, aUndo, 0, GetViewData().GetViewShell()->GetViewShellId());
 
         ScUndoPasteOptions aOptions;            // store options for repeat
         aOptions.nFunction  = nFunction;
@@ -1740,7 +1740,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
         OUString aUndo = ScGlobal::GetRscString(
             pClipDoc->IsCutMode() ? STR_UNDO_CUT : STR_UNDO_COPY);
-        pUndoMgr->EnterListAction(aUndo, aUndo, 0);
+        pUndoMgr->EnterListAction(aUndo, aUndo, 0, GetViewData().GetViewShell()->GetViewShellId());
 
         ScUndoPasteOptions aOptions;            // store options for repeat
         aOptions.nFunction  = nFunction;
@@ -1809,7 +1809,7 @@ bool ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
         //  moving within one table and several tables selected -> apply to all selected tables
 
         OUString aUndo = ScGlobal::GetRscString( bCut ? STR_UNDO_MOVE : STR_UNDO_COPY );
-        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
+        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, GetViewData().GetViewShell()->GetViewShellId() );
 
         //  collect ranges of consecutive selected tables
 
