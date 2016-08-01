@@ -756,10 +756,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
             SelectColumnsMetaData::const_iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
             if ( aFind != aEnd )
             {
-                sMaxStmt += sMax;
-                sMaxStmt += ::dbtools::quoteName( sQuote,aFind->second.sRealName
-);
-                sMaxStmt += sMaxEnd;
+                sMaxStmt += sMax + ::dbtools::quoteName( sQuote,aFind->second.sRealName) + sMaxEnd;
             }
         }
 

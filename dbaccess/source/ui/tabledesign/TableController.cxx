@@ -1493,8 +1493,7 @@ OUString OTableController::getPrivateTitle() const
         if ( sTitle.isEmpty() )
         {
             OUString aName = ModuleRes(STR_TBL_TITLE);
-            sTitle = aName.getToken(0,' ');
-            sTitle += OUString::number(getCurrentStartNumber());
+            sTitle = aName.getToken(0,' ') + OUString::number(getCurrentStartNumber());
         }
     }
     catch( const Exception& )

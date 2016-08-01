@@ -376,8 +376,7 @@ namespace dbaui
 
         for ( i = 1; i < 0x7FFFFFFF; ++i )
         {
-            sNewIndexName = sNewIndexNameBase;
-            sNewIndexName += OUString::number(i);
+            sNewIndexName = sNewIndexNameBase + OUString::number(i);
             if (m_pIndexes->end() == m_pIndexes->find(sNewIndexName))
                 break;
         }
