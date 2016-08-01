@@ -31,10 +31,4 @@ $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 ))
 endif
 
-ifeq ($(OS),ANDROID)
-$(eval $(call gb_UnpackedTarball_add_patches,curl,\
-	external/curl/curl-android.patch \
-))
-endif
-
 # vim: set noet sw=4 ts=4:
