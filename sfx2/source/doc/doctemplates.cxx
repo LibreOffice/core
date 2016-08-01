@@ -246,7 +246,7 @@ class SfxDocTplService_Impl
     void                        createFromContent( GroupList_Impl& rList,
                                                    Content &rContent,
                                                    bool bHierarchy,
-                                                   bool bWriteableContent = false );
+                                                   bool bWriteableContent );
     void                        addHierGroup( GroupList_Impl& rList,
                                               const OUString& rTitle,
                                               const OUString& rOwnURL );
@@ -1141,7 +1141,7 @@ void SfxDocTplService_Impl::doUpdate()
     GroupList_Impl  aGroupList;
 
     // get the entries from the hierarchy
-    createFromContent( aGroupList, maRootContent, true );
+    createFromContent( aGroupList, maRootContent, true, false );
 
     // get the entries from the template directories
     sal_Int32   nCountDir = maTemplateDirs.getLength();

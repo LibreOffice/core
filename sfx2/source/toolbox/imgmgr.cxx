@@ -173,7 +173,7 @@ void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
                         pBox->SetItemImage( nId, GetImage( nId, bLarge ) );
                         SfxStateCache *pCache = SfxViewFrame::Current()->GetBindings().GetStateCache( nId );
                         if ( pCache )
-                            pCache->SetCachedState();
+                            pCache->SetCachedState(false);
                     }
                 }
 

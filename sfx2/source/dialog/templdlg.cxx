@@ -533,7 +533,7 @@ public:
     StyleTree_Impl(const OUString &rName, const OUString &rParent):
         aName(rName), aParent(rParent), pChildren(0) {}
     ~StyleTree_Impl();
-    void Put(StyleTree_Impl* pIns, sal_uIntPtr lPos=ULONG_MAX);
+    void Put(StyleTree_Impl* pIns, sal_uIntPtr lPos);
     size_t Count();
 
     const OUString& getName() { return aName; }
@@ -618,7 +618,7 @@ SvTreeListEntry* FillBox_Impl(SvTreeListBox* pBox,
                               StyleTree_Impl* pEntry,
                               const ExpandedEntries_t& rEntries,
                               SfxStyleFamily eStyleFamily,
-                              SvTreeListEntry* pParent = nullptr)
+                              SvTreeListEntry* pParent)
 {
     SvTreeListEntry* pTreeListEntry = pBox->InsertEntry(pEntry->getName(), pParent);
 
@@ -1082,7 +1082,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
 
         for (sal_uInt16 i = 0; i < nCount; ++i)
         {
-            FillBox_Impl(pTreeBox, aArr[i], aEntries, pItem->GetFamily());
+            FillBox_Impl(pTreeBox, aArr[i], aEntries, pItem->GetFamily(), nullptr);
         }
         pTreeBox->Recalc();
 
@@ -2017,7 +2017,7 @@ void SfxCommonTemplateDialog_Impl::EnableDelete()
         OSL_ENSURE(pStyle, "Style not found");
         if(pStyle && pStyle->IsUserDefined())
         {
-            EnableDel();
+            EnableDel(true);
         }
         else
         {

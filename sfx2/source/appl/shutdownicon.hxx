@@ -98,8 +98,7 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         static void addTerminateListener();
 
         static void FileOpen();
-        static void OpenURL( const OUString& aURL, const OUString& rTarget, const css::uno::Sequence< css::beans::PropertyValue >& =
-            css::uno::Sequence< css::beans::PropertyValue >( 0 ) );
+        static void OpenURL( const OUString& aURL, const OUString& rTarget, const css::uno::Sequence< css::beans::PropertyValue >& );
         static void FromTemplate();
 
         static void SetAutostart( bool bActivate );

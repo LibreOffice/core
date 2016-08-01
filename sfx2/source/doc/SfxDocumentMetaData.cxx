@@ -349,7 +349,7 @@ protected:
     /// set text of a list of standard meta data elements (multiple occ.)
     bool SAL_CALL setMetaList(const char* i_name,
         const css::uno::Sequence< OUString > & i_rValue,
-        AttrVector const* = nullptr);
+        AttrVector const*);
     void createUserDefined();
 };
 
@@ -541,7 +541,7 @@ textToDateTimeDefault(const OUString& i_text) throw ()
 // convert date to string
 OUString SAL_CALL
 dateToText(css::util::Date const& i_rd,
-           sal_Int16 const*const pTimeZone = nullptr) throw ()
+           sal_Int16 const*const pTimeZone) throw ()
 {
     if (isValidDate(i_rd)) {
         OUStringBuffer buf;
@@ -936,7 +936,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
         } else if (type == ::cppu::UnoType<css::util::Date>::get()) {
             css::util::Date d;
             any >>= d;
-            values.push_back(dateToText(d));
+            values.push_back(dateToText(d, nullptr));
             as.push_back(std::make_pair(vt,
                 OUString("date")));
         } else if (type == ::cppu::UnoType<css::util::DateTimeWithTimezone>::get()) {
@@ -1489,7 +1489,7 @@ SfxDocumentMetaData::setKeywords(
         throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard g(m_aMutex);
-    if (setMetaList("meta:keyword", the_value)) {
+    if (setMetaList("meta:keyword", the_value, nullptr)) {
         g.clear();
         setModified(true);
     }

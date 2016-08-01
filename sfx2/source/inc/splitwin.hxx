@@ -97,7 +97,7 @@ public:
                             const Size& rSize,
                             sal_uInt16 nLine,
                             sal_uInt16 nPos,
-                            bool bNewLine=false );
+                            bool bNewLine );
 
     void                RemoveWindow( SfxDockingWindow* pDockWin, bool bHide=true);
 
@@ -119,7 +119,7 @@ public:
 
     bool                IsPinned() const { return bPinned; }
     bool                IsFadeIn() const;
-    bool                IsAutoHide( bool bSelf = false ) const;
+    bool                IsAutoHide( bool bSelf ) const;
     SplitWindow*        GetSplitWindow();
 
     virtual void        AutoHide() override;
