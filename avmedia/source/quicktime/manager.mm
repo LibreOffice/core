@@ -71,9 +71,7 @@ sal_Bool SAL_CALL Manager::supportsService( const ::rtl::OUString& ServiceName )
 uno::Sequence< ::rtl::OUString > SAL_CALL Manager::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
-    uno::Sequence<OUString> aRet { AVMEDIA_QUICKTIME_MANAGER_SERVICENAME };
-
-    return aRet;
+    return { AVMEDIA_QUICKTIME_MANAGER_SERVICENAME };
 }
 
 } // namespace quicktime

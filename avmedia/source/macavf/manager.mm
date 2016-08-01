@@ -70,9 +70,7 @@ sal_Bool SAL_CALL Manager::supportsService( const ::rtl::OUString& ServiceName )
 uno::Sequence< ::rtl::OUString > SAL_CALL Manager::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aRet { AVMEDIA_MACAVF_MANAGER_SERVICENAME };
-
-    return aRet;
+    return { AVMEDIA_MACAVF_MANAGER_SERVICENAME };
 }
 
 } // namespace macavf

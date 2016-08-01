@@ -399,9 +399,7 @@ sal_Bool SAL_CALL Player::supportsService( const ::rtl::OUString& ServiceName )
 uno::Sequence< ::rtl::OUString > SAL_CALL Player::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aRet { AVMEDIA_MACAVF_PLAYER_SERVICENAME };
-
-    return aRet;
+    return { AVMEDIA_MACAVF_PLAYER_SERVICENAME };
 }
 
 } // namespace macavf

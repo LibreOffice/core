@@ -119,9 +119,7 @@ sal_Bool SAL_CALL FrameGrabber::supportsService( const ::rtl::OUString& ServiceN
 uno::Sequence< ::rtl::OUString > SAL_CALL FrameGrabber::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
-    uno::Sequence<OUString> aRet { AVMEDIA_QUICKTIME_FRAMEGRABBER_SERVICENAME };
-
-    return aRet;
+    return { AVMEDIA_QUICKTIME_FRAMEGRABBER_SERVICENAME };
 }
 
 } // namespace quicktime

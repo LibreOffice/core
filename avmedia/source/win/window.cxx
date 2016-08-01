@@ -596,9 +596,7 @@ sal_Bool SAL_CALL Window::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL Window::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
-    uno::Sequence<OUString> aRet { AVMEDIA_WIN_WINDOW_SERVICENAME };
-
-    return aRet;
+    return { AVMEDIA_WIN_WINDOW_SERVICENAME };
 }
 
 } // namespace win
