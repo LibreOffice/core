@@ -1417,7 +1417,10 @@ void FormulaCompiler::Factor()
                     // can not be resolved, there exists no "like ISO but week
                     // starts on Sunday" mode in WEEKNUM and for an expression
                     // we can't determine.
-                    if (pc >= 2 && pArr->nIndex == nSepPos + 3 &&
+                    // Current index is nSepPos+3 if expression stops, or
+                    // nSepPos+4 if expression continues after the call because
+                    // we just called NextToken() to move away from it.
+                    if (pc >= 2 && (pArr->nIndex == nSepPos + 3 || pArr->nIndex == nSepPos + 4) &&
                             pArr->pCode[nSepPos+1]->GetType() == svDouble &&
                             pArr->pCode[nSepPos+1]->GetDouble() != 1.0 &&
                             pArr->RemoveToken( nSepPos, 2) == 2)
