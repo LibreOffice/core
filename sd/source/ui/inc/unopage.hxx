@@ -60,7 +60,10 @@ class SdGenericDrawPage : public SvxFmDrawPage,
 private:
     SdXImpressDocument* mpModel;
     SdrModel* mpSdrModel;
+    bool      mbIsImpressDocument;
     sal_Int16 mnTempPageNumber; // for printing handouts
+
+    void UpdateModel();
 
 protected:
     friend class SdXImpressDocument;
@@ -81,7 +84,7 @@ protected:
     void SetWidth( sal_Int32 nWidth );
     void SetHeight( sal_Int32 nHeight );
 
-    bool     mbIsImpressDocument;
+    bool IsImpressDocument() const;
 
     virtual void disposing() throw() override;
 

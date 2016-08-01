@@ -347,9 +347,9 @@ SdGenericDrawPage::SdGenericDrawPage( SdXImpressDocument* _pModel, SdPage* pInPa
         SdUnoSearchReplaceShape(this),
         mpModel     ( _pModel ),
         mpSdrModel(nullptr),
+        mbIsImpressDocument(false),
         mnTempPageNumber(0),
-        mpPropSet   ( _pSet ),
-        mbIsImpressDocument(false)
+        mpPropSet   ( _pSet )
 {
     mpSdrModel = SvxFmDrawPage::mpModel;
     if( mpModel )
@@ -370,22 +370,31 @@ void SdGenericDrawPage::throwIfDisposed() const throw (css::uno::RuntimeExceptio
 SdXImpressDocument* SdGenericDrawPage::GetModel() const
 {
     if( mpSdrModel != SvxFmDrawPage::mpModel )
-    {
-        const_cast< SdGenericDrawPage* >(this)->mpSdrModel = SvxFmDrawPage::mpModel;
-        if( mpSdrModel )
-        {
-            uno::Reference< uno::XInterface > xModel( SvxFmDrawPage::mpModel->getUnoModel() );
-            const_cast< SdGenericDrawPage*>(this)->mpModel = SdXImpressDocument::getImplementation( xModel );
-            if( mpModel )
-                const_cast< SdGenericDrawPage*>(this)->mbIsImpressDocument = mpModel->IsImpressDocument();
-        }
-        else
-        {
-            const_cast< SdGenericDrawPage* >(this)->mpModel = nullptr;
-        }
-    }
-
+        const_cast<SdGenericDrawPage*>(this)->UpdateModel();
     return mpModel;
+}
+
+bool SdGenericDrawPage::IsImpressDocument() const
+{
+    if( mpSdrModel != SvxFmDrawPage::mpModel )
+        const_cast<SdGenericDrawPage*>(this)->UpdateModel();
+    return mbIsImpressDocument;
+}
+
+
+void SdGenericDrawPage::UpdateModel()
+{
+    mpSdrModel = SvxFmDrawPage::mpModel;
+    if( mpSdrModel )
+    {
+        uno::Reference< uno::XInterface > xModel( SvxFmDrawPage::mpModel->getUnoModel() );
+        mpModel = SdXImpressDocument::getImplementation( xModel );
+    }
+    else
+    {
+        mpModel = nullptr;
+    }
+    mbIsImpressDocument = mpModel ? mpModel->IsImpressDocument() : false;
 }
 
 // this is called whenever a SdrObject must be created for a empty api shape wrapper
@@ -573,7 +582,7 @@ Any SAL_CALL SdGenericDrawPage::queryInterface( const uno::Type & rType )
     {
         aAny <<= Reference<office::XAnnotationAccess>(this);
     }
-    else if (mbIsImpressDocument && rType == cppu::UnoType<XAnimationNodeSupplier>::get())
+    else if (IsImpressDocument() && rType == cppu::UnoType<XAnimationNodeSupplier>::get())
     {
         const PageKind ePageKind = GetPage() ? GetPage()->GetPageKind() : PK_STANDARD;
 
@@ -2071,7 +2080,7 @@ Any SAL_CALL SdDrawPage::queryInterface( const uno::Type & rType )
     {
         return makeAny( Reference< drawing::XMasterPageTarget >( this ) );
     }
-    else if( mbIsImpressDocument
+    else if( IsImpressDocument()
              && rType == cppu::UnoType<presentation::XPresentationPage>::get() )
     {
         SdPage * p = dynamic_cast<SdPage *>(SvxDrawPage::mpPage);
@@ -2106,7 +2115,7 @@ Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeExceptio
     if( maTypeSequence.getLength() == 0 )
     {
         const PageKind ePageKind = GetPage() ? GetPage()->GetPageKind() : PK_STANDARD;
-        bool bPresPage = mbIsImpressDocument && ePageKind != PK_HANDOUT;
+        bool bPresPage = IsImpressDocument() && ePageKind != PK_HANDOUT;
 
         // Collect the types of this class.
         ::std::vector<uno::Type> aTypes;
@@ -2258,7 +2267,7 @@ Sequence< OUString > SAL_CALL SdDrawPage::getSupportedServiceNames() throw(uno::
     Sequence< OUString > aSeq( SdGenericDrawPage::getSupportedServiceNames() );
     comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.drawing.DrawPage"} );
 
-    if( mbIsImpressDocument )
+    if( IsImpressDocument() )
         comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.presentation.DrawPage"} );
 
     return aSeq;
@@ -2719,7 +2728,7 @@ Any SAL_CALL SdMasterPage::queryInterface( const uno::Type & rType )
     else if( rType == cppu::UnoType<container::XNamed>::get() )
         aAny <<=  Reference< container::XNamed >(this);
     else if( rType == cppu::UnoType<presentation::XPresentationPage>::get() &&
-             ( mbIsImpressDocument &&
+             ( IsImpressDocument() &&
                GetPage()  && GetPage()->GetPageKind() != PK_HANDOUT) )
         aAny <<= Reference< presentation::XPresentationPage >( this );
     else
@@ -2750,7 +2759,7 @@ Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes() throw(uno::RuntimeExcept
     if( maTypeSequence.getLength() == 0 )
     {
         const PageKind ePageKind = GetPage() ? GetPage()->GetPageKind() : PK_STANDARD;
-        bool bPresPage = mbIsImpressDocument && SvxFmDrawPage::mpPage && ePageKind != PK_HANDOUT;
+        bool bPresPage = IsImpressDocument() && SvxFmDrawPage::mpPage && ePageKind != PK_HANDOUT;
 
         // Collect the types of this class.
         ::std::vector<uno::Type> aTypes;
@@ -2871,7 +2880,7 @@ void SdMasterPage::setBackground( const Any& rValue )
 
     try
     {
-        if( GetModel() && mbIsImpressDocument )
+        if( GetModel() && IsImpressDocument() )
         {
             Reference< container::XNameAccess >  xFamilies( GetModel()->getStyleFamilies(), UNO_QUERY_THROW );
             Reference< container::XNameAccess > xFamily( xFamilies->getByName( getName() ), UNO_QUERY_THROW ) ;
@@ -2971,7 +2980,7 @@ void SdMasterPage::getBackground( Any& rValue ) throw (std::exception)
 {
     if( GetModel() ) try
     {
-        if( mbIsImpressDocument )
+        if( IsImpressDocument() )
         {
             Reference< container::XNameAccess > xFamilies( GetModel()->getStyleFamilies(), UNO_QUERY_THROW );
             Reference< container::XNameAccess > xFamily( xFamilies->getByName( getName() ), UNO_QUERY_THROW );
