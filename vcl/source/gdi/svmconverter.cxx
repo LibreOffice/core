@@ -309,7 +309,7 @@ void ImplSkipActions( SvStream& rIStm, sal_uLong nSkipCount )
     for( sal_uLong i = 0UL; i < nSkipCount; i++ )
     {
         rIStm.ReadInt16( nType ).ReadInt32( nActionSize );
-        rIStm.SeekRel( nActionSize - 4L );
+        rIStm.SeekRel( nActionSize - 4 );
     }
 }
 
@@ -1010,10 +1010,10 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     sal_Int16 nBrushStyle;
 
                     ImplReadColor( rIStm, aActionColor );
-                    rIStm.SeekRel( 6L );
+                    rIStm.SeekRel( 6 );
                     rIStm.ReadInt16( nBrushStyle );
                     rMtf.AddAction( new MetaFillColorAction( aActionColor, nBrushStyle != 0 ) );
-                    rIStm.SeekRel( 2L );
+                    rIStm.SeekRel( 2 );
                 }
                 break;
 
@@ -1352,7 +1352,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 break;
 
                 default:
-                    rIStm.SeekRel( nActionSize - 4L );
+                    rIStm.SeekRel( nActionSize - 4 );
                 break;
             }
         }
@@ -1391,7 +1391,7 @@ void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
 
     // ActionCount will be written later
     nCountPos = rOStm.Tell();
-    rOStm.SeekRel( 4L );
+    rOStm.SeekRel( 4 );
 
     const sal_Int32 nActCount = ImplWriteActions( rOStm, rMtf, *aSaveVDev.get(), bRop_0_1, aLineCol, aLineColStack, eActualCharSet );
     const sal_uLong nActPos = rOStm.Tell();

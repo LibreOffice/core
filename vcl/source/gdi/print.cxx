@@ -764,18 +764,18 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
             aMask.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
 
         // mirrored horizontically
-        if( aDestSz.Width() < 0L )
+        if( aDestSz.Width() < 0 )
         {
             aDestSz.Width() = -aDestSz.Width();
-            aDestPt.X() -= ( aDestSz.Width() - 1L );
+            aDestPt.X() -= ( aDestSz.Width() - 1 );
             nMirrFlags |= BmpMirrorFlags::Horizontal;
         }
 
         // mirrored vertically
-        if( aDestSz.Height() < 0L )
+        if( aDestSz.Height() < 0 )
         {
             aDestSz.Height() = -aDestSz.Height();
-            aDestPt.Y() -= ( aDestSz.Height() - 1L );
+            aDestPt.Y() -= ( aDestSz.Height() - 1 );
             nMirrFlags |= BmpMirrorFlags::Vertical;
         }
 
@@ -804,10 +804,10 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
         InitFillColor();
 
         // create forward mapping tables
-        for( nX = 0L; nX <= nSrcWidth; nX++ )
+        for( nX = 0; nX <= nSrcWidth; nX++ )
             pMapX[ nX ] = aDestPt.X() + FRound( (double) aDestSz.Width() * nX / nSrcWidth );
 
-        for( nY = 0L; nY <= nSrcHeight; nY++ )
+        for( nY = 0; nY <= nSrcHeight; nY++ )
             pMapY[ nY ] = aDestPt.Y() + FRound( (double) aDestSz.Height() * nY / nSrcHeight );
 
         // walk through all rectangles of mask

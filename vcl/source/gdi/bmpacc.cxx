@@ -141,7 +141,7 @@ void BitmapReadAccess::ImplInitScanBuffer( Bitmap& rBitmap )
         mpScanBuf = new Scanline[ nHeight ];
         if( mpBuffer->mnFormat & ScanlineFormat::TopDown )
         {
-            for( long nY = 0L; nY < nHeight; nY++, pTmpLine += mpBuffer->mnScanlineSize )
+            for( long nY = 0; nY < nHeight; nY++, pTmpLine += mpBuffer->mnScanlineSize )
                 mpScanBuf[ nY ] = pTmpLine;
         }
         else
@@ -414,7 +414,7 @@ void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc 
     }
     else
         // TODO: use fastbmp infrastructure
-        for( long nX = 0L, nWidth = std::min( mpBuffer->mnWidth, rReadAcc.Width() ); nX < nWidth; nX++ )
+        for( long nX = 0, nWidth = std::min( mpBuffer->mnWidth, rReadAcc.Width() ); nX < nWidth; nX++ )
             SetPixel( nY, nX, rReadAcc.GetPixel( nY, nX ) );
 }
 
@@ -472,7 +472,7 @@ void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
             {
                 const ColorMask aDummyMask;
 
-                for( long nX = 0L, nWidth = mpBuffer->mnWidth; nX < nWidth; nX++ )
+                for( long nX = 0, nWidth = mpBuffer->mnWidth; nX < nWidth; nX++ )
                     SetPixel( nY, nX, pFncGetPixel( aSrcScanline, nX, aDummyMask ) );
             }
         }
@@ -492,7 +492,7 @@ void BitmapWriteAccess::CopyBuffer( const BitmapReadAccess& rReadAcc )
         memcpy( mpBuffer->mpBits, rReadAcc.GetBuffer(), nCount );
     }
     else
-        for( long nY = 0L, nHeight = std::min( mpBuffer->mnHeight, rReadAcc.Height() ); nY < nHeight; nY++ )
+        for( long nY = 0, nHeight = std::min( mpBuffer->mnHeight, rReadAcc.Height() ); nY < nHeight; nY++ )
             CopyScanline( nY, rReadAcc );
 }
 

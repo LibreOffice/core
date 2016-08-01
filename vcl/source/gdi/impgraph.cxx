@@ -939,7 +939,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
         sal_Int32 nMapMode, nScaleNumX, nScaleDenomX;
         sal_Int32 nScaleNumY, nScaleDenomY, nOffsX, nOffsY;
 
-        rIStm.SeekRel( -4L );
+        rIStm.SeekRel( -4 );
 
         sal_Int32 nLen;
         rIStm.ReadInt32( nType ).ReadInt32( nLen ).ReadInt32( nWidth ).ReadInt32( nHeight );
@@ -947,7 +947,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
         rIStm.ReadInt32( nScaleDenomY ).ReadInt32( nOffsX ).ReadInt32( nOffsY );
 
         // swapped
-        if( nType > 100L )
+        if( nType > 100 )
         {
             nType = OSL_SWAPDWORD( nType );
             nWidth = OSL_SWAPDWORD( nWidth );

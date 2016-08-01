@@ -39,7 +39,7 @@ break
 #define DOUBLE_SCANLINES()                                                      \
 while( ( nActY < nHeight1 ) && ( pMapY[ nActY + 1 ] == nMapY ) )                \
 {                                                                               \
-    memcpy( pDstScanMap[ nActY + 1L ], pDstScan, rDstBuffer.mnScanlineSize );   \
+    memcpy( pDstScanMap[ nActY + 1 ], pDstScan, rDstBuffer.mnScanlineSize );   \
     nActY++;                                                                    \
 }
 
@@ -49,15 +49,15 @@ static long ImplIndexFromColor( const BitmapColor& rCol )
 {
 #if TC_TO_PAL_COLORS == 4096
 
-    return( ( ( (long) rCol.GetBlue() >> 4L) << 8L ) |
-            ( ( (long) rCol.GetGreen() >> 4L ) << 4L ) |
-            ( (long) rCol.GetRed() >> 4L ) );
+    return( ( ( (long) rCol.GetBlue() >> 4) << 8 ) |
+            ( ( (long) rCol.GetGreen() >> 4 ) << 4 ) |
+            ( (long) rCol.GetRed() >> 4 ) );
 
 #elif TC_TO_PAL_COLORS == 32768
 
-    return( ( ( (long) rCol.GetBlue() >> 3L) << 10L ) |
-            ( ( (long) rCol.GetGreen() >> 3L ) << 5L ) |
-            ( (long) rCol.GetRed() >> 3L ) );
+    return( ( ( (long) rCol.GetBlue() >> 3) << 10 ) |
+            ( ( (long) rCol.GetGreen() >> 3 ) << 5 ) |
+            ( (long) rCol.GetRed() >> 3 ) );
 
 #endif
 }
@@ -88,7 +88,7 @@ static void ImplPALToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuff
         long nMapY = pMapY[nActY];
         Scanline pSrcScan(pSrcScanMap[nMapY]), pDstScan(pDstScanMap[nActY]);
 
-        for (long nX = 0L; nX < rDstBuffer.mnWidth; ++nX)
+        for (long nX = 0; nX < rDstBuffer.mnWidth; ++nX)
             pFncSetPixel( pDstScan, nX, pColMapBuf[ pFncGetPixel( pSrcScan, pMapX[ nX ], rSrcMask ).GetIndex() ], rDstMask );
 
         DOUBLE_SCANLINES();
@@ -115,7 +115,7 @@ static void ImplPALToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
             long nMapY = pMapY[nActY];
             Scanline pSrcScan(pSrcScanMap[nMapY]), pDstScan(pDstScanMap[nActY]);
 
-            for (long nX = 0L; nX < rDstBuffer.mnWidth;)
+            for (long nX = 0; nX < rDstBuffer.mnWidth;)
             {
                 nMapX = pMapX[ nX ];
                 pFncSetPixel( pDstScan, nX++,
@@ -135,7 +135,7 @@ static void ImplPALToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
             long nMapY = pMapY[nActY];
             Scanline pSrcScan(pSrcScanMap[nMapY]), pDstScan(pDstScanMap[nActY]);
 
-            for (long nX = 0L; nX < rDstBuffer.mnWidth;)
+            for (long nX = 0; nX < rDstBuffer.mnWidth;)
             {
                 nMapX = pMapX[ nX ];
                 pFncSetPixel( pDstScan, nX++,
@@ -153,7 +153,7 @@ static void ImplPALToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
             long nMapY = pMapY[nActY];
             Scanline pSrcScan(pSrcScanMap[nMapY]), pDstScan(pDstScanMap[nActY]);
 
-            for (long nX = 0L; nX < rDstBuffer.mnWidth; ++nX)
+            for (long nX = 0; nX < rDstBuffer.mnWidth; ++nX)
                 pFncSetPixel( pDstScan, nX, pColBuf[ pSrcScan[ pMapX[ nX ] ] ], rDstMask );
 
             DOUBLE_SCANLINES();
@@ -166,7 +166,7 @@ static void ImplPALToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
             long nMapY = pMapY[nActY];
             Scanline pSrcScan(pSrcScanMap[nMapY]), pDstScan(pDstScanMap[nActY]);
 
-            for (long nX = 0L; nX < rDstBuffer.mnWidth; ++nX)
+            for (long nX = 0; nX < rDstBuffer.mnWidth; ++nX)
                 pFncSetPixel( pDstScan, nX, pColBuf[ pFncGetPixel( pSrcScan, pMapX[ nX ], rSrcMask ).GetIndex() ], rDstMask );
 
             DOUBLE_SCANLINES();
@@ -192,7 +192,7 @@ static void ImplTCToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer
             long nMapY = pMapY[nActY];
             Scanline pSrcScan(pSrcScanMap[nMapY]), pDstScan(pDstScanMap[nActY]);
 
-            for (long nX = 0L; nX < rDstBuffer.mnWidth; ++nX)
+            for (long nX = 0; nX < rDstBuffer.mnWidth; ++nX)
             {
                 aCol.SetBlue( *( pPixel = ( pSrcScan + pMapX[ nX ] * 3 ) )++ );
                 aCol.SetGreen( *pPixel++ );
@@ -210,7 +210,7 @@ static void ImplTCToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer
             long nMapY = pMapY[nActY];
             Scanline pSrcScan(pSrcScanMap[nMapY]), pDstScan(pDstScanMap[nActY]);
 
-            for (long nX = 0L; nX < rDstBuffer.mnWidth; ++nX)
+            for (long nX = 0; nX < rDstBuffer.mnWidth; ++nX)
                 pFncSetPixel( pDstScan, nX, pFncGetPixel( pSrcScan, pMapX[ nX ], rSrcMask ), rDstMask );
 
             DOUBLE_SCANLINES();
@@ -248,7 +248,7 @@ static void ImplTCToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
         long nMapY = pMapY[nActY];
         Scanline pSrcScan(pSrcScanMap[nMapY]), pDstScan(pDstScanMap[nActY]);
 
-        for (long nX = 0L; nX < rDstBuffer.mnWidth; ++nX)
+        for (long nX = 0; nX < rDstBuffer.mnWidth; ++nX)
         {
             aIndex.SetIndex( pColToPalMap[ ImplIndexFromColor( pFncGetPixel( pSrcScan, pMapX[ nX ], rSrcMask ) ) ] );
             pFncSetPixel( pDstScan, nX, aIndex, rDstMask );
@@ -404,12 +404,12 @@ BitmapBuffer* StretchAndConvert(
     {
         const double fFactorX = (double)rTwoRect.mnSrcWidth / pDstBuffer->mnWidth;
 
-        for (long i = 0L; i < pDstBuffer->mnWidth; ++i)
+        for (long i = 0; i < pDstBuffer->mnWidth; ++i)
             pMapX[ i ] = rTwoRect.mnSrcX + static_cast<int>( i * fFactorX );
     }
     else
     {
-        for (long i = 0L, nTmp = rTwoRect.mnSrcX ; i < pDstBuffer->mnWidth; ++i)
+        for (long i = 0, nTmp = rTwoRect.mnSrcX ; i < pDstBuffer->mnWidth; ++i)
             pMapX[ i ] = nTmp++;
     }
 
@@ -418,12 +418,12 @@ BitmapBuffer* StretchAndConvert(
     {
         const double fFactorY = (double)rTwoRect.mnSrcHeight / pDstBuffer->mnHeight;
 
-        for (long i = 0L; i < pDstBuffer->mnHeight; ++i)
+        for (long i = 0; i < pDstBuffer->mnHeight; ++i)
             pMapY[ i ] = rTwoRect.mnSrcY + static_cast<int>( i * fFactorY );
     }
     else
     {
-        for (long i = 0L, nTmp = rTwoRect.mnSrcY; i < pDstBuffer->mnHeight; ++i)
+        for (long i = 0, nTmp = rTwoRect.mnSrcY; i < pDstBuffer->mnHeight; ++i)
             pMapY[ i ] = nTmp++;
     }
 
@@ -441,7 +441,7 @@ BitmapBuffer* StretchAndConvert(
         nOffset = -rSrcBuffer.mnScanlineSize;
     }
 
-    for (long i = 0L; i < rSrcBuffer.mnHeight; i++, pTmpScan += nOffset)
+    for (long i = 0; i < rSrcBuffer.mnHeight; i++, pTmpScan += nOffset)
         pSrcScan[ i ] = pTmpScan;
 
     // destination scanline buffer
@@ -456,7 +456,7 @@ BitmapBuffer* StretchAndConvert(
         nOffset = -pDstBuffer->mnScanlineSize;
     }
 
-    for (long i = 0L; i < pDstBuffer->mnHeight; i++, pTmpScan += nOffset)
+    for (long i = 0; i < pDstBuffer->mnHeight; i++, pTmpScan += nOffset)
         pDstScan[ i ] = pTmpScan;
 
     // do buffer scaling and conversion
