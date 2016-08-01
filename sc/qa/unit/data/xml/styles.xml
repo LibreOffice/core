@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<office:styles xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0">
+  <style:style style:name="Name1" style:family="table-cell" style:parent-style-name="Text">
+    <style:table-cell-properties fo:background-color="#feffcc" fo:border="0.06pt dotted #ffcc12"/>
+  </style:style>
+  <style:style style:name="Name2" style:family="table-cell" style:parent-style-name="Text">
+    <style:table-cell-properties fo:border-top="0.74pt fine-dashed #ffee11" fo:border-bottom="1.74pt double-thin #aeee11" fo:border-left="0.74pt none #11ee11" fo:border-right="0.22pt dash-dot-dot #05ee11"/>
+  </style:style>
+  <style:style style:name="Name3" style:family="table-cell" style:parent-style-name="Text">
+    <style:table-cell-properties fo:diagonal-bl-tr="1.74pt dashed #ffccee" fo:diagonal-tl-br="0.74pt dash-dot #120000" fo:border-left="none" fo:border-right="0.74pt dotted #000000"/>
+  </style:style>
+  <style:style style:name="Name4" style:family="table-cell" style:parent-style-name="Text">
+    <style:table-cell-properties fo:border-top="0.74pt double-border #000000" fo:border-bottom="none" fo:border-left="0.74pt solid #000000" fo:border-right="0.74pt dotted #000000"/>
+  </style:style>
+  <style:style style:name="Name5" style:family="table-cell" style:parent-style-name="Text">
+    <style:table-cell-properties style:cell-protect="hidden-and-protected" style:print-content="true"/>
+  </style:style>
+  <style:style style:name="Name6" style:family="table-cell" style:parent-style-name="Text">
+    <style:table-cell-properties style:cell-protect="protected formula-hidden" style:print-content="false"/>
+  </style:style>
+  <style:style style:name="Name7" style:family="table-cell" style:parent-style-name="Text">
+    <style:table-cell-properties style:cell-protect="none" style:print-content="true"/>
+  </style:style>
+  <style:style style:name="Name8" style:family="table-cell" style:parent-style-name="Text">
+    <style:text-properties style:font-name="Liberation Sans" style:text-underline-style="solid" fo:font-size="24pt" fo:color="#808080" fo:font-style="italic" style:text-underline-color="font-color" fo:font-weight="bold" style:text-underline-width="thick"/>
+  </style:style>
+  <style:style style:name="Name9" style:family="table-cell" style:parent-style-name="Text">
+    <style:text-properties style:font-name="Tahoma" style:text-underline-style="dash" fo:font-size="00pt" style:text-underline-color="#1856ff" fo:font-weight="bold" style:text-underline-width="bold"/>
+  </style:style>
+  <style:style style:name="Name20" style:family="table-cell" style:parent-style-name="Default">
+    <style:text-properties style:text-line-through-style="solid" style:text-line-through-type="single"/>
+  </style:style>
+  <style:style style:name="Name21" style:family="table-cell" style:parent-style-name="Default">
+    <style:text-properties style:text-line-through-style="solid" style:text-line-through-type="single" style:text-line-through-width="bold"/>
+  </style:style>
+  <style:style style:name="Name22" style:family="table-cell" style:parent-style-name="Default">
+    <style:text-properties style:text-line-through-style="solid" style:text-line-through-type="single" style:text-line-through-text="/"/>
+  </style:style>
+  <style:style style:name="Name23" style:family="table-cell" style:parent-style-name="Text">
+    <style:table-cell-properties style:vertical-align="middle"/>
+    <style:paragraph-properties fo:text-align="start"/>
+  </style:style>
+</office:styles>
