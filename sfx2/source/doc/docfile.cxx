@@ -1008,8 +1008,16 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                             // See http://tools.ietf.org/html/rfc4918#section-14.17 for details
                             LockFileEntry aLockData;
                             aLockData[LockFileComponent::OOOUSERNAME] = "Unknown user";
+                            // This solution works right when the LO user name and the WebDAV user
+                            // name are the same.
+                            // A better thing to do would be to obtain the 'real' WebDAV user name,
+                            // but that's not possible from a WebDAV UCP provider client.
+                            LockFileEntry aOwnData = svt::LockFileCommon::GenerateOwnEntry();
+                            // use the current LO user name as the system name
+                            aLockData[LockFileComponent::SYSUSERNAME] = aOwnData[LockFileComponent::SYSUSERNAME];
 
                             uno::Sequence< css::ucb::Lock >  aLocks;
+                            // getting the property, send a PROPFIND to the server over the net
                             if( aContentToLock.getPropertyValue( "DAV:lockdiscovery" )  >>= aLocks )
                             {
                                 // got at least a lock, show the owner of the first lock returned
@@ -1017,13 +1025,6 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                                 OUString aOwner;
                                 if(aLock.Owner >>= aOwner)
                                 {
-                                    // This solution works right when the LO user name and the WebDAV user
-                                    // name are the same.
-                                    // A better thing to do would be to obtain the 'real' WebDAV user name,
-                                    // but that's not possible from a WebDAV UCP provider client.
-                                    LockFileEntry aOwnData = svt::LockFileCommon::GenerateOwnEntry();
-                                    // use the current LO user name as the system name
-                                    aLockData[LockFileComponent::SYSUSERNAME] = aOwnData[LockFileComponent::SYSUSERNAME];
                                     // we need to display the WebDAV user name owning the lock, not the local one
                                     aLockData[LockFileComponent::OOOUSERNAME] = aOwner;
                                 }
