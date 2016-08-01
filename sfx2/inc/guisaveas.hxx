@@ -63,7 +63,7 @@ public:
                     css::uno::Sequence< css::beans::PropertyValue >& aArgsSequence,
                     bool bPreselectPassword,
                     const OUString& aUserSelectedName,
-                    SignatureState nDocumentSignatureState = SignatureState::NOSIGNATURES );
+                    SignatureState nDocumentSignatureState );
 
     static bool CheckFilterOptionsAppearence(
                     const css::uno::Reference< css::container::XNameAccess >& xFilterCFG,
