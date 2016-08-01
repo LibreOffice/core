@@ -99,8 +99,7 @@ uno::Sequence< OUString > SIDEModel::getSupportedServiceNames() throw( uno::Runt
 
 uno::Sequence< OUString > SIDEModel::getSupportedServiceNames_Static()
 {
-    uno::Sequence< OUString > aRet { "com.sun.star.script.BasicIDE" };
-    return aRet;
+    return { "com.sun.star.script.BasicIDE" };
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SIDEModel_createInstance(

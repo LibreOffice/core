@@ -231,8 +231,7 @@ sal_Bool CanvasFactory::supportsService( OUString const & serviceName )
 Sequence<OUString> CanvasFactory::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
-    OUString name("com.sun.star.rendering.CanvasFactory");
-    return Sequence<OUString>(&name, 1);
+    return { "com.sun.star.rendering.CanvasFactory" };
 }
 
 // XMultiComponentFactory

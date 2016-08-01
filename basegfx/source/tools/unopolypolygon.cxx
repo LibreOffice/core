@@ -448,9 +448,7 @@ namespace unotools
 
     uno::Sequence< OUString > SAL_CALL UnoPolyPolygon::getSupportedServiceNames()  throw( uno::RuntimeException, std::exception )
     {
-        uno::Sequence<OUString> aRet { SERVICE_NAME };
-
-        return aRet;
+        return { SERVICE_NAME };
     }
 
     B2DPolyPolygon UnoPolyPolygon::getPolyPolygon() const
