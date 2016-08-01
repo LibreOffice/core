@@ -287,8 +287,7 @@ OUString AboutDialog::GetVersionString()
         sVersion += m_sBuildStr.replaceAll("$BUILDID", sBuildId);
     }
 
-    sVersion += "\n";
-    sVersion += Application::GetHWOSConfInfo();
+    sVersion += "\n" + Application::GetHWOSConfInfo();
 
     if (EXTRA_BUILDID[0] != '\0')
     {
@@ -324,11 +323,8 @@ OUString AboutDialog::GetVersionString()
 
 OUString AboutDialog::GetCopyrightString()
 {
-    OUString aCopyrightString = m_aVendorTextStr;
-    aCopyrightString += "\n";
-
-    aCopyrightString += m_aCopyrightTextStr;
-    aCopyrightString += "\n";
+    OUString aCopyrightString  = m_aVendorTextStr + "\n"
+                               + m_aCopyrightTextStr + "\n";
 
     if (utl::ConfigManager::getProductName() == "LibreOffice")
         aCopyrightString += m_aBasedTextStr;

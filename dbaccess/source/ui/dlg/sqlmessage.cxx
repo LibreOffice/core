@@ -364,18 +364,12 @@ IMPL_LINK_NOARG_TYPED(OExceptionChainDialog, OnExceptionSelected, SvTreeListBox*
 
         if ( !aExceptionInfo.sSQLState.isEmpty() )
         {
-            sText += m_sStatusLabel;
-            sText += ": ";
-            sText += aExceptionInfo.sSQLState;
-            sText += "\n";
+            sText += m_sStatusLabel + ": " + aExceptionInfo.sSQLState + "\n";
         }
 
         if ( !aExceptionInfo.sErrorCode.isEmpty() )
         {
-            sText += m_sErrorCodeLabel;
-            sText += ": ";
-            sText += aExceptionInfo.sErrorCode;
-            sText += "\n";
+            sText += m_sErrorCodeLabel + ": " + aExceptionInfo.sErrorCode + "\n";
         }
 
         if ( !sText.isEmpty() )

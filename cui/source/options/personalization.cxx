@@ -656,8 +656,7 @@ bool getPreviewFile( const OUString& rURL, OUString *pPreviewFile, OUString *pPe
     // copy the images to the user's gallery
     OUString gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
     rtl::Bootstrap::expandMacros( gallery );
-    gallery += "/user/gallery/personas/";
-    gallery += aName + "/";
+    gallery += "/user/gallery/personas/" + aName + "/";
     osl::Directory::createPath( gallery );
 
     OUString aPreviewFile( INetURLObject( aPreviewURL ).getName() );

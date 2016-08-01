@@ -703,8 +703,7 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef& _
             sSql = "SELECT " + sSql;
             if ( !sFieldAlias.isEmpty() )
             { // always quote the alias name: there cannot be a function in it
-                sSql += " ";
-                sSql += ::dbtools::quoteName( xMetaData->getIdentifierQuoteString(), sFieldAlias );
+                sSql += " " + ::dbtools::quoteName( xMetaData->getIdentifierQuoteString(), sFieldAlias );
             }
             sSql += " FROM x";
 
@@ -1767,11 +1766,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const O
         OUString sOldCriteria = pLastEntry->GetCriteria( nLevel );
         if ( !sOldCriteria.isEmpty() )
         {
-            sCriteria = "( ";
-            sCriteria += sOldCriteria;
-            sCriteria += " OR ";
-            sCriteria += rValue;
-            sCriteria += " )";
+            sCriteria = "( " + sOldCriteria + " OR " + rValue + " )";
         }
         pLastEntry->SetCriteria( nLevel, sCriteria);
         if(nLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1))

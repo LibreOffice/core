@@ -479,8 +479,7 @@ namespace dbaui
                                 bCatalogWildcard = OTableTreeListBox::isWildcardChecked(pCatalog);
                                 if (m_bCatalogAtStart)
                                 {
-                                    sComposedName += m_pTablesList->GetEntryText( pCatalog );
-                                    sComposedName += m_sCatalogSeparator;
+                                    sComposedName += m_pTablesList->GetEntryText( pCatalog ) + m_sCatalogSeparator;
                                     if (bCatalogWildcard)
                                         sComposedName += sWildcard;
                                 }
@@ -490,14 +489,12 @@ namespace dbaui
                                         sCatalog = sWildcard;
                                     else
                                         sCatalog.clear();
-                                    sCatalog += m_sCatalogSeparator;
-                                    sCatalog += m_pTablesList->GetEntryText( pCatalog );
+                                    sCatalog += m_sCatalogSeparator + m_pTablesList->GetEntryText( pCatalog );
                                 }
                             }
                         }
                         bSchemaWildcard = OTableTreeListBox::isWildcardChecked(pSchema);
-                        sComposedName += m_pTablesList->GetEntryText( pSchema );
-                        sComposedName += sDot;
+                        sComposedName += m_pTablesList->GetEntryText( pSchema ) + sDot;
                     }
 
                     if (bSchemaWildcard)

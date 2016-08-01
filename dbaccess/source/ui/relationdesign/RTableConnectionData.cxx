@@ -272,8 +272,7 @@ bool ORelationTableConnectionData::Update()
         // build a foreign key name
         OUString sSourceName;
         xTableProp->getPropertyValue(PROPERTY_NAME) >>= sSourceName;
-        OUString sKeyName = sSourceName;
-        sKeyName += getReferencedTable()->GetTableName();
+        OUString sKeyName = sSourceName + getReferencedTable()->GetTableName();
 
         xKey->setPropertyValue(PROPERTY_NAME,makeAny(sKeyName));
         xKey->setPropertyValue(PROPERTY_TYPE,makeAny(KeyType::FOREIGN));
