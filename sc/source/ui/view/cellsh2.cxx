@@ -1005,7 +1005,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         OSL_ENSURE( pDocSh, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDocSh is null!" );
 
                         OUString aUndo = ScGlobal::GetRscString( STR_UNDO_TEXTTOCOLUMNS );
-                        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+                        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
 
                         ScImportExport aImport( pDoc, aRange.aStart );
                         ScAsciiOptions aOptions;

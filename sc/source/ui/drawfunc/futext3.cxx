@@ -83,7 +83,7 @@ void FuText::StopEditMode(bool /*bTextDirection*/)
         if(pCalcUndo)
         {
             const OUString aUndoStr = ScGlobal::GetRscString( STR_UNDO_EDITNOTE );
-            pUndoMgr->EnterListAction( aUndoStr, aUndoStr );
+            pUndoMgr->EnterListAction( aUndoStr, aUndoStr, 0 );
 
             /*  Note has been created before editing, if first undo action is
                 an insert action. Needed below to decide whether to drop the

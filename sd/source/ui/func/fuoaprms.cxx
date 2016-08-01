@@ -618,7 +618,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
         // with 'following curves', we have an additional UndoAction
         // therefore cling? here
-        pUndoMgr->EnterListAction(aComment, aComment);
+        pUndoMgr->EnterListAction(aComment, aComment, 0);
 
         // create undo group
         SdUndoGroup* pUndoGroup = new SdUndoGroup(mpDoc);

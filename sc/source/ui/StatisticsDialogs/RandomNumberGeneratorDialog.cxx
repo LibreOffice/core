@@ -289,7 +289,7 @@ void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG& randomGenerator, const 
 
     ScDocShell* pDocShell = mpViewData->GetDocShell();
     svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
-    pUndoManager->EnterListAction( aUndo, aUndo );
+    pUndoManager->EnterListAction( aUndo, aUndo, 0 );
 
     SCROW nRowStart = maInputRange.aStart.Row();
     SCROW nRowEnd   = maInputRange.aEnd.Row();

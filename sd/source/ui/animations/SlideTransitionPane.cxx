@@ -249,7 +249,7 @@ void lcl_CreateUndoForPages(
         return;
 
     OUString aComment( SdResId(STR_UNDO_SLIDE_PARAMS) );
-    pManager->EnterListAction(aComment, aComment);
+    pManager->EnterListAction(aComment, aComment, 0);
     SdUndoGroup* pUndoGroup = new SdUndoGroup( pDoc );
     pUndoGroup->SetComment( aComment );
 

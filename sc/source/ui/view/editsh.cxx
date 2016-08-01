@@ -138,7 +138,7 @@ static void lcl_RemoveAttribs( EditView& rEditView )
     pEngine->SetUpdateMode(false);
 
     OUString aName = ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );
-    pEngine->GetUndoManager().EnterListAction( aName, aName );
+    pEngine->GetUndoManager().EnterListAction( aName, aName, 0 );
 
     rEditView.RemoveAttribs(true);
     pEngine->RepeatDefaults();      // paragraph attributes from cell formats must be preserved

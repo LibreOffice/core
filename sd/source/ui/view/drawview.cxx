@@ -181,7 +181,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     // replace placeholder by template name
                     OUString aComment(SD_RESSTR(STR_UNDO_CHANGE_PRES_OBJECT));
                     aComment = aComment.replaceFirst("$", SD_RESSTR(STR_PSEUDOSHEET_OUTLINE));
-                    mpDocSh->GetUndoManager()->EnterListAction( aComment, OUString() );
+                    mpDocSh->GetUndoManager()->EnterListAction( aComment, OUString(), 0 );
 
                     std::vector<Paragraph*> aSelList;
                     pOV->CreateSelectionList(aSelList);
@@ -545,7 +545,7 @@ void DrawView::DeleteMarked()
     {
         OUString aUndo(SVX_RESSTR(STR_EditDelete));
         aUndo = aUndo.replaceFirst("%1", GetDescriptionOfMarkedObjects());
-        pUndoManager->EnterListAction(aUndo, aUndo);
+        pUndoManager->EnterListAction(aUndo, aUndo, 0);
     }
 
     SdPage* pPage = nullptr;

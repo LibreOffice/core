@@ -2044,7 +2044,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
 
     ::svl::IUndoManager* pMgr = GetViewData().GetDocShell()->GetUndoManager();
     OUString aUndo = ScGlobal::GetRscString( STR_UNDO_DOOUTLINE );
-    pMgr->EnterListAction( aUndo, aUndo );
+    pMgr->EnterListAction( aUndo, aUndo, 0 );
 
     OUString aNewTabName;
     pDoc->CreateValidTabName(aNewTabName);

@@ -488,7 +488,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     if( mpDocSh )
     {
         pUndoMgr = mpDocSh->GetUndoManager();
-        pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_INSERTPAGES), "");
+        pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_INSERTPAGES), "", 0);
     }
 
     // Refactored copy'n'pasted layout name collection into IterateBookmarkPages
@@ -1426,7 +1426,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
     if (bUndo)
     {
-        pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_SET_PRESLAYOUT), OUString());
+        pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_SET_PRESLAYOUT), OUString(), 0);
     }
 
     SdPage* pSelectedPage   = GetSdPage(nSdPageNum, PK_STANDARD);

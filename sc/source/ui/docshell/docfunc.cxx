@@ -1799,7 +1799,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     std::vector<ScRange> qIncreaseRange;
     OUString aUndo = ScGlobal::GetRscString( STR_UNDO_INSERTCELLS );
     if (bRecord)
-        rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo );
+        rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
 
     itr = aMark.begin();
     for (; itr != itrEnd && nTabCount; ++itr)
@@ -2226,7 +2226,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     bool bDeletingMerge = false;
     OUString aUndo = ScGlobal::GetRscString( STR_UNDO_DELETECELLS );
     if (bRecord)
-        rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo );
+        rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
 
     itr = aMark.begin();
     for (; itr != itrEnd && *itr < nTabCount; ++itr)
@@ -5201,7 +5201,7 @@ bool ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
         OUString aUndo = ScGlobal::GetRscString( STR_UNDO_RESIZEMATRIX );
         bool bUndo(rDoc.IsUndoEnabled());
         if (bUndo)
-            rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo );
+            rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
 
         aFormula = aFormula.copy(1, aFormula.getLength()-2);
 
@@ -5257,7 +5257,7 @@ bool ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilter,
                 {
                     // group all remove and the insert action
                     OUString aUndo = ScGlobal::GetRscString( STR_UNDO_INSERTAREALINK );
-                    rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo );
+                    rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
                 }
 
                 ScAreaLink* pOldArea = static_cast<ScAreaLink*>(pBase);
@@ -5455,7 +5455,7 @@ void ScDocFunc::ConvertFormulaToValue( const ScRange& rRange, bool bRecord, bool
 void ScDocFunc::EnterListAction( sal_uInt16 nNameResId )
 {
     OUString aUndo( ScGlobal::GetRscString( nNameResId ) );
-    rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo );
+    rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
 }
 
 void ScDocFunc::EndListAction()
