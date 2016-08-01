@@ -289,7 +289,7 @@ void FileDialogHelper_Impl::handleControlStateChanged( const FilePickerEvent& aE
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_PREVIEW:
-            updatePreviewState();
+            updatePreviewState(true);
             break;
     }
 }

@@ -95,7 +95,7 @@ public:
     void                    ClearCache();
 
     void                    SetState( SfxItemState, const SfxPoolItem*, bool bMaybeDirty=false );
-    void                    SetCachedState(bool bAlways = false);
+    void                    SetCachedState(bool bAlways);
     void                    Invalidate( bool bWithSlot );
     void                    SetVisibleState( bool bShow=true );
 
