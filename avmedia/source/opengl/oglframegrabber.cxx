@@ -63,8 +63,7 @@ sal_Bool SAL_CALL OGLFrameGrabber::supportsService( const OUString& rServiceName
 uno::Sequence< OUString > SAL_CALL OGLFrameGrabber::getSupportedServiceNames()
         throw ( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aRet { "com.sun.star.media.FrameGrabber_OpenGL" };
-    return aRet;
+    return { "com.sun.star.media.FrameGrabber_OpenGL" };
 }
 
 } // namespace ogl

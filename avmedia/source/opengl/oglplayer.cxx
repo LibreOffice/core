@@ -355,8 +355,7 @@ sal_Bool SAL_CALL OGLPlayer::supportsService( const OUString& rServiceName )
 uno::Sequence< OUString > SAL_CALL OGLPlayer::getSupportedServiceNames()
      throw ( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aRet { "com.sun.star.media.Player_OpenGL" };
-    return aRet;
+    return { "com.sun.star.media.Player_OpenGL" };
 }
 
 IMPL_LINK_TYPED(OGLPlayer,TimerHandler,Timer*,pTimer,void)

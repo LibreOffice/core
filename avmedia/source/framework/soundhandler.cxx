@@ -125,8 +125,7 @@ sal_Bool SAL_CALL SoundHandler::supportsService( const OUString& sServiceName ) 
 // XServiceInfo
 css::uno::Sequence< OUString > SAL_CALL SoundHandler::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
 {
-    css::uno::Sequence<OUString> seqServiceNames { "com.sun.star.frame.ContentHandler" };
-    return seqServiceNames;
+    return { "com.sun.star.frame.ContentHandler" };
 }
 
 /*-************************************************************************************************************

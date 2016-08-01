@@ -120,9 +120,7 @@ sal_Bool SAL_CALL FrameGrabber::supportsService( const ::rtl::OUString& ServiceN
 uno::Sequence< ::rtl::OUString > SAL_CALL FrameGrabber::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aRet { AVMEDIA_MACAVF_FRAMEGRABBER_SERVICENAME };
-
-    return aRet;
+    return { AVMEDIA_MACAVF_FRAMEGRABBER_SERVICENAME };
 }
 
 } // namespace macavf

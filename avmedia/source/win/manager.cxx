@@ -72,9 +72,7 @@ sal_Bool SAL_CALL Manager::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL Manager::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
-    uno::Sequence<OUString> aRet { AVMEDIA_WIN_MANAGER_SERVICENAME };
-
-    return aRet;
+    return { AVMEDIA_WIN_MANAGER_SERVICENAME };
 }
 
 } // namespace win

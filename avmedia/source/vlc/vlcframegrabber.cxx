@@ -126,8 +126,7 @@ sal_Bool SAL_CALL VLCFrameGrabber::supportsService( const ::rtl::OUString& servi
 ::uno::Sequence< ::rtl::OUString > SAL_CALL VLCFrameGrabber::getSupportedServiceNames()
         throw ( css::uno::RuntimeException, std::exception )
 {
-    ::uno::Sequence< OUString > aRet { AVMEDIA_VLC_GRABBER_SERVICENAME };
-    return aRet;
+    return { AVMEDIA_VLC_GRABBER_SERVICENAME };
 }
 
 }

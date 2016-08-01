@@ -53,8 +53,7 @@ sal_Bool SAL_CALL OGLManager::supportsService( const OUString& rServiceName )
 uno::Sequence< OUString > SAL_CALL OGLManager::getSupportedServiceNames()
         throw ( uno::RuntimeException, std::exception )
 {
-    ::uno::Sequence< OUString > aRet { "com.sun.star.media.Manager_OpenGL" };
-    return aRet;
+    return { "com.sun.star.media.Manager_OpenGL" };
 }
 
 } // namespace ogl
