@@ -812,7 +812,7 @@ void FormulaCompiler::InitSymbolsPODF() const
     static OpCodeMapData aMap;
     osl::MutexGuard aGuard(&aMap.maMtx);
     if (!aMap.mxSymbolMap)
-        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH, FormulaGrammar::GRAM_PODF, aMap.mxSymbolMap, RESOURCE_BASE);
+        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF, FormulaGrammar::GRAM_PODF, aMap.mxSymbolMap, RESOURCE_BASE);
     mxSymbolsPODF = aMap.mxSymbolMap;
 }
 
