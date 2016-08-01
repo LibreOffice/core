@@ -906,8 +906,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
                     if (aUserSuppliedName+extn == childNodes[index]->getName())
                     {
                         bValid = false;
-                        OUString aError( m_createErrStr );
-                        aError += m_createDupStr;
+                        OUString aError = m_createErrStr  + m_createDupStr;
                         ScopedVclPtrInstance< MessageDialog > aErrorBox(static_cast<vcl::Window*>(this), aError);
                         aErrorBox->SetText( m_createErrTitleStr );
                         aErrorBox->Execute();
@@ -1241,18 +1240,12 @@ OUString FormatErrorString(
 
     if ( !type.isEmpty() )
     {
-        result += "\n\n" +
-                  OUString(CUI_RES(RID_SVXSTR_ERROR_TYPE_LABEL)) +
-                  " " +
-                  type;
+        result += "\n\n" + OUString(CUI_RES(RID_SVXSTR_ERROR_TYPE_LABEL)) + " " + type;
     }
 
     if ( !message.isEmpty() )
     {
-        result += "\n\n" +
-                  OUString(CUI_RES(RID_SVXSTR_ERROR_MESSAGE_LABEL)) +
-                  " " +
-                  message;
+        result += "\n\n" + OUString(CUI_RES(RID_SVXSTR_ERROR_MESSAGE_LABEL)) + " " + message;
     }
 
     return result;
@@ -1380,8 +1373,7 @@ OUString GetErrorMessage(
 OUString GetErrorMessage( const RuntimeException& re )
 {
     Type t = cppu::UnoType<decltype(re)>::get();
-    OUString message = t.getTypeName();
-    message += re.Message;
+    OUString message = t.getTypeName() + re.Message;
 
     return message;
 }
@@ -1389,9 +1381,7 @@ OUString GetErrorMessage( const RuntimeException& re )
 OUString GetErrorMessage( const Exception& e )
 {
     Type t = cppu::UnoType<decltype(e)>::get();
-    OUString message = t.getTypeName();
-    message += e.Message;
-
+    OUString message = t.getTypeName() + e.Message;
     return message;
 }
 

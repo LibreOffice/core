@@ -108,8 +108,7 @@ namespace
         OUString sRet;
         if ( _bQuote && !_sAliasName.isEmpty() )
         {
-            sRet = ::dbtools::quoteName(_sQuote,_sAliasName);
-            sRet += ".";
+            sRet = ::dbtools::quoteName(_sQuote,_sAliasName) + ".";
         }
         return sRet;
     }
@@ -408,12 +407,10 @@ namespace
                 aErg += " FULL OUTER ";
                 break;
         }
-        aErg += "JOIN ";
-        aErg += rRh;
+        aErg += "JOIN " + rRh;
         if ( CROSS_JOIN != pData->GetJoinType() && !pData->isNatural() )
         {
-            aErg += " ON ";
-            aErg += BuildJoinCriteria(_xConnection,&pData->GetConnLineDataList(),pData);
+            aErg += " ON " + BuildJoinCriteria(_xConnection,&pData->GetConnLineDataList(),pData);
         }
 
         return aErg;
@@ -776,10 +773,7 @@ namespace
                             if ( pEntryField->isAggreateFunction() )
                             {
                                 OSL_ENSURE(!pEntryField->GetFunction().isEmpty(),"No function name for aggregate given!");
-                                aHavingStr += pEntryField->GetFunction();
-                                aHavingStr += "(";              // bracket
-                                aHavingStr += aWork;
-                                aHavingStr += ")";             // bracket
+                                aHavingStr += pEntryField->GetFunction() + "(" + aWork + ")";       // bracket
                             }
                             else
                                 aHavingStr += aWork;
@@ -941,12 +935,9 @@ namespace
                     }
                     else
                     {
-                        aWorkStr += quoteTableAlias(bMulti,pEntryField->GetAlias(),aQuote);
-                        aWorkStr += ::dbtools::quoteName(aQuote, aColumnName);
+                        aWorkStr += quoteTableAlias(bMulti,pEntryField->GetAlias(),aQuote) + ::dbtools::quoteName(aQuote, aColumnName);
                     }
-                    aWorkStr += " ";
-                    aWorkStr += OUString( ";ASC;DESC" ).getToken( (sal_uInt16)eOrder, ';' );
-                    aWorkStr += ",";
+                    aWorkStr += " " + OUString( ";ASC;DESC" ).getToken( (sal_uInt16)eOrder, ';' ) + ",";
                 }
             }
 
@@ -1002,8 +993,7 @@ namespace
 
         if(_rTableNames.insert(sTabName).second)
         {
-            _rsTableListStr += sTabName;
-            _rsTableListStr += ",";
+            _rsTableListStr += sTabName + ",";
         }
     }
     OUString GenerateFromClause( const Reference< XConnection>& _xConnection,
@@ -1113,8 +1103,7 @@ namespace
             const OQueryTableWindow* pEntryTab = static_cast<const OQueryTableWindow*>(aTabIter->second.get());
             if(!pEntryTab->ExistsAConn())
             {
-                aTableListStr += BuildTable(_xConnection,pEntryTab);
-                aTableListStr += ",";
+                aTableListStr += BuildTable(_xConnection,pEntryTab) + ",";
             }
         }
 
@@ -1174,16 +1163,14 @@ namespace
                     if ( aGroupByNames.find(sGroupByPart) == aGroupByNames.end() )
                     {
                         aGroupByNames.insert(::std::map< OUString,bool>::value_type(sGroupByPart,true));
-                        aGroupByStr += sGroupByPart;
-                        aGroupByStr += ",";
+                        aGroupByStr += sGroupByPart + ",";
                     }
                 }
             }
             if ( !aGroupByStr.isEmpty() )
             {
                 aGroupByStr = aGroupByStr.replaceAt(aGroupByStr.getLength()-1,1, OUString(' ') );
-                OUString aGroupByStr2(" GROUP BY ");
-                aGroupByStr2 += aGroupByStr;
+                OUString aGroupByStr2 = " GROUP BY " + aGroupByStr;
                 aGroupByStr = aGroupByStr2;
             }
         }
@@ -2736,8 +2723,7 @@ void OQueryDesignView::fillValidFields(const OUString& sAliasName, ComboBox* pFi
         OQueryTableWindow* pCurrentWin = static_cast<OQueryTableWindow*>(aIter->second.get());
         if (bAllTables || (pCurrentWin->GetAliasName() == sAliasName))
         {
-            strCurrentPrefix = pCurrentWin->GetAliasName();
-            strCurrentPrefix += ".";
+            strCurrentPrefix = pCurrentWin->GetAliasName() + ".";
 
             pCurrentWin->EnumValidFields(aFields);
 
@@ -2853,8 +2839,7 @@ OUString OQueryDesignView::getStatement()
         OUString aTmp = "( " + aJoinCrit + " )";
         if(!aCriteriaListStr.isEmpty())
         {
-            aTmp += C_AND;
-            aTmp += aCriteriaListStr.makeStringAndClear();
+            aTmp += C_AND + aCriteriaListStr.makeStringAndClear();
         }
         aCriteriaListStr = aTmp;
     }
@@ -3019,10 +3004,7 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(const OTableFieldDesc
         {
             // first try the international version
             OUString sSql;
-            sSql += "SELECT * ";
-            sSql += " FROM x WHERE ";
-            sSql += pEntry->GetField();
-            sSql += _sCriteria;
+            sSql += "SELECT * FROM x WHERE " + pEntry->GetField() + _sCriteria;
             std::unique_ptr<OSQLParseNode> pParseNode( rParser.parseTree( _rsErrorMessage, sSql, true ) );
             nType = DataType::DOUBLE;
             if ( pParseNode.get() )

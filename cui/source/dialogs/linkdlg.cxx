@@ -639,16 +639,12 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uLong nPos, bool 
         // filename not in string
         aTxt = aFileName;
 
-    aEntry = aTxt;
-    aEntry += "\t";
+    aEntry = aTxt + "\t";
     if( OBJECT_CLIENT_GRF == rLink.GetObjType() )
         aEntry += sFilter;
     else
         aEntry += sLinkNm;
-    aEntry += "\t";
-    aEntry += sTypeNm;
-    aEntry += "\t";
-    aEntry += ImplGetStateStr( rLink );
+    aEntry += "\t" + sTypeNm + "\t" + ImplGetStateStr( rLink );
 
     SvTreeListEntry * pE = m_pTbLinks->InsertEntryToColumn( aEntry, nPos );
     pE->SetUserData( const_cast<SvBaseLink *>(&rLink) );

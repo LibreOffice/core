@@ -99,8 +99,7 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
     if ( !(sLocation.isEmpty() || sMediaType.isEmpty()) )
     {
         ::dbaccess::ODsnTypeCollection aTypeCollection(rImport.GetComponentContext());
-        OUString sURL(aTypeCollection.getDatasourcePrefixFromMediaType(sMediaType,sFileTypeExtension));
-        sURL += sLocation;
+        OUString sURL = aTypeCollection.getDatasourcePrefixFromMediaType(sMediaType,sFileTypeExtension)  + sLocation;
         try
         {
             xDataSource->setPropertyValue(PROPERTY_URL,makeAny(sURL));
