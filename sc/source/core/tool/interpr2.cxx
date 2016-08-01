@@ -1814,26 +1814,37 @@ void ScInterpreter::ScVDB()
             }
             else
             {
-
-                double fTimeLength1=fTimeLength;
-
-                //@ The question of all questions: 'Is this right'
-                if(!::rtl::math::approxEqual(fStart,::rtl::math::approxFloor(fStart)))
+                double fPart = 0.0;
+                // respect partial period in the Beginning / End:
+                if ( !::rtl::math::approxEqual( fStart, fIntStart ) ||
+                     !::rtl::math::approxEqual( fEnd, fIntEnd ) )
                 {
-                    if(fFactor>1)
+                    if ( !::rtl::math::approxEqual( fStart, fIntStart ) )
                     {
-                        if(fStart>fTimeLength/2 || ::rtl::math::approxEqual(fStart,fTimeLength/2))
-                        {
-                            double fPart=fStart-fTimeLength/2;
-                            fStart=fTimeLength/2;
-                            fEnd-=fPart;
-                            fTimeLength1+=1;
-                        }
+                        // part to be subtracted at the beginning
+                        double fTempIntEnd = fIntStart + 1.0;
+                        double fTempValue = fValue -
+                            ScInterVDB( fValue, fRest, fTimeLength, fTimeLength, fIntStart, fFactor );
+                        fPart += ( fStart - fIntStart ) *
+                            ScInterVDB( fTempValue, fRest, fTimeLength, fTimeLength - fIntStart,
+                            fTempIntEnd - fIntStart, fFactor);
+                    }
+                    if ( !::rtl::math::approxEqual( fEnd, fIntEnd ) )
+                    {
+                        // part to be subtracted at the end
+                        double fTempIntStart = fIntEnd - 1.0;
+                        double fTempValue = fValue -
+                            ScInterVDB( fValue, fRest, fTimeLength, fTimeLength, fTempIntStart, fFactor );
+                        fPart += ( fIntEnd - fEnd ) *
+                            ScInterVDB( fTempValue, fRest, fTimeLength, fTimeLength - fTempIntStart,
+                            fIntEnd - fTempIntStart, fFactor);
                     }
                 }
-
-                fValue-=ScInterVDB(fValue,fRest,fTimeLength,fTimeLength1,fStart,fFactor);
-                fVdb=ScInterVDB(fValue,fRest,fTimeLength,fTimeLength-fStart,fEnd-fStart,fFactor);
+                // calculate depreciation for whole periods
+                fValue -= ScInterVDB( fValue, fRest, fTimeLength, fTimeLength, fIntStart, fFactor );
+                fVdb = ScInterVDB( fValue, fRest, fTimeLength, fTimeLength - fIntStart,
+                    fIntEnd - fIntStart, fFactor);
+                fVdb -= fPart;
             }
         }
         PushDouble(fVdb);
