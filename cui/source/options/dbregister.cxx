@@ -387,9 +387,7 @@ IMPL_LINK_NOARG_TYPED(DbRegistrationOptionsPage, PathSelect_Impl, SvTreeListBox*
 
 void DbRegistrationOptionsPage::insertNewEntry( const OUString& _sName,const OUString& _sLocation, const bool _bReadOnly )
 {
-    OUString aStr( _sName );
-    aStr += "\t";
-    aStr += _sLocation;
+    OUString aStr = _sName  + "\t" + _sLocation;
 
     SvTreeListEntry* pEntry = nullptr;
     if ( _bReadOnly )

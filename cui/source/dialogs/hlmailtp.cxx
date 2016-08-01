@@ -155,8 +155,7 @@ OUString SvxHyperlinkMailTp::CreateAbsoluteURL() const
     {
         if ( !m_pEdSubject->GetText().isEmpty() )
         {
-            OUString aQuery("subject=");
-            aQuery += m_pEdSubject->GetText();
+            OUString aQuery = "subject=" + m_pEdSubject->GetText();
             aURL.SetParam(aQuery);
         }
     }

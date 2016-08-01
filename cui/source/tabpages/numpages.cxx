@@ -1345,8 +1345,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
             m_pLevelLB->InsertEntry( OUString::number(i));
         if(pSaveNum->GetLevelCount() > 1)
         {
-            OUString sEntry( "1 - " );
-            sEntry += OUString::number( pSaveNum->GetLevelCount() );
+            OUString sEntry = "1 - "  + OUString::number( pSaveNum->GetLevelCount() );
             m_pLevelLB->InsertEntry(sEntry);
             m_pLevelLB->SelectEntry(sEntry);
         }
@@ -2811,20 +2810,16 @@ void lcl_PrintDebugOutput(FixedText& rFixed, const SvxNumberFormat& rNumFmt)
     OUString const sHash( " # " );
     if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
-        OUString sDebugText( OUString::number( convertTwipToMm100(rNumFmt.GetAbsLSpace() ) ) );
-        sDebugText += sHash;
-        sDebugText += OUString::number( convertTwipToMm100(rNumFmt.GetCharTextDistance() ) );
-        sDebugText += sHash;
-        sDebugText += OUString::number( convertTwipToMm100(rNumFmt.GetFirstLineOffset() ) );
+        OUString sDebugText = OUString::number( convertTwipToMm100(rNumFmt.GetAbsLSpace() ) )  + sHash
+                            + OUString::number( convertTwipToMm100(rNumFmt.GetCharTextDistance() ) + sHash
+                            + OUString::number( convertTwipToMm100(rNumFmt.GetFirstLineOffset() ) );
         rFixed.SetText(sDebugText);
     }
     else if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
     {
-        OUString sDebugText( OUString::number( convertTwipToMm100(rNumFmt.GetListtabPos() ) ) );
-        sDebugText += sHash;
-        sDebugText += OUString::number( convertTwipToMm100(rNumFmt.GetFirstLineIndent() ) );
-        sDebugText += sHash;
-        sDebugText += OUString::number( convertTwipToMm100(rNumFmt.GetIndentAt() ) );
+        OUString sDebugText = OUString::number( convertTwipToMm100(rNumFmt.GetListtabPos() ) ) + sHash;
+                            + OUString::number( convertTwipToMm100(rNumFmt.GetFirstLineIndent() ) ) + sHash
+                            + OUString::number( convertTwipToMm100(rNumFmt.GetIndentAt() ) );
         rFixed.SetText(sDebugText);
     }
 
@@ -3123,8 +3118,7 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet* rSet )
             m_pLevelLB->InsertEntry( OUString::number(i) );
         if(pSaveNum->GetLevelCount() > 1)
         {
-            OUString sEntry( "1 - " );
-            sEntry += OUString::number( pSaveNum->GetLevelCount() );
+            OUString sEntry = "1 - "  + OUString::number( pSaveNum->GetLevelCount() );
             m_pLevelLB->InsertEntry(sEntry);
             m_pLevelLB->SelectEntry(sEntry);
         }

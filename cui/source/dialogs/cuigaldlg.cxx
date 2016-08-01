@@ -572,9 +572,7 @@ IMPL_LINK_NOARG_TYPED(GalleryIdDialog, ClickOkHdl, Button*, void)
         {
             OUString aStr( CUI_RES( RID_SVXSTR_GALLERY_ID_EXISTS ) );
 
-            aStr += " (";
-            aStr += pInfo->GetThemeName();
-            aStr += ")";
+            aStr += " (" + pInfo->GetThemeName() + ")";
 
             ScopedVclPtrInstance< InfoBox > aBox( this, aStr );
             aBox->Execute();
@@ -602,9 +600,7 @@ GalleryThemeProperties::GalleryThemeProperties(vcl::Window* pParent,
     if( pData->pTheme->IsReadOnly() )
         RemoveTabPage(m_nFilesPageId);
 
-    OUString aText( GetText() );
-
-    aText += pData->pTheme->GetName();
+    OUString aText =  GetText()  + pData->pTheme->GetName();
 
     if( pData->pTheme->IsReadOnly() )
         aText +=  CUI_RES( RID_SVXSTR_GALLERY_READONLY );
@@ -831,9 +827,7 @@ OUString TPGalleryThemeProperties::addExtension( const OUString& _rDisplayText, 
 
     if ( sRet.indexOf( sAllFilter ) == -1 )
     {
-        sRet += sOpenBracket;
-        sRet += _rExtension;
-        sRet += sCloseBracket;
+        sRet += sOpenBracket + _rExtension + sCloseBracket;
     }
     return sRet;
 }

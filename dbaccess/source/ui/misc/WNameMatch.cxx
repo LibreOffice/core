@@ -67,10 +67,8 @@ OWizNameMatching::OWizNameMatching( vcl::Window* pParent)
     m_pCTRL_LEFT->SetStyle( m_pCTRL_LEFT->GetStyle() | WB_FORCE_MAKEVISIBLE );
     m_pCTRL_RIGHT->SetStyle( m_pCTRL_RIGHT->GetStyle() | WB_FORCE_MAKEVISIBLE );
 
-    m_sSourceText = m_pTABLE_LEFT->GetText();
-    m_sSourceText += "\n";
-    m_sDestText   = m_pTABLE_RIGHT->GetText();
-    m_sDestText   += "\n";
+    m_sSourceText = m_pTABLE_LEFT->GetText() + "\n";
+    m_sDestText   = m_pTABLE_RIGHT->GetText() + "\n";
 }
 
 OWizNameMatching::~OWizNameMatching()
@@ -113,14 +111,12 @@ void OWizNameMatching::ActivatePage( )
 {
 
     // set source table name
-    OUString aName = m_sSourceText;
-    aName += m_pParent->m_sSourceName;
+    OUString aName = m_sSourceText + m_pParent->m_sSourceName;
 
     m_pTABLE_LEFT->SetText(aName);
 
     // set dest table name
-    aName = m_sDestText;
-    aName += m_pParent->m_sName;
+    aName = m_sDestText + m_pParent->m_sName;
     m_pTABLE_RIGHT->SetText(aName);
 
     m_pCTRL_LEFT->FillListBox(m_pParent->getSrcVector());
