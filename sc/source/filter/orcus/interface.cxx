@@ -835,7 +835,7 @@ ScOrcusStyles::protection::protection():
     mbLocked(true),
     mbPrintContent(false),
     mbFormulaHidden(false),
-    mbHasProtectionAttr(true)
+    mbHasProtectionAttr(false)
 {
 }
 
