@@ -847,9 +847,9 @@ namespace
                 const Size aDestinationSizePixel(aDestination.GetSizePixel());
                 const BitmapColor aOutside(BitmapColor(0xff, 0xff, 0xff));
 
-                for(long y(0L); y < aDestinationSizePixel.getHeight(); y++)
+                for(long y(0); y < aDestinationSizePixel.getHeight(); y++)
                 {
-                    for(long x(0L); x < aDestinationSizePixel.getWidth(); x++)
+                    for(long x(0); x < aDestinationSizePixel.getWidth(); x++)
                     {
                         const basegfx::B2DPoint aSourceCoor(rTransform * basegfx::B2DPoint(x, y));
 
@@ -1071,11 +1071,11 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                 }
                 else if(ScanlineFormat::N24BitTcBgr == xContent->GetScanlineFormat())
                 {
-                    for(sal_uInt32 y(0L); y < (sal_uInt32)xContent->Height(); y++)
+                    for(sal_uInt32 y(0); y < (sal_uInt32)xContent->Height(); y++)
                     {
                         Scanline pScan = xContent->GetScanline(y);
 
-                        for(sal_uInt32 x(0L); x < (sal_uInt32)xContent->Width(); x++)
+                        for(sal_uInt32 x(0); x < (sal_uInt32)xContent->Width(); x++)
                         {
                             const basegfx::BColor aBSource(
                                 *(pScan + 2)* fConvertColor,
@@ -1090,11 +1090,11 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                 }
                 else if(ScanlineFormat::N24BitTcRgb == xContent->GetScanlineFormat())
                 {
-                    for(sal_uInt32 y(0L); y < (sal_uInt32)xContent->Height(); y++)
+                    for(sal_uInt32 y(0); y < (sal_uInt32)xContent->Height(); y++)
                     {
                         Scanline pScan = xContent->GetScanline(y);
 
-                        for(sal_uInt32 x(0L); x < (sal_uInt32)xContent->Width(); x++)
+                        for(sal_uInt32 x(0); x < (sal_uInt32)xContent->Width(); x++)
                         {
                             const basegfx::BColor aBSource(
                                 *pScan * fConvertColor,
@@ -1109,9 +1109,9 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                 }
                 else
                 {
-                    for(sal_uInt32 y(0L); y < (sal_uInt32)xContent->Height(); y++)
+                    for(sal_uInt32 y(0); y < (sal_uInt32)xContent->Height(); y++)
                     {
-                        for(sal_uInt32 x(0L); x < (sal_uInt32)xContent->Width(); x++)
+                        for(sal_uInt32 x(0); x < (sal_uInt32)xContent->Width(); x++)
                         {
                             const BitmapColor aBMCol(xContent->GetColor(y, x));
                             const basegfx::BColor aBSource(

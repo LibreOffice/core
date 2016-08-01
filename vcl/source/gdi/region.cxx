@@ -90,7 +90,7 @@ namespace
 
         // Create a new RegionBand object as container of the bands.
         RegionBand* pRegionBand = new RegionBand();
-        long nLineId = 0L;
+        long nLineId = 0;
 
         // Iterate over all polygons.
         const sal_uInt16 nPolyCount = rPolyPoly.Count();
@@ -184,7 +184,7 @@ namespace
     */
     RegionBand* ImplGeneralPolygonToBands(const tools::PolyPolygon& rPolyPoly, const Rectangle& rPolygonBoundingBox)
     {
-        long nLineID = 0L;
+        long nLineID = 0;
 
         // initialisation and creation of Bands
         RegionBand* pRegionBand = new RegionBand();

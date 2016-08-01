@@ -474,8 +474,8 @@ void RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, long nLi
         const long  nStartY = rStartPt.Y();
         const long  nEndX = rEndPt.X();
         const long  nEndY = rEndPt.Y();
-        const long  nXInc = ( nStartX < nEndX ) ? 1L : -1L;
-        const long  nYInc = ( nStartY < nEndY ) ? 1L : -1L;
+        const long  nXInc = ( nStartX < nEndX ) ? 1 : -1;
+        const long  nYInc = ( nStartY < nEndY ) ? 1 : -1;
 
         if ( nDX >= nDY )
         {
@@ -487,7 +487,7 @@ void RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, long nLi
             {
                 InsertPoint( Point( nX, nY ), nLineId, nStartX == nX, eLineType );
 
-                if ( nD < 0L )
+                if ( nD < 0 )
                     nD += nDY2;
                 else
                 {
@@ -506,7 +506,7 @@ void RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, long nLi
             {
                 InsertPoint( Point( nX, nY ), nLineId, nStartY == nY, eLineType );
 
-                if ( nD < 0L )
+                if ( nD < 0 )
                     nD += nDY2;
                 else
                 {

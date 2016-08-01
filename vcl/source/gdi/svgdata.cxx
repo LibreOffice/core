@@ -131,7 +131,7 @@ void SvgData::ensureSequenceAndRange()
             geometry::RealRectangle2D aRealRect;
             uno::Sequence< beans::PropertyValue > aViewParameters;
 
-            for(sal_Int32 a(0L); a < nCount; a++)
+            for(sal_Int32 a(0); a < nCount; a++)
             {
                 // get reference
                 const css::uno::Reference< css::graphic::XPrimitive2D > xReference(maSequence[a]);

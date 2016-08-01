@@ -38,7 +38,7 @@
 #include "BitmapScaleConvolution.hxx"
 
 #define RGB15( _def_cR, _def_cG, _def_cB )  (((sal_uLong)(_def_cR)<<10UL)|((sal_uLong)(_def_cG)<<5UL)|(sal_uLong)(_def_cB))
-#define GAMMA( _def_cVal, _def_InvGamma )   ((sal_uInt8)MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0L,255L))
+#define GAMMA( _def_cVal, _def_InvGamma )   ((sal_uInt8)MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255))
 
 #define CALC_ERRORS                                                             \
                         nTemp = p1T[nX++] >> 12;                              \
@@ -363,9 +363,9 @@ bool Bitmap::ImplMakeMono( sal_uInt8 cThreshold )
 
             if( pReadAcc->HasPalette() )
             {
-                for( long nY = 0L; nY < nHeight; nY++ )
+                for( long nY = 0; nY < nHeight; nY++ )
                 {
-                    for( long nX = 0L; nX < nWidth; nX++ )
+                    for( long nX = 0; nX < nWidth; nX++ )
                     {
                         const sal_uInt8 cIndex = pReadAcc->GetPixelIndex( nY, nX );
                         if( pReadAcc->GetPaletteColor( cIndex ).GetLuminance() >=
@@ -380,9 +380,9 @@ bool Bitmap::ImplMakeMono( sal_uInt8 cThreshold )
             }
             else
             {
-                for( long nY = 0L; nY < nHeight; nY++ )
+                for( long nY = 0; nY < nHeight; nY++ )
                 {
-                    for( long nX = 0L; nX < nWidth; nX++ )
+                    for( long nX = 0; nX < nWidth; nX++ )
                     {
                         if( pReadAcc->GetPixel( nY, nX ).GetLuminance() >=
                             cThreshold )
@@ -438,9 +438,9 @@ bool Bitmap::ImplMakeMonoDither()
 
             if( pReadAcc->HasPalette() )
             {
-                for( long nY = 0L; nY < nHeight; nY++ )
+                for( long nY = 0; nY < nHeight; nY++ )
                 {
-                    for( long nX = 0L, nModY = nY % 16; nX < nWidth; nX++ )
+                    for( long nX = 0, nModY = nY % 16; nX < nWidth; nX++ )
                     {
                         const sal_uInt8 cIndex = pReadAcc->GetPixelIndex( nY, nX );
                         if( pReadAcc->GetPaletteColor( cIndex ).GetLuminance() >
@@ -455,9 +455,9 @@ bool Bitmap::ImplMakeMonoDither()
             }
             else
             {
-                for( long nY = 0L; nY < nHeight; nY++ )
+                for( long nY = 0; nY < nHeight; nY++ )
                 {
-                    for( long nX = 0L, nModY = nY % 16; nX < nWidth; nX++ )
+                    for( long nX = 0, nModY = nY % 16; nX < nWidth; nX++ )
                     {
                         if( pReadAcc->GetPixel( nY, nX ).GetLuminance() >
                             pDitherMatrix[ nModY ][ nX % 16 ] )
@@ -519,9 +519,9 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
 
                 if( pReadAcc->HasPalette() )
                 {
-                    for( long nY = 0L; nY < nHeight; nY++ )
+                    for( long nY = 0; nY < nHeight; nY++ )
                     {
-                        for( long nX = 0L; nX < nWidth; nX++ )
+                        for( long nX = 0; nX < nWidth; nX++ )
                         {
                             const sal_uInt8 cIndex = pReadAcc->GetPixelIndex( nY, nX );
                             pWriteAcc->SetPixelIndex( nY, nX,
@@ -534,12 +534,12 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
                 {
                     nShift += 8;
 
-                    for( long nY = 0L; nY < nHeight; nY++ )
+                    for( long nY = 0; nY < nHeight; nY++ )
                     {
                         Scanline pReadScan = pReadAcc->GetScanline( nY );
                         Scanline pWriteScan = pWriteAcc->GetScanline( nY );
 
-                        for( long nX = 0L; nX < nWidth; nX++ )
+                        for( long nX = 0; nX < nWidth; nX++ )
                         {
                             const sal_uLong nB = *pReadScan++;
                             const sal_uLong nG = *pReadScan++;
@@ -554,12 +554,12 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
                 {
                     nShift += 8;
 
-                    for( long nY = 0L; nY < nHeight; nY++ )
+                    for( long nY = 0; nY < nHeight; nY++ )
                     {
                         Scanline pReadScan = pReadAcc->GetScanline( nY );
                         Scanline pWriteScan = pWriteAcc->GetScanline( nY );
 
-                        for( long nX = 0L; nX < nWidth; nX++ )
+                        for( long nX = 0; nX < nWidth; nX++ )
                         {
                             const sal_uLong nR = *pReadScan++;
                             const sal_uLong nG = *pReadScan++;
@@ -571,8 +571,8 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
                 }
                 else
                 {
-                    for( long nY = 0L; nY < nHeight; nY++ )
-                        for( long nX = 0L; nX < nWidth; nX++ )
+                    for( long nY = 0; nY < nHeight; nY++ )
+                        for( long nX = 0; nX < nWidth; nX++ )
                             pWriteAcc->SetPixelIndex( nY, nX, (pReadAcc->GetPixel( nY, nX ) ).GetLuminance() >> nShift );
                 }
 
@@ -637,9 +637,9 @@ bool Bitmap::ImplConvertUp(sal_uInt16 nBitCount, Color* pExtColor)
 
                 pWriteAcc->SetPalette(aPalette);
 
-                for (long nY = 0L; nY < nHeight; nY++)
+                for (long nY = 0; nY < nHeight; nY++)
                 {
-                    for (long nX = 0L; nX < nWidth; nX++)
+                    for (long nX = 0; nX < nWidth; nX++)
                     {
                         pWriteAcc->SetPixel(nY, nX, pReadAcc->GetPixel(nY, nX));
                     }
@@ -649,9 +649,9 @@ bool Bitmap::ImplConvertUp(sal_uInt16 nBitCount, Color* pExtColor)
             {
                 if (pReadAcc->HasPalette())
                 {
-                    for (long nY = 0L; nY < nHeight; nY++)
+                    for (long nY = 0; nY < nHeight; nY++)
                     {
-                        for (long nX = 0L; nX < nWidth; nX++)
+                        for (long nX = 0; nX < nWidth; nX++)
                         {
                             pWriteAcc->SetPixel(nY, nX, pReadAcc->GetPaletteColor(pReadAcc->GetPixelIndex(nY, nX)));
                         }
@@ -659,9 +659,9 @@ bool Bitmap::ImplConvertUp(sal_uInt16 nBitCount, Color* pExtColor)
                 }
                 else
                 {
-                    for (long nY = 0L; nY < nHeight; nY++)
+                    for (long nY = 0; nY < nHeight; nY++)
                     {
-                        for (long nX = 0L; nX < nWidth; nX++)
+                        for (long nX = 0; nX < nWidth; nX++)
                         {
                             pWriteAcc->SetPixel(nY, nX, pReadAcc->GetPixel(nY, nX));
                         }
@@ -703,7 +703,7 @@ bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color* pExtColor)
         {
             const sal_uInt16 nCount = 1 << nBitCount;
             const long nWidth = pWriteAcc->Width();
-            const long nWidth1 = nWidth - 1L;
+            const long nWidth1 = nWidth - 1;
             const long nHeight = pWriteAcc->Height();
             Octree aOctree(*pReadAcc, pExtColor ? (nCount - 1) : nCount);
             aPalette = aOctree.GetPalette();
@@ -714,7 +714,7 @@ bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color* pExtColor)
             std::vector<ImpErrorQuad> aErrQuad2(nWidth);
             ImpErrorQuad* pQLine1 = aErrQuad1.data();
             ImpErrorQuad* pQLine2 = nullptr;
-            long nYTmp = 0L;
+            long nYTmp = 0;
             sal_uInt8 cIndex;
             bool bQ1 = true;
 
@@ -734,10 +734,10 @@ bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color* pExtColor)
 
             pWriteAcc->SetPalette(aPalette);
 
-            for (long nY = 0L; nY < std::min(nHeight, 2L); nY++, nYTmp++)
+            for (long nY = 0; nY < std::min(nHeight, 2L); nY++, nYTmp++)
             {
                 pQLine2 = !nY ? aErrQuad1.data() : aErrQuad2.data();
-                for (long nX = 0L; nX < nWidth; nX++)
+                for (long nX = 0; nX < nWidth; nX++)
                 {
                     if (pReadAcc->HasPalette())
                         pQLine2[nX] = pReadAcc->GetPaletteColor(pReadAcc->GetPixelIndex(nYTmp, nX));
@@ -746,14 +746,14 @@ bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color* pExtColor)
                 }
             }
 
-            for (long nY = 0L; nY < nHeight; nY++, nYTmp++)
+            for (long nY = 0; nY < nHeight; nY++, nYTmp++)
             {
                 // first pixel in the line
                 cIndex = (sal_uInt8) aColorMap.GetBestPaletteIndex(pQLine1[0].ImplGetColor());
                 pWriteAcc->SetPixelIndex(nY, 0, cIndex);
 
                 long nX;
-                for (nX = 1L; nX < nWidth1; nX++)
+                for (nX = 1; nX < nWidth1; nX++)
                 {
                     aColor = pQLine1[nX].ImplGetColor();
                     cIndex = static_cast<sal_uInt8>(aColorMap.GetBestPaletteIndex(aColor));
@@ -778,7 +778,7 @@ bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color* pExtColor)
 
                 if (nYTmp < nHeight)
                 {
-                    for (nX = 0L; nX < nWidth; nX++)
+                    for (nX = 0; nX < nWidth; nX++)
                     {
                         if (pReadAcc->HasPalette())
                             pQLine2[nX] = pReadAcc->GetPaletteColor(pReadAcc->GetPixelIndex(nYTmp, nX));
@@ -1091,8 +1091,8 @@ bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
             if( pWriteAcc )
             {
                 const long nScanlineSize = pWriteAcc->GetScanlineSize();
-                const long nNewWidth1 = nNewWidth - 1L;
-                const long nNewHeight1 = nNewHeight - 1L;
+                const long nNewWidth1 = nNewWidth - 1;
+                const long nNewHeight1 = nNewHeight - 1;
 
                 if( nNewWidth1 && nNewHeight1 )
                 {
@@ -1101,23 +1101,23 @@ bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
                     std::unique_ptr<long[]> pLutX(new long[ nNewWidth ]);
                     std::unique_ptr<long[]> pLutY(new long[ nNewHeight ]);
 
-                    for( long nX = 0L; nX < nNewWidth; nX++ )
+                    for( long nX = 0; nX < nNewWidth; nX++ )
                         pLutX[ nX ] = long(nX * nWidth / nNewWidth);
 
-                    for( long nY = 0L; nY < nNewHeight; nY++ )
+                    for( long nY = 0; nY < nNewHeight; nY++ )
                         pLutY[ nY ] = long(nY * nHeight / nNewHeight);
 
-                    long nActY = 0L;
+                    long nActY = 0;
                     while( nActY < nNewHeight )
                     {
                         long nMapY = pLutY[ nActY ];
 
-                        for( long nX = 0L; nX < nNewWidth; nX++ )
+                        for( long nX = 0; nX < nNewWidth; nX++ )
                             pWriteAcc->SetPixel( nActY, nX, pReadAcc->GetPixel( nMapY , pLutX[ nX ] ) );
 
                         while( ( nActY < nNewHeight1 ) && ( pLutY[ nActY + 1 ] == nMapY ) )
                         {
-                            memcpy( pWriteAcc->GetScanline( nActY + 1L ),
+                            memcpy( pWriteAcc->GetScanline( nActY + 1 ),
                                     pWriteAcc->GetScanline( nActY ), nScanlineSize );
                             nActY++;
                         }
@@ -1146,7 +1146,7 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
     const long nNewHeight = FRound( aSizePix.Height() * rScaleY );
     bool bRet = false;
 
-    if( ( nNewWidth > 1L ) && ( nNewHeight > 1L ) )
+    if( ( nNewWidth > 1 ) && ( nNewHeight > 1 ) )
     {
         BitmapReadAccess* pReadAcc = AcquireReadAccess();
         if( pReadAcc )
@@ -1158,14 +1158,14 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
 
             if( pWriteAcc )
             {
-                const long nNewWidth1 = nNewWidth - 1L;
-                const long nWidth1 = pReadAcc->Width() - 1L;
+                const long nNewWidth1 = nNewWidth - 1;
+                const long nWidth1 = pReadAcc->Width() - 1;
                 const double fRevScaleX = (double) nWidth1 / nNewWidth1;
 
                 std::unique_ptr<long[]> pLutInt(new long[ nNewWidth ]);
                 std::unique_ptr<long[]> pLutFrac(new long[ nNewWidth ]);
 
-                for( long nX = 0L, nTemp = nWidth - 2L; nX < nNewWidth; nX++ )
+                for( long nX = 0, nTemp = nWidth - 2; nX < nNewWidth; nX++ )
                 {
                     double fTemp = nX * fRevScaleX;
                     pLutInt[ nX ] = MinMax( (long) fTemp, 0, nTemp );
@@ -1173,7 +1173,7 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
                     pLutFrac[ nX ] = (long) ( fTemp * 1024. );
                 }
 
-                for( long nY = 0L; nY < nHeight; nY++ )
+                for( long nY = 0; nY < nHeight; nY++ )
                 {
                     if( 1 == nWidth )
                     {
@@ -1187,14 +1187,14 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
                             aCol0 = pReadAcc->GetPixel( nY, 0 );
                         }
 
-                        for( long nX = 0L; nX < nNewWidth; nX++ )
+                        for( long nX = 0; nX < nNewWidth; nX++ )
                         {
                             pWriteAcc->SetPixel( nY, nX, aCol0 );
                         }
                     }
                     else
                     {
-                        for( long nX = 0L; nX < nNewWidth; nX++ )
+                        for( long nX = 0; nX < nNewWidth; nX++ )
                         {
                             long nTemp = pLutInt[ nX ];
 
@@ -1245,14 +1245,14 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
 
                 if( pReadAcc && pWriteAcc )
                 {
-                    const long nNewHeight1 = nNewHeight - 1L;
-                    const long nHeight1 = pReadAcc->Height() - 1L;
+                    const long nNewHeight1 = nNewHeight - 1;
+                    const long nHeight1 = pReadAcc->Height() - 1;
                     const double fRevScaleY = (double) nHeight1 / nNewHeight1;
 
                     std::unique_ptr<long[]> pLutInt(new long[ nNewHeight ]);
                     std::unique_ptr<long[]> pLutFrac(new long[ nNewHeight ]);
 
-                    for( long nY = 0L, nTemp = nHeight - 2L; nY < nNewHeight; nY++ )
+                    for( long nY = 0, nTemp = nHeight - 2; nY < nNewHeight; nY++ )
                     {
                         double fTemp = nY * fRevScaleY;
                         pLutInt[ nY ] = MinMax( (long) fTemp, 0, nTemp );
@@ -1263,20 +1263,20 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
                     // after 1st step, bitmap *is* 24bit format (see above)
                     OSL_ENSURE(!pReadAcc->HasPalette(), "OOps, somehow ImplScaleInterpolate in-between format has palette, should not happen (!)");
 
-                    for( long nX = 0L; nX < nNewWidth; nX++ )
+                    for( long nX = 0; nX < nNewWidth; nX++ )
                     {
                         if( 1 == nHeight )
                         {
                             BitmapColor aCol0 = pReadAcc->GetPixel( 0, nX );
 
-                            for( long nY = 0L; nY < nNewHeight; nY++ )
+                            for( long nY = 0; nY < nNewHeight; nY++ )
                             {
                                 pWriteAcc->SetPixel( nY, nX, aCol0 );
                             }
                         }
                         else
                         {
-                            for( long nY = 0L; nY < nNewHeight; nY++ )
+                            for( long nY = 0; nY < nNewHeight; nY++ )
                             {
                                 long nTemp = pLutInt[ nY ];
 
@@ -1425,11 +1425,11 @@ bool Bitmap::ImplDitherFloyd()
         {
             BitmapColor aColor;
             long nWidth = pReadAcc->Width();
-            long nWidth1 = nWidth - 1L;
+            long nWidth1 = nWidth - 1;
             long nHeight = pReadAcc->Height();
             long nX;
-            long nW = nWidth * 3L;
-            long nW2 = nW - 3L;
+            long nW = nWidth * 3;
+            long nW2 = nW - 3;
             long nRErr, nGErr, nBErr;
             long nRC, nGC, nBC;
             std::unique_ptr<long[]> p1(new long[ nW ]);
@@ -1464,7 +1464,7 @@ bool Bitmap::ImplDitherFloyd()
                 }
             }
 
-            for( long nY = 1, nYAcc = 0L; nY <= nHeight; nY++, nYAcc++ )
+            for( long nY = 1, nYAcc = 0; nY <= nHeight; nY++, nYAcc++ )
             {
                 pTmp = p1T;
                 p1T = p2T;
@@ -1507,7 +1507,7 @@ bool Bitmap::ImplDitherFloyd()
 
                 // Get middle Pixels using a loop
                 long nXAcc;
-                for ( nX = 3L, nXAcc = 1L; nX < nW2; nXAcc++ )
+                for ( nX = 3, nXAcc = 1; nX < nW2; nXAcc++ )
                 {
                     CALC_ERRORS;
                     CALC_TABLES7;
@@ -1556,7 +1556,7 @@ bool Bitmap::ImplDitherFloyd16()
     if( pReadAcc && pWriteAcc )
     {
         const long nWidth = pWriteAcc->Width();
-        const long nWidth1 = nWidth - 1L;
+        const long nWidth1 = nWidth - 1;
         const long nHeight = pWriteAcc->Height();
         BitmapColor aColor;
         BitmapColor aBestCol;
@@ -1565,17 +1565,17 @@ bool Bitmap::ImplDitherFloyd16()
         std::unique_ptr<ImpErrorQuad[]> pErrQuad2(new ImpErrorQuad[ nWidth ]);
         ImpErrorQuad* pQLine1 = pErrQuad1.get();
         ImpErrorQuad* pQLine2 = nullptr;
-        long nYTmp = 0L;
+        long nYTmp = 0;
         bool bQ1 = true;
 
-        for( long nY = 0L; nY < std::min( nHeight, 2L ); nY++, nYTmp++ )
+        for( long nY = 0; nY < std::min( nHeight, 2L ); nY++, nYTmp++ )
         {
             pQLine2 = !nY ? pErrQuad1.get() : pErrQuad2.get();
-            for( long nX = 0L; nX < nWidth; nX++ )
+            for( long nX = 0; nX < nWidth; nX++ )
                 pQLine2[ nX ] = pReadAcc->GetPixel( nYTmp, nX );
         }
 
-        for( long nY = 0L; nY < nHeight; nY++, nYTmp++ )
+        for( long nY = 0; nY < nHeight; nY++, nYTmp++ )
         {
             // First RowPixel
             aBestCol = pQLine1[ 0 ].ImplGetColor();
@@ -1585,7 +1585,7 @@ bool Bitmap::ImplDitherFloyd16()
             pWriteAcc->SetPixel( nY, 0, aBestCol );
 
             long nX;
-            for( nX = 1L; nX < nWidth1; nX++ )
+            for( nX = 1; nX < nWidth1; nX++ )
             {
                 aColor = pQLine1[ nX ].ImplGetColor();
                 aBestCol.SetRed( ( aColor.GetRed() & 248 ) | 7 );
@@ -1611,7 +1611,7 @@ bool Bitmap::ImplDitherFloyd16()
             pQLine2 = ( bQ1 = !bQ1 ) ? pErrQuad2.get() : pErrQuad1.get();
 
             if( nYTmp < nHeight )
-                for( nX = 0L; nX < nWidth; nX++ )
+                for( nX = 0; nX < nWidth; nX++ )
                     pQLine2[ nX ] = pReadAcc->GetPixel( nYTmp, nX );
         }
 
@@ -1687,14 +1687,14 @@ bool Bitmap::ImplReduceSimple( sal_uInt16 nColorCount )
 
             if( pRAcc->HasPalette() )
             {
-                for( long nY = 0L; nY < nHeight; nY++ )
-                    for( long nX =0L; nX < nWidth; nX++ )
+                for( long nY = 0; nY < nHeight; nY++ )
+                    for( long nX =0; nX < nWidth; nX++ )
                         pWAcc->SetPixelIndex( nY, nX, static_cast<sal_uInt8>(aOct.GetBestPaletteIndex( pRAcc->GetPaletteColor( pRAcc->GetPixelIndex( nY, nX ) ))) );
             }
             else
             {
-                for( long nY = 0L; nY < nHeight; nY++ )
-                    for( long nX =0L; nX < nWidth; nX++ )
+                for( long nY = 0; nY < nHeight; nY++ )
+                    for( long nX =0; nX < nWidth; nX++ )
                         pWAcc->SetPixelIndex( nY, nX, static_cast<sal_uInt8>(aOct.GetBestPaletteIndex( pRAcc->GetPixel( nY, nX ) )) );
             }
 
@@ -1781,9 +1781,9 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
 
         if( pRAcc->HasPalette() )
         {
-            for( long nY = 0L; nY < nHeight; nY++ )
+            for( long nY = 0; nY < nHeight; nY++ )
             {
-                for( long nX = 0L; nX < nWidth; nX++ )
+                for( long nX = 0; nX < nWidth; nX++ )
                 {
                     const BitmapColor& rCol = pRAcc->GetPaletteColor( pRAcc->GetPixelIndex( nY, nX ) );
                     pCountTable[ ( ( ( (sal_uInt32) rCol.GetRed() ) >> nRightShiftBits ) << nLeftShiftBits2 ) |
@@ -1794,9 +1794,9 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
         }
         else
         {
-            for( long nY = 0L; nY < nHeight; nY++ )
+            for( long nY = 0; nY < nHeight; nY++ )
             {
-                for( long nX = 0L; nX < nWidth; nX++ )
+                for( long nX = 0; nX < nWidth; nX++ )
                 {
                     const BitmapColor aCol( pRAcc->GetPixel( nY, nX ) );
                     pCountTable[ ( ( ( (sal_uInt32) aCol.GetRed() ) >> nRightShiftBits ) << nLeftShiftBits2 ) |
@@ -1833,9 +1833,9 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
 
             if( pRAcc->HasPalette() )
             {
-                for( long nY = 0L; nY < nHeight; nY++ )
+                for( long nY = 0; nY < nHeight; nY++ )
                 {
-                    for( long nX = 0L; nX < nWidth; nX++ )
+                    for( long nX = 0; nX < nWidth; nX++ )
                     {
                         const BitmapColor& rCol = pRAcc->GetPaletteColor( pRAcc->GetPixelIndex( nY, nX ) );
                         aDstCol.SetIndex( pIndexMap[ ( ( ( (sal_uInt32) rCol.GetRed() ) >> nRightShiftBits ) << nLeftShiftBits2 ) |
@@ -1847,9 +1847,9 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
             }
             else
             {
-                for( long nY = 0L; nY < nHeight; nY++ )
+                for( long nY = 0; nY < nHeight; nY++ )
                 {
-                    for( long nX = 0L; nX < nWidth; nX++ )
+                    for( long nX = 0; nX < nWidth; nX++ )
                     {
                         const BitmapColor aCol( pRAcc->GetPixel( nY, nX ) );
                         aDstCol.SetIndex( pIndexMap[ ( ( ( (sal_uInt32) aCol.GetRed() ) >> nRightShiftBits ) << nLeftShiftBits2 ) |
@@ -1909,16 +1909,16 @@ bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
             sal_uLong* pColBuf = static_cast<sal_uLong*>(rtl_allocateMemory( nSize ));
             const long nWidth = pWAcc->Width();
             const long nHeight = pWAcc->Height();
-            long nIndex = 0L;
+            long nIndex = 0;
 
             memset( pColBuf, 0, nSize );
 
             // create Buffer
             if( pRAcc->HasPalette() )
             {
-                for( long nY = 0L; nY < nHeight; nY++ )
+                for( long nY = 0; nY < nHeight; nY++ )
                 {
-                    for( long nX = 0L; nX < nWidth; nX++ )
+                    for( long nX = 0; nX < nWidth; nX++ )
                     {
                         const BitmapColor& rCol = pRAcc->GetPaletteColor( pRAcc->GetPixelIndex( nY, nX ) );
                         pColBuf[ RGB15( rCol.GetRed() >> 3, rCol.GetGreen() >> 3, rCol.GetBlue() >> 3 ) ]++;
@@ -1927,9 +1927,9 @@ bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
             }
             else
             {
-                for( long nY = 0L; nY < nHeight; nY++ )
+                for( long nY = 0; nY < nHeight; nY++ )
                 {
-                    for( long nX = 0L; nX < nWidth; nX++ )
+                    for( long nX = 0; nX < nWidth; nX++ )
                     {
                         const BitmapColor aCol( pRAcc->GetPixel( nY, nX ) );
                         pColBuf[ RGB15( aCol.GetRed() >> 3, aCol.GetGreen() >> 3, aCol.GetBlue() >> 3 ) ]++;
@@ -1945,8 +1945,8 @@ bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
             // do mapping of colors to palette
             InverseColorMap aMap( aPal );
             pWAcc->SetPalette( aPal );
-            for( long nY = 0L; nY < nHeight; nY++ )
-                for( long nX = 0L; nX < nWidth; nX++ )
+            for( long nY = 0; nY < nHeight; nY++ )
+                for( long nX = 0; nX < nWidth; nX++ )
                     pWAcc->SetPixelIndex( nY, nX, static_cast<sal_uInt8>( aMap.GetBestPaletteIndex( pRAcc->GetColor( nY, nX ) )) );
 
             rtl_freeMemory( pColBuf );
@@ -2143,15 +2143,15 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
 
             // calculate slope
             if( nContrastPercent >= 0 )
-                fM = 128.0 / ( 128.0 - 1.27 * MinMax( nContrastPercent, 0L, 100L ) );
+                fM = 128.0 / ( 128.0 - 1.27 * MinMax( nContrastPercent, 0, 100 ) );
             else
-                fM = ( 128.0 + 1.27 * MinMax( nContrastPercent, -100L, 0L ) ) / 128.0;
+                fM = ( 128.0 + 1.27 * MinMax( nContrastPercent, -100, 0 ) ) / 128.0;
 
             if(!msoBrightness)
                 // total offset = luminance offset + contrast offset
-                fOff = MinMax( nLuminancePercent, -100L, 100L ) * 2.55 + 128.0 - fM * 128.0;
+                fOff = MinMax( nLuminancePercent, -100, 100 ) * 2.55 + 128.0 - fM * 128.0;
             else
-                fOff = MinMax( nLuminancePercent, -100L, 100L ) * 2.55;
+                fOff = MinMax( nLuminancePercent, -100, 100 ) * 2.55;
 
             // channel offset = channel offset + total offset
             fROff = nChannelRPercent * 2.55 + fOff;
@@ -2163,22 +2163,22 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
             const bool bGamma = ( fGamma != 1.0 );
 
             // create mapping table
-            for( long nX = 0L; nX < 256L; nX++ )
+            for( long nX = 0; nX < 256; nX++ )
             {
                 if(!msoBrightness)
                 {
-                    cMapR[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fROff ), 0L, 255L );
-                    cMapG[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fGOff ), 0L, 255L );
-                    cMapB[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fBOff ), 0L, 255L );
+                    cMapR[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fROff ), 0, 255 );
+                    cMapG[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fGOff ), 0, 255 );
+                    cMapB[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fBOff ), 0, 255 );
                 }
                 else
                 {
                     // LO simply uses (in a somewhat optimized form) "newcolor = (oldcolor-128)*contrast+brightness+128"
                     // as the formula, i.e. contrast first, brightness afterwards. MSOffice, for whatever weird reason,
                     // use neither first, but apparently it applies half of brightness before contrast and half afterwards.
-                    cMapR[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fROff/2-128) * fM + 128 + fROff/2 ), 0L, 255L );
-                    cMapG[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fGOff/2-128) * fM + 128 + fGOff/2 ), 0L, 255L );
-                    cMapB[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fBOff/2-128) * fM + 128 + fBOff/2 ), 0L, 255L );
+                    cMapR[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fROff/2-128) * fM + 128 + fROff/2 ), 0, 255 );
+                    cMapG[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fGOff/2-128) * fM + 128 + fGOff/2 ), 0, 255 );
+                    cMapB[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fBOff/2-128) * fM + 128 + fBOff/2 ), 0, 255 );
                 }
                 if( bGamma )
                 {
@@ -2211,11 +2211,11 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
             }
             else if( pAcc->GetScanlineFormat() == ScanlineFormat::N24BitTcBgr )
             {
-                for( long nY = 0L; nY < nH; nY++ )
+                for( long nY = 0; nY < nH; nY++ )
                 {
                     Scanline pScan = pAcc->GetScanline( nY );
 
-                    for( long nX = 0L; nX < nW; nX++ )
+                    for( long nX = 0; nX < nW; nX++ )
                     {
                         *pScan = cMapB[ *pScan ]; pScan++;
                         *pScan = cMapG[ *pScan ]; pScan++;
@@ -2225,11 +2225,11 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
             }
             else if( pAcc->GetScanlineFormat() == ScanlineFormat::N24BitTcRgb )
             {
-                for( long nY = 0L; nY < nH; nY++ )
+                for( long nY = 0; nY < nH; nY++ )
                 {
                     Scanline pScan = pAcc->GetScanline( nY );
 
-                    for( long nX = 0L; nX < nW; nX++ )
+                    for( long nX = 0; nX < nW; nX++ )
                     {
                         *pScan = cMapR[ *pScan ]; pScan++;
                         *pScan = cMapG[ *pScan ]; pScan++;
@@ -2239,9 +2239,9 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
             }
             else
             {
-                for( long nY = 0L; nY < nH; nY++ )
+                for( long nY = 0; nY < nH; nY++ )
                 {
-                    for( long nX = 0L; nX < nW; nX++ )
+                    for( long nX = 0; nX < nW; nX++ )
                     {
                         aCol = pAcc->GetPixel( nY, nX );
                         aCol.SetRed( cMapR[ aCol.GetRed() ] );

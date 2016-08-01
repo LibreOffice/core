@@ -1715,7 +1715,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
                                PDFWriter& i_rOuterFace)
         :
         m_pReferenceDevice( nullptr ),
-        m_aMapMode( MAP_POINT, Point(), Fraction( 1L, pointToPixel(1) ), Fraction( 1L, pointToPixel(1) ) ),
+        m_aMapMode( MAP_POINT, Point(), Fraction( 1, pointToPixel(1) ), Fraction( 1, pointToPixel(1) ) ),
         m_nCurrentStructElement( 0 ),
         m_bEmitStructure( true ),
         m_nNextFID( 1 ),
@@ -6891,7 +6891,7 @@ bool PDFWriterImpl::finalizeSignature()
             return false;
         }
 
-        SAL_INFO("vcl.pdfwriter", "Setting curl to verbose: " << (curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L) == CURLE_OK ? "OK" : "FAIL"));
+        SAL_INFO("vcl.pdfwriter", "Setting curl to verbose: " << (curl_easy_setopt(curl, CURLOPT_VERBOSE, 1) == CURLE_OK ? "OK" : "FAIL"));
 
         if ((rc = curl_easy_setopt(curl, CURLOPT_URL, OUStringToOString(m_aContext.SignTSA, RTL_TEXTENCODING_UTF8).getStr())) != CURLE_OK)
         {
@@ -6935,7 +6935,7 @@ bool PDFWriterImpl::finalizeSignature()
             return false;
         }
 
-        if ((rc = curl_easy_setopt(curl, CURLOPT_POST, 1l)) != CURLE_OK)
+        if ((rc = curl_easy_setopt(curl, CURLOPT_POST, 1)) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_POST) failed: " << curl_easy_strerror(rc));
             free(pass);
@@ -6955,8 +6955,8 @@ bool PDFWriterImpl::finalizeSignature()
         }
 
         // Use a ten second timeout
-        if ((rc = curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10l)) != CURLE_OK ||
-            (rc = curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10l)) != CURLE_OK)
+        if ((rc = curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10)) != CURLE_OK ||
+            (rc = curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10)) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_TIMEOUT or CURLOPT_CONNECTTIMEOUT) failed: " << curl_easy_strerror(rc));
             free(pass);
