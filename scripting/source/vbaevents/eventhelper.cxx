@@ -76,15 +76,6 @@
 #include <list>
 #include <unordered_map>
 
-#define ASYNC 0
-
-// primitive support for asynchronous handling of
-// events from controls ( all event will be processed asynchronously
-// in the application thread )
-#if ASYNC
-#include <vcl/svapp.hxx>
-#endif
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::uno;
@@ -188,9 +179,10 @@ struct TranslateInfo
 };
 
 
-typedef std::unordered_map< OUString,
-std::list< TranslateInfo >,
-OUStringHash > EventInfoHash;
+typedef std::unordered_map<
+    OUString,
+    std::list< TranslateInfo >,
+    OUStringHash > EventInfoHash;
 
 
 struct TranslatePropMap
@@ -551,7 +543,6 @@ class EventListener : public EventListener_BASE
     ,public ::comphelper::OMutexAndBroadcastHelper
     ,public ::comphelper::OPropertyContainer
     ,public ::comphelper::OPropertyArrayUsageHelper< EventListener >
-
 {
 
 public:
@@ -628,9 +619,6 @@ protected:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper(  ) const override;
 
 private:
-#if ASYNC
-    DECL_LINK( OnAsyncScriptEvent, ScriptEvent* );
-#endif
     void setShellFromModel();
     void firing_Impl( const  ScriptEvent& evt, Any *pSyncRet=nullptr ) throw( RuntimeException, std::exception );
 
@@ -684,39 +672,8 @@ EventListener::disposing(const lang::EventObject&)  throw( RuntimeException, std
 void SAL_CALL
 EventListener::firing(const ScriptEvent& evt) throw(RuntimeException, std::exception)
 {
-#if ASYNC
-    // needs some logic to check if the event handler is oneway or not
-    // if not oneway then firing_Impl otherwise... as below
-    acquire();
-    Application::PostUserEvent( LINK( this, EventListener, OnAsyncScriptEvent ),
-                                new ScriptEvent( evt ) );
-#else
     firing_Impl( evt );
-#endif
 }
-
-#if ASYNC
-IMPL_LINK( EventListener, OnAsyncScriptEvent, ScriptEvent*, _pEvent )
-{
-    if ( !_pEvent )
-        return 1L;
-
-    {
-        // #FIXME if we enable ASYNC we probably need something like
-        // below
-        //::osl::ClearableMutexGuard aGuard( m_aMutex );
-
-        //if ( !impl_isDisposed_nothrow() )
-        //  impl_doFireScriptEvent_nothrow( aGuard, *_pEvent, NULL );
-        firing_Impl( *_pEvent, NULL );
-    }
-
-    delete _pEvent;
-    // we acquired ourself immediately before posting the event
-    release();
-    return 0L;
- }
-#endif
 
 Any SAL_CALL
 EventListener::approveFiring(const ScriptEvent& evt) throw(reflection::InvocationTargetException, RuntimeException, std::exception)
