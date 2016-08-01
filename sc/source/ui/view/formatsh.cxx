@@ -572,7 +572,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             if ( bUndo )
                             {
                                 OUString aUndo = ScGlobal::GetRscString( STR_UNDO_EDITCELLSTYLE );
-                                pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+                                pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
                                 bListAction = true;
                             }
 
@@ -630,7 +630,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                 if ( bUndo )
                                 {
                                     OUString aUndo = ScGlobal::GetRscString( STR_UNDO_EDITCELLSTYLE );
-                                    pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+                                    pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
                                     bListAction = true;
                                 }
 
