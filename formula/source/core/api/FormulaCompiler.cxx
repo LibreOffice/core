@@ -692,8 +692,19 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::GetOpCodeMap( const sal_Int32 nLa
         case FormulaLanguage::ODF_11 :
             if (!mxSymbolsPODF)
                 InitSymbolsPODF();
+            /* FIXME: only temporarily init mxSymbolsAPI here */
+            if (!mxSymbolsAPI)
+                InitSymbolsAPI();
             xMap = mxSymbolsPODF;
             break;
+/* FIXME: add FormulaLanguage::API constant */
+#if 0
+        case FormulaLanguage::API :
+            if (!mxSymbolsAPI)
+                InitSymbolsAPI();
+            xMap = mxSymbolsAPI;
+            break;
+#endif
         case FormulaLanguage::ENGLISH :
             if (!mxSymbolsEnglish)
                 InitSymbolsEnglish();
@@ -814,6 +825,16 @@ void FormulaCompiler::InitSymbolsPODF() const
     if (!aMap.mxSymbolMap)
         loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF, FormulaGrammar::GRAM_PODF, aMap.mxSymbolMap, RESOURCE_BASE);
     mxSymbolsPODF = aMap.mxSymbolMap;
+}
+
+void FormulaCompiler::InitSymbolsAPI() const
+{
+    static OpCodeMapData aMap;
+    osl::MutexGuard aGuard(&aMap.maMtx);
+    if (!aMap.mxSymbolMap)
+        // XFunctionAccess API always used PODF grammar, keep it.
+        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_API, FormulaGrammar::GRAM_PODF, aMap.mxSymbolMap, RESOURCE_BASE);
+    mxSymbolsAPI = aMap.mxSymbolMap;
 }
 
 void FormulaCompiler::InitSymbolsODFF() const

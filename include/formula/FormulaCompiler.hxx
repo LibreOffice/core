@@ -147,6 +147,8 @@ public:
         /// Is it an ODF 1.1 compatibility mapping?
         inline bool isPODF() const { return FormulaGrammar::isPODF( meGrammar); }
 
+        /* TODO: add isAPI() once a FormulaLanguage was added. */
+
         /// Is it an ODFF / ODF 1.2 mapping?
         inline bool isODFF() const { return FormulaGrammar::isODFF( meGrammar); }
 
@@ -350,6 +352,7 @@ private:
     void InitSymbolsNative() const;    /// only SymbolsNative, on first document creation
     void InitSymbolsEnglish() const;   /// only SymbolsEnglish, maybe later
     void InitSymbolsPODF() const;      /// only SymbolsPODF, on demand
+    void InitSymbolsAPI() const;       /// only SymbolsAPI, on demand
     void InitSymbolsODFF() const;      /// only SymbolsODFF, on demand
     void InitSymbolsEnglishXL() const; /// only SymbolsEnglishXL, on demand
     void InitSymbolsOOXML() const;     /// only SymbolsOOXML, on demand
@@ -406,6 +409,7 @@ private:
 
     mutable NonConstOpCodeMapPtr  mxSymbolsODFF;      // ODFF symbols
     mutable NonConstOpCodeMapPtr  mxSymbolsPODF;      // ODF 1.1 symbols
+    mutable NonConstOpCodeMapPtr  mxSymbolsAPI;       // XFunctionAccess API symbols
     mutable NonConstOpCodeMapPtr  mxSymbolsNative;    // native symbols
     mutable NonConstOpCodeMapPtr  mxSymbolsEnglish;   // English symbols
     mutable NonConstOpCodeMapPtr  mxSymbolsEnglishXL; // English Excel symbols (for VBA formula parsing)
