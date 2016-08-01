@@ -111,7 +111,7 @@ public:
     VisualState& GetVisualState() { return maVisualState;}
 
     Rectangle GetBoundingBox() const;
-    Point GetLocation (const bool bIgnoreLocation = false) const;
+    Point GetLocation (const bool bIgnoreLocation) const;
     void SetBoundingBox (const Rectangle& rBoundingBox);
 
 private:

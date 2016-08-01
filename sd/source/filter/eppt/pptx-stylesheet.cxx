@@ -292,7 +292,7 @@ void PPTExParaSheet::SetStyleSheet( const css::uno::Reference< css::beans::XProp
             {
                 PPTExParaLevel& rLevel = maParaLevel[ i ];
                 if ( i )
-                    aParagraphObj.ImplGetNumberingLevel( pBuProv, i, false );
+                    aParagraphObj.ImplGetNumberingLevel( pBuProv, i, false, false );
                 rLevel.mnTextOfs = aParagraphObj.nTextOfs;
                 rLevel.mnBulletOfs = (sal_uInt16)aParagraphObj.nBulletOfs;
                 rLevel.mnBulletChar = aParagraphObj.cBulletId;

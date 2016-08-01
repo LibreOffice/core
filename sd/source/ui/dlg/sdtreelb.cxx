@@ -1107,7 +1107,7 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
             if (pSdDrawDocShell)
             {
                 pSdDrawDocShell->GetObjectIsmarked(aStr, true);
-                bMarked = pSdDrawDocShell->GetObjectIsmarked(aStr);
+                bMarked = pSdDrawDocShell->GetObjectIsmarked(aStr, false);
             }
             pNewEntry->SetMarked(bMarked);
             Invalidate();

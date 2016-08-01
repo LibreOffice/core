@@ -1595,7 +1595,7 @@ void Outliner::PrepareConversion()
         mbStringFound = true;
         mbMatchMayExist = true;
 
-        EnterEditMode ();
+        EnterEditMode(true);
 
         mpDrawDocument->GetDocSh()->SetWaitCursor( false );
         // Start search at the right end of the current object's text

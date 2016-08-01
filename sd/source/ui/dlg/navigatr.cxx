@@ -308,7 +308,7 @@ IMPL_LINK_TYPED( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
                  nID < NAVIGATOR_DRAGTYPE_COUNT;
                  nID++ )
             {
-                sal_uInt16 nRId = GetDragTypeSdResId( (NavigatorDragType)nID );
+                sal_uInt16 nRId = GetDragTypeSdResId( (NavigatorDragType)nID, false );
                 if( nRId > 0 )
                 {
                     DBG_ASSERT(aHIDs[nID-NAVIGATOR_DRAGTYPE_URL],"HelpId not added!");
@@ -674,7 +674,7 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
                 SfxMedium *pMedium = pDocShell->GetMedium();
                 aStr = pMedium ? pMedium->GetName() : OUString();
                 if( !aStr.isEmpty() )
-                    aInfo.SetName();
+                    aInfo.SetName( true );
                 else
                     aInfo.SetName( false );
                 // at the moment, we use the name of the shell again (i.e.
@@ -685,7 +685,7 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
                 maLbDocs->InsertEntry( aStr );
 
                 if( pDocShell == pCurrentDocShell )
-                    aInfo.SetActive();
+                    aInfo.SetActive( true );
                 else
                     aInfo.SetActive( false );
 

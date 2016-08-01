@@ -187,7 +187,7 @@ IMPL_LINK_TYPED(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer
             break;
 
         // First check whether the system is idle.
-        sal_Int32 nIdleState (tools::IdleDetection::GetIdleState());
+        sal_Int32 nIdleState (tools::IdleDetection::GetIdleState(nullptr));
         if (nIdleState != tools::IdleDetection::IDET_IDLE)
         {
             if ((nIdleState&tools::IdleDetection::IDET_FULL_SCREEN_SHOW_ACTIVE) != 0)

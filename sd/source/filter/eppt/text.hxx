@@ -95,7 +95,7 @@ protected:
     css::beans::PropertyState ePropState;
     css::uno::Reference < css::beans::XPropertyState > mXPropState;
 
-    bool    ImplGetPropertyValue( const OUString& rString, bool bGetPropertyState = true );
+    bool    ImplGetPropertyValue( const OUString& rString, bool bGetPropertyState );
 };
 
 struct FieldEntry
@@ -126,7 +126,7 @@ class PortionObj : public PropStateValue
         static sal_uInt32 ImplGetTextField( css::uno::Reference< css::text::XTextRange > & rXTextRangeRef,
                             const css::uno::Reference< css::beans::XPropertySet > & rXPropSetRef, OUString& rURL );
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
-        void            ImplGetPortionValues( FontCollection& rFontCollection, bool bGetPropStateValue = false );
+        void            ImplGetPortionValues( FontCollection& rFontCollection, bool bGetPropStateValue );
 
     public:
 
@@ -184,8 +184,8 @@ class ParagraphObj : public PropStateValue, public SOParagraph
         void            ImplConstruct( const ParagraphObj& rParagraphObj );
         void            ImplClear();
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
-        void            ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bGetPropStateValue = false );
-        void            ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int16 nDepth, bool bIsBullet, bool bGetPropStateValue = false );
+        void            ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bGetPropStateValue );
+        void            ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int16 nDepth, bool bIsBullet, bool bGetPropStateValue );
 
     public:
 

@@ -199,7 +199,7 @@ public:
     void                    Fill( const SdDrawDocument*, SfxMedium* pSfxMedium, const OUString& rDocName );
     void                    SetShowAllShapes (const bool bShowAllShapes, const bool bFill);
     bool                    GetShowAllShapes() const { return mbShowAllShapes;}
-    bool                    IsEqualToDoc( const SdDrawDocument* pInDoc = nullptr );
+    bool                    IsEqualToDoc( const SdDrawDocument* pInDoc );
     bool                    HasSelectedChildren( const OUString& rName );
     bool                    SelectEntry( const OUString& rName );
     OUString                GetSelectEntry();

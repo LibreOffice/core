@@ -272,11 +272,11 @@ public:
 
     SAL_DLLPRIVATE virtual css::uno::Reference< css::animations::XAnimationNode > getRootNode();
 
-    SAL_DLLPRIVATE CustomAnimationEffectPtr append( const CustomAnimationPresetPtr& pDescriptor, const css::uno::Any& rTarget, double fDuration = -1.0 );
-    SAL_DLLPRIVATE CustomAnimationEffectPtr append( const SdrPathObj& rPathObj, const css::uno::Any& rTarget, double fDuration = -1.0 );
+    SAL_DLLPRIVATE CustomAnimationEffectPtr append( const CustomAnimationPresetPtr& pDescriptor, const css::uno::Any& rTarget, double fDuration );
+    SAL_DLLPRIVATE CustomAnimationEffectPtr append( const SdrPathObj& rPathObj, const css::uno::Any& rTarget, double fDuration );
     void append( const CustomAnimationEffectPtr& pEffect );
-    SAL_DLLPRIVATE void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, double fDuration = -1.0 );
-    SAL_DLLPRIVATE void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, const OUString& rPresetSubType, double fDuration = -1.0 );
+    SAL_DLLPRIVATE void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, double fDuration );
+    SAL_DLLPRIVATE void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, const OUString& rPresetSubType, double fDuration );
     SAL_DLLPRIVATE void remove( const CustomAnimationEffectPtr& pEffect );
 
     SAL_DLLPRIVATE void create( const css::uno::Reference< css::animations::XAnimationNode >& xNode );

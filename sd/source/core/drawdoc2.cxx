@@ -1323,7 +1323,7 @@ sal_uInt16 SdDrawDocument::DuplicatePage (sal_uInt16 nPageNum)
         // No names for the new slides
         OUString(), OUString(),
         aVisibleLayers.IsSet(aBckgrnd),
-        aVisibleLayers.IsSet(aBckgrndObj));
+        aVisibleLayers.IsSet(aBckgrndObj), -1);
 }
 
 sal_uInt16 SdDrawDocument::DuplicatePage (

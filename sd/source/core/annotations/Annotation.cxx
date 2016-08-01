@@ -168,7 +168,7 @@ void createAnnotation( Reference< XAnnotation >& xAnnotation, SdPage* pPage )
 {
     xAnnotation.set(
         new Annotation(comphelper::getProcessComponentContext(), pPage));
-    pPage->addAnnotation(xAnnotation);
+    pPage->addAnnotation(xAnnotation, -1);
 }
 
 Annotation::Annotation( const Reference< XComponentContext >& context, SdPage* pPage )

@@ -72,7 +72,7 @@ PortionObj::PortionObj(const css::uno::Reference< css::beans::XPropertySet > & r
 {
     mXPropSet = rXPropSet;
 
-    ImplGetPortionValues( rFontCollection );
+    ImplGetPortionValues( rFontCollection, false );
 }
 
 PortionObj::PortionObj(css::uno::Reference< css::text::XTextRange > & rXTextRange,
@@ -673,7 +673,7 @@ ParagraphObj::ParagraphObj(const css::uno::Reference< css::beans::XPropertySet >
     nBulletFlags = 0;
     nParaFlags = 0;
 
-    ImplGetParagraphValues( pProv );
+    ImplGetParagraphValues( pProv, false );
 }
 
 ParagraphObj::ParagraphObj(css::uno::Reference< css::text::XTextContent > & rXTextContent,

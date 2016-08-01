@@ -342,7 +342,7 @@ SdPage* MasterPagesSelector::GetSelectedMasterPage()
     UserData* pData = GetUserData(nIndex);
     if (pData != nullptr)
     {
-        pMasterPage = mpContainer->GetPageObjectForToken(pData->second);
+        pMasterPage = mpContainer->GetPageObjectForToken(pData->second, true);
     }
     return pMasterPage;
 }

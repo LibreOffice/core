@@ -185,7 +185,7 @@ bool SlideShow::StartPreview( ViewShellBase& rBase,
 {
     rtl::Reference< SlideShow > xSlideShow( GetSlideShow( rBase ) );
     if( xSlideShow.is() )
-        return xSlideShow->startPreview( xDrawPage, xAnimationNode );
+        return xSlideShow->startPreview( xDrawPage, xAnimationNode, nullptr );
 
     return false;
 }

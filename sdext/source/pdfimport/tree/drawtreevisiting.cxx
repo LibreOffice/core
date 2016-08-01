@@ -249,7 +249,7 @@ void DrawXmlEmitter::visit( FrameElement& elem, const std::list< Element* >::con
 
     bool bTextBox = (dynamic_cast<ParagraphElement*>(elem.Children.front()) != nullptr);
     PropertyMap aFrameProps;
-    fillFrameProps( elem, aFrameProps, m_rEmitContext );
+    fillFrameProps( elem, aFrameProps, m_rEmitContext, false );
     m_rEmitContext.rEmitter.beginTag( "draw:frame", aFrameProps );
     if( bTextBox )
         m_rEmitContext.rEmitter.beginTag( "draw:text-box", PropertyMap() );

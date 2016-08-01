@@ -1420,7 +1420,7 @@ void OutlineView::onUpdateStyleSettings( bool bForceUpdate /* = false */ )
 
 IMPL_LINK_NOARG_TYPED(OutlineView, AppEventListenerHdl, VclSimpleEvent&, void)
 {
-    onUpdateStyleSettings();
+    onUpdateStyleSettings(false);
 }
 
 IMPL_LINK_TYPED(OutlineView, EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, rEvent, void)

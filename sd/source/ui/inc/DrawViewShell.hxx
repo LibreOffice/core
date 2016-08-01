@@ -137,8 +137,8 @@ public:
     virtual void    Deactivate(bool IsMDIActivate) override;
     virtual void    UIActivating( SfxInPlaceClient* ) override;
     virtual void    UIDeactivated( SfxInPlaceClient* ) override;
-    OUString        GetSelectionText( bool bCompleteWords = false );
-    bool            HasSelection( bool bText = true ) const;
+    OUString        GetSelectionText( bool bCompleteWords );
+    bool            HasSelection( bool bText ) const;
 
     //If we are editing an PRESOBJ_OUTLINE return the Outliner and fill rSel
     //with the current selection
@@ -259,7 +259,7 @@ public:
     virtual ErrCode DoVerb(long nVerb) override;
     virtual bool    ActivateObject(SdrOle2Obj* pObj, long nVerb) override;
 
-    void            SetZoomOnPage( bool bZoom = true ) { mbZoomOnPage = bZoom; }
+    void            SetZoomOnPage( bool bZoom ) { mbZoomOnPage = bZoom; }
     bool            IsZoomOnPage() { return mbZoomOnPage; }
     static void     CheckLineTo (SfxRequest& rReq);
     void            SetChildWindowState( SfxItemSet& rSet );
@@ -276,7 +276,7 @@ public:
         Do not call this method directly.  Call the method at ViewShellBase
         instead.
     */
-    virtual void    ShowUIControls (bool bVisible = true) override;
+    virtual void    ShowUIControls (bool bVisible) override;
 
     void            ScannerEvent( const css::lang::EventObject& rEventObject );
 
@@ -287,8 +287,8 @@ public:
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                                     ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer ) override;
 
-    virtual void    WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false ) override;
-    virtual void    ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false ) override;
+    virtual void    WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse ) override;
+    virtual void    ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse ) override;
 
     virtual void    VisAreaChanged(const Rectangle& rRect) override;
 

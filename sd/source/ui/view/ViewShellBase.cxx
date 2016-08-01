@@ -694,7 +694,7 @@ void ViewShellBase::WriteUserDataSequence (
     // Forward call to main sub shell.
     ViewShell* pShell = GetMainViewShell().get();
     if (pShell != nullptr)
-        pShell->WriteUserDataSequence (rSequence);
+        pShell->WriteUserDataSequence (rSequence, false);
 }
 
 void ViewShellBase::ReadUserDataSequence (

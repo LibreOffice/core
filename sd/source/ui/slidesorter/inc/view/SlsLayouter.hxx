@@ -118,7 +118,7 @@ public:
     */
     Rectangle GetPageObjectBox (
         const sal_Int32 nIndex,
-        const bool bIncludeBorderAndGap = false) const;
+        const bool bIncludeBorderAndGap) const;
 
     /** Return the bounding box in model coordinates of the page that
         contains the given amount of page objects.
@@ -155,7 +155,7 @@ public:
     */
     sal_Int32 GetIndexAtPoint (
         const Point& rModelPosition,
-        const bool bIncludePageBorders = false,
+        const bool bIncludePageBorders,
         const bool bClampToValidRange = true) const;
 
     /** Return an object that describes the logical and visual properties of

@@ -113,8 +113,8 @@ public:
 
     sal_uLong   Read(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat);
 
-    virtual void WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false ) override;
-    virtual void ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false ) override;
+    virtual void WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse ) override;
+    virtual void ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse ) override;
 
     /** this method is called when the visible area of the view from this viewshell is changed */
     virtual void VisAreaChanged(const Rectangle& rRect) override;

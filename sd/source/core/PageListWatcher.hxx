@@ -58,7 +58,7 @@ public:
     virtual ~ImpPageListWatcher();
 
     void Invalidate() { mbPageListValid = false; }
-    SdPage* GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum = 0L);
+    SdPage* GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum);
     sal_uInt32 GetSdPageCount(PageKind ePgKind);
     sal_uInt32 GetVisibleSdPageCount();
 };

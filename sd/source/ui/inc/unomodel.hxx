@@ -97,7 +97,7 @@ private:
     css::uno::Reference<css::uno::XInterface> create(
         OUString const & aServiceSpecifier, OUString const & referer);
 
-    SdPage* InsertSdPage( sal_uInt16 nPage, bool bDuplicate = false )
+    SdPage* InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
         throw (css::uno::RuntimeException, std::exception);
 
     const bool mbImpressDoc;

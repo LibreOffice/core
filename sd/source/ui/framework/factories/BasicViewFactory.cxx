@@ -227,7 +227,7 @@ void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxV
                     pSfxViewShell->DisconnectAllClients();
             }
 
-            ReleaseView(*iViewShell);
+            ReleaseView(*iViewShell, false);
 
             mpViewShellContainer->erase(iViewShell);
         }

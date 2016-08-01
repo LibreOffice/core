@@ -464,7 +464,7 @@ private:
 
     /** Switch on edit mode for the currently selected text object.
     */
-    void EnterEditMode (bool bGrabFocus=true);
+    void EnterEditMode (bool bGrabFocus);
 
     /** Return the position at which a new search is started with respect to
         the search direction as specified by the argument.

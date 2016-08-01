@@ -272,7 +272,7 @@ bool PDFIRawAdaptor::odfConvert( const OUString&                          rURL,
     const bool bSuccess = parse(uno::Reference<io::XInputStream>(),
                                 uno::Reference<task::XInteractionHandler>(),
                                 OUString(),
-                                xStatus,pEmitter,rURL);
+                                xStatus,pEmitter,rURL, "");
 
     // tell input stream that it is no longer needed
     xOutput->closeOutput();

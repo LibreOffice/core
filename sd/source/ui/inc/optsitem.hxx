@@ -130,11 +130,11 @@ public:
     sal_uInt16  GetMetric() const { Init(); return( ( 0xffff == nMetric ) ? (sal_uInt16)SfxModule::GetCurrentFieldUnit() : nMetric ); }
     sal_uInt16  GetDefTab() const { Init(); return nDefTab; }
 
-    void    SetRulerVisible( bool bOn = true ) { if( bRuler != bOn ) { OptionsChanged(); bRuler = bOn; } }
-    void    SetMoveOutline( bool bOn = true ) { if( bMoveOutline != bOn ) { OptionsChanged(); bMoveOutline = bOn; } }
-    void    SetDragStripes( bool bOn = true ) { if( bDragStripes != bOn ) { OptionsChanged(); bDragStripes = bOn; } }
-    void    SetHandlesBezier( bool bOn = true ) { if( bHandlesBezier != bOn ) { OptionsChanged(); bHandlesBezier = bOn; } }
-    void    SetHelplines( bool bOn = true ) { if( bHelplines != bOn ) { OptionsChanged(); bHelplines = bOn; } }
+    void    SetRulerVisible( bool bOn ) { if( bRuler != bOn ) { OptionsChanged(); bRuler = bOn; } }
+    void    SetMoveOutline( bool bOn ) { if( bMoveOutline != bOn ) { OptionsChanged(); bMoveOutline = bOn; } }
+    void    SetDragStripes( bool bOn ) { if( bDragStripes != bOn ) { OptionsChanged(); bDragStripes = bOn; } }
+    void    SetHandlesBezier( bool bOn ) { if( bHandlesBezier != bOn ) { OptionsChanged(); bHandlesBezier = bOn; } }
+    void    SetHelplines( bool bOn ) { if( bHelplines != bOn ) { OptionsChanged(); bHelplines = bOn; } }
     void    SetMetric( sal_uInt16 nInMetric ) { if( nMetric != nInMetric ) { OptionsChanged(); nMetric = nInMetric; } }
     void    SetDefTab( sal_uInt16 nTab ) { if( nDefTab != nTab ) { OptionsChanged(); nDefTab = nTab; } }
 };
@@ -284,20 +284,20 @@ public:
     double    GetPresentationPenWidth() const { Init(); return mnPenWidth; }
     void      SetPresentationPenWidth( double nPenWidth ) { if( mnPenWidth != nPenWidth ) { OptionsChanged(); mnPenWidth = nPenWidth; } }
 
-    void    SetStartWithTemplate( bool bOn = true ) { if( bStartWithTemplate != bOn ) { OptionsChanged(); bStartWithTemplate = bOn; } }
-    void    SetMarkedHitMovesAlways( bool bOn = true ) { if( bMarkedHitMovesAlways != bOn ) { OptionsChanged(); bMarkedHitMovesAlways = bOn; } }
-    void    SetMoveOnlyDragging( bool bOn = true ) { if( bMoveOnlyDragging != bOn ) { OptionsChanged(); bMoveOnlyDragging = bOn; } }
-    void    SetCrookNoContortion( bool bOn = true ) { if( bCrookNoContortion != bOn ) { OptionsChanged(); bCrookNoContortion = bOn; } }
-    void    SetQuickEdit( bool bOn = true ) { if( bQuickEdit != bOn ) { OptionsChanged(); bQuickEdit = bOn; } }
-    void    SetMasterPagePaintCaching( bool bOn = true ) { if( bMasterPageCache != bOn ) { OptionsChanged(); bMasterPageCache = bOn; } }
-    void    SetDragWithCopy( bool bOn = true ) { if( bDragWithCopy != bOn ) { OptionsChanged(); bDragWithCopy = bOn; } }
-    void    SetPickThrough( bool bOn = true ) { if( bPickThrough != bOn ) { OptionsChanged(); bPickThrough = bOn; } }
-    void    SetDoubleClickTextEdit( bool bOn = true ) { if( bDoubleClickTextEdit != bOn ) { OptionsChanged(); bDoubleClickTextEdit = bOn; } }
-    void    SetClickChangeRotation( bool bOn = true ) { if( bClickChangeRotation != bOn ) { OptionsChanged(); bClickChangeRotation = bOn; } }
-    void    SetEnableSdremote( bool bOn = true ) { if( bEnableSdremote != bOn ) { OptionsChanged(); bEnableSdremote = bOn; } }
-    void    SetEnablePresenterScreen( bool bOn = true ) { if( bEnablePresenterScreen != bOn ) { OptionsChanged(); bEnablePresenterScreen = bOn; } }
-    void    SetSummationOfParagraphs( bool bOn = true ){ if ( bOn != bSummationOfParagraphs ) { OptionsChanged(); bSummationOfParagraphs = bOn; } }
-    void    SetTabBarVisible( bool bOn = true ){ if ( bOn != bTabBarVisible ) { OptionsChanged(); bTabBarVisible = bOn; } }
+    void    SetStartWithTemplate( bool bOn ) { if( bStartWithTemplate != bOn ) { OptionsChanged(); bStartWithTemplate = bOn; } }
+    void    SetMarkedHitMovesAlways( bool bOn ) { if( bMarkedHitMovesAlways != bOn ) { OptionsChanged(); bMarkedHitMovesAlways = bOn; } }
+    void    SetMoveOnlyDragging( bool bOn ) { if( bMoveOnlyDragging != bOn ) { OptionsChanged(); bMoveOnlyDragging = bOn; } }
+    void    SetCrookNoContortion( bool bOn ) { if( bCrookNoContortion != bOn ) { OptionsChanged(); bCrookNoContortion = bOn; } }
+    void    SetQuickEdit( bool bOn ) { if( bQuickEdit != bOn ) { OptionsChanged(); bQuickEdit = bOn; } }
+    void    SetMasterPagePaintCaching( bool bOn ) { if( bMasterPageCache != bOn ) { OptionsChanged(); bMasterPageCache = bOn; } }
+    void    SetDragWithCopy( bool bOn ) { if( bDragWithCopy != bOn ) { OptionsChanged(); bDragWithCopy = bOn; } }
+    void    SetPickThrough( bool bOn ) { if( bPickThrough != bOn ) { OptionsChanged(); bPickThrough = bOn; } }
+    void    SetDoubleClickTextEdit( bool bOn ) { if( bDoubleClickTextEdit != bOn ) { OptionsChanged(); bDoubleClickTextEdit = bOn; } }
+    void    SetClickChangeRotation( bool bOn ) { if( bClickChangeRotation != bOn ) { OptionsChanged(); bClickChangeRotation = bOn; } }
+    void    SetEnableSdremote( bool bOn ) { if( bEnableSdremote != bOn ) { OptionsChanged(); bEnableSdremote = bOn; } }
+    void    SetEnablePresenterScreen( bool bOn ) { if( bEnablePresenterScreen != bOn ) { OptionsChanged(); bEnablePresenterScreen = bOn; } }
+    void    SetSummationOfParagraphs( bool bOn ){ if ( bOn != bSummationOfParagraphs ) { OptionsChanged(); bSummationOfParagraphs = bOn; } }
+    void    SetTabBarVisible( bool bOn ){ if ( bOn != bTabBarVisible ) { OptionsChanged(); bTabBarVisible = bOn; } }
     /** Set the printer independent layout mode.
         @param nOn
             The default value is to switch printer independent layout on,
@@ -305,9 +305,9 @@ public:
             values are reserved for future use.
     */
     void    SetPrinterIndependentLayout (sal_uInt16 nOn = 1 ){ if ( nOn != mnPrinterIndependentLayout ) { OptionsChanged(); mnPrinterIndependentLayout = nOn; } }
-    void    SetSolidDragging( bool bOn = true ) { if( bSolidDragging != bOn ) { OptionsChanged(); bSolidDragging = bOn; } }
-    void    SetShowUndoDeleteWarning( bool bOn = true ) { if( bShowUndoDeleteWarning != bOn ) { OptionsChanged(); bShowUndoDeleteWarning = bOn; } }
-    void    SetSlideshowRespectZOrder( bool bOn = true ) { if( bSlideshowRespectZOrder != bOn ) { OptionsChanged(); bSlideshowRespectZOrder = bOn; } }
+    void    SetSolidDragging( bool bOn ) { if( bSolidDragging != bOn ) { OptionsChanged(); bSolidDragging = bOn; } }
+    void    SetShowUndoDeleteWarning( bool bOn ) { if( bShowUndoDeleteWarning != bOn ) { OptionsChanged(); bShowUndoDeleteWarning = bOn; } }
+    void    SetSlideshowRespectZOrder( bool bOn ) { if( bSlideshowRespectZOrder != bOn ) { OptionsChanged(); bSlideshowRespectZOrder = bOn; } }
     void    SetDefaultObjectSizeWidth( sal_uLong nWidth ) { if( nDefaultObjectSizeWidth != nWidth ) { OptionsChanged(); nDefaultObjectSizeWidth = nWidth; } }
     void    SetDefaultObjectSizeHeight( sal_uLong nHeight ) { if( nDefaultObjectSizeHeight != nHeight ) { OptionsChanged(); nDefaultObjectSizeHeight = nHeight; } }
 
@@ -535,24 +535,24 @@ public:
     bool    IsHandoutHorizontal() const { Init(); return mbHandoutHorizontal; }
     sal_uInt16  GetHandoutPages() const { Init(); return mnHandoutPages; }
 
-    void    SetDraw( bool bOn = true ) { if( bDraw != bOn ) { OptionsChanged(); bDraw = bOn; } }
-    void    SetNotes( bool bOn = true ) { if( bNotes != bOn ) { OptionsChanged(); bNotes = bOn; } }
-    void    SetHandout( bool bOn = true ) { if( bHandout != bOn ) { OptionsChanged(); bHandout = bOn; } }
-    void    SetOutline( bool bOn = true ) { if( bOutline != bOn ) { OptionsChanged(); bOutline = bOn; } }
-    void    SetDate( bool bOn = true ) { if( bDate != bOn ) { OptionsChanged(); bDate = bOn; } }
-    void    SetTime( bool bOn = true ) { if( bTime != bOn ) { OptionsChanged(); bTime = bOn; } }
-    void    SetPagename( bool bOn = true ) { if( bPagename != bOn ) { OptionsChanged(); bPagename = bOn; } }
-    void    SetHiddenPages( bool bOn = true ) { if( bHiddenPages != bOn ) { OptionsChanged(); bHiddenPages = bOn; } }
-    void    SetPagesize( bool bOn = true ) { if( bPagesize != bOn ) { OptionsChanged(); bPagesize = bOn; } }
-    void    SetPagetile( bool bOn = true ) { if( bPagetile != bOn ) { OptionsChanged(); bPagetile = bOn; } }
-    void    SetWarningPrinter( bool bOn = true ) { if( bWarningPrinter != bOn ) { OptionsChanged(); bWarningPrinter = bOn; } }
-    void    SetWarningSize( bool bOn = true ) { if( bWarningSize != bOn ) { OptionsChanged(); bWarningSize = bOn; } }
-    void    SetWarningOrientation( bool bOn = true ) { if( bWarningOrientation != bOn ) { OptionsChanged(); bWarningOrientation = bOn; } }
-    void    SetBooklet( bool bOn = true ) { if( bBooklet != bOn ) { OptionsChanged(); bBooklet = bOn; } }
-    void    SetFrontPage( bool bOn = true ) { if( bFront != bOn ) { OptionsChanged(); bFront = bOn; } }
-    void    SetBackPage( bool bOn = true ) { if( bBack != bOn ) { OptionsChanged(); bBack = bOn; } }
-    void    SetCutPage( bool bOn = true ) { if( bCutPage != bOn ) { OptionsChanged(); bCutPage = bOn; } }
-    void    SetPaperbin( bool bOn = true ) { if( bPaperbin != bOn ) { OptionsChanged(); bPaperbin = bOn; } }
+    void    SetDraw( bool bOn ) { if( bDraw != bOn ) { OptionsChanged(); bDraw = bOn; } }
+    void    SetNotes( bool bOn ) { if( bNotes != bOn ) { OptionsChanged(); bNotes = bOn; } }
+    void    SetHandout( bool bOn ) { if( bHandout != bOn ) { OptionsChanged(); bHandout = bOn; } }
+    void    SetOutline( bool bOn ) { if( bOutline != bOn ) { OptionsChanged(); bOutline = bOn; } }
+    void    SetDate( bool bOn ) { if( bDate != bOn ) { OptionsChanged(); bDate = bOn; } }
+    void    SetTime( bool bOn ) { if( bTime != bOn ) { OptionsChanged(); bTime = bOn; } }
+    void    SetPagename( bool bOn ) { if( bPagename != bOn ) { OptionsChanged(); bPagename = bOn; } }
+    void    SetHiddenPages( bool bOn ) { if( bHiddenPages != bOn ) { OptionsChanged(); bHiddenPages = bOn; } }
+    void    SetPagesize( bool bOn ) { if( bPagesize != bOn ) { OptionsChanged(); bPagesize = bOn; } }
+    void    SetPagetile( bool bOn ) { if( bPagetile != bOn ) { OptionsChanged(); bPagetile = bOn; } }
+    void    SetWarningPrinter( bool bOn ) { if( bWarningPrinter != bOn ) { OptionsChanged(); bWarningPrinter = bOn; } }
+    void    SetWarningSize( bool bOn ) { if( bWarningSize != bOn ) { OptionsChanged(); bWarningSize = bOn; } }
+    void    SetWarningOrientation( bool bOn) { if( bWarningOrientation != bOn ) { OptionsChanged(); bWarningOrientation = bOn; } }
+    void    SetBooklet( bool bOn ) { if( bBooklet != bOn ) { OptionsChanged(); bBooklet = bOn; } }
+    void    SetFrontPage( bool bOn ) { if( bFront != bOn ) { OptionsChanged(); bFront = bOn; } }
+    void    SetBackPage( bool bOn ) { if( bBack != bOn ) { OptionsChanged(); bBack = bOn; } }
+    void    SetCutPage( bool bOn ) { if( bCutPage != bOn ) { OptionsChanged(); bCutPage = bOn; } }
+    void    SetPaperbin( bool bOn ) { if( bPaperbin != bOn ) { OptionsChanged(); bPaperbin = bOn; } }
     void    SetOutputQuality( sal_uInt16 nInQuality ) { if( nQuality != nInQuality ) { OptionsChanged(); nQuality = nInQuality; } }
     void    SetHandoutHorizontal( bool bHandoutHorizontal ) { if( mbHandoutHorizontal != bHandoutHorizontal ) { OptionsChanged(); mbHandoutHorizontal = bHandoutHorizontal; } }
     void    SetHandoutPages( sal_uInt16 nHandoutPages ) { if( nHandoutPages != mnHandoutPages ) { OptionsChanged(); mnHandoutPages = nHandoutPages; } }

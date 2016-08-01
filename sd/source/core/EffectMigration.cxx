@@ -525,7 +525,7 @@ void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEff
                 if( (pEffect->getPresetId() != aPresetId) ||
                     (pEffect->getPresetSubType() != aPresetSubType) )
                 {
-                    pMainSequence->replace( pEffect, pPreset, aPresetSubType );
+                    pMainSequence->replace( pEffect, pPreset, aPresetSubType, -1.0 );
                 }
             }
         }

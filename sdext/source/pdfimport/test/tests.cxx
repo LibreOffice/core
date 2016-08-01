@@ -462,7 +462,7 @@ namespace
                     pSink,
                     uno::Reference< task::XInteractionHandler >(),
                     OUString(),
-                    getComponentContext() ) );
+                    getComponentContext(), "" ) );
             pSink->check();
         }
 

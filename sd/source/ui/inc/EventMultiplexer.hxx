@@ -201,7 +201,7 @@ public:
     */
     void MultiplexEvent(
         EventMultiplexerEvent::EventId eEventId,
-        void* pUserData = nullptr);
+        void* pUserData);
 
 private:
     class Implementation;

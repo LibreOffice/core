@@ -71,7 +71,7 @@ void FuCustomShowDlg::DoExecute( SfxRequest& )
 
         if( nRet == RET_YES )
         {
-            mpViewShell->SetStartShowWithDialog();
+            mpViewShell->SetStartShowWithDialog(true);
 
             mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION,
                     SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );

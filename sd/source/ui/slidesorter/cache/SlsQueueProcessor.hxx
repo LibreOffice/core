@@ -70,7 +70,7 @@ public:
             shorter then that for a low priority request (denoted by a value
             of 1.)  When the timer is already running it is not modified.
     */
-    void Start (int nPriorityClass = 0);
+    void Start (int nPriorityClass);
     void Stop();
     void Pause();
     void Resume();

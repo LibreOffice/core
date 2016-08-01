@@ -52,7 +52,7 @@ public:
     // callbacks from sdr view
     virtual sal_uLong GetMarkablePointCount() const override;
     virtual sal_uLong GetMarkedPointCount() const override;
-    virtual bool MarkPoint(SdrHdl& rHdl, bool bUnmark=false) override;
+    virtual bool MarkPoint(SdrHdl& rHdl, bool bUnmark) override;
     virtual void CheckPossibilities() override;
     virtual bool MarkPoints(const Rectangle* pRect, bool bUnmark) override;
 
