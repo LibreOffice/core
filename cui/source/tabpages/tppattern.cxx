@@ -219,8 +219,7 @@ void SvxPatternTabPage::ActivatePage( const SfxItemSet&  )
 
             if( aURL.getBase().getLength() > 18 )
             {
-                aString += aURL.getBase().copy( 0, 15 );
-                aString += "...";
+                aString += aURL.getBase().copy( 0, 15 ) + "...";
             }
             else
                 aString += aURL.getBase();
@@ -478,9 +477,7 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickAddHdl_Impl, Button*, void)
 
     while( !bDifferent )
     {
-        aName  = aNewName;
-        aName += " ";
-        aName += OUString::number( j++ );
+        aName  = aNewName + " " + OUString::number( j++ );
         bDifferent = true;
 
         for( long i = 0; i < nCount && bDifferent; i++ )

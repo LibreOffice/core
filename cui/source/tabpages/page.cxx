@@ -936,9 +936,7 @@ IMPL_LINK_NOARG_TYPED(SvxPageDescPage, PaperBinHdl_Impl, Control&, void)
 
         if ( aName.isEmpty() )
         {
-            aName = aPaperBin;
-            aName += " ";
-            aName += OUString::number( i+1 );
+            aName = aPaperBin + " " + OUString::number( i+1 );
         }
         nEntryPos = m_pPaperTrayBox->InsertEntry( aName );
         m_pPaperTrayBox->SetEntryData( nEntryPos, reinterpret_cast<void*>((sal_uLong)i) );

@@ -258,11 +258,9 @@ namespace dbaui
 
     void DirectSQLDialog::addOutputText(const OUString& _rMessage)
     {
-        OUString sAppendMessage = _rMessage;
-        sAppendMessage += "\n";
+        OUString sAppendMessage = _rMessage + "\n";
 
-        OUString sCompleteMessage = m_pOutput->GetText();
-        sCompleteMessage += sAppendMessage;
+        OUString sCompleteMessage = m_pOutput->GetText() + sAppendMessage;
         m_pOutput->SetText(sCompleteMessage);
     }
 
