@@ -25,6 +25,7 @@
 #include <editeng/fontitem.hxx>
 #include "OutlineViewShell.hxx"
 #include "DrawViewShell.hxx"
+#include "ViewShellBase.hxx"
 #include "Window.hxx"
 #include "drawdoc.hxx"
 #include "strings.hrc"
@@ -128,7 +129,7 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
         // prepare undo
         ::svl::IUndoManager& rUndoMgr =  pOL->GetUndoManager();
         rUndoMgr.EnterListAction(SD_RESSTR(STR_UNDO_INSERT_SPECCHAR),
-                                    "", 0 );
+                                    "", 0, mpViewShell->GetViewShellBase().GetViewShellId() );
 
         // insert given text
         OUString aStr( cMark );
@@ -255,8 +256,9 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
             aOldSet.Put( pOV->GetAttribs() );
 
             ::svl::IUndoManager& rUndoMgr =  pOL->GetUndoManager();
+            int nViewShellId = mpViewShell ? mpViewShell->GetViewShellBase().GetViewShellId() : -1;
             rUndoMgr.EnterListAction(SD_RESSTR(STR_UNDO_INSERT_SPECCHAR),
-                                     "", 0 );
+                                     "", 0, nViewShellId );
             pOV->InsertText(aChars, true);
 
             // set attributes (set font)

@@ -36,6 +36,7 @@
 #include "editable.hxx"
 #include "queryentry.hxx"
 #include "markdata.hxx"
+#include "tabvwsh.hxx"
 
 ScDBFunc::ScDBFunc( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
     ScViewFunc( pParent, rDocSh, pViewShell )
@@ -325,7 +326,7 @@ void ScDBFunc::ToggleAutoFilter()
         // use a list action for the AutoFilter buttons (ScUndoAutoFilter) and the filter operation
 
         OUString aUndo = ScGlobal::GetRscString( STR_UNDO_QUERY );
-        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
+        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, GetViewData().GetViewShell()->GetViewShellId() );
 
         ScRange aRange;
         pDBData->GetArea( aRange );

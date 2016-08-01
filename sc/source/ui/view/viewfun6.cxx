@@ -45,6 +45,7 @@
 #include "drawview.hxx"
 #include "globalnames.hxx"
 #include "inputhdl.hxx"
+#include "tabvwsh.hxx"
 
 #include <vector>
 
@@ -438,7 +439,7 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
         }
 
         ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
-        pUndoMgr->EnterListAction(rUndoStr, rUndoStr, 0);
+        pUndoMgr->EnterListAction(rUndoStr, rUndoStr, 0, rViewData.GetViewShell()->GetViewShellId());
 
         pDocSh->GetDocFunc().SetValueCell(aCurPos, fVal, true);
 

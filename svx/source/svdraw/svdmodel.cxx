@@ -93,6 +93,7 @@
 #include <libxml/xmlwriter.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <sfx2/viewsh.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -483,7 +484,10 @@ void SdrModel::BegUndo()
 {
     if( mpImpl->mpUndoManager )
     {
-        mpImpl->mpUndoManager->EnterListAction("","",0);
+        int nViewShellId = -1;
+        if (SfxViewShell* pViewShell = SfxViewShell::Current())
+            nViewShellId = pViewShell->GetViewShellId();
+        mpImpl->mpUndoManager->EnterListAction("","",0,nViewShellId);
         nUndoLevel++;
     }
     else if( IsUndoEnabled() )
@@ -504,7 +508,10 @@ void SdrModel::BegUndo(const OUString& rComment)
 {
     if( mpImpl->mpUndoManager )
     {
-        mpImpl->mpUndoManager->EnterListAction( rComment, "", 0 );
+        int nViewShellId = -1;
+        if (SfxViewShell* pViewShell = SfxViewShell::Current())
+            nViewShellId = pViewShell->GetViewShellId();
+        mpImpl->mpUndoManager->EnterListAction( rComment, "", 0, nViewShellId );
         nUndoLevel++;
     }
     else if( IsUndoEnabled() )
@@ -526,7 +533,10 @@ void SdrModel::BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrR
         {
             aComment = aComment.replaceFirst("%1", rObjDescr);
         }
-        mpImpl->mpUndoManager->EnterListAction( aComment,"",0 );
+        int nViewShellId = -1;
+        if (SfxViewShell* pViewShell = SfxViewShell::Current())
+            nViewShellId = pViewShell->GetViewShellId();
+        mpImpl->mpUndoManager->EnterListAction( aComment,"",0,nViewShellId );
         nUndoLevel++;
     }
     else if( IsUndoEnabled() )

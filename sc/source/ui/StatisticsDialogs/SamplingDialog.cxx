@@ -273,7 +273,7 @@ void ScSamplingDialog::PerformSampling()
 
     ScRange aModifiedRange;
 
-    pUndoManager->EnterListAction( aUndo, aUndo, 0 );
+    pUndoManager->EnterListAction( aUndo, aUndo, 0, mViewData->GetViewShell()->GetViewShellId() );
 
     if (mpRandomMethodRadio->IsChecked())
     {

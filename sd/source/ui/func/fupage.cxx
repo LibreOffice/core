@@ -59,6 +59,7 @@
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include "ViewShell.hxx"
+#include "ViewShellBase.hxx"
 #include "DrawViewShell.hxx"
 #include "app.hrc"
 #include "unchss.hxx"
@@ -412,7 +413,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
             {
                 OUString aComment(SdResId(STR_UNDO_CHANGE_PAGEFORMAT));
                 ::svl::IUndoManager* pUndoMgr = mpDocSh->GetUndoManager();
-                pUndoMgr->EnterListAction(aComment, aComment, 0);
+                pUndoMgr->EnterListAction(aComment, aComment, 0, mpViewShell->GetViewShellBase().GetViewShellId());
                 SdUndoGroup* pUndoGroup = new SdUndoGroup(mpDoc);
                 pUndoGroup->SetComment(aComment);
 

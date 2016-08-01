@@ -66,6 +66,7 @@
 #include "queryentry.hxx"
 #include "markdata.hxx"
 #include "stringutil.hxx"
+#include "tabvwsh.hxx"
 
 #include <list>
 #include <memory>
@@ -2044,7 +2045,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
 
     ::svl::IUndoManager* pMgr = GetViewData().GetDocShell()->GetUndoManager();
     OUString aUndo = ScGlobal::GetRscString( STR_UNDO_DOOUTLINE );
-    pMgr->EnterListAction( aUndo, aUndo, 0 );
+    pMgr->EnterListAction( aUndo, aUndo, 0, GetViewData().GetViewShell()->GetViewShellId() );
 
     OUString aNewTabName;
     pDoc->CreateValidTabName(aNewTabName);

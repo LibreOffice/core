@@ -210,7 +210,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             if( rMarkList.GetMarkCount() == 1 )
             {
-                pUndoManager->EnterListAction("", "", 0);
+                pUndoManager->EnterListAction("", "", 0, GetViewShellBase().GetViewShellId());
                 mpDrawView->BegUndo();
 
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();

@@ -28,6 +28,7 @@
 class IDocumentDrawModelAccess;
 class IDocumentRedlineAccess;
 class IDocumentState;
+class SwDocShell;
 
 namespace sw {
 
@@ -85,6 +86,7 @@ public:
 
     SwNodes const& GetUndoNodes() const;
     SwNodes      & GetUndoNodes();
+    void SetDocShell(SwDocShell* pDocShell);
 
 private:
     IDocumentDrawModelAccess & m_rDrawModelAccess;
@@ -99,6 +101,7 @@ private:
     bool m_bLockUndoNoModifiedPosition : 1;
     /// position in Undo-Array at which Doc was saved (and is not modified)
     UndoStackMark m_UndoSaveMark;
+    SwDocShell* m_pDocShell;
 
     typedef enum { UNDO = int(true), REDO = int(false) } UndoOrRedo_t;
     bool impl_DoUndoRedo(UndoOrRedo_t const undoOrRedo);

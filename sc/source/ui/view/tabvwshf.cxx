@@ -656,7 +656,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     ::svl::IUndoManager* pUndoManager = pDocSh->GetUndoManager();
                     OUString aUndo = ScGlobal::GetRscString( STR_UNDO_TAB_RTL );
-                    pUndoManager->EnterListAction( aUndo, aUndo, 0 );
+                    pUndoManager->EnterListAction( aUndo, aUndo, 0, rViewData.GetViewShell()->GetViewShellId() );
 
                     ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
                     for (; itr != itrEnd; ++itr)

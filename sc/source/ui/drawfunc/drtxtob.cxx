@@ -625,7 +625,10 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
                             if (bUpdate)
                                 pOutliner->SetUpdateMode( false );
                             OUString aName = ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );
-                            pOutliner->GetUndoManager().EnterListAction( aName, aName, 0 );
+                            int nViewShellId = -1;
+                            if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+                                nViewShellId = pViewSh->GetViewShellId();
+                            pOutliner->GetUndoManager().EnterListAction( aName, aName, 0, nViewShellId );
                             bChanged = true;
                         }
 

@@ -961,7 +961,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
                 if (bUndo)
                 {
                     OUString aUndo = ScGlobal::GetRscString( STR_UNDO_DRAG_BREAK );
-                    pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
+                    pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pViewData->GetViewShell()->GetViewShellId() );
                 }
 
                 bool bGrow = !bHide && nNew > nPagebreakBreak;

@@ -175,7 +175,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
         if( pUndoManager )
         {
             OUString aComment( SdResId(STR_UNDO_MODIFY_PAGE) );
-            pUndoManager->EnterListAction(aComment, aComment, 0);
+            pUndoManager->EnterListAction(aComment, aComment, 0, mrViewShell.GetViewShellBase().GetViewShellId());
             ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
                 pDocument, pUndoPage, aNewName, aNewAutoLayout, bBVisible, bBObjsVisible);
             pUndoManager->AddUndoAction(pAction);

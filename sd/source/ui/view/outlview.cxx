@@ -1455,7 +1455,7 @@ void OutlineView::IgnoreCurrentPageChanges (bool bIgnoreChanges)
     and or the drawing document model. It will create needed undo actions */
 void OutlineView::BeginModelChange()
 {
-    mrOutliner.GetUndoManager().EnterListAction("", "", 0);
+    mrOutliner.GetUndoManager().EnterListAction("", "", 0, mrOutlineViewShell.GetViewShellBase().GetViewShellId());
     BegUndo(SD_RESSTR(STR_UNDO_CHANGE_TITLE_AND_LAYOUT));
 }
 

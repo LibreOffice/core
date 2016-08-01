@@ -1024,7 +1024,8 @@ void SfxUndoManager::RemoveUndoListener( SfxUndoListener& i_listener )
  * Inserts a ListUndoAction and sets its UndoArray as current.
  */
 void SfxUndoManager::EnterListAction( const OUString& rComment,
-                                      const OUString &rRepeatComment, sal_uInt16 nId )
+                                      const OUString &rRepeatComment, sal_uInt16 nId,
+                                      sal_Int32 nViewShellId )
 {
     UndoManagerGuard aGuard( *m_xData );
 
@@ -1035,7 +1036,7 @@ void SfxUndoManager::EnterListAction( const OUString& rComment,
         return;
 
     m_xData->pFatherUndoArray = m_xData->pActUndoArray;
-    SfxListUndoAction* pAction = new SfxListUndoAction( rComment, rRepeatComment, nId, m_xData->pActUndoArray );
+    SfxListUndoAction* pAction = new SfxListUndoAction( rComment, rRepeatComment, nId, nViewShellId, m_xData->pActUndoArray );
     OSL_VERIFY( ImplAddUndoAction_NoNotify( pAction, false, false, aGuard ) );
     // expected to succeed: all conditions under which it could fail should have been checked already
     m_xData->pActUndoArray = pAction;
@@ -1296,12 +1297,13 @@ void SfxUndoManager::dumpAsXml(xmlTextWriterPtr pWriter) const
 struct SfxListUndoAction::Impl
 {
     sal_uInt16 mnId;
+    sal_Int32 mnViewShellId;
 
     OUString maComment;
     OUString maRepeatComment;
 
-    Impl( sal_uInt16 nId, const OUString& rComment, const OUString& rRepeatComment ) :
-        mnId(nId), maComment(rComment), maRepeatComment(rRepeatComment) {}
+    Impl( sal_uInt16 nId, sal_Int32 nViewShellId, const OUString& rComment, const OUString& rRepeatComment ) :
+        mnId(nId), mnViewShellId(nViewShellId), maComment(rComment), maRepeatComment(rRepeatComment) {}
 };
 
 sal_uInt16 SfxListUndoAction::GetId() const
@@ -1312,6 +1314,11 @@ sal_uInt16 SfxListUndoAction::GetId() const
 OUString SfxListUndoAction::GetComment() const
 {
     return mpImpl->maComment;
+}
+
+sal_Int32 SfxListUndoAction::GetViewShellId() const
+{
+    return mpImpl->mnViewShellId;
 }
 
 void SfxListUndoAction::SetComment(const OUString& rComment)
@@ -1328,8 +1335,9 @@ SfxListUndoAction::SfxListUndoAction(
     const OUString &rComment,
     const OUString &rRepeatComment,
     sal_uInt16 nId,
+    sal_Int32 nViewShellId,
     SfxUndoArray *pFather ) :
-    mpImpl(new Impl(nId, rComment, rRepeatComment))
+    mpImpl(new Impl(nId, nViewShellId, rComment, rRepeatComment))
 {
     pFatherUndoArray = pFather;
     nMaxUndoActions = USHRT_MAX;

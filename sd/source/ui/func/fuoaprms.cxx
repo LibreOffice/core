@@ -36,6 +36,7 @@
 #include "glob.hrc"
 #include "drawdoc.hxx"
 #include "ViewShell.hxx"
+#include "ViewShellBase.hxx"
 #include "anminfo.hxx"
 #include "unoaprms.hxx"
 #include "sdundogr.hxx"
@@ -618,7 +619,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
         // with 'following curves', we have an additional UndoAction
         // therefore cling? here
-        pUndoMgr->EnterListAction(aComment, aComment, 0);
+        pUndoMgr->EnterListAction(aComment, aComment, 0, mpViewShell->GetViewShellBase().GetViewShellId());
 
         // create undo group
         SdUndoGroup* pUndoGroup = new SdUndoGroup(mpDoc);
