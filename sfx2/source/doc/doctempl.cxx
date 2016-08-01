@@ -176,7 +176,7 @@ public:
 
     void                AddEntry( const OUString& rTitle,
                                   const OUString& rTargetURL,
-                                  size_t *pPos = nullptr );
+                                  size_t *pPos );
     void                DeleteEntry( size_t nIndex );
 
     int                 Compare( RegionData_Impl* pCompareWith ) const;
@@ -228,7 +228,7 @@ public:
     RegionData_Impl*    GetRegion( size_t nIndex ) const;
 
     bool            GetTitleFromURL( const OUString& rURL, OUString& aTitle );
-    bool            InsertRegion( RegionData_Impl *pData, size_t nPos = size_t(-1) );
+    bool            InsertRegion( RegionData_Impl *pData, size_t nPos );
     const OUString& GetRootURL() const { return maRootURL; }
 
     const uno::Reference< XDocumentTemplates >& getDocTemplates() { return mxTemplates; }
@@ -1523,7 +1523,7 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
     RegionData_Impl* pRegion;
     pRegion = new RegionData_Impl( this, rTitle );
 
-    if ( ! InsertRegion( pRegion ) )
+    if ( ! InsertRegion( pRegion, (size_t)-1 ) )
     {
         delete pRegion;
         return;
@@ -1557,7 +1557,7 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
                 OUString aTitle( xRow->getString( 1 ) );
                 OUString aTargetDir( xRow->getString( 2 ) );
 
-                pRegion->AddEntry( aTitle, aTargetDir );
+                pRegion->AddEntry( aTitle, aTargetDir, nullptr );
             }
         }
         catch ( Exception& ) {}

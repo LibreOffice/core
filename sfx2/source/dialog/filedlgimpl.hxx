@@ -109,7 +109,7 @@ namespace sfx2
         void                    updateExportButton();
         void                    updateSelectionBox();
         void                    updateVersions();
-        void                    updatePreviewState( bool _bUpdatePreviewWindow = true );
+        void                    updatePreviewState( bool _bUpdatePreviewWindow );
         void                    dispose();
 
         void                    loadConfig();

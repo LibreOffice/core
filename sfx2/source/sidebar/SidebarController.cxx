@@ -1152,7 +1152,8 @@ sal_Int32 SidebarController::SetChildWindowWidth (const sal_Int32 nNewWidth)
         mpParentWindow,
         Size(nNewWidth, aWindowSize.Height()),
         nColumn,
-        nRow);
+        nRow,
+        false);
     static_cast<SplitWindow*>(pSplitWindow)->Split();
 
     return static_cast<sal_Int32>(nColumnWidth);
