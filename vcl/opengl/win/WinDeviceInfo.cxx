@@ -604,7 +604,8 @@ void WinOpenGLDeviceInfo::GetData()
     maDeviceString = displayDevice.DeviceString;
 
     if (maDeviceID.isEmpty() &&
-            maDeviceString == "RDPUDD Chained DD")
+        (maDeviceString == "RDPDD Chained DD" ||
+         (maDeviceString == "RDPUDD Chained DD")))
     {
         // we need to block RDP as it does not provide OpenGL 2.1+
         mbRDP = true;
