@@ -2429,9 +2429,9 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
     {
         for (SCSIZE i=2; i<K+1; i++)
         {
-            pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), i, 2);
-            pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), i, 3);
-            pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), i, 4);
+            pResMat->PutError( NOTAVAILABLE, i, 2);
+            pResMat->PutError( NOTAVAILABLE, i, 3);
+            pResMat->PutError( NOTAVAILABLE, i, 4);
         }
     }
 
@@ -2498,13 +2498,13 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
             {   // exact fit; test SSreg too, because SSresid might be
                 // unequal zero due to round of errors
                 pResMat->PutDouble(0.0, 1, 4); // SSresid
-                pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), 0, 3); // F
+                pResMat->PutError( NOTAVAILABLE, 0, 3); // F
                 pResMat->PutDouble(0.0, 1, 2); // RMSE
                 pResMat->PutDouble(0.0, 0, 1); // SigmaSlope
                 if (bConstant)
                     pResMat->PutDouble(0.0, 1, 1); //SigmaIntercept
                 else
-                    pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), 1, 1);
+                    pResMat->PutError( NOTAVAILABLE, 1, 1);
                 pResMat->PutDouble(1.0, 0, 2); // R^2
             }
             else
@@ -2528,7 +2528,7 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
                 }
                 else
                 {
-                    pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), 1, 1);
+                    pResMat->PutError( NOTAVAILABLE, 1, 1);
                 }
 
                 double fR2 = fSSreg / (fSSreg + fSSresid);
@@ -2626,7 +2626,7 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
                 {   // exact fit; incl. observed values Y are identical
                     pResMat->PutDouble(0.0, 1, 4); // SSresid
                     // F = (SSreg/K) / (SSresid/df) = #DIV/0!
-                    pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), 0, 3); // F
+                    pResMat->PutError( NOTAVAILABLE, 0, 3); // F
                     // RMSE = sqrt(SSresid / df) = sqrt(0 / df) = 0
                     pResMat->PutDouble(0.0, 1, 2); // RMSE
                     // SigmaSlope[i] = RMSE * sqrt(matrix[i,i]) = 0 * sqrt(...) = 0
@@ -2637,7 +2637,7 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
                     if (bConstant)
                         pResMat->PutDouble(0.0, K, 1); //SigmaIntercept
                     else
-                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), K, 1);
+                        pResMat->PutError( NOTAVAILABLE, K, 1);
 
                     //  R^2 = SSreg / (SSreg + SSresid) = 1.0
                     pResMat->PutDouble(1.0, 0, 2); // R^2
@@ -2687,7 +2687,7 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
                     }
                     else
                     {
-                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), K, 1);
+                        pResMat->PutError( NOTAVAILABLE, K, 1);
                     }
 
                     double fR2 = fSSreg / (fSSreg + fSSresid);
@@ -2783,7 +2783,7 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
                 {   // exact fit; incl. case observed values Y are identical
                     pResMat->PutDouble(0.0, 1, 4); // SSresid
                     // F = (SSreg/K) / (SSresid/df) = #DIV/0!
-                    pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), 0, 3); // F
+                    pResMat->PutError( NOTAVAILABLE, 0, 3); // F
                     // RMSE = sqrt(SSresid / df) = sqrt(0 / df) = 0
                     pResMat->PutDouble(0.0, 1, 2); // RMSE
                     // SigmaSlope[i] = RMSE * sqrt(matrix[i,i]) = 0 * sqrt(...) = 0
@@ -2794,7 +2794,7 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
                     if (bConstant)
                         pResMat->PutDouble(0.0, K, 1); //SigmaIntercept
                     else
-                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), K, 1);
+                        pResMat->PutError( NOTAVAILABLE, K, 1);
 
                     //  R^2 = SSreg / (SSreg + SSresid) = 1.0
                     pResMat->PutDouble(1.0, 0, 2); // R^2
@@ -2844,7 +2844,7 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
                     }
                     else
                     {
-                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), K, 1);
+                        pResMat->PutError( NOTAVAILABLE, K, 1);
                     }
 
                     double fR2 = fSSreg / (fSSreg + fSSresid);
