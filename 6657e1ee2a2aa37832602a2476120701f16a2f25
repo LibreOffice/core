@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3a98d1f4_76589057",
+        "filename": "include/tools/urlobj.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-08-01T13:59:01Z",
+      "side": 1,
+      "message": "rTheAbsURIRef is re-used inside of the function to store the resolved file path, otherwise a new OUString was needed.",
+      "parentUuid": "3a98d1f4_105f5473",
+      "range": {
+        "startLine": 170,
+        "startChar": 29,
+        "endLine": 170,
+        "endChar": 37
+      },
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a98d1f4_30545053",
         "filename": "include/tools/urlobj.hxx",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2016-07-29T20:40:06Z",
       "side": 1,
       "message": "The r... prefix is used with references, obejct instances get an a... prefix, so aTheResolvedURIRef would be correct.",
+      "range": {
+        "startLine": 1237,
+        "startChar": 17,
+        "endLine": 1237,
+        "endChar": 35
+      },
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_96551c1f",
+        "filename": "include/tools/urlobj.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1237,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-08-01T13:59:01Z",
+      "side": 1,
+      "message": "will be fixed",
+      "parentUuid": "3a98d1f4_30545053",
       "range": {
         "startLine": 1237,
         "startChar": 17,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "3a98d1f4_b6305809",
+        "filename": "include/tools/urlobj.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1238,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-08-01T13:59:01Z",
+      "side": 1,
+      "message": "will be fixed",
+      "parentUuid": "3a98d1f4_704ed8c2",
+      "range": {
+        "startLine": 1238,
+        "startChar": 60,
+        "endLine": 1238,
+        "endChar": 94
+      },
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a98d1f4_b0c6a014",
         "filename": "include/tools/urlobj.hxx",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2016-07-29T20:40:06Z",
       "side": 1,
       "message": "Same, aTheResolvedURIRef",
+      "range": {
+        "startLine": 1261,
+        "startChar": 17,
+        "endLine": 1261,
+        "endChar": 35
+      },
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_d635e4f7",
+        "filename": "include/tools/urlobj.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1261,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-08-01T13:59:01Z",
+      "side": 1,
+      "message": "will be fixed",
+      "parentUuid": "3a98d1f4_b0c6a014",
       "range": {
         "startLine": 1261,
         "startChar": 17,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "3a98d1f4_f63ae0e6",
+        "filename": "include/tools/urlobj.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-08-01T13:59:01Z",
+      "side": 1,
+      "message": "the encapsuling function GetNewAbsURL has no such parameters and these are the defaults from GetAbsURL",
+      "parentUuid": "3a98d1f4_d0cb2c1d",
+      "range": {
+        "startLine": 1262,
+        "startChar": 60,
+        "endLine": 1262,
+        "endChar": 94
+      },
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a98d1f4_90e2849e",
         "filename": "sc/source/filter/xml/xmlcelli.cxx",
         "patchSetId": 1
@@ -134,6 +254,24 @@
     },
     {
       "key": {
+        "uuid": "3a98d1f4_16402c56",
+        "filename": "sc/source/filter/xml/xmlcelli.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-08-01T13:59:01Z",
+      "side": 1,
+      "message": "GetAbsoluteReference() is called very often: To avoid performance issues or side effects my intention was to use the file path resolver only when it is really needed.",
+      "parentUuid": "3a98d1f4_90e2849e",
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a98d1f4_10ed948b",
         "filename": "sc/source/filter/xml/xmlexprt.cxx",
         "patchSetId": 1
@@ -145,6 +283,24 @@
       "writtenOn": "2016-07-29T20:40:06Z",
       "side": 1,
       "message": "Why not encapsulate this in SvXMLExport::GetRelativeReference() instead of sprinkling the same ifdef over several modules?",
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_362528c2",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2981,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-08-01T13:59:01Z",
+      "side": 1,
+      "message": "GetRelativeReference() is called very often: To avoid performance issues or side effects my intention was to use the file path resolver only when it is really needed.",
+      "parentUuid": "3a98d1f4_10ed948b",
       "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -174,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "3a98d1f4_5622b4ba",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1475,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-08-01T13:59:01Z",
+      "side": 1,
+      "message": "rTheAbsURIRef re-used inside of the function to store the resolved file path, otherwise a new OUString was needed.",
+      "parentUuid": "3a98d1f4_f09e6806",
+      "range": {
+        "startLine": 1475,
+        "startChar": 40,
+        "endLine": 1475,
+        "endChar": 48
+      },
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a98d1f4_10a4b455",
         "filename": "tools/source/fsys/urlobj.cxx",
         "patchSetId": 1
@@ -185,6 +365,24 @@
       "writtenOn": "2016-07-29T20:40:06Z",
       "side": 1,
       "message": "Could you please explain what exactly you are doing here?",
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_762fb0a1",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-08-01T13:59:01Z",
+      "side": 1,
+      "message": "* Definition of aContent because \"/content.xml\" it is needed 3 times\n\n* Check if the URI ends with \"/content.xml\" because only links within the content should be converted\n\n* fetch the file status of rTheAbsURIRef and if the status is ok:\n\n* resolve symlinks or desktop shortcuts to the real file path\n\n* add the string \"/content.xml\" and return the resolved path",
+      "parentUuid": "3a98d1f4_10a4b455",
       "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -208,6 +406,24 @@
     },
     {
       "key": {
+        "uuid": "3a98d1f4_962c3cad",
+        "filename": "xmloff/source/text/txtflde.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1691,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-08-01T13:59:01Z",
+      "side": 1,
+      "message": "This function is called very often: To avoid performance issues or side effects my intention was to use the file path resolver only when it is really needed.",
+      "parentUuid": "3a98d1f4_50ff1c34",
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a98d1f4_d0f24c6f",
         "filename": "xmloff/source/text/txtfldi.cxx",
         "patchSetId": 1
@@ -219,6 +435,24 @@
       "writtenOn": "2016-07-29T20:40:06Z",
       "side": 1,
       "message": "Why not encapsulate this in SvXMLImport::GetAbsoluteReference() instead of sprinkling the same ifdef over several modules?",
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_b6177853",
+        "filename": "xmloff/source/text/txtfldi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3095,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-08-01T13:59:01Z",
+      "side": 1,
+      "message": "This function is called very often: To avoid performance issues or side effects my intention was to use the file path resolver only when it is really needed.",
+      "parentUuid": "3a98d1f4_d0f24c6f",
       "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -242,6 +476,24 @@
     },
     {
       "key": {
+        "uuid": "3a98d1f4_d61c047a",
+        "filename": "xmloff/source/text/txtparae.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3283,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-08-01T13:59:01Z",
+      "side": 1,
+      "message": "This function is called very often: To avoid performance issues or side effects my intention was to use the file path resolver only when it is really needed.",
+      "parentUuid": "3a98d1f4_90f9a450",
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a98d1f4_f0e748aa",
         "filename": "xmloff/source/text/txtparai.cxx",
         "patchSetId": 1
@@ -253,6 +505,24 @@
       "writtenOn": "2016-07-29T20:40:06Z",
       "side": 1,
       "message": "Why not encapsulate this in SvXMLImport::GetAbsoluteReference() instead of sprinkling the same ifdef over several modules?",
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_f611005f",
+        "filename": "xmloff/source/text/txtparai.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-08-01T13:59:01Z",
+      "side": 1,
+      "message": "This function is called very often: To avoid performance issues or side effects my intention was to use the file path resolver only when it is really needed.",
+      "parentUuid": "3a98d1f4_f0e748aa",
       "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
