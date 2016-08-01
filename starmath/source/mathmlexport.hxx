@@ -89,7 +89,7 @@ protected:
     void ExportOperator(const SmNode *pNode, int nLevel);
     void ExportAttributes(const SmNode *pNode, int nLevel);
     void ExportFont(const SmNode *pNode, int nLevel);
-    void ExportVerticalBrace(const SmNode *pNode, int nLevel);
+    void ExportVerticalBrace(const SmVerticalBraceNode *pNode, int nLevel);
     void ExportMatrix(const SmNode *pNode, int nLevel);
     void ExportBlank(const SmNode *pNode, int nLevel);
 

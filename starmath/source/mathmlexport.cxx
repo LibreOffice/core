@@ -1391,7 +1391,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
 }
 
 
-void SmXMLExport::ExportVerticalBrace(const SmNode *pNode, int nLevel)
+void SmXMLExport::ExportVerticalBrace(const SmVerticalBraceNode *pNode, int nLevel)
 {
     // "[body] overbrace [script]"
 
@@ -1417,18 +1417,17 @@ void SmXMLExport::ExportVerticalBrace(const SmNode *pNode, int nLevel)
             break;
     }
 
-    OSL_ENSURE(pNode->GetNumSubNodes()==3,"Bad Vertical Brace");
     SvXMLElementExport aOver1(*this, XML_NAMESPACE_MATH,which, true, true);
     {//Scoping
         // using accents will draw the over-/underbraces too close to the base
         // see http://www.w3.org/TR/MathML2/chapter3.html#id.3.4.5.2
         // also XML_ACCENT is illegal with XML_MUNDER. Thus no XML_ACCENT attribute here!
         SvXMLElementExport aOver2(*this, XML_NAMESPACE_MATH,which, true, true);
-        ExportNodes(pNode->GetSubNode(0), nLevel);
+        ExportNodes(pNode->Body(), nLevel);
         AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_TRUE);
-        ExportNodes(pNode->GetSubNode(1), nLevel);
+        ExportNodes(pNode->Brace(), nLevel);
     }
-    ExportNodes(pNode->GetSubNode(2), nLevel);
+    ExportNodes(pNode->Script(), nLevel);
 }
 
 void SmXMLExport::ExportMatrix(const SmNode *pNode, int nLevel)
@@ -1554,7 +1553,7 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
             ExportFont(pNode, nLevel);
             break;
         case NVERTICAL_BRACE:
-            ExportVerticalBrace(pNode, nLevel);
+            ExportVerticalBrace(static_cast<const SmVerticalBraceNode *>(pNode), nLevel);
             break;
         case NMATRIX:
             ExportMatrix(pNode, nLevel);

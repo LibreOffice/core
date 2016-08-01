@@ -1369,7 +1369,7 @@ inline const SmMathSymbolNode* SmBraceNode::ClosingBrace() const
 
 inline SmNode* SmVerticalBraceNode::Body()
 {
-    OSL_ASSERT( GetNumSubNodes() > 0 );
+    assert( GetNumSubNodes() == 3 );
     return GetSubNode( 0 );
 }
 inline const SmNode* SmVerticalBraceNode::Body() const
@@ -1378,7 +1378,8 @@ inline const SmNode* SmVerticalBraceNode::Body() const
 }
 inline SmMathSymbolNode* SmVerticalBraceNode::Brace()
 {
-    OSL_ASSERT( GetNumSubNodes() > 1 && GetSubNode( 1 )->GetType() == NMATH );
+    assert( GetNumSubNodes() == 3 );
+    assert( GetSubNode( 1 )->GetType() == NMATH );
     return static_cast< SmMathSymbolNode* >( GetSubNode( 1 ));
 }
 inline const SmMathSymbolNode* SmVerticalBraceNode::Brace() const
@@ -1387,7 +1388,7 @@ inline const SmMathSymbolNode* SmVerticalBraceNode::Brace() const
 }
 inline SmNode* SmVerticalBraceNode::Script()
 {
-    OSL_ASSERT( GetNumSubNodes() > 2 );
+    assert( GetNumSubNodes() == 3 );
     return GetSubNode( 2 );
 }
 inline const SmNode* SmVerticalBraceNode::Script() const

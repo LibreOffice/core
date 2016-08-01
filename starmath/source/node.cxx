@@ -1555,9 +1555,9 @@ void SmBracebodyNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
 void SmVerticalBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
-    SmNode *pBody   = GetSubNode(0),
-           *pBrace  = GetSubNode(1),
-           *pScript = GetSubNode(2);
+    SmNode *pBody   = Body(),
+           *pBrace  = Brace(),
+           *pScript = Script();
     assert(pBody);
     assert(pBrace);
     assert(pScript);
