@@ -109,6 +109,11 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/lc_editheaderandfooter.png</property>
   </object>
+  <object class="GtkImage" id="InsertPagebreakImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_insertpagebreak.png</property>
+  </object>
   <object class="GtkImage" id="InsertReferenceFieldImg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -128,6 +133,11 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/lc_showsinglepage.png</property>
+  </object>
+  <object class="GtkImage" id="PlaceholderImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">sfx2/res/placeholder.png</property>
   </object>
   <object class="GtkImage" id="PrintImg">
     <property name="visible">True</property>
@@ -373,6 +383,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:Signature</property>
+                        <property name="image">PlaceholderImg</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                       </object>
@@ -489,6 +500,7 @@
                     <property name="tooltip_text" translatable="yes">Clone Formatting</property>
                     <child>
                       <object class="vcllo-SmallButton" id="FormatPaintbrush">
+                        <property name="label" translatable="yes">Clone</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1106,6 +1118,7 @@
                       <object class="GtkBox" id="box31">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkSeparator" id="separator18">
                             <property name="visible">True</property>
@@ -1224,18 +1237,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="spacing">6</property>
-                                <child>
-                                  <object class="GtkSeparator" id="separator20">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
                                 <child>
                                   <object class="sfxlo-SidebarToolBox" id="line">
                                     <property name="visible">True</property>
@@ -1385,6 +1386,7 @@
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkButton" id="StyleUpdateByExample">
+                                <property name="label" translatable="yes">Update</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -1400,6 +1402,7 @@
                             </child>
                             <child>
                               <object class="GtkButton" id="StyleNewByExample">
+                                <property name="label" translatable="yes">New</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -1523,45 +1526,20 @@
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkBox" id="box78">
+                      <object class="vcllo-SmallButton" id="InsertPagebreak">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="orientation">vertical</property>
-                        <child>
-                          <object class="GtkButton" id="TitlePageDialog">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="action_name">.uno:TitlePageDialog</property>
-                            <property name="relief">none</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="InsertPagebreak">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="action_name">.uno:InsertPagebreak</property>
-                            <property name="relief">none</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="action_name">.uno:InsertPagebreak</property>
+                        <property name="image">InsertPagebreakImg</property>
+                        <property name="relief">none</property>
+                        <property name="image_position">top</property>
+                        <property name="always_show_image">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <style>
@@ -1641,6 +1619,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="tooltip_text" translatable="yes">Insert Audio or Video</property>
                         <property name="action_name">.uno:InsertAVMedia</property>
                         <property name="image">InsertAVMediaImg</property>
                         <property name="relief">none</property>
@@ -1669,9 +1648,11 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="vcllo-SmallButton" id="Gallery">
+                        <property name="label" translatable="yes">Gallery</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="tooltip_text" translatable="yes">Open Media Gallery</property>
                         <property name="action_name">.uno:Gallery</property>
                         <property name="image">GalleryImg</property>
                         <property name="relief">none</property>
@@ -2244,6 +2225,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:InsertBreak</property>
+                        <property name="image">PlaceholderImg</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                         <property name="always_show_image">True</property>
@@ -2274,6 +2256,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:LineNumberingDialog</property>
+                        <property name="image">PlaceholderImg</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                         <property name="always_show_image">True</property>
@@ -2655,6 +2638,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:BibliographyComponent</property>
+                            <property name="image">PlaceholderImg</property>
                             <property name="relief">none</property>
                             <property name="image_position">top</property>
                             <property name="always_show_image">True</property>
@@ -2884,6 +2868,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:WordCountDialog</property>
+                            <property name="image">PlaceholderImg</property>
                             <property name="relief">none</property>
                             <property name="image_position">top</property>
                             <property name="always_show_image">True</property>
@@ -2953,6 +2938,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:ShowAnnotations</property>
+                            <property name="image">PlaceholderImg</property>
                             <property name="relief">none</property>
                             <property name="image_position">top</property>
                             <property name="always_show_image">True</property>
@@ -3259,6 +3245,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:MergeDocuments</property>
+                            <property name="image">PlaceholderImg</property>
                             <property name="relief">none</property>
                             <property name="image_position">top</property>
                             <property name="always_show_image">True</property>
@@ -3334,6 +3321,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:PrintLayout</property>
+                        <property name="image">PlaceholderImg</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                         <property name="always_show_image">True</property>
@@ -3350,6 +3338,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:BrowseView</property>
+                        <property name="image">PlaceholderImg</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                         <property name="always_show_image">True</property>
@@ -3661,6 +3650,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:HideWhitespace</property>
+                        <property name="image">PlaceholderImg</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                         <property name="always_show_image">True</property>
