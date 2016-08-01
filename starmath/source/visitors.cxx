@@ -1181,8 +1181,8 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBinVerNode* pNode )
  */
 void SmCaretPosGraphBuildingVisitor::Visit( SmVerticalBraceNode* pNode )
 {
-    SmNode  *pBody   = pNode->GetSubNode( 0 ),
-            *pScript = pNode->GetSubNode( 2 );
+    SmNode  *pBody   = pNode->Body(),
+            *pScript = pNode->Script();
     //None of these children can be NULL
 
     SmCaretPosGraphEntry  *left,
@@ -2396,8 +2396,8 @@ void SmNodeToTextVisitor::Visit( SmRectangleNode* )
 
 void SmNodeToTextVisitor::Visit( SmVerticalBraceNode* pNode )
 {
-    SmNode *pBody   = pNode->GetSubNode( 0 ),
-           *pScript = pNode->GetSubNode( 2 );
+    SmNode *pBody   = pNode->Body(),
+           *pScript = pNode->Script();
     LineToText( pBody );
     Append( pNode->GetToken( ).aText );
     LineToText( pScript );
