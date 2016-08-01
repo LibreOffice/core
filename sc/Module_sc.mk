@@ -15,6 +15,7 @@ $(eval $(call gb_Module_add_targets,sc,\
 	Library_scd \
 	Library_scfilt \
 	$(call gb_Helper_optional,DESKTOP,Library_scui) \
+	Package_res_xml \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,sc,\
