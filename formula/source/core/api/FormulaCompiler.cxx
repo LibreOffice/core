@@ -1423,6 +1423,7 @@ void FormulaCompiler::Factor()
                     if (pc >= 2 && (pArr->nIndex == nSepPos + 3 || pArr->nIndex == nSepPos + 4) &&
                             pArr->pCode[nSepPos+1]->GetType() == svDouble &&
                             pArr->pCode[nSepPos+1]->GetDouble() != 1.0 &&
+                            pArr->pCode[nSepPos+2]->GetOpCode() == ocClose &&
                             pArr->RemoveToken( nSepPos, 2) == 2)
                     {
                         // Remove the ocPush/svDouble just removed also from
