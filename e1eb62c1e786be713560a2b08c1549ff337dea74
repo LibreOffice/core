@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_3113725e",
+        "filename": "sc/source/ui/view/cellsh.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-08-01T14:16:30Z",
+      "side": 1,
+      "message": "I debugged and GetState method is calling when every column and row selected. And i expected disable items whenever select row or column. But to disable items it needs to double click a cell and after select a row or col.   \n\nIs it true get state method?",
+      "range": {
+        "startLine": 612,
+        "startChar": 0,
+        "endLine": 613,
+        "endChar": 36
+      },
+      "revId": "e1eb62c1e786be713560a2b08c1549ff337dea74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
