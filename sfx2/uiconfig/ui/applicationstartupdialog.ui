@@ -113,7 +113,7 @@
                     <property name="margin_bottom">3</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">LibreOffice-from-Collabora</property>
+                    <property name="label" translatable="no">Collabora Office</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                       <attribute name="size" value="12000"/>
@@ -133,9 +133,9 @@
                     <property name="margin_bottom">3</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Collabora provides and maintains LibreOffice products on iTunes. Collabora's enterprise-grade productivity suite LibreOffice-from-Collabora for Mac delivers long term stability and support for demanding environments. Deployment and administration utilities together with fast-response bug-fix support are available for enterprise customers.
+                    <property name="label" translatable="yes">Collabora provides and maintains LibreOffice products in the Mac App Store. Collabora's enterprise-grade productivity suite Collabora Office for Mac delivers long term stability and support for demanding environments. Deployment and administration utilities together with fast-response bug-fix support are available for enterprise customers.
 
-App Store purchases of LibreOffice-from-Collabora support ongoing development and enhancement of LibreOffice for Mac. Get extended features and stability while funding LibreOffice for Mac development by buying LibreOffice-from-Collabora today.</property>
+App Store purchases of Collabora Office support ongoing development and enhancement of LibreOffice for Mac. Get extended features and stability while funding LibreOffice for Mac development by buying Collabora Office today.</property>
                     <property name="justify">fill</property>
                     <property name="wrap">True</property>
                     <property name="max_width_chars">70</property>
@@ -165,7 +165,7 @@ App Store purchases of LibreOffice-from-Collabora support ongoing development an
                 </child>
                 <child>
                   <object class="GtkLinkButton" id="link">
-                    <property name="label" translatable="yes">LibreOffice-from-Collabora</property>
+                    <property name="label" translatable="no">Collabora Office</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
