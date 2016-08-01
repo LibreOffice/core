@@ -135,7 +135,10 @@ static void lcl_RemoveAttribs( EditView& rEditView )
     pEngine->SetUpdateMode(false);
 
     OUString aName = ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );
-    pEngine->GetUndoManager().EnterListAction( aName, aName, 0 );
+    int nViewShellId = -1;
+    if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+        nViewShellId = pViewSh->GetViewShellId();
+    pEngine->GetUndoManager().EnterListAction( aName, aName, 0, nViewShellId );
 
     rEditView.RemoveAttribs(true);
     pEngine->RepeatDefaults();      // paragraph attributes from cell formats must be preserved

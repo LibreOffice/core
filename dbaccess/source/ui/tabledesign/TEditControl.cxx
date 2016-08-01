@@ -648,7 +648,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
     default:            sActionDescription = ModuleRes( STR_CHANGE_COLUMN_ATTRIBUTE ); break;
     }
 
-    GetUndoManager().EnterListAction( sActionDescription, OUString(),0 );
+    GetUndoManager().EnterListAction( sActionDescription, OUString(),0,-1 );
     if (!pActFieldDescr)
     {
         const OTypeInfoMap& rTypeInfoMap = GetView()->getController().getTypeInfo();

@@ -196,7 +196,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             if (bUndo)
                             {
                                 OUString aStrImport = ScGlobal::GetRscString( STR_UNDO_IMPORTDATA );
-                                GetUndoManager()->EnterListAction( aStrImport, aStrImport, 0 );
+                                int nViewShellId = -1;
+                                if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+                                    nViewShellId = pViewSh->GetViewShellId();
+                                GetUndoManager()->EnterListAction( aStrImport, aStrImport, 0, nViewShellId );
                             }
 
                             ScDBData* pDBData = GetDBData( ScRange(aPos), SC_DB_IMPORT, SC_DBSEL_KEEP );

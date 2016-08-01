@@ -1789,7 +1789,12 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     std::vector<ScRange> qIncreaseRange;
     OUString aUndo = ScGlobal::GetRscString( STR_UNDO_INSERTCELLS );
     if (bRecord)
-        rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
+    {
+        int nViewShellId = -1;
+        if (pViewSh)
+            nViewShellId = pViewSh->GetViewShellId();
+        rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0, nViewShellId );
+    }
 
     itr = aMark.begin();
     for (; itr != itrEnd && nTabCount; ++itr)
@@ -2217,7 +2222,12 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     bool bDeletingMerge = false;
     OUString aUndo = ScGlobal::GetRscString( STR_UNDO_DELETECELLS );
     if (bRecord)
-        rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
+    {
+        int nViewShellId = -1;
+        if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+            nViewShellId = pViewSh->GetViewShellId();
+        rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0, nViewShellId );
+    }
 
     itr = aMark.begin();
     for (; itr != itrEnd && *itr < nTabCount; ++itr)
@@ -5199,7 +5209,12 @@ void ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
         OUString aUndo = ScGlobal::GetRscString( STR_UNDO_RESIZEMATRIX );
         bool bUndo(rDoc.IsUndoEnabled());
         if (bUndo)
-            rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
+        {
+            int nViewShellId = -1;
+            if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+                nViewShellId = pViewSh->GetViewShellId();
+            rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0, nViewShellId );
+        }
 
         aFormula = aFormula.copy(1, aFormula.getLength()-2);
 
@@ -5252,7 +5267,10 @@ void ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilter,
                 {
                     // group all remove and the insert action
                     OUString aUndo = ScGlobal::GetRscString( STR_UNDO_INSERTAREALINK );
-                    rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
+                    int nViewShellId = -1;
+                    if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+                        nViewShellId = pViewSh->GetViewShellId();
+                    rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0, nViewShellId );
                 }
 
                 ScAreaLink* pOldArea = static_cast<ScAreaLink*>(pBase);
@@ -5449,7 +5467,10 @@ void ScDocFunc::ConvertFormulaToValue( const ScRange& rRange, bool bInteraction 
 void ScDocFunc::EnterListAction( sal_uInt16 nNameResId )
 {
     OUString aUndo( ScGlobal::GetRscString( nNameResId ) );
-    rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
+    int nViewShellId = -1;
+    if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+        nViewShellId = pViewSh->GetViewShellId();
+    rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0, nViewShellId );
 }
 
 void ScDocFunc::EndListAction()

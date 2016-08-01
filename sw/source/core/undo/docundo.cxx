@@ -23,6 +23,8 @@
 #include <svx/svdmodel.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>
+#include <docsh.hxx>
+#include <view.hxx>
 #include <drawdoc.hxx>
 #include <ndarr.hxx>
 #include <pam.hxx>
@@ -77,6 +79,11 @@ SwNodes      & UndoManager::GetUndoNodes()
 bool UndoManager::IsUndoNodes(SwNodes const& rNodes) const
 {
     return & rNodes == m_xUndoNodes.get();
+}
+
+void UndoManager::SetDocShell(SwDocShell* pDocShell)
+{
+    m_pDocShell = pDocShell;
 }
 
 size_t UndoManager::GetUndoActionCount(const bool bCurrentLevel) const
@@ -212,7 +219,13 @@ UndoManager::StartUndo(SwUndoId const i_eUndoId,
         comment = pRewriter->Apply(comment);
     }
 
-    SdrUndoManager::EnterListAction(comment, comment, eUndoId);
+    int nViewShellId = -1;
+    if (m_pDocShell)
+    {
+        if (const SwView* pView = m_pDocShell->GetView())
+            nViewShellId = pView->GetViewShellId();
+    }
+    SdrUndoManager::EnterListAction(comment, comment, eUndoId, nViewShellId);
 
     return eUndoId;
 }
@@ -563,7 +576,13 @@ bool UndoManager::Repeat(::sw::RepeatContext & rContext,
     sal_uInt16 const nId(pRepeatAction->GetId());
     if (DoesUndo())
     {
-        EnterListAction(comment, rcomment, nId);
+        int nViewShellId = -1;
+        if (m_pDocShell)
+        {
+            if (const SwView* pView = m_pDocShell->GetView())
+                nViewShellId = pView->GetViewShellId();
+        }
+        EnterListAction(comment, rcomment, nId, nViewShellId);
     }
 
     SwPaM* pTmp = rContext.m_pCurrentPaM;

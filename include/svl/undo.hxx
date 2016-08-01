@@ -130,7 +130,7 @@ class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArra
 public:
 
     SfxListUndoAction(
-        const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId, SfxUndoArray *pFather );
+        const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId, sal_Int32 nViewShellId, SfxUndoArray *pFather );
     virtual ~SfxListUndoAction();
 
     virtual void            Undo() override;
@@ -143,6 +143,8 @@ public:
     virtual bool            Merge( SfxUndoAction *pNextAction ) override;
 
     virtual OUString        GetComment() const override;
+    /// See SfxUndoAction::GetViewShellId().
+    sal_Int32 GetViewShellId() const override;
     virtual OUString        GetRepeatComment(SfxRepeatTarget&) const override;
     virtual sal_uInt16      GetId() const override;
 
@@ -228,7 +230,7 @@ namespace svl
         virtual bool            Repeat( SfxRepeatTarget &rTarget ) = 0;
         virtual bool            CanRepeat( SfxRepeatTarget &rTarget ) const = 0;
 
-        virtual void            EnterListAction(const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId) = 0;
+        virtual void            EnterListAction(const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId, sal_Int32 nViewShellId) = 0;
 
         /** leaves the list action entered with EnterListAction
             @return the number of the sub actions in the list which has just been left. Note that in case no such
@@ -319,7 +321,7 @@ public:
     virtual OUString        GetRepeatActionComment( SfxRepeatTarget &rTarget) const override;
     virtual bool            Repeat( SfxRepeatTarget &rTarget ) override;
     virtual bool            CanRepeat( SfxRepeatTarget &rTarget ) const override;
-    virtual void            EnterListAction(const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId) override;
+    virtual void            EnterListAction(const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId, sal_Int32 nViewShellId) override;
     virtual size_t          LeaveListAction() override;
     virtual size_t          LeaveAndMergeListAction() override;
     virtual bool            IsInListAction() const override;

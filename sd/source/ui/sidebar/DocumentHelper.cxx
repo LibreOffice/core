@@ -27,6 +27,8 @@
 #include "strings.hrc"
 #include "sdresid.hxx"
 #include "undoback.hxx"
+#include "ViewShell.hxx"
+#include "ViewShellBase.hxx"
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -319,7 +321,7 @@ void DocumentHelper::AssignMasterPageToPageList (
 
     ::svl::IUndoManager* pUndoMgr = rTargetDocument.GetDocSh()->GetUndoManager();
     if( pUndoMgr )
-        pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_SET_PRESLAYOUT), OUString(), 0);
+        pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_SET_PRESLAYOUT), OUString(), 0, rTargetDocument.GetDocSh()->GetViewShell()->GetViewShellBase().GetViewShellId());
 
     SdPage* pMasterPageInDocument = ProvideMasterPage(rTargetDocument,pMasterPage,rpPageList);
     if (pMasterPageInDocument == nullptr)

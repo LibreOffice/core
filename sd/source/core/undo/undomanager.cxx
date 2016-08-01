@@ -27,12 +27,12 @@ UndoManager::UndoManager( sal_uInt16 nMaxUndoActionCount /* = 20 */ )
 {
 }
 
-void UndoManager::EnterListAction(const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId /* =0 */)
+void UndoManager::EnterListAction(const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId, sal_Int32 nViewShellId)
 {
     if( !IsDoing() )
     {
         ClearLinkedRedoActions();
-        SdrUndoManager::EnterListAction( rComment, rRepeatComment, nId );
+        SdrUndoManager::EnterListAction( rComment, rRepeatComment, nId, nViewShellId );
     }
 }
 
