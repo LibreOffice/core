@@ -567,7 +567,7 @@ void OptimizerDialog::InitPage3()
 }
 
 
-static OUString ImpValueOfInMB( sal_Int64 rVal, sal_Unicode nSeparator = '.' )
+static OUString ImpValueOfInMB( sal_Int64 rVal, sal_Unicode nSeparator )
 {
     double fVal( static_cast<double>( rVal ) );
     fVal /= ( 1 << 20 );

@@ -1792,7 +1792,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(vcl::Window* pPar
                     continue;
             }
 
-            OUString aDescription( getShapeDescription( xShape ) );
+            OUString aDescription( getShapeDescription( xShape, true ) );
             sal_Int32 nPos = mpLBTrigger->InsertEntry( aDescription );
 
             mpLBTrigger->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)nShape) );

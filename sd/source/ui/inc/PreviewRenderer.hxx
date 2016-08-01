@@ -95,7 +95,7 @@ public:
         const SdPage* pPage,
         const Size aPreviewPixelSize,
         const OUString& sSubstitutionText,
-        const bool bObeyHighContrastMode = true,
+        const bool bObeyHighContrastMode,
         const bool bDisplayPresentationObjects = true);
 
     /** Render an image that contains the given substitution text instead of a

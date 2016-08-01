@@ -125,12 +125,12 @@ public:
     virtual sal_Int8 AcceptDrop (
         const AcceptDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow = nullptr,
+        ::sd::Window* pTargetWindow,
         sal_uInt16 nPage = SDRPAGE_NOTFOUND,
         sal_uInt16 nLayer = SDRPAGE_NOTFOUND) override;
     virtual sal_Int8 ExecuteDrop (
         const ExecuteDropEvent& rEvt,
-        ::sd::Window* pTargetWindow = nullptr,
+        ::sd::Window* pTargetWindow,
         sal_uInt16 nPage = SDRPAGE_NOTFOUND,
         sal_uInt16 nLayer = SDRPAGE_NOTFOUND) override;
 
@@ -193,7 +193,7 @@ private:
     /** updates the high contrast settings and document color if they changed.
         @param bForceUpdate forces the method to set all style settings
     */
-    void onUpdateStyleSettings( bool bForceUpdate = false );
+    void onUpdateStyleSettings( bool bForceUpdate );
 
     /** this link is called from the vcl application when the stylesettings
         change. Its only purpose is to call onUpdateStyleSettings() then.

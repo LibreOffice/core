@@ -369,7 +369,7 @@ public:
     bool IsPrecious() const { return mbIsPrecious; }
 
     void createAnnotation( css::uno::Reference< css::office::XAnnotation >& xAnnotation );
-    void addAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, int nIndex = -1 );
+    void addAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, int nIndex );
     void removeAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
     const sd::AnnotationVector& getAnnotations() const { return maAnnotations; }
     OString stringify() const;

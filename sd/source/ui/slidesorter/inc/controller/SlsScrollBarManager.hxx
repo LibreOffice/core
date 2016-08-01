@@ -84,7 +84,7 @@ public:
             set and the whole window is repainted.
     */
     void UpdateScrollBars (
-        bool bScrollToCurrentPosition = true);
+        bool bScrollToCurrentPosition);
 
     /** Place the scroll bars inside the given area.  When the available
         area is not large enough for the content to display the horizontal

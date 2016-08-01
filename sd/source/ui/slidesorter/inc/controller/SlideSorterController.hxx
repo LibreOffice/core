@@ -94,7 +94,7 @@ public:
             size does not change (the size does change when the visibility
             of scroll bars changes.)
     */
-    void Rearrange (bool bForce = false);
+    void Rearrange (bool bForce);
 
     /** Return the descriptor of the page that is rendered under the
         given position.  This takes the IsOnlyPreviewTriggersMouseOver

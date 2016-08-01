@@ -1517,7 +1517,7 @@ DragAndDropModeHandler::~DragAndDropModeHandler()
     if (mpDragAndDropContext)
     {
         // Disconnect the substitution handler from this selection function.
-        mpDragAndDropContext->SetTargetSlideSorter();
+        mpDragAndDropContext->SetTargetSlideSorter(Point(0,0));
         mpDragAndDropContext.reset();
     }
     mrSlideSorter.GetController().GetInsertionIndicatorHandler()->End(Animator::AM_Animated);
@@ -1563,7 +1563,7 @@ bool DragAndDropModeHandler::ProcessDragEvent (SelectionFunction::EventDescripto
     {
         mpDragAndDropContext->UpdatePosition(
             rDescriptor.maMousePosition,
-            rDescriptor.meDragMode);
+            rDescriptor.meDragMode, true);
     }
 
     return true;

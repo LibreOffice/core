@@ -335,7 +335,7 @@ public:
     SAL_DLLPRIVATE bool InsertBookmarkAsObject(const std::vector<OUString> &rBookmarkList,
                                     const std::vector<OUString> &rExchangeList,
                                     bool bLink, ::sd::DrawDocShell* pBookmarkDocSh,
-                                    Point* pObjPos, bool bCalcObjCount = false);
+                                    Point* pObjPos, bool bCalcObjCount);
 
     void   CloseBookmarkDoc();
 
@@ -414,7 +414,7 @@ public:
     SAL_DLLPRIVATE std::vector<sd::FrameView*>& GetFrameViewList() { return maFrameViewList; }
     SdCustomShowList* GetCustomShowList(bool bCreate = false);
 
-    SAL_DLLPRIVATE void                NbcSetChanged(bool bFlag = true);
+    SAL_DLLPRIVATE void                NbcSetChanged(bool bFlag);
 
     SAL_DLLPRIVATE void                SetTextDefaults() const;
 
@@ -513,7 +513,7 @@ public:
         AutoLayout eNotesLayout,
         bool bIsPageBack,
         bool bIsPageObj,
-        const sal_Int32 nInsertPosition = -1);
+        const sal_Int32 nInsertPosition);
 
     /** This method acts as a simplified front end for the more complex
         <member>DuplicatePage()</member> method.
@@ -561,7 +561,7 @@ public:
         const OUString& sNotesPageName,
         bool bIsPageBack,
         bool bIsPageObj,
-        const sal_Int32 nInsertPosition = -1);
+        const sal_Int32 nInsertPosition);
 
     /** return the document fonts for latin, cjk and ctl according to the current
         languages set at this document */
@@ -631,7 +631,7 @@ private:
         bool bIsPageObj,
         SdPage* pStandardPage,
         SdPage* pNotesPage,
-        sal_Int32 nInsertPosition = -1);
+        sal_Int32 nInsertPosition);
 
     /** Set up a newly created page and insert it into the list of pages.
         @param pPreviousPage

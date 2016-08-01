@@ -89,14 +89,14 @@ public:
     sal_Int8 AcceptDrop (
         const AcceptDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow = nullptr,
+        ::sd::Window* pTargetWindow,
         sal_uInt16 nPage = SDRPAGE_NOTFOUND,
         sal_uInt16 nLayer = SDRPAGE_NOTFOUND );
 
     sal_Int8 ExecuteDrop (
         const ExecuteDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow = nullptr,
+        ::sd::Window* pTargetWindow,
         sal_uInt16 nPage = SDRPAGE_NOTFOUND,
         sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
 

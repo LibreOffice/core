@@ -134,7 +134,7 @@ public:
     OUString GetURLForToken (Token aToken);
     OUString GetPageNameForToken (Token aToken);
     OUString GetStyleNameForToken (Token aToken);
-    SdPage* GetPageObjectForToken (Token aToken, bool bLoad=true);
+    SdPage* GetPageObjectForToken (Token aToken, bool bLoad);
     Origin GetOriginForToken (Token aToken);
     sal_Int32 GetTemplateIndexForToken (Token aToken);
     std::shared_ptr<MasterPageDescriptor> GetDescriptorForToken (Token aToken);

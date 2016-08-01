@@ -133,7 +133,7 @@ public:
 
     bool                    IsMarked(  SdrObject* pObject  );
     // Optionally realize multi-selection of objects
-    bool                    GetObjectIsmarked(const OUString& rBookmark, bool bRealizeMultiSelectionOfObjects = false);
+    bool                    GetObjectIsmarked(const OUString& rBookmark, bool bRealizeMultiSelectionOfObjects);
     Bitmap                  GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixel);
 
     /** checks, if the given name is a valid new name for a slide

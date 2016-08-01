@@ -435,8 +435,8 @@ bool PPTWriter::ImplCloseDocument()
 
         nBytesToInsert += maSoundCollection.GetSize();
         nBytesToInsert += mpPptEscherEx->DrawingGroupContainerSize();
-        nBytesToInsert += ImplMasterSlideListContainer();
-        nBytesToInsert += ImplDocumentListContainer();
+        nBytesToInsert += ImplMasterSlideListContainer(nullptr);
+        nBytesToInsert += ImplDocumentListContainer(nullptr);
 
         // insert nBytes into stream and adjust depending container
         mpPptEscherEx->InsertAtCurrentPos( nBytesToInsert );

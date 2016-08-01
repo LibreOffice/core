@@ -366,7 +366,7 @@ protected:
     virtual bool ImplCreateMainNotes()=0;
 
     bool GetStyleSheets();
-    bool GetShapeByIndex( sal_uInt32 nIndex, bool bGroup = false );
+    bool GetShapeByIndex( sal_uInt32 nIndex, bool bGroup );
 
     bool CreateMainNotes();
 

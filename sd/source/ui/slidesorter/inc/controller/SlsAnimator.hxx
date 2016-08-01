@@ -75,7 +75,7 @@ public:
     AnimationId AddAnimation (
         const AnimationFunctor& rAnimation,
         const sal_Int32 nDuration,
-        const FinishFunctor& rFinishFunctor = FinishFunctor());
+        const FinishFunctor& rFinishFunctor);
 
     /** Abort and remove an animation.  In order to reduce the bookkeeping
         on the caller side, it is OK to call this method with an animation

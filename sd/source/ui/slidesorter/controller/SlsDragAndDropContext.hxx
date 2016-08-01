@@ -58,10 +58,10 @@ public:
     void UpdatePosition (
         const Point& rMousePosition,
         const InsertionIndicatorHandler::Mode eMode,
-        const bool bAllowAutoScroll = true);
+        const bool bAllowAutoScroll);
 
     void SetTargetSlideSorter (
-        const Point& rMousePosition = Point(0,0),
+        const Point& rMousePosition,
         const InsertionIndicatorHandler::Mode eMode = InsertionIndicatorHandler::UnknownMode);
 
 private:

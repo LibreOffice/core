@@ -132,7 +132,7 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
 // Inserts a bookmark as a page
 static void lcl_IterateBookmarkPages( SdDrawDocument &rDoc, SdDrawDocument* pBookmarkDoc,
                                const std::vector<OUString> &rBookmarkList, sal_uInt16 nBMSdPageCount,
-                               InsertBookmarkAsPage_FindDuplicateLayouts& rPageIterator, bool bRenameDuplicates = false )
+                               InsertBookmarkAsPage_FindDuplicateLayouts& rPageIterator, bool bRenameDuplicates )
 {
 
     // Refactored copy'n'pasted layout name collection from InsertBookmarkAsPage

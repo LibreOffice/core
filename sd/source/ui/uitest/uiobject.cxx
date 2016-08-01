@@ -23,7 +23,7 @@ StringMap ImpressWindowUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
 
-    aMap["SelectedText"] = getViewShell()->GetSelectionText();
+    aMap["SelectedText"] = getViewShell()->GetSelectionText(false);
     aMap["CurrentSlide"] = OUString::number(getViewShell()->GetCurPageId());
 
     return aMap;

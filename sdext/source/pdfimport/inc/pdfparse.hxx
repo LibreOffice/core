@@ -210,7 +210,7 @@ struct PDFStream : public PDFEntry
     virtual bool emit( EmitContext& rWriteContext ) const override;
     virtual PDFEntry* clone() const override;
 
-    unsigned int getDictLength( const PDFContainer* pObjectContainer = nullptr ) const; // get contents of the "Length" entry of the dict
+    unsigned int getDictLength( const PDFContainer* pObjectContainer ) const; // get contents of the "Length" entry of the dict
 };
 
 struct PDFTrailer : public PDFContainer

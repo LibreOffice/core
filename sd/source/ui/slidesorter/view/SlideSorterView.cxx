@@ -429,7 +429,7 @@ void SlideSorterView::Layout ()
         while (aPageEnumeration.HasMoreElements())
         {
             model::SharedPageDescriptor pDescriptor (aPageEnumeration.GetNextElement());
-            pDescriptor->SetBoundingBox(mpLayouter->GetPageObjectBox(pDescriptor->GetPageIndex()));
+            pDescriptor->SetBoundingBox(mpLayouter->GetPageObjectBox(pDescriptor->GetPageIndex(), false));
         }
     }
 

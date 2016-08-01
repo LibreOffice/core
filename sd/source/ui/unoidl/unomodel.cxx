@@ -632,7 +632,7 @@ uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewD
                     ::sd::FrameView* pFrameView = rList[ i ];
 
                     uno::Sequence< beans::PropertyValue > aSeq;
-                    pFrameView->WriteUserDataSequence( aSeq );
+                    pFrameView->WriteUserDataSequence( aSeq, false );
                     xCont->insertByIndex( i, uno::makeAny( aSeq ) );
                 }
             }
@@ -670,7 +670,7 @@ void SAL_CALL SdXImpressDocument::setViewData( const uno::Reference < container:
             {
                 pFrameView = new ::sd::FrameView( mpDoc );
 
-                pFrameView->ReadUserDataSequence( aSeq );
+                pFrameView->ReadUserDataSequence( aSeq, false );
                 rViews.push_back( pFrameView );
             }
         }
@@ -2879,7 +2879,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdDrawPagesAccess::insertNewByInde
 
     if( mpModel->mpDoc )
     {
-        SdPage* pPage = mpModel->InsertSdPage( (sal_uInt16)nIndex );
+        SdPage* pPage = mpModel->InsertSdPage( (sal_uInt16)nIndex, false );
         if( pPage )
         {
             uno::Reference< drawing::XDrawPage > xDrawPage( pPage->getUnoPage(), uno::UNO_QUERY );

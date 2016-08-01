@@ -65,7 +65,7 @@ using namespace ::com::sun::star::uno;
 
 namespace sd {
 
-static void lcl_setLanguageForObj( SdrObject *pObj, LanguageType nLang, bool bLanguageNone = false )
+static void lcl_setLanguageForObj( SdrObject *pObj, LanguageType nLang, bool bLanguageNone )
 {
     const sal_uInt16 aLangWhichId_EE[3] =
     {

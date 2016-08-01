@@ -103,7 +103,7 @@ public:
     sal_Int32 GetRowAtPosition (
         sal_Int32 nYPosition,
         bool bIncludeBordersAndGaps,
-        GapMembership eGapMembership = GM_NONE) const;
+        GapMembership eGapMembership) const;
 
     /** Calculate the column that the point with the given horizontal
         coordinate is over.  The vertical component is ignored.
@@ -118,7 +118,7 @@ public:
     sal_Int32 GetColumnAtPosition (
         sal_Int32 nXPosition,
         bool bIncludeBordersAndGaps,
-        GapMembership eGapMembership = GM_NONE) const;
+        GapMembership eGapMembership) const;
 
     /** This method is typically called from GetRowAtPosition() and
         GetColumnAtPosition() to handle a position that lies inside the gap

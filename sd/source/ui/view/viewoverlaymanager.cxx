@@ -112,7 +112,7 @@ public:
     /** returns true if the SmartTag consumes this event. */
     virtual bool KeyInput( const KeyEvent& rKEvt ) override;
 
-    BitmapEx createOverlayImage( int nHighlight = -1 );
+    BitmapEx createOverlayImage( int nHighlight );
 
 protected:
     virtual void addCustomHandles( SdrHdlList& rHandlerList ) override;

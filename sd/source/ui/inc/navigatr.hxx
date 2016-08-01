@@ -65,8 +65,8 @@ public:
     bool    HasName() { return bName; }
     bool    IsActive() { return bActive; }
 
-    void    SetName( bool bOn = true ) { bName = bOn; }
-    void    SetActive( bool bOn = true ) { bActive = bOn; }
+    void    SetName( bool bOn ) { bName = bOn; }
+    void    SetActive( bool bOn ) { bActive = bOn; }
 
 private:
     friend class SdNavigatorWin;
@@ -135,7 +135,7 @@ private:
     */
     //    bool                        mbShowAllShapes;
 
-    static sal_uInt16           GetDragTypeSdResId( NavigatorDragType eDT, bool bImage = false );
+    static sal_uInt16           GetDragTypeSdResId( NavigatorDragType eDT, bool bImage );
     NavDocInfo*                 GetDocInfo();
 
                                 DECL_LINK_TYPED( SelectToolboxHdl, ToolBox *, void );

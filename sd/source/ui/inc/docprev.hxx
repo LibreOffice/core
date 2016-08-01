@@ -63,7 +63,7 @@ public:
                     SdDocPreviewWin( vcl::Window* pParent, const WinBits nStyle );
                     virtual ~SdDocPreviewWin();
     virtual void    dispose() override;
-    void            SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage = 0 );
+    void            SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage );
     virtual void    Resize() override;
     void            startPreview();
 

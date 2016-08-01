@@ -70,7 +70,7 @@ public:
 protected:
     virtual sal_uLong GetMarkablePointCount() const;
     virtual sal_uLong GetMarkedPointCount() const;
-    virtual bool MarkPoint(SdrHdl& rHdl, bool bUnmark=false);
+    virtual bool MarkPoint(SdrHdl& rHdl, bool bUnmark);
     virtual void CheckPossibilities();
     virtual bool MarkPoints(const Rectangle* pRect, bool bUnmark);
 
@@ -136,7 +136,7 @@ public:
     bool HasMarkedPoints() const;
     sal_uLong GetMarkedPointCount() const;
     static bool IsPointMarkable(const SdrHdl& rHdl);
-    bool MarkPoint(SdrHdl& rHdl, bool bUnmark=false);
+    bool MarkPoint(SdrHdl& rHdl, bool bUnmark);
     bool MarkPoints(const Rectangle* pRect, bool bUnmark);
 
     void CheckPossibilities();

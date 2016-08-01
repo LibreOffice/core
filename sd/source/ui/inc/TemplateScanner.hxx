@@ -78,7 +78,7 @@ public:
 
     ::std::vector<TemplateEntry*> maEntries;
 
-    void EnableSorting(bool bSortingEnabled = true);
+    void EnableSorting(bool bSortingEnabled);
     void InsertEntry(TemplateEntry* pNewEntry);
 
 private:

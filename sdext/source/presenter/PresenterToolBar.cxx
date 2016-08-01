@@ -154,7 +154,7 @@ namespace {
             const Reference<rendering::XCanvas>& rxCanvas);
         awt::Rectangle GetBoundingBox() const;
         virtual bool SetState (const bool bIsOver, const bool bIsPressed);
-        void Invalidate (const bool bSynchronous = true);
+        void Invalidate (const bool bSynchronous);
         bool IsOutside (const awt::Rectangle& rBox);
         virtual bool IsFilling() const;
         void UpdateState();
@@ -1316,7 +1316,7 @@ bool Element::SetState (
     }
     else if (bModified)
     {
-        Invalidate();
+        Invalidate(true);
     }
 
     return bModified;

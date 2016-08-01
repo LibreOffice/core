@@ -259,7 +259,7 @@ public:
                             bool bScaleAll, Orientation eOrient, sal_uInt16 nPaperBin,
                             bool bBackgroundFullSize );
 
-    void    SetStartShowWithDialog( bool bIn = true ) { mbStartShowWithDialog = bIn; }
+    void    SetStartShowWithDialog( bool bIn ) { mbStartShowWithDialog = bIn; }
     bool    IsStartShowWithDialog() const { return mbStartShowWithDialog; }
 
     sal_uInt16 GetPrintedHandoutPageNum() const { return mnPrintedHandoutPageNum; }
@@ -277,8 +277,8 @@ public:
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                                   ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer );
 
-    virtual void WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false );
-    virtual void ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false );
+    virtual void WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse );
+    virtual void ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse );
 
     /** this method is called when the visible area of the view from this viewshell is changed */
     virtual void VisAreaChanged(const Rectangle& rRect);
@@ -387,7 +387,7 @@ public:
     /** Show controls of the UI or hide them, depending on the given flag.
         As a result the border is adapted.
     */
-    virtual void ShowUIControls (bool bVisible = true);
+    virtual void ShowUIControls (bool bVisible);
     bool IsPageFlipMode() const;
 
     /** Set the given window as new parent window.  This is not possible for

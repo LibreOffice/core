@@ -1005,7 +1005,7 @@ bool PPTWriterBase::ContainsOtherShapeThanPlaceholders()
     if ( nShapes )
         for ( sal_uInt32 nIndex = 0; ( nIndex < nShapes ) && !bOtherThanPlaceHolders; nIndex++ )
         {
-            if ( GetShapeByIndex( nIndex ) && mType != "drawing.Page" )
+            if ( GetShapeByIndex( nIndex, false ) && mType != "drawing.Page" )
             {
                 if( mType == "presentation.Page" || mType == "presentation.Notes" )
                 {

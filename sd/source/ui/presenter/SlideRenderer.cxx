@@ -184,7 +184,7 @@ BitmapEx SlideRenderer::CreatePreview (
     const Image aPreview = maPreviewRenderer.RenderPage (
         pPage,
         Size(aPreviewSize.Width*nFactor, aPreviewSize.Height*nFactor),
-        OUString());
+        OUString(), true);
     if (nFactor == 1)
         return aPreview.GetBitmapEx();
     else

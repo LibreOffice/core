@@ -234,7 +234,7 @@ private:
         const ::std::vector<SdrObjectWeakRef>& rObjectList,
         SdDrawDocument* pDocument,
         const std::shared_ptr<ViewShell>& rpViewShell,
-        bool bDirectionIsForward=true,
+        bool bDirectionIsForward,
         IteratorLocation aLocation=BEGIN);
 
     /** Create an iterator that iterates over all <type>SdrObjects</type>
@@ -251,7 +251,7 @@ private:
     static Iterator CreateDocumentIterator (
         SdDrawDocument* pDocument,
         const std::shared_ptr<ViewShell>& rpViewShell,
-        bool bDirectionIsForward=true,
+        bool bDirectionIsForward,
         IteratorLocation aLocation=BEGIN);
 
     /** Return the index of a page that contains an object that a new

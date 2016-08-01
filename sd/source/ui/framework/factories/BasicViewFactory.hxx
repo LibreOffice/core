@@ -129,7 +129,7 @@ private:
 
     void ReleaseView (
         const std::shared_ptr<ViewDescriptor>& rpDescriptor,
-        bool bDoNotCache = false);
+        bool bDoNotCache);
 
     bool IsCacheable (
         const std::shared_ptr<ViewDescriptor>& rpDescriptor);

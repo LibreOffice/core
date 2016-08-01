@@ -625,7 +625,7 @@ void SlideSorterViewShell::UpdateScrollBars()
 {
     // Do not call the overwritten method of the base class: We do all the
     // scroll bar setup by ourselves.
-    mpSlideSorter->GetController().GetScrollBarManager().UpdateScrollBars ();
+    mpSlideSorter->GetController().GetScrollBarManager().UpdateScrollBars(true);
 }
 
 void SlideSorterViewShell::StartDrag (
@@ -681,7 +681,7 @@ void SlideSorterViewShell::SetPageSelection (
     const std::shared_ptr<PageSelection>& rSelection)
 {
     OSL_ASSERT(mpSlideSorter.get()!=nullptr);
-    mpSlideSorter->GetController().GetPageSelector().SetPageSelection(rSelection);
+    mpSlideSorter->GetController().GetPageSelector().SetPageSelection(rSelection, true);
 }
 
 void SlideSorterViewShell::AddSelectionChangeListener (

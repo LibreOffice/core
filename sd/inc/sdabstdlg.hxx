@@ -156,13 +156,13 @@ public:
     virtual AbstractCopyDlg*            CreateCopyDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs, const rtl::Reference<XColorList> &pColTab, ::sd::View* pView ) = 0;
     virtual AbstractSdCustomShowDlg*    CreateSdCustomShowDlg(vcl::Window* pWindow, SdDrawDocument& rDrawDoc) = 0;
     virtual SfxAbstractTabDialog*       CreateSdTabCharDialog(vcl::Window* pWindow, const SfxItemSet* pAttr, SfxObjectShell* pDocShell) = 0;
-    virtual SfxAbstractTabDialog*       CreateSdTabPageDialog(vcl::Window* pWindow, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, bool bAreaPage = true) = 0;
+    virtual SfxAbstractTabDialog*       CreateSdTabPageDialog(vcl::Window* pWindow, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, bool bAreaPage) = 0;
     virtual AbstractSdModifyFieldDlg*   CreateSdModifyFieldDlg(vcl::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet) = 0;
     virtual AbstractSdSnapLineDlg*      CreateSdSnapLineDlg(vcl::Window* pParent, const SfxItemSet& rInAttrs, ::sd::View* pView) = 0;
     virtual AbstractSdInsertLayerDlg*   CreateSdInsertLayerDlg(vcl::Window* pParent, const SfxItemSet& rInAttrs, bool bDeletable, const OUString& aStr) = 0;
     virtual AbstractSdInsertPagesObjsDlg* CreateSdInsertPagesObjsDlg(vcl::Window* pParent, const SdDrawDocument* pDoc, SfxMedium* pSfxMedium, const OUString& rFileName) = 0;
     virtual AbstractMorphDlg*           CreateMorphDlg(vcl::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2) = 0;
-    virtual SfxAbstractTabDialog*       CreateSdOutlineBulletTabDlg(vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView = nullptr) = 0;
+    virtual SfxAbstractTabDialog*       CreateSdOutlineBulletTabDlg(vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView) = 0;
     virtual SfxAbstractTabDialog*       CreateSdParagraphTabDlg(vcl::Window* pWindow, const SfxItemSet* pAttr) = 0;
     virtual AbstractSdStartPresDlg*     CreateSdStartPresentationDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs,
                                                                      const std::vector<OUString> &rPageNames, SdCustomShowList* pCSList ) = 0;

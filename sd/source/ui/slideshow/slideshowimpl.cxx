@@ -675,7 +675,7 @@ void SAL_CALL SlideshowImpl::disposing()
         }
         else if( meAnimationMode == ANIMATIONMODE_PREVIEW )
         {
-            mpViewShell->ShowUIControls();
+            mpViewShell->ShowUIControls(true);
         }
     }
 

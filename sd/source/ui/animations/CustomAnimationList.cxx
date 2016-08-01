@@ -157,7 +157,7 @@ OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText 
     return aDescription;
 }
 
-static OUString getDescription( const Any& rTarget, bool bWithText = true )
+static OUString getDescription( const Any& rTarget, bool bWithText )
 {
     OUString aDescription;
 
