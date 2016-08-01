@@ -47,40 +47,40 @@ void SwMasterUsrPref::SetUsrPref(const SwViewOption &rCopy)
 }
 
 SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
-    eFieldUpdateFlags(AUTOUPD_OFF),
-    nLinkUpdateMode(0),
-    bIsHScrollMetricSet(false),
-    bIsVScrollMetricSet(false),
-    nDefTab( MM50 * 4 ),
-    bIsSquaredPageMode(false),
-    bIsAlignMathObjectsToBaseline(false),
-    aContentConfig(bWeb, *this),
-    aLayoutConfig(bWeb, *this),
-    aGridConfig(bWeb, *this),
-    aCursorConfig(*this),
-    pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : nullptr),
-    bApplyCharUnit(false)
+    m_eFieldUpdateFlags(AUTOUPD_OFF),
+    m_nLinkUpdateMode(0),
+    m_bIsHScrollMetricSet(false),
+    m_bIsVScrollMetricSet(false),
+    m_nDefTab( MM50 * 4 ),
+    m_bIsSquaredPageMode(false),
+    m_bIsAlignMathObjectsToBaseline(false),
+    m_aContentConfig(bWeb, *this),
+    m_aLayoutConfig(bWeb, *this),
+    m_aGridConfig(bWeb, *this),
+    m_aCursorConfig(*this),
+    m_pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : nullptr),
+    m_bApplyCharUnit(false)
 {
     if (utl::ConfigManager::IsAvoidConfig())
     {
-        eHScrollMetric = eVScrollMetric = eUserMetric = FUNIT_CM;
+        m_eHScrollMetric = m_eVScrollMetric = m_eUserMetric = FUNIT_CM;
         return;
     }
     MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
-    eUserMetric = MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH;
-    eHScrollMetric = eVScrollMetric = eUserMetric;
+    m_eUserMetric = MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH;
+    m_eHScrollMetric = m_eVScrollMetric = m_eUserMetric;
 
-    aContentConfig.Load();
-    aLayoutConfig.Load();
-    aGridConfig.Load();
-    aCursorConfig.Load();
-    if(pWebColorConfig)
-        pWebColorConfig->Load();
+    m_aContentConfig.Load();
+    m_aLayoutConfig.Load();
+    m_aGridConfig.Load();
+    m_aCursorConfig.Load();
+    if(m_pWebColorConfig)
+        m_pWebColorConfig->Load();
 }
 
 SwMasterUsrPref::~SwMasterUsrPref()
 {
-    delete pWebColorConfig;
+    delete m_pWebColorConfig;
 }
 
 Sequence<OUString> SwContentViewConfig::GetPropertyNames()
@@ -289,12 +289,12 @@ void SwLayoutViewConfig::ImplCommit()
             case  4: rVal <<= rParent.IsViewHRuler(true); break;         // "Window/HorizontalRuler",
             case  5: rVal <<= rParent.IsViewVRuler(true); break;         // "Window/VerticalRuler",
             case  6:
-                if(rParent.bIsHScrollMetricSet)
-                    rVal <<= (sal_Int32)rParent.eHScrollMetric;                     // "Window/HorizontalRulerUnit"
+                if(rParent.m_bIsHScrollMetricSet)
+                    rVal <<= (sal_Int32)rParent.m_eHScrollMetric;                     // "Window/HorizontalRulerUnit"
             break;
             case  7:
-                if(rParent.bIsVScrollMetricSet)
-                    rVal <<= (sal_Int32)rParent.eVScrollMetric;                     // "Window/VerticalRulerUnit"
+                if(rParent.m_bIsVScrollMetricSet)
+                    rVal <<= (sal_Int32)rParent.m_eVScrollMetric;                     // "Window/VerticalRulerUnit"
             break;
             case  8: rVal <<= rParent.IsSmoothScroll(); break;                      // "Window/SmoothScroll",
             case  9: rVal <<= (sal_Int32)rParent.GetZoom(); break;                  // "Zoom/Value",
@@ -340,14 +340,14 @@ void SwLayoutViewConfig::Load()
                     case  5: rParent.SetViewVRuler(bSet); break;// "Window/VerticalRuler",
                     case  6:
                     {
-                        rParent.bIsHScrollMetricSet = true;
-                        rParent.eHScrollMetric = ((FieldUnit)nInt32Val);  // "Window/HorizontalRulerUnit"
+                        rParent.m_bIsHScrollMetricSet = true;
+                        rParent.m_eHScrollMetric = ((FieldUnit)nInt32Val);  // "Window/HorizontalRulerUnit"
                     }
                     break;
                     case  7:
                     {
-                        rParent.bIsVScrollMetricSet = true;
-                        rParent.eVScrollMetric = ((FieldUnit)nInt32Val); // "Window/VerticalRulerUnit"
+                        rParent.m_bIsVScrollMetricSet = true;
+                        rParent.m_eVScrollMetric = ((FieldUnit)nInt32Val); // "Window/VerticalRulerUnit"
                     }
                     break;
                     case  8: rParent.SetSmoothScroll(bSet); break;// "Window/SmoothScroll",
