@@ -282,7 +282,7 @@ public:
     /// point to the buffer of the current destination
     OUStringBuffer* pDestinationText;
 
-    void appendDestinationText(const OUString &rString)
+    void appendDestinationText(const OUString& rString)
     {
         if (pDestinationText)
             pDestinationText->append(rString);
