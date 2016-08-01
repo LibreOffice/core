@@ -694,7 +694,7 @@ bool ShutdownIcon::IsQuickstarterInstalled()
 * @param bCreate Create the directory if it does not exist yet.
 * @return OUString containing the autostart directory path.
 */
-static OUString getAutostartDir( bool bCreate = false )
+static OUString getAutostartDir( bool bCreate )
 {
     OUString aShortcut;
     const char *pConfigHome;
@@ -739,7 +739,7 @@ OUString ShutdownIcon::getShortcutName()
     aShortcut += "\\";
     aShortcut += aShortcutName;
 #else // UNX
-    OUString aShortcut = getAutostartDir();
+    OUString aShortcut = getAutostartDir(false);
     aShortcut += "/qstart.desktop";
 #endif // UNX
     return aShortcut;

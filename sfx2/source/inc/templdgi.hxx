@@ -293,7 +293,7 @@ public:
     {
         bCanEdit = b;
     }
-    void EnableDel( bool b = true )
+    void EnableDel( bool b )
     {
         bCanDel = b;
     }

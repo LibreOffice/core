@@ -288,7 +288,7 @@ static void
 addFile(struct DocumentMetadataAccess_Impl & i_rImpl,
     uno::Reference<rdf::XURI> const& i_xType,
     OUString const & i_rPath,
-    const uno::Sequence < uno::Reference< rdf::XURI > > * i_pTypes = nullptr)
+    const uno::Sequence < uno::Reference< rdf::XURI > > * i_pTypes)
 {
     try {
         const uno::Reference<rdf::XURI> xURI( getURIForStream(
@@ -328,7 +328,7 @@ addContentOrStylesFileImpl(struct DocumentMetadataAccess_Impl & i_rImpl,
     } else {
         return false;
     }
-    addFile(i_rImpl, xType.get(), i_rPath);
+    addFile(i_rImpl, xType.get(), i_rPath, nullptr);
     return true;
 }
 
