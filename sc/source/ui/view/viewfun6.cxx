@@ -438,7 +438,7 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
         }
 
         ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
-        pUndoMgr->EnterListAction(rUndoStr, rUndoStr);
+        pUndoMgr->EnterListAction(rUndoStr, rUndoStr, 0);
 
         pDocSh->GetDocFunc().SetValueCell(aCurPos, fVal, true);
 

@@ -630,7 +630,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
         nNewPages = 0;
 
         rDocliner.GetUndoManager().EnterListAction(
-                                    SD_RESSTR(STR_UNDO_INSERT_FILE), OUString() );
+                                    SD_RESSTR(STR_UNDO_INSERT_FILE), OUString(), 0 );
 
         sal_Int32 nSourcePos = 0;
         SfxStyleSheet* pStyleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE );

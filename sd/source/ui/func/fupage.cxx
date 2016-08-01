@@ -417,7 +417,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
             {
                 OUString aComment(SdResId(STR_UNDO_CHANGE_PAGEFORMAT));
                 ::svl::IUndoManager* pUndoMgr = mpDocSh->GetUndoManager();
-                pUndoMgr->EnterListAction(aComment, aComment);
+                pUndoMgr->EnterListAction(aComment, aComment, 0);
                 SdUndoGroup* pUndoGroup = new SdUndoGroup(mpDoc);
                 pUndoGroup->SetComment(aComment);
 

@@ -2268,7 +2268,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     size_t nRangeSize = aRanges.size();
 
                     OUString aUndo = ScGlobal::GetRscString( bShowNote ? STR_UNDO_SHOWNOTE : STR_UNDO_HIDENOTE );
-                    pData->GetDocShell()->GetUndoManager()->EnterListAction( aUndo, aUndo );
+                    pData->GetDocShell()->GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
 
                     for ( size_t i = 0; i < nRangeSize; ++i )
                     {

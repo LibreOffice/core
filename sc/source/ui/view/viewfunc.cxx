@@ -2290,7 +2290,7 @@ void ScViewFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
     if (bUndo)
     {
         OUString aUndo = ScGlobal::GetRscString( STR_UNDO_PROTECT_TAB );
-        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
     }
 
     ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
@@ -2320,7 +2320,7 @@ void ScViewFunc::Protect( SCTAB nTab, const OUString& rPassword )
         if (bUndo)
         {
             OUString aUndo = ScGlobal::GetRscString( STR_UNDO_PROTECT_TAB );
-            pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+            pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
         }
 
         ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
@@ -2352,7 +2352,7 @@ bool ScViewFunc::Unprotect( SCTAB nTab, const OUString& rPassword )
         if (bUndo)
         {
             OUString aUndo = ScGlobal::GetRscString( STR_UNDO_UNPROTECT_TAB );
-            pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+            pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0 );
         }
 
         ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
