@@ -2401,7 +2401,7 @@ void SfxWorkWindow::EndAutoShow_Impl( Point aPos )
 
     for (VclPtr<SfxSplitWindow> & p : pSplit)
     {
-        if ( p && p->IsAutoHide() )
+        if ( p && p->IsAutoHide(false) )
         {
             Point aLocalPos = p->ScreenToOutputPixel( aPos );
             Point aEmptyPoint;
