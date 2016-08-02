@@ -50,8 +50,11 @@ enum RestartReason {
     RESTART_REASON_EXP_FEATURES,
         // "For the modified experimental features to take effect,
         // %PRODUCTNAME must be restarted."
-    RESTART_REASON_EXTENSION_INSTALL
+    RESTART_REASON_EXTENSION_INSTALL,
         // "For the extension to work properly,
+        // %PRODUCTNAME must be restarted."
+    RESTART_REASON_OPENGL
+        // "For the OpenGL changes to take effect,
         // %PRODUCTNAME must be restarted."
 };
 

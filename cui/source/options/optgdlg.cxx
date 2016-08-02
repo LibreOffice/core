@@ -868,8 +868,13 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         }
     }
 
-    mpOpenGLConfig->setUseOpenGL(m_pUseOpenGL->IsChecked());
-    mpOpenGLConfig->setForceOpenGL(m_pForceOpenGL->IsChecked());
+    if (m_pUseOpenGL->IsValueChangedFromSaved() ||
+        m_pForceOpenGL->IsValueChangedFromSaved())
+    {
+        mpOpenGLConfig->setUseOpenGL(m_pUseOpenGL->IsChecked());
+        mpOpenGLConfig->setForceOpenGL(m_pForceOpenGL->IsChecked());
+        bModified = true;
+    }
 
     if( bMenuOptModified )
     {
@@ -896,6 +901,15 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
             pAppWindow->Invalidate();
             pAppWindow = Application::GetNextTopLevelWindow(pAppWindow);
         }
+    }
+
+    if (m_pUseOpenGL->IsValueChangedFromSaved() ||
+        m_pForceOpenGL->IsValueChangedFromSaved())
+    {
+        SolarMutexGuard aGuard;
+        svtools::executeRestartDialog(
+            comphelper::getProcessComponentContext(), nullptr,
+            svtools::RESTART_REASON_OPENGL);
     }
 
     return bModified;
@@ -984,6 +998,9 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_pAAPointLimit->SaveValue();
 #endif
     m_pFontShowCB->SaveValue();
+
+    m_pUseOpenGL->SaveValue();
+    m_pForceOpenGL->SaveValue();
 
 #if defined( UNX )
     LINK( this, OfaViewTabPage, OnAntialiasingToggled ).Call( *m_pFontAntiAliasing );

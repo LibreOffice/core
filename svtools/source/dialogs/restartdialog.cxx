@@ -61,6 +61,9 @@ public:
         case svtools::RESTART_REASON_EXTENSION_INSTALL:
             get(reason_, "reason_extension_install");
             break;
+        case svtools::RESTART_REASON_OPENGL:
+            get(reason_, "reason_opengl");
+            break;
         default:
             assert(false); // this cannot happen
         }
