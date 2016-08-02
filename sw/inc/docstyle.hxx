@@ -50,7 +50,7 @@ class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
     SwFrameFormat*           pFrameFormat;
     const SwPageDesc*   pDesc;
     const SwNumRule*    pNumRule;
-    const SwTableAutoFormat* pTableFormat;
+    SwTableAutoFormat*  pTableFormat;
     const SwBoxAutoFormat*   pBoxFormat;
     SwDoc&              rDoc;
     SfxItemSet          aCoreSet;
@@ -135,6 +135,7 @@ public:
     const SwPageDesc*       GetPageDesc();
     const SwNumRule*        GetNumRule();
     void                    SetNumRule(const SwNumRule& rRule);
+    SwTableAutoFormat*      GetTableFormat();
 
     virtual bool            IsUsed() const override;
 };
