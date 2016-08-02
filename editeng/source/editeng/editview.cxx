@@ -54,6 +54,7 @@
 #include <editeng/acorrcfg.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/outliner.hxx>
 #include <unotools/lingucfg.hxx>
 #include <osl/file.hxx>
 
@@ -401,9 +402,9 @@ void EditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bActivat
             bGotoCursor = false;
         pImpEditView->ShowCursor( bGotoCursor, bForceVisCursor );
 
-        if (comphelper::LibreOfficeKit::isActive() && !bActivate)
+        if (pImpEditView->mpViewShell && !bActivate)
         {
-            pImpEditView->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(true).getStr());
+            pImpEditView->mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(true).getStr());
         }
     }
 }
@@ -412,9 +413,9 @@ void EditView::HideCursor(bool bDeactivate)
 {
     pImpEditView->GetCursor()->Hide();
 
-    if (comphelper::LibreOfficeKit::isActive() && !bDeactivate)
+    if (pImpEditView->mpViewShell && !bDeactivate)
     {
-        pImpEditView->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(false).getStr());
+        pImpEditView->mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(false).getStr());
     }
 }
 
@@ -588,9 +589,9 @@ Color EditView::GetBackgroundColor() const
     return pImpEditView->GetBackgroundColor();
 }
 
-void EditView::registerLibreOfficeKitViewCallback(OutlinerViewCallable *pCallable)
+void EditView::RegisterViewShell(OutlinerViewShell* pViewShell)
 {
-    pImpEditView->registerLibreOfficeKitViewCallback(pCallable);
+    pImpEditView->RegisterViewShell(pViewShell);
 }
 
 void EditView::SetControlWord( EVControlBits nWord )

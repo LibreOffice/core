@@ -543,7 +543,7 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, bool /*bNoP
     // depend on the application owning this draw view to provide the view
     // shell.
     SfxViewShell* pSfxViewShell = pViewShell ? pViewShell : GetSfxViewShell();
-    pOutlView->registerLibreOfficeKitViewCallback(pSfxViewShell ? pSfxViewShell : SfxViewShell::Current());
+    pOutlView->RegisterViewShell(pSfxViewShell ? pSfxViewShell : SfxViewShell::Current());
 
     if (pText!=nullptr)
     {

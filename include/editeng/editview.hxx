@@ -35,8 +35,7 @@
 class EditEngine;
 class ImpEditEngine;
 class ImpEditView;
-class OutlinerSearchable;
-class OutlinerViewCallable;
+class OutlinerViewShell;
 class SvxSearchItem;
 class SvxFieldItem;
 namespace vcl { class Window; }
@@ -183,8 +182,8 @@ public:
     void            SetBackgroundColor( const Color& rColor );
     Color           GetBackgroundColor() const;
 
-    /// Register a LOK view callback.
-    void registerLibreOfficeKitViewCallback(OutlinerViewCallable *pCallable);
+    /// Informs this edit view about which view shell contains it.
+    void RegisterViewShell(OutlinerViewShell* pViewShell);
 
     void            SetControlWord( EVControlBits nWord );
     EVControlBits   GetControlWord() const;

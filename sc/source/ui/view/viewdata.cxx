@@ -948,7 +948,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
         if (comphelper::LibreOfficeKit::isActive())
         {
-            pEditView[eWhich]->registerLibreOfficeKitViewCallback(pViewShell);
+            pEditView[eWhich]->RegisterViewShell(pViewShell);
         }
     }
 

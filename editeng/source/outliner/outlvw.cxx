@@ -1426,9 +1426,9 @@ void OutlinerView::SetBackgroundColor( const Color& rColor )
     pEditView->SetBackgroundColor( rColor );
 }
 
-void OutlinerView::registerLibreOfficeKitViewCallback(OutlinerViewCallable* pCallable)
+void OutlinerView::RegisterViewShell(OutlinerViewShell* pViewShell)
 {
-    pEditView->registerLibreOfficeKitViewCallback(pCallable);
+    pEditView->RegisterViewShell(pViewShell);
 }
 
 Color OutlinerView::GetBackgroundColor()

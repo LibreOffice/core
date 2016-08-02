@@ -1713,7 +1713,7 @@ void ScInputHandler::UpdateActiveView()
     {
         if (comphelper::LibreOfficeKit::isActive())
         {
-            pTableView->registerLibreOfficeKitViewCallback(pActiveViewSh);
+            pTableView->RegisterViewShell(pActiveViewSh);
         }
     }
 

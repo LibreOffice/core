@@ -72,8 +72,7 @@ class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
 class OverflowingText;
 class NonOverflowingText;
-class OutlinerSearchable;
-class OutlinerViewCallable;
+class OutlinerViewShell;
 
 namespace svl
 {
@@ -274,8 +273,8 @@ public:
     void        SetBackgroundColor( const Color& rColor );
     Color       GetBackgroundColor();
 
-    /// Registers a LOK view callback.
-    void registerLibreOfficeKitViewCallback(OutlinerViewCallable* pCallable);
+    /// Informs this edit view about which view shell contains it.
+    void RegisterViewShell(OutlinerViewShell* pViewShell);
 
     SfxItemSet  GetAttribs();
 
@@ -378,13 +377,14 @@ public:
 };
 
 /// Interface class to not depend on SfxViewShell in editeng.
-class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI OutlinerViewCallable
+class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI OutlinerViewShell
 {
 public:
     virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) const = 0;
+    virtual sal_uInt32 GetViewShellId() const = 0;
 
 protected:
-    ~OutlinerViewCallable() throw () {}
+    ~OutlinerViewShell() throw () {}
 };
 
 // some thesaurus functionality to avoid code duplication in different projects...
