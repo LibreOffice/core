@@ -130,9 +130,8 @@ IMPL_STATIC_LINK_TYPED(SfxNotebookBar, ToggleMenubar, NotebookBar*, pNotebookbar
 {
     if (pNotebookbar)
     {
-        VclPtr<NotebookBarPopupMenu> pMenu = VclPtr<NotebookBarPopupMenu>::Create(SfxResId(RID_MENU_NOTEBOOKBAR));
+        ScopedVclPtrInstance<NotebookBarPopupMenu> pMenu(SfxResId(RID_MENU_NOTEBOOKBAR));
         pMenu->Execute(pNotebookbar, m_xFrame);
-        pMenu->Clear();
     }
 }
 
