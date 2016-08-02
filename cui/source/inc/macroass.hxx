@@ -26,6 +26,7 @@
 #include <svl/macitem.hxx>
 #include <vcl/lstbox.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <memory>
 
 class SfxMacroTabPage_;
 class SvTabListBox;
@@ -45,7 +46,7 @@ class SfxMacroTabPage : public SfxTabPage
     DECL_DLLPRIVATE_LINK_TYPED( TimeOut_Impl, Idle*, void );
 
 protected:
-    SfxMacroTabPage_Impl*       mpImpl;
+    std::unique_ptr<SfxMacroTabPage_Impl>       mpImpl;
 
     void                        InitAndSetHandler();
     void                        FillEvents();
