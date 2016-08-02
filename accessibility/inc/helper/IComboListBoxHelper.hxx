@@ -55,7 +55,7 @@ namespace accessibility
         virtual void            SelectEntryPos( sal_Int32  nPos, bool bSelect = true ) = 0;
         virtual sal_Int32       GetSelectEntryCount() const = 0;
         virtual void            SetNoSelection() = 0;
-        virtual sal_Int32       GetSelectEntryPos( sal_Int32  nSelIndex = 0 ) const = 0;
+        virtual sal_Int32       GetSelectEntryPos( sal_Int32  nSelIndex ) const = 0;
         virtual bool            IsInDropDown() const = 0;
         virtual Rectangle       GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const = 0;
         virtual long            GetIndexForPoint( const Point& rPoint, sal_Int32 & nPos ) const = 0;

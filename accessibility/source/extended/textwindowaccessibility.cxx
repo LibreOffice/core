@@ -725,7 +725,7 @@ void Paragraph::implGetLineBoundary( css::i18n::Boundary& rBoundary,
     if ( implIsValidIndex( nIndex, nLength ) || nIndex == nLength )
     {
         css::i18n::Boundary aBoundary =
-            m_xDocument->retrieveParagraphLineBoundary( this, nIndex );
+            m_xDocument->retrieveParagraphLineBoundary( this, nIndex, nullptr );
         rBoundary.startPos = aBoundary.startPos;
         rBoundary.endPos = aBoundary.endPos;
     }

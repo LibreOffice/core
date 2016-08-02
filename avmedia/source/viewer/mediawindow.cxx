@@ -318,7 +318,7 @@ bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bo
             {
                 uno::Reference< media::XPlayer > xPlayer( priv::MediaWindowImpl::createPlayer(
                                                             aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ),
-                                                            rReferer ) );
+                                                            rReferer, nullptr ) );
 
                 if( xPlayer.is() )
                 {

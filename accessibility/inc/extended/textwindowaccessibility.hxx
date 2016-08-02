@@ -538,7 +538,7 @@ public:
 
     css::i18n::Boundary
     retrieveParagraphLineBoundary( Paragraph const * pParagraph,
-                                   ::sal_Int32 nIndex, ::sal_Int32 *pLineNo = nullptr);
+                                   ::sal_Int32 nIndex, ::sal_Int32 *pLineNo);
 
     css::i18n::Boundary
     retrieveParagraphBoundaryOfLine( Paragraph const * pParagraph,

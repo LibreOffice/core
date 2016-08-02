@@ -109,7 +109,7 @@ public:
     */
     void commitHeaderBarEvent(sal_Int16 nEventId,
             const css::uno::Any& rNewValue,
-            const css::uno::Any& rOldValue,bool _bColumnHeaderBar = true);
+            const css::uno::Any& rOldValue, bool _bColumnHeaderBar);
 
     // helper functions
     /** commitTableEvent commit the event at all listeners of the table
