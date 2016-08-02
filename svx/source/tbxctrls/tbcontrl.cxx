@@ -96,6 +96,8 @@
 #include <svx/xflclit.hxx>
 #include <svl/currencytable.hxx>
 #include <svtools/langtab.hxx>
+#include <cppu/unotype.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #define MAX_MRU_FONTNAME_ENTRIES    5
 
@@ -1331,7 +1333,8 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     {
         mpPaletteListBox->InsertEntry( *it );
     }
-    mpPaletteListBox->SelectEntry(mrPaletteManager.GetPaletteName());
+    OUString aPaletteName( officecfg::Office::Common::UserColors::PaletteName::get() );
+    mpPaletteListBox->SelectEntry( aPaletteName );
     SelectPaletteHdl( *mpPaletteListBox );
 
     mpButtonAutoColor->SetClickHdl( LINK( this, SvxColorWindow_Impl, AutoColorClickHdl ) );
