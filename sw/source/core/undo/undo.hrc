@@ -138,9 +138,11 @@
 #define STR_NUMDOWN                         (CORE_REPEAT_END      +66)
 #define STR_UNDO_FLYFRMFMT_TITLE                (CORE_REPEAT_END      +67)
 #define STR_UNDO_FLYFRMFMT_DESCRITPTION         (CORE_REPEAT_END      +68)
+#define STR_UNDO_TBLSTYLE_CREATE                (CORE_REPEAT_END      +69)
+#define STR_UNDO_TBLSTYLE_DELETE                (CORE_REPEAT_END      +70)
 
 // !!!!!! umsetzen !!!!!!!!!!! umsetzen !!!!!!!!!!! umsetzen !!!!
-#define CORE_UNDO_END           STR_UNDO_FLYFRMFMT_DESCRITPTION// !!!! umsetzen !!!
+#define CORE_UNDO_END           STR_UNDO_TBLSTYLE_DELETE// !!!! umsetzen !!!
 
 // UI-Undo Klammerungen
 #define UI_UNDO_BEGIN                   (CORE_UNDO_END + 1)
