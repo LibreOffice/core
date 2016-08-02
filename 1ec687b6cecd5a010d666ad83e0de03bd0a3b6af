@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_43dd956f",
+        "filename": "svx/source/dialog/graphicinfodialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1001094
+      },
+      "writtenOn": "2016-08-02T20:35:47Z",
+      "side": 1,
+      "message": "I tried to use SdrGrafObj::getOriginalSize here but when I add an image it uses the second constructor and I don\u0027t know how to get SdrGrafObj out of it.",
+      "range": {
+        "startLine": 138,
+        "startChar": 4,
+        "endLine": 138,
+        "endChar": 84
+      },
+      "revId": "1ec687b6cecd5a010d666ad83e0de03bd0a3b6af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
