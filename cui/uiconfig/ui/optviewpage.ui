@@ -90,7 +90,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="forceopengl">
+                      <object class="GtkCheckButton" id="forceopengl:wrap">
                         <property name="label" translatable="yes">Force OpenGL even if blacklisted (on restart)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
