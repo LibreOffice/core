@@ -3170,4 +3170,67 @@ void CheckTable( const SwTable& rTable )
 }
 #endif
 
+SwUndoTableStyleMake::SwUndoTableStyleMake(const OUString& rName, const SwDoc* pDoc)
+    : SwUndo(UNDO_TBLSTYLE_CREATE, pDoc),
+    m_sName(rName)
+{ }
+
+SwUndoTableStyleMake::~SwUndoTableStyleMake()
+{ }
+
+void SwUndoTableStyleMake::UndoImpl(::sw::UndoRedoContext & rContext)
+{
+    m_pAutoFormat = rContext.GetDoc().DelTableStyle(m_sName, true);
+}
+
+void SwUndoTableStyleMake::RedoImpl(::sw::UndoRedoContext & rContext)
+{
+    if (m_pAutoFormat.get())
+    {
+        SwTableAutoFormat* pFormat = rContext.GetDoc().MakeTableStyle(m_sName, true);
+        if (pFormat)
+        {
+            *pFormat = *m_pAutoFormat;
+            m_pAutoFormat.reset(nullptr);
+        }
+    }
+}
+
+SwRewriter SwUndoTableStyleMake::GetRewriter() const
+{
+    SwRewriter aResult;
+    aResult.AddRule(UndoArg1, m_sName);
+    return aResult;
+}
+
+SwUndoTableStyleDelete::SwUndoTableStyleDelete(std::unique_ptr<SwTableAutoFormat> pAutoFormat, const std::vector<SwTable*>& rAffectedTables, const SwDoc* pDoc)
+    : SwUndo(UNDO_TBLSTYLE_DELETE, pDoc),
+    m_pAutoFormat(std::move(pAutoFormat)),
+    m_rAffectedTables(rAffectedTables)
+{ }
+
+SwUndoTableStyleDelete::~SwUndoTableStyleDelete()
+{ }
+
+void SwUndoTableStyleDelete::UndoImpl(::sw::UndoRedoContext & rContext)
+{
+    SwTableAutoFormat* pNewFormat = rContext.GetDoc().MakeTableStyle(m_pAutoFormat->GetName(), true);
+    *pNewFormat = *m_pAutoFormat;
+    for (size_t i=0; i < m_rAffectedTables.size(); i++)
+        m_rAffectedTables[i]->SetTableStyleName(m_pAutoFormat->GetName());
+}
+
+void SwUndoTableStyleDelete::RedoImpl(::sw::UndoRedoContext & rContext)
+{
+    // Don't need to remember deleted table style nor affected tables, because they must be the same as these already known.
+    rContext.GetDoc().DelTableStyle(m_pAutoFormat->GetName());
+}
+
+SwRewriter SwUndoTableStyleDelete::GetRewriter() const
+{
+    SwRewriter aResult;
+    aResult.AddRule(UndoArg1, m_pAutoFormat->GetName());
+    return aResult;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

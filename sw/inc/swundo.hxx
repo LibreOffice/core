@@ -150,7 +150,9 @@ enum SwUndoId
     // --> #i73249#
     UNDO_FLYFRMFMT_TITLE,           // 112
     UNDO_FLYFRMFMT_DESCRIPTION,     // 113
-    UNDO_STD_END= UNDO_FLYFRMFMT_DESCRIPTION,
+    UNDO_TBLSTYLE_CREATE,           // 114
+    UNDO_TBLSTYLE_DELETE,           // 115
+    UNDO_STD_END= UNDO_TBLSTYLE_DELETE,
 
     // UI undo ID's...
     UNDO_UI_REPLACE             =  UNDO_STD_END + 1,

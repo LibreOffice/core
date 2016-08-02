@@ -62,6 +62,7 @@
 #include "UndoManager.hxx"
 #include <textsh.hxx>
 #include <frmmgr.hxx>
+#include <tblafmt.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -200,6 +201,7 @@ public:
     void testTdf99004();
     void testTdf84695();
     void testTdf84695NormalChar();
+    void testTableStyleUndo();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -302,6 +304,7 @@ public:
     CPPUNIT_TEST(testTdf99004);
     CPPUNIT_TEST(testTdf84695);
     CPPUNIT_TEST(testTdf84695NormalChar);
+    CPPUNIT_TEST(testTableStyleUndo);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3763,6 +3766,38 @@ void SwUiWriterTest::testTdf84695NormalChar()
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
     // This was empty, pressing a normal character did not start the fly frame edit mode.
     CPPUNIT_ASSERT_EQUAL(OUString("a"), xShape->getString());
+}
+
+void SwUiWriterTest::testTableStyleUndo()
+{
+    SwDoc* pDoc = createDoc();
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+
+    sal_Int32 nStyleCount = pDoc->GetTableStyles().size();
+    SwTableAutoFormat* pStyle = pDoc->MakeTableStyle("Test Style");
+    SvxBrushItem aBackground(Color(0xFF00FF), RES_BACKGROUND );
+    pStyle->GetBoxFormat(0).SetBackground(aBackground);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount + 1);
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount);
+    rUndoManager.Redo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount + 1);
+    // check if attributes are preserved
+    pStyle = pDoc->GetTableStyles().FindAutoFormat("Test Style");
+    CPPUNIT_ASSERT(pStyle);
+    CPPUNIT_ASSERT(pStyle->GetBoxFormat(0).GetBackground() == aBackground);
+
+    pDoc->DelTableStyle("Test Style");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount);
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount + 1);
+    pStyle = pDoc->GetTableStyles().FindAutoFormat("Test Style");
+    // check if attributes are preserved
+    CPPUNIT_ASSERT(pStyle);
+    CPPUNIT_ASSERT(pStyle->GetBoxFormat(0).GetBackground() == aBackground);
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

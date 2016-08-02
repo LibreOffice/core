@@ -4613,4 +4613,62 @@ bool SwDoc::HasTableAnyProtection( const SwPosition* pPos,
     return bHasProtection;
 }
 
+SwTableAutoFormat* SwDoc::MakeTableStyle(const OUString& rName, bool bBroadcast)
+{
+    SwTableAutoFormat aTableFormat(rName);
+    GetTableStyles().AddAutoFormat(aTableFormat);
+    SwTableAutoFormat* pTableFormat = GetTableStyles().FindAutoFormat(rName);
+
+    getIDocumentState().SetModified();
+
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        SwUndo * pUndo = new SwUndoTableStyleMake(rName, this);
+
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
+    }
+
+    if (bBroadcast)
+        BroadcastStyleOperation(rName, SfxStyleFamily::Table, SfxStyleSheetHintId::CREATED);
+
+    return pTableFormat;
+}
+
+std::unique_ptr<SwTableAutoFormat> SwDoc::DelTableStyle(const OUString& rName, bool bBroadcast, std::vector<SwTable*>* pAffectedTables)
+{
+    if (bBroadcast)
+        BroadcastStyleOperation(rName, SfxStyleFamily::Table, SfxStyleSheetHintId::ERASED);
+
+    std::unique_ptr<SwTableAutoFormat> pReleasedFormat = GetTableStyles().ReleaseAutoFormat(rName);
+
+    std::vector<SwTable*> vAffectedTables;
+    if (pReleasedFormat.get())
+    {
+        size_t nTableCount = GetTableFrameFormatCount(true);
+        for (size_t i=0; i < nTableCount; ++i)
+        {
+            SwFrameFormat* pFrameFormat = &GetTableFrameFormat(i, true);
+            SwTable* pTable = SwTable::FindTable(pFrameFormat);
+            if (pTable->GetTableStyleName() == pReleasedFormat->GetName())
+            {
+                pTable->SetTableStyleName("");
+                vAffectedTables.push_back(pTable);
+            }
+        }
+
+        getIDocumentState().SetModified();
+
+        if (GetIDocumentUndoRedo().DoesUndo())
+        {
+            SwUndo * pUndo = new SwUndoTableStyleDelete(std::move(pReleasedFormat), vAffectedTables, this);
+
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
+        }
+    }
+
+    if (pAffectedTables)
+        *pAffectedTables = vAffectedTables;
+    return pReleasedFormat;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
