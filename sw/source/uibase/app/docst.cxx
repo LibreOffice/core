@@ -84,6 +84,7 @@
 #include "swabstdlg.hxx"
 #include <list.hxx>
 #include <paratr.hxx>
+#include <tblafmt.hxx>
 
 extern bool g_bNoInterrupt;       // in swmodule.cxx
 
@@ -121,6 +122,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
     {
         // determine current template to every family
         OUString aName;
+        SwTableAutoFormat aTableAutoFormat("dummy"); // needed to check if can take a table auto format at current cursor position
         switch (nWhich)
         {
             case SID_STYLE_APPLY:
@@ -249,7 +251,8 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                         ? SfxStyleFamily::Frame != nActualFamily
                         : ( SfxStyleFamily::Frame == nActualFamily ||
                             SfxStyleFamily::Page == nActualFamily ||
-                            (SfxStyleFamily::Pseudo == nActualFamily && !pShell->GetNumRuleAtCurrCursorPos())) )
+                            (SfxStyleFamily::Pseudo == nActualFamily && !pShell->GetNumRuleAtCurrCursorPos()) ||
+                            (SfxStyleFamily::Table == nActualFamily && !pShell->GetTableAutoFormat(aTableAutoFormat))) )
                 {
                     rSet.DisableItem( nWhich );
                 }
@@ -259,7 +262,8 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                 if( (pShell->IsFrameSelected()
                         ? SfxStyleFamily::Frame != nActualFamily
                         : SfxStyleFamily::Frame == nActualFamily) ||
-                    (SfxStyleFamily::Pseudo == nActualFamily && !pShell->GetNumRuleAtCurrCursorPos()) )
+                    (SfxStyleFamily::Pseudo == nActualFamily && !pShell->GetNumRuleAtCurrCursorPos()) ||
+                    (SfxStyleFamily::Table == nActualFamily && !pShell->GetTableAutoFormat(aTableAutoFormat)) )
                 {
                     rSet.DisableItem( nWhich );
                 }
@@ -1268,6 +1272,21 @@ SfxStyleFamily SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily 
             }
         }
         break;
+
+        case SfxStyleFamily::Table:
+        {
+            SwTableAutoFormat* pFormat = pStyle->GetTableFormat();
+            if (pCurrWrtShell->GetTableAutoFormat(*pFormat))
+            {
+                pCurrWrtShell->StartAllAction();
+
+                pCurrWrtShell->SetTableStyle(rName);
+
+                pCurrWrtShell->EndAllAction();
+            }
+        }
+        break;
+
         default: break;
     }
     return nFamily;
