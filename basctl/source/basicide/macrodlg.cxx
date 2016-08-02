@@ -366,7 +366,7 @@ SbMethod* MacroChooser::CreateMacro()
         if ( !pModule )
         {
             pModule = createModImpl( static_cast<vcl::Window*>( this ),
-                aDocument, *m_pBasicBox, aLibName, aModName );
+                aDocument, *m_pBasicBox, aLibName, aModName, false );
         }
 
         OUString aSubName = m_pMacroNameEdit->GetText();

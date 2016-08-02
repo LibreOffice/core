@@ -778,7 +778,7 @@ void ModulWindow::UpdateData()
 
 sal_Int32 ModulWindow::countPages( Printer* pPrinter )
 {
-    return FormatAndPrint( pPrinter );
+    return FormatAndPrint( pPrinter, -1 );
 }
 
 void ModulWindow::printPage( sal_Int32 nPage, Printer* pPrinter )

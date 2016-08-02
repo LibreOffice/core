@@ -401,7 +401,7 @@ bool SbiParser::Parse()
             Next();
             Push( eCurTok );
             aGen.Statement();
-                Symbol();
+                Symbol(nullptr);
         }
     }
     else

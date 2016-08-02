@@ -316,7 +316,7 @@ static const double roundArray[] = {
 ***************************************************************************/
 
 static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
-                    bool bPt, bool bFix, sal_Unicode cForceThousandSep = 0 )
+                    bool bPt, bool bFix, sal_Unicode cForceThousandSep )
 {
 
     short nExp = 0;

@@ -96,7 +96,7 @@ public:
     bool TestComma();
     void TestEoln();
 
-    void Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo = nullptr );  // let or call
+    void Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo );  // let or call
     void ErrorStmnt();              // ERROR n
     void BadBlock();                // LOOP/WEND/NEXT
     void NoIf();                    // ELSE/ELSE IF without IF

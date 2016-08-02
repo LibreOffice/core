@@ -254,7 +254,7 @@ void MarkDocumentModified( const ScriptDocument& rDocument )
     {
         if (Shell* pShell = GetShell())
         {
-            pShell->SetAppBasicModified();
+            pShell->SetAppBasicModified(true);
             pShell->UpdateObjectCatalog();
         }
     }

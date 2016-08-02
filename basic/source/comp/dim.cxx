@@ -833,7 +833,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
     pDef->SetType( eType );
     if( Peek() == CDECL_ )
     {
-        Next(); pDef->SetCdecl();
+        Next(); pDef->SetCdecl(true);
     }
     if( Peek() == LIB )
     {
@@ -939,7 +939,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
                 }
                 if( bByVal )
                 {
-                    pPar->SetByVal();
+                    pPar->SetByVal(true);
                 }
                 if( bOptional )
                 {

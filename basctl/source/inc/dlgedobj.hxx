@@ -69,7 +69,7 @@ protected:
     using SfxListener::StartListening;
     void StartListening();
     using SfxListener::EndListening;
-    void    EndListening(bool bRemoveListener = true);
+    void    EndListening(bool bRemoveListener);
     bool    isListening() const { return bIsListening; }
 
     bool TransformSdrToControlCoordinates(
