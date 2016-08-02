@@ -139,7 +139,7 @@ void SfxMacroTabPage::EnableButtons()
 SfxMacroTabPage::SfxMacroTabPage(vcl::Window* pParent, const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rAttrSet )
     : SfxTabPage(pParent, "EventAssignPage", "cui/ui/eventassignpage.ui", &rAttrSet)
 {
-    mpImpl = new SfxMacroTabPage_Impl;
+    mpImpl.reset(new SfxMacroTabPage_Impl);
     mpImpl->sStrEvent = get<FixedText>("eventft")->GetText();
     mpImpl->sAssignedMacro = get<FixedText>("assignft")->GetText();
     get(mpImpl->pEventLB , "assignments");
@@ -166,7 +166,7 @@ SfxMacroTabPage::~SfxMacroTabPage()
 
 void SfxMacroTabPage::dispose()
 {
-    DELETEZ( mpImpl );
+    mpImpl.reset();
     SfxTabPage::dispose();
 }
 
