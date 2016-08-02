@@ -234,10 +234,6 @@ public:
     /// @returns
     //       true, if the object's layer is visible and not locked
     bool IsObjMarkable(SdrObject* pObj) const;
-
-    /// Hmm, selectable is surely the same as markable, now that I
-    /// see this as I look for a place to put it.
-    /// TODO: merge these
     bool IsObjSelectable(SdrObject *pObj) const;
 
     /// Entering (editing) an object group
