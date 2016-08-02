@@ -961,12 +961,14 @@ inline void SwFont::SetHighlightColor( const Color& aNewColor )
 class SwUnderlineFont
 {
     Point m_aPos;
+    sal_Int32 m_nEnd;
     SwFont* m_pFont;
 
 public:
-    // sets the font which should paint the common baseline
+    // sets the font which should paint the common baseline,
+    // index where continuous underline ends,
     // and the starting point of the common baseline
-    SwUnderlineFont( SwFont& rFnt, const Point& rPoint );
+    SwUnderlineFont( SwFont& rFnt ,sal_Int32 m_nEnd , const Point& rPoint );
     ~SwUnderlineFont();
 
     SwFont& GetFont()
@@ -975,6 +977,7 @@ public:
         return *m_pFont;
     }
     const Point& GetPos() const { return m_aPos; }
+    sal_Int32 GetEnd() const { return m_nEnd; }
     // the x coordinate of the starting point has to be set for each portion
     void SetPos( const Point& rPoint ) { m_aPos = rPoint;  }
 };
