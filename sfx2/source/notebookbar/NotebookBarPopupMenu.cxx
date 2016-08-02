@@ -25,14 +25,18 @@ NotebookBarPopupMenu::NotebookBarPopupMenu(ResId aRes)
 {
     if (SfxViewFrame::Current())
     {
-        for (int i = 0; i < GetItemCount(); ++i)
+        SfxDispatcher* pDispatcher = SfxViewFrame::Current()->GetBindings().GetDispatcher();
+        if (pDispatcher)
         {
-            const SfxPoolItem* pItem;
-            SfxItemState eState = SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(GetItemId(i), pItem);
-            if (eState == SfxItemState::DISABLED)
-                this->EnableItem(GetItemId(i), false);
-            else
-                this->EnableItem(GetItemId(i));
+            for (int i = 0; i < GetItemCount(); ++i)
+            {
+                const SfxPoolItem* pItem;
+                SfxItemState eState = pDispatcher->QueryState(GetItemId(i), pItem);
+                if (eState == SfxItemState::DISABLED)
+                    this->EnableItem(GetItemId(i), false);
+                else
+                    this->EnableItem(GetItemId(i));
+            }
         }
     }
     else
@@ -63,18 +67,23 @@ void NotebookBarPopupMenu::Execute(NotebookBar* pNotebookbar,
             if (xURLTransformer.is())
                 xURLTransformer->parseStrict(aUrl);
 
-            css::uno::Reference<css::frame::XDispatch> xDispatch;
-            css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(xFrame, UNO_QUERY);
+            if (xFrame.is())
+            {
+                css::uno::Reference<css::frame::XDispatch> xDispatch;
+                css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(xFrame, UNO_QUERY);
 
-            if (xDispatchProvider.is())
-            {
-                xDispatch = xDispatchProvider->queryDispatch(aUrl, OUString(), 0);
+                if (xDispatchProvider.is())
+                {
+                    xDispatch = xDispatchProvider->queryDispatch(aUrl, OUString(), 0);
+                }
+                if (xDispatch.is())
+                {
+                    Sequence<com::sun::star::beans::PropertyValue> aArgs;
+                    xDispatch->dispatch(aUrl, aArgs);
+                }
             }
-            if (xDispatch.is())
-            {
-                Sequence<com::sun::star::beans::PropertyValue> aArgs;
-                xDispatch->dispatch(aUrl, aArgs);
-            }
+            else
+                SAL_WARN("sfx", "Can't create XDispatchProvider");
         }
     }
 }
