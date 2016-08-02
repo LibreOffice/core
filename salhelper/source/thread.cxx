@@ -38,12 +38,20 @@ void salhelper::Thread::run() {
     try {
         setName(name_);
         execute();
-    } catch (...) {
+    } catch (const std::exception&) {
         // Work around the problem that onTerminated is not called if run throws
         // an exception:
         onTerminated();
         throw;
     }
+    // don't use a catch all handler with EHa as that will catch SEH exceptions
+#ifndef WNT
+    catch (...)
+    {
+        onTerminated();
+        throw;
+    }
+#endif
 }
 
 void salhelper::Thread::onTerminated() { release(); }
