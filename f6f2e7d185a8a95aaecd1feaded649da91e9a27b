@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_7155fac4",
+        "filename": "cui/source/dialogs/scriptdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-08-02T07:05:45Z",
+      "side": 1,
+      "message": "quite a few places have an extra space before the \"+\", like here, please fix those",
+      "revId": "f6f2e7d185a8a95aaecd1feaded649da91e9a27b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
