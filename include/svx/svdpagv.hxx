@@ -232,13 +232,8 @@ public:
     /// At least one member must be visible for the Group object and
     /// it must not be locked
     /// @returns
-    //       true, if the object's layer is visible and not locked
+    ///      true, if the object's layer is visible and not locked
     bool IsObjMarkable(SdrObject* pObj) const;
-
-    /// Hmm, selectable is surely the same as markable, now that I
-    /// see this as I look for a place to put it.
-    /// TODO: merge these
-    bool IsObjSelectable(SdrObject *pObj) const;
 
     /// Entering (editing) an object group
     /// After that, we have direct access to all member objects of the group.

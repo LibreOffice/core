@@ -1270,33 +1270,6 @@ SfxViewShell* SdrMarkView::GetSfxViewShell() const
     return SfxViewShell::Current();
 }
 
-bool SdrPageView::IsObjSelectable(SdrObject *pObj) const
-{
-    SdrLayerID nLay=pObj->GetLayer();
-    bool bRaus=!pObj->IsInserted(); // Obj deleted?
-    if (!pObj->Is3DObj()) {
-        bRaus=bRaus || pObj->GetPage()!=GetPage();   // Obj suddenly in different Page or Group
-    }
-    bRaus=bRaus || GetLockedLayers().IsSet(nLay) ||  // Layer locked?
-                   !GetVisibleLayers().IsSet(nLay);  // Layer invisible?
-
-    if( !bRaus )
-        bRaus = !pObj->IsVisible(); // invisible objects can not be selected
-
-    if (!bRaus) {
-        // Grouped objects can now be selected.
-        // After EnterGroup the higher-level objects,
-        // have to be deselected, though.
-        const SdrObjList* pOOL=pObj->GetObjList();
-        const SdrObjList* pVOL=GetObjList();
-        while (pOOL!=nullptr && pOOL!=pVOL) {
-            pOOL=pOOL->GetUpList();
-        }
-        bRaus=pOOL!=pVOL;
-    }
-    return !bRaus;
-}
-
 void SdrMarkView::CheckMarked()
 {
     for (size_t nm=GetMarkedObjectCount(); nm>0;) {
@@ -1304,7 +1277,7 @@ void SdrMarkView::CheckMarked()
         SdrMark* pM = GetSdrMarkByIndex(nm);
         SdrObject* pObj = pM->GetMarkedSdrObj();
         SdrPageView* pPV = pM->GetPageView();
-        bool bRaus = !pObj || !pPV->IsObjSelectable(pObj);
+        bool bRaus = !pObj || !pPV->IsObjMarkable(pObj);
         if (bRaus)
         {
             GetMarkedObjectListWriteAccess().DeleteMark(nm);
