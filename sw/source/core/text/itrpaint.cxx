@@ -493,6 +493,10 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         return;
     }
 
+    // Reuse calculated underline font as much as possible.
+    if ( GetInfo().GetUnderFnt() && GetInfo().GetIdx() + pPor->GetLen() <= GetInfo().GetUnderFnt()->GetEnd() + 1)
+        return;
+
     // If current underline matches the common underline font, we continue
     // to use the common underline font.
     // Bug 120769:Color of underline display wrongly
@@ -615,6 +619,7 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
             pPor = pPor->GetPortion();
         }
 
+
         // resulting height
         if ( nNumberOfPortions > 1 && nSumWidth )
         {
@@ -656,7 +661,7 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         const Color aFillColor( COL_TRANSPARENT );
         pUnderlineFnt->SetFillColor( aFillColor );
 
-        GetInfo().SetUnderFnt( new SwUnderlineFont( *pUnderlineFnt,
+        GetInfo().SetUnderFnt( new SwUnderlineFont( *pUnderlineFnt, nUnderEnd,
                                                      aCommonBaseLine ) );
     }
     else
