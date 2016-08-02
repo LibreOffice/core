@@ -647,59 +647,47 @@ bool SdrPageView::IsLayer(const OUString& rName, const SetOfByte& rBS) const
 
 bool SdrPageView::IsObjMarkable(SdrObject* pObj) const
 {
-    if(pObj)
+    if (!pObj)
+        return false;
+    if (pObj->IsMarkProtect())
+        return false;    // excluded from selection?
+    if (!pObj->IsVisible())
+        return false;    // only visible are selectable
+    if (!pObj->IsInserted())
+        return false;    // Obj deleted?
+    if (dynamic_cast<const SdrObjGroup*>(pObj) !=  nullptr)
     {
-        // excluded from selection?
-        if(pObj->IsMarkProtect())
-        {
-            return false;
-        }
+        // If object is a Group object, visibility may depend on
+        // multiple layers. If one object is markable, Group is markable.
+        SdrObjList* pObjList = static_cast<SdrObjGroup*>(pObj)->GetSubList();
 
-        // only visible are selectable
-        if( !pObj->IsVisible() )
+        if (pObjList && pObjList->GetObjCount())
         {
-            return false;
-        }
-
-        if(dynamic_cast<const SdrObjGroup*>( pObj) !=  nullptr)
-        {
-            // If object is a Group object, visibility may depend on
-            // multiple layers. If one object is markable, Group is markable.
-            SdrObjList* pObjList = static_cast<SdrObjGroup*>(pObj)->GetSubList();
-
-            if(pObjList && pObjList->GetObjCount())
+            for(size_t a = 0; a < pObjList->GetObjCount(); ++a)
             {
-                bool bGroupIsMarkable(false);
-
-                for(size_t a = 0; !bGroupIsMarkable && a < pObjList->GetObjCount(); ++a)
-                {
-                    SdrObject* pCandidate = pObjList->GetObj(a);
-
-                    // call recursively
-                    if(IsObjMarkable(pCandidate))
-                    {
-                        bGroupIsMarkable = true;
-                    }
-                }
-
-                return bGroupIsMarkable;
+                SdrObject* pCandidate = pObjList->GetObj(a);
+                // call recursively
+                if(IsObjMarkable(pCandidate))
+                    return true;
             }
-            else
-            {
-                // #i43302#
-                // Allow empty groups to be selected to be able to delete them
-                return true;
-            }
+            return false;
         }
         else
         {
-            // the layer has to be visible and must not be locked
-            SdrLayerID nL = pObj->GetLayer();
-            return (aLayerVisi.IsSet(sal_uInt8(nL)) && !aLayerLock.IsSet(sal_uInt8(nL)));
+            // #i43302#
+            // Allow empty groups to be selected to be able to delete them
+            return true;
         }
     }
-
-    return false;
+    if (!pObj->Is3DObj() && pObj->GetPage()!=GetPage())
+        return false; // Obj suddenly in different Page
+    // the layer has to be visible and must not be locked
+    SdrLayerID nL = pObj->GetLayer();
+    if (!aLayerVisi.IsSet(sal_uInt8(nL)))
+        return false;
+    if (aLayerLock.IsSet(sal_uInt8(nL)))
+        return false;
+    return true;
 }
 
 void SdrPageView::SetPageOrigin(const Point& rOrg)
