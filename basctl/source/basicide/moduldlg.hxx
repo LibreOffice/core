@@ -262,7 +262,7 @@ public:
 
 // Helper functions
 SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
-    TreeListBox& rBasicBox, const OUString& rLibName, const OUString& aModName, bool bMain = false );
+    TreeListBox& rBasicBox, const OUString& rLibName, const OUString& aModName, bool bMain );
 void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                     CheckBox* pLibBox, TreeListBox* pBasicBox );
 

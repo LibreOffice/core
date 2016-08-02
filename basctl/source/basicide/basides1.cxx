@@ -1081,7 +1081,7 @@ void Shell::ManageToolbars()
 
 VclPtr<BaseWindow> Shell::FindApplicationWindow()
 {
-    return FindWindow( ScriptDocument::getApplicationScriptDocument() );
+    return FindWindow( ScriptDocument::getApplicationScriptDocument(), "", "", TYPE_UNKNOWN );
 }
 
 VclPtr<BaseWindow> Shell::FindWindow(

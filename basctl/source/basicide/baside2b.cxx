@@ -1744,7 +1744,7 @@ void WatchWindow::AddWatch( const OUString& rVName )
     aTreeListBox->MakeVisible(pNewEntry);
     aRemoveWatchButton->Enable();
 
-    UpdateWatches();
+    UpdateWatches(false);
 }
 
 void WatchWindow::RemoveSelectedWatch()

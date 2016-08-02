@@ -246,7 +246,7 @@ public:
 
     void            AddWatch( const OUString& rVName );
     void            RemoveSelectedWatch();
-    void            UpdateWatches( bool bBasicStopped = false );
+    void            UpdateWatches( bool bBasicStopped );
 };
 
 
@@ -313,7 +313,7 @@ private:
 
     static void         GoOnTop();
 
-    sal_Int32           FormatAndPrint( Printer* pPrinter, sal_Int32 nPage = -1 );
+    sal_Int32           FormatAndPrint( Printer* pPrinter, sal_Int32 nPage );
     SbModuleRef const & XModule();
 protected:
     virtual void    Resize() override;

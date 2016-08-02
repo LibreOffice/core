@@ -79,7 +79,7 @@ DlgEdObj::DlgEdObj(const OUString& rModelName,
 DlgEdObj::~DlgEdObj()
 {
     if ( isListening() )
-        EndListening();
+        EndListening(true);
 }
 
 void DlgEdObj::SetPage(SdrPage* _pNewPage)

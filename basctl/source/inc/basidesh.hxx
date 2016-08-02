@@ -185,14 +185,14 @@ public:
     bool                CallBasicErrorHdl( StarBASIC* pBasic );
     long                CallBasicBreakHdl( StarBASIC* pBasic );
 
-    VclPtr<BaseWindow>   FindWindow( const ScriptDocument& rDocument, const OUString& rLibName = OUString(), const OUString& rName = OUString(), ItemType nType = TYPE_UNKNOWN, bool bFindSuspended = false );
+    VclPtr<BaseWindow>   FindWindow( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rName, ItemType nType, bool bFindSuspended = false );
     VclPtr<DialogWindow> FindDlgWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rName, bool bCreateIfNotExist = false, bool bFindSuspended = false );
     VclPtr<ModulWindow>  FindBasWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName, bool bCreateIfNotExist = false, bool bFindSuspended = false );
     VclPtr<BaseWindow>   FindApplicationWindow();
-    bool                 NextPage( bool bPrev = false );
+    bool                 NextPage( bool bPrev );
 
     bool                IsAppBasicModified () const { return m_bAppBasicModified; }
-    void                SetAppBasicModified (bool bModified = true) { m_bAppBasicModified = bModified; }
+    void                SetAppBasicModified (bool bModified) { m_bAppBasicModified = bModified; }
 
     // For Dialog Drag&Drop in Dialog Organizer:
     // (defined in moduldlg.cxx)

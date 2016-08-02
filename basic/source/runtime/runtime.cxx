@@ -3254,7 +3254,7 @@ void SbiRuntime::StepSETCLASS_impl( sal_uInt32 nOp1, bool bHandleDflt )
     SbxVariableRef refVar = PopVar();
     OUString aClass( pImg->GetString( static_cast<short>( nOp1 ) ) );
 
-    bool bOk = checkClass_Impl( refVal, aClass, true );
+    bool bOk = checkClass_Impl( refVal, aClass, true, true );
     if( bOk )
     {
         StepSET_Impl( refVal, refVar, bHandleDflt ); // don't do handle default prop for a "proper" set
@@ -3263,7 +3263,7 @@ void SbiRuntime::StepSETCLASS_impl( sal_uInt32 nOp1, bool bHandleDflt )
 
 void SbiRuntime::StepVBASETCLASS( sal_uInt32 nOp1 )
 {
-    StepSETCLASS_impl( nOp1 );
+    StepSETCLASS_impl( nOp1, false );
 }
 
 void SbiRuntime::StepSETCLASS( sal_uInt32 nOp1 )
