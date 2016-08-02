@@ -483,6 +483,16 @@ void ScColumn::CloneFormulaCell(
     sc::CellStoreType::iterator itPos = maCells.begin();
     sc::CellTextAttrStoreType::iterator itAttrPos = maCellTextAttrs.begin();
 
+    SCCOL nMatrixCols = 0;
+    SCROW nMatrixRows = 0;
+    sal_uInt8 nMatrixFlag = rSrc.GetMatrixFlag();
+    if (nMatrixFlag == MM_FORMULA)
+    {
+        rSrc.GetMatColsRows( nMatrixCols, nMatrixRows);
+        SAL_WARN_IF( nMatrixCols != 1 || nMatrixRows != 1, "sc.core",
+                "ScColumn::CloneFormulaCell - cloning array/matrix with not exactly one column or row as single cell");
+    }
+
     std::vector<ScFormulaCell*> aFormulas;
     std::vector<sc::RowSpan>::const_iterator itSpan = rRanges.begin(), itSpanEnd = rRanges.end();
     for (; itSpan != itSpanEnd; ++itSpan)
@@ -514,7 +524,9 @@ void ScColumn::CloneFormulaCell(
             xGroup->compileCode(*pDocument, aPos, pDocument->GetGrammar());
             for (size_t i = 0; i < nLen; ++i, aPos.IncRow())
             {
-                ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, xGroup, pDocument->GetGrammar(), rSrc.GetMatrixFlag());
+                ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, xGroup, pDocument->GetGrammar(), nMatrixFlag);
+                if (nMatrixFlag == MM_FORMULA)
+                    pCell->SetMatColsRows( nMatrixCols, nMatrixRows);
                 if (i == 0)
                 {
                     xGroup->mpTopCell = pCell;
