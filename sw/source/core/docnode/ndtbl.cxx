@@ -4613,4 +4613,62 @@ bool SwDoc::HasTableAnyProtection( const SwPosition* pPos,
     return bHasProtection;
 }
 
+SwTableAutoFormat* SwDoc::MakeTableStyle(const OUString& rName, bool bBroadcast)
+{
+    SwTableAutoFormat rTableFormat(rName);
+    GetTableStyles().AddAutoFormat(rTableFormat);
+    SwTableAutoFormat* pTableFormat = GetTableStyles().FindAutoFormat(rName);
+
+    getIDocumentState().SetModified();
+
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        SwUndo * pUndo = new SwUndoTableStyleMake(rName, this);
+
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
+    }
+
+    if (bBroadcast)
+        BroadcastStyleOperation(rName, SfxStyleFamily::Table, SfxStyleSheetHintId::CREATED);
+
+    return pTableFormat;
+}
+
+std::unique_ptr<SwTableAutoFormat> SwDoc::DelTableStyle(const OUString& rName, bool bBroadcast, std::vector<SwTable*>* pAffectedTables)
+{
+    if (bBroadcast)
+        BroadcastStyleOperation(rName, SfxStyleFamily::Table, SfxStyleSheetHintId::ERASED);
+
+    std::unique_ptr<SwTableAutoFormat> pReleasedFormat = std::move(GetTableStyles().ReleaseAutoFormat(rName));
+
+    std::vector<SwTable*> rAffectedTables;
+    if (pReleasedFormat.get())
+    {
+        size_t nTableCount = GetTableFrameFormatCount(true);
+        for (size_t i=0; i < nTableCount; ++i)
+        {
+            SwFrameFormat* pFrameFormat = &GetTableFrameFormat(i, true);
+            SwTable* pTable = SwTable::FindTable(pFrameFormat);
+            if (pTable->GetTableStyleName() == pReleasedFormat->GetName())
+            {
+                pTable->SetTableStyleName("");
+                rAffectedTables.push_back(pTable);
+            }
+        }
+
+        getIDocumentState().SetModified();
+
+        if (GetIDocumentUndoRedo().DoesUndo())
+        {
+            SwUndo * pUndo = new SwUndoTableStyleDelete(std::move(pReleasedFormat), rAffectedTables, this);
+
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
+        }
+    }
+
+    if (pAffectedTables)
+        *pAffectedTables = rAffectedTables;
+    return std::move(pReleasedFormat);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

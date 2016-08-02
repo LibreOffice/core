@@ -378,6 +378,36 @@ public:
 
 void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx );
 
+class SwUndoTableStyleMake : public SwUndo
+{
+    OUString m_sName;
+    std::unique_ptr<SwTableAutoFormat> m_pAutoFormat;
+public:
+    SwUndoTableStyleMake(const OUString& rName, const SwDoc* pDoc);
+
+    virtual ~SwUndoTableStyleMake();
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+
+    virtual SwRewriter GetRewriter() const override;
+};
+
+class SwUndoTableStyleDelete : public SwUndo
+{
+    std::unique_ptr<SwTableAutoFormat> m_pAutoFormat;
+    std::vector<SwTable*> m_rAffectedTables;
+public:
+    SwUndoTableStyleDelete(std::unique_ptr<SwTableAutoFormat> pAutoFormat, const std::vector<SwTable*>& rAffectedTables, const SwDoc* pDoc);
+
+    virtual ~SwUndoTableStyleDelete();
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+
+    virtual SwRewriter GetRewriter() const override;
+};
+
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOTABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
