@@ -224,9 +224,9 @@ String RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE
     Text [ en-US ] = "Font Name. The current font is not available and will be substituted.";
 };
 
-String RID_SVXSTR_DEFAULT_PAL
+String RID_SVXSTR_CUSTOM_PAL
 {
-    Text [ en-US ] = "Default palette";
+    Text [ en-US ] = "custom";
 };
 
 String RID_SVXSTR_DOC_COLORS

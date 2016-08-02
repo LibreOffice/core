@@ -239,7 +239,7 @@
 #define RID_SVXSTR_MORENUMBERING            (RID_SVX_START + 204)
 #define RID_SVXSTR_MOREBULLETS              (RID_SVX_START + 205)
 
-#define RID_SVXSTR_DEFAULT_PAL              (RID_SVX_START + 206)
+#define RID_SVXSTR_CUSTOM_PAL               (RID_SVX_START + 206)
 #define RID_SVXSTR_DOC_COLORS               (RID_SVX_START + 207)
 #define RID_SVXSTR_DOC_COLOR_PREFIX         (RID_SVX_START + 208)
 
