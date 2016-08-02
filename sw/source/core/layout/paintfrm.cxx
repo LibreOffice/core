@@ -2742,24 +2742,6 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                 aPaintEnd.Y()   += static_cast<long>(offsetEnd   + 0.5);
             }
 
-            if( rEntryStyle.Type() == table::BorderLineStyle::DOUBLE_THIN )
-            {
-                long aPixel = rDev.PixelToLogic( Point(1, 1) ).getX();
-                SwRect aPaintEx( aPaintStart, aPaintEnd );
-                if( bHori )
-                {
-                    aPaintEx.Pos().Y() -= aPixel;
-                    aPaintEx.SSize().Height() += aPixel * 2;
-                }
-                else
-                {
-                    aPaintEx.Pos().X() -= aPixel;
-                    aPaintEx.SSize().Width() += aPixel * 2;
-                }
-
-                gProp.pSGlobalShell->InvalidateWindows( aPaintEx );
-            }
-
             if (bHori)
             {
                 mrTabFrame.ProcessPrimitives( svx::frame::CreateBorderPrimitives(
