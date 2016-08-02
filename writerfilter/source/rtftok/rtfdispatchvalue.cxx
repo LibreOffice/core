@@ -1241,7 +1241,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         {
             rDrawingObject.aPolyLinePoints.back().Y = convertTwipToMm100(nParam);
             rDrawingObject.nPolyLineCount--;
-            if (rDrawingObject.nPolyLineCount == 0)
+            if (rDrawingObject.nPolyLineCount == 0 && rDrawingObject.xPropertySet.is())
             {
                 uno::Sequence< uno::Sequence<awt::Point> >aPointSequenceSequence =
                 {
