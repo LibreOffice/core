@@ -301,12 +301,19 @@ static const SwNumRule* lcl_FindNumRule(   SwDoc&  rDoc,
     return pRule;
 }
 
-static const SwTableAutoFormat* lcl_FindTableStyle(SwDoc& rDoc, const OUString& rName, SwDocStyleSheet *pStyle = nullptr)
+static SwTableAutoFormat* lcl_FindTableStyle(SwDoc& rDoc, const OUString& rName, SwDocStyleSheet *pStyle = nullptr, bool bCreate = true)
 {
-    const SwTableAutoFormat* pFormat = nullptr;
+    SwTableAutoFormat* pFormat = nullptr;
 
     if (!rName.isEmpty())
+    {
         pFormat = rDoc.GetTableStyles().FindAutoFormat(rName);
+        if (!pFormat && bCreate)
+        {
+            SwTableAutoFormat rNew(rName);
+            rDoc.GetTableStyles().AddAutoFormat(rNew);
+        }
+    }
 
     if(pStyle)
     {
@@ -2004,7 +2011,7 @@ bool SwDocStyleSheet::FillStyleSheet(
         break;
 
     case SfxStyleFamily::Table:
-        pTableFormat = lcl_FindTableStyle(rDoc, aName, this);
+        pTableFormat = lcl_FindTableStyle(rDoc, aName, this, bCreate);
         SetMask((pTableFormat && pTableFormat->IsUserDefined()) ? SFXSTYLEBIT_USERDEF : 0);
         bRet = bPhysical = (nullptr != pTableFormat);
         break;
@@ -2131,6 +2138,18 @@ void SwDocStyleSheet::Create()
                 pNumRule = pRule;
             }
             break;
+
+        case SfxStyleFamily::Table:
+            if (aName.isEmpty())
+                return;
+            pTableFormat = lcl_FindTableStyle(rDoc, aName);
+            if (!pTableFormat)
+            {
+                rDoc.MakeTableStyle(aName);
+                pTableFormat = rDoc.GetTableStyles().FindAutoFormat(aName);
+                SAL_WARN_IF(!pTableFormat, "sw.ui", "Recently added auto format not found");
+            }
+            break;
         default:; //prevent warning
     }
     bPhysical = true;
@@ -2165,10 +2184,19 @@ const SwNumRule * SwDocStyleSheet::GetNumRule()
     return pNumRule;
 }
 
+
 void SwDocStyleSheet::SetNumRule(const SwNumRule& rRule)
 {
     OSL_ENSURE(pNumRule, "Wo ist die NumRule");
     rDoc.ChgNumRuleFormats( rRule );
+}
+
+SwTableAutoFormat* SwDocStyleSheet::GetTableFormat()
+{
+    if(!bPhysical)
+        FillStyleSheet( FillPhysical );
+    assert(pTableFormat && "SwDocStyleSheet table style, SwTableAutoFormat not found");
+    return pTableFormat;
 }
 
 // re-generate Name AND Family from String
@@ -2470,20 +2498,7 @@ void SwDocStyleSheetPool::Remove( SfxStyleSheetBase* pStyle)
 
     case SfxStyleFamily::Table:
         {
-            const SwTableAutoFormat* pFormat = lcl_FindTableStyle(rDoc, sName);
-            if (pFormat)
-            {
-                size_t nTableCount = rDoc.GetTableFrameFormatCount(true);
-                for (size_t i=0; i < nTableCount; ++i)
-                {
-                    SwFrameFormat* pFrameFormat = &rDoc.GetTableFrameFormat(i, true);
-                    SwTable* pTable = SwTable::FindTable(pFrameFormat);
-                    if (pTable->GetTableStyleName() == pFormat->GetName())
-                        pTable->SetTableStyleName("");
-                }
-
-                rDoc.GetTableStyles().EraseAutoFormat(pFormat->GetName());
-            }
+            rDoc.DelTableStyle(sName);
         }
         break;
 

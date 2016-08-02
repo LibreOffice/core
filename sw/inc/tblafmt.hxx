@@ -358,6 +358,8 @@ public:
     void EraseAutoFormat(size_t i);
     void EraseAutoFormat(const OUString& rName);
     std::unique_ptr<SwTableAutoFormat> ReleaseAutoFormat(size_t i);
+    /// Removes an autoformat. Returns pointer to the removed autoformat or nullptr.
+    std::unique_ptr<SwTableAutoFormat> ReleaseAutoFormat(const OUString& rName);
 
     /// Find table style with the provided name, return nullptr when not found.
     SwTableAutoFormat* FindAutoFormat(const OUString& rName) const;
