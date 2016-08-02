@@ -1156,9 +1156,12 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                    Minute if one of:
                    * preceded by time keyword H (ignoring separators)
                    * followed by time keyword S (ignoring separators)
-                   * H or S was detected
+                   * H or S was detected and this is the first M following
                    * preceded by '[' amount bracket
                    Else month.
+                   That are the Excel rules. BUT, we break it because certainly
+                   in something like {HH YYYY-MM-DD} the MM is NOT meant to be
+                   minute, so not if MM is between YY and DD or DD and YY.
                 */
                 nIndexPre = PreviousKeyword(i);
                 nIndexNex = NextKeyword(i);
@@ -1166,7 +1169,12 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                     nIndexPre == NF_KEY_HH  ||      // HH
                     nIndexNex == NF_KEY_S   ||      // S
                     nIndexNex == NF_KEY_SS  ||      // SS
-                    bIsTimeDetected         ||      // tdf#101147
+                    (bIsTimeDetected &&
+                     !(((nIndexPre == NF_KEY_YY || nIndexPre == NF_KEY_YYYY) &&
+                        (nIndexNex == NF_KEY_D  || nIndexNex == NF_KEY_DD)) ||
+                       ((nIndexPre == NF_KEY_D  || nIndexPre == NF_KEY_DD) &&
+                        (nIndexNex == NF_KEY_YY || nIndexNex == NF_KEY_YYYY)))
+                    )                       ||      // tdf#101147
                     PreviousChar(i) == '['  )       // [M
                 {
                     eNewType = css::util::NumberFormat::TIME;
