@@ -25,6 +25,7 @@
 #include <editundo.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
+#include <editeng/outliner.hxx>
 
 
 static void lcl_DoSetSelection( EditView* pView, sal_uInt16 nPara )
@@ -118,8 +119,12 @@ bool EditUndoManager::Redo()
 }
 
 EditUndo::EditUndo(sal_uInt16 nI, EditEngine* pEE) :
-    nId(nI), mpEditEngine(pEE)
+    nId(nI), mnViewShellId(-1), mpEditEngine(pEE)
 {
+    const EditView* pEditView = mpEditEngine ? mpEditEngine->GetActiveView() : nullptr;
+    const OutlinerViewShell* pViewShell = pEditView ? pEditView->GetImpEditView()->GetViewShell() : nullptr;
+    if (pViewShell)
+        mnViewShellId = pViewShell->GetViewShellId();
 }
 
 EditUndo::~EditUndo()
@@ -145,6 +150,11 @@ OUString EditUndo::GetComment() const
         aComment = mpEditEngine->GetUndoComment( GetId() );
 
     return aComment;
+}
+
+sal_Int32 EditUndo::GetViewShellId() const
+{
+    return mnViewShellId;
 }
 
 EditUndoDelContent::EditUndoDelContent(

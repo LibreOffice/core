@@ -27,6 +27,7 @@
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
+#include <UndoManager.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/lokhelper.hxx>
 
@@ -60,6 +61,7 @@ public:
     void testViewLock();
     void testTextEditViewInvalidations();
     void testUndoInvalidations();
+    void testShapeTextUndoShells();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -85,6 +87,7 @@ public:
     CPPUNIT_TEST(testViewLock);
     CPPUNIT_TEST(testTextEditViewInvalidations);
     CPPUNIT_TEST(testUndoInvalidations);
+    CPPUNIT_TEST(testShapeTextUndoShells);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -885,6 +888,34 @@ void SwTiledRenderingTest::testUndoInvalidations()
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
     // Undo was dispatched on the first view, this second view was not invalidated.
     CPPUNIT_ASSERT(aView2.m_bTilesInvalidated);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testShapeTextUndoShells()
+{
+    // Load a document and create a view.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
+    sal_Int32 nView1 = SfxLokHelper::getView();
+
+    // Begin text edit.
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+    SdrView* pView = pWrtShell->GetDrawView();
+    pWrtShell->GetView().BeginTextEdit(pObject, pView->GetSdrPageView(), pWrtShell->GetWin());
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+
+    // Make sure that the undo item remembers who created it.
+    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rUndoManager.GetUndoActionCount());
+    // This was -1: the view shell id for the undo action wasn't known.
+    CPPUNIT_ASSERT_EQUAL(nView1, rUndoManager.GetUndoAction()->GetViewShellId());
 
     mxComponent->dispose();
     mxComponent.clear();

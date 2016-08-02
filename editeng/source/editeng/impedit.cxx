@@ -122,6 +122,11 @@ void ImpEditView::RegisterViewShell(OutlinerViewShell* pViewShell)
     mpViewShell = pViewShell;
 }
 
+const OutlinerViewShell* ImpEditView::GetViewShell() const
+{
+    return mpViewShell;
+}
+
 void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
 {
     // set state before notification
