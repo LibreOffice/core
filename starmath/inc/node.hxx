@@ -1254,7 +1254,7 @@ inline const SmNode* SmRootNode::Argument() const
 inline SmRootSymbolNode* SmRootNode::Symbol()
 {
     assert( GetNumSubNodes() == 3 );
-    OSL_ASSERT( GetSubNode( 1 )->GetType() == NROOTSYMBOL );
+    assert( GetSubNode( 1 )->GetType() == NROOTSYMBOL );
     return static_cast< SmRootSymbolNode* >( GetSubNode( 1 ));
 }
 inline const SmRootSymbolNode* SmRootNode::Symbol() const
