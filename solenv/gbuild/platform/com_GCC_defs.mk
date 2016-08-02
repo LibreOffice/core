@@ -39,9 +39,6 @@ ifeq ($(strip $(gb_COMPILEROPTFLAGS)),)
 gb_COMPILEROPTFLAGS := -O2
 endif
 
-gb_SHORTSTDC3 := 1
-gb_SHORTSTDCPP3 := 6
-
 gb_CPPU_ENV := gcc3
 
 gb_AFLAGS := $(AFLAGS)
