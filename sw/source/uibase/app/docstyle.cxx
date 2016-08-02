@@ -2468,6 +2468,25 @@ void SwDocStyleSheetPool::Remove( SfxStyleSheetBase* pStyle)
         }
         break;
 
+    case SfxStyleFamily::Table:
+        {
+            const SwTableAutoFormat* pFormat = lcl_FindTableStyle(rDoc, sName);
+            if (pFormat)
+            {
+                size_t nTableCount = rDoc.GetTableFrameFormatCount(true);
+                for (size_t i=0; i < nTableCount; ++i)
+                {
+                    SwFrameFormat* pFrameFormat = &rDoc.GetTableFrameFormat(i, true);
+                    SwTable* pTable = SwTable::FindTable(pFrameFormat);
+                    if (pTable->GetTableStyleName() == pFormat->GetName())
+                        pTable->SetTableStyleName("");
+                }
+
+                rDoc.GetTableStyles().EraseAutoFormat(pFormat->GetName());
+            }
+        }
+        break;
+
     default:
         OSL_ENSURE(false, "unknown style family");
         bBroadcast = false;
