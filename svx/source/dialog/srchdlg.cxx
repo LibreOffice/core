@@ -2377,8 +2377,12 @@ SfxChildWinInfo SvxSearchDialogWrapper::GetInfo() const
 
 static vcl::Window* lcl_GetSearchLabelWindow()
 {
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    if (!pViewFrame)
+        return nullptr;
+
     css::uno::Reference< css::beans::XPropertySet > xPropSet(
-            SfxViewFrame::Current()->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY_THROW);
+            pViewFrame->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
     xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
     css::uno::Reference< css::ui::XUIElement > xUIElement =
