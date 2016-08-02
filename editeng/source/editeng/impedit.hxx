@@ -221,8 +221,8 @@ private:
     EditView*           pEditView;
     vcl::Cursor*        pCursor;
     Color*              pBackgroundColor;
-    /// Per-view callback.
-    OutlinerViewCallable* mpLibreOfficeKitViewCallable;
+    /// Containing view shell, if any.
+    OutlinerViewShell* mpViewShell;
     EditEngine*         pEditEngine;
     VclPtr<vcl::Window> pOutWin;
     Pointer*            pPointer;
@@ -367,10 +367,8 @@ public:
     const Color&    GetBackgroundColor() const {
                         return ( pBackgroundColor ? *pBackgroundColor : pOutWin->GetBackground().GetColor() ); }
 
-    /// @see SfxViewShell::registerLibreOfficeKitViewCallback().
-    void registerLibreOfficeKitViewCallback(OutlinerViewCallable* pCallable);
-    /// Invokes the registered view callback, if there are any.
-    void libreOfficeKitViewCallback(int nType, const char* pPayload) const;
+    /// Informs this edit view about which view shell contains it.
+    void RegisterViewShell(OutlinerViewShell* pViewShell);
 
     bool            IsWrongSpelledWord( const EditPaM& rPaM, bool bMarkIfWrong );
     OUString        SpellIgnoreWord();

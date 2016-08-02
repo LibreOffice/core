@@ -141,7 +141,7 @@ template<class T> bool checkSfxViewShell(const SfxViewShell* pShell)
     return dynamic_cast<const T*>(pShell) != nullptr;
 }
 
-class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener, public OutlinerViewCallable
+class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener, public OutlinerViewShell
 {
 #ifdef INCLUDED_SFX2_VIEWSH_HXX
 friend class SfxViewFrame;
@@ -334,7 +334,8 @@ public:
     /// See lok::Document::getPart().
     virtual int getPart() const;
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
-    sal_uInt32 GetViewShellId() const;
+    /// See OutlinerViewShell::GetViewShellId().
+    sal_uInt32 GetViewShellId() const override;
 };
 
 
