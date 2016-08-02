@@ -671,10 +671,10 @@ void MenuBarWindow::KeyInput( const KeyEvent& rKEvent )
 
 bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
 {
-    if( ! pMenu )
+    if (!pMenu)
         return false;
 
-    if ( pMenu->bInCallback )
+    if (pMenu->bInCallback)
         return true;    // swallow
 
     bool bDone = false;
@@ -808,6 +808,8 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
     }
 
     bool accel = ImplGetSVData()->maNWFData.mbEnableAccel;
+    bool autoacc = ImplGetSVData()->maNWFData.mbAutoAccel;
+
     if ( !bDone && ( bFromMenu || (rKEvent.GetKeyCode().IsMod2() && accel) ) )
     {
         sal_Unicode nCharCode = rKEvent.GetCharCode();
@@ -818,14 +820,21 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
             if ( pData && (nEntry != ITEMPOS_INVALID) )
             {
                 mbAutoPopup = true;
-                SetMBWMenuKey(true);
-                SetMBWHideAccel(true);
-                Invalidate(InvalidateFlags::Update);
                 ChangeHighlightItem( nEntry, true );
                 bDone = true;
             }
         }
     }
+
+    const bool bShowAccels = nCode != KEY_ESCAPE;
+    if (GetMBWMenuKey() != bShowAccels)
+    {
+        SetMBWMenuKey(bShowAccels);
+        SetMBWHideAccel(!bShowAccels);
+        if (accel && autoacc)
+            Invalidate(InvalidateFlags::Update);
+    }
+
     return bDone;
 }
 

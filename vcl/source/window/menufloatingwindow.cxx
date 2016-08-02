@@ -976,6 +976,8 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
 {
     VclPtr<vcl::Window> xWindow = this;
 
+    bool accel = ImplGetSVData()->maNWFData.mbEnableAccel;
+    bool autoacc = ImplGetSVData()->maNWFData.mbAutoAccel;
     sal_uInt16 nCode = rKEvent.GetKeyCode().GetCode();
     bKeyInput = true;
     switch ( nCode )
@@ -1102,7 +1104,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
             sal_Unicode nCharCode = rKEvent.GetCharCode();
             sal_uInt16 nPos = 0;
             sal_uInt16 nDuplicates = 0;
-            MenuItemData* pData = (nCharCode && pMenu) ?
+            MenuItemData* pData = (nCharCode && pMenu && accel) ?
                 pMenu->GetItemList()->SearchItem(nCharCode, rKEvent.GetKeyCode(), nPos, nDuplicates, nHighlightedItem) : nullptr;
             if (pData)
             {
@@ -1121,6 +1123,20 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
                 FloatingWindow::KeyInput( rKEvent );
         }
     }
+
+    if (pMenu && pMenu->pStartedFrom && pMenu->pStartedFrom->IsMenuBar())
+    {
+        MenuBar *pMenuBar = static_cast<MenuBar*>(pMenu->pStartedFrom.get());
+        const bool bShowAccels = nCode != KEY_ESCAPE;
+        if (pMenuBar->getMenuBarWindow()->GetMBWMenuKey() != bShowAccels)
+        {
+            pMenuBar->getMenuBarWindow()->SetMBWMenuKey(bShowAccels);
+            pMenuBar->getMenuBarWindow()->SetMBWHideAccel(!bShowAccels);
+            if (accel && autoacc)
+                Invalidate(InvalidateFlags::Update);
+        }
+    }
+
     // #105474# check if menu window was not destroyed
     if ( !xWindow->IsDisposed() )
     {
