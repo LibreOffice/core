@@ -79,7 +79,7 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     pOutWin             = pWindow;
     pPointer            = nullptr;
     pBackgroundColor    = nullptr;
-    mpLibreOfficeKitViewCallable = nullptr;
+    mpViewShell = nullptr;
     nScrollDiffX        = 0;
     nExtraCursorFlags   = 0;
     nCursorBidiLevel    = CURSOR_BIDILEVEL_DONTKNOW;
@@ -117,15 +117,9 @@ void ImpEditView::SetBackgroundColor( const Color& rColor )
     pBackgroundColor = new Color( rColor );
 }
 
-void ImpEditView::registerLibreOfficeKitViewCallback(OutlinerViewCallable* pCallable)
+void ImpEditView::RegisterViewShell(OutlinerViewShell* pViewShell)
 {
-    mpLibreOfficeKitViewCallable = pCallable;
-}
-
-void ImpEditView::libreOfficeKitViewCallback(int nType, const char* pPayload) const
-{
-    if (mpLibreOfficeKitViewCallable)
-        mpLibreOfficeKitViewCallable->libreOfficeKitViewCallback(nType, pPayload);
+    mpViewShell = pViewShell;
 }
 
 void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
@@ -343,7 +337,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
     {
         *pRegion = vcl::Region( *pPolyPoly );
 
-        if (comphelper::LibreOfficeKit::isActive() && !pOldRegion)
+        if (comphelper::LibreOfficeKit::isActive() && mpViewShell && !pOldRegion)
         {
             pOutWin->Push(PushFlags::MAPMODE);
             if (pOutWin->GetMapMode().GetMapUnit() == MAP_TWIP)
@@ -386,7 +380,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                         aStart = OutputDevice::LogicToLogic(aStart, MAP_100TH_MM, MAP_TWIP);
                     aStart.Move(aOrigin.getX(), aOrigin.getY());
 
-                    libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
+                    mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
 
                     Rectangle& rEnd = aRectangles.back();
                     Rectangle aEnd = Rectangle(rEnd.Right() - 1, rEnd.Top(), rEnd.Right(), rEnd.Bottom());
@@ -394,7 +388,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                         aEnd = OutputDevice::LogicToLogic(aEnd, MAP_100TH_MM, MAP_TWIP);
                     aEnd.Move(aOrigin.getX(), aOrigin.getY());
 
-                    libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
+                    mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
                 }
 
                 std::vector<OString> v;
@@ -408,7 +402,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                 sRectangle = comphelper::string::join("; ", v);
             }
 
-            libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle.getStr());
+            mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle.getStr());
 
             pOutWin->Pop();
         }
@@ -986,7 +980,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 
         GetCursor()->SetSize( aCursorSz );
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::LibreOfficeKit::isActive() && mpViewShell)
         {
             const Point& rPos = GetCursor()->GetPos();
             Rectangle aRect(rPos.getX(), rPos.getY(), rPos.getX() + GetCursor()->GetWidth(), rPos.getY() + GetCursor()->GetHeight());
@@ -1005,7 +999,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             aRect.setWidth(0);
 
             OString sRect = aRect.toString();
-            libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
+            mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
         }
 
         CursorDirection nCursorDir = CursorDirection::NONE;
