@@ -394,7 +394,7 @@ void SdGenericDrawPage::UpdateModel()
     {
         mpModel = nullptr;
     }
-    mbIsImpressDocument = mpModel ? mpModel->IsImpressDocument() : false;
+    mbIsImpressDocument = mpModel && mpModel->IsImpressDocument();
 }
 
 // this is called whenever a SdrObject must be created for a empty api shape wrapper
