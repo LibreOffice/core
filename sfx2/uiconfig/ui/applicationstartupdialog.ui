@@ -54,7 +54,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="label" translatable="yes">LibreOffice Vanilla is based on the most recent version of LibreOffice available. This build is provided for you by Collabora Productivity.</property>
+                <property name="label" translatable="yes">LibreOffice Vanilla is based on the most recent version of LibreOffice available. This build is provided for your convenience by Collabora Productivity.</property>
                 <property name="justify">fill</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">62</property>
@@ -113,7 +113,10 @@
                     <property name="margin_bottom">3</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="no">Collabora Office</property>
+                    <property name="label" translatable="yes">Collabora provides and maintains LibreOffice products in the Mac App Store. App Store purchases of Collabora Office support ongoing development and enhancement of LibreOffice for Mac. Get extended features and stability while funding LibreOffice for Mac development by buying Collabora Office today.</property>
+                    <property name="wrap">True</property>
+                    <property name="justify">fill</property>
+                    <property name="max_width_chars">70</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                       <attribute name="size" value="12000"/>
@@ -126,46 +129,25 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label7">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_top">3</property>
-                    <property name="margin_bottom">3</property>
-                    <property name="hexpand">True</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Collabora provides and maintains LibreOffice products in the Mac App Store. Collabora's enterprise-grade productivity suite Collabora Office for Mac delivers long term stability and support for demanding environments. Deployment and administration utilities together with fast-response bug-fix support are available for enterprise customers.
-
-App Store purchases of Collabora Office support ongoing development and enhancement of LibreOffice for Mac. Get extended features and stability while funding LibreOffice for Mac development by buying Collabora Office today.</property>
-                    <property name="justify">fill</property>
-                    <property name="wrap">True</property>
-                    <property name="max_width_chars">70</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_top">3</property>
                     <property name="margin_bottom">3</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">More information:</property>
+                    <property name="label" translatable="yes">Support development:</property>
                     <attributes>
                       <attribute name="style" value="italic"/>
                     </attributes>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLinkButton" id="link">
-                    <property name="label" translatable="no">Collabora Office</property>
+                    <property name="label" translatable="yes">Buy Collabora Office in the App Store</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -179,13 +161,68 @@ App Store purchases of Collabora Office support ongoing development and enhancem
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label7">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_top">3</property>
+                    <property name="margin_bottom">3</property>
+                    <property name="hexpand">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Collabora's enterprise-grade productivity suite Collabora Office for Mac delivers stability and support for demanding environments. Deployment and administration utilities together with fast-response bug-fix support are available for enterprise customers.</property>
+                    <property name="justify">fill</property>
+                    <property name="wrap">True</property>
+                    <property name="max_width_chars">70</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label8">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_top">3</property>
+                    <property name="margin_bottom">3</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">More information:</property>
+                    <attributes>
+                      <attribute name="style" value="italic"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLinkButton" id="linkbutton1">
+                    <property name="label" translatable="yes">Collabora Office Website</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="margin_left">12</property>
+                    <property name="margin_top">3</property>
+                    <property name="margin_bottom">3</property>
+                    <property name="hexpand">True</property>
+                    <property name="relief">none</property>
+                    <property name="xalign">0</property>
+                    <property name="uri">https://www.collaboraoffice.com/</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">3</property>
                   </packing>
                 </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
+                <property name="top_attach">2</property>
               </packing>
             </child>
             <child>
@@ -309,7 +346,7 @@ App Store purchases of Collabora Office support ongoing development and enhancem
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
+                <property name="top_attach">3</property>
               </packing>
             </child>
           </object>
