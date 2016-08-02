@@ -1259,6 +1259,10 @@ public:
     /// Return the available table styles.
     SwTableAutoFormatTable& GetTableStyles() { return *mpTableStyles.get(); }
     const SwTableAutoFormatTable& GetTableStyles() const { return *mpTableStyles.get(); }
+    // Create a new table style. Tracked by Undo.
+    SwTableAutoFormat* MakeTableStyle(const OUString& rName, bool bBroadcast = false);
+    // Delete table style named rName. If pAffectedTables is not null, it contains pointers to affected tables. Tracked by undo.
+    std::unique_ptr<SwTableAutoFormat> DelTableStyle(const OUString& rName, bool bBroadcast = false, std::vector<SwTable*>* pAffectedTables = nullptr);
 
     const SwCellStyleTable& GetCellStyles() const  { return *mpCellStyles.get(); }
           SwCellStyleTable& GetCellStyles()        { return *mpCellStyles.get(); }
