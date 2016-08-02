@@ -38,13 +38,13 @@ Globals
     }
 }
 
-LibreOffice
+LibreOfficeVanilla
 {
     Settings
     {
         variables
         {
-            PRODUCTNAME LibreOffice
+            PRODUCTNAME LibreOffice Vanilla
             PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
             POSTVERSIONEXTENSION
