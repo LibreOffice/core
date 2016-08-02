@@ -59,6 +59,8 @@ export LOCAL_COMMON_OUT := $(instsetoo_OUT)
 
 instsetoo_native_WITH_LANG := en-US $(filter-out en-US,$(gb_WITH_LANG))
 
+PRODUCTNAME_no_spaces := $(subst $(WHITESPACE),,$(PRODUCTNAME))
+
 ifeq (WNT,$(OS))
 define instsetoo_native_msitemplates
 
@@ -80,7 +82,7 @@ $(foreach pkgformat,$(5),\
 && $(PERL) -w $< \
 	-f $(BUILDDIR)/instsetoo_native/util/openoffice.lst \
 	-l $(subst $(WHITESPACE),$(COMMA),$(strip $(2))) \
-	-p $(PRODUCTNAME)$(3) \
+	-p $(PRODUCTNAME_no_spaces)$(3) \
 	-u $(instsetoo_OUT) \
 	-buildid $(if $(filter deb0 rpm0,$(pkgformat)$(LIBO_VERSION_PATCH)),1,$(LIBO_VERSION_PATCH)) \
 	$(if $(filter WNT,$(OS)), \
@@ -98,13 +100,13 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony:
 	rm -rf $(instsetoo_OUT)
 ifeq (TRUE,$(LIBO_TEST_INSTALL))
 	$(call instsetoo_native_install_command,openoffice,en-US,,,archive)
-	unzip -q -d $(TESTINSTALLDIR) $(instsetoo_OUT)/$(PRODUCTNAME)/archive/install/en-US/LibreOffice*_archive.zip
+	unzip -q -d $(TESTINSTALLDIR) $(instsetoo_OUT)/$(PRODUCTNAME_no_spaces)/archive/install/en-US/LibreOffice*_archive.zip
 	mv $(TESTINSTALLDIR)/LibreOffice*_archive/LibreOffice*/* $(TESTINSTALLDIR)/
 	rmdir $(TESTINSTALLDIR)/LibreOffice*_archive/LibreOffice*
 	rmdir $(TESTINSTALLDIR)/LibreOffice*_archive
 ifeq (ODK,$(filter ODK,$(BUILD_TYPE)))
 	$(call instsetoo_native_install_command,sdkoo,en-US,_SDK,,archive)
-	unzip -q -d $(TESTINSTALLDIR) $(instsetoo_OUT)/$(PRODUCTNAME)_SDK/archive/install/en-US/LibreOffice*_archive_sdk.zip
+	unzip -q -d $(TESTINSTALLDIR) $(instsetoo_OUT)/$(PRODUCTNAME_no_spaces)_SDK/archive/install/en-US/LibreOffice*_archive_sdk.zip
 	mv $(TESTINSTALLDIR)/LibreOffice*_archive_sdk/LibreOffice*_SDK/sdk \
         $(TESTINSTALLDIR)/
 	rmdir $(TESTINSTALLDIR)/LibreOffice*_archive_sdk/LibreOffice*_SDK
