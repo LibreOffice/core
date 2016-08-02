@@ -421,10 +421,7 @@ void OOXMLSecExporter::Impl::writePackageSignature()
         m_xDocumentHandler->startElement(NSTAG_XD ":" TAG_QUALIFYINGPROPERTIES, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
     }
 
-    // FIXME why does this part crash NSS when MOZILLA_CERTIFICATE_FOLDER is not set?
-    static bool bTest = getenv("LO_TESTNAME");
-    if (!bTest)
-        writeSignedProperties();
+    writeSignedProperties();
 
     m_xDocumentHandler->endElement(NSTAG_XD ":" TAG_QUALIFYINGPROPERTIES);
     m_xDocumentHandler->endElement(TAG_OBJECT);
