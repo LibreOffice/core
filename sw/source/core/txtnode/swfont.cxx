@@ -1501,8 +1501,8 @@ void SwDrawTextInfo::Shift( sal_uInt16 nDir )
 /**
  * @note Used for the "continuous underline" feature.
  **/
-SwUnderlineFont::SwUnderlineFont( SwFont& rFnt, const Point& rPoint )
-        : m_aPos( rPoint ), m_pFont( &rFnt )
+SwUnderlineFont::SwUnderlineFont( SwFont& rFnt, sal_Int32 nEnd, const Point& rPoint )
+        : m_aPos( rPoint ), m_nEnd( nEnd ), m_pFont( &rFnt )
 {
 };
 
