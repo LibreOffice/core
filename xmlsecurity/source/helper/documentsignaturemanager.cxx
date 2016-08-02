@@ -56,11 +56,6 @@ bool DocumentSignatureManager::isXML(const OUString& rURI)
 {
     SAL_WARN_IF(!mxStore.is(), "xmlsecurity.helper", "empty storage reference");
 
-    // FIXME figure out why this is necessary.
-    static bool bTest = getenv("LO_TESTNAME");
-    if (bTest)
-        return true;
-
     bool bIsXML = false;
     bool bPropsAvailable = false;
     const OUString sPropFullPath("FullPath");

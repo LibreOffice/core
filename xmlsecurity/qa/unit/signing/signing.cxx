@@ -110,6 +110,16 @@ void SigningTest::setUp()
 
     mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
+
+#ifndef _WIN32
+    // Set up cert8.db in workdir/CppunitTest/
+    OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
+    OUString aTargetDir = m_directories.getURLFromWorkdir("/CppunitTest/");
+    osl::File::copy(aSourceDir + "cert8.db", aTargetDir + "cert8.db");
+    OUString aTargetPath;
+    osl::FileBase::getSystemPathFromFileURL(aTargetDir, aTargetPath);
+    setenv("MOZILLA_CERTIFICATE_FOLDER", aTargetPath.toUtf8().getStr(), 1);
+#endif
 }
 
 void SigningTest::tearDown()
