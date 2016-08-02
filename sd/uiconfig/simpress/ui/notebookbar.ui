@@ -93,6 +93,11 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/lc_paste.png</property>
   </object>
+  <object class="GtkImage" id="PlaceholderImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">sfx2/res/placeholder.png</property>
+  </object>
   <object class="GtkImage" id="PresentationCurrentSlideImg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -101,7 +106,7 @@
   <object class="GtkImage" id="PresentationDialogImg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_presentationdialog.png</property>
+    <property name="pixbuf">cmd/lc_presentation.png</property>
   </object>
   <object class="GtkImage" id="PresentationImg">
     <property name="visible">True</property>
@@ -310,6 +315,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:Signature</property>
+                    <property name="image">PlaceholderImg</property>
                     <property name="relief">none</property>
                     <property name="image_position">top</property>
                   </object>
@@ -406,6 +412,7 @@
                         </child>
                         <child>
                           <object class="vcllo-SmallButton" id="FormatPaintbrush">
+                            <property name="label" translatable="yes">Clone</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -1592,6 +1599,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="tooltip_text" translatable="yes">Insert Audio or Video</property>
                             <property name="action_name">.uno:InsertAVMedia</property>
                             <property name="relief">none</property>
                             <property name="xalign">0</property>
@@ -2114,6 +2122,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:CustomShowDialog</property>
+                        <property name="image">PlaceholderImg</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                       </object>
@@ -2129,6 +2138,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:Remote</property>
+                        <property name="image">PlaceholderImg</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                       </object>
@@ -2338,6 +2348,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:NormalMultiPaneGUI</property>
+                        <property name="image">PlaceholderImg</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                       </object>
@@ -2353,6 +2364,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:OutlineMode</property>
+                        <property name="image">PlaceholderImg</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                       </object>
@@ -2452,6 +2464,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:HandoutMode</property>
+                        <property name="image">PlaceholderImg</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                       </object>
@@ -2631,6 +2644,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:OutputQualityColor</property>
+                        <property name="image">PlaceholderImg</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                       </object>
@@ -2646,6 +2660,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:OutputQualityGrayscale</property>
+                        <property name="image">PlaceholderImg</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                       </object>
@@ -2661,6 +2676,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:OutputQualityBlackWhite</property>
+                        <property name="image">PlaceholderImg</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                       </object>

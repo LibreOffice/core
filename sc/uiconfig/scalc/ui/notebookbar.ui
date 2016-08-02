@@ -123,6 +123,11 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/lc_paste.png</property>
   </object>
+  <object class="GtkImage" id="PlaceholderImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">sfx2/res/placeholder.png</property>
+  </object>
   <object class="GtkImage" id="PrintImg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -352,6 +357,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:Signature</property>
+                        <property name="image">PlaceholderImg</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                       </object>
@@ -453,6 +459,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="vcllo-SmallButton" id="FormatPaintbrush">
+                        <property name="label" translatable="yes">Clone</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1735,6 +1742,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="tooltip_text" translatable="yes">Insert Audio or Video</property>
                             <property name="action_name">.uno:InsertAVMedia</property>
                             <property name="image">InsertAVMediaImg</property>
                             <property name="relief">none</property>
@@ -1785,6 +1793,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:FunctionDialog</property>
+                    <property name="image">PlaceholderImg</property>
                     <property name="relief">none</property>
                     <property name="image_position">top</property>
                   </object>
@@ -2057,6 +2066,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkButton" id="ToggleSheetGrid">
+                            <property name="label" translatable="yes">Toggle Grid Lines</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -2238,6 +2248,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:ManageXMLSource</property>
+                            <property name="image">PlaceholderImg</property>
                             <property name="relief">none</property>
                             <property name="image_position">top</property>
                           </object>
@@ -2253,6 +2264,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:DataStreams</property>
+                            <property name="image">PlaceholderImg</property>
                             <property name="relief">none</property>
                             <property name="image_position">top</property>
                           </object>
@@ -2297,6 +2309,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:Calculate</property>
+                    <property name="image">PlaceholderImg</property>
                     <property name="relief">none</property>
                     <property name="image_position">top</property>
                   </object>
@@ -2517,6 +2530,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:TextToColumns</property>
+                            <property name="image">PlaceholderImg</property>
                             <property name="relief">none</property>
                             <property name="image_position">top</property>
                           </object>
@@ -2532,6 +2546,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:Validation</property>
+                            <property name="image">PlaceholderImg</property>
                             <property name="relief">none</property>
                             <property name="image_position">top</property>
                           </object>
@@ -2572,6 +2587,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:DataConsolidate</property>
+                            <property name="image">PlaceholderImg</property>
                             <property name="relief">none</property>
                             <property name="image_position">top</property>
                           </object>
@@ -2587,6 +2603,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:DataSubTotals</property>
+                            <property name="image">PlaceholderImg</property>
                             <property name="relief">none</property>
                             <property name="image_position">top</property>
                           </object>
@@ -2627,6 +2644,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:DataForm</property>
+                            <property name="image">PlaceholderImg</property>
                             <property name="relief">none</property>
                             <property name="image_position">top</property>
                           </object>
@@ -2642,6 +2660,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:TableOperationDialog</property>
+                            <property name="image">PlaceholderImg</property>
                             <property name="relief">none</property>
                             <property name="image_position">top</property>
                           </object>
@@ -2951,6 +2970,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:ShareDocument</property>
+                            <property name="image">PlaceholderImg</property>
                             <property name="relief">none</property>
                             <property name="image_position">top</property>
                           </object>
@@ -3008,6 +3028,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:NormalViewMode</property>
+                        <property name="image">PlaceholderImg</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                       </object>
@@ -3023,6 +3044,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:PagebreakMode</property>
+                        <property name="image">PlaceholderImg</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                       </object>
@@ -3061,6 +3083,7 @@
                         <property name="can_focus">False</property>
                         <child>
                           <object class="GtkButton" id="ToggleSheetGrid2">
+                            <property name="label" translatable="yes">Toggle Grid Lines</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -3081,6 +3104,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:ViewValueHighlighting</property>
+                            <property name="image">PlaceholderImg</property>
                             <property name="relief">none</property>
                             <property name="image_position">top</property>
                           </object>
@@ -3096,6 +3120,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:ViewRowColumnHeaders</property>
+                            <property name="image">PlaceholderImg</property>
                             <property name="relief">none</property>
                             <property name="image_position">top</property>
                           </object>
