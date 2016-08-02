@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_511d5e0e",
+        "filename": "svx/source/svdraw/svdmrkv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1263,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-02T08:48:39Z",
+      "side": 1,
+      "message": "this check is not in IsObjMarkable, would add it",
+      "range": {
+        "startLine": 1262,
+        "startChar": 0,
+        "endLine": 1263,
+        "endChar": 37
+      },
+      "revId": "b7d61183eccb1c5718765a833e563f55e4987be9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_9169a68e",
+        "filename": "svx/source/svdraw/svdmrkv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1265,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-02T08:48:39Z",
+      "side": 1,
+      "message": "check if Obj is on our Page makes sense, but why not for 3DObj too?\nthis check it\u0027s not in IsObjMarkable, would add it too",
+      "range": {
+        "startLine": 1264,
+        "startChar": 0,
+        "endLine": 1265,
+        "endChar": 64
+      },
+      "revId": "b7d61183eccb1c5718765a833e563f55e4987be9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_b104e2c6",
+        "filename": "svx/source/svdraw/svdmrkv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1269,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-02T08:48:39Z",
+      "side": 1,
+      "message": "order is different in IsObjMarkable does this as last step",
+      "range": {
+        "startLine": 1266,
+        "startChar": 0,
+        "endLine": 1269,
+        "endChar": 41
+      },
+      "revId": "b7d61183eccb1c5718765a833e563f55e4987be9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_d1096edf",
+        "filename": "svx/source/svdraw/svdmrkv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1280,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-02T08:48:39Z",
+      "side": 1,
+      "message": "not sure what this does\ncheck if Obj.pObjList // list that includes this object\nis not this.AktList // Current List, usually the Page\nand do the same for parents of Obj and their parents ...",
+      "range": {
+        "startLine": 1274,
+        "startChar": 0,
+        "endLine": 1280,
+        "endChar": 5
+      },
+      "revId": "b7d61183eccb1c5718765a833e563f55e4987be9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_f10e6ae4",
+        "filename": "svx/source/svdraw/svdpagv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-02T08:48:39Z",
+      "side": 1,
+      "message": "would assert here, as false suggest there is an Obj",
+      "range": {
+        "startLine": 650,
+        "startChar": 0,
+        "endLine": 651,
+        "endChar": 21
+      },
+      "revId": "b7d61183eccb1c5718765a833e563f55e4987be9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_1114b6f3",
+        "filename": "svx/source/svdraw/svdpagv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-02T08:48:39Z",
+      "side": 1,
+      "message": "not in IsObjSelectable but sounds reasonable",
+      "range": {
+        "startLine": 652,
+        "startChar": 0,
+        "endLine": 653,
+        "endChar": 52
+      },
+      "revId": "b7d61183eccb1c5718765a833e563f55e4987be9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_51f63ed8",
+        "filename": "svx/source/svdraw/svdpagv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-02T08:48:39Z",
+      "side": 1,
+      "message": "looks good should keep it",
+      "range": {
+        "startLine": 657,
+        "startChar": 0,
+        "endLine": 672,
+        "endChar": 25
+      },
+      "revId": "b7d61183eccb1c5718765a833e563f55e4987be9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_31f9b2c9",
+        "filename": "svx/source/svdraw/svdpagv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-02T08:48:39Z",
+      "side": 1,
+      "message": "could not create empty group frames as described in\nhttps://bz.apache.org/ooo/show_bug.cgi?id\u003d43302\nmaybe not needed any more?",
+      "range": {
+        "startLine": 676,
+        "startChar": 0,
+        "endLine": 678,
+        "endChar": 24
+      },
+      "revId": "b7d61183eccb1c5718765a833e563f55e4987be9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_9100c6ac",
+        "filename": "svx/source/svdraw/svdpagv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-02T08:48:39Z",
+      "side": 1,
+      "message": "as I wrote in comments:\nguess we should do early check if Obj is on this page\nand return false if not.\nsee check in IsObjSelectable:\n!pObj-\u003eIs3DObj() \u0026\u0026 pObj-\u003eGetPage()!\u003dGetPage()",
+      "range": {
+        "startLine": 683,
+        "startChar": 0,
+        "endLine": 689,
+        "endChar": 21
+      },
+      "revId": "b7d61183eccb1c5718765a833e563f55e4987be9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
