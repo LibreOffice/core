@@ -26,6 +26,7 @@
 #include <editdbg.hxx>
 #include <svl/smplhint.hxx>
 #include <editeng/lrspitem.hxx>
+#include <editeng/outliner.hxx>
 
 void ImpEditEngine::SetStyleSheetPool( SfxStyleSheetPool* pSPool )
 {
@@ -222,11 +223,23 @@ EditUndoSetAttribs* ImpEditEngine::CreateAttribUndo( EditSelection aSel, const S
     return pUndo;
 }
 
+sal_Int32 ImpEditEngine::CreateViewShellId()
+{
+    sal_Int32 nRet = -1;
+
+    const EditView* pEditView = pEditEngine ? pEditEngine->GetActiveView() : nullptr;
+    const OutlinerViewShell* pViewShell = pEditView ? pEditView->GetImpEditView()->GetViewShell() : nullptr;
+    if (pViewShell)
+        nRet = pViewShell->GetViewShellId();
+
+    return nRet;
+}
+
 void ImpEditEngine::UndoActionStart( sal_uInt16 nId, const ESelection& aSel )
 {
     if ( IsUndoEnabled() && !IsInUndo() )
     {
-        GetUndoManager().EnterListAction( GetEditEnginePtr()->GetUndoComment( nId ), OUString(), nId, -1 );
+        GetUndoManager().EnterListAction( GetEditEnginePtr()->GetUndoComment( nId ), OUString(), nId, CreateViewShellId() );
         DBG_ASSERT( !pUndoMarkSelection, "UndoAction SelectionMarker?" );
         pUndoMarkSelection = new ESelection( aSel );
     }
@@ -236,7 +249,7 @@ void ImpEditEngine::UndoActionStart( sal_uInt16 nId )
 {
     if ( IsUndoEnabled() && !IsInUndo() )
     {
-        GetUndoManager().EnterListAction( GetEditEnginePtr()->GetUndoComment( nId ), OUString(), nId, -1 );
+        GetUndoManager().EnterListAction( GetEditEnginePtr()->GetUndoComment( nId ), OUString(), nId, CreateViewShellId() );
         DBG_ASSERT( !pUndoMarkSelection, "UndoAction SelectionMarker?" );
     }
 }
