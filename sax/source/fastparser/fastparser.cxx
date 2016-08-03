@@ -434,22 +434,23 @@ void Entity::startElement( Event *pEvent )
     {
         Reference< XFastAttributeList > xAttr( pEvent->mxAttributes.get() );
         Reference< XFastContextHandler > xContext;
+
+        if ( mxNamespaceHandler.is() )
+        {
+            Sequence< xml::Attribute > NSDeclAttribs = pEvent->mxDeclAttributes->getUnknownAttributes();
+            sal_uInt16 len = NSDeclAttribs.getLength();
+            for (sal_uInt16 i = 0; i < len; i++)
+            {
+                mxNamespaceHandler->registerNamespace( NSDeclAttribs[i].Name, NSDeclAttribs[i].Value );
+            }
+        }
+
         if( nElementToken == FastToken::DONTKNOW )
         {
             if( pParentContext )
                 xContext = pParentContext->createUnknownChildContext( aNamespace, aElementName, xAttr );
             else if( mxDocumentHandler.is() )
                 xContext = mxDocumentHandler->createUnknownChildContext( aNamespace, aElementName, xAttr );
-
-            if ( mxNamespaceHandler.is() )
-            {
-                Sequence< xml::Attribute > NSDeclAttribs = pEvent->mxDeclAttributes->getUnknownAttributes();
-                sal_uInt16 len = NSDeclAttribs.getLength();
-                for (sal_uInt16 i = 0; i < len; i++)
-                {
-                    mxNamespaceHandler->registerNamespace( NSDeclAttribs[i].Name, NSDeclAttribs[i].Value );
-                }
-            }
 
             if( xContext.is() )
             {
@@ -1103,29 +1104,33 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
 
     try
     {
+        /*  #158414# Each element may define new namespaces, also for attribues.
+            First, process all namespaces, second, process the attributes after namespaces
+            have been initialized. */
+
+        // #158414# first: get namespaces
+        for (int i = 0; i < numNamespaces * 2; i += 2)
+        {
+            // namespaces[] is (prefix/URI)
+            if( namespaces[ i ] != nullptr )
+            {
+                DefineNamespace( OString( XML_CAST( namespaces[ i ] )),
+                    OUString( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 ));
+                if( rEntity.mxNamespaceHandler.is() )
+                    rEvent.mxDeclAttributes->addUnknown( OString( XML_CAST( namespaces[ i ] ) ), OString( XML_CAST( namespaces[ i + 1 ] ) ) );
+            }
+            else
+            {
+                // default namespace
+                sNamespace = OUString( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 );
+                nNamespaceToken = GetNamespaceToken( sNamespace );
+                if( rEntity.mxNamespaceHandler.is() )
+                    rEvent.mxDeclAttributes->addUnknown( OString( "" ), OString( XML_CAST( namespaces[ i + 1 ] ) ) );
+            }
+        }
+
         if ( rEntity.mxTokenHandler.is() )
         {
-            /*  #158414# Each element may define new namespaces, also for attribues.
-                First, process all namespaces, second, process the attributes after namespaces
-                have been initialized. */
-
-            // #158414# first: get namespaces
-            for (int i = 0; i < numNamespaces * 2; i += 2)
-            {
-                // namespaces[] is (prefix/URI)
-                if( namespaces[ i ] != nullptr )
-                {
-                        DefineNamespace( OString( XML_CAST( namespaces[ i ] )),
-                            OUString( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 ));
-                }
-                else
-                {
-                    // default namespace
-                    sNamespace = OUString( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 );
-                    nNamespaceToken = GetNamespaceToken( sNamespace );
-                }
-            }
-
             // #158414# second: fill attribute list with other attributes
             for (int i = 0; i < numAttributes * 5; i += 5)
             {
@@ -1159,20 +1164,6 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
         }
         else
         {
-            for (int i = 0; i < numNamespaces * 2; i += 2)
-            {
-                if( rEntity.mxNamespaceHandler.is() )
-                {
-                    if( namespaces[ i ] != nullptr )
-                        rEvent.mxDeclAttributes->addUnknown( OString( XML_CAST( namespaces[ i ] ) ), OString( XML_CAST( namespaces[ i + 1 ] ) ) );
-                    else
-                    {
-                        sNamespace = OUString( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 );
-                        rEvent.mxDeclAttributes->addUnknown( OString( "" ), OString( XML_CAST( namespaces[ i + 1 ] ) ) );
-                    }
-                }
-            }
-
             for (int i = 0; i < numAttributes * 5; i += 5)
             {
                 if( attributes[ i + 1 ] != nullptr )
