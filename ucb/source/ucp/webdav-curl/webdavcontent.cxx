@@ -3266,10 +3266,18 @@ void Content::unlock(
 
         // update the URL
         aTargetUrl = xResAccess->getURL();
-        xResAccess->UNLOCK( Environment );
-        // remove options from cache, unlock may change it
-        // it will be refreshed when needed
-        aStaticDAVOptionsCache.removeDAVOptions( aTargetUrl );
+        // check if the target URL is a Class1 DAV
+        DAVOptions aDAVOptions;
+        getResourceOptions( Environment, aDAVOptions, xResAccess );
+
+        // at least class one is needed
+        if( aDAVOptions.isClass1() )
+        {
+            xResAccess->UNLOCK( Environment );
+            // remove options from cache, unlock may change it
+            // it will be refreshed when needed
+            aStaticDAVOptionsCache.removeDAVOptions( aTargetUrl );
+        }
 
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
