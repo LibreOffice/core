@@ -2878,9 +2878,9 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
             case ocISPMT:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpISPMT, nResultSize));
                 break;
-            case ocDuration:
+            case ocPDuration:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpDuration, nResultSize));
+                        ft->Children[i], new OpPDuration, nResultSize));
                 break;
             case ocSinHyp:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,

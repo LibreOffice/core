@@ -572,7 +572,7 @@ void OpISPMT::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "}";
 }
 
-void OpDuration::GenSlidingWindowFunction(std::stringstream& ss,
+void OpPDuration::GenSlidingWindowFunction(std::stringstream& ss,
     const std::string &sSymName, SubArguments& vSubArguments)
 {
     ss << "\ndouble " << sSymName;

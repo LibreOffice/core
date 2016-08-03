@@ -2297,8 +2297,8 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Amount of the investment.";
         };
     };
-     // -=*# Resource for function DURATION #*=-
-    Resource SC_OPCODE_DURATION
+     // -=*# Resource for function PDURATION #*=-
+    Resource SC_OPCODE_PDURATION
     {
         String 1 // Description
         {

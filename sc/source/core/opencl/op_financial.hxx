@@ -125,7 +125,7 @@ public:
     virtual std::string BinFuncName() const override { return "ISPMT"; }
 };
 
-class OpDuration: public Normal
+class OpPDuration: public Normal
 {
 public:
     virtual std::string GetBottom() override { return "0"; }

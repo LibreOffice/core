@@ -263,7 +263,7 @@ enum OpCode : sal_uInt16
         ocDDB               = SC_OPCODE_DDB,
         ocDB                = SC_OPCODE_DB,
         ocVBD               = SC_OPCODE_VBD,
-        ocDuration          = SC_OPCODE_DURATION,
+        ocPDuration         = SC_OPCODE_PDURATION,
         ocSLN               = SC_OPCODE_SLN,
         ocPMT               = SC_OPCODE_PMT,
         ocColumns           = SC_OPCODE_COLUMNS,

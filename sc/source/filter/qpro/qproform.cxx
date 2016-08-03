@@ -610,7 +610,7 @@ DefTokenId QProToSc::IndexToDLLId( sal_uInt16 nIndex )
             break;
 
         case 0x003d:
-            eId = ocDuration;
+            eId = ocPDuration;
             break;
 
         case 0x0019:

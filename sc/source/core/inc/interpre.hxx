@@ -749,7 +749,7 @@ void ScDB();
 static double ScInterVDB(double fWert,double fRest,double fDauer,double fDauer1,
                 double fPeriode,double fFactor);
 void ScVDB();
-void ScDuration();
+void ScPDuration();
 void ScSLN();
 static double ScGetRmz(double fZins, double fZzr, double fBw,
                        double fZw, bool bPayInAdvance);
