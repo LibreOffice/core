@@ -100,8 +100,8 @@ RSCINST RscRange::Create( RSCINST * pInst, const RSCINST & rDflt,
         memmove( aInst.pData, rDflt.pData, sizeof( RscRangeInst ) );
     else
     {
-        if( 0L >= nMin && 0L <= nMax )
-            reinterpret_cast<RscRangeInst *>(aInst.pData)->nValue = (sal_uInt16)(0L - nMin);
+        if( 0 >= nMin && 0 <= nMax )
+            reinterpret_cast<RscRangeInst *>(aInst.pData)->nValue = (sal_uInt16)(0 - nMin);
         else
             reinterpret_cast<RscRangeInst *>(aInst.pData)->nValue = 0;
 
@@ -211,7 +211,7 @@ RSCINST RscLongRange::Create( RSCINST * pInst, const RSCINST & rDflt,
     else
     {
         sal_Int32   lDflt;
-        if( 0L >= nMin && 0L <= nMax )
+        if( 0 >= nMin && 0 <= nMax )
             lDflt = 0;
         else
             lDflt = nMin;

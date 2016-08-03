@@ -301,7 +301,7 @@ bool RscExpression::Evaluate( sal_Int32 * plValue )
             *plValue = lLeft << lRight;
         else
         {
-            if( 0L == lRight )
+            if( 0 == lRight )
                 return false;
             *plValue = lLeft / lRight;
         }
