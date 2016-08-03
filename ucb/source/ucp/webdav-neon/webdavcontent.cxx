@@ -567,6 +567,8 @@ uno::Any SAL_CALL Content::execute(
                 xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
             }
             aStaticDAVOptionsCache.removeDAVOptions( xResAccess->getURL() );
+            // clean cached value of PROPFIND property names
+            removeCachedPropertyNames( xResAccess->getURL() );
             xResAccess->DESTROY( Environment );
             {
                 osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -855,6 +857,9 @@ void Content::addProperty( const ucb::PropertyCommandArgument& aCmdArg,
             xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
         }
         aStaticDAVOptionsCache.removeDAVOptions( xResAccess->getURL() );
+        // clean cached value of PROPFIND property names
+        // PROPPATCH can change them
+        removeCachedPropertyNames( xResAccess->getURL() );
         xResAccess->PROPPATCH( aProppatchValues, xEnv );
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -946,6 +951,9 @@ void Content::removeProperty( const OUString& Name,
             xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
         }
         aStaticDAVOptionsCache.removeDAVOptions( xResAccess->getURL() );
+        // clean cached value of PROPFIND property names
+        // PROPPATCH can change them
+        removeCachedPropertyNames( xResAccess->getURL() );
         xResAccess->PROPPATCH( aProppatchValues, xEnv );
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -1463,6 +1471,9 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     try
                     {
                         DAVResource resource;
+                        // clean cached value of PROPFIND property names
+                        // PROPPATCH can change them
+                        removeCachedPropertyNames( xResAccess->getURL() );
                         xResAccess->HEAD( aHeaderNames, resource, xEnv );
                         m_bDidGetOrHead = true;
 
@@ -1870,6 +1881,9 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     {
         try
         {
+            // clean cached value of PROPFIND property names
+            // PROPPATCH can change them
+            removeCachedPropertyNames( xResAccess->getURL() );
             // Set property values at server.
             aStaticDAVOptionsCache.removeDAVOptions( xResAccess->getURL() );
             xResAccess->PROPPATCH( aProppatchValues, xEnv );
@@ -1919,6 +1933,9 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             targetURI.SetScheme( sourceURI.GetScheme() );
 
+            // clean cached value of PROPFIND property names
+            removeCachedPropertyNames( sourceURI.GetURI() );
+            removeCachedPropertyNames( targetURI.GetURI() );
             aStaticDAVOptionsCache.removeDAVOptions( sourceURI.GetURI() );
             aStaticDAVOptionsCache.removeDAVOptions( targetURI.GetURI() );
             xResAccess->MOVE(
@@ -2078,6 +2095,7 @@ uno::Any Content::open(
                 DAVResource aResource;
                 std::vector< OUString > aHeaders;
 
+                removeCachedPropertyNames( xResAccess->getURL() );
                 xResAccess->GET( xOut, aHeaders, aResource, xEnv );
                 m_bDidGetOrHead = true;
 
@@ -2124,6 +2142,7 @@ uno::Any Content::open(
                     DAVResource aResource;
                     std::vector< OUString > aHeaders;
 
+                    removeCachedPropertyNames( xResAccess->getURL() );
                     // check if the resource was present on the server
                     if( aStaticDAVOptionsCache.isResourceFound( aTargetURL ) )
                     {
@@ -2227,6 +2246,7 @@ void Content::post(
                     new DAVResourceAccess( *m_xResAccess.get() ) );
             }
 
+            removeCachedPropertyNames( xResAccess->getURL() );
             uno::Reference< io::XInputStream > xResult
                 = xResAccess->POST( rArg.MediaType,
                                     rArg.Referer,
@@ -2261,6 +2281,7 @@ void Content::post(
                         new DAVResourceAccess( *m_xResAccess.get() ) );
                 }
 
+                removeCachedPropertyNames( xResAccess->getURL() );
                 xResAccess->POST( rArg.MediaType,
                                   rArg.Referer,
                                   rArg.Source,
@@ -2477,6 +2498,7 @@ void Content::insert(
             if ( bCollection )
             {
                 aStaticDAVOptionsCache.removeDAVOptions( xResAccess->getURL() );
+                removeCachedPropertyNames( xResAccess->getURL() );
                 xResAccess->MKCOL( Environment );
             }
             else
@@ -2484,7 +2506,9 @@ void Content::insert(
                 // remove options from cache, PUT may change it
                 // it will be refreshed when needed
                 aStaticDAVOptionsCache.removeDAVOptions( xResAccess->getURL() );
+                removeCachedPropertyNames( xResAccess->getURL() );
                 xResAccess->PUT( xInputStream, Environment );
+                // clean cached value of PROPFIND properties names
             }
             // no error , set the resourcetype to unknown type
             // the resource may have transitioned from NOT FOUND or UNKNOWN to something else
@@ -2508,6 +2532,7 @@ void Content::insert(
                         // Destroy old resource.
                         try
                         {
+                            removeCachedPropertyNames( xResAccess->getURL() );
                             xResAccess->DESTROY( Environment );
                         }
                         catch ( DAVException const & e )
@@ -2586,6 +2611,7 @@ void Content::insert(
         OUString    aTargetUrl = xResAccess->getURL();
         try
         {
+            removeCachedPropertyNames( xResAccess->getURL() );
             // remove options from cache, PUT may change it
             // it will be refreshed when needed
             aStaticDAVOptionsCache.removeDAVOptions( aTargetUrl );
@@ -3121,6 +3147,7 @@ void Content::lock(
 
         // OPTIONS may change as a consequence of the lock operation
         aStaticDAVOptionsCache.removeDAVOptions( xResAccess->getURL() );
+        removeCachedPropertyNames( xResAccess->getURL() );
         xResAccess->LOCK( aLock, Environment );
 
         {
@@ -3249,6 +3276,8 @@ void Content::unlock(
             // remove options from cache, unlock may change it
             // it will be refreshed when needed
             aStaticDAVOptionsCache.removeDAVOptions( xResAccess->getURL() );
+            // clean cached value of PROPFIND properties names
+            removeCachedPropertyNames( xResAccess->getURL() );
             xResAccess->UNLOCK( Environment );
         }
 

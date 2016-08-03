@@ -284,6 +284,12 @@ bool ContentProvider::getProperty(
 
 static PropertyNamesCache aStaticPropertyNamesCache;
 
+// static
+void Content::removeCachedPropertyNames( const OUString & rURL )
+{
+    aStaticPropertyNamesCache.removeCachedPropertyNames( rURL );
+}
+
 // Content implementation.
 
 

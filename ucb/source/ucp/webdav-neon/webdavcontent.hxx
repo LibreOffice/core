@@ -328,6 +328,7 @@ public:
                              DAVOptions& rDAVOptions )
         throw ( css::uno::Exception, std::exception );
 
+    static void removeCachedPropertyNames( const OUString & rURL );
 };
 
 }
