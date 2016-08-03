@@ -4289,7 +4289,7 @@ StackVar ScInterpreter::Interpret()
                 case ocDde              : ScDde();                      break;
                 case ocBase             : ScBase();                     break;
                 case ocDecimal          : ScDecimal();                  break;
-                case ocConvert          : ScConvert();                  break;
+                case ocConvertOOo       : ScConvertOOo();               break;
                 case ocEuroConvert      : ScEuroConvert();              break;
                 case ocRoman            : ScRoman();                    break;
                 case ocArabic           : ScArabic();                   break;

@@ -12397,8 +12397,8 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The base number for conversion must be in the range 2 - 36." ;
         };
     };
-     // -=*# Resource for function CONVERT #*=-
-    Resource SC_OPCODE_CONVERT
+     // -=*# Resource for function CONVERT_OOO #*=-
+    Resource SC_OPCODE_CONVERT_OOO
     {
         String 1 // Description
         {

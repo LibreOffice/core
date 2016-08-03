@@ -485,7 +485,7 @@ enum OpCode : sal_uInt16
         ocVarPA             = SC_OPCODE_VAR_P_A,
         ocEasterSunday      = SC_OPCODE_EASTERSUNDAY,
         ocDecimal           = SC_OPCODE_DECIMAL,
-        ocConvert           = SC_OPCODE_CONVERT,
+        ocConvertOOo        = SC_OPCODE_CONVERT_OOO,
         ocRoman             = SC_OPCODE_ROMAN,
         ocHyperLink         = SC_OPCODE_HYPERLINK,
         ocGetPivotData      = SC_OPCODE_GET_PIVOT_DATA,

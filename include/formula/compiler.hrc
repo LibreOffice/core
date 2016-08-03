@@ -390,7 +390,7 @@
 #define SC_OPCODE_VAR_P_A           379
 #define SC_OPCODE_EASTERSUNDAY      380
 #define SC_OPCODE_DECIMAL           381
-#define SC_OPCODE_CONVERT           382
+#define SC_OPCODE_CONVERT_OOO       382
 #define SC_OPCODE_ROMAN             383
 #define SC_OPCODE_MIRR              384
 #define SC_OPCODE_CELL              385

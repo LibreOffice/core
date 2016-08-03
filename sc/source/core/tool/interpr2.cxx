@@ -2954,7 +2954,7 @@ void ScInterpreter::ScDecimal()
     }
 }
 
-void ScInterpreter::ScConvert()
+void ScInterpreter::ScConvertOOo()
 {   // Value, FromUnit, ToUnit
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {

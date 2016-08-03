@@ -1338,7 +1338,7 @@ void FormulaCompiler::Factor()
                     // Don't use SetExclusiveRecalcModeOnLoad() which would
                     // override ModeAlways, use
                     // AddRecalcMode(ScRecalcMode::ONLOAD) instead.
-                case ocConvert :
+                case ocConvertOOo :
                 case ocDde:
                 case ocMacro:
                 case ocExternal:

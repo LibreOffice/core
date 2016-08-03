@@ -729,7 +729,7 @@ void ScStyle();
 void ScDde();
 void ScBase();
 void ScDecimal();
-void ScConvert();
+void ScConvertOOo();
 void ScEuroConvert();
 
 // financial functions
