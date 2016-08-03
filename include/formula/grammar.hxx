@@ -143,6 +143,11 @@ public:
                                 ((CONV_XL_OOX        +
                                   kConventionOffset) << kConventionShift)       |
                                 kEnglishBit,
+        /// API English with A1 reference style, unbracketed.
+        GRAM_API            = css::sheet::FormulaLanguage::API                  |
+                                ((CONV_OOO           +
+                                  kConventionOffset) << kConventionShift)       |
+                                kEnglishBit,
         /// Central definition of the default grammar to be used.
         GRAM_DEFAULT        = GRAM_NATIVE_UI,
 
