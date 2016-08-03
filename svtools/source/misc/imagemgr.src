@@ -78,6 +78,7 @@
     IMG_SVM ; \
     IMG_TABLE ; \
     IMG_TEXTFILE ; \
+    IMG_TEMPLATE ; \
     IMG_TIFF ; \
     IMG_WMF ; \
     IMG_WRITER ; \
@@ -94,7 +95,7 @@ ImageList RID_SVTOOLS_IMAGELIST_BIG
     };
     IdCount =
     {
-        66 ;
+        67 ;
     };
 };
 
@@ -108,7 +109,7 @@ ImageList RID_SVTOOLS_IMAGELIST_SMALL
     };
     IdCount =
     {
-        66;
+        67;
     };
 };
 
