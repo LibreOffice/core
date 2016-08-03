@@ -1169,12 +1169,7 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                     nIndexPre == NF_KEY_HH  ||      // HH
                     nIndexNex == NF_KEY_S   ||      // S
                     nIndexNex == NF_KEY_SS  ||      // SS
-                    (bIsTimeDetected &&
-                     !(((nIndexPre == NF_KEY_YY || nIndexPre == NF_KEY_YYYY) &&
-                        (nIndexNex == NF_KEY_D  || nIndexNex == NF_KEY_DD)) ||
-                       ((nIndexPre == NF_KEY_D  || nIndexPre == NF_KEY_DD) &&
-                        (nIndexNex == NF_KEY_YY || nIndexNex == NF_KEY_YYYY)))
-                    )                       ||      // tdf#101147
+                    bIsTimeDetected         ||      // tdf#101147
                     PreviousChar(i) == '['  )       // [M
                 {
                     eNewType = css::util::NumberFormat::TIME;
@@ -1187,17 +1182,20 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                     eNewType = css::util::NumberFormat::DATE;
                 }
                 break;
-            case NF_KEY_MMM:                        // MMM
-            case NF_KEY_MMMM:                       // MMMM
-            case NF_KEY_MMMMM:                      // MMMMM
-            case NF_KEY_Q:                          // Q
-            case NF_KEY_QQ:                         // QQ
             case NF_KEY_D:                          // D
             case NF_KEY_DD:                         // DD
             case NF_KEY_DDD:                        // DDD
             case NF_KEY_DDDD:                       // DDDD
             case NF_KEY_YY:                         // YY
             case NF_KEY_YYYY:                       // YYYY
+                if ( bIsTimeDetected )              // reset time detection if date detected
+                    bIsTimeDetected = false;
+                SAL_FALLTHROUGH;
+            case NF_KEY_MMM:                        // MMM
+            case NF_KEY_MMMM:                       // MMMM
+            case NF_KEY_MMMMM:                      // MMMMM
+            case NF_KEY_Q:                          // Q
+            case NF_KEY_QQ:                         // QQ
             case NF_KEY_NN:                         // NN
             case NF_KEY_NNN:                        // NNN
             case NF_KEY_NNNN:                       // NNNN
