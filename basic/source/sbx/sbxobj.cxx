@@ -641,7 +641,7 @@ bool SbxObject::StoreData( SvStream& rStrm ) const
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, aClassName, RTL_TEXTENCODING_ASCII_US);
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, aDfltProp, RTL_TEXTENCODING_ASCII_US);
     sal_Size nPos = rStrm.Tell();
-    rStrm.WriteUInt32( 0L );
+    rStrm.WriteUInt32( 0 );
     sal_Size nNew = rStrm.Tell();
     rStrm.Seek( nPos );
     rStrm.WriteUInt32( nNew - nPos );
