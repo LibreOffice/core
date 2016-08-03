@@ -22,6 +22,7 @@
 #include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/beans/Pair.hpp>
 #include <comphelper/attributelist.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
@@ -129,16 +130,24 @@ public:
 private:
     Reference< XFastParser > m_xParser;
     Reference< XDocumentHandler > m_xDocumentHandler;
+    Reference< XFastTokenHandler > m_xTokenHandler;
 
 };
+
 
 class CallbackDocumentHandler : public WeakImplHelper< XFastDocumentHandler >
 {
 private:
     Reference< XDocumentHandler > m_xDocumentHandler;
+    Reference< XFastTokenHandler > m_xTokenHandler;
     rtl::Reference< NamespaceHandler > m_aNamespaceHandler;
+    const OUString getNamespacePrefixFromToken( sal_Int32 nToken );
+    const OUString getNameFromToken( sal_Int32 nToken );
+
 public:
-    CallbackDocumentHandler( Reference< XDocumentHandler > const & xDocumentHandler, rtl::Reference< NamespaceHandler > const & rNamespaceHandler );
+    CallbackDocumentHandler( Reference< XDocumentHandler > const & xDocumentHandler,
+                             rtl::Reference< NamespaceHandler > const & rNamespaceHandler,
+                             Reference< XFastTokenHandler > const & xTokenHandler);
 
     // XFastDocumentHandler
     virtual void SAL_CALL startDocument() throw (SAXException, RuntimeException, exception) override;
@@ -156,10 +165,32 @@ public:
 
 };
 
-CallbackDocumentHandler::CallbackDocumentHandler( Reference< XDocumentHandler > const & xDocumentHandler, rtl::Reference< NamespaceHandler > const & rNamespaceHandler )
+const OUString CallbackDocumentHandler::getNamespacePrefixFromToken( sal_Int32 nToken )
+{
+    if ( ( nToken & 0xffff0000 ) != 0 )
+    {
+        Sequence< sal_Int8 > aSeq = m_xTokenHandler->getUTF8Identifier( nToken & 0xffff0000 );
+        return OUString( reinterpret_cast< const char* >(
+                        aSeq.getConstArray() ), aSeq.getLength(), RTL_TEXTENCODING_UTF8 );
+    }
+    else
+        return OUString();
+}
+
+const OUString CallbackDocumentHandler::getNameFromToken( sal_Int32 nToken )
+{
+    Sequence< sal_Int8 > aSeq = m_xTokenHandler->getUTF8Identifier( nToken & 0xffff );
+    return OUString( reinterpret_cast< const char* >(
+                    aSeq.getConstArray() ), aSeq.getLength(), RTL_TEXTENCODING_UTF8 );
+}
+
+CallbackDocumentHandler::CallbackDocumentHandler( Reference< XDocumentHandler > const & xDocumentHandler,
+                                                  rtl::Reference< NamespaceHandler > const & rNamespaceHandler,
+                                                  Reference< XFastTokenHandler > const & xTokenHandler)
 {
    m_xDocumentHandler.set( xDocumentHandler );
    m_aNamespaceHandler.set( rNamespaceHandler.get() );
+   m_xTokenHandler.set( xTokenHandler );
 }
 
 void SAL_CALL CallbackDocumentHandler::startDocument()
@@ -183,9 +214,11 @@ void SAL_CALL CallbackDocumentHandler::setDocumentLocator( const Reference< XLoc
         m_xDocumentHandler->setDocumentLocator( xLocator );
 }
 
-void SAL_CALL CallbackDocumentHandler::startFastElement( sal_Int32/* nElement */, const Reference< XFastAttributeList >&/* Attribs */ )
+void SAL_CALL CallbackDocumentHandler::startFastElement( sal_Int32 nElement , const Reference< XFastAttributeList >& Attribs  )
         throw (SAXException, RuntimeException, exception)
 {
+    startUnknownElement( CallbackDocumentHandler::getNamespacePrefixFromToken( nElement ),
+                         CallbackDocumentHandler::getNameFromToken( nElement ), Attribs );
 }
 
 void SAL_CALL CallbackDocumentHandler::startUnknownElement( const OUString& Namespace, const OUString& Name, const Reference< XFastAttributeList >& Attribs  )
@@ -201,15 +234,29 @@ void SAL_CALL CallbackDocumentHandler::startUnknownElement( const OUString& Name
         else
             elementName = Name;
 
+        Sequence< xml::FastAttribute > fastAttribs = Attribs->getFastAttributes();
+        sal_uInt16 len = fastAttribs.getLength();
+        for (sal_uInt16 i = 0; i < len; i++)
+        {
+            OUString& rAttrValue = fastAttribs[i].Value;
+            sal_Int32 nToken = fastAttribs[i].Token;
+            const OUString& rAttrNamespacePrefix = CallbackDocumentHandler::getNamespacePrefixFromToken( nToken );
+            OUString sAttrName = CallbackDocumentHandler::getNameFromToken( nToken );
+            if ( !rAttrNamespacePrefix.isEmpty() )
+                sAttrName = rAttrNamespacePrefix + ":" + sAttrName;
+
+            rAttrList->AddAttribute( sAttrName, "CDATA", rAttrValue );
+        }
+
         Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
-        sal_uInt16 len = unknownAttribs.getLength();
+        len = unknownAttribs.getLength();
         for (sal_uInt16 i = 0; i < len; i++)
         {
             OUString& rAttrValue = unknownAttribs[i].Value;
             OUString sAttrName = unknownAttribs[i].Name;
-            OUString& rAttrNamespaceURL = unknownAttribs[i].NamespaceURL;
-            if ( !rAttrNamespaceURL.isEmpty() )
-                sAttrName = rAttrNamespaceURL + ":" + sAttrName;
+            OUString& rAttrNamespacePrefix = unknownAttribs[i].NamespaceURL;
+            if ( !rAttrNamespacePrefix.isEmpty() )
+                sAttrName = rAttrNamespacePrefix + ":" + sAttrName;
 
             rAttrList->AddAttribute( sAttrName, "CDATA", rAttrValue );
         }
@@ -217,9 +264,11 @@ void SAL_CALL CallbackDocumentHandler::startUnknownElement( const OUString& Name
     }
 }
 
-void SAL_CALL CallbackDocumentHandler::endFastElement( sal_Int32/* nElement */)
+void SAL_CALL CallbackDocumentHandler::endFastElement( sal_Int32 nElement )
         throw (SAXException, RuntimeException, exception)
 {
+    endUnknownElement( CallbackDocumentHandler::getNamespacePrefixFromToken( nElement ),
+                       CallbackDocumentHandler::getNameFromToken( nElement ) );
 }
 
 
@@ -267,9 +316,30 @@ SaxLegacyFastParser::SaxLegacyFastParser( ) : m_aNamespaceHandler( new Namespace
 void SAL_CALL SaxLegacyFastParser::initialize(Sequence< Any > const& rArguments )
     throw (RuntimeException, Exception, exception)
 {
-    uno::Reference<lang::XInitialization> const xInit(m_xParser,
+    if (rArguments.getLength())
+    {
+        Reference< XFastTokenHandler > xTokenHandler;
+        OUString str;
+        if ( ( rArguments[0] >>= xTokenHandler ) && xTokenHandler.is() )
+        {
+            m_xTokenHandler.set( xTokenHandler );
+        }
+        else if ( ( rArguments[0] >>= str ) && "registerNamespaces" == str )
+        {
+            css::beans::Pair< OUString, sal_Int32 > rPair;
+            for (sal_Int32 i = 1; i < rArguments.getLength(); i++ )
+            {
+                rArguments[i] >>= rPair;
+                m_xParser->registerNamespace( rPair.First, rPair.Second );
+            }
+        }
+        else
+        {
+            uno::Reference<lang::XInitialization> const xInit(m_xParser,
                             uno::UNO_QUERY_THROW);
-    xInit->initialize( rArguments );
+            xInit->initialize( rArguments );
+        }
+    }
 }
 
 void SaxLegacyFastParser::parseStream( const InputSource& structSource )
@@ -277,7 +347,9 @@ void SaxLegacyFastParser::parseStream( const InputSource& structSource )
                 IOException,
                 RuntimeException, exception)
 {
-    m_xParser->setFastDocumentHandler( new CallbackDocumentHandler( m_xDocumentHandler.get(), m_aNamespaceHandler.get() ) );
+    m_xParser->setFastDocumentHandler( new CallbackDocumentHandler( m_xDocumentHandler.get(),
+                                       m_aNamespaceHandler.get(), m_xTokenHandler.get() ) );
+    m_xParser->setTokenHandler( m_xTokenHandler );
     m_xParser->parseStream( structSource );
 }
 

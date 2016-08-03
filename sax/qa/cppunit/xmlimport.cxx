@@ -24,6 +24,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <com/sun/star/beans/Pair.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
@@ -40,6 +41,7 @@
 #include <osl/conditn.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
+#include <sax/fastattribs.hxx>
 #include <string>
 #include <stack>
 #include <deque>
@@ -264,6 +266,73 @@ void SAL_CALL NSDocumentHandler::startElement( const OUString& aName, const Refe
         CPPUNIT_ASSERT(false);
 }
 
+class DummyTokenHandler : public cppu::WeakImplHelper< XFastTokenHandler >,
+                          public sax_fastparser::FastTokenHandlerBase
+{
+public:
+    const static OUString tokens[];
+    const static OUString namespaceURIs[];
+    const static OUString namespacePrefixes[];
+
+    // XFastTokenHandler
+    virtual Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier )
+        throw (css::uno::RuntimeException, std::exception) override;
+    //FastTokenHandlerBase
+    virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const override;
+};
+
+const OUString DummyTokenHandler::tokens[] = { "Signature", "CanonicalizationMethod", "Algorithm", "Type",
+                                              "DigestMethod", "Reference", "document",
+                                              "spacing", "Player", "Height" };
+
+const OUString DummyTokenHandler::namespaceURIs[] = { "http://www.w3.org/2000/09/xmldsig#",
+                                                  "http://schemas.openxmlformats.org/wordprocessingml/2006/main/",
+                                                  "xyzsports.com/players/football/" };
+
+const OUString DummyTokenHandler::namespacePrefixes[] = { "", "w", "Player" };
+
+Sequence< sal_Int8 > DummyTokenHandler::getUTF8Identifier( sal_Int32 nToken )
+    throw (uno::RuntimeException, std::exception)
+{
+    OString aUtf8Token;
+    if ( ( ( nToken & 0xffff0000 ) != 0 ) ) //namespace
+    {
+        sal_uInt32 nNamespaceToken = ( nToken >> 16 ) - 1;
+        if ( nNamespaceToken < sizeof( namespacePrefixes ) / sizeof( OUString ) )
+            aUtf8Token = OUStringToOString( namespacePrefixes[ nNamespaceToken ], RTL_TEXTENCODING_UTF8 );
+    }
+    else //element or attribute
+    {
+        sal_uInt32 nElementToken = nToken & 0xffff;
+        if ( nElementToken < sizeof( tokens ) / sizeof( OUString ) )
+            aUtf8Token = OUStringToOString( tokens[ nElementToken ], RTL_TEXTENCODING_UTF8 );
+    }
+    Sequence< sal_Int8 > aSeq = Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >(
+                aUtf8Token.getStr() ), aUtf8Token.getLength() );
+    return aSeq;
+}
+
+sal_Int32 DummyTokenHandler::getTokenFromUTF8( const uno::Sequence< sal_Int8 >& rIdentifier )
+    throw (uno::RuntimeException, std::exception)
+{
+    return getTokenDirect( reinterpret_cast< const char* >(
+                    rIdentifier.getConstArray() ), rIdentifier.getLength() );
+}
+
+sal_Int32 DummyTokenHandler::getTokenDirect( const char* pToken, sal_Int32 nLength ) const
+{
+    OUString sToken( pToken, nLength, RTL_TEXTENCODING_UTF8 );
+    for( sal_uInt16  i = 0; i < sizeof(tokens)/sizeof(OUString); i++ )
+    {
+        if ( tokens[i] == sToken )
+            return (sal_Int32)i;
+    }
+    return FastToken::DONTKNOW;
+}
+
+
 class XMLImportTest : public test::BootstrapFixture
 {
 private:
@@ -298,6 +367,26 @@ void XMLImportTest::setUp()
     m_xLegacyFastParser.set( xContext->getServiceManager()->createInstanceWithContext
                     ( "com.sun.star.xml.sax.LegacyFastParser", xContext ), UNO_QUERY );
     m_xLegacyFastParser->setDocumentHandler( m_xDocumentHandler.get() );
+
+    Reference< XFastTokenHandler > xTokenHandler;
+    xTokenHandler.set( new DummyTokenHandler() );
+    uno::Reference<lang::XInitialization> const xInit(m_xLegacyFastParser,
+                            uno::UNO_QUERY_THROW);
+    uno::Sequence<uno::Any> args(1);
+    args[0] <<= xTokenHandler;
+    xInit->initialize( args );
+
+    sal_Int32 nNamespaceCount = sizeof( DummyTokenHandler::namespaceURIs ) / sizeof( OUString );
+    uno::Sequence<uno::Any> namespaceArgs( nNamespaceCount + 1 );
+    namespaceArgs[0] <<= OUString( "registerNamespaces" );
+    for (sal_Int32 i = 1; i <= nNamespaceCount; i++ )
+    {
+        css::beans::Pair <OUString, sal_Int32> rPair;
+        rPair = css::beans::Pair<OUString, sal_Int32>( DummyTokenHandler::namespaceURIs[i - 1], i << 16 );
+        namespaceArgs[i] <<= rPair;
+    }
+    xInit->initialize( namespaceArgs );
+
     m_sDirPath = m_directories.getPathFromSrc( "/sax/qa/data/" );
 }
 
