@@ -69,7 +69,7 @@
 
 #include <memory>
 
-static ScRefFlags lcl_ParseRange(ScRange& rScRange, const OUString& aAddress, ScDocument* pDoc, sal_uInt16 /* nSlot */)
+static ScRefFlags lcl_ParseRange(ScRange& rScRange, const OUString& aAddress, ScDocument* pDoc)
 {
     // start with the address convention set in the document
     formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
@@ -91,7 +91,7 @@ static ScRefFlags lcl_ParseRange(ScRange& rScRange, const OUString& aAddress, Sc
     return rScRange.Parse(aAddress, pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
 }
 
-static ScRefFlags lcl_ParseAddress(ScAddress& rScAddress, const OUString& aAddress, ScDocument* pDoc, sal_uInt16 /* nSlot */)
+static ScRefFlags lcl_ParseAddress(ScAddress& rScAddress, const OUString& aAddress, ScDocument* pDoc)
 {
     // start with the address convention set in the document
     formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
@@ -278,7 +278,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 ScMarkData& rMark     = rViewData.GetMarkData();
                 ScRange     aScRange;
                 ScAddress   aScAddress;
-                ScRefFlags      nResult = lcl_ParseRange(aScRange, aAddress, pDoc, nSlot);
+                ScRefFlags      nResult = lcl_ParseRange(aScRange, aAddress, pDoc);
                 SCTAB       nTab = rViewData.GetTabNo();
                 bool        bMark = true;
 
@@ -297,7 +297,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     }
                 }
                 // Is this a cell ?
-                else if ( (nResult = lcl_ParseAddress(aScAddress, aAddress, pDoc, nSlot)) & ScRefFlags::VALID )
+                else if ( (nResult = lcl_ParseAddress(aScAddress, aAddress, pDoc)) & ScRefFlags::VALID )
                 {
                     if ( nResult & ScRefFlags::TAB_3D )
                     {
