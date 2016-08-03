@@ -1527,7 +1527,7 @@ sal_uInt16 StarBASIC::GetVBErrorCode( SbError nError )
 
 SbError StarBASIC::GetSfxFromVBError( sal_uInt16 nError )
 {
-    SbError nRet = 0L;
+    SbError nRet = 0;
 
     if( SbiRuntime::isVBAEnabled() )
     {
@@ -1539,7 +1539,7 @@ SbError StarBASIC::GetSfxFromVBError( sal_uInt16 nError )
         case 8:
         case 12:
         case 73:
-            return 0L;
+            return 0;
         case 10:
             return ERRCODE_BASIC_ARRAY_FIX;
         case 14:
@@ -1553,7 +1553,7 @@ SbError StarBASIC::GetSfxFromVBError( sal_uInt16 nError )
         case 92:
             return ERRCODE_BASIC_LOOP_NOT_INIT;
         default:
-            nRet = 0L;
+            nRet = 0;
         }
     }
     const SFX_VB_ErrorItem* pErrItem;

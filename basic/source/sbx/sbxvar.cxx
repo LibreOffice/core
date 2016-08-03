@@ -497,7 +497,7 @@ bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     }
     else
     {
-        rStrm.SeekRel( -1L );
+        rStrm.SeekRel( -1 );
         rStrm.ReadUInt16( nType );
         maName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm,
                                                                 RTL_TEXTENCODING_ASCII_US);

@@ -203,7 +203,7 @@ RTLFUNC(Error)
     else
     {
         OUString aErrorMsg;
-        SbError nErr = 0L;
+        SbError nErr = 0;
         sal_Int32 nCode = 0;
         if( rPar.Count() == 1 )
         {

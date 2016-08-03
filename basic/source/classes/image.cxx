@@ -579,7 +579,7 @@ void SbiImage::AddString( const OUString& r )
     {
         sal_Int32  len = r.getLength() + 1;
         sal_uInt32 needed = nStringOff + len;
-        if( needed > 0xFFFFFF00L )
+        if( needed > 0xFFFFFF00 )
         {
             bError = true;  // out of mem!
         }
@@ -696,7 +696,7 @@ void  SbiImage::ReleaseLegacyBuffer()
 
 bool SbiImage::ExceedsLegacyLimits()
 {
-    return ( nStringSize > 0xFF00L ) || ( CalcLegacyOffset( nCodeSize ) > 0xFF00L );
+    return ( nStringSize > 0xFF00 ) || ( CalcLegacyOffset( nCodeSize ) > 0xFF00 );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
