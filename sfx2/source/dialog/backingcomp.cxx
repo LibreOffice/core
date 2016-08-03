@@ -434,8 +434,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     SystemWindow* pSysWindow = static_cast<SystemWindow*>(pParent);
     if (pSysWindow)
     {
-        sfx2::SfxNotebookBar::StateMethod(pSysWindow, m_xFrame, "sfx/ui/notebookbar.ui");
-        pSysWindow->GetNotebookBar()->Hide();
+        //sfx2::SfxNotebookBar::StateMethod(pSysWindow, m_xFrame, "sfx/ui/notebookbar.ui");
     }
 
     // Set a minimum size for Start Center
