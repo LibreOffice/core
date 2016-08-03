@@ -205,7 +205,7 @@ uno::Reference<awt::XWindow> MMCurrentEntryController::createItemWindow(const un
 IMPL_LINK_TYPED(MMCurrentEntryController, CurrentEditUpdatedHdl, Edit&, rEdit, void)
 {
     SwView* pView = ::GetActiveView();
-    SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
+    SwMailMergeConfigItem* pConfigItem = pView ? pView->GetMailMergeConfigItem() : nullptr;
 
     if (!pConfigItem)
         return;
@@ -226,7 +226,7 @@ void MMCurrentEntryController::statusChanged(const frame::FeatureStateEvent& rEv
         return;
 
     SwView* pView = ::GetActiveView();
-    SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
+    SwMailMergeConfigItem* pConfigItem = pView ? pView->GetMailMergeConfigItem() : nullptr;
 
     if (!pConfigItem || !rEvent.IsEnabled)
     {
@@ -277,7 +277,7 @@ uno::Reference<awt::XWindow> MMExcludeEntryController::createItemWindow(const un
 IMPL_STATIC_LINK_TYPED(MMExcludeEntryController, ExcludeHdl, CheckBox&, rCheckbox, void)
 {
     SwView* pView = ::GetActiveView();
-    SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
+    SwMailMergeConfigItem* pConfigItem = pView ? pView->GetMailMergeConfigItem() : nullptr;
 
     if (pConfigItem)
         pConfigItem->ExcludeRecord(pConfigItem->GetResultSetPosition(), rCheckbox.IsChecked());
@@ -289,7 +289,7 @@ void MMExcludeEntryController::statusChanged(const frame::FeatureStateEvent& rEv
         return;
 
     SwView* pView = ::GetActiveView();
-    SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
+    SwMailMergeConfigItem* pConfigItem = pView ? pView->GetMailMergeConfigItem() : nullptr;
 
     if (!pConfigItem || !rEvent.IsEnabled)
     {
