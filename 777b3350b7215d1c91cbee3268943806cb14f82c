@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_83207df9",
+        "filename": "svx/source/svdraw/svdpagv.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-03T10:27:20Z",
+      "side": 1,
+      "message": "with this check one can\u0027t mark grouped objects any more.\n\nwithout I found no problems with EnterGroup:\nEnterGroup -\u003e group gets unmarked,\none can mark every object in the group independently now\nObjects outside of the group are not markable\nLeaveGroup -\u003e whole group is marked\n\neven works with nested groups",
+      "range": {
+        "startLine": 658,
+        "startChar": 0,
+        "endLine": 667,
+        "endChar": 5
+      },
+      "revId": "777b3350b7215d1c91cbee3268943806cb14f82c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
