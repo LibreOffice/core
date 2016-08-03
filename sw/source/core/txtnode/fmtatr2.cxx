@@ -85,14 +85,14 @@ SfxPoolItem* SwFormatCharFormat::Clone( SfxItemPool* ) const
     return new SwFormatCharFormat( *this );
 }
 
-// weiterleiten an das TextAttribut
+// forward to the TextAttribute
 void SwFormatCharFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     if( pTextAttr )
         pTextAttr->ModifyNotification( pOld, pNew );
 }
 
-// weiterleiten an das TextAttribut
+// forward to the TextAttribute
 bool SwFormatCharFormat::GetInfo( SfxPoolItem& rInfo ) const
 {
     return pTextAttr && pTextAttr->GetInfo( rInfo );
@@ -107,7 +107,7 @@ bool SwFormatCharFormat::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 }
 bool SwFormatCharFormat::PutValue( const uno::Any& , sal_uInt8   )
 {
-    OSL_FAIL("Zeichenvorlage kann mit PutValue nicht gesetzt werden!");
+    OSL_FAIL("format cannot be set with PutValue!");
     return false;
 }
 
