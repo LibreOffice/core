@@ -40,6 +40,7 @@
 #include <osl/conditn.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
+#include <sax/fastattribs.hxx>
 #include <string>
 #include <stack>
 #include <deque>
@@ -264,6 +265,54 @@ void SAL_CALL NSDocumentHandler::startElement( const OUString& aName, const Refe
         CPPUNIT_ASSERT(false);
 }
 
+class DummyTokenHandler : public cppu::WeakImplHelper< XFastTokenHandler >,
+                          public sax_fastparser::FastTokenHandlerBase
+{
+public:
+    const static OUString tokens[];
+
+    // XFastTokenHandler
+    virtual Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier )
+        throw (css::uno::RuntimeException, std::exception) override;
+    //FastTokenHandlerBase
+    virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const override;
+};
+
+const OUString DummyTokenHandler::tokens[] = { "Signature", "CanonicalizationMethod", "Algorithm", "Type",
+                                              "DigestMethod", "Reference", "document",
+                                              "spacing", "Player", "Height" };
+
+Sequence< sal_Int8 > DummyTokenHandler::getUTF8Identifier( sal_Int32 nToken )
+    throw (uno::RuntimeException, std::exception)
+{
+    sal_Int32 nElementToken = nToken & 0xffff;
+    OString aUtf8Token = OUStringToOString( tokens[nElementToken], RTL_TEXTENCODING_UTF8 );
+    Sequence< sal_Int8 > aSeq = Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >(
+                aUtf8Token.getStr() ), aUtf8Token.getLength() );
+    return aSeq;
+}
+
+sal_Int32 DummyTokenHandler::getTokenFromUTF8( const uno::Sequence< sal_Int8 >& rIdentifier )
+    throw (uno::RuntimeException, std::exception)
+{
+    return getTokenDirect( reinterpret_cast< const char* >(
+                    rIdentifier.getConstArray() ), rIdentifier.getLength() );
+}
+
+sal_Int32 DummyTokenHandler::getTokenDirect( const char* pToken, sal_Int32 nLength ) const
+{
+    OUString sToken( pToken, nLength, RTL_TEXTENCODING_UTF8 );
+    for( sal_uInt16  i = 0; i < sizeof(tokens)/sizeof(OUString); i++ )
+    {
+        if ( tokens[i] == sToken )
+            return (sal_Int32)i;
+    }
+    return FastToken::DONTKNOW;
+}
+
+
 class XMLImportTest : public test::BootstrapFixture
 {
 private:
@@ -298,6 +347,15 @@ void XMLImportTest::setUp()
     m_xLegacyFastParser.set( xContext->getServiceManager()->createInstanceWithContext
                     ( "com.sun.star.xml.sax.LegacyFastParser", xContext ), UNO_QUERY );
     m_xLegacyFastParser->setDocumentHandler( m_xDocumentHandler.get() );
+
+    Reference< XFastTokenHandler > xTokenHandler;
+    xTokenHandler.set( new DummyTokenHandler() );
+    uno::Reference<lang::XInitialization> const xInit(m_xLegacyFastParser,
+                            uno::UNO_QUERY_THROW);
+    uno::Sequence<uno::Any> args(1);
+    args[0] <<= xTokenHandler;
+    xInit->initialize( args );
+
     m_sDirPath = m_directories.getPathFromSrc( "/sax/qa/data/" );
 }
 
