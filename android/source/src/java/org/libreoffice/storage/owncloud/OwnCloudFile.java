@@ -93,8 +93,33 @@ public class OwnCloudFile implements IFile {
 
     @Override
     public List<IFile> listFiles(FileFilter filter) {
-        // TODO no filtering yet
-        return listFiles();
+        List<IFile> children = new ArrayList<IFile>();
+        if (isDirectory()) {
+            ReadRemoteFolderOperation refreshOperation = new ReadRemoteFolderOperation(
+                    file.getRemotePath());
+            RemoteOperationResult result = refreshOperation.execute(provider
+                    .getClient());
+            if (!result.isSuccess()) {
+                throw provider.buildRuntimeExceptionForResultCode(result.getCode());
+            }
+
+            for (Object obj : result.getData()) {
+                RemoteFile child = (RemoteFile) obj;
+                if (!child.getRemotePath().equals(file.getRemotePath())){
+                    OwnCloudFile ownCloudFile = new OwnCloudFile(provider, child);
+                    if(!ownCloudFile.isDirectory()){
+                        File f = new File(provider.getCacheDir().getAbsolutePath(),
+                                ownCloudFile.getName());
+                        if(filter.accept(f))
+                            children.add(ownCloudFile);
+                        f.delete();
+                    }else{
+                        children.add(ownCloudFile);
+                    }
+                }
+            }
+        }
+        return children;
     }
 
     @Override
