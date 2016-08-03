@@ -136,6 +136,8 @@
 
 #define RID_SLIDESORTER_ICONS                   RID_GLOB_START+227
 #define STR_DEAUTHORISE_CLIENT                  RID_GLOB_START+229
+#define STR_MASTERSLIDE_NAME                    RID_GLOB_START+230
+#define STR_MASTERPAGE_NAME                     RID_GLOB_START+231
 
 #endif
 

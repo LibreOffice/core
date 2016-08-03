@@ -84,6 +84,8 @@ private:
     VclPtr<ColorLB> mpFillGrad;
     VclPtr<CheckBox> mpDspMasterBackground;
     VclPtr<CheckBox> mpDspMasterObjects;
+    VclPtr<Button> mpCloseMaster;
+    VclPtr<Button> mpEditMaster;
 
     ::sfx2::sidebar::ControllerItem maPaperSizeController;
     ::sfx2::sidebar::ControllerItem maPaperOrientationController;
@@ -96,6 +98,7 @@ private:
     ::sfx2::sidebar::ControllerItem maDspBckController;
     ::sfx2::sidebar::ControllerItem maDspObjController;
     ::sfx2::sidebar::ControllerItem maMetricController;
+    ::sfx2::sidebar::ControllerItem maCloseMasterController;
 
     std::unique_ptr< XFillColorItem > mpColorItem;
     std::unique_ptr< XFillGradientItem > mpGradientItem;
@@ -106,6 +109,7 @@ private:
 
     css::uno::Reference<css::frame::XFrame> mxFrame;
     vcl::EnumContext maContext;
+    vcl::EnumContext::Application maApplication;
     bool         mbTitle;
     SfxBindings* mpBindings;
 
@@ -118,6 +122,7 @@ private:
     DECL_LINK_TYPED(AssignMasterPage, ListBox&, void);
     DECL_LINK_TYPED(DspBackground, Button*, void);
     DECL_LINK_TYPED(DspObjects, Button*, void);
+    DECL_LINK_TYPED(CloseMasterHdl, Button*, void);
     DECL_LINK_TYPED(EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
 
     void Initialize();

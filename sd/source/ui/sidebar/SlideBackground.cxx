@@ -101,6 +101,7 @@ SlideBackground::SlideBackground(
     maDspBckController(SID_DISPLAY_MASTER_BACKGROUND, *pBindings, *this),
     maDspObjController(SID_DISPLAY_MASTER_OBJECTS, *pBindings, *this),
     maMetricController(SID_ATTR_METRIC, *pBindings, *this),
+    maCloseMasterController(SID_CLOSE_MASTER_VIEW, *pBindings, *this),
     mpColorItem(),
     mpGradientItem(),
     mpHatchItem(),
@@ -120,6 +121,8 @@ SlideBackground::SlideBackground(
     get(mpFillLB, "fillattr");
     get(mpDspMasterBackground, "displaymasterbackground");
     get(mpDspMasterObjects, "displaymasterobjects");
+    get(mpCloseMaster, "closemasterslide");
+    get(mpEditMaster, "masterslidebutton");
     addListener();
     Initialize();
 }
@@ -134,8 +137,8 @@ void SlideBackground::Initialize()
     mpPaperSizeBox->FillPaperSizeEntries( PaperSizeDraw );
     mpPaperSizeBox->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
     mpPaperOrientation->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
-
-
+    mpCloseMaster->Hide();
+    mpCloseMaster->SetClickHdl(LINK(this, SlideBackground, CloseMasterHdl));
     meUnit = maPaperSizeController.GetCoreMetric();
 
     mpMasterSlide->SetSelectHdl(LINK(this, SlideBackground, AssignMasterPage));
@@ -364,11 +367,30 @@ IMPL_LINK_TYPED(SlideBackground, EventMultiplexerListener,
                     EditMode eMode = pDrawViewShell->GetEditMode();
 
                     if ( eMode == EM_MASTERPAGE)
+                    {
                         mpMasterSlide->Disable();
+                        if(maApplication == vcl::EnumContext::Application_Impress)
+                        {
+                            SetPanelTitle(SD_RESSTR(STR_MASTERSLIDE_NAME));
+                            mpEditMaster->Hide();
+                            mpCloseMaster->Show();
+                        }
+                        else
+                            SetPanelTitle(SD_RESSTR(STR_MASTERPAGE_NAME));
+                    }
                     else // EM_PAGE
+                    {
+                        if(maApplication == vcl::EnumContext::Application_Impress)
+                        {
+                            SetPanelTitle(SD_RESSTR(STR_SLIDE_NAME));
+                            mpCloseMaster->Hide();
+                            mpEditMaster->Show();
+                        }
+                        else
+                            SetPanelTitle(SD_RESSTR(STR_PAGE_NAME));
                         mpMasterSlide->Enable();
+                    }
                 }
-
                 mbEditModeChangePending = false;
             }
         }
@@ -392,18 +414,44 @@ IMPL_LINK_TYPED(SlideBackground, EventMultiplexerListener,
         {
             if(!mbTitle)
             {
-                vcl::EnumContext rDrawContext(vcl::EnumContext::Application_Draw,
+                vcl::EnumContext rDrawOtherContext(vcl::EnumContext::Application_Draw,
                                               vcl::EnumContext::Context_DrawPage);
-                vcl::EnumContext rImpressContext(vcl::EnumContext::Application_Impress,
+                vcl::EnumContext rDrawMasterContext(vcl::EnumContext::Application_Draw,
+                                              vcl::EnumContext::Context_MasterPage);
+                vcl::EnumContext rImpressOtherContext(vcl::EnumContext::Application_Impress,
                                                  vcl::EnumContext::Context_DrawPage);
-                if(maContext == rDrawContext)
+                vcl::EnumContext rImpressMasterContext(vcl::EnumContext::Application_Impress,
+                                                       vcl::EnumContext::Context_MasterPage);
+                if(maContext == rDrawOtherContext)
                 {
                     SetPanelTitle(SD_RESSTR(STR_PAGE_NAME));
+                    maApplication = vcl::EnumContext::Application_Draw;
+                    mpCloseMaster->Hide();
+                    mpEditMaster->Hide();
                     mbTitle = true;
                 }
-                else if(maContext == rImpressContext)
+                else if(maContext == rDrawMasterContext)
+                {
+                    SetPanelTitle(SD_RESSTR(STR_MASTERPAGE_NAME));
+                    maApplication = vcl::EnumContext::Application_Draw;
+                    mpEditMaster->Hide();
+                    mpCloseMaster->Hide();
+                    mbTitle = true;
+                }
+                else if(maContext == rImpressOtherContext)
                 {
                     SetPanelTitle(SD_RESSTR(STR_SLIDE_NAME));
+                    maApplication = vcl::EnumContext::Application_Impress;
+                    mpCloseMaster->Hide();
+                    mpEditMaster->Show();
+                    mbTitle = true;
+                }
+                else if(maContext == rImpressMasterContext)
+                {
+                    SetPanelTitle(SD_RESSTR(STR_MASTERSLIDE_NAME));
+                    maApplication = vcl::EnumContext::Application_Impress;
+                    mpEditMaster->Hide();
+                    mpCloseMaster->Show();
                     mbTitle = true;
                 }
             }
@@ -863,6 +911,11 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, AssignMasterPage, ListBox&, void)
     }
     OUString aLayoutName(mpMasterSlide->GetSelectEntry());
     pDoc->SetMasterPage(nSelectedPage, aLayoutName, pDoc, false, false);
+}
+
+IMPL_LINK_NOARG_TYPED(SlideBackground, CloseMasterHdl, Button*, void)
+{
+    GetBindings()->GetDispatcher()->Execute( SID_CLOSE_MASTER_VIEW, SfxCallMode::RECORD );
 }
 
 IMPL_LINK_NOARG_TYPED(SlideBackground, DspBackground, Button*, void)
