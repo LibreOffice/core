@@ -58,6 +58,7 @@
 #define IMG_GLOBAL_DOC                  (IMAGELIST_START + 150)
 #define IMG_DRAW                        (IMAGELIST_START + 151)
 #define IMG_DRAWTEMPLATE                (IMAGELIST_START + 152)
+#define IMG_TEMPLATE                    (IMAGELIST_START + 166)
 #define IMG_OO_DATABASE_DOC             (IMAGELIST_START + 169)
 #define IMG_OO_DRAW_DOC                 (IMAGELIST_START + 170)
 #define IMG_OO_MATH_DOC                 (IMAGELIST_START + 171)
