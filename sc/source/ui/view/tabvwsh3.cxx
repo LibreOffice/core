@@ -69,48 +69,95 @@
 
 #include <memory>
 
-static ScRefFlags lcl_ParseRange(ScRange& rScRange, const OUString& aAddress, ScDocument* pDoc)
+namespace
 {
-    // start with the address convention set in the document
-    formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-    ScRefFlags nResult = rScRange.Parse(aAddress, pDoc, eConv);
-    if ( nResult & ScRefFlags::VALID )
-        return nResult;
+    enum class DetectFlags
+    {
+        NONE,
+        RANGE,
+        ADDRESS
+    };
 
-    // try the default Calc (A1) address convention
-    nResult = rScRange.Parse(aAddress, pDoc);
-    if ( nResult & ScRefFlags::VALID )
-        return nResult;
+    struct ScRefFlagsAndType
+    {
+        ScRefFlags nResult;
+        DetectFlags eDetected;
+    };
 
-    // try the Excel A1 address convention
-    nResult = rScRange.Parse(aAddress, pDoc, formula::FormulaGrammar::CONV_XL_A1);
-    if ( nResult & ScRefFlags::VALID )
-        return nResult;
+    ScRefFlagsAndType lcl_ParseRangeOrAddress(ScRange& rScRange, ScAddress& rScAddress,
+                                              const OUString& aAddress, ScDocument* pDoc)
+    {
+        ScRefFlagsAndType aRet;
 
-    // try Excel R1C1 address convention
-    return rScRange.Parse(aAddress, pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
-}
+        formula::FormulaGrammar::AddressConvention eConv;
 
-static ScRefFlags lcl_ParseAddress(ScAddress& rScAddress, const OUString& aAddress, ScDocument* pDoc)
-{
-    // start with the address convention set in the document
-    formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-    ScRefFlags nResult = rScAddress.Parse(aAddress, pDoc, eConv);
-    if ( nResult & ScRefFlags::VALID )
-        return nResult;
+        // start with the address convention set in the document
+        eConv = pDoc->GetAddressConvention();
+        aRet.nResult = rScRange.Parse(aAddress, pDoc, eConv);
+        if (aRet.nResult & ScRefFlags::VALID)
+        {
+            aRet.eDetected = DetectFlags::RANGE;
+            return aRet;
+        }
 
-    // try the default Calc (A1) address convention
-    nResult = rScAddress.Parse(aAddress, pDoc);
-    if ( nResult & ScRefFlags::VALID )
-        return nResult;
+        aRet.nResult = rScAddress.Parse(aAddress, pDoc, eConv);
+        if (aRet.nResult & ScRefFlags::VALID)
+        {
+            aRet.eDetected = DetectFlags::ADDRESS;
+            return aRet;
+        }
 
-    // try the Excel A1 address convention
-    nResult = rScAddress.Parse(aAddress, pDoc, formula::FormulaGrammar::CONV_XL_A1);
-    if ( nResult & ScRefFlags::VALID )
-        return nResult;
+        // try the default Calc (A1) address convention
+        aRet.nResult = rScRange.Parse(aAddress, pDoc);
+        if (aRet.nResult & ScRefFlags::VALID)
+        {
+            aRet.eDetected = DetectFlags::RANGE;
+            return aRet;
+        }
 
-    // try Excel R1C1 address convention
-    return rScAddress.Parse(aAddress, pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
+        aRet.nResult = rScAddress.Parse(aAddress, pDoc);
+        if (aRet.nResult & ScRefFlags::VALID)
+        {
+            aRet.eDetected = DetectFlags::ADDRESS;
+            return aRet;
+        }
+
+        // try the Excel A1 address convention
+        aRet.nResult = rScRange.Parse(aAddress, pDoc, formula::FormulaGrammar::CONV_XL_A1);
+        if (aRet.nResult & ScRefFlags::VALID)
+        {
+            aRet.eDetected = DetectFlags::RANGE;
+            return aRet;
+        }
+
+        // try the Excel A1 address convention
+        aRet.nResult = rScAddress.Parse(aAddress, pDoc, formula::FormulaGrammar::CONV_XL_A1);
+        if (aRet.nResult & ScRefFlags::VALID)
+        {
+            aRet.eDetected = DetectFlags::ADDRESS;
+            return aRet;
+        }
+
+        // try Excel R1C1 address convention
+        aRet.nResult = rScRange.Parse(aAddress, pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
+        if (aRet.nResult & ScRefFlags::VALID)
+        {
+            aRet.eDetected = DetectFlags::RANGE;
+            return aRet;
+        }
+
+        aRet.nResult = rScAddress.Parse(aAddress, pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
+        if (aRet.nResult & ScRefFlags::VALID)
+        {
+            aRet.eDetected = DetectFlags::ADDRESS;
+            return aRet;
+        }
+
+        aRet.nResult = ScRefFlags::ZERO;
+        aRet.eDetected = DetectFlags::NONE;
+
+        return aRet;
+    }
 }
 
 void ScTabViewShell::Execute( SfxRequest& rReq )
@@ -278,12 +325,13 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 ScMarkData& rMark     = rViewData.GetMarkData();
                 ScRange     aScRange;
                 ScAddress   aScAddress;
-                ScRefFlags      nResult = lcl_ParseRange(aScRange, aAddress, pDoc);
+                ScRefFlagsAndType aResult = lcl_ParseRangeOrAddress(aScRange, aScAddress, aAddress, pDoc);
+                ScRefFlags  nResult = aResult.nResult;
                 SCTAB       nTab = rViewData.GetTabNo();
                 bool        bMark = true;
 
                 // Is this a range ?
-                if( nResult & ScRefFlags::VALID )
+                if (aResult.eDetected == DetectFlags::RANGE)
                 {
                     if ( nResult & ScRefFlags::TAB_3D )
                     {
@@ -297,7 +345,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     }
                 }
                 // Is this a cell ?
-                else if ( (nResult = lcl_ParseAddress(aScAddress, aAddress, pDoc)) & ScRefFlags::VALID )
+                else if (aResult.eDetected == DetectFlags::ADDRESS)
                 {
                     if ( nResult & ScRefFlags::TAB_3D )
                     {
