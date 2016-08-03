@@ -53,6 +53,7 @@ public:
     void testSetTextSelection();
     void testGetTextSelection();
     void testSetGraphicSelection();
+    void testUndoShells();
     void testResetSelection();
     void testSearch();
     void testSearchAll();
@@ -76,6 +77,7 @@ public:
     CPPUNIT_TEST(testSetTextSelection);
     CPPUNIT_TEST(testGetTextSelection);
     CPPUNIT_TEST(testSetGraphicSelection);
+    CPPUNIT_TEST(testUndoShells);
     CPPUNIT_TEST(testResetSelection);
     CPPUNIT_TEST(testSearch);
     CPPUNIT_TEST(testSearchAll);
@@ -425,6 +427,27 @@ void SdTiledRenderingTest::testSetGraphicSelection()
     // Check that a resize happened, but aspect ratio is not kept.
     CPPUNIT_ASSERT_EQUAL(aShapeBefore.getWidth(), aShapeAfter.getWidth());
     CPPUNIT_ASSERT(aShapeBefore.getHeight() < aShapeAfter.getHeight());
+}
+
+void SdTiledRenderingTest::testUndoShells()
+{
+    // Load a document and set the page size.
+    SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {"AttributePageSize.Width", uno::makeAny(static_cast<sal_Int32>(10000))},
+        {"AttributePageSize.Height", uno::makeAny(static_cast<sal_Int32>(10000))},
+    }));
+    comphelper::dispatchCommand(".uno:AttributePageSize", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    // Assert that view shell ID tracking works for SdUndoAction subclasses.
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    sd::UndoManager* pUndoManager = pDocument->GetUndoManager();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetUndoActionCount());
+    sal_Int32 nView1 = SfxLokHelper::getView();
+    // This was -1, SdUndoGroup did not track what view shell created it.
+    CPPUNIT_ASSERT_EQUAL(nView1, pUndoManager->GetUndoAction()->GetViewShellId());
 }
 
 void SdTiledRenderingTest::testResetSelection()

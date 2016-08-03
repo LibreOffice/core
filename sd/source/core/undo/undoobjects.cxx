@@ -22,8 +22,26 @@
 #include "CustomAnimationEffect.hxx"
 #include "drawdoc.hxx"
 #include "undoanim.hxx"
+#include "../../ui/inc/ViewShell.hxx"
+#include "../../ui/inc/ViewShellBase.hxx"
+#include "../../ui/inc/DrawDocShell.hxx"
 
 using namespace sd;
+
+SdUndoAction::SdUndoAction(SdDrawDocument* pSdDrawDocument)
+    : mpDoc(pSdDrawDocument),
+      mnViewShellId(-1)
+{
+    sd::DrawDocShell* pDocShell = pSdDrawDocument ? pSdDrawDocument->GetDocSh() : nullptr;
+    sd::ViewShell* pViewShell = pDocShell ? pDocShell->GetViewShell() : nullptr;
+    if (pViewShell)
+        mnViewShellId = pViewShell->GetViewShellBase().GetViewShellId();
+}
+
+sal_Int32 SdUndoAction::GetViewShellId() const
+{
+    return mnViewShellId;
+}
 
 UndoRemovePresObjectImpl::UndoRemovePresObjectImpl( SdrObject& rObject )
 : mpUndoUsercall(nullptr)
