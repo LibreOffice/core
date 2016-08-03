@@ -855,10 +855,10 @@ void Chart2ExportTest::testDataLabelBordersDOCX()
     CPPUNIT_ASSERT(xPropSet.is());
     drawing::FillStyle eStyle = xPropSet->getPropertyValue("FillStyle").get<drawing::FillStyle>();
     sal_Int32 nColor = xPropSet->getPropertyValue("FillColor").get<sal_Int32>();
-    CPPUNIT_ASSERT_MESSAGE("'Automatic' chart background fill in docx should be loaded as solid fill.",
-        eStyle == drawing::FillStyle_SOLID);
-    CPPUNIT_ASSERT_MESSAGE("'Automatic' chart background fill in docx should be loaded as solid white.",
-        (nColor & 0x00FFFFFF) == 0x00FFFFFF); // highest 2 bytes are transparency which we ignore here.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chart background fill in docx should be loaded as solid fill.",
+        drawing::FillStyle_SOLID, eStyle);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chart background fill in docx should be loaded as solid white.",
+         sal_Int32(0x00FFFFFF), sal_Int32(nColor & 0x00FFFFFF)); // highest 2 bytes are transparency which we ignore here.
 
     aTest.checkObject1(xChartDoc);
     xChartDoc.set(getChartDocFromWriter(1), uno::UNO_QUERY);
@@ -982,7 +982,7 @@ void Chart2ExportTest::testDataLabelDefaultLineChartDOCX()
     sal_Int32 nLabelPlacement = -1;
     if (xPropSet->getPropertyValue("LabelPlacement") >>= nLabelPlacement)
         // This option may not be set.  Check its value only when it's set.
-        CPPUNIT_ASSERT_MESSAGE("Line chart's default label placement should be 'right'.", nLabelPlacement == chart::DataLabelPlacement::RIGHT);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Line chart's default label placement should be 'right'.", chart::DataLabelPlacement::RIGHT, nLabelPlacement );
 }
 
 void Chart2ExportTest::testBarChartRotation()
