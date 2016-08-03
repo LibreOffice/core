@@ -296,6 +296,7 @@ public:
     void getResourceOptions( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
                              DAVOptions& rDAVOptions );
 
+    static void removeCachedPropertyNames( const OUString & rURL );
 };
 
 }
