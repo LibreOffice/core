@@ -1897,6 +1897,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="vcllo-SmallButton" id="InsertSymbol">
+                        <property name="label" translatable="yes">Symbol</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2726,6 +2727,7 @@
                 </child>
                 <child>
                   <object class="vcllo-SmallButton" id="SpellOnline">
+                    <property name="label" translatable="yes">Auto Spellcheck</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
