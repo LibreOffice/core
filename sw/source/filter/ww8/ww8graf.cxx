@@ -106,10 +106,10 @@ Color WW8TransCol(SVBT32 nWC)
 {
 #if 1               // 1 = use predefined color, 0 = ignore
 
-    // Farbtabelle zum Umrechnen RGB-Werte in vordefinierte Farben
-    // ( Damit bei der Writer-UI die Farbnamen stimmen )
-    // Die Tabelle int im *3er-System* aufgeteilt. Die Grauwerte fehlen,
-    // da sie nicht ins 3er-System passen ( 4 Werte: sw, ws, 2 * grau )
+    // color table to convert RGB values to pre-defined colors
+    // (to make the writer UI show the right color names)
+    // the table is split in base 3, the greys are missing as
+    // they don't fit into that system (4 values: bw, wb, 2 * grey)
     static const ColorData eColA[] = {              //  B G R  B G R  B G R
         COL_BLACK, COL_RED, COL_LIGHTRED,           //  0 0 0, 0 0 1, 0 0 2
         COL_GREEN, COL_BROWN, COL_BLACK,            //  0 1 0, 0 1 1, 0 1 2
@@ -121,18 +121,17 @@ Color WW8TransCol(SVBT32 nWC)
         COL_BLACK, COL_BLACK, COL_BLACK,            //  2 1 0, 2 1 1, 2 1 2
         COL_LIGHTCYAN, COL_BLACK, COL_WHITE };      //  2 2 0, 2 2 1, 2 2 2
 
-    // In nWC[3] steht ein Byte, dass in der WW-Doku nicht beschrieben ist.
-    // Die Bedeutung ist anscheinend folgende: Bei 0 ist es eine normale
-    // Farbe, dessen RGB-Wert in nWC[0..2] steht. stehen in nWC[3] die
-    // Werte 0x1, 0x7d oder 0x83, dann ist es ein Grauwert, dessen
-    // Schwarzanteil in 1/2 % in nWC[0] steht.
-    // Ich vermute, dass es auf Bit0 in nWV[3] ankommt, ob es RGB oder Grau ist.
+    // In nWC[3] is a byte that's not described in the WW documentation.
+    // Its meaning appears to be the following: For 0, it's a normal color
+    // whose RGB values are in nWC[0..2]. If nWC[3] is 0x1, 0x7d or 0x83,
+    // it's a grey value whose black portion is given in 0.5% in nWC[0].
+    // I guess that BIT(0) in nWC[3] is relevant for distinguishing RGB/Grey.
 
-    if( !( nWC[3] & 0x1 ) &&                        // keine Spezial-Farbe (grau)
-        (    ( nWC[0] == 0 ||  nWC[0]== 0x80 || nWC[0] == 0xff )    // R-Anteil
-          && ( nWC[1] == 0 ||  nWC[1]== 0x80 || nWC[1] == 0xff )    // G-Anteil
-          && ( nWC[2] == 0 ||  nWC[2]== 0x80 || nWC[2] == 0xff ) ) ){// B-Anteil
-        int nIdx = 0;       // and now: Idx-calculation im 3er-System
+    if( !( nWC[3] & 0x1 ) &&                        // not special (grey)
+        (    ( nWC[0] == 0 ||  nWC[0]== 0x80 || nWC[0] == 0xff )    // R
+          && ( nWC[1] == 0 ||  nWC[1]== 0x80 || nWC[1] == 0xff )    // G
+          && ( nWC[2] == 0 ||  nWC[2]== 0x80 || nWC[2] == 0xff ) ) ){// B
+        int nIdx = 0;       // and now: Idx-calculation in base 3
         for (int i = 2; i >= 0; i--)
         {
             nIdx *= 3;
@@ -163,13 +162,13 @@ void wwFrameNamer::SetUniqueGraphName(SwFrameFormat *pFrameFormat, const OUStrin
     pFrameFormat->SetName(msSeed+OUString::number(++mnImportedGraphicsCount) + ": " + rFixed);
 }
 
-// ReadGrafStart liest die ObjektDaten ein und erzeugt falls noetig einen Anker
+// ReadGrafStart reads object data and if necessary creates an anchor
 bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
     WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 {
     if (SVBT16ToShort(pHd->cb) < sizeof(WW8_DPHEAD) + nDataSiz)
     {
-        OSL_ENSURE( false, "+Grafik-Element: Size ?" );
+        OSL_ENSURE( false, "+graphic element: too short?" );
         m_pStrm->SeekRel(SVBT16ToShort(pHd->cb) - sizeof(WW8_DPHEAD));
         return false;
     }
@@ -189,14 +188,14 @@ bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
     return true;
 }
 
-// SetStdAttr() setzt die Attribute, die jedes Objekt hat
+// SetStdAttr() sets standard attributes
 static void SetStdAttr( SfxItemSet& rSet, WW8_DP_LINETYPE& rL,
                         WW8_DP_SHADOW& rSh )
 {
     if( SVBT16ToShort( rL.lnps ) == 5 ){            // invisible
         rSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
-    }else{                                          // sichtbar
-        Color aCol( WW8TransCol( rL.lnpc ) );           // LinienFarbe
+    }else{                                          // visible
+        Color aCol( WW8TransCol( rL.lnpc ) );           // line color
         rSet.Put( XLineColorItem( OUString(), aCol ) );
         rSet.Put( XLineWidthItem( SVBT16ToShort( rL.lnpw ) ) );
                                                     // line thickness
@@ -226,13 +225,11 @@ static void SetStdAttr( SfxItemSet& rSet, WW8_DP_LINETYPE& rL,
     }
 }
 
-// SetFill setzt Fuellattribute wie Vordergrund- und Hintergrund-Farbe
-// und Muster durch Reduktion auf eine Farbe.
-// SetFill() setzt z.Zt kein Muster, da Sdr das nur sehr umstaendlich kann
-// und die Sdr-Schraffur ( XDash ) noch nicht fertig ist.
-// Statt dessen wird eine Mischfarbe gewaehlt, die auf den entsprechenden
-// Farbton zwischen den Farben liegt.
-
+// SetFill() sets fill attributes such as fore- and background color and
+// pattern by reducing to a color
+// SetFill() doesn't yet set a pattern, because Sdr can't easily do that
+// and the Sdr hatching (XDash) isn't finished yet.
+// Instead, a mixed color will be picked that's between the selected ones.
 static void SetFill( SfxItemSet& rSet, WW8_DP_FILL& rFill )
 {
     static const sal_uInt8 nPatA[] =
@@ -302,7 +299,7 @@ static void SetLineEndAttr( SfxItemSet& rSet, WW8_DP_LINEEND& rLe,
     }
 }
 
-// Ab hier folgen die Routinen fuer die einzelnen Objekte
+// start of routines for the different objects
 SdrObject* SwWW8ImplReader::ReadLine(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 {
     WW8_DP_LINE aLine;
@@ -420,7 +417,7 @@ SdrObject* SwWW8ImplReader::ReadPolyLine(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
     sal_uInt16 nCount = SVBT16ToShort( aPoly.aBits1 ) >> 1 & 0x7fff;
     std::unique_ptr<SVBT16[]> xP(new SVBT16[nCount * 2]);
 
-    bool bCouldRead = checkRead(*m_pStrm, xP.get(), nCount * 4);      // Punkte einlesen
+    bool bCouldRead = checkRead(*m_pStrm, xP.get(), nCount * 4);      // read points
     OSL_ENSURE(bCouldRead, "Short PolyLine header");
     if (!bCouldRead)
         return nullptr;
@@ -455,8 +452,8 @@ ESelection GetESelection(EditEngine &rDrawEditEngine, long nCpStart, long nCpEnd
         nCpStart -= rDrawEditEngine.GetTextLen( nSP ) + 1;
         nSP++;
     }
-        // Beim Ende erst 1 Zeichen spaeter auf naechste Zeile umschalten,
-        // da sonst Zeilenattribute immer eine Zeile zu weit reichen.
+        // at the end, switch to the new line only 1 character later as
+        // otherwise line attributes reach one line too far
     while(      (nEP < nPCnt)
             &&  (nCpEnd > rDrawEditEngine.GetTextLen( nEP ) + 1) )
     {
@@ -466,16 +463,13 @@ ESelection GetESelection(EditEngine &rDrawEditEngine, long nCpStart, long nCpEnd
     return ESelection( nSP, nCpStart, nEP, nCpEnd );
 }
 
-// InsertTxbxStyAttrs() setzt die Style-Attribute in den uebergebenen ItemSet.
-// Es werden die SW-Styles genommen, die Import-WW-Styles sind zu diesem
-// Zeitpunkt schon destruiert.
-// Die SW-Styles werden per Tiefensuche, d.h. mit Parent-Styles nach den
-// in aSrcTab angegebenen Attributen untersucht. Diese werden per Clone
-// dupliziert, bei den Duplikaten werden die Which-IDs
-// gemaess der Tabelle aDstTab umgesetzt, damit die EditEngine sie nicht
-// ignoriert.
-// Es werden hierbei sowohl Para- wie auch Zeichen-Attribute in den
-// ItemSet gestopft.
+// InsertTxbxStyAttrs() sets style attributes into the passed ItemSet.
+// SW styles are used since import-WW-styles are alreaday destroyed.
+// SW styles are examined in depth first search order (with parent styles)
+// for the attributes given in aSrcTab. They're cloned, and the clones'
+// Which-IDs are changed according to the aDstTab table so that the
+// EditEngine will not ignore them.
+// Both Paragraph and character attributes are stuffed into the ItemSet.
 void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, sal_uInt16 nColl )
 {
     SwWW8StyInf * pStyInf = GetStyle(nColl);
@@ -564,9 +558,8 @@ public:
     }
 };
 
-// InsertAttrsAsDrawingAttrs() setzt zwischen StartCp und EndCp die Attribute.
-// Dabei werden Style-Attribute als harte Attribute, Absatz- und Zeichen-
-// attribute gesetzt.
+// InsertAttrsAsDrawingAttrs() sets attributes between StartCp and EndCp.
+// Style attributes are set as hard, paragraph and character attributes.
 void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
     ManTypes eType, bool bONLYnPicLocFc)
 {
@@ -775,7 +768,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
     WW8PLCFspecial* pT = m_pPlcxMan ? m_pPlcxMan->GetTxbx() : nullptr;
     if( !pT )
     {
-        OSL_ENSURE( false, "+Wo ist der Grafik-Text (1) ?" );
+        OSL_ENSURE( false, "+where's the text graphic (1)?" );
         return false;
     }
 
@@ -788,7 +781,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
     void* pT0;
     if( !pT->Get( rStartCp, pT0 ) )
     {
-        OSL_ENSURE( false, "+Wo ist der Grafik-Text (2) ?" );
+        OSL_ENSURE( false, "+where's the text graphic (2)?" );
         return false;
     }
 
@@ -800,7 +793,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
             pT->advance();
             if( !pT->Get( rStartCp, pT0 ) )
             {
-                OSL_ENSURE( false, "+Wo ist der Grafik-Text (2-a) ?" );
+                OSL_ENSURE( false, "+where's the text graphic (2a)?" );
                 return false;
             }
             bReusable = (0 != SVBT16ToShort( static_cast<WW8_TXBXS*>(pT0)->fReusable ));
@@ -809,15 +802,14 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
     pT->advance();
     if( !pT->Get( rEndCp, pT0 ) )
     {
-        OSL_ENSURE( false, "+Wo ist der Grafik-Text (3) ?" );
+        OSL_ENSURE( false, "+where's the text graphic (3)?" );
         return false;
     }
 
-    // jetzt ggfs. die passende Page in der Break-Table finden
+    // find the right page in the break table (if necessary)
     if( bCheckTextBoxStory )
     {
-        // Sonderfall: gesamte(!) Kette soll ermittelt werden,
-        //             dann sind wir hier schon fertig!
+        // special case: entire chain should be determined - done!
         if( USHRT_MAX > nSequence )
         {
             long nMinStartCp = rStartCp;
@@ -827,30 +819,30 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
             if (!pT) // It can occur on occasion, Caolan
                 return false;
 
-            // den ersten Eintrag fuer diese TextBox-Story finden
+            // find first entry for this TextBox story
             if( !pT->SeekPos( rStartCp ) )
             {
-                OSL_ENSURE( false, "+Wo ist der Grafik-Text (4) ?" );
+                OSL_ENSURE( false, "+where's the text graphic (4)" );
                 return false;
             }
-            // ggfs. entsprechende Anzahl Eintraege weitergehen
+            // if needed skip the appropriate number of entries
             for (sal_uInt16 iSequence = 0; iSequence < nSequence; ++iSequence)
                 pT->advance();
-            // dann die tatsaechlichen Start und Ende ermitteln
+            // and determine actual start and end
             if(    (!pT->Get( rStartCp, pT0 ))
                 || ( nMinStartCp > rStartCp  ) )
             {
-                OSL_ENSURE( false, "+Wo ist der Grafik-Text (5) ?" );
+                OSL_ENSURE( false, "+where's the text graphic (5)?" );
                 return false;
             }
             if( rStartCp >= nMaxEndCp )
-                rEndCp = rStartCp;  // kein Error: leerer String!
+                rEndCp = rStartCp;  // not an error: empty string
             else
             {
                 pT->advance();
                 if ( (!pT->Get(rEndCp, pT0)) || (nMaxEndCp < rEndCp-1) )
                 {
-                    OSL_ENSURE( false, "+Wo ist der Grafik-Text (6) ?" );
+                    OSL_ENSURE( false, "+where's the text graphic (6)?" );
                     return false;
                 }
                 rEndCp -= 1;
@@ -864,8 +856,8 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
     return true;
 }
 
-// TxbxText() holt aus WW-File den Text und gibt diesen und den Anfangs- und
-// den um -2 (bzw. -1 bei Ver8) korrigierten End-Cp zurueck
+// TxbxText() grabs the text from the WW file and returns that along with
+// the StartCp and the corrected (by -2, or -1 for version 8) EndCp.
 sal_Int32 SwWW8ImplReader::GetRangeAsDrawingString(OUString& rString, long nStartCp, long nEndCp, ManTypes eType)
 {
     WW8_CP nOffset = 0;
@@ -873,13 +865,13 @@ sal_Int32 SwWW8ImplReader::GetRangeAsDrawingString(OUString& rString, long nStar
 
     OSL_ENSURE(nStartCp <= nEndCp, "+Wo ist der Grafik-Text (7) ?");
     if (nStartCp == nEndCp)
-        rString.clear();      // leerer String: durchaus denkbar!
+        rString.clear();      // empty string: entirely possible
     else if (nStartCp < nEndCp)
     {
-        // den Text einlesen: kann sich ueber mehrere Pieces erstrecken!!!
+        // read the text: can be split into multiple pieces
         const sal_Int32 nLen = m_pSBase->WW8ReadString(*m_pStrm, rString,
             nStartCp + nOffset, nEndCp - nStartCp, GetCurrentCharSet());
-        OSL_ENSURE(nLen, "+Wo ist der Grafik-Text (8) ?");
+        OSL_ENSURE(nLen, "+where's the text graphic (8)?");
         if (nLen>0)
         {
             if( rString[nLen-1]==0x0d )
