@@ -60,6 +60,19 @@ constants FormulaLanguage
         @since LibreOffice 4.2
      */
     const long OOXML = 5;
+
+    /** Function names and operators as used with XFunctionAccess and
+        other API context.
+
+        Names are mostly identical to ENGLISH and ODF_11, but while
+        ENGLISH names can be adapted to UI needs and ODF_11 has to stay
+        error compatible, the API names strive to stay compatible but
+        may get corrected in case of errors. Earlier versions than
+        LibreOffice 5.3 always used ODF_11 in API context.
+
+        @since LibreOffice 5.3
+     */
+    const long API = 6;
 };
 
 
