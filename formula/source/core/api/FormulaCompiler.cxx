@@ -692,19 +692,8 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::GetOpCodeMap( const sal_Int32 nLa
         case FormulaLanguage::ODF_11 :
             if (!mxSymbolsPODF)
                 InitSymbolsPODF();
-            /* FIXME: only temporarily init mxSymbolsAPI here */
-            if (!mxSymbolsAPI)
-                InitSymbolsAPI();
             xMap = mxSymbolsPODF;
             break;
-/* FIXME: add FormulaLanguage::API constant */
-#if 0
-        case FormulaLanguage::API :
-            if (!mxSymbolsAPI)
-                InitSymbolsAPI();
-            xMap = mxSymbolsAPI;
-            break;
-#endif
         case FormulaLanguage::ENGLISH :
             if (!mxSymbolsEnglish)
                 InitSymbolsEnglish();
@@ -724,6 +713,11 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::GetOpCodeMap( const sal_Int32 nLa
             if (!mxSymbolsOOXML)
                 InitSymbolsOOXML();
             xMap = mxSymbolsOOXML;
+            break;
+        case FormulaLanguage::API :
+            if (!mxSymbolsAPI)
+                InitSymbolsAPI();
+            xMap = mxSymbolsAPI;
             break;
         default:
             ;   // nothing, NULL map returned
