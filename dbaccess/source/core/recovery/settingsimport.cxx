@@ -102,9 +102,9 @@ namespace dbaccess
             return new ConfigItemSetImport( m_rSettings );
 
 #if OSL_DEBUG_LEVEL > 0
-        OString sMessage( "unknown (or unsupported at this place) element name '" );
-        sMessage += OUStringToOString( i_rElementName, RTL_TEXTENCODING_UTF8 );
-        sMessage += "', ignoring";
+        OString sMessage = "unknown (or unsupported at this place) element name '"
+                         + OUStringToOString( i_rElementName, RTL_TEXTENCODING_UTF8 )
+                         + "', ignoring";
         OSL_FAIL( sMessage.getStr() );
 #endif
         return new IgnoringSettingsImport;
