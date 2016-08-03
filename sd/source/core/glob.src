@@ -55,6 +55,14 @@ String STR_SLIDE_NAME
 {
     Text [ en-US ] = "Slide" ;
 };
+String STR_MASTERSLIDE_NAME
+{
+    Text [ en-US ] = "Master Slide";
+};
+String STR_MASTERPAGE_NAME
+{
+    Text [ en-US ] = "Master Page";
+};
 String STR_MASTERPAGE
 {
     Text [ en-US ] = "Background" ;
