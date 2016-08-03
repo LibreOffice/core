@@ -5225,11 +5225,11 @@ void ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
 
         if ( DeleteContents( aMark, InsertDeleteFlags::CONTENTS, true, false/*bApi*/ ) )
         {
-            // GRAM_PODF_A1 for API compatibility.
-            if (!EnterMatrix( aNewRange, &aMark, nullptr, aFormula, false/*bApi*/, false, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 ))
+            // GRAM_API for API compatibility.
+            if (!EnterMatrix( aNewRange, &aMark, nullptr, aFormula, false/*bApi*/, false, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_API ))
             {
                 //  versuchen, alten Zustand wiederherzustellen
-                EnterMatrix( rOldRange, &aMark, nullptr, aFormula, false/*bApi*/, false, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 );
+                EnterMatrix( rOldRange, &aMark, nullptr, aFormula, false/*bApi*/, false, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_API );
             }
         }
 

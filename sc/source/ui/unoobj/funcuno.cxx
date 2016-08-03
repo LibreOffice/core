@@ -610,10 +610,10 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
     if ( !bArgErr && !bOverflow && nDocRow <= MAXROWCOUNT )
     {
         ScAddress aFormulaPos( 0, 0, nTempSheet );
-        // GRAM_PODF_A1 doesn't really matter for the token array but fits with
+        // GRAM_API doesn't really matter for the token array but fits with
         // other API compatibility grammars.
         ScFormulaCell* pFormula = new ScFormulaCell(
-            pDoc, aFormulaPos, aTokenArr, formula::FormulaGrammar::GRAM_PODF_A1,
+            pDoc, aFormulaPos, aTokenArr, formula::FormulaGrammar::GRAM_API,
             (sal_uInt8)(mbArray ? MM_FORMULA : MM_NONE) );
         pFormula = pDoc->SetFormulaCell(aFormulaPos, pFormula);
 

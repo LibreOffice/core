@@ -875,11 +875,11 @@ protected:
         double aDblValue = 0.0;
         if ( aValue >>= sFormula )
         {
-            // convert to GRAM_PODF_A1 style grammar because XCell::setFormula
+            // convert to GRAM_API style grammar because XCell::setFormula
             // always compile it in that grammar. Perhaps
             // css.sheet.FormulaParser should be used in future to directly
             // pass formula tokens when that API stabilizes.
-            if ( m_eGrammar != formula::FormulaGrammar::GRAM_PODF_A1 && ( sFormula.trim().startsWith("=") ) )
+            if ( m_eGrammar != formula::FormulaGrammar::GRAM_API && ( sFormula.trim().startsWith("=") ) )
             {
                 uno::Reference< uno::XInterface > xIf( xCell, uno::UNO_QUERY_THROW );
                 ScCellRangesBase* pUnoRangesBase = dynamic_cast< ScCellRangesBase* >( xIf.get() );
@@ -891,7 +891,7 @@ protected:
                     // compile the string in the format passed in
                     std::unique_ptr<ScTokenArray> pArray(aCompiler.CompileString(sFormula));
                     // set desired convention to that of the document
-                    aCompiler.SetGrammar( formula::FormulaGrammar::GRAM_PODF_A1 );
+                    aCompiler.SetGrammar( formula::FormulaGrammar::GRAM_API );
                     OUString sConverted;
                     aCompiler.CreateStringFromTokenArray(sConverted);
                     sFormula = EQUALS + sConverted;
@@ -2001,7 +2001,7 @@ ScVbaRange::setFormulaArray(const uno::Any& rFormula) throw (uno::RuntimeExcepti
     ScTokenArray aTokenArray;
     (void)ScTokenConversion::ConvertToTokenArray( getScDocument(), aTokenArray, aTokens );
 
-    getScDocShell()->GetDocFunc().EnterMatrix( *getScRangeList()[0], nullptr, &aTokenArray, OUString(), true, true, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 );
+    getScDocShell()->GetDocFunc().EnterMatrix( *getScRangeList()[0], nullptr, &aTokenArray, OUString(), true, true, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_API );
 }
 
 OUString

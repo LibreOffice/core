@@ -182,8 +182,8 @@ FormulaGrammar::Grammar lclResolveGrammar( FormulaGrammar::Grammar eExtGrammar, 
 {
     if( eExtGrammar != FormulaGrammar::GRAM_UNSPECIFIED )
         return eExtGrammar;
-    OSL_ENSURE( eIntGrammar != FormulaGrammar::GRAM_UNSPECIFIED, "lclResolveGrammar - unspecified grammar, using GRAM_PODF_A1" );
-    return (eIntGrammar == FormulaGrammar::GRAM_UNSPECIFIED) ? FormulaGrammar::GRAM_PODF_A1 : eIntGrammar;
+    OSL_ENSURE( eIntGrammar != FormulaGrammar::GRAM_UNSPECIFIED, "lclResolveGrammar - unspecified grammar, using GRAM_API" );
+    return (eIntGrammar == FormulaGrammar::GRAM_UNSPECIFIED) ? FormulaGrammar::GRAM_API : eIntGrammar;
 }
 
 } // namespace

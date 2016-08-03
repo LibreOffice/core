@@ -5129,8 +5129,8 @@ void SAL_CALL ScCellRangeObj::setArrayFormula( const OUString& aFormula )
                                                 throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    // GRAM_PODF_A1 for API compatibility.
-    SetArrayFormula_Impl( aFormula, OUString(), formula::FormulaGrammar::GRAM_PODF_A1);
+    // GRAM_API for API compatibility.
+    SetArrayFormula_Impl( aFormula, OUString(), formula::FormulaGrammar::GRAM_API);
 }
 
 // XArrayFormulaTokens
@@ -5186,10 +5186,10 @@ void SAL_CALL ScCellRangeObj::setArrayTokens( const uno::Sequence<sheet::Formula
             ScTokenArray aTokenArray;
             (void)ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, rTokens );
 
-            // Actually GRAM_PODF_A1 is a don't-care here because of the token
+            // Actually GRAM_API is a don't-care here because of the token
             // array being set, it fits with other API compatibility grammars
             // though.
-            pDocSh->GetDocFunc().EnterMatrix( aRange, nullptr, &aTokenArray, EMPTY_OUSTRING, true, true, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 );
+            pDocSh->GetDocFunc().EnterMatrix( aRange, nullptr, &aTokenArray, EMPTY_OUSTRING, true, true, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_API );
         }
         else
         {
@@ -5304,8 +5304,8 @@ void SAL_CALL ScCellRangeObj::setFormulaArray(
     {
         ScExternalRefManager::ApiGuard aExtRefGuard(&pDocSh->GetDocument());
 
-        // GRAM_PODF_A1 for API compatibility.
-        bDone = lcl_PutFormulaArray( *pDocSh, aRange, aArray, formula::FormulaGrammar::GRAM_PODF_A1 );
+        // GRAM_API for API compatibility.
+        bDone = lcl_PutFormulaArray( *pDocSh, aRange, aArray, formula::FormulaGrammar::GRAM_API );
     }
 
     if (!bDone)
@@ -6188,9 +6188,9 @@ void ScCellObj::SetString_Impl(const OUString& rString, bool bInterpret, bool bE
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
-        // GRAM_PODF_A1 for API compatibility.
+        // GRAM_API for API compatibility.
         (void)pDocSh->GetDocFunc().SetCellText(
-            aCellPos, rString, bInterpret, bEnglish, true, formula::FormulaGrammar::GRAM_PODF_A1 );
+            aCellPos, rString, bInterpret, bEnglish, true, formula::FormulaGrammar::GRAM_API );
     }
 }
 
@@ -6256,7 +6256,7 @@ void ScCellObj::InputEnglishString( const OUString& rText )
         case ScInputStringType::Formula:
             rFunc.SetFormulaCell(
                 aCellPos,
-                new ScFormulaCell(&rDoc, aCellPos, aRes.maText, formula::FormulaGrammar::GRAM_PODF_A1),
+                new ScFormulaCell(&rDoc, aCellPos, aRes.maText, formula::FormulaGrammar::GRAM_API),
                 false);
         break;
         case ScInputStringType::Number:

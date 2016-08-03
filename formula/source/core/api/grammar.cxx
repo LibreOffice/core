@@ -28,7 +28,7 @@ FormulaGrammar::Grammar FormulaGrammar::mapAPItoGrammar( const bool bEnglish, co
     if (bEnglish && bXML)
         eGrammar = GRAM_PODF;
     else if (bEnglish && !bXML)
-        eGrammar = GRAM_PODF_A1;
+        eGrammar = GRAM_API;
     else if (!bEnglish && bXML)
         eGrammar = GRAM_NATIVE_ODF;
     else // (!bEnglish && !bXML)

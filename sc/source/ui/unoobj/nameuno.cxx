@@ -224,8 +224,8 @@ void SAL_CALL ScNamedRangeObj::setName( const OUString& aNewName )
     //! adapt formulas ?????
 
     OUString aNewStr(aNewName);
-    // GRAM_PODF_A1 for API compatibility.
-    Modify_Impl( &aNewStr, nullptr, nullptr, nullptr, nullptr,formula::FormulaGrammar::GRAM_PODF_A1 );
+    // GRAM_API for API compatibility.
+    Modify_Impl( &aNewStr, nullptr, nullptr, nullptr, nullptr,formula::FormulaGrammar::GRAM_API );
 
     if ( aName != aNewStr )                 // some error occurred...
         throw uno::RuntimeException();      // no other exceptions specified
@@ -237,8 +237,8 @@ OUString SAL_CALL ScNamedRangeObj::getContent() throw(uno::RuntimeException, std
     OUString aContent;
     ScRangeData* pData = GetRangeData_Impl();
     if (pData)
-        // GRAM_PODF_A1 for API compatibility.
-        pData->GetSymbol( aContent,formula::FormulaGrammar::GRAM_PODF_A1);
+        // GRAM_API for API compatibility.
+        pData->GetSymbol( aContent,formula::FormulaGrammar::GRAM_API);
     return aContent;
 }
 
@@ -247,8 +247,8 @@ void SAL_CALL ScNamedRangeObj::setContent( const OUString& aContent )
 {
     SolarMutexGuard aGuard;
     OUString aContStr(aContent);
-    // GRAM_PODF_A1 for API compatibility.
-    Modify_Impl( nullptr, nullptr, &aContStr, nullptr, nullptr,formula::FormulaGrammar::GRAM_PODF_A1 );
+    // GRAM_API for API compatibility.
+    Modify_Impl( nullptr, nullptr, &aContStr, nullptr, nullptr,formula::FormulaGrammar::GRAM_API );
 }
 
 table::CellAddress SAL_CALL ScNamedRangeObj::getReferencePosition()
@@ -282,8 +282,8 @@ void SAL_CALL ScNamedRangeObj::setReferencePosition( const table::CellAddress& a
 {
     SolarMutexGuard aGuard;
     ScAddress aPos( (SCCOL)aReferencePosition.Column, (SCROW)aReferencePosition.Row, aReferencePosition.Sheet );
-    // GRAM_PODF_A1 for API compatibility.
-    Modify_Impl( nullptr, nullptr, nullptr, &aPos, nullptr,formula::FormulaGrammar::GRAM_PODF_A1 );
+    // GRAM_API for API compatibility.
+    Modify_Impl( nullptr, nullptr, nullptr, &aPos, nullptr,formula::FormulaGrammar::GRAM_API );
 }
 
 sal_Int32 SAL_CALL ScNamedRangeObj::getType() throw(uno::RuntimeException, std::exception)
@@ -312,8 +312,8 @@ void SAL_CALL ScNamedRangeObj::setType( sal_Int32 nUnoType )
     if ( nUnoType & sheet::NamedRangeFlag::COLUMN_HEADER )      nNewType |= ScRangeData::Type::ColHeader;
     if ( nUnoType & sheet::NamedRangeFlag::ROW_HEADER )         nNewType |= ScRangeData::Type::RowHeader;
 
-    // GRAM_PODF_A1 for API compatibility.
-    Modify_Impl( nullptr, nullptr, nullptr, nullptr, &nNewType,formula::FormulaGrammar::GRAM_PODF_A1 );
+    // GRAM_API for API compatibility.
+    Modify_Impl( nullptr, nullptr, nullptr, nullptr, &nNewType,formula::FormulaGrammar::GRAM_API );
 }
 
 // XFormulaTokens
@@ -341,8 +341,8 @@ void SAL_CALL ScNamedRangeObj::setTokens( const uno::Sequence<sheet::FormulaToke
     {
         ScTokenArray aTokenArray;
         (void)ScTokenConversion::ConvertToTokenArray( pDocShell->GetDocument(), aTokenArray, rTokens );
-        // GRAM_PODF_A1 for API compatibility.
-        Modify_Impl( nullptr, &aTokenArray, nullptr, nullptr, nullptr, formula::FormulaGrammar::GRAM_PODF_A1 );
+        // GRAM_API for API compatibility.
+        Modify_Impl( nullptr, &aTokenArray, nullptr, nullptr, nullptr, formula::FormulaGrammar::GRAM_API );
     }
 }
 
@@ -515,9 +515,9 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const OUString& aName,
         if (pNames && !pNames->findByUpperName(ScGlobal::pCharClass->uppercase(aName)))
         {
             ScRangeName* pNewRanges = new ScRangeName( *pNames );
-            // GRAM_PODF_A1 for API compatibility.
+            // GRAM_API for API compatibility.
             ScRangeData* pNew = new ScRangeData( &rDoc, aName, aContent,
-                                                aPos, nNewType,formula::FormulaGrammar::GRAM_PODF_A1 );
+                                                aPos, nNewType,formula::FormulaGrammar::GRAM_API );
             if ( pNewRanges->insert(pNew) )
             {
                 pDocShell->GetDocFunc().SetNewRangeNames(pNewRanges, mbModifyAndBroadcast, GetTab_Impl());
