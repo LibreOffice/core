@@ -1826,7 +1826,7 @@ void RtfAttributeOutput::writeTextFrame(const ww8::Frame& rFrame, bool bTextBox)
 
         // Restore table state.
         m_rExport.m_pTableInfo = pTableInfoOrig;
-        m_pTableWrt.reset(pTableWrt.release());
+        m_pTableWrt = std::move(pTableWrt);
         m_nTableDepth = nTableDepth;
     }
 
