@@ -120,7 +120,7 @@ const FuncDataBase pFuncDatas[] =
     FUNCDATA( Accrintm,         UNIQUE,     INTPAR,     5,          FDCat_Finance ),
     FUNCDATA( Received,         UNIQUE,     INTPAR,     5,          FDCat_Finance ),
     FUNCDATA( Disc,             UNIQUE,     INTPAR,     5,          FDCat_Finance ),
-    FUNCDATA( Duration,         DOUBLE,     INTPAR,     6,          FDCat_Finance ),
+    FUNCDATA( Duration,         UNIQUE,     INTPAR,     6,          FDCat_Finance ),
     FUNCDATA( Effect,           DOUBLE,     STDPAR,     2,          FDCat_Finance ),
     FUNCDATA( Cumprinc,         DOUBLE,     STDPAR,     6,          FDCat_Finance ),
     FUNCDATA( Cumipmt,          DOUBLE,     STDPAR,     6,          FDCat_Finance ),

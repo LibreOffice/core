@@ -102,7 +102,7 @@ ScCompiler::AddInMap ScCompiler::maAddInMap[] =
     { "ACCRINTM", "ACCRINTM", "com.sun.star.sheet.addin.Analysis.getAccrintm", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETACCRINTM" },
     { "RECEIVED", "RECEIVED", "com.sun.star.sheet.addin.Analysis.getReceived", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETRECEIVED" },
     { "DISC", "DISC", "com.sun.star.sheet.addin.Analysis.getDisc", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETDISC" },
-    { "DURATION", "DURATION_ADD", "com.sun.star.sheet.addin.Analysis.getDuration", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETDURATION" },
+    { "DURATION", "DURATION", "com.sun.star.sheet.addin.Analysis.getDuration", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETDURATION" },
     { "EFFECT", "EFFECT_ADD", "com.sun.star.sheet.addin.Analysis.getEffect", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETEFFECT" },
     { "CUMPRINC", "CUMPRINC_ADD", "com.sun.star.sheet.addin.Analysis.getCumprinc", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCUMPRINC" },
     { "CUMIPMT", "CUMIPMT_ADD", "com.sun.star.sheet.addin.Analysis.getCumipmt", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCUMIPMT" },
