@@ -13,10 +13,10 @@ def detect_platform():
     return platform.system()
 
 def main():
-    if len(sys.argv) != 4:
+    if len(sys.argv) < 4:
         print(sys.argv)
         print("Invalid number of parameters")
-        print("Usage: upload-symbols.py symbols.zip config.ini \"long explanation\"")
+        print("Usage: upload-symbols.py symbols.zip config.ini \"long explanation\" [--system]")
         sys.exit(1)
 
     upload_url = "http://crashreport.libreoffice.org/upload/"
@@ -31,6 +31,9 @@ def main():
     platform = detect_platform()
     files = {'symbols': open(sys.argv[1], 'rb')}
     data = {'version': sys.argv[3], 'platform': platform}
+
+    if len(sys.argv) > 4 and sys.argv[4] == "--system":
+        data['system'] = True
 
     session = requests.session()
     session.get(login_url)
