@@ -480,7 +480,7 @@ namespace cairocanvas
 
             //faux italics
             if (rSysFontData.bFakeItalic)
-                m.xy = -m.xx * 0x6000L / 0x10000L;
+                m.xy = -m.xx * 0x6000 / 0x10000;
 
             cairo_set_font_matrix(pSCairo.get(), &m);
 

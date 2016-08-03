@@ -49,7 +49,7 @@ namespace dxcanvas
                         if( rBIH.biClrUsed )
                             return rBIH.biClrUsed;
                         else
-                            return 1L << rBIH.biBitCount;
+                            return 1 << rBIH.biBitCount;
                     }
                 }
                 else
@@ -57,7 +57,7 @@ namespace dxcanvas
                     BITMAPCOREHEADER* pCoreHeader = (BITMAPCOREHEADER*)&rBIH;
 
                     if( pCoreHeader->bcBitCount <= 8 )
-                        return 1L << pCoreHeader->bcBitCount;
+                        return 1 << pCoreHeader->bcBitCount;
                 }
 
                 return 0; // nothing known
@@ -341,7 +341,7 @@ namespace dxcanvas
 
                     BitmapColor     aCol;
                     int             nCurrBit;
-                    const int       nMask( 1L );
+                    const int       nMask( 1 );
                     const int       nInitialBit(7);
                     sal_uInt8*      pCurrOutput( aBmpData.mpBitmapData.get() );
                     int             x, y;
@@ -378,8 +378,8 @@ namespace dxcanvas
                                     *pCurrOutput++ = aCol.GetGreen();
                                     *pCurrOutput++ = aCol.GetRed();
 
-                                    *pCurrOutput++ = aColorMap[ (pMScan[ (x & ~7L) >> 3L ] >> nCurrBit ) & nMask ];
-                                    nCurrBit = ((nCurrBit - 1) % 8L) & 7L;
+                                    *pCurrOutput++ = aColorMap[ (pMScan[ (x & ~7) >> 3 ] >> nCurrBit ) & nMask ];
+                                    nCurrBit = ((nCurrBit - 1) % 8) & 7;
                                 }
                             }
                             break;
@@ -396,8 +396,8 @@ namespace dxcanvas
                                     *pCurrOutput++ = *pScan++;
                                     *pCurrOutput++ = *pScan++;
 
-                                    *pCurrOutput++ = aColorMap[ (pMScan[ (x & ~7L) >> 3L ] >> nCurrBit ) & nMask ];
-                                    nCurrBit = ((nCurrBit - 1) % 8L) & 7L;
+                                    *pCurrOutput++ = aColorMap[ (pMScan[ (x & ~7) >> 3 ] >> nCurrBit ) & nMask ];
+                                    nCurrBit = ((nCurrBit - 1) % 8) & 7;
                                 }
                             }
                             break;
@@ -427,8 +427,8 @@ namespace dxcanvas
                                     *pCurrOutput++ = aCol.GetGreen();
                                     *pCurrOutput++ = aCol.GetRed();
 
-                                    *pCurrOutput++ = aColorMap[ (pMScan[ (x & ~7L) >> 3L ] >> nCurrBit ) & nMask ];
-                                    nCurrBit = ((nCurrBit - 1) % 8L) & 7L;
+                                    *pCurrOutput++ = aColorMap[ (pMScan[ (x & ~7) >> 3 ] >> nCurrBit ) & nMask ];
+                                    nCurrBit = ((nCurrBit - 1) % 8) & 7;
                                 }
                             }
                             break;

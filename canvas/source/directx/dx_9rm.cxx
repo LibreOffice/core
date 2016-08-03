@@ -795,7 +795,7 @@ namespace dxcanvas
             LPDIRECT3DSURFACE9 pBackBuffer = NULL;
             mpSwapChain->GetBackBuffer(0,D3DBACKBUFFER_TYPE_MONO,&pBackBuffer);
             mpDevice->SetRenderTarget( 0, pBackBuffer );
-            mpDevice->Clear(0,NULL,D3DCLEAR_TARGET,0,1.0f,0L);
+            mpDevice->Clear(0,NULL,D3DCLEAR_TARGET,0,1.0f,0);
             pBackBuffer->Release();
 
             return true;
@@ -964,7 +964,7 @@ namespace dxcanvas
                 LPDIRECT3DSURFACE9 pBackBuffer = NULL;
                 mpSwapChain->GetBackBuffer(0,D3DBACKBUFFER_TYPE_MONO,&pBackBuffer);
                 mpDevice->SetRenderTarget( 0, pBackBuffer );
-                mpDevice->Clear(0,NULL,D3DCLEAR_TARGET,0,1.0f,0L);
+                mpDevice->Clear(0,NULL,D3DCLEAR_TARGET,0,1.0f,0);
                 pBackBuffer->Release();
             }
         }
