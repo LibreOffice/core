@@ -45,6 +45,7 @@
 #include <sdr/contact/viewcontactofgraphic.hxx>
 #include <svx/svdotable.hxx> // #i124389#
 #include <vcl/svapp.hxx>
+#include <sfx2/viewsh.hxx>
 
 
 // iterates over all views and unmarks this SdrObject if it is marked
@@ -57,6 +58,12 @@ static void ImplUnmarkObject( SdrObject* pObj )
     }
 }
 
+SdrUndoAction::SdrUndoAction(SdrModel& rNewMod)
+    : rMod(rNewMod), m_nViewShellId(-1)
+{
+    if (SfxViewShell* pViewShell = SfxViewShell::Current())
+        m_nViewShellId = pViewShell->GetViewShellId();
+}
 
 SdrUndoAction::~SdrUndoAction() {}
 
@@ -95,6 +102,10 @@ OUString SdrUndoAction::GetSdrRepeatComment(SdrView& /*rView*/) const
     return OUString();
 }
 
+sal_Int32 SdrUndoAction::GetViewShellId() const
+{
+    return m_nViewShellId;
+}
 
 SdrUndoGroup::SdrUndoGroup(SdrModel& rNewMod)
 :   SdrUndoAction(rNewMod),
