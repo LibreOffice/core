@@ -25,7 +25,7 @@ $(eval $(call gb_Library_use_externals,tk,\
     boost_headers \
 ))
 
-ifeq ($(ENABLE_OPENGL),TRUE)
+ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_Library_use_externals,tk,\
     glew \
 ))

@@ -28,7 +28,7 @@ $(eval $(call gb_InstallModule_add_scpfiles,scp2/impress,\
 ))
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/impress,\
-	$(if $(filter TRUE,$(ENABLE_OPENGL)),\
+	$(if $(filter TRUE,$(ENABLE_OPENGL_TRANSITIONS)),\
 		scp2/source/impress/module_ogltrans \
 	) \
 ))

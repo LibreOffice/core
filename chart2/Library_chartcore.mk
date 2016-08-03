@@ -30,7 +30,7 @@ $(eval $(call gb_Library_use_externals,chartcore,\
 	glm_headers \
 ))
 
-ifeq ($(ENABLE_OPENGL),TRUE)
+ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_Library_use_externals,chartcore,\
     glew \
 ))
@@ -119,7 +119,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/main/VPolarTransformation \
     chart2/source/view/main/VTitle \
 ))
-ifeq ($(ENABLE_OPENGL),TRUE)
+ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/main/3DChartObjects \
     chart2/source/view/main/GL3DPlotterBase \
@@ -265,12 +265,12 @@ else ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Library_add_libs,chartcore,\
 	$(DLOPEN_LIBS) \
 ))
-ifeq ($(ENABLE_OPENGL),TRUE)
+ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_Library_add_libs,chartcore,\
     -lGL \
     -lX11 \
 ))
-endif #ENABLE_OPENGL
+endif #!ENABLE_HEADLESS
 
 endif
 

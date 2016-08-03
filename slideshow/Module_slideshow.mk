@@ -12,7 +12,7 @@ $(eval $(call gb_Module_Module,slideshow))
 $(eval $(call gb_Module_add_targets,slideshow,\
     Library_slideshow \
 ))
-ifeq ($(ENABLE_OPENGL),TRUE)
+ifeq ($(ENABLE_OPENGL_TRANSITIONS),TRUE)
 $(eval $(call gb_Module_add_targets,slideshow,\
     Library_OGLTrans \
     Package_opengl \

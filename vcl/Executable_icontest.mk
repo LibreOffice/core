@@ -13,7 +13,7 @@ $(eval $(call gb_Executable_use_externals,icontest,\
     boost_headers \
 	glm_headers \
 ))
-ifeq ($(ENABLE_OPENGL),TRUE)
+ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_Executable_use_externals,icontest,\
     glew \
 ))

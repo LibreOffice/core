@@ -443,7 +443,7 @@ postprocess_FILES_onlineupdate := \
 	$(call gb_XcuModuleTarget_get_target,extensions/source/update/check)/org/openoffice/Office/Jobs-onlineupdate.xcu
 endif
 
-ifeq ($(ENABLE_OPENGL),TRUE)
+ifeq ($(ENABLE_OPENGL_TRANSITIONS),TRUE)
 postprocess_XCDS += ogltrans.xcd
 postprocess_DEPS_ogltrans := main
 postprocess_FILES_ogltrans := \
