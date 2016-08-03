@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_23ede98b",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-03T11:52:55Z",
+      "side": 1,
+      "message": "the OSL_ENSURE macro prints a warning if the condition does not hold, whereas SAL_WARN_IF prints a warning if the condition *does* hold, so you need to invert the condition.\n\nsame for all the other places...",
+      "revId": "9998ce63014f9cca2fdcc6e665440d8e9379b1f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_4302f53f",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-03T11:52:55Z",
+      "side": 1,
+      "message": "because the index is unconditionally used in a dangerous way, an \"assert()\" would be better than \"SAL_WARN\" here to establish that it would be an error, not merely \"a bit suspicious\"\n\nalso the 2nd parameter \"log area\" is not a function name but some dot-separated list of tokens stating with the name of the top-level module; for this file, the log area would be \"sw.html\", see include/sal/log-areas.dox",
+      "revId": "9998ce63014f9cca2fdcc6e665440d8e9379b1f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_63fff134",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2484,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-03T11:52:55Z",
+      "side": 1,
+      "message": "better translation: \"still some residue of relative widths\"",
+      "revId": "9998ce63014f9cca2fdcc6e665440d8e9379b1f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_83fcfd3f",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3520,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-03T11:52:55Z",
+      "side": 1,
+      "message": "better: \"Table in frame has no parent section!\"",
+      "revId": "9998ce63014f9cca2fdcc6e665440d8e9379b1f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_a3f9f94f",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3735,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-03T11:52:55Z",
+      "side": 1,
+      "message": "missing \"not\"",
+      "revId": "9998ce63014f9cca2fdcc6e665440d8e9379b1f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_c39445ea",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4985,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-03T11:52:55Z",
+      "side": 1,
+      "message": "pTCntxt is unconditionally dereferenced, so an \"assert()\" would be better than SAL_WARN",
+      "revId": "9998ce63014f9cca2fdcc6e665440d8e9379b1f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
