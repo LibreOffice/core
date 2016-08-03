@@ -34,6 +34,7 @@
 #include <sdpage.hxx>
 #include <unomodel.hxx>
 #include <drawdoc.hxx>
+#include <undo/undomanager.hxx>
 
 using namespace css;
 
@@ -408,6 +409,18 @@ void SdTiledRenderingTest::testSetGraphicSelection()
     // Resize.
     pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, convertMm100ToTwip(pHdl->GetPos().getX()), convertMm100ToTwip(pHdl->GetPos().getY()));
     pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, convertMm100ToTwip(pHdl->GetPos().getX()), convertMm100ToTwip(pHdl->GetPos().getY() + 1000));
+
+    // Assert that view shell ID tracking works.
+    sal_Int32 nView1 = SfxLokHelper::getView();
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    sd::UndoManager* pUndoManager = pDocument->GetUndoManager();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetUndoActionCount());
+    auto pListAction = dynamic_cast<SfxListUndoAction*>(pUndoManager->GetUndoAction());
+    CPPUNIT_ASSERT(pListAction);
+    for (size_t i = 0; i < pListAction->aUndoActions.size(); ++i)
+        // The second item was -1 here, view shell ID wasn't known.
+        CPPUNIT_ASSERT_EQUAL(nView1, pListAction->aUndoActions.GetUndoAction(i)->GetViewShellId());
+
     Rectangle aShapeAfter = pObject->GetSnapRect();
     // Check that a resize happened, but aspect ratio is not kept.
     CPPUNIT_ASSERT_EQUAL(aShapeBefore.getWidth(), aShapeAfter.getWidth());

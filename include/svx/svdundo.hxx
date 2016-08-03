@@ -55,11 +55,10 @@ class SVX_DLLPUBLIC SdrUndoAction : public SfxUndoAction
 {
 protected:
     SdrModel&                   rMod;
+    sal_Int32 m_nViewShellId;
 
 protected:
-    SdrUndoAction(SdrModel& rNewMod)
-    :   rMod(rNewMod)
-    {}
+    SdrUndoAction(SdrModel& rNewMod);
 
 public:
     virtual ~SdrUndoAction();
@@ -72,6 +71,9 @@ public:
 
     virtual bool CanSdrRepeat(SdrView& rView) const;
     virtual void SdrRepeat(SdrView& rView);
+
+    /// See SfxUndoAction::GetViewShellId().
+    sal_Int32 GetViewShellId() const override;
 };
 
 /**
