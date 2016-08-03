@@ -807,7 +807,7 @@ void SmDynIntegralNode::CreateTextFromNode(OUString &rText)
 {
 
     rText += "intd ";
-    SmNode *pBody = GetSubNode(1);
+    SmNode *pBody = Body();
 
     if (pBody->GetNumSubNodes() > 1)
         rText += "{ ";

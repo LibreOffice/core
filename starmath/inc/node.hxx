@@ -1274,7 +1274,8 @@ inline const SmNode* SmRootNode::Body() const
 
 inline SmDynIntegralSymbolNode* SmDynIntegralNode::Symbol()
 {
-    OSL_ASSERT( GetNumSubNodes() > 0 && GetSubNode( 0 )->GetType() == NDYNINTSYMBOL );
+    assert( GetNumSubNodes() == 2 );
+    assert( GetSubNode( 0 )->GetType() == NDYNINTSYMBOL );
     return static_cast< SmDynIntegralSymbolNode* >( GetSubNode( 0 ));
 }
 inline const SmDynIntegralSymbolNode* SmDynIntegralNode::Symbol() const
@@ -1283,7 +1284,7 @@ inline const SmDynIntegralSymbolNode* SmDynIntegralNode::Symbol() const
 }
 inline SmNode* SmDynIntegralNode::Body()
 {
-    OSL_ASSERT( GetNumSubNodes() > 1 );
+    assert( GetNumSubNodes() == 2 );
     return GetSubNode( 1 );
 }
 inline const SmNode* SmDynIntegralNode::Body() const
