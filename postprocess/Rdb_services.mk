@@ -213,7 +213,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 		extensions/source/update/check/updchk.uno \
 		extensions/source/update/ui/updchk \
 	) \
-	$(if $(ENABLE_OPENGL), \
+	$(if $(ENABLE_OPENGL_TRANSITIONS), \
 		slideshow/source/engine/OGLTrans/ogltrans \
 	) \
 	$(if $(ENABLE_TDE), \
@@ -229,10 +229,8 @@ $(eval $(call gb_Rdb_add_components,services,\
 		wizards/com/sun/star/wizards/report/report \
 		wizards/com/sun/star/wizards/table/table \
 	) \
-    $(if $(ENABLE_OPENGL), \
-        $(if $(ENABLE_GLTF), \
-			$(call gb_Helper_optional,AVMEDIA,avmedia/source/opengl/avmediaogl) \
-		) \
+    $(if $(ENABLE_GLTF), \
+		$(call gb_Helper_optional,AVMEDIA,avmedia/source/opengl/avmediaogl) \
 	) \
 ))
 

@@ -10451,29 +10451,29 @@ else
 fi
 AC_SUBST(ENABLE_VLC)
 
-# this is for opengl transitions in impress slideshow
-ENABLE_OPENGL=
+ENABLE_OPENGL_TRANSITIONS=
+ENABLE_OPENGL_CANVAS=
 if test $_os = iOS -o $_os = Android; then
    : # disable
 elif test "$_os" = "Darwin"; then
     # We use frameworks on Mac OS X, no need for detail checks
-    ENABLE_OPENGL=TRUE
+    ENABLE_OPENGL_TRANSITIONS=TRUE
     AC_DEFINE(HAVE_FEATURE_OPENGL,1)
     ENABLE_OPENGL_CANVAS=TRUE
 elif test $_os = WINNT; then
-    ENABLE_OPENGL=TRUE
+    ENABLE_OPENGL_TRANSITIONS=TRUE
     AC_DEFINE(HAVE_FEATURE_OPENGL,1)
     ENABLE_OPENGL_CANVAS=TRUE
 else
     if test "$USING_X11" = TRUE; then
         AC_CHECK_LIB(GL, glBegin, [:], AC_MSG_ERROR([libGL required.]))
-        ENABLE_OPENGL=TRUE
+        ENABLE_OPENGL_TRANSITIONS=TRUE
         AC_DEFINE(HAVE_FEATURE_OPENGL,1)
         ENABLE_OPENGL_CANVAS=TRUE
     fi
 fi
 
-AC_SUBST(ENABLE_OPENGL)
+AC_SUBST(ENABLE_OPENGL_TRANSITIONS)
 AC_SUBST(ENABLE_OPENGL_CANVAS)
 
 dnl =================================================
@@ -12838,7 +12838,7 @@ if test "$enable_mpl_subset" = "yes"; then
         esac
     done
 
-    ENABLE_OPENGL=
+    ENABLE_OPENGL_TRANSITIONS=
 
     if test "$enable_lpsolve" != "no" -o "x$ENABLE_LPSOLVE" = "xTRUE"; then
         AC_MSG_ERROR([need to --disable-lpsolve - calc linear programming solver.])

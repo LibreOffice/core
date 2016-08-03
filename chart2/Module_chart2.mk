@@ -13,7 +13,7 @@ $(eval $(call gb_Module_add_targets,chart2,\
     Library_chartcontroller \
     Library_chartcore \
 ))
-ifeq ($(ENABLE_OPENGL),TRUE)
+ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_Module_add_targets,chart2,\
      Library_chartopengl \
      Package_opengl \

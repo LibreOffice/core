@@ -19,7 +19,7 @@ $(eval $(call gb_Executable_use_externals,vcldemo,\
 	boost_headers \
 	glm_headers \
 ))
-ifeq ($(ENABLE_OPENGL),TRUE)
+ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_Executable_use_externals,vcldemo,\
     glew \
 ))

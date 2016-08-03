@@ -17,7 +17,7 @@ $(eval $(call gb_CppunitTest_use_externals,vcl_bitmap_test,\
 	boost_headers \
 	glm_headers \
 ))
-ifeq ($(ENABLE_OPENGL),TRUE)
+ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_CppunitTest_use_externals,vcl_bitmap_test,\
      glew \
  ))
