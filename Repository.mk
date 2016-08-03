@@ -605,12 +605,10 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	) \
 ))
 
-ifeq ($(ENABLE_OPENGL),TRUE)
 ifeq ($(ENABLE_GLTF),TRUE)
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
     avmediaogl \
 ))
-endif
 endif
 
 ifeq ($(OS),WNT)
