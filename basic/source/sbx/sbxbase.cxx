@@ -252,7 +252,7 @@ bool SbxBase::Store( SvStream& rStrm )
              .WriteUInt16( static_cast<sal_uInt16>(GetFlags()) )
              .WriteUInt16( GetVersion() );
         sal_Size nOldPos = rStrm.Tell();
-        rStrm.WriteUInt32( 0L );
+        rStrm.WriteUInt32( 0 );
         bool bRes = StoreData( rStrm );
         sal_Size nNewPos = rStrm.Tell();
         rStrm.Seek( nOldPos );
