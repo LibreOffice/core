@@ -113,7 +113,7 @@ const FuncDataBase pFuncDatas[] =
     FUNCDATA( Imsech,           UNIQUE,     STDPAR,     1,          FDCat_Tech ),
     FUNCDATA( Imcsch,           UNIQUE,     STDPAR,     1,          FDCat_Tech ),
     FUNCDATA( Complex,          UNIQUE,     STDPAR,     3,          FDCat_Tech ),
-    FUNCDATA( Convert,          DOUBLE,     STDPAR,     3,          FDCat_Tech ),
+    FUNCDATA( Convert,          UNIQUE,     STDPAR,     3,          FDCat_Tech ),
     FUNCDATA( Amordegrc,        UNIQUE,     INTPAR,     7,          FDCat_Finance ),
     FUNCDATA( Amorlinc,         UNIQUE,     INTPAR,     7,          FDCat_Finance ),
     FUNCDATA( Accrint,          UNIQUE,     INTPAR,     7,          FDCat_Finance ),

@@ -1301,7 +1301,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF
     String SC_OPCODE_DDE { Text = "DDE" ; };
     String SC_OPCODE_BASE { Text = "BASE" ; };
     String SC_OPCODE_DECIMAL { Text = "DECIMAL" ; };
-    String SC_OPCODE_CONVERT_OOO { Text = "CONVERT" ; };
+    String SC_OPCODE_CONVERT_OOO { Text = "CONVERT" ; };    // wrong but ODF1.1, keep it.
     String SC_OPCODE_ROMAN { Text = "ROMAN" ; };
     String SC_OPCODE_ARABIC { Text = "ARABIC" ; };
     String SC_OPCODE_HYPERLINK { Text = "HYPERLINK" ; };
@@ -1743,7 +1743,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_API
     String SC_OPCODE_DDE { Text = "DDE" ; };
     String SC_OPCODE_BASE { Text = "BASE" ; };
     String SC_OPCODE_DECIMAL { Text = "DECIMAL" ; };
-    String SC_OPCODE_CONVERT_OOO { Text = "CONVERT" ; };
+    String SC_OPCODE_CONVERT_OOO { Text = "CONVERT" ; };    /* TODO: wrong but API, change? */
     String SC_OPCODE_ROMAN { Text = "ROMAN" ; };
     String SC_OPCODE_ARABIC { Text = "ARABIC" ; };
     String SC_OPCODE_HYPERLINK { Text = "HYPERLINK" ; };
@@ -2184,7 +2184,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_DDE { Text = "DDE" ; };
     String SC_OPCODE_BASE { Text = "BASE" ; };
     String SC_OPCODE_DECIMAL { Text = "DECIMAL" ; };
-    String SC_OPCODE_CONVERT_OOO { Text = "CONVERT" ; };
+    String SC_OPCODE_CONVERT_OOO { Text = "CONVERT_OOO" ; };
     String SC_OPCODE_ROMAN { Text = "ROMAN" ; };
     String SC_OPCODE_ARABIC { Text = "ARABIC" ; };
     String SC_OPCODE_HYPERLINK { Text = "HYPERLINK" ; };
@@ -3750,7 +3750,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     };
     String SC_OPCODE_CONVERT_OOO
     {
-        Text [ en-US ] = "CONVERT";
+        Text [ en-US ] = "CONVERT_OOO";
     };
     String SC_OPCODE_ROMAN
     {

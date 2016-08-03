@@ -95,7 +95,7 @@ ScCompiler::AddInMap ScCompiler::maAddInMap[] =
     { "IMSECH", "IMSECH", "com.sun.star.sheet.addin.Analysis.getImsech", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMSECH" },
     { "IMCSCH", "IMCSCH", "com.sun.star.sheet.addin.Analysis.getImcsch", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMCSCH" },
     { "COMPLEX", "COMPLEX", "com.sun.star.sheet.addin.Analysis.getComplex", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOMPLEX" },
-    { "CONVERT", "CONVERT_ADD", "com.sun.star.sheet.addin.Analysis.getConvert", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCONVERT" },
+    { "CONVERT", "CONVERT", "com.sun.star.sheet.addin.Analysis.getConvert", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCONVERT" },
     { "AMORDEGRC", "AMORDEGRC", "com.sun.star.sheet.addin.Analysis.getAmordegrc", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETAMORDEGRC" },
     { "AMORLINC", "AMORLINC", "com.sun.star.sheet.addin.Analysis.getAmorlinc", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETAMORLINC" },
     { "ACCRINT", "ACCRINT", "com.sun.star.sheet.addin.Analysis.getAccrint", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETACCRINT" },

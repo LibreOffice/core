@@ -2212,7 +2212,7 @@ void Test::testFunctionLists()
         "COLOR",
         "COMBIN",
         "COMBINA",
-        "CONVERT",
+        "CONVERT_OOO",
         "COS",
         "COSH",
         "COT",
