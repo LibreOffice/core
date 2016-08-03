@@ -1831,7 +1831,8 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             ScAddress aPos( nCol, nRow, aRange.aStart.Tab() );
                             /* FIXME: do we want GRAM_ODFF_A1 instead? At the
                              * end it probably should be GRAM_ODFF_R1C1, since
-                             * R1C1 is what Excel writes in SYLK. */
+                             * R1C1 is what Excel writes in SYLK, or even
+                             * better GRAM_ENGLISH_XL_R1C1. */
                             const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_PODF_A1;
                             ScCompiler aComp( pDoc, aPos);
                             aComp.SetGrammar(eGrammar);
@@ -2035,7 +2036,8 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                                 /* FIXME: do we want GRAM_ODFF_A1 instead? At
                                  * the end it probably should be
                                  * GRAM_ODFF_R1C1, since R1C1 is what Excel
-                                 * writes in SYLK. */
+                                 * writes in SYLK, or even better
+                                 * GRAM_ENGLISH_XL_R1C1. */
                         }
                         if ( pFCell->GetMatrixFlag() != MM_NONE &&
                                 aCellStr.startsWith("{") &&
