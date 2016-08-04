@@ -179,7 +179,7 @@ public:
     virtual void SetSizePixel(const Size& rNewSize) override;
     virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize) override;
 
-    Size calculateRequisition() const;
+    virtual Size calculateRequisition() const;
     void setAllocation(const Size &rAllocation);
 
     void markLayoutDirty()
@@ -207,6 +207,8 @@ public:
     virtual sal_uInt16  GetPageId( const Point& rPos ) const override;
     virtual void        SelectTabPage( sal_uInt16 nPageId ) override;
     virtual void        SetCurPageId( sal_uInt16 nPageId ) override;
+    virtual Size        calculateRequisition() const override;
+    static sal_uInt16   GetHeaderHeight();
 
 protected:
     virtual bool ImplPlaceTabs( long nWidth ) override;
@@ -216,6 +218,7 @@ private:
     bool bLastContextWasSupported;
     vcl::EnumContext::Context eLastContext;
     Link<NotebookBar*,void> m_aIconClickHdl;
+    static sal_uInt16 m_nHeaderHeight;
 };
 
 #endif // INCLUDED_VCL_TABCTRL_HXX
