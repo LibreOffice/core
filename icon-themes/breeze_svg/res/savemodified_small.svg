@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="16"
+   height="16"
+   id="svg3049"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="savemodified_small.svg"
+   inkscape:export-filename="/home/uri/.kde/share/icons/NITRUX-KDE/16x16/actions/view-right-new.png"
+   inkscape:export-xdpi="30"
+   inkscape:export-ydpi="30">
+  <defs
+     id="defs3051" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="24.411306"
+     inkscape:cx="6.4973535"
+     inkscape:cy="5.6502583"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1920"
+     inkscape:window-height="1023"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="false"
+     borderlayer="true"
+     inkscape:snap-bbox="true"
+     inkscape:snap-global="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4085" />
+    <sodipodi:guide
+       position="2.0000044,14.00003"
+       orientation="12,0"
+       id="guide4075" />
+    <sodipodi:guide
+       position="2.0000044,2.0000296"
+       orientation="0,12"
+       id="guide4077" />
+    <sodipodi:guide
+       position="14.000004,2.0000296"
+       orientation="-12,0"
+       id="guide4079" />
+    <sodipodi:guide
+       position="14.000004,14.00003"
+       orientation="0,-12"
+       id="guide4081" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata3054">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-421.71429,-531.79074)">
+    <path
+       style="fill:#4d4d4d;fill-opacity:1;stroke:none"
+       d="M 2 2 L 2 14 L 3 14 L 4 14 L 8 14 L 8 13 L 6 13 L 5 13 L 5 10 L 6 10 L 8 10 L 8 9 L 5 9 L 3.96875 9 L 3.96875 13 L 3 13 L 3 3 L 4 3 L 5 3 L 5 6 L 5 7 L 11 7 L 11 6 L 11 3 L 11.28125 3 L 13 4.71875 L 13 5 L 13 8 L 14 8 L 14 4.28125 L 11.71875 2 L 11.6875 2 L 11 2 L 4 2 L 3 2 L 2 2 z M 6 3 L 7.90625 3 L 7.90625 6 L 6 6 L 6 3 z "
+       transform="translate(421.71429,531.79074)"
+       id="rect4126" />
+    <path
+       transform="matrix(0.53810378,-0.14418447,0.14418447,0.53810378,169.61749,297.02607)"
+       inkscape:transform-center-y="-0.47547164"
+       inkscape:transform-center-x="-0.2745226"
+       d="m 347.20167,549.75597 -3.0655,0.24535 0.55641,3.02455 -2.34113,-1.99414 -1.74523,2.53212 -0.24536,-3.0655 -3.02455,0.55641 1.99414,-2.34112 -2.53212,-1.74524 3.0655,-0.24536 -0.55641,-3.02455 2.34113,1.99415 1.74523,-2.53213 0.24536,3.0655 3.02455,-0.55641 -1.99414,2.34113 z"
+       inkscape:randomized="0"
+       inkscape:rounded="0"
+       inkscape:flatsided="false"
+       sodipodi:arg2="0.65449847"
+       sodipodi:arg1="0.26179939"
+       sodipodi:r2="2.6925824"
+       sodipodi:r1="5.3851647"
+       sodipodi:cy="548.36218"
+       sodipodi:cx="342"
+       sodipodi:sides="8"
+       id="path4160-0"
+       style="opacity:1;fill:#da4453;fill-opacity:1;stroke:none;stroke-width:2.79999995;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.55026455"
+       sodipodi:type="star" />
+  </g>
+</svg>

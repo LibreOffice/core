@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="16"
+   height="16"
+   id="svg3049"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="sc_basicshapes.can.svg"
+   inkscape:export-filename="/home/uri/.kde/share/icons/NITRUX-KDE/16x16/actions/view-right-new.png"
+   inkscape:export-xdpi="30"
+   inkscape:export-ydpi="30">
+  <defs
+     id="defs3051" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="34.5228"
+     inkscape:cx="9.9672665"
+     inkscape:cy="6.4760085"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1407"
+     inkscape:window-height="1053"
+     inkscape:window-x="511"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:showpageshadow="false"
+     borderlayer="true"
+     inkscape:snap-bbox="true"
+     inkscape:snap-global="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4085" />
+    <sodipodi:guide
+       position="2,15"
+       orientation="12,0"
+       id="guide4075" />
+    <sodipodi:guide
+       position="17,2"
+       orientation="0,12"
+       id="guide4077" />
+    <sodipodi:guide
+       position="14,13"
+       orientation="-12,0"
+       id="guide4079" />
+    <sodipodi:guide
+       position="0,14"
+       orientation="0,-12"
+       id="guide4081" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata3054">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-421.71429,-531.79074)">
+    <g
+       id="layer1-9"
+       inkscape:label="Capa 1"
+       transform="translate(-3.3462527e-5,-2.6973293e-5)">
+      <g
+         inkscape:label="Capa 1"
+         id="layer1-4"
+         transform="matrix(0.75000002,0,0,0.83333404,421.46429,-327.98583)">
+        <g
+           inkscape:label="Capa 1"
+           id="layer1-8-5"
+           transform="matrix(0.99999997,0,0,0.89999799,0,104.10707)">
+          <g
+             transform="matrix(0,-1.0000014,0.99999862,0,-1030.3608,1052.3623)"
+             id="g4576">
+            <path
+               inkscape:connector-curvature="0"
+               style="color:#000000;fill:#4d4d4d;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+               d="M 6,2 C 3.7908612,2 2,4.6862985 2,8 c 0,3.313702 1.7908612,6 4,6 l 4,0 C 7.7908611,14 6,11.313702 6,8 6,4.6862985 7.7908611,2 10,2 L 6,2 z"
+               transform="matrix(1.3333333,0,0,1.3333352,0.33333333,1030.6956)"
+               id="path4484-6" />
+            <path
+               sodipodi:type="arc"
+               style="color:#000000;fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+               id="path4484"
+               sodipodi:cx="10"
+               sodipodi:cy="7.4999852"
+               sodipodi:rx="4"
+               sodipodi:ry="5.5000148"
+               d="M 14,7.4999852 C 14,10.53756 12.209139,13 10,13 7.790861,13 6,10.53756 6,7.4999852 6,4.4624109 7.790861,1.9999704 10,1.9999704 c 2.209139,0 4,2.4624405 4,5.5000148 z"
+               transform="matrix(1.3333333,0,0,1.4545406,0.33333333,1030.4532)" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

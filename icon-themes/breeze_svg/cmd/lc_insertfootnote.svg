@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91+devel r"
+   viewBox="0 0 24 24"
+   sodipodi:docname="lc_insertfootnote.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="33.683996"
+     inkscape:cx="11.315158"
+     inkscape:cy="11.057647"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:showpageshadow="false"
+     borderlayer="true"
+     inkscape:window-width="1366"
+     inkscape:window-height="670"
+     inkscape:window-x="-4"
+     inkscape:window-y="29"
+     inkscape:window-maximized="1"
+     units="px"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0">
+    <sodipodi:guide
+       position="3,21"
+       orientation="18,0"
+       id="guide4085" />
+    <sodipodi:guide
+       position="3,3"
+       orientation="0,18"
+       id="guide4087" />
+    <sodipodi:guide
+       position="21,3"
+       orientation="-18,0"
+       id="guide4089" />
+    <sodipodi:guide
+       position="21,21"
+       orientation="0,-18"
+       id="guide4091" />
+    <sodipodi:guide
+       position="4,20"
+       orientation="16,0"
+       id="guide4093" />
+    <sodipodi:guide
+       position="4,4"
+       orientation="0,16"
+       id="guide4095" />
+    <sodipodi:guide
+       position="20,4"
+       orientation="-16,0"
+       id="guide4097" />
+    <sodipodi:guide
+       position="20,20"
+       orientation="0,-16"
+       id="guide4099" />
+    <inkscape:grid
+       type="xygrid"
+       id="grid4101"
+       originx="1px"
+       originy="0.99998262px" />
+    <sodipodi:guide
+       position="4,20"
+       orientation="16,0"
+       id="guide4123" />
+    <sodipodi:guide
+       position="4,4"
+       orientation="0,2.000001"
+       id="guide4125" />
+    <sodipodi:guide
+       position="5,20"
+       orientation="-16,0"
+       id="guide4127" />
+    <sodipodi:guide
+       position="6.000001,20"
+       orientation="0,-2.000001"
+       id="guide4129" />
+    <sodipodi:guide
+       position="19,20"
+       orientation="16,0"
+       id="guide4131" />
+    <sodipodi:guide
+       position="18,4"
+       orientation="0,2"
+       id="guide4133" />
+    <sodipodi:guide
+       position="20,4"
+       orientation="-16,0"
+       id="guide4135" />
+    <sodipodi:guide
+       position="20,20"
+       orientation="0,-2"
+       id="guide4137" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(1,-1029.3622)">
+    <path
+       style="fill:#4d4d4d;fill-opacity:1;stroke:none"
+       d="M 5 4 L 5 20 L 6 20 L 12 20 L 12 19 L 6 19 L 6 5 L 18 5 L 18 13 L 19 13 L 19 4 L 18 4 L 6 4 L 5 4 z M 7 7 L 7 8 L 17 8 L 17 7 L 7 7 z M 7 9 L 7 10 L 13 10 L 13 9 L 7 9 z M 7 14 L 7 15 L 14 15 L 14 14 L 7 14 z "
+       transform="translate(-1,1029.3622)"
+       id="rect4139" />
+    <path
+       style="opacity:1;fill:#1d99f3;fill-opacity:1;stroke:none;stroke-opacity:1"
+       d="m 16,1043.3622 -1,2 1,0 0,4 1,0 0,-6 -1,0 z"
+       id="rect4151"
+       inkscape:connector-curvature="0" />
+    <rect
+       style="opacity:1;fill:#1d99f3;fill-opacity:1;stroke:none;stroke-opacity:1"
+       id="rect4170"
+       width="7"
+       height="1.0000348"
+       x="6"
+       y="1045.3622" />
+  </g>
+</svg>

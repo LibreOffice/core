@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg7384"
+   height="24"
+   width="24"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="lc_assignlayout.svg"
+   inkscape:export-filename="/home/uri/Descargas/NITRUX-KDE/NITRUX-KDE/16x16/actions/view-preview.png"
+   inkscape:export-xdpi="30"
+   inkscape:export-ydpi="30">
+  <defs
+     id="defs9" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10000"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="930"
+     inkscape:window-height="1053"
+     id="namedview7"
+     showgrid="true"
+     inkscape:zoom="23.334524"
+     inkscape:cx="11.893461"
+     inkscape:cy="20.719127"
+     inkscape:window-x="986"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg7384"
+     inkscape:showpageshadow="false"
+     borderlayer="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:snap-global="true"
+     inkscape:snap-bbox="true">
+    <sodipodi:guide
+       position="3,21"
+       orientation="18,0"
+       id="guide4064" />
+    <sodipodi:guide
+       position="3,3"
+       orientation="0,18"
+       id="guide4066" />
+    <sodipodi:guide
+       position="21,3"
+       orientation="-18,0"
+       id="guide4068" />
+    <sodipodi:guide
+       position="21,21"
+       orientation="0,-18"
+       id="guide4070" />
+    <sodipodi:guide
+       position="4,20"
+       orientation="16,0"
+       id="guide4072" />
+    <sodipodi:guide
+       position="4,4"
+       orientation="0,16"
+       id="guide4074" />
+    <sodipodi:guide
+       position="20,4"
+       orientation="-16,0"
+       id="guide4076" />
+    <sodipodi:guide
+       position="20,20"
+       orientation="0,-16"
+       id="guide4078" />
+    <inkscape:grid
+       type="xygrid"
+       id="grid4080"
+       originx="1px"
+       originy="1px" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata90">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Gnome Symbolic Icon Theme</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <title
+     id="title9167">Gnome Symbolic Icon Theme</title>
+  <path
+     style="color:#000000;fill:#4d4d4d;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     d="M 7.5 4 C 5.5670034 4 4 5.5670034 4 7.5 C 4 9.4329966 5.5670034 11 7.5 11 L 10 11 L 10 13 L 7.5 13 C 5.5670034 13 4 14.567003 4 16.5 C 4 18.432997 5.5670034 20 7.5 20 C 9.4329966 20 11 18.432997 11 16.5 L 11 14 L 13 14 L 13 16.5 C 13 18.432997 14.567003 20 16.5 20 C 18.432997 20 20 18.432997 20 16.5 C 20 14.567003 18.432997 13 16.5 13 L 14 13 L 14 11 L 16.5 11 C 18.432997 11 20 9.4329966 20 7.5 C 20 5.5670034 18.432997 4 16.5 4 C 14.567003 4 13 5.5670034 13 7.5 L 13 10 L 11 10 L 11 7.5 C 11 5.5670034 9.4329966 4 7.5 4 z M 7.5 5 C 8.8807119 5 10 6.1192881 10 7.5 L 10 10 L 7.5 10 C 6.1192881 10 5 8.8807119 5 7.5 C 5 6.1192881 6.1192881 5 7.5 5 z M 16.5 5 C 17.880712 5 19 6.1192881 19 7.5 C 19 8.8807119 17.880712 10 16.5 10 L 14 10 L 14 7.5 C 14 6.1192881 15.119288 5 16.5 5 z M 11 11 L 13 11 L 13 13 L 11 13 L 11 11 z M 7.5 14 L 10 14 L 10 16.5 C 10 17.880712 8.8807119 19 7.5 19 C 6.1192881 19 5 17.880712 5 16.5 C 5 15.119288 6.1192881 14 7.5 14 z M 14 14 L 16.5 14 C 17.880712 14 19 15.119288 19 16.5 C 19 17.880712 17.880712 19 16.5 19 C 15.119288 19 14 17.880712 14 16.5 L 14 14 z "
+     id="rect3764" />
+</svg>

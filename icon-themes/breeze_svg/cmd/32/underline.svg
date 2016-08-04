@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="32"
+   height="32"
+   id="svg5453"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="underline.svg"
+   viewBox="0 0 32 32">
+  <defs
+     id="defs5455">
+    <clipPath
+       id="clipPath4160"
+       clipPathUnits="userSpaceOnUse">
+      <rect
+         y="1028.3619"
+         x="-6"
+         height="32.000015"
+         width="32"
+         id="rect4162"
+         style="opacity:1;fill:#aade87;fill-opacity:0.47247709;stroke:none;stroke-opacity:1" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4210">
+      <rect
+         y="1024.3622"
+         x="-7"
+         height="34"
+         width="34"
+         id="rect4212"
+         style="opacity:1;fill:#0000ff;fill-opacity:0.51376145;stroke:none;stroke-opacity:1" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="16"
+     inkscape:cx="0.028491952"
+     inkscape:cy="12.087212"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1920"
+     inkscape:window-height="957"
+     inkscape:window-x="-4"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="false"
+     borderlayer="true"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:object-nodes="true"
+     inkscape:snap-bbox="true"
+     inkscape:snap-global="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4063" />
+    <sodipodi:guide
+       position="13,4"
+       orientation="0,28"
+       id="guide4282" />
+    <sodipodi:guide
+       position="28,25"
+       orientation="-28,0"
+       id="guide4284" />
+    <sodipodi:guide
+       position="15,28"
+       orientation="0,-28"
+       id="guide4286" />
+    <sodipodi:guide
+       position="4,17"
+       orientation="1,0"
+       id="guide4574" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5458">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-384.57143,-515.798)">
+    <g
+       id="layer1-6"
+       inkscape:label="Capa 1"
+       transform="matrix(1.5,0,0,1.5,323.17115,-1036.6062)" />
+    <path
+       inkscape:connector-curvature="0"
+       style="fill:#4d4d4d;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 391.57143,544.79803 0,1 18,0 0,-1 -18,0 z"
+       id="rect4424-9" />
+    <path
+       style="fill:#4d4d4d;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 9 4 L 9 21 A 7 7 0 0 0 9.0371094 21.710938 C 9.0439145 21.778315 9.0577039 21.843357 9.0664062 21.910156 A 7 7 0 0 0 9.140625 22.400391 C 9.1412801 22.403615 9.1419186 22.406933 9.1425781 22.410156 C 9.2358245 22.865839 9.3736715 23.305875 9.5507812 23.724609 A 7 7 0 0 0 9.5527344 23.726562 C 9.6440128 23.942142 9.7457957 24.151575 9.8574219 24.355469 A 7 7 0 0 0 9.8671875 24.369141 C 9.9748508 24.564678 10.089598 24.755882 10.214844 24.939453 A 7 7 0 0 0 10.314453 25.074219 C 10.416482 25.216339 10.520676 25.35635 10.632812 25.490234 A 7 7 0 0 0 10.796875 25.671875 C 10.890817 25.776423 10.983983 25.881753 11.083984 25.980469 A 7 7 0 0 0 11.296875 26.173828 C 11.401375 26.268882 11.505105 26.364457 11.615234 26.453125 A 7 7 0 0 0 11.787109 26.582031 C 11.911537 26.676093 12.037257 26.767772 12.167969 26.853516 A 7 7 0 0 0 12.402344 26.996094 C 12.517286 27.065217 12.632838 27.132728 12.751953 27.195312 A 7 7 0 0 0 13.011719 27.322266 C 13.138634 27.382373 13.265516 27.441582 13.396484 27.494141 A 7 7 0 0 0 13.611328 27.572266 C 13.759412 27.626113 13.907993 27.678713 14.060547 27.722656 A 7 7 0 0 0 14.296875 27.783203 C 14.434289 27.817621 14.57239 27.850793 14.712891 27.876953 A 7 7 0 0 0 15.017578 27.923828 C 15.147098 27.942083 15.276508 27.959639 15.408203 27.970703 A 7 7 0 0 0 16 28 C 16.236356 28 16.468884 27.987723 16.699219 27.964844 C 16.870394 27.947841 17.037756 27.917783 17.205078 27.888672 C 17.266433 27.877997 17.329829 27.873589 17.390625 27.861328 A 7 7 0 0 0 17.410156 27.857422 C 17.865839 27.764176 18.305875 27.626329 18.724609 27.449219 C 18.725414 27.448879 18.725758 27.447606 18.726562 27.447266 C 18.942142 27.355987 19.151575 27.254204 19.355469 27.142578 A 7 7 0 0 0 19.369141 27.132812 C 19.564678 27.025149 19.755882 26.910402 19.939453 26.785156 A 7 7 0 0 0 20.074219 26.685547 C 20.216339 26.583518 20.35635 26.479324 20.490234 26.367188 A 7 7 0 0 0 20.671875 26.203125 C 20.776423 26.109183 20.881753 26.016017 20.980469 25.916016 A 7 7 0 0 0 21.173828 25.703125 C 21.268882 25.598625 21.364457 25.494895 21.453125 25.384766 A 7 7 0 0 0 21.582031 25.212891 C 21.676093 25.088463 21.767772 24.962743 21.853516 24.832031 A 7 7 0 0 0 21.996094 24.597656 C 22.065217 24.482714 22.132728 24.367162 22.195312 24.248047 A 7 7 0 0 0 22.322266 23.988281 C 22.382373 23.861366 22.441582 23.734484 22.494141 23.603516 A 7 7 0 0 0 22.572266 23.388672 C 22.626113 23.240588 22.678713 23.092007 22.722656 22.939453 A 7 7 0 0 0 22.783203 22.703125 C 22.817294 22.567019 22.84901 22.43015 22.875 22.291016 A 7 7 0 0 0 22.927734 21.943359 C 22.942566 21.83365 22.959063 21.724543 22.96875 21.613281 A 7 7 0 0 0 23 21 L 23 4 L 21 4 L 21 21 A 4 4 0 0 1 17 25 A 4 4 0 0 1 13 21 L 13 4 L 11 4 L 9 4 z "
+       transform="translate(384.57143,515.798)"
+       id="path4307-2" />
+  </g>
+</svg>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="16"
+   height="16"
+   id="svg3049"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="onlineupdate_16.svg"
+   inkscape:export-filename="/home/uri/.kde/share/icons/NITRUX-KDE/16x16/actions/view-right-new.png"
+   inkscape:export-xdpi="30"
+   inkscape:export-ydpi="30">
+  <defs
+     id="defs3051" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="34.5228"
+     inkscape:cx="1.7807709"
+     inkscape:cy="6.9003267"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1868"
+     inkscape:window-height="1060"
+     inkscape:window-x="50"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="false"
+     borderlayer="true"
+     inkscape:snap-bbox="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4085" />
+    <sodipodi:guide
+       position="2.0000044,14.00003"
+       orientation="12,0"
+       id="guide4075" />
+    <sodipodi:guide
+       position="2.0000044,2.0000296"
+       orientation="0,12"
+       id="guide4077" />
+    <sodipodi:guide
+       position="14.000004,2.0000296"
+       orientation="-12,0"
+       id="guide4079" />
+    <sodipodi:guide
+       position="14.000004,14.00003"
+       orientation="0,-12"
+       id="guide4081" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata3054">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-421.71429,-531.79074)">
+    <path
+       style="fill:#4d4d4d;fill-opacity:1;stroke:none"
+       d="M 11 7.78125 L 11 12.09375 L 9 10.0625 L 9 11.5 L 11.28125 13.78125 L 11.5 14 L 11.71875 13.78125 L 14 11.5 L 14 10.0625 L 12 12.09375 L 12 7.78125 L 11 7.78125 z "
+       transform="translate(421.71429,531.79074)"
+       id="rect4071" />
+    <path
+       style="color:#000000;fill:#4d4d4d;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="M 3.5 2 C 2.67157 2 2 2.67157 2 3.5 C 2 4.1558404 2.4135873 4.7024109 3 4.90625 L 3 11.09375 C 2.4135873 11.297589 2 11.84416 2 12.5 C 2 13.32843 2.67157 14 3.5 14 C 4.32843 14 5 13.32843 5 12.5 C 5 11.84416 4.5864127 11.297589 4 11.09375 L 4 4.90625 C 4.0771596 4.8794291 4.1479033 4.8509861 4.21875 4.8125 L 7.09375 6.96875 C 7.0337918 7.1308525 7 7.317055 7 7.5 C 7 8.32843 7.67157 9 8.5 9 C 9.32843 9 10 8.32843 10 7.5 C 10 6.67157 9.32843 6 8.5 6 C 8.2152272 6 7.9455454 6.0809461 7.71875 6.21875 L 4.875 4.09375 C 4.9509039 3.9142923 5 3.7071075 5 3.5 C 5 2.67157 4.32843 2 3.5 2 z M 3.5 3 C 3.77614 3 4 3.22386 4 3.5 C 4 3.77614 3.77614 4 3.5 4 C 3.22386 4 3 3.77614 3 3.5 C 3 3.22386 3.22386 3 3.5 3 z M 8.5 7 C 8.77614 7 9 7.22386 9 7.5 C 9 7.77614 8.77614 8 8.5 8 C 8.22386 8 8 7.77614 8 7.5 C 8 7.22386 8.22386 7 8.5 7 z M 3.5 12 C 3.77614 12 4 12.22386 4 12.5 C 4 12.77614 3.77614 13 3.5 13 C 3.22386 13 3 12.77614 3 12.5 C 3 12.22386 3.22386 12 3.5 12 z "
+       transform="translate(421.71429,531.79074)"
+       id="path3010" />
+  </g>
+</svg>
