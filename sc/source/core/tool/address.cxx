@@ -179,23 +179,8 @@ static bool lcl_isString( const sal_Unicode* p1, const OUString& rStr )
     {
         if (!p1[i])
             return false;
-        if (p1[i] != p2[i])
-        {
-            sal_Unicode c1 = p1[i];
-            if ('A' <= c1 && c1 <= 'Z')
-                c1 += 0x20;
-            if (c1 < 'a' || 'z' < c1)
-                return false;   // not a letter
-
-            sal_Unicode c2 = p2[i];
-            if ('A' <= c2 && c2 <= 'Z')
-                c2 += 0x20;
-            if (c2 < 'a' || 'z' < c2)
-                return false;   // not a letter to match
-
-            if (c1 != c2)
-                return false;   // lower case doesn't match either
-        }
+        if (!rtl::compareIgnoreAsciiCase(p1[i],p2[i]))
+            return false;
     }
     return true;
 }
