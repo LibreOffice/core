@@ -1285,6 +1285,8 @@ void SfxUndoManager::RemoveOldestUndoActions( size_t const i_count )
 
 void SfxUndoManager::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
+    UndoManagerGuard aGuard(*m_xData);
+
     bool bOwns = false;
     if (!pWriter)
     {
@@ -1295,9 +1297,23 @@ void SfxUndoManager::dumpAsXml(xmlTextWriterPtr pWriter) const
 
     xmlTextWriterStartElement(pWriter, BAD_CAST("sfxUndoManager"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nUndoActionCount"), BAD_CAST(OString::number(GetUndoActionCount()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nRedoActionCount"), BAD_CAST(OString::number(GetRedoActionCount()).getStr()));
 
+    xmlTextWriterStartElement(pWriter, BAD_CAST("undoActions"));
     for (size_t i = 0; i < GetUndoActionCount(); ++i)
-        GetUndoAction(i)->dumpAsXml(pWriter);
+    {
+        const SfxUndoArray* pUndoArray = m_xData->pActUndoArray;
+        pUndoArray->aUndoActions[pUndoArray->nCurUndoAction - 1 - i].pAction->dumpAsXml(pWriter);
+    }
+    xmlTextWriterEndElement(pWriter);
+
+    xmlTextWriterStartElement(pWriter, BAD_CAST("redoActions"));
+    for (size_t i = 0; i < GetRedoActionCount(); ++i)
+    {
+        const SfxUndoArray* pUndoArray = m_xData->pActUndoArray;
+        pUndoArray->aUndoActions[pUndoArray->nCurUndoAction + i].pAction->dumpAsXml(pWriter);
+    }
+    xmlTextWriterEndElement(pWriter);
 
     xmlTextWriterEndElement(pWriter);
     if (bOwns)
