@@ -3,216 +3,131 @@
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
-  <object class="GtkListStore" id="liststoreLB_AREA_TYPE">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name guint1 -->
-      <column type="guint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">None</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Color</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Gradient</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Hatching</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Bitmap</col>
-        <col id="1">0</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkBox" id="AreaTabPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="spacing">6</property>
     <child>
-      <object class="GtkFrame" id="Fill Frame">
+      <object class="GtkBox" id="box1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
+        <property name="orientation">vertical</property>
         <child>
-          <object class="GtkAlignment" id="alignment1">
+          <object class="GtkButtonBox" id="buttonbox1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="hexpand">True</property>
+            <property name="spacing">12</property>
+            <property name="layout_style">center</property>
             <child>
-              <object class="GtkVBox" id="box1">
+              <object class="GtkButton" id="btnnone">
+                <property name="label" translatable="yes">None</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="spacing">6</property>
-                <child>
-                  <object class="GtkComboBox" id="LB_AREA_TYPE">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="model">liststoreLB_AREA_TYPE</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="boxLB_FILL">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="vexpand">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="svxlo-ColorLB" id="LB_COLOR:border">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="vexpand">True</property>
-                        <property name="dropdown">False</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="svxlo-GradientLB" id="LB_GRADIENT:border">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="vexpand">True</property>
-                        <property name="dropdown">False</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="svxlo-HatchingLB" id="LB_HATCHING:border">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="vexpand">True</property>
-                        <property name="dropdown">False</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="svxlo-BitmapLB" id="LB_BITMAP:border">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="vexpand">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">3</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="box4">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="svxlo-SvxXRectPreview" id="CTL_COLOR_PREVIEW">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="CTL_COLOR_PREVIEW-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Example</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="svxlo-SvxXRectPreview" id="CTL_BITMAP_PREVIEW">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="CTL_BITMAP_PREVIEW-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Example</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="pack_type">end</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
               </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btncolor">
+                <property name="label" translatable="yes">Color</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btngradient">
+                <property name="label" translatable="yes">Gradient</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btnhatch">
+                <property name="label" translatable="yes">Hatch</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btnbitmap">
+                <property name="label" translatable="yes">Bitmap</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btnpattern">
+                <property name="label" translatable="yes">Pattern</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">5</property>
+              </packing>
             </child>
           </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
         </child>
-        <child type="label">
-          <object class="GtkLabel" id="label1">
+        <child>
+          <object class="GtkBox" id="fillstylebox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
-            <property name="label" translatable="yes">Fill</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <placeholder/>
+            </child>
           </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
         </child>
       </object>
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">0</property>
+        <property name="position">1</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup1">
-    <widgets>
-      <widget name="LB_AREA_TYPE"/>
-      <widget name="LB_COLOR:border"/>
-      <widget name="LB_GRADIENT:border"/>
-      <widget name="LB_HATCHING:border"/>
-      <widget name="LB_BITMAP:border"/>
-      <widget name="CTL_COLOR_PREVIEW"/>
-      <widget name="CTL_BITMAP_PREVIEW"/>
-    </widgets>
   </object>
 </interface>
