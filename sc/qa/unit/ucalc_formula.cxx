@@ -3926,17 +3926,13 @@ void Test::testFuncIF()
     m_pDoc->SetValue(ScAddress(1,0,0), 3.0);
     CPPUNIT_ASSERT_EQUAL(OUString("not two"), m_pDoc->GetString(ScAddress(0,0,0)));
 
-/* FIXME: temporarily disabled because e54cd3fbf40300416ef337981bd356b88ad44a41
- * reverted; reactivate when fixed again. */
-#if 0
-    // Test nested IF in array/matrix.
+    // Test nested IF in array/matrix if the nested IF is not already a matrix.
     ScMarkData aMark;
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(0,2, 1,2, aMark, "=IF({1;0};IF(1;23);42)");
     // Results must be 23 and 42.
     CPPUNIT_ASSERT_EQUAL(23.0, m_pDoc->GetValue(ScAddress(0,2,0)));
     CPPUNIT_ASSERT_EQUAL(42.0, m_pDoc->GetValue(ScAddress(1,2,0)));
-#endif
 
     m_pDoc->DeleteTab(0);
 }
