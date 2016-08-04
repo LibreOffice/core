@@ -87,7 +87,7 @@ void ScInterpreter::ScIfJump()
 {
     const short* pJump = pCur->GetJump();
     short nJumpCount = pJump[ 0 ];
-    MatrixDoubleRefToMatrix();
+    MatrixJumpConditionToMatrix();
     switch ( GetStackType() )
     {
         case svMatrix:
@@ -255,7 +255,7 @@ void ScInterpreter::ScIfError( bool bNAonly )
     sal_uInt16 nOldGlobalError = nGlobalError;
     nGlobalError = 0;
 
-    MatrixDoubleRefToMatrix();
+    MatrixJumpConditionToMatrix();
     switch (GetStackType())
     {
         default:
@@ -410,7 +410,7 @@ void ScInterpreter::ScChooseJump()
     bool bHaveJump = false;
     const short* pJump = pCur->GetJump();
     short nJumpCount = pJump[ 0 ];
-    MatrixDoubleRefToMatrix();
+    MatrixJumpConditionToMatrix();
     switch ( GetStackType() )
     {
         case svMatrix:

@@ -364,7 +364,7 @@ void PopDoubleRefPushMatrix();
 // Else convert area reference parameters marked as ForceArray to array.
 // Returns true if JumpMatrix created.
 bool ConvertMatrixParameters();
-inline void MatrixDoubleRefToMatrix();      // if MatrixFormula: PopDoubleRefPushMatrix
+inline void MatrixJumpConditionToMatrix();      // if MatrixFormula: PopDoubleRefPushMatrix
 // If MatrixFormula or ForceArray: ConvertMatrixParameters()
 inline bool MatrixParameterConversion();
 ScMatrixRef PopMatrix();
@@ -975,7 +975,7 @@ public:
     sal_uLong                   GetRetFormatIndex() const   { return nRetFmtIndex; }
 };
 
-inline void ScInterpreter::MatrixDoubleRefToMatrix()
+inline void ScInterpreter::MatrixJumpConditionToMatrix()
 {
     if ( (bMatrixFormula || pCur->IsInForceArray()) && GetStackType() == formula::svDoubleRef )
     {
