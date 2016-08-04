@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_19b05cf4",
+        "filename": "vcl/opengl/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2099,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-08-04T13:07:22Z",
+      "side": 1,
+      "message": "did you mean to drop the CHECK_GL_ERROR() after this call?",
+      "revId": "4fdc9af96ddc1291fbb61a4b5d1e313140964df1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
