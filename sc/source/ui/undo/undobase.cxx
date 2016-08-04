@@ -38,8 +38,16 @@
 
 ScSimpleUndo::ScSimpleUndo( ScDocShell* pDocSh ) :
     pDocShell( pDocSh ),
-    pDetectiveUndo( nullptr )
+    pDetectiveUndo( nullptr ),
+    mnViewShellId(-1)
 {
+    if (ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell())
+        mnViewShellId = pViewShell->GetViewShellId();
+}
+
+sal_Int32 ScSimpleUndo::GetViewShellId() const
+{
+    return mnViewShellId;
 }
 
 ScSimpleUndo::~ScSimpleUndo()
@@ -594,8 +602,11 @@ void ScDBFuncUndo::EndRedo()
 }
 
 ScUndoWrapper::ScUndoWrapper( SfxUndoAction* pUndo ) :
-    pWrappedUndo( pUndo )
+    pWrappedUndo( pUndo ),
+    mnViewShellId( -1 )
 {
+    if (pWrappedUndo)
+        mnViewShellId = pWrappedUndo->GetViewShellId();
 }
 
 ScUndoWrapper::~ScUndoWrapper()
@@ -613,6 +624,11 @@ OUString ScUndoWrapper::GetComment() const
     if (pWrappedUndo)
         return pWrappedUndo->GetComment();
     return OUString();
+}
+
+sal_Int32 ScUndoWrapper::GetViewShellId() const
+{
+    return mnViewShellId;
 }
 
 OUString ScUndoWrapper::GetRepeatComment(SfxRepeatTarget& rTarget) const
