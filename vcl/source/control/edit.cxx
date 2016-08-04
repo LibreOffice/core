@@ -2268,6 +2268,7 @@ void Edit::StateChanged( StateChangedType nType )
     {
         if (!mpSubEdit)
         {
+            ApplySettings(*this);
             ImplShowCursor();
             Invalidate();
         }
@@ -2276,6 +2277,7 @@ void Edit::StateChanged( StateChangedType nType )
     {
         if (!mpSubEdit)
         {
+            ApplySettings(*this);
             ImplShowCursor();
             Invalidate();
         }
@@ -2284,6 +2286,7 @@ void Edit::StateChanged( StateChangedType nType )
     {
         if (!mpSubEdit)
         {
+            ApplySettings(*this);
             Invalidate();
         }
     }
@@ -2291,6 +2294,7 @@ void Edit::StateChanged( StateChangedType nType )
     {
         if (!mpSubEdit)
         {
+            ApplySettings(*this);
             Invalidate();
         }
     }
@@ -2307,6 +2311,7 @@ void Edit::DataChanged( const DataChangedEvent& rDCEvt )
     {
         if ( !mpSubEdit )
         {
+            ApplySettings(*this);
             ImplShowCursor();
             Invalidate();
         }
