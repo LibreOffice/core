@@ -414,18 +414,16 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
     }
 }
 
-sal_Int32 SwFlyCntPortion::GetFlyCursorOfst( const sal_uInt16 nOfst,
-    const Point &rPoint, SwPosition *pPos, SwCursorMoveState* pCMS ) const
+void SwFlyCntPortion::GetFlyCursorOfst( const sal_uInt16 nOfst,
+    const Point &rPoint, SwPosition &rPos, SwCursorMoveState* pCMS ) const
 {
     // As the FlyCnt are not attached to the side, their GetCursorOfst() will
     // not be called.
     // In order to reduce management overhead for the layout page, the paragraph
     // calls the FlyFrame's GetCursorOfst() only when needed
     Point aPoint( rPoint );
-    if( !pPos || bDraw || !( GetFlyFrame()->GetCursorOfst( pPos, aPoint, pCMS ) ) )
-        return SwLinePortion::GetCursorOfst( nOfst );
-    else
-        return 0;
+    if( bDraw || !( GetFlyFrame()->GetCursorOfst(&rPos, aPoint, pCMS) ) )
+        SwLinePortion::GetCursorOfst(nOfst);
 }
 
 sal_Int32 SwFlyCntPortion::GetCursorOfst( const sal_uInt16 nOfst ) const

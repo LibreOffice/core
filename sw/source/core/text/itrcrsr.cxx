@@ -1713,8 +1713,8 @@ sal_Int32 SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
                 if( bChgNodeInner && pTmp->Frame().IsInside( aTmpPoint ) &&
                     !( pTmp->IsProtected() ) )
                 {
-                    nLength = static_cast<SwFlyCntPortion*>(pPor)->
-                              GetFlyCursorOfst( nX, aTmpPoint, pPos, pCMS );
+                    static_cast<SwFlyCntPortion*>(pPor)->
+                        GetFlyCursorOfst( nX, aTmpPoint, *pPos, pCMS );
                     // After a change of the frame, our font must be still
                     // available for/in the OutputDevice.
                     // For comparison: Paint and new SwFlyCntPortion !
