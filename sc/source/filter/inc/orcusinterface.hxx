@@ -299,6 +299,8 @@ private:
             SvxBorderStyle mestyle;
             Color maColor;
             double mnWidth;
+
+            border_line();
         };
         std::map<orcus::spreadsheet::border_direction_t, border_line> border_lines;
 
