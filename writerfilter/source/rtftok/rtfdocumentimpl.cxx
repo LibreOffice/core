@@ -2007,11 +2007,16 @@ RTFError RTFDocumentImpl::popState()
     }
     break;
     case Destination::LEVELNUMBERS:
-        if (aState.aTableSprms.find(NS_ooxml::LN_CT_Lvl_lvlText))
+    {
+        bool bNestedLevelNumbers = false;
+        if (m_aStates.size() > 1)
+            // Current destination is levelnumbers and parent destination is levelnumbers as well.
+            bNestedLevelNumbers = m_aStates[m_aStates.size() - 2].eDestination == Destination::LEVELNUMBERS;
+        if (!bNestedLevelNumbers && aState.aTableSprms.find(NS_ooxml::LN_CT_Lvl_lvlText))
         {
             RTFSprms& rAttributes = aState.aTableSprms.find(NS_ooxml::LN_CT_Lvl_lvlText)->getAttributes();
             RTFValue::Pointer_t pValue = rAttributes.find(NS_ooxml::LN_CT_LevelText_val);
-            if (pValue)
+            if (pValue && aState.bLevelNumbersValid)
             {
                 OUString aOrig = pValue->getString();
 
@@ -2032,8 +2037,12 @@ RTFError RTFDocumentImpl::popState()
 
                 pValue->setString(aBuf.makeStringAndClear());
             }
+            else if (pValue)
+                // Have a value, but levelnumbers is not valid -> ignore it.
+                pValue->setString(OUString());
         }
         break;
+    }
     case Destination::SHAPEPROPERTYNAME:
         if (&m_aStates.top().aDestinationText != m_aStates.top().pDestinationText)
             break; // not for nested group
@@ -2914,7 +2923,13 @@ RTFError RTFDocumentImpl::popState()
         break;
     case Destination::LEVELNUMBERS:
         if (!m_aStates.empty())
+        {
             m_aStates.top().aTableSprms = aState.aTableSprms;
+            if (aState.eDestination == Destination::LEVELNUMBERS)
+                // Both current and parent state is levelnumbers: mark parent
+                // as invalid as well if necessary.
+                m_aStates.top().bLevelNumbersValid = aState.bLevelNumbersValid;
+        }
         break;
     case Destination::FIELDINSTRUCTION:
         if (!m_aStates.empty())
@@ -3171,6 +3186,7 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
       nListLevelNum(0),
       aListLevelEntries(),
       aLevelNumbers(),
+      bLevelNumbersValid(true),
       aPicture(),
       aShape(),
       aDrawingObject(),
