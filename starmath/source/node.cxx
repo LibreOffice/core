@@ -824,9 +824,9 @@ void SmDynIntegralNode::CreateTextFromNode(OUString &rText)
 
 void SmBinHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
-    SmNode *pLeft  = GetSubNode(0),
-           *pOper  = GetSubNode(1),
-           *pRight = GetSubNode(2);
+    SmNode *pLeft  = LeftOperand(),
+           *pOper  = Symbol(),
+           *pRight = RightOperand();
     assert(pLeft);
     assert(pOper);
     assert(pRight);
