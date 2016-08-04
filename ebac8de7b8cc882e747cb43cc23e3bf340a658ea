@@ -16,6 +16,24 @@
       "revId": "ebac8de7b8cc882e747cb43cc23e3bf340a658ea",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_195f7c73",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-04T17:30:57Z",
+      "side": 1,
+      "message": "But only if the two characters are not equal.\nI suggest to leave this as is.",
+      "parentUuid": "3a98d1f4_d964344b",
+      "revId": "ebac8de7b8cc882e747cb43cc23e3bf340a658ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
