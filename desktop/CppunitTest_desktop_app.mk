@@ -56,6 +56,14 @@ $(eval $(call gb_CppunitTest_use_library_objects,desktop_app, \
     sofficeapp \
 ))
 
+ifeq ($(ENABLE_MACOSX_SANDBOX),TRUE)
+
+$(eval $(call gb_CppunitTest_use_system_darwin_frameworks,desktop_app,\
+    Foundation \
+))
+
+endif
+
 $(eval $(call gb_CppunitTest_use_external,desktop_app,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,desktop_app))
