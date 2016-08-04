@@ -4894,7 +4894,7 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
     }
     m_bStartedParaSdt = bStartedParaSdt;
 
-    m_pPostponedOLEs.reset(pPostponedOLEs.release());
+    m_pPostponedOLEs = std::move(pPostponedOLEs);
 }
 
 void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const Point& rNdTopLeft )
