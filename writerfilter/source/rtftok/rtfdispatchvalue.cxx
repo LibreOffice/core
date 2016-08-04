@@ -627,6 +627,9 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             {
                 if (nParam != ';')
                     m_aStates.top().aLevelNumbers.push_back(sal_Int32(nParam));
+                else
+                    // ';' in \u form is not considered valid.
+                    m_aStates.top().bLevelNumbersValid = false;
             }
             else
                 m_aUnicodeBuffer.append(static_cast<sal_Unicode>(nParam));
