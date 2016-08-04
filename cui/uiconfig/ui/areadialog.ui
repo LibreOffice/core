@@ -4,6 +4,7 @@
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="AreaDialog">
     <property name="can_focus">False</property>
+    <property name="hexpand">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Area</property>
     <property name="resizable">False</property>
