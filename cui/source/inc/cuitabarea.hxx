@@ -45,11 +45,6 @@ class SvxAreaTabDialog : public SfxTabDialog
     sal_uInt16            m_nAreaTabPage;
     sal_uInt16            m_nShadowTabPage;
     sal_uInt16            m_nTransparenceTabPage;
-    sal_uInt16            m_nColorTabPage;
-    sal_uInt16            m_nGradientTabPage;
-    sal_uInt16            m_nHatchTabPage;
-    sal_uInt16            m_nBitmapTabPage;
-    sal_uInt16            m_nPatternTabPage;
 
 private:
     SdrModel*           mpDrawModel;
@@ -82,7 +77,6 @@ private:
 protected:
     virtual short       Ok() override;
     DECL_LINK_TYPED( CancelHdlImpl, Button*, void );
-    void                SavePalettes();
 
 public:
     SvxAreaTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, bool bShadow );
