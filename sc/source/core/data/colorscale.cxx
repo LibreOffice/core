@@ -956,6 +956,7 @@ ScIconSetInfo* ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
         nValMax = CalcValue(nMin, nMax, itr);
         ++itr;
     }
+
     if(nVal >= nValMax)
         ++nIndex;
 

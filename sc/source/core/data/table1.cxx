@@ -86,23 +86,28 @@ void GetOptimalHeightsInColumn(
 {
     assert(nStartRow <= nEndRow);
 
-    SCSIZE nCount = static_cast<SCSIZE>(nEndRow-nStartRow+1);
-
     //  first, one time over the whole range
     //  (with the last column in the hope that they most likely still are
     //  on standard format)
 
-    std::vector<sal_uInt16>& rHeights = rCxt.getHeightArray();
 
     rCol[MAXCOL].GetOptimalHeight(rCxt, nStartRow, nEndRow, 0, 0);
 
     //  from there search for the standard height that is in use in the lower part
 
-    sal_uInt16 nMinHeight = rHeights[nCount-1];
-    SCSIZE nPos = nCount-1;
-    while ( nPos && rHeights[nPos-1] >= nMinHeight )
-        --nPos;
-    SCROW nMinStart = nStartRow + nPos;
+    ScFlatUInt16RowSegments& rHeights = rCxt.getHeightArray();
+    sal_uInt16 nMinHeight = rHeights.getValue(nEndRow);
+    SCSIZE nPos = nEndRow-1;
+    ScFlatUInt16RowSegments::RangeData aRangeData;
+    while ( nPos && rHeights.getRangeData(nPos-1, aRangeData) )
+    {
+        if (aRangeData.mnValue >= nMinHeight)
+            nPos = std::max(0, aRangeData.mnRow1);
+        else
+            break;
+    }
+
+    SCROW nMinStart = nPos;
 
     sal_uLong nWeightedCount = 0;
     for (SCCOL nCol=0; nCol<MAXCOL; nCol++)     // MAXCOL already above
@@ -164,20 +169,19 @@ bool SetOptimalHeightsToRows(
     OptimalHeightsFuncObjBase& rFuncObj,
     ScBitMaskCompressedArray<SCROW, sal_uInt8>* pRowFlags, SCROW nStartRow, SCROW nEndRow )
 {
-    SCSIZE nCount = static_cast<SCSIZE>(nEndRow-nStartRow+1);
     bool bChanged = false;
     SCROW nRngStart = 0;
     SCROW nRngEnd = 0;
     sal_uInt16 nLast = 0;
     sal_uInt16 nExtraHeight = rCxt.getExtraHeight();
-    for (SCSIZE i=0; i<nCount; i++)
+    for (SCSIZE i = nStartRow; i <= static_cast<SCSIZE>(nEndRow); i++)
     {
         size_t nIndex;
         SCROW nRegionEndRow;
-        sal_uInt8 nRowFlag = pRowFlags->GetValue( nStartRow+i, nIndex, nRegionEndRow );
+        sal_uInt8 nRowFlag = pRowFlags->GetValue( i, nIndex, nRegionEndRow );
         if ( nRegionEndRow > nEndRow )
             nRegionEndRow = nEndRow;
-        SCSIZE nMoreRows = nRegionEndRow - ( nStartRow+i );     // additional equal rows after first
+        SCSIZE nMoreRows = nRegionEndRow - i;     // additional equal rows after first
 
         bool bAutoSize = ((nRowFlag & CR_MANUALSIZE) == 0);
         if (bAutoSize || rCxt.isForceAutoSize())
@@ -185,17 +189,22 @@ bool SetOptimalHeightsToRows(
             if (nExtraHeight)
             {
                 if (bAutoSize)
-                    pRowFlags->SetValue( nStartRow+i, nRegionEndRow, nRowFlag | CR_MANUALSIZE);
+                    pRowFlags->SetValue( i, nRegionEndRow, nRowFlag | CR_MANUALSIZE);
             }
             else if (!bAutoSize)
-                pRowFlags->SetValue( nStartRow+i, nRegionEndRow, nRowFlag & ~CR_MANUALSIZE);
+                pRowFlags->SetValue( i, nRegionEndRow, nRowFlag & ~CR_MANUALSIZE);
 
             for (SCSIZE nInner = i; nInner <= i + nMoreRows; ++nInner)
             {
                 if (nLast)
                 {
-                    if (rCxt.getHeightArray()[nInner] + nExtraHeight == nLast)
-                        nRngEnd = nStartRow+nInner;
+                    ScFlatUInt16RowSegments::RangeData aRangeData;
+                    rCxt.getHeightArray().getRangeData(nInner, aRangeData);
+                    if (aRangeData.mnValue + nExtraHeight == nLast)
+                    {
+                        nRngEnd = std::min<SCSIZE>(i + nMoreRows, aRangeData.mnRow2);
+                        nInner = aRangeData.mnRow2;
+                    }
                     else
                     {
                         bChanged |= rFuncObj(nRngStart, nRngEnd, nLast);
@@ -204,9 +213,9 @@ bool SetOptimalHeightsToRows(
                 }
                 if (!nLast)
                 {
-                    nLast = rCxt.getHeightArray()[nInner] + rCxt.getExtraHeight();
-                    nRngStart = nStartRow+nInner;
-                    nRngEnd = nStartRow+nInner;
+                    nLast = rCxt.getHeightArray().getValue(nInner) + rCxt.getExtraHeight();
+                    nRngStart = nInner;
+                    nRngEnd = nInner;
                 }
             }
         }
@@ -480,10 +489,9 @@ bool ScTable::SetOptimalHeight(
 
     ScProgress* pProgress = GetProgressBar(nCount, GetWeightedCount(), pOuterProgress, pDocument);
 
-    rCxt.getHeightArray().resize(nCount, 0);
-
     GetOptimalHeightsInColumn(rCxt, aCol, nStartRow, nEndRow, pProgress, nProgressStart);
 
+    rCxt.getHeightArray().enableTreeSearch(true);
     SetRowHeightRangeFunc aFunc(this, rCxt.getPPTX(), rCxt.getPPTY());
     bool bChanged = SetOptimalHeightsToRows(rCxt, aFunc, pRowFlags, nStartRow, nEndRow);
 
@@ -507,11 +515,11 @@ void ScTable::SetOptimalHeightOnly(
 
     ScProgress* pProgress = GetProgressBar(nCount, GetWeightedCount(), pOuterProgress, pDocument);
 
-    rCxt.getHeightArray().resize(nCount, 0);
-
     GetOptimalHeightsInColumn(rCxt, aCol, nStartRow, nEndRow, pProgress, nProgressStart);
 
     SetRowHeightOnlyFunc aFunc(this);
+
+    rCxt.getHeightArray().enableTreeSearch(true);
     SetOptimalHeightsToRows(rCxt, aFunc, pRowFlags, nStartRow, nEndRow);
 
     if ( pProgress != pOuterProgress )

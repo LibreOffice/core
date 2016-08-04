@@ -135,6 +135,7 @@ public:
     ~ScFlatUInt16RowSegments();
 
     void setValue(SCROW nRow1, SCROW nRow2, sal_uInt16 nValue);
+    void setValueIf(SCROW nRow1, SCROW nRow2, sal_uInt16 nValue, const std::function<bool(sal_uInt16)>& rPredicate);
     sal_uInt16 getValue(SCROW nRow);
     sal_uInt32 getSumValue(SCROW nRow1, SCROW nRow2);
     bool getRangeData(SCROW nRow, RangeData& rData);
