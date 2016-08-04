@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_79e5e0a6",
+        "filename": "svl/source/numbers/zforscan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1191,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-04T22:01:06Z",
+      "side": 1,
+      "message": "It\u0027s unnecessary though to check if bIsTimeDetected\u003d\u003dtrue, just set bIsTimeDetected\u003dfalse, there\u0027s ~no performance gain.. I\u0027ll amend the commit.",
+      "revId": "6db904d21c5d296e75a0e1624a178c667bb493f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_99e2ac9e",
+        "filename": "svl/source/numbers/zforscan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1193,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-04T22:01:06Z",
+      "side": 1,
+      "message": "Actually I think we can reset bIsTimeDetected for all these date type setting keywords, including week days, month names,  quarters, eras and what not. DDD and DDDD are also already included, AAA and AAAA are aliases of that, so are NN NNN NNNN (almost). After all these a month is much more likely than a minute.\n\nI\u0027ll amend the commit.\n\nThe testdoc attachment 2 of tdf#101147 gives same results.",
+      "revId": "6db904d21c5d296e75a0e1624a178c667bb493f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
