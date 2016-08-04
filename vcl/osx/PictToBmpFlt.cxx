@@ -19,7 +19,6 @@
 
 #include <premac.h>
 #include <Carbon/Carbon.h>
-#include <QuickTime/QuickTime.h>
 #include <postmac.h>
 
 #include <string.h>
