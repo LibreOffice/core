@@ -414,6 +414,11 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
     }
 }
 
+void SwFlyCntPortion::GetFlyCursorOfst(Point &rPoint, SwPosition &rPos, SwCursorMoveState* pCMS) const
+{
+    GetFlyFrame()->GetCursorOfst(&rPos, rPoint, pCMS);
+}
+
 sal_Int32 SwFlyCntPortion::GetCursorOfst( const sal_uInt16 nOfst ) const
 {
     // OSL_FAIL("SwFlyCntPortion::GetCursorOfst: use GetFlyCursorOfst()");
