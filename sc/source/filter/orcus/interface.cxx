@@ -898,7 +898,7 @@ void ScOrcusStyles::border::applyToItemSet(SfxItemSet& rSet) const
             editeng::SvxBorderLine aLine(&current_border_line.second.maColor, current_border_line.second.mnWidth, current_border_line.second.mestyle);
             aDiagonal_TLBR.SetLine(&aLine);
         }
-        if (current_border_line.first == orcus::spreadsheet::border_direction_t::diagonal_bl_tr)
+        else if (current_border_line.first == orcus::spreadsheet::border_direction_t::diagonal_bl_tr)
         {
             editeng::SvxBorderLine aLine(&current_border_line.second.maColor, current_border_line.second.mnWidth, current_border_line.second.mestyle);
             aDiagonal_BLTR.SetLine(&aLine);
