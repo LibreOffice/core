@@ -54,6 +54,10 @@ sc/imglst/nc06.png cmd/sc_insertannotation.png
 sc/imglst/nc08.png cmd/sc_insertdraw.png
 sc/res/table.png cmd/sc_inserttable.png
 
+# Thesaurus
+cmd/lc_thesaurusdialog.png cmd/lc_thesaurus.png
+cmd/sc_thesaurusdialog.png cmd/sc_thesaurus.png
+
 # File Menu
 cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
 
