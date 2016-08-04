@@ -1819,15 +1819,12 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawF
     if ( GetStyle() & WB_CENTER )
         nTextStyle |= DrawTextFlags::Center;
     else if ( GetStyle() & WB_RIGHT )
-    {
         nTextStyle |= DrawTextFlags::Right;
-        aTextRect.Left() += nOffX;
-    }
     else
-    {
         nTextStyle |= DrawTextFlags::Left;
-        aTextRect.Right() -= nOffX;
-    }
+
+    aTextRect.Left() += nOffX;
+    aTextRect.Right() -= nOffX;
 
     OUString    aText = ImplGetText();
     long        nTextHeight = pDev->GetTextHeight();
