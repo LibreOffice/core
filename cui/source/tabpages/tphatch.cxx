@@ -58,10 +58,7 @@ SvxHatchTabPage::SvxHatchTabPage
     m_rOutAttrs           ( rInAttrs ),
     m_pnHatchingListState ( nullptr ),
     m_pnColorListState    ( nullptr ),
-    m_pPageType           ( nullptr ),
-    m_nDlgType            ( 0 ),
     m_pPos                ( nullptr ),
-    m_pbAreaTP            ( nullptr ),
 
     m_aXFStyleItem        ( drawing::FillStyle_HATCH ),
     m_aXHatchItem         ( OUString(), XHatch() ),
@@ -165,61 +162,56 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
     sal_Int32 nPos;
     sal_Int32 nCount;
 
-    if( m_nDlgType == 0 ) // area dialog
+    if( m_pColorList.is() )
     {
-        *m_pbAreaTP = false;
-
-        if( m_pColorList.is() )
+        // ColorList
+        if( *m_pnColorListState & ChangeType::CHANGED ||
+            *m_pnColorListState & ChangeType::MODIFIED )
         {
-            // ColorList
-            if( *m_pnColorListState & ChangeType::CHANGED ||
-                *m_pnColorListState & ChangeType::MODIFIED )
-            {
-                if( *m_pnColorListState & ChangeType::CHANGED )
-                    m_pColorList = static_cast<SvxAreaTabDialog*>( GetParentDialog() )->GetNewColorList();
+            if( *m_pnColorListState & ChangeType::CHANGED )
+                m_pColorList = static_cast<SvxAreaTabDialog*>( GetParentDialog() )->GetNewColorList();
 
-                // LbLineColor
-                nPos = m_pLbLineColor->GetSelectEntryPos();
-                m_pLbLineColor->Clear();
-                m_pLbLineColor->Fill( m_pColorList );
-                nCount = m_pLbLineColor->GetEntryCount();
-                if( nCount == 0 )
-                    ; // this case should not occur
-                else if( nCount <= nPos )
-                    m_pLbLineColor->SelectEntryPos( 0 );
-                else
-                    m_pLbLineColor->SelectEntryPos( nPos );
-
-                ModifiedHdl_Impl( this );
-            }
-
-            // determining (possibly cutting) the name
-            // and displaying it in the GroupBox
-            OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) );
-            aString         += ": ";
-            INetURLObject   aURL( m_pHatchingList->GetPath() );
-
-            aURL.Append( m_pHatchingList->GetName() );
-            SAL_WARN_IF( aURL.GetProtocol() == INetProtocol::NotValid, "cui.tabpages", "invalid URL" );
-
-            if ( aURL.getBase().getLength() > 18 )
-            {
-                aString += aURL.getBase().copy( 0, 15 ) + "...";
-            }
+            // LbLineColor
+            nPos = m_pLbLineColor->GetSelectEntryPos();
+            m_pLbLineColor->Clear();
+            m_pLbLineColor->Fill( m_pColorList );
+            nCount = m_pLbLineColor->GetEntryCount();
+            if( nCount == 0 )
+                ; // this case should not occur
+            else if( nCount <= nPos )
+                m_pLbLineColor->SelectEntryPos( 0 );
             else
-                aString += aURL.getBase();
+                m_pLbLineColor->SelectEntryPos( nPos );
 
-            if( *m_pPageType == PT_HATCH && *m_pPos != LISTBOX_ENTRY_NOTFOUND )
-            {
-                sal_uInt16 nId = m_pHatchLB->GetItemId( static_cast<size_t>( *m_pPos ) );
-                m_pHatchLB->SelectItem( nId );
-            }
-            // colors could have been deleted
-            ChangeHatchHdl_Impl();
-
-            *m_pPageType = PT_HATCH;
-            *m_pPos = LISTBOX_ENTRY_NOTFOUND;
+            ModifiedHdl_Impl( this );
         }
+
+        // determining (possibly cutting) the name
+        // and displaying it in the GroupBox
+        OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) );
+        aString         += ": ";
+        INetURLObject   aURL( m_pHatchingList->GetPath() );
+
+        aURL.Append( m_pHatchingList->GetName() );
+        SAL_WARN_IF( aURL.GetProtocol() == INetProtocol::NotValid, "cui.tabpages", "invalid URL" );
+
+        if ( aURL.getBase().getLength() > 18 )
+        {
+            aString += aURL.getBase().copy( 0, 15 ) + "...";
+        }
+        else
+            aString += aURL.getBase();
+
+        *m_pPos = SearchHatchList( ( &static_cast<const XFillHatchItem&>( rSet.Get(XATTR_FILLHATCH)) )->GetName() );
+        if( *m_pPos != LISTBOX_ENTRY_NOTFOUND )
+        {
+            sal_uInt16 nId = m_pHatchLB->GetItemId( static_cast<size_t>( *m_pPos ) );
+            m_pHatchLB->SelectItem( nId );
+        }
+        // colors could have been deleted
+        ChangeHatchHdl_Impl();
+
+        *m_pPos = LISTBOX_ENTRY_NOTFOUND;
     }
 
     XFillBackgroundItem aBckItem( static_cast<const XFillBackgroundItem&>(rSet.Get(XATTR_FILLBACKGROUND)));
@@ -329,44 +321,36 @@ sal_Int32 SvxHatchTabPage::SearchHatchList(const OUString& rHatchName)
 
 bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
 {
-    if( m_nDlgType == 0 && !*m_pbAreaTP ) // area dialog
+    std::unique_ptr<XHatch> pXHatch;
+    OUString  aString;
+    size_t nPos = m_pHatchLB->GetSelectItemPos();
+    if( nPos != VALUESET_ITEM_NOTFOUND )
     {
-        if( *m_pPageType == PT_HATCH )
-        {
-            // CheckChanges(); <-- duplicate inquiry ?
+        pXHatch.reset(new XHatch( m_pHatchingList->GetHatch( static_cast<sal_uInt16>(nPos) )->GetHatch() ));
+        aString = m_pHatchLB->GetItemText( m_pHatchLB->GetSelectItemId() );
+    }
+    // gradient has been (unidentifiedly) passed
+    else
+    {
+        pXHatch.reset(new XHatch( m_pLbLineColor->GetSelectEntryColor(),
+                    (css::drawing::HatchStyle) m_pLbLineType->GetSelectEntryPos(),
+                    GetCoreValue( *m_pMtrDistance, m_ePoolUnit ),
+                    static_cast<long>(m_pMtrAngle->GetValue() * 10) ));
+    }
+    assert( pXHatch && "XHatch couldn't be created" );
+    rSet->Put( XFillStyleItem( drawing::FillStyle_HATCH ) );
+    rSet->Put( XFillHatchItem( aString, *pXHatch ) );
 
-            std::unique_ptr<XHatch> pXHatch;
-            OUString  aString;
-            size_t nPos = m_pHatchLB->GetSelectItemPos();
-            if( nPos != VALUESET_ITEM_NOTFOUND )
-            {
-                pXHatch.reset(new XHatch( m_pHatchingList->GetHatch( static_cast<sal_uInt16>(nPos) )->GetHatch() ));
-                aString = m_pHatchLB->GetItemText( m_pHatchLB->GetSelectItemId() );
-            }
-            // gradient has been (unidentifiedly) passed
-            else
-            {
-                pXHatch.reset(new XHatch( m_pLbLineColor->GetSelectEntryColor(),
-                                 (css::drawing::HatchStyle) m_pLbLineType->GetSelectEntryPos(),
-                                 GetCoreValue( *m_pMtrDistance, m_ePoolUnit ),
-                                 static_cast<long>(m_pMtrAngle->GetValue() * 10) ));
-            }
-            assert( pXHatch && "XHatch couldn't be created" );
-            rSet->Put( XFillStyleItem( drawing::FillStyle_HATCH ) );
-            rSet->Put( XFillHatchItem( aString, *pXHatch ) );
-
-            rSet->Put( XFillBackgroundItem( m_pCbBackgroundColor->IsChecked() ) );
-            if(m_pCbBackgroundColor->IsChecked())
-            {
-                sal_uInt32 nPosBckColor = m_pLbBackgroundColor->GetSelectEntryPos();
-                OUString aBckColorString;
-                if( nPosBckColor != LISTBOX_ENTRY_NOTFOUND )
-                    aBckColorString = m_pLbBackgroundColor->GetSelectEntry();
-                else
-                    aBckColorString = OUString();
-                rSet->Put( XFillColorItem( aBckColorString, m_pLbBackgroundColor->GetSelectEntryColor() ) );
-            }
-        }
+    rSet->Put( XFillBackgroundItem( m_pCbBackgroundColor->IsChecked() ) );
+    if(m_pCbBackgroundColor->IsChecked())
+    {
+        sal_uInt32 nPosBckColor = m_pLbBackgroundColor->GetSelectEntryPos();
+        OUString aBckColorString;
+        if( nPosBckColor != LISTBOX_ENTRY_NOTFOUND )
+            aBckColorString = m_pLbBackgroundColor->GetSelectEntry();
+        else
+            aBckColorString = OUString();
+        rSet->Put( XFillColorItem( aBckColorString, m_pLbBackgroundColor->GetSelectEntryColor() ) );
     }
     return true;
 }
