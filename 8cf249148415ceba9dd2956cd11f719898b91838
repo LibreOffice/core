@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_468923ca",
+        "filename": "cui/source/options/optdict.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-08-04T05:45:19Z",
+      "side": 1,
+      "message": "please move this comment one line up",
+      "revId": "8cf249148415ceba9dd2956cd11f719898b91838",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
