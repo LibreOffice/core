@@ -79,7 +79,7 @@ public:
                   long nLnAscent, long nLnDescent,
                   long nFlyAscent, long nFlyDescent,
                   AsCharFlags nFlags );
-    void GetFlyCursorOfst(const Point &rPoint, SwPosition& rPos, SwCursorMoveState* pCMS) const;
+    void GetFlyCursorOfst(Point &rPoint, SwPosition& rPos, SwCursorMoveState* pCMS) const;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     OUTPUT_OPERATOR_OVERRIDE
