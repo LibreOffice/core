@@ -49,12 +49,6 @@ SvxAreaTabDialog::SvxAreaTabDialog
     , m_nAreaTabPage(0)
     , m_nShadowTabPage(0)
     , m_nTransparenceTabPage(0)
-    , m_nColorTabPage(0)
-    , m_nGradientTabPage(0)
-    , m_nHatchTabPage(0)
-    //, m_nBitmapTabPage(0)
-    , m_nPatternTabPage(0)
-
     , mpDrawModel          ( pModel ),
     mpColorList          ( pModel->GetColorList() ),
     mpNewColorList       ( pModel->GetColorList() ),
@@ -87,11 +81,6 @@ SvxAreaTabDialog::SvxAreaTabDialog
     }
 
     m_nTransparenceTabPage = AddTabPage( "RID_SVXPAGE_TRANSPARENCE", SvxTransparenceTabPage::Create,  nullptr);
-    m_nColorTabPage = AddTabPage( "RID_SVXPAGE_COLOR", SvxColorTabPage::Create, nullptr );
-    m_nGradientTabPage = AddTabPage( "RID_SVXPAGE_GRADIENT", SvxGradientTabPage::Create, nullptr );
-    m_nHatchTabPage = AddTabPage( "RID_SVXPAGE_HATCH", SvxHatchTabPage::Create, nullptr );
-    m_nBitmapTabPage = AddTabPage( "RID_SVXPAGE_BITMAP", SvxBitmapTabPage::Create, SvxBitmapTabPage::GetRanges );
-    m_nPatternTabPage = AddTabPage( "RID_SVXPAGE_PATTERN", SvxPatternTabPage::Create,  nullptr);
 
     SetCurPageId( "RID_SVXPAGE_AREA" );
 
@@ -233,11 +222,9 @@ void SvxAreaTabDialog::SavePalettes()
     }
 }
 
-
 short SvxAreaTabDialog::Ok()
 {
     SavePalettes();
-
     // RET_OK is returned, if at least one
     // TabPage returns sal_True in FillItemSet().
     // This happens by default at the moment.
@@ -248,7 +235,6 @@ short SvxAreaTabDialog::Ok()
 IMPL_LINK_NOARG(SvxAreaTabDialog, CancelHdlImpl, Button*, void)
 {
     SavePalettes();
-
     EndDialog();
 }
 
@@ -262,9 +248,14 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             static_cast<SvxAreaTabPage&>(rPage).SetBitmapList( mpBitmapList );
             static_cast<SvxAreaTabPage&>(rPage).SetPatternList( mpPatternList );
             static_cast<SvxAreaTabPage&>(rPage).SetDrawModel( mpDrawModel );
+            static_cast<SvxAreaTabPage&>(rPage).SetPageType( mnPageType );
+            static_cast<SvxAreaTabPage&>(rPage).SetDlgType( 0 );
+            static_cast<SvxAreaTabPage&>(rPage).SetPos( mnPos );
+            static_cast<SvxAreaTabPage&>(rPage).SetAreaTP( &mbAreaTP );
             static_cast<SvxAreaTabPage&>(rPage).SetGrdChgd( &mnGradientListState );
             static_cast<SvxAreaTabPage&>(rPage).SetHtchChgd( &mnHatchingListState );
             static_cast<SvxAreaTabPage&>(rPage).SetBmpChgd( &mnBitmapListState );
+            static_cast<SvxAreaTabPage&>(rPage).SetPtrnChgd( &mnPatternListState );
             static_cast<SvxAreaTabPage&>(rPage).SetColorChgd( &mnColorListState );
             // ActivatePge() is not called the first time
             static_cast<SvxAreaTabPage&>(rPage).ActivatePage( mrOutAttrs );
@@ -275,46 +266,10 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             static_cast<SvxShadowTabPage&>(rPage).SetColorChgd( &mnColorListState );
             static_cast<SvxShadowTabPage&>(rPage).Construct();
     }
-    else if (nId == m_nGradientTabPage)
+    else if (nId == m_nTransparenceTabPage)
     {
-            static_cast<SvxGradientTabPage&>(rPage).SetColorList( mpColorList );
-            static_cast<SvxGradientTabPage&>(rPage).SetGradientList( mpGradientList );
-            static_cast<SvxGradientTabPage&>(rPage).SetPos( &mnPos );
-            static_cast<SvxGradientTabPage&>(rPage).SetGrdChgd( &mnGradientListState );
-            static_cast<SvxGradientTabPage&>(rPage).SetColorChgd( &mnColorListState );
-            static_cast<SvxGradientTabPage&>(rPage).Construct();
-    }
-    else if (nId == m_nHatchTabPage)
-    {
-            static_cast<SvxHatchTabPage&>(rPage).SetColorList( mpColorList );
-            static_cast<SvxHatchTabPage&>(rPage).SetHatchingList( mpHatchingList );
-            static_cast<SvxHatchTabPage&>(rPage).SetPos( &mnPos );
-            static_cast<SvxHatchTabPage&>(rPage).SetHtchChgd( &mnHatchingListState );
-            static_cast<SvxHatchTabPage&>(rPage).SetColorChgd( &mnColorListState );
-            static_cast<SvxHatchTabPage&>(rPage).Construct();
-    }
-    else if (nId == m_nBitmapTabPage )
-    {
-            static_cast<SvxBitmapTabPage&>(rPage).SetBitmapList( mpBitmapList );
-            static_cast<SvxBitmapTabPage&>(rPage).SetPos( &mnPos );
-            static_cast<SvxBitmapTabPage&>(rPage).SetBmpChgd( &mnBitmapListState );
-            static_cast<SvxBitmapTabPage&>(rPage).Construct();
-    }
-    else if (nId == m_nPatternTabPage)
-    {
-            static_cast<SvxPatternTabPage&>(rPage).SetColorList( mpColorList );
-            static_cast<SvxPatternTabPage&>(rPage).SetPatternList( mpPatternList );
-            static_cast<SvxPatternTabPage&>(rPage).SetPos( &mnPos );
-            static_cast<SvxPatternTabPage&>(rPage).SetPtrnChgd( &mnPatternListState );
-            static_cast<SvxPatternTabPage&>(rPage).SetColorChgd( &mnColorListState );
-            static_cast<SvxPatternTabPage&>(rPage).Construct();
-    }
-    else if (nId == m_nColorTabPage)
-    {
-            static_cast<SvxColorTabPage&>(rPage).SetColorList( mpColorList );
-            static_cast<SvxColorTabPage&>(rPage).SetPos( &mnPos );
-            static_cast<SvxColorTabPage&>(rPage).SetColorChgd( &mnColorListState );
-            static_cast<SvxColorTabPage&>(rPage).Construct();
+            static_cast<SvxTransparenceTabPage&>(rPage).SetPageType( mnPageType );
+            static_cast<SvxTransparenceTabPage&>(rPage).SetDlgType( 0 );
     }
 }
 

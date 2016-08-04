@@ -106,11 +106,6 @@ class SvxAreaTabDialog : public SfxTabDialog
     sal_uInt16            m_nAreaTabPage;
     sal_uInt16            m_nShadowTabPage;
     sal_uInt16            m_nTransparenceTabPage;
-    sal_uInt16            m_nColorTabPage;
-    sal_uInt16            m_nGradientTabPage;
-    sal_uInt16            m_nHatchTabPage;
-    sal_uInt16            m_nBitmapTabPage;
-    sal_uInt16            m_nPatternTabPage;
 
 private:
     SdrModel*           mpDrawModel;
@@ -134,7 +129,9 @@ private:
     ChangeType          mnGradientListState;
     ChangeType          mnHatchingListState;
 
-    sal_Int32           mnPos;
+    sal_Int16           mnPos;
+    PageType            mnPageType;
+    bool                mbAreaTP;
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
 
@@ -255,12 +252,12 @@ private:
     VclPtr<PushButton>         m_pBtnPattern;
     ButtonBox                  maBox;
 
-    SdrModel*           mpDrawModel;
     XColorListRef         m_pColorList;
     XGradientListRef      m_pGradientList;
     XHatchListRef         m_pHatchingList;
     XBitmapListRef        m_pBitmapList;
     XPatternListRef       m_pPatternList;
+    SdrModel*             mpDrawModel;
 
     // Placeholders for pointer-based entries; these will be inited
     // to point to these so that the page is usable without that
@@ -274,7 +271,11 @@ private:
     ChangeType*         m_pnGradientListState;
     ChangeType*         m_pnHatchingListState;
 
+    PageType            m_nPageType;
     sal_Int32           m_nPos;
+    sal_uInt16          m_nDlgType;
+    bool*               m_pbAreaTP;
+
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
 
@@ -308,13 +309,17 @@ public:
     void    SetBitmapList( XBitmapListRef const & pBmpLst) { m_pBitmapList = pBmpLst; }
     void    SetPatternList( XPatternListRef const &pPtrnLst ) { m_pPatternList = pPtrnLst; }
     void    SetDrawModel( SdrModel* pModel ) { mpDrawModel = pModel; }
-
+    void    SetPageType( PageType nInType ) { m_nPageType = nInType; }
+    void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
+    void    SetPos( sal_uInt16 nInPos ) { m_nPos = nInPos; }
+    void    SetAreaTP( bool* pIn ) { m_pbAreaTP = pIn; }
     virtual void PageCreated(const SfxAllItemSet& aSet) override;
     void    CreatePage(sal_Int32 nId, SfxTabPage& pTab);
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
     void    SetGrdChgd( ChangeType* pIn ) { m_pnGradientListState = pIn; }
     void    SetHtchChgd( ChangeType* pIn ) { m_pnHatchingListState = pIn; }
     void    SetBmpChgd( ChangeType* pIn ) { m_pnBitmapListState = pIn; }
+    void    SetPtrnChgd( ChangeType* pIn ) { m_pnPatternListState = pIn; }
 };
 
 
