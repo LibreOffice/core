@@ -356,8 +356,6 @@ long SvxColorTabPage::CheckChanges_Impl()
 
 bool SvxColorTabPage::FillItemSet( SfxItemSet* rSet )
 {
-    if( ( nDlgType != 0 ) ||
-        ( *pPageType == PT_COLOR && !*pbAreaTP ) )
     {
         maPaletteManager.AddRecentColor( aCurrentColor );
         rSet->Put( XFillColorItem( OUString(), aCurrentColor ) );
