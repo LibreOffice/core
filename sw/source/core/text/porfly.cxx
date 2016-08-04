@@ -420,8 +420,6 @@ void SwFlyCntPortion::GetFlyCursorOfst(const Point &rPoint, SwPosition &rPos, Sw
     // not be called.
     // In order to reduce management overhead for the layout page, the paragraph
     // calls the FlyFrame's GetCursorOfst() only when needed
-    if (bDraw)
-        return;
     Point aPoint(rPoint);
     GetFlyFrame()->GetCursorOfst(&rPos, aPoint, pCMS);
 }
