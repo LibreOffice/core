@@ -98,7 +98,7 @@ done
 #
 # At this stage we also attach the entitlements in the sandboxing case
 
-id=`echo ${MACOSX_APP_NAME} | tr ' ' '-'`
+id=`echo ${PRODUCTNAME} | tr ' ' '-'`
 
 if test -n "$ENABLE_MACOSX_SANDBOX"; then
     entitlements="--entitlements $BUILDDIR/lo.xcent"
