@@ -827,10 +827,10 @@ OUString SfxObjectShell::GetTitle
         if (pImpl->bIsNamedVisible)
         {
             // Append number
-            aNoName += OUString::number(pImpl->nVisualDocumentNumber);
+            aNoName += " " + OUString::number(pImpl->nVisualDocumentNumber);
         }
 
-        // Document called "noname" for the time being
+        // Document called "Untitled" for the time being
         return aNoName;
     }
 
