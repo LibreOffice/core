@@ -222,6 +222,10 @@ void OpenGLSalGraphicsImpl::InitializePreDrawState(XOROption eOpt)
         CHECK_GL_ERROR();
 
         glLogicOp(GL_XOR);
+        CHECK_GL_ERROR();
+
+        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_FALSE);
+        CHECK_GL_ERROR();
     }
 }
 
@@ -230,6 +234,8 @@ void OpenGLSalGraphicsImpl::PostDraw()
     if (mbXORMode)
     {
         glDisable(GL_COLOR_LOGIC_OP);
+        CHECK_GL_ERROR();
+        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
         CHECK_GL_ERROR();
     }
 
@@ -458,17 +464,43 @@ void OpenGLSalGraphicsImpl::SetFillColor( SalColor nSalColor )
 // enable/disable XOR drawing
 void OpenGLSalGraphicsImpl::SetXORMode( bool bSet, bool )
 {
-    mbXORMode = bSet;
+    if (mbXORMode != bSet)
+    {
+        FlushDeferredDrawing();
+        mbXORMode = bSet;
+    }
 }
 
-// set line color for raster operations
-void OpenGLSalGraphicsImpl::SetROPLineColor( SalROPColor /*nROPColor*/ )
+void OpenGLSalGraphicsImpl::SetROPLineColor(SalROPColor nROPColor)
 {
+    switch (nROPColor)
+    {
+        case SalROPColor::N0:
+            mnLineColor = MAKE_SALCOLOR(0, 0, 0);
+            break;
+        case SalROPColor::N1:
+            mnLineColor = MAKE_SALCOLOR(0xff, 0xff, 0xff);
+            break;
+        case SalROPColor::Invert:
+            mnLineColor = MAKE_SALCOLOR(0xff, 0xff, 0xff);
+            break;
+    }
 }
 
-// set fill color for raster operations
-void OpenGLSalGraphicsImpl::SetROPFillColor( SalROPColor /*nROPColor*/ )
+void OpenGLSalGraphicsImpl::SetROPFillColor(SalROPColor nROPColor)
 {
+    switch (nROPColor)
+    {
+        case SalROPColor::N0:
+            mnFillColor = MAKE_SALCOLOR(0, 0, 0);
+            break;
+        case SalROPColor::N1:
+            mnFillColor = MAKE_SALCOLOR(0xff, 0xff, 0xff);
+            break;
+        case SalROPColor::Invert:
+            mnFillColor = MAKE_SALCOLOR(0xff, 0xff, 0xff);
+            break;
+    }
 }
 
 bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
@@ -2263,15 +2295,21 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
 {
     Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
 
-    VCL_GL_INFO( "::drawGradient" );
+    VCL_GL_INFO("::drawGradient " << rPolyPoly.GetBoundRect());
 
-    if( aBoundRect.IsEmpty() )
+    if (aBoundRect.IsEmpty())
+    {
+        VCL_GL_INFO("::drawGradient nothing to draw");
         return true;
+    }
 
-    if( rGradient.GetStyle() != GradientStyle_LINEAR &&
+    if (rGradient.GetStyle() != GradientStyle_LINEAR &&
         rGradient.GetStyle() != GradientStyle_AXIAL &&
         rGradient.GetStyle() != GradientStyle_RADIAL )
+    {
+        VCL_GL_INFO("::drawGradient unsupported gradient type");
         return false;
+    }
 
     aBoundRect.Left()--;
     aBoundRect.Top()--;
@@ -2285,14 +2323,14 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
     ImplSetClipBit( vcl::Region( rPolyPoly ), 0x02 );
     if( mbUseStencil )
     {
-        glEnable( GL_STENCIL_TEST );
+        mpContext->state()->stencil().enable();
         CHECK_GL_ERROR();
         glStencilFunc( GL_EQUAL, 3, 0xFF );
         CHECK_GL_ERROR();
     }
     else
     {
-        glEnable( GL_STENCIL_TEST );
+        mpContext->state()->stencil().enable();
         CHECK_GL_ERROR();
         glStencilFunc( GL_EQUAL, 2, 0xFF );
         CHECK_GL_ERROR();
@@ -2300,32 +2338,39 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
 #endif
 
     // if border >= 100%, draw solid rectangle with start color
-    if( rGradient.GetBorder() >= 100.0 )
+    if (rGradient.GetBorder() >= 100.0)
     {
-        Color aCol = rGradient.GetStartColor();
-        long nF = rGradient.GetStartIntensity();
-        if( UseSolid( MAKE_SALCOLOR( aCol.GetRed() * nF / 100,
-                                     aCol.GetGreen() * nF / 100,
-                                     aCol.GetBlue() * nF / 100 ) ) )
-            DrawRect( aBoundRect );
+        VCL_GL_INFO("::drawGradient -> DrawRect (no gradient)");
+
+        Color aColor = rGradient.GetStartColor();
+        long nIntensity = rGradient.GetStartIntensity();
+        if (UseSolid(MAKE_SALCOLOR(aColor.GetRed()  * nIntensity / 100.0,
+                                   aColor.GetGreen()* nIntensity / 100.0,
+                                   aColor.GetBlue() * nIntensity / 100.0)))
+        {
+            DrawRect(aBoundRect);
+        }
     }
-    else if( rGradient.GetStyle() == GradientStyle_LINEAR )
+    else if (rGradient.GetStyle() == GradientStyle_LINEAR)
     {
-        DrawLinearGradient( rGradient, aBoundRect );
+        VCL_GL_INFO("::drawGradient -> DrawLinearGradient");
+        DrawLinearGradient(rGradient, aBoundRect);
     }
-    else if( rGradient.GetStyle() == GradientStyle_AXIAL )
+    else if (rGradient.GetStyle() == GradientStyle_AXIAL)
     {
-        DrawAxialGradient( rGradient, aBoundRect );
+        VCL_GL_INFO("::drawGradient -> DrawAxialGradient");
+        DrawAxialGradient(rGradient, aBoundRect);
     }
-    else if( rGradient.GetStyle() == GradientStyle_RADIAL )
+    else if (rGradient.GetStyle() == GradientStyle_RADIAL)
     {
-        DrawRadialGradient( rGradient, aBoundRect );
+        VCL_GL_INFO("::drawGradient -> DrawRadialGradient");
+        DrawRadialGradient(rGradient, aBoundRect);
     }
 
 #if FIXME_BROKEN_STENCIL_FOR_GRADIENTS
     if( !mbUseStencil )
     {
-        glDisable( GL_STENCIL_TEST );
+        mpContext->state()->stencil().disable();
         CHECK_GL_ERROR();
     }
 #endif
