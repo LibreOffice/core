@@ -3926,13 +3926,31 @@ void Test::testFuncIF()
     m_pDoc->SetValue(ScAddress(1,0,0), 3.0);
     CPPUNIT_ASSERT_EQUAL(OUString("not two"), m_pDoc->GetString(ScAddress(0,0,0)));
 
-    // Test nested IF in array/matrix if the nested IF is not already a matrix.
+    // Test nested IF in array/matrix if the nested IF condition is a scalar.
     ScMarkData aMark;
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(0,2, 1,2, aMark, "=IF({1;0};IF(1;23);42)");
     // Results must be 23 and 42.
     CPPUNIT_ASSERT_EQUAL(23.0, m_pDoc->GetValue(ScAddress(0,2,0)));
     CPPUNIT_ASSERT_EQUAL(42.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+
+    // Test nested IF in array/matrix if nested IF conditions are range
+    // references, data in A5:C8, matrix formula in D4 so there is no
+    // implicit intersection between formula and ranges.
+    {
+        const char* aData[][3] = {
+            { "1", "1", "16" },
+            { "0", "1", "32" },
+            { "1", "0", "64" },
+            { "0", "0", "128" }
+        };
+        ScAddress aPos(0,4,0);
+        ScRange aRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        CPPUNIT_ASSERT_EQUAL(aPos, aRange.aStart);
+    }
+    m_pDoc->InsertMatrixFormula(3,3, 3,3, aMark, "=SUM(IF(A5:A8;IF(B5:B8;C5:C8;0);0))");
+    // Result must be 16, only the first row matches all criteria.
+    CPPUNIT_ASSERT_EQUAL(16.0, m_pDoc->GetValue(ScAddress(3,3,0)));
 
     m_pDoc->DeleteTab(0);
 }
