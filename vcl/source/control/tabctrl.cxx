@@ -2203,6 +2203,8 @@ FactoryFunction TabControl::GetUITestFactory() const
 
 VCL_BUILDER_FACTORY(NotebookbarTabControl);
 
+sal_uInt16 NotebookbarTabControl::m_nHeaderHeight = 0;
+
 NotebookbarTabControl::NotebookbarTabControl(vcl::Window* pParent, WinBits nStyle)
     : TabControl(pParent, nStyle)
     , bLastContextWasSupported(true)
@@ -2283,6 +2285,11 @@ void NotebookbarTabControl::SetCurPageId( sal_uInt16 nPageId )
 {
     if ( nPageId != 1 )
         TabControl::SetCurPageId( nPageId );
+}
+
+sal_uInt16 NotebookbarTabControl::GetHeaderHeight()
+{
+    return m_nHeaderHeight;
 }
 
 bool NotebookbarTabControl::ImplPlaceTabs( long nWidth )
@@ -2651,6 +2658,73 @@ void NotebookbarTabControl::ImplPaint(vcl::RenderContext& rRenderContext, const 
         ImplShowFocus();
 
     mbSmallInvalidate = true;
+}
+
+Size NotebookbarTabControl::calculateRequisition() const
+{
+    Size aOptimalPageSize(0, 0);
+
+    sal_uInt16 nOrigPageId = GetCurPageId();
+    for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
+         it != mpTabCtrlData->maItemList.end(); ++it )
+    {
+        const TabPage *pPage = it->mpTabPage;
+        //it's a real nuisance if the page is not inserted yet :-(
+        //We need to force all tabs to exist to get overall optimal size for dialog
+        if (!pPage)
+        {
+            NotebookbarTabControl *pThis = const_cast<NotebookbarTabControl*>(this);
+            pThis->SetCurPageId(it->mnId);
+            pThis->ActivatePage();
+            pPage = it->mpTabPage;
+        }
+
+        if (!pPage)
+            continue;
+
+        Size aPageSize(VclContainer::getLayoutRequisition(*pPage));
+
+        if (aPageSize.Width() > aOptimalPageSize.Width())
+            aOptimalPageSize.Width() = aPageSize.Width();
+        if (aPageSize.Height() > aOptimalPageSize.Height())
+            aOptimalPageSize.Height() = aPageSize.Height();
+    }
+
+    //fdo#61940 If we were forced to activate pages in order to on-demand
+    //create them to get their optimal size, then switch back to the original
+    //page and re-activate it
+    if (nOrigPageId != GetCurPageId())
+    {
+        NotebookbarTabControl *pThis = const_cast<NotebookbarTabControl*>(this);
+        pThis->SetCurPageId(nOrigPageId);
+        pThis->ActivatePage();
+    }
+
+    long nTabLabelsBottom = 0, nTabLabelsRight = 0;
+    for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
+         it != mpTabCtrlData->maItemList.end(); ++it )
+    {
+        NotebookbarTabControl* pThis = const_cast<NotebookbarTabControl*>(this);
+
+        sal_uInt16 nPos = it - mpTabCtrlData->maItemList.begin();
+        Rectangle aTabRect = pThis->ImplGetTabRect(nPos, aOptimalPageSize.Width(), LONG_MAX);
+        if (aTabRect.Bottom() > nTabLabelsBottom)
+        {
+            nTabLabelsBottom = aTabRect.Bottom();
+            m_nHeaderHeight = aTabRect.Bottom();
+        }
+        if (aTabRect.Right() > nTabLabelsRight)
+            nTabLabelsRight = aTabRect.Right();
+    }
+
+    Size aOptimalSize(aOptimalPageSize);
+    aOptimalSize.Height() += nTabLabelsBottom;
+    aOptimalSize.Width() = std::max(nTabLabelsRight, aOptimalSize.Width());
+
+    aOptimalSize.Width() += TAB_OFFSET * 2;
+    aOptimalSize.Height() += TAB_OFFSET * 2;
+
+    return aOptimalSize;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

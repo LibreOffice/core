@@ -54,7 +54,10 @@ void NotebookBarPopupMenu::Execute(NotebookBar* pNotebookbar,
 {
     if (pNotebookbar)
     {
-        sal_uInt16 nSelected = PopupMenu::Execute(pNotebookbar, Point(0, 40));
+        sal_uInt16 nTop = NotebookbarTabControl::GetHeaderHeight();
+        sal_uInt16 nSelected = PopupMenu::Execute(pNotebookbar,
+                                    Rectangle(0, nTop, 0, nTop),
+                                    PopupMenuFlags::ExecuteDown|PopupMenuFlags::NoMouseUpClose);
 
         if (nSelected)
         {
