@@ -60,6 +60,7 @@ public:
     void testDocumentSizeChanged();
     void testViewLock();
     void testColRowResize();
+    void testUndoShells();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -71,6 +72,7 @@ public:
     CPPUNIT_TEST(testDocumentSizeChanged);
     CPPUNIT_TEST(testViewLock);
     CPPUNIT_TEST(testColRowResize);
+    CPPUNIT_TEST(testUndoShells);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -556,6 +558,26 @@ void ScTiledRenderingTest::testColRowResize()
 
     int nNewHeight = rDoc.GetRowHeight(static_cast<SCROW>(4), static_cast<SCTAB>(0), false);
     CPPUNIT_ASSERT(nNewHeight > nOldHeight);
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testUndoShells()
+{
+    comphelper::LibreOfficeKit::setActive();
+    ScModelObj* pModelObj = createDoc("small.ods");
+    // Clear the currently selected cell.
+    comphelper::dispatchCommand(".uno:ClearContents", {});
+
+    auto pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDoc = pDocShell->GetDocument();
+    SfxUndoManager* pUndoManager = rDoc.GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetUndoActionCount());
+    sal_Int32 nView1 = SfxLokHelper::getView();
+    // This was -1: ScSimpleUndo did not remember what view shell created it.
+    CPPUNIT_ASSERT_EQUAL(nView1, pUndoManager->GetUndoAction()->GetViewShellId());
 
     comphelper::LibreOfficeKit::setActive(false);
 }
