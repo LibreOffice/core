@@ -37,6 +37,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/justifyitem.hxx>
+#include <editeng/lineitem.hxx>
 #include <dbdata.hxx>
 #include "validat.hxx"
 #include "formulacell.hxx"
@@ -2677,6 +2678,9 @@ void ScFiltersTest::testOrcusODSStyleInterface()
     pOrcus->importODS_Styles(aDoc, aValidPath);
     ScStyleSheetPool* pStyleSheetPool = aDoc.GetStyleSheetPool();
 
+    /* Test cases for Style "Name1"
+     * Has Border and Fill.
+     */
     ScStyleSheet* pStyleSheet = pStyleSheetPool->FindCaseIns("Name1", SfxStyleFamily::Para);
     const SfxPoolItem* pItem = nullptr;
 
@@ -2700,6 +2704,52 @@ void ScFiltersTest::testOrcusODSStyleInterface()
     ASSERT_DOUBLES_EQUAL_MESSAGE("Error with right width", 1, pBoxItem->GetRight()->GetWidth());
     ASSERT_DOUBLES_EQUAL_MESSAGE("Error with top width", 1, pBoxItem->GetTop()->GetWidth());
     ASSERT_DOUBLES_EQUAL_MESSAGE("Error with bottom width", 1, pBoxItem->GetBottom()->GetWidth());
+
+    CPPUNIT_ASSERT_MESSAGE("Style Name1 : Has Attribute border, but it shouldn't.",
+        !pStyleSheet->GetItemSet().HasItem(ATTR_PROTECTION, &pItem));
+    CPPUNIT_ASSERT_MESSAGE("Style Name1 : Has Attribute font, but it shouldn't.",
+        !pStyleSheet->GetItemSet().HasItem(ATTR_FONT, &pItem));
+    CPPUNIT_ASSERT_MESSAGE("Style Name1 : Has Attribute number format, but it shouldn't.",
+        !pStyleSheet->GetItemSet().HasItem(ATTR_VALUE_FORMAT, &pItem));
+
+    /* Test for Style "Name2"
+     * Has 4 sided borders + Diagonal borders.
+     */
+    pStyleSheet = pStyleSheetPool->FindCaseIns("Name2", SfxStyleFamily::Para);
+
+    CPPUNIT_ASSERT_MESSAGE("Style Name2 : Doesn't have Attribute background, but it should have.",
+        pStyleSheet->GetItemSet().HasItem(ATTR_BORDER, &pItem));
+
+    pBoxItem = static_cast<const SvxBoxItem*>(pItem);
+    CPPUNIT_ASSERT_EQUAL(Color(0, 0, 0), pBoxItem->GetLeft()->GetColor());
+    CPPUNIT_ASSERT_EQUAL(Color(255, 0, 0), pBoxItem->GetRight()->GetColor());
+    CPPUNIT_ASSERT_EQUAL(pBoxItem->GetLeft()->GetBorderLineStyle(), ::com::sun::star::table::BorderLineStyle::SOLID);
+    CPPUNIT_ASSERT_EQUAL(pBoxItem->GetRight()->GetBorderLineStyle(), ::com::sun::star::table::BorderLineStyle::DOTTED);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("Error with left width", 0, pBoxItem->GetLeft()->GetWidth());
+    ASSERT_DOUBLES_EQUAL_MESSAGE("Error with right width", 14, pBoxItem->GetRight()->GetWidth());
+
+    CPPUNIT_ASSERT_MESSAGE("Style Name2 : Doesn't have Attribute diagonal(tl-br) border, but it should have.",
+        pStyleSheet->GetItemSet().HasItem(ATTR_BORDER_TLBR, &pItem));
+
+    const SvxLineItem* pTLBR= static_cast<const SvxLineItem*>(pItem);
+    CPPUNIT_ASSERT_EQUAL(Color(18, 0, 0), pTLBR->GetLine()->GetColor());
+    CPPUNIT_ASSERT_EQUAL(pTLBR->GetLine()->GetBorderLineStyle(), ::com::sun::star::table::BorderLineStyle::DASH_DOT);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("Error with diagonal tl-br width", 14, pTLBR->GetLine()->GetWidth());
+
+    CPPUNIT_ASSERT_MESSAGE("Style Name2 : Doesn't have Attribute diagonal(bl-tr) border, but it should have.",
+        pStyleSheet->GetItemSet().HasItem(ATTR_BORDER_BLTR, &pItem));
+
+    const SvxLineItem* pBLTR= static_cast<const SvxLineItem*>(pItem);
+    CPPUNIT_ASSERT_EQUAL(Color(255, 204, 238), pBLTR->GetLine()->GetColor());
+    CPPUNIT_ASSERT_EQUAL(pBLTR->GetLine()->GetBorderLineStyle(), ::com::sun::star::table::BorderLineStyle::DASHED);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("Error with diagonal tl-br width", 34, pBLTR->GetLine()->GetWidth());
+
+    CPPUNIT_ASSERT_MESSAGE("Style Name2 : Has Attribute background, but it shouldn't.",
+        !pStyleSheet->GetItemSet().HasItem(ATTR_BACKGROUND, &pItem));
+    CPPUNIT_ASSERT_MESSAGE("Style Name2 : Has Attribute font, but it shouldn't.",
+        !pStyleSheet->GetItemSet().HasItem(ATTR_FONT, &pItem));
+    CPPUNIT_ASSERT_MESSAGE("Style Name2 : Has Attribute number format, but it shouldn't.",
+        !pStyleSheet->GetItemSet().HasItem(ATTR_VALUE_FORMAT, &pItem));
 }
 #endif
 
