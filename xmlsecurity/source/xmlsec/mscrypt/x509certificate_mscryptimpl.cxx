@@ -163,10 +163,7 @@ OUString replaceTagSWithTagST(OUString oldDN)
 
     if (pairIndex.first != -1)
     {
-        OUString newDN = oldDN.copy(0, pairIndex.first);
-        newDN += "ST";
-        newDN += oldDN.copy(pairIndex.second);
-        return newDN;
+        return oldDN.copy(0, pairIndex.first)+"ST"+oldDN.copy(pairIndex.second);
     }
     return oldDN;
 }
