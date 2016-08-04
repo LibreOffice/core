@@ -26,6 +26,7 @@
 #include <comphelper/flagguard.hxx>
 #include <tools/diagnose_ex.h>
 #include <libxml/xmlwriter.h>
+#include <unotools/datetime.hxx>
 
 #include <vector>
 #include <list>
@@ -51,6 +52,7 @@ SfxUndoAction::~SfxUndoAction()
 
 
 SfxUndoAction::SfxUndoAction()
+    : m_aDateTime(DateTime::SYSTEM)
 {
 }
 
@@ -75,6 +77,11 @@ sal_uInt16 SfxUndoAction::GetId() const
 sal_Int32 SfxUndoAction::GetViewShellId() const
 {
     return -1;
+}
+
+const DateTime& SfxUndoAction::GetDateTime() const
+{
+    return m_aDateTime;
 }
 
 OUString SfxUndoAction::GetRepeatComment(SfxRepeatTarget&) const
@@ -130,6 +137,7 @@ void SfxUndoAction::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"), BAD_CAST(typeid(*this).name()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("comment"), BAD_CAST(GetComment().toUtf8().getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("viewShellId"), BAD_CAST(OString::number(GetViewShellId()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("dateTime"), BAD_CAST(utl::toISO8601(m_aDateTime.GetUNODateTime()).toUtf8().getStr()));
     xmlTextWriterEndElement(pWriter);
 }
 

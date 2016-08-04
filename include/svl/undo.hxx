@@ -21,6 +21,7 @@
 
 #include <svl/svldllapi.h>
 #include <rtl/ustring.hxx>
+#include <tools/datetime.hxx>
 
 #include <limits>
 #include <memory>
@@ -61,11 +62,15 @@ public:
     virtual sal_uInt16  GetId() const;
     /// ID of the view shell that created this undo action.
     virtual sal_Int32 GetViewShellId() const;
+    /// Timestamp when this undo item was created.
+    const DateTime& GetDateTime() const;
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
 private:
     SfxUndoAction( const SfxUndoAction& ) = delete;
     SfxUndoAction& operator=( const SfxUndoAction& ) = delete;
+
+    DateTime m_aDateTime;
 };
 
 
