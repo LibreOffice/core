@@ -258,6 +258,8 @@ public:
 
     /// List of character positions in leveltext to replace.
     std::vector<sal_Int32> aLevelNumbers;
+    /// If aLevelNumbers should be read at all.
+    bool bLevelNumbersValid;
 
     RTFPicture aPicture;
     RTFShape aShape;
