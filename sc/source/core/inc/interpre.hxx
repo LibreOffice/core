@@ -360,11 +360,17 @@ void PopExternalDoubleRef(ScMatrixRef& rMat);
 void GetExternalDoubleRef(sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& aData, ScExternalRefCache::TokenArrayRef& rArray);
 bool PopDoubleRefOrSingleRef( ScAddress& rAdr );
 void PopDoubleRefPushMatrix();
-// If MatrixFormula: convert formula::svDoubleRef to svMatrix, create JumpMatrix.
+// If MatrixFormula: convert svDoubleRef to svMatrix, create JumpMatrix.
 // Else convert area reference parameters marked as ForceArray to array.
 // Returns true if JumpMatrix created.
 bool ConvertMatrixParameters();
-inline void MatrixJumpConditionToMatrix();      // if MatrixFormula: PopDoubleRefPushMatrix
+// If MatrixFormula: ConvertMatrixJumpConditionToMatrix()
+inline void MatrixJumpConditionToMatrix();
+// For MatrixFormula (preconditions already checked by
+// MatrixJumpConditionToMatrix()): convert svDoubleRef to svMatrix, or if
+// JumpMatrix currently in effect convert also other types to svMatrix so
+// another JumpMatrix will be created by jump commands.
+void ConvertMatrixJumpConditionToMatrix();
 // If MatrixFormula or ForceArray: ConvertMatrixParameters()
 inline bool MatrixParameterConversion();
 ScMatrixRef PopMatrix();
@@ -977,11 +983,8 @@ public:
 
 inline void ScInterpreter::MatrixJumpConditionToMatrix()
 {
-    if ( (bMatrixFormula || pCur->IsInForceArray()) && GetStackType() == formula::svDoubleRef )
-    {
-        GetTokenMatrixMap();    // make sure it exists, create if not.
-        PopDoubleRefPushMatrix();
-    }
+    if (bMatrixFormula || pCur->IsInForceArray())
+        ConvertMatrixJumpConditionToMatrix();
 }
 
 inline bool ScInterpreter::MatrixParameterConversion()

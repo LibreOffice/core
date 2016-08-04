@@ -1374,6 +1374,25 @@ void ScInterpreter::PopDoubleRefPushMatrix()
         SetError( errNoRef );
 }
 
+void ScInterpreter::ConvertMatrixJumpConditionToMatrix()
+{
+    StackVar eStackType = GetStackType();
+    if (eStackType == svUnknown)
+        return;     // can't do anything, some caller will catch that
+    if (eStackType == svMatrix)
+        return;     // already matrix, nothing to do
+
+    if (eStackType != svDoubleRef && GetStackType(2) != svJumpMatrix)
+        return;     // always convert svDoubleRef, others only in JumpMatrix context
+
+    GetTokenMatrixMap();    // make sure it exists, create if not.
+    ScMatrixRef pMat = GetMatrix();
+    if ( pMat )
+        PushMatrix( pMat );
+    else
+        PushIllegalParameter();
+}
+
 ScTokenMatrixMap* ScInterpreter::CreateTokenMatrixMap()
 {
     return new ScTokenMatrixMap;
