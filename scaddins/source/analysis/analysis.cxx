@@ -138,11 +138,8 @@ void AnalysisAddIn::InitData()
         pFD = nullptr;
     }
 
-    if( pDefLocales )
-    {
-        delete pDefLocales;
-        pDefLocales = nullptr;
-    }
+    delete pDefLocales;
+    pDefLocales = nullptr;
 }
 
 AnalysisAddIn::AnalysisAddIn( const uno::Reference< uno::XComponentContext >& xContext ) :
