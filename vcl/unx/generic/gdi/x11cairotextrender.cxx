@@ -42,10 +42,6 @@ struct _XRegion
     BOX extents;
 };
 
-#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 10, 0)
-#    define CAIRO_OPERATOR_DIFFERENCE (static_cast<cairo_operator_t>(23))
-#endif
-
 X11CairoTextRender::X11CairoTextRender(X11SalGraphics& rParent)
     : mrParent(rParent)
 {
@@ -83,17 +79,16 @@ cairo_t* X11CairoTextRender::getCairoContext()
     cairo_t *cr = cairo_create(surface);
     cairo_surface_destroy(surface);
 
-    //rhbz#1283420 bodge to draw and undraw something which has the side effect
-    //of making the mysterious xrender related problem go away
-    if (cairo_version() >= CAIRO_VERSION_ENCODE(1, 10, 0))
+    //rhbz#1283420 bodge to force a read from the underlying surface which has
+    //the side effect of making the mysterious xrender related problem go away
     {
-        cairo_save(cr);
-        cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
-        cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
-        cairo_rectangle(cr, 0, 0, 1, 1);
-        cairo_fill_preserve(cr);
-        cairo_fill(cr);
-        cairo_restore(cr);
+        cairo_surface_t *target = cairo_get_target(cr);
+        cairo_surface_t *throw_away = cairo_surface_create_similar(target, cairo_surface_get_content(target), 1, 1);
+        cairo_t *force_read_cr = cairo_create(throw_away);
+        cairo_set_source_surface(force_read_cr, target, 0, 0);
+        cairo_paint(force_read_cr);
+        cairo_destroy(force_read_cr);
+        cairo_surface_destroy(throw_away);
     }
 
     return cr;
