@@ -1311,7 +1311,7 @@ void GL3DBarChart::updateClickEvent()
         aTitle = " ";
         maScreenTextShapes.push_back(o3tl::make_unique<opengl3D::ScreenText>(mpRenderer.get(), *mpTextCache, aTitle, glm::vec4(0.0f, 0.0f, 0.0f, 0.5f), 0));
         opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(maScreenTextShapes.back().get());
-        pScreenText->setPosition(glm::vec2(nMinXCoord, 0.99f), glm::vec2(nMaxXCoord, 0.99f - nMaxHight));
+        pScreenText->setPosition(glm::vec2(nMinXCoord, 0.99f), glm::vec2(nMaxXCoord, 0.99f - nMaxHight), glm::vec3(0.0, 0.0, 0.0));
     }
 }
 

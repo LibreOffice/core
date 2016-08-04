@@ -659,7 +659,7 @@ namespace cairocanvas
         return pSurface;
     }
 
-    static void addColorStops( cairo_pattern_t* pPattern, const uno::Sequence< uno::Sequence< double > >& rColors, const uno::Sequence< double >& rStops, bool bReverseStops = false )
+    static void addColorStops( cairo_pattern_t* pPattern, const uno::Sequence< uno::Sequence< double > >& rColors, const uno::Sequence< double >& rStops, bool bReverseStops )
     {
         int i;
 
@@ -717,7 +717,7 @@ namespace cairocanvas
                 x1 = 1;
                 y1 = 0;
                 pPattern = cairo_pattern_create_linear( x0, y0, x1, y1 );
-                addColorStops( pPattern, aValues.maColors, aValues.maStops );
+                addColorStops( pPattern, aValues.maColors, aValues.maStops, false );
                 break;
 
             case ::canvas::ParametricPolyPolygon::GradientType::Elliptical:

@@ -176,7 +176,7 @@ public:
     ~OpenGL3DRenderer();
 
     void init();
-    void Set3DSenceInfo(sal_uInt32 color = 255, bool twoSidesLighting = true);
+    void Set3DSenceInfo(sal_uInt32 color, bool twoSidesLighting = true);
     void SetLightInfo(bool lightOn, sal_uInt32 color, const glm::vec4& direction);
     void AddShapePolygon3DObject(sal_uInt32 color, bool lineOnly, sal_uInt32 lineColor,
             long fillStyle, sal_uInt32 specular, sal_uInt32 nUniqueId);

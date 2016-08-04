@@ -93,7 +93,7 @@ public:
                     , const Stripe& rStripe
                     , const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
                     , const tPropertyNameMap& rPropertyNameMap
-                    , bool bDoubleSided = true
+                    , bool bDoubleSided
                     , short nRotatedTexture = 0 //0 to 7 are the different possibilities
                     , bool bFlatNormals=true ) override;
 
@@ -111,8 +111,8 @@ public:
                     , const css::drawing::Position3D& rPos
                     , const css::drawing::Direction3D& rSize
                     , sal_Int32 nStandardSymbol
-                    , sal_Int32 nBorderColor=0
-                    , sal_Int32 nFillColor=0 ) override;
+                    , sal_Int32 nBorderColor
+                    , sal_Int32 nFillColor ) override;
 
     virtual css::uno::Reference< css::drawing::XShape >
         createGraphic2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
@@ -242,7 +242,7 @@ private:
                     , const css::drawing::Position3D& rPosition
                     , const css::drawing::Direction3D& rSize
                     , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree
-                    , bool bCylinder = false);
+                    , bool bCylinder);
 };
 
 } //namespace chart

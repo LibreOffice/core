@@ -92,8 +92,7 @@ protected:
         const OUString & rURL,
         const css::uno::Any & rState,
         bool bEnabled,
-        const css::uno::Reference< css::frame::XStatusListener > & xSingleListener =
-            css::uno::Reference< css::frame::XStatusListener >(),
+        const css::uno::Reference< css::frame::XStatusListener > & xSingleListener,
         const OUString & rFeatureDescriptor = OUString() );
 
     // ____ XDispatch ____

@@ -116,7 +116,7 @@ private:
 
         @return false, if nResIdMessage was 0, true otherwise
      */
-    bool ShowWarning( sal_uInt16 nResIdMessage, Control* pControl = nullptr );
+    bool ShowWarning( sal_uInt16 nResIdMessage, Control* pControl );
 
     void HideAllControls();
 };

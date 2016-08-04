@@ -47,7 +47,7 @@ namespace cairocanvas
 
         SAL_INFO( "canvas.cairo", "sprite size: " << ::canvas::tools::roundUp( rSpriteSize.Width ) << ", " << ::canvas::tools::roundUp( rSpriteSize.Height ));
 
-        mpBufferSurface = mpSpriteCanvas->createSurface( maSize );
+        mpBufferSurface = mpSpriteCanvas->createSurface( maSize, CAIRO_CONTENT_COLOR_ALPHA );
 
         maCanvasHelper.init( maSize,
                              *rRefDevice,

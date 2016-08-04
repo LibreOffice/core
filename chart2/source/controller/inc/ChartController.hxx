@@ -554,7 +554,7 @@ private:
         const css::uno::Sequence< css::beans::PropertyValue >& rArgs );
 
     DECL_LINK_TYPED( DoubleClickWaitingHdl, Timer*, void );
-    void execute_DoubleClick( const Point* pMousePixel = nullptr );
+    void execute_DoubleClick( const Point* pMousePixel );
     void startDoubleClickWaiting();
     void stopDoubleClickWaiting();
 

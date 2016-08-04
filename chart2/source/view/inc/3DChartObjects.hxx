@@ -109,7 +109,7 @@ public:
 
     virtual void render() override;
     void setPosition(const glm::vec2& rTopLeft, const glm::vec2& rBottomRight,
-            const glm::vec3& r3DPos = glm::vec3(0.0, 0.0, 0.0));
+            const glm::vec3& r3DPos);
 
 private:
     TextCacheItem maText;

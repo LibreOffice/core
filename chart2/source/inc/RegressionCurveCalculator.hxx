@@ -50,7 +50,7 @@ protected:
         const css::uno::Reference< css::util::XNumberFormatter >& xNumFormatter,
         sal_Int32 nNumberFormatKey,
         double fNumber,
-        sal_Int32* pStringLength = nullptr );
+        sal_Int32* pStringLength );
 
     static void addStringToEquation( OUStringBuffer& aStrEquation, sal_Int32& nLineLength, OUStringBuffer& aAddString, sal_Int32* pMaxLength );
 

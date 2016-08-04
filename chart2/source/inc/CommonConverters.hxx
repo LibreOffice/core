@@ -94,7 +94,7 @@ void AddPointToPoly( css::drawing::PolyPolygonShape3D& rPoly
 */
 OOO_DLLPUBLIC_CHARTTOOLS css::drawing::Position3D getPointFromPoly(
                   const css::drawing::PolyPolygonShape3D& rPolygon
-                , sal_Int32 nPointIndex, sal_Int32 nPolyIndex=0 );
+                , sal_Int32 nPointIndex, sal_Int32 nPolyIndex );
 
 OOO_DLLPUBLIC_CHARTTOOLS
 void addPolygon( css::drawing::PolyPolygonShape3D& rRet

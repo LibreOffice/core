@@ -69,7 +69,7 @@ OOO_DLLPUBLIC_CHARTTOOLS ::std::vector<
   css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
     getAllDataSequencesByRole( const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & aDataSequences,
                                const OUString& aRole,
-                               bool bMatchPrefix = false );
+                               bool bMatchPrefix );
 
 OOO_DLLPUBLIC_CHARTTOOLS
 std::vector<css::uno::Reference<css::chart2::data::XLabeledDataSequence> >

@@ -922,7 +922,7 @@ void AreaChart::createShapes()
                             createErrorBar_X( aUnscaledLogicPosition, **aSeriesIter, nIndex, m_xErrorBarTarget );
 
                         if (bCreateYErrorBar)
-                            createErrorBar_Y( aUnscaledLogicPosition, **aSeriesIter, nIndex, m_xErrorBarTarget );
+                            createErrorBar_Y( aUnscaledLogicPosition, **aSeriesIter, nIndex, m_xErrorBarTarget, nullptr );
 
                         //create data point label
                         if( (**aSeriesIter).getDataPointLabelIfLabel(nIndex) )

@@ -82,7 +82,7 @@ public:
                     , const Stripe& rStripe
                     , const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
                     , const tPropertyNameMap& rPropertyNameMap
-                    , bool bDoubleSided = true
+                    , bool bDoubleSided
                     , short nRotatedTexture = 0 //0 to 7 are the different possibilities
                     , bool bFlatNormals=true ) override;
 
@@ -100,8 +100,8 @@ public:
                     , const css::drawing::Position3D& rPos
                     , const css::drawing::Direction3D& rSize
                     , sal_Int32 nStandardSymbol
-                    , sal_Int32 nBorderColor=0
-                    , sal_Int32 nFillColor=0 ) override;
+                    , sal_Int32 nBorderColor
+                    , sal_Int32 nFillColor ) override;
 
     virtual css::uno::Reference< css::drawing::XShape >
         createGraphic2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
@@ -182,7 +182,7 @@ public:
 
     virtual void setPageSize( css::uno::Reference < css::drawing::XShapes > xChartShapes, const css::awt::Size& rSize ) override;
 
-    virtual void render(css::uno::Reference< css::drawing::XShapes > xDrawPage, bool bInitOpenGL = true) override;
+    virtual void render(css::uno::Reference< css::drawing::XShapes > xDrawPage, bool bInitOpenGL) override;
 
     virtual bool preRender(css::uno::Reference< css::drawing::XShapes > xRootShape, OpenGLWindow* pWindow) override;
     virtual void postRender(OpenGLWindow* pWindow) override;

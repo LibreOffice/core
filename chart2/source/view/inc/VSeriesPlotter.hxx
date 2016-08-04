@@ -195,7 +195,7 @@ public:
     virtual LegendSymbolStyle getLegendSymbolStyle();
     virtual css::awt::Size getPreferredLegendKeyAspectRatio() override;
 
-    virtual css::uno::Any getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex=-1/*-1 for series symbol*/ );
+    virtual css::uno::Any getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex/*-1 for series symbol*/ );
 
     css::uno::Reference< css::drawing::XShape > createLegendSymbolForSeries(
                   const css::awt::Size& rEntryKeyAspectRatio
@@ -224,7 +224,7 @@ public:
     // This method creates a series plotter of the requested type; e.g. : return new PieChart ....
     static VSeriesPlotter* createSeriesPlotter( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
                                 , sal_Int32 nDimensionCount
-                                , bool bExcludingPositioning = false /*for pie and donut charts labels and exploded segments are excluded from the given size*/);
+                                , bool bExcludingPositioning /*for pie and donut charts labels and exploded segments are excluded from the given size*/);
 
     sal_Int32 getPointCount() const;
 
@@ -319,7 +319,7 @@ protected:
                 , double fValue
                 , double fSumValue
                 , const css::awt::Point& rScreenPosition2D
-                , LabelAlignment eAlignment=LABEL_ALIGN_CENTER
+                , LabelAlignment eAlignment
                 , sal_Int32 nOffset=0
                 , sal_Int32 nTextWidth = 0 );
 
@@ -364,7 +364,7 @@ protected:
     void createErrorBar_Y( const css::drawing::Position3D& rUnscaledLogicPosition
         , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
         , const css::uno::Reference< css::drawing::XShapes >& xTarget
-        , double* pfScaledLogicX=nullptr );
+        , double* pfScaledLogicX );
 
     void createRegressionCurvesShapes( VDataSeries& rVDataSeries
         , const css::uno::Reference< css::drawing::XShapes >& xTarget

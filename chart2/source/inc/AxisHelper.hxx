@@ -135,7 +135,7 @@ public:
         getGridProperties( const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSys
                 , sal_Int32 nDimensionIndex
                 , sal_Int32 nAxisIndex //0: Primary axis, 1: secondary axis
-                , sal_Int32 nSubGridIndex = -1 //-1: Main Grid; 0: First SubGrid etc
+                , sal_Int32 nSubGridIndex //-1: Main Grid; 0: First SubGrid etc
                 );
 
     static sal_Int32 getDimensionIndexOfAxis(
@@ -184,7 +184,7 @@ public:
                         , const css::uno::Sequence< sal_Bool >& rOldExistenceList
                         , const css::uno::Sequence< sal_Bool >& rNewExistenceList
                         , const css::uno::Reference< css::uno::XComponentContext >& xContext
-                        , ReferenceSizeProvider * pRefSizeProvider = nullptr );
+                        , ReferenceSizeProvider * pRefSizeProvider );
 
     static bool shouldAxisBeDisplayed( const css::uno::Reference< css::chart2::XAxis >& xAxis
                                        , const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSys );
