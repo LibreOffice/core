@@ -26,8 +26,11 @@
 
 ScUndoDraw::ScUndoDraw( SfxUndoAction* pUndo, ScDocShell* pDocSh ) :
     pDrawUndo( pUndo ),
-    pDocShell( pDocSh )
+    pDocShell( pDocSh ),
+    mnViewShellId( -1 )
 {
+    if (ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell())
+        mnViewShellId = pViewShell->GetViewShellId();
 }
 
 ScUndoDraw::~ScUndoDraw()
@@ -45,6 +48,11 @@ OUString ScUndoDraw::GetComment() const
     if (pDrawUndo)
         return pDrawUndo->GetComment();
     return OUString();
+}
+
+sal_Int32 ScUndoDraw::GetViewShellId() const
+{
+    return mnViewShellId;
 }
 
 OUString ScUndoDraw::GetRepeatComment(SfxRepeatTarget& rTarget) const
