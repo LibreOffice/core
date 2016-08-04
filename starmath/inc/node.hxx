@@ -842,8 +842,8 @@ public:
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     void Accept(SmVisitor* pVisitor) override;
 
-    SmMathSymbolNode* Symbol();
-    const SmMathSymbolNode* Symbol() const;
+    SmNode* Symbol();
+    const SmNode* Symbol() const;
     SmNode* LeftOperand();
     const SmNode* LeftOperand() const;
     SmNode* RightOperand();
@@ -1293,18 +1293,18 @@ inline const SmNode* SmDynIntegralNode::Body() const
 }
 
 
-inline SmMathSymbolNode* SmBinHorNode::Symbol()
+inline SmNode* SmBinHorNode::Symbol()
 {
-    OSL_ASSERT( GetNumSubNodes() > 1 && GetSubNode( 1 )->GetType() == NMATH );
-    return static_cast< SmMathSymbolNode* >( GetSubNode( 1 ));
+    assert( GetNumSubNodes() == 3 );
+    return GetSubNode( 1 );
 }
-inline const SmMathSymbolNode* SmBinHorNode::Symbol() const
+inline const SmNode* SmBinHorNode::Symbol() const
 {
     return const_cast< SmBinHorNode* >( this )->Symbol();
 }
 inline SmNode* SmBinHorNode::LeftOperand()
 {
-    OSL_ASSERT( GetNumSubNodes() > 0 );
+    assert( GetNumSubNodes() == 3 );
     return GetSubNode( 0 );
 }
 inline const SmNode* SmBinHorNode::LeftOperand() const
@@ -1313,7 +1313,7 @@ inline const SmNode* SmBinHorNode::LeftOperand() const
 }
 inline SmNode* SmBinHorNode::RightOperand()
 {
-    OSL_ASSERT( GetNumSubNodes() > 2 );
+    assert( GetNumSubNodes() == 3 );
     return GetSubNode( 2 );
 }
 inline const SmNode* SmBinHorNode::RightOperand() const

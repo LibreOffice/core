@@ -2185,9 +2185,9 @@ void SmNodeToTextVisitor::Visit( SmUnHorNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmBinHorNode* pNode )
 {
-    SmNode *pLeft  = pNode->GetSubNode( 0 ),
-           *pOper  = pNode->GetSubNode( 1 ),
-           *pRight = pNode->GetSubNode( 2 );
+    SmNode *pLeft  = pNode->LeftOperand(),
+           *pOper  = pNode->Symbol(),
+           *pRight = pNode->RightOperand();
     Separate( );
     pLeft->Accept( this );
     Separate( );
