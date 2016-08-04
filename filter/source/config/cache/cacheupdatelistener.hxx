@@ -65,7 +65,7 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
 
         /** @short  initialize new instance of this class.
 
-            @descr  Listening wont be started here. It can be done
+            @descr  Listening won't be started here. It can be done
                     by calling startListening() on this instance.
 
             @see    startListening()

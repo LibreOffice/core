@@ -137,7 +137,7 @@ public class ScriptMetaData extends ScriptEntry {
             }
         } else if (pathToParcel.contains(UNO_SHARED_PACKAGES1) ||
                    pathToParcel.contains(UNO_SHARED_PACKAGES2)) {
-            //its a package
+            //it's a package
             placeHolder = "share:uno_packages";
             String unoPkg = parent.parent.getName();
 

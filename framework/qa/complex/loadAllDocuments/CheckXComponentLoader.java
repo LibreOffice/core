@@ -212,7 +212,7 @@ public class CheckXComponentLoader
             String sURL     = URLHelper.getFileURLFromSystemPath(aSysFile);
 
             loadURL(m_xLoader, RESULT_VALID_DOC, sURL, "_blank", 0, lProps);
-            // Its not needed to reset this using states!
+            // It's not needed to reset this using states!
             // Its done internally ...
             if (!xIndicator.wasUsed())
             {

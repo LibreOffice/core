@@ -294,7 +294,7 @@ void SwImplProtocol::CheckLine( OString& rLine )
     rLine = rLine.replace( '\t', ' ' );
     if( '#' == rLine[0] )   // comments start with '#'
         return;
-    if( '[' == rLine[0] )   // section: FrameIds, type or funciton
+    if( '[' == rLine[0] )   // section: FrameIds, type or function
     {
         OString aTmp = rLine.getToken(0, ']');
         if (aTmp == "[frmid")      // section FrameIds

@@ -312,7 +312,7 @@ sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_In
             {
                 xEnumeration->nextElement() >>= xParagraph;
 
-                // skip this if its not the only paragraph we want to count
+                // skip this if it's not the only paragraph we want to count
                 if( (nOnlyPara != -1) && (nOnlyPara != nPara ) )
                     continue;
 
@@ -2497,7 +2497,7 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( const CustomAnimatio
             }
             else
             {
-                // reuse first effect if its not yet used
+                // reuse first effect if it's not yet used
                 pNewEffect = pEffect;
                 bUsed = true;
                 aInsertIter = find( pNewEffect );

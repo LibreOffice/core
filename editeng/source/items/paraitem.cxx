@@ -1068,7 +1068,7 @@ SfxPoolItem* SvxTabStopItem::Create( SvStream& rStrm, sal_uInt16 ) const
 SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     // Default-Tabs are only expanded for the default Attribute. For complete
-    // backward compability (<=304) all tabs have to be expanded, this makes
+    // backward compatibility (<=304) all tabs have to be expanded, this makes
     // the files grow large in size. All only SWG!
 
     const SfxItemPool *pPool = SfxItemPool::GetStoringPool();

@@ -4439,7 +4439,7 @@ StackVar ScInterpreter::Interpret()
                     {
                         // If typed, pop token to obtain type information and
                         // push a plain untyped double so the result token to
-                        // be transfered to the formula cell result does not
+                        // be transferred to the formula cell result does not
                         // unnecessarily duplicate the information.
                         if (pCur->GetDoubleType())
                         {

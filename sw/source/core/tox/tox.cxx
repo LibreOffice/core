@@ -498,7 +498,7 @@ void SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
     for( sal_uInt16 i = 0; i < MAXLEVEL; ++i )
         m_aStyleNames[i] = rSource.m_aStyleNames[i];
 
-    // its the same data type!
+    // it's the same data type!
     m_aData.nOptions =  rSource.m_aData.nOptions;
 
     if( !pDoc || pDoc->IsCopyIsMove() )

@@ -634,7 +634,7 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, CancelHdl, void*, void)
             uno::Reference<beans::XPropertySet> xPropSet(pViewFrame->GetFrame().GetFrameInterface(), uno::UNO_QUERY);
             if (xPropSet.is() && m_bDestroyMMToolbarOnCancel)
             {
-                // hide mailmerge toolbar if it hasnt been there before
+                // hide mailmerge toolbar if it hasn't been there before
                 uno::Reference<frame::XLayoutManager> xLayoutManager;
                 uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
                 aValue >>= xLayoutManager;

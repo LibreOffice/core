@@ -903,7 +903,7 @@ class WWD_Events(WWD_Startup):
 
             '''
             Here i go through each file, and validate it.
-            If its ok, I add it to the ListModel/ConfigSet
+            If it's ok, I add it to the ListModel/ConfigSet
             '''
 
             for i in range(0, len(self.files)):

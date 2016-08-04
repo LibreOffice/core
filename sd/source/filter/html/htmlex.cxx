@@ -2200,7 +2200,7 @@ void HtmlExport::CreateFileNames()
 
 OUString const & HtmlExport::getDocumentTitle()
 {
-    // check for a title object in this page, if its the first
+    // check for a title object in this page, if it's the first
     // title it becomes this documents title for the content
     // page
     if( !mbHeader )

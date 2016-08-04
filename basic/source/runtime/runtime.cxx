@@ -1040,7 +1040,7 @@ void SbiRuntime::TOSMakeTemp()
         pDflt->Broadcast( SBX_HINT_DATAWANTED );
         // replacing new p on stack causes object pointed by
         // pDft->pParent to be deleted, when p2->Compute() is
-        // called below pParent is accessed ( but its deleted )
+        // called below pParent is accessed (but it's deleted)
         // so set it to NULL now
         pDflt->SetParent( nullptr );
         p = new SbxVariable( *pDflt );
@@ -1861,7 +1861,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                 pObj = dynamic_cast<SbxObject*>( refVar.get() );
 
                 // calling GetObject on a SbxEMPTY variable raises
-                // object not set errors, make sure its an Object
+                // object not set errors, make sure it's an Object
                 if ( !pObj && refVar->GetType() == SbxOBJECT )
                 {
                     SbxBase* pObjVarObj = refVar->GetObject();

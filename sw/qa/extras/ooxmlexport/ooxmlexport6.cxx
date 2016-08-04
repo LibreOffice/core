@@ -923,7 +923,7 @@ DECLARE_OOXMLEXPORT_TEST(testSyncedRelativePercent, "tdf93676-1.odt")
         return;
 
     // check no explicit pctHeight has been exported, all we care
-    // about at this point is that its not 255000
+    // about at this point is that it's not 255000
     assertXPath(pXmlDoc, "//wp14:pctHeight", 0);
 }
 

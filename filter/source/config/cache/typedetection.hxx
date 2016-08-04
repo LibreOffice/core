@@ -86,7 +86,7 @@ private:
                     The specified MediaDescriptor will be patched, so it contain
                     the right values every time. Using of any deep detection service
                     can be enabled/disabled. And last but not least: If the results
-                    wont be really clear (because a flat detected type has no deep
+                    won't be really clear (because a flat detected type has no deep
                     detection service), a "suggested" type name will be returned as "rLastChance".
                     It can be used after e.g. all well known deep detection services
                     was used without getting any result. Then this "last-chance-type"

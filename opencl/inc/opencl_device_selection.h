@@ -319,7 +319,7 @@ public:
  * XmlWalker main purpose is to make it easier for walking the
  * parsed XML DOM tree.
  *
- * It hides all the libxml2 and C -isms and makes the useage more
+ * It hides all the libxml2 and C -isms and makes the usage more
  * comfortable from LO developer point of view.
  *
  * TODO: move to common code

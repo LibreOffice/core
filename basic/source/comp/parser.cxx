@@ -605,7 +605,7 @@ void SbiParser::Set()
         SbiExpression aExpr( this );
         aLvalue.Gen();
         aExpr.Gen();
-        // Its a good idea to distinguish between
+        // It's a good idea to distinguish between
         // set something = another &
         // something = another
         // ( its necessary for vba objects where set is object

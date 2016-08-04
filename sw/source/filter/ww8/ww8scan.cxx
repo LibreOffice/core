@@ -1394,7 +1394,7 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
             sal_Int32 nLen = (nCpEnd - nCpStart) * (bIsUnicode ? 2 : 1);
 
             /*
-            If this cp is inside this piece, or its the last piece and we are
+            If this cp is inside this piece, or it's the last piece and we are
             on the very last cp of that piece
             */
             if (nFcPos >= nFcStart)

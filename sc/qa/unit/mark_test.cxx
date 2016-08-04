@@ -63,7 +63,7 @@ struct MultiMarkTestData
     std::vector<MarkArrayTestData> aMarkArrays;
 
     // To test ScMultiSel::HasOneMark()
-    // Encoding : StartCol is the column to test, StartRow is the begining of the one mark,
+    // Encoding : StartCol is the column to test, StartRow is the beginning of the one mark,
     // EndRow is the end of the one mark, EndCol is not used
     std::vector<ScRange> aColsWithOneMark;
     std::vector<SCCOL> aColsWithoutOneMark;

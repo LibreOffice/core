@@ -1484,7 +1484,7 @@ void SwCellStyleTable::ChangeBoxFormatName(const OUString& sFromName, const OUSt
         if (m_aCellStyles[i].first == sFromName)
         {
             m_aCellStyles[i].first = sToName;
-            // changed succesfully
+            // changed successfully
             return;
         }
     }

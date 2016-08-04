@@ -113,7 +113,7 @@ service AccessibleParagraphView
         ::com::sun::star::style::CharacterProperties. For
         properties that have Asian and complex counterparts, the value that
         is visible is returned. This can be in fact the western, Asian or
-        complex value.  Its not possible to change the value of any property
+        complex value. It's not possible to change the value of any property
         by using
         ::com::sun::star::accessibility::XAccessibleEditableText::setAttributes().
         <p><em>TODO: If there is a demand, some attributes might be added that

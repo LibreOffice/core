@@ -51,7 +51,7 @@ namespace drawinglayer
             /** the Graphic with all its content possibilities, here only
                 animated is allowed and gets checked by isValidData().
                 an instance of Graphic is used here since it's ref-counted
-                and thus a safe cpoy for now
+                and thus a safe copy for now
              */
             const Graphic                               maGraphic;
 

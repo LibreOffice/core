@@ -270,7 +270,7 @@ def readprops(buff):
     return props
 #---end java.util.Properties copy---#
 
-#   Its a simple command line tool, which can merge different XML fragments
+#   It's a simple command line tool, which can merge different XML fragments
 #   together. Such fragments must exist as files on disk, will be moved into
 #   one file together on disk.
 # 

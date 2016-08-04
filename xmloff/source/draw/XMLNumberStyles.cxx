@@ -694,7 +694,7 @@ void SdXMLNumberFormatImportContext::EndElement()
             }
         }
 
-        // no date style found? maybe its an extended time style
+        // no date style found? maybe it's an extended time style
         if( mnKey == -1 )
         {
             // compare import with all time styles

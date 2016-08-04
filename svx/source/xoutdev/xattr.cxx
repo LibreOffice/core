@@ -151,7 +151,7 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
             if( pItem && ( pItem->GetName() == pCheckItem->GetName() ) )
             {
                 // if there is already an item with the same name and the same
-                // value its ok to set it
+                // value it's ok to set it
                 if( !pCompareValueFunc( pItem, pCheckItem ) )
                 {
                     // same name but different value, we need a new name for this item
@@ -1395,7 +1395,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                 if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
                 {
                     // if there is already an item with the same name and the same
-                    // value its ok to set it
+                    // value it's ok to set it
                     if( pItem->GetLineStartValue() != pLineStartItem->GetLineStartValue() )
                     {
                         // same name but different value, we need a new name for this item
@@ -1417,7 +1417,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                     if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
                     {
                         // if there is already an item with the same name and the same
-                        // value its ok to set it
+                        // value it's ok to set it
                         if( pItem->GetLineEndValue() != pLineStartItem->GetLineStartValue() )
                         {
                             // same name but different value, we need a new name for this item
@@ -1441,7 +1441,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                 if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
                 {
                     // if there is already an item with the same name and the same
-                    // value its ok to set it
+                    // value it's ok to set it
                     if( pItem->GetLineStartValue() != pLineStartItem->GetLineStartValue() )
                     {
                         // same name but different value, we need a new name for this item
@@ -1462,7 +1462,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                     if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
                     {
                         // if there is already an item with the same name and the same
-                        // value its ok to set it
+                        // value it's ok to set it
                         if( pItem->GetLineEndValue() != pLineStartItem->GetLineStartValue() )
                         {
                             // same name but different value, we need a new name for this item
@@ -1678,7 +1678,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                 if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
                 {
                     // if there is already an item with the same name and the same
-                    // value its ok to set it
+                    // value it's ok to set it
                     if( pItem->GetLineStartValue() != pLineEndItem->GetLineEndValue() )
                     {
                         // same name but different value, we need a new name for this item
@@ -1700,7 +1700,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                     if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
                     {
                         // if there is already an item with the same name and the same
-                        // value its ok to set it
+                        // value it's ok to set it
                         if( pItem->GetLineEndValue() != pLineEndItem->GetLineEndValue() )
                         {
                             // same name but different value, we need a new name for this item
@@ -1724,7 +1724,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                 if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
                 {
                     // if there is already an item with the same name and the same
-                    // value its ok to set it
+                    // value it's ok to set it
                     if( pItem->GetLineStartValue() != pLineEndItem->GetLineEndValue() )
                     {
                         // same name but different value, we need a new name for this item
@@ -1745,7 +1745,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                     if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
                     {
                         // if there is already an item with the same name and the same
-                        // value its ok to set it
+                        // value it's ok to set it
                         if( pItem->GetLineEndValue() != pLineEndItem->GetLineEndValue() )
                         {
                             // same name but different value, we need a new name for this item

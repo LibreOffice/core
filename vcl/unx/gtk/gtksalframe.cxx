@@ -3162,7 +3162,7 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
         sal_uInt16 nModMask = 0;
         // pressing just the ctrl key leads to a keysym of XK_Control but
         // the event state does not contain ControlMask. In the release
-        // event its the other way round: it does contain the Control mask.
+        // event it's the other way round: it does contain the Control mask.
         // The modifier mode therefore has to be adapted manually.
         switch( pEvent->keyval )
         {

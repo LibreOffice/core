@@ -954,7 +954,7 @@ void SfxItemPool::SetStoringRange( sal_uInt16 nFrom, sal_uInt16 nTo )
  *  WhichIds. Moving WhichIds is not permitted.
  *  This method should only be called in or right after the ctor.
  *
- *  The array must be static, because its not copied and reused in the
+ *  The array must be static, because it's not copied and reused in the
  *  copy-ctor of the SfxItemPool
  *
  *  Example usage:

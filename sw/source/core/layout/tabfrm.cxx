@@ -267,7 +267,7 @@ static void lcl_InvalidateLowerObjs( SwLayoutFrame& _rLayoutFrame,
                 if ( _bMoveObjsOutOfRange )
                 {
                     // indicate, that positioning is progress to avoid
-                    // modification of the anchored object resp. its attributes
+                    // modification of the anchored object resp. it's attributes
                     // due to the movement
                     SwObjPositioningInProgress aObjPosInProgress( *pAnchoredObj );
                     pAnchoredObj->SetObjLeft( _pPageFrame->Frame().Right() );
@@ -2428,7 +2428,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                                 if ( pNxt )
                                 {
                                     // #i18103# - no formatting of found next
-                                    // frame, if its a follow section of the
+                                    // frame, if it's a follow section of the
                                     // 'ColLocked' section, the follow table is
                                     // in.
                                     bool bCalcNxt = true;
@@ -2587,7 +2587,7 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                 // #i26945# - correction of conditions,
                 // if Writer fly frame has to be considered:
                 // - no need to check, if top of Writer fly frame differs
-                //   from FAR_AWAY, because its also check, if the Writer
+                //   from FAR_AWAY, because it's also checked, if the Writer
                 //   fly frame rectangle overlaps with <aRect>
                 // - no check, if bottom of anchor frame is prior the top of
                 //   the table, because Writer fly frames can be negative positioned.

@@ -392,7 +392,7 @@ void LoadEnv::startLoading()
 -----------------------------------------------*/
 bool LoadEnv::waitWhileLoading(sal_uInt32 nTimeout)
 {
-    // Because its not a good idea to block the main thread
+    // Because it's not a good idea to block the main thread
     // (and we can't be sure that we are currently not used inside the
     // main thread!), we can't use conditions here really. We must yield
     // in an intelligent manner :-)
@@ -618,8 +618,8 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     //      Mos of our filters are handled by our global
     //      default loader. But there exist some specialized
     //      loader, which does not work on top of filters!
-    //      So its not enough to search on the filter configuration.
-    //      Further its not enough to search for types!
+    //      So it's not enough to search on the filter configuration.
+    //      Further it's not enough to search for types!
     //      Because there exist some types, which are referenced by
     //      other objects ... but not by filters nor frame loaders!
 
@@ -1085,7 +1085,7 @@ bool LoadEnv::impl_loadContent()
 
     if (!bHidden && !bMinimized && !bPreview && !xProgress.is())
     {
-        // Note: its an optional interface!
+        // Note: it's an optional interface!
         css::uno::Reference< css::task::XStatusIndicatorFactory > xProgressFactory(xTargetFrame, css::uno::UNO_QUERY);
         if (xProgressFactory.is())
         {
@@ -1233,7 +1233,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     osl::MutexGuard g(m_mutex);
 
     // such search is allowed for special requests only ...
-    // or better its not allowed for some requests in general :-)
+    // or better it's not allowed for some requests in general :-)
     if (
         ( ! TargetHelper::matchSpecialTarget(m_sTarget, TargetHelper::E_DEFAULT)                                               ) ||
         m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ASTEMPLATE() , false) ||
@@ -1245,7 +1245,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     }
 
     // check URL
-    // May its not useful to start expensive document search, if it
+    // May it's not useful to start expensive document search, if it
     // can fail only .. because we load from a stream or model directly!
     if (
         (ProtocolCheck::isProtocol(m_aURL.Complete, ProtocolCheck::E_PRIVATE_STREAM )) ||
@@ -1373,7 +1373,7 @@ bool LoadEnv::impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::
 
     // ? no lock interface ?
     // Might its an external written frame implementation :-(
-    // Allowing using of it ... but it can fail if its not synchronized with our processes !
+    // Allowing using of it ... but it can fail if it's not synchronized with our processes !
     if (!xLock.is())
         return false;
 

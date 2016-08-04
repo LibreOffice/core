@@ -114,7 +114,7 @@ static bool checkComponent( Reference< XComponent >& rxComponent, const OUString
                 // special case for impress documents which supports same service as draw documents
                 if ( rServiceName == "com.sun.star.drawing.DrawingDocument" )
                 {
-                    // so if we want a draw we need to check if its not an impress
+                    // so if we want a draw we need to check if it's not an impress
                     if( !xInfo->supportsService("com.sun.star.presentation.PresentationDocument") )
                         return true;
                 }

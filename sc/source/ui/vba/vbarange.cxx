@@ -3083,7 +3083,7 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
         }
 
         ScGlobal::SetSearchItem( newOptions );
-        // ignore MatchByte for the moment, its not supported in
+        // ignore MatchByte for the moment, it's not supported in
         // OOo.org afaik
 
         uno::Reference< util::XSearchDescriptor > xSearch( xDescriptor, uno::UNO_QUERY );

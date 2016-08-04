@@ -166,7 +166,7 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
 
 ::std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyleFamilies()
 {
-    // Its an optional interface!
+    // It's an optional interface!
     css::uno::Reference< css::style::XStyleFamiliesSupplier > xModel(m_xDoc, css::uno::UNO_QUERY);
     if (!xModel.is())
         return ::std::vector< SfxStyleInfo_Impl >();

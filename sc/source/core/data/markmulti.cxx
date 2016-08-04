@@ -256,7 +256,7 @@ void ScMultiSel::SetMarkArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, S
     MapType::iterator aIter = aMultiSelContainer.end();
     for ( SCCOL nColIter = nEndCol; nColIter >= nStartCol; --nColIter )
     {
-        // First hint is usually off, so the first emplace operation will take upto
+        // First hint is usually off, so the first emplace operation will take up to
         // logarithmic in map size, all other iterations will take only constant time.
         aIter = aMultiSelContainer.emplace_hint( aIter, nColIter, ScMarkArray() );
         aIter->second.SetMarkArea( nStartRow, nEndRow, bMark );

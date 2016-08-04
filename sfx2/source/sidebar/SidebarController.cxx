@@ -415,7 +415,7 @@ void SidebarController::ProcessNewWidth (const sal_Int32 nNewWidth)
     else
     {
         // Deck became too small.  Close it completely.
-        // If window is wider than the tab bar then mark the deck as being visible, even when it its not.
+        // If window is wider than the tab bar then mark the deck as being visible, even when it is not.
         // This is to trigger an adjustment of the width to the width of the tab bar.
         mbIsDeckOpen = true;
         RequestCloseDeck();

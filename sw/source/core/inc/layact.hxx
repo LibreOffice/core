@@ -171,7 +171,7 @@ public:
     void CheckWaitCursor();
 
     // #i28701# - method is now public;
-    // delete 2nd parameter, because its not used;
+    // delete 2nd parameter, because it's not used;
     bool FormatLayoutFly( SwFlyFrame * );
     // #i28701# - method is now public
     bool FormatFlyContent( const SwFlyFrame * );

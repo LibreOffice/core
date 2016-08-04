@@ -103,7 +103,7 @@ ActiveMSPList::getMSPFromAnyContext( const Any& aContext )
         try
         {
             // the component supports executing scripts embedded in a - possibly foreign document.
-            // Check whether this other document its the component itself.
+            // Check whether this other document it's the component itself.
             if ( !xModel.is() || ( xModel != xScriptContext->getScriptContainer() ) )
             {
                 msp = getMSPFromInvocationContext( xScriptContext );

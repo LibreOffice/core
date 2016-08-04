@@ -2277,7 +2277,7 @@ static void ImplApplyBoxItem( sal_uInt16 nCellFlags, const SvxBoxItem* pBoxItem,
     {
         // current cell is outside the selection
 
-        if( (nCellFlags & ( CELL_BEFORE|CELL_AFTER)) == 0 ) // check if its not nw or ne corner
+        if( (nCellFlags & ( CELL_BEFORE|CELL_AFTER)) == 0 ) // check if it's not nw or ne corner
         {
             if( nCellFlags & CELL_UPPER )
             {
@@ -2290,7 +2290,7 @@ static void ImplApplyBoxItem( sal_uInt16 nCellFlags, const SvxBoxItem* pBoxItem,
                     rNewFrame.SetLine( nullptr, SvxBoxItemLine::TOP );
             }
         }
-        else if( (nCellFlags & ( CELL_UPPER|CELL_LOWER)) == 0 ) // check if its not sw or se corner
+        else if( (nCellFlags & ( CELL_UPPER|CELL_LOWER)) == 0 ) // check if it's not sw or se corner
         {
             if( nCellFlags & CELL_BEFORE )
             {
@@ -2362,7 +2362,7 @@ static void ImplApplyBorderLineItem( sal_uInt16 nCellFlags, const SvxBorderLine*
 {
     if( (nCellFlags & ( CELL_BEFORE|CELL_AFTER|CELL_UPPER|CELL_LOWER)) != 0 )
     {
-        if( (nCellFlags & ( CELL_BEFORE|CELL_AFTER)) == 0 ) // check if its not nw or ne corner
+        if( (nCellFlags & ( CELL_BEFORE|CELL_AFTER)) == 0 ) // check if it's not nw or ne corner
         {
             if( nCellFlags & CELL_UPPER )
             {
@@ -2375,7 +2375,7 @@ static void ImplApplyBorderLineItem( sal_uInt16 nCellFlags, const SvxBorderLine*
                     ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, SvxBoxItemLine::TOP );
             }
         }
-        else if( (nCellFlags & ( CELL_UPPER|CELL_LOWER)) == 0 ) // check if its not sw or se corner
+        else if( (nCellFlags & ( CELL_UPPER|CELL_LOWER)) == 0 ) // check if it's not sw or se corner
         {
             if( nCellFlags & CELL_BEFORE )
             {
@@ -2929,14 +2929,14 @@ void lcl_MergeCommonBorderAttr(LinesState& rLinesState, const SvxBoxItem& rCellB
     {
         // current cell is outside the selection
 
-        if( (nCellFlags & ( CELL_BEFORE|CELL_AFTER)) == 0 ) // check if its not nw or ne corner
+        if( (nCellFlags & ( CELL_BEFORE|CELL_AFTER)) == 0 ) // check if it's not nw or ne corner
         {
             if( nCellFlags & CELL_UPPER )
                 lcl_MergeBorderLine(rLinesState, rCellBoxItem.GetBottom(), SvxBoxItemLine::TOP, SvxBoxInfoItemValidFlags::TOP);
             else if( nCellFlags & CELL_LOWER )
                 lcl_MergeBorderLine(rLinesState, rCellBoxItem.GetTop(), SvxBoxItemLine::BOTTOM, SvxBoxInfoItemValidFlags::BOTTOM);
         }
-        else if( (nCellFlags & ( CELL_UPPER|CELL_LOWER)) == 0 ) // check if its not sw or se corner
+        else if( (nCellFlags & ( CELL_UPPER|CELL_LOWER)) == 0 ) // check if it's not sw or se corner
         {
             if( nCellFlags & CELL_BEFORE )
                 lcl_MergeBorderLine(rLinesState, rCellBoxItem.GetRight(), SvxBoxItemLine::LEFT, SvxBoxInfoItemValidFlags::LEFT);

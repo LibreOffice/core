@@ -4828,7 +4828,7 @@ css::uno::Reference<css::style::XStyle> SwXTextCellStyle::CreateXTextCellStyle(S
 sal_Bool SAL_CALL SwXTextCellStyle::isUserDefined() throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    // if this cell belong to first table style then its defaut style
+    // if this cell belong to first table style then its default style
     if (&m_pDocShell->GetDoc()->GetTableStyles()[0] == m_pDocShell->GetDoc()->GetTableStyles().FindAutoFormat(m_sParentStyle))
         return false;
 
@@ -4955,7 +4955,7 @@ void SAL_CALL SwXTextCellStyle::setPropertyValue(const OUString& rPropertyName, 
                 sal_uInt32 nKey;
                 if (aValue >>= nKey)
                 {
-                    // FIXME: Its not working for old "automatic" currency formats, which are still in use by autotbl.fmt.
+                    // FIXME: It's not working for old "automatic" currency formats, which are still in use by autotbl.fmt.
                     // Scenario:
                     // 1) Mark all styles present by default in autotbl.fmt as default.
                     // 2) convert all currencies present in autotbl.fmt before calling this code

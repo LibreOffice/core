@@ -317,7 +317,7 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
 
 void GtkSalMenu::Update()
 {
-    //find out if top level is a menubar or not, if not, then its a popup menu
+    //find out if top level is a menubar or not, if not, then it's a popup menu
     //hierarchy and in those we hide (most) disabled entries
     const GtkSalMenu* pMenu = this;
     while (pMenu->mpParentSalMenu)
@@ -957,7 +957,7 @@ bool GtkSalMenu::NativeSetItemCommand( unsigned nSection,
         bSubMenuAddedOrRemoved = bOldHasSubmenu != bIsSubmenu;
         if (bSubMenuAddedOrRemoved)
         {
-            //tdf#98636 its not good enough to unset the "submenu-action" attribute to change something
+            //tdf#98636 it's not good enough to unset the "submenu-action" attribute to change something
             //from a submenu to a non-submenu item, so remove the old one entirely and re-add it to
             //support achieving that
             gchar* pLabel = g_lo_menu_get_label_from_item_in_section(pMenu, nSection, nItemPos);

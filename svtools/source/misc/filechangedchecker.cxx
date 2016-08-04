@@ -30,7 +30,7 @@ FileChangedChecker::FileChangedChecker(const OUString& rFilename,
 
 void FileChangedChecker::resetTimer()
 {
-    //Start the Idle if its not active
+    //Start the Idle if it's not active
     if(!mIdle.IsActive())
         mIdle.Start();
 

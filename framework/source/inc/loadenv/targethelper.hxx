@@ -82,7 +82,7 @@ class TargetHelper
 
                     And in case such special names can exists one times only
                     by definition inside the same frame tree (e.g. _beamer and
-                    OFFICE_HELP_TASK) its not a good idea to allow anything here :-)
+                    OFFICE_HELP_TASK) it's not a good idea to allow anything here :-)
 
                     Of course we can't check unknown names, which are not special ones.
                     But we decide, that it's not allowed to use "_" as first sign

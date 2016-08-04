@@ -119,7 +119,7 @@ InterceptedInteraction::EInterceptionState InterceptedInteraction::impl_intercep
 
         // intercepted ...
         // Call they might existing derived class, so they can handle that by its own.
-        // If its not interested on that (may be its not overwritten and the default implementation
+        // If it's not interested on that (maybe it's not overwritten and the default implementation
         // returns E_NOT_INTERCEPTED as default) -> break this loop and search for the right continuation.
         if (bMatch)
         {

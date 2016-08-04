@@ -176,14 +176,14 @@ Printer* DrawDocShell::GetDocumentPrinter()
 
 void DrawDocShell::OnDocumentPrinterChanged(Printer* pNewPrinter)
 {
-    // if we already have a printer, see if its the same
+    // if we already have a printer, see if it's the same
     if( mpPrinter )
     {
         // easy case
         if( mpPrinter == pNewPrinter )
             return;
 
-        // compare if its the same printer with the same job setup
+        // compare if it's the same printer with the same job setup
         if( (mpPrinter->GetName() == pNewPrinter->GetName()) &&
             (mpPrinter->GetJobSetup() == pNewPrinter->GetJobSetup()))
             return;

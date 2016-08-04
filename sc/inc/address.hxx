@@ -310,7 +310,7 @@ public:
 
     /**
         @param  pSheetEndPos
-                If given and Parse() sucessfully parsed a sheet name it returns
+                If given and Parse() successfully parsed a sheet name it returns
                 the end position (exclusive) behind the sheet name AND a
                 following sheet name separator. This independent of whether the
                 resulting reference is fully valid or not.

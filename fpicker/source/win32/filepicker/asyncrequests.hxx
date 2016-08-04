@@ -153,7 +153,7 @@ class AsyncRequests : private ::cppu::BaseMutex
         void triggerJobExecution();
 
 
-        /** does nothing special / excepting to make sure our class wont be inline .-)
+        /** does nothing special / excepting to make sure our class won't be inline .-)
          */
         virtual ~AsyncRequests();
 

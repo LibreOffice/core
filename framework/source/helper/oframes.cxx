@@ -319,7 +319,7 @@ void OFrames::impl_appendSequence(          Sequence< css::uno::Reference< XFram
     }
 
     // Don't manipulate nResultPosition between these two loops!
-    // Its the current position in the result list.
+    // It's the current position in the result list.
 
     // Copy all items from second sequence.
     for ( sal_Int32 nDestinationPosition=0; nDestinationPosition<nDestinationCount; ++nDestinationPosition )

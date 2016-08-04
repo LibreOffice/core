@@ -46,7 +46,7 @@ namespace salhelper{
             its state) must be made threadsafe by the object itself
             or from outside.
 
-    @attention  To prevent the code against race conditions, its not
+    @attention  To prevent the code against race conditions, it's not
                 allowed to start operations inside the ctor
                 of the internal wrapped object - especially operations
                 which needs a reference to the same singleton too.

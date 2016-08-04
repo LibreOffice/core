@@ -57,7 +57,7 @@ namespace basprov
                             m_xDocumentScriptContext;
         // hack, OPropertyContainer doesn't allow you to define a property of unknown
         // type ( I guess because an Any can't contain an Any... I've always wondered why?
-    // as its not unusual to do that in corba )
+    // as it's not unusual to do that in corba )
         css::uno::Sequence< css::uno::Any > m_caller;
     protected:
         // OPropertySetHelper

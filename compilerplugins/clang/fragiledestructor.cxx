@@ -52,7 +52,7 @@ bool FragileDestructor::TraverseCXXDestructorDecl(CXXDestructorDecl* pCXXDestruc
         || aFileName.startswith(SRCDIR "/include/cppuhelper/")
         || aFileName.startswith(SRCDIR "/cppuhelper/")
         || aFileName.startswith(SRCDIR "/comphelper/")
-        // dont know how to detect this in clang - it is making an explicit call to it's own method, so presumably OK
+        // don't know how to detect this in clang - it is making an explicit call to it's own method, so presumably OK
         || aFileName == SRCDIR "/basic/source/sbx/sbxvalue.cxx"
        )
         return RecursiveASTVisitor::TraverseCXXDestructorDecl(pCXXDestructorDecl);

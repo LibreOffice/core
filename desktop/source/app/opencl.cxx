@@ -160,7 +160,7 @@ void Desktop::CheckOpenCLCompute(const Reference< XDesktop2 > &xDesktop)
         // OpenCL device changed - sanity check it and disable if bad.
 
         boost::optional<sal_Int32> nOrigMinimumSize = officecfg::Office::Calc::Formula::Calculation::OpenCLMinimumDataSize::get();
-        { // set the minumum group size to something small for quick testing.
+        { // set the minimum group size to something small for quick testing.
             std::shared_ptr<comphelper::ConfigurationChanges> xBatch(comphelper::ConfigurationChanges::create());
             officecfg::Office::Calc::Formula::Calculation::OpenCLMinimumDataSize::set(3 /* small */, xBatch);
             xBatch->commit();

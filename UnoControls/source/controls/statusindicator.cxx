@@ -40,7 +40,7 @@ namespace unocontrols{
 StatusIndicator::StatusIndicator( const css::uno::Reference< XComponentContext >& rxContext )
     : BaseContainerControl  ( rxContext  )
 {
-    // Its not allowed to work with member in this method (refcounter !!!)
+    // It's not allowed to work with member in this method (refcounter !!!)
     // But with a HACK (++refcount) its "OK" :-(
     ++m_refCount;
 

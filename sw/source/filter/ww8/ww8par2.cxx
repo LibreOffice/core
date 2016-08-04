@@ -559,7 +559,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     aRet.mbStartApo = bNowApo && !InAnyApo(); // APO-start
     aRet.mbStopApo = InEqualOrHigherApo(nCellLevel) && !bNowApo;  // APO-end
 
-    //If it happens that we are in a table, then if its not the first cell
+    //If it happens that we are in a table, then if it's not the first cell
     //then any attributes that might otherwise cause the contents to jump
     //into another frame don't matter, a table row sticks together as one
     //unit no matter what else happens. So if we are not in a table at

@@ -3487,7 +3487,7 @@ namespace osl_File
             CPPUNIT_ASSERT_MESSAGE( "test for setTime function: set access time then get it. time precision is still a problem for it cut off the nanosec.",
                 t_compareTime( pTV_access, pTV_current, delta ) );
 #if defined(_WIN32)
-            //Unfortunately there is no way to get the creation time of a file under Unix (its a Windows only feature).
+            //Unfortunately there is no way to get the creation time of a file under Unix (it's a Windows only feature).
             //That means the flag osl_FileStatus_Mask_CreationTime should be deprecated under Unix.
             CPPUNIT_ASSERT_MESSAGE( "test for setTime function: set creation time then get it. ",
                 sal_True == t_compareTime( pTV_creation, pTV_current, delta ) ) ;

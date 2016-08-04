@@ -524,12 +524,12 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             return;
     }
 
-    // Supress invalid payloads.
+    // Suppress invalid payloads.
     if (type == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
         payload.find(", 0, 0, ") != std::string::npos)
     {
         // The cursor position is often the relative coordinates of the widget
-        // issueing it, instead of the absolute one that we expect.
+        // issuing it, instead of the absolute one that we expect.
         // This is temporary however, and, once the control is created and initialized
         // correctly, it eventually emits the correct absolute coordinates.
         //SAL_WARN("lokevt", "Skipping invalid event [" + std::to_string(type) + "]: [" + payload + "].");

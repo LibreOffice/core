@@ -374,7 +374,7 @@ void SwFrame::DestroyImpl()
 SwFrame::~SwFrame()
 {
     assert(m_isInDestroy); // check that only DestroySwFrame does "delete"
-    assert(!IsDeleteForbidden()); // check that its not deleted while deletes are forbidden
+    assert(!IsDeleteForbidden()); // check that it's not deleted while deletes are forbidden
 #if OSL_DEBUG_LEVEL > 0
     // JP 15.10.2001: for detection of access to deleted frames
     mpDrawObjs = reinterpret_cast<SwSortedObjs*>(0x33333333);

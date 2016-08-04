@@ -687,7 +687,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException, s
 }
 
 // #TODO perhaps we should switch the return type depending of the filter
-// type, e.g. return Calc for Calc and Excel if its an imported doc
+// type, e.g. return Calc for Calc and Excel if it's an imported doc
 OUString SAL_CALL
 ScVbaApplication::getName() throw (uno::RuntimeException, std::exception)
 {

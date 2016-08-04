@@ -335,7 +335,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 
         if( ( DFLT_ESC_AUTO_SUPER != nEsc ) && ( DFLT_ESC_AUTO_SUB != nEsc ) )
         {
-            nEsc *= 10; //HalPoints => Twips was embezzled in RTFITEM.CXX!
+            nEsc *= 10; //HalfPoints => Twips was embezzled in RTFITEM.CXX!
             SvxFont aFont;
             mpEditEngine->SeekCursor(aStartPaM.GetNode(), aStartPaM.GetIndex()+1, aFont);
             nEsc = nEsc * 100 / aFont.GetFontSize().Height();

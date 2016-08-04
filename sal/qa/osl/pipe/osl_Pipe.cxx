@@ -430,7 +430,7 @@ namespace osl_Pipe
                 bRes  = aPipe == aPipe;
                 aPipe.close( );
 
-                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test isEqual(), compare its self.",
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test isEqual(), compare itself.",
                                         bRes );
             }
 

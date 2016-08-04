@@ -725,7 +725,7 @@ private:
                 AutoSave              => pParams == 0
                 SessionSave/CrashSave => pParams != 0
 
-        @return A suggestion, how the timer (if its not already disabled!)
+        @return A suggestion, how the timer (if it's not already disabled!)
                 should be restarted to fulfill the requirements.
 
         @threadsafe
@@ -982,7 +982,7 @@ private:
         result at the end... a non existing file .-)
 
         On the other side removing of files from disc is an optional
-        feature. If we are not able doing so... its not a real problem.
+        feature. If we are not able doing so... it's not a real problem.
         Ok - users disc place will be smaller then... but we should produce
         a crash during crash save because we can't delete a temporary file only!
 
@@ -2073,7 +2073,7 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
         if (bRemoveIt)
         {
             // Catch NoSuchElementException.
-            // Its not a good idea inside multithreaded environments to call hasElement - removeElement.
+            // It's not a good idea inside multithreaded environments to call hasElement - removeElement.
             // DO IT!
             try
             {
@@ -2323,7 +2323,7 @@ IMPL_LINK_NOARG_TYPED(AutoRecovery, implts_timerExpired, Timer *, void)
            return;
         } /* SAFE */
 
-        // check some "states", where its not allowed (better: not a good idea) to
+        // check some "states", where it's not allowed (better: not a good idea) to
         // start an AutoSave. (e.g. if the user makes drag & drop ...)
         // Then we poll till this "disallowed" state is gone.
         bool bAutoSaveNotAllowed = Application::IsUICaptured();
@@ -2480,7 +2480,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     implts_specifyAppModuleAndFactory(aNew);
 
     // Hack! Check for "illegal office documents"... as e.g. the Basic IDE
-    // Its not really a full featured office document. It doesn't provide an URL, any filter, a factory URL etcpp.
+    // It's not really a full featured office document. It doesn't provide an URL, any filter, a factory URL etcpp.
     // TODO file bug to Basic IDE developers. They must remove the office document API from its service.
     if (
         (aNew.OrgURL.isEmpty()) &&
@@ -2567,7 +2567,7 @@ void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::fra
     pIt = AutoRecovery::impl_searchDocument(m_lDocCache, xDocument);
     if (pIt != m_lDocCache.end())
         m_lDocCache.erase(pIt);
-    pIt = m_lDocCache.end(); // otherwise its not specified what pIt means!
+    pIt = m_lDocCache.end(); // otherwise it's not specified what pIt means!
     aCacheLock2.unlock();
 
     } /* SAFE */
@@ -2904,7 +2904,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
     // We return a suggestion for an active timer only.
     // It will be ignored if the timer was disabled by the user ...
     // Further this state can be set to USER_IDLE only later in this method.
-    // Its not allowed to reset such state then. Because we must know, if
+    // It's not allowed to reset such state then. Because we must know, if
     // there exists POSTPONED documents. see below ...
     AutoRecovery::ETimerType eTimer = AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL;
 
@@ -3236,7 +3236,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
 
         utl::MediaDescriptor lDescriptor;
 
-        // its an UI feature - so the "USER" itself must be set as referer
+        // it's an UI feature - so the "USER" itself must be set as referer
         lDescriptor[utl::MediaDescriptor::PROP_REFERRER()] <<= OUString(REFERRER_USER);
         lDescriptor[utl::MediaDescriptor::PROP_SALVAGEDFILE()] <<= OUString();
 

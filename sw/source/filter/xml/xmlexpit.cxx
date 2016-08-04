@@ -248,7 +248,7 @@ void SvXMLExportItemMapper::exportElementItems(
 }
 
 /** returns the item with the given WhichId from the given ItemSet if its
-    set or its default item if its not set and the SvXmlExportFlags::DEEP
+    set or its default item if it's not set and the SvXmlExportFlags::DEEP
     is set in the flags
 */
 const SfxPoolItem* SvXMLExportItemMapper::GetItem( const SfxItemSet& rSet,
@@ -269,7 +269,7 @@ const SfxPoolItem* SvXMLExportItemMapper::GetItem( const SfxItemSet& rSet,
     else if( (nFlags & SvXmlExportFlags::DEFAULTS) &&
               SFX_WHICH_MAX > nWhichId )
     {
-        // if its not set, try the pool if we export defaults
+        // if it's not set, try the pool if we export defaults
         return &rSet.GetPool()->GetDefaultItem(nWhichId);
     }
     else

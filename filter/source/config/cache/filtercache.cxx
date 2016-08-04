@@ -504,7 +504,7 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
                 /* TODO
                     Hack -->
                         The default frame loader can't be located inside the normal set of frame loaders.
-                        Its an atomic property inside the misc cfg package. So we can't retrieve the information
+                        It's an atomic property inside the misc cfg package. So we can't retrieve the information
                         about FINALIZED and MANDATORY very easy ... :-(
                         => set it to readonly/required everytimes :-)
                 */
@@ -826,7 +826,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
         case E_PROVIDER_OLD :
         {
             // This special provider is used to work with
-            // the old configuration format only. Its not cached!
+            // the old configuration format only. It's not cached!
             sPath   = CFGPACKAGE_TD_OLD;
             pConfig = &xOld;
             sRtlLog = "impl_openconfig(E_PROVIDER_OLD)";
@@ -1107,7 +1107,7 @@ void FilterCache::impl_validateAndOptimize()
         {
             // OK - there is no filter for this type. But thats not an error.
             // May be it can be handled by a ContentHandler ...
-            // But at this time its not guaranteed that there is any ContentHandler
+            // But at this time it's not guaranteed that there is any ContentHandler
             // or FrameLoader inside this cache ... but on disk ...
             bool bReferencedByLoader  = true;
             bool bReferencedByHandler = true;

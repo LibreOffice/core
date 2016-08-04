@@ -78,7 +78,7 @@ void SwComboBox::RemoveEntryAt(sal_Int32 const nPos)
     ComboBox::RemoveEntryAt(nPos);
 
     // Don't add new entries to the list
-    // add to DelEntryLst
+    // add to DelEntryList
     m_DelEntryList.push_back(m_EntryList[nPos]);
     m_EntryList.erase(m_EntryList.begin() + nPos);
 }

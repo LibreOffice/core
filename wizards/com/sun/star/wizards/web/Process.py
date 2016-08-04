@@ -586,7 +586,7 @@ class Process(ProcessErrors):
 
     # searches the an exporter for the given CGExporter object
     # in the cache.
-    # If its not there, creates it, stores it in the cache and
+    # If it's not there, creates it, stores it in the cache and
     # returns it.
     # @param export specifies the needed exporter.
     # @return an Exporter instance

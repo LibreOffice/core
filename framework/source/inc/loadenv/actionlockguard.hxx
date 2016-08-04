@@ -123,7 +123,7 @@ class ActionLockGuard
                 xLock->removeActionLock();
         }
 
-        /** @short  unlock the internal wrapped resource, if its not already done. */
+        /** @short  unlock the internal wrapped resource, if it's not already done. */
         void unlock()
         {
             osl::MutexGuard g(m_mutex);

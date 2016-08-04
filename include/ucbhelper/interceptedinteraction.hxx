@@ -64,7 +64,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
             css::uno::Type Continuation;
 
 
-            /** @short  its an unique identifier, which must be managed by the outside code.
+            /** @short  it's an unique identifier, which must be managed by the outside code.
 
                 @descr  If there is a derived class, which overwrites the InterceptedInteraction::intercepted()
                         method, it will be called with a reference to an InterceptedRequest struct.

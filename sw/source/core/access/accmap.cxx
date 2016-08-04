@@ -2664,7 +2664,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
             // Moreover, we have to make sure to invalidate the
             // cursor even if the current cell has no accessible object.
             // If the old cursor objects exists and is in the same
-            // table, its the best choice, because using it avoids
+            // table, it's the best choice, because using it avoids
             // an unnecessary cursor invalidation cycle when creating
             // a new object for the current cell.
             if( aFrameOrObj.GetSwFrame()->IsCellFrame() )

@@ -1200,7 +1200,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
                     }
                     else
                     {
-                        // check if its the default segment description ( M L Z N )
+                        // check if it's the default segment description ( M L Z N )
                         if ( seqSegments1.getLength() == 4 )
                         {
                             if ( ( seqSegments1[ 0 ].Command == EnhancedCustomShapeSegmentCommand::MOVETO )

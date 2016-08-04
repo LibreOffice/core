@@ -177,7 +177,7 @@ class Desktop : private cppu::BaseMutex,
 
             @descr      Additional to adding normal listener these method was implemented special.
                         Every listener will be asked for its uno implementation name.
-                        Some of them are well known... and the corresponding listener wont be added
+                        Some of them are well known... and the corresponding listener won't be added
                         to the container of "normal listener". Those listener will be set as special
                         member.
                         see e.g. member m_xSfxTerminator
@@ -432,7 +432,7 @@ class Desktop : private cppu::BaseMutex,
           * Because basic runs Application::Yield internally the application may quit
           * while running inside the internal basic event loop. So all the basic
           * infrastructure may be deleted while the call is executing, leading to
-          * a varient of crashes. So this special terminate listener will
+          * a variant of crashes. So this special terminate listener will
           * veto the current quit attempt, stop basic execution, which will
           * cause the inner event loop to quit, and on return to the outer normal
           * application event loop then resend the quit attempt.

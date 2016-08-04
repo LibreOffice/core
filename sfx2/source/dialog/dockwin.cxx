@@ -738,7 +738,7 @@ void SfxDockingWindow::EndDocking( const Rectangle& rRect, bool bFloatMode )
     {
         // If the alignment changes and the window is in a docked state in a
         // SplitWindow, then it must be re-registered. If it is docked again,
-        // PrepareToggleFloatingMode() and ToggleFloatingMode() preform the
+        // PrepareToggleFloatingMode() and ToggleFloatingMode() perform the
         // re-registered
         if ( !bFloatMode )
             bReArrange = true;

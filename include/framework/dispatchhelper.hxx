@@ -96,7 +96,7 @@ class FWE_DLLPUBLIC DispatchHelper : public ::cppu::WeakImplHelper< css::lang::X
                                         const css::uno::Sequence< css::beans::PropertyValue >&      lArguments        )
         throw(css::uno::RuntimeException, std::exception) override;
 
-        // not a public XDispatchHelper-method, need in sfx2/source/control/statcach.cxx for extentions
+        // not a public XDispatchHelper-method, need in sfx2/source/control/statcach.cxx for extensions
         css::uno::Any SAL_CALL executeDispatch(
                                         const css::uno::Reference< css::frame::XDispatch >&  xDispatch      ,
                                         const  css::util::URL&                                  aURL        ,

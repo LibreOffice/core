@@ -162,7 +162,7 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
         /*-****************************************************************************************************
             @short      standard destructor
             @descr      This method destruct an instance of this class and clear some member.
-                        This method is protected, because its not allowed to use this class as a member!
+                        This method is protected, because it's not allowed to use this class as a member!
                         You MUST use a dynamical instance (pointer). That's the reason for a protected dtor.
         *//*-*****************************************************************************************************/
         virtual ~OFrames();

@@ -2551,7 +2551,7 @@ bool MenuBar::ImplHandleKeyEvent( const KeyEvent& rKEvent )
     {
         // Except when the event is the F6 cycle pane event and we can put our
         // focus into it (i.e. the gtk3 menubar case but not the mac/unity case
-        // where its not part of the application window)
+        // where it's not part of the application window)
         if (!TaskPaneList::IsCycleKey(rKEvent.GetKeyCode()))
             return false;
         if (!pNativeMenu->CanGetFocus())

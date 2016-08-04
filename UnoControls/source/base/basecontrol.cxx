@@ -746,7 +746,7 @@ void BaseControl::impl_paint(           sal_Int32               /*nX*/          
 {
     // - one paint method for peer AND view !!!
     //   (see also => "windowPaint()" and "draw()")
-    // - not used in this implementation, but its not necessary to make it pure virtual !!!
+    // - not used in this implementation, but it's not necessary to make it pure virtual !!!
 }
 
 //  protected method

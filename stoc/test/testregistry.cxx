@@ -455,7 +455,7 @@ void test_DefaultRegistry(
 
     OSL_ENSURE( xServInfo.is(), "test_DefaultRegistry error2");
 
-    OSL_ENSURE( xServInfo->getImplementationName() == "com.sun.star.comp.stoc.NestedRegistry", "test_DefualtRegistry error3");
+    OSL_ENSURE( xServInfo->getImplementationName() == "com.sun.star.comp.stoc.NestedRegistry", "test_DefaultRegistry error3");
     OSL_ENSURE( xServInfo->supportsService("com.sun.star.registry.NestedRegistry"), "test_DefaultRegistry error4");
     OSL_ENSURE( xServInfo->getSupportedServiceNames().getLength() == 1, "test_DefaultRegistry error5");
     xServInfo.clear();

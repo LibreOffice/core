@@ -770,7 +770,7 @@ Found findEntity(
                                          unoidl::PolymorphicStructTypeTemplateEntity *>(
                                              e->entity.get())
                                      ->getTypeParameters().size())
-                                 + " type paramters"));
+                                 + " type parameters"));
                             return FOUND_ERROR;
                         }
                         t = unoidl::detail::SourceProviderType(n, e, args);

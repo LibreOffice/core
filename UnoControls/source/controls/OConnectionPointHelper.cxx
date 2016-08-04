@@ -104,7 +104,7 @@ Type SAL_CALL OConnectionPointHelper::getConnectionType() throw( RuntimeExceptio
     // Set default return value, if method failed.
     if ( !impl_LockContainer() )
     {
-        // Container not exist! Its an runtime error.
+        // Container not exist! It's a runtime error.
         throw RuntimeException();
     }
 
@@ -144,13 +144,13 @@ void SAL_CALL OConnectionPointHelper::advise( const Reference< XInterface >& xLi
     }
 
     // ListenerExistException is obsolete!?
-    // Its the same container for XConnectionPointContainer and XConnectionPoint. But only here we must control, if a listener already exist!?
+    // It's the same container for XConnectionPointContainer and XConnectionPoint. But only here we must control, if a listener already exist!?
     // You can add a listener more than one time at XConnectionPointContainer, but here only one ...
 
     // Operation is permitted only, if reference to container is valid!
     if ( !impl_LockContainer() )
     {
-        // Container not exist! Its an runtime error.
+        // Container not exist! It's a runtime error.
         throw RuntimeException();
     }
     // Forward it to OConnectionPointHelperContainer!
@@ -168,7 +168,7 @@ void SAL_CALL OConnectionPointHelper::unadvise( const Reference< XInterface >& x
     // Operation is permitted only, if reference to container is valid!
     if ( !impl_LockContainer() )
     {
-        // Container not exist! Its an runtime error.
+        // Container not exist! It's a runtime error.
         throw RuntimeException();
 
     }
@@ -187,7 +187,7 @@ Sequence< Reference< XInterface > > SAL_CALL OConnectionPointHelper::getConnecti
     // Operation is permitted only, if reference to container is valid!
     if ( !impl_LockContainer() )
     {
-        // Container not exist! Its an runtime error.
+        // Container not exist! It's a runtime error.
         throw RuntimeException();
     }
     // Set default return value, if method failed.

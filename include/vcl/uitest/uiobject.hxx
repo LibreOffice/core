@@ -70,7 +70,7 @@ public:
     virtual std::unique_ptr<UIObject> get_child(const OUString& rID);
 
     /**
-     * Returns a set containing all decendants of the object.
+     * Returns a set containing all descendants of the object.
      */
     virtual std::set<OUString> get_children() const;
 

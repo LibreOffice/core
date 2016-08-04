@@ -94,7 +94,7 @@ namespace drawinglayer
                 // (see above).
                 // This could even be done when vector graphic, but we explicitly want to have the
                 // pure primitive solution for this; this will allow vector graphics to stay vector
-                // geraphics, independent from the color filtering stuff. This will enhance e.g.
+                // graphics, independent from the color filtering stuff. This will enhance e.g.
                 // SVG and print quality while reducing data size at the same time.
                 // The other way around the old modifications when only used on already bitmap objects
                 // will not lose any quality.

@@ -155,7 +155,7 @@ namespace comphelper
             return get_ensureType( _rValueName, &_out_rValue, ::cppu::UnoType< VALUE_TYPE >::get() );
         }
 
-        /** retrieves a value with a given name, or defaults it to a given value, if its not present
+        /** retrieves a value with a given name, or defaults it to a given value, if it's not present
             in the collection
         */
         template < typename VALUE_TYPE >
