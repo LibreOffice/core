@@ -847,6 +847,14 @@ void ScOrcusStyles::protection::applyToItemSet(SfxItemSet& rSet) const
 ScOrcusStyles::border::border():
     mbHasBorderAttr(false)
 {
+    border_line();
+}
+
+ScOrcusStyles::border::border_line::border_line():
+    mestyle(::com::sun::star::table::BorderLineStyle::SOLID),
+    maColor(COL_WHITE),
+    mnWidth(0)
+{
 }
 
 namespace {
