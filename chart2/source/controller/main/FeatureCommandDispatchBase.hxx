@@ -90,7 +90,7 @@ protected:
             by the user, see also <type scope="css::frame">CommandGroup</type>.
     */
     void implDescribeSupportedFeature( const sal_Char* pAsciiCommandURL, sal_uInt16 nId,
-        sal_Int16 nGroup = css::frame::CommandGroup::INTERNAL );
+        sal_Int16 nGroup );
 
     mutable SupportedFeatures m_aSupportedFeatures;
 

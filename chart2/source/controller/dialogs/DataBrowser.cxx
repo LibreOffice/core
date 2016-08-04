@@ -101,7 +101,7 @@ public:
 
     void setStartColumn( sal_Int32 nStartColumn );
     sal_Int32 getStartColumn() const { return m_nStartColumn;}
-    void SetShowWarningBox( bool bShowWarning = true );
+    void SetShowWarningBox( bool bShowWarning );
 
 private:
     sal_Int32 m_nStartColumn;

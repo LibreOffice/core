@@ -43,7 +43,7 @@ const auto defaultPreferredColor = COL_LIGHTBLUE;
 void lcl_fillRanges(
     Sequence< chart2::data::HighlightedRange > & rOutRanges,
     const Sequence< OUString >& aRangeStrings,
-    sal_Int32 nPreferredColor = defaultPreferredColor,
+    sal_Int32 nPreferredColor,
     sal_Int32 nIndex = -1 )
 {
     rOutRanges.realloc( aRangeStrings.getLength());
@@ -257,7 +257,8 @@ void RangeHighlighter::fillRangesForCategories( const Reference< chart2::XAxis >
         return;
     chart2::ScaleData aData( xAxis->getScaleData());
     lcl_fillRanges( m_aSelectedRanges,
-                    DataSourceHelper::getRangesFromLabeledDataSequence( aData.Categories ));
+                    DataSourceHelper::getRangesFromLabeledDataSequence( aData.Categories ),
+                    defaultPreferredColor );
 }
 
 void RangeHighlighter::fillRangesForDataPoint( const Reference< uno::XInterface > & xDataSeries, sal_Int32 nIndex )

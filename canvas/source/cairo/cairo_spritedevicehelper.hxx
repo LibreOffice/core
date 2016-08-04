@@ -62,7 +62,7 @@ namespace cairocanvas
 
         const ::cairo::SurfaceSharedPtr& getBufferSurface() { return mpBufferSurface; }
         ::cairo::SurfaceSharedPtr getWindowSurface();
-        ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, int aContent = CAIRO_CONTENT_COLOR_ALPHA );
+        ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, int aContent );
         ::cairo::SurfaceSharedPtr createSurface( BitmapSystemData& rData, const Size& rSize );
         const ::basegfx::B2ISize& getSizePixel() { return maSize; }
         void flush();

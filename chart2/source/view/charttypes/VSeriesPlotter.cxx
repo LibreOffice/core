@@ -2346,7 +2346,7 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForSeries(
 {
 
     LegendSymbolStyle eLegendSymbolStyle = this->getLegendSymbolStyle();
-    uno::Any aExplicitSymbol( this->getExplicitSymbol( rSeries ) );
+    uno::Any aExplicitSymbol( this->getExplicitSymbol( rSeries, -1 ) );
 
     VLegendSymbolFactory::tPropertyType ePropType =
         VLegendSymbolFactory::PROP_TYPE_FILLED_SERIES;

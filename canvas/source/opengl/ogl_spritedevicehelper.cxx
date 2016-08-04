@@ -53,7 +53,7 @@ static void initContext()
     glShadeModel(GL_FLAT);
 }
 
-static void initTransformation(const ::Size& rSize, bool bMirror=false)
+static void initTransformation(const ::Size& rSize, bool bMirror)
 {
     // use whole window
     glViewport( 0,0,
@@ -282,7 +282,7 @@ namespace oglcanvas
 
         SystemChildWindow* pChildWindow = mxContext->getChildWindow();
         const ::Size& rOutputSize = pChildWindow->GetSizePixel();
-        initTransformation(rOutputSize);
+        initTransformation(rOutputSize, false);
 
         // render the actual spritecanvas content
         mpSpriteCanvas->renderRecordedActions();

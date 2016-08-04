@@ -35,7 +35,7 @@ void getPropNamesAndValues( const Reference< beans::XPropertySet >& xProp,
         ::chart::tNameSequence& rNames,
         ::chart::tAnySequence& rValues,
         ::chart::VLegendSymbolFactory::tPropertyType ePropertyType,
-        const awt::Size& aMaxSymbolExtent = awt::Size(0,0))
+        const awt::Size& aMaxSymbolExtent)
 {
     const ::chart::tPropertyNameMap & aFilledSeriesNameMap( ::chart::PropertyMapper::getPropertyNameMapForFilledSeriesProperties());
     const ::chart::tPropertyNameMap & aLineSeriesNameMap( ::chart::PropertyMapper::getPropertyNameMapForLineSeriesProperties());
@@ -80,7 +80,7 @@ void lcl_setPropetiesToShape(
     const Reference< beans::XPropertySet > & xProp,
     const Reference< drawing::XShape > & xShape,
     ::chart::VLegendSymbolFactory::tPropertyType ePropertyType,
-    const awt::Size& aMaxSymbolExtent = awt::Size(0,0))
+    const awt::Size& aMaxSymbolExtent)
 {
     ::chart::tNameSequence aPropNames;
     ::chart::tAnySequence aPropValues;
@@ -178,7 +178,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
                         awt::Point( rEntryKeyAspectRatio.Width/2-nSize/2, rEntryKeyAspectRatio.Height/2-nSize/2 ));
             if( xShape.is() )
             {
-                lcl_setPropetiesToShape( xLegendEntryProperties, xShape, ePropertyType ); // PROP_TYPE_FILLED_SERIES );
+                lcl_setPropetiesToShape( xLegendEntryProperties, xShape, ePropertyType, awt::Size(0,0) ); // PROP_TYPE_FILLED_SERIES );
             }
         }
         else // eStyle == LegendSymbolStyle_BOX
@@ -187,7 +187,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
             tAnySequence aPropValues;
 
             getPropNamesAndValues( xLegendEntryProperties, aPropNames, aPropValues,
-                    ePropertyType );// PROP_TYPE_FILLED_SERIES
+                    ePropertyType, awt::Size(0,0) );// PROP_TYPE_FILLED_SERIES
 
             Reference< drawing::XShape > xShape =
                 pShapeFactory->createRectangle( xResultGroup,

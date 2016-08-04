@@ -53,7 +53,7 @@ namespace cairocanvas
 
         /// create new surface in given size
         virtual ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize,
-                                                         int aContent = CAIRO_CONTENT_COLOR_ALPHA ) = 0;
+                                                         int aContent ) = 0;
         /// create new surface from given bitmap
         virtual ::cairo::SurfaceSharedPtr createSurface( ::Bitmap& rBitmap ) = 0;
 

@@ -89,7 +89,7 @@ void ShapeFactory::setPageSize(uno::Reference< drawing::XShapes >, const awt::Si
 //  diverse tools::PolyPolygon create methods
 
 uno::Any createPolyPolygon_Cube(
-            const drawing::Direction3D& rSize, double fRoundedEdge, bool bRounded = true )
+            const drawing::Direction3D& rSize, double fRoundedEdge, bool bRounded )
 {
     OSL_PRECOND(fRoundedEdge>=0, "fRoundedEdge needs to be >= 0");
 
@@ -609,7 +609,7 @@ uno::Reference<drawing::XShape>
           , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
           , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree )
 {
-    return impl_createConeOrCylinder( xTarget, rPosition, rSize, fTopHeight, nRotateZAngleHundredthDegree );
+    return impl_createConeOrCylinder( xTarget, rPosition, rSize, fTopHeight, nRotateZAngleHundredthDegree, false );
 }
 
 uno::Reference<drawing::XShape>

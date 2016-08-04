@@ -111,7 +111,7 @@ public:
     virtual void    hideExtraControls() const;
     virtual void    fillExtraControls( const ChartTypeParameter& rParameter
                                      , const css::uno::Reference< css::chart2::XChartDocument >& xChartModel
-                                     , const css::uno::Reference< css::beans::XPropertySet >& xTemplateProps=css::uno::Reference< css::beans::XPropertySet >() ) const;
+                                     , const css::uno::Reference< css::beans::XPropertySet >& xTemplateProps ) const;
     virtual void    setTemplateProperties( const css::uno::Reference< css::beans::XPropertySet >& xTemplateProps ) const throw (css::uno::RuntimeException);
 
     bool                isSubType( const OUString& rServiceName );
@@ -276,7 +276,7 @@ public:
     virtual void    hideExtraControls() const override;
     virtual void    fillExtraControls( const ChartTypeParameter& rParameter
                                      , const css::uno::Reference< css::chart2::XChartDocument >& xChartModel
-                                     , const css::uno::Reference< css::beans::XPropertySet >& xTemplateProps=css::uno::Reference< css::beans::XPropertySet >() ) const override;
+                                     , const css::uno::Reference< css::beans::XPropertySet >& xTemplateProps ) const override;
 
     virtual void    setTemplateProperties( const css::uno::Reference< css::beans::XPropertySet >& xTemplateProps ) const throw (css::uno::RuntimeException) override;
 

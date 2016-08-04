@@ -75,7 +75,7 @@ public:
         "vertical==true" for bar charts, "vertical==false" for column charts
      */
     static void setVertical( const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
-                             bool bVertical = true );
+                             bool bVertical );
 
     /** Gets the "SwapXAndYAxis" property at all coordinate systems found in the
         given diagram.
@@ -113,8 +113,7 @@ public:
     static StackMode getStackModeFromChartType(
         const css::uno::Reference< css::chart2::XChartType > & xChartType,
         bool& rbFound, bool& rbAmbiguous,
-        const css::uno::Reference< css::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem =
-                css::uno::Reference< css::chart2::XCoordinateSystem >()
+        const css::uno::Reference< css::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
         );
 
     /** Returns the dimension found for all chart types in the tree.  If the

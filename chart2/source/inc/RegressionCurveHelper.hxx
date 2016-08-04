@@ -143,7 +143,7 @@ namespace RegressionCurveHelper
     void initializeCurveCalculator(
         const css::uno::Reference<css::chart2::XRegressionCurveCalculator>& xOutCurveCalculator,
         const css::uno::Reference<css::chart2::data::XDataSource>& xSource,
-        bool bUseXValuesIfAvailable = true );
+        bool bUseXValuesIfAvailable );
 
     /** Same method as above, but uses the given XModel to determine the
         parameter bUseXValuesIfAvailable in the above function.  It is also
