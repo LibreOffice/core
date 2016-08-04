@@ -1811,11 +1811,27 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawF
         }
     }
 
+    const long nOnePixel = GetDrawPixel( pDev, 1 );
+    const long nOffX = 3*nOnePixel;
+    DrawTextFlags nTextStyle = DrawTextFlags::VCenter;
+    Rectangle aTextRect( aPos, aSize );
+
+    if ( GetStyle() & WB_CENTER )
+        nTextStyle |= DrawTextFlags::Center;
+    else if ( GetStyle() & WB_RIGHT )
+    {
+        nTextStyle |= DrawTextFlags::Right;
+        aTextRect.Left() += nOffX;
+    }
+    else
+    {
+        nTextStyle |= DrawTextFlags::Left;
+        aTextRect.Right() -= nOffX;
+    }
+
     OUString    aText = ImplGetText();
     long        nTextHeight = pDev->GetTextHeight();
     long        nTextWidth = pDev->GetTextWidth( aText );
-    long        nOnePixel = GetDrawPixel( pDev, 1 );
-    long        nOffX = 3*nOnePixel;
     long        nOffY = (aSize.Height() - nTextHeight) / 2;
 
     // Clipping?
@@ -1829,18 +1845,7 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawF
         pDev->IntersectClipRegion( aClip );
     }
 
-    if ( GetStyle() & WB_CENTER )
-    {
-        aPos.X() += (aSize.Width() - nTextWidth) / 2;
-        nOffX = 0;
-    }
-    else if ( GetStyle() & WB_RIGHT )
-    {
-        aPos.X() += aSize.Width() - nTextWidth;
-        nOffX = -nOffX;
-    }
-
-    pDev->DrawText( Point( aPos.X() + nOffX, aPos.Y() + nOffY ), aText );
+    pDev->DrawText( aTextRect, aText, nTextStyle );
     pDev->Pop();
 
     if ( GetSubEdit() )

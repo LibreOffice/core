@@ -412,7 +412,8 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, Dr
         }
     }
 
-    long nOnePixel = GetDrawPixel( pDev, 1 );
+    const long nOnePixel = GetDrawPixel( pDev, 1 );
+    const long nOffX = 3*nOnePixel;
     DrawTextFlags nTextStyle = DrawTextFlags::VCenter;
     Rectangle aTextRect( aPos, aSize );
 
@@ -423,15 +424,14 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, Dr
     else
         nTextStyle |= DrawTextFlags::Left;
 
-    aTextRect.Left() += 3*nOnePixel;
-    aTextRect.Right() -= 3*nOnePixel;
+    aTextRect.Left() += nOffX;
+    aTextRect.Right() -= nOffX;
 
     if ( IsDropDownBox() )
     {
         OUString   aText = GetSelectEntry();
         long       nTextHeight = pDev->GetTextHeight();
         long       nTextWidth = pDev->GetTextWidth( aText );
-        long       nOffX = 3*nOnePixel;
         long       nOffY = (aSize.Height()-nTextHeight) / 2;
 
         // Clipping?
