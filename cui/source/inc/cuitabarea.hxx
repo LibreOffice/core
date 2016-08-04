@@ -191,16 +191,21 @@ class SvxAreaTabPage : public SvxTabPage
     using TabPage::DeactivatePage;
     static const sal_uInt16 pAreaRanges[];
 private:
+    sal_uInt16            m_nColorTabPage;
+    sal_uInt16            m_nGradientTabPage;
+    sal_uInt16            m_nHatchTabPage;
+    sal_uInt16            m_nBitmapTabPage;
+    sal_uInt16            m_nPatternTabPage;
+
     VclPtr<ListBox>            m_pTypeLB;
-
-    VclPtr<VclBox>             m_pFillLB;
-    VclPtr<ColorLB>            m_pLbColor;
-    VclPtr<GradientLB>         m_pLbGradient;
-    VclPtr<HatchingLB>         m_pLbHatching;
-    VclPtr<BitmapLB>           m_pLbBitmap;
-    VclPtr<SvxXRectPreview>    m_pCtlBitmapPreview;
-    VclPtr<SvxXRectPreview>    m_pCtlXRectPreview;
-
+    ScopedVclPtr<SfxTabPage>         m_pFillTabPage;
+    VclPtr<VclBox>             m_pFillTab;
+    VclPtr<PushButton>         m_pBtnNone;
+    VclPtr<PushButton>         m_pBtnColor;
+    VclPtr<PushButton>         m_pBtnGradient;
+    VclPtr<PushButton>         m_pBtnHatch;
+    VclPtr<PushButton>         m_pBtnBitmap;
+    VclPtr<PushButton>         m_pBtnPattern;
     const SfxItemSet&   m_rOutAttrs;
     RECT_POINT          m_eRP;
 
@@ -230,33 +235,7 @@ private:
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
 
-    SfxMapUnit          m_ePoolUnit;
-    FieldUnit           m_eFUnit;
-
-    //UUUU
-    bool                mbOfferImportButton;
-    bool                mbDirectGraphicSet;
-    Graphic             maDirectGraphic;
-    OUString            maDirectName;
-    VclPtr<PushButton>         m_pBtnImport;
-
-    DECL_LINK_TYPED(SelectDialogTypeHdl_Impl, ListBox&, void);
-    DECL_LINK_TYPED( ModifyColorHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ModifyGradientHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ModifyHatchingHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ModifyBitmapHdl_Impl, ListBox&, void );
-
-    //UUUU
-    DECL_LINK_TYPED( ClickImportHdl_Impl, Button*, void );
-
-    DECL_LINK_TYPED( ModifyTileHdl_Impl, Edit&, void );
-    DECL_LINK_TYPED( ModifyTileClickHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickScaleHdl_Impl, Button*, void );
-    void ClickInvisibleHdl_Impl();
-    void ClickHatchingHdl_Impl();
-    void ClickGradientHdl_Impl();
-    void ClickColorHdl_Impl();
-    void ClickBitmapHdl_Impl();
+    DECL_LINK_TYPED(SelectFillTypeHdl_Impl, Button*, void);
 
 public:
     SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
@@ -287,6 +266,7 @@ public:
     void    SetPos( sal_uInt16 nInPos ) { m_nPos = nInPos; }
     void    SetAreaTP( bool* pIn ) { m_pbAreaTP = pIn; }
     virtual void PageCreated(const SfxAllItemSet& aSet) override;
+    void CreatePage(sal_Int32 nId, SfxTabPage& pTab);
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
     void    SetGrdChgd( ChangeType* pIn ) { m_pnGradientListState = pIn; }
     void    SetHtchChgd( ChangeType* pIn ) { m_pnHatchingListState = pIn; }
