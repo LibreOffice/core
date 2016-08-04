@@ -4,10 +4,7 @@
     <style:table-cell-properties fo:background-color="#feffcc" fo:border="0.06pt dotted #ffcc12"/>
   </style:style>
   <style:style style:name="Name2" style:family="table-cell" style:parent-style-name="Text">
-    <style:table-cell-properties fo:border-top="0.74pt fine-dashed #ffee11" fo:border-bottom="1.74pt double-thin #aeee11" fo:border-left="0.74pt none #11ee11" fo:border-right="0.22pt dash-dot-dot #05ee11"/>
-  </style:style>
-  <style:style style:name="Name3" style:family="table-cell" style:parent-style-name="Text">
-    <style:table-cell-properties fo:diagonal-bl-tr="1.74pt dashed #ffccee" fo:diagonal-tl-br="0.74pt dash-dot #120000" fo:border-left="none" fo:border-right="0.74pt dotted #000000"/>
+    <style:table-cell-properties fo:diagonal-bl-tr="1.74pt dashed #ffccee" fo:diagonal-tl-br="0.74pt dash-dot #120000" fo:border-left="none" fo:border-right="0.74pt dotted #ff0000"/>
   </style:style>
   <style:style style:name="Name4" style:family="table-cell" style:parent-style-name="Text">
     <style:table-cell-properties fo:border-top="0.74pt double-border #000000" fo:border-bottom="none" fo:border-left="0.74pt solid #000000" fo:border-right="0.74pt dotted #000000"/>
