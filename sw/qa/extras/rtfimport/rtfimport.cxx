@@ -2661,6 +2661,23 @@ DECLARE_RTFIMPORT_TEST(testFlip, "flip.rtf")
     CPPUNIT_ASSERT(!aMap["MirroredY"].hasValue());
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf78506, "tdf78506.rtf")
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1sd level
+
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+
+        if (rProp.Name == "Suffix")
+            // This was '0', invalid \levelnumbers wasn't ignored.
+            CPPUNIT_ASSERT_EQUAL(CHAR_ZWSP, rProp.Value.get<OUString>().toChar());
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
