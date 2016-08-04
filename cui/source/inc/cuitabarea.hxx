@@ -58,11 +58,6 @@ class SvxAreaTabDialog : public SfxTabDialog
     sal_uInt16            m_nAreaTabPage;
     sal_uInt16            m_nShadowTabPage;
     sal_uInt16            m_nTransparenceTabPage;
-    sal_uInt16            m_nColorTabPage;
-    sal_uInt16            m_nGradientTabPage;
-    sal_uInt16            m_nHatchTabPage;
-    sal_uInt16            m_nBitmapTabPage;
-    sal_uInt16            m_nPatternTabPage;
 
 private:
     SdrModel*           mpDrawModel;
@@ -227,6 +222,9 @@ private:
     XGradientListRef      m_pGradientList;
     XHatchListRef         m_pHatchingList;
     XBitmapListRef        m_pBitmapList;
+    XPatternListRef       m_pPatternList;
+
+    SdrModel*             mpDrawModel;
 
     // Placeholders for pointer-based entries; these will be inited
     // to point to these so that the page is usable without that
@@ -237,6 +235,7 @@ private:
 
     ChangeType*         m_pnColorListState;
     ChangeType*         m_pnBitmapListState;
+    ChangeType*         m_pnPatternListState;
     ChangeType*         m_pnGradientListState;
     ChangeType*         m_pnHatchingListState;
 
@@ -289,8 +288,9 @@ public:
     void    SetHatchingList( XHatchListRef const & pHtchLst)
                 { m_pHatchingList = pHtchLst; }
     void    SetBitmapList( XBitmapListRef const & pBmpLst) { m_pBitmapList = pBmpLst; }
-
-    void    SetPageType( PageType nInType ) { m_nPageType = nInType; }
+    void    SetPatternList( XPatternListRef const &pPtrnLst ) { m_pPatternList = pPtrnLst; }
+    void    SetDrawModel( SdrModel* pModel ) { mpDrawModel = pModel; }
+    void    SetPageType( sal_uInt16 nInType ) { m_nPageType = nInType; }
     void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
     void    SetPos( sal_uInt16 nInPos ) { m_nPos = nInPos; }
     void    SetAreaTP( bool* pIn ) { m_pbAreaTP = pIn; }
@@ -299,6 +299,7 @@ public:
     void    SetGrdChgd( ChangeType* pIn ) { m_pnGradientListState = pIn; }
     void    SetHtchChgd( ChangeType* pIn ) { m_pnHatchingListState = pIn; }
     void    SetBmpChgd( ChangeType* pIn ) { m_pnBitmapListState = pIn; }
+    void    SetPtrnChgd( ChangeType* pIn ) { m_pnPatternListState = pIn; }
 };
 
 
