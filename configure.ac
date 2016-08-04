@@ -153,11 +153,16 @@ AC_CANONICAL_HOST
 
 AC_MSG_CHECKING([for product name])
 PRODUCTNAME="AC_PACKAGE_NAME"
+if test -n "$with_product_name" -a "$with_product_name" != no; then
+    PRODUCTNAME="$with_product_name"
+fi
 if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
     PRODUCTNAME="${PRODUCTNAME}Dev"
 fi
 AC_MSG_RESULT([$PRODUCTNAME])
 AC_SUBST(PRODUCTNAME)
+PRODUCTNAME_WITHOUT_SPACES=${PRODUCTNAME// /}
+AC_SUBST(PRODUCTNAME_WITHOUT_SPACES)
 
 dnl ===================================================================
 dnl Our version is defined by the AC_INIT() at the top of this script.
@@ -724,7 +729,7 @@ darwin*) # Mac OS X or iOS
             mac_sanitize_path
             AC_MSG_NOTICE([sanitized the PATH to $PATH])
         fi
-        INSTROOTSUFFIX=/$PRODUCTNAME.app/Contents
+        INSTROOTSUFFIX=/$PRODUCTNAME_WITHOUT_SPACES.app/Contents
         SDKDIRNAME=AC_PACKAGE_NAME${PRODUCTVERSION}_SDK
     fi
     enable_systray=no
@@ -1433,10 +1438,10 @@ AC_ARG_WITH(macosx-bundle-identifier,
          org.libreoffice.script ("script", huh?).]),
 ,with_macosx_bundle_identifier=org.libreoffice.script)
 
-AC_ARG_WITH(macosx-app-name,
-    AS_HELP_STRING([--with-macosx-app-name='My Own Office Suite'],
-        [Define the OS X app name. Default is AC_PACKAGE_NAME.]),
-,with_macosx_app_name=$PRODUCTNAME)
+AC_ARG_WITH(product-name,
+    AS_HELP_STRING([--with-product-name='My Own Office Suite'],
+        [Define the product name. Default is AC_PACKAGE_NAME.]),
+,with_product_name=$PRODUCTNAME)
 
 AC_ARG_ENABLE(ios-simulator,
     AS_HELP_STRING([--enable-ios-simulator],
@@ -3031,11 +3036,6 @@ if test $_os = Darwin; then
     AC_MSG_CHECKING([what OS X app bundle identifier to use])
     MACOSX_BUNDLE_IDENTIFIER=$with_macosx_bundle_identifier
     AC_MSG_RESULT([$MACOSX_BUNDLE_IDENTIFIER])
-
-    AC_MSG_CHECKING([what OS X app name to use])
-    MACOSX_APP_NAME="$with_macosx_app_name"
-    AC_MSG_RESULT([$MACOSX_APP_NAME])
-
 fi
 AC_SUBST(MACOSX_SDK_PATH)
 AC_SUBST(MACOSX_SDK_VERSION)
@@ -3048,7 +3048,6 @@ AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
 AC_SUBST(MACOSX_PACKAGE_SIGNING_IDENTITY)
 AC_SUBST(ENABLE_MACOSX_SANDBOX)
 AC_SUBST(MACOSX_BUNDLE_IDENTIFIER)
-AC_SUBST(MACOSX_APP_NAME)
 
 dnl ===================================================================
 dnl Check iOS SDK and compiler
