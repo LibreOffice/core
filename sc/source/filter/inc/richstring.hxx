@@ -74,13 +74,6 @@ private:
 
 typedef std::shared_ptr< RichStringPortion > RichStringPortionRef;
 
-enum BiffFontPortionMode
-{
-    BIFF_FONTPORTION_8BIT,              /// Font portion with 8-bit values.
-    BIFF_FONTPORTION_16BIT,             /// Font portion with 16-bit values.
-    BIFF_FONTPORTION_OBJ                /// Font portion in OBJ or TXO record.
-};
-
 /** Represents a position in a rich-string containing current font identifier.
 
     This object stores the position of a formatted character in a rich-string
