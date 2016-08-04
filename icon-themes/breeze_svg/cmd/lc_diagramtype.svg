@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg7384"
+   height="24"
+   width="24"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="lc_diagramtype.svg"
+   inkscape:export-filename="/home/uri/Descargas/NITRUX-KDE/NITRUX-KDE/16x16/actions/view-preview.png"
+   inkscape:export-xdpi="30"
+   inkscape:export-ydpi="30">
+  <defs
+     id="defs9" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10000"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1021"
+     id="namedview7"
+     showgrid="true"
+     inkscape:zoom="23.334524"
+     inkscape:cx="10.910069"
+     inkscape:cy="10.685558"
+     inkscape:window-x="-4"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg7384"
+     inkscape:showpageshadow="false"
+     borderlayer="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:snap-global="true"
+     inkscape:snap-bbox="true"
+     inkscape:object-nodes="true">
+    <sodipodi:guide
+       position="3,21"
+       orientation="18,0"
+       id="guide4064" />
+    <sodipodi:guide
+       position="3,3"
+       orientation="0,18"
+       id="guide4066" />
+    <sodipodi:guide
+       position="21,3"
+       orientation="-18,0"
+       id="guide4068" />
+    <sodipodi:guide
+       position="21,21"
+       orientation="0,-18"
+       id="guide4070" />
+    <sodipodi:guide
+       position="4,20"
+       orientation="16,0"
+       id="guide4072" />
+    <sodipodi:guide
+       position="4,4"
+       orientation="0,16"
+       id="guide4074" />
+    <sodipodi:guide
+       position="20,4"
+       orientation="-16,0"
+       id="guide4076" />
+    <sodipodi:guide
+       position="20,20"
+       orientation="0,-16"
+       id="guide4078" />
+    <inkscape:grid
+       type="xygrid"
+       id="grid4080"
+       originx="1px"
+       originy="1px" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata90">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Gnome Symbolic Icon Theme</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <title
+     id="title9167">Gnome Symbolic Icon Theme</title>
+  <path
+     style="fill:#4d4d4d;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 4,11 0,9 16,0 z M 5,12.8 16.1,19 5,19 Z"
+     id="path4163"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccccccc" />
+  <path
+     style="opacity:1;fill:#4d4d4d;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 13 4 C 9.1412834 4 6.0137201 7.122557 6.0019531 10.978516 L 7.0292969 11.556641 C 7.0123807 11.37306 7 11.187995 7 11 C 7 7.6862915 9.6862915 5 13 5 L 13 11 L 16 11 L 19 11 C 19 13.3724 17.619353 15.416935 15.621094 16.390625 L 16.646484 16.966797 C 18.655207 15.736444 20 13.528134 20 11 C 20 7.1340068 16.865993 4 13 4 z "
+     id="path4144" />
+</svg>

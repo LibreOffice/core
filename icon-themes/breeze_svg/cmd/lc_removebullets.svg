@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   viewBox="0 0 24 24"
+   sodipodi:docname="lc_defaultbullet.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="25.647899"
+     inkscape:cx="10.779115"
+     inkscape:cy="12.243607"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:showpageshadow="false"
+     units="px"
+     inkscape:window-width="1868"
+     inkscape:window-height="1060"
+     inkscape:window-x="50"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1"
+     showguides="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:snap-bbox="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4120"
+       originx="1px"
+       originy="0.99998262px" />
+    <sodipodi:guide
+       position="3,21"
+       orientation="18,0"
+       id="guide4126" />
+    <sodipodi:guide
+       position="3,3"
+       orientation="0,18"
+       id="guide4128" />
+    <sodipodi:guide
+       position="21,3"
+       orientation="-18,0"
+       id="guide4130" />
+    <sodipodi:guide
+       position="21,21"
+       orientation="0,-18"
+       id="guide4132" />
+    <sodipodi:guide
+       position="4,20"
+       orientation="16,0"
+       id="guide4134" />
+    <sodipodi:guide
+       position="4,4"
+       orientation="0,16"
+       id="guide4136" />
+    <sodipodi:guide
+       position="20,4"
+       orientation="-16,0"
+       id="guide4138" />
+    <sodipodi:guide
+       position="20,20"
+       orientation="0,-16"
+       id="guide4140" />
+    <sodipodi:guide
+       position="20,14"
+       orientation="-6,0"
+       id="guide4199" />
+    <sodipodi:guide
+       position="20,20"
+       orientation="0,-6.0000172"
+       id="guide4201" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(1,-1029.3622)">
+    <path
+       style="opacity:1;fill:#4d4d4d;fill-opacity:1;stroke:none"
+       d="M 5 4 C 4.4477153 4 4 4.4477153 4 5 C 4 5.5522847 4.4477153 6 5 6 C 5.5522847 6 6 5.5522847 6 5 C 6 4.4477153 5.5522847 4 5 4 z M 11 4 L 11 5 L 20 5 L 20 4 L 11 4 z M 11 6 L 11 7 L 17 7 L 17 6 L 11 6 z M 5 10 C 4.4477153 10 4 10.447715 4 11 C 4 11.552285 4.4477153 12 5 12 C 5.5522847 12 6 11.552285 6 11 C 6 10.447715 5.5522847 10 5 10 z M 11 10 L 11 11 L 20 11 L 20 10 L 11 10 z M 11 12 L 11 13 L 13 13 L 13 12 L 11 12 z M 5 16 C 4.4477153 16 4 16.447715 4 17 C 4 17.552285 4.4477153 18 5 18 C 5.5522847 18 6 17.552285 6 17 C 6 16.447715 5.5522847 16 5 16 z "
+       transform="translate(-1,1029.3622)"
+       id="path4174" />
+    <path
+       inkscape:connector-curvature="0"
+       style="fill:#da4453;fill-opacity:1;stroke:none"
+       d="M 13.99023,1043.3622 13,1044.3524 l 2.00976,2.0098 -2.00976,2.0098 0.99023,0.9902 2.00977,-2.0098 2.00976,2.0098 L 19,1048.372 16.99023,1046.3622 19,1044.3524 18.00976,1043.3622 16,1045.372 l -2.00977,-2.0098 z"
+       id="rect4126" />
+  </g>
+</svg>

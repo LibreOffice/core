@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
+   id="svg3760"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="lc_connectorcurve.svg">
+  <defs
+     id="defs3762" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="34.579357"
+     inkscape:cx="16.884235"
+     inkscape:cy="14.90598"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1868"
+     inkscape:window-height="1060"
+     inkscape:window-x="50"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="false"
+     showguides="true"
+     inkscape:object-paths="true"
+     inkscape:snap-bbox="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4106"
+       originx="1.8863594e-05px"
+       originy="-1.7016406e-05px" />
+    <sodipodi:guide
+       position="3.0000144,20.999978"
+       orientation="0,18"
+       id="guide4229" />
+    <sodipodi:guide
+       position="21.000014,20.999978"
+       orientation="18,0"
+       id="guide4231" />
+    <sodipodi:guide
+       position="35.000019,2.999983"
+       orientation="0,-18"
+       id="guide4233" />
+    <sodipodi:guide
+       position="3.0000144,2.9999782"
+       orientation="-18,0"
+       id="guide4235" />
+    <sodipodi:guide
+       position="20.000014,3.9999782"
+       orientation="0,-16"
+       id="guide4241" />
+    <sodipodi:guide
+       position="4,20"
+       orientation="6,0"
+       id="guide4155" />
+    <sodipodi:guide
+       position="20,14"
+       orientation="-6,0"
+       id="guide4167" />
+    <sodipodi:guide
+       position="20,20"
+       orientation="0,-6"
+       id="guide4169" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata3765">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-550.28571,-606.64789)">
+    <path
+       style="color:#000000;fill:#4d4d4d;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="M 7 4 C 5.34315 4 4 5.34314 4 7 C 4 8.65686 5.34315 10 7 10 C 8.30132 10 9.39699 9.15835 9.8125 8 L 11 8 L 16.5 8 C 17.32843 8 18 8.67157 18 9.5 C 18 10.32843 17.32843 11 16.5 11 L 7.5 11 C 5.5670034 11 4 12.567003 4 14.5 C 4 16.432997 5.5670034 18 7.5 18 L 13.5 18 L 14.1875 18 C 14.60301 19.15835 15.69868 20 17 20 C 18.65685 20 20 18.65686 20 17 C 20 15.34314 18.65685 14 17 14 C 15.69868 14 14.60301 14.84165 14.1875 16 L 13.5 16 L 7.5 16 C 6.6715728 16 6 15.328427 6 14.5 C 6 13.671573 6.6715728 13 7.5 13 L 16.5 13 C 18.433 13 20 11.433 20 9.5 C 20 7.7347322 18.699003 6.2713406 17 6.03125 L 17 6 L 16.5 6 L 11 6 L 9.8125 6 C 9.39699 4.84165 8.30132 4 7 4 z M 7 6 C 7.55228 6 8 6.44772 8 7 C 8 7.55228 7.55228 8 7 8 C 6.44772 8 6 7.55228 6 7 C 6 6.44772 6.44772 6 7 6 z M 17 16 C 17.55228 16 18 16.44772 18 17 C 18 17.55228 17.55228 18 17 18 C 16.44772 18 16 17.55228 16 17 C 16 16.44772 16.44772 16 17 16 z "
+       transform="translate(550.28571,606.64789)"
+       id="path4168-1" />
+  </g>
+</svg>
