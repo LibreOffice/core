@@ -3546,7 +3546,7 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
     // try to create a custom SdrObject that overwrites the passed object
     SdrObjectPtr xNewSdrObj( xDrawObj->CreateSdrObject( *this, rAnchorRect, true ) );
     if( xNewSdrObj )
-        xSdrObj.reset( xNewSdrObj.release() );
+        xSdrObj = std::move( xNewSdrObj );
 
     // process the SdrObject
     if( xSdrObj )

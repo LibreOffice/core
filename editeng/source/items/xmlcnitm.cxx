@@ -141,7 +141,7 @@ bool SvXMLAttrContainerItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nM
             }
 
             if( nAttr == nCount )
-                pImpl.reset( pNewImpl.release() );
+                pImpl = std::move(pNewImpl);
             else
                 return false;
         }

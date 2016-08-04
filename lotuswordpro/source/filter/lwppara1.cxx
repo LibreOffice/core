@@ -542,7 +542,7 @@ void LwpPara::OverrideParaNumbering(LwpParaProperty* pProps)
         pOver->OverrideLevel(m_nLevel);
     }
 
-    m_pParaNumbering.reset(pOver.release());
+    m_pParaNumbering = std::move(pOver);
 }
 
 void LwpPara::FindLayouts()
