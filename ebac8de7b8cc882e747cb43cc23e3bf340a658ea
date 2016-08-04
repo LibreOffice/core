@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_d964344b",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-04T17:25:53Z",
+      "side": 1,
+      "message": "This is not the same. The original code also checks if both are an ASCII alpha letter.",
+      "revId": "ebac8de7b8cc882e747cb43cc23e3bf340a658ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
