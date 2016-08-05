@@ -94,6 +94,8 @@ namespace
             ret = checkOSandCPU("Linux", "X86_64");
         else if (token == "linux_sparc")
             ret = checkOSandCPU("Linux", "SPARC");
+        else if (token == "linux_sparc64")
+            ret = checkOSandCPU("Linux", "SPARC64");
         else if (token == "linux_powerpc")
             ret = checkOSandCPU("Linux", "PowerPC");
         else if (token == "linux_powerpc64")

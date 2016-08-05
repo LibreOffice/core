@@ -4389,6 +4389,11 @@ linux-gnu*)
         RTL_ARCH=SPARC
         PLATFORMID=linux_sparc
         ;;
+    sparc64)
+        CPUNAME=SPARC64
+        RTL_ARCH=SPARC64
+        PLATFORMID=linux_sparc64
+        ;;
     s390)
         CPUNAME=S390
         RTL_ARCH=S390
@@ -7267,6 +7272,9 @@ then
         powerpc64le)
             AS_IF([test -e "$JAVA_HOME/jre/lib/ppc64le/libjawt.so"], [my_java_arch=ppc64le], [my_java_arch=ppc64])
             JAVA_ARCH=$my_java_arch
+            ;;
+        sparc64)
+            my_java_arch=sparcv9
             ;;
         x86_64)
             my_java_arch=amd64

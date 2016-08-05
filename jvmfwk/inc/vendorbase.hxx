@@ -35,7 +35,7 @@ namespace jfw_plugin
 //Used by subclasses of VendorBase to build paths to Java runtime
 #if defined(JAVA_ARCH)
 #define JFW_PLUGIN_ARCH JAVA_ARCH
-#elif defined(__sparcv9)
+#elif defined SPARC64
 #define JFW_PLUGIN_ARCH "sparcv9"
 #elif defined SPARC
 #define JFW_PLUGIN_ARCH "sparc"

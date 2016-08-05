@@ -271,6 +271,11 @@ ifeq "$(PROCTYPE)" "powerpc64"
 JAVA_PROC_TYPE=ppc64
 endif
 
+ifeq "$(PROCTYPE)" "sparc64"
+UNOPKG_PLATFORM=Linux_SPARC64
+JAVA_PROC_TYPE=sparcv9
+endif
+
 OS=LINUX
 PS=/
 ICL=\$$

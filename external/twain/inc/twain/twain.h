@@ -162,6 +162,8 @@
         ||defined(__ia64__)\
         ||defined(__ppc64__)\
         ||defined(__s390x__)\
+        ||(defined(__sparc_v9__) && defined(__arch64__))\
+        ||defined(__sparcv9)\
         ||defined(__x86_64__)
       #define TWH_64BIT
     #else
