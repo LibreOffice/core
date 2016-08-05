@@ -23,7 +23,6 @@
 #include "address.hxx"
 #include <i18nlangtag/lang.h>
 #include <tools/stream.hxx>
-#include <osl/endian.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include "scdllapi.h"
 #include <rtl/ustring.hxx>
