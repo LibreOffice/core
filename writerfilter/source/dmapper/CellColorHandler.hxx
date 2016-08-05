@@ -37,6 +37,7 @@ private:
     sal_Int32 m_nShadingPattern;
     sal_Int32 m_nColor;
     sal_Int32 m_nFillColor;
+    bool      m_bAutoFillColor;
     OutputFormat m_OutputFormat;
 
     OUString m_aInteropGrabBagName;
