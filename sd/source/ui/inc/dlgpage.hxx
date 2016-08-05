@@ -40,7 +40,7 @@ private:
     XPatternListRef       mpPatternList;
     sal_uInt16            mnArea;
     sal_uInt16            mnPage;
-
+    sal_uInt16            mnTransparence;
 public:
 
     SdPageDlg( SfxObjectShell* pDocSh, vcl::Window* pParent, const SfxItemSet* pAttr, bool bAreaPage = true );
