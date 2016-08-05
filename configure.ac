@@ -2331,8 +2331,13 @@ dnl ===================================================================
 
 AC_ARG_WITH(macosx-sdk,
     AS_HELP_STRING([--with-macosx-sdk=<version>],
-        [Use a specific SDK for building.])
+        [Prefer a specific SDK for building.])
     [
+                          If the requested SDK is not available, a search for the oldest one will be done.
+                          With current Xcode versions, only the latest SDK is included, so this option is
+                          not terribly useful. It works fine to build with a new SDK and run the result
+                          on an older OS.
+
                           e. g.: --with-macosx-sdk=10.8
 
                           there are 3 options to control the MacOSX build:
