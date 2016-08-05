@@ -37,6 +37,7 @@ LoggedProperties("CellColorHandler"),
 m_nShadingPattern( drawing::ShadingPattern::CLEAR ),
 m_nColor( 0xffffffff ),
 m_nFillColor( 0xffffffff ),
+m_bAutoFillColor( true ),
     m_OutputFormat( Form )
 {
 }
@@ -110,6 +111,9 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
             createGrabBag("fill", uno::makeAny(OUString::fromUtf8(msfilter::util::ConvertColor(nIntValue, /*bAutoColor=*/true))));
             if( nIntValue == OOXML_COLOR_AUTO )
                 nIntValue = 0xffffff; //fill color auto means white
+            else
+                m_bAutoFillColor = false;
+
             m_nFillColor = nIntValue;
         break;
         case NS_ooxml::LN_CT_Shd_color:
@@ -271,7 +275,10 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
 
     if (m_OutputFormat == Paragraph)
     {
-        pPropertyMap->Insert(PROP_FILL_STYLE, uno::makeAny(drawing::FillStyle_SOLID));
+        // If brush style = clear and FillColor = COLOR_AUTO, then don't enable the fill style - just pre-select the default color
+        if (nWW8BrushStyle || !m_bAutoFillColor)
+            pPropertyMap->Insert(PROP_FILL_STYLE, uno::makeAny(drawing::FillStyle_SOLID));
+
         pPropertyMap->Insert(PROP_FILL_COLOR, uno::makeAny(nApplyColor));
     }
     else
