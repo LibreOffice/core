@@ -2452,3 +2452,15 @@
  	bool operator!=(const GlyphSetIterator & rhs) const throw()	{ return !(*this == rhs); }
  
  	// Random access iterator requirements
+diff -ur misc/silgraphite-2.3.1/engine/src/segment/GrSlotState.h misc/build/silgraphite-2.3.1/engine/src/segment/GrSlotState.h
+--- misc/silgraphite-2.3.1/engine/src/segment/GrSlotState.h	2009-01-27 18:01:29.000000000 -0800
++++ misc/build/silgraphite-2.3.1/engine/src/segment/GrSlotState.h	2016-08-02 17:22:26.300396000 -0700
+@@ -481,7 +481,7 @@
+ 		{
+ 			Assert(false);	// Should have already been set in HandleModifiedPosition,
+ 							// but just in case.
+-			if (!m_srAttachTo == 0)
++			if (m_srAttachTo != 0)
+ 				return 0;
+ 			else
+ 				m_mAttachAtX = 0; // attach on the right
