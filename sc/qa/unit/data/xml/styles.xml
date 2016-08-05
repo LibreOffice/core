@@ -18,13 +18,13 @@
   <style:style style:name="Name6" style:family="table-cell" style:parent-style-name="Text">
     <style:text-properties style:font-name="Liberation Sans" style:text-underline-style="solid" fo:font-size="24pt" fo:color="#808080" fo:font-style="italic" style:text-underline-color="font-color" fo:font-weight="bold"/>
   </style:style>
-  <style:style style:name="Name20" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="Name7" style:family="table-cell" style:parent-style-name="Default">
     <style:text-properties style:text-line-through-style="solid" style:text-line-through-type="single"/>
   </style:style>
-  <style:style style:name="Name21" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="Name8" style:family="table-cell" style:parent-style-name="Default">
     <style:text-properties style:text-line-through-style="solid" style:text-line-through-type="single" style:text-line-through-width="bold"/>
   </style:style>
-  <style:style style:name="Name22" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="Name9" style:family="table-cell" style:parent-style-name="Default">
     <style:text-properties style:text-line-through-style="solid" style:text-line-through-type="single" style:text-line-through-text="/"/>
   </style:style>
   <style:style style:name="Name23" style:family="table-cell" style:parent-style-name="Text">
