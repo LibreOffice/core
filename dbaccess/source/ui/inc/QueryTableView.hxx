@@ -54,7 +54,7 @@ namespace dbaui
         virtual void RemoveTabWin(OTableWindow* pTabWin) override;
 
         /// AddTabWin, setting an alias
-        void    AddTabWin(const OUString& strDatabase, const OUString& strTableName, const OUString& strAlias, bool bNewTable = false);
+        void    AddTabWin(const OUString& strDatabase, const OUString& strTableName, const OUString& strAlias, bool bNewTable);
         /// search TabWin
         OQueryTableWindow*  FindTable(const OUString& rAliasName);
         bool                FindTableFromField(const OUString& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt);

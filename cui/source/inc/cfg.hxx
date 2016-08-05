@@ -100,7 +100,7 @@ protected:
     void ApplyMenu(
         css::uno::Reference< css::container::XIndexContainer >& rMenuBar,
         css::uno::Reference< css::lang::XSingleComponentFactory >& rFactory,
-        SvxConfigEntry *pMenuData = nullptr );
+        SvxConfigEntry *pMenuData );
 
     bool LoadSubMenus(
         const css::uno::Reference< css::container::XIndexAccess >& xMenuSettings,
@@ -614,7 +614,7 @@ private:
     void        ApplyToolbar(
         css::uno::Reference< css::container::XIndexContainer >& rNewToolbarBar,
         css::uno::Reference< css::lang::XSingleComponentFactory >& rFactory,
-        SvxConfigEntry *pToolbar = nullptr );
+        SvxConfigEntry *pToolbar );
 
 public:
 

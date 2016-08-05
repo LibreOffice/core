@@ -35,7 +35,7 @@ namespace dbaui
         ~OTableFieldInfo();
 
         inline ETableFieldType  GetKeyType() const { return m_eFieldType; }
-        inline void             SetKey(ETableFieldType bKey=TAB_NORMAL_FIELD) { m_eFieldType = bKey; }
+        inline void             SetKey(ETableFieldType bKey) { m_eFieldType = bKey; }
         inline sal_Int32        GetDataType() const { return m_eDataType; }
         inline void             SetDataType(sal_Int32 eTyp) { m_eDataType = eTyp; }
     };

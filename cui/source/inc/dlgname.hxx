@@ -60,7 +60,7 @@ public:
         @todo Remove the parameter bCheckImmediately and incorporate the 'true'
               behaviour as default.
      */
-    void    SetCheckNameHdl( const Link<SvxNameDialog&,bool>& rLink, bool bCheckImmediately = false )
+    void    SetCheckNameHdl( const Link<SvxNameDialog&,bool>& rLink, bool bCheckImmediately )
     {
         aCheckNameHdl = rLink;
         if ( bCheckImmediately )

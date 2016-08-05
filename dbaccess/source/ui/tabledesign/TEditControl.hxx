@@ -147,7 +147,7 @@ namespace dbaui
 
         const ::std::shared_ptr<OTableRow>& GetActRow(){ return pActRow; }
         void CellModified( long nRow, sal_uInt16 nColId );
-        void SetReadOnly( bool bRead=true );
+        void SetReadOnly( bool bRead );
 
         virtual void Init() override;
         virtual void DeactivateCell(bool bUpdate = true) override;

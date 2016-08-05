@@ -71,8 +71,8 @@ namespace dbaccess
         */
         void    notifyDocumentEvent(
                     const OUString& EventName,
-                    const css::uno::Reference< css::frame::XController2 >& _rxViewController = nullptr,
-                    const css::uno::Any& Supplement = css::uno::Any()
+                    const css::uno::Reference< css::frame::XController2 >& _rxViewController,
+                    const css::uno::Any& Supplement
                 );
 
         /** notifies a document event, described by the given parameters, asynchronously
@@ -84,8 +84,8 @@ namespace dbaccess
         */
         void    notifyDocumentEventAsync(
                     const OUString& EventName,
-                    const css::uno::Reference< css::frame::XController2 >& ViewController = nullptr,
-                    const css::uno::Any& Supplement = css::uno::Any()
+                    const css::uno::Reference< css::frame::XController2 >& ViewController,
+                    const css::uno::Any& Supplement
                 );
 
         /** notifies a document event to all registered listeners

@@ -70,7 +70,7 @@ public:
    virtual ~CuiAboutConfigTabPage();
    virtual void dispose() override;
    void     InsertEntry(const OUString &rPropertyPath, const OUString& rProp, const OUString& rStatus, const OUString& rType, const OUString& rValue,
-                        SvTreeListEntry *pParentEntry = nullptr, bool bInsertToPrefBox = true);
+                        SvTreeListEntry *pParentEntry, bool bInsertToPrefBox);
    void     Reset();
    void     FillItems(const css::uno::Reference<css::container::XNameAccess>& xNameAccess,
                       SvTreeListEntry *pParentEntry = nullptr, int lineage = 0, bool bLoadAll = false);

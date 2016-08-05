@@ -72,7 +72,7 @@ static inline bool idefaultConstructElements(
     uno_Sequence ** ppSeq,
     typelib_TypeDescriptionReference * pElementType,
     sal_Int32 nStartIndex, sal_Int32 nStopIndex,
-    sal_Int32 nAlloc = -1 ) // >= 0 means (re)alloc memory for nAlloc elements
+    sal_Int32 nAlloc ) // >= 0 means (re)alloc memory for nAlloc elements
 {
     uno_Sequence * pSeq = *ppSeq;
     switch (pElementType->eTypeClass)
@@ -318,7 +318,7 @@ static inline bool icopyConstructFromElements(
     typelib_TypeDescriptionReference * pElementType,
     sal_Int32 nStartIndex, sal_Int32 nStopIndex,
     uno_AcquireFunc acquire,
-    sal_Int32 nAlloc = -1 ) // >= 0 means (re)alloc memory for nAlloc elements
+    sal_Int32 nAlloc ) // >= 0 means (re)alloc memory for nAlloc elements
 {
     uno_Sequence * pSeq = *ppSeq;
     switch (pElementType->eTypeClass)

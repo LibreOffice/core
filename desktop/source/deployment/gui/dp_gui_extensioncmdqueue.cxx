@@ -155,7 +155,7 @@ public:
     void startProgress();
     void stopProgress();
     void progressSection( const OUString &rText,
-                          const uno::Reference< task::XAbortChannel > &xAbortChannel = nullptr );
+                          const uno::Reference< task::XAbortChannel > &xAbortChannel );
     inline void setWarnUser( bool bNewVal ) { m_bWarnUser = bNewVal; }
 
     // XCommandEnvironment

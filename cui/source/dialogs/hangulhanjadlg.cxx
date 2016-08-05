@@ -100,7 +100,7 @@ namespace svx
 
     public:
         void Paint( OutputDevice& _rDevice, const Rectangle& _rRect, DrawTextFlags _nTextStyle,
-            Rectangle* _pPrimaryLocation = nullptr, Rectangle* _pSecondaryLocation = nullptr,
+            Rectangle* _pPrimaryLocation, Rectangle* _pSecondaryLocation,
             vcl::ControlLayoutData* _pLayoutData = nullptr );
     };
 

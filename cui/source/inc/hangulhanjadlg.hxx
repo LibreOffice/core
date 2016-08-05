@@ -157,7 +157,7 @@ namespace svx
         void    SetCurrentString(
                     const OUString& _rNewString,
                     const css::uno::Sequence< OUString >& _rSuggestions,
-                    bool _bOriginatesFromDocument = true
+                    bool _bOriginatesFromDocument
                 );
 
         void    FocusSuggestion( );

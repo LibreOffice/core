@@ -133,7 +133,7 @@ namespace dbaui
         typedef css::uno::Reference< xstlist_type > xlistener_type;
         void NotifyStatusChanged(const css::util::URL& aUrl, const xlistener_type & xControl = xlistener_type() );
 #else
-        void NotifyStatusChanged(const css::util::URL& aUrl, const css::uno::Reference< css::frame::XStatusListener > & xControl = css::uno::Reference< css::frame::XStatusListener > ());
+        void NotifyStatusChanged(const css::util::URL& aUrl, const css::uno::Reference< css::frame::XStatusListener > & xControl);
 #endif // # _MSC_VER
 
     private:

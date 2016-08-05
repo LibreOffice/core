@@ -82,12 +82,12 @@ namespace dbaui
                 );
 
         void    newFormWithPilot(
-                    const sal_Int32 _nCommandType = -1,
-                    const OUString& _rObjectName = OUString()
+                    const sal_Int32 _nCommandType,
+                    const OUString& _rObjectName
                 );
         void    newReportWithPilot(
-                    const sal_Int32 _nCommandType = -1,
-                    const OUString& _rObjectName = OUString()
+                    const sal_Int32 _nCommandType,
+                    const OUString& _rObjectName
                 );
         void    newQueryWithPilot();
         void    newTableWithPilot();

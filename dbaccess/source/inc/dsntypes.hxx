@@ -137,7 +137,7 @@ public:
     OUString getMediaType(const OUString& _sURL) const;
 
     /// returns the dsn prefix for a given media type
-    OUString getDatasourcePrefixFromMediaType(const OUString& _sMediaType,const OUString& _sExtension = OUString() );
+    OUString getDatasourcePrefixFromMediaType(const OUString& _sMediaType, const OUString& _sExtension );
 
     void extractHostNamePort(const OUString& _rDsn,OUString& _sDatabaseName,OUString& _rHostname,sal_Int32& _nPortNumber) const;
 
