@@ -86,7 +86,7 @@ public:
     /**
      * @descr   Set drawing object border line.
      */
-    void    SetLineStyle(double width, XFColor color = XFColor(0,0,0));
+    void    SetLineStyle(double width, XFColor color);
 
     /**
      * @descr   Set drawing object dash border style.
@@ -101,17 +101,17 @@ public:
     /**
      * @descr   Set drawing object area grid style.
      */
-    void    SetAreaLineStyle(enumXFAreaLineStyle style, sal_Int32 angle = 0, double space = 0.102, XFColor lineColor = XFColor(0,0,0));
+    void    SetAreaLineStyle(enumXFAreaLineStyle style, sal_Int32 angle, double space, XFColor lineColor);
 
     /**
      * @descr   Set drawing object arrow start style,only lines can have arrows.
      */
-    void    SetArrowStart(const OUString& start, double size=0.3);
+    void    SetArrowStart(const OUString& start, double size);
 
     /**
      * @descr   Set drawing object arrow end style,only lines can have arrows.
      */
-    void    SetArrowEnd(const OUString& end, double size=0.3);
+    void    SetArrowEnd(const OUString& end, double size);
 
     void SetFontWorkStyle(enumXFFWStyle eStyle, enumXFFWAdjust eAdjust);
 

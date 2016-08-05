@@ -133,14 +133,14 @@ public:
                 between the border and the top of the text.
      * @param   indent value of the padding.
      */
-    void    SetPadding(double left, double right = -1, double top = -1, double bottom = -1);
+    void    SetPadding(double left, double right, double top = -1, double bottom = -1);
 
     /**
      * @descr   Set the Margins of the paragraph.
      * @param   -1:     don't change.
                 other:  set value.
      */
-    void    SetMargins(double left, double right=-1,double top=-1, double bottom=-1);
+    void    SetMargins(double left, double right,double top=-1, double bottom=-1);
 
     /**
      * @descr   Set alignment property of the paragraph.
@@ -170,7 +170,7 @@ public:
      * @param   nLength number of chars to be dropped.
      * @param   nLines line of which the dropped chars will occupy.
      */
-    void    SetDropCap(sal_Int16 nLength = 1,sal_Int16 nLines = 3,double fDistance = 0);
+    void    SetDropCap(sal_Int16 nLength, sal_Int16 nLines, double fDistance = 0);
 
     /**
      * @descr   Set line height of the paragraph.
@@ -199,7 +199,7 @@ public:
     /**
      * @descr   Add a tab style.
      */
-    void    AddTabStyle(enumXFTab type, double len, sal_Unicode leader = '*', sal_Unicode delimiter='.');
+    void    AddTabStyle(enumXFTab type, double len, sal_Unicode leader, sal_Unicode delimiter);
 
     /**
      * @descr   for para style copy operator,sometimes you may need to override tab styles.

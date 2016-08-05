@@ -326,7 +326,7 @@ class MergeDataFile
         MergeEntrys *GetMergeEntrysCaseSensitive( ResData *pResData );
 
         static OString CreateKey(const OString& rTYP, const OString& rGID,
-            const OString& rLID, const OString& rFilename , bool bCaseSensitive = false);
+            const OString& rLID, const OString& rFilename, bool bCaseSensitive);
 };
 
 

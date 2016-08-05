@@ -265,7 +265,7 @@ class FWE_DLLPUBLIC OWriteMenuDocumentHandler
         void WriteMenu( const css::uno::Reference< css::container::XIndexAccess >& rSubMenuContainer ) throw
             ( css::xml::sax::SAXException, css::uno::RuntimeException );
 
-        void WriteMenuItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL, sal_Int16 nStyle = 0 );
+        void WriteMenuItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL, sal_Int16 nStyle );
         void WriteMenuSeparator();
 
         css::uno::Reference< css::container::XIndexAccess > m_xMenuBarContainer;

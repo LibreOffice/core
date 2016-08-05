@@ -115,7 +115,7 @@ class DLLEXPORT HWPPara
         HWPPara(void);
         ~HWPPara(void);
 
-        bool  Read(HWPFile &hwpf, unsigned char flag = 0);
+        bool  Read(HWPFile &hwpf, unsigned char flag);
 
         void  SetNext(HWPPara *n) { _next = n; };
 

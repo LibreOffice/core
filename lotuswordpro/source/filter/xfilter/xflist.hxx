@@ -85,7 +85,7 @@ public:
     /**
      * @descr   Set whether to continue to number list.
      */
-    void    SetContinueNumber(bool bContinueNumber=false);
+    void    SetContinueNumber(bool bContinueNumber);
 
     /**
      * @descr   Output list object.

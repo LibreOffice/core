@@ -130,7 +130,7 @@ public:
 
     SvMetaType *            ReadKnownType( SvTokenStream & rInStm );
     SvMetaAttribute *       ReadKnownAttr( SvTokenStream & rInStm,
-                                            SvMetaType * pType = nullptr );
+                                            SvMetaType * pType );
     SvMetaAttribute *       FindKnownAttr( const SvIdentifier& );
     SvMetaClass *           ReadKnownClass( SvTokenStream & rInStm );
     SvMetaClass *           FindKnownClass( const OString& aName );

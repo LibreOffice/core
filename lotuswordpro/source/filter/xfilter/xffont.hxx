@@ -154,7 +154,7 @@ public:
     /**
      * @descr   Set whether font is italic.
      */
-    void    SetItalic(bool italic = true);
+    void    SetItalic(bool italic);
 
     /**
      * @descr   Set whether font is italic for asia locale.
@@ -169,7 +169,7 @@ public:
     /**
      * @descr   Set font bold.
      */
-    void    SetBold(bool bold = true);
+    void    SetBold(bool bold);
 
     /**
      * @descr   Set font bold for asia locale.

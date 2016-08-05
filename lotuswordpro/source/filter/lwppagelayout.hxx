@@ -101,7 +101,7 @@ public:
     void ConvertFillerPageText(XFContentContainer* pCont);
     void ResetXFColumns();
     LwpPageLayout* GetOddChildLayout();
-    virtual sal_Int32 GetPageNumber(sal_uInt16 nLayoutNumber = 0) override;
+    virtual sal_Int32 GetPageNumber(sal_uInt16 nLayoutNumber) override;
     bool operator <(LwpPageLayout& Other);
     LwpPara* GetPagePosition();
 };

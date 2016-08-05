@@ -85,7 +85,7 @@ public:
 
     void    SetPageHeight(double height);
 
-    void    SetMargins(double left=-1, double right=-1,double top=-1, double bottom=-1);
+    void    SetMargins(double left, double right=-1,double top=-1, double bottom=-1);
 
     void    SetPageUsage(enumXFPageUsage usage);
 
@@ -105,8 +105,8 @@ public:
 
     void    SetTextDir(enumXFTextDir dir);
 
-    void    SetFootNoteSeparator(enumXFAlignType align = enumXFAlignStart,
-                                double width = 0.05,
+    void    SetFootNoteSeparator(enumXFAlignType align,
+                                double width,
                                 sal_Int32 lengthPercent = 25,
                                 double spaceAbove = 0.1,
                                 double spaceBelow = 0.1,

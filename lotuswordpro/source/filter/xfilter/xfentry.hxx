@@ -85,7 +85,7 @@ public:
     /**
      * @descr   Set entry key. The keys is available only for enumXFEntryAlphabetical.
      */
-    void    SetKey(const OUString& key1, const OUString& key2="");
+    void    SetKey(const OUString& key1, const OUString& key2);
 
     /**
      * @descr   Set outline level. This is available for enumXFEntryTOC and enumXFEntryUserIndex.

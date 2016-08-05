@@ -75,7 +75,7 @@ public:
     explicit LwpFrame(LwpPlacableLayout* pLayout);
     ~LwpFrame();
     void RegisterStyle(XFFrameStyle* pFrameStyle);
-    void Parse(XFFrame* pXFFrame, sal_Int32 nPageNo = 0);
+    void Parse(XFFrame* pXFFrame, sal_Int32 nPageNo);
     void XFConvert(XFContentContainer* pCont);
 private:
     void ApplyWrapType(XFFrameStyle* pFrameStyle);

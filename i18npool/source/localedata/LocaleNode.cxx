@@ -176,7 +176,7 @@ void print_color( int color )
      printf("\033[%dm", color);
 }
 
-void print_node( const LocaleNode* p, int depth=0 )
+void print_node( const LocaleNode* p, int depth )
 {
      if( !p ) return;
 

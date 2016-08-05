@@ -89,12 +89,12 @@ public:
     /**
      * @descr:  space between frame and paragraph text.
      */
-    void    SetMargins(double left, double right=-1,double top=-1, double bottom=-1);
+    void    SetMargins(double left, double right, double top, double bottom);
 
     /**
      * @descr:  space between frame and text inside frame.
      */
-    void    SetPadding(double left, double right=-1,double top=-1, double bottom=-1);
+    void    SetPadding(double left, double right, double top, double bottom);
 
     /**
      * @descr:  set the border property of the frame.

@@ -154,7 +154,7 @@ public:
     XMLFile( const XMLFile& rObj ) ;
     virtual ~XMLFile();
 
-    void Print( XMLNode *pCur = nullptr, sal_uInt16 nLevel = 0 );
+    void Print( XMLNode *pCur, sal_uInt16 nLevel = 0 );
     void SearchL10NElements( XMLChildNode *pCur, int pos = 0 );
     void Extract();
 

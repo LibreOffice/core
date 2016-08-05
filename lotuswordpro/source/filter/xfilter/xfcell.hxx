@@ -114,7 +114,7 @@ public:
     /**
      * @descr   Set cell protected.
      */
-    void    SetProtect(bool protect=true);
+    void    SetProtect(bool protect);
 
     /**
      * @descr   Set cell column id.

@@ -92,17 +92,17 @@ public:
     /**
      * @descr   Add a entry in the template.
      */
-    void    AddEntry(enumXFIndexTemplate entry, const OUString& styleName = "");
+    void    AddEntry(enumXFIndexTemplate entry, const OUString& styleName);
 
     /**
      * @descr   Add a tab entry in the template.
      */
-    void    AddTabEntry(enumXFTab type, double len, sal_Unicode leader = '*', sal_Unicode delimiter='.', const OUString& styleName = "");
+    void    AddTabEntry(enumXFTab type, double len, sal_Unicode leader, sal_Unicode delimiter, const OUString& styleName = "");
 
     /**
      * @descr   Add a entry in the template.
      */
-    void    AddTextEntry(const OUString& sSpan, const OUString& styleName = "");
+    void    AddTextEntry(const OUString& sSpan, const OUString& styleName);
 
     virtual void    ToXml(IXFStream *pStrm) override;
 

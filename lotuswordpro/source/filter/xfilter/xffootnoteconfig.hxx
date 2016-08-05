@@ -70,7 +70,7 @@ public:
 public:
     void    SetMasterPage(const OUString& masterPage);
 
-    void    SetStartValue(sal_Int32 value=0);
+    void    SetStartValue(sal_Int32 value);
 
     void    SetRestartOnPage();
 

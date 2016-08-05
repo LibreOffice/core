@@ -82,7 +82,7 @@ public:
 
     void    SetSurfix(const OUString& surfix);
 
-    void    SetNegativeStyle(const OUString& prefix, const OUString& suffix, const XFColor& color=XFColor(255,0,0));
+    void    SetNegativeStyle(const OUString& prefix, const OUString& suffix, const XFColor& color);
 
     void    SetNumberType(enumXFNumberType type);
 

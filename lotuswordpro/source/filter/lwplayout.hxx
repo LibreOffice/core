@@ -182,7 +182,7 @@ public:
     virtual bool IsUseOnAllEvenPages(){ return false;}
     virtual bool IsUseOnAllOddPages(){ return false;}
     virtual bool IsUseOnPage(){ return false;}
-    virtual sal_Int32 GetPageNumber(sal_uInt16 /*nLayoutNumber*/ = 0){ return -1;}
+    virtual sal_Int32 GetPageNumber(sal_uInt16 /*nLayoutNumber*/) { return -1;}
     bool IsMinimumHeight();
     virtual bool IsForWaterMark(){ return false;}
     virtual LwpPara* GetLastParaOfPreviousStory() { return nullptr; }

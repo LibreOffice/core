@@ -180,7 +180,7 @@ public:
         @returns nLimit for later comparison with WLD()
      */
     void CalcLPQR( int nOtherX, int nShorterY, int nLongerZ,
-                    bool bRelaxed = true );
+                    bool bRelaxed );
 
     inline int GetLimit() const     { return nLimit; }
 
