@@ -4149,9 +4149,18 @@ StackVar ScInterpreter::Interpret()
             if ( nFuncFmtType != css::util::NumberFormat::UNDEFINED )
             {
                 nRetTypeExpr = nFuncFmtType;
-                // inherit the format index only for currency formats
-                nRetIndexExpr = ( nFuncFmtType == css::util::NumberFormat::CURRENCY ?
-                    nFuncFmtIndex : 0 );
+                // Inherit the format index for currency, date or time formats.
+                switch (nFuncFmtType)
+                {
+                    case css::util::NumberFormat::CURRENCY:
+                    case css::util::NumberFormat::DATE:
+                    case css::util::NumberFormat::TIME:
+                    case css::util::NumberFormat::DATETIME:
+                        nRetIndexExpr = nFuncFmtIndex;
+                    break;
+                    default:
+                        nRetIndexExpr = 0;
+                }
             }
         }
 
