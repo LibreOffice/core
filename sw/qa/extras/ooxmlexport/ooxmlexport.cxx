@@ -718,6 +718,24 @@ DECLARE_OOXMLEXPORT_TEST(testTdf88583, "tdf88583.odt")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x00cc00), getProperty<sal_Int32>(getParagraph(1), "FillColor"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf97090, "tdf97090.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x95B3D7), getProperty<sal_Int32>(xTable->getCellByName("A1"), "BackColor"));
+
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    assert( paraEnumAccess.is() );
+    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
+
+    assert( paraEnum.is() );
+    uno::Reference<beans::XPropertySet> paragraphProperties(paraEnum->nextElement(), uno::UNO_QUERY);
+    assert( paragraphProperties.is() );
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(paragraphProperties, "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff), getProperty<sal_Int32>(paragraphProperties, "FillColor"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf89791, "tdf89791.docx")
 {
     if (mbExported)
