@@ -224,7 +224,7 @@ protected:
 
         @param bCreate Instead of comparing to the reference file(s), create it/them.
     */
-    void compareWithShapesDump( ::sd::DrawDocShellRef xDocShRef, const OUString &rShapesDumpFileNameBase, bool bCreate = false )
+    void compareWithShapesDump( ::sd::DrawDocShellRef xDocShRef, const OUString &rShapesDumpFileNameBase, bool bCreate )
     {
         CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
         CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );

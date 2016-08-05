@@ -88,7 +88,7 @@ protected:
     void                registerTitleLayout(
                             const css::uno::Reference< css::chart2::XTitle >& rxTitle,
                             const ModelRef< LayoutModel >& rxLayout, ObjectType eObjType,
-                            sal_Int32 nMainIdx = -1, sal_Int32 nSubIdx = -1 );
+                            sal_Int32 nMainIdx, sal_Int32 nSubIdx );
     /** Converts the positions of the main title and all axis titles. */
     void                convertTitlePositions();
 

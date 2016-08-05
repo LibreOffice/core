@@ -1754,7 +1754,7 @@ OUString Complex::GetString() const throw( uno::RuntimeException, lang::IllegalA
     bool bHasReal = !bHasImag || (r != 0.0);
 
     if( bHasReal )
-        aRet.append(::GetString( r ));
+        aRet.append(::GetString( r, false ));
     if( bHasImag )
     {
         if( i == 1.0 )

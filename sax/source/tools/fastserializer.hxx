@@ -130,7 +130,7 @@ public:
 
         @param nTag debugging aid to ensure mark and merge match in LIFO order
      */
-    void mark(sal_Int32 nTag, const Int32Sequence& rOrder = Int32Sequence());
+    void mark(sal_Int32 nTag, const Int32Sequence& rOrder);
 
     /** Merge 2 topmost marks.
 
@@ -150,7 +150,7 @@ public:
         @see mark()
      */
     void mergeTopMarks(sal_Int32 nTag,
-        sax_fastparser::MergeMarks eMergeType = sax_fastparser::MergeMarks::APPEND);
+        sax_fastparser::MergeMarks eMergeType);
 
 private:
     /** Helper class to cache data and write in chunks to XOutputStream or ForMerge::append.

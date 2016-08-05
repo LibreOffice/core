@@ -77,8 +77,8 @@ public:
 
     RegError    loadKey(RegKeyHandle hKey,
                         const OUString& regFileName,
-                        bool bWarings=false,
-                        bool bReport=false);
+                        bool bWarings,
+                        bool bReport);
 
     RegError    dumpRegistry(RegKeyHandle hKey) const;
 
@@ -109,14 +109,14 @@ private:
                                  ORegKey* pSourceKey,
                                  const OUString& valueName,
                                  sal_uInt32 nCut,
-                                 bool bWarnings=false,
-                                 bool bReport=false);
+                                 bool bWarnings,
+                                 bool bReport);
 
     static RegError checkBlop(store::OStoreStream& rValue,
                           const OUString& sTargetPath,
                           sal_uInt32 srcValueSize,
                           sal_uInt8* pSrcBuffer,
-                          bool bReport=false);
+                          bool bReport);
 
     static RegError mergeModuleValue(store::OStoreStream& rTargetValue,
                                  RegistryTypeReader& reader,
@@ -126,8 +126,8 @@ private:
                                 ORegKey* pSourceKey,
                                 const OUString& keyName,
                                 sal_uInt32 nCut,
-                                bool bWarnings=false,
-                                bool bReport=false);
+                                bool bWarnings,
+                                bool bReport);
 
     RegError    dumpValue(const OUString& sPath,
                           const OUString& sName,

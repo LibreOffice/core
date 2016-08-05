@@ -620,7 +620,7 @@ protected:
 
 private:
     void setShellFromModel();
-    void firing_Impl( const  ScriptEvent& evt, Any *pSyncRet=nullptr ) throw( RuntimeException, std::exception );
+    void firing_Impl( const  ScriptEvent& evt, Any *pSyncRet ) throw( RuntimeException, std::exception );
 
     Reference< frame::XModel > m_xModel;
     bool m_bDocClosed;
@@ -672,7 +672,7 @@ EventListener::disposing(const lang::EventObject&)  throw( RuntimeException, std
 void SAL_CALL
 EventListener::firing(const ScriptEvent& evt) throw(RuntimeException, std::exception)
 {
-    firing_Impl( evt );
+    firing_Impl( evt, nullptr );
 }
 
 Any SAL_CALL

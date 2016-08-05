@@ -198,7 +198,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         void                ImplWriteExtParaHeader( SvMemoryStream& rSt, sal_uInt32 nRef, sal_uInt32 nInstance, sal_uInt32 nSlideId );
 
         sal_uInt32          ImplProgBinaryTag( SvStream* pOutStrm );
-        sal_uInt32          ImplProgBinaryTagContainer( SvStream* pOutStrm, SvMemoryStream* pBinTag = nullptr );
+        sal_uInt32          ImplProgBinaryTagContainer( SvStream* pOutStrm, SvMemoryStream* pBinTag );
         sal_uInt32          ImplProgTagContainer( SvStream* pOutStrm, SvMemoryStream* pBinTag = nullptr );
         static sal_uInt32   ImplOutlineViewInfoContainer( SvStream* pOutStrm );
         static sal_uInt32   ImplSlideViewInfoContainer( sal_uInt32 nInstance, SvStream* pOutStrm );

@@ -235,7 +235,7 @@ private:
         SdDrawDocument* pDocument,
         const std::shared_ptr<ViewShell>& rpViewShell,
         bool bDirectionIsForward,
-        IteratorLocation aLocation=BEGIN);
+        IteratorLocation aLocation);
 
     /** Create an iterator that iterates over all <type>SdrObjects</type>
         objects of the <member>mpOutliner</member> outliner.
@@ -252,7 +252,7 @@ private:
         SdDrawDocument* pDocument,
         const std::shared_ptr<ViewShell>& rpViewShell,
         bool bDirectionIsForward,
-        IteratorLocation aLocation=BEGIN);
+        IteratorLocation aLocation);
 
     /** Return the index of a page that contains an object that a new
         iterator shall point to.  This page index depends primarily on the

@@ -87,7 +87,7 @@ namespace rptui
 
         // forwards
         void                    SetMode( DlgEdMode _eMode );
-        void                    SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType = OUString());
+        void                    SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType);
         OUString                GetInsertObjString() const;
         void                    setGridSnap(bool bOn);
         void                    setDragStripes(bool bOn);
@@ -130,7 +130,7 @@ namespace rptui
         */
         void                    addSection(const css::uno::Reference< css::report::XSection >& _xSection
                                     ,const OUString& _sColorEntry
-                                    ,sal_uInt16 _nPosition = USHRT_MAX);
+                                    ,sal_uInt16 _nPosition);
 
         sal_uInt16                  getSectionCount() const;
 
