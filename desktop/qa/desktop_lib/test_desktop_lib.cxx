@@ -79,6 +79,7 @@ public:
     void testSaveAsCalc();
     void testPasteWriter();
     void testPasteWriterJPEG();
+    void testUndoWriter();
     void testRowColumnHeaders();
     void testHiddenRowHeaders();
     void testCellCursor();
@@ -106,6 +107,7 @@ public:
     CPPUNIT_TEST(testSaveAsCalc);
     CPPUNIT_TEST(testPasteWriter);
     CPPUNIT_TEST(testPasteWriterJPEG);
+    CPPUNIT_TEST(testUndoWriter);
     CPPUNIT_TEST(testRowColumnHeaders);
     CPPUNIT_TEST(testHiddenRowHeaders);
     CPPUNIT_TEST(testCellCursor);
@@ -497,6 +499,27 @@ void DesktopLOKTest::testPasteWriterJPEG()
     xShape.set(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     // This was text::TextContentAnchorType_AS_CHARACTER, AnchorType argument was ignored.
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, xShape->getPropertyValue("AnchorType").get<text::TextContentAnchorType>());
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void DesktopLOKTest::testUndoWriter()
+{
+    // Load a Writer document and press a key.
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 't', 0);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 't', 0);
+
+    // Get undo info.
+    boost::property_tree::ptree aTree;
+    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:Undo");
+    std::stringstream aStream(pJSON);
+    free(pJSON);
+    CPPUNIT_ASSERT(!aStream.str().empty());
+    boost::property_tree::read_json(aStream, aTree);
+    // Make sure that pressing a key creates exactly one undo action.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTree.get_child("actions").size());
 
     comphelper::LibreOfficeKit::setActive(false);
 }

@@ -81,6 +81,8 @@
 #include <unotools/mediadescriptor.hxx>
 #include <osl/module.hxx>
 #include <comphelper/sequence.hxx>
+#include <sfx2/sfxbasemodel.hxx>
+#include <svl/undo.hxx>
 
 #include <app.hxx>
 
@@ -88,7 +90,7 @@
 // We also need to hackily be able to start the main libreoffice thread:
 #include "../app/sofficemain.h"
 #include "../app/officeipcthread.hxx"
-#include "../../inc/lib/init.hxx"
+#include <lib/init.hxx>
 
 #include "lokinteractionhandler.hxx"
 #include <lokclipboard.hxx>
@@ -1792,6 +1794,38 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
     return pJson;
 }
 
+enum class UndoOrRedo
+{
+    UNDO,
+    REDO
+};
+
+/// Returns the JSON representation of either an undo or a redo stack.
+static char* getUndoOrRedo(LibreOfficeKitDocument* pThis, UndoOrRedo eCommand)
+{
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    auto pBaseModel = dynamic_cast<SfxBaseModel*>(pDocument->mxComponent.get());
+    if (!pBaseModel)
+        return nullptr;
+
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    if (!pObjectShell)
+        return nullptr;
+
+    svl::IUndoManager* pUndoManager = pObjectShell->GetUndoManager();
+    if (!pUndoManager)
+        return nullptr;
+
+    OUString aString;
+    if (eCommand == UndoOrRedo::UNDO)
+        aString = pUndoManager->GetUndoActionsInfo();
+    else
+        aString = pUndoManager->GetRedoActionsInfo();
+    char* pJson = strdup(aString.toUtf8().getStr());
+    return pJson;
+}
+
 static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCommand)
 {
     OString aCommand(pCommand);
@@ -1805,6 +1839,14 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     else if (!strcmp(pCommand, ".uno:StyleApply"))
     {
         return getStyles(pThis, pCommand);
+    }
+    else if (aCommand == ".uno:Undo")
+    {
+        return getUndoOrRedo(pThis, UndoOrRedo::UNDO);
+    }
+    else if (aCommand == ".uno:Redo")
+    {
+        return getUndoOrRedo(pThis, UndoOrRedo::REDO);
     }
     else if (aCommand.startsWith(aViewRowColumnHeaders))
     {

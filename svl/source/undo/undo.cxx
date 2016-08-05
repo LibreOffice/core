@@ -26,6 +26,7 @@
 #include <comphelper/flagguard.hxx>
 #include <tools/diagnose_ex.h>
 #include <libxml/xmlwriter.h>
+#include <boost/property_tree/json_parser.hpp>
 #include <unotools/datetime.hxx>
 
 #include <vector>
@@ -1329,6 +1330,51 @@ void SfxUndoManager::dumpAsXml(xmlTextWriterPtr pWriter) const
         xmlTextWriterEndDocument(pWriter);
         xmlFreeTextWriter(pWriter);
     }
+}
+
+/// Returns a JSON representation of pAction.
+boost::property_tree::ptree lcl_ActionToJson(size_t nIndex, SfxUndoAction* pAction)
+{
+    boost::property_tree::ptree aRet;
+    aRet.put("index", nIndex);
+    aRet.put("comment", pAction->GetComment().toUtf8().getStr());
+    aRet.put("viewId", pAction->GetViewShellId());
+    aRet.put("dateTime", utl::toISO8601(pAction->GetDateTime().GetUNODateTime()).toUtf8().getStr());
+    return aRet;
+}
+
+OUString SfxUndoManager::GetUndoActionsInfo() const
+{
+    boost::property_tree::ptree aActions;
+    const SfxUndoArray* pUndoArray = m_xData->pActUndoArray;
+    for (size_t i = 0; i < GetUndoActionCount(); ++i)
+    {
+        boost::property_tree::ptree aAction = lcl_ActionToJson(i, pUndoArray->aUndoActions[pUndoArray->nCurUndoAction - 1 - i].pAction);
+        aActions.push_back(std::make_pair("", aAction));
+    }
+
+    boost::property_tree::ptree aTree;
+    aTree.add_child("actions", aActions);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    return OUString::fromUtf8(aStream.str().c_str());
+}
+
+OUString SfxUndoManager::GetRedoActionsInfo() const
+{
+    boost::property_tree::ptree aActions;
+    const SfxUndoArray* pUndoArray = m_xData->pActUndoArray;
+    for (size_t i = 0; i < GetRedoActionCount(); ++i)
+    {
+        boost::property_tree::ptree aAction = lcl_ActionToJson(i, pUndoArray->aUndoActions[pUndoArray->nCurUndoAction + i].pAction);
+        aActions.push_back(std::make_pair("", aAction));
+    }
+
+    boost::property_tree::ptree aTree;
+    aTree.add_child("actions", aActions);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    return OUString::fromUtf8(aStream.str().c_str());
 }
 
 struct SfxListUndoAction::Impl
