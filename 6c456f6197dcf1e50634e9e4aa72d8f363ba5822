@@ -1,0 +1,633 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_3ccee683",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "typo \"alignment\"",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_dc93424e",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "style, not template\n\ngenerally there is a lot of inconsistency already but it would be much easier if \"style\" is consistently used for \"named collection of formatting attributes\" and \"template\" for \"a special kind of document managed by the template manager UI\"",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_fc98fe6c",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "style, not template",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_dc64224b",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "style, not template",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_fc59de8f",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "style, not template",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_1c5f6a73",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "style, not template",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_3c542653",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "style, not template",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_5c51f261",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "style, not template",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_7c4eaec2",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "style, not template",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_9c4b7ab0",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "style, not template",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_bcc67614",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "style, not template",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_fcd0fecb",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "styles are not exported",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_dccb421d",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 846,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "style, not template",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_1cd68ac5",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "typo \"alignment\"",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_3cdb46ef",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "it\u0027s a document, so in this case \"template\" is appropriate",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_5cd812f0",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1155,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "\"behind\" not \"before\"",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_7ce5cea6",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1650,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "style, not template",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_9ce29a9e",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1657,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "style, not template",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_bced9690",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1700,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "style, not template",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_dcf2626f",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2014,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "style, not template",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_fce71eaa",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2022,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "anchored, not tied",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_5cff3234",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2114,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "Do not export the empty nodes with 2pt fonts and standard style that are inserted before tables and sections, but do export bookmarks and paragraph anchored frames.",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_1cedaa8b",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2120,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "style, not template\n\nalso there\u0027s a \"red\" space at the end of the line",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_7cfcee3e",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2138,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "i think this should be \"oder einem Bereich\", because \"ohne\" doesn\u0027t make sense, which translates to \"or a section\"",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_9c737a4d",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2151,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "existing typo \"PagePreak\" -\u003e \"PageBreak\" and \"PagDesc\" -\u003e \"PageDesc\"",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_7c76ae3f",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2195,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "page-anchored",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_5c79f22e",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2282,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "character style",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_3c7c2620",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2392,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "delete german text",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_1c876a10",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2416,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "\"draw formats\", not character",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_fc81defc",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3039,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "this comment doesn\u0027t make much sense",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_bc875611",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3082,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "character style",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_9c9c5a6b",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3163,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "there was a \"HTML-DLL\"? that must have been decades ago :) better remove the last line",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_fcaabe84",
+        "filename": "sw/source/filter/html/htmlflywriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "anchored, not tied",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_1cb04af4",
+        "filename": "sw/source/filter/html/htmlflywriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "anchored, not tied",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_3c950640",
+        "filename": "sw/source/filter/html/htmlflywriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "rather \"Size of the object in Twips\", it\u0027s a unit of measure",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_5c92d258",
+        "filename": "sw/source/filter/html/htmlflywriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "\"anchored\" not \"tied\"",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_7c9f8e5f",
+        "filename": "sw/source/filter/html/htmlflywriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-08-05T14:29:20Z",
+      "side": 1,
+      "message": "\"in Twips\"",
+      "revId": "6c456f6197dcf1e50634e9e4aa72d8f363ba5822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
