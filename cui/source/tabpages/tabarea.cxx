@@ -224,9 +224,6 @@ void SvxAreaTabDialog::SavePalettes()
 
     if (mnColorListState & ChangeType::MODIFIED && mpColorList.is())
     {
-        mpColorList->SetPath( aPath );
-        mpColorList->Save();
-
         SvxColorListItem aItem( mpColorList, SID_COLOR_TABLE );
         // ToolBoxControls are informed:
         if ( pShell )
