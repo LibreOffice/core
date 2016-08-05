@@ -52,15 +52,15 @@ namespace svgio
 
             /// path content, set if found in current context
             const basegfx::B2DPolyPolygon* getPath() const { return mpPolyPolygon; }
-            void setPath(const basegfx::B2DPolyPolygon* pPath = nullptr) { if(mpPolyPolygon) delete mpPolyPolygon; mpPolyPolygon = nullptr; if(pPath) mpPolyPolygon = new basegfx::B2DPolyPolygon(*pPath); }
+            void setPath(const basegfx::B2DPolyPolygon* pPath) { if(mpPolyPolygon) delete mpPolyPolygon; mpPolyPolygon = nullptr; if(pPath) mpPolyPolygon = new basegfx::B2DPolyPolygon(*pPath); }
 
             /// transform content, set if found in current context
             const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform; }
-            void setTransform(const basegfx::B2DHomMatrix* pMatrix = nullptr) { if(mpaTransform) delete mpaTransform; mpaTransform = nullptr; if(pMatrix) mpaTransform = new basegfx::B2DHomMatrix(*pMatrix); }
+            void setTransform(const basegfx::B2DHomMatrix* pMatrix) { if(mpaTransform) delete mpaTransform; mpaTransform = nullptr; if(pMatrix) mpaTransform = new basegfx::B2DHomMatrix(*pMatrix); }
 
             /// PathLength content
             const SvgNumber& getPathLength() const { return maPathLength; }
-            void setPathLength(const SvgNumber& rPathLength = SvgNumber()) { maPathLength = rPathLength; }
+            void setPathLength(const SvgNumber& rPathLength) { maPathLength = rPathLength; }
         };
     } // end of namespace svgreader
 } // end of namespace svgio

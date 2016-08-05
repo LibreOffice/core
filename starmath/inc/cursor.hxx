@@ -107,7 +107,7 @@ public:
     void Move(OutputDevice* pDev, SmMovementDirection direction, bool bMoveAnchor = true);
 
     /** Move to the caret position closet to a given point */
-    void MoveTo(OutputDevice* pDev, Point pos, bool bMoveAnchor = true);
+    void MoveTo(OutputDevice* pDev, Point pos, bool bMoveAnchor);
 
     /** Delete the current selection or do nothing */
     void Delete();
@@ -216,7 +216,7 @@ public:
     /** Draw the caret */
     void Draw(OutputDevice& pDev, Point Offset, bool isCaretVisible);
 
-    bool IsAtTailOfBracket(SmBracketType eBracketType, SmBraceNode** ppBraceNode = nullptr) const;
+    bool IsAtTailOfBracket(SmBracketType eBracketType, SmBraceNode** ppBraceNode) const;
     void MoveAfterBracket(SmBraceNode* pBraceNode);
 
 private:
@@ -257,7 +257,7 @@ private:
      * that includes pLine!
      * This method also deletes SmErrorNode's as they're just meta info in the line.
      */
-    static SmNodeList* LineToList(SmStructureNode* pLine, SmNodeList* pList = new SmNodeList());
+    static SmNodeList* LineToList(SmStructureNode* pLine, SmNodeList* pList);
 
     /** Auxiliary function for calling LineToList on a node
      *

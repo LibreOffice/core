@@ -373,7 +373,7 @@ private:
 
     /// Resets the current slide transition sound object with a new one:
     SoundPlayerSharedPtr resetSlideTransitionSound(
-        uno::Any const& url = uno::Any(), bool bLoopSound = false );
+        uno::Any const& url, bool bLoopSound = false );
 
     /// stops the current slide transition sound
     void stopSlideTransitionSound();

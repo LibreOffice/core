@@ -56,21 +56,21 @@ namespace svgio
 
             /// transform content
             const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform; }
-            void setTransform(const basegfx::B2DHomMatrix* pMatrix = nullptr) { if(mpaTransform) delete mpaTransform; mpaTransform = nullptr; if(pMatrix) mpaTransform = new basegfx::B2DHomMatrix(*pMatrix); }
+            void setTransform(const basegfx::B2DHomMatrix* pMatrix) { if(mpaTransform) delete mpaTransform; mpaTransform = nullptr; if(pMatrix) mpaTransform = new basegfx::B2DHomMatrix(*pMatrix); }
 
             /// x content
             const SvgNumber& getX() const { return maX; }
-            void setX(const SvgNumber& rX = SvgNumber()) { maX = rX; }
+            void setX(const SvgNumber& rX) { maX = rX; }
 
             /// y content
             const SvgNumber& getY() const { return maY; }
-            void setY(const SvgNumber& rY = SvgNumber()) { maY = rY; }
+            void setY(const SvgNumber& rY) { maY = rY; }
 
             /// width content
-            void setWidth(const SvgNumber& rWidth = SvgNumber()) { maWidth = rWidth; }
+            void setWidth(const SvgNumber& rWidth) { maWidth = rWidth; }
 
             /// height content
-            void setHeight(const SvgNumber& rHeight = SvgNumber()) { maHeight = rHeight; }
+            void setHeight(const SvgNumber& rHeight) { maHeight = rHeight; }
         };
     } // end of namespace svgreader
 } // end of namespace svgio

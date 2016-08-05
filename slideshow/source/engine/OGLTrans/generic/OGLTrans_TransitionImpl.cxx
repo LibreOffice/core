@@ -566,12 +566,11 @@ makeReflectionTransition(
         const Primitives_t& rLeavingSlidePrimitives,
         const Primitives_t& rEnteringSlidePrimitives,
         const Operations_t& rOverallOperations,
-        const TransitionSettings& rSettings = TransitionSettings())
+        const TransitionSettings& rSettings)
 {
     return std::make_shared<ReflectionTransition>(
             TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives, rOverallOperations, SceneObjects_t()),
-            rSettings)
-        ;
+            rSettings);
 }
 
 }
@@ -616,7 +615,7 @@ makeSimpleTransition(
         const Primitives_t& rEnteringSlidePrimitives,
         const Operations_t& rOverallOperations,
         const SceneObjects_t& rSceneObjects,
-        const TransitionSettings& rSettings = TransitionSettings())
+        const TransitionSettings& rSettings)
 {
     return std::make_shared<SimpleTransition>(
             TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives, rOverallOperations, rSceneObjects),
@@ -638,7 +637,7 @@ makeSimpleTransition(
         const Primitives_t& rLeavingSlidePrimitives,
         const Primitives_t& rEnteringSlidePrimitives,
         const SceneObjects_t& rSceneObjects,
-        const TransitionSettings& rSettings = TransitionSettings())
+        const TransitionSettings& rSettings)
 {
     return makeSimpleTransition(rLeavingSlidePrimitives, rEnteringSlidePrimitives, Operations_t(), rSceneObjects, rSettings);
 }
@@ -2227,7 +2226,7 @@ void HoneycombTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlide
 std::shared_ptr<OGLTransitionImpl>
 makeHoneycombTransition(const Primitives_t& rLeavingSlidePrimitives,
                         const Primitives_t& rEnteringSlidePrimitives,
-                        const TransitionSettings& rSettings = TransitionSettings())
+                        const TransitionSettings& rSettings)
 {
     // The center point should be adjustable by the user, but we have no way to do that in the UI
     return std::make_shared<HoneycombTransition>(TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
