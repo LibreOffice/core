@@ -1772,7 +1772,7 @@ void SmParser::DoAttribut()
 
     NextToken();
 
-    pSNode->SetSubNodes(pAttr, nullptr);
+    pSNode->SetSubNodes(pAttr, nullptr); // the body will be filled later
     pSNode->SetScaleMode(eScaleMode);
     m_aNodeStack.push_front(std::move(pSNode));
 }

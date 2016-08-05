@@ -1145,7 +1145,7 @@ class SmAttributNode : public SmStructureNode
 {
 public:
     explicit SmAttributNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NATTRIBUT, rNodeToken)
+    :   SmStructureNode(NATTRIBUT, rNodeToken, 2)
     {}
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
@@ -1323,7 +1323,7 @@ inline const SmNode* SmBinHorNode::RightOperand() const
 
 inline SmNode* SmAttributNode::Attribute()
 {
-    OSL_ASSERT( GetNumSubNodes() > 0 );
+    assert( GetNumSubNodes() == 2 );
     return GetSubNode( 0 );
 }
 inline const SmNode* SmAttributNode::Attribute() const
@@ -1332,7 +1332,7 @@ inline const SmNode* SmAttributNode::Attribute() const
 }
 inline SmNode* SmAttributNode::Body()
 {
-    OSL_ASSERT( GetNumSubNodes() > 1 );
+    assert( GetNumSubNodes() == 2 );
     return GetSubNode( 1 );
 }
 inline const SmNode* SmAttributNode::Body() const
