@@ -53,6 +53,7 @@
 #include "documentimport.hxx"
 
 #include "globstr.hrc"
+#include <osl/endian.h>
 #include <vcl/svapp.hxx>
 
 #include <memory>
@@ -69,6 +70,15 @@ namespace
     const char SYLK_LF[]  = "\x1b :";
     const char DOUBLE_SEMICOLON[] = ";;";
     const char DOUBLE_DOUBLEQUOTE[] = "\"\"";
+
+    inline bool lclIsEndianSwap( const SvStream& rStrm )
+    {
+    #ifdef OSL_BIGENDIAN
+        return rStrm.GetEndian() != SvStreamEndian::BIG;
+    #else
+        return rStrm.GetEndian() != SvStreamEndian::LITTLE;
+    #endif
+    }
 }
 
 enum SylkVersion
@@ -173,6 +183,15 @@ ScImportExport::~ScImportExport()
 {
     delete pUndoDoc;
     delete pExtOptions;
+}
+
+void ScImportExport::SetNoEndianSwap( SvStream& rStrm )
+{
+#ifdef OSL_BIGENDIAN
+    rStrm.SetEndian( SvStreamEndian::BIG );
+#else
+    rStrm.SetEndian( SvStreamEndian::LITTLE );
+#endif
 }
 
 void ScImportExport::SetExtOptions( const ScAsciiOptions& rOpt )
@@ -479,7 +498,7 @@ void ScImportExport::WriteUnicodeOrByteString( SvStream& rStrm, const OUString& 
     rtl_TextEncoding eEnc = rStrm.GetStreamCharSet();
     if ( eEnc == RTL_TEXTENCODING_UNICODE )
     {
-        if ( !IsEndianSwap( rStrm ) )
+        if ( !lclIsEndianSwap( rStrm ) )
             rStrm.WriteBytes(rString.getStr(), rString.getLength() * sizeof(sal_Unicode));
         else
         {
@@ -2292,6 +2311,18 @@ static inline const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr,
         ++pStr;
     }
     return nullptr;
+}
+
+ScImportStringStream::ScImportStringStream( const OUString& rStr )
+    : SvMemoryStream( const_cast<sal_Unicode *>(rStr.getStr()),
+            rStr.getLength() * sizeof(sal_Unicode), StreamMode::READ)
+{
+    SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
+#ifdef OSL_BIGENDIAN
+    SetEndian(SvStreamEndian::BIG);
+#else
+    SetEndian(SvStreamEndian::LITTLE);
+#endif
 }
 
 OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
