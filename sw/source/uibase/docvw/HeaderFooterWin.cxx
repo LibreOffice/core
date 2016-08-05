@@ -307,7 +307,7 @@ void SwHeaderFooterWin::Paint(vcl::RenderContext& rRenderContext, const Rectangl
 
     aSeq[2] = drawinglayer::primitive2d::Primitive2DReference(
                     new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                        aTextMatrix, OUString(m_sLabel), 0, m_sLabel.getLength(),
+                        aTextMatrix, m_sLabel, 0, m_sLabel.getLength(),
                         std::vector<double>(), aFontAttr, css::lang::Locale(), aLineColor));
 
     // Create the 'plus' or 'arrow' primitive
