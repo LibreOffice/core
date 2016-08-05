@@ -432,7 +432,7 @@ LOKPostCommand (LOKDocView* pDocView,
     GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(LOK_POST_COMMAND);
     GError* error = nullptr;
-    pLOEvent->m_pCommand = pCommand;
+    pLOEvent->m_pCommand = g_strdup(pCommand);
     pLOEvent->m_pArguments  = g_strdup(pArguments);
     pLOEvent->m_bNotifyWhenFinished = bNotifyWhenFinished;
 
