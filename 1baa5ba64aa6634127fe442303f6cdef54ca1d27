@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_dc2fc2f4",
+        "filename": "sd/uiconfig/sdraw/ui/drawpagedialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2016-08-05T13:40:07Z",
+      "side": 1,
+      "message": "it should be Transparency",
+      "range": {
+        "startLine": 127,
+        "startChar": 58,
+        "endLine": 127,
+        "endChar": 70
+      },
+      "revId": "1baa5ba64aa6634127fe442303f6cdef54ca1d27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
