@@ -73,19 +73,19 @@ namespace svgio
 
             /// viewBox content
             const basegfx::B2DRange* getViewBox() const { return mpViewBox; }
-            void setViewBox(const basegfx::B2DRange* pViewBox = nullptr) { if(mpViewBox) delete mpViewBox; mpViewBox = nullptr; if(pViewBox) mpViewBox = new basegfx::B2DRange(*pViewBox); }
+            void setViewBox(const basegfx::B2DRange* pViewBox) { if(mpViewBox) delete mpViewBox; mpViewBox = nullptr; if(pViewBox) mpViewBox = new basegfx::B2DRange(*pViewBox); }
 
             /// SvgAspectRatio content
             const SvgAspectRatio& getSvgAspectRatio() const { return maSvgAspectRatio; }
-            void setSvgAspectRatio(const SvgAspectRatio& rSvgAspectRatio = SvgAspectRatio()) { maSvgAspectRatio = rSvgAspectRatio; }
+            void setSvgAspectRatio(const SvgAspectRatio& rSvgAspectRatio) { maSvgAspectRatio = rSvgAspectRatio; }
 
             /// RefX content, set if found in current context
             const SvgNumber& getRefX() const { return maRefX; }
-            void setRefX(const SvgNumber& rRefX = SvgNumber()) { maRefX = rRefX; }
+            void setRefX(const SvgNumber& rRefX) { maRefX = rRefX; }
 
             /// RefY content, set if found in current context
             const SvgNumber& getRefY() const { return maRefY; }
-            void setRefY(const SvgNumber& rRefY = SvgNumber()) { maRefY = rRefY; }
+            void setRefY(const SvgNumber& rRefY) { maRefY = rRefY; }
 
             /// MarkerUnits content
             MarkerUnits getMarkerUnits() const { return maMarkerUnits; }
@@ -93,15 +93,15 @@ namespace svgio
 
             /// MarkerWidth content, set if found in current context
             const SvgNumber& getMarkerWidth() const { return maMarkerWidth; }
-            void setMarkerWidth(const SvgNumber& rMarkerWidth = SvgNumber()) { maMarkerWidth = rMarkerWidth; }
+            void setMarkerWidth(const SvgNumber& rMarkerWidth) { maMarkerWidth = rMarkerWidth; }
 
             /// MarkerHeight content, set if found in current context
             const SvgNumber& getMarkerHeight() const { return maMarkerHeight; }
-            void setMarkerHeight(const SvgNumber& rMarkerHeight = SvgNumber()) { maMarkerHeight = rMarkerHeight; }
+            void setMarkerHeight(const SvgNumber& rMarkerHeight) { maMarkerHeight = rMarkerHeight; }
 
             /// Angle content, set if found in current context
             double getAngle() const { return mfAngle; }
-            void setAngle(double fAngle = 0.0) { mfAngle = fAngle; mbOrientAuto = false; }
+            void setAngle(double fAngle) { mfAngle = fAngle; mbOrientAuto = false; }
 
             /// OrientAuto content, set if found in current context
             bool getOrientAuto() const { return mbOrientAuto; }

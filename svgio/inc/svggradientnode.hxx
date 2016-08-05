@@ -76,39 +76,39 @@ namespace svgio
 
             /// x1 content
             const SvgNumber getX1() const;
-            void setX1(const SvgNumber& rX1 = SvgNumber()) { maX1 = rX1; }
+            void setX1(const SvgNumber& rX1) { maX1 = rX1; }
 
             /// y1 content
             const SvgNumber getY1() const;
-            void setY1(const SvgNumber& rY1 = SvgNumber()) { maY1 = rY1; }
+            void setY1(const SvgNumber& rY1) { maY1 = rY1; }
 
             /// x2 content
             const SvgNumber getX2() const;
-            void setX2(const SvgNumber& rX2 = SvgNumber()) { maX2 = rX2; }
+            void setX2(const SvgNumber& rX2) { maX2 = rX2; }
 
             /// y2 content
             const SvgNumber getY2() const;
-            void setY2(const SvgNumber& rY2 = SvgNumber()) { maY2 = rY2; }
+            void setY2(const SvgNumber& rY2) { maY2 = rY2; }
 
             /// Cx content
             const SvgNumber getCx() const;
-            void setCx(const SvgNumber& rCx = SvgNumber()) { maCx = rCx; }
+            void setCx(const SvgNumber& rCx) { maCx = rCx; }
 
             /// Cy content
             const SvgNumber getCy() const;
-            void setCy(const SvgNumber& rCy = SvgNumber()) { maCy = rCy; }
+            void setCy(const SvgNumber& rCy) { maCy = rCy; }
 
             /// R content
             const SvgNumber getR() const;
-            void setR(const SvgNumber& rR = SvgNumber()) { maR = rR; }
+            void setR(const SvgNumber& rR) { maR = rR; }
 
             /// Fx content
             const SvgNumber* getFx() const;
-            void setFx(const SvgNumber& rFx = SvgNumber()) { maFx = rFx; }
+            void setFx(const SvgNumber& rFx) { maFx = rFx; }
 
             /// Fy content
             const SvgNumber* getFy() const;
-            void setFy(const SvgNumber& rFy = SvgNumber()) { maFy = rFy; }
+            void setFy(const SvgNumber& rFy) { maFy = rFy; }
 
             /// gradientUnits content
             SvgUnits getGradientUnits() const { return maGradientUnits; }
@@ -120,7 +120,7 @@ namespace svgio
 
             /// transform content, set if found in current context
             const basegfx::B2DHomMatrix* getGradientTransform() const;
-            void setGradientTransform(const basegfx::B2DHomMatrix* pMatrix = nullptr);
+            void setGradientTransform(const basegfx::B2DHomMatrix* pMatrix);
         };
     } // end of namespace svgreader
 } // end of namespace svgio
