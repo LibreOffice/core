@@ -156,7 +156,7 @@ void RecursiveTest::test()
         css::uno::UNO_QUERY_THROW);
     properties_->addPropertyChangeListener("Label", this);
     step();
-    CPPUNIT_ASSERT(count_ == 0);
+    CPPUNIT_ASSERT_EQUAL(0, count_);
     css::uno::Reference< css::lang::XComponent >(
         properties_, css::uno::UNO_QUERY_THROW)->dispose();
 }
@@ -233,7 +233,7 @@ void Test::testKeySet()
             "/org.openoffice.System/L10N",
             "Locale") >>=
         s);
-    CPPUNIT_ASSERT( s == "com.sun.star.configuration.backend.LocaleBackend UILocale" );
+    CPPUNIT_ASSERT_EQUAL( OUString("com.sun.star.configuration.backend.LocaleBackend UILocale"), s );
 }
 
 void Test::testKeyReset()
@@ -248,7 +248,7 @@ void Test::testKeyReset()
                 "/org.openoffice.System/L10N",
                 "Locale") >>=
             s);
-        CPPUNIT_ASSERT( s == "com.sun.star.configuration.backend.LocaleBackend Locale" );
+        CPPUNIT_ASSERT_EQUAL( OUString("com.sun.star.configuration.backend.LocaleBackend Locale"), s );
     }
 }
 
@@ -261,7 +261,7 @@ void Test::testSetSetMemberName()
                      ".uno:FontworkShapeType",
             "Label") >>=
         s);
-    CPPUNIT_ASSERT( s == "Fontwork Shape" );
+    CPPUNIT_ASSERT_EQUAL( OUString("Fontwork Shape"), s );
 
     css::uno::Reference< css::container::XNameAccess > access(
         createUpdateAccess(
@@ -283,7 +283,7 @@ void Test::testSetSetMemberName()
                     ".uno:FontworkShapeType",
             "Label") >>=
         s);
-    CPPUNIT_ASSERT( s == "Fontwork Style" );
+    CPPUNIT_ASSERT_EQUAL( OUString("Fontwork Style"), s );
 }
 
 void Test::testInsertSetMember() {
