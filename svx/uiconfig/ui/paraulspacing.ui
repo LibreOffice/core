@@ -16,7 +16,7 @@
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="row_spacing">6</property>
+        <property name="row_spacing">1</property>
         <property name="column_spacing">6</property>
         <child>
           <object class="GtkBox" id="box27">
@@ -94,12 +94,10 @@
         </child>
         <child>
           <object class="svxlo-SvxRelativeField" id="aboveparaspacing">
-            <property name="width_request">150</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="has_tooltip">True</property>
             <property name="tooltip_text" translatable="yes">Above Paragraph Spacing</property>
-            <property name="hexpand">True</property>
             <property name="invisible_char">•</property>
             <property name="text">0</property>
             <property name="adjustment">adjustment1</property>
@@ -111,12 +109,10 @@
         </child>
         <child>
           <object class="svxlo-SvxRelativeField" id="belowparaspacing">
-            <property name="width_request">150</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="has_tooltip">True</property>
             <property name="tooltip_text" translatable="yes">Below Paragraph Spacing</property>
-            <property name="hexpand">True</property>
             <property name="invisible_char">•</property>
             <property name="text">0</property>
             <property name="adjustment">adjustment1</property>
