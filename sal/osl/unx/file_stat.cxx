@@ -155,7 +155,7 @@ namespace
 
     /* we only need to call stat or lstat if one of the
        following flags is set */
-    inline bool is_stat_call_necessary(sal_uInt32 field_mask, oslFileType file_type = osl_File_Type_Unknown)
+    inline bool is_stat_call_necessary(sal_uInt32 field_mask, oslFileType file_type)
     {
         return (
                 ((field_mask & osl_FileStatus_Mask_Type) && (file_type == osl_File_Type_Unknown)) ||

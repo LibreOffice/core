@@ -42,7 +42,7 @@ using ::rtl::OUStringToOString;
 
 /** print a UNI_CODE String. And also print some comments of the string.
 */
-inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = nullptr )
+inline void printUString( const ::rtl::OUString & str, const sal_Char * msg )
 {
     if ( msg != nullptr )
     {

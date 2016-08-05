@@ -139,7 +139,7 @@ public:
     void                convertAutomaticFill(
                             PropertySet& rPropSet,
                             ObjectType eObjType,
-                            sal_Int32 nSeriesIdx = -1 );
+                            sal_Int32 nSeriesIdx );
 
     /** Returns true, if the passed shape properties have automatic fill mode. */
     static bool         isAutomaticFill( const ModelRef< Shape >& rxShapeProp );

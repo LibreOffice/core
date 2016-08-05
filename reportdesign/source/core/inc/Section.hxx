@@ -139,7 +139,7 @@ namespace reportdesign
                 ,const css::uno::Reference< css::uno::XComponentContext >& context,bool _bPageSection=false);
         static css::uno::Reference< css::report::XSection>
         createOSection(const css::uno::Reference< css::report::XGroup >& _xParent
-                ,const css::uno::Reference< css::uno::XComponentContext >& context,bool _bPageSection=false);
+                ,const css::uno::Reference< css::uno::XComponentContext >& context, bool _bPageSection);
 
         DECLARE_XINTERFACE( )
 

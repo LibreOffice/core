@@ -14,7 +14,7 @@
 
 namespace opencl {
 
-ds_device const & getDeviceSelection(OUString const & pFileName, bool bForceSelection = false);
+ds_device const & getDeviceSelection(OUString const & pFileName, bool bForceSelection);
 
 struct GPUEnv;
 void releaseOpenCLEnv( GPUEnv *gpuInfo );

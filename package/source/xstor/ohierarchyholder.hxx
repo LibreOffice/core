@@ -87,7 +87,7 @@ public:
         GetStreamHierarchically( sal_Int32 nStorageMode,
                                 OStringList_Impl& aPath,
                                 sal_Int32 nStreamMode,
-                                const ::comphelper::SequenceAsHashMap& aEncryptionData = ::comphelper::SequenceAsHashMap() );
+                                const ::comphelper::SequenceAsHashMap& aEncryptionData );
 
     void RemoveStreamHierarchically( OStringList_Impl& aListPath );
 

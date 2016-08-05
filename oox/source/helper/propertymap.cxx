@@ -553,7 +553,7 @@ static void printParameterPairData(int level, EnhancedCustomShapeParameterPair &
     fprintf (stderr, "}");
 }
 
-static const char* lclDumpAnyValueCode( const Any& value, int level = 0)
+static const char* lclDumpAnyValueCode( const Any& value, int level)
 {
     OUString strValue;
     Sequence< OUString > strArray;

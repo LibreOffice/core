@@ -276,7 +276,7 @@ public:
     bool    IsPreviewTransitions() const { Init(); return bPreviewTransitions; }
 
     sal_Int32   GetDisplay() const;
-    void        SetDisplay( sal_Int32 nDisplay = 0 );
+    void        SetDisplay( sal_Int32 nDisplay );
 
     sal_Int32 GetPresentationPenColor() const { Init(); return mnPenColor; }
     void      SetPresentationPenColor( sal_Int32 nPenColor ) { if( mnPenColor != nPenColor ) { OptionsChanged(); mnPenColor = nPenColor; } }
@@ -304,7 +304,7 @@ public:
             hence the parameters name.  Use 0 for turning it off.  Other
             values are reserved for future use.
     */
-    void    SetPrinterIndependentLayout (sal_uInt16 nOn = 1 ){ if ( nOn != mnPrinterIndependentLayout ) { OptionsChanged(); mnPrinterIndependentLayout = nOn; } }
+    void    SetPrinterIndependentLayout (sal_uInt16 nOn ){ if ( nOn != mnPrinterIndependentLayout ) { OptionsChanged(); mnPrinterIndependentLayout = nOn; } }
     void    SetSolidDragging( bool bOn ) { if( bSolidDragging != bOn ) { OptionsChanged(); bSolidDragging = bOn; } }
     void    SetShowUndoDeleteWarning( bool bOn ) { if( bShowUndoDeleteWarning != bOn ) { OptionsChanged(); bShowUndoDeleteWarning = bOn; } }
     void    SetSlideshowRespectZOrder( bool bOn ) { if( bSlideshowRespectZOrder != bOn ) { OptionsChanged(); bSlideshowRespectZOrder = bOn; } }
@@ -376,13 +376,13 @@ public:
     sal_Int16   GetAngle() const { Init(); return nAngle; }
     sal_Int16   GetEliminatePolyPointLimitAngle() const { Init(); return nBezAngle; }
 
-    void    SetSnapHelplines( bool bOn = true ) { if( bSnapHelplines != bOn ) { OptionsChanged(); bSnapHelplines = bOn; } }
-    void    SetSnapBorder( bool bOn = true ) { if( bSnapBorder != bOn ) { OptionsChanged(); bSnapBorder = bOn; } }
-    void    SetSnapFrame( bool bOn = true ) { if( bSnapFrame != bOn ) { OptionsChanged(); bSnapFrame = bOn; } }
-    void    SetSnapPoints( bool bOn = true ) { if( bSnapPoints != bOn ) { OptionsChanged(); bSnapPoints = bOn; } }
-    void    SetOrtho( bool bOn = true ) { if( bOrtho != bOn ) { OptionsChanged(); bOrtho = bOn; } }
-    void    SetBigOrtho( bool bOn = true ) { if( bBigOrtho != bOn ) { OptionsChanged(); bBigOrtho = bOn; } }
-    void    SetRotate( bool bOn = true ) { if( bRotate != bOn ) { OptionsChanged(); bRotate = bOn; } }
+    void    SetSnapHelplines( bool bOn ) { if( bSnapHelplines != bOn ) { OptionsChanged(); bSnapHelplines = bOn; } }
+    void    SetSnapBorder( bool bOn ) { if( bSnapBorder != bOn ) { OptionsChanged(); bSnapBorder = bOn; } }
+    void    SetSnapFrame( bool bOn ) { if( bSnapFrame != bOn ) { OptionsChanged(); bSnapFrame = bOn; } }
+    void    SetSnapPoints( bool bOn ) { if( bSnapPoints != bOn ) { OptionsChanged(); bSnapPoints = bOn; } }
+    void    SetOrtho( bool bOn ) { if( bOrtho != bOn ) { OptionsChanged(); bOrtho = bOn; } }
+    void    SetBigOrtho( bool bOn ) { if( bBigOrtho != bOn ) { OptionsChanged(); bBigOrtho = bOn; } }
+    void    SetRotate( bool bOn ) { if( bRotate != bOn ) { OptionsChanged(); bRotate = bOn; } }
     void    SetSnapArea( sal_Int16 nIn ) { if( nSnapArea != nIn ) { OptionsChanged(); nSnapArea = nIn; } }
     void    SetAngle( sal_Int16 nIn ) { if( nAngle != nIn ) { OptionsChanged(); nAngle = nIn; } }
     void    SetEliminatePolyPointLimitAngle( sal_Int16 nIn ) { if( nBezAngle != nIn ) { OptionsChanged(); nBezAngle = nIn; } }

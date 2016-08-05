@@ -83,7 +83,7 @@ sal_Int32           GetDiffDate360( sal_Int32 nNullDate, sal_Int32 nDate1, sal_I
 sal_Int32           GetDaysInYears( sal_uInt16 nYear1, sal_uInt16 nYear2 );
 inline sal_Int16    GetDayOfWeek( sal_Int32 nDate );
 sal_Int32           GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode,
-                                sal_Int32* pOptDaysIn1stYear = nullptr ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+                                sal_Int32* pOptDaysIn1stYear ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 double              GetYearDiff( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
                                 throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 sal_Int32           GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nMode ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
@@ -101,7 +101,7 @@ OUString              ConvertFromDec(
 double              Erf( double fX );
 double              Erfc( double fX );
 bool                ParseDouble( const sal_Unicode*& rpDoubleAsString, double& rReturn );
-OUString            GetString( double fNumber, bool bLeadingSign = false, sal_uInt16 nMaxNumOfDigits = 15 );
+OUString            GetString( double fNumber, bool bLeadingSign, sal_uInt16 nMaxNumOfDigits = 15 );
 
 double              GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
                                 double fRestVal, double fPer, double fRate, sal_Int32 nBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
@@ -424,8 +424,8 @@ public:
                                 { return maVector.size(); }
 
     inline void             Append( Complex* pNew );
-    void                    Append( const css::uno::Sequence< css::uno::Sequence< OUString > >& rComplexNumList, ComplListAppendHandl eAH = AH_EmpyAs0 ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
-    void                    Append( const css::uno::Sequence< css::uno::Any >& aMultPars,ComplListAppendHandl eAH = AH_EmpyAs0 ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Append( const css::uno::Sequence< css::uno::Sequence< OUString > >& rComplexNumList, ComplListAppendHandl eAH ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Append( const css::uno::Sequence< css::uno::Any >& aMultPars,ComplListAppendHandl eAH ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 };
 
 

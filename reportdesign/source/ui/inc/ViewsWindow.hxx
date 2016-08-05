@@ -129,7 +129,7 @@ namespace rptui
         */
         void            addSection(const css::uno::Reference< css::report::XSection >& _xSection
                                     ,const OUString& _sColorEntry
-                                    ,sal_uInt16 _nPosition = USHRT_MAX);
+                                    ,sal_uInt16 _nPosition);
 
         sal_uInt16          getSectionCount() const;
         /** return the section at the given position
@@ -153,7 +153,7 @@ namespace rptui
 
         inline bool     empty() const { return m_aSections.empty(); }
         void            SetMode( DlgEdMode m_eMode );
-        void            SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType = OUString());
+        void            SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType);
         const OUString& GetInsertObjString() const { return m_sShapeType;}
         /** copies the current selection in this section
         */
@@ -232,7 +232,7 @@ namespace rptui
 
         /** returns the current position in the list
         */
-        sal_uInt16 getPosition(const OSectionWindow* _pSectionWindow = nullptr) const;
+        sal_uInt16 getPosition(const OSectionWindow* _pSectionWindow) const;
 
         /** calls on every section BrkAction
         *

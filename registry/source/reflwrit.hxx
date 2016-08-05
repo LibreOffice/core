@@ -76,7 +76,7 @@ public:
                               const rtl::OUString&    doku,
                               const rtl::OUString&    fileName,
                               RTFieldAccess           access,
-                              const RTConstValue&     constValue = RTConstValue());
+                              const RTConstValue&     constValue);
 
     /** returns a pointer to the new type blob.
 
