@@ -1162,6 +1162,11 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "before 1.2inside3E+0middle4 after";
         checkPreviewString(aFormatter, sCode, 12345.667, eLang, sExpected);
     }
+    {  // Display 1.96 as 2 and not 1 1/1
+        sCode = "# ?/?";
+        sExpected = "2    ";
+        checkPreviewString(aFormatter, sCode, 1.96, eLang, sExpected);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
