@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_1c03ea74",
+        "filename": "cui/source/options/sdbcdriverenum.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-08-05T12:46:42Z",
+      "side": 1,
+      "message": "this is unnecessary, it will be released when the destructor runs automatically",
+      "revId": "039df37cee879291616fc6916039a405d0dfc326",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
