@@ -40,6 +40,25 @@ private:
     bool mbToggle;
 };
 
+namespace vcl
+{
+    class Font;
+}
+
+class ScOverlayHint : public sdr::overlay::OverlayObject
+{
+public:
+    ScOverlayHint(const OUString& rTit, const OUString& rMsg, const Color& rColor, const vcl::Font& rFont);
+
+public:
+    virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;
+
+private:
+    const OUString m_aTitle;
+    const OUString m_aMessage;
+    const vcl::Font& m_rTextFont;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

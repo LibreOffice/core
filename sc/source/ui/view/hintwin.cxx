@@ -19,6 +19,7 @@
 
 #include "hintwin.hxx"
 #include "global.hxx"
+#include "overlayobject.hxx"
 #include "scmod.hxx"
 
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
@@ -75,56 +76,61 @@ ScHintWindow::ScHintWindow( vcl::Window* pParent, const OUString& rTit, const OU
     SetOutputSizePixel( aWinSize );
 }
 
-void ScHintWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /* rRect */)
+ScOverlayHint::ScOverlayHint(const OUString& rTit, const OUString& rMsg, const Color& rColor, const vcl::Font& rFont)
+    : OverlayObject(rColor)
+    , m_aTitle(rTit)
+    , m_aMessage(convertLineEnd(rMsg, LINEEND_CR))
+    , m_rTextFont(rFont)
 {
-    // Create the processor and process the primitives
-    const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
-    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(
-        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
+}
 
-    const Rectangle aRect(Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
-    basegfx::B2DPolygon aPoly(basegfx::tools::createPolygonFromRect(basegfx::B2DRectangle(aRect.Left(), aRect.Top(),
-                                                                                          aRect.Right(), aRect.Bottom())));
-
-    const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
-    Color aCommentColor = rColorCfg.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor;
-    const drawinglayer::primitive2d::Primitive2DReference aBg(
-        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPoly), aCommentColor.getBColor()));
-
-    basegfx::BColor aBorder(0.5, 0.5, 0.5);
-    const drawinglayer::primitive2d::Primitive2DReference aReference(
-        new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-            aPoly, aBorder));
+drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlayObjectPrimitive2DSequence()
+{
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    const Color& rColor = rStyleSettings.GetWindowTextColor();
+    vcl::Font aHeadFont = m_rTextFont;
+    aHeadFont.SetWeight(WEIGHT_BOLD);
 
     // Create the text primitive for the title
     basegfx::B2DVector aFontSize;
     drawinglayer::attribute::FontAttribute aFontAttr =
-        drawinglayer::primitive2d::getFontAttributeFromVclFont(aFontSize, m_aHeadFont, false, false);
+        drawinglayer::primitive2d::getFontAttributeFromVclFont(aFontSize, aHeadFont, false, false);
 
-    FontMetric aFontMetric = rRenderContext.GetFontMetric(m_aHeadFont);
-    double nTextOffsetY = aFontMetric.GetAscent() + HINT_MARGIN;
+    OutputDevice* pDefaultDev = Application::GetDefaultDevice();
+
+    FontMetric aFontMetric = pDefaultDev->GetFontMetric(aHeadFont);
+    double nTextOffsetY = HINT_MARGIN + aFontMetric.GetAscent();
     Point aTextPos(HINT_MARGIN, nTextOffsetY);
+    basegfx::B2DRange aRange(0, 0, HINT_MARGIN, nTextOffsetY);
 
     basegfx::B2DHomMatrix aTextMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
                                             aFontSize.getX(), aFontSize.getY(),
                                             double(aTextPos.X()), double(aTextPos.Y())));
 
-    const drawinglayer::primitive2d::Primitive2DReference aTitle(
-                    new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+    drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pTitle =
+        new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                         aTextMatrix, m_aTitle, 0, m_aTitle.getLength(),
                         std::vector<double>(), aFontAttr, css::lang::Locale(),
-                        GetLineColor().getBColor()));
+                        rColor.getBColor());
 
-    drawinglayer::primitive2d::Primitive2DContainer aSeq { aBg, aReference, aTitle };
+    const drawinglayer::primitive2d::Primitive2DReference aTitle(pTitle);
 
-    aFontMetric = rRenderContext.GetFontMetric(m_aTextFont);
+    Point m_aTextStart(HINT_MARGIN + HINT_INDENT, HINT_MARGIN + aFontMetric.GetLineHeight() + HINT_LINESPACE);
+
+    drawinglayer::geometry::ViewInformation2D aDummy;
+    aRange.expand(pTitle->getB2DRange(aDummy));
+
+    drawinglayer::primitive2d::Primitive2DContainer aSeq { aTitle };
+
+    aFontMetric = pDefaultDev->GetFontMetric(m_rTextFont);
+
     nTextOffsetY = aFontMetric.GetAscent();
 
-    aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(aFontSize, m_aTextFont, false, false);
+    aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(aFontSize, m_rTextFont, false, false);
 
     sal_Int32 nIndex = 0;
     Point aLineStart = m_aTextStart;
-    while ( nIndex != -1 )
+    while (nIndex != -1)
     {
         OUString aLine = m_aMessage.getToken( 0, '\r', nIndex );
 
@@ -133,16 +139,54 @@ void ScHintWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*
                                 aLineStart.X(), aLineStart.Y() + nTextOffsetY);
 
         // Create the text primitive for each line of text
-        const drawinglayer::primitive2d::Primitive2DReference aMessage(
+        drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pMessage =
                                         new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                                                 aTextMatrix, aLine, 0, aLine.getLength(),
                                                 std::vector<double>(), aFontAttr, css::lang::Locale(),
-                                                GetLineColor().getBColor()));
+                                                rColor.getBColor());
 
+        aRange.expand(pMessage->getB2DRange(aDummy));
+
+        const drawinglayer::primitive2d::Primitive2DReference aMessage(pMessage);
         aSeq.push_back(aMessage);
 
-        aLineStart.Y() += m_nTextHeight;
+        aLineStart.Y() += aFontMetric.GetLineHeight();
     }
+
+    aRange.grow(HINT_MARGIN);
+
+    basegfx::B2DPolygon aPoly(basegfx::tools::createPolygonFromRect(aRange));
+
+    const drawinglayer::primitive2d::Primitive2DReference aBg(
+        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPoly), getBaseColor().getBColor()));
+
+    basegfx::BColor aBorderColor(0.5, 0.5, 0.5);
+    const drawinglayer::primitive2d::Primitive2DReference aBorder(
+        new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+            aPoly, aBorderColor));
+
+
+    aSeq.insert(aSeq.begin(), aBorder);
+    aSeq.insert(aSeq.begin(), aBg);
+
+    return aSeq;
+}
+
+void ScHintWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /* rRect */)
+{
+    // Create the processor and process the primitives
+    const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(
+        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
+
+    const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+    Color aCommentColor = rColorCfg.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor;
+
+    ScOverlayHint* pHint = new ScOverlayHint(m_aTitle, m_aMessage, aCommentColor, GetFont());
+
+    drawinglayer::primitive2d::Primitive2DContainer aSeq = pHint->createOverlayObjectPrimitive2DSequence();
+
+    delete pHint;
 
     xProcessor->process(aSeq);
 }
