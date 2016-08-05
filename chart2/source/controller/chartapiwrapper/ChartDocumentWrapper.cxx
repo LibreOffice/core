@@ -660,7 +660,7 @@ void WrappedHasSubTitleProperty::setPropertyValue( const Any& rOuterValue, const
     try
     {
         if( bNewValue )
-            TitleHelper::createTitle( TitleHelper::SUB_TITLE, "sub-title", m_spChart2ModelContact->getChartModel(), m_spChart2ModelContact->m_xContext );
+            TitleHelper::createTitle( TitleHelper::SUB_TITLE, "", m_spChart2ModelContact->getChartModel(), m_spChart2ModelContact->m_xContext );
         else
             TitleHelper::removeTitle( TitleHelper::SUB_TITLE, m_spChart2ModelContact->getChartModel() );
     }
