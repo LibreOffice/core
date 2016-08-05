@@ -46,7 +46,6 @@
 #include <comphelper/fileurl.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/stillreadwriteinteraction.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <tools/urlobj.hxx>
