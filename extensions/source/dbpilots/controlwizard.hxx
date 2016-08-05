@@ -112,7 +112,7 @@ namespace dbp
 
         const OControlWizardContext&    getContext() const { return m_aContext; }
         bool                        updateContext(const OAccessRegulator&);
-        void                            setFormConnection(const OAccessRegulator&, const css::uno::Reference< css::sdbc::XConnection >& _rxConn, bool _bAutoDispose = true );
+        void                            setFormConnection(const OAccessRegulator&, const css::uno::Reference< css::sdbc::XConnection >& _rxConn, bool _bAutoDispose );
             css::uno::Reference< css::sdbc::XConnection >
                                         getFormConnection(const OAccessRegulator&) const;
 

@@ -52,11 +52,11 @@ public:
     SvTreeListEntry*    InsertStaticEntry(
                         const OUString& rText,
                         const Image& rEntryImg,
-                        SvTreeListEntry* pParent = nullptr,
-                        sal_uLong nPos = TREELIST_APPEND,
+                        SvTreeListEntry* pParent,
+                        sal_uLong nPos,
                         IFormulaToken* pToken = nullptr );
 
-    void            SetActiveFlag(bool bFlag=true);
+    void            SetActiveFlag(bool bFlag);
     bool            GetActiveFlag() { return bActiveFlag;}
     void            GetFocus() override;
     void            LoseFocus() override;
@@ -91,7 +91,7 @@ public:
 
     void            ClearStruct();
     SvTreeListEntry* InsertEntry(const OUString& rText, SvTreeListEntry* pParent,
-                                sal_uInt16 nFlag,sal_uLong nPos=0,IFormulaToken* pScToken=nullptr);
+                                sal_uInt16 nFlag,sal_uLong nPos,IFormulaToken* pScToken);
 
     OUString        GetEntryText(SvTreeListEntry* pEntry) const;
 

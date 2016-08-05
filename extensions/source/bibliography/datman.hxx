@@ -158,7 +158,7 @@ public:
         static OUString             getControlName(sal_Int32 nFormatKey );
 
         css::uno::Reference< css::awt::XControlModel > loadControlModel(const OUString& rName,
-                                                        bool bForceListBox = false);
+                                                        bool bForceListBox);
 
         void                        CreateMappingDialog(vcl::Window* pParent);
         OUString                    CreateDBChangeDialog(vcl::Window* pParent);

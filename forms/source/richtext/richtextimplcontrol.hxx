@@ -85,7 +85,7 @@ namespace frm
         void    updateAttribute( AttributeId _nAttribute );
 
         /// enables the callback for a particular attribute
-        void    enableAttributeNotification( AttributeId _nAttributeId, ITextAttributeListener* _pListener = nullptr );
+        void    enableAttributeNotification( AttributeId _nAttributeId, ITextAttributeListener* _pListener );
 
         /// disables the change notifications for a particular attribute
         void    disableAttributeNotification( AttributeId _nAttributeId );

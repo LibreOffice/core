@@ -189,7 +189,7 @@ namespace pcr
         inline void addDoublePropertyDescription(
                     ::std::vector< css::beans::Property >& _rProperties,
                     const OUString& _rPropertyName,
-                    sal_Int16 _nAttribs = 0
+                    sal_Int16 _nAttribs
                 ) const;
 
         /** adds a description for the given date property to the given property vector
@@ -197,7 +197,7 @@ namespace pcr
         inline void addDatePropertyDescription(
                     ::std::vector< css::beans::Property >& _rProperties,
                     const OUString& _rPropertyName,
-                    sal_Int16 _nAttribs = 0
+                    sal_Int16 _nAttribs
                 ) const;
 
         /** adds a description for the given time property to the given property vector
@@ -205,7 +205,7 @@ namespace pcr
         inline void addTimePropertyDescription(
                     ::std::vector< css::beans::Property >& _rProperties,
                     const OUString& _rPropertyName,
-                    sal_Int16 _nAttribs = 0
+                    sal_Int16 _nAttribs
                 ) const;
 
         /** adds a description for the given DateTime property to the given property vector
@@ -213,7 +213,7 @@ namespace pcr
         inline void addDateTimePropertyDescription(
                     ::std::vector< css::beans::Property >& _rProperties,
                     const OUString& _rPropertyName,
-                    sal_Int16 _nAttribs = 0
+                    sal_Int16 _nAttribs
                 ) const;
 
         /// adds a Property, given by name only, to a given vector of Properties

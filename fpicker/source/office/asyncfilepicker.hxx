@@ -74,7 +74,7 @@ namespace svt
             const OUString& _rFilter,
             sal_Int32 _nMinTimeout,
             sal_Int32 _nMaxTimeout,
-            const css::uno::Sequence< OUString >& rBlackList = css::uno::Sequence< OUString >() );
+            const css::uno::Sequence< OUString >& rBlackList );
 
         /// cancels the running action
         void cancel();

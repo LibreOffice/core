@@ -164,12 +164,12 @@ class BibToolBar:   public ToolBox
         void    SetXController(const css::uno::Reference< css::frame::XController > &);
 
         void    ClearSourceList();
-        void    UpdateSourceList(bool bFlag=true);
-        void    EnableSourceList(bool bFlag=true);
+        void    UpdateSourceList(bool bFlag);
+        void    EnableSourceList(bool bFlag);
         void    InsertSourceEntry(const OUString& );
         void    SelectSourceEntry(const OUString& );
 
-        void    EnableQuery(bool bFlag=true);
+        void    EnableQuery(bool bFlag);
         void    SetQueryString(const OUString& );
         void    AdjustToolBox();
 

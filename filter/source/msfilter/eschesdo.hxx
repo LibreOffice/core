@@ -143,7 +143,7 @@ protected:
                                         const Point& rTextRefPoint );
     sal_uInt32          ImplEnterAdditionalTextGroup(
                                 const css::uno::Reference< css::drawing::XShape >& rShape,
-                                const Rectangle* pBoundRect = nullptr );
+                                const Rectangle* pBoundRect );
 
 
 public:
@@ -169,7 +169,7 @@ public:
     bool                ImplInitUnoShapes( const css::uno::Reference< css::drawing::XShapes >& rxShapes );
     void                ImplWriteCurrentPage();
 
-    sal_uInt32          ImplWriteTheShape( ImplEESdrObject& rObj, bool ooxmlExport = false );
+    sal_uInt32          ImplWriteTheShape( ImplEESdrObject& rObj, bool ooxmlExport );
 
     void                ImplExitPage();
     void                ImplFlushSolverContainer();

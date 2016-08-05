@@ -88,7 +88,7 @@ private:
     // this will extract the document from the model that will be submitted
     css::uno::Reference< css::xml::dom::XDocumentFragment >
         createSubmissionDocument(const css::uno::Reference< css::xml::xpath::XXPathObject >& aObject,
-                                 bool bRemoveWSNodes = false);
+                                 bool bRemoveWSNodes);
     static css::uno::Reference< css::xml::dom::XDocument >
         getInstanceDocument(const css::uno::Reference< css::xml::xpath::XXPathObject >& aObject);
 

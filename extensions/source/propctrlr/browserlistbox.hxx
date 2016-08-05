@@ -127,7 +127,7 @@ namespace pcr
 
         void                        Clear();
 
-        void                        InsertEntry( const OLineDescriptor&, sal_uInt16 nPos = EDITOR_LIST_APPEND );
+        void                        InsertEntry( const OLineDescriptor&, sal_uInt16 nPos );
         bool                        RemoveEntry( const OUString& _rName );
         void                        ChangeEntry( const OLineDescriptor&, sal_uInt16 nPos );
 

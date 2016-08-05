@@ -71,7 +71,7 @@ namespace pcr
         css::uno::Reference< css::form::binding::XValueBinding >
                         createCellBindingFromStringAddress(
                             const OUString& _rAddress,
-                            bool _bSupportIntegerExchange = false
+                            bool _bSupportIntegerExchange
                         ) const;
 
         /** creates a cell binding (supporting integer exchange, if requested) for
@@ -80,7 +80,7 @@ namespace pcr
         css::uno::Reference< css::form::binding::XValueBinding >
                         createCellBindingFromAddress(
                             const css::table::CellAddress& _rAddress,
-                            bool _bSupportIntegerExchange = false
+                            bool _bSupportIntegerExchange
                         ) const;
 
         /** gets a cell range list source binding for the given address

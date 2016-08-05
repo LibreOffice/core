@@ -225,7 +225,7 @@ public:
 
     void GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const;
 
-    bool RemoveCharAttribs( sal_uInt16 nWhich = 0 );
+    bool RemoveCharAttribs( sal_uInt16 nWhich );
 
     void GetAllSections( std::vector<editeng::Section>& rAttrs ) const;
 
@@ -233,7 +233,7 @@ public:
     const SvxFieldItem* GetField() const;
     const SvxFieldData* GetFieldData(sal_Int32 nPara, size_t nPos, sal_Int32 nType) const;
 
-    bool HasField( sal_Int32 nType = css::text::textfield::Type::UNSPECIFIED ) const;
+    bool HasField( sal_Int32 nType ) const;
 
     const SfxItemSet& GetParaAttribs(sal_Int32 nPara) const;
 

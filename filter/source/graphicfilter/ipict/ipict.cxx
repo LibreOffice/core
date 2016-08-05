@@ -54,7 +54,7 @@ namespace PictReaderInternal {
      *
      * note: maybe, we must also use some mode PatCopy, ... to define the color
      */
-    Color getColor(Color bkColor=COL_WHITE, Color fgColor = COL_BLACK) const {
+    Color getColor(Color bkColor, Color fgColor) const {
       if (isColor) return color;
       // we create a gray pattern from nBitCount
       double alpha = nBitCount / 64.0;

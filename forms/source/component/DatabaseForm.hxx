@@ -443,10 +443,10 @@ protected:
     virtual void _propertyChanged( const css::beans::PropertyChangeEvent& ) throw(css::uno::RuntimeException) override;
 
 private:
-    bool executeRowSet(::osl::ResettableMutexGuard& _rClearForNotifies, bool bMoveToFirst = true,
-                    const css::uno::Reference< css::task::XInteractionHandler >& _rxCompletionHandler = css::uno::Reference< css::task::XInteractionHandler >());
+    bool executeRowSet(::osl::ResettableMutexGuard& _rClearForNotifies, bool bMoveToFirst,
+                    const css::uno::Reference< css::task::XInteractionHandler >& _rxCompletionHandler);
     bool    fillParameters(::osl::ResettableMutexGuard& _rClearForNotifies,
-                    const css::uno::Reference< css::task::XInteractionHandler >& _rxCompletionHandler = css::uno::Reference< css::task::XInteractionHandler >());
+                    const css::uno::Reference< css::task::XInteractionHandler >& _rxCompletionHandler);
     void    updateParameterInfo();
     bool    hasValidParent() const;
 

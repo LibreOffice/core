@@ -89,9 +89,9 @@ using namespace editeng;
 
 // Some helper functions
 // char
-inline const SvxEscapementItem& GetEscapement(const SfxItemSet& rSet,sal_uInt16 nId,bool bInP=true)
+inline const SvxEscapementItem& GetEscapement(const SfxItemSet& rSet,sal_uInt16 nId,bool bInP)
     { return static_cast<const SvxEscapementItem&>(rSet.Get( nId,bInP)); }
-inline const SvxLineSpacingItem& GetLineSpacing(const SfxItemSet& rSet,sal_uInt16 nId,bool bInP=true)
+inline const SvxLineSpacingItem& GetLineSpacing(const SfxItemSet& rSet,sal_uInt16 nId,bool bInP)
     { return static_cast<const SvxLineSpacingItem&>(rSet.Get( nId,bInP)); }
 // frm
 inline const SvxLRSpaceItem& GetLRSpace(const SfxItemSet& rSet,sal_uInt16 nId)

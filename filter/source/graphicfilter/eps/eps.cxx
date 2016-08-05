@@ -148,7 +148,7 @@ private:
 
     css::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
 
-    void                ImplWriteProlog( const Graphic* pPreviewEPSI = nullptr );
+    void                ImplWriteProlog( const Graphic* pPreviewEPSI );
     void                ImplWriteEpilog();
     void                ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev );
 
@@ -180,7 +180,7 @@ private:
     inline void         ImplWritePoint( const Point& );
     void                ImplMoveTo( const Point& );
     void                ImplLineTo( const Point&, sal_uInt32 nMode = PS_SPACE );
-    void                ImplCurveTo( const Point& rP1, const Point& rP2, const Point& rP3, sal_uInt32 nMode = PS_SPACE );
+    void                ImplCurveTo( const Point& rP1, const Point& rP2, const Point& rP3, sal_uInt32 nMode );
     void                ImplTranslate( const double& fX, const double& fY );
     void                ImplScale( const double& fX, const double& fY );
 
@@ -200,15 +200,15 @@ private:
     void                ImplText( const OUString& rUniString, const Point& rPos, const long* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev );
     void                ImplSetAttrForText( const Point & rPoint );
     void                ImplWriteCharacter( sal_Char );
-    void                ImplWriteString( const OString&, VirtualDevice& rVDev, const long* pDXArry = nullptr, bool bStretch = false );
+    void                ImplWriteString( const OString&, VirtualDevice& rVDev, const long* pDXArry, bool bStretch );
     void                ImplDefineFont( const char*, const char* );
 
     void                ImplClosePathDraw();
     void                ImplPathDraw();
 
-    inline void         ImplWriteLineColor( sal_uLong nMode = PS_RET );
-    inline void         ImplWriteFillColor( sal_uLong nMode = PS_RET );
-    inline void         ImplWriteTextColor( sal_uLong nMode = PS_RET );
+    inline void         ImplWriteLineColor( sal_uLong nMode );
+    inline void         ImplWriteFillColor( sal_uLong nMode );
+    inline void         ImplWriteTextColor( sal_uLong nMode );
     void                ImplWriteColor( sal_uLong nMode );
 
     void                ImplGetMapMode( const MapMode& );
@@ -2067,7 +2067,7 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
     Point aPoint( rPoint );
 
     long nRotation = maFont.GetOrientation();
-    ImplWriteTextColor();
+    ImplWriteTextColor(PS_RET);
 
     Size aSize = maFont.GetFontSize();
 

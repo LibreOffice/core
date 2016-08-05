@@ -86,7 +86,7 @@ namespace frm
         }
 
 
-        void implAdjustTwoStateFlag( const Any& _rValue, WinBits& _rAllBits, WinBits _nFlag, bool _bInvert = false )
+        void implAdjustTwoStateFlag( const Any& _rValue, WinBits& _rAllBits, WinBits _nFlag, bool _bInvert )
         {
             bool bFlagValue = false;
             if ( _rValue >>= bFlagValue )

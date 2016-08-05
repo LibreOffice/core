@@ -106,7 +106,7 @@ void BibTBListBoxListener::statusChanged(const css::frame::FeatureStateEvent& rE
                 aEntry = pStringArray[i];
                 pToolBar->InsertSourceEntry(aEntry);
             }
-            pToolBar->UpdateSourceList();
+            pToolBar->UpdateSourceList(true);
         }
 
         pToolBar->SelectSourceEntry(rEvt.FeatureDescriptor);
