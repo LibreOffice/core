@@ -22,7 +22,6 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
-#include <osl/endian.h>
 
 #include <limits>
 #include "scdllapi.h"
