@@ -29,14 +29,16 @@
 
 #include <com/sun/star/ucb/AuthenticationRequest.hpp>
 
+#include <com/sun/star/ucb/CertificateValidationRequest.hpp>
+
 namespace comphelper{
 
 StillReadWriteInteraction::StillReadWriteInteraction(const css::uno::Reference< css::task::XInteractionHandler >& xHandler,
-                                                     const css::uno::Reference< css::task::XInteractionHandler >& xAuthenticationHandler)
+                                                     const css::uno::Reference< css::task::XInteractionHandler >& xAuxiliaryHandler)
              : m_bUsed                    (false)
              , m_bHandledByMySelf         (false)
              , m_bHandledByInternalHandler(false)
-             , m_xAuthenticationHandler(xAuthenticationHandler)
+             , m_xAuxiliaryHandler(xAuxiliaryHandler)
 {
     ::std::vector< ::ucbhelper::InterceptedInteraction::InterceptedRequest > lInterceptions;
     ::ucbhelper::InterceptedInteraction::InterceptedRequest                  aInterceptedRequest;
@@ -53,6 +55,11 @@ StillReadWriteInteraction::StillReadWriteInteraction(const css::uno::Reference< 
 
     aInterceptedRequest.Handle = HANDLE_AUTHENTICATIONREQUESTEXCEPTION;
     aInterceptedRequest.Request <<= css::ucb::AuthenticationRequest();
+    aInterceptedRequest.Continuation = cppu::UnoType<css::task::XInteractionApprove>::get();
+    lInterceptions.push_back(aInterceptedRequest);
+
+    aInterceptedRequest.Handle = HANDLE_CERTIFICATEVALIDATIONREQUESTEXCEPTION;
+    aInterceptedRequest.Request <<= css::ucb::CertificateValidationRequest();
     aInterceptedRequest.Continuation = cppu::UnoType<css::task::XInteractionApprove>::get();
     lInterceptions.push_back(aInterceptedRequest);
 
@@ -108,9 +115,21 @@ ucbhelper::InterceptedInteraction::EInterceptionState StillReadWriteInteraction:
     case HANDLE_AUTHENTICATIONREQUESTEXCEPTION:
        {
 //use internal authentication dedicated handler and return
-           if (m_xAuthenticationHandler.is())
+           if (m_xAuxiliaryHandler.is())
            {
-               m_xAuthenticationHandler->handle(xRequest);
+               m_xAuxiliaryHandler->handle(xRequest);
+               return ::ucbhelper::InterceptedInteraction::E_INTERCEPTED;
+           }
+           else //simply abort
+               bAbort = true;
+       }
+       break;
+    case HANDLE_CERTIFICATEVALIDATIONREQUESTEXCEPTION:
+       {
+//use internal dedicated handler and return
+           if (m_xAuxiliaryHandler.is())
+           {
+               m_xAuxiliaryHandler->handle(xRequest);
                return ::ucbhelper::InterceptedInteraction::E_INTERCEPTED;
            }
            else //simply abort
