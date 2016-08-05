@@ -38,6 +38,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <editeng/lineitem.hxx>
+#include <editeng/colritem.hxx>
 #include <dbdata.hxx>
 #include "validat.hxx"
 #include "formulacell.hxx"
@@ -2787,6 +2788,48 @@ void ScFiltersTest::testOrcusODSStyleInterface()
         !pStyleSheet->GetItemSet().HasItem(ATTR_FONT, &pItem));
     CPPUNIT_ASSERT_MESSAGE("Style Name5 : Has Attribute number format, but it shouldn't.",
         !pStyleSheet->GetItemSet().HasItem(ATTR_VALUE_FORMAT, &pItem));
+
+    /* Test for Style "Name6"
+     * Has Font name, posture, weight, color, height
+     */
+    pStyleSheet = pStyleSheetPool->FindCaseIns("Name6", SfxStyleFamily::Para);
+    CPPUNIT_ASSERT_MESSAGE("Style Name6 : Doesn't have Attribute Font, but it should have.",
+        pStyleSheet->GetItemSet().HasItem(ATTR_FONT, &pItem));
+
+    const SvxFontItem* pFontItem= static_cast<const SvxFontItem*>(pItem);
+    CPPUNIT_ASSERT_MESSAGE("Style Name6 :Error with Font name", pFontItem->GetStyleName() == "Liberation Sans");
+
+    CPPUNIT_ASSERT_MESSAGE("Style Name6 : Doesn't have Attribute Font Height, but it should have.",
+        pStyleSheet->GetItemSet().HasItem(ATTR_FONT_HEIGHT, &pItem));
+
+    const SvxFontHeightItem* pFontHeightItem= static_cast<const SvxFontHeightItem*>(pItem);
+    CPPUNIT_ASSERT_MESSAGE("Style Name6 :Error with Font Height", pFontHeightItem->GetHeight() == 480);
+
+    CPPUNIT_ASSERT_MESSAGE("Style Name6 : Doesn't have Attribute Font Posture, but it should have.",
+        pStyleSheet->GetItemSet().HasItem(ATTR_FONT_POSTURE, &pItem));
+
+    const SvxPostureItem* pFontPostureItem= static_cast<const SvxPostureItem*>(pItem);
+    CPPUNIT_ASSERT_MESSAGE("Style Name6 :Error with Font Posture", pFontPostureItem->GetPosture() == ITALIC_NORMAL);
+
+    CPPUNIT_ASSERT_MESSAGE("Style Name6 : Doesn't have Attribute Font Weight, but it should have.",
+        pStyleSheet->GetItemSet().HasItem(ATTR_FONT_WEIGHT, &pItem));
+
+    const SvxWeightItem* pFontWeightItem= static_cast<const SvxWeightItem*>(pItem);
+    CPPUNIT_ASSERT_MESSAGE("Style Name6 :Error with Font Weight", pFontWeightItem->GetWeight() == WEIGHT_BOLD);
+
+    CPPUNIT_ASSERT_MESSAGE("Style Name6 : Doesn't have Attribute Font Color, but it should have.",
+        pStyleSheet->GetItemSet().HasItem(ATTR_FONT_COLOR, &pItem));
+
+    const SvxColorItem* pFontColorItem= static_cast<const SvxColorItem*>(pItem);
+    CPPUNIT_ASSERT_MESSAGE("Style Name6 :Error with Font Color", pFontColorItem->GetValue() == Color(128, 128, 128));
+
+    CPPUNIT_ASSERT_MESSAGE("Style Name6 : Doesn't have Attribute Underline, but it should have.",
+        pStyleSheet->GetItemSet().HasItem(ATTR_FONT_UNDERLINE, &pItem));
+
+    const SvxUnderlineItem* pUnderlineItem= static_cast<const SvxUnderlineItem*>(pItem);
+    CPPUNIT_ASSERT_MESSAGE("Style Name6 :Error with Font Underline Style", pUnderlineItem->GetLineStyle() == LINESTYLE_SINGLE);
+    CPPUNIT_ASSERT_MESSAGE("Style Name6 :Error with Font Underline Color", pUnderlineItem->GetColor() == Color(128, 128, 128));
+
 
 }
 #endif
