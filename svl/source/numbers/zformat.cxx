@@ -2517,6 +2517,11 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
                 fRemainder = 0.0; // exit while loop
             }
         }
+        if (nFrac == nDiv)
+        {
+            ++fNum;
+            nFrac = 0;
+        }
     }
 
     if (rInfo.nCntPre == 0) // Improper fraction
