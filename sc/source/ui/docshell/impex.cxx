@@ -56,6 +56,7 @@
 #include <vcl/svapp.hxx>
 
 #include <memory>
+#include <osl/endian.h>
 
 // We don't want to end up with 2GB read in one line just because of malformed
 // multiline fields, so chop it _somewhere_, which is twice supported columns
@@ -69,6 +70,15 @@ namespace
     const char SYLK_LF[]  = "\x1b :";
     const char DOUBLE_SEMICOLON[] = ";;";
     const char DOUBLE_DOUBLEQUOTE[] = "\"\"";
+
+    inline bool lcl_IsEndianSwap( const SvStream& rStrm )
+    {
+    #ifdef OSL_BIGENDIAN
+        return rStrm.GetEndian() != SvStreamEndian::BIG;
+    #else
+        return rStrm.GetEndian() != SvStreamEndian::LITTLE;
+    #endif
+    }
 }
 
 enum SylkVersion
@@ -479,7 +489,7 @@ void ScImportExport::WriteUnicodeOrByteString( SvStream& rStrm, const OUString& 
     rtl_TextEncoding eEnc = rStrm.GetStreamCharSet();
     if ( eEnc == RTL_TEXTENCODING_UNICODE )
     {
-        if ( !IsEndianSwap( rStrm ) )
+        if ( !lcl_IsEndianSwap( rStrm ) )
             rStrm.WriteBytes(rString.getStr(), rString.getLength() * sizeof(sal_Unicode));
         else
         {
@@ -521,6 +531,15 @@ void ScImportExport::WriteUnicodeOrByteEndl( SvStream& rStrm )
     }
     else
         endl( rStrm );
+}
+
+void ScImportExport::SetNoEndianSwap( SvStream& rStrm )
+{
+#ifdef OSL_BIGENDIAN
+    rStrm.SetEndian( SvStreamEndian::BIG );
+#else
+    rStrm.SetEndian( SvStreamEndian::LITTLE );
+#endif
 }
 
 enum QuoteType
@@ -2292,6 +2311,18 @@ static inline const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr,
         ++pStr;
     }
     return nullptr;
+}
+
+ScImportStringStream::ScImportStringStream( const OUString& rStr )
+    : SvMemoryStream( const_cast<sal_Unicode *>(rStr.getStr()),
+            rStr.getLength() * sizeof(sal_Unicode), StreamMode::READ)
+{
+    SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
+#ifdef OSL_BIGENDIAN
+    SetEndian(SvStreamEndian::BIG);
+#else
+    SetEndian(SvStreamEndian::LITTLE);
+#endif
 }
 
 OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
