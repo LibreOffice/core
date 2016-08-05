@@ -224,6 +224,12 @@ void ScPreview::CalcPages()
     ScDocument& rDoc = pDocShell->GetDocument();
     nTabCount = rDoc.GetTableCount();
 
+    if (maSelectedTabs.empty())
+    {
+        SCTAB nTab = pDocShell->GetCurTab();
+        maSelectedTabs.insert(nTab);
+    }
+
     SCTAB nStart = nTabsTested;
     if (!bValid)
     {
