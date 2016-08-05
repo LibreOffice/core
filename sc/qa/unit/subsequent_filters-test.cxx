@@ -2830,6 +2830,35 @@ void ScFiltersTest::testOrcusODSStyleInterface()
     CPPUNIT_ASSERT_MESSAGE("Style Name6 :Error with Font Underline Style", pUnderlineItem->GetLineStyle() == LINESTYLE_SINGLE);
     CPPUNIT_ASSERT_MESSAGE("Style Name6 :Error with Font Underline Color", pUnderlineItem->GetColor() == Color(128, 128, 128));
 
+    /* Test for Style Name "7"
+     * Has strikethrough single
+     */
+    pStyleSheet = pStyleSheetPool->FindCaseIns("Name7", SfxStyleFamily::Para);
+    CPPUNIT_ASSERT_MESSAGE("Style Name7 : Doesn't have Attribute Strikeout, but it should have.",
+        pStyleSheet->GetItemSet().HasItem(ATTR_FONT_CROSSEDOUT, &pItem));
+
+    const SvxCrossedOutItem* pCrossedOutItem = static_cast<const SvxCrossedOutItem*>(pItem);
+    CPPUNIT_ASSERT_MESSAGE("Style Name7 :Error with Strikeout", pCrossedOutItem->GetStrikeout() == STRIKEOUT_SINGLE);
+
+    /* Test for Style Name "8"
+     * Has strikethrough bold
+     */
+    pStyleSheet = pStyleSheetPool->FindCaseIns("Name8", SfxStyleFamily::Para);
+    CPPUNIT_ASSERT_MESSAGE("Style Name8 : Doesn't have Attribute Strikeout, but it should have.",
+        pStyleSheet->GetItemSet().HasItem(ATTR_FONT_CROSSEDOUT, &pItem));
+
+    pCrossedOutItem = static_cast<const SvxCrossedOutItem*>(pItem);
+    CPPUNIT_ASSERT_MESSAGE("Style Name7 :Error with Strikeout", pCrossedOutItem->GetStrikeout() == STRIKEOUT_BOLD);
+
+    /* Test for Style Name "9"
+     * Has strikethrough slash
+     */
+    pStyleSheet = pStyleSheetPool->FindCaseIns("Name9", SfxStyleFamily::Para);
+    CPPUNIT_ASSERT_MESSAGE("Style Name9 : Doesn't have Attribute Strikeout, but it should have.",
+        pStyleSheet->GetItemSet().HasItem(ATTR_FONT_CROSSEDOUT, &pItem));
+
+    pCrossedOutItem = static_cast<const SvxCrossedOutItem*>(pItem);
+    CPPUNIT_ASSERT_MESSAGE("Style Name9 :Error with Strikeout", pCrossedOutItem->GetStrikeout() == STRIKEOUT_SLASH);
 
 }
 #endif
