@@ -1724,8 +1724,8 @@ void SmAlignNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
 void SmAttributNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
-    SmNode *pAttr = GetSubNode(0),
-           *pBody = GetSubNode(1);
+    SmNode *pAttr = Attribute(),
+           *pBody = Body();
     assert(pBody);
     assert(pAttr);
 
@@ -2534,11 +2534,10 @@ void SmRectangleNode::CreateTextFromNode(OUString &rText)
 void SmAttributNode::CreateTextFromNode(OUString &rText)
 {
     SmNode *pNode;
-    sal_uInt16  nSize = GetNumSubNodes();
-    OSL_ENSURE(nSize == 2, "Node missing members");
+    assert(GetNumSubNodes() == 2);
     rText += "{";
     sal_Unicode nLast=0;
-    if (nullptr != (pNode = GetSubNode(0)))
+    if (nullptr != (pNode = Attribute()))
     {
         OUString aStr;
         pNode->CreateTextFromNode(aStr);
@@ -2609,9 +2608,8 @@ void SmAttributNode::CreateTextFromNode(OUString &rText)
         }
     }
 
-    if (nSize == 2)
-        if (nullptr != (pNode = GetSubNode(1)))
-            pNode->CreateTextFromNode(rText);
+    if (nullptr != (pNode = Body()))
+        pNode->CreateTextFromNode(rText);
 
     rText = comphelper::string::stripEnd(rText, ' ');
 

@@ -1488,21 +1488,18 @@ void SmXMLUnderContext_Impl::HandleAccent()
     aToken.cMathChar = '\0';
     aToken.eType = TUNDERLINE;
 
-
-    SmNodeArray aSubNodes;
-    aSubNodes.resize(2);
-
+    SmNode *pFirst;
     std::unique_ptr<SmStructureNode> pNode(new SmAttributNode(aToken));
     if ((pTest->GetToken().cMathChar & 0x0FFF) == 0x0332)
     {
-        aSubNodes[0] = new SmRectangleNode(aToken);
+        pFirst = new SmRectangleNode(aToken);
         delete pTest;
     }
     else
-        aSubNodes[0] = pTest;
+        pFirst = pTest;
 
-    aSubNodes[1] = popOrZero(rNodeStack);
-    pNode->SetSubNodes(aSubNodes);
+    SmNode *pSecond = popOrZero(rNodeStack);
+    pNode->SetSubNodes(pFirst, pSecond);
     pNode->SetScaleMode(SCALE_WIDTH);
     rNodeStack.push_front(std::move(pNode));
 }
@@ -1563,11 +1560,9 @@ void SmXMLOverContext_Impl::HandleAccent()
     std::unique_ptr<SmAttributNode> pNode(new SmAttributNode(aToken));
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
 
-    SmNodeArray aSubNodes;
-    aSubNodes.resize(2);
-    aSubNodes[0] = popOrZero(rNodeStack);
-    aSubNodes[1] = popOrZero(rNodeStack);
-    pNode->SetSubNodes(aSubNodes);
+    SmNode *pFirst = popOrZero(rNodeStack);
+    SmNode *pSecond = popOrZero(rNodeStack);
+    pNode->SetSubNodes(pFirst, pSecond);
     pNode->SetScaleMode(SCALE_WIDTH);
     rNodeStack.push_front(std::move(pNode));
 

@@ -1531,9 +1531,10 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBraceNode* pNode )
  */
 void SmCaretPosGraphBuildingVisitor::Visit( SmAttributNode* pNode )
 {
-    SmNode  *pAttr = pNode->GetSubNode( 0 ),
-            *pBody = pNode->GetSubNode( 1 );
-    //None of the children can be NULL
+    SmNode  *pAttr = pNode->Attribute(),
+            *pBody = pNode->Body();
+    assert(pAttr);
+    assert(pBody);
 
     SmCaretPosGraphEntry  *left = mpRightMost,
                         *attrLeft,
@@ -2085,7 +2086,7 @@ void SmNodeToTextVisitor::Visit( SmAlignNode* pNode )
 void SmNodeToTextVisitor::Visit( SmAttributNode* pNode )
 {
     Append( pNode->GetToken( ).aText );
-    LineToText( pNode->GetSubNode( 1 ) );
+    LineToText( pNode->Body() );
 }
 
 void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
