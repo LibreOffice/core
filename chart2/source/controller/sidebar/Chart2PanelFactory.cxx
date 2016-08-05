@@ -139,8 +139,7 @@ sal_Bool ChartPanelFactory::supportsService(OUString const & ServiceName)
 css::uno::Sequence<OUString> ChartPanelFactory::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    css::uno::Sequence<OUString> aServiceNames { "com.sun.star.ui.UIElementFactory" };
-    return aServiceNames;
+    return { "com.sun.star.ui.UIElementFactory" };
 }
 
 } } // end of namespace chart::sidebar

@@ -264,17 +264,14 @@ void Legend::fireModifyEvent()
 
 Sequence< OUString > Legend::getSupportedServiceNames_Static()
 {
-    const sal_Int32 nNumServices( 6 );
-    sal_Int32 nI = 0;
-    Sequence< OUString > aServices( nNumServices );
-    aServices[ nI++ ] = "com.sun.star.chart2.Legend";
-    aServices[ nI++ ] = "com.sun.star.beans.PropertySet";
-    aServices[ nI++ ] = "com.sun.star.drawing.FillProperties";
-    aServices[ nI++ ] = "com.sun.star.drawing.LineProperties";
-    aServices[ nI++ ] = "com.sun.star.style.CharacterProperties";
-    aServices[ nI++ ] = "com.sun.star.layout.LayoutElement";
-    OSL_ASSERT( nNumServices == nI );
-    return aServices;
+    return Sequence< OUString >{
+        "com.sun.star.chart2.Legend",
+        "com.sun.star.beans.PropertySet",
+        "com.sun.star.drawing.FillProperties",
+        "com.sun.star.drawing.LineProperties",
+        "com.sun.star.style.CharacterProperties",
+        "com.sun.star.layout.LayoutElement"
+    };
 }
 
 // ____ OPropertySet ____

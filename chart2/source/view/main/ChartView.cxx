@@ -1403,8 +1403,7 @@ css::uno::Sequence< OUString > SAL_CALL ChartView::getSupportedServiceNames()
 
 uno::Sequence< OUString > ChartView::getSupportedServiceNames_Static()
 {
-    uno::Sequence<OUString> aSNS { CHART_VIEW_SERVICE_NAME };
-    return aSNS;
+    return { CHART_VIEW_SERVICE_NAME };
 }
 
 ::basegfx::B3DHomMatrix createTransformationSceneToScreen(

@@ -106,8 +106,7 @@ OUString SAL_CALL DateScaling::getServiceName()
 
 uno::Sequence< OUString > DateScaling::getSupportedServiceNames_Static()
 {
-    uno::Sequence< OUString > aSeq { lcl_aServiceName_DateScaling };
-    return aSeq;
+    return { lcl_aServiceName_DateScaling };
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
@@ -207,8 +206,7 @@ OUString SAL_CALL InverseDateScaling::getServiceName()
 
 uno::Sequence< OUString > InverseDateScaling::getSupportedServiceNames_Static()
 {
-    uno::Sequence<OUString> aSeq { lcl_aServiceName_InverseDateScaling };
-    return aSeq;
+    return { lcl_aServiceName_InverseDateScaling };
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static

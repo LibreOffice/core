@@ -81,8 +81,7 @@ css::uno::Sequence< OUString > SAL_CALL ChartFrameLoader::getSupportedServiceNam
 
 uno::Sequence< OUString > ChartFrameLoader::getSupportedServiceNames_Static()
 {
-    uno::Sequence<OUString> aSNS { CHART_FRAMELOADER_SERVICE_NAME };
-    return aSNS;
+    return { CHART_FRAMELOADER_SERVICE_NAME };
 }
 
 // frame::XFrameLoader

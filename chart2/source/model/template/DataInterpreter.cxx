@@ -381,8 +381,7 @@ bool DataInterpreter::UseCategoriesAsX( const Sequence< beans::PropertyValue > &
 
 Sequence< OUString > DataInterpreter::getSupportedServiceNames_Static()
 {
-    Sequence<OUString> aServices { "com.sun.star.chart2.DataInterpreter" };
-    return aServices;
+    return { "com.sun.star.chart2.DataInterpreter" };
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
