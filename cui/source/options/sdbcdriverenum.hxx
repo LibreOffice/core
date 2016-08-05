@@ -25,6 +25,7 @@
 #include <rtl/ustring.hxx>
 
 #include <vector>
+#include <memory>
 
 
 namespace offapp
@@ -39,7 +40,7 @@ namespace offapp
     class ODriverEnumeration
     {
     private:
-        ODriverEnumerationImpl* m_pImpl;
+        std::unique_ptr<ODriverEnumerationImpl> m_pImpl;
 
     public:
         ODriverEnumeration() throw();
