@@ -79,7 +79,6 @@ namespace offapp
 
     ODriverEnumeration::~ODriverEnumeration() throw()
     {
-        delete m_pImpl;
     }
 
 
