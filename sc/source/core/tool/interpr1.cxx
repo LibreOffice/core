@@ -885,6 +885,7 @@ double ScInterpreter::Compare( ScQueryOp eOp )
                 // mode. Which also means we'd have to change all places where
                 // it currently is handled along with svMatrix.
             default:
+                PopError();
                 SetError( errIllegalParameter);
             break;
         }
@@ -953,6 +954,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
                     // errors are transported as DoubleError inside matrix
                 break;
             default:
+                PopError();
                 SetError( errIllegalParameter);
             break;
         }
