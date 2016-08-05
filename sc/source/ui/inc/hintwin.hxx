@@ -25,19 +25,18 @@
 class ScHintWindow : public vcl::Window
 {
 private:
-    OUString  aTitle;
-    OUString  aMessage;
-    Point     aTextStart;
-    long      nTextHeight;
-    vcl::Font aTextFont;
-    vcl::Font aHeadFont;
+    OUString  m_aTitle;
+    OUString  m_aMessage;
+    Point     m_aTextStart;
+    long      m_nTextHeight;
+    vcl::Font m_aTextFont;
+    vcl::Font m_aHeadFont;
 
 protected:
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 
 public:
-            ScHintWindow( vcl::Window* pParent, const OUString& rTit, const OUString& rMsg );
-            virtual ~ScHintWindow();
+    ScHintWindow(vcl::Window* pParent, const OUString& rTit, const OUString& rMsg);
 };
 
 #endif
