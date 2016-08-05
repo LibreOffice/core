@@ -244,7 +244,7 @@ class TypeConverter_Impl : public WeakImplHelper< XTypeConverter, XServiceInfo >
 {
     // ...misc helpers...
     static sal_Int64 toHyper(
-        const Any& rAny, sal_Int64 min = SAL_INT64_MIN, sal_uInt64 max = SAL_UINT64_MAX )
+        const Any& rAny, sal_Int64 min, sal_uInt64 max = SAL_UINT64_MAX )
         throw( CannotConvertException );
     static double toDouble( const Any& rAny, double min = -DBL_MAX, double max = DBL_MAX )
         throw( CannotConvertException );

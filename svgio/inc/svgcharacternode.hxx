@@ -68,7 +68,7 @@ namespace svgio
 
             /// TextLength content
             const SvgNumber& getTextLength() const { return maTextLength; }
-            void setTextLength(const SvgNumber& rTextLength = SvgNumber()) { maTextLength = rTextLength; }
+            void setTextLength(const SvgNumber& rTextLength) { maTextLength = rTextLength; }
 
             /// LengthAdjust content
             bool getLengthAdjust() const { return mbLengthAdjust; }

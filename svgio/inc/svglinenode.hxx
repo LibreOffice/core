@@ -52,23 +52,23 @@ namespace svgio
 
             /// X1 content, set if found in current context
             const SvgNumber& getX1() const { return maX1; }
-            void setX1(const SvgNumber& rX1 = SvgNumber()) { maX1 = rX1; }
+            void setX1(const SvgNumber& rX1) { maX1 = rX1; }
 
             /// Y1 content, set if found in current context
             const SvgNumber& getY1() const { return maY1; }
-            void setY1(const SvgNumber& rY1 = SvgNumber()) { maY1 = rY1; }
+            void setY1(const SvgNumber& rY1) { maY1 = rY1; }
 
             /// X2 content, set if found in current context
             const SvgNumber& getX2() const { return maX2; }
-            void setX2(const SvgNumber& rX2 = SvgNumber()) { maX2 = rX2; }
+            void setX2(const SvgNumber& rX2) { maX2 = rX2; }
 
             /// Y2 content, set if found in current context
             const SvgNumber& getY2() const { return maY2; }
-            void setY2(const SvgNumber& rY2 = SvgNumber()) { maY2 = rY2; }
+            void setY2(const SvgNumber& rY2) { maY2 = rY2; }
 
             /// transform content, set if found in current context
             const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform; }
-            void setTransform(const basegfx::B2DHomMatrix* pMatrix = nullptr) { if(mpaTransform) delete mpaTransform; mpaTransform = nullptr; if(pMatrix) mpaTransform = new basegfx::B2DHomMatrix(*pMatrix); }
+            void setTransform(const basegfx::B2DHomMatrix* pMatrix) { if(mpaTransform) delete mpaTransform; mpaTransform = nullptr; if(pMatrix) mpaTransform = new basegfx::B2DHomMatrix(*pMatrix); }
         };
     } // end of namespace svgreader
 } // end of namespace svgio

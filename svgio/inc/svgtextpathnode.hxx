@@ -61,7 +61,7 @@ namespace svgio
 
             /// StartOffset content
             const SvgNumber& getStartOffset() const { return maStartOffset; }
-            void setStartOffset(const SvgNumber& rStartOffset = SvgNumber()) { maStartOffset = rStartOffset; }
+            void setStartOffset(const SvgNumber& rStartOffset) { maStartOffset = rStartOffset; }
 
             /// Method content
             void setMethod(bool bNew) { mbMethod = bNew; }

@@ -230,7 +230,7 @@ protected:
 
     void InvalidateBindings();
     virtual void InsertFamilyItem( sal_uInt16 nId, const SfxStyleFamilyItem* pItem ) = 0;
-    virtual void EnableFamilyItem( sal_uInt16 nId, bool bEnabled = true ) = 0;
+    virtual void EnableFamilyItem( sal_uInt16 nId, bool bEnabled ) = 0;
     virtual void ClearFamilyList() = 0;
     virtual void ReplaceUpdateButtonByMenu();
 
@@ -255,7 +255,7 @@ protected:
     void Initialize();
     void EnableHierarchical(bool);
 
-    void FilterSelect( sal_uInt16 nFilterIdx, bool bForce = false );
+    void FilterSelect( sal_uInt16 nFilterIdx, bool bForce );
     void SetFamilyState( sal_uInt16 nSlotId, const SfxTemplateItem* );
     void SetWaterCanState( const SfxBoolItem* pItem );
     bool IsSafeForWaterCan() const;
@@ -289,7 +289,7 @@ public:
     DECL_LINK_TYPED( MenuSelectHdl, Menu*, bool );
     DECL_LINK_TYPED( MenuSelectAsyncHdl, void*, void );
 
-    virtual void EnableEdit( bool b = true )
+    virtual void EnableEdit( bool b )
     {
         bCanEdit = b;
     }
@@ -297,15 +297,15 @@ public:
     {
         bCanDel = b;
     }
-    void EnableNew( bool b = true )
+    void EnableNew( bool b )
     {
         bCanNew = b;
     }
-    void EnableHide( bool b = true )
+    void EnableHide( bool b )
     {
         bCanHide = b;
     }
-    void EnableShow( bool b = true )
+    void EnableShow( bool b )
     {
         bCanShow = b;
     }
@@ -315,7 +315,7 @@ public:
         return pWindow;
     }
 
-    void EnableTreeDrag(bool b = true);
+    void EnableTreeDrag(bool b);
     void EnableExample_Impl(sal_uInt16 nId, bool bEnable);
     SfxStyleFamily GetActualFamily() const;
     OUString GetSelectedEntry() const;
@@ -356,13 +356,13 @@ private:
     DECL_LINK_TYPED( MenuSelectHdl, Menu*, bool );
 
 protected:
-    virtual void EnableEdit( bool = true ) override;
+    virtual void EnableEdit( bool ) override;
     virtual void EnableItem( sal_uInt16 nMesId, bool bCheck = true ) override;
     virtual void CheckItem( sal_uInt16 nMesId, bool bCheck = true ) override;
     virtual bool IsCheckedItem( sal_uInt16 nMesId ) override;
     virtual void LoadedFamilies() override;
     virtual void InsertFamilyItem( sal_uInt16 nId, const SfxStyleFamilyItem* pIten ) override;
-    virtual void EnableFamilyItem( sal_uInt16 nId, bool bEnabled = true ) override;
+    virtual void EnableFamilyItem( sal_uInt16 nId, bool bEnabled ) override;
     virtual void ClearFamilyList() override;
     virtual void ReplaceUpdateButtonByMenu() override;
 

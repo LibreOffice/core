@@ -59,23 +59,23 @@ namespace svgio
 
             /// x content, set if found in current context
             const SvgNumber& getX() const { return maX; }
-            void setX(const SvgNumber& rX = SvgNumber()) { maX = rX; }
+            void setX(const SvgNumber& rX) { maX = rX; }
 
             /// y content, set if found in current context
             const SvgNumber& getY() const { return maY; }
-            void setY(const SvgNumber& rY = SvgNumber()) { maY = rY; }
+            void setY(const SvgNumber& rY) { maY = rY; }
 
             /// width content, set if found in current context
             const SvgNumber& getWidth() const { return maWidth; }
-            void setWidth(const SvgNumber& rWidth = SvgNumber()) { maWidth = rWidth; }
+            void setWidth(const SvgNumber& rWidth) { maWidth = rWidth; }
 
             /// height content, set if found in current context
             const SvgNumber& getHeight() const { return maHeight; }
-            void setHeight(const SvgNumber& rHeight = SvgNumber()) { maHeight = rHeight; }
+            void setHeight(const SvgNumber& rHeight) { maHeight = rHeight; }
 
             /// transform content
             const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform; }
-            void setTransform(const basegfx::B2DHomMatrix* pMatrix = nullptr) { if(mpaTransform) delete mpaTransform; mpaTransform = nullptr; if(pMatrix) mpaTransform = new basegfx::B2DHomMatrix(*pMatrix); }
+            void setTransform(const basegfx::B2DHomMatrix* pMatrix) { if(mpaTransform) delete mpaTransform; mpaTransform = nullptr; if(pMatrix) mpaTransform = new basegfx::B2DHomMatrix(*pMatrix); }
 
             /// MaskUnits content
             SvgUnits getMaskUnits() const { return maMaskUnits; }

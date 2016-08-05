@@ -47,7 +47,7 @@ namespace svgio
 
             /// offset content
             const SvgNumber& getOffset() const { return maOffset; }
-            void setOffset(const SvgNumber& rOffset = SvgNumber()) { maOffset = rOffset; }
+            void setOffset(const SvgNumber& rOffset) { maOffset = rOffset; }
         };
     } // end of namespace svgreader
 } // end of namespace svgio
