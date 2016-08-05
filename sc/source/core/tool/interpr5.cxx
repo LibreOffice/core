@@ -1327,20 +1327,24 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
         else
             PushIllegalArgument();
     }
-    else if ( _bSub )
-        PushDouble( ::rtl::math::approxSub( fVal1, fVal2 ) );
-    else
-        PushDouble( ::rtl::math::approxAdd( fVal1, fVal2 ) );
-    if ( nFmtCurrencyType == css::util::NumberFormat::CURRENCY )
-    {
-        nFuncFmtType = nFmtCurrencyType;
-        nFuncFmtIndex = nFmtCurrencyIndex;
-    }
     else
     {
-        lcl_GetDiffDateTimeFmtType( nFuncFmtType, nFmt1, nFmt2 );
-        if ( nFmtPercentType == css::util::NumberFormat::PERCENT && nFuncFmtType == css::util::NumberFormat::NUMBER )
-            nFuncFmtType = css::util::NumberFormat::PERCENT;
+        // Determine nFuncFmtType type before PushDouble().
+        if ( nFmtCurrencyType == css::util::NumberFormat::CURRENCY )
+        {
+            nFuncFmtType = nFmtCurrencyType;
+            nFuncFmtIndex = nFmtCurrencyIndex;
+        }
+        else
+        {
+            lcl_GetDiffDateTimeFmtType( nFuncFmtType, nFmt1, nFmt2 );
+            if (nFmtPercentType == css::util::NumberFormat::PERCENT && nFuncFmtType == css::util::NumberFormat::NUMBER)
+                nFuncFmtType = css::util::NumberFormat::PERCENT;
+        }
+        if ( _bSub )
+            PushDouble( ::rtl::math::approxSub( fVal1, fVal2 ) );
+        else
+            PushDouble( ::rtl::math::approxAdd( fVal1, fVal2 ) );
     }
 }
 
@@ -1506,11 +1510,14 @@ void ScInterpreter::ScMul()
             PushIllegalArgument();
     }
     else
-        PushDouble(fVal1 * fVal2);
-    if ( nFmtCurrencyType == css::util::NumberFormat::CURRENCY )
     {
-        nFuncFmtType = nFmtCurrencyType;
-        nFuncFmtIndex = nFmtCurrencyIndex;
+        // Determine nFuncFmtType type before PushDouble().
+        if ( nFmtCurrencyType == css::util::NumberFormat::CURRENCY )
+        {
+            nFuncFmtType = nFmtCurrencyType;
+            nFuncFmtIndex = nFmtCurrencyIndex;
+        }
+        PushDouble(fVal1 * fVal2);
     }
 }
 
@@ -1580,12 +1587,14 @@ void ScInterpreter::ScDiv()
     }
     else
     {
+        // Determine nFuncFmtType type before PushDouble().
+        if (    nFmtCurrencyType  == css::util::NumberFormat::CURRENCY &&
+                nFmtCurrencyType2 != css::util::NumberFormat::CURRENCY)
+        {   // even USD/USD is not USD
+            nFuncFmtType = nFmtCurrencyType;
+            nFuncFmtIndex = nFmtCurrencyIndex;
+        }
         PushDouble( div( fVal1, fVal2) );
-    }
-    if ( nFmtCurrencyType == css::util::NumberFormat::CURRENCY && nFmtCurrencyType2 != css::util::NumberFormat::CURRENCY )
-    {   // even USD/USD is not USD
-        nFuncFmtType = nFmtCurrencyType;
-        nFuncFmtIndex = nFmtCurrencyIndex;
     }
 }
 
@@ -3221,15 +3230,20 @@ void ScInterpreter::ScMatRef()
             }
             else
             {
-                PushDouble(nMatVal.fVal);  // handles DoubleError
+                // Determine nFuncFmtType type before PushDouble().
                 pDok->GetNumberFormatInfo(nCurFmtType, nCurFmtIndex, aAdr);
                 nFuncFmtType = nCurFmtType;
                 nFuncFmtIndex = nCurFmtIndex;
+                PushDouble(nMatVal.fVal);  // handles DoubleError
             }
         }
     }
     else
     {
+        // Determine nFuncFmtType type before PushDouble().
+        pDok->GetNumberFormatInfo(nCurFmtType, nCurFmtIndex, aAdr);
+        nFuncFmtType = nCurFmtType;
+        nFuncFmtIndex = nCurFmtIndex;
         // If not a result matrix, obtain the cell value.
         sal_uInt16 nErr = aCell.mpFormula->GetErrCode();
         if (nErr)
@@ -3241,9 +3255,6 @@ void ScInterpreter::ScMatRef()
             svl::SharedString aVal = aCell.mpFormula->GetString();
             PushString( aVal );
         }
-        pDok->GetNumberFormatInfo(nCurFmtType, nCurFmtIndex, aAdr);
-        nFuncFmtType = nCurFmtType;
-        nFuncFmtIndex = nCurFmtIndex;
     }
 }
 
