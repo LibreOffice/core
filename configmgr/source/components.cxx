@@ -488,7 +488,7 @@ Components::Components(
         for (;; ++c) {
             if (c == conf.getLength() || conf[c] == ' ') {
                 throw css::uno::RuntimeException(
-                    "CONFIGURATION_LAYERS: missing \":\"");
+                    "CONFIGURATION_LAYERS: missing ':' in \"" + conf + "\"");
             }
             if (conf[c] == ':') {
                 break;
