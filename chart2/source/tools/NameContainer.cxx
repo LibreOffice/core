@@ -73,8 +73,7 @@ sal_Bool SAL_CALL NameContainer::supportsService( const OUString& ServiceName )
 Sequence< OUString > SAL_CALL NameContainer::getSupportedServiceNames()
     throw( css::uno::RuntimeException, std::exception )
 {
-    Sequence<OUString> aSNS { m_aServicename };
-    return aSNS;
+    return { m_aServicename };
 }
 
 // XNameContainer

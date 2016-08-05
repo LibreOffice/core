@@ -269,8 +269,7 @@ css::uno::Sequence< OUString > SAL_CALL ElementSelectorToolbarController::getSup
 
 Sequence< OUString > ElementSelectorToolbarController::getSupportedServiceNames_Static()
 {
-    Sequence<OUString> aServices { "com.sun.star.frame.ToolbarController" };
-    return aServices;
+    return { "com.sun.star.frame.ToolbarController" };
 }
 ElementSelectorToolbarController::ElementSelectorToolbarController()
 {

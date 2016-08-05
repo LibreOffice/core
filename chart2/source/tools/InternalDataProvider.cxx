@@ -1547,8 +1547,7 @@ Reference< util::XCloneable > SAL_CALL InternalDataProvider::createClone()
 
 Sequence< OUString > InternalDataProvider::getSupportedServiceNames_Static()
 {
-    Sequence<OUString> aServices { "com.sun.star.chart2.data.DataProvider" };
-    return aServices;
+    return { "com.sun.star.chart2.data.DataProvider" };
 }
 
 OUString SAL_CALL InternalDataProvider::getImplementationName()

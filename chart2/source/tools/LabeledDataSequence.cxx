@@ -151,8 +151,7 @@ void SAL_CALL LabeledDataSequence::removeModifyListener( const Reference< util::
 
 Sequence< OUString > LabeledDataSequence::getSupportedServiceNames_Static()
 {
-    Sequence<OUString> aServices { "com.sun.star.chart2.data.LabeledDataSequence" };
-    return aServices;
+    return { "com.sun.star.chart2.data.LabeledDataSequence" };
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
