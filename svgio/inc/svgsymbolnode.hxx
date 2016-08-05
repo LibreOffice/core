@@ -46,10 +46,10 @@ namespace svgio
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
 
             /// viewBox content
-            void setViewBox(const basegfx::B2DRange* pViewBox = nullptr) { if(mpViewBox) delete mpViewBox; mpViewBox = nullptr; if(pViewBox) mpViewBox = new basegfx::B2DRange(*pViewBox); }
+            void setViewBox(const basegfx::B2DRange* pViewBox) { if(mpViewBox) delete mpViewBox; mpViewBox = nullptr; if(pViewBox) mpViewBox = new basegfx::B2DRange(*pViewBox); }
 
             /// SvgAspectRatio content
-            void setSvgAspectRatio(const SvgAspectRatio& rSvgAspectRatio = SvgAspectRatio()) { maSvgAspectRatio = rSvgAspectRatio; }
+            void setSvgAspectRatio(const SvgAspectRatio& rSvgAspectRatio) { maSvgAspectRatio = rSvgAspectRatio; }
         };
     } // end of namespace svgreader
 } // end of namespace svgio

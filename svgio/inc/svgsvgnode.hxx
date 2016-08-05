@@ -71,30 +71,30 @@ namespace svgio
 
             /// viewBox content
             const basegfx::B2DRange* getViewBox() const { return mpViewBox; }
-            void setViewBox(const basegfx::B2DRange* pViewBox = nullptr) { if(mpViewBox) delete mpViewBox; mpViewBox = nullptr; if(pViewBox) mpViewBox = new basegfx::B2DRange(*pViewBox); }
+            void setViewBox(const basegfx::B2DRange* pViewBox) { if(mpViewBox) delete mpViewBox; mpViewBox = nullptr; if(pViewBox) mpViewBox = new basegfx::B2DRange(*pViewBox); }
 
             /// SvgAspectRatio content
             const SvgAspectRatio& getSvgAspectRatio() const { return maSvgAspectRatio; }
-            void setSvgAspectRatio(const SvgAspectRatio& rSvgAspectRatio = SvgAspectRatio()) { maSvgAspectRatio = rSvgAspectRatio; }
+            void setSvgAspectRatio(const SvgAspectRatio& rSvgAspectRatio) { maSvgAspectRatio = rSvgAspectRatio; }
 
             /// x content
             const SvgNumber& getX() const { return maX; }
-            void setX(const SvgNumber& rX = SvgNumber()) { maX = rX; }
+            void setX(const SvgNumber& rX) { maX = rX; }
 
             /// y content
             const SvgNumber& getY() const { return maY; }
-            void setY(const SvgNumber& rY = SvgNumber()) { maY = rY; }
+            void setY(const SvgNumber& rY) { maY = rY; }
 
             /// width content
             const SvgNumber& getWidth() const { return maWidth; }
-            void setWidth(const SvgNumber& rWidth = SvgNumber()) { maWidth = rWidth; }
+            void setWidth(const SvgNumber& rWidth) { maWidth = rWidth; }
 
             /// height content
             const SvgNumber& getHeight() const { return maHeight; }
-            void setHeight(const SvgNumber& rHeight = SvgNumber()) { maHeight = rHeight; }
+            void setHeight(const SvgNumber& rHeight) { maHeight = rHeight; }
 
             /// version content
-            void setVersion(const SvgNumber& rVersion = SvgNumber()) { maVersion = rVersion; }
+            void setVersion(const SvgNumber& rVersion) { maVersion = rVersion; }
         };
     } // end of namespace svgreader
 } // end of namespace svgio

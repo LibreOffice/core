@@ -76,27 +76,27 @@ namespace svgio
 
             /// viewBox content
             const basegfx::B2DRange* getViewBox() const;
-            void setViewBox(const basegfx::B2DRange* pViewBox = nullptr) { if(mpViewBox) delete mpViewBox; mpViewBox = nullptr; if(pViewBox) mpViewBox = new basegfx::B2DRange(*pViewBox); }
+            void setViewBox(const basegfx::B2DRange* pViewBox) { if(mpViewBox) delete mpViewBox; mpViewBox = nullptr; if(pViewBox) mpViewBox = new basegfx::B2DRange(*pViewBox); }
 
             /// SvgAspectRatio content
             const SvgAspectRatio& getSvgAspectRatio() const;
-            void setSvgAspectRatio(const SvgAspectRatio& rSvgAspectRatio = SvgAspectRatio()) { maSvgAspectRatio = rSvgAspectRatio; }
+            void setSvgAspectRatio(const SvgAspectRatio& rSvgAspectRatio) { maSvgAspectRatio = rSvgAspectRatio; }
 
             /// X content, set if found in current context
             const SvgNumber& getX() const;
-            void setX(const SvgNumber& rX = SvgNumber()) { maX = rX; }
+            void setX(const SvgNumber& rX) { maX = rX; }
 
             /// Y content, set if found in current context
             const SvgNumber& getY() const;
-            void setY(const SvgNumber& rY = SvgNumber()) { maY = rY; }
+            void setY(const SvgNumber& rY) { maY = rY; }
 
             /// Width content, set if found in current context
             const SvgNumber& getWidth() const;
-            void setWidth(const SvgNumber& rWidth = SvgNumber()) { maWidth = rWidth; }
+            void setWidth(const SvgNumber& rWidth) { maWidth = rWidth; }
 
             /// Height content, set if found in current context
             const SvgNumber& getHeight() const;
-            void setHeight(const SvgNumber& rHeight = SvgNumber()) { maHeight = rHeight; }
+            void setHeight(const SvgNumber& rHeight) { maHeight = rHeight; }
 
             /// PatternUnits content
             const SvgUnits* getPatternUnits() const;
@@ -108,7 +108,7 @@ namespace svgio
 
             /// PatternTransform content
             const basegfx::B2DHomMatrix* getPatternTransform() const;
-            void setPatternTransform(const basegfx::B2DHomMatrix* pMatrix = nullptr) { if(mpaPatternTransform) delete mpaPatternTransform; mpaPatternTransform = nullptr; if(pMatrix) mpaPatternTransform = new basegfx::B2DHomMatrix(*pMatrix); }
+            void setPatternTransform(const basegfx::B2DHomMatrix* pMatrix) { if(mpaPatternTransform) delete mpaPatternTransform; mpaPatternTransform = nullptr; if(pMatrix) mpaPatternTransform = new basegfx::B2DHomMatrix(*pMatrix); }
 
         };
     } // end of namespace svgreader

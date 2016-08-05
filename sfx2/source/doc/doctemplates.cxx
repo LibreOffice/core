@@ -254,7 +254,7 @@ class SfxDocTplService_Impl
                                               const OUString& rTitle,
                                               const OUString& rUITitle,
                                               const OUString& rOwnURL,
-                                              bool bWriteableGroup = false );
+                                              bool bWriteableGroup );
     void                        removeFromHierarchy( DocTemplates_EntryData_Impl *pData );
     void                        addToHierarchy( GroupData_Impl *pGroup,
                                                 DocTemplates_EntryData_Impl *pData );

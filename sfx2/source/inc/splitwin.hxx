@@ -57,7 +57,7 @@ private:
                             const Size& rSize,
                             sal_uInt16 nLine,
                             sal_uInt16 nPos,
-                            bool bNewLine=false );
+                            bool bNewLine );
 
     DECL_LINK_TYPED(    TimerHdl, Timer*, void );
     bool                CursorIsOverRect() const;
@@ -91,7 +91,7 @@ public:
                             const Size& rSize,
                             sal_uInt16 nLine,
                             sal_uInt16 nPos,
-                            bool bNewLine=false );
+                            bool bNewLine );
 
     void                MoveWindow( SfxDockingWindow* pDockWin,
                             const Size& rSize,
