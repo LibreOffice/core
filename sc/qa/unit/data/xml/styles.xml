@@ -15,11 +15,8 @@
   <style:style style:name="Name5" style:family="table-cell" style:parent-style-name="Text">
     <style:table-cell-properties style:cell-protect="none" style:print-content="true"/>
   </style:style>
-  <style:style style:name="Name8" style:family="table-cell" style:parent-style-name="Text">
-    <style:text-properties style:font-name="Liberation Sans" style:text-underline-style="solid" fo:font-size="24pt" fo:color="#808080" fo:font-style="italic" style:text-underline-color="font-color" fo:font-weight="bold" style:text-underline-width="thick"/>
-  </style:style>
-  <style:style style:name="Name9" style:family="table-cell" style:parent-style-name="Text">
-    <style:text-properties style:font-name="Tahoma" style:text-underline-style="dash" fo:font-size="00pt" style:text-underline-color="#1856ff" fo:font-weight="bold" style:text-underline-width="bold"/>
+  <style:style style:name="Name6" style:family="table-cell" style:parent-style-name="Text">
+    <style:text-properties style:font-name="Liberation Sans" style:text-underline-style="solid" fo:font-size="24pt" fo:color="#808080" fo:font-style="italic" style:text-underline-color="font-color" fo:font-weight="bold"/>
   </style:style>
   <style:style style:name="Name20" style:family="table-cell" style:parent-style-name="Default">
     <style:text-properties style:text-line-through-style="solid" style:text-line-through-type="single"/>
