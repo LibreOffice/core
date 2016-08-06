@@ -1174,14 +1174,13 @@ void OpenGLSalGraphicsImpl::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
 
 void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, bool blockAA )
 {
-    const basegfx::B2DPolyPolygon& aSimplePolyPolygon = ::basegfx::tools::solveCrossovers( rPolyPolygon );
     basegfx::B2DTrapezoidVector aB2DTrapVector;
-    basegfx::tools::trapezoidSubdivide( aB2DTrapVector, aSimplePolyPolygon );
+    basegfx::tools::trapezoidSubdivide(aB2DTrapVector, rPolyPolygon);
     // draw tesselation result
-    if( aB2DTrapVector.size())
+    if (aB2DTrapVector.size())
     {
-        for(basegfx::B2DTrapezoid & i : aB2DTrapVector)
-            DrawTrapezoid( i, blockAA );
+        for(basegfx::B2DTrapezoid & rTrapezoid : aB2DTrapVector)
+            DrawTrapezoid(rTrapezoid, blockAA);
     }
 }
 
@@ -1870,20 +1869,32 @@ void OpenGLSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32*
 bool OpenGLSalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency )
 {
     VCL_GL_INFO( "::drawPolyPolygon trans " << fTransparency );
+
     if( rPolyPolygon.count() <= 0 )
         return true;
 
-    PreDraw( XOROption::IMPLEMENT_XOR );
+    bool bUseAA = mrParent.getAntiAliasB2DDraw();
 
-    if( UseSolid( mnFillColor, fTransparency ) )
-        DrawPolyPolygon( rPolyPolygon );
+    PreDraw(XOROption::IMPLEMENT_XOR);
 
-    if( mnLineColor != mnFillColor && UseSolid( mnLineColor, fTransparency ))
+    if (mnFillColor != SALCOLOR_NONE && UseSolid(mnFillColor, fTransparency))
     {
-        basegfx::B2DTrapezoidVector aB2DTrapVector;
-        basegfx::tools::createLineTrapezoidFromB2DPolyPolygon( aB2DTrapVector, rPolyPolygon );
-        for(basegfx::B2DTrapezoid & i : aB2DTrapVector)
-            DrawTrapezoid( i );
+        DrawPolyPolygon(rPolyPolygon, true);
+    }
+
+    if (mnLineColor != SALCOLOR_NONE || bUseAA)
+    {
+        SalColor nColor = (mnLineColor == SALCOLOR_NONE) ? mnFillColor : mnLineColor;
+        if (UseLine(nColor, fTransparency, 1.0, bUseAA))
+        {
+            for (const basegfx::B2DPolygon& rPolygon : rPolyPolygon)
+            {
+                basegfx::B2DPolygon aPolygon(rPolygon);
+                if (rPolygon.areControlPointsUsed())
+                    aPolygon = rPolygon.getDefaultAdaptiveSubdivision();
+                DrawPolyLine(aPolygon, 1.0f, basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT, 15.0 * F_PI180);
+            }
+        }
     }
 
     PostDraw();
