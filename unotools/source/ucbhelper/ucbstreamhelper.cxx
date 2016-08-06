@@ -20,12 +20,14 @@
 #include <rtl/ustring.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 
+#include <comphelper/simplefileaccessinteraction.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/streamwrap.hxx>
 #include <ucblockbytes.hxx>
@@ -140,7 +142,14 @@ static SvStream* lcl_CreateStream( const OUString& rFileName, StreamMode eOpenMo
 
 SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode )
 {
-    return lcl_CreateStream( rFileName, eOpenMode, Reference < XInteractionHandler >(), true /* bEnsureFileExists */ );
+    // related tdf#99312
+    // create a specialized interaction handler to manages Web certificates and Web credentials when needed
+    Reference< XInteractionHandler > xIH(
+        css::task::InteractionHandler::createWithParent( comphelper::getProcessComponentContext(), nullptr ) );
+    Reference < XInteractionHandler > xIHScoped( static_cast< XInteractionHandler *> (
+                                                     new comphelper::SimpleFileAccessInteraction( xIH ) ) );
+
+    return lcl_CreateStream( rFileName, eOpenMode, xIHScoped, true /* bEnsureFileExists */ );
 }
 
 SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
@@ -152,7 +161,13 @@ SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode e
 SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
                                          bool bFileExists )
 {
-    return lcl_CreateStream( rFileName, eOpenMode, Reference < XInteractionHandler >(), !bFileExists );
+    // related tdf#99312
+    // create a specialized interaction handler to manages Web certificates and Web credentials when needed
+    Reference< XInteractionHandler > xIH(
+        css::task::InteractionHandler::createWithParent( comphelper::getProcessComponentContext(), nullptr ) );
+    Reference < XInteractionHandler > xIHScoped( static_cast< XInteractionHandler *> (
+                                                     new comphelper::SimpleFileAccessInteraction( xIH ) ) );
+    return lcl_CreateStream( rFileName, eOpenMode, xIHScoped,!bFileExists );
 }
 
 SvStream* UcbStreamHelper::CreateStream( const Reference < XInputStream >& xStream )
