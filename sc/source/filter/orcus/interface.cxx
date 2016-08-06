@@ -941,8 +941,8 @@ ScOrcusStyles::xf::xf():
     mnNumberFormatId(0),
     mnStyleXf(0),
     mbAlignment(false),
-    meHor_alignment(SVX_HOR_JUSTIFY_LEFT),
-    meVer_alignment(SVX_VER_JUSTIFY_CENTER)
+    meHor_alignment(SVX_HOR_JUSTIFY_RIGHT),
+    meVer_alignment(SVX_VER_JUSTIFY_BOTTOM)
 {
 }
 
