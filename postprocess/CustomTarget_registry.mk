@@ -188,6 +188,7 @@ postprocess_FILES_main := \
 	$(postprocess_XCS)/Office/UI/Sidebar.xcs \
 	$(postprocess_XCS)/Office/UI/StartModuleCommands.xcs \
 	$(postprocess_XCS)/Office/UI/StartModuleWindowState.xcs \
+	$(postprocess_XCS)/Office/UI/ToolbarMode.xcs \
 	$(postprocess_XCS)/Office/UI/WindowContentFactories.xcs \
 	$(postprocess_XCS)/Office/UI/WindowState.xcs \
 	$(postprocess_XCS)/Office/UI.xcs \
@@ -252,6 +253,7 @@ postprocess_FILES_main := \
 	$(postprocess_XCU)/Office/UI/Sidebar.xcu \
 	$(postprocess_XCU)/Office/UI/StartModuleCommands.xcu \
 	$(postprocess_XCU)/Office/UI/StartModuleWindowState.xcu \
+	$(postprocess_XCU)/Office/UI/ToolbarMode.xcu \
 	$(postprocess_XCU)/Office/UI.xcu \
 	$(postprocess_XCU)/Office/Views.xcu \
 	$(postprocess_XCU)/Office/WebWizard.xcu \

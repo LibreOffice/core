@@ -29,11 +29,11 @@ public:
     static bool IsActive();
 
     /// Function to be called from the sdi's ExecMethod.
-    static void ExecMethod(SfxBindings& rBindings);
+    static void ExecMethod(SfxBindings& rBindings, const OUString& rUIName);
 
     /// Function to be called from the sdi's StateMethod.
-    static void StateMethod(SfxBindings& rBindings, const OUString& rUIFile);
-    static void StateMethod(SystemWindow* pSysWindow,
+    static bool StateMethod(SfxBindings& rBindings, const OUString& rUIFile);
+    static bool StateMethod(SystemWindow* pSysWindow,
                             const css::uno::Reference<css::frame::XFrame> & xFrame,
                             const OUString& rUIFile);
 
