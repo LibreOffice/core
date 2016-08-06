@@ -1303,6 +1303,18 @@ void SidebarController::updateModel(const css::uno::Reference<css::frame::XModel
     mpResourceManager->UpdateModel(xModel);
 }
 
+void SidebarController::FadeOut()
+{
+    if (mpSplitWindow)
+        mpSplitWindow->FadeOut();
+}
+
+void SidebarController::FadeIn()
+{
+    if (mpSplitWindow)
+        mpSplitWindow->FadeIn();
+}
+
 
 } } // end of namespace sfx2::sidebar
 

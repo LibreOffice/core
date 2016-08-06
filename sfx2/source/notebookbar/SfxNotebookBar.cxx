@@ -22,10 +22,15 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include "NotebookBarPopupMenu.hxx"
 #include <officecfg/Office/UI/Notebookbar.hxx>
+#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
+#include <unotools/confignode.hxx>
+#include <comphelper/types.hxx>
 
 using namespace sfx2;
 using namespace css::uno;
 using namespace css::ui;
+using namespace css;
 
 #define MENUBAR_STR "private:resource/menubar/menubar"
 
@@ -49,27 +54,61 @@ void SfxNotebookBar::CloseMethod(SystemWindow* pSysWindow)
 
 bool SfxNotebookBar::IsActive()
 {
-    SvtViewOptions aViewOpt(E_WINDOW, "notebookbar");
-    return aViewOpt.IsVisible();
+    const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( ::comphelper::getProcessComponentContext() );
+    vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(m_xFrame));
+
+    OUStringBuffer aPath("org.openoffice.Office.UI.ToolbarMode/Applications/");
+    switch ( eApp )
+    {
+        case vcl::EnumContext::Application::Application_Writer:
+            aPath.append("Writer");
+            break;
+        case vcl::EnumContext::Application::Application_Calc:
+            aPath.append("Calc");
+            break;
+        case vcl::EnumContext::Application::Application_Impress:
+            aPath.append("Impress");
+            break;
+        case vcl::EnumContext::Application::Application_Draw:
+            aPath.append("Draw");
+            break;
+        default:
+            break;
+    }
+
+    const utl::OConfigurationTreeRoot aModesNode(
+                                        ::comphelper::getProcessComponentContext(),
+                                        aPath.makeStringAndClear(),
+                                        false);
+    if ( !aModesNode.isValid() )
+        return false;
+
+    return ( comphelper::getString( aModesNode.getNodeValue( "Active" ) ).compareTo("Notebookbar") == 0 );
 }
 
-void SfxNotebookBar::ExecMethod(SfxBindings& rBindings)
+void SfxNotebookBar::ExecMethod(SfxBindings& rBindings, const OUString& rUIName)
 {
-    SvtViewOptions aViewOpt(E_WINDOW, "notebookbar");
-    aViewOpt.SetVisible(!aViewOpt.IsVisible());
+    // Save active UI file name
+    if ( !rUIName.isEmpty() )
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(
+                comphelper::ConfigurationChanges::create( ::comphelper::getProcessComponentContext() ) );
+        officecfg::Office::UI::Notebookbar::Active::set( rUIName, batch );
+        batch->commit();
+    }
 
     // trigger the StateMethod
     rBindings.Invalidate(SID_NOTEBOOKBAR);
     rBindings.Update();
 }
 
-void SfxNotebookBar::StateMethod(SfxBindings& rBindings, const OUString& rUIFile)
+bool SfxNotebookBar::StateMethod(SfxBindings& rBindings, const OUString& rUIFile)
 {
     SfxFrame& rFrame = rBindings.GetDispatcher_Impl()->GetFrame()->GetFrame();
-    StateMethod(rFrame.GetSystemWindow(), rFrame.GetFrameInterface(), rUIFile);
+    return StateMethod(rFrame.GetSystemWindow(), rFrame.GetFrameInterface(), rUIFile);
 }
 
-void SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
+bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                                  const Reference<css::frame::XFrame> & xFrame,
                                  const OUString& rUIFile)
 {
@@ -88,9 +127,7 @@ void SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         }
     }
 
-    SvtViewOptions aViewOpt(E_WINDOW, "notebookbar");
-
-    if (aViewOpt.IsVisible())
+    if (IsActive())
     {
         RemoveListeners(pSysWindow);
 
@@ -122,9 +159,13 @@ void SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                 }
             }
         }
+
+        return true;
     }
     else if (auto pNotebookBar = pSysWindow->GetNotebookBar())
         pNotebookBar->Hide();
+
+    return false;
 }
 
 void SfxNotebookBar::RemoveListeners(SystemWindow* pSysWindow)
