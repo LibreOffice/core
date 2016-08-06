@@ -56,13 +56,13 @@ void SfxNotebookBar::ExecMethod(SfxBindings& rBindings)
     rBindings.Update();
 }
 
-void SfxNotebookBar::StateMethod(SfxBindings& rBindings, const OUString& rUIFile)
+bool SfxNotebookBar::StateMethod(SfxBindings& rBindings, const OUString& rUIFile)
 {
     SfxFrame& rFrame = rBindings.GetDispatcher_Impl()->GetFrame()->GetFrame();
-    StateMethod(rFrame.GetSystemWindow(), rFrame.GetFrameInterface(), rUIFile);
+    return StateMethod(rFrame.GetSystemWindow(), rFrame.GetFrameInterface(), rUIFile);
 }
 
-void SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
+bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                                  const Reference<css::frame::XFrame> & xFrame,
                                  const OUString& rUIFile)
 {
@@ -108,9 +108,13 @@ void SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                                     xFrame->getController());
             }
         }
+
+        return true;
     }
     else if (auto pNotebookBar = pSysWindow->GetNotebookBar())
         pNotebookBar->Hide();
+
+    return false;
 }
 
 void SfxNotebookBar::RemoveListeners(SystemWindow* pSysWindow)
