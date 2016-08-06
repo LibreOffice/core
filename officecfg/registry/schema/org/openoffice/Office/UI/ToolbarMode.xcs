@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../../../component-schema.dtd">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="ToolbarMode" oor:package="org.openoffice.Office.UI" xml:lang="en-US">
+  <info>
+    <desc>Contains information about toolbar modes.</desc>
+  </info>
+  <templates>
+    <group oor:name="ModeEntry">
+      <info>
+        <desc>The container for mode description.</desc>
+      </info>
+      <prop oor:name="Label" oor:type="xs:string" oor:nillable="false" oor:localized="true">
+      <info>
+        <desc>The toolbar mode label.</desc>
+      </info>
+      </prop>
+      <prop oor:name="CommandArg" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>The toolbar mode name to use as a parameter in the UNO command. Must be a single word.</desc>
+        </info>
+      </prop>
+      <prop oor:name="MenuPosition" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Position in the menu.</desc>
+        </info>
+      </prop>
+      <prop oor:name="HasNotebookbar" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Determines if Notebookbar is visible.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Toolbars" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>List of mandatory toolbars.</desc>
+        </info>
+      </prop>
+      <prop oor:name="UserToolbars" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>List of visible toolbars activated by user.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Sidebar" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>
+            Describes sidebar mode.
+            Arrow - sidebar coollapsed, showing the 'open' arrow button
+            Tabs - sidebar is showing only tab bars
+            Opened - sidebar fully opened
+          </desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="Application">
+      <info>
+        <desc>Describes toolbar modes for one application.</desc>
+      </info>
+      <prop oor:name="Active" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Contains name of currently used mode.</desc>
+        </info>
+      </prop>
+      <set oor:name="Modes" oor:node-type="ModeEntry">
+        <info>
+          <desc>Contains list of toolbar modes.</desc>
+        </info>
+      </set>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="Applications" oor:node-type="Application">
+      <info>
+        <desc>Contains list of toolbar mode settings for each application.</desc>
+      </info>
+    </set>
+  </component>
+</oor:component-schema>
