@@ -111,6 +111,7 @@ public:
     void testFormatExportODS();
 
     void testCustomColumnWidthExportXLSX();
+    void testColumnWidthExportXLSX();
     void testOutlineExportXLSX();
     void testHiddenEmptyRowsXLSX();
     void testLandscapeOrientationXLSX();
@@ -199,6 +200,7 @@ public:
     CPPUNIT_TEST(testFormatExportODS);
 
     CPPUNIT_TEST(testCustomColumnWidthExportXLSX);
+    CPPUNIT_TEST(testColumnWidthExportXLSX);
     CPPUNIT_TEST(testOutlineExportXLSX);
     CPPUNIT_TEST(testHiddenEmptyRowsXLSX);
     CPPUNIT_TEST(testLandscapeOrientationXLSX);
@@ -481,7 +483,6 @@ void ScExportTest::testFormatExportODS()
     xDocSh->DoClose();
 }
 
-
 void ScExportTest::testCustomColumnWidthExportXLSX()
 {
     //tdf#100946 FILESAVE Excel on OS X ignored column widths in XLSX last saved by LO
@@ -574,6 +575,46 @@ void ScExportTest::testCustomColumnWidthExportXLSX()
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]", "customHeight", "false");
 }
 
+
+void ScExportTest::testColumnWidthExportXLSX()
+{
+    // tdf#91475 FILESAVE: Column width is not preserved in XLSX / after round trip.
+    // Test if after resave of .xlsx file created by MS Excel 2010,
+    // the column width is as much as possible close to expectation.
+    // It is not testing if the values from Excel are exactly the same as for this exported by LO.
+    // The most important is to make sure that these values will not change after .xlsx round trip
+    ScDocShellRef xShell = loadDoc("different-column-width-excel2010.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    // In original Excel document the width is "24"
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]", "width", "23.97");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]", "customWidth", "true");
+
+    // In original Excel document the width is "12"
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]", "width", "12.03");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]", "customWidth", "true");
+
+    // In original Excel document the width is "6"
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]", "width", "5.95");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]", "customWidth", "true");
+
+    // In original Excel document the width is "1"
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]", "width", "0.93");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]", "customWidth", "true");
+
+    // In original Excel document the width is "250"
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]", "width", "249.94");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]", "customWidth", "true");
+
+    // This column is not existing in Excel sheet but it is added by LibreOffice
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[6]", "width", "8.57");
+
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col", 6);
+}
 
 void ScExportTest::testOutlineExportXLSX()
 {

@@ -1675,7 +1675,20 @@ void XclExpColinfo::SaveXml( XclExpXmlStream& rStrm )
             XML_min,            OString::number( (mnFirstXclCol + 1) ).getStr(),
             // OOXTODO: XML_phonetic,
             XML_style,          lcl_GetStyleId( rStrm, maXFId.mnXFIndex ).getStr(),
-            XML_width,          OString::number( (double) (mnScWidth / (double)sc::TwipsToHMM( GetCharWidth() )) ).getStr(),
+            // After mathematical conversion of the formula:
+            // {width in pixels} = Truncate(((256 * {width} + Truncate(128/{Maximum Digit Width}))/256)*{Maximum Digit Width})
+            // the result is:
+            // {width} = ( {width in pixels} - 0.5 ) / {Maximum Digit Width}
+
+            // But in MS specification there is:
+            // =Truncate(({width in pixels} - 5)/{Maximum Digit Width} * 100 + 0.5)/100 = ({width in pixels} - 5)/{Maximum Digit Width}) + 0.005
+
+            // Explanation the differences and magic numbers are:
+            // 5 number - are 4 pixels of margin padding (two on each side), plus 1 pixel padding for the gridlines. Does it really needed by LibreOffice?
+            // 100 number - used to limit precision to 0.01 with formula =Truncate( {value} * 100 ) / 100
+            // 0.5 number (0.005 to output value) - used to increase value before truncating, to avoid situation when 2.997 will be truncated to 2 and not to 3
+            // 0.97 - align number taken from experiments with different column width values export/import. We need to multiple by 0.97 before precision limitation
+            XML_width,          OString::number( std::floor( ( ( mnScWidth - 5.0 ) / static_cast<double>( sc::TwipsToHMM( GetCharWidth() ) ) ) * 0.97 * 100.0 + 0.5 ) / 100.0 ).getStr(),
             FSEND );
 }
 
