@@ -541,6 +541,7 @@
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:DataPilotMenu">
                 <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:InsertPivotTable"/>
                     <menu:menuitem menu:id=".uno:RecalcPivotTable"/>
                     <menu:menuitem menu:id=".uno:DeletePivotTable"/>
                 </menu:menupopup>
