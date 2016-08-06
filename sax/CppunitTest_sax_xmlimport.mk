@@ -48,6 +48,7 @@ $(eval $(call gb_CppunitTest_use_components,sax_xmlimport,\
     sax/source/expatwrap/expwrap \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
+    uui/util/uui \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sax_xmlimport))
