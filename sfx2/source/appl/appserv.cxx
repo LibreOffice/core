@@ -38,6 +38,8 @@
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/text/ModuleDispatcher.hpp>
 #include <com/sun/star/ui/dialogs/AddressBookSourcePilot.hpp>
+#include <com/sun/star/ui/UIElementType.hpp>
+#include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
@@ -73,6 +75,7 @@
 
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <unotools/viewoptions.hxx>
 #include <svtools/helpopt.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/bootstrap.hxx>
@@ -118,8 +121,12 @@
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <sfx2/templatedlg.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 
+#include <comphelper/types.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/UI/ToolbarMode.hxx>
+#include <unotools/confignode.hxx>
 #include <officecfg/Setup.hxx>
 #include <memory>
 
@@ -133,6 +140,7 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::system;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::ui;
 
 namespace
 {
@@ -650,6 +658,168 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
             pCurrentShell->GetDispatcher()->ExecuteList(SID_ATTR_ZOOM, SfxCallMode::ASYNCHRON, { &aZoom });
 
+            break;
+        }
+        case SID_TOOLBAR_MODE:
+        {
+            const SfxStringItem* pModeName = rReq.GetArg<SfxStringItem>( SID_TOOLBAR_MODE );
+
+            if ( !pModeName )
+            {
+                bDone = true;
+                break;
+            }
+
+            OUString aNewName(pModeName->GetValue());
+            uno::Reference< uno::XComponentContext > xContext =
+                    ::comphelper::getProcessComponentContext();
+            OUString aCurrentMode = officecfg::Office::UI::ToolbarMode::Active::get( xContext );
+
+            if ( aCurrentMode.compareTo(aNewName) == 0 )
+            {
+                bDone = true;
+                break;
+            }
+
+            Reference<XDesktop2> xDesktop = Desktop::create( xContext );
+            Reference<XFrame> xFrame = xDesktop->getActiveFrame();
+
+            Reference<css::beans::XPropertySet> xPropSet( xFrame, UNO_QUERY );
+            Reference<css::frame::XLayoutManager> xLayoutManager;
+            if ( xPropSet.is() )
+            {
+                try
+                {
+                    Any aValue = xPropSet->getPropertyValue( "LayoutManager" );
+                    aValue >>= xLayoutManager;
+                }
+                catch ( const css::uno::RuntimeException& )
+                {
+                    throw;
+                }
+                catch ( css::uno::Exception& )
+                {
+                }
+            }
+
+            if ( xLayoutManager.is() )
+            {
+                css::uno::Sequence<OUString> aToolbarList;
+                std::vector<OUString> aBackupList;
+                bool bNotebookbarVisible = false;
+                bool bCorrectMode = true;
+
+                // Read mode settings
+                const utl::OConfigurationTreeRoot aModesNode(
+                                        xContext,
+                                        OUString("org.openoffice.Office.UI.ToolbarMode/Modes"),
+                                        true);
+                if ( !aModesNode.isValid() )
+                {
+                    bDone = true;
+                    break;
+                }
+
+                const Sequence<OUString> aModeNodeNames (aModesNode.getNodeNames());
+                const sal_Int32 nCount(aModeNodeNames.getLength());
+
+                for ( sal_Int32 nReadIndex = 0; nReadIndex < nCount; ++nReadIndex )
+                {
+                    const utl::OConfigurationNode aModeNode(aModesNode.openNode(aModeNodeNames[nReadIndex]));
+                    if ( !aModeNode.isValid() )
+                        continue;
+
+                    OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( "CommandArg" ) );
+
+                    if ( aCommandArg.compareTo( aNewName ) == 0 )
+                    {
+                        bNotebookbarVisible = comphelper::getBOOL( aModeNode.getNodeValue( "HasNotebookbar" ) );
+                        aToolbarList = aModeNode.getNodeValue( "Toolbars" ).get< uno::Sequence<OUString> >();
+                        break;
+                    }
+                }
+
+                if ( bCorrectMode )
+                {
+                    // Backup visible toolbar list and hide all toolbars
+                    Sequence<Reference<XUIElement>> aUIElements = xLayoutManager->getElements();
+                    for ( sal_Int32 i = 0; i < aUIElements.getLength(); i++ )
+                    {
+                        Reference< XUIElement > xUIElement( aUIElements[i] );
+                        Reference< XPropertySet > xPropertySet( aUIElements[i], UNO_QUERY );
+                        if ( xPropertySet.is() && xUIElement.is() )
+                        {
+                            try
+                            {
+                                OUString aResName;
+                                sal_Int16 nType( -1 );
+                                xPropertySet->getPropertyValue( "Type" ) >>= nType;
+                                xPropertySet->getPropertyValue( "ResourceURL" ) >>= aResName;
+
+                                if (( nType == css::ui::UIElementType::TOOLBAR ) &&
+                                    !aResName.isEmpty() )
+                                {
+                                    if ( xLayoutManager->isElementVisible( aResName ) )
+                                        aBackupList.push_back( aResName );
+                                    xLayoutManager->hideElement( aResName );
+                                }
+                            }
+                            catch ( const Exception& )
+                            {
+                            }
+                        }
+                    }
+
+                    // Show toolbars
+                    for ( OUString& rName : aToolbarList )
+                    {
+                        xLayoutManager->createElement( rName );
+                        xLayoutManager->showElement( rName );
+                    }
+
+                    // Show/Hide the Notebookbar
+                    SvtViewOptions aViewOpt( E_WINDOW, "notebookbar" );
+                    bool bNotebookbarState = aViewOpt.IsVisible();
+                    if ( ( !bNotebookbarState && bNotebookbarVisible )
+                        || ( bNotebookbarState && !bNotebookbarVisible ) )
+                    {
+                        for ( SfxObjectShell *pObjSh = SfxObjectShell::GetFirst();
+                            pObjSh;
+                            pObjSh = SfxObjectShell::GetNext( *pObjSh ) )
+                        {
+                            SfxRequest aReq( SID_NOTEBOOKBAR, SfxCallMode::SLOT, pObjSh->GetPool() );
+                            pObjSh->ExecuteSlot( aReq );
+                        }
+                    }
+
+                    // Save settings
+                    css::uno::Sequence<OUString> aBackup( aBackupList.size() );
+                    for ( size_t i = 0; i < aBackupList.size(); ++i )
+                        aBackup[i] = aBackupList[i];
+
+                    std::shared_ptr<comphelper::ConfigurationChanges> batch( comphelper::ConfigurationChanges::create( xContext ) );
+                    officecfg::Office::UI::ToolbarMode::Active::set( aNewName, batch );
+                    batch->commit();
+
+                    for ( sal_Int32 nReadIndex = 0; nReadIndex < nCount; ++nReadIndex )
+                    {
+                        const utl::OConfigurationNode aModeNode(aModesNode.openNode(aModeNodeNames[nReadIndex]));
+                        if ( !aModeNode.isValid() )
+                            continue;
+
+                        OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( "CommandArg" ) );
+
+                        if ( aCommandArg.compareTo( aCurrentMode ) == 0 )
+                        {
+                            aModeNode.setNodeValue( "Toolbars", makeAny( aBackup ) );
+                            break;
+                        }
+                    }
+                    aModesNode.commit();
+                }
+            }
+
+            bDone = true;
             break;
         }
         case SID_AVAILABLE_TOOLBARS:
