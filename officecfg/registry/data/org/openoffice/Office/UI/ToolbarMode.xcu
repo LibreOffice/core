@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE oor:component-data SYSTEM "../../../../../component-update.dtd">
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="ToolbarMode" oor:package="org.openoffice.Office.UI">
+  <node oor:name="Applications">
+    <node oor:name="Writer" oor:op="replace">
+      <prop oor:name="Active">
+        <value>Default</value>
+      </prop>
+      <node oor:name="Modes">
+        <node oor:name="Default" oor:op="replace">
+          <prop oor:name="Label">
+            <value>Default</value>
+          </prop>
+          <prop oor:name="CommandArg">
+            <value>Default</value>
+          </prop>
+          <prop oor:name="MenuPosition">
+            <value>0</value>
+          </prop>
+          <prop oor:name="HasNotebookbar">
+            <value>false</value>
+          </prop>
+          <prop oor:name="Toolbars">
+            <value>
+              <it>private:resource/toolbar/standardbar</it>
+              <it>private:resource/toolbar/textobjectbar</it>
+            </value>
+          </prop>
+          <prop oor:name="UserToolbars">
+            <value>
+            </value>
+          </prop>
+          <prop oor:name="Sidebar">
+            <value>Tabs</value>
+          </prop>
+        </node>
+        <node oor:name="Single" oor:op="replace">
+          <prop oor:name="Label">
+            <value>Single toolbar</value>
+          </prop>
+          <prop oor:name="CommandArg">
+            <value>Single</value>
+          </prop>
+          <prop oor:name="MenuPosition">
+            <value>1</value>
+          </prop>
+          <prop oor:name="HasNotebookbar">
+            <value>false</value>
+          </prop>
+          <prop oor:name="Toolbars">
+            <value>
+              <it>private:resource/toolbar/singlemode</it>
+            </value>
+          </prop>
+          <prop oor:name="UserToolbars">
+            <value>
+            </value>
+          </prop>
+          <prop oor:name="Sidebar">
+            <value>Arrow</value>
+          </prop>
+        </node>
+        <node oor:name="Sidebar" oor:op="replace">
+          <prop oor:name="Label">
+            <value>Sidebar</value>
+          </prop>
+          <prop oor:name="CommandArg">
+            <value>Sidebar</value>
+          </prop>
+          <prop oor:name="MenuPosition">
+            <value>2</value>
+          </prop>
+          <prop oor:name="HasNotebookbar">
+            <value>false</value>
+          </prop>
+          <prop oor:name="Toolbars">
+            <value>
+              <it>private:resource/toolbar/standardbar</it>
+            </value>
+          </prop>
+          <prop oor:name="UserToolbars">
+            <value>
+            </value>
+          </prop>
+          <prop oor:name="Sidebar">
+            <value>Opened</value>
+          </prop>
+        </node>
+        <node oor:name="Notebookbar" oor:op="replace">
+          <prop oor:name="Label">
+            <value>Notebookbar</value>
+          </prop>
+          <prop oor:name="HasNotebookbar">
+            <value>true</value>
+          </prop>
+          <prop oor:name="MenuPosition">
+            <value>3</value>
+          </prop>
+          <prop oor:name="CommandArg">
+            <value>Notebookbar</value>
+          </prop>
+          <prop oor:name="Toolbars">
+            <value>
+            </value>
+          </prop>
+          <prop oor:name="UserToolbars">
+            <value>
+            </value>
+          </prop>
+          <prop oor:name="Sidebar">
+            <value>Arrow</value>
+          </prop>
+        </node>
+      </node>
+    </node>
+    <node oor:name="Calc" oor:op="replace">
+      <prop oor:name="Active">
+        <value>Default</value>
+      </prop>
+      <node oor:name="Modes">
+        <node oor:name="Default" oor:op="replace">
+          <prop oor:name="Label">
+            <value>Default</value>
+          </prop>
+          <prop oor:name="CommandArg">
+            <value>Default</value>
+          </prop>
+          <prop oor:name="MenuPosition">
+            <value>0</value>
+          </prop>
+          <prop oor:name="HasNotebookbar">
+            <value>false</value>
+          </prop>
+          <prop oor:name="Toolbars">
+            <value>
+              <it>private:resource/toolbar/standardbar</it>
+              <it>private:resource/toolbar/formatobjectbar</it>
+            </value>
+          </prop>
+          <prop oor:name="UserToolbars">
+            <value>
+            </value>
+          </prop>
+          <prop oor:name="Sidebar">
+            <value>Tabs</value>
+          </prop>
+        </node>
+        <node oor:name="Single" oor:op="replace">
+          <prop oor:name="Label">
+            <value>Single toolbar</value>
+          </prop>
+          <prop oor:name="CommandArg">
+            <value>Single</value>
+          </prop>
+          <prop oor:name="MenuPosition">
+            <value>1</value>
+          </prop>
+          <prop oor:name="HasNotebookbar">
+            <value>false</value>
+          </prop>
+          <prop oor:name="Toolbars">
+            <value>
+              <it>private:resource/toolbar/singlemode</it>
+            </value>
+          </prop>
+          <prop oor:name="UserToolbars">
+            <value>
+            </value>
+          </prop>
+          <prop oor:name="Sidebar">
+            <value>Arrow</value>
+          </prop>
+        </node>
+        <node oor:name="Sidebar" oor:op="replace">
+          <prop oor:name="Label">
+            <value>Sidebar</value>
+          </prop>
+          <prop oor:name="CommandArg">
+            <value>Sidebar</value>
+          </prop>
+          <prop oor:name="MenuPosition">
+            <value>2</value>
+          </prop>
+          <prop oor:name="HasNotebookbar">
+            <value>false</value>
+          </prop>
+          <prop oor:name="Toolbars">
+            <value>
+              <it>private:resource/toolbar/standardbar</it>
+            </value>
+          </prop>
+          <prop oor:name="UserToolbars">
+            <value>
+            </value>
+          </prop>
+          <prop oor:name="Sidebar">
+            <value>Opened</value>
+          </prop>
+        </node>
+        <node oor:name="Notebookbar" oor:op="replace">
+          <prop oor:name="Label">
+            <value>Notebookbar</value>
+          </prop>
+          <prop oor:name="HasNotebookbar">
+            <value>true</value>
+          </prop>
+          <prop oor:name="MenuPosition">
+            <value>3</value>
+          </prop>
+          <prop oor:name="CommandArg">
+            <value>Notebookbar</value>
+          </prop>
+          <prop oor:name="Toolbars">
+            <value>
+            </value>
+          </prop>
+          <prop oor:name="UserToolbars">
+            <value>
+            </value>
+          </prop>
+          <prop oor:name="Sidebar">
+            <value>Arrow</value>
+          </prop>
+        </node>
+      </node>
+    </node>
+    <node oor:name="Impress" oor:op="replace">
+      <prop oor:name="Active">
+        <value>Default</value>
+      </prop>
+      <node oor:name="Modes">
+        <node oor:name="Default" oor:op="replace">
+          <prop oor:name="Label">
+            <value>Default</value>
+          </prop>
+          <prop oor:name="CommandArg">
+            <value>Default</value>
+          </prop>
+          <prop oor:name="MenuPosition">
+            <value>0</value>
+          </prop>
+          <prop oor:name="HasNotebookbar">
+            <value>false</value>
+          </prop>
+          <prop oor:name="Toolbars">
+            <value>
+              <it>private:resource/toolbar/standardbar</it>
+              <it>private:resource/toolbar/toolbar</it>
+              <it>private:resource/toolbar/commontaskbar</it>
+            </value>
+          </prop>
+          <prop oor:name="UserToolbars">
+            <value>
+            </value>
+          </prop>
+          <prop oor:name="Sidebar">
+            <value>Opened</value>
+          </prop>
+        </node>
+        <node oor:name="Notebookbar" oor:op="replace">
+          <prop oor:name="Label">
+            <value>Notebookbar</value>
+          </prop>
+          <prop oor:name="HasNotebookbar">
+            <value>true</value>
+          </prop>
+          <prop oor:name="MenuPosition">
+            <value>3</value>
+          </prop>
+          <prop oor:name="CommandArg">
+            <value>Notebookbar</value>
+          </prop>
+          <prop oor:name="Toolbars">
+            <value>
+            </value>
+          </prop>
+          <prop oor:name="UserToolbars">
+            <value>
+            </value>
+          </prop>
+          <prop oor:name="Sidebar">
+            <value>Arrow</value>
+          </prop>
+        </node>
+      </node>
+    </node>
+  </node>
+</oor:component-data>
