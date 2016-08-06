@@ -2863,7 +2863,7 @@ void ScFiltersTest::testOrcusODSStyleInterface()
     /* Test for Style Name "10"
      * Has ver align, and hor align
      */
-    /*
+
     pStyleSheet = pStyleSheetPool->FindCaseIns("Name10", SfxStyleFamily::Para);
     CPPUNIT_ASSERT_MESSAGE("Style Name10 : Doesn't have Attribute hor justify, but it should have.",
         pStyleSheet->GetItemSet().HasItem(ATTR_HOR_JUSTIFY, &pItem));
@@ -2877,7 +2877,7 @@ void ScFiltersTest::testOrcusODSStyleInterface()
 
     const SvxVerJustifyItem* pVerJustify = static_cast<const SvxVerJustifyItem*>(pItem);
     CPPUNIT_ASSERT_MESSAGE("Style Name10 :Error with ver justify", pVerJustify->GetValue() == SVX_VER_JUSTIFY_CENTER);
-    */
+
 }
 #endif
 
