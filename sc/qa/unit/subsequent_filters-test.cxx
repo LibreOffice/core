@@ -2860,6 +2860,24 @@ void ScFiltersTest::testOrcusODSStyleInterface()
     pCrossedOutItem = static_cast<const SvxCrossedOutItem*>(pItem);
     CPPUNIT_ASSERT_MESSAGE("Style Name9 :Error with Strikeout", pCrossedOutItem->GetStrikeout() == STRIKEOUT_SLASH);
 
+    /* Test for Style Name "10"
+     * Has ver align, and hor align
+     */
+    /*
+    pStyleSheet = pStyleSheetPool->FindCaseIns("Name10", SfxStyleFamily::Para);
+    CPPUNIT_ASSERT_MESSAGE("Style Name10 : Doesn't have Attribute hor justify, but it should have.",
+        pStyleSheet->GetItemSet().HasItem(ATTR_HOR_JUSTIFY, &pItem));
+
+    const SvxHorJustifyItem* pHorJustify = static_cast<const SvxHorJustifyItem*>(pItem);
+    CPPUNIT_ASSERT_MESSAGE("Style Name10 :Error with hor justify", pHorJustify->GetValue() == SVX_HOR_JUSTIFY_RIGHT);
+
+    pStyleSheet = pStyleSheetPool->FindCaseIns("Name10", SfxStyleFamily::Para);
+    CPPUNIT_ASSERT_MESSAGE("Style Name10 : Doesn't have Attribute ver justify, but it should have.",
+        pStyleSheet->GetItemSet().HasItem(ATTR_VER_JUSTIFY, &pItem));
+
+    const SvxVerJustifyItem* pVerJustify = static_cast<const SvxVerJustifyItem*>(pItem);
+    CPPUNIT_ASSERT_MESSAGE("Style Name10 :Error with ver justify", pVerJustify->GetValue() == SVX_VER_JUSTIFY_CENTER);
+    */
 }
 #endif
 
