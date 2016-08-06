@@ -39,6 +39,7 @@
 #include "readstrings.h"
 #include "errors.h"
 #include "bzlib.h"
+#include <thread>
 
 #include <stdio.h>
 #include <string.h>
@@ -211,68 +212,6 @@ struct MARChannelStringTable {
 
   char MARChannelID[MAX_TEXT_LEN];
 };
-
-//-----------------------------------------------------------------------------
-
-typedef void (* ThreadFunc)(void *param);
-
-#ifdef _WIN32
-#include <process.h>
-
-class Thread
-{
-public:
-  int Run(ThreadFunc func, void *param)
-  {
-    mThreadFunc = func;
-    mThreadParam = param;
-
-    unsigned int threadID;
-
-    mThread = (HANDLE) _beginthreadex(nullptr, 0, ThreadMain, this, 0,
-                                      &threadID);
-
-    return mThread ? 0 : -1;
-  }
-  int Join()
-  {
-    WaitForSingleObject(mThread, INFINITE);
-    CloseHandle(mThread);
-    return 0;
-  }
-private:
-  static unsigned __stdcall ThreadMain(void *p)
-  {
-    Thread *self = (Thread *) p;
-    self->mThreadFunc(self->mThreadParam);
-    return 0;
-  }
-  HANDLE     mThread;
-  ThreadFunc mThreadFunc;
-  void      *mThreadParam;
-};
-
-#elif defined(UNIX)
-#include <pthread.h>
-
-class Thread
-{
-public:
-  int Run(ThreadFunc func, void *param)
-  {
-    return pthread_create(&thr, nullptr, (void* (*)(void *)) func, param);
-  }
-  int Join()
-  {
-    void *result;
-    return pthread_join(thr, &result);
-  }
-private:
-  pthread_t thr;
-};
-#else
-#error "Unsupported platform"
-#endif
 
 //-----------------------------------------------------------------------------
 
@@ -2751,12 +2690,11 @@ int NS_main(int argc, NS_tchar **argv)
           // has still not stopped then show an indeterminate progress bar.
           DWORD lastState = WaitForServiceStop(SVC_NAME, 5);
           if (lastState != SERVICE_STOPPED) {
-            Thread t1;
-            if (t1.Run(WaitForServiceFinishThread, nullptr) == 0 &&
-                showProgressUI) {
+            std::thread waitThread(WaitForServiceFinishThread, nullptr);
+            if (showProgressUI) {
               ShowProgressUI(true, false);
             }
-            t1.Join();
+            waitThread.join();
           }
 
           lastState = WaitForServiceStop(SVC_NAME, 1);
@@ -3101,13 +3039,12 @@ int NS_main(int argc, NS_tchar **argv)
   // Run update process on a background thread.  ShowProgressUI may return
   // before QuitProgressUI has been called, so wait for UpdateThreadFunc to
   // terminate.  Avoid showing the progress UI when staging an update.
-  Thread t;
-  if (t.Run(UpdateThreadFunc, nullptr) == 0) {
-    if (!sStagedUpdate && !sReplaceRequest) {
+  std::thread updateThread(UpdateThreadFunc, nullptr);
+  if (!sStagedUpdate && !sReplaceRequest)
+  {
       ShowProgressUI();
-    }
   }
-  t.Join();
+  updateThread.join();
 
 #ifdef _WIN32
   if (argc > callbackIndex && !sReplaceRequest) {
