@@ -44,6 +44,7 @@ $(eval $(call gb_CppunitTest_use_components,vcl_filters_test,\
     i18npool/util/i18npool \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
+    uui/util/uui \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_filters_test))
