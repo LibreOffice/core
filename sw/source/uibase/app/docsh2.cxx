@@ -1164,13 +1164,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
             SfxViewShell* pViewShell = GetView()? GetView(): SfxViewShell::Current();
             SfxBindings& rBindings( pViewShell->GetViewFrame()->GetBindings() );
 
-            if ( !pFile || ( pFile && !SfxNotebookBar::IsActive() ) )
-                sfx2::SfxNotebookBar::ExecMethod( rBindings );
-            else if ( pFile && pFile->GetValue().isEmpty() )
+            if ( SfxNotebookBar::IsActive() )
+                sfx2::SfxNotebookBar::ExecMethod( rBindings, pFile ? pFile->GetValue() : "" );
+            else
             {
                 sfx2::SfxNotebookBar::CloseMethod( rBindings );
-                if ( sfx2::SfxNotebookBar::IsActive() )
-                    sfx2::SfxNotebookBar::ExecMethod( rBindings );
             }
         }
         break;

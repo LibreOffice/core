@@ -61,6 +61,9 @@
   <implementation name="com.sun.star.comp.framework.ServiceHandler">
     <service name="com.sun.star.frame.ProtocolHandler"/>
   </implementation>
+  <implementation name="com.sun.star.comp.framework.ToolbarModeMenuController">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
   <implementation name="com.sun.star.comp.framework.ToolBarsMenuController">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>

@@ -163,6 +163,9 @@ public:
 
     void disposeDecks();
 
+    void FadeIn();
+    void FadeOut();
+
 private:
 
     VclPtr<Deck> mpCurrentDeck;

@@ -274,7 +274,9 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
 
             case SID_NOTEBOOKBAR:
             {
-                sfx2::SfxNotebookBar::StateMethod(mpViewShell->GetFrame()->GetBindings(), "modules/simpress/ui/");
+                bool bVisible = sfx2::SfxNotebookBar::StateMethod(mpViewShell->GetFrame()->GetBindings(),
+                                                                  "modules/simpress/ui/");
+                rSet.Put( SfxBoolItem( SID_NOTEBOOKBAR, bVisible ) );
             }
             break;
 
