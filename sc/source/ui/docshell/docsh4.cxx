@@ -1099,14 +1099,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
         {
             const SfxStringItem* pFile = rReq.GetArg<SfxStringItem>( SID_NOTEBOOKBAR );
 
-            if ( pBindings && ( !pFile || ( pFile && !sfx2::SfxNotebookBar::IsActive() ) ) )
-                sfx2::SfxNotebookBar::ExecMethod(*pBindings);
-            else if ( pBindings && pFile && pFile->GetValue().isEmpty() )
-            {
+            if ( pBindings && sfx2::SfxNotebookBar::IsActive() )
+                sfx2::SfxNotebookBar::ExecMethod(*pBindings, pFile ? pFile->GetValue() : "");
+            else if ( pBindings )
                 sfx2::SfxNotebookBar::CloseMethod(*pBindings);
-                if ( sfx2::SfxNotebookBar::IsActive() )
-                    sfx2::SfxNotebookBar::ExecMethod(*pBindings);
-            }
         }
         break;
         default:
@@ -1866,7 +1862,11 @@ void ScDocShell::GetState( SfxItemSet &rSet )
             case SID_NOTEBOOKBAR:
                 {
                     if (GetViewBindings())
-                        sfx2::SfxNotebookBar::StateMethod(*GetViewBindings(), "modules/scalc/ui/");
+                    {
+                        bool bVisible = sfx2::SfxNotebookBar::StateMethod(*GetViewBindings(),
+                                                                          "modules/scalc/ui/");
+                        rSet.Put( SfxBoolItem( SID_NOTEBOOKBAR, bVisible ) );
+                    }
                 }
                 break;
 

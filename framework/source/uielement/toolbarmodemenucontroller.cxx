@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <uielement/notebookbarmenucontroller.hxx>
+#include <uielement/toolbarmodemenucontroller.hxx>
 
 #include "services.h"
 #include <framework/sfxhelperfunctions.hxx>
@@ -29,10 +29,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
-#include <officecfg/Office/UI/Notebookbar.hxx>
-#include <officecfg/Office/UI/ToolbarMode.hxx>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+
 
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
@@ -42,6 +41,7 @@
 #include <vcl/window.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/miscopt.hxx>
+#include <officecfg/Office/UI/ToolbarMode.hxx>
 #include <unotools/confignode.hxx>
 
 //  Defines
@@ -58,25 +58,25 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2      (   NotebookbarMenuController                  ,
+DEFINE_XSERVICEINFO_MULTISERVICE_2      (   ToolbarModeMenuController                  ,
                                             OWeakObject                             ,
                                             SERVICENAME_POPUPMENUCONTROLLER         ,
-                                            IMPLEMENTATIONNAME_NOTEBOOKBARMENUCONTROLLER
+                                            IMPLEMENTATIONNAME_TOOLBARMODEMENUCONTROLLER
                                         )
 
-DEFINE_INIT_SERVICE                     (   NotebookbarMenuController, {} )
+DEFINE_INIT_SERVICE                     (   ToolbarModeMenuController, {} )
 
-NotebookbarMenuController::NotebookbarMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
+ToolbarModeMenuController::ToolbarModeMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
     m_xContext( xContext )
 {
 }
 
-NotebookbarMenuController::~NotebookbarMenuController()
+ToolbarModeMenuController::~ToolbarModeMenuController()
 {
 }
 
-void NotebookbarMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
+void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
     if ( SvtMiscOptions().DisableUICustomization() )
         return;
@@ -84,31 +84,57 @@ void NotebookbarMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
     SolarMutexGuard aSolarMutexGuard;
     resetPopupMenu( rPopupMenu );
 
-    const utl::OConfigurationTreeRoot aImplementationsNode(
+    const Reference<XComponentContext> xContext (::comphelper::getProcessComponentContext() );
+    const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( xContext );
+    vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(m_xFrame));
+
+    OUStringBuffer aPath("org.openoffice.Office.UI.ToolbarMode/Applications/");
+    switch ( eApp )
+    {
+        case vcl::EnumContext::Application::Application_Writer:
+            aPath.append("Writer");
+            break;
+        case vcl::EnumContext::Application::Application_Calc:
+            aPath.append("Calc");
+            break;
+        case vcl::EnumContext::Application::Application_Impress:
+            aPath.append("Impress");
+            break;
+        case vcl::EnumContext::Application::Application_Draw:
+            aPath.append("Draw");
+            break;
+        default:
+            break;
+    }
+    aPath.append("/Modes");
+
+    const utl::OConfigurationTreeRoot aModesNode(
                                         m_xContext,
-                                        OUString("org.openoffice.Office.UI.Notebookbar/Implementations"),
+                                        aPath.makeStringAndClear(),
                                         false);
-    if ( !aImplementationsNode.isValid() )
+    if ( !aModesNode.isValid() )
         return;
 
-    const Sequence<OUString> aImplNodeNames (aImplementationsNode.getNodeNames());
-    const sal_Int32 nCount(aImplNodeNames.getLength());
+    const Sequence<OUString> aModeNodeNames (aModesNode.getNodeNames());
+    const sal_Int32 nCount(aModeNodeNames.getLength());
 
     for ( sal_Int32 nReadIndex = 0; nReadIndex < nCount; ++nReadIndex )
     {
-        const utl::OConfigurationNode aImplNode(aImplementationsNode.openNode(aImplNodeNames[nReadIndex]));
-        if ( !aImplNode.isValid() )
+        const utl::OConfigurationNode aModeNode(aModesNode.openNode(aModeNodeNames[nReadIndex]));
+        if ( !aModeNode.isValid() )
             continue;
 
-        OUString aLabel = comphelper::getString( aImplNode.getNodeValue( "Label" ) );
-        OUString aFile = comphelper::getString( aImplNode.getNodeValue( "File" ) );
-        m_xPopupMenu->insertItem( nReadIndex+1, aLabel, css::awt::MenuItemStyle::RADIOCHECK, m_xPopupMenu->getItemCount() );
-        rPopupMenu->setCommand( nReadIndex+1, aFile );
+        OUString aLabel = comphelper::getString( aModeNode.getNodeValue( "Label" ) );
+        OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( "CommandArg" ) );
+        long nPosition = comphelper::getINT32( aModeNode.getNodeValue( "MenuPosition" ) );
+
+        m_xPopupMenu->insertItem( nReadIndex+1, aLabel, css::awt::MenuItemStyle::RADIOCHECK, nPosition );
+        rPopupMenu->setCommand( nReadIndex+1, aCommandArg );
     }
 }
 
 // XEventListener
-void SAL_CALL NotebookbarMenuController::disposing( const EventObject& ) throw ( RuntimeException, std::exception )
+void SAL_CALL ToolbarModeMenuController::disposing( const EventObject& ) throw ( RuntimeException, std::exception )
 {
     Reference< css::awt::XMenuListener > xHolder(static_cast<OWeakObject *>(this), UNO_QUERY );
 
@@ -122,7 +148,7 @@ void SAL_CALL NotebookbarMenuController::disposing( const EventObject& ) throw (
 }
 
 // XStatusListener
-void SAL_CALL NotebookbarMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException, std::exception )
+void SAL_CALL ToolbarModeMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException, std::exception )
 {
     OUString aFeatureURL( Event.FeatureURL.Complete );
 
@@ -174,7 +200,7 @@ void SAL_CALL NotebookbarMenuController::statusChanged( const FeatureStateEvent&
 }
 
 // XMenuListener
-void SAL_CALL NotebookbarMenuController::itemSelected( const css::awt::MenuEvent& rEvent ) throw (RuntimeException, std::exception)
+void SAL_CALL ToolbarModeMenuController::itemSelected( const css::awt::MenuEvent& rEvent ) throw (RuntimeException, std::exception)
 {
     Reference< css::awt::XPopupMenu >   xPopupMenu;
     Reference< XURLTransformer >        xURLTransformer;
@@ -196,13 +222,12 @@ void SAL_CALL NotebookbarMenuController::itemSelected( const css::awt::MenuEvent
             PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
 
             OUString aCmd( pVCLPopupMenu->GetItemCommand( rEvent.MenuId ));
+            OUStringBuffer aBuf(".uno:ToolbarMode?Mode:string=");
+            aBuf.append( aCmd );
             URL aTargetURL;
             Sequence<PropertyValue> aArgs;
 
-            OUStringBuffer aBuf(".uno:Notebookbar?File:string=");
-            aBuf.append( aCmd );
             aTargetURL.Complete = aBuf.makeStringAndClear();
-
             xURLTransformer->parseStrict( aTargetURL );
             Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
             if ( xDispatchProvider.is() )
@@ -214,16 +239,14 @@ void SAL_CALL NotebookbarMenuController::itemSelected( const css::awt::MenuEvent
                 pExecuteInfo->xDispatch     = xDispatch;
                 pExecuteInfo->aTargetURL    = aTargetURL;
                 pExecuteInfo->aArgs         = aArgs;
-                Application::PostUserEvent( LINK(nullptr, NotebookbarMenuController, ExecuteHdl_Impl), pExecuteInfo );
+                Application::PostUserEvent( LINK(nullptr, ToolbarModeMenuController, ExecuteHdl_Impl), pExecuteInfo );
             }
         }
     }
 }
 
-void SAL_CALL NotebookbarMenuController::itemActivated( const css::awt::MenuEvent& ) throw (RuntimeException, std::exception)
+void SAL_CALL ToolbarModeMenuController::itemActivated( const css::awt::MenuEvent& ) throw (RuntimeException, std::exception)
 {
-    OUString aActive = officecfg::Office::UI::Notebookbar::Active::get( m_xContext );
-
     const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( m_xContext );
     vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(m_xFrame));
 
@@ -253,18 +276,14 @@ void SAL_CALL NotebookbarMenuController::itemActivated( const css::awt::MenuEven
     if ( !aModesNode.isValid() )
         return;
 
-    // Entries are enabled only when Notebookbar mode is active
-    bool bActive = ( comphelper::getString( aModesNode.getNodeValue( "Active" ) ).compareTo("Notebookbar") == 0 );
+    OUString aMode = comphelper::getString( aModesNode.getNodeValue( "Active" ) );
 
     for ( int i = 0; i < m_xPopupMenu->getItemCount(); ++i )
-    {
-        m_xPopupMenu->checkItem( i+1, ( aActive.compareTo( m_xPopupMenu->getCommand( i+1 ) ) == 0 ) );
-        m_xPopupMenu->enableItem( i+1, bActive );
-    }
+        m_xPopupMenu->checkItem( i+1, (aMode.compareTo( m_xPopupMenu->getCommand( i+1 ) ) == 0) );
 }
 
 // XPopupMenuController
-void SAL_CALL NotebookbarMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu ) throw ( RuntimeException, std::exception )
+void SAL_CALL ToolbarModeMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu ) throw ( RuntimeException, std::exception )
 {
     osl::MutexGuard aLock( m_aMutex );
 
@@ -281,7 +300,7 @@ void SAL_CALL NotebookbarMenuController::setPopupMenu( const Reference< css::awt
     }
 }
 
-IMPL_STATIC_LINK_TYPED( NotebookbarMenuController, ExecuteHdl_Impl, void*, p, void )
+IMPL_STATIC_LINK_TYPED( ToolbarModeMenuController, ExecuteHdl_Impl, void*, p, void )
 {
     ExecuteInfo* pExecuteInfo = static_cast<ExecuteInfo*>(p);
     try

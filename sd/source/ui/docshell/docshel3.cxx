@@ -326,14 +326,10 @@ void DrawDocShell::Execute( SfxRequest& rReq )
             {
                 SfxBindings& rBindings( mpViewShell->GetFrame()->GetBindings() );
 
-                if ( !pFile || ( pFile && !sfx2::SfxNotebookBar::IsActive() ) )
-                    sfx2::SfxNotebookBar::ExecMethod( rBindings );
-                else if ( pFile && pFile->GetValue().isEmpty() )
-                {
+                if ( sfx2::SfxNotebookBar::IsActive() )
+                    sfx2::SfxNotebookBar::ExecMethod( rBindings, pFile ? pFile->GetValue() : "" );
+                else
                     sfx2::SfxNotebookBar::CloseMethod( rBindings );
-                    if ( sfx2::SfxNotebookBar::IsActive() )
-                        sfx2::SfxNotebookBar::ExecMethod( rBindings );
-                }
             }
         }
         break;
