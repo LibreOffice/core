@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE oor:component-data SYSTEM "../../../../../component-update.dtd">
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="ToolbarMode" oor:package="org.openoffice.Office.UI">
+  <prop oor:name="Active">
+    <value>Default</value>
+  </prop>
+  <prop oor:name="Labels">
+    <value>
+      <it>Default</it>
+      <it>Single Toolbar</it>
+      <it>Sidebar</it>
+      <it>Notebookbar</it>
+    </value>
+  </prop>
+  <prop oor:name="Modes">
+    <value>
+      <it>Default</it>
+      <it>Single</it>
+      <it>Sidebar</it>
+      <it>Notebookbar</it>
+    </value>
+  </prop>
+  <prop oor:name="Default">
+    <value>
+      <it>private:resource/toolbar/standardbar</it>
+      <it>private:resource/toolbar/textobjectbar</it>
+    </value>
+  </prop>
+  <prop oor:name="Single">
+    <value>
+      <it>private:resource/toolbar/singlemode</it>
+    </value>
+  </prop>
+  <prop oor:name="Sidebar">
+    <value>
+      <it>private:resource/toolbar/standardbar</it>
+    </value>
+  </prop>
+  <prop oor:name="Notebookbar">
+    <value>
+    </value>
+  </prop>
+</oor:component-data>
