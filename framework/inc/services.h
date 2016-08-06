@@ -51,6 +51,7 @@ namespace framework{
 #define IMPLEMENTATIONNAME_HEADERMENUCONTROLLER                 "com.sun.star.comp.framework.HeaderMenuController"
 #define IMPLEMENTATIONNAME_FOOTERMENUCONTROLLER                 "com.sun.star.comp.framework.FooterMenuController"
 #define IMPLEMENTATIONNAME_NEWMENUCONTROLLER                    "com.sun.star.comp.framework.NewMenuController"
+#define IMPLEMENTATIONNAME_TOOLBARMODEMENUCONTROLLER            "com.sun.star.comp.framework.ToolbarModeMenuController"
 #define IMPLEMENTATIONNAME_TOOLBARSMENUCONTROLLER               "com.sun.star.comp.framework.ToolBarsMenuController"
 #define IMPLEMENTATIONNAME_HELPONSTARTUP                        "com.sun.star.comp.framework.HelpOnStartup"
 #define IMPLEMENTATIONNAME_SHELLJOB                             "com.sun.star.comp.framework.ShellJob"

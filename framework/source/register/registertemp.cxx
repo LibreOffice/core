@@ -49,6 +49,7 @@
 #include <uielement/langselectionmenucontroller.hxx>
 #include <uielement/macrosmenucontroller.hxx>
 #include <uielement/newmenucontroller.hxx>
+#include <uielement/toolbarmodemenucontroller.hxx>
 #include <uielement/toolbarsmenucontroller.hxx>
 
 COMPONENTGETFACTORY ( fwl,
@@ -60,6 +61,7 @@ COMPONENTGETFACTORY ( fwl,
                         IFFACTORY( ::framework::DispatchDisabler                        )   else
                         IFFACTORY( ::framework::DispatchRecorder                        )   else
                         IFFACTORY( ::framework::DispatchRecorderSupplier                )   else
+                        IFFACTORY( ::framework::ToolbarModeMenuController               )   else
                         IFFACTORY( ::framework::ToolbarsMenuController                  )   else
                         IFFACTORY( ::framework::FontMenuController                      )   else
                         IFFACTORY( ::framework::MacrosMenuController                    )   else

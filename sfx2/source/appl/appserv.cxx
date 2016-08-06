@@ -38,6 +38,8 @@
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/text/ModuleDispatcher.hpp>
 #include <com/sun/star/ui/dialogs/AddressBookSourcePilot.hpp>
+#include <com/sun/star/ui/UIElementType.hpp>
+#include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
@@ -73,6 +75,7 @@
 
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <unotools/viewoptions.hxx>
 #include <svtools/helpopt.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/bootstrap.hxx>
@@ -118,8 +121,10 @@
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <sfx2/templatedlg.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/UI/ToolbarMode.hxx>
 #include <officecfg/Setup.hxx>
 #include <memory>
 
@@ -133,6 +138,7 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::system;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::ui;
 
 namespace
 {
@@ -627,6 +633,138 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
             pCurrentShell->GetDispatcher()->ExecuteList(SID_ATTR_ZOOM, SfxCallMode::ASYNCHRON, { &aZoom });
 
+            break;
+        }
+        case SID_TOOLBAR_MODE:
+        {
+            const SfxStringItem* pModeName = rReq.GetArg<SfxStringItem>(SID_TOOLBAR_MODE);
+
+            if ( pModeName )
+            {
+                OUString aModeName(pModeName->GetValue());
+
+                Reference < XDesktop2 > xDesktop = Desktop::create ( ::comphelper::getProcessComponentContext() );
+                Reference< XFrame > xFrame = xDesktop->getActiveFrame();
+
+                Reference< css::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
+                Reference< css::frame::XLayoutManager > xLayoutManager;
+                if ( xPropSet.is() )
+                {
+                    try
+                    {
+                        Any aValue = xPropSet->getPropertyValue("LayoutManager");
+                        aValue >>= xLayoutManager;
+                    }
+                    catch ( const css::uno::RuntimeException& )
+                    {
+                        throw;
+                    }
+                    catch ( css::uno::Exception& )
+                    {
+                    }
+                }
+
+                if ( xLayoutManager.is() )
+                {
+                    OUString aToolbarResName( "private:resource/toolbar/" );
+                    std::vector<OUString> aToolbarsVisible;
+                    bool bNotebookbarVisible = false;
+                    bool bCorrectMode = false;
+
+                    OUStringBuffer aBuf( aToolbarResName );
+                    if ( aModeName.compareTo("Default") == 0 )
+                    {
+                        aBuf.append( "standardbar" );
+                        aToolbarsVisible.push_back( aBuf.makeStringAndClear() );
+                        aBuf = OUStringBuffer( aToolbarResName );
+                        aBuf.append( "textobjectbar" );
+                        aToolbarsVisible.push_back( aBuf.makeStringAndClear() );
+
+                        bCorrectMode = true;
+                    }
+                    else if ( aModeName.compareTo("Single") == 0 )
+                    {
+                        aBuf.append( "singlemode" );
+                        aToolbarsVisible.push_back( aBuf.makeStringAndClear() );
+
+                        bCorrectMode = true;
+                    }
+                    else if ( aModeName.compareTo("Sidebar") == 0 )
+                    {
+                        //TODO: SfxViewFrame::GetChildWindow(SID_SIDEBAR)
+
+                        aBuf.append( "standardbar" );
+                        aToolbarsVisible.push_back( aBuf.makeStringAndClear() );
+
+                        bCorrectMode = true;
+                    }
+                    else if ( aModeName.compareTo("Notebookbar") == 0 )
+                    {
+                        bNotebookbarVisible = true;
+                        bCorrectMode = true;
+                    }
+
+                    if (bCorrectMode)
+                    {
+                        // Hide all toolbars
+                        Sequence< Reference< XUIElement > > aUIElements = xLayoutManager->getElements();
+                        for ( sal_Int32 i = 0; i < aUIElements.getLength(); i++ )
+                        {
+                            Reference< XUIElement > xUIElement( aUIElements[i] );
+                            Reference< XPropertySet > xPropertySet( aUIElements[i], UNO_QUERY );
+                            if ( xPropertySet.is() && xUIElement.is() )
+                            {
+                                try
+                                {
+                                    OUString aResName;
+                                    sal_Int16 nType( -1 );
+                                    xPropertySet->getPropertyValue("Type") >>= nType;
+                                    xPropertySet->getPropertyValue("ResourceURL") >>= aResName;
+
+                                    if (( nType == css::ui::UIElementType::TOOLBAR ) &&
+                                        !aResName.isEmpty() )
+                                    {
+                                        xLayoutManager->hideElement( aResName );
+                                    }
+                                }
+                                catch ( const Exception& )
+                                {
+                                }
+                            }
+                        }
+
+                        // Show toolbars
+                        for (OUString& rName : aToolbarsVisible)
+                        {
+                            xLayoutManager->createElement( rName );
+                            xLayoutManager->showElement( rName );
+                        }
+
+                        // Notebookbar
+                        SvtViewOptions aViewOpt(E_WINDOW, "notebookbar");
+                        bool bNotebookbarState = aViewOpt.IsVisible();
+                        if ( ( !bNotebookbarState && bNotebookbarVisible )
+                            || ( bNotebookbarState && !bNotebookbarVisible ) )
+                        {
+                            for ( SfxObjectShell *pObjSh = SfxObjectShell::GetFirst();
+                                pObjSh;
+                                pObjSh = SfxObjectShell::GetNext( *pObjSh ) )
+                            {
+                                SfxRequest aReq( SID_NOTEBOOKBAR, SfxCallMode::SLOT, pObjSh->GetPool() );
+                                pObjSh->ExecuteSlot( aReq );
+                            }
+                        }
+
+                        uno::Reference< uno::XComponentContext > xContext =
+                            ::comphelper::getProcessComponentContext();
+                        std::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create( xContext ) );
+                        officecfg::Office::UI::ToolbarMode::Active::set( aModeName, batch );
+                        batch->commit();
+                    }
+                }
+            }
+
+            bDone = true;
             break;
         }
         case SID_AVAILABLE_TOOLBARS:
