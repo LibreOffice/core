@@ -29,6 +29,6 @@
   </style:style>
   <style:style style:name="Name10" style:family="table-cell" style:parent-style-name="Text">
     <style:table-cell-properties style:vertical-align="middle"/>
-    <style:paragraph-properties fo:text-align="start"/>
+    <style:paragraph-properties fo:text-align="end"/>
   </style:style>
 </office:styles>
