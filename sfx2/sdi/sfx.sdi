@@ -5385,6 +5385,22 @@ SfxVoidItem RecentFileList SID_RECENTFILELIST
     GroupId = GID_APPLICATION;
 ]
 
+SfxVoidItem ToolbarMode SID_TOOLBAR_MODE
+(SfxStringItem Mode SID_TOOLBAR_MODE)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_APPLICATION;
+]
 
 SfxVoidItem AvailableToolbars SID_AVAILABLE_TOOLBARS
 (SfxStringItem Toolbar SID_AVAILABLE_TOOLBARS)

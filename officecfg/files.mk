@@ -85,6 +85,7 @@ officecfg_XCSFILES := \
     Office/UI/Sidebar \
     Office/UI/StartModuleCommands \
     Office/UI/StartModuleWindowState \
+    Office/UI/ToolbarMode \
     Office/UI/WindowContentFactories \
     Office/UI/WindowState \
     Office/UI/WriterCommands \
