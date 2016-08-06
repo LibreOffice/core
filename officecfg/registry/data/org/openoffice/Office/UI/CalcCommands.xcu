@@ -2096,10 +2096,16 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Insert Current Date</value>
         </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Date</value>
+        </prop>
       </node>
       <node oor:name=".uno:InsertCurrentTime" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Insert Current Time</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Time</value>
         </prop>
       </node>
       <node oor:name=".uno:ExportAsGraphic" oor:op="replace">
