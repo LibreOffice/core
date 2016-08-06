@@ -569,14 +569,9 @@ DECLARE_WW8EXPORT_TEST(testTdf92281, "tdf92281.doc")
 
         xCursor->goRight( 5 , false );
         uno::Reference< beans::XPropertySet > xPropSet(xCursor, uno::UNO_QUERY);
-        OUString sPMingLiUFont= OUString( sal_Unicode( 26032 ) ) +
-                OUString( sal_Unicode( 32048 ) ) +
-                OUString( sal_Unicode( 26126 ) ) +
-                OUString( sal_Unicode( 39636 ) ) +
-                OUString(";PMingLiU");
-
+        const sal_Unicode aFontname[14] = { 26032, 32048, 26126, 39636, ';' , 'P' , 'M', 'i', 'n', 'g', 'L', 'i', 'U' , 0 };
         CPPUNIT_ASSERT_EQUAL(OUString("Calibri"), getProperty<OUString>(xPropSet, "CharFontName"));
-        CPPUNIT_ASSERT_EQUAL(sPMingLiUFont      , getProperty<OUString>(xPropSet, "CharFontNameAsian"));
+        CPPUNIT_ASSERT_EQUAL(OUString(aFontname), getProperty<OUString>(xPropSet, "CharFontNameAsian"));
         CPPUNIT_ASSERT_EQUAL(OUString("Times New Roman"), getProperty<OUString>(xPropSet, "CharFontNameComplex"));
 }
 
