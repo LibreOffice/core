@@ -86,14 +86,17 @@ void SaveAsMenuController::impl_setPopupMenu()
 
     pVCLPopupMenu->InsertItem( ".uno:SaveAs", m_xFrame );
 
-    // Add Save As Template/Save Remote File commands only where they are supported.
-    OUString sSaveAsTemplate(".uno:SaveAsTemplate");
-    if (isCommandAvailable(sSaveAsTemplate))
-        pVCLPopupMenu->InsertItem( sSaveAsTemplate, m_xFrame );
-
     OUString sSaveRemote(".uno:SaveAsRemote");
     if (isCommandAvailable(sSaveRemote))
         pVCLPopupMenu->InsertItem( sSaveRemote, m_xFrame );
+
+    OUString sExportTo(".uno:ExportTo");
+    if (isCommandAvailable(sExportTo))
+        pVCLPopupMenu->InsertItem( sExportTo, m_xFrame );
+
+    OUString sSaveAsTemplate(".uno:SaveAsTemplate");
+    if (isCommandAvailable(sSaveAsTemplate))
+        pVCLPopupMenu->InsertItem( sSaveAsTemplate, m_xFrame );
 }
 
 bool SaveAsMenuController::isCommandAvailable(const OUString & sCommand)
