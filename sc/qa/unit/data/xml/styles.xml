@@ -27,7 +27,7 @@
   <style:style style:name="Name9" style:family="table-cell" style:parent-style-name="Default">
     <style:text-properties style:text-line-through-style="solid" style:text-line-through-type="single" style:text-line-through-text="/"/>
   </style:style>
-  <style:style style:name="Name23" style:family="table-cell" style:parent-style-name="Text">
+  <style:style style:name="Name10" style:family="table-cell" style:parent-style-name="Text">
     <style:table-cell-properties style:vertical-align="middle"/>
     <style:paragraph-properties fo:text-align="start"/>
   </style:style>
