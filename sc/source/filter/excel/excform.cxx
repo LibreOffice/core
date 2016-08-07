@@ -18,7 +18,6 @@
  */
 
 #include "excform.hxx"
-#include <osl/endian.h>
 
 #include "formulacell.hxx"
 #include "document.hxx"
