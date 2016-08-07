@@ -88,7 +88,7 @@ protected:
     OUString     aName;
     SbxDataType eType;
     SbiSymPool* pIn;                // parent pool
-    SbiSymPool* pPool;              // pool for sub-elements
+    std::unique_ptr<SbiSymPool> pPool; // pool for sub-elements
     short      nLen;                // string length for STRING*n
     short      nDims;
     sal_uInt16     nId;

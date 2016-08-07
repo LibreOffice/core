@@ -43,7 +43,6 @@ SbxAppData::~SbxAppData()
 {
     SolarMutexGuard g;
 
-    delete pBasicFormater;
     m_Factories.clear();
 }
 
