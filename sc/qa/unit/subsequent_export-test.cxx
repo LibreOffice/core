@@ -110,6 +110,8 @@ public:
 
     void testCustomColumnWidthExportXLSX();
     void testXfDefaultValuesXLSX();
+    void testColumnWidthResaveXLSX();
+    void testColumnWidthExportFromODStoXLSX();
     void testOutlineExportXLSX();
     void testHiddenEmptyRowsXLSX();
     void testLandscapeOrientationXLSX();
@@ -190,6 +192,8 @@ public:
 
     CPPUNIT_TEST(testCustomColumnWidthExportXLSX);
     CPPUNIT_TEST(testXfDefaultValuesXLSX);
+    CPPUNIT_TEST(testColumnWidthResaveXLSX);
+    CPPUNIT_TEST(testColumnWidthExportFromODStoXLSX);
     CPPUNIT_TEST(testOutlineExportXLSX);
     CPPUNIT_TEST(testHiddenEmptyRowsXLSX);
     CPPUNIT_TEST(testLandscapeOrientationXLSX);
@@ -475,7 +479,7 @@ void ScExportTest::testCustomColumnWidthExportXLSX()
     xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheet);
 
-    // First column, has everything default
+    // First column, has everything default (width in Calc: 1280)
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]", "hidden", "false");
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]", "outlineLevel", "0");
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]", "customWidth", "false");
@@ -483,7 +487,7 @@ void ScExportTest::testCustomColumnWidthExportXLSX()
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]", "min", "1");
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]", "max", "1");
 
-    // Second column, has custom width
+    // Second column, has custom width (width in Calc: 1225)
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]", "hidden", "false");
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]", "outlineLevel", "0");
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]", "customWidth", "true");
@@ -491,7 +495,7 @@ void ScExportTest::testCustomColumnWidthExportXLSX()
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]", "min", "2");
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]", "max", "2");
 
-    // Third column, has everything default
+    // Third column, has everything default (width in Calc: 1280)
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]", "hidden", "false");
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]", "outlineLevel", "0");
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]", "customWidth", "false");
@@ -579,6 +583,108 @@ void ScExportTest::testXfDefaultValuesXLSX()
 
     // We expected that exactly 15 cellXfs:xf Nodes will be produced
     assertXPath(pSheet, "/x:styleSheet/x:cellXfs/x:xf", 14);
+}
+
+void ScExportTest::testColumnWidthResaveXLSX()
+{
+    // tdf#91475 FILESAVE: Column width is not preserved in XLSX / after round trip.
+    // Test if after resave .xlsx file, columns width is identical with with previous one
+    ScDocShellRef xShell = loadDoc("different-column-width-excel2010.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    // In original Excel document the width is "24"
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]", "width", "24");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[1]", "customWidth", "true");
+
+    // In original Excel document the width is "12"
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]", "width", "12");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[2]", "customWidth", "true");
+
+    // In original Excel document the width is "6"
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]", "width", "6");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[3]", "customWidth", "true");
+
+    // In original Excel document the width is "1"
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]", "width", "1");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[4]", "customWidth", "true");
+
+    // In original Excel document the width is "250"
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]", "width", "250");
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]", "customWidth", "true");
+
+    // The last column [6] is not existing in Excel sheet, and it is added only by LibreOffice.
+    // This column width is default and it is depended on operating system.
+
+    assertXPath(pSheet, "/x:worksheet/x:cols/x:col", 6);
+}
+
+
+void ScExportTest::testColumnWidthExportFromODStoXLSX()
+{
+    // tdf#91475 FILESAVE: Column width is not preserved in XLSX / after round trip.
+    // Test if after export .ods to .xlsx format, displayed columns width
+    // is identical with with previous (.ods) one
+
+    ScDocShellRef xShell = loadDoc("different-column-width.", FORMAT_ODS);
+
+    CPPUNIT_ASSERT( xShell.Is() );
+
+    ScDocument& rOdsDoc = xShell->GetDocument();
+
+    // Col 1, Tab 0 (Column width 2.00 in)
+    sal_uInt16 nExpectedColumn0Width = rOdsDoc.GetColWidth(static_cast<SCCOL>(0), static_cast<SCTAB>(0), false);
+    CPPUNIT_ASSERT_EQUAL( static_cast< sal_uInt16 >( 2880 ), nExpectedColumn0Width );
+
+    // Col 2, Tab 0 (Column width 1.00 in)
+    sal_uInt16 nExpectedColumn1Width = rOdsDoc.GetColWidth(static_cast<SCCOL>(1), static_cast<SCTAB>(0), false);
+    CPPUNIT_ASSERT_EQUAL( static_cast< sal_uInt16 >( 1440 ), nExpectedColumn1Width );
+
+    // Col 3, Tab 0 (Column width 0.50 in)
+    sal_uInt16 nExpectedColumn2Width = rOdsDoc.GetColWidth(static_cast<SCCOL>(2), static_cast<SCTAB>(0), false);
+    CPPUNIT_ASSERT_EQUAL( static_cast< sal_uInt16 >( 720 ), nExpectedColumn2Width );
+
+    // Col 4, Tab 0 (Column width 0.25 in)
+    sal_uInt16 nExpectedColumn3Width = rOdsDoc.GetColWidth(static_cast<SCCOL>(3), static_cast<SCTAB>(0), false);
+    CPPUNIT_ASSERT_EQUAL( static_cast< sal_uInt16 >( 360 ), nExpectedColumn3Width  );
+
+    // Col 5, Tab 0 (Column width 13.57 in)
+    sal_uInt16 nExpectedColumn4Width = rOdsDoc.GetColWidth(static_cast<SCCOL>(4), static_cast<SCTAB>(0), false);
+    CPPUNIT_ASSERT_EQUAL( static_cast< sal_uInt16 >( 19539 ), nExpectedColumn4Width );
+
+    // Export to .xlsx and compare column width with the .ods
+    // We expect that column width from .ods will be exactly the same as imported from .xlsx
+
+    ScDocShellRef xXlsxDocSh = saveAndReload( xShell.get(), FORMAT_XLSX );
+    CPPUNIT_ASSERT( xXlsxDocSh.Is() );
+
+    ScDocument& rDoc = xXlsxDocSh->GetDocument();
+
+    // Col 1, Tab 0
+    sal_uInt16 nCalcWidth;
+    nCalcWidth = rDoc.GetColWidth(static_cast<SCCOL>(0), static_cast<SCTAB>(0), false);
+    CPPUNIT_ASSERT_EQUAL( nExpectedColumn0Width, nCalcWidth );
+
+    // Col 2, Tab 0
+    nCalcWidth = rDoc.GetColWidth(static_cast<SCCOL>(1), static_cast<SCTAB>(0), false);
+    CPPUNIT_ASSERT_EQUAL( nExpectedColumn1Width, nCalcWidth );
+
+    // Col 3, Tab 0
+    nCalcWidth = rDoc.GetColWidth(static_cast<SCCOL>(2), static_cast<SCTAB>(0), false);
+    CPPUNIT_ASSERT_EQUAL( nExpectedColumn2Width, nCalcWidth );
+
+    // Col 4, Tab 0
+    nCalcWidth = rDoc.GetColWidth(static_cast<SCCOL>(3), static_cast<SCTAB>(0), false);
+    CPPUNIT_ASSERT_EQUAL( nExpectedColumn3Width, nCalcWidth );
+
+    // Col 5, Tab 0
+    nCalcWidth = rDoc.GetColWidth(static_cast<SCCOL>(4), static_cast<SCTAB>(0), false);
+    CPPUNIT_ASSERT_EQUAL( nExpectedColumn4Width, nCalcWidth );
+
+    xXlsxDocSh->DoClose();
 }
 
 void ScExportTest::testOutlineExportXLSX()
