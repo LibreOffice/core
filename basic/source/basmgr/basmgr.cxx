@@ -107,21 +107,18 @@ struct BasicManagerImpl
     LibraryContainerInfo    maContainerInfo;
 
     // Save stream data
-    SvMemoryStream*  mpManagerStream;
     std::vector<std::unique_ptr<SvMemoryStream>> maLibStreams;
 
     std::vector<std::unique_ptr<BasicLibInfo>> aLibs;
     OUString         aBasicLibPath;
 
     BasicManagerImpl()
-        : mpManagerStream( nullptr )
     {}
     ~BasicManagerImpl();
 };
 
 BasicManagerImpl::~BasicManagerImpl()
 {
-    delete mpManagerStream;
 }
 
 
@@ -524,8 +521,8 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
         // #91626 Save all stream data to save it unmodified if basic isn't modified
         // in an 6.0+ office. So also the old basic dialogs can be saved.
         tools::SvRef<SotStorageStream> xManagerStream = rStorage.OpenSotStream( szManagerStream, eStreamReadMode );
-        mpImpl->mpManagerStream = new SvMemoryStream();
-        xManagerStream->ReadStream( *mpImpl->mpManagerStream );
+        SvMemoryStream aManagerStream;
+        xManagerStream->ReadStream( aManagerStream );
 
         tools::SvRef<SotStorage> xBasicStorage = rStorage.OpenSotStorage( szBasicStorage, eStorageReadMode, false );
         if( xBasicStorage.Is() && !xBasicStorage->GetError() )
