@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ -->
+
+<!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Update" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <desc>Contains settings for the Updater</desc>
+  </info>
+  <component>
+    <group oor:name="Update">
+        <info>
+            <desc>All Settings for the Updater</desc>
+        </info>
+        <prop oor:name="Enabled" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+                <desc>Determines if the automatic Updater is enabled or disabled</desc>
+            </info>
+            <value>true</value>
+        </prop>
+        <prop oor:name="Mode" oor:type="xs:int" oor:nillable="false">
+            <info>
+                <desc>Selects if the the user should be asked about updates or nor</desc>
+            </info>
+            <value>Some Value</value>
+        </prop>
+        <prop oor:name="LastUpdateTime" oor:type="xs:int" oor:nillable="false">
+            <info>
+                <desc>The last time the update check ran</desc>
+            </info>
+            <value>-1</value>
+        </prop>
+        <prop oor:name="URL" oor:type="xs:string" oor:nillable="false">
+            <info>
+                <desc>The URL that is used for the update check</desc>
+            </info>
+            <value>https://update.libreoffice.org/</value>
+        </prop>
+        <prop oor:name="UpdateChannel" oor:type="xs:string" oor:nillable="false">
+            <info>
+                <desc>The update channel that is current use</desc>
+            </info>
+            <value>Release</value>
+        </prop>
+    </group>
+  </component>
+</oor:component-schema>
