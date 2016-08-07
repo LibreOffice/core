@@ -47,7 +47,10 @@ using namespace ::com::sun::star::frame;
 
 bool ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION filter, const OUString &rExt)
 {
-    bool bRet = true;
+    bool bRet = rExt == "ott" || rExt == "stw" || rExt == "oth" || rExt == "dot" || rExt == "dotx" || rExt == "otm"
+          || rExt == "ots" || rExt == "stc" || rExt == "xlt" || rExt == "xltm" || rExt == "xltx"
+          || rExt == "otp" || rExt == "sti" || rExt == "pot" || rExt == "potm" || rExt == "potx"
+          || rExt == "otg" || rExt == "std";
 
     if (filter == FILTER_APPLICATION::WRITER)
     {
