@@ -59,6 +59,7 @@
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
 #include <memory>
 #include <random>
+#include <o3tl/make_unique.hxx>
 
 using namespace comphelper;
 using namespace osl;
@@ -2720,8 +2721,7 @@ OUString implSetupWildcard( const OUString& rFileParam, SbiRTLData* pRTLData )
     static sal_Char cWild1 = '*';
     static sal_Char cWild2 = '?';
 
-    delete pRTLData->pWildCard;
-    pRTLData->pWildCard = nullptr;
+    pRTLData->pWildCard.reset();
     pRTLData->sFullNameToBeChecked.clear();
 
     OUString aFileParam = rFileParam;
@@ -2775,7 +2775,7 @@ OUString implSetupWildcard( const OUString& rFileParam, SbiRTLData* pRTLData )
     // invalid anyway because it was not accepted by OSL before
     if (aPureFileName != "*")
     {
-        pRTLData->pWildCard = new WildCard( aPureFileName );
+        pRTLData->pWildCard = o3tl::make_unique<WildCard>( aPureFileName );
     }
     return aPathStr;
 }
@@ -3012,12 +3012,11 @@ RTLFUNC(Dir)
 
                 // Read directory
                 bool bIncludeFolders = bool(nFlags & SbAttributes::DIRECTORY);
-                pRTLData->pDir = new Directory( aDirURL );
+                pRTLData->pDir = o3tl::make_unique<Directory>( aDirURL );
                 FileBase::RC nRet = pRTLData->pDir->open();
                 if( nRet != FileBase::E_None )
                 {
-                    delete pRTLData->pDir;
-                    pRTLData->pDir = nullptr;
+                    pRTLData->pDir.reset();
                     rPar.Get(0)->PutString( OUString() );
                     return;
                 }
@@ -3063,8 +3062,7 @@ RTLFUNC(Dir)
                         FileBase::RC nRet = pRTLData->pDir->getNextItem( aItem );
                         if( nRet != FileBase::E_None )
                         {
-                            delete pRTLData->pDir;
-                            pRTLData->pDir = nullptr;
+                            pRTLData->pDir.reset();
                             aPath.clear();
                             break;
                         }
