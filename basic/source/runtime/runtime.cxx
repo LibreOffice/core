@@ -264,17 +264,12 @@ SbiRuntime::pStep2 SbiRuntime::aStep2[] = {// all opcodes with two operands
 
 SbiRTLData::SbiRTLData()
 {
-    pDir        = nullptr;
     nDirFlags   = SbAttributes::NONE;
     nCurDirPos  = 0;
-    pWildCard   = nullptr;
 }
 
 SbiRTLData::~SbiRTLData()
 {
-    delete pDir;
-    pDir = nullptr;
-    delete pWildCard;
 }
 
 //                              SbiInstance

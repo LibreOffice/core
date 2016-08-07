@@ -107,12 +107,12 @@ class SbiRTLData
 {
 public:
 
-    ::osl::Directory* pDir;
+    std::unique_ptr<osl::Directory> pDir;
     SbAttributes nDirFlags;
     short   nCurDirPos;
 
     OUString sFullNameToBeChecked;
-    WildCard* pWildCard;
+    std::unique_ptr<WildCard> pWildCard;
 
     css::uno::Sequence< OUString > aDirSeq;
 

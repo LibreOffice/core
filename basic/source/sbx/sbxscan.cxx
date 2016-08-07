@@ -49,6 +49,8 @@
 #include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <o3tl/make_unique.hxx>
+
 
 void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep )
 {
@@ -812,8 +814,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
             {
                 if( rAppData.eBasicFormaterLangType != eLangType )
                 {
-                    delete rAppData.pBasicFormater;
-                    rAppData.pBasicFormater = nullptr;
+                    rAppData.pBasicFormater.reset();
                 }
             }
             rAppData.eBasicFormaterLangType = eLangType;
@@ -838,7 +839,8 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
                 OUString aFalseStrg = SbxValueFormatResId(STR_BASICKEY_FORMAT_FALSE).toString();
                 OUString aCurrencyFormatStrg = SbxValueFormatResId(STR_BASICKEY_FORMAT_CURRENCY).toString();
 
-                rAppData.pBasicFormater = new SbxBasicFormater( cComma,c1000,aOnStrg,aOffStrg,
+                rAppData.pBasicFormater = o3tl::make_unique<SbxBasicFormater>(
+                                                                cComma,c1000,aOnStrg,aOffStrg,
                                                                 aYesStrg,aNoStrg,aTrueStrg,aFalseStrg,
                                                                 aCurrencyStrg,aCurrencyFormatStrg );
             }
