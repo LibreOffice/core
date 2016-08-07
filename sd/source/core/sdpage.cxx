@@ -1355,9 +1355,6 @@ static void CalcAutoLayoutRectangles( SdPage& rPage,Rectangle* rRectangle ,const
             const int presobjsize = layoutChildren->getLength();
             for( int j=0; j< presobjsize ; j++)
             {
-                // TODO: rework sd to permit arbitrary number of presentation objects
-                OSL_ASSERT(count < MAX_PRESOBJS);
-
                 rtl::OUString nodename;
                 Reference<XNode> presobj = layoutChildren->item(j);
                 nodename=presobj->getNodeName();
@@ -1365,6 +1362,9 @@ static void CalcAutoLayoutRectangles( SdPage& rPage,Rectangle* rRectangle ,const
                 //check whether children is blank 'text-node' or 'presobj' node
                 if(nodename == "presobj")
                 {
+                    // TODO: rework sd to permit arbitrary number of presentation objects
+                    assert(count < MAX_PRESOBJS);
+
                     Reference<XNamedNodeMap> presObjAttributes = presobj->getAttributes();
 
                     Reference<XNode> presObjSizeHeight = presObjAttributes->getNamedItem("relative-height");
