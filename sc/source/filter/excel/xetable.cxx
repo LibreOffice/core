@@ -1667,17 +1667,28 @@ void XclExpColinfo::SaveXml( XclExpXmlStream& rStrm )
     if( nLastXclCol == static_cast< sal_uInt16 >( rStrm.GetRoot().GetMaxPos().Col() ) )
         ++nLastXclCol;
 
+    const double nExcelColumnWidth = mnScWidth  / static_cast< double >( sc::TwipsToHMM( GetCharWidth() ) );
+
+    // tdf#101363 In MS specification the output value is set with double precision after delimiter:
+    // =Truncate(({width in pixels} - 5)/{Maximum Digit Width} * 100 + 0.5)/100
+    // Explanation of magic numbers:
+    // 5 number - are 4 pixels of margin padding (two on each side), plus 1 pixel padding for the gridlines.
+    //            It is unknown if it should be applied during LibreOffice export
+    // 100 number - used to limit precision to 0.01 with formula =Truncate( {value}*100+0.5 ) / 100
+    // 0.5 number (0.005 to output value) - used to increase value before truncating,
+    //            to avoid situation when 2.997 will be truncated to 2.99 and not to 3.00
+    const double nTruncatedExcelColumnWidth = std::trunc( nExcelColumnWidth * 100.0 + 0.5 ) / 100.0;
     rStrm.GetCurrentStream()->singleElement( XML_col,
             // OOXTODO: XML_bestFit,
             XML_collapsed,      XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_COLINFO_COLLAPSED ) ),
             XML_customWidth,    XclXmlUtils::ToPsz( mbCustomWidth ),
             XML_hidden,         XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_COLINFO_HIDDEN ) ),
             XML_outlineLevel,   OString::number( mnOutlineLevel ).getStr(),
-            XML_max,            OString::number( (nLastXclCol + 1) ).getStr(),
-            XML_min,            OString::number( (mnFirstXclCol + 1) ).getStr(),
+            XML_max,            OString::number( nLastXclCol + 1 ).getStr(),
+            XML_min,            OString::number( mnFirstXclCol + 1 ).getStr(),
             // OOXTODO: XML_phonetic,
             XML_style,          lcl_GetStyleId( rStrm, maXFId.mnXFIndex ).getStr(),
-            XML_width,          OString::number( (double) (mnScWidth / (double)sc::TwipsToHMM( GetCharWidth() )) ).getStr(),
+            XML_width,          OString::number( nTruncatedExcelColumnWidth ).getStr(),
             FSEND );
 }
 
