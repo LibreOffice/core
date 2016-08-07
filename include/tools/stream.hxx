@@ -178,9 +178,6 @@ private:
     // Userdata
     long            m_nVersion;   // for external use
 
-    // helper methods
-    TOOLS_DLLPRIVATE void ImpInit();
-
                     SvStream ( const SvStream& rStream ) = delete;
     SvStream&       operator=( const SvStream& rStream ) = delete;
 
