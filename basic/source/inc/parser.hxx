@@ -80,6 +80,7 @@ public:
     SbxDataType   eDefTypes[N_DEF_TYPES];    // DEFxxx data types
 
     SbiParser( StarBASIC*, SbModule* );
+    ~SbiParser( );
     bool Parse();
     void SetCodeCompleting( bool b );
     bool IsCodeCompleting() const { return bCodeCompleting;}

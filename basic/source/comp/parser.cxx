@@ -150,6 +150,8 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
 
 }
 
+SbiParser::~SbiParser() { }
+
 // part of the runtime-library?
 SbiSymDef* SbiParser::CheckRTLForSym(const OUString& rSym, SbxDataType eType)
 {
