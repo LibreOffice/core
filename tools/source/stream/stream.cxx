@@ -309,45 +309,46 @@ void SvStream::SetSize(sal_uInt64 const nSize)
     m_nError = m_xLockBytes->SetSize( nSize );
 }
 
-void SvStream::ImpInit()
-{
-    m_nActPos           = 0;
-    m_nCompressMode     = SvStreamCompressFlags::NONE;
-    m_eStreamCharSet    = osl_getThreadTextEncoding();
-    m_nCryptMask        = 0;
-    m_isEof             = false;
+SvStream::SvStream() :
+     m_nActPos(0)
+
+   , m_pRWBuf(nullptr)
+   , m_pBufPos(nullptr)
+   , m_nBufSize(0)
+   , m_nBufActualLen(0)
+   , m_nBufActualPos(0)
+   , m_nBufFree(0)
+   , m_isIoRead(false)
+   , m_isIoWrite(false)
+
+   , m_isDirty(false)
+   , m_isConsistent(true)
+   , m_isEof(false)
+
+   , m_nCompressMode(SvStreamCompressFlags::NONE)
 #if defined UNX
-    m_eLineDelimiter    = LINEEND_LF;   // UNIX-Format
+   , m_eLineDelimiter(LINEEND_LF)   // UNIX-Format
 #else
-    m_eLineDelimiter    = LINEEND_CRLF; // DOS-Format
+   , m_eLineDelimiter(LINEEND_CRLF) // DOS-Format
 #endif
+   , m_eStreamCharSet(osl_getThreadTextEncoding())
 
+   , m_nCryptMask(0)
+
+   , m_nVersion(0)
+
+   , m_nBufFilePos(0)
+   , m_eStreamMode(StreamMode::NONE)
+   , m_isWritable(true)
+
+{
     SetEndian( SvStreamEndian::LITTLE );
-
-    m_nBufFilePos       = 0;
-    m_nBufActualPos     = 0;
-    m_isDirty           = false;
-    m_isConsistent      = true;
-    m_isWritable        = true;
-
-    m_pRWBuf            = nullptr;
-    m_pBufPos           = nullptr;
-    m_nBufSize          = 0;
-    m_nBufActualLen     = 0;
-    m_isIoRead          = false;
-    m_isIoWrite         = false;
-    m_nBufFree          = 0;
-
-    m_eStreamMode       = StreamMode::NONE;
-
-    m_nVersion          = 0;
 
     ClearError();
 }
 
-SvStream::SvStream( SvLockBytes* pLockBytesP )
+SvStream::SvStream( SvLockBytes* pLockBytesP ) : SvStream()
 {
-    ImpInit();
     m_xLockBytes = pLockBytesP;
     if( pLockBytesP ) {
         const SvStream* pStrm = pLockBytesP->GetStream();
@@ -356,11 +357,6 @@ SvStream::SvStream( SvLockBytes* pLockBytesP )
         }
     }
     SetBufferSize( 256 );
-}
-
-SvStream::SvStream()
-{
-    ImpInit();
 }
 
 SvStream::~SvStream()
