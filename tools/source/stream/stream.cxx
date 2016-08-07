@@ -309,7 +309,7 @@ void SvStream::SetSize(sal_uInt64 const nSize)
     m_nError = m_xLockBytes->SetSize( nSize );
 }
 
-void SvStream::ImpInit()
+SvStream::SvStream()
 {
     m_nActPos           = 0;
     m_nCompressMode     = SvStreamCompressFlags::NONE;
@@ -345,9 +345,8 @@ void SvStream::ImpInit()
     ClearError();
 }
 
-SvStream::SvStream( SvLockBytes* pLockBytesP )
+SvStream::SvStream( SvLockBytes* pLockBytesP ) : SvStream()
 {
-    ImpInit();
     m_xLockBytes = pLockBytesP;
     if( pLockBytesP ) {
         const SvStream* pStrm = pLockBytesP->GetStream();
@@ -356,11 +355,6 @@ SvStream::SvStream( SvLockBytes* pLockBytesP )
         }
     }
     SetBufferSize( 256 );
-}
-
-SvStream::SvStream()
-{
-    ImpInit();
 }
 
 SvStream::~SvStream()
