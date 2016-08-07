@@ -20,6 +20,7 @@
 #include <algorithm>
 
 #include <comphelper/classids.hxx>
+#include <comphelper/embeddedobjectcontainer.hxx>
 
 #include <vcl/svapp.hxx>
 #include <editeng/outliner.hxx>
@@ -54,11 +55,11 @@
 #include <rtl/ustring.hxx>
 #include <basegfx/tools/tools.hxx>
 
-#include "../ui/inc/DrawDocShell.hxx"
 #include "Outliner.hxx"
 #include "app.hrc"
 #include "createunopageimpl.hxx"
 #include "drawdoc.hxx"
+#include "sdmod.hxx"
 #include "sdpage.hxx"
 #include "pglink.hxx"
 #include "sdresid.hxx"

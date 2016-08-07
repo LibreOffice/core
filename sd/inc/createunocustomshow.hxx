@@ -20,8 +20,9 @@
 #ifndef INCLUDED_SD_INC_CREATEUNOCUSTOMSHOW_HXX
 #define INCLUDED_SD_INC_CREATEUNOCUSTOMSHOW_HXX
 
-#include <sal/config.h>
+#include <com/sun/star/uno/Reference.hxx>
 
+namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
 class SdCustomShow;
 
 css::uno::Reference<css::uno::XInterface> createUnoCustomShow(
