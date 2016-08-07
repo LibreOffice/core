@@ -45,6 +45,7 @@
 #include "runtime.hxx"
 
 #include <rtl/strbuf.hxx>
+#include <rtl/character.hxx>
 #include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -57,10 +58,6 @@ void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep )
     rcThousandSep = rData.getNumThousandSep()[0];
 }
 
-inline bool ImpIsDigit( sal_Unicode c )
-{
-    return '0' <= c && c <= '9';
-}
 
 /** NOTE: slightly differs from strchr() in that it does not consider the
     terminating NULL character to be part of the string and returns bool
@@ -78,10 +75,6 @@ bool ImpStrChr( const sal_Unicode* p, sal_Unicode c )
     return false;
 }
 
-bool ImpIsAlNum( sal_Unicode c )
-{
-    return c < 128 && isalnum( static_cast<char>(c) );
-}
 
 // scanning a string according to BASIC-conventions
 // but exponent may also be a D, so data type is SbxDOUBLE
@@ -118,8 +111,8 @@ SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
         p++;
         bMinus = true;
     }
-    if( ImpIsDigit( *p ) || ((*p == cNonIntntlDecSep || *p == cIntntlDecSep ||
-                    (cIntntlDecSep && *p == cIntntlGrpSep)) && ImpIsDigit( *(p+1) )))
+    if( rtl::isAsciiDigit( *p ) || ((*p == cNonIntntlDecSep || *p == cIntntlDecSep ||
+                    (cIntntlDecSep && *p == cIntntlGrpSep)) && rtl::isAsciiDigit( *(p+1) )))
     {
         short exp = 0;
         short decsep = 0;
@@ -229,7 +222,7 @@ SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
                 bRes = false;
         }
         const sal_Unicode* const pCmp = aCmp.getStr();
-        while( ImpIsAlNum( *p ) )    /* XXX: really munge all alnum also when error? */
+        while( rtl::isAsciiAlphanumeric( *p ) )    /* XXX: really munge all alnum also when error? */
         {
             sal_Unicode ch = *p;
             if( ImpStrChr( pCmp, ch ) )
