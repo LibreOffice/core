@@ -1302,7 +1302,6 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, PropertyMapP
     }
 }
 
-
 void DomainMapper_Impl::appendTextContent(
     const uno::Reference< text::XTextContent >& xContent,
     const uno::Sequence< beans::PropertyValue >& xPropertyValues
@@ -1313,7 +1312,7 @@ void DomainMapper_Impl::appendTextContent(
         return;
     uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert( m_aTextAppendStack.top().xTextAppend, uno::UNO_QUERY );
     OSL_ENSURE( xTextAppendAndConvert.is(), "trying to append a text content without XTextAppendAndConvert" );
-    if(xTextAppendAndConvert.is() && ! getTableManager( ).isIgnore())
+    if (xTextAppendAndConvert.is() && hasTableManager() && !getTableManager().isIgnore())
     {
         try
         {
@@ -1330,8 +1329,6 @@ void DomainMapper_Impl::appendTextContent(
         }
     }
 }
-
-
 
 void DomainMapper_Impl::appendOLE( const OUString& rStreamName, OLEHandlerPtr pOLEHandler )
 {
