@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintwin.hxx"
 #include "global.hxx"
 #include "overlayobject.hxx"
 #include "scmod.hxx"
@@ -40,55 +39,30 @@
 #define HINT_INDENT     3
 #define HINT_MARGIN     4
 
-ScHintWindow::ScHintWindow( vcl::Window* pParent, const OUString& rTit, const OUString& rMsg ) :
-    Window( pParent, 0 ),
-    m_aTitle( rTit ),
-    m_aMessage( convertLineEnd(rMsg, LINEEND_CR) )
-{
-    m_aTextFont = GetFont();
-    m_aTextFont.SetTransparent( true );
-    m_aTextFont.SetWeight( WEIGHT_NORMAL );
-    m_aHeadFont = m_aTextFont;
-    m_aHeadFont.SetWeight( WEIGHT_BOLD );
-
-    SetFont( m_aHeadFont );
-    Size aHeadSize( GetTextWidth( m_aTitle ), GetTextHeight() );
-    SetFont( m_aTextFont );
-
-    Size aTextSize;
-    sal_Int32 nIndex = 0;
-    while ( nIndex != -1 )
-    {
-        OUString aLine = m_aMessage.getToken( 0, '\r', nIndex );
-        Size aLineSize( GetTextWidth( aLine ), GetTextHeight() );
-        m_nTextHeight = aLineSize.Height();
-        aTextSize.Height() += m_nTextHeight;
-        if ( aLineSize.Width() > aTextSize.Width() )
-            aTextSize.Width() = aLineSize.Width();
-    }
-    aTextSize.Width() += HINT_INDENT;
-
-    m_aTextStart = Point( HINT_MARGIN + HINT_INDENT,
-                        aHeadSize.Height() + HINT_MARGIN + HINT_LINESPACE );
-
-    Size aWinSize( std::max( aHeadSize.Width(), aTextSize.Width() ) + 2 * HINT_MARGIN + 1,
-                    aHeadSize.Height() + aTextSize.Height() + HINT_LINESPACE + 2 * HINT_MARGIN + 1 );
-    SetOutputSizePixel( aWinSize );
-}
-
 ScOverlayHint::ScOverlayHint(const OUString& rTit, const OUString& rMsg, const Color& rColor, const vcl::Font& rFont)
     : OverlayObject(rColor)
     , m_aTitle(rTit)
     , m_aMessage(convertLineEnd(rMsg, LINEEND_CR))
-    , m_rTextFont(rFont)
+    , m_aTextFont(rFont)
+    , m_aMapMode(MAP_PIXEL)
+    , m_nLeft(0)
+    , m_nTop(0)
 {
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlayObjectPrimitive2DSequence()
+drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequence(sal_Int32 nLeft, sal_Int32 nTop,
+                                                                                     const MapMode &rMapMode,
+                                                                                     basegfx::B2DRange &rRange) const
 {
+    OutputDevice* pDefaultDev = Application::GetDefaultDevice();
+    MapMode aOld = pDefaultDev->GetMapMode();
+    pDefaultDev->SetMapMode(rMapMode);
+
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    const Color& rColor = rStyleSettings.GetWindowTextColor();
-    vcl::Font aHeadFont = m_rTextFont;
+    const Color& rColor = rStyleSettings.GetLabelTextColor();
+    vcl::Font aTextFont = m_aTextFont;
+    aTextFont.SetFontSize(pDefaultDev->PixelToLogic(aTextFont.GetFontSize(), rMapMode));
+    vcl::Font aHeadFont = aTextFont;
     aHeadFont.SetWeight(WEIGHT_BOLD);
 
     // Create the text primitive for the title
@@ -96,16 +70,16 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlayObje
     drawinglayer::attribute::FontAttribute aFontAttr =
         drawinglayer::primitive2d::getFontAttributeFromVclFont(aFontSize, aHeadFont, false, false);
 
-    OutputDevice* pDefaultDev = Application::GetDefaultDevice();
-
     FontMetric aFontMetric = pDefaultDev->GetFontMetric(aHeadFont);
-    double nTextOffsetY = HINT_MARGIN + aFontMetric.GetAscent();
-    Point aTextPos(HINT_MARGIN, nTextOffsetY);
-    basegfx::B2DRange aRange(0, 0, HINT_MARGIN, nTextOffsetY);
+    Size aHintMargin = pDefaultDev->PixelToLogic(Size(HINT_MARGIN, HINT_MARGIN), rMapMode);
+    Size aIndent = pDefaultDev->PixelToLogic(Size(HINT_INDENT, HINT_LINESPACE), rMapMode);
+    double nTextOffsetY = nTop + aHintMargin.Height() + aFontMetric.GetAscent();
+    Point aTextPos(nLeft + aHintMargin.Width() , nTextOffsetY);
+    rRange = basegfx::B2DRange(nLeft, nTop, nLeft + aHintMargin.Width(), nTop + aHintMargin.Height());
 
     basegfx::B2DHomMatrix aTextMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
                                             aFontSize.getX(), aFontSize.getY(),
-                                            double(aTextPos.X()), double(aTextPos.Y())));
+                                            aTextPos.X(), aTextPos.Y()));
 
     drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pTitle =
         new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
@@ -115,21 +89,24 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlayObje
 
     const drawinglayer::primitive2d::Primitive2DReference aTitle(pTitle);
 
-    Point m_aTextStart(HINT_MARGIN + HINT_INDENT, HINT_MARGIN + aFontMetric.GetLineHeight() + HINT_LINESPACE);
+    Point aTextStart(nLeft + aHintMargin.Width() + aIndent.Width(),
+                     nTop + aHintMargin.Height() + aFontMetric.GetLineHeight() + aIndent.Height());
 
     drawinglayer::geometry::ViewInformation2D aDummy;
-    aRange.expand(pTitle->getB2DRange(aDummy));
+    rRange.expand(pTitle->getB2DRange(aDummy));
 
     drawinglayer::primitive2d::Primitive2DContainer aSeq { aTitle };
 
-    aFontMetric = pDefaultDev->GetFontMetric(m_rTextFont);
+    aFontMetric = pDefaultDev->GetFontMetric(aTextFont);
+    pDefaultDev->SetMapMode(aOld);
 
     nTextOffsetY = aFontMetric.GetAscent();
+    sal_Int32 nLineHeight = aFontMetric.GetLineHeight();
 
-    aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(aFontSize, m_rTextFont, false, false);
+    aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(aFontSize, aTextFont, false, false);
 
     sal_Int32 nIndex = 0;
-    Point aLineStart = m_aTextStart;
+    Point aLineStart = aTextStart;
     while (nIndex != -1)
     {
         OUString aLine = m_aMessage.getToken( 0, '\r', nIndex );
@@ -145,17 +122,18 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlayObje
                                                 std::vector<double>(), aFontAttr, css::lang::Locale(),
                                                 rColor.getBColor());
 
-        aRange.expand(pMessage->getB2DRange(aDummy));
+        rRange.expand(pMessage->getB2DRange(aDummy));
 
         const drawinglayer::primitive2d::Primitive2DReference aMessage(pMessage);
         aSeq.push_back(aMessage);
 
-        aLineStart.Y() += aFontMetric.GetLineHeight();
+        aLineStart.Y() += nLineHeight;
     }
 
-    aRange.grow(HINT_MARGIN);
+    rRange.expand(basegfx::B2DTuple(rRange.getMaxX() + aHintMargin.Width(),
+                                    rRange.getMaxY() + aHintMargin.Height()));
 
-    basegfx::B2DPolygon aPoly(basegfx::tools::createPolygonFromRect(aRange));
+    basegfx::B2DPolygon aPoly(basegfx::tools::createPolygonFromRect(rRange));
 
     const drawinglayer::primitive2d::Primitive2DReference aBg(
         new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPoly), getBaseColor().getBColor()));
@@ -165,30 +143,30 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlayObje
         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
             aPoly, aBorderColor));
 
-
     aSeq.insert(aSeq.begin(), aBorder);
     aSeq.insert(aSeq.begin(), aBg);
 
     return aSeq;
 }
 
-void ScHintWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /* rRect */)
+drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlayObjectPrimitive2DSequence()
 {
-    // Create the processor and process the primitives
-    const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
-    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(
-        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
+    basegfx::B2DRange aRange;
+    return createOverlaySequence(m_nLeft, m_nTop, m_aMapMode, aRange);
+}
 
-    const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
-    Color aCommentColor = rColorCfg.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor;
+Size ScOverlayHint::GetSizePixel() const
+{
+    basegfx::B2DRange aRange;
+    createOverlaySequence(0, 0, MAP_PIXEL, aRange);
+    return Size(aRange.getWidth(), aRange.getHeight());
+}
 
-    ScOverlayHint* pHint = new ScOverlayHint(m_aTitle, m_aMessage, aCommentColor, GetFont());
-
-    drawinglayer::primitive2d::Primitive2DContainer aSeq = pHint->createOverlayObjectPrimitive2DSequence();
-
-    delete pHint;
-
-    xProcessor->process(aSeq);
+void ScOverlayHint::SetPos(const Point& rPos, const MapMode& rMode)
+{
+    m_nLeft = rPos.X();
+    m_nTop = rPos.Y();
+    m_aMapMode = rMode;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

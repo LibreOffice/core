@@ -35,7 +35,6 @@
 #include "tabsplit.hxx"
 #include "colrowba.hxx"
 #include "tabcont.hxx"
-#include "hintwin.hxx"
 #include "sc.hrc"
 #include "pagedata.hxx"
 #include "hiranges.hxx"
@@ -176,8 +175,7 @@ ScTabView::~ScTabView()
 
     delete pSelEngine;
 
-    // Delete this before the grid windows, since it's a child window of one of them.
-    mpInputHintWindow.disposeAndClear();
+    mxInputHintOO.reset();
     for (i=0; i<4; i++)
         pGridWin[i].disposeAndClear();
 

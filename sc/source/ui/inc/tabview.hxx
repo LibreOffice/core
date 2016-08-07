@@ -48,7 +48,6 @@ class Splitter;
 class ScTabSplitter;
 class SdrView;
 class SdrObject;
-class ScHintWindow;
 class ScPageBreakData;
 class SdrHdlList;
 class TabBar;
@@ -116,7 +115,7 @@ private:
     VclPtr<ScCornerButton>      aTopButton;
     VclPtr<ScrollBarBox>        aScrollBarBox;
 
-    VclPtr<ScHintWindow>        mpInputHintWindow; // popup window for data validation
+    std::unique_ptr<sdr::overlay::OverlayObjectList> mxInputHintOO; // help hint for data validation
 
     ScPageBreakData*    pPageBreakData;
     std::vector<ScHighlightEntry>   maHighlightRanges;

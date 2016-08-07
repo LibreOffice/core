@@ -44,7 +44,6 @@
 #include "AccessibilityHints.hxx"
 #include "appoptio.hxx"
 #include "attrib.hxx"
-#include "hintwin.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
@@ -204,7 +203,7 @@ ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* 
     aCornerButton( VclPtr<ScCornerButton>::Create( pFrameWin, &aViewData, false ) ),
     aTopButton( VclPtr<ScCornerButton>::Create( pFrameWin, &aViewData, true ) ),
     aScrollBarBox( VclPtr<ScrollBarBox>::Create( pFrameWin, WB_SIZEABLE ) ),
-    mpInputHintWindow( nullptr ),
+    mxInputHintOO(),
     pPageBreakData( nullptr ),
     pBrushDocument( nullptr ),
     pDrawBrushSet( nullptr ),

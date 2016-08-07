@@ -24,6 +24,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/editview.hxx>
 #include <svx/fmshell.hxx>
+#include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/svdoole2.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -34,6 +35,7 @@
 #include "docsh.hxx"
 #include "gridwin.hxx"
 #include "olinewin.hxx"
+#include "overlayobject.hxx"
 #include "colrowba.hxx"
 #include "tabcont.hxx"
 #include "scmod.hxx"
@@ -44,7 +46,6 @@
 #include "inputhdl.hxx"
 #include "inputwin.hxx"
 #include "validat.hxx"
-#include "hintwin.hxx"
 #include "inputopt.hxx"
 #include "rfindlst.hxx"
 #include "hiranges.hxx"
@@ -646,6 +647,8 @@ void ScTabView::TestHintWindow()
 {
     //  show input help window and list drop-down button for validity
 
+    mxInputHintOO.reset();
+
     bool bListValButton = false;
     ScAddress aListValPos;
 
@@ -660,12 +663,9 @@ void ScTabView::TestHintWindow()
         const ScValidationData* pData = pDoc->GetValidationEntry( pItem->GetValue() );
         OSL_ENSURE(pData,"ValidationData not found");
         OUString aTitle, aMessage;
+
         if ( pData && pData->GetInput( aTitle, aMessage ) && !aMessage.isEmpty() )
         {
-            //! check if on the same spot !!!!
-
-            mpInputHintWindow.disposeAndClear();
-
             ScSplitPos eWhich = aViewData.GetActivePart();
             ScGridWindow* pWin = pGridWin[eWhich];
             SCCOL nCol = aViewData.GetCurX();
@@ -677,23 +677,30 @@ void ScTabView::TestHintWindow()
                  nRow >= aViewData.GetPosY(WhichV(eWhich)) &&
                  aPos.X() < aWinSize.Width() && aPos.Y() < aWinSize.Height() )
             {
-                // create HintWindow, determines its size by itself
-                mpInputHintWindow.reset(VclPtr<ScHintWindow>::Create(pWin, aTitle, aMessage));
-                Size aHintWndSize = mpInputHintWindow->GetSizePixel();
-                long nCellSizeX = 0;
-                long nCellSizeY = 0;
-                aViewData.GetMergeSizePixel(nCol, nRow, nCellSizeX, nCellSizeY);
+                rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = pWin->getOverlayManager();
+                if (xOverlayManager.is())
+                {
+                    const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+                    Color aCommentColor = rColorCfg.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor;
+                    // create HintWindow, determines its size by itself
+                    ScOverlayHint* pOverlay = new ScOverlayHint(aTitle, aMessage, aCommentColor, pFrameWin->GetFont());
 
-                Point aHintPos = calcHintWindowPosition(
-                    aPos, Size(nCellSizeX,nCellSizeY), aWinSize, aHintWndSize);
+                    Size aHintWndSize = pOverlay->GetSizePixel();
+                    long nCellSizeX = 0;
+                    long nCellSizeY = 0;
+                    aViewData.GetMergeSizePixel(nCol, nRow, nCellSizeX, nCellSizeY);
 
-                mpInputHintWindow->SetPosPixel( aHintPos );
-                mpInputHintWindow->ToTop();
-                mpInputHintWindow->Show();
+                    Point aHintPos = calcHintWindowPosition(
+                        aPos, Size(nCellSizeX,nCellSizeY), aWinSize, aHintWndSize);
+
+                    pOverlay->SetPos(pWin->PixelToLogic(aHintPos, pWin->GetDrawMapMode()), pWin->GetDrawMapMode());
+
+                    xOverlayManager->add(*pOverlay);
+                    mxInputHintOO.reset(new sdr::overlay::OverlayObjectList);
+                    mxInputHintOO->append(*pOverlay);
+                }
             }
         }
-        else
-            mpInputHintWindow.disposeAndClear();
 
         // list drop-down button
         if ( pData && pData->HasSelectionList() )
@@ -702,8 +709,6 @@ void ScTabView::TestHintWindow()
             bListValButton = true;
         }
     }
-    else
-        mpInputHintWindow.disposeAndClear();
 
     for (VclPtr<ScGridWindow> & pWin : pGridWin)
         if ( pWin && pWin->IsVisible() )
@@ -712,12 +717,12 @@ void ScTabView::TestHintWindow()
 
 bool ScTabView::HasHintWindow() const
 {
-    return mpInputHintWindow.get() != nullptr;
+    return mxInputHintOO.get() != nullptr;
 }
 
 void ScTabView::RemoveHintWindow()
 {
-    mpInputHintWindow.disposeAndClear();
+    mxInputHintOO.reset();
 }
 
 // find window that should not be over the cursor
