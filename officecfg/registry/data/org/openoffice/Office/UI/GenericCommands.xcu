@@ -1963,7 +1963,10 @@
       </node>
       <node oor:name=".uno:GrafAttrCrop" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Crop Image...</value>
+          <value xml:lang="en-US">Image Crop...</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Crop</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1971,10 +1974,10 @@
       </node>
       <node oor:name=".uno:Crop" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Crop Image</value>
+          <value xml:lang="en-US">Interactive Crop Image</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Crop</value>
+          <value xml:lang="en-US">Interactive Crop</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
