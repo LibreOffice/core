@@ -59,11 +59,6 @@ published interface XStringRepresentation
                         ) raises( com::sun::star::uno::Exception );
 };
 
-service StringRepresentation : XStringRepresentation
-{
-    create([in]com::sun::star::script::XTypeConverter TypeConverter)raises( com::sun::star::lang::IllegalArgumentException );
-    createConstant([in]com::sun::star::script::XTypeConverter TypeConverter,[in] string Constant,[in] sequence<string> Values)raises( com::sun::star::lang::IllegalArgumentException );
-};
 //=============================================================================
 
 }; }; }; };

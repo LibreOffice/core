@@ -1,0 +1,59 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+
+#ifndef __ooo_vba_powerpoint_MsoAnimateByLevel_idl__
+#define __ooo_vba_powerpoint_MsoAnimateByLevel_idl__
+
+module ooo { module vba { module powerpoint {
+    constants MsoAnimateByLevel {
+        const long msoAnimateChartAllAtOnce = 7;
+        const long msoAnimateChartByCategory = 8;
+        const long msoAnimateChartByCategoryElements = 9;
+        const long msoAnimateChartBySeries = 10;
+        const long msoAnimateChartBySeriesElements = 11;
+        const long msoAnimateDiagramAllAtOnce = 12;
+        const long msoAnimateDiagramBreadthByLevel = 16;
+        const long msoAnimateDiagramBreadthByNode = 15;
+        const long msoAnimateDiagramClockwise = 17;
+        const long msoAnimateDiagramClockwiseIn = 18;
+        const long msoAnimateDiagramClockwiseOut = 19;
+        const long msoAnimateDiagramCounterClockwise = 20;
+        const long msoAnimateDiagramCounterClockwiseIn = 21;
+        const long msoAnimateDiagramCounterClockwiseOut = 22;
+        const long msoAnimateDiagramDepthByBranch = 14;
+        const long msoAnimateDiagramDepthByNode = 13;
+        const long msoAnimateDiagramDown = 26;
+        const long msoAnimateDiagramInByRing = 23;
+        const long msoAnimateDiagramOutByRing = 24;
+        const long msoAnimateDiagramUp = 25;
+        const long msoAnimateLevelMixed = -1;
+        const long msoAnimateLevelNone = 0;
+        const long msoAnimateTextByAllLevels = 1;
+        const long msoAnimateTextByFifthLevel = 6;
+        const long msoAnimateTextByFirstLevel = 2;
+        const long msoAnimateTextByFourthLevel = 5;
+        const long msoAnimateTextBySecondLevel = 3;
+        const long msoAnimateTextByThirdLevel = 4;
+    };
+}; }; };
+
+#endif

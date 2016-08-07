@@ -23,10 +23,18 @@
 #ifndef INCLUDED_DMAPPER_PROPERTYIDS_HXX
 #define INCLUDED_DMAPPER_PROPERTYIDS_HXX
 
+#include <hash_map>
+#include <boost/shared_ptr.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
+
 namespace rtl{ class OUString;}
 
 namespace writerfilter {
 namespace dmapper{
+
+using namespace ::com::sun::star;
+
 enum PropertyIds
     {
         PROP_ID_START = 1
@@ -285,16 +293,54 @@ enum PropertyIds
         ,PROP_WRITING_MODE
     };
 struct PropertyNameSupplier_Impl;
+
+struct PropertyIdsHash
+{
+    size_t operator()(const PropertyIds a) const { return a; }
+};
+
 class PropertyNameSupplier
 {
     PropertyNameSupplier_Impl* m_pImpl;
-public:
     PropertyNameSupplier();
+
+public:
     ~PropertyNameSupplier();
     const rtl::OUString& GetName( PropertyIds eId ) const;
+    PropertyIds GetId(const ::rtl::OUString & rString) const;
 
     static PropertyNameSupplier& GetPropertyNameSupplier();
 };
+
+class PropertySequence
+{
+    typedef ::std::hash_map<PropertyIds, sal_Int32, PropertyIdsHash> Map_t;
+    Map_t m_indexMap;
+    uno::Sequence<beans::PropertyValue>m_sequence;
+    PropertyNameSupplier & m_rPropNameSupplier;
+
+    int getOrCreateIndex(PropertyIds aId);
+
+public:
+    typedef boost::shared_ptr<PropertySequence> Pointer_t;
+
+    PropertySequence();
+    PropertySequence(const uno::Sequence<beans::PropertyValue> & rSeq);
+    virtual ~PropertySequence();
+
+    uno::Any get(PropertyIds aId);
+
+    void set(PropertyIds aId, const uno::Any & rValue);
+    void set(PropertyIds aId, sal_uInt32 nValue);
+    void set(PropertyIds aId, sal_Int32 nValue);
+    void set(PropertyIds aId, sal_uInt16 nValue);
+    void set(PropertyIds aId, sal_Int16 nValue);
+
+    uno::Sequence<beans::PropertyValue> & getSequence();
+
+    ::std::string toString() const;
+};
+
 } //namespace dmapper
 } // namespace writerfilter
 #endif

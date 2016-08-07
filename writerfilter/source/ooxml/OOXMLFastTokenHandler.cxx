@@ -27,6 +27,10 @@
 #include "OOXMLFastTokenHandler.hxx"
 #include "gperffasttoken.hxx"
 
+#ifdef DEBUG_TOKEN
+#include "ooxmlLoggers.hxx"
+#endif
+
 namespace writerfilter {
 namespace ooxml
 {
@@ -53,10 +57,10 @@ OOXMLFastTokenHandler::OOXMLFastTokenHandler
         nResult = pToken->nToken;
 
 #ifdef DEBUG_TOKEN
-    clog << "getToken: "
-         << OUStringToOString(Identifier, RTL_TEXTENCODING_ASCII_US).getStr()
-         << ", " << nResult
-         << endl;
+    debug_logger->startElement(__FUNCTION__);
+    debug_logger->attribute("identifier", Identifier);
+    debug_logger->attribute("result", nResult);
+    debug_logger->endElement(__FUNCTION__);
 #endif
 
     return nResult;
@@ -114,11 +118,13 @@ css::uno::Sequence< ::sal_Int8 > SAL_CALL OOXMLFastTokenHandler::getUTF8Identifi
         nResult = pToken->nToken;
 
 #ifdef DEBUG_TOKEN
-    clog << "getTokenFromUTF8: "
-         << string(reinterpret_cast<const char *>
-                   (Identifier.getConstArray()), Identifier.getLength())
-         << ", " << nResult
-         << (pToken == NULL ? ", failed" : "") << endl;
+    debug_logger->startElement(__FUNCTION__);
+    debug_logger->attribute
+        ("utf8", string(reinterpret_cast<const char *>
+                        (Identifier.getConstArray()),
+                        Identifier.getLength()));
+    debug_logger->attribute("result", nResult);
+    debug_logger->endElement(__FUNCTION__);
 #endif
 
     return nResult;

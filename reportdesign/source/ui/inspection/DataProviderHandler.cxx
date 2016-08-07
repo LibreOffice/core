@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptui.hxx"
 #include "DataProviderHandler.hxx"
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/namedvaluecollection.hxx>

@@ -1,0 +1,82 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+
+
+#ifndef __com_sun_star_lang_SearchOptions_idl__
+#define __com_sun_star_lang_SearchOptions_idl__
+
+
+#include <com/sun/star/lang/Locale.idl>
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/util/SearchAlgorithms.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module util {
+
+//=============================================================================
+
+published  struct SearchOptions  {
+    //-------------------------------------------------------------------------
+    /** search type */
+    SearchAlgorithms    algorithmType;
+
+    /** some flags - can be mixed
+
+        @see <type>SearchFlags</type>
+    */
+    long            searchFlag;
+
+    /** The text or pattern to be searched. */
+    string          searchString;
+
+    /** The replacement text
+        (is for optional replacing - SearchOption is only the data container for it) */
+    string          replaceString;
+
+    /** The locale for case insensitive search. */
+    ::com::sun::star::lang::Locale  Locale;
+
+    /** This many characters can be different (as a replacement) between
+        the found word and the search pattern in a "Weighted Levenshtein
+        Distance" search. */
+    long            changedChars;
+
+    /** This many characters can be missing in the found word in a
+        "Weighted Levenshtein Distance" search. */
+    long            deletedChars;
+
+    /** This many characters can be additional in the found word in a
+        "Weighted Levenshtein Distance" search. */
+    long            insertedChars;
+
+    /** Flags for the transliteration. Same meaning as the enum of
+        <type scope="com::sun::star::i18n">TransliterationModules</type>
+    */
+    long            transliterateFlags;
+};
+
+//=============================================================================
+}; }; }; };
+
+#endif
+

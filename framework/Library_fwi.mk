@@ -25,9 +25,13 @@ $(eval $(call gb_Library_Library,fwi))
 
 $(eval $(call gb_Library_add_package_headers,fwi,framework_inc))
 
-$(eval $(call gb_Library_set_defs,fwi,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,fwi,\
     -DFWI_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_api,fwi,\
+    udkapi \
+    offapi \
 ))
 
 $(eval $(call gb_Library_set_include,fwi,\
@@ -37,7 +41,6 @@ $(eval $(call gb_Library_set_include,fwi,\
     -I$(WORKDIR)/inc/framework/ \
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/framework \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,fwi,\

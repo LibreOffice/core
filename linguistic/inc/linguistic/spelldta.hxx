@@ -32,6 +32,7 @@
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
 #include <cppuhelper/implbase2.hxx>
+#include <linguistic/lngdllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace linguistic2 {
@@ -117,8 +118,9 @@ public:
     // non-interface specific functions
     void    SetWordLanguage(const ::rtl::OUString &rWord, sal_Int16 nLang);
     void    SetFailureType(sal_Int16 nTypeP);
-    void    SetAlternatives(
-                const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlt );
+    void    SetAlternatives( const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlt );
+    static com::sun::star::uno::Reference < com::sun::star::linguistic2::XSpellAlternatives > LNG_DLLPUBLIC CreateSpellAlternatives(
+        const ::rtl::OUString &rWord, sal_Int16 nLang, sal_Int16 nTypeP, const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlt );
 };
 
 

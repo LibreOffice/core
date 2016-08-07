@@ -35,11 +35,14 @@ $(eval $(call gb_Library_set_include,for,\
 	-I$(SRCDIR)/formula/inc/pch \
 	-I$(SRCDIR)/formula/source/core/inc \
 	-I$(OUTDIR)/inc \
-	-I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,for,\
-	$$(DEFS) \
+$(eval $(call gb_Library_add_api,for, \
+        udkapi \
+	offapi \
+))
+
+$(eval $(call gb_Library_add_defs,for,\
 	-DFORMULA_DLLIMPLEMENTATION \
 ))
 

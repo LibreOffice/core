@@ -21,7 +21,7 @@
 
 
 
-$(eval $(call gb_JunitTest_JunitTest,framework_complex))
+$(eval $(call gb_JunitTest_JunitTest,framework_complex,SRCDIR))
 
 $(eval $(call gb_JunitTest_set_defs,framework_complex,\
     $$(DEFS) \

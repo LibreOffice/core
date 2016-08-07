@@ -34,12 +34,15 @@ $(eval $(call gb_Library_set_include,ootk,\
     -I$(SRCDIR)/toolkit/inc \
     -I$(SRCDIR)/toolkit/inc/pch \
     -I$(SRCDIR)/toolkit/source \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,ootk,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,ootk,\
     -DTOOLKIT_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_api,ootk,\
+    udkapi \
+    offapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,ootk,\
@@ -152,8 +155,9 @@ $(eval $(call gb_Library_add_exception_objects,ootk,\
 ))
 
 ifeq ($(GUIBASE),aqua)
-$(eval $(call gb_Library_set_cxxflags,ootk,\
-    $$(CXXFLAGS) $(gb_OBJCXXFLAGS)))
+$(eval $(call gb_Library_add_cxxflags,ootk,\
+    $(gb_OBJCXXFLAGS) \
+))
 endif
 
 ifeq ($(OS),LINUX)

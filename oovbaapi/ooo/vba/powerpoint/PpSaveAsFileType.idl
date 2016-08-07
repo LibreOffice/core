@@ -1,0 +1,53 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+
+#ifndef __ooo_vba_powerpoint_PpSaveAsFileType_idl__
+#define __ooo_vba_powerpoint_PpSaveAsFileType_idl__
+
+module ooo { module vba { module powerpoint {
+    constants PpSaveAsFileType {
+        const long ppSaveAsAddIn = 8;
+        const long ppSaveAsBMP = 19;
+        const long ppSaveAsDefault = 11;
+        const long ppSaveAsEMF = 23;
+        const long ppSaveAsGIF = 16;
+        const long ppSaveAsHTML = 12;
+        const long ppSaveAsHTMLDual = 14;
+        const long ppSaveAsHTMLv3 = 13;
+        const long ppSaveAsJPG = 17;
+        const long ppSaveAsMetaFile = 15;
+        const long ppSaveAsPNG = 18;
+        const long ppSaveAsPowerPoint3 = 4;
+        const long ppSaveAsPowerPoint4 = 3;
+        const long ppSaveAsPowerPoint4FarEast = 10;
+        const long ppSaveAsPowerPoint7 = 2;
+        const long ppSaveAsPresentation = 1;
+        const long ppSaveAsPresForReview = 22;
+        const long ppSaveAsRTF = 6;
+        const long ppSaveAsShow = 7;
+        const long ppSaveAsTemplate = 5;
+        const long ppSaveAsTIF = 21;
+        const long ppSaveAsWebArchive = 20;
+    };
+}; }; };
+
+#endif

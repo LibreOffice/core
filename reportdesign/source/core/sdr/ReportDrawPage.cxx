@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-
+#include "precompiled_reportdesign.hxx"
 #include "ReportDrawPage.hxx"
 #include "RptObject.hxx"
 #include "RptModel.hxx"

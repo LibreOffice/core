@@ -40,7 +40,7 @@ namespace basegfx
         @derive Use this class to implement Points or Vectors
         which are based on two sal_Int32 values
     */
-    class B2ITuple
+    class BASEGFX_DLLPUBLIC B2ITuple
     {
     protected:
         sal_Int32                                       mnX;

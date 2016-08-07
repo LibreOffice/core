@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptui.hxx"
 #include "AddField.hxx"
 #include "UITools.hxx"
 #include <svx/dbaexchange.hxx>

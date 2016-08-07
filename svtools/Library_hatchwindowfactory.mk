@@ -32,8 +32,12 @@ $(eval $(call gb_Library_set_include,hatchwindowfactory,\
     -I$(SRCDIR)/svtools/inc/pch/ \
     -I$(OUTDIR)/inc/ \
     -I$(SRCDIR)/svtools/inc \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
+))
+
+$(eval $(call gb_Library_add_api,hatchwindowfactory,\
+    udkapi \
+    offapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,hatchwindowfactory,\

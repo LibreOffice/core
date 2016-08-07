@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
+#include "precompiled_dbui.hxx"
 
 #include "detailpages.hxx"
 #include "sqlmessage.hxx"
@@ -78,7 +78,7 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
-#include "AutoControls.hrc"
+#include "AutoControlsDef.hrc"
 
 //.........................................................................
 namespace dbaui

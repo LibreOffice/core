@@ -36,14 +36,11 @@
 #ifndef __com_sun_star_awt_Rectangle_idl__
 #include <com/sun/star/awt/Rectangle.idl>
 #endif
+#ifndef __com_sun_star_drawing_CanvasFeature_idl__
+#include <com/sun/star/drawing/CanvasFeature.idl>
+#endif
 
 module com { module sun { module star { module drawing {
-
-constants CanvasFeature
-{
-    const short None = 0;
-    const short SpriteCanvas = 1;
-};
 
 /** This interface is a collection of functions that are necessary to
     implement larger parts of the presenter screen as extension.  The

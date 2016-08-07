@@ -56,7 +56,7 @@ gb_Output_BELL := $(shell echo|awk 'BEGIN { printf "%c", 7 }' -)
 # - gb_COLOR is set
 # - we have a known term
 ifneq ($(strip $(gb_COLOR)),)
-ifneq ($(filter $(TERM),Eterm aterm gnome kterm linux rxvt rxvt-unicode screen xterm xterm-color),)
+ifneq ($(filter $(TERM),Eterm aterm gnome kterm linux rxvt rxvt-unicode screen xterm xterm-color xtermc),)
 
 gb_Output_COLOR_RESET := $(gb_Output_ESCAPE)[0m
 gb_Output_COLOR_RESETANDESCAPE := $(gb_Output_COLOR_RESET)$(gb_Output_ESCAPE)

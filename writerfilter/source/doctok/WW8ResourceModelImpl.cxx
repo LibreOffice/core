@@ -168,8 +168,6 @@ void WW8PropertiesReference::resolve(Properties & rHandler)
 {
     if( bool(mpPropSet))
     {
-        //mpPropSet->dump(clog);
-
         if (mpPropSet->isPap())
         {
             WW8IntValue aValue(mpPropSet->get_istd());
@@ -192,6 +190,7 @@ void WW8PropertiesReference::resolve(Properties & rHandler)
         }
         catch (ExceptionOutOfBounds e)
         {
+            (void) e;
         }
     }
 }

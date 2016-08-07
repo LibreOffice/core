@@ -24,6 +24,8 @@
 #ifndef INCLUDED_PDFI_PROCESSOR_HXX
 #define INCLUDED_PDFI_PROCESSOR_HXX
 
+#include "pdfihelper.hxx"
+
 #include <com/sun/star/util/XStringMapping.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
@@ -46,7 +48,6 @@
 #include <hash_map>
 
 #include "imagecontainer.hxx"
-#include "pdfihelper.hxx"
 #include "contentsink.hxx"
 #include "treevisitorfactory.hxx"
 #include "genericelements.hxx"

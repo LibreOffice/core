@@ -29,6 +29,7 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include <canvas/canvastoolsdllapi.h>
 
 namespace canvas
 {
@@ -69,7 +70,7 @@ namespace canvas
 
     /** Create a surface proxy for the given render module.
      */
-    ISurfaceProxyManagerSharedPtr createSurfaceProxyManager( const IRenderModuleSharedPtr& rRenderModule );
+    CANVASTOOLS_DLLPUBLIC ISurfaceProxyManagerSharedPtr createSurfaceProxyManager( const IRenderModuleSharedPtr& rRenderModule );
 }
 
 #endif /* INCLUDED_CANVAS_ISURFACEPROXYMANAGER_HXX */

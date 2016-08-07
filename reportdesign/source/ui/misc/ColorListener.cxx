@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptui.hxx"
 #include "ColorListener.hxx"
 #include <svl/smplhint.hxx>
 #ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC

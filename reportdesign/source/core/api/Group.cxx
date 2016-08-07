@@ -20,6 +20,7 @@
  *************************************************************/
 
 
+#include "precompiled_reportdesign.hxx"
 #include "Group.hxx"
 #include "Section.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>

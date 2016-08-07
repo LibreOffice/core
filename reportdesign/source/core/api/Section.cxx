@@ -20,6 +20,7 @@
  *************************************************************/
 
 
+#include "precompiled_reportdesign.hxx"
 #include "Section.hxx"
 #include <comphelper/enumhelper.hxx>
 #include <connectivity/dbtools.hxx>

@@ -31,6 +31,7 @@
 #include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XBezierPolyPolygon2D.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 
 namespace basegfx
@@ -42,7 +43,7 @@ namespace unotools
           ::com::sun::star::rendering::XBezierPolyPolygon2D,
           ::com::sun::star::lang::XServiceInfo > UnoPolyPolygonBase;
 
-    class UnoPolyPolygon : private cppu::BaseMutex,
+    class BASEGFX_DLLPUBLIC UnoPolyPolygon : private cppu::BaseMutex,
                            public UnoPolyPolygonBase
     {
     public:

@@ -23,12 +23,16 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,vclmain))
 
+$(eval $(call gb_StaticLibrary_add_api,vclmain,\
+	udkapi \
+	offapi \
+))
+
 $(eval $(call gb_StaticLibrary_set_include,vclmain,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/vcl/inc \
 	-I$(SRCDIR)/vcl/inc/pch \
 	-I$(SRCDIR)/solenv/inc \
-	-I$(OUTDIR)/inc/offuh \
 	-I$(OUTDIR)/inc/stl \
 	-I$(OUTDIR)/inc \
 ))
@@ -42,7 +46,7 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,vclmain,\
 # Instead of this evil linking of an object from $(OUTDIR)
 define StaticLibrary_salmain_hack
 $(call gb_StaticLibrary_get_target,vclmain) : $(OUTDIR)/lib/$(1)
-$$(eval $$(call gb_Deliver_add_deliverable,$(OUTDIR)/lib/$(1),$(call gb_CxxObject_get_target,vcl/source/salmain/salmain)))
+$$(eval $$(call gb_Deliver_add_deliverable,$(OUTDIR)/lib/$(1),$(call gb_CxxObject_get_target,vcl/source/salmain/salmain),$(1)))
 
 $(OUTDIR)/lib/$(1) : $(call gb_CxxObject_get_target,vcl/source/salmain/salmain)
 	$$(call gb_Deliver_deliver,$$<,$$@)
@@ -50,6 +54,7 @@ $(OUTDIR)/lib/$(1) : $(call gb_CxxObject_get_target,vcl/source/salmain/salmain)
 endef
 
 ifeq ($(OS),WNT)
+$(eval $(call gb_StaticLibrary_add_defs,vclmain,-D_DLL))
 $(eval $(call StaticLibrary_salmain_hack,salmain.obj))
 else
 $(eval $(call StaticLibrary_salmain_hack,salmain.o))

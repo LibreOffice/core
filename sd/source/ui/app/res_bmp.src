@@ -420,24 +420,25 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         {
             SfxStyleFamiliesRes1
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
-            FilterList  =
+            FilterList [ en-US ] =
             {
-                < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
-                < STR_STYLE_FILTER_USED ; SFXSTYLEBIT_USED ; > ;
-                < STR_STYLE_FILTER_USERDEF ; SFXSTYLEBIT_USERDEF ; > ;
+                < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
+                < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
+                < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
             };
         };
         SfxStyleFamilyItem RID_PRESENTATIONSTYLEFAMILY
         {
             SfxStyleFamiliesRes2
             StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
-            FilterList =
+            FilterList [ en-US ] =
             {
-                < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
+                < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
             };
         };
     };
     #define STYLE_IMAGE_LISTEF \
+        MaskColor = IMAGE_MASK_STDCOLOR; \
         IdList = \
         { \
             1; 2; \
@@ -447,13 +448,11 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
     ImageList 1 // == BMP_COLOR_NORMAL + 1
     {
         Prefix = "sf";
-        MaskColor = IMAGE_MASK_STDCOLOR;
         STYLE_IMAGE_LISTEF
     };
     ImageList 2 // == BMP_COLOR_HIGHCONTRAST + 1
     {
         Prefix = "sfh";
-        MaskColor = IMAGE_MASK_STDCOLOR_HC;
         STYLE_IMAGE_LISTEF
     };
     #undef STYLE_IMAGE_LISTEF

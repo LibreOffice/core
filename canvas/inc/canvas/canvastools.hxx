@@ -38,6 +38,7 @@
 #include <limits>
 #include <algorithm>
 
+#include <canvas/canvastoolsdllapi.h>
 
 namespace basegfx
 {
@@ -149,56 +150,56 @@ namespace canvas
 
         /** Create a RealSize2D with both coordinate values set to +infinity
          */
-        ::com::sun::star::geometry::RealSize2D createInfiniteSize2D();
+        CANVASTOOLS_DLLPUBLIC ::com::sun::star::geometry::RealSize2D createInfiniteSize2D();
 
 
         // View- and RenderState utilities
         // ===================================================================
 
-        ::com::sun::star::rendering::RenderState&
+        CANVASTOOLS_DLLPUBLIC ::com::sun::star::rendering::RenderState&
             initRenderState( ::com::sun::star::rendering::RenderState&                      renderState );
 
-        ::com::sun::star::rendering::ViewState&
+        CANVASTOOLS_DLLPUBLIC ::com::sun::star::rendering::ViewState&
             initViewState( ::com::sun::star::rendering::ViewState&                          viewState );
 
-        ::basegfx::B2DHomMatrix&
+        CANVASTOOLS_DLLPUBLIC ::basegfx::B2DHomMatrix&
             getViewStateTransform( ::basegfx::B2DHomMatrix&                                 transform,
                                    const ::com::sun::star::rendering::ViewState&            viewState );
 
-        ::com::sun::star::rendering::ViewState&
+        CANVASTOOLS_DLLPUBLIC ::com::sun::star::rendering::ViewState&
             setViewStateTransform( ::com::sun::star::rendering::ViewState&                  viewState,
                                    const ::basegfx::B2DHomMatrix&                           transform );
 
-        ::basegfx::B2DHomMatrix&
+        CANVASTOOLS_DLLPUBLIC ::basegfx::B2DHomMatrix&
             getRenderStateTransform( ::basegfx::B2DHomMatrix&                               transform,
                                      const ::com::sun::star::rendering::RenderState&        renderState );
 
-        ::com::sun::star::rendering::RenderState&
+        CANVASTOOLS_DLLPUBLIC ::com::sun::star::rendering::RenderState&
             setRenderStateTransform( ::com::sun::star::rendering::RenderState&              renderState,
                                      const ::basegfx::B2DHomMatrix&                         transform );
 
-        ::com::sun::star::rendering::ViewState&
+        CANVASTOOLS_DLLPUBLIC ::com::sun::star::rendering::ViewState&
             appendToViewState( ::com::sun::star::rendering::ViewState&                      viewState,
                                const ::basegfx::B2DHomMatrix&                               transform );
 
-        ::com::sun::star::rendering::RenderState&
+        CANVASTOOLS_DLLPUBLIC ::com::sun::star::rendering::RenderState&
             appendToRenderState( ::com::sun::star::rendering::RenderState&                  renderState,
                                  const ::basegfx::B2DHomMatrix&                             transform );
 
-        ::com::sun::star::rendering::ViewState&
+        CANVASTOOLS_DLLPUBLIC ::com::sun::star::rendering::ViewState&
             prependToViewState( ::com::sun::star::rendering::ViewState&                     viewState,
                                 const ::basegfx::B2DHomMatrix&                              transform );
 
-        ::com::sun::star::rendering::RenderState&
+        CANVASTOOLS_DLLPUBLIC ::com::sun::star::rendering::RenderState&
             prependToRenderState( ::com::sun::star::rendering::RenderState&                 renderState,
                                   const ::basegfx::B2DHomMatrix&                            transform );
 
-        ::basegfx::B2DHomMatrix&
+        CANVASTOOLS_DLLPUBLIC ::basegfx::B2DHomMatrix&
             mergeViewAndRenderTransform( ::basegfx::B2DHomMatrix&                           transform,
                                          const ::com::sun::star::rendering::ViewState&      viewState,
                                          const ::com::sun::star::rendering::RenderState&    renderState );
 
-        ::com::sun::star::rendering::ViewState&
+        CANVASTOOLS_DLLPUBLIC ::com::sun::star::rendering::ViewState&
             mergeViewAndRenderState( ::com::sun::star::rendering::ViewState&                resultViewState,
                                      const ::com::sun::star::rendering::ViewState&          viewState,
                                      const ::com::sun::star::rendering::RenderState&        renderState,
@@ -209,10 +210,10 @@ namespace canvas
         // Matrix utilities
         // ===================================================================
 
-        ::com::sun::star::geometry::AffineMatrix2D&
+        CANVASTOOLS_DLLPUBLIC ::com::sun::star::geometry::AffineMatrix2D&
             setIdentityAffineMatrix2D( ::com::sun::star::geometry::AffineMatrix2D&  matrix );
 
-        ::com::sun::star::geometry::Matrix2D&
+        CANVASTOOLS_DLLPUBLIC ::com::sun::star::geometry::Matrix2D&
             setIdentityMatrix2D( ::com::sun::star::geometry::Matrix2D&              matrix );
 
 
@@ -238,7 +239,7 @@ namespace canvas
 
             @return a reference to the resulting rectangle
          */
-        ::basegfx::B2DRange& calcTransformedRectBounds( ::basegfx::B2DRange&            o_Rect,
+        CANVASTOOLS_DLLPUBLIC ::basegfx::B2DRange& calcTransformedRectBounds( ::basegfx::B2DRange&          o_Rect,
                                                         const ::basegfx::B2DRange&      i_Rect,
                                                         const ::basegfx::B2DHomMatrix&  i_Transformation );
 
@@ -278,7 +279,7 @@ namespace canvas
 
             @see calcTransformedRectBounds()
         */
-        ::basegfx::B2DHomMatrix& calcRectToRectTransform( ::basegfx::B2DHomMatrix&          o_transform,
+        CANVASTOOLS_DLLPUBLIC ::basegfx::B2DHomMatrix& calcRectToRectTransform( ::basegfx::B2DHomMatrix&            o_transform,
                                                           const ::basegfx::B2DRange&        i_destRect,
                                                           const ::basegfx::B2DRange&        i_srcRect,
                                                           const ::basegfx::B2DHomMatrix&    i_transformation );
@@ -310,7 +311,7 @@ namespace canvas
             @see calcRectToRectTransform()
             @see calcTransformedRectBounds()
         */
-        ::basegfx::B2DHomMatrix& calcRectToOriginTransform( ::basegfx::B2DHomMatrix&        o_transform,
+        CANVASTOOLS_DLLPUBLIC ::basegfx::B2DHomMatrix& calcRectToOriginTransform( ::basegfx::B2DHomMatrix&      o_transform,
                                                             const ::basegfx::B2DRange&      i_srcRect,
                                                             const ::basegfx::B2DHomMatrix&  i_transformation );
 
@@ -334,7 +335,7 @@ namespace canvas
             @param rTransformation
             This transformation is applied to rTransformRect
          */
-        bool isInside( const ::basegfx::B2DRange&       rContainedRect,
+        CANVASTOOLS_DLLPUBLIC bool isInside( const ::basegfx::B2DRange&         rContainedRect,
                        const ::basegfx::B2DRange&       rTransformRect,
                        const ::basegfx::B2DHomMatrix&   rTransformation );
 
@@ -361,7 +362,7 @@ namespace canvas
 
             @return false, if the resulting scroll area is empty
          */
-        bool clipScrollArea( ::basegfx::B2IRange&                  io_rSourceArea,
+        CANVASTOOLS_DLLPUBLIC bool clipScrollArea( ::basegfx::B2IRange&                  io_rSourceArea,
                              ::basegfx::B2IPoint&                  io_rDestPoint,
                              ::std::vector< ::basegfx::B2IRange >& o_ClippedAreas,
                              const ::basegfx::B2IRange&            rBounds );
@@ -389,7 +390,7 @@ namespace canvas
             @return false, if the resulting blit is empty, i.e. fully
             clipped away.
          */
-        bool clipBlit( ::basegfx::B2IRange&       io_rSourceArea,
+        CANVASTOOLS_DLLPUBLIC bool clipBlit( ::basegfx::B2IRange&       io_rSourceArea,
                        ::basegfx::B2IPoint&       io_rDestPoint,
                        const ::basegfx::B2IRange& rSourceBounds,
                        const ::basegfx::B2IRange& rDestBounds );
@@ -409,7 +410,7 @@ namespace canvas
             @return the integer range, which is covered by the sprite
             given by rRange.
          */
-        ::basegfx::B2IRange spritePixelAreaFromB2DRange( const ::basegfx::B2DRange& rRange );
+        CANVASTOOLS_DLLPUBLIC ::basegfx::B2IRange spritePixelAreaFromB2DRange( const ::basegfx::B2DRange& rRange );
 
         /** Retrieve various internal properties of the actual canvas implementation.
 
@@ -429,7 +430,7 @@ namespace canvas
 
             @return A reference to the resulting sequence of parameters
         */
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& getDeviceInfo(
+        CANVASTOOLS_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& getDeviceInfo(
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >& i_rxCanvas,
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& o_rxParams );
 
@@ -438,21 +439,21 @@ namespace canvas
             Use this method for dead-simple bitmap implementations,
             that map all their formats to 8888 RGBA color.
          */
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XIntegerBitmapColorSpace> getStdColorSpace();
+        CANVASTOOLS_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XIntegerBitmapColorSpace> getStdColorSpace();
 
         /** Return a memory layout for a default RGBA integer format
 
             Use this method for dead-simple bitmap implementations,
             that map all their formats to 8888 RGBA color.
          */
-        ::com::sun::star::rendering::IntegerBitmapLayout getStdMemoryLayout(
+        CANVASTOOLS_DLLPUBLIC ::com::sun::star::rendering::IntegerBitmapLayout getStdMemoryLayout(
             const ::com::sun::star::geometry::IntegerSize2D& rBitmapSize );
 
         /// Convert standard 8888 RGBA color to vcl color
-        ::Color stdIntSequenceToColor( const ::com::sun::star::uno::Sequence<sal_Int8>& rColor );
+        CANVASTOOLS_DLLPUBLIC ::Color stdIntSequenceToColor( const ::com::sun::star::uno::Sequence<sal_Int8>& rColor );
 
         /// Convert standard 8888 RGBA color to vcl color
-        ::com::sun::star::uno::Sequence<sal_Int8> colorToStdIntSequence( const ::Color& rColor );
+        CANVASTOOLS_DLLPUBLIC ::com::sun::star::uno::Sequence<sal_Int8> colorToStdIntSequence( const ::Color& rColor );
 
         // Modelled closely after boost::numeric_cast, only that we
         // issue some trace output here and throw a RuntimeException
@@ -485,13 +486,13 @@ namespace canvas
             return static_cast<Target>(arg);
         }
 
-        ::com::sun::star::awt::Rectangle getAbsoluteWindowRect(
+        CANVASTOOLS_DLLPUBLIC ::com::sun::star::awt::Rectangle getAbsoluteWindowRect(
             const ::com::sun::star::awt::Rectangle&                                    rRect,
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2 >& xWin  );
 
         /** Retrieve for small bound marks around each corner of the given rectangle
          */
-        ::basegfx::B2DPolyPolygon getBoundMarksPolyPolygon( const ::basegfx::B2DRange& rRange );
+        CANVASTOOLS_DLLPUBLIC ::basegfx::B2DPolyPolygon getBoundMarksPolyPolygon( const ::basegfx::B2DRange& rRange );
 
         /** Calculate number of gradient "strips" to generate (takes
            into account device resolution)
@@ -500,7 +501,7 @@ namespace canvas
            Maximal integer difference between all color stops, needed
            for smooth gradient color differences
          */
-        int calcGradientStepCount( ::basegfx::B2DHomMatrix&                        rTotalTransform,
+        CANVASTOOLS_DLLPUBLIC int calcGradientStepCount( ::basegfx::B2DHomMatrix&                        rTotalTransform,
                                    const ::com::sun::star::rendering::ViewState&   viewState,
                                    const ::com::sun::star::rendering::RenderState& renderState,
                                    const ::com::sun::star::rendering::Texture&     texture,

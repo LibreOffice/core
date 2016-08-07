@@ -21,8 +21,10 @@
 
 
 #include "strings.hrc"
+#include "sdstring.hrc"
 #include "glob.hrc"
 #include "helpids.h"
+#include "sdstring.hrc"
 
 String STR_DRAW_TOOLBOX
 {
@@ -1264,4 +1266,50 @@ String STR_INSERT_PICTURE
 String STR_INSERT_MOVIE
 {
      Text [ en-US ] = "Insert Movie";
+};
+
+String RID_DRAW_VIEWER_TOOLBOX
+{
+    Text [ en-US ] = "Function Bar (viewing mode)" ;
+};
+
+String RID_GRAPHIC_VIEWER_TOOLBOX
+{
+    Text [ en-US ] = "Function Bar (viewing mode)" ;
+};
+
+String RID_DRAW_MEDIA_TOOLBOX
+{
+    Text [ en-US ] = "Media Playback" ;
+};
+
+String RID_DRAW_TABLE_TOOLBOX
+{
+    TEXT [ de ] = "Tabelle" ;
+    Text [ en-US ] = "Table" ;
+};
+
+String STR_SAR_NOT_FOUND
+{
+    Text [ en-US ] = "Search key not found.";
+};
+
+String STR_SAR_WRAP_FORWARD
+{
+    Text [ en-US ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
+};
+
+String STR_SAR_WRAP_BACKWARD
+{
+    Text [ en-US ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
+};
+
+String STR_SAR_WRAP_FORWARD_DRAW
+{
+    Text [ en-US ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
+};
+
+String STR_SAR_WRAP_BACKWARD_DRAW
+{
+    Text [ en-US ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
 };

@@ -49,7 +49,7 @@
 #include <svl/intitem.hxx>
 
 #include <sfx2/app.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #define _SVX_SRCHDLG_CXX
 #include "svx/srchdlg.hxx"

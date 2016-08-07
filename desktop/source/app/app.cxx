@@ -97,7 +97,7 @@
 #include <tools/testtoolloader.hxx>
 #include <tools/solar.h>
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #endif
 #include <vos/security.hxx>
 #include <vos/ref.hxx>

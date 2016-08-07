@@ -35,9 +35,6 @@
 #ifndef __com_sun_star_rendering_RenderState_idl__
 #include <com/sun/star/rendering/RenderState.idl>
 #endif
-#ifndef __com_sun_star_rendering_XBitmap_idl__
-#include <com/sun/star/rendering/XBitmap.idl>
-#endif
 #ifndef __com_sun_star_rendering_XCanvas_idl__
 #include <com/sun/star/rendering/XCanvas.idl>
 #endif
@@ -123,23 +120,6 @@ published interface XBitmapCanvas : XCanvas
         raises (com::sun::star::lang::IllegalArgumentException,
                 VolatileContentDestroyedException);
 
-};
-
-//=============================================================================
-
-// TODO: Multiple-inheritance interfaces
-
-/** This service provides the interfaces for a <type>XBitmapCanvas</type>
- */
-service BitmapCanvas
-{
-    /** Canvas interface, to issue rendering operations.
-     */
-    interface XBitmapCanvas;
-
-    /** Bitmap interface, to directly manipulate the pixel.
-     */
-    interface XBitmap;
 };
 
 }; }; }; };

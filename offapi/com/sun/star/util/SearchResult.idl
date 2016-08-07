@@ -1,0 +1,60 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+
+
+#ifndef __com_sun_star_lang_SearchResult_idl__
+#define __com_sun_star_lang_SearchResult_idl__
+
+
+//=============================================================================
+
+module com { module sun { module star { module util {
+
+//=============================================================================
+
+published  struct SearchResult  {
+    //-------------------------------------------------------------------------
+    /** Number of subexpressions,
+    if it is 0, then no match found; this value is 1 for ABSOLUTE and APPROXIMATE match.
+    The start and endOffset are always dependent on the search direction.
+    For example:
+    if you search "X" in the text "-X-" the offset are:
+        for forward:    start = 1, end = 2
+        for backward:   start = 2, end = 1
+    Forward, the startOffset is inclusive, the endOffset exclusive.
+    Backward, the startOffset is exclusive, the endOffset inclusive.
+
+    For regular expressions it can be greater than 1.
+    If the value is 1, startoffset[0] and endoffset[0] points to the matching sub string
+    if value is > 1, still startoffset[0] and endoffset[0] points to the matching substring for whole regular expression
+    startoffset[i] and endoffset[i] points to the matching substring of i th matching substring.
+    */
+    long subRegExpressions;
+    sequence<long> startOffset;     // inclusive
+    sequence<long> endOffset;       // exclusive
+};
+
+//=============================================================================
+}; }; }; };
+
+#endif
+

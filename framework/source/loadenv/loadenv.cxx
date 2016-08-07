@@ -93,7 +93,7 @@
 #include <vcl/syswin.hxx>
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #endif
 #include <unotools/moduleoptions.hxx>
 #include <svtools/sfxecode.hxx>

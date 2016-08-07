@@ -52,7 +52,7 @@
 #include <sfx2/viewsh.hxx>
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #endif
 #include <comphelper/property.hxx>
 #include <comphelper/composedprops.hxx>

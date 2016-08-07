@@ -26,6 +26,7 @@
 
 #include <sal/types.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -46,7 +47,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class B3DPolygon
+    class BASEGFX_DLLPUBLIC B3DPolygon
     {
     public:
         typedef o3tl::cow_wrapper< ImplB3DPolygon > ImplType;

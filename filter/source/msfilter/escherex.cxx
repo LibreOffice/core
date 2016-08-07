@@ -91,7 +91,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/extract.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/virdev.hxx>
 #include <rtl/crc.h>
 #include <vos/xception.hxx>

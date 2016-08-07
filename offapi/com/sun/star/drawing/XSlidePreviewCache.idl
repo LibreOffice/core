@@ -39,27 +39,11 @@
 #ifndef __com_sun_star_rendering_XCanvas_idl__
 #include <com/sun/star/rendering/XCanvas.idl>
 #endif
+#ifndef __com_sun_star_drawing_XSlidePreviewCacheListener_idl__
+#include <com/sun/star/drawing/XSlidePreviewCacheListener.idl>
+#endif
 
 module com { module sun { module star { module drawing {
-
-/** Listener for asynchronous preview creations.  Called when a slide
-    preview has been created that was previously requested via a call to
-    <method>XSlidePreviewCache::getSlidePreview()</method>.  The
-    implementor may then call <method>getSlidePreview()</method> a second
-    time to get the up-to-date version of the preview.
-*/
-published interface XSlidePreviewCacheListener
-{
-    /** Called by a <interface>XSlidePreviewCache</interface> object when a
-        preview has been created for the slide with the given index.
-        @param nSlideIndex
-            The index of the slide for which a new preview has been created.
-    */
-    void notifyPreviewCreation ([in] long nSlideIndex);
-};
-
-
-
 
 /** A cache of preview bitmaps for the slides of one Impress or Draw
     document in one size.  There may be more than one cache for one

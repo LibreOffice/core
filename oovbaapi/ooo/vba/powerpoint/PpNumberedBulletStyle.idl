@@ -1,0 +1,73 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+
+#ifndef __ooo_vba_powerpoint_PpNumberedBulletStyle_idl__
+#define __ooo_vba_powerpoint_PpNumberedBulletStyle_idl__
+
+module ooo { module vba { module powerpoint {
+    constants PpNumberedBulletStyle {
+        const long ppBulletAlphaLCParenBoth = 8;
+        const long ppBulletAlphaLCParenRight = 9;
+        const long ppBulletAlphaLCPeriod = 0;
+        const long ppBulletAlphaUCParenBoth = 10;
+        const long ppBulletAlphaUCParenRight = 11;
+        const long ppBulletAlphaUCPeriod = 1;
+        const long ppBulletArabicAbjadDash = 24;
+        const long ppBulletArabicAlphaDash = 23;
+        const long ppBulletArabicDBPeriod = 29;
+        const long ppBulletArabicDBPlain = 28;
+        const long ppBulletArabicParenBoth = 12;
+        const long ppBulletArabicParenRight = 2;
+        const long ppBulletArabicPeriod = 3;
+        const long ppBulletArabicPlain = 13;
+        const long ppBulletCircleNumDBPlain = 18;
+        const long ppBulletCircleNumWDBlackPlain = 20;
+        const long ppBulletCircleNumWDWhitePlain = 19;
+        const long ppBulletHebrewAlphaDash = 25;
+        const long ppBulletHindiAlpha1Period = 40;
+        const long ppBulletHindiAlphaPeriod = 36;
+        const long ppBulletHindiNumParenRight = 39;
+        const long ppBulletHindiNumPeriod = 37;
+        const long ppBulletKanjiKoreanPeriod = 27;
+        const long ppBulletKanjiKoreanPlain = 26;
+        const long ppBulletKanjiSimpChinDBPeriod = 38;
+        const long ppBulletRomanLCParenBoth = 4;
+        const long ppBulletRomanLCParenRight = 5;
+        const long ppBulletRomanLCPeriod = 6;
+        const long ppBulletRomanUCParenBoth = 14;
+        const long ppBulletRomanUCParenRight = 15;
+        const long ppBulletRomanUCPeriod = 7;
+        const long ppBulletSimpChinPeriod = 17;
+        const long ppBulletSimpChinPlain = 16;
+        const long ppBulletStyleMixed = -2;
+        const long ppBulletThaiAlphaParenBoth = 32;
+        const long ppBulletThaiAlphaParenRight = 31;
+        const long ppBulletThaiAlphaPeriod = 30;
+        const long ppBulletThaiNumParenBoth = 35;
+        const long ppBulletThaiNumParenRight = 34;
+        const long ppBulletThaiNumPeriod = 33;
+        const long ppBulletTradChinPeriod = 22;
+        const long ppBulletTradChinPlain = 21;
+    };
+}; }; };
+
+#endif

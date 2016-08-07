@@ -66,7 +66,7 @@
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #endif
 
 #include <com/sun/star/uno/Reference.h>

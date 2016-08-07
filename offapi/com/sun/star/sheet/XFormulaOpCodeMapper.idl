@@ -141,10 +141,6 @@ published interface XFormulaOpCodeMapper
 
 //=============================================================================
 
-service FormulaOpCodeMapper : XFormulaOpCodeMapper;
-
-//=============================================================================
-
 }; }; }; };
 
 #endif

@@ -27,11 +27,11 @@ $(eval $(call gb_Library_set_componentfile,unoxml,unoxml/source/service/unoxml))
 
 $(eval $(call gb_Library_set_include,unoxml,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,unoxml,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_api,unoxml,\
+    udkapi \
+    offapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,unoxml,\
@@ -42,9 +42,10 @@ $(eval $(call gb_Library_add_linked_libs,unoxml,\
     cppu \
     sal \
     stl \
-    xml2 \
     $(gb_STDLIBS) \
 ))
+
+$(call gb_Library_use_external,unoxml,libxml2)
 
 $(eval $(call gb_Library_add_exception_objects,unoxml,\
     unoxml/source/dom/node \
@@ -80,13 +81,6 @@ $(eval $(call gb_Library_add_exception_objects,unoxml,\
     unoxml/source/events/testlistener \
     unoxml/source/service/services \
 ))
-
-ifeq ($(SYSTEM_LIBXML),YES)
-$(eval $(call gb_Library_set_cxxflags,unoxml,\
-    $$(CXXFLAGS) \
-    -DSYSTEM_LIBXML $$(LIBXML_CFLAGS) \
-))
-endif
 
 # vim: set noet sw=4 ts=4:
 

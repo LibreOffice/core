@@ -26,10 +26,14 @@ $(eval $(call gb_Executable_Executable,bmpsum))
 $(eval $(call gb_Executable_set_include,bmpsum,\
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/ \
-    -I$(OUTDIR)/inc/offuh/ \
     -I$(SRCDIR)/svtools/inc/ \
     -I$(SRCDIR)/svtools/inc/pch/ \
     -I$(SRCDIR)/svtools/inc/svtools/ \
+))
+
+$(eval $(call gb_Executable_add_api,bmpsum,\
+    udkapi \
+    offapi \
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,bmpsum,\

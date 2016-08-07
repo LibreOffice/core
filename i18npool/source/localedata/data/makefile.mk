@@ -38,7 +38,7 @@ my_file = file:///
 my_file = file://
 .END
 
-my_components = sax.inbuild
+my_components = component/sax/source/expatwrap/expwrap.inbuild
 
 # --- Settings -----------------------------------------------------
 

@@ -76,10 +76,6 @@ published interface XFunction
     [attribute,bound] com::sun::star::beans::Optional<string> InitialFormula;
 };
 
-service Function : XFunction
-{
-    create();
-};
 //=============================================================================
 
 }; }; }; };

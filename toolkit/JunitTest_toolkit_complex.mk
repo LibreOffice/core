@@ -21,7 +21,7 @@
 
 
 
-$(eval $(call gb_JunitTest_JunitTest,toolkit_complex))
+$(eval $(call gb_JunitTest_JunitTest,toolkit_complex,SRCDIR))
 
 $(eval $(call gb_JunitTest_add_jars,toolkit_complex,\
     $(OUTDIR)/bin/OOoRunner.jar \

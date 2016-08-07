@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptui.hxx"
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/seleng.hxx>

@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-
+#include "precompiled_reportdesign.hxx"
 #include "core_resource.hxx"
 #include <tools/simplerm.hxx>
 

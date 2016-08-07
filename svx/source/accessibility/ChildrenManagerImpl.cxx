@@ -40,9 +40,7 @@
 #ifndef _SVX_ACCESSIBILITY_SVX_SHAPE_TYPES_HXX
 #include <svx/SvxShapeTypes.hxx>
 #endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/unohlp.hxx>
-#endif
+#include <toolkit/helper/vclunohelper.hxx>
 
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>

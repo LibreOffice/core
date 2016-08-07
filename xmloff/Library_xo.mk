@@ -35,12 +35,15 @@ $(eval $(call gb_Library_set_include,xo,\
     -I$(SRCDIR)/xmloff/inc \
     -I$(SRCDIR)/xmloff/source/inc \
     -I$(SRCDIR)/xmloff/inc/pch \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,xo,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,xo,\
     -DXMLOFF_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_api,xo,\
+    udkapi \
+    offapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,xo,\

@@ -707,7 +707,7 @@ elsif ( $platform =~ m/cygwin/ )
       $use_shl_versions = "TRUE";
       $wps = ';'; # Windows style path seperator
   if ( $MINGW eq "yes" )
-  {   # At the moment this implies the use of tcsh
+  {
       print "Setting Windows NT cygwin MinGW specific values... ";
       $FLIPCMD        = "slfl.pl";
       $PATH_SEPERATOR = ';';
@@ -1526,8 +1526,6 @@ print "done\n";
 # VI. Open the output file.
 #--------------------------
 #
-open( OUT, ">$outfile" ) ||
-   die "Cannot open $outfile: $!\n";
 
 # Create sh environment file
 open( OUT_SH, ">$outfile_sh" ) ||
@@ -1545,7 +1543,6 @@ if(defined($outfile_bat))
 #------------------------------------------
 #
 # Write file header.
-CreateFileHeader( *OUT, $UPD, $platform, "(t)csh", "#" );
 CreateFileHeader( *OUT_SH, $UPD, $platform, "sh/bash/ksh", "#" );
 CreateFileHeader( *OUT_BAT, $UPD, $platform, "4nt", "rem" ) if defined($outfile_bat);
 
@@ -2053,9 +2050,6 @@ ToFile( "ZIPDEP",        $perlpre."zipdep.pl",      "e" );
 #
 # Writing the aliases to file.
 ToFile( "Aliases.",          $empty,             "c" );
-ToFile( "Don't set aliases when bootstrapping", $empty, "c" );
-ToFile( 'if ( ! ${?_ISBOOTSTRAP_} ) then', $empty, "y");
-ToFile( "if test -z \"\$_ISBOOTSTRAP_\"; then", $empty, "z");
 
 ToFile( "alias mkout",       $mkout,             "a" );
 ToFile( "alias deliver",     $deliver,           "a" );
@@ -2069,20 +2063,6 @@ if ( $platform =~ m/os2/ )
 {  ToFile( "alias gunzip",       "gzip -d",         "a" );
 }
 
-ToFile( "endif",             $empty, "y");
-ToFile( "fi",                $empty, "z");
-
-# Check if the right dmake version is used. (W32 only)
-if ( $platform =~ m/cygwin/ ) {
-    ToFile( "Check if the right dmake version is used.", $empty, "c" );
-    # Invalidate build environment.
-    ToFile( "WORK_STAMP", "_invalid_", "e" );
-    # Don't test the dmake version if this file is sourced by bootstrap
-    ToFile( "bash -c 'if test -n \"\$_ISBOOTSTRAP_\" || (dmake.exe -V | grep -e \"-cygwin\\|OS := cygwin\" > /dev/null ); then true; else echo -e \"\\n\\nERROR: Not a cygwin build dmake or dmake missing, please check!\\n\\n\" ; sleep 5; false ; fi' || exit 1", $empty, "y");
-    # Restore valid environment if test was successful.
-    ToFile( "WORK_STAMP",        $WORK_STAMP,        "e" );
-    ToFile( "", $empty, "n");
-}
 
 # on Solaris, MacOSX and FreeBSD (and Windows) set GNUPATCH and GPERF
 if ($platform =~ m/solaris|darwin|freebsd|cygwin/)
@@ -2102,8 +2082,6 @@ ToFile( "SAL_ENABLE_FILE_LOCKING",	"1",	"e");
 #
 # Writing unset variables you might not need to file.
 # 
-print OUT $unsetvars;
-
 print OUT_SH "export $exportvars$newline";
 print OUT_SH "unset $unsetvarssh$newline";
 
@@ -2116,8 +2094,6 @@ if(defined($outfile_bat))
 # VIII. Closing output file.
 #---------------------------
 #
-close( OUT ) || print "Can't close $outfile: $!";
-
 close( OUT_SH ) || print "Can't close $outfile_sh: $!";
 
 if( defined($outfile_bat))
@@ -2178,8 +2154,7 @@ if ( $Warning ne "" )
 }
 
 print "*$newline* USAGE: $newline";
-print "* Source $outfile (in tcsh)";
-print " or $outfile.sh (in sh)";
+print "* Source $outfile.sh (in sh)";
 print "$newline";
 print "* in order to set up the build-environment variables.$newline";
 for ( $tmp = 0; $tmp < 2; $tmp++ ) 
@@ -2192,8 +2167,6 @@ $bootfile = "bootstrap";
 open( OUT, ">$bootfile" ) ||
 die "Cannot open $bootfile: $!\n";
 print OUT "#!/bin/sh\n";
-print OUT "_ISBOOTSTRAP_=TRUE ; export _ISBOOTSTRAP_ ; . $SRC_ROOT/$outfile.sh\n"; 
-print OUT "unset _ISBOOTSTRAP_; export _ISBOOTSTRAP_\n"; 
 if ( $MINGW eq "yes" )
 {  print OUT 'PATH="/usr/bin:$PATH" : export PATH'."\n"; }
 close( OUT ) || print "Can't close $bootfile: $!";
@@ -2296,8 +2269,6 @@ sub CreateFileHeader
 #                   a - alias
 #                   c - comment
 #                   n - newline
-#                   x - raw, write as is to OUT_BAT
-#                   y - raw, write as is to OUT
 #                   z - raw, write as is to OUT_SH
 # Return value:  void
 #---------------------------------------------------------
@@ -2339,7 +2310,6 @@ sub ToFile {
          }
 
          printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", $envvar);
-         print OUT "$setenv $_[ 0 ] \"$envvar\"$newline";  # to tcsh file
          print OUT_SH "$_[ 0 ]=\"$envvarbash\"$newline";   # to sh file
          $exportvars .= " $_[ 0 ]";                        # add to export list for sh file
 
@@ -2360,7 +2330,6 @@ sub ToFile {
    elsif ( $_[ 2 ] eq "a" ) 
    {  # Write an alias to file.
       print "The $_[ 0 ] is set to: $_[ 1 ]\n";    # to stdout
-      print OUT "$_[ 0 ] $_[ 1 ]$newline";         # to tcsh file
       print OUT_SH "$_[ 0 ]=$_[ 1 ]$newline";      # to sh file
       if(defined($outfile_bat)) # create the correct 4nt alias format
       {  my $aliastmp = $_[ 1 ];
@@ -2376,10 +2345,6 @@ sub ToFile {
       print "$comment$newline";
       print "$comment $_[ 0 ]$newline";
       print "$comment$newline";
-      print OUT "$newline";
-      print OUT "$comment$newline";
-      print OUT "$comment $_[ 0 ]$newline";
-      print OUT "$comment$newline";
       print OUT_SH "$newline";
       print OUT_SH "$comment$newline";
       print OUT_SH "$comment $_[ 0 ]$newline";
@@ -2393,14 +2358,8 @@ sub ToFile {
    }
    elsif ( $_[ 2 ] eq "n" )
    {  #Write a newline to a file
-      print OUT "$newline";
       print OUT_SH "$newline";
       print OUT_BAT "$newline" if defined($outfile_bat);
-   }
-   elsif ( $_[ 2 ] eq "y" )
-   {
-      #Write first argument as is, and nothing else
-      print OUT "$_[ 0 ]$newline";
    }
    elsif ( $_[ 2 ] eq "z" )
    {

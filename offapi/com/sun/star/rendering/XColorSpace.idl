@@ -35,46 +35,17 @@
 #ifndef __com_sun_star_rendering_ColorProfile_idl__
 #include <com/sun/star/rendering/ColorProfile.idl>
 #endif
+#ifndef __com_sun_star_rendering_ColorComponent_idl__
+#include <com/sun/star/rendering/ColorComponent.idl>
+#endif
+#ifndef __com_sun_star_rendering_RGBColor_idl__
+#include <com/sun/star/rendering/RGBColor.idl>
+#endif
+#ifndef __com_sun_star_rendering_ARGBColor_idl__
+#include <com/sun/star/rendering/ARGBColor.idl>
+#endif
 
 module com { module sun { module star { module rendering {
-
-/// Shorthand for the device-dependent color components, and easier to read
-published typedef double ColorComponent;
-published typedef sequence<ColorComponent> Color;
-
-//=============================================================================
-
-/// RGB color triplet
-published struct RGBColor
-{
-    /// Red component. Valid range is [0,1.0]
-    ColorComponent Red;
-    /// Green component. Valid range is [0,1.0]
-    ColorComponent Green;
-    /// Blue component. Valid range is [0,1.0]
-    ColorComponent Blue;
-};
-
-//=============================================================================
-
-/// ARGB color quad
-published struct ARGBColor
-{
-    /** Alpha component.<p>
-
-        Valid range is [0,1.0], with 0.0 denoting fully transparent,
-        and 1.0 fully opaque.
-     */
-    ColorComponent Alpha;
-    /// Red component. Valid range is [0,1.0]
-    ColorComponent Red;
-    /// Green component. Valid range is [0,1.0]
-    ColorComponent Green;
-    /// Blue component. Valid range is [0,1.0]
-    ColorComponent Blue;
-};
-
-//=============================================================================
 
 /** Information how to interpret certain color data.<p>
 

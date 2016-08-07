@@ -33,6 +33,7 @@
 #include <cppcanvas/text.hxx>
 #include <cppcanvas/sprite.hxx>
 
+#include <cppcanvas/cppcanvasdllapi.h>
 
 class Window;
 class Bitmap;
@@ -66,7 +67,7 @@ namespace cppcanvas
         only be drawn on exactly that canvas. You have to regenerate
         them for different canvases.
      */
-    class VCLFactory
+    class CPPCANVAS_DLLPUBLIC VCLFactory
     {
     public:
         static VCLFactory& getInstance();

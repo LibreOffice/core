@@ -19,13 +19,21 @@
 #  
 #**************************************************************
 
+# if no environment is set, try to find one, source it and re-exec
 ifeq ($(strip $(SOLARENV)),)
-$(error No environment set!)
-endif
+
+all:
+	if test -f ./source_soenv.sh; then . ./source_soenv.sh; fi && \
+	if test -z "$${SOLARENV}"; then echo "No environment set!"; exit 1; fi && \
+	$(MAKE)
+
+else # SOLARENV
 
 GBUILDDIR := $(SOLARENV)/gbuild
 include $(GBUILDDIR)/gbuild.mk
 
 $(foreach repo,$(gb_REPOS),$(eval $(call gb_Module_make_global_targets,$(wildcard $(repo)/Module_*.mk))))
+
+endif # SOLARENV
 
 # vim: set noet sw=4 ts=4:

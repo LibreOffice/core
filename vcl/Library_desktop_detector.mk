@@ -27,18 +27,21 @@ $(eval $(call gb_Library_Library,desktop_detector))
 
 $(eval $(call gb_Library_add_precompiled_header,desktop_detector,$(SRCDIR)/vcl/inc/pch/precompiled_vcl))
 
+$(eval $(call gb_Library_add_api,desktop_detector,\
+    udkapi \
+    offapi \
+))
+
 $(eval $(call gb_Library_set_include,desktop_detector,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/inc/pch \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc/stl \
     -I$(OUTDIR)/inc \
 ))
 
-$(eval $(call gb_Library_set_defs,desktop_detector,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,desktop_detector,\
     -DDESKTOP_DETECTOR_IMPLEMENTATION \
 ))
 
@@ -51,8 +54,6 @@ $(eval $(call gb_Library_add_linked_libs,desktop_detector,\
     basegfx \
     comphelper \
     cppuhelper \
-    icuuc \
-    icule \
     i18nisolang1 \
     i18npaper \
     i18nutil \
@@ -67,6 +68,11 @@ $(eval $(call gb_Library_add_linked_libs,desktop_detector,\
     ICE \
     $(gb_STDLIBS) \
 ))
+
+$(call gb_Library_use_externals,desktop_detector,\
+    icule \
+    icuuc \
+)
 
 $(eval $(call gb_Library_add_exception_objects,desktop_detector,\
     vcl/unx/generic/desktopdetect/desktopdetector \

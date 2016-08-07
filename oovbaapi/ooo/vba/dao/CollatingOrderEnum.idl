@@ -1,0 +1,56 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+
+#ifndef __ooo_vba_dao_CollatingOrderEnum_idl__
+#define __ooo_vba_dao_CollatingOrderEnum_idl__
+
+module ooo { module vba { module dao {
+    constants CollatingOrderEnum {
+        const long dbSortArabic = 1025;
+        const long dbSortChineseSimplified = 2052;
+        const long dbSortChineseTraditional = 1028;
+        const long dbSortCyrillic = 1049;
+        const long dbSortCzech = 1029;
+        const long dbSortDutch = 1043;
+        const long dbSortGeneral = 1033;
+        const long dbSortGreek = 1032;
+        const long dbSortHebrew = 1037;
+        const long dbSortHungarian = 1038;
+        const long dbSortIcelandic = 1039;
+        const long dbSortJapanese = 1041;
+        const long dbSortKorean = 1042;
+        const long dbSortNeutral = 1024;
+        const long dbSortNorwdan = 1030;
+        const long dbSortPDXIntl = 1033;
+        const long dbSortPDXNor = 1030;
+        const long dbSortPDXSwe = 1053;
+        const long dbSortPolish = 1045;
+        const long dbSortSlovenian = 1060;
+        const long dbSortSpanish = 1034;
+        const long dbSortSwedFin = 1053;
+        const long dbSortThai = 1054;
+        const long dbSortTurkish = 1055;
+        const long dbSortUndefined = -1;
+    };
+}; }; };
+
+#endif

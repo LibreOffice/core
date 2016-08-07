@@ -391,16 +391,44 @@ public:
 */
 Stream::Pointer_t WRITERFILTER_DLLPUBLIC createStreamHandler();
 
-    void WRITERFILTER_DLLPUBLIC analyzerIds();
-    Stream::Pointer_t WRITERFILTER_DLLPUBLIC createAnalyzer();
+void WRITERFILTER_DLLPUBLIC analyzerIds();
+Stream::Pointer_t WRITERFILTER_DLLPUBLIC createAnalyzer();
 
-    void WRITERFILTER_DLLPUBLIC logger(string prefix, string message);
+void WRITERFILTER_DLLPUBLIC logger(string prefix, string message);
 
-    void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<Properties>::Pointer_t props);
-    void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, sal_uInt32 n);
-    void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & /*o*/, const char * /*name*/,
-                                     const rtl::OUString & /*str*/);
-    void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<BinaryObj>::Pointer_t binary);
+void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<Properties>::Pointer_t props);
+void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, sal_uInt32 n);
+void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & /*o*/, const char * /*name*/,
+                                 const rtl::OUString & /*str*/);
+void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<BinaryObj>::Pointer_t binary);
+
+class Token_t
+{
+    sal_Int32 m_nId;
+#ifdef DEBUG
+    ::std::string m_string;
+#endif
+
+    void assign(sal_Int32 nId);
+
+public:
+    Token_t();
+    Token_t(sal_Int32 nId);
+    virtual ~Token_t();
+
+    sal_Int32 getId() const;
+    operator sal_Int32() const;
+    Token_t & operator = (sal_Int32 n);
+
+#ifdef DEBUG
+    ::std::string toString() const;
+#endif
+};
+
+struct TokenHash
+{
+    size_t operator()(const Token_t & rToken) const;
+};
 
 }
 

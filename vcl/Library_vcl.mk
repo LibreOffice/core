@@ -35,15 +35,18 @@ endif
 
 $(eval $(call gb_Library_add_package_headers,vcl,vcl_inc))
 
+$(eval $(call gb_Library_add_api,vcl,\
+    udkapi \
+    offapi \
+))
+
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/inc/pch \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc/stl \
     -I$(OUTDIR)/inc \
-    $$(FREETYPE_CFLAGS) \
 ))
 ifeq ($(GUIBASE),os2)
 $(eval $(call gb_Library_set_include,vcl,\
@@ -52,13 +55,13 @@ $(eval $(call gb_Library_set_include,vcl,\
 ))
 endif
 ifeq ($(GUIBASE),unx)
-$(eval $(call gb_Library_set_cxxflags,vcl,\
-    $$(CXXFLAGS) \
+$(eval $(call gb_Library_set_include,vcl,\
+    $$(INCLUDE) \
+     $$(FREETYPE_CFLAGS) \
 ))
 endif
 
-$(eval $(call gb_Library_set_defs,vcl,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vcl,\
     -DVCL_DLLIMPLEMENTATION \
     -DCUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,cui)\" \
     -DDLLPOSTFIX=$(subst $(or $(gb_Library_DLLEXT),$(gb_Library_PLAINEXT)),,$(gb_Library_OOOEXT)) \
@@ -72,8 +75,6 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     basegfx \
     comphelper \
     cppuhelper \
-    icuuc \
-    icule \
     i18nisolang1 \
     i18npaper \
     i18nutil \
@@ -85,6 +86,11 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     $(gb_STDLIBS) \
 ))
 
+$(call gb_Library_use_externals,vcl,\
+    icule \
+    icuuc \
+)
+
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_linked_libs,vcl,\
     freetype \
@@ -93,24 +99,18 @@ endif
 
 ifeq ($(GUIBASE),os2)
 # YD FIXME this is not working... needs ldflags hack...
-$(eval $(call gb_Library_add_linked_libs,vcl,\
-    ft2lib \
-))
-$(eval $(call gb_Library_set_ldflags,vcl,\
-    $$(LDFLAGS) \
+$(eval $(call gb_Library_add_libs,vcl,\
     -lft2lib \
 ))
 
 endif
 
 ifeq ($(GUIBASE),aqua)
-$(eval $(call gb_Library_set_cxxflags,vcl,\
-    $$(CXXFLAGS) \
-    $$(OBJCXXFLAGS) \
+$(eval $(call gb_Library_add_cxxflags,vcl,\
+    $(gb_OBJCXXFLAGS) \
 ))
 ifeq ($(ENABLE_CAIRO),TRUE)
-$(eval $(call gb_Library_set_defs,vcl,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vcl,\
     -DCAIRO \
 ))
 endif
@@ -184,22 +184,19 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 endif
 
 ifeq ($(GUIBASE),unx)
-$(eval $(call gb_Library_set_defs,vcl,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vcl,\
     -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
     -DSAL_DLLPOSTFIX=\"\" \
     -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
 ))
 ## handle fontconfig
 ifeq ($(ENABLE_FONTCONFIG),TRUE)
-$(eval $(call gb_Library_set_defs,vcl,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vcl,\
     -DENABLE_FONTCONFIG \
 ))
 ## handle CUPS
 ifeq ($(ENABLE_CUPS),TRUE)
-$(eval $(call gb_Library_set_defs,vcl,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vcl,\
     -DENABLE_CUPS \
 ))
 endif
@@ -454,8 +451,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 ## handle Graphite
 ifeq ($(ENABLE_GRAPHITE),TRUE)
 # add defines, graphite sources for all platforms
-$(eval $(call gb_Library_set_defs,vcl,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vcl,\
     -DENABLE_GRAPHITE \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
@@ -471,23 +467,9 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/glyphs/graphite_adaptors \
     vcl/source/glyphs/graphite_serverfont \
 ))
-ifeq ($(SYSTEM_GRAPHITE),YES)
-$(eval $(call gb_Library_set_ldflags,vcl,\
-    $$(LDFLAGS) \
-    $(GRAPHITE_LIBS) \
-))
-else
-$(eval $(call gb_Library_add_linked_static_libs,vcl,\
-    graphite \
-))
 endif
-endif
-# on windows link static graphite library
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_static_libs,vcl,\
-    graphite \
-))
-endif
+
+$(call gb_Library_use_external,vcl,graphite)
 endif
 
 ifeq ($(OS),LINUX)
@@ -500,13 +482,11 @@ endif
 
 ifeq ($(OS),SOLARIS)
 ifeq ($(CPUNAME)$(CPU),SPARCU)
-$(eval $(call gb_Library_set_ldflags,vcl,\
-    $$(LDFLAGS) \
+$(eval $(call gb_Library_add_ldflags,vcl,\
     -R/usr/sfw/lib/64 \
 ))
 else
-$(eval $(call gb_Library_set_ldflags,vcl,\
-    $$(LDFLAGS) \
+$(eval $(call gb_Library_add_ldflags,vcl,\
     -R/usr/sfw/lib \
 ))
 endif
@@ -516,8 +496,7 @@ ifeq ($(GUIBASE),aqua)
 $(eval $(call gb_Library_add_linked_libs,vcl,\
     AppleRemote \
 ))
-$(eval $(call gb_Library_set_ldflags,vcl,\
-    $$(LDFLAGS) \
+$(eval $(call gb_Library_add_libs,vcl,\
     -framework Cocoa \
     -framework Carbon \
     -framework CoreFoundation \
@@ -530,8 +509,7 @@ endif
 
 ifeq ($(OS),WNT)
 ifeq ($(USE_MINGW),)
-$(eval $(call gb_Library_set_ldflags,vcl,\
-    $$(LDFLAGS) \
+$(eval $(call gb_Library_add_ldflags,vcl,\
     /ENTRY:LibMain@12 \
 ))
 endif

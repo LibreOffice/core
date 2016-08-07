@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptxml.hxx"
 #include "xmlGroup.hxx"
 #include "xmlSection.hxx"
 #include "xmlFunction.hxx"

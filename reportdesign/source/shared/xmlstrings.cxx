@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptxml.hxx"
 
 #include "xmlstrings.hrc"
 
@@ -30,7 +30,7 @@ namespace rptxml
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SETTINGSIMPORTER           , "com.sun.star.comp.Report.XMLOasisSettingsImporter");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_STYLESIMPORTER             , "com.sun.star.comp.Report.XMLOasisStylesImporter");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_CONTENTIMPORTER            , "com.sun.star.comp.Report.XMLOasisContentImporter");
-IMPLEMENT_CONSTASCII_USTRING(SERVICE_IMPORTFILTER               , "com.sun.star.comp.document.ImportFilter");
+IMPLEMENT_CONSTASCII_USTRING(SERVICE_IMPORTFILTER               , "com.sun.star.document.ImportFilter");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_METAIMPORTER               , "com.sun.star.comp.Report.XMLOasisMetaImporter");
 
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_BORDERLEFT                , "BorderLeft");

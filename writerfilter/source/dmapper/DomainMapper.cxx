@@ -194,7 +194,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
 
     SectionPropertyMap * pSectionContext = m_pImpl->GetSectionContext();
 
-    // printf ( "DomainMapper::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nName, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR )
         m_pImpl->GetFIB().SetData( nName, nIntValue );
     else //if( !m_pImpl->getTableManager().attribute( nName, val) )
@@ -2219,7 +2218,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
     const rtl::OUString sStringValue = pValue->getString();
-    // printf ( "DomainMapper::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nSprmId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     /* WRITERFILTERSTATUS: table: sprmdata */
 
     switch(nSprmId)
@@ -3908,8 +3906,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 xLineNumberingPropSet->setPropertyValue(rNameSupplier.GetName( PROP_DISTANCE ), uno::makeAny(aSettings.nDistance) );
             xLineNumberingPropSet->setPropertyValue(rNameSupplier.GetName( PROP_RESTART_AT_EACH_PAGE ), uno::makeAny(aSettings.bRestartAtEachPage) );
         }
-        catch( const uno::Exception& )
+        catch( const uno::Exception& e)
         {
+            (void) e;
         }
 
     }
@@ -4197,8 +4196,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                                                                     uno::makeAny( nNumType ));
             }
         }
-        catch( const uno::Exception& )
+        catch( const uno::Exception& e)
         {
+            (void) e;
         }
     }
     break;
@@ -4503,7 +4503,12 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
     }
     catch( const uno::RuntimeException& )
     {
-        std::clog << __FILE__ << "(l" << __LINE__ << ")" << std::endl;
+#ifdef DEBUG_DOMAINMAPPER
+        dmapper_logger->startElement("exception");
+        dmapper_logger->attribute("file", __FILE__);
+        dmapper_logger->attribute("line", __LINE__);
+        dmapper_logger->endElement("exception");
+#endif
     }
 }
 /*-- 09.06.2006 09:52:15---------------------------------------------------
@@ -4570,8 +4575,9 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
 
         }
     }
-    catch( const uno::RuntimeException& )
+    catch( const uno::RuntimeException& e)
     {
+        (void) e;
     }
 }
 /*-- 09.06.2006 09:52:15---------------------------------------------------
@@ -4596,7 +4602,6 @@ void DomainMapper::lcl_props(writerfilter::Reference<Properties>::Pointer_t ref)
 -----------------------------------------------------------------------*/
 void DomainMapper::lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
 {
-    // printf ( "DomainMapper::table(0x%.4x)\n", (unsigned int)name);
     m_pImpl->SetAnyTableImport(true);
     /* WRITERFILTERSTATUS: table: attributedata */
     switch(name)

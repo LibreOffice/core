@@ -28,14 +28,10 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/container/XNameContainer.hpp>
 
-#include <resourcemodel/exceptions.hxx>
 #include <doctok/WW8Document.hxx>
-#include <resourcemodel/WW8ResourceModel.hxx>
 
 #include <iostream>
 
@@ -133,7 +129,7 @@ namespace testdoctok
 
             rtl::OUString sInputFileURL( absfile );
 
-            for (sal_uInt32 n = 0; n < sInputFileURL.getLength(); ++n)
+            for (sal_Int32 n = 0; n < sInputFileURL.getLength(); ++n)
             {
                 sal_uChar nC = sInputFileURL[n];
 
@@ -150,7 +146,7 @@ namespace testdoctok
             WW8Stream::Pointer_t pStream =
                 WW8DocumentFactory::createStream(xContext, xStream);
 
-            pDocument = WW8Document::Pointer_t(WW8DocumentFactory::createDocument(pStream));
+            pDocument.reset(WW8DocumentFactory::createDocument(pStream));
         }
         catch (::writerfilter::Exception e)
         {
@@ -159,48 +155,6 @@ namespace testdoctok
 
         ASSERT_TRUE(pDocument != NULL) << "creating document failed";
 
-#if 1
-    }
-
-    TEST_F(test, testTraversal)
-    {
-#endif
-        sal_uInt32 nResult = 0;
-
-        try
-        {
-            WW8DocumentIterator::Pointer_t pIt = pDocument->begin();
-            WW8DocumentIterator::Pointer_t pItEnd = pDocument->end();
-
-            while (! pIt->equal(*pItEnd))
-            {
-                pIt->dump(clog);
-
-                clog << endl;
-
-// Doesn't compile:
-//                WW8PropertySet::Pointer_t pAttrs = pIt->getProperties();
-//
-//                if (pAttrs != NULL)
-//                {
-//                    pAttrs->dump(clog);
-//                }
-
-                pIt->getText().dump(clog);
-                ++(*pIt);
-                ++nResult;
-            }
-        }
-        catch (::writerfilter::Exception e)
-        {
-            clog << "Exception!!" << endl;
-        }
-
-        char sBuffer[256];
-        snprintf(sBuffer, 255, "%d", nResult);
-        clog << "Iterator steps:" << sBuffer << endl;
-
-        ASSERT_TRUE(nResult > 0) << "traversing document failed";
     }
 
     TEST_F(test, testEvents)

@@ -143,13 +143,13 @@ public:
     void AddRGISTD( rtl::OUString sValue ) { m_sRGISTD += sValue; };
 
     // Accessors
-    sal_Int32             GetId( ) { return m_nId; };
+    sal_Int32             GetId( ) const { return m_nId; };
 
     sal_Int16             Size( ) { return sal_Int16( m_aLevels.size( ) ); };
     ListLevel::Pointer    GetLevel( sal_uInt16 nLvl );
     void                  AddLevel( );
 
-    ListLevel::Pointer    GetCurrentLevel( ) { return m_pCurrentLevel; };
+    ListLevel::Pointer    GetCurrentLevel( ) const { return m_pCurrentLevel; };
 
     virtual com::sun::star::uno::Sequence<
         com::sun::star::uno::Sequence<

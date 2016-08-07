@@ -85,7 +85,7 @@ CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 .IF "$(GUI)"=="OS2"
 UCBHELPERLIB=-lucbh$(UCBHELPER_MAJOR)
 .ELSE
-UCBHELPERLIB=-lucbhelper$(UCBHELPER_MAJOR)$(COMID)
+UCBHELPERLIB=-lucbhelper$(COMID)
 .ENDIF
 .IF "$(SYSTEM_OPENSSL)" == "YES"
 OPENSSLLIB=$(OPENSSL_LIBS)
@@ -381,7 +381,7 @@ OTXLIB=otx_ind.lib
 OSXLIB=osx.lib
 REGLIB=ireg.lib
 EXTLIB=iext.lib
-SOTLIB=sot.lib
+SOTLIB=isot.lib
 MOZBASELIBST=nspr4_s.lib xpcombase_s.lib
 MOZBASELIB=nspr4.lib xpcom.lib
 LDAPSDKLIB=nsldap32v50.lib

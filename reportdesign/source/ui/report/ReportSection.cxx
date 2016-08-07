@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptui.hxx"
 #include "ReportSection.hxx"
 #include "ReportWindow.hxx"
 #include "DesignView.hxx"

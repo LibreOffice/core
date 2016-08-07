@@ -30,8 +30,7 @@ $(eval $(call gb_Executable_set_include,rscdep,\
     -I$(SRCDIR)/tools/bootstrp/ \
 ))
 
-$(eval $(call gb_Executable_set_cxxflags,rscdep,\
-    $$(CXXFLAGS) \
+$(eval $(call gb_Executable_add_defs,rscdep,\
     -D_TOOLS_STRINGLIST \
 ))
 

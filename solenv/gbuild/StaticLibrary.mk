@@ -59,15 +59,14 @@ endef
 define gb_StaticLibrary__StaticLibrary_impl
 $(call gb_LinkTarget_LinkTarget,$(2))
 $(call gb_LinkTarget_set_targettype,$(2),StaticLibrary)
-$(call gb_LinkTarget_set_defs,$(2),\
-	$$(DEFS) \
+$(call gb_LinkTarget_add_defs,$(2),\
 	$(gb_StaticLibrary_DEFS) \
 )
 $(call gb_StaticLibrary_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
 $(call gb_StaticLibrary_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_StaticLibrary_StaticLibrary_platform,$(1),$(2))
 $$(eval $$(call gb_Module_register_target,$(call gb_StaticLibrary_get_target,$(1)),$(call gb_StaticLibrary_get_clean_target,$(1))))
-$(call gb_Deliver_add_deliverable,$(call gb_StaticLibrary_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)))
+$(call gb_Deliver_add_deliverable,$(call gb_StaticLibrary_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)),$(1))
 
 endef
 
@@ -86,13 +85,20 @@ $(eval $(foreach method,\
 	add_exception_objects \
 	add_noexception_objects \
 	add_generated_exception_objects \
+	add_cflags \
 	set_cflags \
+	add_cxxflags \
 	set_cxxflags \
+	add_objcxxflags \
 	set_objcxxflags \
+	add_defs \
 	set_defs \
 	set_include \
+	add_ldflags \
 	set_ldflags \
+	add_libs \
 	set_library_path_flags \
+	add_api \
 	add_linked_libs \
 	add_linked_static_libs \
 	add_package_headers \

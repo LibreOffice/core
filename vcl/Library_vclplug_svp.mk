@@ -23,18 +23,21 @@
 
 $(eval $(call gb_Library_Library,vclplug_svp))
 
+$(eval $(call gb_Library_add_api,vclplug_svp,\
+    udkapi \
+    offapi \
+))
+
 $(eval $(call gb_Library_set_include,vclplug_svp,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/inc/pch \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc/stl \
     -I$(OUTDIR)/inc \
 ))
 
-$(eval $(call gb_Library_set_defs,vclplug_svp,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vclplug_svp,\
     -DVCLPLUG_SVP_IMPLEMENTATION \
 ))
 
@@ -48,8 +51,6 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_svp,\
     basebmp \
     comphelper \
     cppuhelper \
-    icuuc \
-    icule \
     i18nisolang1 \
     i18npaper \
     i18nutil \
@@ -64,6 +65,11 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_svp,\
     ICE \
     $(gb_STDLIBS) \
 ))
+
+$(call gb_Library_use_externals,vclplug_svp,\
+    icule \
+    icuuc \
+)
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_svp,\
     vcl/unx/generic/printergfx/bitmap_gfx \

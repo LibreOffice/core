@@ -33,11 +33,14 @@ $(eval $(call gb_Library_set_include,svl,\
     $$(SOLARINC) \
     -I$(SRCDIR)/svl/source/inc \
     -I$(SRCDIR)/svl/inc/pch \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,svl,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_api,svl,\
+    udkapi \
+    offapi \
+))
+
+$(eval $(call gb_Library_add_defs,svl,\
     -DSVL_DLLIMPLEMENTATION \
 ))
 

@@ -25,16 +25,16 @@
 <component loader="com.sun.star.loader.SharedLibrary"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.Report.XMLOasisContentImporter">
-    <service name="com.sun.star.comp.document.ImportFilter"/>
+    <service name="com.sun.star.document.ImportFilter"/>
   </implementation>
   <implementation name="com.sun.star.comp.Report.XMLOasisMetaImporter">
-    <service name="com.sun.star.comp.document.ImportFilter"/>
+    <service name="com.sun.star.document.ImportFilter"/>
   </implementation>
   <implementation name="com.sun.star.comp.Report.XMLOasisSettingsImporter">
-    <service name="com.sun.star.comp.document.ImportFilter"/>
+    <service name="com.sun.star.document.ImportFilter"/>
   </implementation>
   <implementation name="com.sun.star.comp.Report.XMLOasisStylesImporter">
-    <service name="com.sun.star.comp.document.ImportFilter"/>
+    <service name="com.sun.star.document.ImportFilter"/>
   </implementation>
   <implementation name="com.sun.star.comp.report.ExportDocumentHandler">
     <service name="com.sun.star.report.ExportDocumentHandler"/>
@@ -46,7 +46,7 @@
     <service name="com.sun.star.report.ImportDocumentHandler"/>
   </implementation>
   <implementation name="com.sun.star.comp.report.OReportFilter">
-    <service name="com.sun.star.comp.document.ImportFilter"/>
+    <service name="com.sun.star.document.ImportFilter"/>
   </implementation>
   <implementation name="com.sun.star.comp.report.ORptTypeDetection">
     <service name="com.sun.star.document.ExtendedTypeDetection"/>

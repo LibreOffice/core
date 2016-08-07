@@ -1,0 +1,52 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+
+#ifndef __ooo_vba_dao_DataTypeEnum_idl__
+#define __ooo_vba_dao_DataTypeEnum_idl__
+
+module ooo { module vba { module dao {
+    constants DataTypeEnum {
+        const long dbBigInt = 16;
+        const long dbBinary = 9;
+        const long dbBoolean = 1;
+        const long dbByte = 2;
+        const long dbChar = 18;
+        const long dbCurrency = 5;
+        const long dbDate = 8;
+        const long dbDecimal = 20;
+        const long dbDouble = 7;
+        const long dbFloat = 21;
+        const long dbGUID = 15;
+        const long dbInteger = 3;
+        const long dbLong = 4;
+        const long dbLongBinary = 11;
+        const long dbMemo = 12;
+        const long dbNumeric = 19;
+        const long dbSingle = 6;
+        const long dbText = 10;
+        const long dbTime = 22;
+        const long dbTimeStamp = 23;
+        const long dbVarBinary = 17;
+    };
+}; }; };
+
+#endif

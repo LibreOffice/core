@@ -23,8 +23,10 @@
 
 #include <iostream>
 #include <boost/shared_ptr.hpp>
-#ifdef DEBUG_ELEMENT
+#ifdef DEBUG_CONTEXT_HANDLER
 #include "ooxmlLoggers.hxx"
+#endif
+#ifdef DEBUG_PROTOCOL
 #include <resourcemodel/Protocol.hxx>
 #endif
 #include "OOXMLFastDocumentHandler.hxx"
@@ -62,75 +64,27 @@ OOXMLFastDocumentHandler::OOXMLFastDocumentHandler(
 
 // ::com::sun::star::xml::sax::XFastContextHandler:
 void SAL_CALL OOXMLFastDocumentHandler::startFastElement
-(::sal_Int32
-#ifdef DEBUG_CONTEXT_STACK
-Element
-#endif
-, const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
+(::sal_Int32 /*Element*/, const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-#ifdef DEBUG_CONTEXT_STACK
-    clog << this << ":start element:"
-         << fastTokenToId(Element)
-         << endl;
-#endif
 }
 
 void SAL_CALL OOXMLFastDocumentHandler::startUnknownElement
-(const ::rtl::OUString &
-#ifdef DEBUG_CONTEXT_STACK
-Namespace
-#endif
-, const ::rtl::OUString &
-#ifdef DEBUG_CONTEXT_STACK
-Name
-#endif
-,
+(const ::rtl::OUString & /*Namespace*/, const ::rtl::OUString & /*Name*/,
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
 throw (uno::RuntimeException, xml::sax::SAXException)
 {
-#ifdef DEBUG_CONTEXT_STACK
-    clog << this << ":start unknown element:"
-         << OUStringToOString(Namespace, RTL_TEXTENCODING_ASCII_US).getStr()
-         << ":"
-         << OUStringToOString(Name, RTL_TEXTENCODING_ASCII_US).getStr()
-         << endl;
-#endif
 }
 
-void SAL_CALL OOXMLFastDocumentHandler::endFastElement(::sal_Int32
-#ifdef DEBUG_CONTEXT_STACK
-Element
-#endif
-)
+void SAL_CALL OOXMLFastDocumentHandler::endFastElement(::sal_Int32 /*Element*/)
 throw (uno::RuntimeException, xml::sax::SAXException)
 {
-#ifdef DEBUG_CONTEXT_STACK
-    clog << this << ":end element:"
-         << fastTokenToId(Element)
-         << endl;
-#endif
 }
 
 void SAL_CALL OOXMLFastDocumentHandler::endUnknownElement
-(const ::rtl::OUString &
-#ifdef DEBUG_CONTEXT_STACK
-Namespace
-#endif
-, const ::rtl::OUString &
-#ifdef DEBUG_CONTEXT_STACK
-Name
-#endif
-)
+(const ::rtl::OUString & /*Namespace*/, const ::rtl::OUString &  /*Name*/)
 throw (uno::RuntimeException, xml::sax::SAXException)
 {
-#ifdef DEBUG_CONTEXT_STACK
-    clog << this << ":end unknown element:"
-         << OUStringToOString(Namespace, RTL_TEXTENCODING_ASCII_US).getStr()
-         << ":"
-         << OUStringToOString(Name, RTL_TEXTENCODING_ASCII_US).getStr()
-         << endl;
-#endif
 }
 
 OOXMLFastContextHandler::Pointer_t
@@ -154,11 +108,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-#ifdef DEBUG_CONTEXT_STACK
-    clog << this << ":createFastChildContext:"
-         << fastTokenToId(Element)
-         << endl;
-#endif
 
     if ( mpStream == 0 && mpDocument == 0 )
     {
@@ -172,26 +121,11 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 OOXMLFastDocumentHandler::createUnknownChildContext
-(const ::rtl::OUString &
-#ifdef DEBUG_CONTEXT_STACK
-Namespace
-#endif
-,
- const ::rtl::OUString &
-#ifdef DEBUG_CONTEXT_STACK
-Name
-#endif
-, const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
+(const ::rtl::OUString & /*Namespace*/,
+ const ::rtl::OUString & /*Name*/,
+ const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-#ifdef DEBUG_CONTEXT_STACK
-    clog << this << ":createUnknownChildContext:"
-         << OUStringToOString(Namespace, RTL_TEXTENCODING_ASCII_US).getStr()
-         << ":"
-         << OUStringToOString(Name, RTL_TEXTENCODING_ASCII_US).getStr()
-         << endl;
-#endif
-
     return uno::Reference< xml::sax::XFastContextHandler >
         ( new OOXMLFastDocumentHandler( m_xContext, 0, 0 ) );
 }

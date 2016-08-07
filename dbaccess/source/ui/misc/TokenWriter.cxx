@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
+#include "precompiled_dbui.hxx"
 #include "TokenWriter.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

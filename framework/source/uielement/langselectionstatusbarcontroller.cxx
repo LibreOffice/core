@@ -35,7 +35,6 @@
 #include <toolkit/helper/convert.hxx>
 
 #include <com/sun/star/frame/XPopupMenuController.hpp>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <svtools/langtab.hxx>
 #include "sal/types.h"

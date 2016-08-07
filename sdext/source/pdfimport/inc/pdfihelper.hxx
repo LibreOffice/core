@@ -24,6 +24,8 @@
 #ifndef INCLUDED_PDFI_HELPER_HXX
 #define INCLUDED_PDFI_HELPER_HXX
 
+#define BASEGFX_STATICLIBRARY
+
 #include "contentsink.hxx"
 
 #include <rtl/ustring.hxx>

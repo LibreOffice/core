@@ -37,7 +37,7 @@
 
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespace

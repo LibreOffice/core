@@ -34,6 +34,11 @@ $(eval $(call gb_Library_add_sdi_headers,sfx,sfx2/sdi/sfxslots))
 
 $(eval $(call gb_Library_set_componentfile,sfx,sfx2/util/sfx))
 
+$(eval $(call gb_Library_add_api,sfx,\
+    udkapi \
+    offapi \
+))
+
 $(eval $(call gb_Library_set_include,sfx,\
     -I$(SRCDIR)/sfx2/inc \
     -I$(SRCDIR)/sfx2/inc/sfx2 \
@@ -42,13 +47,10 @@ $(eval $(call gb_Library_set_include,sfx,\
     -I$(WORKDIR)/SdiTarget/sfx2/sdi \
     -I$(WORKDIR)/inc/ \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
-    $(LIBXML_CFLAGS) \
 ))
 
-$(eval $(call gb_Library_set_defs,sfx,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,sfx,\
     -DSFX2_DLLIMPLEMENTATION \
 ))
 
@@ -71,9 +73,10 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
     utl \
     vcl \
     vos3 \
-    xml2 \
     $(gb_STDLIBS) \
 ))
+
+$(call gb_Library_use_external,sfx,libxml2)
 
 $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/app \
@@ -295,23 +298,13 @@ $(eval $(call gb_SdiTarget_set_include,sfx2/sdi/sfxslots,\
 ))
 
 ifeq ($(OS),$(filter WNT MACOSX,$(OS)))
-$(eval $(call gb_Library_set_defs,sfx,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,sfx,\
     -DENABLE_QUICKSTART_APPLET \
 ))
 endif
 
 ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
-$(eval $(call gb_Library_set_defs,sfx,\
-    $$(DEFS) \
-    -DENABLE_QUICKSTART_APPLET \
-    -DENABLE_SYSTRAY_GTK \
-))
-endif
-
-ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
-$(eval $(call gb_Library_set_defs,sfx,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,sfx,\
     -DENABLE_QUICKSTART_APPLET \
     -DENABLE_SYSTRAY_GTK \
 ))

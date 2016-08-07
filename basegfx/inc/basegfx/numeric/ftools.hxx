@@ -25,6 +25,7 @@
 #define _BGFX_NUMERIC_FTOOLS_HXX
 
 #include <rtl/math.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // standard PI defines from solar.h, but we do not want to link against tools
@@ -149,15 +150,15 @@ namespace basegfx
         snapToNearestMultiple(0.25, 0.5) = 0.0
         snapToNearestMultiple(0.26, 0.5) = 0.5
      */
-    double snapToNearestMultiple(double v, const double fStep);
+    BASEGFX_DLLPUBLIC double snapToNearestMultiple(double v, const double fStep);
 
     /** Snap v to the range [0.0 .. fWidth] using modulo
      */
-    double snapToZeroRange(double v, double fWidth);
+    BASEGFX_DLLPUBLIC double snapToZeroRange(double v, double fWidth);
 
     /** Snap v to the range [fLow .. fHigh] using modulo
      */
-    double snapToRange(double v, double fLow, double fHigh);
+    BASEGFX_DLLPUBLIC double snapToRange(double v, double fLow, double fHigh);
 
     /** return fValue with the sign of fSignCarrier, thus evtl. changed
     */
@@ -170,7 +171,7 @@ namespace basegfx
 #endif
     }
 
-    class fTools
+    class BASEGFX_DLLPUBLIC fTools
     {
         /// Threshold value for equalZero()
         static double                                   mfSmallValue;

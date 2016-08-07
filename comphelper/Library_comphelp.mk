@@ -33,11 +33,9 @@ $(eval $(call gb_Library_set_include,comphelper,\
     -I$(SRCDIR)/comphelper/inc/pch \
     -I$(SRCDIR)/comphelper/source/inc \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,comphelper,\
-       $$(DEFS) \
+$(eval $(call gb_Library_add_defs,comphelper,\
        -DCOMPHELPER_DLLIMPLEMENTATION \
 ))
 
@@ -49,6 +47,11 @@ $(eval $(call gb_Library_add_linked_libs,comphelper,\
     vos3 \
     stl \
     $(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Library_add_api,comphelper,\
+    udkapi \
+    offapi \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,comphelper,\

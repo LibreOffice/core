@@ -833,7 +833,6 @@
 #include "sys/types.h"
 
 #include "toolkit/helper/vclunohelper.hxx"
-#include "toolkit/unohlp.hxx"
 
 #include "tools/bigint.hxx"
 #include "tools/cachestr.hxx"

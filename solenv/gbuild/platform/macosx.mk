@@ -137,6 +137,8 @@ gb_LinkTarget_LDFLAGS := \
 	$(subst -L../lib , ,$(SOLARLIB)) \
 #man ld says: obsolete	-Wl,-multiply_defined,suppress \
 
+gb_DEBUG_CFLAGS := -g
+
 ifeq ($(gb_DEBUGLEVEL),2)
 gb_COMPILEROPTFLAGS := -O0
 else
@@ -156,20 +158,27 @@ define gb_Helper_convert_native
 $(1)
 endef
 
+# convert parametters filesystem root to native notation
+# does some real work only on windows, make sure not to
+# break the dummy implementations on unx*
+define gb_Helper_convert_native
+$(1)
+endef
+
 
 # CObject class
 
 define gb_CObject__command
 $(call gb_Output_announce,$(2),$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) && \
-	mkdir -p $(dir $(call gb_CObject_get_dep_target,$(2))) && \
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CC) \
-		$(DEFS) $(CFLAGS) \
+		$(DEFS) \
+		$(T_CFLAGS) \
 		-c $(3) \
 		-o $(1) \
-		-MMD -MT $(call gb_CObject_get_target,$(2)) \
-		-MF $(call gb_CObject_get_dep_target,$(2)) \
+		-MMD -MT $(1) \
+		-MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE))
 endef
@@ -181,14 +190,14 @@ endef
 define gb_CxxObject__command
 $(call gb_Output_announce,$(2),$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) && \
-	mkdir -p $(dir $(call gb_CxxObject_get_dep_target,$(2))) && \
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CXX) \
-		$(DEFS) $(CXXFLAGS) \
+		$(DEFS) \
+		$(T_CXXFLAGS) \
 		-c $(3) \
 		-o $(1) \
-		-MMD -MT $(call gb_CxxObject_get_target,$(2)) \
-		-MF $(call gb_CxxObject_get_dep_target,$(2)) \
+		-MMD -MT $(1) \
+		-MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
 endef
@@ -199,14 +208,14 @@ endef
 define gb_ObjCxxObject__command
 $(call gb_Output_announce,$(2),$(true),OCX,3)
 $(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) && \
-	mkdir -p $(dir $(call gb_ObjCxxObject_get_dep_target,$(2))) && \
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CXX) \
-		$(DEFS) $(OBJCXXFLAGS) \
+		$(DEFS) \
+		$(T_OBJCXXFLAGS) \
 		-c $(3) \
 		-o $(1) \
-		-MMD -MT $(call gb_ObjCxxObject_get_target,$(2)) \
-		-MF $(call gb_ObjCxxObject_get_dep_target,$(2)) \
+		-MMD -MT $(1) \
+		-MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
 endef
@@ -230,15 +239,9 @@ define gb_LinkTarget__get_installname
 $(if $(2),-install_name '$(2)$(1)',)
 endef
 
-gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
-gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR) $(gb_OBJCXXFLAGS) $(gb_COMPILEROPTFLAGS)
-
-ifeq ($(gb_DEBUGLEVEL),2)
-gb_LinkTarget_CFLAGS += -g
-gb_LinkTarget_CXXFLAGS += -g
-gb_LinkTarget_OBJCXXFLAGS += -g
-endif
+gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR) $(gb_OBJCXXFLAGS)
 
 gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
@@ -264,20 +267,23 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
-		$(subst \d,$$,$(RPATH)) $(LDFLAGS) \
+		$(subst \d,$$,$(RPATH)) \
+		$(T_LDFLAGS) \
 		$(patsubst lib%.dylib,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) \
 		$(patsubst %,-l%,$(EXTERNAL_LIBS)) \
 		> $${DYLIB_FILE} && \
 	$(gb_CXX) \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
-		$(subst \d,$$,$(RPATH)) $(LDFLAGS) \
+		$(subst \d,$$,$(RPATH)) \
+		$(T_LDFLAGS) \
 		$(call gb_LinkTarget__get_liblinkflags,$(LINKED_LIBS)) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
+		$(LIBS) \
 		-o $(1) \
 		`cat $${DYLIB_FILE}` && \
 	$(if $(filter Library,$(TARGETTYPE)),\
@@ -323,10 +329,8 @@ gb_Library__FRAMEWORKS := \
 gb_Library_PLAINLIBS_NONE += \
 	Cocoa \
 	objc \
-	jpeg \
 	m \
-	pthread \
-	z
+	pthread
 
 gb_Library_FILENAMES := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_OOOEXT)) \
@@ -450,6 +454,20 @@ gb_XSLTPROCPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
 gb_Library_COMPONENTPREFIXES := \
     OOO:vnd.sun.star.expand:\dOOO_BASE_DIR/program/ \
     URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
+    NONE:vnd.sun.star.expand:\dOOO_INBUILD_SHAREDLIB_DIR/ \
+
+# UnoApiTarget
+
+gb_UnoApiTarget_IDLCTARGET := $(OUTDIR)/bin/idlc
+gb_UnoApiTarget_IDLCCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_IDLCTARGET)
+gb_UnoApiTarget_REGMERGETARGET := $(OUTDIR)/bin/regmerge
+gb_UnoApiTarget_REGMERGECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGMERGETARGET)
+gb_UnoApiTarget_REGCOMPARETARGET := $(OUTDIR)/bin/regcompare
+gb_UnoApiTarget_REGCOMPARECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
+gb_UnoApiTarget_CPPUMAKERTARGET := $(OUTDIR)/bin/cppumaker
+gb_UnoApiTarget_CPPUMAKERCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_CPPUMAKERTARGET)
+gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR)/bin/regview
+gb_UnoApiTarget_REGVIEWCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
 
 # vim: set noet sw=4 ts=4:

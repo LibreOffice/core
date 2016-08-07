@@ -1,0 +1,45 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+module ooo { module vba {
+    constants VbMsgBoxStyle {
+        const long vbAbortRetryIgnore = 2;
+        const long vbApplicationModal = 0;
+        const long vbCritical = 16;
+        const long vbDefaultButton1 = 0;
+        const long vbDefaultButton2 = 256;
+        const long vbDefaultButton3 = 512;
+        const long vbDefaultButton4 = 768;
+        const long vbExclamation = 48;
+        const long vbInformation = 64;
+        const long vbMsgBoxHelpButton = 16384;
+        const long vbMsgBoxRight = 524288;
+        const long vbMsgBoxRtlReading = 1048576;
+        const long vbMsgBoxSetForeground = 65536;
+        const long vbOKCancel = 1;
+        const long vbOKOnly = 0;
+        const long vbQuestion = 32;
+        const long vbRetryCancel = 5;
+        const long vbSystemModal = 4096;
+        const long vbYesNo = 4;
+        const long vbYesNoCancel = 3;
+    };
+}; };

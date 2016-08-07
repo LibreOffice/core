@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-
+#include "precompiled_reportdesign.hxx"
 #include "UndoActions.hxx"
 #include "UndoEnv.hxx"
 #include "formatnormalizer.hxx"

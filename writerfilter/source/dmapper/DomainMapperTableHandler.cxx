@@ -42,6 +42,58 @@ using namespace ::std;
 #define DEFAULT_CELL_MARGIN 108 //default cell margin, not documented
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
+XMLTag::Pointer_t handleToTag(Handle_t & rHandle)
+{
+    XMLTag::Pointer_t pTag(new XMLTag("handle"));
+
+    pTag->chars(rHandle->getString());
+
+    return pTag;
+}
+
+void cellSequenceToTags(XMLTag::Pointer_t pTag, CellSequence_t & rCellSequence)
+{
+    sal_Int32 nCount = rCellSequence.getLength();
+    pTag->addAttr("count", nCount);
+
+    for (sal_Int32 n = 0; n < nCount; n++)
+    {
+        Handle_t aHandle = rCellSequence[n];
+        pTag->addTag(handleToTag(aHandle));
+    }
+}
+
+void rowSequenceToTags(XMLTag::Pointer_t pTag, RowSequence_t & rRowSequence)
+{
+    sal_Int32 nCount = rRowSequence.getLength();
+    pTag->addAttr("count", nCount);
+
+    for (sal_Int32 n = 0; n < nCount; n++)
+    {
+        CellSequence_t & rCells = rRowSequence[n];
+        XMLTag::Pointer_t pCellTag(new XMLTag("cell"));
+        cellSequenceToTags(pCellTag, rCells);
+        pTag->addTag(pCellTag);
+    }
+}
+
+XMLTag::Pointer_t tableSequenceToTag(TableSequence_t & rTableSequence)
+{
+    XMLTag::Pointer_t pTag(new XMLTag("table"));
+    sal_Int32 nCount = rTableSequence.getLength();
+    pTag->addAttr("count", nCount);
+
+    for (sal_Int32 n = 0; n < nCount; n++)
+    {
+        RowSequence_t & rRowSequence = rTableSequence[n];
+        XMLTag::Pointer_t pRowTag(new XMLTag("row"));
+        rowSequenceToTags(pRowTag, rRowSequence);
+        pTag->addTag(pRowTag);
+    }
+
+    return pTag;
+}
+
 static void  lcl_printProperties( PropertyMapPtr pProps )
 {
     if( pProps.get() )
@@ -54,8 +106,9 @@ static void  lcl_printProperties( PropertyMapPtr pProps )
         for( ; aMapIter != aEndIter; ++aMapIter )
         {
             rtl::OUString aOUStr = rPropSupplier.GetName( aMapIter->first.eId );
-            rtl::OString aOStr(aOUStr.getStr(), aOUStr.getLength(),  RTL_TEXTENCODING_ASCII_US );
-            clog << aOStr.getStr();
+            dmapper_logger->startElement("entry");
+            dmapper_logger->chars(aOUStr);
+            dmapper_logger->endElement("entry");
 
             table::BorderLine aLine;
             sal_Int32 nColor;
@@ -737,6 +790,12 @@ void DomainMapperTableHandler::endTable(
     {
         try
         {
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
+            XMLTag::Pointer_t pTag = tableSequenceToTag(*m_pTableSeq);
+            dmapper_logger->addTag(pTag);
+
+            ::std::clog << pTag->toTree() << ::std::endl;
+#endif
             uno::Reference< text::XTextTable > xTable =
                     m_xText->convertToTable(
                         *m_pTableSeq,
@@ -748,12 +807,14 @@ void DomainMapperTableHandler::endTable(
         }
         catch (lang::IllegalArgumentException e)
         {
+            (void) e;
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
             dmapper_logger->chars("failed to import table!");
 #endif
         }
         catch ( uno::Exception e )
         {
+            (void) e;
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
             dmapper_logger->startElement("exception");
             dmapper_logger->chars(rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ));
@@ -838,7 +899,6 @@ void DomainMapperTableHandler::endCell(const Handle_t & end)
     dmapper_logger->chars(toString(end));
     dmapper_logger->endElement("table.cell.end");
     dmapper_logger->endElement("table.cell");
-    clog << "</table.cell>" << endl;
 #endif
 
     if (!end.get())

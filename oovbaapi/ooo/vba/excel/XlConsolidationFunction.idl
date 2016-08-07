@@ -1,0 +1,37 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+module ooo { module vba { module excel {
+    constants XlConsolidationFunction {
+        const long xlAverage = -4106;
+        const long xlCount = -4112;
+        const long xlCountNums = -4113;
+        const long xlMax = -4136;
+        const long xlMin = -4139;
+        const long xlProduct = -4149;
+        const long xlStDev = -4155;
+        const long xlStDevP = -4156;
+        const long xlSum = -4157;
+        const long xlUnknown = 1000;
+        const long xlVar = -4164;
+        const long xlVarP = -4165;
+    };
+}; }; };

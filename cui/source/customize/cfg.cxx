@@ -57,7 +57,7 @@
 #include <svl/stritem.hxx>
 #include <svtools/miscopt.hxx>
 #include <tools/diagnose_ex.h>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <algorithm>
 //add

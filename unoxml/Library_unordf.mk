@@ -27,11 +27,11 @@ $(eval $(call gb_Library_set_componentfile,unordf,unoxml/source/rdf/unordf))
 
 $(eval $(call gb_Library_set_include,unordf,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,unordf,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_api,unordf,\
+    udkapi \
+    offapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,unordf,\
@@ -39,11 +39,14 @@ $(eval $(call gb_Library_add_linked_libs,unordf,\
     cppu \
     sal \
     stl \
-    rdf \
-    xml2 \
-    xslt \
     $(gb_STDLIBS) \
 ))
+
+$(call gb_Library_use_externals,unordf,\
+    librdf \
+    libxml2 \
+    libxslt \
+)
 
 $(eval $(call gb_Library_add_exception_objects,unordf,\
     unoxml/source/rdf/CBlankNode \
@@ -52,20 +55,6 @@ $(eval $(call gb_Library_add_exception_objects,unordf,\
     unoxml/source/rdf/librdf_repository \
     unoxml/source/rdf/librdf_services \
 ))
-
-ifeq ($(SYSTEM_REDLAND),YES)
-$(eval $(call gb_Library_set_cxxflags,unordf,\
-    $$(CXXFLAGS) \
-    -DSYSTEM_REDLAND $$(REDLAND_CFLAGS) \
-))
-endif
-
-ifeq ($(SYSTEM_LIBXSLT),YES)
-$(eval $(call gb_Library_set_cxxflags,unordf,\
-    $$(CXXFLAGS) \
-    $$(LIBXSLT_CFLAGS) \
-))
-endif
 
 # vim: set noet sw=4 ts=4:
 

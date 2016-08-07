@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-
+#include "precompiled_reportdesign.hxx"
 
 #include "RptModel.hxx"
 #include "RptPage.hxx"

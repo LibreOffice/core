@@ -27,6 +27,7 @@
 #include <sal/types.h>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -35,7 +36,7 @@
 
 namespace basegfx
 {
-    class BPixel
+    class BASEGFX_DLLPUBLIC BPixel
     {
     protected:
         union

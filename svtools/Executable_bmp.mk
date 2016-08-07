@@ -32,7 +32,11 @@ $(eval $(call gb_Executable_set_include,bmp,\
     -I$(SRCDIR)/svtools/inc/svtools \
     -I$(SRCDIR)/svtools/source/inc \
     -I$(SRCDIR)/svtools/inc/pch \
-    -I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Executable_add_api,bmp,\
+    udkapi \
+    offapi \
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,bmp,\

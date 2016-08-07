@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptui.hxx"
 #include "GroupExchange.hxx"
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>

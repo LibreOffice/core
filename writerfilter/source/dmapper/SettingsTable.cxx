@@ -95,7 +95,6 @@ SettingsTable::SettingsTable(DomainMapper& rDMapper, const uno::Reference< lang:
 , LoggedTable(dmapper_logger, "SettingsTable")
 , m_pImpl( new SettingsTable_Impl(rDMapper, xTextFactory) )
 {
-    // printf("SettingsTable::SettingsTable()\n");
 }
 
 SettingsTable::~SettingsTable()
@@ -110,7 +109,6 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
     (void)nIntValue;
     ::rtl::OUString sValue = val.getString();
     (void)sValue;
-    //printf ( "SettingsTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     /* WRITERFILTERSTATUS: table: SettingsTable_attributedata */
 #if 0 //no values known, yet
 
@@ -134,8 +132,6 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     sal_Int32 nIntValue = pValue->getInt();
     (void)nIntValue;
     rtl::OUString sStringValue = pValue->getString();
-
-    //printf ( "SettingsTable::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nSprmId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
 
     /* WRITERFILTERSTATUS: table: SettingsTable_sprm */
     switch(nSprmId)
@@ -216,8 +212,8 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
         break;
     default:
     {
-#ifdef DEBUG_DMAPPER_SETTINGS_TABLE
-        dmapper_logger->element("unhandled");
+#ifdef DEBUG_DOMAINMAPPER
+        dmapper_logger->element("SettingsTable.unhandled");
 #endif
     }
     }
@@ -225,7 +221,6 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
 
 void SettingsTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
 {
-    // printf ( "SettingsTable::entry\n");
     ref->resolve(*this);
 }
 //returns default TabStop in 1/100th mm

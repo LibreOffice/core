@@ -25,13 +25,14 @@ package complex.reportdesign;
 
 import java.io.File;
 import org.openoffice.test.OfficeFileUrl;
+import org.openoffice.test.Argument;
 
 final class TestDocument
 {
     public static String getUrl(String name)
-        {
-            return OfficeFileUrl.getAbsolute(new File("test_documents", name));
-        }
+    {
+        return OfficeFileUrl.getAbsolute(new File(Argument.get("tdoc"), name));
+    }
 
     private TestDocument() {}
 }

@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptui.hxx"
 
 #include <ReportControllerObserver.hxx>
 #include <ReportController.hxx>

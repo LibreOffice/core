@@ -60,4 +60,3 @@ $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/unomemorystream
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/unopropertyarrayhelper.hxx,toolkit/helper/unopropertyarrayhelper.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/unowrapper.hxx,toolkit/helper/unowrapper.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/vclunohelper.hxx,toolkit/helper/vclunohelper.hxx))
-$(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/unohlp.hxx,toolkit/helper/vclunohelper.hxx))

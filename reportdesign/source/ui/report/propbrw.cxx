@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptui.hxx"
 #include "propbrw.hxx"
 #include "RptObject.hxx"
 #include "ReportController.hxx"
@@ -45,7 +45,7 @@
 #include <svx/svditer.hxx>
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #endif
 #include <comphelper/property.hxx>
 #include <comphelper/namecontainer.hxx>

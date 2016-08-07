@@ -27,6 +27,7 @@
 #include <sal/types.h>
 
 #include <memory>
+#include <canvas/canvastoolsdllapi.h>
 
 
 namespace canvas
@@ -47,8 +48,8 @@ namespace canvas
                 Difference in execution priority. Positive values
                 increase prio, negative values decrease prio.
              */
-            explicit PriorityBooster( sal_Int32 nDelta );
-            ~PriorityBooster();
+             CANVASTOOLS_DLLPUBLIC explicit PriorityBooster( sal_Int32 nDelta );
+             CANVASTOOLS_DLLPUBLIC ~PriorityBooster();
 
         private:
             // also disables copy constructor and assignment operator

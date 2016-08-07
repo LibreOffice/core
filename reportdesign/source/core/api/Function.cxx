@@ -20,6 +20,7 @@
  *************************************************************/
 
 
+#include "precompiled_reportdesign.hxx"
 #include "Function.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #ifndef REPORTDESIGN_SHARED_CORESTRINGS_HRC

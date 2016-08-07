@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
+#include "precompiled_dbaxml.hxx"
 
 #ifndef _FLT_REGHELPER_HXX_
 #include "flt_reghelper.hxx"

@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
+#include "precompiled_dbaxml.hxx"
 #ifndef DBA_XMLCONNECTIONRESOURCE_HXX_INCLUDED
 #include "xmlConnectionResource.hxx"
 #endif

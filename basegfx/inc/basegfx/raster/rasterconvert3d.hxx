@@ -30,6 +30,7 @@
 #include <basegfx/vector/b3dvector.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -45,7 +46,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class ip_single
+    class BASEGFX_DLLPUBLIC ip_single
     {
     private:
         double                                      mfVal;
@@ -71,7 +72,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class ip_double
+    class BASEGFX_DLLPUBLIC ip_double
     {
     private:
         ip_single                                   maX;
@@ -97,7 +98,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class ip_triple
+    class BASEGFX_DLLPUBLIC ip_triple
     {
     private:
         ip_single                                   maX;
@@ -133,7 +134,7 @@ namespace basegfx
 {
     #define SCANLINE_EMPTY_INDEX (0xffffffff)
 
-    class InterpolatorProvider3D
+    class BASEGFX_DLLPUBLIC InterpolatorProvider3D
     {
     private:
         ::std::vector< ip_triple >                  maColorInterpolators;
@@ -315,7 +316,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class RasterConversionLineEntry3D
+    class BASEGFX_DLLPUBLIC RasterConversionLineEntry3D
     {
     private:
         ip_single                                   maX;
@@ -413,7 +414,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class RasterConverter3D : public InterpolatorProvider3D
+    class BASEGFX_DLLPUBLIC RasterConverter3D : public InterpolatorProvider3D
     {
     private:
         // the line entries for an area conversion run

@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptui.hxx"
 
 #define RPTUI_ID_LRSPACE    1
 #define RPTUI_ID_ULSPACE    2

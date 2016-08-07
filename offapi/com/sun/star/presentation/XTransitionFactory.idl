@@ -80,8 +80,6 @@ interface XTransitionFactory : ::com::sun::star::uno::XInterface
                                   [in] com::sun::star::rendering::XBitmap    enteringBitmap );
 };
 
-service TransitionFactory : XTransitionFactory;
-
 }; }; }; };
 
 #endif

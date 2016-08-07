@@ -50,7 +50,6 @@ $(eval $(call gb_Module_add_targets,sfx2,\
 endif
 
 #todo: source/dialog BUILD_VER_STRING
-#todo: source/doc SYSTEM_LIBXML2
 #todo: ENABLE_LAYOUT
 #todo: clean up quickstarter stuff in both libraries
 #todo: move standard pool to svl

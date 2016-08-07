@@ -26,6 +26,7 @@
 
 #include <sal/types.h>
 #include <vector>
+#include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -39,7 +40,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class B2DCubicBezierHelper
+    class BASEGFX_DLLPUBLIC B2DCubicBezierHelper
     {
     private:
         ::std::vector< double >         maLengthArray;

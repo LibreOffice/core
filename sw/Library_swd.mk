@@ -34,11 +34,15 @@ $(eval $(call gb_Library_set_include,swd,\
     -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/source/filter/inc \
     -I$(SRCDIR)/sw/source/ui/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,swd,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_api,swd,\
+    udkapi \
+    offapi \
+))
+
+$(eval $(call gb_Library_add_defs,swd,\
+    -DSWD_DLLIMPLEMENTATION \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,swd,\
@@ -59,7 +63,6 @@ $(eval $(call gb_Library_add_linked_libs,swd,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,swd,\
-    sw/source/core/except/errhdl \
     sw/source/filter/basflt/iodetect \
     sw/source/ui/uno/detreg \
     sw/source/ui/uno/swdet2 \

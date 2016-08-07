@@ -32,11 +32,11 @@ $(eval $(call gb_Library_set_include,swui,\
     -I$(WORKDIR)/SdiTarget/sw/sdi \
     -I$(WORKDIR)/Misc/sw \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,swui,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_api,swui,\
+    udkapi \
+    offapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,swui,\
@@ -56,6 +56,7 @@ $(eval $(call gb_Library_add_linked_libs,swui,\
     svx \
     svxcore \
     sw \
+    swd \
     ootk \
     tl \
     ucbhelper \

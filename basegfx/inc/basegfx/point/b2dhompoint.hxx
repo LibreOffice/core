@@ -25,6 +25,7 @@
 #define _BGFX_POINT_B2DHOMPOINT_HXX
 
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {
@@ -41,7 +42,7 @@ namespace basegfx
 
         @see B2DTuple
     */
-    class B2DHomPoint
+    class BASEGFX_DLLPUBLIC B2DHomPoint
     {
     protected:
         /// This member contains the coordinate part of the point

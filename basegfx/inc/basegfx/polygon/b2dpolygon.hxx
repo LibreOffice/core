@@ -28,6 +28,7 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -46,7 +47,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class B2DPolygon
+    class BASEGFX_DLLPUBLIC B2DPolygon
     {
     public:
         typedef o3tl::cow_wrapper< ImplB2DPolygon > ImplType;

@@ -397,7 +397,6 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
     int nIntValue = val.getInt();
     (void)nIntValue;
     ::rtl::OUString sValue = val.getString();
-//    printf ( "StyleSheetTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     /* WRITERFILTERSTATUS: table: StyleSheetTable_attributedata */
     switch(Name)
     {
@@ -507,7 +506,7 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         default:
         {
 #ifdef DEBUG_DOMAINMAPPER
-            dmapper_logger->element("unhandled");
+            dmapper_logger->element("StyleSheetTable.unhandled");
 #endif
         }
         break;
@@ -523,7 +522,6 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
     sal_Int32 nIntValue = pValue.get() ? pValue->getInt() : 0;
     (void)nIntValue;
     rtl::OUString sStringValue = pValue.get() ? pValue->getString() : rtl::OUString();
-    //printf ( "StyleSheetTable::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nSprmId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
 
     /* WRITERFILTERSTATUS: table: StyleSheetTable_sprm */
     switch(nSprmId)
@@ -682,7 +680,6 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
 void StyleSheetTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
 {
     //create a new style entry
-    // printf("StyleSheetTable::entry(...)\n");
     OSL_ENSURE( !m_pImpl->m_pCurrentEntry, "current entry has to be NULL here");
     StyleSheetEntryPtr pNewEntry( new StyleSheetEntry );
     m_pImpl->m_pCurrentEntry = pNewEntry;
@@ -1315,8 +1312,9 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
             }
         }
     }
-    catch( const uno::Exception& )
+    catch( const uno::Exception& e)
     {
+        (void) e;
     }
 }
 /*-- 05.02.2008 10:27:36---------------------------------------------------

@@ -20,11 +20,10 @@
  *************************************************************/
 
 
+#include "precompiled_reportdesign.hxx"
 #include "FormatCondition.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#ifndef REPORTDESIGN_SHARED_CORESTRINGS_HRC
 #include "corestrings.hrc"
-#endif
 #include <tools/debug.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/sequence.hxx>

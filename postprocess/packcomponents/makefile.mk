@@ -54,7 +54,6 @@ my_components = \
     textoutstream \
     uuresolver \
     abp \
-    adabasui \
     analysis \
     animcore \
     avmedia \
@@ -63,22 +62,41 @@ my_components = \
     bib \
     cached1 \
     calc \
-    canvasfactory \
     chartcontroller \
     chartmodel \
     charttools \
     chartview \
+    component/canvas/source/factory/canvasfactory \
+    component/canvas/source/simplecanvas/simplecanvas \
+    component/canvas/source/vcl/vclcanvas \
     component/comphelper/util/comphelp \
     component/cui/util/cui \
     component/drawinglayer/drawinglayer \
+    component/dbaccess/source/ext/adabas/adabasui \
+    component/dbaccess/source/ext/macromigration/dbmm \
+    component/dbaccess/source/filter/xml/dbaxml \
+    component/dbaccess/util/dba \
+    component/dbaccess/util/dbu \
+    component/dbaccess/util/sdbt \
     component/formula/util/for \
     component/framework/util/fwk \
     component/framework/util/fwl \
     component/framework/util/fwm \
+    component/linguistic/source/lng \
+    component/oox/util/oox \
+    component/reportdesign/util/rptxml \
+    component/reportdesign/util/rpt \
+    component/reportdesign/util/rptui \
     component/vbahelper/util/msforms \
+    component/sax/source/expatwrap/expwrap \
+    component/sax/source/fastparser/fastsax \
+    component/sd/util/sd \
+    component/sd/util/sdd \
     component/sfx2/util/sfx \
     component/sot/util/sot \
     component/svgio/svgio \
+    component/starmath/util/sm \
+    component/starmath/util/smd \
     component/svl/source/fsstor/fsstorage \
     component/svl/source/passwordcontainer/passwordcontainer \
     component/svl/util/svl \
@@ -91,28 +109,26 @@ my_components = \
     component/sw/util/sw \
     component/sw/util/swd \
     component/sw/util/vbaswobj \
+    component/unotools/util/utl \
     component/toolkit/util/ootk \
     component/unoxml/source/rdf/unordf \
     component/unoxml/source/service/unoxml \
+    component/writerfilter/util/writerfilter \
     component/xmloff/source/transform/xof \
     component/xmloff/util/xo \
+    component/xmlscript/util/xcr \
     configmgr \
     ctl \
     date \
-    dba \
     dbase \
-    dbaxml \
-    dbmm \
     dbp \
     dbpool2 \
     dbtools \
-    dbu \
     deployment \
     deploymentgui \
     dlgprov \
     embobj \
     evtatt \
-    fastsax \
     fileacc \
     filterconfig1 \
     flash \
@@ -123,7 +139,6 @@ my_components = \
     guesslang \
     i18npool \
     i18nsearch \
-    lng \
     lnth \
     localebe1 \
     log \
@@ -135,7 +150,6 @@ my_components = \
     odbc \
     offacc \
     oooimprovecore \
-    oox \
     package2 \
     pcr \
     pdffilter \
@@ -145,23 +159,13 @@ my_components = \
     pythonloader \
     pythonscript \
     res \
-    rpt \
-    rptui \
-    rptxml \
-    sax \
     sb \
     sc \
     scd \
     scn \
     scriptframe \
-    sd \
     sdbc2 \
-    sdbt \
-    sdd \
-    simplecanvas \
     slideshow \
-    sm \
-    smd \
     spl \
     srtrs1 \
     stringresource \
@@ -181,13 +185,9 @@ my_components = \
     ucptdoc1 \
     updatefeed \
     updchk \
-    utl \
     uui \
     vbaevents \
     vbaobj \
-    vclcanvas \
-    writerfilter \
-    xcr \
     xmlfa \
     xmlfd \
     xmx \
@@ -244,7 +244,7 @@ my_components += emboleobj
 .END
 
 .IF "$(ENABLE_CAIRO_CANVAS)" == "TRUE"
-my_components += cairocanvas
+my_components += component/canvas/source/cairo/cairocanvas
 .END
 
 .IF "$(ENABLE_GCONF)" != ""
@@ -282,16 +282,16 @@ my_components += \
     ScriptProviderForJava \
     XMergeBridge \
     XSLTValidate \
-    agenda \
-    fax \
-    form \
+    component/wizards/com/sun/star/wizards/agenda/agenda \
+    component/wizards/com/sun/star/wizards/fax/fax \
+    component/wizards/com/sun/star/wizards/form/form \
     hsqldb \
     jdbc \
-    letter \
-    query \
-    report \
-    table \
-    web
+    component/wizards/com/sun/star/wizards/letter/letter \
+    component/wizards/com/sun/star/wizards/query/query \
+    component/wizards/com/sun/star/wizards/report/report \
+    component/wizards/com/sun/star/wizards/table/table \
+    component/wizards/com/sun/star/wizards/web/web
 .IF "$(ENABLE_BEANSHELL)" == "YES"
 my_components += ScriptProviderForBeanShell
 .END
@@ -351,12 +351,12 @@ my_components += \
 .IF "$(OS)" == "WNT" && "$(ENABLE_DIRECTX)" != ""
 my_components += \
     avmediawin \
-    directx9canvas \
-    gdipluscanvas
+    component/canvas/source/directx/directx9canvas \
+    component/canvas/source/directx/gdipluscanvas
 .END
 
 .IF "$(OS)" == "WNT" && "$(ENABLE_DIRECTX)" != "" && "$(USE_DIRECTX5)" != ""
-my_components += directx5canvas
+my_components += component/canvas/source/directx/directx5canvas
 .END
 
 .IF "$(OS)" == "LINUX" || "$(OS)" == "NETBSD" || \

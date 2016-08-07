@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptui.hxx"
 #include "metadata.hxx"
 #include <svtools/localresaccess.hxx>
 #include "com/sun/star/inspection/XPropertyHandler.hpp"

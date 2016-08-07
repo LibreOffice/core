@@ -30,7 +30,11 @@ $(eval $(call gb_Library_set_include,xof,\
     -I$(SRCDIR)/xmloff/inc \
     -I$(SRCDIR)/xmloff/source/inc \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_add_api,xof,\
+    udkapi \
+    offapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,xof,\

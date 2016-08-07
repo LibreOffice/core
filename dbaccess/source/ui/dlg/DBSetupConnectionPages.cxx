@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
+#include "precompiled_dbui.hxx"
 #ifndef DBAUI_DBSETUPCONNECTIONPAGES_HXX
 #include "DBSetupConnectionPages.hxx"
 #endif
@@ -32,9 +32,7 @@
 #ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
 #endif
-#ifndef _DBAUI_AUTOCONTROLS_HRC_
-#include "AutoControls.hrc"
-#endif
+#include "AutoControlsDef.hrc"
 #ifndef _DBAUI_DBADMINSETUP_HRC_
 #include "dbadminsetup.hrc"
 #endif

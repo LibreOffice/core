@@ -29,7 +29,7 @@
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
 //#include <toolkit/unoiface.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/smplhint.hxx>
 #include <vcl/svapp.hxx>

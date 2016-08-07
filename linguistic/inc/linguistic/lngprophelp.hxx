@@ -25,14 +25,13 @@
 #define _LINGUISTIC_LNGPROPHELP_HXX_
 
 #include <tools/solar.h>
-
 #include <uno/lbnames.h>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
-
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
+#include <linguistic/lngdllapi.h>
 
 namespace com { namespace sun { namespace star { namespace beans {
     class   XPropertySet;
@@ -157,7 +156,6 @@ public:
 
 
 ///////////////////////////////////////////////////////////////////////////
-
 class PropertyHelper_Thes :
     public PropertyChgHelper
 {
@@ -179,6 +177,28 @@ public:
             throw(::com::sun::star::uno::RuntimeException);
 };
 
+class LNG_DLLPUBLIC PropertyHelper_Thesaurus
+{
+    PropertyHelper_Thes* pInst;
+    com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >    xPropHelper;
+
+    // disallow use of copy-constructor and assignment-operator
+    PropertyHelper_Thesaurus( const PropertyHelper_Thes & );
+    PropertyHelper_Thesaurus & operator = ( const PropertyHelper_Thes & );
+
+public:
+    PropertyHelper_Thesaurus(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::XInterface > &rxSource,
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet > &rxPropSet );
+    ~PropertyHelper_Thesaurus();
+    void    AddAsPropListener();
+    void    RemoveAsPropListener();
+    void SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals );
+};
+
+
 ///////////////////////////////////////////////////////////////////////////
 
 class PropertyHelper_Spell :
@@ -187,6 +207,7 @@ class PropertyHelper_Spell :
     // default values
     sal_Bool    bIsSpellUpperCase;
     sal_Bool    bIsSpellWithDigits;
+
     sal_Bool    bIsSpellCapitalization;
 
     // return values, will be set to default value or current temporary value
@@ -228,6 +249,41 @@ public:
     sal_Bool    IsSpellUpperCase() const            { return bResIsSpellUpperCase; }
     sal_Bool    IsSpellWithDigits() const           { return bResIsSpellWithDigits; }
     sal_Bool    IsSpellCapitalization() const       { return bResIsSpellCapitalization; }
+};
+
+
+class LNG_DLLPUBLIC PropertyHelper_Spelling
+{
+    PropertyHelper_Spell* pInst;
+    com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >    xPropHelper;
+
+    // disallow use of copy-constructor and assignment-operator
+    PropertyHelper_Spelling( const PropertyHelper_Spell & );
+    PropertyHelper_Spelling & operator = ( const PropertyHelper_Spell & );
+
+public:
+    PropertyHelper_Spelling(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::XInterface > &rxSource,
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet > &rxPropSet );
+    ~PropertyHelper_Spelling();
+
+    void    AddAsPropListener();
+    void    RemoveAsPropListener();
+    void SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals );
+    sal_Int16   GetMaxNumberOfSuggestions() const;
+    sal_Bool    IsSpellUpperCase() const;
+    sal_Bool    IsSpellWithDigits() const;
+    sal_Bool    IsSpellCapitalization() const;
+    sal_Bool addLinguServiceEventListener(
+                const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
+            throw(::com::sun::star::uno::RuntimeException);
+    sal_Bool removeLinguServiceEventListener(
+                const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
+            throw(::com::sun::star::uno::RuntimeException);
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -274,6 +330,39 @@ public:
     sal_Int16   GetMinLeading() const               { return nResHyphMinLeading; }
     sal_Int16   GetMinTrailing() const              { return nResHyphMinTrailing; }
     sal_Int16   GetMinWordLength() const            { return nResHyphMinWordLength; }
+};
+
+class LNG_DLLPUBLIC PropertyHelper_Hyphenation
+{
+    PropertyHelper_Hyphen* pInst;
+    com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >    xPropHelper;
+
+    // disallow use of copy-constructor and assignment-operator
+    PropertyHelper_Hyphenation( const PropertyHelper_Hyphen & );
+    PropertyHelper_Hyphenation & operator = ( const PropertyHelper_Hyphen & );
+
+public:
+    PropertyHelper_Hyphenation(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::XInterface > &rxSource,
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet > &rxPropSet);
+    ~PropertyHelper_Hyphenation();
+
+    void    AddAsPropListener();
+    void    RemoveAsPropListener();
+    void SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals );
+    sal_Int16   GetMinLeading() const;
+    sal_Int16   GetMinTrailing() const;
+    sal_Int16   GetMinWordLength() const;
+    sal_Bool addLinguServiceEventListener(
+                const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
+            throw(::com::sun::star::uno::RuntimeException);
+    sal_Bool removeLinguServiceEventListener(
+                const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
+            throw(::com::sun::star::uno::RuntimeException);
 };
 
 ///////////////////////////////////////////////////////////////////////////

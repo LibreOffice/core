@@ -30,6 +30,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 
+#include "xmlscript/xcrdllapi.h"
 
 namespace xmlscript
 {
@@ -41,7 +42,7 @@ namespace xmlscript
 ##################################################################################################*/
 
 //==================================================================================================
-class XMLElement
+class XCR_DLLPUBLIC XMLElement
     : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XAttributeList >
 {
 public:
@@ -126,13 +127,13 @@ protected:
 ##################################################################################################*/
 
 //==================================================================================================
-::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+XCR_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
 SAL_CALL createInputStream(
     ::rtl::ByteSequence const & rInData )
     SAL_THROW( () );
 
 //==================================================================================================
-::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
+XCR_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
 SAL_CALL createOutputStream(
     ::rtl::ByteSequence * pOutData )
     SAL_THROW( () );

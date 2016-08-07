@@ -31,20 +31,22 @@ $(eval $(call gb_Library_set_include,editeng,\
     $$(INCLUDE) \
     -I$(SRCDIR)/editeng/inc/pch \
     -I$(SRCDIR)/editeng/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,editeng,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,editeng,\
     -DEDITENG_DLLIMPLEMENTATION \
 ))
 
 ifneq ($(strip $(EDITDEBUG)),)
-$(eval $(call gb_Library_set_defs,editeng,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,editeng,\
     -DEDITDEBUG \
 ))
 endif
+
+$(eval $(call gb_Library_add_api,editeng,\
+    udkapi \
+    offapi \
+))
 
 $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/inc/pch/precompiled_editeng \
@@ -153,11 +155,12 @@ $(eval $(call gb_Library_add_linked_libs,editeng,\
     cppu \
     vos3 \
     sal \
-    icuuc \
     i18nisolang1 \
     i18npaper \
     $(gb_STDLIBS) \
 ))
+
+$(call gb_Library_use_external,editeng,icuuc)
 
 # vim: set noet sw=4 ts=4:
 

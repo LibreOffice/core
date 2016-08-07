@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptxml.hxx"
 #include "xmlSubDocument.hxx"
 #include "xmlCell.hxx"
 #include "xmlfilter.hxx"

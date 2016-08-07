@@ -71,7 +71,6 @@ published interface XGroups
     [attribute,readonly] com::sun::star::report::XReportDefinition ReportDefinition;
 };
 
-service Groups : XGroups;
 //=============================================================================
 
 }; }; }; };

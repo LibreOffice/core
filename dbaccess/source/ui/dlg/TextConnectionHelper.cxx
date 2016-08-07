@@ -21,7 +21,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
+#include "precompiled_dbui.hxx"
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
@@ -39,9 +39,7 @@
 #ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
 #endif
-#ifndef _DBAUI_AUTOCONTROLS_HRC_
-#include "AutoControls.hrc"
-#endif
+#include "AutoControlsDef.hrc"
 
 #ifndef _SFXITEMSET_HXX
 #include <svl/itemset.hxx>

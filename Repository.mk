@@ -31,6 +31,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     mkunroll \
     rscdep \
     so_checksum \
+    svidl \
     sspretty \
 ))
 
@@ -40,16 +41,26 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     AppleRemote \
+    adabas \
+    adabasui \
+    agg \
     avmedia \
-    basegfx \
     basebmp \
+    basegfx \
     canvastools \
     cppcanvas \
     cui \
+    dba \
+    dbaxml \
+    dbmm \
+    dbui \
+    dbpool \
+    dbtools \
     desktop_detector \
     drawinglayer \
     svgio \
     editeng \
+    file \
     for \
     forui \
     fwe \
@@ -61,10 +72,20 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     lng \
     msfilter \
     msword \
+    odbc \
+    odbcbase \
+    oox \
     qstart_gtk \
+    rpt \
+    rptui \
+    rptxml \
     sax \
     sb \
+    sdbc \
+    sdbt \
     sfx \
+    sm \
+    smd \
     sot \
     spa \
     svl \
@@ -74,6 +95,10 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     sw \
     swd \
     swui \
+    sd \
+    sdd \
+    sdui \
+    sdfilt \
     textconversiondlgs \
     ootk \
     tl \
@@ -81,6 +106,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     unordf \
     unoxml \
     vbahelper \
+    writerfilter \
     vcl \
     vclplug_gen \
     vclplug_gtk \
@@ -93,14 +119,10 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
-    xml2 \
+    xmlreader \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-    icuuc \
-    icule \
-    rdf \
-    xslt \
 ))
 
 
@@ -123,11 +145,22 @@ $(eval $(call gb_Helper_register_libraries,STLLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
+    cairocanvas \
+    canvasfactory \
+    directx5canvas \
+    directx9canvas \
+    expwrap \
+    fastsax \
     fsstorage \
+    gdipluscanvas \
     hatchwindowfactory \
+    nullcanvas \
     passwordcontainer \
+    simplecanvas \
     vbaswobj \
     msforms \
+    vclcanvas \
+    writerfilter_debug \
 ))
 
 
@@ -138,11 +171,9 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-    jpeglib \
+    basegfx_s \
     ooopathutils \
     salcpprt \
-    zlib \
-    graphite \
     vclmain \
 ))
 

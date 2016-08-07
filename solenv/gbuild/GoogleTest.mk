@@ -57,6 +57,9 @@ endef
 define gb_GoogleTest__GoogleTest_impl
 $(call gb_LinkTarget_LinkTarget,$(2))
 $(call gb_LinkTarget_set_targettype,$(2),GoogleTest)
+$(call gb_LinkTarget_add_defs,$(2),\
+	$(gb_GoogleTest_DEFS) \
+)
 $(call gb_LinkTarget_add_linked_libs,$(2),gtest)
 $(call gb_GoogleTest_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
 $(call gb_GoogleTest_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
@@ -79,15 +82,25 @@ $(eval $(foreach method,\
 	add_objcxxobjects \
 	add_exception_objects \
 	add_noexception_objects \
+	set_yaccflags \
+	add_cflags \
 	set_cflags \
+	add_cxxflags \
 	set_cxxflags \
+	add_objcxxflags \
 	set_objcxxflags \
+	add_defs \
 	set_defs \
 	set_include \
+	add_ldflags \
 	set_ldflags \
+	add_libs \
 	set_library_path_flags \
+	add_api \
 	add_linked_libs \
 	add_linked_static_libs \
+	use_external \
+	use_externals \
 	add_package_headers \
 	add_sdi_headers \
 	add_precompiled_header \

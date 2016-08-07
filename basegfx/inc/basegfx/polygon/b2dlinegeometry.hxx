@@ -29,6 +29,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -69,7 +70,7 @@ namespace basegfx
             @return
             The Line start and end polygon, correctly rotated and scaled
         */
-        B2DPolyPolygon createAreaGeometryForLineStartEnd(
+        BASEGFX_DLLPUBLIC B2DPolyPolygon createAreaGeometryForLineStartEnd(
             const B2DPolygon& rCandidate,
             const B2DPolyPolygon& rArrow,
             bool bStart,
@@ -128,7 +129,7 @@ namespace basegfx
             it's line width. Contains bezier segments and edge roundings as
             needed and defined.
         */
-        B2DPolyPolygon createAreaGeometry(
+        BASEGFX_DLLPUBLIC B2DPolyPolygon createAreaGeometry(
             const B2DPolygon& rCandidate,
             double fHalfLineWidth,
             B2DLineJoin eJoin = B2DLINEJOIN_ROUND,

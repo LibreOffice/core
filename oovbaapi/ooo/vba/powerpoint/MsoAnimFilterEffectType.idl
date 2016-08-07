@@ -1,0 +1,50 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+
+#ifndef __ooo_vba_powerpoint_MsoAnimFilterEffectType_idl__
+#define __ooo_vba_powerpoint_MsoAnimFilterEffectType_idl__
+
+module ooo { module vba { module powerpoint {
+    constants MsoAnimFilterEffectType {
+        const long msoAnimFilterEffectTypeBarn = 1;
+        const long msoAnimFilterEffectTypeBlinds = 2;
+        const long msoAnimFilterEffectTypeBox = 3;
+        const long msoAnimFilterEffectTypeCheckerboard = 4;
+        const long msoAnimFilterEffectTypeCircle = 5;
+        const long msoAnimFilterEffectTypeDiamond = 6;
+        const long msoAnimFilterEffectTypeDissolve = 7;
+        const long msoAnimFilterEffectTypeFade = 8;
+        const long msoAnimFilterEffectTypeImage = 9;
+        const long msoAnimFilterEffectTypeNone = 0;
+        const long msoAnimFilterEffectTypePixelate = 10;
+        const long msoAnimFilterEffectTypePlus = 11;
+        const long msoAnimFilterEffectTypeRandomBar = 12;
+        const long msoAnimFilterEffectTypeSlide = 13;
+        const long msoAnimFilterEffectTypeStretch = 14;
+        const long msoAnimFilterEffectTypeStrips = 15;
+        const long msoAnimFilterEffectTypeWedge = 16;
+        const long msoAnimFilterEffectTypeWheel = 17;
+        const long msoAnimFilterEffectTypeWipe = 18;
+    };
+}; }; };
+
+#endif

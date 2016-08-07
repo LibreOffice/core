@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptxml.hxx"
 #include "xmlFunction.hxx"
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>

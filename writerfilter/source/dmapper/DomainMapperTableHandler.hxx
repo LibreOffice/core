@@ -31,23 +31,32 @@
 namespace writerfilter {
 namespace dmapper {
 
-typedef ::com::sun::star::text::XTextRange TextRange_t;
-typedef ::com::sun::star::uno::Reference< TextRange_t > Handle_t;
-typedef ::com::sun::star::uno::Sequence< Handle_t> CellSequence_t;
-typedef boost::shared_ptr<CellSequence_t> CellSequencePointer_t;
-typedef ::com::sun::star::uno::Sequence< CellSequence_t > RowSequence_t;
-typedef boost::shared_ptr<RowSequence_t> RowSequencePointer_t;
-typedef ::com::sun::star::uno::Sequence< RowSequence_t> TableSequence_t;
-typedef boost::shared_ptr<TableSequence_t> TableSequencePointer_t;
-typedef ::com::sun::star::text::XTextAppendAndConvert Text_t;
-typedef ::com::sun::star::uno::Reference<Text_t> TextReference_t;
+using namespace ::com::sun::star;
 
-typedef ::com::sun::star::beans::PropertyValues                     TablePropertyValues_t;
-typedef ::com::sun::star::uno::Sequence< TablePropertyValues_t >    RowPropertyValuesSeq_t;
-typedef ::com::sun::star::uno::Sequence< RowPropertyValuesSeq_t>    CellPropertyValuesSeq_t;
+typedef text::XTextRange TextRange_t;
+typedef uno::Reference< TextRange_t > Handle_t;
+typedef uno::Sequence< Handle_t> CellSequence_t;
+typedef boost::shared_ptr<CellSequence_t> CellSequencePointer_t;
+typedef uno::Sequence< CellSequence_t > RowSequence_t;
+typedef boost::shared_ptr<RowSequence_t> RowSequencePointer_t;
+typedef uno::Sequence< RowSequence_t> TableSequence_t;
+typedef boost::shared_ptr<TableSequence_t> TableSequencePointer_t;
+typedef text::XTextAppendAndConvert Text_t;
+typedef uno::Reference<Text_t> TextReference_t;
+
+typedef beans::PropertyValues                     TablePropertyValues_t;
+typedef uno::Sequence< TablePropertyValues_t >    RowPropertyValuesSeq_t;
+typedef uno::Sequence< RowPropertyValuesSeq_t>    CellPropertyValuesSeq_t;
 
 typedef std::vector<PropertyMapPtr>     PropertyMapVector1;
 typedef std::vector<PropertyMapVector1> PropertyMapVector2;
+
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
+XMLTag::Pointer_t handleToTag(Handle_t & rHandle);
+void cellSequenceToTag(XMLTag::Pointer_t pTag, CellSequence_t & pCellSequence);
+void rowSequenceToTag(XMLTag::Pointer_t pTag, RowSequence_t & pRowSequence);
+XMLTag::Pointer_t tableSequenceToTag(TableSequence_t & rTableSequence);
+#endif
 
 class DomainMapper_Impl;
 class TableStyleSheetEntry;

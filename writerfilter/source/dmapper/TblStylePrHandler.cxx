@@ -23,7 +23,9 @@
 #include <PropertyMap.hxx>
 #include <ooxml/resourceids.hxx>
 #include <dmapperLoggers.hxx>
+#ifdef DEBUG_DMAPPER_TBL_STYLE_HANDLER
 #include <resourcemodel/QNameToString.hxx>
+#endif
 
 #include "dmapperLoggers.hxx"
 
@@ -46,7 +48,7 @@ TblStylePrHandler::~TblStylePrHandler( )
 
 void TblStylePrHandler::lcl_attribute(Id rName, Value & rVal)
 {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TBL_STYLE_HANDLER
     dmapper_logger->startElement("TblStylePrHandler.attribute");
     dmapper_logger->attribute("name", (*QNameToString::Instance())(rName));
     dmapper_logger->chars(rVal.toString());
@@ -67,7 +69,7 @@ void TblStylePrHandler::lcl_attribute(Id rName, Value & rVal)
 
 void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
 {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TBL_STYLE_HANDLER
     dmapper_logger->startElement("TblStylePrHandler.sprm");
     dmapper_logger->attribute("sprm", rSprm.toString());
 #endif
@@ -96,7 +98,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
             }
     }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TBL_STYLE_HANDLER
     dmapper_logger->endElement("TblStylePrHandler.sprm");
 #endif
 }

@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
+#include "precompiled_dbui.hxx"
 
 #include "dbwizsetup.hxx"
 #include "dsmeta.hxx"
@@ -32,69 +32,27 @@
 #include "dsitems.hxx"
 #include "dsnItem.hxx"
 
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <unotools/pathoptions.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX
 #include <svl/stritem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX
 #include <svl/eitem.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX
 #include <svl/intitem.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
-#endif
-#ifndef _SFX_DOCFILT_HACK_HXX
 #include <sfx2/docfilt.hxx>
-#endif
-#ifndef _UNOTOOLS_UCBHELPER_HXX
 #include <unotools/ucbhelper.hxx>
-#endif
-#ifndef _DBAUI_GENERALPAGE_HXX_
 #include "generalpage.hxx"
-#endif
-#ifndef _DBAUI_LOCALRESACCESS_HXX_
 #include "localresaccess.hxx"
-#endif
-#ifndef _DBAUI_STRINGLISTITEM_HXX_
 #include "stringlistitem.hxx"
-#endif
-#ifndef _DBAUI_PROPERTYSETITEM_HXX_
 #include "propertysetitem.hxx"
-#endif
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
 #include <unotools/confignode.hxx>
-#endif
-#ifndef _DBAUI_DBADMINIMPL_HXX_
 #include "DbAdminImpl.hxx"
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
-#ifndef DBAUI_CONNECTIONPAGESETUP_HXX
 #include "ConnectionPageSetup.hxx"
-#endif
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
-#ifndef _DBAUI_DBADMIN_HRC_
 #include "dbadmin.hrc"
-#endif
-#ifndef DBAUI_ASYNCRONOUSLINK_HXX
 #include "AsyncronousLink.hxx"
-#endif
-#ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
-#endif
 #include <cppuhelper/exc_hlp.hxx>
 
 /** === begin UNO includes === **/
@@ -1101,8 +1059,8 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             void doLoadAsync();
 
             // XTerminateListener
-            virtual void SAL_CALL queryTermination( const EventObject& Event ) throw (TerminationVetoException, RuntimeException);
-            virtual void SAL_CALL notifyTermination( const EventObject& Event ) throw (RuntimeException);
+            virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& Event ) throw (TerminationVetoException, RuntimeException);
+            virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& Event ) throw (RuntimeException);
             // XEventListener
             virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -1186,17 +1144,17 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         }
 
         // .............................................................................
-        void SAL_CALL AsyncLoader::queryTermination( const EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException)
+        void SAL_CALL AsyncLoader::queryTermination( const ::com::sun::star::lang::EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException)
         {
             throw TerminationVetoException();
         }
 
         // .............................................................................
-        void SAL_CALL AsyncLoader::notifyTermination( const EventObject& /*Event*/ ) throw (RuntimeException)
+        void SAL_CALL AsyncLoader::notifyTermination( const ::com::sun::star::lang::EventObject& /*Event*/ ) throw (RuntimeException)
         {
         }
         // .............................................................................
-        void SAL_CALL AsyncLoader::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
+        void SAL_CALL AsyncLoader::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw (RuntimeException)
         {
         }
     }

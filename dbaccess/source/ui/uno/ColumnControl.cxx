@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
+#include "precompiled_dbui.hxx"
 #ifndef DBAUI_COLUMNCONTROL_HXX
 #include "ColumnControl.hxx"
 #endif

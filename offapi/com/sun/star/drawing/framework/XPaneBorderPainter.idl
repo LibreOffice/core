@@ -33,19 +33,11 @@
 #ifndef __com_sun_star_rendering_XCanvas_idl__
 #include <com/sun/star/rendering/XCanvas.idl>
 #endif
+#ifndef __com_sun_star_rendering_drawing_framework_BorderType_idl__
+#include <com/sun/star/drawing/framework/BorderType.idl>
+#endif
 
 module com { module sun { module star { module drawing { module framework {
-
-/** See XPaneBorderPainter and its addBorder() and removeBorder() methods
-    for an explanation of the border type and its values.
-*/
-published enum BorderType
-{
-    INNER_BORDER,
-    OUTER_BORDER,
-    TOTAL_BORDER
-};
-
 
 /** Paint the border around a rectangular region, typically a pane.
 

@@ -27,12 +27,13 @@
 #ifndef __com_sun_star_sync_SyncScheme_idl__
 #include <com/sun/star/sync/SyncScheme.idl>
 #endif
+#ifndef __com_sun_star_sync_FilterData_idl__
+#include <com/sun/star/sync/FilterData.idl>
+#endif
 
 //=============================================================================
 
 module com {  module sun {  module star {  module sync {
-
-published typedef sequence< string > FilterData;
 
 //=============================================================================
 

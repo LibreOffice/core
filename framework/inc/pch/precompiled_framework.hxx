@@ -405,7 +405,6 @@
 #include "toolkit/awt/vclxwindow.hxx"
 #include "toolkit/helper/convert.hxx"
 #include "toolkit/helper/vclunohelper.hxx"
-#include "toolkit/unohlp.hxx"
 
 #include "tools/color.hxx"
 #include "tools/config.hxx"

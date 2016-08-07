@@ -20,6 +20,7 @@
  *************************************************************/
 
 
+#include "precompiled_reportdesign.hxx"
 #include "Groups.hxx"
 #include "Group.hxx"
 #include <tools/debug.hxx>

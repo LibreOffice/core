@@ -89,7 +89,7 @@ namespace basegfx
             @param rTup
             The 2D Tuple which will be copied.
         */
-        explicit B2DTuple(const B2ITuple& rTup);
+        BASEGFX_DLLPUBLIC explicit B2DTuple(const B2ITuple& rTup);
 
         ~B2DTuple()
         {}
@@ -235,9 +235,9 @@ namespace basegfx
             return *this;
         }
 
-        void correctValues(const double fCompareValue = 0.0);
+        BASEGFX_DLLPUBLIC void correctValues(const double fCompareValue = 0.0);
 
-        static const B2DTuple& getEmptyTuple();
+        BASEGFX_DLLPUBLIC static const B2DTuple& getEmptyTuple();
     };
 
     // external operators
@@ -362,7 +362,7 @@ namespace basegfx
 
         @return the nearest integer for this tuple
     */
-    B2ITuple fround(const B2DTuple& rTup);
+    BASEGFX_DLLPUBLIC B2ITuple fround(const B2DTuple& rTup);
 } // end of namespace basegfx
 
 #endif /* _BGFX_TUPLE_B2DTUPLE_HXX */

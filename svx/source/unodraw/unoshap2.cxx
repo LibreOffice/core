@@ -1627,7 +1627,7 @@ uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygonBezier::getSupportedServic
 #include <sfx2/fcontnr.hxx>
 #endif
 
-#include "toolkit/unohlp.hxx"
+#include "toolkit/helper/vclunohelper.hxx"
 
 //----------------------------------------------------------------------
 SvxGraphicObject::SvxGraphicObject( SdrObject* pObj ) throw()

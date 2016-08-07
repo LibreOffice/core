@@ -125,9 +125,11 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
                 }
                 catch( const uno::Exception& e )
                 {
+                    (void) e;
 #if DEBUG
-                    clog << "Exception in OLE Handler: ";
-                    clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
+                    dmapper_logger->startElement("exception");
+                    dmapper_logger->chars(e.Message);
+                    dmapper_logger->endElement("exception");
 #endif
                 }
             }
@@ -175,9 +177,11 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
                 }
                 catch( const uno::Exception& e )
                 {
+                    (void) e;
 #if DEBUG
-                    clog << "Exception in OLE Handler: ";
-                    clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
+                    dmapper_logger->startElement("exception");
+                    dmapper_logger->chars(e.Message);
+                    dmapper_logger->endElement("exception");
 #endif
                 }
             }

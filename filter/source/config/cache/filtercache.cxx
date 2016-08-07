@@ -222,7 +222,7 @@ void FilterCache::load(EFillState eRequired,
         )
        )
     {
-        OSL_ENSURE(sal_False, "Who disturbs our \"fill cache on demand\" feature and force loading of ALL data during office startup? Please optimize your code, so a full filled filter cache is not really needed here!");
+        OSL_TRACE("Who disturbs our \"fill cache on demand\" feature and force loading of ALL data during office startup? Please optimize your code, so a full filled filter cache is not really needed here!");
     }
 #endif
 

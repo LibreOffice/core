@@ -1,0 +1,60 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+
+
+//i20156 - new file for xmlsecurity module
+
+/** -- idl definition -- **/
+
+#ifndef __com_sun_star_xml_crypto_sax_elementmarkpriority_idl_
+#define __com_sun_star_xml_crypto_sax_elementmarkpriority_idl_
+
+module com { module sun { module star { module xml { module crypto { module sax {
+
+/**
+ * Defines priority for the element mark's notification.
+ * <p>
+ * The PRI_MINIMUM priority is a value less than any practical
+ * priority value, it is used when compare between different
+ * priority values.
+ * <p>
+ * The PRI_AFTERMODIFY priority represents the notification will be
+ * sent after any internal modification has finished.
+ * <p>
+ * The PRI_BEFOREMODIFY proirity represents the notification will be
+ * sent before any internal modification happens.
+ * <p>
+ * So an element mark with PRI_BEFOREMODIFY will be handled first,
+ * and one with PRI_AFTERMODIFY will be handled at last.
+ */
+enum ElementMarkPriority
+{
+    MINIMUM = 1,
+    AFTERMODIFY,
+    BEFOREMODIFY
+};
+
+} ; } ; } ; } ; } ; } ;
+
+
+#endif
+

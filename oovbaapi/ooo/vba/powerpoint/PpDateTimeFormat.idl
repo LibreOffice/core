@@ -1,0 +1,46 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+
+#ifndef __ooo_vba_powerpoint_PpDateTimeFormat_idl__
+#define __ooo_vba_powerpoint_PpDateTimeFormat_idl__
+
+module ooo { module vba { module powerpoint {
+    constants PpDateTimeFormat {
+        const long ppDateTimeddddMMMMddyyyy = 2;
+        const long ppDateTimedMMMMyyyy = 3;
+        const long ppDateTimedMMMyy = 5;
+        const long ppDateTimeFigureOut = 14;
+        const long ppDateTimeFormatMixed = -2;
+        const long ppDateTimeHmm = 10;
+        const long ppDateTimehmmAMPM = 12;
+        const long ppDateTimeHmmss = 11;
+        const long ppDateTimehmmssAMPM = 13;
+        const long ppDateTimeMdyy = 1;
+        const long ppDateTimeMMddyyHmm = 8;
+        const long ppDateTimeMMddyyhmmAMPM = 9;
+        const long ppDateTimeMMMMdyyyy = 4;
+        const long ppDateTimeMMMMyy = 6;
+        const long ppDateTimeMMyy = 7;
+    };
+}; }; };
+
+#endif

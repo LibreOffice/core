@@ -25,6 +25,7 @@
 #define _BGFX_TOOLS_TOOLS_HXX
 
 #include <sal/types.h>
+#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {
@@ -53,7 +54,7 @@ namespace basegfx
             @return true, when at least part of the line is visible
             after the clip, false otherwise
          */
-        bool liangBarskyClip2D( ::basegfx::B2DPoint&        io_rStart,
+        BASEGFX_DLLPUBLIC bool liangBarskyClip2D( ::basegfx::B2DPoint&      io_rStart,
                                 ::basegfx::B2DPoint&        io_rEnd,
                                 const ::basegfx::B2DRange&  rClipRect );
 
@@ -115,7 +116,7 @@ namespace basegfx
             @param rFitTarget
             The rectangle to fit the parallelogram into.
          */
-        void infiniteLineFromParallelogram( ::basegfx::B2DPoint&        io_rLeftTop,
+        BASEGFX_DLLPUBLIC void infiniteLineFromParallelogram( ::basegfx::B2DPoint&      io_rLeftTop,
                                             ::basegfx::B2DPoint&        io_rLeftBottom,
                                             ::basegfx::B2DPoint&        io_rRightTop,
                                             ::basegfx::B2DPoint&        io_rRightBottom,

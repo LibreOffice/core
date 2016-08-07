@@ -54,7 +54,7 @@
 #include <comphelper/extract.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #endif
 #include <comphelper/property.hxx>
 #include <vcl/msgbox.hxx>

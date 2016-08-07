@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptui.hxx"
 #include "EndMarker.hxx"
 #include "ColorChanger.hxx"
 #include "SectionWindow.hxx"

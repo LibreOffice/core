@@ -25,6 +25,7 @@ package org.openoffice.dbaccess.qa.unoapi;
 
 import org.openoffice.Runner;
 import org.openoffice.test.OfficeConnection;
+import org.openoffice.test.Argument;
 import static org.junit.Assert.*;
 
 public final class Test {
@@ -41,9 +42,11 @@ public final class Test {
     @org.junit.Test public void test() {
         assertTrue(
             Runner.run(
-                "-sce", "dbaccess.sce", "-xcl", "knownissues.xcl", "-ini",
-                "dbaccess.props", "-tdoc", "testdocuments", "-cs",
-                connection.getDescription()));
+                "-sce", Argument.get("sce"),
+                "-xcl", Argument.get("xcl"),
+                "-ini", Argument.get("ini"),
+                "-tdoc", Argument.get("tdoc"),
+                "-cs", connection.getDescription()));
     }
 
     private final OfficeConnection connection = new OfficeConnection();

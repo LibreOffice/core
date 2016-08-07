@@ -56,27 +56,6 @@ published interface XNamed: com::sun::star::uno::XInterface
 
 //=============================================================================
 
-/** specifies the display name of the object.
-
-    <p>The name is generally unique in the container of the object.</p>
- */
-published interface XNamedEx: XNamed
-{
-    //-------------------------------------------------------------------------
-
-    /** @returns
-        the display name of the object.
-     */
-    string getDisplayName();
-
-    //-------------------------------------------------------------------------
-
-    /** sets the display name of the object.
-     */
-    [oneway] void setDisplayName( [in] string aName );
-
-};
-
 }; }; }; };
 
 #endif

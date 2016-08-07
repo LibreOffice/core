@@ -68,7 +68,7 @@
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #endif
 #include <vcl/window.hxx>
 #include <svtools/menuoptions.hxx>

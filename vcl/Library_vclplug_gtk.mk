@@ -23,23 +23,26 @@
 
 $(eval $(call gb_Library_Library,vclplug_gtk))
 
+$(eval $(call gb_Library_add_api,vclplug_gtk,\
+    udkapi \
+    offapi \
+))
+
 $(eval $(call gb_Library_set_include,vclplug_gtk,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/inc/pch \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc/stl \
     -I$(OUTDIR)/inc \
 ))
 
-$(eval $(call gb_Library_set_cxxflags,vclplug_gtk,\
-    $$(CXXFLAGS) \
+$(eval $(call gb_Library_set_include,vclplug_gtk,\
+    $$(INCLUDE) \
     $$(GTK_CFLAGS) \
 ))
 
-$(eval $(call gb_Library_set_defs,vclplug_gtk,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vclplug_gtk,\
     -DVCLPLUG_GTK_IMPLEMENTATION \
     -DVERSION=\"$(UPD)$(LAST_MINOR)\" \
 ))
@@ -49,27 +52,17 @@ $(eval $(call gb_Library_set_include,vclplug_gtk,\
     $$(INCLUDE) \
     $(shell pkg-config --cflags-only-I dbus-glib-1) \
 ))
-$(eval $(call gb_Library_set_defs,vclplug_gtk,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vclplug_gtk,\
     -DENABLE_DBUS \
 ))
-$(eval $(call gb_Library_set_ldflags,vclplug_gtk,\
-    $$(LDFLAGS) \
-    $(filter-out -l%,$(shell pkg-config --libs dbus-glib-1)) \
-))
-$(eval $(call gb_Library_add_external_libs,vclplug_gtk, \
-    $(patsubst -l%,%, $(filter -l%, $(shell pkg-config --libs dbus-glib-1))) \
+$(eval $(call gb_Library_add_libs,vclplug_gtk,\
+    $(shell pkg-config --libs dbus-glib-1) \
 ))
 endif
 
-$(eval $(call gb_Library_set_ldflags,vclplug_gtk,	\
-    $$(LDFLAGS)						\
-    $(filter-out -l%,$(GTK_LIBS))			\
-    $(filter-out -l%,$(GTHREAD_LIBS)) \
-))
-$(eval $(call gb_Library_add_external_libs,vclplug_gtk,	\
-    $(patsubst -l%,%, $(filter -l%, $(GTK_LIBS)))	\
-    $(patsubst -l%,%, $(filter -l%, $(GTHREAD_LIBS))) \
+$(eval $(call gb_Library_add_libs,vclplug_gtk,\
+    $(GTK_LIBS) \
+    $(GTHREAD_LIBS) \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,vclplug_gtk,\
@@ -82,8 +75,6 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gtk,\
     basegfx \
     comphelper \
     cppuhelper \
-    icuuc \
-    icule \
     i18nisolang1 \
     i18npaper \
     i18nutil \
@@ -98,6 +89,11 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gtk,\
     ICE \
     $(gb_STDLIBS) \
 ))
+
+$(call gb_Library_use_externals,vclplug_gtk,\
+    icule \
+    icuuc \
+)
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_gtk,\
     vcl/unx/gtk/a11y/atkaction \

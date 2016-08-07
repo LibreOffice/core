@@ -34,6 +34,7 @@
 #include <cppcanvas/sprite.hxx>
 #include <basegfx/vector/b2isize.hxx>
 
+#include <cppcanvas/cppcanvasdllapi.h>
 
 namespace basegfx
 {
@@ -58,7 +59,7 @@ namespace cppcanvas
         only be drawn on exactly that canvas. You have to regenerate
         them for different canvases.
      */
-    class BaseGfxFactory
+    class CPPCANVAS_DLLPUBLIC BaseGfxFactory
     {
     public:
         static BaseGfxFactory& getInstance();

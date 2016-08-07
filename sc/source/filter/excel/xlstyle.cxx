@@ -32,7 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/font.hxx>
 #include <rtl/tencinfo.h>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <editeng/svxfont.hxx>
 #include "global.hxx"
 #include "xlroot.hxx"

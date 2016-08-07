@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-
+#include "precompiled_reportdesign.hxx"
 #include "conditionalexpression.hxx"
 
 /** === begin UNO includes === **/

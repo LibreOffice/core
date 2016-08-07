@@ -20,6 +20,7 @@
  *************************************************************/
 
 
+#include "precompiled_reportdesign.hxx"
 #include "Shape.hxx"
 
 #include <com/sun/star/beans/NamedValue.hpp>

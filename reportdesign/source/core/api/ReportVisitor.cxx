@@ -20,6 +20,7 @@
  *************************************************************/
 
 
+#include "precompiled_reportdesign.hxx"
 #include "ReportVisitor.hxx"
 namespace reportdesign
 {

@@ -26,10 +26,14 @@ $(eval $(call gb_Executable_Executable,g2g))
 $(eval $(call gb_Executable_set_include,g2g,\
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/ \
-    -I$(OUTDIR)/inc/offuh/ \
     -I$(SRCDIR)/svtools/inc/ \
     -I$(SRCDIR)/svtools/inc/pch/ \
     -I$(SRCDIR)/svtools/inc/svtools/ \
+))
+
+$(eval $(call gb_Executable_add_api,g2g,\
+    udkapi \
+    offapi \
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,g2g,\

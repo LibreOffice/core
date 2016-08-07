@@ -21,7 +21,6 @@
 
 
 
-#include "precompiled_xmlreader.hxx"
 #include "sal/config.h"
 
 #include <climits>

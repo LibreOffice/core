@@ -26,6 +26,7 @@
 #include <boost/utility.hpp>
 #include <boost/shared_ptr.hpp>
 #include <vector>
+#include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -57,7 +58,7 @@ namespace basegfx
         All usages should handle instances of BColorModifier encapsulated
         into these shared pointers.
     */
-    class BColorModifier : private boost::noncopyable
+    class BASEGFX_DLLPUBLIC BColorModifier : private boost::noncopyable
     {
     private:
     protected:
@@ -92,7 +93,7 @@ namespace basegfx
         luminance value calculated based on the source color by using
         the following weights: r * 0.30, g * 0.59, b * 0.11
     */
-    class BColorModifier_gray : public BColorModifier
+    class BASEGFX_DLLPUBLIC BColorModifier_gray : public BColorModifier
     {
     private:
     protected:
@@ -120,7 +121,7 @@ namespace basegfx
 
         returns a color where red green and blue are inverted using 1.0 - n
     */
-    class BColorModifier_invert : public BColorModifier
+    class BASEGFX_DLLPUBLIC BColorModifier_invert : public BColorModifier
     {
     private:
     protected:
@@ -152,7 +153,7 @@ namespace basegfx
         This derivation is used for the svg importer and does exactly what SVG
         defines for this needed case.
     */
-    class BColorModifier_luminance_to_alpha : public BColorModifier
+    class BASEGFX_DLLPUBLIC BColorModifier_luminance_to_alpha : public BColorModifier
     {
     private:
     protected:
@@ -182,7 +183,7 @@ namespace basegfx
         given color, replacing everything. Useful e.g. for unified shadow
         creation
     */
-    class BColorModifier_replace : public BColorModifier
+    class BASEGFX_DLLPUBLIC BColorModifier_replace : public BColorModifier
     {
     private:
         ::basegfx::BColor           maBColor;
@@ -219,7 +220,7 @@ namespace basegfx
 
         col * (1 - f) + aSourceColor * f
     */
-    class BColorModifier_interpolate : public BColorModifier
+    class BASEGFX_DLLPUBLIC BColorModifier_interpolate : public BColorModifier
     {
     private:
         ::basegfx::BColor           maBColor;
@@ -257,7 +258,7 @@ namespace basegfx
         returns black when the luminance of the given color is less than
         the given treshhold value in the range [0.0 .. 1.0], else white
     */
-    class BColorModifier_black_and_white : public BColorModifier
+    class BASEGFX_DLLPUBLIC BColorModifier_black_and_white : public BColorModifier
     {
     private:
         double                      mfValue;
@@ -294,7 +295,7 @@ namespace basegfx
 
         col(r,g,b) = clamp(pow(col(r,g,b), 1.0 / gamma), 0.0, 1.0)
     */
-    class BColorModifier_gamma : public BColorModifier
+    class BASEGFX_DLLPUBLIC BColorModifier_gamma : public BColorModifier
     {
     private:
         double                      mfValue;
@@ -332,7 +333,7 @@ namespace basegfx
         - be able to cover a bigger change range utilizing the cmobination
         - allow execution by a small, common, precalculated table
     */
-    class BColorModifier_RGBLuminanceContrast : public BColorModifier
+    class BASEGFX_DLLPUBLIC BColorModifier_RGBLuminanceContrast : public BColorModifier
     {
     private:
         double                      mfRed;
@@ -385,7 +386,7 @@ namespace basegfx
         All references to BColorModifier members use shared pointers, thus instances of
         BColorModifierStack can be copied by the default mechanisms if needed.
     */
-    class BColorModifierStack
+    class BASEGFX_DLLPUBLIC BColorModifierStack
     {
     protected:
         ::std::vector< BColorModifierSharedPtr >        maBColorModifiers;

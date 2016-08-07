@@ -365,8 +365,6 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
 
 };
 
-service SlideShow : XSlideShow;
-
 }; }; }; };
 
 #endif

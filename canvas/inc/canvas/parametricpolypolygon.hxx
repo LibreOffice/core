@@ -32,6 +32,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 #include <boost/utility.hpp>
+#include <canvas/canvastoolsdllapi.h>
 
 namespace basegfx
 {
@@ -47,7 +48,7 @@ namespace canvas
     typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::rendering::XParametricPolyPolygon2D,
                                                    ::com::sun::star::lang::XServiceInfo > ParametricPolyPolygon_Base;
 
-    class ParametricPolyPolygon : public ::comphelper::OBaseMutex,
+    class CANVASTOOLS_DLLPUBLIC ParametricPolyPolygon : public ::comphelper::OBaseMutex,
                                   public ParametricPolyPolygon_Base,
                                   private ::boost::noncopyable
     {

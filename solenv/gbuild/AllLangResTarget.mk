@@ -242,8 +242,8 @@ $(call gb_ResTarget_get_imagelist_target,$(1)) : $(call gb_ResTarget_get_target,
 
 $(call gb_ResTarget_get_outdir_target,$(1)) : $(call gb_ResTarget_get_target,$(1)) 
 $(call gb_ResTarget_get_outdir_target,$(1)) : ILSTTARGET = $(call gb_ResTarget_get_outdir_imagelist_target,$(1))
-$(call gb_Deliver_add_deliverable,$(call gb_ResTarget_get_outdir_target,$(1)),$(call gb_ResTarget_get_target,$(1)))
-$(call gb_Deliver_add_deliverable,$(call gb_ResTarget_get_outdir_imagelist_target,$(1)),$(call gb_ResTarget_get_imagelist_target,$(1)))
+$(call gb_Deliver_add_deliverable,$(call gb_ResTarget_get_outdir_target,$(1)),$(call gb_ResTarget_get_target,$(1)),$(1))
+$(call gb_Deliver_add_deliverable,$(call gb_ResTarget_get_outdir_imagelist_target,$(1)),$(call gb_ResTarget_get_imagelist_target,$(1)),$(1))
 
 endef
 

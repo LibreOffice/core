@@ -90,6 +90,42 @@ const ::rtl::OUString & OOXMLStreamImpl::getTarget() const
     return msTarget;
 }
 
+::rtl::OUString lcl_normalizeTarget(const ::rtl::OUString & s)
+{
+    const int nStringsToCut = 2;
+    const ::rtl::OUString aStringToCut[] = {
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("./")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"))
+    };
+
+    bool bDone = false;
+    sal_Int32 nIndex = 0;
+    while (!bDone)
+    {
+        for (int n = 0; n <= nStringsToCut; n++)
+        {
+            if (n == nStringsToCut)
+            {
+                bDone = true;
+            }
+            else
+            {
+                sal_Int32 nNewIndex = s.indexOf(aStringToCut[n], nIndex);
+
+                if (nIndex == nNewIndex)
+                {
+                    sal_Int32 nLength = aStringToCut[n].getLength();
+                    nIndex += nLength;
+
+                    break;
+                }
+            }
+        }
+    }
+
+    return s.copy(nIndex);
+}
+
 bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                                     xRelationshipAccess,
                                     StreamType_t nStreamType,
@@ -184,7 +220,7 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                 else
                 {
                     rDocumentTarget = msPath;
-                    rDocumentTarget += sMyTarget;
+                    rDocumentTarget += lcl_normalizeTarget(sMyTarget);
                 }
 
                 break;

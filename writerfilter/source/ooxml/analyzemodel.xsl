@@ -119,6 +119,7 @@
 			</xsl:when>
 		</xsl:choose>
         <xsl:copy-of select="@tag"/>
+        <xsl:copy-of select="@supported"/>
 	</xsl:for-each>
 </xsl:template>
 </xsl:stylesheet>

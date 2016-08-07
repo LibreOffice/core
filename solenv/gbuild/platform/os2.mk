@@ -163,17 +163,18 @@ endef
 
 # CObject class
 
+# $(call gb_CObject__command,object,relative-source,source,dep-file)
 define gb_CObject__command
 $(call gb_Output_announce,$(2),$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) && \
-	mkdir -p $(dir $(call gb_CObject_get_dep_target,$(2))) && \
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CC) \
-		$(DEFS) $(CFLAGS) \
+		$(DEFS) \
+		$(T_CFLAGS) \
 		-c $(3) \
 		-o $(1) \
-		-MMD -MT $(call gb_CObject_get_target,$(2)) \
-		-MF $(call gb_CObject_get_dep_target,$(2)) \
+		-MMD -MT $(1) \
+		-MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE))
 endef
@@ -181,17 +182,18 @@ endef
 
 # CxxObject class
 
+# $(call gb_CxxObject__command,object,relative-source,source,dep-file)
 define gb_CxxObject__command
 $(call gb_Output_announce,$(2),$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) && \
-	mkdir -p $(dir $(call gb_CxxObject_get_dep_target,$(2))) && \
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CXX) \
-		$(DEFS) $(CXXFLAGS) \
+		$(DEFS) \
+		$(T_CXXFLAGS) \
 		-c $(3) \
 		-o $(1) \
-		-MMD -MT $(call gb_CxxObject_get_target,$(2)) \
-		-MF $(call gb_CxxObject_get_dep_target,$(2)) \
+		-MMD -MT $(1) \
+		-MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
 endef
@@ -281,14 +283,9 @@ endef
 
 # LinkTarget class
 
-gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
-
-ifeq ($(gb_DEBUGLEVEL),2)
-gb_LinkTarget_CFLAGS += -g
-gb_LinkTarget_CXXFLAGS += -g
-gb_LinkTarget_OBJCXXFLAGS += -g
-endif
+gb_DEBUG_CFLAGS := -g
 
 gb_LinkTarget_INCLUDE :=\
 	$(filter-out %/stl, $(subst -I. , ,$(SOLARINC))) \
@@ -319,13 +316,14 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
-		$(LDFLAGS) \
+		$(T_LDFLAGS) \
 		@$${RESPONSEFILE} \
 		$(if $(DLLTARGET), $(DLLDEF)) \
 		$(NATIVERES) \
 		$(patsubst %.lib,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) \
 		$(patsubst %,-l%,$(EXTERNAL_LIBS)) \
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
+		$(LIBS) \
 		$(if $(DLLTARGET),-o $(DLLTARGET), -o $(1) ); \
 		RC=$$?; rm $${RESPONSEFILE} \
 	$(if $(DLLTARGET),; emximp -p2048 -o $(1) $(DLLDEF) ) \
@@ -355,7 +353,7 @@ endef
 
 # Library class
 
-gb_Library_DEFS := -D_DLL
+gb_Library_DEFS := -D_DLL_
 gb_Library_TARGETTYPEFLAGS := -Zdll
 gb_Library_get_rpath :=
 
@@ -367,9 +365,7 @@ gb_Library_PLAINLIBS_NONE += \
 	ft2lib \
 	dl \
 	freetype \
-	jpeg \
 	m \
-	z \
 	pthread
 
 gb_Library_LAYER := \
@@ -433,11 +429,11 @@ $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS +=  \
 		$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.pdb,$(3))) \
 		$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.ilk,$(3))) \
 
-$(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.pdb,$(3))),$(patsubst %.dll,%.pdb,$(3)))
-$(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.ilk,$(3))),$(patsubst %.dll,%.ilk,$(3)))
+$(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.pdb,$(3))),$(patsubst %.dll,%.pdb,$(3)),$(1))
+$(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.ilk,$(3))),$(patsubst %.dll,%.ilk,$(3)),$(1))
 endif
 
-$(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3))
+$(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3),$(1))
 
 $(call gb_LinkTarget_get_target,$(2)) \
 $(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
@@ -499,7 +495,7 @@ define gb_Executable_Executable_platform
 
 #$(call gb_Executable_get_target,$(1)) \
 #$(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS := $(call gb_Executable_get_target,$(1)).manifest
-#$(call gb_Deliver_add_deliverable,$(call gb_Executable_get_target,$(1)).manifest,$(call gb_LinkTarget_get_target,$(2)).manifest)
+#$(call gb_Deliver_add_deliverable,$(call gb_Executable_get_target,$(1)).manifest,$(call gb_LinkTarget_get_target,$(2)).manifest,$(1))
 
 #$(call gb_LinkTarget_get_target,$(2)) \
 #$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
@@ -638,5 +634,19 @@ gb_XSLTPROCPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
 gb_Library_COMPONENTPREFIXES := \
     OOO:vnd.sun.star.expand:\dOOO_BASE_DIR/program/ \
     URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
+    NONE:vnd.sun.star.expand:\dOOO_INBUILD_SHAREDLIB_DIR/ \
+
+# UnoApiTarget
+
+gb_UnoApiTarget_IDLCTARGET := $(OUTDIR)/bin/idlc.exe
+gb_UnoApiTarget_IDLCCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_IDLCTARGET)
+gb_UnoApiTarget_REGMERGETARGET := $(OUTDIR)/bin/regmerge.exe
+gb_UnoApiTarget_REGMERGECOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGMERGETARGET)
+gb_UnoApiTarget_REGCOMPARETARGET := $(OUTDIR)/bin/regcompare.exe
+gb_UnoApiTarget_REGCOMPARECOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
+gb_UnoApiTarget_CPPUMAKERTARGET := $(OUTDIR)/bin/cppumaker.exe
+gb_UnoApiTarget_CPPUMAKERCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_CPPUMAKERTARGET)
+gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR)/bin/regview.exe
+gb_UnoApiTarget_REGVIEWCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
 # vim: set noet sw=4 ts=4:

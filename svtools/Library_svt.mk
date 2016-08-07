@@ -29,6 +29,11 @@ $(eval $(call gb_Library_add_precompiled_header,svt,$(SRCDIR)/svtools/inc/pch/pr
 
 $(eval $(call gb_Library_set_componentfile,svt,svtools/util/svt))
 
+$(eval $(call gb_Library_add_api,svt,\
+    udkapi \
+    offapi \
+))
+
 $(eval $(call gb_Library_set_include,svt,\
     -I$(OUTDIR)/inc/external/jpeg \
     $$(INCLUDE) \
@@ -39,11 +44,9 @@ $(eval $(call gb_Library_set_include,svt,\
     -I$(SRCDIR)/svtools/inc/svtools \
     -I$(SRCDIR)/svtools/source/inc \
     -I$(SRCDIR)/svtools/inc/pch \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,svt,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,svt,\
     -DSVT_DLLIMPLEMENTATION \
 ))
 
@@ -54,7 +57,6 @@ $(eval $(call gb_Library_add_linked_libs,svt,\
     cppuhelper \
     i18nisolang1 \
     i18nutil \
-    icuuc \
     jvmfwk \
     sal \
     sot \
@@ -69,32 +71,10 @@ $(eval $(call gb_Library_add_linked_libs,svt,\
     $(gb_STDLIBS) \
 ))
 
-ifeq ($(SYSTEM_JPEG),YES)
-$(eval $(call gb_Library_add_linked_libs,svt,\
-    jpeg \
-))
-$(eval $(call gb_Library_set_ldflags,svt,\
-    $$(filter-out -L/usr/lib/jvm%,$$(LDFLAGS)) \
-))
-ifeq ($(OS),FREEBSD)
-# JDK jpeg library on FreeBSD lives under ${JAVA_HOME}/jre/lib/${ARCH}/
-$(eval $(call gb_Library_set_ldflags,svt,\
-    $$(filter-out -L$$(JAVA_HOME)/jre/lib/%,$$(LDFLAGS)) \
-))
-endif
-ifeq ($(GUIBASE),os2)
-# YD FIXME above is not working... needs ldflags hack...
-$(eval $(call gb_Library_set_ldflags,svt,\
-    $$(LDFLAGS) \
-    -ljpeg \
-))
-endif
-
-else
-$(eval $(call gb_Library_add_linked_static_libs,svt,\
-    jpeglib \
-))
-endif
+$(call gb_Library_use_externals,svt,\
+        icuuc \
+        jpeg \
+)
 
 $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/brwbox/brwbox1 \

@@ -171,6 +171,77 @@ string XMLTag::toString() const
     return sResult;
 }
 
+string XMLTag::toTree(const string & sIndent) const
+{
+    if (mChars.length() > 0)
+        return sIndent + mChars;
+
+    string sResult;
+
+    {
+        size_t nSize = sIndent.size();
+        if (nSize > 1)
+        {
+            sResult += sIndent.substr(0, nSize - 2) + "+-\\" + mTag;
+        }
+        else
+        {
+            sResult += "\\" + mTag;
+        }
+    }
+
+    XMLAttributes_t::const_iterator aIt = mAttrs.begin();
+    while (aIt != mAttrs.end())
+    {
+        if (aIt == mAttrs.begin())
+        {
+            sResult += "(";
+        }
+        else
+        {
+            sResult += sIndent + ", ";
+        }
+
+        sResult += aIt->mName;
+        sResult += "=";
+        sResult += aIt->mValue;
+
+        aIt++;
+
+        if (aIt == mAttrs.end())
+        {
+            sResult += ")";
+        }
+    }
+
+    sResult += "\n";
+
+    if (mTags.size() > 0)
+    {
+        XMLTags_t::const_iterator aItTags = mTags.begin();
+        size_t nSize = mTags.size();
+        while (aItTags != mTags.end())
+        {
+            if ((*aItTags).get() != NULL)
+            {
+                if (nSize == 1)
+                {
+                    sResult += (*aItTags)->toTree(sIndent + "  ");
+                }
+                else
+                {
+                    sResult += (*aItTags)->toTree(sIndent + "| ");
+                }
+            }
+
+            aItTags++;
+            nSize--;
+        }
+    }
+
+    return sResult;
+}
+
 ostream & XMLTag::output(ostream & o, const string & sIndent) const
 {
     bool bHasContent = mChars.size() > 0 || mTags.size() > 0;

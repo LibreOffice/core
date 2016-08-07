@@ -33,7 +33,7 @@
 #include <vcl/svapp.hxx>
 #include <svtools/imgdef.hxx>
 #include <svtools/miscopt.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/toolbox.hxx>
 //shizhobo
 #include <com/sun/star/beans/PropertyAttribute.hpp>

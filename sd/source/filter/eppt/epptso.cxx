@@ -90,7 +90,7 @@
 #include <ucbhelper/contentbroker.hxx>
 #endif
 #ifndef _TOOLKIT_UNOHLP_HXX
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #endif
 #include <rtl/crc.h>
 #include <sot/clsids.hxx>

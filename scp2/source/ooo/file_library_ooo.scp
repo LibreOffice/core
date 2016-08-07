@@ -1226,16 +1226,16 @@ File gid_File_Lib_Res
     Dir = SCP2_OOO_BIN_DIR;
 End
 
-File gid_File_Lib_Sax_Uno
+File gid_File_Lib_Expwrap_Uno
     TXT_FILE_BODY;
     Styles = (PACKED,DONT_OVERWRITE);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
-    Name = STRING(CONCAT2(sax.uno,UNXSUFFIX));
+    Name = STRING(CONCAT2(expwrap.uno,UNXSUFFIX));
   #elif defined(OS2)
-    Name = "sax_uno.dll";
+    Name = "expwrap_uno.dll";
   #else
-    Name = "sax.uno.dll";
+    Name = "expwrap.uno.dll";
   #endif
 End
 
@@ -1483,11 +1483,11 @@ File gid_File_Lib_Ucbhelper
     Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
   #ifdef UNX
-    Name = STRING(CONCAT3(libucbhelper4,COMID,UNXSUFFIX));
+    Name = STRING(CONCAT3(libucbhelper,COMID,UNXSUFFIX));
   #elif defined OS2
-    Name = "ucbh4.dll";
+    Name = "ucbh.dll";
   #else
-    Name = STRING(CONCAT3(ucbhelper4,COMID,.dll));
+    Name = STRING(CONCAT3(ucbhelper,COMID,.dll));
   #endif
 End
 

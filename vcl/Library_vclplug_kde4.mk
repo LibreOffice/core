@@ -23,29 +23,31 @@
 
 $(eval $(call gb_Library_Library,vclplug_kde4))
 
+$(eval $(call gb_Library_add_api,vclplug_kde4,\
+    udkapi \
+    offapi \
+))
+
 $(eval $(call gb_Library_set_include,vclplug_kde4,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/inc/pch \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc/stl \
     -I$(OUTDIR)/inc \
 ))
 
-$(eval $(call gb_Library_set_cxxflags,vclplug_kde4,\
-    $$(CXXFLAGS) \
+$(eval $(call gb_Library_set_include,vclplug_kde4,\
+    $$(INCLUDE) \
     $$(KDE4_CFLAGS) \
 ))
 
-$(eval $(call gb_Library_set_defs,vclplug_kde4,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vclplug_kde4,\
     -DVCLPLUG_KDE4_IMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_set_ldflags,vclplug_kde4,\
-    $$(KDE4_LIBS)\
-    $$(LDFLAGS) \
+$(eval $(call gb_Library_add_libs,vclplug_kde4,\
+    $$(KDE4_LIBS) \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,vclplug_kde4,\
@@ -58,8 +60,6 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_kde4,\
     basegfx \
     comphelper \
     cppuhelper \
-    icuuc \
-    icule \
     i18nisolang1 \
     i18npaper \
     i18nutil \
@@ -73,6 +73,11 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_kde4,\
     SM \
     ICE \
 ))
+
+$(call gb_Library_use_externals,vclplug_kde4,\
+    icule \
+    icuuc \
+)
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_kde4,\
     vcl/unx/kde4/KDEData \

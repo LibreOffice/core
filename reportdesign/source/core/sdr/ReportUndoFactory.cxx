@@ -20,6 +20,7 @@
  *************************************************************/
 
 
+#include "precompiled_reportdesign.hxx"
 #include "ReportUndoFactory.hxx"
 #include "RptObject.hxx"
 #include "UndoActions.hxx"

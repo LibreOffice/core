@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
+#include "precompiled_dbui.hxx"
 
 #ifndef _DBACCESS_UI_DIRECTSQL_HXX_
 #include "directsql.hxx"

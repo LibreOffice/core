@@ -42,7 +42,7 @@
 #include <comphelper/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 // namespace
 using namespace com::sun::star;

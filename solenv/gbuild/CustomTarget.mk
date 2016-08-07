@@ -32,56 +32,44 @@ define gb_CustomTarget__command
 
 endef
 
-define gb_CustomTarget__rules
-$$(call gb_CustomTarget_get_repo_target,$(1),%) :
-	$$(call gb_Output_announce,$$*,$$(true),MAK,3)
-	$$(call gb_CustomTarget__command,$$@,$$*)
-
-$$(call gb_CustomTarget_get_target,%) : $$(call gb_CustomTarget_get_repo_target,$(1),%)
-	$$(call gb_Helper_abbreviate_dirs,\
-		touch $$@)
-
-endef
+$(call gb_CustomTarget_get_target,%) :
+	$(call gb_Output_announce,$*,$(true),MAK,3)
+	$(call gb_CustomTarget__command,$@,$*)
 
 .PHONY: $(call gb_CustomTarget_get_clean_target,%)
 $(call gb_CustomTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),MAK,3)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf $(call gb_CustomTarget_get_workdir,$*) && \
-		rm -f $(call gb_CustomTarget_get_target,$*) \
-			$(foreach reponame,$(gb_CustomTarget_REPOSITORYNAMES),$(call gb_CustomTarget_get_repo_target,$(reponame),$*)))
-
-
-$(foreach reponame,$(gb_CustomTarget_REPOSITORYNAMES),$(eval $(call gb_CustomTarget__rules,$(reponame))))
+		rm -f $(call gb_CustomTarget_get_target,$*))
 
 define gb_CustomTarget__get_makefile
 $(1)/$(2)/Makefile
 endef
 
 define gb_CustomTarget_CustomTarget
-$(foreach reponame,$(gb_CustomTarget_REPOSITORYNAMES),\
-	$(eval $(call gb_CustomTarget_get_repo_target,$(reponame),$(1)) : $(call gb_CustomTarget__get_makefile,$($(reponame)),$(1))))
-
-$(call gb_CustomTarget_get_workdir,$(1))/% : $(call gb_CustomTarget_get_target,$(1))
-
+$(if $(filter $(2),$(gb_CustomTarget_REPOSITORYNAMES)),,\
+ $(error CustomTarget: no or invalid repository given; known repositories: \
+  $(gb_JavaClassSet_REPOSITORYNAMES)))
+gb_CustomTarget_REPO_$(1) := $(2)
+$(call gb_CustomTarget_get_target,$(1)) : \
+  $(call gb_CustomTarget__get_makefile,$($(2)),$(1))
+$(call gb_CustomTarget_get_workdir,$(1))/% : \
+  $(call gb_CustomTarget_get_target,$(1))
 endef
 
 
 define gb_CustomTarget_add_dependency
-$(foreach reponame,$(gb_CustomTarget_REPOSITORYNAMES),\
-	$(eval $(call gb_CustomTarget_get_repo_target,$(reponame),$(1)) : $($(reponame))/$(2)))
-
+$(eval $(call gb_CustomTarget_get_target,$(1)) : \
+	$($(gb_CustomTarget_REPO_$(1)))/$(2))
 endef
 
 define gb_CustomTarget_add_dependencies
 $(foreach dependency,$(2),$(call gb_CustomTarget_add_dependency,$(1),$(dependency)))
-
 endef
 
 define gb_CustomTarget_add_outdir_dependency
-$(foreach reponame,$(gb_CustomTarget_REPOSITORYNAMES),\
-	$(eval $(call gb_CustomTarget_get_repo_target,$(reponame),$(1)) : $(2)))
-
+$(eval $(call gb_CustomTarget_get_target,$(1)) : $(2))
 endef
 
 define gb_CustomTarget_add_outdir_dependencies

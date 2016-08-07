@@ -180,7 +180,6 @@ published interface XSection
     [attribute,readonly] com::sun::star::report::XReportDefinition ReportDefinition;
 };
 
-service Section : XSection;
 //=============================================================================
 
 }; }; }; };

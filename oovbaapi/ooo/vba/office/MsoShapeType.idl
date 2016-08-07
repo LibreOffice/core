@@ -1,0 +1,55 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+
+#ifndef __ooo_vba_office_MsoShapeType_idl__
+#define __ooo_vba_office_MsoShapeType_idl__
+
+module ooo { module vba { module office {
+    constants MsoShapeType {
+        const long msoAutoShape = 1;
+        const long msoCallout = 2;
+        const long msoCanvas = 20;
+        const long msoChart = 3;
+        const long msoComment = 4;
+        const long msoDiagram = 21;
+        const long msoEmbeddedOLEObject = 7;
+        const long msoFormControl = 8;
+        const long msoFreeform = 5;
+        const long msoGroup = 6;
+        const long msoInk = 22;
+        const long msoInkComment = 23;
+        const long msoLine = 9;
+        const long msoLinkedOLEObject = 10;
+        const long msoLinkedPicture = 11;
+        const long msoMedia = 16;
+        const long msoOLEControlObject = 12;
+        const long msoPicture = 13;
+        const long msoPlaceholder = 14;
+        const long msoScriptAnchor = 18;
+        const long msoShapeTypeMixed = -2;
+        const long msoTable = 19;
+        const long msoTextBox = 17;
+        const long msoTextEffect = 15;
+    };
+}; }; };
+
+#endif

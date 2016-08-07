@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptxml.hxx"
 
 #include "xmlExportDocumentHandler.hxx"
 #include <com/sun/star/sdb/CommandType.hpp>

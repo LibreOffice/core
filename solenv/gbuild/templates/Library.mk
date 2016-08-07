@@ -45,9 +45,8 @@ $(eval $(call gb_Library_set_include,LIB,\
 
 # add any additional definitions to be set for compilation here
 # (e.g. -DLIB_DLLIMPLEMENTATION)
-$(eval $(call gb_Library_set_defs,LIB,\
-	$$(DEFS) \
-))
+#$(eval $(call gb_Library_add_defs,LIB,\
+#))
 
 # add libraries to be linked to LIB; again these names need to be given as
 # specified in Repository.mk

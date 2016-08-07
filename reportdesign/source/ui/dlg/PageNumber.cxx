@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptui.hxx"
 #include "PageNumber.hxx"
 #ifndef RPTUI_PAGENUMBER_HRC
 #include "PageNumber.hrc"

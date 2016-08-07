@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
+#include "precompiled_dbui.hxx"
 
 #include "browserids.hxx"
 #include "dbaccess_helpid.hrc"
@@ -119,7 +119,7 @@
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/databaseregistrationui.hxx>
 #include <svx/gridctrl.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/multisel.hxx>
 #include <tools/urlobj.hxx>
@@ -316,7 +316,8 @@ void SAL_CALL SbaTableQueryBrowser::disposing()
         // doin' a lot of VCL stuff here -> lock the SolarMutex
 
     // kiss our listeners goodbye
-    EventObject aEvt(*this);
+
+    ::com::sun::star::lang::EventObject aEvt(*this);
     m_aSelectionListeners.disposeAndClear(aEvt);
     m_aContextMenuInterceptors.disposeAndClear(aEvt);
 
@@ -1394,7 +1395,7 @@ void SbaTableQueryBrowser::implCheckExternalSlot( sal_uInt16 _nId )
 }
 
 // -------------------------------------------------------------------------
-void SAL_CALL SbaTableQueryBrowser::disposing( const EventObject& _rSource ) throw(RuntimeException)
+void SAL_CALL SbaTableQueryBrowser::disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw(RuntimeException)
 {
     // our frame ?
     Reference< ::com::sun::star::frame::XFrame >  xSourceFrame(_rSource.Source, UNO_QUERY);
@@ -1693,7 +1694,7 @@ void SbaTableQueryBrowser::LoadFinished(sal_Bool _bWasSynch)
     }
 
     // if the form has been loaded, this means that our "selection" has changed
-    EventObject aEvent( *this );
+    ::com::sun::star::lang::EventObject aEvent( *this );
     m_aSelectionListeners.notifyEach( &XSelectionChangeListener::selectionChanged, aEvent );
 }
 

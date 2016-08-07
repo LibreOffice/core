@@ -50,7 +50,6 @@ published interface XFormatCondition
     [attribute,bound] string Formula;
 };
 
-service FormatCondition : XFormatCondition;
 //=============================================================================
 
 }; }; }; };

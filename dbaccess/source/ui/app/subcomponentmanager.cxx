@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-
+#include "precompiled_dbui.hxx"
 #include "subcomponentmanager.hxx"
 #include "AppController.hxx"
 #include "dbustrings.hrc"

@@ -1444,9 +1444,28 @@ main/configure
 main/warn
 main/autom4te.cache/*
 
+main/SolarisX86Env.Set*
+main/SolarisSparcEnv.Set*
+main/LinuxX86Env.Set*
 main/LinuxX86-64Env.Set*
+main/LinuxIA64Env.Set*
+main/LinuxSparcEnv.Set*
+main/LinuxPPCEnv.Set*
+main/LinuxPPC64Env.Set*
+main/LinuxS390Env.Set*
+main/LinuxS390XEnv.Set*
+main/LinuxM68KEnv.Set*
+main/LinuxHPPAEnv.Set*
+main/LinuxAlphaEnv.Set*
+main/LinuxARMEnv.Set*
+main/LinuxMIPSEnv.Set*
+main/FreeBSDX86Env.Set*
+main/FreeBSDAMDEnv.Set*
 main/MacOSXX64Env.Set*
+main/MacOSXX86Env.Set*
+main/MacOSXPPCEnv.Set*
 main/winenv.set*
+main/winmingw.set*
 
 ##############################################################################
 #

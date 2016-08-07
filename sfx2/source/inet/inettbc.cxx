@@ -39,7 +39,7 @@
 #include <svl/folderrestriction.hxx>
 #include <vcl/toolbox.hxx>
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #endif
 #ifndef _VOS_THREAD_HXX //autogen
 #include <vos/thread.hxx>

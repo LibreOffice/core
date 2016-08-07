@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
+#include "precompiled_dbui.hxx"
 
 #ifndef DBACCESS_SOURCE_UI_UNO_COMPOSERDIALOGS_HXX
 #include "composerdialogs.hxx"

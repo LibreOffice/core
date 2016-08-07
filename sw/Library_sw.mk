@@ -38,12 +38,15 @@ $(eval $(call gb_Library_set_include,sw,\
     -I$(WORKDIR)/SdiTarget/sw/sdi \
     -I$(WORKDIR)/Misc/sw/ \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
 ))
 
-$(eval $(call gb_Library_set_defs,sw,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_api,sw,\
+    udkapi \
+    offapi \
+))
+
+$(eval $(call gb_Library_add_defs,sw,\
     -DSW_DLLIMPLEMENTATION \
 ))
 
@@ -57,7 +60,6 @@ $(eval $(call gb_Library_add_linked_libs,sw,\
     editeng \
     i18nisolang1 \
     i18nutil \
-    icuuc \
     lng \
     sal \
     salhelper \
@@ -69,6 +71,7 @@ $(eval $(call gb_Library_add_linked_libs,sw,\
     svt \
     svx \
     svxcore \
+    swd \
     ootk \
     tl \
     ucbhelper \
@@ -79,6 +82,8 @@ $(eval $(call gb_Library_add_linked_libs,sw,\
     xo \
     $(gb_STDLIBS) \
 ))
+
+$(call gb_Library_use_external,sw,icuuc)
 
 $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/SwNumberTree/SwNodeNum \
@@ -472,7 +477,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/filter/ascii/wrtasc \
     sw/source/filter/basflt/docfact \
     sw/source/filter/basflt/fltini \
-    sw/source/filter/basflt/iodetect \
     sw/source/filter/basflt/shellio \
     sw/source/filter/html/SwAppletImpl \
     sw/source/filter/html/css1atr \

@@ -31,7 +31,7 @@
 #include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase3.hxx"
-#include "xmlscript/xml_import.hxx"
+#include "xml_import.hxx"
 
 #include "com/sun/star/xml/input/XAttributes.hpp"
 #include "com/sun/star/lang/XInitialization.hpp"

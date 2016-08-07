@@ -25,11 +25,16 @@ $(eval $(call gb_Library_Library,svxcore))
 
 $(eval $(call gb_Library_set_componentfile,svxcore,svx/util/svxcore))
 
-$(eval $(call gb_Library_add_sdi_headers,svx,svx/sdi/svxslots))
+$(eval $(call gb_Library_add_sdi_headers,svxcore,svx/sdi/svxslots))
 
 $(eval $(call gb_Library_add_package_headers,svxcore,\
     svx_inc \
     svx_sdi \
+))
+
+$(eval $(call gb_Library_add_api,svxcore,\
+    udkapi \
+    offapi \
 ))
 
 $(eval $(call gb_Library_set_include,svxcore,\
@@ -37,7 +42,6 @@ $(eval $(call gb_Library_set_include,svxcore,\
     -I$(SRCDIR)/svx/inc/pch \
     -I$(SRCDIR)/svx/source/inc \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
     -I$(WORKDIR)/SdiTarget/svx/sdi \
 ))
 
@@ -47,8 +51,7 @@ $(eval $(call gb_Library_set_include,svxcore,\
 #CFLAGS+= -DUNICODE -D_UNICODE
 #.ENDIF
 
-$(eval $(call gb_Library_set_defs,svxcore,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,svxcore,\
     -DSVX_DLLIMPLEMENTATION \
     -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
 ))
@@ -64,7 +67,6 @@ $(eval $(call gb_Library_add_linked_libs,svxcore,\
     editeng \
     fwe \
     i18nisolang1 \
-    icuuc \
     lng \
     sal \
     sfx \
@@ -81,6 +83,8 @@ $(eval $(call gb_Library_add_linked_libs,svxcore,\
     xo \
     $(gb_STDLIBS) \
 ))
+
+$(call gb_Library_use_external,svxcore,icuuc)
 
 $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/core/coreservices \

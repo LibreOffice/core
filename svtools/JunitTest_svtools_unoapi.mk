@@ -21,7 +21,7 @@
 
 
 
-$(eval $(call gb_JunitTest_JunitTest,svtools_unoapi))
+$(eval $(call gb_JunitTest_JunitTest,svtools_unoapi,SRCDIR))
 
 $(eval $(call gb_JunitTest_set_defs,svtools_unoapi,\
     $$(DEFS) \

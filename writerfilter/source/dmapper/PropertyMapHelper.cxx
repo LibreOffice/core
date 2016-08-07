@@ -73,6 +73,7 @@ XMLTag::Pointer_t lcl_PropertyValuesToTag(beans::PropertyValues & rValues)
         }
         catch (...)
         {
+            pTag->addAttr("exception", "true");
         }
 
         if (pValues[n].Name.equalsAscii("TableColumnSeparators"))

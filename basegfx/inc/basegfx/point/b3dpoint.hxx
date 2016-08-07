@@ -25,6 +25,7 @@
 #define _BGFX_POINT_B3DPOINT_HXX
 
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {
@@ -39,7 +40,7 @@ namespace basegfx
 
         @see B3DTuple
     */
-    class B3DPoint : public ::basegfx::B3DTuple
+    class BASEGFX_DLLPUBLIC B3DPoint : public ::basegfx::B3DTuple
     {
     public:
         /** Create a 3D Point
@@ -139,7 +140,7 @@ namespace basegfx
         Since this is a Point, translational components of the
         matrix are used.
     */
-    B3DPoint operator*( const B3DHomMatrix& rMat, const B3DPoint& rPoint );
+    BASEGFX_DLLPUBLIC B3DPoint operator*( const B3DHomMatrix& rMat, const B3DPoint& rPoint );
 
 } // end of namespace basegfx
 

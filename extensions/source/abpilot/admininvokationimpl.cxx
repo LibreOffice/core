@@ -30,7 +30,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <vcl/stdtext.hxx>
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #endif
 #ifndef EXTENSIONS_ABPRESID_HRC
 #include "abpresid.hrc"

@@ -25,6 +25,7 @@
 #define _BGFX_VECTOR_B3IVECTOR_HXX
 
 #include <basegfx/tuple/b3ituple.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {
@@ -39,7 +40,7 @@ namespace basegfx
 
         @see B3ITuple
     */
-    class B3IVector : public ::basegfx::B3ITuple
+    class BASEGFX_DLLPUBLIC B3IVector : public ::basegfx::B3ITuple
     {
     public:
         /** Create a 3D Vector
@@ -229,7 +230,7 @@ namespace basegfx
         Since this is a vector, translational components of the
         matrix are disregarded.
     */
-    B3IVector operator*( const B3DHomMatrix& rMat, const B3IVector& rVec );
+    BASEGFX_DLLPUBLIC B3IVector operator*( const B3DHomMatrix& rMat, const B3IVector& rVec );
 
     /** Calculate the Cross Product of two 3D Vectors
 

@@ -21,9 +21,7 @@
 
 
 
-#include "precompiled_xmlreader.hxx"
 #include "sal/config.h"
-
 #include "osl/diagnose.h"
 #include "rtl/string.h"
 #include "sal/types.h"

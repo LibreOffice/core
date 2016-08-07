@@ -40,7 +40,6 @@ published interface XFixedText
     [attribute,bound] string Label;
 };
 
-published service FixedText : XFixedText;
 //=============================================================================
 
 }; }; }; };

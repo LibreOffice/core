@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
+#include "precompiled_dbui.hxx"
 #ifndef DBUI_TABLECOPYHELPER_HXX
 #include "TableCopyHelper.hxx"
 #endif

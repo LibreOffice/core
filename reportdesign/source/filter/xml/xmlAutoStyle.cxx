@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptxml.hxx"
 #include "xmlAutoStyle.hxx"
 #include "xmlHelper.hxx"
 #include "xmlExport.hxx"

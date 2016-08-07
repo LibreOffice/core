@@ -207,6 +207,8 @@ include $(GBUILDDIR)/Deliver.mk
 
 $(eval $(call gb_Deliver_init))
 
+include $(SOLARENV)/inc/minor.mk
+
 # We are using a set of scopes that we might as well call classes.
 
 # It is important to include them in the right order as that is
@@ -237,9 +239,12 @@ include $(foreach class, \
 	CustomTarget \
 	PrecompiledHeaders \
 	GoogleTest \
+	Jar \
 	JavaClassSet \
 	JunitTest \
 	Module \
+	UnoApiTarget \
+	Zip \
 ,$(GBUILDDIR)/$(class).mk)
 
 # optional extensions that should never be essential
@@ -257,5 +262,8 @@ endif
 
 export gb_AWK
 export gb_XSLTPROC
+export GBUILDDIR
+# FIXME exporting SRCDIR seems kind of a hack
+export SRCDIR
 
 # vim: set noet sw=4 ts=4:

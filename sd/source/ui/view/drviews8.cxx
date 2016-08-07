@@ -29,7 +29,7 @@
 #include "ViewShellHint.hxx"
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #endif
 #include <sfx2/dispatch.hxx>
 #ifndef _SVXIDS_HXX

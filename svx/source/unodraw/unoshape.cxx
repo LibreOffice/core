@@ -41,7 +41,7 @@
 #include <comphelper/extract.hxx>
 #include "svx/shapepropertynotifier.hxx"
 #include <comphelper/serviceinfohelper.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 #include <rtl/uuid.h>
 #include <rtl/memory.h>

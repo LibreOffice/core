@@ -30,11 +30,14 @@ $(eval $(call gb_Library_set_include,svx,\
     -I$(SRCDIR)/svx/source/inc \
     -I$(SRCDIR)/svx/inc/pch \
     $$(SOLARINC) \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,svx,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_api,svx,\
+    udkapi \
+    offapi \
+))
+
+$(eval $(call gb_Library_add_defs,svx,\
     -DSVX_DLLIMPLEMENTATION \
     -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
 ))
@@ -50,7 +53,6 @@ $(eval $(call gb_Library_add_linked_libs,svx,\
     fwe \
     fwk \
     i18nisolang1 \
-    icuuc \
     sal \
     sfx \
     sot \
@@ -68,6 +70,8 @@ $(eval $(call gb_Library_add_linked_libs,svx,\
     xcr \
     $(gb_STDLIBS) \
 ))
+
+$(call gb_Library_use_external,svx,icuuc)
 
 $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/accessibility/AccessibleControlShape \

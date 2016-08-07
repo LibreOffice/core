@@ -37,8 +37,8 @@
 #include <com/sun/star/util/XChangesNotifier.hpp>
 
 #include <cppuhelper/implbase4.hxx>
-#include <toolkit/unohlp.hxx>
 #include <unotools/eventcfg.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vbahelper/helperdecl.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>

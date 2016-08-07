@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
+#include "precompiled_dbui.hxx"
 #ifndef DBAUI_TABLEROW_EXCHANGE_HXX
 #include "TableRowExchange.hxx"
 #endif

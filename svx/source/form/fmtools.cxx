@@ -86,7 +86,7 @@
 #include <sfx2/bindings.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
 #include <vcl/stdtext.hxx>

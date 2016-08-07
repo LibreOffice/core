@@ -26,6 +26,7 @@
 
 #include <basegfx/raster/bpixelraster.hxx>
 #include <rtl/memory.h>
+#include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -34,7 +35,7 @@
 
 namespace basegfx
 {
-    class BZPixelRaster : public BPixelRaster
+    class BASEGFX_DLLPUBLIC BZPixelRaster : public BPixelRaster
     {
     protected:
         // additionally, host a ZBuffer

@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
+#include "precompiled_dbaxml.hxx"
 #ifndef DBA_XMLTABLEFILTERLIST_HXX
 #include "xmlTableFilterList.hxx"
 #endif

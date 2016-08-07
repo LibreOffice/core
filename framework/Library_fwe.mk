@@ -30,12 +30,15 @@ $(eval $(call gb_Library_set_include,fwe,\
     -I$(WORKDIR)/inc/framework/ \
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/framework \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,fwe,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,fwe,\
     -DFWE_DLLIMPLEMENTATION\
+))
+
+$(eval $(call gb_Library_add_api,fwe,\
+    udkapi \
+    offapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,fwe,\
@@ -88,13 +91,5 @@ $(eval $(call gb_Library_add_exception_objects,fwe,\
     framework/source/fwe/xml/toolboxdocumenthandler \
     framework/source/fwe/xml/xmlnamespaces \
 ))
-
-#todo: ImageListDescriptor can't be exported completely without exporting everything
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_set_cxxflags,fwe,$$(filter-out -fvisibility=hidden,$$(CXXFLAGS))))
-endif
-ifeq ($(OS),FREEBSD)
-$(eval $(call gb_Library_set_cxxflags,fwe,$$(filter-out -fvisibility=hidden,$$(CXXFLAGS))))
-endif
 
 # vim: set noet sw=4 ts=4:

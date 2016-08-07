@@ -1,0 +1,44 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+module ooo { module vba { module word {
+    constants WdColorIndex {
+        const long wdAuto = 0;
+        const long wdBlack = 1;
+        const long wdBlue = 2;
+        const long wdBrightGreen = 4;
+        const long wdByAuthor = -1;
+        const long wdDarkBlue = 9;
+        const long wdDarkRed = 13;
+        const long wdDarkYellow = 14;
+        const long wdGray25 = 16;
+        const long wdGray50 = 15;
+        const long wdGreen = 11;
+        const long wdNoHighlight = 0;
+        const long wdPink = 5;
+        const long wdRed = 6;
+        const long wdTeal = 10;
+        const long wdTurquoise = 3;
+        const long wdViolet = 12;
+        const long wdWhite = 8;
+        const long wdYellow = 7;
+    };
+}; }; };

@@ -33,14 +33,17 @@ $(eval $(call gb_Library_set_include,tl,\
     -I$(SRCDIR)/tools/inc/pch \
     -I$(SRCDIR)/solenv/inc \
     -I$(SRCDIR)/solenv/inc/Xp31 \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc/stl \
 ))
 
-$(eval $(call gb_Library_set_defs,tl,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,tl,\
     -DTOOLS_DLLIMPLEMENTATION \
     -DVCL \
+))
+
+$(eval $(call gb_Library_add_api,tl,\
+    udkapi \
+    offapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,tl,\
@@ -128,24 +131,11 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
 ))
 endif
 
-ifeq ($(SYSTEM_ZLIB),YES)
-$(eval $(call gb_Library_set_cxxflags,tl,\
-    $$(CXXFLAGS) \
-    -DSYSTEM_ZLIB \
-))
-$(eval $(call gb_Library_add_linked_libs,tl,\
-    z \
-))
-else
-$(eval $(call gb_Library_add_linked_static_libs,tl,\
-    zlib \
-))
-endif
+$(call gb_Library_use_external,tl,zlib)
 
 ifeq ($(OS),OS2)
 # YD FIXME above is not working... needs ldflags hack...
-$(eval $(call gb_Library_set_ldflags,tl,\
-    $$(LDFLAGS) \
+$(eval $(call gb_Library_add_libs,tl,\
     -lz \
 ))
 endif

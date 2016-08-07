@@ -25,6 +25,7 @@ package org.openoffice.linguistic.qa.unoapi;
 
 import org.openoffice.Runner;
 import org.openoffice.test.OfficeConnection;
+import org.openoffice.test.Argument;
 import static org.junit.Assert.*;
 
 public final class Test {
@@ -41,8 +42,8 @@ public final class Test {
     @org.junit.Test public void test() {
         assertTrue(
             Runner.run(
-                "-sce", "lng.sce", "-xcl", "knownissues.xcl", "-cs",
-                connection.getDescription()));
+                "-sce", Argument.get("sce"), "-xcl", Argument.get("xcl"), "-tdoc",
+                Argument.get("tdoc"), "-cs", connection.getDescription()));
     }
 
     private final OfficeConnection connection = new OfficeConnection();

@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-
+#include "precompiled_reportdesign.hxx"
 #include "conditionupdater.hxx"
 #include "reportformula.hxx"
 

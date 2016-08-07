@@ -1,4 +1,4 @@
-cm	codemaker	:	udkapi NULL
+cm	codemaker	:	registry NULL
 cm	codemaker								usr1	-	all	cm_mkout NULL
 cm	codemaker\inc							nmake	-	all	cm_inc NULL
 cm	codemaker\prj							get		-	all	cm_prj NULL

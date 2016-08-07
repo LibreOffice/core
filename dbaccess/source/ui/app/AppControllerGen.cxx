@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
+#include "precompiled_dbui.hxx"
 
 #include "AppController.hxx"
 #include "AppDetailView.hxx"
@@ -68,7 +68,7 @@
 #include <connectivity/dbexception.hxx>
 #include <sfx2/mailmodelapi.hxx>
 #include <svx/dbaexchange.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <unotools/bootstrap.hxx>

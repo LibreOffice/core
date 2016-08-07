@@ -44,8 +44,4 @@ $(eval $(call gb_GoogleTest_set_include,sw_bigpointerarray,\
 	-I$(OUTDIR)/inc \
 ))
  
-$(eval $(call gb_GoogleTest_set_ldflags,sw_bigpointerarray,\
-    $$(LDFLAGS) \
-))
-
 # vim: set noet sw=4 ts=4:

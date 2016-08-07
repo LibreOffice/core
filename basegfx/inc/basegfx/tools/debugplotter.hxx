@@ -34,6 +34,7 @@
 #include <vector>
 #include <utility>
 #include <iostream>
+#include <basegfx/basegfxdllapi.h>
 
 
 namespace basegfx
@@ -50,7 +51,7 @@ namespace basegfx
         To be able to generate one coherent block of output, this
         class delays actual writing to its destructor
      */
-    class DebugPlotter : private ::boost::noncopyable
+    class BASEGFX_DLLPUBLIC DebugPlotter : private ::boost::noncopyable
     {
     public:
         /** Create new debug output object

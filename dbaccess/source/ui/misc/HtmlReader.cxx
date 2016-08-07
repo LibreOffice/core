@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaccess.hxx"
+#include "precompiled_dbui.hxx"
 #include "HtmlReader.hxx"
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>

@@ -24,6 +24,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sdext.hxx"
 
+#define BASEGFX_STATICLIBRARY
+
 #ifdef SYSTEM_ZLIB
 #include "zlib.h"
 #else

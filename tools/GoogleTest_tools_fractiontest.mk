@@ -40,8 +40,4 @@ $(eval $(call gb_GoogleTest_set_include,tools_fractiontest,\
 	-I$(SRCDIR)/tools/inc/pch \
 ))
  
-$(eval $(call gb_GoogleTest_set_ldflags,tools_fractiontest,\
-    $$(LDFLAGS) \
-))
-
 # vim: set noet sw=4 ts=4:

@@ -1,0 +1,51 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+
+
+#ifndef __com_sun_star_drawing_XSlidePreviewCacheListener_idl__
+#define __com_sun_star_drawing_XSlidePreviewCacheListener_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+module com { module sun { module star { module drawing {
+
+/** Listener for asynchronous preview creations.  Called when a slide
+    preview has been created that was previously requested via a call to
+    <method>XSlidePreviewCache::getSlidePreview()</method>.  The
+    implementor may then call <method>getSlidePreview()</method> a second
+    time to get the up-to-date version of the preview.
+*/
+published interface XSlidePreviewCacheListener
+{
+    /** Called by a <interface>XSlidePreviewCache</interface> object when a
+        preview has been created for the slide with the given index.
+        @param nSlideIndex
+            The index of the slide for which a new preview has been created.
+    */
+    void notifyPreviewCreation ([in] long nSlideIndex);
+};
+
+}; }; }; }; // ::com::sun::star::drawing
+
+#endif

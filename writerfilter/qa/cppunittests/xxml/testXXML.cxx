@@ -123,25 +123,29 @@ public:
     }
     virtual void endElement(QName_t name)
     {
-        //printf("</{%s}:%s>\n", QName::serializer().getNamespaceUri(name), QName::serializer().getLocalName(name));
-        events++;
-        switch(name)
-        {
-        case NS_table::LN_table:
-        case NS_ss11::LN_Table:
-            currentRow->append(*currentTable);
-            currentRow=NULL;
-            break;
-        case NS_table::LN_table_row:
-        case NS_ss11::LN_Row:
-            currentCell->append(*currentRow);
-            currentCell=NULL;
-            break;
-        case NS_table::LN_table_cell:
-        case NS_ss11::LN_Cell:
-            break;
+            //printf("</{%s}:%s>\n", QName::serializer().getNamespaceUri(name), QName::serializer().getLocalName(name));
+            events++;
+            switch(name)
+            {
+            case NS_table::LN_table:
+            case NS_ss11::LN_Table:
+                if (currentTable != NULL)
+                {
+                    currentRow->append(*currentTable);
+                }
+                currentRow=NULL;
+                break;
+            case NS_table::LN_table_row:
+            case NS_ss11::LN_Row:
+                if (currentRow != NULL)
+                    currentCell->append(*currentRow);
+                currentCell=NULL;
+                break;
+            case NS_table::LN_table_cell:
+            case NS_ss11::LN_Cell:
+                break;
 
-        };
+            };
     }
     virtual void characters(const xxml::Value &value)
     {
