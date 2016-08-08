@@ -27,7 +27,7 @@ using namespace ::com::sun::star::uno;
 
 rtl::Reference< AquaA11yFocusListener > AquaA11yFocusListener::theListener;
 
-rtl::Reference< AquaA11yFocusListener > AquaA11yFocusListener::get()
+rtl::Reference< AquaA11yFocusListener > const & AquaA11yFocusListener::get()
 {
     if ( ! theListener.is() )
         theListener = new AquaA11yFocusListener();
