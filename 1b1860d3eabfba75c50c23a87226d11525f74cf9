@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_727415cf",
+        "filename": "avmedia/source/framework/MediaControlBase.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-08T08:17:26Z",
+      "side": 1,
+      "message": "A boolean member is not so ideal coding style in this particular case, things that are specific to sidebar (or toolbar) should be implemented in the corresponding sidebar subclass of this one (the same for toolbar code, of course), see inline comments below how it could look like ...",
+      "revId": "1b1860d3eabfba75c50c23a87226d11525f74cf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_9281a192",
+        "filename": "avmedia/source/framework/MediaControlBase.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-08T08:17:26Z",
+      "side": 1,
+      "message": "This should be implemented in MediaControl class -\u003e please make InitializeWidgets method virtual and override it there, insert this code and for everything else, call the parent class (MediaControlBase::InitializeWidgets)",
+      "revId": "1b1860d3eabfba75c50c23a87226d11525f74cf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_b27e9dac",
+        "filename": "avmedia/source/framework/MediaControlBase.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-08T08:17:26Z",
+      "side": 1,
+      "message": "The same here",
+      "revId": "1b1860d3eabfba75c50c23a87226d11525f74cf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_d2496990",
+        "filename": "avmedia/source/framework/MediaControlBase.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-08T08:17:26Z",
+      "side": 1,
+      "message": "And in pretty the same fashion, move this to sidebar code",
+      "revId": "1b1860d3eabfba75c50c23a87226d11525f74cf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
