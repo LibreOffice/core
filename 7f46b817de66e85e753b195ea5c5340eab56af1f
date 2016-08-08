@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_b2905dee",
+        "filename": "basic/source/sbx/sbxbase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-08-08T06:47:36Z",
+      "side": 1,
+      "message": "you are going to need to call pBasicFormater.reset() here, or the destruction of it will happen __outside__ the SolarMutexGuard",
+      "revId": "7f46b817de66e85e753b195ea5c5340eab56af1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
