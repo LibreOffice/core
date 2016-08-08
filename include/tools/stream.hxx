@@ -121,7 +121,7 @@ public:
 
     const SvStream * GetStream() const { return m_pStream; }
 
-    virtual void    SetSynchronMode(bool bTheSync = true) { m_bSync = bTheSync; }
+    void            SetSynchronMode(bool bTheSync = true) { m_bSync = bTheSync; }
     bool            IsSynchronMode() const { return m_bSync; }
 
     virtual ErrCode ReadAt(sal_uInt64 nPos, void * pBuffer, sal_Size nCount,

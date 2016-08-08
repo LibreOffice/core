@@ -42,8 +42,8 @@ public:
     virtual ~DropdownBox() override;
     virtual void dispose() override;
 
-    virtual void HideContent();
-    virtual void ShowContent();
+    void HideContent();
+    void ShowContent();
 
 private:
     DECL_LINK_TYPED(PBClickHdl, Button*, void);

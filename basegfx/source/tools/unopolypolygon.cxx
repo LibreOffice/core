@@ -54,7 +54,6 @@ namespace unotools
         const uno::Reference< rendering::XPolyPolygon2D >&  polyPolygon ) throw (lang::IllegalArgumentException,uno::RuntimeException, std::exception)
     {
         osl::MutexGuard const guard( m_aMutex );
-        modifying();
 
         // TODO(F1): Correctly fulfill the UNO API
         // specification. This will probably result in a vector of
@@ -154,7 +153,6 @@ namespace unotools
         rendering::FillRule fillRule ) throw (uno::RuntimeException, std::exception)
     {
         osl::MutexGuard const guard( m_aMutex );
-        modifying();
 
         meFillRule = fillRule;
     }
@@ -173,7 +171,6 @@ namespace unotools
         sal_Bool closedState ) throw (lang::IndexOutOfBoundsException,uno::RuntimeException, std::exception)
     {
         osl::MutexGuard const guard( m_aMutex );
-        modifying();
 
         if( index == -1 )
         {
@@ -213,7 +210,6 @@ namespace unotools
         sal_Int32 nPolygonIndex ) throw (lang::IndexOutOfBoundsException,uno::RuntimeException, std::exception)
     {
         osl::MutexGuard const guard( m_aMutex );
-        modifying();
 
         const B2DPolyPolygon& rNewPolyPoly(
             unotools::polyPolygonFromPoint2DSequenceSequence( points ) );
@@ -252,7 +248,6 @@ namespace unotools
     {
         osl::MutexGuard const guard( m_aMutex );
         checkIndex( nPolygonIndex );
-        modifying();
 
         B2DPolygon aPoly( maPolyPoly.getB2DPolygon( nPolygonIndex ) );
 
@@ -284,7 +279,6 @@ namespace unotools
                                                                                                        uno::RuntimeException, std::exception)
     {
         osl::MutexGuard const guard( m_aMutex );
-        modifying();
         const B2DPolyPolygon& rNewPolyPoly(
             unotools::polyPolygonFromBezier2DSequenceSequence( points ) );
 
@@ -332,7 +326,6 @@ namespace unotools
     {
         osl::MutexGuard const guard( m_aMutex );
         checkIndex( nPolygonIndex );
-        modifying();
 
         B2DPolygon aPoly( maPolyPoly.getB2DPolygon( nPolygonIndex ) );
         const sal_uInt32 nPointCount(aPoly.count());

@@ -87,19 +87,6 @@ public:
     virtual css::awt::Size SAL_CALL getSize()
         throw (css::uno::RuntimeException, std::exception) override;
 
-    /** The default implementation ignores this call.
-    */
-    virtual void SAL_CALL addFocusListener (
-        const css::uno::Reference<
-        css::awt::XFocusListener >& xListener)
-        throw (css::uno::RuntimeException);
-
-    /** The default implementation ignores this call.
-    */
-    virtual void SAL_CALL removeFocusListener (const css::uno::Reference<
-        css::awt::XFocusListener >& xListener )
-        throw (css::uno::RuntimeException);
-
     /** The default implementation does nothing.
     */
     virtual void SAL_CALL grabFocus()

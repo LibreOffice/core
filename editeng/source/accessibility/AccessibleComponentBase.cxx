@@ -98,23 +98,6 @@ css::awt::Size SAL_CALL AccessibleComponentBase::getSize()
 }
 
 
-void SAL_CALL AccessibleComponentBase::addFocusListener (
-    const css::uno::Reference<
-    css::awt::XFocusListener >& /*xListener*/)
-    throw (css::uno::RuntimeException)
-{
-    // Ignored
-}
-
-
-void SAL_CALL AccessibleComponentBase::removeFocusListener (const css::uno::Reference<
-    css::awt::XFocusListener >& /*xListener*/ )
-    throw (css::uno::RuntimeException)
-{
-    // Ignored
-}
-
-
 void SAL_CALL AccessibleComponentBase::grabFocus()
     throw (css::uno::RuntimeException, std::exception)
 {

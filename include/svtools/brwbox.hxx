@@ -388,7 +388,6 @@ private:
 protected:
     // callbacks for the data window
     virtual void    ImplStartTracking();
-    virtual void    ImplTracking();
     virtual void    ImplEndTracking();
 
 public:
