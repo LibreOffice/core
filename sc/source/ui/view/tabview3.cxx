@@ -677,27 +677,49 @@ void ScTabView::TestHintWindow()
                  nRow >= aViewData.GetPosY(WhichV(eWhich)) &&
                  aPos.X() < aWinSize.Width() && aPos.Y() < aWinSize.Height() )
             {
-                rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = pWin->getOverlayManager();
-                if (xOverlayManager.is())
+                const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+                Color aCommentColor = rColorCfg.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor;
+                // create HintWindow, determines its size by itself
+                ScOverlayHint* pOverlay = new ScOverlayHint(aTitle, aMessage, aCommentColor, pFrameWin->GetFont());
+
+                mxInputHintOO.reset(new sdr::overlay::OverlayObjectList);
+                mxInputHintOO->append(*pOverlay);
+
+                Size aHintWndSize = pOverlay->GetSizePixel();
+                long nCellSizeX = 0;
+                long nCellSizeY = 0;
+                aViewData.GetMergeSizePixel(nCol, nRow, nCellSizeX, nCellSizeY);
+
+                Point aHintPos = calcHintWindowPosition(
+                    aPos, Size(nCellSizeX,nCellSizeY), aWinSize, aHintWndSize);
+
+                pOverlay->SetPos(pWin->PixelToLogic(aHintPos, pWin->GetDrawMapMode()), pWin->GetDrawMapMode());
+                for (VclPtr<ScGridWindow> & pWindow : pGridWin)
                 {
-                    const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
-                    Color aCommentColor = rColorCfg.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor;
-                    // create HintWindow, determines its size by itself
-                    ScOverlayHint* pOverlay = new ScOverlayHint(aTitle, aMessage, aCommentColor, pFrameWin->GetFont());
-
-                    Size aHintWndSize = pOverlay->GetSizePixel();
-                    long nCellSizeX = 0;
-                    long nCellSizeY = 0;
-                    aViewData.GetMergeSizePixel(nCol, nRow, nCellSizeX, nCellSizeY);
-
-                    Point aHintPos = calcHintWindowPosition(
-                        aPos, Size(nCellSizeX,nCellSizeY), aWinSize, aHintWndSize);
-
-                    pOverlay->SetPos(pWin->PixelToLogic(aHintPos, pWin->GetDrawMapMode()), pWin->GetDrawMapMode());
-
-                    xOverlayManager->add(*pOverlay);
-                    mxInputHintOO.reset(new sdr::overlay::OverlayObjectList);
-                    mxInputHintOO->append(*pOverlay);
+                    if (!pWindow)
+                        continue;
+                    if (!pWindow->IsVisible())
+                        continue;
+                    rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = pWindow->getOverlayManager();
+                    if (!xOverlayManager.is())
+                        continue;
+                    if (pWindow == pWin)
+                    {
+                        xOverlayManager->add(*pOverlay);
+                    }
+                    else
+                    {
+                        //tdf#92530 if the help tip doesn't fit into its allocated area in a split window
+                        //scenario, then because here we place it into the other split windows as well the
+                        //missing portions will be displayed in the other split windows to form an apparent
+                        //single tip, albeit "under" the split lines
+                        Point aOtherPos(pWindow->ScreenToOutputPixel(pWin->OutputToScreenPixel(aHintPos)));
+                        ScOverlayHint* pOtherOverlay = new ScOverlayHint(aTitle, aMessage, aCommentColor, pFrameWin->GetFont());
+                        Point aFooPos(pWindow->PixelToLogic(aOtherPos, pWindow->GetDrawMapMode()));
+                        pOtherOverlay->SetPos(aFooPos, pWindow->GetDrawMapMode());
+                        mxInputHintOO->append(*pOtherOverlay);
+                        xOverlayManager->add(*pOtherOverlay);
+                    }
                 }
             }
         }
