@@ -606,8 +606,7 @@ void SfxWorkWindow::DeleteControllers_Impl()
 
     // Lock SplitWindows (which means suppressing the Resize-Reaction of the
     // DockingWindows)
-    sal_uInt16 n;
-    for ( n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
+    for (size_t n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
     {
         SfxSplitWindow *p = pSplit[n];
         if (p->GetWindowCount())
@@ -615,7 +614,7 @@ void SfxWorkWindow::DeleteControllers_Impl()
     }
 
     // Delete Child-Windows
-    for ( n=0; n<aChildWins.size(); )
+    for (size_t n=0; n<aChildWins.size(); )
     {
         SfxChildWin_Impl* pCW = aChildWins[n];
         aChildWins.erase(aChildWins.begin());
