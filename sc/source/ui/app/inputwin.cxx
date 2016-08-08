@@ -1056,7 +1056,8 @@ IMPL_LINK_NOARG_TYPED(ScInputBarGroup, ClickHdl, Button*, void)
     TriggerToolboxLayout();
 
     // Restore focus to input line(s) if necessary
-    if (  SC_MOD()->GetInputHdl()->IsTopMode() )
+    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+    if ( pHdl && pHdl->IsTopMode() )
         maTextWnd->GrabFocus();
 }
 
