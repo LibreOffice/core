@@ -53,7 +53,7 @@ struct FmFormModelImplData
 };
 
 FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers)
-    : SdrModel(pPool, pPers, false)
+    : SdrModel(pPool, pPers)
     , m_pImpl(nullptr)
     , m_pObjShell(nullptr)
     , m_bOpenInDesignMode(false)

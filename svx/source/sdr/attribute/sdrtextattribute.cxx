@@ -67,7 +67,6 @@ namespace drawinglayer
             bool                                mbFixedCellHeight : 1;
             bool                                mbWrongSpell : 1;
 
-            bool                                mbToBeChained : 1;
             bool                                mbChainable : 1;
 
 
@@ -91,7 +90,6 @@ namespace drawinglayer
                 bool bInEditMode,
                 bool bFixedCellHeight,
                 bool bWrongSpell,
-                bool bToBeChained,
                 bool bChainable)
             :   mpSdrText(pSdrText),
                 mxOutlinerParaObject(new OutlinerParaObject(rOutlinerParaObject)),
@@ -112,7 +110,6 @@ namespace drawinglayer
                 mbInEditMode(bInEditMode),
                 mbFixedCellHeight(bFixedCellHeight),
                 mbWrongSpell(bWrongSpell),
-                mbToBeChained(bToBeChained),
                 mbChainable(bChainable)
             {
                 if(pSdrText)
@@ -150,7 +147,6 @@ namespace drawinglayer
                 mbInEditMode(false),
                 mbFixedCellHeight(false),
                 mbWrongSpell(false),
-                mbToBeChained(false),
                 mbChainable(false)
             {
             }
@@ -177,7 +173,6 @@ namespace drawinglayer
             bool isInEditMode() const { return mbInEditMode; }
             bool isFixedCellHeight() const { return mbFixedCellHeight; }
             bool isWrongSpell() const { return mbWrongSpell; }
-            bool isToBeChained() const { return mbToBeChained; }
             bool isChainable() const { return mbChainable; }
             const SdrFormTextAttribute& getSdrFormTextAttribute() const { return maSdrFormTextAttribute; }
             sal_Int32 getTextLeftDistance() const { return maTextLeftDistance; }
@@ -237,8 +232,7 @@ namespace drawinglayer
                     && isScroll() == rCandidate.isScroll()
                     && isInEditMode() == rCandidate.isInEditMode()
                     && isFixedCellHeight() == rCandidate.isFixedCellHeight()
-                    && isWrongSpell() == rCandidate.isWrongSpell()
-                    && isToBeChained() == rCandidate.isToBeChained() );
+                    && isWrongSpell() == rCandidate.isWrongSpell() );
             }
         };
 
@@ -267,7 +261,6 @@ namespace drawinglayer
             bool bInEditMode,
             bool bFixedCellHeight,
             bool bWrongSpell,
-            bool bIsToBeChained,
             bool bChainable)
         :   mpSdrTextAttribute(
                 ImpSdrTextAttribute(
@@ -275,7 +268,7 @@ namespace drawinglayer
                     aTextUpperDistance, aTextRightDistance, aTextLowerDistance,
                     aSdrTextHorzAdjust, aSdrTextVertAdjust, bContour, bFitToSize, bAutoFit,
                     bHideContour, bBlink, bScroll, bInEditMode, bFixedCellHeight, bWrongSpell,
-                    bIsToBeChained, bChainable))
+                    bChainable))
         {
         }
 

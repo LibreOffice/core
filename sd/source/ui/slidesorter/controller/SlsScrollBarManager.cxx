@@ -540,7 +540,6 @@ IMPL_LINK_NOARG_TYPED(ScrollBarManager, AutoScrollTimeoutHandler, Timer *, void)
 
 void ScrollBarManager::Scroll(
     const Orientation eOrientation,
-    const Unit eUnit,
     const sal_Int32 nDistance)
 {
     bool bIsVertical (false);
@@ -556,60 +555,49 @@ void ScrollBarManager::Scroll(
     Point aNewTopLeft (
         mpHorizontalScrollBar ? mpHorizontalScrollBar->GetThumbPos() : 0,
         mpVerticalScrollBar ? mpVerticalScrollBar->GetThumbPos() : 0);
-    switch (eUnit)
-    {
-        case Unit_Pixel:
-            if (bIsVertical)
-                aNewTopLeft.Y() += nDistance;
-            else
-                aNewTopLeft.X() += nDistance;
-            break;
 
-        case Unit_Slide:
+    view::Layouter& rLayouter (mrSlideSorter.GetView().GetLayouter());
+
+    // Calculate estimate of new location.
+    if (bIsVertical)
+        aNewTopLeft.Y() += nDistance * rLayouter.GetPageObjectSize().Height();
+    else
+        aNewTopLeft.X() += nDistance * rLayouter.GetPageObjectSize().Width();
+
+    // Adapt location to show whole slides.
+    if (bIsVertical)
+        if (nDistance > 0)
         {
-            view::Layouter& rLayouter (mrSlideSorter.GetView().GetLayouter());
-
-            // Calculate estimate of new location.
-            if (bIsVertical)
-                aNewTopLeft.Y() += nDistance * rLayouter.GetPageObjectSize().Height();
-            else
-                aNewTopLeft.X() += nDistance * rLayouter.GetPageObjectSize().Width();
-
-            // Adapt location to show whole slides.
-            if (bIsVertical)
-                if (nDistance > 0)
-                {
-                    const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
-                        Point(aNewTopLeft.X(), aNewTopLeft.Y()+mpVerticalScrollBar->GetVisibleSize()),
-                        true));
-                    aNewTopLeft.Y() = rLayouter.GetPageObjectBox(nIndex,true).Bottom()
-                        - mpVerticalScrollBar->GetVisibleSize();
-                }
-                else
-                {
-                    const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
-                        Point(aNewTopLeft.X(), aNewTopLeft.Y()),
-                        true));
-                    aNewTopLeft.Y() = rLayouter.GetPageObjectBox(nIndex,true).Top();
-                }
-            else
-                if (nDistance > 0)
-                {
-                    const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
-                        Point(aNewTopLeft.X()+mpVerticalScrollBar->GetVisibleSize(), aNewTopLeft.Y()),
-                        true));
-                    aNewTopLeft.X() = rLayouter.GetPageObjectBox(nIndex,true).Right()
-                        - mpVerticalScrollBar->GetVisibleSize();
-                }
-                else
-                {
-                    const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
-                        Point(aNewTopLeft.X(), aNewTopLeft.Y()),
-                            true));
-                    aNewTopLeft.X() = rLayouter.GetPageObjectBox(nIndex,true).Left();
-                }
+            const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
+                Point(aNewTopLeft.X(), aNewTopLeft.Y()+mpVerticalScrollBar->GetVisibleSize()),
+                true));
+            aNewTopLeft.Y() = rLayouter.GetPageObjectBox(nIndex,true).Bottom()
+                - mpVerticalScrollBar->GetVisibleSize();
         }
-    }
+        else
+        {
+            const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
+                Point(aNewTopLeft.X(), aNewTopLeft.Y()),
+                true));
+            aNewTopLeft.Y() = rLayouter.GetPageObjectBox(nIndex,true).Top();
+        }
+    else
+        if (nDistance > 0)
+        {
+            const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
+                Point(aNewTopLeft.X()+mpVerticalScrollBar->GetVisibleSize(), aNewTopLeft.Y()),
+                true));
+            aNewTopLeft.X() = rLayouter.GetPageObjectBox(nIndex,true).Right()
+                - mpVerticalScrollBar->GetVisibleSize();
+        }
+        else
+        {
+            const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
+                Point(aNewTopLeft.X(), aNewTopLeft.Y()),
+                    true));
+            aNewTopLeft.X() = rLayouter.GetPageObjectBox(nIndex,true).Left();
+        }
+
     mrSlideSorter.GetController().GetVisibleAreaManager().DeactivateCurrentSlideTracking();
     SetTopLeft(aNewTopLeft);
 }

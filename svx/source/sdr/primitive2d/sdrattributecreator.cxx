@@ -579,7 +579,6 @@ namespace drawinglayer
                     bInEditMode,
                     static_cast<const SdrTextFixedCellHeightItem&>(rSet.Get(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue(),
                     bWrongSpell,
-                    false/*bToBeChained*/,
                     bChainable);
             }
 

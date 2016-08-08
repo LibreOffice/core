@@ -1067,10 +1067,9 @@ struct ImplBmpObj
 {
     X11SalBitmap*   mpBmp;
     sal_uLong       mnMemSize;
-    sal_uLong       mnFlags;
 
-                ImplBmpObj( X11SalBitmap* pBmp, sal_uLong nMemSize, sal_uLong nFlags ) :
-                    mpBmp( pBmp ), mnMemSize( nMemSize ), mnFlags( nFlags ) {}
+                ImplBmpObj( X11SalBitmap* pBmp, sal_uLong nMemSize ) :
+                    mpBmp( pBmp ), mnMemSize( nMemSize ) {}
 };
 
 ImplSalBitmapCache::ImplSalBitmapCache() :
@@ -1104,10 +1103,9 @@ void ImplSalBitmapCache::ImplAdd( X11SalBitmap* pBmp, sal_uLong nMemSize )
     {
         mnTotalSize -= pObj->mnMemSize;
         pObj->mnMemSize = nMemSize;
-        pObj->mnFlags = 0;
     }
     else
-        maBmpList.push_back( new ImplBmpObj( pBmp, nMemSize, 0 ) );
+        maBmpList.push_back( new ImplBmpObj( pBmp, nMemSize ) );
 }
 
 void ImplSalBitmapCache::ImplRemove( X11SalBitmap* pBmp )

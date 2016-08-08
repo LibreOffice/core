@@ -76,7 +76,6 @@ namespace drawinglayer
                 bool bInEditMode,
                 bool bFixedCellHeight,
                 bool bWrongSpell,
-                bool bToBeChained,
                 bool bChainable);
 
             SdrTextAttribute();

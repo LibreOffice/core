@@ -199,7 +199,7 @@ class NotebookBar;
 class VCL_DLLPUBLIC NotebookbarTabControl : public TabControl
 {
 public:
-    NotebookbarTabControl( vcl::Window* pParent, WinBits nStyle = WB_STDTABCONTROL );
+    NotebookbarTabControl( vcl::Window* pParent );
 
     void SetContext( vcl::EnumContext::Context eContext );
     void SetIconClickHdl( Link<NotebookBar*, void> aHdl );

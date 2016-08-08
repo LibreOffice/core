@@ -384,16 +384,13 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(bool _bSearchForNull
     bool bMovedAround(false);
     do
     {
-        if (m_eMode == SM_ALLOWSCHEDULE)
-        {
-            Application::Reschedule();
-            Application::Reschedule();
-            // do 2 reschedules because of #70226# : some things done within this loop's body may cause an user event
-            // to be posted (deep within vcl), and these user events will be handled before any keyinput or paintings
-            // or anything like that. So within each loop we create one user event and handle one user event (and no
-            // paintings and these), so the office seems to be frozen while searching.
-            // FS - 70226 - 02.12.99
-        }
+        Application::Reschedule();
+        Application::Reschedule();
+        // do 2 reschedules because of #70226# : some things done within this loop's body may cause an user event
+        // to be posted (deep within vcl), and these user events will be handled before any keyinput or paintings
+        // or anything like that. So within each loop we create one user event and handle one user event (and no
+        // paintings and these), so the office seems to be frozen while searching.
+        // FS - 70226 - 02.12.99
 
         // der aktuell zu vergleichende Inhalt
         iterFieldLoop->xContents->getString();  // needed for wasNull
@@ -451,16 +448,13 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const OUString& str
     bool bMovedAround(false);
     do
     {
-        if (m_eMode == SM_ALLOWSCHEDULE)
-        {
-            Application::Reschedule();
-            Application::Reschedule();
-            // do 2 reschedules because of #70226# : some things done within this loop's body may cause an user event
-            // to be posted (deep within vcl), and these user events will be handled before any keyinput or paintings
-            // or anything like that. So within each loop we create one user event and handle one user event (and no
-            // paintings and these), so the office seems to be frozen while searching.
-            // FS - 70226 - 02.12.99
-        }
+        Application::Reschedule();
+        Application::Reschedule();
+        // do 2 reschedules because of #70226# : some things done within this loop's body may cause an user event
+        // to be posted (deep within vcl), and these user events will be handled before any keyinput or paintings
+        // or anything like that. So within each loop we create one user event and handle one user event (and no
+        // paintings and these), so the office seems to be frozen while searching.
+        // FS - 70226 - 02.12.99
 
         // der aktuell zu vergleichende Inhalt
         OUString sCurrentCheck;
@@ -553,16 +547,13 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
     bool bMovedAround(false);
     do
     {
-        if (m_eMode == SM_ALLOWSCHEDULE)
-        {
-            Application::Reschedule();
-            Application::Reschedule();
-            // do 2 reschedules because of #70226# : some things done within this loop's body may cause an user event
-            // to be posted (deep within vcl), and these user events will be handled before any keyinput or paintings
-            // or anything like that. So within each loop we create one user event and handle one user event (and no
-            // paintings and these), so the office seems to be frozen while searching.
-            // FS - 70226 - 02.12.99
-        }
+        Application::Reschedule();
+        Application::Reschedule();
+        // do 2 reschedules because of #70226# : some things done within this loop's body may cause an user event
+        // to be posted (deep within vcl), and these user events will be handled before any keyinput or paintings
+        // or anything like that. So within each loop we create one user event and handle one user event (and no
+        // paintings and these), so the office seems to be frozen while searching.
+        // FS - 70226 - 02.12.99
 
         // der aktuell zu vergleichende Inhalt
         OUString sCurrentCheck;
@@ -640,7 +631,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
 
 FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
         const Reference< XResultSet > & xCursor, const OUString& sVisibleFields,
-        const InterfaceArray& arrFields, FMSEARCH_MODE eMode)
+        const InterfaceArray& arrFields)
     :m_xSearchCursor(xCursor)
     ,m_aCharacterClassficator( _rxContext, SvtSysLocale().GetLanguageTag() )
     ,m_aStringCompare( _rxContext )
@@ -651,7 +642,6 @@ FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
     ,m_srResult(SR_FOUND)
     ,m_bSearchingCurrently(false)
     ,m_bCancelAsynchRequest(false)
-    ,m_eMode(eMode)
     ,m_bFormatter(true)     // das muss konsistent sein mit m_xSearchCursor, der i.A. == m_xOriginalIterator ist
     ,m_bForward(false)
     ,m_bWildcard(false)
@@ -1086,21 +1076,8 @@ void FmSearchEngine::ImplStartNextSearch()
     m_bCancelAsynchRequest = false;
     m_bSearchingCurrently = true;
 
-    if (m_eMode == SM_USETHREAD)
-    {
-        FmSearchThread* pSearcher = new FmSearchThread(this);
-            // der loescht sich nach Beendigung selber ...
-        pSearcher->setTerminationHandler(LINK(this, FmSearchEngine, OnSearchTerminated));
-
-        pSearcher->createSuspended();
-        pSearcher->setPriority(osl_Thread_PriorityLowest);
-        pSearcher->resume();
-    }
-    else
-    {
-        SearchNextImpl();
-        LINK(this, FmSearchEngine, OnSearchTerminated).Call(nullptr);
-    }
+    SearchNextImpl();
+    LINK(this, FmSearchEngine, OnSearchTerminated).Call(nullptr);
 }
 
 

@@ -159,8 +159,6 @@ namespace svxform {
     };
 }
 
-enum FMSEARCH_MODE { SM_BRUTE, SM_ALLOWSCHEDULE, SM_USETHREAD };
-
 typedef std::vector< css::uno::Reference< css::uno::XInterface> > InterfaceArray;
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine
@@ -215,7 +213,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine
     bool                m_bCancelAsynchRequest : 1;     // should be cancelled?
     ::osl::Mutex        m_aCancelAsynchAccess;          // access to_bCancelAsynchRequest (technically only
                                                         // relevant for m_eMode == SM_USETHREAD)
-    FMSEARCH_MODE   m_eMode;                            // current mode
 
     // parameters for the search
     bool        m_bFormatter : 1;       // use field formatting
@@ -281,8 +278,6 @@ public:
     sal_uInt16  GetPosition() const             { return m_nPosition; }
     // position will be ignored in case of m_bWildCard==sal_True
 
-    FMSEARCH_MODE GetSearchMode() const { return m_eMode; }
-
 public:
     /** two constructs, both analogical to FmSearchDialog, therefore look this up for explanations ....
         xCursor has to implement css::data::DatabaseCursor service  each time.
@@ -296,8 +291,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
         const css::uno::Reference< css::sdbc::XResultSet >& xCursor,
         const OUString& strVisibleFields,
-        const InterfaceArray& arrFields,
-        FMSEARCH_MODE eMode);
+        const InterfaceArray& arrFields);
 
     virtual ~FmSearchEngine();
 

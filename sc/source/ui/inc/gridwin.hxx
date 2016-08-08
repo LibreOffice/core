@@ -223,7 +223,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
 
     bool            IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab );
     void            ExecFilter( sal_uLong nSel, SCCOL nCol, SCROW nRow,
-                                const OUString& aValue, bool bCheckForDates );
+                                const OUString& aValue );
     void            FilterSelect( sal_uLong nSel );
 
     void            ExecDataSelect( SCCOL nCol, SCROW nRow, const OUString& rStr );

@@ -155,7 +155,7 @@ AccessibleGridControl::getAccessibleChild( sal_Int32 nChildIndex )
         {
             if(!m_xImpl->m_xTable.is())
             {
-            AccessibleGridControlTable* pTable = new AccessibleGridControlTable(m_xImpl->m_aCreator, m_aTable, svt::table::TCTYPE_TABLE);
+            AccessibleGridControlTable* pTable = new AccessibleGridControlTable(m_xImpl->m_aCreator, m_aTable);
             m_xImpl->m_xTable = pTable;
                 m_xImpl->m_pTable = pTable;
             }
@@ -306,7 +306,7 @@ AccessibleGridControlTable* AccessibleGridControl::createAccessibleTable()
 {
     css::uno::Reference< css::accessibility::XAccessible > xCreator(m_xImpl->m_aCreator);
     OSL_ENSURE( xCreator.is(), "extended/AccessibleGridControl::createAccessibleTable: my creator died - how this?" );
-    return new AccessibleGridControlTable( xCreator, m_aTable, TCTYPE_TABLE );
+    return new AccessibleGridControlTable( xCreator, m_aTable );
 }
 
 void AccessibleGridControl::commitCellEvent(sal_Int16 _nEventId,const Any& _rNewValue,const Any& _rOldValue)

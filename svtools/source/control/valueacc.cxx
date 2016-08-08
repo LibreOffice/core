@@ -61,10 +61,9 @@ uno::Reference< accessibility::XAccessible > const & ValueSetItem::GetAccessible
 }
 
 
-ValueSetAcc::ValueSetAcc( ValueSet* pParent, bool bIsTransientChildrenDisabled ) :
+ValueSetAcc::ValueSetAcc( ValueSet* pParent ) :
     ValueSetAccComponentBase (m_aMutex),
     mpParent( pParent ),
-    mbIsTransientChildrenDisabled( bIsTransientChildrenDisabled ),
     mbIsFocused(false)
 {
 }
@@ -183,7 +182,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
     ValueSetItem* pItem = getItem (sal::static_int_cast< sal_uInt16 >(i));
 
     if( pItem )
-        xRet = pItem->GetAccessible( mbIsTransientChildrenDisabled );
+        xRet = pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/ );
     else
         throw lang::IndexOutOfBoundsException();
 
@@ -236,11 +235,7 @@ sal_Int16 SAL_CALL ValueSetAcc::getAccessibleRole()
     throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
-    // #i73746# As the Java Access Bridge (v 2.0.1) uses "managesDescendants"
-    // always if the role is LIST, we need a different role in this case
-    return (mbIsTransientChildrenDisabled
-            ? accessibility::AccessibleRole::PANEL
-            : accessibility::AccessibleRole::LIST );
+    return accessibility::AccessibleRole::LIST;
 }
 
 
@@ -322,8 +317,7 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueSetAcc::getAc
     pStateSet->AddState (accessibility::AccessibleStateType::SENSITIVE);
     pStateSet->AddState (accessibility::AccessibleStateType::SHOWING);
     pStateSet->AddState (accessibility::AccessibleStateType::VISIBLE);
-    if ( !mbIsTransientChildrenDisabled )
-        pStateSet->AddState (accessibility::AccessibleStateType::MANAGES_DESCENDANTS);
+    pStateSet->AddState (accessibility::AccessibleStateType::MANAGES_DESCENDANTS);
     pStateSet->AddState (accessibility::AccessibleStateType::FOCUSABLE);
     if (mbIsFocused)
         pStateSet->AddState (accessibility::AccessibleStateType::FOCUSED);
@@ -421,7 +415,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
         if( VALUESET_ITEM_NONEITEM != nItemPos )
         {
             ValueSetItem *const pItem = mpParent->mItemList[nItemPos];
-            xRet = pItem->GetAccessible( mbIsTransientChildrenDisabled );
+            xRet = pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/ );
         }
     }
 
@@ -595,7 +589,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getSelectedAc
         ValueSetItem* pItem = getItem(i);
 
         if( pItem && mpParent->IsItemSelected( pItem->mnId ) && ( nSelectedChildIndex == static_cast< sal_Int32 >( nSel++ ) ) )
-            xRet = pItem->GetAccessible( mbIsTransientChildrenDisabled );
+            xRet = pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/ );
     }
 
     return xRet;

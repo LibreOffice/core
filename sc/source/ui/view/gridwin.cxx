@@ -1235,7 +1235,7 @@ void ScGridWindow::FilterSelect( sal_uLong nSel )
             ExecDataSelect(nCol, nRow, aString);
             break;
         case SC_FILTERBOX_FILTER:
-            ExecFilter(nSel, nCol, nRow, aString, false/*bHasDates*/);
+            ExecFilter(nSel, nCol, nRow, aString);
             break;
         case SC_FILTERBOX_SCENARIO:
             pViewData->GetView()->UseScenario(aString);
@@ -1268,7 +1268,7 @@ void ScGridWindow::ExecDataSelect( SCCOL nCol, SCROW nRow, const OUString& rStr 
 
 void ScGridWindow::ExecFilter( sal_uLong nSel,
                                SCCOL nCol, SCROW nRow,
-                               const OUString& aValue, bool bCheckForDates )
+                               const OUString& aValue )
 {
     SCTAB nTab = pViewData->GetTabNo();
     ScDocument* pDoc = pViewData->GetDocument();
@@ -1341,7 +1341,7 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
                     ScQueryEntry::Item& rItem = rNewEntry.GetQueryItem();
                     rNewEntry.bDoQuery       = true;
                     rNewEntry.nField         = nCol;
-                    rItem.meType = bCheckForDates ? ScQueryEntry::ByDate : ScQueryEntry::ByString;
+                    rItem.meType = ScQueryEntry::ByString;
 
                     if ( nSel == SC_AUTOFILTER_TOP10 )
                     {

@@ -368,7 +368,6 @@ public:
 
         void             Clear();
         void             Consume( SvStream& rIn,
-                                  bool bAppend = false,
                                   sal_uInt32 nStOfs = 0 );
 
         bool             SeekToContent( SvStream& rIn,

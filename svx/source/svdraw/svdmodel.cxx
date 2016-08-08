@@ -228,11 +228,11 @@ SdrModel::SdrModel():
     ImpCtor(nullptr, nullptr, false);
 }
 
-SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable):
+SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers):
     maMaPag(),
     maPages()
 {
-    ImpCtor(pPool,pPers,bUseExtColorTable);
+    ImpCtor(pPool,pPers,false/*bUseExtColorTable*/);
 }
 
 SdrModel::SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable):

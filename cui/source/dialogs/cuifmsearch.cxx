@@ -146,7 +146,7 @@ FmSearchDialog::FmSearchDialog(vcl::Window* pParent, const OUString& sInitialTex
     }
 
     m_pSearchEngine = new FmSearchEngine(
-        ::comphelper::getProcessComponentContext(), fmscInitial.xCursor, fmscInitial.strUsedFields, fmscInitial.arrFields, SM_ALLOWSCHEDULE );
+        ::comphelper::getProcessComponentContext(), fmscInitial.xCursor, fmscInitial.strUsedFields, fmscInitial.arrFields );
     initCommon( fmscInitial.xCursor );
 
     if ( !fmscInitial.sFieldDisplayNames.isEmpty() )
@@ -346,7 +346,6 @@ IMPL_LINK_NOARG_TYPED(FmSearchDialog, OnClickedSearchAgain, Button*, void)
     }
     else
     {   // the button has the function 'cancel'
-        DBG_ASSERT(m_pSearchEngine->GetSearchMode() != SM_BRUTE, "FmSearchDialog, OnClickedSearchAgain : falscher Modus !");
             // the CancelButton is usually only disabled, when working in a thread or with reschedule
         m_pSearchEngine->CancelSearch();
             // the ProgressHandler is called when it's really finished, here it's only a demand
@@ -587,26 +586,23 @@ void FmSearchDialog::EnableSearchUI(bool bEnable)
     OUString sButtonText( bEnable ? m_sSearch : m_sCancel );
     m_pbSearchAgain->SetText( sButtonText );
 
-    if (m_pSearchEngine->GetSearchMode() != SM_BRUTE)
-    {
-        m_prbSearchForText->Enable    (bEnable);
-        m_prbSearchForNull->Enable    (bEnable);
-        m_prbSearchForNotNull->Enable (bEnable);
-        m_plbForm->Enable             (bEnable);
-        m_prbAllFields->Enable        (bEnable);
-        m_prbSingleField->Enable      (bEnable);
-        m_plbField->Enable            (bEnable && m_prbSingleField->IsChecked());
-        m_pcbBackwards->Enable        (bEnable);
-        m_pcbStartOver->Enable        (bEnable);
-        m_pbClose->Enable            (bEnable);
-        EnableSearchForDependees    (bEnable);
+    m_prbSearchForText->Enable    (bEnable);
+    m_prbSearchForNull->Enable    (bEnable);
+    m_prbSearchForNotNull->Enable (bEnable);
+    m_plbForm->Enable             (bEnable);
+    m_prbAllFields->Enable        (bEnable);
+    m_prbSingleField->Enable      (bEnable);
+    m_plbField->Enable            (bEnable && m_prbSingleField->IsChecked());
+    m_pcbBackwards->Enable        (bEnable);
+    m_pcbStartOver->Enable        (bEnable);
+    m_pbClose->Enable            (bEnable);
+    EnableSearchForDependees    (bEnable);
 
-        if ( !bEnable )
-        {   // this means we're preparing for starting a search
-            // In this case, EnableSearchForDependees disabled the search button
-            // But as we're about to use it for cancelling the search, we really need to enable it, again
-            m_pbSearchAgain->Enable();
-        }
+    if ( !bEnable )
+    {   // this means we're preparing for starting a search
+        // In this case, EnableSearchForDependees disabled the search button
+        // But as we're about to use it for cancelling the search, we really need to enable it, again
+        m_pbSearchAgain->Enable();
     }
 
     if (!bEnable)

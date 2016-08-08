@@ -75,12 +75,11 @@ class XInputStreamHelper : public cppu::WeakImplHelper<io::XInputStream>
     const sal_uInt8* m_pBuffer;
     const sal_Int32  m_nLength;
     sal_Int32        m_nPosition;
-    bool             m_bBmp;
 
     const sal_uInt8* m_pBMPHeader; //default BMP-header
     sal_Int32        m_nHeaderLength;
 public:
-    XInputStreamHelper(const sal_uInt8* buf, size_t len, bool bBmp);
+    XInputStreamHelper(const sal_uInt8* buf, size_t len);
     virtual ~XInputStreamHelper();
 
     virtual ::sal_Int32 SAL_CALL readBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead ) throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception) override;
@@ -90,16 +89,15 @@ public:
     virtual void SAL_CALL closeInput(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception) override;
 };
 
-XInputStreamHelper::XInputStreamHelper(const sal_uInt8* buf, size_t len, bool bBmp) :
+XInputStreamHelper::XInputStreamHelper(const sal_uInt8* buf, size_t len) :
         m_pBuffer( buf ),
         m_nLength( len ),
-        m_nPosition( 0 ),
-        m_bBmp( bBmp )
+        m_nPosition( 0 )
 {
     static const sal_uInt8 aHeader[] =
         {0x42, 0x4d, 0xe6, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
     m_pBMPHeader = aHeader;
-    m_nHeaderLength = m_bBmp ? sizeof( aHeader ) / sizeof(sal_uInt8) : 0;
+    m_nHeaderLength = 0;
 }
 
 
@@ -1365,7 +1363,7 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Referen
         beans::PropertyValues aMediaProperties( 1 );
         aMediaProperties[0].Name = getPropertyName(PROP_INPUT_STREAM);
 
-        uno::Reference< io::XInputStream > xIStream = new XInputStreamHelper( buf, len, false/*bIsBitmap*/ );
+        uno::Reference< io::XInputStream > xIStream = new XInputStreamHelper( buf, len );
         aMediaProperties[0].Value <<= xIStream;
 
         uno::Reference<beans::XPropertySet> xPropertySet;
