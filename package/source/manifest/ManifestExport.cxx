@@ -81,6 +81,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
 
     const OUString sWhiteSpace           ( " " );
 
+    const OUString sSHA256_URL_ODF12     ( SHA256_URL_ODF12 );
     const OUString sSHA256_URL           ( SHA256_URL );
     const OUString  sSHA1_Name           ( SHA1_NAME );
 
@@ -350,7 +351,8 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 *pStartKeyAlg >>= nStartKeyAlgID;
                 if ( nStartKeyAlgID == xml::crypto::DigestID::SHA256 )
                 {
-                    sStartKeyAlg = sSHA256_URL;
+                    sStartKeyAlg = sSHA256_URL_ODF12; // TODO use sSHA256_URL
+                    (void) sSHA256_URL;
                     aBuffer.append( (sal_Int32)32 );
                     sStartKeySize = aBuffer.makeStringAndClear();
                 }
