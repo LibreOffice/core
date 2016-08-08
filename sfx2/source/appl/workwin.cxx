@@ -614,10 +614,11 @@ void SfxWorkWindow::DeleteControllers_Impl()
     }
 
     // Delete Child-Windows
-    for (size_t n=0; n<aChildWins.size(); )
+    while(!aChildWins.empty())
     {
-        SfxChildWin_Impl* pCW = aChildWins[n];
-        aChildWins.erase(aChildWins.begin());
+        auto itr = aChildWins.begin();
+        SfxChildWin_Impl* pCW = *itr;
+        aChildWins.erase(itr);
         SfxChildWindow *pChild = pCW->pWin;
         if (pChild)
         {
