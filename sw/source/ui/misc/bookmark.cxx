@@ -246,7 +246,7 @@ bool SwInsertBookmarkDlg::ValidateBookmarks()
 bool SwInsertBookmarkDlg::HaveBookmarksChanged()
 {
     IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
-    if (pMarkAccess->getBookmarksCount() != static_cast<sal_Int32>(aTableBookmarks.size()))
+    if (pMarkAccess->getBookmarksCount() != m_nLastBookmarksCount)
         return true;
 
     IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
@@ -277,16 +277,18 @@ void SwInsertBookmarkDlg::PopulateTable()
             aTableBookmarks.push_back(std::make_pair(ppBookmark->get(), ppBookmark->get()->GetName()));
         }
     }
+    m_nLastBookmarksCount = pMarkAccess->getBookmarksCount();
 }
 
 void SwInsertBookmarkDlg::Apply()
 {
 }
 
-SwInsertBookmarkDlg::SwInsertBookmarkDlg(vcl::Window* pParent, SwWrtShell& rS, SfxRequest& rRequest) :
-    SvxStandardDialog(pParent, "InsertBookmarkDialog", "modules/swriter/ui/insertbookmark.ui"),
-    rSh(rS),
-    rReq(rRequest)
+SwInsertBookmarkDlg::SwInsertBookmarkDlg(vcl::Window* pParent, SwWrtShell& rS, SfxRequest& rRequest)
+    : SvxStandardDialog(pParent, "InsertBookmarkDialog", "modules/swriter/ui/insertbookmark.ui")
+    , rSh(rS)
+    , rReq(rRequest)
+    , m_nLastBookmarksCount(0)
 {
     get(m_pBookmarksContainer, "bookmarks");
     get(m_pEditBox, "name");
