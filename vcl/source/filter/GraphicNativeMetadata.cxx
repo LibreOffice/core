@@ -37,7 +37,11 @@ bool GraphicNativeMetadata::read(Graphic& rGraphic)
     GfxLink aLink = rGraphic.GetLink();
     if ( aLink.GetType() != GFX_LINK_TYPE_NATIVE_JPG )
         return false;
+
     sal_uInt32 aDataSize = aLink.GetDataSize();
+    if (!aDataSize)
+        return false;
+
     std::unique_ptr<sal_uInt8[]> aBuffer(new sal_uInt8[aDataSize]);
 
     memcpy(aBuffer.get(), aLink.GetData(), aDataSize);
