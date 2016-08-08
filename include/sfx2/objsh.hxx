@@ -435,7 +435,7 @@ public:
     static sal_uInt32           HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc );
 
     virtual bool                PrepareClose(bool bUI = true);
-    virtual bool                IsInformationLost();
+    bool                        IsInformationLost();
     virtual HiddenInformation   GetHiddenInformationState( HiddenInformation nStates );
     sal_Int16                   QueryHiddenInformation( HiddenWarningFact eFact, vcl::Window* pParent );
     bool                        IsSecurityOptOpenReadOnly() const;

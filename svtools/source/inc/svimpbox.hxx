@@ -276,7 +276,7 @@ public:
     virtual void        UpdateAll( bool bInvalidateCompleteView );
     void                SetEntryHeight( short nHeight );
     void                InvalidateEntry( SvTreeListEntry* );
-    virtual void        RecalcFocusRect();
+    void                RecalcFocusRect();
 
     void SelectEntry( SvTreeListEntry* pEntry, bool bSelect );
     void                SetDragDropMode( DragDropMode eDDMode );

@@ -191,11 +191,6 @@ void BrowseBox::ImplStartTracking()
 }
 
 
-void BrowseBox::ImplTracking()
-{
-}
-
-
 void BrowseBox::ImplEndTracking()
 {
 }

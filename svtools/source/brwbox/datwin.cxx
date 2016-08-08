@@ -559,8 +559,6 @@ void BrowserDataWin::Tracking( const TrackingEvent& rTEvt )
     }
     else
     {
-        GetParent()->ImplTracking();
-
         long nDragRowDividerCurrentPos = aMousePos.Y() + m_nDragRowDividerOffset;
 
         // care for minimum row height
