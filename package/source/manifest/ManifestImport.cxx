@@ -70,6 +70,7 @@ ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManV
     , sStartKeyAlgProperty          ( "StartKeyAlgorithm" )
     , sDigestAlgProperty            ( "DigestAlgorithm" )
 
+    , sSHA256_URL_ODF12             ( SHA256_URL_ODF12 )
     , sSHA256_URL                   ( SHA256_URL )
     , sSHA1_Name                    ( SHA1_NAME )
     , sSHA1_URL                     ( SHA1_URL )
@@ -228,7 +229,7 @@ void ManifestImport::doStartKeyAlg(StringHashMap &rConvertedAttribs)
 throw( uno::RuntimeException )
 {
     OUString aString = rConvertedAttribs[sStartKeyAlgNameAttribute];
-    if ( aString.equals( sSHA256_URL ) ) {
+    if (aString.equals(sSHA256_URL) || aString.equals(sSHA256_URL_ODF12)) {
         aSequence[PKG_MNFST_STARTALG].Name = sStartKeyAlgProperty;
         aSequence[PKG_MNFST_STARTALG].Value <<= xml::crypto::DigestID::SHA256;
     } else if ( aString.equals( sSHA1_Name ) || aString.equals( sSHA1_URL ) ) {

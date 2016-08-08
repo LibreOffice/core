@@ -52,7 +52,9 @@
 #define ATTRIBUTE_SALT "manifest:salt"
 #define ATTRIBUTE_ITERATION_COUNT "manifest:iteration-count"
 
-#define SHA256_URL "http://www.w3.org/2000/09/xmldsig#sha256"
+/// OFFICE-3708: wrong URL cited in ODF 1.2 and used since OOo 3.4 beta
+#define SHA256_URL_ODF12 "http://www.w3.org/2000/09/xmldsig#sha256"
+#define SHA256_URL "http://www.w3.org/2001/04/xmlenc#sha256"
 #define SHA1_NAME "SHA1"
 #define SHA1_URL "http://www.w3.org/2000/09/xmldsig#sha1"
 
