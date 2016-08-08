@@ -155,7 +155,16 @@ SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode e
 SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
                                          const Reference < XInteractionHandler >& xInteractionHandler )
 {
-    return lcl_CreateStream( rFileName, eOpenMode, xInteractionHandler, true /* bEnsureFileExists */ );
+    Reference < XInteractionHandler > xIHScoped( xInteractionHandler );
+    if ( !xIHScoped.is() )
+    {
+        // create a specialized interaction handler to manages Web certificates and Web credentials when needed
+        Reference< XInteractionHandler > xIH(
+            css::task::InteractionHandler::createWithParent( comphelper::getProcessComponentContext(), nullptr ) );
+        xIHScoped = static_cast< XInteractionHandler *> (
+            new comphelper::SimpleFileAccessInteraction( xIH ) );
+    }
+    return lcl_CreateStream( rFileName, eOpenMode, xIHScoped, true /* bEnsureFileExists */ );
 }
 
 SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
