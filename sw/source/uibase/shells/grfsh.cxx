@@ -840,6 +840,15 @@ void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
 
     SwWrtShell& rShell = GetShell();
 
+    if (rReq.GetSlot() == SID_OBJECT_ROTATE)
+    {
+        if (GetView().IsDrawRotate())
+            rShell.SetDragMode(SDRDRAG_MOVE);
+        else
+            rShell.SetDragMode(SDRDRAG_ROTATE);
+
+        GetView().FlipDrawRotate();
+    }
     if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_LEFT)
     {
         aRotation = 900;
@@ -908,6 +917,7 @@ void SwGrfShell::GetAttrStateForRotation(SfxItemSet &rSet)
         bool bDisable = bIsParentContentProtected;
         switch( nWhich )
         {
+        case SID_OBJECT_ROTATE:
         case SID_ROTATE_GRAPHIC_LEFT:
         case SID_ROTATE_GRAPHIC_RIGHT:
             if( rShell.GetGraphicType() == GraphicType::NONE )
