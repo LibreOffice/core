@@ -589,6 +589,10 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             break;
         }
 
+        case accessibility::AccessibleEventId::SELECTION_CHANGED_REMOVE:
+            /* unknown what to do with this */
+            break;
+
         default:
             SAL_WARN("vcl.gtk", "Unknown event notification: " << aEvent.EventId);
             break;
