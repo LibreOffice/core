@@ -846,6 +846,12 @@ UpdateCheck::download()
     State eState = m_eState;
     aGuard.clear();
 
+    if (aInfo.Sources.empty())
+    {
+        SAL_WARN("extension.updatecheck", "download called without source");
+        return;
+    }
+
     if( aInfo.Sources[0].IsDirect )
     {
         // Ignore second click of a double click
