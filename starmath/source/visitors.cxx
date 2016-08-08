@@ -1499,7 +1499,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBlankNode* pNode )
  */
 void SmCaretPosGraphBuildingVisitor::Visit( SmBraceNode* pNode )
 {
-    SmNode* pBody = pNode->GetSubNode( 1 );
+    SmNode* pBody = pNode->Body();
 
     SmCaretPosGraphEntry  *left = mpRightMost,
                         *right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
@@ -1988,9 +1988,9 @@ void SmNodeToTextVisitor::Visit( SmTableNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmBraceNode* pNode )
 {
-    SmNode *pLeftBrace  = pNode->GetSubNode( 0 ),
-           *pBody       = pNode->GetSubNode( 1 ),
-           *pRightBrace = pNode->GetSubNode( 2 );
+    SmNode *pLeftBrace  = pNode->OpeningBrace(),
+           *pBody       = pNode->Body(),
+           *pRightBrace = pNode->ClosingBrace();
     //Handle special case where it's absolute function
     if( pNode->GetToken( ).eType == TABS ) {
         Append( "abs" );
