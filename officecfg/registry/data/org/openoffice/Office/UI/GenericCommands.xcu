@@ -139,7 +139,10 @@
       </node>
       <node oor:name=".uno:ArrowShapes" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Block Arrows</value>
+          <value xml:lang="en-US">Arrow Shapes</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Arrow</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -147,7 +150,10 @@
       </node>
       <node oor:name=".uno:FlowChartShapes" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Flowcharts</value>
+          <value xml:lang="en-US">Flowchart Shapes</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Flowchart</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -155,7 +161,10 @@
       </node>
       <node oor:name=".uno:CalloutShapes" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Callouts</value>
+          <value xml:lang="en-US">Callout Shapes</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Callout</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -163,7 +172,10 @@
       </node>
       <node oor:name=".uno:StarShapes" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Stars</value>
+          <value xml:lang="en-US">Star Shapes</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">S~tar</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
