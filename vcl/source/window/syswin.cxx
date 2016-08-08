@@ -153,6 +153,18 @@ bool Accelerator::ToggleMnemonicsOnHierarchy(const CommandEvent& rCEvent, vcl::W
                      pTabPageChild = nextLogicalChildOfParent(pTabPage, pTabPageChild);
                  }
             }
+            else if ( pGetChild->GetType() == WINDOW_TABPAGE )
+            {
+                 // bare tabpage without tabcontrol parent (options dialog)
+                 vcl::Window* pTabPageChild = firstLogicalChildOfParent( pGetChild );
+
+                 // and go through its children
+                 while ( pTabPageChild )
+                 {
+                     ImplHandleControlAccelerator(pTabPageChild, bShowAccel);
+                     pTabPageChild = nextLogicalChildOfParent(pGetChild, pTabPageChild);
+                 }
+            }
 
             ImplHandleControlAccelerator( pGetChild, bShowAccel );
             pGetChild = nextLogicalChildOfParent(pWindow, pGetChild);
