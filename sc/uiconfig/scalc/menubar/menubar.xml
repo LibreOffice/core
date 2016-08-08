@@ -221,7 +221,11 @@
                         </menu:menupopup>
                     </menu:menu>
                     <menu:menuitem menu:id=".uno:BasicShapes"/>
+                    <menu:menuitem menu:id=".uno:ArrowShapes"/>
                     <menu:menuitem menu:id=".uno:SymbolShapes"/>
+                    <menu:menuitem menu:id=".uno:StarShapes"/>
+                    <menu:menuitem menu:id=".uno:CalloutShapes"/>
+                    <menu:menuitem menu:id=".uno:FlowChartShapes"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
