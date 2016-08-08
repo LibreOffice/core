@@ -95,20 +95,23 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                     pObj->SetMergedItemSetAndBroadcast(aItemSet);
                 }
             }
-            else if(mbVertical && pObj && dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr)
+            else if(mbVertical)
             {
-                SdrTextObj* pText = static_cast<SdrTextObj*>(pObj);
-                SfxItemSet aSet(pSdrView->GetModel()->GetItemPool());
+                if (SdrTextObj* pText = dynamic_cast<SdrTextObj*>(pObj))
+                {
+                    SfxItemSet aSet(pSdrView->GetModel()->GetItemPool());
 
-                pText->SetVerticalWriting(true);
+                    pText->SetVerticalWriting(true);
 
-                aSet.Put(makeSdrTextAutoGrowWidthItem(true));
-                aSet.Put(makeSdrTextAutoGrowHeightItem(false));
-                aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
-                aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
+                    aSet.Put(makeSdrTextAutoGrowWidthItem(true));
+                    aSet.Put(makeSdrTextAutoGrowHeightItem(false));
+                    aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
+                    aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
 
-                pText->SetMergedItemSet(aSet);
+                    pText->SetMergedItemSet(aSet);
+                }
             }
+
             if( pObj )
             {
                 SdrPageView* pPV = pSdrView->GetSdrPageView();

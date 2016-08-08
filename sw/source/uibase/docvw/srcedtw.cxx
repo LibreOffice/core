@@ -742,11 +742,11 @@ void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineO
 
 void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if ( !dynamic_cast<const TextHint*>(&rHint) )
+    const TextHint* pTextHint = dynamic_cast<const TextHint*>(&rHint);
+    if (!pTextHint)
         return;
 
-    const TextHint& rTextHint = static_cast<const TextHint&>(rHint);
-    switch (rTextHint.GetId())
+    switch (pTextHint->GetId())
     {
         case TEXT_HINT_VIEWSCROLLED:
             m_pHScrollbar->SetThumbPos( m_pTextView->GetStartDocPos().X() );
@@ -762,7 +762,7 @@ void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
         case TEXT_HINT_PARAINSERTED:
         case TEXT_HINT_PARACONTENTCHANGED:
-            DoDelayedSyntaxHighlight( (sal_uInt16)rTextHint.GetValue() );
+            DoDelayedSyntaxHighlight(static_cast<sal_uInt16>(pTextHint->GetValue()));
             break;
     }
 }
