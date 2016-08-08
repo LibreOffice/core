@@ -93,6 +93,7 @@ protected:
     const OUString sStartKeyAlgProperty;
     const OUString sDigestAlgProperty;
 
+    const OUString sSHA256_URL_ODF12;
     const OUString sSHA256_URL;
     const OUString sSHA1_Name;
     const OUString sSHA1_URL;
