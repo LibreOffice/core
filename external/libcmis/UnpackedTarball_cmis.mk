@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,cmis, \
 						external/libcmis/libcmis-libxml2_compatibility.patch \
 						external/libcmis/libcmis-fix-google-drive.patch \
 						external/libcmis/libcmis-google-2FA-implementation.patch \
+						external/libcmis/libcmis-sharepoint-repository-root.patch \
 ))
 
 ifeq ($(OS)$(COM),WNTMSC)
