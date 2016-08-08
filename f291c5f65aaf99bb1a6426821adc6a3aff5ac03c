@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_d2dc091b",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3242,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-08-08T03:58:17Z",
+      "side": 1,
+      "message": "Please avoid unrelated changes that are only cosmetic.",
+      "revId": "f291c5f65aaf99bb1a6426821adc6a3aff5ac03c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_52cab950",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3244,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-08-08T03:58:17Z",
+      "side": 1,
+      "message": "We use some form of hungarian notation and it would be good not to change it and follow that pattern in new code.",
+      "revId": "f291c5f65aaf99bb1a6426821adc6a3aff5ac03c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_32ec4dc7",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3259,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-08-08T03:58:17Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "f291c5f65aaf99bb1a6426821adc6a3aff5ac03c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_72c7b545",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3261,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-08-08T03:58:17Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "f291c5f65aaf99bb1a6426821adc6a3aff5ac03c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
