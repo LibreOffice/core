@@ -211,7 +211,6 @@
 #define SID_PICK_THROUGH                    (SID_SD_START+159)
     // FREE 160 - 168
 #define SID_DOUBLECLICK_TEXTEDIT            (SID_SD_START+169)
-#define SID_CLICK_CHANGE_ROTATION           (SID_SD_START+170)
 #define SID_DRAWTBX_ARROWS                  (SID_SD_START+171)
 #define SID_LINE_ARROW_START                (SID_SD_START+172)
 #define SID_LINE_ARROW_END                  (SID_SD_START+173)

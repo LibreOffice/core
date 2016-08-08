@@ -18,8 +18,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:ClickChangeRotation" toolbar:helpid="27170"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:helpid="27322"/>
  <toolbar:toolbaritem xlink:href=".uno:HelplinesVisible" toolbar:helpid="27324"/>
  <toolbar:toolbaritem xlink:href=".uno:HelplinesMove" toolbar:helpid="27153"/>

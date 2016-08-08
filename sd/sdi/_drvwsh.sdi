@@ -2166,11 +2166,6 @@ interface DrawView
         ExecMethod = ExecOptionsBar ;
         StateMethod = GetOptionsBarState ;
     ]
-    SID_CLICK_CHANGE_ROTATION // ole : ?, status : ?
-    [
-        ExecMethod = ExecOptionsBar ;
-        StateMethod = GetOptionsBarState ;
-    ]
     SID_HYPHENATION // ole : no, status : play rec
     [
         ExecMethod = FuTemporary ;

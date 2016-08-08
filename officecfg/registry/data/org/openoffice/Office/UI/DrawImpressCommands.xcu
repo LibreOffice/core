@@ -1478,14 +1478,6 @@
           <value xml:lang="en-US">E~dit Style...</value>
         </prop>
       </node>
-      <node oor:name=".uno:ClickChangeRotation" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Rotation Mode after Clicking Object</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:ArrowsToolbox" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Lines and Arrows</value>

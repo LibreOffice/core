@@ -182,12 +182,6 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
         }
         break;
 
-        case SID_CLICK_CHANGE_ROTATION:
-        {
-            pOptions->SetClickChangeRotation( !mpFrameView->IsClickChangeRotation() );
-        }
-        break;
-
         default:
             bDefault = true;
         break;
@@ -228,7 +222,6 @@ void DrawViewShell::GetOptionsBarState( SfxItemSet& rSet )
                 mpDrawView->GetModel()->IsPickThroughTransparentTextFrames() ) );
 
     rSet.Put( SfxBoolItem( SID_DOUBLECLICK_TEXTEDIT, mpFrameView->IsDoubleClickTextEdit() ) );
-    rSet.Put( SfxBoolItem( SID_CLICK_CHANGE_ROTATION, mpFrameView->IsClickChangeRotation() ) );
 }
 
 } // end of namespace sd
