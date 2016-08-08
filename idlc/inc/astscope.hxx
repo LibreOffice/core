@@ -34,7 +34,7 @@ public:
     NodeType getScopeNodeType() const
         { return m_nodeType; }
 
-    virtual AstDeclaration* addDeclaration(AstDeclaration* pDecl);
+    AstDeclaration* addDeclaration(AstDeclaration* pDecl);
 
     sal_uInt32 nMembers() const
         { return (sal_uInt32)(m_declarations.size()); }

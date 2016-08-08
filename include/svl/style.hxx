@@ -95,7 +95,7 @@ protected:
     SfxStyleSheetBase( const SfxStyleSheetBase& );
     virtual ~SfxStyleSheetBase();
     virtual void Load( SvStream&, sal_uInt16 );
-    virtual void Store( SvStream& );
+    void Store( SvStream& );
 
 public:
 

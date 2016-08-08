@@ -22,7 +22,7 @@ Then we will post-process the 2 lists and find the set of virtual methods which 
 The process goes something like this:
   $ make check
   $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='unnecessaryvirtual' check
-  $ ./compilerplugins/clang/unnecessaryvirtual.py unnecessaryvirtual.log > result.txt
+  $ ./compilerplugins/clang/unnecessaryvirtual.py
   $ for dir in *; do make FORCE_COMPILE_ALL=1 UPDATE_FILES=$dir COMPILER_PLUGIN_TOOL='removevirtuals' $dir; done
 
 Note that the actual process may involve a fair amount of undoing, hand editing, and general messing around
@@ -56,7 +56,7 @@ public:
         for (const std::string & s : overridingSet)
             output += "overriding:\t" + s + "\n";
         ofstream myfile;
-        myfile.open( SRCDIR "/unnecessaryvirtual.log", ios::app | ios::out);
+        myfile.open( SRCDIR "/loplugin.unnecessaryvirtual.log", ios::app | ios::out);
         myfile << output;
         myfile.close();
     }

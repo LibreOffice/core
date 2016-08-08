@@ -115,7 +115,7 @@ namespace dbaccess
         // helper
         virtual void SAL_CALL disposing() override;
 
-        virtual void notifyDataSourceModified();
+        void notifyDataSourceModified();
 
         /**
         * This method can be used to propagate changes of property values.

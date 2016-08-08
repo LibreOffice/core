@@ -87,13 +87,13 @@ public:
     void insertItems (const std::vector<TemplateItemProperties> &rTemplates, bool isRegionSelected = true, bool bShowCategoryInTooltip = false);
 
     // Fill view with template folders thumbnails
-    virtual void Populate ();
+    void Populate ();
 
     virtual void reload ();
 
     virtual void showAllTemplates ();
 
-    virtual void showRegion (TemplateContainerItem *pItem);
+    void showRegion (TemplateContainerItem *pItem);
 
     void showRegion (const OUString &rName);
 
@@ -116,7 +116,7 @@ public:
     std::vector<TemplateItemProperties>
         getFilteredItems (const std::function<bool (const TemplateItemProperties&) > &rFunc) const;
 
-    virtual sal_uInt16 createRegion (const OUString &rName);
+    sal_uInt16 createRegion (const OUString &rName);
 
     bool renameRegion(const OUString &rTitle, const OUString &rNewTitle);
 

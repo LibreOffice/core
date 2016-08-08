@@ -53,8 +53,8 @@ protected:
     virtual int GetNextToken_() override;
 
     void ReadUnknownData();
-    virtual void ReadBitmapData();
-    virtual void ReadOLEData();
+    void ReadBitmapData();
+    void ReadOLEData();
 
     virtual ~SvRTFParser();
 
