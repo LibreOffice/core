@@ -61,6 +61,7 @@ class SwInsertBookmarkDlg: public SvxStandardDialog
     SwWrtShell&                         rSh;
     SfxRequest&                         rReq;
     std::vector<std::pair<sw::mark::IMark*, OUString>> aTableBookmarks;
+    sal_Int32                           m_nLastBookmarksCount;
 
     DECL_LINK_TYPED(ModifyHdl, Edit&, void);
     DECL_LINK_TYPED(InsertHdl, Button*, void);
