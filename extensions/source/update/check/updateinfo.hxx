@@ -54,22 +54,7 @@ struct UpdateInfo
     OUString Description;
     std::vector< DownloadSource > Sources;
     std::vector< ReleaseNote > ReleaseNotes;
-
-    UpdateInfo() : BuildId(), Version(), Description(), Sources(), ReleaseNotes() {};
-    UpdateInfo(const UpdateInfo& ui) : BuildId(ui.BuildId), Version(ui.Version), Description(ui.Description), Sources(ui.Sources), ReleaseNotes(ui.ReleaseNotes) {};
-    inline UpdateInfo & operator=( const UpdateInfo& ui );
 };
-
-UpdateInfo & UpdateInfo::operator=( const UpdateInfo& ui )
-{
-    BuildId = ui.BuildId;
-    Version = ui.Version;
-    Description = ui.Description;
-    Sources = ui.Sources;
-    ReleaseNotes = ui.ReleaseNotes;
-    return *this;
-}
-
 
 // Returns the URL of the release note for the given position
 OUString getReleaseNote(const UpdateInfo& rInfo, sal_uInt8 pos, bool autoDownloadEnabled=false);
