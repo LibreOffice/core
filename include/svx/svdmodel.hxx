@@ -259,7 +259,7 @@ public:
     // If, however, you use objects inheriting from SdrObject you are free
     // to chose a pool of your liking.
     explicit SdrModel();
-    explicit SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable);
+    explicit SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers);
     explicit SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable);
     virtual ~SdrModel();
     void ClearModel(bool bCalledFromDestructor);

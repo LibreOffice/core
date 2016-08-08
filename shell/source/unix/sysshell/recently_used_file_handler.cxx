@@ -72,11 +72,10 @@ namespace /* private */ {
         recently_used_item(
             const string_t& uri,
             const string_t& mime_type,
-            const string_container_t& groups,
-            bool is_private = false) :
+            const string_container_t& groups) :
             uri_(uri),
             mime_type_(mime_type),
-            is_private_(is_private),
+            is_private_(false),
             groups_(groups)
         {
             timestamp_ = time(nullptr);

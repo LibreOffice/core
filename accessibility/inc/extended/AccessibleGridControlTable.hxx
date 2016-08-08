@@ -40,8 +40,7 @@ class AccessibleGridControlTable : public AccessibleGridControlTableBase,
 public:
     AccessibleGridControlTable(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-            ::svt::table::IAccessibleTable& rTable,
-            ::svt::table::AccessibleTableControlObjType _eType);
+            ::svt::table::IAccessibleTable& rTable);
 
 protected:
     virtual ~AccessibleGridControlTable();

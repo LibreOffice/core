@@ -83,7 +83,7 @@ class ValueSetAcc :
 {
 public:
 
-    ValueSetAcc( ValueSet* pParent, bool bIsTransientChildrenDisabled );
+    ValueSetAcc( ValueSet* pParent );
     virtual ~ValueSetAcc();
 
     void                FireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
@@ -149,7 +149,6 @@ private:
     ::std::vector< css::uno::Reference<
         css::accessibility::XAccessibleEventListener > >                mxEventListeners;
     VclPtr<ValueSet>                                                    mpParent;
-    bool                                                                mbIsTransientChildrenDisabled;
     /// The current FOCUSED state.
     bool mbIsFocused;
 

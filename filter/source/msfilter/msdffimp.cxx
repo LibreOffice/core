@@ -2927,10 +2927,9 @@ DffRecordManager::DffRecordManager( SvStream& rIn ) :
     Consume( rIn );
 }
 
-void DffRecordManager::Consume( SvStream& rIn, bool bAppend, sal_uInt32 nStOfs )
+void DffRecordManager::Consume( SvStream& rIn, sal_uInt32 nStOfs )
 {
-    if ( !bAppend )
-        Clear();
+    Clear();
     sal_uInt32 nOldPos = rIn.Tell();
     if ( !nStOfs )
     {

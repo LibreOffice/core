@@ -1334,7 +1334,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
 
             rStCtrl.Seek( 0 );
             DffRecordManager aPptRecManager;                            // contains all first level container and atoms
-            aPptRecManager.Consume( rStCtrl, false, nStreamLen );
+            aPptRecManager.Consume( rStCtrl, nStreamLen );
             DffRecordHeader* pHd;
             for ( pHd = aPptRecManager.Last(); pHd; pHd = aPptRecManager.Prev() )
             {
@@ -3257,7 +3257,7 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                 break;
 
                 case PPT_PST_ExtendedPresRuleContainer :
-                    aExtendedPresRules.Consume( rSt, false, aHd.GetRecEndFilePos() );
+                    aExtendedPresRules.Consume( rSt, aHd.GetRecEndFilePos() );
                 break;
 #ifdef DBG_UTIL
                 default :

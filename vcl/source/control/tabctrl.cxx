@@ -2205,8 +2205,8 @@ VCL_BUILDER_FACTORY(NotebookbarTabControl);
 
 sal_uInt16 NotebookbarTabControl::m_nHeaderHeight = 0;
 
-NotebookbarTabControl::NotebookbarTabControl(vcl::Window* pParent, WinBits nStyle)
-    : TabControl(pParent, nStyle)
+NotebookbarTabControl::NotebookbarTabControl(vcl::Window* pParent)
+    : TabControl(pParent, WB_STDTABCONTROL)
     , bLastContextWasSupported(true)
     , eLastContext(vcl::EnumContext::Context::Context_Any)
 {

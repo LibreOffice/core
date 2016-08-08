@@ -366,7 +366,7 @@ void ValueSet::ImplFormatItem(vcl::RenderContext& rRenderContext, ValueSetItem* 
 
 Reference<XAccessible> ValueSet::CreateAccessible()
 {
-    return new ValueSetAcc( this, false/*bIsTransientChildrenDisabled*/ );
+    return new ValueSetAcc( this );
 }
 
 void ValueSet::Format(vcl::RenderContext& rRenderContext)

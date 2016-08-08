@@ -425,14 +425,12 @@ bool SlideSorterController::Command (
             {
                 GetScrollBarManager().Scroll(
                     ScrollBarManager::Orientation_Vertical,
-                    ScrollBarManager::Unit_Slide,
                     -pData->GetNotchDelta());
             }
             else
             {
                 GetScrollBarManager().Scroll(
                     ScrollBarManager::Orientation_Horizontal,
-                    ScrollBarManager::Unit_Slide,
                     -pData->GetNotchDelta());
             }
             mrSlideSorter.GetView().UpdatePageUnderMouse(rEvent.GetMousePosPixel());
