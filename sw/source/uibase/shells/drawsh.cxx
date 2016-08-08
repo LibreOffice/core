@@ -206,18 +206,6 @@ void SwDrawShell::Execute(SfxRequest &rReq)
 
     switch (nSlotId)
     {
-        case SID_OBJECT_ROTATE:
-            if (rSh.IsObjSelected() && pSdrView->IsRotateAllowed())
-            {
-                if (GetView().IsDrawRotate())
-                    rSh.SetDragMode(SDRDRAG_MOVE);
-                else
-                    rSh.SetDragMode(SDRDRAG_ROTATE);
-
-                GetView().FlipDrawRotate();
-            }
-            break;
-
         case SID_BEZIER_EDIT:
             if (GetView().IsDrawRotate())
             {
@@ -421,16 +409,6 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                 if ( !rSh.IsObjSelected() || bProtected )
                     rSet.DisableItem( nWhich );
                 break;
-
-            case SID_OBJECT_ROTATE:
-            {
-                const bool bIsRotate = GetView().IsDrawRotate();
-                if ( (!bIsRotate && !pSdrView->IsRotateAllowed()) || bProtected )
-                    rSet.DisableItem( nWhich );
-                else
-                    rSet.Put( SfxBoolItem( nWhich, bIsRotate ) );
-            }
-            break;
 
             case SID_BEZIER_EDIT:
                 if (!Disable(rSet, nWhich))

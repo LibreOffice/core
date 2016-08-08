@@ -217,14 +217,6 @@ interface TextDraw : TextDrawBase
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    SID_OBJECT_ROTATE
-    [
-        Export = FALSE;
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
     SID_BEZIER_EDIT
     [
         Export = FALSE;
