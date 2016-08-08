@@ -42,12 +42,12 @@ public:
     virtual bool    DrawTextSpecial( SalGraphics& rGraphics, sal_uInt32 flags ) const override;
 
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, int&,
-                                   DeviceCoordinate* pGlyphAdvances, int* pCharIndexes,
-                                   const PhysicalFontFace** pFallbackFonts ) const override;
+                                   DeviceCoordinate* pGlyphAdvances = nullptr, int* pCharIndexes = nullptr,
+                                   const PhysicalFontFace** pFallbackFonts = nullptr ) const override;
 
     virtual DeviceCoordinate GetTextWidth() const override;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const override;
-    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
+    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra = 0, int nFactor = 1) const override;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const override;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const override;
 

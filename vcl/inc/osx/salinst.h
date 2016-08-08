@@ -85,12 +85,12 @@ public:
     virtual SalFrame*       CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
     virtual void            DestroyFrame( SalFrame* pFrame ) override;
     virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData,
-                                          bool bShow = true ) override;
+                                          bool bShow ) override;
     virtual void            DestroyObject( SalObject* pObject ) override;
     virtual SalVirtualDevice* CreateVirtualDevice( SalGraphics* pGraphics,
                                                    long &nDX, long &nDY,
                                                    DeviceFormat eFormat,
-                                                   const SystemGraphicsData *pData ) override;
+                                                   const SystemGraphicsData *pData = nullptr ) override;
     virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                ImplJobSetup* pSetupData ) override;
     virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter ) override;
