@@ -458,7 +458,7 @@ void SmOoxmlExport::HandleBrace( const SmBraceNode* pNode, int nLevel )
     m_pSerializer->startElementNS( XML_m, XML_dPr, FSEND );
 
     //check if the node has an opening brace
-    if( TNONE == pNode->GetSubNode(0)->GetToken().eType )
+    if( TNONE == pNode->OpeningBrace()->GetToken().eType )
         m_pSerializer->singleElementNS( XML_m, XML_begChr,
             FSNS( XML_m, XML_val ), "", FSEND );
     else
@@ -490,7 +490,7 @@ void SmOoxmlExport::HandleBrace( const SmBraceNode* pNode, int nLevel )
     else
         subnodes.push_back( pNode->Body());
 
-    if( TNONE == pNode->GetSubNode(2)->GetToken().eType )
+    if( TNONE == pNode->ClosingBrace()->GetToken().eType )
         m_pSerializer->singleElementNS( XML_m, XML_endChr,
             FSNS( XML_m, XML_val ), "", FSEND );
     else

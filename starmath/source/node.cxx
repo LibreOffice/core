@@ -1350,7 +1350,7 @@ void SmBraceNode::CreateTextFromNode(OUString &rText)
         rText += "left ";
     {
         OUString aStr;
-        GetSubNode(0)->CreateTextFromNode(aStr);
+        OpeningBrace()->CreateTextFromNode(aStr);
         aStr = comphelper::string::strip(aStr, ' ');
         aStr = comphelper::string::stripStart(aStr, '\\');
         if (!aStr.isEmpty())
@@ -1368,12 +1368,12 @@ void SmBraceNode::CreateTextFromNode(OUString &rText)
         else
             rText += "none ";
     }
-    GetSubNode(1)->CreateTextFromNode(rText);
+    Body()->CreateTextFromNode(rText);
     if (GetScaleMode() == SCALE_HEIGHT)
         rText += "right ";
     {
         OUString aStr;
-        GetSubNode(2)->CreateTextFromNode(aStr);
+        ClosingBrace()->CreateTextFromNode(aStr);
         aStr = comphelper::string::strip(aStr, ' ');
         aStr = comphelper::string::stripStart(aStr, '\\');
         if (!aStr.isEmpty())
@@ -1397,9 +1397,9 @@ void SmBraceNode::CreateTextFromNode(OUString &rText)
 
 void SmBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
-    SmNode *pLeft  = GetSubNode(0),
-           *pBody  = GetSubNode(1),
-           *pRight = GetSubNode(2);
+    SmNode *pLeft  = OpeningBrace(),
+           *pBody  = Body(),
+           *pRight = ClosingBrace();
     assert(pLeft);
     assert(pBody);
     assert(pRight);
