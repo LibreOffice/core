@@ -149,9 +149,10 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
         requiredMethod("getFilter()");
         try{
             oObj.setQuery("SELECT \"Identifier\", \"Type\", \"Address\" FROM \"biblio\" \"biblio\"");
-            String complexFilter = "( \"Identifier\" = '1' AND \"Type\" = '4' ) OR ( \"Identifier\" = '2' AND \"Type\" = '5' ) OR ( \"Identifier\" = '3' AND \"Type\" = '6' AND \"Address\" = '7' ) OR ( \"Address\" = '8' ) OR ( \"Type\" = '9' )";
+            String complexFilter = "( \"Identifier\" >= '1' AND \"Type\" <= '4' ) OR ( \"Identifier\" <> '2' AND \"Type\" = '5' ) OR ( \"Identifier\" < '3' AND \"Type\" > '6' AND \"Address\" = '7' ) OR ( \"Address\" >= '8' ) OR ( \"Type\" = '9' )";
             xComposer.setFilter(complexFilter);
             PropertyValue[][] aStructuredFilter = oObj.getStructuredFilter();
+
             xComposer.setFilter("");
             xComposer.setStructuredFilter(aStructuredFilter);
             tRes.tested("getStructuredFilter()", oObj.getFilter().equals(complexFilter));
@@ -233,8 +234,8 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
         requiredMethod("setQuery()");
         requiredMethod("getFilter()");
         executeMethod("getStructuredFilter()");
-        String complexFilter = "( \"Identifier\" = '1' AND \"Type\" = '4' ) OR ( \"Identifier\" = '2' AND \"Type\" = '5' ) OR ( \"Identifier\" = '3' AND \"Type\" = '6' AND \"Address\" = '7' ) OR ( \"Address\" = '8' ) OR ( \"Type\" = '9' )";
 
+        String complexFilter = "( \"Identifier\" >= '1' AND \"Type\" <= '4' ) OR ( \"Identifier\" <> '2' AND \"Type\" = '5' ) OR ( \"Identifier\" < '3' AND \"Type\" > '6' AND \"Address\" = '7' ) OR ( \"Address\" >= '8' ) OR ( \"Type\" = '9' )";
         try{
            xComposer.setHavingClause(complexFilter);
            PropertyValue[][] aStructuredHaving = oObj.getStructuredHavingClause();

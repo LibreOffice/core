@@ -274,7 +274,7 @@ public class FilterComponent
                         composer.getQueryComposer().appendFilterByColumn(columnSet, getfilterstate() == this.SOI_MATCHALL, nOperator);
                     }
                 }
-                filterconditions = composer.getNormalizedStructuredFilter();
+                filterconditions = composer.getQueryComposer().getStructuredFilter();
                 int[] iduplicate = JavaTools.getDuplicateFieldIndex(filterconditions);
                 if (iduplicate[0] != -1)
                 {
