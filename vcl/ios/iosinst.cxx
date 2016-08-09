@@ -23,7 +23,7 @@
 
 #include "ios/iosinst.hxx"
 #include "headless/svpdummies.hxx"
-#include "generic/gendata.hxx"
+#include "unx/gendata.hxx"
 #include "quartz/utils.h"
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
