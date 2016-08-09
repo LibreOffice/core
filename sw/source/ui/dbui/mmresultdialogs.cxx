@@ -909,16 +909,17 @@ IMPL_LINK_TYPED(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, 
 
     //get the composed document
     SwView* pTargetView = xConfigItem->GetTargetView();
-    assert(pTargetView);
+    SAL_WARN_IF(!pTargetView, "sw.ui", "No TargetView in SwMailMergeConfigItem");
 
     if (xConfigItem->GetMailServer().isEmpty() ||
             !SwMailMergeHelper::CheckMailAddress(xConfigItem->GetMailAddress()) )
     {
         ScopedVclPtrInstance< QueryBox > aQuery(pButton, WB_YES_NO_CANCEL, m_sConfigureMail);
         sal_uInt16 nRet = aQuery->Execute();
-        if(RET_YES == nRet )
+        if (RET_YES == nRet )
         {
-            SfxAllItemSet aSet(pTargetView->GetPool());
+            SwView* pConfigView = pTargetView ? pTargetView : pView;
+            SfxAllItemSet aSet(pConfigView->GetPool());
             ScopedVclPtrInstance< SwMailConfigDlg > pDlg(pButton, aSet);
             nRet = pDlg->Execute();
         }
