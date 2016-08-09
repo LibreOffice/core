@@ -816,7 +816,6 @@
   <block-list:block block-list:abbreviated-name=":^alpha:" block-list:name="ᵅ"/>
   <block-list:block block-list:abbreviated-name=":alpha:" block-list:name="α"/>
   <block-list:block block-list:abbreviated-name=":Alpha:" block-list:name="Α"/>
-  <block-list:block block-list:abbreviated-name=":baht:" block-list:name="฿"/>
   <block-list:block block-list:abbreviated-name=":^beta:" block-list:name="ᵝ"/>
   <block-list:block block-list:abbreviated-name=":_beta:" block-list:name="ᵦ"/>
   <block-list:block block-list:abbreviated-name=":beta:" block-list:name="β"/>
@@ -840,6 +839,7 @@
   <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
   <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
   <block-list:block block-list:abbreviated-name=":+-:" block-list:name="±"/>
+  <block-list:block block-list:abbreviated-name=":～～:" block-list:name="≈"/>
   <block-list:block block-list:abbreviated-name=":^chi:" block-list:name="ᵡ"/>
   <block-list:block block-list:abbreviated-name=":_chi:" block-list:name="ᵪ"/>
   <block-list:block block-list:abbreviated-name=":chi:" block-list:name="χ"/>
@@ -856,6 +856,7 @@
   <block-list:block block-list:abbreviated-name=":_gamma:" block-list:name="ᵧ"/>
   <block-list:block block-list:abbreviated-name=":gamma:" block-list:name="γ"/>
   <block-list:block block-list:abbreviated-name=":Gamma:" block-list:name="Γ"/>
+  <block-list:block block-list:abbreviated-name=":&gt;=:" block-list:name="≥"/>
   <block-list:block block-list:abbreviated-name=":&gt;&gt;:" block-list:name="≫"/>
   <block-list:block block-list:abbreviated-name=":^iota:" block-list:name="ᶥ"/>
   <block-list:block block-list:abbreviated-name=":iota:" block-list:name="ι"/>
@@ -864,6 +865,8 @@
   <block-list:block block-list:abbreviated-name=":Kappa:" block-list:name="Κ"/>
   <block-list:block block-list:abbreviated-name=":lambda:" block-list:name="λ"/>
   <block-list:block block-list:abbreviated-name=":Lambda:" block-list:name="Λ"/>
+  <block-list:block block-list:abbreviated-name=":&lt;=:" block-list:name="≤"/>
+  <block-list:block block-list:abbreviated-name=":&lt;&gt;:" block-list:name="≠"/>
   <block-list:block block-list:abbreviated-name=":&lt;&lt;:" block-list:name="≪"/>
   <block-list:block block-list:abbreviated-name=":mu:" block-list:name="μ"/>
   <block-list:block block-list:abbreviated-name=":Mu:" block-list:name="Μ"/>
@@ -906,40 +909,143 @@
   <block-list:block block-list:abbreviated-name=":Xi:" block-list:name="Ξ"/>
   <block-list:block block-list:abbreviated-name=":zeta:" block-list:name="ζ"/>
   <block-list:block block-list:abbreviated-name=":Zeta:" block-list:name="Ζ"/>
+  <block-list:block block-list:abbreviated-name=":三角形2:" block-list:name="▲"/>
+  <block-list:block block-list:abbreviated-name=":三角形:" block-list:name="△"/>
+  <block-list:block block-list:abbreviated-name=":上下箭2:" block-list:name="⇕"/>
+  <block-list:block block-list:abbreviated-name=":上下箭:" block-list:name="↕"/>
+  <block-list:block block-list:abbreviated-name=":上箭2:" block-list:name="⇑"/>
+  <block-list:block block-list:abbreviated-name=":上箭:" block-list:name="↑"/>
+  <block-list:block block-list:abbreviated-name=":下箭2:" block-list:name="⇓"/>
+  <block-list:block block-list:abbreviated-name=":下箭:" block-list:name="↓"/>
+  <block-list:block block-list:abbreviated-name=":不包含:" block-list:name="⊅"/>
+  <block-list:block block-list:abbreviated-name=":不包含於:" block-list:name="⊄"/>
   <block-list:block block-list:abbreviated-name=":不存在:" block-list:name="∄"/>
   <block-list:block block-list:abbreviated-name=":不屬於:" block-list:name="∉"/>
+  <block-list:block block-list:abbreviated-name=":不平行:" block-list:name="∦"/>
+  <block-list:block block-list:abbreviated-name=":且:" block-list:name="∧"/>
+  <block-list:block block-list:abbreviated-name=":中正方形2:" block-list:name="◼"/>
+  <block-list:block block-list:abbreviated-name=":中正方形:" block-list:name="◻"/>
   <block-list:block block-list:abbreviated-name=":中點:" block-list:name="·"/>
+  <block-list:block block-list:abbreviated-name=":交集:" block-list:name="∩"/>
   <block-list:block block-list:abbreviated-name=":信用卡:" block-list:name="💳"/>
+  <block-list:block block-list:abbreviated-name=":傘:" block-list:name="☂"/>
   <block-list:block block-list:abbreviated-name=":全部:" block-list:name="∀"/>
   <block-list:block block-list:abbreviated-name=":分:" block-list:name="¢"/>
+  <block-list:block block-list:abbreviated-name=":勾選框2:" block-list:name="☑"/>
+  <block-list:block block-list:abbreviated-name=":勾選框3:" block-list:name="☒"/>
+  <block-list:block block-list:abbreviated-name=":勾選框:" block-list:name="☐"/>
+  <block-list:block block-list:abbreviated-name=":包含:" block-list:name="⊃"/>
+  <block-list:block block-list:abbreviated-name=":包含於:" block-list:name="⊂"/>
   <block-list:block block-list:abbreviated-name=":千分比:" block-list:name="‰"/>
+  <block-list:block block-list:abbreviated-name=":升記號:" block-list:name="♯"/>
+  <block-list:block block-list:abbreviated-name=":右上箭2:" block-list:name="⇗"/>
+  <block-list:block block-list:abbreviated-name=":右上箭:" block-list:name="↗"/>
+  <block-list:block block-list:abbreviated-name=":右下箭2:" block-list:name="⇘"/>
+  <block-list:block block-list:abbreviated-name=":右下箭:" block-list:name="↘"/>
+  <block-list:block block-list:abbreviated-name=":右箭2:" block-list:name="⇒"/>
+  <block-list:block block-list:abbreviated-name=":右箭:" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name=":咖啡:" block-list:name="☕"/>
   <block-list:block block-list:abbreviated-name=":商標:" block-list:name="™"/>
   <block-list:block block-list:abbreviated-name=":四次方根:" block-list:name="∜"/>
+  <block-list:block block-list:abbreviated-name=":圓形2:" block-list:name="●"/>
+  <block-list:block block-list:abbreviated-name=":圓形:" block-list:name="○"/>
+  <block-list:block block-list:abbreviated-name=":土耳其里拉:" block-list:name="₺"/>
   <block-list:block block-list:abbreviated-name=":基點:" block-list:name="‱"/>
+  <block-list:block block-list:abbreviated-name=":大圓形:" block-list:name="◯"/>
+  <block-list:block block-list:abbreviated-name=":太陽2:" block-list:name="☼"/>
+  <block-list:block block-list:abbreviated-name=":太陽:" block-list:name="☉"/>
   <block-list:block block-list:abbreviated-name=":存在:" block-list:name="∃"/>
   <block-list:block block-list:abbreviated-name=":實心圓:" block-list:name="•"/>
   <block-list:block block-list:abbreviated-name=":小於:" block-list:name="∊"/>
+  <block-list:block block-list:abbreviated-name=":小正方形2:" block-list:name="▪"/>
+  <block-list:block block-list:abbreviated-name=":小正方形:" block-list:name="▫"/>
   <block-list:block block-list:abbreviated-name=":小節:" block-list:name="§"/>
   <block-list:block block-list:abbreviated-name=":屬於:" block-list:name="∈"/>
+  <block-list:block block-list:abbreviated-name=":左上箭2:" block-list:name="⇖"/>
+  <block-list:block block-list:abbreviated-name=":左上箭:" block-list:name="↖"/>
+  <block-list:block block-list:abbreviated-name=":左下箭2:" block-list:name="⇙"/>
+  <block-list:block block-list:abbreviated-name=":左下箭:" block-list:name="↙"/>
+  <block-list:block block-list:abbreviated-name=":左右箭2:" block-list:name="⇔"/>
+  <block-list:block block-list:abbreviated-name=":左右箭:" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name=":左箭2:" block-list:name="⇐"/>
+  <block-list:block block-list:abbreviated-name=":左箭:" block-list:name="←"/>
   <block-list:block block-list:abbreviated-name=":平行:" block-list:name="∥"/>
+  <block-list:block block-list:abbreviated-name=":平行四邊形2:" block-list:name="▰"/>
+  <block-list:block block-list:abbreviated-name=":平行四邊形:" block-list:name="▱"/>
   <block-list:block block-list:abbreviated-name=":度:" block-list:name="°"/>
+  <block-list:block block-list:abbreviated-name=":彗星:" block-list:name="☄"/>
+  <block-list:block block-list:abbreviated-name=":微笑2:" block-list:name="☻"/>
+  <block-list:block block-list:abbreviated-name=":微笑:" block-list:name="☺"/>
+  <block-list:block block-list:abbreviated-name=":或:" block-list:name="∨"/>
+  <block-list:block block-list:abbreviated-name=":披索:" block-list:name="₱"/>
   <block-list:block block-list:abbreviated-name=":旗幟3:" block-list:name="⚐"/>
   <block-list:block block-list:abbreviated-name=":日圓:" block-list:name="¥"/>
+  <block-list:block block-list:abbreviated-name=":日圓鈔:" block-list:name="💴"/>
+  <block-list:block block-list:abbreviated-name=":星號2:" block-list:name="☆"/>
+  <block-list:block block-list:abbreviated-name=":星號:" block-list:name="★"/>
+  <block-list:block block-list:abbreviated-name=":晴天:" block-list:name="☀"/>
+  <block-list:block block-list:abbreviated-name=":暴風雨:" block-list:name="☈"/>
+  <block-list:block block-list:abbreviated-name=":更小正方形2:" block-list:name="◾"/>
+  <block-list:block block-list:abbreviated-name=":更小正方形:" block-list:name="◽"/>
+  <block-list:block block-list:abbreviated-name=":月亮2:" block-list:name="☾"/>
+  <block-list:block block-list:abbreviated-name=":月亮:" block-list:name="☽"/>
+  <block-list:block block-list:abbreviated-name=":根號:" block-list:name="√"/>
+  <block-list:block block-list:abbreviated-name=":梯形:" block-list:name="⏢"/>
   <block-list:block block-list:abbreviated-name=":歐圓:" block-list:name="€"/>
+  <block-list:block block-list:abbreviated-name=":歐圓鈔:" block-list:name="💶"/>
+  <block-list:block block-list:abbreviated-name=":正方形2:" block-list:name="■"/>
+  <block-list:block block-list:abbreviated-name=":正方形:" block-list:name="□"/>
+  <block-list:block block-list:abbreviated-name=":毒藥:" block-list:name="☠"/>
+  <block-list:block block-list:abbreviated-name=":沙漏2:" block-list:name="⏳"/>
+  <block-list:block block-list:abbreviated-name=":沙漏:" block-list:name="⌛"/>
+  <block-list:block block-list:abbreviated-name=":泰銖:" block-list:name="฿"/>
   <block-list:block block-list:abbreviated-name=":無限:" block-list:name="∞"/>
   <block-list:block block-list:abbreviated-name=":男性:" block-list:name="♂"/>
+  <block-list:block block-list:abbreviated-name=":盧比:" block-list:name="₹"/>
+  <block-list:block block-list:abbreviated-name=":直角三角形:" block-list:name="⊿"/>
   <block-list:block block-list:abbreviated-name=":短劍2:" block-list:name="‡"/>
   <block-list:block block-list:abbreviated-name=":短劍:" block-list:name="†"/>
+  <block-list:block block-list:abbreviated-name=":碼表:" block-list:name="⏱"/>
+  <block-list:block block-list:abbreviated-name=":積分2:" block-list:name="∬"/>
+  <block-list:block block-list:abbreviated-name=":積分3:" block-list:name="∭"/>
+  <block-list:block block-list:abbreviated-name=":積分4:" block-list:name="∮"/>
+  <block-list:block block-list:abbreviated-name=":積分5:" block-list:name="∰"/>
+  <block-list:block block-list:abbreviated-name=":積分:" block-list:name="∫"/>
   <block-list:block block-list:abbreviated-name=":空集合:" block-list:name="∅"/>
   <block-list:block block-list:abbreviated-name=":立方根:" block-list:name="∛"/>
   <block-list:block block-list:abbreviated-name=":籃球:" block-list:name="⚾"/>
+  <block-list:block block-list:abbreviated-name=":美鈔:" block-list:name="💵"/>
+  <block-list:block block-list:abbreviated-name=":聯集:" block-list:name="∪"/>
   <block-list:block block-list:abbreviated-name=":英吋:" block-list:name="″"/>
   <block-list:block block-list:abbreviated-name=":英鎊2:" block-list:name="💷"/>
   <block-list:block block-list:abbreviated-name=":英鎊:" block-list:name="£"/>
+  <block-list:block block-list:abbreviated-name=":菱形:" block-list:name="◊"/>
   <block-list:block block-list:abbreviated-name=":著作權所有:" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name=":角2:" block-list:name="∡"/>
+  <block-list:block block-list:abbreviated-name=":角:" block-list:name="∠"/>
   <block-list:block block-list:abbreviated-name=":註冊商標:" block-list:name="®"/>
   <block-list:block block-list:abbreviated-name=":資訊:" block-list:name="ℹ"/>
+  <block-list:block block-list:abbreviated-name=":還原號:" block-list:name="♮"/>
   <block-list:block block-list:abbreviated-name=":部份:" block-list:name="∂"/>
+  <block-list:block block-list:abbreviated-name=":里拉:" block-list:name="₤"/>
+  <block-list:block block-list:abbreviated-name=":錶:" block-list:name="⌚"/>
+  <block-list:block block-list:abbreviated-name=":鍵盤:" block-list:name="⌨"/>
+  <block-list:block block-list:abbreviated-name=":長方形2:" block-list:name="▬"/>
+  <block-list:block block-list:abbreviated-name=":長方形:" block-list:name="▭"/>
+  <block-list:block block-list:abbreviated-name=":閃電:" block-list:name="☇"/>
+  <block-list:block block-list:abbreviated-name=":降記號:" block-list:name="♭"/>
   <block-list:block block-list:abbreviated-name=":除:" block-list:name="∣"/>
+  <block-list:block block-list:abbreviated-name=":陰陽:" block-list:name="☯"/>
+  <block-list:block block-list:abbreviated-name=":雙音符2:" block-list:name="♬"/>
+  <block-list:block block-list:abbreviated-name=":雙音符:" block-list:name="♫"/>
+  <block-list:block block-list:abbreviated-name=":雨:" block-list:name="☔"/>
+  <block-list:block block-list:abbreviated-name=":雪人:" block-list:name="☃"/>
+  <block-list:block block-list:abbreviated-name=":雲:" block-list:name="☁"/>
+  <block-list:block block-list:abbreviated-name=":電話2:" block-list:name="☏"/>
+  <block-list:block block-list:abbreviated-name=":電話:" block-list:name="☎"/>
   <block-list:block block-list:abbreviated-name=":非:" block-list:name="¬"/>
+  <block-list:block block-list:abbreviated-name=":音符2:" block-list:name="♪"/>
+  <block-list:block block-list:abbreviated-name=":音符:" block-list:name="♩"/>
+  <block-list:block block-list:abbreviated-name=":項目符號3:" block-list:name="◦"/>
+  <block-list:block block-list:abbreviated-name=":鬧鐘:" block-list:name="⏰"/>
 </block-list:block-list>
