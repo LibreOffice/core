@@ -140,7 +140,7 @@ void SmOoxmlExport::HandleFractions( const SmNode* pNode, int nLevel, const char
         m_pSerializer->singleElementNS( XML_m, XML_type, FSNS( XML_m, XML_val ), type, FSEND );
         m_pSerializer->endElementNS( XML_m, XML_fPr );
     }
-    OSL_ASSERT( pNode->GetNumSubNodes() == 3 );
+    assert( pNode->GetNumSubNodes() == 3 );
     m_pSerializer->startElementNS( XML_m, XML_num, FSEND );
     HandleNode( pNode->GetSubNode( 0 ), nLevel + 1 );
     m_pSerializer->endElementNS( XML_m, XML_num );

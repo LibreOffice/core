@@ -77,7 +77,7 @@ void SmRtfExport::HandleFractions(const SmNode* pNode, int nLevel, const char* t
         m_pBuffer->append("}"); // mtype
         m_pBuffer->append("}"); // mfPr
     }
-    OSL_ASSERT(pNode->GetNumSubNodes() == 3);
+    assert(pNode->GetNumSubNodes() == 3);
     m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MNUM " ");
     HandleNode(pNode->GetSubNode(0), nLevel + 1);
     m_pBuffer->append("}"); // mnum

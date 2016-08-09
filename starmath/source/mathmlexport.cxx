@@ -668,7 +668,7 @@ void SmXMLExport::ExportExpression(const SmNode *pNode, int nLevel,
 
 void SmXMLExport::ExportBinaryVertical(const SmNode *pNode, int nLevel)
 {
-    OSL_ENSURE(pNode->GetNumSubNodes()==3,"Bad Fraction");
+    assert(pNode->GetNumSubNodes() == 3);
     const SmNode *pNum = pNode->GetSubNode(0);
     const SmNode *pDenom = pNode->GetSubNode(2);
     if (pNum->GetType() == NALIGN && pNum->GetToken().eType != TALIGNC)
@@ -692,7 +692,7 @@ void SmXMLExport::ExportBinaryVertical(const SmNode *pNode, int nLevel)
 
 void SmXMLExport::ExportBinaryDiagonal(const SmNode *pNode, int nLevel)
 {
-    OSL_ENSURE(pNode->GetNumSubNodes()==3, "Bad Slash");
+    assert(pNode->GetNumSubNodes() == 3);
 
     if (pNode->GetToken().eType == TWIDESLASH)
     {
