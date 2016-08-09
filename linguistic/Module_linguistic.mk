@@ -31,9 +31,11 @@ $(eval $(call gb_Module_add_targets,linguistic,\
 #$(eval $(call gb_Module_add_check_targets,linguistic,\
 #))
 
+ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,linguistic,\
 	JunitTest_linguistic_unoapi \
 ))
+endif
 
 # was disabled in old build system
 # JunitTest_linguistic_complex \

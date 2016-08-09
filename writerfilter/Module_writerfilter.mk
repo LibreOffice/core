@@ -36,8 +36,10 @@ ifeq ($(WITH_CPPUNIT),YES)
 #))
 endif
 
+ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,writerfilter,\
 	JunitTest_writerfilter_complex \
 ))
+endif
 
 # vim: set noet sw=4 ts=4:

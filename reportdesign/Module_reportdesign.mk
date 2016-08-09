@@ -33,10 +33,12 @@ $(eval $(call gb_Module_add_targets,reportdesign,\
 	Package_xml \
 ))
 
+ifneq ($(OOO_JUNIT_JAR),)
 # deactivated since sb123;
 # apparently fails because OOo does not find JVM?
 #$(eval $(call gb_Module_add_subsequentcheck_targets,reportdesign,\
 	JunitTest_reportdesign_complex \
 ))
+endif
 
 # vim: set noet ts=4 sw=4:

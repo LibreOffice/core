@@ -30,8 +30,10 @@ $(eval $(call gb_Module_add_targets,starmath,\
 	Package_uiconfig \
 ))
 
+ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,starmath,\
 	JunitTest_sm_unoapi \
 ))
+endif
 
 # vim: set noet ts=4 sw=4:

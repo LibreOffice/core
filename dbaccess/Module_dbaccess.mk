@@ -46,9 +46,11 @@ $(eval $(call gb_Module_add_targets,dbaccess,\
 ))
 endif
 
+ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
 	JunitTest_dbaccess_complex \
 	JunitTest_dbaccess_unoapi \
 ))
+endif
 
 # vim: set noet ts=4 sw=4:

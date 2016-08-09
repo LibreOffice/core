@@ -36,7 +36,9 @@ $(eval $(call gb_Module_add_targets,vbahelper,\
 #))
 
 # add any subsequent checks (e.g. complex tests) here
+ifneq ($(OOO_JUNIT_JAR),)
 #$(eval $(call gb_Module_add_subsequentcheck_targets,vbahelper,\
 #))
+endif
 
 # vim: set noet sw=4 ts=4:
