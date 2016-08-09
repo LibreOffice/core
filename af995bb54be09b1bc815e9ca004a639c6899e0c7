@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_ad7e42ac",
+        "filename": "sw/source/uibase/app/docst.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-08-09T15:18:45Z",
+      "side": 1,
+      "message": "Nitpick: this is an instance, then use the \"a\" (anything) prefix please, \"r\" is for references (as this is not a C++ reference).",
+      "revId": "af995bb54be09b1bc815e9ca004a639c6899e0c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
