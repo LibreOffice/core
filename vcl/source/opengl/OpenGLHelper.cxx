@@ -1072,6 +1072,8 @@ void OpenGLHelper::debugMsgPrint(const int nType, const char *pFormat, ...)
     va_end (aArgs);
 }
 
+#if HAVE_FEATURE_OPENGL || defined(ANDROID)
+
 OutputDevice::PaintScope::PaintScope(OutputDevice *pDev)
     : pHandle( nullptr )
 {
@@ -1107,5 +1109,7 @@ OutputDevice::PaintScope::~PaintScope()
 {
     flush();
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
