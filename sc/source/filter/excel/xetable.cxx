@@ -37,6 +37,17 @@
 #include <thread>
 #include <comphelper/threadpool.hxx>
 
+#if defined(ANDROID)
+namespace std
+{
+template<typename T>
+T trunc(T x)
+{
+    return ::trunc(x);
+}
+}
+#endif
+
 using namespace ::oox;
 
 namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
