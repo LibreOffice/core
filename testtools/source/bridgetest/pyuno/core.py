@@ -336,10 +336,10 @@ class TestCase( unittest.TestCase):
           self.failUnlessRaises( (RuntimeException), uno.getConstantByName, "com.sun.star.uno.XInterface" )
 
       def testByteSequence( self ):
-          s = uno.ByteSequence( "ab" )
-          self.failUnless( s == uno.ByteSequence( "ab" ) )
-          self.failUnless( uno.ByteSequence( "abc" ) == s + uno.ByteSequence( "c" ) )
-          self.failUnless( uno.ByteSequence( "abc" ) == s + "c" )
+          s = uno.ByteSequence( b"ab" )
+          self.failUnless( s == uno.ByteSequence( b"ab" ) )
+          self.failUnless( uno.ByteSequence( b"abc" ) == s + uno.ByteSequence( b"c" ) )
+          self.failUnless( uno.ByteSequence( b"abc" ) == s + "c" )
           self.failUnless( s + "c"  == "abc" )
           self.failUnless( s == uno.ByteSequence( s ) )
           self.failUnless( s[0] == 'a' )

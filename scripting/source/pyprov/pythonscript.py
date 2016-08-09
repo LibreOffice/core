@@ -153,7 +153,7 @@ g_implName = "org.libreoffice.pyuno.LanguageScriptProviderFor"+LANGUAGENAME
 BLOCK_SIZE = 65536
 def readTextFromStream( inputStream ):
     # read the file
-    code = uno.ByteSequence( "" )
+    code = uno.ByteSequence( b"" )
     while True:
         read,out = inputStream.readBytes( None , BLOCK_SIZE )
         code = code + out
@@ -549,9 +549,8 @@ class ScriptBrowseNode( unohelper.Base, XBrowseNode , XPropertySet, XInvocation,
 
             elif event.ActionCommand == "Save":
                 toWrite = uno.ByteSequence(
-                    str(
                     self.editor.getControl("EditorTextField").getText().encode(
-                    sys.getdefaultencoding())) )
+                    sys.getdefaultencoding()) )
                 copyUrl = self.uri + ".orig"
                 self.provCtx.sfa.move( self.uri, copyUrl )
                 out = self.provCtx.sfa.openFileWrite( self.uri )
