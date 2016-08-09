@@ -688,11 +688,21 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, bool bDestPnt )
             pObject = aIter.Next();
         }
 
-        for (size_t i=1; i<=nDelCount; ++i)
-            pModel->AddCalcUndo( new SdrUndoDelObj( *ppObj[nDelCount-i] ) );
+        const bool bRecording = pModel->IsRecording();
+
+        if (bRecording)
+        {
+            for (size_t i=1; i<=nDelCount; ++i)
+                pModel->AddCalcUndo(new SdrUndoDelObj(*ppObj[nDelCount-i]));
+        }
 
         for (size_t i=1; i<=nDelCount; ++i)
-            pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
+        {
+            // remove the object from the drawing page, delete if undo is disabled
+            SdrObject* pObj = pPage->RemoveObject(ppObj[nDelCount-i]->GetOrdNum());
+            if( !bRecording )
+                SdrObject::Free( pObj );
+        }
 
         ppObj.reset();
 
