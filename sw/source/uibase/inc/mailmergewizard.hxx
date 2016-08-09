@@ -37,7 +37,7 @@ class SwMailMergeWizard : public ::svt::RoadmapWizard
     OUString                sDocumentURL;
     bool                    m_bDocumentLoad;
 
-    SwMailMergeConfigItem&  m_rConfigItem;
+    std::shared_ptr<SwMailMergeConfigItem> m_xConfigItem;
 
     OUString                m_sStarting;
     OUString                m_sDocumentType;
@@ -60,11 +60,11 @@ protected:
     virtual OUString                getStateDisplayName( WizardState _nState ) const override;
 
 public:
-    SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rConfigItem);
+    SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeConfigItem>& rConfigItem);
     virtual ~SwMailMergeWizard();
 
     SwView*                     GetSwView() {return m_pSwView;}
-    SwMailMergeConfigItem&      GetConfigItem() { return m_rConfigItem;}
+    SwMailMergeConfigItem&      GetConfigItem() { return *m_xConfigItem.get();}
 
     void                    SetReloadDocument(const OUString& rURL) {sDocumentURL = rURL;}
     const OUString&         GetReloadDocument() const {return sDocumentURL;}

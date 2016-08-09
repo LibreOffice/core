@@ -486,7 +486,7 @@ public:
     virtual VclAbstractDialog *         CreateIndexMarkModalDlg(
                                                 vcl::Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark ) override;
 
-    virtual AbstractMailMergeWizard*    CreateMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rConfigItem) override;
+    virtual AbstractMailMergeWizard*    CreateMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeConfigItem>& rConfigItem) override;
 
     virtual GlossaryGetCurrGroup        GetGlossaryCurrGroupFunc() override;
     virtual GlossarySetActGroup         SetGlossaryActGroupFunc() override;

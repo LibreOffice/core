@@ -1116,7 +1116,7 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateIndexMarkModalDlg(
 }
 
 AbstractMailMergeWizard*    SwAbstractDialogFactory_Impl::CreateMailMergeWizard(
-                                    SwView& rView, SwMailMergeConfigItem& rConfigItem)
+                                    SwView& rView, std::shared_ptr<SwMailMergeConfigItem>& rConfigItem)
 {
     return new AbstractMailMergeWizard_Impl( VclPtr<SwMailMergeWizard>::Create(rView, rConfigItem));
 }

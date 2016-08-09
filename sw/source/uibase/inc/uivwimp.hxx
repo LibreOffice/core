@@ -106,9 +106,8 @@ class SwView_Impl
     ShellModes                  eShellMode;
 
 #if HAVE_FEATURE_DBCONNECTIVITY
-    SwMailMergeConfigItem*      pConfigItem;
-    sal_uInt16                  nMailMergeRestartPage;
-    bool                    bMailMergeSourceView;
+    std::shared_ptr<SwMailMergeConfigItem> xConfigItem;
+    sal_uInt16              nMailMergeRestartPage;
 #endif
 
     sfx2::DocumentInserter*     m_pDocInserter;
@@ -139,13 +138,12 @@ public:
     void                            AddTransferable(SwTransferable& rTransferable);
 
 #if HAVE_FEATURE_DBCONNECTIVITY
-    void   SetMailMergeConfigItem(SwMailMergeConfigItem*  pItem,
-                                                sal_uInt16 nRestart, bool bIsSource)
-                            {   pConfigItem = pItem;
-                                nMailMergeRestartPage = nRestart;
-                                bMailMergeSourceView = bIsSource;
-                            }
-    SwMailMergeConfigItem*  GetMailMergeConfigItem() {return pConfigItem;}
+    void SetMailMergeConfigItem(std::shared_ptr<SwMailMergeConfigItem>& rItem, sal_uInt16 nRestart)
+    {
+        xConfigItem = rItem;
+        nMailMergeRestartPage = nRestart;
+    }
+    std::shared_ptr<SwMailMergeConfigItem>  GetMailMergeConfigItem() {return xConfigItem;}
 #endif
 
     //#i33307# restore editing position

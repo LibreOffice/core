@@ -732,7 +732,8 @@ SwMailMergeConfigItem::SwMailMergeConfigItem() :
     m_nEndPrint(0),
     m_pSourceView(nullptr),
     m_pTargetView(nullptr)
-{}
+{
+}
 
 void SwMailMergeConfigItem::stopDBChangeListening()
 {

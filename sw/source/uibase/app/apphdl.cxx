@@ -208,13 +208,15 @@ void SwModule::StateOther(SfxItemSet &rSet)
             case FN_MAILMERGE_LAST_ENTRY:
             {
                 SwView* pView = ::GetActiveView();
-                SwMailMergeConfigItem* pConfigItem = pView?pView->GetMailMergeConfigItem():nullptr;
-                if (!pConfigItem)
+                std::shared_ptr<SwMailMergeConfigItem> xConfigItem;
+                if (pView)
+                    xConfigItem = pView->GetMailMergeConfigItem();
+                if (!xConfigItem)
                     rSet.DisableItem(nWhich);
                 else
                 {
                     bool bFirst, bLast;
-                    bool bValid = pConfigItem->IsResultSetFirstLast(bFirst, bLast);
+                    bool bValid = xConfigItem->IsResultSetFirstLast(bFirst, bLast);
 
                     if (!bValid ||
                         (bFirst && (nWhich == FN_MAILMERGE_FIRST_ENTRY || nWhich == FN_MAILMERGE_PREV_ENTRY)) ||
@@ -239,13 +241,15 @@ void SwModule::StateOther(SfxItemSet &rSet)
             case FN_MAILMERGE_EMAIL_DOCUMENTS:
             {
                 SwView* pView = ::GetActiveView();
-                SwMailMergeConfigItem* pConfigItem = pView ? pView->EnsureMailMergeConfigItem() : nullptr;
+                std::shared_ptr<SwMailMergeConfigItem> xConfigItem;
+                if (pView)
+                    xConfigItem = pView->EnsureMailMergeConfigItem();
 
                 // #i51949# hide e-Mail option if e-Mail is not supported
                 // #i63267# printing might be disabled
-                if (!pConfigItem ||
+                if (!xConfigItem ||
                     (nWhich == FN_MAILMERGE_PRINT_DOCUMENTS && Application::GetSettings().GetMiscSettings().GetDisablePrinting()) ||
-                    (nWhich == FN_MAILMERGE_EMAIL_DOCUMENTS && !pConfigItem->IsMailAvailable()))
+                    (nWhich == FN_MAILMERGE_EMAIL_DOCUMENTS && !xConfigItem->IsMailAvailable()))
                 {
                     rSet.DisableItem(nWhich);
                 }
@@ -263,14 +267,14 @@ void NewXForms( SfxRequest& rReq ); // implementation: below
 
 #if HAVE_FEATURE_DBCONNECTIVITY
 
-SwMailMergeConfigItem* SwView::EnsureMailMergeConfigItem(const SfxItemSet* pArgs, sal_uInt16 nWizardRestartPage)
+std::shared_ptr<SwMailMergeConfigItem> SwView::EnsureMailMergeConfigItem(const SfxItemSet* pArgs, sal_uInt16 nWizardRestartPage)
 {
     // create if it does not exist yet
-    SwMailMergeConfigItem* pMMConfig = GetMailMergeConfigItem();
-    if (!pMMConfig)
+    std::shared_ptr<SwMailMergeConfigItem> xMMConfig = GetMailMergeConfigItem();
+    if (!xMMConfig)
     {
-        pMMConfig = new SwMailMergeConfigItem;
-        pMMConfig->SetSourceView(this);
+        xMMConfig.reset(new SwMailMergeConfigItem);
+        xMMConfig->SetSourceView(this);
 
         //set the first used database as default source on the config item
         const SfxPoolItem* pItem = nullptr;
@@ -298,7 +302,7 @@ SwMailMergeConfigItem* SwView::EnsureMailMergeConfigItem(const SfxItemSet* pArgs
                 uno::Reference<container::XChild> xChild(xConnection, uno::UNO_QUERY);
                 if (xChild.is())
                     xSource.set(xChild->getParent(), uno::UNO_QUERY);
-                pMMConfig->SetCurrentConnection(
+                xMMConfig->SetCurrentConnection(
                     xSource, SharedConnection(xConnection, SharedConnection::NoTakeOwnership),
                     xColumnsSupplier, aDBData);
             }
@@ -316,13 +320,13 @@ SwMailMergeConfigItem* SwView::EnsureMailMergeConfigItem(const SfxItemSet* pArgs
                 aDBData.sCommand = sDBName.getToken(1, DB_DELIM);
                 aDBData.nCommandType = sDBName.getToken(2, DB_DELIM).toInt32();
                 //set the currently used database for the wizard
-                pMMConfig->SetCurrentDBData(aDBData);
+                xMMConfig->SetCurrentDBData(aDBData);
             }
         }
 
-        SetMailMergeConfigItem(pMMConfig, nWizardRestartPage, true);
+        SetMailMergeConfigItem(xMMConfig, nWizardRestartPage);
     }
-    return pMMConfig;
+    return xMMConfig;
 }
 
 namespace
@@ -447,10 +451,10 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
     acquire();
 
     // create if it does not exist yet
-    SwMailMergeConfigItem* pMMConfig = m_pView->EnsureMailMergeConfigItem(pArgs, m_pWizard ? m_pWizard->GetRestartPage() : 0);
+    std::shared_ptr<SwMailMergeConfigItem> xMMConfig = m_pView->EnsureMailMergeConfigItem(pArgs, m_pWizard ? m_pWizard->GetRestartPage() : 0);
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    m_pWizard = pFact->CreateMailMergeWizard(*m_pView, *pMMConfig);
+    m_pWizard = pFact->CreateMailMergeWizard(*m_pView, xMMConfig);
 
     uno::Reference<beans::XPropertySet> xPropSet(m_pView->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY);
     if (!xPropSet.is())
@@ -476,9 +480,9 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
 
 void SwMailMergeWizardExecutor::ExecutionFinished()
 {
-    SwMailMergeConfigItem* pMMConfig = m_pView->GetMailMergeConfigItem();
-    if (pMMConfig)
-        pMMConfig->Commit();
+    std::shared_ptr<SwMailMergeConfigItem> xMMConfig = m_pView->GetMailMergeConfigItem();
+    if (xMMConfig)
+        xMMConfig->Commit();
 
     // release/destroy asynchronously
     Application::PostUserEvent( LINK( this, SwMailMergeWizardExecutor, DestroyDialogHdl ) );
@@ -506,19 +510,19 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
                 LINK( this, SwMailMergeWizardExecutor, DestroyWizardHdl ), m_pWizard );
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            SwMailMergeConfigItem* pMMConfig = m_pView->GetMailMergeConfigItem();
+            std::shared_ptr<SwMailMergeConfigItem> xMMConfig = m_pView->GetMailMergeConfigItem();
             if (pNewView)
             {
                 m_pView = pNewView;
-                pMMConfig->DocumentReloaded();
+                xMMConfig->DocumentReloaded();
                 //new source view!
-                pMMConfig->SetSourceView( m_pView );
-                m_pWizard = pFact->CreateMailMergeWizard(*m_pView, *pMMConfig);
+                xMMConfig->SetSourceView( m_pView );
+                m_pWizard = pFact->CreateMailMergeWizard(*m_pView, xMMConfig);
                 m_pWizard->ShowPage( nRestartPage );
             }
             else
             {
-                m_pWizard = pFact->CreateMailMergeWizard(*m_pView, *pMMConfig);
+                m_pWizard = pFact->CreateMailMergeWizard(*m_pView, xMMConfig);
             }
 
             // execute the wizard again
@@ -527,8 +531,8 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
         }
     case RET_TARGET_CREATED:
         {
-            SwMailMergeConfigItem* pMMConfig = m_pView->GetMailMergeConfigItem();
-            SwView* pTargetView = pMMConfig->GetTargetView();
+            std::shared_ptr<SwMailMergeConfigItem> xMMConfig = m_pView->GetMailMergeConfigItem();
+            SwView* pTargetView = xMMConfig->GetTargetView();
             OSL_ENSURE(pTargetView, "No target view has been created");
             if(pTargetView)
             {
@@ -537,7 +541,7 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
                     LINK( this, SwMailMergeWizardExecutor, DestroyWizardHdl ), m_pWizard );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                m_pWizard = pFact->CreateMailMergeWizard(*pTargetView, *pMMConfig);
+                m_pWizard = pFact->CreateMailMergeWizard(*pTargetView, xMMConfig);
                 m_pWizard->ShowPage( nRestartPage );
 
                 // execute the wizard again
@@ -552,9 +556,9 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
         }
     case RET_REMOVE_TARGET:
         {
-            SwMailMergeConfigItem* pMMConfig = m_pView->GetMailMergeConfigItem();
-            SwView* pTargetView = pMMConfig->GetTargetView();
-            SwView* pSourceView = pMMConfig->GetSourceView();
+            std::shared_ptr<SwMailMergeConfigItem> xMMConfig = m_pView->GetMailMergeConfigItem();
+            SwView* pTargetView = xMMConfig->GetTargetView();
+            SwView* pSourceView = xMMConfig->GetSourceView();
             OSL_ENSURE(pTargetView && pSourceView, "source or target view not available" );
             if(pTargetView && pSourceView)
             {
@@ -563,14 +567,14 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
                 pSourceView->GetViewFrame()->GetFrame().AppearWithUpdate();
                 // the current view has be set when the target is destroyed
                 m_pView = pSourceView;
-                pMMConfig->SetTargetView(nullptr);
+                xMMConfig->SetTargetView(nullptr);
 
                 // destroy wizard asynchronously
                 Application::PostUserEvent(
                     LINK( this, SwMailMergeWizardExecutor, CloseFrameHdl ), m_pWizard );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                m_pWizard = pFact->CreateMailMergeWizard(*pSourceView, *pMMConfig);
+                m_pWizard = pFact->CreateMailMergeWizard(*pSourceView, xMMConfig);
                 m_pWizard->ShowPage( nRestartPage );
 
                 // execute the wizard again
@@ -592,11 +596,11 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
         }
     default: // finish
         {
-            SwMailMergeConfigItem* pMMConfig = m_pView->GetMailMergeConfigItem();
-            SwView* pSourceView = pMMConfig->GetSourceView();
+            std::shared_ptr<SwMailMergeConfigItem> xMMConfig = m_pView->GetMailMergeConfigItem();
+            SwView* pSourceView = xMMConfig->GetSourceView();
             if(pSourceView)
             {
-                pMMConfig->GetSourceView()->GetViewFrame()->GetFrame().Appear();
+                xMMConfig->GetSourceView()->GetViewFrame()->GetFrame().Appear();
             }
             ExecutionFinished();
             break;
@@ -620,16 +624,17 @@ IMPL_STATIC_LINK_TYPED(SwMailMergeWizardExecutor, DestroyWizardHdl, void*, pDial
 
 IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, CancelHdl, void*, void)
 {
-    if (SwMailMergeConfigItem* pMMConfig = m_pView->GetMailMergeConfigItem())
+    std::shared_ptr<SwMailMergeConfigItem> xMMConfig = m_pView->GetMailMergeConfigItem();
+    if (xMMConfig)
     {
-        if (pMMConfig->GetTargetView())
+        if (xMMConfig->GetTargetView())
         {
-            pMMConfig->GetTargetView()->GetViewFrame()->DoClose();
-            pMMConfig->SetTargetView(nullptr);
+            xMMConfig->GetTargetView()->GetViewFrame()->DoClose();
+            xMMConfig->SetTargetView(nullptr);
         }
-        if (pMMConfig->GetSourceView())
+        if (xMMConfig->GetSourceView())
         {
-            auto pViewFrame(pMMConfig->GetSourceView()->GetViewFrame());
+            auto pViewFrame(xMMConfig->GetSourceView()->GetViewFrame());
             pViewFrame->GetFrame().AppearWithUpdate();
             uno::Reference<beans::XPropertySet> xPropSet(pViewFrame->GetFrame().GetFrameInterface(), uno::UNO_QUERY);
             if (xPropSet.is() && m_bDestroyMMToolbarOnCancel)
@@ -645,7 +650,7 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, CancelHdl, void*, void)
                 }
             }
         }
-        pMMConfig->Commit();
+        xMMConfig->Commit();
     }
 
     delete m_pWizard;
@@ -737,33 +742,33 @@ void SwModule::ExecOther(SfxRequest& rReq)
         case FN_MAILMERGE_CURRENT_ENTRY:
         {
             SwView* pView = ::GetActiveView();
-            SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
-            if (!pConfigItem)
+            std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
+            if (!xConfigItem)
                 return;
 
-            sal_Int32 nPos = pConfigItem->GetResultSetPosition();
+            sal_Int32 nPos = xConfigItem->GetResultSetPosition();
             switch (nWhich)
             {
-                case FN_MAILMERGE_FIRST_ENTRY: pConfigItem->MoveResultSet(1); break;
-                case FN_MAILMERGE_PREV_ENTRY:  pConfigItem->MoveResultSet(nPos - 1); break;
-                case FN_MAILMERGE_NEXT_ENTRY:  pConfigItem->MoveResultSet(nPos + 1); break;
-                case FN_MAILMERGE_LAST_ENTRY:  pConfigItem->MoveResultSet(-1); break;
+                case FN_MAILMERGE_FIRST_ENTRY: xConfigItem->MoveResultSet(1); break;
+                case FN_MAILMERGE_PREV_ENTRY:  xConfigItem->MoveResultSet(nPos - 1); break;
+                case FN_MAILMERGE_NEXT_ENTRY:  xConfigItem->MoveResultSet(nPos + 1); break;
+                case FN_MAILMERGE_LAST_ENTRY:  xConfigItem->MoveResultSet(-1); break;
                 case FN_MAILMERGE_CURRENT_ENTRY: /* don't move the result set, just update the document */ break;
                 default: break;
             }
 
             // now the record has to be merged into the source document
             // TODO can we re-use PerformMailMerge() here somehow?
-            const SwDBData& rDBData = pConfigItem->GetCurrentDBData();
-            uno::Sequence<uno::Any> vSelection({ uno::makeAny(pConfigItem->GetResultSetPosition()) });
+            const SwDBData& rDBData = xConfigItem->GetCurrentDBData();
+            uno::Sequence<uno::Any> vSelection({ uno::makeAny(xConfigItem->GetResultSetPosition()) });
             svx::ODataAccessDescriptor aDescriptor(::comphelper::InitPropertySequence({
                         {"Selection",        uno::makeAny(vSelection)},
                         {"DataSourceName",   uno::makeAny(rDBData.sDataSource)},
                         {"Command",          uno::makeAny(rDBData.sCommand)},
                         {"CommandType",      uno::makeAny(rDBData.nCommandType)},
-                        {"ActiveConnection", uno::makeAny(pConfigItem->GetConnection().getTyped())},
-                        {"Filter",           uno::makeAny(pConfigItem->GetFilter())},
-                        {"Cursor",           uno::makeAny(pConfigItem->GetResultSet())}
+                        {"ActiveConnection", uno::makeAny(xConfigItem->GetConnection().getTyped())},
+                        {"Filter",           uno::makeAny(xConfigItem->GetFilter())},
+                        {"Cursor",           uno::makeAny(xConfigItem->GetResultSet())}
                         }));
 
             SwWrtShell& rSh = pView->GetWrtShell();
@@ -783,20 +788,20 @@ void SwModule::ExecOther(SfxRequest& rReq)
         break;
         case FN_MAILMERGE_CREATE_DOCUMENTS:
         {
-            SwMailMergeConfigItem* pConfigItem = SwDBManager::PerformMailMerge(GetActiveView());
+            std::shared_ptr<SwMailMergeConfigItem> xConfigItem = SwDBManager::PerformMailMerge(GetActiveView());
 
-            if (pConfigItem && pConfigItem->GetTargetView())
-                pConfigItem->GetTargetView()->GetViewFrame()->GetFrame().Appear();
+            if (xConfigItem && xConfigItem->GetTargetView())
+                xConfigItem->GetTargetView()->GetViewFrame()->GetFrame().Appear();
         }
         break;
         case FN_MAILMERGE_SAVE_DOCUMENTS:
         case FN_MAILMERGE_PRINT_DOCUMENTS:
         case FN_MAILMERGE_EMAIL_DOCUMENTS:
         {
-            SwMailMergeConfigItem* pConfigItem = GetActiveView()->GetMailMergeConfigItem();
-            if(!pConfigItem)
+            std::shared_ptr<SwMailMergeConfigItem> xConfigItem = GetActiveView()->GetMailMergeConfigItem();
+            if(!xConfigItem)
                 return;
-            pConfigItem->SetTargetView(nullptr);
+            xConfigItem->SetTargetView(nullptr);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             switch (nWhich)
             {

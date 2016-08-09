@@ -139,14 +139,14 @@ void SwView::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOpt
 
 #if HAVE_FEATURE_DBCONNECTIVITY
 
-void SwView::SetMailMergeConfigItem(SwMailMergeConfigItem*  pConfigItem,
-                sal_uInt16 nRestart, bool bIsSource)
+void SwView::SetMailMergeConfigItem(std::shared_ptr<SwMailMergeConfigItem>& rConfigItem,
+                                    sal_uInt16 nRestart)
 {
-    m_pViewImpl->SetMailMergeConfigItem(pConfigItem, nRestart, bIsSource);
+    m_pViewImpl->SetMailMergeConfigItem(rConfigItem, nRestart);
     UIFeatureChanged();
 }
 
-SwMailMergeConfigItem* SwView::GetMailMergeConfigItem()
+std::shared_ptr<SwMailMergeConfigItem> SwView::GetMailMergeConfigItem()
 {
     return m_pViewImpl->GetMailMergeConfigItem();
 }

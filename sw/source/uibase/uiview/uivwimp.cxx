@@ -61,9 +61,7 @@ SwView_Impl::SwView_Impl(SwView* pShell)
     , pClipEvtLstnr(nullptr)
     , eShellMode(SHELL_MODE_TEXT)
 #if HAVE_FEATURE_DBCONNECTIVITY
-    , pConfigItem(nullptr)
     , nMailMergeRestartPage(0)
-    , bMailMergeSourceView(true)
 #endif
     , m_pDocInserter(nullptr)
     , m_pRequest(nullptr)
@@ -97,8 +95,7 @@ SwView_Impl::~SwView_Impl()
         pClipEvtLstnr->ViewDestroyed();
     }
 #if HAVE_FEATURE_DBCONNECTIVITY
-    if(bMailMergeSourceView)
-        delete pConfigItem;
+    xConfigItem.reset();
 #endif
     delete m_pDocInserter;
     delete m_pRequest;

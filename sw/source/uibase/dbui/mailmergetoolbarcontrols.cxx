@@ -194,16 +194,18 @@ uno::Reference<awt::XWindow> MMCurrentEntryController::createItemWindow(const un
 IMPL_LINK_TYPED(MMCurrentEntryController, CurrentEditUpdatedHdl, Edit&, rEdit, void)
 {
     SwView* pView = ::GetActiveView();
-    SwMailMergeConfigItem* pConfigItem = pView ? pView->GetMailMergeConfigItem() : nullptr;
+    std::shared_ptr<SwMailMergeConfigItem> xConfigItem;
+    if (pView)
+        xConfigItem = pView->GetMailMergeConfigItem();
 
-    if (!pConfigItem)
+    if (!xConfigItem)
         return;
 
     OUString aText(rEdit.GetText());
     sal_Int32 nEntry = aText.toInt32();
-    if (!aText.isEmpty() && nEntry != pConfigItem->GetResultSetPosition())
+    if (!aText.isEmpty() && nEntry != xConfigItem->GetResultSetPosition())
     {
-        pConfigItem->MoveResultSet(nEntry);
+        xConfigItem->MoveResultSet(nEntry);
         // notify about the change
         dispatchCommand(".uno:MailMergeCurrentEntry", uno::Sequence<beans::PropertyValue>());
     }
@@ -215,9 +217,11 @@ void MMCurrentEntryController::statusChanged(const frame::FeatureStateEvent& rEv
         return;
 
     SwView* pView = ::GetActiveView();
-    SwMailMergeConfigItem* pConfigItem = pView ? pView->GetMailMergeConfigItem() : nullptr;
+    std::shared_ptr<SwMailMergeConfigItem> xConfigItem;
+    if (pView)
+        xConfigItem = pView->GetMailMergeConfigItem();
 
-    if (!pConfigItem || !rEvent.IsEnabled)
+    if (!xConfigItem || !rEvent.IsEnabled)
     {
         m_pCurrentEdit->Disable();
         m_pCurrentEdit->SetText("");
@@ -225,10 +229,10 @@ void MMCurrentEntryController::statusChanged(const frame::FeatureStateEvent& rEv
     else
     {
         sal_Int32 nEntry = m_pCurrentEdit->GetText().toInt32();
-        if (!m_pCurrentEdit->IsEnabled() || nEntry != pConfigItem->GetResultSetPosition())
+        if (!m_pCurrentEdit->IsEnabled() || nEntry != xConfigItem->GetResultSetPosition())
         {
             m_pCurrentEdit->Enable();
-            m_pCurrentEdit->SetText(OUString::number(pConfigItem->GetResultSetPosition()));
+            m_pCurrentEdit->SetText(OUString::number(xConfigItem->GetResultSetPosition()));
         }
     }
 }
@@ -261,10 +265,12 @@ uno::Reference<awt::XWindow> MMExcludeEntryController::createItemWindow(const un
 IMPL_STATIC_LINK_TYPED(MMExcludeEntryController, ExcludeHdl, CheckBox&, rCheckbox, void)
 {
     SwView* pView = ::GetActiveView();
-    SwMailMergeConfigItem* pConfigItem = pView ? pView->GetMailMergeConfigItem() : nullptr;
+    std::shared_ptr<SwMailMergeConfigItem> xConfigItem;
+    if (pView)
+        xConfigItem = pView->GetMailMergeConfigItem();
 
-    if (pConfigItem)
-        pConfigItem->ExcludeRecord(pConfigItem->GetResultSetPosition(), rCheckbox.IsChecked());
+    if (xConfigItem)
+        xConfigItem->ExcludeRecord(xConfigItem->GetResultSetPosition(), rCheckbox.IsChecked());
 };
 
 void MMExcludeEntryController::statusChanged(const frame::FeatureStateEvent& rEvent) throw (uno::RuntimeException, std::exception)
@@ -273,9 +279,11 @@ void MMExcludeEntryController::statusChanged(const frame::FeatureStateEvent& rEv
         return;
 
     SwView* pView = ::GetActiveView();
-    SwMailMergeConfigItem* pConfigItem = pView ? pView->GetMailMergeConfigItem() : nullptr;
+    std::shared_ptr<SwMailMergeConfigItem> xConfigItem;
+    if (pView)
+        xConfigItem = pView->GetMailMergeConfigItem();
 
-    if (!pConfigItem || !rEvent.IsEnabled)
+    if (!xConfigItem || !rEvent.IsEnabled)
     {
         m_pExcludeCheckbox->Disable();
         m_pExcludeCheckbox->Check(false);
@@ -283,7 +291,7 @@ void MMExcludeEntryController::statusChanged(const frame::FeatureStateEvent& rEv
     else
     {
         m_pExcludeCheckbox->Enable();
-        m_pExcludeCheckbox->Check(pConfigItem->IsRecordExcluded(pConfigItem->GetResultSetPosition()));
+        m_pExcludeCheckbox->Check(xConfigItem->IsRecordExcluded(xConfigItem->GetResultSetPosition()));
     }
 }
 

@@ -3070,31 +3070,32 @@ void SwConnectionDisposedListener_Impl::disposing( const lang::EventObject& rSou
         }
     }
 }
-SwMailMergeConfigItem* SwDBManager::PerformMailMerge(SwView* pView)
+
+std::shared_ptr<SwMailMergeConfigItem> SwDBManager::PerformMailMerge(SwView* pView)
 {
-    SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
-    if (!pConfigItem)
-        return nullptr;
+    std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
+    if (!xConfigItem)
+        return xConfigItem;
 
     svx::ODataAccessDescriptor aDescriptor;
-    aDescriptor.setDataSource(pConfigItem->GetCurrentDBData().sDataSource);
-    aDescriptor[ svx::daConnection ]  <<= pConfigItem->GetConnection().getTyped();
-    aDescriptor[ svx::daCursor ]      <<= pConfigItem->GetResultSet();
-    aDescriptor[ svx::daCommand ]     <<= pConfigItem->GetCurrentDBData().sCommand;
-    aDescriptor[ svx::daCommandType ] <<= pConfigItem->GetCurrentDBData().nCommandType;
-    aDescriptor[ svx::daSelection ]   <<= pConfigItem->GetSelection();
+    aDescriptor.setDataSource(xConfigItem->GetCurrentDBData().sDataSource);
+    aDescriptor[ svx::daConnection ]  <<= xConfigItem->GetConnection().getTyped();
+    aDescriptor[ svx::daCursor ]      <<= xConfigItem->GetResultSet();
+    aDescriptor[ svx::daCommand ]     <<= xConfigItem->GetCurrentDBData().sCommand;
+    aDescriptor[ svx::daCommandType ] <<= xConfigItem->GetCurrentDBData().nCommandType;
+    aDescriptor[ svx::daSelection ]   <<= xConfigItem->GetSelection();
 
     SwWrtShell& rSh = pView->GetWrtShell();
-    pConfigItem->SetTargetView(nullptr);
+    xConfigItem->SetTargetView(nullptr);
 
     SwMergeDescriptor aMergeDesc(DBMGR_MERGE_SHELL, rSh, aDescriptor);
-    aMergeDesc.pMailMergeConfigItem = pConfigItem;
+    aMergeDesc.pMailMergeConfigItem = xConfigItem.get();
     aMergeDesc.bCreateSingleFile = true;
     rSh.GetDBManager()->Merge(aMergeDesc);
 
-    pConfigItem->SetMergeDone();
+    xConfigItem->SetMergeDone();
 
-    return pConfigItem;
+    return xConfigItem;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

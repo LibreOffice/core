@@ -38,12 +38,12 @@
 using namespace svt;
 using namespace ::com::sun::star;
 
-SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem) :
+SwMailMergeWizard::SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeConfigItem>& rItem) :
         RoadmapWizard(&rView.GetViewFrame()->GetWindow(),
                         WizardButtonFlags::NEXT|WizardButtonFlags::PREVIOUS|WizardButtonFlags::FINISH|WizardButtonFlags::CANCEL|WizardButtonFlags::HELP),
         m_pSwView(&rView),
         m_bDocumentLoad( false ),
-        m_rConfigItem(rItem),
+        m_xConfigItem(rItem),
         m_sStarting(        SW_RES( ST_STARTING      )),
         m_sDocumentType(    SW_RES( ST_DOCUMENTTYPE   )),
         m_sAddressBlock(    SW_RES( ST_ADDRESSBLOCK   )),
@@ -61,7 +61,7 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem
     m_pPrevPage->SetHelpId(HID_MM_PREV_PAGE);
 
     //#i51949# no output type page visible if e-Mail is not supported
-    if(rItem.IsMailAvailable())
+    if (m_xConfigItem->IsMailAvailable())
         declarePath(
             0,
             {MM_DOCUMENTSELECTPAGE,
@@ -111,20 +111,20 @@ void SwMailMergeWizard::enterState( WizardState _nState )
     of greeting and address block - if not yet done
     entering the merge or output page requires to create the output document
 */
-    if(_nState > MM_LAYOUTPAGE && m_rConfigItem.GetSourceView() &&
-            ((m_rConfigItem.IsAddressBlock() && !m_rConfigItem.IsAddressInserted()) ||
-             (m_rConfigItem.IsGreetingLine(false) && !m_rConfigItem.IsGreetingInserted() )))
+    if(_nState > MM_LAYOUTPAGE && m_xConfigItem->GetSourceView() &&
+            ((m_xConfigItem->IsAddressBlock() && !m_xConfigItem->IsAddressInserted()) ||
+             (m_xConfigItem->IsGreetingLine(false) && !m_xConfigItem->IsGreetingInserted() )))
     {
-        SwMailMergeLayoutPage::InsertAddressAndGreeting(m_rConfigItem.GetSourceView(),
-                                m_rConfigItem, Point(-1, -1), true);
+        SwMailMergeLayoutPage::InsertAddressAndGreeting(m_xConfigItem->GetSourceView(),
+                                *m_xConfigItem, Point(-1, -1), true);
     }
 
-    if(m_rConfigItem.GetTargetView())
+    if (m_xConfigItem->GetTargetView())
     {
         //close the dialog, remove the target view, show the source view
         m_nRestartPage = _nState;
         //set ResultSet back to start
-        m_rConfigItem.MoveResultSet(1);
+        m_xConfigItem->MoveResultSet(1);
         EndDialog(RET_REMOVE_TARGET);
         return;
     }
@@ -136,7 +136,7 @@ void SwMailMergeWizard::enterState( WizardState _nState )
             bEnablePrev = false; // the first page
         break;
         case MM_ADDRESSBLOCKPAGE  :
-            bEnableNext = m_rConfigItem.GetResultSet().is();
+            bEnableNext = m_xConfigItem->GetResultSet().is();
         break;
         case MM_LAYOUTPAGE:
             bEnableNext = false; // the last page
@@ -157,7 +157,7 @@ OUString SwMailMergeWizard::getStateDisplayName( WizardState _nState ) const
         case MM_OUTPUTTYPETPAGE:
             return m_sDocumentType;
         case MM_ADDRESSBLOCKPAGE:
-            return m_rConfigItem.IsOutputToLetter() ?
+            return m_xConfigItem->IsOutputToLetter() ?
                    m_sAddressBlock : m_sAddressList;
         case MM_GREETINGSPAGE:
             return m_sGreetingsLine;
@@ -185,12 +185,12 @@ void SwMailMergeWizard::UpdateRoadmap()
     TabPage* pCurPage = GetPage( nCurPage );
     if(!pCurPage)
         return;
-    bool bAddressFieldsConfigured = !m_rConfigItem.IsOutputToLetter() ||
-                !m_rConfigItem.IsAddressBlock() ||
-                m_rConfigItem.IsAddressFieldsAssigned();
-    bool bGreetingFieldsConfigured = !m_rConfigItem.IsGreetingLine(false) ||
-            !m_rConfigItem.IsIndividualGreeting(false)||
-                    m_rConfigItem.IsGreetingFieldsAssigned();
+    bool bAddressFieldsConfigured = !m_xConfigItem->IsOutputToLetter() ||
+                !m_xConfigItem->IsAddressBlock() ||
+                m_xConfigItem->IsAddressFieldsAssigned();
+    bool bGreetingFieldsConfigured = !m_xConfigItem->IsGreetingLine(false) ||
+            !m_xConfigItem->IsIndividualGreeting(false) ||
+                    m_xConfigItem->IsGreetingFieldsAssigned();
 
     //#i97436# if a document has to be loaded then enable output type page only
     m_bDocumentLoad = false;
@@ -199,7 +199,7 @@ void SwMailMergeWizard::UpdateRoadmap()
 
     // handle the Finish button
     bool bCanFinish = !m_bDocumentLoad && bEnableOutputTypePage &&
-        m_rConfigItem.GetResultSet().is() &&
+        m_xConfigItem->GetResultSet().is() &&
         bAddressFieldsConfigured &&
         bGreetingFieldsConfigured;
     enableButtons(WizardButtonFlags::FINISH, (nCurPage != MM_DOCUMENTSELECTPAGE) && bCanFinish);
@@ -220,13 +220,13 @@ void SwMailMergeWizard::UpdateRoadmap()
             break;
             case MM_GREETINGSPAGE:
                 bEnable = !m_bDocumentLoad && bEnableOutputTypePage &&
-                    m_rConfigItem.GetResultSet().is() &&
+                    m_xConfigItem->GetResultSet().is() &&
                             bAddressFieldsConfigured;
             break;
             case MM_LAYOUTPAGE:
                 bEnable = bCanFinish &&
-                        ((m_rConfigItem.IsAddressBlock() && !m_rConfigItem.IsAddressInserted()) ||
-                            (m_rConfigItem.IsGreetingLine(false) && !m_rConfigItem.IsGreetingInserted() ));
+                        ((m_xConfigItem->IsAddressBlock() && !m_xConfigItem->IsAddressInserted()) ||
+                            (m_xConfigItem->IsGreetingLine(false) && !m_xConfigItem->IsGreetingInserted() ));
             break;
         }
         enableState( nPage, bEnable );
