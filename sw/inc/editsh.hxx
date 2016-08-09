@@ -97,6 +97,7 @@ class SwEndNoteInfo;
 class SwLineNumberInfo;
 class SwAuthEntry;
 class SwRewriter;
+class SwView;
 struct SwConversionArgs;
 enum class SvtScriptType;
 enum class SfxClassificationPolicyType;
@@ -558,8 +559,10 @@ public:
     SwUndoId EndUndo( SwUndoId eUndoId = UNDO_EMPTY, const SwRewriter * pRewriter = nullptr );
 
     bool     GetLastUndoInfo(OUString *const o_pStr,
-                             SwUndoId *const o_pId) const;
-    bool     GetFirstRedoInfo(OUString *const o_pStr) const;
+                             SwUndoId *const o_pId,
+                             const SwView* pView = nullptr) const;
+    bool     GetFirstRedoInfo(OUString *const o_pStr,
+                              const SwView* pView = nullptr) const;
     SwUndoId GetRepeatInfo(OUString *const o_pStr) const;
 
     /// is it forbidden to modify cursors via API calls?
