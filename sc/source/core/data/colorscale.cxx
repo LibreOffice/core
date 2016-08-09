@@ -131,9 +131,14 @@ ScFormulaListener::~ScFormulaListener()
     stopListening();
 }
 
-void ScFormulaListener::Notify( const SfxHint& )
+void ScFormulaListener::Notify(const SfxHint& rHint)
 {
     mbDirty = true;
+
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if (pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING)
+        return;
+
     if (maCallbackFunction)
         maCallbackFunction();
 }
