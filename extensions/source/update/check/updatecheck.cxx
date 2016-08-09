@@ -848,7 +848,7 @@ UpdateCheck::download()
 
     if (aInfo.Sources.empty())
     {
-        SAL_WARN("extension.updatecheck", "download called without source");
+        SAL_WARN("extensions.update", "download called without source");
         return;
     }
 
