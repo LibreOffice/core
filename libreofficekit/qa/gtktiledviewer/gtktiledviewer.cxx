@@ -120,6 +120,9 @@ public:
     GtkWidget* m_pScrolledWindow;
     std::map<GtkToolItem*, std::string> m_aToolItemCommandNames;
     std::map<std::string, GtkToolItem*> m_aCommandNameToolItems;
+    /// Sensitivity (enabled or disabled) or each tool item, ignoring edit
+    /// state.
+    std::map<GtkToolItem*, bool> m_aToolItemSensitivities;
     bool m_bToolItemBroadcast;
     GtkWidget* m_pVBox;
     GtkComboBoxText* m_pPartSelector;
@@ -386,6 +389,7 @@ static void lcl_registerToolItem(TiledWindow& rWindow, GtkToolItem* pItem, const
 {
     rWindow.m_aToolItemCommandNames[pItem] = rName;
     rWindow.m_aCommandNameToolItems[rName] = pItem;
+    rWindow.m_aToolItemSensitivities[pItem] = true;
 }
 
 const float fZooms[] = { 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0 };
@@ -958,6 +962,13 @@ static gboolean signalFormulabar(GtkWidget* /*pWidget*/, GdkEventKey* /*pEvent*/
     return TRUE;
 }
 
+/// Set sensitivity based on rWindow.m_aToolItemSensitivities, taking edit
+/// state into account.
+static void setSensitiveIfInEdit(GtkToolItem* pItem, gboolean bEdit, TiledWindow& rWindow)
+{
+    gtk_widget_set_sensitive(GTK_WIDGET(pItem), bEdit && rWindow.m_aToolItemSensitivities[pItem]);
+}
+
 /// LOKDocView changed edit state -> inform the tool button.
 static void signalEdit(LOKDocView* pLOKDocView, gboolean bWasEdit, gpointer /*pData*/)
 {
@@ -966,22 +977,22 @@ static void signalEdit(LOKDocView* pLOKDocView, gboolean bWasEdit, gpointer /*pD
     g_info("signalEdit: %d -> %d", bWasEdit, bEdit);
 
     // Set toggle button sensitivity
-    gtk_widget_set_sensitive(GTK_WIDGET(rWindow.m_pBold), bEdit);
-    gtk_widget_set_sensitive(GTK_WIDGET(rWindow.m_pItalic), bEdit);
-    gtk_widget_set_sensitive(GTK_WIDGET(rWindow.m_pUnderline), bEdit);
-    gtk_widget_set_sensitive(GTK_WIDGET(rWindow.m_pStrikethrough), bEdit);
-    gtk_widget_set_sensitive(GTK_WIDGET(rWindow.m_pSuperscript), bEdit);
-    gtk_widget_set_sensitive(GTK_WIDGET(rWindow.m_pSubscript), bEdit);
-    gtk_widget_set_sensitive(GTK_WIDGET(rWindow.m_pLeftpara), bEdit);
-    gtk_widget_set_sensitive(GTK_WIDGET(rWindow.m_pCenterpara), bEdit);
-    gtk_widget_set_sensitive(GTK_WIDGET(rWindow.m_pRightpara), bEdit);
-    gtk_widget_set_sensitive(GTK_WIDGET(rWindow.m_pJustifypara), bEdit);
-    gtk_widget_set_sensitive(GTK_WIDGET(rWindow.m_pInsertAnnotation), bEdit);
-    gtk_widget_set_sensitive(GTK_WIDGET(rWindow.m_pDeleteComment), bEdit);
-    gtk_widget_set_sensitive(GTK_WIDGET(rWindow.m_pUndo), bEdit);
-    gtk_widget_set_sensitive(GTK_WIDGET(rWindow.m_pRedo), bEdit);
-    gtk_widget_set_sensitive(GTK_WIDGET(rWindow.m_pPasteButton), bEdit);
-    gtk_widget_set_sensitive(GTK_WIDGET(rWindow.m_pSaveButton), bEdit);
+    setSensitiveIfInEdit(rWindow.m_pBold, bEdit, rWindow);
+    setSensitiveIfInEdit(rWindow.m_pItalic, bEdit, rWindow);
+    setSensitiveIfInEdit(rWindow.m_pUnderline, bEdit, rWindow);
+    setSensitiveIfInEdit(rWindow.m_pStrikethrough, bEdit, rWindow);
+    setSensitiveIfInEdit(rWindow.m_pSuperscript, bEdit, rWindow);
+    setSensitiveIfInEdit(rWindow.m_pSubscript, bEdit, rWindow);
+    setSensitiveIfInEdit(rWindow.m_pLeftpara, bEdit, rWindow);
+    setSensitiveIfInEdit(rWindow.m_pCenterpara, bEdit, rWindow);
+    setSensitiveIfInEdit(rWindow.m_pRightpara, bEdit, rWindow);
+    setSensitiveIfInEdit(rWindow.m_pJustifypara, bEdit, rWindow);
+    setSensitiveIfInEdit(rWindow.m_pInsertAnnotation, bEdit, rWindow);
+    setSensitiveIfInEdit(rWindow.m_pDeleteComment, bEdit, rWindow);
+    setSensitiveIfInEdit(rWindow.m_pUndo, bEdit, rWindow);
+    setSensitiveIfInEdit(rWindow.m_pRedo, bEdit, rWindow);
+    setSensitiveIfInEdit(rWindow.m_pPasteButton, bEdit, rWindow);
+    setSensitiveIfInEdit(rWindow.m_pSaveButton, bEdit, rWindow);
 }
 
 /// LOKDocView changed command state -> inform the tool button.
@@ -1010,6 +1021,10 @@ static void signalCommand(LOKDocView* pLOKDocView, char* pPayload, gpointer /*pD
             } else if (aValue == "enabled" || aValue == "disabled") {
                 gboolean bSensitive = aValue == "enabled";
                 gtk_widget_set_sensitive(GTK_WIDGET(pItem), bSensitive);
+
+                // Remember state, so in case edit is disable and enabled
+                // later, the correct sensitivity can be restored.
+                rWindow.m_aToolItemSensitivities[pItem] = bSensitive;
             }
         }
     }
