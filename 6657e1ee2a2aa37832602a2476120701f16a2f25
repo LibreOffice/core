@@ -272,6 +272,24 @@
     },
     {
       "key": {
+        "uuid": "3a98d1f4_4ddbfeed",
+        "filename": "sc/source/filter/xml/xmlcelli.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-09T12:54:16Z",
+      "side": 1,
+      "message": "What I meant is, always call GetAbsoluteReference(rURL, true) at these places and in the implementation of GetAbsoluteReference() for the true case do the actual #ifdef UNX switch. There is ~no performance penalty doing so but you get rid of having to take care of several places calling it in case changes are needed.",
+      "parentUuid": "3a98d1f4_16402c56",
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a98d1f4_10ed948b",
         "filename": "sc/source/filter/xml/xmlexprt.cxx",
         "patchSetId": 1
@@ -354,6 +372,70 @@
     },
     {
       "key": {
+        "uuid": "3a98d1f4_6dd8baf0",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1475,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-09T12:54:16Z",
+      "side": 1,
+      "message": "Create the string copy only when needed, i.e. inside the if(rTheAbsURIRef.endsWith(aContent)). As is, the compiler creates a copy for every call.",
+      "parentUuid": "3a98d1f4_5622b4ba",
+      "range": {
+        "startLine": 1475,
+        "startChar": 40,
+        "endLine": 1475,
+        "endChar": 48
+      },
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_2dedd28b",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1478,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-09T12:54:16Z",
+      "side": 1,
+      "message": "I\u0027d also not create aContent beforehand, but use a literal\n\n if (rTheAbsURIRef.endsWith(\"/content.xml\"))\n\ninstead. Saves creating a temporary string for all cases where it doesn\u0027t match.",
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_0de8167c",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1481,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-09T12:54:16Z",
+      "side": 1,
+      "message": "Replacing the first occurrence of \"/content.xml\" doesn\u0027t match the endsWith() precondition.",
+      "range": {
+        "startLine": 1481,
+        "startChar": 62,
+        "endLine": 1481,
+        "endChar": 105
+      },
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a98d1f4_10a4b455",
         "filename": "tools/source/fsys/urlobj.cxx",
         "patchSetId": 1
@@ -383,6 +465,24 @@
       "side": 1,
       "message": "* Definition of aContent because \"/content.xml\" it is needed 3 times\n\n* Check if the URI ends with \"/content.xml\" because only links within the content should be converted\n\n* fetch the file status of rTheAbsURIRef and if the status is ok:\n\n* resolve symlinks or desktop shortcuts to the real file path\n\n* add the string \"/content.xml\" and return the resolved path",
       "parentUuid": "3a98d1f4_10a4b455",
+      "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_edf20a6f",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-09T12:54:16Z",
+      "side": 1,
+      "message": "Such explanation belongs as comment in the source. At least the \"fetch file status and if ok resolve a symlink\" part.\n\nBtw, what happens if rTheAbsURIRef happens to be a pipe ending with /content.xml?",
+      "parentUuid": "3a98d1f4_762fb0a1",
       "revId": "6657e1ee2a2aa37832602a2476120701f16a2f25",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
