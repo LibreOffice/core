@@ -526,7 +526,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
         {
             case SID_UNDO:
             {
-                if (rSh.GetLastUndoInfo(nullptr, nullptr))
+                if (rSh.GetLastUndoInfo(nullptr, nullptr, &rSh.GetView()))
                 {
                     rSet.Put( SfxStringItem(nWhich,
                         rSh.GetDoString(SwWrtShell::UNDO)));
@@ -537,7 +537,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
             }
             case SID_REDO:
             {
-                if (rSh.GetFirstRedoInfo(nullptr))
+                if (rSh.GetFirstRedoInfo(nullptr, &rSh.GetView()))
                 {
                     rSet.Put(SfxStringItem(nWhich,
                         rSh.GetDoString(SwWrtShell::REDO)));
