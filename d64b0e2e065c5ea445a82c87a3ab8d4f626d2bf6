@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a98d1f4_8df26699",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1478,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-09T09:30:40Z",
+      "side": 1,
+      "message": "Pardon me my ignorance, but is there any good reason to limit this operation to content.xml? \n\nIf there is, this code should be placed in ODF import filter. Or better, it should be implemented here in a generic way and then used appropriately in the import filter.",
+      "revId": "d64b0e2e065c5ea445a82c87a3ab8d4f626d2bf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
