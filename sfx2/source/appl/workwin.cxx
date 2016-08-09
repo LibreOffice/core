@@ -1290,9 +1290,11 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
 
 void SfxWorkWindow::UpdateChildWindows_Impl()
 {
-    // any current or in the context available Childwindows
+    // tdf#100870, tdf#101320: don't use range-based for loop when
+    // container is modified
     for ( size_t n=0; n<aChildWins.size(); n++ )
     {
+        // any current or in the context available Childwindows
         SfxChildWin_Impl *pCW = aChildWins[n];
         SfxChildWindow *pChildWin = pCW->pWin;
         bool bCreate = false;
