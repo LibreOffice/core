@@ -147,6 +147,7 @@ GalleryThemePopup::GalleryThemePopup(
     , mnObjectPos( nObjectPos )
     , mbPreview( bPreview )
     , mpPopupMenu( VclPtr<PopupMenu>::Create(GAL_RES( RID_SVXMN_GALLERY2 )) )
+    , mpBackgroundPopup( VclPtr<PopupMenu>::Create() )
     , mpBrowser( pBrowser )
 {
 
