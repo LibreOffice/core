@@ -151,24 +151,24 @@ CalcOp* FindOperator( const OUString& rSearch );
 
 class SwCalc
 {
-    SwHash*     VarTable[ TBLSZ ];
-    OUString    aVarName, sCurrSym;
-    OUString    sCommand;
-    std::vector<const SwUserFieldType*> aRekurStack;
-    SwSbxValue  nLastLeft;
-    SwSbxValue  nNumberValue;
-    SwCalcExp   aErrExpr;
-    sal_Int32   nCommandPos;
+    SwHash*     m_aVarTable[ TBLSZ ];
+    OUString    m_aVarName, m_sCurrSym;
+    OUString    m_sCommand;
+    std::vector<const SwUserFieldType*> m_aRekurStack;
+    SwSbxValue  m_nLastLeft;
+    SwSbxValue  m_nNumberValue;
+    SwCalcExp   m_aErrExpr;
+    sal_Int32   m_nCommandPos;
 
-    SwDoc&      rDoc;
+    SwDoc&      m_rDoc;
     SvtSysLocale m_aSysLocale;
-    const LocaleDataWrapper* pLclData;
-    CharClass*  pCharClass;
+    const LocaleDataWrapper* m_pLocaleDataWrapper;
+    CharClass*  m_pCharClass;
 
-    sal_uInt16      nListPor;
-    SwCalcOper  eCurrOper;
-    SwCalcOper  eCurrListOper;
-    SwCalcError eError;
+    sal_uInt16      m_nListPor;
+    SwCalcOper  m_eCurrOper;
+    SwCalcOper  m_eCurrListOper;
+    SwCalcError m_eError;
 
     SwCalcOper  GetToken();
     SwSbxValue  Expr();
@@ -193,13 +193,13 @@ public:
     SwCalcExp*  VarLook( const OUString &rStr, bool bIns = false );
     void        VarChange( const OUString& rStr, const SwSbxValue& rValue );
     void        VarChange( const OUString& rStr, double );
-    SwHash**    GetVarTable()                       { return VarTable; }
+    SwHash**    GetVarTable()                       { return m_aVarTable; }
 
     bool        Push(const SwUserFieldType* pUserFieldType);
     void        Pop();
 
-    void        SetCalcError( SwCalcError eErr )    { eError = eErr; }
-    bool        IsCalcError() const                 { return 0 != eError; }
+    void        SetCalcError( SwCalcError eErr )    { m_eError = eErr; }
+    bool        IsCalcError() const                 { return 0 != m_eError; }
 
     static bool Str2Double( const OUString& rStr, sal_Int32& rPos,
                                 double& rVal );

@@ -230,30 +230,30 @@ static double lcl_ConvertToDateValue( SwDoc& rDoc, sal_Int32 nDate )
 }
 
 SwCalc::SwCalc( SwDoc& rD )
-    : aErrExpr( OUString(), SwSbxValue(), nullptr )
-    , nCommandPos(0)
-    , rDoc( rD )
-    , pLclData( m_aSysLocale.GetLocaleDataPtr() )
-    , pCharClass( &GetAppCharClass() )
-    , nListPor( 0 )
-    , eCurrOper( CALC_NAME )
-    , eCurrListOper( CALC_NAME )
-    , eError( CALC_NOERR )
+    : m_aErrExpr( OUString(), SwSbxValue(), nullptr )
+    , m_nCommandPos(0)
+    , m_rDoc( rD )
+    , m_pLocaleDataWrapper( m_aSysLocale.GetLocaleDataPtr() )
+    , m_pCharClass( &GetAppCharClass() )
+    , m_nListPor( 0 )
+    , m_eCurrOper( CALC_NAME )
+    , m_eCurrListOper( CALC_NAME )
+    , m_eError( CALC_NOERR )
 {
-    aErrExpr.aStr = "~C_ERR~";
-    memset( VarTable, 0, sizeof(VarTable) );
-    LanguageType eLang = GetDocAppScriptLang( rDoc );
+    m_aErrExpr.aStr = "~C_ERR~";
+    memset( m_aVarTable, 0, sizeof(m_aVarTable) );
+    LanguageType eLang = GetDocAppScriptLang( m_rDoc );
 
-    if( eLang != pLclData->getLanguageTag().getLanguageType() ||
-        eLang != pCharClass->getLanguageTag().getLanguageType() )
+    if( eLang != m_pLocaleDataWrapper->getLanguageTag().getLanguageType() ||
+        eLang != m_pCharClass->getLanguageTag().getLanguageType() )
     {
         LanguageTag aLanguageTag( eLang );
-        pCharClass = new CharClass( ::comphelper::getProcessComponentContext(), aLanguageTag );
-        pLclData = new LocaleDataWrapper( aLanguageTag );
+        m_pCharClass = new CharClass( ::comphelper::getProcessComponentContext(), aLanguageTag );
+        m_pLocaleDataWrapper = new LocaleDataWrapper( aLanguageTag );
     }
 
-    sCurrSym = comphelper::string::strip(pLclData->getCurrSymbol(), ' ');
-    sCurrSym  = pCharClass->lowercase( sCurrSym );
+    m_sCurrSym = comphelper::string::strip(m_pLocaleDataWrapper->getCurrSymbol(), ' ');
+    m_sCurrSym  = m_pCharClass->lowercase( m_sCurrSym );
 
     static sal_Char const
         sNType0[] = "false",
@@ -324,7 +324,7 @@ SwCalc::SwCalc( SwDoc& rD )
 #error Did you adjust all hash values?
 #endif
 
-    const SwDocStat& rDocStat = rDoc.getIDocumentStatistics().GetDocStat();
+    const SwDocStat& rDocStat = m_rDoc.getIDocumentStatistics().GetDocStat();
 
     SwSbxValue nVal;
     OUString sTmpStr;
@@ -333,64 +333,64 @@ SwCalc::SwCalc( SwDoc& rD )
     for( n = 0; n < 25; ++n )
     {
         sTmpStr = OUString::createFromAscii(sNTypeTab[n]);
-        VarTable[ aHashValue[ n ] ] = new SwCalcExp( sTmpStr, nVal, nullptr );
+        m_aVarTable[ aHashValue[ n ] ] = new SwCalcExp( sTmpStr, nVal, nullptr );
     }
 
-    static_cast<SwCalcExp*>(VarTable[ aHashValue[ 0 ] ])->nValue.PutBool( false );
-    static_cast<SwCalcExp*>(VarTable[ aHashValue[ 1 ] ])->nValue.PutBool( true );
-    static_cast<SwCalcExp*>(VarTable[ aHashValue[ 2 ] ])->nValue.PutDouble( F_PI );
-    static_cast<SwCalcExp*>(VarTable[ aHashValue[ 3 ] ])->nValue.PutDouble( 2.7182818284590452354 );
+    static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ 0 ] ])->nValue.PutBool( false );
+    static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ 1 ] ])->nValue.PutBool( true );
+    static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ 2 ] ])->nValue.PutDouble( F_PI );
+    static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ 3 ] ])->nValue.PutDouble( 2.7182818284590452354 );
 
     for( n = 0; n < 3; ++n )
-        static_cast<SwCalcExp*>(VarTable[ aHashValue[ n + 4 ] ])->nValue.PutLong( rDocStat.*aDocStat1[ n ]  );
+        static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ n + 4 ] ])->nValue.PutLong( rDocStat.*aDocStat1[ n ]  );
     for( n = 0; n < 4; ++n )
-        static_cast<SwCalcExp*>(VarTable[ aHashValue[ n + 7 ] ])->nValue.PutLong( rDocStat.*aDocStat2[ n ]  );
+        static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ n + 7 ] ])->nValue.PutLong( rDocStat.*aDocStat2[ n ]  );
 
     SvtUserOptions& rUserOptions = SW_MOD()->GetUserOptions();
 
-    static_cast<SwCalcExp*>(VarTable[ aHashValue[ 11 ] ])->nValue.PutString( rUserOptions.GetFirstName() );
-    static_cast<SwCalcExp*>(VarTable[ aHashValue[ 12 ] ])->nValue.PutString( rUserOptions.GetLastName() );
-    static_cast<SwCalcExp*>(VarTable[ aHashValue[ 13 ] ])->nValue.PutString( rUserOptions.GetID() );
+    static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ 11 ] ])->nValue.PutString( rUserOptions.GetFirstName() );
+    static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ 12 ] ])->nValue.PutString( rUserOptions.GetLastName() );
+    static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ 13 ] ])->nValue.PutString( rUserOptions.GetID() );
 
     for( n = 0; n < 11; ++n )
-        static_cast<SwCalcExp*>(VarTable[ aHashValue[ n + 14 ] ])->nValue.PutString(
+        static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ n + 14 ] ])->nValue.PutString(
                                         rUserOptions.GetToken( aAdrToken[ n ] ));
 
     nVal.PutString( rUserOptions.GetToken( aAdrToken[ 11 ] ));
     sTmpStr = OUString::createFromAscii(sNTypeTab[25]);
-    VarTable[ aHashValue[ 25 ] ]->pNext = new SwCalcExp( sTmpStr, nVal, nullptr );
+    m_aVarTable[ aHashValue[ 25 ] ]->pNext = new SwCalcExp( sTmpStr, nVal, nullptr );
 
 } // SwCalc::SwCalc
 
 SwCalc::~SwCalc()
 {
-    for(SwHash* p : VarTable)
+    for(SwHash* p : m_aVarTable)
         delete p;
 
-    if( pLclData != m_aSysLocale.GetLocaleDataPtr() )
-        delete pLclData;
-    if( pCharClass != &GetAppCharClass() )
-        delete pCharClass;
+    if( m_pLocaleDataWrapper != m_aSysLocale.GetLocaleDataPtr() )
+        delete m_pLocaleDataWrapper;
+    if( m_pCharClass != &GetAppCharClass() )
+        delete m_pCharClass;
 }
 
 SwSbxValue SwCalc::Calculate( const OUString& rStr )
 {
-    eError = CALC_NOERR;
+    m_eError = CALC_NOERR;
     SwSbxValue nResult;
 
     if( rStr.isEmpty() )
         return nResult;
 
-    nListPor = 0;
-    eCurrListOper = CALC_PLUS; // default: sum
+    m_nListPor = 0;
+    m_eCurrListOper = CALC_PLUS; // default: sum
 
-    sCommand = rStr;
-    nCommandPos = 0;
+    m_sCommand = rStr;
+    m_nCommandPos = 0;
 
-    while( (eCurrOper = GetToken()) != CALC_ENDCALC && eError == CALC_NOERR )
+    while( (m_eCurrOper = GetToken()) != CALC_ENDCALC && m_eError == CALC_NOERR )
         nResult = Expr();
 
-    if( eError )
+    if( m_eError )
         nResult.PutDouble( DBL_MAX );
 
     return nResult;
@@ -408,7 +408,7 @@ OUString SwCalc::GetStrResult( const SwSbxValue& rVal )
 OUString SwCalc::GetStrResult( double nValue, bool )
 {
     if( nValue >= DBL_MAX )
-        switch( eError )
+        switch( m_eError )
         {
         case CALC_SYNTAX    :   return RESOURCE->aCalc_Syntax;
         case CALC_ZERODIV   :   return RESOURCE->aCalc_ZeroDiv;
@@ -425,30 +425,30 @@ OUString SwCalc::GetStrResult( double nValue, bool )
                         nValue,
                         rtl_math_StringFormat_Automatic,
                         nDecPlaces,
-                        pLclData->getNumDecimalSep()[0],
+                        m_pLocaleDataWrapper->getNumDecimalSep()[0],
                         true ));
     return aRetStr;
 }
 
 SwCalcExp* SwCalc::VarInsert( const OUString &rStr )
 {
-    OUString aStr = pCharClass->lowercase( rStr );
+    OUString aStr = m_pCharClass->lowercase( rStr );
     return VarLook( aStr, true );
 }
 
 SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
 {
-    aErrExpr.nValue.SetVoidValue(false);
+    m_aErrExpr.nValue.SetVoidValue(false);
 
     sal_uInt16 ii = 0;
-    OUString aStr = pCharClass->lowercase( rStr );
+    OUString aStr = m_pCharClass->lowercase( rStr );
 
-    SwHash* pFnd = Find( aStr, VarTable, TBLSZ, &ii );
+    SwHash* pFnd = Find( aStr, m_aVarTable, TBLSZ, &ii );
 
     if( !pFnd )
     {
         // then check doc
-        SwHash* const * ppDocTable = rDoc.getIDocumentFieldsAccess().GetUpdateFields().GetFieldTypeTable();
+        SwHash* const * ppDocTable = m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().GetFieldTypeTable();
         for( SwHash* pEntry = *(ppDocTable+ii); pEntry; pEntry = pEntry->pNext )
         {
             if( aStr == pEntry->aStr )
@@ -456,8 +456,8 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
                 // then insert here
                 pFnd = new SwCalcExp( aStr, SwSbxValue(),
                                     static_cast<SwCalcFieldType*>(pEntry)->pFieldType );
-                pFnd->pNext = *(VarTable+ii);
-                *(VarTable+ii) = pFnd;
+                pFnd->pNext = *(m_aVarTable+ii);
+                *(m_aVarTable+ii) = pFnd;
                 break;
             }
         }
@@ -477,22 +477,22 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
             else if( !pUField->IsValid() )
             {
                 // Save the current values...
-                sal_uInt16          nOld_ListPor        = nListPor;
-                SwSbxValue      nOld_LastLeft       = nLastLeft;
-                SwSbxValue      nOld_NumberValue    = nNumberValue;
-                sal_Int32      nOld_CommandPos     = nCommandPos;
-                SwCalcOper      eOld_CurrOper       = eCurrOper;
-                SwCalcOper      eOld_CurrListOper   = eCurrListOper;
+                sal_uInt16 nListPor = m_nListPor;
+                SwSbxValue nLastLeft = m_nLastLeft;
+                SwSbxValue nNumberValue = m_nNumberValue;
+                sal_Int32 nCommandPos = m_nCommandPos;
+                SwCalcOper eCurrOper = m_eCurrOper;
+                SwCalcOper eCurrListOper = m_eCurrListOper;
 
                 pFndExp->nValue.PutDouble( pUField->GetValue( *this ) );
 
                 // ...and write them back.
-                nListPor        = nOld_ListPor;
-                nLastLeft       = nOld_LastLeft;
-                nNumberValue    = nOld_NumberValue;
-                nCommandPos     = nOld_CommandPos;
-                eCurrOper       = eOld_CurrOper;
-                eCurrListOper   = eOld_CurrListOper;
+                m_nListPor = nListPor;
+                m_nLastLeft = nLastLeft;
+                m_nNumberValue = nNumberValue;
+                m_nCommandPos = nCommandPos;
+                m_eCurrOper = eCurrOper;
+                m_eCurrListOper = eCurrListOper;
             }
             else
             {
@@ -508,7 +508,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
     if( !bIns )
     {
 #if HAVE_FEATURE_DBCONNECTIVITY
-        SwDBManager *pMgr = rDoc.GetDBManager();
+        SwDBManager *pMgr = m_rDoc.GetDBManager();
 
         OUString sDBName(GetDBName( sTmpName ));
         OUString sSourceName(sDBName.getToken(0, DB_DELIM));
@@ -520,7 +520,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
             OSL_ENSURE(!sColumnName.isEmpty(), "Missing DB column name");
 
             OUString sDBNum( SwFieldType::GetTypeStr(TYP_DBSETNUMBERFLD) );
-            sDBNum = pCharClass->lowercase(sDBNum);
+            sDBNum = m_pCharClass->lowercase(sDBNum);
 
             // Initialize again because this doesn't happen in docfld anymore for
             // elements != RES_DBFLD. E.g. if there is an expression field before
@@ -529,42 +529,42 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
 
             if( sDBNum.equalsIgnoreAsciiCase(sColumnName) )
             {
-                aErrExpr.nValue.PutLong(long(pMgr->GetSelectedRecordId(sSourceName, sTableName)));
-                return &aErrExpr;
+                m_aErrExpr.nValue.PutLong(long(pMgr->GetSelectedRecordId(sSourceName, sTableName)));
+                return &m_aErrExpr;
             }
 
             sal_uLong nTmpRec = 0;
-            if( nullptr != ( pFnd = Find( sDBNum, VarTable, TBLSZ ) ) )
+            if( nullptr != ( pFnd = Find( sDBNum, m_aVarTable, TBLSZ ) ) )
                 nTmpRec = static_cast<SwCalcExp*>(pFnd)->nValue.GetULong();
 
             OUString sResult;
             double nNumber = DBL_MAX;
 
-            long nLang = pLclData->getLanguageTag().getLanguageType();
+            long nLang = m_pLocaleDataWrapper->getLanguageTag().getLanguageType();
             if(pMgr->GetColumnCnt( sSourceName, sTableName, sColumnName,
                                     nTmpRec, nLang, sResult, &nNumber ))
             {
                 if (nNumber != DBL_MAX)
-                    aErrExpr.nValue.PutDouble( nNumber );
+                    m_aErrExpr.nValue.PutDouble( nNumber );
                 else
-                    aErrExpr.nValue.PutString( sResult );
+                    m_aErrExpr.nValue.PutString( sResult );
 
-                return &aErrExpr;
+                return &m_aErrExpr;
             }
         }
         else
 #endif
         {
             //data source was not available - set return to "NoValue"
-            aErrExpr.nValue.SetVoidValue(true);
+            m_aErrExpr.nValue.SetVoidValue(true);
         }
         // NEVER save!
-        return &aErrExpr;
+        return &m_aErrExpr;
     }
 
     SwCalcExp* pNewExp = new SwCalcExp( aStr, SwSbxValue(), nullptr );
-    pNewExp->pNext = VarTable[ ii ];
-    VarTable[ ii ] = pNewExp;
+    pNewExp->pNext = m_aVarTable[ ii ];
+    m_aVarTable[ ii ] = pNewExp;
 
     OUString sColumnName( GetColumnName( sTmpName ));
     OSL_ENSURE( !sColumnName.isEmpty(), "Missing DB column name" );
@@ -572,7 +572,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
                             SwFieldType::GetTypeStr( TYP_DBSETNUMBERFLD ) ))
     {
 #if HAVE_FEATURE_DBCONNECTIVITY
-        SwDBManager *pMgr = rDoc.GetDBManager();
+        SwDBManager *pMgr = m_rDoc.GetDBManager();
         OUString sDBName(GetDBName( sTmpName ));
         OUString sSourceName(sDBName.getToken(0, DB_DELIM));
         OUString sTableName(sDBName.getToken(0, ';').getToken(1, DB_DELIM));
@@ -600,16 +600,16 @@ void SwCalc::VarChange( const OUString& rStr, double nValue )
 
 void SwCalc::VarChange( const OUString& rStr, const SwSbxValue& rValue )
 {
-    OUString aStr = pCharClass->lowercase( rStr );
+    OUString aStr = m_pCharClass->lowercase( rStr );
 
     sal_uInt16 nPos = 0;
-    SwCalcExp* pFnd = static_cast<SwCalcExp*>(Find( aStr, VarTable, TBLSZ, &nPos ));
+    SwCalcExp* pFnd = static_cast<SwCalcExp*>(Find( aStr, m_aVarTable, TBLSZ, &nPos ));
 
     if( !pFnd )
     {
         pFnd = new SwCalcExp( aStr, SwSbxValue( rValue ), nullptr );
-        pFnd->pNext = VarTable[ nPos ];
-        VarTable[ nPos ] = pFnd;
+        pFnd->pNext = m_aVarTable[ nPos ];
+        m_aVarTable[ nPos ] = pFnd;
     }
     else
     {
@@ -619,18 +619,18 @@ void SwCalc::VarChange( const OUString& rStr, const SwSbxValue& rValue )
 
 bool SwCalc::Push( const SwUserFieldType* pUserFieldType )
 {
-    if( aRekurStack.end() != std::find(aRekurStack.begin(), aRekurStack.end(), pUserFieldType ) )
+    if( m_aRekurStack.end() != std::find(m_aRekurStack.begin(), m_aRekurStack.end(), pUserFieldType ) )
         return false;
 
-    aRekurStack.push_back( pUserFieldType );
+    m_aRekurStack.push_back( pUserFieldType );
     return true;
 }
 
 void SwCalc::Pop()
 {
-    OSL_ENSURE( aRekurStack.size(), "SwCalc: Pop on an invalid pointer" );
+    OSL_ENSURE( m_aRekurStack.size(), "SwCalc: Pop on an invalid pointer" );
 
-    aRekurStack.pop_back();
+    m_aRekurStack.pop_back();
 }
 
 SwCalcOper SwCalc::GetToken()
@@ -643,36 +643,36 @@ SwCalcOper SwCalc::GetToken()
     {
 #endif
 
-    if( nCommandPos >= sCommand.getLength() )
-        return eCurrOper = CALC_ENDCALC;
+    if( m_nCommandPos >= m_sCommand.getLength() )
+        return m_eCurrOper = CALC_ENDCALC;
 
     using namespace ::com::sun::star::i18n;
     {
         // Parse any token.
-        ParseResult aRes = pCharClass->parseAnyToken( sCommand, nCommandPos,
+        ParseResult aRes = m_pCharClass->parseAnyToken( m_sCommand, m_nCommandPos,
                                                       coStartFlags, OUString(),
                                                       coContFlags, OUString());
 
         bool bSetError = true;
-        sal_Int32 nRealStt = nCommandPos + aRes.LeadingWhiteSpace;
+        sal_Int32 nRealStt = m_nCommandPos + aRes.LeadingWhiteSpace;
         if( aRes.TokenType & (KParseType::ASC_NUMBER | KParseType::UNI_NUMBER) )
         {
-            nNumberValue.PutDouble( aRes.Value );
-            eCurrOper = CALC_NUMBER;
+            m_nNumberValue.PutDouble( aRes.Value );
+            m_eCurrOper = CALC_NUMBER;
             bSetError = false;
         }
         else if( aRes.TokenType & KParseType::IDENTNAME )
         {
-            OUString aName( sCommand.copy( nRealStt,
+            OUString aName( m_sCommand.copy( nRealStt,
                             aRes.EndPos - nRealStt ) );
             //#101436#: The variable may contain a database name. It must not be
             // converted to lower case! Instead all further comparisons must be
             // done case-insensitive
-            OUString sLowerCaseName = pCharClass->lowercase( aName );
+            OUString sLowerCaseName = m_pCharClass->lowercase( aName );
             // catch currency symbol
-            if( sLowerCaseName == sCurrSym )
+            if( sLowerCaseName == m_sCurrSym )
             {
-                nCommandPos = aRes.EndPos;
+                m_nCommandPos = aRes.EndPos;
                 return GetToken(); // call again
             }
 
@@ -680,40 +680,40 @@ SwCalcOper SwCalc::GetToken()
             CalcOp* pFnd = ::FindOperator( sLowerCaseName );
             if( pFnd )
             {
-                switch( ( eCurrOper = pFnd->eOp ) )
+                switch( ( m_eCurrOper = pFnd->eOp ) )
                 {
                 case CALC_SUM:
                 case CALC_MEAN:
-                    eCurrListOper = CALC_PLUS;
+                    m_eCurrListOper = CALC_PLUS;
                     break;
                 case CALC_MIN:
-                    eCurrListOper = CALC_MIN_IN;
+                    m_eCurrListOper = CALC_MIN_IN;
                     break;
                 case CALC_MAX:
-                    eCurrListOper = CALC_MAX_IN;
+                    m_eCurrListOper = CALC_MAX_IN;
                     break;
                 case CALC_DATE:
-                    eCurrListOper = CALC_MONTH;
+                    m_eCurrListOper = CALC_MONTH;
                     break;
                 default:
                     break;
                 }
-                nCommandPos = aRes.EndPos;
-                return eCurrOper;
+                m_nCommandPos = aRes.EndPos;
+                return m_eCurrOper;
             }
-            aVarName = aName;
-            eCurrOper = CALC_NAME;
+            m_aVarName = aName;
+            m_eCurrOper = CALC_NAME;
             bSetError = false;
         }
         else if ( aRes.TokenType & KParseType::DOUBLE_QUOTE_STRING )
         {
-            nNumberValue.PutString( aRes.DequotedNameOrString );
-            eCurrOper = CALC_NUMBER;
+            m_nNumberValue.PutString( aRes.DequotedNameOrString );
+            m_eCurrOper = CALC_NUMBER;
             bSetError = false;
         }
         else if( aRes.TokenType & KParseType::ONE_SINGLE_CHAR )
         {
-            OUString aName( sCommand.copy( nRealStt,
+            OUString aName( m_sCommand.copy( nRealStt,
                               aRes.EndPos - nRealStt ));
             if( 1 == aName.getLength() )
             {
@@ -722,14 +722,14 @@ SwCalcOper SwCalc::GetToken()
                 switch( ch )
                 {
                 case ';':
-                    if( CALC_MONTH == eCurrListOper || CALC_DAY == eCurrListOper )
+                    if( CALC_MONTH == m_eCurrListOper || CALC_DAY == m_eCurrListOper )
                     {
-                        eCurrOper = eCurrListOper;
+                        m_eCurrOper = m_eCurrListOper;
                         break;
                     }
                     SAL_FALLTHROUGH;
                 case '\n':
-                    eCurrOper = CALC_PRINT;
+                    m_eCurrOper = CALC_PRINT;
                     break;
 
                 case '%':
@@ -740,7 +740,7 @@ SwCalcOper SwCalc::GetToken()
                 case '-':
                 case '(':
                 case ')':
-                    eCurrOper = SwCalcOper(ch);
+                    m_eCurrOper = SwCalcOper(ch);
                     break;
 
                 case '=':
@@ -749,43 +749,43 @@ SwCalcOper SwCalc::GetToken()
                         SwCalcOper eTmp2;
                         if( '=' == ch )
                         {
-                            eCurrOper = SwCalcOper('=');
+                            m_eCurrOper = SwCalcOper('=');
                             eTmp2 = CALC_EQ;
                         }
                         else
                         {
-                            eCurrOper = CALC_NOT;
+                            m_eCurrOper = CALC_NOT;
                             eTmp2 = CALC_NEQ;
                         }
 
-                        if( aRes.EndPos < sCommand.getLength() &&
-                            '=' == sCommand[aRes.EndPos] )
+                        if( aRes.EndPos < m_sCommand.getLength() &&
+                            '=' == m_sCommand[aRes.EndPos] )
                         {
-                            eCurrOper = eTmp2;
+                            m_eCurrOper = eTmp2;
                             ++aRes.EndPos;
                         }
                     }
                     break;
 
                 case cListDelim:
-                    eCurrOper = eCurrListOper;
+                    m_eCurrOper = m_eCurrListOper;
                     break;
 
                 case '[':
-                    if( aRes.EndPos < sCommand.getLength() )
+                    if( aRes.EndPos < m_sCommand.getLength() )
                     {
-                        aVarName.clear();
+                        m_aVarName.clear();
                         sal_Int32 nFndPos = aRes.EndPos,
                                   nSttPos = nFndPos;
 
                         do {
                             if( -1 != ( nFndPos =
-                                sCommand.indexOf( ']', nFndPos )) )
+                                m_sCommand.indexOf( ']', nFndPos )) )
                             {
                                 // ignore the ]
-                                if ('\\' == sCommand[nFndPos-1])
+                                if ('\\' == m_sCommand[nFndPos-1])
                                 {
-                                    aVarName += sCommand.copy( nSttPos,
+                                    m_aVarName += m_sCommand.copy( nSttPos,
                                                     nFndPos - nSttPos - 1 );
                                     nSttPos = ++nFndPos;
                                 }
@@ -797,10 +797,10 @@ SwCalcOper SwCalc::GetToken()
                         if( nFndPos != -1 )
                         {
                             if( nSttPos != nFndPos )
-                                aVarName += sCommand.copy( nSttPos,
+                                m_aVarName += m_sCommand.copy( nSttPos,
                                                     nFndPos - nSttPos );
                             aRes.EndPos = nFndPos + 1;
-                            eCurrOper = CALC_NAME;
+                            m_eCurrOper = CALC_NAME;
                         }
                         else
                             bSetError = true;
@@ -819,7 +819,7 @@ SwCalcOper SwCalc::GetToken()
         }
         else if( aRes.TokenType & KParseType::BOOLEAN )
         {
-            OUString aName( sCommand.copy( nRealStt,
+            OUString aName( m_sCommand.copy( nRealStt,
                                          aRes.EndPos - nRealStt ));
             if( !aName.isEmpty() )
             {
@@ -831,27 +831,27 @@ SwCalcOper SwCalc::GetToken()
                     bSetError = false;
 
                     SwCalcOper eTmp2 = ('<' == ch) ? CALC_LEQ : CALC_GEQ;
-                    eCurrOper = ('<' == ch) ? CALC_LES : CALC_GRE;
+                    m_eCurrOper = ('<' == ch) ? CALC_LES : CALC_GRE;
 
                     if( 2 == aName.getLength() && '=' == aName[1] )
-                        eCurrOper = eTmp2;
+                        m_eCurrOper = eTmp2;
                     else if( 1 != aName.getLength() )
                         bSetError = true;
                 }
             }
         }
-        else if( nRealStt == sCommand.getLength() )
+        else if( nRealStt == m_sCommand.getLength() )
         {
-            eCurrOper = CALC_ENDCALC;
+            m_eCurrOper = CALC_ENDCALC;
             bSetError = false;
         }
 
         if( bSetError )
         {
-            eError = CALC_SYNTAX;
-            eCurrOper = CALC_PRINT;
+            m_eError = CALC_SYNTAX;
+            m_eCurrOper = CALC_PRINT;
         }
-        nCommandPos = aRes.EndPos;
+        m_nCommandPos = aRes.EndPos;
     };
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1069,18 +1069,18 @@ SwCalcOper SwCalc::GetToken()
         }
     }
 #endif
-    return eCurrOper;
+    return m_eCurrOper;
 }
 
 SwSbxValue SwCalc::Term()
 {
     SwSbxValue left( Prim() );
-    nLastLeft = left;
+    m_nLastLeft = left;
     for(;;)
     {
         sal_uInt16 nSbxOper = USHRT_MAX;
 
-        switch( eCurrOper )
+        switch( m_eCurrOper )
         {
         case CALC_AND:
             {
@@ -1138,7 +1138,7 @@ SwSbxValue SwCalc::Term()
                 sal_Int32 nMonth = (sal_Int32) floor( e.GetDouble() );
                 nMonth = ( nMonth & 0x000000FF ) << 16;
                 left.PutLong( nMonth + nYear );
-                eCurrOper = CALC_DAY;
+                m_eCurrOper = CALC_DAY;
             }
             break;
         case CALC_DAY:
@@ -1149,7 +1149,7 @@ SwSbxValue SwCalc::Term()
                 nYearMonth = nYearMonth & 0x00FFFFFF;
                 sal_Int32 nDay = (sal_Int32) floor( e.GetDouble() );
                 nDay = ( nDay & 0x000000FF ) << 24;
-                left = lcl_ConvertToDateValue( rDoc, nDay + nYearMonth );
+                left = lcl_ConvertToDateValue( m_rDoc, nDay + nYearMonth );
             }
             break;
         case CALC_ROUND:
@@ -1162,7 +1162,7 @@ SwSbxValue SwCalc::Term()
                 sal_Int32 nDec = (sal_Int32) floor( e.GetDouble() );
                 if( nDec < -20 || nDec > 20 )
                 {
-                    eError = CALC_OVERFLOW;
+                    m_eError = CALC_OVERFLOW;
                     left.Clear();
                     return left;
                 }
@@ -1245,7 +1245,7 @@ SwSbxValue SwCalc::Term()
                 left.MakeDouble();
 
                 if( SbxDIV == eSbxOper && !aRight.GetDouble() )
-                    eError = CALC_ZERODIV;
+                    m_eError = CALC_ZERODIV;
                 else
                     left.Compute( eSbxOper, aRight );
             }
@@ -1263,7 +1263,7 @@ SwSbxValue SwCalc::Prim()
 
     bool bChkTrig = false, bChkPow = false;
 
-    switch( eCurrOper )
+    switch( m_eCurrOper )
     {
     case CALC_SIN:  pFnc = &sin;  break;
     case CALC_COS:  pFnc = &cos;  break;
@@ -1302,18 +1302,18 @@ SwSbxValue SwCalc::Prim()
     case CALC_NUMBER:
         if( GetToken() == CALC_PHD )
         {
-            double aTmp = nNumberValue.GetDouble();
+            double aTmp = m_nNumberValue.GetDouble();
             aTmp *= 0.01;
             nErg.PutDouble( aTmp );
             GetToken();
         }
-        else if( eCurrOper == CALC_NAME )
+        else if( m_eCurrOper == CALC_NAME )
         {
-            eError = CALC_SYNTAX;
+            m_eError = CALC_SYNTAX;
         }
         else
         {
-            nErg = nNumberValue;
+            nErg = m_nNumberValue;
             bChkPow = true;
         }
         break;
@@ -1323,17 +1323,17 @@ SwSbxValue SwCalc::Prim()
         {
             case CALC_ASSIGN:
                 {
-                    SwCalcExp* n = VarInsert(aVarName);
+                    SwCalcExp* n = VarInsert(m_aVarName);
                     GetToken();
                     nErg = n->nValue = Expr();
                 }
                 break;
             default:
-                nErg = VarLook(aVarName)->nValue;
+                nErg = VarLook(m_aVarName)->nValue;
                 // Explicitly disallow unknown function names (followed by "("),
                 // allow unknown variable names (equal to zero)
                 if (nErg.IsVoidValue() && (eOper == CALC_LP))
-                    eError = CALC_SYNTAX;
+                    m_eError = CALC_SYNTAX;
                 else
                     bChkPow = true;
         }
@@ -1348,9 +1348,9 @@ SwSbxValue SwCalc::Prim()
         {
             GetToken();
             nErg = Expr();
-            if( eCurrOper != CALC_RP )
+            if( m_eCurrOper != CALC_RP )
             {
-                eError = CALC_BRACK;
+                m_eError = CALC_BRACK;
             }
             else
             {
@@ -1362,11 +1362,11 @@ SwSbxValue SwCalc::Prim()
 
     case CALC_MEAN:
         {
-            nListPor = 1;
+            m_nListPor = 1;
             GetToken();
             nErg = Expr();
             double aTmp = nErg.GetDouble();
-            aTmp /= nListPor;
+            aTmp /= m_nListPor;
             nErg.PutDouble( aTmp );
         }
         break;
@@ -1376,7 +1376,7 @@ SwSbxValue SwCalc::Prim()
             GetToken();
             nErg = Prim();
             if( nErg.GetDouble() < 0 )
-                eError = CALC_OVERFLOW;
+                m_eError = CALC_OVERFLOW;
             else
                 nErg.PutDouble( sqrt( nErg.GetDouble() ));
         }
@@ -1395,7 +1395,7 @@ SwSbxValue SwCalc::Prim()
         break;
 
     default:
-        eError = CALC_SYNTAX;
+        m_eError = CALC_SYNTAX;
         break;
     }
 
@@ -1406,10 +1406,10 @@ SwSbxValue SwCalc::Prim()
         if( !bChkTrig || ( nVal > -1 && nVal < 1 ) )
             nErg.PutDouble( (*pFnc)( nVal ) );
         else
-            eError = CALC_OVERFLOW;
+            m_eError = CALC_OVERFLOW;
     }
 
-    if( bChkPow && eCurrOper == CALC_POW )
+    if( bChkPow && m_eCurrOper == CALC_POW )
     {
         double dleft = nErg.GetDouble();
         GetToken();
@@ -1420,7 +1420,7 @@ SwSbxValue SwCalc::Prim()
         if( ( dleft < 0.0 && 0.0 != fraction ) ||
             ( 0.0 == dleft && right < 0.0 ) )
         {
-            eError = CALC_OVERFLOW;
+            m_eError = CALC_OVERFLOW;
             nErg.Clear();
         }
         else
@@ -1428,7 +1428,7 @@ SwSbxValue SwCalc::Prim()
             dleft = pow(dleft, right );
             if( dleft == HUGE_VAL )
             {
-                eError = CALC_POWERR;
+                m_eError = CALC_POWERR;
                 nErg.Clear();
             }
             else
@@ -1444,17 +1444,17 @@ SwSbxValue SwCalc::Prim()
 SwSbxValue  SwCalc::Expr()
 {
     SwSbxValue left = Term(), right;
-    nLastLeft = left;
+    m_nLastLeft = left;
     for(;;)
     {
-        switch(eCurrOper)
+        switch(m_eCurrOper)
         {
         case CALC_PLUS:
             GetToken();
             left.MakeDouble();
             ( right = Term() ).MakeDouble();
             left.Compute( SbxPLUS, right );
-            nListPor++;
+            m_nListPor++;
             break;
 
         case CALC_MINUS:
@@ -1493,7 +1493,7 @@ OUString SwCalc::GetDBName(const OUString& rName)
         if( -1 != nPos )
             return rName.copy( 0, nPos );
     }
-    SwDBData aData = rDoc.GetDBData();
+    SwDBData aData = m_rDoc.GetDBData();
     OUString sRet = aData.sDataSource;
     sRet += OUString(DB_DELIM);
     sRet += aData.sCommand;
