@@ -480,11 +480,7 @@ void SbaTableQueryBrowser::impl_sanitizeRowSetClauses_nothrow()
         // "SELECT * FROM <table> WHERE <other_table>.<column> = <value>", it will return "<column>". But
         // there's no API at all to retrieve the information about  "<other_table>" - which is what would
         // be needed here.
-        // That'd be a chance to replace getStructuredFilter with something more reasonable. This method
-        // has at least one other problem: for a clause like "<column> != <value>", it will return "<column>"
-        // as column name, "NOT_EQUAL" as operator, and "!= <value>" as value, effectively duplicating the
-        // information about the operator, and begging all clients to manually remove the "!=" from the value
-        // string.
+        // That'd be a chance to replace getStructuredFilter with something more reasonable.
         // So, what really would be handy, is some
         //   XNormalizedFilter getNormalizedFilter();
         // with

@@ -429,62 +429,6 @@ public class SQLQueryComposer
         }
     }
 
-    /**
-     * retrieves a normalized structured filter
-     *
-     * <p>XSingleSelectQueryComposer.getStructuredFilter has a strange habit of returning the predicate (equal, not equal, etc)
-     * effectively twice: Once as SQLFilterOperator, and once in the value. That is, if you have a term {@literal "column <> 3"}, then
-     * you'll get an SQLFilterOperator.NOT_EQUAL (which is fine), <strong>and</strong> the textual value of the condition
-     * will read {@literal "<> 3"}. The latter is strange enough, but even more strange is that this behavior is not even consistent:
-     * for SQLFilterOperator.EQUAL, the "=" sign is not include in the textual value.</p>
-     *
-     * <p>To abstract from this weirdness, use this function here, which strips the unwanted tokens from the textual value
-     * representation.</p>
-     */
-    public PropertyValue[][] getNormalizedStructuredFilter()
-    {
-        final PropertyValue[][] structuredFilter = m_queryComposer.getStructuredFilter();
-        for (int i = 0; i < structuredFilter.length; ++i)
-        {
-            for (int j = 0; j < structuredFilter[i].length; ++j)
-            {
-                if (!(structuredFilter[i][j].Value instanceof String))
-                {
-                    continue;
-                }
-                final StringBuffer textualValue = new StringBuffer((String) structuredFilter[i][j].Value);
-                switch (structuredFilter[i][j].Handle)
-                {
-                    case SQLFilterOperator.EQUAL:
-                        break;
-                    case SQLFilterOperator.NOT_EQUAL:
-                    case SQLFilterOperator.LESS_EQUAL:
-                    case SQLFilterOperator.GREATER_EQUAL:
-                        textualValue.delete(0, 2);
-                        break;
-                    case SQLFilterOperator.LESS:
-                    case SQLFilterOperator.GREATER:
-                        textualValue.delete(0, 1);
-                        break;
-                    case SQLFilterOperator.NOT_LIKE:
-                        textualValue.delete(0, 8);
-                        break;
-                    case SQLFilterOperator.LIKE:
-                        textualValue.delete(0, 4);
-                        break;
-                    case SQLFilterOperator.SQLNULL:
-                        textualValue.delete(0, 7);
-                        break;
-                    case SQLFilterOperator.NOT_SQLNULL:
-                        textualValue.delete(0, 11);
-                        break;
-                }
-                structuredFilter[i][j].Value = textualValue.toString().trim();
-            }
-        }
-        return structuredFilter;
-    }
-
     public XSingleSelectQueryComposer getQueryComposer()
     {
         return m_queryComposer;
