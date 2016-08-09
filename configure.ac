@@ -1398,7 +1398,7 @@ AC_ARG_ENABLE(extension-update,
 AC_ARG_ENABLE(release-build,
     AS_HELP_STRING([--enable-release-build],
         [Enable release build.
-         See http://wiki.documentfoundation.org/DevBuild]),
+         See http://wiki.documentfoundation.org/Development/DevBuild]),
 ,)
 
 AC_ARG_ENABLE(windows-build-signing,
