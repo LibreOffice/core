@@ -745,7 +745,7 @@ void ScPostIt::RemoveCaption()
         {
             pDrawPage->RecalcObjOrdNums();
             // create drawing undo action (before removing the object to have valid draw page in undo action)
-            bool bRecording = ( pDrawLayer && pDrawLayer->IsRecording() );
+            const bool bRecording = (pDrawLayer && pDrawLayer->IsRecording());
             if( bRecording )
                 pDrawLayer->AddCalcUndo( new SdrUndoDelObj( *maNoteData.mpCaption ) );
             // remove the object from the drawing page, delete if undo is disabled
