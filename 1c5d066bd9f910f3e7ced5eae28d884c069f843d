@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3a98d1f4_0d3bb6ec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-08-09T15:56:31Z",
+      "side": 1,
+      "message": "No, this is still valid.\nThe patch resolves symlinks also for writer and impress.",
+      "parentUuid": "3a98d1f4_0d9f3604",
+      "range": {
+        "startLine": 7,
+        "startChar": 34,
+        "endLine": 7,
+        "endChar": 58
+      },
+      "revId": "1c5d066bd9f910f3e7ced5eae28d884c069f843d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a98d1f4_6dffda34",
         "filename": "include/tools/urlobj.hxx",
         "patchSetId": 5
@@ -36,6 +60,24 @@
       "writtenOn": "2016-08-09T13:12:08Z",
       "side": 1,
       "message": "This looks odd. So any relative URL starting with ../ will be resolved? Looks wrong to me.",
+      "revId": "1c5d066bd9f910f3e7ced5eae28d884c069f843d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_2d407256",
+        "filename": "include/tools/urlobj.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1234,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-08-09T15:56:31Z",
+      "side": 1,
+      "message": "There are also related paths starting with \"file:///\" which should not be resolved.",
+      "parentUuid": "3a98d1f4_6dffda34",
       "revId": "1c5d066bd9f910f3e7ced5eae28d884c069f843d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "3a98d1f4_4d25bec0",
+        "filename": "include/tools/urlobj.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-08-09T15:56:31Z",
+      "side": 1,
+      "message": "There are also related paths starting with \"file:///\" which should not be resolved. Without this filter a few unit tests fail.",
+      "parentUuid": "3a98d1f4_8dfc2640",
+      "revId": "1c5d066bd9f910f3e7ced5eae28d884c069f843d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a98d1f4_adf9e24f",
         "filename": "include/tools/urlobj.hxx",
         "patchSetId": 5
@@ -70,6 +130,24 @@
       "writtenOn": "2016-08-09T13:12:08Z",
       "side": 1,
       "message": "Always resolving here for all callers also doesn\u0027t look right to me.",
+      "revId": "1c5d066bd9f910f3e7ced5eae28d884c069f843d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_6d227abb",
+        "filename": "include/tools/urlobj.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1296,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-08-09T15:56:31Z",
+      "side": 1,
+      "message": "will be fixed",
+      "parentUuid": "3a98d1f4_adf9e24f",
       "revId": "1c5d066bd9f910f3e7ced5eae28d884c069f843d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -99,6 +177,30 @@
     },
     {
       "key": {
+        "uuid": "3a98d1f4_0d12d662",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1481,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-08-09T15:56:31Z",
+      "side": 1,
+      "message": "Should be replaced by replaceLast()?",
+      "parentUuid": "3a98d1f4_cd946eea",
+      "range": {
+        "startLine": 1481,
+        "startChar": 76,
+        "endLine": 1481,
+        "endChar": 88
+      },
+      "revId": "1c5d066bd9f910f3e7ced5eae28d884c069f843d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a98d1f4_ed992a21",
         "filename": "tools/source/fsys/urlobj.cxx",
         "patchSetId": 5
@@ -110,6 +212,30 @@
       "writtenOn": "2016-08-09T13:12:08Z",
       "side": 1,
       "message": "So, what about pipes and maybe other non-file types?",
+      "range": {
+        "startLine": 1482,
+        "startChar": 38,
+        "endLine": 1482,
+        "endChar": 46
+      },
+      "revId": "1c5d066bd9f910f3e7ced5eae28d884c069f843d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a98d1f4_ed1cca79",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1482,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-08-09T15:56:31Z",
+      "side": 1,
+      "message": "Only file paths should be resolved. Are there any use cases for pipes or non-file types?",
+      "parentUuid": "3a98d1f4_ed992a21",
       "range": {
         "startLine": 1482,
         "startChar": 38,
