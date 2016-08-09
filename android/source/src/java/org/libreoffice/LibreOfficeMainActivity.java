@@ -96,6 +96,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         return mTempFile != null;
     }
 
+    private boolean isKeyboardOpen = false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.w(LOGTAG, "onCreate..");
@@ -368,13 +369,18 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
      * Show software keyboard.
      * Force the request on main thread.
      */
+
+
     public void showSoftKeyboard() {
+
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
-                showSoftKeyboardDirect();
+                if(!isKeyboardOpen) showSoftKeyboardDirect();
+                else hideSoftKeyboardDirect();
             }
         });
+
     }
 
     private void showSoftKeyboardDirect() {
@@ -384,7 +390,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
             InputMethodManager inputMethodManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.showSoftInput(layerView, InputMethodManager.SHOW_FORCED);
         }
-
+        isKeyboardOpen=true;
         hideBottomToolbar();
     }
 
@@ -419,6 +425,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         if (getCurrentFocus() != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            isKeyboardOpen=false;
         }
     }
 
