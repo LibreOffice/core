@@ -98,7 +98,7 @@ SvNumberFormatter* ScPoolHelper::CreateNumberFormatter() const
     SvNumberFormatter* p = nullptr;
     {
         osl::MutexGuard aGuard(&maMtxCreateNumFormatter);
-        p = new SvNumberFormatter(comphelper::getProcessComponentContext(), ScGlobal::eLnge);
+        p = new SvNumberFormatter(comphelper::getProcessComponentContext(), LANGUAGE_SYSTEM);
     }
     p->SetColorLink( LINK(m_pSourceDoc, ScDocument, GetUserDefinedColor) );
     p->SetEvalDateFormat(NF_EVALDATEFORMAT_INTL_FORMAT);
