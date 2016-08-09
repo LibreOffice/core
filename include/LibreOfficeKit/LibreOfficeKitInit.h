@@ -161,19 +161,20 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
 
     // allocate large enough buffer
     partial_length = strlen(install_path);
-    imp_lib = (char *) malloc(partial_length + sizeof(TARGET_LIB) + sizeof(TARGET_MERGED_LIB) + 2);
+    size_t imp_lib_size = partial_length + sizeof(TARGET_LIB) + sizeof(TARGET_MERGED_LIB) + 2;
+    imp_lib = (char *) malloc(imp_lib_size);
     if (!imp_lib)
     {
         fprintf( stderr, "failed to open library : not enough memory\n");
         return NULL;
     }
 
-    strcpy(imp_lib, install_path);
+    strncpy(imp_lib, install_path, imp_lib_size);
 
     extendUnoPath(install_path);
 
     imp_lib[partial_length++] = SEPARATOR;
-    strcpy(imp_lib + partial_length, TARGET_LIB);
+    strncpy(imp_lib + partial_length, TARGET_LIB, imp_lib_size - partial_length);
 
     dlhandle = lok_loadlib(imp_lib);
     if (!dlhandle)
@@ -191,7 +192,7 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
             return NULL;
         }
 
-        strcpy(imp_lib + partial_length, TARGET_MERGED_LIB);
+        strncpy(imp_lib + partial_length, TARGET_MERGED_LIB, imp_lib_size - partial_length);
 
         dlhandle = lok_loadlib(imp_lib);
         if (!dlhandle)
