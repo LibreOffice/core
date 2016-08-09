@@ -1641,6 +1641,7 @@ ToFile( "ENABLE_PDFIMPORT",  "@ENABLE_PDFIMPORT@", "e" );
 ToFile( "ENABLE_REPORTBUILDER","@ENABLE_REPORTBUILDER@","e" );
 ToFile( "SYSTEM_JFREEREPORT","@SYSTEM_JFREEREPORT@","e" );
 ToFile( "OOO_JUNIT_JAR",     "@OOO_JUNIT_JAR@",    "e" );
+ToFile( "HAMCREST_CORE_JAR", "@HAMCREST_CORE_JAR@","e" );
 ToFile( "SAC_JAR",           "@SAC_JAR@",          "e" );
 ToFile( "LIBXML_JAR",        "@LIBXML_JAR@",       "e" );
 ToFile( "FLUTE_JAR",         "@FLUTE_JAR@",        "e" );
