@@ -1115,7 +1115,7 @@ sal_Int32 OSingleSelectQueryComposer::getPredicateType(OSQLParseNode * _pPredica
 bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition, OSQLParseTreeIterator& _rIterator,
                                             ::std::vector < PropertyValue >& rFilter, const Reference< css::util::XNumberFormatter > & xFormatter) const
 {
-    OSL_ENSURE(SQL_ISRULE(pCondition, comparison_predicate),"setComparsionPredicate: pCondition ist kein ComparsionPredicate");
+    OSL_ENSURE(SQL_ISRULE(pCondition, comparison_predicate),"setComparsionPredicate: pCondition is not a ComparsionPredicate");
     if (SQL_ISRULE(pCondition->getChild(0), column_ref) ||
         SQL_ISRULE(pCondition->getChild(pCondition->count()-1), column_ref))
     {
@@ -1128,12 +1128,9 @@ bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pConditi
             sal_uInt32 i=1;
 
             aItem.Handle = getPredicateType(pCondition->getChild(i));
-            // don't display the equal
-            if (pCondition->getChild(i)->getNodeType() == SQLNodeType::Equal)
-                i++;
 
-            // go forward
-            for (;i < pCondition->count();i++)
+            // go forward - don't display the operator
+            for (i++;i < pCondition->count();i++)
                 pCondition->getChild(i)->parseNodeToPredicateStr(
                     aValue, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>(m_sDecimalSep.toChar() ) );
         }
@@ -1145,44 +1142,33 @@ bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pConditi
             switch (pCondition->getChild(i)->getNodeType())
             {
                 case SQLNodeType::Equal:
-                    // don't display the equal
-                    i--;
                     aItem.Handle = SQLFilterOperator::EQUAL;
                     break;
                 case SQLNodeType::NotEqual:
-                    i--;
                     aItem.Handle = SQLFilterOperator::NOT_EQUAL;
                     break;
                 case SQLNodeType::Less:
                     // take the opposite as we change the order
-                    i--;
-                    aValue = ">=";
                     aItem.Handle = SQLFilterOperator::GREATER_EQUAL;
                     break;
                 case SQLNodeType::LessEq:
                     // take the opposite as we change the order
-                    i--;
-                    aValue = ">";
                     aItem.Handle = SQLFilterOperator::GREATER;
                     break;
                 case SQLNodeType::Great:
                     // take the opposite as we change the order
-                    i--;
-                    aValue = "<=";
                     aItem.Handle = SQLFilterOperator::LESS_EQUAL;
                     break;
                 case SQLNodeType::GreatEq:
                     // take the opposite as we change the order
-                    i--;
-                    aValue = "<";
                     aItem.Handle = SQLFilterOperator::LESS;
                     break;
                 default:
                     break;
             }
 
-            // go backward
-            for (; i >= 0; i--)
+            // go backward - don't display the operator
+            for (i--; i >= 0; i--)
                 pCondition->getChild(i)->parseNodeToPredicateStr(
                     aValue, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep.toChar() ) );
         }
@@ -1728,6 +1714,7 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
 
     Sequence< Sequence< PropertyValue > > aFilterSeq;
     OUString sFilter = getStatementPart( _aGetFunctor, m_aAdditiveIterator );
+
 
     if ( !sFilter.isEmpty() )
     {
