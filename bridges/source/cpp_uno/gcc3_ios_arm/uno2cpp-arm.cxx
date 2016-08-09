@@ -114,6 +114,7 @@ void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionReference * 
         case typelib_TypeClass_HYPER:
         case typelib_TypeClass_UNSIGNED_HYPER:
             pRegisterReturn[1] = r1;
+            SAL_FALLTHROUGH;
         case typelib_TypeClass_LONG:
         case typelib_TypeClass_UNSIGNED_LONG:
         case typelib_TypeClass_ENUM:
@@ -654,6 +655,7 @@ void unoInterfaceProxyDispatch(
                 TYPELIB_DANGER_RELEASE( pTD );
             }
         } // else perform queryInterface()
+        SAL_FALLTHROUGH;
         default:
             // dependent dispatch
             cpp_call(
