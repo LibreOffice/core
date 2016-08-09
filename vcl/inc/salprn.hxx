@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_SALPRN_HXX
 
 #include <vcl/prntypes.hxx>
+#include <vcl/dllapi.h>
 
 #include "salptype.hxx"
 
