@@ -39,6 +39,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentState.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace ::com::sun::star;
 
@@ -296,7 +297,7 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
 
 bool
 UndoManager::GetLastUndoInfo(
-        OUString *const o_pStr, SwUndoId *const o_pId) const
+        OUString *const o_pStr, SwUndoId *const o_pId, const SwView* pView) const
 {
     // this is actually expected to work on the current level,
     // but that was really not obvious from the previous implementation...
@@ -306,6 +307,14 @@ UndoManager::GetLastUndoInfo(
     }
 
     SfxUndoAction *const pAction( SdrUndoManager::GetUndoAction() );
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // If an other view created the undo action, prevent undoing it from this view.
+        sal_Int32 nViewShellId = pView ? pView->GetViewShellId() : m_pDocShell->GetView()->GetViewShellId();
+        if (pAction->GetViewShellId() != nViewShellId)
+            return false;
+    }
 
     if (o_pStr)
     {
@@ -338,7 +347,8 @@ SwUndoComments_t UndoManager::GetUndoComments() const
 }
 
 bool UndoManager::GetFirstRedoInfo(OUString *const o_pStr,
-                                   SwUndoId *const o_pId) const
+                                   SwUndoId *const o_pId,
+                                   const SwView* pView) const
 {
     if (!SdrUndoManager::GetRedoActionCount())
     {
@@ -349,6 +359,14 @@ bool UndoManager::GetFirstRedoInfo(OUString *const o_pStr,
     if ( pAction == nullptr )
     {
         return false;
+    }
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // If an other view created the undo action, prevent redoing it from this view.
+        sal_Int32 nViewShellId = pView ? pView->GetViewShellId() : m_pDocShell->GetView()->GetViewShellId();
+        if (pAction->GetViewShellId() != nViewShellId)
+            return false;
     }
 
     if (o_pStr)

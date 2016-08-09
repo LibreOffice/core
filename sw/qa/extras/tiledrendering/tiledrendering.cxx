@@ -60,6 +60,7 @@ public:
     void testViewLock();
     void testTextEditViewInvalidations();
     void testUndoInvalidations();
+    void testUndoLimiting();
     void testShapeTextUndoShells();
     void testShapeTextUndoGroupShells();
 
@@ -87,6 +88,7 @@ public:
     CPPUNIT_TEST(testViewLock);
     CPPUNIT_TEST(testTextEditViewInvalidations);
     CPPUNIT_TEST(testUndoInvalidations);
+    CPPUNIT_TEST(testUndoLimiting);
     CPPUNIT_TEST(testShapeTextUndoShells);
     CPPUNIT_TEST(testShapeTextUndoGroupShells);
     CPPUNIT_TEST_SUITE_END();
@@ -868,10 +870,12 @@ void SwTiledRenderingTest::testUndoInvalidations()
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     ViewCallback aView1;
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    int nView1 = SfxLokHelper::getView();
     SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ViewCallback aView2;
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    SfxLokHelper::setView(nView1);
 
     // Insert a character the end of the document.
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
@@ -892,6 +896,30 @@ void SwTiledRenderingTest::testUndoInvalidations()
 
     mxComponent->dispose();
     mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testUndoLimiting()
+{
+    // Load a document and create two views.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SfxLokHelper::createView();
+    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    // Insert a character the end of the document in the second view.
+    SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell2->EndDoc();
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
+    SwShellCursor* pShellCursor = pWrtShell2->getShellCursor(false);
+    CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb.c"), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+
+    // Assert that the first view can't undo, but the second view can.
+    CPPUNIT_ASSERT(!pWrtShell1->GetLastUndoInfo(nullptr, nullptr, &pWrtShell1->GetView()));
+    CPPUNIT_ASSERT(pWrtShell2->GetLastUndoInfo(nullptr, nullptr, &pWrtShell2->GetView()));
+
     comphelper::LibreOfficeKit::setActive(false);
 }
 
