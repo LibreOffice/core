@@ -1066,6 +1066,13 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
                 for (sw::mark::IMark* pMark : aSeenMarks)
                     pMarkAccess->repositionMark(pMark, aPaM);
             }
+
+            // Flush the page break, if we want to keep it
+            if ( !bDeletePrevious )
+            {
+                pTargetShell->EndAllAction();
+                pTargetShell->StartAllAction();
+            }
         }
     }
 #ifdef DBG_UTIL
