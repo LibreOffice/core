@@ -117,7 +117,6 @@ ODesignView::ODesignView(   vcl::Window* pParent,
     m_aSplitWin->SetAlign(WindowAlign::Left);
     m_aSplitWin->Show();
 
-    m_aMarkIdle.SetPriority( SchedulerPriority::LOW );
     m_aMarkIdle.SetIdleHdl( LINK( this, ODesignView, MarkTimeout ) );
 }
 

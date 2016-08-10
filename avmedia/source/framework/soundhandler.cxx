@@ -221,7 +221,7 @@ void SAL_CALL SoundHandler::dispatchWithNotification(const css::util::URL&      
         // Count this request and initialize self-holder against dying by uno ref count ...
         m_xSelfHold.set(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
         m_xPlayer->start();
-        m_aUpdateIdle.SetPriority( SchedulerPriority::LOWER );
+        m_aUpdateIdle.SetPriority( SchedulerPriority::HIGH_IDLE );
         m_aUpdateIdle.Start();
     }
     catch( css::uno::Exception& e )

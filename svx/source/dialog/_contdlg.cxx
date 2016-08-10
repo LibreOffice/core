@@ -286,7 +286,6 @@ SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *
 
     Resize();
 
-    aUpdateIdle.SetPriority( SchedulerPriority::LOW );
     aUpdateIdle.SetIdleHdl( LINK( this, SvxSuperContourDlg, UpdateHdl ) );
 
     aCreateIdle.SetPriority( SchedulerPriority::RESIZE );
