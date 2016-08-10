@@ -135,6 +135,7 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
         m_xToolbarManager = new ToolbarLayoutManager( xContext, Reference<XUIElementFactory>(m_xUIElementFactoryManager, UNO_QUERY_THROW), this );
     }
 
+    m_aAsyncLayoutTimer.SetPriority( TaskPriority::HIGH_IDLE );
     m_aAsyncLayoutTimer.SetTimeout( 50 );
     m_aAsyncLayoutTimer.SetInvokeHandler( LINK( this, LayoutManager, AsyncLayoutHdl ) );
     m_aAsyncLayoutTimer.SetDebugName( "framework::LayoutManager m_aAsyncLayoutTimer" );
