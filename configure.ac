@@ -2039,7 +2039,7 @@ AC_ARG_WITH(export-validation,
         [If you want the exported files to be validated. Right now limited to OOXML and ODF files.
          Note: You need executable scripts officeotron and odfvalidator that take the path to the file.
          See https://cgit.freedesktop.org/libreoffice/contrib/dev-tools/tree/export-validation]),
-,)
+,with_export_validation=yes)
 
 AC_ARG_WITH(bffvalidator,
     AS_HELP_STRING([--with-bffvalidator=<absolute path to BFFValidator>],
