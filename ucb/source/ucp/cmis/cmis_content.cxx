@@ -504,7 +504,7 @@ namespace cmis
                     throw libcmis::Exception( "Object not found" );
                 }
             }
-            else if ( !m_sObjectPath.isEmpty( ) )
+            else if (!(m_sObjectPath.isEmpty() || m_sObjectPath == "/"))
             {
                 try
                 {

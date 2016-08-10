@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,cmis, \
 						external/libcmis/tdf90351.patch \
 						external/libcmis/http_auth.patch \
 						external/libcmis/libcmis-fix-google-drive.patch \
+						external/libcmis/libcmis-sharepoint-repository-root.patch \
 ))
 
 ifeq ($(OS)$(COM),WNTMSC)
