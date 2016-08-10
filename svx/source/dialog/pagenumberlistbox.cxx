@@ -66,4 +66,9 @@ sal_uInt16 PageNumberListBox::GetSelection() const
     return nData;
 }
 
+Size PageNumberListBox::GetOptimalSize() const
+{
+    return Size(150, ListBox::GetOptimalSize().Height());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
