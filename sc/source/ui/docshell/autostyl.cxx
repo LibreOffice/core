@@ -65,7 +65,7 @@ ScAutoStyleList::ScAutoStyleList(ScDocShell* pShell)
 {
     aTimer.SetTimeoutHdl( LINK( this, ScAutoStyleList, TimerHdl ) );
     aInitIdle.SetIdleHdl( LINK( this, ScAutoStyleList, InitHdl ) );
-    aInitIdle.SetPriority( SchedulerPriority::HIGHEST );
+    aInitIdle.SetPriority( SchedulerPriority::HIGH_IDLE );
 }
 
 ScAutoStyleList::~ScAutoStyleList()

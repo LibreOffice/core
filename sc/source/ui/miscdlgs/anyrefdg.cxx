@@ -765,7 +765,6 @@ ScRefHandler::ScRefHandler( vcl::Window &rWindow, SfxBindings* pB, bool bBindRef
         pActiveWin(nullptr)
 {
     m_aHelper.SetWindow(m_rWindow.get());
-    aIdle.SetPriority(SchedulerPriority::LOWER);
     aIdle.SetIdleHdl(LINK( this, ScRefHandler, UpdateFocusHdl));
 
     if( bBindRef ) EnterRefMode();
