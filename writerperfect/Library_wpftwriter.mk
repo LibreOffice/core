@@ -57,6 +57,7 @@ $(eval $(call gb_Library_use_externals,wpftwriter,\
 	mwaw \
 	odfgen \
 	revenge \
+	staroffice \
 	wpd \
 	wpg \
 	wps \
@@ -69,6 +70,7 @@ $(eval $(call gb_Library_add_exception_objects,wpftwriter,\
 	writerperfect/source/writer/MSWorksImportFilter \
 	writerperfect/source/writer/MWAWImportFilter \
 	writerperfect/source/writer/PagesImportFilter \
+	writerperfect/source/writer/StarOfficeWriterImportFilter \
 	writerperfect/source/writer/WordPerfectImportFilter \
 ))
 

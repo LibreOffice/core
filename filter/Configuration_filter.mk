@@ -352,6 +352,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu
 	writer_ApplePages \
 	MWAW_Text_Document \
 	Palm_Text_Document \
+	StarOffice_Writer \
 ))
 
 $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,filter/source/config/fragments/filters,\
@@ -397,6 +398,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters
 	ApplePages \
 	MWAW_Text_Document \
 	Palm_Text_Document \
+	StarOffice_Writer \
 ))
 
 # fcfg_web
@@ -486,6 +488,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,f
 	calc_AppleNumbers \
 	MWAW_Database \
 	MWAW_Spreadsheet \
+	StarOffice_Spreadsheet \
 ))
 
 $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.xcu,filter/source/config/fragments/filters,\
@@ -528,6 +531,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.x
 	AppleNumbers \
 	MWAW_Database \
 	MWAW_Spreadsheet \
+	StarOffice_Spreadsheet \
 ))
 
 # fcfg_draw
@@ -550,6 +554,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,f
 	draw_ZMF_Document \
 	MWAW_Bitmap \
 	MWAW_Drawing \
+	StarOffice_Drawing \
 ))
 
 $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.xcu,filter/source/config/fragments/filters,\
@@ -570,6 +575,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.x
 	ZMFDocument \
 	MWAW_Bitmap \
 	MWAW_Drawing \
+	StarOffice_Drawing \
 ))
 
 # fcfg_impress
