@@ -49,6 +49,8 @@ public:
     virtual bool DoesGroupUndo() const override;
     virtual void DoDrawUndo(bool const bDoUndo) override;
     virtual bool DoesDrawUndo() const override;
+    void DoRepair(bool bRepair) override;
+    bool DoesRepair() const override;
     virtual void SetUndoNoModifiedPosition() override;
     virtual void LockUndoNoModifiedPosition() override;
     virtual void UnLockUndoNoModifiedPosition() override;
@@ -100,6 +102,8 @@ private:
 
     bool m_bGroupUndo       : 1;    // TRUE: Undo grouping enabled
     bool m_bDrawUndo        : 1;    // TRUE: Draw Undo enabled
+    /// If true, then repair mode is enabled.
+    bool m_bRepair;
     bool m_bLockUndoNoModifiedPosition : 1;
     /// position in Undo-Array at which Doc was saved (and is not modified)
     UndoStackMark m_UndoSaveMark;

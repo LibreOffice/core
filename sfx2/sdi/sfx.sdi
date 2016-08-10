@@ -3428,7 +3428,7 @@ SfxBoolItem MacroRecordingFloat SID_RECORDING_FLOATWINDOW
 
 
 SfxVoidItem Redo SID_REDO
-( SfxUInt16Item Redo SID_REDO )
+( SfxUInt16Item Redo SID_REDO, SfxBoolItem Repair SID_REPAIRPACKAGE )
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -4555,7 +4555,7 @@ SfxVoidItem BasicIDEShowWindow SID_BASICIDE_SHOWWINDOW
 
 
 SfxVoidItem Undo SID_UNDO
-( SfxUInt16Item Undo SID_UNDO )
+( SfxUInt16Item Undo SID_UNDO, SfxBoolItem Repair SID_REPAIRPACKAGE )
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
