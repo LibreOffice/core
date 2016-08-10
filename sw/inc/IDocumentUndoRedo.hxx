@@ -64,6 +64,11 @@ public:
      */
     virtual bool DoesDrawUndo() const = 0;
 
+    /// Enable repair mode.
+    virtual void DoRepair(bool bRepair) = 0;
+    /// Is repair mode active?
+    virtual bool DoesRepair() const = 0;
+
     /** Set the position at which the document is in the "unmodified" state
         to the current position in the Undo stack.
     */
