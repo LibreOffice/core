@@ -536,7 +536,6 @@ void SwSrcEditWindow::CreateTextEngine()
     pOutWin->SetFont( aFont );
     pTextEngine->SetFont( aFont );
 
-    aSyntaxIdle.SetPriority( TaskPriority::LOWER );
     aSyntaxIdle.SetInvokeHandler( LINK( this, SwSrcEditWindow, SyntaxTimerHdl ) );
 
     pTextEngine->EnableUndo( true );
