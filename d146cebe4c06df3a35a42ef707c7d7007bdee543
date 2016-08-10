@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a95cdbc_bb93e74e",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-10T14:41:20Z",
+      "side": 1,
+      "message": "You might want to make this some kinda local static convenience function, such as IsImpress",
+      "revId": "d146cebe4c06df3a35a42ef707c7d7007bdee543",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a95cdbc_7bc5df59",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-10T14:41:20Z",
+      "side": 1,
+      "message": "some naming conventions: \u0027r\u0027 makes it look as if this was a reference, which it isn\u0027t, so rather \u0027aDrawFooContext\u0027",
+      "revId": "d146cebe4c06df3a35a42ef707c7d7007bdee543",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a95cdbc_fbaf2f92",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-10T14:41:20Z",
+      "side": 1,
+      "message": "this block ...",
+      "revId": "d146cebe4c06df3a35a42ef707c7d7007bdee543",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a95cdbc_3b799730",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-10T14:41:20Z",
+      "side": 1,
+      "message": "... is almost the same as this one, except for a different SetPanelTitle. Please try to group the work somehow, e.g. create some (local static) convenience functions evaluating context, such as IsDraw (Draw normal and master), IsDrawMaster (Draw master) and then \u0027if (IsDraw) -\u003e hide the widgets; if (IsDrawMaster) -\u003e set master panel title; else -\u003e set normal panel title;\u0027",
+      "revId": "d146cebe4c06df3a35a42ef707c7d7007bdee543",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a95cdbc_5b76633f",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-10T14:41:20Z",
+      "side": 1,
+      "message": "And more or less the same story in the following block, less code to share though",
+      "revId": "d146cebe4c06df3a35a42ef707c7d7007bdee543",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a95cdbc_9ba0eba7",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-10T14:41:20Z",
+      "side": 1,
+      "message": "since mbTitle is true in all the cases, it can just as well be outside those if-else branches, no?",
+      "revId": "d146cebe4c06df3a35a42ef707c7d7007bdee543",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
