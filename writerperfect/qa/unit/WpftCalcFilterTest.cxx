@@ -39,6 +39,7 @@ void WpftCalcFilterTest::test()
     doTest("com.sun.star.comp.Calc.MWAWCalcImportFilter", "/writerperfect/qa/unit/data/calc/libmwaw/");
     doTest("com.sun.star.comp.Calc.MSWorksCalcImportFilter", "/writerperfect/qa/unit/data/calc/libwps/");
     doTest("org.libreoffice.comp.Calc.NumbersImportFilter", "/writerperfect/qa/unit/data/calc/libetonyek/", aEtonyekOptional);
+    doTest("org.libreoffice.comp.Calc.StarOfficeCalcImportFilter", "/writerperfect/qa/unit/data/calc/libstaroffice/");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WpftCalcFilterTest);
