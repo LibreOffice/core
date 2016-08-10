@@ -435,11 +435,8 @@
 #define RID_SVXSTR_CONFIRM_RESTORE_DEFAULT                  (RID_SVX_START + 1284)
 #define RID_SVXSTR_CONFIRM_SET_LANGUAGE                     (RID_SVX_START + 1285)
 
-#define RID_SVXSTR_PERSONA_ABSTRACT                         (RID_SVX_START + 1286)
-#define RID_SVXSTR_PERSONA_COLOR                            (RID_SVX_START + 1287)
-#define RID_SVXSTR_PERSONA_MUSIC                            (RID_SVX_START + 1288)
-#define RID_SVXSTR_PERSONA_NATURE                           (RID_SVX_START + 1289)
-#define RID_SVXSTR_PERSONA_SOLID                            (RID_SVX_START + 1290)
+// String Array for Persona Categories
+#define RID_SVXSTR_PERSONA_CATEGORIES                       (RID_SVX_START + 1286)
 
 #define RID_SVXPAGE_OPENCL                                  (RID_SVX_START + 254)
 

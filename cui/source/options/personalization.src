@@ -49,29 +49,22 @@ String RID_SVXSTR_APPLYPERSONA
     Text [ en-US ] = "Applying Theme...";
 };
 
-String RID_SVXSTR_PERSONA_ABSTRACT
+/*
+ * This string array must have exactly the same content
+ * and the same order as the m_vSuggestionCategories array
+ * in personalization.cxx file.
+ */
+StringArray RID_SVXSTR_PERSONA_CATEGORIES
 {
-    Text [ en-US ] = "Abstract";
-};
-
-String RID_SVXSTR_PERSONA_COLOR
-{
-    Text [ en-US ] = "Color";
-};
-
-String RID_SVXSTR_PERSONA_MUSIC
-{
-    Text [ en-US ] = "Music";
-};
-
-String RID_SVXSTR_PERSONA_NATURE
-{
-    Text [ en-US ] = "Nature";
-};
-
-String RID_SVXSTR_PERSONA_SOLID
-{
-    Text [ en-US ] = "Solid";
+    ItemList [en-US]=
+    {
+        < "LibreOffice" ; > ;
+        < "Abstract" ; > ;
+        < "Color" ; > ;
+        < "Music" ; > ;
+        < "Nature" ; > ;
+        < "Solid" ; > ;
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
