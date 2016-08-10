@@ -258,7 +258,7 @@ public:
      *  set hints what decoration is needed;
      *  must be called before showing the frame
      */
-    virtual void setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, X11SalFrame* pTransientFrame = nullptr ) const;
+    virtual void setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, X11SalFrame* pTransientFrame ) const;
 
     /*
      *  tells whether there is WM support for splash screens

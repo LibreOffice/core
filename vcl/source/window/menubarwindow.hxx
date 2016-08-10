@@ -45,7 +45,7 @@ public:
 
     void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    void    SetImages( long nMaxHeight = 0, bool bForce = false );
+    void    SetImages( long nMaxHeight, bool bForce = false );
 
     void    calcMinSize();
     const Size& getMinSize() { return maMinSize;}

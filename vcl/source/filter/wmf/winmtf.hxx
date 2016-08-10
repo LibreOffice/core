@@ -621,8 +621,8 @@ public:
                                       bool bRecordPath = false
                         );
     void                DrawPolyBezier( tools::Polygon& rPolygin,
-                                        bool bDrawTo = false,
-                                        bool bRecordPath = false
+                                        bool bDrawTo,
+                                        bool bRecordPath
                         );
     void                DrawText( Point& rPosition,
                                   OUString& rString,
