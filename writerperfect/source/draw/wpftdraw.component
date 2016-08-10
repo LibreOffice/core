@@ -34,6 +34,11 @@
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
+  <implementation name="org.libreoffice.comp.Draw.StarOfficeDrawImportFilter"
+      constructor="org_libreoffice_comp_Draw_StarOfficeDrawImportFilter_get_implementation">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
   <implementation name="com.sun.star.comp.Draw.VisioImportFilter"
       constructor="com_sun_star_comp_Draw_VisioImportFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
