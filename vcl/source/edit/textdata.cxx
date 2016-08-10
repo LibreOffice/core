@@ -279,7 +279,7 @@ IdleFormatter::IdleFormatter()
 {
     mpView = nullptr;
     mnRestarts = 0;
-    SetPriority(TaskPriority::HIGH);
+    SetPriority(TaskPriority::HIGH_IDLE);
 }
 
 IdleFormatter::~IdleFormatter()
