@@ -108,7 +108,7 @@ SfxEventAsyncer_Impl::SfxEventAsyncer_Impl( const SfxEventHint& rHint )
         StartListening( *rHint.GetObjShell() );
     pIdle.reset( new Idle("SfxEventASyncer") );
     pIdle->SetInvokeHandler( LINK(this, SfxEventAsyncer_Impl, IdleHdl) );
-    pIdle->SetPriority( TaskPriority::HIGHEST );
+    pIdle->SetPriority( TaskPriority::HIGH_IDLE );
     pIdle->SetDebugName( "sfx::SfxEventAsyncer_Impl pIdle" );
     pIdle->Start();
 }

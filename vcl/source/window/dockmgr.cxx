@@ -87,11 +87,11 @@ ImplDockFloatWin2::ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
     SetBackground( GetSettings().GetStyleSettings().GetFaceColor() );
 
     maDockIdle.SetInvokeHandler( LINK( this, ImplDockFloatWin2, DockTimerHdl ) );
-    maDockIdle.SetPriority( TaskPriority::MEDIUM );
+    maDockIdle.SetPriority( TaskPriority::HIGH_IDLE );
     maDockIdle.SetDebugName( "vcl::ImplDockFloatWin2 maDockIdle" );
 
     maEndDockIdle.SetInvokeHandler( LINK( this, ImplDockFloatWin2, EndDockTimerHdl ) );
-    maEndDockIdle.SetPriority( TaskPriority::MEDIUM );
+    maDockIdle.SetPriority( TaskPriority::HIGH_IDLE );
     maEndDockIdle.SetDebugName( "vcl::ImplDockFloatWin2 maEndDockIdle" );
 }
 
