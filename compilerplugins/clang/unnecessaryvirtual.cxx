@@ -74,7 +74,7 @@ std::string niceName(const CXXMethodDecl* functionDecl)
            functionDecl->getParent()->getQualifiedNameAsString() + "::"
            + compat::getReturnType(*functionDecl).getAsString() + "-"
            + functionDecl->getNameAsString() + "(";
-    for (const ParmVarDecl *pParmVarDecl : functionDecl->params()) {
+    for (const ParmVarDecl *pParmVarDecl : compat::parameters(*functionDecl)) {
         s += pParmVarDecl->getType().getAsString();
         s += ",";
     }
@@ -96,7 +96,7 @@ std::string UnnecessaryVirtual::fullyQualifiedName(const FunctionDecl* functionD
     }
     ret += functionDecl->getNameAsString() + "(";
     bool bFirst = true;
-    for (const ParmVarDecl *pParmVarDecl : functionDecl->params()) {
+    for (const ParmVarDecl *pParmVarDecl : compat::parameters(*functionDecl)) {
         if (bFirst)
             bFirst = false;
         else
