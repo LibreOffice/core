@@ -134,6 +134,9 @@
       </node>
       <node oor:name=".uno:InsertMultiIndex" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Table of Contents</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Insert Table of Contents, Index or Bibliography</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
@@ -177,11 +180,17 @@
       </node>
       <node oor:name=".uno:UpdateAllIndexes" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Update All</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Indexes and ~Tables</value>
         </prop>
       </node>
       <node oor:name=".uno:UpdateCurIndex" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Update Index</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Current ~Index</value>
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
@@ -484,10 +493,13 @@
       </node>
       <node oor:name=".uno:InsertFrame" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Frame</value>
+          <value xml:lang="en-US">Frame</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">F~rame...</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Frame</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

@@ -1554,7 +1554,6 @@
                                 <property name="spacing">6</property>
                                 <child>
                                   <object class="GtkButton" id="StyleUpdateByExample">
-                                    <property name="label" translatable="yes">Update</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
@@ -1570,7 +1569,6 @@
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="StyleNewByExample">
-                                    <property name="label" translatable="yes">New</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
@@ -1586,7 +1584,6 @@
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="EditStyle">
-                                    <property name="label" translatable="yes">Edit</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
@@ -1922,7 +1919,6 @@
                     <property name="tooltip_text" translatable="yes">Gallery</property>
                     <child>
                       <object class="vcllo-SmallButton" id="Gallery">
-                        <property name="label" translatable="yes">Gallery</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1973,11 +1969,9 @@
                     <property name="tooltip_text" translatable="yes">Symbol</property>
                     <child>
                       <object class="vcllo-SmallButton" id="InsertSymbol">
-                        <property name="label" translatable="yes">Symbol</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Insert Audio or Video</property>
                         <property name="action_name">.uno:InsertSymbol</property>
                         <property name="image">InsertSymbolImg</property>
                         <property name="relief">none</property>
@@ -2028,7 +2022,6 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="InsertAVMedia">
-                            <property name="label" translatable="yes">Media</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -2480,7 +2473,6 @@
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkButton" id="InsertFrame">
-                                <property name="label" translatable="yes">Frame</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -2848,7 +2840,6 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="vcllo-SmallButton" id="InsertMultiIndex">
-                        <property name="label" translatable="yes">Table of Contents</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2888,7 +2879,6 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkButton" id="UpdateCurIndex">
-                            <property name="label" translatable="yes">Update Index</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -2905,7 +2895,6 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="UpdateAllIndexes">
-                            <property name="label" translatable="yes">Update All</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -3235,7 +3224,6 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="vcllo-SmallButton" id="SpellOnline">
-                        <property name="label" translatable="yes">Auto Spellcheck</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -3826,7 +3814,6 @@
                             </child>
                             <child>
                               <object class="GtkButton" id="GridVisible">
-                                <property name="label" translatable="yes">Grid</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -3958,7 +3945,6 @@
                     </child>
                     <child>
                       <object class="vcllo-SmallButton" id="ZoomOptimal">
-                        <property name="label" translatable="yes">Optimal</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>

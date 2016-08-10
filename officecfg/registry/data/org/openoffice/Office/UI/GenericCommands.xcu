@@ -1870,6 +1870,9 @@
       </node>
       <node oor:name=".uno:ZoomOptimal" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Optimal</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Optimal view</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -2743,8 +2746,11 @@
         </prop>
       </node>
       <node oor:name=".uno:StyleNewByExample" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~New Style...</value>
+        </prop>
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">New</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2767,8 +2773,11 @@
         </prop>
       </node>
       <node oor:name=".uno:StyleUpdateByExample" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Update Style</value>
+        </prop>
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Update</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -4173,6 +4182,9 @@
       </node>
       <node oor:name=".uno:GridVisible" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Grid</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Display Grid</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -4499,6 +4511,9 @@
       </node>
       <node oor:name=".uno:SpellOnline" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Auto Spellcheck</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Automatic Spell Checking</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -4525,6 +4540,9 @@
       </node>
       <node oor:name=".uno:InsertSymbol" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Symbol</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">S~pecial Character...</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
@@ -4764,10 +4782,13 @@
       </node>
       <node oor:name=".uno:Gallery" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Media ~Gallery</value>
+          <value xml:lang="en-US">Gallery</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Gallery</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Open Clip Art and Media Gallery</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
@@ -5939,6 +5960,9 @@
       </node>
       <node oor:name=".uno:InsertAVMedia" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Media</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Audio or ~Video...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
