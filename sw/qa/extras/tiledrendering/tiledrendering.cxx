@@ -61,6 +61,7 @@ public:
     void testTextEditViewInvalidations();
     void testUndoInvalidations();
     void testUndoLimiting();
+    void testUndoDispatch();
     void testShapeTextUndoShells();
     void testShapeTextUndoGroupShells();
 
@@ -89,6 +90,7 @@ public:
     CPPUNIT_TEST(testTextEditViewInvalidations);
     CPPUNIT_TEST(testUndoInvalidations);
     CPPUNIT_TEST(testUndoLimiting);
+    CPPUNIT_TEST(testUndoDispatch);
     CPPUNIT_TEST(testShapeTextUndoShells);
     CPPUNIT_TEST(testShapeTextUndoGroupShells);
     CPPUNIT_TEST_SUITE_END();
@@ -919,6 +921,41 @@ void SwTiledRenderingTest::testUndoLimiting()
     // Assert that the first view can't undo, but the second view can.
     CPPUNIT_ASSERT(!pWrtShell1->GetLastUndoInfo(nullptr, nullptr, &pWrtShell1->GetView()));
     CPPUNIT_ASSERT(pWrtShell2->GetLastUndoInfo(nullptr, nullptr, &pWrtShell2->GetView()));
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testUndoDispatch()
+{
+    // Load a document and create two views.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    int nView1 = SfxLokHelper::getView();
+    SfxLokHelper::createView();
+    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    int nView2 = SfxLokHelper::getView();
+
+    // Insert a character in the first view.
+    SfxLokHelper::setView(nView1);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
+
+    // Click before the first word in the second view.
+    SfxLokHelper::setView(nView2);
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+    Point aStart = pShellCursor->GetSttPos();
+    aStart.setX(aStart.getX() - 1000);
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
+    uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
+    uno::Reference<frame::XFrame> xFrame2 = xDesktop->getActiveFrame();
+
+    // Now switch back to the first view, and make sure that the active frame is updated.
+    SfxLokHelper::setView(nView1);
+    uno::Reference<frame::XFrame> xFrame1 = xDesktop->getActiveFrame();
+    // This failed: setView() did not update the active frame.
+    CPPUNIT_ASSERT(xFrame1 != xFrame2);
 
     comphelper::LibreOfficeKit::setActive(false);
 }
