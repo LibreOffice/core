@@ -2290,6 +2290,60 @@ endif # MSC
 
 endif # SYSTEM_MWAW
 
+ifneq ($(SYSTEM_STAROFFICE),)
+
+define gb_LinkTarget__use_staroffice
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(STAROFFICE_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(STAROFFICE_LIBS))
+
+endef
+
+else # !SYSTEM_STAROFFICE
+
+ifeq ($(COM),MSC)
+
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+	staroffice \
+))
+
+define gb_LinkTarget__use_staroffice
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,libstaroffice)/inc \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_use_libraries,$(1),\
+	staroffice \
+)
+
+endef
+
+else # !MSC
+
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	libstaroffice \
+))
+
+define gb_LinkTarget__use_staroffice
+$(call gb_LinkTarget_use_package,$(1),libstaroffice)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,libstaroffice)/inc \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,libstaroffice)/src/lib/.libs -lstaroffice-0.0 \
+)
+
+endef
+
+endif # MSC
+
+endif # SYSTEM_STAROFFICE
+
 
 ifneq ($(SYSTEM_LCMS2),)
 

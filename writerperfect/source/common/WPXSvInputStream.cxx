@@ -44,8 +44,8 @@ class PositionHolder
 public:
     explicit PositionHolder(const Reference<XSeekable> &rxSeekable);
     ~PositionHolder();
-    PositionHolder(const PositionHolder&) = delete;
-    PositionHolder& operator=(const PositionHolder&) = delete;
+    PositionHolder(const PositionHolder &) = delete;
+    PositionHolder &operator=(const PositionHolder &) = delete;
 
 private:
     const Reference<XSeekable> mxSeekable;
