@@ -811,14 +811,16 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
     bool bQuote = true;
     sal_Int32 nLength = rContent.getLength();
 
-    if ( ( nLength == 1 &&
-            lcl_ValidChar( rContent[0], rParent ) ) ||
-         ( nLength == 2 &&
-             lcl_ValidChar( rContent[0], rParent ) &&
-             rContent[1] == ' ' ) )
+    if ((nLength == 1 && lcl_ValidChar( rContent[0], rParent)) ||
+            (nLength == 2 &&
+             ((rContent[0] == ' ' && rContent[1] == '-') ||
+              (rContent[1] == ' ' && lcl_ValidChar( rContent[0], rParent)))))
     {
-        //  don't quote single separator characters like space or percent,
-        //  or separator characters followed by space (used in date formats)
+        //  Don't quote single separator characters like space or percent,
+        //  or separator characters followed by space (used in date formats).
+        //  Or space followed by minus (used in currency formats) that would
+        //  lead to almost duplicated formats with built-in formats just with
+        //  the difference of quotes.
         bQuote = false;
     }
     else if ( rParent.GetType() == XML_TOK_STYLES_PERCENTAGE_STYLE && nLength > 1 )
