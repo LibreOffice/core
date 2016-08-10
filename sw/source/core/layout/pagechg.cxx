@@ -1028,6 +1028,33 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
             if ( bIsEmpty && ( pFormatWish ||          //1.
                  ( !bWantOdd && !pPrevPage ) ) )
             {
+                // Check all cases for the next page, so we don't oscillate empty pages
+                // Skip case 1 and 2, as we require a non-empty next page to save the empty page
+                // Case 3 is the one we actually want to predict and skip
+                // We can skip the empty check of case 3, as we just work on an existing next page
+                bool bNextWantOdd;
+                SwPageDesc *pNextDesc;
+                if ( pNextPage && !pNextPage->IsEmptyPage() &&    //3.
+                     pNextPage->OnRightPage() == (bNextWantOdd = pNextPage->WannaRightPage()) &&
+                     pNextPage->GetPageDesc() == (pNextDesc = pNextPage->FindPageDesc()) )   //4.
+                {
+                    bool bNextFirst = pNextPage->OnFirstPage();
+                    SwFrameFormat *pNextFormatWish = (bNextWantOdd) ?   //5.
+                        pNextDesc->GetRightFormat(bNextFirst) : pNextDesc->GetLeftFormat(bNextFirst);
+                    if ( !pNextFormatWish )    // 6.
+                        pNextFormatWish = bNextWantOdd ? pNextDesc->GetLeftFormat() : pNextDesc->GetRightFormat();
+                    if ( pNextFormatWish && pNextPage->GetFormat() == pNextFormatWish )
+                    {
+                        SAL_INFO( "sw.swpagefrm", "CheckPageDescs phys: " << pPage->GetPhyPageNum()
+                                  << " c: 1+3 - skip next page of p: " << pPage );
+                        if (pPage->GetPageDesc() != pPrevPage->GetPageDesc())
+                            pPage->SetPageDesc( pPrevPage->GetPageDesc(), 0 );
+                        // We can skip the next page, as all checks were already done!
+                        pPage = static_cast<SwPageFrame*>(pNextPage->GetNext());
+                        continue;
+                    }
+                }
+
                 pPage->Cut();
                 bool bUpdatePrev = false;
                 if (ppPrev && *ppPrev == pPage)
