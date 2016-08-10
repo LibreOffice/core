@@ -1525,7 +1525,9 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         pTargetDoc->SetAllUniqueFlyNames();
 
         // Unfreeze target document layouts and correct all PageDescs.
+        SAL_INFO( "sw.pageframe", "(MergeMailFiles pTargetShell->CalcLayout in" );
         pTargetShell->CalcLayout();
+        SAL_INFO( "sw.pageframe", "MergeMailFiles pTargetShell->CalcLayout out)" );
         for ( auto aLayout : pTargetShell->GetDoc()->GetAllLayouts() )
         {
             aLayout->FreezeLayout(false);

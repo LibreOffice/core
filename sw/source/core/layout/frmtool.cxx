@@ -2663,10 +2663,12 @@ SwPageFrame * InsertNewPage( SwPageDesc &rDesc, SwFrame *pUpper,
         SwPageDesc *pTmpDesc = pSibling && pSibling->GetPrev() ?
                 static_cast<SwPageFrame*>(pSibling->GetPrev())->GetPageDesc() : &rDesc;
         pRet = new SwPageFrame( pDoc->GetEmptyPageFormat(), pUpper, pTmpDesc );
+        SAL_INFO( "sw.pageframe", "InsertNewPage - insert empty p: " << pRet << " d: " << pTmpDesc );
         pRet->Paste( pUpper, pSibling );
         pRet->PreparePage( bFootnote );
     }
     pRet = new SwPageFrame( pFormat, pUpper, &rDesc );
+    SAL_INFO( "sw.pageframe", "InsertNewPage p: " << pRet << " d: " << &rDesc << " f: " << pFormat );
     pRet->Paste( pUpper, pSibling );
     pRet->PreparePage( bFootnote );
     if ( pRet->GetNext() )
