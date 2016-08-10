@@ -1,5 +1,5 @@
---- misc/expat-2.1.0/lib/makefile.mk	Wed Aug 20 14:33:55 2008
-+++ misc/build/expat-2.1.0/lib/makefile.mk	Wed Aug 20 14:26:42 2008
+--- misc/expat-2.2.0/lib/makefile.mk	Wed Aug 20 14:33:55 2008
++++ misc/build/expat-2.2.0/lib/makefile.mk	Wed Aug 20 14:26:42 2008
 @@ -1 +1,83 @@
 -dummy
 +#**************************************************************
@@ -36,7 +36,7 @@
 +CFLAGS+=-I..
 +
 +.IF "$(OS)"=="WNT"
-+CDEFS+=-DCOMPILED_FROM_DSP
++CDEFS+=-DWIN32
 +.ELSE
 +CDEFS+=-DHAVE_EXPAT_CONFIG_H
 +.ENDIF
@@ -73,7 +73,7 @@
 +SLOFILES_X64=$(SLO_X64)$/xmlparse.obj \
 +             $(SLO_X64)$/xmlrole.obj \
 +             $(SLO_X64)$/xmltok.obj
-+CDEFS_X64+=-DXML_UNICODE -DCOMPILED_FROM_DSP
++CDEFS_X64+=-DXML_UNICODE -DWIN32
 +CFLAGS_X64+=-I..
 +LIB1TARGET_X64=$(SLB_X64)$/$(TARGET)_xmlparse.lib
 +LIB1OBJFILES_X64=$(SLO_X64)$/xmlparse.obj
@@ -85,3 +85,32 @@
 +.INCLUDE :  set_wntx64.mk
 +.INCLUDE :	target.mk
 +.INCLUDE :  tg_wntx64.mk
+--- misc/expat-2.2.0/lib/xmltok.c	2016-06-21 05:58:38.000000000 -0700
++++ misc/build/expat-2.2.0/lib/xmltok.c	2016-08-05 10:08:54.265761000 -0700
+@@ -402,7 +402,7 @@
+     case BT_LEAD2:
+       if (fromLim - from < 2) {
+         res = XML_CONVERT_INPUT_INCOMPLETE;
+-        break;
++        goto after;
+       }
+       *to++ = (unsigned short)(((from[0] & 0x1f) << 6) | (from[1] & 0x3f));
+       from += 2;
+@@ -410,7 +410,7 @@
+     case BT_LEAD3:
+       if (fromLim - from < 3) {
+         res = XML_CONVERT_INPUT_INCOMPLETE;
+-        break;
++        goto after;
+       }
+       *to++ = (unsigned short)(((from[0] & 0xf) << 12)
+                                | ((from[1] & 0x3f) << 6) | (from[2] & 0x3f));
+@@ -441,6 +441,8 @@
+       break;
+     }
+   }
++  if (from < fromLim)
++    res = XML_CONVERT_OUTPUT_EXHAUSTED;
+ after:
+   *fromP = from;
+   *toP = to;
