@@ -36,6 +36,7 @@
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include "ucbhelper/content.hxx"
 #include <comphelper/simplefileaccessinteraction.hxx>
+#include <tools/resary.hxx>
 
 #define MAX_RESULTS 9
 
@@ -51,28 +52,19 @@ SelectPersonaDialog::SelectPersonaDialog( vcl::Window *pParent )
     m_pSearchButton->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
 
     get( m_vSearchSuggestions[0], "suggestion1" );
-    m_vSearchSuggestions[0]->SetText( "LibreOffice" );
-    m_vSearchSuggestions[0]->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
-
     get( m_vSearchSuggestions[1], "suggestion2" );
-    m_vSearchSuggestions[1]->SetText( CUI_RES ( RID_SVXSTR_PERSONA_ABSTRACT ) );
-    m_vSearchSuggestions[1]->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
-
     get( m_vSearchSuggestions[2], "suggestion3" );
-    m_vSearchSuggestions[2]->SetText( CUI_RES ( RID_SVXSTR_PERSONA_COLOR ) );
-    m_vSearchSuggestions[2]->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
-
     get( m_vSearchSuggestions[3], "suggestion4" );
-    m_vSearchSuggestions[3]->SetText( CUI_RES( RID_SVXSTR_PERSONA_MUSIC ) );
-    m_vSearchSuggestions[3]->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
-
     get( m_vSearchSuggestions[4], "suggestion5" );
-    m_vSearchSuggestions[4]->SetText( CUI_RES( RID_SVXSTR_PERSONA_NATURE ) );
-    m_vSearchSuggestions[4]->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
-
     get( m_vSearchSuggestions[5], "suggestion6" );
-    m_vSearchSuggestions[5]->SetText( CUI_RES( RID_SVXSTR_PERSONA_SOLID ) );
-    m_vSearchSuggestions[5]->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
+
+    ResStringArray aCategoriesArr(CUI_RES(RID_SVXSTR_PERSONA_CATEGORIES));
+    assert(aCategoriesArr.Count() >= CATEGORYCOUNT);
+    for(sal_uInt32 i = 0; i < CATEGORYCOUNT; ++i)
+    {
+        m_vSearchSuggestions[i]->SetText( aCategoriesArr.GetString(i) );
+        m_vSearchSuggestions[i]->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
+    }
 
     get( m_pEdit, "search_term" );
 
@@ -132,6 +124,17 @@ OUString SelectPersonaDialog::GetSelectedPersona() const
 
 IMPL_LINK_TYPED( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
 {
+    /*
+     * English category names should be used for search.
+     * These strings should be in sync with the strings of
+     * RID_SVXSTR_PERSONA_CATEGORIES in personalization.src
+     */
+    static const OUStringLiteral vSuggestionCategories[] =
+    {
+        OUStringLiteral("LibreOffice"), OUStringLiteral("Abstract"), OUStringLiteral("Color"),
+        OUStringLiteral("Music"), OUStringLiteral("Nature"), OUStringLiteral("Solid")
+    };
+
     OUString searchTerm;
     if( m_pSearchThread.is() )
         m_pSearchThread->StopExecution();
@@ -140,12 +143,12 @@ IMPL_LINK_TYPED( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
         searchTerm = m_pEdit->GetText();
     else
     {
-        for( VclPtr<PushButton> & i : m_vSearchSuggestions )
+        for ( sal_uInt32 i = 0; i < CATEGORYCOUNT; ++i)
         {
-            if( pButton == i )
+            if( pButton == m_vSearchSuggestions[i] )
             {
-                // GetDisplayText() is returning a blank string, thus removing mnemonics explicitly.
-                searchTerm = MnemonicGenerator::EraseAllMnemonicChars(i->GetText());
+                // Use the category name in English as search term
+                searchTerm = vSuggestionCategories[i];
                 break;
             }
         }

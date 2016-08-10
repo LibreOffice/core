@@ -14,8 +14,10 @@
 #include <salhelper/thread.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/prgsbar.hxx>
-
 #include <vector>
+#include <array>
+
+#define CATEGORYCOUNT 6    // Number of persona categories
 
 class FixedText;
 class SearchAndParseThread;
@@ -32,9 +34,9 @@ private:
     VclPtr<PushButton> m_vDefaultPersonaImages[3];     ///< Buttons to show the default persona images
     VclPtr<PushButton> m_pExtensionPersonaPreview;     ///< Buttons to show the last 3 personas installed via extensions
     VclPtr<ListBox> m_pPersonaList;                    ///< The ListBox to show the list of installed personas
-    OUString m_aPersonaSettings;                ///< Header and footer images + color to be set in the settings.
+    OUString m_aPersonaSettings;                       ///< Header and footer images + color to be set in the settings.
     VclPtr<FixedText> m_pExtensionLabel;               ///< The "select persona installed via extensions" label
-    VclPtr<FixedText> m_pAppliedThemeLabel;        ///< The label for showing applied custom theme
+    VclPtr<FixedText> m_pAppliedThemeLabel;            ///< The label for showing applied custom theme
 
     std::vector<OUString> m_vDefaultPersonaSettings;
     std::vector<OUString> m_vExtensionPersonaSettings;
@@ -73,21 +75,17 @@ private:
     DECL_LINK_TYPED( SelectInstalledPersona, ListBox&, void );
 };
 
-/** Dialog that will allow the user to choose a Persona to use.
-
-So far there is no better possibility than just to paste the URL from
-https://addons.mozilla.org/firefox/themes ...
-*/
+/** Dialog that will allow the user to choose a Persona to use. */
 class SelectPersonaDialog : public ModalDialog
 {
 private:
-    VclPtr<Edit> m_pEdit;                          ///< The input line for the search term
-    VclPtr<PushButton> m_pSearchButton;            ///< The search button
-    VclPtr<FixedText> m_pProgressLabel;            ///< The label for showing progress of search
-    VclPtr<PushButton> m_vResultList[9];           ///< List of buttons to show search results
-    VclPtr<PushButton> m_vSearchSuggestions[6];    ///< List of buttons for the search suggestions
-    VclPtr<PushButton> m_pOkButton;                ///< The OK button
-    VclPtr<PushButton> m_pCancelButton;            ///< The Cancel button
+    VclPtr<Edit> m_pEdit;                                   ///< The input line for the search term
+    VclPtr<PushButton> m_pSearchButton;                     ///< The search button
+    VclPtr<FixedText> m_pProgressLabel;                     ///< The label for showing progress of search
+    VclPtr<PushButton> m_vResultList[9];                    ///< List of buttons to show search results
+    VclPtr<PushButton> m_vSearchSuggestions[CATEGORYCOUNT]; ///< List of buttons for the search suggestions
+    VclPtr<PushButton> m_pOkButton;                         ///< The OK button
+    VclPtr<PushButton> m_pCancelButton;                     ///< The Cancel button
 
     std::vector<OUString> m_vPersonaSettings;
     OUString m_aSelectedPersona;
