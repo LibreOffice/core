@@ -7913,6 +7913,7 @@ dnl ===================================================================
 dnl Check for system libstaroffice
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([libstaroffice],[STAROFFICE],[libstaroffice-0.0])
+libo_PKG_VERSION([STAROFFICE], [libstaroffice-0.0], [0.0.2])
 
 dnl ===================================================================
 dnl Check for system libvisio
