@@ -30,6 +30,8 @@ public:
 
     void SetSelection( sal_uInt16 );
     sal_uInt16 GetSelection() const;
+
+    Size GetOptimalSize() const override;
 };
 
 #endif
