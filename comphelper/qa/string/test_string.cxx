@@ -220,8 +220,8 @@ void TestString::testNatural()
 
 // --- Some generic tests to ensure we do not alter original behavior
 // outside what we want
-    CPPUNIT_ASSERT(
-        compareNatural("ABC", "ABC", xCollator, xBI, lang::Locale()) == 0
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<sal_Int32>(0), compareNatural("ABC", "ABC", xCollator, xBI, lang::Locale())
     );
     // Case sensitivity
     CPPUNIT_ASSERT(
@@ -271,8 +271,8 @@ void TestString::testNatural()
     CPPUNIT_ASSERT(
         compareNatural("abc010", "abc08", xCollator, xBI, lang::Locale()) > 0
     );
-    CPPUNIT_ASSERT(
-        compareNatural("apple10apple", "apple10apple", xCollator, xBI, lang::Locale()) == 0
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<sal_Int32>(0), compareNatural("apple10apple", "apple10apple", xCollator, xBI, lang::Locale())
     );
 }
 
@@ -282,10 +282,10 @@ void TestString::testStripStart()
     OString aOut;
 
     aOut = ::comphelper::string::stripStart(aIn, 'b');
-    CPPUNIT_ASSERT(aOut == "abc");
+    CPPUNIT_ASSERT_EQUAL(OString("abc"), aOut);
 
     aOut = ::comphelper::string::stripStart(aIn, 'a');
-    CPPUNIT_ASSERT(aOut == "bc");
+    CPPUNIT_ASSERT_EQUAL(OString("bc"), aOut);
 
     aIn = "aaa";
     aOut = ::comphelper::string::stripStart(aIn, 'a');
@@ -293,7 +293,7 @@ void TestString::testStripStart()
 
     aIn = "aba";
     aOut = ::comphelper::string::stripStart(aIn, 'a');
-    CPPUNIT_ASSERT(aOut == "ba");
+    CPPUNIT_ASSERT_EQUAL(OString("ba"), aOut);
 }
 
 void TestString::testStripEnd()
@@ -302,10 +302,10 @@ void TestString::testStripEnd()
     OString aOut;
 
     aOut = ::comphelper::string::stripEnd(aIn, 'b');
-    CPPUNIT_ASSERT(aOut == "abc");
+    CPPUNIT_ASSERT_EQUAL(OString("abc"), aOut);
 
     aOut = ::comphelper::string::stripEnd(aIn, 'c');
-    CPPUNIT_ASSERT(aOut == "ab");
+    CPPUNIT_ASSERT_EQUAL(OString("ab"), aOut);
 
     aIn = "aaa";
     aOut = ::comphelper::string::stripEnd(aIn, 'a');
@@ -313,7 +313,7 @@ void TestString::testStripEnd()
 
     aIn = "aba";
     aOut = ::comphelper::string::stripEnd(aIn, 'a');
-    CPPUNIT_ASSERT(aOut == "ab");
+    CPPUNIT_ASSERT_EQUAL(OString("ab"), aOut);
 }
 
 void TestString::testStrip()
@@ -322,10 +322,10 @@ void TestString::testStrip()
     OString aOut;
 
     aOut = ::comphelper::string::strip(aIn, 'b');
-    CPPUNIT_ASSERT(aOut == "abc");
+    CPPUNIT_ASSERT_EQUAL(OString("abc"), aOut);
 
     aOut = ::comphelper::string::strip(aIn, 'c');
-    CPPUNIT_ASSERT(aOut == "ab");
+    CPPUNIT_ASSERT_EQUAL(OString("ab"), aOut);
 
     aIn = "aaa";
     aOut = ::comphelper::string::strip(aIn, 'a');
@@ -333,7 +333,7 @@ void TestString::testStrip()
 
     aIn = "aba";
     aOut = ::comphelper::string::strip(aIn, 'a');
-    CPPUNIT_ASSERT(aOut == "b");
+    CPPUNIT_ASSERT_EQUAL(OString("b"), aOut);
 }
 
 void TestString::testToken()
@@ -345,13 +345,13 @@ void TestString::testToken()
     CPPUNIT_ASSERT(aOut.isEmpty());
 
     aOut = aIn.getToken(0, '.');
-    CPPUNIT_ASSERT(aOut == "10");
+    CPPUNIT_ASSERT_EQUAL(OString("10"), aOut);
 
     aOut = aIn.getToken(1, '.');
-    CPPUNIT_ASSERT(aOut == "11");
+    CPPUNIT_ASSERT_EQUAL(OString("11"), aOut);
 
     aOut = aIn.getToken(2, '.');
-    CPPUNIT_ASSERT(aOut == "12");
+    CPPUNIT_ASSERT_EQUAL(OString("12"), aOut);
 
     aOut = aIn.getToken(3, '.');
     CPPUNIT_ASSERT(aOut.isEmpty());
@@ -363,13 +363,13 @@ void TestString::testTokenCount()
     sal_Int32 nOut;
 
     nOut = ::comphelper::string::getTokenCount(aIn, '.');
-    CPPUNIT_ASSERT(nOut == 3);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), nOut);
 
     nOut = ::comphelper::string::getTokenCount(aIn, 'X');
-    CPPUNIT_ASSERT(nOut == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nOut);
 
     nOut = ::comphelper::string::getTokenCount(OString(), 'X');
-    CPPUNIT_ASSERT(nOut == 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nOut);
 }
 
 void TestString::testReverseString()
@@ -377,7 +377,7 @@ void TestString::testReverseString()
     OString aIn("ABC");
     OString aOut = ::comphelper::string::reverseString(aIn);
 
-    CPPUNIT_ASSERT(aOut == "CBA");
+    CPPUNIT_ASSERT_EQUAL(OString("CBA"), aOut);
 }
 
 void TestString::testSplit()

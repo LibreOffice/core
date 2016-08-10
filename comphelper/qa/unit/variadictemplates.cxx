@@ -129,11 +129,11 @@ void VariadicTemplatesTest::testUnwrapArgs() {
         ::com::sun::star::uno::Any* p2 = seq2.getArray();
 
         for( sal_Int16 i = 0; i < seq1.getLength() && i < seq2.getLength(); ++i ) {
-            CPPUNIT_ASSERT_MESSAGE( "seq1 and seq2 are equal",
-                                    p1[i] == p2[i] );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "seq1 and seq2 are equal",
+                                    p1[i], p2[i] );
         }
         CPPUNIT_ASSERT_MESSAGE( "seq1 and seq2 are equal",
-                                seq1 == seq2 );
+                                bool(seq1 == seq2) );
     }
     catch( ::com::sun::star::lang::IllegalArgumentException& err ) {
         std::stringstream ss;
@@ -171,8 +171,8 @@ void VariadicTemplatesTest::testUnwrapArgs() {
             CPPUNIT_FAIL( "unwrapArgs failed while the baseline did not throw" );
         }
         catch( ::com::sun::star::lang::IllegalArgumentException& err2 ) {
-            CPPUNIT_ASSERT_MESSAGE( "err1.ArgumentPosition == err2.ArgumentPosition",
-                                    err1.ArgumentPosition == err2.ArgumentPosition );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "err1.ArgumentPosition == err2.ArgumentPosition",
+                                    err1.ArgumentPosition, err2.ArgumentPosition );
         }
     }
 }
