@@ -42,7 +42,7 @@ Timer::Timer( bool bAuto, const sal_Char *pDebugName )
     , mnTimeout( Scheduler::ImmediateTimeoutMs )
     , mbAuto( bAuto )
 {
-    SetPriority( TaskPriority::HIGHEST );
+    SetPriority( TaskPriority::DEFAULT );
 }
 
 Timer::Timer( const sal_Char *pDebugName )
