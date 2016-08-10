@@ -966,6 +966,7 @@ void SwPageFrame::PrepareRegisterChg()
  */
 void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFrame** ppPrev )
 {
+    SAL_INFO( "sw.pageframe", "(CheckPageDescs in phy: " << pStart->GetPhyPageNum() );
     assert(pStart && "no starting page.");
 
     SwViewShell *pSh   = pStart->getRootFrame()->GetCurrShell();
@@ -974,6 +975,8 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
     if ( pImp && pImp->IsAction() && !pImp->GetLayAction().IsCheckPages() )
     {
         pImp->GetLayAction().SetCheckPageNum( pStart->GetPhyPageNum() );
+        SAL_INFO( "sw.pageframe", "CheckPageDescs out fast - via SetCheckPageNum: "
+                  << pStart->GetPhyPageNum() << ")" );
         return;
     }
 
@@ -1045,7 +1048,7 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
                         pNextFormatWish = bNextWantOdd ? pNextDesc->GetLeftFormat() : pNextDesc->GetRightFormat();
                     if ( pNextFormatWish && pNextPage->GetFormat() == pNextFormatWish )
                     {
-                        SAL_INFO( "sw.swpagefrm", "CheckPageDescs phys: " << pPage->GetPhyPageNum()
+                        SAL_INFO( "sw.pageframe", "CheckPageDescs phys: " << pPage->GetPhyPageNum()
                                   << " c: 1+3 - skip next page of p: " << pPage );
                         if (pPage->GetPageDesc() != pPrevPage->GetPageDesc())
                             pPage->SetPageDesc( pPrevPage->GetPageDesc(), 0 );
@@ -1059,6 +1062,8 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
                 bool bUpdatePrev = false;
                 if (ppPrev && *ppPrev == pPage)
                     bUpdatePrev = true;
+                SAL_INFO( "sw.pageframe", "CheckPageDescs phys: " << pPage->GetPhyPageNum()
+                          << " c: 1 - destroy p: " << pPage );
                 SwFrame::DestroyFrame(pPage);
                 if ( pStart == pPage )
                     pStart = pNextPage;
@@ -1070,6 +1075,8 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
             else if ( bIsEmpty && !pFormatWish &&  //2.
                       pDesc != pPage->GetPageDesc() )
             {
+                SAL_INFO( "sw.pageframe", "CheckPageDescs phys: " << pPage->GetPhyPageNum()
+                          << " c: 2 - set desc p: " << pPage << " d: " << pDesc );
                 pPage->SetPageDesc( pDesc, nullptr );
             }
             else if ( !bIsEmpty &&      //3.
@@ -1082,6 +1089,8 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
                 if ( pPrevPage )
                     pDesc = pPrevPage->GetPageDesc();
                 SwPageFrame *pTmp = new SwPageFrame( pDoc->GetEmptyPageFormat(), pRoot, pDesc );
+                SAL_INFO( "sw.pageframe", "CheckPageDescs phys: " << pPage->GetPhyPageNum()
+                          << " c: 3 - insert empty p: " << pTmp << " d: " << pDesc );
                 pTmp->Paste( pRoot, pPage );
                 pTmp->PreparePage( false );
                 pPage = pTmp;
@@ -1090,6 +1099,9 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
             {
                 SwPageDesc *pOld = pPage->GetPageDesc();
                 pPage->SetPageDesc( pDesc, pFormatWish );
+                SAL_INFO( "sw.pageframe", "CheckPageDescs phys: " << pPage->GetPhyPageNum()
+                          << " c: 4 - set desc + format p: " << pPage
+                          << " d: " << pDesc << " f: " << pFormatWish );
                 if ( bFootnotes )
                 {
                     // If specific values of the FootnoteInfo are changed, something has to happen.
@@ -1104,13 +1116,19 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
             else if ( pFormatWish && pPage->GetFormat() != pFormatWish )         //5.
             {
                 pPage->SetFrameFormat( pFormatWish );
+                SAL_INFO( "sw.pageframe", "CheckPageDescs phys: " << pPage->GetPhyPageNum()
+                          << " c: 5 - set format p: " << pPage << " f: " << pFormatWish );
             }
             else if ( !pFormatWish )                                       //6.
             {
                 // get format with inverted logic
                 pFormatWish = bWantOdd ? pDesc->GetLeftFormat() : pDesc->GetRightFormat();
                 if ( pFormatWish && pPage->GetFormat() != pFormatWish )
+                {
                     pPage->SetFrameFormat( pFormatWish );
+                    SAL_INFO( "sw.pageframe", "CheckPageDescs phys: " << pPage->GetPhyPageNum()
+                              << " c: 6 - set format p: " << pPage << " f: " << pFormatWish );
+                }
             }
 #if OSL_DEBUG_LEVEL > 0
             else
@@ -1134,6 +1152,7 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
                 if (ppPrev && *ppPrev == pPage)
                     bUpdatePrev = true;
                 SwFrame::DestroyFrame(pPage);
+                SAL_INFO( "sw.pageframe", "CheckPageDescs - handle bIsEmpty - destroy p: " << pPage );
                 if ( pStart == pPage )
                     pStart = pTmp;
                 pPage = pTmp;
@@ -1175,6 +1194,7 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
         pPg = static_cast<SwPageFrame*>(pPg->GetNext());
     }
 #endif
+    SAL_INFO( "sw.pageframe", "CheckPageDescs out)" );
 }
 
 namespace
@@ -1193,7 +1213,14 @@ namespace
         SwPageFrame *pPage = new SwPageFrame(pFormat, pRoot, pDesc);
         SwPageFrame *pSibling = *pRefSibling;
         if ( pRefPage )
+        {
             *pRefPage = pPage;
+            SAL_INFO( "sw.pageframe", "doInsertPage p: " << pPage
+                                      << " d: " << pDesc << " f: " << pFormat );
+        }
+        else
+            SAL_INFO( "sw.pageframe", "doInsertPage - insert empty p: "
+                                      << pPage << " d: " << pDesc );
         pPage->Paste( pRoot, pSibling );
         pPage->PreparePage( bFootnote );
         // If the sibling has no body text, destroy it as long as it is no footnote page.
@@ -1268,8 +1295,12 @@ SwPageFrame *SwFrame::InsertPage( SwPageFrame *pPrevPage, bool bFootnote )
             {
                 const sal_uInt16 nNum = pImp->GetLayAction().GetCheckPageNum();
                 if ( nNum == pPrevPage->GetPhyPageNum() + 1 )
+                {
                     pImp->GetLayAction().SetCheckPageNumDirect(
                                                     pSibling->GetPhyPageNum() );
+                    SAL_INFO( "sw.pageframe", "InsertPage - SetCheckPageNumDirect: "
+                              << pSibling->GetPhyPageNum() );
+                }
                 return pPage;
             }
         }
@@ -1406,6 +1437,7 @@ void SwRootFrame::RemoveSuperfluous()
 
         if ( pPage )
         {
+            SAL_INFO( "sw.pageframe", "RemoveSuperfluous - DestroyFrm p: " << pPage );
             RemovePage( &pPage, SwRemoveResult::Prev );
             nDocPos = pPage ? pPage->Frame().Top() : 0;
         }
@@ -1469,11 +1501,27 @@ void SwRootFrame::AssertFlyPages()
             }
         }
     }
+
+#if OSL_DEBUG_LEVEL > 0
+    pPage = static_cast<SwPageFrame*>(Lower());
+    while ( pPage && pPage->GetNext() &&
+            !static_cast<SwPageFrame*>(pPage->GetNext())->IsFootnotePage() )
+    {
+        SAL_INFO( "sw.pageframe",  "AssertFlyPages p: " << pPage << " d: " << pPage->GetPageDesc()
+                   << " f: " << pPage->GetFormat() << " virt: " << pPage->GetVirtPageNum()
+                   << " phys: " << pPage->GetPhyPageNum() << " empty: " << pPage->IsEmptyPage() );
+        pPage = static_cast<SwPageFrame*>(pPage->GetNext());
+    }
+    SAL_INFO( "sw.pageframe", "AssertFlyPages p: " << pPage << " d: " << pPage->GetPageDesc()
+              << " f: " << pPage->GetFormat() << " virt: " << pPage->GetVirtPageNum()
+              << " phys: " << pPage->GetPhyPageNum() << " empty: " << pPage->IsEmptyPage() );
+#endif
 }
 
 /// Ensure that after the given page all page-bound objects are located on the correct page
 void SwRootFrame::AssertPageFlys( SwPageFrame *pPage )
 {
+    SAL_INFO( "sw.pageframe", "(AssertPageFlys in" );
     while ( pPage )
     {
         if (pPage->GetSortedObjs())
@@ -1488,6 +1536,7 @@ void SwRootFrame::AssertPageFlys( SwPageFrame *pPage )
                 if ((rAnch.GetAnchorId() == FLY_AT_PAGE) &&
                      nPg != pPage->GetPhyPageNum() )
                 {
+                    SAL_INFO( "sw.pageframe", nPg << " " << pPage->GetPhyPageNum() );
                     // If on the wrong page, check if previous page is empty
                     if( nPg && !(pPage->GetPhyPageNum()-1 == nPg &&
                         static_cast<SwPageFrame*>(pPage->GetPrev())->IsEmptyPage()) )
@@ -1511,6 +1560,7 @@ void SwRootFrame::AssertPageFlys( SwPageFrame *pPage )
         }
         pPage = static_cast<SwPageFrame*>(pPage->GetNext());
     }
+    SAL_INFO( "sw.pageframe", "AssertPageFlys out)" );
 }
 
 Size SwRootFrame::ChgSize( const Size& aNewSize )
