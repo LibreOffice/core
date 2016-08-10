@@ -123,7 +123,7 @@ bool OGLPlayer::create( const OUString& rURL )
 
     // Set timer
     m_aTimer.SetTimeout(8); // is 125fps enough for anyone ?
-    m_aTimer.SetPriority(TaskPriority::LOW);
+    m_aTimer.SetPriority(TaskPriority::HIGH_IDLE);
     m_aTimer.SetInvokeHandler(LINK(this,OGLPlayer,TimerHandler));
 
     return true;

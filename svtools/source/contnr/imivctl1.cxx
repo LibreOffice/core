@@ -143,7 +143,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     aEditIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,EditTimeoutHdl));
     aEditIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aEditIdle" );
 
-    aAutoArrangeIdle.SetPriority( TaskPriority::LOW );
+    aAutoArrangeIdle.SetPriority( TaskPriority::HIGH_IDLE );
     aAutoArrangeIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,AutoArrangeHdl));
     aAutoArrangeIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aAutoArrangeIdle" );
 
@@ -151,11 +151,11 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     aCallSelectHdlIdle.SetInvokeHandler( LINK(this,SvxIconChoiceCtrl_Impl,CallSelectHdlHdl));
     aCallSelectHdlIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aCallSelectHdlIdle" );
 
-    aDocRectChangedIdle.SetPriority( TaskPriority::MEDIUM );
+    aDocRectChangedIdle.SetPriority( TaskPriority::HIGH_IDLE );
     aDocRectChangedIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,DocRectChangedHdl));
     aDocRectChangedIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aDocRectChangedIdle" );
 
-    aVisRectChangedIdle.SetPriority( TaskPriority::MEDIUM );
+    aVisRectChangedIdle.SetPriority( TaskPriority::HIGH_IDLE );
     aVisRectChangedIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,VisRectChangedHdl));
     aVisRectChangedIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aVisRectChangedIdle" );
 

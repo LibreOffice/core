@@ -217,7 +217,6 @@ DlgEditor::DlgEditor (
     m_ClipboardDataFlavorsResource[1].HumanPresentableName = "Dialog 8.0" ;
     m_ClipboardDataFlavorsResource[1].DataType =             cppu::UnoType<Sequence< sal_Int8 >>::get();
 
-    aMarkIdle.SetPriority(TaskPriority::LOW);
     aMarkIdle.SetInvokeHandler( LINK( this, DlgEditor, MarkTimeout ) );
 
     rWindow.SetMapMode( MapMode( MapUnit::Map100thMM ) );

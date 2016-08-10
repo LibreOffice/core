@@ -121,7 +121,6 @@ ImplGrafMetricField::ImplGrafMetricField( vcl::Window* pParent, const OUString& 
         SetSpinSize( 1 );
     }
 
-    maIdle.SetPriority( TaskPriority::LOW );
     maIdle.SetInvokeHandler( LINK( this, ImplGrafMetricField, ImplModifyHdl ) );
 }
 
