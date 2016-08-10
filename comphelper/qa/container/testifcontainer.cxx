@@ -117,7 +117,7 @@ void TestInterfaceContainer2::test1()
         static_cast<XVetoableChangeListener*>(iterator.next())->vetoableChange( PropertyChangeEvent() );
         iterator.remove();
 
-        CPPUNIT_ASSERT( helper.getLength() == 0 );
+        CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(0), helper.getLength() );
         helper.disposeAndClear( EventObject() );
     }
 
@@ -141,7 +141,7 @@ void TestInterfaceContainer2::test1()
                     iterator.remove();
             }
         }
-        CPPUNIT_ASSERT( helper.getLength() == 2 );
+        CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(2), helper.getLength() );
         {
             comphelper::OInterfaceIteratorHelper2 iterator( helper );
             while( iterator.hasMoreElements() )
