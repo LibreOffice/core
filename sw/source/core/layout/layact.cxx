@@ -454,7 +454,10 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
     sal_uInt16 nPercentPageNum = 0;
     while ( (pPage && !IsInterrupt()) || m_nCheckPageNum != USHRT_MAX )
     {
-        if (!pPage || (m_nCheckPageNum != USHRT_MAX && pPage->GetPhyPageNum() >= m_nCheckPageNum))
+        // nCheckPageNum is set to USHRT_MAX in this code path after we have
+        // checked the SwPageDescs and set tos the minimal changed SwPageDesc.
+        // We don't need to check the SwPageDescs without changes.
+        if ( (m_nCheckPageNum != USHRT_MAX) && (!pPage || pPage->GetPhyPageNum() >= m_nCheckPageNum) )
         {
             if ( !pPage || pPage->GetPhyPageNum() > m_nCheckPageNum )
             {
