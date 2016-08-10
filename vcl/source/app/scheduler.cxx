@@ -429,7 +429,7 @@ Task& Task::operator=( const Task& rTask )
 Task::Task( const sal_Char *pDebugName )
     : mpSchedulerData( nullptr )
     , mpDebugName( pDebugName )
-    , mePriority( TaskPriority::HIGH )
+    , mePriority( TaskPriority::DEFAULT )
     , mbActive( false )
 {
 }

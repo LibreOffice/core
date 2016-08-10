@@ -106,13 +106,11 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window
     m_pAcceptChgCtr = VclPtr<SvxAcceptChgCtr>::Create(get_content_area(), this);
     nAcceptCount=0;
     nRejectCount=0;
-    aReOpenIdle.SetPriority(TaskPriority::MEDIUM);
     aReOpenIdle.SetInvokeHandler(LINK( this, ScAcceptChgDlg, ReOpenTimerHdl ));
 
     pTPFilter=m_pAcceptChgCtr->GetFilterPage();
     pTPView=m_pAcceptChgCtr->GetViewPage();
     pTheView=pTPView->GetTableControl();
-    aSelectionIdle.SetPriority(TaskPriority::LOW);
     aSelectionIdle.SetInvokeHandler(LINK( this, ScAcceptChgDlg, UpdateSelectionHdl ));
     aSelectionIdle.SetDebugName( "ScAcceptChgDlg  aSelectionIdle" );
 
