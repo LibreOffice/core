@@ -58,6 +58,12 @@ namespace o3tl
     template<> struct typed_flags<SwInvalidateFlags> : is_typed_flags<SwInvalidateFlags, 0x7f> {};
 };
 
+enum class SwRemoveResult
+{
+    Next,
+    Prev
+};
+
 /// The root element of a Writer document layout.
 class SwRootFrame: public SwLayoutFrame
 {
@@ -385,6 +391,8 @@ public:
 
     bool IsLayoutFreezed() const { return mbLayoutFreezed; }
     void FreezeLayout( bool freeze ) { mbLayoutFreezed = freeze; }
+
+    void RemovePage( SwPageFrame **pDel, SwRemoveResult eResult );
 };
 
 inline long SwRootFrame::GetBrowseWidth() const
