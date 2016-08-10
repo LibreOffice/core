@@ -23,6 +23,38 @@
 #include <saltimer.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>
+#include <vcl/idle.hxx>
+
+/**
+ * clang won't compile this in the Timer.hxx header, even with a class Idle
+ * forward definition, due to the incomplete Idle type in the template.
+ * Currently the code is just used in the Scheduler, so we keep it local.
+ *
+ * @see http://clang.llvm.org/compatibility.html#undep_incomplete
+ */
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const Timer& timer )
+{
+    bool bIsIdle = (dynamic_cast<const Idle*>( &timer ) != nullptr);
+    stream << (bIsIdle ? "Idle " : "Timer")
+           << " a: " << timer.IsActive() << " p: " << (int) timer.GetPriority();
+    const sal_Char *name = timer.GetDebugName();
+    if ( nullptr == name )
+        stream << " (nullptr)";
+    else
+        stream << " " << name;
+    if ( !bIsIdle )
+        stream << " " << timer.GetTimeout() << "ms";
+    return stream;
+}
+
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const Idle& idle )
+{
+    return stream << static_cast<const Timer*>( &idle );
+}
 
 void ImplSchedulerData::Invoke()
 {
@@ -182,8 +214,18 @@ bool Scheduler::ProcessTaskScheduling( IdleRunPolicy eIdleRunPolicy )
 
     DBG_TESTSOLARMUTEX();
 
+    SAL_INFO( "vcl.schedule", "==========  Start  ==========" );
+
     while ( pSchedulerData )
     {
+        const Timer *timer = dynamic_cast<Timer*>( pSchedulerData->mpScheduler );
+        if ( timer )
+            SAL_INFO( "vcl.schedule", pSchedulerData->mbInScheduler << " " << *timer );
+        else if ( pSchedulerData->mpScheduler )
+            SAL_INFO( "vcl.schedule", pSchedulerData->mbInScheduler << " " << *pSchedulerData->mpScheduler );
+        else
+            SAL_INFO( "vcl.schedule", pSchedulerData->mbInScheduler << " (to be deleted)" );
+
         // Skip invoked task
         if ( pSchedulerData->mbInScheduler )
             goto next_entry;
@@ -226,7 +268,12 @@ next_entry:
 
     if ( pMostUrgent )
     {
+        Scheduler *pTempScheduler = pMostUrgent->mpScheduler;
+        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks()
+             << " " << pMostUrgent << "  invoke     " << *pTempScheduler );
         pMostUrgent->Invoke();
+        SAL_INFO_IF( !pMostUrgent->mpScheduler, "vcl.schedule", tools::Time::GetSystemTicks()
+                     << " " << pMostUrgent <<  "  tag-rm" );
 
         if ( pMostUrgent->mpScheduler )
         {
@@ -239,10 +286,13 @@ next_entry:
             && ((eIdleRunPolicy == IdleRunPolicy::IDLE_VIA_TIMER)
                 || (nMinPeriod > ImmediateTimeoutMs)) )
     {
+        SAL_INFO( "vcl.schedule", "Scheduler sleep timeout: " << nMinPeriod );
         ImplStartTimer( nMinPeriod, true );
     }
     else if ( pSVData->mpSalTimer )
         pSVData->mpSalTimer->Stop();
+
+    SAL_INFO( "vcl.schedule", "==========   End   ==========" );
 
     pSVData->mnTimerPeriod = nMinPeriod;
     pSVData->mnLastUpdate = nTime;
@@ -286,7 +336,12 @@ void Scheduler::Start()
             pPrev->mpNext = mpSchedulerData;
         else
             pSVData->mpFirstSchedulerData = mpSchedulerData;
+        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks()
+             << " " << mpSchedulerData <<  "  added      " << *this );
     }
+    else
+        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " " << mpSchedulerData
+             <<  "  restarted  " << (int) mePriority << " " << mpDebugName );
 
     assert( mpSchedulerData->mpScheduler == this );
     mpSchedulerData->mnUpdateTime = tools::Time::GetSystemTicks();
@@ -297,6 +352,8 @@ void Scheduler::Stop()
 {
     if ( !mpSchedulerData )
         return;
+    SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks()
+          << " " << mpSchedulerData << "  stopped    " << *this );
     Scheduler::SetDeletionFlags();
     assert( !mpSchedulerData );
 }

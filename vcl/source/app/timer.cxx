@@ -19,6 +19,7 @@
 
 #include <tools/time.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include "saltimer.hxx"
 
 void Timer::SetDeletionFlags()

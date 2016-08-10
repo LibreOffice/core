@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_SCHEDULER_HXX
 
 #include <vcl/dllapi.h>
+#include <ostream>
 
 struct ImplSchedulerData;
 struct ImplSVData;
@@ -54,7 +55,7 @@ private:
     static inline bool HasPendingEvents( const ImplSVData* pSVData, const sal_uInt64 nTime );
 
 protected:
-    ImplSchedulerData*  mpSchedulerData;    /// Pointer to element in scheduler list
+    ImplSchedulerData  *mpSchedulerData;    /// Pointer to element in scheduler list
     const sal_Char     *mpDebugName;        /// Useful for debugging
     SchedulerPriority   mePriority;         /// Scheduler priority
 
@@ -77,7 +78,7 @@ public:
     SchedulerPriority GetPriority() const { return mePriority; }
 
     void            SetDebugName( const sal_Char *pDebugName ) { mpDebugName = pDebugName; }
-    const char     *GetDebugName() const { return mpDebugName; }
+    const sal_Char* GetDebugName() const { return mpDebugName; }
 
     // Call handler
     virtual void    Invoke() = 0;
@@ -110,6 +111,18 @@ public:
 inline bool Scheduler::IsActive() const
 {
     return nullptr != mpSchedulerData;
+}
+
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const Scheduler& scheduler )
+{
+    stream << scheduler.IsActive() << " " << (int) scheduler.GetPriority();
+    const sal_Char *name = scheduler.GetDebugName();
+    if( nullptr == name )
+        return stream << " (nullptr)";
+    else
+        return stream << " " << name;
 }
 
 #endif // INCLUDED_VCL_SCHEDULER_HXX
