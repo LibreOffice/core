@@ -153,9 +153,9 @@ public:
                                     sal_uInt16 nPrefixOnly=0xffffU ) const;
 
     bool ConvertURIToOASIS( OUString& rURI,
-                                bool bSupportPackage=false ) const;
+                                bool bSupportPackage ) const;
     bool ConvertURIToOOo( OUString& rURI,
-                                bool bSupportPackage=false ) const;
+                                bool bSupportPackage ) const;
 
     /** renames the given rOutAttributeValue if one of the parameters contains a
         matching token in its lower 16 bits.  The value is converted to the

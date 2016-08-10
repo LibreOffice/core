@@ -44,7 +44,7 @@ class XMLTextListsHelper
         /// list stack for importing:
 
         /// push a list context on the list context stack
-        void PushListContext(XMLTextListBlockContext *i_pListBlock = nullptr);
+        void PushListContext(XMLTextListBlockContext *i_pListBlock);
         void PushListContext(XMLNumberedParaContext *i_pNumberedParagraph);
         /// pop the list context stack
         void PopListContext();

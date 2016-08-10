@@ -88,7 +88,7 @@ namespace helpdatafileproxy {
         ~Hdf()
             { releaseHashMap(); }
 
-        void createHashMap( bool bOptimizeForPerformance = false );
+        void createHashMap( bool bOptimizeForPerformance );
         void releaseHashMap();
 
         bool getValueForKey( const OString& rKey, HDFData& rValue );

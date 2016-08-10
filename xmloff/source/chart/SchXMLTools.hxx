@@ -123,7 +123,7 @@ namespace SchXMLTools
     bool getXMLRangePropertyFromDataSequence(
         const css::uno::Reference< css::chart2::data::XDataSequence > & xDataSequence,
         OUString & rOutXMLRange,
-        bool bClearProp = false );
+        bool bClearProp );
 
     css::uno::Reference< css::chart2::data::XDataProvider > getDataProviderFromParent( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc );
 
