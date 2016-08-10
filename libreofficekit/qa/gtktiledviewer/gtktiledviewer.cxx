@@ -535,6 +535,11 @@ static void documentRepair(GtkWidget* pButton, gpointer /*pItem*/)
             boost::property_tree::ptree aTree;
             aTree.put(boost::property_tree::ptree::path_type(aKey + "/type", '/'), "unsigned short");
             aTree.put(boost::property_tree::ptree::path_type(aKey + "/value", '/'), nIndex + 1);
+
+            // Without this, we could only undo our own commands.
+            aTree.put(boost::property_tree::ptree::path_type("Repair/type", '/'), "boolean");
+            aTree.put(boost::property_tree::ptree::path_type("Repair/value", '/'), true);
+
             std::stringstream aStream;
             boost::property_tree::write_json(aStream, aTree);
             std::string aArguments = aStream.str();

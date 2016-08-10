@@ -94,6 +94,7 @@
 #include <fmtinfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include "swabstdlg.hxx"
 #include "dialog.hrc"
 #include "fldui.hrc"
@@ -108,8 +109,8 @@
 #include <com/sun/star/gallery/GalleryItemType.hpp>
 #include <memory>
 
-//UUUU
 #include <svx/unobrushitemhelper.hxx>
+#include <comphelper/scopeguard.hxx>
 
 FlyMode SwBaseShell::eFrameMode = FLY_DRAG_END;
 
@@ -483,8 +484,22 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
     if( pArgs && SfxItemState::SET == pArgs->GetItemState( nId, false, &pItem ))
         nCnt = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
 
+    // Repair mode: allow undo/redo of all undo actions, even if access would
+    // be limited based on the view shell ID.
+    bool bRepair = false;
+    if (pArgs && pArgs->GetItemState(SID_REPAIRPACKAGE, false, &pItem) == SfxItemState::SET)
+        bRepair = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+
     // #i106349#: save pointer: undo/redo may delete the shell, i.e., this!
     SfxViewFrame *const pViewFrame( GetView().GetViewFrame() );
+
+    IDocumentUndoRedo& rUndoRedo = rWrtShell.GetIDocumentUndoRedo();
+    bool bWasRepair = rUndoRedo.DoesRepair();
+    rUndoRedo.DoRepair(bRepair);
+    comphelper::ScopeGuard aGuard([&rUndoRedo, bWasRepair]()
+    {
+        rUndoRedo.DoRepair(bWasRepair);
+    });
 
     switch( nId )
     {
