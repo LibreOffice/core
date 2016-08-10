@@ -442,6 +442,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
+                        <property name="valign">center</property>
                         <child>
                           <object class="sfxlo-SidebarToolBox" id="cutbox">
                             <property name="visible">True</property>
@@ -525,6 +526,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Font</property>
+                    <property name="valign">center</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkBox" id="box11">
@@ -593,7 +595,7 @@
                           <object class="GtkBox" id="box10">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="spacing">12</property>
+                            <property name="spacing">6</property>
                             <child>
                               <object class="sfxlo-SidebarToolBox" id="fonteffects">
                                 <property name="visible">True</property>
@@ -667,6 +669,8 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
+                                <property name="height_request">20</property>
+                                <property name="valign">center</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -719,6 +723,8 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
+                                <property name="height_request">20</property>
+                                <property name="valign">center</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -732,6 +738,8 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
+                                <property name="height_request">20</property>
+                                <property name="valign">center</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -807,6 +815,7 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Font</property>
                     <property name="orientation">vertical</property>
+                    <property name="valign">center</property>
                     <child>
                       <object class="GtkBox" id="box77">
                         <property name="visible">True</property>
@@ -937,6 +946,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="orientation">vertical</property>
+                            <property name="valign">center</property>
                             <child>
                               <object class="sfxlo-SidebarToolBox" id="numberbullet">
                                 <property name="visible">True</property>
@@ -1104,6 +1114,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="column_spacing">6</property>
+                            <property name="valign">center</property>
                             <child>
                               <object class="sfxlo-SidebarToolBox" id="verticalalignment1">
                                 <property name="visible">True</property>
@@ -1338,6 +1349,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="orientation">vertical</property>
+                            <property name="valign">center</property>
                             <child>
                               <object class="GtkBox" id="box66">
                                 <property name="visible">True</property>
@@ -1685,6 +1697,7 @@
                 </child>
                 <child>
                   <object class="sfxlo-DropdownBox" id="FindSection1">
+                    <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Find</property>
                     <child>
