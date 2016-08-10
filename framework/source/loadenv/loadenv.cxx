@@ -552,25 +552,13 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
                   in a special way .-)
     */
 
-    utl::MediaDescriptor stlMediaDescriptor(lMediaDescriptor);
-    utl::MediaDescriptor::const_iterator pIt;
-
     // creation of new documents
     if (ProtocolCheck::isProtocol(sURL,ProtocolCheck::E_PRIVATE_FACTORY))
-    {
-        //tdf#98837 - check if read only prop is set to true for a new document
-        //if yes then fail loading as doc needs to be saved before being opened
-        //in read only mode
-        pIt = stlMediaDescriptor.find(utl::MediaDescriptor::PROP_READONLY());
-        if( pIt == stlMediaDescriptor.end() ||
-            pIt->second == uno::Any(false)
-          )
-            return E_CAN_BE_LOADED;
-        SAL_INFO("fwk", "LoadEnv::classifyContent(): new document can not be loaded in read only mode");
-        return E_UNSUPPORTED_CONTENT;
-    }
+        return E_CAN_BE_LOADED;
 
     // using of an existing input stream
+    utl::MediaDescriptor                 stlMediaDescriptor(lMediaDescriptor);
+    utl::MediaDescriptor::const_iterator pIt;
     if (ProtocolCheck::isProtocol(sURL,ProtocolCheck::E_PRIVATE_STREAM))
     {
         pIt = stlMediaDescriptor.find(utl::MediaDescriptor::PROP_INPUTSTREAM());
