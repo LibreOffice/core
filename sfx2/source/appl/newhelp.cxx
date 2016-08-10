@@ -553,7 +553,6 @@ IndexTabPage_Impl::IndexTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Im
     m_pOpenBtn->SetClickHdl( LINK( this, IndexTabPage_Impl, OpenHdl ) );
     Link<Timer *, void> aTimeoutLink = LINK( this, IndexTabPage_Impl, TimeoutHdl );
     aFactoryIdle.SetIdleHdl( LINK(this, IndexTabPage_Impl, IdleHdl ));
-    aFactoryIdle.SetPriority(SchedulerPriority::LOWER);
     aKeywordTimer.SetTimeoutHdl( aTimeoutLink );
 }
 
@@ -1434,7 +1433,6 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* _pParent)
     nMinWidth = ( m_pActiveLB->GetSizePixel().Width() / 2 );
 
     aIdle.SetIdleHdl( LINK( this, SfxHelpIndexWindow_Impl, InitHdl ) );
-    aIdle.SetPriority( SchedulerPriority::LOWER );
     aIdle.Start();
 
     Show();
