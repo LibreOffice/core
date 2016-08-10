@@ -161,7 +161,7 @@ public:
     sal_Int8            ExecuteDrop( DropTargetHelper& rTarget, const ExecuteDropEvent& rEvt );
     void                StartDrag( vcl::Window* pWindow, const Point* pDragPoint = nullptr );
     void                TogglePreview( vcl::Window* pWindow, const Point* pPreviewPoint = nullptr );
-    void                ShowContextMenu( vcl::Window* pWindow, const Point* pContextPoint = nullptr );
+    void                ShowContextMenu( vcl::Window* pWindow, const Point* pContextPoint );
     bool                KeyInput( const KeyEvent& rEvt, vcl::Window* pWindow );
 
     static css::uno::Reference< css::frame::XFrame > GetFrame();

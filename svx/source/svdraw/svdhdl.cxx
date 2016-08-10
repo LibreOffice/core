@@ -91,7 +91,7 @@ public:
     explicit SdrHdlBitmapSet(sal_uInt16 nResId);
     ~SdrHdlBitmapSet();
 
-    const BitmapEx& GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd=0);
+    const BitmapEx& GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd);
 };
 
 

@@ -69,7 +69,7 @@ public:
     void                    SetInteractive( bool _bInteractive );
 
     void                    SetClickHdl( const Link<HyperLabel*,void>& rLink );
-    void                    Enable( bool bEnable = true);
+    void                    Enable( bool bEnable );
     bool                    IsEnabled() const;
     void                    GrabFocus();
 

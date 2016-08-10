@@ -293,8 +293,8 @@ private:
      *        If <TRUE/> the items will not be removed from the model, otherwise they will.
      */
     void insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems, bool _bCopy);
-    SvTreeListEntry* getPrevEntry(SvTreeListEntry* _pStartWith = nullptr);
-    SvTreeListEntry* getNextEntry(SvTreeListEntry* _pStartWith = nullptr);
+    SvTreeListEntry* getPrevEntry(SvTreeListEntry* _pStartWith);
+    SvTreeListEntry* getNextEntry(SvTreeListEntry* _pStartWith);
 
     using SvTreeListBox::Select;
     using SvTreeListBox::ExecuteDrop;

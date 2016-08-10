@@ -1129,7 +1129,7 @@ IMPL_LINK_NOARG_TYPED( FmXFormView, OnStartControlWizard, void*, void )
 namespace
 {
     void lcl_insertIntoFormComponentHierarchy_throw( const FmFormView& _rView, const SdrUnoObj& _rSdrObj,
-        const Reference< XDataSource >& _rxDataSource = nullptr, const OUString& _rDataSourceName = OUString(),
+        const Reference< XDataSource >& _rxDataSource, const OUString& _rDataSourceName,
         const OUString& _rCommand = OUString(), const sal_Int32 _nCommandType = -1 )
     {
         FmFormPage& rPage = static_cast< FmFormPage& >( *_rView.GetSdrPageView()->GetPage() );

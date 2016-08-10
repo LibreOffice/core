@@ -362,7 +362,7 @@ public:
     FileViewResult          GetFolderContent_Impl(
         const OUString& rFolder,
         const FileViewAsyncAction* pAsyncDescriptor,
-        const css::uno::Sequence< OUString >& rBlackList = css::uno::Sequence< OUString >() );
+        const css::uno::Sequence< OUString >& rBlackList );
 
     FileViewResult          GetFolderContent_Impl(
         const FolderDescriptor& _rFolder,

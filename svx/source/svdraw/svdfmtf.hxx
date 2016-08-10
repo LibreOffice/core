@@ -167,7 +167,7 @@ public:
     size_t DoImport(
         const GDIMetaFile& rMtf,
         SdrObjList& rDestList,
-        size_t nInsPos = SAL_MAX_SIZE,
+        size_t nInsPos,
         SvdProgressInfo* pProgrInfo = nullptr);
 };
 

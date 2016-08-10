@@ -212,7 +212,7 @@ class SvxIconChoiceCtrl_Impl
 
     void                ShowCursor( bool bShow );
 
-    void                ImpArrange( bool bKeepPredecessors = false );
+    void                ImpArrange( bool bKeepPredecessors );
     void                AdjustVirtSize( const Rectangle& );
     void                ResetVirtSize();
     void                CheckScrollBars();
@@ -252,14 +252,14 @@ class SvxIconChoiceCtrl_Impl
     void                SelectRect(
                             SvxIconChoiceCtrlEntry* pEntry1,
                             SvxIconChoiceCtrlEntry* pEntry2,
-                            bool bAdd = true,
-                            std::vector<Rectangle*>* pOtherRects = nullptr
+                            bool bAdd,
+                            std::vector<Rectangle*>* pOtherRects
                         );
 
     void                SelectRange(
                             SvxIconChoiceCtrlEntry* pStart,
                             SvxIconChoiceCtrlEntry* pEnd,
-                            bool bAdd = true
+                            bool bAdd
                         );
 
     void                AddSelectedRect( const Rectangle& );
@@ -328,7 +328,7 @@ public:
     void                SetStyle( WinBits nWinStyle );
     WinBits             GetStyle() const { return nWinBits; }
     void                InsertEntry( SvxIconChoiceCtrlEntry*, size_t nPos );
-    void                CreateAutoMnemonics( MnemonicGenerator* _pGenerator = nullptr );
+    void                CreateAutoMnemonics( MnemonicGenerator* _pGenerator );
     void                FontModified();
     void                SelectAll();
     void                SelectEntry(
@@ -433,8 +433,8 @@ public:
 
     void                SelectRect(
                             const Rectangle&,
-                            bool bAdd = true,
-                            std::vector<Rectangle*>* pOtherRects = nullptr
+                            bool bAdd,
+                            std::vector<Rectangle*>* pOtherRects
                         );
 
     bool               IsTextHit( SvxIconChoiceCtrlEntry* pEntry, const Point& rDocPos );
@@ -447,7 +447,7 @@ public:
 #ifdef DBG_UTIL
     void                SetEntryTextMode(
                             SvxIconChoiceCtrlTextMode,
-                            SvxIconChoiceCtrlEntry* pEntry = nullptr
+                            SvxIconChoiceCtrlEntry* pEntry
                         );
 #endif
     bool                IsEntryEditingEnabled() const { return bEntryEditingEnabled; }

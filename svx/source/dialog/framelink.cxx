@@ -1351,7 +1351,7 @@ bool CheckFrameBorderConnectable( const Style& rLBorder, const Style& rRBorder,
 
 
 double lcl_GetExtent( const Style& rBorder, const Style& rSide, const Style& rOpposite,
-                      long nAngleSide = 9000, long nAngleOpposite = 9000 )
+                      long nAngleSide, long nAngleOpposite )
 {
     Style aOtherBorder = rSide;
     long nOtherAngle = nAngleSide;
