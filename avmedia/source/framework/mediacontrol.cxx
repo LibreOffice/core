@@ -114,7 +114,7 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
         mpZoomToolBox->SetPaintTransparent( true );
     }
 
-    maIdle.SetPriority( TaskPriority::LOW );
+    maIdle.SetPriority( TaskPriority::HIGH_IDLE );
     maIdle.SetInvokeHandler( LINK( this, MediaControl, implTimeoutHdl ) );
     maIdle.Start();
 }

@@ -1085,7 +1085,7 @@ void SdrItemBrowser::SetDirty()
 {
     if (!bDirty) {
         bDirty = true;
-        aIdle.SetPriority(TaskPriority::HIGH);
+        aIdle.SetPriority(TaskPriority::HIGH_IDLE);
         aIdle.Start();
     }
 }
