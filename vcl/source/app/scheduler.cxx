@@ -311,7 +311,7 @@ Scheduler& Scheduler::operator=( const Scheduler& rScheduler )
 Scheduler::Scheduler(const sal_Char *pDebugName):
     mpSchedulerData(nullptr),
     mpDebugName(pDebugName),
-    mePriority(SchedulerPriority::HIGH)
+    mePriority(SchedulerPriority::DEFAULT)
 {
 }
 
