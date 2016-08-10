@@ -27,6 +27,7 @@
 PaperSizeListBox::PaperSizeListBox(vcl::Window* pParent, WinBits nStyle)
     : ListBox( pParent, nStyle)
 {
+    SetDropDownLineCount(6);
 }
 
 VCL_BUILDER_FACTORY(PaperSizeListBox);
