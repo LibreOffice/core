@@ -48,4 +48,9 @@
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
     <service name="com.sun.star.document.ImportFilter"/>
   </implementation>
+  <implementation name="org.libreoffice.comp.Writer.StarOfficeWriterImportFilter"
+      constructor="org_libreoffice_comp_Writer_StarOfficeWriterImportFilter_get_implementation">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
 </component>
