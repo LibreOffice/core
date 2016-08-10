@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a95cdbc_dbafd37b",
+        "filename": "cui/source/tabpages/tparea.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-10T15:38:44Z",
+      "side": 1,
+      "message": "What about disposing also the other widgets you\u0027ve created in constructor?",
+      "revId": "cdbe47acbe0061bed362a89e3cdf52a7c627350a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a95cdbc_bbba07bf",
+        "filename": "cui/source/tabpages/tparea.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-10T15:38:44Z",
+      "side": 1,
+      "message": "The worst possible indentation of switch-case, please change that",
+      "revId": "cdbe47acbe0061bed362a89e3cdf52a7c627350a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a95cdbc_fbb48fd2",
+        "filename": "cui/source/tabpages/tparea.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-10T15:38:44Z",
+      "side": 1,
+      "message": "This is horrible! Come on, you can do much better making sure that only one button is pressed at time. \n\nIf you really don\u0027t have time to make this a custom widget derived from radio button, at the very least create some struct or class that\u0027ll contain a vector of pointers to those buttons as a member variable + some set of methods that\u0027ll press the buttons, one at a time",
+      "revId": "cdbe47acbe0061bed362a89e3cdf52a7c627350a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a95cdbc_1bca1b50",
+        "filename": "cui/source/tabpages/tparea.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-10T15:38:44Z",
+      "side": 1,
+      "message": "What about some switch-case here?",
+      "revId": "cdbe47acbe0061bed362a89e3cdf52a7c627350a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a95cdbc_3bc7d746",
+        "filename": "cui/source/tabpages/tparea.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-10T15:38:44Z",
+      "side": 1,
+      "message": "This whole if-else thing is a perfect candidate for a template function",
+      "revId": "cdbe47acbe0061bed362a89e3cdf52a7c627350a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
