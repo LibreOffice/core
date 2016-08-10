@@ -2689,6 +2689,15 @@ bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const OUString
                     {
                         if (sCurrentCurrency.equals(sTemp))
                             return true;
+                        // A release that saved an unknown currency may have
+                        // saved the currency symbol of the number format
+                        // instead of an ISO code bank symbol. In another
+                        // release we may have a match for that. In this case
+                        // sCurrentCurrency is the ISO code obtained through
+                        // XMLNumberFormatAttributesExportHelper::GetCellType()
+                        // and sBankSymbol is the currency symbol.
+                        if (sCurrentCurrency.getLength() == 3 && sBankSymbol.equals(sTemp))
+                            return true;
                         // #i61657# This may be a legacy currency symbol that changed in the meantime.
                         if (SvNumberFormatter::GetLegacyOnlyCurrencyEntry( sCurrentCurrency, sBankSymbol) != nullptr)
                             return true;
