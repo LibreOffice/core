@@ -109,7 +109,6 @@ void AquaSalInstance::delayedSettingsChanged( bool bInvalidate )
 {
     osl::Guard< comphelper::SolarMutex > aGuard( *mpSalYieldMutex );
     AquaDelayedSettingsChanged* pIdle = new AquaDelayedSettingsChanged( bInvalidate );
-    pIdle->SetPriority( TaskPriority::MEDIUM );
     pIdle->Start();
 }
 

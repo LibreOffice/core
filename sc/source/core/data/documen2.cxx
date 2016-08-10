@@ -250,7 +250,6 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
     SetLanguage( ScGlobal::eLnge, ScGlobal::eLnge, ScGlobal::eLnge );
 
     aTrackIdle.SetInvokeHandler( LINK( this, ScDocument, TrackTimeHdl ) );
-    aTrackIdle.SetPriority( TaskPriority::LOW );
 }
 
 sfx2::LinkManager* ScDocument::GetLinkManager()
