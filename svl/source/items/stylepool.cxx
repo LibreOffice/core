@@ -371,8 +371,8 @@ public:
     std::shared_ptr<SfxItemSet> insertItemSet( const SfxItemSet& rSet );
 
     // #i86923#
-    IStylePoolIteratorAccess* createIterator( bool bSkipUnusedItemSets = false,
-                                              bool bSkipIgnorableItems = false );
+    IStylePoolIteratorAccess* createIterator( bool bSkipUnusedItemSets,
+                                              bool bSkipIgnorableItems );
 };
 
 std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet )

@@ -87,7 +87,7 @@ public:
     virtual ~UnoTreeListBoxImpl();
     virtual void dispose() override;
 
-    void            insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uLong nPos=TREELIST_APPEND );
+    void            insert( SvTreeListEntry* pEntry, SvTreeListEntry* pParent, sal_uLong nPos );
 
     virtual void    RequestingChildren( SvTreeListEntry* pParent ) override;
 

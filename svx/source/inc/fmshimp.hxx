@@ -325,7 +325,7 @@ protected:
 
     // form handling
     /// load or unload the forms on a page
-    SAL_DLLPRIVATE         void        loadForms( FmFormPage* _pPage, const LoadFormsFlags _nBehaviour = LoadFormsFlags::Load | LoadFormsFlags::Sync );
+    SAL_DLLPRIVATE         void        loadForms( FmFormPage* _pPage, const LoadFormsFlags _nBehaviour );
     SAL_DLLPRIVATE         void        smartControlReset( const css::uno::Reference< css::container::XIndexAccess >& _rxModels );
 
 

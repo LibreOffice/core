@@ -36,7 +36,7 @@ void printMethods(std::ostream & o,
                   OUString const & name,
                   codemaker::GeneratedTypeSet & generated,
                   OString const & delegate,
-                  OString const & indentation=OString(),
+                  OString const & indentation,
                   bool defaultvalue=false,
                   bool usepropertymixin=false);
 

@@ -116,7 +116,7 @@ struct FmGridHeaderData
 };
 
 const sal_Int16 nChangeTypeOffset = 1000;
-void SetMenuItem(const ImageList& rList, sal_uInt16 nID, Menu* pMenu, Menu& rNewMenu, bool bDesignMode = true, sal_Int16 nOffset = nChangeTypeOffset)
+void SetMenuItem(const ImageList& rList, sal_uInt16 nID, Menu* pMenu, Menu& rNewMenu, bool bDesignMode, sal_Int16 nOffset = nChangeTypeOffset)
 {
     pMenu->SetItemImage(nID, rList.GetImage(nID));
     pMenu->EnableItem(nID, bDesignMode);

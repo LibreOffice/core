@@ -225,7 +225,7 @@ protected:
     inline  void        setTransparent( bool _bSet ) { m_bTransparent = _bSet; }
 
     // control alignment
-    inline  void        setAlignedController( bool _bAlign = true ) { m_bAlignedController = _bAlign; }
+    inline  void        setAlignedController( bool _bAlign ) { m_bAlignedController = _bAlign; }
 
 
     /** determined whether or not the value property is locked

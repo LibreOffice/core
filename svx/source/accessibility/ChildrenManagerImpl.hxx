@@ -181,7 +181,7 @@ public:
             before this method returns and events are sent to inform the
             listeners of the new object.
     */
-    void Update (bool bCreateNewObjectsOnDemand = true);
+    void Update (bool bCreateNewObjectsOnDemand);
 
     /** Set the list of UNO shapes to the given list.  This removes the old
         list and does not add to it.  The list of accessible shapes that is

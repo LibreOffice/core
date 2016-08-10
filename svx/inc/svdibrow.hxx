@@ -73,7 +73,7 @@ public:
     virtual ~SdrItemBrowserControl();
     virtual void dispose() override;
     void Clear();
-    void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=nullptr);
+    void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet);
     sal_uInt16 GetCurrentWhich() const;
     void EndChangeEntry();
     void BreakChangeEntry();

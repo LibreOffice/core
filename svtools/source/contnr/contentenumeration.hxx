@@ -235,7 +235,7 @@ namespace svt
         */
         EnumerationResult   enumerateFolderContentSync(
                     const FolderDescriptor& _rFolder,
-                    const css::uno::Sequence< OUString >& rBlackList = css::uno::Sequence< OUString >()
+                    const css::uno::Sequence< OUString >& rBlackList
                 );
 
         /** cancels the running operation.

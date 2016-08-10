@@ -59,7 +59,7 @@ namespace sdr
             void ImpPrepareBufferDevice();
             void ImpRestoreBackground() const ;
             void ImpRestoreBackground(const vcl::Region& rRegionPixel) const;
-            void ImpSaveBackground(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice = nullptr);
+            void ImpSaveBackground(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice);
 
             OverlayManagerBuffered(
                 OutputDevice& rOutputDevice,
@@ -68,7 +68,7 @@ namespace sdr
 
         public:
             static rtl::Reference<OverlayManager> create(OutputDevice& rOutputDevice,
-                bool bRefreshWithPreRendering = false);
+                bool bRefreshWithPreRendering);
 
             // complete redraw
             virtual void completeRedraw(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice = nullptr) const override;

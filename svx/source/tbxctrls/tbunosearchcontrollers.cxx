@@ -74,7 +74,7 @@ static const sal_Int32       REMEMBER_SIZE = 10;
 void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                          const css::uno::Reference< css::frame::XFrame >& xFrame,
                          const ToolBox* pToolBox,
-                         const bool aSearchBackwards = false,
+                         const bool aSearchBackwards,
                          const bool aFindAll = false )
 {
     css::uno::Reference< css::util::XURLTransformer > xURLTransformer( css::util::URLTransformer::create( rxContext ) );

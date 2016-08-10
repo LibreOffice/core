@@ -439,7 +439,7 @@ namespace fileaccess {
 
         void SAL_CALL copyPersistentSet( const OUString& srcUnqPath,
                                          const OUString& dstUnqPath,
-                                         bool withChildren = false );
+                                         bool withChildren );
 
 
         // Special optimized method for getting the properties of a directoryitem, which
