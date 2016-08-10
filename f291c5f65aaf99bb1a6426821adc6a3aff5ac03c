@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a95cdbc_db08b32b",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3242,
+      "author": {
+        "id": 1001333
+      },
+      "writtenOn": "2016-08-10T20:24:45Z",
+      "side": 1,
+      "message": "prefix increment is faster cause it doesn\u0027t return rvalue copy. Still need to change?",
+      "parentUuid": "3a98d1f4_d2dc091b",
+      "revId": "f291c5f65aaf99bb1a6426821adc6a3aff5ac03c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a98d1f4_52cab950",
         "filename": "sc/source/core/data/table3.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-08-08T03:58:17Z",
       "side": 1,
       "message": "We use some form of hungarian notation and it would be good not to change it and follow that pattern in new code.",
+      "revId": "f291c5f65aaf99bb1a6426821adc6a3aff5ac03c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a95cdbc_1b13fb5d",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3244,
+      "author": {
+        "id": 1001333
+      },
+      "writtenOn": "2016-08-10T20:24:45Z",
+      "side": 1,
+      "message": "how desired name should look like? eFirstCellType?",
+      "parentUuid": "3a98d1f4_52cab950",
       "revId": "f291c5f65aaf99bb1a6426821adc6a3aff5ac03c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
