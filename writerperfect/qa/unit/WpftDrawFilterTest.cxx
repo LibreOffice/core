@@ -45,6 +45,10 @@ void WpftDrawFilterTest::test()
         {"MacDraw_II.hqx", REQUIRE_MWAW_VERSION(0, 3, 3)},
         {"MacDraw_Pro_1.0.hqx", REQUIRE_MWAW_VERSION(0, 3, 4)},
     };
+    const writerperfect::test::WpftOptionalMap_t aStarOfficeOptional
+    {
+        {"Draw_3.1.sda", REQUIRE_STAROFFICE_VERSION(0, 0, 1)},
+    };
 
     doTest("com.sun.star.comp.Draw.CDRImportFilter", "/writerperfect/qa/unit/data/draw/libcdr/");
     doTest("com.sun.star.comp.Draw.CMXImportFilter", "/writerperfect/qa/unit/data/draw/libcdr-cmx/");
@@ -54,6 +58,7 @@ void WpftDrawFilterTest::test()
     doTest("com.sun.star.comp.Draw.VisioImportFilter", "/writerperfect/qa/unit/data/draw/libvisio/");
     doTest("com.sun.star.comp.Draw.WPGImportFilter", "/writerperfect/qa/unit/data/draw/libwpg/");
     doTest("org.libreoffice.comp.Draw.PageMakerImportFilter", "/writerperfect/qa/unit/data/draw/libpagemaker/");
+    doTest("org.libreoffice.comp.Draw.StarOfficeDrawImportFilter", "/writerperfect/qa/unit/data/draw/libstaroffice/", aStarOfficeOptional);
     doTest("org.libreoffice.comp.Draw.ZMFImportFilter", "/writerperfect/qa/unit/data/draw/libzmf/");
 }
 
