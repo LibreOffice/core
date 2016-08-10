@@ -11,11 +11,16 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
+#include <com/sun/star/frame/Desktop.hpp>
+
+#include <comphelper/processfactory.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <shellimpl.hxx>
+
+using namespace com::sun::star;
 
 int SfxLokHelper::createView()
 {
@@ -59,6 +64,11 @@ void SfxLokHelper::setView(int nId)
 
             SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
             pViewFrame->MakeActive_Impl(false);
+
+            // Make comphelper::dispatchCommand() find the correct frame.
+            uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame().GetFrameInterface();
+            uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
+            xDesktop->setActiveFrame(xFrame);
             return;
         }
     }
