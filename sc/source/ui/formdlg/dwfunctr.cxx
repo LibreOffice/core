@@ -68,7 +68,6 @@ ScFunctionWin::ScFunctionWin(vcl::Window* pParent, const ResId& rResId) :
     InitLRUList();
     SetStyle(GetStyle()|WB_CLIPCHILDREN);
 
-    aIdle.SetPriority(SchedulerPriority::LOWER);
     aIdle.SetIdleHdl(LINK( this, ScFunctionWin, TimerHdl));
 
     aFiFuncDesc->SetUpdateMode(true);
