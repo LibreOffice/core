@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a95cdbc_1ba3fb9f",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-10T15:17:21Z",
+      "side": 1,
+      "message": "Please reduce the duplicated code. This block is the same as the one below \n\n(I don\u0027t understand why XFillBmpSizeX and SizeY are different items anyway, but that\u0027s not your fault)",
+      "revId": "e93e1dd2b7c413707ee2230e32ba3e2c88ea5007",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a95cdbc_3ba0b790",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-10T15:17:21Z",
+      "side": 1,
+      "message": "and the same here ... both are good candidates for some kind of template function",
+      "revId": "e93e1dd2b7c413707ee2230e32ba3e2c88ea5007",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a95cdbc_7baa3f72",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-10T15:17:21Z",
+      "side": 1,
+      "message": "Hm, why not put the radio buttons into group(s) to make sure only one of them is selected at time? You wouldn\u0027t then need this code at all",
+      "revId": "e93e1dd2b7c413707ee2230e32ba3e2c88ea5007",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
