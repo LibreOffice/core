@@ -61,7 +61,7 @@ public:
     bool            mbVisible;
 
     static VCL_DLLPUBLIC bool Dispatch( XEvent* pEvent );
-    static VCL_DLLPUBLIC X11SalObject* CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true );
+    static VCL_DLLPUBLIC X11SalObject* CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow );
 
     X11SalObject();
     virtual ~X11SalObject();

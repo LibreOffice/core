@@ -435,7 +435,7 @@ namespace chelp {
     private:
         css::uno::Reference< css::container::XHierarchicalNameAccess >
             implGetJarFromPackage(const css::uno::Reference< css::deployment::XPackage >& xPackage,
-                OUString* o_pExtensionPath = nullptr, OUString* o_pExtensionRegistryPath = nullptr );
+                OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath );
 
     }; // end class JarFileIterator
 

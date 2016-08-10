@@ -245,7 +245,7 @@ public:
 
     void            PSUploadPS1Font (sal_Int32 nFontID);
     void            PSSetFont (const OString& rName,
-                               rtl_TextEncoding nEncoding = RTL_TEXTENCODING_DONTKNOW)
+                               rtl_TextEncoding nEncoding)
     { maVirtualStatus.maFont = rName; maVirtualStatus.maEncoding = nEncoding; }
 
     /* graphics status stack */

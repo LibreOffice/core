@@ -104,7 +104,7 @@ protected:
 
     void ImplInitClipRegion();
     void ImplSetClipBit( const vcl::Region& rClip, GLuint nMask );
-    void ImplDrawLineAA( double nX1, double nY1, double nX2, double nY2, bool edge = false );
+    void ImplDrawLineAA( double nX1, double nY1, double nX2, double nY2, bool edge );
     bool CheckOffscreenTexture();
 
     void ApplyProgramMatrices(float fPixelOffset = 0.0);
@@ -121,7 +121,7 @@ public:
     bool UseInvert(SalInvert nFlags);
 
     void DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry, bool blockAA = false );
-    void DrawConvexPolygon( const tools::Polygon& rPolygon, bool blockAA = false );
+    void DrawConvexPolygon( const tools::Polygon& rPolygon, bool blockAA );
     void DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoid, bool blockAA );
     void DrawRect( long nX, long nY, long nWidth, long nHeight );
     void DrawRect( const Rectangle& rRect );
@@ -133,7 +133,7 @@ public:
     void DrawTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false );
     void DrawTransformedTexture( OpenGLTexture& rTexture, OpenGLTexture& rMask, const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX, const basegfx::B2DPoint& rY );
     void DrawAlphaTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted, bool pPremultiplied );
-    void DrawTextureDiff( OpenGLTexture& rTexture, OpenGLTexture& rMask, const SalTwoRect& rPosAry, bool bInverted = false );
+    void DrawTextureDiff( OpenGLTexture& rTexture, OpenGLTexture& rMask, const SalTwoRect& rPosAry, bool bInverted );
     void DrawTextureWithMask( OpenGLTexture& rTexture, OpenGLTexture& rMask, const SalTwoRect& rPosAry );
     void DrawBlendedTexture( OpenGLTexture& rTexture, OpenGLTexture& rMask, OpenGLTexture& rAlpha, const SalTwoRect& rPosAry );
     void DrawMask( OpenGLTexture& rTexture, SalColor nMaskColor, const SalTwoRect& rPosAry );
@@ -162,7 +162,7 @@ public:
     enum XOROption { IGNORE_XOR, IMPLEMENT_XOR };
 
     // initialize pre-draw state
-    void InitializePreDrawState(XOROption eOpt = IGNORE_XOR);
+    void InitializePreDrawState(XOROption eOpt);
 
     // operations to do before painting
     void PreDraw(XOROption eOpt = IGNORE_XOR);

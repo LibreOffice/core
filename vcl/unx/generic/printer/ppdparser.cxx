@@ -84,13 +84,13 @@ namespace psp
             const OUString& i_rOption,
             const OUString& i_rValue,
             const OUString& i_rTranslation,
-            const css::lang::Locale& i_rLocale = css::lang::Locale()
+            const css::lang::Locale& i_rLocale
             );
 
         void insertOption( const OUString& i_rKey,
                            const OUString& i_rOption,
                            const OUString& i_rTranslation,
-                           const css::lang::Locale& i_rLocale = css::lang::Locale() )
+                           const css::lang::Locale& i_rLocale )
         {
             insertValue( i_rKey, i_rOption, OUString(), i_rTranslation, i_rLocale );
         }
