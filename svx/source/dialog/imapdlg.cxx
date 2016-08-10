@@ -203,7 +203,6 @@ SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, vcl::Window
     m_pCbbTarget->Disable();
     pOwnData->bExecState = false;
 
-    pOwnData->aIdle.SetPriority( SchedulerPriority::LOW );
     pOwnData->aIdle.SetIdleHdl( LINK( this, SvxIMapDlg, UpdateHdl ) );
 
     m_pTbxIMapDlg1->EnableItem( mnActiveId, false );

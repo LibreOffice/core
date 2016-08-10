@@ -83,7 +83,7 @@ namespace sdr
 
         TimerEventHandler::TimerEventHandler()
         {
-            SetPriority(SchedulerPriority::HIGH);
+            SetPriority(SchedulerPriority::HIGH_IDLE);
             Stop();
         }
 
