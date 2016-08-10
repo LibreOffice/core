@@ -898,7 +898,7 @@ static void appendDouble( double fValue, OStringBuffer& rBuffer, sal_Int32 nPrec
     }
 }
 
-static void appendColor( const Color& rColor, OStringBuffer& rBuffer, bool bConvertToGrey = false )
+static void appendColor( const Color& rColor, OStringBuffer& rBuffer, bool bConvertToGrey )
 {
 
     if( rColor != Color( COL_TRANSPARENT ) )

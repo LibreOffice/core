@@ -113,7 +113,7 @@ public:
     virtual void  AdjustLayout( ImplLayoutArgs& ) override;  // adjusting positions
 
     // methods using string indexing
-    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra=0, int nFactor=1) const override;
+    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const override;
     void  ApplyDXArray(ImplLayoutArgs &rArgs, std::vector<int> & rDeltaWidth);
 

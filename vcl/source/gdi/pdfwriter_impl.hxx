@@ -1176,7 +1176,7 @@ public:
 
     // links
     sal_Int32 createLink( const Rectangle& rRect, sal_Int32 nPageNr );
-    sal_Int32 createDest( const Rectangle& rRect, sal_Int32 nPageNr = -1, PDFWriter::DestAreaType eType = PDFWriter::XYZ );
+    sal_Int32 createDest( const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType );
     sal_Int32 registerDestReference( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType );
     void      setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId );
     void      setLinkURL( sal_Int32 nLinkId, const OUString& rURL );

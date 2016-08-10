@@ -111,7 +111,7 @@ public:
     /// GetAddedHeight( 0 ) @return 0
     /// GetAddedHeight( LISTBOX_ENTRY_NOTFOUND ) @return 0
     /// GetAddedHeight( i, k ) with k > i is equivalent -GetAddedHeight( k, i )
-    long            GetAddedHeight( sal_Int32  nEndIndex, sal_Int32  nBeginIndex = 0 ) const;
+    long            GetAddedHeight( sal_Int32  nEndIndex, sal_Int32  nBeginIndex ) const;
     long            GetEntryHeight( sal_Int32  nPos ) const;
 
     sal_Int32       GetEntryCount() const { return (sal_Int32 )maEntries.size(); }
@@ -561,7 +561,7 @@ public:
     bool            IsUserDrawEnabled() const           { return mbUserDrawEnabled; }
 
     void DrawEntry(vcl::RenderContext& rRenderContext, bool bDrawImage,
-                   bool bDrawTextAtImagePos = false, bool bLayout = false);
+                   bool bDrawTextAtImagePos, bool bLayout = false);
 
     bool GetEdgeBlending() const { return mbEdgeBlending; }
     void SetEdgeBlending(bool bNew) { mbEdgeBlending = bNew; }

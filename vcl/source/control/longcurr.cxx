@@ -122,7 +122,7 @@ bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
 
 bool ImplNumericGetValue( const OUString& rStr, BigInt& rValue,
                                  sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper,
-                                 bool bCurrency = false )
+                                 bool bCurrency )
 {
     OUString aStr = rStr;
     OUStringBuffer aStr1;

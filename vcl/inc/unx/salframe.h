@@ -162,8 +162,8 @@ public:
     virtual ~X11SalFrame();
 
     long            Dispatch( XEvent *pEvent );
-    void            Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nScreen = SalX11Screen( -1 ),
-                          SystemParentData* pParentData = nullptr, bool bUseGeometry = false );
+    void            Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nScreen,
+                          SystemParentData* pParentData, bool bUseGeometry = false );
 
     SalDisplay* GetDisplay() const
     {
