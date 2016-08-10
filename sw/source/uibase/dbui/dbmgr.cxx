@@ -987,6 +987,7 @@ static SfxObjectShell* lcl_CreateWorkingDocument(
 
     SwView* pWorkView = static_cast< SwView* >( pWorkFrame->GetViewShell() );
     SwWrtShell* pWorkWrtShell = pWorkView->GetWrtShellPtr();
+    pWorkWrtShell->GetViewOptions()->SetIdle( false );
     pWorkView->AttrChangedNotify( pWorkWrtShell );// in order for SelectShell to be called
     SwDoc* pWorkDoc = pWorkWrtShell->GetDoc();
     pWorkDoc->ReplaceDocumentProperties( *pSourceDoc );
@@ -1528,6 +1529,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         SAL_INFO( "sw.pageframe", "(MergeMailFiles pTargetShell->CalcLayout in" );
         pTargetShell->CalcLayout();
         SAL_INFO( "sw.pageframe", "MergeMailFiles pTargetShell->CalcLayout out)" );
+        pTargetShell->GetViewOptions()->SetIdle( true );
         for ( auto aLayout : pTargetShell->GetDoc()->GetAllLayouts() )
         {
             aLayout->FreezeLayout(false);
