@@ -138,7 +138,7 @@ SfxMacroTabPage::SfxMacroTabPage(vcl::Window* pParent, const Reference< XFrame >
     mpImpl.reset(new SfxMacroTabPage_Impl);
 
     mpImpl->maFillGroupIdle.SetIdleHdl( LINK( this, SfxMacroTabPage, TimeOut_Impl ) );
-    mpImpl->maFillGroupIdle.SetPriority( SchedulerPriority::HIGHEST );
+    mpImpl->maFillGroupIdle.SetPriority( SchedulerPriority::HIGH_IDLE );
     mpImpl->maFillGroupIdle.SetDebugName( "SfxMacroTabPage maFillGroupIdle" );
 
     mpImpl->sStrEvent = get<FixedText>("eventft")->GetText();

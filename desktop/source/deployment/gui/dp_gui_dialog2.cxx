@@ -1202,7 +1202,6 @@ UpdateRequiredDialog::UpdateRequiredDialog(vcl::Window *pParent, TheExtensionMan
     m_pUpdateBtn->Enable( false );
     m_pCloseBtn->GrabFocus();
 
-    m_aIdle.SetPriority( SchedulerPriority::LOWEST );
     m_aIdle.SetIdleHdl( LINK( this, UpdateRequiredDialog, TimeOutHdl ) );
 }
 

@@ -26,16 +26,14 @@ struct ImplSchedulerData;
 struct ImplSVData;
 
 enum class SchedulerPriority {
-    HIGHEST      = 0,
-    HIGH         = 1,
-    RESIZE       = 2,
-    REPAINT      = 3,
-    MEDIUM       = 3,
-    POST_PAINT   = 4,
-    DEFAULT_IDLE = 5,
-    LOW          = 6,
-    LOWER        = 7,
-    LOWEST       = 8
+    HIGHEST,       ///< These events should run very fast!
+    DEFAULT,       ///< Default priority used, e.g. the default timer priority
+    HIGH_IDLE,     ///< Important idle events to be run before processing drawing events
+    RESIZE,        ///< Resize runs before repaint, so we won't paint twice
+    REPAINT,       ///< All repaint events should go in here
+    POST_PAINT,    ///< Everything running directly after painting
+    DEFAULT_IDLE,  ///< Default idle priority
+    LOWEST         ///< Low, very idle cleanup tasks
 };
 
 class VCL_DLLPUBLIC Scheduler

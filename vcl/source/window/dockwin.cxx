@@ -106,7 +106,7 @@ ImplDockFloatWin::ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
     SetBackground();
 
     maDockIdle.SetIdleHdl( LINK( this, ImplDockFloatWin, DockTimerHdl ) );
-    maDockIdle.SetPriority( SchedulerPriority::MEDIUM );
+    maDockIdle.SetPriority( SchedulerPriority::HIGH_IDLE );
     maDockIdle.SetDebugName( "vcl::ImplDockFloatWin maDockIdle" );
 }
 
