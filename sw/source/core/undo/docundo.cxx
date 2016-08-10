@@ -58,6 +58,7 @@ UndoManager::UndoManager(std::shared_ptr<SwNodes> xUndoNodes,
     ,   m_xUndoNodes(xUndoNodes)
     ,   m_bGroupUndo(true)
     ,   m_bDrawUndo(true)
+    ,   m_bRepair(false)
     ,   m_bLockUndoNoModifiedPosition(false)
     ,   m_UndoSaveMark(MARK_INVALID)
 {
@@ -136,6 +137,16 @@ void UndoManager::DoDrawUndo(bool const bDoUndo)
 bool UndoManager::DoesDrawUndo() const
 {
     return m_bDrawUndo;
+}
+
+void UndoManager::DoRepair(bool bRepair)
+{
+    m_bRepair = bRepair;
+}
+
+bool UndoManager::DoesRepair() const
+{
+    return m_bRepair;
 }
 
 bool UndoManager::IsUndoNoResetModified() const
@@ -308,7 +319,7 @@ UndoManager::GetLastUndoInfo(
 
     SfxUndoAction *const pAction( SdrUndoManager::GetUndoAction() );
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::LibreOfficeKit::isActive() && !m_bRepair)
     {
         // If an other view created the undo action, prevent undoing it from this view.
         sal_Int32 nViewShellId = pView ? pView->GetViewShellId() : m_pDocShell->GetView()->GetViewShellId();
@@ -361,7 +372,7 @@ bool UndoManager::GetFirstRedoInfo(OUString *const o_pStr,
         return false;
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::LibreOfficeKit::isActive() && !m_bRepair)
     {
         // If an other view created the undo action, prevent redoing it from this view.
         sal_Int32 nViewShellId = pView ? pView->GetViewShellId() : m_pDocShell->GetView()->GetViewShellId();

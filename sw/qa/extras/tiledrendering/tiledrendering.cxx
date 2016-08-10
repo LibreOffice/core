@@ -62,6 +62,7 @@ public:
     void testUndoInvalidations();
     void testUndoLimiting();
     void testUndoDispatch();
+    void testUndoRepairDispatch();
     void testShapeTextUndoShells();
     void testShapeTextUndoGroupShells();
 
@@ -91,6 +92,7 @@ public:
     CPPUNIT_TEST(testUndoInvalidations);
     CPPUNIT_TEST(testUndoLimiting);
     CPPUNIT_TEST(testUndoDispatch);
+    CPPUNIT_TEST(testUndoRepairDispatch);
     CPPUNIT_TEST(testShapeTextUndoShells);
     CPPUNIT_TEST(testShapeTextUndoGroupShells);
     CPPUNIT_TEST_SUITE_END();
@@ -956,6 +958,45 @@ void SwTiledRenderingTest::testUndoDispatch()
     uno::Reference<frame::XFrame> xFrame1 = xDesktop->getActiveFrame();
     // This failed: setView() did not update the active frame.
     CPPUNIT_ASSERT(xFrame1 != xFrame2);
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testUndoRepairDispatch()
+{
+    // Load a document and create two views.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    int nView1 = SfxLokHelper::getView();
+    SfxLokHelper::createView();
+    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    int nView2 = SfxLokHelper::getView();
+
+    // Insert a character in the first view.
+    SfxLokHelper::setView(nView1);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
+
+    // Assert that by default the second view can't undo the action.
+    SfxLokHelper::setView(nView2);
+    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rUndoManager.GetUndoActionCount());
+    comphelper::dispatchCommand(".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rUndoManager.GetUndoActionCount());
+
+    // But the same is allowed in repair mode.
+    SfxLokHelper::setView(nView2);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rUndoManager.GetUndoActionCount());
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {"Repair", uno::makeAny(true)}
+    }));
+    comphelper::dispatchCommand(".uno:Undo", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+    // This was 1: repair mode couldn't undo the action, either.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rUndoManager.GetUndoActionCount());
 
     comphelper::LibreOfficeKit::setActive(false);
 }
