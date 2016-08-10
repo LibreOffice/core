@@ -1800,7 +1800,6 @@ OUString FormulaDlg::GetMeText() const
 void FormulaDlg::Update()
 {
     m_pImpl->Update();
-    m_pImpl->aIdle.SetPriority(TaskPriority::LOWER);
     m_pImpl->aIdle.SetInvokeHandler( LINK( this, FormulaDlg, UpdateFocusHdl));
     m_pImpl->aIdle.Start();
 }
