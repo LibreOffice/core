@@ -51,7 +51,7 @@ Timer::Timer(const sal_Char *pDebugName) :
     mnTimeout(ImmediateTimeoutMs),
     mbAuto(false)
 {
-    mePriority = SchedulerPriority::HIGHEST;
+    mePriority = SchedulerPriority::DEFAULT;
 }
 
 Timer::Timer( const Timer& rTimer ) :

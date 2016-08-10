@@ -186,7 +186,6 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& 
     m_pParameterBtn->SetClickHdl( LINK( this, SvxJavaOptionsPage, ParameterHdl_Impl ) );
     m_pClassPathBtn->SetClickHdl( LINK( this, SvxJavaOptionsPage, ClassPathHdl_Impl ) );
     m_aResetIdle.SetIdleHdl( LINK( this, SvxJavaOptionsPage, ResetHdl_Impl ) );
-    m_aResetIdle.SetPriority(SchedulerPriority::LOWER);
 
     m_pExpertConfigBtn->SetClickHdl( LINK( this, SvxJavaOptionsPage, ExpertConfigHdl_Impl) );
     if (!officecfg::Office::Common::Security::EnableExpertConfiguration::get())

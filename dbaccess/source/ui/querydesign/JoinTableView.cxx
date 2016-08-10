@@ -1063,7 +1063,7 @@ void OJoinTableView::ScrollWhileDragging()
     // resetting timer, if still necessary
     if (bNeedScrollTimer)
     {
-        m_aDragScrollIdle.SetPriority(SchedulerPriority::LOW);
+        m_aDragScrollIdle.SetPriority( SchedulerPriority::HIGH_IDLE );
         m_aDragScrollIdle.Start();
     }
 
