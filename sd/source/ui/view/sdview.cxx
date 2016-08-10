@@ -140,9 +140,7 @@ View::View(SdDrawDocument& rDrawDoc, OutputDevice* pOutDev,
 
     // Timer for delayed drop (has to be for MAC)
     maDropErrorIdle.SetInvokeHandler( LINK(this, View, DropErrorHdl) );
-    maDropErrorIdle.SetPriority(TaskPriority::MEDIUM);
     maDropInsertFileIdle.SetInvokeHandler( LINK(this, View, DropInsertFileHdl) );
-    maDropInsertFileIdle.SetPriority(TaskPriority::MEDIUM);
 }
 
 void View::ImplClearDrawDropMarker()
