@@ -182,8 +182,18 @@ bool Scheduler::ProcessTaskScheduling( IdleRunPolicy eIdleRunPolicy )
 
     DBG_TESTSOLARMUTEX();
 
+    SAL_INFO( "vcl.schedule", "==========  Start  ==========" );
+
     while ( pSchedulerData )
     {
+        const Timer *timer = dynamic_cast<Timer*>( pSchedulerData->mpScheduler );
+        if ( timer )
+            SAL_INFO( "vcl.schedule", pSchedulerData->mbInScheduler << " " << timer );
+        else if ( pSchedulerData->mpScheduler )
+            SAL_INFO( "vcl.schedule", pSchedulerData->mbInScheduler << " " << pSchedulerData->mpScheduler );
+        else
+            SAL_INFO( "vcl.schedule", pSchedulerData->mbInScheduler << " (to be deleted)" );
+
         // Skip invoked task
         if ( pSchedulerData->mbInScheduler )
             goto next_entry;
@@ -226,7 +236,13 @@ next_entry:
 
     if ( pMostUrgent )
     {
+        Scheduler *pTempScheduler = pMostUrgent->mpScheduler;
+        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks()
+             << " " << static_cast<void*>( pMostUrgent ) << "  invoke     "
+             << (int) pTempScheduler->mePriority << " " << pTempScheduler );
         pMostUrgent->Invoke();
+        SAL_INFO_IF( !pMostUrgent->mpScheduler, "vcl.schedule", tools::Time::GetSystemTicks()
+                     << " " << static_cast<void*>( pMostUrgent ) <<  "  tag-rm" );
 
         if ( pMostUrgent->mpScheduler )
         {
@@ -239,10 +255,13 @@ next_entry:
             && ((eIdleRunPolicy == IdleRunPolicy::IDLE_VIA_TIMER)
                 || (nMinPeriod > ImmediateTimeoutMs)) )
     {
+        SAL_INFO( "vcl.schedule", "Scheduler sleep timeout: " << nMinPeriod );
         ImplStartTimer( nMinPeriod, true );
     }
     else if ( pSVData->mpSalTimer )
         pSVData->mpSalTimer->Stop();
+
+    SAL_INFO( "vcl.schedule", "==========   End   ==========" );
 
     pSVData->mnTimerPeriod = nMinPeriod;
     pSVData->mnLastUpdate = nTime;
@@ -286,7 +305,13 @@ void Scheduler::Start()
             pPrev->mpNext = mpSchedulerData;
         else
             pSVData->mpFirstSchedulerData = mpSchedulerData;
+        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks()
+             << " " << static_cast<void*>( mpSchedulerData )
+             <<  "  added      " << mpSchedulerData );
     }
+    else
+        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " " << mpSchedulerData
+             <<  "  restarted  " << (int) mePriority << " " << mpDebugName );
 
     assert( mpSchedulerData->mpScheduler == this );
     mpSchedulerData->mnUpdateTime = tools::Time::GetSystemTicks();
@@ -297,7 +322,10 @@ void Scheduler::Stop()
 {
     if ( !mpSchedulerData )
         return;
+    ImplSchedulerData *pData = mpSchedulerData;
     Scheduler::SetDeletionFlags();
+    SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks()
+          << " " << static_cast<void*>( pData ) << "  stopped    " << pData );
     assert( !mpSchedulerData );
 }
 

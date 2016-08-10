@@ -19,6 +19,7 @@
 
 #include <tools/time.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include "saltimer.hxx"
 
 void Timer::SetDeletionFlags()
@@ -78,6 +79,21 @@ void Timer::SetTimeout( sal_uInt64 nNewTimeout )
     {
         Scheduler::ImplStartTimer(mnTimeout);
     }
+}
+
+template< typename charT, typename traits >
+std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const Timer& timer )
+{
+    stream << (dynamic_cast<const Idle*>( &timer ) ? "Idle " : "Timer")
+           << " " << timer.IsActive() << " " << (int) timer.GetPriority()
+           << " " << timer.GetTimeout();
+
+    const sal_Char *name = timer.GetDebugName();
+    if( nullptr == name )
+        stream << " (nullptr)";
+    else
+        stream << " " << name;
 }
 
 AutoTimer::AutoTimer( const sal_Char *pDebugName )

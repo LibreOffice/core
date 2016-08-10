@@ -70,6 +70,10 @@ inline void Timer::SetTimeoutHdl( const Link<Timer *, void>& rLink )
     SetInvokeHandler( rLink );
 }
 
+template< typename charT, typename traits >
+std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const Timer& timer );
+
 /// An auto-timer is a multi-shot timer re-emitting itself at
 /// interval until destroyed.
 class VCL_DLLPUBLIC AutoTimer : public Timer
