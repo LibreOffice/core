@@ -1073,7 +1073,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         case SID_NOTEBOOKBAR:
         {
             SfxViewShell* pViewShell = GetView()? GetView(): SfxViewShell::Current();
-            sfx2::SfxNotebookBar::StateMethod(pViewShell->GetViewFrame()->GetBindings(), "modules/swriter/ui/notebookbar.ui");
+            sfx2::SfxNotebookBar::StateMethod(pViewShell->GetViewFrame()->GetBindings(), "modules/swriter/ui/");
         }
         break;
 

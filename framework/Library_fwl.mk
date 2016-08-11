@@ -24,6 +24,7 @@ $(eval $(call gb_Library_set_componentfile,fwl,framework/util/fwl))
 $(eval $(call gb_Library_set_include,fwl,\
     -I$(SRCDIR)/framework/inc \
     -I$(SRCDIR)/framework/source/inc \
+    -I$(WORKDIR)/CustomTarget/officecfg/registry \
     $$(INCLUDE) \
 ))
 
@@ -70,6 +71,7 @@ $(eval $(call gb_Library_add_exception_objects,fwl,\
     framework/source/uielement/macrosmenucontroller \
     framework/source/uielement/newmenucontroller \
     framework/source/uielement/toolbarsmenucontroller \
+    framework/source/uielement/notebookbarmenucontroller \
 ))
 
 # vim: set noet sw=4 ts=4:
