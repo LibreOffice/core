@@ -36,6 +36,11 @@
         <desc>The .ui file name.</desc>
       </info>
     </prop>
+    <prop oor:name="HasMenubar" oor:type="xs:boolean" oor:nillable="false">
+      <info>
+        <desc>Determines if menubar is visible.</desc>
+      </info>
+    </prop>
     </group>
   </templates>
   <component>

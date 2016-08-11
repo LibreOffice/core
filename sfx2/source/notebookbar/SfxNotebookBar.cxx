@@ -38,6 +38,64 @@ bool SfxNotebookBar::m_bLock = false;
 Reference<css::frame::XLayoutManager> SfxNotebookBar::m_xLayoutManager;
 css::uno::Reference<css::frame::XFrame> SfxNotebookBar::m_xFrame;
 
+static OUString lcl_getAppName( vcl::EnumContext::Application eApp )
+{
+    switch ( eApp )
+    {
+        case vcl::EnumContext::Application::Application_Writer:
+            return OUString( "Writer" );
+            break;
+        case vcl::EnumContext::Application::Application_Calc:
+            return OUString( "Calc" );
+            break;
+        case vcl::EnumContext::Application::Application_Impress:
+            return OUString( "Impress" );
+            break;
+        case vcl::EnumContext::Application::Application_Draw:
+            return OUString( "Draw" );
+            break;
+        default:
+            return OUString( "" );
+            break;
+    }
+}
+
+static const utl::OConfigurationNode lcl_getCurrentImplConfigNode()
+{
+    const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( ::comphelper::getProcessComponentContext() );
+
+    OUStringBuffer aPath("org.openoffice.Office.UI.Notebookbar/");
+
+    const utl::OConfigurationTreeRoot aNotebookbarNode(
+                                        ::comphelper::getProcessComponentContext(),
+                                        aPath.makeStringAndClear(),
+                                        false);
+    if ( !aNotebookbarNode.isValid() )
+        return utl::OConfigurationNode();
+
+    OUString aActive = comphelper::getString( aNotebookbarNode.getNodeValue( "Active" ) );
+
+    const utl::OConfigurationNode aImplsNode = aNotebookbarNode.openNode("Implementations");
+    const Sequence<OUString> aModeNodeNames( aImplsNode.getNodeNames() );
+    const sal_Int32 nCount( aModeNodeNames.getLength() );
+
+    for ( sal_Int32 nReadIndex = 0; nReadIndex < nCount; ++nReadIndex )
+    {
+        const utl::OConfigurationNode aImplNode( aImplsNode.openNode( aModeNodeNames[nReadIndex] ) );
+        if ( !aImplNode.isValid() )
+            continue;
+
+        OUString aCommandArg = comphelper::getString( aImplNode.getNodeValue( "File" ) );
+
+        if ( aCommandArg.compareTo( aActive ) == 0 )
+        {
+            return aImplNode;
+        }
+    }
+
+    return utl::OConfigurationNode();
+}
+
 void SfxNotebookBar::CloseMethod(SfxBindings& rBindings)
 {
     SfxFrame& rFrame = rBindings.GetDispatcher_Impl()->GetFrame()->GetFrame();
@@ -52,6 +110,8 @@ void SfxNotebookBar::CloseMethod(SystemWindow* pSysWindow)
         if(pSysWindow->GetNotebookBar())
             pSysWindow->CloseNotebookBar();
     }
+    SfxNotebookBar::ShowMenubar(true);
+
     m_xLayoutManager.clear();
     m_xFrame.clear();
 }
@@ -62,23 +122,7 @@ bool SfxNotebookBar::IsActive()
     vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(m_xFrame));
 
     OUStringBuffer aPath("org.openoffice.Office.UI.ToolbarMode/Applications/");
-    switch ( eApp )
-    {
-        case vcl::EnumContext::Application::Application_Writer:
-            aPath.append("Writer");
-            break;
-        case vcl::EnumContext::Application::Application_Calc:
-            aPath.append("Calc");
-            break;
-        case vcl::EnumContext::Application::Application_Impress:
-            aPath.append("Impress");
-            break;
-        case vcl::EnumContext::Application::Application_Draw:
-            aPath.append("Draw");
-            break;
-        default:
-            break;
-    }
+    aPath.append( lcl_getAppName( eApp ) );
 
     const utl::OConfigurationTreeRoot aAppNode(
                                         ::comphelper::getProcessComponentContext(),
@@ -92,7 +136,6 @@ bool SfxNotebookBar::IsActive()
     const utl::OConfigurationNode aModesNode = aAppNode.openNode("Modes");
     const Sequence<OUString> aModeNodeNames( aModesNode.getNodeNames() );
     const sal_Int32 nCount( aModeNodeNames.getLength() );
-    bool bNotebookbarVisible = false;
 
     for ( sal_Int32 nReadIndex = 0; nReadIndex < nCount; ++nReadIndex )
     {
@@ -104,11 +147,10 @@ bool SfxNotebookBar::IsActive()
 
         if ( aCommandArg.compareTo( aActive ) == 0 )
         {
-            bNotebookbarVisible = comphelper::getBOOL( aModeNode.getNodeValue( "HasNotebookbar" ) );
-            break;
+            return comphelper::getBOOL( aModeNode.getNodeValue( "HasNotebookbar" ) );
         }
     }
-    return bNotebookbarVisible;
+    return false;
 }
 
 void SfxNotebookBar::ExecMethod(SfxBindings& rBindings, const OUString& rUIName)
@@ -164,9 +206,11 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
             // setup if necessary
             pSysWindow->SetNotebookBar(aBuf.makeStringAndClear(), xFrame);
-
             pSysWindow->GetNotebookBar()->Show();
             pSysWindow->GetNotebookBar()->SetIconClickHdl(LINK(nullptr, SfxNotebookBar, OpenNotebookbarPopupMenu));
+
+            const utl::OConfigurationNode aModeNode( lcl_getCurrentImplConfigNode() );
+            SfxNotebookBar::ShowMenubar( comphelper::getBOOL( aModeNode.getNodeValue( "HasMenubar" ) ) );
 
             SfxViewFrame* pView = SfxViewFrame::Current();
 
@@ -188,7 +232,10 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         return true;
     }
     else if (auto pNotebookBar = pSysWindow->GetNotebookBar())
+    {
         pNotebookBar->Hide();
+        SfxNotebookBar::ShowMenubar(true);
+    }
 
     return false;
 }
@@ -210,7 +257,7 @@ IMPL_STATIC_LINK_TYPED(SfxNotebookBar, OpenNotebookbarPopupMenu, NotebookBar*, p
 {
     if (pNotebookbar)
     {
-        ScopedVclPtrInstance<NotebookBarPopupMenu> pMenu(SfxResId(RID_MENU_NOTEBOOKBAR));
+        ScopedVclPtrInstance<NotebookBarPopupMenu> pMenu;
         pMenu->Execute(pNotebookbar, m_xFrame);
     }
 }
@@ -222,13 +269,27 @@ void SfxNotebookBar::ShowMenubar(bool bShow)
         m_bLock = true;
         m_xLayoutManager->lock();
 
-        if (m_xLayoutManager->getElement(MENUBAR_STR).is() && !bShow)
-            m_xLayoutManager->destroyElement(MENUBAR_STR);
-        else if(!m_xLayoutManager->getElement(MENUBAR_STR).is() && bShow)
-            m_xLayoutManager->createElement(MENUBAR_STR);
+        if (m_xLayoutManager->getElement(MENUBAR_STR).is())
+        {
+            if (m_xLayoutManager->isElementVisible(MENUBAR_STR) && !bShow)
+                m_xLayoutManager->hideElement(MENUBAR_STR);
+            else if(!m_xLayoutManager->isElementVisible(MENUBAR_STR) && bShow)
+                m_xLayoutManager->showElement(MENUBAR_STR);
+        }
 
         m_xLayoutManager->unlock();
         m_bLock = false;
+    }
+}
+
+void SfxNotebookBar::ToggleMenubar()
+{
+    if (m_xLayoutManager.is() && m_xLayoutManager->getElement(MENUBAR_STR).is())
+    {
+        if (m_xLayoutManager->isElementVisible(MENUBAR_STR))
+            SfxNotebookBar::ShowMenubar(false);
+        else
+            SfxNotebookBar::ShowMenubar(true);
     }
 }
 

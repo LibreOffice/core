@@ -12,6 +12,9 @@
       <prop oor:name="File">
         <value>notebookbar.ui</value>
       </prop>
+      <prop oor:name="HasMenubar">
+        <value>false</value>
+      </prop>
     </node>
     <node oor:name="Groups" oor:op="replace">
       <prop oor:name="Label">
@@ -19,6 +22,9 @@
       </prop>
       <prop oor:name="File">
         <value>notebookbar_groups.ui</value>
+      </prop>
+      <prop oor:name="HasMenubar">
+        <value>true</value>
       </prop>
     </node>
   </node>

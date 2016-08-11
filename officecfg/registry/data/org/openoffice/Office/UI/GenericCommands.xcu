@@ -6130,6 +6130,11 @@
           <value xml:lang="en-US">Paste Special</value>
         </prop>
       </node>
+      <node oor:name=".uno:Menubar" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Menubar</value>
+        </prop>
+      </node>
     </node>
   </node>
 </oor:component-data>
