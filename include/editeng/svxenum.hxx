@@ -70,8 +70,7 @@ enum SvxInterLineSpace
 {
     SVX_INTER_LINE_SPACE_OFF,
     SVX_INTER_LINE_SPACE_PROP,
-    SVX_INTER_LINE_SPACE_FIX,
-    SVX_INTER_LINE_SPACE_END
+    SVX_INTER_LINE_SPACE_FIX
 };
 
 enum SvxAdjust
@@ -148,33 +147,12 @@ enum SvxDrawAlignEnum
     SVX_OBJECT_ALIGN_DOWN
 };
 
-enum SvxDrawBezierEnum
-{
-    SVX_BEZIER_MOVE,
-    SVX_BEZIER_INSERT,
-    SVX_BEZIER_DELETE,
-    SVX_BEZIER_CUTLINE,
-    SVX_BEZIER_CONVERT,
-    SVX_BEZIER_EDGE,
-    SVX_BEZIER_SMOOTH,
-    SVX_BEZIER_SYMMTR,
-    SVX_BEZIER_CLOSE,
-    SVX_BEZIER_ELIMINATE_POINTS
-};
-
 enum SvxSpellArea
 {
     SVX_SPELL_BODY = 0,
     SVX_SPELL_BODY_END,
     SVX_SPELL_BODY_START,
     SVX_SPELL_OTHER
-};
-
-enum SvxFrameAnchor
-{
-    SVX_FLY_AT_CNTNT,       // Paragraph-based frame
-    SVX_FLY_IN_CNTNT,       // Character-based frame
-    SVX_FLY_PAGE            // Page-based frame
 };
 
 enum SvxExtNumType
@@ -190,8 +168,6 @@ enum SvxExtNumType
     SVX_NUM_BITMAP,
     SVX_NUM_CHARS_UPPER_LETTER_N, // Counts from  a-z, aa-zz, aaa-zzz
     SVX_NUM_CHARS_LOWER_LETTER_N,
-    SVX_NUM_TRANSLITERATION,
-    SVX_NUM_NATIVE_NUMBERING,
     SVX_NUM_FULL_WIDTH_ARABIC,
     SVX_NUM_CIRCLE_NUMBER,
     SVX_NUM_NUMBER_LOWER_ZH,

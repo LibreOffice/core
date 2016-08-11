@@ -29,9 +29,6 @@
 enum class SvxBulletStyle
 {
     ABC_BIG          = 0,
-    ABC_SMALL        = 1,
-    ROMAN_BIG        = 2,
-    ROMAN_SMALL      = 3,
     N123             = 4,
     NONE             = 5,
     BULLET           = 6,

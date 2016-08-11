@@ -59,21 +59,7 @@ enum MorkErrors
 {
     NoError = 0,
     FailedToOpen,
-    UnsupportedVersion,
     DefectedFormat
-};
-
-// Mork term types
-enum MorkTerm
-{
-    NoneTerm = 0,
-    DictTerm,
-    GroupTerm,
-    TableTerm,
-    RowTerm,
-    CellTerm,
-    CommentTerm,
-    LiteralTerm
 };
 
 

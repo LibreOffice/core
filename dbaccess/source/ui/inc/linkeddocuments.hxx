@@ -92,12 +92,6 @@ namespace dbaui
         void    newQueryWithPilot();
         void    newTableWithPilot();
 
-        enum RESULT
-        {
-            ERROR,
-            SUCCESS,
-            CANCEL
-        };
     private:
         css::uno::Reference< css::lang::XComponent >
             impl_open(
