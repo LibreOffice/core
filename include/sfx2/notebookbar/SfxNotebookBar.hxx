@@ -26,6 +26,8 @@ public:
     static void CloseMethod(SfxBindings& rBindings);
     static void CloseMethod(SystemWindow* pSysWindow);
 
+    static bool IsActive();
+
     /// Function to be called from the sdi's ExecMethod.
     static void ExecMethod(SfxBindings& rBindings);
 
