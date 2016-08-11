@@ -52,6 +52,7 @@ class DAVResourceAccess
     rtl::Reference< DAVSessionFactory > m_xSessionFactory;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     std::vector<CurlUri> m_aRedirectURIs;
+    sal_uInt32   m_nRedirectLimit;
 
 public:
     DAVResourceAccess() = default;
