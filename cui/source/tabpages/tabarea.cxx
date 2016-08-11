@@ -92,7 +92,7 @@ SvxAreaTabDialog::SvxAreaTabDialog
     m_nColorTabPage = AddTabPage( "RID_SVXPAGE_COLOR", SvxColorTabPage::Create, nullptr );
     m_nGradientTabPage = AddTabPage( "RID_SVXPAGE_GRADIENT", SvxGradientTabPage::Create, nullptr );
     m_nHatchTabPage = AddTabPage( "RID_SVXPAGE_HATCH", SvxHatchTabPage::Create, nullptr );
-    m_nBitmapTabPage = AddTabPage( "RID_SVXPAGE_BITMAP", SvxBitmapTabPage::Create, nullptr );
+    m_nBitmapTabPage = AddTabPage( "RID_SVXPAGE_BITMAP", SvxBitmapTabPage::Create, SvxBitmapTabPage::GetRanges );
     m_nPatternTabPage = AddTabPage( "RID_SVXPAGE_PATTERN", SvxPatternTabPage::Create,  nullptr);
 
     SetCurPageId( "RID_SVXPAGE_AREA" );
