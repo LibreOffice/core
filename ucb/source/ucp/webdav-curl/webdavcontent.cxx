@@ -3959,6 +3959,10 @@ void Content::getResourceOptions(
                     }
                 }
                 break;
+                // The 'DAVException::DAV_HTTP_REDIRECT' means we reached the maximum
+                // number of redirections, consider the resource type as UNKNOWN
+                // possibly a normal web site, not DAV
+                case DAVException::DAV_HTTP_REDIRECT:
                 default: // leave the resource type as UNKNOWN, for now
                     // it means this will be managed as a standard http site
                     SAL_WARN( "ucb.ucp.webdav","OPTIONS - DAVException for URL <" << m_xIdentifier->getContentIdentifier() << ">, DAV error: "
