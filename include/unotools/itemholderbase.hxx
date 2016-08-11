@@ -33,7 +33,6 @@ struct ItemHolderMutexBase
 enum EItem
 {
     E_ACCESSIBILITYOPTIONS          ,   // 2
-    E_ADDXMLTOSTORAGEOPTIONS        ,
     E_APEARCFG                      ,   // 2
 
     E_CJKOPTIONS                    ,   // 2
@@ -69,8 +68,6 @@ enum EItem
     E_PRINTOPTIONS                  ,   // 2
     E_PRINTFILEOPTIONS              ,   // 2
     E_PRINTWARNINGOPTIONS           ,
-
-    E_REGOPTIONS                    ,
 
     E_SAVEOPTIONS                   ,
     E_SEARCHOPT                     ,
