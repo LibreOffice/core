@@ -11,9 +11,13 @@
 #include "Tables.hxx"
 #include "Catalog.hxx"
 
+#include "TConnection.hxx"
+
 #include <connectivity/dbtools.hxx>
 
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 
 using namespace ::connectivity;
 using namespace ::connectivity::firebird;
@@ -26,6 +30,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::uno;
 
 
@@ -65,6 +70,42 @@ ObjectType Tables::createObject(const OUString& rName)
     return xRet;
 }
 
+OUString Tables::createStandardColumnPart(const Reference< XPropertySet >& xColProp,const Reference< XConnection>& _xConnection)
+{
+    Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
+
+    ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
+
+    bool bIsAutoIncrement = false;
+    xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))    >>= bIsAutoIncrement;
+
+    const OUString sQuoteString = xMetaData->getIdentifierQuoteString();
+    OUStringBuffer aSql = ::dbtools::quoteName(sQuoteString,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))));
+
+    // check if the user enter a specific string to create autoincrement values
+    OUString sAutoIncrementValue;
+    Reference<XPropertySetInfo> xPropInfo = xColProp->getPropertySetInfo();
+
+    if ( xPropInfo.is() && xPropInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)) )
+        xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)) >>= sAutoIncrementValue;
+
+    aSql.append(" ");
+
+    aSql.append(dbtools::createStandardTypePart(xColProp, _xConnection));
+
+
+    if ( bIsAutoIncrement && !sAutoIncrementValue.isEmpty())
+    {
+        aSql.append(" ");
+        aSql.append(sAutoIncrementValue);
+    }
+    // AutoIncrementive "IDENTITY" is implizit "NOT NULL"
+    else if(::comphelper::getINT32(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISNULLABLE))) == ColumnValue::NO_NULLS)
+        aSql.append(" NOT NULL");
+
+    return aSql.makeStringAndClear();
+}
+
 uno::Reference< XPropertySet > Tables::createDescriptor()
 {
     // There is some internal magic so that the same class can be used as either
@@ -77,8 +118,56 @@ uno::Reference< XPropertySet > Tables::createDescriptor()
 ObjectType Tables::appendObject(const OUString& rName,
                                 const uno::Reference< XPropertySet >& rDescriptor)
 {
-    OUString sSql(::dbtools::createSqlCreateTableStatement(rDescriptor,
-                                                            m_xMetaData->getConnection()));
+   /* OUString sSql(::dbtools::createSqlCreateTableStatement(rDescriptor,
+                                                            m_xMetaData->getConnection())); */
+    OUStringBuffer aSqlBuffer("CREATE TABLE ");
+    OUString sCatalog, sSchema, sComposedName, sTable;
+    const Reference< XConnection>& xConnection = m_xMetaData->getConnection();
+
+    ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
+
+    rDescriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME))  >>= sCatalog;
+    rDescriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))   >>= sSchema;
+    rDescriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))         >>= sTable;
+
+    sComposedName = ::dbtools::composeTableName(m_xMetaData, sCatalog, sSchema, sTable, true, ::dbtools::EComposeRule::InTableDefinitions );
+    if ( sComposedName.isEmpty() )
+        ::dbtools::throwFunctionSequenceException(xConnection);
+
+    aSqlBuffer.append(sComposedName);
+    aSqlBuffer.append(" (");
+
+    // columns
+    Reference<XColumnsSupplier> xColumnSup(rDescriptor,UNO_QUERY);
+    Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
+    // check if there are columns
+    if(!xColumns.is() || !xColumns->getCount())
+        ::dbtools::throwFunctionSequenceException(xConnection);
+
+    Reference< XPropertySet > xColProp;
+
+    sal_Int32 nCount = xColumns->getCount();
+    for(sal_Int32 i=0;i<nCount;++i)
+    {
+        if ( (xColumns->getByIndex(i) >>= xColProp) && xColProp.is() )
+        {
+            aSqlBuffer.append(createStandardColumnPart(xColProp,xConnection));
+            aSqlBuffer.append(",");
+        }
+    }
+    OUString sSql = aSqlBuffer.makeStringAndClear();
+
+    const OUString sKeyStmt = ::dbtools::createStandardKeyStatement(rDescriptor,xConnection);
+    if ( !sKeyStmt.isEmpty() )
+        sSql += sKeyStmt;
+    else
+    {
+        if ( sSql.endsWith(",") )
+            sSql = sSql.replaceAt(aSqlBuffer.getLength()-1, 1, ")");
+        else
+            sSql += ")";
+    }
+
     m_xMetaData->getConnection()->createStatement()->execute(sSql);
 
     return createObject(rName);
