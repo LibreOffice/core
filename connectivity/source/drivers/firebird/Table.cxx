@@ -196,7 +196,11 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
 
     if (bIsAutoIncrementChanged)
     {
-        // TODO: changeType
+       ::dbtools::throwSQLException(
+            "Changing autoincrement property of existing column is not supported",
+            ::dbtools::StandardSQLState::FUNCTION_NOT_SUPPORTED,
+            *this);
+
     }
 
     if (bDefaultChanged)
