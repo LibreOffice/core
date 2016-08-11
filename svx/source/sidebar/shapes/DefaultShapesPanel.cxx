@@ -84,7 +84,7 @@ void DefaultShapesPanel::Initialize()
     populateShapes();
     for(auto& aSetMap: mpShapesSetMap)
     {
-        aSetMap.first->SetColor(GetSettings().GetStyleSettings().GetMenuColor());
+        aSetMap.first->SetColor(GetSettings().GetStyleSettings().GetDialogColor());
         aSetMap.first->SetSelectHdl(LINK(this, DefaultShapesPanel, ShapeSelectHdl));
     }
 }
