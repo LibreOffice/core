@@ -21,6 +21,7 @@
 #include <sfx2/htmlmode.hxx>
 #include <svx/sdtacitm.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdopath.hxx>
 #include <svx/sdtagitm.hxx>
 #include <svx/sdtakitm.hxx>
 #include <svx/sdtaditm.hxx>
@@ -35,6 +36,49 @@
 #include <viewopt.hxx>
 #include <drawbase.hxx>
 #include <conrect.hxx>
+#include <svx/svxids.hrc>
+#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svx/xlnstwit.hxx>
+#include <svx/xlnedwit.hxx>
+#include <svx/xlnedit.hxx>
+#include <svx/xlnstit.hxx>
+
+/**
+ * set line starts and ends for the object to be created
+ */
+
+static const int DRGPIX = 2; // Drag MinMove in Pixel
+
+namespace {
+
+::basegfx::B2DPolyPolygon getPolygon( sal_uInt16 nResId, SdrModel* pDoc )
+{
+    ::basegfx::B2DPolyPolygon aRetval;
+    XLineEndListRef pLineEndList = pDoc->GetLineEndList();
+
+    if( pLineEndList.is() )
+    {
+        OUString aArrowName( SVX_RES(nResId) );
+        long nCount = pLineEndList->Count();
+        long nIndex;
+        for( nIndex = 0L; nIndex < nCount; nIndex++ )
+        {
+            const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nIndex);
+            if( pEntry->GetName() == aArrowName )
+            {
+                aRetval = pEntry->GetLineEnd();
+                break;
+            }
+        }
+    }
+
+    return aRetval;
+}
+
+}
 
 ConstRectangle::ConstRectangle( SwWrtShell* pWrtShell, SwEditWin* pEditWin,
                                 SwView* pSwView )
@@ -45,19 +89,95 @@ ConstRectangle::ConstRectangle( SwWrtShell* pWrtShell, SwEditWin* pEditWin,
 {
 }
 
+void ConstRectangle::CreateDefaultObject()
+{
+     SdrObject* pObj = SdrObjFactory::MakeNewObject(
+         m_pView->GetDrawView()->GetCurrentObjInventor(), m_pView->GetDrawView()->GetCurrentObjIdentifier(),
+         nullptr, m_pView->GetDrawView()->GetModel());
+
+    if(pObj)
+    {
+        Point aStart = GetDefaultCenterPos();
+        Point aEnd(aStart);
+        aStart.X() -= 8 * MM50;
+        aStart.Y() -= 4 * MM50;
+        aEnd.X() += 8 * MM50;
+        aEnd.Y() += 4 * MM50;
+        Rectangle aRect(aStart, aEnd);
+
+        switch(m_nSlotId)
+        {
+            case SID_DRAW_LINE:
+            case SID_DRAW_XLINE:
+            case SID_LINE_ARROW_START:
+            case SID_LINE_ARROW_END:
+            case SID_LINE_ARROWS:
+            case SID_LINE_ARROW_CIRCLE:
+            case SID_LINE_CIRCLE_ARROW:
+            case SID_LINE_ARROW_SQUARE:
+            case SID_LINE_SQUARE_ARROW:
+            {
+                if( dynamic_cast< const SdrPathObj *>( pObj ) !=  nullptr)
+                {
+                    sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
+
+                    ::basegfx::B2DPolygon aB2DPolygon;
+                    aB2DPolygon.append(::basegfx::B2DPoint(aStart.X(), nYMiddle));
+                    aB2DPolygon.append(::basegfx::B2DPoint(aEnd.X(), nYMiddle));
+                    static_cast<SdrPathObj*>(pObj)->SetPathPoly(::basegfx::B2DPolyPolygon(aB2DPolygon));
+                }
+                else
+                {
+                    OSL_FAIL("Object is NO line object");
+                }
+
+                break;
+            }
+
+            default:
+            {
+                pObj->SetLogicRect(aRect);
+
+                break;
+            }
+        }
+
+        SfxItemSet aAttr(pObj->GetModel()->GetItemPool());
+        SetLineEnds(aAttr, pObj);
+        pObj->SetMergedItemSet(aAttr);
+        m_pSh->InsertDrawObj( *pObj, aStart);
+    }
+}
+
 bool ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 {
     bool bReturn;
 
-    if ((bReturn = SwDrawBase::MouseButtonDown(rMEvt))
-                                    && m_pWin->GetSdrDrawMode() == OBJ_CAPTION)
+    if ( (bReturn = SwDrawBase::MouseButtonDown(rMEvt)) )
     {
-        m_pView->NoRotate();
-        if (m_pView->IsDrawSelMode())
+        Point aPnt( m_pWin->PixelToLogic( rMEvt.GetPosPixel() ) );
+        m_pWin->CaptureMouse();
+
+        if (m_pWin->GetSdrDrawMode() == OBJ_CAPTION)
         {
-            m_pView->FlipDrawSelMode();
-            m_pSh->GetDrawView()->SetFrameDragSingles(m_pView->IsDrawSelMode());
+            m_pView->NoRotate();
+            if (m_pView->IsDrawSelMode())
+            {
+                m_pView->FlipDrawSelMode();
+                m_pSh->GetDrawView()->SetFrameDragSingles(m_pView->IsDrawSelMode());
+            }
         }
+
+        bReturn = m_pSh->BeginCreate( m_pWin->GetSdrDrawMode(), aPnt );
+        SdrObject* pObj = m_pView->GetDrawView()->GetCreateObj();
+
+        if (pObj)
+        {
+            SfxItemSet aAttr(pObj->GetModel()->GetItemPool());
+            SetLineEnds(aAttr, pObj);
+            pObj->SetMergedItemSet(aAttr);
+        }
+
     }
     return bReturn;
 }
@@ -130,10 +250,143 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             }
         }
         break;
+
         default:; //prevent warning
         }
     }
     return bRet;
+}
+
+void ConstRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
+{
+    SdrModel *mpDoc = pObj->GetModel();
+
+    if ( m_nSlotId == SID_LINE_ARROW_START      ||
+         m_nSlotId == SID_LINE_ARROW_END        ||
+         m_nSlotId == SID_LINE_ARROWS           ||
+         m_nSlotId == SID_LINE_ARROW_CIRCLE     ||
+         m_nSlotId == SID_LINE_CIRCLE_ARROW     ||
+         m_nSlotId == SID_LINE_ARROW_SQUARE     ||
+         m_nSlotId == SID_LINE_SQUARE_ARROW )
+    {
+
+        // set attributes of line start and ends
+
+        // arrowhead
+        ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, mpDoc ) );
+        if( !aArrow.count() )
+        {
+            ::basegfx::B2DPolygon aNewArrow;
+            aNewArrow.append(::basegfx::B2DPoint(10.0, 0.0));
+            aNewArrow.append(::basegfx::B2DPoint(0.0, 30.0));
+            aNewArrow.append(::basegfx::B2DPoint(20.0, 30.0));
+            aNewArrow.setClosed(true);
+            aArrow.append(aNewArrow);
+        }
+
+        // Circles
+        ::basegfx::B2DPolyPolygon aCircle( getPolygon( RID_SVXSTR_CIRCLE, mpDoc ) );
+        if( !aCircle.count() )
+        {
+            ::basegfx::B2DPolygon aNewCircle;
+            aNewCircle = ::basegfx::tools::createPolygonFromEllipse(::basegfx::B2DPoint(0.0, 0.0), 250.0, 250.0);
+            aNewCircle.setClosed(true);
+            aCircle.append(aNewCircle);
+        }
+
+        // Square
+        ::basegfx::B2DPolyPolygon aSquare( getPolygon( RID_SVXSTR_SQUARE, mpDoc ) );
+        if( !aSquare.count() )
+        {
+            ::basegfx::B2DPolygon aNewSquare;
+            aNewSquare.append(::basegfx::B2DPoint(0.0, 0.0));
+            aNewSquare.append(::basegfx::B2DPoint(10.0, 0.0));
+            aNewSquare.append(::basegfx::B2DPoint(10.0, 10.0));
+            aNewSquare.append(::basegfx::B2DPoint(0.0, 10.0));
+            aNewSquare.setClosed(true);
+            aSquare.append(aNewSquare);
+        }
+
+        SfxItemSet aSet( mpDoc->GetItemPool() );
+        long nWidth = 100; // (1/100th mm)
+
+        // determine line width and calculate with it the line end width
+        if( aSet.GetItemState( XATTR_LINEWIDTH ) != SfxItemState::DONTCARE )
+        {
+            long nValue = static_cast<const XLineWidthItem&>( aSet.Get( XATTR_LINEWIDTH ) ).GetValue();
+            if( nValue > 0 )
+                nWidth = nValue * 3;
+        }
+
+        switch (m_nSlotId)
+        {
+            case SID_LINE_ARROWS:
+            {
+                // connector with arrow ends
+                rAttr.Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW), aArrow));
+                rAttr.Put(XLineStartWidthItem(nWidth));
+                rAttr.Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_ARROW), aArrow));
+                rAttr.Put(XLineEndWidthItem(nWidth));
+            }
+            break;
+
+            case SID_LINE_ARROW_START:
+            case SID_LINE_ARROW_CIRCLE:
+            case SID_LINE_ARROW_SQUARE:
+            {
+                // connector with arrow start
+                rAttr.Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW), aArrow));
+                rAttr.Put(XLineStartWidthItem(nWidth));
+            }
+            break;
+
+            case SID_LINE_ARROW_END:
+            case SID_LINE_CIRCLE_ARROW:
+            case SID_LINE_SQUARE_ARROW:
+            {
+                // connector with arrow end
+                rAttr.Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_ARROW), aArrow));
+                rAttr.Put(XLineEndWidthItem(nWidth));
+            }
+            break;
+        }
+
+        // and again, for the still missing ends
+        switch (m_nSlotId)
+        {
+            case SID_LINE_ARROW_CIRCLE:
+            {
+                // circle end
+                rAttr.Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_CIRCLE), aCircle));
+                rAttr.Put(XLineEndWidthItem(nWidth));
+            }
+            break;
+
+            case SID_LINE_CIRCLE_ARROW:
+            {
+                // circle start
+                rAttr.Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_CIRCLE), aCircle));
+                rAttr.Put(XLineStartWidthItem(nWidth));
+            }
+            break;
+
+            case SID_LINE_ARROW_SQUARE:
+            {
+                // square end
+                rAttr.Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_SQUARE), aSquare));
+                rAttr.Put(XLineEndWidthItem(nWidth));
+            }
+            break;
+
+            case SID_LINE_SQUARE_ARROW:
+            {
+                // square start
+                rAttr.Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_SQUARE), aSquare));
+                rAttr.Put(XLineStartWidthItem(nWidth));
+            }
+            break;
+        }
+    }
 }
 
 void ConstRectangle::Activate(const sal_uInt16 nSlotId)
@@ -143,6 +396,13 @@ void ConstRectangle::Activate(const sal_uInt16 nSlotId)
 
     switch (nSlotId)
     {
+    case SID_LINE_ARROW_END:
+    case SID_LINE_ARROW_CIRCLE:
+    case SID_LINE_ARROW_SQUARE:
+    case SID_LINE_ARROW_START:
+    case SID_LINE_CIRCLE_ARROW:
+    case SID_LINE_SQUARE_ARROW:
+    case SID_LINE_ARROWS:
     case SID_DRAW_LINE:
         m_pWin->SetSdrDrawMode(OBJ_LINE);
         break;

@@ -38,6 +38,9 @@ class ConstRectangle : public SwDrawBase
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
     virtual void Activate(const sal_uInt16 nSlotId) override;    // activate function
+    void SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj);
+    virtual void CreateDefaultObject() override;
+
 };
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_CONRECT_HXX

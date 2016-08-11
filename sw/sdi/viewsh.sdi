@@ -82,6 +82,45 @@ interface TextEditView : BaseTextEditView
         ExecMethod = ExecDraw ;
         StateMethod = GetDrawState ;
     ]
+    SID_LINE_ARROW_END
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_LINE_ARROW_CIRCLE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_LINE_ARROW_SQUARE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_LINE_ARROW_START
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_LINE_CIRCLE_ARROW
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_LINE_SQUARE_ARROW
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_LINE_ARROWS
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAWTBX_ARROWS
+    [
+        StateMethod = GetDrawState ;
+    ]
     SID_DRAW_RECT
     [
         ExecMethod = ExecDraw ;
