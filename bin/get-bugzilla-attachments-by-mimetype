@@ -462,6 +462,12 @@ mimetypes = {
     'application/x-abiword': 'abw',
     'application/x-pagemaker': 'pmd',
     'application/x-gnumeric': 'gnumeric',
+    'application/vnd.stardivision.calc': 'sdc',
+    'application/vnd.stardivision.draw': 'sda',
+    'application/vnd.stardivision.writer': 'sdw',
+    'application/x-starcalc': 'sdc',
+    'application/x-stardraw': 'sdd',
+    'application/x-starwriter': 'sdw',
 # relatively uncommon image mimetypes
     'image/x-freehand': 'fh',
     'image/cgm': 'cgm',
