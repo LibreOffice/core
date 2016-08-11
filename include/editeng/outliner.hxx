@@ -197,8 +197,7 @@ private:
         Text = 0,
         Bullet = 1,
         Hypertext = 2,  // Outside OutputArea
-        Outside = 3,    // Outside OutputArea
-        DontKnow = 4
+        Outside = 3     // Outside OutputArea
     };
 
     EDITENG_DLLPRIVATE void         ImplExpandOrCollaps( sal_Int32 nStartPara, sal_Int32 nEndPara, bool bExpand );
@@ -569,13 +568,11 @@ enum class OutlinerMode {
     TextObject     = 0x0001,
     TitleObject    = 0x0002,
     OutlineObject  = 0x0003,
-    OutlineView    = 0x0004,
-    Subtitle       = 0x0101,
-    Note           = 0x0201
+    OutlineView    = 0x0004
 };
 namespace o3tl
 {
-    template<> struct typed_flags<OutlinerMode> : is_typed_flags<OutlinerMode, 0x030f> {};
+    template<> struct typed_flags<OutlinerMode> : is_typed_flags<OutlinerMode, 0x000f> {};
 }
 
 #define OUTLINERMODE_USERMASK       (OutlinerMode)0x00FF

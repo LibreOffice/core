@@ -58,8 +58,7 @@ struct CreateShapeParam2D;
 enum TimeBasedMode
 {
     MANUAL,
-    AUTOMATIC,
-    AUTOMATIC_WRAP
+    AUTOMATIC
 };
 
 struct TimeBasedInfo
