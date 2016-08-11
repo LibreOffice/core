@@ -439,6 +439,11 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     gtk_render_background(gtk_widget_get_style_context(gCacheWindow), cr, 0, 0,
                           scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
 
+    gtk_render_background(context, cr, 0, 0,
+                          scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
+    gtk_render_frame(context, cr, 0, 0,
+                     scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
+
     gtk_render_background(pScrollbarContentsStyle, cr, 0, 0,
                           scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
     gtk_render_frame(pScrollbarContentsStyle, cr, 0, 0,
