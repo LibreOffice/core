@@ -72,10 +72,15 @@ namespace connectivity
             friend class connectivity::OSubComponent<Connection, Connection_BASE>;
 
              /**
-             * Location within the .odb that an embedded .fdb will be stored.
+             * Location within the .odb that an embedded .fbk will be stored.
              * Only relevant for embedded dbs.
              */
-            static const OUString our_sDBLocation;
+            static const OUString our_sFBKLocation;
+
+            /**
+             * Older version of LO may store the database in a .fdb file
+             */
+            static const OUString our_sFDBLocation;
 
             ::osl::Mutex        m_aMutex;
 
@@ -95,9 +100,16 @@ namespace connectivity
             ::rtl::OUString     m_sFirebirdURL;
 
             /* EMBEDDED MODE DATA */
-            /** Denotes that we have a .fdb stored within a .odb file. */
+            /** Denotes that we have a database stored within a .odb file. */
             bool            m_bIsEmbedded;
 
+            /**
+             * Denotes that the database stored in the .odb file is an
+             * archive file (.fbk). Older version of LO had a .fdb file, not a
+             * .fbk.
+             * (Only used if m_bIsEmbedded is true).
+             */
+            bool            m_bIsFbkStored;
             /**
              * Handle for the parent DatabaseDocument. We need to notify this
              * whenever any data is written to our temporary database so that
@@ -109,17 +121,39 @@ namespace connectivity
                 m_xParentDocument;
 
             /**
-             * Handle for the folder within the .odb where we store our .fdb
+             * Handle for the folder within the .odb where we store our .fbk
              * (Only used if m_bIsEmbedded is true).
              */
             css::uno::Reference< css::embed::XStorage >
                 m_xEmbeddedStorage;
             /**
-             * The temporary folder where we extract the .fdb from a .odb.
+             * The temporary folder where we extract the .fbk from a .odb,
+             * and also store the temporary .fdb
              * It is only valid if m_bIsEmbedded is true.
+             *
+             * The extracted .fbk is written in firebird.fbk, the temporary
+             * .fdb is stored as firebird.fdb.
              */
-            std::unique_ptr< ::utl::TempFile >  m_pExtractedFDBFile;
+            std::unique_ptr< ::utl::TempFile >  m_pDatabaseFileDir;
+            /**
+             * Path for our extracted .fbk file.
+             *
+             * (The temporary .fdb is our m_sFirebirdURL.)
+             */
+            ::rtl::OUString m_sFBKPath;
 
+            void loadDatabaseFile(const OUString& pSrcLocation, const OUString& pTmpLocation);
+
+            /**
+             * Run the backup service, use nAction =
+             * isc_action_svc_backup to backup, nAction = isc_action_svc_restore
+             * to restore.
+             */
+            void runBackupService(const short nAction);
+
+            isc_svc_handle attachServiceManager();
+
+            void detachServiceManager(isc_svc_handle pServiceHandle);
 
             /** We are using an external (local) file */
             bool                m_bIsFile;
