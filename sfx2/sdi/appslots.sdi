@@ -220,6 +220,11 @@ interface Application
     [
         ExecMethod = MiscExec_Impl ;
     ]
+    SID_MENUBAR
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
 }
 
 

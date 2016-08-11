@@ -162,6 +162,12 @@ Menu RID_MENU_NOTEBOOKBAR
         };
         MenuItem
         {
+            Identifier = SID_MENUBAR;
+            Command = ".uno:Menubar";
+            Text [ en-US ] = "Menubar" ;
+        };
+        MenuItem
+        {
             Identifier = SID_OPTIONS;
             Command = ".uno:OptionsTreeDialog";
             Text [ en-US ] = "Options" ;

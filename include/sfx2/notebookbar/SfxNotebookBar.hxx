@@ -40,6 +40,7 @@ public:
     static void RemoveListeners(SystemWindow* pSysWindow);
 
     static void ShowMenubar(bool bShow);
+    static void ToggleMenubar();
 
 private:
     static bool m_bLock;

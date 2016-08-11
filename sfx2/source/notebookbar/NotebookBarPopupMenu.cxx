@@ -15,13 +15,14 @@
 #include <sfxlocal.hrc>
 #include <sfx2/sfxresid.hxx>
 #include "NotebookBarPopupMenu.hxx"
+#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
 using namespace sfx2;
 using namespace css::uno;
 using namespace css::ui;
 
-NotebookBarPopupMenu::NotebookBarPopupMenu(ResId aRes)
-    : PopupMenu(aRes)
+NotebookBarPopupMenu::NotebookBarPopupMenu()
+    : PopupMenu(SfxResId(RID_MENU_NOTEBOOKBAR))
 {
     if (SfxViewFrame::Current())
     {

@@ -944,6 +944,12 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             bDone = true;
             break;
         }
+        case SID_MENUBAR:
+        {
+            sfx2::SfxNotebookBar::ToggleMenubar();
+            bDone = true;
+            break;
+        }
 
         default:
             break;
@@ -1079,6 +1085,46 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                             rSet.DisableItem( nWhich );
                     }
                     break;
+
+                case SID_MENUBAR:
+                {
+                    Reference < XDesktop2 > xDesktop = Desktop::create ( ::comphelper::getProcessComponentContext() );
+                    Reference< XFrame > xFrame = xDesktop->getActiveFrame();
+
+                    Reference< css::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
+                    Reference< css::frame::XLayoutManager > xLayoutManager;
+                    if ( xPropSet.is() )
+                    {
+                        try
+                        {
+                            Any aValue = xPropSet->getPropertyValue("LayoutManager");
+                            aValue >>= xLayoutManager;
+                        }
+                        catch ( const css::uno::RuntimeException& )
+                        {
+                            throw;
+                        }
+                        catch ( css::uno::Exception& )
+                        {
+                        }
+                    }
+
+                    if ( xLayoutManager.is() )
+                    {
+                        bool bState = true;
+                        if ( xLayoutManager->getElement( "private:resource/menubar/menubar" ).is()
+                            && xLayoutManager->isElementVisible( "private:resource/menubar/menubar" ) )
+                            bState = true;
+                        else
+                            bState = false;
+
+                        SfxBoolItem aItem( SID_MENUBAR, bState );
+                        rSet.Put( aItem );
+                    }
+                    if ( Application::GetToolkitName().compareTo( "gtk3" ) == 0 )
+                        rSet.DisableItem( SID_MENUBAR );
+                    break;
+                }
 
                 default:
                     break;
