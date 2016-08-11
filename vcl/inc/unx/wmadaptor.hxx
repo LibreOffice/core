@@ -88,7 +88,6 @@ public:
         WIN_APP_STATE,
         WIN_EXPANDED_SIZE,
         WIN_ICONS,
-        WIN_WORKSPACE_NAMES,
         WIN_CLIENT_LIST,
 
         // atoms for general WM hints
@@ -107,7 +106,6 @@ public:
         SAL_USEREVENT,
         SAL_EXTTEXTEVENT,
         SAL_GETTIMEEVENT,
-        DTWM_IS_RUNNING,
         VCL_SYSTEM_SETTINGS,
         XSETTINGS,
         XEMBED,

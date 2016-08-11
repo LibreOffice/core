@@ -342,8 +342,7 @@ enum class StateChangedType : sal_uInt16
     ExtendedStyle      = 17,
     Mirroring          = 18,
     Layout             = 19,
-    ControlFocus       = 20,
-    User               = 10000
+    ControlFocus       = 20
 };
 
 // GetFocusFlags
@@ -378,13 +377,12 @@ enum class DrawFlags
     NoDisable           = 0x0008,
     NoMnemonic          = 0x0010,
     NoSelection         = 0x0020,
-    NoFocus             = 0x0040,
-    NoBackground        = 0x0080,
-    NoRollover          = 0x0100,
+    NoBackground        = 0x0040,
+    NoRollover          = 0x0080,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<DrawFlags> : is_typed_flags<DrawFlags, 0x01ff> {};
+    template<> struct typed_flags<DrawFlags> : is_typed_flags<DrawFlags, 0x00ff> {};
 }
 
 // DialogControl-Flags

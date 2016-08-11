@@ -204,14 +204,13 @@ namespace o3tl
 enum class SelectionOptions
 {
     NONE       = 0x0000,
-    Word       = 0x0001,
-    Focus      = 0x0002,
-    Invert     = 0x0004,
-    ShowFirst  = 0x0008,
+    Focus      = 0x0001,
+    Invert     = 0x0002,
+    ShowFirst  = 0x0004,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SelectionOptions> : is_typed_flags<SelectionOptions, 0x000f> {};
+    template<> struct typed_flags<SelectionOptions> : is_typed_flags<SelectionOptions, 0x0007> {};
 }
 
 enum class DisplayOptions

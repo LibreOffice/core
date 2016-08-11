@@ -26,17 +26,6 @@
 #include <memory>
 
 
-enum class CVCFlags
-{
-    LAZY_UPDATE         = 0x0000,
-    UPDATE_ACCESS       = 0x0001,
-    IMMEDIATE_UPDATE    = 0x0002,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<CVCFlags> : is_typed_flags<CVCFlags, 0x03> {};
-}
-
 namespace utl
 {
 
