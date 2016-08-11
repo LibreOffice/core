@@ -702,15 +702,15 @@ SwBoxAutoFormat& SwTableAutoFormat::GetBoxFormat( sal_uInt8 nPos )
 {
     SAL_WARN_IF(!(nPos < 16), "sw.core", "GetBoxFormat wrong area");
 
-    SwBoxAutoFormat* pFormat = aBoxAutoFormat[ nPos ];
-    if( !pFormat )
+    SwBoxAutoFormat** pFormat = &aBoxAutoFormat[ nPos ];
+    if( !*pFormat )
     {
         // If default doesn't exist yet:
         if( !pDfltBoxAutoFormat )
             pDfltBoxAutoFormat = new SwBoxAutoFormat();
-        pFormat = pDfltBoxAutoFormat;
+        *pFormat = new SwBoxAutoFormat(*pDfltBoxAutoFormat);
     }
-    return *pFormat;
+    return **pFormat;
 }
 
 const SwBoxAutoFormat& SwTableAutoFormat::GetDefaultBoxFormat()

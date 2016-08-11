@@ -3233,4 +3233,30 @@ SwRewriter SwUndoTableStyleDelete::GetRewriter() const
     return aResult;
 }
 
+SwUndoTableStyleUpdate::SwUndoTableStyleUpdate(const OUString& rName, const SwTableAutoFormat& rOldFormat, const SwDoc* pDoc)
+    : SwUndo(UNDO_TBLSTYLE_UPDATE, pDoc),
+    m_pOldFormat(new SwTableAutoFormat(rOldFormat)),
+    m_pNewFormat(new SwTableAutoFormat(*pDoc->GetTableStyles().FindAutoFormat(rName)))
+{ }
+
+SwUndoTableStyleUpdate::~SwUndoTableStyleUpdate()
+{ }
+
+void SwUndoTableStyleUpdate::UndoImpl(::sw::UndoRedoContext & rContext)
+{
+    rContext.GetDoc().ChgTableStyle(m_pNewFormat->GetName(), *m_pOldFormat);
+}
+
+void SwUndoTableStyleUpdate::RedoImpl(::sw::UndoRedoContext & rContext)
+{
+    rContext.GetDoc().ChgTableStyle(m_pNewFormat->GetName(), *m_pNewFormat);
+}
+
+SwRewriter SwUndoTableStyleUpdate::GetRewriter() const
+{
+    SwRewriter aResult;
+    aResult.AddRule(UndoArg1, m_pNewFormat->GetName());
+    return aResult;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

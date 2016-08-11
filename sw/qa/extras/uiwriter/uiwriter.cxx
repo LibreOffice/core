@@ -3796,8 +3796,32 @@ void SwUiWriterTest::testTableStyleUndo()
     // check if attributes are preserved
     CPPUNIT_ASSERT(pStyle);
     CPPUNIT_ASSERT(pStyle->GetBoxFormat(0).GetBackground() == aBackground);
-    rUndoManager.Undo();
+    rUndoManager.Redo();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount);
+
+    // undo delete so we can replace the style
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount +1 );
+    pStyle = pDoc->GetTableStyles().FindAutoFormat("Test Style");
+    CPPUNIT_ASSERT(pStyle);
+    CPPUNIT_ASSERT(pStyle->GetBoxFormat(0).GetBackground() == aBackground);
+
+    SwTableAutoFormat aNewStyle("Test Style2");
+    SvxBrushItem aBackground2(Color(0x00FF00), RES_BACKGROUND);
+    aNewStyle.GetBoxFormat(0).SetBackground(aBackground2);
+
+    pDoc->ChgTableStyle("Test Style", aNewStyle);
+    pStyle = pDoc->GetTableStyles().FindAutoFormat("Test Style");
+    CPPUNIT_ASSERT(pStyle);
+    CPPUNIT_ASSERT(pStyle->GetBoxFormat(0).GetBackground() == aBackground2);
+    rUndoManager.Undo();
+    pStyle = pDoc->GetTableStyles().FindAutoFormat("Test Style");
+    CPPUNIT_ASSERT(pStyle);
+    CPPUNIT_ASSERT(pStyle->GetBoxFormat(0).GetBackground() == aBackground);
+    rUndoManager.Redo();
+    pStyle = pDoc->GetTableStyles().FindAutoFormat("Test Style");
+    CPPUNIT_ASSERT(pStyle);
+    CPPUNIT_ASSERT(pStyle->GetBoxFormat(0).GetBackground() == aBackground2);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
