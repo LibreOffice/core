@@ -78,6 +78,7 @@
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <swwait.hxx>
 #include <swunohelper.hxx>
 #include <dbui.hrc>
@@ -990,6 +991,7 @@ static SfxObjectShell* lcl_CreateWorkingDocument(
     pWorkWrtShell->GetViewOptions()->SetIdle( false );
     pWorkView->AttrChangedNotify( pWorkWrtShell );// in order for SelectShell to be called
     SwDoc* pWorkDoc = pWorkWrtShell->GetDoc();
+    pWorkDoc->GetIDocumentUndoRedo().DoUndo( false );
     pWorkDoc->ReplaceDocumentProperties( *pSourceDoc );
 
     if( aType == WorkingDocType::TARGET )
@@ -1530,6 +1532,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         pTargetShell->CalcLayout();
         SAL_INFO( "sw.pageframe", "MergeMailFiles pTargetShell->CalcLayout out)" );
         pTargetShell->GetViewOptions()->SetIdle( true );
+        pTargetDoc->GetIDocumentUndoRedo().DoUndo( true );
         for ( auto aLayout : pTargetShell->GetDoc()->GetAllLayouts() )
         {
             aLayout->FreezeLayout(false);
