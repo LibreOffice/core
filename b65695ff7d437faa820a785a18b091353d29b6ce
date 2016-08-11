@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a95cdbc_1edda970",
+        "filename": "chart2/inc/SpecialUnicodes.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-08-11T13:55:31Z",
+      "side": 1,
+      "message": "maybe a OUStringLiteral1 (rtl/stringutils.hxx) would also work for the cases where aMinusSign is used?",
+      "revId": "b65695ff7d437faa820a785a18b091353d29b6ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a95cdbc_3eda6579",
+        "filename": "chart2/source/tools/LogarithmicRegressionCurveCalculator.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-08-11T13:55:31Z",
+      "side": 1,
+      "message": "there\u0027s a OUStringBuffer::append overload for OUStringConcat, so the original code should be acceptable",
+      "revId": "b65695ff7d437faa820a785a18b091353d29b6ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
