@@ -68,11 +68,10 @@ enum class ComplexTextLayoutFlags
     TextOriginLeft    = 0x0004,
     TextOriginRight   = 0x0008,
     ComplexDisabled   = 0x0100,
-    LigaturesEnabled  = 0x0200,
-    SubstituteDigits  = 0x0400
+    LigaturesEnabled  = 0x0200
 };
 namespace o3tl {
-    template<> struct typed_flags<ComplexTextLayoutFlags> : is_typed_flags<ComplexTextLayoutFlags, 0x070f> {};
+    template<> struct typed_flags<ComplexTextLayoutFlags> : is_typed_flags<ComplexTextLayoutFlags, 0x030f> {};
 }
 
 class OutDevState

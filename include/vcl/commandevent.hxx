@@ -236,10 +236,8 @@ enum class MediaCommand
     VolumeMute            = 16,// Mute the volume.
     VolumeUp              = 17,// Raise the volume.
     Menu                  = 18,// Button Menu pressed.
-    MenuHold              = 19,// Button Menu (long) pressed.
     PlayHold              = 20,// Button Play (long) pressed.
     NextTrackHold         = 21,// Button Right holding pressed.
-    PreviousTrackHold     = 22,// Button Left holding pressed.
 };
 
 class VCL_DLLPUBLIC CommandMediaData

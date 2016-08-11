@@ -79,13 +79,6 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSecurityOptions : public utl::detail
             E_BLOCKUNTRUSTEDREFERERLINKS
         };
 
-        enum MacroAction
-        {
-            MA_DONTRUN = 0,
-            MA_CONFIRM,
-            MA_RUN
-        };
-
         typedef css::uno::Sequence< OUString > Certificate;
 
         /*
