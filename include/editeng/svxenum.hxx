@@ -70,8 +70,7 @@ enum SvxInterLineSpace
 {
     SVX_INTER_LINE_SPACE_OFF,
     SVX_INTER_LINE_SPACE_PROP,
-    SVX_INTER_LINE_SPACE_FIX,
-    SVX_INTER_LINE_SPACE_END
+    SVX_INTER_LINE_SPACE_FIX
 };
 
 enum SvxAdjust
@@ -148,20 +147,6 @@ enum SvxDrawAlignEnum
     SVX_OBJECT_ALIGN_DOWN
 };
 
-enum SvxDrawBezierEnum
-{
-    SVX_BEZIER_MOVE,
-    SVX_BEZIER_INSERT,
-    SVX_BEZIER_DELETE,
-    SVX_BEZIER_CUTLINE,
-    SVX_BEZIER_CONVERT,
-    SVX_BEZIER_EDGE,
-    SVX_BEZIER_SMOOTH,
-    SVX_BEZIER_SYMMTR,
-    SVX_BEZIER_CLOSE,
-    SVX_BEZIER_ELIMINATE_POINTS
-};
-
 enum SvxSpellArea
 {
     SVX_SPELL_BODY = 0,
@@ -170,13 +155,9 @@ enum SvxSpellArea
     SVX_SPELL_OTHER
 };
 
-enum SvxFrameAnchor
-{
-    SVX_FLY_AT_CNTNT,       // Paragraph-based frame
-    SVX_FLY_IN_CNTNT,       // Character-based frame
-    SVX_FLY_PAGE            // Page-based frame
-};
-
+/**
+ * these must match the values in css::style::NumberingType
+ */
 enum SvxExtNumType
 {
     SVX_NUM_CHARS_UPPER_LETTER, // Counts from a-z, aa - az, ba - bz, ...
