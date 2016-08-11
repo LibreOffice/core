@@ -13,15 +13,18 @@
 #include <ibase.h>
 
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
+
+#include <vector>
 
 namespace connectivity
 {
     namespace firebird
     {
-
+        typedef ::std::vector< OString > OStringVector;
         /**
          * Make sure an identifier is safe to use within the databse. Currently
          * firebird seems to return identifiers with 93 character (instead of
@@ -64,6 +67,12 @@ namespace connectivity
         void mallocSQLVAR(XSQLDA* pSqlda);
 
         void freeSQLVAR(XSQLDA* pSqlda);
+
+        void tokenizeSQL( const OString & sql, OStringVector &vec  );
+
+        OString extractSingleTableFromSelect( const OStringVector &vec );
+
+        OUString escapeWith( const OUString& sText, const char aKey, const char aEscapeChar);
     }
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_UTIL_HXX

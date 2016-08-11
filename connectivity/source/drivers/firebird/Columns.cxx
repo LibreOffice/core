@@ -8,6 +8,7 @@
  */
 
 #include "Columns.hxx"
+#include "Column.hxx"
 
 #include <com/sun/star/sdbc/XRow.hpp>
 
@@ -31,6 +32,11 @@ Columns::Columns(Table& rTable,
                    rVector)
 {
     OColumnsHelper::setParent(&rTable);
+}
+
+Reference< css::beans::XPropertySet > Columns::createDescriptor()
+{
+    return new Column;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
