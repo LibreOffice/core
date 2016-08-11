@@ -4070,6 +4070,9 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
         const ScTokenArray* pTokenArray, const OUString& rString, bool bApi, bool bEnglish,
         const OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
 {
+    if (ScViewData::SelectionFillDOOM( rRange ))
+        return false;
+
     ScDocShellModificator aModificator( rDocShell );
 
     bool bSuccess = false;
