@@ -125,13 +125,6 @@ namespace dbaxml
         XML_TOK_AS_TEMPLATE ,
         XML_TOK_COMPONENT_NAME
     };
-    enum XMLType
-    {
-        XML_TYPE_FORMS,
-        XML_TYPE_REPORTS,
-        XML_TYPE_QUERIES,
-        XML_TYPE_TABLES
-    };
     enum XMLQueryTable
     {
         XML_TOK_QUERY_NAME,

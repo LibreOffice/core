@@ -25,7 +25,9 @@
 #include <vcl/font.hxx>
 
 
-// Styles
+/**
+ * these must match the values in css::style::NumberingType
+ */
 enum class SvxBulletStyle
 {
     ABC_BIG          = 0,

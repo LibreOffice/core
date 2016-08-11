@@ -56,7 +56,6 @@ namespace dbaui
         FULL_JOIN=0,
         LEFT_JOIN,
         RIGHT_JOIN,
-        UNION_JOIN,
         CROSS_JOIN,
         INNER_JOIN
     };
