@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a95cdbc_9e3619b3",
+        "filename": "sw/uiconfig/swriter/ui/pagefooterpanel.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1001174
+      },
+      "writtenOn": "2016-08-11T14:53:11Z",
+      "side": 1,
+      "message": "This ordering should be exactly reversed. Else, everything is fine. So your call if you want me to fix it in code, or it can be reversed here itself.",
+      "revId": "4dd5437fcebf2ddaed88b3466280229c19507064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
