@@ -21,6 +21,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include "NotebookBarPopupMenu.hxx"
+#include <officecfg/Office/UI/Notebookbar.hxx>
 
 using namespace sfx2;
 using namespace css::uno;
@@ -87,25 +88,32 @@ void SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
     {
         RemoveListeners(pSysWindow);
 
-        // setup if necessary
-        pSysWindow->SetNotebookBar(rUIFile, xFrame);
-
-        pSysWindow->GetNotebookBar()->Show();
-        pSysWindow->GetNotebookBar()->SetIconClickHdl(LINK(nullptr, SfxNotebookBar, ToggleMenubar));
-
-        SfxViewFrame* pView = SfxViewFrame::Current();
-
-        if(pView)
+        OUString sFile = officecfg::Office::UI::Notebookbar::Active::get();
+        if ( !sFile.isEmpty() )
         {
-            Reference<XContextChangeEventMultiplexer> xMultiplexer
-                        = ContextChangeEventMultiplexer::get(
-                                ::comphelper::getProcessComponentContext());
+            OUStringBuffer aBuf(rUIFile);
+            aBuf.append( sFile );
 
-            if(xFrame.is() && xMultiplexer.is())
+            // setup if necessary
+            pSysWindow->SetNotebookBar(aBuf.makeStringAndClear(), xFrame);
+
+            pSysWindow->GetNotebookBar()->Show();
+            pSysWindow->GetNotebookBar()->SetIconClickHdl(LINK(nullptr, SfxNotebookBar, ToggleMenubar));
+
+            SfxViewFrame* pView = SfxViewFrame::Current();
+
+            if(pView)
             {
-                xMultiplexer->addContextChangeEventListener(
-                                    pSysWindow->GetNotebookBar()->getContextChangeEventListener(),
-                                    xFrame->getController());
+                Reference<XContextChangeEventMultiplexer> xMultiplexer
+                            = ContextChangeEventMultiplexer::get(
+                                    ::comphelper::getProcessComponentContext());
+
+                if(xFrame.is() && xMultiplexer.is())
+                {
+                    xMultiplexer->addContextChangeEventListener(
+                                        pSysWindow->GetNotebookBar()->getContextChangeEventListener(),
+                                        xFrame->getController());
+                }
             }
         }
     }

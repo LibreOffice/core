@@ -126,6 +126,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/groupdialog \
 	sc/uiconfig/scalc/ui/groupbydate \
 	sc/uiconfig/scalc/ui/groupbynumber \
+	sc/uiconfig/scalc/ui/groups \
 	sc/uiconfig/scalc/ui/headerdialog \
 	sc/uiconfig/scalc/ui/headerfootercontent \
 	sc/uiconfig/scalc/ui/headerfooterdialog \
