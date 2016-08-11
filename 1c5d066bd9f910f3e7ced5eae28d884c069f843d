@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "1a95cdbc_1b25bbc1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-11T08:39:43Z",
+      "side": 1,
+      "message": "Yep, sorry, you\u0027re right.",
+      "parentUuid": "3a98d1f4_0d3bb6ec",
+      "range": {
+        "startLine": 7,
+        "startChar": 34,
+        "endLine": 7,
+        "endChar": 58
+      },
+      "revId": "1c5d066bd9f910f3e7ced5eae28d884c069f843d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a98d1f4_6dffda34",
         "filename": "include/tools/urlobj.hxx",
         "patchSetId": 5
@@ -78,6 +102,24 @@
       "side": 1,
       "message": "There are also related paths starting with \"file:///\" which should not be resolved.",
       "parentUuid": "3a98d1f4_6dffda34",
+      "revId": "1c5d066bd9f910f3e7ced5eae28d884c069f843d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a95cdbc_fb3f2fd4",
+        "filename": "include/tools/urlobj.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1234,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-11T08:39:43Z",
+      "side": 1,
+      "message": "Ok, but still looks wrong to me. This introduces some magic you don\u0027t know what gets hit by it.",
+      "parentUuid": "3a98d1f4_2d407256",
       "revId": "1c5d066bd9f910f3e7ced5eae28d884c069f843d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -201,6 +243,30 @@
     },
     {
       "key": {
+        "uuid": "1a95cdbc_5b582357",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1481,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-11T08:39:43Z",
+      "side": 1,
+      "message": "No, there is no replaceLast(), but replaceFirst() has a sal_Int32 * index parameter where to start the search.",
+      "parentUuid": "3a98d1f4_0d12d662",
+      "range": {
+        "startLine": 1481,
+        "startChar": 76,
+        "endLine": 1481,
+        "endChar": 88
+      },
+      "revId": "1c5d066bd9f910f3e7ced5eae28d884c069f843d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a98d1f4_ed992a21",
         "filename": "tools/source/fsys/urlobj.cxx",
         "patchSetId": 5
@@ -236,6 +302,30 @@
       "side": 1,
       "message": "Only file paths should be resolved. Are there any use cases for pipes or non-file types?",
       "parentUuid": "3a98d1f4_ed992a21",
+      "range": {
+        "startLine": 1482,
+        "startChar": 38,
+        "endLine": 1482,
+        "endChar": 46
+      },
+      "revId": "1c5d066bd9f910f3e7ced5eae28d884c069f843d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a95cdbc_7b55df1b",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1482,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-11T08:39:43Z",
+      "side": 1,
+      "message": "There is no use case, but as this is a low level function that may get called for every type it should handle every type. As is, it treats every non-directory type as a file and resolves a symlink, which is wrong.",
+      "parentUuid": "3a98d1f4_ed1cca79",
       "range": {
         "startLine": 1482,
         "startChar": 38,
