@@ -993,6 +993,15 @@
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
 #define SID_SVX_FIRSTFREE                               (SID_EDIT_POSTIT + 1)
 
+#define SID_LINE_ARROW_CIRCLE                           ( SID_EDIT_POSTIT  + 2 )
+#define SID_LINE_ARROW_SQUARE                           ( SID_EDIT_POSTIT  + 3 )
+#define SID_LINE_CIRCLE_ARROW                           ( SID_EDIT_POSTIT  + 4 )
+#define SID_LINE_SQUARE_ARROW                           ( SID_EDIT_POSTIT  + 5 )
+#define SID_LINE_ARROWS                                 ( SID_EDIT_POSTIT  + 6 )
+#define SID_DRAWTBX_ARROWS                              ( SID_EDIT_POSTIT  + 7 )
+#define SID_LINE_ARROW_START                            ( SID_EDIT_POSTIT  + 8 )
+#define SID_LINE_ARROW_END                              ( SID_EDIT_POSTIT  + 9 )
+
 // Overflow check for slot IDs
 
 #if SID_SVX_FIRSTFREE > SID_SVX_END
