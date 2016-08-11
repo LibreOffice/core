@@ -75,12 +75,11 @@ enum class BmpVectorizeFlags
 {
     Inner         = 0x0001,
     Outer         = 0x0002,
-    BoundOnly     = 0x0004,
-    ReduceEdges   = 0x0008,
+    ReduceEdges   = 0x0004,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<BmpVectorizeFlags> : is_typed_flags<BmpVectorizeFlags, 0x0f> {};
+    template<> struct typed_flags<BmpVectorizeFlags> : is_typed_flags<BmpVectorizeFlags, 0x07> {};
 }
 
 #define BMP_COL_TRANS               Color( 252, 3, 251 )
@@ -115,21 +114,7 @@ enum BmpCombine
 enum BmpReduce
 {
     BMP_REDUCE_SIMPLE = 0,
-    BMP_REDUCE_POPULAR = 1,
-    BMP_REDUCE_MEDIAN = 2
-};
-
-enum BmpEmboss
-{
-    BMP_EMBOSS_TOPLEFT = 0,
-    BMP_EMBOSS_TOP = 1,
-    BMP_EMBOSS_TOPRIGHT = 2,
-    BMP_EMBOSS_LEFT = 3,
-    BMP_EMBOSS_MIDDLE = 4,
-    BMP_EMBOSS_RIGHT = 5,
-    BMP_EMBOSS_BOTTOMLEFT = 6,
-    BMP_EMBOSS_BOTTOM = 7,
-    BMP_EMBOSS_BOTTOMRIGHT = 8
+    BMP_REDUCE_POPULAR = 1
 };
 
 enum BmpFilter

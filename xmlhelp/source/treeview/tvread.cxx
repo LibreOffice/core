@@ -82,7 +82,6 @@ namespace treeview {
         }
 
         enum Kind {
-            tree_view,
             tree_node,
             tree_leaf,
             other
