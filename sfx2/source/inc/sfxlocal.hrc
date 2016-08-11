@@ -48,6 +48,7 @@
 #define SFX_IMG_CLOSE_DOC                   (RID_SFX_SFXLOCAL_START +  2)
 
 #define RID_MENU_NOTEBOOKBAR                (RID_SFX_SFXLOCAL_START + 10)
+#define ID_MENUBAR                          1
 
 #endif
 

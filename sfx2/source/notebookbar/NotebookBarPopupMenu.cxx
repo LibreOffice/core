@@ -15,13 +15,14 @@
 #include <sfxlocal.hrc>
 #include <sfx2/sfxresid.hxx>
 #include "NotebookBarPopupMenu.hxx"
+#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
 using namespace sfx2;
 using namespace css::uno;
 using namespace css::ui;
 
-NotebookBarPopupMenu::NotebookBarPopupMenu(ResId aRes)
-    : PopupMenu(aRes)
+NotebookBarPopupMenu::NotebookBarPopupMenu()
+    : PopupMenu(SfxResId(RID_MENU_NOTEBOOKBAR))
 {
     if (SfxViewFrame::Current())
     {
@@ -30,12 +31,15 @@ NotebookBarPopupMenu::NotebookBarPopupMenu(ResId aRes)
         {
             for (int i = 0; i < GetItemCount(); ++i)
             {
-                const SfxPoolItem* pItem;
-                SfxItemState eState = pDispatcher->QueryState(GetItemId(i), pItem);
-                if (eState == SfxItemState::DISABLED)
-                    this->EnableItem(GetItemId(i), false);
-                else
-                    this->EnableItem(GetItemId(i));
+                if (GetItemId(i) != ID_MENUBAR)
+                {
+                    const SfxPoolItem* pItem;
+                    SfxItemState eState = pDispatcher->QueryState(GetItemId(i), pItem);
+                    if (eState == SfxItemState::DISABLED)
+                        this->EnableItem(GetItemId(i), false);
+                    else
+                        this->EnableItem(GetItemId(i));
+                }
             }
         }
     }
@@ -59,7 +63,7 @@ void NotebookBarPopupMenu::Execute(NotebookBar* pNotebookbar,
                                     Rectangle(0, nTop, 0, nTop),
                                     PopupMenuFlags::ExecuteDown|PopupMenuFlags::NoMouseUpClose);
 
-        if (nSelected)
+        if (nSelected && nSelected != ID_MENUBAR)
         {
             OUString aCommandURL = GetItemCommand(nSelected);
             css::util::URL aUrl;
@@ -87,6 +91,10 @@ void NotebookBarPopupMenu::Execute(NotebookBar* pNotebookbar,
             }
             else
                 SAL_WARN("sfx", "Can't create XDispatchProvider");
+        }
+        else if(nSelected)
+        {
+            SfxNotebookBar::ToggleMenubar();
         }
     }
 }

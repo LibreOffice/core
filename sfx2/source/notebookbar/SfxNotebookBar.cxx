@@ -42,6 +42,7 @@ void SfxNotebookBar::CloseMethod(SystemWindow* pSysWindow)
 {
     if (pSysWindow && pSysWindow->GetNotebookBar())
         pSysWindow->CloseNotebookBar();
+    SfxNotebookBar::ShowMenubar(true);
     m_xLayoutManager.clear();
     m_xFrame.clear();
 }
@@ -92,6 +93,7 @@ void SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
         pSysWindow->GetNotebookBar()->Show();
         pSysWindow->GetNotebookBar()->SetIconClickHdl(LINK(nullptr, SfxNotebookBar, ToggleMenubar));
+        SfxNotebookBar::ShowMenubar(false);
 
         SfxViewFrame* pView = SfxViewFrame::Current();
 
@@ -110,7 +112,10 @@ void SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         }
     }
     else if (auto pNotebookBar = pSysWindow->GetNotebookBar())
+    {
         pNotebookBar->Hide();
+        SfxNotebookBar::ShowMenubar(true);
+    }
 }
 
 void SfxNotebookBar::RemoveListeners(SystemWindow* pSysWindow)
@@ -130,7 +135,7 @@ IMPL_STATIC_LINK_TYPED(SfxNotebookBar, ToggleMenubar, NotebookBar*, pNotebookbar
 {
     if (pNotebookbar)
     {
-        ScopedVclPtrInstance<NotebookBarPopupMenu> pMenu(SfxResId(RID_MENU_NOTEBOOKBAR));
+        ScopedVclPtrInstance<NotebookBarPopupMenu> pMenu;
         pMenu->Execute(pNotebookbar, m_xFrame);
     }
 }
@@ -142,13 +147,27 @@ void SfxNotebookBar::ShowMenubar(bool bShow)
         m_bLock = true;
         m_xLayoutManager->lock();
 
-        if (m_xLayoutManager->getElement(MENUBAR_STR).is() && !bShow)
-            m_xLayoutManager->destroyElement(MENUBAR_STR);
-        else if(!m_xLayoutManager->getElement(MENUBAR_STR).is() && bShow)
-            m_xLayoutManager->createElement(MENUBAR_STR);
+        if (m_xLayoutManager->getElement(MENUBAR_STR).is())
+        {
+            if (m_xLayoutManager->isElementVisible(MENUBAR_STR) && !bShow)
+                m_xLayoutManager->hideElement(MENUBAR_STR);
+            else if(!m_xLayoutManager->isElementVisible(MENUBAR_STR) && bShow)
+                m_xLayoutManager->showElement(MENUBAR_STR);
+        }
 
         m_xLayoutManager->unlock();
         m_bLock = false;
+    }
+}
+
+void SfxNotebookBar::ToggleMenubar()
+{
+    if (m_xLayoutManager.is() && m_xLayoutManager->getElement(MENUBAR_STR).is())
+    {
+        if (m_xLayoutManager->isElementVisible(MENUBAR_STR))
+            SfxNotebookBar::ShowMenubar(false);
+        else
+            SfxNotebookBar::ShowMenubar(true);
     }
 }
 
