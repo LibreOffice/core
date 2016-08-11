@@ -814,6 +814,7 @@ public:
                                    const Point& _rDocPos );
 
     void ToggleHeaderFooterEdit( );
+    void SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj, sal_uInt16 nSlotId);
 };
 
 void ClearFEShellTabCols();

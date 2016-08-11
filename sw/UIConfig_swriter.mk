@@ -36,6 +36,7 @@ $(eval $(call gb_UIConfig_add_statusbarfiles,modules/swriter,\
 
 $(eval $(call gb_UIConfig_add_toolbarfiles,modules/swriter,\
 	sw/uiconfig/swriter/toolbar/alignmentbar \
+	sw/uiconfig/swriter/toolbar/arrowsbar \
 	sw/uiconfig/swriter/toolbar/arrowshapes \
 	sw/uiconfig/swriter/toolbar/basicshapes \
 	sw/uiconfig/swriter/toolbar/bezierobjectbar \
