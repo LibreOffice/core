@@ -245,6 +245,13 @@ void SwView::ExecDraw(SfxRequest& rReq)
             m_sDrawCustom.clear();
             break;
 
+        case SID_LINE_ARROW_END:
+        case SID_LINE_ARROW_CIRCLE:
+        case SID_LINE_ARROW_SQUARE:
+        case SID_LINE_ARROW_START:
+        case SID_LINE_CIRCLE_ARROW:
+        case SID_LINE_SQUARE_ARROW:
+        case SID_LINE_ARROWS:
         case SID_DRAW_LINE:
         case SID_DRAW_RECT:
         case SID_DRAW_ELLIPSE:

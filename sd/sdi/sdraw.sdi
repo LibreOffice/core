@@ -141,24 +141,6 @@ SfxUInt16Item AnimatorState SID_ANIMATOR_STATE
     GroupId = GID_OPTIONS;
 ]
 
-SfxVoidItem ArrowsToolbox SID_DRAWTBX_ARROWS
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_DRAWING;
-]
-
 SfxVoidItem Backward SID_MOREBACK
 ()
 [
@@ -2423,114 +2405,6 @@ SfxBoolItem LeaveAllGroups SID_LEAVE_ALL_GROUPS
     GroupId = GID_MODIFY;
 ]
 
-SfxBoolItem LineArrowCircle SID_LINE_ARROW_CIRCLE
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerItem;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_DRAWING;
-]
-
-SfxBoolItem LineArrowEnd SID_LINE_ARROW_END
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerItem;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_DRAWING;
-]
-
-SfxBoolItem LineArrows SID_LINE_ARROWS
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerItem;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_DRAWING;
-]
-
-SfxBoolItem LineArrowSquare SID_LINE_ARROW_SQUARE
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerItem;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_DRAWING;
-]
-
-SfxBoolItem LineArrowStart SID_LINE_ARROW_START
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerItem;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_DRAWING;
-]
-
-SfxBoolItem LineCircleArrow SID_LINE_CIRCLE_ARROW
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerItem;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_DRAWING;
-]
-
 SfxVoidItem LineColor SID_SETLINECOLOR
 (SfxUInt32Item Red ID_VAL_RED,SfxUInt32Item Green ID_VAL_GREEN,SfxUInt32Item Blue ID_VAL_BLUE)
 [
@@ -2562,24 +2436,6 @@ SfxVoidItem LineEndPolygon SID_LINEEND_POLYGON
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
-    GroupId = GID_DRAWING;
-]
-
-SfxBoolItem LineSquareArrow SID_LINE_SQUARE_ARROW
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerItem;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = TRUE,
     GroupId = GID_DRAWING;
 ]
 
