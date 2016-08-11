@@ -297,7 +297,7 @@
 
       <node oor:name="StylesPropertyPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Styles</value>
+          <value xml:lang="en-US">Style</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
           <value>StylesPropertyPanel</value>
@@ -413,9 +413,7 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            Writer, Table,    visible ;
-            Writer, Text,     visible ;
-            Writer, default,  visible ;
+            Writer, any,  visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
@@ -441,9 +439,7 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            Writer, Table,    visible ;
-            Writer, Text,     visible ;
-            Writer, default,  visible ;
+            Writer, any,    visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
@@ -469,9 +465,7 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            Writer, Table,    hidden ;
-            Writer, Text,     hidden ;
-            Writer, default,  hidden ;
+            Writer, any,    hidden ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
@@ -497,9 +491,7 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            Writer, Table,    hidden ;
-            Writer, Text,     hidden ;
-            Writer, default,  hidden ;
+            Writer, any,    hidden ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
