@@ -739,6 +739,8 @@ void ScViewFunc::EnterDataAtCursor( const OUString& rString )
 void ScViewFunc::EnterMatrix( const OUString& rString, ::formula::FormulaGrammar::Grammar eGram )
 {
     ScViewData& rData = GetViewData();
+    const SCCOL nCol = rData.GetCurX();
+    const SCROW nRow = rData.GetCurY();
     const ScMarkData& rMark = rData.GetMarkData();
     if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
     {
@@ -746,8 +748,6 @@ void ScViewFunc::EnterMatrix( const OUString& rString, ::formula::FormulaGrammar
         //  with size of result formula to get the size
 
         ScDocument* pDoc = rData.GetDocument();
-        SCCOL nCol = rData.GetCurX();
-        SCROW nRow = rData.GetCurY();
         SCTAB nTab = rData.GetTabNo();
         ScFormulaCell aFormCell( pDoc, ScAddress(nCol,nRow,nTab), rString, eGram, MM_FORMULA );
 
@@ -773,6 +773,8 @@ void ScViewFunc::EnterMatrix( const OUString& rString, ::formula::FormulaGrammar
             aRange, &rMark, nullptr, rString, false, false, EMPTY_OUSTRING, eGram );
         if (bSuccess)
             pDocSh->UpdateOle(&GetViewData());
+        else
+            PaintArea(nCol, nRow, nCol, nRow);        // possibly the edit-engine is still painted there
     }
     else
         ErrorMessage(STR_NOMULTISELECT);
