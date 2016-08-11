@@ -1263,6 +1263,8 @@ public:
     SwTableAutoFormat* MakeTableStyle(const OUString& rName, bool bBroadcast = false);
     // Delete table style named rName. If pAffectedTables is not null, it contains pointers to affected tables. Tracked by undo.
     std::unique_ptr<SwTableAutoFormat> DelTableStyle(const OUString& rName, bool bBroadcast = false, std::vector<SwTable*>* pAffectedTables = nullptr);
+    // Change (replace) a table style named rName. Tracked by undo.
+    void ChgTableStyle(const OUString& rName, const SwTableAutoFormat& rNewFormat);
 
     const SwCellStyleTable& GetCellStyles() const  { return *mpCellStyles.get(); }
           SwCellStyleTable& GetCellStyles()        { return *mpCellStyles.get(); }
