@@ -38,6 +38,8 @@ public:
     void FillPaperSizeEntries( PaperSizeApp eApp );
     void SetSelection(  Paper eSize  );
     Paper GetSelection() const;
+
+    Size GetOptimalSize() const override;
 };
 
 #endif

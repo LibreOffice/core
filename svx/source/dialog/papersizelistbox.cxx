@@ -78,5 +78,10 @@ Paper PaperSizeListBox::GetSelection() const
 
     return ePaper;
 }
+
+Size PaperSizeListBox::GetOptimalSize() const
+{
+    return Size(150, ListBox::GetOptimalSize().Height());
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 
