@@ -9,6 +9,7 @@
 
 #include "Util.hxx"
 #include <rtl/ustrbuf.hxx>
+#include <rtl/strbuf.hxx>
 
 using namespace ::connectivity;
 
@@ -305,5 +306,238 @@ void firebird::freeSQLVAR(XSQLDA* pSqlda)
             pVar->sqlind = nullptr;
         }
     }
+}
+
+static bool isWhitespace( sal_Unicode c )
+{
+    return ' ' == c || 9 == c || 10 == c || 13 == c;
+}
+
+static bool isOperator( char c )
+{
+    bool ret;
+    switch(c)
+    {
+    case '+':
+    case '-':
+    case '*':
+    case '/':
+    case '<':
+    case '>':
+    case '=':
+    case '~':
+    case '!':
+    case '@':
+    case '#':
+    case '%':
+    case '^':
+    case '&':
+    case '|':
+    case '`':
+    case '?':
+    case '$':
+        ret = true;
+        break;
+    default:
+        ret = false;
+    }
+    return ret;
+}
+
+void firebird::tokenizeSQL( const OString & sql, OStringVector &vec  )
+{
+    int length = sql.getLength();
+
+    int i = 0;
+    bool singleQuote = false;
+    bool doubleQuote = false;
+    int start = 0;
+    for( ; i < length ; i ++ )
+    {
+        char c = sql[i];
+        if( doubleQuote  )
+        {
+            if( '"' == c )
+            {
+                vec.push_back( OString( &sql.getStr()[start], i-start  ) );
+                start = i + 1;
+                doubleQuote = false;
+            }
+        }
+        else if( singleQuote )
+        {
+            if( '\'' == c )
+            {
+                vec.push_back( OString( &sql.getStr()[start], i - start +1 ) );
+                start = i + 1; // leave single quotes !
+                singleQuote = false;
+            }
+        }
+        else
+        {
+            if( '"' == c )
+            {
+                doubleQuote = true;
+                start = i +1; // skip double quotes !
+            }
+            else if( '\'' == c )
+            {
+                singleQuote = true;
+                start = i; // leave single quotes
+            }
+            else if( isWhitespace( c ) )
+            {
+                if( i == start )
+                    start ++;   // skip additional whitespace
+                else
+                {
+                    vec.push_back( OString( &sql.getStr()[start], i - start  ) );
+                    start = i +1;
+                }
+            }
+            else if( ',' == c || isOperator( c ) || '(' == c || ')' == c )
+            {
+                if( i - start )
+                    vec.push_back( OString( &sql.getStr()[start], i - start ) );
+                vec.push_back( OString( &sql.getStr()[i], 1 ) );
+                start = i + 1;
+            }
+            else if( '.' == c )
+            {
+                if( ( i > start && sql[start] >= '0' && sql[start] <= '9' ) ||
+                    ( i == start && i > 1 && isWhitespace( sql[i-1] ) ) )
+                {
+                    // ignore, is a literal
+                }
+                else
+                {
+                    if( i - start )
+                        vec.push_back( OString( &sql.getStr()[start], i - start ) );
+                    vec.push_back( OString( "." ) );
+                    start = i + 1;
+                }
+            }
+        }
+    }
+    if( start < i )
+        vec.push_back( OString( &sql.getStr()[start] , i - start ) );
+}
+
+OString firebird::extractSingleTableFromSelect( const OStringVector &vec )
+{
+    OString ret;
+
+    if( 0 == rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
+            vec[0].pData->buffer, vec[0].pData->length, "select" , 6 , 6 ) )
+    {
+        size_t token = 0;
+
+        for( token = 1; token < vec.size() ; token ++ )
+        {
+            if( 0 == rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
+                    vec[token].getStr(), vec[token].getLength(), "from" , 4 , 4 ) )
+            {
+                // found from
+                break;
+            }
+        }
+        token ++;
+
+        if( token < vec.size() && 0 == rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
+                vec[token].pData->buffer, vec[token].pData->length, "only " , 4 , 4 ) )
+        {
+            token ++;
+        }
+
+        if( token < vec.size() && vec[token] != "(" )
+        {
+            // it is a table or a function name
+            OStringBuffer buf(128);
+            if( '"' == vec[token][0] )
+                buf.append( &(vec[token].getStr()[1]) , vec[token].getLength() -2 );
+            else
+                buf.append( vec[token] );
+            token ++;
+
+            if( token < vec.size() )
+            {
+                if( vec[token] == "." )
+                {
+                    buf.append( vec[token] );
+                    token ++;
+                    if( token < vec.size() )
+                    {
+                        if( '"' == vec[token][0] )
+                            buf.append( &(vec[token].getStr()[1]) , vec[token].getLength() -2 );
+                        else
+                            buf.append( vec[token] );
+                        token ++;
+                    }
+                }
+            }
+
+            ret = buf.makeStringAndClear();
+            // now got my table candidate
+
+            if( token < vec.size() && vec[token] == "(" )
+            {
+                // whoops, it is a function
+                ret.clear();
+            }
+            else
+            {
+                if( token < vec.size() )
+                {
+                    if( 0 == rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
+                            vec[token].pData->buffer, vec[token].pData->length, "as" , 2, 2 ) )
+                    {
+                        token += 2; // skip alias
+                    }
+                }
+
+                if( token < vec.size() )
+                {
+                    if( vec[token] == "," )
+                    {
+                        // whoops, multiple tables are used
+                        ret.clear();
+                    }
+                    else
+                    {
+                        static const char * forbiddenKeywords[] =
+                            { "join", "natural", "outer", "inner", "left", "right", "full" , nullptr };
+                        for( int i = 0 ; forbiddenKeywords[i] ; i ++ )
+                        {
+                            size_t nKeywordLen = strlen(forbiddenKeywords[i]);
+                            if( 0 == rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
+                                 vec[token].pData->buffer, vec[token].pData->length,
+                                 forbiddenKeywords[i], nKeywordLen,
+                                 nKeywordLen ) )
+                            {
+                                // whoops, it is a join
+                                ret.clear();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return ret;
+
+}
+
+OUString firebird::escapeWith( const OUString& sText, const char aKey, const char aEscapeChar)
+{
+    OUString sRet(sText);
+    sal_Int32 aIndex = 0;
+    while( (aIndex = sRet.indexOf(aKey, aIndex)) > 0 &&
+            aIndex < sRet.getLength())
+    {
+            sRet = sRet.replaceAt(aIndex, 1, OUString(aEscapeChar) + OUString(aKey)  );
+            aIndex+= 2;
+    }
+
+    return sRet;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
