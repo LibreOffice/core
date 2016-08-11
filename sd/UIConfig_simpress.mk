@@ -113,6 +113,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/definecustomslideshow \
 	sd/uiconfig/simpress/ui/dlgfield \
 	sd/uiconfig/simpress/ui/dockinganimation \
+	sd/uiconfig/simpress/ui/groups \
 	sd/uiconfig/simpress/ui/headerfooterdialog \
 	sd/uiconfig/simpress/ui/headerfootertab \
 	sd/uiconfig/simpress/ui/insertslides \
