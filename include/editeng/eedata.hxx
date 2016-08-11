@@ -41,14 +41,6 @@ namespace EEngineData
 
     typedef std::vector< WrongSpellClass > WrongSpellVector;
 
-    // text marking vector containing the EOC, EOW and EOS TEXT definitions
-    enum TextMarkingType
-    {
-        EndOfCaracter = 0,
-        EndOfWord = 1,
-        EndOfSentence = 2
-    };
-
 } // end of namespace EditEngine
 
 #endif // INCLUDED_EDITENG_EEDATA_HXX

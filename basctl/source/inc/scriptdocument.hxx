@@ -139,9 +139,6 @@ namespace basctl
                 the application-wide scripts/dialogs.
             */
             AllWithApplication,
-            /** real documents only
-            */
-            DocumentsOnly,
             /** real documents only, sorted lexicographically by their title (using the sys locale's default
                 collator)
             */
