@@ -31,6 +31,7 @@
 #include <edtwin.hxx>
 #include <olmenu.hxx>
 #include <cmdid.h>
+#include <pagefrm.hxx>
 
 /**
  * Maps database URIs to the registered database names for quick lookups
@@ -504,6 +505,43 @@ DECLARE_FILE_MAILMERGE_TEST(testTdf102010, "empty.odt", "10-testing-addresses.od
     // Don't overwrite previous result
     executeMailMerge( true );
     loadMailMergeDocument( 1 );
+}
+
+DECLARE_SHELL_MAILMERGE_TEST(test_sections_first_last, "sections_first_last.odt", "10-testing-addresses.ods", "testing-addresses")
+{
+    // A document with a leading, middle and trailing section
+    // Originally we were losing the trailing section during merge
+    executeMailMerge();
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // Get the size of the document in nodes
+    SwDoc *pDoc = pTextDoc->GetDocShell()->GetDoc();
+    sal_uLong nSize = pDoc->GetNodes().GetEndOfContent().GetIndex() - pDoc->GetNodes().GetEndOfExtras().GetIndex();
+    nSize -= 2; // The common start and end node
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(13), nSize );
+
+    SwXTextDocument* pTextDocMM = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
+    CPPUNIT_ASSERT(pTextDocMM);
+
+    SwDoc *pDocMM = pTextDocMM->GetDocShell()->GetDoc();
+    sal_uLong nSizeMM = pDocMM->GetNodes().GetEndOfContent().GetIndex() - pDocMM->GetNodes().GetEndOfExtras().GetIndex();
+    nSizeMM -= 2;
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(10 * nSize), nSizeMM );
+
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16(19), pDocMM->GetDocShell()->GetWrtShell()->GetPhyPageNum() );
+
+    // All even pages should be empty, all sub-documents have two pages
+    const SwRootFrame* pLayout = pDocMM->getIDocumentLayoutAccess().GetCurrentLayout();
+    const SwPageFrame* pPageFrm = static_cast<const SwPageFrame*>( pLayout->Lower() );
+    while ( pPageFrm )
+    {
+        bool bOdd = (1 == (pPageFrm->GetPhyPageNum() % 2));
+        CPPUNIT_ASSERT_EQUAL( !bOdd, pPageFrm->IsEmptyPage() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt16( bOdd ? 1 : 2 ), pPageFrm->GetVirtPageNum() );
+        pPageFrm = static_cast<const SwPageFrame*>( pPageFrm->GetNext() );
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

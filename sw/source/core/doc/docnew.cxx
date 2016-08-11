@@ -967,20 +967,13 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
                              bool const bDeletePrevious, int pageOffset, const sal_uLong nDocNo)
 {
     // GetEndOfExtras + 1 = StartOfContent == no content node!
-    // this ensures, that we have at least two nodes in the SwPaM.
-    // @see IDocumentContentOperations::CopyRange
+    // This ensures it won't be merged in the SwTextNode at the position.
     SwNodeIndex aSourceIdx( rSource.GetNodes().GetEndOfExtras(), 1 );
-    SwNodeIndex aSourceEndIdx( rSource.GetNodes().GetEndOfContent(), -1 );
-    SwPaM aCpyPam( aSourceIdx );
-
-    if ( aSourceEndIdx.GetNode().IsTextNode() ) {
-        aCpyPam.SetMark();
-        // moves to the last content node before EOC; for single paragraph
-        // documents this would result in [n, n], which is considered empty
-        aCpyPam.Move( fnMoveForward, fnGoDoc );
-    }
-    else
-        aCpyPam = SwPaM( aSourceIdx, aSourceEndIdx );
+    // CopyRange works on the range a [mark, point[ and considers an
+    // index < point outside the selection.
+    // @see IDocumentContentOperations::CopyRange
+    SwNodeIndex aSourceEndIdx( rSource.GetNodes().GetEndOfContent(), 0 );
+    SwPaM aCpyPam( aSourceIdx, aSourceEndIdx );
 
 #ifdef DBG_UTIL
     SAL_INFO( "sw.docappend", "NodeType 0x" << std::hex << (int) aSourceIdx.GetNode().GetNodeType()
@@ -997,10 +990,8 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
     SAL_INFO( "sw.docappend", ".." );
     SAL_INFO( "sw.docappend", "NodeType 0x" << std::hex << (int) aSourceEndIdx.GetNode().GetNodeType()
                               << std::dec << " " << aSourceEndIdx.GetNode().GetIndex() );
-    aSourceEndIdx++;
     SAL_INFO( "sw.docappend", "NodeType 0x" << std::hex << (int) aSourceEndIdx.GetNode().GetNodeType()
                               << std::dec << " " << aSourceEndIdx.GetNode().GetIndex() );
-    aSourceEndIdx--;
     SAL_INFO( "sw.docappend", "Src-Nd: " << CNTNT_DOC( &rSource ) );
     SAL_INFO( "sw.docappend", "Nd: " << CNTNT_DOC( this ) );
 #endif
@@ -1044,9 +1035,23 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
         }
 
         // Otherwise we have to handle SwPlaceholderNodes as first node
-        if ( pTargetPageDesc ) {
+        if ( pTargetPageDesc )
+        {
+            SwNodeIndex aBreakIdx( GetNodes().GetEndOfContent(), -1 );
+            SwPosition aBreakPos( aBreakIdx );
+            // InsertPageBreak just works on SwTextNode nodes, so make
+            // sure the last node is one!
+            bool bIsTextNode = aBreakIdx.GetNode().IsTextNode();
+            if ( !bIsTextNode )
+                getIDocumentContentOperations().AppendTextNode( aBreakPos );
             OUString name = pTargetPageDesc->GetName();
             pTargetShell->InsertPageBreak( &name, nStartPageNumber );
+            if ( !bIsTextNode )
+            {
+                pTargetShell->SttEndDoc( false );
+                --aBreakIdx;
+                GetNodes().Delete( aBreakIdx, 1 );
+            }
 
             // There is now a new empty text node on the new page. If it has
             // any marks, those are from the previous page: move them back
@@ -1097,7 +1102,8 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
     this->GetIDocumentUndoRedo().StartUndo( UNDO_INSGLOSSARY, nullptr );
     this->getIDocumentFieldsAccess().LockExpFields();
 
-    // Position where the appended doc starts. Will be filled in later (uses GetEndOfContent() because SwNodeIndex has no default ctor).
+    // Position where the appended doc starts. Will be filled in later.
+    // Initially uses GetEndOfContent() because SwNodeIndex has no default ctor.
     SwNodeIndex aStartAppendIndex( GetNodes().GetEndOfContent() );
 
     {

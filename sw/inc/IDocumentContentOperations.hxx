@@ -80,7 +80,7 @@ public:
         be within the range!
 
         \warning The range has to include at least two nodes or has to be a
-        SwDoc::IsColumnSelection!
+        SwDoc::IsColumnSelection, because the rPam is treated [mark, point[.
 
         Normally this function should work only with content nodes. But there
         is a special case used by SwDoc::Paste, which starts the SwPaM at the
