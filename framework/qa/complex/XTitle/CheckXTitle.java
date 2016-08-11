@@ -210,11 +210,12 @@ public class CheckXTitle
         xDisProv = null;
     }
 
-    /** @short checks loading of new document with readonly set to true
+    /** @short checks creation of new empty document with readonly set to true
 
-        @descr loads a new document with readonly mode set to true.
-               this should fail because new doc can not be opened in
-               read only mode
+        @descr creation of a new document with readonly property set
+               to true.  this should not fail even if as such it can
+               be seen as a slightly silly thing to do. But existing
+               3rd-party code depends on it to work.
     */
     @Test public void checkLoadingWithReadOnly()
     {
@@ -232,10 +233,8 @@ public class CheckXTitle
         try{
                 xDoc = m_xLoader.loadComponentFromURL("private:factory/swriter", "_default", 0, lArgs);
         } catch (Exception e) {
-            //exception is expected. do nothing
         }
-
-        assertNull("Loading new document with read only mode true should have failed", xDoc);
+        assertNotNull("Creating a new document read with ReadOnly property true should work (even if slightly silly)", xDoc);
     }
 
     private XMultiServiceFactory getMSF()
