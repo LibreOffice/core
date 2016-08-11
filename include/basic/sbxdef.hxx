@@ -58,10 +58,6 @@ enum SbxDataType {
     SbxUSHORT   = 18,    // * unsigned short (sal_uInt16)
     SbxULONG    = 19,    // * unsigned long (sal_uInt32)
 
-//deprecated:  // old 64bit types kept for backward compatibility in file I/O
-    SbxLONG64   = 20,    //   moved to SbxSALINT64  as 64bit int
-    SbxULONG64  = 21,    //   moved to SbxSALUINT64 as 64bit int
-
     SbxINT      = 22,    // * signed machine-dependent int
     SbxUINT     = 23,    // * unsigned machine-dependent int
 
@@ -85,10 +81,6 @@ enum SbxDataType {
     SbxVECTOR = 0x1000,  // simple counted array
     SbxARRAY  = 0x2000,  // array
     SbxBYREF  = 0x4000,  // access by reference
-
-    SbxSV1 = 128,        // first defined data type for StarView
-    SbxMEMORYSTREAM,     // SvMemoryStream
-    SbxSTORAGE,          // SotStorage
 
     SbxUSER1  = 256,     // first user defined data type
     SbxUSERn  = 2047     // last user defined data type
