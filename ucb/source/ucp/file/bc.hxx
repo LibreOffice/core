@@ -258,8 +258,7 @@ namespace fileaccess {
         enum state { NameForInsertionSet = 1,
                      JustInserted = 2,
                      Deleted = 4,
-                     FullFeatured = 8,
-                     Connected = 16 };
+                     FullFeatured = 8 };
         bool                                                                    m_bFolder;
         sal_uInt16                                                                  m_nState;
 

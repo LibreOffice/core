@@ -209,8 +209,7 @@ enum class DrawGridFlags
     NONE                 = 0x0000,
     Dots                 = 0x0001,
     HorzLines            = 0x0002,
-    VertLines            = 0x0004,
-    Lines                = HorzLines | VertLines,
+    VertLines            = 0x0004
 };
 namespace o3tl
 {

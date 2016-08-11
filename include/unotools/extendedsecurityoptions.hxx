@@ -50,7 +50,6 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtExtendedSecurityOptions : public utl
         {
             OPEN_NEVER                  = 0,
             OPEN_WITHSECURITYCHECK,
-            OPEN_ALWAYS
         };
 
          SvtExtendedSecurityOptions();
