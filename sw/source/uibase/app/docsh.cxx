@@ -128,6 +128,7 @@
 
 #include <sal/log.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <officecfg/Office/UI/Notebookbar.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1072,8 +1073,14 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         break;
         case SID_NOTEBOOKBAR:
         {
-            SfxViewShell* pViewShell = GetView()? GetView(): SfxViewShell::Current();
-            sfx2::SfxNotebookBar::StateMethod(pViewShell->GetViewFrame()->GetBindings(), "modules/swriter/ui/notebookbar.ui");
+            OUString sFile = officecfg::Office::UI::Notebookbar::Active::get();
+            if ( !sFile.isEmpty() )
+            {
+                OUStringBuffer aBuf("modules/swriter/ui/");
+                aBuf.append( sFile );
+                SfxViewShell* pViewShell = GetView()? GetView(): SfxViewShell::Current();
+                sfx2::SfxNotebookBar::StateMethod(pViewShell->GetViewFrame()->GetBindings(), aBuf.makeStringAndClear());
+            }
         }
         break;
 

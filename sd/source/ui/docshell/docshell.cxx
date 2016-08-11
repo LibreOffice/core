@@ -68,6 +68,7 @@
 #include "OutlineView.hxx"
 #include "ViewShellBase.hxx"
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
+#include <officecfg/Office/UI/Notebookbar.hxx>
 
 using namespace sd;
 #define DrawDocShell
@@ -274,7 +275,14 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
 
             case SID_NOTEBOOKBAR:
             {
-                sfx2::SfxNotebookBar::StateMethod(mpViewShell->GetFrame()->GetBindings(), "modules/simpress/ui/notebookbar.ui");
+                OUString sFile = officecfg::Office::UI::Notebookbar::Active::get();
+                if ( !sFile.isEmpty() )
+                {
+                    OUStringBuffer aBuf("modules/simpress/ui/");
+                    aBuf.append( sFile );
+
+                    sfx2::SfxNotebookBar::StateMethod(mpViewShell->GetFrame()->GetBindings(), aBuf.makeStringAndClear());
+                }
             }
             break;
 
