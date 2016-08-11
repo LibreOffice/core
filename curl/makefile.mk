@@ -37,12 +37,12 @@ all:
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=curl-7.49.1
-TARFILE_MD5=2feb3767b958add6a177c6602ff21e8c
+TARFILE_NAME=curl-7.50.1
+TARFILE_MD5=c264788f2e4313a05140d712c1ec90c2
 PATCH_FILES=
 
 .IF "$(GUI)"=="WNT"
-    PATCH_FILES+=curl-7.49.1_win.patch
+    PATCH_FILES+=curl-7.50.1_win.patch
 #	.IF "$(COM)"=="GCC"
 #		PATCH_FILES+=curl-7.19.7_mingw.patch
 #	.ENDIF
