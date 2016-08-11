@@ -196,13 +196,12 @@ enum class HeaderBarItemBits
     FLAT                = 0x0800,
     DOWNARROW           = 0x1000,
     UPARROW             = 0x2000,
-    USERDRAW            = 0x4000,
     STDSTYLE            = LEFT | LEFTIMAGE | VCENTER | CLICKABLE,
 };
 
 namespace o3tl
 {
-    template<> struct typed_flags<HeaderBarItemBits> : is_typed_flags<HeaderBarItemBits, 0x7fff> {};
+    template<> struct typed_flags<HeaderBarItemBits> : is_typed_flags<HeaderBarItemBits, 0x3fff> {};
 }
 
 #define HEADERBAR_APPEND            ((sal_uInt16)0xFFFF)

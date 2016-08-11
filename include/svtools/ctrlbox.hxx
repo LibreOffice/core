@@ -237,11 +237,10 @@ enum class BorderWidthImplFlags
     CHANGE_LINE1    = 1,
     CHANGE_LINE2    = 2,
     CHANGE_DIST     = 4,
-    ADAPT_DIST      = 8,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<BorderWidthImplFlags> : is_typed_flags<BorderWidthImplFlags, 0x0f> {};
+    template<> struct typed_flags<BorderWidthImplFlags> : is_typed_flags<BorderWidthImplFlags, 0x07> {};
 }
 class SVT_DLLPUBLIC BorderWidthImpl
 {
