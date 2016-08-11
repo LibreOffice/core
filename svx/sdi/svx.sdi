@@ -5348,6 +5348,131 @@ SfxBoolItem Line SID_DRAW_LINE
     GroupId = GID_DRAWING;
 ]
 
+SfxBoolItem LineArrowCircle SID_LINE_ARROW_CIRCLE
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerItem;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+SfxBoolItem LineArrowEnd SID_LINE_ARROW_END
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerItem;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+SfxBoolItem LineArrows SID_LINE_ARROWS
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerItem;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+SfxBoolItem LineArrowSquare SID_LINE_ARROW_SQUARE
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerItem;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+SfxBoolItem LineArrowStart SID_LINE_ARROW_START
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerItem;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+SfxBoolItem LineCircleArrow SID_LINE_CIRCLE_ARROW
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerItem;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+SfxBoolItem LineSquareArrow SID_LINE_SQUARE_ARROW
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerItem;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
 
 SfxBoolItem Line_Diagonal SID_DRAW_XLINE
 
@@ -5366,6 +5491,23 @@ SfxBoolItem Line_Diagonal SID_DRAW_XLINE
     GroupId = GID_DRAWING;
 ]
 
+SfxVoidItem ArrowsToolbox SID_DRAWTBX_ARROWS
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
 
 SvxColorItem FrameLineColor SID_FRAME_LINECOLOR
 

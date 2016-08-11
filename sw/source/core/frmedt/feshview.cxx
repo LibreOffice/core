@@ -30,12 +30,19 @@
 #include <svx/sxciaitm.hxx>
 #include <svx/xfillit.hxx>
 #include <svx/svdocapt.hxx>
+#include <svx/dialogs.hrc>
+#include <svx/xlnwtit.hxx>
+#include <svx/xlnstwit.hxx>
+#include <svx/xlnedwit.hxx>
+#include <svx/xlnedit.hxx>
+#include <svx/xlnstit.hxx>
 #include <sfx2/app.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/protitem.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/dialmgr.hxx>
 #include <tools/globname.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <DocumentSettingManager.hxx>
@@ -86,6 +93,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <calbck.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
@@ -93,6 +101,38 @@
 #define SCROLLVAL 75
 
 using namespace com::sun::star;
+
+/**
+ * set line starts and ends for the object to be created
+ */
+
+namespace {
+
+::basegfx::B2DPolyPolygon getPolygon( sal_uInt16 nResId, SdrModel* pDoc )
+{
+    ::basegfx::B2DPolyPolygon aRetval;
+    XLineEndListRef pLineEndList = pDoc->GetLineEndList();
+
+    if( pLineEndList.is() )
+    {
+        OUString aArrowName( SVX_RES(nResId) );
+        long nCount = pLineEndList->Count();
+        long nIndex;
+        for( nIndex = 0L; nIndex < nCount; nIndex++ )
+        {
+            const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nIndex);
+            if( pEntry->GetName() == aArrowName )
+            {
+                aRetval = pEntry->GetLineEnd();
+                break;
+            }
+        }
+    }
+
+    return aRetval;
+}
+
+}
 
 SwFlyFrame *GetFlyFromMarked( const SdrMarkList *pLst, SwViewShell *pSh )
 {
@@ -844,6 +884,138 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
                     pAct->Frame().Pos().Y() += 1;
                 }
             }
+        }
+    }
+}
+
+void SwFEShell::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj, sal_uInt16 nSlotId)
+{
+    SdrModel *pDoc = pObj->GetModel();
+
+    if ( nSlotId == SID_LINE_ARROW_START      ||
+         nSlotId == SID_LINE_ARROW_END        ||
+         nSlotId == SID_LINE_ARROWS           ||
+         nSlotId == SID_LINE_ARROW_CIRCLE     ||
+         nSlotId == SID_LINE_CIRCLE_ARROW     ||
+         nSlotId == SID_LINE_ARROW_SQUARE     ||
+         nSlotId == SID_LINE_SQUARE_ARROW )
+    {
+
+        // set attributes of line start and ends
+
+        // arrowhead
+        ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, pDoc ) );
+        if( !aArrow.count() )
+        {
+            ::basegfx::B2DPolygon aNewArrow;
+            aNewArrow.append(::basegfx::B2DPoint(10.0, 0.0));
+            aNewArrow.append(::basegfx::B2DPoint(0.0, 30.0));
+            aNewArrow.append(::basegfx::B2DPoint(20.0, 30.0));
+            aNewArrow.setClosed(true);
+            aArrow.append(aNewArrow);
+        }
+
+        // Circles
+        ::basegfx::B2DPolyPolygon aCircle( getPolygon( RID_SVXSTR_CIRCLE, pDoc ) );
+        if( !aCircle.count() )
+        {
+            ::basegfx::B2DPolygon aNewCircle;
+            aNewCircle = ::basegfx::tools::createPolygonFromEllipse(::basegfx::B2DPoint(0.0, 0.0), 250.0, 250.0);
+            aNewCircle.setClosed(true);
+            aCircle.append(aNewCircle);
+        }
+
+        // Square
+        ::basegfx::B2DPolyPolygon aSquare( getPolygon( RID_SVXSTR_SQUARE, pDoc ) );
+        if( !aSquare.count() )
+        {
+            ::basegfx::B2DPolygon aNewSquare;
+            aNewSquare.append(::basegfx::B2DPoint(0.0, 0.0));
+            aNewSquare.append(::basegfx::B2DPoint(10.0, 0.0));
+            aNewSquare.append(::basegfx::B2DPoint(10.0, 10.0));
+            aNewSquare.append(::basegfx::B2DPoint(0.0, 10.0));
+            aNewSquare.setClosed(true);
+            aSquare.append(aNewSquare);
+        }
+
+        SfxItemSet aSet( pDoc->GetItemPool() );
+        long nWidth = 100; // (1/100th mm)
+
+        // determine line width and calculate with it the line end width
+        if( aSet.GetItemState( XATTR_LINEWIDTH ) != SfxItemState::DONTCARE )
+        {
+            long nValue = static_cast<const XLineWidthItem&>( aSet.Get( XATTR_LINEWIDTH ) ).GetValue();
+            if( nValue > 0 )
+                nWidth = nValue * 3;
+        }
+
+        switch (nSlotId)
+        {
+            case SID_LINE_ARROWS:
+            {
+                // connector with arrow ends
+                rAttr.Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW), aArrow));
+                rAttr.Put(XLineStartWidthItem(nWidth));
+                rAttr.Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_ARROW), aArrow));
+                rAttr.Put(XLineEndWidthItem(nWidth));
+            }
+            break;
+
+            case SID_LINE_ARROW_START:
+            case SID_LINE_ARROW_CIRCLE:
+            case SID_LINE_ARROW_SQUARE:
+            {
+                // connector with arrow start
+                rAttr.Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW), aArrow));
+                rAttr.Put(XLineStartWidthItem(nWidth));
+            }
+            break;
+
+            case SID_LINE_ARROW_END:
+            case SID_LINE_CIRCLE_ARROW:
+            case SID_LINE_SQUARE_ARROW:
+            {
+                // connector with arrow end
+                rAttr.Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_ARROW), aArrow));
+                rAttr.Put(XLineEndWidthItem(nWidth));
+            }
+            break;
+        }
+
+        // and again, for the still missing ends
+        switch (nSlotId)
+        {
+            case SID_LINE_ARROW_CIRCLE:
+            {
+                // circle end
+                rAttr.Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_CIRCLE), aCircle));
+                rAttr.Put(XLineEndWidthItem(nWidth));
+            }
+            break;
+
+            case SID_LINE_CIRCLE_ARROW:
+            {
+                // circle start
+                rAttr.Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_CIRCLE), aCircle));
+                rAttr.Put(XLineStartWidthItem(nWidth));
+            }
+            break;
+
+            case SID_LINE_ARROW_SQUARE:
+            {
+                // square end
+                rAttr.Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_SQUARE), aSquare));
+                rAttr.Put(XLineEndWidthItem(nWidth));
+            }
+            break;
+
+            case SID_LINE_SQUARE_ARROW:
+            {
+                // square start
+                rAttr.Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_SQUARE), aSquare));
+                rAttr.Put(XLineStartWidthItem(nWidth));
+            }
+            break;
         }
     }
 }
@@ -2839,6 +3011,10 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
                     aTempPoly.append(basegfx::B2DPoint(aRect.TopLeft().getX(), nYMiddle));
                     aTempPoly.append(basegfx::B2DPoint(aRect.BottomRight().getX(), nYMiddle));
                     aPoly.append(aTempPoly);
+
+                    SfxItemSet aAttr(pObj->GetModel()->GetItemPool());
+                    SetLineEnds(aAttr, pObj, nSlotId);
+                    pObj->SetMergedItemSet(aAttr);
                 }
                 break;
             }
