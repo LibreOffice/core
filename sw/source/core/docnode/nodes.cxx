@@ -1695,24 +1695,30 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
                 !pAktNode->m_pStartOfSection->IsSectionNode() ) )
         ++aRg.aStart;
 
-    // if aEnd-1 points to no ContentNode, search previous one
-    --aRg.aEnd;
-    // #i107142#: if aEnd is start node of a special section, do nothing.
-    // Otherwise this could lead to crash: going through all previous
-    // special section nodes and then one before the first.
-    if (aRg.aEnd.GetNode().StartOfSectionIndex() != 0)
-    {
-        while( ((pAktNode = & aRg.aEnd.GetNode())->GetStartNode() &&
-                !pAktNode->IsSectionNode() ) ||
-                ( pAktNode->IsEndNode() &&
-                ND_STARTNODE == pAktNode->m_pStartOfSection->GetNodeType()) )
-        {
-            --aRg.aEnd;
-        }
-    }
-    ++aRg.aEnd;
+    const SwNode *aEndNode = &aRg.aEnd.GetNode();
+    int nIsEndOfContent = (aEndNode == &aEndNode->GetNodes().GetEndOfContent()) ? 1 : 0;
 
-    // if in same array, check insertion position
+    if (0 == nIsEndOfContent)
+    {
+        // if aEnd-1 points to no ContentNode, search previous one
+        --aRg.aEnd;
+        // #i107142#: if aEnd is start node of a special section, do nothing.
+        // Otherwise this could lead to crash: going through all previous
+        // special section nodes and then one before the first.
+        if (aRg.aEnd.GetNode().StartOfSectionIndex() != 0)
+        {
+            while( ((pAktNode = & aRg.aEnd.GetNode())->GetStartNode() &&
+                    !pAktNode->IsSectionNode() ) ||
+                    ( pAktNode->IsEndNode() &&
+                    ND_STARTNODE == pAktNode->m_pStartOfSection->GetNodeType()) )
+            {
+                --aRg.aEnd;
+            }
+        }
+        ++aRg.aEnd;
+    }
+
+    // is there anything left to copy?
     if( aRg.aStart >= aRg.aEnd )
         return;
 
@@ -1787,7 +1793,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
                 if (nDistance < nNodeCnt)
                     nNodeCnt -= nDistance;
                 else
-                    nNodeCnt = 1;
+                    nNodeCnt = 1 - nIsEndOfContent;
 
                 aRg.aStart = pAktNode->EndOfSectionIndex();
 
@@ -1815,7 +1821,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
                 if (nDistance < nNodeCnt)
                     nNodeCnt -= nDistance;
                 else
-                    nNodeCnt = 1;
+                    nNodeCnt = 1 - nIsEndOfContent;
                 aRg.aStart = pAktNode->EndOfSectionIndex();
 
                 if( bNewFrames && pSectNd &&
@@ -1840,6 +1846,9 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
                 --nLevel;
                 ++aInsPos; // EndNode already exists
             }
+            else if( 1 == nNodeCnt && 1 == nIsEndOfContent )
+                // we have reached the EndOfContent node - nothing to do!
+                continue;
             else if( !pAktNode->m_pStartOfSection->IsSectionNode() )
             {
                 // create a section at the original InsertPosition
