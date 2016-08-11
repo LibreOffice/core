@@ -50,13 +50,6 @@ enum ScrollingMode
     ScrollingAuto
 };
 
-enum SizeSelector
-{
-    SIZE_ABS,
-    SIZE_PERCENT,
-    SIZE_REL
-};
-
 #define SPACING_NOT_SET     -1L
 #define SIZE_NOT_SET        -1L
 

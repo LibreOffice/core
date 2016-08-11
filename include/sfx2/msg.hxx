@@ -38,7 +38,6 @@ enum class SfxSlotMode {
     RECORDPERITEM   =    0x0200L, // each item, one statement
     RECORDPERSET    =    0x0400L, // The whole Set is a Statement, default
     RECORDABSOLUTE  = 0x1000000L, // Recording with absolute Target
-    STANDARD        =   0x00400L, // RECORDPERSET;
 
     METHOD          =    0x4000L,
 

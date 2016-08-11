@@ -45,14 +45,6 @@ class LoadEnvException
             /** @short  The specified URL/Stream/etcpp. can not be handled by a LoadEnv instance. */
             ID_UNSUPPORTED_CONTENT,
 
-            /** @short  It was not possible to get access to global filter configuration.
-                @descr  Might some necessary services could not be created. */
-            ID_NO_CONFIG_ACCESS,
-
-            /** @short  Some data obtained from the filter configuration seems to incorrect.
-                @descr  Might a filter-type relationship seem to be damaged. */
-            ID_INVALID_FILTER_CONFIG,
-
             /** @short  indicates a corrupted media descriptor.
                 @descr  Some parts are required - some other ones are optional. Such exception
                         should be thrown, if a required item does not exists. */
@@ -67,12 +59,6 @@ class LoadEnvException
 
             /** @short  indicates a failed search for the right target frame. */
             ID_NO_TARGET_FOUND,
-
-            /** @short  An already existing document was found inside a target frame.
-                        But its controller could not be suspended successfully. Thats
-                        why the new load request was cancelled. The document could not
-                        be replaced. */
-            ID_COULD_NOT_SUSPEND_CONTROLLER,
 
             /** @short  TODO */
             ID_COULD_NOT_REACTIVATE_CONTROLLER,

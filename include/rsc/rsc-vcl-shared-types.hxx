@@ -64,8 +64,7 @@ enum class ToolBoxItemBits
     REPEAT              = 0x0040,
     DROPDOWNONLY        = 0x00a0, // 0x0080 | DROPDOWN
     TEXT_ONLY           = 0x0100,
-    ICON_ONLY           = 0x0200,
-    TEXTICON            = 0x0300 // TEXT_ONLY | ICON_ONLY
+    ICON_ONLY           = 0x0200
 };
 namespace o3tl
 {

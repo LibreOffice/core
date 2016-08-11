@@ -102,9 +102,7 @@ class ToolBarManager : public ToolbarManager_Base
         {
             EXEC_CMD_CLOSETOOLBAR,
             EXEC_CMD_DOCKTOOLBAR,
-            EXEC_CMD_DOCKALLTOOLBARS,
-            EXEC_CMD_NONE,
-            EXEC_CMD_COUNT
+            EXEC_CMD_DOCKALLTOOLBARS
         };
 
         struct ExecuteInfo

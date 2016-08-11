@@ -90,9 +90,7 @@ namespace data {
 enum DatabaseCursorType
 {
     DatabaseCursorType_FORWARD = 0,
-    DatabaseCursorType_SNAPSHOT = 1,
     DatabaseCursorType_KEYSET = 2,
-    DatabaseCursorType_DYNAMIC = 3,
     DatabaseCursorType_MAKE_FIXED_SIZE = SAL_MAX_ENUM
 };
 

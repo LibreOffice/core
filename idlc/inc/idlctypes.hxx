@@ -98,7 +98,6 @@ enum ParseState
     PS_SingletonSqSeen,     // '{' seen for singleton
     PS_SingletonQsSeen,     // '}' seen for singleton
     PS_SingletonBodySeen,   // Seen complete singleton body
-    PS_SingletonMemberSeen, // Seen a singleton member
 
     PS_ModuleSeen,          // Seen a MODULE keyword
     PS_ModuleIDSeen,        // Seen the module ID

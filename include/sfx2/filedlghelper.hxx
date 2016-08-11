@@ -84,14 +84,6 @@ public:
     {
         UNKNOWN_CONTEXT,                // unknown context
         SW_INSERT_GRAPHIC,              // insert graphic in writer
-        SW_INSERT_SOUND,                // insert sound in writer
-        SW_INSERT_VIDEO,                // insert video in writer
-        SC_INSERT_GRAPHIC,              // insert graphic in calc
-        SC_INSERT_SOUND,                // insert sound in calc
-        SC_INSERT_VIDEO,                // insert video in calc
-        SD_INSERT_GRAPHIC,              // insert graphic in draw
-        SD_INSERT_SOUND,                // insert sound in draw
-        SD_INSERT_VIDEO,                // insert video in draw
         SD_EXPORT,                      // export in draw
         SI_EXPORT,                      // export in impress
         SW_EXPORT                       // export in writer
