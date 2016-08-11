@@ -2472,23 +2472,21 @@ void Content::insert(
 
         aURL += aEscapedTitle;
 
-        // save the URL to clean cache
-        OUString    aTargetUrl = aURL;
         try
         {
             xResAccess->setURL( aURL );
 
             if ( bCollection )
             {
+                aStaticDAVOptionsCache.removeDAVOptions( xResAccess->getURL() );
                 xResAccess->MKCOL( Environment );
-                aStaticDAVOptionsCache.removeDAVOptions( aTargetUrl );
             }
             else
             {
-                xResAccess->PUT( xInputStream, Environment );
                 // remove options from cache, PUT may change it
                 // it will be refreshed when needed
-                aStaticDAVOptionsCache.removeDAVOptions( aTargetUrl );
+                aStaticDAVOptionsCache.removeDAVOptions( xResAccess->getURL() );
+                xResAccess->PUT( xInputStream, Environment );
             }
             // no error , set the resourcetype to unknown type
             // the resource may have transitioned from NOT FOUND or UNKNOWN to something else
@@ -2499,7 +2497,6 @@ void Content::insert(
         }
         catch ( DAVException const & except )
         {
-            aStaticDAVOptionsCache.removeDAVOptions( aTargetUrl );
             if ( bCollection )
             {
                 if ( except.getStatus() == SC_METHOD_NOT_ALLOWED )
