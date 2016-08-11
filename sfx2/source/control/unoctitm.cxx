@@ -826,6 +826,25 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const css::uno::Refe
     aListener->statusChanged( aEvent );
 }
 
+void SfxDispatchController_Impl::sendStatusChanged(const OUString& rURL, const css::frame::FeatureStateEvent& rEvent)
+{
+    ::cppu::OInterfaceContainerHelper* pContnr = pDispatch->GetListeners().getContainer(rURL);
+    if (!pContnr)
+        return;
+    ::cppu::OInterfaceIteratorHelper aIt(*pContnr);
+    while (aIt.hasMoreElements())
+    {
+        try
+        {
+            static_cast<css::frame::XStatusListener*>(aIt.next())->statusChanged(rEvent);
+        }
+        catch (const css::uno::RuntimeException&)
+        {
+            aIt.remove();
+        }
+    }
+}
+
 void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, SfxSlotServer* pSlotServ )
 {
     if ( !pDispatch )
@@ -904,20 +923,12 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
                     pDispatcher->GetFrame()->GetObjectShell(), aEvent);
         }
 
-        ::cppu::OInterfaceContainerHelper* pContnr = pDispatch->GetListeners().getContainer ( aDispatchURL.Complete );
-        if (pContnr) {
-            ::cppu::OInterfaceIteratorHelper aIt( *pContnr );
-            while( aIt.hasMoreElements() )
-            {
-                try
-                {
-                    static_cast< css::frame::XStatusListener *>(aIt.next())->statusChanged( aEvent );
-                }
-                catch (const css::uno::RuntimeException&)
-                {
-                    aIt.remove();
-                }
-            }
+        Sequence< OUString > seqNames = pDispatch->GetListeners().getContainedTypes();
+        sal_Int32 nLength = seqNames.getLength();
+        for (sal_Int32 i = 0; i < nLength; ++i)
+        {
+            if (seqNames[i] == aDispatchURL.Main || seqNames[i] == aDispatchURL.Complete)
+                sendStatusChanged(seqNames[i], aEvent);
         }
     }
 }
