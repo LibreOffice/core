@@ -30,13 +30,11 @@ enum class InputContextFlags
 {
     NONE         = 0x0000,
     Text         = 0x0001,
-    ExtText      = 0x0002,
-    ExtTextOn    = 0x0004,
-    ExtTextOff   = 0x0008,
+    ExtText      = 0x0002
 };
 namespace o3tl
 {
-    template<> struct typed_flags<InputContextFlags> : is_typed_flags<InputContextFlags, 0x000f> {};
+    template<> struct typed_flags<InputContextFlags> : is_typed_flags<InputContextFlags, 0x0003> {};
 }
 
 

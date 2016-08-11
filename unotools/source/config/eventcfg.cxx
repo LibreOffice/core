@@ -47,8 +47,6 @@ static const char ROOTNODE_EVENTS[] = "Office.Events/ApplicationEvents";
 
 static o3tl::enumarray<GlobalEventId, const char*> pEventAsciiNames =
 {
-"OnStartApp",
-"OnCloseApp",
 "OnCreate",
 "OnNew",
 "OnLoadFinished",
