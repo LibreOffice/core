@@ -46,7 +46,7 @@ public:
     bool IsNumberFormat( const OUString& rString,            /// input string
                          short& F_Type,                      /// format type (in + out)
                          double& fOutNumber,                 /// value determined (out)
-                         const SvNumberformat* pFormat);     /// optional a number format to which compare against
+                         const SvNumberformat* pFormat);     /// number format to which compare against
 
     /// after IsNumberFormat: get decimal position
     short   GetDecPos() const { return nDecPos; }
@@ -294,7 +294,7 @@ private:
     // Get currency symbol and advance string position
     bool GetCurrency( const OUString& rString,
                       sal_Int32& nPos,
-                      const SvNumberformat* pFormat ); // optional number format to match against
+                      const SvNumberformat* pFormat ); // number format to match against
 
     // Get symbol AM or PM and advance string position
     bool GetTimeAmPm( const OUString& rString,
@@ -335,7 +335,7 @@ private:
     // Conversion of date to number
     bool GetDateRef( double& fDays,                          // OUT: days diff to null date
                      sal_uInt16& nCounter,                   // Count of date substrings
-                     const SvNumberformat* pFormat ); // optional number format to match against
+                     const SvNumberformat* pFormat );        // number format to match against
 
     // Analyze start of string
     bool ScanStartString( const OUString& rString,
@@ -369,7 +369,7 @@ private:
 
     // Main analyzing function
     bool IsNumberFormatMain( const OUString& rString,
-                             const SvNumberformat* pFormat);    // optional number format to match against
+                             const SvNumberformat* pFormat);    // number format to match against
 
     static inline bool MyIsdigit( sal_Unicode c );
 
