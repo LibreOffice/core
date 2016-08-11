@@ -54,10 +54,6 @@ enum SdrDragMode
 };
 
 
-// fuer SdrObject::ConvertToPoly()
-enum SdrConvertType {SDRCONVERT_POLY,   // create pure polygon
-                     SDRCONVERT_BEZIER, // Beziersegment
-                     SDRCONVERT_MIXED}; // mixed object (optimal)
 
 /*
  * Layer
@@ -76,8 +72,6 @@ typedef sal_uInt8 SdrLayerID;
 enum SdrObjListKind {SDROBJLIST_UNKNOWN    =0x00,
                      // reine Objektlisten:
                      SDROBJLIST_GROUPOBJ   =0x01,
-                     SDROBJLIST_VIRTOBJECTS=0x02,
-                     SDROBJLIST_SYMBOLTABLE=0x03,
                      // Here is space for 12 more types of lists
                      // Pages:
                      SDROBJLIST_DRAWPAGE   =0x10,
@@ -92,16 +86,7 @@ enum SdrRepeatFunc {SDRREPFUNC_OBJ_NONE,
                     // with parameter
                     SDRREPFUNC_OBJ_MOVE,         // distance
                     SDRREPFUNC_OBJ_RESIZE,       // factor, reference(%) related to MarkRect
-                    SDRREPFUNC_OBJ_SETSNAPRECT,  // rectangle
-                    SDRREPFUNC_OBJ_SETLOGICRECT, // rectangle
                     SDRREPFUNC_OBJ_ROTATE,       // rotation angle, reference(%) related to MarkRect
-                    SDRREPFUNC_OBJ_SHEAR,        // angle, factor, reference(%) related to MarkRect
-                    SDRREPFUNC_OBJ_CROOKROTATE,
-                    SDRREPFUNC_OBJ_CROOKSLANT,
-                    SDRREPFUNC_OBJ_CROOKSTRETCH,
-                    SDRREPFUNC_OBJ_ALIGN,        // Hor/Vert/bBound
-                    SDRREPFUNC_OBJ_SETATTRIBUTES,// ItemSet
-                    SDRREPFUNC_OBJ_SETSTYLESHEET,// StyleSheet*
                     // Without parameter
                     SDRREPFUNC_OBJ_DELETE,
                     SDRREPFUNC_OBJ_COMBINE_POLYPOLY,
@@ -118,7 +103,6 @@ enum SdrRepeatFunc {SDRREPFUNC_OBJ_NONE,
                     SDRREPFUNC_OBJ_MOVTOBTM,
                     SDRREPFUNC_OBJ_REVORDER,
                     SDRREPFUNC_OBJ_IMPORTMTF,
-                    SDRREPFUNC_PAGE_DELETE,
                     SDRREPFUNC_LAST};
 
 #endif // INCLUDED_SVX_SVDTYPES_HXX

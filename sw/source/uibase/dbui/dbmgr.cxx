@@ -59,7 +59,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svl/mailenum.hxx>
 #include <cmdid.h>
 #include <swmodule.hxx>
 #include <view.hxx>

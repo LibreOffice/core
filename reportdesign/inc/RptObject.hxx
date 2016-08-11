@@ -39,10 +39,7 @@ namespace rptui
 typedef ::std::multimap< sal_Int16, OUString, ::std::less< sal_Int16 > > IndexToNameMap;
     enum DlgEdHintKind
     {
-        RPTUI_HINT_UNKNOWN,
         RPTUI_HINT_WINDOWSCROLLED,
-        RPTUI_HINT_LAYERCHANGED,
-        RPTUI_HINT_OBJORDERCHANGED,
         RPTUI_HINT_SELECTIONCHANGED
     };
 

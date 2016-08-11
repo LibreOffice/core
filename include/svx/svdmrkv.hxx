@@ -58,15 +58,6 @@ namespace o3tl
 
 enum SdrHitKind {SDRHIT_NONE,      // No hit
                  SDRHIT_OBJECT,    // Hit
-                 SDRHIT_BOUNDRECT, // Hit at BoundRect
-                 SDRHIT_BOUNDTL,   // Hit at BoundRect TopLeft
-                 SDRHIT_BOUNDTC,   // Hit at BoundRect TopCenter
-                 SDRHIT_BOUNDTR,   // Hit at BoundRect TopRight
-                 SDRHIT_BOUNDCL,   // Hit at BoundRect CenterLeft
-                 SDRHIT_BOUNDCR,   // Hit at BoundRect CenterRight
-                 SDRHIT_BOUNDBL,   // Hit at BoundRect BottomLeft
-                 SDRHIT_BOUNDBC,   // Hit at BoundRect BottomCenter
-                 SDRHIT_BOUNDBR,/*,*/ // Hit at BoundRect BottomRight
                  /*SDRHIT_REFPOINT*/ // Reference point (Rotation axis, axis of reflextion) hit
                  SDRHIT_HANDLE,          // Marking handle
                  SDRHIT_HELPLINE,        // Reference line

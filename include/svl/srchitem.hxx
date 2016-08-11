@@ -55,7 +55,6 @@ enum class SvxSearchApp
     WRITER        = 0,
     CALC          = 1,
     DRAW          = 2,
-    BASE          = 3,
 };
 
 // class SvxSearchItem ---------------------------------------------------

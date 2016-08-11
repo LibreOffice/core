@@ -22,7 +22,6 @@
 #include <o3tl/any.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
-#include <svl/mailenum.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/svxenum.hxx>
 #include <osl/diagnose.h>

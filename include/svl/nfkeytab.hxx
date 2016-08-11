@@ -71,7 +71,7 @@ enum NfKeywordIndex
     NF_KEY_MMMMM,       // first letter of month name
     NF_KEY_LASTKEYWORD = NF_KEY_MMMMM,
     NF_KEY_UNUSED4,
-    NF_KEY_QUARTER,     // was quarter word, not used anymore from SRC631 on (26.04.01)
+    NF_KEY_UNUSED5,     // was quarter word, not used anymore from SRC631 on (26.04.01)
     NF_KEY_TRUE,        // boolean true
     NF_KEY_FALSE,       // boolean false
     NF_KEY_BOOLEAN,     // boolean

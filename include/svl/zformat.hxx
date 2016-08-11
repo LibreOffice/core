@@ -45,13 +45,6 @@ enum SvNumberformatLimitOps
     NUMBERFORMAT_OP_GE  = 6             // Operator >=
 };
 
-// SYSTEM-german to SYSTEM-xxx and vice versa conversion hack onLoad
-enum NfHackConversion
-{
-    NF_CONVERT_NONE,
-    NF_CONVERT_GERMAN_ENGLISH,
-    NF_CONVERT_ENGLISH_GERMAN
-};
 
 struct ImpSvNumberformatInfo            // Struct for FormatInfo
 {

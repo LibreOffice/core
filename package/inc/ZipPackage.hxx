@@ -47,13 +47,6 @@ namespace com { namespace sun { namespace star {
     namespace uno { class XComponentContext; }
     namespace task { class XInteractionHandler; }
 } } }
-enum SegmentEnum
-{
-    e_Aborted = -1000,
-    e_Retry,
-    e_Finished,
-    e_Success = 0
-};
 
 enum InitialisationMode
 {

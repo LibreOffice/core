@@ -58,7 +58,6 @@ SvxIconChoiceCtrlColumnInfo::SvxIconChoiceCtrlColumnInfo( const SvxIconChoiceCtr
     : aColText( rInfo.aColText ), aColImage( rInfo.aColImage )
 {
     nWidth = rInfo.nWidth;
-    eAlignment = rInfo.eAlignment;
     nSubItem = rInfo.nSubItem;
 }
 

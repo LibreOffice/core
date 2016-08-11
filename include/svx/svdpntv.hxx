@@ -66,7 +66,6 @@ namespace sdr { namespace contact {
 enum SdrAnimationMode
 {
     SDR_ANIMATION_ANIMATE,
-    SDR_ANIMATION_DONT_ANIMATE,
     SDR_ANIMATION_DISABLE
 };
 

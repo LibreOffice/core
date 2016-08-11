@@ -69,6 +69,16 @@ for d in definitionSet:
         or srcLoc.startswith("include/typelib/")
         or srcLoc.startswith("include/uno/")):
         continue
+    # definitions of external file formats
+    if (srcLoc.startswith("include/svx/msdffdef.hxx"):
+        continue
+    # used in templates to find the last member of an enum
+    if (d1.endswith("LAST"):
+        continue
+    # used to aid in alignment of enum values
+    if (d1.endswith("FORCE_EQUAL_SIZE"):
+        continue
+        
     untouchedSet.add((clazz, srcLoc))
 
 # sort the results using a "natural order" so sequences like [item1,item2,item10] sort nicely

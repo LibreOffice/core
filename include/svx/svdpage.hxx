@@ -57,7 +57,6 @@ enum SdrInsertReasonKind {
     SDRREASON_STREAMING,  /// importing document
     SDRREASON_UNDO,       /// from Undo
     SDRREASON_COPY,       /// something copied...
-    SDRREASON_VIEWCREATE, /// created by User interactively
     SDRREASON_VIEWCALL    /// via SdrView::Group(), ...
 };
 
