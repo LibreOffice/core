@@ -466,6 +466,12 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                             aParam = static_cast<const SfxStringItem*>(pItem)->GetValue();
                         }
                         break;
+                        case SfxStyleFamily::Table:
+                        if(SfxItemState::SET == pArgs->GetItemState(SID_STYLE_UPD_BY_EX_NAME, false, &pItem))
+                        {
+                            aParam = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                        }
+                        break;
                         default: break;
                     }
                     rReq.AppendItem(SfxStringItem(nSlot, aParam));
@@ -1122,6 +1128,19 @@ SfxStyleFamily SwDocShell::UpdateStyle(const OUString &rName, SfxStyleFamily nFa
                                pCurrWrtShell->GetDoc()->getIDocumentListsAccess() );
                 pCurrWrtShell->ChgNumRuleFormats( aRule );
             }
+        }
+        break;
+        case SfxStyleFamily::Table:
+        {
+
+            SwTableAutoFormat aFormat(rName);
+            if (pCurrWrtShell->GetTableAutoFormat(aFormat))
+            {
+                pCurrWrtShell->StartAllAction();
+                pCurrWrtShell->GetDoc()->ChgTableStyle(rName, aFormat);
+                pCurrWrtShell->EndAllAction();
+            }
+
         }
         break;
         default: break;
