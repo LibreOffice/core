@@ -40,8 +40,32 @@
 #include "sfx2/opengrf.hxx"
 #include <vcl/layout.hxx>
 #include <svx/svxdlg.hxx>
+#include <sfx2/viewsh.hxx>
 
 using namespace com::sun::star;
+
+enum eBitmapStyle
+{
+    ORIGINAL,
+    FILLED,
+    STRETCHED,
+    ZOOMED,
+    CUSTOM,
+    TILED
+};
+
+enum eTileOff
+{
+    ROW,
+    COLUMN
+};
+
+const sal_uInt16 SvxBitmapTabPage::pBitmapRanges[] =
+{
+    SID_ATTR_TRANSFORM_WIDTH,
+    SID_ATTR_TRANSFORM_HEIGHT,
+    0
+};
 
 SvxBitmapTabPage::SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs ) :
 
@@ -56,7 +80,8 @@ SvxBitmapTabPage::SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInA
     m_pnBitmapListState( nullptr ),
     m_aXFStyleItem( drawing::FillStyle_BITMAP ),
     m_aXBitmapItem( OUString(), Graphic() ),
-
+    m_nObjectWidth(0.0),
+    m_nObjectHeight(0.0),
     m_nPageType(nullptr),
     m_nDlgType(0),
     m_nPos(nullptr),
@@ -64,9 +89,20 @@ SvxBitmapTabPage::SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInA
     m_pbAreaTP( nullptr ),
 
     m_aXFillAttr          ( rInAttrs.GetPool() ),
-    m_rXFSet              ( m_aXFillAttr.GetItemSet() )
+    m_rXFSet              ( m_aXFillAttr.GetItemSet() ),
+    mpView(nullptr),
+    meDlgUnit(FUNIT_NONE)
 {
     get(m_pBitmapLB,"BITMAP");
+    get(m_pBitmapStyleLB, "bitmapstyle");
+    get(m_pSizeBox, "sizebox");
+    get(m_pBitmapWidth, "width");
+    get(m_pBitmapHeight, "height");
+    get(m_pPositionBox, "posbox");
+    get(m_pPositionLB, "positionlb");
+    get(m_pPositionOffBox, "posoffbox");
+    get(m_pPositionOffX, "posoffx");
+    get(m_pPositionOffY, "posoffy");
     get(m_pCtlBitmapPreview,"CTL_BITMAP_PREVIEW");
     get(m_pBtnImport, "BTN_IMPORT");
 
@@ -78,12 +114,29 @@ SvxBitmapTabPage::SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInA
     m_pBitmapLB->SetSelectHdl( LINK(this, SvxBitmapTabPage, ModifyBitmapHdl) );
     m_pBitmapLB->SetRenameHdl( LINK(this, SvxBitmapTabPage, ClickRenameHdl) );
     m_pBitmapLB->SetDeleteHdl( LINK(this, SvxBitmapTabPage, ClickDeleteHdl) );
+    m_pBitmapStyleLB->SetSelectHdl( LINK(this, SvxBitmapTabPage, ModifyBitmapStyleHdl) );
+    m_pPositionLB->SetSelectHdl( LINK( this, SvxBitmapTabPage, ModifyBitmapPositionHdl ) );
+    Link<Edit&, void> aLink( LINK( this, SvxBitmapTabPage, ModifyTileOffsetHdl ) );
+    m_pPositionOffX->SetModifyHdl(aLink);
+    m_pPositionOffY->SetModifyHdl(aLink);
     m_pBtnImport->SetClickHdl( LINK(this, SvxBitmapTabPage, ClickImportHdl) );
 
     // Calculate size of display boxes
     Size aSize = LogicToPixel(Size(90, 42), MAP_APPFONT);
     m_pCtlBitmapPreview->set_width_request(aSize.Width());
     m_pCtlBitmapPreview->set_height_request(aSize.Height());
+
+    SfxItemPool* pPool = m_rXFSet.GetPool();
+    mePoolUnit = pPool->GetMetric( SID_ATTR_TRANSFORM_WIDTH );
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if( pViewShell )
+        mpView = pViewShell->GetDrawView();
+    else
+        mpView = nullptr;
+    DBG_ASSERT( mpView, "no valid view (!)" );
+    meDlgUnit = GetModuleFieldUnit( GetItemSet() );
+    SetFieldUnit( *m_pBitmapWidth, FUNIT_PERCENT, true );
+    SetFieldUnit( *m_pBitmapHeight, FUNIT_PERCENT, true );
 }
 
 SvxBitmapTabPage::~SvxBitmapTabPage()
@@ -94,6 +147,15 @@ SvxBitmapTabPage::~SvxBitmapTabPage()
 void SvxBitmapTabPage::dispose()
 {
     m_pBitmapLB.clear();
+    m_pBitmapStyleLB.clear();
+    m_pSizeBox.clear();
+    m_pBitmapWidth.clear();
+    m_pBitmapHeight.clear();
+    m_pPositionBox.clear();
+    m_pPositionLB.clear();
+    m_pPositionOffBox.clear();
+    m_pPositionOffX.clear();
+    m_pPositionOffY.clear();
     m_pCtlBitmapPreview.clear();
     m_pBtnImport.clear();
     SvxTabPage::dispose();
@@ -134,7 +196,6 @@ DeactivateRC SvxBitmapTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 bool SvxBitmapTabPage::FillItemSet( SfxItemSet* rAttrs )
 {
-    bool bModified = false;
     if( m_nDlgType == 0 && !*m_pbAreaTP )
     {
         if(PT_BITMAP == *m_nPageType)
@@ -146,19 +207,107 @@ bool SvxBitmapTabPage::FillItemSet( SfxItemSet* rAttrs )
                 const XBitmapEntry* pXBitmapEntry = m_pBitmapList->GetBitmap( static_cast<sal_uInt16>(nPos) );
                 const OUString aString(m_pBitmapLB->GetItemText( m_pBitmapLB->GetSelectItemId() ));
                 rAttrs->Put(XFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject()));
-                bModified = true;
             }
-
-            rAttrs->Put (SfxUInt16Item(SID_PAGE_TYPE,*m_nPageType));
-            rAttrs->Put (SfxUInt16Item(SID_TABPAGE_POS,*m_nPos));
+            eBitmapStyle nStylePos = (eBitmapStyle)m_pBitmapStyleLB->GetSelectEntryPos();
+            switch(nStylePos)
+            {
+                case ORIGINAL:
+                {
+                    rAttrs->Put( XFillBmpTileItem(false) );
+                    rAttrs->Put(XFillBmpStretchItem(false));
+                    std::unique_ptr<XFillBmpSizeXItem> pXItem;
+                    pXItem.reset(new XFillBmpSizeXItem( rBitmapSize.Width() ));
+                    std::unique_ptr<XFillBmpSizeYItem> pYItem;
+                    pYItem.reset(new XFillBmpSizeYItem( rBitmapSize.Height() ));
+                    rAttrs->Put( *pXItem );
+                    rAttrs->Put( *pYItem );
+                }
+                break;
+                case FILLED:
+                {
+                    rAttrs->Put( XFillBmpTileItem(false) );
+                    rAttrs->Put(XFillBmpStretchItem(false));
+                    std::unique_ptr<XFillBmpSizeXItem> pXItem;
+                    std::unique_ptr<XFillBmpSizeYItem> pYItem;
+                    if(rBitmapSize.Width() > rBitmapSize.Height())
+                    {
+                        pXItem.reset(new XFillBmpSizeXItem(m_nObjectWidth));
+                        pYItem.reset(new XFillBmpSizeYItem(rBitmapSize.Height()*m_nObjectWidth/rBitmapSize.Width()));
+                    }
+                    else
+                    {
+                        pXItem.reset(new XFillBmpSizeXItem(rBitmapSize.Width()*m_nObjectHeight/rBitmapSize.Height()));
+                        pYItem.reset(new XFillBmpSizeYItem(m_nObjectHeight));
+                    }
+                    rAttrs->Put( *pXItem );
+                    rAttrs->Put( *pYItem );
+                }
+                break;
+                case STRETCHED:
+                {
+                    rAttrs->Put( XFillBmpTileItem(false) );
+                    rAttrs->Put(XFillBmpStretchItem(true));
+                }
+                break;
+                case ZOOMED:
+                {
+                    rAttrs->Put( XFillBmpTileItem(false) );
+                    rAttrs->Put(XFillBmpStretchItem(false));
+                    std::unique_ptr<XFillBmpSizeXItem> pXItem;
+                    std::unique_ptr<XFillBmpSizeYItem> pYItem;
+                    if(rBitmapSize.Width() > rBitmapSize.Height())
+                    {
+                        pXItem.reset(new XFillBmpSizeXItem(rBitmapSize.Width()*m_nObjectHeight/rBitmapSize.Height()));
+                        pYItem.reset(new XFillBmpSizeYItem(m_nObjectHeight));
+                    }
+                    else
+                    {
+                        pXItem.reset(new XFillBmpSizeXItem(m_nObjectWidth));
+                        pYItem.reset(new XFillBmpSizeYItem(rBitmapSize.Height()*m_nObjectWidth/rBitmapSize.Width()));
+                    }
+                    rAttrs->Put( *pXItem );
+                    rAttrs->Put( *pYItem );
+                }
+                break;
+                case CUSTOM:
+                {
+                    rAttrs->Put( XFillBmpTileItem(false) );
+                    rAttrs->Put(XFillBmpStretchItem(false));
+                }
+                break;
+                case TILED:
+                {
+                    rAttrs->Put( XFillBmpTileItem(true) );
+                    rAttrs->Put(XFillBmpStretchItem(false));
+                }
+                break;
+            }
+            if(m_pPositionLB->IsEnabled())
+                rAttrs->Put( XFillBmpPosItem( static_cast<RECT_POINT>( m_pPositionLB->GetSelectEntryPos() ) ) );
+            if(m_pPositionOffX->IsEnabled())
+                rAttrs->Put( XFillBmpPosOffsetXItem( m_pPositionOffX->GetValue() ) );
+            if(m_pPositionOffY->IsEnabled())
+                rAttrs->Put( XFillBmpPosOffsetYItem( m_pPositionOffY->GetValue() ) );
         }
     }
-    return bModified;
+    return true;
 }
 
 
 void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
 {
+    SfxItemSet rGeoAttr(mpView->GetGeoAttrFromMarked());
+    const SfxPoolItem* pItem = nullptr;
+    const double fUIScale(double(mpView->GetModel()->GetUIScale()));
+    pItem = GetItem( rGeoAttr, SID_ATTR_TRANSFORM_WIDTH );
+    m_nObjectWidth = std::max( pItem ? (double)static_cast<const SfxUInt32Item*>(pItem)->GetValue() : 0.0, 1.0 );
+    double fTmpWidth((OutputDevice::LogicToLogic(static_cast<sal_Int32>(m_nObjectWidth),(MapUnit)mePoolUnit, MAP_100TH_MM )) / fUIScale);
+    m_nObjectWidth = fTmpWidth;
+    pItem = GetItem( rGeoAttr, SID_ATTR_TRANSFORM_HEIGHT );
+    m_nObjectHeight = std::max( pItem ? (double)static_cast<const SfxUInt32Item*>(pItem)->GetValue() : 0.0, 1.0 );
+    double fTmpHeight((OutputDevice::LogicToLogic(static_cast<sal_Int32>(m_nObjectHeight),(MapUnit)mePoolUnit, MAP_100TH_MM )) / fUIScale);
+    m_nObjectHeight = fTmpHeight;
+
     XFillBitmapItem aItem( static_cast<const XFillBitmapItem&>(rAttrs->Get(XATTR_FILLBITMAP)) );
     if(!aItem.isPattern())
     {
@@ -168,6 +317,26 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     }
     else
         m_pCtlBitmapPreview->Disable();
+
+    if( rAttrs->GetItemState( XATTR_FILLBMP_POS ) != SfxItemState::DONTCARE )
+    {
+        RECT_POINT eValue = static_cast<const XFillBmpPosItem&>( rAttrs->Get( XATTR_FILLBMP_POS ) ).GetValue();
+        m_pPositionLB->SelectEntryPos( static_cast< sal_Int32 >(eValue) );
+    }
+    if( rAttrs->GetItemState( XATTR_FILLBMP_POSOFFSETX ) != SfxItemState::DONTCARE )
+    {
+        sal_Int32 nValue = static_cast<const XFillBmpPosOffsetXItem&>( rAttrs->Get( XATTR_FILLBMP_POSOFFSETX ) ).GetValue();
+        m_pPositionOffX->SetValue( nValue );
+    }
+    else
+        m_pPositionOffX->SetText("");
+    if( rAttrs->GetItemState( XATTR_FILLBMP_POSOFFSETY ) != SfxItemState::DONTCARE )
+    {
+        sal_Int32 nValue = static_cast<const XFillBmpPosOffsetYItem&>( rAttrs->Get( XATTR_FILLBMP_POSOFFSETY ) ).GetValue();
+        m_pPositionOffY->SetValue( nValue );
+    }
+    else
+        m_pPositionOffY->SetText("");
     ClickBitmapHdl_Impl();
 }
 
@@ -220,6 +389,14 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ModifyBitmapHdl, ValueSet*, void)
             }
         }
     }
+    BitmapEx aBmpEx(pGraphicObject->GetGraphic().GetBitmapEx());
+    Size aTempBitmapSize = aBmpEx.GetSizePixel();
+    const double fUIScale(double(mpView->GetModel()->GetUIScale()));
+    rBitmapSize.Width() = ((OutputDevice::LogicToLogic(static_cast<sal_Int32>(aTempBitmapSize.Width()),MAP_PIXEL, MAP_100TH_MM )) / fUIScale);
+    rBitmapSize.Height() = ((OutputDevice::LogicToLogic(static_cast<sal_Int32>(aTempBitmapSize.Height()),MAP_PIXEL, MAP_100TH_MM )) / fUIScale);
+    ModifyBitmapStyleHdl( *m_pBitmapStyleLB );
+    ModifyBitmapPositionHdl( *m_pPositionLB );
+    //m_pBitmapWidth->SetValue(rBitmapSize.Width, FUNIT_PERCENT);
     m_rXFSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
     m_rXFSet.Put(XFillBitmapItem(OUString(), *pGraphicObject));
 
@@ -292,6 +469,88 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickDeleteHdl, SvxPresetListBox*, void)
             *m_pnBitmapListState |= ChangeType::MODIFIED;
         }
     }
+}
+
+IMPL_LINK_NOARG_TYPED( SvxBitmapTabPage, ModifyBitmapStyleHdl, ListBox&, void )
+{
+    eBitmapStyle nStylePos = (eBitmapStyle)m_pBitmapStyleLB->GetSelectEntryPos();
+    switch(nStylePos)
+    {
+        case ORIGINAL:
+            {
+                m_pSizeBox->Enable();
+                m_pPositionBox->Enable();
+                m_pPositionOffBox->Disable();
+                m_rXFSet.Put( XFillBmpTileItem(false) );
+                m_rXFSet.Put(XFillBmpStretchItem(false));
+            }
+            break;
+        case FILLED:
+            {
+                m_pSizeBox->Enable();
+                m_pPositionBox->Enable();
+                m_pPositionOffBox->Disable();
+                m_rXFSet.Put( XFillBmpTileItem(false) );
+                m_rXFSet.Put(XFillBmpStretchItem(false));
+            }
+            break;
+        case STRETCHED:
+            {
+                m_pSizeBox->Disable();
+                m_pPositionBox->Disable();
+                m_pPositionOffBox->Disable();
+                m_rXFSet.Put( XFillBmpTileItem(false) );
+                m_rXFSet.Put(XFillBmpStretchItem(true));
+            }
+            break;
+        case ZOOMED:
+            {
+                m_pSizeBox->Enable();
+                m_pPositionBox->Enable();
+                m_pPositionOffBox->Disable();
+                m_rXFSet.Put( XFillBmpTileItem(false) );
+                m_rXFSet.Put(XFillBmpStretchItem(false));
+            }
+            break;
+        case CUSTOM:
+            {
+                m_pSizeBox->Enable();
+                m_pPositionBox->Enable();
+                m_pPositionOffBox->Disable();
+                m_rXFSet.Put( XFillBmpTileItem(false) );
+                m_rXFSet.Put(XFillBmpStretchItem(false));
+            }
+            break;
+        case TILED:
+            {
+                m_pSizeBox->Enable();
+                m_pPositionBox->Enable();
+                m_pPositionOffBox->Enable();
+                m_rXFSet.Put( XFillBmpTileItem(true) );
+                m_rXFSet.Put(XFillBmpStretchItem(false));
+            }
+            break;
+    }
+    m_pCtlBitmapPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
+    m_pCtlBitmapPreview->Invalidate();
+}
+
+IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ModifyBitmapPositionHdl, ListBox&, void)
+{
+    if(m_pPositionLB->IsEnabled())
+        m_rXFSet.Put( XFillBmpPosItem( static_cast< RECT_POINT >( m_pPositionLB->GetSelectEntryPos() ) ) );
+    m_pCtlBitmapPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
+    m_pCtlBitmapPreview->Invalidate();
+}
+
+IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ModifyTileOffsetHdl, Edit&, void)
+{
+    if(m_pPositionOffX->IsEnabled())
+        m_rXFSet.Put( XFillBmpPosOffsetXItem( m_pPositionOffX->GetValue() ) );
+    if(m_pPositionOffY->IsEnabled())
+        m_rXFSet.Put( XFillBmpPosOffsetYItem( m_pPositionOffY->GetValue() ) );
+    m_pCtlBitmapPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
+    m_pCtlBitmapPreview->Invalidate();
 }
 
 IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickImportHdl, Button*, void)
