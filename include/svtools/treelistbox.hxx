@@ -90,7 +90,6 @@ enum class SvLBoxTabFlags
                                // (on which Abo Tabpage/Extras/Option/Customize, etc. rely on)
                                // The first tab's position corresponds precisely to the Flags set
                                // and column widths
-    ALL              = 0x0f5f,
 };
 namespace o3tl
 {

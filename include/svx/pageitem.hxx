@@ -31,10 +31,7 @@ enum SvxNumType
     SVX_ROMAN_LOWER,
     SVX_ARABIC,
     SVX_NUMBER_NONE,
-    SVX_CHAR_SPECIAL,
     SVX_PAGEDESC,
-    SVX_BITMAP,
-    SVX_CHARS_UPPER_LETTER_N
 };
 
 /*--------------------------------------------------------------------
@@ -46,9 +43,7 @@ enum SvxPageUsage
     SVX_PAGE_LEFT           = 0x0001,
     SVX_PAGE_RIGHT          = 0x0002,
     SVX_PAGE_ALL            = 0x0003,
-    SVX_PAGE_MIRROR         = 0x0007,
-    SVX_PAGE_HEADERSHARE    = 0x0040,
-    SVX_PAGE_FOOTERSHARE    = 0x0080
+    SVX_PAGE_MIRROR         = 0x0007
 };
 
 /*--------------------------------------------------------------------

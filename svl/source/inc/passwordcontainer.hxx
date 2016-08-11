@@ -206,12 +206,6 @@ public:
 };
 
 
-enum PasswordState {
-    no_password,
-    entered,
-    cancelled
-};
-
 class PasswordContainer : public ::cppu::WeakImplHelper<
         css::task::XPasswordContainer2,
         css::lang::XServiceInfo,

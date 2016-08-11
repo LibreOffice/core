@@ -72,8 +72,7 @@ enum class SdrSnap
 {
     NOTSNAPPED = 0x00,
     XSNAPPED   = 0x01,
-    YSNAPPED   = 0x02,
-    XYSNAPPED  = XSNAPPED | YSNAPPED,
+    YSNAPPED   = 0x02
 };
 namespace o3tl
 {

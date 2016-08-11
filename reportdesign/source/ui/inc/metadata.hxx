@@ -28,18 +28,12 @@
     //= UI flags (for all browseable properties)
 enum class PropUIFlags {
     NONE          = 0x0001,  // no special flag
-    Enum          = 0x0002,  // the property is some kind of enum property, i.e. its                                                // value is chosen from a fixed list of possible values
-    EnumOne       = 0x0004,  // the property is an enum property starting with 1
-                             //  (note that this includes PropUIFlags::Enum)
-    Composeable   = 0x0008,  // the property is "composeable", i.e. an intersection of property
+    Composeable   = 0x0002,  // the property is "composeable", i.e. an intersection of property
                              //  sets should expose it, if all elements do
-    Experimental  = 0x0010,  // the property is experimental, i.e. should not appear in the
-                             // UI, unless experimental properties are enabled by a configuration
-                             // option
-    DataProperty  = 0x0020   // the property is to appear on the "Data" page
+    DataProperty  = 0x0004   // the property is to appear on the "Data" page
 };
 namespace o3tl {
-    template<> struct typed_flags<PropUIFlags> : is_typed_flags<PropUIFlags, 0x003f> {};
+    template<> struct typed_flags<PropUIFlags> : is_typed_flags<PropUIFlags, 0x0007> {};
 }
 
 

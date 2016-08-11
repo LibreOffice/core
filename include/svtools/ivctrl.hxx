@@ -39,7 +39,6 @@ enum class SvxIconViewFlags
     POS_LOCKED     = 0x0001,
     SELECTED       = 0x0002,
     FOCUSED        = 0x0004,
-    IN_USE         = 0x0008,
     CURSORED       = 0x0010, // Border around image
     POS_MOVED      = 0x0020, // Moved by Drag and Drop, but not logged
     DROP_TARGET    = 0x0040, // Set in QueryDrop
@@ -48,14 +47,13 @@ enum class SvxIconViewFlags
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SvxIconViewFlags> : is_typed_flags<SvxIconViewFlags, 0x04ff> {};
+    template<> struct typed_flags<SvxIconViewFlags> : is_typed_flags<SvxIconViewFlags, 0x04f7> {};
 }
 
 enum SvxIconChoiceCtrlTextMode
 {
     IcnShowTextFull = 1,        //  Enlarge BoundRect southwards
     IcnShowTextShort,           // Shorten with "..."
-    IcnShowTextSmart,           // Show all text (not implemented)
     IcnShowTextDontKnow         // Settings of the View
 };
 
@@ -140,24 +138,16 @@ public:
     bool                    IsPosLocked() const { return bool(nFlags & SvxIconViewFlags::POS_LOCKED); }
 };
 
-enum SvxIconChoiceCtrlColumnAlign
-{
-    IcnViewAlignLeft = 1,
-    IcnViewAlignRight,
-    IcnViewAlignCenter
-};
-
 class SvxIconChoiceCtrlColumnInfo
 {
     OUString                aColText;
     Image                   aColImage;
     long                    nWidth;
-    SvxIconChoiceCtrlColumnAlign    eAlignment;
     sal_uInt16              nSubItem;
 
 public:
                             SvxIconChoiceCtrlColumnInfo( long nWd ) :
-                                nWidth( nWd ), eAlignment( IcnViewAlignLeft ), nSubItem( 0 ) {}
+                                nWidth( nWd ), nSubItem( 0 ) {}
                             SvxIconChoiceCtrlColumnInfo( const SvxIconChoiceCtrlColumnInfo& );
 
     void                    SetWidth( long nWd ) { nWidth = nWd; }
