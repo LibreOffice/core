@@ -58,7 +58,17 @@ bool ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
             m_pView->FlipDrawSelMode();
             m_pSh->GetDrawView()->SetFrameDragSingles(m_pView->IsDrawSelMode());
         }
+
+        SdrObject* pObj = m_pView->GetDrawView()->GetCreateObj();
+
+        if (pObj)
+        {
+            SfxItemSet aAttr(pObj->GetModel()->GetItemPool());
+            m_pSh->SetLineEnds(aAttr, pObj, m_nSlotId);
+            pObj->SetMergedItemSet(aAttr);
+        }
     }
+
     return bReturn;
 }
 
@@ -143,6 +153,13 @@ void ConstRectangle::Activate(const sal_uInt16 nSlotId)
 
     switch (nSlotId)
     {
+    case SID_LINE_ARROW_END:
+    case SID_LINE_ARROW_CIRCLE:
+    case SID_LINE_ARROW_SQUARE:
+    case SID_LINE_ARROW_START:
+    case SID_LINE_CIRCLE_ARROW:
+    case SID_LINE_SQUARE_ARROW:
+    case SID_LINE_ARROWS:
     case SID_DRAW_LINE:
         m_pWin->SetSdrDrawMode(OBJ_LINE);
         break;

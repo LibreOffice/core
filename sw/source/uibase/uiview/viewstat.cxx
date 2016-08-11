@@ -479,6 +479,13 @@ void SwView::GetDrawState(SfxItemSet &rSet)
         switch(nWhich)
         {
         case SID_DRAW_LINE:
+        case SID_LINE_ARROW_END:
+        case SID_LINE_ARROW_CIRCLE:
+        case SID_LINE_ARROW_SQUARE:
+        case SID_LINE_ARROW_START:
+        case SID_LINE_CIRCLE_ARROW:
+        case SID_LINE_SQUARE_ARROW:
+        case SID_LINE_ARROWS:
         case SID_DRAW_RECT:
         case SID_DRAW_ELLIPSE:
         case SID_DRAW_XPOLYGON_NOFILL:
@@ -521,6 +528,7 @@ void SwView::GetDrawState(SfxItemSet &rSet)
 
         case SID_INSERT_DRAW:
         case SID_FONTWORK_GALLERY_FLOATER :
+        case SID_DRAWTBX_ARROWS:
         {
             if ( bWeb )
                 rSet.DisableItem( nWhich );
