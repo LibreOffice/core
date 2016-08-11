@@ -33,9 +33,9 @@
 #include <svx/SvxPresetListBox.hxx>
 #include <svx/Palette.hxx>
 #include <svx/PaletteManager.hxx>
+#include <svx/svdview.hxx>
 
 class SdrModel;
-class SdrView;
 class SvxBitmapCtl;
 
 /************************************************************************/
@@ -534,9 +534,23 @@ class SvxBitmapTabPage : public SvxTabPage
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
+    static const sal_uInt16 pBitmapRanges[];
 private:
 
     VclPtr<SvxPresetListBox>   m_pBitmapLB;
+    VclPtr<ListBox>            m_pBitmapStyleLB;
+    VclPtr<VclBox>             m_pSizeBox;
+    VclPtr<CheckBox>           m_pTsbScale;
+    VclPtr<MetricField>        m_pBitmapWidth;
+    VclPtr<MetricField>        m_pBitmapHeight;
+    VclPtr<VclBox>             m_pPositionBox;
+    VclPtr<ListBox>            m_pPositionLB;
+    VclPtr<VclBox>             m_pPositionOffBox;
+    VclPtr<MetricField>        m_pPositionOffX;
+    VclPtr<MetricField>        m_pPositionOffY;
+    VclPtr<VclBox>             m_pTileOffBox;
+    VclPtr<ListBox>            m_pTileOffLB;
+    VclPtr<MetricField>        m_pTileOffset;
     VclPtr<PushButton>         m_pBtnImport;
     VclPtr<SvxXRectPreview>    m_pCtlBitmapPreview;
 
@@ -547,6 +561,8 @@ private:
     XFillStyleItem             m_aXFStyleItem;
     XFillBitmapItem            m_aXBitmapItem;
 
+    double                     m_fObjectWidth;
+    double                     m_fObjectHeight;
     sal_uInt16*                m_nPageType;
     sal_uInt16                 m_nDlgType;
     sal_Int32*                 m_nPos;
@@ -555,12 +571,28 @@ private:
 
     XFillAttrSetItem           m_aXFillAttr;
     SfxItemSet&                m_rXFSet;
-
+    const SdrView*             mpView;
+    SfxMapUnit                 mePoolUnit;
+    FieldUnit                  meDlgUnit;
+    Size                       rBitmapSize;
+    Size                       rFilledSize;
+    Size                       rZoomedSize;
+    sal_Int64                  nFilledWidthPercent;
+    sal_Int64                  nFilledHeightPercent;
+    sal_Int64                  nZoomedWidthPercent;
+    sal_Int64                  nZoomedHeightPercent;
     DECL_LINK_TYPED( ModifyBitmapHdl, ValueSet*, void );
+    DECL_LINK_TYPED( ClickScaleHdl, Button*, void );
+    DECL_LINK_TYPED( ModifyBitmapStyleHdl, ListBox&, void );
+    DECL_LINK_TYPED( ModifyBitmapSizeHdl, Edit&, void );
+    DECL_LINK_TYPED( ModifyBitmapPositionHdl, ListBox&, void );
+    DECL_LINK_TYPED( ModifyPositionOffsetHdl, Edit&, void );
+    DECL_LINK_TYPED( ModifyTileOffsetHdl, Edit&, void );
     DECL_LINK_TYPED( ClickRenameHdl, SvxPresetListBox*, void );
     DECL_LINK_TYPED( ClickDeleteHdl, SvxPresetListBox*, void );
     DECL_LINK_TYPED( ClickImportHdl, Button*, void );
     void ClickBitmapHdl_Impl();
+    void CalculateBitmapPresetSize();
     sal_Int32 SearchBitmapList(const OUString& rBitmapName);
 
 public:
@@ -571,6 +603,7 @@ public:
     void    Construct();
 
     static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
+    static const sal_uInt16* GetRanges() { return pBitmapRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
