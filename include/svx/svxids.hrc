@@ -989,9 +989,17 @@
 
 #define SID_EDIT_POSTIT                                 ( SID_SVX_START + 1158 )
 
+#define SID_LINE_ARROW_CIRCLE                           ( SID_SVX_START + 1159 )
+#define SID_LINE_ARROW_SQUARE                           ( SID_SVX_START + 1160 )
+#define SID_LINE_CIRCLE_ARROW                           ( SID_SVX_START + 1161 )
+#define SID_LINE_SQUARE_ARROW                           ( SID_SVX_START + 1162 )
+#define SID_LINE_ARROWS                                 ( SID_SVX_START + 1163 )
+#define SID_DRAWTBX_ARROWS                              ( SID_SVX_START + 1164 )
+#define SID_LINE_ARROW_START                            ( SID_SVX_START + 1165 )
+#define SID_LINE_ARROW_END                              ( SID_SVX_START + 1166 )
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               (SID_EDIT_POSTIT + 1)
+#define SID_SVX_FIRSTFREE                               ( SID_LINE_ARROW_END + 1 )
 
 // Overflow check for slot IDs
 
