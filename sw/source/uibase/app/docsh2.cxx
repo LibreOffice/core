@@ -1160,8 +1160,18 @@ void SwDocShell::Execute(SfxRequest& rReq)
         break;
         case SID_NOTEBOOKBAR:
         {
+            const SfxStringItem* pFile = rReq.GetArg<SfxStringItem>( SID_NOTEBOOKBAR );
             SfxViewShell* pViewShell = GetView()? GetView(): SfxViewShell::Current();
-            sfx2::SfxNotebookBar::ExecMethod(pViewShell->GetViewFrame()->GetBindings());
+            SfxBindings& rBindings( pViewShell->GetViewFrame()->GetBindings() );
+
+            if ( !pFile || ( pFile && !SfxNotebookBar::IsActive() ) )
+                sfx2::SfxNotebookBar::ExecMethod( rBindings );
+            else if ( pFile && pFile->GetValue().isEmpty() )
+            {
+                sfx2::SfxNotebookBar::CloseMethod( rBindings );
+                if ( sfx2::SfxNotebookBar::IsActive() )
+                    sfx2::SfxNotebookBar::ExecMethod( rBindings );
+            }
         }
         break;
 

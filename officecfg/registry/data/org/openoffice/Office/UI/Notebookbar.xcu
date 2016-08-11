@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE oor:component-data SYSTEM "../../../../../component-update.dtd">
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="Notebookbar" oor:package="org.openoffice.Office.UI">
+  <prop oor:name="Active">
+    <value></value>
+  </prop>
+  <node oor:name="Implementations">
+    <node oor:name="Off" oor:op="replace">
+      <prop oor:name="Label">
+        <value xml:lang="en-US">Off</value>
+      </prop>
+      <prop oor:name="File">
+        <value></value>
+      </prop>
+    </node>
+    <node oor:name="Tabbed" oor:op="replace">
+      <prop oor:name="Label">
+        <value xml:lang="en-US">Tabbed</value>
+      </prop>
+      <prop oor:name="File">
+        <value>notebookbar.ui</value>
+      </prop>
+    </node>
+    <node oor:name="Groups" oor:op="replace">
+      <prop oor:name="Label">
+        <value xml:lang="en-US">Contextual groups</value>
+      </prop>
+      <prop oor:name="File">
+        <value>notebookbar_groups.ui</value>
+      </prop>
+    </node>
+  </node>
+</oor:component-data>
