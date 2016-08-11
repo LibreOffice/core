@@ -931,7 +931,13 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
             InterceptLOKStateChangeEvent(pDispatcher->GetFrame(), aEvent);
         }
 
-        sendStatusChanged(aDispatchURL.Complete, aEvent);
+        Sequence< OUString > seqNames = pDispatch->GetListeners().getContainedTypes();
+        sal_Int32 nLength = seqNames.getLength();
+        for (sal_Int32 i = 0; i < nLength; ++i)
+        {
+            if (seqNames[i] == aDispatchURL.Main || seqNames[i] == aDispatchURL.Complete)
+                sendStatusChanged(seqNames[i], aEvent);
+        }
     }
 }
 
