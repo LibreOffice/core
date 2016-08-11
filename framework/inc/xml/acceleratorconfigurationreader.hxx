@@ -60,13 +60,6 @@ class AcceleratorConfigurationReader : public ::cppu::WeakImplHelper< css::xml::
             E_ATTRIBUTE_URL
         };
 
-        /** @short  some namespace defines */
-        enum EAcceleratorXMLNamespace
-        {
-            E_NAMESPACE_ACCEL,
-            E_NAMESPACE_XLINK
-        };
-
     // member
 
     private:

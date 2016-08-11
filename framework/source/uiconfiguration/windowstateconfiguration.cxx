@@ -145,14 +145,6 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper< XNameCon
     protected:
         enum WindowStateMask
         {
-            WINDOWSTATE_MASK_LOCKED         = 1,
-            WINDOWSTATE_MASK_DOCKED         = 2,
-            WINDOWSTATE_MASK_VISIBLE        = 4,
-            WINDOWSTATE_MASK_CONTEXT        = 8,
-            WINDOWSTATE_MASK_HIDEFROMMENU   = 16,
-            WINDOWSTATE_MASK_NOCLOSE        = 32,
-            WINDOWSTATE_MASK_SOFTCLOSE      = 64,
-            WINDOWSTATE_MASK_CONTEXTACTIVE  = 128,
             WINDOWSTATE_MASK_DOCKINGAREA    = 256,
             WINDOWSTATE_MASK_POS            = 512,
             WINDOWSTATE_MASK_SIZE           = 1024,

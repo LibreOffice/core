@@ -120,10 +120,6 @@ protected:
 public:
     enum SubmissionResult {
         SUCCESS,
-        INVALID_METHOD,
-        INVALID_URL,
-        INVALID_ENCODING,
-        E_TRANSMISSION,
         UNKNOWN_ERROR
     };
 

@@ -86,8 +86,6 @@ enum StgEntryType {                     // dir entry types:
     STG_EMPTY     = 0,
     STG_STORAGE   = 1,
     STG_STREAM    = 2,
-    STG_LOCKBYTES = 3,
-    STG_PROPERTY  = 4,
     STG_ROOT      = 5
 };
 
@@ -96,11 +94,6 @@ enum StgEntryRef {                      // reference blocks:
     STG_RIGHT     = 1,                  // right
     STG_CHILD     = 2,                  // child
     STG_DATA      = 3                   // data start
-};
-
-enum StgEntryTime {                     // time codes:
-    STG_MODIFIED  = 0,                  // last modification
-    STG_ACCESSED  = 1                   // last access
 };
 
 #define STGENTRY_SIZE 128

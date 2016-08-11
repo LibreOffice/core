@@ -124,7 +124,6 @@ enum class SfxObjectShellFlags
     DONTCLOSE       = 0x10L,
     NODOCINFO       = 0x20L,
     STD_NORMAL      = HASOPENDOC,
-    STD_SPECIAL     = DONTLOADFILTERS,
     UNDEFINED       = 0xf000000
 };
 namespace o3tl
@@ -180,7 +179,6 @@ enum class SfxObjectCreateMode
     STANDARD,
     PREVIEW,
     ORGANIZER,
-    PLUGIN,
     INTERNAL
 };
 

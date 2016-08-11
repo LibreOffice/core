@@ -36,26 +36,11 @@ typedef ::std::vector< OUString > AddressList_Impl;
 class SFX2_DLLPUBLIC SfxMailModel
 {
 public:
-    enum MailPriority
-    {
-        PRIO_HIGHEST,
-        PRIO_HIGH,
-        PRIO_NORMAL,
-        PRIO_LOW,
-        PRIO_LOWEST
-    };
-
     enum AddressRole
     {
         ROLE_TO,
         ROLE_CC,
         ROLE_BCC
-    };
-
-    enum MailDocType
-    {
-        TYPE_SELF,
-        TYPE_ASPDF
     };
 
 protected:
