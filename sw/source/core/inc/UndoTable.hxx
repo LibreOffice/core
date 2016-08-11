@@ -408,6 +408,20 @@ public:
     virtual SwRewriter GetRewriter() const override;
 };
 
+class SwUndoTableStyleUpdate : public SwUndo
+{
+    std::unique_ptr<SwTableAutoFormat> m_pOldFormat, m_pNewFormat;
+public:
+    SwUndoTableStyleUpdate(const OUString& rName, const SwTableAutoFormat& rOldFormat, const SwDoc* pDoc);
+
+    virtual ~SwUndoTableStyleUpdate();
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
+
+    virtual SwRewriter GetRewriter() const override;
+};
+
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOTABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

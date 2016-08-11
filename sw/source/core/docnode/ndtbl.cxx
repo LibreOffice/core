@@ -4671,4 +4671,33 @@ std::unique_ptr<SwTableAutoFormat> SwDoc::DelTableStyle(const OUString& rName, b
     return pReleasedFormat;
 }
 
+void SwDoc::ChgTableStyle(const OUString& rName, const SwTableAutoFormat& rNewFormat)
+{
+    SwTableAutoFormat* pFormat = GetTableStyles().FindAutoFormat(rName);
+    if (pFormat)
+    {
+        SwTableAutoFormat aOldFormat = *pFormat;
+        *pFormat = rNewFormat;
+        pFormat->SetName(rName);
+
+        size_t nTableCount = GetTableFrameFormatCount(true);
+        for (size_t i=0; i < nTableCount; ++i)
+        {
+            SwFrameFormat* pFrameFormat = &GetTableFrameFormat(i, true);
+            SwTable* pTable = SwTable::FindTable(pFrameFormat);
+            if (pTable->GetTableStyleName() == rName)
+                GetDocShell()->GetFEShell()->UpdateTableStyleFormatting(pTable->GetTableNode());
+        }
+
+        getIDocumentState().SetModified();
+
+        if (GetIDocumentUndoRedo().DoesUndo())
+        {
+            SwUndo * pUndo = new SwUndoTableStyleUpdate(rName, aOldFormat, this);
+
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
+        }
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

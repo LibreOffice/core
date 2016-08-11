@@ -658,6 +658,10 @@ String STR_UNDO_TBLSTYLE_DELETE
 {
     Text[ en-US ] = "Delete table style: $1";
 };
+String STR_UNDO_TBLSTYLE_UPDATE
+{
+    Text[ en-US ] = "Update table style: $1";
+};
 String STR_UNDO_TABLE_DELETE
 {
     Text [ en-US ] = "Delete table" ;
