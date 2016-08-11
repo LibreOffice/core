@@ -2625,6 +2625,7 @@ SfxBoolItem Sidebar SID_SIDEBAR
 
 
 SfxBoolItem Notebookbar SID_NOTEBOOKBAR
+(SfxStringItem File SID_NOTEBOOKBAR)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,

@@ -320,8 +320,12 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
         case SID_NOTEBOOKBAR:
         {
-            if (mpViewShell)
+            const SfxStringItem* pFile = rReq.GetArg<SfxStringItem>( SID_NOTEBOOKBAR );
+
+            if ( mpViewShell && !pFile )
                 sfx2::SfxNotebookBar::ExecMethod(mpViewShell->GetFrame()->GetBindings());
+            else if ( mpViewShell && pFile && pFile->GetValue().isEmpty() )
+                sfx2::SfxNotebookBar::CloseMethod(mpViewShell->GetFrame()->GetBindings());
         }
         break;
 
