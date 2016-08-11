@@ -126,6 +126,8 @@ class SfxDispatchController_Impl : public SfxControllerItem
                                              css::uno::Sequence< css::beans::PropertyValue >& rArgs );
     static SfxMapUnit   GetCoreMetric( SfxItemPool& rPool, sal_uInt16 nSlot );
 
+    void                sendStatusChanged(const OUString& rURL, const css::frame::FeatureStateEvent& rEvent);
+
 public:
                         SfxDispatchController_Impl( SfxOfficeDispatch*                 pDisp,
                                                     SfxBindings*                       pBind,
