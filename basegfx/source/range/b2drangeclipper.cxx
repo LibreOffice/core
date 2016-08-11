@@ -59,16 +59,6 @@ namespace basegfx
         class ActiveEdge
         {
         public:
-            /** The two possible active rectangle edges differ by one
-                coordinate value - the upper edge has the lower, the
-                lower edge the higher value.
-             */
-            enum EdgeType {
-                /// edge with lower coordinate value
-                UPPER=0,
-                /// edge with higher coordinate value
-                LOWER=1
-            };
 
             enum EdgeDirection {
                 /// edge proceeds to the left

@@ -32,10 +32,7 @@ namespace connectivity
 enum ExpressionFunct
 {
     FUNC_CONST,
-
     ENUM_FUNC_EQUATION,
-
-    UNARY_FUNC_COLUMN,
     ENUM_FUNC_AND,
     ENUM_FUNC_OR
 };

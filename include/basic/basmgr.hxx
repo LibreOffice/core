@@ -34,14 +34,12 @@ class SotStorage;
 
 enum class BasicErrorReason
 {
-    OPENSTORAGE      = 0x0001,
     OPENLIBSTORAGE   = 0x0002,
     OPENMGRSTREAM    = 0x0004,
     OPENLIBSTREAM    = 0x0008,
     LIBNOTFOUND      = 0x0010,
     STORAGENOTFOUND  = 0x0020,
     BASICLOADERROR   = 0x0040,
-    NOSTORAGENAME    = 0x0080,
     STDLIB           = 0x0100
 };
 
