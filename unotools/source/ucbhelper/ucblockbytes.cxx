@@ -282,7 +282,6 @@ public:
     enum ReplyType {
         NOREPLY,
         EXIT,
-        RETRY,
         REQUESTHANDLED
     };
 

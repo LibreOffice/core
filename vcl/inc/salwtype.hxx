@@ -220,8 +220,7 @@ typedef bool (*SALFRAMEPROC)( vcl::Window* pInst, SalEvent nEvent, const void* p
 enum class SalObjEvent {
     GetFocus           = 1,
     LoseFocus          = 2,
-    ToTop              = 3,
-    Count              = 4
+    ToTop              = 3
 };
 
 typedef long (*SALOBJECTPROC)( void* pInst, SalObject* pObject,

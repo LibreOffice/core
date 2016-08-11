@@ -46,6 +46,7 @@
 
 #include "itemholder1.hxx"
 
+#include <set>
 #include <unordered_map>
 #include <vector>
 
@@ -68,18 +69,11 @@ using namespace com::sun::star::lang;
 
 #define STRPOS_NOTFOUND       -1
 
-enum VarNameProperty
-{
-    VAR_NEEDS_SYSTEM_PATH,
-    VAR_NEEDS_FILEURL
-};
-
 typedef std::unordered_map<OUString, sal_Int32, OUStringHash> NameToHandleMap;
 
 typedef std::unordered_map<sal_Int32, sal_Int32> EnumToHandleMap;
 
-typedef std::unordered_map<OUString, VarNameProperty, OUStringHash>
-    VarNameToEnumMap;
+typedef std::set<OUString> VarNameSet;
 
 // class SvtPathOptions_Impl ---------------------------------------------
 class SvtPathOptions_Impl
@@ -91,7 +85,7 @@ class SvtPathOptions_Impl
         Reference< XStringSubstitution >    m_xSubstVariables;
         Reference< XMacroExpander >         m_xMacroExpander;
         mutable EnumToHandleMap             m_aMapEnumToPropHandle;
-        VarNameToEnumMap                    m_aMapVarNamesToEnum;
+        VarNameSet                          m_aSystemPathVarNames;
 
         LanguageTag                         m_aLanguageTag;
         OUString                            m_aEmptyString;
@@ -174,7 +168,6 @@ struct PropertyStruct
 struct VarNameAttribute
 {
     const char*             pVarName;       // The name of the path variable
-    VarNameProperty         eVarProperty;   // Which return value is needed by this path variable
 };
 
 static const PropertyStruct aPropNames[] =
@@ -208,10 +201,10 @@ static const PropertyStruct aPropNames[] =
 
 static const VarNameAttribute aVarNameAttribute[] =
 {
-    { SUBSTITUTE_INSTPATH,  VAR_NEEDS_SYSTEM_PATH },    // $(instpath)
-    { SUBSTITUTE_PROGPATH,  VAR_NEEDS_SYSTEM_PATH },    // $(progpath)
-    { SUBSTITUTE_USERPATH,  VAR_NEEDS_SYSTEM_PATH },    // $(userpath)
-    { SUBSTITUTE_PATH,      VAR_NEEDS_SYSTEM_PATH },    // $(path)
+    { SUBSTITUTE_INSTPATH },    // $(instpath)
+    { SUBSTITUTE_PROGPATH },    // $(progpath)
+    { SUBSTITUTE_USERPATH },    // $(userpath)
+    { SUBSTITUTE_PATH },    // $(path)
 };
 
 // class SvtPathOptions_Impl ---------------------------------------------
@@ -343,8 +336,8 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar ) const
         aSubString = aSubString.toAsciiLowerCase();
 
         // Look for special variable that needs a system path.
-        VarNameToEnumMap::const_iterator pIter = m_aMapVarNamesToEnum.find( aSubString );
-        if ( pIter != m_aMapVarNamesToEnum.end() )
+        VarNameSet::const_iterator pIter = m_aSystemPathVarNames.find( aSubString );
+        if ( pIter != m_aSystemPathVarNames.end() )
             bConvertLocal = true;
 
         nPosition += nLength;
@@ -429,9 +422,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     nCount = sizeof( aVarNameAttribute ) / sizeof( VarNameAttribute );
     for ( i = 0; i < nCount; i++ )
     {
-        m_aMapVarNamesToEnum.insert( VarNameToEnumMap::value_type(
-                OUString::createFromAscii( aVarNameAttribute[i].pVarName ),
-                aVarNameAttribute[i].eVarProperty ));
+        m_aSystemPathVarNames.insert( OUString::createFromAscii( aVarNameAttribute[i].pVarName ) );
     }
 
     // Set language type!

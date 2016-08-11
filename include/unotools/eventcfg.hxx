@@ -31,8 +31,6 @@
 
 enum class GlobalEventId
 {
-    STARTAPP,
-    CLOSEAPP,
     DOCCREATED,
     CREATEDOC,
     LOADFINISHED,
