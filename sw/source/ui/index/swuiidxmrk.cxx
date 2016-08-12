@@ -97,6 +97,8 @@ SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, bool bNewDlg,
     rDialog.get(m_pTypeDCB, "typecb");
     rDialog.get(m_pNewBT, "new");
     rDialog.get(m_pEntryED, "entryed");
+    rDialog.get(m_pSyncED, "sync");
+    m_pSyncED->Show();
     rDialog.get(m_pPhoneticFT0, "phonetic0ft");
     rDialog.get(m_pPhoneticED0, "phonetic0ed");
     rDialog.get(m_pKey1FT, "key1ft");
@@ -151,6 +153,7 @@ SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, bool bNewDlg,
     m_pPhoneticED0->SetModifyHdl(LINK(this,SwIndexMarkPane, PhoneticEDModifyHdl));
     m_pPhoneticED1->SetModifyHdl(LINK(this,SwIndexMarkPane, PhoneticEDModifyHdl));
     m_pPhoneticED2->SetModifyHdl(LINK(this,SwIndexMarkPane, PhoneticEDModifyHdl));
+    m_pSyncED->SetClickHdl(LINK(this, SwIndexMarkPane, SyncSelectionHdl));
 
     if(bNewMark)
     {
@@ -359,30 +362,31 @@ OUString SwIndexMarkPane::GetDefaultPhoneticReading( const OUString& rText )
     return xExtendedIndexEntrySupplier->getPhoneticCandidate(rText, LanguageTag::convertToLocale( nLangForPhoneticReading ));
 }
 
-// Change the content of m_pEntryED if text is selected
 void    SwIndexMarkPane::Activate()
 {
     // display current selection (first element) ????
-    if(bNewMark)
+    if (bNewMark)
     {
-        if (pSh->GetCursorCnt() < 2)
-        {
-            bSelected = !pSh->HasSelection();
-            aOrgStr = pSh->GetView().GetSelectionTextParam(true, false);
-            m_pEntryED->SetText(aOrgStr);
-
-            //to include all equal entries may only be allowed in the body and even there
-            //only when a simple selection exists
-            const FrameTypeFlags nFrameType = pSh->GetFrameType(nullptr,true);
-            m_pApplyToAllCB->Show();
-            m_pSearchCaseSensitiveCB->Show();
-            m_pSearchCaseWordOnlyCB->Show();
-            m_pApplyToAllCB->Enable(!aOrgStr.isEmpty() &&
-                !(nFrameType & ( FrameTypeFlags::HEADER | FrameTypeFlags::FOOTER | FrameTypeFlags::FLY_ANY )));
-            SearchTypeHdl(m_pApplyToAllCB);
-        }
-        ModifyHdl(m_pTypeDCB);
+        m_pSyncED->Enable(pSh->GetCursorCnt() < 2);
     }
+}
+
+IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, SyncSelectionHdl, Button*, void)
+{
+    bSelected = !pSh->HasSelection();
+    aOrgStr = pSh->GetView().GetSelectionTextParam(true, false);
+    m_pEntryED->SetText(aOrgStr);
+
+    //to include all equal entries may only be allowed in the body and even there
+    //only when a simple selection exists
+    const FrameTypeFlags nFrameType = pSh->GetFrameType(nullptr,true);
+    m_pApplyToAllCB->Show();
+    m_pSearchCaseSensitiveCB->Show();
+    m_pSearchCaseWordOnlyCB->Show();
+    m_pApplyToAllCB->Enable(!aOrgStr.isEmpty() &&
+        !(nFrameType & ( FrameTypeFlags::HEADER | FrameTypeFlags::FOOTER | FrameTypeFlags::FLY_ANY )));
+    SearchTypeHdl(m_pApplyToAllCB);
+    ModifyHdl(m_pTypeDCB);
 }
 
 // evaluate Ok-Button

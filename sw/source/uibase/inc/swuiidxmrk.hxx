@@ -57,6 +57,7 @@ class SwIndexMarkPane
     VclPtr<PushButton>     m_pNewBT;
 
     VclPtr<Edit>           m_pEntryED;
+    VclPtr<PushButton>     m_pSyncED;
     VclPtr<FixedText>      m_pPhoneticFT0;
     VclPtr<Edit>           m_pPhoneticED0;
 
@@ -109,6 +110,7 @@ class SwIndexMarkPane
 
     DECL_LINK_TYPED( InsertHdl, Button *, void );
     DECL_LINK_TYPED( CloseHdl, Button*, void );
+    DECL_LINK_TYPED( SyncSelectionHdl, Button*, void );
     DECL_LINK_TYPED( DelHdl, Button*, void );
     DECL_LINK_TYPED( NextHdl, Button*, void );
     DECL_LINK_TYPED( NextSameHdl, Button*, void );
