@@ -750,6 +750,12 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
         }
     }
 
+    if (GetViewData().SelectionForbidsCellFill())
+    {
+        PaintArea(nCol, nRow, nCol, nRow);        // possibly the edit-engine is still painted there
+        return;
+    }
+
     ScDocument* pDoc = GetViewData().GetDocument();
     OUString aNewStr = rString;
     if ( pData )
