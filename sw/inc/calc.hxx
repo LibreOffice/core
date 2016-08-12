@@ -42,7 +42,6 @@ enum SwCalcOper
     CALC_DIV='/',           CALC_PRINT=';',         CALC_ASSIGN='=',
     CALC_LP='(',            CALC_RP=')',            CALC_PHD='%',
     CALC_POW='^',
-    CALC_LISTOP = cListDelim,
     CALC_NOT=256,           CALC_AND=257,           CALC_OR=258,
     CALC_XOR=259,           CALC_EQ=260,            CALC_NEQ=261,
     CALC_LEQ=262,           CALC_GEQ=263,           CALC_LES=264,

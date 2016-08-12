@@ -41,14 +41,13 @@ class InsCaptionOpt;
 enum class MailTextFormats
 {
     NONE      = 0x00,
-    ASCII     = 0x01,
-    HTML      = 0x02,
-    RTF       = 0x04,
-    OFFICE    = 0x08
+    HTML      = 0x01,
+    RTF       = 0x02,
+    OFFICE    = 0x04
 };
 namespace o3tl
 {
-    template<> struct typed_flags<MailTextFormats> : is_typed_flags<MailTextFormats, 0x0f> {};
+    template<> struct typed_flags<MailTextFormats> : is_typed_flags<MailTextFormats, 0x07> {};
 }
 
 

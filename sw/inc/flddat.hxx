@@ -26,54 +26,6 @@ class DateTime;
 class Date;
 namespace tools { class Time; }
 
-enum SwDateFormat
-{
-    DF_BEGIN,
-    // new formats
-    DFF_SSYS = DF_BEGIN,
-    DFF_LSYS ,
-    DFF_DMY ,
-    DFF_DMYY ,
-    DFF_DMMY ,
-    DFF_DMMYY,
-    DFF_DMMMY ,
-    DFF_DMMMYY,
-    DFF_DDMMY ,
-    DFF_DDMMMY ,
-    DFF_DDMMMYY ,
-    DFF_DDDMMMY ,
-    DFF_DDDMMMYY ,
-    DFF_MY ,
-    DFF_MD ,
-    DFF_YMD ,
-    DFF_YYMD ,
-    DF_END ,
-    // Compatibility
-    DF_SSYS     = DFF_SSYS,
-    DF_LSYS     = DFF_LSYS,
-    DF_SHORT    = DFF_DMY,
-    DF_SCENT    = DFF_DMYY,
-    DF_LMON     = DFF_DMMYY,
-    DF_LMONTH   = DFF_DMMMYY,
-    DF_LDAYMON  = DFF_DDMMMYY,
-    DF_LDAYMONTH= DFF_DDDMMMYY
-};
-
-enum SwTimeFormat
-{
-    TF_BEGIN,
-    TF_SYSTEM=TF_BEGIN,
-    TF_SSMM_24,
-    TF_SSMM_12,
-    TF_END
-};
-
-enum SwTimeSubFormat
-{
-    TIME_FIX,
-    TIME_VAR
-};
-
 enum SwDateSubFormat
 {
     DATE_FIX,

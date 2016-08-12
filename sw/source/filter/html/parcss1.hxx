@@ -24,7 +24,6 @@
 enum CSS1Token
 {
     CSS1_NULL,
-    CSS1_UNKNOWN,
 
     CSS1_IDENT,
     CSS1_STRING,
@@ -60,8 +59,7 @@ enum CSS1Token
 enum CSS1ParserState
 {
     CSS1_PAR_ACCEPTED = 0,
-    CSS1_PAR_WORKING,
-    CSS1_PAR_ERROR
+    CSS1_PAR_WORKING
 };
 
 enum CSS1SelectorType

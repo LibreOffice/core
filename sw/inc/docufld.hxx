@@ -84,14 +84,6 @@ namespace nsSwDocInfoSubType
     const SwDocInfoSubType DI_SUB_MASK      = 0xff00;
 }
 
-enum RegInfoFormat  ///< Only for loading of old documents!!!
-{
-    RF_AUTHOR,
-    RF_TIME,
-    RF_DATE,
-    RF_ALL
-};
-
 enum SwPageNumSubType
 {
     PG_RANDOM,
