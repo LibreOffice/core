@@ -1559,19 +1559,12 @@ void XclExpPivotTable::WriteQsiSxTag( XclExpStream& rStrm ) const
 #endif
     rStrm << nOptions;
 
-    enum ExcelVersion
-    {
-        Excel2000 = 0,
-        ExcelXP   = 1,
-        Excel2003 = 2,
-        Excel2007 = 3
-    };
-    ExcelVersion eXclVer = Excel2000;
+    sal_uInt8 eXclVer = 0; // Excel2000
     sal_uInt8 nOffsetBytes = 16;
-    rStrm << static_cast<sal_uInt8>(eXclVer)  // version table last refreshed
-          << static_cast<sal_uInt8>(eXclVer)  // minimum version to refresh
+    rStrm << eXclVer  // version table last refreshed
+          << eXclVer  // minimum version to refresh
           << nOffsetBytes
-          << static_cast<sal_uInt8>(eXclVer); // first version created
+          << eXclVer; // first version created
 
     rStrm << XclExpString(maPTInfo.maTableName);
     rStrm << static_cast<sal_uInt16>(0x0001); // no idea what this is for.

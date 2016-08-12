@@ -66,8 +66,7 @@ enum E_TYPE
     T_Matrix,   // token for inline arrays
     T_ExtName,  // token for external names
     T_ExtRefC,
-    T_ExtRefA,
-    T_Error     // for check in case of error
+    T_ExtRefA
 };
 
 class TokenPool

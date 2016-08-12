@@ -43,13 +43,6 @@ class ScRefUpdate
 {
 public:
 
-    /// What type of reference is to be updated.
-    enum WhatType
-    {
-        ALL,        /// all references
-        ABSOLUTE    /// only absolute references
-    };
-
     static ScRefUpdateRes Update
         ( ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                             SCCOL nCol1, SCROW nRow1, SCTAB nTab1,

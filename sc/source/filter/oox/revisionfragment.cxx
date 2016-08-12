@@ -44,10 +44,7 @@ enum RevisionType
 {
     REV_UNKNOWN = 0,
     REV_CELLCHANGE,
-    REV_INSERTROW,
-    REV_DELETEROW,
-    REV_INSERTCOL,
-    REV_DELETECOL
+    REV_INSERTROW
 };
 
 /**
