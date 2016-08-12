@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a95cdbc_3ef50583",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-08-12T00:52:25Z",
+      "side": 1,
+      "message": "Care to elaborate on your intent in the commit message?",
+      "revId": "ecf28c94a1a193bedf19cb33eaa241172ee3b74b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
