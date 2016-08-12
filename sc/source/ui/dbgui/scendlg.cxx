@@ -71,7 +71,7 @@ ScNewScenarioDlg::ScNewScenarioDlg( vcl::Window* pParent, const OUString& rName,
                 long nCount = pColorList->Count();
                 for ( long n=0; n<nCount; n++ )
                 {
-                    XColorEntry* pEntry = pColorList->GetColor(n);
+                    const XColorEntry* pEntry = pColorList->GetColor(n);
                     m_pLbColor->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
                 }
                 m_pLbColor->SetUpdateMode( true );

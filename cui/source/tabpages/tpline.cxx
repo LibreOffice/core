@@ -1292,7 +1292,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
 
         for(sal_Int32 a(0);!bSelected &&  a < m_pLineEndList->Count(); a++)
         {
-            XLineEndEntry* pEntry = m_pLineEndList->GetLineEnd(a);
+            const XLineEndEntry* pEntry = m_pLineEndList->GetLineEnd(a);
             const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
 
             if(rItemPolygon == rEntryPolygon)
@@ -1324,7 +1324,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
 
         for(sal_Int32 a(0);!bSelected &&  a < m_pLineEndList->Count(); a++)
         {
-            XLineEndEntry* pEntry = m_pLineEndList->GetLineEnd(a);
+            const XLineEndEntry* pEntry = m_pLineEndList->GetLineEnd(a);
             const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
 
             if(rItemPolygon == rEntryPolygon)

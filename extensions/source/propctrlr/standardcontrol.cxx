@@ -681,7 +681,7 @@ namespace pcr
         {
             for (long i = 0; i < pColorList->Count(); ++i)
             {
-                XColorEntry* pEntry = pColorList->GetColor( i );
+                const XColorEntry* pEntry = pColorList->GetColor(i);
                 getTypedControlWindow()->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
             }
         }

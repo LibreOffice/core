@@ -30,12 +30,9 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
-using namespace com::sun::star;
+#include <o3tl/make_unique.hxx>
 
-XBitmapEntry* XPatternList::Remove(long nIndex)
-{
-    return static_cast<XBitmapEntry*>( XPropertyList::Remove(nIndex) );
-}
+using namespace com::sun::star;
 
 XBitmapEntry* XPatternList::GetBitmap(long nIndex) const
 {
@@ -60,28 +57,28 @@ bool XPatternList::Create()
     // white/white bitmap
     aStr.append(" 1");
     aBitmap = createHistorical8x8FromArray(aArray, RGB_Color(COL_WHITE), RGB_Color(COL_WHITE));
-    Insert(new XBitmapEntry(Graphic(aBitmap), aStr.toString()));
+    Insert(o3tl::make_unique<XBitmapEntry>(Graphic(aBitmap), aStr.toString()));
 
     // black/white bitmap
     aArray[ 0] = 1; aArray[ 9] = 1; aArray[18] = 1; aArray[27] = 1;
     aArray[36] = 1; aArray[45] = 1; aArray[54] = 1; aArray[63] = 1;
     aStr[nLen] = '2';
     aBitmap = createHistorical8x8FromArray(aArray, RGB_Color(COL_BLACK), RGB_Color(COL_WHITE));
-    Insert(new XBitmapEntry(Graphic(aBitmap), aStr.toString()));
+    Insert(o3tl::make_unique<XBitmapEntry>(Graphic(aBitmap), aStr.toString()));
 
     // lightred/white bitmap
     aArray[ 7] = 1; aArray[14] = 1; aArray[21] = 1; aArray[28] = 1;
     aArray[35] = 1; aArray[42] = 1; aArray[49] = 1; aArray[56] = 1;
     aStr[nLen] = '3';
     aBitmap = createHistorical8x8FromArray(aArray, RGB_Color(COL_LIGHTRED), RGB_Color(COL_WHITE));
-    Insert(new XBitmapEntry(Graphic(aBitmap), aStr.toString()));
+    Insert(o3tl::make_unique<XBitmapEntry>(Graphic(aBitmap), aStr.toString()));
 
     // lightblue/white bitmap
     aArray[24] = 1; aArray[25] = 1; aArray[26] = 1;
     aArray[29] = 1; aArray[30] = 1; aArray[31] = 1;
     aStr[nLen] = '4';
     aBitmap = createHistorical8x8FromArray(aArray, RGB_Color(COL_LIGHTBLUE), RGB_Color(COL_WHITE));
-    Insert(new XBitmapEntry(Graphic(aBitmap), aStr.toString()));
+    Insert(o3tl::make_unique<XBitmapEntry>(Graphic(aBitmap), aStr.toString()));
 
     return true;
 }

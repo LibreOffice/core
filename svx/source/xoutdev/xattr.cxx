@@ -178,7 +178,7 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
             int nIndex;
             for( nIndex = 0; nIndex < nCount; nIndex++ )
             {
-                XPropertyEntry* pEntry = pDefaults->Get(nIndex);
+                const XPropertyEntry* pEntry = pDefaults->Get(nIndex);
                 if( pEntry )
                 {
                     bool bFound = false;
@@ -188,25 +188,25 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
                     case XATTR_FILLBITMAP:
                     {
                         const GraphicObject& rGraphicObjectA(static_cast<const XFillBitmapItem*>(pCheckItem)->GetGraphicObject());
-                        const GraphicObject& rGraphicObjectB(static_cast<XBitmapEntry*>(pEntry)->GetGraphicObject());
+                        const GraphicObject& rGraphicObjectB(static_cast<const XBitmapEntry*>(pEntry)->GetGraphicObject());
 
                         bFound = (rGraphicObjectA == rGraphicObjectB);
                         break;
                     }
                     case XATTR_LINEDASH:
-                        bFound = static_cast<const XLineDashItem*>(pCheckItem)->GetDashValue() == static_cast<XDashEntry*>(pEntry)->GetDash();
+                        bFound = static_cast<const XLineDashItem*>(pCheckItem)->GetDashValue() == static_cast<const XDashEntry*>(pEntry)->GetDash();
                         break;
                     case XATTR_LINESTART:
-                        bFound = static_cast<const XLineStartItem*>(pCheckItem)->GetLineStartValue() == static_cast<XLineEndEntry*>(pEntry)->GetLineEnd();
+                        bFound = static_cast<const XLineStartItem*>(pCheckItem)->GetLineStartValue() == static_cast<const XLineEndEntry*>(pEntry)->GetLineEnd();
                         break;
                     case XATTR_LINEEND:
-                        bFound = static_cast<const XLineEndItem*>(pCheckItem)->GetLineEndValue() == static_cast<XLineEndEntry*>(pEntry)->GetLineEnd();
+                        bFound = static_cast<const XLineEndItem*>(pCheckItem)->GetLineEndValue() == static_cast<const XLineEndEntry*>(pEntry)->GetLineEnd();
                         break;
                     case XATTR_FILLGRADIENT:
-                        bFound = static_cast<const XFillGradientItem*>(pCheckItem)->GetGradientValue() == static_cast<XGradientEntry*>(pEntry)->GetGradient();
+                        bFound = static_cast<const XFillGradientItem*>(pCheckItem)->GetGradientValue() == static_cast<const XGradientEntry*>(pEntry)->GetGradient();
                         break;
                     case XATTR_FILLHATCH:
-                        bFound = static_cast<const XFillHatchItem*>(pCheckItem)->GetHatchValue() == static_cast<XHatchEntry*>(pEntry)->GetHatch();
+                        bFound = static_cast<const XFillHatchItem*>(pCheckItem)->GetHatchValue() == static_cast<const XHatchEntry*>(pEntry)->GetHatch();
                         break;
                     }
 

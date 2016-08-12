@@ -42,6 +42,7 @@
 #include "svx/dlgutil.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <o3tl/make_unique.hxx>
 
 #define XOUT_WIDTH    150
 
@@ -535,7 +536,6 @@ IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickAddHdl_Impl, Button*, void)
     OUString aNewName( SVX_RES( RID_SVXSTR_LINESTYLE ) );
     OUString aDesc( ResId( RID_SVXSTR_DESC_LINESTYLE, rMgr ) );
     OUString aName;
-    XDashEntry* pEntry;
 
     long nCount = pDashList->Count();
     long j = 1;
@@ -573,12 +573,9 @@ IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickAddHdl_Impl, Button*, void)
             bLoop = false;
             FillDash_Impl();
 
-            pEntry = new XDashEntry( aDash, aName );
-
             long nDashCount = pDashList->Count();
-            pDashList->Insert( pEntry, nDashCount );
-            const Bitmap aBitmap = pDashList->GetUiBitmap( nDashCount );
-            m_pLbLineStyles->Append( *pEntry, pDashList->GetUiBitmap( nDashCount ) );
+            pDashList->Insert( o3tl::make_unique<XDashEntry>(aDash, aName), nDashCount );
+            m_pLbLineStyles->Append( *pDashList->GetDash(nDashCount), pDashList->GetUiBitmap(nDashCount) );
 
             m_pLbLineStyles->SelectEntryPos( m_pLbLineStyles->GetEntryCount() - 1 );
 
@@ -651,10 +648,8 @@ IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickModifyHdl_Impl, Button*, void)
                 bLoop = false;
                 FillDash_Impl();
 
-                XDashEntry* pEntry = new XDashEntry( aDash, aName );
-
-                delete pDashList->Replace( pEntry, nPos );
-                m_pLbLineStyles->Modify( *pEntry, nPos, pDashList->GetUiBitmap( nPos ) );
+                pDashList->Replace(o3tl::make_unique<XDashEntry>(aDash, aName), nPos);
+                m_pLbLineStyles->Modify(*pDashList->GetDash(nPos), nPos, pDashList->GetUiBitmap(nPos));
 
                 m_pLbLineStyles->SelectEntryPos( nPos );
 
@@ -695,7 +690,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickDeleteHdl_Impl, Button*, void)
 
         if ( aQueryBox->Execute() == RET_YES )
         {
-            delete pDashList->Remove( nPos );
+            pDashList->Remove(nPos);
             m_pLbLineStyles->RemoveEntry( nPos );
             m_pLbLineStyles->SelectEntryPos( 0 );
 

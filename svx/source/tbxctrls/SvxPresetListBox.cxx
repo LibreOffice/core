@@ -102,7 +102,7 @@ void SvxPresetListBox::FillPresetListBoxImpl(ListType & pList, sal_uInt32 nStart
     for(long nIndex = 0; nIndex < pList.Count(); nIndex++, nStartIndex++)
     {
         aBitmap = pList.GetBitmapForPreview(nIndex, aSize);
-        EntryType *pItem = static_cast<EntryType*>( pList.Get( nIndex ) );
+        EntryType* pItem = static_cast<EntryType*>( pList.Get(nIndex) );
         InsertItem(nStartIndex, Image(aBitmap), pItem->GetName());
     }
 }

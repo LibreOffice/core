@@ -113,7 +113,7 @@ SwTextGridPage::SwTextGridPage(vcl::Window *pParent, const SfxItemSet &rSet) :
     const long nCount = pColorLst->Count();
     for( long i = 0; i < nCount; ++i )
     {
-        XColorEntry* pEntry = pColorLst->GetColor( i );
+        const XColorEntry* pEntry = pColorLst->GetColor(i);
         Color aColor = pEntry->GetColor();
         OUString sName = pEntry->GetName();
         m_pColorLB->InsertEntry( aColor, sName );
