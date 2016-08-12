@@ -850,14 +850,13 @@ void NeonSession::OPTIONS( const OUString & inPath,
     SAL_INFO( "ucb.ucp.webdav", "OPTIONS - relative URL <" << inPath << ">" );
 
     rOptions.reset();
-    int theRetVal = NE_OK;
 
     Init( rEnv );
 
     ne_request *req = ne_request_create(m_pHttpSession, "OPTIONS", OUStringToOString(
                                             inPath, RTL_TEXTENCODING_UTF8 ).getStr());
 
-    theRetVal = ne_request_dispatch(req);
+    int theRetVal = ne_request_dispatch(req);
 
     //check if http error is in the 200 class (no error)
     if (theRetVal == NE_OK && ne_get_status(req)->klass != 2) {
