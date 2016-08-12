@@ -2747,7 +2747,7 @@ if test "$with_export_validation" = yes; then
         # remember to download the ODF toolkit with validator later
         AC_MSG_NOTICE([no odfvalidator found, will download it])
         BUILD_TYPE="$BUILD_TYPE ODFVALIDATOR"
-        ODFVALIDATOR="bin/odfvalidator.sh"
+        ODFVALIDATOR="sh bin/odfvalidator.sh"
 
         # and fetch name of odfvalidator jar name from download.lst
         ODFVALIDATOR_JAR=`sed -ne "s/export *ODFVALIDATOR_JAR *:= *\(.*\) */\1/p" download.lst`
@@ -2772,7 +2772,7 @@ if test "$with_export_validation" = yes; then
         # remember to download the officeotron with validator later
         AC_MSG_NOTICE([no officeotron found, will download it])
         BUILD_TYPE="$BUILD_TYPE OFFICEOTRON"
-        OFFICEOTRON="bin/officeotron.sh"
+        OFFICEOTRON="sh bin/officeotron.sh"
 
         # and fetch name of officeotron jar name from download.lst
         OFFICEOTRON_JAR=`sed -ne "s/export *OFFICEOTRON_JAR *:= *\(.*\) */\1/p" download.lst`
@@ -2826,7 +2826,7 @@ if test "$with_bffvalidator" != "no"; then
 
         # so swap in a shell wrapper that converts paths transparently
         BFFVALIDATOR_EXE="$BFFVALIDATOR"
-        BFFVALIDATOR="$SRC_ROOT/bin/bffvalidator.sh"
+        BFFVALIDATOR="sh $SRC_ROOT/bin/bffvalidator.sh"
         AC_SUBST(BFFVALIDATOR_EXE)
         AC_MSG_RESULT($BFFVALIDATOR)
     else
