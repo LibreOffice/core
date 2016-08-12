@@ -21,6 +21,7 @@
 
 sal_uInt64 volatile OpenCLZone::gnEnterCount = 0;
 sal_uInt64 volatile OpenCLZone::gnLeaveCount = 0;
+bool volatile OpenCLZone::gbInInitialTest = false;
 
 /**
  * Called from a signal handler if we get
@@ -45,6 +46,11 @@ void OpenCLZone::hardDisable()
 
         releaseOpenCLEnv(&opencl::gpuEnv);
     }
+}
+
+void OpenCLZone::enterInitialTest()
+{
+    gbInInitialTest = true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
