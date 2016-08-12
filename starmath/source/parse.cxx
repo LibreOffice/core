@@ -2138,11 +2138,9 @@ void SmParser::DoBinom()
     DoSum();
     DoSum();
 
-    SmNodeArray ExpressionArray(2);
-    ExpressionArray[1] = popOrZero(m_aNodeStack);
-    ExpressionArray[0] = popOrZero(m_aNodeStack);
-
-    pSNode->SetSubNodes(ExpressionArray);
+    SmNode *pSecond = popOrZero(m_aNodeStack);
+    SmNode *pFirst = popOrZero(m_aNodeStack);
+    pSNode->SetSubNodes(pFirst, pSecond);
     m_aNodeStack.push_front(std::move(pSNode));
 }
 

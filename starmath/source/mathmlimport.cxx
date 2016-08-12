@@ -2082,15 +2082,13 @@ SvXMLImportContext *SmXMLDocContext_Impl::CreateChildContext(
 
 void SmXMLDocContext_Impl::EndElement()
 {
-    SmNodeArray ContextArray;
-    ContextArray.resize(1);
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
 
-    ContextArray[0] = popOrZero(rNodeStack);
+    SmNode *pContextNode = popOrZero(rNodeStack);
 
     SmToken aDummy;
     std::unique_ptr<SmStructureNode> pSNode(new SmLineNode(aDummy));
-    pSNode->SetSubNodes(ContextArray);
+    pSNode->SetSubNodes(pContextNode, nullptr);
     rNodeStack.push_front(std::move(pSNode));
 
     SmNodeArray  LineArray;
