@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a95cdbc_21afaae4",
+        "filename": "xmloff/CppunitTest_xmloff_tokenmap.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-12T12:46:34Z",
+      "side": 1,
+      "message": "Certainly many of these libraries are not needed for the unit test, e.g. basegfx, i18nlangtag, svl, tl, utl, vcl; maybe also not comphelper and salhelper.",
+      "revId": "2ef4f950d0777687ba60dd9348dd2751d1a136c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a95cdbc_01aaaed4",
+        "filename": "xmloff/qa/unit/tokenmap-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-12T12:46:34Z",
+      "side": 1,
+      "message": "As the xmloff/source/token/tokens.txt token list is currently duplicated (lacking some entries) of xmloff/source/core/xmltoken.cxx, the unit test should also ensure that both lists are identical. Otherwise they\u0027d diverse over time.",
+      "revId": "2ef4f950d0777687ba60dd9348dd2751d1a136c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a95cdbc_c178c692",
+        "filename": "xmloff/source/token/tokens.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-12T12:46:34Z",
+      "side": 1,
+      "message": "The list of tokens is incomplete, it lacks entries added to xmloff/source/core/xmltoken.cxx since it was created.",
+      "revId": "2ef4f950d0777687ba60dd9348dd2751d1a136c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
