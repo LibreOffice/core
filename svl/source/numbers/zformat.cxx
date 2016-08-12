@@ -217,11 +217,6 @@ sal_uInt8 SvNumberNatNum::MapDBNumToNatNum( sal_uInt8 nDBNum, LanguageType eLang
     return nNatNum;
 }
 
-#ifdef THE_FUTURE
-/* XXX NOTE: even though the MapNatNumToDBNum method is currently unused please
- * don't remove it in case we'd have to use it for some obscure exports to
- * Excel. */
-
 // static
 sal_uInt8 SvNumberNatNum::MapNatNumToDBNum( sal_uInt8 nNatNum, LanguageType eLang, bool bDate )
 {
@@ -326,7 +321,6 @@ sal_uInt8 SvNumberNatNum::MapNatNumToDBNum( sal_uInt8 nNatNum, LanguageType eLan
     }
     return nDBNum;
 }
-#endif
 
 /**
  * SvNumFor
@@ -4724,6 +4718,12 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
         }
 
         const SvNumberNatNum& rNum = NumFor[n].GetNatNum();
+        if ( rNum.IsSet() && rNum.GetDBNum() > 0 )
+        {
+            aPrefix += "[DBNum";
+            aPrefix += OUString::number( rNum.GetDBNum() );
+            aPrefix += "]";
+        }
 
         sal_uInt16 nAnz = NumFor[n].GetCount();
         if ( nSem && (nAnz || !aPrefix.isEmpty()) )
