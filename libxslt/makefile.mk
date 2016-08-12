@@ -45,12 +45,11 @@ all:
 LIBXSLTVERSION=$(LIBXSLT_MAJOR).$(LIBXSLT_MINOR).$(LIBXSLT_MICRO)
 
 TARFILE_NAME=$(PRJNAME)-$(LIBXSLTVERSION)
-TARFILE_MD5=9667bf6f9310b957254fdcf6596600b7
+TARFILE_MD5=a129d3c44c022de3b9dcf6d6f288d72e
 
 # libxslt-internal-symbols: #i112480#: Solaris ld requires symbols to be defined
 PATCH_FILES=libxslt-configure.patch \
-            libxslt-win_manifest.patch \
-            libxslt-CVE-2015-7995.patch
+            libxslt-win_manifest.patch
 
 
 

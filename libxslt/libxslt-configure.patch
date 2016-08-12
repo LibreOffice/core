@@ -1,36 +1,18 @@
-diff -ur misc/libxslt-1.1.28/ltmain.sh misc/build/libxslt-1.1.28/ltmain.sh
---- misc/libxslt-1.1.28/ltmain.sh	2012-11-20 23:21:48.000000000 -0800
-+++ misc/build/libxslt-1.1.28/ltmain.sh	2016-03-27 11:14:40.564087000 -0700
-@@ -7331,13 +7331,13 @@
- 	  #
- 	  case $version_type in
- 	  # correct linux to gnu/linux during the next big refactor
--	  darwin|linux|osf|windows|none)
-+	  darwin|freebsd-elf|linux|osf|windows|none)
- 	    func_arith $number_major + $number_minor
- 	    current=$func_arith_result
- 	    age="$number_minor"
- 	    revision="$number_revision"
- 	    ;;
--	  freebsd-aout|freebsd-elf|qnx|sunos)
-+	  freebsd-aout|qnx|sunos)
- 	    current="$number_major"
- 	    revision="$number_minor"
- 	    age="0"
-@@ -7414,8 +7414,8 @@
- 	  ;;
+diff -ur misc/libxslt-1.1.29/configure misc/build/libxslt-1.1.29/configure
+--- misc/libxslt-1.1.29/configure	2016-05-23 18:49:13.000000000 -0700
++++ misc/build/libxslt-1.1.29/configure	2016-08-11 11:06:10.448691000 -0700
+@@ -6691,7 +6691,7 @@
  
- 	freebsd-elf)
--	  major=".$current"
--	  versuffix=".$current"
-+	  major=.$(($current - $age))
-+	  versuffix="$major.$age.$revision"
- 	  ;;
+ cygwin*)
+   # func_win32_libid is a shell function defined in ltmain.sh
+-  lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
++  lt_cv_deplibs_check_method='file_magic ^x86 archive|^x86 DLL'
+   lt_cv_file_magic_cmd='func_win32_libid'
+   ;;
  
- 	irix | nonstopux)
-diff -ur misc/libxslt-1.1.28/xslt-config.in misc/build/libxslt-1.1.28/xslt-config.in
---- misc/libxslt-1.1.28/xslt-config.in	2012-09-04 07:26:23.000000000 -0700
-+++ misc/build/libxslt-1.1.28/xslt-config.in	2016-03-26 10:54:11.377552000 -0700
+diff -ur misc/libxslt-1.1.29/xslt-config.in misc/build/libxslt-1.1.29/xslt-config.in
+--- misc/libxslt-1.1.29/xslt-config.in	2015-05-10 07:11:30.000000000 -0700
++++ misc/build/libxslt-1.1.29/xslt-config.in	2016-08-11 11:06:10.442201000 -0700
 @@ -1,10 +1,15 @@
  #! /bin/sh
  
@@ -61,33 +43,3 @@ diff -ur misc/libxslt-1.1.28/xslt-config.in misc/build/libxslt-1.1.28/xslt-confi
  if test "$includedir" != "/usr/include"; then
      the_flags="$the_flags -I$includedir `@XML_CONFIG@ --cflags`"
  else
-diff -ur misc/libxslt-1.1.28/configure misc/build/libxslt-1.1.28/configure
---- misc/libxslt-1.1.28/configure	2012-11-20 23:11:21.000000000 -0800
-+++ misc/build/libxslt-1.1.28/configure	2016-03-27 12:43:44.464670000 -0700
-@@ -6462,7 +6462,7 @@
- 
- cygwin*)
-   # func_win32_libid is a shell function defined in ltmain.sh
--  lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
-+  lt_cv_deplibs_check_method='file_magic ^x86 archive|^x86 DLL'
-   lt_cv_file_magic_cmd='func_win32_libid'
-   ;;
- 
-@@ -6472,7 +6472,7 @@
-   # unless we find 'file', for example because we are cross-compiling.
-   # func_win32_libid assumes BSD nm, so disallow it if using MS dumpbin.
-   if ( test "$lt_cv_nm_interface" = "BSD nm" && file / ) >/dev/null 2>&1; then
--    lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
-+    lt_cv_deplibs_check_method='file_magic ^x86 archive|^x86 DLL'
-     lt_cv_file_magic_cmd='func_win32_libid'
-   else
-     # Keep this pattern in sync with the one in func_win32_libid.
-@@ -11635,7 +11635,7 @@
-   version_type=freebsd-$objformat
-   case $version_type in
-     freebsd-elf*)
--      library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext} $libname${shared_ext}'
-+      library_names_spec='$libname$release$shared_ext$versuffix  $libname$release$shared_ext$major	 $libname$shared_ext'			 soname_spec='$libname$release$shared_ext$major'
-       need_version=no
-       need_lib_prefix=no
-       ;;

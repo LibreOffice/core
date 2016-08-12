@@ -1,5 +1,6 @@
---- misc/libxslt-1.1.26/libxslt/libxslt.syms	Thu Sep 24 16:28:46 2009
-+++ misc/build/libxslt-1.1.26/libxslt/libxslt.syms	Thu Jul  8 12:22:14 2010
+diff -ur misc/libxslt-1.1.29/libxslt/libxslt.syms misc/build/libxslt-1.1.29/libxslt/libxslt.syms
+--- misc/libxslt-1.1.29/libxslt/libxslt.syms	2016-05-23 18:57:36.000000000 -0700
++++ misc/build/libxslt-1.1.29/libxslt/libxslt.syms	2016-08-11 12:05:20.834928000 -0700
 @@ -107,7 +107,7 @@
    xsltFreeCompMatchList;
    xsltFreeTemplateHashes;
@@ -9,7 +10,7 @@
    xsltTestCompMatchList;
  
  # preproc
-@@ -406,7 +406,7 @@
+@@ -407,7 +407,7 @@
      global:
  
  # xsltInternals
@@ -18,7 +19,7 @@
    xsltExtensionInstructionResultFinalize;
    xsltExtensionInstructionResultRegister;
    xsltInitCtxtKey;
-@@ -415,24 +415,24 @@
+@@ -416,24 +416,24 @@
    xsltInit;
  
  # xsltInternals
@@ -44,17 +45,15 @@
 +#XSLT_REFACTORED  xsltStyleStylesheetLevelGetExtData;
  
  # xsltInternals
--  xsltTransStorageAdd;
--  xsltTransStorageRemove;
-+#NOT_IMPLEMENTED  xsltTransStorageAdd;
-+#NOT_IMPLEMENTED  xsltTransStorageRemove;
+ # xsltTransStorageAdd; removed in 1.1.28
+ # xsltTransStorageRemove; removed in 1.1.28
    xsltUninit;
 -  xsltXSLTAttrMarker; # variable
 +#XSLT_REFACTORED  xsltXSLTAttrMarker; # variable
  } LIBXML2_1.1.9;
  
  LIBXML2_1.1.20 {
-@@ -475,5 +475,9 @@
+@@ -476,6 +476,10 @@
  
  # transform
    xsltProcessOneNode;
@@ -64,3 +63,4 @@
 +  *;
  } LIBXML2_1.1.25;
  
+ LIBXML2_1.1.27 {

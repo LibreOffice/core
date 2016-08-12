@@ -179,8 +179,8 @@ if (SYSTEM_LIBXML != YES)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_LIBXSLT != YES)
-    MD5 = 9667bf6f9310b957254fdcf6596600b7
-    name = libxslt-1.1.28.tar.gz
+    MD5 = a129d3c44c022de3b9dcf6d6f288d72e
+    name = libxslt-1.1.29.tar.gz
     URL1 = http://xmlsoft.org/sources/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
