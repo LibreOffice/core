@@ -7,9 +7,17 @@ import io
 definitionSet = set()
 definitionToSourceLocationMap = dict()
 touchSet = set()
-# things we need to exclude for reasons like :
-# - it's a weird template thingy that confuses the plugin
-exclusionSet = set([
+# exclude some stuff, mostly because they are some kind of definition of external file formats
+excludedSourceFiles = set([
+    "include/svx/msdffdef.hxx",
+    "sw/source/filter/ww8/fields.hxx",
+    "sw/source/filter/inc/wwstyles.hxx",
+    "sw/inc/toxe.hxx",
+    "sw/inc/poolfmt.hxx",
+    "sw/inc/hintids.hxx",
+    ])
+excludedTypes = set([
+    "SwVarFormat", "RES_FIELDS", "SwFillOrder", "SwIoDetect", "SwDocumentSettingsPropertyHandles"
     ])
 
 # clang does not always use exactly the same numbers in the type-parameter vars it generates
@@ -69,14 +77,13 @@ for d in definitionSet:
         or srcLoc.startswith("include/typelib/")
         or srcLoc.startswith("include/uno/")):
         continue
-    # definitions of external file formats
-    if (srcLoc.startswith("include/svx/msdffdef.hxx"):
+    if srcLoc in excludedSourceFiles or d[0] in excludedTypes:
         continue
     # used in templates to find the last member of an enum
-    if (d1.endswith("LAST"):
+    if d[1] == "LAST" or d[1].endswith("_END"):
         continue
     # used to aid in alignment of enum values
-    if (d1.endswith("FORCE_EQUAL_SIZE"):
+    if d[1].endswith("FORCE_EQUAL_SIZE"):
         continue
         
     untouchedSet.add((clazz, srcLoc))

@@ -36,13 +36,6 @@ namespace vcl { class Font; }
 class SwSortedObjs;
 class SwAnchoredObject;
 
-enum SwPageChg
-{
-    CHG_NEWPAGE,
-    CHG_CUTPAGE,
-    CHG_CHGPAGE
-};
-
 /// A page of the document layout.
 class SwPageFrame: public SwFootnoteBossFrame
 {

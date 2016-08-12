@@ -165,9 +165,7 @@ public:
         BOOK_TO_VAR_REF,
         BOOK_AND_REF,
         TAGS_IN_TEXT,
-        ALLOW_FLD_CR,
-        NO_FLD_CR,
-        DONT_HARD_PROTECT
+        ALLOW_FLD_CR
     };
 
     SwFltControlStack(SwDoc* pDo, sal_uLong nFieldFl);
