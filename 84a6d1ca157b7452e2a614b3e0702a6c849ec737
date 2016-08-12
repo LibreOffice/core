@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a95cdbc_fe02bd6e",
+        "filename": "svx/uiconfig/ui/findreplacedialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-08-12T00:35:57Z",
+      "side": 1,
+      "message": "Can you pick another letter? Letters with descenders (g, j, p, q, y) are not appropriate as accelerators because the underline collides with them and obstruct legibility. These should be used only as a last resort.\n\nIt would be nice if we drew the accelerator underlines as GTK+ does (it lowers the line so as to avoid colliding), but that is another bug/topic.",
+      "range": {
+        "startLine": 649,
+        "startChar": 80,
+        "endLine": 649,
+        "endChar": 82
+      },
+      "revId": "84a6d1ca157b7452e2a614b3e0702a6c849ec737",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
