@@ -19,6 +19,7 @@ class OPENCL_DLLPUBLIC OpenCLZone
     static volatile sal_uInt64 gnEnterCount;
     /// how many times have we left a new CL zone
     static volatile sal_uInt64 gnLeaveCount;
+    static volatile bool gbInInitialTest;
 
 public:
     OpenCLZone()
@@ -29,6 +30,8 @@ public:
     ~OpenCLZone()
     {
         gnLeaveCount++;
+        if (!isInZone())
+            gbInInitialTest = false;
     }
 
     static bool isInZone()
@@ -36,7 +39,13 @@ public:
         return gnEnterCount != gnLeaveCount;
     }
 
+    static bool isInInitialTest()
+    {
+        return gbInInitialTest;
+    }
+
     static void hardDisable();
+    static void enterInitialTest();
 };
 
 #endif // INCLUDED_OPENCL_INC_OPENCL_ZONE_HXX
