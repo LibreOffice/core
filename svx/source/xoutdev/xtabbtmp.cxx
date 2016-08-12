@@ -33,11 +33,6 @@
 
 using namespace com::sun::star;
 
-XBitmapEntry* XBitmapList::Remove(long nIndex)
-{
-    return static_cast<XBitmapEntry*>( XPropertyList::Remove(nIndex) );
-}
-
 XBitmapEntry* XBitmapList::GetBitmap(long nIndex) const
 {
     return static_cast<XBitmapEntry*>( XPropertyList::Get(nIndex) );

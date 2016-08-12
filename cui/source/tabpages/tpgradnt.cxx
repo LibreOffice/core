@@ -41,6 +41,8 @@
 #include <svx/dialogs.hrc>
 #include "paragrph.hrc"
 
+#include <o3tl/make_unique.hxx>
+
 #define DEFAULT_GRADIENTSTEP 64
 
 using namespace com::sun::star;
@@ -511,9 +513,8 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickAddHdl_Impl, Button*, void)
                               (sal_uInt16) m_pMtrBorder->GetValue(),
                               (sal_uInt16) m_pMtrColorFrom->GetValue(),
                               (sal_uInt16) m_pMtrColorTo->GetValue() );
-        XGradientEntry* pEntry = new XGradientEntry( aXGradient, aName );
 
-        m_pGradientList->Insert( pEntry, nCount );
+        m_pGradientList->Insert(o3tl::make_unique<XGradientEntry>(aXGradient, aName), nCount);
 
         sal_Int32 nId = m_pGradientLB->GetItemId(nCount - 1); //calculate the last ID
         Bitmap aBitmap = m_pGradientList->GetBitmapForPreview( nCount, m_pGradientLB->GetIconSize() );
@@ -551,9 +552,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickModifyHdl_Impl, Button*, void)
                               (sal_uInt16) m_pMtrColorFrom->GetValue(),
                               (sal_uInt16) m_pMtrColorTo->GetValue() );
 
-        XGradientEntry* pEntry = new XGradientEntry( aXGradient, aName );
-
-        delete m_pGradientList->Replace( pEntry, static_cast<sal_uInt16>(nPos) );
+        m_pGradientList->Replace(o3tl::make_unique<XGradientEntry>(aXGradient, aName), nPos);
 
         Bitmap aBitmap = m_pGradientList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), m_pGradientLB->GetIconSize() );
         m_pGradientLB->RemoveItem( nId );
@@ -575,7 +574,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*
 
         if ( aQueryBox->Execute() == RET_YES )
         {
-            delete m_pGradientList->Remove( static_cast<sal_uInt16>(nPos) );
+            m_pGradientList->Remove(nPos);
             m_pGradientLB->RemoveItem( nId );
             nId = m_pGradientLB->GetItemId( 0 );
             m_pGradientLB->SelectItem( nId );
@@ -618,8 +617,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickRenameHdl_Impl, SvxPresetListBox*
             if( bValidGradientName )
             {
                 bLoop = false;
-                XGradientEntry* pEntry = m_pGradientList->GetGradient( static_cast<sal_uInt16>(nPos) );
-                pEntry->SetName( aName );
+                m_pGradientList->GetGradient(nPos)->SetName(aName);
 
                 m_pGradientLB->SetItemText( nId, aName );
                 m_pGradientLB->SelectItem( nId );

@@ -25,6 +25,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <svx/xtable.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
@@ -99,8 +100,7 @@ void SAL_CALL SvxUnoColorTable::insertByName( const OUString& aName, const uno::
 
     if( pList.is() )
     {
-        XColorEntry* pEntry = new XColorEntry( Color( (ColorData)nColor ), aName  );
-        pList->Insert( pEntry, pList->Count() );
+        pList->Insert(o3tl::make_unique<XColorEntry>(Color((ColorData)nColor), aName));
     }
 }
 
@@ -126,8 +126,7 @@ void SAL_CALL SvxUnoColorTable::replaceByName( const OUString& aName, const uno:
     if( nIndex == -1  )
         throw container::NoSuchElementException();
 
-    XColorEntry* pEntry = new XColorEntry( Color( (ColorData)nColor ), aName );
-    delete pList->Replace( nIndex, pEntry );
+    pList->Replace(nIndex, o3tl::make_unique<XColorEntry>(Color((ColorData)nColor), aName ));
 }
 
 // XNameAccess
@@ -138,7 +137,7 @@ uno::Any SAL_CALL SvxUnoColorTable::getByName( const OUString& aName )
     if( nIndex == -1 )
         throw container::NoSuchElementException();
 
-    XColorEntry* pEntry = pList->GetColor( nIndex );
+    const XColorEntry* pEntry = pList->GetColor(nIndex);
     return uno::Any( (sal_Int32) pEntry->GetColor().GetRGBColor() );
 }
 
@@ -152,7 +151,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getElementNames()
 
     for( long nIndex = 0; nIndex < nCount; nIndex++ )
     {
-        XColorEntry* pEntry = pList->GetColor( (long)nIndex );
+        const XColorEntry* pEntry = pList->GetColor(nIndex);
         pStrings[nIndex] = pEntry->GetName();
     }
 

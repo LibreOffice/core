@@ -42,6 +42,8 @@
 #include <svx/tbcontrl.hxx>
 #include "sfx2/opengrf.hxx"
 
+#include <o3tl/make_unique.hxx>
+
 using namespace css;
 using namespace css::uno;
 
@@ -233,8 +235,7 @@ IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ClickImportBitmapHdl, Button*, void
                 }
             }
 
-            XBitmapEntry* pEntry = new XBitmapEntry( aGraphic, aName );
-            pList->Insert(pEntry);
+            pList->Insert(o3tl::make_unique<XBitmapEntry>(aGraphic, aName));
             pList->Save();
             mpLbFillAttr->Clear();
             mpLbFillAttr->Fill(pList);

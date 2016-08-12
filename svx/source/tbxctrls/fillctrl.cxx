@@ -39,6 +39,8 @@
 #include <svx/dialmgr.hxx>
 #include "helpid.hrc"
 #include <memory>
+#include <o3tl/make_unique.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -376,19 +378,16 @@ void SvxFillToolBoxControl::Update()
                             }
                             aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
-                            std::unique_ptr<XGradientEntry> pEntry(new XGradientEntry(mpFillGradientItem->GetGradientValue(), aTmpStr));
                             XGradientList aGradientList( "", ""/*TODO?*/ );
-                            aGradientList.Insert( pEntry.get() );
+                            aGradientList.Insert(o3tl::make_unique<XGradientEntry>(mpFillGradientItem->GetGradientValue(), aTmpStr));
                             aGradientList.SetDirty( false );
                             const Bitmap aBmp = aGradientList.GetUiBitmap( 0 );
 
                             if(!aBmp.IsEmpty())
                             {
-                                mpLbFillAttr->InsertEntry(pEntry->GetName(), Image(aBmp));
+                                mpLbFillAttr->InsertEntry(aGradientList.Get(0)->GetName(), Image(aBmp));
                                 mpLbFillAttr->SelectEntryPos(mpLbFillAttr->GetEntryCount() - 1);
                             }
-
-                            aGradientList.Remove( 0 );
                         }
 
                     }
@@ -438,21 +437,17 @@ void SvxFillToolBoxControl::Update()
                             }
                             aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
-                            XHatchEntry* pEntry = new XHatchEntry(mpHatchItem->GetHatchValue(), aTmpStr);
                             XHatchList aHatchList( "", ""/*TODO?*/ );
-                            aHatchList.Insert( pEntry );
+                            aHatchList.Insert(o3tl::make_unique<XHatchEntry>(mpHatchItem->GetHatchValue(), aTmpStr));
                             aHatchList.SetDirty( false );
                             const Bitmap aBmp = aHatchList.GetUiBitmap( 0 );
 
                             if( !aBmp.IsEmpty() )
                             {
-                                mpLbFillAttr->InsertEntry(pEntry->GetName(), Image(aBmp));
+                                mpLbFillAttr->InsertEntry(aHatchList.GetHatch(0)->GetName(), Image(aBmp));
                                 mpLbFillAttr->SelectEntryPos( mpLbFillAttr->GetEntryCount() - 1 );
                                 //delete pBmp;
                             }
-
-                            aHatchList.Remove( 0 );
-                            delete pEntry;
                         }
                     }
                     else
@@ -501,16 +496,14 @@ void SvxFillToolBoxControl::Update()
                             }
                             aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
-                            std::unique_ptr<XBitmapEntry> pEntry(new XBitmapEntry(mpBitmapItem->GetGraphicObject(), aTmpStr));
                             XBitmapListRef xBitmapList =
                                 XPropertyList::AsBitmapList(
                                     XPropertyList::CreatePropertyList(
                                         XBITMAP_LIST, "TmpList", ""/*TODO?*/));
-                            xBitmapList->Insert( pEntry.get() );
+                            xBitmapList->Insert(o3tl::make_unique<XBitmapEntry>(mpBitmapItem->GetGraphicObject(), aTmpStr));
                             xBitmapList->SetDirty( false );
                             mpLbFillAttr->Fill( xBitmapList );
                             mpLbFillAttr->SelectEntryPos(mpLbFillAttr->GetEntryCount() - 1);
-                            xBitmapList->Remove( 0 );
                         }
 
                     }

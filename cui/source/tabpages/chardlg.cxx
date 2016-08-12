@@ -1463,7 +1463,7 @@ void SvxCharEffectsPage::Initialize()
     }
     for ( long i = 0; i < pColorTable->Count(); i++ )
     {
-        XColorEntry* pEntry = pColorTable->GetColor(i);
+        const XColorEntry* pEntry = pColorTable->GetColor(i);
         m_pUnderlineColorLB->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         m_pOverlineColorLB->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         m_pFontColorLB->InsertEntry( pEntry->GetColor(), pEntry->GetName() );

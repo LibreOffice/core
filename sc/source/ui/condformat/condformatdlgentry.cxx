@@ -810,7 +810,7 @@ void ScColorScale2FrmtEntry::Init()
 
         for ( long i = 0; i < pColorTable->Count(); ++i )
         {
-            XColorEntry* pEntry = pColorTable->GetColor(i);
+            const XColorEntry* pEntry = pColorTable->GetColor(i);
             maLbColMin->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
             maLbColMax->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
 
@@ -991,7 +991,7 @@ void ScColorScale3FrmtEntry::Init()
 
         for ( long i = 0; i < pColorTable->Count(); ++i )
         {
-            XColorEntry* pEntry = pColorTable->GetColor(i);
+            const XColorEntry* pEntry = pColorTable->GetColor(i);
             maLbColMin->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
             maLbColMiddle->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
             maLbColMax->InsertEntry( pEntry->GetColor(), pEntry->GetName() );

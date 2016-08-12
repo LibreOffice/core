@@ -180,7 +180,7 @@ void ScDataBarSettingsDlg::Init()
 
         for ( long i = 0; i < pColorTable->Count(); ++i )
         {
-            XColorEntry* pEntry = pColorTable->GetColor(i);
+            const XColorEntry* pEntry = pColorTable->GetColor(i);
             mpLbPos->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
             mpLbNeg->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
             mpLbAxisCol->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
