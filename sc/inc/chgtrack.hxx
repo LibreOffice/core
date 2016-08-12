@@ -82,7 +82,6 @@ enum ScChangeActionClipMode
 {
     SC_CACM_NONE,
     SC_CACM_CUT,
-    SC_CACM_COPY,
     SC_CACM_PASTE
 };
 

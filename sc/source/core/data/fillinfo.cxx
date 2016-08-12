@@ -46,14 +46,6 @@
 #include <memory>
 #include <o3tl/make_unique.hxx>
 
-enum FillInfoLinePos
-    {
-        FILP_TOP,
-        FILP_BOTTOM,
-        FILP_LEFT,
-        FILP_RIGHT
-    };
-
 // Similar as in output.cxx
 
 static void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
