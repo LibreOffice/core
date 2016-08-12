@@ -109,6 +109,7 @@ public:
     void testFormatExportODS();
 
     void testCustomColumnWidthExportXLSX();
+    void testXfDefaultValuesXLSX();
     void testOutlineExportXLSX();
     void testHiddenEmptyRowsXLSX();
     void testLandscapeOrientationXLSX();
@@ -188,6 +189,7 @@ public:
     CPPUNIT_TEST(testFormatExportODS);
 
     CPPUNIT_TEST(testCustomColumnWidthExportXLSX);
+    CPPUNIT_TEST(testXfDefaultValuesXLSX);
     CPPUNIT_TEST(testOutlineExportXLSX);
     CPPUNIT_TEST(testHiddenEmptyRowsXLSX);
     CPPUNIT_TEST(testLandscapeOrientationXLSX);
@@ -463,7 +465,6 @@ void ScExportTest::testFormatExportODS()
     xDocSh->DoClose();
 }
 
-
 void ScExportTest::testCustomColumnWidthExportXLSX()
 {
     //tdf#100946 FILESAVE Excel on OS X ignored column widths in XLSX last saved by LO
@@ -556,6 +557,29 @@ void ScExportTest::testCustomColumnWidthExportXLSX()
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]", "customHeight", "false");
 }
 
+void ScExportTest::testXfDefaultValuesXLSX()
+{
+    //tdf#70565 FORMATTING: User Defined Custom Formatting is not applied during importing XLSX documents
+    ScDocShellRef xShell = loadDoc("xf_default_values.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/styles.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    // cellStyleXfs don't need xfId, so we need to make sure it is not saved
+    assertXPathNoAttribute(pSheet, "/x:styleSheet/x:cellStyleXfs/x:xf[1]", "xfId");
+
+    // Because numFmtId fontId fillId borderId xfId are not existing during import
+    // it should be created during export, with values set to "0"
+    assertXPath(pSheet, "/x:styleSheet/x:cellXfs/x:xf[1]", "xfId", "0");
+    assertXPath(pSheet, "/x:styleSheet/x:cellXfs/x:xf[2]", "xfId", "0");
+    assertXPath(pSheet, "/x:styleSheet/x:cellXfs/x:xf[3]", "xfId", "0");
+    assertXPath(pSheet, "/x:styleSheet/x:cellXfs/x:xf[4]", "xfId", "0");
+
+    // We expected that exactly 15 cellXfs:xf Nodes will be produced
+    assertXPath(pSheet, "/x:styleSheet/x:cellXfs/x:xf", 14);
+}
 
 void ScExportTest::testOutlineExportXLSX()
 {
