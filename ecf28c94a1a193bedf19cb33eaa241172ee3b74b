@@ -16,6 +16,23 @@
       "revId": "ecf28c94a1a193bedf19cb33eaa241172ee3b74b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a95cdbc_7eef8db0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-08-12T00:53:01Z",
+      "side": 1,
+      "message": "Care to elaborate on your intent in the commit message?",
+      "revId": "ecf28c94a1a193bedf19cb33eaa241172ee3b74b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
