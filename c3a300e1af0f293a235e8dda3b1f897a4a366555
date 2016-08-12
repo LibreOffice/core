@@ -51,6 +51,24 @@
       "revId": "c3a300e1af0f293a235e8dda3b1f897a4a366555",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a95cdbc_4179162f",
+        "filename": "solenv/gbuild/Module.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-08-12T18:26:59Z",
+      "side": 1,
+      "message": "Well, if you look at the diff between patch set 1 (yours) and patch set 2 (mine) it should be obvious that there was a typo, you missed a letter: \"gb_Module_add_creenshot_targets\" aint gonna work, adding the missing \"s\" it does.\nhttps://gerrit.libreoffice.org/#/c/27678/1..2/solenv/gbuild/Module.mk",
+      "parentUuid": "1a95cdbc_5b2f43a1",
+      "revId": "c3a300e1af0f293a235e8dda3b1f897a4a366555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
