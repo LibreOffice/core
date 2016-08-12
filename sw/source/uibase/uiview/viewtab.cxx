@@ -1028,8 +1028,8 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             const SfxInt16Item& aLayoutItem = static_cast<const SfxInt16Item&>(pReqArgs->Get(SID_ATTR_PAGE_HEADER_LAYOUT));
             sal_uInt16 nLayout = aLayoutItem.GetValue();
             SwPageDesc aDesc(rDesc);
-            aDesc.ChgHeaderShare((nLayout>>1) == 1);
-            aDesc.ChgFirstShare((nLayout % 2) == 1); // FIXME control changes for both header footer - tdf#100287
+            aDesc.ChgHeaderShare((nLayout>>1) == 0);
+            aDesc.ChgFirstShare((nLayout % 2) == 0); // FIXME control changes for both header footer - tdf#100287
             rSh.ChgPageDesc(rSh.GetCurPageDesc(), aDesc);
         }
     }
@@ -1081,8 +1081,8 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             const SfxInt16Item& aLayoutItem = static_cast<const SfxInt16Item&>(pReqArgs->Get(SID_ATTR_PAGE_FOOTER_LAYOUT));
             sal_uInt16 nLayout = aLayoutItem.GetValue();
             SwPageDesc aDesc(rDesc);
-            aDesc.ChgFooterShare((nLayout>>1) == 1);
-            aDesc.ChgFirstShare((nLayout % 2) == 1); // FIXME control changes for both header footer - tdf#100287
+            aDesc.ChgFooterShare((nLayout>>1) == 0);
+            aDesc.ChgFirstShare((nLayout % 2) == 0); // FIXME control changes for both header footer - tdf#100287
             rSh.ChgPageDesc(rSh.GetCurPageDesc(), aDesc);
         }
     }
@@ -2236,7 +2236,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                 bool rShared = rDesc.IsHeaderShared();
                 bool rFirst = rDesc.IsFirstShared(); // FIXME control changes for both header footer - tdf#100287
-                sal_uInt16 nLayout = ((int)rShared<<1) + (int)rFirst;
+                sal_uInt16 nLayout = ((int)rFirst<<1) + (int)rShared;
                 SfxInt16Item aLayoutItem(SID_ATTR_PAGE_HEADER_LAYOUT, nLayout);
                 rSet.Put(aLayoutItem);
             }
@@ -2261,7 +2261,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                 bool rShared = rDesc.IsFooterShared();
                 bool rFirst = rDesc.IsFirstShared(); // FIXME control changes for both header footer - tdf#100287
-                sal_uInt16 nLayout = ((int)rShared<<1) + (int)rFirst;
+                sal_uInt16 nLayout = ((int)rFirst<<1) + (int)rShared;
                 SfxInt16Item aLayoutItem(SID_ATTR_PAGE_FOOTER_LAYOUT, nLayout);
                 rSet.Put(aLayoutItem);
             }
