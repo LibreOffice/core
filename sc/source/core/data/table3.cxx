@@ -3238,8 +3238,20 @@ bool ScTable::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
     return bValid;
 }
 
-bool ScTable::HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW /* nEndRow */ ) const
+bool ScTable::HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow) const
 {
+    if (nStartCol == nEndCol)
+    {
+        if (nEndRow > nStartRow)
+        {
+            CellType eFstCellType = GetCellType(nStartCol, nStartRow);
+            CellType eSndCellType = GetCellType(nStartCol, nStartRow+1);
+            if ((eFstCellType == CELLTYPE_STRING || eFstCellType == CELLTYPE_EDIT)
+                   && (eSndCellType != CELLTYPE_STRING && eSndCellType != CELLTYPE_EDIT))
+                return true;
+        }
+        return false;
+    }
     for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
     {
         CellType eType = GetCellType( nCol, nStartRow );
@@ -3249,8 +3261,20 @@ bool ScTable::HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCR
     return true;
 }
 
-bool ScTable::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL /* nEndCol */, SCROW nEndRow ) const
+bool ScTable::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow ) const
 {
+    if (nStartRow == nEndRow)
+    {
+        if (nEndCol > nStartCol)
+        {
+            CellType eFstCellType = GetCellType(nStartCol, nStartRow);
+            CellType eSndCellType = GetCellType(nStartCol+1, nStartRow);
+            if ((eFstCellType == CELLTYPE_STRING || eFstCellType == CELLTYPE_EDIT)
+                   && (eSndCellType != CELLTYPE_STRING && eSndCellType != CELLTYPE_EDIT))
+                return true;
+        }
+        return false;
+    }
     for (SCROW nRow=nStartRow; nRow<=nEndRow; nRow++)
     {
         CellType eType = GetCellType( nStartCol, nRow );
