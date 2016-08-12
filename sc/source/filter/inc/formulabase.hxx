@@ -382,17 +382,6 @@ enum FuncParamValidity
     FUNC_PARAM_EXCELONLY        /// Parameter supported by Excel only.
 };
 
-/** Enumerates different types of token class conversion in function parameters. */
-enum FuncParamConversion
-{
-    FUNC_PARAMCONV_ORG,         /// Use original class of current token.
-    FUNC_PARAMCONV_VAL,         /// Convert tokens to VAL class.
-    FUNC_PARAMCONV_ARR,         /// Convert tokens to ARR class.
-    FUNC_PARAMCONV_RPT,         /// Repeat parent conversion in VALTYPE parameters.
-    FUNC_PARAMCONV_RPX,         /// Repeat parent conversion in REFTYPE parameters.
-    FUNC_PARAMCONV_RPO          /// Repeat parent conversion in operands of operators.
-};
-
 /** Structure that contains all needed information for a parameter in a
     function.
 

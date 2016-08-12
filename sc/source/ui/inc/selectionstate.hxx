@@ -29,8 +29,6 @@ enum ScSelectionType
     SC_SELECTTYPE_NONE,             /// No selection, simple cell cursor.
     SC_SELECTTYPE_SHEET,            /// Single cell, cell range, or multi range selection.
     SC_SELECTTYPE_EDITCELL,         /// Cell in edit mode (with or without selection).
-    SC_SELECTTYPE_DRAWING,          /// One or more drawing objects.
-    SC_SELECTTYPE_EDITDRAW          /// Edit mode in drawing object (with or without selection).
 };
 
 class ScViewData;

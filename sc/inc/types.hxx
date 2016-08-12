@@ -78,12 +78,6 @@ enum GroupCalcState
     GroupCalcRunning,
 };
 
-enum OpenCLKernelState
-{
-    OpenCLKernelNone = 0,
-    OpenCLKernelBinaryCreated
-};
-
 struct RangeMatrix
 {
     ScMatrixRef mpMat;

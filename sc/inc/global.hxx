@@ -151,7 +151,6 @@ enum class InsertDeleteFlags : sal_uInt16
     ATTRIB           = HARDATTR | STYLES,
     CONTENTS         = VALUE | DATETIME | STRING | NOTE | FORMULA | OUTLINE,
     ALL              = CONTENTS | ATTRIB | OBJECTS,
-    ALL_USED_BITS    = ALL | EDITATTR | NOCAPTIONS | ADDNOTES | SPECIAL_BOOLEAN | FORGETCAPTIONS,
     /// Copy flags for auto/series fill functions: do not touch notes and drawing objects.
     AUTOFILL         = ALL & ~(NOTE | OBJECTS)
 };
