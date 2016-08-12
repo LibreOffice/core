@@ -78,6 +78,7 @@ public:
     }
 
     bool shouldVisitTemplateInstantiations () const { return true; }
+    bool shouldVisitImplicitCode() const { return true; }
 
     bool VisitEnumDecl( const EnumDecl* );
     bool VisitDeclRefExpr( const DeclRefExpr* );

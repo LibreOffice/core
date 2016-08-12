@@ -112,8 +112,7 @@ public:
     {
         HORI_L2R,
         HORI_R2L,
-        VERT_R2L,
-        VERT_L2R    ///< Not supported yet.
+        VERT_R2L
     };
 
     virtual SwFrameFormat::tLayoutDir GetLayoutDir() const;

@@ -593,8 +593,7 @@ private:
     {
         BOOKMARK_INDEX,
         BOOKMARK_NEXT,
-        BOOKMARK_PREV,
-        BOOKMARK_LAST_LAST_ENTRY
+        BOOKMARK_PREV
     };
 
     SAL_DLLPRIVATE bool MoveBookMark(BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark=nullptr);
