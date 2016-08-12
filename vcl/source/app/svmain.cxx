@@ -24,6 +24,8 @@
 #include <osl/file.hxx>
 #include <osl/signal.h>
 
+#include <desktop/exithelper.h>
+
 #include <tools/debug.hxx>
 #include <tools/resmgr.hxx>
 
@@ -123,7 +125,13 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
 #endif
 #if HAVE_FEATURE_OPENCL
         if (OpenCLZone::isInZone())
+        {
             OpenCLZone::hardDisable();
+#ifdef _WIN32
+            if (OpenCLZone::isInInitialTest())
+                TerminateProcess(GetCurrentProcess(), EXITHELPER_NORMAL_RESTART);
+#endif
+        }
 #endif
     }
 
