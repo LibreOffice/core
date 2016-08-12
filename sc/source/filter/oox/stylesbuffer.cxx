@@ -1982,11 +1982,26 @@ Xf::Xf( const WorkbookHelper& rHelper ) :
 void Xf::importXf( const AttributeList& rAttribs, bool bCellXf )
 {
     maModel.mbCellXf = bCellXf;
-    maModel.mnStyleXfId = rAttribs.getInteger( XML_xfId, -1 );
+    // tdf#70565 Set proper default value to "0" of xfId attribute
+    // When xfId is not exist during .xlsx import
+    // it must have values set to "0".
+    // Is is not impacts spreadsheets created with MS Excel,
+    // as xfId attribute is always created during export to .xlsx
+    // Not setting "0" value is causing wrong .xlsx import by LibreOffice,
+    // for spreadsheets created by external applications (ex. SAP BI).
+    if ( maModel.mbCellXf )
+    {
+        maModel.mnStyleXfId = rAttribs.getInteger( XML_xfId, 0 );
+    }
+    else
+    {
+        maModel.mnStyleXfId = rAttribs.getInteger( XML_xfId, -1 );
+    }
     maModel.mnFontId = rAttribs.getInteger( XML_fontId, -1 );
     maModel.mnNumFmtId = rAttribs.getInteger( XML_numFmtId, -1 );
     maModel.mnBorderId = rAttribs.getInteger( XML_borderId, -1 );
     maModel.mnFillId = rAttribs.getInteger( XML_fillId, -1 );
+
 
     /*  Default value of the apply*** attributes is dependent on context:
         true in cellStyleXfs element, false in cellXfs element... */
