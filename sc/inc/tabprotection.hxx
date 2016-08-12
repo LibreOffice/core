@@ -77,7 +77,6 @@ public:
     {
         STRUCTURE = 0,
         WINDOWS,
-        CONTENT,
         NONE        ///< last item - used to resize the vector
     };
 
@@ -162,7 +161,6 @@ public:
         SCENARIOS,
         SELECT_LOCKED_CELLS,
         SELECT_UNLOCKED_CELLS,
-        SHEET,
         SORT,
         NONE        ///< last item - used to resize the vector
     };

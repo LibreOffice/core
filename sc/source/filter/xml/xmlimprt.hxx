@@ -74,23 +74,6 @@ enum ScXMLDocTokens
     XML_TOK_OFFICE_END=XML_TOK_UNKNOWN
 };
 
-enum ScXMLStylesTokens
-{
-    XML_TOK_STYLES_STYLE
-};
-
-enum ScXMLStylesAttrTokens
-{
-    XML_TOK_STYLES_STYLE_NAME,
-    XML_TOK_STYLES_STYLE_FAMILY,
-    XML_TOK_STYLES_STYLE_PARENT_STYLE_NAME
-};
-
-enum ScXMLStyleTokens
-{
-    XML_TOK_STYLE_PROPERTIES
-};
-
 enum ScXMLBodyTokens
 {
     XML_TOK_BODY_TRACKED_CHANGES,
