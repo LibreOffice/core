@@ -777,7 +777,7 @@ bool WinOpenGLSalGraphicsImpl::RenderTextureCombo(TextureCombo& rCombo, int nX, 
     SalTwoRect aPosAry(0,   0, rTexture.GetWidth(), rTexture.GetHeight(),
                        nX, nY, rTexture.GetWidth(), rTexture.GetHeight());
 
-    DrawTextureDiff(rTexture, *rCombo.mpMask, aPosAry);
+    DrawTextureDiff(rTexture, *rCombo.mpMask, aPosAry, false);
 
     return true;
 }
