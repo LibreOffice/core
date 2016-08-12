@@ -66,6 +66,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 #include <PostItMgr.hxx>
+#include <DocumentSettingManager.hxx>
 
 using namespace com::sun::star;
 using namespace util;
@@ -3053,7 +3054,9 @@ bool SwCursorShell::HasReadonlySel(bool bAnnotationMode) const
 {
     bool bRet = false;
     // If protected area is to be ignored, then selections are never read-only.
-    if ((IsReadOnlyAvailable() || GetViewOptions()->IsFormView()) && !GetViewOptions()->IsIgnoreProtectedArea())
+    if ((IsReadOnlyAvailable() || GetViewOptions()->IsFormView() ||
+        GetDoc()->GetDocumentSettingManager().get( DocumentSettingId::PROTECT_FORM )) &&
+        !GetViewOptions()->IsIgnoreProtectedArea())
     {
         if ( m_pTableCursor != nullptr )
         {
