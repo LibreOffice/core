@@ -664,7 +664,12 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
 
                         // Get the text of the Link.
                         rSh.StartAction();
+                        const bool bAtEnd(rSh.IsCursorPtAtEnd());
+                        if(!bAtEnd) // tdf#91832: ensure forward selection
+                            rSh.SwapPam();
                         rSh.CreateCursor();
+                        if(!bAtEnd)
+                            rSh.SwapPam();
                         rSh.SwCursorShell::SelectTextAttr(RES_TXTATR_INETFMT,true);
                         OUString sLinkName = rSh.GetSelText();
                         aHLinkItem.SetName(sLinkName);
