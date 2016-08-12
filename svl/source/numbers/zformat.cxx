@@ -1455,13 +1455,13 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                     eState = SsGetPrefix;
                 }
                 else if ( lcl_matchKeywordAndGetNumber( aBufStr, nPos-1, aDBNum, nDBNum) &&
-                        '1' <= nDBNum && nDBNum <= '9' )
+                        1 <= nDBNum && nDBNum <= 9 )
                 {
                     sBuffSymbol.stripStart('[');
                     sBuffSymbol.append( aBufStr.copy( --nPos, aDBNum.getLength()+1 ));
                     nPos += aDBNum.getLength()+1;
                     //! SymbolType is negative
-                    eSymbolType = sal::static_int_cast< short >( BRACKET_SYMBOLTYPE_DBNUM1 - (nDBNum - '1'));
+                    eSymbolType = sal::static_int_cast< short >( BRACKET_SYMBOLTYPE_DBNUM1 - (nDBNum - 1) );
                     eState = SsGetPrefix;
                 }
                 else
