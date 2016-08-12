@@ -20,14 +20,6 @@ class OPENCL_DLLPUBLIC OpenCLZone
     /// how many times have we left a new CL zone
     static volatile sal_uInt64 gnLeaveCount;
 
-    static void enter()
-    {
-        gnEnterCount++;
-    }
-    static void leave()
-    {
-        gnLeaveCount--;
-    }
 public:
     OpenCLZone()
     {
