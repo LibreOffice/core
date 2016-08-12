@@ -73,17 +73,13 @@ class SvNumberNatNum
 public:
 
     static  sal_uInt8    MapDBNumToNatNum( sal_uInt8 nDBNum, LanguageType eLang, bool bDate );
-#ifdef THE_FUTURE
     static  sal_uInt8    MapNatNumToDBNum( sal_uInt8 nNatNum, LanguageType eLang, bool bDate );
-#endif
 
                     SvNumberNatNum() : eLang( LANGUAGE_DONTKNOW ), nNum(0),
                                         bDBNum(false), bDate(false), bSet(false) {}
     bool            IsComplete() const  { return bSet && eLang != LANGUAGE_DONTKNOW; }
     sal_uInt8       GetNatNum() const   { return bDBNum ? MapDBNumToNatNum( nNum, eLang, bDate ) : nNum; }
-#ifdef THE_FUTURE
     sal_uInt8       GetDBNum() const    { return bDBNum ? nNum : MapNatNumToDBNum( nNum, eLang, bDate ); }
-#endif
     LanguageType    GetLang() const     { return eLang; }
     void            SetLang( LanguageType e ) { eLang = e; }
     void            SetNum( sal_uInt8 nNumber, bool bDBNumber )
