@@ -2092,6 +2092,7 @@ void Xf::importXf( const AttributeList& rAttribs, bool bCellXf )
     maModel.mnBorderId = rAttribs.getInteger( XML_borderId, -1 );
     maModel.mnFillId = rAttribs.getInteger( XML_fillId, -1 );
 
+
     /*  Default value of the apply*** attributes is dependent on context:
         true in cellStyleXfs element, false in cellXfs element... */
     maModel.mbAlignUsed  = rAttribs.getBool( XML_applyAlignment,    !maModel.mbCellXf );
