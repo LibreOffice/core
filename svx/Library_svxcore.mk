@@ -120,6 +120,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/dialog/langbox \
     svx/source/dialog/pagenumberlistbox \
     svx/source/dialog/papersizelistbox \
+    svx/source/dialog/spacinglistbox \
     svx/source/dialog/stddlg \
     svx/source/dialog/svxdlg \
     svx/source/dialog/SvxNumOptionsTabPageHelper \

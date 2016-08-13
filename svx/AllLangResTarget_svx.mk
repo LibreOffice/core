@@ -49,6 +49,7 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/dialog/passwd.src \
     svx/source/dialog/prtqry.src \
     svx/source/dialog/ruler.src \
+    svx/source/dialog/spacing.src \
     svx/source/dialog/sdstring.src \
     svx/source/dialog/srchdlg.src \
     svx/source/dialog/svxbmpnumvalueset.src \
