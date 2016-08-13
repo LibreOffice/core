@@ -125,7 +125,7 @@ namespace cmis
             const char* /*username*/,
             const char* /*password*/ )
     {
-        OUString instructions = "PIN:";
+        OUString instructions = "Enter the 6 digit PIN:";
         OUString url_oustr( "" );
         const css::uno::Reference<
             css::ucb::XCommandEnvironment> xEnv = getXEnv( );
