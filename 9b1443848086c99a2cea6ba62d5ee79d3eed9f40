@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "fa6399be_1a205d49",
+        "filename": "sw/uiconfig/swriter/ui/pagefooterpanel.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1001174
+      },
+      "writtenOn": "2016-08-13T19:39:59Z",
+      "side": 1,
+      "message": "This is specific to this panel only. The listbox, on the other hand is used in many other panels, so it makes less sense to add the tooltip to listbox code. As for adding it to the sidebar code, keeping this string in ui file is better.",
+      "parentUuid": "fa6399be_7a69598b",
+      "range": {
+        "startLine": 87,
+        "startChar": 63,
+        "endLine": 87,
+        "endChar": 125
+      },
+      "revId": "9b1443848086c99a2cea6ba62d5ee79d3eed9f40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_9a046dc7",
         "filename": "sw/uiconfig/swriter/ui/pagefooterpanel.ui",
         "patchSetId": 1
