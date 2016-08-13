@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "fa6399be_9ae8ed18",
+        "filename": "svx/source/unodraw/XPropertyTable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-08-13T12:18:07Z",
+      "side": 1,
+      "message": "should probably be called createEntry instead of getEntry then?",
+      "parentUuid": "fa6399be_7a5f990e",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 169
+      },
+      "revId": "d143c73851a0a1111610961f636aef65c9d668d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_da6d05ce",
         "filename": "svx/source/unodraw/XPropertyTable.cxx",
         "patchSetId": 3
@@ -88,6 +112,23 @@
         "endLine": 140,
         "endChar": 24
       },
+      "revId": "d143c73851a0a1111610961f636aef65c9d668d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_faf729f3",
+        "filename": "svx/source/unodraw/XPropertyTable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-08-13T12:18:07Z",
+      "side": 1,
+      "message": "this should probably an assert since it should not be possible at al",
       "revId": "d143c73851a0a1111610961f636aef65c9d668d6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -163,6 +204,30 @@
     },
     {
       "key": {
+        "uuid": "fa6399be_5ae73540",
+        "filename": "svx/source/xoutdev/xtable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-08-13T12:18:07Z",
+      "side": 1,
+      "message": "given that none of the call sites use nullptr, I suggest making this an assert",
+      "parentUuid": "fa6399be_da56e505",
+      "range": {
+        "startLine": 194,
+        "startChar": 0,
+        "endLine": 195,
+        "endChar": 15
+      },
+      "revId": "d143c73851a0a1111610961f636aef65c9d668d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_fa5ba92c",
         "filename": "svx/source/xoutdev/xtable.cxx",
         "patchSetId": 3
@@ -180,6 +245,47 @@
         "endLine": 206,
         "endChar": 15
       },
+      "revId": "d143c73851a0a1111610961f636aef65c9d668d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_7ae4f93a",
+        "filename": "svx/source/xoutdev/xtable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-08-13T12:18:07Z",
+      "side": 1,
+      "message": "ditto here",
+      "parentUuid": "fa6399be_fa5ba92c",
+      "range": {
+        "startLine": 205,
+        "startChar": 0,
+        "endLine": 206,
+        "endChar": 15
+      },
+      "revId": "d143c73851a0a1111610961f636aef65c9d668d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_9acf0db3",
+        "filename": "svx/source/xoutdev/xtable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-08-13T12:18:07Z",
+      "side": 1,
+      "message": "should probably be an assert, indicates some kind of logic error",
       "revId": "d143c73851a0a1111610961f636aef65c9d668d6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
