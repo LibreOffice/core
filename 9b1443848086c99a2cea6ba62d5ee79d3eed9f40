@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa6399be_5af1f5cc",
+        "filename": "svx/source/dialog/spacing.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001174
+      },
+      "writtenOn": "2016-08-13T20:52:06Z",
+      "side": 1,
+      "message": "I can\u0027t think of any method which doesn\u0027t involve putting a slot in every sidebar having this listbox which updates the user\u0027s set measurement unit, and sending that update to this listbox.",
+      "parentUuid": "fa6399be_5a6c959c",
+      "range": {
+        "startLine": 8,
+        "startChar": 23,
+        "endLine": 8,
+        "endChar": 31
+      },
+      "revId": "9b1443848086c99a2cea6ba62d5ee79d3eed9f40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_7a69598b",
         "filename": "sw/uiconfig/swriter/ui/pagefooterpanel.ui",
         "patchSetId": 1
