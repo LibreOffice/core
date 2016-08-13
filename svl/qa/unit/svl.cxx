@@ -1183,6 +1183,17 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "2    ";
         checkPreviewString(aFormatter, sCode, 1.96, eLang, sExpected);
     }
+    {  // tdf#79399 tdf#101462 Native Number Formats
+        sCode = "[NatNum5][$-0404]General\\ ";
+        sExpected = OUString(sal_Unicode(22777)) +  // 壹
+                    OUString(sal_Unicode(20336)) +  // 佰
+                    OUString(sal_Unicode(36019)) +  // 貳
+                    OUString(sal_Unicode(25342)) +  // 拾
+                    OUString(sal_Unicode(' '));
+        checkPreviewString(aFormatter, sCode, 120, eLang, sExpected);
+        sCode = "[DBNum2][$-0404]General\\ ";
+        checkPreviewString(aFormatter, sCode, 120, eLang, sExpected);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
