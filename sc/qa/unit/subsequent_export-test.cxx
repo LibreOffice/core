@@ -172,6 +172,7 @@ public:
 
     void testTdf88657();
     void testEscapeCharInNumberFormatXLSX();
+    void testNatNumInNumberFormatXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -252,6 +253,7 @@ public:
 
     CPPUNIT_TEST(testTdf88657);
     CPPUNIT_TEST(testEscapeCharInNumberFormatXLSX);
+    CPPUNIT_TEST(testNatNumInNumberFormatXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3634,6 +3636,21 @@ void ScExportTest::testEscapeCharInNumberFormatXLSX()
     assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[5]", "formatCode", rFormatStrExpected );
     // remove escape char in fraction
     assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[6]", "formatCode", "# ?/?;[RED]\\-# #/#####");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testNatNumInNumberFormatXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf79398_NatNum5.", FORMAT_ODS);
+    CPPUNIT_ASSERT( xDocSh.Is() );
+    xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLSX);  // Convert [NatNum5] to [DBNum2] in Chinese
+    CPPUNIT_ASSERT( xDocSh.Is() );
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode", "[DBNum2][$-804]General");
 
     xDocSh->DoClose();
 }
