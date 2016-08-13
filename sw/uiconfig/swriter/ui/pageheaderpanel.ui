@@ -2,48 +2,6 @@
 <!-- Generated with glade 3.16.1 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
-  <object class="GtkListStore" id="spacinglist">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name gint1 -->
-      <column type="gint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">None</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Extra Small (0.16cm)</col>
-        <col id="1">91</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Small (0.32cm)</col>
-        <col id="1">181</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Small Medium (0.64cm)</col>
-        <col id="1">363</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Medium (0.95cm)</col>
-        <col id="1">539</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Medium Large (1.27cm)</col>
-        <col id="1">720</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Large (1.9cm)</col>
-        <col id="1">1077</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Extra Large (2.54cm)</col>
-        <col id="1">1440</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkGrid" id="PageHeaderPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -131,8 +89,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkComboBox" id="headermarginpreset">
-            <property name="width_request">150</property>
+          <object class="svxcorelo-SpacingListBox" id="headermarginpreset">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
@@ -144,8 +101,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkComboBox" id="spacingpreset">
-            <property name="width_request">150</property>
+          <object class="svxcorelo-SpacingListBox" id="spacingpreset">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
