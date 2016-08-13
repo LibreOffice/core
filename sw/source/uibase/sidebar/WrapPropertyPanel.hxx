@@ -26,6 +26,7 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <vcl/lstbox.hxx>
+#include <svx/spacinglistbox.hxx>
 
 namespace sw { namespace sidebar {
 
@@ -65,7 +66,7 @@ namespace sw { namespace sidebar {
         VclPtr<RadioButton> mpRBIdealWrap;
         VclPtr<Button>      mpEditContour;
         VclPtr<CheckBox> mpEnableContour;
-        VclPtr<ListBox>  mpSpacingLB;
+        VclPtr<SpacingListBox>  mpSpacingLB;
         VclPtr<FixedText> mpCustomEntry;
 
         //Spacing

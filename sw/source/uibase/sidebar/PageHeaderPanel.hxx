@@ -43,6 +43,7 @@
 #include <tools/fldunit.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
+#include <svx/spacinglistbox.hxx>
 
 namespace sw { namespace sidebar {
 
@@ -79,11 +80,11 @@ private:
     ::sfx2::sidebar::ControllerItem maHeaderSpacingController;
     ::sfx2::sidebar::ControllerItem maHeaderLayoutController;
 
-    VclPtr<CheckBox>    mpHeaderToggle;
-    VclPtr<ListBox>     mpHeaderSpacingLB;
-    VclPtr<ListBox>     mpHeaderLayoutLB;
-    VclPtr<ListBox>     mpHeaderMarginPresetLB;
-    VclPtr<FixedText>   mpCustomEntry;
+    VclPtr<CheckBox>           mpHeaderToggle;
+    VclPtr<SpacingListBox>     mpHeaderSpacingLB;
+    VclPtr<SpacingListBox>     mpHeaderMarginPresetLB;
+    VclPtr<ListBox>            mpHeaderLayoutLB;
+    VclPtr<FixedText>          mpCustomEntry;
     OUString aCustomEntry;
 
     void Initialize();
