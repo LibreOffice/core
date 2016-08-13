@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_faa9e9e0",
+        "filename": "cui/source/tabpages/tphatch.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-13T09:49:11Z",
+      "side": 0,
+      "message": "these casts are everywhere and were recently introduced.\nXProperList takes long for index and there is no need for cast here\nTODO follow up",
+      "range": {
+        "startLine": 610,
+        "startChar": 49,
+        "endLine": 610,
+        "endChar": 72
+      },
+      "revId": "5d7a9281270120a1f34dc0c11ecad2019362f0fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_7a3159ec",
+        "filename": "cui/source/tabpages/tphatch.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-13T09:49:11Z",
+      "side": 0,
+      "message": "this leaks,\nintroduced in commit 50ba4a079ec6dbf00277bcfbbf15dc2f10d8cdcf\nRedesign of Hatch tab\n\nnot in 5.2 brach\n\nhttps://gerrit.libreoffice.org/#/c/26869/",
+      "range": {
+        "startLine": 639,
+        "startChar": 0,
+        "endLine": 639,
+        "endChar": 69
+      },
+      "revId": "5d7a9281270120a1f34dc0c11ecad2019362f0fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_daa4250a",
+        "filename": "svx/source/xoutdev/xtable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-13T09:49:11Z",
+      "side": 0,
+      "message": "was not needed anyway",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 19
+      },
+      "revId": "5d7a9281270120a1f34dc0c11ecad2019362f0fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_9a4c6d78",
+        "filename": "include/svx/xtable.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-13T09:49:11Z",
+      "side": 1,
+      "message": "can\u0027t copy unique_ptr and msvc would create copy-ctor by default",
+      "range": {
+        "startLine": 193,
+        "startChar": 0,
+        "endLine": 194,
+        "endChar": 60
+      },
+      "revId": "d143c73851a0a1111610961f636aef65c9d668d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_ba9f71b3",
+        "filename": "include/svx/xtable.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-13T09:49:11Z",
+      "side": 1,
+      "message": "saw no reason why the arguments are switched here\nTODO for follow up",
+      "range": {
+        "startLine": 270,
+        "startChar": 4,
+        "endLine": 270,
+        "endChar": 67
+      },
+      "revId": "d143c73851a0a1111610961f636aef65c9d668d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_7a5f990e",
+        "filename": "svx/source/unodraw/XPropertyTable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-13T09:49:11Z",
+      "side": 1,
+      "message": "creates new XPropertyEntry, manage ownership from the start with unique_ptr",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 169
+      },
+      "revId": "d143c73851a0a1111610961f636aef65c9d668d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_da6d05ce",
+        "filename": "svx/source/unodraw/XPropertyTable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-13T09:49:11Z",
+      "side": 1,
+      "message": "not possible, get would return nullptr -\u003e pEntry\nremove later",
+      "range": {
+        "startLine": 140,
+        "startChar": 0,
+        "endLine": 140,
+        "endChar": 24
+      },
+      "revId": "d143c73851a0a1111610961f636aef65c9d668d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_ba513111",
+        "filename": "svx/source/xoutdev/xtable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-13T09:49:11Z",
+      "side": 1,
+      "message": "users seldom check for nullptr,\nmaybe assert or warning would be good.\nbut there might be valid use cases (when it\u0027s checked)",
+      "range": {
+        "startLine": 153,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 23
+      },
+      "revId": "d143c73851a0a1111610961f636aef65c9d668d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_1a413d3a",
+        "filename": "svx/source/xoutdev/xtable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-13T09:49:11Z",
+      "side": 1,
+      "message": "can\u0027t be nullptr, see Insert and Replace",
+      "range": {
+        "startLine": 156,
+        "startChar": 0,
+        "endLine": 156,
+        "endChar": 32
+      },
+      "revId": "d143c73851a0a1111610961f636aef65c9d668d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_da56e505",
+        "filename": "svx/source/xoutdev/xtable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-13T09:49:11Z",
+      "side": 1,
+      "message": "discard empty unique_ptr",
+      "range": {
+        "startLine": 194,
+        "startChar": 0,
+        "endLine": 195,
+        "endChar": 15
+      },
+      "revId": "d143c73851a0a1111610961f636aef65c9d668d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_fa5ba92c",
+        "filename": "svx/source/xoutdev/xtable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-13T09:49:11Z",
+      "side": 1,
+      "message": "discard empty unique_ptr",
+      "range": {
+        "startLine": 205,
+        "startChar": 0,
+        "endLine": 206,
+        "endChar": 15
+      },
+      "revId": "d143c73851a0a1111610961f636aef65c9d668d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
