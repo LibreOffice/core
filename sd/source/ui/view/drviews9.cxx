@@ -61,6 +61,7 @@
 #include <com/sun/star/gallery/GalleryItemType.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <memory>
+#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 
@@ -347,7 +348,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                     for ( i = 0; i < nCounts; i ++)
                     {
-                        XGradientEntry *pEntry = pGradientList->GetGradient (i);
+                        const XGradientEntry* pEntry = pGradientList->GetGradient(i);
 
                         if (pEntry->GetName () == pName->GetValue ())
                         {
@@ -376,7 +377,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                                                  ? aColor
                                                  : aBlack);
 
-                        GetDoc()->GetGradientList ()->Insert (new XGradientEntry (aGradient, pName->GetValue ()));
+                        GetDoc()->GetGradientList()->Insert(o3tl::make_unique<XGradientEntry>(aGradient, pName->GetValue()));
 
                         XFillStyleItem aStyleItem(drawing::FillStyle_GRADIENT);
                         aStyleItem.SetWhich(XATTR_FILLSTYLE);
@@ -418,7 +419,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                     for ( i = 0; i < nCounts; i ++)
                     {
-                        XHatchEntry *pEntry = pHatchList->GetHatch (i);
+                        const XHatchEntry* pEntry = pHatchList->GetHatch(i);
 
                         if (pEntry->GetName () == pName->GetValue ())
                         {
@@ -440,7 +441,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     {
                         XHatch aHatch (aColor);
 
-                        GetDoc()->GetHatchList ()->Insert (new XHatchEntry (aHatch, pName->GetValue ()));
+                        GetDoc()->GetHatchList()->Insert(o3tl::make_unique<XHatchEntry>(aHatch, pName->GetValue()));
 
                         XFillStyleItem aStyleItem(drawing::FillStyle_HATCH);
                         aStyleItem.SetWhich(XATTR_FILLSTYLE);
@@ -484,7 +485,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                         XDashListRef pDashList = GetDoc()->GetDashList();
                         long       nCounts    = pDashList->Count ();
-                        XDashEntry *pEntry    = new XDashEntry (aNewDash, pName->GetValue ());
+                        std::unique_ptr<XDashEntry> pEntry = o3tl::make_unique<XDashEntry>(aNewDash, pName->GetValue());
                         long i;
 
                         for ( i = 0; i < nCounts; i++ )
@@ -492,9 +493,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                                 break;
 
                         if (i < nCounts)
-                            pDashList->Replace (pEntry, i);
+                            pDashList->Replace(std::move(pEntry), i);
                         else
-                            pDashList->Insert (pEntry);
+                            pDashList->Insert(std::move(pEntry));
 
                         XLineDashItem aDashItem(pName->GetValue(), aNewDash);
                         aDashItem.SetWhich(XATTR_LINEDASH);
@@ -546,7 +547,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                         for ( i = 0; i < nCounts; i++ )
                         {
-                            XGradientEntry *pEntry = pGradientList->GetGradient (i);
+                            const XGradientEntry* pEntry = pGradientList->GetGradient(i);
 
                             if (pEntry->GetName () == pName->GetValue ())
                             {
@@ -578,7 +579,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                                                  (short) pCenterY->GetValue (), (short) pBorder->GetValue (),
                                                  (short) pStart->GetValue (), (short) pEnd->GetValue ());
 
-                            pGradientList->Insert (new XGradientEntry (aGradient, pName->GetValue ()));
+                            pGradientList->Insert(o3tl::make_unique<XGradientEntry>(aGradient, pName->GetValue()));
                             XFillStyleItem aStyleItem(drawing::FillStyle_GRADIENT);
                             aStyleItem.SetWhich(XATTR_FILLSTYLE);
                             pAttr->Put(aStyleItem);
@@ -624,7 +625,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                         for ( i = 0; i < nCounts; i++ )
                         {
-                            XHatchEntry *pEntry = pHatchList->GetHatch (i);
+                            const XHatchEntry* pEntry = pHatchList->GetHatch(i);
 
                             if (pEntry->GetName () == pName->GetValue ())
                             {
@@ -650,7 +651,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                             XHatch aHatch (aBlack, (css::drawing::HatchStyle) pStyle->GetValue (), pDistance->GetValue (),
                                            pAngle->GetValue () * 10);
 
-                            pHatchList->Insert (new XHatchEntry (aHatch, pName->GetValue ()));
+                            pHatchList->Insert(o3tl::make_unique<XHatchEntry>(aHatch, pName->GetValue()));
                             XFillStyleItem aStyleItem(drawing::FillStyle_HATCH);
                             aStyleItem.SetWhich(XATTR_FILLSTYLE);
                             pAttr->Put(aStyleItem);
@@ -685,7 +686,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                               i < nCounts;
                               i ++)
                     {
-                        XGradientEntry *pEntry = pGradientList->GetGradient (i);
+                        const XGradientEntry* pEntry = pGradientList->GetGradient(i);
 
                         if (pEntry->GetName () == pName->GetValue ())
                         {
@@ -725,7 +726,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                               i < nCounts;
                               i ++)
                     {
-                        XHatchEntry *pEntry = pHatchList->GetHatch (i);
+                        const XHatchEntry* pEntry = pHatchList->GetHatch(i);
 
                         if (pEntry->GetName () == pName->GetValue ())
                         {

@@ -45,6 +45,8 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/dialogs.hrc>
 
+#include <o3tl/make_unique.hxx>
+
 #define XOUT_WIDTH    150
 
 SvxLineEndDefTabPage::SvxLineEndDefTabPage
@@ -223,7 +225,7 @@ bool SvxLineEndDefTabPage::FillItemSet( SfxItemSet* rSet )
             CheckChanges_Impl();
 
             long nPos = m_pLbLineEnds->GetSelectEntryPos();
-            XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
+            const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nPos);
 
             rSet->Put( XLineStartItem( pEntry->GetName(), pEntry->GetLineEnd() ) );
             rSet->Put( XLineEndItem( pEntry->GetName(), pEntry->GetLineEnd() ) );
@@ -242,7 +244,7 @@ void SvxLineEndDefTabPage::Reset( const SfxItemSet* )
     {
         int nPos = m_pLbLineEnds->GetSelectEntryPos();
 
-        XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
+        const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nPos);
 
         m_pEdtName->SetText( m_pLbLineEnds->GetSelectEntry() );
 
@@ -283,7 +285,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, SelectLineEndHdl_Impl, ListBox&, voi
     {
         int nPos = m_pLbLineEnds->GetSelectEntryPos();
 
-        XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
+        const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nPos);
 
         m_pEdtName->SetText( m_pLbLineEnds->GetSelectEntry() );
 
@@ -360,17 +362,16 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickModifyHdl_Impl, Button*, void)
         // if not existing, enter the entry
         if( bDifferent )
         {
-            const XLineEndEntry* pOldEntry = pLineEndList->GetLineEnd( nPos );
+            const XLineEndEntry* pOldEntry = pLineEndList->GetLineEnd(nPos);
 
             if(pOldEntry)
             {
-                // #123497# Need to replace the existing entry with a new one (old returned needs to be deleted)
-                XLineEndEntry* pEntry = new XLineEndEntry(pOldEntry->GetLineEnd(), aName);
-                delete pLineEndList->Replace(pEntry, nPos);
+                // #123497# Need to replace the existing entry with a new one
+                pLineEndList->Replace(o3tl::make_unique<XLineEndEntry>(pOldEntry->GetLineEnd(), aName), nPos);
 
                 m_pEdtName->SetText( aName );
 
-                m_pLbLineEnds->Modify( *pEntry, nPos, pLineEndList->GetUiBitmap( nPos ) );
+                m_pLbLineEnds->Modify(*pLineEndList->GetLineEnd(nPos), nPos, pLineEndList->GetUiBitmap(nPos));
                 m_pLbLineEnds->SelectEntryPos( nPos );
 
                 // Flag fuer modifiziert setzen
@@ -422,8 +423,6 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickAddHdl_Impl, Button*, void)
 
         SdrObject::Free( pConvPolyObj );
 
-        XLineEndEntry* pEntry;
-
         ResMgr& rMgr = CUI_MGR();
         OUString aNewName( SVX_RES( RID_SVXSTR_LINEEND ) );
         OUString aDesc( ResId( RID_SVXSTR_DESC_LINEEND, rMgr ) );
@@ -463,13 +462,12 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickAddHdl_Impl, Button*, void)
             if( bDifferent )
             {
                 bLoop = false;
-                pEntry = new XLineEndEntry( aNewPolyPolygon, aName );
 
                 long nLineEndCount = pLineEndList->Count();
-                pLineEndList->Insert( pEntry, nLineEndCount );
+                pLineEndList->Insert(o3tl::make_unique<XLineEndEntry>(aNewPolyPolygon, aName), nLineEndCount);
 
                 // add to the ListBox
-                m_pLbLineEnds->Append( *pEntry, pLineEndList->GetUiBitmap( nLineEndCount ) );
+                m_pLbLineEnds->Append(*pLineEndList->GetLineEnd(nLineEndCount), pLineEndList->GetUiBitmap(nLineEndCount));
                 m_pLbLineEnds->SelectEntryPos( m_pLbLineEnds->GetEntryCount() - 1 );
 
                 *pnLineEndListState |= ChangeType::MODIFIED;
@@ -510,7 +508,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickDeleteHdl_Impl, Button*, void)
 
         if ( aQueryBox->Execute() == RET_YES )
         {
-            delete pLineEndList->Remove( nPos );
+            pLineEndList->Remove(nPos);
             m_pLbLineEnds->RemoveEntry( nPos );
             m_pLbLineEnds->SelectEntryPos( 0 );
 

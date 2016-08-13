@@ -97,7 +97,7 @@ bool DrawCommandDispatch::isFeatureSupported( const OUString& rCommandURL )
         long nCount = pLineEndList->Count();
         for ( long nIndex = 0; nIndex < nCount; ++nIndex )
         {
-            XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nIndex );
+            const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nIndex);
             if ( pEntry->GetName() == aName )
             {
                 aReturn = pEntry->GetLineEnd();

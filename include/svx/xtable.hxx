@@ -41,6 +41,7 @@
 #include <svx/XPropertyEntry.hxx>
 
 #include <limits>
+#include <memory>
 
 class Color;
 class Bitmap;
@@ -172,7 +173,7 @@ class SVX_DLLPUBLIC XPropertyList : public cppu::OWeakObject
  protected:
     SAL_DLLPRIVATE void operator delete(void *);
 protected:
-    typedef ::std::vector< XPropertyEntry* > XPropertyEntryList_impl;
+    typedef std::vector< std::unique_ptr<XPropertyEntry> > XPropertyEntryList_impl;
 
     XPropertyListType   meType;
     OUString            maName; // not persistent
@@ -185,18 +186,20 @@ protected:
     bool                mbEmbedInDocument;
 
     XPropertyList(XPropertyListType t, const OUString& rPath, const OUString& rReferer);
-
+    bool isValidIdx(long nIndex) const;
     virtual Bitmap CreateBitmapForUI(long nIndex) = 0;
 
 public:
+    XPropertyList(const XPropertyList&) = delete;
+    XPropertyList& operator=(const XPropertyList&) = delete;
     virtual ~XPropertyList();
 
     XPropertyListType Type() const { return meType; }
     long Count() const;
 
-    void Insert(XPropertyEntry* pEntry, long nIndex = ::std::numeric_limits<long>::max());
-    XPropertyEntry* Replace(XPropertyEntry* pEntry, long nIndex);
-    XPropertyEntry* Remove(long nIndex);
+    void Insert(std::unique_ptr<XPropertyEntry> pEntry, long nIndex = std::numeric_limits<long>::max());
+    void Replace(std::unique_ptr<XPropertyEntry> pEntry, long nIndex);
+    void Remove(long nIndex);
 
     XPropertyEntry* Get(long nIndex) const;
     long GetIndex(const OUString& rName) const;
@@ -264,11 +267,7 @@ public:
     XColorList(const OUString& rPath, const OUString& rReferer)
         : XPropertyList(XCOLOR_LIST, rPath, rReferer) {}
 
-    using XPropertyList::Replace;
-    using XPropertyList::Remove;
-
-    XColorEntry* Replace(long nIndex, XColorEntry* pEntry);
-    XColorEntry* Remove(long nIndex);
+    void Replace(long nIndex, std::unique_ptr<XColorEntry> pEntry);
     XColorEntry* GetColor(long nIndex) const;
     virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
@@ -286,8 +285,6 @@ public:
     XLineEndList(const OUString& rPath, const OUString& rReferer);
     virtual ~XLineEndList();
 
-    using XPropertyList::Remove;
-    XLineEndEntry* Remove(long nIndex);
     XLineEndEntry* GetLineEnd(long nIndex) const;
 
     virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
@@ -309,10 +306,7 @@ public:
     XDashList(const OUString& rPath, const OUString& rReferer);
     virtual ~XDashList();
 
-    using XPropertyList::Replace;
-    XDashEntry* Replace(XDashEntry* pEntry, long nIndex);
-    using XPropertyList::Remove;
-    XDashEntry* Remove(long nIndex);
+    void Replace(std::unique_ptr<XDashEntry> pEntry, long nIndex);
     XDashEntry* GetDash(long nIndex) const;
 
     virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
@@ -339,10 +333,7 @@ public:
     XHatchList(const OUString& rPath, const OUString& rReferer);
     virtual ~XHatchList();
 
-    using XPropertyList::Replace;
-    XHatchEntry* Replace(XHatchEntry* pEntry, long nIndex);
-    using XPropertyList::Remove;
-    XHatchEntry* Remove(long nIndex);
+    void Replace(std::unique_ptr<XHatchEntry> pEntry, long nIndex);
     XHatchEntry* GetHatch(long nIndex) const;
     Bitmap GetBitmapForPreview(long nIndex, const Size& rSize);
 
@@ -362,10 +353,7 @@ public:
     XGradientList(const OUString& rPath, const OUString& rReferer);
     virtual ~XGradientList();
 
-    using XPropertyList::Replace;
-    XGradientEntry* Replace(XGradientEntry* pEntry, long nIndex);
-    using XPropertyList::Remove;
-    XGradientEntry* Remove(long nIndex);
+    void Replace(std::unique_ptr<XGradientEntry> pEntry, long nIndex);
     XGradientEntry* GetGradient(long nIndex) const;
     Bitmap GetBitmapForPreview(long nIndex, const Size& rSize);
 
@@ -385,9 +373,6 @@ public:
     XBitmapList(const OUString& rPath, const OUString& rReferer)
         : XPropertyList(XBITMAP_LIST, rPath, rReferer) {}
 
-    using XPropertyList::Replace;
-    using XPropertyList::Remove;
-    XBitmapEntry* Remove(long nIndex);
     XBitmapEntry* GetBitmap(long nIndex) const;
     Bitmap GetBitmapForPreview(long nIndex, const Size& rSize);
 
@@ -407,9 +392,6 @@ public:
     XPatternList(const OUString& rPath, const OUString& rReferer)
         : XPropertyList(XPATTERN_LIST, rPath, rReferer) {}
 
-    using XPropertyList::Replace;
-    using XPropertyList::Remove;
-    XBitmapEntry* Remove(long nIndex);
     XBitmapEntry* GetBitmap(long nIndex) const;
     Bitmap GetBitmapForPreview(long nIndex, const Size& rSize);
 

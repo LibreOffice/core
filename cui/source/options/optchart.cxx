@@ -149,7 +149,7 @@ void SvxDefaultColorOptPage::FillColorBox()
 
     for( long i = 0; i < nCount; i++ )
     {
-        XColorEntry* pColorEntry = pColorList->GetColor( i );
+        const XColorEntry* pColorEntry = pColorList->GetColor(i);
         m_pValSetColorBox->InsertItem( i + 1, pColorEntry->GetColor(), pColorEntry->GetName() );
     }
 }
@@ -163,7 +163,7 @@ long SvxDefaultColorOptPage::GetColorIndex( const Color& rCol )
 
         for( long i = nCount - 1; i >= 0; i-- )         // default chart colors are at the end of the table
         {
-            XColorEntry* pColorEntry = pColorList->GetColor( i );
+            const XColorEntry* pColorEntry = pColorList->GetColor(i);
             if( pColorEntry && pColorEntry->GetColor() == rCol )
                 return pColorList->GetIndex( pColorEntry->GetName() );
         }

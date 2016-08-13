@@ -1973,7 +1973,7 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
     XColorListRef pColorLst = XColorList::GetStdColorList();
     for( long i = 0; i < pColorLst->Count(); ++i )
     {
-        XColorEntry* pEntry = pColorLst->GetColor( i );
+        const XColorEntry* pEntry = pColorLst->GetColor(i);
         Color aColor = pEntry->GetColor();
         const OUString sName = pEntry->GetName();
 

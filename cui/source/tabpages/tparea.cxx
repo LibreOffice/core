@@ -774,7 +774,7 @@ IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyGradientHdl_Impl, ListBox&, void)
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         // fill ItemSet and pass it on to aCtlXRectPreview
-        XGradientEntry* pEntry = m_pGradientList->GetGradient( _nPos );
+        const XGradientEntry* pEntry = m_pGradientList->GetGradient(_nPos);
 
         m_rXFSet.Put( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
         m_rXFSet.Put( XFillGradientItem( OUString(), pEntry->GetGradient() ) );
@@ -820,7 +820,7 @@ IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyHatchingHdl_Impl, ListBox&, void)
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         // fill ItemSet and pass it on to aCtlXRectPreview
-        XHatchEntry* pEntry = m_pHatchingList->GetHatch( _nPos );
+        const XHatchEntry* pEntry = m_pHatchingList->GetHatch(_nPos);
 
         m_rXFSet.Put( XFillStyleItem( drawing::FillStyle_HATCH ) );
         m_rXFSet.Put( XFillHatchItem( OUString(), pEntry->GetHatch() ) );

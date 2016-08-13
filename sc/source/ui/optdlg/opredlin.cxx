@@ -146,7 +146,7 @@ void ScRedlineOptionsTabPage::Reset( const SfxItemSet* /* rSet */ )
     XColorListRef xColorLst = XColorList::GetStdColorList();
     for( long i = 0; i < xColorLst->Count(); ++i )
     {
-        XColorEntry* pEntry = xColorLst->GetColor( i );
+        const XColorEntry* pEntry = xColorLst->GetColor(i);
         Color aColor = pEntry->GetColor();
         OUString sName = pEntry->GetName();
 

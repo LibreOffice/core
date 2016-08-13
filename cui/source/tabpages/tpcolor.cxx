@@ -271,7 +271,7 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
             if( *pPageType == PT_COLOR && *pPos != LISTBOX_ENTRY_NOTFOUND )
             {
                 m_pValSetColorList->SelectItem( m_pValSetColorList->GetItemId( static_cast<size_t>(*pPos) ) );
-                XColorEntry* pEntry = pColorList->GetColor( *pPos );
+                const XColorEntry* pEntry = pColorList->GetColor(*pPos);
                 aPreviousColor = pEntry->GetColor();
                 ChangeColor(pEntry->GetColor());
             }
