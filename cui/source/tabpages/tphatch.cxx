@@ -76,9 +76,8 @@ SvxHatchTabPage::SvxHatchTabPage
     get(m_pCbBackgroundColor, "backgroundcolor");
     get(m_pLbBackgroundColor, "backgroundcolorlb");
     get(m_pHatchLB , "hatchpresetlist");
-    Size aSize = getDrawListBoxOptimalSize(this);
     get(m_pCtlPreview, "previewctl");
-    aSize = getDrawPreviewOptimalSize(this);
+    Size aSize = getDrawPreviewOptimalSize(this);
     m_pCtlPreview->set_width_request(aSize.Width());
     m_pCtlPreview->set_height_request(aSize.Height());
     get(m_pBtnAdd, "add");
