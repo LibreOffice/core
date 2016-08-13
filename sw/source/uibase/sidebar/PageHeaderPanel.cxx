@@ -251,7 +251,6 @@ IMPL_LINK_NOARG_TYPED( PageHeaderPanel, HeaderSpacingHdl, ListBox&, void )
     mpHeaderSpacingItem->SetLower(nVal);
     GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_HEADER_SPACING,
                                                  SfxCallMode::RECORD, { mpHeaderSpacingItem.get() } );
-
 }
 IMPL_LINK_NOARG_TYPED( PageHeaderPanel, HeaderLayoutHdl, ListBox&, void )
 {
