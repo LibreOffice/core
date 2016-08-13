@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_5a6c959c",
+        "filename": "svx/source/dialog/spacing.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2016-08-13T16:48:58Z",
+      "side": 1,
+      "message": "would be better if these values were converted to the user\u0027s set measurement unit and there should be a space between the number and \u0027cm\u0027.",
+      "range": {
+        "startLine": 8,
+        "startChar": 23,
+        "endLine": 8,
+        "endChar": 31
+      },
+      "revId": "9b1443848086c99a2cea6ba62d5ee79d3eed9f40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_7a69598b",
+        "filename": "sw/uiconfig/swriter/ui/pagefooterpanel.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2016-08-13T16:48:58Z",
+      "side": 1,
+      "message": "anyway to make this also translated a single time.",
+      "range": {
+        "startLine": 87,
+        "startChar": 63,
+        "endLine": 87,
+        "endChar": 125
+      },
+      "revId": "9b1443848086c99a2cea6ba62d5ee79d3eed9f40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_9a046dc7",
+        "filename": "sw/uiconfig/swriter/ui/pagefooterpanel.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2016-08-13T16:48:58Z",
+      "side": 1,
+      "message": "only one of these needs to be used",
+      "range": {
+        "startLine": 88,
+        "startChar": 61,
+        "endLine": 88,
+        "endChar": 123
+      },
+      "revId": "9b1443848086c99a2cea6ba62d5ee79d3eed9f40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
