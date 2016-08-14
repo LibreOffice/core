@@ -179,7 +179,7 @@ OSaveAsDlg::OSaveAsDlg( vcl::Window * pParent,
     : ModalDialog(pParent, "SaveDialog", "dbaccess/ui/savedialog.ui")
     , m_xContext( _rxContext )
 {
-    m_pImpl = new OSaveAsDlgImpl(this,_rType,_xConnection,rDefault,_rObjectNameCheck,_nFlags);
+    m_pImpl.reset( new OSaveAsDlgImpl(this,_rType,_xConnection,rDefault,_rObjectNameCheck,_nFlags) );
 
     switch (_rType) {
     case CommandType::QUERY:
@@ -261,7 +261,7 @@ OSaveAsDlg::OSaveAsDlg( vcl::Window * pParent,
     : ModalDialog(pParent, "SaveDialog", "dbaccess/ui/savedialog.ui")
     , m_xContext( _rxContext )
 {
-    m_pImpl = new OSaveAsDlgImpl(this,rDefault,_rObjectNameCheck,_nFlags);
+    m_pImpl.reset( new OSaveAsDlgImpl(this,rDefault,_rObjectNameCheck,_nFlags) );
     implInitOnlyTitle(_sLabel);
     implInit();
 }
@@ -273,7 +273,7 @@ OSaveAsDlg::~OSaveAsDlg()
 
 void OSaveAsDlg::dispose()
 {
-    DELETEZ(m_pImpl);
+    m_pImpl.reset();
     ModalDialog::dispose();
 }
 

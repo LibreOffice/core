@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <vcl/msgbox.hxx>
+#include <memory>
 
 namespace com { namespace sun { namespace star {
     namespace sdbc {
@@ -49,7 +50,7 @@ namespace dbaui
     class OSaveAsDlg : public ModalDialog
     {
     private:
-        OSaveAsDlgImpl* m_pImpl;
+        std::unique_ptr<OSaveAsDlgImpl> m_pImpl;
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;
     public:
         OSaveAsDlg( vcl::Window * pParent, sal_Int32 _rType,
