@@ -21,17 +21,20 @@
 
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
-
+#include <com/sun/star/style/NumberingType.hpp>
 
 enum SvxNumType
 {
-    SVX_CHARS_UPPER_LETTER,
-    SVX_CHARS_LOWER_LETTER,
-    SVX_ROMAN_UPPER,
-    SVX_ROMAN_LOWER,
-    SVX_ARABIC,
-    SVX_NUMBER_NONE,
-    SVX_PAGEDESC,
+    SVX_CHARS_UPPER_LETTER = css::style::NumberingType::CHARS_UPPER_LETTER,
+    SVX_CHARS_LOWER_LETTER = css::style::NumberingType::CHARS_LOWER_LETTER,
+    SVX_ROMAN_UPPER = css::style::NumberingType::ROMAN_UPPER,
+    SVX_ROMAN_LOWER = css::style::NumberingType::ROMAN_LOWER,
+    SVX_ARABIC = css::style::NumberingType::ARABIC,
+    SVX_NUMBER_NONE = css::style::NumberingType::NUMBER_NONE,
+    SVX_CHAR_SPECIAL = css::style::NumberingType::CHAR_SPECIAL,
+    SVX_PAGEDESC = css::style::NumberingType::PAGE_DESCRIPTOR,
+    SVX_BITMAP = css::style::NumberingType::BITMAP,
+    SVX_CHARS_UPPER_LETTER_N = css::style::NumberingType::CHARS_UPPER_LETTER_N
 };
 
 /*--------------------------------------------------------------------
