@@ -2168,7 +2168,7 @@ uno::Any Content::open(
                                     ucb::IOErrorCode_NOT_EXISTING,
                                     aArgs ) ),
                             xEnv );
-                // Unreachable
+                        // Unreachable
                     }
                 }
                 catch ( DAVException const & e )
@@ -2746,13 +2746,13 @@ void Content::transfer(
             // destination resource.  If the Overwrite header is set to
             // "F" then the operation will fail.
 
+            aStaticDAVOptionsCache.removeDAVOptions( sourceURI.GetURI() );
+            aStaticDAVOptionsCache.removeDAVOptions( targetURI.GetURI() );
             aSourceAccess.MOVE( sourceURI.GetPath(),
                                 targetURI.GetURI(),
                                 rArgs.NameClash
                                     == ucb::NameClash::OVERWRITE,
                                 Environment );
-            aStaticDAVOptionsCache.removeDAVOptions( sourceURI.GetURI() );
-            aStaticDAVOptionsCache.removeDAVOptions( targetURI.GetURI() );
 
             if ( xSource.is() )
             {
@@ -2775,13 +2775,13 @@ void Content::transfer(
             // destination resource.  If the Overwrite header is set to
             // "F" then the operation will fail.
 
+            aStaticDAVOptionsCache.removeDAVOptions( sourceURI.GetURI() );
+            aStaticDAVOptionsCache.removeDAVOptions( targetURI.GetURI() );
             aSourceAccess.COPY( sourceURI.GetPath(),
                                 targetURI.GetURI(),
                                 rArgs.NameClash
                                     == ucb::NameClash::OVERWRITE,
                                 Environment );
-            aStaticDAVOptionsCache.removeDAVOptions( sourceURI.GetURI() );
-            aStaticDAVOptionsCache.removeDAVOptions( targetURI.GetURI() );
 
 // DAV resources store all additional props on server!
 //              // Copy own and all children's Additional Core Properties.
@@ -2801,14 +2801,10 @@ void Content::transfer(
     }
     catch ( ucb::IllegalIdentifierException const & )
     {
-        aStaticDAVOptionsCache.removeDAVOptions( sourceURI.GetURI() );
-        aStaticDAVOptionsCache.removeDAVOptions( targetURI.GetURI() );
         // queryContent
     }
     catch ( DAVException const & e )
     {
-        aStaticDAVOptionsCache.removeDAVOptions( sourceURI.GetURI() );
-        aStaticDAVOptionsCache.removeDAVOptions( targetURI.GetURI() );
         // [RFC 2518] - WebDAV
         // 412 (Precondition Failed) - The server was unable to maintain
         // the liveness of the properties listed in the propertybehavior
