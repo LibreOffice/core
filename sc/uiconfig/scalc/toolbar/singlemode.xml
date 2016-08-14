@@ -18,7 +18,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:AddDirect"/>
+ <toolbar:toolbaritem xlink:href=".uno:AddDirect" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:OpenFromCalc"/>
  <toolbar:toolbaritem xlink:href=".uno:Save"/>
  <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF" toolbar:visible="false"/>
@@ -41,6 +41,7 @@
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatDecDecimals"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:StyleApply" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:CharFontName"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontHeight"/>
@@ -61,13 +62,13 @@
  <toolbar:toolbaritem xlink:href=".uno:AlignHorizontalCenter"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignRight"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignBlock" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:WrapText"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleMergeCells"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AlignTop"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignVCenter"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignBottom"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleMergeCells" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:IncrementIndent" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:DecrementIndent" toolbar:visible="false"/>
