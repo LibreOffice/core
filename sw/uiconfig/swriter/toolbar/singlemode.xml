@@ -18,7 +18,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:AddDirect" toolbar:helpid="5537"/>
+ <toolbar:toolbaritem xlink:href=".uno:AddDirect" toolbar:helpid="5537" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:OpenFromWriter"/>
  <toolbar:toolbaritem xlink:href=".uno:Save" toolbar:helpid="5505"/>
  <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF" toolbar:visible="false" toolbar:helpid="6674"/>
@@ -31,6 +31,7 @@
  <toolbar:toolbaritem xlink:href=".uno:SearchDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:FormatPaintbrush" toolbar:helpid="5715"/>
  <toolbar:toolbaritem xlink:href=".uno:SpellingAndGrammarDialog" toolbar:visible="false" toolbar:helpid="20622"/>
+ <toolbar:toolbaritem xlink:href=".uno:Zoom" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Bold"/>
  <toolbar:toolbaritem xlink:href=".uno:Italic"/>
@@ -38,6 +39,11 @@
  <toolbar:toolbaritem xlink:href=".uno:Strikeout" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:FontColor"/>
  <toolbar:toolbaritem xlink:href=".uno:BackColor" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:SuperScript" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SubScript" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ResetAttributes" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
  <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>
@@ -51,6 +57,8 @@
  <toolbar:toolbaritem xlink:href=".uno:CharFontName"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontHeight"/>
+ <toolbar:toolbaritem xlink:href=".uno:Grow" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Shrink" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LineSpacing"/>
  <toolbar:toolbarseparator/>
@@ -63,8 +71,8 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic" toolbar:helpid="10241"/>
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:helpid="5678"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation" toolbar:helpid="20329"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:TrackChanges"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ControlCodes"/>
  <toolbar:toolbaritem xlink:href=".uno:Zoom" toolbar:visible="false"/>
 </toolbar:toolbar>
