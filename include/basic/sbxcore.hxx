@@ -38,14 +38,13 @@ class SvStream;
     virtual sal_uInt16 GetVersion() const override { return nVer;   }    \
     virtual sal_uInt16 GetSbxId() const override   { return nSbxId; }
 
-class SbxBase;
 class SbxFactory;
 class SbxObject;
 
 class BASIC_DLLPUBLIC SbxBase : virtual public SvRefBase
 {
-    virtual bool LoadData( SvStream&, sal_uInt16 );
-    virtual bool StoreData( SvStream& ) const;
+    virtual bool LoadData( SvStream&, sal_uInt16 ) = 0;
+    virtual bool StoreData( SvStream& ) const = 0;
 protected:
     SbxFlagBits nFlags;          // Flag-Bits
 
@@ -54,9 +53,9 @@ protected:
     SbxBase& operator=( const SbxBase& );
     virtual ~SbxBase();
 
-    virtual sal_uInt32 GetCreator() const { return 0;   }
-    virtual sal_uInt16 GetVersion() const { return 0;   }
-    virtual sal_uInt16 GetSbxId() const   { return 0; }
+    virtual sal_uInt32 GetCreator() const = 0 ;
+    virtual sal_uInt16 GetVersion() const = 0;
+    virtual sal_uInt16 GetSbxId() const = 0;
 
 public:
     inline void         SetFlags( SbxFlagBits n );
@@ -77,7 +76,7 @@ public:
     virtual SbxDataType GetType()  const;
     virtual SbxClassType GetClass() const;
 
-    virtual void    Clear();
+    virtual void    Clear() = 0;
 
     static SbxBase* Load( SvStream& );
     bool            Store( SvStream& );
