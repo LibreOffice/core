@@ -970,7 +970,6 @@ void ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
     m_bNeedsRecalc = true;
 }
 
-
 void ExtensionBox_Impl::updateEntry( const uno::Reference< deployment::XPackage > &xPackage )
 {
     typedef std::vector< TEntry_Impl >::iterator ITER;
@@ -999,7 +998,6 @@ void ExtensionBox_Impl::updateEntry( const uno::Reference< deployment::XPackage 
         }
     }
 }
-
 
 //This function is also called as a result of removing an extension.
 //see PackageManagerImpl::removePackage

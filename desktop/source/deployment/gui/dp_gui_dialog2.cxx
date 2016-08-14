@@ -746,15 +746,11 @@ void ExtMgrDialog::setGetExtensionsURL( const OUString &rURL )
     m_pGetExtensions->SetURL( rURL );
 }
 
-
 void ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
                                      bool bLicenseMissing )
 {
-
     const SolarMutexGuard aGuard;
     m_pUpdateBtn->Enable();
-
-    m_pExtensionBox->removeEntry(xPackage);
 
     if (m_pBundledCbx->IsChecked() && (xPackage->getRepositoryName() == BUNDLED_PACKAGE_MANAGER) )
     {
@@ -768,12 +764,7 @@ void ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage 
     {
         m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
     }
-    else
-    {
-    //OSL_FAIL("Package will not be displayed");
-    }
 }
-
 
 void ExtMgrDialog::prepareChecking()
 {
@@ -1055,11 +1046,12 @@ IMPL_LINK_NOARG_TYPED(ExtMgrDialog, HandleAddBtn, Button*, void)
     setBusy( false );
 }
 
-
 IMPL_LINK_NOARG_TYPED(ExtMgrDialog, HandleExtTypeCbx, Button*, void)
 {
     // re-creates the list of packages with addEntry selecting the packages
+    prepareChecking();
     m_pManager->createPackageList();
+    checkEntries();
 }
 
 IMPL_LINK_NOARG_TYPED(ExtMgrDialog, HandleUpdateBtn, Button*, void)
