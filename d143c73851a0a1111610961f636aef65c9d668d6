@@ -95,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "fa6399be_1a54dd52",
+        "filename": "svx/source/unodraw/XPropertyTable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-14T19:23:20Z",
+      "side": 1,
+      "message": "yes, createEntry is much better.",
+      "parentUuid": "fa6399be_9ae8ed18",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 169
+      },
+      "revId": "d143c73851a0a1111610961f636aef65c9d668d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_da6d05ce",
         "filename": "svx/source/unodraw/XPropertyTable.cxx",
         "patchSetId": 3
@@ -129,6 +153,24 @@
       "writtenOn": "2016-08-13T12:18:07Z",
       "side": 1,
       "message": "this should probably an assert since it should not be possible at al",
+      "revId": "d143c73851a0a1111610961f636aef65c9d668d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_5af2d59b",
+        "filename": "svx/source/unodraw/XPropertyTable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-14T19:23:20Z",
+      "side": 1,
+      "message": "unique_ptr has an overload for bool operator (false for empty unique_ptr)\nin case aElement \u003e\u003e\u003d conversion fails getEntry returns an empty unique_ptr",
+      "parentUuid": "fa6399be_faf729f3",
       "revId": "d143c73851a0a1111610961f636aef65c9d668d6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -216,6 +258,30 @@
       "side": 1,
       "message": "given that none of the call sites use nullptr, I suggest making this an assert",
       "parentUuid": "fa6399be_da56e505",
+      "range": {
+        "startLine": 194,
+        "startChar": 0,
+        "endLine": 195,
+        "endChar": 15
+      },
+      "revId": "d143c73851a0a1111610961f636aef65c9d668d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_3a51a163",
+        "filename": "svx/source/xoutdev/xtable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-14T19:23:20Z",
+      "side": 1,
+      "message": "insert an assert, but kept return for release builds\nor is an assert sufficient?\nsame for the 2 other cases",
+      "parentUuid": "fa6399be_5ae73540",
       "range": {
         "startLine": 194,
         "startChar": 0,
