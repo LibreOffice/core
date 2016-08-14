@@ -1402,7 +1402,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
 
         for ( long i = 0; i < pColorTable->Count(); i++ )
         {
-            XColorEntry* pEntry = pColorTable->GetColor(i);
+            const XColorEntry* pEntry = pColorTable->GetColor(i);
             m_pBulColLB->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
     }

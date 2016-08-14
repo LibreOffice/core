@@ -41,6 +41,8 @@
 #include <vcl/layout.hxx>
 #include <svx/svxdlg.hxx>
 
+#include <o3tl/make_unique.hxx>
+
 using namespace com::sun::star;
 
 SvxBitmapTabPage::SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs ) :
@@ -143,7 +145,7 @@ bool SvxBitmapTabPage::FillItemSet( SfxItemSet* rAttrs )
             size_t nPos = m_pBitmapLB->GetSelectItemPos();
             if(VALUESET_ITEM_NOTFOUND != nPos)
             {
-                const XBitmapEntry* pXBitmapEntry = m_pBitmapList->GetBitmap( static_cast<sal_uInt16>(nPos) );
+                const XBitmapEntry* pXBitmapEntry = m_pBitmapList->GetBitmap(nPos);
                 const OUString aString(m_pBitmapLB->GetItemText( m_pBitmapLB->GetSelectItemId() ));
                 rAttrs->Put(XFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject()));
                 bModified = true;
@@ -252,8 +254,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
             if(bValidBitmapName)
             {
                 bLoop = false;
-                XBitmapEntry* pEntry = m_pBitmapList->GetBitmap( static_cast<sal_uInt16>(nPos) );
-                pEntry->SetName( aName );
+                m_pBitmapList->GetBitmap(nPos)->SetName(aName);
 
                 m_pBitmapLB->SetItemText(nId, aName);
                 m_pBitmapLB->SelectItem( nId );
@@ -354,8 +355,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickImportHdl, Button*, void)
 
             if( !nError )
             {
-                XBitmapEntry* pEntry = new XBitmapEntry( aGraphic, aName );
-                m_pBitmapList->Insert( pEntry, nCount );
+                m_pBitmapList->Insert(o3tl::make_unique<XBitmapEntry>(aGraphic, aName), nCount);
 
                 sal_Int32 nId = m_pBitmapLB->GetItemId( nCount - 1 );
                 Bitmap aBitmap = m_pBitmapList->GetBitmapForPreview( nCount, m_pBitmapLB->GetIconSize() );

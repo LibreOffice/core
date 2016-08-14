@@ -1129,7 +1129,7 @@ void ColorLB::Fill( const XColorListRef &pColorTab )
 
     for( long i = 0; i < nCount; i++ )
     {
-        XColorEntry* pEntry = pColorTab->GetColor( i );
+        const XColorEntry* pEntry = pColorTab->GetColor(i);
         InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
 
@@ -1181,7 +1181,7 @@ void HatchingLB::Fill( const XHatchListRef &pList )
 
     for( long i = 0; i < nCount; i++ )
     {
-        XHatchEntry* pEntry = pList->GetHatch( i );
+        const XHatchEntry* pEntry = pList->GetHatch(i);
         const Bitmap aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
             InsertEntry(pEntry->GetName(), Image(aBitmap));
@@ -1230,7 +1230,7 @@ void FillAttrLB::Fill( const XHatchListRef &pList )
 
     for( long i = 0; i < nCount; i++ )
     {
-        XHatchEntry* pEntry = pList->GetHatch( i );
+        const XHatchEntry* pEntry = pList->GetHatch(i);
         const Bitmap aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
             ListBox::InsertEntry(pEntry->GetName(), Image(aBitmap));
@@ -1274,7 +1274,7 @@ void GradientLB::Fill( const XGradientListRef &pList )
 
     for( long i = 0; i < nCount; i++ )
     {
-        XGradientEntry* pEntry = pList->GetGradient( i );
+        const XGradientEntry* pEntry = pList->GetGradient(i);
         const Bitmap aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
             InsertEntry(pEntry->GetName(), Image(aBitmap));
@@ -1318,7 +1318,7 @@ void GradientLB::SelectEntryByList( const XGradientListRef &pList, const OUStrin
                                     const XGradient& rGradient )
 {
     long nCount = pList.get() ? pList->Count() : 0;
-    XGradientEntry* pEntry;
+    const XGradientEntry* pEntry;
     bool bFound = false;
     OUString aStr;
 
@@ -1345,7 +1345,7 @@ void FillAttrLB::Fill( const XGradientListRef &pList )
 
     for( long i = 0; i < nCount; i++ )
     {
-        XGradientEntry* pEntry = pList->GetGradient( i );
+        const XGradientEntry* pEntry = pList->GetGradient(i);
         const Bitmap aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
             ListBox::InsertEntry(pEntry->GetName(), Image(aBitmap));
@@ -1438,7 +1438,7 @@ void BitmapLB::Fill( const XBitmapListRef &pList )
         return;
 
     mpList = pList;
-    XBitmapEntry* pEntry;
+    const XBitmapEntry* pEntry;
     const long nCount(pList->Count());
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Size aSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
@@ -1498,7 +1498,7 @@ FillAttrLB::FillAttrLB(vcl::Window* pParent, WinBits aWB)
 void FillAttrLB::Fill( const XBitmapListRef &pList )
 {
     const long nCount(pList->Count());
-    XBitmapEntry* pEntry;
+    const XBitmapEntry* pEntry;
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Size aSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
 
@@ -1519,7 +1519,7 @@ void FillAttrLB::Fill( const XBitmapListRef &pList )
 void FillAttrLB::Fill( const XPatternListRef &pList )
 {
     const long nCount(pList->Count());
-    XBitmapEntry* pEntry;
+    const XBitmapEntry* pEntry;
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Size aSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
 
@@ -1607,7 +1607,7 @@ void LineLB::Fill( const XDashListRef &pList )
 
     for( long i = 0; i < nCount; i++ )
     {
-        XDashEntry* pEntry = pList->GetDash( i );
+        const XDashEntry* pEntry = pList->GetDash(i);
         const Bitmap aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
         {
@@ -1682,7 +1682,7 @@ void LineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
 
     for( long i = 0; i < nCount; i++ )
     {
-        XLineEndEntry* pEntry = pList->GetLineEnd( i );
+        const XLineEndEntry* pEntry = pList->GetLineEnd(i);
         const Bitmap aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
         {

@@ -35,6 +35,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/unoapi.hxx>
 #include <memory>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -316,13 +317,13 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndWindow, SelectHdl, ValueSet*, void)
     }
     else if( nId % 2 ) // beginning of line
     {
-        XLineEndEntry* pEntry = pLineEndList->GetLineEnd( ( nId - 1 ) / 2 - 1 );
-        pLineStartItem.reset(new XLineStartItem( pEntry->GetName(), pEntry->GetLineEnd() ));
+        const XLineEndEntry* pEntry = pLineEndList->GetLineEnd( (nId - 1) / 2 - 1 );
+        pLineStartItem.reset(new XLineStartItem(pEntry->GetName(), pEntry->GetLineEnd()));
     }
     else // end of line
     {
-        XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nId / 2 - 2 );
-        pLineEndItem.reset(new XLineEndItem( pEntry->GetName(), pEntry->GetLineEnd() ));
+        const XLineEndEntry* pEntry = pLineEndList->GetLineEnd( (nId - 1) / 2 );
+        pLineEndItem.reset(new XLineEndItem(pEntry->GetName(), pEntry->GetLineEnd()));
     }
 
     if ( IsInPopupMode() )
@@ -359,7 +360,6 @@ void SvxLineEndWindow::FillValueSet()
 {
     if( pLineEndList.is() )
     {
-        XLineEndEntry*      pEntry  = nullptr;
         ScopedVclPtrInstance< VirtualDevice > pVD;
 
         long nCount = pLineEndList->Count();
@@ -367,8 +367,8 @@ void SvxLineEndWindow::FillValueSet()
         // First entry: no line end.
         // An entry is temporarly added to get the UI bitmap
         basegfx::B2DPolyPolygon aNothing;
-        pLineEndList->Insert( new XLineEndEntry( aNothing, SVX_RESSTR( RID_SVXSTR_NONE ) ) );
-        pEntry = pLineEndList->GetLineEnd( nCount );
+        pLineEndList->Insert(o3tl::make_unique<XLineEndEntry>(aNothing, SVX_RESSTR(RID_SVXSTR_NONE)));
+        const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nCount);
         Bitmap aBmp = pLineEndList->GetUiBitmap( nCount );
         OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );
 
@@ -382,7 +382,7 @@ void SvxLineEndWindow::FillValueSet()
         aLineEndSet->InsertItem(1, Image(pVD->GetBitmap(aPt0, aBmpSize)), pEntry->GetName());
         aLineEndSet->InsertItem(2, Image(pVD->GetBitmap(aPt1, aBmpSize)), pEntry->GetName());
 
-        delete pLineEndList->Remove( nCount );
+        pLineEndList->Remove(nCount);
 
         for( long i = 0; i < nCount; i++ )
         {

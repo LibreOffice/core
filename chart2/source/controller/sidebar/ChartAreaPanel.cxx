@@ -107,7 +107,7 @@ XGradient getXGradientForName(const css::uno::Reference<css::frame::XModel>& xMo
         size_t n = aRef->Count();
         for (size_t i = 0; i < n; ++i)
         {
-            XGradientEntry* pGradient = aRef->GetGradient(i);
+            const XGradientEntry* pGradient = aRef->GetGradient(i);
             if (!pGradient)
                 continue;
 
@@ -155,7 +155,7 @@ XHatch getXHatchFromName(const css::uno::Reference<css::frame::XModel>& xModel,
         size_t n = aRef->Count();
         for (size_t i = 0; i < n; ++i)
         {
-            XHatchEntry* pHatch = aRef->GetHatch(i);
+            const XHatchEntry* pHatch = aRef->GetHatch(i);
             if (!pHatch)
                 continue;
 
@@ -185,7 +185,7 @@ GraphicObject getXBitmapFromName(const css::uno::Reference<css::frame::XModel>& 
         size_t n = aRef->Count();
         for (size_t i = 0; i < n; ++i)
         {
-            XBitmapEntry* pBitmap = aRef->GetBitmap(i);
+            const XBitmapEntry* pBitmap = aRef->GetBitmap(i);
             if (!pBitmap)
                 continue;
 

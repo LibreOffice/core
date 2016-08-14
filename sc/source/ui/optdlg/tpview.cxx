@@ -328,7 +328,7 @@ void ScTpContentOptions::InitGridOpt()
         long nCount = pColorList->Count();
         for ( long n=0; n<nCount; n++ )
         {
-            XColorEntry* pEntry = pColorList->GetColor(n);
+            const XColorEntry* pEntry = pColorList->GetColor(n);
             pColorLB->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
 

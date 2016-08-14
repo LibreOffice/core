@@ -47,6 +47,8 @@
 #include "sfx2/opengrf.hxx"
 #include "paragrph.hrc"
 
+#include <o3tl/make_unique.hxx>
+
 using namespace com::sun::star;
 
 /*************************************************************************
@@ -523,12 +525,12 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickAddHdl_Impl, Button*, void)
 
     if( !nError )
     {
-        XBitmapEntry* pEntry = nullptr;
+        std::unique_ptr<XBitmapEntry> pEntry;
         if( m_pCtlPixel->IsEnabled() )
         {
             const BitmapEx aBitmapEx(m_pBitmapCtl->GetBitmapEx());
 
-            pEntry = new XBitmapEntry(Graphic(aBitmapEx), aName);
+            pEntry.reset(new XBitmapEntry(Graphic(aBitmapEx), aName));
         }
         else // it must be a not existing imported bitmap
         {
@@ -536,15 +538,15 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickAddHdl_Impl, Button*, void)
 
             if(SfxItemState::SET == m_rOutAttrs.GetItemState(XATTR_FILLBITMAP, true, &pPoolItem))
             {
-                pEntry = new XBitmapEntry(dynamic_cast< const XFillBitmapItem* >(pPoolItem)->GetGraphicObject(), aName);
+                pEntry.reset(new XBitmapEntry(dynamic_cast<const XFillBitmapItem*>(pPoolItem)->GetGraphicObject(), aName));
             }
+            else
+                assert("SvxPatternTabPage::ClickAddHdl_Impl(), XBitmapEntry* pEntry == nullptr ?");
         }
-
-        assert( pEntry && "SvxPatternTabPage::ClickAddHdl_Impl(), pEntry == 0 ?" );
 
         if( pEntry )
         {
-            m_pPatternList->Insert( pEntry, nCount );
+            m_pPatternList->Insert(std::move(pEntry), nCount);
             sal_Int32 nId = m_pPatternLB->GetItemId( nCount - 1 );
             Bitmap aBitmap = m_pPatternList->GetBitmapForPreview( nCount, m_pPatternLB->GetIconSize() );
             m_pPatternLB->InsertItem( nId + 1, Image(aBitmap), aName );
@@ -581,8 +583,7 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickModifyHdl_Impl, Button*, void)
         const BitmapEx aBitmapEx(m_pBitmapCtl->GetBitmapEx());
 
         // #i123497# Need to replace the existing entry with a new one (old returned needs to be deleted)
-        XBitmapEntry* pEntry = new XBitmapEntry(Graphic(aBitmapEx), aName);
-        delete m_pPatternList->Replace(pEntry, nPos);
+        m_pPatternList->Replace(o3tl::make_unique<XBitmapEntry>(Graphic(aBitmapEx), aName), nPos);
 
         Bitmap aBitmap = m_pPatternList->GetBitmapForPreview( static_cast<sal_uInt16>( nPos ), m_pPatternLB->GetIconSize() );
         m_pPatternLB->RemoveItem(nId);
@@ -632,8 +633,7 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickRenameHdl_Impl, SvxPresetListBox*,
             {
                 bLoop = false;
 
-                XBitmapEntry* pEntry = m_pPatternList->GetBitmap( static_cast<sal_uInt16>(nPos) );
-                pEntry->SetName( aName );
+                m_pPatternList->GetBitmap(nPos)->SetName(aName);
 
                 m_pPatternLB->SetItemText( nId, aName );
                 m_pPatternLB->SelectItem( nId );
@@ -666,7 +666,7 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*,
 
         if( aQueryBox->Execute() == RET_YES )
         {
-            delete m_pPatternList->Remove( static_cast<sal_uInt16>(nPos) );
+            m_pPatternList->Remove(nPos);
             m_pPatternLB->RemoveItem( nId );
             nId = m_pPatternLB->GetItemId(0);
             m_pPatternLB->SelectItem( nId );

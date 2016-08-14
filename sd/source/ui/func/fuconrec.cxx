@@ -511,7 +511,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         long nIndex;
         for( nIndex = 0L; nIndex < nCount; nIndex++ )
         {
-            XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nIndex);
+            const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nIndex);
             if( pEntry->GetName() == aArrowName )
             {
                 aRetval = pEntry->GetLineEnd();
