@@ -45,6 +45,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/headfootformatpage \
 	svx/uiconfig/ui/imapdialog \
 	svx/uiconfig/ui/linkwarndialog \
+	svx/uiconfig/ui/mediaplayback \
 	svx/uiconfig/ui/namespacedialog \
 	svx/uiconfig/ui/optgridpage \
 	svx/uiconfig/ui/paralinespacingcontrol \
