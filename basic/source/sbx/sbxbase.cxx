@@ -78,10 +78,6 @@ SbxClassType SbxBase::GetClass() const
     return SbxClassType::DontCare;
 }
 
-void SbxBase::Clear()
-{
-}
-
 bool SbxBase::IsFixed() const
 {
     return IsSet( SbxFlagBits::Fixed );
@@ -266,16 +262,6 @@ bool SbxBase::Store( SvStream& rStrm )
     }
     else
         return true;
-}
-
-bool SbxBase::LoadData( SvStream&, sal_uInt16 )
-{
-    return false;
-}
-
-bool SbxBase::StoreData( SvStream& ) const
-{
-    return false;
 }
 
 bool SbxBase::LoadCompleted()
