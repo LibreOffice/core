@@ -147,7 +147,6 @@ OOdbcEnumeration::OOdbcEnumeration()
 OOdbcEnumeration::~OOdbcEnumeration()
 {
     freeEnv();
-    delete m_pImpl;
     unload();
 }
 

@@ -53,7 +53,7 @@ class OOdbcEnumeration
     oslGenericFunction  m_pDataSources;
 
 #endif
-    OdbcTypesImpl*  m_pImpl;
+    std::unique_ptr<OdbcTypesImpl>  m_pImpl;
         // needed because we can't have a member of type SQLHANDLE: this would require us to include the respective
         // ODBC file, which would lead to a lot of conflicts with other includes
 
