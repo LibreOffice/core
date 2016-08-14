@@ -47,7 +47,7 @@ public:
 
     virtual DeviceCoordinate GetTextWidth() const override;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const override;
-    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra = 0, int nFactor = 1) const override;
+    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const override;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const override;
 
