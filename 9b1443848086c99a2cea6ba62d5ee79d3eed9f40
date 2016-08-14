@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "fa6399be_1af85d7c",
+        "filename": "svx/source/dialog/spacing.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2016-08-14T12:44:44Z",
+      "side": 1,
+      "message": "Is this something simple and quick to do, if not then lets go with fraction inch values rather than cm. - 1/16\", 1/8\", 1/4\", 3/8\", 1/2\", 3/4\", 1\"",
+      "parentUuid": "fa6399be_5af1f5cc",
+      "range": {
+        "startLine": 8,
+        "startChar": 23,
+        "endLine": 8,
+        "endChar": 31
+      },
+      "revId": "9b1443848086c99a2cea6ba62d5ee79d3eed9f40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_7a69598b",
         "filename": "sw/uiconfig/swriter/ui/pagefooterpanel.ui",
         "patchSetId": 1
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "fa6399be_3af52183",
+        "filename": "sw/uiconfig/swriter/ui/pagefooterpanel.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2016-08-14T12:44:44Z",
+      "side": 1,
+      "message": "okey",
+      "parentUuid": "fa6399be_1a205d49",
+      "range": {
+        "startLine": 87,
+        "startChar": 63,
+        "endLine": 87,
+        "endChar": 125
+      },
+      "revId": "9b1443848086c99a2cea6ba62d5ee79d3eed9f40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_9a046dc7",
         "filename": "sw/uiconfig/swriter/ui/pagefooterpanel.ui",
         "patchSetId": 1
@@ -107,6 +155,30 @@
       "writtenOn": "2016-08-13T16:48:58Z",
       "side": 1,
       "message": "only one of these needs to be used",
+      "range": {
+        "startLine": 88,
+        "startChar": 61,
+        "endLine": 88,
+        "endChar": 123
+      },
+      "revId": "9b1443848086c99a2cea6ba62d5ee79d3eed9f40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_7aef99b0",
+        "filename": "sw/uiconfig/swriter/ui/pagefooterpanel.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2016-08-14T12:44:44Z",
+      "side": 1,
+      "message": "so do we need to keep this one as well, as translators would need to translate both?",
+      "parentUuid": "fa6399be_9a046dc7",
       "range": {
         "startLine": 88,
         "startChar": 61,
