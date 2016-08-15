@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_3d6a7b1b",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4726,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-15T11:57:28Z",
+      "side": 1,
+      "message": "I\u0027m not sure if MS-Word can cope with DBNumY values at all (GetMappedFormatstring() is also used by Writer export), but let\u0027s assume it can.. ;-)",
+      "revId": "af588648ba4cb95bb61483c9494a1fecf41259f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
