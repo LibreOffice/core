@@ -709,10 +709,17 @@ bool DocumentHolder::ShowUI( const uno::Reference< css::frame::XLayoutManager >&
                     // this must be done after merging menus as we won't get the container menu otherwise
                     xContainerLM->setDockingAreaAcceptor( uno::Reference < ui::XDockingAreaAcceptor >() );
 
+                    bool bIsChart = false;
+                    uno::Reference< lang::XServiceInfo> xServiceInfo(m_xComponent, uno::UNO_QUERY);
+                    if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.chart2.ChartDocument"))
+                        bIsChart = true;
                     // prevent further changes at this LM
                     // TODO: moggi: why is this necessary?
-                    // xContainerLM->setVisible( sal_False );
-                    // xContainerLM->lock();
+                    if (!bIsChart)
+                    {
+                        xContainerLM->setVisible( false );
+                        xContainerLM->lock();
+                    }
                     bUnlock = true;
 
                     // by unlocking the LM each layout change will now resize the containers window; pending layouts will be processed now
