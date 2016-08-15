@@ -340,7 +340,7 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
             size_t nPos = m_pHatchLB->GetSelectItemPos();
             if( nPos != VALUESET_ITEM_NOTFOUND )
             {
-                pXHatch.reset(new XHatch( m_pHatchingList->GetHatch( static_cast<sal_uInt16>(nPos) )->GetHatch() ));
+                pXHatch.reset(new XHatch(m_pHatchingList->GetHatch(nPos)->GetHatch()));
                 aString = m_pHatchLB->GetItemText( m_pHatchLB->GetSelectItemId() );
             }
             // gradient has been (unidentifiedly) passed
@@ -468,7 +468,7 @@ void SvxHatchTabPage::ChangeHatchHdl_Impl()
     size_t nPos = m_pHatchLB->GetSelectItemPos();
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
-        pHatch.reset(new XHatch( m_pHatchingList->GetHatch( static_cast<sal_uInt16>(nPos) )->GetHatch() ));
+        pHatch.reset(new XHatch(m_pHatchingList->GetHatch(nPos)->GetHatch()));
     else
     {
         const SfxPoolItem* pPoolItem = nullptr;
@@ -597,7 +597,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickModifyHdl_Impl, Button*, void)
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
-        OUString aName( m_pHatchingList->GetHatch( static_cast<sal_uInt16>(nPos) )->GetName() );
+        OUString aName(m_pHatchingList->GetHatch(nPos)->GetName());
 
         XHatch aXHatch( m_pLbLineColor->GetSelectEntryColor(),
                         (css::drawing::HatchStyle) m_pLbLineType->GetSelectEntryPos(),
@@ -606,7 +606,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickModifyHdl_Impl, Button*, void)
 
         m_pHatchingList->Replace(o3tl::make_unique<XHatchEntry>(aXHatch, aName), nPos);
 
-        Bitmap aBitmap = m_pHatchingList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), m_pHatchLB->GetIconSize() );
+        Bitmap aBitmap = m_pHatchingList->GetBitmapForPreview(nPos, m_pHatchLB->GetIconSize());
         m_pHatchLB->RemoveItem( nId );
         m_pHatchLB->InsertItem( nId, Image(aBitmap), aName, static_cast<sal_uInt16>(nPos) );
         m_pHatchLB->SelectItem( nId );
