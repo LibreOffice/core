@@ -61,6 +61,8 @@ UndoManager::UndoManager(std::shared_ptr<SwNodes> xUndoNodes,
     ,   m_bRepair(false)
     ,   m_bLockUndoNoModifiedPosition(false)
     ,   m_UndoSaveMark(MARK_INVALID)
+    ,   m_pDocShell(nullptr)
+    ,   m_pView(nullptr)
 {
     OSL_ASSERT(m_xUndoNodes.get());
     // writer expects it to be disabled initially
@@ -88,9 +90,57 @@ void UndoManager::SetDocShell(SwDocShell* pDocShell)
     m_pDocShell = pDocShell;
 }
 
+void UndoManager::SetView(SwView* pView)
+{
+    m_pView = pView;
+}
+
 size_t UndoManager::GetUndoActionCount(const bool bCurrentLevel) const
 {
-    return SdrUndoManager::GetUndoActionCount(bCurrentLevel);
+    size_t nRet = SdrUndoManager::GetUndoActionCount(bCurrentLevel);
+    if (!comphelper::LibreOfficeKit::isActive() || !m_pView)
+        return nRet;
+
+    if (!nRet || !SdrUndoManager::GetUndoActionCount())
+        return nRet;
+
+    const SfxUndoAction* pAction = SdrUndoManager::GetUndoAction();
+    if (!pAction)
+        return nRet;
+
+    if (!m_bRepair)
+    {
+        // If an other view created the last undo action, prevent undoing it from this view.
+        sal_Int32 nViewShellId = m_pView->GetViewShellId();
+        if (pAction->GetViewShellId() != nViewShellId)
+            nRet = 0;
+    }
+
+    return nRet;
+}
+
+size_t UndoManager::GetRedoActionCount(const bool bCurrentLevel) const
+{
+    size_t nRet = SdrUndoManager::GetRedoActionCount(bCurrentLevel);
+    if (!comphelper::LibreOfficeKit::isActive() || !m_pView)
+        return nRet;
+
+    if (!nRet || !SdrUndoManager::GetRedoActionCount())
+        return nRet;
+
+    const SfxUndoAction* pAction = SdrUndoManager::GetRedoAction();
+    if (!pAction)
+        return nRet;
+
+    if (m_pView && !m_bRepair)
+    {
+        // If an other view created the first redo action, prevent redoing it from this view.
+        sal_Int32 nViewShellId = m_pView->GetViewShellId();
+        if (pAction->GetViewShellId() != nViewShellId)
+            nRet = 0;
+    }
+
+    return nRet;
 }
 
 void UndoManager::DoUndo(bool const bDoUndo)
