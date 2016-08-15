@@ -466,7 +466,7 @@ ${MYCMD} --base sw/source/ui/misc --files glossary.src numberingtypelistbox.src 
 
 ${MYCMD} --files sw/source/ui/shells/shells.src
 
-${MYCMD} --files sw/source/ui/sidebar/PagePropertyPanel.src
+# ${MYCMD} --files sw/source/ui/sidebar/PagePropertyPanel.src
 
 ${MYCMD} --base sw/source/ui/utlui --files poolfmt.src utlui.src
 
