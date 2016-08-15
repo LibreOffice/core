@@ -77,7 +77,6 @@ SystemWindow::SystemWindow(WindowType nType)
     , mbHideBtn(false)
     , mbSysChild(false)
     , mbIsCalculatingInitialLayoutSize(false)
-    , mbInitialLayoutDone(false)
     , mnMenuBarMode(MenuBarMode::Normal)
     , mnIcon(0)
     , mpImplData(new ImplData)
@@ -1171,7 +1170,6 @@ void SystemWindow::DoInitialLayout()
         setDeferredProperties();
         setOptimalLayoutSize();
         mbIsCalculatingInitialLayoutSize = false;
-        mbInitialLayoutDone = true;
     }
     else if (IsDialog() && !(GetStyle() & WB_SIZEABLE))
     {

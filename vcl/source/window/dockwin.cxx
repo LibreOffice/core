@@ -323,7 +323,6 @@ void DockingWindow::ImplInitDockingWindowData()
     mbHideBtn      = false;
     mbIsDefferedInit = false;
     mbIsCalculatingInitialLayoutSize = false;
-    mbInitialLayoutDone = false;
     mpDialogParent = nullptr;
 
     //To-Do, reuse maResizeTimer
@@ -707,7 +706,6 @@ void DockingWindow::DoInitialLayout()
         if (IsFloatingMode())
             setOptimalLayoutSize();
         mbIsCalculatingInitialLayoutSize = false;
-        mbInitialLayoutDone = true;
     }
 }
 

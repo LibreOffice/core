@@ -162,7 +162,6 @@ private:
     bool            mbHideBtn;
     bool            mbSysChild;
     bool            mbIsCalculatingInitialLayoutSize;
-    bool            mbInitialLayoutDone;
     MenuBarMode     mnMenuBarMode;
     sal_uInt16      mnIcon;
     ImplData*       mpImplData;

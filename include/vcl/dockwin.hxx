@@ -236,8 +236,7 @@ private:
                     mbRollUp:1,
                     mbDockBtn:1,
                     mbHideBtn:1,
-                    mbIsCalculatingInitialLayoutSize:1,
-                    mbInitialLayoutDone:1;
+                    mbIsCalculatingInitialLayoutSize:1;
 
 protected:
     bool mbIsDefferedInit;
