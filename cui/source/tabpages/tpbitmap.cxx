@@ -195,7 +195,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ModifyBitmapHdl, ValueSet*, void)
     size_t nPos = m_pBitmapLB->GetSelectItemPos();
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
-        pGraphicObject.reset(new GraphicObject(m_pBitmapList->GetBitmap( static_cast<sal_uInt16>(nPos) )->GetGraphicObject()));
+        pGraphicObject.reset(new GraphicObject(m_pBitmapList->GetBitmap(nPos)->GetGraphicObject()));
     }
     else
     {
@@ -283,7 +283,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickDeleteHdl, SvxPresetListBox*, void)
 
         if( aQueryBox->Execute() == RET_YES )
         {
-            m_pBitmapList->Remove( static_cast<sal_uInt16>(nPos) );
+            m_pBitmapList->Remove(nPos);
             m_pBitmapLB->RemoveItem( nId );
             nId = m_pBitmapLB->GetItemId(0);
             m_pBitmapLB->SelectItem( nId );

@@ -278,7 +278,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
     size_t nPos = m_pGradientLB->GetSelectItemPos();
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
-        XGradient aGradient = m_pGradientList->GetGradient( static_cast<sal_uInt16>(nPos) )->GetGradient();
+        XGradient aGradient = m_pGradientList->GetGradient(nPos)->GetGradient();
 
         if( !( aTmpGradient == aGradient ) )
         {
@@ -335,7 +335,7 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
         size_t        nPos = m_pGradientLB->GetSelectItemPos();
         if( nPos != VALUESET_ITEM_NOTFOUND )
         {
-            pXGradient.reset(new XGradient( m_pGradientList->GetGradient( static_cast<sal_uInt16>(nPos) )->GetGradient() ));
+            pXGradient.reset(new XGradient(m_pGradientList->GetGradient(nPos)->GetGradient()));
             aString = m_pGradientLB->GetItemText( m_pGradientLB->GetSelectItemId() );
         }
         else
@@ -540,7 +540,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickModifyHdl_Impl, Button*, void)
 
     if ( nPos != VALUESET_ITEM_NOTFOUND )
     {
-        OUString aName( m_pGradientList->GetGradient( static_cast<sal_uInt16>(nPos) )->GetName() );
+        OUString aName(m_pGradientList->GetGradient(nPos)->GetName());
 
         XGradient aXGradient( m_pLbColorFrom->GetSelectEntryColor(),
                               m_pLbColorTo->GetSelectEntryColor(),
@@ -554,7 +554,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickModifyHdl_Impl, Button*, void)
 
         m_pGradientList->Replace(o3tl::make_unique<XGradientEntry>(aXGradient, aName), nPos);
 
-        Bitmap aBitmap = m_pGradientList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), m_pGradientLB->GetIconSize() );
+        Bitmap aBitmap = m_pGradientList->GetBitmapForPreview(nPos, m_pGradientLB->GetIconSize());
         m_pGradientLB->RemoveItem( nId );
         m_pGradientLB->InsertItem( nId, Image(aBitmap), aName, static_cast<sal_uInt16>(nPos) );
         m_pGradientLB->SelectItem( nId );
@@ -646,7 +646,7 @@ void SvxGradientTabPage::ChangeGradientHdl_Impl()
     size_t nPos = m_pGradientLB->GetSelectItemPos();
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
-        pGradient.reset(new XGradient( m_pGradientList->GetGradient( static_cast<sal_uInt16>( nPos ) )->GetGradient() ));
+        pGradient.reset(new XGradient(m_pGradientList->GetGradient(nPos)->GetGradient()));
     else
     {
         const SfxPoolItem* pPoolItem = nullptr;

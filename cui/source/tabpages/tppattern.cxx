@@ -263,7 +263,7 @@ bool SvxPatternTabPage::FillItemSet( SfxItemSet* _rOutAttrs )
             size_t nPos = m_pPatternLB->GetSelectItemPos();
             if(VALUESET_ITEM_NOTFOUND != nPos)
             {
-                const XBitmapEntry* pXBitmapEntry = m_pPatternList->GetBitmap( static_cast<sal_uInt16>(nPos) );
+                const XBitmapEntry* pXBitmapEntry = m_pPatternList->GetBitmap(nPos);
                 const OUString aString( m_pPatternLB->GetItemText( m_pPatternLB->GetSelectItemId() ) );
 
                 _rOutAttrs->Put(XFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject()));
@@ -322,7 +322,7 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ChangePatternHdl_Impl, ValueSet*, void)
 
     if(VALUESET_ITEM_NOTFOUND != nPos)
     {
-        pGraphicObject.reset(new GraphicObject(m_pPatternList->GetBitmap( static_cast<sal_uInt16>(nPos) )->GetGraphicObject()));
+        pGraphicObject.reset(new GraphicObject(m_pPatternList->GetBitmap(nPos)->GetGraphicObject()));
     }
     else
     {
@@ -578,14 +578,14 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickModifyHdl_Impl, Button*, void)
 
     if ( nPos != VALUESET_ITEM_NOTFOUND )
     {
-        OUString aName( m_pPatternList->GetBitmap( static_cast<sal_uInt16>(nPos) )->GetName() );
+        OUString aName(m_pPatternList->GetBitmap(nPos)->GetName());
 
         const BitmapEx aBitmapEx(m_pBitmapCtl->GetBitmapEx());
 
         // #i123497# Need to replace the existing entry with a new one (old returned needs to be deleted)
         m_pPatternList->Replace(o3tl::make_unique<XBitmapEntry>(Graphic(aBitmapEx), aName), nPos);
 
-        Bitmap aBitmap = m_pPatternList->GetBitmapForPreview( static_cast<sal_uInt16>( nPos ), m_pPatternLB->GetIconSize() );
+        Bitmap aBitmap = m_pPatternList->GetBitmapForPreview(nPos, m_pPatternLB->GetIconSize());
         m_pPatternLB->RemoveItem(nId);
         m_pPatternLB->InsertItem( nId, Image(aBitmap), aName, static_cast<sal_uInt16>(nPos) );
         m_pPatternLB->SelectItem( nId );
