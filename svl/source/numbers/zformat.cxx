@@ -4809,8 +4809,8 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                                 aStr.insert( 0, "[$-107041E]" ); // date in Arabic digit, Buddhist era
                             }
                             j = j+2;
+                            bLCIDInserted = true;
                         }
-                        bLCIDInserted = true;
                         break;
                     default:
                         aStr.append( pStr[j] );
