@@ -4718,7 +4718,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
         }
 
         const SvNumberNatNum& rNum = NumFor[n].GetNatNum();
-        if ( rNum.IsSet() && rNum.GetDBNum() > 0 )
+        if ( rNum.IsComplete() && rNum.GetDBNum() > 0 )
         {
             aPrefix += "[DBNum";
             aPrefix += OUString::number( rNum.GetDBNum() );
