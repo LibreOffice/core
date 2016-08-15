@@ -17,29 +17,37 @@ using namespace boost;
 AuthFallbackDlg::AuthFallbackDlg(Window* pParent, const OUString& instructions,
                                  const OUString& url)
     : ModalDialog(pParent, "AuthFallbackDlg", "uui/ui/authfallback.ui")
+    , m_bGoogleMode( false )
 {
     get( m_pTVInstructions, "instructions" );
     get( m_pEDUrl, "url" );
     get( m_pEDCode, "code" );
+    get( m_pEDGoogleCode, "google_code" );
     get( m_pBTOk, "ok" );
     get( m_pBTCancel, "cancel" );
-    get( m_pFTGooglePrefixLabel, "google_prefix_label" );
+    get( m_pGoogleBox, "GDrive" );
+    get( m_pOneDriveBox, "OneDrive" );
 
     m_pBTOk->SetClickHdl( LINK( this, AuthFallbackDlg, OKHdl) );
     m_pBTCancel->SetClickHdl( LINK( this, AuthFallbackDlg, CancelHdl) );
     m_pBTOk->Enable();
 
     m_pTVInstructions->SetText( instructions );
+    m_pTVInstructions->SetPaintTransparent(true);
     if( url.isEmpty() )
     {
         // Google 2FA
-        m_pFTGooglePrefixLabel->Show();
+        m_bGoogleMode = true;
+        m_pGoogleBox->Show();
+        m_pOneDriveBox->Hide();
         m_pEDUrl->Hide();
     }
     else
     {
         // OneDrive
-        m_pFTGooglePrefixLabel->Hide();
+        m_bGoogleMode = false;
+        m_pGoogleBox->Hide();
+        m_pOneDriveBox->Show();
         m_pEDUrl->SetText( url );
     }
 }
@@ -49,14 +57,25 @@ AuthFallbackDlg::~AuthFallbackDlg()
     disposeOnce();
 }
 
+OUString AuthFallbackDlg::GetCode() const
+{
+    if( m_bGoogleMode )
+        return m_pEDGoogleCode->GetText();
+    else
+        return m_pEDCode->GetText();
+}
+
+
 void AuthFallbackDlg::dispose()
 {
     m_pTVInstructions.clear();
     m_pEDUrl.clear();
     m_pEDCode.clear();
+    m_pEDGoogleCode.clear();
     m_pBTOk.clear();
     m_pBTCancel.clear();
-    m_pFTGooglePrefixLabel.clear();
+    m_pGoogleBox.clear();
+    m_pOneDriveBox.clear();
     ModalDialog::dispose();
 }
 
