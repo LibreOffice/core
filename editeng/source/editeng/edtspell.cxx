@@ -57,7 +57,7 @@ void EditSpellWrapper::SpellStart( SvxSpellArea eArea )
     ImpEditEngine* pImpEE = pEditView->GetImpEditEngine();
     SpellInfo* pSpellInfo = pImpEE->GetSpellInfo();
 
-    if ( eArea == SVX_SPELL_BODY_START )
+    if ( eArea == SvxSpellArea::BodyStart )
     {
         // Is called when
         // a) Spell-Forward has arrived at the end and should restart at the top
@@ -76,7 +76,7 @@ void EditSpellWrapper::SpellStart( SvxSpellArea eArea )
                     pEE->GetEditDoc().GetStartPaM() );
         }
     }
-    else if ( eArea == SVX_SPELL_BODY_END )
+    else if ( eArea == SvxSpellArea::BodyEnd )
     {
         // Is called when
         // a) Spell-Forward is launched
@@ -95,7 +95,7 @@ void EditSpellWrapper::SpellStart( SvxSpellArea eArea )
                     pEE->GetEditDoc().GetEndPaM() );
         }
     }
-    else if ( eArea == SVX_SPELL_BODY )
+    else if ( eArea == SvxSpellArea::Body )
     {
         ;   // Is handled by the App through SpellNextDocument
     }

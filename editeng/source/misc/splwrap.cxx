@@ -275,12 +275,12 @@ void SvxSpellWrapper::SpellDocument( )
     if ( bOtherCntnt )
     {
         bReverse = false;
-        SpellStart( SVX_SPELL_OTHER );
+        SpellStart( SvxSpellArea::Other );
     }
     else
     {
         bStartChk = bReverse;
-        SpellStart( bReverse ? SVX_SPELL_BODY_START : SVX_SPELL_BODY_END );
+        SpellStart( bReverse ? SvxSpellArea::BodyStart : SvxSpellArea::BodyEnd );
     }
 
     if ( FindSpellError() )
@@ -340,7 +340,7 @@ bool SvxSpellWrapper::SpellNext( )
             bOtherCntnt = false;
             bStartDone = !bReverse;
             bEndDone  = bReverse;
-            SpellStart( SVX_SPELL_BODY );
+            SpellStart( SvxSpellArea::Body );
             return true;
         }
         return false;
@@ -351,7 +351,7 @@ bool SvxSpellWrapper::SpellNext( )
     if ( bOtherCntnt )
     {
         bStartChk = false;
-        SpellStart( SVX_SPELL_BODY );
+        SpellStart( SvxSpellArea::Body );
         bGoOn = true;
     }
     else if ( bStartDone && bEndDone )
@@ -360,7 +360,7 @@ bool SvxSpellWrapper::SpellNext( )
         // Body area done, ask for special area
         if( !IsHyphen() && bIsSpellSpecial && HasOtherCnt() )
         {
-            SpellStart( SVX_SPELL_OTHER );
+            SpellStart( SvxSpellArea::Other );
             bOtherCntnt = bGoOn = true;
         }
         else if ( SpellMore() )  // check another document?
@@ -368,7 +368,7 @@ bool SvxSpellWrapper::SpellNext( )
             bOtherCntnt = false;
             bStartDone = !bReverse;
             bEndDone  = bReverse;
-            SpellStart( SVX_SPELL_BODY );
+            SpellStart( SvxSpellArea::Body );
             return true;
         }
     }
@@ -389,7 +389,7 @@ bool SvxSpellWrapper::SpellNext( )
         else
         {
             bStartChk = !bStartDone;
-            SpellStart( bStartChk ? SVX_SPELL_BODY_START : SVX_SPELL_BODY_END );
+            SpellStart( bStartChk ? SvxSpellArea::BodyStart : SvxSpellArea::BodyEnd );
             bGoOn = true;
         }
         WAIT_ON();

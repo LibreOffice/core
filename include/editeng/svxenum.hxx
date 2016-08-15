@@ -162,12 +162,12 @@ enum SvxDrawBezierEnum
     SVX_BEZIER_ELIMINATE_POINTS
 };
 
-enum SvxSpellArea
+enum class SvxSpellArea
 {
-    SVX_SPELL_BODY = 0,
-    SVX_SPELL_BODY_END,
-    SVX_SPELL_BODY_START,
-    SVX_SPELL_OTHER
+    Body = 0,
+    BodyEnd,
+    BodyStart,
+    Other
 };
 
 enum SvxFrameAnchor

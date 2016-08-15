@@ -600,11 +600,11 @@ void SwHHCWrapper::Convert()
     }
 
     if ( m_bIsOtherContent )
-        ConvStart_impl( m_pConvArgs, SVX_SPELL_OTHER );
+        ConvStart_impl( m_pConvArgs, SvxSpellArea::Other );
     else
     {
         m_bStartChk = false;
-        ConvStart_impl( m_pConvArgs, SVX_SPELL_BODY_END );
+        ConvStart_impl( m_pConvArgs, SvxSpellArea::BodyEnd );
     }
 
     ConvertDocument();
@@ -632,7 +632,7 @@ bool SwHHCWrapper::ConvNext_impl( )
     if ( m_bIsOtherContent )
     {
         m_bStartChk = false;
-        ConvStart_impl( m_pConvArgs, SVX_SPELL_BODY );
+        ConvStart_impl( m_pConvArgs, SvxSpellArea::Body );
         bGoOn = true;
     }
     else if ( m_bStartDone && m_bEndDone )
@@ -640,14 +640,14 @@ bool SwHHCWrapper::ConvNext_impl( )
         // body region done, ask about special region
         if( HasOtherCnt_impl() )
         {
-            ConvStart_impl( m_pConvArgs, SVX_SPELL_OTHER );
+            ConvStart_impl( m_pConvArgs, SvxSpellArea::Other );
             m_bIsOtherContent = bGoOn = true;
         }
     }
     else
     {
             m_bStartChk = !m_bStartDone;
-            ConvStart_impl( m_pConvArgs, m_bStartChk ? SVX_SPELL_BODY_START : SVX_SPELL_BODY_END );
+            ConvStart_impl( m_pConvArgs, m_bStartChk ? SvxSpellArea::BodyStart : SvxSpellArea::BodyEnd );
             bGoOn = true;
     }
     return bGoOn;
@@ -686,7 +686,7 @@ bool SwHHCWrapper::HasOtherCnt_impl()
 
 void SwHHCWrapper::ConvStart_impl( SwConversionArgs /* [out] */ *pConversionArgs, SvxSpellArea eArea )
 {
-    SetDrawObj( SVX_SPELL_OTHER == eArea );
+    SetDrawObj( SvxSpellArea::Other == eArea );
     m_pView->SpellStart( eArea, m_bStartDone, m_bEndDone, /* [out] */ pConversionArgs );
 }
 

@@ -278,13 +278,13 @@ void SwView::SpellStart( SvxSpellArea eWhich,
     SwDocPositions eCurr  = DOCPOS_CURR;
     switch ( eWhich )
     {
-        case SVX_SPELL_BODY:
+        case SvxSpellArea::Body:
             if( bIsWrapReverse )
                 eCurr = DOCPOS_END;
             else
                 eCurr = DOCPOS_START;
             break;
-        case SVX_SPELL_BODY_END:
+        case SvxSpellArea::BodyEnd:
             if( bIsWrapReverse )
             {
                 if( bStartDone )
@@ -294,7 +294,7 @@ void SwView::SpellStart( SvxSpellArea eWhich,
             else if( bStartDone )
                 eCurr = DOCPOS_START;
             break;
-        case SVX_SPELL_BODY_START:
+        case SvxSpellArea::BodyStart:
             if( !bIsWrapReverse )
             {
                 if( bEndDone )
@@ -304,7 +304,7 @@ void SwView::SpellStart( SvxSpellArea eWhich,
             else if( bEndDone )
                 eCurr = DOCPOS_END;
             break;
-        case SVX_SPELL_OTHER:
+        case SvxSpellArea::Other:
             if( bIsWrapReverse )
             {
                 eStart = DOCPOS_OTHERSTART;
@@ -397,16 +397,16 @@ void SwView::HyphStart( SvxSpellArea eWhich )
 {
     switch ( eWhich )
     {
-        case SVX_SPELL_BODY:
+        case SvxSpellArea::Body:
             m_pWrtShell->HyphStart( DOCPOS_START, DOCPOS_END );
             break;
-        case SVX_SPELL_BODY_END:
+        case SvxSpellArea::BodyEnd:
             m_pWrtShell->HyphStart( DOCPOS_CURR, DOCPOS_END );
             break;
-        case SVX_SPELL_BODY_START:
+        case SvxSpellArea::BodyStart:
             m_pWrtShell->HyphStart( DOCPOS_START, DOCPOS_CURR );
             break;
-        case SVX_SPELL_OTHER:
+        case SvxSpellArea::Other:
             m_pWrtShell->HyphStart( DOCPOS_OTHERSTART, DOCPOS_OTHEREND );
             break;
         default:
