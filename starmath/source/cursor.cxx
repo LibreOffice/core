@@ -296,9 +296,6 @@ void SmCursor::InsertNodes(SmNodeList* pNewNodes){
     //Begin edit section
     BeginEdit();
 
-    //Position after insert should be after pNewNode
-    SmCaretPos PosAfterInsert = SmCaretPos(pNewNodes->back(), 1);
-
     //Get the current position
     const SmCaretPos pos = mpPosition->CaretPos;
 
@@ -324,14 +321,10 @@ void SmCursor::InsertNodes(SmNodeList* pNewNodes){
         insIt = pLineList->insert(it, *newIt);
         if(newIt == pNewNodes->begin())
             patchIt = insIt;
-        if((*newIt)->GetType() == NTEXT)
-            PosAfterInsert = SmCaretPos(*newIt, static_cast<SmTextNode*>(*newIt)->GetText().getLength());
-        else
-            PosAfterInsert = SmCaretPos(*newIt, 1);
     }
     //Patch the places we've changed stuff
                         PatchLineList(pLineList, patchIt);
-    PosAfterInsert =    PatchLineList(pLineList, it);
+    SmCaretPos PosAfterInsert = PatchLineList(pLineList, it);
     //Release list, we've taken the nodes
     delete pNewNodes;
     pNewNodes = nullptr;
