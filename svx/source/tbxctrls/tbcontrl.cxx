@@ -2066,6 +2066,7 @@ void SfxStyleControllerItem_Impl::StateChanged(
         case SID_STYLE_FAMILY3:
         case SID_STYLE_FAMILY4:
         case SID_STYLE_FAMILY5:
+        case SID_STYLE_FAMILY6:
         {
             const sal_uInt16 nIdx = GetId() - SID_STYLE_FAMILY_START;
 
@@ -2187,7 +2188,8 @@ static const char* StyleSlotToStyleCommand[MAX_FAMILIES] =
     ".uno:ParaStyle",
     ".uno:FrameStyle",
     ".uno:PageStyle",
-    ".uno:TemplateFamily5"
+    ".uno:TemplateFamily5",
+    ".uno:TableStyle"
 };
 
 SvxStyleToolBoxControl::SvxStyleToolBoxControl(
@@ -2283,6 +2285,7 @@ SfxStyleFamily SvxStyleToolBoxControl::GetActFamily()
         case SID_STYLE_FAMILY3: return SfxStyleFamily::Frame;
         case SID_STYLE_FAMILY4: return SfxStyleFamily::Page;
         case SID_STYLE_FAMILY5: return SfxStyleFamily::Pseudo;
+        case SID_STYLE_FAMILY6: return SfxStyleFamily::Table;
         default:
             OSL_FAIL( "unknown style family" );
             break;
@@ -2548,7 +2551,7 @@ VclPtr<vcl::Window> SvxStyleToolBoxControl::CreateItemWindow( vcl::Window *pPare
 {
     VclPtrInstance<SvxStyleBox_Impl> pBox( pParent,
                                            OUString( ".uno:StyleApply" ),
-                                           SfxStyleFamily::Para,
+                                           GetActFamily(),
                                            Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
                                            m_xFrame,
                                            pImpl->aClearForm,

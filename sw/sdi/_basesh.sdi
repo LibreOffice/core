@@ -335,6 +335,14 @@ interface BaseTextSelection
         FastCall = TRUE;// fuer Macroausfuehrung!
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    
+        SID_TABLE_STYLE_APPLY // status(fina|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = StateStyle ;
+        FastCall = TRUE;// fuer Macroausfuehrung!
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
 
     SID_STYLE_FAMILY1 // status(fina|play)
     [
