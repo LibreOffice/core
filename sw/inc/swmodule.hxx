@@ -18,6 +18,7 @@
  */
 #ifndef INCLUDED_SW_INC_SWMODULE_HXX
 #define INCLUDED_SW_INC_SWMODULE_HXX
+
 #include <tools/fldunit.hxx>
 #include <svl/lstner.hxx>
 #include <unotools/options.hxx>
@@ -28,7 +29,6 @@
 #include <fldupde.hxx>
 #include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
-#include <editeng/svxenum.hxx>
 
 class Color;
 class SfxItemSet;
@@ -51,7 +51,7 @@ namespace svtools{ class ColorConfig;}
 class SvtAccessibilityOptions;
 class SvtCTLOptions;
 class SvtUserOptions;
-
+enum class SwCompareMode;
 struct SwDBData;
 
 enum class SvViewOpt {
@@ -199,7 +199,7 @@ public:
     sal_uInt16              GetRedlineMarkPos();
     const Color&            GetRedlineMarkColor();
 
-    SvxCompareMode      GetCompareMode() const;
+    SwCompareMode      GetCompareMode() const;
     bool            IsUseRsid() const;
     bool            IsIgnorePieces() const;
     sal_uInt16          GetPieceLen() const;

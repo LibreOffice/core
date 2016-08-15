@@ -206,13 +206,6 @@ enum SvxExtNumType
     SVX_NUM_IROHA_HALFWIDTH_JA
 };
 
-enum SvxCompareMode
-{
-    SVX_CMP_AUTO = 0,
-    SVX_CMP_BY_WORD,
-    SVX_CMP_BY_CHAR
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

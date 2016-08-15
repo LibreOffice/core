@@ -39,6 +39,7 @@
 #include <tox.hxx>
 #include <docsh.hxx>
 #include <fmtcntnt.hxx>
+#include <modcfg.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -313,7 +314,7 @@ public:
 /// Options set in Tools->Options->Writer->Comparison
 struct CmpOptionsContainer
 {
-    SvxCompareMode eCmpMode;
+    SwCompareMode eCmpMode;
     int nIgnoreLen;
     bool bUseRsid;
 } CmpOptions;
@@ -1308,7 +1309,7 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
         std::vector<int> aLcsDst( nMinLen + 1 );
         std::vector<int> aLcsSrc( nMinLen + 1 );
 
-        if( CmpOptions.eCmpMode == SVX_CMP_BY_WORD )
+        if( CmpOptions.eCmpMode == SwCompareMode::ByWord )
         {
             std::vector<int> aTmpLcsDst( nMinLen + 1 );
             std::vector<int> aTmpLcsSrc( nMinLen + 1 );
@@ -1814,17 +1815,17 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
 
     // Get comparison options
     CmpOptions.eCmpMode = SW_MOD()->GetCompareMode();
-    if( CmpOptions.eCmpMode == SVX_CMP_AUTO )
+    if( CmpOptions.eCmpMode == SwCompareMode::Auto )
     {
         if( getRsidRoot() == rDoc.getRsidRoot() )
         {
-            CmpOptions.eCmpMode = SVX_CMP_BY_CHAR;
+            CmpOptions.eCmpMode = SwCompareMode::ByChar;
             CmpOptions.bUseRsid = true;
             CmpOptions.nIgnoreLen = 2;
         }
         else
         {
-            CmpOptions.eCmpMode = SVX_CMP_BY_WORD;
+            CmpOptions.eCmpMode = SwCompareMode::ByWord;
             CmpOptions.bUseRsid = false;
             CmpOptions.nIgnoreLen = 3;
         }

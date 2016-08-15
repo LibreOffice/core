@@ -88,11 +88,18 @@ public:
     void                    SetModified(){ConfigItem::SetModified();}
 };
 
+enum class SwCompareMode
+{
+    Auto = 0,
+    ByWord,
+    ByChar
+};
+
 class SwCompareConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 
-    sal_uInt16      eCmpMode;       //Compare/CompareDocuments;
+    SwCompareMode  eCmpMode;       //Compare/CompareDocuments;
     bool            bUseRsid;       //Compare/Settings/Use RSID
     /// Compare/Settings/Store RSID
     bool            m_bStoreRsid;
@@ -349,8 +356,8 @@ public:
     bool    IsHideFieldTips() const {return bHideFieldTips;}
     void        SetHideFieldTips(bool bSet) {bHideFieldTips = bSet;}
 
-    SvxCompareMode  GetCompareMode() const { return (SvxCompareMode)aCompareConfig.eCmpMode; }
-    void            SetCompareMode( SvxCompareMode eMode ) { aCompareConfig.eCmpMode = eMode;
+    SwCompareMode  GetCompareMode() const { return aCompareConfig.eCmpMode; }
+    void            SetCompareMode( SwCompareMode eMode ) { aCompareConfig.eCmpMode = eMode;
                                                              aCompareConfig.SetModified(); }
 
     bool    IsUseRsid() const { return aCompareConfig.bUseRsid; }

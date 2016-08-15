@@ -2335,11 +2335,11 @@ bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet* )
         m_pWordRB->IsValueChangedFromSaved() ||
         m_pCharRB->IsValueChangedFromSaved() )
     {
-        SvxCompareMode eCmpMode = SVX_CMP_AUTO;
+        SwCompareMode eCmpMode = SwCompareMode::Auto;
 
-        if ( m_pAutoRB->IsChecked() ) eCmpMode = SVX_CMP_AUTO;
-        if ( m_pWordRB->IsChecked() ) eCmpMode = SVX_CMP_BY_WORD;
-        if ( m_pCharRB->IsChecked() ) eCmpMode = SVX_CMP_BY_CHAR;
+        if ( m_pAutoRB->IsChecked() ) eCmpMode = SwCompareMode::Auto;
+        if ( m_pWordRB->IsChecked() ) eCmpMode = SwCompareMode::ByWord;
+        if ( m_pCharRB->IsChecked() ) eCmpMode = SwCompareMode::ByChar;
 
         pOpt->SetCompareMode( eCmpMode );
         bRet = true;
@@ -2376,22 +2376,22 @@ void SwCompareOptionsTabPage::Reset( const SfxItemSet* )
 {
     SwModuleOptions *pOpt = SW_MOD()->GetModuleConfig();
 
-    SvxCompareMode eCmpMode = pOpt->GetCompareMode();
-    if( eCmpMode == SVX_CMP_AUTO )
+    SwCompareMode eCmpMode = pOpt->GetCompareMode();
+    if( eCmpMode == SwCompareMode::Auto )
     {
         m_pAutoRB->Check();
         m_pRsidCB->Disable();
         m_pIgnoreCB->Disable();
         m_pLenNF->Disable();
     }
-    else if( eCmpMode == SVX_CMP_BY_WORD )
+    else if( eCmpMode == SwCompareMode::ByWord )
     {
         m_pWordRB->Check();
         m_pRsidCB->Enable();
         m_pIgnoreCB->Enable();
         m_pLenNF->Enable();
     }
-    else if( eCmpMode == SVX_CMP_BY_CHAR)
+    else if( eCmpMode == SwCompareMode::ByChar)
     {
         m_pCharRB->Check();
         m_pRsidCB->Enable();
@@ -2408,7 +2408,7 @@ void SwCompareOptionsTabPage::Reset( const SfxItemSet* )
     m_pIgnoreCB->Check( pOpt->IsIgnorePieces() );
     m_pIgnoreCB->SaveValue();
 
-    m_pLenNF->Enable( m_pIgnoreCB->IsChecked() && eCmpMode );
+    m_pLenNF->Enable( m_pIgnoreCB->IsChecked() && eCmpMode != SwCompareMode::Auto );
 
     m_pLenNF->SetValue( pOpt->GetPieceLen() );
     m_pLenNF->SaveValue();

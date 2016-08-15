@@ -632,7 +632,7 @@ void SwModule::ApplyDefaultPageMode(bool bIsSquaredPageMode)
     m_pUsrPref->SetDefaultPageMode(bIsSquaredPageMode);
 }
 
-SvxCompareMode SwModule::GetCompareMode() const
+SwCompareMode SwModule::GetCompareMode() const
 {
     return m_pModuleConfig->GetCompareMode();
 }

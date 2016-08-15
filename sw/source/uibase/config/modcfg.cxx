@@ -1319,7 +1319,7 @@ SwCompareConfig::SwCompareConfig() :
         ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree)
     ,m_bStoreRsid(true)
 {
-    eCmpMode = SVX_CMP_AUTO;
+    eCmpMode = SwCompareMode::Auto;
     bUseRsid = false;
     bIgnorePieces = false;
     nPieceLen = 1;
@@ -1361,7 +1361,7 @@ void SwCompareConfig::Load()
 
             switch(nProp)
             {
-                case 0 : eCmpMode = (SvxCompareMode) nVal; break;
+                case 0 : eCmpMode = (SwCompareMode) nVal; break;
                 case 1 : bUseRsid = *o3tl::doAccess<bool>(pValues[nProp]); break;
                 case 2 : bIgnorePieces = *o3tl::doAccess<bool>(pValues[nProp]); break;
                 case 3 : nPieceLen = nVal; break;
