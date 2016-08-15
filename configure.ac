@@ -2929,7 +2929,7 @@ if test $_os = Darwin; then
         ;;
     esac
 
-    LIBTOOL=libtool
+    LIBTOOL=/usr/bin/libtool
     INSTALL_NAME_TOOL=install_name_tool
     if test -z "$save_CC"; then
         AC_MSG_CHECKING([what compiler to use])
