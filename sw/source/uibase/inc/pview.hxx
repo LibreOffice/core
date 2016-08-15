@@ -162,28 +162,28 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
 {
     // ViewWindow and handle to core
     // current dispatcher shell
-    VclPtr<SwPagePreviewWin> pViewWin;
+    VclPtr<SwPagePreviewWin> m_pViewWin;
     //viewdata of the previous SwView and the new cursor position
-    OUString sSwViewData;
+    OUString m_sSwViewData;
     //and the new cursor position if the user double click in the PagePreview
-    OUString sNewCursorPos;
+    OUString m_sNewCursorPosition;
     // to support keyboard the number of the page to go to can be set too
-    sal_uInt16 nNewPage;
+    sal_uInt16 m_nNewPage;
     // visible range
-    OUString sPageStr;
-    Size aDocSz;
-    Rectangle               aVisArea;
+    OUString m_sPageStr;
+    Size m_aDocSize;
+    Rectangle               m_aVisArea;
 
     // MDI control elements
-    VclPtr<SwScrollbar> pHScrollbar;
-    VclPtr<SwScrollbar> pVScrollbar;
+    VclPtr<SwScrollbar> m_pHScrollbar;
+    VclPtr<SwScrollbar> m_pVScrollbar;
     bool mbHScrollbarEnabled : 1;
     bool mbVScrollbarEnabled : 1;
     // dummy window for filling the lower right edge when both scrollbars are active
-    VclPtr<vcl::Window> pScrollFill;
+    VclPtr<vcl::Window> m_pScrollFill;
 
     sal_uInt16 mnPageCount;
-    bool bNormalPrint;
+    bool m_bNormalPrint;
 
     // New members to reset design mode at draw view for form shell on switching
     // back from writer page preview to normal view.
@@ -233,9 +233,9 @@ private:
 
 public:
     inline SwViewShell* GetViewShell() const
-    { return pViewWin->GetViewShell(); }
+    { return m_pViewWin->GetViewShell(); }
     inline void RepaintCoreRect( const SwRect& rRect )
-    { pViewWin->RepaintCoreRect( rRect ); }
+    { m_pViewWin->RepaintCoreRect( rRect ); }
 
     void DocSzChgd(const Size& rNewSize);
 
@@ -249,16 +249,16 @@ public:
     void EnableVScrollbar(bool bEnable);
 
     sal_uInt16 GetPageCount() const        { return mnPageCount; }
-    sal_uInt16 GetSelectedPage() const {return pViewWin->SelectedPage();}
+    sal_uInt16 GetSelectedPage() const {return m_pViewWin->SelectedPage();}
 
     bool HandleWheelCommands( const CommandEvent& );
 
-    const OUString& GetPrevSwViewData() const       { return sSwViewData; }
-    void SetNewCursorPos( const OUString& rStr ) { sNewCursorPos = rStr; }
-    const OUString& GetNewCursorPos() const           { return sNewCursorPos; }
+    const OUString& GetPrevSwViewData() const       { return m_sSwViewData; }
+    void SetNewCursorPos( const OUString& rStr ) { m_sNewCursorPosition = rStr; }
+    const OUString& GetNewCursorPos() const           { return m_sNewCursorPosition; }
 
-    sal_uInt16 GetNewPage() const {return nNewPage;}
-    void SetNewPage(sal_uInt16 nSet)  {nNewPage = nSet;}
+    sal_uInt16 GetNewPage() const {return m_nNewPage;}
+    void SetNewPage(sal_uInt16 nSet)  {m_nNewPage = nSet;}
 
     // Handler
     void Execute(SfxRequest&);
