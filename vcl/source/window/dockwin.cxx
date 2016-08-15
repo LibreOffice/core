@@ -704,7 +704,8 @@ void DockingWindow::DoInitialLayout()
     {
         mbIsCalculatingInitialLayoutSize = true;
         setDeferredProperties();
-        setOptimalLayoutSize();
+        if (IsFloatingMode())
+            setOptimalLayoutSize();
         mbIsCalculatingInitialLayoutSize = false;
         mbInitialLayoutDone = true;
     }
