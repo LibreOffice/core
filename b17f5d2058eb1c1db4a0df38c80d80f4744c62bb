@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_dd9edf06",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-15T13:20:46Z",
+      "side": 1,
+      "message": "Splendid, and now let\u0027s try to reduce c\u0027n\u0027p code here:",
+      "revId": "b17f5d2058eb1c1db4a0df38c80d80f4744c62bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_1d8937cb",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-15T13:20:46Z",
+      "side": 1,
+      "message": "In all of those cases, you\u0027re filling XFillBmpTileItem and XBmpStretchItem ... the former is only true if eStylePos \u003d\u003d TILED and latter if eStylePos \u003d\u003d STRETCHED.\n\nSo you can as well factor those two out of switch-case statement",
+      "revId": "b17f5d2058eb1c1db4a0df38c80d80f4744c62bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_3d86fbb9",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-15T13:20:46Z",
+      "side": 1,
+      "message": "and now for those p[XY]Items \n\nHave some common variable, aSomeSize and then fill it accordingly\n\ncase ORIGINAL:\n    aSomeSize \u003d rBitmapSize\ncase FILLED:\n    aSomeSize \u003d rFilledSize\n\nand then, outside switch-case statement, for everyone:\n\npXItem.reset(aSomeSize.Width())\npYItem.reset(aSomeSize.Height())",
+      "revId": "b17f5d2058eb1c1db4a0df38c80d80f4744c62bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_5d93affa",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-15T13:20:46Z",
+      "side": 1,
+      "message": "The same here, if possible\n\nfurther:\nm_pSizeBox-\u003eEnable( eStyle \u003d\u003d STRETCHED )\nthe same with m_pPositionBox\nm_pPositionOffBox( eStyle \u003d\u003d TILED )\n\nyou get the idea, right",
+      "revId": "b17f5d2058eb1c1db4a0df38c80d80f4744c62bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
