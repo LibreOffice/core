@@ -115,10 +115,10 @@ enum SvxCellHorJustify
     SVX_HOR_JUSTIFY_REPEAT
 };
 
-enum SvxCellJustifyMethod
+enum class SvxCellJustifyMethod
 {
-    SVX_JUSTIFY_METHOD_AUTO,
-    SVX_JUSTIFY_METHOD_DISTRIBUTE
+    Auto,
+    Distribute
 };
 
 enum SvxCellVerJustify

@@ -1550,7 +1550,7 @@ bool XclExpCellAlign::FillFromItemSet(
         {
             SvxCellJustifyMethod eHorJustMethod = GETITEMVALUE(
                 rItemSet, SvxJustifyMethodItem, ATTR_HOR_JUSTIFY_METHOD, SvxCellJustifyMethod);
-            if (eHorJustMethod == SVX_JUSTIFY_METHOD_DISTRIBUTE)
+            if (eHorJustMethod == SvxCellJustifyMethod::Distribute)
                 mnHorAlign = EXC_XF_HOR_DISTRIB;
         }
 
@@ -1558,7 +1558,7 @@ bool XclExpCellAlign::FillFromItemSet(
         {
             SvxCellJustifyMethod eVerJustMethod = GETITEMVALUE(
                 rItemSet, SvxJustifyMethodItem, ATTR_VER_JUSTIFY_METHOD, SvxCellJustifyMethod);
-            if (eVerJustMethod == SVX_JUSTIFY_METHOD_DISTRIBUTE)
+            if (eVerJustMethod == SvxCellJustifyMethod::Distribute)
                 mnVerAlign = EXC_XF_VER_DISTRIB;
         }
     }

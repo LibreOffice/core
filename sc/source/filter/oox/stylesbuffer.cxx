@@ -1274,10 +1274,10 @@ void Alignment::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
 {
     // horizontal alignment
     ScfTools::PutItem( rItemSet, SvxHorJustifyItem( GetScHorAlign(), ATTR_HOR_JUSTIFY ), bSkipPoolDefs );
-    ScfTools::PutItem( rItemSet, SvxJustifyMethodItem( ( maApiData.mnHorJustifyMethod == css::table::CellJustifyMethod::DISTRIBUTE ) ? ::SVX_JUSTIFY_METHOD_DISTRIBUTE : ::SVX_JUSTIFY_METHOD_AUTO, ATTR_HOR_JUSTIFY_METHOD ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, SvxJustifyMethodItem( ( maApiData.mnHorJustifyMethod == css::table::CellJustifyMethod::DISTRIBUTE ) ? ::SvxCellJustifyMethod::Distribute : ::SvxCellJustifyMethod::Auto, ATTR_HOR_JUSTIFY_METHOD ), bSkipPoolDefs );
     ScfTools::PutItem( rItemSet, SvxVerJustifyItem( GetScVerAlign(), ATTR_VER_JUSTIFY ), bSkipPoolDefs );
     // vertical alignment
-    ScfTools::PutItem( rItemSet, SvxJustifyMethodItem( ( maApiData.mnVerJustifyMethod == css::table::CellJustifyMethod::DISTRIBUTE ) ? ::SVX_JUSTIFY_METHOD_DISTRIBUTE : ::SVX_JUSTIFY_METHOD_AUTO, ATTR_VER_JUSTIFY_METHOD ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, SvxJustifyMethodItem( ( maApiData.mnVerJustifyMethod == css::table::CellJustifyMethod::DISTRIBUTE ) ? ::SvxCellJustifyMethod::Distribute : ::SvxCellJustifyMethod::Auto, ATTR_VER_JUSTIFY_METHOD ), bSkipPoolDefs );
 
     // CTL text direction
     ScfTools::PutItem( rItemSet, SvxFrameDirectionItem( GetScFrameDir(), ATTR_WRITINGDIR ), bSkipPoolDefs );

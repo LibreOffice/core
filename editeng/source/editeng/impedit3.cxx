@@ -1430,7 +1430,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             break;
             case SVX_ADJUST_BLOCK:
             {
-                bool bDistLastLine = (GetJustifyMethod(nPara) == SVX_JUSTIFY_METHOD_DISTRIBUTE);
+                bool bDistLastLine = (GetJustifyMethod(nPara) == SvxCellJustifyMethod::Distribute);
                 long nRemainingSpace = nMaxLineWidth - aTextSize.Width();
                 pLine->SetStartPosX( nStartX );
                 if ( nRemainingSpace > 0 && (!bEOC || bDistLastLine) )

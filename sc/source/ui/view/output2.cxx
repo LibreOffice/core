@@ -189,8 +189,8 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, bool bPTL) :
     eAttrOrient ( SVX_ORIENTATION_STANDARD ),
     eAttrHorJust( SVX_HOR_JUSTIFY_STANDARD ),
     eAttrVerJust( SVX_VER_JUSTIFY_BOTTOM ),
-    eAttrHorJustMethod( SVX_JUSTIFY_METHOD_AUTO ),
-    eAttrVerJustMethod( SVX_JUSTIFY_METHOD_AUTO ),
+    eAttrHorJustMethod( SvxCellJustifyMethod::Auto ),
+    eAttrVerJustMethod( SvxCellJustifyMethod::Auto ),
     pMargin     ( nullptr ),
     nIndent     ( 0 ),
     bRotated    ( false ),
@@ -1815,7 +1815,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                     {
                         bNeedEdit =
                             aVars.GetHorJust() == SVX_HOR_JUSTIFY_BLOCK &&
-                            aVars.GetHorJustMethod() == SVX_JUSTIFY_METHOD_DISTRIBUTE;
+                            aVars.GetHorJustMethod() == SvxCellJustifyMethod::Distribute;
                     }
                 }
                 if (bNeedEdit)

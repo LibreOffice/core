@@ -1571,7 +1571,7 @@ SvxCellHorJustify XclCellAlign::GetScHorAlign() const
 
 SvxCellJustifyMethod XclCellAlign::GetScHorJustifyMethod() const
 {
-    return (mnHorAlign == EXC_XF_HOR_DISTRIB) ? SVX_JUSTIFY_METHOD_DISTRIBUTE : SVX_JUSTIFY_METHOD_AUTO;
+    return (mnHorAlign == EXC_XF_HOR_DISTRIB) ? SvxCellJustifyMethod::Distribute : SvxCellJustifyMethod::Auto;
 }
 
 SvxCellVerJustify XclCellAlign::GetScVerAlign() const
@@ -1591,7 +1591,7 @@ SvxCellVerJustify XclCellAlign::GetScVerAlign() const
 
 SvxCellJustifyMethod XclCellAlign::GetScVerJustifyMethod() const
 {
-    return (mnVerAlign == EXC_XF_VER_DISTRIB) ? SVX_JUSTIFY_METHOD_DISTRIBUTE : SVX_JUSTIFY_METHOD_AUTO;
+    return (mnVerAlign == EXC_XF_VER_DISTRIB) ? SvxCellJustifyMethod::Distribute : SvxCellJustifyMethod::Auto;
 }
 
 SvxFrameDirection XclCellAlign::GetScFrameDir() const

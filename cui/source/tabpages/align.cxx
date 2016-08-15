@@ -129,16 +129,16 @@ void lcl_MaybeResetAlignToDistro(
 
     p = static_cast<const SfxEnumItem*>(pItem);
     SvxCellJustifyMethod eMethod = static_cast<SvxCellJustifyMethod>(p->GetEnumValue());
-    if (eMethod == SVX_JUSTIFY_METHOD_DISTRIBUTE)
+    if (eMethod == SvxCellJustifyMethod::Distribute)
         // Select the 'distribute' entry in the specified list box.
         rLB.SelectEntryPos(nListPos);
 }
 
 void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, sal_uInt16 nWhichJM, const ListBox& rLB, sal_uInt16 nListPos)
 {
-    SvxCellJustifyMethod eJM = SVX_JUSTIFY_METHOD_AUTO;
+    SvxCellJustifyMethod eJM = SvxCellJustifyMethod::Auto;
     if (rLB.GetSelectEntryPos() == nListPos)
-        eJM = SVX_JUSTIFY_METHOD_DISTRIBUTE;
+        eJM = SvxCellJustifyMethod::Distribute;
 
     SvxJustifyMethodItem aItem(eJM, nWhichJM);
     rSet.Put(aItem);
@@ -400,8 +400,8 @@ bool AlignmentTabPage::HasAlignmentChanged( const SfxItemSet& rNew, sal_uInt16 n
 {
     const SfxItemSet& rOld = GetItemSet();
     const SfxPoolItem* pItem;
-    SvxCellJustifyMethod eMethodOld = SVX_JUSTIFY_METHOD_AUTO;
-    SvxCellJustifyMethod eMethodNew = SVX_JUSTIFY_METHOD_AUTO;
+    SvxCellJustifyMethod eMethodOld = SvxCellJustifyMethod::Auto;
+    SvxCellJustifyMethod eMethodNew = SvxCellJustifyMethod::Auto;
     if (rOld.GetItemState(nWhich, true, &pItem) == SfxItemState::SET)
     {
         const SfxEnumItem* p = static_cast<const SfxEnumItem*>(pItem);

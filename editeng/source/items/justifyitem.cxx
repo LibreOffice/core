@@ -345,8 +345,8 @@ bool SvxJustifyMethodItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
     sal_Int32 nUno = table::CellJustifyMethod::AUTO;
     switch (static_cast<SvxCellJustifyMethod>(GetValue()))
     {
-        case SVX_JUSTIFY_METHOD_AUTO:       nUno = table::CellJustifyMethod::AUTO;       break;
-        case SVX_JUSTIFY_METHOD_DISTRIBUTE: nUno = table::CellJustifyMethod::DISTRIBUTE; break;
+        case SvxCellJustifyMethod::Auto:       nUno = table::CellJustifyMethod::AUTO;       break;
+        case SvxCellJustifyMethod::Distribute: nUno = table::CellJustifyMethod::DISTRIBUTE; break;
         default:;
     }
     rVal <<= nUno;
@@ -359,14 +359,14 @@ bool SvxJustifyMethodItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId
     if (!(rVal >>= nVal))
         return false;
 
-    SvxCellJustifyMethod eSvx = SVX_JUSTIFY_METHOD_AUTO;
+    SvxCellJustifyMethod eSvx = SvxCellJustifyMethod::Auto;
     switch (nVal)
     {
         case table::CellJustifyMethod::AUTO:
-            eSvx = SVX_JUSTIFY_METHOD_AUTO;
+            eSvx = SvxCellJustifyMethod::Auto;
         break;
         case table::CellJustifyMethod::DISTRIBUTE:
-            eSvx = SVX_JUSTIFY_METHOD_DISTRIBUTE;
+            eSvx = SvxCellJustifyMethod::Distribute;
         break;
         default:;
     }
@@ -398,7 +398,7 @@ SfxPoolItem* SvxJustifyMethodItem::Create( SvStream& rStream, sal_uInt16 ) const
 
 sal_uInt16 SvxJustifyMethodItem::GetValueCount() const
 {
-    return SVX_JUSTIFY_METHOD_DISTRIBUTE + 1;   // Last Enum value + 1
+    return (sal_uInt16)SvxCellJustifyMethod::Distribute + 1;   // Last Enum value + 1
 }
 
 SvxJustifyMethodItem& SvxJustifyMethodItem::operator=(const SvxJustifyMethodItem& r)
