@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_bdbe8bd2",
+        "filename": "cui/source/tabpages/tparea.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-15T09:00:23Z",
+      "side": 1,
+      "message": "FillStyle",
+      "revId": "b8b4ef1314a4a6fe1f2330d932e53e74afa771e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_ddb33f09",
+        "filename": "cui/source/tabpages/tparea.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-15T09:00:23Z",
+      "side": 1,
+      "message": "You sure fixed width is going to work for all locales?",
+      "revId": "b8b4ef1314a4a6fe1f2330d932e53e74afa771e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
