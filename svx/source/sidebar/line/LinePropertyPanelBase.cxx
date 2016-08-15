@@ -69,7 +69,7 @@ void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLin
 
     for(sal_uInt32 i(0); i < nCount; i++)
     {
-        XLineEndEntry* pEntry = rList.GetLineEnd(i);
+        const XLineEndEntry* pEntry = rList.GetLineEnd(i);
         const Bitmap aBitmap = const_cast< XLineEndList& >(rList).GetUiBitmap(i);
 
         if(!aBitmap.IsEmpty())
@@ -140,7 +140,7 @@ void FillLineStyleListBox(ListBox& rListBox, const XDashList& rList)
 
     for(sal_uInt32 i(0); i < nCount; i++)
     {
-        XDashEntry* pEntry = rList.GetDash(i);
+        const XDashEntry* pEntry = rList.GetDash(i);
         const Bitmap aBitmap = const_cast< XDashList& >(rList).GetUiBitmap(i);
 
         if(!aBitmap.IsEmpty())
@@ -812,7 +812,7 @@ void LinePropertyPanelBase::SelectLineStyle()
                 const XDash& rDash = mpDashItem->GetDashValue();
                 for(sal_Int32 a(0);!bSelected &&  a < mxLineStyleList->Count(); a++)
                 {
-                    XDashEntry* pEntry = mxLineStyleList->GetDash(a);
+                    const XDashEntry* pEntry = mxLineStyleList->GetDash(a);
                     const XDash& rEntry = pEntry->GetDash();
                     if(rDash == rEntry)
                     {
@@ -848,7 +848,7 @@ void LinePropertyPanelBase::SelectEndStyle(bool bStart)
             const basegfx::B2DPolyPolygon& rItemPolygon = mpStartItem->GetLineStartValue();
             for(sal_Int32 a(0);!bSelected &&  a < mxLineEndList->Count(); a++)
             {
-                XLineEndEntry* pEntry = mxLineEndList->GetLineEnd(a);
+                const XLineEndEntry* pEntry = mxLineEndList->GetLineEnd(a);
                 const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
                 if(rItemPolygon == rEntryPolygon)
                 {
@@ -877,7 +877,7 @@ void LinePropertyPanelBase::SelectEndStyle(bool bStart)
             const basegfx::B2DPolyPolygon& rItemPolygon = mpEndItem->GetLineEndValue();
             for(sal_Int32 a(0);!bSelected &&  a < mxLineEndList->Count(); a++)
             {
-                XLineEndEntry* pEntry = mxLineEndList->GetLineEnd(a);
+                const XLineEndEntry* pEntry = mxLineEndList->GetLineEnd(a);
                 const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
                 if(rItemPolygon == rEntryPolygon)
                 {

@@ -32,6 +32,7 @@
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <memory>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
@@ -44,14 +45,9 @@ XHatchList::~XHatchList()
 {
 }
 
-XHatchEntry* XHatchList::Replace(XHatchEntry* pEntry, long nIndex )
+void XHatchList::Replace(std::unique_ptr<XHatchEntry> pEntry, long nIndex)
 {
-    return static_cast<XHatchEntry*>( XPropertyList::Replace(pEntry, nIndex) );
-}
-
-XHatchEntry* XHatchList::Remove(long nIndex)
-{
-    return static_cast<XHatchEntry*>( XPropertyList::Remove(nIndex) );
+    XPropertyList::Replace(std::move(pEntry), nIndex);
 }
 
 XHatchEntry* XHatchList::GetHatch(long nIndex) const
@@ -71,11 +67,11 @@ bool XHatchList::Create()
     aStr.append(" 1");
 
     sal_Int32 nLen = aStr.getLength() - 1;
-    Insert(new XHatchEntry(XHatch(RGB_Color(COL_BLACK),css::drawing::HatchStyle_SINGLE,100,  0),aStr.toString()));
+    Insert(o3tl::make_unique<XHatchEntry>(XHatch(RGB_Color(COL_BLACK),css::drawing::HatchStyle_SINGLE,100,  0),aStr.toString()));
     aStr[nLen] = '2';
-    Insert(new XHatchEntry(XHatch(RGB_Color(COL_RED  ),css::drawing::HatchStyle_DOUBLE, 80,450),aStr.toString()));
+    Insert(o3tl::make_unique<XHatchEntry>(XHatch(RGB_Color(COL_RED  ),css::drawing::HatchStyle_DOUBLE, 80,450),aStr.toString()));
     aStr[nLen] = '3';
-    Insert(new XHatchEntry(XHatch(RGB_Color(COL_BLUE ),css::drawing::HatchStyle_TRIPLE,120,  0),aStr.toString()));
+    Insert(o3tl::make_unique<XHatchEntry>(XHatch(RGB_Color(COL_BLUE ),css::drawing::HatchStyle_TRIPLE,120,  0),aStr.toString()));
 
     return true;
 }

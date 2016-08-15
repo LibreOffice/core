@@ -542,7 +542,7 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
         for (long i = 0; i < pColorList->Count(); ++i )
         {
-            XColorEntry* pEntry = pColorList->GetColor(i);
+            const XColorEntry* pEntry = pColorList->GetColor(i);
             m_pLineColorDLB->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
         m_pLineColorDLB->SetUpdateMode( true );

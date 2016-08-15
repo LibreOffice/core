@@ -123,13 +123,14 @@ XPropertyList::XPropertyList(
 //    fprintf (stderr, "Create type %d count %d\n", (int)meType, count++);
 }
 
+bool XPropertyList::isValidIdx(long nIndex) const
+{
+    return ((size_t)nIndex < maList.size() && nIndex >= 0);
+}
+
+
 XPropertyList::~XPropertyList()
 {
-//    fprintf (stderr, "Destroy type %d count %d\n", (int)meType, --count);
-    for(XPropertyEntry* p : maList)
-        delete p;
-
-    maList.clear();
 }
 
 long XPropertyList::Count() const
@@ -149,7 +150,10 @@ XPropertyEntry* XPropertyList::Get( long nIndex ) const
         if( !const_cast<XPropertyList*>(this)->Load() )
             const_cast<XPropertyList*>(this)->Create();
     }
-    return ( (size_t)nIndex < maList.size() ) ? maList[ nIndex ] : nullptr;
+    if (!isValidIdx(nIndex))
+        return nullptr;
+
+    return maList[nIndex].get();
 }
 
 long XPropertyList::GetIndex(const OUString& rName) const
@@ -171,46 +175,60 @@ long XPropertyList::GetIndex(const OUString& rName) const
 Bitmap XPropertyList::GetUiBitmap( long nIndex ) const
 {
     Bitmap aRetval;
-    XPropertyEntry* pEntry = ( (size_t)nIndex < maList.size() ) ? maList[ nIndex ] : nullptr;
-    if(pEntry)
-    {
-        aRetval = pEntry->GetUiBitmap();
+    if (!isValidIdx(nIndex))
+        return aRetval;
 
-        if(aRetval.IsEmpty())
-        {
-            aRetval = const_cast< XPropertyList* >(this)->CreateBitmapForUI(nIndex);
-            pEntry->SetUiBitmap(aRetval);
-        }
+    XPropertyEntry* pEntry = maList[nIndex].get();
+    aRetval = pEntry->GetUiBitmap();
+
+    if(aRetval.IsEmpty())
+    {
+        aRetval = const_cast< XPropertyList* >(this)->CreateBitmapForUI(nIndex);
+        pEntry->SetUiBitmap(aRetval);
     }
     return aRetval;
 }
 
-void XPropertyList::Insert( XPropertyEntry* pEntry, long nIndex )
+void XPropertyList::Insert(std::unique_ptr<XPropertyEntry> pEntry, long nIndex)
 {
-    if ( (size_t)nIndex < maList.size() ) {
-        maList.insert( maList.begin() + nIndex, pEntry );
+    if (!pEntry)
+    {
+        assert("empty XPropertyEntry not allowed in XPropertyList");
+        return;
+    }
+
+    if (isValidIdx(nIndex)) {
+        maList.insert( maList.begin()+nIndex, std::move(pEntry) );
     } else {
-        maList.push_back( pEntry );
+        maList.push_back( std::move(pEntry) );
     }
 }
 
-XPropertyEntry* XPropertyList::Replace( XPropertyEntry* pEntry, long nIndex )
+void XPropertyList::Replace(std::unique_ptr<XPropertyEntry> pEntry, long nIndex)
 {
-    XPropertyEntry* pOldEntry = (size_t)nIndex < maList.size() ? maList[ nIndex ] : nullptr;
-    if ( pOldEntry ) {
-        maList[ nIndex ] = pEntry;
+    if (!pEntry)
+    {
+        assert("empty XPropertyEntry not allowed in XPropertyList");
+        return;
     }
-    return pOldEntry;
+    if (!isValidIdx(nIndex))
+    {
+        assert("trying to replace invalid entry in XPropertyList");
+        return;
+    }
+
+    maList[nIndex] = std::move(pEntry);
 }
 
-XPropertyEntry* XPropertyList::Remove( long nIndex )
+void XPropertyList::Remove(long nIndex)
 {
-    XPropertyEntry* pEntry = nullptr;
-    if ( (size_t)nIndex < maList.size() ) {
-        pEntry = maList[ nIndex ];
-        maList.erase( maList.begin() + nIndex );
+    if (!isValidIdx(nIndex))
+    {
+        assert("trying to remove invalid entry in XPropertyList");
+        return;
     }
-    return pEntry;
+
+    maList.erase(maList.begin() + nIndex);
 }
 
 void XPropertyList::SetName( const OUString& rString )

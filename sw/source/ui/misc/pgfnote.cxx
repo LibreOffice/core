@@ -231,7 +231,7 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
 
         for ( long i = 0; i < pColorList->Count(); ++i )
         {
-            XColorEntry* pEntry = pColorList->GetColor(i);
+            const XColorEntry* pEntry = pColorList->GetColor(i);
             m_pLineColorBox->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
         m_pLineColorBox->SetUpdateMode( true );
