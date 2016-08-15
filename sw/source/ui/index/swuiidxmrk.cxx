@@ -386,7 +386,7 @@ IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, SyncSelectionHdl, Button*, void)
     m_pApplyToAllCB->Enable(!aOrgStr.isEmpty() &&
         !(nFrameType & ( FrameTypeFlags::HEADER | FrameTypeFlags::FOOTER | FrameTypeFlags::FLY_ANY )));
     SearchTypeHdl(m_pApplyToAllCB);
-    ModifyHdl(m_pTypeDCB);
+    ModifyHdl(m_pEntryED);
 }
 
 // evaluate Ok-Button
@@ -650,10 +650,12 @@ IMPL_LINK_TYPED( SwIndexMarkPane, ModifyListBoxHdl, ListBox&, rBox, void )
 {
     ModifyHdl(&rBox);
 }
+
 IMPL_LINK_TYPED( SwIndexMarkPane, ModifyEditHdl, Edit&, rEdit, void )
 {
     ModifyHdl(&rEdit);
 }
+
 void SwIndexMarkPane::ModifyHdl(Control* pBox)
 {
     if (m_pTypeDCB == pBox)
