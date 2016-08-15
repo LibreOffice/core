@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_bdf20b6e",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-15T12:47:22Z",
+      "side": 1,
+      "message": "Nitpick: constructing a LanguageTag with a LANGUAGE_ENGLISH_US value instead of \"en-US\" string is slightly faster.",
+      "range": {
+        "startLine": 62,
+        "startChar": 25,
+        "endLine": 62,
+        "endChar": 32
+      },
+      "revId": "4b525584d97c1627a1260b90cece0507fb2ebf7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_bdcbeb1d",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-15T12:47:22Z",
+      "side": 1,
+      "message": "Yes please check that the ResMgr could be created! Is it even valid to assume that an en-US localization is always installed and its resource available?",
+      "range": {
+        "startLine": 63,
+        "startChar": 89,
+        "endLine": 63,
+        "endChar": 118
+      },
+      "revId": "4b525584d97c1627a1260b90cece0507fb2ebf7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
