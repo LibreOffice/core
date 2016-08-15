@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_bd304ba0",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-15T08:45:26Z",
+      "side": 1,
+      "message": "BitmapStyle, \u0027e\u0027 prefix is used with variables, not the data types",
+      "revId": "c8a021b80f6e9abcd271a416d0e4de8ad6786ccd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_dd25ff5c",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-15T08:45:26Z",
+      "side": 1,
+      "message": "TileOffset (provided that Off \u003d\u003d Offset)",
+      "revId": "c8a021b80f6e9abcd271a416d0e4de8ad6786ccd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_1d205749",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-15T08:45:26Z",
+      "side": 1,
+      "message": "This variable is overwritten couple of lines below (144), so either drop this, or move the initializiation w/ GetModuleFieldUnit here",
+      "revId": "c8a021b80f6e9abcd271a416d0e4de8ad6786ccd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_fd2ac32b",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-15T08:45:26Z",
+      "side": 1,
+      "message": "You already initialized to null in line 93, so why do it again?",
+      "revId": "c8a021b80f6e9abcd271a416d0e4de8ad6786ccd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_3d1d1b10",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-15T08:45:26Z",
+      "side": 1,
+      "message": "You\u0027ll have to reduce copy\u0027n\u0027pasta code here substantially.\n\nAll those cases are almost identical. The only point of difference is which size (BitmapSize, FilledSize) is used.",
+      "revId": "c8a021b80f6e9abcd271a416d0e4de8ad6786ccd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_7d1793ed",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-15T08:45:26Z",
+      "side": 1,
+      "message": "This block is rather lame, what about using some triple ? operator :",
+      "revId": "c8a021b80f6e9abcd271a416d0e4de8ad6786ccd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_9dd2a733",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-15T08:45:26Z",
+      "side": 1,
+      "message": "Some free lines here please, this is very hard to read",
+      "revId": "c8a021b80f6e9abcd271a416d0e4de8ad6786ccd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_bdd76b22",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-15T08:45:26Z",
+      "side": 1,
+      "message": "Either rename the member variable to m_fObjectWidth (to denote floating point number) or don\u0027t cast to double",
+      "revId": "c8a021b80f6e9abcd271a416d0e4de8ad6786ccd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_dddc1f49",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-15T08:45:26Z",
+      "side": 1,
+      "message": "So what\u0027s the point of this conversion?",
+      "revId": "c8a021b80f6e9abcd271a416d0e4de8ad6786ccd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_fde1e3ff",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-15T08:45:26Z",
+      "side": 1,
+      "message": "Free lines. In the whole block below",
+      "revId": "c8a021b80f6e9abcd271a416d0e4de8ad6786ccd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_7deeb3ed",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-15T08:45:26Z",
+      "side": 1,
+      "message": "BitmapStyle eStylePos (\u0027e\u0027 for enum)",
+      "revId": "c8a021b80f6e9abcd271a416d0e4de8ad6786ccd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
