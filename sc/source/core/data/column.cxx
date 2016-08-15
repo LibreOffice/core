@@ -1511,7 +1511,27 @@ public:
     ~CopyByCloneHandler()
     {
         if (mpDestPos)
+        {
+            // If broadcasters were setup in the same column,
+            // maDestPos.miBroadcasterPos doesn't match
+            // mrDestCol.maBroadcasters because it is never passed anywhere.
+            // Assign a corresponding iterator before copying all over.
+            // Otherwise this may result in wrongly copying a singular
+            // iterator.
+
+            {
+                /* XXX Using a temporary ColumnBlockPosition just for
+                 * initializing from ScColumn::maBroadcasters.begin() is ugly,
+                 * on the other hand we don't want to expose
+                 * ScColumn::maBroadcasters to the outer world and have a
+                 * getter. */
+                sc::ColumnBlockPosition aTempBlock;
+                mrDestCol.InitBlockPosition(aTempBlock);
+                maDestPos.miBroadcasterPos = aTempBlock.miBroadcasterPos;
+            }
+
             *mpDestPos = maDestPos;
+        }
     }
 
     void setStartListening( bool b )
