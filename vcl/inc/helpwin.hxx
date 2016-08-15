@@ -49,6 +49,7 @@ private:
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
     virtual void RequestHelp( const HelpEvent& rHEvt ) override;
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void StateChanged(StateChangedType nType) override;
 
     virtual OUString GetText() const override;
     void ImplShow();
