@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_bd868b63",
+        "filename": "svx/source/unodraw/XPropertyTable.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-08-15T05:51:30Z",
+      "side": 1,
+      "message": "should be \"if (!pNewEntry)\"",
+      "revId": "a0a0b5f9a56e3916278c6c1877a7e6ea06f1784a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
