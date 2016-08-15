@@ -64,41 +64,19 @@
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
-              <object class="GtkTextView" id="instructions">
+              <object class="GtkBox" id="OneDrive">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="pixels_below_lines">4</property>
-                <property name="editable">False</property>
-                <property name="wrap_mode">word</property>
-                <property name="cursor_visible">False</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="url">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="editable">False</property>
-                <property name="invisible_char">●</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="box1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
                 <child>
-                  <object class="GtkLabel" id="google_prefix_label">
+                  <object class="GtkTextView" id="instructions">
+                    <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="no">G-</property>
+                    <property name="pixels_below_lines">4</property>
+                    <property name="editable">False</property>
+                    <property name="wrap_mode">word</property>
+                    <property name="cursor_visible">False</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -107,10 +85,88 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkEntry" id="url">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="editable">False</property>
+                    <property name="invisible_char">●</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkEntry" id="code">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="invisible_char">●</property>
+                    <property name="width_chars">0</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="GDrive">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkLabel" id="label1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Enter the 6 digit PIN:</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">center</property>
+                    <child>
+                      <object class="GtkLabel" id="google_prefix_label">
+                        <property name="can_focus">False</property>
+                        <property name="margin_right">3</property>
+                        <property name="label">G-</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="google_code">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="max_length">6</property>
+                        <property name="invisible_char">●</property>
+                        <property name="width_chars">6</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
