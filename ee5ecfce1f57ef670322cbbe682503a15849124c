@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_bdd4cb47",
+        "filename": "sw/source/core/inc/UndoTable.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-08-15T06:45:13Z",
+      "side": 1,
+      "message": "The m_r prefix is for member references, so that would be misleading here. Can you please use e.g. m_a here? (Other code in sw uses m_v for member vectors, that\u0027s also fine.)",
+      "revId": "ee5ecfce1f57ef670322cbbe682503a15849124c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
