@@ -61,6 +61,7 @@ public:
     void testTextEditViewInvalidations();
     void testUndoInvalidations();
     void testUndoLimiting();
+    void testUndoShapeLimiting();
     void testUndoDispatch();
     void testUndoRepairDispatch();
     void testShapeTextUndoShells();
@@ -91,6 +92,7 @@ public:
     CPPUNIT_TEST(testTextEditViewInvalidations);
     CPPUNIT_TEST(testUndoInvalidations);
     CPPUNIT_TEST(testUndoLimiting);
+    CPPUNIT_TEST(testUndoShapeLimiting);
     CPPUNIT_TEST(testUndoDispatch);
     CPPUNIT_TEST(testUndoRepairDispatch);
     CPPUNIT_TEST(testShapeTextUndoShells);
@@ -924,6 +926,38 @@ void SwTiledRenderingTest::testUndoLimiting()
     CPPUNIT_ASSERT(!pWrtShell1->GetLastUndoInfo(nullptr, nullptr, &pWrtShell1->GetView()));
     CPPUNIT_ASSERT(pWrtShell2->GetLastUndoInfo(nullptr, nullptr, &pWrtShell2->GetView()));
 
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testUndoShapeLimiting()
+{
+    // Load a document and create a view.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
+    SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SfxLokHelper::createView();
+    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
+
+    // Start shape text in the second view.
+    SdrPage* pPage = pWrtShell2->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+    SdrView* pView = pWrtShell2->GetDrawView();
+    pWrtShell2->GetView().BeginTextEdit(pObject, pView->GetSdrPageView(), pWrtShell2->GetWin());
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+
+    // Assert that the first view can't and the second view can undo the insertion.
+    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    rUndoManager.SetView(&pWrtShell1->GetView());
+    // This was 1: first view could undo the change of the second view.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rUndoManager.GetUndoActionCount());
+    rUndoManager.SetView(&pWrtShell2->GetView());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rUndoManager.GetUndoActionCount());
+
+    pWrtShell2->EndTextEdit();
+    rUndoManager.SetView(nullptr);
     comphelper::LibreOfficeKit::setActive(false);
 }
 

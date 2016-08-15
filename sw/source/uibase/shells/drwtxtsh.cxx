@@ -74,6 +74,7 @@
 #include <comphelper/processfactory.hxx>
 #include "swabstdlg.hxx"
 #include "misc.hrc"
+#include "IDocumentUndoRedo.hxx"
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -606,8 +607,14 @@ void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
             break;
 
         default:
-            pSfxViewFrame->GetSlotState( nWhich,
-                                    pSfxViewFrame->GetInterface(), &rSet );
+            {
+                auto* pUndoManager = dynamic_cast<IDocumentUndoRedo*>(GetUndoManager());
+                if (pUndoManager)
+                    pUndoManager->SetView(&GetView());
+                pSfxViewFrame->GetSlotState(nWhich, pSfxViewFrame->GetInterface(), &rSet);
+                if (pUndoManager)
+                    pUndoManager->SetView(nullptr);
+            }
         }
 
         nWhich = aIter.NextWhich();

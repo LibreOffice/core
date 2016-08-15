@@ -29,6 +29,7 @@ class IDocumentDrawModelAccess;
 class IDocumentRedlineAccess;
 class IDocumentState;
 class SwDocShell;
+class SwView;
 
 namespace sw {
 
@@ -77,6 +78,8 @@ public:
     virtual void ClearRedo() override;
     virtual bool IsUndoNodes(SwNodes const& rNodes) const override;
     virtual size_t GetUndoActionCount(const bool bCurrentLevel = true) const override;
+    size_t GetRedoActionCount(const bool bCurrentLevel = true) const override;
+    void SetView(SwView* pView) override;
 
     // ::svl::IUndoManager
     virtual void AddUndoAction(SfxUndoAction *pAction,
@@ -108,6 +111,7 @@ private:
     /// position in Undo-Array at which Doc was saved (and is not modified)
     UndoStackMark m_UndoSaveMark;
     SwDocShell* m_pDocShell;
+    SwView* m_pView;
 
     typedef enum { UNDO = int(true), REDO = int(false) } UndoOrRedo_t;
     bool impl_DoUndoRedo(UndoOrRedo_t const undoOrRedo);
