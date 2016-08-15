@@ -1440,7 +1440,7 @@ void SwHTMLParser::NextToken( int nToken )
             AppendTextNode();
         if( !m_pTable && !m_pDoc->IsInHeaderFooter( m_pPam->GetPoint()->nNode ) )
         {
-            NewAttr( &m_aAttrTab.pBreak, SvxFormatBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK) );
+            NewAttr( &m_aAttrTab.pBreak, SvxFormatBreakItem(SvxBreak::PageBefore, RES_BREAK) );
             EndAttr( m_aAttrTab.pBreak, nullptr, false );
         }
         break;
@@ -5139,7 +5139,7 @@ void SwHTMLParser::InsertLineBreak()
     } // kein CLEAR
 
     // Styles parsen
-    SvxFormatBreakItem aBreakItem( SVX_BREAK_NONE, RES_BREAK );
+    SvxFormatBreakItem aBreakItem( SvxBreak::NONE, RES_BREAK );
     bool bBreakItem = false;
     if( HasStyleOptions( aStyle, aId, aClass ) )
     {
@@ -5158,7 +5158,7 @@ void SwHTMLParser::InsertLineBreak()
         }
     }
 
-    if( bBreakItem && SVX_BREAK_PAGE_AFTER==aBreakItem.GetBreak() )
+    if( bBreakItem && SvxBreak::PageAfter==aBreakItem.GetBreak() )
     {
         NewAttr( &m_aAttrTab.pBreak, aBreakItem );
         EndAttr( m_aAttrTab.pBreak, nullptr, false );
@@ -5180,7 +5180,7 @@ void SwHTMLParser::InsertLineBreak()
         // schief (>Netscape). Deshalb lassen wir das erstmal.
         AppendTextNode( AM_NOSPACE );
     }
-    if( bBreakItem && SVX_BREAK_PAGE_BEFORE==aBreakItem.GetBreak() )
+    if( bBreakItem && SvxBreak::PageBefore==aBreakItem.GetBreak() )
     {
         NewAttr( &m_aAttrTab.pBreak, aBreakItem );
         EndAttr( m_aAttrTab.pBreak, nullptr, false );

@@ -596,7 +596,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
             if( eEnum == 0 )
             {
-                rFormatBreak.SetValue( SVX_BREAK_NONE );
+                rFormatBreak.SetValue( SvxBreak::NONE );
                 bOk = true;
             }
             else
@@ -604,14 +604,14 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 switch( nMemberId )
                 {
                     case MID_BREAK_BEFORE:
-                        rFormatBreak.SetValue( static_cast< sal_uInt16 >((eEnum == 1) ?
-                                             SVX_BREAK_COLUMN_BEFORE :
-                                             SVX_BREAK_PAGE_BEFORE) );
+                        rFormatBreak.SetValue( eEnum == 1 ?
+                                               SvxBreak::ColumnBefore :
+                                               SvxBreak::PageBefore );
                         break;
                     case MID_BREAK_AFTER:
-                        rFormatBreak.SetValue( static_cast< sal_uInt16 >((eEnum == 1) ?
-                                             SVX_BREAK_COLUMN_AFTER :
-                                             SVX_BREAK_PAGE_AFTER) );
+                        rFormatBreak.SetValue( eEnum == 1 ?
+                                               SvxBreak::ColumnAfter :
+                                               SvxBreak::PageAfter );
                         break;
                 }
                 bOk = true;

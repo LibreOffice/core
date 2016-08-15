@@ -28,7 +28,7 @@
 
 /*  [Description]
 
-    This item Describes a wrap-attribute
+    This item describes a wrap-attribute
     Automatic?, Page or column break, before or after?
 */
 #define FMTBREAK_NOAUTO ((sal_uInt16)0x0001)
@@ -38,7 +38,7 @@ class EDITENG_DLLPUBLIC SvxFormatBreakItem : public SfxEnumItem
 public:
     static SfxPoolItem* CreateDefault();
 
-    inline SvxFormatBreakItem( const SvxBreak eBrk /*= SVX_BREAK_NONE*/,
+    inline SvxFormatBreakItem( const SvxBreak eBrk /*= SvxBreak::NONE*/,
                             const sal_uInt16 nWhich );
     inline SvxFormatBreakItem( const SvxFormatBreakItem& rBreak );
     inline SvxFormatBreakItem& operator=( const SvxFormatBreakItem& rCpy );
@@ -60,10 +60,9 @@ public:
     virtual SfxPoolItem*     Create( SvStream&, sal_uInt16 ) const override;
     virtual sal_uInt16       GetValueCount() const override;
 
-    // MS VC4.0 messes things up
-    void                     SetValue( sal_uInt16 nNewVal )
-                                {SfxEnumItem::SetValue(nNewVal); }
-    SvxBreak                 GetBreak() const { return SvxBreak( GetValue() ); }
+    void                     SetValue( SvxBreak nNewVal )
+                                {SfxEnumItem::SetValue((sal_uInt16) nNewVal); }
+    SvxBreak                 GetBreak() const { return (SvxBreak) GetValue(); }
 };
 
 
@@ -79,7 +78,7 @@ inline SvxFormatBreakItem::SvxFormatBreakItem( const SvxFormatBreakItem& rBreak 
 inline SvxFormatBreakItem& SvxFormatBreakItem::operator=(
     const SvxFormatBreakItem& rBreak )
 {
-    SetValue( rBreak.GetValue() );
+    SetValue( rBreak.GetBreak() );
     return *this;
 }
 

@@ -1052,7 +1052,7 @@ bool SwAutoFormat::HasBreakAttr( const SwTextNode& rTextNd )
 
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == pSet->GetItemState( RES_BREAK, false, &pItem )
-        && SVX_BREAK_NONE != static_cast<const SvxFormatBreakItem*>(pItem)->GetBreak() )
+        && SvxBreak::NONE != static_cast<const SvxFormatBreakItem*>(pItem)->GetBreak() )
         return true;
 
     if( SfxItemState::SET == pSet->GetItemState( RES_PAGEDESC, false, &pItem )

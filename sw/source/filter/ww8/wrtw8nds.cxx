@@ -2450,7 +2450,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
             const SwTableFormat* pTabFormat = pTable->GetFrameFormat();
             if (pTabFormat != nullptr)
             {
-                if (pTabFormat->GetBreak().GetBreak() == SVX_BREAK_PAGE_BEFORE)
+                if (pTabFormat->GetBreak().GetBreak() == SvxBreak::PageBefore)
                     AttrOutput().PageBreakBefore(true);
             }
         }
@@ -2656,7 +2656,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
             const SvxFormatBreakItem* pBreakAtParaStyle =
                 &(ItemGet<SvxFormatBreakItem>(rNode.GetSwAttrSet(), RES_BREAK));
             if ( pBreakAtParaStyle &&
-                 pBreakAtParaStyle->GetBreak() == SVX_BREAK_PAGE_AFTER )
+                 pBreakAtParaStyle->GetBreak() == SvxBreak::PageAfter )
             {
                 if ( !pTmpSet )
                 {
@@ -2822,8 +2822,8 @@ bool MSWordExportBase::NoPageBreakSection( const SfxItemSet* pSet )
                 SvxBreak eBreak = static_cast<const SvxFormatBreakItem*>(pI)->GetBreak();
                 switch (eBreak)
                 {
-                    case SVX_BREAK_PAGE_BEFORE:
-                    case SVX_BREAK_PAGE_AFTER:
+                    case SvxBreak::PageBefore:
+                    case SvxBreak::PageAfter:
                         bNoPageBreak = false;
                         break;
                     default:

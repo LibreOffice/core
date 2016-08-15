@@ -3721,9 +3721,9 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     {
                         switch( static_cast<const SvxFormatBreakItem *>(pItem2)->GetBreak() )
                         {
-                        case SVX_BREAK_PAGE_BEFORE:
-                        case SVX_BREAK_PAGE_AFTER:
-                        case SVX_BREAK_PAGE_BOTH:
+                        case SvxBreak::PageBefore:
+                        case SvxBreak::PageAfter:
+                        case SvxBreak::PageBoth:
                             pFrameFormat->SetFormatAttr( *pItem2 );
                             pOldTextNd->ResetAttr( RES_BREAK );
                             break;

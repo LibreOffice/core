@@ -1456,7 +1456,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 
     if ( bIsPageModel )
         // if PageModel is turned on, always turn off PageBreak
-        rOutSet->Put( SvxFormatBreakItem( SVX_BREAK_NONE, _nWhich ) );
+        rOutSet->Put( SvxFormatBreakItem( SvxBreak::NONE, _nWhich ) );
     else
     {
         eState = m_pPageBreakBox->GetState();
@@ -1480,22 +1480,22 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
                     if ( m_pBreakTypeLB->GetSelectEntryPos() == 0 )
                     {
                         if ( bBefore )
-                            aBreak.SetValue( SVX_BREAK_PAGE_BEFORE );
+                            aBreak.SetValue( SvxBreak::PageBefore );
                         else
-                            aBreak.SetValue( SVX_BREAK_PAGE_AFTER );
+                            aBreak.SetValue( SvxBreak::PageAfter );
                     }
                     else
                     {
                         if ( bBefore )
-                            aBreak.SetValue( SVX_BREAK_COLUMN_BEFORE );
+                            aBreak.SetValue( SvxBreak::ColumnBefore );
                         else
-                            aBreak.SetValue( SVX_BREAK_COLUMN_AFTER );
+                            aBreak.SetValue( SvxBreak::ColumnAfter );
                     }
                     break;
                 }
 
                 case TRISTATE_FALSE:
-                    aBreak.SetValue( SVX_BREAK_NONE );
+                    aBreak.SetValue( SvxBreak::NONE );
                     break;
                 default: ; //prevent warning
             }
@@ -1683,7 +1683,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
                 const SvxFormatBreakItem& rPageBreak =
                     static_cast<const SvxFormatBreakItem&>(rSet->Get( _nWhich ));
 
-                SvxBreak eBreak = (SvxBreak)rPageBreak.GetValue();
+                SvxBreak eBreak = rPageBreak.GetBreak();
 
                 // PageBreak not via CTRL-RETURN,
                 // then CheckBox can be freed
@@ -1696,9 +1696,9 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
 
                 m_pPageBreakBox->SetState( TRISTATE_TRUE );
 
-                bool _bEnable =     eBreak != SVX_BREAK_NONE &&
-                                eBreak != SVX_BREAK_COLUMN_BEFORE &&
-                                eBreak != SVX_BREAK_COLUMN_AFTER;
+                bool _bEnable =     eBreak != SvxBreak::NONE &&
+                                eBreak != SvxBreak::ColumnBefore &&
+                                eBreak != SvxBreak::ColumnAfter;
                 m_pApplyCollBtn->Enable(_bEnable);
                 if(!_bEnable)
                 {
@@ -1706,22 +1706,22 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
                     m_pPagenumEdit->Enable(_bEnable);
                 }
 
-                if ( eBreak == SVX_BREAK_NONE )
+                if ( eBreak == SvxBreak::NONE )
                     m_pPageBreakBox->SetState( TRISTATE_FALSE );
 
                 sal_Int32 nType = 0; // selection position in break type ListBox : Page
                 sal_Int32 nPosition = 0; //  selection position in break position ListBox : Before
                 switch ( eBreak )
                 {
-                    case SVX_BREAK_PAGE_BEFORE:
+                    case SvxBreak::PageBefore:
                         break;
-                    case SVX_BREAK_PAGE_AFTER:
+                    case SvxBreak::PageAfter:
                         nPosition = 1;
                         break;
-                    case SVX_BREAK_COLUMN_BEFORE:
+                    case SvxBreak::ColumnBefore:
                         nType = 1;
                         break;
-                    case SVX_BREAK_COLUMN_AFTER:
+                    case SvxBreak::ColumnAfter:
                         nType = 1;
                         nPosition = 1;
                         break;

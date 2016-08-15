@@ -490,7 +490,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
                     // #i76301# - assure that there is a page break before set at the node.
                     const SvxFormatBreakItem* pBreak = dynamic_cast<const SvxFormatBreakItem*>(pItem);
                     if ( pBreak &&
-                         pBreak->GetBreak() == SVX_BREAK_PAGE_BEFORE )
+                         pBreak->GetBreak() == SvxBreak::PageBefore )
                     {
                         bNewPageDesc |= SetAktPageDescFromNode( rNd );
                     }
@@ -517,7 +517,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
         {
             const SvxFormatBreakItem &rBreak =
                 ItemGet<SvxFormatBreakItem>( *pNd, RES_BREAK );
-            if ( rBreak.GetBreak() == SVX_BREAK_PAGE_BEFORE )
+            if ( rBreak.GetBreak() == SvxBreak::PageBefore )
                 bHackInBreak = true;
             else
             {   // Even a pagedesc item is set, the break item can be set 'NONE',
@@ -3423,7 +3423,7 @@ void AttributeOutputBase::FormatPageDescription( const SwFormatPageDesc& rPageDe
     {
         const SwTextFormatColl* pC = static_cast<const SwTextFormatColl*>(GetExport().m_pOutFormatNode);
         if ( (SfxItemState::SET != pC->GetItemState( RES_BREAK, false ) ) && rPageDesc.KnowsPageDesc() )
-            FormatBreak( SvxFormatBreakItem( SVX_BREAK_PAGE_BEFORE, RES_BREAK ) );
+            FormatBreak( SvxFormatBreakItem( SvxBreak::PageBefore, RES_BREAK ) );
     }
 }
 
@@ -3444,9 +3444,9 @@ void AttributeOutputBase::FormatBreak( const SvxFormatBreakItem& rBreak )
     {
         switch ( rBreak.GetBreak() )
         {
-            case SVX_BREAK_NONE:
-            case SVX_BREAK_PAGE_BEFORE:
-            case SVX_BREAK_PAGE_BOTH:
+            case SvxBreak::NONE:
+            case SvxBreak::PageBefore:
+            case SvxBreak::PageBoth:
                 PageBreakBefore( rBreak.GetValue() );
                 break;
             default:
@@ -3462,23 +3462,23 @@ void AttributeOutputBase::FormatBreak( const SvxFormatBreakItem& rBreak )
 
         switch ( rBreak.GetBreak() )
         {
-            case SVX_BREAK_NONE:                                // Ausgeschaltet
+            case SvxBreak::NONE:                                // Ausgeschaltet
                 if ( !GetExport().m_bBreakBefore )
                     PageBreakBefore( false );
                 return;
 
-            case SVX_BREAK_COLUMN_BEFORE:                       // ColumnBreak
+            case SvxBreak::ColumnBefore:                       // ColumnBreak
                 bBefore = true;
                 SAL_FALLTHROUGH;
-            case SVX_BREAK_COLUMN_AFTER:
-            case SVX_BREAK_COLUMN_BOTH:
+            case SvxBreak::ColumnAfter:
+            case SvxBreak::ColumnBoth:
                 if ( GetExport().Sections().CurrentNumberOfColumns( *GetExport().m_pDoc ) > 1 || GetExport().SupportsOneColumnBreak() )
                 {
                     nC = msword::ColumnBreak;
                 }
                 break;
 
-            case SVX_BREAK_PAGE_BEFORE:                         // PageBreak
+            case SvxBreak::PageBefore:                         // PageBreak
                 // From now on(fix for #i77900#) we prefer to save a page break
                 // as paragraph attribute (if the exporter is OK with that),
                 // this has to be done after the export of the paragraph ( =>
@@ -3490,8 +3490,8 @@ void AttributeOutputBase::FormatBreak( const SvxFormatBreakItem& rBreak )
                     break;
                 }
                 SAL_FALLTHROUGH;
-            case SVX_BREAK_PAGE_AFTER:
-            case SVX_BREAK_PAGE_BOTH:
+            case SvxBreak::PageAfter:
+            case SvxBreak::PageBoth:
                 nC = msword::PageBreak;
                 // #i76300# - check for follow page description,
                 // if current writing attributes of a paragraph.

@@ -112,15 +112,15 @@ OUString SwHistorySetFormat::GetDescription() const
     case RES_BREAK:
         switch ((static_cast<SvxFormatBreakItem &>(*m_pAttr)).GetBreak())
         {
-        case SVX_BREAK_PAGE_BEFORE:
-        case SVX_BREAK_PAGE_AFTER:
-        case SVX_BREAK_PAGE_BOTH:
+        case SvxBreak::PageBefore:
+        case SvxBreak::PageAfter:
+        case SvxBreak::PageBoth:
             aResult = SW_RESSTR(STR_UNDO_PAGEBREAKS);
 
             break;
-        case SVX_BREAK_COLUMN_BEFORE:
-        case SVX_BREAK_COLUMN_AFTER:
-        case SVX_BREAK_COLUMN_BOTH:
+        case SvxBreak::ColumnBefore:
+        case SvxBreak::ColumnAfter:
+        case SvxBreak::ColumnBoth:
             aResult = SW_RESSTR(STR_UNDO_COLBRKS);
 
             break;

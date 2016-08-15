@@ -130,14 +130,14 @@ SwCSS1Parser::~SwCSS1Parser()
 bool SwCSS1Parser::SetFormatBreak( SfxItemSet& rItemSet,
                                 const SvxCSS1PropertyInfo& rPropInfo )
 {
-    SvxBreak eBreak = SVX_BREAK_NONE;
+    SvxBreak eBreak = SvxBreak::NONE;
     bool bKeep = false;
     bool bSetKeep = false, bSetBreak = false, bSetPageDesc = false;
     const SwPageDesc *pPageDesc = nullptr;
     switch( rPropInfo.ePageBreakBefore )
     {
     case SVX_CSS1_PBREAK_ALWAYS:
-        eBreak = SVX_BREAK_PAGE_BEFORE;
+        eBreak = SvxBreak::PageBefore;
         bSetBreak = true;
         break;
     case SVX_CSS1_PBREAK_LEFT:
@@ -160,7 +160,7 @@ bool SwCSS1Parser::SetFormatBreak( SfxItemSet& rItemSet,
     case SVX_CSS1_PBREAK_LEFT:
     case SVX_CSS1_PBREAK_RIGHT:
         // LEFT/RIGHT koennte man auch am Absatz davor setzen
-        eBreak = SVX_BREAK_PAGE_AFTER;
+        eBreak = SvxBreak::PageAfter;
         bSetBreak = true;
         break;
     case SVX_CSS1_PBREAK_AUTO:

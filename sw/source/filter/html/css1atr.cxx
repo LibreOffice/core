@@ -3119,17 +3119,17 @@ static Writer& OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( Writer& rWrt,
     {
         switch( pBreakItem->GetBreak() )
         {
-        case SVX_BREAK_NONE:
+        case SvxBreak::NONE:
             pBreakBefore = sCSS1_PV_auto;
             if( !pBreakAfter )
                 pBreakAfter = sCSS1_PV_auto;
             break;
 
-        case SVX_BREAK_PAGE_BEFORE:
+        case SvxBreak::PageBefore:
             pBreakBefore = sCSS1_PV_always;
             break;
 
-        case SVX_BREAK_PAGE_AFTER:
+        case SvxBreak::PageAfter:
             pBreakAfter= sCSS1_PV_always;
             break;
 

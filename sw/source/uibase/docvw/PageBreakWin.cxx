@@ -286,7 +286,7 @@ void SwPageBreakWin::Select( )
                             RES_PAGEDESC, RES_PAGEDESC,
                             RES_BREAK, RES_BREAK,
                             nullptr );
-                    aSet.Put( SvxFormatBreakItem( SVX_BREAK_NONE, RES_BREAK ) );
+                    aSet.Put( SvxFormatBreakItem( SvxBreak::NONE, RES_BREAK ) );
                     aSet.Put( SwFormatPageDesc( nullptr ) );
 
                     SwPaM aPaM( *pNd );

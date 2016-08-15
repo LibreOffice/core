@@ -188,10 +188,10 @@ bool SwFlowFrame::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldKee
     {
         switch ( rAttrs.GetBreak().GetBreak() )
         {
-            case SVX_BREAK_COLUMN_AFTER:
-            case SVX_BREAK_COLUMN_BOTH:
-            case SVX_BREAK_PAGE_AFTER:
-            case SVX_BREAK_PAGE_BOTH:
+            case SvxBreak::ColumnAfter:
+            case SvxBreak::ColumnBoth:
+            case SvxBreak::PageAfter:
+            case SvxBreak::PageBoth:
             {
                 bKeep = false;
                 break;
@@ -243,10 +243,10 @@ bool SwFlowFrame::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldKee
                         bKeep = false;
                     else switch ( pSet->GetBreak().GetBreak() )
                     {
-                        case SVX_BREAK_COLUMN_BEFORE:
-                        case SVX_BREAK_COLUMN_BOTH:
-                        case SVX_BREAK_PAGE_BEFORE:
-                        case SVX_BREAK_PAGE_BOTH:
+                        case SvxBreak::ColumnBefore:
+                        case SvxBreak::ColumnBoth:
+                        case SvxBreak::PageBefore:
+                        case SvxBreak::PageBoth:
                             bKeep = false;
                             break;
                         default: break;
@@ -1129,15 +1129,15 @@ bool SwFlowFrame::IsPageBreak( bool bAct ) const
 
             //for compatibility, also break at column break if no columns exist
             const SvxBreak eBreak = pSet->GetBreak().GetBreak();
-            if ( eBreak == SVX_BREAK_PAGE_BEFORE ||
-                 eBreak == SVX_BREAK_PAGE_BOTH ||
-                 (eBreak == SVX_BREAK_COLUMN_BEFORE && !m_rThis.FindColFrame()) )
+            if ( eBreak == SvxBreak::PageBefore ||
+                 eBreak == SvxBreak::PageBoth ||
+                 (eBreak == SvxBreak::ColumnBefore && !m_rThis.FindColFrame()) )
                 return true;
             else
             {
                 const SvxBreak &ePrB = pPrev->GetAttrSet()->GetBreak().GetBreak();
-                if ( ePrB == SVX_BREAK_PAGE_AFTER ||
-                     ePrB == SVX_BREAK_PAGE_BOTH  ||
+                if ( ePrB == SvxBreak::PageAfter ||
+                     ePrB == SvxBreak::PageBoth  ||
                      pSet->GetPageDesc().GetPageDesc() )
                     return true;
             }
@@ -1184,14 +1184,14 @@ bool SwFlowFrame::IsColBreak( bool bAct ) const
                 }
 
                 const SvxBreak eBreak = m_rThis.GetAttrSet()->GetBreak().GetBreak();
-                if ( eBreak == SVX_BREAK_COLUMN_BEFORE ||
-                     eBreak == SVX_BREAK_COLUMN_BOTH )
+                if ( eBreak == SvxBreak::ColumnBefore ||
+                     eBreak == SvxBreak::ColumnBoth )
                     return true;
                 else
                 {
                     const SvxBreak &ePrB = pPrev->GetAttrSet()->GetBreak().GetBreak();
-                    if ( ePrB == SVX_BREAK_COLUMN_AFTER ||
-                         ePrB == SVX_BREAK_COLUMN_BOTH )
+                    if ( ePrB == SvxBreak::ColumnAfter ||
+                         ePrB == SvxBreak::ColumnBoth )
                         return true;
                 }
             }

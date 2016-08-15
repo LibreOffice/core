@@ -578,7 +578,7 @@ void InitCore()
     aAttrTab[ RES_LR_SPACE- POOLATTR_BEGIN ] =              new SvxLRSpaceItem( RES_LR_SPACE );
     aAttrTab[ RES_UL_SPACE- POOLATTR_BEGIN ] =              new SvxULSpaceItem( RES_UL_SPACE );
     aAttrTab[ RES_PAGEDESC- POOLATTR_BEGIN ] =              new SwFormatPageDesc;
-    aAttrTab[ RES_BREAK- POOLATTR_BEGIN ] =                 new SvxFormatBreakItem( SVX_BREAK_NONE, RES_BREAK);
+    aAttrTab[ RES_BREAK- POOLATTR_BEGIN ] =                 new SvxFormatBreakItem( SvxBreak::NONE, RES_BREAK);
     aAttrTab[ RES_CNTNT- POOLATTR_BEGIN ] =                 new SwFormatContent;
     aAttrTab[ RES_HEADER- POOLATTR_BEGIN ] =                new SwFormatHeader;
     aAttrTab[ RES_FOOTER- POOLATTR_BEGIN ] =                new SwFormatFooter;

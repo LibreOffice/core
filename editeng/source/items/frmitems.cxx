@@ -154,7 +154,7 @@ SfxPoolItem* SvxBrushItem::CreateDefault() { return new  SvxBrushItem(0);}
 SfxPoolItem* SvxShadowItem::CreateDefault() { return new  SvxShadowItem(0);}
 SfxPoolItem* SvxBoxItem::CreateDefault() { return new  SvxBoxItem(0);}
 SfxPoolItem* SvxBoxInfoItem::CreateDefault() { return new  SvxBoxInfoItem(0);}
-SfxPoolItem* SvxFormatBreakItem::CreateDefault() { return new  SvxFormatBreakItem(SVX_BREAK_NONE, 0);}
+SfxPoolItem* SvxFormatBreakItem::CreateDefault() { return new  SvxFormatBreakItem(SvxBreak::NONE, 0);}
 SfxPoolItem* SvxFormatKeepItem::CreateDefault() { return new  SvxFormatKeepItem(false, 0);}
 SfxPoolItem* SvxLineItem::CreateDefault() { return new  SvxLineItem(0);}
 SfxPoolItem* SvxFrameDirectionItem::CreateDefault() { return new  SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, 0);}
@@ -2905,7 +2905,7 @@ bool SvxFormatBreakItem::GetPresentation
 
 OUString SvxFormatBreakItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
-    DBG_ASSERT( nPos < SVX_BREAK_END, "enum overflow!" );
+    DBG_ASSERT( nPos < (sal_uInt16)SvxBreak::End, "enum overflow!" );
     return EE_RESSTR(RID_SVXITEMS_BREAK_BEGIN + nPos);
 }
 
@@ -2913,14 +2913,14 @@ OUString SvxFormatBreakItem::GetValueTextByPos( sal_uInt16 nPos ) const
 bool SvxFormatBreakItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     style::BreakType eBreak = style::BreakType_NONE;
-    switch ( (SvxBreak)GetValue() )
+    switch ( GetBreak() )
     {
-        case SVX_BREAK_COLUMN_BEFORE:   eBreak = style::BreakType_COLUMN_BEFORE; break;
-        case SVX_BREAK_COLUMN_AFTER:    eBreak = style::BreakType_COLUMN_AFTER ; break;
-        case SVX_BREAK_COLUMN_BOTH:     eBreak = style::BreakType_COLUMN_BOTH  ; break;
-        case SVX_BREAK_PAGE_BEFORE:     eBreak = style::BreakType_PAGE_BEFORE  ; break;
-        case SVX_BREAK_PAGE_AFTER:      eBreak = style::BreakType_PAGE_AFTER   ; break;
-        case SVX_BREAK_PAGE_BOTH:       eBreak = style::BreakType_PAGE_BOTH    ; break;
+        case SvxBreak::ColumnBefore:   eBreak = style::BreakType_COLUMN_BEFORE; break;
+        case SvxBreak::ColumnAfter:    eBreak = style::BreakType_COLUMN_AFTER ; break;
+        case SvxBreak::ColumnBoth:     eBreak = style::BreakType_COLUMN_BOTH  ; break;
+        case SvxBreak::PageBefore:     eBreak = style::BreakType_PAGE_BEFORE  ; break;
+        case SvxBreak::PageAfter:      eBreak = style::BreakType_PAGE_AFTER   ; break;
+        case SvxBreak::PageBoth:       eBreak = style::BreakType_PAGE_BOTH    ; break;
         default: ; // prevent warning
     }
     rVal <<= eBreak;
@@ -2940,18 +2940,18 @@ bool SvxFormatBreakItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
         nBreak = (style::BreakType) nValue;
     }
 
-    SvxBreak eBreak = SVX_BREAK_NONE;
+    SvxBreak eBreak = SvxBreak::NONE;
     switch( nBreak )
     {
-        case style::BreakType_COLUMN_BEFORE:    eBreak = SVX_BREAK_COLUMN_BEFORE; break;
-        case style::BreakType_COLUMN_AFTER: eBreak = SVX_BREAK_COLUMN_AFTER;  break;
-        case style::BreakType_COLUMN_BOTH:      eBreak = SVX_BREAK_COLUMN_BOTH;   break;
-        case style::BreakType_PAGE_BEFORE:      eBreak = SVX_BREAK_PAGE_BEFORE;   break;
-        case style::BreakType_PAGE_AFTER:       eBreak = SVX_BREAK_PAGE_AFTER;    break;
-        case style::BreakType_PAGE_BOTH:        eBreak = SVX_BREAK_PAGE_BOTH;     break;
+        case style::BreakType_COLUMN_BEFORE:    eBreak = SvxBreak::ColumnBefore; break;
+        case style::BreakType_COLUMN_AFTER: eBreak = SvxBreak::ColumnAfter;  break;
+        case style::BreakType_COLUMN_BOTH:      eBreak = SvxBreak::ColumnBoth;   break;
+        case style::BreakType_PAGE_BEFORE:      eBreak = SvxBreak::PageBefore;   break;
+        case style::BreakType_PAGE_AFTER:       eBreak = SvxBreak::PageAfter;    break;
+        case style::BreakType_PAGE_BOTH:        eBreak = SvxBreak::PageBoth;     break;
         default: ; // prevent warning
     }
-    SetValue((sal_uInt16) eBreak);
+    SetValue(eBreak);
 
     return true;
 }
@@ -2995,7 +2995,7 @@ SfxPoolItem* SvxFormatBreakItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) 
 
 sal_uInt16 SvxFormatBreakItem::GetValueCount() const
 {
-    return SVX_BREAK_END;   // SVX_BREAK_PAGE_BOTH + 1
+    return (sal_uInt16)SvxBreak::End;   // SvxBreak::PageBoth + 1
 }
 
 

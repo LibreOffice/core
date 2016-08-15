@@ -1891,7 +1891,7 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
                 {
                     *m_pCurrentCursor->GetPoint() = aPos;
                     GetDoc()->getIDocumentContentOperations().InsertPoolItem( *m_pCurrentCursor,
-                            SvxFormatBreakItem( SVX_BREAK_COLUMN_BEFORE, RES_BREAK ) );
+                            SvxFormatBreakItem( SvxBreak::ColumnBefore, RES_BREAK ) );
                 }
             }
 

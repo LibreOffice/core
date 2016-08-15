@@ -2167,13 +2167,13 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
             {
                 switch( static_cast<const SvxFormatBreakItem *>(pItem)->GetBreak() )
                 {
-                case SVX_BREAK_PAGE_BEFORE:
+                case SvxBreak::PageBefore:
                     bPageBreakBefore = true;
                     break;
-                case SVX_BREAK_PAGE_AFTER:
+                case SvxBreak::PageAfter:
                     bPageBreakBehind = true;
                     break;
-                case SVX_BREAK_PAGE_BOTH:
+                case SvxBreak::PageBoth:
                     bPageBreakBefore = true;
                     bPageBreakBehind = true;
                     break;

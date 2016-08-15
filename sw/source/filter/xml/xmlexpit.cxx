@@ -844,15 +844,15 @@ bool SvXMLExportItemMapper::QueryXMLValue(
             switch( nMemberId )
             {
             case MID_BREAK_BEFORE:
-                switch (rFormatBreak.GetValue())
+                switch (rFormatBreak.GetBreak())
                 {
-                    case SVX_BREAK_COLUMN_BEFORE:
+                    case SvxBreak::ColumnBefore:
                         eEnum = 1;
                         break;
-                    case SVX_BREAK_PAGE_BEFORE:
+                    case SvxBreak::PageBefore:
                         eEnum = 2;
                         break;
-                    case SVX_BREAK_NONE:
+                    case SvxBreak::NONE:
                         eEnum = 0;
                         break;
                     default:
@@ -860,15 +860,15 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                 }
                 break;
             case MID_BREAK_AFTER:
-                switch (rFormatBreak.GetValue())
+                switch (rFormatBreak.GetBreak())
                 {
-                    case SVX_BREAK_COLUMN_AFTER:
+                    case SvxBreak::ColumnAfter:
                         eEnum = 1;
                         break;
-                    case SVX_BREAK_PAGE_AFTER:
+                    case SvxBreak::PageAfter:
                         eEnum = 2;
                         break;
-                    case SVX_BREAK_NONE:
+                    case SvxBreak::NONE:
                         eEnum = 0;
                         break;
                     default:

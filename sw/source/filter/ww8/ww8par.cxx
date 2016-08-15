@@ -3541,7 +3541,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                 SwContentNode *pCntNd=m_pPaM->GetContentNode();
                 if (pCntNd!=nullptr && pCntNd->Len()>0) // if par is empty not break is needed
                     AppendTextNode(*m_pPaM->GetPoint());
-                m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SvxFormatBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK));
+                m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SvxFormatBreakItem(SvxBreak::ColumnBefore, RES_BREAK));
             }
             break;
         case 0x7:
@@ -4133,7 +4133,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
                     AppendTextNode(*m_pPaM->GetPoint());
                 }
                 m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM,
-                    SvxFormatBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK));
+                    SvxFormatBreakItem(SvxBreak::PageBefore, RES_BREAK));
                 m_bFirstParaOfPage = true;
                 m_bPgSecBreak = false;
             }
@@ -4461,7 +4461,7 @@ void wwSectionManager::InsertSegments()
         if ( aIter->maSep.bkc == 1 && aIter->maSep.ccolM1 > 0 )
         {
             SwPaM start( aIter->maStart );
-            mrReader.m_rDoc.getIDocumentContentOperations().InsertPoolItem( start, SvxFormatBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK));
+            mrReader.m_rDoc.getIDocumentContentOperations().InsertPoolItem( start, SvxFormatBreakItem(SvxBreak::ColumnBefore, RES_BREAK));
             continue;
         }
 

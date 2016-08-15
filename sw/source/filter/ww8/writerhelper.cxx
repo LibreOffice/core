@@ -635,7 +635,7 @@ namespace sw
             else if (const SwContentNode *pNd = rNd.GetContentNode())
                 pBreak = &(ItemGet<SvxFormatBreakItem>(*pNd, RES_BREAK));
 
-            if (pBreak && pBreak->GetBreak() == SVX_BREAK_PAGE_BEFORE)
+            if (pBreak && pBreak->GetBreak() == SvxBreak::PageBefore)
                 return true;
             return false;
         }

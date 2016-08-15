@@ -433,7 +433,7 @@ sal_uLong SwASCIIParser::ReadChars()
                         }
                         pDoc->getIDocumentContentOperations().SplitNode( *pPam->GetPoint(), false );
                         pDoc->getIDocumentContentOperations().InsertPoolItem(
-                            *pPam, SvxFormatBreakItem( SVX_BREAK_PAGE_BEFORE, RES_BREAK ) );
+                            *pPam, SvxFormatBreakItem( SvxBreak::PageBefore, RES_BREAK ) );
                         pLastStt = pStt;
                         nLineLen = 0;
                         bIns = false;

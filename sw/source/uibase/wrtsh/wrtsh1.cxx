@@ -862,7 +862,7 @@ void SwWrtShell::InsertPageBreak(const OUString *pPageDesc, const ::boost::optio
             SetAttrItem( aDesc );
         }
         else
-            SetAttrItem( SvxFormatBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK) );
+            SetAttrItem( SvxFormatBreakItem(SvxBreak::PageBefore, RES_BREAK) );
         EndUndo(UNDO_UI_INSERT_PAGE_BREAK);
     }
 }
@@ -904,7 +904,7 @@ void SwWrtShell::InsertColumnBreak()
                 DelRight();
             SwFEShell::SplitNode( false, false );
         }
-        SetAttrItem(SvxFormatBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK));
+        SetAttrItem(SvxFormatBreakItem(SvxBreak::ColumnBefore, RES_BREAK));
 
         EndUndo(UNDO_UI_INSERT_COLUMN_BREAK);
     }

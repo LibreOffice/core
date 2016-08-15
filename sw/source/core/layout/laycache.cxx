@@ -589,11 +589,11 @@ bool SwLayHelper::CheckInsertPage()
                               rDesc.GetPageDesc();
 
     bool bBrk = nParagraphCnt > nMaxParaPerPage || mbBreakAfter;
-    mbBreakAfter = rBrk.GetBreak() == SVX_BREAK_PAGE_AFTER ||
-                   rBrk.GetBreak() == SVX_BREAK_PAGE_BOTH;
+    mbBreakAfter = rBrk.GetBreak() == SvxBreak::PageAfter ||
+                   rBrk.GetBreak() == SvxBreak::PageBoth;
     if ( !bBrk )
-        bBrk = rBrk.GetBreak() == SVX_BREAK_PAGE_BEFORE ||
-               rBrk.GetBreak() == SVX_BREAK_PAGE_BOTH;
+        bBrk = rBrk.GetBreak() == SvxBreak::PageBefore ||
+               rBrk.GetBreak() == SvxBreak::PageBoth;
 
     if ( bBrk || pDesc )
     {

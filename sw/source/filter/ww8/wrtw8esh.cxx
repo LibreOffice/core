@@ -2510,7 +2510,7 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
             dynamic_cast<SwTextNode&>(_rFrameFormat.GetAnchor().GetContentAnchor()->nNode.GetNode());
         const SvxFormatBreakItem* pBreak = &(ItemGet<SvxFormatBreakItem>(rAnchorTextNode, RES_BREAK));
         if ( pBreak &&
-             pBreak->GetBreak() == SVX_BREAK_COLUMN_BEFORE )
+             pBreak->GetBreak() == SvxBreak::ColumnBefore )
         {
             bConvDueToAnchoredAtColBreakPara = true;
         }

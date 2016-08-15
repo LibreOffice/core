@@ -148,7 +148,7 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                         bSave = nullptr != static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc();
                     break;
                     case RES_BREAK:
-                        bSave = SVX_BREAK_NONE != static_cast<const SvxFormatBreakItem*>(pItem)->GetBreak();
+                        bSave = SvxBreak::NONE != static_cast<const SvxFormatBreakItem*>(pItem)->GetBreak();
                     break;
                     case RES_PARATR_NUMRULE:
                         bSave = !static_cast<const SwNumRuleItem*>(pItem)->GetValue().isEmpty();

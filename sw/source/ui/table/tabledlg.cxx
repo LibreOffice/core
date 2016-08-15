@@ -1426,21 +1426,21 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
             if ( m_pPgBrkRB->IsChecked() )
             {
                 if ( bBefore )
-                    aBreak.SetValue( SVX_BREAK_PAGE_BEFORE );
+                    aBreak.SetValue( SvxBreak::PageBefore );
                 else
-                    aBreak.SetValue( SVX_BREAK_PAGE_AFTER );
+                    aBreak.SetValue( SvxBreak::PageAfter );
             }
             else
             {
                 if ( bBefore )
-                    aBreak.SetValue( SVX_BREAK_COLUMN_BEFORE );
+                    aBreak.SetValue( SvxBreak::ColumnBefore );
                 else
-                    aBreak.SetValue( SVX_BREAK_COLUMN_AFTER );
+                    aBreak.SetValue( SvxBreak::ColumnAfter );
             }
         }
         else
         {
-                aBreak.SetValue( SVX_BREAK_NONE );
+                aBreak.SetValue( SvxBreak::NONE );
         }
 
         if ( !pBreak || !( *pBreak == aBreak ) )
@@ -1564,9 +1564,9 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
             if(SfxItemState::SET == rSet->GetItemState( RES_BREAK, false, &pItem ))
             {
                 const SvxFormatBreakItem* pPageBreak = static_cast<const SvxFormatBreakItem*>(pItem);
-                SvxBreak eBreak = (SvxBreak)pPageBreak->GetValue();
+                SvxBreak eBreak = pPageBreak->GetBreak();
 
-                if ( eBreak != SVX_BREAK_NONE )
+                if ( eBreak != SvxBreak::NONE )
                 {
                     m_pPgBrkCB->Check();
                     m_pPageCollCB->Enable(false);
@@ -1576,25 +1576,25 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
                 }
                 switch ( eBreak )
                 {
-                    case SVX_BREAK_PAGE_BEFORE:
+                    case SvxBreak::PageBefore:
                         m_pPgBrkRB->Check();
                         m_pColBrkRB->Check( false );
                         m_pPgBrkBeforeRB->Check();
                         m_pPgBrkAfterRB->Check( false );
                         break;
-                    case SVX_BREAK_PAGE_AFTER:
+                    case SvxBreak::PageAfter:
                         m_pPgBrkRB->Check();
                         m_pColBrkRB->Check( false );
                         m_pPgBrkBeforeRB->Check( false );
                         m_pPgBrkAfterRB->Check();
                         break;
-                    case SVX_BREAK_COLUMN_BEFORE:
+                    case SvxBreak::ColumnBefore:
                         m_pPgBrkRB->Check( false );
                         m_pColBrkRB->Check();
                         m_pPgBrkBeforeRB->Check();
                         m_pPgBrkAfterRB->Check( false );
                         break;
-                    case SVX_BREAK_COLUMN_AFTER:
+                    case SvxBreak::ColumnAfter:
                         m_pPgBrkRB->Check( false );
                         m_pColBrkRB->Check();
                         m_pPgBrkBeforeRB->Check( false );

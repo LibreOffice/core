@@ -93,16 +93,16 @@ enum SvxSpecialLineSpace
     SVX_LINESPACE_END
 };
 
-enum SvxBreak
+enum class SvxBreak
 {
-    SVX_BREAK_NONE,
-    SVX_BREAK_COLUMN_BEFORE,
-    SVX_BREAK_COLUMN_AFTER,
-    SVX_BREAK_COLUMN_BOTH,
-    SVX_BREAK_PAGE_BEFORE,
-    SVX_BREAK_PAGE_AFTER,
-    SVX_BREAK_PAGE_BOTH,
-    SVX_BREAK_END
+    NONE,
+    ColumnBefore,
+    ColumnAfter,
+    ColumnBoth,
+    PageBefore,
+    PageAfter,
+    PageBoth,
+    End
 };
 
 enum SvxCellHorJustify

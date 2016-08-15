@@ -814,9 +814,9 @@ void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
         {
             switch( static_cast<const SvxFormatBreakItem *>(pItem)->GetBreak() )
             {
-            case SVX_BREAK_PAGE_BEFORE:
-            case SVX_BREAK_PAGE_AFTER:
-            case SVX_BREAK_PAGE_BOTH:
+            case SvxBreak::PageBefore:
+            case SvxBreak::PageAfter:
+            case SvxBreak::PageBoth:
                 if( bFormatBreak )
                     pDestContentNd->SetAttr( *pItem );
                 pSrcContentNd->ResetAttr( RES_BREAK );
