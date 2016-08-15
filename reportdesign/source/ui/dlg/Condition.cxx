@@ -132,7 +132,7 @@ OColorPopup::OColorPopup(vcl::Window* _pParent,Condition* _pCondition)
 
     for ( i = 0; i < nCount; i++ )
     {
-        XColorEntry* pEntry = pColorList->GetColor(i);
+        const XColorEntry* pEntry = pColorList->GetColor(i);
         m_aColorSet->InsertItem( i+1, pEntry->GetColor(), pEntry->GetName() );
     }
 

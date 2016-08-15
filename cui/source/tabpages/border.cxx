@@ -317,7 +317,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
 
         for ( long i = 0; i < pColorTable->Count(); ++i )
         {
-            XColorEntry* pEntry = pColorTable->GetColor(i);
+            const XColorEntry* pEntry = pColorTable->GetColor(i);
             m_pLbLineColor->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
         m_pLbLineColor->SetUpdateMode( true );

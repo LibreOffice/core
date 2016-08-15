@@ -1436,7 +1436,7 @@ bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName,
             if( nPos == -1 )
                 return false;
 
-            XBitmapEntry* pEntry = pBitmapList->GetBitmap( nPos );
+            const XBitmapEntry* pEntry = pBitmapList->GetBitmap(nPos);
             XFillBitmapItem aBmpItem;
             aBmpItem.SetWhich( XATTR_FILLBITMAP );
             aBmpItem.SetName( rName );
@@ -1455,7 +1455,7 @@ bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName,
             if( nPos == -1 )
                 return false;
 
-            XGradientEntry* pEntry = pGradientList->GetGradient( nPos );
+            const XGradientEntry* pEntry = pGradientList->GetGradient(nPos);
             XFillGradientItem aGrdItem;
             aGrdItem.SetWhich( XATTR_FILLGRADIENT );
             aGrdItem.SetName( rName );
@@ -1474,7 +1474,7 @@ bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName,
             if( nPos == -1 )
                 return false;
 
-            XHatchEntry* pEntry = pHatchList->GetHatch( nPos );
+            const XHatchEntry* pEntry = pHatchList->GetHatch( nPos );
             XFillHatchItem aHatchItem;
             aHatchItem.SetWhich( XATTR_FILLHATCH );
             aHatchItem.SetName( rName );
@@ -1494,7 +1494,7 @@ bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName,
             if( nPos == -1 )
                 return false;
 
-            XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
+            const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nPos);
             if( XATTR_LINEEND == nWID )
             {
                 XLineEndItem aLEItem;
@@ -1525,7 +1525,7 @@ bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName,
             if( nPos == -1 )
                 return false;
 
-            XDashEntry* pEntry = pDashList->GetDash( nPos );
+            const XDashEntry* pEntry = pDashList->GetDash(nPos);
             XLineDashItem aDashItem;
             aDashItem.SetWhich( XATTR_LINEDASH );
             aDashItem.SetName( rName );

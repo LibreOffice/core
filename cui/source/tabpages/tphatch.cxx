@@ -43,6 +43,7 @@
 #include "paragrph.hrc"
 #include <svx/dialogs.hrc>
 
+#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 
@@ -573,9 +574,8 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
                         (css::drawing::HatchStyle) m_pLbLineType->GetSelectEntryPos(),
                         GetCoreValue( *m_pMtrDistance, m_ePoolUnit ),
                         static_cast<long>(m_pMtrAngle->GetValue() * 10) );
-        XHatchEntry* pEntry = new XHatchEntry( aXHatch, aName );
 
-        m_pHatchingList->Insert( pEntry, nCount );
+        m_pHatchingList->Insert(o3tl::make_unique<XHatchEntry>(aXHatch, aName), nCount);
 
         sal_Int32 nId = m_pHatchLB->GetItemId(nCount - 1); // calculate the last ID
         Bitmap aBitmap = m_pHatchingList->GetBitmapForPreview( nCount, m_pHatchLB->GetIconSize() );
@@ -604,9 +604,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickModifyHdl_Impl, Button*, void)
                          GetCoreValue( *m_pMtrDistance, m_ePoolUnit ),
                         static_cast<long>(m_pMtrAngle->GetValue() * 10) );
 
-        XHatchEntry* pEntry = new XHatchEntry( aXHatch, aName );
-
-        delete m_pHatchingList->Replace( pEntry, static_cast<sal_uInt16>(nPos) );
+        m_pHatchingList->Replace(o3tl::make_unique<XHatchEntry>(aXHatch, aName), nPos);
 
         Bitmap aBitmap = m_pHatchingList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), m_pHatchLB->GetIconSize() );
         m_pHatchLB->RemoveItem( nId );
@@ -635,7 +633,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, v
 
         if( aQueryBox->Execute() == RET_YES )
         {
-            m_pHatchingList->Remove( static_cast<sal_uInt16>(nPos) );
+            m_pHatchingList->Remove(nPos);
             m_pHatchLB->RemoveItem( nId );
             nId = m_pHatchLB->GetItemId(0);
             m_pHatchLB->SelectItem( nId );
@@ -675,8 +673,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, v
             if(bValidHatchName)
             {
                 bLoop = false;
-                XHatchEntry* pEntry = m_pHatchingList->GetHatch( static_cast<sal_uInt16>(nPos) );
-                pEntry->SetName( aName );
+                m_pHatchingList->GetHatch(nPos)->SetName(aName);
 
                 m_pHatchLB->SetItemText(nId, aName);
                 m_pHatchLB->SelectItem( nId );

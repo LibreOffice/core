@@ -220,7 +220,7 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, vcl::Window* pParent
 
     for ( long i = 0; i < pColorList->Count(); i++ )
     {
-        XColorEntry* pEntry = pColorList->GetColor(i);
+        const XColorEntry* pEntry = pColorList->GetColor(i);
         sal_Int32 nPos = mpControl->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         if( pEntry->GetColor().GetRGBColor() == (sal_uInt32)nColor )
             mpControl->SelectEntryPos( nPos );
@@ -1093,7 +1093,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( vcl::Window* pParent
 
     for ( long i = 0; i < pColorList->Count(); i++ )
     {
-        XColorEntry* pEntry = pColorList->GetColor(i);
+        const XColorEntry* pEntry = pColorList->GetColor(i);
         mpCLBDimColor->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
 
