@@ -4385,6 +4385,23 @@ SfxTemplateItem StyleApplyState SID_STYLE_APPLY
     GroupId = GID_DOCUMENT;
 ]
 
+SfxTemplateItem TableStyleApply SID_TABLE_STYLE_APPLY
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT;
+]
+
 
 SfxVoidItem StyleNewByExample SID_STYLE_NEW_BY_EXAMPLE
 (SfxStringItem Param SID_STYLE_NEW_BY_EXAMPLE,SfxUInt16Item Family SID_STYLE_FAMILY)

@@ -39,6 +39,9 @@
  <toolbar:toolbaritem xlink:href=".uno:Paste" toolbar:helpid="5712"/>
  <toolbar:toolbaritem xlink:href=".uno:FormatPaintbrush" toolbar:helpid="5715"/>
  <toolbar:toolbarseparator/>
+<!--    temporary place-->
+ <toolbar:toolbaritem xlink:href=".uno:TableStyleApply"/>
+<!--    temporary place-->
  <toolbar:toolbaritem xlink:href=".uno:Undo" toolbar:helpid="5701"/>
  <toolbar:toolbaritem xlink:href=".uno:Redo" toolbar:helpid="5700"/>
  <toolbar:toolbarseparator/>

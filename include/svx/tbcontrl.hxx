@@ -184,9 +184,7 @@ protected:
     virtual void SAL_CALL dispose()
             throw (css::uno::RuntimeException, std::exception) override;
 
-private:
-
-#define MAX_FAMILIES 5
+#define MAX_FAMILIES 6
 
     SfxStyleSheetBasePool* pStyleSheetPool;
     SfxStyleControllerItem_Impl* pBoundItems[MAX_FAMILIES];
@@ -194,9 +192,9 @@ private:
     SfxTemplateItem* pFamilyState[MAX_FAMILIES];
     sal_uInt16 nActFamily; // Id in the ToolBox = Position - 1
 
-    SVX_DLLPRIVATE void Update();
-    SVX_DLLPRIVATE void FillStyleBox();
-    SVX_DLLPRIVATE void SelectStyle(const OUString& rStyleName);
+    virtual SVX_DLLPRIVATE void Update();
+    virtual SVX_DLLPRIVATE void FillStyleBox();
+    void SelectStyle(const OUString& rStyleName);
 
 friend class SfxStyleControllerItem_Impl;
 

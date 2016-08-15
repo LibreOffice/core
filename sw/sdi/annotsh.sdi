@@ -328,6 +328,12 @@ interface Annotation : _Annotation
         StateMethod = StateDisableItems ;
     ]
 
+        SID_TABLE_STYLE_APPLY // status(fina|play)
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+
     SID_STYLE_NEW // ole : no, status : ?
     [
         StateMethod = StateDisableItems ;

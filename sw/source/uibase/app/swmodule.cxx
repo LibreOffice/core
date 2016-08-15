@@ -114,6 +114,7 @@
 #include <PageMarginPopup.hxx>
 #include <PageOrientationPopup.hxx>
 #include <PageColumnPopup.hxx>
+#include <tbltoolbox.hxx>
 
 #include <unotools/configmgr.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -318,6 +319,7 @@ void SwDLL::RegisterControls()
     SvxColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR2, pMod );
     SvxColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR_BACKGROUND, pMod );
     SvxStyleToolBoxControl::RegisterControl(SID_STYLE_APPLY, pMod );
+    SwTableStyleToolBoxControl::RegisterControl( SID_TABLE_STYLE_APPLY, pMod );
     SvxColorToolBoxControl::RegisterControl( SID_BACKGROUND_COLOR, pMod );
     SvxColorToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
 
