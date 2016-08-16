@@ -851,6 +851,7 @@ void SdTiledRenderingTest::testResizeTableColumn()
     comphelper::LibreOfficeKit::setActive(false);
 }
 
+/// A view callback tracks callbacks invoked on one specific view.
 class ViewCallback
 {
 public:
