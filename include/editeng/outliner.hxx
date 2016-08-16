@@ -378,6 +378,8 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI OutlinerViewShell
 public:
     virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) const = 0;
     virtual sal_uInt32 GetViewShellId() const = 0;
+    /// Wrapper around SfxLokHelper::notifyOtherViews().
+    virtual void NotifyOtherViews(int nType, const OString& rKey, const OString& rPayload) = 0;
 
 protected:
     ~OutlinerViewShell() throw () {}
