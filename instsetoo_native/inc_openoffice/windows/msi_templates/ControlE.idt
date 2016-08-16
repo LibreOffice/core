@@ -80,6 +80,9 @@ MaintenanceType	Next	Reinstall	ALL	_IsMaintenance = "Reinstall"	10
 MaintenanceType	Next	ReinstallMode	[ReinstallModeText]	_IsMaintenance = "Reinstall"	9
 MaintenanceWelcome	Cancel	SpawnDialog	CancelSetup	1	0
 MaintenanceWelcome	Next	NewDialog	MaintenanceType	1	0
+MsiRMFilesInUse	Cancel	EndDialog	Exit	1	1
+MsiRMFilesInUse	OK	EndDialog	Return	1	1
+MsiRMFilesInUse	OK	RMShutdownAndRestart	0	MsiUIRMOption~="UseRM"	2
 OutOfSpace	Resume	NewDialog	AdminNetworkLocation	ACTION = "ADMIN"	0
 OutOfSpace	Resume	NewDialog	CustomSetup	ACTION <> "ADMIN"	0
 PatchWelcome	Back	NewDialog	SplashBitmap	Display_IsBitmapDlg	0
