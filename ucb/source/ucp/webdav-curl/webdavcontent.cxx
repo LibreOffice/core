@@ -582,6 +582,7 @@ uno::Any SAL_CALL Content::execute(
                 osl::Guard< osl::Mutex > aGuard( m_aMutex );
                 xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
             }
+            aStaticDAVOptionsCache.removeDAVOptions( xResAccess->getURL() );
             xResAccess->DESTROY( Environment );
             {
                 osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -860,6 +861,7 @@ void Content::addProperty( const css::ucb::PropertyCommandArgument &aCmdArg,
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
         }
+        aStaticDAVOptionsCache.removeDAVOptions( xResAccess->getURL() );
         xResAccess->PROPPATCH( aProppatchValues, xEnv );
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -968,6 +970,7 @@ void Content::removeProperty( const OUString& Name,
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
         }
+        aStaticDAVOptionsCache.removeDAVOptions( xResAccess->getURL() );
         xResAccess->PROPPATCH( aProppatchValues, xEnv );
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -1886,6 +1889,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         try
         {
             // Set property values at server.
+            aStaticDAVOptionsCache.removeDAVOptions( xResAccess->getURL() );
             xResAccess->PROPPATCH( aProppatchValues, xEnv );
             // TODO PLACEHOLDER:
             // remove target URL options from cache, since PROPPATCH may change it
@@ -1940,17 +1944,17 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             = new ::ucbhelper::ContentIdentifier( aNewURL );
         uno::Reference< ucb::XContentIdentifier > xOldId = xIdentifier;
 
-        CurlUri const sourceURI( xOldId->getContentIdentifier() );
-        CurlUri targetURI( xNewId->getContentIdentifier() );
-
         try
         {
+            CurlUri const sourceURI( xOldId->getContentIdentifier() );
+            CurlUri targetURI( xNewId->getContentIdentifier() );
+
             targetURI.SetScheme( sourceURI.GetScheme() );
 
-            xResAccess->MOVE(
-                sourceURI.GetPath(), targetURI.GetURI(), false, xEnv );
             aStaticDAVOptionsCache.removeDAVOptions( sourceURI.GetURI() );
             aStaticDAVOptionsCache.removeDAVOptions( targetURI.GetURI() );
+            xResAccess->MOVE(
+                sourceURI.GetPath(), targetURI.GetURI(), false, xEnv );
 
             // @@@ Should check for resources that could not be moved
             //     (due to source access or target overwrite) and send
@@ -1985,8 +1989,6 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
         catch ( DAVException const & e )
         {
-            aStaticDAVOptionsCache.removeDAVOptions( sourceURI.GetURI() );
-            aStaticDAVOptionsCache.removeDAVOptions( targetURI.GetURI() );
             // Do not set new title!
             aNewTitle.clear();
 
@@ -2602,14 +2604,13 @@ void Content::insert(
         OUString    aTargetUrl = xResAccess->getURL();
         try
         {
-            xResAccess->PUT( xInputStream, Environment );
             // remove options from cache, PUT may change it
             // it will be refreshed when needed
             aStaticDAVOptionsCache.removeDAVOptions( aTargetUrl );
+            xResAccess->PUT( xInputStream, Environment );
         }
         catch ( DAVException const & e )
         {
-            aStaticDAVOptionsCache.removeDAVOptions( aTargetUrl );
             cancelCommandExecution( e, Environment, true );
             // Unreachable
         }
