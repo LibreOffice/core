@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_03871410",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-16T20:03:53Z",
+      "side": 1,
+      "message": "This should be declared as an array with CATEGORYCOUNT elements, so the loop below that matches with pButton and obtains searchTerm is always aligned.",
+      "revId": "26da418d58cdfdd1f5d52dc4d6df4582fee228db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_c38c3c38",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-16T20:03:53Z",
+      "side": 1,
+      "message": "Yes, that\u0027s always a good idea.. ;-) in case someone alters the resource or a translation goes awry. As ResStringArray::GetString() plays safe for index\u003e\u003dcount it\u0027s sufficient though to do that with an assert() once so running a debug build bails out.",
+      "range": {
+        "startLine": 74,
+        "startChar": 38,
+        "endLine": 74,
+        "endChar": 101
+      },
+      "revId": "26da418d58cdfdd1f5d52dc4d6df4582fee228db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_8373244d",
+        "filename": "cui/source/options/personalization.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-16T20:03:53Z",
+      "side": 1,
+      "message": "Please move local defines after all includes.\nApart from that, instead of a define this can be a const size_t value local to class SelectPersonaDialog.",
+      "revId": "26da418d58cdfdd1f5d52dc4d6df4582fee228db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
