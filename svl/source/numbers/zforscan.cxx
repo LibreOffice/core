@@ -26,7 +26,6 @@
 #include <unotools/charclass.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/numberformatcodewrapper.hxx>
-#include <rtl/instance.hxx>
 
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -39,34 +38,6 @@ using namespace svt;
 
 const sal_Unicode cNoBreakSpace = 0xA0;
 const sal_Unicode cNarrowNoBreakSpace = 0x202F;
-
-namespace
-{
-    struct ImplEnglishColors
-    {
-        const OUString* operator()()
-        {
-            static const OUString aEnglishColors[NF_MAX_DEFAULT_COLORS] =
-            {
-                OUString( "BLACK" ),
-                OUString( "BLUE" ),
-                OUString( "GREEN" ),
-                OUString( "CYAN" ),
-                OUString( "RED" ),
-                OUString( "MAGENTA" ),
-                OUString( "BROWN" ),
-                OUString( "GREY" ),
-                OUString( "YELLOW" ),
-                OUString( "WHITE" )
-            };
-            return &aEnglishColors[0];
-        }
-    };
-
-    struct theEnglishColors
-            : public rtl::StaticAggregate< const OUString, ImplEnglishColors> {};
-
-}
 
 ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
     : eNewLnge(LANGUAGE_DONTKNOW)
@@ -470,7 +441,18 @@ Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
     }
     if ( i >= NF_MAX_DEFAULT_COLORS )
     {
-        const OUString* pEnglishColors = theEnglishColors::get();
+        static OUStringLiteral const pEnglishColors[NF_MAX_DEFAULT_COLORS] = {
+            OUStringLiteral( "BLACK" ),
+            OUStringLiteral( "BLUE" ),
+            OUStringLiteral( "GREEN" ),
+            OUStringLiteral( "CYAN" ),
+            OUStringLiteral( "RED" ),
+            OUStringLiteral( "MAGENTA" ),
+            OUStringLiteral( "BROWN" ),
+            OUStringLiteral( "GREY" ),
+            OUStringLiteral( "YELLOW" ),
+            OUStringLiteral( "WHITE" )
+        };
         size_t j = 0;
         while ( j < NF_MAX_DEFAULT_COLORS && sString != pEnglishColors[j] )
         {
