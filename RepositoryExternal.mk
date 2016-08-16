@@ -3852,7 +3852,7 @@ $(call gb_Executable_add_runtime_dependencies,saxparser,\
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
 	$(call gb_Package_get_target_for_build,instsetoo_native_setup_ure) \
 	$(call gb_Rdb_get_target_for_build,saxparser) \
-	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_MISC_FOLDER)/services.rdb \
+	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_MISC_FOLDER_FOR_BUILD)/services.rdb \
 	$(call gb_UnoApi_get_target,udkapi) \
 )
 endef
