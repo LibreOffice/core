@@ -54,6 +54,7 @@ public:
     void testPageDownInvalidation();
     void testPartHash();
     void testViewCursors();
+    void testShapeViewCursors();
     void testMissingInvalidation();
     void testViewCursorVisibility();
     void testViewCursorCleanup();
@@ -85,6 +86,7 @@ public:
     CPPUNIT_TEST(testPageDownInvalidation);
     CPPUNIT_TEST(testPartHash);
     CPPUNIT_TEST(testViewCursors);
+    CPPUNIT_TEST(testShapeViewCursors);
     CPPUNIT_TEST(testMissingInvalidation);
     CPPUNIT_TEST(testViewCursorVisibility);
     CPPUNIT_TEST(testViewCursorCleanup);
@@ -729,6 +731,47 @@ void SwTiledRenderingTest::testViewCursors()
     CPPUNIT_ASSERT(aView1.m_bViewSelectionSet);
     CPPUNIT_ASSERT(aView2.m_bOwnSelectionSet);
     CPPUNIT_ASSERT(!aView2.m_bViewSelectionSet);
+    mxComponent->dispose();
+    mxComponent.clear();
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testShapeViewCursors()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    // Load a document and create a view, so we have 2 ones.
+    SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
+
+    // Start shape text in the second view.
+    SdrPage* pPage = pWrtShell2->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+    SdrView* pView = pWrtShell2->GetDrawView();
+    pWrtShell2->GetView().BeginTextEdit(pObject, pView->GetSdrPageView(), pWrtShell2->GetWin());
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+
+    // Press a key in the second view, while the first one observes this.
+    aView1.m_bOwnCursorInvalidated = false;
+    aView1.m_bViewCursorInvalidated = false;
+    aView2.m_bOwnCursorInvalidated = false;
+    aView2.m_bViewCursorInvalidated = false;
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'y', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'y', 0);
+    // Make sure that aView1 gets a view-only cursor notification, while
+    // aView2 gets a real cursor notification.
+    CPPUNIT_ASSERT(!aView1.m_bOwnCursorInvalidated);
+    CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated);
+    CPPUNIT_ASSERT(aView2.m_bOwnCursorInvalidated);
+    CPPUNIT_ASSERT(!aView2.m_bViewCursorInvalidated);
     mxComponent->dispose();
     mxComponent.clear();
 
