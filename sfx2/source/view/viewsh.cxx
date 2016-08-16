@@ -81,6 +81,7 @@
 #include "workwin.hxx"
 #include <sfx2/objface.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/lokhelper.hxx>
 #include "openuriexternally.hxx"
 #include <shellimpl.hxx>
 
@@ -1655,6 +1656,11 @@ int SfxViewShell::getPart() const
 sal_uInt32 SfxViewShell::GetViewShellId() const
 {
     return pImp->m_nViewShellId;
+}
+
+void SfxViewShell::NotifyOtherViews(int nType, const OString& rKey, const OString& rPayload)
+{
+    SfxLokHelper::notifyOtherViews(this, nType, rKey, rPayload);
 }
 
 void SfxViewShell::dumpAsXml(xmlTextWriterPtr pWriter) const
