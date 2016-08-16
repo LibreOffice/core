@@ -272,9 +272,9 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
                 }
                 switch( pSpace->GetInterLineSpaceRule() )
                 {
-                    case SVX_INTER_LINE_SPACE_OFF:
+                    case SvxInterLineSpaceRule::Off:
                     break;
-                    case SVX_INTER_LINE_SPACE_PROP:
+                    case SvxInterLineSpaceRule::Prop:
                     {
                         long nTmp = pSpace->GetPropLineSpace();
                         // 50% is the minimum, at 0% we switch to
@@ -289,7 +289,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
                         nFirstLineOfs = nTmp;
                         break;
                     }
-                    case SVX_INTER_LINE_SPACE_FIX:
+                    case SvxInterLineSpaceRule::Fix:
                     {
                         nFirstLineOfs += pSpace->GetInterLineSpace();
                         break;

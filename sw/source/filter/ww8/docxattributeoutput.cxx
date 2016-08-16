@@ -4026,7 +4026,7 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             break;
 
         case RES_PARATR_LINESPACING:
-            bMustWrite = static_cast< const SvxLineSpacingItem& >(rHt).GetInterLineSpaceRule() != SVX_INTER_LINE_SPACE_OFF;
+            bMustWrite = static_cast< const SvxLineSpacingItem& >(rHt).GetInterLineSpaceRule() != SvxInterLineSpaceRule::Off;
             break;
         case RES_PARATR_ADJUST:
             bMustWrite = static_cast< const SvxAdjustItem& >(rHt).GetAdjust() != SVX_ADJUST_LEFT;

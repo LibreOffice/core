@@ -34,11 +34,11 @@ class SvXMLUnitConverter;
 #define LINE_SPACE_DEFAULT_HEIGHT 200
 class EDITENG_DLLPUBLIC SvxLineSpacingItem : public SfxEnumItemInterface
 {
-    short             nInterLineSpace;
-    sal_uInt16        nLineHeight;
-    sal_uInt16        nPropLineSpace;
-    SvxLineSpace      eLineSpace;
-    SvxInterLineSpace eInterLineSpace;
+    short                 nInterLineSpace;
+    sal_uInt16            nLineHeight;
+    sal_uInt16            nPropLineSpace;
+    SvxLineSpace          eLineSpace;
+    SvxInterLineSpaceRule eInterLineSpaceRule;
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -69,7 +69,7 @@ public:
     inline void SetInterLineSpace( const short nSpace )
     {
         nInterLineSpace = nSpace;
-        eInterLineSpace = SVX_INTER_LINE_SPACE_FIX;
+        eInterLineSpaceRule = SvxInterLineSpaceRule::Fix;
     }
 
     // Determines the absolute or minimum row height.
@@ -85,14 +85,14 @@ public:
     inline void SetPropLineSpace( const sal_uInt8 nProp )
     {
         nPropLineSpace = nProp;
-        eInterLineSpace = SVX_INTER_LINE_SPACE_PROP;
+        eInterLineSpaceRule = SvxInterLineSpaceRule::Prop;
     }
 
     inline SvxLineSpace &GetLineSpaceRule() { return eLineSpace; }
     inline SvxLineSpace GetLineSpaceRule() const { return eLineSpace; }
 
-    inline SvxInterLineSpace &GetInterLineSpaceRule() { return eInterLineSpace; }
-    inline SvxInterLineSpace GetInterLineSpaceRule() const { return eInterLineSpace; }
+    inline void SetInterLineSpaceRule(SvxInterLineSpaceRule e) { eInterLineSpaceRule = e; }
+    inline SvxInterLineSpaceRule GetInterLineSpaceRule() const { return eInterLineSpaceRule; }
 
     virtual sal_uInt16      GetValueCount() const override;
     virtual OUString        GetValueTextByPos( sal_uInt16 nPos ) const override;

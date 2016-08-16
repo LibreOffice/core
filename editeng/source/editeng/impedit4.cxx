@@ -754,7 +754,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SL );
             sal_Int32 nVal = static_cast<const SvxLineSpacingItem&>(rItem).GetLineHeight();
             char cMult = '0';
-            if ( static_cast<const SvxLineSpacingItem&>(rItem).GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
+            if ( static_cast<const SvxLineSpacingItem&>(rItem).GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop )
             {
                 // From where do I get the value now?
                 // The SwRTF parser is based on a 240 Font!

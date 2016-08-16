@@ -127,15 +127,15 @@ void ParaLineSpacingControl::Initialize()
         {
         case SVX_LINE_SPACE_AUTO:
             {
-                SvxInterLineSpace eInter = currSPItem->GetInterLineSpaceRule();
+                SvxInterLineSpaceRule eInter = currSPItem->GetInterLineSpaceRule();
 
                 switch( eInter )
                 {
-                case SVX_INTER_LINE_SPACE_OFF:
+                case SvxInterLineSpaceRule::Off:
                     SelectEntryPos(LLINESPACE_1);
                     break;
 
-                case SVX_INTER_LINE_SPACE_PROP:
+                case SvxInterLineSpaceRule::Prop:
                     {
                         if ( LINESPACE_1 == currSPItem->GetPropLineSpace() )
                         {
@@ -161,7 +161,7 @@ void ParaLineSpacingControl::Initialize()
                     }
                     break;
 
-                case SVX_INTER_LINE_SPACE_FIX:
+                case SvxInterLineSpaceRule::Fix:
                     {
                         SelectEntryPos(LLINESPACE_DURCH);
                         SetMetricValue(*mpLineDistAtMetricBox, currSPItem->GetInterLineSpace(), eUnit);
@@ -375,7 +375,7 @@ void ParaLineSpacingControl::SetLineSpace(SvxLineSpacingItem& rLineSpace, sal_In
     {
         case LLINESPACE_1:
             rLineSpace.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
-            rLineSpace.GetInterLineSpaceRule() = SVX_INTER_LINE_SPACE_OFF;
+            rLineSpace.SetInterLineSpaceRule( SvxInterLineSpaceRule::Off );
             break;
 
         case LLINESPACE_115:
@@ -400,7 +400,7 @@ void ParaLineSpacingControl::SetLineSpace(SvxLineSpacingItem& rLineSpace, sal_In
 
         case LLINESPACE_MIN:
             rLineSpace.SetLineHeight( (sal_uInt16)lValue );
-            rLineSpace.GetInterLineSpaceRule() = SVX_INTER_LINE_SPACE_OFF;
+            rLineSpace.SetInterLineSpaceRule( SvxInterLineSpaceRule::Off );
             break;
 
         case LLINESPACE_DURCH:
@@ -411,7 +411,7 @@ void ParaLineSpacingControl::SetLineSpace(SvxLineSpacingItem& rLineSpace, sal_In
         case LLINESPACE_FIX:
             rLineSpace.SetLineHeight((sal_uInt16)lValue);
             rLineSpace.GetLineSpaceRule() = SVX_LINE_SPACE_FIX;
-            rLineSpace.GetInterLineSpaceRule() = SVX_INTER_LINE_SPACE_OFF;
+            rLineSpace.SetInterLineSpaceRule( SvxInterLineSpaceRule::Off );
         break;
     }
 }

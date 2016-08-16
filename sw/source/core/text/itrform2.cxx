@@ -1705,7 +1705,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
         // we ignore any line spacing options except from ...
         const SvxLineSpacingItem* pSpace = m_aLineInf.GetLineSpacing();
         if ( ! IsParaLine() && pSpace &&
-             SVX_INTER_LINE_SPACE_PROP == pSpace->GetInterLineSpaceRule() )
+             SvxInterLineSpaceRule::Prop == pSpace->GetInterLineSpaceRule() )
         {
             sal_uLong nTmp = pSpace->GetPropLineSpace();
 
@@ -1735,7 +1735,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                 case SVX_LINE_SPACE_AUTO:
                     // shrink first line of paragraph too on spacing < 100%
                     if (IsParaLine() &&
-                        pSpace->GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP
+                        pSpace->GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop
                         && GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::PROP_LINE_SPACING_SHRINKS_FIRST_LINE))
                     {
                         long nTmp = pSpace->GetPropLineSpace();
@@ -1788,9 +1788,9 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
             if( !IsParaLine() )
                 switch( pSpace->GetInterLineSpaceRule() )
                 {
-                    case SVX_INTER_LINE_SPACE_OFF:
+                    case SvxInterLineSpaceRule::Off:
                     break;
-                    case SVX_INTER_LINE_SPACE_PROP:
+                    case SvxInterLineSpaceRule::Prop:
                     {
                         long nTmp = pSpace->GetPropLineSpace();
                         // 50% ist das Minimum, bei 0% schalten wir auf
@@ -1805,7 +1805,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                         nLineHeight = (sal_uInt16)nTmp;
                         break;
                     }
-                    case SVX_INTER_LINE_SPACE_FIX:
+                    case SvxInterLineSpaceRule::Fix:
                     {
                         nLineHeight = nLineHeight + pSpace->GetInterLineSpace();
                         break;

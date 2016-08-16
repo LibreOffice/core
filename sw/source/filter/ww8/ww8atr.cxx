@@ -4297,7 +4297,7 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
             break;
         case SVX_LINE_SPACE_AUTO:
         {
-            if( rSpacing.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_FIX ) // Leading
+            if( rSpacing.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix ) // Leading
             {
                 // gibt es aber nicht in WW - also wie kommt man an
                 // die MaxLineHeight heran?

@@ -739,7 +739,7 @@ SwContentNotify::SwContentNotify( SwContentFrame *pContentFrame ) :
         {
             const SwAttrSet* pSet = pTextFrame->GetAttrSet();
             const SvxLineSpacingItem &rSpace = pSet->GetLineSpacing();
-            if ( rSpace.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
+            if ( rSpace.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop )
             {
                 mbChkHeightOfLastLine = true;
                 mnHeightOfLastLine = pTextFrame->GetHeightOfLastLine();

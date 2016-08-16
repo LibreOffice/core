@@ -1351,7 +1351,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 pLine->SetMaxAscent( (sal_uInt16)(pLine->GetMaxAscent() + ( nFixHeight - nTxtHeight ) ) );
                 pLine->SetHeight( nFixHeight, nTxtHeight );
             }
-            else if ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
+            else if ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop )
             {
                 if ( nPara || pLine->GetStartPortion() ) // Not the very first line
                 {
@@ -1678,7 +1678,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
             pTmpLine->SetMaxAscent( (sal_uInt16)(pTmpLine->GetMaxAscent() + ( nFixHeight - nTxtHeight ) ) );
             pTmpLine->SetHeight( nFixHeight, nTxtHeight );
         }
-        else if ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
+        else if ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop )
         {
             sal_Int32 nPara = GetParaPortions().GetPos( pParaPortion );
             if ( nPara || pTmpLine->GetStartPortion() ) // Not the very first line
@@ -2937,7 +2937,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
             Point aParaStart( aStartPos );
 
             const SvxLineSpacingItem& rLSItem = static_cast<const SvxLineSpacingItem&>(pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL ));
-            sal_uInt16 nSBL = ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_FIX )
+            sal_uInt16 nSBL = ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix )
                                 ? GetYValue( rLSItem.GetInterLineSpace() ) : 0;
             bool bPaintBullet (false);
 
@@ -3959,7 +3959,7 @@ long ImpEditEngine::CalcVertLineSpacing(Point& rStartPos) const
         nTotalOccupiedHeight += pPortion->GetFirstLineOffset();
 
         const SvxLineSpacingItem& rLSItem = static_cast<const SvxLineSpacingItem&>(pPortion->GetNode()->GetContentAttribs().GetItem(EE_PARA_SBL));
-        sal_uInt16 nSBL = ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_FIX )
+        sal_uInt16 nSBL = ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix )
                             ? GetYValue( rLSItem.GetInterLineSpace() ) : 0;
 
         const SvxULSpaceItem& rULItem = static_cast<const SvxULSpaceItem&>(pPortion->GetNode()->GetContentAttribs().GetItem(EE_PARA_ULSPACE));

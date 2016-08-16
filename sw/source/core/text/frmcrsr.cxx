@@ -475,7 +475,7 @@ bool SwTextFrame::GetTopOfLine( SwTwips& _onTopOfLine,
             // top of the line.
             // Otherwise the line layout determines the top of the line
             const SvxLineSpacingItem& rSpace = GetAttrSet()->GetLineSpacing();
-            if ( rSpace.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
+            if ( rSpace.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop )
             {
                 SwRect aCharRect;
                 if ( GetAutoPos( aCharRect, _rPos ) )

@@ -130,7 +130,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
                 aDebStr.append("Min: ");
                 aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxLineSpacingItem&>(rItem).GetInterLineSpace()));
             }
-            else if ( static_cast<const SvxLineSpacingItem&>(rItem).GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
+            else if ( static_cast<const SvxLineSpacingItem&>(rItem).GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop )
             {
                 aDebStr.append("Prop: ");
                 aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxLineSpacingItem&>(rItem).GetPropLineSpace()));

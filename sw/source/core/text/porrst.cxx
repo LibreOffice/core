@@ -414,9 +414,9 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                             }
                             switch( rSpace.GetInterLineSpaceRule() )
                             {
-                                case SVX_INTER_LINE_SPACE_OFF:
+                                case SvxInterLineSpaceRule::Off:
                                 break;
-                                case SVX_INTER_LINE_SPACE_PROP:
+                                case SvxInterLineSpaceRule::Prop:
                                 {
                                     long nTmp = rSpace.GetPropLineSpace();
                                     if( nTmp < 50 )
@@ -429,7 +429,7 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                                     nNetHeight = rRegDiff;
                                     break;
                                 }
-                                case SVX_INTER_LINE_SPACE_FIX:
+                                case SvxInterLineSpaceRule::Fix:
                                 {
                                     rRegDiff = rRegDiff + rSpace.GetInterLineSpace();
                                     nNetHeight = rRegDiff;

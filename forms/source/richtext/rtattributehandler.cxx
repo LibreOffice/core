@@ -228,7 +228,7 @@ namespace frm
         SvxLineSpacingItem aLineSpacing( m_nLineSpace, getWhich() );
         aLineSpacing.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
         if ( 100 == m_nLineSpace )
-            aLineSpacing.GetInterLineSpaceRule() = SVX_INTER_LINE_SPACE_OFF;
+            aLineSpacing.SetInterLineSpaceRule( SvxInterLineSpaceRule::Off );
         else
             aLineSpacing.SetPropLineSpace( (sal_uInt8)m_nLineSpace );
 

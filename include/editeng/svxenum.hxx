@@ -66,12 +66,12 @@ enum SvxLineSpace
     SVX_LINE_SPACE_END
 };
 
-enum SvxInterLineSpace
+enum class SvxInterLineSpaceRule
 {
-    SVX_INTER_LINE_SPACE_OFF,
-    SVX_INTER_LINE_SPACE_PROP,
-    SVX_INTER_LINE_SPACE_FIX,
-    SVX_INTER_LINE_SPACE_END
+    Off,
+    Prop,
+    Fix,
+    End
 };
 
 enum SvxAdjust

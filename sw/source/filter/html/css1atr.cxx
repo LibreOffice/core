@@ -2762,8 +2762,8 @@ static Writer& OutCSS1_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
     SvxLineSpace eLineSpace = rLSItem.GetLineSpaceRule();
     switch( rLSItem.GetInterLineSpaceRule() )
     {
-    case SVX_INTER_LINE_SPACE_OFF:
-    case SVX_INTER_LINE_SPACE_FIX:
+    case SvxInterLineSpaceRule::Off:
+    case SvxInterLineSpaceRule::Fix:
         {
             switch( eLineSpace )
             {
@@ -2779,7 +2779,7 @@ static Writer& OutCSS1_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
             }
         }
         break;
-    case SVX_INTER_LINE_SPACE_PROP:
+    case SvxInterLineSpaceRule::Prop:
         nPrcHeight = rLSItem.GetPropLineSpace();
         break;
 

@@ -2379,7 +2379,7 @@ long SwTextFrame::GetLineSpace( const bool _bNoPropLineSpace ) const
 
     switch( rSpace.GetInterLineSpaceRule() )
     {
-        case SVX_INTER_LINE_SPACE_PROP:
+        case SvxInterLineSpaceRule::Prop:
         {
             if ( _bNoPropLineSpace )
             {
@@ -2400,7 +2400,7 @@ long SwTextFrame::GetLineSpace( const bool _bNoPropLineSpace ) const
                 nRet = 0;
         }
             break;
-        case SVX_INTER_LINE_SPACE_FIX:
+        case SvxInterLineSpaceRule::Fix:
         {
             if ( rSpace.GetInterLineSpace() > 0 )
                 nRet = rSpace.GetInterLineSpace();

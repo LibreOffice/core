@@ -105,7 +105,7 @@ void SetLineSpace_Impl( SvxLineSpacingItem& rLineSpace,
     {
         case LLINESPACE_1:
             rLineSpace.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
-            rLineSpace.GetInterLineSpaceRule() = SVX_INTER_LINE_SPACE_OFF;
+            rLineSpace.SetInterLineSpaceRule( SvxInterLineSpaceRule::Off );
             break;
 
         case LLINESPACE_115:
@@ -130,7 +130,7 @@ void SetLineSpace_Impl( SvxLineSpacingItem& rLineSpace,
 
         case LLINESPACE_MIN:
             rLineSpace.SetLineHeight( (sal_uInt16)lValue );
-            rLineSpace.GetInterLineSpaceRule() = SVX_INTER_LINE_SPACE_OFF;
+            rLineSpace.SetInterLineSpaceRule( SvxInterLineSpaceRule::Off );
             break;
 
         case LLINESPACE_DURCH:
@@ -141,7 +141,7 @@ void SetLineSpace_Impl( SvxLineSpacingItem& rLineSpace,
         case LLINESPACE_FIX:
             rLineSpace.SetLineHeight((sal_uInt16)lValue);
             rLineSpace.GetLineSpaceRule() = SVX_LINE_SPACE_FIX;
-            rLineSpace.GetInterLineSpaceRule() = SVX_INTER_LINE_SPACE_OFF;
+            rLineSpace.SetInterLineSpaceRule( SvxInterLineSpaceRule::Off );
         break;
     }
 }
@@ -720,17 +720,17 @@ void SvxStdParagraphTabPage::SetLineSpacing_Impl
     {
         case SVX_LINE_SPACE_AUTO:
         {
-            SvxInterLineSpace eInter = rAttr.GetInterLineSpaceRule();
+            SvxInterLineSpaceRule eInter = rAttr.GetInterLineSpaceRule();
 
             switch( eInter )
             {
                 // Default single line spacing
-                case SVX_INTER_LINE_SPACE_OFF:
+                case SvxInterLineSpaceRule::Off:
                     m_pLineDist->SelectEntryPos( LLINESPACE_1 );
                     break;
 
                 // Default single line spacing
-                case SVX_INTER_LINE_SPACE_PROP:
+                case SvxInterLineSpaceRule::Prop:
                     if ( 100 == rAttr.GetPropLineSpace() )
                     {
                         m_pLineDist->SelectEntryPos( LLINESPACE_1 );
@@ -759,7 +759,7 @@ void SvxStdParagraphTabPage::SetLineSpacing_Impl
                     m_pLineDist->SelectEntryPos( LLINESPACE_PROP );
                     break;
 
-                case SVX_INTER_LINE_SPACE_FIX:
+                case SvxInterLineSpaceRule::Fix:
                     SetMetricValue( *m_pLineDistAtMetricBox, rAttr.GetInterLineSpace(), eUnit );
                     m_pLineDist->SelectEntryPos( LLINESPACE_DURCH );
                     break;
