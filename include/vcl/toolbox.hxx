@@ -68,6 +68,9 @@ enum ToolBoxButtonSize { TOOLBOX_BUTTONSIZE_DONTCARE, TOOLBOX_BUTTONSIZE_SMALL, 
 //                       toolbox is prevented from centering the items
 enum class ToolBoxLayoutMode { Normal, LockVert };
 
+// Position of the text when icon and text are painted
+enum ToolBoxTextPosition { Right, Bottom };
+
 struct ImplToolSize
 {
     long mnWidth;
@@ -146,6 +149,7 @@ private:
     PointerStyle        meLastStyle;
     WinBits             mnWinStyle;
     ToolBoxLayoutMode   meLayoutMode;
+    ToolBoxTextPosition meTextPosition;
     Link<ToolBox *, void> maClickHdl;
     Link<ToolBox *, void> maDoubleClickHdl;
     Link<ToolBox *, void> maActivateHdl;
@@ -511,6 +515,8 @@ public:
 
     void SetToolbarLayoutMode( ToolBoxLayoutMode eLayout );
     void statusChanged(const css::frame::FeatureStateEvent& rEvent);
+
+    void SetToolBoxTextPosition( ToolBoxTextPosition ePosition );
 };
 
 inline void ToolBox::CheckItem( sal_uInt16 nItemId, bool bCheck )
