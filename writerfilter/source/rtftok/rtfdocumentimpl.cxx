@@ -700,6 +700,19 @@ OUString RTFDocumentImpl::getStyleName(int nIndex)
         return m_pSuperstream->getStyleName(nIndex);
 }
 
+Id RTFDocumentImpl::getStyleType(int nIndex)
+{
+    if (!m_pSuperstream)
+    {
+        Id nRet = 0;
+        if (m_aStyleTypes.find(nIndex) != m_aStyleTypes.end())
+            nRet = m_aStyleTypes[nIndex];
+        return nRet;
+    }
+    else
+        return m_pSuperstream->getStyleType(nIndex);
+}
+
 RTFParserState& RTFDocumentImpl::getDefaultState()
 {
     if (!m_pSuperstream)
@@ -1247,10 +1260,13 @@ void RTFDocumentImpl::text(OUString& rString)
             }
             break;
             case Destination::STYLEENTRY:
-                if (m_aStates.top().aTableAttributes.find(NS_ooxml::LN_CT_Style_type))
+            {
+                RTFValue::Pointer_t pType = m_aStates.top().aTableAttributes.find(NS_ooxml::LN_CT_Style_type);
+                if (pType)
                 {
                     // Word strips whitespace around style names.
                     m_aStyleNames[m_nCurrentStyleIndex] = aName.trim();
+                    m_aStyleTypes[m_nCurrentStyleIndex] = pType->getInt();
                     auto pValue = std::make_shared<RTFValue>(aName.trim());
                     m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_styleId, pValue);
                     m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Style_name, pValue);
@@ -1261,6 +1277,7 @@ void RTFDocumentImpl::text(OUString& rString)
                 else
                     SAL_INFO("writerfilter", "no RTF style type defined, ignoring");
                 break;
+            }
             case Destination::LISTNAME:
                 // TODO: what can be done with a list name?
                 break;
