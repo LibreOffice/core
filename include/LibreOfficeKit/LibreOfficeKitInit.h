@@ -51,22 +51,22 @@ extern "C"
                       );
     }
 
-    inline char *lok_dlerror(void)
+    char *lok_dlerror(void)
     {
         return dlerror();
     }
 
-    inline void *lok_dlsym(void *Hnd, const char *pName)
+    void *lok_dlsym(void *Hnd, const char *pName)
     {
         return dlsym(Hnd, pName);
     }
 
-    inline int lok_dlclose(void *Hnd)
+    int lok_dlclose(void *Hnd)
     {
         return dlclose(Hnd);
     }
 
-    inline void extendUnoPath(const char *pPath)
+    void extendUnoPath(const char *pPath)
     {
         (void)pPath;
     }
