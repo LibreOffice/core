@@ -391,8 +391,8 @@ void SAL_CALL OPreparedStatement::setDate(sal_Int32 nIndex, const Date& rDate)
 {
     struct tm aCTime;
     aCTime.tm_mday = rDate.Day;
-    aCTime.tm_mon = rDate.Month;
-    aCTime.tm_year = rDate.Year;
+    aCTime.tm_mon = rDate.Month -1;
+    aCTime.tm_year = rDate.Year -1900;
 
     ISC_DATE aISCDate;
     isc_encode_sql_date(&aCTime, &aISCDate);
@@ -422,8 +422,8 @@ void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 nIndex, const DateTime&
     aCTime.tm_min = rTimestamp.Minutes;
     aCTime.tm_hour = rTimestamp.Hours;
     aCTime.tm_mday = rTimestamp.Day;
-    aCTime.tm_mon = rTimestamp.Month;
-    aCTime.tm_year = rTimestamp.Year;
+    aCTime.tm_mon = rTimestamp.Month - 1;
+    aCTime.tm_year = rTimestamp.Year - 1900;
 
     ISC_TIMESTAMP aISCTimestamp;
     isc_encode_timestamp(&aCTime, &aISCTimestamp);
