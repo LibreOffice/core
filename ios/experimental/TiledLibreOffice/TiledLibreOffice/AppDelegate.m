@@ -6,6 +6,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
 
 #import "AppDelegate.h"
@@ -73,7 +74,7 @@ static LibreOfficeKitDocument* document;
     // kit = lok_init([[[NSBundle mainBundle] bundlePath] UTF8String]);
     kit = lok_init(NULL);
     document = kit->pClass->documentLoad(kit, [documentPath UTF8String]);
-    document->pClass->initializeForRendering(document);
+    document->pClass->initializeForRendering(document, "");
     vc.view = [[View alloc] initWithFrame:[self.window frame] kit:kit document:document];
 }
 

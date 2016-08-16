@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKit.h>
 
 @interface TiledView : UIView

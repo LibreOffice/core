@@ -7,6 +7,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #import <UIKit/UIKit.h>
+#define LOK_USE_UNSTABLE_API
 #import <LibreOfficeKit/LibreOfficeKit.h>
 
 @interface View : UIScrollView <UIScrollViewDelegate>
