@@ -613,6 +613,7 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptViewPage", "cui/ui/optviewpage.ui", &rSet)
     , nSizeLB_InitialSelection(0)
     , nSidebarSizeLB_InitialSelection(0)
+    , nNotebookbarSizeLB_InitialSelection(0)
     , nStyleLB_InitialSelection(0)
     , pAppearanceCfg(new SvtTabAppearanceCfg)
     , pCanvasSettings(new CanvasSettings)
@@ -621,6 +622,7 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 {
     get(m_pIconSizeLB, "iconsize");
     get(m_pSidebarIconSizeLB, "sidebariconsize");
+    get(m_pNotebookbarIconSizeLB, "notebookbariconsize");
     get(m_pIconStyleLB, "iconstyle");
 
     get(m_pFontAntiAliasing, "aafont");
@@ -702,6 +704,7 @@ void OfaViewTabPage::dispose()
     pAppearanceCfg = nullptr;
     m_pIconSizeLB.clear();
     m_pSidebarIconSizeLB.clear();
+    m_pNotebookbarIconSizeLB.clear();
     m_pIconStyleLB.clear();
     m_pFontAntiAliasing.clear();
     m_pAAPointLimitLabel.clear();
@@ -774,6 +777,22 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
                 OSL_FAIL( "OfaViewTabPage::FillItemSet(): This state of m_pSidebarIconSizeLB should not be possible!" );
         }
         aMiscOptions.SetSidebarIconSize( eSet );
+    }
+
+    const sal_Int32 nNotebookbarSizeLB_NewSelection = m_pNotebookbarIconSizeLB->GetSelectEntryPos();
+    if( nNotebookbarSizeLB_InitialSelection != nNotebookbarSizeLB_NewSelection )
+    {
+        // from now on it's modified, even if via auto setting the same size was set as now selected in the LB
+        sal_Int16 eSet = TOOLBOX_BUTTONSIZE_DONTCARE;
+        switch( nNotebookbarSizeLB_NewSelection )
+        {
+            case 0: eSet = TOOLBOX_BUTTONSIZE_DONTCARE;  break;
+            case 1: eSet = TOOLBOX_BUTTONSIZE_SMALL; break;
+            case 2: eSet = TOOLBOX_BUTTONSIZE_LARGE; break;
+            default:
+                OSL_FAIL( "OfaViewTabPage::FillItemSet(): This state of m_pNotebookbarIconSizeLB should not be possible!" );
+        }
+        aMiscOptions.SetNotebookbarIconSize( eSet );
     }
 
     const sal_Int32 nStyleLB_NewSelection = m_pIconStyleLB->GetSelectEntryPos();
@@ -928,6 +947,10 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
         nSidebarSizeLB_InitialSelection = aMiscOptions.GetSidebarIconSize();
     m_pSidebarIconSizeLB->SelectEntryPos( nSidebarSizeLB_InitialSelection );
     m_pSidebarIconSizeLB->SaveValue();
+    if( aMiscOptions.GetNotebookbarIconSize() != TOOLBOX_BUTTONSIZE_DONTCARE )
+        nNotebookbarSizeLB_InitialSelection = aMiscOptions.GetNotebookbarIconSize();
+    m_pNotebookbarIconSizeLB->SelectEntryPos( nNotebookbarSizeLB_InitialSelection );
+    m_pNotebookbarIconSizeLB->SaveValue();
 
     if (aMiscOptions.IconThemeWasSetAutomatically()) {
         nStyleLB_InitialSelection = 0;

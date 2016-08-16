@@ -69,7 +69,7 @@ SidebarToolBox::SidebarToolBox (vcl::Window* pParentWindow)
     SvtMiscOptions aMiscOptions;
     aMiscOptions.AddListenerLink(LINK(this, SidebarToolBox, ChangedIconSizeHandler));
 
-    sal_uInt16 nSize = aMiscOptions.GetSidebarIconSize();
+    sal_uInt16 nSize = GetIconSize();
     if (nSize <= TOOLBOX_BUTTONSIZE_LARGE)
         eSize = static_cast<ToolBoxButtonSize>(nSize);
 
@@ -115,6 +115,12 @@ void SidebarToolBox::dispose()
     }
 
     ToolBox::dispose();
+}
+
+sal_uInt16 SidebarToolBox::GetIconSize() const
+{
+    SvtMiscOptions aMiscOptions;
+    return aMiscOptions.GetSidebarIconSize();
 }
 
 void SidebarToolBox::InsertItem(const OUString& rCommand,
@@ -264,8 +270,7 @@ IMPL_LINK_NOARG_TYPED(SidebarToolBox, ChangedIconSizeHandler, LinkParamNone*, vo
 
     ToolBoxButtonSize eSize = TOOLBOX_BUTTONSIZE_SMALL;
 
-    SvtMiscOptions aMiscOptions;
-    sal_uInt16 nSize = aMiscOptions.GetSidebarIconSize();
+    sal_uInt16 nSize = GetIconSize();
     if(nSize <= TOOLBOX_BUTTONSIZE_LARGE)
         eSize = static_cast<ToolBoxButtonSize>(nSize);
 
@@ -297,6 +302,7 @@ IMPL_LINK_NOARG_TYPED(SidebarToolBox, ChangedIconSizeHandler, LinkParamNone*, vo
         }
     }
 
+    Resize();
     queue_resize();
 }
 

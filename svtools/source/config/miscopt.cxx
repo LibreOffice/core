@@ -64,6 +64,8 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_MACRORECORDERMODE        9
 #define PROPERTYNAME_SIDEBARICONSIZE        "SidebarIconSize"
 #define PROPERTYHANDLE_SIDEBARICONSIZE          10
+#define PROPERTYNAME_NOTEBOOKBARICONSIZE    "NotebookbarIconSize"
+#define PROPERTYHANDLE_NOTEBOOKBARICONSIZE      11
 
 #define VCL_TOOLBOX_STYLE_FLAT              ((sal_uInt16)0x0004) // from <vcl/toolbox.hxx>
 
@@ -79,6 +81,8 @@ private:
     bool        m_bIsSymbolsSizeRO;
     sal_Int16   m_nSidebarIconSize;
     bool        m_bIsSidebarIconSizeRO;
+    sal_Int16   m_nNotebookbarIconSize;
+    bool        m_bIsNotebookbarIconSizeRO;
     bool        m_bIsSymbolsStyleRO;
     sal_Int16   m_nToolboxStyle;
     bool        m_bIsToolboxStyleRO;
@@ -153,9 +157,14 @@ public:
         inline sal_Int16 GetSidebarIconSize()
         { return m_nSidebarIconSize; }
 
+        inline sal_Int16 GetNotebookbarIconSize()
+        { return m_nNotebookbarIconSize; }
+
         void SetSymbolsSize( sal_Int16 nSet );
 
         void SetSidebarIconSize( sal_Int16 nSet );
+
+        void SetNotebookbarIconSize( sal_Int16 nSet );
 
         static OUString GetIconTheme();
 
@@ -236,6 +245,8 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     , m_bIsSymbolsSizeRO( false )
     , m_nSidebarIconSize( 0 )
     , m_bIsSidebarIconSizeRO( false )
+    , m_nNotebookbarIconSize( 0 )
+    , m_bIsNotebookbarIconSizeRO( false )
     , m_bIsSymbolsStyleRO( false )
     , m_nToolboxStyle( 1 )
     , m_bIsToolboxStyleRO( false )
@@ -293,6 +304,16 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
                     OSL_FAIL("Wrong type of \"Misc\\SidebarIconSize\"!" );
                 }
                 m_bIsSidebarIconSizeRO = seqRO[nProperty];
+                break;
+            }
+
+            case PROPERTYHANDLE_NOTEBOOKBARICONSIZE :
+            {
+                if( !(seqValues[nProperty] >>= m_nNotebookbarIconSize) )
+                {
+                    OSL_FAIL("Wrong type of \"Misc\\NotebookbarIconSize\"!" );
+                }
+                m_bIsNotebookbarIconSizeRO = seqRO[nProperty];
                 break;
             }
 
@@ -432,6 +453,13 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                             }
                                                         }
                                                     break;
+            case PROPERTYHANDLE_NOTEBOOKBARICONSIZE     :   {
+                                                            if( !(seqValues[nProperty] >>= m_nNotebookbarIconSize) )
+                                                            {
+                                                                OSL_FAIL("Wrong type of \"Misc\\NotebookbarIconSize\"!" );
+                                                            }
+                                                        }
+                                                    break;
             case PROPERTYHANDLE_TOOLBOXSTYLE        :   {
                                                             if( !(seqValues[nProperty] >>= m_nToolboxStyle) )
                                                             {
@@ -521,6 +549,13 @@ void SvtMiscOptions_Impl::SetSidebarIconSize( sal_Int16 nSet )
     CallListeners();
 }
 
+void SvtMiscOptions_Impl::SetNotebookbarIconSize( sal_Int16 nSet )
+{
+    m_nNotebookbarIconSize = nSet;
+    SetModified();
+    CallListeners();
+}
+
 OUString SvtMiscOptions_Impl::GetIconTheme()
 {
     return Application::GetSettings().GetStyleSettings().DetermineIconTheme();
@@ -592,6 +627,13 @@ void SvtMiscOptions_Impl::ImplCommit()
             {
                 if ( !m_bIsSidebarIconSizeRO )
                    seqValues[nProperty] <<= m_nSidebarIconSize;
+                break;
+            }
+
+            case PROPERTYHANDLE_NOTEBOOKBARICONSIZE :
+            {
+                if ( !m_bIsNotebookbarIconSizeRO )
+                   seqValues[nProperty] <<= m_nNotebookbarIconSize;
                 break;
             }
 
@@ -677,7 +719,8 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
         OUString(PROPERTYNAME_DISABLEUICUSTOMIZATION),
         OUString(PROPERTYNAME_EXPERIMENTALMODE),
         OUString(PROPERTYNAME_MACRORECORDERMODE),
-        OUString(PROPERTYNAME_SIDEBARICONSIZE)
+        OUString(PROPERTYNAME_SIDEBARICONSIZE),
+        OUString(PROPERTYNAME_NOTEBOOKBARICONSIZE)
     };
 
     // Initialize return sequence with these list ...
@@ -749,9 +792,19 @@ sal_Int16 SvtMiscOptions::GetSidebarIconSize() const
     return m_pImpl->GetSidebarIconSize();
 }
 
+sal_Int16 SvtMiscOptions::GetNotebookbarIconSize() const
+{
+    return m_pImpl->GetNotebookbarIconSize();
+}
+
 void SvtMiscOptions::SetSidebarIconSize( sal_Int16 nSet )
 {
     m_pImpl->SetSidebarIconSize( nSet );
+}
+
+void SvtMiscOptions::SetNotebookbarIconSize( sal_Int16 nSet )
+{
+    m_pImpl->SetNotebookbarIconSize( nSet );
 }
 
 sal_Int16 SvtMiscOptions::GetCurrentSymbolsSize() const

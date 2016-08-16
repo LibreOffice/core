@@ -444,7 +444,7 @@
                         <property name="orientation">vertical</property>
                         <property name="valign">center</property>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="cutbox">
+                          <object class="sfxlo-NotebookbarToolBox" id="cutbox">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="show_arrow">False</property>
@@ -470,7 +470,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="copybox">
+                          <object class="sfxlo-NotebookbarToolBox" id="copybox">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="show_arrow">False</property>
@@ -539,7 +539,7 @@
                             <property name="can_focus">False</property>
                             <property name="spacing">6</property>
                             <child>
-                              <object class="sfxlo-SidebarToolBox" id="font">
+                              <object class="sfxlo-NotebookbarToolBox" id="font">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
@@ -562,7 +562,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="sfxlo-SidebarToolBox" id="fontheight">
+                              <object class="sfxlo-NotebookbarToolBox" id="fontheight">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
@@ -597,7 +597,7 @@
                             <property name="can_focus">False</property>
                             <property name="spacing">6</property>
                             <child>
-                              <object class="sfxlo-SidebarToolBox" id="fonteffects">
+                              <object class="sfxlo-NotebookbarToolBox" id="fonteffects">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="show_arrow">False</property>
@@ -679,7 +679,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="sfxlo-SidebarToolBox" id="position1">
+                              <object class="sfxlo-NotebookbarToolBox" id="position1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="show_arrow">False</property>
@@ -748,7 +748,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="sfxlo-SidebarToolBox" id="colorbar_writer">
+                              <object class="sfxlo-NotebookbarToolBox" id="colorbar_writer">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="show_arrow">False</property>
@@ -822,7 +822,7 @@
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="fontadjust">
+                          <object class="sfxlo-NotebookbarToolBox" id="fontadjust">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="show_arrow">False</property>
@@ -862,7 +862,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="position">
+                          <object class="sfxlo-NotebookbarToolBox" id="position">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="show_arrow">False</property>
@@ -948,7 +948,7 @@
                             <property name="orientation">vertical</property>
                             <property name="valign">center</property>
                             <child>
-                              <object class="sfxlo-SidebarToolBox" id="numberbullet">
+                              <object class="sfxlo-NotebookbarToolBox" id="numberbullet">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
@@ -1001,7 +1001,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="sfxlo-SidebarToolBox" id="level">
+                              <object class="sfxlo-NotebookbarToolBox" id="level">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
@@ -1116,7 +1116,7 @@
                             <property name="column_spacing">6</property>
                             <property name="valign">center</property>
                             <child>
-                              <object class="sfxlo-SidebarToolBox" id="verticalalignment1">
+                              <object class="sfxlo-NotebookbarToolBox" id="verticalalignment1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
@@ -1167,7 +1167,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="sfxlo-SidebarToolBox" id="horizontalalignment">
+                              <object class="sfxlo-NotebookbarToolBox" id="horizontalalignment">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
@@ -1229,7 +1229,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="sfxlo-SidebarToolBox" id="writedirection">
+                              <object class="sfxlo-NotebookbarToolBox" id="writedirection">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="show_arrow">False</property>
@@ -1253,7 +1253,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="sfxlo-SidebarToolBox" id="writedirection1">
+                              <object class="sfxlo-NotebookbarToolBox" id="writedirection1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="show_arrow">False</property>
@@ -1356,7 +1356,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="spacing">12</property>
                                 <child>
-                                  <object class="sfxlo-SidebarToolBox" id="indent">
+                                  <object class="sfxlo-NotebookbarToolBox" id="indent">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="has_tooltip">True</property>
@@ -1401,7 +1401,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="sfxlo-SidebarToolBox" id="controlcodes">
+                                  <object class="sfxlo-NotebookbarToolBox" id="controlcodes">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="has_tooltip">True</property>
@@ -1440,7 +1440,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
-                                  <object class="sfxlo-SidebarToolBox" id="line">
+                                  <object class="sfxlo-NotebookbarToolBox" id="line">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">end</property>
@@ -1537,7 +1537,7 @@
                             <property name="can_focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="sfxlo-SidebarToolBox" id="style">
+                              <object class="sfxlo-NotebookbarToolBox" id="style">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
@@ -2099,7 +2099,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
-                                  <object class="sfxlo-SidebarToolBox" id="shapes1">
+                                  <object class="sfxlo-NotebookbarToolBox" id="shapes1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <child>
@@ -2158,7 +2158,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="sfxlo-SidebarToolBox" id="shapes2">
+                                  <object class="sfxlo-NotebookbarToolBox" id="shapes2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <child>
@@ -2216,7 +2216,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
-                                  <object class="sfxlo-SidebarToolBox" id="shapes3">
+                                  <object class="sfxlo-NotebookbarToolBox" id="shapes3">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <child>
@@ -2275,7 +2275,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="sfxlo-SidebarToolBox" id="shapes4">
+                                  <object class="sfxlo-NotebookbarToolBox" id="shapes4">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <child>
@@ -2755,7 +2755,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="sfxlo-SidebarToolBox" id="ulspacing">
+                      <object class="sfxlo-NotebookbarToolBox" id="ulspacing">
                         <property name="width_request">210</property>
                         <property name="height_request">72</property>
                         <property name="visible">True</property>
@@ -2785,7 +2785,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-SidebarToolBox" id="lrspacing">
+                      <object class="sfxlo-NotebookbarToolBox" id="lrspacing">
                         <property name="width_request">200</property>
                         <property name="height_request">72</property>
                         <property name="visible">True</property>
@@ -4610,7 +4610,7 @@
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="formattable">
+                          <object class="sfxlo-NotebookbarToolBox" id="formattable">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="has_tooltip">True</property>
@@ -4652,7 +4652,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="formattable1">
+                          <object class="sfxlo-NotebookbarToolBox" id="formattable1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="has_tooltip">True</property>
@@ -4808,7 +4808,7 @@
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="brightnes">
+                          <object class="sfxlo-NotebookbarToolBox" id="brightnes">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="show_arrow">False</property>
@@ -4835,7 +4835,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="contrast">
+                          <object class="sfxlo-NotebookbarToolBox" id="contrast">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="show_arrow">False</property>
@@ -4886,7 +4886,7 @@
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="gamma">
+                          <object class="sfxlo-NotebookbarToolBox" id="gamma">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="show_arrow">False</property>
@@ -4913,7 +4913,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="transparence">
+                          <object class="sfxlo-NotebookbarToolBox" id="transparence">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="show_arrow">False</property>
@@ -4979,7 +4979,7 @@
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="mode">
+                          <object class="sfxlo-NotebookbarToolBox" id="mode">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="show_arrow">False</property>
@@ -5006,7 +5006,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="red">
+                          <object class="sfxlo-NotebookbarToolBox" id="red">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="show_arrow">False</property>
@@ -5057,7 +5057,7 @@
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="green">
+                          <object class="sfxlo-NotebookbarToolBox" id="green">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="show_arrow">False</property>
@@ -5084,7 +5084,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="blue">
+                          <object class="sfxlo-NotebookbarToolBox" id="blue">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="show_arrow">False</property>
@@ -5147,7 +5147,7 @@
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="flip">
+                          <object class="sfxlo-NotebookbarToolBox" id="flip">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="show_arrow">False</property>
@@ -5173,7 +5173,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="flip1">
+                          <object class="sfxlo-NotebookbarToolBox" id="flip1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="show_arrow">False</property>
@@ -5223,7 +5223,7 @@
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="rotate">
+                          <object class="sfxlo-NotebookbarToolBox" id="rotate">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="show_arrow">False</property>
@@ -5249,7 +5249,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="rotate1">
+                          <object class="sfxlo-NotebookbarToolBox" id="rotate1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="show_arrow">False</property>
@@ -5299,7 +5299,7 @@
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="crop">
+                          <object class="sfxlo-NotebookbarToolBox" id="crop">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="show_arrow">False</property>
@@ -5325,7 +5325,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="filter">
+                          <object class="sfxlo-NotebookbarToolBox" id="filter">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="show_arrow">False</property>
