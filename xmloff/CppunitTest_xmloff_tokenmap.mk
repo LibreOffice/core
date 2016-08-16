@@ -26,18 +26,9 @@ $(eval $(call gb_CppunitTest_use_api,xmloff_tokenmap, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,xmloff_tokenmap, \
-	basegfx \
-    comphelper \
     cppu \
     cppuhelper \
-    i18nlangtag \
     sal \
-    salhelper \
-    sax \
-    svl \
-    tl \
-    utl \
-    vcl \
     $(gb_UWINAPI) \
 ))
 
