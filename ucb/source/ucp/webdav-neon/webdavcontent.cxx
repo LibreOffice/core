@@ -860,8 +860,6 @@ void Content::addProperty( const ucb::PropertyCommandArgument& aCmdArg,
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
         }
-        // TODO PLACEHOLDER:
-        // remove target URL options from cache, since PROPPATCH may change them
 
         // Notify propertyset info change listeners.
         beans::PropertySetInfoChangeEvent evt(
@@ -1875,8 +1873,6 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             // Set property values at server.
             aStaticDAVOptionsCache.removeDAVOptions( xResAccess->getURL() );
             xResAccess->PROPPATCH( aProppatchValues, xEnv );
-            // TODO PLACEHOLDER:
-            // remove target URL options from cache, since PROPPATCH may change it
 
             std::vector< ProppatchValue >::const_iterator it
                 = aProppatchValues.begin();
@@ -3023,7 +3019,6 @@ Content::ResourceType Content::resourceTypeForLocks(
                                 eResourceTypeForLocks = NOT_FOUND;
                                 break;
                                 // some servers returns SC_FORBIDDEN, instead
-                                // TODO: probably remove it, when OPTIONS implemented
                                 // the meaning of SC_FORBIDDEN is, according to <http://tools.ietf.org/html/rfc7231#section-6.5.3>:
                                 // The 403 (Forbidden) status code indicates that the server understood
                                 // the request but refuses to authorize it
