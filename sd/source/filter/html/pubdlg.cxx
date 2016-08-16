@@ -1513,8 +1513,7 @@ void SdPublishingDlg::Load()
 
     // check if file exists, SfxMedium shows an errorbox else
     {
-        css::uno::Reference < css::task::XInteractionHandler > xHandler;
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ, xHandler );
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ );
 
         bool bOk = pIStm && ( pIStm->GetError() == 0);
 

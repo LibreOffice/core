@@ -153,12 +153,6 @@ SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode e
 }
 
 SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
-                                         const Reference < XInteractionHandler >& xInteractionHandler )
-{
-    return lcl_CreateStream( rFileName, eOpenMode, xInteractionHandler, true /* bEnsureFileExists */ );
-}
-
-SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
                                          bool bFileExists )
 {
     // related tdf#99312

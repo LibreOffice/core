@@ -313,8 +313,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
 
             // check if file exists, warn before we overwrite it
             {
-                css::uno::Reference < css::task::XInteractionHandler > xHandler;
-                SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ, xHandler );
+                SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ );
 
                 bool bOk = pIStm && ( pIStm->GetError() == 0);
 
