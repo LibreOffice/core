@@ -31,6 +31,7 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -48,8 +49,9 @@
 #include <xmloff/shapeimport.hxx>
 #include <xmloff/SchXMLImportHelper.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase8.hxx>
 #include <xmloff/formlayerimport.hxx>
+#include <comphelper/attributelist.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 
@@ -58,6 +60,10 @@
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
+
+const size_t NMSP_SHIFT = 16;
+const sal_Int32 TOKEN_MASK = 0xffff;
+const sal_Int32 NMSP_MASK = 0xffff0000;
 
 namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }
@@ -103,15 +109,39 @@ namespace o3tl
     template<> struct typed_flags<SvXMLImportFlags> : is_typed_flags<SvXMLImportFlags, 0xffff> {};
 }
 
+class SvXMLImportFastNamespaceHandler : public ::cppu::WeakImplHelper< css::xml::sax::XFastNamespaceHandler >
+{
+private:
+    struct NamespaceDefine
+    {
+        OUString    m_aPrefix;
+        OUString    m_aNamespaceURI;
 
-class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper7<
+        NamespaceDefine( const OUString& rPrefix, const OUString& rNamespaceURI ) : m_aPrefix( rPrefix ), m_aNamespaceURI( rNamespaceURI ) {}
+    };
+    std::vector< std::unique_ptr< NamespaceDefine > > m_aNamespaceDefines;
+
+public:
+    SvXMLImportFastNamespaceHandler();
+    void addNSDeclAttributes( rtl::Reference < comphelper::AttributeList >& rAttrList );
+
+    //XFastNamespaceHandler
+    virtual void SAL_CALL registerNamespace( const OUString& rNamespacePrefix, const OUString& rNamespaceURI )
+                            throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getNamespaceURI( const OUString& rNamespacePrefix )
+                            throw (css::uno::RuntimeException, std::exception) override;
+};
+
+
+class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper8<
              css::xml::sax::XExtendedDocumentHandler,
              css::xml::sax::XFastDocumentHandler,
              css::lang::XServiceInfo,
              css::lang::XInitialization,
              css::document::XImporter,
              css::document::XFilter,
-             css::lang::XUnoTunnel>
+             css::lang::XUnoTunnel,
+             css::xml::sax::XFastParser>
 {
     friend class SvXMLImportContext;
 
@@ -159,6 +189,14 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper7<
     SvXMLImportFlags  mnImportFlags;
     SvXMLErrorFlags  mnErrorFlags;
     std::set< OUString > embeddedFontUrlsKnown;
+    css::uno::Reference< css::xml::sax::XFastParser > mxParser;
+    rtl::Reference< SvXMLImportFastNamespaceHandler > maNamespaceHandler;
+    css::uno::Reference< css::xml::sax::XFastTokenHandler > mxTokenHandler;
+    std::unordered_map< sal_Int32, OUString > maNamespaceMap;
+    const OUString getNameFromToken( sal_Int32 nToken );
+    const OUString getNamespacePrefixFromToken( sal_Int32 nToken );
+    void registerNamespaces();
+    void registerNSHelper(sal_Int32 nToken, sal_Int32 nPrefix, sal_Int32 nNamespace );
 
 protected:
 
@@ -267,6 +305,17 @@ public:
         throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL unknown(const OUString& sString)
         throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
+
+    // XFastParser
+    virtual void SAL_CALL parseStream( const css::xml::sax::InputSource& aInputSource ) throw (css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setFastDocumentHandler( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setTokenHandler( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getNamespaceURL( const OUString& rPrefix ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setLocale( const css::lang::Locale& rLocale ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) throw (css::uno::RuntimeException, std::exception) override;
 
     // XImporter
     virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;

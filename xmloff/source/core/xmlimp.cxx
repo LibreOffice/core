@@ -45,6 +45,7 @@
 #include <com/sun/star/document/XBinaryStreamResolver.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
+#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -55,6 +56,8 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/fontcvt.hxx>
+#include <o3tl/make_unique.hxx>
+#include <xmloff/fasttokenhandler.hxx>
 
 #include <com/sun/star/rdf/XMetadatable.hpp>
 #include <com/sun/star/rdf/XRepositorySupplier.hpp>
@@ -432,12 +435,19 @@ SvXMLImport::SvXMLImport(
     mpXMLErrors( nullptr ),
     mnImportFlags( nImportFlags ),
     mnErrorFlags(SvXMLErrorFlags::NO),
+    maNamespaceHandler( new SvXMLImportFastNamespaceHandler() ),
+    mxTokenHandler( new FastTokenHandler() ),
     mbIsFormsSupported( true ),
     mbIsTableShapeSupported( false ),
     mbIsGraphicLoadOnDemandSupported( true )
 {
     SAL_WARN_IF( !xContext.is(), "xmloff.core", "got no service manager" );
     InitCtor_();
+    mxParser = xml::sax::FastParser::create( xContext );
+    setFastDocumentHandler( this );
+    setNamespaceHandler( maNamespaceHandler.get() );
+    setTokenHandler( mxTokenHandler  );
+    registerNamespaces();
 }
 
 SvXMLImport::~SvXMLImport() throw ()
@@ -493,6 +503,62 @@ sal_Int64 SAL_CALL SvXMLImport::getSomething( const uno::Sequence< sal_Int8 >& r
     }
     return 0;
 }
+
+// XFastParser
+void SAL_CALL SvXMLImport::parseStream( const xml::sax::InputSource& aInputSource )
+    throw (xml::sax::SAXException, io::IOException, uno::RuntimeException, std::exception)
+{
+    mxParser->parseStream( aInputSource );
+}
+
+void SAL_CALL SvXMLImport::setFastDocumentHandler( const uno::Reference< xml::sax::XFastDocumentHandler >& Handler )
+    throw (uno::RuntimeException, std::exception)
+{
+    mxParser->setFastDocumentHandler( Handler );
+}
+
+void SAL_CALL SvXMLImport::setTokenHandler( const uno::Reference< xml::sax::XFastTokenHandler >& Handler )
+    throw (uno::RuntimeException, std::exception)
+{
+    mxParser->setTokenHandler( Handler );
+}
+
+void SAL_CALL SvXMLImport::registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken )
+    throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
+{
+    mxParser->registerNamespace( NamespaceURL, NamespaceToken );
+}
+
+OUString SAL_CALL SvXMLImport::getNamespaceURL( const OUString& rPrefix )
+    throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
+{
+    return mxParser->getNamespaceURL( rPrefix );
+}
+
+void SAL_CALL SvXMLImport::setErrorHandler( const uno::Reference< xml::sax::XErrorHandler >& Handler )
+    throw (uno::RuntimeException, std::exception)
+{
+    mxParser->setErrorHandler( Handler );
+}
+
+void SAL_CALL SvXMLImport::setEntityResolver( const uno::Reference< xml::sax::XEntityResolver >& Resolver )
+    throw (uno::RuntimeException, std::exception)
+{
+    mxParser->setEntityResolver( Resolver );
+}
+
+void SAL_CALL SvXMLImport::setLocale( const lang::Locale& rLocale )
+    throw (uno::RuntimeException, std::exception)
+{
+    mxParser->setLocale( rLocale );
+}
+
+void SAL_CALL SvXMLImport::setNamespaceHandler( const uno::Reference< xml::sax::XFastNamespaceHandler >& Handler)
+    throw (uno::RuntimeException, std::exception)
+{
+    mxParser->setNamespaceHandler( Handler );
+}
+
 
 void SAL_CALL SvXMLImport::startDocument()
     throw (xml::sax::SAXException,
@@ -829,10 +895,25 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
     mpFastContexts->push_back( xContext );
 }
 
-void SAL_CALL SvXMLImport::startUnknownElement (const OUString &, const OUString &,
-    const uno::Reference< xml::sax::XFastAttributeList > &)
+void SAL_CALL SvXMLImport::startUnknownElement (const OUString & rPrefix, const OUString & rLocalName,
+    const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
+    uno::Reference<XFastContextHandler> xContext;
+    sal_uInt16 nCount = mpFastContexts->size();
+    if( nCount > 0 )
+    {
+        uno::Reference< XFastContextHandler > pHandler = (*mpFastContexts)[nCount - 1];
+        xContext = pHandler->createUnknownChildContext( rPrefix, rLocalName, Attribs );
+    }
+    else
+        xContext.set( CreateFastContext( -1, Attribs ) );
+
+    if ( !xContext.is() )
+        xContext.set( new SvXMLImportContext( *this ) );
+
+    xContext->startUnknownElement( rPrefix, rLocalName, Attribs );
+    mpFastContexts->push_back( xContext );
 }
 
 void SAL_CALL SvXMLImport::endFastElement (sal_Int32 Element)
@@ -848,9 +929,17 @@ void SAL_CALL SvXMLImport::endFastElement (sal_Int32 Element)
     }
 }
 
-void SAL_CALL SvXMLImport::endUnknownElement (const OUString &, const OUString &)
+void SAL_CALL SvXMLImport::endUnknownElement (const OUString & rPrefix, const OUString & rLocalName)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
+    sal_uInt16 nCount = mpFastContexts->size();
+    if( nCount > 0 )
+    {
+        uno::Reference< XFastContextHandler > xContext = mpFastContexts->back();
+        mpFastContexts->pop_back();
+        xContext->endUnknownElement( rPrefix, rLocalName );
+        xContext = nullptr;
+    }
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
@@ -1971,6 +2060,129 @@ bool SvXMLImport::embeddedFontAlreadyProcessed( const OUString& url )
         return true;
     embeddedFontUrlsKnown.insert( url );
     return false;
+}
+
+const OUString SvXMLImport::getNameFromToken( sal_Int32 nToken )
+{
+    uno::Sequence< sal_Int8 > aSeq = mxTokenHandler->getUTF8Identifier( nToken & TOKEN_MASK );
+    return OUString( reinterpret_cast< const char* >(
+                    aSeq.getConstArray() ), aSeq.getLength(), RTL_TEXTENCODING_UTF8 );
+}
+
+const OUString SvXMLImport::getNamespacePrefixFromToken( sal_Int32 nToken )
+{
+    sal_Int32 nNamespaceToken = ( nToken & NMSP_MASK ) >> NMSP_SHIFT;
+    auto aIter( maNamespaceMap.find( nNamespaceToken ) );
+    if( aIter != maNamespaceMap.end() )
+        return (*aIter).second;
+    else
+        return OUString();
+}
+
+void SvXMLImport::registerNamespaces()
+{
+    registerNSHelper( XML_NAMESPACE_OFFICE + 1, XML_NP_OFFICE, XML_N_OFFICE );
+    registerNSHelper( XML_NAMESPACE_OFFICE + 1, XML_NP_OFFICE, XML_N_OFFICE_OLD );
+    registerNSHelper( XML_NAMESPACE_STYLE + 1, XML_NP_STYLE, XML_N_STYLE );
+    registerNSHelper( XML_NAMESPACE_STYLE + 1, XML_NP_STYLE, XML_N_STYLE_OLD );
+    registerNSHelper( XML_NAMESPACE_TEXT + 1, XML_NP_TEXT, XML_N_TEXT );
+    registerNSHelper( XML_NAMESPACE_TEXT + 1, XML_NP_TEXT, XML_N_TEXT_OLD );
+    registerNSHelper( XML_NAMESPACE_TABLE + 1, XML_NP_TABLE, XML_N_TABLE );
+    registerNSHelper( XML_NAMESPACE_TABLE + 1, XML_NP_TABLE, XML_N_TABLE_OLD );
+    registerNSHelper( XML_NAMESPACE_DRAW + 1, XML_NP_DRAW, XML_N_DRAW );
+    registerNSHelper( XML_NAMESPACE_DRAW + 1, XML_NP_DRAW, XML_N_DRAW_OLD );
+    registerNSHelper( XML_NAMESPACE_FO + 1, XML_NP_FO, XML_N_FO );
+    registerNSHelper( XML_NAMESPACE_FO + 1, XML_NP_FO, XML_N_FO_OLD );
+    registerNSHelper( XML_NAMESPACE_FO + 1, XML_NP_FO, XML_N_FO_COMPAT );
+    registerNSHelper( XML_NAMESPACE_XLINK + 1, XML_NP_XLINK, XML_N_XLINK );
+    registerNSHelper( XML_NAMESPACE_XLINK + 1, XML_NP_XLINK, XML_N_XLINK_OLD );
+    registerNSHelper( XML_NAMESPACE_DC + 1, XML_NP_DC, XML_N_DC );
+    registerNSHelper( XML_NAMESPACE_META + 1, XML_NP_META, XML_N_META );
+    registerNSHelper( XML_NAMESPACE_META + 1, XML_NP_META, XML_N_META_OLD );
+    registerNSHelper( XML_NAMESPACE_NUMBER + 1, XML_NP_NUMBER, XML_N_NUMBER );
+    registerNSHelper( XML_NAMESPACE_NUMBER + 1, XML_NP_NUMBER, XML_N_NUMBER_OLD );
+    registerNSHelper( XML_NAMESPACE_PRESENTATION + 1, XML_NP_PRESENTATION, XML_N_PRESENTATION );
+    registerNSHelper( XML_NAMESPACE_PRESENTATION + 1, XML_NP_PRESENTATION, XML_N_PRESENTATION_OLD );
+    registerNSHelper( XML_NAMESPACE_SVG + 1, XML_NP_SVG, XML_N_SVG );
+    registerNSHelper( XML_NAMESPACE_SVG + 1, XML_NP_SVG, XML_N_SVG_COMPAT );
+    registerNSHelper( XML_NAMESPACE_CHART + 1, XML_NP_CHART, XML_N_CHART );
+    registerNSHelper( XML_NAMESPACE_CHART + 1, XML_NP_CHART, XML_N_CHART_OLD );
+    registerNSHelper( XML_NAMESPACE_DR3D + 1, XML_NP_DR3D, XML_N_DR3D );
+    registerNSHelper( XML_NAMESPACE_MATH + 1, XML_NP_MATH, XML_N_MATH );
+    registerNSHelper( XML_NAMESPACE_FORM + 1, XML_NP_FORM, XML_N_FORM );
+    registerNSHelper( XML_NAMESPACE_SCRIPT + 1, XML_NP_SCRIPT, XML_N_SCRIPT );
+    registerNSHelper( XML_NAMESPACE_BLOCKLIST + 1, XML_NP_BLOCK_LIST, XML_N_BLOCK_LIST );
+    registerNSHelper( XML_NAMESPACE_CONFIG + 1, XML_NP_CONFIG, XML_N_CONFIG );
+    registerNSHelper( XML_NAMESPACE_OOO + 1, XML_NP_OOO, XML_N_OOO );
+    registerNSHelper( XML_NAMESPACE_OOOW + 1, XML_NP_OOOW, XML_N_OOOW );
+    registerNSHelper( XML_NAMESPACE_OOOC + 1, XML_NP_OOOC, XML_N_OOOC );
+    registerNSHelper( XML_NAMESPACE_DOM + 1, XML_NP_DOM, XML_N_DOM );
+    registerNSHelper( XML_NAMESPACE_DB + 1, XML_NP_DB, XML_N_DB );
+    registerNSHelper( XML_NAMESPACE_DB + 1, XML_NP_DB, XML_N_DB_OASIS );
+    registerNSHelper( XML_NAMESPACE_DLG + 1, XML_NP_DLG, XML_N_DLG );
+    registerNSHelper( XML_NAMESPACE_XFORMS + 1, XML_NP_XFORMS_1_0, XML_N_XFORMS_1_0 );
+    registerNSHelper( XML_NAMESPACE_XSD + 1, XML_NP_XSD, XML_N_XSD );
+    registerNSHelper( XML_NAMESPACE_XSI + 1, XML_NP_XSI, XML_N_XSI );
+    registerNSHelper( XML_NAMESPACE_SMIL + 1, XML_NP_SMIL, XML_N_SMIL );
+    registerNSHelper( XML_NAMESPACE_SMIL + 1, XML_NP_SMIL, XML_N_SMIL_OLD );
+    registerNSHelper( XML_NAMESPACE_SMIL + 1, XML_NP_SMIL, XML_N_SMIL_COMPAT );
+    registerNSHelper( XML_NAMESPACE_ANIMATION + 1, XML_NP_ANIMATION, XML_N_ANIMATION );
+    registerNSHelper( XML_NAMESPACE_REPORT + 1, XML_NP_RPT, XML_N_RPT );
+    registerNSHelper( XML_NAMESPACE_REPORT + 1, XML_NP_RPT, XML_N_RPT_OASIS );
+    registerNSHelper( XML_NAMESPACE_OF + 1, XML_NP_OF, XML_N_OF );
+    registerNSHelper( XML_NAMESPACE_XHTML + 1, XML_NP_XHTML, XML_N_XHTML );
+    registerNSHelper( XML_NAMESPACE_GRDDL + 1, XML_NP_GRDDL, XML_N_GRDDL );
+    registerNSHelper( XML_NAMESPACE_OFFICE_EXT + 1, XML_NP_OFFICE_EXT, XML_N_OFFICE_EXT );
+    registerNSHelper( XML_NAMESPACE_TABLE_EXT + 1, XML_NP_TABLE_EXT, XML_N_TABLE_EXT );
+    registerNSHelper( XML_NAMESPACE_CHART_EXT + 1, XML_NP_CHART_EXT, XML_N_CHART_EXT );
+    registerNSHelper( XML_NAMESPACE_DRAW_EXT + 1, XML_NP_DRAW_EXT, XML_N_DRAW_EXT );
+    registerNSHelper( XML_NAMESPACE_CALC_EXT + 1, XML_NP_CALC_EXT, XML_N_CALC_EXT );
+    registerNSHelper( XML_NAMESPACE_LO_EXT + 1, XML_NP_LO_EXT, XML_N_LO_EXT );
+    registerNSHelper( XML_NAMESPACE_CSS3TEXT + 1, XML_NP_CSS3TEXT, XML_N_CSS3TEXT );
+    registerNSHelper( XML_NAMESPACE_FIELD + 1, XML_NP_FIELD, XML_N_FIELD );
+    registerNSHelper( XML_NAMESPACE_FORMX + 1, XML_NP_FORMX, XML_N_FORMX );
+}
+
+void SvXMLImport::registerNSHelper(sal_Int32 nToken, sal_Int32 nPrefix, sal_Int32 nNamespace )
+{
+    if ( nToken > 0 )
+    {
+        maNamespaceMap[ nToken ] = GetXMLToken( static_cast<XMLTokenEnum>( nPrefix ) );
+        registerNamespace( GetXMLToken( static_cast<XMLTokenEnum>( nNamespace ) ), nToken << NMSP_SHIFT );
+    }
+}
+
+SvXMLImportFastNamespaceHandler::SvXMLImportFastNamespaceHandler()
+{
+}
+
+void SvXMLImportFastNamespaceHandler::addNSDeclAttributes( rtl::Reference < comphelper::AttributeList >& rAttrList )
+{
+    for(const auto& aNamespaceDefine : m_aNamespaceDefines)
+    {
+        OUString& rPrefix = aNamespaceDefine.get()->m_aPrefix;
+        OUString& rNamespaceURI = aNamespaceDefine.get()->m_aNamespaceURI;
+        OUString sDecl;
+        if ( rPrefix.isEmpty() )
+            sDecl = "xmlns";
+        else
+            sDecl = "xmlns:" + rPrefix;
+        rAttrList->AddAttribute( sDecl, "CDATA", rNamespaceURI );
+    }
+    m_aNamespaceDefines.clear();
+}
+
+void SvXMLImportFastNamespaceHandler::registerNamespace( const OUString& rNamespacePrefix, const OUString& rNamespaceURI )
+                            throw (uno::RuntimeException, std::exception)
+{
+    m_aNamespaceDefines.push_back( o3tl::make_unique<NamespaceDefine>(
+                                    rNamespacePrefix, rNamespaceURI) );
+}
+
+OUString SvXMLImportFastNamespaceHandler::getNamespaceURI( const OUString&/* rNamespacePrefix */ )
+                            throw (uno::RuntimeException, std::exception)
+{
+    return OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
