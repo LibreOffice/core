@@ -684,3 +684,19 @@ en-US  = "Create a start link on desktop"
 
 [OOO_CONTROL_321]
 en-US  = "Load [ProductName] during system start-up"
+
+[OOO_CONTROL_322]
+en-US  = "Some files that need to be updated are currently in use."
+
+[OOO_CONTROL_323]
+en-US  = "The following applications are using files that need to be updated by this setup. You can let Installation Wizard close them and attempt to restart them or reboot the machine later."
+
+[OOO_CONTROL_324]
+en-US  = "{&MSSansBold8}Files in Use"
+
+[OOO_CONTROL_325]
+en-US  = "Cancel"
+
+[OOO_CONTROL_326]
+en-US  = "OK"
+

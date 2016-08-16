@@ -177,6 +177,16 @@ MaintenanceWelcome	Image	Bitmap	0	0	122	234	1		ImageBmp
 MaintenanceWelcome	Next	PushButton	230	243	66	17	3		OOO_CONTROL_148	Cancel	
 MaintenanceWelcome	TextLine1	Text	135	8	225	45	65539		OOO_CONTROL_149		
 MaintenanceWelcome	TextLine2	Text	135	55	228	50	65539		OOO_CONTROL_150		
+MsiRMFilesInUse	Banner	Bitmap	0	0	374	44	1		BannerBmp		
+MsiRMFilesInUse	DlgTitle	Text	13	6	280	15	196611		OOO_CONTROL_324		
+MsiRMFilesInUse	DlgDesc	Text	21	23	272	25	196611		OOO_CONTROL_322		
+MsiRMFilesInUse	BannerLine	Line	0	44	374	0	1				
+MsiRMFilesInUse	DlgText	Text	21	51	326	43	3		OOO_CONTROL_323		
+MsiRMFilesInUse	List	ListBox	21	95	332	85	7	FileInUseProcess			
+MsiRMFilesInUse	ShutdownOption	RadioButtonGroup	26	190	305	45	3	MsiUIRMOption		OK	
+MsiRMFilesInUse	DlgLine	Line	0	234	374	0	1				
+MsiRMFilesInUse	OK	PushButton	230	243	66	17	3		OOO_CONTROL_326	Cancel	
+MsiRMFilesInUse	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_325	ShutdownOption	
 OutOfSpace	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 OutOfSpace	BannerLine	Line	0	44	374	0	1				
 OutOfSpace	DlgDesc	Text	21	23	272	25	65539		OOO_CONTROL_153		

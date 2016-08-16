@@ -43,3 +43,9 @@ en-US = "&Anyone who uses this computer (all users)"
 [OOO_RADIOBUTTON_9]
 en-US = "Only for &me ([USERNAME])"
 
+[OOO_RADIOBUTTON_10]
+en-US = "&Close the applications and attempt to restart them."
+
+[OOO_RADIOBUTTON_11]
+en-US = "&Do not close applications. A reboot will be required."
+
