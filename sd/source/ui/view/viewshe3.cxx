@@ -71,6 +71,7 @@
 #include "framework/FrameworkHelper.hxx"
 #include "optsitem.hxx"
 #include "sdresid.hxx"
+#include "undo/undomanager.hxx"
 
 #include <svx/svxids.hrc>
 #include <sfx2/request.hxx>
@@ -128,10 +129,15 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
 
         if(pUndoManager)
         {
+            auto pSdUndoManager = dynamic_cast<sd::UndoManager*>(pUndoManager);
+            if (pSdUndoManager)
+                pSdUndoManager->SetViewShell(&GetViewShellBase());
             if(pUndoManager->GetUndoActionCount() != 0)
             {
                 bActivate = true;
             }
+            if (pSdUndoManager)
+                pSdUndoManager->SetViewShell(nullptr);
         }
 
         if(bActivate)
@@ -155,10 +161,15 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
 
         if(pUndoManager)
         {
+            auto pSdUndoManager = dynamic_cast<sd::UndoManager*>(pUndoManager);
+            if (pSdUndoManager)
+                pSdUndoManager->SetViewShell(&GetViewShellBase());
             if(pUndoManager->GetRedoActionCount() != 0)
             {
                 bActivate = true;
             }
+            if (pSdUndoManager)
+                pSdUndoManager->SetViewShell(nullptr);
         }
 
         if(bActivate)
