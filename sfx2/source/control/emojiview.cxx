@@ -95,8 +95,14 @@ EmojiView::~EmojiView()
     disposeOnce();
 }
 
-void EmojiView::Populate ()
+void EmojiView::Populate()
 {
+    if (msJSONData.empty())
+    {
+        SAL_WARN("sfx", "Emoji config data is empty");
+        return;
+    }
+
     //TODO::populate view using the orcus json parser
     using node = orcus::json_document_tree::node;
 
