@@ -89,20 +89,20 @@ namespace http_dav_ucp
 
         virtual ~DAVOptions();
 
-        bool isResourceFound() { return m_isResourceFound; };
+        bool isResourceFound() const { return m_isResourceFound; };
         void setResourceFound( bool ResourceFound = true ) { m_isResourceFound = ResourceFound; };
 
-        bool isClass1() { return m_isClass1; };
+        bool isClass1() const { return m_isClass1; };
         void setClass1( bool Class1 = true ) { m_isClass1 = Class1; };
 
-        bool isClass2() { return m_isClass2; };
+        bool isClass2() const { return m_isClass2; };
         void setClass2( bool Class2 = true ) { m_isClass2 = Class2; };
 
         bool isClass3() { return m_isClass3; };
         void setClass3( bool Class3 = true ) { m_isClass3 = Class3; };
 
-        sal_uInt32  getStaleTime() { return m_nStaleTime ; };
-        void setStaleTime( sal_uInt32 nStaleTime ) { m_nStaleTime = nStaleTime; };
+        sal_uInt32  getStaleTime() const { return m_nStaleTime ; };
+        void setStaleTime( const sal_uInt32 nStaleTime ) { m_nStaleTime = nStaleTime; };
 
         OUString & getURL() { return m_sURL; };
         void setURL( OUString & sURL ) { m_sURL = sURL; };
@@ -112,11 +112,11 @@ namespace http_dav_ucp
 
         void  setAllowedMethods( OUString & aAllowedMethods ) { m_aAllowedMethods = aAllowedMethods; } ;
         OUString & getAllowedMethods() { return m_aAllowedMethods; } ;
-        bool isLockAllowed() { return ( m_aAllowedMethods.indexOf( "LOCK" ) != -1 ); };
-        bool isUnlockAllowed() { return ( m_aAllowedMethods.indexOf( "UNLOCK" ) != -1 ); };
+        bool isLockAllowed() const { return ( m_aAllowedMethods.indexOf( "LOCK" ) != -1 ); };
+        bool isUnlockAllowed() const { return ( m_aAllowedMethods.indexOf( "UNLOCK" ) != -1 ); };
 
         void setLocked( bool locked = true ) { m_isLocked = locked; } ;
-        bool isLocked() { return m_isLocked; };
+        bool isLocked() const { return m_isLocked; };
 
         void reset() {
             m_isResourceFound = false;
@@ -135,7 +135,11 @@ namespace http_dav_ucp
 
     };
 
-    typedef std::map< OUString, DAVOptions > DAVOptionsMap;
+    // TODO: the OUString key element in std::map needs to be changed with a URI representation
+    // along with a specific compare (std::less) implementation, as suggested in
+    // <https://tools.ietf.org/html/rfc3986#section-6>, to find by URI and not by string comparison
+    typedef std::map< OUString, DAVOptions,
+                      std::less< OUString > > DAVOptionsMap;
 
     class DAVOptionsCache
     {
