@@ -485,7 +485,8 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         // By default the style with index 0 is applied.
         {
             OUString const aName = getStyleName(0);
-            if (!aName.isEmpty())
+            // But only in case it's not a character style.
+            if (!aName.isEmpty() && getStyleType(0) != NS_ooxml::LN_Value_ST_StyleType_character)
             {
                 m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_pStyle, std::make_shared<RTFValue>(aName));
                 m_aStates.top().nCurrentStyleIndex = 0;
