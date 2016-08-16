@@ -749,6 +749,10 @@ void PrintDialog::readFromSettings()
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     OUString aValue = pItem->getValue( "PrintDialog",
                                             "LastPage" );
+
+    // apply sticky settings
+    maOptionsPage.mpPapersizeFromSetup->Check( maPController->getPapersizeFromSetup() );
+
     sal_uInt16 nCount = mpTabCtrl->GetPageCount();
     for( sal_uInt16 i = 0; i < nCount; i++ )
     {

@@ -67,7 +67,7 @@ public:
              m_bPrintHiddenText, m_bPrintTextPlaceholder,
              m_bPrintLeftPages, m_bPrintRightPages, m_bPrintReverse, m_bPrintProspect,
              m_bPrintProspectRTL,
-             m_bPrintSingleJobs, m_bPaperFromSetup,
+             m_bPrintSingleJobs, m_bPaperFromSetup, m_bPapersizeFromSetup,
              /// Print empty pages
              m_bPrintEmptyPages,
 
@@ -94,6 +94,7 @@ public:
         m_bUpdateFieldsInPrinting = true;
 
         m_bPaperFromSetup         =
+        m_bPapersizeFromSetup     =
         m_bPrintReverse           =
         m_bPrintProspect          =
         m_bPrintProspectRTL       =
@@ -124,6 +125,7 @@ public:
         m_bPrintProspectRTL   ==   rData.m_bPrintProspectRTL    &&
         m_bPrintSingleJobs    ==   rData.m_bPrintSingleJobs     &&
         m_bPaperFromSetup     ==   rData.m_bPaperFromSetup      &&
+        m_bPapersizeFromSetup ==   rData.m_bPapersizeFromSetup  &&
         m_bPrintEmptyPages    ==   rData.m_bPrintEmptyPages     &&
         m_bUpdateFieldsInPrinting == rData.m_bUpdateFieldsInPrinting &&
         m_nPrintPostIts       ==   rData.m_nPrintPostIts        &&
@@ -146,6 +148,7 @@ public:
     bool IsPrintRightPage() const           { return m_bPrintRightPages; }
     bool IsPrintReverse() const             { return m_bPrintReverse; }
     bool IsPaperFromSetup() const           { return m_bPaperFromSetup; }
+    bool IsPapersizeFromSetup() const       { return m_bPapersizeFromSetup; }
     bool IsPrintEmptyPages() const          { return m_bPrintEmptyPages; }
     bool IsPrintProspect() const            { return m_bPrintProspect; }
     bool IsPrintProspectRTL() const         { return m_bPrintProspectRTL; }
@@ -165,6 +168,7 @@ public:
     void SetPrintRightPage( bool b )            { doSetModified(); m_bPrintRightPages = b; }
     void SetPrintReverse( bool b )              { doSetModified(); m_bPrintReverse = b; }
     void SetPaperFromSetup( bool b )            { doSetModified(); m_bPaperFromSetup = b; }
+    void SetPapersizeFromSetup( bool b )        { doSetModified(); m_bPapersizeFromSetup = b; }
     void SetPrintEmptyPages( bool b )           { doSetModified(); m_bPrintEmptyPages = b; }
     void SetPrintPostIts( SwPostItMode n )      { doSetModified(); m_nPrintPostIts = n; }
     void SetPrintProspect( bool b )             { doSetModified(); m_bPrintProspect = b; }
@@ -199,6 +203,7 @@ public:
     bool IsPrintWithBlackTextColor() const      { return getBoolValue( "PrintBlackFonts",      m_rDefaultPrintData.m_bPrintBlackFont ); }
     SwPostItMode GetPrintPostItsType() const       { return static_cast< SwPostItMode >(getIntValue( "PrintAnnotationMode", static_cast<sal_uInt16>(m_rDefaultPrintData.m_nPrintPostIts) )); }
     bool IsPaperFromSetup() const               { return getBoolValue( "PrintPaperFromSetup",  m_rDefaultPrintData.m_bPaperFromSetup ); }
+    bool IsPapersizeFromSetup() const           { return getBoolValue( "PapersizeFromSetup",  m_rDefaultPrintData.m_bPapersizeFromSetup ); }
 
     bool IsPrintLeftPages() const;
     bool IsPrintRightPages() const;

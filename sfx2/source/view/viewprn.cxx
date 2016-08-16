@@ -151,6 +151,15 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
                 {
                     setValue( aRenderParms[i].Name, aRenderParms[i].Value );
                 }
+                else if( aRenderParms[i].Name == "PerDocumentStickyOptions" )
+                {
+                    css::uno::Sequence< css::beans::PropertyValue > aStickyProps;
+                    aRenderParms[i].Value >>= aStickyProps;
+                    for( i = 0; i < aStickyProps.getLength(); ++i )
+                    {
+                        setValue( aStickyProps[i].Name, aStickyProps[i].Value );
+                    }
+                }
             }
         }
         catch( lang::IllegalArgumentException& )
