@@ -53,6 +53,7 @@ Module gid_Module_Root
              gid_File_Extra_Palettes,
              gid_File_Extra_Database,
              gid_File_Extra_Databasebiblio,
+             gid_File_Extra_Emojiconfig,
              gid_File_Extra_Gallsound,
              gid_File_Extra_Autocorr,
              gid_File_Extra_Autocorr_Lang,
