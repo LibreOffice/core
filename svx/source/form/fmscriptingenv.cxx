@@ -790,7 +790,9 @@ namespace svxform
                 throw(css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception) override
             {
                 mbQuitBlocked = true;
+#if HAVE_FEATURE_SCRIPTING
                 StarBASIC::Stop();
+#endif
                 throw css::frame::TerminationVetoException();
             }
 
