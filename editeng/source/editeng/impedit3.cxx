@@ -1332,7 +1332,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
         if ( !bSameLineAgain && !aStatus.IsOutliner() )
         {
-            if ( rLSItem.GetLineSpaceRule() == SVX_LINE_SPACE_MIN )
+            if ( rLSItem.GetLineSpaceRule() == SvxLineSpaceRule::Min )
             {
                 sal_uInt16 nMinHeight = GetYValue( rLSItem.GetLineHeight() );
                 sal_uInt16 nTxtHeight = pLine->GetHeight();
@@ -1344,7 +1344,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     pLine->SetHeight( nMinHeight, nTxtHeight );
                 }
             }
-            else if ( rLSItem.GetLineSpaceRule() == SVX_LINE_SPACE_FIX )
+            else if ( rLSItem.GetLineSpaceRule() == SvxLineSpaceRule::Fix )
             {
                 sal_uInt16 nFixHeight = GetYValue( rLSItem.GetLineHeight() );
                 sal_uInt16 nTxtHeight = pLine->GetHeight();
@@ -1658,7 +1658,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
 
     if ( !aStatus.IsOutliner() )
     {
-        if ( rLSItem.GetLineSpaceRule() == SVX_LINE_SPACE_MIN )
+        if ( rLSItem.GetLineSpaceRule() == SvxLineSpaceRule::Min )
         {
             sal_uInt16 nMinHeight = rLSItem.GetLineHeight();
             sal_uInt16 nTxtHeight = pTmpLine->GetHeight();
@@ -1670,7 +1670,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
                 pTmpLine->SetHeight( nMinHeight, nTxtHeight );
             }
         }
-        else if ( rLSItem.GetLineSpaceRule() == SVX_LINE_SPACE_FIX )
+        else if ( rLSItem.GetLineSpaceRule() == SvxLineSpaceRule::Fix )
         {
             sal_uInt16 nFixHeight = rLSItem.GetLineHeight();
             sal_uInt16 nTxtHeight = pTmpLine->GetHeight();

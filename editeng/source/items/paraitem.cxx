@@ -84,7 +84,7 @@ SvxLineSpacingItem::SvxLineSpacingItem( sal_uInt16 nHeight, const sal_uInt16 nId
     nPropLineSpace = 100;
     nInterLineSpace = 0;
     nLineHeight = nHeight;
-    eLineSpace = SVX_LINE_SPACE_AUTO;
+    eLineSpaceRule = SvxLineSpaceRule::Auto;
     eInterLineSpaceRule = SvxInterLineSpaceRule::Off;
 }
 
@@ -96,9 +96,9 @@ bool SvxLineSpacingItem::operator==( const SfxPoolItem& rAttr ) const
     const SvxLineSpacingItem& rLineSpace = static_cast<const SvxLineSpacingItem&>(rAttr);
     return
         // Same Linespacing Rule?
-        (eLineSpace == rLineSpace.eLineSpace)
+        (eLineSpaceRule == rLineSpace.eLineSpaceRule)
         // For maximum and minimum Linespacing be the size must coincide.
-        && (eLineSpace == SVX_LINE_SPACE_AUTO ||
+        && (eLineSpaceRule == SvxLineSpaceRule::Auto ||
             nLineHeight == rLineSpace.nLineHeight)
         // Same Linespacing Rule?
         && ( eInterLineSpaceRule == rLineSpace.eInterLineSpaceRule )
@@ -121,9 +121,9 @@ bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     nMemberId &= ~CONVERT_TWIPS;
 
     style::LineSpacing aLSp;
-    switch( eLineSpace )
+    switch( eLineSpaceRule )
     {
-        case SVX_LINE_SPACE_AUTO:
+        case SvxLineSpaceRule::Auto:
             if(eInterLineSpaceRule == SvxInterLineSpaceRule::Fix)
             {
                 aLSp.Mode = style::LineSpacingMode::LEADING;
@@ -140,13 +140,13 @@ bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 aLSp.Height = nPropLineSpace;
             }
         break;
-        case SVX_LINE_SPACE_FIX :
-        case SVX_LINE_SPACE_MIN :
-            aLSp.Mode = eLineSpace == SVX_LINE_SPACE_FIX ? style::LineSpacingMode::FIX : style::LineSpacingMode::MINIMUM;
+        case SvxLineSpaceRule::Fix :
+        case SvxLineSpaceRule::Min :
+            aLSp.Mode = eLineSpaceRule == SvxLineSpaceRule::Fix ? style::LineSpacingMode::FIX : style::LineSpacingMode::MINIMUM;
             aLSp.Height = ( bConvert ? (short)convertTwipToMm100(nLineHeight) : nLineHeight );
         break;
         default:
-            ;//prevent warning about SVX_LINE_SPACE_END
+            ;//prevent warning about SvxLineSpaceRule::End
     }
 
     switch ( nMemberId )
@@ -187,7 +187,7 @@ bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             case style::LineSpacingMode::LEADING:
             {
                 eInterLineSpaceRule = SvxInterLineSpaceRule::Fix;
-                eLineSpace = SVX_LINE_SPACE_AUTO;
+                eLineSpaceRule = SvxLineSpaceRule::Auto;
                 nInterLineSpace = aLSp.Height;
                 if(bConvert)
                     nInterLineSpace = (short)convertMm100ToTwip(nInterLineSpace);
@@ -196,7 +196,7 @@ bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             break;
             case style::LineSpacingMode::PROP:
             {
-                eLineSpace = SVX_LINE_SPACE_AUTO;
+                eLineSpaceRule = SvxLineSpaceRule::Auto;
                 nPropLineSpace = (sal_Int16)aLSp.Height;
                 if(100 == aLSp.Height)
                     eInterLineSpaceRule = SvxInterLineSpaceRule::Off;
@@ -208,7 +208,7 @@ bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             case style::LineSpacingMode::MINIMUM:
             {
                 eInterLineSpaceRule =  SvxInterLineSpaceRule::Off;
-                eLineSpace = aLSp.Mode == style::LineSpacingMode::FIX ? SVX_LINE_SPACE_FIX : SVX_LINE_SPACE_MIN;
+                eLineSpaceRule = aLSp.Mode == style::LineSpacingMode::FIX ? SvxLineSpaceRule::Fix : SvxLineSpaceRule::Min;
                 nLineHeight = aLSp.Height;
                 if(bConvert)
                     nLineHeight = (sal_uInt16)convertMm100ToTwip(nLineHeight);
@@ -260,7 +260,7 @@ SfxPoolItem* SvxLineSpacingItem::Create(SvStream& rStrm, sal_uInt16) const
     SvxLineSpacingItem* pAttr = new SvxLineSpacingItem( nHeight, Which() );
     pAttr->SetInterLineSpace( nInterSpace );
     pAttr->SetPropLineSpace( nPropSpace );
-    pAttr->GetLineSpaceRule() = (SvxLineSpace)nRule;
+    pAttr->SetLineSpaceRule( (SvxLineSpaceRule)nRule );
     pAttr->SetInterLineSpaceRule( (SvxInterLineSpaceRule)nInterRule );
     return pAttr;
 }
@@ -271,7 +271,7 @@ SvStream& SvxLineSpacingItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*
     rStrm.WriteSChar( GetPropLineSpace() )
          .WriteInt16( GetInterLineSpace() )
          .WriteUInt16( GetLineHeight() )
-         .WriteSChar( GetLineSpaceRule() )
+         .WriteSChar( (char) GetLineSpaceRule() )
          .WriteSChar( (char) GetInterLineSpaceRule() );
     return rStrm;
 }

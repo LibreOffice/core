@@ -1732,7 +1732,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
         {
             switch( pSpace->GetLineSpaceRule() )
             {
-                case SVX_LINE_SPACE_AUTO:
+                case SvxLineSpaceRule::Auto:
                     // shrink first line of paragraph too on spacing < 100%
                     if (IsParaLine() &&
                         pSpace->GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop
@@ -1763,13 +1763,13 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                         }
                     }
                 break;
-                case SVX_LINE_SPACE_MIN:
+                case SvxLineSpaceRule::Min:
                 {
                     if( nLineHeight < sal_uInt16( pSpace->GetLineHeight() ) )
                         nLineHeight = pSpace->GetLineHeight();
                     break;
                 }
-                case SVX_LINE_SPACE_FIX:
+                case SvxLineSpaceRule::Fix:
                 {
                     nLineHeight = pSpace->GetLineHeight();
                     const sal_uInt16 nAsc = ( 4 * nLineHeight ) / 5;  // 80%

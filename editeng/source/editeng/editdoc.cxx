@@ -893,7 +893,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
             DBG_ASSERT( dynamic_cast<const SvxLineSpacingItem *>(&rPoolItem) != nullptr, "ConvertItem: Invalid Item!" );
             SvxLineSpacingItem& rItem = static_cast<SvxLineSpacingItem&>(rPoolItem);
             // SetLineHeight changes also eLineSpace!
-            if ( rItem.GetLineSpaceRule() == SVX_LINE_SPACE_MIN )
+            if ( rItem.GetLineSpaceRule() == SvxLineSpaceRule::Min )
                 rItem.SetLineHeight( sal::static_int_cast< sal_uInt16 >( OutputDevice::LogicToLogic( rItem.GetLineHeight(), eSourceUnit, eDestUnit ) ) );
         }
         break;

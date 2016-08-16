@@ -294,8 +294,8 @@ bool SwTextFrame::FormatEmpty()
           aSet.GetRegister().GetValue() ) )
         return false;
     const SvxLineSpacingItem &rSpacing = aSet.GetLineSpacing();
-    if( !bCollapse && ( SVX_LINE_SPACE_MIN == rSpacing.GetLineSpaceRule() ||
-        SVX_LINE_SPACE_FIX == rSpacing.GetLineSpaceRule() ||
+    if( !bCollapse && ( SvxLineSpaceRule::Min == rSpacing.GetLineSpaceRule() ||
+        SvxLineSpaceRule::Fix == rSpacing.GetLineSpaceRule() ||
         aSet.GetLRSpace().IsAutoFirst() ) )
         return false;
 
@@ -369,7 +369,7 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                     if( pFormat )
                     {
                         const SvxLineSpacingItem &rSpace = pFormat->GetLineSpacing();
-                        if( SVX_LINE_SPACE_FIX == rSpace.GetLineSpaceRule() )
+                        if( SvxLineSpaceRule::Fix == rSpace.GetLineSpaceRule() )
                         {
                             rRegDiff = rSpace.GetLineHeight();
                             pDesc->SetRegHeight( rRegDiff );
@@ -401,9 +401,9 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
 
                             switch( rSpace.GetLineSpaceRule() )
                             {
-                                case SVX_LINE_SPACE_AUTO:
+                                case SvxLineSpaceRule::Auto:
                                 break;
-                                case SVX_LINE_SPACE_MIN:
+                                case SvxLineSpaceRule::Min:
                                 {
                                     if( rRegDiff < rSpace.GetLineHeight() )
                                         rRegDiff = rSpace.GetLineHeight();

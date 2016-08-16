@@ -6266,13 +6266,13 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
         SvxLineSpacingItem aItem( 200, EE_PARA_SBL );
         if ( nVal2 <= 0 ) {
             aItem.SetLineHeight( (sal_uInt16)( rManager.ScalePoint( -nVal2 ) / 8 ) );
-            aItem.GetLineSpaceRule() = SVX_LINE_SPACE_FIX;
+            aItem.SetLineSpaceRule( SvxLineSpaceRule::Fix );
             aItem.SetInterLineSpaceRule(SvxInterLineSpaceRule::Off);
         } else
         {
             sal_uInt8 nPropLineSpace = (sal_uInt8)nVal2;
             aItem.SetPropLineSpace( nPropLineSpace );
-            aItem.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
+            aItem.SetLineSpaceRule( SvxLineSpaceRule::Auto );
         }
         rSet.Put( aItem );
     }

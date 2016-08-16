@@ -4289,13 +4289,13 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
     {
         default:
             break;
-        case SVX_LINE_SPACE_FIX: // Fix
+        case SvxLineSpaceRule::Fix: // Fix
             nSpace = -(short)rSpacing.GetLineHeight();
             break;
-        case SVX_LINE_SPACE_MIN: // At least
+        case SvxLineSpaceRule::Min: // At least
             nSpace = (short)rSpacing.GetLineHeight();
             break;
-        case SVX_LINE_SPACE_AUTO:
+        case SvxLineSpaceRule::Auto:
         {
             if( rSpacing.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix ) // Leading
             {

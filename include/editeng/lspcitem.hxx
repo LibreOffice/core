@@ -37,7 +37,7 @@ class EDITENG_DLLPUBLIC SvxLineSpacingItem : public SfxEnumItemInterface
     short                 nInterLineSpace;
     sal_uInt16            nLineHeight;
     sal_uInt16            nPropLineSpace;
-    SvxLineSpace          eLineSpace;
+    SvxLineSpaceRule      eLineSpaceRule;
     SvxInterLineSpaceRule eInterLineSpaceRule;
 
 public:
@@ -77,7 +77,7 @@ public:
     inline void SetLineHeight( const sal_uInt16 nHeight )
     {
         nLineHeight = nHeight;
-        eLineSpace = SVX_LINE_SPACE_MIN;
+        eLineSpaceRule = SvxLineSpaceRule::Min;
     }
 
     // To increase or decrease the row height.
@@ -88,8 +88,8 @@ public:
         eInterLineSpaceRule = SvxInterLineSpaceRule::Prop;
     }
 
-    inline SvxLineSpace &GetLineSpaceRule() { return eLineSpace; }
-    inline SvxLineSpace GetLineSpaceRule() const { return eLineSpace; }
+    inline void SetLineSpaceRule(SvxLineSpaceRule e) { eLineSpaceRule = e; }
+    inline SvxLineSpaceRule GetLineSpaceRule() const { return eLineSpaceRule; }
 
     inline void SetInterLineSpaceRule(SvxInterLineSpaceRule e) { eInterLineSpaceRule = e; }
     inline SvxInterLineSpaceRule GetInterLineSpaceRule() const { return eInterLineSpaceRule; }

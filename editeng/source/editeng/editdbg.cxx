@@ -125,7 +125,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
         break;
         case EE_PARA_SBL:
             aDebStr.append("SBL=");
-            if ( static_cast<const SvxLineSpacingItem&>(rItem).GetLineSpaceRule() == SVX_LINE_SPACE_MIN )
+            if ( static_cast<const SvxLineSpacingItem&>(rItem).GetLineSpaceRule() == SvxLineSpaceRule::Min )
             {
                 aDebStr.append("Min: ");
                 aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxLineSpacingItem&>(rItem).GetInterLineSpace()));

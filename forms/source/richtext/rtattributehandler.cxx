@@ -226,7 +226,7 @@ namespace frm
         (void)_pAdditionalArg;
 
         SvxLineSpacingItem aLineSpacing( m_nLineSpace, getWhich() );
-        aLineSpacing.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
+        aLineSpacing.SetLineSpaceRule( SvxLineSpaceRule::Auto );
         if ( 100 == m_nLineSpace )
             aLineSpacing.SetInterLineSpaceRule( SvxInterLineSpaceRule::Off );
         else

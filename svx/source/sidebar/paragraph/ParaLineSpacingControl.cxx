@@ -125,7 +125,7 @@ void ParaLineSpacingControl::Initialize()
 
         switch( currSPItem->GetLineSpaceRule() )
         {
-        case SVX_LINE_SPACE_AUTO:
+        case SvxLineSpaceRule::Auto:
             {
                 SvxInterLineSpaceRule eInter = currSPItem->GetInterLineSpaceRule();
 
@@ -172,14 +172,14 @@ void ParaLineSpacingControl::Initialize()
                 }
             }
             break;
-        case SVX_LINE_SPACE_FIX:
+        case SvxLineSpaceRule::Fix:
             {
                 SelectEntryPos(LLINESPACE_FIX);
                 SetMetricValue(*mpLineDistAtMetricBox, currSPItem->GetLineHeight(), eUnit);
             }
             break;
 
-        case SVX_LINE_SPACE_MIN:
+        case SvxLineSpaceRule::Min:
             {
                 SelectEntryPos(LLINESPACE_MIN);
                 SetMetricValue(*mpLineDistAtMetricBox, currSPItem->GetLineHeight(), eUnit);
@@ -374,27 +374,27 @@ void ParaLineSpacingControl::SetLineSpace(SvxLineSpacingItem& rLineSpace, sal_In
     switch ( eSpace )
     {
         case LLINESPACE_1:
-            rLineSpace.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
+            rLineSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
             rLineSpace.SetInterLineSpaceRule( SvxInterLineSpaceRule::Off );
             break;
 
         case LLINESPACE_115:
-            rLineSpace.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
+            rLineSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
             rLineSpace.SetPropLineSpace( LINESPACE_115 );
             break;
 
         case LLINESPACE_15:
-            rLineSpace.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
+            rLineSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
             rLineSpace.SetPropLineSpace( LINESPACE_15 );
             break;
 
         case LLINESPACE_2:
-            rLineSpace.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
+            rLineSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
             rLineSpace.SetPropLineSpace( LINESPACE_2 );
             break;
 
         case LLINESPACE_PROP:
-            rLineSpace.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
+            rLineSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
             rLineSpace.SetPropLineSpace( (sal_uInt8)lValue );
             break;
 
@@ -404,13 +404,13 @@ void ParaLineSpacingControl::SetLineSpace(SvxLineSpacingItem& rLineSpace, sal_In
             break;
 
         case LLINESPACE_DURCH:
-            rLineSpace.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
+            rLineSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
             rLineSpace.SetInterLineSpace( (sal_uInt16)lValue );
             break;
 
         case LLINESPACE_FIX:
             rLineSpace.SetLineHeight((sal_uInt16)lValue);
-            rLineSpace.GetLineSpaceRule() = SVX_LINE_SPACE_FIX;
+            rLineSpace.SetLineSpaceRule( SvxLineSpaceRule::Fix );
             rLineSpace.SetInterLineSpaceRule( SvxInterLineSpaceRule::Off );
         break;
     }

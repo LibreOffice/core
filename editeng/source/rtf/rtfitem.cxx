@@ -449,7 +449,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                         nTokenValue = 200;      // is one BYTE !!!
 
                     aLSpace.SetPropLineSpace( (const sal_uInt8)nTokenValue );
-                    aLSpace.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
+                    aLSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
 
                     pSet->Put( aLSpace );
                 }
@@ -467,28 +467,28 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     if (1000 == nTokenValue )
                         nTokenValue = 240;
 
-                    SvxLineSpace eLnSpc;
+                    SvxLineSpaceRule eLnSpc;
                     if (nTokenValue < 0)
                     {
-                        eLnSpc = SVX_LINE_SPACE_FIX;
+                        eLnSpc = SvxLineSpaceRule::Fix;
                         nTokenValue = -nTokenValue;
                     }
                     else if (nTokenValue == 0)
                     {
                         //if \sl0 is used, the line spacing is automatically
                         //determined
-                        eLnSpc = SVX_LINE_SPACE_AUTO;
+                        eLnSpc = SvxLineSpaceRule::Auto;
                     }
                     else
-                        eLnSpc = SVX_LINE_SPACE_MIN;
+                        eLnSpc = SvxLineSpaceRule::Min;
 
                     if (IsCalcValue())
                         CalcValue();
 
-                    if (eLnSpc != SVX_LINE_SPACE_AUTO)
+                    if (eLnSpc != SvxLineSpaceRule::Auto)
                         aLSpace.SetLineHeight( (const sal_uInt16)nTokenValue );
 
-                    aLSpace.GetLineSpaceRule() = eLnSpc;
+                    aLSpace.SetLineSpaceRule(eLnSpc);
                     pSet->Put(aLSpace);
                 }
                 break;

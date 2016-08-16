@@ -257,15 +257,15 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
             {
                 switch( pSpace->GetLineSpaceRule() )
                 {
-                    case SVX_LINE_SPACE_AUTO:
+                    case SvxLineSpaceRule::Auto:
                     break;
-                    case SVX_LINE_SPACE_MIN:
+                    case SvxLineSpaceRule::Min:
                     {
                         if( nFirstLineOfs < pSpace->GetLineHeight() )
                             nFirstLineOfs = pSpace->GetLineHeight();
                         break;
                     }
-                    case SVX_LINE_SPACE_FIX:
+                    case SvxLineSpaceRule::Fix:
                         nFirstLineOfs = pSpace->GetLineHeight();
                     break;
                     default: OSL_FAIL( ": unknown LineSpaceRule" );

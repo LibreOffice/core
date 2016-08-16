@@ -1656,14 +1656,14 @@ static void ParseCSS1_line_height( const CSS1Expression *pExpr,
         SvxLineSpacingItem aLSItem( nHeight, aItemIds.nLineSpacing );
         aLSItem.SetLineHeight( nHeight );
         // interpret <line-height> attribute as minimum line height
-        aLSItem.GetLineSpaceRule() = SVX_LINE_SPACE_MIN;
+        aLSItem.SetLineSpaceRule( SvxLineSpaceRule::Min );
         aLSItem.SetInterLineSpaceRule( SvxInterLineSpaceRule::Off );
         rItemSet.Put( aLSItem );
     }
     else if( nPropHeight )
     {
         SvxLineSpacingItem aLSItem( nPropHeight, aItemIds.nLineSpacing );
-        aLSItem.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
+        aLSItem.SetLineSpaceRule( SvxLineSpaceRule::Auto );
         if( 100 == nPropHeight )
             aLSItem.SetInterLineSpaceRule( SvxInterLineSpaceRule::Off );
         else

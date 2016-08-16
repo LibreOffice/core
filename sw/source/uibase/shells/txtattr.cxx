@@ -335,7 +335,7 @@ SET_LINESPACE:
         {
 
             SvxLineSpacingItem aLineSpacing(ePropL, RES_PARATR_LINESPACING );
-            aLineSpacing.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
+            aLineSpacing.SetLineSpaceRule( SvxLineSpaceRule::Auto );
             if( 100 == ePropL )
                 aLineSpacing.SetInterLineSpaceRule( SvxInterLineSpaceRule::Off );
             else
@@ -541,7 +541,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
     if( SfxItemState::DEFAULT == eState )
         pItem = &rPool.GetDefaultItem(RES_PARATR_LINESPACING);
     if( SfxItemState::DEFAULT <= eState &&
-            static_cast<const SvxLineSpacingItem* >(pItem)->GetLineSpaceRule() == SVX_LINE_SPACE_AUTO )
+            static_cast<const SvxLineSpacingItem* >(pItem)->GetLineSpaceRule() == SvxLineSpaceRule::Auto )
     {
         if(SvxInterLineSpaceRule::Off ==
                     static_cast<const SvxLineSpacingItem* >(pItem)->GetInterLineSpaceRule())

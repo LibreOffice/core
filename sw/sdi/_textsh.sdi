@@ -1164,7 +1164,7 @@ interface BaseText
     ]
     SID_ATTR_PARA_LINESPACE // status(final|play)
     [
-         // SvxLineSpace           LineSpace       MID_LINESPACE;
+         // SvxLineSpaceRule       LineSpace       MID_LINESPACE;
          // UINT16                 LineHeight      MID_HEIGHT;     // % or direct
          // SvxInterLineSpaceRule  InterLineSpace  MID_INTER_LINESPACE;
          // INT16                  InterSpace      MID_INTER_SPACE;

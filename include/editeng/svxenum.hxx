@@ -58,12 +58,12 @@ enum SvxTabAdjust
     SVX_TAB_ADJUST_END
 };
 
-enum SvxLineSpace
+enum class SvxLineSpaceRule
 {
-    SVX_LINE_SPACE_AUTO,
-    SVX_LINE_SPACE_FIX,
-    SVX_LINE_SPACE_MIN,
-    SVX_LINE_SPACE_END
+    Auto,
+    Fix,
+    Min,
+    End
 };
 
 enum class SvxInterLineSpaceRule

@@ -4096,14 +4096,14 @@ void SwWW8ImplReader::Read_LineSpace( sal_uInt16, const sal_uInt8* pData, short 
     ww::WordVersion eVersion = m_pWwFib->GetFIBVersion();
     short nMulti = (eVersion <= ww::eWW2) ? 1 : SVBT16ToShort( pData + 2 );
 
-    SvxLineSpace eLnSpc;
+    SvxLineSpaceRule eLnSpc;
     if( 0 > nSpace )
     {
         nSpace = -nSpace;
-        eLnSpc = SVX_LINE_SPACE_FIX;
+        eLnSpc = SvxLineSpaceRule::Fix;
     }
     else
-        eLnSpc = SVX_LINE_SPACE_MIN;
+        eLnSpc = SvxLineSpaceRule::Min;
 
     // WW has implicit additional paragraph spacing depending on
     // the line spacing. It is, for "exactly", 0.8 * line spacing "before"
@@ -4135,7 +4135,7 @@ void SwWW8ImplReader::Read_LineSpace( sal_uInt16, const sal_uInt8* pData, short 
         // for negative space, the distance is "exact", otherwise "at least"
         nSpaceTw = (sal_uInt16)nSpace;
         aLSpc.SetLineHeight( nSpaceTw );
-        aLSpc.GetLineSpaceRule() = eLnSpc;
+        aLSpc.SetLineSpaceRule( eLnSpc);
     }
     NewAttr( aLSpc );
     if( m_pSFlyPara )
