@@ -20,9 +20,7 @@
 #include "headless/svpgdi.hxx"
 #include "headless/svpbmp.hxx"
 #include "headless/svpframe.hxx"
-#ifndef IOS
 #include "headless/svpcairotextrender.hxx"
-#endif
 #include "saldatabasic.hxx"
 
 #include <vcl/sysdata.hxx>
@@ -86,8 +84,6 @@ namespace
         return aDamageRect;
     }
 }
-
-#ifndef IOS
 
 bool SvpSalGraphics::blendBitmap( const SalTwoRect&, const SalBitmap& /*rBitmap*/ )
 {
@@ -312,8 +308,6 @@ bool SvpSalGraphics::drawTransformedBitmap(
     return true;
 }
 
-#endif
-
 void SvpSalGraphics::clipRegion(cairo_t* cr)
 {
     RectangleVector aRectangles;
@@ -395,8 +389,6 @@ void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 {
     rDPIX = rDPIY = 96;
 }
-
-#ifndef IOS
 
 sal_uInt16 SvpSalGraphics::GetBitCount() const
 {
@@ -1219,8 +1211,6 @@ void SvpSalGraphics::invert(sal_uInt32 nPoints, const SalPoint* pPtAry, SalInver
     invert(aPoly, nFlags);
 }
 
-#endif
-
 bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uLong )
 {
     return false;
@@ -1395,8 +1385,6 @@ css::uno::Any SvpSalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& /*
 
 #endif // ENABLE_CAIRO_CANVAS
 
-#ifndef IOS
-
 SystemGraphicsData SvpSalGraphics::GetGraphicsData() const
 {
     return SystemGraphicsData();
@@ -1412,7 +1400,5 @@ bool SvpSalGraphics::supportsOperation(OutDevSupportType eType) const
     }
     return false;
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

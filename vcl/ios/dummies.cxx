@@ -124,4 +124,9 @@ void SalGenericInstance::jobEndedPrinterUpdate()
 {
 }
 
+bool AquaSalGraphics::drawEPS( long, long, long, long, void*, sal_uLong )
+{
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

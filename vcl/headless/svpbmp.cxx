@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef IOS
-
 #include <sal/config.h>
 
 #include <cstring>
@@ -266,7 +264,5 @@ bool SvpSalBitmap::Replace( const ::Color& /*rSearchColor*/, const ::Color& /*rR
 {
     return false;
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

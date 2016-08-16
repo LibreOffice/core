@@ -1544,10 +1544,9 @@ SalColor AquaSalGraphics::getPixel( long nX, long nY )
     return nSalColor;
 }
 
-#ifndef IOS
-
 void AquaSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 {
+#ifndef IOS
     if( !mnRealDPIY )
     {
         initResolution( (mbWindow && mpFrame) ? mpFrame->getNSWindow() : nil );
@@ -1555,9 +1554,10 @@ void AquaSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 
     rDPIX = mnRealDPIX;
     rDPIY = mnRealDPIY;
-}
-
+#else
+    rDPIX = rDPIY = 200; // FIXME
 #endif
+}
 
 void AquaSalGraphics::ImplDrawPixel( long nX, long nY, const RGBAColor& rColor )
 {

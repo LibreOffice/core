@@ -534,14 +534,17 @@ endif
 endif
 
 vcl_headless_code= \
-    vcl/headless/svpbmp \
-    vcl/headless/svpdummies \
     vcl/headless/svpframe \
-    vcl/headless/svpgdi \
+    $(call gb_Helper_optional,CAIRO, \
+	    vcl/headless/svpbmp \
+		vcl/headless/svpgdi \
+	    vcl/headless/svpdata) \
+    vcl/headless/svpdummies \
     vcl/headless/svpinst \
-    vcl/headless/svpdata \
     vcl/headless/svpvd \
     vcl/unx/generic/app/gendisp \
+    vcl/unx/generic/app/geninst \
+    vcl/unx/generic/app/gensys \
 
 vcl_headless_freetype_code=\
     vcl/headless/svpprn \
@@ -568,8 +571,6 @@ vcl_headless_freetype_code=\
     vcl/unx/generic/print/genprnpsp \
     vcl/unx/generic/print/prtsetup \
     vcl/unx/generic/print/text_gfx \
-    vcl/unx/generic/app/gensys \
-    vcl/unx/generic/app/geninst \
 
 ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
