@@ -1383,6 +1383,7 @@ void ToolBox::ImplInitToolBoxData()
     meLastStyle       = PointerStyle::Arrow;
     mnWinStyle        = 0;
     meLayoutMode      = ToolBoxLayoutMode::Normal;
+    meTextPosition    = ToolBoxTextPosition::Right;
     mnLastFocusItemId = 0;
     mnKeyModifier     = 0;
     mnActivateCount   = 0;
@@ -1854,14 +1855,28 @@ bool ToolBox::ImplCalcItem()
                         it->maItemSize.Width() = bText ? GetCtrlTextWidth( it->maText )+TB_TEXTOFFSET : 0;
                         it->maItemSize.Height() = bText ? GetTextHeight() : 0;
 
-                        // leave space between image and text
-                        if( bText )
-                            it->maItemSize.Width() += TB_IMAGETEXTOFFSET;
+                        if ( meTextPosition == ToolBoxTextPosition::Right )
+                        {
+                            // leave space between image and text
+                            if( bText )
+                                it->maItemSize.Width() += TB_IMAGETEXTOFFSET;
 
-                        // image and text side by side
-                        it->maItemSize.Width() += it->maImage.GetSizePixel().Width();
-                        if ( it->maImage.GetSizePixel().Height() > it->maItemSize.Height() )
-                            it->maItemSize.Height() = it->maImage.GetSizePixel().Height();
+                            // image and text side by side
+                            it->maItemSize.Width() += it->maImage.GetSizePixel().Width();
+                            if ( it->maImage.GetSizePixel().Height() > it->maItemSize.Height() )
+                                it->maItemSize.Height() = it->maImage.GetSizePixel().Height();
+                        }
+                        else
+                        {
+                            // leave space between image and text
+                            if( bText )
+                                it->maItemSize.Height() += TB_IMAGETEXTOFFSET;
+
+                            // text below image
+                            it->maItemSize.Height() += it->maImage.GetSizePixel().Height();
+                            if ( it->maImage.GetSizePixel().Width() > it->maItemSize.Width() )
+                                it->maItemSize.Width() = it->maImage.GetSizePixel().Width();
+                        }
 
                         it->mbVisibleText = bText;
                     }
@@ -1886,8 +1901,16 @@ bool ToolBox::ImplCalcItem()
                 // add in drop down arrow
                 if( it->mnBits & ToolBoxItemBits::DROPDOWN )
                 {
-                    it->maItemSize.Width() += nDropDownArrowWidth;
-                    it->mnDropDownArrowWidth = nDropDownArrowWidth;
+                    if ( meTextPosition == ToolBoxTextPosition::Right )
+                    {
+                        it->maItemSize.Width() += nDropDownArrowWidth;
+                        it->mnDropDownArrowWidth = nDropDownArrowWidth;
+                    }
+                    else
+                    {
+                        it->maItemSize.Height() += nDropDownArrowWidth;
+                        it->mnDropDownArrowWidth = nDropDownArrowWidth;
+                    }
                 }
 
                 // text items will be rotated in vertical mode
@@ -1956,7 +1979,8 @@ bool ToolBox::ImplCalcItem()
         ImplAddButtonBorder( nMaxWidth, nMaxHeight, mpData->mbNativeButtons );
     }
 
-    if( !ImplIsFloatingMode() && GetToolboxButtonSize() != TOOLBOX_BUTTONSIZE_DONTCARE )
+    if( !ImplIsFloatingMode() && GetToolboxButtonSize() != TOOLBOX_BUTTONSIZE_DONTCARE
+        && ( meTextPosition == ToolBoxTextPosition::Right ) )
     {
         // make sure all vertical toolbars have the same width and horizontal have the same height
         // this depends on the used button sizes
@@ -3164,7 +3188,8 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
         // draw the image
         nImageOffX = nOffX;
         nImageOffY = nOffY;
-        if ( (pItem->mnBits & (ToolBoxItemBits::LEFT|ToolBoxItemBits::DROPDOWN)) || bText )
+        if ( ( (pItem->mnBits & (ToolBoxItemBits::LEFT|ToolBoxItemBits::DROPDOWN)) || bText )
+            && ( meTextPosition == ToolBoxTextPosition::Right ) )
         {
             // left align also to leave space for drop down arrow
             // and when drawing text+image
@@ -3175,7 +3200,8 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
         else
         {
             nImageOffX += (nBtnWidth-aImageSize.Width())/2;
-            nImageOffY += (nBtnHeight-aImageSize.Height())/2;
+            if ( meTextPosition == ToolBoxTextPosition::Right )
+                nImageOffY += (nBtnHeight-aImageSize.Height())/2;
         }
         if ( nHighlight != 0 || (pItem->meState == TRISTATE_TRUE) )
         {
@@ -3223,12 +3249,21 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
         }
         else
         {
-            // center vertically
-            nTextOffY += (nBtnHeight-aTxtSize.Height())/2;
+            if ( meTextPosition == ToolBoxTextPosition::Right )
+            {
+                // center vertically
+                nTextOffY += (nBtnHeight-aTxtSize.Height())/2;
 
-            // add in image offset
-            if( bImage )
-                nTextOffX = nImageOffX + aImageSize.Width() + TB_IMAGETEXTOFFSET;
+                // add in image offset
+                if( bImage )
+                    nTextOffX = nImageOffX + aImageSize.Width() + TB_IMAGETEXTOFFSET;
+            }
+            else
+            {
+                long nArrowHeight = ( pItem->mnBits & ToolBoxItemBits::DROPDOWN )
+                                        ? TB_DROPDOWNARROWWIDTH : 0;
+                nTextOffY += nBtnHeight - aTxtSize.Height() - nArrowHeight;
+            }
         }
 
         // draw selection only if not already drawn during image output (see above)
@@ -3253,7 +3288,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
     // paint optional drop down arrow
     if ( pItem->mnBits & ToolBoxItemBits::DROPDOWN )
     {
-        Rectangle aDropDownRect( pItem->GetDropDownRect( mbHorz ) );
+        Rectangle aDropDownRect( pItem->GetDropDownRect( mbHorz && ( meTextPosition == ToolBoxTextPosition::Right ) ) );
         bool bSetColor = true;
         if ( !pItem->mbEnabled || !IsEnabled() )
         {
@@ -3887,7 +3922,8 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                 // was dropdown arrow pressed
                 if( (it->mnBits & ToolBoxItemBits::DROPDOWN) )
                 {
-                    if( ( (it->mnBits & ToolBoxItemBits::DROPDOWNONLY) == ToolBoxItemBits::DROPDOWNONLY) || it->GetDropDownRect( mbHorz ).IsInside( aMousePos ))
+                    if( ( (it->mnBits & ToolBoxItemBits::DROPDOWNONLY) == ToolBoxItemBits::DROPDOWNONLY)
+                        || it->GetDropDownRect( mbHorz && ( meTextPosition == ToolBoxTextPosition::Right ) ).IsInside( aMousePos ))
                     {
                         // dropdownonly always triggers the dropdown handler, over the whole button area
 
@@ -5656,6 +5692,11 @@ void ToolBox::SetToolbarLayoutMode( ToolBoxLayoutMode eLayout )
 {
     if ( meLayoutMode != eLayout )
        meLayoutMode  = eLayout;
+}
+
+void ToolBox::SetToolBoxTextPosition( ToolBoxTextPosition ePosition )
+{
+    meTextPosition = ePosition;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

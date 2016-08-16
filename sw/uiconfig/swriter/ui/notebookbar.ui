@@ -199,11 +199,6 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/lc_zoomoptimal.png</property>
   </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_paste.png</property>
-  </object>
   <object class="GtkImage" id="inserttableimg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -421,15 +416,25 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="vcllo-SmallButton" id="button5">
+                      <object class="sfxlo-BigToolBox" id="pastebox">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="action_name">.uno:Paste</property>
-                        <property name="image">image1</property>
-                        <property name="relief">none</property>
-                        <property name="image_position">top</property>
-                        <property name="always_show_image">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="show_arrow">False</property>
+                        <child>
+                          <object class="GtkMenuToolButton" id="Paste">
+                            <property name="use_action_appearance">False</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="is_important">True</property>
+                            <property name="action_name">.uno:Paste</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -441,8 +446,8 @@
                       <object class="GtkBox" id="box6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="orientation">vertical</property>
                         <property name="valign">center</property>
+                        <property name="orientation">vertical</property>
                         <child>
                           <object class="sfxlo-NotebookbarToolBox" id="cutbox">
                             <property name="visible">True</property>
@@ -666,11 +671,11 @@
                             </child>
                             <child>
                               <object class="GtkSeparator" id="separator30">
+                                <property name="height_request">20</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="orientation">vertical</property>
-                                <property name="height_request">20</property>
                                 <property name="valign">center</property>
+                                <property name="orientation">vertical</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -720,11 +725,11 @@
                             </child>
                             <child>
                               <object class="GtkSeparator" id="separator32">
+                                <property name="height_request">20</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="orientation">vertical</property>
-                                <property name="height_request">20</property>
                                 <property name="valign">center</property>
+                                <property name="orientation">vertical</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -735,11 +740,11 @@
                             </child>
                             <child>
                               <object class="GtkSeparator" id="separator31">
+                                <property name="height_request">20</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="orientation">vertical</property>
-                                <property name="height_request">20</property>
                                 <property name="valign">center</property>
+                                <property name="orientation">vertical</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -814,8 +819,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Font</property>
-                    <property name="orientation">vertical</property>
                     <property name="valign">center</property>
+                    <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkBox" id="box77">
                         <property name="visible">True</property>
@@ -945,8 +950,8 @@
                           <object class="GtkBox" id="box19">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="orientation">vertical</property>
                             <property name="valign">center</property>
+                            <property name="orientation">vertical</property>
                             <child>
                               <object class="sfxlo-NotebookbarToolBox" id="numberbullet">
                                 <property name="visible">True</property>
@@ -1113,8 +1118,8 @@
                           <object class="GtkGrid" id="grid1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="column_spacing">6</property>
                             <property name="valign">center</property>
+                            <property name="column_spacing">6</property>
                             <child>
                               <object class="sfxlo-NotebookbarToolBox" id="verticalalignment1">
                                 <property name="visible">True</property>
@@ -1348,8 +1353,8 @@
                           <object class="GtkBox" id="box32">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="orientation">vertical</property>
                             <property name="valign">center</property>
+                            <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkBox" id="box66">
                                 <property name="visible">True</property>

@@ -59,7 +59,7 @@ public:
 
     css::uno::Reference<css::frame::XToolbarController> GetFirstController();
 
-private:
+protected:
     typedef std::map<sal_uInt16, css::uno::Reference<css::frame::XToolbarController>> ControllerContainer;
     ControllerContainer maControllers;
     bool mbAreHandlersRegistered;
