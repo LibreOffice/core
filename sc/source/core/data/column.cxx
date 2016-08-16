@@ -1307,7 +1307,16 @@ public:
     ~CopyAsLinkHandler()
     {
         if (mpDestPos)
+        {
+            // Similar to CopyByCloneHandler, don't copy a singular iterator.
+            {
+                sc::ColumnBlockPosition aTempBlock;
+                mrDestCol.InitBlockPosition(aTempBlock);
+                maDestPos.miBroadcasterPos = aTempBlock.miBroadcasterPos;
+            }
+
             *mpDestPos = maDestPos;
+        }
     }
 
     void setStartListening( bool b )
