@@ -558,7 +558,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     if( 0 == nRet )
     {
         pGraphicHelper = SvXMLGraphicHelper::Create( xStorage,
-                                                     GRAPHICHELPER_MODE_READ,
+                                                     SvXMLGraphicHelperMode::Read,
                                                      false );
         xGraphicResolver = pGraphicHelper;
         pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
@@ -889,7 +889,7 @@ bool SdXMLFilter::Export()
                 pObjectHelper = SvXMLEmbeddedObjectHelper::Create( xStorage, *mrDocShell.GetDoc()->GetPersist(), EMBEDDEDOBJECTHELPER_MODE_WRITE, false );
                 xObjectResolver = pObjectHelper;
 
-                pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_WRITE, false );
+                pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, SvXMLGraphicHelperMode::Write, false );
                 xGrfResolver = pGraphicHelper;
             }
 

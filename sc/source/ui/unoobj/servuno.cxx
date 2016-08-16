@@ -485,10 +485,10 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
 
         // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
         case Type::EXPORT_GOR:
-            xRet.set(static_cast<cppu::OWeakObject *>(new SvXMLGraphicHelper( GRAPHICHELPER_MODE_WRITE )));
+            xRet.set(static_cast<cppu::OWeakObject *>(new SvXMLGraphicHelper( SvXMLGraphicHelperMode::Write )));
             break;
         case Type::IMPORT_GOR:
-            xRet.set(static_cast<cppu::OWeakObject *>(new SvXMLGraphicHelper( GRAPHICHELPER_MODE_READ )));
+            xRet.set(static_cast<cppu::OWeakObject *>(new SvXMLGraphicHelper( SvXMLGraphicHelperMode::Read )));
             break;
         case Type::EXPORT_EOR:
             if (pDocShell)

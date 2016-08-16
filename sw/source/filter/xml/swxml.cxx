@@ -520,7 +520,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
         return ERR_SWG_READ_ERROR;
 
     pGraphicHelper = SvXMLGraphicHelper::Create( xStorage,
-                                                 GRAPHICHELPER_MODE_READ,
+                                                 SvXMLGraphicHelperMode::Read,
                                                  false );
     xGraphicResolver = pGraphicHelper;
     SfxObjectShell *pPersist = rDoc.GetPersist();

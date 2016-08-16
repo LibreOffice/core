@@ -80,7 +80,7 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
                 xObjectResolver = pObjectHelper;
             }
 
-            pGraphicHelper = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_WRITE );
+            pGraphicHelper = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Write );
             xGraphicResolver = pGraphicHelper;
 
             if( bDocRet )
@@ -176,7 +176,7 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
             xTargetModel->lockControllers();
 
 
-        pGraphicHelper = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_READ );
+        pGraphicHelper = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Read );
         xGraphicResolver = pGraphicHelper;
 
         ::comphelper::IEmbeddedHelper *pPersist = pModel->GetPersist();

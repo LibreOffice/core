@@ -359,7 +359,7 @@ SvXMLGraphicHelper::SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode ) :
 SvXMLGraphicHelper::SvXMLGraphicHelper()
     : ::cppu::WeakComponentImplHelper2< css::document::XGraphicObjectResolver,
                                       css::document::XBinaryStreamResolver >( maMutex )
-    , meCreateMode(GRAPHICHELPER_MODE_READ)
+    , meCreateMode(SvXMLGraphicHelperMode::Read)
     , mbDirect(false)
 {
 }
@@ -409,7 +409,7 @@ uno::Reference < embed::XStorage > SvXMLGraphicHelper::ImplGetGraphicStorage( co
         {
             xRetStorage = mxRootStorage->openStorageElement(
                 maCurStorageName = rStorageName,
-                ( GRAPHICHELPER_MODE_WRITE == meCreateMode )
+                ( SvXMLGraphicHelperMode::Write == meCreateMode )
                     ? embed::ElementModes::READWRITE
                     : embed::ElementModes::READ );
         }
@@ -441,13 +441,13 @@ SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const OUSt
     if( aRet.xStorage.is() )
     {
         sal_Int32 nMode = embed::ElementModes::READ;
-        if ( GRAPHICHELPER_MODE_WRITE == meCreateMode )
+        if ( SvXMLGraphicHelperMode::Write == meCreateMode )
         {
             nMode = embed::ElementModes::READWRITE;
         }
 
         aRet.xStream = aRet.xStorage->openStreamElement( rPictureStreamName, nMode );
-        if( aRet.xStream.is() && ( GRAPHICHELPER_MODE_WRITE == meCreateMode ) )
+        if( aRet.xStream.is() && ( SvXMLGraphicHelperMode::Write == meCreateMode ) )
         {
             OUString aPropName( "UseCommonStoragePasswordEncryption" );
             uno::Reference < beans::XPropertySet > xProps( aRet.xStream, uno::UNO_QUERY );
@@ -636,7 +636,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
     {
         URLPair& rURLPair = maGrfURLs[ nInsertPos ];
 
-        if( GRAPHICHELPER_MODE_READ == meCreateMode )
+        if( SvXMLGraphicHelperMode::Read == meCreateMode )
         {
             const GraphicObject aObj( ImplReadGraphic( aPictureStorageName, aPictureStreamName ) );
 
@@ -767,7 +767,7 @@ void SvXMLGraphicHelper::Init( const uno::Reference < embed::XStorage >& rXMLSto
 {
     mxRootStorage = rXMLStorage;
     meCreateMode = eCreateMode;
-    mbDirect = meCreateMode != GRAPHICHELPER_MODE_READ || bDirect;
+    mbDirect = meCreateMode != SvXMLGraphicHelperMode::Read || bDirect;
 }
 
 SvXMLGraphicHelper* SvXMLGraphicHelper::Create( const uno::Reference < embed::XStorage >& rXMLStorage,
@@ -853,7 +853,7 @@ Reference< XInputStream > SAL_CALL SvXMLGraphicHelper::getInputStream( const OUS
     OUString                    aPictureStorageName, aGraphicId;
 
 
-    if( ( GRAPHICHELPER_MODE_WRITE == meCreateMode ) &&
+    if( ( SvXMLGraphicHelperMode::Write == meCreateMode ) &&
         ImplGetStreamNames( rURL, aPictureStorageName, aGraphicId ) )
     {
         SvXMLGraphicInputStream* pInputStream = new SvXMLGraphicInputStream( aGraphicId );
@@ -872,7 +872,7 @@ Reference< XOutputStream > SAL_CALL SvXMLGraphicHelper::createOutputStream()
 {
     Reference< XOutputStream > xRet;
 
-    if( GRAPHICHELPER_MODE_READ == meCreateMode )
+    if( SvXMLGraphicHelperMode::Read == meCreateMode )
     {
         SvXMLGraphicOutputStream* pOutputStream = new SvXMLGraphicOutputStream;
 
@@ -890,7 +890,7 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveOutputStream( const Reference< XOut
 {
     OUString aRet;
 
-    if( ( GRAPHICHELPER_MODE_READ == meCreateMode ) && rxBinaryStream.is() )
+    if( ( SvXMLGraphicHelperMode::Read == meCreateMode ) && rxBinaryStream.is() )
     {
         if( ::std::find( maGrfStms.begin(), maGrfStms.end(), rxBinaryStream ) != maGrfStms.end() )
         {
@@ -1042,7 +1042,7 @@ OUString SAL_CALL SvXMLGraphicImportExportHelper::resolveOutputStream( const Ref
 OUString SAL_CALL SvXMLGraphicImportExportHelper::getImplementationName()
     throw (uno::RuntimeException, std::exception)
 {
-    if( m_eGraphicHelperMode == GRAPHICHELPER_MODE_READ )
+    if( m_eGraphicHelperMode == SvXMLGraphicHelperMode::Read )
         return OUString("com.sun.star.comp.Svx.GraphicImportHelper");
     return OUString("com.sun.star.comp.Svx.GraphicExportHelper");
 }
@@ -1073,7 +1073,7 @@ Sequence< OUString > SAL_CALL SvXMLGraphicImportExportHelper::getSupportedServic
 
     You should call dispose after you no longer need this component.
 
-    uses eCreateMode == GRAPHICHELPER_MODE_READ, bDirect == sal_True in
+    uses eCreateMode == SvXMLGraphicHelperMode::Read, bDirect == sal_True in
     SvXMLGraphicHelper
  */
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -1081,7 +1081,7 @@ com_sun_star_comp_Svx_GraphicImportHelper_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new SvXMLGraphicImportExportHelper(GRAPHICHELPER_MODE_READ));
+    return cppu::acquire(new SvXMLGraphicImportExportHelper(SvXMLGraphicHelperMode::Read));
 }
 
 /** Create this with createInstanceWithArguments. service name
@@ -1093,7 +1093,7 @@ com_sun_star_comp_Svx_GraphicImportHelper_get_implementation(
     To write the Pictures stream, you have to call dispose at this component.
     Make sure you call dispose before you commit the parent storage.
 
-    uses eCreateMode == GRAPHICHELPER_MODE_WRITE, bDirect == sal_True in
+    uses eCreateMode == SvXMLGraphicHelperMode::Write, bDirect == sal_True in
     SvXMLGraphicHelper
  */
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -1101,7 +1101,7 @@ com_sun_star_comp_Svx_GraphicExportHelper_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new SvXMLGraphicImportExportHelper(GRAPHICHELPER_MODE_WRITE));
+    return cppu::acquire(new SvXMLGraphicImportExportHelper(SvXMLGraphicHelperMode::Write));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

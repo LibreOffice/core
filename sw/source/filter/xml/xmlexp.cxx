@@ -249,7 +249,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     SvXMLGraphicHelper *pGraphicResolver = nullptr;
     if( !GetGraphicResolver().is() )
     {
-        pGraphicResolver = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_WRITE );
+        pGraphicResolver = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Write );
         Reference< XGraphicObjectResolver > xGraphicResolver( pGraphicResolver );
         SetGraphicResolver( xGraphicResolver );
     }

@@ -87,7 +87,7 @@ sal_uInt32 SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >&
 
     OSL_ENSURE( xStg.is(), "Where is my storage?" );
     pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
-                                                 GRAPHICHELPER_MODE_WRITE,
+                                                 SvXMLGraphicHelperMode::Write,
                                                  false );
     xGraphicResolver = pGraphicHelper;
 

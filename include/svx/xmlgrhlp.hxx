@@ -31,10 +31,9 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <svx/svxdllapi.h>
 
-enum SvXMLGraphicHelperMode
+enum class SvXMLGraphicHelperMode
 {
-    GRAPHICHELPER_MODE_READ = 0,
-    GRAPHICHELPER_MODE_WRITE = 1
+    Read, Write
 };
 
 struct SvxGraphicHelperStream_Impl

@@ -688,7 +688,7 @@ void SwXMLImport::startDocument()
 
     if( !GetGraphicResolver().is() )
     {
-        m_pGraphicResolver = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_READ );
+        m_pGraphicResolver = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Read );
         Reference< document::XGraphicObjectResolver > xGraphicResolver( m_pGraphicResolver );
         SetGraphicResolver( xGraphicResolver );
     }

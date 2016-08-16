@@ -946,12 +946,12 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
     // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
     if( aServiceSpecifier == "com.sun.star.document.ExportGraphicObjectResolver" )
     {
-        return static_cast<cppu::OWeakObject *>(new SvXMLGraphicHelper( GRAPHICHELPER_MODE_WRITE ));
+        return static_cast<cppu::OWeakObject *>(new SvXMLGraphicHelper( SvXMLGraphicHelperMode::Write ));
     }
 
     if( aServiceSpecifier == "com.sun.star.document.ImportGraphicObjectResolver" )
     {
-        return static_cast<cppu::OWeakObject *>(new SvXMLGraphicHelper( GRAPHICHELPER_MODE_READ ));
+        return static_cast<cppu::OWeakObject *>(new SvXMLGraphicHelper( SvXMLGraphicHelperMode::Read ));
     }
 
     if( aServiceSpecifier == "com.sun.star.document.ExportEmbeddedObjectResolver" )
