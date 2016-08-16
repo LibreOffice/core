@@ -134,6 +134,7 @@ void SwRenderData::MakeSwPrtOptions(
     rOptions.m_bPrintEmptyPages       = pOpt->IsPrintEmptyPages( bIsPDFExport );
     // bUpdateFieldsInPrinting  <-- not set here; mail merge only
     rOptions.m_bPaperFromSetup        = pOpt->IsPaperFromSetup();
+    rOptions.m_bPapersizeFromSetup    = pOpt->IsPapersizeFromSetup();
     rOptions.m_bPrintReverse          = false; /*handled by print dialog now*/
     rOptions.m_bPrintProspect         = pOpt->IsPrintProspect();
     rOptions.m_bPrintProspectRTL      = pOpt->IsPrintProspectRTL();
@@ -174,7 +175,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     // create sequence of print UI options
     // (5 options are not available for Writer-Web)
     const int nCTLOpts = bCTL ? 1 : 0;
-    const int nNumProps = nCTLOpts + (bWeb ? 15 : 21);
+    const int nNumProps = nCTLOpts + (bWeb ? 16 : 22);
     m_aUIProperties.resize( nNumProps );
     int nIdx = 0;
 
@@ -260,6 +261,16 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                         "PrintPaperFromSetup",
                                                         bDefaultVal,
                                                         aPaperTrayOpt);
+
+    // create a bool option for paper size
+    bDefaultVal = rDefaultPrintData.IsPapersizeFromSetup();
+    vcl::PrinterOptionsHelper::UIControlOptions aPapersizeOpt;
+    aPapersizeOpt.maGroupHint = "OptionsPageOptGroup";
+    m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("papersizefromsetup", SW_RES( STR_PRINTOPTUI_ONLY_PAPERSIZE),
+                                                        ".HelpID:vcl:PrintDialog:PapersizeFromSetup:CheckBox",
+                                                        "PapersizeFromSetup",
+                                                        bDefaultVal,
+                                                        aPapersizeOpt);
 
     // print range selection
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;

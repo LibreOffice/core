@@ -84,6 +84,10 @@ String STR_PRINTOPTUI_ONLY_PAPER
 {
     Text [ en-US ] = "~Use only paper tray from printer preferences";
 };
+String STR_PRINTOPTUI_ONLY_PAPERSIZE
+{
+    Text [ en-US ] = "Use only paper ~size from printer preferences";
+};
 String STR_PRINTOPTUI_PRINT
 {
     Text [ en-US ] = "Print";

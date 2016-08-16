@@ -2453,6 +2453,7 @@ static void lcl_SavePrintUIOptionsToDocumentPrintData(
     aDocPrintData.SetPrintRightPage( rPrintUIOptions.IsPrintRightPages() );
     aDocPrintData.SetPrintReverse( false ); /*handled by print dialog now*/
     aDocPrintData.SetPaperFromSetup( rPrintUIOptions.IsPaperFromSetup() );
+    aDocPrintData.SetPapersizeFromSetup( rPrintUIOptions.IsPapersizeFromSetup() );
     aDocPrintData.SetPrintEmptyPages( rPrintUIOptions.IsPrintEmptyPages( bIsPDFEXport ) );
     aDocPrintData.SetPrintPostIts( rPrintUIOptions.GetPrintPostItsType() );
     aDocPrintData.SetPrintProspect( rPrintUIOptions.IsPrintProspect() );
