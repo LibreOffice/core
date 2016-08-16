@@ -401,6 +401,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Apatani" ; LANGUAGE_USER_APATANI ; > ;
         < "English (Mauritius)" ; LANGUAGE_USER_ENGLISH_MAURITIUS ; > ;
         < "French (Mauritius)" ; LANGUAGE_USER_FRENCH_MAURITIUS ; > ;
+        < "Silesian" ; LANGUAGE_USER_SILESIAN ; > ;
     };
 };
 
