@@ -2678,6 +2678,12 @@ DECLARE_RTFIMPORT_TEST(testTdf78506, "tdf78506.rtf")
     }
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf100507, "tdf100507.rtf")
+{
+    // This was 0: left margin of the first paragraph was lost on import.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6618), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

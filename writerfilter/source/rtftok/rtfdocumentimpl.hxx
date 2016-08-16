@@ -438,6 +438,8 @@ public:
     OUString getFontName(int nIndex);
     /// Return the style name of an RTF style index.
     OUString getStyleName(int nIndex);
+    /// Return the style type of an RTF style index.
+    Id getStyleType(int nIndex);
     /// Return the encoding associated with a font index.
     rtl_TextEncoding getEncoding(int nFontIndex);
     /// Get the default parser state.
@@ -519,6 +521,8 @@ private:
     std::vector<int> m_aFontIndexes;
     /// Maps style indexes to style names.
     std::map<int, OUString> m_aStyleNames;
+    /// Maps style indexes to style types.
+    std::map<int, Id> m_aStyleTypes;
     /// Color index <-> RGB color value map
     std::vector<sal_uInt32> m_aColorTable;
     bool m_bFirstRun;
