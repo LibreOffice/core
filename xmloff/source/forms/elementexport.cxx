@@ -1163,9 +1163,9 @@ namespace xmloff
             {   // attribute flags
                 SCAFlags::GroupName
             };
-            static const OUString pStringPropertyNames[] =
+            static const OUStringLiteral pStringPropertyNames[] =
             {   // property names
-                OUString(PROPERTY_GROUP_NAME)
+                OUStringLiteral(PROPERTY_GROUP_NAME)
             };
 
             static const sal_Int32 nIdCount = SAL_N_ELEMENTS( nStringPropertyAttributeIds );
