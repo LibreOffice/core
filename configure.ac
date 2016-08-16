@@ -2747,7 +2747,7 @@ if test "$with_export_validation" = yes; then
         # remember to download the ODF toolkit with validator later
         AC_MSG_NOTICE([no odfvalidator found, will download it])
         BUILD_TYPE="$BUILD_TYPE ODFVALIDATOR"
-        ODFVALIDATOR="sh bin/odfvalidator.sh"
+        ODFVALIDATOR="$SRC_ROOT/bin/odfvalidator.sh"
 
         # and fetch name of odfvalidator jar name from download.lst
         ODFVALIDATOR_JAR=`sed -ne "s/export *ODFVALIDATOR_JAR *:= *\(.*\) */\1/p" download.lst`
@@ -2763,6 +2763,8 @@ if test "$with_export_validation" = yes; then
         # so instead of "odfvalidator" it will be
         # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
         ODFVALIDATOR="bash.exe `cygpath -m "$ODFVALIDATOR"`"
+    else
+        ODFVALIDATOR="sh $ODFVALIDATOR"
     fi
     AC_SUBST(ODFVALIDATOR)
 
@@ -2772,7 +2774,7 @@ if test "$with_export_validation" = yes; then
         # remember to download the officeotron with validator later
         AC_MSG_NOTICE([no officeotron found, will download it])
         BUILD_TYPE="$BUILD_TYPE OFFICEOTRON"
-        OFFICEOTRON="sh bin/officeotron.sh"
+        OFFICEOTRON="$SRC_ROOT/bin/officeotron.sh"
 
         # and fetch name of officeotron jar name from download.lst
         OFFICEOTRON_JAR=`sed -ne "s/export *OFFICEOTRON_JAR *:= *\(.*\) */\1/p" download.lst`
@@ -2794,6 +2796,8 @@ if test "$with_export_validation" = yes; then
         # so instead of "odfvalidator" it will be
         # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
         OFFICEOTRON="bash.exe `cygpath -m "$OFFICEOTRON"`"
+    else
+        OFFICEOTRON="sh $OFFICEOTRON"
     fi
     AC_SUBST(OFFICEOTRON)
 else
