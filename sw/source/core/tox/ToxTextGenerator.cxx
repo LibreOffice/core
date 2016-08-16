@@ -87,7 +87,7 @@ ToxTextGenerator::GetNumStringOfFirstNode( const SwTOXSortTabBase& rBase, bool b
         sRet = pNd->GetNumString(bUsePrefix, nLevel);
     }
 
-    if(sRet != "") {
+    if (!sRet.isEmpty()) {
         sRet += " ";// Makes sure spacing is done only when there is outline numbering
     }
 
