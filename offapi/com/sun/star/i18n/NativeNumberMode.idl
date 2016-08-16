@@ -56,16 +56,36 @@ published constants NativeNumberMode
         Chinese:    Chinese lower case characters; CAL: 1/7/7 [DBNum1] <br/>
         Japanese:   short Kanji characters [DBNum1]; CAL: 1/4/4 [DBNum1] <br/>
         Korean:     Korean lower case characters [DBNum1]; CAL: 1/7/7 [DBNum1] <br/>
+        Hebrew:     Hebrew characters <br/>
+        Arabic:     Arabic-Indic characters <br/>
         Thai:       Thai characters <br/>
-        Arabic:     Indic characters <br/>
-        Indic:      Indic characters
+        Hindi:      Indic-Devanagari characters <br/>
+        Odia:       Odia (Oriya) characters<br/>
+        Marathi:    Indic-Devanagari characters<br/>
+        Bengali:    Bengali characters<br/>
+        Punjabi:    Punjabi (Gurmukhi) characters<br/>
+        Gujarati:   Gujarati characters<br/>
+        Tamil:      Tamil characters<br/>
+        Telugu:     Telugu characters<br/>
+        Kannada:    Kannada characters<br/>
+        Malayalam:  Malayalam characters<br/>
+        Lao:        Lao characters<br/>
+        Tibetan:    Tibetan characters<br/>
+        Burmese:    Burmese (Myanmar) characters<br/>
+        Khmer:      Khmer (Cambodian) characters<br/>
+        Mongolian:  Mongolian characters<br/>
+        Nepali:     Indic-Devanagari characters<br/>
+        Dzongkha:   Tibetan characters<br/>
+        Farsi:      East Arabic-Indic characters<br/>
+        Church Slavic: Cyrillic characters
      */
     const short NATNUM1     = 1;
 
     /** Transliteration in <br/>
         Chinese:    Chinese upper case characters; CAL: 2/8/8 [DBNum2] <br/>
         Japanese:   traditional Kanji characters; CAL: 2/5/5 [DBNum2] <br/>
-        Korean:     Korean upper case characters [DBNum2]; CAL: 2/8/8 [DBNum2]
+        Korean:     Korean upper case characters [DBNum2]; CAL: 2/8/8 [DBNum2] <br/>
+        Hebrew:     Hebrew numbering
      */
     const short NATNUM2     = 2;
 
