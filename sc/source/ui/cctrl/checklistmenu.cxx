@@ -1714,8 +1714,11 @@ SvTreeListEntry* ScCheckListBox::ShowCheckEntry( const OUString& sName, ScCheckL
     {
         if ( !pEntry )
         {
-            if ( rMember.mbDate )
+            if (rMember.mbDate)
             {
+                if (rMember.maDateParts.empty())
+                    return nullptr;
+
                 SvTreeListEntry* pYearEntry = FindEntry( nullptr, rMember.maDateParts[0] );
                 if ( !pYearEntry )
                     pYearEntry = InsertEntry( rMember.maDateParts[0], nullptr, true );
