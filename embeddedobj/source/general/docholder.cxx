@@ -717,7 +717,7 @@ bool DocumentHolder::ShowUI( const uno::Reference< css::frame::XLayoutManager >&
                     // TODO: moggi: why is this necessary?
                     if (!bIsChart)
                     {
-                        xContainerLM->setVisible( sal_False );
+                        xContainerLM->setVisible( false );
                         xContainerLM->lock();
                     }
                     bUnlock = true;
