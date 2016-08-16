@@ -435,11 +435,9 @@ uno::Sequence< OUString > SAL_CALL
     throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
-    static const OUString sServiceNames[2] = {
-            OUString("com.sun.star.accessibility.Accessible"),
-            OUString("com.sun.star.accessibility.AccessibleContext")
-    };
-    return uno::Sequence<OUString> (sServiceNames, 2);
+    return {
+        "com.sun.star.accessibility.Accessible",
+        "com.sun.star.accessibility.AccessibleContext"};
 }
 
 
