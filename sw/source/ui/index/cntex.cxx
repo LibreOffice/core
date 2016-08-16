@@ -343,7 +343,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         if(TOKEN_TAB_STOP == aToken.eTokenType)
                         {
                             pPropValArr[2].Name = "TabStopRightAligned";
-                            pPropValArr[2].Value <<= SVX_TAB_ADJUST_END == aToken.eTabAlign;
+                            pPropValArr[2].Value <<= SvxTabAdjust::End == aToken.eTabAlign;
                             pPropValArr[3].Name = "TabStopFillCharacter";
                             pPropValArr[3].Value <<= OUString(aToken.cTabFillChar);
                             pPropValArr[4].Name = "TabStopPosition";

@@ -515,11 +515,11 @@ css::uno::Sequence< css::style::TabStop > SwTextFrame::GetTabStopInfo( SwTwips C
     ts.FillChar = pTS->GetFill();
     switch( pTS->GetAdjustment() )
     {
-    case SVX_TAB_ADJUST_LEFT   : ts.Alignment = css::style::TabAlign_LEFT; break;
-    case SVX_TAB_ADJUST_CENTER : ts.Alignment = css::style::TabAlign_CENTER; break;
-    case SVX_TAB_ADJUST_RIGHT  : ts.Alignment = css::style::TabAlign_RIGHT; break;
-    case SVX_TAB_ADJUST_DECIMAL: ts.Alignment = css::style::TabAlign_DECIMAL; break;
-    case SVX_TAB_ADJUST_DEFAULT: ts.Alignment = css::style::TabAlign_DEFAULT; break;
+    case SvxTabAdjust::Left   : ts.Alignment = css::style::TabAlign_LEFT; break;
+    case SvxTabAdjust::Center : ts.Alignment = css::style::TabAlign_CENTER; break;
+    case SvxTabAdjust::Right  : ts.Alignment = css::style::TabAlign_RIGHT; break;
+    case SvxTabAdjust::Decimal: ts.Alignment = css::style::TabAlign_DECIMAL; break;
+    case SvxTabAdjust::Default: ts.Alignment = css::style::TabAlign_DEFAULT; break;
     default: break; // prevent warning
     }
 

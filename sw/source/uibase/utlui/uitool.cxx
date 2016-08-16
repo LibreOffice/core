@@ -580,7 +580,7 @@ void MakeDefTabs(SwTwips nDefDist, SvxTabStopItem& rTabs)
     if( rTabs.Count() )
         return;
     {
-        SvxTabStop aSwTabStop( nDefDist, SVX_TAB_ADJUST_DEFAULT );
+        SvxTabStop aSwTabStop( nDefDist, SvxTabAdjust::Default );
         rTabs.Insert( aSwTabStop );
     }
 }

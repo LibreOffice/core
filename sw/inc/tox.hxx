@@ -224,7 +224,7 @@ struct SW_DLLPUBLIC SwFormToken
         nTabStopPosition(0),
         eTokenType(eType),
         nPoolId(USHRT_MAX),
-        eTabAlign( SVX_TAB_ADJUST_LEFT ),
+        eTabAlign( SvxTabAdjust::Left ),
         nChapterFormat(0 /*CF_NUMBER*/),
         nOutlineLevel(MAXLEVEL),   //default to maximum outline level
         nAuthorityField(0 /*AUTH_FIELD_IDENTIFIER*/),

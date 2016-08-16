@@ -7088,17 +7088,17 @@ static void impl_WriteTabElement( FSHelperPtr const & pSerializer,
 
     switch (rTab.GetAdjustment())
     {
-    case SVX_TAB_ADJUST_RIGHT:
+    case SvxTabAdjust::Right:
         pTabElementAttrList->add( FSNS( XML_w, XML_val ), OString( "right" ) );
         break;
-    case SVX_TAB_ADJUST_DECIMAL:
+    case SvxTabAdjust::Decimal:
         pTabElementAttrList->add( FSNS( XML_w, XML_val ), OString( "decimal" ) );
         break;
-    case SVX_TAB_ADJUST_CENTER:
+    case SvxTabAdjust::Center:
         pTabElementAttrList->add( FSNS( XML_w, XML_val ), OString( "center" ) );
         break;
-    case SVX_TAB_ADJUST_DEFAULT:
-    case SVX_TAB_ADJUST_LEFT:
+    case SvxTabAdjust::Default:
+    case SvxTabAdjust::Left:
     default:
         pTabElementAttrList->add( FSNS( XML_w, XML_val ), OString( "left" ) );
         break;
@@ -7134,7 +7134,7 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
     // <w:tabs> must contain at least one <w:tab>, so don't write it empty
     if( nCount == 0 )
         return;
-    if( nCount == 1 && rTabStop[ 0 ].GetAdjustment() == SVX_TAB_ADJUST_DEFAULT )
+    if( nCount == 1 && rTabStop[ 0 ].GetAdjustment() == SvxTabAdjust::Default )
     {
         GetExport().setDefaultTabStop( rTabStop[ 0 ].GetTabPos());
         return;
@@ -7144,7 +7144,7 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
 
     for (sal_uInt16 i = 0; i < nCount; i++ )
     {
-        if( rTabStop[i].GetAdjustment() != SVX_TAB_ADJUST_DEFAULT )
+        if( rTabStop[i].GetAdjustment() != SvxTabAdjust::Default )
             impl_WriteTabElement( m_pSerializer, rTabStop[i], nCurrentLeft );
         else
             GetExport().setDefaultTabStop( rTabStop[i].GetTabPos());

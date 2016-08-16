@@ -945,15 +945,15 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         // Switch direction in R2L para...
                         if ( bRightToLeftPara )
                         {
-                            if ( aCurrentTab.aTabStop.GetAdjustment() == SVX_TAB_ADJUST_RIGHT )
-                                aCurrentTab.aTabStop.GetAdjustment() = SVX_TAB_ADJUST_LEFT;
-                            else if ( aCurrentTab.aTabStop.GetAdjustment() == SVX_TAB_ADJUST_LEFT )
-                                aCurrentTab.aTabStop.GetAdjustment() = SVX_TAB_ADJUST_RIGHT;
+                            if ( aCurrentTab.aTabStop.GetAdjustment() == SvxTabAdjust::Right )
+                                aCurrentTab.aTabStop.GetAdjustment() = SvxTabAdjust::Left;
+                            else if ( aCurrentTab.aTabStop.GetAdjustment() == SvxTabAdjust::Left )
+                                aCurrentTab.aTabStop.GetAdjustment() = SvxTabAdjust::Right;
                         }
 
-                        if ( ( aCurrentTab.aTabStop.GetAdjustment() == SVX_TAB_ADJUST_RIGHT ) ||
-                             ( aCurrentTab.aTabStop.GetAdjustment() == SVX_TAB_ADJUST_CENTER ) ||
-                             ( aCurrentTab.aTabStop.GetAdjustment() == SVX_TAB_ADJUST_DECIMAL ) )
+                        if ( ( aCurrentTab.aTabStop.GetAdjustment() == SvxTabAdjust::Right ) ||
+                             ( aCurrentTab.aTabStop.GetAdjustment() == SvxTabAdjust::Center ) ||
+                             ( aCurrentTab.aTabStop.GetAdjustment() == SvxTabAdjust::Decimal ) )
                         {
                             // For LEFT / DEFAULT this tab is not considered.
                             aCurrentTab.bValid = true;
@@ -1135,14 +1135,14 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     nWidthAfterTab += rTP.GetSize().Width();
                 }
                 long nW = nWidthAfterTab;   // Length before tab position
-                if ( aCurrentTab.aTabStop.GetAdjustment() == SVX_TAB_ADJUST_RIGHT )
+                if ( aCurrentTab.aTabStop.GetAdjustment() == SvxTabAdjust::Right )
                 {
                 }
-                else if ( aCurrentTab.aTabStop.GetAdjustment() == SVX_TAB_ADJUST_CENTER )
+                else if ( aCurrentTab.aTabStop.GetAdjustment() == SvxTabAdjust::Center )
                 {
                     nW = nWidthAfterTab/2;
                 }
-                else if ( aCurrentTab.aTabStop.GetAdjustment() == SVX_TAB_ADJUST_DECIMAL )
+                else if ( aCurrentTab.aTabStop.GetAdjustment() == SvxTabAdjust::Decimal )
                 {
                     OUString aText = GetSelected( EditSelection(  EditPaM( pParaPortion->GetNode(), nTmpPos ),
                                                                 EditPaM( pParaPortion->GetNode(), nTmpPos + pPortion->GetLen() ) ) );

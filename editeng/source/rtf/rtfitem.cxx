@@ -1282,7 +1282,7 @@ void SvxRTFParser::ReadTabAttr( int nToken, SfxItemSet& rSet )
     bool bMethodOwnsToken = false; // #i52542# patch from cmc.
 // then read all the TabStops
     SvxTabStop aTabStop;
-    SvxTabStopItem aAttr( 0, 0, SVX_TAB_ADJUST_DEFAULT, aPardMap.nTabStop );
+    SvxTabStopItem aAttr( 0, 0, SvxTabAdjust::Default, aPardMap.nTabStop );
     bool bContinue = true;
     do {
         switch( nToken )
@@ -1299,16 +1299,16 @@ void SvxRTFParser::ReadTabAttr( int nToken, SfxItemSet& rSet )
             break;
 
         case RTF_TQL:
-            aTabStop.GetAdjustment() = SVX_TAB_ADJUST_LEFT;
+            aTabStop.GetAdjustment() = SvxTabAdjust::Left;
             break;
         case RTF_TQR:
-            aTabStop.GetAdjustment() = SVX_TAB_ADJUST_RIGHT;
+            aTabStop.GetAdjustment() = SvxTabAdjust::Right;
             break;
         case RTF_TQC:
-            aTabStop.GetAdjustment() = SVX_TAB_ADJUST_CENTER;
+            aTabStop.GetAdjustment() = SvxTabAdjust::Center;
             break;
         case RTF_TQDEC:
-            aTabStop.GetAdjustment() = SVX_TAB_ADJUST_DECIMAL;
+            aTabStop.GetAdjustment() = SvxTabAdjust::Decimal;
             break;
 
         case RTF_TLDOT:     aTabStop.GetFill() = '.';   break;
@@ -1873,9 +1873,9 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
 
             // we want Defaulttabs
             SvxTabStopItem aNewTab( nTabCount, sal_uInt16(nValue),
-                                SVX_TAB_ADJUST_DEFAULT, aPardMap.nTabStop );
+                                SvxTabAdjust::Default, aPardMap.nTabStop );
             while( nTabCount )
-                ((SvxTabStop&)aNewTab[ --nTabCount ]).GetAdjustment() = SVX_TAB_ADJUST_DEFAULT;
+                ((SvxTabStop&)aNewTab[ --nTabCount ]).GetAdjustment() = SvxTabAdjust::Default;
 
             pAttrPool->SetPoolDefaultItem( aNewTab );
         }

@@ -173,7 +173,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabBase*>
         sal_uInt16 nLvl = rBase.GetLevel();
         OSL_ENSURE( nLvl < mToxForm.GetFormMax(), "invalid FORM_LEVEL");
 
-        SvxTabStopItem aTStops( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
+        SvxTabStopItem aTStops( 0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP );
         // create an enumerator
         // #i21237#
         SwFormTokens aPattern = mToxForm.GetPattern(nLvl);

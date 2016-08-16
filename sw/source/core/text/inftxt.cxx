@@ -110,14 +110,14 @@ void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
 
         // insert the list tab stop into SvxTabItem instance <pRuler>
         const SvxTabStop aListTabStop( nListTabStopPosition,
-                                       SVX_TAB_ADJUST_LEFT );
+                                       SvxTabAdjust::Left );
         pRuler->Insert( aListTabStop );
 
         // remove default tab stops, which are before the inserted list tab stop
         for ( sal_uInt16 i = 0; i < pRuler->Count(); i++ )
         {
             if ( (*pRuler)[i].GetTabPos() < nListTabStopPosition &&
-                 (*pRuler)[i].GetAdjustment() == SVX_TAB_ADJUST_DEFAULT )
+                 (*pRuler)[i].GetAdjustment() == SvxTabAdjust::Default )
             {
                 pRuler->Remove(i);
                 continue;
@@ -131,7 +131,7 @@ void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
         for ( sal_uInt16 i = 0; i < pRuler->Count(); i++ )
         {
             if ( (*pRuler)[i].GetTabPos() == 0 &&
-                 (*pRuler)[i].GetAdjustment() == SVX_TAB_ADJUST_DEFAULT )
+                 (*pRuler)[i].GetAdjustment() == SvxTabAdjust::Default )
             {
                 pRuler->Remove(i);
                 break;

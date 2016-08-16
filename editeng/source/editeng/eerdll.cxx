@@ -120,7 +120,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[12] = new SvxULSpaceItem( EE_PARA_ULSPACE );
         ppDefItems[13] = new SvxLineSpacingItem( 0, EE_PARA_SBL );
         ppDefItems[14] = new SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST );
-        ppDefItems[15] = new SvxTabStopItem( 0, 0, SVX_TAB_ADJUST_LEFT, EE_PARA_TABS );
+        ppDefItems[15] = new SvxTabStopItem( 0, 0, SvxTabAdjust::Left, EE_PARA_TABS );
         ppDefItems[16] = new SvxJustifyMethodItem( SvxCellJustifyMethod::Auto, EE_PARA_JUST_METHOD );
         ppDefItems[17] = new SvxVerJustifyItem( SVX_VER_JUSTIFY_STANDARD, EE_PARA_VER_JUST );
 

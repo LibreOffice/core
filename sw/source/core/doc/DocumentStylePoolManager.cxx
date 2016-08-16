@@ -230,9 +230,9 @@ namespace
         if( bTab )
         {
             long nRightMargin = lcl_GetRightMargin( *pDoc );
-            SvxTabStopItem aTStops( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
+            SvxTabStopItem aTStops( 0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP );
             aTStops.Insert( SvxTabStop( nRightMargin - nLeft,
-                                        SVX_TAB_ADJUST_RIGHT,
+                                        SvxTabAdjust::Right,
                                         cDfltDecimalChar, '.' ));
             rSet.Put( aTStops );
         }
@@ -582,9 +582,9 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
 
                 long nRightMargin = lcl_GetRightMargin( m_rDoc );
 
-                SvxTabStopItem aTStops( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
-                aTStops.Insert( SvxTabStop( nRightMargin / 2, SVX_TAB_ADJUST_CENTER ) );
-                aTStops.Insert( SvxTabStop( nRightMargin, SVX_TAB_ADJUST_RIGHT ) );
+                SvxTabStopItem aTStops( 0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP );
+                aTStops.Insert( SvxTabStop( nRightMargin / 2, SvxTabAdjust::Center ) );
+                aTStops.Insert( SvxTabStop( nRightMargin, SvxTabAdjust::Right ) );
 
                 aSet.Put( aTStops );
             }

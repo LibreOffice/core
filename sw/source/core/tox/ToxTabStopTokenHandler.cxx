@@ -47,7 +47,7 @@ DefaultToxTabStopTokenHandler::HandleTabStopToken(
     }
 
     // check whether a tab adjustment has been specified.
-    if (SVX_TAB_ADJUST_END > aToken.eTabAlign) {
+    if (SvxTabAdjust::End > aToken.eTabAlign) {
         const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>( targetNode.SwContentNode::GetAttr(RES_LR_SPACE) );
 
         long nTabPosition = aToken.nTabStopPosition;
@@ -76,7 +76,7 @@ DefaultToxTabStopTokenHandler::HandleTabStopToken(
         nRightMargin -= rLRSpace.GetTextFirstLineOfst();
     }
 
-    result.tabStop = SvxTabStop(nRightMargin, SVX_TAB_ADJUST_RIGHT, cDfltDecimalChar, aToken.cTabFillChar);
+    result.tabStop = SvxTabStop(nRightMargin, SvxTabAdjust::Right, cDfltDecimalChar, aToken.cTabFillChar);
     return result;
 }
 

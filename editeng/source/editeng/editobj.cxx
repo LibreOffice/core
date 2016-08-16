@@ -1535,7 +1535,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
             if ( rLRSpace.GetTextLeft() && ( rC.GetParaAttribs().GetItemState( EE_PARA_TABS ) == SfxItemState::SET ) )
             {
                 const SvxTabStopItem& rTabs = static_cast<const SvxTabStopItem&>(rC.GetParaAttribs().Get(EE_PARA_TABS));
-                SvxTabStopItem aNewTabs( 0, 0, SVX_TAB_ADJUST_LEFT, EE_PARA_TABS );
+                SvxTabStopItem aNewTabs( 0, 0, SvxTabAdjust::Left, EE_PARA_TABS );
                 for ( sal_uInt16 t = 0; t < rTabs.Count(); t++ )
                 {
                     const SvxTabStop& rT = rTabs[ t ];

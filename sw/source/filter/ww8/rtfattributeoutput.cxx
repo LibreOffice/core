@@ -2750,7 +2750,7 @@ void RtfAttributeOutput::ParaTabStop(const SvxTabStopItem& rTabStop)
     for (sal_uInt16 n = 0; n < rTabStop.Count(); n++)
     {
         const SvxTabStop& rTS = rTabStop[ n ];
-        if (SVX_TAB_ADJUST_DEFAULT != rTS.GetAdjustment())
+        if (SvxTabAdjust::Default != rTS.GetAdjustment())
         {
             const char* pFill = nullptr;
             switch (rTS.GetFill())
@@ -2779,13 +2779,13 @@ void RtfAttributeOutput::ParaTabStop(const SvxTabStopItem& rTabStop)
             const sal_Char* pAdjStr = nullptr;
             switch (rTS.GetAdjustment())
             {
-            case SVX_TAB_ADJUST_RIGHT:
+            case SvxTabAdjust::Right:
                 pAdjStr = OOO_STRING_SVTOOLS_RTF_TQR;
                 break;
-            case SVX_TAB_ADJUST_DECIMAL:
+            case SvxTabAdjust::Decimal:
                 pAdjStr = OOO_STRING_SVTOOLS_RTF_TQDEC;
                 break;
-            case SVX_TAB_ADJUST_CENTER:
+            case SvxTabAdjust::Center:
                 pAdjStr = OOO_STRING_SVTOOLS_RTF_TQC;
                 break;
             default:

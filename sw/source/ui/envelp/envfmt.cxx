@@ -334,7 +334,7 @@ IMPL_LINK_TYPED( SwEnvFormatPage, EditHdl, MenuButton *, pButton, void )
                 false, &pItem ) &&
                 nDefDist != (nNewDist = static_cast<const SfxUInt16Item*>(pItem)->GetValue()) )
             {
-                SvxTabStopItem aDefTabs( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
+                SvxTabStopItem aDefTabs( 0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP );
                 MakeDefTabs( nNewDist, aDefTabs );
                 pSh->SetDefault( aDefTabs );
                 pOutputSet->ClearItem( SID_ATTR_TABSTOP_DEFAULTS );

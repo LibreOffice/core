@@ -2983,7 +2983,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                                             --aIt;
 
                                             if(0x09 == sDelimiter[0])
-                                                aIt->eTabAlign = SVX_TAB_ADJUST_END;
+                                                aIt->eTabAlign = SvxTabAdjust::End;
                                             else
                                             {
                                                 SwFormToken aToken(TOKEN_TEXT);

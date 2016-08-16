@@ -689,7 +689,7 @@ void SwDocShell::SubInitNew()
         sal_uInt16 nNewPos = static_cast< sal_uInt16 >(SW_MOD()->GetUsrPref(false)->GetDefTab());
         if( nNewPos )
             aDfltSet.Put( SvxTabStopItem( 1, nNewPos,
-                                          SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP ) );
+                                          SvxTabAdjust::Default, RES_PARATR_TABSTOP ) );
     }
     aDfltSet.Put( SvxColorItem( Color( COL_AUTO ), RES_CHRATR_COLOR ) );
 

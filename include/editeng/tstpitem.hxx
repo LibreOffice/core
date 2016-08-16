@@ -46,7 +46,7 @@ private:
 public:
     SvxTabStop();
     explicit SvxTabStop( const sal_Int32 nPos,
-                const SvxTabAdjust eAdjst = SVX_TAB_ADJUST_LEFT,
+                const SvxTabAdjust eAdjst = SvxTabAdjust::Left,
                 const sal_Unicode cDec = cDfltDecimalChar,
                 const sal_Unicode cFil = cDfltFillChar );
 
@@ -104,7 +104,7 @@ public:
     explicit SvxTabStopItem( sal_uInt16 nWhich  );
     SvxTabStopItem( const sal_uInt16 nTabs,
                     const sal_uInt16 nDist,
-                    const SvxTabAdjust eAdjst /*= SVX_TAB_ADJUST_DEFAULT*/,
+                    const SvxTabAdjust eAdjst /*= SvxTabAdjust::Default*/,
                     sal_uInt16 nWhich  );
     SvxTabStopItem( const SvxTabStopItem& rTSI );
 

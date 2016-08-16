@@ -264,7 +264,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
 
         // #i36870# right aligned tab for all
         aToken.cTabFillChar = '.';
-        aToken.eTabAlign = SVX_TAB_ADJUST_END;
+        aToken.eTabAlign = SvxTabAdjust::End;
 
         aTokens.push_back(aToken);
         aTokens.push_back(SwFormToken(TOKEN_PAGE_NUMS));
@@ -385,7 +385,7 @@ void SwForm::AdjustTabStops( SwDoc& rDoc ) // #i21237#
             {
                 const SvxTabStop& rTab = rTabStops[nTab];
 
-                if ( rTab.GetAdjustment() == SVX_TAB_ADJUST_DEFAULT )
+                if ( rTab.GetAdjustment() == SvxTabAdjust::Default )
                     continue; // ignore the default tab stop
 
                 aIt = find_if( aIt, aCurrentPattern.end(), SwFormTokenEqualToFormTokenType(TOKEN_TAB_STOP) );
@@ -395,8 +395,8 @@ void SwForm::AdjustTabStops( SwDoc& rDoc ) // #i21237#
                     aIt->nTabStopPosition = rTab.GetTabPos();
                     aIt->eTabAlign =
                         ( nTab == nTabCount - 1
-                          && rTab.GetAdjustment() == SVX_TAB_ADJUST_RIGHT )
-                        ? SVX_TAB_ADJUST_END
+                          && rTab.GetAdjustment() == SvxTabAdjust::Right )
+                        ? SvxTabAdjust::End
                         : rTab.GetAdjustment();
                     aIt->cTabFillChar = rTab.GetFill();
                     ++aIt;

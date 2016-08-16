@@ -2477,7 +2477,7 @@ IMPL_LINK_TYPED(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken&, rToken, void)
     if(bTabStop)
     {
         m_pTabPosMF->SetValue(m_pTabPosMF->Normalize(rToken.nTabStopPosition), FUNIT_TWIP);
-        m_pAutoRightCB->Check(SVX_TAB_ADJUST_END == rToken.eTabAlign);
+        m_pAutoRightCB->Check(SvxTabAdjust::End == rToken.eTabAlign);
         m_pFillCharCB->SetText(OUString(rToken.cTabFillChar));
         m_pTabPosFT->Enable(!m_pAutoRightCB->IsChecked());
         m_pTabPosMF->Enable(!m_pAutoRightCB->IsChecked());
@@ -2646,7 +2646,7 @@ IMPL_LINK_TYPED(SwTOXEntryTabPage, AutoRightHdl, Button*, pBox, void)
     bool bChecked = static_cast<CheckBox*>(pBox)->IsChecked();
     if(rToken.eTokenType == TOKEN_TAB_STOP)
         static_cast<SwTOXButton*>(pCurCtrl)->SetTabAlign(
-            bChecked ? SVX_TAB_ADJUST_END : SVX_TAB_ADJUST_LEFT);
+            bChecked ? SvxTabAdjust::End : SvxTabAdjust::Left);
     m_pTabPosFT->Enable(!bChecked);
     m_pTabPosMF->Enable(!bChecked);
     ModifyHdl(nullptr);

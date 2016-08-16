@@ -2871,7 +2871,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
             {
                 const bool bRight = lcl_AnyToBool(pProperties[j].Value);
                 aToken.eTabAlign = bRight ?
-                                    SVX_TAB_ADJUST_END : SVX_TAB_ADJUST_LEFT;
+                                    SvxTabAdjust::End : SvxTabAdjust::Left;
             }
             else if ( pProperties[j].Name == "TabStopPosition" )
             {
@@ -3114,7 +3114,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 pArr[0].Name = "TokenType";
                 pArr[0].Value <<= OUString("TokenTabStop");
 
-                if(SVX_TAB_ADJUST_END == aToken.eTabAlign)
+                if(SvxTabAdjust::End == aToken.eTabAlign)
                 {
                     pArr[1].Name = "TabStopRightAligned";
                     pArr[1].Value <<= true;

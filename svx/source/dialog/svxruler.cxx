@@ -1039,11 +1039,11 @@ sal_uInt16 ToSvTab_Impl(SvxTabAdjust eAdj)
 {
     /* Internal conversion routine between SV-Tab.-Enum and Svx */
     switch(eAdj) {
-        case SVX_TAB_ADJUST_LEFT:    return RULER_TAB_LEFT;
-        case SVX_TAB_ADJUST_RIGHT:   return RULER_TAB_RIGHT;
-        case SVX_TAB_ADJUST_DECIMAL: return RULER_TAB_DECIMAL;
-        case SVX_TAB_ADJUST_CENTER:  return RULER_TAB_CENTER;
-        case SVX_TAB_ADJUST_DEFAULT: return RULER_TAB_DEFAULT;
+        case SvxTabAdjust::Left:    return RULER_TAB_LEFT;
+        case SvxTabAdjust::Right:   return RULER_TAB_RIGHT;
+        case SvxTabAdjust::Decimal: return RULER_TAB_DECIMAL;
+        case SvxTabAdjust::Center:  return RULER_TAB_CENTER;
+        case SvxTabAdjust::Default: return RULER_TAB_DEFAULT;
         default: ; //prevent warning
     }
     return 0;
@@ -1052,13 +1052,13 @@ sal_uInt16 ToSvTab_Impl(SvxTabAdjust eAdj)
 SvxTabAdjust ToAttrTab_Impl(sal_uInt16 eAdj)
 {
     switch(eAdj) {
-        case RULER_TAB_LEFT:    return SVX_TAB_ADJUST_LEFT    ;
-        case RULER_TAB_RIGHT:   return SVX_TAB_ADJUST_RIGHT   ;
-        case RULER_TAB_DECIMAL: return SVX_TAB_ADJUST_DECIMAL ;
-        case RULER_TAB_CENTER:  return SVX_TAB_ADJUST_CENTER  ;
-        case RULER_TAB_DEFAULT: return SVX_TAB_ADJUST_DEFAULT ;
+        case RULER_TAB_LEFT:    return SvxTabAdjust::Left    ;
+        case RULER_TAB_RIGHT:   return SvxTabAdjust::Right   ;
+        case RULER_TAB_DECIMAL: return SvxTabAdjust::Decimal ;
+        case RULER_TAB_CENTER:  return SvxTabAdjust::Center  ;
+        case RULER_TAB_DEFAULT: return SvxTabAdjust::Default ;
     }
-    return SVX_TAB_ADJUST_LEFT;
+    return SvxTabAdjust::Left;
 }
 
 void SvxRuler::UpdateTabs()
@@ -2174,7 +2174,7 @@ void SvxRuler::ApplyTabs()
         //remove default tab stops
         for ( sal_uInt16 i = 0; i < pItem->Count(); )
         {
-            if ( SVX_TAB_ADJUST_DEFAULT == (*pItem)[i].GetAdjustment() )
+            if ( SvxTabAdjust::Default == (*pItem)[i].GetAdjustment() )
             {
                 pItem->Remove(i);
                 continue;

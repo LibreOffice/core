@@ -152,7 +152,7 @@ static void lcl_EraseDefTabs(SvxTabStopItem& rTabStops)
     for ( sal_uInt16 i = 0; i < rTabStops.Count(); )
     {
         // Here also throw out the DefTab to zero
-        if ( SVX_TAB_ADJUST_DEFAULT == rTabStops[i].GetAdjustment() ||
+        if ( SvxTabAdjust::Default == rTabStops[i].GetAdjustment() ||
             rTabStops[i].GetTabPos() == 0 )
         {
             rTabStops.Remove(i);
@@ -635,7 +635,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
             if ( rLR.GetTextFirstLineOfst() < 0 )
             {
-                SvxTabStop aSwTabStop( 0, SVX_TAB_ADJUST_DEFAULT );
+                SvxTabStop aSwTabStop( 0, SvxTabAdjust::Default );
                 aTabStops.Insert( aSwTabStop );
             }
 
@@ -714,7 +714,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
                     ::lcl_EraseDefTabs(aTabStops);
 
-                    SvxTabStop aSwTabStop( 0, SVX_TAB_ADJUST_DEFAULT );
+                    SvxTabStop aSwTabStop( 0, SvxTabAdjust::Default );
                     aTabStops.Insert(aSwTabStop);
 
                     const SvxTabStopItem& rDefTabs =

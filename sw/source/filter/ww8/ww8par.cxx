@@ -1721,7 +1721,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
 
     WW8_TBD const * pTyp = reinterpret_cast<WW8_TBD const *>(pData + 2*nDel + 2*nIns + 2); // Type Array
 
-    SvxTabStopItem aAttr(0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP);
+    SvxTabStopItem aAttr(0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP);
 
     const SwTextFormatColl* pSty = nullptr;
     sal_uInt16 nTabBase;
@@ -1792,16 +1792,16 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
         switch( pTyp[i].aBits1 & 0x7 ) // pTyp[i].jc
         {
             case 0:
-                aTabStop.GetAdjustment() = SVX_TAB_ADJUST_LEFT;
+                aTabStop.GetAdjustment() = SvxTabAdjust::Left;
                 break;
             case 1:
-                aTabStop.GetAdjustment() = SVX_TAB_ADJUST_CENTER;
+                aTabStop.GetAdjustment() = SvxTabAdjust::Center;
                 break;
             case 2:
-                aTabStop.GetAdjustment() = SVX_TAB_ADJUST_RIGHT;
+                aTabStop.GetAdjustment() = SvxTabAdjust::Right;
                 break;
             case 3:
-                aTabStop.GetAdjustment() = SVX_TAB_ADJUST_DECIMAL;
+                aTabStop.GetAdjustment() = SvxTabAdjust::Decimal;
                 break;
             case 4:
                 continue; // Ignore Bar
@@ -1893,8 +1893,8 @@ void SwWW8ImplReader::ImportDop()
         nDefTabSiz = 709;
 
     // We want exactly one DefaultTab
-    SvxTabStopItem aNewTab( 1, sal_uInt16(nDefTabSiz), SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
-    const_cast<SvxTabStop&>(aNewTab[0]).GetAdjustment() = SVX_TAB_ADJUST_DEFAULT;
+    SvxTabStopItem aNewTab( 1, sal_uInt16(nDefTabSiz), SvxTabAdjust::Default, RES_PARATR_TABSTOP );
+    const_cast<SvxTabStop&>(aNewTab[0]).GetAdjustment() = SvxTabAdjust::Default;
 
     m_rDoc.GetAttrPool().SetPoolDefaultItem( aNewTab );
 

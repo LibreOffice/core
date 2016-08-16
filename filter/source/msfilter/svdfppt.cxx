@@ -6324,7 +6324,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
         GetAttrib( PPT_ParaAttr_BulletOfs, nTab, nDestinationInstance );
         GetAttrib( PPT_ParaAttr_BulletOn, i, nDestinationInstance );
         GetAttrib( PPT_ParaAttr_DefaultTab, nDefaultTab, nDestinationInstance );
-        SvxTabStopItem aTabItem( 0, 0, SVX_TAB_ADJUST_DEFAULT, EE_PARA_TABS );
+        SvxTabStopItem aTabItem( 0, 0, SvxTabAdjust::Default, EE_PARA_TABS );
         if ( GetTabCount() )
         {
             //paragraph offset = MIN(first_line_offset, hanging_offset)
@@ -6335,10 +6335,10 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
                 nTab = GetTabOffsetByIndex( (sal_uInt16)i );
                 switch( GetTabStyleByIndex( (sal_uInt16)i ) )
                 {
-                    case 1 :    eTabAdjust = SVX_TAB_ADJUST_CENTER; break;
-                    case 2 :    eTabAdjust = SVX_TAB_ADJUST_RIGHT; break;
-                    case 3 :    eTabAdjust = SVX_TAB_ADJUST_DECIMAL; break;
-                    default :   eTabAdjust = SVX_TAB_ADJUST_LEFT;
+                    case 1 :    eTabAdjust = SvxTabAdjust::Center; break;
+                    case 2 :    eTabAdjust = SvxTabAdjust::Right; break;
+                    case 3 :    eTabAdjust = SvxTabAdjust::Decimal; break;
+                    default :   eTabAdjust = SvxTabAdjust::Left;
                 }
                 if ( nTab > nParaOffset )//If tab stop greater than paragraph offset
                     aTabItem.Insert( SvxTabStop( ( ( (long( nTab - nTextOfs2 )) * 2540 ) / 576 ), eTabAdjust ) );

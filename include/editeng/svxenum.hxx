@@ -48,14 +48,14 @@ enum SvxShadowLocation
     SVX_SHADOW_END
 };
 
-enum SvxTabAdjust
+enum class SvxTabAdjust
 {
-    SVX_TAB_ADJUST_LEFT = 0,
-    SVX_TAB_ADJUST_RIGHT,
-    SVX_TAB_ADJUST_DECIMAL,
-    SVX_TAB_ADJUST_CENTER,
-    SVX_TAB_ADJUST_DEFAULT,
-    SVX_TAB_ADJUST_END
+    Left,
+    Right,
+    Decimal,
+    Center,
+    Default,
+    End
 };
 
 enum class SvxLineSpaceRule

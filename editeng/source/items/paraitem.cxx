@@ -785,7 +785,7 @@ SvStream& SvxHyphenZoneItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/
 SvxTabStop::SvxTabStop()
 {
     nTabPos = 0;
-    eAdjustment = SVX_TAB_ADJUST_LEFT;
+    eAdjustment = SvxTabAdjust::Left;
     m_cDecimal = cDfltDecimalChar;
     cFill = cDfltFillChar;
 }
@@ -814,7 +814,7 @@ SvxTabStopItem::SvxTabStopItem( sal_uInt16 _nWhich ) :
     maTabStops()
 {
     const sal_uInt16 nTabs = SVX_TAB_DEFCOUNT, nDist = SVX_TAB_DEFDIST;
-    const SvxTabAdjust eAdjst= SVX_TAB_ADJUST_DEFAULT;
+    const SvxTabAdjust eAdjst= SvxTabAdjust::Default;
 
     for (sal_uInt16 i = 0; i < nTabs; ++i)
     {
@@ -883,11 +883,11 @@ bool SvxTabStopItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 pArr[i].Position        = bConvert ? convertTwipToMm100(rTab.GetTabPos()) : rTab.GetTabPos();
                 switch(rTab.GetAdjustment())
                 {
-                case  SVX_TAB_ADJUST_LEFT   : pArr[i].Alignment = style::TabAlign_LEFT; break;
-                case  SVX_TAB_ADJUST_RIGHT  : pArr[i].Alignment = style::TabAlign_RIGHT; break;
-                case  SVX_TAB_ADJUST_DECIMAL: pArr[i].Alignment = style::TabAlign_DECIMAL; break;
-                case  SVX_TAB_ADJUST_CENTER : pArr[i].Alignment = style::TabAlign_CENTER; break;
-                    default: //SVX_TAB_ADJUST_DEFAULT
+                case  SvxTabAdjust::Left   : pArr[i].Alignment = style::TabAlign_LEFT; break;
+                case  SvxTabAdjust::Right  : pArr[i].Alignment = style::TabAlign_RIGHT; break;
+                case  SvxTabAdjust::Decimal: pArr[i].Alignment = style::TabAlign_DECIMAL; break;
+                case  SvxTabAdjust::Center : pArr[i].Alignment = style::TabAlign_CENTER; break;
+                    default: //SvxTabAdjust::Default
                         pArr[i].Alignment = style::TabAlign_DEFAULT;
 
                 }
@@ -964,13 +964,13 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             const sal_uInt16 nCount = (sal_uInt16)aSeq.getLength();
             for(sal_uInt16 i = 0; i < nCount ; i++)
             {
-                SvxTabAdjust eAdjust = SVX_TAB_ADJUST_DEFAULT;
+                SvxTabAdjust eAdjust = SvxTabAdjust::Default;
                 switch(pArr[i].Alignment)
                 {
-                case style::TabAlign_LEFT   : eAdjust = SVX_TAB_ADJUST_LEFT; break;
-                case style::TabAlign_CENTER : eAdjust = SVX_TAB_ADJUST_CENTER; break;
-                case style::TabAlign_RIGHT  : eAdjust = SVX_TAB_ADJUST_RIGHT; break;
-                case style::TabAlign_DECIMAL: eAdjust = SVX_TAB_ADJUST_DECIMAL; break;
+                case style::TabAlign_LEFT   : eAdjust = SvxTabAdjust::Left; break;
+                case style::TabAlign_CENTER : eAdjust = SvxTabAdjust::Center; break;
+                case style::TabAlign_RIGHT  : eAdjust = SvxTabAdjust::Right; break;
+                case style::TabAlign_DECIMAL: eAdjust = SvxTabAdjust::Decimal; break;
                 default: ;//prevent warning
                 }
                 sal_Unicode cFill = pArr[i].FillChar;
@@ -1039,7 +1039,7 @@ bool SvxTabStopItem::GetPresentation
 
     for ( sal_uInt16 i = 0; i < Count(); ++i )
     {
-        if ( SVX_TAB_ADJUST_DEFAULT != ((*this)[i]).GetAdjustment() )
+        if ( SvxTabAdjust::Default != ((*this)[i]).GetAdjustment() )
         {
             if ( bComma )
                 rText += ",";
@@ -1061,7 +1061,7 @@ SfxPoolItem* SvxTabStopItem::Create( SvStream& rStrm, sal_uInt16 ) const
     sal_Int8 nTabs;
     rStrm.ReadSChar( nTabs );
     SvxTabStopItem* pAttr =
-        new SvxTabStopItem( 0, 0, SVX_TAB_ADJUST_DEFAULT, Which() );
+        new SvxTabStopItem( 0, 0, SvxTabAdjust::Default, Which() );
 
     for ( sal_Int8 i = 0; i < nTabs; i++ )
     {
@@ -1069,7 +1069,7 @@ SfxPoolItem* SvxTabStopItem::Create( SvStream& rStrm, sal_uInt16 ) const
         sal_Int8 eAdjust;
         unsigned char cDecimal, cFill;
         rStrm.ReadInt32( nPos ).ReadSChar( eAdjust ).ReadUChar( cDecimal ).ReadUChar( cFill );
-        if( !i || SVX_TAB_ADJUST_DEFAULT != eAdjust )
+        if( !i || SvxTabAdjust::Default != (SvxTabAdjust)eAdjust )
             pAttr->Insert( SvxTabStop
                 ( nPos, (SvxTabAdjust)eAdjust, sal_Unicode(cDecimal), sal_Unicode(cFill) ) );
     }
@@ -1113,7 +1113,7 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
     {
         const SvxTabStop& rTab = (*this)[ i ];
         rStrm.WriteInt32( rTab.GetTabPos() )
-             .WriteSChar( rTab.GetAdjustment() )
+             .WriteSChar( (char)rTab.GetAdjustment() )
              .WriteUChar( rTab.GetDecimal() )
              .WriteUChar( rTab.GetFill() );
     }
@@ -1121,9 +1121,9 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
     if ( bStoreDefTabs )
         for( ; nCount; --nCount )
         {
-            SvxTabStop aSwTabStop(nNew, SVX_TAB_ADJUST_DEFAULT);
+            SvxTabStop aSwTabStop(nNew, SvxTabAdjust::Default);
             rStrm.WriteInt32( aSwTabStop.GetTabPos() )
-                 .WriteSChar( aSwTabStop.GetAdjustment() )
+                 .WriteSChar( (char)aSwTabStop.GetAdjustment() )
                  .WriteUChar( aSwTabStop.GetDecimal() )
                  .WriteUChar( aSwTabStop.GetFill() );
             nNew += nDefDist;

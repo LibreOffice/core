@@ -630,7 +630,7 @@ void MSWordExportBase::CorrectTabStopInSet( SfxItemSet& rSet, sal_uInt16 nAbsLef
         for ( sal_uInt16 nCnt = 0; nCnt < aTStop.Count(); ++nCnt )
         {
             SvxTabStop& rTab = (SvxTabStop&)aTStop[ nCnt ];
-            if ( SVX_TAB_ADJUST_DEFAULT != rTab.GetAdjustment() &&
+            if ( SvxTabAdjust::Default != rTab.GetAdjustment() &&
                 rTab.GetTabPos() >= nAbsLeft )
             {
                 rTab.GetTabPos() -= nAbsLeft;
@@ -4547,13 +4547,13 @@ void SwWW8WrTabu::Add(const SvxTabStop & rTS, long nAdjustment)
     sal_uInt8 nPara = 0;
     switch (rTS.GetAdjustment())
     {
-        case SVX_TAB_ADJUST_RIGHT:
+        case SvxTabAdjust::Right:
             nPara = 2;
             break;
-        case SVX_TAB_ADJUST_CENTER:
+        case SvxTabAdjust::Center:
             nPara = 1;
             break;
-        case SVX_TAB_ADJUST_DECIMAL:
+        case SvxTabAdjust::Decimal:
             /*
             Theres nothing we can do btw the decimal separator has been
             customized, but if you think different remember that different
@@ -4634,7 +4634,7 @@ static void ParaTabStopAdd( WW8Export& rWrt,
     {
         const SvxTabStop& rTS = rTStops[n];
         // Def-Tabs ignorieren
-        if (SVX_TAB_ADJUST_DEFAULT != rTS.GetAdjustment())
+        if (SvxTabAdjust::Default != rTS.GetAdjustment())
             aTab.Add(rTS, nLParaMgn);
     }
     aTab.PutAll( rWrt );
@@ -4669,7 +4669,7 @@ static void ParaTabStopDelAdd( WW8Export& rWrt,
         {
             pTO = &rTStyle[ nO ];
             nOP = pTO->GetTabPos() + nLStypeMgn;
-            if( SVX_TAB_ADJUST_DEFAULT == pTO->GetAdjustment() )
+            if( SvxTabAdjust::Default == pTO->GetAdjustment() )
             {
                 nO++;                                // Default-Tab ignorieren
                 continue;
@@ -4687,7 +4687,7 @@ static void ParaTabStopDelAdd( WW8Export& rWrt,
         {
             pTN = &rTNew[ nN ];
             nNP = pTN->GetTabPos() + nLParaMgn;
-            if( SVX_TAB_ADJUST_DEFAULT == pTN->GetAdjustment() )
+            if( SvxTabAdjust::Default == pTN->GetAdjustment() )
             {
                 nN++;                               // Default-Tab ignorieren
                 continue;
@@ -4747,7 +4747,7 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
          m_rWW8Export.m_pCurrentStyle != nullptr &&
          m_rWW8Export.m_pCurrentStyle->DerivedFrom() != nullptr )
     {
-        SvxTabStopItem aParentTabs( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
+        SvxTabStopItem aParentTabs( 0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP );
         const SwFormat *pParentStyle = m_rWW8Export.m_pCurrentStyle->DerivedFrom();
         {
             if (const SvxTabStopItem* pParentTabs = pParentStyle->GetAttrSet().GetItem<SvxTabStopItem>(RES_PARATR_TABSTOP))

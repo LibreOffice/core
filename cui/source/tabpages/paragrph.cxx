@@ -377,7 +377,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
                 const SvxTabStopItem& rTabItem =
                     static_cast<const SvxTabStopItem&>(rInSet.Get( _nWhich ));
                 SvxTabStopItem aNullTab( rTabItem );
-                SvxTabStop aNull( 0, SVX_TAB_ADJUST_DEFAULT );
+                SvxTabStop aNull( 0, SvxTabAdjust::Default );
                 aNullTab.Insert( aNull );
                 rOutSet->Put( aNullTab );
             }

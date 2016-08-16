@@ -136,7 +136,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
             cDec = pTabStop->GetDecimal();
             eAdj = pTabStop->GetAdjustment();
             nNextPos = pTabStop->GetTabPos();
-            if(!bTabsRelativeToIndent && eAdj == SVX_TAB_ADJUST_DEFAULT && nSearchPos < 0)
+            if(!bTabsRelativeToIndent && eAdj == SvxTabAdjust::Default && nSearchPos < 0)
             {
                 //calculate default tab position of default tabs in negative indent
                 nNextPos = ( nSearchPos / nNextPos ) * nNextPos;
@@ -176,7 +176,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
                 nNextPos += nDefTabDist;
             }
             cFill = 0;
-            eAdj = SVX_TAB_ADJUST_LEFT;
+            eAdj = SvxTabAdjust::Left;
         }
 
         // #i115705# - correction and refactoring:
@@ -234,10 +234,10 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
                         get(DocumentSettingId::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST);
                 if ( bTabAtLeftMarginAllowed )
                 {
-                    if ( !pTabStop || eAdj == SVX_TAB_ADJUST_DEFAULT ||
+                    if ( !pTabStop || eAdj == SvxTabAdjust::Default ||
                          ( nNextPos > nLeftMarginTabPos ) )
                     {
-                        eAdj = SVX_TAB_ADJUST_DEFAULT;
+                        eAdj = SvxTabAdjust::Default;
                         cFill = 0;
                         nNextPos = nLeftMarginTabPos;
                     }
@@ -253,7 +253,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
     SwTabPortion *pTabPor = nullptr;
     if ( bAuto )
     {
-        if ( SVX_TAB_ADJUST_DECIMAL == eAdj &&
+        if ( SvxTabAdjust::Decimal == eAdj &&
              1 == m_aLineInf.NumberOfTabStops() )
             pTabPor = new SwAutoTabDecimalPortion( nNewTabPos, cDec, cFill );
     }
@@ -261,24 +261,24 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
     {
         switch( eAdj )
         {
-        case SVX_TAB_ADJUST_RIGHT :
+        case SvxTabAdjust::Right :
             {
                 pTabPor = new SwTabRightPortion( nNewTabPos, cFill );
                 break;
             }
-        case SVX_TAB_ADJUST_CENTER :
+        case SvxTabAdjust::Center :
             {
                 pTabPor = new SwTabCenterPortion( nNewTabPos, cFill );
                 break;
             }
-        case SVX_TAB_ADJUST_DECIMAL :
+        case SvxTabAdjust::Decimal :
             {
                 pTabPor = new SwTabDecimalPortion( nNewTabPos, cDec, cFill );
                 break;
             }
         default:
             {
-                OSL_ENSURE( SVX_TAB_ADJUST_LEFT == eAdj || SVX_TAB_ADJUST_DEFAULT == eAdj,
+                OSL_ENSURE( SvxTabAdjust::Left == eAdj || SvxTabAdjust::Default == eAdj,
                     "+SwTextFormatter::NewTabPortion: unknown adjustment" );
                 pTabPor = new SwTabLeftPortion( nNewTabPos, cFill, bAutoTabStop );
                 break;

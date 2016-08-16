@@ -984,7 +984,7 @@ void SwView::Execute(SfxRequest &rReq)
         {
             if(pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_DEFTABSTOP, false, &pItem))
             {
-                SvxTabStopItem aDefTabs( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
+                SvxTabStopItem aDefTabs( 0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP );
                 const sal_uInt16 nTab = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
                 MakeDefTabs( nTab, aDefTabs );
                 m_pWrtShell->SetDefault( aDefTabs );

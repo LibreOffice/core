@@ -335,7 +335,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         pPref->SetDefTab(nTabDist);
         if(pAppView)
         {
-            SvxTabStopItem aDefTabs( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
+            SvxTabStopItem aDefTabs( 0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP );
             MakeDefTabs( nTabDist, aDefTabs );
             pAppView->GetWrtShell().SetDefault( aDefTabs );
         }
