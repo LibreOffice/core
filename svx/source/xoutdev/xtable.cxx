@@ -334,25 +334,25 @@ XPropertyListRef XPropertyList::CreatePropertyList( XPropertyListType aType,
     XPropertyListRef pRet;
 
     switch (aType) {
-        case XCOLOR_LIST:
+        case XPropertyListType::Color:
             pRet = XPropertyListRef(new XColorList(rPath, rReferer));
             break;
-        case XLINE_END_LIST:
+        case XPropertyListType::LineEnd:
             pRet = XPropertyListRef(new XLineEndList(rPath, rReferer));
             break;
-        case XDASH_LIST:
+        case XPropertyListType::Dash:
             pRet = XPropertyListRef(new XDashList(rPath, rReferer));
             break;
-        case XHATCH_LIST:
+        case XPropertyListType::Hatch:
             pRet = XPropertyListRef(new XHatchList(rPath, rReferer));
             break;
-        case XGRADIENT_LIST:
+        case XPropertyListType::Gradient:
             pRet = XPropertyListRef(new XGradientList(rPath, rReferer));
             break;
-        case XBITMAP_LIST:
+        case XPropertyListType::Bitmap:
             pRet = XPropertyListRef(new XBitmapList(rPath, rReferer));
             break;
-        case XPATTERN_LIST:
+        case XPropertyListType::Pattern:
             pRet = XPropertyListRef(new XPatternList(rPath, rReferer));
             break;
     default:
@@ -397,13 +397,13 @@ static struct {
     XPropertyListType t;
     const char *pExt;
 } pExtnMap[] = {
-    { XCOLOR_LIST,    "soc" },
-    { XLINE_END_LIST, "soe" },
-    { XDASH_LIST,     "sod" },
-    { XHATCH_LIST,    "soh" },
-    { XGRADIENT_LIST, "sog" },
-    { XBITMAP_LIST,   "sob" },
-    { XPATTERN_LIST,  "sop"}
+    { XPropertyListType::Color,    "soc" },
+    { XPropertyListType::LineEnd, "soe" },
+    { XPropertyListType::Dash,     "sod" },
+    { XPropertyListType::Hatch,    "soh" },
+    { XPropertyListType::Gradient, "sog" },
+    { XPropertyListType::Bitmap,   "sob" },
+    { XPropertyListType::Pattern,  "sop"}
 };
 
 OUString XPropertyList::GetDefaultExt( XPropertyListType t )

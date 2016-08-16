@@ -189,7 +189,7 @@ void PaletteManager::SetPalette( sal_Int32 nPos )
     {
         pColorList = XPropertyList::AsColorList(
                             XPropertyList::CreatePropertyListFromURL(
-                            XCOLOR_LIST, GetSelectedPalettePath()));
+                            XPropertyListType::Color, GetSelectedPalettePath()));
         pColorList->SetName(GetPaletteName());
         if(pColorList->Load())
         {

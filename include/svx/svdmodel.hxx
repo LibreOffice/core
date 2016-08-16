@@ -33,6 +33,7 @@
 #include <tools/fract.hxx>
 #include <svl/hint.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/enumarray.hxx>
 
 #include <svl/style.hxx>
 #include <svx/xtable.hxx>
@@ -214,7 +215,7 @@ public:
     bool                mbInDestruction;
 
     // Color, Dash, Line-End, Hatch, Gradient, Bitmap property lists ...
-    XPropertyListRef maProperties[XPROPERTY_LIST_COUNT];
+    o3tl::enumarray<XPropertyListType, XPropertyListRef> maProperties;
 
     // New src638: NumberFormatter for drawing layer and
     // method for getting it. It is constructed on demand
@@ -505,13 +506,13 @@ public:
     void             SetPropertyList( XPropertyListRef const & p ) { maProperties[ p->Type() ] = p; }
 
     // friendlier helpers
-    XDashListRef     GetDashList() const     { return XPropertyList::AsDashList(GetPropertyList( XDASH_LIST )); }
-    XHatchListRef    GetHatchList() const    { return XPropertyList::AsHatchList(GetPropertyList( XHATCH_LIST )); }
-    XColorListRef    GetColorList() const    { return XPropertyList::AsColorList(GetPropertyList( XCOLOR_LIST )); }
-    XBitmapListRef   GetBitmapList() const   { return XPropertyList::AsBitmapList(GetPropertyList( XBITMAP_LIST )); }
-    XPatternListRef  GetPatternList() const  { return XPropertyList::AsPatternList(GetPropertyList( XPATTERN_LIST )); }
-    XLineEndListRef  GetLineEndList() const  { return XPropertyList::AsLineEndList(GetPropertyList( XLINE_END_LIST )); }
-    XGradientListRef GetGradientList() const { return XPropertyList::AsGradientList(GetPropertyList( XGRADIENT_LIST )); }
+    XDashListRef     GetDashList() const     { return XPropertyList::AsDashList(GetPropertyList( XPropertyListType::Dash )); }
+    XHatchListRef    GetHatchList() const    { return XPropertyList::AsHatchList(GetPropertyList( XPropertyListType::Hatch )); }
+    XColorListRef    GetColorList() const    { return XPropertyList::AsColorList(GetPropertyList( XPropertyListType::Color )); }
+    XBitmapListRef   GetBitmapList() const   { return XPropertyList::AsBitmapList(GetPropertyList( XPropertyListType::Bitmap )); }
+    XPatternListRef  GetPatternList() const  { return XPropertyList::AsPatternList(GetPropertyList( XPropertyListType::Pattern )); }
+    XLineEndListRef  GetLineEndList() const  { return XPropertyList::AsLineEndList(GetPropertyList( XPropertyListType::LineEnd )); }
+    XGradientListRef GetGradientList() const { return XPropertyList::AsGradientList(GetPropertyList( XPropertyListType::Gradient )); }
 
     // The DrawingEngine only references the StyleSheetPool, whoever
     // made it needs to delete it.

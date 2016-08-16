@@ -67,7 +67,7 @@ SvxUnoColorTable::SvxUnoColorTable()
 {
     pList = XPropertyList::AsColorList(
         XPropertyList::CreatePropertyList(
-            XCOLOR_LIST, SvtPathOptions().GetPalettePath(), ""));
+            XPropertyListType::Color, SvtPathOptions().GetPalettePath(), ""));
 }
 
 sal_Bool SAL_CALL SvxUnoColorTable::supportsService( const  OUString& ServiceName ) throw(uno::RuntimeException, std::exception)

@@ -144,16 +144,16 @@ public:
     }
 };
 
-enum XPropertyListType {
-    UNKNOWN_XPROPERTYLISTTYPE = -1,
-    XCOLOR_LIST,
-    XLINE_END_LIST,
-    XDASH_LIST,
-    XHATCH_LIST,
-    XGRADIENT_LIST,
-    XBITMAP_LIST,
-    XPATTERN_LIST,
-    XPROPERTY_LIST_COUNT
+enum class XPropertyListType {
+    Unknown = -1,
+    Color,
+    LineEnd,
+    Dash,
+    Hatch,
+    Gradient,
+    Bitmap,
+    Pattern,
+    LAST
 };
 
 typedef rtl::Reference< class XPropertyList > XPropertyListRef;
@@ -265,7 +265,7 @@ protected:
 
 public:
     XColorList(const OUString& rPath, const OUString& rReferer)
-        : XPropertyList(XCOLOR_LIST, rPath, rReferer) {}
+        : XPropertyList(XPropertyListType::Color, rPath, rReferer) {}
 
     void Replace(long nIndex, std::unique_ptr<XColorEntry> pEntry);
     XColorEntry* GetColor(long nIndex) const;
@@ -371,7 +371,7 @@ protected:
 
 public:
     XBitmapList(const OUString& rPath, const OUString& rReferer)
-        : XPropertyList(XBITMAP_LIST, rPath, rReferer) {}
+        : XPropertyList(XPropertyListType::Bitmap, rPath, rReferer) {}
 
     XBitmapEntry* GetBitmap(long nIndex) const;
     Bitmap GetBitmapForPreview(long nIndex, const Size& rSize);
@@ -390,7 +390,7 @@ protected:
 
 public:
     XPatternList(const OUString& rPath, const OUString& rReferer)
-        : XPropertyList(XPATTERN_LIST, rPath, rReferer) {}
+        : XPropertyList(XPropertyListType::Pattern, rPath, rReferer) {}
 
     XBitmapEntry* GetBitmap(long nIndex) const;
     Bitmap GetBitmapForPreview(long nIndex, const Size& rSize);

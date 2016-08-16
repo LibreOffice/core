@@ -33,7 +33,7 @@ XColorListRef XColorList::CreateStdColorList()
 {
     return XPropertyList::AsColorList(
         XPropertyList::CreatePropertyList(
-            XCOLOR_LIST, SvtPathOptions().GetPalettePath(), ""));
+            XPropertyListType::Color, SvtPathOptions().GetPalettePath(), ""));
 }
 
 XColorListRef XColorList::GetStdColorList()

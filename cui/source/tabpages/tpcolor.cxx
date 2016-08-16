@@ -75,7 +75,7 @@ struct SvxColorTabPageShadow
 
 SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "ColorPage", "cui/ui/colorpage.ui", &rInAttrs)
-    , meType( XCOLOR_LIST )
+    , meType( XPropertyListType::Color )
     , mpTopDlg( GetParentDialog() )
     , pShadow             ( new SvxColorTabPageShadow() )
     , rOutAttrs           ( rInAttrs )
@@ -883,13 +883,13 @@ void SvxColorTabPage::SaveToViewFrame( SfxViewFrame *pViewFrame )
 void SvxColorTabPage::SetPropertyList( XPropertyListType t, const XPropertyListRef &xRef )
 {
     (void) t;
-    OSL_ASSERT( t == XCOLOR_LIST );
+    OSL_ASSERT( t == XPropertyListType::Color );
     pColorList = XColorListRef( static_cast<XColorList *>(xRef.get() ) );
 }
 
 void SvxColorTabPage::SetColorList( const XColorListRef& pColList )
 {
-    SetPropertyList( XCOLOR_LIST, XPropertyListRef( ( pColList.get() ) ) );
+    SetPropertyList( XPropertyListType::Color, XPropertyListRef( ( pColList.get() ) ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

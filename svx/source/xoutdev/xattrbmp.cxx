@@ -523,9 +523,9 @@ XFillBitmapItem* XFillBitmapItem::checkForUniqueItem( SdrModel* pModel ) const
 {
     if( pModel )
     {
-        XPropertyListType aListType = XBITMAP_LIST;
+        XPropertyListType aListType = XPropertyListType::Bitmap;
         if(isPattern())
-            aListType = XPATTERN_LIST;
+            aListType = XPropertyListType::Pattern;
         const OUString aUniqueName = NameOrIndex::CheckNamedItem(
                 this, XATTR_FILLBITMAP, &pModel->GetItemPool(),
                 pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : nullptr,

@@ -347,7 +347,7 @@ void PaletteSOC::LoadColorSet( SvxColorValueSet& rColorSet )
     if( !mbLoadedPalette )
     {
         mbLoadedPalette = true;
-        mpColorList = XPropertyList::AsColorList(XPropertyList::CreatePropertyListFromURL(XCOLOR_LIST, maFPath));
+        mpColorList = XPropertyList::AsColorList(XPropertyList::CreatePropertyListFromURL(XPropertyListType::Color, maFPath));
         (void)mpColorList->Load();
     }
     rColorSet.Clear();

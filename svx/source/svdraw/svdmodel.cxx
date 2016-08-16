@@ -94,6 +94,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
+#include <o3tl/enumrange.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -650,11 +651,11 @@ bool SdrModel::IsUndoEnabled() const
 
 void SdrModel::ImpCreateTables()
 {
-    for( int i = 0; i < XPROPERTY_LIST_COUNT; i++ )
+    for( auto i : o3tl::enumrange<XPropertyListType>() )
     {
-        if( !bExtColorTable || i != XCOLOR_LIST )
+        if( !bExtColorTable || i != XPropertyListType::Color )
             maProperties[i] = XPropertyList::CreatePropertyList (
-                (XPropertyListType) i, aTablePath, ""/*TODO?*/ );
+                i, aTablePath, ""/*TODO?*/ );
     }
 }
 

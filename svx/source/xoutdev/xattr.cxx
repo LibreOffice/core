@@ -1001,7 +1001,7 @@ XLineDashItem* XLineDashItem::checkForUniqueItem( SdrModel* pModel ) const
                 this, XATTR_LINEDASH, &pModel->GetItemPool(),
                 pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : nullptr,
                 XLineDashItem::CompareValueFunc, RID_SVXSTR_DASH11,
-                pModel->GetPropertyList( XDASH_LIST ) );
+                pModel->GetPropertyList( XPropertyListType::Dash ) );
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )
@@ -2741,7 +2741,7 @@ XFillGradientItem* XFillGradientItem::checkForUniqueItem( SdrModel* pModel ) con
                 this, Which(), &pModel->GetItemPool(),
                 pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : nullptr,
                 XFillGradientItem::CompareValueFunc, RID_SVXSTR_GRADIENT,
-                pModel->GetPropertyList( XGRADIENT_LIST ) );
+                pModel->GetPropertyList( XPropertyListType::Gradient ) );
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )
@@ -3148,7 +3148,7 @@ XFillHatchItem* XFillHatchItem::checkForUniqueItem( SdrModel* pModel ) const
                 this, XATTR_FILLHATCH, &pModel->GetItemPool(),
                 pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : nullptr,
                 XFillHatchItem::CompareValueFunc, RID_SVXSTR_HATCH10,
-                pModel->GetPropertyList( XHATCH_LIST ) );
+                pModel->GetPropertyList( XPropertyListType::Hatch ) );
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )

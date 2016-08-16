@@ -572,7 +572,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickLoadHdl_Impl, Button*, void)
 
             XLineEndListRef pLeList = XPropertyList::AsLineEndList(
                 XPropertyList::CreatePropertyList(
-                    XLINE_END_LIST,
+                    XPropertyListType::LineEnd,
                     aPathURL.GetMainURL(INetURLObject::NO_DECODE), ""));
             pLeList->SetName( aURL.getName() );
             if( pLeList->Load() )

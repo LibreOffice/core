@@ -499,7 +499,7 @@ void SvxFillToolBoxControl::Update()
                             XBitmapListRef xBitmapList =
                                 XPropertyList::AsBitmapList(
                                     XPropertyList::CreatePropertyList(
-                                        XBITMAP_LIST, "TmpList", ""/*TODO?*/));
+                                        XPropertyListType::Bitmap, "TmpList", ""/*TODO?*/));
                             xBitmapList->Insert(o3tl::make_unique<XBitmapEntry>(mpBitmapItem->GetGraphicObject(), aTmpStr));
                             xBitmapList->SetDirty( false );
                             mpLbFillAttr->Fill( xBitmapList );

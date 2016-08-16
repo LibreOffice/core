@@ -37,7 +37,7 @@
 using namespace com::sun::star;
 
 XLineEndList::XLineEndList( const OUString& rPath, const OUString& rReferer )
-    : XPropertyList( XLINE_END_LIST, rPath, rReferer )
+    : XPropertyList( XPropertyListType::LineEnd, rPath, rReferer )
 {
 }
 
