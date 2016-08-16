@@ -628,7 +628,7 @@ SdrEscapeDirection SdrEdgeObj::ImpCalcEscAngle(SdrObject* pObj, const Point& rPt
 XPolygon SdrEdgeObj::ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, const Rectangle& rRect, const Point& rMeeting)
 {
     XPolygon aXP;
-    aXP.Insert(XPOLY_APPEND,rStPt,XPOLY_NORMAL);
+    aXP.Insert(XPOLY_APPEND,rStPt,XPolyFlags::Normal);
     bool bRts=nEscAngle==0;
     bool bObn=nEscAngle==9000;
     bool bLks=nEscAngle==18000;
@@ -645,7 +645,7 @@ XPolygon SdrEdgeObj::ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, cons
     if (bRts && rMeeting.X()>=aP2.X()) aP2.X()=rMeeting.X();
     if (bObn && rMeeting.Y()<=aP2.Y()) aP2.Y()=rMeeting.Y();
     if (bUnt && rMeeting.Y()>=aP2.Y()) aP2.Y()=rMeeting.Y();
-    aXP.Insert(XPOLY_APPEND,aP2,XPOLY_NORMAL);
+    aXP.Insert(XPOLY_APPEND,aP2,XPolyFlags::Normal);
 
     Point aP3(aP2);
     if ((bLks && rMeeting.X()>aP2.X()) || (bRts && rMeeting.X()<aP2.X())) { // around
@@ -656,10 +656,10 @@ XPolygon SdrEdgeObj::ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, cons
             aP3.Y()=rRect.Bottom();
             if (rMeeting.Y()>aP3.Y()) aP3.Y()=rMeeting.Y();
         }
-        aXP.Insert(XPOLY_APPEND,aP3,XPOLY_NORMAL);
+        aXP.Insert(XPOLY_APPEND,aP3,XPolyFlags::Normal);
         if (aP3.Y()!=rMeeting.Y()) {
             aP3.X()=rMeeting.X();
-            aXP.Insert(XPOLY_APPEND,aP3,XPOLY_NORMAL);
+            aXP.Insert(XPOLY_APPEND,aP3,XPolyFlags::Normal);
         }
     }
     if ((bObn && rMeeting.Y()>aP2.Y()) || (bUnt && rMeeting.Y()<aP2.Y())) { // around
@@ -670,10 +670,10 @@ XPolygon SdrEdgeObj::ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, cons
             aP3.X()=rRect.Right();
             if (rMeeting.X()>aP3.X()) aP3.X()=rMeeting.X();
         }
-        aXP.Insert(XPOLY_APPEND,aP3,XPOLY_NORMAL);
+        aXP.Insert(XPOLY_APPEND,aP3,XPolyFlags::Normal);
         if (aP3.X()!=rMeeting.X()) {
             aP3.Y()=rMeeting.Y();
-            aXP.Insert(XPOLY_APPEND,aP3,XPOLY_NORMAL);
+            aXP.Insert(XPOLY_APPEND,aP3,XPolyFlags::Normal);
         }
     }
 #ifdef DBG_UTIL
@@ -1227,7 +1227,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         nXP2Anz--; aXP2.Remove(nXP2Anz,1);
     }
     if (bInsMeetingPoint) {
-        aXP1.Insert(XPOLY_APPEND,aMeeting,XPOLY_NORMAL);
+        aXP1.Insert(XPOLY_APPEND,aMeeting,XPolyFlags::Normal);
         if (bInfo) {
             // Inserting a MeetingPoint adds 2 new lines,
             // either might become the center line.
@@ -1252,7 +1252,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
     if (aXP1[nXP1Anz-1]==aXP2[nXP2Anz-1] && nXP1Anz>1 && nXP2Anz>1) nNum--;
     while (nNum>0) {
         nNum--;
-        aXP1.Insert(XPOLY_APPEND,aXP2[nNum],XPOLY_NORMAL);
+        aXP1.Insert(XPOLY_APPEND,aXP2[nNum],XPolyFlags::Normal);
     }
     sal_uInt16 nPointCount=aXP1.GetPointCount();
     char cForm;
@@ -1458,9 +1458,9 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         long dx2=pPt3->X()-pPt4->X();
         long dy2=pPt3->Y()-pPt4->Y();
         if (cForm=='L') { // nPointCount==3
-            aXP1.SetFlags(1,XPOLY_CONTROL);
+            aXP1.SetFlags(1,XPolyFlags::Control);
             Point aPt3(*pPt2);
-            aXP1.Insert(2,aPt3,XPOLY_CONTROL);
+            aXP1.Insert(2,aPt3,XPolyFlags::Control);
             nPointCount=aXP1.GetPointCount();
             pPt2=&aXP1[1];
             pPt3=&aXP1[nPointCount-2];
@@ -1471,8 +1471,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         } else if (nPointCount>=4 && nPointCount<=6) { // Z or U or ...
             // To all others, the end points of the original lines become control
             // points for now. Thus, we need to do some more work for nPointCount>4!
-            aXP1.SetFlags(1,XPOLY_CONTROL);
-            aXP1.SetFlags(nPointCount-2,XPOLY_CONTROL);
+            aXP1.SetFlags(1,XPolyFlags::Control);
+            aXP1.SetFlags(nPointCount-2,XPolyFlags::Control);
             // distance x1.5
             pPt2->X()+=dx1/2;
             pPt2->Y()+=dy1/2;
@@ -1485,9 +1485,9 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                 long dy1b=aCenter.Y()-aXP1[1].Y();
                 long dx2b=aCenter.X()-aXP1[3].X();
                 long dy2b=aCenter.Y()-aXP1[3].Y();
-                aXP1.Insert(2,aCenter,XPOLY_CONTROL);
-                aXP1.SetFlags(3,XPOLY_SYMMTR);
-                aXP1.Insert(4,aCenter,XPOLY_CONTROL);
+                aXP1.Insert(2,aCenter,XPolyFlags::Control);
+                aXP1.SetFlags(3,XPolyFlags::Symmetric);
+                aXP1.Insert(4,aCenter,XPolyFlags::Control);
                 aXP1[2].X()-=dx1b/2;
                 aXP1[2].Y()-=dy1b/2;
                 aXP1[3].X()-=(dx1b+dx2b)/4;
@@ -1498,13 +1498,13 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
             if (nPointCount==6) {
                 Point aPt1b(aXP1[2]);
                 Point aPt2b(aXP1[3]);
-                aXP1.Insert(2,aPt1b,XPOLY_CONTROL);
-                aXP1.Insert(5,aPt2b,XPOLY_CONTROL);
+                aXP1.Insert(2,aPt1b,XPolyFlags::Control);
+                aXP1.Insert(5,aPt2b,XPolyFlags::Control);
                 long dx=aPt1b.X()-aPt2b.X();
                 long dy=aPt1b.Y()-aPt2b.Y();
                 aXP1[3].X()-=dx/2;
                 aXP1[3].Y()-=dy/2;
-                aXP1.SetFlags(3,XPOLY_SYMMTR);
+                aXP1.SetFlags(3,XPolyFlags::Symmetric);
                 aXP1.Remove(4,1); // because it's identical with aXP1[3]
             }
         }

@@ -37,12 +37,12 @@ class OutputDevice;
 
 
 // point-styles in XPolygon:
-// NORMAL : start-/endpoint of a curve or a line
-// SMOOTH : smooth transition between curves
-// SYMMTR : smooth and symmetrical transition between curves
-// CONTROL: control handles of a  Bezier curve
+// Normal : start-/endpoint of a curve or a line
+// Smooth : smooth transition between curves
+// Control: control handles of a Bezier curve
+// Symmetric : smooth and symmetrical transition between curves
 
-enum XPolyFlags { XPOLY_NORMAL, XPOLY_SMOOTH, XPOLY_CONTROL, XPOLY_SYMMTR };
+enum class XPolyFlags { Normal, Smooth, Control, Symmetric };
 
 // Class XPolygon;has a point-array and a flag-array, which contains information about a particular point
 

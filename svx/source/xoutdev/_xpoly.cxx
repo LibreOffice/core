@@ -270,8 +270,8 @@ XPolygon::XPolygon(const Rectangle& rRect, long nRx, long nRy)
                         break;
             }
             GenBezArc(aCenter, nRx, nRy, nXHdl, nYHdl, 0, 900, nQuad, nPos);
-            pImpXPolygon->pFlagAry[nPos  ] = (sal_uInt8) XPOLY_SMOOTH;
-            pImpXPolygon->pFlagAry[nPos+3] = (sal_uInt8) XPOLY_SMOOTH;
+            pImpXPolygon->pFlagAry[nPos  ] = (sal_uInt8) XPolyFlags::Smooth;
+            pImpXPolygon->pFlagAry[nPos+3] = (sal_uInt8) XPolyFlags::Smooth;
             nPos += 4;
         }
     }
@@ -310,7 +310,7 @@ XPolygon::XPolygon(const Point& rCenter, long nRx, long nRy,
         GenBezArc(rCenter, nRx, nRy, nXHdl, nYHdl, nA1, nA2, nQuad, nPos);
         nPos += 3;
         if ( !bLoopEnd )
-            pImpXPolygon->pFlagAry[nPos] = (sal_uInt8) XPOLY_SMOOTH;
+            pImpXPolygon->pFlagAry[nPos] = (sal_uInt8) XPolyFlags::Smooth;
 
     } while ( !bLoopEnd );
 
@@ -320,8 +320,8 @@ XPolygon::XPolygon(const Point& rCenter, long nRx, long nRy,
 
     if ( bFull )
     {
-        pImpXPolygon->pFlagAry[0   ] = (sal_uInt8) XPOLY_SMOOTH;
-        pImpXPolygon->pFlagAry[nPos] = (sal_uInt8) XPOLY_SMOOTH;
+        pImpXPolygon->pFlagAry[0   ] = (sal_uInt8) XPolyFlags::Smooth;
+        pImpXPolygon->pFlagAry[nPos] = (sal_uInt8) XPolyFlags::Smooth;
     }
     pImpXPolygon->nPoints = nPos + 1;
 }
@@ -476,14 +476,14 @@ void XPolygon::SetFlags( sal_uInt16 nPos, XPolyFlags eFlags )
 /// short path to read the CONTROL flag directly (TODO: better explain what the sense behind this flag is!)
 bool XPolygon::IsControl(sal_uInt16 nPos) const
 {
-    return ( (XPolyFlags) pImpXPolygon->pFlagAry[nPos] == XPOLY_CONTROL );
+    return ( (XPolyFlags) pImpXPolygon->pFlagAry[nPos] == XPolyFlags::Control );
 }
 
 /// short path to read the SMOOTH and SYMMTR flag directly (TODO: better explain what the sense behind these flags is!)
 bool XPolygon::IsSmooth(sal_uInt16 nPos) const
 {
     XPolyFlags eFlag = (XPolyFlags) pImpXPolygon->pFlagAry[nPos];
-    return ( eFlag == XPOLY_SMOOTH || eFlag == XPOLY_SYMMTR );
+    return ( eFlag == XPolyFlags::Smooth || eFlag == XPolyFlags::Symmetric );
 }
 
 /** calculate the euclidean distance between two points
@@ -587,8 +587,8 @@ void XPolygon::GenBezArc(const Point& rCenter, long nRx, long nRy,
         SubdivideBezier(nFirst, false, (double)nStart / 900);
     if ( nEnd < 900 )
         SubdivideBezier(nFirst, true, (double)(nEnd-nStart) / (900-nStart));
-    SetFlags(nFirst+1, XPOLY_CONTROL);
-    SetFlags(nFirst+2, XPOLY_CONTROL);
+    SetFlags(nFirst+1, XPolyFlags::Control);
+    SetFlags(nFirst+2, XPolyFlags::Control);
 }
 
 bool XPolygon::CheckAngles(sal_uInt16& nStart, sal_uInt16 nEnd, sal_uInt16& nA1, sal_uInt16& nA2)
@@ -637,7 +637,7 @@ void XPolygon::CalcSmoothJoin(sal_uInt16 nCenter, sal_uInt16 nDrag, sal_uInt16 n
     {
         double fRatio = CalcDistance(nCenter, nPnt) / fDiv;
         // keep the length if SMOOTH
-        if ( GetFlags(nCenter) == XPOLY_SMOOTH || !IsControl(nDrag) )
+        if ( GetFlags(nCenter) == XPolyFlags::Smooth || !IsControl(nDrag) )
         {
             aDiff.X() = (long) (fRatio * aDiff.X());
             aDiff.Y() = (long) (fRatio * aDiff.Y());
@@ -666,7 +666,7 @@ void XPolygon::CalcTangent(sal_uInt16 nCenter, sal_uInt16 nPrev, sal_uInt16 nNex
         double  fPrevLen = CalcDistance(nCenter, nPrev) / fAbsLen;
 
         // same length for both sides if SYMMTR
-        if ( GetFlags(nCenter) == XPOLY_SYMMTR )
+        if ( GetFlags(nCenter) == XPolyFlags::Symmetric )
         {
             fPrevLen = (fNextLen + fPrevLen) / 2;
             fNextLen = fPrevLen;
@@ -741,8 +741,8 @@ void XPolygon::PointsToBezier(sal_uInt16 nFirst)
 
     pPoints[nFirst+1] = Point((long) fX1, (long) fY1);
     pPoints[nFirst+2] = Point((long) fX2, (long) fY2);
-    SetFlags(nFirst+1, XPOLY_CONTROL);
-    SetFlags(nFirst+2, XPOLY_CONTROL);
+    SetFlags(nFirst+1, XPolyFlags::Control);
+    SetFlags(nFirst+2, XPolyFlags::Control);
 }
 
 /// scale in X- and/or Y-direction
