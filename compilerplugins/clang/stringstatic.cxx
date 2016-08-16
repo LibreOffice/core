@@ -47,9 +47,6 @@ void StringStatic::run()
     // has a mix of literals and and refs to external OUStrings
     if (fn == SRCDIR "/ucb/source/ucp/webdav-neon/ContentProperties.cxx")
          return;
-    // we could use OUStringLiteral1 here, but we'd need to update OUStringLiteral1 to allow BMP chars first
-    if (fn == SRCDIR "/include/chart2/SpecialUnicodes.hxx")
-         return;
 
     TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 
@@ -67,6 +64,12 @@ void StringStatic::run()
 bool StringStatic::VisitVarDecl(VarDecl const* varDecl)
 {
     if (ignoreLocation(varDecl)) {
+        return true;
+    }
+    // We could use OUStringLiteral1 here, but we'd need to update OUStringLiteral1 to allow BMP chars first:
+    if (compiler.getSourceManager().getFilename(varDecl->getLocation())
+        == SRCDIR "/chart2/inc/SpecialUnicodes.hxx")
+    {
         return true;
     }
 
