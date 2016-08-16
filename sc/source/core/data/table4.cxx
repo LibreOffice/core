@@ -170,7 +170,7 @@ void setSuffixCell(
     aEngine.SetEditTextObjectPool(rDoc.GetEditPool());
 
     SfxItemSet aAttr = aEngine.GetEmptyItemSet();
-    aAttr.Put( SvxEscapementItem( SVX_ESCAPEMENT_SUPERSCRIPT, EE_CHAR_ESCAPEMENT));
+    aAttr.Put( SvxEscapementItem( SvxEscapement::Superscript, EE_CHAR_ESCAPEMENT));
     aEngine.SetText( aValue );
     aEngine.QuickInsertText(
         aOrdinalSuffix,

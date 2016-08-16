@@ -3139,8 +3139,7 @@ bool SwTextNode::GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
                             if( !sExpand.isEmpty() )
                             {
                                 ++aDestIdx;     // insert behind
-                                SvxEscapementItem aItem(
-                                        SVX_ESCAPEMENT_SUPERSCRIPT );
+                                SvxEscapementItem aItem( SvxEscapement::Superscript, RES_CHRATR_ESCAPEMENT );
                                 rDestNd.InsertItem(
                                         aItem,
                                         aDestIdx.GetIndex(),

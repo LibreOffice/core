@@ -3915,7 +3915,7 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             bMustWrite = static_cast< const SvxCrossedOutItem& >(rHt).GetStrikeout() != STRIKEOUT_NONE;
             break;
         case RES_CHRATR_ESCAPEMENT:
-            bMustWrite = static_cast< const SvxEscapementItem& >(rHt).GetEscapement() != SVX_ESCAPEMENT_OFF;
+            bMustWrite = static_cast< const SvxEscapementItem& >(rHt).GetEscapement() != SvxEscapement::Off;
             break;
         case RES_CHRATR_FONT:
             bMustWrite = true;

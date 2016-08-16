@@ -295,7 +295,7 @@ private:
 
     void                Initialize();
     void                UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
-    void                SetEscapement_Impl( sal_uInt16 nEsc );
+    void                SetEscapement_Impl( SvxEscapement nEsc );
 
     DECL_LINK_TYPED(    PositionHdl_Impl, Button*, void );
     DECL_LINK_TYPED(    RotationHdl_Impl, Button*, void );

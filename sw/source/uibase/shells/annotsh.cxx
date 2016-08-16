@@ -362,10 +362,10 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             SvxEscapement eEsc = (SvxEscapement ) static_cast<const SvxEscapementItem&>(
                             aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
-            if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
-                aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
+            if( eEsc == SvxEscapement::Superscript )
+                aItem.SetEscapement( SvxEscapement::Off );
             else
-                aItem.SetEscapement( SVX_ESCAPEMENT_SUPERSCRIPT );
+                aItem.SetEscapement( SvxEscapement::Superscript );
             aNewAttr.Put( aItem );
         }
         break;
@@ -375,10 +375,10 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             SvxEscapement eEsc = (SvxEscapement ) static_cast<const SvxEscapementItem&>(
                             aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
-            if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
-                aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
+            if( eEsc == SvxEscapement::Subscript )
+                aItem.SetEscapement( SvxEscapement::Off );
             else
-                aItem.SetEscapement( SVX_ESCAPEMENT_SUBSCRIPT );
+                aItem.SetEscapement( SvxEscapement::Subscript );
             aNewAttr.Put( aItem );
         }
         break;
@@ -726,14 +726,14 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             case FN_SET_SUPER_SCRIPT:
             case FN_SET_SUB_SCRIPT:
             {
-                sal_uInt16 nEsc;
+                SvxEscapement nEsc;
                 if (nWhich==FN_SET_SUPER_SCRIPT)
-                    nEsc = SVX_ESCAPEMENT_SUPERSCRIPT;
+                    nEsc = SvxEscapement::Superscript;
                 else
-                    nEsc = SVX_ESCAPEMENT_SUBSCRIPT;
+                    nEsc = SvxEscapement::Subscript;
 
                 const SfxPoolItem *pEscItem = &aEditAttr.Get( EE_CHAR_ESCAPEMENT );
-                if( nEsc == static_cast<const SvxEscapementItem*>(pEscItem)->GetEnumValue() )
+                if( nEsc == static_cast<const SvxEscapementItem*>(pEscItem)->GetEscapement() )
                     rSet.Put( SfxBoolItem( nWhich, true ));
                 else
                     rSet.InvalidateItem( nWhich );

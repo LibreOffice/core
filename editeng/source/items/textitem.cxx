@@ -2238,7 +2238,7 @@ SfxPoolItem* SvxEscapementItem::Create(SvStream& rStrm, sal_uInt16) const
 
 sal_uInt16 SvxEscapementItem::GetValueCount() const
 {
-    return SVX_ESCAPEMENT_END;  // SVX_ESCAPEMENT_SUBSCRIPT + 1
+    return (sal_uInt16)SvxEscapement::End;  // SvxEscapement::Subscript + 1
 }
 
 
@@ -2265,7 +2265,7 @@ bool SvxEscapementItem::GetPresentation
 
 OUString SvxEscapementItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
-    DBG_ASSERT( nPos < (sal_uInt16)SVX_ESCAPEMENT_END, "enum overflow!" );
+    DBG_ASSERT( nPos < (sal_uInt16)SvxEscapement::End, "enum overflow!" );
     return EE_RESSTR(RID_SVXITEMS_ESCAPEMENT_BEGIN + nPos);
 }
 
@@ -2273,10 +2273,10 @@ OUString SvxEscapementItem::GetValueTextByPos( sal_uInt16 nPos ) const
 sal_uInt16 SvxEscapementItem::GetEnumValue() const
 {
     if ( nEsc < 0 )
-        return SVX_ESCAPEMENT_SUBSCRIPT;
+        return (sal_uInt16)SvxEscapement::Subscript;
     else if ( nEsc > 0 )
-        return SVX_ESCAPEMENT_SUPERSCRIPT;
-    return SVX_ESCAPEMENT_OFF;
+        return (sal_uInt16)SvxEscapement::Superscript;
+    return (sal_uInt16)SvxEscapement::Off;
 }
 
 

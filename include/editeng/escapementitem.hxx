@@ -67,13 +67,13 @@ public:
 
     inline void SetEscapement( const SvxEscapement eNew )
     {
-        if( SVX_ESCAPEMENT_OFF == eNew )
+        if( SvxEscapement::Off == eNew )
         {
             nEsc = 0;
             nProp = 100;
         }
         else
-            if( SVX_ESCAPEMENT_SUPERSCRIPT == eNew )
+            if( SvxEscapement::Superscript == eNew )
             {
                 nEsc = DFLT_ESC_SUPER;
                 nProp = DFLT_ESC_PROP;

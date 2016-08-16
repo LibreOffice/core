@@ -2715,16 +2715,16 @@ void SvxCharPositionPage::UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscPro
 }
 
 
-void SvxCharPositionPage::SetEscapement_Impl( sal_uInt16 nEsc )
+void SvxCharPositionPage::SetEscapement_Impl( SvxEscapement nEsc )
 {
-    SvxEscapementItem aEscItm( (SvxEscapement)nEsc, SID_ATTR_CHAR_ESCAPEMENT );
+    SvxEscapementItem aEscItm( nEsc, SID_ATTR_CHAR_ESCAPEMENT );
 
-    if ( SVX_ESCAPEMENT_SUPERSCRIPT == nEsc )
+    if ( SvxEscapement::Superscript == nEsc )
     {
         aEscItm.GetEsc() = m_nSuperEsc;
         aEscItm.GetProportionalHeight() = m_nSuperProp;
     }
-    else if ( SVX_ESCAPEMENT_SUBSCRIPT == nEsc )
+    else if ( SvxEscapement::Subscript == nEsc )
     {
         aEscItm.GetEsc() = m_nSubEsc;
         aEscItm.GetProportionalHeight() = m_nSubProp;
@@ -2735,7 +2735,7 @@ void SvxCharPositionPage::SetEscapement_Impl( sal_uInt16 nEsc )
     m_pHighLowMF->SetValue( aEscItm.GetEsc() * nFac );
     m_pFontSizeMF->SetValue( aEscItm.GetProportionalHeight() );
 
-    if ( SVX_ESCAPEMENT_OFF == nEsc )
+    if ( SvxEscapement::Off == nEsc )
     {
         m_pHighLowFT->Disable();
         m_pHighLowMF->Disable();
@@ -2764,12 +2764,12 @@ void SvxCharPositionPage::SetEscapement_Impl( sal_uInt16 nEsc )
 
 IMPL_LINK_TYPED( SvxCharPositionPage, PositionHdl_Impl, Button*, pBtn, void )
 {
-    sal_uInt16 nEsc = SVX_ESCAPEMENT_OFF;   // also when pBtn == NULL
+    SvxEscapement nEsc = SvxEscapement::Off;   // also when pBtn == NULL
 
     if ( m_pHighPosBtn == pBtn )
-        nEsc = SVX_ESCAPEMENT_SUPERSCRIPT;
+        nEsc = SvxEscapement::Superscript;
     else if ( m_pLowPosBtn == pBtn )
-        nEsc = SVX_ESCAPEMENT_SUBSCRIPT;
+        nEsc = SvxEscapement::Subscript;
 
     SetEscapement_Impl( nEsc );
 }

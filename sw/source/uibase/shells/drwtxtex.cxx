@@ -293,10 +293,10 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             SvxEscapement eEsc = (SvxEscapement ) static_cast<const SvxEscapementItem&>(
                             aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
-            if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
-                aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
+            if( eEsc == SvxEscapement::Superscript )
+                aItem.SetEscapement( SvxEscapement::Off );
             else
-                aItem.SetEscapement( SVX_ESCAPEMENT_SUPERSCRIPT );
+                aItem.SetEscapement( SvxEscapement::Superscript );
             aNewAttr.Put( aItem );
         }
         break;
@@ -306,10 +306,10 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             SvxEscapement eEsc = (SvxEscapement ) static_cast<const SvxEscapementItem&>(
                             aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
-            if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
-                aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
+            if( eEsc == SvxEscapement::Subscript )
+                aItem.SetEscapement( SvxEscapement::Off );
             else
-                aItem.SetEscapement( SVX_ESCAPEMENT_SUBSCRIPT );
+                aItem.SetEscapement( SvxEscapement::Subscript );
             aNewAttr.Put( aItem );
         }
         break;
@@ -594,7 +594,8 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
 
     SfxItemSet aEditAttr( pOLV->GetAttribs() );
     const SfxPoolItem *pAdjust = nullptr, *pLSpace = nullptr, *pEscItem = nullptr;
-    int eAdjust, nLSpace, nEsc;
+    int eAdjust, nLSpace;
+    SvxEscapement nEsc;
 
     while(nWhich)
     {
@@ -721,9 +722,9 @@ ASK_LINESPACE:
             }
             break;
 
-        case FN_SET_SUPER_SCRIPT:   nEsc = SVX_ESCAPEMENT_SUPERSCRIPT;
+        case FN_SET_SUPER_SCRIPT:   nEsc = SvxEscapement::Superscript;
                                     goto ASK_ESCAPE;
-        case FN_SET_SUB_SCRIPT:     nEsc = SVX_ESCAPEMENT_SUBSCRIPT;
+        case FN_SET_SUB_SCRIPT:     nEsc = SvxEscapement::Subscript;
                                     goto ASK_ESCAPE;
 ASK_ESCAPE:
             {
@@ -731,7 +732,7 @@ ASK_ESCAPE:
                     pEscItem = &aEditAttr.Get( EE_CHAR_ESCAPEMENT );
 
                 if( nEsc == static_cast<const SvxEscapementItem*>(
-                                                pEscItem)->GetEnumValue() )
+                                                pEscItem)->GetEscapement() )
                     bFlag = true;
                 else
                     nSlotId = 0;

@@ -536,10 +536,10 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         SvxEscapement eEsc = (SvxEscapement ) static_cast<const SvxEscapementItem&>(
                                         aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
-                        if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
-                            aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
+                        if( eEsc == SvxEscapement::Superscript )
+                            aItem.SetEscapement( SvxEscapement::Off );
                         else
-                            aItem.SetEscapement( SVX_ESCAPEMENT_SUPERSCRIPT );
+                            aItem.SetEscapement( SvxEscapement::Superscript );
                         aNewAttr.Put( aItem );
                     }
                     break;
@@ -549,10 +549,10 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         SvxEscapement eEsc = (SvxEscapement ) static_cast<const SvxEscapementItem&>(
                                         aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
-                        if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
-                            aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
+                        if( eEsc == SvxEscapement::Subscript )
+                            aItem.SetEscapement( SvxEscapement::Off );
                         else
-                            aItem.SetEscapement( SVX_ESCAPEMENT_SUBSCRIPT );
+                            aItem.SetEscapement( SvxEscapement::Subscript );
                         aNewAttr.Put( aItem );
                     }
                     break;
@@ -661,10 +661,10 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
                                 aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
-                if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
-                    aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
+                if( eEsc == SvxEscapement::Superscript )
+                    aItem.SetEscapement( SvxEscapement::Off );
                 else
-                    aItem.SetEscapement( SVX_ESCAPEMENT_SUPERSCRIPT );
+                    aItem.SetEscapement( SvxEscapement::Superscript );
                 aNewAttr.Put( aItem );
                 rReq.Done( aNewAttr );
                 pArgs = rReq.GetArgs();
@@ -675,10 +675,10 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
                                 aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
-                if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
-                    aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
+                if( eEsc == SvxEscapement::Subscript )
+                    aItem.SetEscapement( SvxEscapement::Off );
                 else
-                    aItem.SetEscapement( SVX_ESCAPEMENT_SUBSCRIPT );
+                    aItem.SetEscapement( SvxEscapement::Subscript );
                 aNewAttr.Put( aItem );
                 rReq.Done( aNewAttr );
                 pArgs = rReq.GetArgs();

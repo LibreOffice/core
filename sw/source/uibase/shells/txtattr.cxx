@@ -86,7 +86,7 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
         case FN_SET_SUB_SCRIPT:
         case FN_SET_SUPER_SCRIPT:
         {
-            SvxEscapement eEscape = SVX_ESCAPEMENT_SUBSCRIPT;
+            SvxEscapement eEscape = SvxEscapement::Subscript;
             switch (eState)
             {
             case STATE_TOGGLE:
@@ -94,11 +94,11 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
                 short nTmpEsc = static_cast<const SvxEscapementItem&>(
                             aSet.Get( RES_CHRATR_ESCAPEMENT )).GetEsc();
                 eEscape = nWhich == FN_SET_SUPER_SCRIPT ?
-                                SVX_ESCAPEMENT_SUPERSCRIPT:
-                                SVX_ESCAPEMENT_SUBSCRIPT;
+                                SvxEscapement::Superscript:
+                                SvxEscapement::Subscript;
                 if( (nWhich == FN_SET_SUB_SCRIPT && nTmpEsc < 0) ||
                             (nWhich == FN_SET_SUPER_SCRIPT && nTmpEsc > 0) )
-                    eEscape = SVX_ESCAPEMENT_OFF;
+                    eEscape = SvxEscapement::Off;
 
                 SfxBindings& rBind = GetView().GetViewFrame()->GetBindings();
                 if( nWhich == FN_SET_SUB_SCRIPT )
@@ -112,17 +112,17 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
             break;
             case STATE_ON:
                 eEscape = nWhich == FN_SET_SUPER_SCRIPT ?
-                                SVX_ESCAPEMENT_SUPERSCRIPT:
-                                SVX_ESCAPEMENT_SUBSCRIPT;
+                                SvxEscapement::Superscript:
+                                SvxEscapement::Subscript;
                 break;
             case STATE_OFF:
-                eEscape = SVX_ESCAPEMENT_OFF;
+                eEscape = SvxEscapement::Off;
                 break;
             }
             SvxEscapementItem aEscape( eEscape, RES_CHRATR_ESCAPEMENT );
-            if(eEscape == SVX_ESCAPEMENT_SUPERSCRIPT)
+            if(eEscape == SvxEscapement::Superscript)
                 aEscape.GetEsc() = DFLT_ESC_AUTO_SUPER;
-            else if(eEscape == SVX_ESCAPEMENT_SUBSCRIPT)
+            else if(eEscape == SvxEscapement::Subscript)
                 aEscape.GetEsc() = DFLT_ESC_AUTO_SUB;
             rSh.SetAttrItem( aEscape );
             rReq.AppendItem( aEscape );

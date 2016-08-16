@@ -2328,9 +2328,9 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                             SfxItemSet aAttr = aEngine.GetEmptyItemSet();
                             aEngine.SetText(aStr);
                             if( nValue < 0 )    // Subscript
-                                aAttr.Put( SvxEscapementItem( SVX_ESCAPEMENT_SUBSCRIPT, EE_CHAR_ESCAPEMENT ) );
+                                aAttr.Put( SvxEscapementItem( SvxEscapement::Subscript, EE_CHAR_ESCAPEMENT ) );
                             else                // Superscript
-                                aAttr.Put( SvxEscapementItem( SVX_ESCAPEMENT_SUPERSCRIPT, EE_CHAR_ESCAPEMENT ) );
+                                aAttr.Put( SvxEscapementItem( SvxEscapement::Superscript, EE_CHAR_ESCAPEMENT ) );
                             aEngine.QuickSetAttribs(aAttr, ESelection(0, 0, 0, aStr.getLength()));
 
                             // The cell will own the text object instance.

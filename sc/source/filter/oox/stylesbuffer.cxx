@@ -960,11 +960,11 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, bool bEditEngineText, bool bSkip
     }
     if( maUsedFlags.mbEscapementUsed )
     {
-        SvxEscapement eScEscapem = SVX_ESCAPEMENT_OFF;
+        SvxEscapement eScEscapem = SvxEscapement::Off;
         if ( maApiData.mnEscapement == API_ESCAPE_SUPERSCRIPT )
-            eScEscapem = SVX_ESCAPEMENT_SUPERSCRIPT;
+            eScEscapem = SvxEscapement::Superscript;
         else if ( maApiData.mnEscapement == API_ESCAPE_SUBSCRIPT )
-            eScEscapem = SVX_ESCAPEMENT_SUBSCRIPT;
+            eScEscapem = SvxEscapement::Subscript;
         if( bEditEngineText )
         {
            // #TODO handle EscapementHeight

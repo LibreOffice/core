@@ -720,10 +720,10 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
                 SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
                                 aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
-                if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
-                    aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
+                if( eEsc == SvxEscapement::Superscript )
+                    aItem.SetEscapement( SvxEscapement::Off );
                 else
-                    aItem.SetEscapement( SVX_ESCAPEMENT_SUPERSCRIPT );
+                    aItem.SetEscapement( SvxEscapement::Superscript );
                 aNewAttr.Put( aItem );
             }
             break;
@@ -734,10 +734,10 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
                 SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
                                 aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
-                if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
-                    aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
+                if( eEsc == SvxEscapement::Subscript )
+                    aItem.SetEscapement( SvxEscapement::Off );
                 else
-                    aItem.SetEscapement( SVX_ESCAPEMENT_SUBSCRIPT );
+                    aItem.SetEscapement( SvxEscapement::Subscript );
                 aNewAttr.Put( aItem );
             }
             break;
@@ -1096,9 +1096,9 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 
     SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
                     aAttrSet.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
-    if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
+    if( eEsc == SvxEscapement::Superscript )
         rDestSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, true ) );
-    else if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
+    else if( eEsc == SvxEscapement::Subscript )
         rDestSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, true ) );
 
     //  Unterstreichung

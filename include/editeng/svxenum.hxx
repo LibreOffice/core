@@ -30,12 +30,12 @@ enum SvxCaseMap
     SVX_CASEMAP_END
 };
 
-enum SvxEscapement
+enum class SvxEscapement
 {
-    SVX_ESCAPEMENT_OFF,
-    SVX_ESCAPEMENT_SUPERSCRIPT,
-    SVX_ESCAPEMENT_SUBSCRIPT,
-    SVX_ESCAPEMENT_END
+    Off,
+    Superscript,
+    Subscript,
+    End
 };
 
 enum SvxShadowLocation

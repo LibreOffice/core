@@ -237,12 +237,12 @@ namespace frm
 
     EscapementHandler::EscapementHandler( AttributeId _nAttributeId )
         :AttributeHandler( _nAttributeId, EE_CHAR_ESCAPEMENT )
-        ,m_eEscapement( SVX_ESCAPEMENT_OFF )
+        ,m_eEscapement( SvxEscapement::Off )
     {
         switch ( getAttribute() )
         {
-            case SID_SET_SUPER_SCRIPT   : m_eEscapement = SVX_ESCAPEMENT_SUPERSCRIPT; break;
-            case SID_SET_SUB_SCRIPT     : m_eEscapement = SVX_ESCAPEMENT_SUBSCRIPT;   break;
+            case SID_SET_SUPER_SCRIPT   : m_eEscapement = SvxEscapement::Superscript; break;
+            case SID_SET_SUB_SCRIPT     : m_eEscapement = SvxEscapement::Subscript;   break;
             default:
                 OSL_FAIL( "EscapementHandler::EscapementHandler: invalid slot!" );
                 break;
@@ -264,7 +264,7 @@ namespace frm
         (void)_pAdditionalArg;
 
         bool bIsChecked = getCheckState( _rCurrentAttribs ) == eChecked;
-        _rNewAttribs.Put( SvxEscapementItem( bIsChecked ? SVX_ESCAPEMENT_OFF : m_eEscapement, getWhich() ) );
+        _rNewAttribs.Put( SvxEscapementItem( bIsChecked ? SvxEscapement::Off : m_eEscapement, getWhich() ) );
     }
 
     SlotHandler::SlotHandler( AttributeId _nAttributeId, WhichId _nWhichId )

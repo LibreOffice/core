@@ -886,9 +886,9 @@ static const char* lcl_ToVerticalAlignmentRun( SvxEscapement eEscapement, bool& 
     bHaveAlignment = true;
     switch( eEscapement )
     {
-        case SVX_ESCAPEMENT_SUPERSCRIPT:    return "superscript";
-        case SVX_ESCAPEMENT_SUBSCRIPT:      return "subscript";
-        case SVX_ESCAPEMENT_OFF:
+        case SvxEscapement::Superscript:    return "superscript";
+        case SvxEscapement::Subscript:      return "subscript";
+        case SvxEscapement::Off:
         default:                            bHaveAlignment = false; return "baseline";
     }
 }

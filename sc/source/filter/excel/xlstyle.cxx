@@ -286,11 +286,11 @@ FontLineStyle XclFontData::GetScUnderline() const
 
 SvxEscapement XclFontData::GetScEscapement() const
 {
-    SvxEscapement eScEscapem = SVX_ESCAPEMENT_OFF;
+    SvxEscapement eScEscapem = SvxEscapement::Off;
     switch( mnEscapem )
     {
-        case EXC_FONTESC_SUPER: eScEscapem = SVX_ESCAPEMENT_SUPERSCRIPT;    break;
-        case EXC_FONTESC_SUB:   eScEscapem = SVX_ESCAPEMENT_SUBSCRIPT;      break;
+        case EXC_FONTESC_SUPER: eScEscapem = SvxEscapement::Superscript;    break;
+        case EXC_FONTESC_SUB:   eScEscapem = SvxEscapement::Subscript;      break;
     }
     return eScEscapem;
 }
@@ -710,7 +710,7 @@ void XclFontPropSetHelper::WriteFontProperties(
             lclWriteChartFont( rPropSet, maHlpChCmplx, maHlpChCmplxNoName, rFontData, bHasCmplx );
 
             // font escapement
-            if( rFontData.GetScEscapement() != SVX_ESCAPEMENT_OFF )
+            if( rFontData.GetScEscapement() != SvxEscapement::Off )
             {
                 maHlpChEscapement.InitializeWrite();
                 maHlpChEscapement << rFontData.GetApiEscapement() << EXC_API_ESC_HEIGHT;

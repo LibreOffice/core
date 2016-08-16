@@ -1035,8 +1035,8 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
             {
                 SvxEscapement eOld = (SvxEscapement) static_cast<const SvxEscapementItem&>(
                         pEditView->GetAttribs().Get(EE_CHAR_ESCAPEMENT)).GetEnumValue();
-                SvxEscapement eNew = (eOld == SVX_ESCAPEMENT_SUPERSCRIPT) ?
-                                        SVX_ESCAPEMENT_OFF : SVX_ESCAPEMENT_SUPERSCRIPT;
+                SvxEscapement eNew = (eOld == SvxEscapement::Superscript) ?
+                                        SvxEscapement::Off : SvxEscapement::Superscript;
                 aSet.Put( SvxEscapementItem( eNew, EE_CHAR_ESCAPEMENT ) );
                 rBindings.Invalidate( nSlot );
             }
@@ -1045,8 +1045,8 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
             {
                 SvxEscapement eOld = (SvxEscapement) static_cast<const SvxEscapementItem&>(
                         pEditView->GetAttribs().Get(EE_CHAR_ESCAPEMENT)).GetEnumValue();
-                SvxEscapement eNew = (eOld == SVX_ESCAPEMENT_SUBSCRIPT) ?
-                                        SVX_ESCAPEMENT_OFF : SVX_ESCAPEMENT_SUBSCRIPT;
+                SvxEscapement eNew = (eOld == SvxEscapement::Subscript) ?
+                                        SvxEscapement::Off : SvxEscapement::Subscript;
                 aSet.Put( SvxEscapementItem( eNew, EE_CHAR_ESCAPEMENT ) );
                 rBindings.Invalidate( nSlot );
             }
@@ -1158,11 +1158,11 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
 
     SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
                     aAttribs.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
-    if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
+    if( eEsc == SvxEscapement::Superscript )
     {
         rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, true ) );
     }
-    else if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
+    else if( eEsc == SvxEscapement::Subscript )
     {
         rSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, true ) );
     }
