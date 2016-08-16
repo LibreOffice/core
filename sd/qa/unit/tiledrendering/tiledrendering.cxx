@@ -69,6 +69,7 @@ public:
     void testViewCursorParts();
     void testCursorViews();
     void testViewLock();
+    void testUndoLimiting();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -93,6 +94,7 @@ public:
     CPPUNIT_TEST(testViewCursorParts);
     CPPUNIT_TEST(testCursorViews);
     CPPUNIT_TEST(testViewLock);
+    CPPUNIT_TEST(testUndoLimiting);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1065,6 +1067,43 @@ void SdTiledRenderingTest::testViewLock()
     // the first view.
     pView->SdrEndTextEdit();
     CPPUNIT_ASSERT(!aView1.m_bViewLock);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testUndoLimiting()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    // Create the first view.
+    SdXImpressDocument* pXImpressDocument = createDoc("title-shape.odp");
+    SfxViewShell& rViewShell1 = pXImpressDocument->GetDocShell()->GetViewShell()->GetViewShellBase();
+    SfxLokHelper::createView();
+    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SfxViewShell& rViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell()->GetViewShellBase();
+
+    // Begin text edit on the only object on the slide.
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+
+    // Now check what views see the undo action.
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    sd::UndoManager* pUndoManager = pDocument->GetUndoManager();
+    pUndoManager->SetViewShell(&rViewShell1);
+    // This was 1, undo action was visible to the first view, even if the
+    // action belongs to the second view.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pUndoManager->GetUndoActionCount());
+    pUndoManager->SetViewShell(&rViewShell2);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetUndoActionCount());
+    pUndoManager->SetViewShell(nullptr);
 
     mxComponent->dispose();
     mxComponent.clear();
