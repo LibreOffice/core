@@ -34,10 +34,10 @@ class SvXMLUnitConverter;
 #define LINE_SPACE_DEFAULT_HEIGHT 200
 class EDITENG_DLLPUBLIC SvxLineSpacingItem : public SfxEnumItemInterface
 {
-    short nInterLineSpace;
-    sal_uInt16 nLineHeight;
-    sal_uInt16 nPropLineSpace;
-    SvxLineSpace eLineSpace;
+    short             nInterLineSpace;
+    sal_uInt16        nLineHeight;
+    sal_uInt16        nPropLineSpace;
+    SvxLineSpace      eLineSpace;
     SvxInterLineSpace eInterLineSpace;
 
 public:
@@ -48,7 +48,7 @@ public:
     // writer? => Rather have a crooked vales as the default, but the
     // programmer sees that there's something special happening.
 
-    SvxLineSpacingItem( sal_uInt16 nHeight /*= LINE_SPACE_DEFAULT_HEIGHT*/, const sal_uInt16 nId  );
+    SvxLineSpacingItem( sal_uInt16 nLineHeight /*= LINE_SPACE_DEFAULT_HEIGHT*/, const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
@@ -95,7 +95,7 @@ public:
     inline SvxInterLineSpace GetInterLineSpaceRule() const { return eInterLineSpace; }
 
     virtual sal_uInt16      GetValueCount() const override;
-    virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const override;
+    virtual OUString        GetValueTextByPos( sal_uInt16 nPos ) const override;
     virtual sal_uInt16      GetEnumValue() const override;
     virtual void            SetEnumValue( sal_uInt16 nNewVal ) override;
 };

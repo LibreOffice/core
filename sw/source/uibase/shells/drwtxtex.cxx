@@ -267,21 +267,21 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         break;
         case SID_ATTR_PARA_LINESPACE_10:
         {
-            SvxLineSpacingItem aItem(SVX_LINESPACE_ONE_LINE, EE_PARA_SBL);
+            SvxLineSpacingItem aItem(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
             aItem.SetPropLineSpace(100);
             aNewAttr.Put(aItem);
         }
         break;
         case SID_ATTR_PARA_LINESPACE_15:
         {
-            SvxLineSpacingItem aItem(SVX_LINESPACE_ONE_POINT_FIVE_LINES, EE_PARA_SBL);
+            SvxLineSpacingItem aItem(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
             aItem.SetPropLineSpace(150);
             aNewAttr.Put(aItem);
         }
         break;
         case SID_ATTR_PARA_LINESPACE_20:
         {
-            SvxLineSpacingItem aItem(SVX_LINESPACE_TWO_LINES, EE_PARA_SBL);
+            SvxLineSpacingItem aItem(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
             aItem.SetPropLineSpace(200);
             aNewAttr.Put(aItem);
         }

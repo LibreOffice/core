@@ -1279,7 +1279,7 @@ static void lcl_ModifyRTLDefaults( SfxItemSet& rSet )
     // PaperSize width is limited to USHRT_MAX in RTL mode (because of EditEngine's
     // sal_uInt16 values in EditLine), so the text may be wrapped and line spacing must be
     // increased to not see the beginning of the next line.
-    SvxLineSpacingItem aItem( SVX_LINESPACE_TWO_LINES, EE_PARA_SBL );
+    SvxLineSpacingItem aItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL );
     aItem.SetPropLineSpace( 200 );
     rSet.Put( aItem );
 }

@@ -84,15 +84,6 @@ enum SvxAdjust
     SVX_ADJUST_END
 };
 
-enum SvxSpecialLineSpace
-{
-    SVX_LINESPACE_USER,
-    SVX_LINESPACE_ONE_LINE,
-    SVX_LINESPACE_ONE_POINT_FIVE_LINES,
-    SVX_LINESPACE_TWO_LINES,
-    SVX_LINESPACE_END
-};
-
 enum class SvxBreak
 {
     NONE,

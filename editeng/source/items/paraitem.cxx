@@ -68,6 +68,16 @@ SfxPoolItem* SvxParaVertAlignItem::CreateDefault() { return new  SvxParaVertAlig
 SfxPoolItem* SvxParaGridItem::CreateDefault() { return new  SvxParaGridItem(true, 0);}
 
 
+enum class SvxSpecialLineSpace
+{
+    User,
+    OneLine,
+    OnePointFiveLines,
+    TwoLines,
+    End
+};
+
+
 SvxLineSpacingItem::SvxLineSpacingItem( sal_uInt16 nHeight, const sal_uInt16 nId )
     : SfxEnumItemInterface( nId )
 {
@@ -269,7 +279,7 @@ SvStream& SvxLineSpacingItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*
 
 sal_uInt16 SvxLineSpacingItem::GetValueCount() const
 {
-    return SVX_LINESPACE_END;   // SVX_LINESPACE_TWO_LINES + 1
+    return (sal_uInt16)SvxSpecialLineSpace::End;   // SvxSpecialLineSpace::TwoLines + 1
 }
 
 
@@ -277,20 +287,21 @@ OUString SvxLineSpacingItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     //! load strings from resource
     OUString aText;
-    switch ( nPos )
+    switch ( (SvxSpecialLineSpace)nPos )
     {
-        case SVX_LINESPACE_USER:
+        case SvxSpecialLineSpace::User:
             aText = "User";
             break;
-        case SVX_LINESPACE_ONE_LINE:
+        case SvxSpecialLineSpace::OneLine:
             aText = "One line";
             break;
-        case SVX_LINESPACE_ONE_POINT_FIVE_LINES:
+        case SvxSpecialLineSpace::OnePointFiveLines:
             aText = "1.5 line";
             break;
-        case SVX_LINESPACE_TWO_LINES:
+        case SvxSpecialLineSpace::TwoLines:
             aText = "Two lines";
             break;
+        default: break;
     }
     return aText;
 }
@@ -298,25 +309,26 @@ OUString SvxLineSpacingItem::GetValueTextByPos( sal_uInt16 nPos ) const
 
 sal_uInt16 SvxLineSpacingItem::GetEnumValue() const
 {
-    sal_uInt16 nVal;
+    SvxSpecialLineSpace nVal;
     switch ( nPropLineSpace )
     {
-        case 100:   nVal = SVX_LINESPACE_ONE_LINE;              break;
-        case 150:   nVal = SVX_LINESPACE_ONE_POINT_FIVE_LINES;  break;
-        case 200:   nVal = SVX_LINESPACE_TWO_LINES;             break;
-        default:    nVal = SVX_LINESPACE_USER;                  break;
+        case 100:   nVal = SvxSpecialLineSpace::OneLine;            break;
+        case 150:   nVal = SvxSpecialLineSpace::OnePointFiveLines;  break;
+        case 200:   nVal = SvxSpecialLineSpace::TwoLines;           break;
+        default:    nVal = SvxSpecialLineSpace::User;               break;
     }
-    return nVal;
+    return (sal_uInt16)nVal;
 }
 
 
 void SvxLineSpacingItem::SetEnumValue( sal_uInt16 nVal )
 {
-    switch ( nVal )
+    switch ( (SvxSpecialLineSpace)nVal )
     {
-        case SVX_LINESPACE_ONE_LINE:             nPropLineSpace = 100; break;
-        case SVX_LINESPACE_ONE_POINT_FIVE_LINES: nPropLineSpace = 150; break;
-        case SVX_LINESPACE_TWO_LINES:            nPropLineSpace = 200; break;
+        case SvxSpecialLineSpace::OneLine:           nPropLineSpace = 100; break;
+        case SvxSpecialLineSpace::OnePointFiveLines: nPropLineSpace = 150; break;
+        case SvxSpecialLineSpace::TwoLines:          nPropLineSpace = 200; break;
+        default: break;
     }
 }
 
