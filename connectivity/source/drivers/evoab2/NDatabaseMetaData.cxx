@@ -997,22 +997,22 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  ) throw
     /* Don't need to change as evoab driver supports only table */
 
     // there exists no possibility to get table types so we have to check
-    static const OUString sTableTypes[] =
+    static const OUStringLiteral sTableTypes[] =
     {
-        OUString("TABLE"),
+        OUStringLiteral("TABLE"),
         // Currently we only support a 'TABLE' nothing more complex
     };
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTableTypes);
     Reference< XResultSet > xRef = pResult;
 
     // here we fill the rows which should be visible when ask for data from the resultset returned here
-    sal_Int32  nSize = sizeof(sTableTypes) / sizeof(OUString);
+    sal_Int32  nSize = SAL_N_ELEMENTS(sTableTypes);
     ODatabaseMetaDataResultSet::ORows aRows;
     for(sal_Int32 i=0;i < nSize;++i)
     {
         ODatabaseMetaDataResultSet::ORow aRow;
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator(sTableTypes[i]));
+        aRow.push_back(new ORowSetValueDecorator(OUString(sTableTypes[i])));
 
         // bound row
         aRows.push_back(aRow);
