@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/lok.hxx>
+#include <sfx2/viewsh.hxx>
 #include <undo/undomanager.hxx>
 
 using namespace sd;
@@ -24,6 +26,7 @@ using namespace sd;
 UndoManager::UndoManager( sal_uInt16 nMaxUndoActionCount /* = 20 */ )
   : SdrUndoManager( nMaxUndoActionCount )
   , mpLinkedUndoManager(nullptr)
+  , mpViewShell(nullptr)
 {
 }
 
@@ -47,6 +50,53 @@ void UndoManager::AddUndoAction( SfxUndoAction *pAction, bool bTryMerg /* = sal_
     {
         delete pAction;
     }
+}
+
+size_t UndoManager::GetUndoActionCount(const bool bCurrentLevel) const
+{
+    size_t nRet = SdrUndoManager::GetUndoActionCount(bCurrentLevel);
+    if (!comphelper::LibreOfficeKit::isActive() || !mpViewShell)
+        return nRet;
+
+    if (!nRet || !SdrUndoManager::GetUndoActionCount())
+        return nRet;
+
+    const SfxUndoAction* pAction = SdrUndoManager::GetUndoAction();
+    if (!pAction)
+        return nRet;
+
+    // If an other view created the last undo action, prevent undoing it from this view.
+    sal_Int32 nViewShellId = mpViewShell->GetViewShellId();
+    if (pAction->GetViewShellId() != nViewShellId)
+        nRet = 0;
+
+    return nRet;
+}
+
+size_t UndoManager::GetRedoActionCount(const bool bCurrentLevel) const
+{
+    size_t nRet = SdrUndoManager::GetRedoActionCount(bCurrentLevel);
+    if (!comphelper::LibreOfficeKit::isActive() || !mpViewShell)
+        return nRet;
+
+    if (!nRet || !SdrUndoManager::GetRedoActionCount())
+        return nRet;
+
+    const SfxUndoAction* pAction = SdrUndoManager::GetRedoAction();
+    if (!pAction)
+        return nRet;
+
+    // If an other view created the first redo action, prevent redoing it from this view.
+    sal_Int32 nViewShellId = mpViewShell->GetViewShellId();
+    if (pAction->GetViewShellId() != nViewShellId)
+        nRet = 0;
+
+    return nRet;
+}
+
+void UndoManager::SetViewShell(SfxViewShell* pViewShell)
+{
+    mpViewShell = pViewShell;
 }
 
 void UndoManager::SetLinkedUndoManager (::svl::IUndoManager* pLinkedUndoManager)
