@@ -445,13 +445,73 @@ static void addMoreUnoParam(GtkWidget* /*pWidget*/, gpointer userdata)
     gtk_widget_show_all(pUnoParamAreaBox);
 }
 
+/// Exposes the info returned for tracked changes.
+static void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
+{
+    TiledWindow& rWindow = lcl_getTiledWindow(pButton);
+    LOKDocView* pDocView = LOK_DOC_VIEW(rWindow.m_pDocView);
+    // Get the data.
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pDocView);
+    char* pValues = pDocument->pClass->getCommandValues(pDocument, ".uno:AcceptTrackedChanges");
+    std::stringstream aInfo;
+    aInfo << "lok::Document::getCommandValues('.uno:AcceptTrackedChanges') returned '" << pValues << "'" << std::endl;
+    g_info("%s", aInfo.str().c_str());
+    std::stringstream aStream(pValues);
+    free(pValues);
+    assert(!aStream.str().empty());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+
+    // Create the dialog.
+    GtkWidget* pDialog = gtk_dialog_new_with_buttons("Manage Changes",
+                                                     GTK_WINDOW (gtk_widget_get_toplevel(GTK_WIDGET(pDocView))),
+                                                     GTK_DIALOG_MODAL,
+                                                     "Close",
+                                                     GTK_RESPONSE_OK,
+                                                     nullptr);
+    GtkWidget* pContentArea = gtk_dialog_get_content_area(GTK_DIALOG (pDialog));
+
+    // Build the table.
+    GtkTreeStore* pTreeStore = gtk_tree_store_new(5, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+    for (const auto& rValue : aTree.get_child("redlines"))
+    {
+        GtkTreeIter aTreeIter;
+        gtk_tree_store_append(pTreeStore, &aTreeIter, nullptr);
+        gtk_tree_store_set(pTreeStore, &aTreeIter,
+                           0, rValue.second.get<int>("index"),
+                           1, rValue.second.get<std::string>("author").c_str(),
+                           2, rValue.second.get<std::string>("type").c_str(),
+                           3, rValue.second.get<std::string>("comment").c_str(),
+                           4, rValue.second.get<std::string>("dateTime").c_str(),
+                           -1);
+    }
+    GtkWidget* pTreeView = gtk_tree_view_new_with_model(GTK_TREE_MODEL(pTreeStore));
+    std::vector<std::string> aColumns = {"Index", "Type", "Comment", "Author", "Timestamp"};
+    for (size_t nColumn = 0; nColumn < aColumns.size(); ++nColumn)
+    {
+        GtkCellRenderer* pRenderer = gtk_cell_renderer_text_new();
+        GtkTreeViewColumn* pColumn = gtk_tree_view_column_new_with_attributes(aColumns[nColumn].c_str(),
+                                                                              pRenderer,
+                                                                              "text", nColumn,
+                                                                              nullptr);
+        gtk_tree_view_append_column(GTK_TREE_VIEW(pTreeView), pColumn);
+    }
+    gtk_box_pack_start(GTK_BOX(pContentArea), pTreeView, TRUE, TRUE, 2);
+
+    // Show the dialog.
+    gtk_widget_show_all(pDialog);
+    gtk_dialog_run(GTK_DIALOG(pDialog));
+
+    gtk_widget_destroy(pDialog);
+}
+
 static void documentRepair(GtkWidget* pButton, gpointer /*pItem*/)
 {
     TiledWindow& rWindow = lcl_getTiledWindow(pButton);
     LOKDocView* pDocView = LOK_DOC_VIEW(rWindow.m_pDocView);
     // Get the data.
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pDocView);
-    // How it in linear time, so first redo in reverse order, then undo.
+    // Show it in linear time, so first redo in reverse order, then undo.
     std::vector<std::string> aTypes = {".uno:Redo", ".uno:Undo"};
     std::vector<boost::property_tree::ptree> aTrees;
     for (size_t nType = 0; nType < aTypes.size(); ++nType)
@@ -1409,6 +1469,12 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_tool_item_set_tooltip_text(pDocumentRepair, "Document repair");
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pDocumentRepair, -1);
     g_signal_connect(G_OBJECT(pDocumentRepair), "clicked", G_CALLBACK(documentRepair), nullptr);
+
+    GtkToolItem* pDocumentRedline = gtk_tool_button_new(nullptr, nullptr);
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(pDocumentRedline), "system-run");
+    gtk_tool_item_set_tooltip_text(pDocumentRedline, "Document redlines");
+    gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pDocumentRedline, -1);
+    g_signal_connect(G_OBJECT(pDocumentRedline), "clicked", G_CALLBACK(documentRedline), nullptr);
 
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), gtk_separator_tool_item_new(), -1);
 
