@@ -1993,6 +1993,8 @@ regression-moving-type
 regression-name
 regression-period
 regression-type
+regression-x-name
+regression-y-name
 rejected
 rejecting-change-id
 rejection
