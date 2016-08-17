@@ -8,6 +8,9 @@
  */
 
 #include "interpre.hxx"
+#include "jumpmatrix.hxx"
+#include "formulacell.hxx"
+#include "scmatrix.hxx"
 #include <rtl/strbuf.hxx>
 #include <formula/errorcodes.hxx>
 #include <svtools/miscopt.hxx>
@@ -33,6 +36,54 @@ void ScInterpreter::ScFilterXML()
     sal_uInt8 nParamCount = GetByte();
     if (MustHaveParamCount( nParamCount, 2 ) )
     {
+        SCSIZE nMatCols = 1, nMatRows = 1, nNode = 0;
+        const ScMatrix* pPathMatrix = nullptr;
+        // In array/matrix context node elements' results are to be
+        // subsequently stored. Check this before obtaining any argument from
+        // the stack so the stack type can be used.
+        if (pJumpMatrix || bMatrixFormula || pCur->IsInForceArray())
+        {
+            if (pJumpMatrix)
+            {
+                // Single result, GetString() will retrieve the corresponding
+                // argument and JumpMatrix() will store it at the proper
+                // position. Note that nMatCols and nMatRows are still 1.
+                SCSIZE nCurCol = 0, nCurRow = 0;
+                pJumpMatrix->GetPos( nCurCol, nCurRow);
+                nNode = nCurRow;
+            }
+            else if (bMatrixFormula)
+            {
+                // If there is no formula cell then continue with a single
+                // result.
+                if (pMyFormulaCell)
+                {
+                    SCCOL nCols;
+                    SCROW nRows;
+                    pMyFormulaCell->GetMatColsRows( nCols, nRows);
+                    nMatCols = nCols;
+                    nMatRows = nRows;
+                }
+            }
+            else if (GetStackType() == formula::svMatrix)
+            {
+                pPathMatrix = pStack[sp-1]->GetMatrix();
+                if (!pPathMatrix)
+                {
+                    PushIllegalParameter();
+                    return;
+                }
+                pPathMatrix->GetDimensions( nMatCols, nMatRows);
+
+                /* TODO: it is unclear what should happen if there are
+                 * different path arguments in matrix elements. We may have to
+                 * evaluate each, and for repeated identical paths use
+                 * subsequent nodes. As is, the path at 0,0 is used as obtained
+                 * by GetString(). */
+
+            }
+        }
+
         OUString aXPathExpression = GetString().getString();
         OUString aString = GetString().getString();
         if(aString.isEmpty() || aXPathExpression.isEmpty())
@@ -70,8 +121,6 @@ void ScInterpreter::ScFilterXML()
             return;
         }
 
-        rtl::OUString aResult;
-
         switch(pXPathObj->type)
         {
             case XPATH_UNDEFINED:
@@ -85,30 +134,64 @@ void ScInterpreter::ScFilterXML()
                         return;
                     }
 
-                    size_t nSize = pNodeSet->nodeNr;
-                    if( nSize >= 1 )
+                    const size_t nSize = pNodeSet->nodeNr;
+                    if (nNode >= nSize)
                     {
-                        if(pNodeSet->nodeTab[0]->type == XML_NAMESPACE_DECL)
+                        // For pJumpMatrix
+                        PushError( formula::NOTAVAILABLE);
+                        return;
+                    }
+
+                    /* TODO: for nMatCols>1 IF stack type is svMatrix, i.e.
+                     * pPathMatrix!=nullptr, we may want a result matrix with
+                     * nMatCols columns as well, but clarify first how to treat
+                     * differing path elements. */
+
+                    ScMatrixRef xResMat;
+                    if (nMatRows > 1)
+                    {
+                        xResMat = GetNewMat( 1, nMatRows, true);
+                        if (!xResMat)
                         {
-                            xmlNsPtr ns = reinterpret_cast<xmlNsPtr>(pNodeSet->nodeTab[0]);
-                            xmlNodePtr cur = reinterpret_cast<xmlNodePtr>(ns->next);
-                            std::shared_ptr<xmlChar> pChar2(xmlNodeGetContent(cur), xmlFree);
-                            aResult = OStringToOUString(OString(reinterpret_cast<char*>(pChar2.get())), RTL_TEXTENCODING_UTF8);
+                            PushError( formula::errCodeOverflow);
+                            return;
+                        }
+                    }
+
+                    for ( ; nNode < nMatRows; ++nNode)
+                    {
+                        if( nSize > nNode )
+                        {
+                            rtl::OUString aResult;
+                            if(pNodeSet->nodeTab[nNode]->type == XML_NAMESPACE_DECL)
+                            {
+                                xmlNsPtr ns = reinterpret_cast<xmlNsPtr>(pNodeSet->nodeTab[nNode]);
+                                xmlNodePtr cur = reinterpret_cast<xmlNodePtr>(ns->next);
+                                std::shared_ptr<xmlChar> pChar2(xmlNodeGetContent(cur), xmlFree);
+                                aResult = OStringToOUString(OString(reinterpret_cast<char*>(pChar2.get())), RTL_TEXTENCODING_UTF8);
+                            }
+                            else
+                            {
+                                xmlNodePtr cur = pNodeSet->nodeTab[nNode];
+                                std::shared_ptr<xmlChar> pChar2(xmlNodeGetContent(cur), xmlFree);
+                                aResult = OStringToOUString(OString(reinterpret_cast<char*>(pChar2.get())), RTL_TEXTENCODING_UTF8);
+                            }
+                            if (xResMat)
+                                xResMat->PutString( mrStrPool.intern( aResult), 0, nNode);
+                            else
+                                PushString(aResult);
                         }
                         else
                         {
-                            xmlNodePtr cur = pNodeSet->nodeTab[0];
-                            std::shared_ptr<xmlChar> pChar2(xmlNodeGetContent(cur), xmlFree);
-                            aResult = OStringToOUString(OString(reinterpret_cast<char*>(pChar2.get())), RTL_TEXTENCODING_UTF8);
+                            if (xResMat)
+                                xResMat->PutError( formula::NOTAVAILABLE, 0, nNode);
+                            else
+                                PushError( formula::NOTAVAILABLE );
                         }
                     }
-                    else
-                    {
-                        PushError( formula::errNoValue );
-                        return;
-                    }
+                    if (xResMat)
+                        PushMatrix( xResMat);
                 }
-                PushString(aResult);
                 break;
             case XPATH_BOOLEAN:
                 {
