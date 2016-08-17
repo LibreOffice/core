@@ -36,6 +36,7 @@ AVAILABLE TARGETS
        check                run unit tests and if in toplevel subsequentcheck
        unitcheck            run unit tests
        slowcheck            run slow unit tests
+       screenshot           create all screenshots
        subsequentcheck      run system tests (requires full installation)
        stagingcheck         run (unstable/failing) tests from staging area
                             (requires full installation)

@@ -85,10 +85,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
 ))
 endif
 
-$(eval $(call gb_Module_add_slowcheck_targets,sw,\
-    CppunitTest_sw_dialogs_test \
-))
-
 ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,sw,\
     JunitTest_sw_complex \
@@ -104,5 +100,10 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sw,\
 	PythonTest_sw_python \
 ))
 endif
+
+# screenshots
+$(eval $(call gb_Module_add_screenshot_targets,sw,\
+    CppunitTest_sw_dialogs_test \
+))
 
 # vim: set noet sw=4 ts=4:

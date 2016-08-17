@@ -35,7 +35,8 @@ $(eval $(call gb_Module_add_l10n_targets,basctl,\
 	UIConfig_basicide \
 ))
 
-$(eval $(call gb_Module_add_slowcheck_targets,basctl,\
+# screenshots
+$(eval $(call gb_Module_add_screenshot_targets,basctl,\
     CppunitTest_basctl_dialogs_test \
 ))
 
