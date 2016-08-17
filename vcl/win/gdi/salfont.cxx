@@ -1008,7 +1008,8 @@ WinFontFace::WinFontFace( const FontAttributes& rDFS,
     mnPitchAndFamily( nPitchAndFamily ),
     mbAliasSymbolsHigh( false ),
     mbAliasSymbolsLow( false ),
-    mbGsubRead( false )
+    mbGsubRead( false ),
+    mpHbFace( nullptr )
 {
     SetBitmapSize( 0, nHeight );
 
@@ -1049,6 +1050,9 @@ WinFontFace::~WinFontFace()
 #endif
 #endif // ENABLE_GRAPHITE
     delete mpEncodingVector;
+
+    if( mpHbFace )
+        hb_face_destroy( mpHbFace );
 }
 
 sal_IntPtr WinFontFace::GetFontId() const
@@ -1201,16 +1205,22 @@ void WinFontFace::ReadCmapTable( HDC hDC ) const
     }
 }
 
-int WinFontFace::GetTable(const char pTagName[5], const unsigned char*& pResBuffer, HDC hDC)
+sal_uLong WinSalGraphics::GetTable( const char pTagName[5], const unsigned char*& pResBuffer, void*& pTableContext, IDWriteFontFace*& pIDFace )
 {
-    const DWORD nTableTag = CalcTag( pTagName );
-    RawFontData aRawFontData( hDC, nTableTag );
-
-    if( !aRawFontData.get() )
+    if( !pIDFace )
         return 0;
-
-    pResBuffer = aRawFontData.steal();
-    return aRawFontData.size();
+    const void* pResBuf;
+    UINT32 nSize;
+    BOOL bExists;
+    HRESULT hr = S_OK;
+    const DWORD nTableTag = DWRITE_MAKE_OPENTYPE_TAG( pTagName[0], pTagName[1], pTagName[2], pTagName[3] );
+    hr = pIDFace->TryGetFontTable( nTableTag, &pResBuf, &nSize, &pTableContext, &bExists );
+    if( SUCCEEDED( hr ) && ( bExists ) )
+    {
+        pResBuffer = static_cast<const unsigned char*>(pResBuf);
+        return static_cast<sal_uLong>(nSize);
+    }
+    return 0;
 }
 
 void WinFontFace::GetFontCapabilities( HDC hDC ) const

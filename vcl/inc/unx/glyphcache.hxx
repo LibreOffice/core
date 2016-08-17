@@ -35,6 +35,7 @@
 #include <sallayout.hxx>
 #include "fontattributes.hxx"
 #include "impfontmetricdata.hxx"
+#include "hb-ot.h"
 
 #include <unordered_map>
 
@@ -181,6 +182,8 @@ public:
     sal_GlyphId             FixupGlyphIndex( sal_GlyphId aGlyphId, sal_UCS4 ) const;
     bool                    GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolygon& ) const;
     bool                    GetAntialiasAdvice() const;
+    hb_face_t*              GetHbFace() { return mpHbFace; }
+    void                    SetHbFace( hb_face_t* pHbFace ) { mpHbFace=pHbFace; }
 
 private:
     friend class GlyphCache;
@@ -240,6 +243,7 @@ private:
     GlyphSubstitution       maGlyphSubstitution;
 
     ServerFontLayoutEngine* mpLayoutEngine;
+    hb_face_t*              mpHbFace;
 };
 
 // a class for cache entries for physical font instances that are based on serverfonts
