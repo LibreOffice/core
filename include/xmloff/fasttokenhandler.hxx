@@ -27,7 +27,7 @@ public:
             ~TokenMap();
 
     /** Returns the token identifier for the passed Unicode token name. */
-    sal_Int32 getTokenFromUnicode( const OUString& rUnicodeName ) const;
+    static sal_Int32 getTokenFromUnicode( const OUString& rUnicodeName );
 
     /** Returns the UTF8 name of the passed token identifier as byte sequence. */
     css::uno::Sequence< sal_Int8 > getUtf8TokenName( sal_Int32 nToken ) const
@@ -39,20 +39,20 @@ public:
     }
 
     /** Returns the token identifier for the passed UTF8 token name. */
-    sal_Int32 getTokenFromUtf8( const css::uno::Sequence< sal_Int8 >& rUtf8Name ) const
+    static sal_Int32 getTokenFromUtf8( const css::uno::Sequence< sal_Int8 >& rUtf8Name )
     {
         return getTokenFromUTF8( reinterpret_cast< const char* >(
                     rUtf8Name.getConstArray() ), rUtf8Name.getLength() );
     }
 
     /** Returns the token identifier for a UTF8 string passed in pToken */
-    sal_Int32 getTokenFromUTF8( const char *pToken, sal_Int32 nLength ) const
+    static sal_Int32 getTokenFromUTF8( const char *pToken, sal_Int32 nLength )
     {
         return getTokenPerfectHash( pToken, nLength );
     }
 
 private:
-    sal_Int32 getTokenPerfectHash( const char *pToken, sal_Int32 nLength ) const;
+    static sal_Int32 getTokenPerfectHash( const char *pToken, sal_Int32 nLength );
 
     std::vector< css::uno::Sequence< sal_Int8 > > maTokenNames;
 };

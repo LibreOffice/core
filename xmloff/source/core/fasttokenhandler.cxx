@@ -55,14 +55,14 @@ TokenMap::~TokenMap()
 {
 }
 
-sal_Int32 TokenMap::getTokenFromUnicode( const OUString& rUnicodeName ) const
+sal_Int32 TokenMap::getTokenFromUnicode( const OUString& rUnicodeName )
 {
     OString aUtf8Name = OUStringToOString( rUnicodeName, RTL_TEXTENCODING_UTF8 );
     const struct xmltoken* pToken = Perfect_Hash::in_word_set( aUtf8Name.getStr(), aUtf8Name.getLength() );
     return pToken ? pToken->nToken : XML_TOKEN_INVALID;
 }
 
-sal_Int32 TokenMap::getTokenPerfectHash( const char *pStr, sal_Int32 nLength ) const
+sal_Int32 TokenMap::getTokenPerfectHash( const char *pStr, sal_Int32 nLength )
 {
     const struct xmltoken *pToken = Perfect_Hash::in_word_set( pStr, nLength );
     return pToken ? pToken->nToken : XML_TOKEN_INVALID;
@@ -87,13 +87,13 @@ uno::Sequence< sal_Int8 > FastTokenHandler::getUTF8Identifier( sal_Int32 nToken 
 sal_Int32 FastTokenHandler::getTokenFromUTF8( const uno::Sequence< sal_Int8 >& rIdentifier )
     throw (uno::RuntimeException, std::exception)
 {
-    return mrTokenMap.getTokenFromUtf8( rIdentifier );
+    return TokenMap::getTokenFromUtf8( rIdentifier );
 }
 
 // Much faster direct C++ shortcut
 sal_Int32 FastTokenHandler::getTokenDirect( const char* pToken, sal_Int32 nLength ) const
 {
-    return mrTokenMap.getTokenFromUTF8( pToken, nLength );
+    return TokenMap::getTokenFromUTF8( pToken, nLength );
 }
 
 } // namespace token
