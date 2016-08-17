@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_ee7be779",
+        "filename": "xmloff/qa/unit/tokenmap-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-17T09:40:41Z",
+      "side": 1,
+      "message": "Ok, this checks if all tokenMap entries without _DUMMY suffix are in GetXMLToken(), but it does not check if all GetXMLToken() are in tokenMap (ignoring content of the ones that have a _DUMMY suffix there).",
+      "revId": "67e56ba2b6b34e36b71a58e991cb0f26f573e322",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
