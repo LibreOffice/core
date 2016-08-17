@@ -411,24 +411,18 @@ SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator a
             --aIter; //Thus find node before aIter
         if(aIter == pLineList->begin())
             return SmCaretPos();
-        if((*aIter)->GetType() == NTEXT)
-            return SmCaretPos(*aIter, static_cast<SmTextNode*>(*aIter)->GetText().getLength());
-        return SmCaretPos(*aIter, 1);
+        return SmCaretPos::GetPosAfter(*aIter);
     }
     if(prev && next && next->GetType() == NPLACE && !SmNodeListParser::IsOperator(prev->GetToken())){
         aIter = pLineList->erase(aIter);
         delete next;
-        if(prev->GetType() == NTEXT)
-            return SmCaretPos(prev, static_cast<SmTextNode*>(prev)->GetText().getLength());
-        return SmCaretPos(prev, 1);
+        return SmCaretPos::GetPosAfter(prev);
     }
 
     //If we didn't do anything return
     if(!prev) //return an invalid to indicate we're in front of line
         return SmCaretPos();
-    if(prev->GetType() == NTEXT)
-        return SmCaretPos(prev, static_cast<SmTextNode*>(prev)->GetText().getLength());
-    return SmCaretPos(prev, 1);
+    return SmCaretPos::GetPosAfter(prev);
 }
 
 SmNodeList::iterator SmCursor::TakeSelectedNodesFromList(SmNodeList *pLineList,
