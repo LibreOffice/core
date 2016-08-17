@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_8e90abee",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 836,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-08-17T17:56:20Z",
+      "side": 0,
+      "message": "I suddenly wonder if we shouldn\u0027t keep this one for when we open a legacy file with an .fdb inside... Maybe not, because we will on the next save create a fbk anyway?",
+      "range": {
+        "startLine": 836,
+        "startChar": 0,
+        "endLine": 836,
+        "endChar": 4
+      },
+      "revId": "4d4c19fe44cbdb2fa462c7044318fe34958261ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
