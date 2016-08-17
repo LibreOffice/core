@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_ced46349",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3250,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-17T10:20:37Z",
+      "side": 1,
+      "message": "So if one cell is CELLTYPE_STRING and one is CELLTYPE_EDIT this assumes that there would be a header. In fact CELLTYPE_STRING and CELLTYPE_EDIT should be treated similar, both have text content, just that CELLTYPE_EDIT can have rich formatting.",
+      "range": {
+        "startLine": 3250,
+        "startChar": 23,
+        "endLine": 3250,
+        "endChar": 51
+      },
+      "revId": "2248e73bbb66fc6e0581b7a0b0834c59219bbc6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
