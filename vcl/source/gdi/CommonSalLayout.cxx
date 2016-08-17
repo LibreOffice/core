@@ -26,6 +26,21 @@
 #include <limits>
 #include <salgdi.hxx>
 
+#if defined(_WIN32)
+struct WinSalGraphicsWithIDFace
+{
+    WinSalGraphics*     mpWSL;
+    IDWriteFontFace*    mpIDFace;
+    void*               mpTableContext;
+
+    WinSalGraphicsWithIDFace( WinSalGraphics* pWSL, IDWriteFontFace* pIDFace )
+    : mpWSL( pWSL ),
+      mpIDFace( pIDFace ),
+      mpTableContext( nullptr )
+    {}
+};
+#endif
+
 static hb_blob_t *getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
 {
     char pTagName[5];
@@ -38,8 +53,8 @@ static hb_blob_t *getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
     sal_uLong nLength=0;
 #if defined(_WIN32)
     const unsigned char* pBuffer = nullptr;
-    HDC* phDC = static_cast<HDC*>(pUserData);
-    nLength = WinFontFace::GetTable(pTagName, pBuffer, *phDC);
+    WinSalGraphicsWithIDFace* pWSLWithIDFace = static_cast<WinSalGraphicsWithIDFace*>(pUserData);
+    nLength = (pWSLWithIDFace->mpWSL)->GetTable(pTagName, pBuffer, pWSLWithIDFace->mpTableContext, pWSLWithIDFace->mpIDFace);
 #elif defined(MACOSX) || defined(IOS)
     unsigned char* pBuffer = nullptr;
     CoreTextFontFace* pFont = static_cast<CoreTextFontFace*>(pUserData);
@@ -57,7 +72,15 @@ static hb_blob_t *getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
 
     hb_blob_t* pBlob = nullptr;
     if (pBuffer != nullptr)
-#if defined(_WIN32) || defined(MACOSX) || defined(IOS)
+#if defined(_WIN32)
+        pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY, pWSLWithIDFace,
+                               [](void* pUserData)
+                               {
+                                   WinSalGraphicsWithIDFace* pUData = static_cast<WinSalGraphicsWithIDFace*>(pUserData);
+                                   pUData->mpIDFace->ReleaseFontTable(pUData->mpTableContext);
+                               }
+                              );
+#elif defined(MACOSX) || defined(IOS)
         pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY,
                                const_cast<unsigned char*>(pBuffer), [](void* data){ delete[] reinterpret_cast<unsigned char*>(data); } );
 #else
@@ -77,13 +100,29 @@ static hb_unicode_funcs_t* getUnicodeFuncs()
 }
 
 #if defined(_WIN32)
-CommonSalLayout::CommonSalLayout(HDC hDC, WinFontInstance& rWinFontInstance)
-:   mhDC(hDC),
-    mhFont((HFONT)GetCurrentObject(hDC, OBJ_FONT)),
+CommonSalLayout::CommonSalLayout(WinSalGraphics* WSL, WinFontInstance& rWinFontInstance, const WinFontFace& rWinFontFace)
+:   mhFont((HFONT)GetCurrentObject(WSL->getHDC(), OBJ_FONT)),
+    mhDC(WSL->getHDC()),
     mpHbFace(nullptr),
-    maFontSelData(rWinFontInstance.maFontSelData)
+    maFontSelData(rWinFontInstance.maFontSelData),
+    mpD2DRenderer(nullptr)
 {
-    mpHbFace = hb_face_create_for_tables(getFontTable, &hDC, nullptr);
+    mpHbFace = rWinFontFace.GetHbFace();
+    if(!mpHbFace)
+    {
+        mpD2DRenderer = dynamic_cast<D2DWriteTextOutRenderer*>(&TextOutRenderer::get());
+        WinSalGraphicsWithIDFace* pWSLWithIDFace = new WinSalGraphicsWithIDFace(WSL, mpD2DRenderer->GetDWriteFontFace(mhDC));
+        mpHbFace= hb_face_create_for_tables( getFontTable, pWSLWithIDFace,
+                  [](void* pUserData)
+                  {
+                      WinSalGraphicsWithIDFace* pUData = static_cast<WinSalGraphicsWithIDFace*>( pUserData );
+                      if(pUData->mpIDFace)
+                          pUData->mpIDFace->Release();
+                      delete pUData;
+                  }
+                 );
+        rWinFontFace.SetHbFace(mpHbFace);
+    }
 }
 
 void CommonSalLayout::InitFont() const
@@ -97,13 +136,18 @@ CommonSalLayout::CommonSalLayout(const CoreTextStyle& rCoreTextStyle)
     maFontSelData(rCoreTextStyle.maFontSelData),
     mrCoreTextStyle(rCoreTextStyle)
 {
-    CTFontRef pCTFont = static_cast<CTFontRef>(CFDictionaryGetValue(rCoreTextStyle.GetStyleDict(), kCTFontAttributeName));
-    CGFontRef pCGFont = CTFontCopyGraphicsFont(pCTFont, NULL);
-    if (pCGFont)
-        mpHbFace = hb_coretext_face_create(pCGFont);
-    else
-        mpHbFace = hb_face_create_for_tables(getFontTable, const_cast<CoreTextFontFace*>(rCoreTextStyle.mpFontData), nullptr);
-    CGFontRelease(pCGFont);
+    mpHbFace = rCoreTextStyle.GetHbFace();
+    if(!mpHbFace)
+    {
+        CTFontRef pCTFont = static_cast<CTFontRef>(CFDictionaryGetValue(rCoreTextStyle.GetStyleDict(), kCTFontAttributeName));
+        CGFontRef pCGFont = CTFontCopyGraphicsFont(pCTFont, NULL);
+        if (pCGFont)
+            mpHbFace = hb_coretext_face_create(pCGFont);
+        else
+            mpHbFace = hb_face_create_for_tables(getFontTable, const_cast<CoreTextFontFace*>(rCoreTextStyle.mpFontData), nullptr);
+        CGFontRelease(pCGFont);
+        rCoreTextStyle.SetHbFace(mpHbFace);
+    }
 }
 
 #else
@@ -112,14 +156,14 @@ CommonSalLayout::CommonSalLayout(ServerFont& rServerFont)
     maFontSelData(rServerFont.GetFontSelData()),
     mrServerFont(rServerFont)
 {
-    mpHbFace = hb_face_create_for_tables(getFontTable, &rServerFont, nullptr);
+    mpHbFace = rServerFont.GetHbFace();
+    if(!mpHbFace)
+    {
+        mpHbFace = hb_face_create_for_tables(getFontTable, &rServerFont, nullptr);
+        mrServerFont.SetHbFace(mpHbFace);
+    }
 }
 #endif
-
-CommonSalLayout::~CommonSalLayout()
-{
-    hb_face_destroy(mpHbFace);
-}
 
 hb_font_t* CommonSalLayout::GetHbFont()
 {

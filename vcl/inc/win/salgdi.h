@@ -44,6 +44,9 @@
 #  include "postwin.h"
 #endif
 
+#include <hb-ot.h>
+#include <dwrite.h>
+
 class FontSelectPattern;
 class WinFontInstance;
 class ImplFontAttrCache;
@@ -139,10 +142,12 @@ private:
 
     mutable std::unordered_set<sal_UCS4>      maGsubTable;
     mutable bool            mbGsubRead;
+    mutable hb_face_t*      mpHbFace;
 public:
     bool                    HasGSUBstitutions( HDC ) const;
     bool                    IsGSUBstituted( sal_UCS4 ) const;
-    static int              GetTable( const char pTagName[5], const unsigned char*&, HDC );
+    hb_face_t*              GetHbFace() const { return mpHbFace; }
+    void                    SetHbFace( hb_face_t* pHbFace ) const { mpHbFace = pHbFace; }
 };
 
 /** Class that creates (and destroys) a compatible Device Context.
@@ -354,6 +359,7 @@ private:
     sal_uLong               GetKernPairs();
 
 public:
+    sal_uLong               GetTable( const char pTagName[5], const unsigned char*&, void*&, IDWriteFontFace*& );
     // public SalGraphics methods, the interface to the independent vcl part
 
     // get device resolution
