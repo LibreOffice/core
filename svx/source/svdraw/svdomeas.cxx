@@ -412,9 +412,9 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
 
     rPol.eUsedTextHPos=rRec.eWantTextHPos;
     rPol.eUsedTextVPos=rRec.eWantTextVPos;
-    if (rPol.eUsedTextVPos==SDRMEASURE_TEXTVAUTO) rPol.eUsedTextVPos=SDRMEASURE_ABOVE;
-    bool bBrkLine=rPol.eUsedTextVPos==SDRMEASURETEXT_BREAKEDLINE;
-    if (rPol.eUsedTextVPos==SDRMEASURETEXT_VERTICALCENTERED)
+    if (rPol.eUsedTextVPos==SdrMeasureTextVPos::Auto) rPol.eUsedTextVPos=SdrMeasureTextVPos::Above;
+    bool bBrkLine=rPol.eUsedTextVPos==SdrMeasureTextVPos::BreakedLine;
+    if (rPol.eUsedTextVPos==SdrMeasureTextVPos::VerticalCentered)
     {
         OutlinerParaObject* pOutlinerParaObject = SdrTextObj::GetOutlinerParaObject();
         if (pOutlinerParaObject!=nullptr && pOutlinerParaObject->GetTextObject().GetParagraphCount()==1)
@@ -675,9 +675,9 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
             default: aTextPos.X()=aPt1b.X(); aTextSize2.Width()=nLen;
         }
         switch (eMV) {
-            case SDRMEASURETEXT_VERTICALCENTERED:
-            case SDRMEASURETEXT_BREAKEDLINE: aTextPos.Y()=aPt1b.Y()-aTextSize2.Height()/2; break;
-            case SDRMEASURE_BELOW: {
+            case SdrMeasureTextVPos::VerticalCentered:
+            case SdrMeasureTextVPos::BreakedLine: aTextPos.Y()=aPt1b.Y()-aTextSize2.Height()/2; break;
+            case SdrMeasureTextVPos::Below: {
                 if (!bUpsideDown) aTextPos.Y()=aPt1b.Y()+nLWdt;
                 else aTextPos.Y()=aPt1b.Y()-aTextSize2.Height()-nLWdt;
             } break;
@@ -697,9 +697,9 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
             default: aTextPos.X()=aPt1b.X(); aTextSize2.Height()=nLen;
         }
         switch (eMV) {
-            case SDRMEASURETEXT_VERTICALCENTERED:
-            case SDRMEASURETEXT_BREAKEDLINE: aTextPos.Y()=aPt1b.Y()+aTextSize2.Width()/2; break;
-            case SDRMEASURE_BELOW: {
+            case SdrMeasureTextVPos::VerticalCentered:
+            case SdrMeasureTextVPos::BreakedLine: aTextPos.Y()=aPt1b.Y()+aTextSize2.Width()/2; break;
+            case SdrMeasureTextVPos::Below: {
                 if (!bBelowRefEdge) aTextPos.Y()=aPt1b.Y()+aTextSize2.Width()+nLWdt;
                 else aTextPos.Y()=aPt1b.Y()-nLWdt;
             } break;
@@ -1333,21 +1333,21 @@ sal_uInt16 SdrMeasureObj::GetOutlinerViewAnchorMode() const
         if (eMH==SDRMEASURE_TEXTLEFTOUTSIDE) eTH=SDRTEXTHORZADJUST_RIGHT;
         if (eMH==SDRMEASURE_TEXTRIGHTOUTSIDE) eTH=SDRTEXTHORZADJUST_LEFT;
         // at eMH==SDRMEASURE_TEXTINSIDE we can anchor horizontally
-        if (eMV==SDRMEASURE_ABOVE) eTV=SDRTEXTVERTADJUST_BOTTOM;
-        if (eMV==SDRMEASURE_BELOW) eTV=SDRTEXTVERTADJUST_TOP;
-        if (eMV==SDRMEASURETEXT_BREAKEDLINE || eMV==SDRMEASURETEXT_VERTICALCENTERED) eTV=SDRTEXTVERTADJUST_CENTER;
+        if (eMV==SdrMeasureTextVPos::Above) eTV=SDRTEXTVERTADJUST_BOTTOM;
+        if (eMV==SdrMeasureTextVPos::Below) eTV=SDRTEXTVERTADJUST_TOP;
+        if (eMV==SdrMeasureTextVPos::BreakedLine || eMV==SdrMeasureTextVPos::VerticalCentered) eTV=SDRTEXTVERTADJUST_CENTER;
     } else {
         if (eMH==SDRMEASURE_TEXTLEFTOUTSIDE) eTV=SDRTEXTVERTADJUST_BOTTOM;
         if (eMH==SDRMEASURE_TEXTRIGHTOUTSIDE) eTV=SDRTEXTVERTADJUST_TOP;
         // at eMH==SDRMEASURE_TEXTINSIDE we can anchor vertically
         if (!bBelowRefEdge) {
-            if (eMV==SDRMEASURE_ABOVE) eTH=SDRTEXTHORZADJUST_LEFT;
-            if (eMV==SDRMEASURE_BELOW) eTH=SDRTEXTHORZADJUST_RIGHT;
+            if (eMV==SdrMeasureTextVPos::Above) eTH=SDRTEXTHORZADJUST_LEFT;
+            if (eMV==SdrMeasureTextVPos::Below) eTH=SDRTEXTHORZADJUST_RIGHT;
         } else {
-            if (eMV==SDRMEASURE_ABOVE) eTH=SDRTEXTHORZADJUST_RIGHT;
-            if (eMV==SDRMEASURE_BELOW) eTH=SDRTEXTHORZADJUST_LEFT;
+            if (eMV==SdrMeasureTextVPos::Above) eTH=SDRTEXTHORZADJUST_RIGHT;
+            if (eMV==SdrMeasureTextVPos::Below) eTH=SDRTEXTHORZADJUST_LEFT;
         }
-        if (eMV==SDRMEASURETEXT_BREAKEDLINE || eMV==SDRMEASURETEXT_VERTICALCENTERED) eTH=SDRTEXTHORZADJUST_CENTER;
+        if (eMV==SdrMeasureTextVPos::BreakedLine || eMV==SdrMeasureTextVPos::VerticalCentered) eTH=SDRTEXTHORZADJUST_CENTER;
     }
 
     EVAnchorMode eRet=ANCHOR_BOTTOM_HCENTER;

@@ -24,7 +24,7 @@
 #include <svx/svxdllapi.h>
 
 enum SdrMeasureTextHPos {SDRMEASURE_TEXTHAUTO,SDRMEASURE_TEXTLEFTOUTSIDE,SDRMEASURE_TEXTINSIDE,SDRMEASURE_TEXTRIGHTOUTSIDE};
-enum SdrMeasureTextVPos {SDRMEASURE_TEXTVAUTO,SDRMEASURE_ABOVE,SDRMEASURETEXT_BREAKEDLINE,SDRMEASURE_BELOW,SDRMEASURETEXT_VERTICALCENTERED};
+enum class SdrMeasureTextVPos { Auto, Above, BreakedLine, Below, VerticalCentered };
 
 
 // class SdrMeasureTextHPosItem
@@ -50,7 +50,7 @@ public:
 
 class SVX_DLLPUBLIC SdrMeasureTextVPosItem: public SfxEnumItem {
 public:
-    SdrMeasureTextVPosItem(SdrMeasureTextVPos ePos=SDRMEASURE_TEXTVAUTO): SfxEnumItem(SDRATTR_MEASURETEXTVPOS,sal::static_int_cast< sal_uInt16 >(ePos)) {}
+    SdrMeasureTextVPosItem(SdrMeasureTextVPos ePos=SdrMeasureTextVPos::Auto): SfxEnumItem(SDRATTR_MEASURETEXTVPOS,sal::static_int_cast< sal_uInt16 >(ePos)) {}
     SdrMeasureTextVPosItem(SvStream& rIn)                               : SfxEnumItem(SDRATTR_MEASURETEXTVPOS,rIn)    {}
     virtual SfxPoolItem*   Clone(SfxItemPool* pPool=nullptr) const override;
     virtual SfxPoolItem*   Create(SvStream& rIn, sal_uInt16 nVer) const override;

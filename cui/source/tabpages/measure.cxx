@@ -352,7 +352,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
                 RECT_POINT eRP = RP_MM;
                 switch( eVPos )
                 {
-                case SDRMEASURE_ABOVE:
+                case SdrMeasureTextVPos::Above:
                     switch( eHPos )
                     {
                     case SDRMEASURE_TEXTLEFTOUTSIDE:    eRP = RP_LT; break;
@@ -361,7 +361,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
                     case SDRMEASURE_TEXTHAUTO:          eRP = RP_MT; break;
                     }
                     break;
-                case SDRMEASURETEXT_VERTICALCENTERED:
+                case SdrMeasureTextVPos::VerticalCentered:
                     switch( eHPos )
                     {
                     case SDRMEASURE_TEXTLEFTOUTSIDE:    eRP = RP_LM; break;
@@ -370,7 +370,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
                     case SDRMEASURE_TEXTHAUTO:          eRP = RP_MM; break;
                     }
                     break;
-                case SDRMEASURE_BELOW:
+                case SdrMeasureTextVPos::Below:
                     switch( eHPos )
                     {
                     case SDRMEASURE_TEXTLEFTOUTSIDE:    eRP = RP_LB; break;
@@ -379,7 +379,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
                     case SDRMEASURE_TEXTHAUTO:          eRP = RP_MB; break;
                     }
                     break;
-                case SDRMEASURE_TEXTVAUTO:
+                case SdrMeasureTextVPos::Auto:
                     switch( eHPos )
                     {
                     case SDRMEASURE_TEXTLEFTOUTSIDE:    eRP = RP_LM; break;
@@ -399,7 +399,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
                     nState = CTL_STATE::NOHORZ;
                 }
 
-                if( eVPos == SDRMEASURE_TEXTVAUTO )
+                if( eVPos == SdrMeasureTextVPos::Auto )
                 {
                     m_pTsbAutoPosV->SetState( TRISTATE_TRUE );
                     nState |= CTL_STATE::NOVERT;
@@ -525,30 +525,30 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
         switch( eRP )
         {
             default:
-            case RP_LT: eVPos = SDRMEASURE_ABOVE;
+            case RP_LT: eVPos = SdrMeasureTextVPos::Above;
                         eHPos = SDRMEASURE_TEXTLEFTOUTSIDE; break;
-            case RP_LM: eVPos = SDRMEASURETEXT_VERTICALCENTERED;
+            case RP_LM: eVPos = SdrMeasureTextVPos::VerticalCentered;
                         eHPos = SDRMEASURE_TEXTLEFTOUTSIDE; break;
-            case RP_LB: eVPos = SDRMEASURE_BELOW;
+            case RP_LB: eVPos = SdrMeasureTextVPos::Below;
                         eHPos = SDRMEASURE_TEXTLEFTOUTSIDE; break;
-            case RP_MT: eVPos = SDRMEASURE_ABOVE;
+            case RP_MT: eVPos = SdrMeasureTextVPos::Above;
                         eHPos = SDRMEASURE_TEXTINSIDE; break;
-            case RP_MM: eVPos = SDRMEASURETEXT_VERTICALCENTERED;
+            case RP_MM: eVPos = SdrMeasureTextVPos::VerticalCentered;
                         eHPos = SDRMEASURE_TEXTINSIDE; break;
-            case RP_MB: eVPos = SDRMEASURE_BELOW;
+            case RP_MB: eVPos = SdrMeasureTextVPos::Below;
                         eHPos = SDRMEASURE_TEXTINSIDE; break;
-            case RP_RT: eVPos = SDRMEASURE_ABOVE;
+            case RP_RT: eVPos = SdrMeasureTextVPos::Above;
                         eHPos = SDRMEASURE_TEXTRIGHTOUTSIDE; break;
-            case RP_RM: eVPos = SDRMEASURETEXT_VERTICALCENTERED;
+            case RP_RM: eVPos = SdrMeasureTextVPos::VerticalCentered;
                         eHPos = SDRMEASURE_TEXTRIGHTOUTSIDE; break;
-            case RP_RB: eVPos = SDRMEASURE_BELOW;
+            case RP_RB: eVPos = SdrMeasureTextVPos::Below;
                         eHPos = SDRMEASURE_TEXTRIGHTOUTSIDE; break;
         }
         if( m_pTsbAutoPosH->GetState() == TRISTATE_TRUE )
             eHPos = SDRMEASURE_TEXTHAUTO;
 
         if( m_pTsbAutoPosV->GetState() == TRISTATE_TRUE )
-            eVPos = SDRMEASURE_TEXTVAUTO;
+            eVPos = SdrMeasureTextVPos::Auto;
 
         if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTVPOS ) != SfxItemState::DONTCARE )
         {
@@ -754,23 +754,23 @@ void SvxMeasurePage::ChangeAttrHdl_Impl( void* p )
         switch( eRP )
         {
             default:
-            case RP_LT: eVPos = SDRMEASURE_ABOVE;
+            case RP_LT: eVPos = SdrMeasureTextVPos::Above;
                         eHPos = SDRMEASURE_TEXTLEFTOUTSIDE; break;
-            case RP_LM: eVPos = SDRMEASURETEXT_VERTICALCENTERED;
+            case RP_LM: eVPos = SdrMeasureTextVPos::VerticalCentered;
                         eHPos = SDRMEASURE_TEXTLEFTOUTSIDE; break;
-            case RP_LB: eVPos = SDRMEASURE_BELOW;
+            case RP_LB: eVPos = SdrMeasureTextVPos::Below;
                         eHPos = SDRMEASURE_TEXTLEFTOUTSIDE; break;
-            case RP_MT: eVPos = SDRMEASURE_ABOVE;
+            case RP_MT: eVPos = SdrMeasureTextVPos::Above;
                         eHPos = SDRMEASURE_TEXTINSIDE; break;
-            case RP_MM: eVPos = SDRMEASURETEXT_VERTICALCENTERED;
+            case RP_MM: eVPos = SdrMeasureTextVPos::VerticalCentered;
                         eHPos = SDRMEASURE_TEXTINSIDE; break;
-            case RP_MB: eVPos = SDRMEASURE_BELOW;
+            case RP_MB: eVPos = SdrMeasureTextVPos::Below;
                         eHPos = SDRMEASURE_TEXTINSIDE; break;
-            case RP_RT: eVPos = SDRMEASURE_ABOVE;
+            case RP_RT: eVPos = SdrMeasureTextVPos::Above;
                         eHPos = SDRMEASURE_TEXTRIGHTOUTSIDE; break;
-            case RP_RM: eVPos = SDRMEASURETEXT_VERTICALCENTERED;
+            case RP_RM: eVPos = SdrMeasureTextVPos::VerticalCentered;
                         eHPos = SDRMEASURE_TEXTRIGHTOUTSIDE; break;
-            case RP_RB: eVPos = SDRMEASURE_BELOW;
+            case RP_RB: eVPos = SdrMeasureTextVPos::Below;
                         eHPos = SDRMEASURE_TEXTRIGHTOUTSIDE; break;
         }
 
@@ -784,7 +784,7 @@ void SvxMeasurePage::ChangeAttrHdl_Impl( void* p )
 
         if( m_pTsbAutoPosV->GetState() == TRISTATE_TRUE )
         {
-            eVPos = SDRMEASURE_TEXTVAUTO;
+            eVPos = SdrMeasureTextVPos::Auto;
             nState |= CTL_STATE::NOVERT;
         }
 
