@@ -35,7 +35,7 @@ namespace basegfx { class B3DRange; } // end of namespace basegfx
 |*
 \************************************************************************/
 
-enum ProjectionType { PR_PARALLEL, PR_PERSPECTIVE };
+enum class ProjectionType { Parallel, Perspective };
 
 
 /*************************************************************************

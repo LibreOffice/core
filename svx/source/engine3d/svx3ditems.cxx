@@ -78,8 +78,8 @@ Svx3DTextureModeItem::Svx3DTextureModeItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_MODE, nVal)
 {}
 
-Svx3DPerspectiveItem::Svx3DPerspectiveItem(sal_uInt16 nVal)
-:   SfxUInt16Item(SDRATTR_3DSCENE_PERSPECTIVE, nVal)
+Svx3DPerspectiveItem::Svx3DPerspectiveItem(ProjectionType nVal)
+:   SfxUInt16Item(SDRATTR_3DSCENE_PERSPECTIVE, (sal_uInt16)nVal)
 {}
 
 Svx3DShadeModeItem::Svx3DShadeModeItem(sal_uInt16 nVal)

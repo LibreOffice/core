@@ -320,7 +320,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         const Any* pAny = rGeometryItem.GetPropertyValueByName( "Extrusion", "ProjectionMode" );
         if ( pAny )
             *pAny >>= eProjectionMode;
-        ProjectionType eProjectionType( eProjectionMode == drawing::ProjectionMode_PARALLEL ? PR_PARALLEL : PR_PERSPECTIVE );
+        ProjectionType eProjectionType( eProjectionMode == drawing::ProjectionMode_PARALLEL ? ProjectionType::Parallel : ProjectionType::Perspective );
         // pShape2d Convert in scenes which include 3D Objects
         E3dDefaultAttributes a3DDefaultAttr;
         a3DDefaultAttr.SetDefaultLatheCharacterMode( true );
@@ -614,7 +614,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 aNewTransform.rotate( 0.0, -fYRotate, 0.0 );
             if( fXRotate != 0.0 )
                 aNewTransform.rotate( -fXRotate, 0.0, 0.0 );
-            if ( eProjectionType == PR_PARALLEL )
+            if ( eProjectionType == ProjectionType::Parallel )
             {
                 double fSkew, fAlpha;
                 GetSkew( rGeometryItem, fSkew, fAlpha );

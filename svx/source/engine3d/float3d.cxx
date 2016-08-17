@@ -1578,14 +1578,14 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     if( eState != SfxItemState::DONTCARE )
     {
         ProjectionType ePT = (ProjectionType)static_cast<const Svx3DPerspectiveItem&>(rAttrs.Get(SDRATTR_3DSCENE_PERSPECTIVE)).GetValue();
-        if( ( !m_pBtnPerspective->IsChecked() && ePT == PR_PERSPECTIVE ) ||
-            ( m_pBtnPerspective->IsChecked() && ePT == PR_PARALLEL ) )
+        if( ( !m_pBtnPerspective->IsChecked() && ePT == ProjectionType::Perspective ) ||
+            ( m_pBtnPerspective->IsChecked() && ePT == ProjectionType::Parallel ) )
         {
-            m_pBtnPerspective->Check( ePT == PR_PERSPECTIVE );
+            m_pBtnPerspective->Check( ePT == ProjectionType::Perspective );
             bUpdate = true;
         }
         if( m_pBtnPerspective->GetState() == TRISTATE_INDET )
-            m_pBtnPerspective->Check( ePT == PR_PERSPECTIVE );
+            m_pBtnPerspective->Check( ePT == ProjectionType::Perspective );
     }
     else
     {
@@ -1674,11 +1674,11 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Perspective
     if( m_pBtnPerspective->GetState() != TRISTATE_INDET )
     {
-        sal_uInt16 nValue;
+        ProjectionType nValue;
         if( m_pBtnPerspective->IsChecked() )
-            nValue = PR_PERSPECTIVE;
+            nValue = ProjectionType::Perspective;
         else
-            nValue = PR_PARALLEL;
+            nValue = ProjectionType::Parallel;
         rAttrs.Put(Svx3DPerspectiveItem(nValue));
     }
     else

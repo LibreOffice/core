@@ -307,7 +307,7 @@ namespace sdr
             Camera3D aSceneCam(rObj.GetCamera());
 
             // ProjectionType
-            mpItemSet->Put(Svx3DPerspectiveItem((sal_uInt16)aSceneCam.GetProjection()));
+            mpItemSet->Put(Svx3DPerspectiveItem(aSceneCam.GetProjection()));
 
             // CamPos
             mpItemSet->Put(makeSvx3DDistanceItem((sal_uInt32)(aSceneCam.GetPosition().getZ() + 0.5)));

@@ -145,7 +145,7 @@ inline SfxBoolItem makeSvx3DTextureFilterItem(bool bVal) {
 // Svx3D _3DSCENE_ Items
 class SVX_DLLPUBLIC Svx3DPerspectiveItem : public SfxUInt16Item {
 public:
-    Svx3DPerspectiveItem(sal_uInt16 nVal = (sal_uInt16)PR_PERSPECTIVE);
+    Svx3DPerspectiveItem(ProjectionType nVal = ProjectionType::Perspective);
 
     // use drawing::ProjectionMode
     SVX_DLLPRIVATE virtual  bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

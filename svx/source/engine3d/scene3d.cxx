@@ -345,7 +345,7 @@ void E3dScene::SetCamera(const Camera3D& rNewCamera)
     GetCameraSet().SetViewportValues(aVRP, aVPN, aVUV);
 
     // Set perspective
-    GetCameraSet().SetPerspective(aCamera.GetProjection() == PR_PERSPECTIVE);
+    GetCameraSet().SetPerspective(aCamera.GetProjection() == ProjectionType::Perspective);
     GetCameraSet().SetViewportRectangle((Rectangle&)aCamera.GetDeviceWindow());
 
     ImpCleanup3DDepthMapper();

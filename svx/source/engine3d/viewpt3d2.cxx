@@ -27,7 +27,7 @@ Viewport3D::Viewport3D() :
     aVUV(0, 1, 1),
     aPRP(0, 0, 2),
     fVPD(-3),
-    eProjection(PR_PERSPECTIVE),
+    eProjection(ProjectionType::Perspective),
     aDeviceRect(Point(0,0), Size(-1,-1)),
     aViewPoint (0, 0, 5000),
     bTfValid(false),
