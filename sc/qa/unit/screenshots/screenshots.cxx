@@ -72,11 +72,9 @@ public:
     virtual ~ScScreenshotTest();
 
     void testOpeningModalDialogs();
-    //void testOpeningModelessDialogs();
 
     CPPUNIT_TEST_SUITE(ScScreenshotTest);
     CPPUNIT_TEST(testOpeningModalDialogs);
-    //CPPUNIT_TEST(testOpeningModelessDialogs);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -99,7 +97,8 @@ void ScScreenshotTest::initializeWithDoc(const char* pName)
 {
     if (mxComponent.is())
         mxComponent->dispose();
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY) + OUString::createFromAscii(pName), "com.sun.star.sheet.SpreadsheetDocument");
+    // use new, epty doc to avoid file locking
+    mxComponent = loadFromDesktop("private:factory/scalc", "com.sun.star.sheet.SpreadsheetDocument");
 
     mpFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", mpFoundShell);
