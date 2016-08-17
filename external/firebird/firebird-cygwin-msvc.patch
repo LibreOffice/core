@@ -532,17 +532,7 @@ diff -ur extern/btyacc/Makefile extern/btyacc/Makefile
  #define DLL_EXPORT __declspec(dllexport)
 --- extern/cloop/Makefile	2016-07-07 15:56:28.279136300 +0200
 +++ extern/cloop/Makefile	2016-07-13 16:22:38.493479800 +0200
-@@ -4,15 +4,15 @@
- 
- TARGET	:= release
- 
--CC	:= gcc
--CXX	:= g++
--LD	:= $(CXX)
-+#CC	:= gcc
-+#CXX	:= g++
-+#LD	:= $(CXX)
- 
+@@ -11,8 +11,8 @@
  SRC_DIR		:= src
  BUILD_DIR	:= build
  OUT_DIR		:= output
@@ -553,7 +543,7 @@ diff -ur extern/btyacc/Makefile extern/btyacc/Makefile
  
  OBJ_DIR := $(BUILD_DIR)/$(TARGET)
  BIN_DIR := $(OUT_DIR)/$(TARGET)/bin
-@@ -27,17 +27,17 @@
+@@ -27,7 +27,7 @@
  OBJS_C := $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS_C))
  OBJS_CPP := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS_CPP))
  
@@ -562,23 +552,6 @@ diff -ur extern/btyacc/Makefile extern/btyacc/Makefile
  CXX_FLAGS := $(C_FLAGS)
  FPC_FLAGS := -Mdelphi
  
--ifeq ($(TARGET),release)
--	CXX_FLAGS += -O3
--endif
--
--ifeq ($(TARGET),debug)
--	FPC_FLAGS += -g
--endif
-+#ifeq ($(TARGET),release)
-+#	CXX_FLAGS += -O3
-+#endif
-+
-+#ifeq ($(TARGET),debug)
-+#	FPC_FLAGS += -g
-+#endif
- 
- vpath %.c $(SRC_DIRS)
- vpath %.cpp $(SRC_DIRS)
 @@ -53,7 +53,7 @@
  .PHONY: all mkdirs clean
  
