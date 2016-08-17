@@ -35,6 +35,7 @@ PageNumberListBox::PageNumberListBox(vcl::Window* pParent, WinBits nStyle)
         sal_Int32 nPos = InsertEntry( aStr );
         SetEntryData( nPos, reinterpret_cast<void*>((sal_uLong)nData) );
     }
+    SetDropDownLineCount(6);
 }
 
 VCL_BUILDER_FACTORY(PageNumberListBox);
