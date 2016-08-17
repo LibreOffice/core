@@ -14,6 +14,7 @@
 
 #include "xmloff/fasttokenhandler.hxx"
 #include "xmloff/token/tokens.hxx"
+#include <xmloff/xmltoken.hxx>
 
 using namespace std;
 using namespace com::sun::star::uno;
@@ -24,10 +25,13 @@ class TokenmapTest: public CppUnit::TestFixture
 {
 public:
     void test_roundTrip();
+    void test_listEquality();
 
     CPPUNIT_TEST_SUITE(TokenmapTest);
 
     CPPUNIT_TEST(test_roundTrip);
+    CPPUNIT_TEST(test_listEquality);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -44,6 +48,20 @@ void TokenmapTest::test_roundTrip()
             reinterpret_cast< const char * >(rUtf8Name.getConstArray()),
             rUtf8Name.getLength() );
         CPPUNIT_ASSERT_EQUAL(ret, nToken);
+    }
+}
+
+void TokenmapTest::test_listEquality()
+{
+    for ( sal_Int32 nToken = 0; nToken < XML_TOKEN_COUNT; ++nToken )
+    {
+        Sequence< sal_Int8 > rUtf8Name = tokenMap.getUtf8TokenName(nToken);
+        const OUString& sName = OUString( reinterpret_cast< const char* >(
+                        rUtf8Name.getConstArray() ), rUtf8Name.getLength(), RTL_TEXTENCODING_UTF8 );
+        if ( sName.endsWith("_DUMMY") )
+            continue;
+        const OUString& sTokenName = GetXMLToken( static_cast<xmloff::token::XMLTokenEnum>(nToken) );
+        CPPUNIT_ASSERT_EQUAL(sName, sTokenName);
     }
 }
 
