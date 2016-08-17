@@ -84,14 +84,10 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-#if !defined MACOSX && !defined DRAGONFLY
     ScDocShellRef saveAndReloadPassword( ScDocShell*, const OUString&, const OUString&, const OUString&, SfxFilterFlags );
-#endif
 
     void test();
-#if !defined MACOSX && !defined DRAGONFLY
     void testPasswordExport();
-#endif
     void testConditionalFormatExportODS();
     void testConditionalFormatExportXLSX();
     void testColorScaleExportODS();
@@ -178,9 +174,7 @@ public:
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
-#if !defined(MACOSX) && !defined(DRAGONFLY)
     CPPUNIT_TEST(testPasswordExport);
-#endif
     CPPUNIT_TEST(testConditionalFormatExportODS);
     CPPUNIT_TEST(testConditionalFormatExportXLSX);
     CPPUNIT_TEST(testColorScaleExportODS);
@@ -294,7 +288,6 @@ void ScExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
     }
 }
 
-#if !defined MACOSX && !defined DRAGONFLY
 ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const OUString &rFilter,
     const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType)
 {
@@ -329,7 +322,6 @@ ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const OUSt
     OUString aPass("test");
     return load(aTempFile.GetURL(), rFilter, rUserData, rTypeName, nFormatType, nFormat, SOFFICE_FILEFORMAT_CURRENT, &aPass);
 }
-#endif
 
 void ScExportTest::test()
 {
@@ -352,7 +344,6 @@ void ScExportTest::test()
     xDocSh->DoClose();
 }
 
-#if !defined MACOSX && !defined DRAGONFLY
 void ScExportTest::testPasswordExport()
 {
     ScDocShell* pShell = new ScDocShell(
@@ -363,7 +354,7 @@ void ScExportTest::testPasswordExport()
 
     ScDocument& rDoc = pShell->GetDocument();
 
-    rDoc.SetValue(0,0,0, 1.0);
+    rDoc.SetValue(0, 0, 0, 1.0);
 
     sal_Int32 nFormat = FORMAT_ODS;
     OUString aFilterName(getFileFormats()[nFormat].pFilterName, strlen(getFileFormats()[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
@@ -377,7 +368,6 @@ void ScExportTest::testPasswordExport()
 
     xDocSh->DoClose();
 }
-#endif
 
 void ScExportTest::testConditionalFormatExportODS()
 {
