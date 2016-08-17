@@ -87,12 +87,14 @@ gb_DEBUGLEVEL := 1
 # make DEBUG=true should force -g
 ifeq ($(origin DEBUG),command line)
 ENABLE_DEBUGINFO_FOR := all
+ENABLE_SYMBOLS := TRUE
 endif
 endif
 ifneq ($(strip $(debug)),)
 gb_DEBUGLEVEL := 1
 ifeq ($(origin debug),command line)
 ENABLE_DEBUGINFO_FOR := all
+ENABLE_SYMBOLS := TRUE
 endif
 endif
 ifeq ($(gb_ENABLE_DBGUTIL),$(true))
