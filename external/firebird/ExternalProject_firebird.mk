@@ -35,7 +35,6 @@ MAKE_POST=$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(gb_Package_SOURCEDIR_firebird)/gen/Release/firebird/plugins/libEngine12.dylib \
 			$(gb_Package_SOURCEDIR_firebird)/gen/Release/firebird/lib/libfbclient.dylib.3.0.0)
 
-# do not set LDFLAGS - it is mysteriously not used by firebird on MacOSX
 $(call gb_ExternalProject_get_state_target,firebird,build):
 	$(call gb_ExternalProject_run,build,\
 		unset MAKEFLAGS \
@@ -53,7 +52,6 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
-				-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib \
 			) \
 			" \
 		&& export CXXFLAGS=" \
@@ -65,14 +63,21 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
-				-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib \
 			) \
 			$(if $(SYSTEM_LIBTOMMATH),$(LIBTOMMATH_CFLAGS), \
 				-L$(call gb_UnpackedTarball_get_dir,libtommath) \
 			) \
 		" \
+		&& export LDFLAGS=" \
+			$(if $(SYSTEM_ICU),$(ICU_LIBS), \
+				-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib \
+			) \
+		" \
 		$(if $(filter MACOSX,$(OS)), \
 		&& export DYLD_LIBRARY_PATH="$(call gb_UnpackedTarball_get_dir,icu)/source/lib" \
+		)\
+		$(if $(filter-out WNT MACOSX IOS,$(OS)), \
+		&& export LD_LIBRARY_PATH="$(call gb_UnpackedTarball_get_dir,icu)/source/lib" \
 		)\
 		&& MAKE=$(MAKE) ./configure \
 			--without-editline \
