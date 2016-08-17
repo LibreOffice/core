@@ -1237,8 +1237,8 @@ SdrObject* SwWW8ImplReader::ReadTextBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 
 SdrObject* SwWW8ImplReader::ReadCaptionBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 {
-    static const SdrCaptionType aCaptA[] = { SDRCAPT_TYPE1, SDRCAPT_TYPE2,
-                                       SDRCAPT_TYPE3, SDRCAPT_TYPE4 };
+    static const SdrCaptionType aCaptA[] = { SdrCaptionType::Type1, SdrCaptionType::Type2,
+                                       SdrCaptionType::Type3, SdrCaptionType::Type4 };
 
     WW8_DP_CALLOUT_TXTBOX aCallB;
 

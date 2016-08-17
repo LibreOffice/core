@@ -722,9 +722,9 @@ static SvXMLEnumMapEntry const pXML_Caption_Esc_Dir_Enum[] =
 
 static SvXMLEnumMapEntry const pXML_Caption_Type_Enum[] =
 {
-    { XML_STRAIGHT_LINE,            0 }, //SDRCAPT_TYPE1,
-    { XML_ANGLED_LINE,              1 }, //SDRCAPT_TYPE2,
-    { XML_ANGLED_CONNECTOR_LINE,    2 }, //SDRCAPT_TYPE3,
+    { XML_STRAIGHT_LINE,            0 }, //SdrCaptionType::Type1,
+    { XML_ANGLED_LINE,              1 }, //SdrCaptionType::Type2,
+    { XML_ANGLED_CONNECTOR_LINE,    2 }, //SdrCaptionType::Type3,
     { XML_TOKEN_INVALID,0 }
 };
 

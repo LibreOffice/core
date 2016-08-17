@@ -80,7 +80,7 @@ public:
 public:
     ImpCaptParams()
     {
-        eType      =SDRCAPT_TYPE3;
+        eType      =SdrCaptionType::Type3;
         bFixedAngle=false;
         nAngle     =4500;
         nGap       =0;
@@ -113,7 +113,7 @@ void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Poi
     EscDir eBestDir=LKS;
     bool bTryH=eEscDir==SDRCAPT_ESCBESTFIT;
     if (!bTryH) {
-        if (eType!=SDRCAPT_TYPE1) {
+        if (eType!=SdrCaptionType::Type1) {
             bTryH=eEscDir==SDRCAPT_ESCHORIZONTAL;
         } else {
             bTryH=eEscDir==SDRCAPT_ESCVERTICAL;
@@ -121,7 +121,7 @@ void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Poi
     }
     bool bTryV=eEscDir==SDRCAPT_ESCBESTFIT;
     if (!bTryV) {
-        if (eType!=SDRCAPT_TYPE1) {
+        if (eType!=SdrCaptionType::Type1) {
             bTryV=eEscDir==SDRCAPT_ESCVERTICAL;
         } else {
             bTryV=eEscDir==SDRCAPT_ESCHORIZONTAL;
@@ -159,7 +159,7 @@ void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Poi
             BigInt aHorY(aBestPt.Y()-aTl.Y()); aHorY*=aHorY;
             BigInt aVerX(aBest2.X()-aTl.X());  aVerX*=aVerX;
             BigInt aVerY(aBest2.Y()-aTl.Y());  aVerY*=aVerY;
-            if (eType!=SDRCAPT_TYPE1) {
+            if (eType!=SdrCaptionType::Type1) {
                 bTakeIt=aVerX+aVerY<aHorX+aHorY;
             } else {
                 bTakeIt=aVerX+aVerY>=aHorX+aHorY;
@@ -446,7 +446,7 @@ void SdrCaptionObj::ImpRecalcTail()
 // twice or SetSnapRect after it again just to work around this.
 // Changed this method to not do that.
 // Also found why this has been done: For interactive dragging of the
-// tail end pos for SDRCAPT_TYPE1. This sure was the simplest method
+// tail end pos for SdrCaptionType::Type1. This sure was the simplest method
 // to achieve this, at the cost of making a whole group of const methods
 // of this object implicitly change the object's position.
 void SdrCaptionObj::ImpCalcTail1(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect) const
@@ -533,10 +533,10 @@ void SdrCaptionObj::ImpCalcTail4(const ImpCaptParams& rPara, tools::Polygon& rPo
 void SdrCaptionObj::ImpCalcTail(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect) const
 {
     switch (rPara.eType) {
-        case SDRCAPT_TYPE1: ImpCalcTail1(rPara,rPoly,rRect); break;
-        case SDRCAPT_TYPE2: ImpCalcTail2(rPara,rPoly,rRect); break;
-        case SDRCAPT_TYPE3: ImpCalcTail3(rPara,rPoly,rRect); break;
-        case SDRCAPT_TYPE4: ImpCalcTail4(rPara,rPoly,rRect); break;
+        case SdrCaptionType::Type1: ImpCalcTail1(rPara,rPoly,rRect); break;
+        case SdrCaptionType::Type2: ImpCalcTail2(rPara,rPoly,rRect); break;
+        case SdrCaptionType::Type3: ImpCalcTail3(rPara,rPoly,rRect); break;
+        case SdrCaptionType::Type4: ImpCalcTail4(rPara,rPoly,rRect); break;
     }
 }
 

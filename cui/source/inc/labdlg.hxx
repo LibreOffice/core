@@ -24,6 +24,9 @@
 #include <vcl/fixed.hxx>
 #include <svtools/valueset.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <svx/sxctitm.hxx>
+
+
 class SdrView;
 
 // class SvxCaptionTabPage -----------------------------------------------
@@ -51,7 +54,7 @@ private:
     std::vector<OUString> m_aStrVertList;
     std::vector<OUString> m_aLineTypes;
 
-    short               nCaptionType;
+    SdrCaptionType      nCaptionType;
     sal_Int32           nGap;
     short               nEscDir;
     bool            bEscRel;
@@ -64,7 +67,7 @@ private:
     sal_uInt16          nAnsatzTypePos;
 
     void            SetupAnsatz_Impl( sal_uInt16 nType );
-    void            SetupType_Impl( sal_uInt16 nType );
+    void            SetupType_Impl( SdrCaptionType nType );
     DECL_LINK_TYPED( AnsatzSelectHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( AnsatzRelSelectHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( LineOptHdl_Impl, Button *, void );

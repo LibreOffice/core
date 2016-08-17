@@ -72,7 +72,7 @@ const sal_uInt16 SvxCaptionTabPage::pCaptionRanges[] =
 
 SvxCaptionTabPage::SvxCaptionTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "CalloutPage", "cui/ui/calloutpage.ui", &rInAttrs)
-    , nCaptionType(0)
+    , nCaptionType(SdrCaptionType::Type1)
     , nGap(0)
     , nEscDir(0)
     , bEscRel(false)
@@ -172,7 +172,7 @@ bool SvxCaptionTabPage::FillItemSet( SfxItemSet*  _rOutAttrs)
 
     SfxMapUnit      eUnit;
 
-    nCaptionType = m_pCT_CAPTTYPE->GetSelectItemId()-1;
+    nCaptionType = (SdrCaptionType) (m_pCT_CAPTTYPE->GetSelectItemId()-1);
 
     _rOutAttrs->Put( SdrCaptionTypeItem( (SdrCaptionType) nCaptionType ) );
 
@@ -183,7 +183,7 @@ bool SvxCaptionTabPage::FillItemSet( SfxItemSet*  _rOutAttrs)
     }
 
     // special treatment!!! XXX
-    if( nCaptionType==SDRCAPT_TYPE1 )
+    if( nCaptionType==SdrCaptionType::Type1 )
     {
         switch( nEscDir )
         {
@@ -285,13 +285,13 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
     SetMetricValue( *m_pMF_ABSTAND, nGap, eUnit );
     nGap = static_cast<long>(m_pMF_ABSTAND->GetValue());
 
-    nCaptionType = (short)static_cast<const SdrCaptionTypeItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONTYPE ) ) ).GetValue();
+    nCaptionType = (SdrCaptionType)static_cast<const SdrCaptionTypeItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONTYPE ) ) ).GetValue();
     bFitLineLen = static_cast<const SfxBoolItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONFITLINELEN ) ) ).GetValue();
     nEscDir = (short)static_cast<const SdrCaptionEscDirItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONESCDIR ) ) ).GetValue();
     bEscRel = static_cast<const SfxBoolItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONESCISREL ) ) ).GetValue();
 
     // special treatment!!! XXX
-    if( nCaptionType==SDRCAPT_TYPE1 )
+    if( nCaptionType==SdrCaptionType::Type1 )
     {
         switch( nEscDir )
         {
@@ -348,8 +348,8 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
     m_pLB_ANSATZ->SelectEntryPos( nAnsatzTypePos );
 
     SetupAnsatz_Impl( nAnsatzTypePos );
-    m_pCT_CAPTTYPE->SelectItem( nCaptionType+1 ); // Enum starts at 0!
-    SetupType_Impl( nCaptionType+1 );
+    m_pCT_CAPTTYPE->SelectItem( (int)nCaptionType+1 ); // Enum starts at 0!
+    SetupType_Impl( nCaptionType );
 }
 
 
@@ -453,32 +453,32 @@ IMPL_LINK_TYPED( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton, void )
 
 IMPL_LINK_NOARG_TYPED(SvxCaptionTabPage, SelectCaptTypeHdl_Impl, ValueSet*, void)
 {
-    SetupType_Impl( m_pCT_CAPTTYPE->GetSelectItemId() );
+    SetupType_Impl( (SdrCaptionType) m_pCT_CAPTTYPE->GetSelectItemId() );
 }
 
-void SvxCaptionTabPage::SetupType_Impl( sal_uInt16 nType )
+void SvxCaptionTabPage::SetupType_Impl( SdrCaptionType nType )
 {
-    switch( nType-1 )
+    switch( nType )
     {
-        case SDRCAPT_TYPE1:
+        case SdrCaptionType::Type1:
         m_pFT_LAENGE->Disable();
         m_pCB_LAENGE->Disable();
         LineOptHdl_Impl( m_pCB_LAENGE );
         break;
 
-        case SDRCAPT_TYPE2:
+        case SdrCaptionType::Type2:
         m_pFT_LAENGE->Disable();
         m_pCB_LAENGE->Disable();
         LineOptHdl_Impl( m_pCB_LAENGE );
         break;
 
-        case SDRCAPT_TYPE3:
+        case SdrCaptionType::Type3:
         m_pFT_LAENGE->Enable();
         m_pCB_LAENGE->Enable();
         LineOptHdl_Impl( m_pCB_LAENGE );
         break;
 
-        case SDRCAPT_TYPE4:
+        case SdrCaptionType::Type4:
         m_pFT_LAENGE->Enable();
         m_pCB_LAENGE->Enable();
         LineOptHdl_Impl( m_pCB_LAENGE );

@@ -23,14 +23,14 @@
 #include <svx/svddef.hxx>
 #include <svx/svxdllapi.h>
 
-enum SdrCaptionType   {SDRCAPT_TYPE1,SDRCAPT_TYPE2,SDRCAPT_TYPE3,SDRCAPT_TYPE4};
+enum class SdrCaptionType { Type1, Type2, Type3, Type4 };
 
 
 // class SdrCaptionTypeItem
 
 class SVX_DLLPUBLIC SdrCaptionTypeItem: public SfxEnumItem {
 public:
-    SdrCaptionTypeItem(SdrCaptionType eStyle=SDRCAPT_TYPE3): SfxEnumItem(SDRATTR_CAPTIONTYPE,sal::static_int_cast< sal_uInt16 >(eStyle)) {}
+    SdrCaptionTypeItem(SdrCaptionType eStyle=SdrCaptionType::Type3): SfxEnumItem(SDRATTR_CAPTIONTYPE,sal::static_int_cast< sal_uInt16 >(eStyle)) {}
     SdrCaptionTypeItem(SvStream& rIn)                      : SfxEnumItem(SDRATTR_CAPTIONTYPE,rIn)    {}
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool=nullptr) const override;
     virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
