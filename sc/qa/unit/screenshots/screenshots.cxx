@@ -42,7 +42,6 @@
 #include <scitems.hxx>
 
 using namespace css;
-static const char* DATA_DIRECTORY = "/sc/qa/unit/screenshots/data/";
 
 class ScScreenshotTest : public ScreenshotTest
 {
@@ -53,11 +52,11 @@ private:
     ScDocShellRef                           mxDocSh;
     ScTabViewShell*                         mpViewShell;
     ScAbstractDialogFactory*                mpFact;
-    std::unique_ptr<ScImportStringStream>   mpStream;
+    std::unique_ptr<SvMemoryStream>         mpStream;
     std::unique_ptr<SfxItemSet>             mpItemSet;
 
     /// helper
-    void initializeWithDoc(const char* pName);
+    void initialize();
 
     /// helper method to populate KnownDialogs, called in setUp(). Needs to be
     /// written and has to add entries to KnownDialogs
@@ -93,7 +92,7 @@ ScScreenshotTest::~ScScreenshotTest()
 {
 }
 
-void ScScreenshotTest::initializeWithDoc(const char* pName)
+void ScScreenshotTest::initialize()
 {
     if (mxComponent.is())
         mxComponent->dispose();
@@ -113,7 +112,14 @@ void ScScreenshotTest::initializeWithDoc(const char* pName)
     CPPUNIT_ASSERT_MESSAGE("Failed to create dialog factory", mpFact);
 
     const OUString aCsv("some, strings, here, separated, by, commas");
-    mpStream.reset(new ScImportStringStream(aCsv));
+    SvMemoryStream* pNewMemStream = new SvMemoryStream(const_cast<sal_Unicode *>(aCsv.getStr()), aCsv.getLength() * sizeof(sal_Unicode), StreamMode::READ);
+    pNewMemStream->SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
+    #ifdef OSL_BIGENDIAN
+        pNewMemStream->SetEndian(SvStreamEndian::BIG);
+    #else
+        pNewMemStream->SetEndian(SvStreamEndian::LITTLE);
+    #endif
+    mpStream.reset(pNewMemStream);
 }
 
 void ScScreenshotTest::registerKnownDialogsByID(mapType& rKnownDialogs)
@@ -272,7 +278,7 @@ VclAbstractDialog* ScScreenshotTest::createDialogByID(sal_uInt32 nID)
 
 void ScScreenshotTest::testOpeningModalDialogs()
 {
-    initializeWithDoc("empty.ods");
+    initialize();
 
     /// process input file containing the UXMLDescriptions of the dialogs to dump
     processDialogBatchFile("sc/qa/unit/screenshots/data/screenshots.txt");
