@@ -46,7 +46,8 @@ $(eval $(call gb_Module_add_check_targets,sd,\
 ))
 endif
 
-$(eval $(call gb_Module_add_slowcheck_targets,sd, \
+# screenshots
+$(eval $(call gb_Module_add_screenshot_targets,sd, \
     CppunitTest_sd_dialogs_test \
 ))
 

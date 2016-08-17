@@ -27,7 +27,8 @@ $(eval $(call gb_Module_add_l10n_targets,reportdesign,\
 	JunitTest_reportdesign_complex \
 ))
 
-$(eval $(call gb_Module_add_slowcheck_targets,reportdesign,\
+# screenshots
+$(eval $(call gb_Module_add_screenshot_targets,reportdesign,\
     CppunitTest_reportdesign_dialogs_test \
 ))
 

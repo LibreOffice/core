@@ -78,7 +78,8 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
 endif
 endif
 
-$(eval $(call gb_Module_add_slowcheck_targets,dbaccess,\
+# screenshots
+$(eval $(call gb_Module_add_screenshot_targets,dbaccess,\
     CppunitTest_dbaccess_dialogs_test \
 ))
 

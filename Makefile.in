@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-gb_Top_MODULE_CHECK_TARGETS := slowcheck unitcheck subsequentcheck perfcheck uicheck
+gb_Top_MODULE_CHECK_TARGETS := slowcheck unitcheck subsequentcheck perfcheck uicheck screenshot
 
 .PHONY : all check-if-root bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download etags fetch findunusedcode get-submodules id install install-strip tags debugrun help showmodules translations packageinfo internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
 
@@ -97,7 +97,7 @@ $(1).clean $(1).showdeliverables:
 	cd $(SRCDIR)/$(2) && $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
 
 $(1).all: bootstrap fetch
-	$$(MAKE) $(PARALLELISM_OPTION) $(IWYU_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1) $(if $(CROSS_COMPILING),,$(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1))
+	$$(MAKE) $(PARALLELISM_OPTION) $(IWYU_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1) $(if $(CROSS_COMPILING),,$(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1) $(WORKDIR)/Module/screenshot/$(1))
 
 endef
 

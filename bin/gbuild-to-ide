@@ -561,16 +561,16 @@ isExecutable=true
         result = KdevelopIntegrationGenerator.launchestemplate % {'launches': launches}
         result += self.generate_launch(0, 'Local tests -- quick tests (unitcheck)', self.gbuildparser.makecmd,
                                        'unitcheck', moduledir)
-        result += self.generate_launch(1, 'Local tests -- slow tests (unitcheck, slowcheck)', self.gbuildparser.makecmd,
-                                       'unitcheck slowcheck', moduledir)
-        result += self.generate_launch(2, 'Local tests -- integration tests (unitcheck, slowcheck, subsequentcheck)',
-                                       self.gbuildparser.makecmd, 'unitcheck slowcheck subsequentcheck', moduledir)
+        result += self.generate_launch(1, 'Local tests -- slow tests (unitcheck, slowcheck, screenshot)', self.gbuildparser.makecmd,
+                                       'unitcheck slowcheck screenshot', moduledir)
+        result += self.generate_launch(2, 'Local tests -- integration tests (unitcheck, slowcheck, screenshot, subsequentcheck)',
+                                       self.gbuildparser.makecmd, 'unitcheck slowcheck screenshot subsequentcheck', moduledir)
         result += self.generate_launch(3, 'Global tests -- quick tests (unitcheck)', self.gbuildparser.makecmd,
                                        'unitcheck', self.gbuildparser.builddir)
-        result += self.generate_launch(4, 'Global tests -- slow tests (unitcheck, slowcheck)',
-                                       self.gbuildparser.makecmd, 'unitcheck slowcheck', self.gbuildparser.builddir)
-        result += self.generate_launch(5, 'Global tests -- integration tests (unitcheck, slowcheck, subsequentcheck)',
-                                       self.gbuildparser.makecmd, 'unitcheck slowcheck subsequentcheck',
+        result += self.generate_launch(4, 'Global tests -- slow tests (unitcheck, slowcheck, screenshot)',
+                                       self.gbuildparser.makecmd, 'unitcheck slowcheck screenshot', self.gbuildparser.builddir)
+        result += self.generate_launch(5, 'Global tests -- integration tests (unitcheck, slowcheck, screenshot, subsequentcheck)',
+                                       self.gbuildparser.makecmd, 'unitcheck slowcheck screenshot subsequentcheck',
                                        self.gbuildparser.builddir)
         result += self.generate_launch(6, 'Run LibreOffice',
                                        os.path.join(self.gbuildparser.instdir, 'program/soffice.bin'), '',
@@ -826,9 +826,9 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
                 'rebuild': self.module_make_command('clean unitcheck'),
             },
             'Integration tests': {
-                'build': self.module_make_command('unitcheck slowcheck subsequentcheck'),
+                'build': self.module_make_command('unitcheck slowcheck screenshot subsequentcheck'),
                 'clean': self.module_make_command('clean'),
-                'rebuild': self.module_make_command('clean unitcheck slowcheck subsequentcheck')
+                'rebuild': self.module_make_command('clean unitcheck slowcheck screenshot subsequentcheck')
             }
         }
 
@@ -1102,14 +1102,14 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
             'index': '2',
             'base_folder': module_folder,
-            'arg': "unitcheck slowcheck",
-            'name': "3-Local tests -- slow tests (unitcheck, slowcheck)",
+            'arg': "unitcheck slowcheck screenshot",
+            'name': "3-Local tests -- slow tests (unitcheck, slowcheck, screenshot)",
         }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
             'index': '3',
             'base_folder': module_folder,
-            'arg': "unitcheck slowcheck subsequentcheck",
-            'name': "4-Local tests -- integration tests (unitcheck, slowcheck, subsequentcheck)",
+            'arg': "unitcheck slowcheck screenshot subsequentcheck",
+            'name': "4-Local tests -- integration tests (unitcheck, slowcheck, screenshot, subsequentcheck)",
         }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
             'index': '4',
@@ -1120,14 +1120,14 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
             'index': '5',
             'base_folder': self.base_folder,
-            'arg': "unitcheck slowcheck",
-            'name': "6-Global tests -- slow tests (unitcheck, slowcheck)",
+            'arg': "unitcheck slowcheck screenshot",
+            'name': "6-Global tests -- slow tests (unitcheck, slowcheck, screenshot)",
         }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
             'index': '6',
             'base_folder': self.base_folder,
-            'arg': "unitcheck slowcheck subsequentcheck",
-            'name': "7-Global tests -- integration tests (unitcheck, slowcheck, subsequentcheck)",
+            'arg': "unitcheck slowcheck screenshot subsequentcheck",
+            'name': "7-Global tests -- integration tests (unitcheck, slowcheck, screenshot, subsequentcheck)",
         }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
             'index': '7',
@@ -1167,14 +1167,14 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
             'index': '2',
             'base_folder': self.base_folder,
-            'arg': "unitcheck slowcheck",
-            'name': "03-Global tests -- slow tests (unitcheck, slowcheck)",
+            'arg': "unitcheck slowcheck screenshot",
+            'name': "03-Global tests -- slow tests (unitcheck, slowcheck, screenshot)",
         }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
             'index': '3',
             'base_folder': self.base_folder,
-            'arg': "unitcheck slowcheck subsequentcheck",
-            'name': "04-Global tests -- integration tests (unitcheck, slowcheck, subsequentcheck)",
+            'arg': "unitcheck slowcheck screenshot subsequentcheck",
+            'name': "04-Global tests -- integration tests (unitcheck, slowcheck, screenshot, subsequentcheck)",
         }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
             'index': '4',

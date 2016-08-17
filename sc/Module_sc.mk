@@ -65,7 +65,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_opencl_test \
 	CppunitTest_sc_copypaste \
 	CppunitTest_sc_functions_test \
-	CppunitTest_sc_screenshots \
 ))
 
 # Disabled to allow the check tinderbox execute the sd tests
@@ -110,5 +109,9 @@ $(eval $(call gb_Module_add_perfcheck_targets,sc,\
 	CppunitTest_sc_tablesheetobj \
 ))
 
+# screenshots
+$(eval $(call gb_Module_add_screenshot_targets,sc,\
+	CppunitTest_sc_screenshots \
+))
 
 # vim: set noet sw=4 ts=4:
