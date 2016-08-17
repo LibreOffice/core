@@ -2655,10 +2655,6 @@ SwCursorShell::SwCursorShell( SwCursorShell& rShell, vcl::Window *pInitWin )
     m_bSetCursorInReadOnly = true;
     m_pVisibleCursor = new SwVisibleCursor( this );
     m_bMacroExecAllowed = rShell.IsMacroExecAllowed();
-
-#if defined(IOS)
-    HideCursor();
-#endif
 }
 
 /// default constructor
@@ -2706,10 +2702,6 @@ SwCursorShell::SwCursorShell( SwDoc& rDoc, vcl::Window *pInitWin,
 
     m_pVisibleCursor = new SwVisibleCursor( this );
     m_bMacroExecAllowed = true;
-
-#if defined(IOS)
-    HideCursor();
-#endif
 }
 
 SwCursorShell::~SwCursorShell()
