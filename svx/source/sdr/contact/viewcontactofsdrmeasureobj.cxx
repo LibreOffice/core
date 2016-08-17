@@ -67,22 +67,22 @@ namespace sdr
 
             switch(static_cast<const SdrMeasureTextHPosItem&>(rItemSet.Get(SDRATTR_MEASURETEXTHPOS)).GetValue())
             {
-                case SDRMEASURE_TEXTLEFTOUTSIDE :
+                case SdrMeasureTextHPos::LeftOutside :
                 {
                     aMTPHor = drawinglayer::primitive2d::MEASURETEXTPOSITION_NEGATIVE;
                     break;
                 }
-                case SDRMEASURE_TEXTINSIDE :
+                case SdrMeasureTextHPos::Inside :
                 {
                     aMTPHor = drawinglayer::primitive2d::MEASURETEXTPOSITION_CENTERED;
                     break;
                 }
-                case SDRMEASURE_TEXTRIGHTOUTSIDE :
+                case SdrMeasureTextHPos::RightOutside :
                 {
                     aMTPHor = drawinglayer::primitive2d::MEASURETEXTPOSITION_POSITIVE;
                     break;
                 }
-                default : // SDRMEASURE_TEXTHAUTO
+                default : // SdrMeasureTextHPos::Auto
                 {
                     break;
                 }
