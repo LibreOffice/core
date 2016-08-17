@@ -45,6 +45,7 @@
 
 #include "quartz/salgdicommon.hxx"
 #include <unordered_map>
+#include <hb-ot.h>
 
 class AquaSalFrame;
 class FontAttributes;
@@ -98,6 +99,8 @@ public:
     void       GetFontMetric( ImplFontMetricDataRef& ) const;
     bool       GetGlyphBoundRect( sal_GlyphId, Rectangle& ) const;
     bool       GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) const;
+    hb_face_t* GetHbFace() const { return mpHbFace; }
+    void       SetHbFace(hb_face_t* pHbFace) const { mpHbFace = pHbFace; }
 
     const CoreTextFontFace*  mpFontData;
     /// <1.0: font is squeezed, >1.0 font is stretched, else 1.0
@@ -109,6 +112,7 @@ public:
 private:
     /// CoreText text style object
     CFMutableDictionaryRef  mpStyleDict;
+    mutable hb_face_t*      mpHbFace;
 
     friend class CTLayout;
     friend class AquaSalGraphics;
