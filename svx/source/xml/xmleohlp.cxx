@@ -139,7 +139,7 @@ SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
     maReplacementGraphicsContainerStorageName( XML_CONTAINERSTORAGE_NAME ),
     maReplacementGraphicsContainerStorageName60( XML_CONTAINERSTORAGE_NAME_60 ),
     mpDocPersist( nullptr ),
-    meCreateMode( EMBEDDEDOBJECTHELPER_MODE_READ ),
+    meCreateMode( SvXMLEmbeddedObjectHelperMode::Read ),
     mpStreamMap( nullptr )
 {
 }
@@ -149,7 +149,7 @@ SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper( ::comphelper::IEmbeddedHel
     maReplacementGraphicsContainerStorageName( XML_CONTAINERSTORAGE_NAME ),
     maReplacementGraphicsContainerStorageName60( XML_CONTAINERSTORAGE_NAME_60 ),
     mpDocPersist( nullptr ),
-    meCreateMode( EMBEDDEDOBJECTHELPER_MODE_READ ),
+    meCreateMode( SvXMLEmbeddedObjectHelperMode::Read ),
     mpStreamMap( nullptr )
 {
     Init( nullptr, rDocPersist, eCreateMode );
@@ -340,7 +340,7 @@ uno::Reference < embed::XStorage > const & SvXMLEmbeddedObjectHelper::ImplGetCon
     {
         if( mxContainerStorage.is() &&
             !maCurContainerStorageName.isEmpty() &&
-            EMBEDDEDOBJECTHELPER_MODE_WRITE == meCreateMode )
+            SvXMLEmbeddedObjectHelperMode::Write == meCreateMode )
         {
             uno::Reference < embed::XTransactedObject > xTrans( mxContainerStorage, uno::UNO_QUERY );
             if ( xTrans.is() )
@@ -349,7 +349,7 @@ uno::Reference < embed::XStorage > const & SvXMLEmbeddedObjectHelper::ImplGetCon
 
         if( !rStorageName.isEmpty() && mxRootStorage.is() )
         {
-            sal_Int32 nMode = EMBEDDEDOBJECTHELPER_MODE_WRITE == meCreateMode
+            sal_Int32 nMode = SvXMLEmbeddedObjectHelperMode::Write == meCreateMode
                                     ? ::embed::ElementModes::READWRITE
                                     : ::embed::ElementModes::READ;
             mxContainerStorage = mxRootStorage->openStorageElement( rStorageName,
@@ -455,10 +455,10 @@ OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
     OUString aContainerStorageName, aObjectStorageName;
     if( !ImplGetStorageNames( rURLStr, aContainerStorageName,
                               aObjectStorageName,
-                              EMBEDDEDOBJECTHELPER_MODE_WRITE == meCreateMode ) )
+                              SvXMLEmbeddedObjectHelperMode::Write == meCreateMode ) )
         return sRetURL;
 
-    if( EMBEDDEDOBJECTHELPER_MODE_READ == meCreateMode )
+    if( SvXMLEmbeddedObjectHelperMode::Read == meCreateMode )
     {
         OutputStorageWrapper_Impl *pOut = nullptr;
         SvXMLEmbeddedObjectHelper_Impl::iterator aIter;
@@ -635,7 +635,7 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
 {
     MutexGuard          aGuard( maMutex );
     Any aRet;
-    if( EMBEDDEDOBJECTHELPER_MODE_READ == meCreateMode )
+    if( SvXMLEmbeddedObjectHelperMode::Read == meCreateMode )
     {
         Reference < XOutputStream > xStrm;
         if( mpStreamMap )
@@ -739,7 +739,7 @@ sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasByName( const OUString& rURLStr 
     throw (RuntimeException, std::exception)
 {
     MutexGuard          aGuard( maMutex );
-    if( EMBEDDEDOBJECTHELPER_MODE_READ == meCreateMode )
+    if( SvXMLEmbeddedObjectHelperMode::Read == meCreateMode )
     {
         return true;
     }
@@ -762,7 +762,7 @@ Type SAL_CALL SvXMLEmbeddedObjectHelper::getElementType()
     throw (RuntimeException, std::exception)
 {
     MutexGuard          aGuard( maMutex );
-    if( EMBEDDEDOBJECTHELPER_MODE_READ == meCreateMode )
+    if( SvXMLEmbeddedObjectHelperMode::Read == meCreateMode )
         return cppu::UnoType<XOutputStream>::get();
     else
         return cppu::UnoType<XInputStream>::get();
@@ -772,7 +772,7 @@ sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasElements()
     throw (RuntimeException, std::exception)
 {
     MutexGuard          aGuard( maMutex );
-    if( EMBEDDEDOBJECTHELPER_MODE_READ == meCreateMode )
+    if( SvXMLEmbeddedObjectHelperMode::Read == meCreateMode )
     {
         return true;
     }

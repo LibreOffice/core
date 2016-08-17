@@ -96,7 +96,7 @@ sal_uInt32 SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >&
     {
         pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
                                          xStg, *pPersist,
-                                         EMBEDDEDOBJECTHELPER_MODE_WRITE,
+                                         SvXMLEmbeddedObjectHelperMode::Write,
                                          false );
         xObjectResolver = pObjectHelper;
     }

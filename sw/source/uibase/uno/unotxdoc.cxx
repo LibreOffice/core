@@ -1663,7 +1663,7 @@ css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
     {
         return static_cast<cppu::OWeakObject *>(
             new SvXMLEmbeddedObjectHelper(
-                *pDocShell, EMBEDDEDOBJECTHELPER_MODE_READ));
+                *pDocShell, SvXMLEmbeddedObjectHelperMode::Read));
     }
     if (rServiceName == "com.sun.star.text.DocumentSettings")
     {

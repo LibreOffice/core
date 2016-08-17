@@ -960,7 +960,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
         if( nullptr == pPersist )
             throw lang::DisposedException();
 
-        return static_cast<cppu::OWeakObject *>(new SvXMLEmbeddedObjectHelper( *pPersist, EMBEDDEDOBJECTHELPER_MODE_WRITE ));
+        return static_cast<cppu::OWeakObject *>(new SvXMLEmbeddedObjectHelper( *pPersist, SvXMLEmbeddedObjectHelperMode::Write ));
     }
 
     if( aServiceSpecifier == "com.sun.star.document.ImportEmbeddedObjectResolver" )
@@ -969,7 +969,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
         if( nullptr == pPersist )
             throw lang::DisposedException();
 
-        return static_cast<cppu::OWeakObject *>(new SvXMLEmbeddedObjectHelper( *pPersist, EMBEDDEDOBJECTHELPER_MODE_READ ));
+        return static_cast<cppu::OWeakObject *>(new SvXMLEmbeddedObjectHelper( *pPersist, SvXMLEmbeddedObjectHelperMode::Read ));
     }
 
     uno::Reference< uno::XInterface > xRet;

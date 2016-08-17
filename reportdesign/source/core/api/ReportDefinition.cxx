@@ -1345,7 +1345,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     SvXMLGraphicHelper* pGraphicHelper = SvXMLGraphicHelper::Create(_xStorageToSaveTo,SvXMLGraphicHelperMode::Write);
     xGrfResolver = pGraphicHelper;
     pGraphicHelper->release();
-    SvXMLEmbeddedObjectHelper* pEmbeddedObjectHelper = SvXMLEmbeddedObjectHelper::Create( _xStorageToSaveTo,*this, EMBEDDEDOBJECTHELPER_MODE_WRITE );
+    SvXMLEmbeddedObjectHelper* pEmbeddedObjectHelper = SvXMLEmbeddedObjectHelper::Create( _xStorageToSaveTo,*this, SvXMLEmbeddedObjectHelperMode::Write );
     xObjectResolver = pEmbeddedObjectHelper;
     pEmbeddedObjectHelper->release();
 
@@ -2068,7 +2068,7 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstanceWith
                 aValue.Value >>= xStorage;
         }
         m_pImpl->m_pObjectContainer->SwitchPersistence(xStorage);
-        xRet = static_cast< ::cppu::OWeakObject* >(SvXMLEmbeddedObjectHelper::Create( xStorage,*this, EMBEDDEDOBJECTHELPER_MODE_READ ));
+        xRet = static_cast< ::cppu::OWeakObject* >(SvXMLEmbeddedObjectHelper::Create( xStorage,*this, SvXMLEmbeddedObjectHelperMode::Read ));
     }
     return xRet;
 }
@@ -2155,9 +2155,9 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
         return m_pImpl->m_xMarkerTable;
     }
     else if ( aServiceSpecifier == "com.sun.star.document.ImportEmbeddedObjectResolver" )
-        return static_cast< ::cppu::OWeakObject* >(SvXMLEmbeddedObjectHelper::Create( m_pImpl->m_xStorage,*this, EMBEDDEDOBJECTHELPER_MODE_READ ));
+        return static_cast< ::cppu::OWeakObject* >(SvXMLEmbeddedObjectHelper::Create( m_pImpl->m_xStorage,*this, SvXMLEmbeddedObjectHelperMode::Read ));
     else if ( aServiceSpecifier == "com.sun.star.document.ExportEmbeddedObjectResolver" )
-        return static_cast< ::cppu::OWeakObject* >(SvXMLEmbeddedObjectHelper::Create( m_pImpl->m_xStorage,*this, EMBEDDEDOBJECTHELPER_MODE_WRITE ));
+        return static_cast< ::cppu::OWeakObject* >(SvXMLEmbeddedObjectHelper::Create( m_pImpl->m_xStorage,*this, SvXMLEmbeddedObjectHelperMode::Write ));
     else if ( aServiceSpecifier == "com.sun.star.document.ImportGraphicObjectResolver" )
     {
         SvXMLGraphicHelper* pGraphicHelper = SvXMLGraphicHelper::Create(m_pImpl->m_xStorage,SvXMLGraphicHelperMode::Write);

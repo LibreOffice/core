@@ -262,7 +262,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         {
             pEmbeddedResolver = SvXMLEmbeddedObjectHelper::Create(
                                             *pPersist,
-                                            EMBEDDEDOBJECTHELPER_MODE_WRITE );
+                                            SvXMLEmbeddedObjectHelperMode::Write );
             Reference< XEmbeddedObjectResolver > xEmbeddedResolver( pEmbeddedResolver );
             SetEmbeddedResolver( xEmbeddedResolver );
         }

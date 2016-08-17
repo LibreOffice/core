@@ -528,7 +528,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     {
         pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
                                         xStorage, *pPersist,
-                                        EMBEDDEDOBJECTHELPER_MODE_READ,
+                                        SvXMLEmbeddedObjectHelperMode::Read,
                                         false );
         xObjectResolver = pObjectHelper;
     }

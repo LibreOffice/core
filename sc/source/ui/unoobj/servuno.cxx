@@ -492,11 +492,11 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             break;
         case Type::EXPORT_EOR:
             if (pDocShell)
-                xRet.set(static_cast<cppu::OWeakObject *>(new SvXMLEmbeddedObjectHelper( *pDocShell, EMBEDDEDOBJECTHELPER_MODE_WRITE )));
+                xRet.set(static_cast<cppu::OWeakObject *>(new SvXMLEmbeddedObjectHelper( *pDocShell, SvXMLEmbeddedObjectHelperMode::Write )));
             break;
         case Type::IMPORT_EOR:
             if (pDocShell)
-                xRet.set(static_cast<cppu::OWeakObject *>(new SvXMLEmbeddedObjectHelper( *pDocShell, EMBEDDEDOBJECTHELPER_MODE_READ )));
+                xRet.set(static_cast<cppu::OWeakObject *>(new SvXMLEmbeddedObjectHelper( *pDocShell, SvXMLEmbeddedObjectHelperMode::Read )));
             break;
         case Type::VALBIND:
         case Type::LISTCELLBIND:

@@ -700,7 +700,7 @@ void SwXMLImport::startDocument()
         {
             m_pEmbeddedResolver = SvXMLEmbeddedObjectHelper::Create(
                                             *pPersist,
-                                            EMBEDDEDOBJECTHELPER_MODE_READ );
+                                            SvXMLEmbeddedObjectHelperMode::Read );
             Reference< document::XEmbeddedObjectResolver > xEmbeddedResolver( m_pEmbeddedResolver );
             SetEmbeddedResolver( xEmbeddedResolver );
         }
