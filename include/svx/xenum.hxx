@@ -23,8 +23,8 @@
 
 enum XFormTextStyle     { XFT_ROTATE, XFT_UPRIGHT, XFT_SLANTX, XFT_SLANTY,
                           XFT_NONE };
-enum XFormTextAdjust    { XFT_LEFT, XFT_RIGHT, XFT_AUTOSIZE, XFT_CENTER };
-enum class XFormTextShadow  { NONE, Normal, Slant};
+enum class XFormTextAdjust  { Left, Right, AutoSize, Center };
+enum class XFormTextShadow  { NONE, Normal, Slant };
 enum class XBitmapType      { Import, N8x8 };
 
 

@@ -34,7 +34,7 @@ class SVX_DLLPUBLIC XFormTextAdjustItem : public SfxEnumItem
 public:
                             static SfxPoolItem* CreateDefault();
 
-                            XFormTextAdjustItem(XFormTextAdjust = XFT_CENTER);
+                            XFormTextAdjustItem(XFormTextAdjust = XFormTextAdjust::Center);
                             XFormTextAdjustItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
     virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;

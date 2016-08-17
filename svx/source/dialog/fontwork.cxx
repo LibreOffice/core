@@ -387,15 +387,15 @@ void SvxFontWorkDialog::SetAdjust_Impl(const XFormTextAdjustItem* pItem)
         m_pTbxAdjust->Enable();
         m_pMtrFldDistance->Enable();
 
-        if ( pItem->GetValue() == XFT_LEFT || pItem->GetValue() == XFT_RIGHT )
+        if ( pItem->GetValue() == XFormTextAdjust::Left || pItem->GetValue() == XFormTextAdjust::Right )
         {
-            if ( pItem->GetValue() == XFT_LEFT )    nId = nAdjustLeftId;
+            if ( pItem->GetValue() == XFormTextAdjust::Left )    nId = nAdjustLeftId;
             else                                    nId = nAdjustRightId;
             m_pMtrFldTextStart->Enable();
         }
         else
         {
-            if ( pItem->GetValue() == XFT_CENTER )  nId = nAdjustCenterId;
+            if ( pItem->GetValue() == XFormTextAdjust::Center )  nId = nAdjustCenterId;
             else                                    nId = nAdjustAutoSizeId;
             m_pMtrFldTextStart->Disable();
         }
@@ -673,14 +673,14 @@ IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, SelectAdjustHdl_Impl, ToolBox *, void)
     }
     else if ( nId != nLastAdjustTbxId )
     {
-        XFormTextAdjust eAdjust = XFT_AUTOSIZE;
+        XFormTextAdjust eAdjust = XFormTextAdjust::AutoSize;
 
         if (nId == nAdjustLeftId)
-            eAdjust = XFT_LEFT;
+            eAdjust = XFormTextAdjust::Left;
         else if (nId == nAdjustCenterId)
-            eAdjust = XFT_CENTER;
+            eAdjust = XFormTextAdjust::Center;
         else if (nId == nAdjustRightId)
-            eAdjust = XFT_RIGHT;
+            eAdjust = XFormTextAdjust::Right;
 
         XFormTextAdjustItem aItem(eAdjust);
         GetBindings().GetDispatcher()->ExecuteList(SID_FORMTEXT_ADJUST,

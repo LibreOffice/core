@@ -273,10 +273,10 @@ namespace
             }
 
             if(maSdrFormTextAttribute.getFormTextStart()
-                && (XFT_LEFT == maSdrFormTextAttribute.getFormTextAdjust()
-                    || XFT_RIGHT == maSdrFormTextAttribute.getFormTextAdjust()))
+                && (XFormTextAdjust::Left == maSdrFormTextAttribute.getFormTextAdjust()
+                    || XFormTextAdjust::Right == maSdrFormTextAttribute.getFormTextAdjust()))
             {
-                if(XFT_LEFT == maSdrFormTextAttribute.getFormTextAdjust())
+                if(XFormTextAdjust::Left == maSdrFormTextAttribute.getFormTextAdjust())
                 {
                     fPolyStart += maSdrFormTextAttribute.getFormTextStart();
 
@@ -296,16 +296,16 @@ namespace
                 }
             }
 
-            if(XFT_LEFT != maSdrFormTextAttribute.getFormTextAdjust())
+            if(XFormTextAdjust::Left != maSdrFormTextAttribute.getFormTextAdjust())
             {
                 // calculate total text length of this paragraph, some layout needs to be done
                 const double fParagraphTextLength(getParagraphTextLength(rTextPortions));
 
                 // check if text is too long for paragraph. If yes, handle as if left aligned (default),
-                // but still take care of XFT_AUTOSIZE in that case
+                // but still take care of XFormTextAdjust::AutoSize in that case
                 const bool bTextTooLong(fParagraphTextLength > (fPolyEnd - fPolyStart));
 
-                if(XFT_RIGHT == maSdrFormTextAttribute.getFormTextAdjust())
+                if(XFormTextAdjust::Right == maSdrFormTextAttribute.getFormTextAdjust())
                 {
                     if(!bTextTooLong)
                     {
@@ -313,7 +313,7 @@ namespace
                         fPolyStart += ((fPolyEnd - fPolyStart) - fParagraphTextLength);
                     }
                 }
-                else if(XFT_CENTER == maSdrFormTextAttribute.getFormTextAdjust())
+                else if(XFormTextAdjust::Center == maSdrFormTextAttribute.getFormTextAdjust())
                 {
                     if(!bTextTooLong)
                     {
@@ -321,7 +321,7 @@ namespace
                         fPolyStart += ((fPolyEnd - fPolyStart) - fParagraphTextLength) / 2.0;
                     }
                 }
-                else if(XFT_AUTOSIZE == maSdrFormTextAttribute.getFormTextAdjust())
+                else if(XFormTextAdjust::AutoSize == maSdrFormTextAttribute.getFormTextAdjust())
                 {
                     // if scale, prepare scale factor between curve length and text length
                     if(0.0 != fParagraphTextLength)

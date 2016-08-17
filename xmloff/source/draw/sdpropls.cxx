@@ -679,10 +679,10 @@ static SvXMLEnumMapEntry const pXML_Fontwork_Style_Enum[] =
 
 static SvXMLEnumMapEntry const pXML_Fontwork_Adjust_Enum[] =
 {
-    { XML_LEFT,         0 }, //XFT_LEFT,
-    { XML_RIGHT,        1 }, //XFT_RIGHT,
-    { XML_AUTOSIZE,     2 }, //XFT_AUTOSIZE,
-    { XML_CENTER,       3 }, //XFT_CENTER
+    { XML_LEFT,         0 }, //XFormTextAdjust::Left,
+    { XML_RIGHT,        1 }, //XFormTextAdjust::Right,
+    { XML_AUTOSIZE,     2 }, //XFormTextAdjust::AutoSize,
+    { XML_CENTER,       3 }, //XFormTextAdjust::Center
     { XML_TOKEN_INVALID,0 }
 };
 

@@ -214,7 +214,7 @@ namespace drawinglayer
                 mnFormTextShdwYVal(0),
                 mnFormTextShdwTransp(0),
                 meFormTextStyle(XFT_NONE),
-                meFormTextAdjust(XFT_CENTER),
+                meFormTextAdjust(XFormTextAdjust::Center),
                 meFormTextShadow(XFormTextShadow::NONE),
                 maFormTextShdwColor(),
                 maOutline(),
