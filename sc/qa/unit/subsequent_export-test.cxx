@@ -178,9 +178,7 @@ public:
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
-#if !defined(MACOSX) && !defined(DRAGONFLY)
     CPPUNIT_TEST(testPasswordExport);
-#endif
     CPPUNIT_TEST(testConditionalFormatExportODS);
     CPPUNIT_TEST(testConditionalFormatExportXLSX);
     CPPUNIT_TEST(testColorScaleExportODS);
@@ -352,7 +350,6 @@ void ScExportTest::test()
     xDocSh->DoClose();
 }
 
-#if !defined MACOSX && !defined DRAGONFLY
 void ScExportTest::testPasswordExport()
 {
     ScDocShell* pShell = new ScDocShell(
@@ -363,7 +360,7 @@ void ScExportTest::testPasswordExport()
 
     ScDocument& rDoc = pShell->GetDocument();
 
-    rDoc.SetValue(0,0,0, 1.0);
+    rDoc.SetValue(0, 0, 0, 1.0);
 
     sal_Int32 nFormat = FORMAT_ODS;
     OUString aFilterName(getFileFormats()[nFormat].pFilterName, strlen(getFileFormats()[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
@@ -377,7 +374,6 @@ void ScExportTest::testPasswordExport()
 
     xDocSh->DoClose();
 }
-#endif
 
 void ScExportTest::testConditionalFormatExportODS()
 {
