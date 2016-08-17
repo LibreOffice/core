@@ -89,7 +89,7 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     m_pnGradientListState(&maFixed_ChangeType),
     m_pnHatchingListState(&maFixed_ChangeType),
 
-    m_nPageType(0),
+    m_nPageType(PageType::Area),
     m_nDlgType(0),
     m_nPos(0),
 
@@ -195,7 +195,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
     const SfxUInt16Item* pPageTypeItem = rSet.GetItem<SfxUInt16Item>(SID_PAGE_TYPE, false);
     const SfxUInt16Item* pPosItem = rSet.GetItem<SfxUInt16Item>(SID_TABPAGE_POS, false);
     if (pPageTypeItem)
-        SetPageType(pPageTypeItem->GetValue());
+        SetPageType((PageType) pPageTypeItem->GetValue());
     if (pPosItem)
         SetPos(pPosItem->GetValue());
     if( m_nDlgType == 0 ) // area dialog
@@ -288,32 +288,33 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
             {
                 switch( m_nPageType )
                 {
-                    case PT_GRADIENT:
+                    case PageType::Gradient:
                         m_pTypeLB->SelectEntryPos( drawing::FillStyle_GRADIENT );
                         m_pLbGradient->SelectEntryPos( _nPos );
                         ClickGradientHdl_Impl();
                     break;
 
-                    case PT_HATCH:
+                    case PageType::Hatch:
                         m_pTypeLB->SelectEntryPos( drawing::FillStyle_HATCH );
                         m_pLbHatching->SelectEntryPos( _nPos );
                         ClickHatchingHdl_Impl();
                     break;
 
-                    case PT_BITMAP:
+                    case PageType::Bitmap:
                         m_pTypeLB->SelectEntryPos( drawing::FillStyle_BITMAP );
                         m_pLbBitmap->SelectEntryPos( _nPos );
                         ClickBitmapHdl_Impl();
                     break;
 
-                    case PT_COLOR:
+                    case PageType::Color:
                         m_pTypeLB->SelectEntryPos( drawing::FillStyle_SOLID );
                         m_pLbColor->SelectEntryPos( _nPos );
                         ClickColorHdl_Impl();
                     break;
+                    default: break;
                 }
             }
-            m_nPageType = PT_AREA;
+            m_nPageType = PageType::Area;
         }
     }
 }
@@ -329,7 +330,7 @@ DeactivateRC SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
         {
             case drawing::FillStyle_GRADIENT:
             {
-                        m_nPageType = PT_GRADIENT;
+                        m_nPageType = PageType::Gradient;
                         m_nPos = m_pLbGradient->GetSelectEntryPos();
                         if( nPosOrig != m_nPos )
                             *m_pnGradientListState |= ChangeType::MODIFIED;
@@ -337,7 +338,7 @@ DeactivateRC SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
             break;
             case drawing::FillStyle_HATCH:
             {
-                m_nPageType = PT_HATCH;
+                m_nPageType = PageType::Hatch;
                 m_nPos = m_pLbHatching->GetSelectEntryPos();
                 if( nPosOrig != m_nPos )
                     *m_pnHatchingListState |= ChangeType::MODIFIED;
@@ -345,7 +346,7 @@ DeactivateRC SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
             break;
             case drawing::FillStyle_BITMAP:
             {
-                m_nPageType = PT_BITMAP;
+                m_nPageType = PageType::Bitmap;
                 m_nPos = m_pLbBitmap->GetSelectEntryPos();
                 if( nPosOrig != m_nPos )
                     *m_pnBitmapListState |= ChangeType::MODIFIED;
@@ -353,7 +354,7 @@ DeactivateRC SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
             break;
             case drawing::FillStyle_SOLID:
             {
-                m_nPageType = PT_COLOR;
+                m_nPageType = PageType::Color;
                 m_nPos = m_pLbColor->GetSelectEntryPos();
                 if( nPosOrig != m_nPos )
                     *m_pnColorListState |= ChangeType::MODIFIED;
@@ -532,7 +533,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
            }
            break;
         }
-        rAttrs->Put (SfxUInt16Item(SID_PAGE_TYPE,m_nPageType));
+        rAttrs->Put (SfxUInt16Item(SID_PAGE_TYPE, (sal_uInt16)m_nPageType));
         rAttrs->Put (SfxUInt16Item(SID_TABPAGE_POS,m_nPos));
     }
 
@@ -914,7 +915,7 @@ void SvxAreaTabPage::PageCreated(const SfxAllItemSet& aSet)
     if (pBitmapListItem)
         SetBitmapList(pBitmapListItem->GetBitmapList());
     if (pPageTypeItem)
-        SetPageType(pPageTypeItem->GetValue());
+        SetPageType((PageType) pPageTypeItem->GetValue());
     if (pDlgTypeItem)
         SetDlgType(pDlgTypeItem->GetValue());
     if (pPosItem)

@@ -235,7 +235,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
             else
                 aString += aURL.getBase();
 
-            if ( *m_pPageType == PT_GRADIENT && *m_pPos != LISTBOX_ENTRY_NOTFOUND )
+            if ( *m_pPageType == PageType::Gradient && *m_pPos != LISTBOX_ENTRY_NOTFOUND )
             {
                 sal_uInt16 nId = m_pGradientLB->GetItemId( static_cast<size_t>( *m_pPos ) );
                 m_pGradientLB->SelectItem( nId );
@@ -243,7 +243,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
             // colors could have been deleted
             ChangeGradientHdl_Impl();
 
-            *m_pPageType = PT_GRADIENT;
+            *m_pPageType = PageType::Gradient;
             *m_pPos = LISTBOX_ENTRY_NOTFOUND;
         }
     }
@@ -326,7 +326,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
 
 bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
 {
-    if( m_nDlgType == 0 && *m_pPageType == PT_GRADIENT && !*m_pbAreaTP )
+    if( m_nDlgType == 0 && *m_pPageType == PageType::Gradient && !*m_pbAreaTP )
     {
         // CheckChanges(); <-- duplicate inquiry ?
 

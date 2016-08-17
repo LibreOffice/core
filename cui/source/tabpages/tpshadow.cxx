@@ -56,7 +56,7 @@ SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInA
     m_rOutAttrs           ( rInAttrs ),
     m_eRP                 ( RP_LT ),
     m_pnColorListState    ( nullptr ),
-    m_nPageType           ( 0 ),
+    m_nPageType           ( PageType::Area ),
     m_nDlgType            ( 0 ),
     m_pbAreaTP            ( nullptr ),
     m_aXFillAttr          ( rInAttrs.GetPool() ),
@@ -195,7 +195,7 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
 
     const SfxUInt16Item* pPageTypeItem = rSet.GetItem<SfxUInt16Item>(SID_PAGE_TYPE, false);
     if (pPageTypeItem)
-        SetPageType(pPageTypeItem->GetValue());
+        SetPageType((PageType) pPageTypeItem->GetValue());
 
     if( m_nDlgType == 0 )
     {
@@ -242,7 +242,7 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
                 m_pCtlXRectPreview->SetRectangleAttributes( rAttribs );
                 ModifyShadowHdl_Impl( *m_pMtrTransparent );
             }
-            m_nPageType = PT_SHADOW;
+            m_nPageType = PageType::Shadow;
         }
     }
 }
@@ -361,7 +361,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
         }
     }
 
-    rAttrs->Put (CntUInt16Item(SID_PAGE_TYPE,m_nPageType));
+    rAttrs->Put (CntUInt16Item(SID_PAGE_TYPE, (sal_uInt16)m_nPageType));
 
     return bModified;
 }
@@ -550,7 +550,7 @@ void SvxShadowTabPage::PageCreated(const SfxAllItemSet& aSet)
     if (pColorListItem)
         SetColorList(pColorListItem->GetColorList());
     if (pPageTypeItem)
-        SetPageType(pPageTypeItem->GetValue());
+        SetPageType((PageType) pPageTypeItem->GetValue());
     if (pDlgTypeItem)
         SetDlgType(pDlgTypeItem->GetValue());
     Construct();

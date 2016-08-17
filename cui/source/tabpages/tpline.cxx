@@ -51,6 +51,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/settings.hxx>
+#include <cuitabarea.hxx>
 
 #define MAX_BMP_WIDTH   16
 #define MAX_BMP_HEIGHT  16
@@ -103,7 +104,7 @@ SvxLineTabPage::SvxLineTabPage
      m_pnLineEndListState( nullptr ),
     m_pnDashListState( nullptr ),
     m_pnColorListState( nullptr ),
-    m_nPageType           ( 0 ),
+    m_nPageType( PageType::Area ),
 
     m_nDlgType(0),
     m_pPosDashLb(nullptr),
@@ -555,7 +556,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
 {
     const CntUInt16Item* pPageTypeItem = rSet.GetItem<CntUInt16Item>(SID_PAGE_TYPE, false);
     if (pPageTypeItem)
-        SetPageType(pPageTypeItem->GetValue());
+        SetPageType((PageType) pPageTypeItem->GetValue());
     if( m_nDlgType == 0 && m_pDashList.is() )
     {
         sal_Int32 nPos;
@@ -634,12 +635,12 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         // Evaluate if another TabPage set another fill type
         if( m_pLbLineStyle->GetSelectEntryPos() != 0 )
         {
-            if( m_nPageType == 2 ) // 1
+            if( m_nPageType == PageType::Hatch ) // 1
             {
                 m_pLbLineStyle->SelectEntryPos( *m_pPosDashLb + 2 ); // +2 due to SOLID and INVISIBLE
                 ChangePreviewHdl_Impl( nullptr );
             }
-            if( m_nPageType == 3 )
+            if( m_nPageType == PageType::Bitmap )
             {
                 m_pLbStartStyle->SelectEntryPos( *m_pPosLineEndLb + 1 );// +1 due to SOLID
                 m_pLbEndStyle->SelectEntryPos( *m_pPosLineEndLb + 1 );// +1 due to SOLID
@@ -667,7 +668,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
                 ChangePreviewHdl_Impl( nullptr );
             }
 
-        m_nPageType = 0;
+        m_nPageType = PageType::Area;
     }
     // Page does not yet exist in the ctor, that's why we do it here!
 
@@ -684,7 +685,7 @@ DeactivateRC SvxLineTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( m_nDlgType == 0 ) // Line dialog
     {
-        m_nPageType = 1; // possibly for extensions
+        m_nPageType = PageType::Gradient; // possibly for extensions
         *m_pPosDashLb = m_pLbLineStyle->GetSelectEntryPos() - 2;// First entry SOLID!!!
         sal_Int32 nPos = m_pLbStartStyle->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -706,7 +707,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
     bool    bModified = false;
 
     // To prevent modifications to the list, we do not set other page's items.
-    if( m_nDlgType != 0 || m_nPageType != 2 )
+    if( m_nDlgType != 0 || m_nPageType != PageType::Hatch )
     {
         nPos = m_pLbLineStyle->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND &&
@@ -790,7 +791,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
         }
     }
 
-    if( m_nDlgType != 0 || m_nPageType != 3 )
+    if( m_nDlgType != 0 || m_nPageType != PageType::Bitmap )
     {
         // Line start
         nPos = m_pLbStartStyle->GetSelectEntryPos();
@@ -978,7 +979,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
             }
         }
     }
-    rAttrs->Put (CntUInt16Item(SID_PAGE_TYPE,m_nPageType));
+    rAttrs->Put (CntUInt16Item(SID_PAGE_TYPE, (sal_uInt16)m_nPageType));
     return bModified;
 }
 
@@ -1811,7 +1812,7 @@ void SvxLineTabPage::PageCreated(const SfxAllItemSet& aSet)
     if (pLineEndListItem)
         SetLineEndList(pLineEndListItem->GetLineEndList());
     if (pPageTypeItem)
-        SetPageType(pPageTypeItem->GetValue());
+        SetPageType((PageType) pPageTypeItem->GetValue());
     if (pDlgTypeItem)
         SetDlgType(pDlgTypeItem->GetValue());
     Construct();

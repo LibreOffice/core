@@ -38,6 +38,19 @@
 class SdrModel;
 class SvxBitmapCtl;
 
+enum class PageType
+{
+    Area,
+    Gradient,
+    Hatch,
+    Bitmap,
+    Color,
+    Shadow,
+    Transparence,
+    Unknown = 0xFFFF
+};
+
+
 /************************************************************************/
 
 class SvxAreaTabDialog : public SfxTabDialog
@@ -73,7 +86,7 @@ private:
     ChangeType          mnGradientListState;
     ChangeType          mnHatchingListState;
 
-    sal_uInt16          mnPageType;
+    PageType            mnPageType;
     sal_Int32           mnPos;
     bool                mbAreaTP;
 
@@ -122,7 +135,7 @@ class SvxTransparenceTabPage : public SvxTabPage
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
 
-    sal_uInt16             nPageType;
+    PageType               nPageType;
     sal_uInt16             nDlgType;
 
     // main selection
@@ -184,7 +197,7 @@ public:
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
     virtual void PointChanged(vcl::Window* pWindow, RECT_POINT eRP) override;
 
-    void SetPageType(sal_uInt16 nInType) { nPageType = nInType; }
+    void SetPageType(PageType nInType) { nPageType = nInType; }
     void SetDlgType(sal_uInt16 nInType) { nDlgType = nInType; }
     virtual void PageCreated(const SfxAllItemSet& aSet) override;
 };
@@ -227,7 +240,7 @@ private:
     ChangeType*         m_pnGradientListState;
     ChangeType*         m_pnHatchingListState;
 
-    sal_uInt16 m_nPageType;
+    PageType   m_nPageType;
     sal_uInt16 m_nDlgType;
     sal_Int32  m_nPos;
 
@@ -288,7 +301,7 @@ public:
                 { m_pHatchingList = pHtchLst; }
     void    SetBitmapList( XBitmapListRef const & pBmpLst) { m_pBitmapList = pBmpLst; }
 
-    void    SetPageType( sal_uInt16 nInType ) { m_nPageType = nInType; }
+    void    SetPageType( PageType nInType ) { m_nPageType = nInType; }
     void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
     void    SetPos( sal_uInt16 nInPos ) { m_nPos = nInPos; }
     void    SetAreaTP( bool* pIn ) { m_pbAreaTP = pIn; }
@@ -320,7 +333,7 @@ private:
 
     XColorListRef       m_pColorList;
     ChangeType*         m_pnColorListState;
-    sal_uInt16          m_nPageType;
+    PageType            m_nPageType;
     sal_uInt16          m_nDlgType;
     bool*               m_pbAreaTP;
 
@@ -348,7 +361,7 @@ public:
     virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
 
     void    SetColorList( XColorListRef const & pColorList ) { m_pColorList = pColorList; }
-    void    SetPageType( sal_uInt16 nInType ) { m_nPageType = nInType; }
+    void    SetPageType( PageType nInType ) { m_nPageType = nInType; }
     void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
     void    SetAreaTP( bool* pIn ) { m_pbAreaTP = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
@@ -389,7 +402,7 @@ private:
 
     ChangeType*         m_pnGradientListState;
     ChangeType*         m_pnColorListState;
-    sal_uInt16*         m_pPageType;
+    PageType*           m_pPageType;
     sal_uInt16          m_nDlgType;
     sal_Int32*          m_pPos;
     bool*               m_pbAreaTP;
@@ -433,7 +446,7 @@ public:
     void    SetGradientList( XGradientListRef const & pGrdLst)
                 { m_pGradientList = pGrdLst; }
 
-    void    SetPageType( sal_uInt16* pInType ) { m_pPageType = pInType; }
+    void    SetPageType( PageType* pInType ) { m_pPageType = pInType; }
     void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
     void    SetPos( sal_Int32* pInPos ) { m_pPos = pInPos; }
     void    SetAreaTP( bool* pIn ) { m_pbAreaTP = pIn; }
@@ -469,7 +482,7 @@ private:
 
     ChangeType*         m_pnHatchingListState;
     ChangeType*         m_pnColorListState;
-    sal_uInt16*         m_pPageType;
+    PageType*           m_pPageType;
     sal_uInt16          m_nDlgType;
     sal_Int32*          m_pPos;
     bool*               m_pbAreaTP;
@@ -517,7 +530,7 @@ public:
     void    SetHatchingList( XHatchListRef const & pHtchLst)
                 { m_pHatchingList = pHtchLst; }
 
-    void    SetPageType( sal_uInt16* pInType ) { m_pPageType = pInType; }
+    void    SetPageType( PageType* pInType ) { m_pPageType = pInType; }
     void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
     void    SetPos( sal_Int32* pInPos ) { m_pPos = pInPos; }
     void    SetAreaTP( bool* pIn ) { m_pbAreaTP = pIn; }
@@ -563,7 +576,7 @@ private:
 
     double                     m_fObjectWidth;
     double                     m_fObjectHeight;
-    sal_uInt16*                m_nPageType;
+    PageType*                  m_nPageType;
     sal_uInt16                 m_nDlgType;
     sal_Int32*                 m_nPos;
 
@@ -612,7 +625,7 @@ public:
 
     void    SetBitmapList( const XBitmapListRef& pBmpLst) { m_pBitmapList = pBmpLst; }
 
-    void    SetPageType( sal_uInt16* pInType ) { m_nPageType = pInType; }
+    void    SetPageType( PageType* pInType ) { m_nPageType = pInType; }
     void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
     void    SetPos( sal_Int32* pInPos ) { m_nPos = pInPos; }
     void    SetAreaTP( bool* pIn ) { m_pbAreaTP = pIn; }
@@ -646,7 +659,7 @@ private:
 
     ChangeType*         m_pnPatternListState;
     ChangeType*         m_pnColorListState;
-    sal_uInt16*         m_pPageType;
+    PageType*           m_pPageType;
     sal_uInt16          m_nDlgType;
     sal_Int32*          m_pPos;
     bool*               m_pbAreaTP;
@@ -686,7 +699,7 @@ public:
     void    SetColorList( XColorListRef const & pColorList ) { m_pColorList = pColorList; }
     void    SetPatternList( XPatternListRef const & pPatternList) { m_pPatternList = pPatternList; }
 
-    void    SetPageType( sal_uInt16* pInType ) { m_pPageType = pInType; }
+    void    SetPageType( PageType* pInType ) { m_pPageType = pInType; }
     void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
     void    SetPos( sal_Int32* pInPos ) { m_pPos = pInPos; }
     void    SetAreaTP( bool* pIn ) { m_pbAreaTP = pIn; }
@@ -753,7 +766,7 @@ private:
     XColorListRef         pColorList;
 
     ChangeType*         pnColorListState;
-    sal_uInt16*         pPageType;
+    PageType*           pPageType;
     sal_uInt16          nDlgType;
     sal_Int32*          pPos;
     bool*               pbAreaTP;
@@ -816,7 +829,7 @@ public:
     void    SaveToViewFrame( SfxViewFrame *pViewFrame );
     void    SetupForViewFrame( SfxViewFrame *pViewFrame );
 
-    void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
+    void    SetPageType( PageType* pInType ) { pPageType = pInType; }
     void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
     void    SetPos( sal_Int32* pInPos ) { pPos = pInPos; }
     void    SetAreaTP( bool* pIn ) { pbAreaTP = pIn; }

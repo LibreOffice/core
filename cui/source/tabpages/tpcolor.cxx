@@ -59,12 +59,12 @@ using namespace com::sun::star;
 
 struct SvxColorTabPageShadow
 {
-    sal_uInt16 nUnknownType;
+    PageType nUnknownType;
     sal_Int32  nUnknownPos;
     bool   bIsAreaTP;
     ChangeType nChangeType;
     SvxColorTabPageShadow()
-        : nUnknownType( COLORPAGE_UNKNOWN )
+        : nUnknownType( PageType::Unknown )
         , nUnknownPos( LISTBOX_ENTRY_NOTFOUND )
         , bIsAreaTP( false )
         , nChangeType( ChangeType::NONE )
@@ -268,14 +268,14 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
 
         if( pColorList.is() )
         {
-            if( *pPageType == PT_COLOR && *pPos != LISTBOX_ENTRY_NOTFOUND )
+            if( *pPageType == PageType::Color && *pPos != LISTBOX_ENTRY_NOTFOUND )
             {
                 m_pValSetColorList->SelectItem( m_pValSetColorList->GetItemId( static_cast<size_t>(*pPos) ) );
                 const XColorEntry* pEntry = pColorList->GetColor(*pPos);
                 aPreviousColor = pEntry->GetColor();
                 ChangeColor(pEntry->GetColor());
             }
-            else if( *pPageType == PT_COLOR && *pPos == LISTBOX_ENTRY_NOTFOUND )
+            else if( *pPageType == PageType::Color && *pPos == LISTBOX_ENTRY_NOTFOUND )
             {
                 const SfxPoolItem* pPoolItem = nullptr;
                 if( SfxItemState::SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), true, &pPoolItem ) )
@@ -300,7 +300,7 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
 
             SelectValSetHdl_Impl( m_pValSetColorList );
 
-            *pPageType = PT_COLOR;
+            *pPageType = PageType::Color;
             *pPos = LISTBOX_ENTRY_NOTFOUND;
         }
     }
@@ -357,7 +357,7 @@ long SvxColorTabPage::CheckChanges_Impl()
 bool SvxColorTabPage::FillItemSet( SfxItemSet* rSet )
 {
     if( ( nDlgType != 0 ) ||
-        ( *pPageType == PT_COLOR && !*pbAreaTP ) )
+        ( *pPageType == PageType::Color && !*pbAreaTP ) )
     {
         maPaletteManager.AddRecentColor( aCurrentColor );
         rSet->Put( XFillColorItem( OUString(), aCurrentColor ) );

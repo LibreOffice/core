@@ -226,7 +226,7 @@ void SvxPatternTabPage::ActivatePage( const SfxItemSet&  )
             else
                 aString += aURL.getBase();
 
-            if( *m_pPageType == PT_BITMAP && *m_pPos != LISTBOX_ENTRY_NOTFOUND )
+            if( *m_pPageType == PageType::Bitmap && *m_pPos != LISTBOX_ENTRY_NOTFOUND )
             {
                 sal_uInt16 nId = m_pPatternLB->GetItemId( static_cast<size_t>( *m_pPos ) );
                 m_pPatternLB->SelectItem( nId );
@@ -234,7 +234,7 @@ void SvxPatternTabPage::ActivatePage( const SfxItemSet&  )
             // colors could have been deleted
             ChangePatternHdl_Impl( m_pPatternLB );
 
-            *m_pPageType = PT_BITMAP;
+            *m_pPageType = PageType::Bitmap;
             *m_pPos = LISTBOX_ENTRY_NOTFOUND;
         }
     }
@@ -257,7 +257,7 @@ bool SvxPatternTabPage::FillItemSet( SfxItemSet* _rOutAttrs )
 {
     if( m_nDlgType == 0 && !*m_pbAreaTP ) // area dialog
     {
-        if(PT_BITMAP == *m_pPageType)
+        if(PageType::Bitmap == *m_pPageType)
         {
             _rOutAttrs->Put(XFillStyleItem(drawing::FillStyle_BITMAP));
             size_t nPos = m_pPatternLB->GetSelectItemPos();

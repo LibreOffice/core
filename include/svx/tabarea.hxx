@@ -27,17 +27,6 @@ enum ColorModel
     CM_CMYK // can be extend with more models, e.g. HSV
 };
 
-enum PageType
-{
-    PT_AREA,
-    PT_GRADIENT,
-    PT_HATCH,
-    PT_BITMAP,
-    PT_COLOR,
-    PT_SHADOW,
-    PT_TRANSPARENCE
-};
-
 enum class ChangeType
 {
     NONE                 = 0x00,

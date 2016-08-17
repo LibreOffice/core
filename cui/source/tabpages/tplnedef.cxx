@@ -43,6 +43,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <o3tl/make_unique.hxx>
+#include "cuitabarea.hxx"
 
 #define XOUT_WIDTH    150
 
@@ -192,7 +193,7 @@ void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
         // ActivatePage() is called before the dialog receives PageCreated() !!!
         if( pDashList.is() )
         {
-            if( *pPageType == 1 &&
+            if( *pPageType == PageType::Gradient &&
                 *pPosDashLb != LISTBOX_ENTRY_NOTFOUND )
             {
                 m_pLbLineStyles->SelectEntryPos( *pPosDashLb );
@@ -209,7 +210,7 @@ void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
             aURL.Append( pDashList->GetName() );
             DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
-            *pPageType = 0; // 2
+            *pPageType = PageType::Area; // 2
             *pPosDashLb = LISTBOX_ENTRY_NOTFOUND;
         }
     }
@@ -284,7 +285,7 @@ bool SvxLineDefTabPage::FillItemSet( SfxItemSet* rAttrs )
 {
     if( nDlgType == 0 ) // line dialog
     {
-        if( *pPageType == 2 )
+        if( *pPageType == PageType::Hatch )
         {
             FillDash_Impl();
 
@@ -380,7 +381,7 @@ void SvxLineDefTabPage::SelectLinestyleHdl_Impl(ListBox* p)
         // only if there was an entry selected in the ListBox.
         // If it was called via Reset(), then p is == NULL
         if( p )
-            *pPageType = 2;
+            *pPageType = PageType::Hatch;
     }
 }
 
@@ -581,7 +582,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickAddHdl_Impl, Button*, void)
 
             *pnDashListState |= ChangeType::MODIFIED;
 
-            *pPageType = 2;
+            *pPageType = PageType::Hatch;
 
             // save values for changes recognition (-> method)
             m_pNumFldNumber1->SaveValue();
@@ -655,7 +656,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickModifyHdl_Impl, Button*, void)
 
                 *pnDashListState |= ChangeType::MODIFIED;
 
-                *pPageType = 2;
+                *pPageType = PageType::Hatch;
 
                 // save values for changes recognition (-> method)
                 m_pNumFldNumber1->SaveValue();
@@ -695,7 +696,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickDeleteHdl_Impl, Button*, void)
             m_pLbLineStyles->SelectEntryPos( 0 );
 
             SelectLinestyleHdl_Impl( nullptr );
-            *pPageType = 0; // style should not be taken
+            *pPageType = PageType::Area; // style should not be taken
 
             *pnDashListState |= ChangeType::MODIFIED;
 

@@ -209,7 +209,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
             else
                 aString += aURL.getBase();
 
-            if( *m_pPageType == PT_HATCH && *m_pPos != LISTBOX_ENTRY_NOTFOUND )
+            if( *m_pPageType == PageType::Hatch && *m_pPos != LISTBOX_ENTRY_NOTFOUND )
             {
                 sal_uInt16 nId = m_pHatchLB->GetItemId( static_cast<size_t>( *m_pPos ) );
                 m_pHatchLB->SelectItem( nId );
@@ -217,7 +217,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
             // colors could have been deleted
             ChangeHatchHdl_Impl();
 
-            *m_pPageType = PT_HATCH;
+            *m_pPageType = PageType::Hatch;
             *m_pPos = LISTBOX_ENTRY_NOTFOUND;
         }
     }
@@ -331,7 +331,7 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
 {
     if( m_nDlgType == 0 && !*m_pbAreaTP ) // area dialog
     {
-        if( *m_pPageType == PT_HATCH )
+        if( *m_pPageType == PageType::Hatch )
         {
             // CheckChanges(); <-- duplicate inquiry ?
 

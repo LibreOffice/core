@@ -63,7 +63,7 @@ SvxLineTabDialog::SvxLineTabDialog
     nLineEndListState( ChangeType::NONE ),
     nDashListState( ChangeType::NONE ),
     mnColorListState( ChangeType::NONE ),
-    nPageType( 0 ), // We use it here primarily to get the right attributes with FillItemSet
+    nPageType( PageType::Area ), // We use it here primarily to get the right attributes with FillItemSet
     nPosDashLb( 0 ),
     nPosLineEndLb( 0 ),
     mbAreaTP( false )

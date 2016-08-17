@@ -183,12 +183,12 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet& )
     {
         *m_pbAreaTP = false;
 
-        if( *m_nPageType == PT_BITMAP && *m_nPos != LISTBOX_ENTRY_NOTFOUND )
+        if( *m_nPageType == PageType::Bitmap && *m_nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             sal_uInt16 nId = m_pBitmapLB->GetItemId( static_cast<size_t>( *m_nPos ) );
             m_pBitmapLB->SelectItem(nId);
         }
-        *m_nPageType = PT_BITMAP;
+        *m_nPageType = PageType::Bitmap;
         *m_nPos = LISTBOX_ENTRY_NOTFOUND;
     }
 }
@@ -207,7 +207,7 @@ bool SvxBitmapTabPage::FillItemSet( SfxItemSet* rAttrs )
 {
     if( m_nDlgType == 0 && !*m_pbAreaTP )
     {
-        if(PT_BITMAP == *m_nPageType)
+        if(PageType::Bitmap == *m_nPageType)
         {
             rAttrs->Put(XFillStyleItem(drawing::FillStyle_BITMAP));
             size_t nPos = m_pBitmapLB->GetSelectItemPos();

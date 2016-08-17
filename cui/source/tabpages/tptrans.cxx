@@ -242,7 +242,7 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(vcl::Window* pParent, const SfxIt
                           rInAttrs),
     rOutAttrs           ( rInAttrs ),
     eRP                 ( RP_LT ),
-    nPageType           (0),
+    nPageType           ( PageType::Area ),
     nDlgType            (0),
     bBitmap             ( false ),
     aXFillAttr          ( rInAttrs.GetPool() ),
@@ -397,7 +397,7 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
         rAttrs->Put(aShadowItem);
         bModified = true;
     }
-    rAttrs->Put (CntUInt16Item(SID_PAGE_TYPE,nPageType));
+    rAttrs->Put(CntUInt16Item(SID_PAGE_TYPE, (sal_uInt16)nPageType));
     return bModified;
 }
 
@@ -474,10 +474,10 @@ void SvxTransparenceTabPage::ActivatePage(const SfxItemSet& rSet)
 {
     const CntUInt16Item* pPageTypeItem = rSet.GetItem<CntUInt16Item>(SID_PAGE_TYPE, false);
     if (pPageTypeItem)
-        SetPageType(pPageTypeItem->GetValue());
+        SetPageType((PageType) pPageTypeItem->GetValue());
 
     if(nDlgType == 0) // area dialog
-        nPageType = PT_TRANSPARENCE;
+        nPageType = PageType::Transparence;
 
     InitPreview ( rSet );
 }
@@ -571,7 +571,7 @@ void SvxTransparenceTabPage::PageCreated(const SfxAllItemSet& aSet)
     const SfxUInt16Item* pDlgTypeItem = aSet.GetItem<SfxUInt16Item>(SID_DLG_TYPE, false);
 
     if (pPageTypeItem)
-        SetPageType(pPageTypeItem->GetValue());
+        SetPageType((PageType) pPageTypeItem->GetValue());
     if (pDlgTypeItem)
         SetDlgType(pDlgTypeItem->GetValue());
 }

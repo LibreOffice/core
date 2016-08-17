@@ -24,6 +24,8 @@
 #include <svx/tabline.hxx>
 #include <svx/tabarea.hxx>
 
+enum class PageType;
+
 class SvxLineTabDialog : public SfxTabDialog
 {
     sal_uInt16            m_nLineTabPage;
@@ -49,7 +51,7 @@ private:
     ChangeType          nDashListState;
     ChangeType          mnColorListState;
 
-    sal_uInt16          nPageType;
+    PageType            nPageType;
     sal_Int32           nPosDashLb;
     sal_Int32           nPosLineEndLb;
     bool            mbAreaTP;
@@ -157,7 +159,7 @@ private:
     ChangeType*         m_pnLineEndListState;
     ChangeType*         m_pnDashListState;
     ChangeType*         m_pnColorListState;
-    sal_uInt16          m_nPageType;
+    PageType            m_nPageType;
     sal_uInt16          m_nDlgType;
     sal_Int32*          m_pPosDashLb;
     sal_Int32*          m_pPosLineEndLb;
@@ -224,7 +226,7 @@ public:
     void    SetLineEndList( XLineEndListRef const & pLneEndLst) { m_pLineEndList = pLneEndLst; }
     void    SetObjSelected( bool bHasObj ) { m_bObjSelected = bHasObj; }
 
-    void    SetPageType( sal_uInt16 nInType ) { m_nPageType = nInType; }
+    void    SetPageType( PageType nInType ) { m_nPageType = nInType; }
     void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
     void    SetPosDashLb( sal_Int32* pInPos ) { m_pPosDashLb = pInPos; }
     void    SetPosLineEndLb( sal_Int32* pInPos ) { m_pPosLineEndLb = pInPos; }
@@ -274,7 +276,7 @@ private:
     XDashListRef          pDashList;
 
     ChangeType*         pnDashListState;
-    sal_uInt16*         pPageType;
+    PageType*           pPageType;
     sal_uInt16          nDlgType;
     sal_Int32*          pPosDashLb;
 
@@ -317,7 +319,7 @@ public:
     void    SetDashList( XDashListRef const & pDshLst ) { pDashList = pDshLst; }
     void    SetObjSelected( bool bHasObj ) { bObjSelected = bHasObj; }
 
-    void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
+    void    SetPageType( PageType* pInType ) { pPageType = pInType; }
     void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
     void    SetPosDashLb( sal_Int32* pInPos ) { pPosDashLb = pInPos; }
 
@@ -356,7 +358,7 @@ private:
     XLineEndListRef       pLineEndList;
 
     ChangeType*         pnLineEndListState;
-    sal_uInt16*         pPageType;
+    PageType*           pPageType;
     sal_uInt16          nDlgType;
     sal_Int32*          pPosLineEndLb;
 
@@ -388,7 +390,7 @@ public:
     void    SetPolyObj( const SdrObject* pObj ) { pPolyObj = pObj; }
     void    SetObjSelected( bool bHasObj ) { bObjSelected = bHasObj; }
 
-    void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
+    void    SetPageType( PageType* pInType ) { pPageType = pInType; }
     void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
     void    SetPosLineEndLb( sal_Int32* pInPos ) { pPosLineEndLb = pInPos; }
 

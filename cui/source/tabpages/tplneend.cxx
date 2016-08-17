@@ -34,6 +34,7 @@
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
 #include "cuitabline.hxx"
+#include "cuitabarea.hxx"
 #include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
@@ -174,7 +175,7 @@ void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& )
 
             aURL.Append( pLineEndList->GetName() );
             DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
-            *pPageType = 0; // 3
+            *pPageType = PageType::Area; // 3
             *pPosLineEndLb = LISTBOX_ENTRY_NOTFOUND;
         }
     }
@@ -220,7 +221,7 @@ bool SvxLineEndDefTabPage::FillItemSet( SfxItemSet* rSet )
 {
     if( nDlgType == 0 ) // line dialog
     {
-        if( *pPageType == 3 )
+        if( *pPageType == PageType::Bitmap )
         {
             CheckChanges_Impl();
 
@@ -299,7 +300,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, SelectLineEndHdl_Impl, ListBox&, voi
 
         // Is not set before, in order to only take the new style,
         // if there is an entry selected in the ListBox
-        *pPageType = 3;
+        *pPageType = PageType::Bitmap;
     }
 }
 
@@ -377,7 +378,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickModifyHdl_Impl, Button*, void)
                 // Flag fuer modifiziert setzen
                 *pnLineEndListState |= ChangeType::MODIFIED;
 
-                *pPageType = 3;
+                *pPageType = PageType::Bitmap;
             }
             else
             {
@@ -513,7 +514,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickDeleteHdl_Impl, Button*, void)
             m_pLbLineEnds->SelectEntryPos( 0 );
 
             SelectLineEndHdl_Impl( *m_pLbLineEnds );
-            *pPageType = 0; // LineEnd shall not be taken over
+            *pPageType = PageType::Area; // LineEnd shall not be taken over
 
             *pnLineEndListState |= ChangeType::MODIFIED;
 

@@ -73,7 +73,7 @@ SvxAreaTabDialog::SvxAreaTabDialog
     mnPatternListState ( ChangeType::NONE ),
     mnGradientListState ( ChangeType::NONE ),
     mnHatchingListState ( ChangeType::NONE ),
-    mnPageType( PT_AREA ),
+    mnPageType( PageType::Area ),
     mnPos( 0 ),
     mbAreaTP( false )
 {
