@@ -41,6 +41,7 @@ class CommonSalLayout : public GenericSalLayout
 #ifdef _WIN32
     HDC   mhDC;
     HFONT mhFont;
+    D2DWriteTextOutRenderer* mpD2DRenderer;
 #elif defined(MACOSX) || defined(IOS)
     const CoreTextStyle& mrCoreTextStyle;
 #else
@@ -50,7 +51,7 @@ class CommonSalLayout : public GenericSalLayout
     hb_font_t*              GetHbFont();
 public:
 #if defined(_WIN32)
-    explicit                CommonSalLayout(HDC, WinFontInstance&);
+    explicit                CommonSalLayout(WinSalGraphics*, WinFontInstance&, const WinFontFace&);
     virtual void            InitFont() const override;
 #elif defined(MACOSX) || defined(IOS)
     explicit                CommonSalLayout(const CoreTextStyle&);
@@ -60,7 +61,6 @@ public:
     const ServerFont&       getFontData() const { return mrServerFont; };
 #endif
 
-    virtual                 ~CommonSalLayout();
     void                    SetNeedFallback(ImplLayoutArgs&, sal_Int32, bool);
     void                    AdjustLayout(ImplLayoutArgs&) override;
     virtual bool            LayoutText(ImplLayoutArgs&) override;
