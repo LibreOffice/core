@@ -50,6 +50,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/document/XRedlinesSupplier.hpp>
 
 #include <editeng/fontitem.hxx>
 #include <editeng/flstitem.hxx>
@@ -80,6 +81,7 @@
 #include <comphelper/sequence.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <svl/undo.hxx>
+#include <unotools/datetime.hxx>
 
 #include <app.hxx>
 
@@ -1810,8 +1812,55 @@ static char* getUndoOrRedo(LibreOfficeKitDocument* pThis, UndoOrRedo eCommand)
     return pJson;
 }
 
+/// Returns the JSON representation of the redline stack.
+static char* getTrackedChanges(LibreOfficeKitDocument* pThis)
+{
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    uno::Reference<document::XRedlinesSupplier> xRedlinesSupplier(pDocument->mxComponent, uno::UNO_QUERY);
+    if (!xRedlinesSupplier.is())
+        return nullptr;
+
+    uno::Reference<container::XEnumeration> xRedlines = xRedlinesSupplier->getRedlines()->createEnumeration();
+    boost::property_tree::ptree aRedlines;
+    for (size_t nIndex = 0; xRedlines->hasMoreElements(); ++nIndex)
+    {
+        uno::Reference<beans::XPropertySet> xRedline(xRedlines->nextElement(), uno::UNO_QUERY);
+        boost::property_tree::ptree aRedline;
+        aRedline.put("index", nIndex);
+
+        OUString sAuthor;
+        xRedline->getPropertyValue("RedlineAuthor") >>= sAuthor;
+        aRedline.put("author", sAuthor.toUtf8().getStr());
+
+        OUString sType;
+        xRedline->getPropertyValue("RedlineType") >>= sType;
+        aRedline.put("type", sType.toUtf8().getStr());
+
+        OUString sComment;
+        xRedline->getPropertyValue("RedlineComment") >>= sComment;
+        aRedline.put("comment", sComment.toUtf8().getStr());
+
+        util::DateTime aDateTime;
+        xRedline->getPropertyValue("RedlineDateTime") >>= aDateTime;
+        OUString sDateTime = utl::toISO8601(aDateTime);
+        aRedline.put("dateTime", sDateTime.toUtf8().getStr());
+
+        aRedlines.push_back(std::make_pair("", aRedline));
+    }
+
+    boost::property_tree::ptree aTree;
+    aTree.add_child("redlines", aRedlines);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    char* pJson = strdup(aStream.str().c_str());
+    return pJson;
+}
+
 static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCommand)
 {
+    SolarMutexGuard aGuard;
+
     OString aCommand(pCommand);
     static const OString aViewRowColumnHeaders(".uno:ViewRowColumnHeaders");
     static const OString aCellCursor(".uno:CellCursor");
@@ -1831,6 +1880,10 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     else if (aCommand == ".uno:Redo")
     {
         return getUndoOrRedo(pThis, UndoOrRedo::REDO);
+    }
+    else if (aCommand == ".uno:AcceptTrackedChanges")
+    {
+        return getTrackedChanges(pThis);
     }
     else if (aCommand.startsWith(aViewRowColumnHeaders))
     {
