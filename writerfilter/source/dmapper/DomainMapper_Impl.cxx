@@ -68,6 +68,7 @@
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <oox/mathml/import.hxx>
+#include <rtl/uri.hxx>
 #include <GraphicHelpers.hxx>
 #include <dmapper/GraphicZOrderHelper.hxx>
 
@@ -241,6 +242,13 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bParaHadField(false)
 
 {
+    m_aBaseUrl = rMediaDesc.getUnpackedValueOrDefault(
+        utl::MediaDescriptor::PROP_DOCUMENTBASEURL(), OUString());
+    if (m_aBaseUrl.isEmpty()) {
+        m_aBaseUrl = rMediaDesc.getUnpackedValueOrDefault(
+            utl::MediaDescriptor::PROP_URL(), OUString());
+    }
+
     appendTableManager( );
     GetBodyText();
     uno::Reference< text::XTextAppend > xBodyTextAppend( m_xBodyText, uno::UNO_QUERY );
@@ -3867,6 +3875,20 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                         if (!sURL.isEmpty())
                         {
+                            // Try to make absolute any relative URLs, except
+                            // for relative same-document URLs that only contain
+                            // a fragment part:
+                            if (!sURL.startsWith("#")) {
+                                try {
+                                    sURL = rtl::Uri::convertRelToAbs(
+                                        m_aBaseUrl, sURL);
+                                } catch (rtl::MalformedUriException & e) {
+                                    SAL_WARN(
+                                        "writerfilter.dmapper",
+                                        "MalformedUriException "
+                                            << e.getMessage());
+                                }
+                            }
                             pContext->SetHyperlinkURL(sURL);
                         }
                     }
