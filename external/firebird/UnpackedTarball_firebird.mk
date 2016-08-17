@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 		external/firebird/firebird-Engine12.patch \
 		external/firebird/firebird-rpath.patch.0 \
 		external/firebird/firebird-cloop-compiler.patch.1 \
+		external/firebird/firebird-gcc6.patch.1 \
 ))
 
 ifeq ($(OS)-$(COM),WNT-MSC)
