@@ -535,7 +535,7 @@ endif
 
 vcl_headless_code= \
     vcl/headless/svpframe \
-    $(call gb_Helper_optional,CAIRO, \
+    $(if $(filter-out IOS,$(OS)), \
 	    vcl/headless/svpbmp \
 		vcl/headless/svpgdi \
 	    vcl/headless/svpdata) \
