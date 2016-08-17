@@ -1571,11 +1571,11 @@ bool ImpEdgeHdl::IsHorzDrag() const
     SdrEdgeKind eEdgeKind = static_cast<const SdrEdgeKindItem&>(pEdge->GetObjectItem(SDRATTR_EDGEKIND)).GetValue();
 
     const SdrEdgeInfoRec& rInfo=pEdge->aEdgeInfo;
-    if (eEdgeKind==SDREDGE_ORTHOLINES || eEdgeKind==SDREDGE_BEZIER)
+    if (eEdgeKind==SdrEdgeKind::OrthoLines || eEdgeKind==SdrEdgeKind::Bezier)
     {
         return !rInfo.ImpIsHorzLine(eLineCode,*pEdge->pEdgeTrack);
     }
-    else if (eEdgeKind==SDREDGE_THREELINES)
+    else if (eEdgeKind==SdrEdgeKind::ThreeLines)
     {
         long nAngle=nObjHdlNum==2 ? rInfo.nAngle1 : rInfo.nAngle2;
         if (nAngle==0 || nAngle==18000)

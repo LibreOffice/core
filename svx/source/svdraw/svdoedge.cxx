@@ -190,7 +190,7 @@ void SdrEdgeObj::ImpSetAttrToEdgeInfo()
     sal_Int32 nVal2 = static_cast<const SdrMetricItem&>(rSet.Get(SDRATTR_EDGELINE2DELTA)).GetValue();
     sal_Int32 nVal3 = static_cast<const SdrMetricItem&>(rSet.Get(SDRATTR_EDGELINE3DELTA)).GetValue();
 
-    if(eKind == SDREDGE_ORTHOLINES || eKind == SDREDGE_BEZIER)
+    if(eKind == SdrEdgeKind::OrthoLines || eKind == SdrEdgeKind::Bezier)
     {
         sal_Int32 nVals[3] = { nVal1, nVal2, nVal3 };
         sal_uInt16 n = 0;
@@ -225,7 +225,7 @@ void SdrEdgeObj::ImpSetAttrToEdgeInfo()
             n++;
         }
     }
-    else if(eKind == SDREDGE_THREELINES)
+    else if(eKind == SdrEdgeKind::ThreeLines)
     {
         bool bHor1 = aEdgeInfo.nAngle1 == 0 || aEdgeInfo.nAngle1 == 18000;
         bool bHor2 = aEdgeInfo.nAngle2 == 0 || aEdgeInfo.nAngle2 == 18000;
@@ -263,7 +263,7 @@ void SdrEdgeObj::ImpSetEdgeInfoToAttr()
     sal_Int32 nVals[3] = { nVal1, nVal2, nVal3 };
     sal_uInt16 n = 0;
 
-    if(eKind == SDREDGE_ORTHOLINES || eKind == SDREDGE_BEZIER)
+    if(eKind == SdrEdgeKind::OrthoLines || eKind == SdrEdgeKind::Bezier)
     {
         if(aEdgeInfo.nObj1Lines >= 2 && n < 3)
         {
@@ -295,7 +295,7 @@ void SdrEdgeObj::ImpSetEdgeInfoToAttr()
             n++;
         }
     }
-    else if(eKind == SDREDGE_THREELINES)
+    else if(eKind == SdrEdgeKind::ThreeLines)
     {
         bool bHor1 = aEdgeInfo.nAngle1 == 0 || aEdgeInfo.nAngle1 == 18000;
         bool bHor2 = aEdgeInfo.nAngle2 == 0 || aEdgeInfo.nAngle2 == 18000;
@@ -845,7 +845,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
     Rectangle aBewareRect1(rBewareRect1);
     Rectangle aBewareRect2(rBewareRect2);
     Point aMeeting((aPt1.X()+aPt2.X()+1)/2,(aPt1.Y()+aPt2.Y()+1)/2);
-    if (eKind==SDREDGE_ONELINE) {
+    if (eKind==SdrEdgeKind::OneLine) {
         XPolygon aXP(2);
         aXP[0]=rPt1;
         aXP[1]=rPt2;
@@ -853,7 +853,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
             *pnQuality=std::abs(rPt1.X()-rPt2.X())+std::abs(rPt1.Y()-rPt2.Y());
         }
         return aXP;
-    } else if (eKind==SDREDGE_THREELINES) {
+    } else if (eKind==SdrEdgeKind::ThreeLines) {
         XPolygon aXP(4);
         aXP[0]=rPt1;
         aXP[1]=rPt1;
@@ -1448,7 +1448,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         }
     }
     // make the connector a bezier curve, if appropriate
-    if (eKind==SDREDGE_BEZIER && nPointCount>2) {
+    if (eKind==SdrEdgeKind::Bezier && nPointCount>2) {
         Point* pPt1=&aXP1[0];
         Point* pPt2=&aXP1[1];
         Point* pPt3=&aXP1[nPointCount-2];
@@ -1718,14 +1718,14 @@ sal_uInt32 SdrEdgeObj::GetHdlCount() const
     {
         nHdlAnz = 2;
 
-        if ((eKind==SDREDGE_ORTHOLINES || eKind==SDREDGE_BEZIER) && nPointCount >= 4)
+        if ((eKind==SdrEdgeKind::OrthoLines || eKind==SdrEdgeKind::Bezier) && nPointCount >= 4)
         {
             sal_uInt32 nO1(aEdgeInfo.nObj1Lines > 0 ? aEdgeInfo.nObj1Lines - 1 : 0);
             sal_uInt32 nO2(aEdgeInfo.nObj2Lines > 0 ? aEdgeInfo.nObj2Lines - 1 : 0);
             sal_uInt32 nM(aEdgeInfo.nMiddleLine != 0xFFFF ? 1 : 0);
             nHdlAnz += nO1 + nO2 + nM;
         }
-        else if (eKind==SDREDGE_THREELINES && nPointCount == 4)
+        else if (eKind==SdrEdgeKind::ThreeLines && nPointCount == 4)
         {
             if(GetConnectedNode(true))
                 nHdlAnz++;
@@ -1751,7 +1751,7 @@ SdrHdl* SdrEdgeObj::GetHdl(sal_uInt32 nHdlNum) const
             if (aCon2.pObj!=nullptr && aCon2.bBestVertex) pHdl->Set1PixMore();
         } else {
             SdrEdgeKind eKind=static_cast<const SdrEdgeKindItem&>(GetObjectItem(SDRATTR_EDGEKIND)).GetValue();
-            if (eKind==SDREDGE_ORTHOLINES || eKind==SDREDGE_BEZIER) {
+            if (eKind==SdrEdgeKind::OrthoLines || eKind==SdrEdgeKind::Bezier) {
                 sal_uInt32 nO1(aEdgeInfo.nObj1Lines > 0 ? aEdgeInfo.nObj1Lines - 1 : 0);
                 sal_uInt32 nO2(aEdgeInfo.nObj2Lines > 0 ? aEdgeInfo.nObj2Lines - 1 : 0);
                 sal_uInt32 nM(aEdgeInfo.nMiddleLine != 0xFFFF ? 1 : 0);
@@ -1786,7 +1786,7 @@ SdrHdl* SdrEdgeObj::GetHdl(sal_uInt32 nHdlNum) const
                     delete pHdl;
                     pHdl=nullptr;
                 }
-            } else if (eKind==SDREDGE_THREELINES) {
+            } else if (eKind==SdrEdgeKind::ThreeLines) {
                 sal_uInt32 nNum(nHdlNum);
                 if (GetConnectedNode(true)==nullptr) nNum++;
                 Point aPos((*pEdgeTrack)[(sal_uInt16)nNum-1]);

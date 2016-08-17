@@ -1587,11 +1587,11 @@ bool SdrEdgeKindItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 
     switch( GetValue() )
     {
-        case SDREDGE_ORTHOLINES :   eCT = drawing::ConnectorType_STANDARD; break;
-        case SDREDGE_THREELINES :   eCT = drawing::ConnectorType_LINES; break;
-        case SDREDGE_ONELINE :      eCT = drawing::ConnectorType_LINE;  break;
-        case SDREDGE_BEZIER :       eCT = drawing::ConnectorType_CURVE; break;
-        case SDREDGE_ARC :          eCT = drawing::ConnectorType_CURVE; break;
+        case SdrEdgeKind::OrthoLines :   eCT = drawing::ConnectorType_STANDARD; break;
+        case SdrEdgeKind::ThreeLines :   eCT = drawing::ConnectorType_LINES; break;
+        case SdrEdgeKind::OneLine :      eCT = drawing::ConnectorType_LINE;  break;
+        case SdrEdgeKind::Bezier :       eCT = drawing::ConnectorType_CURVE; break;
+        case SdrEdgeKind::Arc :          eCT = drawing::ConnectorType_CURVE; break;
         default:
             OSL_FAIL( "SdrEdgeKindItem::QueryValue : unknown enum" );
     }
@@ -1613,13 +1613,13 @@ bool SdrEdgeKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
         eCT = (drawing::ConnectorType)nEnum;
     }
 
-    SdrEdgeKind eEK = SDREDGE_ORTHOLINES;
+    SdrEdgeKind eEK = SdrEdgeKind::OrthoLines;
     switch( eCT )
     {
-        case drawing::ConnectorType_STANDARD :  eEK = SDREDGE_ORTHOLINES;   break;
-        case drawing::ConnectorType_CURVE :     eEK = SDREDGE_BEZIER;       break;
-        case drawing::ConnectorType_LINE :       eEK = SDREDGE_ONELINE;     break;
-        case drawing::ConnectorType_LINES :      eEK = SDREDGE_THREELINES;   break;
+        case drawing::ConnectorType_STANDARD :  eEK = SdrEdgeKind::OrthoLines;   break;
+        case drawing::ConnectorType_CURVE :     eEK = SdrEdgeKind::Bezier;       break;
+        case drawing::ConnectorType_LINE :       eEK = SdrEdgeKind::OneLine;     break;
+        case drawing::ConnectorType_LINES :      eEK = SdrEdgeKind::ThreeLines;   break;
         default:
             OSL_FAIL( "SdrEdgeKindItem::PuValue : unknown enum" );
     }

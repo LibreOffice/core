@@ -4741,15 +4741,15 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         {
                             case mso_cxstyleBent:
                             {
-                                aSet.Put( SdrEdgeKindItem( SDREDGE_ORTHOLINES ) );
+                                aSet.Put( SdrEdgeKindItem( SdrEdgeKind::OrthoLines ) );
                                 n1HorzDist = n1VertDist = n2HorzDist = n2VertDist = 630;
                             }
                             break;
                             case mso_cxstyleCurved:
-                                aSet.Put( SdrEdgeKindItem( SDREDGE_BEZIER ) );
+                                aSet.Put( SdrEdgeKindItem( SdrEdgeKind::Bezier ) );
                             break;
                             default: // mso_cxstyleStraight || mso_cxstyleNone
-                                aSet.Put( SdrEdgeKindItem( SDREDGE_ONELINE ) );
+                                aSet.Put( SdrEdgeKindItem( SdrEdgeKind::OneLine ) );
                             break;
                         }
                         aSet.Put( SdrEdgeNode1HorzDistItem( n1HorzDist ) );

@@ -824,11 +824,11 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
         case SDRATTR_EDGELINE3DELTA: {
             if (ImpGetItem(*pSet,SDRATTR_EDGEKIND,pItem)) {
                 SdrEdgeKind eKind=static_cast<const SdrEdgeKindItem*>(pItem)->GetValue();
-                if (eKind==SDREDGE_THREELINES) {
+                if (eKind==SdrEdgeKind::ThreeLines) {
                     if (nWhich>SDRATTR_EDGELINE2DELTA) return true;
                     else return false;
                 }
-                if (eKind!=SDREDGE_ORTHOLINES && eKind!=SDREDGE_BEZIER) return true;
+                if (eKind!=SdrEdgeKind::OrthoLines && eKind!=SdrEdgeKind::Bezier) return true;
             }
             if (ImpGetItem(*pSet,SDRATTR_EDGELINEDELTAANZ,pItem)) {
                 sal_uInt16 nCount=static_cast<const SdrEdgeLineDeltaCountItem*>(pItem)->GetValue();

@@ -427,7 +427,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
              nSlotId == SID_CONNECTOR_LINE_CIRCLES)
     {
         // direct connector
-        rAttr.Put(SdrEdgeKindItem(SDREDGE_ONELINE));
+        rAttr.Put(SdrEdgeKindItem(SdrEdgeKind::OneLine));
     }
     else if (nSlotId == SID_CONNECTOR_LINES              ||
              nSlotId == SID_CONNECTOR_LINES_ARROW_START  ||
@@ -438,7 +438,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
              nSlotId == SID_CONNECTOR_LINES_CIRCLES)
     {
         // line connector
-        rAttr.Put(SdrEdgeKindItem(SDREDGE_THREELINES));
+        rAttr.Put(SdrEdgeKindItem(SdrEdgeKind::ThreeLines));
     }
     else if (nSlotId == SID_CONNECTOR_CURVE              ||
              nSlotId == SID_CONNECTOR_CURVE_ARROW_START  ||
@@ -449,7 +449,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
              nSlotId == SID_CONNECTOR_CURVE_CIRCLES)
     {
         // curve connector
-        rAttr.Put(SdrEdgeKindItem(SDREDGE_BEZIER));
+        rAttr.Put(SdrEdgeKindItem(SdrEdgeKind::Bezier));
     }
     else if ( nSlotId == SID_DRAW_CAPTION || nSlotId == SID_DRAW_CAPTION_VERTICAL )
     {
