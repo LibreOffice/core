@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa6399be_8e318bef",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2016-08-17T13:15:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa6399be_03871410",
+      "revId": "26da418d58cdfdd1f5d52dc4d6df4582fee228db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_c38c3c38",
         "filename": "cui/source/options/personalization.cxx",
         "patchSetId": 3
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "fa6399be_0e73bbb2",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2016-08-17T13:15:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa6399be_c38c3c38",
+      "range": {
+        "startLine": 74,
+        "startChar": 38,
+        "endLine": 74,
+        "endChar": 101
+      },
+      "revId": "26da418d58cdfdd1f5d52dc4d6df4582fee228db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_8373244d",
         "filename": "cui/source/options/personalization.hxx",
         "patchSetId": 3
@@ -53,6 +95,24 @@
       "writtenOn": "2016-08-16T20:03:53Z",
       "side": 1,
       "message": "Please move local defines after all includes.\nApart from that, instead of a define this can be a const size_t value local to class SelectPersonaDialog.",
+      "revId": "26da418d58cdfdd1f5d52dc4d6df4582fee228db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_c31c3c7a",
+        "filename": "cui/source/options/personalization.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2016-08-17T13:15:24Z",
+      "side": 1,
+      "message": "Done. Moved the define to proper place.",
+      "parentUuid": "fa6399be_8373244d",
       "revId": "26da418d58cdfdd1f5d52dc4d6df4582fee228db",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
