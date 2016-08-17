@@ -7273,6 +7273,7 @@ SfxBoolItem SpellingAndGrammarDialog FN_SPELL_GRAMMAR_DIALOG
 ]
 
 SfxVoidItem AcceptTrackedChange FN_REDLINE_ACCEPT_DIRECT
+( SfxUInt16Item AcceptTrackedChange FN_REDLINE_ACCEPT_DIRECT )
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -7291,6 +7292,7 @@ SfxVoidItem AcceptTrackedChange FN_REDLINE_ACCEPT_DIRECT
 ]
 
 SfxVoidItem RejectTrackedChange FN_REDLINE_REJECT_DIRECT
+( SfxUInt16Item RejectTrackedChange FN_REDLINE_REJECT_DIRECT )
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

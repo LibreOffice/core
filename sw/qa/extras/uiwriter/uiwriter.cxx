@@ -202,6 +202,7 @@ public:
     void testTdf84695();
     void testTdf84695NormalChar();
     void testTableStyleUndo();
+    void testRedlineParam();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -305,6 +306,7 @@ public:
     CPPUNIT_TEST(testTdf84695);
     CPPUNIT_TEST(testTdf84695NormalChar);
     CPPUNIT_TEST(testTableStyleUndo);
+    CPPUNIT_TEST(testRedlineParam);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3822,6 +3824,37 @@ void SwUiWriterTest::testTableStyleUndo()
     pStyle = pDoc->GetTableStyles().FindAutoFormat("Test Style");
     CPPUNIT_ASSERT(pStyle);
     CPPUNIT_ASSERT(pStyle->GetBoxFormat(0).GetBackground() == aBackground2);
+}
+
+void SwUiWriterTest::testRedlineParam()
+{
+    // Create a document with minimal content.
+    SwDoc* pDoc = createDoc();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert("middle");
+
+    // Turn on track changes, and add changes to the start and end of the document.
+    uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
+    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    pWrtShell->SttDoc();
+    pWrtShell->Insert("aaa");
+    pWrtShell->EndDoc();
+    pWrtShell->Insert("zzz");
+
+    // Move the cursor to the start again, and reject the second change.
+    pWrtShell->SttDoc();
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {"RejectTrackedChange", uno::makeAny(static_cast<sal_uInt16>(1))}
+    }));
+    lcl_dispatchCommand(mxComponent, ".uno:RejectTrackedChange", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+
+    // This was 'middlezzz', the uno command rejected the redline under the
+    // cursor, instead of the requested one.
+    CPPUNIT_ASSERT_EQUAL(OUString("aaamiddle"), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

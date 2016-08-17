@@ -466,8 +466,10 @@ static void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
     GtkWidget* pDialog = gtk_dialog_new_with_buttons("Manage Changes",
                                                      GTK_WINDOW (gtk_widget_get_toplevel(GTK_WIDGET(pDocView))),
                                                      GTK_DIALOG_MODAL,
-                                                     "Close",
-                                                     GTK_RESPONSE_OK,
+                                                     "Accept",
+                                                     GTK_RESPONSE_YES,
+                                                     "Reject",
+                                                     GTK_RESPONSE_NO,
                                                      nullptr);
     GtkWidget* pContentArea = gtk_dialog_get_content_area(GTK_DIALOG (pDialog));
 
@@ -486,7 +488,7 @@ static void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
                            -1);
     }
     GtkWidget* pTreeView = gtk_tree_view_new_with_model(GTK_TREE_MODEL(pTreeStore));
-    std::vector<std::string> aColumns = {"Index", "Type", "Comment", "Author", "Timestamp"};
+    std::vector<std::string> aColumns = {"Index", "Author", "Type", "Comment", "Timestamp"};
     for (size_t nColumn = 0; nColumn < aColumns.size(); ++nColumn)
     {
         GtkCellRenderer* pRenderer = gtk_cell_renderer_text_new();
@@ -500,7 +502,38 @@ static void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
 
     // Show the dialog.
     gtk_widget_show_all(pDialog);
-    gtk_dialog_run(GTK_DIALOG(pDialog));
+    gint res = gtk_dialog_run(GTK_DIALOG(pDialog));
+
+    // Dispatch the matching command, if necessary.
+    if (res == GTK_RESPONSE_YES || res == GTK_RESPONSE_NO)
+    {
+        GtkTreeSelection* pSelection = gtk_tree_view_get_selection(GTK_TREE_VIEW(pTreeView));
+        GtkTreeIter aTreeIter;
+        GtkTreeModel* pTreeModel;
+        if (gtk_tree_selection_get_selected(pSelection, &pTreeModel, &aTreeIter))
+        {
+            gint nIndex = 0;
+            // 0: index
+            gtk_tree_model_get(pTreeModel, &aTreeIter, 0, &nIndex, -1);
+            std::string aCommand;
+            if (res == GTK_RESPONSE_YES)
+                aCommand = ".uno:AcceptTrackedChange";
+            else
+                aCommand = ".uno:RejectTrackedChange";
+            // Without the '.uno:' prefix.
+            std::string aKey = aCommand.substr(strlen(".uno:"));
+
+            // Post the command.
+            boost::property_tree::ptree aCommandTree;
+            aCommandTree.put(boost::property_tree::ptree::path_type(aKey + "/type", '/'), "unsigned short");
+            aCommandTree.put(boost::property_tree::ptree::path_type(aKey + "/value", '/'), nIndex);
+
+            aStream.str(std::string());
+            boost::property_tree::write_json(aStream, aCommandTree);
+            std::string aArguments = aStream.str();
+            lok_doc_view_post_command(pDocView, aCommand.c_str(), aArguments.c_str(), false);
+        }
+    }
 
     gtk_widget_destroy(pDialog);
 }
