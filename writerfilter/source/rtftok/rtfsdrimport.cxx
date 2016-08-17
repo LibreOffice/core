@@ -41,6 +41,17 @@
 
 using namespace com::sun::star;
 
+#if defined(ANDROID)
+namespace std
+{
+template<typename T>
+T lround(T x)
+{
+    return ::lround(x);
+}
+}
+#endif
+
 namespace writerfilter
 {
 namespace rtftok
