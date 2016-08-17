@@ -34,7 +34,7 @@ class SVX_DLLPUBLIC XFormTextStyleItem : public SfxEnumItem
 {
 public:
                             static SfxPoolItem* CreateDefault();
-                            XFormTextStyleItem(XFormTextStyle = XFT_NONE);
+                            XFormTextStyleItem(XFormTextStyle = XFormTextStyle::NONE);
                             XFormTextStyleItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
     virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;

@@ -669,11 +669,11 @@ static SvXMLEnumMapEntry const pXML_Measure_VAlign_Enum[] =
 // #FontWork#
 static SvXMLEnumMapEntry const pXML_Fontwork_Style_Enum[] =
 {
-    { XML_ROTATE,       0 }, //XFT_ROTATE,
-    { XML_UPRIGHT,      1 }, //XFT_UPRIGHT,
-    { XML_SLANT_X,      2 }, //XFT_SLANTX,
-    { XML_SLANT_Y,      3 }, //XFT_SLANTY,
-    { XML_NONE,         4 }, //XFT_NONE
+    { XML_ROTATE,       0 }, //XFormTextStyle::Rotate,
+    { XML_UPRIGHT,      1 }, //XFormTextStyle::Upright,
+    { XML_SLANT_X,      2 }, //XFormTextStyle::SlantX,
+    { XML_SLANT_Y,      3 }, //XFormTextStyle::SlantY,
+    { XML_NONE,         4 }, //XFormTextStyle::NONE
     { XML_TOKEN_INVALID,0 }
 };
 
@@ -1453,7 +1453,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
 
         if(pFontWorkStyle->maValue >>= nStyle)
         {
-            if(/*XFT_NONE*/4 == nStyle)
+            if(/*XFormTextStyle::NONE*/4 == nStyle)
             {
                 pFontWorkStyle->mnIndex = -1;
                 if(pFontWorkAdjust)

@@ -114,7 +114,7 @@ namespace drawinglayer
             {
                 if(pSdrText)
                 {
-                    if(XFT_NONE != eFormTextStyle)
+                    if(XFormTextStyle::NONE != eFormTextStyle)
                     {
                         // text on path. Create FormText attribute
                         const SfxItemSet& rSet = pSdrText->GetItemSet();

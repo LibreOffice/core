@@ -403,7 +403,7 @@ namespace
 
                         switch(maSdrFormTextAttribute.getFormTextStyle())
                         {
-                            case XFT_ROTATE :
+                            case XFormTextStyle::Rotate :
                             {
                                 aEndPos = basegfx::tools::getPositionAbsolute(aPolygonCandidate, fPolyStart + fPortionLength, fPolyLength);
                                 const basegfx::B2DVector aDirection(aEndPos - aStartPos);
@@ -412,13 +412,13 @@ namespace
 
                                 break;
                             }
-                            case XFT_UPRIGHT :
+                            case XFormTextStyle::Upright :
                             {
                                 aNewTransformB.translate(aStartPos.getX() - (fPortionLength / 2.0), aStartPos.getY());
 
                                 break;
                             }
-                            case XFT_SLANTX :
+                            case XFormTextStyle::SlantX :
                             {
                                 aEndPos = basegfx::tools::getPositionAbsolute(aPolygonCandidate, fPolyStart + fPortionLength, fPolyLength);
                                 const basegfx::B2DVector aDirection(aEndPos - aStartPos);
@@ -436,7 +436,7 @@ namespace
 
                                 break;
                             }
-                            case XFT_SLANTY :
+                            case XFormTextStyle::SlantY :
                             {
                                 aEndPos = basegfx::tools::getPositionAbsolute(aPolygonCandidate, fPolyStart + fPortionLength, fPolyLength);
                                 const basegfx::B2DVector aDirection(aEndPos - aStartPos);
@@ -455,7 +455,7 @@ namespace
 
                                 break;
                             }
-                            default : break; // XFT_NONE
+                            default : break; // XFormTextStyle::NONE
                         }
 
                         // distance from path?

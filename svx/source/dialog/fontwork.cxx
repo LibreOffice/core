@@ -346,16 +346,16 @@ void SvxFontWorkDialog::SetStyle_Impl(const XFormTextStyleItem* pItem)
 
         switch ( pItem->GetValue() )
         {
-            case XFT_ROTATE : nId = nStyleRotateId;   break;
-            case XFT_UPRIGHT: nId = nStyleUprightId;  break;
-            case XFT_SLANTX : nId = nStyleSlantXId;   break;
-            case XFT_SLANTY : nId = nStyleSlantYId;   break;
+            case XFormTextStyle::Rotate : nId = nStyleRotateId;   break;
+            case XFormTextStyle::Upright: nId = nStyleUprightId;  break;
+            case XFormTextStyle::SlantX : nId = nStyleSlantXId;   break;
+            case XFormTextStyle::SlantY : nId = nStyleSlantYId;   break;
             default: ;//prevent warning
         }
         m_pTbxStyle->Enable();
 
         // Make sure that there is always exactly one checked toolbox item.
-        if ( pItem->GetValue() == XFT_NONE )
+        if ( pItem->GetValue() == XFormTextStyle::NONE )
         {
             m_pTbxStyle->CheckItem(nStyleRotateId, false);
             m_pTbxStyle->CheckItem(nStyleUprightId, false);
@@ -642,16 +642,16 @@ IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, SelectStyleHdl_Impl, ToolBox *, void)
     // enabled that is.)
     if (nId == nStyleOffId || nId != nLastStyleTbxId )
     {
-        XFormTextStyle eStyle = XFT_NONE;
+        XFormTextStyle eStyle = XFormTextStyle::NONE;
 
         if (nId == nStyleRotateId)
-            eStyle = XFT_ROTATE;
+            eStyle = XFormTextStyle::Rotate;
         else if (nId == nStyleUprightId)
-            eStyle = XFT_UPRIGHT;
+            eStyle = XFormTextStyle::Upright;
         else if (nId == nStyleSlantXId)
-            eStyle = XFT_SLANTX;
+            eStyle = XFormTextStyle::SlantX;
         else if (nId == nStyleSlantYId)
-            eStyle = XFT_SLANTY;
+            eStyle = XFormTextStyle::SlantY;
 
         XFormTextStyleItem aItem( eStyle );
         GetBindings().GetDispatcher()->ExecuteList(SID_FORMTEXT_STYLE,

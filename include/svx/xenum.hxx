@@ -21,8 +21,7 @@
 #define INCLUDED_SVX_XENUM_HXX
 
 
-enum XFormTextStyle     { XFT_ROTATE, XFT_UPRIGHT, XFT_SLANTX, XFT_SLANTY,
-                          XFT_NONE };
+enum class XFormTextStyle   { Rotate, Upright, SlantX, SlantY, NONE };
 enum class XFormTextAdjust  { Left, Right, AutoSize, Center };
 enum class XFormTextShadow  { NONE, Normal, Slant };
 enum class XBitmapType      { Import, N8x8 };
