@@ -1697,7 +1697,7 @@ void ScInterpreter::ScTan()
 
 void ScInterpreter::ScCot()
 {
-    PushDouble(div(1.0, ::rtl::math::tan(GetDouble())));
+    PushDouble(1.0 / ::rtl::math::tan(GetDouble()));
 }
 
 void ScInterpreter::ScArcSin()
@@ -1737,7 +1737,7 @@ void ScInterpreter::ScTanHyp()
 
 void ScInterpreter::ScCotHyp()
 {
-    PushDouble(div(1.0, tanh(GetDouble())));
+    PushDouble(1.0 / tanh(GetDouble()));
 }
 
 void ScInterpreter::ScArcSinHyp()
@@ -1774,22 +1774,22 @@ void ScInterpreter::ScArcCotHyp()
 
 void ScInterpreter::ScCosecant()
 {
-    PushDouble(div(1.0, ::rtl::math::sin(GetDouble())));
+    PushDouble(1.0 / ::rtl::math::sin(GetDouble()));
 }
 
 void ScInterpreter::ScSecant()
 {
-    PushDouble(div(1.0, ::rtl::math::cos(GetDouble())));
+    PushDouble(1.0 / ::rtl::math::cos(GetDouble()));
 }
 
 void ScInterpreter::ScCosecantHyp()
 {
-    PushDouble(div(1.0, sinh(GetDouble())));
+    PushDouble(1.0 / sinh(GetDouble()));
 }
 
 void ScInterpreter::ScSecantHyp()
 {
-    PushDouble(div(1.0, cosh(GetDouble())));
+    PushDouble(1.0 / cosh(GetDouble()));
 }
 
 void ScInterpreter::ScExp()
