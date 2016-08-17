@@ -737,7 +737,7 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
                 rIndent=2;
                 if (ImpGetItem(*pSet,XATTR_FORMTXTSHADOW,pItem)) {
                     XFormTextShadow eShadow=static_cast<const XFormTextShadowItem*>(pItem)->GetValue();
-                    if (eShadow==XFTSHADOW_NONE) return true;
+                    if (eShadow==XFormTextShadow::NONE) return true;
                 }
             }
         } break;

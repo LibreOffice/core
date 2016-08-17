@@ -688,9 +688,9 @@ static SvXMLEnumMapEntry const pXML_Fontwork_Adjust_Enum[] =
 
 static SvXMLEnumMapEntry const pXML_Fontwork_Shadow_Enum[] =
 {
-    { XML_NORMAL,       0 }, //XFTSHADOW_NORMAL,
-    { XML_SLANT,        1 }, //XFTSHADOW_SLANT,
-    { XML_NONE,         2 }, //XFTSHADOW_NONE
+    { XML_NORMAL,       0 }, //XFormTextShadow::Normal,
+    { XML_SLANT,        1 }, //XFormTextShadow::Slant,
+    { XML_NONE,         2 }, //XFormTextShadow::NONE
     { XML_TOKEN_INVALID,0 }
 };
 

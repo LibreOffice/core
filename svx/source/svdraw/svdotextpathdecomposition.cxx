@@ -380,17 +380,17 @@ namespace
                         }
 
                         // eventually create shadow primitives from aDecomposition and add to rDecomposition
-                        const bool bShadow(XFTSHADOW_NONE != maSdrFormTextAttribute.getFormTextShadow());
+                        const bool bShadow(XFormTextShadow::NONE != maSdrFormTextAttribute.getFormTextShadow());
 
                         if(bShadow)
                         {
-                            if(XFTSHADOW_NORMAL == maSdrFormTextAttribute.getFormTextShadow())
+                            if(XFormTextShadow::Normal == maSdrFormTextAttribute.getFormTextShadow())
                             {
                                 aNewShadowTransform.translate(
                                     maSdrFormTextAttribute.getFormTextShdwXVal(),
                                     -maSdrFormTextAttribute.getFormTextShdwYVal());
                             }
-                            else // XFTSHADOW_SLANT
+                            else // XFormTextShadow::Slant
                             {
                                 double fScaleValue(maSdrFormTextAttribute.getFormTextShdwYVal() / 100.0);
                                 double fShearValue(-maSdrFormTextAttribute.getFormTextShdwXVal() * F_PI1800);

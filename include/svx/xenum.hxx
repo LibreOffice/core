@@ -24,8 +24,8 @@
 enum XFormTextStyle     { XFT_ROTATE, XFT_UPRIGHT, XFT_SLANTX, XFT_SLANTY,
                           XFT_NONE };
 enum XFormTextAdjust    { XFT_LEFT, XFT_RIGHT, XFT_AUTOSIZE, XFT_CENTER };
-enum XFormTextShadow    { XFTSHADOW_NONE, XFTSHADOW_NORMAL, XFTSHADOW_SLANT};
-enum class XBitmapType  { Import, N8x8 };
+enum class XFormTextShadow  { NONE, Normal, Slant};
+enum class XBitmapType      { Import, N8x8 };
 
 
 #endif // INCLUDED_SVX_XENUM_HXX

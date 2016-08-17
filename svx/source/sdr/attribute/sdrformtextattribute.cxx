@@ -159,7 +159,7 @@ namespace drawinglayer
             Color                                   maFormTextShdwColor;    // shadow color
 
             // outline attributes; used when getFormTextOutline() is true and (for
-            // shadow) when getFormTextShadow() != XFTSHADOW_NONE
+            // shadow) when getFormTextShadow() != XFormTextShadow::NONE
             SdrFormTextOutlineAttribute             maOutline;
             SdrFormTextOutlineAttribute             maShadowOutline;
 
@@ -195,7 +195,7 @@ namespace drawinglayer
                             aLineAttribute, aStrokeAttribute, nTransparence);
                     }
 
-                    if(XFTSHADOW_NONE != getFormTextShadow())
+                    if(XFormTextShadow::NONE != getFormTextShadow())
                     {
                         // also need to prepare attributes for shadow outlines
                         const LineAttribute aLineAttribute(impGetLineAttribute(true, rSet));
@@ -215,7 +215,7 @@ namespace drawinglayer
                 mnFormTextShdwTransp(0),
                 meFormTextStyle(XFT_NONE),
                 meFormTextAdjust(XFT_CENTER),
-                meFormTextShadow(XFTSHADOW_NONE),
+                meFormTextShadow(XFormTextShadow::NONE),
                 maFormTextShdwColor(),
                 maOutline(),
                 maShadowOutline(),

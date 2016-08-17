@@ -471,7 +471,7 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
 
         m_pTbxShadow->Enable();
 
-        if ( pItem->GetValue() == XFTSHADOW_NONE )
+        if ( pItem->GetValue() == XFormTextShadow::NONE )
         {
             nId = nShadowOffId;
             m_pFbShadowX->Hide();
@@ -488,7 +488,7 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
             m_pMtrFldShadowY->Enable();
             m_pShadowColorLB->Enable();
 
-            if ( pItem->GetValue() == XFTSHADOW_NORMAL )
+            if ( pItem->GetValue() == XFormTextShadow::Normal )
             {
                 nId = nShadowNormalId;
                 const FieldUnit eDlgUnit = rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
@@ -708,7 +708,7 @@ IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, SelectShadowHdl_Impl, ToolBox *, void)
     }
     else if (nId != nLastShadowTbxId)
     {
-        XFormTextShadow eShadow = XFTSHADOW_NONE;
+        XFormTextShadow eShadow = XFormTextShadow::NONE;
 
         if (nLastShadowTbxId == nShadowNormalId)
         {
@@ -722,8 +722,8 @@ IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, SelectShadowHdl_Impl, ToolBox *, void)
         }
         nLastShadowTbxId = nId;
 
-        if ( nId == nShadowNormalId)     eShadow = XFTSHADOW_NORMAL;
-        else if (nId == nShadowSlantId) eShadow = XFTSHADOW_SLANT;
+        if ( nId == nShadowNormalId)     eShadow = XFormTextShadow::Normal;
+        else if (nId == nShadowSlantId) eShadow = XFormTextShadow::Slant;
 
         XFormTextShadowItem aItem(eShadow);
         GetBindings().GetDispatcher()->ExecuteList(SID_FORMTEXT_SHADOW,
