@@ -664,7 +664,11 @@ void SwView::Execute(SfxRequest &rReq)
         {
             SwDoc *pDoc = m_pWrtShell->GetDoc();
             SwPaM *pCursor = m_pWrtShell->GetCursor();
-            if( pCursor->HasMark())
+            sal_uInt16 nRedline = USHRT_MAX;
+            if (pArgs && pArgs->GetItemState(nSlot, false, &pItem) == SfxItemState::SET)
+                nRedline = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+
+            if( pCursor->HasMark() && nRedline == USHRT_MAX)
             {
                 if (FN_REDLINE_ACCEPT_DIRECT == nSlot)
                     m_pWrtShell->AcceptRedlinesInSelection();
@@ -677,8 +681,18 @@ void SwView::Execute(SfxRequest &rReq)
                 // This ensures we work properly with FN_REDLINE_NEXT_CHANGE, which leaves the
                 // point at the *end* of the redline and the mark at the start (so GetRedline
                 // would return NULL if called on the point)
-                sal_uInt16 nRedline = 0;
-                const SwRangeRedline *pRedline = pDoc->getIDocumentRedlineAccess().GetRedline(*pCursor->Start(), &nRedline);
+                const SwRangeRedline* pRedline = nullptr;
+                if (nRedline < USHRT_MAX)
+                {
+                    // A redline was explicitly requested by specifying an
+                    // index, don't guess based on the cursor position.
+                    const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+                    if (nRedline < rTable.size())
+                        pRedline = rTable[nRedline];
+                }
+                else
+                    pRedline = pDoc->getIDocumentRedlineAccess().GetRedline(*pCursor->Start(), &nRedline);
+
                 assert(pRedline != nullptr);
                 if (pRedline)
                 {
