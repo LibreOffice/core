@@ -49,26 +49,24 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 				-I$(call gb_UnpackedTarball_get_dir,libtommath) \
 				-L$(call gb_UnpackedTarball_get_dir,libtommath) \
 			) \
-			$(if $(filter WNT MACOSX,$(OS)), \
-				$(if $(SYSTEM_ICU),$(ICU_CPPFLAGS), \
-					-I$(call gb_UnpackedTarball_get_dir,icu)/source \
-					-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
-					-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
-					-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib \
-				)) \
+			$(if $(SYSTEM_ICU),$(ICU_CPPFLAGS), \
+				-I$(call gb_UnpackedTarball_get_dir,icu)/source \
+				-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
+				-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
+				-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib \
+			) \
 			" \
 		&& export CXXFLAGS=" \
 			$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS), \
 				$(BOOST_CPPFLAGS) \
 				-L$(call gb_UnpackedTarball_get_dir,boost)/source/lib \
 			) \
-			$(if $(filter-out WNT MACOSX,$(OS)), \
-				$(if $(SYSTEM_ICU),$(ICU_CPPFLAGS), \
-					-I$(call gb_UnpackedTarball_get_dir,icu)/source \
-					-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
-					-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
-					-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib \
-				)) \
+			$(if $(SYSTEM_ICU),$(ICU_CPPFLAGS), \
+				-I$(call gb_UnpackedTarball_get_dir,icu)/source \
+				-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
+				-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
+				-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib \
+			) \
 			$(if $(SYSTEM_LIBTOMMATH),$(LIBTOMMATH_CFLAGS), \
 				-L$(call gb_UnpackedTarball_get_dir,libtommath) \
 			) \
