@@ -1373,7 +1373,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
 
                             XOBitmap aXOBitmap( aBmp );
                             aXOBitmap.Bitmap2Array();
-                            aXOBitmap.SetBitmapType( XBITMAP_8X8 );
+                            aXOBitmap.SetBitmapType( XBitmapType::N8x8 );
                             aXOBitmap.SetPixelSize( aBmp.GetSizePixel() );
 
                             if( aXOBitmap.GetBackgroundColor() == COL_BLACK )

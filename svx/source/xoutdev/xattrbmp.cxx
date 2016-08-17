@@ -45,7 +45,7 @@
 using namespace ::com::sun::star;
 
 XOBitmap::XOBitmap( const Bitmap& rBmp ) :
-    eType           ( XBITMAP_IMPORT ),
+    eType           ( XBitmapType::Import ),
     aGraphicObject  ( rBmp ),
     pPixelArray     ( nullptr ),
     bGraphicDirty   ( false )
@@ -64,7 +64,7 @@ XOBitmap::XOBitmap( const XOBitmap& rXBmp ) :
 
     if( rXBmp.pPixelArray )
     {
-        if( eType == XBITMAP_8X8 )
+        if( eType == XBitmapType::N8x8 )
         {
             pPixelArray = new sal_uInt16[ 64 ];
 
@@ -90,7 +90,7 @@ XOBitmap& XOBitmap::operator=( const XOBitmap& rXBmp )
 
     if( rXBmp.pPixelArray )
     {
-        if( eType == XBITMAP_8X8 )
+        if( eType == XBitmapType::N8x8 )
         {
             pPixelArray = new sal_uInt16[ 64 ];
 
@@ -278,16 +278,16 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
             sal_Int16 iTmp;
 
             rIn.ReadInt16( iTmp ); // former XBitmapStyle
-            rIn.ReadInt16( iTmp ); // former XBitmapType
+            rIn.ReadInt16( iTmp ); // XBitmapType
 
-            if(XBITMAP_IMPORT == iTmp)
+            if(XBitmapType::Import == (XBitmapType)iTmp)
             {
                 Bitmap aBmp;
 
                 ReadDIB(aBmp, rIn, true);
                 maGraphicObject = Graphic(aBmp);
             }
-            else if(XBITMAP_8X8 == iTmp)
+            else if(XBitmapType::N8x8 == (XBitmapType)iTmp)
             {
                 sal_uInt16 aArray[64];
 
