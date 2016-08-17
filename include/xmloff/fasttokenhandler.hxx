@@ -26,10 +26,10 @@ public:
     explicit TokenMap();
             ~TokenMap();
 
-    /** Returns the token identifier for the passed Unicode token name. */
+    /** Returns the token identifier for the passed OUString (UTF-16) token name. */
     static sal_Int32 getTokenFromUnicode( const OUString& rUnicodeName );
 
-    /** Returns the UTF8 name of the passed token identifier as byte sequence. */
+    /** Returns the UTF-8 name of the passed token identifier as byte sequence. */
     css::uno::Sequence< sal_Int8 > getUtf8TokenName( sal_Int32 nToken ) const
     {
         SAL_WARN_IF(nToken < 0 || nToken >= XML_TOKEN_COUNT, "xmloff", "Wrong nToken parameter");
@@ -38,14 +38,14 @@ public:
         return css::uno::Sequence< sal_Int8 >();
     }
 
-    /** Returns the token identifier for the passed UTF8 token name. */
+    /** Returns the token identifier for the passed UTF-8 token name. */
     static sal_Int32 getTokenFromUtf8( const css::uno::Sequence< sal_Int8 >& rUtf8Name )
     {
         return getTokenFromUTF8( reinterpret_cast< const char* >(
                     rUtf8Name.getConstArray() ), rUtf8Name.getLength() );
     }
 
-    /** Returns the token identifier for a UTF8 string passed in pToken */
+    /** Returns the token identifier for a UTF-8 string */
     static sal_Int32 getTokenFromUTF8( const char *pToken, sal_Int32 nLength )
     {
         return getTokenPerfectHash( pToken, nLength );
