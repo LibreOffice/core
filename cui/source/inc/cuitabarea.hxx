@@ -711,6 +711,12 @@ public:
 
 /************************************************************************/
 
+enum class ColorModel
+{
+    RGB,
+    CMYK // can be extend with more models, e.g. HSV
+};
+
 struct SvxColorTabPageShadow;
 class SvxColorTabPage : public SfxTabPage
 {

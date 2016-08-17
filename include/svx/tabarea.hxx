@@ -21,12 +21,6 @@
 
 #include <o3tl/typed_flags_set.hxx>
 
-enum ColorModel
-{
-    CM_RGB,
-    CM_CMYK // can be extend with more models, e.g. HSV
-};
-
 enum class ChangeType
 {
     NONE                 = 0x00,

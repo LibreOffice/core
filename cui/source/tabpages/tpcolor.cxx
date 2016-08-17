@@ -89,7 +89,7 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     , aXFillColorItem( OUString(), Color( COL_BLACK ) )
     , aXFillAttr( static_cast<XOutdevItemPool*>( rInAttrs.GetPool() ))
     , rXFSet( aXFillAttr.GetItemSet() )
-    , eCM( CM_RGB )
+    , eCM( ColorModel::RGB )
     , m_context(comphelper::getProcessComponentContext())
 {
     get(m_pSelectPalette, "paletteselector");
@@ -280,7 +280,7 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
                 const SfxPoolItem* pPoolItem = nullptr;
                 if( SfxItemState::SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), true, &pPoolItem ) )
                 {
-                    SetColorModel( CM_RGB );
+                    SetColorModel( ColorModel::RGB );
                     ChangeColorModel();
 
                     aPreviousColor = static_cast<const XFillColorItem*>(pPoolItem)->GetColorValue();
@@ -406,7 +406,7 @@ VclPtr<SfxTabPage> SvxColorTabPage::Create( vcl::Window* pWindow,
 // is called when the content of the MtrFields is changed for color values
 IMPL_LINK_TYPED(SvxColorTabPage, ModifiedHdl_Impl, Edit&, rEdit, void)
 {
-    if (eCM == CM_RGB)
+    if (eCM == ColorModel::RGB)
     {
         // read current MtrFields, if cmyk, then k-value as transparency
         if(&rEdit == m_pHexcustom)
@@ -427,7 +427,7 @@ IMPL_LINK_TYPED(SvxColorTabPage, ModifiedHdl_Impl, Edit&, rEdit, void)
                                         (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pCcustom->GetValue() ),
                                         (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pYcustom->GetValue() ),
                                         (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pMcustom->GetValue() ) ).GetColor() );
-        ConvertColorValues (aCurrentColor, CM_RGB);
+        ConvertColorValues (aCurrentColor, ColorModel::RGB);
     }
 
     rXFSet.Put( XFillColorItem( OUString(), aCurrentColor ) );
@@ -626,14 +626,14 @@ void SvxColorTabPage::ConvertColorValues (Color& rColor, ColorModel eModell)
 {
     switch (eModell)
     {
-        case CM_RGB:
+        case ColorModel::RGB:
         {
             CmykToRgb_Impl (rColor, (sal_uInt16)rColor.GetTransparency() );
             rColor.SetTransparency ((sal_uInt8) 0);
         }
         break;
 
-        case CM_CMYK:
+        case ColorModel::CMYK:
         {
             sal_uInt16 nK;
             RgbToCmyk_Impl (rColor, nK );
@@ -645,9 +645,9 @@ void SvxColorTabPage::ConvertColorValues (Color& rColor, ColorModel eModell)
 IMPL_LINK_TYPED(SvxColorTabPage, SelectColorModeHdl_Impl, RadioButton&, rRadioButton, void)
 {
     if( &rRadioButton == m_pRbRGB )
-        eCM = CM_RGB;
+        eCM = ColorModel::RGB;
     if( &rRadioButton == m_pRbCMYK )
-        eCM = CM_CMYK;
+        eCM = ColorModel::CMYK;
     ChangeColorModel();
     UpdateColorValues();
 }
@@ -667,9 +667,9 @@ void SvxColorTabPage::SetColorModel( ColorModel eModel )
 {
     m_pRbRGB->SetState(false);
     m_pRbCMYK->SetState(false);
-    if(eModel == CM_RGB)
+    if(eModel == ColorModel::RGB)
         m_pRbRGB->SetState(true);
-    if(eModel == CM_CMYK)
+    if(eModel == ColorModel::CMYK)
         m_pRbCMYK->SetState(true);
 }
 
@@ -677,7 +677,7 @@ void SvxColorTabPage::ChangeColorModel()
 {
     switch( eCM )
     {
-        case CM_RGB:
+        case ColorModel::RGB:
         {
             m_pRGBcustom->Show();
             m_pRGBpreset->Show();
@@ -686,7 +686,7 @@ void SvxColorTabPage::ChangeColorModel()
         }
         break;
 
-        case CM_CMYK:
+        case ColorModel::CMYK:
         {
             m_pCMYKcustom->Show();
             m_pCMYKpreset->Show();
@@ -699,7 +699,7 @@ void SvxColorTabPage::ChangeColorModel()
 
 void SvxColorTabPage::UpdateColorValues()
 {
-    if (eCM != CM_RGB)
+    if (eCM != ColorModel::RGB)
     {
         ConvertColorValues (aPreviousColor, eCM );
         ConvertColorValues (aCurrentColor, eCM);
@@ -713,8 +713,8 @@ void SvxColorTabPage::UpdateColorValues()
         m_pKcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetTransparency() ) );
         m_pKpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetTransparency() ) );
 
-        ConvertColorValues (aPreviousColor, CM_RGB);
-        ConvertColorValues (aCurrentColor, CM_RGB);
+        ConvertColorValues (aPreviousColor, ColorModel::RGB);
+        ConvertColorValues (aCurrentColor, ColorModel::RGB);
     }
     else
     {
@@ -798,11 +798,11 @@ sal_uInt16 SvxColorTabPage::ColorToPercent_Impl( sal_uInt16 nColor )
 
     switch (eCM)
     {
-        case CM_RGB :
+        case ColorModel::RGB :
             nWert = nColor;
             break;
 
-        case CM_CMYK:
+        case ColorModel::CMYK:
             nWert = (sal_uInt16) ( (double) nColor * 100.0 / 255.0 + 0.5 );
             break;
     }
@@ -817,11 +817,11 @@ sal_uInt16 SvxColorTabPage::PercentToColor_Impl( sal_uInt16 nPercent )
 
     switch (eCM)
     {
-        case CM_RGB :
+        case ColorModel::RGB :
             nWert = nPercent;
             break;
 
-        case CM_CMYK:
+        case ColorModel::CMYK:
             nWert = (sal_uInt16) ( (double) nPercent * 255.0 / 100.0 + 0.5 );
             break;
     }
@@ -833,7 +833,7 @@ sal_uInt16 SvxColorTabPage::PercentToColor_Impl( sal_uInt16 nPercent )
 void SvxColorTabPage::FillUserData()
 {
     // the color model is saved in the Ini-file
-    SetUserData( OUString::number( eCM ) );
+    SetUserData( OUString::number( (int)eCM ) );
 }
 
 
