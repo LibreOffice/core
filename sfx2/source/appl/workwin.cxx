@@ -100,12 +100,9 @@ static const ResIdToResName pToolBarResToName[] =
     { 23030,    "graphicobjectbar"     },
     { 23013,    "drawingobjectbar"     },      //impress
     { 23016,    "textobjectbar"        },      //impress
-    { 23028,    "textobjectbar"        },      //draw
     { 23011,    "toolbar"              },      //impress
     { 23020,    "optionsbar"           },
     { 23021,    "commontaskbar"        },
-    { 23025,    "toolbar"              },      //draw
-    { 23026,    "optionsbar"           },
     { 23027,    "drawingobjectbar"     },      //draw
     { 23017,    "outlinetoolbar"       },      //impress
     { 23012,    "slideviewtoolbar"     },
@@ -133,7 +130,6 @@ static const ResIdToResName pToolBarResToName[] =
     { 23310,    "viewerbar"            },      //writer (plugin)
     { 25000,    "viewerbar"            },      //calc   (plugin)
     { 23023,    "viewerbar"            },      //impress(plugin)
-    { 23024,    "viewerbar"            },      //draw   (plugin)
     { 23031,    "mediaobjectbar"       },      //draw/impress
     { 25060,    "mediaobjectbar"       },      //calc
     { 23311,    "mediaobjectbar"       },      //writer
