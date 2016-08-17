@@ -33,7 +33,7 @@
       </prop>
       <prop oor:name="SubstFontsMS" oor:type="xs:string">
         <info>
-          <desc>Contains a list of substitute fonts used in MS import filters.</desc>
+          <desc>Contains a list of substitute fonts used in MS export filters.</desc>
         </info>
       </prop>
       <prop oor:name="SubstFontsPS" oor:type="xs:string">
