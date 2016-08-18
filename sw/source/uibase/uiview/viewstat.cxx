@@ -51,6 +51,7 @@
 #include <globdoc.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <comphelper/lok.hxx>
 #include <svl/visitem.hxx>
 #include <redline.hxx>
 #include <docary.hxx>
@@ -286,8 +287,10 @@ void SwView::GetState(SfxItemSet &rSet)
                 SwPaM *pCursor = m_pWrtShell->GetCursor();
                 if (GetDocShell()->HasChangeRecordProtection())
                     rSet.DisableItem(nWhich);
-                else if (pCursor->HasMark())
-                { // If the selection does not contain redlines, disable accepting/rejecting changes.
+                else if (pCursor->HasMark() && !comphelper::LibreOfficeKit::isActive())
+                {
+                    // If the selection does not contain redlines, disable accepting/rejecting changes.
+                    // Though LibreOfficeKit wants to handle changes by index, so always allow there.
                     sal_uInt16 index = 0;
                     const SwRedlineTable& table = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
                     const SwRangeRedline* redline = table.FindAtPosition( *pCursor->Start(), index );
@@ -310,7 +313,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     if( redline == nullptr )
                         rSet.DisableItem(nWhich);
                 }
-                else
+                else if (!comphelper::LibreOfficeKit::isActive())
                 {
                     // If the cursor position isn't on a redline, disable
                     // accepting/rejecting changes.
