@@ -162,6 +162,7 @@ void SdDLL::RegisterControllers(SdModule* pMod)
 {
     SdTbxCtlDiaPages::RegisterControl( SID_PAGES_PER_ROW, pMod );
     SdTbxCtlGlueEscDir::RegisterControl( SID_GLUE_ESCDIR, pMod );
+    SdTbxCtlSlideMasterControl::RegisterControl( SID_SLIDE_MASTER_MODE, pMod );
 
     ::sd::AnimationChildWindow::RegisterChildWindow(false, pMod);
     ::sd::NavigatorChildWindow::RegisterChildWindowContext( (sal_uInt16) ::sd::DrawViewShell::GetInterfaceId(), pMod );
