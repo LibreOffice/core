@@ -1176,7 +1176,7 @@ namespace accessibility
                 const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>( &rHint );
                 const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
                 const TextHint* pTextHint = dynamic_cast<const TextHint*>( &rHint );
-                const SvxViewHint* pViewHint = dynamic_cast<const SvxViewHint*>( &rHint );
+                const SvxViewChangedHint* pViewHint = dynamic_cast<const SvxViewChangedHint*>( &rHint );
                 const SvxEditSourceHint* pEditSourceHint = dynamic_cast<const SvxEditSourceHint*>( &rHint );
 
                 try
@@ -1267,14 +1267,9 @@ namespace accessibility
                     }
                     else if( pViewHint )
                     {
-                        switch( pViewHint->GetHintType() )
-                        {
-                            case SvxViewHint::SVX_HINT_VIEWCHANGED:
-                                // just check visibility
-                                UpdateVisibleChildren();
-                                UpdateBoundRect();
-                                break;
-                        }
+                        // just check visibility
+                        UpdateVisibleChildren();
+                        UpdateBoundRect();
                     }
                     else if( pSdrHint )
                     {
@@ -1356,7 +1351,7 @@ namespace accessibility
         const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>( &rHint );
         const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
         const TextHint* pTextHint = dynamic_cast<const TextHint*>( &rHint );
-        const SvxViewHint* pViewHint = dynamic_cast<const SvxViewHint*>( &rHint );
+        const SvxViewChangedHint* pViewHint = dynamic_cast<const SvxViewChangedHint*>( &rHint );
         const SvxEditSourceHint* pEditSourceHint = dynamic_cast<const SvxEditSourceHint*>( &rHint );
 
         try

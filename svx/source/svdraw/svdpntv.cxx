@@ -115,8 +115,7 @@ OutputDevice* SdrPaintView::GetFirstOutputDevice() const
 }
 
 
-SvxViewHint::SvxViewHint (HintType eHintType)
-    : meHintType(eHintType)
+SvxViewChangedHint::SvxViewChangedHint()
 {
 }
 
@@ -1242,7 +1241,7 @@ void SdrPaintView::VisAreaChanged(const OutputDevice* pOut)
 void SdrPaintView::VisAreaChanged(const SdrPageWindow& /*rWindow*/)
 {
     // notify SfxListener
-    Broadcast(SvxViewHint(SvxViewHint::SVX_HINT_VIEWCHANGED));
+    Broadcast(SvxViewChangedHint());
 }
 
 

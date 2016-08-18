@@ -89,15 +89,10 @@ namespace sdr
 }
 
 
-class SVX_DLLPUBLIC SvxViewHint : public SfxHint
+class SVX_DLLPUBLIC SvxViewChangedHint : public SfxHint
 {
 public:
-    enum HintType { SVX_HINT_VIEWCHANGED };
-    explicit SvxViewHint(HintType eType);
-    HintType GetHintType() const { return meHintType;}
-
-private:
-    HintType meHintType;
+    explicit SvxViewChangedHint();
 };
 
 /// Typedefs for a list of SdrPaintWindows

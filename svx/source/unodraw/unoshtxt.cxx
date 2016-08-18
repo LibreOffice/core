@@ -332,14 +332,9 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             }
         }
     }
-    else if (const SvxViewHint* pViewHint = dynamic_cast<const SvxViewHint*>(&rHint))
+    else if (const SvxViewChangedHint* pViewHint = dynamic_cast<const SvxViewChangedHint*>(&rHint))
     {
-        switch( pViewHint->GetHintType() )
-        {
-            case SvxViewHint::SVX_HINT_VIEWCHANGED:
-                Broadcast( *pViewHint );
-                break;
-        }
+        Broadcast( *pViewHint );
     }
     else if (const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint))
     {
@@ -358,7 +353,7 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                     // UpdateOutliner();
 
                     // #101029# Broadcast object changes, as they might change visible attributes
-                    SvxViewHint aHint(SvxViewHint::SVX_HINT_VIEWCHANGED);
+                    SvxViewChangedHint aHint;
                     Broadcast( aHint );
                 }
                 break;
