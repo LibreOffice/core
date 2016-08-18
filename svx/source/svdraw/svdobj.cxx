@@ -657,7 +657,7 @@ void SdrObject::SetName(const OUString& rStr)
             SdrUndoAction* pUndoAction =
                     SdrUndoFactory::CreateUndoObjectStrAttr(
                                                     *this,
-                                                    SdrUndoObjStrAttr::OBJ_NAME,
+                                                    SdrUndoObjStrAttr::ObjStrAttrType::Name,
                                                     GetName(),
                                                     rStr );
             GetModel()->BegUndo( pUndoAction->GetComment() );
@@ -701,7 +701,7 @@ void SdrObject::SetTitle(const OUString& rStr)
             SdrUndoAction* pUndoAction =
                     SdrUndoFactory::CreateUndoObjectStrAttr(
                                                     *this,
-                                                    SdrUndoObjStrAttr::OBJ_TITLE,
+                                                    SdrUndoObjStrAttr::ObjStrAttrType::Title,
                                                     GetTitle(),
                                                     rStr );
             GetModel()->BegUndo( pUndoAction->GetComment() );
@@ -745,7 +745,7 @@ void SdrObject::SetDescription(const OUString& rStr)
             SdrUndoAction* pUndoAction =
                     SdrUndoFactory::CreateUndoObjectStrAttr(
                                                     *this,
-                                                    SdrUndoObjStrAttr::OBJ_DESCRIPTION,
+                                                    SdrUndoObjStrAttr::ObjStrAttrType::Description,
                                                     GetDescription(),
                                                     rStr );
             GetModel()->BegUndo( pUndoAction->GetComment() );

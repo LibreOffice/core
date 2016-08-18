@@ -436,11 +436,11 @@ public:
 class SdrUndoObjStrAttr : public SdrUndoObj
 {
 public:
-    enum ObjStrAttrType
+    enum class ObjStrAttrType
     {
-        OBJ_NAME,
-        OBJ_TITLE,
-        OBJ_DESCRIPTION
+        Name,
+        Title,
+        Description
     };
 
 protected:

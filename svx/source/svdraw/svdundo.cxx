@@ -1245,13 +1245,13 @@ void SdrUndoObjStrAttr::Undo()
 
     switch ( meObjStrAttr )
     {
-    case OBJ_NAME:
+    case ObjStrAttrType::Name:
         pObj->SetName( msOldStr );
         break;
-    case OBJ_TITLE:
+    case ObjStrAttrType::Title:
         pObj->SetTitle( msOldStr );
         break;
-    case OBJ_DESCRIPTION:
+    case ObjStrAttrType::Description:
         pObj->SetDescription( msOldStr );
         break;
     }
@@ -1261,13 +1261,13 @@ void SdrUndoObjStrAttr::Redo()
 {
     switch ( meObjStrAttr )
     {
-    case OBJ_NAME:
+    case ObjStrAttrType::Name:
         pObj->SetName( msNewStr );
         break;
-    case OBJ_TITLE:
+    case ObjStrAttrType::Title:
         pObj->SetTitle( msNewStr );
         break;
-    case OBJ_DESCRIPTION:
+    case ObjStrAttrType::Description:
         pObj->SetDescription( msNewStr );
         break;
     }
@@ -1280,14 +1280,14 @@ OUString SdrUndoObjStrAttr::GetComment() const
     OUString aStr;
     switch ( meObjStrAttr )
     {
-    case OBJ_NAME:
+    case ObjStrAttrType::Name:
         ImpTakeDescriptionStr( STR_UndoObjName, aStr );
         aStr += " '" + msNewStr + "'";
         break;
-    case OBJ_TITLE:
+    case ObjStrAttrType::Title:
         ImpTakeDescriptionStr( STR_UndoObjTitle, aStr );
         break;
-    case OBJ_DESCRIPTION:
+    case ObjStrAttrType::Description:
         ImpTakeDescriptionStr( STR_UndoObjDescription, aStr );
         break;
     }
