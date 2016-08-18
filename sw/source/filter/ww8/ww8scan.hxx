@@ -211,6 +211,9 @@ private:
     long nIdx;              ///< marker where we currently are
     sal_uInt32 nStru;
 
+    WW8PLCFspecial(const WW8PLCFspecial&) = delete;
+    WW8PLCFspecial& operator=(const WW8PLCFspecial&) = delete;
+
 public:
     WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos, sal_uInt32 nPLCF,
         sal_uInt32 nStruct);
@@ -328,6 +331,9 @@ class WW8PLCFpcd
     sal_uInt8*  pPLCF_Contents;  // pointer to content-array-part of Pos-array
     long nIMax;
     sal_uInt32 nStru;
+
+    WW8PLCFpcd(const WW8PLCFpcd&) = delete;
+    WW8PLCFpcd& operator=(const WW8PLCFpcd&) = delete;
 
 public:
     WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos, sal_uInt32 nPLCF,
@@ -1045,6 +1051,9 @@ private:
     WW8PLCFpcd* OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF );
     void DeletePieceTable();
 
+    WW8ScannerBase(const WW8ScannerBase&) = delete;
+    WW8ScannerBase& operator=(const WW8ScannerBase&) = delete;
+
 public:
     WW8ScannerBase( SvStream* pSt, SvStream* pTableSt, SvStream* pDataSt,
         WW8Fib* pWwF );
@@ -1549,6 +1558,9 @@ public:
 
 class WW8Fonts
 {
+private:
+    WW8Fonts(const WW8Fonts&) = delete;
+    WW8Fonts& operator=(const WW8Fonts&) = delete;
 protected:
     WW8_FFN* pFontA;    // Array of Pointers to Font Description
     sal_uInt16 nMax;        // Array-Size

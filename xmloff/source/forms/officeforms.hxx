@@ -78,6 +78,9 @@ namespace xmloff
             const OUString& _rPropName,
             bool _bDefault
             );
+
+        OFormsRootExport(const OFormsRootExport&) = delete;
+        OFormsRootExport& operator=(const OFormsRootExport&) = delete;
     };
 
 }   // namespace xmloff

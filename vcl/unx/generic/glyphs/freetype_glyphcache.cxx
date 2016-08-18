@@ -1098,6 +1098,9 @@ private:
     sal_uInt16      mnPoints;
     sal_uInt16      mnPoly;
     bool        bHasOffline;
+
+    PolyArgs(const PolyArgs&) = delete;
+    PolyArgs& operator=(const PolyArgs&) = delete;
 };
 
 PolyArgs::PolyArgs( tools::PolyPolygon& rPolyPoly, sal_uInt16 nMaxPoints )

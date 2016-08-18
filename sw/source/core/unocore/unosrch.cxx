@@ -43,6 +43,10 @@ class SwSearchProperties_Impl
     beans::PropertyValue**          pValueArr;
     sal_uInt32                      nArrLen;
     const PropertyEntryVector_t     aPropertyEntries;
+
+    SwSearchProperties_Impl(const SwSearchProperties_Impl&) = delete;
+    SwSearchProperties_Impl& operator=(const SwSearchProperties_Impl&) = delete;
+
 public:
     SwSearchProperties_Impl();
     ~SwSearchProperties_Impl();

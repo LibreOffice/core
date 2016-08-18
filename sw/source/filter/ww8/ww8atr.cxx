@@ -4507,11 +4507,15 @@ void WW8AttributeOutput::ParaWidows( const SvxWidowsItem& rWidows )
 
 class SwWW8WrTabu
 {
-    sal_uInt8* pDel;                 // DelArray
-    sal_uInt8* pAddPos;              // AddPos-Array
-    sal_uInt8* pAddTyp;              // AddTyp-Array
+    sal_uInt8* pDel;            // DelArray
+    sal_uInt8* pAddPos;         // AddPos-Array
+    sal_uInt8* pAddTyp;         // AddTyp-Array
     sal_uInt16 nAdd;            // so viele Tabs kommen hinzu
     sal_uInt16 nDel;            // so viele Tabs fallen weg
+
+    SwWW8WrTabu(const SwWW8WrTabu&) = delete;
+    SwWW8WrTabu& operator=(const SwWW8WrTabu&) = delete;
+
 public:
     SwWW8WrTabu(sal_uInt16 nDelMax, sal_uInt16 nAddMax);
     ~SwWW8WrTabu();

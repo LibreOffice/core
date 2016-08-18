@@ -86,6 +86,9 @@ class SwShapeDescriptor_Impl
     // #i28749#
     sal_Int16 mnPositionLayoutDir;
 
+    SwShapeDescriptor_Impl(const SwShapeDescriptor_Impl&) = delete;
+    SwShapeDescriptor_Impl& operator=(const SwShapeDescriptor_Impl&) = delete;
+
 public:
     bool    bInitializedPropertyNotifier;
 

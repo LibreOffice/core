@@ -71,6 +71,10 @@ class SwExtraPainter
     bool bGoLeft;
     bool bLineNum;
     inline bool IsClipChg() { return aClip.IsChg(); }
+
+    SwExtraPainter(const SwExtraPainter&) = delete;
+    SwExtraPainter& operator=(const SwExtraPainter&) = delete;
+
 public:
     SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
         const SwLineNumberInfo &rLnInf, const SwRect &rRct,

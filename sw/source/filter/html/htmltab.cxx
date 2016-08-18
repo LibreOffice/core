@@ -116,6 +116,9 @@ class HTMLTableContext
     bool    bRestartXMP : 1;
     bool    bRestartListing : 1;
 
+    HTMLTableContext(const HTMLTableContext&) = delete;
+    HTMLTableContext& operator=(const HTMLTableContext&) = delete;
+
 public:
 
     HTMLAttrTable aAttrTab;        // attributes

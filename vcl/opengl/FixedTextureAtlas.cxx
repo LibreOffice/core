@@ -69,6 +69,10 @@ struct FixedTexture
         }
         return -1;
     }
+
+private:
+    FixedTexture(const FixedTexture&) = delete;
+    FixedTexture& operator=(const FixedTexture&) = delete;
 };
 
 FixedTextureAtlasManager::FixedTextureAtlasManager(int nWidthFactor, int nHeightFactor, int nSubTextureSize)

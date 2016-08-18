@@ -87,6 +87,9 @@ namespace ftp {
         XInteractionDisapproveImpl* p2;
 
         css::uno::Reference<css::task::XInteractionRequest> m_xRequest;
+
+        XInteractionRequestImpl(const XInteractionRequestImpl&) = delete;
+        XInteractionRequestImpl& operator=(const XInteractionRequestImpl&) = delete;
     };
 
 }

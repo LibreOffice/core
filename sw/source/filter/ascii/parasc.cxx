@@ -61,6 +61,9 @@ class SwASCIIParser
     sal_uLong ReadChars();
     void InsertText( const OUString& rStr );
 
+    SwASCIIParser(const SwASCIIParser&) = delete;
+    SwASCIIParser& operator=(const SwASCIIParser&) = delete;
+
 public:
     SwASCIIParser( SwDoc* pD, const SwPaM& rCursor, SvStream& rIn,
                             bool bReadNewDoc, const SwAsciiOptions& rOpts );

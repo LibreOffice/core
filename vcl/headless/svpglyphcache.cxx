@@ -34,6 +34,10 @@ namespace
     {
     private:
         GlyphCache* m_pSvpGlyphCache;
+
+        GlyphCacheHolder(const GlyphCacheHolder&) = delete;
+        GlyphCacheHolder& operator=(const GlyphCacheHolder&) = delete;
+
     public:
         GlyphCacheHolder()
         {

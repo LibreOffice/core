@@ -106,6 +106,9 @@ private:
     bool            mbResizeMode;
     bool            mbShowDragRect;
 
+    ImplTBDragMgr(const ImplTBDragMgr&) = delete;
+    ImplTBDragMgr& operator=(const ImplTBDragMgr&) = delete;
+
 public:
                     ImplTBDragMgr();
                     ~ImplTBDragMgr();

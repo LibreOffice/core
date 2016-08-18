@@ -94,6 +94,8 @@ class SwImplShellAction
 public:
     explicit SwImplShellAction( SwDoc& rDoc );
     ~SwImplShellAction();
+    SwImplShellAction(const SwImplShellAction&) = delete;
+    SwImplShellAction& operator=(const SwImplShellAction&) = delete;
 };
 
 SwImplShellAction::SwImplShellAction( SwDoc& rDoc )

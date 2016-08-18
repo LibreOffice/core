@@ -274,6 +274,9 @@ private:
 
     void            ImplPostProcess( const ImplPointArray& rArr );
 
+    ImplChain(const ImplChain&) = delete;
+    ImplChain& operator=(const ImplChain&) = delete;
+
 public:
 
                     ImplChain();

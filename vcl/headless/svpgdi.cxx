@@ -136,6 +136,9 @@ namespace
     private:
         SvpSalBitmap aTmpBmp;
         cairo_surface_t* source;
+
+        SourceHelper(const SourceHelper&) = delete;
+        SourceHelper& operator=(const SourceHelper&) = delete;
     };
 
     class MaskHelper
@@ -196,6 +199,9 @@ namespace
     private:
         cairo_surface_t *mask;
         unsigned char* pAlphaBits;
+
+        MaskHelper(const MaskHelper&) = delete;
+        MaskHelper& operator=(const MaskHelper&) = delete;
     };
 }
 

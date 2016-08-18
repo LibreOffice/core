@@ -46,6 +46,8 @@ class GIFLZWDecompressor
     bool                AddToTable(sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData);
     bool                ProcessOneCode();
 
+    GIFLZWDecompressor(const GIFLZWDecompressor&) = delete;
+    GIFLZWDecompressor& operator=(const GIFLZWDecompressor&) = delete;
 public:
 
     explicit GIFLZWDecompressor( sal_uInt8 cDataSize );

@@ -42,6 +42,10 @@ class SwNode2LayImpl
     sal_uLong nIndex;        // The Index of the to-be-inserted Nodes
     bool bMaster    : 1; // true => only Master, false => only Frames without Follow
     bool bInit      : 1; // Did we already call First() at SwClient?
+
+    SwNode2LayImpl(const SwNode2LayImpl&) = delete;
+    SwNode2LayImpl& operator=(const SwNode2LayImpl&) = delete;
+
 public:
     SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearch );
     ~SwNode2LayImpl() { delete pIter; delete pUpperFrames; }

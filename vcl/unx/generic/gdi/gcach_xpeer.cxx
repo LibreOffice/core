@@ -63,6 +63,10 @@ namespace
     {
     private:
         X11GlyphCache* m_pX11GlyphCache;
+
+        GlyphCacheHolder(const GlyphCacheHolder&) = delete;
+        GlyphCacheHolder& operator=(const GlyphCacheHolder&) = delete;
+
     public:
         GlyphCacheHolder()
         {

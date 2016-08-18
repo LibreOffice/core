@@ -137,6 +137,10 @@ class WW8_WrFkp
     bool bCombined;     // true : paste not allowed
 
     sal_uInt8 SearchSameSprm( sal_uInt16 nVarLen, const sal_uInt8* pSprms );
+
+    WW8_WrFkp(const WW8_WrFkp&) = delete;
+    WW8_WrFkp& operator=(const WW8_WrFkp&) = delete;
+
 public:
     WW8_WrFkp(ePLCFT ePl, WW8_FC nStartFc);
     ~WW8_WrFkp();

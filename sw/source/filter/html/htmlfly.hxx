@@ -91,6 +91,9 @@ class SwHTMLPosFlyFrame
     sal_Int32          nContentIdx;      // seine Position im Content
     sal_uInt8               nOutputMode;    // Ausgabe-Infos
 
+    SwHTMLPosFlyFrame(const SwHTMLPosFlyFrame&) = delete;
+    SwHTMLPosFlyFrame& operator=(const SwHTMLPosFlyFrame&) = delete;
+
 public:
 
     SwHTMLPosFlyFrame( const SwPosFlyFrame& rPosFly,

@@ -119,6 +119,9 @@ class SaveTable
     bool m_bSaveFormula : 1;
     bool m_bNewModel : 1;
 
+    SaveTable(const SaveTable&) = delete;
+    SaveTable& operator=(const SaveTable&) = delete;
+
 public:
     SaveTable( const SwTable& rTable, sal_uInt16 nLnCnt = USHRT_MAX,
                 bool bSaveFormula = true );
@@ -143,6 +146,9 @@ class SaveLine
     SaveLine* pNext;
     SaveBox* pBox;
     sal_uInt16 nItemSet;
+
+    SaveLine(const SaveLine&) = delete;
+    SaveLine& operator=(const SaveLine&) = delete;
 
 public:
     SaveLine( SaveLine* pPrev, const SwTableLine& rLine, SaveTable& rSTable );
@@ -204,6 +210,11 @@ struct SwTableToTextSave
 
     SwTableToTextSave( SwDoc& rDoc, sal_uLong nNd, sal_uLong nEndIdx, sal_Int32 nContent );
     ~SwTableToTextSave() { delete m_pHstry; }
+
+private:
+    SwTableToTextSave(const SwTableToTextSave&) = delete;
+    SwTableToTextSave& operator=(const SwTableToTextSave&) = delete;
+
 };
 
 sal_uInt16 aSave_BoxContentSet[] = {

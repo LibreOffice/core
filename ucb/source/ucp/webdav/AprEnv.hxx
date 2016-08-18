@@ -47,6 +47,8 @@ class AprEnv
 
         AprEnv();
 
+        AprEnv(const AprEnv&) = delete;
+        AprEnv& operator=(const AprEnv&) = delete;
 };
 
 } // namespace apr_environment

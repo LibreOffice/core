@@ -1231,6 +1231,10 @@ class SwFootnoteSave
     SwTextSizeInfo *pInf;
     SwFont       *pFnt;
     SwFont       *pOld;
+
+    SwFootnoteSave(const SwFootnoteSave&) = delete;
+    SwFootnoteSave& operator=(const SwFootnoteSave&) = delete;
+
 public:
     SwFootnoteSave( const SwTextSizeInfo &rInf,
                const SwTextFootnote *pTextFootnote,
