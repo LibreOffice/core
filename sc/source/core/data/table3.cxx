@@ -3252,7 +3252,7 @@ bool ScTable::HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCR
         CellType eFstCellType = GetCellType(nStartCol, nStartRow);
         CellType eSndCellType = GetCellType(nStartCol, nStartRow+1);
         return ((eFstCellType == CELLTYPE_STRING || eFstCellType == CELLTYPE_EDIT) &&
-                (eSndCellType != CELLTYPE_STRING && eSndCellType != CELLTYPE_STRING));
+                (eSndCellType != CELLTYPE_STRING && eSndCellType != CELLTYPE_EDIT));
     }
 
     for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
@@ -3289,7 +3289,7 @@ bool ScTable::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCR
         CellType eFstCellType = GetCellType(nStartCol, nStartRow);
         CellType eSndCellType = GetCellType(nStartCol+1, nStartRow);
         return ((eFstCellType == CELLTYPE_STRING || eFstCellType == CELLTYPE_EDIT) &&
-                (eSndCellType != CELLTYPE_STRING && eSndCellType != CELLTYPE_STRING));
+                (eSndCellType != CELLTYPE_STRING && eSndCellType != CELLTYPE_EDIT));
     }
 
     for (SCROW nRow=nStartRow; nRow<=nEndRow; nRow++)
