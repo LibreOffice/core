@@ -86,10 +86,10 @@ bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
         mpView->SetEditMode(SDREDITMODE_CREATE);
     }
 
-    if (aVEvt.eEvent == SDREVENT_BEGTEXTEDIT)
+    if (aVEvt.eEvent == SdrEventKind::BeginTextEdit)
     {
         // here, we do not allow text input
-        aVEvt.eEvent = SDREVENT_BEGDRAGOBJ;
+        aVEvt.eEvent = SdrEventKind::BeginDragObj;
         mpView->EnableExtendedMouseEventDispatcher(false);
     }
     else
@@ -138,7 +138,7 @@ bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
         mpView->MouseButtonUp(rMEvt, mpWindow);
     }
 
-    if (aVEvt.eEvent == SDREVENT_ENDCREATE)
+    if (aVEvt.eEvent == SdrEventKind::EndCreate)
     {
         bReturn = true;
 

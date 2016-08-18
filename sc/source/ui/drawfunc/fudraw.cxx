@@ -682,7 +682,7 @@ static bool lcl_UrlHit( SdrView* pView, const Point& rPosPixel, vcl::Window* pWi
                                 aVEvt.pObj, pWindow->PixelToLogic(rPosPixel), *pWindow ) )
             return true;
 
-        if ( aVEvt.eEvent == SDREVENT_EXECUTEURL )
+        if ( aVEvt.eEvent == SdrEventKind::ExecuteUrl )
             return true;
     }
 

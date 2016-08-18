@@ -333,7 +333,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                 // URL in shape text or at shape itself (URL in text overrides object URL)
                 if ( aHelpText.isEmpty() )
                 {
-                    if( aVEvt.eEvent == SDREVENT_EXECUTEURL )
+                    if( aVEvt.eEvent == SdrEventKind::ExecuteUrl )
                     {
                         aHelpText = aVEvt.pURLField->GetURL();
                         aPixRect = LogicToPixel(aVEvt.pObj->GetLogicRect());

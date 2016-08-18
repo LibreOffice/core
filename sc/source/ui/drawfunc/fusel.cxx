@@ -238,7 +238,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                             sTarget = pIMapObj->GetTarget();
                         }
                     }
-                    if ( aVEvt.eEvent == SDREVENT_EXECUTEURL && aVEvt.pURLField )   // URL
+                    if ( aVEvt.eEvent == SdrEventKind::ExecuteUrl && aVEvt.pURLField )   // URL
                     {
                         sURL = aVEvt.pURLField->GetURL();
                         sTarget = aVEvt.pURLField->GetTargetFrame();

@@ -308,7 +308,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     }
                 }
 
-                if ( aVEvt.eEvent == SDREVENT_EXECUTEURL                   ||
+                if ( aVEvt.eEvent == SdrEventKind::ExecuteUrl                   ||
                      eHit == SDRHIT_HANDLE                                 ||
                      eHit == SDRHIT_MARKEDOBJECT                           ||
                      eHit == SDRHIT_TEXTEDITOBJ                            ||
@@ -329,7 +329,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
                         SetInEditMode(rMEvt, true);
                     }
-                    else if (aVEvt.eEvent == SDREVENT_EXECUTEURL && !rMEvt.IsMod2())
+                    else if (aVEvt.eEvent == SdrEventKind::ExecuteUrl && !rMEvt.IsMod2())
                     {
                         // execute URL
                         mpWindow->ReleaseMouse();

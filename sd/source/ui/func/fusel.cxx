@@ -262,7 +262,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 }
             }
             else if ( !rMEvt.IsMod2() && rMEvt.GetClicks() == 1 &&
-                      aVEvt.eEvent == SDREVENT_EXECUTEURL )
+                      aVEvt.eEvent == SdrEventKind::ExecuteUrl )
              {
                 mpWindow->ReleaseMouse();
                 SfxStringItem aStrItem(SID_FILE_NAME, aVEvt.pURLField->GetURL());

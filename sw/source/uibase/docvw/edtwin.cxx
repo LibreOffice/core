@@ -3201,7 +3201,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         SdrViewEvent aVEvt;
                         pSdrView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-                        if (aVEvt.eEvent == SDREVENT_EXECUTEURL)
+                        if (aVEvt.eEvent == SdrEventKind::ExecuteUrl)
                             bExecDrawTextLink = true;
                     }
                 }
@@ -4742,7 +4742,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                 if (pSdrView)
                                     pSdrView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-                                if (pSdrView && aVEvt.eEvent == SDREVENT_EXECUTEURL)
+                                if (pSdrView && aVEvt.eEvent == SdrEventKind::ExecuteUrl)
                                 {
                                     // hit URL field
                                     const SvxURLField *pField = aVEvt.pURLField;
