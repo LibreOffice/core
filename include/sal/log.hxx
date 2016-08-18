@@ -242,7 +242,10 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     everything being output).
 
     The "+TIMESTAMP" flag causes each output line (as selected by the level
-    switch(es)) to be prefixed by a timestamp like 2016-08-18:14:04:43.672.
+    switch(es)) to be prefixed by a timestamp like 2016-08-18:14:04:43..
+
+    Specifying a flag with a negative sense has no effect. Specifying
+    the same flag multiple times has no extra effect.
 
     A given macro call's level (INFO or WARN) and area is matched against the
     given switches as follows:  Only those switches for which the level matches
