@@ -2639,7 +2639,8 @@ bool SwTransferable::PasteDBData( TransferableDataHelper& rData,
         {
             rSh.MakeDrawView();
             FmFormView* pFmView = dynamic_cast<FmFormView*>( rSh.GetDrawView()  );
-            if(pFmView) {
+            if (pFmView && pDragPt)
+            {
                 const OXFormsDescriptor &rDesc = OXFormsTransferable::extractDescriptor(rData);
                 SdrObject* pObj = pFmView->CreateXFormsControl(rDesc);
                 if(nullptr != pObj)
@@ -2696,7 +2697,7 @@ bool SwTransferable::PasteDBData( TransferableDataHelper& rData,
         {
             rSh.MakeDrawView();
             FmFormView* pFmView = dynamic_cast<FmFormView*>( rSh.GetDrawView()  );
-            if (pFmView && bHaveColumnDescriptor)
+            if (pFmView && bHaveColumnDescriptor && pDragPt)
             {
                 SdrObject* pObj = pFmView->CreateFieldControl( OColumnTransferable::extractColumnDescriptor(rData) );
                 if ( nullptr != pObj)
