@@ -327,7 +327,7 @@ std::vector<OString> TabDialog::getAllPageUIXMLDescriptions() const
 
 bool TabDialog::selectPageByUIXMLDescription(const OString& rUIXMLDescription)
 {
-    TabControl* pTabCtrl = dynamic_cast<TabControl*>(findTabControl(const_cast<TabDialog*>(this)));
+    TabControl* pTabCtrl = dynamic_cast<TabControl*>(findTabControl(this));
 
     if (pTabCtrl)
     {
