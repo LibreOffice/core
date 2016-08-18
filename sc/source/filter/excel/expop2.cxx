@@ -98,8 +98,8 @@ FltError ExportBiff5::Write()
         VbaExport aExport(pDocShell->GetModel());
         if (aExport.containsVBAProject())
         {
-            SotStorage* pVBARoot = xRootStrg->OpenSotStorage("_VBA_PROJECT_CUR");
-            aExport.exportVBA(pVBARoot);
+            tools::SvRef<SotStorage> xVBARoot = xRootStrg->OpenSotStorage("_VBA_PROJECT_CUR");
+            aExport.exportVBA(xVBARoot);
         }
     }
     else if( pDocShell && xRootStrg.Is() && eVbaExportMode == VBAExportMode::REEXPORT_STREAM )
