@@ -37,7 +37,7 @@
       </node>
       <node oor:name=".uno:InsertMenuTrendlines" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Tre~nd Lines...</value>
+          <value xml:lang="en-US">Tre~nd Line...</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertMenuMeanValues" oor:op="replace">
