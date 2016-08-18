@@ -3241,48 +3241,76 @@ bool ScTable::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
 
 bool ScTable::HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow) const
 {
+    if (nStartRow == nEndRow)
+        // Assume only data.
+        /* XXX NOTE: previous behavior still checked this one row and could
+         * evaluate it has header row, but that doesn't make much sense. */
+        return false;
+
     if (nStartCol == nEndCol)
     {
-        if (nEndRow > nStartRow)
-        {
-            CellType eFstCellType = GetCellType(nStartCol, nStartRow);
-            CellType eSndCellType = GetCellType(nStartCol, nStartRow+1);
-            if ((eFstCellType == CELLTYPE_STRING || eFstCellType == CELLTYPE_EDIT)
-                   && (eSndCellType != CELLTYPE_STRING && eSndCellType != CELLTYPE_STRING))
-                return true;
-        }
-        return false;
+        CellType eFstCellType = GetCellType(nStartCol, nStartRow);
+        CellType eSndCellType = GetCellType(nStartCol, nStartRow+1);
+        return ((eFstCellType == CELLTYPE_STRING || eFstCellType == CELLTYPE_EDIT) &&
+                (eSndCellType != CELLTYPE_STRING && eSndCellType != CELLTYPE_STRING));
     }
+
     for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
     {
         CellType eType = GetCellType( nCol, nStartRow );
+        // Any non-text cell in first row => not headers.
         if (eType != CELLTYPE_STRING && eType != CELLTYPE_EDIT)
             return false;
     }
-    return true;
+
+    // First row all text cells, any non-text cell in second row => headers.
+    SCROW nTestRow = nStartRow + 1;
+    for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
+    {
+        CellType eType = GetCellType( nCol, nTestRow );
+        if (eType != CELLTYPE_STRING && eType != CELLTYPE_EDIT)
+            return true;
+    }
+
+    // Also second row all text cells => first row not headers.
+    return false;
 }
 
 bool ScTable::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow ) const
 {
+    if (nStartCol == nEndCol)
+        // Assume only data.
+        /* XXX NOTE: previous behavior still checked this one column and could
+         * evaluate it has header column, but that doesn't make much sense. */
+        return false;
+
     if (nStartRow == nEndRow)
     {
-        if (nEndCol > nStartCol)
-        {
-            CellType eFstCellType = GetCellType(nStartCol, nStartRow);
-            CellType eSndCellType = GetCellType(nStartCol+1, nStartRow);
-            if ((eFstCellType == CELLTYPE_STRING || eFstCellType == CELLTYPE_EDIT)
-                   && (eSndCellType != CELLTYPE_STRING && eSndCellType != CELLTYPE_STRING))
-                return true;
-        }
-        return false;
+        CellType eFstCellType = GetCellType(nStartCol, nStartRow);
+        CellType eSndCellType = GetCellType(nStartCol+1, nStartRow);
+        return ((eFstCellType == CELLTYPE_STRING || eFstCellType == CELLTYPE_EDIT) &&
+                (eSndCellType != CELLTYPE_STRING && eSndCellType != CELLTYPE_STRING));
     }
+
     for (SCROW nRow=nStartRow; nRow<=nEndRow; nRow++)
     {
         CellType eType = GetCellType( nStartCol, nRow );
+        // Any non-text cell in first column => not headers.
         if (eType != CELLTYPE_STRING && eType != CELLTYPE_EDIT)
             return false;
     }
-    return true;
+
+    // First column all text cells, any non-text cell in second column => headers.
+    SCROW nTestCol = nStartCol + 1;
+    for (SCCOL nRow=nStartRow; nRow<=nEndRow; nRow++)
+    {
+        CellType eType = GetCellType( nRow, nTestCol );
+        if (eType != CELLTYPE_STRING && eType != CELLTYPE_EDIT)
+            return true;
+    }
+
+    // Also second column all text cells => first column not headers.
+    return false;
 }
 
 void ScTable::GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
