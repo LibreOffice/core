@@ -30,6 +30,9 @@
 #include <sfx2/tbxctrl.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
+#include <sddllapi.h>
+#include <svx/svxdllapi.h>
+
 // SdPagesField:
 
 class SdPagesField : public SvxMetricField
@@ -63,6 +66,20 @@ public:
     virtual ~SdTbxCtlDiaPages();
 };
 
+class SdTbxCtlToggleSlideMaster : public SfxToolBoxControl
+{
+public:
+    SdTbxCtlToggleSlideMaster( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual ~SdTbxCtlToggleSlideMaster() {}
+
+    SFX_DECL_TOOLBOX_CONTROL();
+
+    virtual void                Select(sal_uInt16 nSelectModifier) override;
+    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
+                                              const SfxPoolItem* pState ) override;
+};
 #endif // INCLUDED_SD_SOURCE_UI_INC_DIACTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

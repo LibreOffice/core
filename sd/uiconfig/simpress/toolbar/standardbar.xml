@@ -53,6 +53,7 @@
  <toolbar:toolbaritem xlink:href=".uno:ToggleTabBarVisibility" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SlideSetup" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SlideMasterPage"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleSlideMaster"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Presentation" toolbar:helpid="10157"/>
  <toolbar:toolbaritem xlink:href=".uno:PresentationCurrentSlide"/>

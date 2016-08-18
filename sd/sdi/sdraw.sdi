@@ -4928,3 +4928,20 @@ SfxVoidItem UnicodeNotationToggle SID_UNICODE_NOTATION_TOGGLE
     ToolBoxConfig = FALSE,
     GroupId = GID_OPTIONS;
 ]
+
+SfxVoidItem ToggleSlideMaster SID_TOGGLE_SLIDE_MASTER
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]

@@ -139,6 +139,11 @@ interface ViewShellBaseView
     ]
     SID_INSERT_DRAW
     []
+    SID_TOGGLE_SLIDE_MASTER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
 }
 
 shell ViewShellBase
