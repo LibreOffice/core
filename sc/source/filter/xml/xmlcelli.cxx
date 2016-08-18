@@ -173,8 +173,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     rXMLImport.GetTables().AddColumn(bTempIsCovered);
     const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     OUString aLocalName;
-    OUString* pStyleName = nullptr;
-    OUString* pCurrencySymbol = nullptr;
+    std::unique_ptr<OUString> xStyleName;
+    std::unique_ptr<OUString> xCurrencySymbol;
     const SvXMLTokenMap& rTokenMap = rImport.GetTableRowCellAttrTokenMap();
     for (sal_Int16 i = 0; i < nAttrCount; ++i)
     {
@@ -186,7 +186,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
         switch (nToken)
         {
             case XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME:
-                pStyleName = new OUString(sValue);
+                xStyleName.reset(new OUString(sValue));
                 mbHasStyle = true;
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_CONTENT_VALIDATION_NAME:
@@ -295,7 +295,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
             }
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_CURRENCY:
-                pCurrencySymbol = new OUString(sValue);
+                xCurrencySymbol.reset(new OUString(sValue));
             break;
             default:
                 ;
@@ -313,7 +313,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
         if(bIsEmpty)
             bFormulaTextResult = true;
     }
-    rXMLImport.GetStylesImportHelper()->SetAttributes(pStyleName, pCurrencySymbol, nCellType);
+    rXMLImport.GetStylesImportHelper()->SetAttributes(xStyleName.release(), xCurrencySymbol.release(), nCellType);
 }
 
 ScXMLTableRowCellContext::~ScXMLTableRowCellContext()
