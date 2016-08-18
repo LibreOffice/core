@@ -539,7 +539,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 aPushInfo.kind = kThemePushButtonMini;
                 nPaintHeight = PB_Mini_Height;
             }
-            else if( pPBVal->mbSingleLine || rc.size.height < (PB_Norm_Height + PB_Norm_Height/2) )
+            else if( (pPBVal && pPBVal->mbSingleLine) || rc.size.height < (PB_Norm_Height + PB_Norm_Height/2) )
             {
                 aPushInfo.kind = kThemePushButtonNormal;
                 nPaintHeight = PB_Norm_Height;
