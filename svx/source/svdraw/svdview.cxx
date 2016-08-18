@@ -1296,7 +1296,7 @@ OUString SdrView::GetStatusText()
 SdrViewContext SdrView::GetContext() const
 {
     if( IsGluePointEditMode() )
-        return SDRCONTEXT_GLUEPOINTEDIT;
+        return SdrViewContext::GluePointEdit;
 
     const size_t nMarkCount = GetMarkedObjectCount();
 
@@ -1308,7 +1308,7 @@ SdrViewContext SdrView::GetContext() const
                 bPath=false;
 
         if( bPath )
-            return SDRCONTEXT_POINTEDIT;
+            return SdrViewContext::PointEdit;
     }
 
     if( GetMarkedObjectCount() )
@@ -1334,14 +1334,14 @@ SdrViewContext SdrView::GetContext() const
         }
 
         if( bGraf )
-            return SDRCONTEXT_GRAPHIC;
+            return SdrViewContext::Graphic;
         else if( bMedia )
-            return SDRCONTEXT_MEDIA;
+            return SdrViewContext::Media;
         else if( bTable )
-            return SDRCONTEXT_TABLE;
+            return SdrViewContext::Table;
     }
 
-    return SDRCONTEXT_STANDARD;
+    return SdrViewContext::Standard;
 }
 
 void SdrView::MarkAll()
@@ -1398,7 +1398,7 @@ void SdrView::DeleteMarked()
         {
             DeleteMarkedGluePoints();
         }
-        else if (GetContext()==SDRCONTEXT_POINTEDIT && HasMarkedPoints())
+        else if (GetContext()==SdrViewContext::PointEdit && HasMarkedPoints())
         {
             DeleteMarkedPoints();
         }

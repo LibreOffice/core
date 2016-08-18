@@ -1086,22 +1086,22 @@ void ToolBarRules::SelectionHasChanged (
 
     switch (rView.GetContext())
     {
-        case SDRCONTEXT_GRAPHIC:
+        case SdrViewContext::Graphic:
             if( !bTextEdit )
                 mpToolBarManager->SetToolBarShell(ToolBarManager::TBG_FUNCTION, RID_DRAW_GRAF_TOOLBOX);
             break;
 
-        case SDRCONTEXT_MEDIA:
+        case SdrViewContext::Media:
             if( !bTextEdit )
                 mpToolBarManager->SetToolBarShell(ToolBarManager::TBG_FUNCTION, RID_DRAW_MEDIA_TOOLBOX);
             break;
 
-        case SDRCONTEXT_TABLE:
+        case SdrViewContext::Table:
             mpToolBarManager->SetToolBarShell(ToolBarManager::TBG_FUNCTION, RID_DRAW_TABLE_TOOLBOX);
             bTextEdit = true;
             break;
 
-        case SDRCONTEXT_STANDARD:
+        case SdrViewContext::Standard:
         default:
             if( !bTextEdit )
             {
@@ -1135,7 +1135,7 @@ void ToolBarRules::SelectionHasChanged (
         mpToolBarManager->AddToolBarShell(ToolBarManager::TBG_FUNCTION, RID_SVX_FONTWORK_BAR);
 
     // Switch on additional context-sensitive tool bars.
-    if (rView.GetContext() == SDRCONTEXT_POINTEDIT)
+    if (rView.GetContext() == SdrViewContext::PointEdit)
         mpToolBarManager->AddToolBarShell(ToolBarManager::TBG_FUNCTION, RID_BEZIER_TOOLBOX);
 }
 

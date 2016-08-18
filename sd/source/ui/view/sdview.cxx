@@ -1137,7 +1137,7 @@ void View::updateHandles()
 
 SdrViewContext View::GetContext() const
 {
-    SdrViewContext eContext = SDRCONTEXT_STANDARD;
+    SdrViewContext eContext = SdrViewContext::Standard;
     if( maSmartTags.getContext( eContext ) )
         return eContext;
     else

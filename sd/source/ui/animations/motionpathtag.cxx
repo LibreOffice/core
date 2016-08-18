@@ -839,7 +839,7 @@ bool MotionPathTag::getContext( SdrViewContext& rContext )
 {
     if( mpPathObj && isSelected() && !mrView.IsFrameDragSingles() )
     {
-        rContext = SDRCONTEXT_POINTEDIT;
+        rContext = SdrViewContext::PointEdit;
         return true;
     }
     else

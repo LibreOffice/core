@@ -51,12 +51,14 @@
 
 class SvxURLField;
 
-enum SdrViewContext {SDRCONTEXT_STANDARD,
-                     SDRCONTEXT_POINTEDIT,
-                     SDRCONTEXT_GLUEPOINTEDIT,
-                     SDRCONTEXT_GRAPHIC,
-                     SDRCONTEXT_MEDIA,
-                     SDRCONTEXT_TABLE};
+enum class SdrViewContext {
+    Standard,
+    PointEdit,
+    GluePointEdit,
+    Graphic,
+    Media,
+    Table
+};
 
 enum class SdrEventKind {
     NONE,

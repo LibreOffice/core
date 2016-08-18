@@ -1381,7 +1381,7 @@ SelectionType SwWrtShell::GetSelectionType() const
 
             if (_rView.IsBezierEditMode())
                 nCnt |= nsSelectionType::SEL_BEZ;
-            else if( GetDrawView()->GetContext() == SDRCONTEXT_MEDIA )
+            else if( GetDrawView()->GetContext() == SdrViewContext::Media )
                 nCnt |= nsSelectionType::SEL_MEDIA;
 
             if (svx::checkForSelectedCustomShapes(
