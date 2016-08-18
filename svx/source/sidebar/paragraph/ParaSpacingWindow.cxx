@@ -36,6 +36,7 @@ using namespace svx;
 
 ParaULSpacingWindow::ParaULSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame)
     : VclVBox(pParent)
+    , m_eUnit(SFX_MAPUNIT_TWIP)
 {
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(),
                                   "svx/ui/paraulspacing.ui",
