@@ -203,6 +203,7 @@ public:
     void testTdf84695NormalChar();
     void testTableStyleUndo();
     void testRedlineParam();
+    void testRedlineViewAuthor();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -307,6 +308,7 @@ public:
     CPPUNIT_TEST(testTdf84695NormalChar);
     CPPUNIT_TEST(testTableStyleUndo);
     CPPUNIT_TEST(testRedlineParam);
+    CPPUNIT_TEST(testRedlineViewAuthor);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3855,6 +3857,34 @@ void SwUiWriterTest::testRedlineParam()
     // This was 'middlezzz', the uno command rejected the redline under the
     // cursor, instead of the requested one.
     CPPUNIT_ASSERT_EQUAL(OUString("aaamiddle"), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+}
+
+void SwUiWriterTest::testRedlineViewAuthor()
+{
+    // Test that setting an author at an SwView level has effect.
+
+    // Create a document with minimal content.
+    SwDoc* pDoc = createDoc();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert("middle");
+    SwView* pView = pDocShell->GetView();
+    const OUString aAuthor("A U. Thor");
+    pView->SetRedlineAuthor(aAuthor);
+    pDocShell->SetView(pView);
+
+    // Turn on track changes, and add changes to the start of the document.
+    uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
+    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    pWrtShell->SttDoc();
+    pWrtShell->Insert("aaa");
+
+    // Now assert that SwView::SetRedlineAuthor() had an effect.
+    const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rTable.size());
+    SwRangeRedline* pRedline = rTable[0];
+    // This was 'Unknown Author' instead of 'A U. Thor'.
+    CPPUNIT_ASSERT_EQUAL(aAuthor, pRedline->GetAuthorString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
