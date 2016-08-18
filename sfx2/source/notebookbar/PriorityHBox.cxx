@@ -121,12 +121,10 @@ public:
             m_nNeededWidth += pChild->GetSizePixel().Width() + spacing;
 
             // Add only containers which have explicitly assigned priority.
-            if (pChild->GetType() == WINDOW_CONTAINER)
-            {
-                IPrioritable* pPrioritable = dynamic_cast<IPrioritable*>(pChild);
-                if (pPrioritable->GetPriority() != VCL_PRIORITY_DEFAULT)
-                    m_aSortedChilds.push_back(pPrioritable);
-            }
+            IPrioritable* pPrioritable = pChild->GetType() == WINDOW_CONTAINER ?
+                dynamic_cast<IPrioritable*>(pChild) : nullptr;
+            if (pPrioritable && pPrioritable->GetPriority() != VCL_PRIORITY_DEFAULT)
+                m_aSortedChilds.push_back(pPrioritable);
         }
 
         std::sort(m_aSortedChilds.begin(), m_aSortedChilds.end(), lcl_comparePriority);
