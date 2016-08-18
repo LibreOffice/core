@@ -6428,7 +6428,11 @@ CXXFLAGS=$save_CXXFLAGS
 AC_MSG_RESULT([$cxx14_sized_deallocation])
 if test "$cxx14_sized_deallocation" = yes; then
     AC_DEFINE([HAVE_CXX14_SIZED_DEALLOCATION])
+    HAVE_CXX14_SIZED_DEALLOCATION=TRUE
+else
+    HAVE_CXX14_SIZED_DEALLOCATION=
 fi
+AC_SUBST([HAVE_CXX14_SIZED_DEALLOCATION])
 
 HAVE_GCC_PRAGMA_OPERATOR=
 dnl _Pragma support (may require C++11)
