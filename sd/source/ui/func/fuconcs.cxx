@@ -143,7 +143,7 @@ bool FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
     if(mpView->IsCreateObj() && rMEvt.IsLeft())
     {
         SdrObject* pObj = mpView->GetCreateObj();
-        if( pObj && mpView->EndCreateObj( SDRCREATE_FORCEEND ) )
+        if( pObj && mpView->EndCreateObj( SdrCreateCmd::ForceEnd ) )
         {
             bReturn = true;
         }

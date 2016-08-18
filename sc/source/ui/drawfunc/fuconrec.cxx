@@ -107,7 +107,7 @@ bool FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 
     if ( pView->IsCreateObj() && rMEvt.IsLeft() )
     {
-        pView->EndCreateObj(SDRCREATE_FORCEEND);
+        pView->EndCreateObj(SdrCreateCmd::ForceEnd);
 
         if (aSfxRequest.GetSlot() == SID_DRAW_CAPTION_VERTICAL)
         {

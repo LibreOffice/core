@@ -60,7 +60,7 @@ SdrViewEvent::SdrViewEvent()
       pURLField(nullptr),
       eHit(SDRHIT_NONE),
       eEvent(SdrEventKind::NONE),
-      eEndCreateCmd(SDRCREATE_NEXTPOINT),
+      eEndCreateCmd(SdrCreateCmd::NextPoint),
       nMouseClicks(0),
       nMouseMode(MouseEventModifiers::NONE),
       nMouseCode(0),
@@ -573,9 +573,9 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                 else if (IsCreateObj() || IsInsObjPoint())
                 {
                     eEvent=IsCreateObj() ? SdrEventKind::EndCreate : SdrEventKind::EndInsertObjPoint;
-                    rVEvt.eEndCreateCmd=SDRCREATE_NEXTPOINT;
-                    if (MODKEY_PolyPoly) rVEvt.eEndCreateCmd=SDRCREATE_NEXTOBJECT;
-                    if (rVEvt.nMouseClicks>1) rVEvt.eEndCreateCmd=SDRCREATE_FORCEEND;
+                    rVEvt.eEndCreateCmd=SdrCreateCmd::NextPoint;
+                    if (MODKEY_PolyPoly) rVEvt.eEndCreateCmd=SdrCreateCmd::NextObject;
+                    if (rVEvt.nMouseClicks>1) rVEvt.eEndCreateCmd=SdrCreateCmd::ForceEnd;
                 }
                 else if (IsMarking())
                 {
@@ -803,9 +803,9 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
             bRet=true;
         } break;
         case SdrEventKind::EndCreate: { // if necessary, MarkObj
-            SdrCreateCmd eCmd=SDRCREATE_NEXTPOINT;
-            if (MODKEY_PolyPoly) eCmd=SDRCREATE_NEXTOBJECT;
-            if (rVEvt.nMouseClicks>1) eCmd=SDRCREATE_FORCEEND;
+            SdrCreateCmd eCmd=SdrCreateCmd::NextPoint;
+            if (MODKEY_PolyPoly) eCmd=SdrCreateCmd::NextObject;
+            if (rVEvt.nMouseClicks>1) eCmd=SdrCreateCmd::ForceEnd;
             if (!EndCreateObj(eCmd)) { // Don't evaluate event for Create? -> Select
                 if (eHit==SDRHIT_UNMARKEDOBJECT || eHit==SDRHIT_TEXTEDIT) {
                     MarkObj(rVEvt.pRootObj,rVEvt.pPV);
@@ -880,9 +880,9 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
         case SdrEventKind::BeginMark: bRet=BegMark(aLogicPos,rVEvt.bAddMark,rVEvt.bUnmark); break;
         case SdrEventKind::BeginInsertObjPoint: bRet = BegInsObjPoint(aLogicPos, MODKEY_PolyPoly); break;
         case SdrEventKind::EndInsertObjPoint: {
-            SdrCreateCmd eCmd=SDRCREATE_NEXTPOINT;
-            if (MODKEY_PolyPoly) eCmd=SDRCREATE_NEXTOBJECT;
-            if (rVEvt.nMouseClicks>1) eCmd=SDRCREATE_FORCEEND;
+            SdrCreateCmd eCmd=SdrCreateCmd::NextPoint;
+            if (MODKEY_PolyPoly) eCmd=SdrCreateCmd::NextObject;
+            if (rVEvt.nMouseClicks>1) eCmd=SdrCreateCmd::ForceEnd;
             EndInsObjPoint(eCmd);
             bRet=true;
         } break;

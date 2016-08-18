@@ -136,7 +136,7 @@ bool FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
     {
         const size_t nCount = mpView->GetSdrPageView()->GetObjList()->GetObjCount();
 
-        if (mpView->EndCreateObj(SDRCREATE_NEXTPOINT) )
+        if (mpView->EndCreateObj(SdrCreateCmd::NextPoint) )
         {
             if (nCount != mpView->GetSdrPageView()->GetObjList()->GetObjCount())
             {

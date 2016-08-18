@@ -390,7 +390,7 @@ bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
     // object creation active?
     if ( rView.IsCreateObj() )
     {
-        rView.EndCreateObj(SDRCREATE_FORCEEND);
+        rView.EndCreateObj(SdrCreateCmd::ForceEnd);
 
         if ( !rView.AreObjectsMarked() )
         {

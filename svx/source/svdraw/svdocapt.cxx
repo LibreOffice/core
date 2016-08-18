@@ -572,7 +572,7 @@ bool SdrCaptionObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     maRect.SetPos(rStat.GetNow());
     ImpCalcTail(aPara,aTailPoly,maRect);
     SetRectsDirty();
-    return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointCount()>=2);
+    return (eCmd==SdrCreateCmd::ForceEnd || rStat.GetPointCount()>=2);
 }
 
 bool SdrCaptionObj::BckCreate(SdrDragStat& /*rStat*/)

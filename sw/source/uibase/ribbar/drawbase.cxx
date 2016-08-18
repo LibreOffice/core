@@ -268,7 +268,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                 m_pSh->StartUndo(UNDO_INSERT, &aRewriter);
             }
 
-            m_pSh->EndCreate(SDRCREATE_FORCEEND);
+            m_pSh->EndCreate(SdrCreateCmd::ForceEnd);
             if (OBJ_NONE == nDrawMode)   // Text border inserted
             {
                uno::Reference< frame::XDispatchRecorder > xRecorder =
@@ -362,7 +362,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
             if ( pSdrView->IsAction() )
             {
                 if ( pSdrView->IsInsObjPoint() )
-                    bReturn = pSdrView->EndInsObjPoint(SDRCREATE_FORCEEND);
+                    bReturn = pSdrView->EndInsObjPoint(SdrCreateCmd::ForceEnd);
                 else if (pSdrView->IsMarkPoints() )
                     bReturn = pSdrView->EndMarkPoints();
                 else

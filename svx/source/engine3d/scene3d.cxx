@@ -698,7 +698,7 @@ bool E3dScene::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     aRect1.Justify();
     NbcSetSnapRect(aRect1);
     SetRectsDirty();
-    return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointCount()>=2);
+    return (eCmd==SdrCreateCmd::ForceEnd || rStat.GetPointCount()>=2);
 }
 
 bool E3dScene::BckCreate(SdrDragStat& /*rStat*/)

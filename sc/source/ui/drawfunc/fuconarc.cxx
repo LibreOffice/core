@@ -92,7 +92,7 @@ bool FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 
     if ( pView->IsCreateObj() && rMEvt.IsLeft() )
     {
-        pView->EndCreateObj( SDRCREATE_NEXTPOINT );
+        pView->EndCreateObj( SdrCreateCmd::NextPoint );
         bReturn = true;
     }
     return (FuConstruct::MouseButtonUp(rMEvt) || bReturn);

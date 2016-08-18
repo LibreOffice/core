@@ -342,7 +342,7 @@ bool FuConstruct3dObject::MouseButtonUp(const MouseEvent& rMEvt)
 
     if ( mpView->IsCreateObj() && rMEvt.IsLeft() )
     {
-        mpView->EndCreateObj(SDRCREATE_FORCEEND);
+        mpView->EndCreateObj(SdrCreateCmd::ForceEnd);
         bReturn = true;
     }
 

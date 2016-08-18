@@ -67,7 +67,7 @@ void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget,
         Point aEndPos(aSz.Width(), aSz.Height());
 
         rSh.MoveCreate(aStartPos + aEndPos);
-        rSh.EndCreate(SDRCREATE_FORCEEND);
+        rSh.EndCreate(SdrCreateCmd::ForceEnd);
 
         const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
         if (rMarkList.GetMark(0))

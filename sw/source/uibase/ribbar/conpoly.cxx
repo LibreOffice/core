@@ -60,7 +60,7 @@ bool ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
                                         m_pWin->GetSdrDrawMode() != OBJ_FREELINE &&
                                         m_pWin->GetSdrDrawMode() != OBJ_FREEFILL)
         {
-            if (!m_pSh->EndCreate(SDRCREATE_NEXTPOINT))
+            if (!m_pSh->EndCreate(SdrCreateCmd::NextPoint))
             {
                 m_pSh->BreakCreate();
                 EnterSelectMode(rMEvt);

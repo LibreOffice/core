@@ -232,7 +232,7 @@ void SdrCreateView::MovAction(const Point& rPnt)
 
 void SdrCreateView::EndAction()
 {
-    if (pAktCreate!=nullptr) EndCreateObj(SDRCREATE_FORCEEND);
+    if (pAktCreate!=nullptr) EndCreateObj(SdrCreateCmd::ForceEnd);
     SdrDragView::EndAction();
 }
 
@@ -595,7 +595,7 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
     {
         sal_uIntPtr nCount=maDragStat.GetPointCount();
 
-        if (nCount<=1 && eCmd==SDRCREATE_FORCEEND)
+        if (nCount<=1 && eCmd==SdrCreateCmd::ForceEnd)
         {
             BrkCreateObj(); // objects with only a single point don't exist (at least today)
             return false; // sal_False = event not interpreted
@@ -672,7 +672,7 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
         }
         else
         { // more points
-            if (eCmd==SDRCREATE_FORCEEND || // nothing there -- force ending
+            if (eCmd==SdrCreateCmd::ForceEnd || // nothing there -- force ending
                 nCount==0 ||                             // no existing points (should never happen)
                 (nCount<=1 && !maDragStat.IsMinMoved())) { // MinMove not met
                 BrkCreateObj();

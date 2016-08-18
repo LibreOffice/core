@@ -521,13 +521,13 @@ public:
 
     /** Process of creating draw objects. At the beginning object type is passed.
      At the end a Cmd can be passed. Here, SDRCREATE_RESTRAINTEND for end
-     or SDRCREATE_NEXTPOINT for a polygon may be relevant.
+     or SdrCreateCmd::NextPoint for a polygon may be relevant.
      After RESTRAINTEND the object is created and selected.
      BreakCreate interrupts the process. In this case no object is selected. */
     bool BeginCreate( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, const Point &rPos );
     bool BeginCreate( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, sal_uInt32 eObjInventor, const Point &);
     void MoveCreate ( const Point &rPos );
-    bool EndCreate  ( sal_uInt16 eSdrCreateCmd );
+    bool EndCreate  ( SdrCreateCmd eSdrCreateCmd );
     void BreakCreate();
     bool IsDrawCreate() const;
     void CreateDefaultShape( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, const Rectangle& rRect, sal_uInt16 nSlotId);

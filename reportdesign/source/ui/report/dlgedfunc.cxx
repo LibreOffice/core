@@ -701,7 +701,7 @@ bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
             return true;
         }
 
-        m_rView.EndCreateObj(SDRCREATE_FORCEEND);
+        m_rView.EndCreateObj(SdrCreateCmd::ForceEnd);
 
         if ( !m_rView.AreObjectsMarked() )
         {

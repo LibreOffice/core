@@ -679,7 +679,7 @@ void GraphCtrl::MouseButtonUp(const MouseEvent& rMEvt)
     if ( bSdrMode )
     {
         if ( pView->IsInsObjPoint() )
-            pView->EndInsObjPoint( SDRCREATE_FORCEEND );
+            pView->EndInsObjPoint( SdrCreateCmd::ForceEnd );
         else
             pView->MouseButtonUp( rMEvt, this );
 

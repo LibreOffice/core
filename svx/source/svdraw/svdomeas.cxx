@@ -991,7 +991,7 @@ bool SdrMeasureObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     SetTextDirty();
     SetRectsDirty();
-    return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointCount()>=2);
+    return (eCmd==SdrCreateCmd::ForceEnd || rStat.GetPointCount()>=2);
 }
 
 bool SdrMeasureObj::BckCreate(SdrDragStat& /*rStat*/)

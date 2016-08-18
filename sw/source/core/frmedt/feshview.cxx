@@ -1522,7 +1522,7 @@ void SwFEShell::MoveCreate( const Point &rPos )
     }
 }
 
-bool SwFEShell::EndCreate( sal_uInt16 eSdrCreateCmd )
+bool SwFEShell::EndCreate( SdrCreateCmd eSdrCreateCmd )
 {
     // To assure undo-object from the DrawEngine is not stored,
     // (we create our own undo-object!), temporarily switch-off Undo
@@ -1531,8 +1531,7 @@ bool SwFEShell::EndCreate( sal_uInt16 eSdrCreateCmd )
     {
         GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
     }
-    bool bCreate = Imp()->GetDrawView()->EndCreateObj(
-                                    SdrCreateCmd( eSdrCreateCmd ) );
+    bool bCreate = Imp()->GetDrawView()->EndCreateObj( eSdrCreateCmd );
     GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(true);
 
     if ( !bCreate )
@@ -1541,7 +1540,7 @@ bool SwFEShell::EndCreate( sal_uInt16 eSdrCreateCmd )
         return false;
     }
 
-    if ( (SdrCreateCmd)eSdrCreateCmd == SDRCREATE_NEXTPOINT )
+    if ( eSdrCreateCmd == SdrCreateCmd::NextPoint )
     {
         ::FrameNotify( this );
         return true;

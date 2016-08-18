@@ -441,7 +441,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
     {
         if (rMEvt.IsLeft())
         {
-            pView->EndCreateObj(SDRCREATE_FORCEEND);
+            pView->EndCreateObj(SdrCreateCmd::ForceEnd);
             if (aSfxRequest.GetSlot() == SID_DRAW_TEXT_MARQUEE)
             {
                 //  Lauftext-Objekt erzeugen?

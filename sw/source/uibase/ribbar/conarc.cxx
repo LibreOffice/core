@@ -64,7 +64,7 @@ bool ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
                 bReturn = true;
             }
             else
-                m_pSh->EndCreate(SDRCREATE_NEXTPOINT);
+                m_pSh->EndCreate(SdrCreateCmd::NextPoint);
         }
     }
 

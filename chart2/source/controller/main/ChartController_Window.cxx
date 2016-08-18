@@ -743,7 +743,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
         // #i12587# support for shapes in chart
         if ( m_eDrawMode == CHARTDRAW_INSERT && pDrawViewWrapper->IsCreateObj() )
         {
-            pDrawViewWrapper->EndCreateObj( SDRCREATE_FORCEEND );
+            pDrawViewWrapper->EndCreateObj( SdrCreateCmd::ForceEnd );
             {
                 HiddenUndoContext aUndoContext( m_xUndoManager );
                     // don't want the positioning Undo action to appear in the UI

@@ -31,9 +31,12 @@ const sal_uInt32 SdrInventor=sal_uInt32('S')*0x00000001+
                          sal_uInt32('r')*0x01000000;
 
 // commands for EndCreate()
-enum SdrCreateCmd {SDRCREATE_NEXTPOINT,     // next traverse station, segment of a circle: next coordinate
-                   SDRCREATE_NEXTOBJECT,    // next polygon in PolyPolygon
-                   SDRCREATE_FORCEEND};     // forced end
+enum class SdrCreateCmd
+{
+    NextPoint,     // next traverse station, segment of a circle: next coordinate
+    NextObject,    // next polygon in PolyPolygon
+    ForceEnd       // forced end
+};
 
 enum class SdrDragMode
 {

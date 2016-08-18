@@ -705,7 +705,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             ImpSetAttributesForNewTextObject(GetTextObj());
         }
 
-        if (!mpView->EndCreateObj(SDRCREATE_FORCEEND))
+        if (!mpView->EndCreateObj(SdrCreateCmd::ForceEnd))
         {
             // it was not possible to create text object
             mxTextObj.reset(nullptr);
@@ -781,7 +781,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 GetTextObj()->SetDisableAutoWidthOnDragging(true);
             }
 
-            if(!mpView->EndCreateObj(SDRCREATE_FORCEEND))
+            if(!mpView->EndCreateObj(SdrCreateCmd::ForceEnd))
             {
                 mxTextObj.reset(nullptr);
             }

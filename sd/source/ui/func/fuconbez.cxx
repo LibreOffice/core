@@ -131,7 +131,7 @@ bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
 
     if (mpView->IsInsObjPoint())
     {
-        mpView->EndInsObjPoint(SDRCREATE_FORCEEND);
+        mpView->EndInsObjPoint(SdrCreateCmd::ForceEnd);
     }
     else
     {

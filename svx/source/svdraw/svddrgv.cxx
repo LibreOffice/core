@@ -697,10 +697,10 @@ bool SdrDragView::EndInsObjPoint(SdrCreateCmd eCmd)
         sal_uInt32 nNextPnt(mnInsPointNum);
         Point aPnt(maDragStat.GetNow());
         bool bOk=EndDragObj();
-        if (bOk && eCmd!=SDRCREATE_FORCEEND)
+        if (bOk && eCmd!=SdrCreateCmd::ForceEnd)
         {
             // Ret=True means: Action is over.
-            bOk=!(ImpBegInsObjPoint(true, nNextPnt, aPnt, eCmd == SDRCREATE_NEXTOBJECT, mpDragWin));
+            bOk=!(ImpBegInsObjPoint(true, nNextPnt, aPnt, eCmd == SdrCreateCmd::NextObject, mpDragWin));
         }
 
         return bOk;

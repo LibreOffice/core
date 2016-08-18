@@ -712,7 +712,7 @@ bool SdrCircObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     ImpSetCreateParams(rStat);
     ImpCircUser* pU=static_cast<ImpCircUser*>(rStat.GetUser());
     bool bRet = false;
-    if (eCmd==SDRCREATE_FORCEEND && rStat.GetPointCount()<4) meCircleKind=OBJ_CIRC;
+    if (eCmd==SdrCreateCmd::ForceEnd && rStat.GetPointCount()<4) meCircleKind=OBJ_CIRC;
     if (meCircleKind==OBJ_CIRC) {
         bRet=rStat.GetPointCount()>=2;
         if (bRet) {

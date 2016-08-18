@@ -1403,8 +1403,8 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     sal_uInt16 nActPoint=rXPoly.GetPointCount()-1;
     rXPoly[nActPoint]=rStat.Now();
     if (!pU->bMixedCreate && pU->eStartKind==OBJ_LINE) {
-        if (rStat.GetPointCount()>=2) eCmd=SDRCREATE_FORCEEND;
-        bRet = eCmd==SDRCREATE_FORCEEND;
+        if (rStat.GetPointCount()>=2) eCmd=SdrCreateCmd::ForceEnd;
+        bRet = eCmd==SdrCreateCmd::ForceEnd;
         if (bRet) {
             mbCreating = false;
             delete pU;
@@ -1414,8 +1414,8 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     }
 
     if (!pU->bMixedCreate && IsFreeHand(pU->eStartKind)) {
-        if (rStat.GetPointCount()>=2) eCmd=SDRCREATE_FORCEEND;
-        bRet=eCmd==SDRCREATE_FORCEEND;
+        if (rStat.GetPointCount()>=2) eCmd=SdrCreateCmd::ForceEnd;
+        bRet=eCmd==SdrCreateCmd::ForceEnd;
         if (bRet) {
             mbCreating=false;
             delete pU;
@@ -1423,7 +1423,7 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
         }
         return bRet;
     }
-    if (eCmd==SDRCREATE_NEXTPOINT || eCmd==SDRCREATE_NEXTOBJECT) {
+    if (eCmd==SdrCreateCmd::NextPoint || eCmd==SdrCreateCmd::NextObject) {
         // don't allow two consecutive points to occupy the same position
         if (nActPoint==0 || rStat.Now()!=rXPoly[nActPoint-1]) {
             if (bIncomp) {
@@ -1458,7 +1458,7 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
             nActPoint++;
             rXPoly[nActPoint]=rStat.GetNow();
         }
-        if (eCmd==SDRCREATE_NEXTOBJECT) {
+        if (eCmd==SdrCreateCmd::NextObject) {
             if (rXPoly.GetPointCount()>=2) {
                 pU->bBezHasCtrl0=false;
                 // only a singular polygon may be opened, so close this
@@ -1473,7 +1473,7 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     sal_uInt16 nPolyCount=aPathPolygon.Count();
     if (nPolyCount!=0) {
         // delete last point, if necessary
-        if (eCmd==SDRCREATE_FORCEEND) {
+        if (eCmd==SdrCreateCmd::ForceEnd) {
             XPolygon& rXP=aPathPolygon[nPolyCount-1];
             sal_uInt16 nPointCount=rXP.GetPointCount();
             if (nPointCount>=2) {
@@ -1493,13 +1493,13 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
             XPolygon& rXP=aPathPolygon[nPolyNum];
             sal_uInt16 nPointCount=rXP.GetPointCount();
             // delete polygons with too few points
-            if (nPolyNum<nPolyCount-1 || eCmd==SDRCREATE_FORCEEND) {
+            if (nPolyNum<nPolyCount-1 || eCmd==SdrCreateCmd::ForceEnd) {
                 if (nPointCount<2) aPathPolygon.Remove(nPolyNum);
             }
         }
     }
     pU->ResetFormFlags();
-    bRet=eCmd==SDRCREATE_FORCEEND;
+    bRet=eCmd==SdrCreateCmd::ForceEnd;
     if (bRet) {
         mbCreating=false;
         delete pU;

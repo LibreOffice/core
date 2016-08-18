@@ -633,7 +633,7 @@ void FmFormObj::SetUnoControlModel( const Reference< css::awt::XControlModel >& 
 bool FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
 {
     bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
-    if ( bResult && SDRCREATE_FORCEEND == eCmd && rStat.GetView() )
+    if ( bResult && SdrCreateCmd::ForceEnd == eCmd && rStat.GetView() )
     {
         if ( pPage )
         {

@@ -223,7 +223,7 @@ bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
     {
         SdrObject* pObj = mpView->GetCreateObj();
 
-        if(pObj && mpView->EndCreateObj(SDRCREATE_FORCEEND))
+        if(pObj && mpView->EndCreateObj(SdrCreateCmd::ForceEnd))
         {
             if(SID_DRAW_MEASURELINE == nSlotId)
             {
