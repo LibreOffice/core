@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_1414acf3",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3251,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-18T20:55:47Z",
+      "side": 1,
+      "message": "Actually this was a copy\u0026paste error I didn\u0027t spot, it got fixed with commit b69503ea67cea885fde8a36f41af37a56455fe19",
+      "range": {
+        "startLine": 3251,
+        "startChar": 23,
+        "endLine": 3251,
+        "endChar": 89
+      },
+      "revId": "4cd9e45a439b654c8e1ff7983fe7e4bd073b9c92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_54f624d8",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3274,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-18T20:55:47Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 3274,
+        "startChar": 23,
+        "endLine": 3274,
+        "endChar": 89
+      },
+      "revId": "4cd9e45a439b654c8e1ff7983fe7e4bd073b9c92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
