@@ -136,7 +136,10 @@ public:
     std::shared_ptr<TiledRowColumnBar> m_pRowBar;
     std::shared_ptr<TiledRowColumnBar> m_pColumnBar;
     std::shared_ptr<TiledCornerButton> m_pCornerButton;
+    /// Author string, used for comment insertion.
     std::string m_aAuthor;
+    /// Rendering arguments, which are the same for all views.
+    boost::property_tree::ptree m_aRenderingArguments;
 
     TiledWindow()
         : m_pDocView(nullptr),
@@ -174,8 +177,6 @@ public:
         m_pFindbarLabel(nullptr),
         m_bFindAll(false)
     {
-        struct passwd* pPasswd = getpwuid(getuid());
-        m_aAuthor = std::string(pPasswd->pw_gecos);
     }
 };
 
@@ -196,6 +197,14 @@ static TiledWindow& lcl_getTiledWindow(GtkWidget* pWidget)
     GtkWidget* pToplevel = gtk_widget_get_toplevel(pWidget);
     assert(g_aWindows.find(pToplevel) != g_aWindows.end());
     return g_aWindows[pToplevel];
+}
+
+/// Generate an author string for multiple views.
+static std::string getNextAuthor()
+{
+    static int nCounter = 0;
+    struct passwd* pPasswd = getpwuid(getuid());
+    return std::string(pPasswd->pw_gecos) + " #" + std::to_string(++nCounter);
 }
 
 TiledRowColumnBar::TiledRowColumnBar(TiledBarType eType)
@@ -841,9 +850,19 @@ static void registerSelectorHandlers(TiledWindow& rWindow)
 static void createView(GtkWidget* pButton, gpointer /*pItem*/)
 {
     TiledWindow& rWindow = lcl_getTiledWindow(pButton);
-    GtkWidget* pDocView = lok_doc_view_new_from_widget(LOK_DOC_VIEW(rWindow.m_pDocView));
+
+    boost::property_tree::ptree aTree = rWindow.m_aRenderingArguments;
+    std::string aAuthor = getNextAuthor();
+    aTree.put(boost::property_tree::ptree::path_type(".uno:Author/type", '/'), "string");
+    aTree.put(boost::property_tree::ptree::path_type(".uno:Author/value", '/'), aAuthor);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    std::string aArguments = aStream.str();
+
+    GtkWidget* pDocView = lok_doc_view_new_from_widget(LOK_DOC_VIEW(rWindow.m_pDocView), aArguments.c_str());
 
     TiledWindow& rNewWindow = setupWidgetAndCreateWindow(pDocView);
+    rNewWindow.m_aAuthor = aAuthor;
     // Hide the unused progress bar.
     gtk_widget_show_all(rNewWindow.m_pStatusBar);
     gtk_widget_hide(rNewWindow.m_pProgressBar);
@@ -866,7 +885,7 @@ static void createModelAndView(const char* pLOPath, const char* pDocPath, const 
     const gchar* pUserProfile = aUserProfile.empty() ? nullptr : aUserProfile.c_str();
     GtkWidget* pDocView = lok_doc_view_new_from_user_profile(pLOPath, pUserProfile, nullptr, nullptr);
 
-    setupWidgetAndCreateWindow(pDocView);
+    TiledWindow& rWindow = setupWidgetAndCreateWindow(pDocView);
 
     boost::property_tree::ptree aTree;
     for (size_t i = 0; i < rArguments.size(); ++i)
@@ -891,6 +910,13 @@ static void createModelAndView(const char* pLOPath, const char* pDocPath, const 
             aTree.put(boost::property_tree::ptree::path_type(".uno:HideWhitespace/value", '/'), true);
         }
     }
+
+    // Save rendering arguments for views which are created later.
+    rWindow.m_aRenderingArguments = aTree;
+
+    rWindow.m_aAuthor = getNextAuthor();
+    aTree.put(boost::property_tree::ptree::path_type(".uno:Author/type", '/'), "string");
+    aTree.put(boost::property_tree::ptree::path_type(".uno:Author/value", '/'), rWindow.m_aAuthor);
 
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);

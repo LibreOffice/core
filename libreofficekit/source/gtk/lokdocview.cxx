@@ -3016,7 +3016,8 @@ lok_doc_view_new_from_user_profile (const gchar* pPath, const gchar* pUserProfil
                                      nullptr));
 }
 
-SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new_from_widget(LOKDocView* pOldLOKDocView)
+SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new_from_widget(LOKDocView* pOldLOKDocView,
+                                                             const gchar* pRenderingArguments)
 {
     LOKDocViewPrivate& pOldPriv = getPrivate(pOldLOKDocView);
     GtkWidget* pNewDocView = GTK_WIDGET(g_initable_new(LOK_TYPE_DOC_VIEW, /*cancellable=*/nullptr, /*error=*/nullptr,
@@ -3034,7 +3035,7 @@ SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new_from_widget(LOKDocView* pOldLOK
     // Store the view id only later in postDocumentLoad(), as
     // initializeForRendering() changes the id in Impress.
     pDocument->pClass->createView(pDocument);
-    pNewPriv->m_aRenderingArguments = pOldPriv->m_aRenderingArguments;
+    pNewPriv->m_aRenderingArguments = pRenderingArguments;
 
     postDocumentLoad(pNewDocView);
     return pNewDocView;

@@ -75,10 +75,12 @@ GtkWidget*                     lok_doc_view_new_from_user_profile  (const gchar*
 /**
  * lok_doc_view_new_from_widget:
  * @pDocView: The #LOKDocView instance
+ * @pRenderingArguments: (nullable): lok::Document::initializeForRendering() arguments.
  *
  * Returns: (transfer none): The #LOKDocView widget instance.
  */
-GtkWidget*                     lok_doc_view_new_from_widget        (LOKDocView* pDocView);
+GtkWidget*                     lok_doc_view_new_from_widget        (LOKDocView* pDocView,
+                                                                    const gchar* pRenderingArguments);
 
 /**
  * lok_doc_view_open_document:
