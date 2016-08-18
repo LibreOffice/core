@@ -2740,114 +2740,6 @@ dnl ENABLE_JAVA="TRUE" if we want there to be *run-time* (and build-time) suppor
 dnl ENABLE_JAVA="" indicate no Java support at all
 
 dnl ===================================================================
-dnl Export file validation
-dnl ===================================================================
-AC_MSG_CHECKING([whether to enable export file validation])
-if test "$with_export_validation" = yes; then
-    AC_MSG_RESULT([yes])
-    AC_DEFINE(HAVE_EXPORT_VALIDATION)
-
-    AC_PATH_PROGS(ODFVALIDATOR, odfvalidator)
-    if test -z "$ODFVALIDATOR"; then
-        # remember to download the ODF toolkit with validator later
-        AC_MSG_NOTICE([no odfvalidator found, will download it])
-        BUILD_TYPE="$BUILD_TYPE ODFVALIDATOR"
-        ODFVALIDATOR="$SRC_ROOT/bin/odfvalidator.sh"
-
-        # and fetch name of odfvalidator jar name from download.lst
-        ODFVALIDATOR_JAR=`sed -ne "s/export *ODFVALIDATOR_JAR *:= *\(.*\) */\1/p" download.lst`
-        AC_SUBST(ODFVALIDATOR_JAR)
-
-        if test -z "$ODFVALIDATOR_JAR"; then
-            AC_MSG_ERROR([odfvalidator jar location is not determined (--with-export-validation)])
-        fi
-    fi
-    if test "$build_os" = "cygwin"; then
-        # In case of CygWin it will be executed from Windows,
-        # so we need to run bash and absolute path to validator
-        # so instead of "odfvalidator" it will be
-        # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
-        ODFVALIDATOR="bash.exe `cygpath -m "$ODFVALIDATOR"`"
-    else
-        ODFVALIDATOR="sh $ODFVALIDATOR"
-    fi
-    AC_SUBST(ODFVALIDATOR)
-
-
-    AC_PATH_PROGS(OFFICEOTRON, officeotron)
-    if test -z "$OFFICEOTRON"; then
-        # remember to download the officeotron with validator later
-        AC_MSG_NOTICE([no officeotron found, will download it])
-        BUILD_TYPE="$BUILD_TYPE OFFICEOTRON"
-        OFFICEOTRON="$SRC_ROOT/bin/officeotron.sh"
-
-        # and fetch name of officeotron jar name from download.lst
-        OFFICEOTRON_JAR=`sed -ne "s/export *OFFICEOTRON_JAR *:= *\(.*\) */\1/p" download.lst`
-        AC_SUBST(OFFICEOTRON_JAR)
-
-        if test -z "$OFFICEOTRON_JAR"; then
-            AC_MSG_ERROR([officeotron jar location is not determined (--with-export-validation)])
-        fi
-    else
-        # check version of existing officeotron
-        OFFICEOTRON_VER=`$OFFICEOTRON --version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-        if test 0"$OFFICEOTRON_VER" -lt 704; then
-            AC_MSG_ERROR([officeotron too old])
-        fi
-    fi
-    if test "$build_os" = "cygwin"; then
-        # In case of CygWin it will be executed from Windows,
-        # so we need to run bash and absolute path to validator
-        # so instead of "odfvalidator" it will be
-        # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
-        OFFICEOTRON="bash.exe `cygpath -m "$OFFICEOTRON"`"
-    else
-        OFFICEOTRON="sh $OFFICEOTRON"
-    fi
-    AC_SUBST(OFFICEOTRON)
-else
-    AC_MSG_RESULT([no])
-fi
-
-AC_MSG_CHECKING([for Microsoft Binary File Format Validator])
-if test "$with_bffvalidator" != "no"; then
-    AC_DEFINE(HAVE_BFFVALIDATOR)
-
-    if test "$with_export_validation" != "yes"; then
-        AC_MSG_ERROR([Please enable export validation (-with-export-validation)!])
-    fi
-
-    if test "$with_bffvalidator" = "yes"; then
-        BFFVALIDATOR=`win_short_path_for_make "$PROGRAMFILES/Microsoft Office/BFFValidator/BFFValidator.exe"`
-    else
-        BFFVALIDATOR="$with_bffvalidator"
-    fi
-
-    if test "$build_os" = "cygwin"; then
-        if test -n "$BFFVALIDATOR" -a -e "`cygpath $BFFVALIDATOR`"; then
-            AC_MSG_RESULT($BFFVALIDATOR)
-        else
-            AC_MSG_ERROR([bffvalidator not found, but required by --with-bffvalidator])
-        fi
-    elif test -n "$BFFVALIDATOR"; then
-        # We are not in CygWin but need to run Windows binary with wine
-        AC_PATH_PROGS(WINE, wine)
-
-        # so swap in a shell wrapper that converts paths transparently
-        BFFVALIDATOR_EXE="$BFFVALIDATOR"
-        BFFVALIDATOR="sh $SRC_ROOT/bin/bffvalidator.sh"
-        AC_SUBST(BFFVALIDATOR_EXE)
-        AC_MSG_RESULT($BFFVALIDATOR)
-    else
-        AC_MSG_ERROR([bffvalidator not found, but required by --with-bffvalidator])
-    fi
-    AC_SUBST(BFFVALIDATOR)
-else
-    AC_MSG_RESULT([no])
-fi
-
-
-dnl ===================================================================
 dnl Check OS X SDK and compiler
 dnl ===================================================================
 
@@ -7392,6 +7284,120 @@ AC_SUBST(JAVA_SOURCE_VER)
 AC_SUBST(JAVA_TARGET_VER)
 AC_SUBST(JDK)
 
+
+dnl ===================================================================
+dnl Export file validation
+dnl ===================================================================
+AC_MSG_CHECKING([whether to enable export file validation])
+if test "$with_export_validation" = yes; then
+    if test "$HAVE_JAVA6" != "TRUE"; then
+        AC_MSG_ERROR([officeotron needs at least JRE 1.6; update or specify --without-export-validation])
+    fi
+    AC_MSG_RESULT([yes])
+    AC_DEFINE(HAVE_EXPORT_VALIDATION)
+
+    AC_PATH_PROGS(ODFVALIDATOR, odfvalidator)
+    if test -z "$ODFVALIDATOR"; then
+        # remember to download the ODF toolkit with validator later
+        AC_MSG_NOTICE([no odfvalidator found, will download it])
+        BUILD_TYPE="$BUILD_TYPE ODFVALIDATOR"
+        ODFVALIDATOR="$SRC_ROOT/bin/odfvalidator.sh"
+
+        # and fetch name of odfvalidator jar name from download.lst
+        ODFVALIDATOR_JAR=`sed -ne "s/export *ODFVALIDATOR_JAR *:= *\(.*\) */\1/p" download.lst`
+        AC_SUBST(ODFVALIDATOR_JAR)
+
+        if test -z "$ODFVALIDATOR_JAR"; then
+            AC_MSG_ERROR([cannot determine odfvalidator jar location (--with-export-validation)])
+        fi
+    fi
+    if test "$build_os" = "cygwin"; then
+        # In case of CygWin it will be executed from Windows,
+        # so we need to run bash and absolute path to validator
+        # so instead of "odfvalidator" it will be
+        # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
+        ODFVALIDATOR="bash.exe `cygpath -m "$ODFVALIDATOR"`"
+    else
+        ODFVALIDATOR="sh $ODFVALIDATOR"
+    fi
+    AC_SUBST(ODFVALIDATOR)
+
+
+    AC_PATH_PROGS(OFFICEOTRON, officeotron)
+    if test -z "$OFFICEOTRON"; then
+        # remember to download the officeotron with validator later
+        AC_MSG_NOTICE([no officeotron found, will download it])
+        BUILD_TYPE="$BUILD_TYPE OFFICEOTRON"
+        OFFICEOTRON="$SRC_ROOT/bin/officeotron.sh"
+
+        # and fetch name of officeotron jar name from download.lst
+        OFFICEOTRON_JAR=`sed -ne "s/export *OFFICEOTRON_JAR *:= *\(.*\) */\1/p" download.lst`
+        AC_SUBST(OFFICEOTRON_JAR)
+
+        if test -z "$OFFICEOTRON_JAR"; then
+            AC_MSG_ERROR([cannot determine officeotron jar location (--with-export-validation)])
+        fi
+    else
+        # check version of existing officeotron
+        OFFICEOTRON_VER=`$OFFICEOTRON --version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+        if test 0"$OFFICEOTRON_VER" -lt 704; then
+            AC_MSG_ERROR([officeotron too old])
+        fi
+    fi
+    if test "$build_os" = "cygwin"; then
+        # In case of CygWin it will be executed from Windows,
+        # so we need to run bash and absolute path to validator
+        # so instead of "odfvalidator" it will be
+        # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
+        OFFICEOTRON="bash.exe `cygpath -m "$OFFICEOTRON"`"
+    else
+        OFFICEOTRON="sh $OFFICEOTRON"
+    fi
+    AC_SUBST(OFFICEOTRON)
+else
+    AC_MSG_RESULT([no])
+fi
+
+AC_MSG_CHECKING([for Microsoft Binary File Format Validator])
+if test "$with_bffvalidator" != "no"; then
+    AC_DEFINE(HAVE_BFFVALIDATOR)
+
+    if test "$with_export_validation" != "yes"; then
+        AC_MSG_ERROR([Please enable export validation (-with-export-validation)!])
+    fi
+
+    if test "$with_bffvalidator" = "yes"; then
+        BFFVALIDATOR=`win_short_path_for_make "$PROGRAMFILES/Microsoft Office/BFFValidator/BFFValidator.exe"`
+    else
+        BFFVALIDATOR="$with_bffvalidator"
+    fi
+
+    if test "$build_os" = "cygwin"; then
+        if test -n "$BFFVALIDATOR" -a -e "`cygpath $BFFVALIDATOR`"; then
+            AC_MSG_RESULT($BFFVALIDATOR)
+        else
+            AC_MSG_ERROR([bffvalidator not found, but required by --with-bffvalidator])
+        fi
+    elif test -n "$BFFVALIDATOR"; then
+        # We are not in CygWin but need to run Windows binary with wine
+        AC_PATH_PROGS(WINE, wine)
+
+        # so swap in a shell wrapper that converts paths transparently
+        BFFVALIDATOR_EXE="$BFFVALIDATOR"
+        BFFVALIDATOR="sh $SRC_ROOT/bin/bffvalidator.sh"
+        AC_SUBST(BFFVALIDATOR_EXE)
+        AC_MSG_RESULT($BFFVALIDATOR)
+    else
+        AC_MSG_ERROR([bffvalidator not found, but required by --with-bffvalidator])
+    fi
+    AC_SUBST(BFFVALIDATOR)
+else
+    AC_MSG_RESULT([no])
+fi
+
+dnl ===================================================================
+dnl Check for C preprocessor to use
+dnl ===================================================================
 AC_MSG_CHECKING([which C preprocessor to use in idlc])
 if test -n "$with_idlc_cpp"; then
     AC_MSG_RESULT([$with_idlc_cpp])
