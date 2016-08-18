@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_94319cef",
+        "filename": "external/libodfgen/0001-tdf-101077-make-double-string-conversion-locale-agno.patch.1",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-18T16:05:02Z",
+      "side": 1,
+      "message": "A temporary std::ostringstream for each double likey will not speed things up, but.. ;-)",
+      "revId": "cd2b371ef5d34c484bdd456997d6edd4639fb7f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
