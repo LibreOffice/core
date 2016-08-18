@@ -57,7 +57,7 @@ public:
         throw(css::io::IOException, css::uno::RuntimeException);
 
     void finish()
-        throw(css::io::IOException, css::uno::RuntimeException);
+        throw(css::io::IOException, css::uno::RuntimeException, std::exception);
     const css::uno::Reference< css::io::XOutputStream >& getStream();
 
     static sal_uInt32 getCurrentDosTime();

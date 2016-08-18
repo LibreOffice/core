@@ -173,7 +173,7 @@ void ZipOutputStream::reduceScheduledThreadsToGivenNumberOrLess(sal_Int32 nThrea
 }
 
 void ZipOutputStream::finish()
-    throw(IOException, RuntimeException)
+    throw(IOException, RuntimeException, std::exception)
 {
     assert(!m_aZipList.empty() && "Zip file must have at least one entry!");
 
