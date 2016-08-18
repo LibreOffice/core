@@ -1107,7 +1107,14 @@ void SwDocShell::SetView(SwView* pVw)
     SetViewShell_Impl(pVw);
     m_pView = pVw;
     if (m_pView)
+    {
         m_pWrtShell = &m_pView->GetWrtShell();
+
+        // Set view-specific redline author.
+        const OUString& rRedlineAuthor = m_pView->GetRedlineAuthor();
+        if (!rRedlineAuthor.isEmpty())
+            SW_MOD()->SetRedlineAuthor(m_pView->GetRedlineAuthor());
+    }
     else
         m_pWrtShell = nullptr;
 }
