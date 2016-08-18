@@ -71,7 +71,6 @@ namespace comphelper
         }
     };
 
-
     struct EventNotifierImpl
     {
         ::osl::Mutex        aMutex;
@@ -83,7 +82,8 @@ namespace comphelper
         std::shared_ptr<AsyncEventNotifierAutoJoin> pKeepThisAlive;
 
         EventNotifierImpl()
-            :bTerminate( false )
+            : bTerminate(false)
+            , name(nullptr)
         {
         }
     };
