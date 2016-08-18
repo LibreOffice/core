@@ -267,6 +267,7 @@ SwSpellPopup::SwSpellPopup(
 )   : PopupMenu( SW_RES(MN_SPELL_POPUP) )
     , m_pSh( pWrtSh )
     , m_xSpellAlt(xAlt)
+    , m_nGrammarError(0)
     , m_bGrammarResults(false)
 {
     OSL_ENSURE(m_xSpellAlt.is(), "no spelling alternatives available");
