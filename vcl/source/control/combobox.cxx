@@ -351,28 +351,22 @@ IMPL_LINK_TYPED(ComboBox::Impl, ImplAutocompleteHdl, Edit&, rEdit, void)
         if ( nStart == LISTBOX_ENTRY_NOTFOUND )
             nStart = 0;
 
-        bool bForward = true;
-
         sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
         if (!m_isMatchCase)
         {
             // Try match case insensitive from current position
-            nPos = m_pImplLB->GetEntryList()->FindMatchingEntry( aStartText, nStart, bForward );
+            nPos = m_pImplLB->GetEntryList()->FindMatchingEntry(aStartText, nStart, true);
             if ( nPos == LISTBOX_ENTRY_NOTFOUND )
                 // Try match case insensitive, but from start
-                nPos = m_pImplLB->GetEntryList()->FindMatchingEntry( aStartText,
-                    bForward ? 0 : (m_pImplLB->GetEntryList()->GetEntryCount()-1),
-                    bForward );
+                nPos = m_pImplLB->GetEntryList()->FindMatchingEntry(aStartText, 0, true);
         }
 
         if ( nPos == LISTBOX_ENTRY_NOTFOUND )
             // Try match full from current position
-            nPos = m_pImplLB->GetEntryList()->FindMatchingEntry( aStartText, nStart, bForward, false );
+            nPos = m_pImplLB->GetEntryList()->FindMatchingEntry(aStartText, nStart, true, false);
         if ( nPos == LISTBOX_ENTRY_NOTFOUND )
             //  Match full, but from start
-            nPos = m_pImplLB->GetEntryList()->FindMatchingEntry( aStartText,
-                bForward ? 0 : (m_pImplLB->GetEntryList()->GetEntryCount()-1),
-                bForward, false );
+            nPos = m_pImplLB->GetEntryList()->FindMatchingEntry(aStartText, 0, true, false);
 
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
