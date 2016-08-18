@@ -1145,7 +1145,7 @@ public:
     void OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
                         HTMLOutContext *pContext = nullptr );
     void OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
-                      HTMLOutContext *pContext = nullptr );
+                      HTMLOutContext *pContext );
 
     bool IsHTMLMode( sal_uLong nMode ) const { return (nHTMLMode & nMode) != 0; }
 };
@@ -1939,7 +1939,7 @@ void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
 }
 
 void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
-                                     HTMLOutContext *pContext )
+                                     HTMLOutContext *pContext = nullptr )
 {
     rHWrt.m_bTagOn = false;
 

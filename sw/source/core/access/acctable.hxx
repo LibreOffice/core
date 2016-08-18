@@ -224,7 +224,7 @@ public:
     virtual void InvalidatePosOrSize( const SwRect& rOldBox ) override;
 
     // The object is not visible an longer and should be destroyed
-    virtual void Dispose(bool bRecursive = false, bool bCanSkipInvisible = true) override;
+    virtual void Dispose(bool bRecursive, bool bCanSkipInvisible = true) override;
 
     virtual void DisposeChild( const sw::access::SwAccessibleChild& rFrameOrObj,
                                bool bRecursive, bool bCanSkipInvisible ) override;

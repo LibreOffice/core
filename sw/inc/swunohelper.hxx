@@ -50,7 +50,7 @@ SW_DLLPUBLIC bool UCB_DeleteFile( const OUString& rURL );
 
     // copy/move the file to a new location
 bool UCB_CopyFile( const OUString& rURL, const OUString& rNewURL,
-                    bool bCopyIsMove = false );
+                    bool bCopyIsMove );
 
     // is the URL on the current system case sensitive?
 SW_DLLPUBLIC bool UCB_IsCaseSensitiveFileName( const OUString& rURL );
@@ -65,7 +65,7 @@ SW_DLLPUBLIC bool UCB_IsReadOnlyFileName( const OUString& rURL );
     //                       !! objects must be deleted from the caller!!
 bool UCB_GetFileListOfFolder( const OUString& rURL,
                                 std::vector<OUString>& rList,
-                                const OUString* pExtension = nullptr,
+                                const OUString* pExtension,
                                 std::vector<DateTime*>* pDateTimeList = nullptr );
 
     // is the URL an existing file?

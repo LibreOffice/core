@@ -225,7 +225,7 @@ public:
     /// Output FKP (Formatted disK Page) - necessary for binary formats only.
     /// FIXME having it in AttributeOutputBase is probably a hack, it
     /// should be in WW8AttributeOutput only...
-    virtual void OutputFKP(bool /*bForce*/ = false) {}
+    virtual void OutputFKP(bool /*bForce*/) {}
 
     /// Output style.
     virtual void ParagraphStyle( sal_uInt16 nStyle ) = 0;
@@ -358,7 +358,7 @@ public:
         sal_Int16 nFirstLineIndex,
         sal_Int16 nListTabPos,
         const OUString &rNumberingString,
-        const SvxBrushItem* pBrush = nullptr) = 0; // #i120928 export graphic of bullet
+        const SvxBrushItem* pBrush) = 0; // #i120928 export graphic of bullet
 
 protected:
 

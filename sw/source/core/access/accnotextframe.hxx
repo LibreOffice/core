@@ -98,7 +98,7 @@ public:
         throw ( css::uno::RuntimeException, std::exception ) override;
 
     // The object is not visible an longer and should be destroyed
-    virtual void Dispose(bool bRecursive = false, bool bCanSkipInvisible = true) override;
+    virtual void Dispose(bool bRecursive, bool bCanSkipInvisible = true) override;
 
     virtual sal_Int32 SAL_CALL getCaretPosition(  ) throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;

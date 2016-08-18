@@ -393,7 +393,7 @@ public:
     virtual SfxAbstractTabDialog * CreateSwFootNoteOptionDlg(vcl::Window *pParent, SwWrtShell &rSh) override;
 
     virtual AbstractDropDownFieldDialog * CreateDropDownFieldDialog(SwWrtShell &rSh,
-        SwField* pField, bool bNextButton = false) override;
+        SwField* pField, bool bNextButton) override;
     virtual SfxAbstractTabDialog* CreateSwEnvDlg ( vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert ) override;
     virtual AbstractSwLabDlg* CreateSwLabDlg(const SfxItemSet& rSet,
                                                      SwDBManager* pDBManager, bool bLabel) override;
@@ -402,7 +402,7 @@ public:
     virtual SfxAbstractTabDialog* CreateSwParaDlg ( vcl::Window *pParent,
                                                     SwView& rVw,
                                                     const SfxItemSet& rCoreSet,
-                                                    const OUString *pCollName = nullptr,
+                                                    const OUString *pCollName,
                                                     bool bDraw = false,
                                                     const OString& sDefPage = OString() ) override;
 
@@ -437,14 +437,14 @@ public:
                                                 vcl::Window *pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 SfxStyleFamily      nRegion,
-                                                const OString&      sPage = OString(),
+                                                const OString&      sPage,
                                                 SwWrtShell*         pActShell = nullptr,
                                                 bool                bNew = false) override;
     virtual AbstractGlossaryDlg*        CreateGlossaryDlg(SfxViewFrame* pViewFrame,
                                                 SwGlossaryHdl* pGlosHdl,
                                                 SwWrtShell *pWrtShell) override;
     virtual AbstractFieldInputDlg*        CreateFieldInputDlg(vcl::Window *pParent,
-        SwWrtShell &rSh, SwField* pField, bool bNextButton = false) override;
+        SwWrtShell &rSh, SwField* pField, bool bNextButton) override;
     virtual AbstractInsFootNoteDlg*     CreateInsFootNoteDlg(
         vcl::Window * pParent, SwWrtShell &rSh, bool bEd = false) override;
     virtual VclAbstractDialog *         CreateTitlePageDlg ( vcl::Window * pParent ) override;
@@ -468,7 +468,7 @@ public:
     virtual AbstractMultiTOXTabDialog*      CreateMultiTOXTabDialog(
                                                 vcl::Window* pParent, const SfxItemSet& rSet,
                                                 SwWrtShell &rShell,
-                                                SwTOXBase* pCurTOX, sal_uInt16 nToxType = USHRT_MAX,
+                                                SwTOXBase* pCurTOX, sal_uInt16 nToxType,
                                                 bool bGlobal = false) override;
     virtual AbstractEditRegionDlg*      CreateEditRegionDlg(vcl::Window* pParent, SwWrtShell& rWrtSh) override;
     virtual AbstractInsertSectionTabDialog*     CreateInsertSectionTabDialog(

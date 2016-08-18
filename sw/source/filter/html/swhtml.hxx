@@ -321,7 +321,7 @@ public:
     void SetRestartListing( bool bSet ) { bRestartListing = bSet; }
     bool IsRestartListing() const { return bRestartListing; }
 
-    void SetAppendMode( SwHTMLAppendMode eMode=AM_NORMAL ) { eAppend = eMode; }
+    void SetAppendMode( SwHTMLAppendMode eMode ) { eAppend = eMode; }
     SwHTMLAppendMode GetAppendMode() const { return eAppend; }
 };
 
@@ -510,7 +510,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void EndContextAttrs( HTMLAttrContext *pContext );
     void SaveAttrTab( HTMLAttrTable& rNewAttrTab );
     void SplitAttrTab( const SwPosition& rNewPos );
-    void SplitAttrTab( HTMLAttrTable& rNewAttrTab, bool bMoveEndBack = true );
+    void SplitAttrTab( HTMLAttrTable& rNewAttrTab, bool bMoveEndBack );
     void RestoreAttrTab( HTMLAttrTable& rNewAttrTab );
     void InsertAttr( const SfxPoolItem& rItem, bool bInsAtStart );
     void InsertAttrs( HTMLAttrs& rAttrs );
@@ -607,7 +607,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void NewNumBulList( int nToken );
     void EndNumBulList( int nToken=0 );
     void NewNumBulListItem( int nToken );
-    void EndNumBulListItem( int nToken=0, bool bSetColl=true,
+    void EndNumBulListItem( int nToken, bool bSetColl=true,
                             bool bLastPara=false );
 
     // Definitions-Listen <DL> mit <DD>, <DT>
@@ -721,7 +721,7 @@ private:
     // eine Bookmark einfuegen
     void InsertBookmark( const OUString& rName );
 
-    void InsertCommentText( const sal_Char *pTag = nullptr );
+    void InsertCommentText( const sal_Char *pTag );
     void InsertComment( const OUString& rName, const sal_Char *pTag = nullptr );
 
     // sind im aktuellen Absatz Bookmarks vorhanden?

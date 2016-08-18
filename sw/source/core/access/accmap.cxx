@@ -249,7 +249,7 @@ public:
     const ::accessibility::AccessibleShapeTreeInfo& GetInfo() const { return maInfo; }
 
     SwAccessibleObjShape_Impl *Copy( size_t& rSize,
-        const SwFEShell *pFESh = nullptr,
+        const SwFEShell *pFESh,
         SwAccessibleObjShape_Impl  **pSelShape = nullptr ) const;
 
 #if OSL_DEBUG_LEVEL > 0

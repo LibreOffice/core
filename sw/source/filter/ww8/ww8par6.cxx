@@ -1326,7 +1326,7 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP*
 
 void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace,
     sal_uInt32 cv, short nIdx, SvxBoxItemLine nOOIndex, sal_uInt16 nWWIndex,
-    short *pSize=nullptr)
+    short *pSize)
 {
     // LO cannot handle outset/inset (new in WW9 BRC) so fall back same as WW8
     if ( nIdx == 0x1A || nIdx == 0x1B )

@@ -126,8 +126,8 @@ public:
     void SetGraphic(const Graphic& rGraphic, const OUString& rLink);
 
     /// wrappers for non-const calls at GraphicObject
-    void StartGraphicAnimation(OutputDevice* pOut, const Point& rPt, const Size& rSz, long nExtraData = 0, const GraphicAttr* pAttr = nullptr, GraphicManagerDrawFlags nFlags = GraphicManagerDrawFlags::STANDARD, OutputDevice* pFirstFrameOutDev = nullptr) { maGrfObj.StartAnimation(pOut, rPt, rSz, nExtraData, pAttr, nFlags, pFirstFrameOutDev); }
-    void StopGraphicAnimation(OutputDevice* pOut = nullptr, long nExtraData = 0) { maGrfObj.StopAnimation(pOut, nExtraData); }
+    void StartGraphicAnimation(OutputDevice* pOut, const Point& rPt, const Size& rSz, long nExtraData, const GraphicAttr* pAttr = nullptr, GraphicManagerDrawFlags nFlags = GraphicManagerDrawFlags::STANDARD, OutputDevice* pFirstFrameOutDev = nullptr) { maGrfObj.StartAnimation(pOut, rPt, rSz, nExtraData, pAttr, nFlags, pFirstFrameOutDev); }
+    void StopGraphicAnimation(OutputDevice* pOut, long nExtraData = 0) { maGrfObj.StopAnimation(pOut, nExtraData); }
 
     virtual Size GetTwipSize() const override;
     void SetTwipSize( const Size& rSz );

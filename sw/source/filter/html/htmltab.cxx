@@ -473,7 +473,7 @@ class HTMLTable
     void FixFillerFrameFormat( SwTableBox *pBox, bool bRight ) const;
 
     // Create a table with the content (lines/boxes)
-    void MakeTable_( SwTableBox *pUpper=nullptr );
+    void MakeTable_( SwTableBox *pUpper );
 
     // Gernerate a new SwTableBox, which contains a SwStartNode
     SwTableBox *NewTableBox( const SwStartNode *pStNd,

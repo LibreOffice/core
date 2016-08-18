@@ -563,7 +563,7 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        ww8::Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM = nullptr);
+        ww8::Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM);
 
         /** fix up frame positions, must be called after SetRedlineMode */
         void UpdateFramePositions(ww8::Frames & rFrames);

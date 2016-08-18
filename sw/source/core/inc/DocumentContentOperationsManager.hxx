@@ -158,7 +158,7 @@ private:
     SwFlyFrameFormat* InsNoTextNode( const SwPosition&rPos, SwNoTextNode*,
                                 const SfxItemSet* pFlyAttrSet,
                                 const SfxItemSet* pGrfAttrSet,
-                                SwFrameFormat* = nullptr );
+                                SwFrameFormat* );
     /* Copy a range within the same or to another document.
      Position may not lie within range! */
     bool CopyImpl( SwPaM&, SwPosition&, const bool MakeNewFrames /*= true */,

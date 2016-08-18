@@ -173,7 +173,7 @@ public:
                           const unsigned int _nRestrictToThisLevel = MAXLEVEL,
                           Extremities* pExtremities = nullptr ) const;
     OUString MakeRefNumString( const SwNodeNum& rNodeNum,
-                             const bool bInclSuperiorNumLabels = false,
+                             const bool bInclSuperiorNumLabels,
                              const sal_uInt8 nRestrictInclToThisLevel = 0 ) const;
 
     /**

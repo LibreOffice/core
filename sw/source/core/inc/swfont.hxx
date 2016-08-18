@@ -402,7 +402,7 @@ public:
         const SvxShadowItemSide nShadow, const bool bVertLayout,
         const bool bSkipLeft, const bool bSkipRight ) const;
 
-    void dumpAsXml( xmlTextWriterPtr writer = nullptr ) const;
+    void dumpAsXml( xmlTextWriterPtr writer ) const;
 };
 
 inline void SwFont::SetColor( const Color& rColor )

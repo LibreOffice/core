@@ -101,7 +101,7 @@ class SwLayAction
                              const SwRect & );
 
     bool FormatLayout( OutputDevice* pRenderContext, SwLayoutFrame *, bool bAddRect = true );
-    bool FormatLayoutTab( SwTabFrame *, bool bAddRect = true );
+    bool FormatLayoutTab( SwTabFrame *, bool bAddRect );
     bool FormatContent( const SwPageFrame* pPage );
     void FormatContent_( const SwContentFrame* pContent,
                        const SwPageFrame* pPage );

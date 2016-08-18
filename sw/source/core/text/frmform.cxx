@@ -846,7 +846,7 @@ bool SwTextFrame::CalcPreps()
                     if( bPrepMustFit )
                     {
                         SwTextLineAccess aAccess( this );
-                        aAccess.GetPara()->SetPrepMustFit();
+                        aAccess.GetPara()->SetPrepMustFit(true);
                     }
                     return false;
                 }

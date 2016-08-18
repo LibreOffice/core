@@ -257,7 +257,7 @@ public:
     IDocumentListItems& getIDocumentListItems();
 
     /// Is node in the visible area of the Shell?
-    bool IsInVisibleArea( SwViewShell const * pSh = nullptr ) const;
+    bool IsInVisibleArea( SwViewShell const * pSh ) const;
     /// Is node in an protected area?
     bool IsInProtectSect() const;
     /**  Is node in something that is protected (range, frame,

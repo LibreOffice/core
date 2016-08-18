@@ -407,10 +407,10 @@ public:
     Writer();
     virtual ~Writer();
 
-    virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* = nullptr );
-            sal_uLong Write( SwPaM&, SvStream&,  const OUString* = nullptr );
-    virtual sal_uLong Write( SwPaM&, const css::uno::Reference < css::embed::XStorage >&, const OUString* = nullptr, SfxMedium* = nullptr );
-    virtual sal_uLong Write( SwPaM&, SotStorage&, const OUString* = nullptr );
+    virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* );
+            sal_uLong Write( SwPaM&, SvStream&,  const OUString* );
+    virtual sal_uLong Write( SwPaM&, const css::uno::Reference < css::embed::XStorage >&, const OUString*, SfxMedium* = nullptr );
+    virtual sal_uLong Write( SwPaM&, SotStorage&, const OUString* );
 
     virtual void SetupFilterOptions(SfxMedium& rMedium);
 
@@ -475,8 +475,8 @@ public:
 
     virtual bool IsStgWriter() const override;
 
-    virtual sal_uLong Write( SwPaM&, const css::uno::Reference < css::embed::XStorage >&, const OUString* = nullptr, SfxMedium* = nullptr ) override;
-    virtual sal_uLong Write( SwPaM&, SotStorage&, const OUString* = nullptr ) override;
+    virtual sal_uLong Write( SwPaM&, const css::uno::Reference < css::embed::XStorage >&, const OUString*, SfxMedium* = nullptr ) override;
+    virtual sal_uLong Write( SwPaM&, SotStorage&, const OUString* ) override;
 
     SotStorage& GetStorage() const       { return *pStg; }
 };

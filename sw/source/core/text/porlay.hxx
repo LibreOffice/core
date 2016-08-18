@@ -285,16 +285,16 @@ public:
     inline bool IsPrep() const { return m_bPrep; }
     inline void SetPrepWidows() { m_bPrepWidows = true; }
     inline bool IsPrepWidows() const { return m_bPrepWidows; }
-    inline void SetPrepMustFit( const bool bNew = true ) { m_bPrepMustFit = bNew; }
+    inline void SetPrepMustFit( const bool bNew ) { m_bPrepMustFit = bNew; }
     inline bool IsPrepMustFit() const { return m_bPrepMustFit; }
     inline void SetPrepAdjust() { m_bPrepAdjust = true; }
     inline bool IsPrepAdjust() const { return m_bPrepAdjust; }
-    inline void SetFollowField( const bool bNew = true ) { m_bFollowField = bNew; }
+    inline void SetFollowField( const bool bNew ) { m_bFollowField = bNew; }
     inline bool IsFollowField() const { return m_bFollowField; }
     inline void SetFixLineHeight() { m_bFixLineHeight = true; }
     inline bool IsFixLineHeight() const { return m_bFixLineHeight; }
 
-    inline void SetFootnoteNum( const bool bNew = true ) { m_bFootnoteNum = bNew; }
+    inline void SetFootnoteNum( const bool bNew ) { m_bFootnoteNum = bNew; }
     inline bool IsFootnoteNum() const { return m_bFootnoteNum; }
     inline void SetMargin( const bool bNew = true ) { m_bMargin = bNew; }
     inline bool IsMargin() const { return m_bMargin; }

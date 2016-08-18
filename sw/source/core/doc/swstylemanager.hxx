@@ -23,7 +23,7 @@
 class IStyleAccess;
 class SfxItemSet;
 
-IStyleAccess *createStyleManager( SfxItemSet* pIgnorableParagraphItems = nullptr );
+IStyleAccess *createStyleManager( SfxItemSet* pIgnorableParagraphItems );
 #endif // INCLUDED_SW_SOURCE_CORE_DOC_SWSTYLEMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

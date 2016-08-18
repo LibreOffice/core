@@ -57,9 +57,9 @@ public:
 
 // Functions for moving boxes
 void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox,
-             sal_uInt16 nS, sal_uInt16 nT, SwMovedBoxes& rMovedList, SwUndoSort* pUD=nullptr);
+             sal_uInt16 nS, sal_uInt16 nT, SwMovedBoxes& rMovedList, SwUndoSort* pUD);
 void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox,
-             sal_uInt16 nS, sal_uInt16 nT, SwMovedBoxes& rMovedList, SwUndoSort* pUD=nullptr);
+             sal_uInt16 nS, sal_uInt16 nT, SwMovedBoxes& rMovedList, SwUndoSort* pUD);
 void MoveCell(SwDoc* pDoc, const SwTableBox* pSource,
               const SwTableBox* pTar, bool bMovedBefore, SwUndoSort* pUD=nullptr);
 

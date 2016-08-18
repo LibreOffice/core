@@ -1551,7 +1551,7 @@ void WW8AttributeOutput::TextINetFormat( const SwFormatINetFormat& rINet )
 // add optional parameter <bIncludeEmptyPicLocation>
 // It is needed to write an empty picture location for page number field separators
 static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
-                               OUString* pLinkStr = nullptr,
+                               OUString* pLinkStr,
                                bool bIncludeEmptyPicLocation = false )
 {
     ww::bytes aItems;

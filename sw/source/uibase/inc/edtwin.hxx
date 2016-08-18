@@ -146,7 +146,7 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
 
     void            RstMBDownFlags();
 
-    void            ChangeFly( sal_uInt8 nDir, bool bWeb = false );
+    void            ChangeFly( sal_uInt8 nDir, bool bWeb );
     void            ChangeDrawing( sal_uInt8 nDir );
 
     bool            EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos);

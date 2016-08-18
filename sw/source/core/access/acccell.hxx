@@ -83,7 +83,7 @@ public:
         getSupportedServiceNames()
         throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual void Dispose(bool bRecursive = false, bool bCanSkipInvisible = true) override;
+    virtual void Dispose(bool bRecursive, bool bCanSkipInvisible = true) override;
 
     virtual void InvalidatePosOrSize( const SwRect& rFrame ) override;
 

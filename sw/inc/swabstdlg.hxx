@@ -349,7 +349,7 @@ public:
     virtual SfxAbstractTabDialog * CreateSwFootNoteOptionDlg(vcl::Window *pParent, SwWrtShell &rSh) = 0;
 
     virtual AbstractDropDownFieldDialog * CreateDropDownFieldDialog(SwWrtShell &rSh,
-        SwField* pField, bool bNextButton = false) = 0;
+        SwField* pField, bool bNextButton) = 0;
     virtual SfxAbstractTabDialog* CreateSwEnvDlg ( vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert ) = 0;
 
     virtual AbstractSwLabDlg* CreateSwLabDlg(const SfxItemSet& rSet,
@@ -360,7 +360,7 @@ public:
     virtual SfxAbstractTabDialog* CreateSwParaDlg ( vcl::Window *pParent,
                                                     SwView& rVw,
                                                     const SfxItemSet& rCoreSet,
-                                                    const OUString *pCollName = nullptr,
+                                                    const OUString *pCollName,
                                                     bool bDraw = false,
                                                     const OString& sDefPage = OString() ) = 0;
 
@@ -399,14 +399,14 @@ public:
     virtual SfxAbstractApplyTabDialog*  CreateTemplateDialog(vcl::Window* pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 SfxStyleFamily      nRegion,
-                                                const OString&      sPage = OString(),
+                                                const OString&      sPage,
                                                 SwWrtShell*         pActShell = nullptr,
                                                 bool                bNew = false) = 0;
     virtual AbstractGlossaryDlg*        CreateGlossaryDlg(SfxViewFrame* pViewFrame,
                                                 SwGlossaryHdl* pGlosHdl,
                                                 SwWrtShell *pWrtShell) = 0;
     virtual AbstractFieldInputDlg*        CreateFieldInputDlg(vcl::Window *pParent,
-        SwWrtShell &rSh, SwField* pField, bool bNextButton = false) = 0;
+        SwWrtShell &rSh, SwField* pField, bool bNextButton) = 0;
     virtual AbstractInsFootNoteDlg*     CreateInsFootNoteDlg(vcl::Window * pParent,
         SwWrtShell &rSh, bool bEd = false) = 0;
     virtual VclAbstractDialog*          CreateTitlePageDlg ( vcl::Window * pParent ) = 0;
@@ -430,7 +430,7 @@ public:
     virtual AbstractMultiTOXTabDialog*      CreateMultiTOXTabDialog(
                                                 vcl::Window* pParent, const SfxItemSet& rSet,
                                                 SwWrtShell &rShell,
-                                                SwTOXBase* pCurTOX, sal_uInt16 nToxType = USHRT_MAX,
+                                                SwTOXBase* pCurTOX, sal_uInt16 nToxType,
                                                 bool bGlobal = false) = 0;
     virtual AbstractEditRegionDlg*      CreateEditRegionDlg(vcl::Window* pParent, SwWrtShell& rWrtSh) = 0;
     virtual AbstractInsertSectionTabDialog*     CreateInsertSectionTabDialog(

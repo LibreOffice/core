@@ -374,7 +374,7 @@ protected:
         SwFltStackEntry& rEntry) override;
 
     virtual sal_Int32 GetCurrAttrCP() const override;
-    virtual bool IsParaEndInCPs(sal_Int32 nStart,sal_Int32 nEnd,bool bSdOD=true) const override;
+    virtual bool IsParaEndInCPs(sal_Int32 nStart, sal_Int32 nEnd, bool bSdOD) const override;
     //Clear the para end position recorded in reader intermittently for the least impact on loading performance
     virtual void ClearParaEndPosition() override;
     virtual bool CheckSdOD(sal_Int32 nStart,sal_Int32 nEnd) override;
@@ -387,7 +387,7 @@ public:
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr);
 
-    virtual SwFltStackEntry* SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId=0, bool bTstEnde=true, long nHand=LONG_MAX, bool consumedByField=false) override;
+    virtual SwFltStackEntry* SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId, bool bTstEnde=true, long nHand=LONG_MAX, bool consumedByField=false) override;
 
     void SetToggleAttr(sal_uInt8 nId, bool bOn)
     {
@@ -733,7 +733,7 @@ public:
         css::uno::Reference<  css::drawing::XShape > *pShape, bool bFloatingCtrl) override;
     void ExportControl(WW8Export &rWrt, const SdrUnoObj& rFormObj);
     bool ReadOCXStream( tools::SvRef<SotStorage>& rSrc1,
-        css::uno::Reference< css::drawing::XShape > *pShapeRef=nullptr,
+        css::uno::Reference< css::drawing::XShape > *pShapeRef,
         bool bFloatingCtrl=false );
 private:
     sal_uInt32 GenerateObjectID() { return ++mnObjectId; }
@@ -1456,7 +1456,7 @@ private:
         const WW8_BRCVer9& aRightBrc);
     //returns true is a shadow was set
     static bool SetFlyBordersShadow(SfxItemSet& rFlySet, const WW8_BRCVer9 *pbrc,
-        short *SizeArray=nullptr);
+        short *SizeArray);
     static void SetPageBorder(SwFrameFormat &rFormat, const wwSection &rSection);
 
     static sal_Int32 MatchSdrBoxIntoFlyBoxItem( const Color& rLineColor,
@@ -1479,7 +1479,7 @@ private:
     //Apo == Absolutely Positioned Object, MSWord's old-style frames
     WW8FlyPara *ConstructApo(const ApoTestResults &rApo,
         const WW8_TablePos *pTabPos);
-    bool StartApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos, SvxULSpaceItem* pULSpaceItem = nullptr);
+    bool StartApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos, SvxULSpaceItem* pULSpaceItem);
     void StopApo();
     bool TestSameApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos);
     ApoTestResults TestApo(int nCellLevel, bool bTableRowEnd,
@@ -1530,7 +1530,7 @@ private:
 
     void ReadDocVars();
 
-    bool StartTable(WW8_CP nStartCp, SvxULSpaceItem* pULSpaceItem = nullptr);
+    bool StartTable(WW8_CP nStartCp, SvxULSpaceItem* pULSpaceItem);
     bool InEqualApo(int nLvl) const;
     bool InLocalApo() const { return InEqualApo(m_nInTable); }
     bool InEqualOrHigherApo(int nLvl) const;

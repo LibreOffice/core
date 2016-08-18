@@ -106,7 +106,7 @@ public:
     virtual SwCursor* Create( SwPaM* pRing = nullptr ) const;
 
     virtual short MaxReplaceArived(); //returns RET_YES/RET_CANCEL/RET_NO
-    virtual void SaveTableBoxContent( const SwPosition* pPos = nullptr );
+    virtual void SaveTableBoxContent( const SwPosition* pPos );
 
     void FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const;
     SwMoveFnCollection* MakeFindRange( SwDocPositions, SwDocPositions,
@@ -139,7 +139,7 @@ public:
     bool GoEndWord();
     bool GoNextWord();
     bool GoPrevWord();
-    bool SelectWord( SwViewShell* pViewShell, const Point* pPt = nullptr );
+    bool SelectWord( SwViewShell* pViewShell, const Point* pPt );
 
     // API versions of above functions (will be used with a different
     // WordType for the break iterator)
@@ -150,7 +150,7 @@ public:
     bool GoEndWordWT( sal_Int16 nWordType );
     bool GoNextWordWT( sal_Int16 nWordType );
     bool GoPrevWordWT( sal_Int16 nWordType );
-    bool SelectWordWT( SwViewShell* pViewShell, sal_Int16 nWordType, const Point* pPt = nullptr );
+    bool SelectWordWT( SwViewShell* pViewShell, sal_Int16 nWordType, const Point* pPt );
 
     enum SentenceMoveType
     {
@@ -168,8 +168,8 @@ public:
     virtual bool LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
         bool bAllowVisual, bool bSkipHidden, bool bInsertCursor );
     bool UpDown( bool bUp, sal_uInt16 nCnt, Point* pPt, long nUpDownX );
-    bool LeftRightMargin( bool bLeftMargin, bool bAPI = false );
-    bool IsAtLeftRightMargin( bool bLeftMargin, bool bAPI = false ) const;
+    bool LeftRightMargin( bool bLeftMargin, bool bAPI );
+    bool IsAtLeftRightMargin( bool bLeftMargin, bool bAPI ) const;
     bool SttEndDoc( bool bSttDoc );
     bool GoPrevNextCell( bool bNext, sal_uInt16 nCnt );
 

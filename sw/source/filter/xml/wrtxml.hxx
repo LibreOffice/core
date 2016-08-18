@@ -51,7 +51,7 @@ public:
     SwXMLWriter( const OUString& rBaseURL );
     virtual ~SwXMLWriter();
 
-    virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* = nullptr ) override;
+    virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* ) override;
 
 private:
 

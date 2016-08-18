@@ -75,7 +75,7 @@ public:
                                     const SfxPoolItem& rItem,
                                     const SvXMLUnitConverter& rUnitConverter,
                                     const SvXMLNamespaceMap& rNamespaceMap,
-                                    const SfxItemSet *pSet = nullptr ) const override;
+                                    const SfxItemSet *pSet ) const override;
 
     virtual void handleElementItem(
             SvXMLExport& rExport,

@@ -155,9 +155,9 @@ public:
     virtual SwCursor* Create( SwPaM* pRing = nullptr ) const override;
 
     virtual short MaxReplaceArived() override; //returns RET_YES/RET_CANCEL/RET_NO
-    virtual void SaveTableBoxContent( const SwPosition* pPos = nullptr ) override;
+    virtual void SaveTableBoxContent( const SwPosition* pPos ) override;
 
-    bool UpDown( bool bUp, sal_uInt16 nCnt = 1 );
+    bool UpDown( bool bUp, sal_uInt16 nCnt );
 
     // true: Cursor can be set to this position.
     virtual bool IsAtValidPos( bool bPoint = true ) const override;
@@ -195,7 +195,7 @@ public:
     virtual SwCursor* Create( SwPaM* pRing = nullptr ) const override;
 
     virtual short MaxReplaceArived() override; //returns RET_YES/RET_CANCEL/RET_NO
-    virtual void SaveTableBoxContent( const SwPosition* pPos = nullptr ) override;
+    virtual void SaveTableBoxContent( const SwPosition* pPos ) override;
 
     // true: Cursor can be set to this position.
     virtual bool IsAtValidPos( bool bPoint = true ) const override;

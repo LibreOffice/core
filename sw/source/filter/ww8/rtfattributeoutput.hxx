@@ -211,7 +211,7 @@ public:
                                 sal_Int16 nFirstLineIndex,
                                 sal_Int16 nListTabPos,
                                 const OUString& rNumberingString,
-                                const SvxBrushItem* pBrush = nullptr) override;//For i120928,to export graphic of bullet
+                                const SvxBrushItem* pBrush) override;//For i120928,to export graphic of bullet
 
     void WriteField_Impl(const SwField* pField, ww::eField eType, const OUString& rFieldCmd, sal_uInt8 nMode);
     void WriteBookmarks_Impl(std::vector< OUString >& rStarts, std::vector< OUString >& rEnds);

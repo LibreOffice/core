@@ -129,7 +129,7 @@ public:
        @param nDepth   depth in which to add the child
      */
     void AddChild( SwNumberTreeNode* pChild,
-                   const int nDepth = 0 );
+                   const int nDepth );
 
     /**
        Remove a child.

@@ -183,7 +183,7 @@ public:
 
     WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp );
     bool Ok() const { return bOk; }
-    void CreateSwTable(SvxULSpaceItem* pULSpaceItem = nullptr);
+    void CreateSwTable(SvxULSpaceItem* pULSpaceItem);
     void UseSwTable();
     void SetSizePosition(SwFrameFormat* pFrameFormat);
     void TableCellEnd();

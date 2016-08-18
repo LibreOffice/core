@@ -260,7 +260,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     // methods for searching
     // set search context
-    SAL_DLLPRIVATE bool          SearchAndWrap(bool bApi = false);
+    SAL_DLLPRIVATE bool          SearchAndWrap(bool bApi);
     SAL_DLLPRIVATE bool          SearchAll();
     SAL_DLLPRIVATE sal_uLong     FUNC_Search( const SwSearchOptions& rOptions );
     SAL_DLLPRIVATE void          Replace();
@@ -277,7 +277,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     inline long     GetYScroll() const;
     SAL_DLLPRIVATE  Point    AlignToPixel(const Point& rPt) const;
     SAL_DLLPRIVATE   void        CalcPt( Point* pPt,const Rectangle& rRect,
-                            sal_uInt16 nRangeX = USHRT_MAX,
+                            sal_uInt16 nRangeX,
                             sal_uInt16 nRangeY = USHRT_MAX);
 
     SAL_DLLPRIVATE bool          GetPageScrollUpOffset(SwTwips& rOff) const;
@@ -309,8 +309,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     // used for spell checking and text conversion
     SAL_DLLPRIVATE void          SpellStart( SvxSpellArea eSpell, bool bStartDone,
-                                        bool bEndDone, SwConversionArgs *pConvArgs = nullptr );
-    SAL_DLLPRIVATE void          SpellEnd( SwConversionArgs *pConvArgs = nullptr );
+                                        bool bEndDone, SwConversionArgs *pConvArgs );
+    SAL_DLLPRIVATE void          SpellEnd( SwConversionArgs *pConvArgs );
 
     SAL_DLLPRIVATE void          HyphStart( SvxSpellArea eSpell );
     SAL_DLLPRIVATE void          SpellKontext(bool bOn = true)
@@ -326,7 +326,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     SAL_DLLPRIVATE void          SetZoom_( const Size &rEditSz,
                               SvxZoomType eZoomType,
-                              short nFactor = 100,
+                              short nFactor,
                               bool bViewOnly = false);
     SAL_DLLPRIVATE void          CalcAndSetBorderPixel( SvBorder &rToFill, bool bInner );
 
@@ -621,7 +621,7 @@ public:
 
     //public fuer D&D
     int     InsertGraphic( const OUString &rPath, const OUString &rFilter,
-                            bool bLink = true, GraphicFilter *pFlt = nullptr,
+                            bool bLink, GraphicFilter *pFlt = nullptr,
                             Graphic* pPreviewGrf = nullptr );
 
     void ExecuteScan( SfxRequest& rReq );
