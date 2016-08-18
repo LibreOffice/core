@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_d4d4f448",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3639,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-18T18:44:42Z",
+      "side": 1,
+      "message": "But this is not what is expected.. it is [DBNum2]General in the default locale, whereas the original was in the fixed Chinese locale, in the test document even additionally (and superfluously) marked in the format code as [NatNum5][$-804]General\n\nSaving and re-loading in .ods btw results in [NatNum5]General but that is expected as [$-804] matches the zh-CN locale.",
+      "range": {
+        "startLine": 3639,
+        "startChar": 76,
+        "endLine": 3639,
+        "endChar": 91
+      },
+      "revId": "36204f26256ee853211f625d725bf6d9fdd3103b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
