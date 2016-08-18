@@ -4469,12 +4469,11 @@ void SwXTextTableStyle::SetPhysical()
                 SwBoxAutoFormat* pOldBoxFormat = &m_pTableAutoFormat->GetBoxFormat(aTableTemplateMap[i]);
                 uno::Reference<style::XStyle> xCellStyle(pOldBoxFormat->GetXObject(), uno::UNO_QUERY);
                 if (!xCellStyle.is())
-                {
-                    SwXTextCellStyle* pStyle = dynamic_cast<SwXTextCellStyle*>(xCellStyle.get());
-                    SwBoxAutoFormat* pNewBoxFormat = &pTableAutoFormat->GetBoxFormat(aTableTemplateMap[i]);
-                    pStyle->SetBoxFormat(pNewBoxFormat);
-                    pNewBoxFormat->SetXObject(uno::Reference<style::XStyle>(xCellStyle));
-                }
+                    continue;
+                SwXTextCellStyle& rStyle = dynamic_cast<SwXTextCellStyle&>(*xCellStyle.get());
+                SwBoxAutoFormat& rNewBoxFormat = pTableAutoFormat->GetBoxFormat(aTableTemplateMap[i]);
+                rStyle.SetBoxFormat(&rNewBoxFormat);
+                rNewBoxFormat.SetXObject(xCellStyle);
             }
             m_pTableAutoFormat_Impl = nullptr;
             m_pTableAutoFormat = pTableAutoFormat;
