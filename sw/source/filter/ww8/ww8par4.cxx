@@ -144,23 +144,23 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
 
     if( pMfp->mm == 94 || pMfp->mm == 99 )
     {
-        OSL_ENSURE( !pSt, "+OLE: wrong metafile type" );
+        SAL_WARN("sw.ww8", "+OLE: wrong metafile type");
         return false;
     }
     if( pMfp->mm != 8 )
     {
-        OSL_ENSURE( !pSt, "+OLE: wrong mMetafile type (not anisotropic)" );
+        SAL_WARN("sw.ww8", "OLE: wrong mMetafile type (not anisotropic)");
     }
     if( !pMfp->xExt || !pMfp->yExt )
     {
-        OSL_ENSURE( !pSt, "+OLE: size of 0?" );
+        SAL_WARN("sw.ww8", "+OLE: size of 0?");
         return false;
     }
     bool bOk = ReadWindowMetafile( *pSt, rWMF );   // read WMF
                     // *pSt >> aWMF  doesn't work without the placable header
     if (!bOk || pSt->GetError() || rWMF.GetActionSize() == 0)
     {
-        OSL_ENSURE( !pSt, "+OLE: could not read the metafile" );
+        SAL_WARN("sw.ww8", "+OLE: could not read the metafile");
         return false;
     }
 

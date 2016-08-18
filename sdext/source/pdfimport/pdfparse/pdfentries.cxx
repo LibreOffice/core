@@ -882,8 +882,7 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
                 if( pOutBytes != reinterpret_cast<sal_uInt8*>(pStream) )
                     rtl_freeMemory( pOutBytes );
                 rtl_freeMemory( pStream );
-                if( pEData )
-                    pEData->setDecryptObject( 0, 0 );
+                pEData->setDecryptObject( 0, 0 );
                 return bRet;
             }
             if( pOutBytes != reinterpret_cast<sal_uInt8*>(pStream) )
