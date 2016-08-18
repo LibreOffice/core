@@ -509,9 +509,9 @@ void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRa
     {
         XPolyPolygon aXPP(pPath->GetPathPoly());
         switch (eMode) {
-            case SDRCROOK_ROTATE : CrookRotatePoly (aXPP,rRef,rRad,bVertical);           break;
-            case SDRCROOK_SLANT  : CrookSlantPoly  (aXPP,rRef,rRad,bVertical);           break;
-            case SDRCROOK_STRETCH: CrookStretchPoly(aXPP,rRef,rRad,bVertical,rMarkRect); break;
+            case SdrCrookMode::Rotate : CrookRotatePoly (aXPP,rRef,rRad,bVertical);           break;
+            case SdrCrookMode::Slant  : CrookSlantPoly  (aXPP,rRef,rRad,bVertical);           break;
+            case SdrCrookMode::Stretch: CrookStretchPoly(aXPP,rRef,rRad,bVertical,rMarkRect); break;
         } // switch
         pPath->SetPathPoly(aXPP.getB2DPolyPolygon());
         bDone = true;
@@ -532,9 +532,9 @@ void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRa
 
         switch (eMode)
         {
-            case SDRCROOK_ROTATE : CrookRotatePoly (aXP,rRef,rRad,bVertical);           break;
-            case SDRCROOK_SLANT  : CrookSlantPoly  (aXP,rRef,rRad,bVertical);           break;
-            case SDRCROOK_STRETCH: CrookStretchPoly(aXP,rRef,rRad,bVertical,rMarkRect); break;
+            case SdrCrookMode::Rotate : CrookRotatePoly (aXP,rRef,rRad,bVertical);           break;
+            case SdrCrookMode::Slant  : CrookSlantPoly  (aXP,rRef,rRad,bVertical);           break;
+            case SdrCrookMode::Stretch: CrookStretchPoly(aXP,rRef,rRad,bVertical,rMarkRect); break;
         }
 
         for(nPtNum = 0L; nPtNum < nPointCount; nPtNum++)
@@ -562,9 +562,9 @@ void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRa
 
             switch (eMode)
             {
-                case SDRCROOK_ROTATE : nAngle=CrookRotateXPoint (aCtr1,nullptr,nullptr,rRef,rRad,nSin,nCos,bVertical); bRotOk=bRotate; break;
-                case SDRCROOK_SLANT  : nAngle=CrookSlantXPoint  (aCtr1,nullptr,nullptr,rRef,rRad,nSin,nCos,bVertical);           break;
-                case SDRCROOK_STRETCH: nAngle=CrookStretchXPoint(aCtr1,nullptr,nullptr,rRef,rRad,nSin,nCos,bVertical,rMarkRect); break;
+                case SdrCrookMode::Rotate : nAngle=CrookRotateXPoint (aCtr1,nullptr,nullptr,rRef,rRad,nSin,nCos,bVertical); bRotOk=bRotate; break;
+                case SdrCrookMode::Slant  : nAngle=CrookSlantXPoint  (aCtr1,nullptr,nullptr,rRef,rRad,nSin,nCos,bVertical);           break;
+                case SdrCrookMode::Stretch: nAngle=CrookStretchXPoint(aCtr1,nullptr,nullptr,rRef,rRad,nSin,nCos,bVertical,rMarkRect); break;
             }
         }
 
@@ -583,7 +583,7 @@ void SdrEditView::CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookM
     Rectangle aMarkRect(GetMarkedObjRect());
     const bool bUndo = IsUndoEnabled();
 
-    bool bRotate=bNoContortion && eMode==SDRCROOK_ROTATE && IsRotateAllowed();
+    bool bRotate=bNoContortion && eMode==SdrCrookMode::Rotate && IsRotateAllowed();
 
     if( bUndo )
     {

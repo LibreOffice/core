@@ -1078,7 +1078,7 @@ void FuSelection::Activate()
             if ( mpView->GetDragMode() != eMode )
             {
                 mpView->SetDragMode(eMode);
-                mpView->SetCrookMode(SDRCROOK_ROTATE);
+                mpView->SetCrookMode(SdrCrookMode::Rotate);
             }
         }
         break;
@@ -1090,7 +1090,7 @@ void FuSelection::Activate()
             if ( mpView->GetDragMode() != eMode )
             {
                 mpView->SetDragMode(eMode);
-                mpView->SetCrookMode(SDRCROOK_SLANT);
+                mpView->SetCrookMode(SdrCrookMode::Slant);
             }
         }
         break;
@@ -1102,7 +1102,7 @@ void FuSelection::Activate()
             if ( mpView->GetDragMode() != eMode )
             {
                 mpView->SetDragMode(eMode);
-                mpView->SetCrookMode(SDRCROOK_STRETCH);
+                mpView->SetCrookMode(SdrCrookMode::Stretch);
             }
         }
         break;

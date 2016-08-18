@@ -2793,7 +2793,7 @@ SdrDragCrook::SdrDragCrook(SdrDragView& rNewView)
     bAtCenter(false),
     nAngle(0),
     nMarkSize(0),
-    eMode(SDRCROOK_ROTATE)
+    eMode(SdrCrookMode::Rotate)
 {
 }
 
@@ -2994,9 +2994,9 @@ void SdrDragCrook::MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
 
                         switch (eMode)
                         {
-                            case SDRCROOK_ROTATE : CrookRotateXPoint (aCtr1,nullptr,nullptr,aC,aRad,nSin,nCos,bVertical);           break;
-                            case SDRCROOK_SLANT  : CrookSlantXPoint  (aCtr1,nullptr,nullptr,aC,aRad,nSin,nCos,bVertical);           break;
-                            case SDRCROOK_STRETCH: CrookStretchXPoint(aCtr1,nullptr,nullptr,aC,aRad,nSin,nCos,bVertical,aMarkRect); break;
+                            case SdrCrookMode::Rotate : CrookRotateXPoint (aCtr1,nullptr,nullptr,aC,aRad,nSin,nCos,bVertical);           break;
+                            case SdrCrookMode::Slant  : CrookSlantXPoint  (aCtr1,nullptr,nullptr,aC,aRad,nSin,nCos,bVertical);           break;
+                            case SdrCrookMode::Stretch: CrookStretchXPoint(aCtr1,nullptr,nullptr,aC,aRad,nSin,nCos,bVertical,aMarkRect); break;
                         } // switch
                     }
 
@@ -3095,9 +3095,9 @@ void SdrDragCrook::MovCrookPoint(Point& rPnt, Point* pC1, Point* pC2)
 
         switch (eMode)
         {
-            case SDRCROOK_ROTATE : CrookRotateXPoint (rPnt,pC1,pC2,aC,aRad,nSin,nCos,bVert);           break;
-            case SDRCROOK_SLANT  : CrookSlantXPoint  (rPnt,pC1,pC2,aC,aRad,nSin,nCos,bVert);           break;
-            case SDRCROOK_STRETCH: CrookStretchXPoint(rPnt,pC1,pC2,aC,aRad,nSin,nCos,bVert,aMarkRect); break;
+            case SdrCrookMode::Rotate : CrookRotateXPoint (rPnt,pC1,pC2,aC,aRad,nSin,nCos,bVert);           break;
+            case SdrCrookMode::Slant  : CrookSlantXPoint  (rPnt,pC1,pC2,aC,aRad,nSin,nCos,bVert);           break;
+            case SdrCrookMode::Stretch: CrookStretchXPoint(rPnt,pC1,pC2,aC,aRad,nSin,nCos,bVert,aMarkRect); break;
         } // switch
     }
 }
@@ -3111,7 +3111,7 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
         SdrCrookMode eNeuMode=getSdrDragView().GetCrookMode();
         bool bNeuContortion=!bNeuMoveOnly && ((bContortionAllowed && !getSdrDragView().IsCrookNoContortion()) || !bNoContortionAllowed);
         bResize=!getSdrDragView().IsOrtho() && bResizeAllowed && !bNeuMoveOnly;
-        bool bNeuRotate=bRotateAllowed && !bNeuContortion && !bNeuMoveOnly && eNeuMode==SDRCROOK_ROTATE;
+        bool bNeuRotate=bRotateAllowed && !bNeuContortion && !bNeuMoveOnly && eNeuMode==SdrCrookMode::Rotate;
 
         Point aPnt(GetSnapPos(rPnt));
 
@@ -3310,7 +3310,7 @@ void SdrDragCrook::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
         if (bDoCrook)
         {
             const Rectangle aLocalMarkRect(getSdrDragView().GetMarkedObjRect());
-            const bool bLocalRotate(!bContortion && eMode == SDRCROOK_ROTATE && getSdrDragView().IsRotateAllowed());
+            const bool bLocalRotate(!bContortion && eMode == SdrCrookMode::Rotate && getSdrDragView().IsRotateAllowed());
 
             SdrEditView::ImpCrookObj(&rTarget,aCenter,aRad,eMode,bVertical,!bContortion,bLocalRotate,aLocalMarkRect);
         }

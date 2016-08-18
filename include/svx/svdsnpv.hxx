@@ -79,11 +79,11 @@ namespace o3tl
     template<> struct typed_flags<SdrSnap> : is_typed_flags<SdrSnap, 3> {};
 }
 
-// SDRCROOK_STRETCH is not implemented yet!
-enum SdrCrookMode {
-    SDRCROOK_ROTATE,
-    SDRCROOK_SLANT,
-    SDRCROOK_STRETCH
+// SdrCrookMode::Stretch is not implemented yet!
+enum class SdrCrookMode {
+    Rotate,
+    Slant,
+    Stretch
 };
 
 
@@ -269,7 +269,7 @@ public:
     void SetCrookNoContortion(bool bOn) { bCrookNoContortion=bOn; }
     bool IsCrookNoContortion() const { return bCrookNoContortion; }
 
-    // Crook-Mode. persistent. Default=SDRCROOK_ROTATE. (ni)
+    // Crook-Mode. persistent. Default=SdrCrookMode::Rotate. (ni)
     void SetCrookMode(SdrCrookMode eMode) { eCrookMode=eMode; }
     SdrCrookMode GetCrookMode() const { return eCrookMode; }
 
