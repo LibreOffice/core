@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_e9c921ae",
+        "filename": "sfx2/source/appl/workwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-18T08:34:46Z",
+      "side": 1,
+      "message": "still investigating",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 73
+      },
+      "revId": "cae7a627e52da2e5219b7a4dcacc737124dd5b93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

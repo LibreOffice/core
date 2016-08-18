@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_89bb450e",
+        "filename": "sfx2/source/appl/workwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-08-18T08:34:46Z",
+      "side": 0,
+      "message": "nasty one.\ncommit diff for 30008dfb2b5f29252687f975072ccf85e7d3590f \"fdo#32869: Added navigation buttons to writer\" does not help.\n\nhttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d32869 shows other commit 6101a8f5f579023e52732603661a39b535e0ef0b\nwhich introduces new ID in shells.hrc\n+#define STR_SHELLNAME_NAVIGATION (RC_SHELLS_BEGIN + 62)\nthis equals to 23312.\nGuess this was a typo.\n\ncommit 8c041824b67caa53d3f7f96803b7a69ced6614b5 \"all these ids and their associated resources were unnecessary\" removed this ID again.\nEnd of story.",
+      "range": {
+        "startLine": 136,
+        "startChar": 0,
+        "endLine": 136,
+        "endChar": 55
+      },
+      "revId": "c73c068e43996ae8dda652c1db2ca0f50757a9dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
