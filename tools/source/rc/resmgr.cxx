@@ -235,6 +235,8 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
     ::std::vector< OUString > aFallbacks( aLocale.getFallbackStrings( true));
     if (!isAlreadyPureenUS( aLocale))
         aFallbacks.push_back( "en-US");     // last resort if all fallbacks fail
+                                            // TODO: What if en-US is not available either?
+                                            // It is not always installed at least on Windows machines with ru and tr locale
 
     for (::std::vector< OUString >::const_iterator fb( aFallbacks.begin()); fb != aFallbacks.end(); ++fb)
     {
@@ -359,6 +361,8 @@ InternalResMgr* ResMgrContainer::getNextFallback( InternalResMgr* pMgr )
     // The first is the locale itself, use next fallback or en-US.
     /* TODO: what happens if the chain is "en-US", "en" -> "en-US", ...
      * This was already an issue with the previous code. */
+    // TODO: What if en-US is not available either?
+    // It is not always installed at least on Windows machines with ru and tr locale
     LanguageTag aLocale( ((aFallbacks.size() > 1) ? aFallbacks[1] : OUString( "en-US")));
     InternalResMgr* pNext = getResMgr( pMgr->aPrefix, aLocale, pMgr->bSingular );
     // prevent recursion
