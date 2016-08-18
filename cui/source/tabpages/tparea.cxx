@@ -174,10 +174,8 @@ void SvxAreaTabPage::dispose()
     m_pLbBitmap.clear();
     m_pCtlBitmapPreview.clear();
     m_pCtlXRectPreview.clear();
-    m_pBtnImport.clear();
     SvxTabPage::dispose();
 }
-
 
 void SvxAreaTabPage::Construct()
 {
@@ -493,45 +491,35 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
             case drawing::FillStyle_BITMAP:
             {
                 //UUUU
-                if(mbDirectGraphicSet && GraphicType::NONE != maDirectGraphic.GetType())
+                m_nPos = m_pLbBitmap->GetSelectEntryPos();
+                if( m_nPos != LISTBOX_ENTRY_NOTFOUND &&
+                    m_pLbBitmap->IsValueChangedFromSaved() )
                 {
-                    const XFillBitmapItem aXBmpItem(maDirectName, maDirectGraphic);
-                    rAttrs->Put(XFillStyleItem(drawing::FillStyle_BITMAP));
-                    rAttrs->Put(aXBmpItem);
-                    bModified = true;
-                }
-                else
-                {
-                    m_nPos = m_pLbBitmap->GetSelectEntryPos();
-                    if( m_nPos != LISTBOX_ENTRY_NOTFOUND &&
-                        m_pLbBitmap->IsValueChangedFromSaved() )
+                    const XBitmapEntry* pXBitmapEntry = m_pBitmapList->GetBitmap(m_nPos);
+                    const OUString aString(m_pLbBitmap->GetSelectEntry());
+                    const XFillBitmapItem aFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject());
+                    pOld = GetOldItem( *rAttrs, XATTR_FILLBITMAP );
+                    if ( !pOld || !( *static_cast<const XFillBitmapItem*>(pOld) == aFillBitmapItem ) )
                     {
-                        const XBitmapEntry* pXBitmapEntry = m_pBitmapList->GetBitmap(m_nPos);
-                        const OUString aString(m_pLbBitmap->GetSelectEntry());
-                        const XFillBitmapItem aFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject());
-                        pOld = GetOldItem( *rAttrs, XATTR_FILLBITMAP );
-                        if ( !pOld || !( *static_cast<const XFillBitmapItem*>(pOld) == aFillBitmapItem ) )
+                        rAttrs->Put( aFillBitmapItem );
+                        bModified = true;
+                    }
+                }
+                // NEW
+                if( (eSavedStyle != eStyle) &&
+                    ( bModified ||
+                      SfxItemState::SET == m_rOutAttrs.GetItemState( GetWhich( XATTR_FILLBITMAP ) ) ) )
+                {
+                        XFillStyleItem aStyleItem( drawing::FillStyle_BITMAP );
+                        pOld = GetOldItem( *rAttrs, XATTR_FILLSTYLE );
+                        if ( !pOld || !( *static_cast<const XFillStyleItem*>(pOld) == aStyleItem ) )
                         {
-                            rAttrs->Put( aFillBitmapItem );
+                            rAttrs->Put( aStyleItem );
                             bModified = true;
                         }
-                    }
-                    // NEW
-                    if( (eSavedStyle != eStyle) &&
-                        ( bModified ||
-                          SfxItemState::SET == m_rOutAttrs.GetItemState( GetWhich( XATTR_FILLBITMAP ) ) ) )
-                    {
-                            XFillStyleItem aStyleItem( drawing::FillStyle_BITMAP );
-                            pOld = GetOldItem( *rAttrs, XATTR_FILLSTYLE );
-                            if ( !pOld || !( *static_cast<const XFillStyleItem*>(pOld) == aStyleItem ) )
-                            {
-                                rAttrs->Put( aStyleItem );
-                                bModified = true;
-                            }
-                    }
                 }
-           }
-           break;
+            }
+            break;
         }
         rAttrs->Put (SfxUInt16Item(SID_PAGE_TYPE, (sal_uInt16)m_nPageType));
         rAttrs->Put (SfxUInt16Item(SID_TABPAGE_POS,m_nPos));

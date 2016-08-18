@@ -250,23 +250,12 @@ private:
     SfxItemSet&         m_rXFSet;
 
     SfxMapUnit          m_ePoolUnit;
-    FieldUnit           m_eFUnit;
-
-    //UUUU
-    bool                mbOfferImportButton;
-    bool                mbDirectGraphicSet;
-    Graphic             maDirectGraphic;
-    OUString            maDirectName;
-    VclPtr<PushButton>         m_pBtnImport;
 
     DECL_LINK_TYPED(SelectDialogTypeHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED( ModifyColorHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ModifyGradientHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ModifyHatchingHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ModifyBitmapHdl_Impl, ListBox&, void );
-
-    //UUUU
-    DECL_LINK_TYPED( ClickImportHdl_Impl, Button*, void );
 
     DECL_LINK_TYPED( ModifyTileHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( ModifyTileClickHdl_Impl, Button*, void );
