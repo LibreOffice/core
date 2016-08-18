@@ -366,20 +366,20 @@ throw( RuntimeException, std::exception )
 class IpcThread: public salhelper::Thread {
 public:
     void start(RequestHandler * handler) {
-        handler_ = handler;
+        m_handler = handler;
         launch();
     }
 
     virtual void close() = 0;
 
 protected:
-    explicit IpcThread(char const * name): Thread(name), handler_(nullptr) {}
+    explicit IpcThread(char const * name): Thread(name), m_handler(nullptr) {}
 
     virtual ~IpcThread() {}
 
     bool process(OString const & arguments, bool * waitProcessed);
 
-    RequestHandler * handler_;
+    RequestHandler * m_handler;
 };
 
 class PipeIpcThread: public IpcThread {
@@ -561,12 +561,12 @@ RequestHandler::Status DbusIpcThread::enable(rtl::Reference<IpcThread> * thread)
 
 void DbusIpcThread::execute()
 {
-    assert(handler_ != nullptr);
-    handler_->cReady.wait();
+    assert(m_handler != nullptr);
+    m_handler->cReady.wait();
     for (;;) {
         {
             osl::MutexGuard g(RequestHandler::GetMutex());
-            if (handler_->mState == RequestHandler::State::Downing) {
+            if (m_handler->mState == RequestHandler::State::Downing) {
                 break;
             }
         }
@@ -607,7 +607,7 @@ void DbusIpcThread::execute()
             }
         }
         if (waitProcessed) {
-            handler_->cProcessed.wait();
+            m_handler->cProcessed.wait();
         }
         DbusMessageHolder repl(dbus_message_new_method_return(msg.message));
         if (repl.message == nullptr) {
@@ -1038,8 +1038,8 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
 
         ProcessDocumentsRequest* pRequest = new ProcessDocumentsRequest(
             aCmdLineArgs->getCwdUrl());
-        handler_->cProcessed.reset();
-        pRequest->pcProcessed = &handler_->cProcessed;
+        m_handler->cProcessed.reset();
+        pRequest->pcProcessed = &m_handler->cProcessed;
 
         // Print requests are not dependent on the --invisible cmdline argument as they are
         // loaded with the "hidden" flag! So they are always checked.
@@ -1186,7 +1186,7 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
 
 void PipeIpcThread::execute()
 {
-    assert(handler_ != nullptr);
+    assert(m_handler != nullptr);
     do
     {
         osl::StreamPipe aStreamPipe;
@@ -1199,16 +1199,16 @@ void PipeIpcThread::execute()
             // bootstrap, that dialogs event loop might get events that are dispatched by this thread
             // we have to wait for cReady to be set by the real main loop.
             // only requests that don't dispatch events may be processed before cReady is set.
-            handler_->cReady.wait();
+            m_handler->cReady.wait();
 
             // we might have decided to shutdown while we were sleeping
-            if (!handler_->pGlobal.is()) return;
+            if (!m_handler->pGlobal.is()) return;
 
             // only lock the mutex when processing starts, othewise we deadlock when the office goes
             // down during wait
             osl::ClearableMutexGuard aGuard( RequestHandler::GetMutex() );
 
-            if ( handler_->mState == RequestHandler::State::Downing )
+            if (m_handler->mState == RequestHandler::State::Downing)
             {
                 break;
             }
@@ -1238,7 +1238,7 @@ void PipeIpcThread::execute()
             aGuard.clear();
             // wait for processing to finish
             if (waitProcessed)
-                handler_->cProcessed.wait();
+                m_handler->cProcessed.wait();
             // processing finished, inform the requesting end:
             SAL_INFO("desktop.app", "writing <" << PROCESSING_DONE << ">");
             n = aStreamPipe.write(
@@ -1253,7 +1253,7 @@ void PipeIpcThread::execute()
         {
             {
                 osl::MutexGuard aGuard( RequestHandler::GetMutex() );
-                if ( handler_->mState == RequestHandler::State::Downing )
+                if (m_handler->mState == RequestHandler::State::Downing)
                 {
                     break;
                 }
