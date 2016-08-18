@@ -57,7 +57,7 @@ void XMLMarkerStyleImport::importXML(
     bool bHasPathData   = false;
     OUString aDisplayName;
 
-    SdXMLImExViewBox* pViewBox = nullptr;
+    std::unique_ptr<SdXMLImExViewBox> xViewBox;
 
     SvXMLNamespaceMap& rNamespaceMap = rImport.GetNamespaceMap();
     SvXMLUnitConverter& rUnitConverter = rImport.GetMM100UnitConverter();
@@ -82,7 +82,7 @@ void XMLMarkerStyleImport::importXML(
         }
         else if( IsXMLToken( aStrAttrName, XML_VIEWBOX ) )
         {
-            pViewBox = new SdXMLImExViewBox( aStrValue, rUnitConverter );
+            xViewBox.reset(new SdXMLImExViewBox(aStrValue, rUnitConverter));
             bHasViewBox = true;
 
         }
@@ -104,11 +104,12 @@ void XMLMarkerStyleImport::importXML(
                 // ViewBox probably not used, but stay with former processing inside of
                 // SdXMLImExSvgDElement
                 const basegfx::B2DRange aSourceRange(
-                    pViewBox->GetX(), pViewBox->GetY(),
-                    pViewBox->GetX() + pViewBox->GetWidth(), pViewBox->GetY() + pViewBox->GetHeight());
+                    xViewBox->GetX(), xViewBox->GetY(),
+                    xViewBox->GetX() + xViewBox->GetWidth(),
+                    xViewBox->GetY() + xViewBox->GetHeight());
                 const basegfx::B2DRange aTargetRange(
                     0.0, 0.0,
-                    pViewBox->GetWidth(), pViewBox->GetHeight());
+                    xViewBox->GetWidth(), xViewBox->GetHeight());
 
                 if(!aSourceRange.equal(aTargetRange))
                 {
@@ -136,7 +137,7 @@ void XMLMarkerStyleImport::importXML(
         }
     }
 
-    delete pViewBox;
+    xViewBox.reset();
 }
 
 // Export
