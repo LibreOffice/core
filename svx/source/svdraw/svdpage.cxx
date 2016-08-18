@@ -83,7 +83,7 @@ SdrObjList::SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewU
     bObjOrdNumsDirty=false;
     bRectsDirty=false;
     pOwnerObj=nullptr;
-    eListKind=SDROBJLIST_UNKNOWN;
+    eListKind=SdrObjListKind::Unknown;
 }
 
 SdrObjList::SdrObjList():
@@ -98,7 +98,7 @@ SdrObjList::SdrObjList():
     bObjOrdNumsDirty=false;
     bRectsDirty=false;
     pOwnerObj=nullptr;
-    eListKind=SDROBJLIST_UNKNOWN;
+    eListKind=SdrObjListKind::Unknown;
 }
 
 SdrObjList::~SdrObjList()
@@ -1189,7 +1189,7 @@ SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
     mbPageBorderOnlyLeftRight(false)
 {
     aPrefVisiLayers.SetAll();
-    eListKind = (bMasterPage) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
+    eListKind = (bMasterPage) ? SdrObjListKind::MasterPage : SdrObjListKind::DrawPage;
 
     mpSdrPageProperties.reset(new SdrPageProperties(*this));
 }
@@ -1307,7 +1307,7 @@ void SdrPage::lateInit(const SdrPage& rSrcPage, SdrModel* const pNewModel)
 
     // be careful and correct eListKind, a member of SdrObjList which
     // will be changed by the SdrObjList::lateInit before...
-    eListKind = (mbMaster) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
+    eListKind = (mbMaster) ? SdrObjListKind::MasterPage : SdrObjListKind::DrawPage;
 }
 
 SdrPage* SdrPage::Clone() const

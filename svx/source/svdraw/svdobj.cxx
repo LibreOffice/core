@@ -2737,7 +2737,7 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundR
 {
     SdrObject* pGroup = nullptr;
 
-    if( pObjList && pObjList->GetListKind() == SDROBJLIST_GROUPOBJ )
+    if( pObjList && pObjList->GetListKind() == SdrObjListKind::GroupObj )
         pGroup = pObjList->GetOwnerObj();
 
     if ( pUserCall )
@@ -2789,7 +2789,7 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundR
         }
 
         if( pGroup->GetObjList()                                       &&
-            pGroup->GetObjList()->GetListKind() == SDROBJLIST_GROUPOBJ &&
+            pGroup->GetObjList()->GetListKind() == SdrObjListKind::GroupObj &&
             pGroup != pObjList->GetOwnerObj() )
             pGroup = pObjList->GetOwnerObj();
         else

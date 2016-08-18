@@ -71,7 +71,7 @@ SdrObjGroup::SdrObjGroup()
 {
     pSub=new SdrObjList(nullptr,nullptr);
     pSub->SetOwnerObj(this);
-    pSub->SetListKind(SDROBJLIST_GROUPOBJ);
+    pSub->SetListKind(SdrObjListKind::GroupObj);
     bClosedObj=false;
 }
 

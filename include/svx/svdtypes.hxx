@@ -69,14 +69,15 @@ typedef sal_uInt8 SdrLayerID;
 /*
  * Page + ObjList
  */
-enum SdrObjListKind {SDROBJLIST_UNKNOWN    =0x00,
-                     // reine Objektlisten:
-                     SDROBJLIST_GROUPOBJ   =0x01,
-                     // Here is space for 12 more types of lists
-                     // Pages:
-                     SDROBJLIST_DRAWPAGE   =0x10,
-                     SDROBJLIST_MASTERPAGE =0x11
-                     // Here is space for 8 more types of pages
+enum class SdrObjListKind {
+    Unknown    = 0x00,
+    // reine Objektlisten:
+    GroupObj   = 0x01,
+    // Here is space for 12 more types of lists
+    // Pages:
+    DrawPage   = 0x10,
+    MasterPage = 0x11
+    // Here is space for 8 more types of pages
 };   // reserved for Surrogate
 
 /*

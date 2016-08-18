@@ -3748,14 +3748,14 @@ uno::Reference<uno::XInterface> SAL_CALL SvxShape::getParent()
 
         switch (pObjList->GetListKind())
         {
-            case SDROBJLIST_GROUPOBJ:
+            case SdrObjListKind::GroupObj:
                 if (SdrObjGroup *pGroup = dynamic_cast<SdrObjGroup*>(pObjList->GetOwnerObj()))
                     return pGroup->getUnoShape();
                 else if (E3dScene *pScene = dynamic_cast<E3dScene*>(pObjList->GetOwnerObj()))
                     return pScene->getUnoShape();
                 break;
-            case SDROBJLIST_DRAWPAGE:
-            case SDROBJLIST_MASTERPAGE:
+            case SdrObjListKind::DrawPage:
+            case SdrObjListKind::MasterPage:
                 return dynamic_cast<SdrPage&>(*pObjList).getUnoPage();
             default:
                 OSL_FAIL( "SvxShape::getParent(  ): unexpected SdrObjListKind" );

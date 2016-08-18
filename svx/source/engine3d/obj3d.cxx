@@ -187,7 +187,7 @@ E3dObject::E3dObject()
 {
     bIs3DObj = true;
     maSubList.SetOwnerObj(this);
-    maSubList.SetListKind(SDROBJLIST_GROUPOBJ);
+    maSubList.SetListKind(SdrObjListKind::GroupObj);
     bClosedObj = true;
 }
 
