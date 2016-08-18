@@ -4269,14 +4269,14 @@ void SwWW8ImplReader::Read_IdctHint( sal_uInt16, const sal_uInt8* pData, short n
     // this property determines what font and language the character will use.
     // when this value is 0, text properties bias towards non-far east properties.
     // when this value is 1, text properties bias towards far east properties.
+    // when this value is 2, text properties bias towards complex properties.
     if( nLen < 0 )  //Property end
     {
         m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(),RES_CHRATR_IDCTHINT);
     }
     else    //Property start
     {
-        sal_uInt8 nVal = *pData;
-        NewAttr( SfxInt16Item( RES_CHRATR_IDCTHINT, (nVal!=0)? 1 : 0 ) );
+        NewAttr(SfxInt16Item(RES_CHRATR_IDCTHINT, *pData));
     }
 }
 

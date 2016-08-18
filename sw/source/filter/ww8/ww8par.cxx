@@ -3239,10 +3239,6 @@ namespace
 // to auto-bias to LATIN.
 
 // See https://bugs.libreoffice.org/show_bug.cgi?id=34319 for an example
-//
-// TO-DO: revisit this after the fix of #i119612# which retains the
-// idcthint feature on import from word and has it available for re-export
-// but we don't use it yet for the actual rendering and layout
 void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString)
 {
     if (rAddString.isEmpty())
@@ -3280,7 +3276,10 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString
 
         int nLclIdctHint = 0xFF;
         if (nScript == i18n::ScriptType::WEAK)
-            nLclIdctHint = 0;
+        {
+            const SfxInt16Item *pIdctHint = static_cast<const SfxInt16Item*>(GetFormatAttr(RES_CHRATR_IDCTHINT));
+            nLclIdctHint = pIdctHint->GetValue();
+        }
         else if (nScript == MSASCII) // Force weak chars in ascii range to use LATIN font
             nLclIdctHint = 0;
 
