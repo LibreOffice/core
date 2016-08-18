@@ -1189,7 +1189,7 @@ void Test::testUserDefinedNumberFormats()
                     OUString(sal_Unicode(20336)) +  // 佰
                     OUString(sal_Unicode(36019)) +  // 貳
                     OUString(sal_Unicode(25342)) +  // 拾
-                    OUString(sal_Unicode(' '));
+                    " ";
         checkPreviewString(aFormatter, sCode, 120, eLang, sExpected);
         sCode = "[DBNum2][$-0404]General\\ ";
         checkPreviewString(aFormatter, sCode, 120, eLang, sExpected);
