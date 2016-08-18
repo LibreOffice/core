@@ -45,7 +45,7 @@ public:
     void        GlossaryDlg();
 
     size_t      GetGroupCnt() const;
-    OUString    GetGroupName( size_t, OUString* pTitle = nullptr );
+    OUString    GetGroupName( size_t, OUString* pTitle );
     void        NewGroup(OUString & rGroupName, const OUString& rTitle);
     bool        DelGroup(const OUString &);
     void        RenameGroup(const OUString& rOld, OUString& rNew, const OUString& rNewTitle);

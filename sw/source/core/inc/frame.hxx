@@ -191,7 +191,7 @@ class SW_DLLPUBLIC SwFrame: public SwClient, public SfxBroadcaster
         @return SwContentFrame*
         pointer to the found next content frame. It's NULL, if none exists.
     */
-    SwContentFrame* FindNextCnt_( const bool _bInSameFootnote = false );
+    SwContentFrame* FindNextCnt_( const bool _bInSameFootnote );
 
     /** method to determine previous content frame in the same environment
         for a flow frame (content frame, table frame, section frame)
@@ -365,10 +365,10 @@ public:
     SwLayoutFrame *GetNextFootnoteLeaf( MakePageType eMakePage );
     SwLayoutFrame *GetNextSctLeaf( MakePageType eMakePage );
     SwLayoutFrame *GetNextCellLeaf( MakePageType eMakePage );
-    SwLayoutFrame *GetPrevLeaf   ( MakePageType eMakeFootnote = MAKEPAGE_FTN );
-    SwLayoutFrame *GetPrevFootnoteLeaf( MakePageType eMakeFootnote = MAKEPAGE_FTN );
-    SwLayoutFrame *GetPrevSctLeaf( MakePageType eMakeFootnote = MAKEPAGE_FTN );
-    SwLayoutFrame *GetPrevCellLeaf( MakePageType eMakeFootnote = MAKEPAGE_FTN );
+    SwLayoutFrame *GetPrevLeaf   ( MakePageType eMakeFootnote );
+    SwLayoutFrame *GetPrevFootnoteLeaf( MakePageType eMakeFootnote );
+    SwLayoutFrame *GetPrevSctLeaf( MakePageType eMakeFootnote );
+    SwLayoutFrame *GetPrevCellLeaf( MakePageType eMakeFootnote );
     const SwLayoutFrame *GetLeaf ( MakePageType eMakePage, bool bFwd,
                                  const SwFrame *pAnch ) const;
 
@@ -388,7 +388,7 @@ public:
 
     virtual void PaintBorder( const SwRect&, const SwPageFrame *pPage,
                               const SwBorderAttrs & ) const;
-    void PaintBaBo( const SwRect&, const SwPageFrame *pPage = nullptr,
+    void PaintBaBo( const SwRect&, const SwPageFrame *pPage,
                     const bool bOnlyTextBackground = false) const;
     void PaintBackground( const SwRect&, const SwPageFrame *pPage,
                           const SwBorderAttrs &,

@@ -73,7 +73,7 @@ public:
                     const SfxItemSet& rSet,
                     const SvXMLUnitConverter& rUnitConverter,
                     ::xmloff::token::XMLTokenEnum ePropToken,
-                    SvXmlExportFlags nFlags = SvXmlExportFlags::NONE ) const;
+                    SvXmlExportFlags nFlags ) const;
 
     /** this method is called for every item that has the
         MID_SW_FLAG_SPECIAL_ITEM_EXPORT flag set */
@@ -82,7 +82,7 @@ public:
                                     const SfxPoolItem& rItem,
                                     const SvXMLUnitConverter& rUnitConverter,
                                     const SvXMLNamespaceMap& rNamespaceMap,
-                                    const SfxItemSet *pSet = nullptr ) const;
+                                    const SfxItemSet *pSet ) const;
 
     /** this method is called for every item that has the
         MID_SW_FLAG_NO_ITEM_EXPORT flag set */

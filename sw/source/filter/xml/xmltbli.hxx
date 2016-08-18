@@ -147,7 +147,7 @@ public:
 
     void InsertColumn( sal_Int32 nWidth, bool bRelWidth,
                        const OUString *pDfltCellStyleName = nullptr );
-    sal_Int32 GetColumnWidth( sal_uInt32 nCol, sal_uInt32 nColSpan=1UL ) const;
+    sal_Int32 GetColumnWidth( sal_uInt32 nCol, sal_uInt32 nColSpan ) const;
     OUString GetColumnDefaultCellStyleName( sal_uInt32 nCol ) const;
     inline sal_uInt32 GetColumnCount() const;
     inline bool HasColumnDefaultCellStyleNames() const;
@@ -158,7 +158,7 @@ public:
     bool IsValid() const { return m_pTableNode != nullptr; }
 
     void InsertCell( const OUString& rStyleName,
-                     sal_uInt32 nRowSpan=1U, sal_uInt32 nColSpan=1U,
+                     sal_uInt32 nRowSpan, sal_uInt32 nColSpan=1U,
                      const SwStartNode *pStNd=nullptr,
                      const OUString & i_rXmlId = OUString(),
                      SwXMLTableContext *pTable=nullptr,

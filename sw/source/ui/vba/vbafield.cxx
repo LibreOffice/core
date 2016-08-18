@@ -84,7 +84,7 @@ public:
 
     long SkipToNextToken();
 
-    sal_Int32 FindNextStringPiece( sal_Int32 _nStart = -1 );
+    sal_Int32 FindNextStringPiece( sal_Int32 _nStart );
 
     OUString GetResult() const;
     const OUString& GetFieldName()const { return aFieldName; }

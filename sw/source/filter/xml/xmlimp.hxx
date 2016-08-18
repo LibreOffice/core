@@ -176,7 +176,7 @@ public:
 
     bool FindAutomaticStyle( sal_uInt16 nFamily,
                              const OUString& rName,
-                             const SfxItemSet **ppItemSet=nullptr,
+                             const SfxItemSet **ppItemSet,
                              OUString *pParent=nullptr ) const;
 
     virtual void SetStatistics(

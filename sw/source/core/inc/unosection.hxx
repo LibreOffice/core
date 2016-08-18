@@ -68,7 +68,7 @@ public:
     SwSectionFormat*   GetFormat() const;
 
     static css::uno::Reference< css::text::XTextSection >
-        CreateXTextSection(SwSectionFormat *const pFormat = nullptr,
+        CreateXTextSection(SwSectionFormat *const pFormat,
                 const bool bIndexHeader = false);
 
     // MetadatableMixin

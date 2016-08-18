@@ -496,7 +496,7 @@ SwXTextSection::getPropertySetInfo() throw (uno::RuntimeException, std::exceptio
 }
 
 static void
-lcl_UpdateLinkType(SwSection & rSection, bool const bLinkUpdateAlways = true)
+lcl_UpdateLinkType(SwSection & rSection, bool const bLinkUpdateAlways)
 {
     if (rSection.GetType() == DDE_LINK_SECTION)
     {

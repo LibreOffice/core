@@ -2605,7 +2605,7 @@ void DocxAttributeOutput::ParagraphStyle( sal_uInt16 nStyle )
 }
 
 static void impl_borderLine( FSHelperPtr const & pSerializer, sal_Int32 elementToken, const SvxBorderLine* pBorderLine, sal_uInt16 nDist,
-                             bool bWriteShadow = false, const table::BorderLine2* rStyleProps = nullptr )
+                             bool bWriteShadow, const table::BorderLine2* rStyleProps = nullptr )
 {
     // Compute val attribute value
     // Can be one of:
@@ -2901,7 +2901,7 @@ static void impl_borders( FSHelperPtr const & pSerializer, const SvxBoxItem& rBo
     }
 }
 
-static void impl_cellMargins( FSHelperPtr const & pSerializer, const SvxBoxItem& rBox, sal_Int32 tag, bool bUseStartEnd = false, const SvxBoxItem* pDefaultMargins = nullptr)
+static void impl_cellMargins( FSHelperPtr const & pSerializer, const SvxBoxItem& rBox, sal_Int32 tag, bool bUseStartEnd, const SvxBoxItem* pDefaultMargins = nullptr)
 {
     static const SvxBoxItemLine aBorders[] =
     {

@@ -373,7 +373,7 @@ class SwXTextCellStyle : public cppu::WeakImplHelper
     * @param pParentName Optional output. Pointer to a OUString where parsed parent name will be returned.
     * @return Pointer to a SwBoxAutoFormat, nullptr if not found.
     */
-    static SwBoxAutoFormat* GetBoxAutoFormat(SwDocShell* pDocShell, const OUString& sName, OUString* pParentName = nullptr);
+    static SwBoxAutoFormat* GetBoxAutoFormat(SwDocShell* pDocShell, const OUString& sName, OUString* pParentName);
     /// returns box format assigned to this style
     SwBoxAutoFormat* GetBoxFormat();
     /// Sets the address of SwBoxAutoFormat this style is bound to. Usable only when style is physical.

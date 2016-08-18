@@ -155,7 +155,7 @@ protected:
     // MoveTo:      moves from the NodesArray into the UndoNodesArray.
     // MoveFrom:    moves from the UndoNodesArray into the NodesArray.
     static void MoveToUndoNds( SwPaM& rPam,
-                        SwNodeIndex* pNodeIdx = nullptr,
+                        SwNodeIndex* pNodeIdx,
                         sal_uLong* pEndNdIdx = nullptr, sal_Int32 * pEndCntIdx = nullptr );
     static void MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
                           SwPosition& rInsPos,

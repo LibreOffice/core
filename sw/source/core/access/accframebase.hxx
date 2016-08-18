@@ -57,7 +57,7 @@ public:
     static sal_uInt8 GetNodeType( const SwFlyFrame *pFlyFrame );
 
     // The object is not visible an longer and should be destroyed
-    virtual void Dispose(bool bRecursive = false, bool bCanSkipInvisible = true) override;
+    virtual void Dispose(bool bRecursive, bool bCanSkipInvisible = true) override;
     virtual bool SetSelectedState( bool bSeleted ) override;
 };
 

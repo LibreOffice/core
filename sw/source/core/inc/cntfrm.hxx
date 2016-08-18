@@ -82,9 +82,9 @@ public:
     // layout dependent cursor travelling
     virtual bool LeftMargin( SwPaM * ) const;
     virtual bool RightMargin( SwPaM *, bool bAPI = false ) const;
-    virtual bool UnitUp( SwPaM *, const SwTwips nOffset = 0,
+    virtual bool UnitUp( SwPaM *, const SwTwips nOffset,
                          bool bSetInReadOnly = false ) const;
-    virtual bool UnitDown( SwPaM *, const SwTwips nOffset = 0,
+    virtual bool UnitDown( SwPaM *, const SwTwips nOffset,
                            bool bSetInReadOnly = false ) const;
 
     // nMaxHeight is the required height

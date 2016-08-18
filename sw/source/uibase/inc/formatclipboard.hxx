@@ -46,7 +46,7 @@ public:
      * @param bPersistentCopy
      * input parameter - specify if the Paste function will erase the current object.
      */
-    void Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bPersistentCopy=false );
+    void Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bPersistentCopy );
 
     /**
      * Paste the stored text and paragraph attributes on the current selection and current paragraph.
@@ -58,7 +58,7 @@ public:
      * Do not paste the paragraph formats.
      */
     void Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPool
-        , bool bNoCharacterFormats=false, bool bNoParagraphFormats=false );
+        , bool bNoCharacterFormats, bool bNoParagraphFormats=false );
 
     /**
      * Clear the currently stored text and paragraph attributes.

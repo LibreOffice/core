@@ -148,7 +148,7 @@ protected:
 
     virtual void SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry& rEntry);
     virtual sal_Int32 GetCurrAttrCP() const {return -1;}
-    virtual bool IsParaEndInCPs(sal_Int32 nStart,sal_Int32 nEnd,bool bSdOD=true) const;
+    virtual bool IsParaEndInCPs(sal_Int32 nStart,sal_Int32 nEnd,bool bSdOD) const;
 
     //Clear the para end position recorded in reader intermittently for the least impact on loading performance
     virtual void ClearParaEndPosition(){};
@@ -175,12 +175,12 @@ public:
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem & rAttr );
 
-    virtual SwFltStackEntry* SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId=0, bool bTstEnde=true, long nHand = LONG_MAX, bool consumedByField=false);
+    virtual SwFltStackEntry* SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId, bool bTstEnde=true, long nHand = LONG_MAX, bool consumedByField=false);
 
     void StealAttr(const SwNodeIndex& rNode);
     void MarkAllAttrsOld();
     void KillUnlockedAttrs(const SwPosition& pPos);
-    SfxPoolItem* GetFormatStackAttr(sal_uInt16 nWhich, sal_uInt16 * pPos = nullptr);
+    SfxPoolItem* GetFormatStackAttr(sal_uInt16 nWhich, sal_uInt16 * pPos);
     const SfxPoolItem* GetOpenStackAttr(const SwPosition& rPos, sal_uInt16 nWhich);
     void Delete(const SwPaM &rPam);
 

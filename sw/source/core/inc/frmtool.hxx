@@ -311,7 +311,7 @@ class SwBorderAttrs : public SwCacheObj
     // #i25029# - If <_pPrevFrame> is set, its value is taken for testing, if
     // borders/shadow have to be joined with previous frame.
     void GetTopLine_   ( const SwFrame& _rFrame,
-                         const SwFrame* _pPrevFrame = nullptr );
+                         const SwFrame* _pPrevFrame );
     void GetBottomLine_( const SwFrame& _rFrame );
 
     // calculate cached values <m_bJoinedWithPrev> and <m_bJoinedWithNext>

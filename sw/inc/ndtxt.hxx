@@ -150,7 +150,7 @@ class SW_DLLPUBLIC SwTextNode: public SwContentNode, public ::sfx2::Metadatable
 
     SAL_DLLPRIVATE void CalcHiddenCharFlags() const;
 
-    SAL_DLLPRIVATE SwNumRule * GetNumRule_(bool bInParent = true) const;
+    SAL_DLLPRIVATE SwNumRule * GetNumRule_(bool bInParent) const;
 
     SAL_DLLPRIVATE void SetLanguageAndFont( const SwPaM &rPaM,
             LanguageType nLang, sal_uInt16 nLangWhichId,
@@ -688,7 +688,7 @@ public:
                             const bool bAddSpaceAfterListLabelStr = false,
                             const bool bWithSpacesForLevel = false,
                             const bool bWithFootnote = true ) const;
-    bool GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx = nullptr,
+    bool GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
                            sal_Int32 nIdx = 0, sal_Int32 nLen = -1,
                            bool bWithNum = false, bool bWithFootnote = true,
                            bool bReplaceTabsWithSpaces = false ) const;
@@ -743,7 +743,7 @@ public:
     /// change text to Upper/Lower/Hiragana/Katagana/...
     void TransliterateText( utl::TransliterationWrapper& rTrans,
                             sal_Int32 nStart, sal_Int32 nEnd,
-                            SwUndoTransliterate* pUndo = nullptr );
+                            SwUndoTransliterate* pUndo );
 
     /// count words in given range - returns true if we refreshed out count
     bool CountWords( SwDocStat& rStat, sal_Int32 nStart, sal_Int32 nEnd ) const;

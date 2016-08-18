@@ -101,7 +101,7 @@ namespace
 
     inline std::unique_ptr<SwPosition> lcl_PositionFromContentNode(
         SwContentNode * const pContentNode,
-        const bool bAtEnd=false)
+        const bool bAtEnd)
     {
         std::unique_ptr<SwPosition> pResult(new SwPosition(*pContentNode));
         pResult->nContent.Assign(pContentNode, bAtEnd ? pContentNode->Len() : 0);

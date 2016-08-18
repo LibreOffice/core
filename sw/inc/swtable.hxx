@@ -210,7 +210,7 @@ public:
 // It's not allowed to change the table model after the first call of one of these functions.
 
     bool Merge( SwDoc* pDoc, const SwSelBoxes& rBoxes, const SwSelBoxes& rMerged,
-                SwTableBox* pMergeBox, SwUndoTableMerge* pUndo = nullptr )
+                SwTableBox* pMergeBox, SwUndoTableMerge* pUndo )
     {
 #ifdef DBG_UTIL
         m_bDontChangeModel = true;
@@ -218,7 +218,7 @@ public:
         return m_bNewModel ? NewMerge( pDoc, rBoxes, rMerged, pMergeBox, pUndo ) :
                            OldMerge( pDoc, rBoxes, pMergeBox, pUndo );
     }
-    bool SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt=1,
+    bool SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
                    bool bSameHeight = false )
     {
 #ifdef DBG_UTIL
@@ -233,13 +233,13 @@ public:
     void PrepareDeleteCol( long nMin, long nMax );
 
     bool InsertCol( SwDoc*, const SwSelBoxes& rBoxes,
-                    sal_uInt16 nCnt = 1, bool bBehind = true );
+                    sal_uInt16 nCnt, bool bBehind = true );
     bool InsertRow( SwDoc*, const SwSelBoxes& rBoxes,
-                    sal_uInt16 nCnt = 1, bool bBehind = true );
+                    sal_uInt16 nCnt, bool bBehind = true );
     void PrepareDelBoxes( const SwSelBoxes& rBoxes );
     bool DeleteSel( SwDoc*, const SwSelBoxes& rBoxes, const SwSelBoxes* pMerged,
         SwUndo* pUndo, const bool bDelMakeFrames, const bool bCorrBorder );
-    bool SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt=1 );
+    bool SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt );
 
     void FindSuperfluousRows( SwSelBoxes& rBoxes )
         { FindSuperfluousRows_( rBoxes, nullptr, nullptr ); }
@@ -268,9 +268,9 @@ public:
                     bool bCpyName = false ) const;
     // Copy table in this
     bool InsTable( const SwTable& rCpyTable, const SwNodeIndex&,
-                    SwUndoTableCpyTable* pUndo = nullptr );
+                    SwUndoTableCpyTable* pUndo );
     bool InsTable( const SwTable& rCpyTable, const SwSelBoxes&,
-                    SwUndoTableCpyTable* pUndo = nullptr );
+                    SwUndoTableCpyTable* pUndo );
     bool InsNewTable( const SwTable& rCpyTable, const SwSelBoxes&,
                       SwUndoTableCpyTable* pUndo );
     // Copy headline of table (with content!) into an other one.
@@ -430,9 +430,9 @@ public:
     sal_uLong GetSttIdx() const;
 
     // Search next/previous box with content.
-    SwTableBox* FindNextBox( const SwTable&, const SwTableBox* =nullptr,
+    SwTableBox* FindNextBox( const SwTable&, const SwTableBox*,
                             bool bOvrTableLns=true ) const;
-    SwTableBox* FindPreviousBox( const SwTable&, const SwTableBox* =nullptr ) const;
+    SwTableBox* FindPreviousBox( const SwTable&, const SwTableBox* ) const;
     // Return name of this box. It is determined dynamically and
     // is calculated from the position in the lines/boxes/table.
     OUString GetName() const;
@@ -443,7 +443,7 @@ public:
     // width or height when inserting cols or rows
     Point GetCoordinates() const;
 
-    bool IsInHeadline( const SwTable* pTable = nullptr ) const;
+    bool IsInHeadline( const SwTable* pTable ) const;
 
     // Contains box contents, that can be formatted as a number?
     bool HasNumContent( double& rNum, sal_uInt32& rFormatIndex,
@@ -479,9 +479,9 @@ public:
         sal_uInt16 nMaxStep = USHRT_MAX ) const
         { return const_cast<SwTableBox*>(this)->FindStartOfRowSpan( rTable, nMaxStep ); }
 
-    SwTableBox& FindEndOfRowSpan( const SwTable&, sal_uInt16 nMaxStep = USHRT_MAX );
+    SwTableBox& FindEndOfRowSpan( const SwTable&, sal_uInt16 nMaxStep );
     const SwTableBox& FindEndOfRowSpan( const SwTable& rTable,
-        sal_uInt16 nMaxStep = USHRT_MAX ) const
+        sal_uInt16 nMaxStep ) const
         { return const_cast<SwTableBox*>(this)->FindEndOfRowSpan( rTable, nMaxStep ); }
     void RegisterToFormat( SwFormat& rFormat ) ;
 };

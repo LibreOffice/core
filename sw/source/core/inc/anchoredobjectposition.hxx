@@ -75,7 +75,7 @@ namespace objectpositioning
                                        const SwFrame&  rPageAlignLayFrame,
                                        const SwTwips nProposedRelPosY,
                                        const bool bFollowTextFlow,
-                                       const bool bCheckBottom = true ) const;
+                                       const bool bCheckBottom ) const;
         SwTwips ImplAdjustHoriRelPos( const SwFrame&  _rPageAlignLayFrame,
                                        const SwTwips _nProposedRelPosX ) const;
 

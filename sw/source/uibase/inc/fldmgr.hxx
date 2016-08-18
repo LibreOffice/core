@@ -136,7 +136,7 @@ public:
 
     void            InsertFieldType(SwFieldType& rType);
 
-    bool            ChooseMacro(const OUString &rSelMacro = OUString());
+    bool            ChooseMacro(const OUString &rSelMacro);
     void            SetMacroPath(const OUString& rPath);
     const OUString& GetMacroPath() const         { return sMacroPath; }
     const OUString& GetMacroName() const         { return sMacroName; }
@@ -162,7 +162,7 @@ public:
     // access via TypeId from the dialog
     // Ids for a range of fields
     static const SwFieldGroupRgn& GetGroupRange(bool bHtmlMode, sal_uInt16 nGrpId);
-    static sal_uInt16           GetGroup(sal_uInt16 nTypeId, sal_uInt16 nSubType = 0);
+    static sal_uInt16           GetGroup(sal_uInt16 nTypeId, sal_uInt16 nSubType);
 
     // the current field's TypeId
     sal_uInt16          GetCurTypeId() const;
@@ -188,7 +188,7 @@ public:
     // of many expression fields (see labels)
 
     inline void     SetEvalExpFields(bool bEval);
-    void            EvalExpFields(SwWrtShell* pSh = nullptr);
+    void            EvalExpFields(SwWrtShell* pSh);
 };
 
 inline void SwFieldMgr::SetEvalExpFields(bool bEval)

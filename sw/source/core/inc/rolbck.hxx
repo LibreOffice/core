@@ -330,7 +330,7 @@ public:
 
     void Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
               sal_uLong nNodeIdx );
-    void Add( SwTextAttr* pTextHt, sal_uLong nNodeIdx, bool bNewAttr = true );
+    void Add( SwTextAttr* pTextHt, sal_uLong nNodeIdx, bool bNewAttr );
     void Add( SwFormatColl*, sal_uLong nNodeIdx, sal_uInt8 nWhichNd );
     void Add( const ::sw::mark::IMark&, bool bSavePos, bool bSaveOtherPos );
     void Add( SwFrameFormat& rFormat );
@@ -390,7 +390,7 @@ public:
         sal_Int32 const nStart, sal_Int32 const nEnd,
         SetAttrMode const nFlags );
 
-    void AddHint( SwTextAttr* pHt, const bool bNew = false );
+    void AddHint( SwTextAttr* pHt, const bool bNew );
 
     void RegisterInModify( SwModify* pRegIn, const SwNode& rNd );
     void ChangeNodeIndex( sal_uLong nNew ) { m_nNodeIndex = nNew; }

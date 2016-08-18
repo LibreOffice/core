@@ -647,7 +647,7 @@ Writer& OutHTML_Image( Writer&, const SwFrameFormat& rFormat,
                        const OUString& rGraphicURL,
                        Graphic& rGraphic, const OUString& rAlternateText,
                        const Size& rRealSize, sal_uInt32 nFrameOpts,
-                       const sal_Char *pMarkType = nullptr,
+                       const sal_Char *pMarkType,
                        const ImageMap *pGenImgMap = nullptr );
 
 Writer& OutHTML_BulletImage( Writer& rWrt, const sal_Char *pTag,

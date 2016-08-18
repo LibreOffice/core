@@ -69,7 +69,7 @@ class SwFieldRefPage : public SwFieldPage
 
     void SubTypeHdl();
 
-    void                UpdateSubType(const OUString& filterString = OUString());
+    void                UpdateSubType(const OUString& filterString);
 
     static bool                MatchSubstring( const OUString& list_string, const OUString& substr );
 

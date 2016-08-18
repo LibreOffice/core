@@ -105,7 +105,7 @@ public:
      *  and change font to merge character border with neighbours.
     **/
     bool SeekAndChgAttrIter( const sal_Int32 nPos, OutputDevice* pOut );
-    bool SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFont = false );
+    bool SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFont );
 
     // Do we have an attribute change at all?
     bool HasHints() const { return nullptr != pHints; }

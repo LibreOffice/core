@@ -73,7 +73,7 @@ class SwXMLExport : public SvXMLExport
                                  SwXMLTableInfo_Impl& rTableInfo,
                                  bool bTop=false );
 
-    void ExportFormat( const SwFormat& rFormat,  enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID );
+    void ExportFormat( const SwFormat& rFormat,  enum ::xmloff::token::XMLTokenEnum eClass );
     void ExportTableFormat( const SwFrameFormat& rFormat, sal_uInt32 nAbsWidth );
 
     void ExportTableColumnStyle( const SwXMLTableColumn_Impl& rCol );

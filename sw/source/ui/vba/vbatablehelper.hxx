@@ -32,7 +32,7 @@ private:
 
 private:
     SwTableBox* GetTabBox( sal_Int32 nCol, sal_Int32 nRow ) throw (css::uno::RuntimeException);
-    void    InitTabCols( SwTabCols& rCols, const SwTableBox *pStart, bool bCurRowOnly  = false );
+    void    InitTabCols( SwTabCols& rCols, const SwTableBox *pStart, bool bCurRowOnly );
     static sal_Int32 GetRightSeparator( SwTabCols& rCols, sal_Int32 nNum);
     static sal_Int32 GetColCount( SwTabCols& rCols );
     static sal_Int32 GetColWidth( SwTabCols& rCols, sal_Int32 nNum ) throw (css::uno::RuntimeException);

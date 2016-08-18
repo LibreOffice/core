@@ -274,14 +274,14 @@ public:
     inline SwPosSize GetTextSize( const OUString &rText ) const;
 
     sal_Int32 GetTextBreak( const long nLineWidth,
-                                           const sal_Int32 nMaxLen,
-                                           const sal_uInt16 nComp,
-                           vcl::TextLayoutCache const* = nullptr) const;
+                            const sal_Int32 nMaxLen,
+                            const sal_uInt16 nComp,
+                            vcl::TextLayoutCache const*) const;
     sal_Int32 GetTextBreak( const long nLineWidth,
-                                           const sal_Int32 nMaxLen,
-                                           const sal_uInt16 nComp,
-                                           sal_Int32& rExtraCharPos,
-                           vcl::TextLayoutCache const* = nullptr) const;
+                            const sal_Int32 nMaxLen,
+                            const sal_uInt16 nComp,
+                            sal_Int32& rExtraCharPos,
+                            vcl::TextLayoutCache const*) const;
 
     sal_uInt16 GetAscent() const;
 

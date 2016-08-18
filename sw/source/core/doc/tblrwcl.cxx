@@ -1376,11 +1376,11 @@ struct InsULPara
         pLeftBox( pLeft )
         {   bUL_LR = true; bUL = true; }
 
-    void SetLeft( SwTableBox* pBox=nullptr )
+    void SetLeft( SwTableBox* pBox )
         { bUL_LR = false;   bUL = true; if( pBox ) pInsBox = pBox; }
-    void SetRight( SwTableBox* pBox=nullptr )
+    void SetRight( SwTableBox* pBox )
         { bUL_LR = false;   bUL = false; if( pBox ) pInsBox = pBox; }
-    void SetLower( SwTableLine* pLine=nullptr )
+    void SetLower( SwTableLine* pLine )
         { bUL_LR = true;    bUL = false; if( pLine ) pInsLine = pLine; }
 };
 

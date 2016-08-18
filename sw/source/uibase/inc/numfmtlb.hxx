@@ -52,7 +52,7 @@ public:
 
     void            Clear();
 
-    inline void     SetOneArea(bool bOnlyOne = true) { bOneArea = bOnlyOne; }
+    inline void     SetOneArea(bool bOnlyOne) { bOneArea = bOnlyOne; }
 
     void            SetFormatType(const short nFormatType);
     inline short    GetFormatType() const { return nCurrFormatType; }

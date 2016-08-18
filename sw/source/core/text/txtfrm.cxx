@@ -1540,7 +1540,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                                         SetOfst_( 0 );
                                 }
                                 break;
-        case PREP_MUST_FIT :        pPara->SetPrepMustFit();
+        case PREP_MUST_FIT :        pPara->SetPrepMustFit(true);
                                     SAL_FALLTHROUGH;
         case PREP_WIDOWS_ORPHANS :  pPara->SetPrepAdjust();
                                     break;

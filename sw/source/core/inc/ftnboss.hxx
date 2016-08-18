@@ -84,7 +84,7 @@ public:
 
     static void ChangeFootnoteRef( const SwContentFrame *pOld, const SwTextFootnote *,
                        SwContentFrame *pNew );
-    void RearrangeFootnotes( const SwTwips nDeadLine, const bool bLock = false,
+    void RearrangeFootnotes( const SwTwips nDeadLine, const bool bLock,
                         const SwTextFootnote *pAttr = nullptr );
 
     // Set DeadLine (in document coordinates) so that the text formatter can

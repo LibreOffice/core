@@ -215,7 +215,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
         optional input parameter - pointer to the <SfxRequest> instance, if existing.
     */
     SAL_DLLPRIVATE void ExecPgUpAndPgDown( const bool  _bPgUp,
-                             SfxRequest* _pReq = nullptr );
+                             SfxRequest* _pReq );
 
 protected:
     virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize ) override;

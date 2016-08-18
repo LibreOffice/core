@@ -1820,7 +1820,7 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, vcl::RenderContext *pOu
                       SwViewShell &rSh, const SwRect &rGrf, const SwRect &rOut,
                       bool bClip, bool bGrfNum,
                       SwPaintProperties& properties,
-                      bool bBackgrdAlreadyDrawn = false )
+                      bool bBackgrdAlreadyDrawn )
                       // add parameter <bBackgrdAlreadyDrawn> to indicate
                       // that the background is already drawn.
 {

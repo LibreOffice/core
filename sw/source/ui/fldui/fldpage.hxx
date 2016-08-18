@@ -62,7 +62,7 @@ protected:
     void                Init();
     void                SavePos( const ListBox* pLst1);
     void                RestorePos( ListBox* pLst1 );
-    void                EnableInsert(bool bEnable = true);
+    void                EnableInsert(bool bEnable);
     inline bool         IsFieldEdit() const   { return m_bFieldEdit; }
 
     // insert field

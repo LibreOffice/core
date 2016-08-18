@@ -202,7 +202,7 @@ public:
     virtual bool HeaderFooterWritten();
 
     void AppendSection( const SwPageDesc* pPd,
-                    const SwSectionFormat* pSectionFormat = nullptr,
+                    const SwSectionFormat* pSectionFormat,
                     sal_uLong nLnNumRestartNo = 0,
                     bool bIsFirstParagraph = false );
     void AppendSection( const SwFormatPageDesc& rPd,
@@ -249,7 +249,7 @@ public:
 
     void AppendSep( WW8_CP nStartCp,
                     const SwPageDesc* pPd,
-                    const SwSectionFormat* pSectionFormat = nullptr,
+                    const SwSectionFormat* pSectionFormat,
                     sal_uLong nLnNumRestartNo = 0 );
     void AppendSep( WW8_CP nStartCp, const SwFormatPageDesc& rPd,
                     const SwNode& rNd,
@@ -806,7 +806,7 @@ protected:
 
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,
                                      const SwNode& rNd,
-                                     const SwFormatPageDesc* pNewPgDescFormat = nullptr,
+                                     const SwFormatPageDesc* pNewPgDescFormat,
                                      const SwPageDesc* pNewPgDesc = nullptr ) = 0;
 
     /// Return value indicates if an inherited outline numbering is suppressed.
@@ -928,7 +928,7 @@ public:
     bool InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec );
 
     using StgWriter::Write;
-    virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* = nullptr ) override;
+    virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* ) override;
     //Seems not an expected to provide method to access the private member
     SfxMedium* GetMedia() { return mpMedium; }
 
@@ -1066,7 +1066,7 @@ public:
     // #i76300#
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,
                                      const SwNode& rNd,
-                                     const SwFormatPageDesc* pNewPgDescFormat = nullptr,
+                                     const SwFormatPageDesc* pNewPgDescFormat,
                                      const SwPageDesc* pNewPgDesc = nullptr ) override;
 
     static void Out_BorderLine(ww::bytes& rO, const ::editeng::SvxBorderLine* pLine,

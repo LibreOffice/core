@@ -96,7 +96,7 @@ public:
     void SetType(SectionType const eNew)    { m_eType = eNew; }
 
     bool IsHidden() const { return m_bHidden; }
-    void SetHidden(bool const bFlag = true) { m_bHidden = bFlag; }
+    void SetHidden(bool const bFlag) { m_bHidden = bFlag; }
 
     bool IsHiddenFlag() const { return m_bHiddenFlag; }
     SAL_DLLPRIVATE void
@@ -108,7 +108,7 @@ public:
     void SetEditInReadonlyFlag(bool const bFlag)
         { m_bEditInReadonlyFlag = bFlag; }
 
-    void SetCondHidden(bool const bFlag = true) { m_bCondHiddenFlag = bFlag; }
+    void SetCondHidden(bool const bFlag) { m_bCondHiddenFlag = bFlag; }
     bool IsCondHidden() const { return m_bCondHiddenFlag; }
 
     const OUString& GetCondition() const           { return m_sCondition; }
@@ -131,7 +131,7 @@ public:
     { return (DDE_LINK_SECTION == m_eType) || (FILE_LINK_SECTION == m_eType); }
 
     bool IsConnectFlag() const                  { return m_bConnectFlag; }
-    void SetConnectFlag(bool const bFlag = true){ m_bConnectFlag = bFlag; }
+    void SetConnectFlag(bool const bFlag){ m_bConnectFlag = bFlag; }
 
     static OUString CollapseWhiteSpaces(const OUString& sName);
 };
@@ -189,7 +189,7 @@ public:
     bool IsProtectFlag() const { return m_Data.IsProtectFlag(); }
     bool IsEditInReadonlyFlag() const { return m_Data.IsEditInReadonlyFlag(); }
 
-    void SetCondHidden(bool const bFlag = true);
+    void SetCondHidden(bool const bFlag);
     bool IsCondHidden() const { return m_Data.IsCondHidden(); }
     // Query (also for parents) if this section is to be hidden.
     bool CalcHiddenFlag() const;

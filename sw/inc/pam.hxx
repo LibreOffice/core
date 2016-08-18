@@ -164,7 +164,7 @@ class SW_DLLPUBLIC SwPaM : public sw::Ring<SwPaM>
     SwPosition * m_pMark;  ///< points at either m_Bound1 or m_Bound2
     bool m_bIsInFrontOfLabel;
 
-    SwPaM* MakeRegion( SwMoveFn fnMove, const SwPaM * pOrigRg = nullptr );
+    SwPaM* MakeRegion( SwMoveFn fnMove, const SwPaM * pOrigRg );
 
     SwPaM(SwPaM const& rPaM) = delete;
 
@@ -202,7 +202,7 @@ public:
     bool Find(  const SwFormat& rFormat,
                 SwMoveFn fnMove = fnMoveForward,
                 const SwPaM *pPam =nullptr, bool bInReadOnly = false);
-    bool Find(  const SfxPoolItem& rAttr, bool bValue = true,
+    bool Find(  const SfxPoolItem& rAttr, bool bValue,
                 SwMoveFn fnMove = fnMoveForward,
                 const SwPaM *pPam =nullptr, bool bInReadOnly = false );
     bool Find(  const SfxItemSet& rAttr, bool bNoColls,
