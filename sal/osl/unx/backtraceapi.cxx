@@ -9,16 +9,52 @@
 
 #include <sal/config.h>
 
-#include <rtl/ustrbuf.hxx>
-#include "misc.hxx"
+#include <cassert>
+#include <cstdlib>
+#include <limits>
+#include <memory>
 
-// FIXME: no-op for now; it needs implementing, cf. above.
-rtl_uString *osl_backtraceAsString()
-{
-    OUStringBuffer aBuf;
-    OUString aStr = aBuf.makeStringAndClear();
-    rtl_uString_acquire( aStr.pData );
-    return aStr.pData;
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+#include "backtrace.h"
+#include "backtraceasstring.hxx"
+
+namespace {
+
+struct FreeGuard {
+    FreeGuard(char ** theBuffer): buffer(theBuffer) {}
+
+    ~FreeGuard() { std::free(buffer); }
+
+    char ** buffer;
+};
+
+}
+
+OUString osl::detail::backtraceAsString(sal_uInt32 maxDepth) {
+    assert(maxDepth != 0);
+    auto const maxInt = static_cast<unsigned int>(
+        std::numeric_limits<int>::max());
+    if (maxDepth > maxInt) {
+        maxDepth = static_cast<sal_uInt32>(maxInt);
+    }
+    auto b1 = std::unique_ptr<void *[]>(new void *[maxDepth]);
+    int n = backtrace(b1.get(), static_cast<int>(maxDepth));
+    FreeGuard b2(backtrace_symbols(b1.get(), n));
+    b1.reset();
+    if (b2.buffer == nullptr) {
+        return OUString();
+    }
+    OUStringBuffer b3;
+    for (int i = 0; i != n; ++i) {
+        if (i != 0) {
+            b3.append("\n");
+        }
+        // TODO b3.append(o3tl::runtimeToOUString(b2.buffer[i]));
+    }
+    return b3.makeStringAndClear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

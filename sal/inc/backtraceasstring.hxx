@@ -7,23 +7,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_OSL_ALL_LOGFORMAT_HXX
-#define INCLUDED_SAL_OSL_ALL_LOGFORMAT_HXX
+#ifndef INCLUDED_SAL_INC_BACKTRACEASSTRING_HXX
+#define INCLUDED_SAL_INC_BACKTRACEASSTRING_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include <cstdarg>
-
-#include "sal/detail/log.h"
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace osl { namespace detail {
 
-void logFormat(
-    sal_detail_LogLevel level, char const * area, char const * where,
-    char const * format, std::va_list arguments);
+/// Build a debugging backtrace from current PC location.
+OUString backtraceAsString(sal_uInt32 maxDepth);
 
 } }
 
-#endif
+#endif // INCLUDED_SAL_INC_INTERNAL_MISC_H
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
