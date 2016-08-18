@@ -44,6 +44,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
 #include <svx/spacinglistbox.hxx>
+#include <svx/samecontentlistbox.hxx>
 
 namespace sw { namespace sidebar {
 
@@ -83,7 +84,7 @@ private:
     VclPtr<CheckBox>           mpFooterToggle;
     VclPtr<SpacingListBox>     mpFooterSpacingLB;
     VclPtr<SpacingListBox>     mpFooterMarginPresetLB;
-    VclPtr<ListBox>            mpFooterLayoutLB;
+    VclPtr<SameContentListBox> mpFooterLayoutLB;
     VclPtr<FixedText>          mpCustomEntry;
     OUString aCustomEntry;
 
