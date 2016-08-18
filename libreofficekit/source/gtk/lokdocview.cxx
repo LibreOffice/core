@@ -1355,7 +1355,7 @@ static void callbackWorker (int nType, const char* pPayload, void* pData)
     CallbackData* pCallback = new CallbackData(nType, pPayload ? pPayload : "(nil)", pDocView);
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     std::stringstream ss;
-    ss << "callbackWorker, view #" << priv->m_nViewId << ": " << callbackTypeToString(nType) << ", '" << pPayload << "'";
+    ss << "callbackWorker, view #" << priv->m_nViewId << ": " << callbackTypeToString(nType) << ", '" << (pPayload ? pPayload : "(nil)") << "'";
     g_info("%s", ss.str().c_str());
     gdk_threads_add_idle(callback, pCallback);
 }
