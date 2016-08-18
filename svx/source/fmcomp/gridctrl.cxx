@@ -2930,15 +2930,6 @@ CellController* DbGridControl::GetController(long /*nRow*/, sal_uInt16 nColumnId
         if ((bInsert && !pColumn->IsAutoValue()) || bUpdate)
         {
             pReturn = &pColumn->GetController();
-            if (pReturn)
-            {
-                // if it is an edit row, it is possible to give it a forced read-only property
-                if ( dynamic_cast<const EditCellController*>( pReturn) == nullptr && dynamic_cast<const SpinCellController*>( pReturn) == nullptr )
-                    // controller could not be set to read-only in forceROController
-                    if (!bInsert && !bUpdate)
-                        // better use no controller than one without read-only
-                        pReturn = nullptr;
-            }
         }
     }
     return pReturn;
