@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_74bec800",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/ChartCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2016-08-18T18:53:21Z",
+      "side": 1,
+      "message": "Shall we also update command names?",
+      "range": {
+        "startLine": 38,
+        "startChar": 37,
+        "endLine": 38,
+        "endChar": 47
+      },
+      "revId": "ce41247e5b14daf06495c0b9776c5c53c5422b80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
