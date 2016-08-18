@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_297cf91f",
+        "filename": "external/firebird/wnt-dbgutil.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-08-18T09:58:12Z",
+      "side": 1,
+      "message": "Trailing whitespace causes warnings",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 1
+      },
+      "revId": "a45351ae45373ece08276bc75e57b892c9d89bd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_49792d2f",
+        "filename": "external/firebird/wnt-dbgutil.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-08-18T09:58:12Z",
+      "side": 1,
+      "message": "Trailing whitespace causes warnings",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 1
+      },
+      "revId": "a45351ae45373ece08276bc75e57b892c9d89bd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
