@@ -97,7 +97,7 @@ void XMLTableShapeImportHelper::finishShape(
             sal_Int32 nEndY(-1);
             sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
             table::CellAddress aEndCell;
-            OUString* pRangeList(nullptr);
+            std::unique_ptr<OUString> xRangeList;
             sal_Int16 nLayerID(-1);
             for( sal_Int16 i=0; i < nAttrCount; ++i )
             {
@@ -137,7 +137,7 @@ void XMLTableShapeImportHelper::finishShape(
                 else if(nPrefix == XML_NAMESPACE_DRAW)
                 {
                     if (IsXMLToken(aLocalName, XML_NOTIFY_ON_UPDATE_OF_RANGES))
-                        pRangeList = new OUString(rValue);
+                        xRangeList.reset(new OUString(rValue));
                 }
             }
             SetLayer(rShape, nLayerID, rShape->getShapeType());
@@ -153,17 +153,17 @@ void XMLTableShapeImportHelper::finishShape(
                 }
             }
 
-            if (pRangeList)
+            if (xRangeList)
             {
                 // #i78086# If there are notification ranges, the ChartListener must be created
                 // also when anchored to the sheet
                 // -> call AddOLE with invalid cell position (checked in ScMyShapeResizer::ResizeShapes)
 
                 if (ScMyTables::IsOLE(rShape))
-                    rTables.AddOLE(rShape, *pRangeList);
+                    rTables.AddOLE(rShape, *xRangeList);
             }
 
-            delete pRangeList;
+            xRangeList.reset();
         }
         else // shape is annotation
         {
