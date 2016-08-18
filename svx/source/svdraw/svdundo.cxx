@@ -110,7 +110,7 @@ sal_Int32 SdrUndoAction::GetViewShellId() const
 SdrUndoGroup::SdrUndoGroup(SdrModel& rNewMod)
 :   SdrUndoAction(rNewMod),
     aBuf(),
-    eFunction(SDRREPFUNC_OBJ_NONE)
+    eFunction(SdrRepeatFunc::NONE)
 {}
 
 SdrUndoGroup::~SdrUndoGroup()
@@ -158,22 +158,22 @@ bool SdrUndoGroup::CanSdrRepeat(SdrView& rView) const
 {
     switch (eFunction)
     {
-    case SDRREPFUNC_OBJ_NONE            :  return false;
-    case SDRREPFUNC_OBJ_DELETE          :  return rView.AreObjectsMarked();
-    case SDRREPFUNC_OBJ_COMBINE_POLYPOLY:  return rView.IsCombinePossible();
-    case SDRREPFUNC_OBJ_COMBINE_ONEPOLY :  return rView.IsCombinePossible(true);
-    case SDRREPFUNC_OBJ_DISMANTLE_POLYS :  return rView.IsDismantlePossible();
-    case SDRREPFUNC_OBJ_DISMANTLE_LINES :  return rView.IsDismantlePossible(true);
-    case SDRREPFUNC_OBJ_CONVERTTOPOLY   :  return rView.IsConvertToPolyObjPossible();
-    case SDRREPFUNC_OBJ_CONVERTTOPATH   :  return rView.IsConvertToPathObjPossible();
-    case SDRREPFUNC_OBJ_GROUP           :  return rView.IsGroupPossible();
-    case SDRREPFUNC_OBJ_UNGROUP         :  return rView.IsUnGroupPossible();
-    case SDRREPFUNC_OBJ_PUTTOTOP        :  return rView.IsToTopPossible();
-    case SDRREPFUNC_OBJ_PUTTOBTM        :  return rView.IsToBtmPossible();
-    case SDRREPFUNC_OBJ_MOVTOTOP        :  return rView.IsToTopPossible();
-    case SDRREPFUNC_OBJ_MOVTOBTM        :  return rView.IsToBtmPossible();
-    case SDRREPFUNC_OBJ_REVORDER        :  return rView.IsReverseOrderPossible();
-    case SDRREPFUNC_OBJ_IMPORTMTF       :  return rView.IsImportMtfPossible();
+    case SdrRepeatFunc::NONE           :  return false;
+    case SdrRepeatFunc::Delete         :  return rView.AreObjectsMarked();
+    case SdrRepeatFunc::CombinePolyPoly:  return rView.IsCombinePossible();
+    case SdrRepeatFunc::CombineOnePoly :  return rView.IsCombinePossible(true);
+    case SdrRepeatFunc::DismantlePolys :  return rView.IsDismantlePossible();
+    case SdrRepeatFunc::DismantleLines :  return rView.IsDismantlePossible(true);
+    case SdrRepeatFunc::ConvertToPoly  :  return rView.IsConvertToPolyObjPossible();
+    case SdrRepeatFunc::ConvertToPath  :  return rView.IsConvertToPathObjPossible();
+    case SdrRepeatFunc::Group          :  return rView.IsGroupPossible();
+    case SdrRepeatFunc::Ungroup        :  return rView.IsUnGroupPossible();
+    case SdrRepeatFunc::PutToTop       :  return rView.IsToTopPossible();
+    case SdrRepeatFunc::PutToBottom    :  return rView.IsToBtmPossible();
+    case SdrRepeatFunc::MoveToTop      :  return rView.IsToTopPossible();
+    case SdrRepeatFunc::MoveToBottom   :  return rView.IsToBtmPossible();
+    case SdrRepeatFunc::ReverseOrder   :  return rView.IsReverseOrderPossible();
+    case SdrRepeatFunc::ImportMtf      :  return rView.IsImportMtfPossible();
     default: break;
     } // switch
     return false;
@@ -183,22 +183,22 @@ void SdrUndoGroup::SdrRepeat(SdrView& rView)
 {
     switch (eFunction)
     {
-    case SDRREPFUNC_OBJ_NONE            :  break;
-    case SDRREPFUNC_OBJ_DELETE          :  rView.DeleteMarked();                break;
-    case SDRREPFUNC_OBJ_COMBINE_POLYPOLY:  rView.CombineMarkedObjects(false);   break;
-    case SDRREPFUNC_OBJ_COMBINE_ONEPOLY :  rView.CombineMarkedObjects();        break;
-    case SDRREPFUNC_OBJ_DISMANTLE_POLYS :  rView.DismantleMarkedObjects();      break;
-    case SDRREPFUNC_OBJ_DISMANTLE_LINES :  rView.DismantleMarkedObjects(true);  break;
-    case SDRREPFUNC_OBJ_CONVERTTOPOLY   :  rView.ConvertMarkedToPolyObj();      break;
-    case SDRREPFUNC_OBJ_CONVERTTOPATH   :  rView.ConvertMarkedToPathObj(false); break;
-    case SDRREPFUNC_OBJ_GROUP           :  rView.GroupMarked();                 break;
-    case SDRREPFUNC_OBJ_UNGROUP         :  rView.UnGroupMarked();               break;
-    case SDRREPFUNC_OBJ_PUTTOTOP        :  rView.PutMarkedToTop();              break;
-    case SDRREPFUNC_OBJ_PUTTOBTM        :  rView.PutMarkedToBtm();              break;
-    case SDRREPFUNC_OBJ_MOVTOTOP        :  rView.MovMarkedToTop();              break;
-    case SDRREPFUNC_OBJ_MOVTOBTM        :  rView.MovMarkedToBtm();              break;
-    case SDRREPFUNC_OBJ_REVORDER        :  rView.ReverseOrderOfMarked();        break;
-    case SDRREPFUNC_OBJ_IMPORTMTF       :  rView.DoImportMarkedMtf();           break;
+    case SdrRepeatFunc::NONE            :  break;
+    case SdrRepeatFunc::Delete          :  rView.DeleteMarked();                break;
+    case SdrRepeatFunc::CombinePolyPoly :  rView.CombineMarkedObjects(false);   break;
+    case SdrRepeatFunc::CombineOnePoly  :  rView.CombineMarkedObjects();        break;
+    case SdrRepeatFunc::DismantlePolys  :  rView.DismantleMarkedObjects();      break;
+    case SdrRepeatFunc::DismantleLines  :  rView.DismantleMarkedObjects(true);  break;
+    case SdrRepeatFunc::ConvertToPoly   :  rView.ConvertMarkedToPolyObj();      break;
+    case SdrRepeatFunc::ConvertToPath   :  rView.ConvertMarkedToPathObj(false); break;
+    case SdrRepeatFunc::Group           :  rView.GroupMarked();                 break;
+    case SdrRepeatFunc::Ungroup         :  rView.UnGroupMarked();               break;
+    case SdrRepeatFunc::PutToTop        :  rView.PutMarkedToTop();              break;
+    case SdrRepeatFunc::PutToBottom     :  rView.PutMarkedToBtm();              break;
+    case SdrRepeatFunc::MoveToTop       :  rView.MovMarkedToTop();              break;
+    case SdrRepeatFunc::MoveToBottom    :  rView.MovMarkedToBtm();              break;
+    case SdrRepeatFunc::ReverseOrder    :  rView.ReverseOrderOfMarked();        break;
+    case SdrRepeatFunc::ImportMtf       :  rView.DoImportMarkedMtf();           break;
     default: break;
     } // switch
 }

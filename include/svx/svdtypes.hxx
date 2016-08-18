@@ -82,28 +82,30 @@ enum SdrObjListKind {SDROBJLIST_UNKNOWN    =0x00,
 /*
  * Repeat
  */
-enum SdrRepeatFunc {SDRREPFUNC_OBJ_NONE,
-                    // with parameter
-                    SDRREPFUNC_OBJ_MOVE,         // distance
-                    SDRREPFUNC_OBJ_RESIZE,       // factor, reference(%) related to MarkRect
-                    SDRREPFUNC_OBJ_ROTATE,       // rotation angle, reference(%) related to MarkRect
-                    // Without parameter
-                    SDRREPFUNC_OBJ_DELETE,
-                    SDRREPFUNC_OBJ_COMBINE_POLYPOLY,
-                    SDRREPFUNC_OBJ_COMBINE_ONEPOLY,
-                    SDRREPFUNC_OBJ_DISMANTLE_POLYS,
-                    SDRREPFUNC_OBJ_DISMANTLE_LINES,
-                    SDRREPFUNC_OBJ_CONVERTTOPOLY,
-                    SDRREPFUNC_OBJ_CONVERTTOPATH,
-                    SDRREPFUNC_OBJ_GROUP,
-                    SDRREPFUNC_OBJ_UNGROUP,
-                    SDRREPFUNC_OBJ_PUTTOTOP,
-                    SDRREPFUNC_OBJ_PUTTOBTM,
-                    SDRREPFUNC_OBJ_MOVTOTOP,
-                    SDRREPFUNC_OBJ_MOVTOBTM,
-                    SDRREPFUNC_OBJ_REVORDER,
-                    SDRREPFUNC_OBJ_IMPORTMTF,
-                    SDRREPFUNC_LAST};
+enum class SdrRepeatFunc {
+    NONE,
+    // with parameter
+    Move,         // distance
+    Resize,       // factor, reference(%) related to MarkRect
+    Rotate,       // rotation angle, reference(%) related to MarkRect
+    // Without parameter
+    Delete,
+    CombinePolyPoly,
+    CombineOnePoly,
+    DismantlePolys,
+    DismantleLines,
+    ConvertToPoly,
+    ConvertToPath,
+    Group,
+    Ungroup,
+    PutToTop,
+    PutToBottom,
+    MoveToTop,
+    MoveToBottom,
+    ReverseOrder,
+    ImportMtf,
+    LAST
+};
 
 #endif // INCLUDED_SVX_SVDTYPES_HXX
 

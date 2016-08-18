@@ -460,7 +460,7 @@ public:
     // Actions on the SdrView however do generate those.
     void BegUndo();                       // open Undo group
     void BegUndo(const OUString& rComment); // open Undo group
-    void BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrRepeatFunc eFunc=SDRREPFUNC_OBJ_NONE); // open Undo group
+    void BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrRepeatFunc eFunc=SdrRepeatFunc::NONE); // open Undo group
     void EndUndo();                       // close Undo group
     void AddUndo(SdrUndoAction* pUndo);
     sal_uInt16 GetUndoBracketLevel() const                       { return nUndoLevel; }

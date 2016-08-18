@@ -182,7 +182,7 @@ void SdrEditView::MoveMarkedObj(const Size& rSiz, bool bCopy)
         if (bCopy)
             aStr += ImpGetResStr(STR_EditWithCopy);
         // needs its own UndoGroup because of its parameters
-        BegUndo(aStr,GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_MOVE);
+        BegUndo(aStr,GetDescriptionOfMarkedObjects(),SdrRepeatFunc::Move);
     }
 
     if (bCopy)

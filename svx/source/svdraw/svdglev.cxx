@@ -222,7 +222,7 @@ void SdrGlueEditView::DeleteMarkedGluePoints()
     ForceUndirtyMrkPnt();
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
-        BegUndo(ImpGetResStr(STR_EditDelete),GetDescriptionOfMarkedGluePoints(),SDRREPFUNC_OBJ_DELETE);
+        BegUndo(ImpGetResStr(STR_EditDelete),GetDescriptionOfMarkedGluePoints(),SdrRepeatFunc::Delete);
 
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm)
@@ -356,7 +356,7 @@ void SdrGlueEditView::MoveMarkedGluePoints(const Size& rSiz, bool bCopy)
     ForceUndirtyMrkPnt();
     OUString aStr(ImpGetResStr(STR_EditMove));
     if (bCopy) aStr += ImpGetResStr(STR_EditWithCopy);
-    BegUndo(aStr,GetDescriptionOfMarkedGluePoints(),SDRREPFUNC_OBJ_MOVE);
+    BegUndo(aStr,GetDescriptionOfMarkedGluePoints(),SdrRepeatFunc::Move);
     if (bCopy) ImpCopyMarkedGluePoints();
     ImpTransformMarkedGluePoints(ImpMove,&rSiz);
     EndUndo();
@@ -374,7 +374,7 @@ void SdrGlueEditView::ResizeMarkedGluePoints(const Point& rRef, const Fraction& 
     ForceUndirtyMrkPnt();
     OUString aStr(ImpGetResStr(STR_EditResize));
     if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
-    BegUndo(aStr,GetDescriptionOfMarkedGluePoints(),SDRREPFUNC_OBJ_RESIZE);
+    BegUndo(aStr,GetDescriptionOfMarkedGluePoints(),SdrRepeatFunc::Resize);
     if (bCopy) ImpCopyMarkedGluePoints();
     ImpTransformMarkedGluePoints(ImpResize,&rRef,&xFact,&yFact);
     EndUndo();
@@ -392,7 +392,7 @@ void SdrGlueEditView::RotateMarkedGluePoints(const Point& rRef, long nAngle, boo
     ForceUndirtyMrkPnt();
     OUString aStr(ImpGetResStr(STR_EditRotate));
     if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
-    BegUndo(aStr,GetDescriptionOfMarkedGluePoints(),SDRREPFUNC_OBJ_ROTATE);
+    BegUndo(aStr,GetDescriptionOfMarkedGluePoints(),SdrRepeatFunc::Rotate);
     if (bCopy) ImpCopyMarkedGluePoints();
     double nSin=sin(nAngle*nPi180);
     double nCos=cos(nAngle*nPi180);

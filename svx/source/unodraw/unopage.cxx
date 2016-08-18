@@ -299,7 +299,7 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
                     if (bUndoEnabled)
                     {
                         mpModel->BegUndo(ImpGetResStr(STR_EditDelete),
-                            pObj->TakeObjNameSingul(), SDRREPFUNC_OBJ_DELETE);
+                            pObj->TakeObjNameSingul(), SdrRepeatFunc::Delete);
 
                         SdrUndoAction * pAction = mpModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj);
                         mpModel->AddUndo(pAction);

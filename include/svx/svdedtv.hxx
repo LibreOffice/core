@@ -180,7 +180,7 @@ public:
     // NotifyNewUndoAction() is not called for an empty group.
     void BegUndo()                         { mpModel->BegUndo();         } // open undo-grouping
     void BegUndo(const OUString& rComment) { mpModel->BegUndo(rComment); } // open undo-grouping
-    void BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrRepeatFunc eFunc=SDRREPFUNC_OBJ_NONE) { mpModel->BegUndo(rComment,rObjDescr,eFunc); } // open undo-grouping
+    void BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrRepeatFunc eFunc=SdrRepeatFunc::NONE) { mpModel->BegUndo(rComment,rObjDescr,eFunc); } // open undo-grouping
     void EndUndo();                                                   // close undo-grouping  (incl. BroadcastEdges)
     void AddUndo(SdrUndoAction* pUndo)   { mpModel->AddUndo(pUndo);    } // add action
     // only after first BegUndo or befor last EndUndo:
