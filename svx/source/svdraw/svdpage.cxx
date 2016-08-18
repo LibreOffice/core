@@ -135,7 +135,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
     bRectsDirty     =false;
     size_t nCloneErrCnt = 0;
     const size_t nCount = rSrcList.GetObjCount();
-    SdrInsertReason aReason(SDRREASON_COPY);
+    SdrInsertReason aReason(SdrInsertReasonKind::Copy);
     for (size_t no=0; no<nCount; ++no) {
         SdrObject* pSO=rSrcList.GetObj(no);
 
@@ -740,7 +740,7 @@ void SdrObjList::UnGroupObj( size_t nObjNum )
             for( size_t i=0; i<nCount; ++i )
             {
                 SdrObject* pObj = pSrcLst->RemoveObject(0);
-                SdrInsertReason aReason(SDRREASON_VIEWCALL);
+                SdrInsertReason aReason(SdrInsertReasonKind::ViewCall);
                 InsertObject(pObj, nInsertPos, &aReason);
                 ++nInsertPos;
             }

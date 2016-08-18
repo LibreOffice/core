@@ -380,7 +380,7 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
 
                     if(pNeuObj)
                     {
-                        SdrInsertReason aReason(SDRREASON_VIEWCALL);
+                        SdrInsertReason aReason(SdrInsertReasonKind::ViewCall);
                         pM->GetPageView()->GetObjList()->InsertObject(pNeuObj, pObj->GetOrdNum() + 1, &aReason);
                         if( bUndo )
                             AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNeuObj));

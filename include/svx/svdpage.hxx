@@ -52,12 +52,12 @@ class Color;
 class SfxStyleSheet;
 class SvxUnoDrawPagesAccess;
 
-enum SdrInsertReasonKind {
-    SDRREASON_UNKNOWN,
-    SDRREASON_STREAMING,  /// importing document
-    SDRREASON_UNDO,       /// from Undo
-    SDRREASON_COPY,       /// something copied...
-    SDRREASON_VIEWCALL    /// via SdrView::Group(), ...
+enum class SdrInsertReasonKind {
+    Unknown,
+    Streaming,  /// importing document
+    Undo,       /// from Undo
+    Copy,       /// something copied...
+    ViewCall    /// via SdrView::Group(), ...
 };
 
 class SdrInsertReason {

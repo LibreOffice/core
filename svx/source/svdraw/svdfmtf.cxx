@@ -293,7 +293,7 @@ size_t ImpSdrGDIMetaFileImport::DoImport(
     // insert all objects cached in aTmpList now into rOL from nInsPos
     nInsPos = std::min(nInsPos, rOL.GetObjCount());
 
-    SdrInsertReason aReason(SDRREASON_VIEWCALL);
+    SdrInsertReason aReason(SdrInsertReasonKind::ViewCall);
 
     for(SdrObject* pObj : maTmpList)
     {

@@ -2608,7 +2608,7 @@ bool SvxTableController::GetMarkedObjModel( SdrPage* pNewPage )
         pNewTableObj->SetPage( pNewPage );
         pNewTableObj->SetModel( pNewPage->GetModel() );
 
-        SdrInsertReason aReason(SDRREASON_VIEWCALL);
+        SdrInsertReason aReason(SdrInsertReasonKind::ViewCall);
         pNewPage->InsertObject(pNewTableObj, SAL_MAX_SIZE, &aReason);
 
         return true;
