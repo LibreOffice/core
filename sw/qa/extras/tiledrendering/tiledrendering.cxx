@@ -67,6 +67,7 @@ public:
     void testUndoRepairDispatch();
     void testShapeTextUndoShells();
     void testShapeTextUndoGroupShells();
+    void testTrackChanges();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -99,6 +100,7 @@ public:
     CPPUNIT_TEST(testUndoRepairDispatch);
     CPPUNIT_TEST(testShapeTextUndoShells);
     CPPUNIT_TEST(testShapeTextUndoGroupShells);
+    CPPUNIT_TEST(testTrackChanges);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1134,6 +1136,36 @@ void SwTiledRenderingTest::testShapeTextUndoGroupShells()
 
     mxComponent->dispose();
     mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testTrackChanges()
+{
+    // Load a document.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+
+    // Turn on trak changes, type "zzz" at the end, and move to the start.
+    uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
+    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->EndDoc();
+    pWrtShell->Insert("zzz");
+    pWrtShell->SttDoc();
+
+    // Reject the change by index, while the cursor does not cover the tracked change.
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {"RejectTrackedChange", uno::makeAny(static_cast<sal_uInt16>(0))}
+    }));
+    comphelper::dispatchCommand(".uno:RejectTrackedChange", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    // Assert that the reject was performed.
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+    // This was 'Aaa bbb.zzz', the change wasn't rejected.
+    CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb."), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+
     comphelper::LibreOfficeKit::setActive(false);
 }
 
