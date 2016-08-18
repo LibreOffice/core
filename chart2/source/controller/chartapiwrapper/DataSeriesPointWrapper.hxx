@@ -60,12 +60,12 @@ public:
     };
 
     //this constructor needs an initialize call afterwards
-    explicit DataSeriesPointWrapper( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit DataSeriesPointWrapper(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
 
-    DataSeriesPointWrapper( eType eType
+    DataSeriesPointWrapper(eType eType
             , sal_Int32 nSeriesIndexInNewAPI
             , sal_Int32 nPointIndex //ignored for series
-            , std::shared_ptr< Chart2ModelContact > spChart2ModelContact  );
+            , const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
 
     virtual ~DataSeriesPointWrapper();
 

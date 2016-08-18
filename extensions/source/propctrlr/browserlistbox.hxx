@@ -59,7 +59,7 @@ namespace pcr
         css::uno::Reference< css::inspection::XPropertyHandler >
                                                 xHandler;
 
-        ListBoxLine( const OUString& rName, BrowserLinePointer _pLine, const css::uno::Reference< css::inspection::XPropertyHandler >& _rxHandler )
+        ListBoxLine( const OUString& rName, const BrowserLinePointer& _pLine, const css::uno::Reference< css::inspection::XPropertyHandler >& _rxHandler )
             : aName( rName ),
               pLine( _pLine ),
               xHandler( _rxHandler )

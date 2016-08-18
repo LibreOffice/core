@@ -42,8 +42,8 @@ public:
     virtual sal_Int32 getValueFromSeries( const css::uno::Reference< css::beans::XPropertySet >& xSeriesPropertySet ) const override;
     virtual void setValueToSeries( const css::uno::Reference< css::beans::XPropertySet >& xSeriesPropertySet, const sal_Int32& aNewValue ) const override;
 
-    explicit WrappedDataCaptionProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
-                                         tSeriesOrDiagramPropertyType ePropertyType );
+    explicit WrappedDataCaptionProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
+                                        tSeriesOrDiagramPropertyType ePropertyType );
     virtual ~WrappedDataCaptionProperty();
 };
 
@@ -122,7 +122,7 @@ void WrappedDataCaptionProperties::addWrappedPropertiesForDiagram( std::vector< 
 }
 
 WrappedDataCaptionProperty::WrappedDataCaptionProperty(
-      std::shared_ptr< Chart2ModelContact > spChart2ModelContact
+      const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact
     , tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedSeriesOrDiagramProperty< sal_Int32 >( "DataCaption"
             , uno::makeAny( sal_Int32(0) ), spChart2ModelContact, ePropertyType )

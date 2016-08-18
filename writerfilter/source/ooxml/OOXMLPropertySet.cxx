@@ -30,9 +30,9 @@ namespace ooxml
 using namespace ::std;
 using namespace com::sun::star;
 
-OOXMLProperty::OOXMLProperty(Id id, OOXMLValue::Pointer_t pValue,
-                                     OOXMLProperty::Type_t eType)
-: mId(id), mpValue(pValue), meType(eType)
+OOXMLProperty::OOXMLProperty(Id id, const OOXMLValue::Pointer_t& pValue,
+                             OOXMLProperty::Type_t eType)
+    : mId(id), mpValue(pValue), meType(eType)
 {
 }
 
@@ -447,9 +447,8 @@ string OOXMLPropertySet::toString()
   class OOXMLPropertySetValue
 */
 
-OOXMLPropertySetValue::OOXMLPropertySetValue
-(OOXMLPropertySet::Pointer_t pPropertySet)
-: mpPropertySet(pPropertySet)
+OOXMLPropertySetValue::OOXMLPropertySetValue(const OOXMLPropertySet::Pointer_t& pPropertySet)
+    : mpPropertySet(pPropertySet)
 {
 }
 

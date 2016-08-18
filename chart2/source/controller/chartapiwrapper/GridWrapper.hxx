@@ -55,7 +55,7 @@ public:
         Z_MINOR_GRID
     };
 
-    GridWrapper( tGridType eType, std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    GridWrapper(tGridType eType, const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
     virtual ~GridWrapper();
 
     static void getDimensionAndSubGridBool( tGridType eType, sal_Int32& rnDimensionIndex, bool& rbSubGrid );

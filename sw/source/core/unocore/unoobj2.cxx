@@ -453,7 +453,7 @@ struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
 
     SwXParagraphEnumerationImpl(
             uno::Reference< text::XText > const& xParent,
-            std::shared_ptr<SwUnoCursor> pCursor,
+            const std::shared_ptr<SwUnoCursor>& pCursor,
             const CursorType eType,
             SwStartNode const*const pStartNode, SwTable const*const pTable)
         : m_xParentText( xParent )

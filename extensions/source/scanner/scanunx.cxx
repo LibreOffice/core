@@ -132,17 +132,16 @@ public:
     virtual void run() override;
     virtual void onTerminated() override { delete this; }
 public:
-    ScannerThread( std::shared_ptr<SaneHolder> pHolder,
+    ScannerThread( const std::shared_ptr<SaneHolder>& pHolder,
                    const Reference< css::lang::XEventListener >& listener,
                    ScannerManager* pManager );
     virtual ~ScannerThread();
 };
 
 
-ScannerThread::ScannerThread(
-                             std::shared_ptr<SaneHolder> pHolder,
+ScannerThread::ScannerThread(const std::shared_ptr<SaneHolder>& pHolder,
                              const Reference< css::lang::XEventListener >& listener,
-                             ScannerManager* pManager )
+                             ScannerManager* pManager)
         : m_pHolder( pHolder ), m_xListener( listener ), m_pManager( pManager )
 {
     SAL_INFO("extensions.scanner", "ScannerThread");

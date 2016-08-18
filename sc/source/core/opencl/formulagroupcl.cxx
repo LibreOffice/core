@@ -250,7 +250,7 @@ class ConstStringArgument : public DynamicKernelArgument
 {
 public:
     ConstStringArgument( const ScCalcConfig& config, const std::string& s,
-        FormulaTreeNodeRef ft ) :
+        const FormulaTreeNodeRef& ft ) :
         DynamicKernelArgument(config, s, ft) { }
     /// Generate declaration
     virtual void GenDecl( std::stringstream& ss ) const override
@@ -307,7 +307,7 @@ class DynamicKernelConstantArgument : public DynamicKernelArgument
 {
 public:
     DynamicKernelConstantArgument( const ScCalcConfig& config, const std::string& s,
-        FormulaTreeNodeRef ft ) :
+        const FormulaTreeNodeRef& ft ) :
         DynamicKernelArgument(config, s, ft) { }
     /// Generate declaration
     virtual void GenDecl( std::stringstream& ss ) const override
@@ -356,7 +356,7 @@ class DynamicKernelPiArgument : public DynamicKernelArgument
 {
 public:
     DynamicKernelPiArgument( const ScCalcConfig& config, const std::string& s,
-        FormulaTreeNodeRef ft ) :
+        const FormulaTreeNodeRef& ft ) :
         DynamicKernelArgument(config, s, ft) { }
     /// Generate declaration
     virtual void GenDecl( std::stringstream& ss ) const override
@@ -396,7 +396,7 @@ class DynamicKernelRandomArgument : public DynamicKernelArgument
 {
 public:
     DynamicKernelRandomArgument( const ScCalcConfig& config, const std::string& s,
-        FormulaTreeNodeRef ft ) :
+        const FormulaTreeNodeRef& ft ) :
         DynamicKernelArgument(config, s, ft) { }
     /// Generate declaration
     virtual void GenDecl( std::stringstream& ss ) const override
@@ -762,7 +762,7 @@ class DynamicKernelStringArgument : public VectorRef
 {
 public:
     DynamicKernelStringArgument( const ScCalcConfig& config, const std::string& s,
-        FormulaTreeNodeRef ft, int index = 0 ) :
+        const FormulaTreeNodeRef& ft, int index = 0 ) :
         VectorRef(config, s, ft, index) { }
 
     virtual void GenSlidingWindowFunction( std::stringstream& ) override { }
@@ -872,7 +872,7 @@ class DynamicKernelMixedArgument : public VectorRef
 {
 public:
     DynamicKernelMixedArgument( const ScCalcConfig& config, const std::string& s,
-        FormulaTreeNodeRef ft ) :
+        const FormulaTreeNodeRef& ft ) :
         VectorRef(config, s, ft), mStringArgument(config, s + "s", ft) { }
     virtual void GenSlidingWindowDecl( std::stringstream& ss ) const override
     {
@@ -1132,7 +1132,7 @@ class DynamicKernelMixedSlidingArgument : public VectorRef
 {
 public:
     DynamicKernelMixedSlidingArgument( const ScCalcConfig& config, const std::string& s,
-        FormulaTreeNodeRef ft, std::shared_ptr<SlidingFunctionBase>& CodeGen,
+        const FormulaTreeNodeRef& ft, std::shared_ptr<SlidingFunctionBase>& CodeGen,
         int index = 0 ) :
         VectorRef(config, s, ft),
         mDoubleArgument(mCalcConfig, s, ft, CodeGen, index),

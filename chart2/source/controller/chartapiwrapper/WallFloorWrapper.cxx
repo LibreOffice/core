@@ -80,7 +80,7 @@ namespace wrapper
 {
 
 WallFloorWrapper::WallFloorWrapper( bool bWall,
-    std::shared_ptr< Chart2ModelContact > spChart2ModelContact ) :
+    const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact ) :
         m_spChart2ModelContact( spChart2ModelContact ),
         m_aEventListenerContainer( m_aMutex ),
         m_bWall( bWall )

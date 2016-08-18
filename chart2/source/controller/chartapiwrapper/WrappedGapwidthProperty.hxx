@@ -36,7 +36,7 @@ public:
               const OUString& rOuterName
             , const OUString& rInnerSequencePropertyName
             , sal_Int32 nDefaultValue
-            , std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+            , const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact );
     virtual ~WrappedBarPositionProperty_Base();
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
@@ -61,14 +61,14 @@ protected:
 class WrappedGapwidthProperty : public WrappedBarPositionProperty_Base
 {
 public:
-    explicit WrappedGapwidthProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit WrappedGapwidthProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
     virtual ~WrappedGapwidthProperty();
 };
 
 class WrappedBarOverlapProperty : public WrappedBarPositionProperty_Base
 {
 public:
-    explicit WrappedBarOverlapProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit WrappedBarOverlapProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
     virtual ~WrappedBarOverlapProperty();
 };
 

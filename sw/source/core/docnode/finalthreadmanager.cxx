@@ -36,10 +36,10 @@
 class CancelJobsThread : public osl::Thread
 {
     public:
-        explicit CancelJobsThread( std::list< css::uno::Reference< css::util::XCancellable > > aJobs )
+        explicit CancelJobsThread( const std::list< css::uno::Reference< css::util::XCancellable > >& rJobs )
             : osl::Thread(),
               maMutex(),
-              maJobs( aJobs ),
+              maJobs( rJobs ),
               mbAllJobsCancelled( false ),
               mbStopped( false )
         {

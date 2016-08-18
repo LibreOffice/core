@@ -24,7 +24,7 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-ScVbaCommandBarControl::ScVbaCommandBarControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl ) throw (css::uno::RuntimeException) : CommandBarControl_BASE( xParent, xContext ), pCBarHelper( pHelper ), m_sResourceUrl( sResourceUrl ), m_xCurrentSettings( xSettings ), m_xBarSettings( xBarSettings ), m_nPosition( 0 ), m_bTemporary( true )
+ScVbaCommandBarControl::ScVbaCommandBarControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl ) throw (css::uno::RuntimeException) : CommandBarControl_BASE( xParent, xContext ), pCBarHelper( pHelper ), m_sResourceUrl( sResourceUrl ), m_xCurrentSettings( xSettings ), m_xBarSettings( xBarSettings ), m_nPosition( 0 ), m_bTemporary( true )
 {
 }
 
@@ -197,7 +197,7 @@ ScVbaCommandBarControl::getServiceNames()
 ScVbaCommandBarPopup::ScVbaCommandBarPopup( const css::uno::Reference< ov::XHelperInterface >& xParent,
                                             const css::uno::Reference< css::uno::XComponentContext >& xContext,
                                             const css::uno::Reference< css::container::XIndexAccess >& xSettings,
-                                            VbaCommandBarHelperRef pHelper,
+                                            const VbaCommandBarHelperRef& pHelper,
                                             const css::uno::Reference< css::container::XIndexAccess >& xBarSettings,
                                             const OUString& sResourceUrl,
                                             sal_Int32 nPosition,
@@ -231,7 +231,7 @@ ScVbaCommandBarPopup::getServiceNames()
 ScVbaCommandBarButton::ScVbaCommandBarButton( const css::uno::Reference< ov::XHelperInterface >& xParent,
                                               const css::uno::Reference< css::uno::XComponentContext >& xContext,
                                               const css::uno::Reference< css::container::XIndexAccess >& xSettings,
-                                              VbaCommandBarHelperRef pHelper,
+                                              const VbaCommandBarHelperRef& pHelper,
                                               const css::uno::Reference< css::container::XIndexAccess >& xBarSettings,
                                               const OUString& sResourceUrl,
                                               sal_Int32 nPosition,

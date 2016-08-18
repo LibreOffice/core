@@ -41,9 +41,9 @@ namespace sd {
 
 //                          struct ClientBoxEntry
 
-ClientBoxEntry::ClientBoxEntry( std::shared_ptr<ClientInfo> pClientInfo ) :
-    m_bActive( false ),
-    m_pClientInfo( pClientInfo )
+ClientBoxEntry::ClientBoxEntry(const std::shared_ptr<ClientInfo>& pClientInfo)
+    : m_bActive(false)
+    , m_pClientInfo(pClientInfo)
 {
 }
 

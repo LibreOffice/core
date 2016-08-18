@@ -34,7 +34,7 @@ class WrappedLinkNumberFormatProperty;
 class WrappedNumberFormatProperty : public WrappedDirectStateProperty
 {
 public:
-    explicit WrappedNumberFormatProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit WrappedNumberFormatProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
     virtual ~WrappedNumberFormatProperty();
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const

@@ -60,8 +60,8 @@ public:
     virtual beans::PropertyState getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
                         throw (beans::UnknownPropertyException, uno::RuntimeException) override;
 
-    explicit WrappedSymbolTypeProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
-                                        tSeriesOrDiagramPropertyType ePropertyType );
+    explicit WrappedSymbolTypeProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
+                                       tSeriesOrDiagramPropertyType ePropertyType);
     virtual ~WrappedSymbolTypeProperty();
 };
 
@@ -71,8 +71,8 @@ public:
     virtual OUString getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
     virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const OUString& aNewGraphicURL ) const override;
 
-    explicit WrappedSymbolBitmapURLProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
-                                             tSeriesOrDiagramPropertyType ePropertyType );
+    explicit WrappedSymbolBitmapURLProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
+                                            tSeriesOrDiagramPropertyType ePropertyType);
     virtual ~WrappedSymbolBitmapURLProperty();
 };
 
@@ -84,8 +84,8 @@ public:
     virtual beans::PropertyState getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
                         throw (beans::UnknownPropertyException, uno::RuntimeException) override;
 
-    explicit WrappedSymbolSizeProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
-                                        tSeriesOrDiagramPropertyType ePropertyType );
+    explicit WrappedSymbolSizeProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
+                                       tSeriesOrDiagramPropertyType ePropertyType);
     virtual ~WrappedSymbolSizeProperty();
 };
 
@@ -97,8 +97,8 @@ public:
     virtual beans::PropertyState getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
                         throw (beans::UnknownPropertyException, uno::RuntimeException) override;
 
-    explicit WrappedSymbolAndLinesProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
-                                            tSeriesOrDiagramPropertyType ePropertyType );
+    explicit WrappedSymbolAndLinesProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
+                                           tSeriesOrDiagramPropertyType ePropertyType);
     virtual ~WrappedSymbolAndLinesProperty();
 };
 
@@ -214,7 +214,7 @@ void WrappedSymbolProperties::addWrappedPropertiesForDiagram( std::vector< Wrapp
 }
 
 WrappedSymbolTypeProperty::WrappedSymbolTypeProperty(
-    std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedSeriesOrDiagramProperty< sal_Int32 >( "SymbolType"
             , uno::makeAny( css::chart::ChartSymbolType::NONE )
@@ -300,7 +300,7 @@ beans::PropertyState WrappedSymbolTypeProperty::getPropertyState( const Referenc
 }
 
 WrappedSymbolBitmapURLProperty::WrappedSymbolBitmapURLProperty(
-    std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedSeriesOrDiagramProperty< OUString >( "SymbolBitmapURL"
             , uno::makeAny( OUString() ), spChart2ModelContact, ePropertyType  )
@@ -428,7 +428,7 @@ void lcl_correctSymbolSizeForBitmaps( chart2::Symbol& rSymbol )
 }//end anonymous namespace
 
 WrappedSymbolSizeProperty::WrappedSymbolSizeProperty(
-    std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedSeriesOrDiagramProperty< awt::Size >( "SymbolSize"
             , uno::makeAny( awt::Size(250,250) ), spChart2ModelContact, ePropertyType  )
@@ -490,7 +490,7 @@ beans::PropertyState WrappedSymbolSizeProperty::getPropertyState( const Referenc
 }
 
 WrappedSymbolAndLinesProperty::WrappedSymbolAndLinesProperty(
-    std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedSeriesOrDiagramProperty< bool >( "Lines"
             , uno::makeAny( true ), spChart2ModelContact, ePropertyType  )

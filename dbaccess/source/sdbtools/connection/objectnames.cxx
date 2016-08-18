@@ -206,7 +206,7 @@ namespace sdbtools
         PNameValidation  m_pSecondary;
 
     public:
-        CombinedNameCheck( PNameValidation _pPrimary, PNameValidation _pSecondary )
+        CombinedNameCheck(const PNameValidation& _pPrimary, const PNameValidation& _pSecondary)
             :m_pPrimary( _pPrimary )
             ,m_pSecondary( _pSecondary )
         {

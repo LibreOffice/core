@@ -44,7 +44,7 @@ class WrappedSplineProperty : public WrappedProperty
 public:
     explicit WrappedSplineProperty( const OUString& rOuterName, const OUString& rInnerName
         , const css::uno::Any& rDefaulValue
-        , std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+        , const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact )
             : WrappedProperty(rOuterName,OUString())
             , m_spChart2ModelContact(spChart2ModelContact)
             , m_aOuterValue(rDefaulValue)
@@ -161,7 +161,7 @@ protected:
 class WrappedSplineTypeProperty : public WrappedSplineProperty< sal_Int32 >
 {
 public:
-    explicit WrappedSplineTypeProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit WrappedSplineTypeProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
     virtual ~WrappedSplineTypeProperty();
 
     virtual css::uno::Any convertInnerToOuterValue( const css::uno::Any& rInnerValue ) const override;
@@ -219,13 +219,15 @@ void WrappedSplineProperties::addWrappedProperties( std::vector< WrappedProperty
             uno::makeAny(sal_Int32(20)), spChart2ModelContact));
 }
 
-WrappedSplineTypeProperty::WrappedSplineTypeProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+WrappedSplineTypeProperty::WrappedSplineTypeProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
     : WrappedSplineProperty<sal_Int32>(CHART_UNONAME_SPLINE_TYPE, CHART_UNONAME_CURVE_STYLE, uno::makeAny(sal_Int32(0)), spChart2ModelContact )
 {
 }
+
 WrappedSplineTypeProperty::~WrappedSplineTypeProperty()
 {
 }
+
 Any WrappedSplineTypeProperty::convertInnerToOuterValue( const Any& rInnerValue ) const
 {
     chart2::CurveStyle aInnerValue = chart2::CurveStyle_LINES;

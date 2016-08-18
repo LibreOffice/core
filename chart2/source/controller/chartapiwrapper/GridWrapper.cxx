@@ -76,11 +76,10 @@ namespace chart
 namespace wrapper
 {
 
-GridWrapper::GridWrapper(
-    tGridType eType, std::shared_ptr< Chart2ModelContact > spChart2ModelContact ) :
-        m_spChart2ModelContact( spChart2ModelContact ),
-        m_aEventListenerContainer( m_aMutex ),
-        m_eType( eType )
+GridWrapper::GridWrapper(tGridType eType, const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
+    : m_spChart2ModelContact(spChart2ModelContact)
+    , m_aEventListenerContainer(m_aMutex)
+    , m_eType(eType)
 {
 }
 

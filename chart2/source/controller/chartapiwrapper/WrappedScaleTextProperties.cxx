@@ -36,7 +36,7 @@ namespace wrapper
 class WrappedScaleTextProperty : public WrappedProperty
 {
 public:
-    explicit WrappedScaleTextProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit WrappedScaleTextProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
     virtual ~WrappedScaleTextProperty();
 
     virtual void setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
@@ -50,7 +50,7 @@ private:
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
 };
 
-WrappedScaleTextProperty::WrappedScaleTextProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+WrappedScaleTextProperty::WrappedScaleTextProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
     : ::chart::WrappedProperty( "ScaleText" , OUString() )
     , m_spChart2ModelContact( spChart2ModelContact )
 {

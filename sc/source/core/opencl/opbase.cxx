@@ -33,7 +33,7 @@ Unhandled::Unhandled( const std::string& fn, int ln ) :
     mFile(fn), mLineNumber(ln) {}
 
 DynamicKernelArgument::DynamicKernelArgument( const ScCalcConfig& config, const std::string& s,
-    FormulaTreeNodeRef ft ) :
+    const FormulaTreeNodeRef& ft ) :
     mCalcConfig(config), mSymName(s), mFormulaTree(ft) { }
 
 std::string DynamicKernelArgument::GenDoubleSlidingWindowDeclRef( bool ) const
@@ -92,7 +92,7 @@ bool DynamicKernelArgument::NeedParallelReduction() const
     return false;
 }
 
-VectorRef::VectorRef( const ScCalcConfig& config, const std::string& s, FormulaTreeNodeRef ft, int idx ) :
+VectorRef::VectorRef( const ScCalcConfig& config, const std::string& s, const FormulaTreeNodeRef& ft, int idx ) :
     DynamicKernelArgument(config, s, ft), mpClmem(nullptr), mnIndex(idx)
 {
     if (mnIndex)

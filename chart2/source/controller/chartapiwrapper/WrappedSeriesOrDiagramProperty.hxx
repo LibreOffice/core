@@ -49,7 +49,7 @@ public:
     virtual void setValueToSeries( const css::uno::Reference< css::beans::XPropertySet >& xSeriesPropertySet, const PROPERTYTYPE & aNewValue ) const =0;
 
     explicit WrappedSeriesOrDiagramProperty( const OUString& rName, const css::uno::Any& rDefaulValue
-        , std::shared_ptr< Chart2ModelContact > spChart2ModelContact
+        , const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact
         , tSeriesOrDiagramPropertyType ePropertyType )
             : WrappedProperty(rName,OUString())
             , m_spChart2ModelContact(spChart2ModelContact)

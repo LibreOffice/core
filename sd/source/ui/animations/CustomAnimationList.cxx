@@ -202,7 +202,7 @@ class CustomAnimationListEntryItem : public SvLBoxString
 {
 public:
     CustomAnimationListEntryItem(const OUString& aDescription,
-                                 CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent);
+                                 const CustomAnimationEffectPtr& pEffect, CustomAnimationList* pParent);
     virtual ~CustomAnimationListEntryItem();
     void InitViewData(SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* = nullptr) override;
     SvLBoxItem* Create() const override;
@@ -220,7 +220,7 @@ private:
     const long nItemMinHeight = 38;
 };
 
-CustomAnimationListEntryItem::CustomAnimationListEntryItem( const OUString& aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  )
+CustomAnimationListEntryItem::CustomAnimationListEntryItem( const OUString& aDescription, const CustomAnimationEffectPtr& pEffect, CustomAnimationList* pParent  )
 : SvLBoxString( aDescription )
 , mpParent( pParent )
 , msDescription( aDescription )
@@ -349,7 +349,7 @@ class CustomAnimationListEntry : public SvTreeListEntry
 {
 public:
     CustomAnimationListEntry();
-    explicit CustomAnimationListEntry( CustomAnimationEffectPtr pEffect );
+    explicit CustomAnimationListEntry(const CustomAnimationEffectPtr& pEffect);
     virtual ~CustomAnimationListEntry();
 
     const CustomAnimationEffectPtr& getEffect() const { return mpEffect; }
@@ -362,7 +362,7 @@ CustomAnimationListEntry::CustomAnimationListEntry()
 {
 }
 
-CustomAnimationListEntry::CustomAnimationListEntry( CustomAnimationEffectPtr pEffect )
+CustomAnimationListEntry::CustomAnimationListEntry(const CustomAnimationEffectPtr& pEffect)
 : mpEffect( pEffect )
 {
 }

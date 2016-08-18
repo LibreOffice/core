@@ -41,7 +41,7 @@ class CommandBarEnumeration : public ::cppu::WeakImplHelper< container::XEnumera
     uno::Sequence< OUString > m_sNames;
     sal_Int32 m_nCurrentPosition;
 public:
-    CommandBarEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, VbaCommandBarHelperRef pHelper) throw ( uno::RuntimeException ) : m_xParent( xParent ), m_xContext( xContext ), m_pCBarHelper( pHelper ) , m_nCurrentPosition( 0 )
+    CommandBarEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const VbaCommandBarHelperRef& pHelper) throw ( uno::RuntimeException ) : m_xParent( xParent ), m_xContext( xContext ), m_pCBarHelper( pHelper ) , m_nCurrentPosition( 0 )
     {
         uno::Reference< container::XNameAccess > xNameAccess = m_pCBarHelper->getPersistentWindowState();
         m_sNames = xNameAccess->getElementNames();

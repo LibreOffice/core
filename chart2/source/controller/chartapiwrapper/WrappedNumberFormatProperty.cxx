@@ -31,7 +31,7 @@ namespace chart
 namespace wrapper
 {
 
-WrappedNumberFormatProperty::WrappedNumberFormatProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+WrappedNumberFormatProperty::WrappedNumberFormatProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
         : WrappedDirectStateProperty( CHART_UNONAME_NUMFMT, CHART_UNONAME_NUMFMT )
         , m_spChart2ModelContact(spChart2ModelContact)
 {

@@ -37,8 +37,8 @@ namespace chart
 namespace wrapper
 {
 
-WrappedScaleProperty::WrappedScaleProperty( tScaleProperty eScaleProperty
-                , std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+WrappedScaleProperty::WrappedScaleProperty(tScaleProperty eScaleProperty
+                , const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
             : WrappedProperty(OUString(),OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
             , m_eScaleProperty( eScaleProperty )

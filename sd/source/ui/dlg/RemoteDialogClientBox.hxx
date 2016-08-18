@@ -59,7 +59,7 @@ struct ClientBoxEntry
     bool m_bActive :1;
     std::shared_ptr<ClientInfo> m_pClientInfo;
 
-    explicit ClientBoxEntry(std::shared_ptr<ClientInfo> pClientInfo);
+    explicit ClientBoxEntry(const std::shared_ptr<ClientInfo>& pClientInfo);
    ~ClientBoxEntry();
 
 };

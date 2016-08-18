@@ -273,9 +273,9 @@ namespace chart
 namespace wrapper
 {
 
-LegendWrapper::LegendWrapper( std::shared_ptr< Chart2ModelContact > spChart2ModelContact ) :
-        m_spChart2ModelContact( spChart2ModelContact ),
-        m_aEventListenerContainer( m_aMutex )
+LegendWrapper::LegendWrapper(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
+    : m_spChart2ModelContact(spChart2ModelContact)
+    , m_aEventListenerContainer(m_aMutex)
 {
 }
 

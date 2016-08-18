@@ -58,7 +58,7 @@ private:
     Type_t meType;
 
 public:
-    OOXMLProperty(Id id, OOXMLValue::Pointer_t pValue, Type_t eType);
+    OOXMLProperty(Id id, const OOXMLValue::Pointer_t& pValue, Type_t eType);
     OOXMLProperty(const OOXMLProperty & rSprm);
     virtual ~OOXMLProperty();
 
@@ -186,7 +186,7 @@ class OOXMLPropertySetValue : public OOXMLValue
 {
     OOXMLPropertySet::Pointer_t mpPropertySet;
 public:
-    explicit OOXMLPropertySetValue(OOXMLPropertySet::Pointer_t pPropertySet);
+    explicit OOXMLPropertySetValue(const OOXMLPropertySet::Pointer_t& pPropertySet);
     virtual ~OOXMLPropertySetValue();
 
     virtual writerfilter::Reference<Properties>::Pointer_t getProperties() override;
