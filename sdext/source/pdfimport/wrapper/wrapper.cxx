@@ -471,9 +471,12 @@ sal_Int32 Parser::parseFontCheckForString(
     if (nCopyLen < nAttribLen)
         return 0;
     for (sal_Int32 i = 0; i < nAttribLen; ++i)
-        if (rtl::toAsciiLowerCase(pCopy[i]) != rtl::toAsciiLowerCase(pAttrib[i])
-            && rtl::toAsciiUpperCase(pCopy[i]) != rtl::toAsciiLowerCase(pAttrib[i]))
+    {
+        sal_uInt32 nCode = pAttrib[i];
+        if (rtl::toAsciiLowerCase(pCopy[i]) != nCode
+            && rtl::toAsciiUpperCase(pCopy[i]) != nCode)
             return 0;
+    }
     rResult.isItalic |= bItalic;
     rResult.isBold |= bBold;
     return nAttribLen;
