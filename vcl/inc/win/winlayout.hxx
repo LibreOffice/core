@@ -417,4 +417,105 @@ public:
 
 #endif
 
+class TextOutRenderer
+{
+protected:
+    explicit TextOutRenderer() = default;
+    TextOutRenderer(const TextOutRenderer &) = delete;
+    TextOutRenderer & operator = (const TextOutRenderer &) = delete;
+
+public:
+    static TextOutRenderer & get();
+
+    virtual ~TextOutRenderer() = default;
+
+    virtual bool operator ()(SalLayout const &rLayout, HDC hDC,
+        const Rectangle* pRectToErase,
+        Point* pPos, int* pGetNextGlypInfo) = 0;
+};
+
+class ExTextOutRenderer : public TextOutRenderer
+{
+    ExTextOutRenderer(const ExTextOutRenderer &) = delete;
+    ExTextOutRenderer & operator = (const ExTextOutRenderer &) = delete;
+
+public:
+    explicit ExTextOutRenderer() = default;
+    virtual ~ExTextOutRenderer() override = default;
+
+    bool operator ()(SalLayout const &rLayout, HDC hDC,
+        const Rectangle* pRectToErase,
+        Point* pPos, int* pGetNextGlypInfo) override;
+};
+
+#if ENABLE_GRAPHITE_DWRITE
+
+class D2DWriteTextOutRenderer : public TextOutRenderer
+{
+    typedef HRESULT(WINAPI *pD2D1CreateFactory_t)(D2D1_FACTORY_TYPE,
+        REFIID, const D2D1_FACTORY_OPTIONS *, void **);
+    typedef HRESULT(WINAPI *pDWriteCreateFactory_t)(DWRITE_FACTORY_TYPE,
+        REFIID, IUnknown **);
+
+    static HINSTANCE mmD2d1, mmDWrite;
+    static pD2D1CreateFactory_t     D2D1CreateFactory;
+    static pDWriteCreateFactory_t   DWriteCreateFactory;
+
+public:
+    static bool InitModules();
+
+    explicit D2DWriteTextOutRenderer();
+    virtual ~D2DWriteTextOutRenderer() override;
+
+    bool operator ()(SalLayout const &rLayout, HDC hDC,
+        const Rectangle* pRectToErase,
+        Point* pPos, int* pGetNextGlypInfo) override;
+
+    inline bool BindDC(HDC hDC, Rectangle const & rRect = Rectangle(0, 0, 0, 0)) {
+        RECT const rc = { rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() };
+        HRESULT ok= mpRT->BindDC(hDC, &rc);
+        return SUCCEEDED(ok);
+    }
+
+    bool BindFont(HDC hDC) /*override*/;
+    bool ReleaseFont() /*override*/;
+
+    std::vector<Rectangle>  GetGlyphInkBoxes(uint16_t * pGid, uint16_t * pGidEnd) const /*override*/;
+    ID2D1RenderTarget * GetRenderTarget() const { return mpRT; }
+    IDWriteFontFace*    GetDWriteFontFace(HDC) const;
+    IDWriteFontFace   * GetFontFace() const { return mpFontFace; }
+    float               GetEmHeight() const { return mlfEmHeight; }
+
+    inline HRESULT CreateRenderTarget() {
+        if (mpRT) mpRT->Release(); mpRT = nullptr;
+        return mpD2DFactory->CreateDCRenderTarget(&mRTProps, &mpRT);
+    }
+
+    inline bool Ready() const { return mpGdiInterop && mpRT; }
+
+private:
+    static void CleanupModules();
+
+    // This is a singleton object disable copy ctor and assignemnt operator
+    D2DWriteTextOutRenderer(const D2DWriteTextOutRenderer &) = delete;
+    D2DWriteTextOutRenderer & operator = (const D2DWriteTextOutRenderer &) = delete;
+
+    bool GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** ppFontFace, float * lfSize) const;
+    bool GetDWriteInkBox(IDWriteFontFace & rFontFace, SalLayout const &rLayout, float const lfEmHeight, Rectangle &) const;
+    bool DrawGlyphs(const Point & origin, uint16_t * pGid, uint16_t * pGidEnd,
+        float * pAdvances, Point * pOffsets) /*override*/;
+
+    ID2D1Factory        * mpD2DFactory;
+    IDWriteFactory      * mpDWriteFactory;
+    IDWriteGdiInterop   * mpGdiInterop;
+    ID2D1DCRenderTarget * mpRT;
+    const D2D1_RENDER_TARGET_PROPERTIES mRTProps;
+
+    IDWriteFontFace * mpFontFace;
+    float             mlfEmHeight;
+    HDC               mhDC;
+};
+
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
