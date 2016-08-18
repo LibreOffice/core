@@ -40,10 +40,11 @@ void TokenmapTest::test_roundTrip()
     {
         // check that the getIdentifier <-> getToken roundtrip works
         Sequence< sal_Int8 > rUtf8Name = tokenMap.getUtf8TokenName(nToken);
-        sal_Int32 ret = token::TokenMap::getTokenFromUTF8(
-            reinterpret_cast< const char * >(rUtf8Name.getConstArray()),
-            rUtf8Name.getLength() );
-        CPPUNIT_ASSERT_EQUAL(ret, nToken);
+        CPPUNIT_ASSERT_MESSAGE("Token name sequence should not be empty", rUtf8Name.getLength());
+        const char* pChar = reinterpret_cast< const char * >(rUtf8Name.getConstArray());
+        CPPUNIT_ASSERT_MESSAGE("Token name sequence array pointer failed", pChar);
+        sal_Int32 ret = token::TokenMap::getTokenFromUTF8( pChar, rUtf8Name.getLength() );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("No roundtrip for token", ret, nToken);
     }
 }
 
