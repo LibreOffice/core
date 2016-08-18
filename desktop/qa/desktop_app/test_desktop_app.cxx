@@ -47,7 +47,7 @@ public:
 
 class TestSupplier : public desktop::CommandLineArgs::Supplier {
 public:
-    TestSupplier(const std::initializer_list<OUString>& args) : m_args(args) {}
+    explicit TestSupplier(const std::initializer_list<OUString>& args) : m_args(args) {}
     virtual ~TestSupplier() {}
     virtual boost::optional< OUString > getCwdUrl() override { return boost::optional< OUString >(); }
     virtual bool next(OUString * argument) override {

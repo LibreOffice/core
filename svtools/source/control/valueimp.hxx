@@ -83,7 +83,7 @@ class ValueSetAcc :
 {
 public:
 
-    ValueSetAcc( ValueSet* pParent );
+    explicit ValueSetAcc(ValueSet* pParent);
     virtual ~ValueSetAcc();
 
     void                FireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
