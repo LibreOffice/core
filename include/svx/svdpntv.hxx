@@ -63,10 +63,10 @@ namespace sdr { namespace contact {
 
 
 // Defines for AnimationMode
-enum SdrAnimationMode
+enum class SdrAnimationMode
 {
-    SDR_ANIMATION_ANIMATE,
-    SDR_ANIMATION_DISABLE
+    Animate,
+    Disable
 };
 
 
@@ -470,16 +470,16 @@ public:
     /// Enable/disable animations for ::Paint
     /// Is used by e.g. SdrGrafObj, if it contains an animation
     /// Preventing automatic animation is needed for e.g. the presentation view
-    bool IsAnimationEnabled() const { return ( SDR_ANIMATION_ANIMATE == meAnimationMode ); }
+    bool IsAnimationEnabled() const { return ( SdrAnimationMode::Animate == meAnimationMode ); }
     void SetAnimationEnabled( bool bEnable=true );
 
     /// Set/unset pause state for animations
     void SetAnimationPause( bool bSet );
 
     /// Mode when starting an animation in the Paint Handler:
-    /// 1. SDR_ANIMATION_ANIMATE (default): start animation normally
+    /// 1. SdrAnimationMode::Animate (default): start animation normally
     /// 2. SDR_ANIMATION_DONT_ANIMATE: only show the replacement picture
-    /// 3. SDR_ANIMATION_DISABLE: don't start and don't show any replacement
+    /// 3. SdrAnimationMode::Disable: don't start and don't show any replacement
     void SetAnimationMode( const SdrAnimationMode eMode );
 
     /// The Browser is destroyed for bShow=false

@@ -166,7 +166,7 @@ void SdrPaintView::ImpClearVars()
     mbPrintPreview=false;
     mbPreviewRenderer=false;
 
-    meAnimationMode = SDR_ANIMATION_ANIMATE;
+    meAnimationMode = SdrAnimationMode::Animate;
     mbAnimationPause = false;
 
     mnHitTolPix=2;
@@ -1177,7 +1177,7 @@ void SdrPaintView::DoConnect(SdrOle2Obj* /*pOleObj*/)
 
 void SdrPaintView::SetAnimationEnabled( bool bEnable )
 {
-    SetAnimationMode( bEnable ? SDR_ANIMATION_ANIMATE : SDR_ANIMATION_DISABLE );
+    SetAnimationMode( bEnable ? SdrAnimationMode::Animate : SdrAnimationMode::Disable );
 }
 
 #if defined DBG_UTIL

@@ -362,7 +362,7 @@ void DrawViewShell::Shutdown()
     if(SlideShow::IsRunning( GetViewShellBase() ) )
     {
         // Turn off effects.
-        GetDrawView()->SetAnimationMode(SDR_ANIMATION_DISABLE);
+        GetDrawView()->SetAnimationMode(SdrAnimationMode::Disable);
     }
 }
 
