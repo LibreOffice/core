@@ -234,7 +234,7 @@ ScCommentData::ScCommentData( ScDocument& rDoc, SdrModel* pModel ) :
 
     // support the best position for the tail connector now that
     // that notes can be resized and repositioned.
-    aCaptionSet.Put( SdrCaptionEscDirItem( SDRCAPT_ESCBESTFIT) );
+    aCaptionSet.Put( SdrCaptionEscDirItem( SdrCaptionEscDir::BestFit) );
 }
 
 void ScCommentData::UpdateCaptionSet( const SfxItemSet& rItemSet )

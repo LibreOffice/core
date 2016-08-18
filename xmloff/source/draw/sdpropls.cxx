@@ -714,9 +714,9 @@ static SvXMLEnumMapEntry const pXML_Fontwork_Form_Enum[] =
 
 static SvXMLEnumMapEntry const pXML_Caption_Esc_Dir_Enum[] =
 {
-    { XML_HORIZONTAL,       0 }, //SDRCAPT_ESCHORIZONTAL,
-    { XML_VERTICAL,         1 }, //SDRCAPT_ESCVERTICAL,
-    { XML_AUTO,             2 }, //SDRCAPT_ESCBESTFIT,
+    { XML_HORIZONTAL,       0 }, //SdrCaptionEscDir::Horizontal,
+    { XML_VERTICAL,         1 }, //SdrCaptionEscDir::Vertical,
+    { XML_AUTO,             2 }, //SdrCaptionEscDir::BestFit,
     { XML_TOKEN_INVALID,0 }
 };
 

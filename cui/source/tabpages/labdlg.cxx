@@ -74,7 +74,7 @@ SvxCaptionTabPage::SvxCaptionTabPage(vcl::Window* pParent, const SfxItemSet& rIn
     : SfxTabPage(pParent, "CalloutPage", "cui/ui/calloutpage.ui", &rInAttrs)
     , nCaptionType(SdrCaptionType::Type1)
     , nGap(0)
-    , nEscDir(0)
+    , nEscDir(SdrCaptionEscDir::Horizontal)
     , bEscRel(false)
     , nEscAbs(0)
     , nEscRel(0)
@@ -187,12 +187,13 @@ bool SvxCaptionTabPage::FillItemSet( SfxItemSet*  _rOutAttrs)
     {
         switch( nEscDir )
         {
-            case SDRCAPT_ESCHORIZONTAL:     nEscDir=SDRCAPT_ESCVERTICAL;break;
-            case SDRCAPT_ESCVERTICAL:       nEscDir=SDRCAPT_ESCHORIZONTAL;break;
+            case SdrCaptionEscDir::Horizontal:     nEscDir=SdrCaptionEscDir::Vertical;break;
+            case SdrCaptionEscDir::Vertical:       nEscDir=SdrCaptionEscDir::Horizontal;break;
+            default: break;
         }
     }
 
-    _rOutAttrs->Put( SdrCaptionEscDirItem( (SdrCaptionEscDir)nEscDir ) );
+    _rOutAttrs->Put( SdrCaptionEscDirItem( nEscDir ) );
 
     bEscRel = m_pLB_ANSATZ_REL->IsVisible();
     _rOutAttrs->Put( SdrCaptionEscIsRelItem( bEscRel ) );
@@ -287,7 +288,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
 
     nCaptionType = (SdrCaptionType)static_cast<const SdrCaptionTypeItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONTYPE ) ) ).GetValue();
     bFitLineLen = static_cast<const SfxBoolItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONFITLINELEN ) ) ).GetValue();
-    nEscDir = (short)static_cast<const SdrCaptionEscDirItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONESCDIR ) ) ).GetValue();
+    nEscDir = static_cast<const SdrCaptionEscDirItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONESCDIR ) ) ).GetValue();
     bEscRel = static_cast<const SfxBoolItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONESCISREL ) ) ).GetValue();
 
     // special treatment!!! XXX
@@ -295,8 +296,9 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
     {
         switch( nEscDir )
         {
-            case SDRCAPT_ESCHORIZONTAL:     nEscDir=SDRCAPT_ESCVERTICAL;break;
-            case SDRCAPT_ESCVERTICAL:       nEscDir=SDRCAPT_ESCHORIZONTAL;break;
+            case SdrCaptionEscDir::Horizontal:     nEscDir=SdrCaptionEscDir::Vertical;break;
+            case SdrCaptionEscDir::Vertical:       nEscDir=SdrCaptionEscDir::Horizontal;break;
+            default: break;
         }
     }
 
@@ -305,7 +307,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
 
     m_pMF_ABSTAND->SetValue( nGap );
 
-    if( nEscDir == SDRCAPT_ESCHORIZONTAL )
+    if( nEscDir == SdrCaptionEscDir::Horizontal )
     {
         if( bEscRel )
         {
@@ -321,7 +323,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
             m_pMF_ANSATZ->SetValue( nEscAbs );
         }
     }
-    else if( nEscDir == SDRCAPT_ESCVERTICAL )
+    else if( nEscDir == SdrCaptionEscDir::Vertical )
     {
         if( bEscRel )
         {
@@ -337,7 +339,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
             m_pMF_ANSATZ->SetValue( nEscAbs );
         }
     }
-    else if( nEscDir == SDRCAPT_ESCBESTFIT )
+    else if( nEscDir == SdrCaptionEscDir::BestFit )
     {
         nAnsatzTypePos = AZ_OPTIMAL;
     }
@@ -369,7 +371,7 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
         m_pFT_UM->Show();
         m_pFT_ANSATZ_REL->Hide();
         m_pLB_ANSATZ_REL->Hide();
-        nEscDir = SDRCAPT_ESCBESTFIT;
+        nEscDir = SdrCaptionEscDir::BestFit;
         break;
 
         case AZ_VON_OBEN:
@@ -377,7 +379,7 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
         m_pFT_UM->Show();
         m_pFT_ANSATZ_REL->Hide();
         m_pLB_ANSATZ_REL->Hide();
-        nEscDir = SDRCAPT_ESCHORIZONTAL;
+        nEscDir = SdrCaptionEscDir::Horizontal;
         break;
 
         case AZ_VON_LINKS:
@@ -385,7 +387,7 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
         m_pFT_UM->Show();
         m_pFT_ANSATZ_REL->Hide();
         m_pLB_ANSATZ_REL->Hide();
-        nEscDir = SDRCAPT_ESCVERTICAL;
+        nEscDir = SdrCaptionEscDir::Vertical;
         break;
 
         case AZ_HORIZONTAL:
@@ -398,7 +400,7 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
         m_pFT_UM->Hide();
         m_pFT_ANSATZ_REL->Show();
         m_pLB_ANSATZ_REL->Show();
-        nEscDir = SDRCAPT_ESCHORIZONTAL;
+        nEscDir = SdrCaptionEscDir::Horizontal;
         break;
 
         case AZ_VERTIKAL:
@@ -411,7 +413,7 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
         m_pFT_UM->Hide();
         m_pFT_ANSATZ_REL->Show();
         m_pLB_ANSATZ_REL->Show();
-        nEscDir = SDRCAPT_ESCVERTICAL;
+        nEscDir = SdrCaptionEscDir::Vertical;
         break;
     }
 }

@@ -25,6 +25,7 @@
 #include <svtools/valueset.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/sxctitm.hxx>
+#include <svx/sxcecitm.hxx>
 
 
 class SdrView;
@@ -56,12 +57,12 @@ private:
 
     SdrCaptionType      nCaptionType;
     sal_Int32           nGap;
-    short               nEscDir;
-    bool            bEscRel;
+    SdrCaptionEscDir    nEscDir;
+    bool                bEscRel;
     sal_Int32           nEscAbs;
     sal_Int32           nEscRel;
     sal_Int32           nLineLen;
-    bool            bFitLineLen;
+    bool                bFitLineLen;
 
     sal_uInt16          nAnsatzRelPos;
     sal_uInt16          nAnsatzTypePos;

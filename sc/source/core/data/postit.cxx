@@ -118,7 +118,7 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
     aItemSet.Put( XLineStartCenterItem( false ) );
     aItemSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
     aItemSet.Put( XFillColorItem( OUString(), ScDetectiveFunc::GetCommentColor() ) );
-    aItemSet.Put( SdrCaptionEscDirItem( SDRCAPT_ESCBESTFIT ) );
+    aItemSet.Put( SdrCaptionEscDirItem( SdrCaptionEscDir::BestFit ) );
 
     // shadow
     /*  SdrShadowItem has sal_False, instead the shadow is set for the

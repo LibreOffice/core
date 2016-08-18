@@ -84,7 +84,7 @@ public:
         bFixedAngle=false;
         nAngle     =4500;
         nGap       =0;
-        eEscDir    =SDRCAPT_ESCHORIZONTAL;
+        eEscDir    =SdrCaptionEscDir::Horizontal;
         bEscRel    =true;
         nEscRel    =5000;
         nEscAbs    =0;
@@ -111,20 +111,20 @@ void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Poi
     nY+=rRect.Top();
     Point  aBestPt;
     EscDir eBestDir=LKS;
-    bool bTryH=eEscDir==SDRCAPT_ESCBESTFIT;
+    bool bTryH=eEscDir==SdrCaptionEscDir::BestFit;
     if (!bTryH) {
         if (eType!=SdrCaptionType::Type1) {
-            bTryH=eEscDir==SDRCAPT_ESCHORIZONTAL;
+            bTryH=eEscDir==SdrCaptionEscDir::Horizontal;
         } else {
-            bTryH=eEscDir==SDRCAPT_ESCVERTICAL;
+            bTryH=eEscDir==SdrCaptionEscDir::Vertical;
         }
     }
-    bool bTryV=eEscDir==SDRCAPT_ESCBESTFIT;
+    bool bTryV=eEscDir==SdrCaptionEscDir::BestFit;
     if (!bTryV) {
         if (eType!=SdrCaptionType::Type1) {
-            bTryV=eEscDir==SDRCAPT_ESCVERTICAL;
+            bTryV=eEscDir==SdrCaptionEscDir::Vertical;
         } else {
-            bTryV=eEscDir==SDRCAPT_ESCHORIZONTAL;
+            bTryV=eEscDir==SdrCaptionEscDir::Horizontal;
         }
     }
 
@@ -153,7 +153,7 @@ void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Poi
             eBest2=UNT;
             aBest2=aBtm;
         }
-        bool bTakeIt=eEscDir!=SDRCAPT_ESCBESTFIT;
+        bool bTakeIt=eEscDir!=SdrCaptionEscDir::BestFit;
         if (!bTakeIt) {
             BigInt aHorX(aBestPt.X()-aTl.X()); aHorX*=aHorX;
             BigInt aHorY(aBestPt.Y()-aTl.Y()); aHorY*=aHorY;
