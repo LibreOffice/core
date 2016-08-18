@@ -55,6 +55,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			) \
 			" \
 		&& export CXXFLAGS=" \
+			$(if $(filter MSC,$(COM)),$(if $(MSVC_USE_DEBUG_RUNTIME),-DMSVC_USE_DEBUG_RUNTIME)) \
 			$(if $(shell test '$(GCC_VERSION)' -ge 600 && echo yes),-fno-sized-deallocation -fno-delete-null-pointer-checks,) \
 			$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS), \
 				$(BOOST_CPPFLAGS) \
