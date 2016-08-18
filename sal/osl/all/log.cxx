@@ -156,11 +156,9 @@ void maybeOutputTimestamp(std::ostringstream &s) {
 
 #endif
 
-namespace {
-    inline bool isDebug(sal_detail_LogLevel level) {
-        return level == SAL_DETAIL_LOG_LEVEL_DEBUG ||
-               level == SAL_DETAIL_LOG_LEVEL_DEBUG_TRACE;
-    }
+bool isDebug(sal_detail_LogLevel level) {
+    return level == SAL_DETAIL_LOG_LEVEL_DEBUG ||
+        level == SAL_DETAIL_LOG_LEVEL_DEBUG_TRACE;
 }
 
 bool report(sal_detail_LogLevel level, char const * area) {
