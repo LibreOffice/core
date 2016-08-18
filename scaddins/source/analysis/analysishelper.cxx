@@ -2159,18 +2159,17 @@ void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars, ComplListA
     }
 }
 
-
-ConvertData::ConvertData( const sal_Char p[], double fC, ConvertDataClass e, bool bPrefSupport ) : aName( p, strlen( p ), RTL_TEXTENCODING_MS_1252 )
+ConvertData::ConvertData(const sal_Char p[], double fC, ConvertDataClass e, bool bPrefSupport)
+    : fConst(fC)
+    , aName(p, strlen(p), RTL_TEXTENCODING_MS_1252)
+    , eClass(e)
+    , bPrefixSupport(bPrefSupport)
 {
-    fConst = fC;
-    eClass = e;
-    bPrefixSupport = bPrefSupport;
 }
 
 ConvertData::~ConvertData()
 {
 }
-
 
 sal_Int16 ConvertData::GetMatchingLevel( const OUString& rRef ) const
 {
