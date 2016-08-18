@@ -109,9 +109,52 @@ void maybeOutputTimestamp(std::ostringstream &s) {
     char const * env = getEnvironmentVariable();
     if (env == nullptr)
         return;
+    bool outputTimestamp = false;
+    bool outputRelativeTimer = false;
     for (char const * p = env;;) {
         switch (*p++) {
         case '\0':
+            if (outputTimestamp) {
+                char ts[100];
+                TimeValue systemTime;
+                osl_getSystemTime(&systemTime);
+                TimeValue localTime;
+                osl_getLocalTimeFromSystemTime(&systemTime, &localTime);
+                oslDateTime dateTime;
+                osl_getDateTimeFromTimeValue(&localTime, &dateTime);
+                struct tm tm;
+                tm.tm_sec = dateTime.Seconds;
+                tm.tm_min = dateTime.Minutes;
+                tm.tm_hour = dateTime.Hours;
+                tm.tm_mday = dateTime.Day;
+                tm.tm_mon = dateTime.Month - 1;
+                tm.tm_year = dateTime.Year - 1900;
+                strftime(ts, sizeof(ts), "%Y-%m-%d:%H:%M:%S", &tm);
+                char milliSecs[10];
+                sprintf(milliSecs, "%03d", dateTime.NanoSeconds/1000000);
+                s << ts << '.' << milliSecs << ':';
+            }
+            if (outputRelativeTimer) {
+                static bool beenHere = false;
+                static TimeValue first;
+                if (!beenHere) {
+                    osl_getSystemTime(&first);
+                    beenHere = true;
+                }
+                TimeValue now;
+                osl_getSystemTime(&now);
+                int seconds = now.Seconds - first.Seconds;
+                int milliSeconds;
+                if (now.Nanosec < first.Nanosec) {
+                    seconds--;
+                    milliSeconds = 1000-(first.Nanosec-now.Nanosec)/1000000;
+                }
+                else
+                    milliSeconds = (now.Nanosec-first.Nanosec)/1000000;
+                char relativeTimestamp[100];
+                sprintf(relativeTimestamp, "%d.%03d", seconds, milliSeconds);
+                s << relativeTimestamp << ':';
+            }
             return;
         case '+':
             {
@@ -119,27 +162,10 @@ void maybeOutputTimestamp(std::ostringstream &s) {
                 while (*p1 != '.' && *p1 != '+' && *p1 != '-' && *p1 != '\0') {
                     ++p1;
                 }
-                if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("TIMESTAMP"))) {
-                    char ts[100];
-                    TimeValue systemTime;
-                    osl_getSystemTime(&systemTime);
-                    TimeValue localTime;
-                    osl_getLocalTimeFromSystemTime(&systemTime, &localTime);
-                    oslDateTime dateTime;
-                    osl_getDateTimeFromTimeValue(&localTime, &dateTime);
-                    struct tm tm;
-                    tm.tm_sec = dateTime.Seconds;
-                    tm.tm_min = dateTime.Minutes;
-                    tm.tm_hour = dateTime.Hours;
-                    tm.tm_mday = dateTime.Day;
-                    tm.tm_mon = dateTime.Month - 1;
-                    tm.tm_year = dateTime.Year - 1900;
-                    strftime(ts, sizeof(ts), "%Y-%m-%d:%H:%M:%S", &tm);
-                    char milliSecs[10];
-                    sprintf(milliSecs, "%03d", dateTime.NanoSeconds/1000000);
-                    s << ts << '.' << milliSecs << ':';
-                    return;
-                }
+                if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("TIMESTAMP")))
+                    outputTimestamp = true;
+                else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("RELATIVETIMER")))
+                    outputRelativeTimer = true;
                 char const * p2 = p1;
                 while (*p2 != '+' && *p2 != '-' && *p2 != '\0') {
                     ++p2;
@@ -166,7 +192,7 @@ bool report(sal_detail_LogLevel level, char const * area) {
         return true;
     assert(area != nullptr);
     char const * env = getEnvironmentVariable();
-    if (env == nullptr || strcmp(env, "+TIMESTAMP") == 0) {
+    if (env == nullptr) {
         env = "+WARN";
     }
     std::size_t areaLen = std::strlen(area);
@@ -203,7 +229,8 @@ bool report(sal_detail_LogLevel level, char const * area) {
         } else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("WARN")))
         {
             match = level == SAL_DETAIL_LOG_LEVEL_WARN;
-        } else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("TIMESTAMP")))
+        } else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("TIMESTAMP")) ||
+                   equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("RELATIVETIMER")))
         {
             // handled later
             match = false;
