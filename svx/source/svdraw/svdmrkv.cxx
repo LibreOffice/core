@@ -128,7 +128,7 @@ void ImplMarkingOverlay::SetSecondPosition(const basegfx::B2DPoint& rNewPosition
 
 void SdrMarkView::ImpClearVars()
 {
-    meDragMode=SDRDRAG_MOVE;
+    meDragMode=SdrDragMode::Move;
     meEditMode=SDREDITMODE_EDIT;
     meEditMode0=SDREDITMODE_EDIT;
     mbDesignMode=false;
@@ -573,7 +573,7 @@ bool SdrMarkView::ImpIsFrameHandles() const
 {
     const size_t nMarkCount=GetMarkedObjectCount();
     bool bFrmHdl=nMarkCount>static_cast<size_t>(mnFrameHandlesLimit) || mbForceFrameHandles;
-    bool bStdDrag=meDragMode==SDRDRAG_MOVE;
+    bool bStdDrag=meDragMode==SdrDragMode::Move;
     if (nMarkCount==1 && bStdDrag && bFrmHdl)
     {
         const SdrObject* pObj=GetMarkedObjectByIndex(0);
@@ -589,7 +589,7 @@ bool SdrMarkView::ImpIsFrameHandles() const
     if (!bStdDrag && !bFrmHdl) {
         // all other drag modes only with FrameHandles
         bFrmHdl=true;
-        if (meDragMode==SDRDRAG_ROTATE) {
+        if (meDragMode==SdrDragMode::Rotate) {
             // when rotating, use ObjOwn drag, if there's at least 1 PolyObj
             for (size_t nMarkNum=0; nMarkNum<nMarkCount && bFrmHdl; ++nMarkNum) {
                 const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
@@ -608,7 +608,7 @@ bool SdrMarkView::ImpIsFrameHandles() const
     }
 
     // no FrameHdl for crop
-    if(bFrmHdl && SDRDRAG_CROP == meDragMode)
+    if(bFrmHdl && SdrDragMode::Crop == meDragMode)
     {
         bFrmHdl = false;
     }
@@ -639,8 +639,8 @@ void SdrMarkView::SetMarkHandles()
 
     // delete/clear all handles. This will always be done, even with areMarkHandlesHidden()
     maHdlList.Clear();
-    maHdlList.SetRotateShear(meDragMode==SDRDRAG_ROTATE);
-    maHdlList.SetDistortShear(meDragMode==SDRDRAG_SHEAR);
+    maHdlList.SetRotateShear(meDragMode==SdrDragMode::Rotate);
+    maHdlList.SetDistortShear(meDragMode==SdrDragMode::Shear);
     mpMarkedObj=nullptr;
     mpMarkedPV=nullptr;
 
@@ -648,7 +648,7 @@ void SdrMarkView::SetMarkHandles()
     if(!areMarkHandlesHidden())
     {
         const size_t nMarkCount=GetMarkedObjectCount();
-        bool bStdDrag=meDragMode==SDRDRAG_MOVE;
+        bool bStdDrag=meDragMode==SdrDragMode::Move;
         bool bSingleTextObjMark=false;
 
         if (nMarkCount==1)
@@ -822,7 +822,7 @@ void SdrMarkView::SetMarkHandles()
             bool bDone(false);
 
             // moved crop handling to non-frame part and the handle creation to SdrGrafObj
-            if(1 == nMarkCount && mpMarkedObj && SDRDRAG_CROP == meDragMode)
+            if(1 == nMarkCount && mpMarkedObj && SdrDragMode::Crop == meDragMode)
             {
                 // Default addCropHandles from SdrObject does nothing. When pMarkedObj is SdrGrafObj, previous
                 // behaviour occurs (code in svx/source/svdraw/svdograf.cxx). When pMarkedObj is SwVirtFlyDrawObj
@@ -948,7 +948,7 @@ void SdrMarkView::SetDragMode(SdrDragMode eMode)
 {
     SdrDragMode eMode0=meDragMode;
     meDragMode=eMode;
-    if (meDragMode==SDRDRAG_RESIZE) meDragMode=SDRDRAG_MOVE;
+    if (meDragMode==SdrDragMode::Resize) meDragMode=SdrDragMode::Move;
     if (meDragMode!=eMode0) {
         ForceRefToMarked();
         SetMarkHandles();
@@ -962,7 +962,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
 {
     switch(eMode)
     {
-        case SDRDRAG_ROTATE:
+        case SdrDragMode::Rotate:
         {
             // add rotation center
             SdrHdl* pHdl = new SdrHdl(maRef1, HDL_REF1);
@@ -971,7 +971,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
 
             break;
         }
-        case SDRDRAG_MIRROR:
+        case SdrDragMode::Mirror:
         {
             // add axis of reflection
             SdrHdl* pHdl3 = new SdrHdl(maRef2, HDL_REF2);
@@ -988,7 +988,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
 
             break;
         }
-        case SDRDRAG_TRANSPARENCE:
+        case SdrDragMode::Transparence:
         {
             // add interactive transparency handle
             const size_t nMarkCount = GetMarkedObjectCount();
@@ -1052,7 +1052,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
             }
             break;
         }
-        case SDRDRAG_GRADIENT:
+        case SdrDragMode::Gradient:
         {
             // add interactive gradient handle
             const size_t nMarkCount = GetMarkedObjectCount();
@@ -1095,7 +1095,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
             }
             break;
         }
-        case SDRDRAG_CROP:
+        case SdrDragMode::Crop:
         {
             // TODO
             break;
@@ -1147,7 +1147,7 @@ void SdrMarkView::ForceRefToMarked()
 {
     switch(meDragMode)
     {
-        case SDRDRAG_ROTATE:
+        case SdrDragMode::Rotate:
         {
             Rectangle aR(GetMarkedObjRect());
             maRef1 = aR.Center();
@@ -1155,7 +1155,7 @@ void SdrMarkView::ForceRefToMarked()
             break;
         }
 
-        case SDRDRAG_MIRROR:
+        case SdrDragMode::Mirror:
         {
             // first calculate the length of the axis of reflection
             long nOutMin=0;
@@ -1219,9 +1219,9 @@ void SdrMarkView::ForceRefToMarked()
             break;
         }
 
-        case SDRDRAG_TRANSPARENCE:
-        case SDRDRAG_GRADIENT:
-        case SDRDRAG_CROP:
+        case SdrDragMode::Transparence:
+        case SdrDragMode::Gradient:
+        case SdrDragMode::Crop:
         {
             Rectangle aRect(GetMarkedObjBoundRect());
             maRef1 = aRect.TopLeft();
@@ -1234,7 +1234,7 @@ void SdrMarkView::ForceRefToMarked()
 
 void SdrMarkView::SetRef1(const Point& rPt)
 {
-    if(meDragMode == SDRDRAG_ROTATE || meDragMode == SDRDRAG_MIRROR)
+    if(meDragMode == SdrDragMode::Rotate || meDragMode == SdrDragMode::Mirror)
     {
         maRef1 = rPt;
         SdrHdl* pH = maHdlList.GetHdl(HDL_REF1);
@@ -1245,7 +1245,7 @@ void SdrMarkView::SetRef1(const Point& rPt)
 
 void SdrMarkView::SetRef2(const Point& rPt)
 {
-    if(meDragMode == SDRDRAG_MIRROR)
+    if(meDragMode == SdrDragMode::Mirror)
     {
         maRef2 = rPt;
         SdrHdl* pH = maHdlList.GetHdl(HDL_REF2);

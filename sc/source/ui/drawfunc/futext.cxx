@@ -272,7 +272,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                         pView->UnmarkAll();
                     }
 
-                    pView->SetDragMode(SDRDRAG_MOVE);
+                    pView->SetDragMode(SdrDragMode::Move);
                     SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
                     rBindings.Invalidate( SID_OBJECT_ROTATE );
                     rBindings.Invalidate( SID_OBJECT_MIRROR );
@@ -577,7 +577,7 @@ bool FuText::KeyInput(const KeyEvent& rKEvt)
 
 void FuText::Activate()
 {
-    pView->SetDragMode(SDRDRAG_MOVE);
+    pView->SetDragMode(SdrDragMode::Move);
     SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
     rBindings.Invalidate( SID_OBJECT_ROTATE );
     rBindings.Invalidate( SID_OBJECT_MIRROR );

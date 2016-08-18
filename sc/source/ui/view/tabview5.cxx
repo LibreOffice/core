@@ -412,7 +412,7 @@ void ScTabView::SetPagebreakMode( bool bSet )
 void ScTabView::ResetDrawDragMode()
 {
     if (pDrawView)
-        pDrawView->SetDragMode( SDRDRAG_MOVE );
+        pDrawView->SetDragMode( SdrDragMode::Move );
 }
 
 void ScTabView::ViewOptionsHasChanged( bool bHScrollChanged, bool bGraphicsChanged )

@@ -248,7 +248,7 @@ void ScGraphicShell::ExecuteCropGraphic( SfxRequest& )
         if( pObj && dynamic_cast<const SdrGrafObj*>( pObj) != nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
         {
             pView->SetEditMode(SDREDITMODE_EDIT);
-            pView->SetDragMode(SDRDRAG_CROP);
+            pView->SetDragMode(SdrDragMode::Crop);
         }
     }
 

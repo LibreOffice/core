@@ -524,7 +524,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                 eHit = mpView->PickAnything(*pMEvt, SdrMouseEventKind::MOVE, aVEvt);
             }
 
-            if ((eDragMode == SDRDRAG_ROTATE) && (eHit == SDRHIT_MARKEDOBJECT))
+            if ((eDragMode == SdrDragMode::Rotate) && (eHit == SDRHIT_MARKEDOBJECT))
             {
                 // The goal of this request is show always the rotation-arrow for 3D-objects at rotation-modus
                 // Independent of the settings at Extras->Optionen->Grafik "Objekte immer verschieben"

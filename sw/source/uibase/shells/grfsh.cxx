@@ -481,7 +481,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         case SID_OBJECT_CROP:
         {
             GraphicObject const *pGraphicObject = rSh.GetGraphicObj();
-            if (nullptr != pGraphicObject  && SDRDRAG_CROP != rSh.GetDragMode()) {
+            if (nullptr != pGraphicObject  && SdrDragMode::Crop != rSh.GetDragMode()) {
                 rSh.StartCropImage();
             }
         }

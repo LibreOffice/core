@@ -185,8 +185,8 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
                 }
 
                 // Cancel crop mode
-                if ( SDRDRAG_CROP == GetDragMode() )
-                    SetDragMode( SDRDRAG_MOVE );
+                if ( SdrDragMode::Crop == GetDragMode() )
+                    SetDragMode( SdrDragMode::Move );
 
                 bUnmark = true;
             }
@@ -608,10 +608,10 @@ void SwFEShell::ScrollTo( const Point &rPt )
     }
 }
 
-void SwFEShell::SetDragMode( sal_uInt16 eDragMode )
+void SwFEShell::SetDragMode( SdrDragMode eDragMode )
 {
     if ( Imp()->HasDrawView() )
-        Imp()->GetDrawView()->SetDragMode( (SdrDragMode)eDragMode );
+        Imp()->GetDrawView()->SetDragMode( eDragMode );
 }
 
 SdrDragMode SwFEShell::GetDragMode() const
@@ -657,7 +657,7 @@ void SwFEShell::StartCropImage()
 
     // Activate CROP mode
     pView->SetEditMode( SDREDITMODE_EDIT );
-    SetDragMode( SDRDRAG_CROP );
+    SetDragMode( SdrDragMode::Crop );
 }
 
 long SwFEShell::BeginDrag( const Point* pPt, bool bIsShift)

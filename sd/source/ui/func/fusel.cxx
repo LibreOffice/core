@@ -120,9 +120,9 @@ FuSelection::~FuSelection()
     mpView->UnmarkAllPoints();
     mpView->ResetCreationActive();
 
-    if ( mpView->GetDragMode() != SDRDRAG_MOVE )
+    if ( mpView->GetDragMode() != SdrDragMode::Move )
     {
-        mpView->SetDragMode(SDRDRAG_MOVE);
+        mpView->SetDragMode(SdrDragMode::Move);
     }
 }
 
@@ -819,9 +819,9 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         }
 
         if ( (nSlotId != SID_OBJECT_SELECT && nMarkCount==0)                    ||
-             ( mpView->GetDragMode() == SDRDRAG_CROOK &&
+             ( mpView->GetDragMode() == SdrDragMode::Crook &&
               !mpView->IsCrookAllowed( mpView->IsCrookNoContortion() ) ) ||
-             ( mpView->GetDragMode() == SDRDRAG_SHEAR &&
+             ( mpView->GetDragMode() == SdrDragMode::Shear &&
               !mpView->IsShearAllowed() && !mpView->IsDistortAllowed() ) ||
              ( nSlotId==SID_CONVERT_TO_3D_LATHE && pSingleObj &&
               (pSingleObj->GetObjInventor() != SdrInventor         ||
@@ -1019,7 +1019,7 @@ void FuSelection::Activate()
     {
         case SID_OBJECT_ROTATE:
         {
-            eMode = SDRDRAG_ROTATE;
+            eMode = SdrDragMode::Rotate;
 
             if ( mpView->GetDragMode() != eMode )
                 mpView->SetDragMode(eMode);
@@ -1028,7 +1028,7 @@ void FuSelection::Activate()
 
         case SID_OBJECT_MIRROR:
         {
-            eMode = SDRDRAG_MIRROR;
+            eMode = SdrDragMode::Mirror;
 
             if ( mpView->GetDragMode() != eMode )
                 mpView->SetDragMode(eMode);
@@ -1037,7 +1037,7 @@ void FuSelection::Activate()
 
         case SID_OBJECT_CROP:
         {
-            eMode = SDRDRAG_CROP;
+            eMode = SdrDragMode::Crop;
 
             if ( mpView->GetDragMode() != eMode )
                 mpView->SetDragMode(eMode);
@@ -1046,7 +1046,7 @@ void FuSelection::Activate()
 
         case SID_OBJECT_TRANSPARENCE:
         {
-            eMode = SDRDRAG_TRANSPARENCE;
+            eMode = SdrDragMode::Transparence;
 
             if ( mpView->GetDragMode() != eMode )
                 mpView->SetDragMode(eMode);
@@ -1055,7 +1055,7 @@ void FuSelection::Activate()
 
         case SID_OBJECT_GRADIENT:
         {
-            eMode = SDRDRAG_GRADIENT;
+            eMode = SdrDragMode::Gradient;
 
             if ( mpView->GetDragMode() != eMode )
                 mpView->SetDragMode(eMode);
@@ -1064,7 +1064,7 @@ void FuSelection::Activate()
 
         case SID_OBJECT_SHEAR:
         {
-            eMode = SDRDRAG_SHEAR;
+            eMode = SdrDragMode::Shear;
 
             if ( mpView->GetDragMode() != eMode )
                 mpView->SetDragMode(eMode);
@@ -1073,7 +1073,7 @@ void FuSelection::Activate()
 
         case SID_OBJECT_CROOK_ROTATE:
         {
-            eMode = SDRDRAG_CROOK;
+            eMode = SdrDragMode::Crook;
 
             if ( mpView->GetDragMode() != eMode )
             {
@@ -1085,7 +1085,7 @@ void FuSelection::Activate()
 
         case SID_OBJECT_CROOK_SLANT:
         {
-            eMode = SDRDRAG_CROOK;
+            eMode = SdrDragMode::Crook;
 
             if ( mpView->GetDragMode() != eMode )
             {
@@ -1097,7 +1097,7 @@ void FuSelection::Activate()
 
         case SID_OBJECT_CROOK_STRETCH:
         {
-            eMode = SDRDRAG_CROOK;
+            eMode = SdrDragMode::Crook;
 
             if ( mpView->GetDragMode() != eMode )
             {
@@ -1109,7 +1109,7 @@ void FuSelection::Activate()
 
         case SID_CONVERT_TO_3D_LATHE:
         {
-            eMode = SDRDRAG_MIRROR;
+            eMode = SdrDragMode::Mirror;
             bSuppressChangesOfSelection = true;
 
             if ( mpView->GetDragMode() != eMode )
@@ -1124,7 +1124,7 @@ void FuSelection::Activate()
 
         default:
         {
-            eMode = SDRDRAG_MOVE;
+            eMode = SdrDragMode::Move;
 
             if ( mpView->GetDragMode() != eMode )
                 mpView->SetDragMode(eMode);

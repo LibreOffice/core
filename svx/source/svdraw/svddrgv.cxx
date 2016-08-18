@@ -50,7 +50,7 @@ using namespace sdr;
 void SdrDragView::ImpClearVars()
 {
     mbFramDrag=false;
-    meDragMode=SDRDRAG_MOVE;
+    meDragMode=SdrDragMode::Move;
     mbDragLimit=false;
     mbMarkedHitMovesAlways=false;
     meDragHdl=HDL_MOVE;
@@ -209,8 +209,8 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
         mbDragSpecial=false;
         mbDragLimit=false;
         SdrDragMode eTmpMode=meDragMode;
-        if (eTmpMode==SDRDRAG_MOVE && pHdl!=nullptr && pHdl->GetKind()!=HDL_MOVE) {
-            eTmpMode=SDRDRAG_RESIZE;
+        if (eTmpMode==SdrDragMode::Move && pHdl!=nullptr && pHdl->GetKind()!=HDL_MOVE) {
+            eTmpMode=SdrDragMode::Resize;
         }
         mbDragLimit=TakeDragLimit(eTmpMode,maDragLimit);
         mbFramDrag=ImpIsFrameHandles();
@@ -259,7 +259,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
         {
             switch (meDragMode)
             {
-                case SDRDRAG_ROTATE: case SDRDRAG_SHEAR: case SDRDRAG_DISTORT:
+                case SdrDragMode::Rotate: case SdrDragMode::Shear: case SdrDragMode::Distort:
                 {
                     switch (meDragHdl)
                     {
@@ -278,12 +278,12 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                             // because 3D objects are limited rotations
                             if (!b3DObjSelected && !IsShearAllowed())
                                 return false;
-                            mpCurrentSdrDragMethod = new SdrDragShear(*this,meDragMode==SDRDRAG_ROTATE);
+                            mpCurrentSdrDragMethod = new SdrDragShear(*this,meDragMode==SdrDragMode::Rotate);
                         } break;
                         case HDL_UPLFT: case HDL_UPRGT:
                         case HDL_LWLFT: case HDL_LWRGT:
                         {
-                            if (meDragMode==SDRDRAG_SHEAR || meDragMode==SDRDRAG_DISTORT)
+                            if (meDragMode==SdrDragMode::Shear || meDragMode==SdrDragMode::Distort)
                             {
                                 if (!IsDistortAllowed(true) && !IsDistortAllowed()) return false;
                                 mpCurrentSdrDragMethod = new SdrDragDistort(*this);
@@ -309,7 +309,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                         }
                     }
                 } break;
-                case SDRDRAG_MIRROR:
+                case SdrDragMode::Mirror:
                 {
                     if (meDragHdl==HDL_MOVE && IsMarkedHitMovesAlways())
                     {
@@ -323,7 +323,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                     }
                 } break;
 
-                case SDRDRAG_CROP:
+                case SdrDragMode::Crop:
                 {
                     if (meDragHdl==HDL_MOVE && IsMarkedHitMovesAlways())
                     {
@@ -340,7 +340,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                 }
                 break;
 
-                case SDRDRAG_TRANSPARENCE:
+                case SdrDragMode::Transparence:
                 {
                     if(meDragHdl == HDL_MOVE && IsMarkedHitMovesAlways())
                     {
@@ -357,7 +357,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                     }
                     break;
                 }
-                case SDRDRAG_GRADIENT:
+                case SdrDragMode::Gradient:
                 {
                     if(meDragHdl == HDL_MOVE && IsMarkedHitMovesAlways())
                     {
@@ -375,7 +375,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                     break;
                 }
 
-                case SDRDRAG_CROOK :
+                case SdrDragMode::Crook :
                 {
                     if (meDragHdl==HDL_MOVE && IsMarkedHitMovesAlways())
                     {
@@ -391,7 +391,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
 
                 default:
                 {
-                    // SDRDRAG_MOVE
+                    // SdrDragMode::Move
                     if((meDragHdl == HDL_MOVE) && !IsMoveAllowed())
                     {
                         return false;

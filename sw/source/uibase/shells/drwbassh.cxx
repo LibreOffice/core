@@ -360,7 +360,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                 if( GetView().IsDrawRotate() )
                 {
-                    pSh->SetDragMode( SDRDRAG_MOVE );
+                    pSh->SetDragMode( SdrDragMode::Move );
                     GetView().FlipDrawRotate();
                 }
 

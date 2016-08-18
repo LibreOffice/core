@@ -426,7 +426,7 @@ void SwView::NoRotate()
 {
     if (IsDrawRotate())
     {
-        m_pWrtShell->SetDragMode(SDRDRAG_MOVE);
+        m_pWrtShell->SetDragMode(SdrDragMode::Move);
         FlipDrawRotate();
 
         const SfxBoolItem aTmp( SID_OBJECT_ROTATE, false );

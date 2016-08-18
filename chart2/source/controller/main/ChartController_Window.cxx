@@ -651,7 +651,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
 
         if( !m_aSelection.isRotateableObjectSelected( getModel() ) )
         {
-                m_eDragMode = SDRDRAG_MOVE;
+                m_eDragMode = SdrDragMode::Move;
                 pDrawViewWrapper->SetDragMode(m_eDragMode);
         }
 
@@ -666,7 +666,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
 
         //change selection to 3D scene if rotate mode
         SdrDragMode eDragMode = pDrawViewWrapper->GetDragMode();
-        if( SDRDRAG_ROTATE==eDragMode )
+        if( SdrDragMode::Rotate==eDragMode )
         {
             E3dScene* pScene = SelectionHelper::getSceneToRotate( pDrawViewWrapper->getNamedSdrObject( m_aSelection.getSelectedCID() ) );
             if( pScene )
@@ -851,10 +851,10 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                 bool bIsRotateable = m_aSelection.isRotateableObjectSelected( getModel() );
 
                 //toggle between move and rotate
-                if( bIsRotateable && bClickedTwiceOnDragableObject && SDRDRAG_MOVE==m_eDragMode )
-                    m_eDragMode=SDRDRAG_ROTATE;
+                if( bIsRotateable && bClickedTwiceOnDragableObject && SdrDragMode::Move==m_eDragMode )
+                    m_eDragMode=SdrDragMode::Rotate;
                 else
-                    m_eDragMode=SDRDRAG_MOVE;
+                    m_eDragMode=SdrDragMode::Move;
 
                 pDrawViewWrapper->SetDragMode(m_eDragMode);
 
@@ -1310,9 +1310,9 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
             {
                 aNewSelection = aNewOID.getAny();
             }
-            if ( m_eDragMode == SDRDRAG_ROTATE && !SelectionHelper::isRotateableObject( aNewOID.getObjectCID(), getModel() ) )
+            if ( m_eDragMode == SdrDragMode::Rotate && !SelectionHelper::isRotateableObject( aNewOID.getObjectCID(), getModel() ) )
             {
-                m_eDragMode = SDRDRAG_MOVE;
+                m_eDragMode = SdrDragMode::Move;
             }
             bReturn = select( aNewSelection );
         }
@@ -1946,7 +1946,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
     }
     else if( ObjectIdentifier::isDragableObject( aHitObjectCID ) )
     {
-        if( (m_eDragMode == SDRDRAG_ROTATE)
+        if( (m_eDragMode == SdrDragMode::Rotate)
             && SelectionHelper::isRotateableObject( aHitObjectCID
                 , getModel() ) )
             m_pChartWindow->SetPointer( Pointer( PointerStyle::Rotate ) );

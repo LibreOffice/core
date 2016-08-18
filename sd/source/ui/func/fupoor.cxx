@@ -1123,7 +1123,7 @@ bool FuPoor::doConstructOrthogonal() const
     // Check whether a media object is selected
     bool bResizeKeepRatio = false;
     // tdf#89758 Avoid interactive crop preview from being proportionally scaled by default.
-    if (mpView->AreObjectsMarked() && mpView->GetDragMode() != SDRDRAG_CROP)
+    if (mpView->AreObjectsMarked() && mpView->GetDragMode() != SdrDragMode::Crop)
     {
         const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
         if (rMarkList.GetMarkCount() == 1)

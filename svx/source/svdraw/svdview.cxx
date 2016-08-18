@@ -1053,12 +1053,12 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
         bool bCorner=pHdl!=nullptr && pHdl->IsCornerHdl();
         bool bVertex=pHdl!=nullptr && pHdl->IsVertexHdl();
         bool bMov=eHdl==HDL_MOVE;
-        if (bMov && (meDragMode==SDRDRAG_MOVE || meDragMode==SDRDRAG_RESIZE || mbMarkedHitMovesAlways)) {
+        if (bMov && (meDragMode==SdrDragMode::Move || meDragMode==SdrDragMode::Resize || mbMarkedHitMovesAlways)) {
             if (!IsMoveAllowed()) return Pointer(PointerStyle::Arrow); // because double click or drag & drop is possible
             return Pointer(PointerStyle::Move);
         }
         switch (meDragMode) {
-            case SDRDRAG_ROTATE: {
+            case SdrDragMode::Rotate: {
                 if ((bCorner || bMov) && !IsRotateAllowed(true))
                     return Pointer(PointerStyle::NotAllowed);
 
@@ -1076,7 +1076,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
                 if (bMov)
                     return Pointer(PointerStyle::Rotate);
             } break;
-            case SDRDRAG_SHEAR: case SDRDRAG_DISTORT: {
+            case SdrDragMode::Shear: case SdrDragMode::Distort: {
                 if (bCorner) {
                     if (!IsDistortAllowed(true) && !IsDistortAllowed()) return Pointer(PointerStyle::NotAllowed);
                     else return Pointer(PointerStyle::RefHand);
@@ -1087,7 +1087,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
                     return Pointer(PointerStyle::Move);
                 }
             } break;
-            case SDRDRAG_MIRROR: {
+            case SdrDragMode::Mirror: {
                 if (bCorner || bVertex || bMov) {
                     SdrHdl* pH1=maHdlList.GetHdl(HDL_REF1);
                     SdrHdl* pH2=maHdlList.GetHdl(HDL_REF2);
@@ -1111,7 +1111,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
                 }
             } break;
 
-            case SDRDRAG_TRANSPARENCE:
+            case SdrDragMode::Transparence:
             {
                 if(!IsTransparenceAllowed())
                     return Pointer(PointerStyle::NotAllowed);
@@ -1119,7 +1119,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
                 return Pointer(PointerStyle::RefHand);
             }
 
-            case SDRDRAG_GRADIENT:
+            case SdrDragMode::Gradient:
             {
                 if(!IsGradientAllowed())
                     return Pointer(PointerStyle::NotAllowed);
@@ -1127,7 +1127,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
                 return Pointer(PointerStyle::RefHand);
             }
 
-            case SDRDRAG_CROOK: {
+            case SdrDragMode::Crook: {
                 if (bCorner || bVertex || bMov) {
                     if (!IsCrookAllowed(true) && !IsCrookAllowed()) return Pointer(PointerStyle::NotAllowed);
                     return Pointer(PointerStyle::Crook);
@@ -1135,7 +1135,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
                 break;
             }
 
-            case SDRDRAG_CROP:
+            case SdrDragMode::Crop:
             {
                 return Pointer(PointerStyle::Crop);
             }

@@ -387,14 +387,14 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
         case SID_OBJECT_ROTATE:
             {
                 SdrDragMode eMode;
-                if (pView->GetDragMode() == SDRDRAG_ROTATE)
-                    eMode = SDRDRAG_MOVE;
+                if (pView->GetDragMode() == SdrDragMode::Rotate)
+                    eMode = SdrDragMode::Move;
                 else
-                    eMode = SDRDRAG_ROTATE;
+                    eMode = SdrDragMode::Rotate;
                 pView->SetDragMode( eMode );
                 rBindings.Invalidate( SID_OBJECT_ROTATE );
                 rBindings.Invalidate( SID_OBJECT_MIRROR );
-                if (eMode == SDRDRAG_ROTATE && !pView->IsFrameDragSingles())
+                if (eMode == SdrDragMode::Rotate && !pView->IsFrameDragSingles())
                 {
                     pView->SetFrameDragSingles();
                     rBindings.Invalidate( SID_BEZIER_EDIT );
@@ -404,14 +404,14 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
         case SID_OBJECT_MIRROR:
             {
                 SdrDragMode eMode;
-                if (pView->GetDragMode() == SDRDRAG_MIRROR)
-                    eMode = SDRDRAG_MOVE;
+                if (pView->GetDragMode() == SdrDragMode::Mirror)
+                    eMode = SdrDragMode::Move;
                 else
-                    eMode = SDRDRAG_MIRROR;
+                    eMode = SdrDragMode::Mirror;
                 pView->SetDragMode( eMode );
                 rBindings.Invalidate( SID_OBJECT_ROTATE );
                 rBindings.Invalidate( SID_OBJECT_MIRROR );
-                if (eMode == SDRDRAG_MIRROR && !pView->IsFrameDragSingles())
+                if (eMode == SdrDragMode::Mirror && !pView->IsFrameDragSingles())
                 {
                     pView->SetFrameDragSingles();
                     rBindings.Invalidate( SID_BEZIER_EDIT );
@@ -423,9 +423,9 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                 bool bOld = pView->IsFrameDragSingles();
                 pView->SetFrameDragSingles( !bOld );
                 rBindings.Invalidate( SID_BEZIER_EDIT );
-                if (bOld && pView->GetDragMode() != SDRDRAG_MOVE)
+                if (bOld && pView->GetDragMode() != SdrDragMode::Move)
                 {
-                    pView->SetDragMode( SDRDRAG_MOVE );
+                    pView->SetDragMode( SdrDragMode::Move );
                     rBindings.Invalidate( SID_OBJECT_ROTATE );
                     rBindings.Invalidate( SID_OBJECT_MIRROR );
                 }

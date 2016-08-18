@@ -189,7 +189,7 @@ public:
     void BrkMarkObj();
     bool IsMarkObj() const { return (nullptr != mpMarkObjOverlay); }
 
-    // DragModes: SDRDRAG_CREATE,SDRDRAG_MOVE,SDRDRAG_RESIZE,SDRDRAG_ROTATE,SDRDRAG_MIRROR,SDRDRAG_SHEAR,SDRDRAG_CROOK
+    // DragModes: SDRDRAG_CREATE,SdrDragMode::Move,SdrDragMode::Resize,SdrDragMode::Rotate,SdrDragMode::Mirror,SdrDragMode::Shear,SdrDragMode::Crook
     // Move==Resize
     // The interface might maybe be changed in the future because of Ortho-Drag
     void SetDragMode(SdrDragMode eMode);

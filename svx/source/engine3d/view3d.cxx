@@ -1227,8 +1227,8 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                 meDragHdl = ( pHdl == nullptr ? HDL_MOVE : pHdl->GetKind() );
                 switch ( meDragMode )
                 {
-                    case SDRDRAG_ROTATE:
-                    case SDRDRAG_SHEAR:
+                    case SdrDragMode::Rotate:
+                    case SdrDragMode::Shear:
                     {
                         switch ( meDragHdl )
                         {
@@ -1263,7 +1263,7 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                     }
                     break;
 
-                    case SDRDRAG_MOVE:
+                    case SdrDragMode::Move:
                     {
                         if(!bThereAreRootScenes)
                         {
@@ -1273,11 +1273,11 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                     break;
 
                     // later on
-                    case SDRDRAG_MIRROR:
-                    case SDRDRAG_CROOK:
-                    case SDRDRAG_DISTORT:
-                    case SDRDRAG_TRANSPARENCE:
-                    case SDRDRAG_GRADIENT:
+                    case SdrDragMode::Mirror:
+                    case SdrDragMode::Crook:
+                    case SdrDragMode::Distort:
+                    case SdrDragMode::Transparence:
+                    case SdrDragMode::Gradient:
                     default:
                     {
                     }

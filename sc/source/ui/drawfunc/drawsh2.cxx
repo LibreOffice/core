@@ -83,8 +83,8 @@ void ScDrawShell::GetState( SfxItemSet& rSet )          // Zustaende / Toggles
     ScDrawView* pView    = pViewData->GetScDrawView();
     SdrDragMode eMode    = pView->GetDragMode();
 
-    rSet.Put( SfxBoolItem( SID_OBJECT_ROTATE, eMode == SDRDRAG_ROTATE ) );
-    rSet.Put( SfxBoolItem( SID_OBJECT_MIRROR, eMode == SDRDRAG_MIRROR ) );
+    rSet.Put( SfxBoolItem( SID_OBJECT_ROTATE, eMode == SdrDragMode::Rotate ) );
+    rSet.Put( SfxBoolItem( SID_OBJECT_MIRROR, eMode == SdrDragMode::Mirror ) );
     rSet.Put( SfxBoolItem( SID_BEZIER_EDIT, !pView->IsFrameDragSingles() ) );
 
     sal_uInt16 nFWId = ScGetFontWorkId();

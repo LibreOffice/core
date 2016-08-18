@@ -192,15 +192,15 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                 pSingleObj = mpView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
             }
 
-            if (mpView->GetDragMode() == SDRDRAG_MOVE && mpView->IsRotateAllowed() &&
+            if (mpView->GetDragMode() == SdrDragMode::Move && mpView->IsRotateAllowed() &&
                 (mpViewShell->GetFrameView()->IsClickChangeRotation() ||
                  (pSingleObj && pSingleObj->GetObjInventor()==E3dInventor)))
             {
-                mpView->SetDragMode(SDRDRAG_ROTATE);
+                mpView->SetDragMode(SdrDragMode::Rotate);
             }
             else
             {
-                mpView->SetDragMode(SDRDRAG_MOVE);
+                mpView->SetDragMode(SdrDragMode::Move);
             }
         }
     }

@@ -35,22 +35,22 @@ enum SdrCreateCmd {SDRCREATE_NEXTPOINT,     // next traverse station, segment of
                    SDRCREATE_NEXTOBJECT,    // next polygon in PolyPolygon
                    SDRCREATE_FORCEEND};     // forced end
 
-enum SdrDragMode
+enum class SdrDragMode
 {
-    SDRDRAG_MOVE,
-    SDRDRAG_RESIZE,
-    SDRDRAG_ROTATE,
-    SDRDRAG_MIRROR,
-    SDRDRAG_SHEAR,
-    SDRDRAG_CROOK,
-    SDRDRAG_DISTORT,    // Free deform (transform Rect in arbitrary quad)
+    Move,
+    Resize,
+    Rotate,
+    Mirror,
+    Shear,
+    Crook,
+    Distort,    // Free deform (transform Rect in arbitrary quad)
 
     // new modes for interactive transparence and gradient tools
-    SDRDRAG_TRANSPARENCE,
-    SDRDRAG_GRADIENT,
+    Transparence,
+    Gradient,
 
     // new mode for interactive cropping of graphics
-    SDRDRAG_CROP
+    Crop
 };
 
 
@@ -61,9 +61,9 @@ enum SdrDragMode
 // If there is no layer when it should be identified, then
 // drLayerAdmin::GetLayerID(const String&) returns a value.
 #define SDRLAYER_NOTFOUND 0xFF
-// You can use this value in the methods of SdrLayerSet, but sal_False is returned
-// every time or the methode does nothing.
-// type deklaration for Layer-IDs
+// You can use this value in the methods of SdrLayerSet, but false is returned
+// every time or the method does nothing.
+// type declaration for Layer-IDs
 typedef sal_uInt8 SdrLayerID;
 
 /*

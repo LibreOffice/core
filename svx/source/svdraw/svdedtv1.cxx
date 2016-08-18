@@ -886,13 +886,13 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, bool /*bOnlyH
         rAttr.Put(SdrVertShearAllItem());
     }
 
-    if(meDragMode == SDRDRAG_ROTATE || meDragMode == SDRDRAG_MIRROR)
+    if(meDragMode == SdrDragMode::Rotate || meDragMode == SdrDragMode::Mirror)
     {
         rAttr.Put(SdrTransformRef1XItem(GetRef1().X()));
         rAttr.Put(SdrTransformRef1YItem(GetRef1().Y()));
     }
 
-    if(meDragMode == SDRDRAG_MIRROR)
+    if(meDragMode == SdrDragMode::Mirror)
     {
         rAttr.Put(SdrTransformRef2XItem(GetRef2().X()));
         rAttr.Put(SdrTransformRef2YItem(GetRef2().Y()));
@@ -1300,7 +1300,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         // size
         long nResizeRefX=aRect.Left();
         long nResizeRefY=aRect.Top();
-        if (meDragMode==SDRDRAG_ROTATE) { // use rotation axis as a reference for resizing, too
+        if (meDragMode==SdrDragMode::Rotate) { // use rotation axis as a reference for resizing, too
             nResizeRefX=maRef1.X();
             nResizeRefY=maRef1.Y();
         }
@@ -1319,7 +1319,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         // rotation
         long nRotateRefX=aRect.Center().X();
         long nRotateRefY=aRect.Center().Y();
-        if (meDragMode==SDRDRAG_ROTATE) {
+        if (meDragMode==SdrDragMode::Rotate) {
             nRotateRefX=aRotateAxe.X();
             nRotateRefY=aRotateAxe.Y();
         }
@@ -1330,7 +1330,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         // shearing
         long nShearRefX=aRect.Left();
         long nShearRefY=aRect.Bottom();
-        if (meDragMode==SDRDRAG_ROTATE) { // use rotation axis as a reference for shearing, too
+        if (meDragMode==SdrDragMode::Rotate) { // use rotation axis as a reference for shearing, too
             nShearRefX=aRotateAxe.X();
             nShearRefY=aRotateAxe.Y();
         }
@@ -1472,7 +1472,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     long nSizY=0;
     long nRotateAngle=0;
 
-    bool bModeIsRotate(meDragMode == SDRDRAG_ROTATE);
+    bool bModeIsRotate(meDragMode == SdrDragMode::Rotate);
     long nRotateX(0);
     long nRotateY(0);
     long nOldRotateX(0);

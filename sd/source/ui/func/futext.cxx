@@ -304,7 +304,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     if (!rMEvt.IsShift() && eHit == SDRHIT_TEXTEDITOBJ)
                     {
                         mpView->UnmarkAll();
-                        mpView->SetDragMode(SDRDRAG_MOVE);
+                        mpView->SetDragMode(SdrDragMode::Move);
                     }
                 }
 

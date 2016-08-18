@@ -500,7 +500,7 @@ public:
     bool GotoObj( bool bNext, GotoObjFlags eType = GotoObjFlags::DrawAny);
 
     /// Set DragMode (e.g. Rotate), but do nothing when frame is selected.
-    void SetDragMode( sal_uInt16 eSdrDragMode );
+    void SetDragMode( SdrDragMode eSdrDragMode );
 
     // Get the current drag mode
     SdrDragMode GetDragMode() const;

@@ -656,7 +656,7 @@ bool SwDrawView::TakeDragLimit( SdrDragMode eMode,
     {
         const SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
         SwRect aRect;
-        if( ::CalcClipRect( pObj, aRect, eMode == SDRDRAG_MOVE ) )
+        if( ::CalcClipRect( pObj, aRect, eMode == SdrDragMode::Move ) )
         {
             rRect = aRect.SVRect();
             bRet = true;

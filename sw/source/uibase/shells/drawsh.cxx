@@ -210,9 +210,9 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             if (rSh.IsObjSelected() && pSdrView->IsRotateAllowed())
             {
                 if (GetView().IsDrawRotate())
-                    rSh.SetDragMode(SDRDRAG_MOVE);
+                    rSh.SetDragMode(SdrDragMode::Move);
                 else
-                    rSh.SetDragMode(SDRDRAG_ROTATE);
+                    rSh.SetDragMode(SdrDragMode::Rotate);
 
                 GetView().FlipDrawRotate();
             }
@@ -221,7 +221,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         case SID_BEZIER_EDIT:
             if (GetView().IsDrawRotate())
             {
-                rSh.SetDragMode(SDRDRAG_MOVE);
+                rSh.SetDragMode(SdrDragMode::Move);
                 GetView().FlipDrawRotate();
             }
             GetView().FlipDrawSelMode();
