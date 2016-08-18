@@ -1333,9 +1333,11 @@ OUString SfxUndoManager::GetRedoActionsInfo() const
 {
     boost::property_tree::ptree aActions;
     const SfxUndoArray* pUndoArray = m_xData->pActUndoArray;
-    for (size_t i = GetRedoActionCount(); i > 0; --i)
+    size_t nCount = GetRedoActionCount();
+    for (size_t i = 0; i < nCount; ++i)
     {
-        boost::property_tree::ptree aAction = lcl_ActionToJson(i - 1, pUndoArray->aUndoActions[pUndoArray->nCurUndoAction - 1 + i].pAction);
+        size_t nIndex = nCount - i - 1;
+        boost::property_tree::ptree aAction = lcl_ActionToJson(nIndex, pUndoArray->aUndoActions[pUndoArray->nCurUndoAction + nIndex].pAction);
         aActions.push_back(std::make_pair("", aAction));
     }
 
