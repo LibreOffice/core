@@ -387,11 +387,18 @@
     </Calendar>
   </LC_CALENDAR>
   <LC_CURRENCY>
-    <Currency default="true" usedInCompatibleFormatCodes="true">
+    <Currency default="false" usedInCompatibleFormatCodes="true">
       <CurrencyID>BYR</CurrencyID>
       <CurrencySymbol>р.</CurrencySymbol>
       <BankSymbol>BYR</BankSymbol>
       <CurrencyName>Ruble</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+    <Currency default="true" usedInCompatibleFormatCodes="false">
+      <CurrencyID>BYN</CurrencyID>
+      <CurrencySymbol>Br</CurrencySymbol>
+      <BankSymbol>BYN</BankSymbol>
+      <CurrencyName>New Belarusian Ruble</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
   </LC_CURRENCY>
