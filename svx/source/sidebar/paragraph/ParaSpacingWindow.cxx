@@ -104,6 +104,7 @@ IMPL_LINK_NOARG_TYPED(ParaULSpacingWindow, ModifySpacingHdl, Edit&, void)
 
 ParaLRSpacingWindow::ParaLRSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame)
     : VclVBox(pParent)
+    , m_eUnit(SFX_MAPUNIT_TWIP)
 {
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(),
                                   "svx/ui/paralrspacing.ui",
