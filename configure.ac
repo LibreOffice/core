@@ -4631,6 +4631,7 @@ if test "$cross_compiling" = "yes"; then
         --with-parallelism="$with_parallelism" \
         --without-doxygen \
         --without-java \
+        --without-export-validation \
         $sub_conf_opts \
         --srcdir=$srcdir \
         2>&1 | sed -e 's/^/    /'
