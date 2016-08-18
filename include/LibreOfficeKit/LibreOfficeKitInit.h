@@ -51,22 +51,34 @@ extern "C"
                       );
     }
 
-    inline char *lok_dlerror(void)
+#ifndef __OBJC__
+    inline
+#endif
+    char *lok_dlerror(void)
     {
         return dlerror();
     }
 
-    inline void *lok_dlsym(void *Hnd, const char *pName)
+#ifndef __OBJC__
+    inline
+#endif
+    void *lok_dlsym(void *Hnd, const char *pName)
     {
         return dlsym(Hnd, pName);
     }
 
-    inline int lok_dlclose(void *Hnd)
+#ifndef __OBJC__
+    inline
+#endif
+    int lok_dlclose(void *Hnd)
     {
         return dlclose(Hnd);
     }
 
-    inline void extendUnoPath(const char *pPath)
+#ifndef __OBJC__
+    inline
+#endif
+    void extendUnoPath(const char *pPath)
     {
         (void)pPath;
     }
