@@ -32,11 +32,14 @@
 #include "svx/tbxctl.hxx"
 #include "svx/tbxcolor.hxx"
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <svx/svxids.hrc>
 
 SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlDraw, SfxBoolItem);
+SFX_IMPL_TOOLBOX_CONTROL(SvxSlideMasterControl, SfxVoidItem);
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::beans;
 
 
 SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
@@ -102,6 +105,45 @@ void SvxTbxCtlDraw::toggleToolbox()
 void SvxTbxCtlDraw::Select(sal_uInt16 /*nSelectModifier*/)
 {
     toggleToolbox();
+}
+
+SvxSlideMasterControl::SvxSlideMasterControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+    SfxToolBoxControl( nSlotId, nId, rTbx )
+{
+    rTbx.SetItemBits( nId, ToolBoxItemBits::CHECKABLE | rTbx.GetItemBits( nId ) );
+    rTbx.Invalidate();
+}
+
+void SAL_CALL SvxSlideMasterControl::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception)
+{
+    svt::ToolboxController::initialize(aArguments);
+}
+
+void SvxSlideMasterControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
+                                  const SfxPoolItem* pState )
+{
+    GetToolBox().EnableItem( GetId(), ( eState != SfxItemState::DISABLED ) );
+    SfxToolBoxControl::StateChanged( nSID, eState, pState );
+}
+
+
+void SvxSlideMasterControl::Select(sal_uInt16 /*nSelectModifier*/)
+{
+    Sequence< PropertyValue > aArgs(1);
+    bool bIsSlideMasterButtonChecked = GetToolBox().IsItemChecked(GetId());
+    bool bCheck = true;
+    OUString aCommand;
+
+    if( bIsSlideMasterButtonChecked ){
+       bCheck = false;
+       aCommand = ".uno:NormalMultiPaneGUI";
+    }else{
+       bCheck = true;
+       aCommand = ".uno:SlideMasterPage";
+    }
+
+       Dispatch( aCommand, aArgs );
+       GetToolBox().CheckItem( GetId(), bCheck );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

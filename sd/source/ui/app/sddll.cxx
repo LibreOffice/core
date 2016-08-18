@@ -239,6 +239,7 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     SvxColorToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
     SvxFrameToolBoxControl::RegisterControl(SID_ATTR_BORDER, pMod );
     SvxTbxCtlDraw::RegisterControl(SID_INSERT_DRAW, pMod );
+    SvxSlideMasterControl::RegisterControl(SID_SLIDE_MASTER_MODE, pMod);
 
     EmojiPopup::RegisterControl(SID_EMOJI_CONTROL, pMod );
 }

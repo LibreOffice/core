@@ -21,6 +21,7 @@
 #define INCLUDED_SD_INC_APP_HRC
 
 #include <sfx2/sfx.hrc>
+#include <svx/svxids.hrc>
 
 // Helper IDs for templates
 #define HID_STANDARD_STYLESHEET_NAME        (HID_SD_START + 70)
@@ -376,7 +377,6 @@
 #define SID_SUMMARY_PAGE                    (SID_SD_START+344)
 #define SID_LEAVE_ALL_GROUPS                (SID_SD_START+345)
     // FREE
-#define SID_SLIDE_MASTER_MODE               (SID_SD_START+348)
 #define SID_HANDOUT_MASTERPAGE              (SID_SD_START+349)
 #define SID_NOTES_MASTER_MODE               (SID_SD_START+350)
     // FREE
@@ -432,7 +432,6 @@
 #define SID_NOTES_WINDOW                    (SID_SD_START+417)
 #define SID_SWITCH_SHELL_PANE               (SID_SD_START+418)
         // FREE
-#define SID_NORMAL_MULTI_PANE_GUI           (SID_SD_START+420)
 #define SID_SLIDE_SORTER_MULTI_PANE_GUI     (SID_SD_START+421)
 
 #define SID_SELECT_BACKGROUND               (SID_SD_START+422)
