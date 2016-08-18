@@ -1366,7 +1366,7 @@ bool SfxTabDialog::selectPageByUIXMLDescription(const OString& rUIXMLDescription
         if (!pCandidate)
         {
             // force SfxTabPage creation
-            const_cast<SfxTabDialog*>(this)->ShowPage((*it)->nId);
+            ShowPage((*it)->nId);
             pCandidate = GetTabPage((*it)->nId);
         }
 
