@@ -37,7 +37,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">center</property>
-        <property name="margin_right">12</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="border_width">6</property>
@@ -146,6 +145,7 @@
         </child>
         <child>
           <object class="svxlo-SvxFillAttrBox" id="lbhatching">
+            <property name="width_request">150</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
@@ -158,6 +158,7 @@
         </child>
         <child>
           <object class="svxlo-SvxFillAttrBox" id="lbbitmap">
+            <property name="width_request">150</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
@@ -170,6 +171,7 @@
         </child>
         <child>
           <object class="svxlo-ColorLB" id="lbcolor">
+            <property name="width_request">150</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
@@ -182,6 +184,7 @@
         </child>
         <child>
           <object class="svxlo-ColorLB" id="lbgradient">
+            <property name="width_request">150</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
