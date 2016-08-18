@@ -20,6 +20,7 @@
 #include <config_features.h>
 #include <comphelper/processfactory.hxx>
 
+#include "app.hrc"
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
@@ -44,6 +45,8 @@
 #include <svl/whiter.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
+#include <svx/fmresids.hrc>
+#include <svx/dialogs.hrc>
 #include <unotools/moduleoptions.hxx>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/frame/LayoutManagerEvents.hpp>
@@ -58,6 +61,58 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+#define RID_MATH_TOOLBOX            (RID_APP_START + 50) //starmath/inc/starmath.hrc
+#define SC_RESOURCE_START           (RID_APP_START+5000) //sc/inc/sc.hrc
+#define RID_OBJECTBAR_APP           (SC_RESOURCE_START)
+#define RID_OBJECTBAR_FORMAT        (SC_RESOURCE_START+1)
+#define RID_TEXT_TOOLBOX            (SC_RESOURCE_START+5) /*!!name conflict - fix before merge*/
+#define RID_OBJECTBAR_PREVIEW       (SC_RESOURCE_START+6)
+#define RID_OBJECTBAR_TOOLS         (SC_RESOURCE_START+35)
+#define RID_DRAW_OBJECTBAR          (SC_RESOURCE_START+53)
+#define RID_GRAPHIC_OBJECTBAR       (SC_RESOURCE_START+54)
+#define RID_MEDIA_OBJECTBAR         (SC_RESOURCE_START+60)
+#define RID_BASICIDE_OBJECTBAR      (RID_BASICIDE_START +  0) //basctl/inc/basidesh.hrc
+#define RC_BASE                      RID_SW_START//sw/inc/rcid.hrc - 20000
+#define RC_WEB                      (RC_BASE + 400)
+#define RC_VIEW                     (RC_BASE + 600)
+#define RC_SHELLS                   (RC_BASE + 3250)
+#define RC_WEB_BEGIN                 RC_WEB
+#define RC_VIEW_BEGIN                RC_VIEW
+#define RC_SHELLS_BEGIN              RC_SHELLS
+#define RID_TEXT_TOOLBOX            (RC_SHELLS_BEGIN +  15) /*!!name conflict - fix before merge*/
+#define RID_TABLE_TOOLBOX           (RC_SHELLS_BEGIN +  16)
+#define RID_FRAME_TOOLBOX           (RC_SHELLS_BEGIN +  17)
+#define RID_GRAFIK_TOOLBOX          (RC_SHELLS_BEGIN +  18)
+#define RID_DRAW_TOOLBOX            (RC_SHELLS_BEGIN +  19) /*!!name conflict - fix before merge*/
+#define RID_DRAW_TEXT_TOOLBOX       (RC_SHELLS_BEGIN +  20) /*!!name conflict - fix before merge*/
+#define RID_NUM_TOOLBOX             (RC_SHELLS_BEGIN +  21)
+#define RID_OLE_TOOLBOX             (RC_SHELLS_BEGIN +  22)
+#define RID_TOOLS_TOOLBOX           (RC_SHELLS_BEGIN +  23)
+#define RID_BEZIER_TOOLBOX          (RC_SHELLS_BEGIN +  33) /*!!name conflict - fix before merge*/
+#define RID_MODULE_TOOLBOX          (RC_SHELLS_BEGIN + 60)
+#define RID_MEDIA_TOOLBOX           (RC_SHELLS_BEGIN + 61)
+#define RID_WEBTOOLS_TOOLBOX        (RC_WEB_BEGIN + 2)//sw/source/uibase/inc/web.hrc
+#define RID_WEBTEXT_TOOLBOX         (RC_WEB_BEGIN + 3)
+#define RID_WEBFRAME_TOOLBOX        (RC_WEB_BEGIN + 8)
+#define RID_WEBGRAPHIC_TOOLBOX      (RC_WEB_BEGIN + 10)
+#define RID_WEBOLE_TOOLBOX          (RC_WEB_BEGIN + 11)
+#define RID_PVIEW_TOOLBOX           (RC_VIEW_BEGIN + 31)//sw/source/uibase/uiview/view.hrc
+#define RID_DRAW_TOOLBOX            (SFX_ITEMTYPE_SD_BEGIN + 11)//sd/source/ui/inc/cfgids.hxx /*!!name conflict - fix before merge*/
+#define RID_SLIDE_TOOLBOX           (SFX_ITEMTYPE_SD_BEGIN + 12)
+#define RID_DRAW_OBJ_TOOLBOX        (SFX_ITEMTYPE_SD_BEGIN + 13)
+#define RID_SLIDE_OBJ_TOOLBOX       (SFX_ITEMTYPE_SD_BEGIN + 14)
+#define RID_BEZIER_TOOLBOX          (SFX_ITEMTYPE_SD_BEGIN + 15) /*!!name conflict - fix before merge*/
+#define RID_DRAW_TEXT_TOOLBOX       (SFX_ITEMTYPE_SD_BEGIN + 16) /*!!name conflict - fix before merge*/
+#define RID_OUTLINE_TOOLBOX         (SFX_ITEMTYPE_SD_BEGIN + 17)
+#define RID_GLUEPOINTS_TOOLBOX      (SFX_ITEMTYPE_SD_BEGIN + 19)
+#define RID_DRAW_OPTIONS_TOOLBOX    (SFX_ITEMTYPE_SD_BEGIN + 20)
+#define RID_DRAW_COMMONTASK_TOOLBOX (SFX_ITEMTYPE_SD_BEGIN + 21)
+#define RID_FORMLAYER_TOOLBOX       (SFX_ITEMTYPE_SD_BEGIN + 22)
+#define RID_DRAW_VIEWER_TOOLBOX     (SFX_ITEMTYPE_SD_BEGIN + 23)
+#define RID_GRAPHIC_OBJ_TOOLBOX     (SFX_ITEMTYPE_SD_BEGIN + 27)
+#define RID_DRAW_GRAF_TOOLBOX       (SFX_ITEMTYPE_SD_BEGIN + 30)
+#define RID_DRAW_MEDIA_TOOLBOX      (SFX_ITEMTYPE_SD_BEGIN + 31)
+
 struct ResIdToResName
 {
     sal_uInt16      nId;
@@ -66,75 +121,62 @@ struct ResIdToResName
 
 static const ResIdToResName pToolBarResToName[] =
 {
-    // OMG! hardcoded numbers that have nice (?) symbolic names
-    // elsewhere.
-    { 558,      "fullscreenbar"        }, // This 558 for instance equals RID_FULLSCREENTOOLBOX (in
-                                          // value, and presumably also in semantics) from app.hrc in
-                                          // this very same directory, so why RID_FULLSCREENTOOLBOX
-                                          // can't be used I have no idea.
-
-    { 560,      "standardbar",         }, // 560 is called RID_ENVTOOLBOX in app.hrc, still the same?
-
-    { 18001,    "formsnavigationbar"   }, // Probably the rest are defined in .hrc files that are higher
-                                          // up in the dependency chain and/or later in the build order,
-                                          // and that is the (bad) reason why their symbolic names are
-                                          // not available? Would it really be so awful to move the .hrc
-                                          // files in question out from the modules where they now are?
-
-    { 18002,    "formsfilterbar"       },
-    { 18003,    "formtextobjectbar"    },
-    { 18004,    "formcontrols"         },
-    { 18005,    "moreformcontrols"     },
-    { 18006,    "formdesign"           },
-    { 20050,    "toolbar"              },      //math
-    { 30001,    "objectbar"            },      //chart
-    { 30513,    "toolbar"              },      //chart
-    { 25005,    "textobjectbar"        },      //calc
-    { 25053,    "drawobjectbar"        },
-    { 25054,    "graphicobjectbar"     },
-    { 25001,    "formatobjectbar"      },
-    { 25006,    "previewbar"           },
-    { 25035,    "toolbar"              },      //calc
-    { 23015,    "bezierobjectbar"      },      //draw/impress
-    { 23019,    "gluepointsobjectbar"  },
-    { 23030,    "graphicobjectbar"     },
-    { 23013,    "drawingobjectbar"     },      //impress
-    { 23016,    "textobjectbar"        },      //impress
-    { 23011,    "toolbar"              },      //impress
-    { 23020,    "optionsbar"           },
-    { 23021,    "commontaskbar"        },
-    { 23027,    "drawingobjectbar"     },      //draw
-    { 23017,    "outlinetoolbar"       },      //impress
-    { 23012,    "slideviewtoolbar"     },
-    { 23014,    "slideviewobjectbar"   },
-    { 23283,    "bezierobjectbar"      },      // RID_BEZIER_TOOLBOX
-    { 23269,    "drawingobjectbar"     },      // RID_DRAW_TOOLBOX
-    { 23270,    "drawtextobjectbar"    },      // RID_DRAW_TEXT_TOOLBOX
-    { 23267,    "frameobjectbar"       },      // RID_FRAME_TOOLBOX
-    { 23268,    "graphicobjectbar"     },      // RID_GRAFIK_TOOLBOX
-    { 23271,    "numobjectbar"         },      // RID_NUM_TOOLBOX
-    { 23272,    "oleobjectbar"         },      // RID_OLE_TOOLBOX
-    { 23266,    "tableobjectbar"       },      // RID_TOOLS_TOOLBOX
-    { 23265,    "textobjectbar"        },      // RID_TEXT_TOOLBOX
-    { 20631,    "previewobjectbar"     },      //writer
-    { 20402,    "toolbar"              },      //web
-    { 20403,    "textobjectbar"        },
-    { 23273,    "toolbar"              },      //writer
-    { 20408,    "frameobjectbar"       },      //web
-    { 20410,    "graphicobjectbar"     },
-    { 20411,    "oleobjectbar"         },
-    { 14850,    "macrobar"             },
-    { 10987,    "fontworkobjectbar"    },      //global
-    { 10986,    "extrusionobjectbar"   },
-    { 23022,    "formsobjectbar"       },
-    { 23310,    "viewerbar"            },      //writer (plugin)
-    { 25000,    "viewerbar"            },      //calc   (plugin)
-    { 23023,    "viewerbar"            },      //impress(plugin)
-    { 23031,    "mediaobjectbar"       },      //draw/impress
-    { 25060,    "mediaobjectbar"       },      //calc
-    { 23311,    "mediaobjectbar"       },      //writer
-    { 23313,    "navigationobjectbar"  },      //writer
-    { 0,        ""                     }
+    { RID_FULLSCREENTOOLBOX,       "fullscreenbar"        },
+    { RID_ENVTOOLBOX,              "standardbar",         },
+    { RID_SVXTBX_FORM_NAVIGATION,  "formsnavigationbar"   },
+    { RID_SVXTBX_FORM_FILTER,      "formsfilterbar"       },
+    { RID_SVXTBX_TEXT_CONTROL_ATTRIBUTES, "formtextobjectbar"    },
+    { RID_SVXTBX_CONTROLS,         "formcontrols"         },
+    { RID_SVXTBX_MORECONTROLS,     "moreformcontrols"     },
+    { RID_SVXTBX_FORMDESIGN,       "formdesign"           },
+    { RID_MATH_TOOLBOX,            "toolbar"              },      //math
+    { 30001,                       "objectbar"            },      //chart
+    { 30513,                       "toolbar"              },      //chart
+    { RID_TEXT_TOOLBOX,            "textobjectbar"        },      //calc
+    { RID_DRAW_OBJECTBAR,          "drawobjectbar"        },
+    { RID_GRAPHIC_OBJECTBAR,       "graphicobjectbar"     },
+    { RID_OBJECTBAR_FORMAT,        "formatobjectbar"      },
+    { RID_OBJECTBAR_PREVIEW,       "previewbar"           },
+    { RID_OBJECTBAR_TOOLS,         "toolbar"              },      //calc
+    { RID_BEZIER_TOOLBOX,          "bezierobjectbar"      },      //draw/impress
+    { RID_GLUEPOINTS_TOOLBOX,      "gluepointsobjectbar"  },
+    { RID_DRAW_GRAF_TOOLBOX,       "graphicobjectbar"     },
+    { RID_DRAW_OBJ_TOOLBOX,        "drawingobjectbar"     },      //impress
+    { RID_DRAW_TEXT_TOOLBOX,       "textobjectbar"        },      //impress
+    { RID_DRAW_TOOLBOX,            "toolbar"              },      //impress
+    { RID_DRAW_OPTIONS_TOOLBOX,    "optionsbar"           },
+    { RID_DRAW_COMMONTASK_TOOLBOX, "commontaskbar"        },
+    { RID_GRAPHIC_OBJ_TOOLBOX,     "drawingobjectbar"     },      //draw
+    { RID_OUTLINE_TOOLBOX,         "outlinetoolbar"       },      //impress
+    { RID_SLIDE_TOOLBOX,           "slideviewtoolbar"     },
+    { RID_SLIDE_OBJ_TOOLBOX,       "slideviewobjectbar"   },
+    { RID_BEZIER_TOOLBOX,          "bezierobjectbar"      },      // RID_BEZIER_TOOLBOX
+    { RID_DRAW_TOOLBOX,            "drawingobjectbar"     },      // RID_DRAW_TOOLBOX
+    { RID_DRAW_TEXT_TOOLBOX,       "drawtextobjectbar"    },      // RID_DRAW_TEXT_TOOLBOX
+    { RID_FRAME_TOOLBOX,           "frameobjectbar"       },      // RID_FRAME_TOOLBOX
+    { RID_GRAFIK_TOOLBOX,          "graphicobjectbar"     },      // RID_GRAFIK_TOOLBOX
+    { RID_NUM_TOOLBOX,             "numobjectbar"         },      // RID_NUM_TOOLBOX
+    { RID_OLE_TOOLBOX,             "oleobjectbar"         },      // RID_OLE_TOOLBOX
+    { RID_TABLE_TOOLBOX,           "tableobjectbar"       },      // RID_TOOLS_TOOLBOX
+    { RID_TEXT_TOOLBOX,            "textobjectbar"        },      // RID_TEXT_TOOLBOX
+    { RID_PVIEW_TOOLBOX,           "previewobjectbar"     },      //writer
+    { RID_WEBTOOLS_TOOLBOX,        "toolbar"              },      //web
+    { RID_WEBTEXT_TOOLBOX,         "textobjectbar"        },
+    { RID_TOOLS_TOOLBOX,           "toolbar"              },      //writer
+    { RID_WEBFRAME_TOOLBOX,        "frameobjectbar"       },      //web
+    { RID_WEBGRAPHIC_TOOLBOX,      "graphicobjectbar"     },
+    { RID_WEBOLE_TOOLBOX,          "oleobjectbar"         },
+    { RID_BASICIDE_OBJECTBAR,      "macrobar"             },
+    { RID_SVX_FONTWORK_BAR,        "fontworkobjectbar"    },      //global
+    { RID_SVX_EXTRUSION_BAR,       "extrusionobjectbar"   },
+    { RID_FORMLAYER_TOOLBOX,       "formsobjectbar"       },
+    { RID_MODULE_TOOLBOX,          "viewerbar"            },      //writer (plugin)
+    { RID_OBJECTBAR_APP,           "viewerbar"            },      //calc   (plugin)
+    { RID_DRAW_VIEWER_TOOLBOX,     "viewerbar"            },      //impress(plugin)
+    { RID_DRAW_MEDIA_TOOLBOX,      "mediaobjectbar"       },      //draw/impress
+    { RID_MEDIA_OBJECTBAR,         "mediaobjectbar"       },      //calc
+    { RID_MEDIA_TOOLBOX,           "mediaobjectbar"       },      //writer
+    { 0,                           ""                     }
 };
 
 //SV_IMPL_OBJARR( SfxObjectBarArr_Impl, SfxObjectBar_Impl );
