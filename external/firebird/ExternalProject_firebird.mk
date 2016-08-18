@@ -78,7 +78,6 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 		&& export $(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}":$(call gb_UnpackedTarball_get_dir,icu)/source/lib" \
 		&& MAKE=$(MAKE) ./configure \
 			--without-editline \
-			--without-fbsample --without-fbsample-db \
 			--with-wire-compress=no \
 			$(if $(filter-out MSC,$(COM)),$(if $(ENABLE_DEBUG),--enable-debug)) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
