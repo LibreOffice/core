@@ -1,0 +1,63 @@
+--- configure
++++ configure
+@@ -18402,44 +18402,6 @@
+ fi
+ 
+ 
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -licuuc" >&5
+-$as_echo_n "checking for main in -licuuc... " >&6; }
+-if ${ac_cv_lib_icuuc_main+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  ac_check_lib_save_LIBS=$LIBS
+-LIBS="-licuuc  $LIBS"
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-
+-int
+-main ()
+-{
+-return main ();
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_link "$LINENO"; then :
+-  ac_cv_lib_icuuc_main=yes
+-else
+-  ac_cv_lib_icuuc_main=no
+-fi
+-rm -f core conftest.err conftest.$ac_objext \
+-    conftest$ac_exeext conftest.$ac_ext
+-LIBS=$ac_check_lib_save_LIBS
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_icuuc_main" >&5
+-$as_echo "$ac_cv_lib_icuuc_main" >&6; }
+-if test "x$ac_cv_lib_icuuc_main" = xyes; then :
+-  ICU_OK=yes
+-else
+-  as_fn_error $? "ICU support not found - please install development ICU package" "$LINENO" 5
+-fi
+-
+-
+-
+ pre_save_restore_cflags=$CFLAGS
+ pre_save_restore_cxxflags=$CXXFLAGS
+ pre_save_restore_libs=$LIBS
+--- src/common/unicode_util.cpp
++++ src/common/unicode_util.cpp
+@@ -58,8 +58,13 @@
+ 
+ namespace {
+ #if defined(WIN_NT)
++#if defined(MSVC_USE_DEBUG_RUNTIME)
++const char* const inTemplate = "icuind%s.dll";
++const char* const ucTemplate = "icuucd%s.dll";
++#else
+ const char* const inTemplate = "icuin%s.dll";
+ const char* const ucTemplate = "icuuc%s.dll";
++#endif
+ #elif defined(DARWIN)
+ //const char* const inTemplate = "/Library/Frameworks/Firebird.framework/Versions/A/Libraries/libicui18n.dylib";
+ //const char* const ucTemplate = "/Library/Frameworks/Firebird.framework/versions/A/Libraries/libicuuc.dylib";
