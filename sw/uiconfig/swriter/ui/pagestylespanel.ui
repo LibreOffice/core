@@ -146,6 +146,7 @@
         </child>
         <child>
           <object class="svxlo-SvxFillAttrBox" id="lbhatching">
+            <property name="width_request">150</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
@@ -158,6 +159,7 @@
         </child>
         <child>
           <object class="svxlo-SvxFillAttrBox" id="lbbitmap">
+            <property name="width_request">150</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
@@ -170,6 +172,7 @@
         </child>
         <child>
           <object class="svxlo-ColorLB" id="lbcolor">
+            <property name="width_request">150</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
@@ -182,6 +185,7 @@
         </child>
         <child>
           <object class="svxlo-ColorLB" id="lbgradient">
+            <property name="width_request">150</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
