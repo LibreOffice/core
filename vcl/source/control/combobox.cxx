@@ -355,10 +355,10 @@ IMPL_LINK_TYPED(ComboBox::Impl, ImplAutocompleteHdl, Edit&, rEdit, void)
         if (!m_isMatchCase)
         {
             // Try match case insensitive from current position
-            nPos = m_pImplLB->GetEntryList()->FindMatchingEntry(aStartText, nStart, true);
+            nPos = m_pImplLB->GetEntryList()->FindMatchingEntry(aStartText, nStart);
             if ( nPos == LISTBOX_ENTRY_NOTFOUND )
                 // Try match case insensitive, but from start
-                nPos = m_pImplLB->GetEntryList()->FindMatchingEntry(aStartText, 0, true);
+                nPos = m_pImplLB->GetEntryList()->FindMatchingEntry(aStartText);
         }
 
         if ( nPos == LISTBOX_ENTRY_NOTFOUND )
