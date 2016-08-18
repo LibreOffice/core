@@ -279,13 +279,13 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window*
 
     mbLeftButtonDown = (rMEvt.GetClicks() == 1) && rMEvt.IsLeft();
 
-    if( eHit == SDRTABLEHIT_CELL )
+    if( eHit == TableHitKind::Cell )
     {
         StartSelection( maMouseDownPos );
         return true;
     }
 
-    if( rMEvt.IsRight() && eHit != SDRTABLEHIT_NONE )
+    if( rMEvt.IsRight() && eHit != TableHitKind::NONE )
         return true; // right click will become context menu
 
     // for cell selection with the mouse remember our first hit
@@ -303,14 +303,14 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window*
         {
             sdr::table::SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
 
-            if( !pWindow || !pTableObj || eHit  == SDRTABLEHIT_NONE)
+            if( !pWindow || !pTableObj || eHit  == TableHitKind::NONE)
             {
                 mbLeftButtonDown = false;
             }
         }
     }
 
-    if (comphelper::LibreOfficeKit::isActive() && rMEvt.GetClicks() == 2 && rMEvt.IsLeft() && eHit == SDRTABLEHIT_CELLTEXTAREA)
+    if (comphelper::LibreOfficeKit::isActive() && rMEvt.GetClicks() == 2 && rMEvt.IsLeft() && eHit == TableHitKind::CellTextArea)
     {
         bool bEmptyOutliner = false;
         if (Outliner* pOutliner = mpView->GetTextEditOutliner())
@@ -357,7 +357,7 @@ bool SvxTableController::onMouseMove(const MouseEvent& rMEvt, vcl::Window* pWind
 
     SdrTableObj* pTableObj = dynamic_cast< SdrTableObj* >( mxTableObj.get() );
     CellPos aPos;
-    if (mbLeftButtonDown && pTableObj && pTableObj->CheckTableHit(pixelToLogic(rMEvt.GetPosPixel(), pWindow), aPos.mnCol, aPos.mnRow ) != SDRTABLEHIT_NONE)
+    if (mbLeftButtonDown && pTableObj && pTableObj->CheckTableHit(pixelToLogic(rMEvt.GetPosPixel(), pWindow), aPos.mnCol, aPos.mnRow ) != TableHitKind::NONE)
     {
         if(aPos != maMouseDownPos)
         {
@@ -3145,7 +3145,7 @@ bool SvxTableController::setCursorLogicPosition(const Point& rPosition, bool bPo
 
     SdrTableObj* pTableObj = static_cast<SdrTableObj*>(mxTableObj.get());
     CellPos aCellPos;
-    if (pTableObj->CheckTableHit(rPosition, aCellPos.mnCol, aCellPos.mnRow) != SDRTABLEHIT_NONE)
+    if (pTableObj->CheckTableHit(rPosition, aCellPos.mnCol, aCellPos.mnRow) != TableHitKind::NONE)
     {
         // Position is a table cell.
         if (mbCellSelectionMode)

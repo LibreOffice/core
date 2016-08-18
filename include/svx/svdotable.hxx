@@ -48,13 +48,13 @@ struct ImplTableShadowPaintInfo;
 
 
 /// SdrTableHitKind
-enum TableHitKind
+enum class TableHitKind
 {
-    SDRTABLEHIT_NONE,
-    SDRTABLEHIT_CELL,
-    SDRTABLEHIT_CELLTEXTAREA,
-    SDRTABLEHIT_HORIZONTAL_BORDER,
-    SDRTABLEHIT_VERTICAL_BORDER
+    NONE,
+    Cell,
+    CellTextArea,
+    HorizontalBorder,
+    VerticallBorder
 };
 
 

@@ -363,10 +363,10 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
             sal_Int32 nX = 0, nY = 0;
             switch( pTableObj->CheckTableHit( aLocalLogicPosition, nX, nY ) )
             {
-                case sdr::table::SDRTABLEHIT_CELL:
+                case sdr::table::TableHitKind::Cell:
                     eHit = SDRHIT_CELL;
                     break;
-                case sdr::table::SDRTABLEHIT_CELLTEXTAREA:
+                case sdr::table::TableHitKind::CellTextArea:
                     eHit = SDRHIT_TEXTEDITOBJ;
                     break;
                 default:
@@ -384,10 +384,10 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
             sal_Int32 nX = 0, nY = 0;
             switch( pTableObj->CheckTableHit( aLocalLogicPosition, nX, nY, mnHitTolLog ) )
             {
-                case sdr::table::SDRTABLEHIT_CELL:
+                case sdr::table::TableHitKind::Cell:
                     eHit = SDRHIT_CELL;
                     break;
-                case sdr::table::SDRTABLEHIT_CELLTEXTAREA:
+                case sdr::table::TableHitKind::CellTextArea:
                     eHit = SDRHIT_TEXTEDITOBJ;
                     break;
                 default:

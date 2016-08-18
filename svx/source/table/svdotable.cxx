@@ -1054,7 +1054,7 @@ void SdrTableObj::setTableStyleSettings( const TableStyleSettings& rStyle )
 TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_Int32& rnY, const sal_uInt16 aTol ) const
 {
     if( !mpImpl.is() || !mpImpl->mxTable.is() )
-        return SDRTABLEHIT_NONE;
+        return TableHitKind::NONE;
 
     rnX = 0;
     rnY = 0;
@@ -1066,7 +1066,7 @@ TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_
     sal_Int32 nY = rPos.Y() - maRect.Top();
 
     if( (nX < 0) || (nX > maRect.GetWidth()) || (nY < 0) || (nY > maRect.GetHeight() ) )
-        return SDRTABLEHIT_NONE;
+        return TableHitKind::NONE;
 
     // get vertical edge number and check for a hit
     const bool bRTL = (GetWritingMode() == WritingMode_RL_TB);
@@ -1141,10 +1141,10 @@ TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_
     // rnY is now the edge number above the pointer, if it was hit bVrtHit is also true
 
     if( bVrtHit && mpImpl->mpLayouter->isEdgeVisible( rnX, rnY, false ) )
-        return SDRTABLEHIT_VERTICAL_BORDER;
+        return TableHitKind::VerticallBorder;
 
     if( bHrzHit && mpImpl->mpLayouter->isEdgeVisible( rnX, rnY, true ) )
-        return SDRTABLEHIT_HORIZONTAL_BORDER;
+        return TableHitKind::HorizontalBorder;
 
     CellRef xCell( mpImpl->getCell( CellPos( rnX, rnY ) ) );
     if( xCell.is() && xCell->isMerged() )
@@ -1166,10 +1166,10 @@ TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_
         }
 
         if( nX < xCell->GetTextLeftDistance() )
-            return SDRTABLEHIT_CELL;
+            return TableHitKind::Cell;
     }
 
-    return SDRTABLEHIT_CELLTEXTAREA;
+    return TableHitKind::CellTextArea;
 }
 
 const SfxItemSet& SdrTableObj::GetActiveCellItemSet() const
@@ -1271,7 +1271,7 @@ sal_Int32 SdrTableObj::CheckTextHit(const Point& rPnt) const
     if( mpImpl.is() && mpImpl->mxTable.is() )
     {
         CellPos aPos;
-        if( CheckTableHit( rPnt, aPos.mnCol, aPos.mnRow ) == SDRTABLEHIT_CELLTEXTAREA )
+        if( CheckTableHit( rPnt, aPos.mnCol, aPos.mnRow ) == TableHitKind::CellTextArea )
             return aPos.mnRow * mpImpl->mxTable->getColumnCount() + aPos.mnCol;
     }
 
