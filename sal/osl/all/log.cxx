@@ -202,14 +202,17 @@ bool report(sal_detail_LogLevel level, char const * area) {
         // no matching switches at all, the result will be negative (and
         // initializing with 1 is safe as the length of a valid switch, even
         // without the "+"/"-" prefix, will always be > 1)
+    bool seenWarn = false;
     for (char const * p = env;;) {
         Sense sense;
         switch (*p++) {
         case '\0':
+            // if a specific item is both positive and negative
+            // (senseLen[POSITIVE] == senseLen[NEGATIVE]), default to
+            // positive
+            if (level == SAL_DETAIL_LOG_LEVEL_WARN && !seenWarn)
+                return report(SAL_DETAIL_LOG_LEVEL_INFO, area);
             return senseLen[POSITIVE] >= senseLen[NEGATIVE];
-                // if a specific item is both positive and negative
-                // (senseLen[POSITIVE] == senseLen[NEGATIVE]), default to
-                // positive
         case '+':
             sense = POSITIVE;
             break;
@@ -229,6 +232,7 @@ bool report(sal_detail_LogLevel level, char const * area) {
         } else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("WARN")))
         {
             match = level == SAL_DETAIL_LOG_LEVEL_WARN;
+            seenWarn = true;
         } else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("TIMESTAMP")) ||
                    equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("RELATIVETIMER")))
         {

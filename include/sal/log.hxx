@@ -262,6 +262,9 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     that has a sense of "+".  (That is, if both +INFO.foo and -INFO.foo are
     present, +INFO.foo wins.)
 
+    If no WARN selection is specified, but an INFO selection is, the
+    INFO selection is used for WARN messages, too.
+
     For example, if SAL_LOG is "+INFO-INFO.foo+INFO.foo.bar", then calls like
     SAL_INFO("foo.bar", ...), SAL_INFO("foo.bar.baz", ...), or
     SAL_INFO("other", ...) generate output, while calls like
