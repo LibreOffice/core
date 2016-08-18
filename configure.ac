@@ -6449,6 +6449,23 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
 fi
 AC_SUBST(HAVE_GCC_PRAGMA_OPERATOR)
 
+HAVE_GCC_FNO_FNO_SIZED_DEALLOCATION=
+if test "$GCC" = yes; then
+    AC_MSG_CHECKING([whether $CXX supports -fno-sized-deallocation])
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS -fno-sized-deallocation"
+    AC_LINK_IFELSE([AC_LANG_PROGRAM()],[HAVE_GCC_FNO_SIZED_DEALLOCATION=TRUE])
+    CXXFLAGS=$save_CXXFLAGS
+    AC_LANG_POP([C++])
+    if test "$HAVE_GCC_FNO_SIZED_DEALLOCATION" = TRUE; then
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_RESULT([no])
+    fi
+fi
+AC_SUBST([HAVE_GCC_FNO_SIZED_DEALLOCATION])
+
 dnl ===================================================================
 dnl system stl sanity tests
 dnl ===================================================================
