@@ -109,6 +109,7 @@ SlideBackground::SlideBackground(
     mbEditModeChangePending(false),
     mxFrame(rxFrame),
     maContext(),
+    maApplication(vcl::EnumContext::Application_None),
     mbTitle(false),
     mpBindings(pBindings)
 {
