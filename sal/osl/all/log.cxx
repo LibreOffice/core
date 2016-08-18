@@ -105,6 +105,55 @@ char const * getEnvironmentVariable() {
     return env;
 }
 
+void maybeOutputTimestamp(std::ostringstream &s) {
+    char const * env = getEnvironmentVariable();
+    if (env == nullptr)
+        return;
+    for (char const * p = env;;) {
+        switch (*p++) {
+        case '\0':
+            return;
+        case '+':
+            {
+                char const * p1 = p;
+                while (*p1 != '.' && *p1 != '+' && *p1 != '-' && *p1 != '\0') {
+                    ++p1;
+                }
+                if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("TIMESTAMP"))) {
+                    char ts[100];
+                    TimeValue systemTime;
+                    osl_getSystemTime(&systemTime);
+                    TimeValue localTime;
+                    osl_getLocalTimeFromSystemTime(&systemTime, &localTime);
+                    oslDateTime dateTime;
+                    osl_getDateTimeFromTimeValue(&localTime, &dateTime);
+                    struct tm tm;
+                    tm.tm_sec = dateTime.Seconds;
+                    tm.tm_min = dateTime.Minutes;
+                    tm.tm_hour = dateTime.Hours;
+                    tm.tm_mday = dateTime.Day;
+                    tm.tm_mon = dateTime.Month - 1;
+                    tm.tm_year = dateTime.Year - 1900;
+                    strftime(ts, sizeof(ts), "%Y-%m-%d:%H:%M:%S", &tm);
+                    char milliSecs[10];
+                    sprintf(milliSecs, "%03d", dateTime.NanoSeconds/1000000);
+                    s << ts << '.' << milliSecs << ':';
+                    return;
+                }
+                char const * p2 = p1;
+                while (*p2 != '+' && *p2 != '-' && *p2 != '\0') {
+                    ++p2;
+                }
+                p = p2;
+            }
+            break;
+        default:
+            ; // nothing
+        }
+    }
+    return;
+}
+
 #endif
 
 namespace {
@@ -119,7 +168,7 @@ bool report(sal_detail_LogLevel level, char const * area) {
         return true;
     assert(area != nullptr);
     char const * env = getEnvironmentVariable();
-    if (env == nullptr) {
+    if (env == nullptr || strcmp(env, "+TIMESTAMP") == 0) {
         env = "+WARN";
     }
     std::size_t areaLen = std::strlen(area);
@@ -156,6 +205,10 @@ bool report(sal_detail_LogLevel level, char const * area) {
         } else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("WARN")))
         {
             match = level == SAL_DETAIL_LOG_LEVEL_WARN;
+        } else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("TIMESTAMP")))
+        {
+            // handled later
+            match = false;
         } else {
             return true;
                 // upon an illegal SAL_LOG value, everything is considered
@@ -190,8 +243,9 @@ void log(
     std::ostringstream s;
 #if !defined ANDROID
     // On Android, the area will be used as the "tag," and log info already
-    // contains the PID
+    // contains timestamp and PID.
     if (!sal_use_syslog) {
+        maybeOutputTimestamp(s);
         s << toString(level) << ':';
     }
     if (!isDebug(level)) {

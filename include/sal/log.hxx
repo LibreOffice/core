@@ -228,15 +228,21 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     with
 
     @verbatim
-      <switch> ::= <sense><level>("."<area>)?
+      <switch> ::= <sense><item>
       <sense> ::= "+"|"-"
+      <item> ::= <flag>|<level>("."<area>)?
+      <flag> ::= "TIMESTAMP"
       <level> ::= "INFO"|"WARN"
     @endverbatim
 
-    If the environment variable is unset, "+WARN" is used instead (which results
-    in all warnings being output but no infos).  If the given value does not
-    match the regular expression, "+INFO+WARN" is used instead (which in turn
-    results in everything being output).
+    If the environment variable is unset, or contains no level, the level
+    setting "+WARN" is assumed instead (which results in all warnings being
+    output but no infos).  If the given value does not match the regular
+    expression, "+INFO+WARN" is used instead (which in turn results in
+    everything being output).
+
+    The "+TIMESTAMP" flag causes each output line (as selected by the level
+    switch(es)) to be prefixed by a timestamp like 2016-08-18:14:04:43.672.
 
     A given macro call's level (INFO or WARN) and area is matched against the
     given switches as follows:  Only those switches for which the level matches
@@ -251,12 +257,12 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     SAL_INFO("other", ...) generate output, while calls like
     SAL_INFO("foo", ...) or SAL_INFO("foo.barzzz", ...) do not.
 
-    The generated log output consists of the given level ("info" or "warn"), the
-    given area, the process ID, the thread ID, the source file, and the source
-    line number, each followed by a colon, followed by a space, the given
-    message, and a newline.  The precise format of the log output is subject to
-    change.  The log output is printed to stderr without further text encoding
-    conversion.
+    The generated log output consists of the optinal timestamp, the given level
+    ("info" or "warn"), the given area, the process ID, the thread ID, the
+    source file, and the source line number, each followed by a colon, followed
+    by a space, the given message, and a newline.  The precise format of the log
+    output is subject to change.  The log output is printed to stderr without
+    further text encoding conversion.
 
     @see @ref sal_log_areas
 
