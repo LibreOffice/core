@@ -810,12 +810,13 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 XMLPersAttrListTContext *pSymbolImageContext = new XMLPersAttrListTContext(
                     GetTransformer(), GetTransformer().GetNamespaceMap().GetQNameByKey(
                         XML_NAMESPACE_CHART, GetXMLToken( XML_SYMBOL_IMAGE )));
+                rtl::Reference<XMLTransformerContext> xSymbolImageContext(pSymbolImageContext);
 
                 OUString aAttrValue( sAttrValue );
                 if( GetTransformer().ConvertURIToOASIS( aAttrValue, true ))
                 {
                     pSymbolImageContext->AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aAttrValue );
-                    pContext->AddContent( pSymbolImageContext );
+                    pContext->AddContent(xSymbolImageContext);
                 }
             }
             break;
