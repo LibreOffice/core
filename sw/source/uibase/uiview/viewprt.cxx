@@ -65,6 +65,7 @@
 #include <svl/slstitm.hxx>
 
 #include <unomid.h>
+#include <uivwimp.hxx>
 
 using namespace ::com::sun::star;
 
@@ -266,6 +267,16 @@ void SwView::dumpAsXml(xmlTextWriterPtr pWriter) const
     if (m_pWrtShell)
         m_pWrtShell->dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
+}
+
+void SwView::SetRedlineAuthor(const OUString& rAuthor)
+{
+    m_pViewImpl->m_sRedlineAuthor = rAuthor;
+}
+
+const OUString& SwView::GetRedlineAuthor()
+{
+    return m_pViewImpl->m_sRedlineAuthor;
 }
 
 // Create page printer/additions for SwView and SwPagePreview

@@ -646,6 +646,8 @@ public:
     int getPart() const override;
     /// See SfxViewShell::dumpAsXml().
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    void SetRedlineAuthor(const OUString& rAuthor);
+    const OUString& GetRedlineAuthor();
 };
 
 inline long SwView::GetXScroll() const

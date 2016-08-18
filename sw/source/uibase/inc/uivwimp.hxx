@@ -119,6 +119,9 @@ class SwView_Impl
     bool                        m_bEditingPositionSet;
 
 public:
+    /// Redline author that's specific to this view.
+    OUString m_sRedlineAuthor;
+
     SwView_Impl(SwView* pShell);
     ~SwView_Impl();
 
