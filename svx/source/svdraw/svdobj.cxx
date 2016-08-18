@@ -361,7 +361,7 @@ SdrObject::~SdrObject()
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    SendUserCall(SDRUSERCALL_DELETE, GetLastBoundRect());
+    SendUserCall(SdrUserCallType::Delete, GetLastBoundRect());
     delete pPlusData;
 
     delete pGrabBagItem;
@@ -1483,7 +1483,7 @@ void SdrObject::Move(const Size& rSiz)
         NbcMove(rSiz);
         SetChanged();
         BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_MOVEONLY,aBoundRect0);
+        SendUserCall(SdrUserCallType::MoveOnly,aBoundRect0);
     }
 }
 
@@ -1505,7 +1505,7 @@ void SdrObject::Resize(const Point& rRef, const Fraction& xFact, const Fraction&
         NbcResize(rRef,xFact,yFact);
         SetChanged();
         BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
     }
 }
 
@@ -1515,7 +1515,7 @@ void SdrObject::Crop(const Point& rRef, const Fraction& xFact, const Fraction& y
     NbcCrop(rRef, xFact, yFact);
     SetChanged();
     BroadcastObjectChange();
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+    SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
 void SdrObject::Rotate(const Point& rRef, long nAngle, double sn, double cs)
@@ -1525,7 +1525,7 @@ void SdrObject::Rotate(const Point& rRef, long nAngle, double sn, double cs)
         NbcRotate(rRef,nAngle,sn,cs);
         SetChanged();
         BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
     }
 }
 
@@ -1535,7 +1535,7 @@ void SdrObject::Mirror(const Point& rRef1, const Point& rRef2)
     NbcMirror(rRef1,rRef2);
     SetChanged();
     BroadcastObjectChange();
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+    SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
 void SdrObject::Shear(const Point& rRef, long nAngle, double tn, bool bVShear)
@@ -1545,7 +1545,7 @@ void SdrObject::Shear(const Point& rRef, long nAngle, double tn, bool bVShear)
         NbcShear(rRef,nAngle,tn,bVShear);
         SetChanged();
         BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
     }
 }
 
@@ -1563,7 +1563,7 @@ void SdrObject::SetRelativePos(const Point& rPnt)
         NbcSetRelativePos(rPnt);
         SetChanged();
         BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_MOVEONLY,aBoundRect0);
+        SendUserCall(SdrUserCallType::MoveOnly,aBoundRect0);
     }
 }
 
@@ -1591,7 +1591,7 @@ void SdrObject::SetAnchorPos(const Point& rPnt)
         NbcSetAnchorPos(rPnt);
         SetChanged();
         BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_MOVEONLY,aBoundRect0);
+        SendUserCall(SdrUserCallType::MoveOnly,aBoundRect0);
     }
 }
 
@@ -1635,7 +1635,7 @@ void SdrObject::SetSnapRect(const Rectangle& rRect)
     NbcSetSnapRect(rRect);
     SetChanged();
     BroadcastObjectChange();
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+    SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
 void SdrObject::SetLogicRect(const Rectangle& rRect)
@@ -1644,7 +1644,7 @@ void SdrObject::SetLogicRect(const Rectangle& rRect)
     NbcSetLogicRect(rRect);
     SetChanged();
     BroadcastObjectChange();
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+    SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
 long SdrObject::GetRotateAngle() const
@@ -1688,7 +1688,7 @@ void SdrObject::SetPoint(const Point& rPnt, sal_uInt32 i)
     NbcSetPoint(rPnt, i);
     SetChanged();
     BroadcastObjectChange();
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+    SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
 void SdrObject::NbcSetPoint(const Point& /*rPnt*/, sal_uInt32 /*i*/)
@@ -1766,7 +1766,7 @@ void SdrObject::SetOutlinerParaObject(OutlinerParaObject* pTextObject)
     SetChanged();
     BroadcastObjectChange();
     if (GetCurrentBoundRect()!=aBoundRect0) {
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
     }
 }
 
@@ -1790,7 +1790,7 @@ void SdrObject::ReformatText()
     SetChanged();
     BroadcastObjectChange();
     if (GetCurrentBoundRect()!=aBoundRect0) {
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
     }
 }
 
@@ -1925,7 +1925,7 @@ void SdrObject::SetGeoData(const SdrObjGeoData& rGeo)
     RestGeoData(rGeo);
     SetChanged();
     BroadcastObjectChange();
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+    SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
 
@@ -1992,7 +1992,7 @@ void SdrObject::ApplyNotPersistAttr(const SfxItemSet& rAttr)
     NbcApplyNotPersistAttr(rAttr);
     SetChanged();
     BroadcastObjectChange();
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+    SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
 void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
@@ -2217,7 +2217,7 @@ void SdrObject::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHar
     NbcSetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
     SetChanged();
     BroadcastObjectChange();
-    SendUserCall(SDRUSERCALL_CHGATTR, aBoundRect0);
+    SendUserCall(SdrUserCallType::ChangeAttr, aBoundRect0);
 }
 
 void SdrObject::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
@@ -2624,8 +2624,8 @@ void SdrObject::SetInserted(bool bIns)
     if (bIns!=IsInserted()) {
         bInserted=bIns;
         Rectangle aBoundRect0(GetLastBoundRect());
-        if (bIns) SendUserCall(SDRUSERCALL_INSERTED,aBoundRect0);
-        else SendUserCall(SDRUSERCALL_REMOVED,aBoundRect0);
+        if (bIns) SendUserCall(SdrUserCallType::Inserted,aBoundRect0);
+        else SendUserCall(SdrUserCallType::Removed,aBoundRect0);
 
         if (pPlusData!=nullptr && pPlusData->pBroadcast!=nullptr) {
             SdrHint aHint(*this);
@@ -2750,36 +2750,36 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundR
         // broadcast to group
         if( pGroup->GetUserCall() )
         {
-            SdrUserCallType eChildUserType = SDRUSERCALL_CHILD_CHGATTR;
+            SdrUserCallType eChildUserType = SdrUserCallType::ChildChangeAttr;
 
             switch( eUserCall )
             {
-                case SDRUSERCALL_MOVEONLY:
-                    eChildUserType = SDRUSERCALL_CHILD_MOVEONLY;
+                case SdrUserCallType::MoveOnly:
+                    eChildUserType = SdrUserCallType::ChildMoveOnly;
                 break;
 
-                case SDRUSERCALL_RESIZE:
-                    eChildUserType = SDRUSERCALL_CHILD_RESIZE;
+                case SdrUserCallType::Resize:
+                    eChildUserType = SdrUserCallType::ChildResize;
                 break;
 
-                case SDRUSERCALL_CHGATTR:
-                    eChildUserType = SDRUSERCALL_CHILD_CHGATTR;
+                case SdrUserCallType::ChangeAttr:
+                    eChildUserType = SdrUserCallType::ChildChangeAttr;
                 break;
 
-                case SDRUSERCALL_DELETE:
-                    eChildUserType = SDRUSERCALL_CHILD_DELETE;
+                case SdrUserCallType::Delete:
+                    eChildUserType = SdrUserCallType::ChildDelete;
                 break;
 
-                case SDRUSERCALL_COPY:
-                    eChildUserType = SDRUSERCALL_CHILD_COPY;
+                case SdrUserCallType::Copy:
+                    eChildUserType = SdrUserCallType::ChildCopy;
                 break;
 
-                case SDRUSERCALL_INSERTED:
-                    eChildUserType = SDRUSERCALL_CHILD_INSERTED;
+                case SdrUserCallType::Inserted:
+                    eChildUserType = SdrUserCallType::ChildInserted;
                 break;
 
-                case SDRUSERCALL_REMOVED:
-                    eChildUserType = SDRUSERCALL_CHILD_REMOVED;
+                case SdrUserCallType::Removed:
+                    eChildUserType = SdrUserCallType::ChildRemoved;
                 break;
 
                 default: break;
@@ -2799,10 +2799,10 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundR
     // notify our UNO shape listeners
     switch ( eUserCall )
     {
-    case SDRUSERCALL_RESIZE:
+    case SdrUserCallType::Resize:
         notifyShapePropertyChange( svx::eShapeSize );
         SAL_FALLTHROUGH; // RESIZE might also imply a change of the position
-    case SDRUSERCALL_MOVEONLY:
+    case SdrUserCallType::MoveOnly:
         notifyShapePropertyChange( svx::eShapePosition );
         break;
     default:

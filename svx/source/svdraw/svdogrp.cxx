@@ -525,7 +525,7 @@ void SdrObjGroup::SetSnapRect(const Rectangle& rRect)
 
     SetChanged();
     BroadcastObjectChange();
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+    SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
 
@@ -559,7 +559,7 @@ void SdrObjGroup::Move(const Size& rSiz)
 
         SetChanged();
         BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_MOVEONLY,aBoundRect0);
+        SendUserCall(SdrUserCallType::MoveOnly,aBoundRect0);
     }
 }
 
@@ -603,7 +603,7 @@ void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fractio
 
         SetChanged();
         BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
     }
 }
 
@@ -629,7 +629,7 @@ void SdrObjGroup::Rotate(const Point& rRef, long nAngle, double sn, double cs)
         SetGlueReallyAbsolute(false);
         SetChanged();
         BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
     }
 }
 
@@ -654,7 +654,7 @@ void SdrObjGroup::Mirror(const Point& rRef1, const Point& rRef2)
     SetGlueReallyAbsolute(false);
     SetChanged();
     BroadcastObjectChange();
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+    SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
 
@@ -679,7 +679,7 @@ void SdrObjGroup::Shear(const Point& rRef, long nAngle, double tn, bool bVShear)
         SetGlueReallyAbsolute(false);
         SetChanged();
         BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
     }
 }
 
@@ -705,7 +705,7 @@ void SdrObjGroup::SetAnchorPos(const Point& rPnt)
     if (bChg) {
         SetChanged();
         BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_MOVEONLY,aBoundRect0);
+        SendUserCall(SdrUserCallType::MoveOnly,aBoundRect0);
     }
 }
 

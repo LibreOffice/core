@@ -215,7 +215,7 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
     pObjArr->pObj = pObj;
 
     // object will destroy itself
-    pDrawContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
+    pDrawContact->Changed( *pObj, SdrUserCallType::Delete, pObj->GetLastBoundRect() );
     pObj->SetUserCall( nullptr );
 
     ::lcl_SaveAnchor( pFormat, pObjArr->nNodeIdx );
@@ -269,7 +269,7 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
         SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
 
         // object will destroy itself
-        pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
+        pContact->Changed( *pObj, SdrUserCallType::Delete, pObj->GetLastBoundRect() );
         pObj->SetUserCall( nullptr );
 
         ::lcl_SaveAnchor( rSave.pFormat, rSave.nNodeIdx );
@@ -333,7 +333,7 @@ SwUndoDrawUnGroup::SwUndoDrawUnGroup( SdrObjGroup* pObj, const SwDoc* pDoc )
     pObjArr->pFormat = pFormat;
 
     // object will destroy itself
-    pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
+    pContact->Changed( *pObj, SdrUserCallType::Delete, pObj->GetLastBoundRect() );
     pObj->SetUserCall( nullptr );
 
     ::lcl_SaveAnchor( pFormat, pObjArr->nNodeIdx );
@@ -407,7 +407,7 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
     SwDrawContact* pContact = static_cast<SwDrawContact*>(pFormat->FindContactObj());
 
         // object will destroy itself
-    pContact->Changed( *pObjArr->pObj, SDRUSERCALL_DELETE,
+    pContact->Changed( *pObjArr->pObj, SdrUserCallType::Delete,
         pObjArr->pObj->GetLastBoundRect() );
     pObjArr->pObj->SetUserCall( nullptr );
 
@@ -467,7 +467,7 @@ SwUndoDrawUnGroupConnectToLayout::UndoImpl(::sw::UndoRedoContext &)
         {
             // deletion of instance <pDrawContact> and thus disconnection from
             // the Writer layout.
-            pDrawContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
+            pDrawContact->Changed( *pObj, SdrUserCallType::Delete, pObj->GetLastBoundRect() );
             pObj->SetUserCall( nullptr );
         }
     }
@@ -523,7 +523,7 @@ void SwUndoDrawDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         rFlyFormats.push_back( rSave.pFormat );
         SdrObject *pObj = rSave.pObj;
         SwDrawContact *pContact = new SwDrawContact( rSave.pFormat, pObj );
-        pContact->Changed_( *pObj, SDRUSERCALL_INSERTED, nullptr );
+        pContact->Changed_( *pObj, SdrUserCallType::Inserted, nullptr );
         // #i45718# - follow-up of #i35635# move object to visible layer
         pContact->MoveObjToVisibleLayer( pObj );
 
@@ -550,7 +550,7 @@ void SwUndoDrawDelete::RedoImpl(::sw::UndoRedoContext & rContext)
         SwDrawFrameFormat *pFormat = static_cast<SwDrawFrameFormat*>(pContact->GetFormat());
 
         // object will destroy itself
-        pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
+        pContact->Changed( *pObj, SdrUserCallType::Delete, pObj->GetLastBoundRect() );
         pObj->SetUserCall( nullptr );
 
            // notify UNO objects to decouple

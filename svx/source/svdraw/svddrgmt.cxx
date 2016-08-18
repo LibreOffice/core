@@ -1409,7 +1409,7 @@ bool SdrDragObjOwn::EndSdrDrag(bool /*bCopy*/)
         {
             pObj->SetChanged();
             pObj->BroadcastObjectChange();
-            pObj->SendUserCall( SDRUSERCALL_RESIZE, aBoundRect0 );
+            pObj->SendUserCall( SdrUserCallType::Resize, aBoundRect0 );
         }
 
         if(bRet)

@@ -691,8 +691,8 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
     {
         switch (eType)
         {
-            case SDRUSERCALL_MOVEONLY:
-            case SDRUSERCALL_RESIZE:
+            case SdrUserCallType::MoveOnly:
+            case SdrUserCallType::Resize:
             {
                 if (!pModel || pModel->isLocked())
                     break;
@@ -737,8 +737,8 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
             }
             break;
 
-            case SDRUSERCALL_DELETE:
-            case SDRUSERCALL_REMOVED:
+            case SdrUserCallType::Delete:
+            case SdrUserCallType::Removed:
             default:
                 break;
         }

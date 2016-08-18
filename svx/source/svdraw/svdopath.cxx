@@ -2805,7 +2805,7 @@ void SdrPathObj::SetPathPoly(const basegfx::B2DPolyPolygon& rPathPoly)
         NbcSetPathPoly(rPathPoly);
         SetChanged();
         BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
     }
 }
 
@@ -2819,7 +2819,7 @@ void SdrPathObj::ToggleClosed()
     SetRectsDirty();
     SetChanged();
     BroadcastObjectChange();
-    SendUserCall(SDRUSERCALL_RESIZE, aBoundRect0);
+    SendUserCall(SdrUserCallType::Resize, aBoundRect0);
 }
 
 // for friend class SdrPolyEditView in some compilers:

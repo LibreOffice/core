@@ -1487,7 +1487,7 @@ void SdrObjCustomShape::SetSnapRect( const Rectangle& rRect )
         aBoundRect0 = GetLastBoundRect();
     NbcSetSnapRect( rRect );
     BroadcastObjectChange();
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+    SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
 void SdrObjCustomShape::NbcSetLogicRect( const Rectangle& rRect )
@@ -1509,7 +1509,7 @@ void SdrObjCustomShape::SetLogicRect( const Rectangle& rRect )
         aBoundRect0 = GetLastBoundRect();
     NbcSetLogicRect(rRect);
     BroadcastObjectChange();
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+    SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
 void SdrObjCustomShape::Move( const Size& rSiz )
@@ -1522,7 +1522,7 @@ void SdrObjCustomShape::Move( const Size& rSiz )
         NbcMove(rSiz);
         SetChanged();
         BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_MOVEONLY,aBoundRect0);
+        SendUserCall(SdrUserCallType::MoveOnly,aBoundRect0);
     }
 }
 void SdrObjCustomShape::NbcMove( const Size& rSiz )
@@ -2533,7 +2533,7 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight()
         InvalidateRenderGeometry();
         SetChanged();
         BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
     }
     return bRet;
 }

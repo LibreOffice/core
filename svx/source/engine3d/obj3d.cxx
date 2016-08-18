@@ -652,7 +652,7 @@ void E3dObject::SetTransform(const basegfx::B3DHomMatrix& rMatrix)
         NbcSetTransform(rMatrix);
         SetChanged();
         BroadcastObjectChange();
-        if (pUserCall != nullptr) pUserCall->Changed(*this, SDRUSERCALL_RESIZE, Rectangle());
+        if (pUserCall != nullptr) pUserCall->Changed(*this, SdrUserCallType::Resize, Rectangle());
     }
 }
 

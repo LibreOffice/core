@@ -581,7 +581,7 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
         // Only redraw here, no object change
         ActionChanged();
 
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 
         mbBoundRectCalculationRunning = false;
     }
@@ -1595,7 +1595,7 @@ void SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             // only redraw here, object hasn't actually changed
             ActionChanged();
 
-            SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+            SendUserCall(SdrUserCallType::Resize,aBoundRect0);
         }
         nNotifyingCount--;
     }

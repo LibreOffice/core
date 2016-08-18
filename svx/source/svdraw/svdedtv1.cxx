@@ -1144,7 +1144,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
                     pTextObj->SetChanged();
 
                     pTextObj->BroadcastObjectChange();
-                    pTextObj->SendUserCall(SDRUSERCALL_CHGATTR, aOldBoundRect);
+                    pTextObj->SendUserCall(SdrUserCallType::ChangeAttr, aOldBoundRect);
                 }
             }
 

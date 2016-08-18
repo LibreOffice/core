@@ -233,7 +233,7 @@ void SdrTextObj::SetText(const OUString& rStr)
     NbcSetText(rStr);
     SetChanged();
     BroadcastObjectChange();
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+    SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
 void SdrTextObj::NbcSetText(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat)
@@ -256,7 +256,7 @@ void SdrTextObj::SetText(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 
     NbcSetText(rInput,rBaseURL,eFormat);
     SetChanged();
     BroadcastObjectChange();
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+    SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
 const Size& SdrTextObj::GetTextSize() const
@@ -1453,7 +1453,7 @@ void SdrTextObj::ReformatText()
         NbcReformatText();
         SetChanged();
         BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
     }
 }
 

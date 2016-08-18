@@ -1324,7 +1324,7 @@ void SdrTableObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
         ActionChanged();
         BroadcastObjectChange();
         if (aRect0 != maRect)
-            SendUserCall(SDRUSERCALL_RESIZE,aRect0);
+            SendUserCall(SdrUserCallType::Resize,aRect0);
     }
 }
 
@@ -1943,7 +1943,7 @@ bool SdrTableObj::AdjustTextFrameWidthAndHeight()
         SetRectsDirty();
         SetChanged();
         BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
     }
     return bRet;
 }
@@ -1983,7 +1983,7 @@ void SdrTableObj::ReformatText()
     NbcReformatText();
     SetChanged();
     BroadcastObjectChange();
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+    SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
 

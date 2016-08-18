@@ -290,7 +290,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight()
         }
         SetChanged();
         BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
     }
     return bRet;
 }

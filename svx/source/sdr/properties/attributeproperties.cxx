@@ -591,7 +591,7 @@ namespace sdr
                 //  rObj.BroadcastObjectChange();
                 //}
 
-                rObj.SendUserCall(SDRUSERCALL_CHGATTR, aBoundRect);
+                rObj.SendUserCall(SdrUserCallType::ChangeAttr, aBoundRect);
 
                 bHintUsed = true;
             }

@@ -133,7 +133,7 @@ void SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
         // This may have led to object change
         SetChanged();
         BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_CHGATTR, aBoundRect);
+        SendUserCall(SdrUserCallType::ChangeAttr, aBoundRect);
     }
 }
 

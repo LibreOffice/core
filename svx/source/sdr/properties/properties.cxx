@@ -162,7 +162,7 @@ namespace sdr
             // also send the user calls
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
-                GetSdrObject().SendUserCall(SDRUSERCALL_CHGATTR, rChange.GetRectangle(a));
+                GetSdrObject().SendUserCall(SdrUserCallType::ChangeAttr, rChange.GetRectangle(a));
             }
         }
 

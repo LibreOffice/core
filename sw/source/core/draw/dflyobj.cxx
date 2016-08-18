@@ -539,7 +539,7 @@ void SwVirtFlyDrawObj::SetSnapRect(const Rectangle& )
     SetChanged();
     BroadcastObjectChange();
     if (pUserCall!=nullptr)
-        pUserCall->Changed(*this, SDRUSERCALL_RESIZE, aTmp);
+        pUserCall->Changed(*this, SdrUserCallType::Resize, aTmp);
 }
 
 void SwVirtFlyDrawObj::NbcSetSnapRect(const Rectangle& )
@@ -560,7 +560,7 @@ void SwVirtFlyDrawObj::SetLogicRect(const Rectangle& )
     SetChanged();
     BroadcastObjectChange();
     if (pUserCall!=nullptr)
-        pUserCall->Changed(*this, SDRUSERCALL_RESIZE, aTmp);
+        pUserCall->Changed(*this, SdrUserCallType::Resize, aTmp);
 }
 
 void SwVirtFlyDrawObj::NbcSetLogicRect(const Rectangle& )

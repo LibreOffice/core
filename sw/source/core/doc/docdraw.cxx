@@ -237,7 +237,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 
             pFormat = static_cast<SwDrawFrameFormat*>(pContact->GetFormat());
             // Deletes itself!
-            pContact->Changed(*pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
+            pContact->Changed(*pObj, SdrUserCallType::Delete, pObj->GetLastBoundRect() );
             pObj->SetUserCall( nullptr );
 
             if( pUndo )
@@ -453,7 +453,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                             OSL_FAIL( "<SwDrawVirtObj> is still marked for delete. application will crash!" );
                         }
                         // Deletes itself!
-                        pContact->Changed(*pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
+                        pContact->Changed(*pObj, SdrUserCallType::Delete, pObj->GetLastBoundRect() );
                         pObj->SetUserCall( nullptr );
 
                         if( pUndo )

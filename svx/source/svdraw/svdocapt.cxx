@@ -667,7 +667,7 @@ void SdrCaptionObj::SetTailPos(const Point& rPos)
         NbcSetTailPos(rPos);
         SetChanged();
         BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
     }
 }
 

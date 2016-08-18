@@ -141,20 +141,22 @@ enum SdrObjKind {
     OBJ_MAXI
 };
 
-enum SdrUserCallType {SDRUSERCALL_MOVEONLY,         // only moved, size unchanged
-                      SDRUSERCALL_RESIZE,           // size and maybe position changed
-                      SDRUSERCALL_CHGATTR,          // attribute changed. Eventually new size, because of line width
-                      SDRUSERCALL_DELETE,           // object is going to be deleted soon, no attributes anymore
-                      SDRUSERCALL_COPY,             // assign operator called, everything can be changed
-                      SDRUSERCALL_INSERTED,         // inserted into an object list (e.g. Page)
-                      SDRUSERCALL_REMOVED,          // removed from an object list
-                      SDRUSERCALL_CHILD_MOVEONLY,   // a child within a group has changed
-                      SDRUSERCALL_CHILD_RESIZE,     // a child within a group has changed
-                      SDRUSERCALL_CHILD_CHGATTR,    // a child within a group has changed
-                      SDRUSERCALL_CHILD_DELETE,     // a child within a group has changed
-                      SDRUSERCALL_CHILD_COPY,       // a child within a group has changed
-                      SDRUSERCALL_CHILD_INSERTED,   // a child within a group has changed
-                      SDRUSERCALL_CHILD_REMOVED};   // a child within a group has changed
+enum class SdrUserCallType {
+    MoveOnly,         // only moved, size unchanged
+    Resize,           // size and maybe position changed
+    ChangeAttr,       // attribute changed. Eventually new size, because of line width
+    Delete,           // object is going to be deleted soon, no attributes anymore
+    Copy,             // assign operator called, everything can be changed
+    Inserted,         // inserted into an object list (e.g. Page)
+    Removed,          // removed from an object list
+    ChildMoveOnly,    // a child within a group has changed
+    ChildResize,      // a child within a group has changed
+    ChildChangeAttr,  // a child within a group has changed
+    ChildDelete,      // a child within a group has changed
+    ChildCopy,        // a child within a group has changed
+    ChildInserted,    // a child within a group has changed
+    ChildRemoved      // a child within a group has changed
+};
 
 class SVX_DLLPUBLIC SdrObjUserCall
 {
