@@ -414,6 +414,9 @@ SvXMLShapeContext* XMLShapeImportHelper::Create3DSceneChildContext(
         }
     }
 
+    if (!pContext)
+        return nullptr;
+
     // now parse the attribute list and call the child context for each unknown attribute
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 a(0); a < nAttrCount; a++)
