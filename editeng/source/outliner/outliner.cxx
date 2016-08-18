@@ -1487,26 +1487,24 @@ void Outliner::SetRefDevice( OutputDevice* pRefDev )
 
 void Outliner::ParaAttribsChanged( sal_Int32 nPara )
 {
-
     // The Outliner does not have an undo of its own, when paragraphs are
     // separated/merged. When ParagraphInserted the attribute EE_PARA_OUTLLEVEL
     // may not be set, this is however needed when the depth of the paragraph
     // is to be determined.
-    if( pEditEngine->IsInUndo() )
-    {
-        if ( pParaList->GetParagraphCount() == pEditEngine->GetParagraphCount() )
-        {
-            Paragraph* pPara = pParaList->GetParagraph( nPara );
-            // tdf#100734: force update of bullet
-            pPara->Invalidate();
-            const SfxInt16Item& rLevel = static_cast<const SfxInt16Item&>( pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL ) );
-            if ( pPara && pPara->GetDepth() != rLevel.GetValue() )
-            {
-                pPara->SetDepth( rLevel.GetValue() );
-                ImplCalcBulletText( nPara, true, true );
-            }
-        }
-    }
+    if (!pEditEngine->IsInUndo())
+        return;
+    if (pParaList->GetParagraphCount() != pEditEngine->GetParagraphCount())
+        return;
+    Paragraph* pPara = pParaList->GetParagraph(nPara);
+    if (!pPara)
+        return;
+    // tdf#100734: force update of bullet
+    pPara->Invalidate();
+    const SfxInt16Item& rLevel = static_cast<const SfxInt16Item&>( pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL ) );
+    if (pPara->GetDepth() == rLevel.GetValue())
+        return;
+    pPara->SetDepth(rLevel.GetValue());
+    ImplCalcBulletText(nPara, true, true);
 }
 
 void Outliner::StyleSheetChanged( SfxStyleSheet* pStyle )
