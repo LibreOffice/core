@@ -59,8 +59,6 @@
 #include <onlineupdate/mozilla/Types.h>
 
 #ifdef _WIN32
-#include "nsWindowsRestart.cxx"
-#include "nsWindowsHelpers.h"
 #include "uachelper.h"
 #include "pathhash.h"
 #endif
