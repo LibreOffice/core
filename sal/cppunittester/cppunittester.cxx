@@ -86,7 +86,10 @@ class TimingListener
     : public CppUnit::TestListener
 {
 public:
-    TimingListener() = default;
+    TimingListener()
+        : m_nStartTime(0)
+    {
+    }
     TimingListener(const TimingListener&) = delete;
     TimingListener& operator=(const TimingListener&) = delete;
 
