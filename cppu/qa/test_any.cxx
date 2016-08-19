@@ -227,7 +227,7 @@ public:
 
 void Test::testVoid() {
     css::uno::Any a;
-    CPPUNIT_ASSERT(a.getValueType() == cppu::UnoType<void>::get());
+    CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<void>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
@@ -317,7 +317,7 @@ void Test::testVoid() {
 
 void Test::testBoolean() {
     css::uno::Any a(false);
-    CPPUNIT_ASSERT(a.getValueType() == cppu::UnoType<bool>::get());
+    CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<bool>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", (a >>= b) && !b);
@@ -408,7 +408,7 @@ void Test::testBoolean() {
 
 void Test::testByte() {
     css::uno::Any a(static_cast< sal_Int8 >(1));
-    CPPUNIT_ASSERT(a.getValueType() == cppu::UnoType<sal_Int8>::get());
+    CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<sal_Int8>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
@@ -503,7 +503,7 @@ void Test::testByte() {
 
 void Test::testShort() {
     css::uno::Any a(static_cast< sal_Int16 >(1));
-    CPPUNIT_ASSERT(a.getValueType() == cppu::UnoType<sal_Int16>::get());
+    CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<sal_Int16>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
@@ -600,7 +600,7 @@ void Test::testUnsignedShort() {
     sal_uInt16 n = 1;
     css::uno::Any a(&n, cppu::UnoType<cppu::UnoUnsignedShortType>::get());
     CPPUNIT_ASSERT(
-        a.getValueType() == cppu::UnoType<cppu::UnoUnsignedShortType>::get());
+        bool(a.getValueType() == cppu::UnoType<cppu::UnoUnsignedShortType>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
@@ -695,7 +695,7 @@ void Test::testUnsignedShort() {
 
 void Test::testLong() {
     css::uno::Any a(static_cast< sal_Int32 >(1));
-    CPPUNIT_ASSERT(a.getValueType() == cppu::UnoType<sal_Int32>::get());
+    CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<sal_Int32>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
@@ -786,7 +786,7 @@ void Test::testLong() {
 
 void Test::testUnsignedLong() {
     css::uno::Any a(static_cast< sal_uInt32 >(1));
-    CPPUNIT_ASSERT(a.getValueType() == cppu::UnoType<sal_uInt32>::get());
+    CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<sal_uInt32>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
@@ -877,7 +877,7 @@ void Test::testUnsignedLong() {
 
 void Test::testHyper() {
     css::uno::Any a(static_cast< sal_Int64 >(1));
-    CPPUNIT_ASSERT(a.getValueType() == cppu::UnoType<sal_Int64>::get());
+    CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<sal_Int64>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
@@ -968,7 +968,7 @@ void Test::testHyper() {
 
 void Test::testUnsignedHyper() {
     css::uno::Any a(static_cast< sal_uInt64 >(1));
-    CPPUNIT_ASSERT(a.getValueType() == cppu::UnoType<sal_uInt64>::get());
+    CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<sal_uInt64>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
@@ -1059,7 +1059,7 @@ void Test::testUnsignedHyper() {
 
 void Test::testFloat() {
     css::uno::Any a(1.f);
-    CPPUNIT_ASSERT(a.getValueType() == cppu::UnoType<float>::get());
+    CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<float>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
@@ -1150,7 +1150,7 @@ void Test::testFloat() {
 
 void Test::testDouble() {
     css::uno::Any a(1.);
-    CPPUNIT_ASSERT(a.getValueType() == cppu::UnoType<double>::get());
+    CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<double>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
@@ -1242,7 +1242,7 @@ void Test::testDouble() {
 void Test::testChar() {
     sal_Unicode c = '1';
     css::uno::Any a(&c, cppu::UnoType<cppu::UnoCharType>::get());
-    CPPUNIT_ASSERT(a.getValueType() == cppu::UnoType<cppu::UnoCharType>::get());
+    CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<cppu::UnoCharType>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
@@ -1337,7 +1337,7 @@ void Test::testChar() {
 
 void Test::testString() {
     css::uno::Any a(rtl::OUString("1"));
-    CPPUNIT_ASSERT(a.getValueType() == cppu::UnoType<OUString>::get());
+    CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<OUString>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
@@ -1428,7 +1428,7 @@ void Test::testString() {
 
 void Test::testType() {
     css::uno::Any a(cppu::UnoType<sal_Int32>::get());
-    CPPUNIT_ASSERT(a.getValueType() == cppu::UnoType<css::uno::Type>::get());
+    CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<css::uno::Type>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
@@ -1520,8 +1520,8 @@ void Test::testSequence() {
     sal_Int32 n = 1;
     css::uno::Any a(css::uno::Sequence< sal_Int32 >(&n, 1));
     CPPUNIT_ASSERT(
-        a.getValueType()
-        == cppu::UnoType<css::uno::Sequence<sal_Int32>>::get());
+        bool(a.getValueType()
+        == cppu::UnoType<css::uno::Sequence<sal_Int32>>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
@@ -1618,7 +1618,7 @@ void Test::testSequence() {
 
 void Test::testEnum() {
     css::uno::Any a(Enum2_M1);
-    CPPUNIT_ASSERT(a.getValueType() == cppu::UnoType<Enum2>::get());
+    CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<Enum2>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
@@ -1713,7 +1713,7 @@ void Test::testEnum() {
 
 void Test::testStruct() {
     css::uno::Any a(Struct2a(1, 3));
-    CPPUNIT_ASSERT(a.getValueType() == cppu::UnoType<Struct2a>::get());
+    CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<Struct2a>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
@@ -1818,10 +1818,10 @@ void Test::testStruct() {
 void Test::testPoly() {
     css::uno::Any a;
     a <<= Poly< css::uno::Sequence< ::sal_Unicode > >();
-    CPPUNIT_ASSERT_MESSAGE( "type name", a.getValueType().getTypeName() == "Poly<[]char>" );
-    CPPUNIT_ASSERT_MESSAGE(
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "type name", OUString("Poly<[]char>"), a.getValueType().getTypeName() );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "constructor",
-        a == css::uno::Any(Poly< css::uno::Sequence< ::sal_Unicode > >()));
+        css::uno::Any(Poly< css::uno::Sequence< ::sal_Unicode > >()), a);
 }
 
 void Test::testException() {
@@ -1829,7 +1829,7 @@ void Test::testException() {
         Exception2a(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 1,
             3));
-    CPPUNIT_ASSERT(a.getValueType() == cppu::UnoType<Exception2a>::get());
+    CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<Exception2a>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
@@ -1939,7 +1939,7 @@ void Test::testException() {
 void Test::testInterface() {
     css::uno::Reference< Interface2a > i2(new Impl2);
     css::uno::Any a(i2);
-    CPPUNIT_ASSERT(a.getValueType() == cppu::UnoType<Interface2a>::get());
+    CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<Interface2a>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
@@ -2047,7 +2047,7 @@ void Test::testInterface() {
 
 void Test::testNull() {
     css::uno::Any a = css::uno::Any(css::uno::Reference< Interface2a >());
-    CPPUNIT_ASSERT(a.getValueType() == cppu::UnoType<Interface2a>::get());
+    CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<Interface2a>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
