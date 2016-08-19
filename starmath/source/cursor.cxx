@@ -77,9 +77,8 @@ void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMov
     }
 }
 
-void SmCursor::MoveTo(OutputDevice* pDev, Point pos, bool bMoveAnchor){
-    SmCaretLine best_line,  //Best line found so far, when iterating
-                curr_line;  //Current line, when iterating
+void SmCursor::MoveTo(OutputDevice* pDev, const Point& pos, bool bMoveAnchor)
+{
     SmCaretPosGraphEntry* NewPos = nullptr;
     long dp_sq = 0,     //Distance to current line squared
          dbp_sq = 1;    //Distance to best line squared
@@ -87,19 +86,18 @@ void SmCursor::MoveTo(OutputDevice* pDev, Point pos, bool bMoveAnchor){
     {
         OSL_ENSURE(pEntry->CaretPos.IsValid(), "The caret position graph may not have invalid positions!");
         //Compute current line
-        curr_line = SmCaretPos2LineVisitor(pDev, pEntry->CaretPos).GetResult();
+        SmCaretLine curr_line = SmCaretPos2LineVisitor(pDev, pEntry->CaretPos).GetResult();
+        //Compute squared distance to current line
+        dp_sq = curr_line.SquaredDistanceX(pos) + curr_line.SquaredDistanceY(pos);
         //If we have a position compare to it
         if(NewPos){
-            //Compute squared distance to current line
-            dp_sq = curr_line.SquaredDistanceX(pos) + curr_line.SquaredDistanceY(pos);
             //If best line is closer, reject current line
             if(dbp_sq <= dp_sq) continue;
         }
         //Accept current position as the best
-        best_line = curr_line;
         NewPos = pEntry.get();
         //Update distance to best line
-        dbp_sq = best_line.SquaredDistanceX(pos) + best_line.SquaredDistanceY(pos);
+        dbp_sq = dp_sq;
     }
     if(NewPos){
         mpPosition = NewPos;
