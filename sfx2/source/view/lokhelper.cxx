@@ -25,10 +25,14 @@ using namespace com::sun::star;
 int SfxLokHelper::createView()
 {
     SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
+    if (!pViewFrame)
+        return -1;
     SfxRequest aRequest(pViewFrame, SID_NEWWINDOW);
     pViewFrame->ExecView_Impl(aRequest);
-
-    return SfxViewShell::Current()->GetViewShellId();
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (!pViewShell)
+        return -1;
+    return pViewShell->GetViewShellId();
 }
 
 void SfxLokHelper::destroyView(int nId)
