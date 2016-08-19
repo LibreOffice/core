@@ -685,7 +685,8 @@ SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
     SfxItemIter aIter( m_OldSet ), aOrigIter( rSet );
     const SfxPoolItem* pItem = aIter.FirstItem(),
                      * pOrigItem = aOrigIter.FirstItem();
-    do {
+    while (pItem && pOrigItem)
+    {
         if( !rSetArr.count( pOrigItem->Which() ))
         {
             m_ResetArray.push_back( pOrigItem->Which() );
@@ -741,11 +742,9 @@ SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
             }
         }
 
-        if( aIter.IsAtEnd() )
-            break;
         pItem = aIter.NextItem();
         pOrigItem = aOrigIter.NextItem();
-    } while( true );
+    }
 }
 
 void SwHistorySetAttrSet::SetInDoc( SwDoc* pDoc, bool )
