@@ -327,6 +327,7 @@ namespace XSLT
             m_transformer->error(msg);
         }
         closeOutput();
+        m_tcontext->_private = nullptr;
         oh.reset();
         xsltFreeStylesheet(styleSheet);
         xsltFreeTransformContext(m_tcontext);
