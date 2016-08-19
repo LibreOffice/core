@@ -104,7 +104,7 @@ ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken
     return nullptr;
 }
 
-RegularTextRunContext::RegularTextRunContext( ContextHandler2Helper& rParent, TextRunPtr pRunPtr )
+RegularTextRunContext::RegularTextRunContext( ContextHandler2Helper& rParent, TextRunPtr const & pRunPtr )
 : ContextHandler2( rParent )
 , mpRunPtr( pRunPtr )
 , mbIsInText( false )

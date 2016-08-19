@@ -30,7 +30,7 @@ namespace ucbhelper
     {
         public:
 
-            StdOutputStream( boost::shared_ptr< std::ostream > pStream );
+            StdOutputStream( boost::shared_ptr< std::ostream > const & pStream );
 
             virtual ~StdOutputStream( );
 

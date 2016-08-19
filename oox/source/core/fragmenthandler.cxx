@@ -28,7 +28,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-FragmentBaseData::FragmentBaseData( XmlFilterBase& rFilter, const OUString& rFragmentPath, RelationsRef xRelations ) :
+FragmentBaseData::FragmentBaseData( XmlFilterBase& rFilter, const OUString& rFragmentPath, RelationsRef const & xRelations ) :
     mrFilter( rFilter ),
     maFragmentPath( rFragmentPath ),
     mxRelations( xRelations )

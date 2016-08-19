@@ -388,7 +388,7 @@ FontCharMap::FontCharMap()
     , mnRefCount(0)
 {}
 
-FontCharMap::FontCharMap( ImplFontCharMapPtr pIFCMap )
+FontCharMap::FontCharMap( ImplFontCharMapPtr const & pIFCMap )
     : mpImplFontCharMap( pIFCMap )
     , mnRefCount(0)
 {}

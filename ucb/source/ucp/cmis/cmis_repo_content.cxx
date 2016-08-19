@@ -49,7 +49,7 @@ namespace cmis
 {
     RepoContent::RepoContent( const uno::Reference< uno::XComponentContext >& rxContext,
         ContentProvider *pProvider, const uno::Reference< ucb::XContentIdentifier >& Identifier,
-        vector< libcmis::RepositoryPtr > aRepos )
+        vector< libcmis::RepositoryPtr > const & aRepos )
             throw ( ucb::ContentCreationException )
         : ContentImplHelper( rxContext, pProvider, Identifier ),
         m_pProvider( pProvider ),

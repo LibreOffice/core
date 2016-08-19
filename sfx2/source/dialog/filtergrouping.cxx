@@ -530,7 +530,7 @@ namespace sfx2
     struct FindGroupEntry : public ::std::unary_function< MapGroupEntry2GroupEntry::value_type, sal_Bool >
     {
         FilterGroupEntryReferrer::mapped_type aLookingFor;
-        explicit FindGroupEntry( FilterGroupEntryReferrer::mapped_type _rLookingFor ) : aLookingFor( _rLookingFor ) { }
+        explicit FindGroupEntry( FilterGroupEntryReferrer::mapped_type const & _rLookingFor ) : aLookingFor( _rLookingFor ) { }
 
         bool operator() ( const MapGroupEntry2GroupEntry::value_type& _rMapEntry )
         {

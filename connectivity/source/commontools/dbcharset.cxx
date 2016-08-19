@@ -135,7 +135,7 @@ namespace dbtools
     {
     }
 
-    OCharsetMap::CharsetIterator::CharsetIterator(const OCharsetMap* _pContainer, OCharsetMap::TextEncBag::const_iterator _aPos )
+    OCharsetMap::CharsetIterator::CharsetIterator(const OCharsetMap* _pContainer, OCharsetMap::TextEncBag::const_iterator const & _aPos )
         :m_pContainer( _pContainer )
         ,m_aPos( _aPos )
     {

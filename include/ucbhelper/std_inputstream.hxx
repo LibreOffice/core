@@ -34,7 +34,7 @@ namespace ucbhelper
     {
         public:
 
-            StdInputStream( boost::shared_ptr< std::istream > pStream );
+            StdInputStream( boost::shared_ptr< std::istream > const & pStream );
 
             virtual ~StdInputStream();
 

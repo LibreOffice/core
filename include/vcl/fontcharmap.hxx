@@ -144,7 +144,7 @@ private:
 
     int                 findRangeIndex( sal_uInt32 ) const;
 
-                        FontCharMap( ImplFontCharMapPtr pIFCMap );
+                        FontCharMap( ImplFontCharMapPtr const & pIFCMap );
 
     sal_uInt32          mnRefCount;
 

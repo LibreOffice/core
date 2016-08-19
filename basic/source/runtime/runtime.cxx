@@ -115,7 +115,7 @@ struct SbiArgv {                   // Argv stack:
     SbxArrayRef    refArgv;             // Argv
     short nArgc;                        // Argc
 
-    SbiArgv(SbxArrayRef refArgv_, short nArgc_) :
+    SbiArgv(SbxArrayRef const & refArgv_, short nArgc_) :
         refArgv(refArgv_),
         nArgc(nArgc_) {}
 };

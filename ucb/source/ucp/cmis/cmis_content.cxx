@@ -285,7 +285,7 @@ namespace cmis
 {
     Content::Content( const uno::Reference< uno::XComponentContext >& rxContext,
         ContentProvider *pProvider, const uno::Reference< ucb::XContentIdentifier >& Identifier,
-        libcmis::ObjectPtr pObject )
+        libcmis::ObjectPtr const & pObject )
             throw ( ucb::ContentCreationException )
         : ContentImplHelper( rxContext, pProvider, Identifier ),
         m_pProvider( pProvider ),

@@ -31,7 +31,7 @@ using namespace ooo::vba;
 
 ScVbaCommandBar::ScVbaCommandBar( const uno::Reference< ov::XHelperInterface >& xParent,
                                   const uno::Reference< uno::XComponentContext >& xContext,
-                                  VbaCommandBarHelperRef pHelper,
+                                  VbaCommandBarHelperRef const & pHelper,
                                   const uno::Reference< container::XIndexAccess >& xBarSettings,
                                   const OUString& sResourceUrl, bool bIsMenu ) throw( uno::RuntimeException )
    : CommandBar_BASE( xParent, xContext ), pCBarHelper( pHelper ), m_xBarSettings( xBarSettings ), m_sResourceUrl( sResourceUrl ), m_bIsMenu( bIsMenu )

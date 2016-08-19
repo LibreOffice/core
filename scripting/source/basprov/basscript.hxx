@@ -69,11 +69,11 @@ namespace basprov
     public:
         BasicScriptImpl(
             const OUString& funcName,
-            SbMethodRef xMethod
+            SbMethodRef const & xMethod
         );
         BasicScriptImpl(
             const OUString& funcName,
-            SbMethodRef xMethod,
+            SbMethodRef const & xMethod,
             BasicManager& documentBasicManager,
             const css::uno::Reference< css::document::XScriptInvocationContext >& documentScriptContext
         );

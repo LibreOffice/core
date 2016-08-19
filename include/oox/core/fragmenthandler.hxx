@@ -64,7 +64,7 @@ struct FragmentBaseData
     explicit            FragmentBaseData(
                             XmlFilterBase& rFilter,
                             const OUString& rFragmentPath,
-                            RelationsRef xRelations );
+                            RelationsRef const & xRelations );
 };
 
 

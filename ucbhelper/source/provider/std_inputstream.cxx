@@ -18,7 +18,7 @@ using namespace com::sun::star;
 
 namespace ucbhelper
 {
-    StdInputStream::StdInputStream( boost::shared_ptr< istream > pStream ) :
+    StdInputStream::StdInputStream( boost::shared_ptr< istream > const & pStream ) :
         m_pStream( pStream ),
         m_nLength( 0 )
     {

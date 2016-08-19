@@ -39,7 +39,7 @@ private:
     bool        m_bIsMenu;
 
 public:
-    ScVbaCommandBar( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, bool bIsMenu ) throw( css::uno::RuntimeException );
+    ScVbaCommandBar( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, VbaCommandBarHelperRef const & pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, bool bIsMenu ) throw( css::uno::RuntimeException );
 
     // Attributes
     virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) override;

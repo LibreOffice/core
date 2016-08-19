@@ -149,7 +149,7 @@ class UcbPropertiesChangeListener_Impl : public ::cppu::WeakImplHelper< XPropert
 public:
     UcbLockBytesRef         m_xLockBytes;
 
-    explicit UcbPropertiesChangeListener_Impl( UcbLockBytesRef rRef )
+    explicit UcbPropertiesChangeListener_Impl( UcbLockBytesRef const & rRef )
         : m_xLockBytes( rRef )
     {}
 

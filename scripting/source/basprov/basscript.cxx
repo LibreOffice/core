@@ -56,7 +56,7 @@ namespace basprov
     // BasicScriptImpl
 
 
-    BasicScriptImpl::BasicScriptImpl( const OUString& funcName, SbMethodRef xMethod )
+    BasicScriptImpl::BasicScriptImpl( const OUString& funcName, SbMethodRef const & xMethod )
         : ::scripting_helper::OBroadcastHelperHolder( m_aMutex )
         ,OPropertyContainer( GetBroadcastHelper() )
         ,m_xMethod( xMethod )
@@ -68,7 +68,7 @@ namespace basprov
     }
 
 
-    BasicScriptImpl::BasicScriptImpl( const OUString& funcName, SbMethodRef xMethod,
+    BasicScriptImpl::BasicScriptImpl( const OUString& funcName, SbMethodRef const & xMethod,
         BasicManager& documentBasicManager, const Reference< XScriptInvocationContext >& documentScriptContext ) : ::scripting_helper::OBroadcastHelperHolder( m_aMutex )
         ,OPropertyContainer( GetBroadcastHelper() )
         ,m_xMethod( xMethod )

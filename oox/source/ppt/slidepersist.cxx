@@ -52,7 +52,7 @@ namespace oox { namespace ppt {
 
 SlidePersist::SlidePersist( XmlFilterBase& rFilter, bool bMaster, bool bNotes,
     const css::uno::Reference< css::drawing::XDrawPage >& rxPage,
-        oox::drawingml::ShapePtr pShapesPtr, const drawingml::TextListStylePtr & pDefaultTextStyle )
+        oox::drawingml::ShapePtr const & pShapesPtr, const drawingml::TextListStylePtr & pDefaultTextStyle )
 : mpDrawingPtr( new oox::vml::Drawing( rFilter, rxPage, oox::vml::VMLDRAWING_POWERPOINT ) )
 , mxPage( rxPage )
 , maShapesPtr( pShapesPtr )

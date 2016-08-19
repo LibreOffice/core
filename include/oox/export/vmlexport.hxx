@@ -105,7 +105,7 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
     bool *m_pShapeTypeWritten;
 
 public:
-                        VMLExport( ::sax_fastparser::FSHelperPtr pSerializer, VMLTextExport* pTextExport = nullptr );
+                        VMLExport( ::sax_fastparser::FSHelperPtr const & pSerializer, VMLTextExport* pTextExport = nullptr );
     virtual             ~VMLExport();
 
     const ::sax_fastparser::FSHelperPtr&

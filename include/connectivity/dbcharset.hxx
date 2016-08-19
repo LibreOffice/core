@@ -144,7 +144,7 @@ namespace dbtools
         const CharsetIterator&  operator--();
 
     protected:
-        CharsetIterator(const OCharsetMap* _pContainer, OCharsetMap::TextEncBag::const_iterator _aPos );
+        CharsetIterator(const OCharsetMap* _pContainer, OCharsetMap::TextEncBag::const_iterator const & _aPos );
     };
 
 
