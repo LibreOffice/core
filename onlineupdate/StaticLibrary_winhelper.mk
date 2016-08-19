@@ -15,7 +15,7 @@ $(eval $(call gb_StaticLibrary_set_include,winhelper,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_StaticLibrary_add_cxxobjects,winhelper,\
+$(eval $(call gb_StaticLibrary_add_exception_objects,winhelper,\
 	onlineupdate/source/winhelper/windowsStart \
 ))
 
