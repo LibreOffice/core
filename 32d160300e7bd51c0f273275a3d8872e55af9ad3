@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_8fbb450e",
+        "filename": "uui/uiconfig/ui/authfallback.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-08-19T17:22:20Z",
+      "side": 1,
+      "message": "that\u0027s asking for trouble I think. current length for sure, but what about future-proofing?",
+      "revId": "32d160300e7bd51c0f273275a3d8872e55af9ad3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
