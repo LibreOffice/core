@@ -65,31 +65,31 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
             switch( rTokenMap.Get( nPrefix, sLocalName ) )
             {
                 case XML_TOK_IMAGE_DATA:
-                    {
+                {
                         SvtPathOptions aPathOptions;
                         sValue = aPathOptions.SubstituteVariable(sValue);
                         _xComponent->setImageURL(rImport.GetAbsoluteReference( sValue ));
-                    }
-
                     break;
+                }
                 case XML_TOK_PRESERVE_IRI:
                     _xComponent->setPreserveIRI(s_sTRUE == sValue);
                     break;
                 case XML_TOK_SCALE:
+                {
+                    sal_uInt16 nRet = awt::ImageScaleMode::NONE;
+                    if ( s_sTRUE == sValue )
                     {
-                        sal_uInt16 nRet = awt::ImageScaleMode::NONE;
-                        if ( s_sTRUE == sValue )
-                        {
-                            nRet = awt::ImageScaleMode::ANISOTROPIC;
-                        }
-                        else
-                        {
-                                   const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetImageScaleOptions();
-                                   SvXMLUnitConverter::convertEnum( nRet, sValue, aXML_EnumMap );
-                        }
-                        _xComponent->setScaleMode( nRet );
+                        nRet = awt::ImageScaleMode::ANISOTROPIC;
                     }
+                    else
+                    {
+                        const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetImageScaleOptions();
+                        bool bConvertOk = SvXMLUnitConverter::convertEnum( nRet, sValue, aXML_EnumMap );
+                        SAL_WARN_IF(!bConvertOk, "reportdesign", "convertEnum failed");
+                    }
+                    _xComponent->setScaleMode( nRet );
                     break;
+                }
                 case XML_TOK_DATA_FORMULA:
                     _xComponent->setDataField(ORptFilter::convertFormula(sValue));
                     break;
