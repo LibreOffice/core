@@ -75,7 +75,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 				-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib \
 			) \
 		" \
-		&& export $(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}":$(call gb_UnpackedTarball_get_dir,icu)/source/lib" \
+		&& export $(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}"$(call gb_UnpackedTarball_get_dir,icu)/source/lib" \
 		&& MAKE=$(MAKE) ./configure \
 			--without-editline \
 			--with-wire-compress=no \
