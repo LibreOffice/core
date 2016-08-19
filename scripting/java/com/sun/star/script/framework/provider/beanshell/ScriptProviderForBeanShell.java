@@ -49,9 +49,7 @@ import com.sun.star.uno.Any;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.XComponentContext;
 
-import java.io.IOException;
 import java.net.URL;
-import java.net.URLClassLoader;
 
 import java.util.StringTokenizer;
 
@@ -184,19 +182,13 @@ class ScriptImpl implements XScript {
         aOutParamIndex[0] = new short[0];
         aOutParam[0] = new Object[0];
 
-        URLClassLoader cl = null;
+        ClassLoader cl = null;
         URL sourceUrl = null;
 
         try {
             cl = ClassLoaderFactory.getURLClassLoader(metaData);
             sourceUrl = metaData.getSourceURL();
         } catch (java.net.MalformedURLException mfu) {
-            if (cl != null) {
-                try {
-                  cl.close();
-                } catch (IOException e) {
-                }
-            }
             // Framework error
             throw new ScriptFrameworkErrorException(
                 mfu.getMessage(), null,

@@ -31,7 +31,7 @@ public class ClassLoaderFactory {
 
     private ClassLoaderFactory() {}
 
-    public static URLClassLoader getURLClassLoader(ScriptMetaData scriptData) {
+    public static ClassLoader getURLClassLoader(ScriptMetaData scriptData) {
         ClassLoader parent = scriptData.getClass().getClassLoader();
         URL[] classPath = scriptData.getClassPath();
         LogUtils.DEBUG("Classpath has length " + classPath.length);
@@ -43,7 +43,7 @@ public class ClassLoaderFactory {
         return getURLClassLoader(parent, classPath);
     }
 
-    private static URLClassLoader getURLClassLoader(ClassLoader parent,
+    private static ClassLoader getURLClassLoader(ClassLoader parent,
             URL[] classpath) {
         return new URLClassLoader(classpath, parent);
     }
