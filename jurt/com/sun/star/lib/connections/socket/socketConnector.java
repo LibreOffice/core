@@ -154,9 +154,11 @@ public final class socketConnector implements XConnector {
 
             con = new SocketConnection(connectionDescription, socket);
         } catch (IOException e) {
-            try {
-                socket.close();
-            } catch(IOException ioException) {
+            if (socket != null) {
+                try {
+                    socket.close();
+                } catch(IOException ioException) {
+                }
             }
             throw new NoConnectException(e);
         }

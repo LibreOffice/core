@@ -144,7 +144,7 @@ public final class socketAcceptor implements XAcceptor {
             }
             serv = server;
         }
-        Socket socket;
+        Socket socket = null;
         try {
             socket = serv.accept();
             if (DEBUG) {
@@ -165,6 +165,12 @@ public final class socketAcceptor implements XAcceptor {
             return new SocketConnection(acceptingDescription, socket);
         }
         catch(IOException e) {
+            if (socket != null) {
+                try {
+                    socket.close();
+                } catch(IOException ioException) {
+                }
+            }
             throw new ConnectionSetupException(e);
         }
     }
