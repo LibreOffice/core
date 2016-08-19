@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_742fa8a1",
+        "filename": "include/svx/svxids.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 995,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-19T13:03:21Z",
+      "side": 1,
+      "message": "Eh, nope, this is not the right way to do it. \n\nNormally you append your SIDs after the last valid SID (SID_EDIT_POSTIT in this particular case) and then adapt SID_SVX_FIRSTFREE to point at now-last item\n\nBut irrelevant anyway, see the other comment explaning why it is a bad idea to have those slots in svx",
+      "revId": "4ad593e742f52e5563dc04ae79b7a81a91b35a59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_5422a4ba",
+        "filename": "svx/source/tbxctrls/tbxdrctl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-19T13:03:21Z",
+      "side": 1,
+      "message": "This toolbox controller is of no use outside Impress/Draw. \n\nTherefore, it should not be implemented in svx, which is reserved for UI code that is needed across all apps. \n\nPlease move it to sd/source/ui/dlg ... there\u0027s couple of tbx controllers implemented there already",
+      "revId": "4ad593e742f52e5563dc04ae79b7a81a91b35a59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
