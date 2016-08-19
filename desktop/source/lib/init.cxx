@@ -453,7 +453,8 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
       m_pDocument(pDocument),
       m_pCallback(pCallback),
       m_pData(pData),
-      m_bPartTilePainting(false)
+      m_bPartTilePainting(false),
+      m_bEventLatch(false)
 {
     SetPriority(SchedulerPriority::POST_PAINT);
 
@@ -481,9 +482,6 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
 CallbackFlushHandler::~CallbackFlushHandler()
 {
     Stop();
-
-    // We might have important notification (.uno:save?).
-    flush();
 }
 
 void CallbackFlushHandler::Invoke()
@@ -500,6 +498,16 @@ void CallbackFlushHandler::callback(const int type, const char* payload, void* d
     }
 }
 
+static Rectangle lcl_ParseRect(const std::string& payload)
+{
+    std::istringstream iss(payload);
+    long left, top, right, bottom;
+    char comma;
+    iss >> left >> comma >> top >> comma >> right >> comma >> bottom;
+    Rectangle rc(left, top, left + right, top + bottom);
+    return rc;
+}
+
 void CallbackFlushHandler::queue(const int type, const char* data)
 {
     const std::string payload(data ? data : "(nil)");
@@ -510,22 +518,17 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         // there will be multiple notifications. On the first invalidation
         // we will start painting, but other events will get fired
         // while the complex command in question executes.
-        // We don't want to suppress everything here on the wrong assumption
+        // We don't want to supress everything here on the wrong assumption
         // that no new events are fired during painting.
         if (type != LOK_CALLBACK_STATE_CHANGED &&
             type != LOK_CALLBACK_INVALIDATE_TILES &&
             type != LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
             type != LOK_CALLBACK_CURSOR_VISIBLE &&
-            type != LOK_CALLBACK_VIEW_CURSOR_VISIBLE &&
             type != LOK_CALLBACK_TEXT_SELECTION)
         {
             //SAL_WARN("lokevt", "Skipping while painting [" + std::to_string(type) + "]: [" + payload + "].");
             return;
         }
-
-        // In Writer we drop all notifications during painting.
-        if (doc_getDocumentType(m_pDocument) == LOK_DOCTYPE_TEXT)
-            return;
     }
 
     // Supress invalid payloads.
@@ -572,14 +575,10 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         case LOK_CALLBACK_TEXT_SELECTION_END:
         case LOK_CALLBACK_TEXT_SELECTION:
         case LOK_CALLBACK_GRAPHIC_SELECTION:
-        case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
         case LOK_CALLBACK_MOUSE_POINTER:
         case LOK_CALLBACK_CELL_CURSOR:
-        case LOK_CALLBACK_CELL_VIEW_CURSOR:
         case LOK_CALLBACK_CELL_FORMULA:
         case LOK_CALLBACK_CURSOR_VISIBLE:
-        case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
-        case LOK_CALLBACK_SET_PART:
         case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
             removeAllButLast(type, false);
         break;
@@ -587,7 +586,6 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         // These come with rects, so drop earlier
         // only when the latter includes former ones.
         case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
-        case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
         case LOK_CALLBACK_INVALIDATE_TILES:
             if (payload.empty())
             {
@@ -595,9 +593,46 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                 // invalidated tiles can be dropped.
                 removeAllButLast(type, false);
             }
-            else
+            else if (type == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR)
             {
                 removeAllButLast(type, true);
+            }
+            else if (type == LOK_CALLBACK_INVALIDATE_TILES)
+            {
+                Rectangle rcNew = lcl_ParseRect(payload);
+                SAL_WARN("lokevt", "New: " << rcNew.toString());
+                const auto rcOrig = rcNew;
+                int i = m_queue.size();
+                i -= 2;
+                for (; i >= 0; --i)
+                {
+                    if (m_queue[i].first == type)
+                    {
+                        const Rectangle rcOld = lcl_ParseRect(m_queue[i].second);
+                        SAL_WARN("lokevt", "#" << i << " Old: " << rcOld.toString());
+                        const Rectangle rcOverlap = rcNew.GetIntersection(rcOld);
+                        SAL_WARN("lokevt", "#" << i << " Overlap: " << rcOverlap.toString());
+                        if (rcOverlap.GetWidth() > 0 && rcOverlap.GetHeight() > 0)
+                        {
+                            SAL_WARN("lokevt", rcOld.toString() << " U " << rcNew.toString());
+                            rcNew.Union(rcOld);
+                            SAL_WARN("lokevt", "#" << i << " Union: " << rcNew.toString());
+                            m_queue.erase(m_queue.begin() + i);
+                        }
+                    }
+                }
+
+                assert(!m_queue.empty());
+                if (rcNew != rcOrig)
+                {
+                    SAL_WARN("lokevt", "Replacing: " << rcOrig.toString() << " by " << rcNew.toString());
+                    m_queue.erase(m_queue.begin() + m_queue.size() - 1);
+                    m_queue.emplace_back(type, rcNew.toString().getStr());
+                }
+                else
+                {
+                    SAL_WARN("lokevt", "Nothing to replace");
+                }
             }
 
         break;
@@ -610,19 +645,9 @@ void CallbackFlushHandler::queue(const int type, const char* data)
     }
 }
 
-void CallbackFlushHandler::setPartTilePainting(const bool bPartPainting)
-{
-    m_bPartTilePainting = bPartPainting;
-}
-
-bool CallbackFlushHandler::isPartTilePainting() const
-{
-    return m_bPartTilePainting;
-}
-
 void CallbackFlushHandler::flush()
 {
-    if (m_pCallback)
+    if (m_pCallback && !m_bEventLatch)
     {
         std::unique_lock<std::mutex> lock(m_mutex);
         for (auto& pair : m_queue)
