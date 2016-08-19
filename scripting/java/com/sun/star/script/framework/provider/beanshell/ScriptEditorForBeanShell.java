@@ -344,6 +344,9 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
             if (fos != null) {
                 try {
                     fos.flush();
+                } catch (IOException ignore) {
+                }
+                try {
                     fos.close();
                 } catch (IOException ignore) {
                 }
