@@ -194,8 +194,11 @@ void PaletteManager::SetPalette( sal_Int32 nPos )
         if(pColorList->Load())
         {
             SfxObjectShell* pShell = SfxObjectShell::Current();
-            SvxColorListItem aColorItem(pColorList, SID_COLOR_TABLE);
-            pShell->PutItem( aColorItem );
+            if (pShell != nullptr)
+            {
+                SvxColorListItem aColorItem(pColorList, SID_COLOR_TABLE);
+                pShell->PutItem( aColorItem );
+            }
         }
     }
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
