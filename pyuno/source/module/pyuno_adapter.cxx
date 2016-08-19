@@ -78,7 +78,7 @@ sal_Int64 Adapter::getSomething( const Sequence< sal_Int8 > &id) throw (RuntimeE
 }
 
 void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime )
-    throw ( InvocationTargetException )
+    throw ( InvocationTargetException, RuntimeException )
 {
     if( !Py_IsInitialized() )
         throw InvocationTargetException();

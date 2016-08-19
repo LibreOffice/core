@@ -262,7 +262,7 @@ OUString pyString2ustring( PyObject *str );
 
 
 void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime )
-    throw ( css::reflection::InvocationTargetException );
+    throw (css::reflection::InvocationTargetException, css::uno::RuntimeException);
 
 PyRef PyUNO_callable_new (
     const css::uno::Reference<css::script::XInvocation2> &xInv,
