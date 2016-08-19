@@ -537,6 +537,7 @@
 #define UNO_NAME_REDLINE_AUTHOR "RedlineAuthor"
 #define UNO_NAME_REDLINE_DATE_TIME "RedlineDateTime"
 #define UNO_NAME_REDLINE_COMMENT "RedlineComment"
+#define UNO_NAME_REDLINE_DESCRIPTION "RedlineDescription"
 #define UNO_NAME_REDLINE_TYPE "RedlineType"
 #define UNO_NAME_REDLINE_SUCCESSOR_DATA "RedlineSuccessorData"
 #define UNO_NAME_REDLINE_IDENTIFIER "RedlineIdentifier"
