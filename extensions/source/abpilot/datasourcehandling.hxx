@@ -96,7 +96,7 @@ namespace abp
     class ODataSource
     {
     private:
-        ODataSourceImpl*    m_pImpl;
+        std::unique_ptr<ODataSourceImpl>    m_pImpl;
 
     public:
 

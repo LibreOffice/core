@@ -333,8 +333,7 @@ namespace abp
     {
         if( this != &_rSource )
         {
-            delete m_pImpl;
-            m_pImpl = new ODataSourceImpl( *_rSource.m_pImpl );
+            m_pImpl.reset( new ODataSourceImpl( *_rSource.m_pImpl ) );
         }
         return *this;
     }
@@ -348,7 +347,6 @@ namespace abp
 
     ODataSource::~ODataSource( )
     {
-        delete m_pImpl;
     }
 
     void ODataSource::store(const AddressSettings& rSettings)
