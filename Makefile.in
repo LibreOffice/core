@@ -409,6 +409,14 @@ endif
 
 	cd $(WORKDIR)/symbols/ && zip -r $(WORKDIR)/symbols.zip *
 
+create-mar:
+	rm -fr $(WORKDIR)/installation/mar/
+	rm -fr $(WORKDIR)/installation/temp/
+	mkdir -p $(WORKDIR)/installation/temp/
+	mkdir -p $(WORKDIR)/installation/mar/
+	tar -xzf $(WORKDIR)/installation/LibreOfficeDev/archive/install/en-US/LibreOffice* -C $(WORKDIR)/installation/temp/
+	$(SRCDIR)/bin/update/make_full_update.sh $(WORKDIR)/installation/mar/test.mar $(WORKDIR)/installation/temp/*/
+
 upload-symbols:
 	$(MAKE) -f $(SRCDIR)/Makefile.gbuild upload-symbols
 
