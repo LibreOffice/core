@@ -16,6 +16,24 @@
       "revId": "5e5bd85c3e5ba8341d95f716a5e5bcc762887c55",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_cf3b7d9b",
+        "filename": "uui/uiconfig/ui/authfallback.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2016-08-19T18:34:10Z",
+      "side": 1,
+      "message": "why would limiting the input value of a field to the exact number of characters that have to be filled in asking for trouble?",
+      "parentUuid": "fa6399be_2fc4f990",
+      "revId": "5e5bd85c3e5ba8341d95f716a5e5bcc762887c55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
