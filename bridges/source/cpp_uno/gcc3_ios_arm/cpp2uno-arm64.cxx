@@ -402,6 +402,7 @@ namespace
                     TYPELIB_DANGER_RELEASE( pTD );
                 }
             } // else perform queryInterface()
+            SAL_FALLTHROUGH;
             default:
                 eRet = cpp2uno_call(
                     pCppI, aMemberDescr.get(),
