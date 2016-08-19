@@ -4630,7 +4630,6 @@ if test "$cross_compiling" = "yes"; then
         --with-parallelism="$with_parallelism" \
         --without-doxygen \
         --without-java \
-        --without-export-validation \
         $sub_conf_opts \
         --srcdir=$srcdir \
         2>&1 | sed -e 's/^/    /'
@@ -7307,68 +7306,72 @@ dnl Export file validation
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable export file validation])
 if test "$with_export_validation" = yes; then
-    if test "$HAVE_JAVA6" != "TRUE"; then
-        AC_MSG_ERROR([officeotron needs at least JRE 1.6; update or specify --without-export-validation])
-    fi
-    AC_MSG_RESULT([yes])
-    AC_DEFINE(HAVE_EXPORT_VALIDATION)
-
-    AC_PATH_PROGS(ODFVALIDATOR, odfvalidator)
-    if test -z "$ODFVALIDATOR"; then
-        # remember to download the ODF toolkit with validator later
-        AC_MSG_NOTICE([no odfvalidator found, will download it])
-        BUILD_TYPE="$BUILD_TYPE ODFVALIDATOR"
-        ODFVALIDATOR="$SRC_ROOT/bin/odfvalidator.sh"
-
-        # and fetch name of odfvalidator jar name from download.lst
-        ODFVALIDATOR_JAR=`$SED -n -e "s/export *ODFVALIDATOR_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
-        AC_SUBST(ODFVALIDATOR_JAR)
-
-        if test -z "$ODFVALIDATOR_JAR"; then
-            AC_MSG_ERROR([cannot determine odfvalidator jar location (--with-export-validation)])
-        fi
-    fi
-    if test "$build_os" = "cygwin"; then
-        # In case of CygWin it will be executed from Windows,
-        # so we need to run bash and absolute path to validator
-        # so instead of "odfvalidator" it will be
-        # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
-        ODFVALIDATOR="bash.exe `cygpath -m "$ODFVALIDATOR"`"
+    if test -z "$ENABLE_JAVA"; then
+        AC_MSG_RESULT([no, as Java is disabled])
     else
-        ODFVALIDATOR="sh $ODFVALIDATOR"
-    fi
-    AC_SUBST(ODFVALIDATOR)
-
-
-    AC_PATH_PROGS(OFFICEOTRON, officeotron)
-    if test -z "$OFFICEOTRON"; then
-        # remember to download the officeotron with validator later
-        AC_MSG_NOTICE([no officeotron found, will download it])
-        BUILD_TYPE="$BUILD_TYPE OFFICEOTRON"
-        OFFICEOTRON="$SRC_ROOT/bin/officeotron.sh"
-
-        # and fetch name of officeotron jar name from download.lst
-        OFFICEOTRON_JAR=`$SED -n -e "s/export *OFFICEOTRON_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
-        AC_SUBST(OFFICEOTRON_JAR)
-
-        if test -z "$OFFICEOTRON_JAR"; then
-            AC_MSG_ERROR([cannot determine officeotron jar location (--with-export-validation)])
+        if test "$HAVE_JAVA6" != "TRUE"; then
+            AC_MSG_ERROR([officeotron needs at least JRE 1.6; update or specify --without-export-validation])
         fi
-    else
-        # check version of existing officeotron
-        OFFICEOTRON_VER=`$OFFICEOTRON --version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-        if test 0"$OFFICEOTRON_VER" -lt 704; then
-            AC_MSG_ERROR([officeotron too old])
+        AC_MSG_RESULT([yes])
+        AC_DEFINE(HAVE_EXPORT_VALIDATION)
+
+        AC_PATH_PROGS(ODFVALIDATOR, odfvalidator)
+        if test -z "$ODFVALIDATOR"; then
+            # remember to download the ODF toolkit with validator later
+            AC_MSG_NOTICE([no odfvalidator found, will download it])
+            BUILD_TYPE="$BUILD_TYPE ODFVALIDATOR"
+            ODFVALIDATOR="$SRC_ROOT/bin/odfvalidator.sh"
+
+            # and fetch name of odfvalidator jar name from download.lst
+            ODFVALIDATOR_JAR=`$SED -n -e "s/export *ODFVALIDATOR_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
+            AC_SUBST(ODFVALIDATOR_JAR)
+
+            if test -z "$ODFVALIDATOR_JAR"; then
+                AC_MSG_ERROR([cannot determine odfvalidator jar location (--with-export-validation)])
+            fi
         fi
-    fi
-    if test "$build_os" = "cygwin"; then
-        # In case of CygWin it will be executed from Windows,
-        # so we need to run bash and absolute path to validator
-        # so instead of "odfvalidator" it will be
-        # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
-        OFFICEOTRON="bash.exe `cygpath -m "$OFFICEOTRON"`"
-    else
-        OFFICEOTRON="sh $OFFICEOTRON"
+        if test "$build_os" = "cygwin"; then
+            # In case of CygWin it will be executed from Windows,
+            # so we need to run bash and absolute path to validator
+            # so instead of "odfvalidator" it will be
+            # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
+            ODFVALIDATOR="bash.exe `cygpath -m "$ODFVALIDATOR"`"
+        else
+            ODFVALIDATOR="sh $ODFVALIDATOR"
+        fi
+        AC_SUBST(ODFVALIDATOR)
+
+
+        AC_PATH_PROGS(OFFICEOTRON, officeotron)
+        if test -z "$OFFICEOTRON"; then
+            # remember to download the officeotron with validator later
+            AC_MSG_NOTICE([no officeotron found, will download it])
+            BUILD_TYPE="$BUILD_TYPE OFFICEOTRON"
+            OFFICEOTRON="$SRC_ROOT/bin/officeotron.sh"
+
+            # and fetch name of officeotron jar name from download.lst
+            OFFICEOTRON_JAR=`$SED -n -e "s/export *OFFICEOTRON_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
+            AC_SUBST(OFFICEOTRON_JAR)
+
+            if test -z "$OFFICEOTRON_JAR"; then
+                AC_MSG_ERROR([cannot determine officeotron jar location (--with-export-validation)])
+            fi
+        else
+            # check version of existing officeotron
+            OFFICEOTRON_VER=`$OFFICEOTRON --version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+            if test 0"$OFFICEOTRON_VER" -lt 704; then
+                AC_MSG_ERROR([officeotron too old])
+            fi
+        fi
+        if test "$build_os" = "cygwin"; then
+            # In case of CygWin it will be executed from Windows,
+            # so we need to run bash and absolute path to validator
+            # so instead of "odfvalidator" it will be
+            # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
+            OFFICEOTRON="bash.exe `cygpath -m "$OFFICEOTRON"`"
+        else
+            OFFICEOTRON="sh $OFFICEOTRON"
+        fi
     fi
     AC_SUBST(OFFICEOTRON)
 else
