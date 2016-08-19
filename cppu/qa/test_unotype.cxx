@@ -113,11 +113,11 @@ void Test::testUnoType() {
     t = cppu::UnoType<cppu::UnoVoidType>::get();
     CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_VOID, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(OUString("void"), t.getTypeName());
-    CPPUNIT_ASSERT(cppu::UnoType<void>::get() == t);
+    CPPUNIT_ASSERT(bool(cppu::UnoType<void>::get() == t));
     t = cppu::UnoType<bool>::get();
     CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_BOOLEAN, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(OUString("boolean"), t.getTypeName());
-    CPPUNIT_ASSERT(cppu::UnoType<sal_Bool>::get() == t);
+    CPPUNIT_ASSERT(bool(cppu::UnoType<sal_Bool>::get() == t));
     t = cppu::UnoType<sal_Int8>::get();
     CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_BYTE, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(OUString("byte"), t.getTypeName());
@@ -162,7 +162,7 @@ void Test::testUnoType() {
     t = cppu::UnoType<cppu::UnoSequenceType<sal_Int8>>::get();
     CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_SEQUENCE, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(OUString("[]byte"), t.getTypeName());
-    CPPUNIT_ASSERT(cppu::UnoType<css::uno::Sequence<sal_Int8>>::get() == t);
+    CPPUNIT_ASSERT(bool(cppu::UnoType<css::uno::Sequence<sal_Int8>>::get() == t));
     t = cppu::UnoType<cppu::UnoSequenceType<cppu::UnoUnsignedShortType>>::get();
     CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_SEQUENCE, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(OUString("[]unsigned short"), t.getTypeName());
