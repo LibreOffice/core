@@ -116,6 +116,7 @@ public:
     GtkToolItem* m_pJustifypara;
     GtkToolItem* m_pInsertAnnotation;
     GtkToolItem* m_pDeleteComment;
+    GtkToolItem* m_pTrackChanges;
     GtkWidget* m_pFormulabarEntry;
     GtkWidget* m_pScrolledWindow;
     std::map<GtkToolItem*, std::string> m_aToolItemCommandNames;
@@ -165,6 +166,7 @@ public:
         m_pJustifypara(nullptr),
         m_pInsertAnnotation(nullptr),
         m_pDeleteComment(nullptr),
+        m_pTrackChanges(nullptr),
         m_pFormulabarEntry(nullptr),
         m_pScrolledWindow(nullptr),
         m_bToolItemBroadcast(true),
@@ -1117,6 +1119,7 @@ static void signalEdit(LOKDocView* pLOKDocView, gboolean bWasEdit, gpointer /*pD
     setSensitiveIfInEdit(rWindow.m_pRedo, bEdit, rWindow);
     setSensitiveIfInEdit(rWindow.m_pPasteButton, bEdit, rWindow);
     setSensitiveIfInEdit(rWindow.m_pSaveButton, bEdit, rWindow);
+    setSensitiveIfInEdit(rWindow.m_pTrackChanges, bEdit, rWindow);
 }
 
 /// LOKDocView changed command state -> inform the tool button.
@@ -1708,6 +1711,15 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     g_signal_connect(G_OBJECT(rWindow.m_pDeleteComment), "clicked", G_CALLBACK(toggleToolItem), nullptr);
     lcl_registerToolItem(rWindow, rWindow.m_pDeleteComment, ".uno:DeleteComment");
     gtk_widget_set_sensitive(GTK_WIDGET(rWindow.m_pDeleteComment), false);
+
+    // Track changes
+    rWindow.m_pTrackChanges = gtk_toggle_tool_button_new();
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(rWindow.m_pTrackChanges), "media-record-symbolic");
+    gtk_tool_item_set_tooltip_text(rWindow.m_pTrackChanges, "Track Changes");
+    gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), rWindow.m_pTrackChanges, -1);
+    g_signal_connect(G_OBJECT(rWindow.m_pTrackChanges), "toggled", G_CALLBACK(toggleToolItem), nullptr);
+    lcl_registerToolItem(rWindow, rWindow.m_pTrackChanges, ".uno:TrackChanges");
+    gtk_widget_set_sensitive(GTK_WIDGET(rWindow.m_pTrackChanges), false);
 
     // Formula bar
     GtkToolItem* pFormulaEntryContainer = gtk_tool_item_new();
