@@ -17,6 +17,8 @@ $(eval $(call gb_Executable_set_include,updater,\
 
 $(eval $(call gb_Executable_use_static_libraries,updater,\
     libmar \
+	$(if $(filter WNT,$(OS)), \
+		winhelper \
 ))
 
 ifeq ($(OS),WNT)
