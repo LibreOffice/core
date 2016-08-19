@@ -479,12 +479,12 @@ bool initOpenCLRunEnv( GPUEnv *gpuInfo )
     clGetPlatformInfo(gpuInfo->mpPlatformID, CL_PLATFORM_NAME, 64,
              pName, nullptr);
 
-    bool bIsNotWinOrIsWin8OrGreater = true;
-
+#if defined (_WIN32)
 // the Win32 SDK 8.1 deprecates GetVersionEx()
-#ifdef _WIN32_WINNT_WINBLUE
-    bIsNotWinOrIsWin8OrGreater = IsWindows8OrGreater();
-#elif defined (_WIN32)
+# ifdef _WIN32_WINNT_WINBLUE
+    const bool bIsNotWinOrIsWin8OrGreater = IsWindows8OrGreater();
+# else
+    bool bIsNotWinOrIsWin8OrGreater = true;
     OSVERSIONINFO aVersionInfo;
     memset( &aVersionInfo, 0, sizeof(aVersionInfo) );
     aVersionInfo.dwOSVersionInfoSize = sizeof( aVersionInfo );
@@ -495,6 +495,9 @@ bool initOpenCLRunEnv( GPUEnv *gpuInfo )
            (aVersionInfo.dwMajorVersion == 6 && aVersionInfo.dwMinorVersion < 2))
             bIsNotWinOrIsWin8OrGreater = false;
     }
+# endif
+#else
+    const bool bIsNotWinOrIsWin8OrGreater = true;
 #endif
 
     // Heuristic: Certain old low-end OpenCL implementations don't
