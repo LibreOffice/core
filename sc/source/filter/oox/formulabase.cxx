@@ -1039,17 +1039,17 @@ FunctionProviderImpl::FunctionProviderImpl( bool bImportFilter )
     /*  Add functions supported in the current BIFF version only. Function
         tables from later BIFF versions may overwrite single functions from
         earlier tables. */
-    initFuncs( saFuncTableBiff2, std::end( saFuncTableBiff2 ), bImportFilter );
-    initFuncs( saFuncTableBiff3, std::end( saFuncTableBiff3 ), bImportFilter );
-    initFuncs( saFuncTableBiff4, std::end( saFuncTableBiff4 ), bImportFilter );
-    initFuncs( saFuncTableBiff5, std::end( saFuncTableBiff5 ), bImportFilter );
-    initFuncs( saFuncTableBiff8, std::end( saFuncTableBiff8 ), bImportFilter );
-    initFuncs( saFuncTableOox,   std::end( saFuncTableOox   ), bImportFilter );
-    initFuncs( saFuncTable2010,  std::end( saFuncTable2010  ), bImportFilter );
-    initFuncs( saFuncTable2013,  std::end( saFuncTable2013  ), bImportFilter );
-    initFuncs( saFuncTable2016,  std::end( saFuncTable2016  ), bImportFilter );
-    initFuncs( saFuncTableOdf,   std::end( saFuncTableOdf   ), bImportFilter );
-    initFuncs( saFuncTableOOoLO, std::end( saFuncTableOOoLO ), bImportFilter );
+    initFuncs(std::begin(saFuncTableBiff2), std::end(saFuncTableBiff2), bImportFilter);
+    initFuncs(std::begin(saFuncTableBiff3), std::end(saFuncTableBiff3), bImportFilter);
+    initFuncs(std::begin(saFuncTableBiff4), std::end(saFuncTableBiff4), bImportFilter);
+    initFuncs(std::begin(saFuncTableBiff5), std::end(saFuncTableBiff5), bImportFilter);
+    initFuncs(std::begin(saFuncTableBiff8), std::end(saFuncTableBiff8), bImportFilter);
+    initFuncs(std::begin(saFuncTableOox  ), std::end(saFuncTableOox  ), bImportFilter);
+    initFuncs(std::begin(saFuncTable2010 ), std::end(saFuncTable2010 ), bImportFilter);
+    initFuncs(std::begin(saFuncTable2013 ), std::end(saFuncTable2013 ), bImportFilter);
+    initFuncs(std::begin(saFuncTable2016 ), std::end(saFuncTable2016 ), bImportFilter);
+    initFuncs(std::begin(saFuncTableOdf  ), std::end(saFuncTableOdf  ), bImportFilter);
+    initFuncs(std::begin(saFuncTableOOoLO), std::end(saFuncTableOOoLO), bImportFilter);
 }
 
 void FunctionProviderImpl::initFunc(const FunctionData& rFuncData)
