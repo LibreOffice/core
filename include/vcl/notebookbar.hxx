@@ -12,8 +12,8 @@
 
 #include <vcl/builder.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/tabctrl.hxx>
 #include <vcl/EnumContext.hxx>
+#include <sfx2/notebookbar/NotebookbarMainControl.hxx>
 #include <com/sun/star/ui/XContextChangeEventListener.hpp>
 
 /// This implements Widget Layout-based notebook-like menu bar.
@@ -35,7 +35,7 @@ public:
     const css::uno::Reference<css::ui::XContextChangeEventListener>& getContextChangeEventListener() const { return m_pEventListener; }
 private:
     css::uno::Reference<css::ui::XContextChangeEventListener> m_pEventListener;
-    VclPtr<NotebookbarTabControl> m_pTabControl;
+    NotebookbarMainControl* m_pMainControl;
 };
 
 

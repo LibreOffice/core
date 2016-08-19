@@ -24,18 +24,18 @@
 #include <vcl/dllapi.h>
 #include <vcl/builder.hxx>
 #include <vcl/window.hxx>
+#include <vcl/IContext.hxx>
 
 
 class VCL_DLLPUBLIC TabPage
     : public vcl::Window
     , public VclBuilderContainer
+    , public vcl::IContext
 {
 private:
     using Window::ImplInit;
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void ImplInitSettings();
-
-    std::vector<vcl::EnumContext::Context> maContext;
 
 public:
     explicit        TabPage( vcl::Window* pParent, WinBits nStyle = 0 );
@@ -59,10 +59,6 @@ public:
     virtual void    SetPosPixel(const Point& rNewPos) override;
     virtual void    SetSizePixel(const Size& rNewSize) override;
     virtual Size    GetOptimalSize() const override;
-
-    void            SetContext( const std::vector<vcl::EnumContext::Context>& aContext );
-    bool            HasContext( const vcl::EnumContext::Context eContext ) const;
-    const std::vector<vcl::EnumContext::Context>& GetContext() const;
 };
 
 #endif // INCLUDED_VCL_TABPAGE_HXX
