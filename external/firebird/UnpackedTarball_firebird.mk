@@ -32,6 +32,7 @@ ifeq ($(OS),MACOSX)
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 	external/firebird/firebird-configure-x86-64-macosx.patch.1 \
 	external/firebird/firebird-macosx.patch.1 \
+	external/firebird/macosx-elcapitan-dyld.patch \
 ))
 endif
 
