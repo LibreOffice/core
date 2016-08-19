@@ -491,7 +491,7 @@ extract_signature(const char *src, uint32_t sigIndex, const char * dest)
   FILE *fpSrc = NULL, *fpDest = NULL;
   uint32_t i;
   uint32_t signatureCount;
-  uint32_t signatureLen;
+  uint32_t signatureLen = 0;
   uint8_t *extractedSignature = NULL;
   char *base64Encoded = NULL;
   int rv = -1;
