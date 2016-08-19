@@ -28,6 +28,7 @@
 #include <svl/hint.hxx>
 #include <svl/svldllapi.h>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/solar.h>
 
 class IntlWrapper;
@@ -59,22 +60,6 @@ inline bool Any2Bool( const css::uno::Any&rValue )
 
     return bValue;
 }
-
-enum SfxMapUnit
-{
-    SFX_MAPUNIT_100TH_MM,
-    SFX_MAPUNIT_10TH_MM,
-    SFX_MAPUNIT_MM,
-    SFX_MAPUNIT_CM,
-    SFX_MAPUNIT_1000TH_INCH,
-    SFX_MAPUNIT_100TH_INCH,
-    SFX_MAPUNIT_10TH_INCH,
-    SFX_MAPUNIT_INCH,
-    SFX_MAPUNIT_POINT,
-    SFX_MAPUNIT_TWIP,
-    SFX_MAPUNIT_PIXEL,
-    SFX_MAPUNIT_RELATIVE,
-};
 
 /*
  * The values of this enum describe the degree of textual
@@ -166,8 +151,8 @@ public:
 
     /**  @return true if it has a valid string representation */
     virtual bool             GetPresentation( SfxItemPresentation ePresentation,
-                                    SfxMapUnit eCoreMetric,
-                                    SfxMapUnit ePresentationMetric,
+                                    MapUnit eCoreMetric,
+                                    MapUnit ePresentationMetric,
                                     OUString &rText,
                                     const IntlWrapper * pIntlWrapper = nullptr ) const;
 
@@ -256,8 +241,8 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
-                                    SfxMapUnit eCoreMetric,
-                                    SfxMapUnit ePresMetric,
+                                    MapUnit eCoreMetric,
+                                    MapUnit ePresMetric,
                                     OUString &rText,
                                     const IntlWrapper * = nullptr ) const override;
 
@@ -280,8 +265,8 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
-                                    SfxMapUnit eCoreMetric,
-                                    SfxMapUnit ePresMetric,
+                                    MapUnit eCoreMetric,
+                                    MapUnit ePresMetric,
                                     OUString &rText,
                                     const IntlWrapper * = nullptr ) const override;
 

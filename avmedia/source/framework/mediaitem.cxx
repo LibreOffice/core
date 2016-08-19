@@ -125,23 +125,20 @@ bool MediaItem::operator==( const SfxPoolItem& rItem ) const
         && m_pImpl->m_eZoom == rOther.m_pImpl->m_eZoom;
 }
 
-
 SfxPoolItem* MediaItem::Clone( SfxItemPool* ) const
 {
     return new MediaItem( *this );
 }
 
-
 bool MediaItem::GetPresentation( SfxItemPresentation,
-                                                  SfxMapUnit,
-                                                  SfxMapUnit,
-                                                  OUString& rText,
-                                                  const IntlWrapper * ) const
+                                 MapUnit,
+                                 MapUnit,
+                                 OUString& rText,
+                                 const IntlWrapper * ) const
 {
     rText.clear();
     return false;
 }
-
 
 bool MediaItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
 {

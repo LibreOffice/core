@@ -63,7 +63,7 @@ private:
     DECL_LINK_TYPED(KerningSelectHdl, ListBox&, void);
     DECL_LINK_TYPED(KerningModifyHdl, Edit&, void);
 
-    SfxMapUnit GetCoreMetric() const;
+    MapUnit GetCoreMetric() const;
 };
 }
 

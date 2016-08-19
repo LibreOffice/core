@@ -41,9 +41,9 @@ bool SfxVisibilityItem::operator ==(const SfxPoolItem & rItem) const
 
 // virtual
 bool SfxVisibilityItem::GetPresentation(SfxItemPresentation,
-                                                  SfxMapUnit, SfxMapUnit,
-                                                  OUString & rText,
-                                                  const IntlWrapper *) const
+                                        MapUnit, MapUnit,
+                                        OUString & rText,
+                                        const IntlWrapper *) const
 {
     rText = GetValueTextByVal(m_nValue.bVisible);
     return true;

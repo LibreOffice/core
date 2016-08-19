@@ -167,7 +167,7 @@ LinePropertyPanelBase::LinePropertyPanelBase(
     mpStyleItem(),
     mpDashItem(),
     mnTrans(0),
-    meMapUnit(SFX_MAPUNIT_MM),
+    meMapUnit(MAP_MM),
     mnWidthCoreValue(0),
     mpStartItem(),
     mpEndItem(),
@@ -905,7 +905,7 @@ void LinePropertyPanelBase::ActivateControls()
     mpLBEnd->Enable( bLineStyle && mbArrowSupported );
 }
 
-void LinePropertyPanelBase::setMapUnit(SfxMapUnit eMapUnit)
+void LinePropertyPanelBase::setMapUnit(MapUnit eMapUnit)
 {
     meMapUnit = eMapUnit;
 }

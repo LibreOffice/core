@@ -777,12 +777,12 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
 
     if ( pSizeBox->IsRelativeMode() )
     {
-        SfxMapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
+        MapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
         const SvxFontHeightItem& rItem = static_cast<const SvxFontHeightItem&>(rSet.Get( nWhich ));
 
-        if( rItem.GetProp() != 100 || SFX_MAPUNIT_RELATIVE != rItem.GetPropUnit() )
+        if( rItem.GetProp() != 100 || MAP_RELATIVE != rItem.GetPropUnit() )
         {
-            bool bPtRel = SFX_MAPUNIT_POINT == rItem.GetPropUnit();
+            bool bPtRel = MAP_POINT == rItem.GetPropUnit();
             pSizeBox->SetPtRelative( bPtRel );
             pSizeBox->SetValue( bPtRel ? ((short)rItem.GetProp()) * 10 : rItem.GetProp() );
         }
@@ -794,7 +794,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     }
     else if ( eState >= SfxItemState::DEFAULT )
     {
-        SfxMapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
+        MapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
         const SvxFontHeightItem& rItem = static_cast<const SvxFontHeightItem&>(rSet.Get( nWhich ));
         pSizeBox->SetValue( (long)CalcToPoint( rItem.GetHeight(), eUnit, 10 ) );
     }
@@ -1079,9 +1079,9 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     }
 
     if ( bChanged || !pOldHeight ||
-         bRel != ( SFX_MAPUNIT_RELATIVE != pOldHeight->GetPropUnit() || 100 != pOldHeight->GetProp() ) )
+         bRel != ( MAP_RELATIVE != pOldHeight->GetPropUnit() || 100 != pOldHeight->GetProp() ) )
     {
-        SfxMapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
+        MapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
         if ( pSizeBox->IsRelative() )
         {
             DBG_ASSERT( GetItemSet().GetParent(), "No parent set" );
@@ -1090,7 +1090,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
 
             SvxFontHeightItem aHeight( 240, 100, nWhich );
             if ( pSizeBox->IsPtRelative() )
-                aHeight.SetHeight( rOldItem.GetHeight(), (sal_uInt16)( nSize / 10 ), SFX_MAPUNIT_POINT, eUnit );
+                aHeight.SetHeight( rOldItem.GetHeight(), (sal_uInt16)( nSize / 10 ), MAP_POINT, eUnit );
             else
                 aHeight.SetHeight( rOldItem.GetHeight(), (sal_uInt16)nSize );
             rSet.Put( aHeight );
@@ -1269,7 +1269,7 @@ namespace
 
         const SvxFontHeightItem& rHeightItem =
             static_cast<const SvxFontHeightItem&>(_pPage->GetItemSet().GetParent()->Get( _nHeightWhich ));
-        SfxMapUnit eUnit = _pPage->GetItemSet().GetPool()->GetMetric( _nHeightWhich );
+        MapUnit eUnit = _pPage->GetItemSet().GetPool()->GetMetric( _nHeightWhich );
         short nCurHeight =
             static_cast< short >( CalcToPoint( rHeightItem.GetHeight(), eUnit, 1 ) * 10 );
 
@@ -3003,7 +3003,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
     if ( rSet->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
     {
         const SvxKerningItem& rItem = static_cast<const SvxKerningItem&>(rSet->Get( nWhich ));
-        SfxMapUnit eUnit = rSet->GetPool()->GetMetric( nWhich );
+        MapUnit eUnit = rSet->GetPool()->GetMetric( nWhich );
         MapUnit eOrgUnit = (MapUnit)eUnit;
         MapUnit ePntUnit( MAP_POINT );
         long nBig = static_cast<long>(m_pKerningMF->Normalize( static_cast<long>(rItem.GetValue()) ));
@@ -3176,7 +3176,7 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
     nWhich = GetWhich( SID_ATTR_CHAR_KERNING );
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_KERNING );
     short nKerning = 0;
-    SfxMapUnit eUnit = rSet->GetPool()->GetMetric( nWhich );
+    MapUnit eUnit = rSet->GetPool()->GetMetric( nWhich );
 
     long nTmp = static_cast<long>(m_pKerningMF->GetValue());
     long nVal = LogicToLogic( nTmp, MAP_POINT, (MapUnit)eUnit );

@@ -124,7 +124,7 @@ class SfxDispatchController_Impl : public SfxControllerItem
 
     static void         addParametersToArgs( const css::util::URL& aURL,
                                              css::uno::Sequence< css::beans::PropertyValue >& rArgs );
-    static SfxMapUnit   GetCoreMetric( SfxItemPool& rPool, sal_uInt16 nSlot );
+    static MapUnit      GetCoreMetric( SfxItemPool& rPool, sal_uInt16 nSlot );
 
     void                sendStatusChanged(const OUString& rURL, const css::frame::FeatureStateEvent& rEvent);
 

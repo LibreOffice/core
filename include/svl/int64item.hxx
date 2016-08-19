@@ -27,7 +27,7 @@ public:
     virtual bool operator== ( const SfxPoolItem& rItem ) const override;
 
     virtual bool GetPresentation(
-        SfxItemPresentation, SfxMapUnit, SfxMapUnit,
+        SfxItemPresentation, MapUnit, MapUnit,
         OUString& rText, const IntlWrapper* pIntlWrapper = nullptr ) const override;
 
     virtual bool QueryValue(

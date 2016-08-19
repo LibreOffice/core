@@ -284,8 +284,8 @@ bool SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
 bool SvxSearchItem::GetPresentation
 (
     SfxItemPresentation ,
-    SfxMapUnit          ,
-    SfxMapUnit          ,
+    MapUnit             ,
+    MapUnit             ,
     OUString&           ,
     const IntlWrapper *
 )   const

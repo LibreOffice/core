@@ -49,7 +49,7 @@ private:
     VclPtr<SvxRelativeField> m_pAboveSpacing;
     VclPtr<SvxRelativeField> m_pBelowSpacing;
 
-    SfxMapUnit m_eUnit;
+    MapUnit m_eUnit;
 
     DECL_LINK_TYPED(ModifySpacingHdl, Edit&, void);
 };
@@ -71,7 +71,7 @@ private:
     VclPtr<SvxRelativeField> m_pAfterSpacing;
     VclPtr<SvxRelativeField> m_pFLSpacing;
 
-    SfxMapUnit m_eUnit;
+    MapUnit m_eUnit;
 
     vcl::EnumContext m_aContext;
 

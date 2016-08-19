@@ -114,7 +114,7 @@ private:
     bool         mbTitle;
     SfxBindings* mpBindings;
 
-    SfxMapUnit meUnit;
+    MapUnit meUnit;
 
     DECL_LINK_TYPED(FillBackgroundHdl, ListBox&, void);
     DECL_LINK_TYPED(FillStyleModifyHdl, ListBox&, void);

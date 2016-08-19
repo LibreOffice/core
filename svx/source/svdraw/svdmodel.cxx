@@ -186,7 +186,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
         // remember that I created both pools myself
         bMyPool=true;
     }
-    pItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
+    pItemPool->SetDefaultMetric(eObjUnit);
 
 // using static SdrEngineDefaults only if default SvxFontHeight item is not available
     const SfxPoolItem* pPoolItem = pItemPool->GetPoolDefaultItem( EE_CHAR_FONTHEIGHT );
@@ -1050,7 +1050,7 @@ void SdrModel::SetScaleUnit(MapUnit eMap, const Fraction& rFrac)
     if (eObjUnit!=eMap || aObjUnit!=rFrac) {
         eObjUnit=eMap;
         aObjUnit=rFrac;
-        pItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
+        pItemPool->SetDefaultMetric(eObjUnit);
         ImpSetUIUnit();
         ImpSetOutlinerDefaults( pDrawOutliner );
         ImpSetOutlinerDefaults( pHitTestOutliner );
@@ -1062,7 +1062,7 @@ void SdrModel::SetScaleUnit(MapUnit eMap)
 {
     if (eObjUnit!=eMap) {
         eObjUnit=eMap;
-        pItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
+        pItemPool->SetDefaultMetric(eObjUnit);
         ImpSetUIUnit();
         ImpSetOutlinerDefaults( pDrawOutliner );
         ImpSetOutlinerDefaults( pHitTestOutliner );

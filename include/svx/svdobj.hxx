@@ -700,8 +700,8 @@ protected:
     void SetObjectItemSet(const SfxItemSet& rSet);
     const SfxPoolItem& GetObjectItem(const sal_uInt16 nWhich) const;
 
-    // get SfxMapUnit the object is using
-    SfxMapUnit GetObjectMapUnit() const;
+    // get MapUnit the object is using
+    MapUnit GetObjectMapUnit() const;
 
 public:
     // syntactical sugar for ItemSet accesses

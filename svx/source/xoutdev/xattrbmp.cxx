@@ -370,8 +370,8 @@ sal_uInt16 XFillBitmapItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
 
 bool XFillBitmapItem::GetPresentation(
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit /*eCoreUnit*/,
-    SfxMapUnit /*ePresUnit*/,
+    MapUnit /*eCoreUnit*/,
+    MapUnit /*ePresUnit*/,
     OUString& rText,
     const IntlWrapper*) const
 {

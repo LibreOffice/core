@@ -284,8 +284,8 @@ OUString ScProtectionAttr::GetValueText() const
 bool ScProtectionAttr::GetPresentation
     (
         SfxItemPresentation ePres,
-        SfxMapUnit /* eCoreMetric */,
-        SfxMapUnit /* ePresMetric */,
+        MapUnit /* eCoreMetric */,
+        MapUnit /* ePresMetric */,
         OUString& rText,
         const IntlWrapper* /* pIntl */
     ) const
@@ -391,8 +391,8 @@ SfxPoolItem* ScRangeItem::Clone( SfxItemPool* ) const
 bool ScRangeItem::GetPresentation
     (
         SfxItemPresentation ePres,
-        SfxMapUnit          /* eCoreUnit */,
-        SfxMapUnit          /* ePresUnit */,
+        MapUnit             /* eCoreUnit */,
+        MapUnit             /* ePresUnit */,
         OUString&           rText,
         const IntlWrapper*  /* pIntl */
     ) const
@@ -492,8 +492,8 @@ SfxPoolItem* ScTableListItem::Clone( SfxItemPool* ) const
 bool ScTableListItem::GetPresentation
     (
         SfxItemPresentation ePres,
-        SfxMapUnit          /* eCoreUnit */,
-        SfxMapUnit          /* ePresUnit */,
+        MapUnit             /* eCoreUnit */,
+        MapUnit             /* ePresUnit */,
         OUString&           rText,
         const IntlWrapper* /* pIntl */
     ) const
@@ -823,8 +823,8 @@ ScViewObjectModeItem::~ScViewObjectModeItem()
 bool ScViewObjectModeItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /* eCoreUnit */,
-    SfxMapUnit          /* ePresUnit */,
+    MapUnit             /* eCoreUnit */,
+    MapUnit             /* ePresUnit */,
     OUString&           rText,
     const IntlWrapper* /* pIntl */
 )   const
@@ -986,7 +986,7 @@ void lclAppendScalePageCount( OUString& rText, sal_uInt16 nPages )
 } // namespace
 
 bool ScPageScaleToItem::GetPresentation(
-        SfxItemPresentation ePres, SfxMapUnit, SfxMapUnit, OUString& rText, const IntlWrapper* ) const
+        SfxItemPresentation ePres, MapUnit, MapUnit, OUString& rText, const IntlWrapper* ) const
 {
     rText.clear();
     if( !IsValid())

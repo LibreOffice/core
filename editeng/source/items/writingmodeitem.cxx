@@ -66,8 +66,8 @@ sal_uInt16 SvxWritingModeItem::GetVersion( sal_uInt16 /*nFVer*/ ) const
 }
 
 bool SvxWritingModeItem::GetPresentation( SfxItemPresentation /*ePres*/,
-        SfxMapUnit /*eCoreMetric*/,
-        SfxMapUnit /*ePresMetric*/,
+        MapUnit /*eCoreMetric*/,
+        MapUnit /*ePresMetric*/,
         OUString &rText,
         const IntlWrapper *  ) const
 {

@@ -53,7 +53,7 @@ private:
     const SfxItemSet&   rOutAttrs;
     SfxItemSet          aAttrSet;
     const SdrView*      pView;
-    SfxMapUnit          eUnit;
+    MapUnit             eUnit;
 
     void                FillTypeLB();
 

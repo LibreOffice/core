@@ -1449,7 +1449,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
             // therefore evaluate only from 401
             nMetric = nTmpMetric;
             if ( bOwnerOfPool && pPool && ( nMetric != 0xFFFF ) )
-                pPool->SetDefaultMetric( (SfxMapUnit)nMetric );
+                pPool->SetDefaultMetric( (MapUnit)nMetric );
         }
     }
 

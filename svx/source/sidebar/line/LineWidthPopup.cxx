@@ -32,7 +32,7 @@ LineWidthPopup::LineWidthPopup(LinePropertyPanelBase& rParent)
     , m_rParent(rParent)
     , m_pStr(nullptr)
     , m_sPt(SVX_RESSTR(RID_SVXSTR_PT))
-    , m_eMapUnit(SFX_MAPUNIT_TWIP)
+    , m_eMapUnit(MAP_TWIP)
     , m_bVSFocus(true)
     , m_bCustom(false)
     , m_bCloseByEdit(false)
@@ -174,7 +174,7 @@ IMPL_LINK_TYPED(LineWidthPopup, MFModifyHdl, Edit&, /*rControl*/, void)
     m_nTmpCustomWidth = nTmp;
 }
 
-void LineWidthPopup::SetWidthSelect(long lValue, bool bValuable, SfxMapUnit eMapUnit)
+void LineWidthPopup::SetWidthSelect(long lValue, bool bValuable, MapUnit eMapUnit)
 {
     m_bVSFocus = true;
     m_xVSWidth->SetSelItem(0);

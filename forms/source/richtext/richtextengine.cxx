@@ -55,7 +55,7 @@ namespace frm
 
         pReturn->SetStatusEventHdl( LINK( pReturn, RichTextEngine, EditEngineStatusChanged ) );
 
-        pPool->SetDefaultMetric(  (SfxMapUnit)( aDeviceMapMode.GetMapUnit() ) );
+        pPool->SetDefaultMetric(aDeviceMapMode.GetMapUnit());
 
         // defaults
         vcl::Font aFont = Application::GetSettings().GetStyleSettings().GetAppFont();

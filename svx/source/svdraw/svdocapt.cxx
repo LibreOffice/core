@@ -773,12 +773,12 @@ void SdrCaptionObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
     handleNegativeScale(aScale, &fRotate);
 
     // force metric to pool metric
-    SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
-    if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+    MapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
+    if(eMapUnit != MAP_100TH_MM)
     {
         switch(eMapUnit)
         {
-            case SFX_MAPUNIT_TWIP :
+            case MAP_TWIP :
             {
                 // position
                 aTranslate.setX(ImplMMToTwips(aTranslate.getX()));

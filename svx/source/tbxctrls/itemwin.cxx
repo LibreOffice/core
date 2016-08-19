@@ -245,7 +245,7 @@ SvxMetricField::SvxMetricField(
     vcl::Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits )
     : MetricField(pParent, nBits)
     , aCurTxt()
-    , ePoolUnit(SFX_MAPUNIT_CM)
+    , ePoolUnit(MAP_CM)
     , mxFrame(rFrame)
 {
     Size aSize(GetTextWidth( "99,99mm" ),GetTextHeight());
@@ -305,7 +305,7 @@ void SvxMetricField::ReleaseFocus_Impl()
     }
 }
 
-void SvxMetricField::SetCoreUnit( SfxMapUnit eUnit )
+void SvxMetricField::SetCoreUnit( MapUnit eUnit )
 {
     ePoolUnit = eUnit;
 }

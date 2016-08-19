@@ -633,10 +633,10 @@ void SvxBorderLine::SetWidth( long nWidth )
     m_nWidth = nWidth;
 }
 
-OUString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
-                                      SfxMapUnit eDestUnit,
-                                      const IntlWrapper* pIntl,
-                                      bool bMetricStr) const
+OUString SvxBorderLine::GetValueString(MapUnit eSrcUnit,
+                                       MapUnit eDestUnit,
+                                       const IntlWrapper* pIntl,
+                                       bool bMetricStr) const
 {
     static const sal_uInt16 aStyleIds[] =
     {

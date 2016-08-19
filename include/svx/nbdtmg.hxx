@@ -185,7 +185,7 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         NBOType         eType;
     private:
         const SfxItemSet*   pSet;
-        SfxMapUnit      eCoreUnit;
+        MapUnit         eCoreUnit;
         // store the attributes passed from pSet
         OUString        aNumCharFmtName;
         void            StoreBulCharFmtName_impl();
@@ -195,7 +195,7 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         NBOTypeMgrBase(const NBOType aType)
             : eType(aType)
             , pSet(nullptr)
-            , eCoreUnit(SFX_MAPUNIT_TWIP)
+            , eCoreUnit(MAP_TWIP)
             , aNumCharFmtName(OUString())
             , bIsLoading(false)
         {}
@@ -219,7 +219,7 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         void SetItems(const SfxItemSet* pArg) { pSet = pArg;StoreBulCharFmtName_impl();StoreMapUnit_impl();}
     protected:
         const OUString& GetBulCharFmtName() { return aNumCharFmtName;}
-        SfxMapUnit GetMapUnit() { return eCoreUnit;}
+        MapUnit GetMapUnit() { return eCoreUnit;}
     protected:
         bool    bIsLoading;
         void    ImplLoad(const OUString& filename);

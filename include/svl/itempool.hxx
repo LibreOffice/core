@@ -111,8 +111,8 @@ public:
     void                            ReleaseDefaults( bool bDelete = false );
     static void                     ReleaseDefaults( SfxPoolItem **pDefaults, sal_uInt16 nCount, bool bDelete = false );
 
-    virtual SfxMapUnit              GetMetric( sal_uInt16 nWhich ) const;
-    void                            SetDefaultMetric( SfxMapUnit eNewMetric );
+    virtual MapUnit                 GetMetric( sal_uInt16 nWhich ) const;
+    void                            SetDefaultMetric( MapUnit eNewMetric );
 
     /** Request string representation of pool items.
 
@@ -141,9 +141,9 @@ public:
         @return true if it has a valid string representation
     */
     virtual bool                    GetPresentation( const SfxPoolItem& rItem,
-                                        SfxMapUnit          ePresentationMetric,
-                                        OUString&           rText,
-                                        const IntlWrapper * pIntlWrapper = nullptr ) const;
+                                                     MapUnit ePresentationMetric,
+                                                     OUString& rText,
+                                                     const IntlWrapper * pIntlWrapper = nullptr ) const;
     virtual SfxItemPool*            Clone() const;
     const OUString&                 GetName() const;
 

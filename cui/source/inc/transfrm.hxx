@@ -116,7 +116,7 @@ private:
     basegfx::B2DRange   maWorkRange;
     basegfx::B2DPoint   maAnchor;
 
-    SfxMapUnit          mePoolUnit;
+    MapUnit             mePoolUnit;
     FieldUnit           meDlgUnit;
     TriState            mnProtectSizeState;
     bool                mbPageDisabled;
@@ -197,7 +197,7 @@ private:
     basegfx::B2DRange   maRange;
     basegfx::B2DPoint   maAnchor;
 
-    SfxMapUnit          ePoolUnit;
+    MapUnit             ePoolUnit;
     FieldUnit           eDlgUnit;
 
 public:
@@ -250,7 +250,7 @@ private:
     // #i75273#
     basegfx::B2DRange   maRange;
 
-    SfxMapUnit          ePoolUnit;
+    MapUnit             ePoolUnit;
     FieldUnit           eDlgUnit;
 
 public:

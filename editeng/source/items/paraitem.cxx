@@ -230,8 +230,8 @@ SfxPoolItem* SvxLineSpacingItem::Clone( SfxItemPool * ) const
 bool SvxLineSpacingItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
@@ -415,8 +415,8 @@ SfxPoolItem* SvxAdjustItem::Clone( SfxItemPool * ) const
 bool SvxAdjustItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
@@ -530,8 +530,8 @@ SvStream& SvxWidowsItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
 bool SvxWidowsItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
@@ -591,8 +591,8 @@ SvStream& SvxOrphansItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
 bool SvxOrphansItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
@@ -703,8 +703,8 @@ SfxPoolItem* SvxHyphenZoneItem::Clone( SfxItemPool * ) const
 bool SvxHyphenZoneItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
@@ -1028,8 +1028,8 @@ SfxPoolItem* SvxTabStopItem::Clone( SfxItemPool * ) const
 bool SvxTabStopItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    MapUnit             eCoreUnit,
+    MapUnit             ePresUnit,
     OUString&           rText, const IntlWrapper *pIntl
 )   const
 {
@@ -1186,8 +1186,8 @@ SfxPoolItem* SvxFormatSplitItem::Create( SvStream& rStrm, sal_uInt16 ) const
 bool SvxFormatSplitItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
@@ -1246,8 +1246,8 @@ bool SvxPageModelItem::operator==( const SfxPoolItem& rAttr ) const
 bool SvxPageModelItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
@@ -1302,7 +1302,7 @@ sal_uInt16  SvxScriptSpaceItem::GetVersion( sal_uInt16 nFFVer ) const
 
 bool SvxScriptSpaceItem::GetPresentation(
         SfxItemPresentation /*ePres*/,
-        SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
+        MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
     rText = EE_RESSTR( !GetValue()
@@ -1342,7 +1342,7 @@ sal_uInt16 SvxHangingPunctuationItem::GetVersion( sal_uInt16 nFFVer ) const
 
 bool SvxHangingPunctuationItem::GetPresentation(
         SfxItemPresentation /*ePres*/,
-        SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
+        MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
     rText = EE_RESSTR( !GetValue()
@@ -1382,7 +1382,7 @@ sal_uInt16 SvxForbiddenRuleItem::GetVersion( sal_uInt16 nFFVer ) const
 
 bool SvxForbiddenRuleItem::GetPresentation(
         SfxItemPresentation /*ePres*/,
-        SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
+        MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
     rText = EE_RESSTR( !GetValue()
@@ -1426,7 +1426,7 @@ sal_uInt16 SvxParaVertAlignItem::GetVersion( sal_uInt16 nFFVer ) const
 
 bool SvxParaVertAlignItem::GetPresentation(
         SfxItemPresentation /*ePres*/,
-        SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
+        MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper*  ) const
 {
     sal_uInt16 nTmp;
@@ -1498,7 +1498,7 @@ sal_uInt16  SvxParaGridItem::GetVersion( sal_uInt16 nFFVer ) const
 
 bool SvxParaGridItem::GetPresentation(
         SfxItemPresentation /*ePres*/,
-        SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
+        MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
     rText = GetValue() ?

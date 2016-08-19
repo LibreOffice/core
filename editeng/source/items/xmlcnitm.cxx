@@ -56,8 +56,8 @@ bool SvXMLAttrContainerItem::operator==( const SfxPoolItem& rItem ) const
 
 bool SvXMLAttrContainerItem::GetPresentation(
                     SfxItemPresentation /*ePresentation*/,
-                    SfxMapUnit /*eCoreMetric*/,
-                    SfxMapUnit /*ePresentationMetric*/,
+                    MapUnit /*eCoreMetric*/,
+                    MapUnit /*ePresentationMetric*/,
                     OUString & /*rText*/,
                     const IntlWrapper * /*pIntlWrapper*/ ) const
 {

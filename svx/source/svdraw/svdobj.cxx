@@ -476,7 +476,7 @@ SdrItemPool& SdrObject::GetGlobalDrawObjectItemPool()
         mpGlobalItemPool = new SdrItemPool();
         SfxItemPool* pGlobalOutlPool = EditEngine::CreatePool();
         mpGlobalItemPool->SetSecondaryPool(pGlobalOutlPool);
-        mpGlobalItemPool->SetDefaultMetric((SfxMapUnit)SdrEngineDefaults::GetMapUnit());
+        mpGlobalItemPool->SetDefaultMetric(SdrEngineDefaults::GetMapUnit());
         mpGlobalItemPool->FreezeIdRanges();
     }
 
@@ -1971,7 +1971,7 @@ const SfxPoolItem& SdrObject::GetObjectItem(const sal_uInt16 nWhich) const
     return GetObjectItemSet().Get(nWhich);
 }
 
-SfxMapUnit SdrObject::GetObjectMapUnit() const
+MapUnit SdrObject::GetObjectMapUnit() const
 {
     return GetObjectItemPool().GetMetric(0);
 }
@@ -2958,12 +2958,12 @@ bool SdrObject::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPo
     }
 
     // force MapUnit to 100th mm
-    const SfxMapUnit eMapUnit(GetObjectMapUnit());
-    if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+    const MapUnit eMapUnit(GetObjectMapUnit());
+    if(eMapUnit != MAP_100TH_MM)
     {
         switch(eMapUnit)
         {
-            case SFX_MAPUNIT_TWIP :
+            case MAP_TWIP :
             {
                 // position
                 aTranslate.setX(ImplTwipsToMM(aTranslate.getX()));
@@ -3008,12 +3008,12 @@ void SdrObject::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const ba
     }
 
     // force metric to pool metric
-    const SfxMapUnit eMapUnit(GetObjectMapUnit());
-    if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+    const MapUnit eMapUnit(GetObjectMapUnit());
+    if(eMapUnit != MAP_100TH_MM)
     {
         switch(eMapUnit)
         {
-            case SFX_MAPUNIT_TWIP :
+            case MAP_TWIP :
             {
                 // position
                 aTranslate.setX(ImplMMToTwips(aTranslate.getX()));

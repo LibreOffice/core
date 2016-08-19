@@ -261,7 +261,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
         }
         bIsDontCare = !pBoxInfo->IsValid( SvxBoxInfoItemValidFlags::DISABLE );
     }
-    if(!mbUseMarginItem && eFUnit == FUNIT_MM && SFX_MAPUNIT_TWIP == rCoreAttrs.GetPool()->GetMetric( GetWhich( SID_ATTR_BORDER_INNER ) ))
+    if(!mbUseMarginItem && eFUnit == FUNIT_MM && MAP_TWIP == rCoreAttrs.GetPool()->GetMetric( GetWhich( SID_ATTR_BORDER_INNER ) ))
     {
         //#i91548# changing the number of decimal digits changes the minimum values, too
         lcl_SetDecimalDigitsTo1(*m_pLeftMF);
@@ -433,8 +433,8 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
 
     const SvxBoxItem*       pBoxItem;
     const SvxBoxInfoItem*   pBoxInfoItem;
-    sal_uInt16                  nWhichBox       = GetWhich(SID_ATTR_BORDER_OUTER);
-    SfxMapUnit              eCoreUnit;
+    sal_uInt16              nWhichBox       = GetWhich(SID_ATTR_BORDER_OUTER);
+    MapUnit                 eCoreUnit;
 
     pBoxItem  = static_cast<const SvxBoxItem*>(GetItem( *rSet, SID_ATTR_BORDER_OUTER ));
 
@@ -663,7 +663,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
     SvxBoxInfoItem        aBoxInfoItem  ( nBoxInfoWhich );
     const SvxBoxItem*     pOldBoxItem = static_cast<const SvxBoxItem*>(GetOldItem( *rCoreAttrs, SID_ATTR_BORDER_OUTER ));
 
-    SfxMapUnit eCoreUnit = rOldSet.GetPool()->GetMetric( nBoxWhich );
+    MapUnit eCoreUnit = rOldSet.GetPool()->GetMetric( nBoxWhich );
 
 
     // outer border:

@@ -1523,7 +1523,7 @@ bool View::PasteRTFTable( const ::tools::SvRef<SotStorageStream>& xStm, SdrPage*
 {
     std::unique_ptr<SdDrawDocument> pModel(new SdDrawDocument( DOCUMENT_TYPE_IMPRESS, mpDocSh ));
     pModel->NewOrLoadCompleted(NEW_DOC);
-    pModel->GetItemPool().SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
+    pModel->GetItemPool().SetDefaultMetric(MAP_100TH_MM);
     pModel->InsertPage(pModel->AllocPage(false));
 
     Reference< XComponent > xComponent( new SdXImpressDocument( pModel.get(), true ) );

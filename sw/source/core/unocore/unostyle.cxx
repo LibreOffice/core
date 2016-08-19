@@ -1582,8 +1582,8 @@ sal_uInt8 lcl_TranslateMetric(const SfxItemPropertySimpleEntry& rEntry, SwDoc* p
         return rEntry.nMemberId & (~SFX_METRIC_ITEM);
 
     const SfxItemPool& rPool = pDoc->GetAttrPool();
-    const SfxMapUnit eMapUnit(rPool.GetMetric(rEntry.nWID));
-    if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+    const MapUnit eMapUnit(rPool.GetMetric(rEntry.nWID));
+    if(eMapUnit != MAP_100TH_MM)
         SvxUnoConvertFromMM(eMapUnit, o_aValue);
     return rEntry.nMemberId & (~SFX_METRIC_ITEM);
 }
@@ -2310,13 +2310,13 @@ uno::Any SwXStyle::GetStyleProperty<HINT_BEGIN>(const SfxItemPropertySimpleEntry
     if(rEntry.nMemberId & SFX_METRIC_ITEM && GetDoc())
     {
         const SfxItemPool& rPool = GetDoc()->GetAttrPool();
-        const SfxMapUnit eMapUnit(rPool.GetMetric(rEntry.nWID));
+        const MapUnit eMapUnit(rPool.GetMetric(rEntry.nWID));
         bool bAllowedConvert(true);
         // exception: If these ItemTypes are used, do not convert when these are negative
         // since this means they are intended as percent values
         if(XATTR_FILLBMP_SIZEX == rEntry.nWID || XATTR_FILLBMP_SIZEY == rEntry.nWID)
             bAllowedConvert = !aResult.has<sal_Int32>() || aResult.get<sal_Int32>() > 0;
-        if(eMapUnit != SFX_MAPUNIT_100TH_MM && bAllowedConvert)
+        if(eMapUnit != MAP_100TH_MM && bAllowedConvert)
             SvxUnoConvertToMM(eMapUnit, aResult);
     }
     return aResult;
@@ -3616,9 +3616,9 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
                 if(bDoIt)
                 {
                     const SfxItemPool& rPool = m_pDocShell->GetDoc()->GetAttrPool();
-                    const SfxMapUnit eMapUnit(rPool.GetMetric(pEntry->nWID));
+                    const MapUnit eMapUnit(rPool.GetMetric(pEntry->nWID));
 
-                    if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+                    if(eMapUnit != MAP_100TH_MM)
                     {
                         SvxUnoConvertFromMM(eMapUnit, aValue);
                     }
@@ -4100,9 +4100,9 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
                 if(bDoIt)
                 {
                     const SfxItemPool& rPool = mrDoc.GetAttrPool();
-                    const SfxMapUnit eMapUnit(rPool.GetMetric(pEntry->nWID));
+                    const MapUnit eMapUnit(rPool.GetMetric(pEntry->nWID));
 
-                    if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+                    if(eMapUnit != MAP_100TH_MM)
                     {
                         SvxUnoConvertToMM(eMapUnit, aTarget);
                     }

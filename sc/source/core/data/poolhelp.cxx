@@ -51,7 +51,7 @@ SfxItemPool*        ScPoolHelper::GetEditPool() const
     if ( !pEditPool )
     {
         pEditPool = EditEngine::CreatePool();
-        pEditPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
+        pEditPool->SetDefaultMetric( MAP_100TH_MM );
         pEditPool->FreezeIdRanges();
         pEditPool->SetFileFormatVersion( SOFFICE_FILEFORMAT_50 );   // used in ScGlobal::EETextObjEqual
     }
@@ -62,7 +62,7 @@ SfxItemPool*        ScPoolHelper::GetEnginePool() const
     if ( !pEnginePool )
     {
         pEnginePool = EditEngine::CreatePool();
-        pEnginePool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
+        pEnginePool->SetDefaultMetric( MAP_100TH_MM );
         pEnginePool->FreezeIdRanges();
     } // ifg ( pEnginePool )
     return pEnginePool;

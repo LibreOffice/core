@@ -170,7 +170,7 @@ bool SvxCaptionTabPage::FillItemSet( SfxItemSet*  _rOutAttrs)
     SfxItemPool*    pPool = _rOutAttrs->GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
 
-    SfxMapUnit      eUnit;
+    MapUnit      eUnit;
 
     nCaptionType = (SdrCaptionType) (m_pCT_CAPTTYPE->GetSelectItemId()-1);
 
@@ -260,8 +260,8 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
     SfxItemPool*    pPool = rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
 
-    sal_uInt16          nWhich;
-    SfxMapUnit      eUnit;
+    sal_uInt16   nWhich;
+    MapUnit      eUnit;
 
     nWhich = GetWhich( SDRATTR_CAPTIONESCABS );
     eUnit = pPool->GetMetric( nWhich );

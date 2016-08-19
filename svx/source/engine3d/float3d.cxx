@@ -97,7 +97,7 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     , pConvertTo3DItem(nullptr)
     , pConvertTo3DLatheItem(nullptr)
     , mpImpl(new Svx3DWinImpl())
-    , ePoolUnit(SFX_MAPUNIT_MM)
+    , ePoolUnit(MAP_MM)
     , mpRemember2DAttributes(nullptr)
 {
     get(m_pBtnGeo, "geometry");

@@ -138,7 +138,7 @@ bool GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel )
         // read as XML
         uno::Reference< io::XInputStream > xInputStream( new utl::OInputStreamWrapper( rIStm ) );
 
-        rModel.GetItemPool().SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
+        rModel.GetItemPool().SetDefaultMetric( MAP_100TH_MM );
         uno::Reference< lang::XComponent > xComponent;
 
         bRet = SvxDrawingLayerImport( &rModel, xInputStream, xComponent, "com.sun.star.comp.Draw.XMLOasisImporter" );

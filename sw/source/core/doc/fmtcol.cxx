@@ -284,7 +284,7 @@ void SwTextFormatColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
             pFSize != pOldFSize )
         {
             if( 100 == pOldFSize->GetProp() &&
-                SFX_MAPUNIT_RELATIVE == pOldFSize->GetPropUnit() )
+                MAP_RELATIVE == pOldFSize->GetPropUnit() )
             {
                 // We set it to absolute -> do not propagate it further, unless
                 // we set it!

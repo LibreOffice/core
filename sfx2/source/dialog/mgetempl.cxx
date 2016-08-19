@@ -311,7 +311,7 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
 */
 
 {
-    SfxMapUnit eUnit = SFX_MAPUNIT_CM;
+    MapUnit eUnit = MAP_CM;
     FieldUnit eFieldUnit( FUNIT_CM );
     SfxModule* pModule = SfxModule::GetActiveModule();
     if ( pModule )
@@ -323,15 +323,15 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
 
     switch ( eFieldUnit )
     {
-        case FUNIT_MM:      eUnit = SFX_MAPUNIT_MM; break;
+        case FUNIT_MM:      eUnit = MAP_MM; break;
         case FUNIT_CM:
         case FUNIT_M:
-        case FUNIT_KM:      eUnit = SFX_MAPUNIT_CM; break;
+        case FUNIT_KM:      eUnit = MAP_CM; break;
         case FUNIT_POINT:
-        case FUNIT_PICA:    eUnit = SFX_MAPUNIT_POINT; break;
+        case FUNIT_PICA:    eUnit = MAP_POINT; break;
         case FUNIT_INCH:
         case FUNIT_FOOT:
-        case FUNIT_MILE:    eUnit = SFX_MAPUNIT_INCH; break;
+        case FUNIT_MILE:    eUnit = MAP_INCH; break;
 
         default:
             OSL_FAIL( "non supported field unit" );
