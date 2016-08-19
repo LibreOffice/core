@@ -20,6 +20,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 		external/firebird/firebird-cloop-compiler.patch.1 \
 		external/firebird/firebird-gcc6.patch.1 \
 		external/firebird/wnt-dbgutil.patch \
+		external/firebird/libc++.patch \
 ))
 
 ifeq ($(OS)-$(COM),WNT-MSC)

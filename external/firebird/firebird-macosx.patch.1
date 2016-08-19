@@ -11,15 +11,15 @@
  #ifdef WIN32
 --- firebird.org/builds/posix/prefix.darwin_x86_64	2016-08-01 20:02:48.000000000 +0200
 +++ firebird/builds/posix/prefix.darwin_x86_64	2016-08-01 21:42:45.000000000 +0200
-@@ -19,7 +19,7 @@
+@@ -19,8 +19,6 @@
  #
  # Default build from 10.7 using Clang
  
 -DYLD_LIBRARY_PATH=$(HOME)/icu54/icu/source/lib
-+DYLD_LIBRARY_PATH:=$(HOME)/icu54/icu/source/lib:$(DYLD_LIBRARY_PATH)
- export DYLD_LIBRARY_PATH
+-export DYLD_LIBRARY_PATH
  
  #DYLD_PRINT_ENV=1
+ #export DYLD_PRINT_ENV
 @@ -31,15 +31,15 @@
  MACOSX_DEPLOYMENT_TARGET=10.7
  export MACOSX_DEPLOYMENT_TARGET
