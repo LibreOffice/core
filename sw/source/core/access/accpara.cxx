@@ -396,9 +396,9 @@ void SwAccessibleParagraph::InvalidateContent_( bool bVisibleDataFired )
         aEvent.EventId = AccessibleEventId::TEXT_CHANGED;
 
         // determine exact changes between sOldText and rText
-        comphelper::OCommonAccessibleText::implInitTextChangedEvent(
-            sOldText, rText,
-            aEvent.OldValue, aEvent.NewValue );
+        (void)comphelper::OCommonAccessibleText::implInitTextChangedEvent(sOldText, rText,
+                                                                          aEvent.OldValue,
+                                                                          aEvent.NewValue);
 
         FireAccessibleEvent( aEvent );
         uno::Reference< XAccessible > xparent = getAccessibleParent();
