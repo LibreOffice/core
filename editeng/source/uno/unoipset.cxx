@@ -103,9 +103,9 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
     if( nullptr == pItem && pPool )
         pItem = &(pPool->GetDefaultItem( pMap->nWID ));
 
-    const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((sal_uInt16)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
+    const MapUnit eMapUnit = pPool ? pPool->GetMetric((sal_uInt16)pMap->nWID) : MAP_100TH_MM;
     sal_uInt8 nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
-    if( eMapUnit == SFX_MAPUNIT_100TH_MM )
+    if( eMapUnit == MAP_100TH_MM )
         nMemberId &= (~CONVERT_TWIPS);
 
     if(pItem)
@@ -113,7 +113,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
         pItem->QueryValue( aVal, nMemberId );
         if( pMap->nMemberId & SFX_METRIC_ITEM )
         {
-            if( eMapUnit != SFX_MAPUNIT_100TH_MM )
+            if( eMapUnit != MAP_100TH_MM )
             {
                 if ( !bDontConvertNegativeValues || SvxUnoCheckForPositiveValue( aVal ) )
                     SvxUnoConvertToMM( eMapUnit, aVal );
@@ -164,10 +164,10 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
     {
         uno::Any aValue( rVal );
 
-        const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((sal_uInt16)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
+        const MapUnit eMapUnit = pPool ? pPool->GetMetric((sal_uInt16)pMap->nWID) : MAP_100TH_MM;
 
         // check for needed metric translation
-        if( (pMap->nMemberId & SFX_METRIC_ITEM) && eMapUnit != SFX_MAPUNIT_100TH_MM )
+        if( (pMap->nMemberId & SFX_METRIC_ITEM) && eMapUnit != MAP_100TH_MM )
         {
             if ( !bDontConvertNegativeValues || SvxUnoCheckForPositiveValue( aValue ) )
                 SvxUnoConvertFromMM( eMapUnit, aValue );
@@ -176,7 +176,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
         SfxPoolItem *pNewItem = pItem->Clone();
 
         sal_uInt8 nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
-        if( eMapUnit == SFX_MAPUNIT_100TH_MM )
+        if( eMapUnit == MAP_100TH_MM )
             nMemberId &= (~CONVERT_TWIPS);
 
         if( pNewItem->PutValue( aValue, nMemberId ) )
@@ -198,9 +198,9 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
         return *pUsrAny;
 
     // No UsrAny detected yet, generate Default entry and return this
-    const SfxMapUnit eMapUnit = mrItemPool.GetMetric((sal_uInt16)pMap->nWID);
+    const MapUnit eMapUnit = mrItemPool.GetMetric((sal_uInt16)pMap->nWID);
     sal_uInt8 nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
-    if( eMapUnit == SFX_MAPUNIT_100TH_MM )
+    if( eMapUnit == MAP_100TH_MM )
         nMemberId &= (~CONVERT_TWIPS);
     uno::Any aVal;
     SfxItemSet aSet( mrItemPool, pMap->nWID, pMap->nWID);
@@ -226,7 +226,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
     if( pMap->nMemberId & SFX_METRIC_ITEM )
     {
         // check for needed metric translation
-        if(pMap->nMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
+        if(pMap->nMemberId & SFX_METRIC_ITEM && eMapUnit != MAP_100TH_MM)
         {
             SvxUnoConvertToMM( eMapUnit, aVal );
         }
@@ -277,12 +277,12 @@ uno::Reference< beans::XPropertySetInfo > const &  SvxItemPropertySet::getProper
 #endif
 
 /** converts the given any with a metric to 100th/mm if needed */
-void SvxUnoConvertToMM( const SfxMapUnit eSourceMapUnit, uno::Any & rMetric ) throw()
+void SvxUnoConvertToMM( const MapUnit eSourceMapUnit, uno::Any & rMetric ) throw()
 {
     // map the metric of the itempool to 100th mm
     switch(eSourceMapUnit)
     {
-        case SFX_MAPUNIT_TWIP :
+        case MAP_TWIP :
         {
             switch( rMetric.getValueTypeClass() )
             {
@@ -315,11 +315,11 @@ void SvxUnoConvertToMM( const SfxMapUnit eSourceMapUnit, uno::Any & rMetric ) th
 
 
 /** converts the given any with a metric from 100th/mm to the given metric if needed */
-void SvxUnoConvertFromMM( const SfxMapUnit eDestinationMapUnit, uno::Any & rMetric ) throw()
+void SvxUnoConvertFromMM( const MapUnit eDestinationMapUnit, uno::Any & rMetric ) throw()
 {
     switch(eDestinationMapUnit)
     {
-        case SFX_MAPUNIT_TWIP :
+        case MAP_TWIP :
         {
             switch( rMetric.getValueTypeClass() )
             {

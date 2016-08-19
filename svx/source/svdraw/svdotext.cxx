@@ -1630,12 +1630,12 @@ bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
     }
 
     // force MapUnit to 100th mm
-    const SfxMapUnit eMapUnit(GetObjectMapUnit());
-    if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+    const MapUnit eMapUnit(GetObjectMapUnit());
+    if(eMapUnit != MAP_100TH_MM)
     {
         switch(eMapUnit)
         {
-            case SFX_MAPUNIT_TWIP :
+            case MAP_TWIP :
             {
                 // position
                 aTranslate.setX(ImplTwipsToMM(aTranslate.getX()));
@@ -1695,12 +1695,12 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     aGeo.RecalcTan();
 
     // force metric to pool metric
-    const SfxMapUnit eMapUnit(GetObjectMapUnit());
-    if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+    const MapUnit eMapUnit(GetObjectMapUnit());
+    if(eMapUnit != MAP_100TH_MM)
     {
         switch(eMapUnit)
         {
-            case SFX_MAPUNIT_TWIP :
+            case MAP_TWIP :
             {
                 // position
                 aTranslate.setX(ImplMMToTwips(aTranslate.getX()));

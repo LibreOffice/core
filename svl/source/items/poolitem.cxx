@@ -180,8 +180,8 @@ SvStream& SfxPoolItem::Store(SvStream &rStream, sal_uInt16 ) const
 bool SfxPoolItem::GetPresentation
 (
     SfxItemPresentation /*ePresentation*/,       // IN:  how we should format
-    SfxMapUnit          /*eCoreMetric*/,         // IN:  current metric of the SfxPoolItems
-    SfxMapUnit          /*ePresentationMetric*/, // IN:  target metric of the presentation
+    MapUnit             /*eCoreMetric*/,         // IN:  current metric of the SfxPoolItems
+    MapUnit             /*ePresentationMetric*/, // IN:  target metric of the presentation
     OUString&           /*rText*/,               // OUT: textual representation
     const IntlWrapper *
 )   const
@@ -230,8 +230,8 @@ bool SfxVoidItem::operator==( const SfxPoolItem& rCmp ) const
 bool SfxVoidItem::GetPresentation
 (
     SfxItemPresentation     /*ePresentation*/,
-    SfxMapUnit              /*eCoreMetric*/,
-    SfxMapUnit              /*ePresentationMetric*/,
+    MapUnit                 /*eCoreMetric*/,
+    MapUnit                 /*ePresentationMetric*/,
     OUString&               rText,
     const IntlWrapper *
 )   const

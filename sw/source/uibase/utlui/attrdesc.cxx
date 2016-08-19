@@ -63,8 +63,8 @@ using namespace com::sun::star;
 // query the attribute descriptions
 void SwAttrSet::GetPresentation(
         SfxItemPresentation ePres,
-        SfxMapUnit eCoreMetric,
-        SfxMapUnit ePresMetric,
+        MapUnit eCoreMetric,
+        MapUnit ePresMetric,
         OUString &rText ) const
 {
     static sal_Char const sComma[] = ", ";
@@ -94,8 +94,8 @@ void SwAttrSet::GetPresentation(
 bool SwFormatCharFormat::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    MapUnit             eCoreUnit,
+    MapUnit             ePresUnit,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
@@ -116,8 +116,8 @@ bool SwFormatCharFormat::GetPresentation
 bool SwFormatAutoFormat::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
@@ -129,8 +129,8 @@ bool SwFormatAutoFormat::GetPresentation
 bool SwFormatINetFormat::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
@@ -140,8 +140,8 @@ bool SwFormatINetFormat::GetPresentation
 }
 
 bool SwFormatRuby::GetPresentation( SfxItemPresentation /*ePres*/,
-                            SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
-                            OUString &rText, const IntlWrapper* /*pIntl*/ ) const
+                                    MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
+                                    OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
     rText.clear();
     return true;
@@ -150,8 +150,8 @@ bool SwFormatRuby::GetPresentation( SfxItemPresentation /*ePres*/,
 bool SwFormatDrop::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
@@ -178,8 +178,8 @@ bool SwFormatDrop::GetPresentation
 bool SwRegisterItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
@@ -192,8 +192,8 @@ bool SwRegisterItem::GetPresentation
 bool SwNumRuleItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
@@ -209,8 +209,8 @@ bool SwNumRuleItem::GetPresentation
 bool SwParaConnectBorderItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
@@ -225,8 +225,8 @@ bool SwParaConnectBorderItem::GetPresentation
 bool SwFormatFrameSize::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    MapUnit             eCoreUnit,
+    MapUnit             ePresUnit,
     OUString&           rText,
     const IntlWrapper*        pIntl
 )   const
@@ -267,8 +267,8 @@ bool SwFormatFrameSize::GetPresentation
 bool SwFormatHeader::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
@@ -284,8 +284,8 @@ bool SwFormatHeader::GetPresentation
 bool SwFormatFooter::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
@@ -298,8 +298,8 @@ bool SwFormatFooter::GetPresentation
 bool SwFormatSurround::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
@@ -342,8 +342,8 @@ bool SwFormatSurround::GetPresentation
 bool SwFormatVertOrient::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    MapUnit             eCoreUnit,
+    MapUnit             ePresUnit,
     OUString&           rText,
     const IntlWrapper*        pIntl
 )   const
@@ -388,8 +388,8 @@ bool SwFormatVertOrient::GetPresentation
 bool SwFormatHoriOrient::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    MapUnit             eCoreUnit,
+    MapUnit             ePresUnit,
     OUString&           rText,
     const IntlWrapper*        pIntl
 )   const
@@ -434,8 +434,8 @@ bool SwFormatHoriOrient::GetPresentation
 bool SwFormatAnchor::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
@@ -462,8 +462,8 @@ bool SwFormatAnchor::GetPresentation
 bool SwFormatPageDesc::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
@@ -481,8 +481,8 @@ bool SwFormatPageDesc::GetPresentation
 bool SwFormatCol::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             eCoreUnit,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        pIntl
 )   const
@@ -496,7 +496,7 @@ bool SwFormatCol::GetPresentation
             const long nWdth = static_cast<long>(GetLineWidth());
             rText = rText + " " + SW_RESSTR( STR_LINE_WIDTH ) + " " +
                     ::GetMetricText( nWdth, eCoreUnit,
-                                      SFX_MAPUNIT_POINT, pIntl );
+                                      MAP_POINT, pIntl );
         }
     }
     else
@@ -509,8 +509,8 @@ bool SwFormatCol::GetPresentation
 bool SwFormatURL::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
@@ -536,8 +536,8 @@ bool SwFormatURL::GetPresentation
 bool SwFormatEditInReadonly::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
@@ -559,8 +559,8 @@ void SwFormatEditInReadonly::dumpAsXml(xmlTextWriterPtr pWriter) const
 bool SwFormatLayoutSplit::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
@@ -573,8 +573,8 @@ bool SwFormatLayoutSplit::GetPresentation
 bool SwFormatRowSplit::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           /*rText*/,
     const IntlWrapper*        /*pIntl*/
 )   const
@@ -585,8 +585,8 @@ bool SwFormatRowSplit::GetPresentation
 bool SwFormatFootnoteEndAtTextEnd::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           /*rText*/,
     const IntlWrapper*        /*pIntl*/
 )   const
@@ -597,8 +597,8 @@ bool SwFormatFootnoteEndAtTextEnd::GetPresentation
 bool SwFormatChain::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*        /*pIntl*/
 )   const
@@ -621,8 +621,8 @@ bool SwFormatChain::GetPresentation
 bool SwFormatLineNumber::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*    /*pIntl*/
 )   const
@@ -642,8 +642,8 @@ bool SwFormatLineNumber::GetPresentation
 bool SwTextGridItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper*  /*pIntl*/
 )   const
@@ -670,8 +670,8 @@ bool SwTextGridItem::GetPresentation
 bool SwHeaderAndFooterEatSpacingItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           /*rText*/,
     const IntlWrapper*        /*pIntl*/
 )   const
@@ -682,7 +682,7 @@ bool SwHeaderAndFooterEatSpacingItem::GetPresentation
 // Graphic attributes
 
 bool SwMirrorGrf::GetPresentation(
-    SfxItemPresentation /*ePres*/, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
+    SfxItemPresentation /*ePres*/, MapUnit /*eCoreUnit*/, MapUnit /*ePresUnit*/,
     OUString& rText, const IntlWrapper* /*pIntl*/ ) const
 {
     sal_uInt16 nId;
@@ -704,7 +704,7 @@ bool SwMirrorGrf::GetPresentation(
 }
 
 bool SwRotationGrf::GetPresentation(
-    SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
+    SfxItemPresentation ePres, MapUnit /*eCoreUnit*/, MapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
     if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
@@ -716,7 +716,7 @@ bool SwRotationGrf::GetPresentation(
 }
 
 bool SwLuminanceGrf::GetPresentation(
-    SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
+    SfxItemPresentation ePres, MapUnit /*eCoreUnit*/, MapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
     if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
@@ -729,7 +729,7 @@ bool SwLuminanceGrf::GetPresentation(
 }
 
 bool SwContrastGrf::GetPresentation(
-    SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
+    SfxItemPresentation ePres, MapUnit /*eCoreUnit*/, MapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
     if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
@@ -742,7 +742,7 @@ bool SwContrastGrf::GetPresentation(
 }
 
 bool SwChannelGrf::GetPresentation(
-    SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
+    SfxItemPresentation ePres, MapUnit /*eCoreUnit*/, MapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
     if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
@@ -768,7 +768,7 @@ bool SwChannelGrf::GetPresentation(
 }
 
 bool SwGammaGrf::GetPresentation(
-    SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
+    SfxItemPresentation ePres, MapUnit /*eCoreUnit*/, MapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
     OUStringBuffer aText;
@@ -781,7 +781,7 @@ bool SwGammaGrf::GetPresentation(
 }
 
 bool SwInvertGrf::GetPresentation(
-    SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
+    SfxItemPresentation ePres, MapUnit /*eCoreUnit*/, MapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
     rText.clear();
@@ -794,7 +794,7 @@ bool SwInvertGrf::GetPresentation(
 }
 
 bool SwTransparencyGrf::GetPresentation(
-    SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
+    SfxItemPresentation ePres, MapUnit /*eCoreUnit*/, MapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
     if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
@@ -807,7 +807,7 @@ bool SwTransparencyGrf::GetPresentation(
 }
 
 bool SwDrawModeGrf::GetPresentation(
-    SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
+    SfxItemPresentation ePres, MapUnit /*eCoreUnit*/, MapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
     rText.clear();
@@ -828,10 +828,10 @@ bool SwDrawModeGrf::GetPresentation(
 }
 
 bool SwFormatFollowTextFlow::GetPresentation( SfxItemPresentation ePres,
-                                    SfxMapUnit /*eCoreMetric*/,
-                                    SfxMapUnit /*ePresMetric*/,
-                                    OUString &rText,
-                                    const IntlWrapper*    /*pIntl*/ ) const
+                                              MapUnit /*eCoreMetric*/,
+                                              MapUnit /*ePresMetric*/,
+                                              OUString &rText,
+                                              const IntlWrapper*    /*pIntl*/ ) const
 {
     rText.clear();
     if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )

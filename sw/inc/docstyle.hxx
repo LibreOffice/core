@@ -127,7 +127,7 @@ public:
     virtual bool            HasFollowSupport() const override;
     virtual bool            HasParentSupport() const override;
     virtual bool            HasClearParentSupport() const override;
-    virtual OUString        GetDescription(SfxMapUnit eUnit) override;
+    virtual OUString        GetDescription(MapUnit eUnit) override;
 
     SwCharFormat*              GetCharFormat();
     SwTextFormatColl*           GetCollection();

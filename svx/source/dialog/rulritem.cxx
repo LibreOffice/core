@@ -117,8 +117,8 @@ bool SvxLongLRSpaceItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberI
 
 bool SvxLongLRSpaceItem::GetPresentation(
                         SfxItemPresentation /*ePres*/,
-                        SfxMapUnit          /*eCoreUnit*/,
-                        SfxMapUnit          /*ePresUnit*/,
+                        MapUnit             /*eCoreUnit*/,
+                        MapUnit             /*ePresUnit*/,
                         OUString&           /*rText*/,
                         const IntlWrapper*  /*pWrapper*/) const
 {
@@ -243,8 +243,8 @@ bool SvxLongULSpaceItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberI
 
 bool SvxLongULSpaceItem::GetPresentation(
                         SfxItemPresentation /*ePres*/,
-                        SfxMapUnit          /*eCoreUnit*/,
-                        SfxMapUnit          /*ePresUnit*/,
+                        MapUnit             /*eCoreUnit*/,
+                        MapUnit             /*ePresUnit*/,
                         OUString&           /*rText*/,
                         const IntlWrapper*  /*pWrapper*/ ) const
 {
@@ -364,8 +364,8 @@ bool SvxPagePosSizeItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberI
 
 bool SvxPagePosSizeItem::GetPresentation(
                         SfxItemPresentation /*ePres*/,
-                        SfxMapUnit          /*eCoreUnit*/,
-                        SfxMapUnit          /*ePresUnit*/,
+                        MapUnit             /*eCoreUnit*/,
+                        MapUnit             /*ePresUnit*/,
                         OUString&           /*rText*/,
                         const IntlWrapper*  /*pWrapper*/ ) const
 {
@@ -455,8 +455,8 @@ SvxColumnItem::~SvxColumnItem()
 
 bool SvxColumnItem::GetPresentation(
                         SfxItemPresentation /*ePres*/,
-                        SfxMapUnit          /*eCoreUnit*/,
-                        SfxMapUnit          /*ePresUnit*/,
+                        MapUnit             /*eCoreUnit*/,
+                        MapUnit             /*ePresUnit*/,
                         OUString&           /*rText*/,
                         const IntlWrapper*  /*pWrapper*/ ) const
 {
@@ -695,8 +695,8 @@ bool SvxObjectItem::operator==( const SfxPoolItem& rCmp ) const
 
 bool SvxObjectItem::GetPresentation(
                         SfxItemPresentation /*ePres*/,
-                        SfxMapUnit          /*eCoreUnit*/,
-                        SfxMapUnit          /*ePresUnit*/,
+                        MapUnit             /*eCoreUnit*/,
+                        MapUnit             /*ePresUnit*/,
                         OUString&           /*rText*/,
                         const IntlWrapper*  /*pWrapper*/ ) const
 {

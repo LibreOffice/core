@@ -43,8 +43,8 @@ SvxPostItAuthorItem::SvxPostItAuthorItem( const OUString& rAuthor,
 bool SvxPostItAuthorItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
@@ -83,8 +83,8 @@ SvxPostItDateItem::SvxPostItDateItem( const OUString& rDate, sal_uInt16 _nWhich 
 bool SvxPostItDateItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
@@ -112,19 +112,17 @@ SvxPostItTextItem::SvxPostItTextItem( sal_uInt16 _nWhich )
     SetWhich( _nWhich );
 }
 
-
 SvxPostItTextItem::SvxPostItTextItem( const OUString& rText, sal_uInt16 _nWhich ) :
 
     SfxStringItem( _nWhich, rText )
 {
 }
 
-
 bool SvxPostItTextItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
@@ -141,11 +139,9 @@ bool SvxPostItTextItem::GetPresentation
     return false;
 }
 
-
 SfxPoolItem* SvxPostItTextItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItTextItem( *this );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -690,8 +690,8 @@ SfxItemPool* ScDocumentPool::Clone() const
 static bool lcl_HFPresentation
 (
     const SfxPoolItem&  rItem,
-    SfxMapUnit          eCoreMetric,
-    SfxMapUnit          ePresentationMetric,
+    MapUnit             eCoreMetric,
+    MapUnit             ePresentationMetric,
     OUString&           rText,
     const IntlWrapper* pIntl
 )
@@ -787,7 +787,7 @@ static bool lcl_HFPresentation
 
 bool ScDocumentPool::GetPresentation(
     const SfxPoolItem&  rItem,
-    SfxMapUnit          ePresentationMetric,
+    MapUnit             ePresentationMetric,
     OUString&           rText,
     const IntlWrapper* pIntl ) const
 {
@@ -914,13 +914,13 @@ bool ScDocumentPool::GetPresentation(
     return ePresentationRet;
 }
 
-SfxMapUnit ScDocumentPool::GetMetric( sal_uInt16 nWhich ) const
+MapUnit ScDocumentPool::GetMetric( sal_uInt16 nWhich ) const
 {
     // Own attributes in Twips, everything else in 1/100 mm
     if ( nWhich >= ATTR_STARTINDEX && nWhich <= ATTR_ENDINDEX )
-        return SFX_MAPUNIT_TWIP;
+        return MAP_TWIP;
     else
-        return SFX_MAPUNIT_100TH_MM;
+        return MAP_100TH_MM;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

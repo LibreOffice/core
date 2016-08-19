@@ -821,7 +821,7 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
     };
 
     SfxItemPool* pPool = new SfxItemPool(OUString("GridBrowserProperties"), SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, pDefaults);
-    pPool->SetDefaultMetric( SFX_MAPUNIT_TWIP );    // ripped, don't understand why
+    pPool->SetDefaultMetric( MAP_TWIP );    // ripped, don't understand why
     pPool->FreezeIdRanges();                        // the same
 
     std::unique_ptr<SfxItemSet> pFormatDescriptor(new SfxItemSet(*pPool, aAttrMap));

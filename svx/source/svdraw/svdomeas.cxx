@@ -1391,12 +1391,12 @@ bool SdrMeasureObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B
     }
 
     // force MapUnit to 100th mm
-    SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
-    if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+    MapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
+    if(eMapUnit != MAP_100TH_MM)
     {
         switch(eMapUnit)
         {
-            case SFX_MAPUNIT_TWIP :
+            case MAP_TWIP :
             {
                 // position
                 aTranslate.setX(ImplTwipsToMM(aTranslate.getX()));
@@ -1428,12 +1428,12 @@ void SdrMeasureObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
     basegfx::B2DPoint aPosB(rMatrix * basegfx::B2DPoint(1.0, 0.0));
 
     // force metric to pool metric
-    SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
-    if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+    MapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
+    if(eMapUnit != MAP_100TH_MM)
     {
         switch(eMapUnit)
         {
-            case SFX_MAPUNIT_TWIP :
+            case MAP_TWIP :
             {
                 // position
                 aPosA.setX(ImplMMToTwips(aPosA.getX()));

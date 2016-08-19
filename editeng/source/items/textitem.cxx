@@ -186,8 +186,8 @@ bool SvxFontListItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 bool SvxFontListItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
@@ -422,8 +422,8 @@ SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, sal_uInt16) const
 bool SvxFontItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
@@ -487,8 +487,8 @@ SfxPoolItem* SvxPostureItem::Create(SvStream& rStrm, sal_uInt16) const
 bool SvxPostureItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
@@ -638,8 +638,8 @@ SfxPoolItem* SvxWeightItem::Create(SvStream& rStrm, sal_uInt16) const
 bool SvxWeightItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
@@ -733,7 +733,7 @@ SvStream& SvxFontHeightItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) 
         // When exporting to the old versions the relative information is lost
         // when there is no percentage
         sal_uInt16 _nProp = GetProp();
-        if( SFX_MAPUNIT_RELATIVE != GetPropUnit() )
+        if( MAP_RELATIVE != GetPropUnit() )
             _nProp = 100;
         rStrm.WriteUInt16( _nProp );
     }
@@ -744,7 +744,7 @@ SvStream& SvxFontHeightItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) 
 SfxPoolItem* SvxFontHeightItem::Create( SvStream& rStrm,
                                                  sal_uInt16 nVersion ) const
 {
-    sal_uInt16 nsize, nprop = 0, nPropUnit = SFX_MAPUNIT_RELATIVE;
+    sal_uInt16 nsize, nprop = 0, nPropUnit = MAP_RELATIVE;
 
     rStrm.ReadUInt16( nsize );
 
@@ -761,7 +761,7 @@ SfxPoolItem* SvxFontHeightItem::Create( SvStream& rStrm,
         rStrm.ReadUInt16( nPropUnit );
 
     SvxFontHeightItem* pItem = new SvxFontHeightItem( nsize, 100, Which() );
-    pItem->SetProp( nprop, (SfxMapUnit)nPropUnit );
+    pItem->SetProp( nprop, (MapUnit)nPropUnit );
     return pItem;
 }
 
@@ -801,22 +801,22 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 aFontHeight.Height = fRoundPoints;
             }
 
-            aFontHeight.Prop = (sal_Int16)(SFX_MAPUNIT_RELATIVE == ePropUnit ? nProp : 100);
+            aFontHeight.Prop = (sal_Int16)(MAP_RELATIVE == ePropUnit ? nProp : 100);
 
             float fRet = (float)(short)nProp;
             switch( ePropUnit )
             {
-                case SFX_MAPUNIT_RELATIVE:
+                case MAP_RELATIVE:
                     fRet = 0.;
                 break;
-                case SFX_MAPUNIT_100TH_MM:
+                case MAP_100TH_MM:
                     fRet = convertMm100ToTwip(fRet);
                     fRet /= 20.;
                 break;
-                case SFX_MAPUNIT_POINT:
+                case MAP_POINT:
 
                 break;
-                case SFX_MAPUNIT_TWIP:
+                case MAP_TWIP:
                     fRet /= 20.;
                 break;
                 default: ;//prevent warning
@@ -843,24 +843,24 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         break;
         case MID_FONTHEIGHT_PROP:
-            rVal <<= (sal_Int16)(SFX_MAPUNIT_RELATIVE == ePropUnit ? nProp : 100);
+            rVal <<= (sal_Int16)(MAP_RELATIVE == ePropUnit ? nProp : 100);
         break;
         case MID_FONTHEIGHT_DIFF:
         {
             float fRet = (float)(short)nProp;
             switch( ePropUnit )
             {
-                case SFX_MAPUNIT_RELATIVE:
+                case MAP_RELATIVE:
                     fRet = 0.;
                 break;
-                case SFX_MAPUNIT_100TH_MM:
+                case MAP_100TH_MM:
                     fRet = convertMm100ToTwip(fRet);
                     fRet /= 20.;
                 break;
-                case SFX_MAPUNIT_POINT:
+                case MAP_POINT:
 
                 break;
-                case SFX_MAPUNIT_TWIP:
+                case MAP_TWIP:
                     fRet /= 20.;
                 break;
                 default: ;//prevent warning
@@ -879,17 +879,17 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 // overloads), and indeed known to occasionally produce nRet values that would
 // be negative, so just guard against negative results here and throw the hands
 // up in despair:
-static sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, SfxMapUnit eProp, bool bCoreInTwip)
+static sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, MapUnit eProp, bool bCoreInTwip)
 {
     sal_uInt32 nRet = nHeight;
     short nDiff = 0;
     switch( eProp )
     {
-        case SFX_MAPUNIT_RELATIVE:
+        case MAP_RELATIVE:
             nRet *= 100;
             nRet /= nProp;
         break;
-        case SFX_MAPUNIT_POINT:
+        case MAP_POINT:
         {
             short nTemp = (short)nProp;
             nDiff = nTemp * 20;
@@ -897,11 +897,11 @@ static sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, S
                 nDiff = (short)convertTwipToMm100((long)(nDiff));
         }
         break;
-        case SFX_MAPUNIT_100TH_MM:
+        case MAP_100TH_MM:
             //then the core is surely also in 1/100 mm
             nDiff = (short)nProp;
         break;
-        case SFX_MAPUNIT_TWIP:
+        case MAP_TWIP:
             // Here surely TWIP
             nDiff = ((short)nProp);
         break;
@@ -926,7 +926,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if ( rVal >>= aFontHeight )
             {
                 // Height
-                ePropUnit = SFX_MAPUNIT_RELATIVE;
+                ePropUnit = MAP_RELATIVE;
                 nProp = 100;
                 double fPoint = aFontHeight.Height;
                 if( fPoint < 0. || fPoint > 10000. )
@@ -944,7 +944,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
         case MID_FONTHEIGHT:
         {
-            ePropUnit = SFX_MAPUNIT_RELATIVE;
+            ePropUnit = MAP_RELATIVE;
             nProp = 100;
             double fPoint = 0;
             if(!(rVal >>= fPoint))
@@ -973,7 +973,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             nHeight *= nNew;
             nHeight /= 100;
             nProp = nNew;
-            ePropUnit = SFX_MAPUNIT_RELATIVE;
+            ePropUnit = MAP_RELATIVE;
         }
         break;
         case MID_FONTHEIGHT_DIFF:
@@ -990,7 +990,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nCoreDiffValue = (sal_Int16)(fValue * 20.);
             nHeight += bConvert ? nCoreDiffValue : convertTwipToMm100(nCoreDiffValue);
             nProp = (sal_uInt16)((sal_Int16)fValue);
-            ePropUnit = SFX_MAPUNIT_POINT;
+            ePropUnit = MAP_POINT;
         }
         break;
     }
@@ -1001,12 +1001,12 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 bool SvxFontHeightItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             eCoreUnit,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *pIntl
 )   const
 {
-    if( SFX_MAPUNIT_RELATIVE != ePropUnit )
+    if( MAP_RELATIVE != ePropUnit )
     {
         rText = OUString::number( (short)nProp ) +
                 " " + EE_RESSTR( GetMetricId( ePropUnit ) );
@@ -1016,8 +1016,8 @@ bool SvxFontHeightItem::GetPresentation
     else if( 100 == nProp )
     {
         rText = GetMetricText( (long)nHeight,
-                                eCoreUnit, SFX_MAPUNIT_POINT, pIntl ) +
-                " " + EE_RESSTR(GetMetricId(SFX_MAPUNIT_POINT));
+                                eCoreUnit, MAP_POINT, pIntl ) +
+                " " + EE_RESSTR(GetMetricId(MAP_POINT));
     }
     else
         rText = OUString::number( nProp ) + "%";
@@ -1045,11 +1045,11 @@ bool SvxFontHeightItem::HasMetrics() const
 }
 
 void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, const sal_uInt16 nNewProp,
-                                    SfxMapUnit eUnit )
+                                   MapUnit eUnit )
 {
     DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
 
-    if( SFX_MAPUNIT_RELATIVE != eUnit )
+    if( MAP_RELATIVE != eUnit )
         nHeight = nNewHeight + ::ItemToControl( (short)nNewProp, eUnit,
                                                 FUNIT_TWIP );
     else if( 100 != nNewProp )
@@ -1062,11 +1062,11 @@ void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, const sal_uInt16 nNewP
 }
 
 void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, sal_uInt16 nNewProp,
-                                 SfxMapUnit eMetric, SfxMapUnit eCoreMetric )
+                                   MapUnit eMetric, MapUnit eCoreMetric )
 {
     DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
 
-    if( SFX_MAPUNIT_RELATIVE != eMetric )
+    if( MAP_RELATIVE != eMetric )
         nHeight = nNewHeight +
                 ::ControlToItem( ::ItemToControl((short)nNewProp, eMetric,
                                         FUNIT_TWIP ), FUNIT_TWIP,
@@ -1186,16 +1186,16 @@ bool SvxFontWidthItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 bool SvxFontWidthItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             eCoreUnit,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *pIntl
 )   const
 {
     if ( 100 == nProp )
     {
         rText = GetMetricText( (long)nWidth,
-                                eCoreUnit, SFX_MAPUNIT_POINT, pIntl ) +
-                " " + EE_RESSTR(GetMetricId(SFX_MAPUNIT_POINT));
+                                eCoreUnit, MAP_POINT, pIntl ) +
+                " " + EE_RESSTR(GetMetricId(MAP_POINT));
     }
     else
         rText = OUString::number( nProp ) + "%";
@@ -1260,8 +1260,8 @@ SfxPoolItem* SvxTextLineItem::Create(SvStream& rStrm, sal_uInt16) const
 bool SvxTextLineItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
@@ -1463,8 +1463,8 @@ SfxPoolItem* SvxCrossedOutItem::Create(SvStream& rStrm, sal_uInt16) const
 bool SvxCrossedOutItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
@@ -1545,8 +1545,8 @@ SfxPoolItem* SvxShadowedItem::Create(SvStream& rStrm, sal_uInt16) const
 bool SvxShadowedItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
@@ -1590,8 +1590,8 @@ SfxPoolItem* SvxAutoKernItem::Create(SvStream& rStrm, sal_uInt16) const
 bool SvxAutoKernItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
@@ -1636,8 +1636,8 @@ SfxPoolItem* SvxWordLineModeItem::Create(SvStream& rStrm, sal_uInt16) const
 bool SvxWordLineModeItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
@@ -1681,8 +1681,8 @@ SfxPoolItem* SvxContourItem::Create(SvStream& rStrm, sal_uInt16) const
 bool SvxContourItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
@@ -1726,8 +1726,8 @@ SfxPoolItem* SvxPropSizeItem::Create(SvStream& rStrm, sal_uInt16) const
 bool SvxPropSizeItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
@@ -1910,8 +1910,8 @@ SfxPoolItem* SvxColorItem::Create(SvStream& rStrm, sal_uInt16 /*nVer*/ ) const
 bool SvxColorItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
@@ -1972,8 +1972,8 @@ SfxPoolItem* SvxCharSetColorItem::Create(SvStream& rStrm, sal_uInt16) const
 bool SvxCharSetColorItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
@@ -2025,16 +2025,16 @@ SfxPoolItem* SvxKerningItem::Create(SvStream& rStrm, sal_uInt16) const
 bool SvxKerningItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             eCoreUnit,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *pIntl
 )   const
 {
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            rText = GetMetricText( (long)GetValue(), eCoreUnit, SFX_MAPUNIT_POINT, pIntl ) +
-                    " " + EE_RESSTR(GetMetricId(SFX_MAPUNIT_POINT));
+            rText = GetMetricText( (long)GetValue(), eCoreUnit, MAP_POINT, pIntl ) +
+                    " " + EE_RESSTR(GetMetricId(MAP_POINT));
             return true;
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
@@ -2049,8 +2049,8 @@ bool SvxKerningItem::GetPresentation
             if ( nId )
                 rText += EE_RESSTR(nId);
             rText = rText +
-                    GetMetricText( (long)GetValue(), eCoreUnit, SFX_MAPUNIT_POINT, pIntl ) +
-                    " " + EE_RESSTR(GetMetricId(SFX_MAPUNIT_POINT));
+                    GetMetricText( (long)GetValue(), eCoreUnit, MAP_POINT, pIntl ) +
+                    " " + EE_RESSTR(GetMetricId(MAP_POINT));
             return true;
         }
         default: ; //prevent warning
@@ -2116,8 +2116,8 @@ SfxPoolItem* SvxCaseMapItem::Create(SvStream& rStrm, sal_uInt16) const
 bool SvxCaseMapItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
@@ -2245,8 +2245,8 @@ sal_uInt16 SvxEscapementItem::GetValueCount() const
 bool SvxEscapementItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
@@ -2389,8 +2389,8 @@ SfxPoolItem* SvxLanguageItem::Create(SvStream& rStrm, sal_uInt16) const
 bool SvxLanguageItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
@@ -2472,8 +2472,8 @@ SfxPoolItem* SvxNoLinebreakItem::Create(SvStream& rStrm, sal_uInt16) const
 bool SvxNoLinebreakItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
@@ -2513,8 +2513,8 @@ SfxPoolItem* SvxNoHyphenItem::Create( SvStream& rStrm, sal_uInt16 ) const
 bool SvxNoHyphenItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
@@ -2551,8 +2551,8 @@ SvxLineColorItem::~SvxLineColorItem()
 bool SvxLineColorItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    MapUnit             eCoreUnit,
+    MapUnit             ePresUnit,
     OUString&           rText,
     const IntlWrapper * pIntlWrapper
 )   const
@@ -2594,8 +2594,8 @@ SfxPoolItem* SvxBlinkItem::Create(SvStream& rStrm, sal_uInt16) const
 bool SvxBlinkItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
@@ -2641,8 +2641,8 @@ SfxPoolItem* SvxEmphasisMarkItem::Create( SvStream& rStrm, sal_uInt16 ) const
 bool SvxEmphasisMarkItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper * /*pIntl*/
 )   const
@@ -2830,7 +2830,7 @@ bool SvxTwoLinesItem::PutValue( const css::uno::Any& rVal,
 }
 
 bool SvxTwoLinesItem::GetPresentation( SfxItemPresentation /*ePres*/,
-                            SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
+                            MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
                             OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
     if( !GetValue() )
@@ -2910,7 +2910,7 @@ sal_uInt16 SvxCharRotateItem::GetVersion( sal_uInt16 nFFVer ) const
 
 bool SvxCharRotateItem::GetPresentation(
         SfxItemPresentation /*ePres*/,
-        SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
+        MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper*  ) const
 {
     if( !GetValue() )
@@ -3049,7 +3049,7 @@ sal_uInt16 SvxCharScaleWidthItem::GetVersion( sal_uInt16 nFFVer ) const
 
 bool SvxCharScaleWidthItem::GetPresentation(
         SfxItemPresentation /*ePres*/,
-        SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
+        MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper*  ) const
 {
     if( !GetValue() )
@@ -3135,8 +3135,8 @@ sal_uInt16 SvxCharReliefItem::GetValueCount() const
 bool SvxCharReliefItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {

@@ -47,8 +47,8 @@ SvStream& SfxFlagItem::Store(SvStream &rStream, sal_uInt16) const
 bool SfxFlagItem::GetPresentation
 (
     SfxItemPresentation     /*ePresentation*/,
-    SfxMapUnit              /*eCoreMetric*/,
-    SfxMapUnit              /*ePresentationMetric*/,
+    MapUnit              /*eCoreMetric*/,
+    MapUnit              /*ePresentationMetric*/,
     OUString&               rText,
     const IntlWrapper *
 )   const

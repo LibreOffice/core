@@ -38,7 +38,7 @@ protected:
 public:
 
     virtual SfxItemPool* Clone() const override;
-    SfxMapUnit GetMetric( sal_uInt16 nWhich ) const override;
+    MapUnit GetMetric( sal_uInt16 nWhich ) const override;
 
     /// creates a pure chart item pool
     static SfxItemPool* CreateChartItemPool();

@@ -59,8 +59,8 @@ private:
 
             virtual bool                operator==( const SfxPoolItem& ) const override;
             virtual bool GetPresentation(SfxItemPresentation ePresentation,
-                                            SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric,
-                                            OUString &rText, const IntlWrapper * = nullptr) const override;
+                                         MapUnit eCoreMetric, MapUnit ePresentationMetric,
+                                         OUString &rText, const IntlWrapper * = nullptr) const override;
 
             virtual SfxPoolItem*        Create( SvStream&, sal_uInt16 nItem ) const override;
             virtual SvStream&           Store( SvStream&, sal_uInt16 nVersion ) const override;

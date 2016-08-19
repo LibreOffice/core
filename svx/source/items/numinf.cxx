@@ -108,8 +108,8 @@ SvxNumberInfoItem::~SvxNumberInfoItem()
 bool SvxNumberInfoItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {

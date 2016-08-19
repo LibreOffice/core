@@ -37,10 +37,10 @@ public:
     virtual ~SvxLineColorItem();
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
-                                    SfxMapUnit eCoreMetric,
-                                    SfxMapUnit ePresMetric,
-                                    OUString &rText,
-                                    const IntlWrapper * pIntlWrapper = nullptr )
+                                  MapUnit eCoreMetric,
+                                  MapUnit ePresMetric,
+                                  OUString &rText,
+                                  const IntlWrapper * pIntlWrapper = nullptr )
         const override;
 
     inline SvxLineColorItem& operator=(const SvxLineColorItem& rColor)

@@ -63,7 +63,7 @@ DrawModelWrapper::DrawModelWrapper( const uno::Reference<uno::XComponentContext>
     SetDefaultFontHeight(423);     // 12pt
 
     SfxItemPool* pMasterPool = &GetItemPool();
-    pMasterPool->SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
+    pMasterPool->SetDefaultMetric(MAP_100TH_MM);
     pMasterPool->SetPoolDefaultItem(SfxBoolItem(EE_PARA_HYPHENATE, true) );
     pMasterPool->SetPoolDefaultItem(makeSvx3DPercentDiagonalItem (5));
 

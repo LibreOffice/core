@@ -50,8 +50,8 @@ SfxRangeItem::SfxRangeItem( const SfxRangeItem& rItem ) :
 bool SfxRangeItem::GetPresentation
 (
     SfxItemPresentation     /*ePresentation*/,
-    SfxMapUnit              /*eCoreMetric*/,
-    SfxMapUnit              /*ePresentationMetric*/,
+    MapUnit                 /*eCoreMetric*/,
+    MapUnit                 /*ePresentationMetric*/,
     OUString&               rText,
     const IntlWrapper *
 )   const
@@ -138,17 +138,15 @@ bool SfxUShortRangesItem::operator==( const SfxPoolItem &rItem ) const
     return !_pRanges[n] && !rOther._pRanges[n];
 }
 
-
 bool SfxUShortRangesItem::GetPresentation( SfxItemPresentation /*ePres*/,
-                                    SfxMapUnit /*eCoreMetric*/,
-                                    SfxMapUnit /*ePresMetric*/,
-                                    OUString & /*rText*/,
-                                    const IntlWrapper * ) const
+                                            MapUnit /*eCoreMetric*/,
+                                            MapUnit /*ePresMetric*/,
+                                            OUString & /*rText*/,
+                                            const IntlWrapper * ) const
 {
     // not implemented
     return false;
 }
-
 
 SfxPoolItem* SfxUShortRangesItem::Clone( SfxItemPool * ) const
 {

@@ -213,7 +213,7 @@ class SvxBitmapPickTabPage : public SfxTabPage
     SvxNumRule*         pSaveNum;
     sal_uInt16              nActNumLvl;
     sal_uInt16              nNumItemId;
-    SfxMapUnit          eCoreUnit;
+    MapUnit             eCoreUnit;
     bool                bModified   : 1;
     bool                bPreset     : 1;
 
@@ -303,10 +303,10 @@ class SvxNumOptionsTabPage : public SfxTabPage
     std::vector<OUString> aGrfNames;
     vcl::Font             aActBulletFont;
 
-    sal_uInt8               nBullet;
-    sal_uInt16              nActNumLvl;
-    sal_uInt16              nNumItemId;
-    SfxMapUnit          eCoreUnit;
+    sal_uInt8           nBullet;
+    sal_uInt16          nActNumLvl;
+    sal_uInt16          nNumItemId;
+    MapUnit             eCoreUnit;
 
     void                InitControls();
     /** To switch between the numbering type
@@ -402,7 +402,7 @@ class SvxNumPositionTabPage : public SfxTabPage
 
     sal_uInt16              nActNumLvl;
     sal_uInt16              nNumItemId;
-    SfxMapUnit          eCoreUnit;
+    MapUnit             eCoreUnit;
 
     bool                bModified           : 1;
     bool                bPreset             : 1;

@@ -1440,9 +1440,9 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
         {
             const SwDoc* pDoc = (IsDescriptor() ? m_pDoc : GetFrameFormat()->GetDoc());
             const SfxItemPool& rPool = pDoc->GetAttrPool();
-            const SfxMapUnit eMapUnit(rPool.GetMetric(pEntry->nWID));
+            const MapUnit eMapUnit(rPool.GetMetric(pEntry->nWID));
 
-            if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+            if(eMapUnit != MAP_100TH_MM)
             {
                 SvxUnoConvertFromMM(eMapUnit, aValue);
             }
@@ -2346,9 +2346,9 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         {
             const SwDoc* pDoc = (IsDescriptor() ? m_pDoc : GetFrameFormat()->GetDoc());
             const SfxItemPool& rPool = pDoc->GetAttrPool();
-            const SfxMapUnit eMapUnit(rPool.GetMetric(pEntry->nWID));
+            const MapUnit eMapUnit(rPool.GetMetric(pEntry->nWID));
 
-            if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+            if(eMapUnit != MAP_100TH_MM)
             {
                 SvxUnoConvertToMM(eMapUnit, aAny);
             }

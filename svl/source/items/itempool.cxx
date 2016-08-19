@@ -175,7 +175,7 @@ SfxItemPool::SfxItemPool
     pItemInfos(pInfo),
     pImpl( new SfxItemPool_Impl( this, rName, nStartWhich, nEndWhich ) )
 {
-    pImpl->eDefMetric = SFX_MAPUNIT_TWIP;
+    pImpl->eDefMetric = MAP_TWIP;
     pImpl->nVersion = 0;
     pImpl->bStreaming = false;
     pImpl->nLoadingVersion = 0;
@@ -445,13 +445,13 @@ void SfxItemPool::SetItemInfos(SfxItemInfo const*const pInfo)
 }
 
 
-SfxMapUnit SfxItemPool::GetMetric( sal_uInt16 ) const
+MapUnit SfxItemPool::GetMetric( sal_uInt16 ) const
 {
     return pImpl->eDefMetric;
 }
 
 
-void SfxItemPool::SetDefaultMetric( SfxMapUnit eNewMetric )
+void SfxItemPool::SetDefaultMetric( MapUnit eNewMetric )
 {
     pImpl->eDefMetric = eNewMetric;
 }
@@ -465,7 +465,7 @@ const OUString& SfxItemPool::GetName() const
 bool SfxItemPool::GetPresentation
 (
     const SfxPoolItem&  rItem,
-    SfxMapUnit          eMetric,
+    MapUnit             eMetric,
     OUString&           rText,
     const IntlWrapper * pIntlWrapper
 )   const

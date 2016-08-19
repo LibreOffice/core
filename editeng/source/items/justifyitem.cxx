@@ -52,8 +52,8 @@ SvxHorJustifyItem::SvxHorJustifyItem( const SvxCellHorJustify eJustify,
 bool SvxHorJustifyItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *)    const
 {
     rText = GetValueText( GetValue() );
@@ -199,8 +199,8 @@ SvxVerJustifyItem::SvxVerJustifyItem( const SvxCellVerJustify eJustify,
 bool SvxVerJustifyItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper * )    const
 {
@@ -330,8 +330,8 @@ SvxJustifyMethodItem::SvxJustifyMethodItem( const SvxCellJustifyMethod eJustify,
 bool SvxJustifyMethodItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper * )    const
 {

@@ -59,11 +59,11 @@ bool SwPageFootnoteInfoItem::operator==( const SfxPoolItem& rAttr ) const
     return ( aFootnoteInfo == static_cast<const SwPageFootnoteInfoItem&>(rAttr).GetPageFootnoteInfo());
 }
 
-bool  SwPageFootnoteInfoItem::GetPresentation
+bool SwPageFootnoteInfoItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    MapUnit             eCoreUnit,
+    MapUnit             ePresUnit,
     OUString&           rText,
     const IntlWrapper*  pIntl
 )   const

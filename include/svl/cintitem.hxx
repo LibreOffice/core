@@ -42,9 +42,9 @@ public:
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,
-                                                SfxMapUnit, SfxMapUnit,
-                                                OUString & rText,
-                                                const IntlWrapper * = nullptr)
+                                 MapUnit, MapUnit,
+                                 OUString & rText,
+                                 const IntlWrapper * = nullptr)
         const override;
 
     virtual bool QueryValue(css::uno::Any& rVal,
@@ -91,9 +91,9 @@ public:
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,
-                                                SfxMapUnit, SfxMapUnit,
-                                                OUString & rText,
-                                                const IntlWrapper * = nullptr)
+                                 MapUnit, MapUnit,
+                                 OUString & rText,
+                                 const IntlWrapper * = nullptr)
         const override;
 
     virtual bool QueryValue(css::uno::Any& rVal,
@@ -140,9 +140,9 @@ public:
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,
-                                                SfxMapUnit, SfxMapUnit,
-                                                OUString & rText,
-                                                const IntlWrapper * = nullptr)
+                                 MapUnit, MapUnit,
+                                 OUString & rText,
+                                 const IntlWrapper * = nullptr)
         const override;
 
     virtual bool QueryValue(css::uno::Any& rVal,
@@ -189,9 +189,9 @@ public:
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,
-                                                SfxMapUnit, SfxMapUnit,
-                                                OUString & rText,
-                                                const IntlWrapper * = nullptr)
+                                 MapUnit, MapUnit,
+                                 OUString & rText,
+                                 const IntlWrapper * = nullptr)
         const override;
 
     virtual bool QueryValue(css::uno::Any& rVal,

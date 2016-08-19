@@ -121,8 +121,8 @@ public:
     OUString     GetValueText() const;
     virtual bool GetPresentation(
                                     SfxItemPresentation ePres,
-                                    SfxMapUnit eCoreMetric,
-                                    SfxMapUnit ePresMetric,
+                                    MapUnit eCoreMetric,
+                                    MapUnit ePresMetric,
                                     OUString& rText,
                                     const IntlWrapper* pIntl = nullptr ) const override;
 
@@ -165,10 +165,10 @@ public:
     // "pure virtual methods" from SfxPoolItem
     virtual bool                operator==( const SfxPoolItem& ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
-                                                 SfxMapUnit eCoreMetric,
-                                                 SfxMapUnit ePresMetric,
-                                                 OUString &rText,
-                                                 const IntlWrapper* pIntl = nullptr ) const override;
+                                  MapUnit eCoreMetric,
+                                  MapUnit ePresMetric,
+                                  OUString &rText,
+                                  const IntlWrapper* pIntl = nullptr ) const override;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
 
 private:
@@ -206,10 +206,10 @@ public:
     // "pure virtual Methoden" from SfxPoolItem
     virtual bool                operator==( const SfxPoolItem& ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
-                                                 SfxMapUnit eCoreMetric,
-                                                 SfxMapUnit ePresMetric,
-                                                 OUString &rText,
-                                                 const IntlWrapper* pIntl = nullptr ) const override;
+                                  MapUnit eCoreMetric,
+                                  MapUnit ePresMetric,
+                                  OUString &rText,
+                                  const IntlWrapper* pIntl = nullptr ) const override;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
 
 public:
@@ -274,10 +274,10 @@ public:
     virtual SfxPoolItem*        Create(SvStream &, sal_uInt16) const override;
     virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
-                                                 SfxMapUnit eCoreMetric,
-                                                 SfxMapUnit ePresMetric,
-                                                 OUString& rText,
-                                                 const IntlWrapper* pIntl = nullptr ) const override;
+                                  MapUnit eCoreMetric,
+                                  MapUnit ePresMetric,
+                                  OUString& rText,
+                                  const IntlWrapper* pIntl = nullptr ) const override;
 };
 
 class ScDoubleItem : public SfxPoolItem
@@ -327,11 +327,10 @@ public:
     inline void                 Set( sal_uInt16 nWidth, sal_uInt16 nHeight )
                                     { mnWidth = nWidth; mnHeight = nHeight; }
 
-    virtual bool GetPresentation(
-                                    SfxItemPresentation ePresentation,
-                                    SfxMapUnit, SfxMapUnit,
-                                    OUString& rText,
-                                    const IntlWrapper* = nullptr ) const override;
+    virtual bool GetPresentation( SfxItemPresentation ePresentation,
+                                  MapUnit, MapUnit,
+                                  OUString& rText,
+                                  const IntlWrapper* = nullptr ) const override;
 
     virtual bool                QueryValue( css::uno::Any& rAny, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool                PutValue( const css::uno::Any& rAny, sal_uInt8 nMemberId ) override;

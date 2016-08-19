@@ -859,7 +859,7 @@ ScDrawTextCursor* ScDrawTextCursor::getImplementation(const uno::Reference<uno::
 ScSimpleEditSourceHelper::ScSimpleEditSourceHelper()
 {
     SfxItemPool* pEnginePool = EditEngine::CreatePool();
-    pEnginePool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
+    pEnginePool->SetDefaultMetric( MAP_100TH_MM );
     pEnginePool->FreezeIdRanges();
 
     pEditEngine = new ScFieldEditEngine(nullptr, pEnginePool, nullptr, true);     // TRUE: become owner of pool

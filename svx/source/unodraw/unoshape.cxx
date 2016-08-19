@@ -484,12 +484,12 @@ void SvxShape::ForceMetricToItemPoolMetric(Pair& rPoint) const throw()
     DBG_TESTSOLARMUTEX();
     if(mpModel)
     {
-        SfxMapUnit eMapUnit = mpModel->GetItemPool().GetMetric(0);
-        if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+        MapUnit eMapUnit = mpModel->GetItemPool().GetMetric(0);
+        if(eMapUnit != MAP_100TH_MM)
         {
             switch(eMapUnit)
             {
-                case SFX_MAPUNIT_TWIP :
+                case MAP_TWIP :
                 {
                     rPoint.A() = MM_TO_TWIPS(rPoint.A());
                     rPoint.B() = MM_TO_TWIPS(rPoint.B());
@@ -510,12 +510,12 @@ void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon
     DBG_TESTSOLARMUTEX();
     if(mpModel)
     {
-        SfxMapUnit eMapUnit = mpModel->GetItemPool().GetMetric(0);
-        if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+        MapUnit eMapUnit = mpModel->GetItemPool().GetMetric(0);
+        if(eMapUnit != MAP_100TH_MM)
         {
             switch(eMapUnit)
             {
-                case SFX_MAPUNIT_TWIP :
+                case MAP_TWIP :
                 {
                     basegfx::B2DHomMatrix aTransform;
                     const double fMMToTWIPS(72.0 / 127.0);
@@ -537,15 +537,15 @@ void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon
 void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const throw()
 {
     DBG_TESTSOLARMUTEX();
-    SfxMapUnit eMapUnit = SFX_MAPUNIT_100TH_MM;
+    MapUnit eMapUnit = MAP_100TH_MM;
     if(mpModel)
     {
         eMapUnit = mpModel->GetItemPool().GetMetric(0);
-        if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+        if(eMapUnit != MAP_100TH_MM)
         {
             switch(eMapUnit)
             {
-                case SFX_MAPUNIT_TWIP :
+                case MAP_TWIP :
                 {
                     rPoint.A() = TWIPS_TO_MM(rPoint.A());
                     rPoint.B() = TWIPS_TO_MM(rPoint.B());
@@ -564,15 +564,15 @@ void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const throw()
 void SvxShape::ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) const throw()
 {
     DBG_TESTSOLARMUTEX();
-    SfxMapUnit eMapUnit = SFX_MAPUNIT_100TH_MM;
+    MapUnit eMapUnit = MAP_100TH_MM;
     if(mpModel)
     {
         eMapUnit = mpModel->GetItemPool().GetMetric(0);
-        if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+        if(eMapUnit != MAP_100TH_MM)
         {
             switch(eMapUnit)
             {
-                case SFX_MAPUNIT_TWIP :
+                case MAP_TWIP :
                 {
                     basegfx::B2DHomMatrix aTransform;
                     const double fTWIPSToMM(127.0 / 72.0);

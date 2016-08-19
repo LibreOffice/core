@@ -98,8 +98,8 @@ private:
 
     FieldUnit                       m_eMetricUnit;
     FieldUnit                       m_last_eMetricUnit;
-    SfxMapUnit                      m_eLRSpaceUnit;
-    SfxMapUnit                      m_eULSpaceUnit;
+    MapUnit                         m_eLRSpaceUnit;
+    MapUnit                         m_eULSpaceUnit;
     // Control Items
     ::sfx2::sidebar::ControllerItem  maLRSpaceControl;
     ::sfx2::sidebar::ControllerItem  maULSpaceControl;

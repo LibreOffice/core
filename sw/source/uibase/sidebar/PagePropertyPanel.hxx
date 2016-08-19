@@ -178,7 +178,7 @@ namespace sw { namespace sidebar {
         std::unique_ptr<SfxInt16Item> mpPageColumnTypeItem;
 
         FieldUnit           meFUnit;
-        SfxMapUnit          meUnit;
+        MapUnit             meUnit;
 
         // controller items
         ::sfx2::sidebar::ControllerItem m_aSwPagePgULControl;

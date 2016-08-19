@@ -703,7 +703,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     };
 
     SfxItemPool* pPool( new SfxItemPool(OUString("ReportCharProperties"), ITEMID_FONT,ITEMID_WEIGHT_COMPLEX, aItemInfos, pDefaults) );
-    // not needed for font height pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );  // ripped, don't understand why
+    // not needed for font height pPool->SetDefaultMetric( MAP_100TH_MM );  // ripped, don't understand why
     pPool->FreezeIdRanges();                        // the same
     bool bSuccess = false;
     try

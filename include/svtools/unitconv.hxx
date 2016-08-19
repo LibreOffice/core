@@ -34,16 +34,16 @@ typedef long (*FUNC_CONVERT)(long);
 SVT_DLLPUBLIC void      SetFieldUnit( MetricField& rCtrl, FieldUnit eUnit, bool bAll = false );
 SVT_DLLPUBLIC void      SetFieldUnit( MetricBox& rCtrl, FieldUnit eUnit );
 
-SVT_DLLPUBLIC long      CalcToUnit( float nIn, SfxMapUnit eUnit );
-SVT_DLLPUBLIC long      CalcToPoint( long nIn, SfxMapUnit eUnit, sal_uInt16 nFactor );
+SVT_DLLPUBLIC long      CalcToUnit( float nIn, MapUnit eUnit );
+SVT_DLLPUBLIC long      CalcToPoint( long nIn, MapUnit eUnit, sal_uInt16 nFactor );
 
-SVT_DLLPUBLIC long      ItemToControl( long nIn, SfxMapUnit eItem, FieldUnit eCtrl );
-SVT_DLLPUBLIC long      ControlToItem( long nIn, FieldUnit eCtrl, SfxMapUnit eItem );
+SVT_DLLPUBLIC long      ItemToControl( long nIn, MapUnit eItem, FieldUnit eCtrl );
+SVT_DLLPUBLIC long      ControlToItem( long nIn, FieldUnit eCtrl, MapUnit eItem );
 
-SVT_DLLPUBLIC FieldUnit MapToFieldUnit( const SfxMapUnit eUnit );
+SVT_DLLPUBLIC FieldUnit MapToFieldUnit( const MapUnit eUnit );
 
-SVT_DLLPUBLIC void      SetMetricValue( MetricField& rField, long lCoreValue, SfxMapUnit eUnit );
-SVT_DLLPUBLIC long      GetCoreValue( const MetricField& rField, SfxMapUnit eUnit );
+SVT_DLLPUBLIC void      SetMetricValue( MetricField& rField, long lCoreValue, MapUnit eUnit );
+SVT_DLLPUBLIC long      GetCoreValue( const MetricField& rField, MapUnit eUnit );
 
 SVT_DLLPUBLIC long  PointToTwips( long nIn );
 

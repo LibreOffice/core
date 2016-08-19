@@ -208,9 +208,9 @@ SfxItemPool* ChartItemPool::Clone() const
     return new ChartItemPool(*this);
 }
 
-SfxMapUnit ChartItemPool::GetMetric(sal_uInt16 /* nWhich */) const
+MapUnit ChartItemPool::GetMetric(sal_uInt16 /* nWhich */) const
 {
-    return SFX_MAPUNIT_100TH_MM;
+    return MAP_100TH_MM;
 }
 
 SfxItemPool* ChartItemPool::CreateChartItemPool()

@@ -39,8 +39,8 @@ class SvXMLUnitConverter;
 class EDITENG_DLLPUBLIC SvxFontHeightItem : public SfxPoolItem
 {
     sal_uInt32  nHeight;
-    sal_uInt16  nProp;              // default 100%
-    SfxMapUnit ePropUnit;       // Percent, Twip, ...
+    sal_uInt16  nProp;       // default 100%
+    MapUnit ePropUnit;       // Percent, Twip, ...
 public:
     static SfxPoolItem* CreateDefault();
 
@@ -53,8 +53,8 @@ public:
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
-                                    SfxMapUnit eCoreMetric,
-                                    SfxMapUnit ePresMetric,
+                                    MapUnit eCoreMetric,
+                                    MapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = nullptr ) const override;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -74,14 +74,14 @@ public:
         }
 
     void SetHeight( sal_uInt32 nNewHeight, const sal_uInt16 nNewProp = 100,
-                     SfxMapUnit eUnit = SFX_MAPUNIT_RELATIVE );
+                     MapUnit eUnit = MAP_RELATIVE );
 
     void SetHeight( sal_uInt32 nNewHeight, sal_uInt16 nNewProp,
-                     SfxMapUnit eUnit, SfxMapUnit eCoreUnit );
+                     MapUnit eUnit, MapUnit eCoreUnit );
 
     sal_uInt32 GetHeight() const { return nHeight; }
 
-    void SetProp( sal_uInt16 nNewProp, SfxMapUnit eUnit )
+    void SetProp( sal_uInt16 nNewProp, MapUnit eUnit )
         {
             DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
             nProp = nNewProp;
@@ -90,7 +90,7 @@ public:
 
     sal_uInt16 GetProp() const { return nProp; }
 
-    SfxMapUnit GetPropUnit() const { return ePropUnit;  }   // Percent, Twip, ...
+    MapUnit GetPropUnit() const { return ePropUnit;  }   // Percent, Twip, ...
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };

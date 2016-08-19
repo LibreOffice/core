@@ -66,7 +66,7 @@ bool SfxInt16Item::operator ==(const SfxPoolItem & rItem) const
 
 // virtual
 bool SfxInt16Item::GetPresentation(SfxItemPresentation,
-                                                  SfxMapUnit, SfxMapUnit,
+                                                  MapUnit, MapUnit,
                                                   OUString & rText,
                                                   const IntlWrapper *) const
 {

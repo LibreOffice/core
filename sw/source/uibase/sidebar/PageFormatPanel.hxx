@@ -97,7 +97,7 @@ private:
     std::unique_ptr<SvxLongULSpaceItem> mpPageULMarginItem;
 
     FieldUnit meFUnit, meLastFUnit;
-    SfxMapUnit meUnit;
+    MapUnit meUnit;
 
     long mnPageLeftMargin;
     long mnPageRightMargin;

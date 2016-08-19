@@ -184,8 +184,8 @@ SfxPoolItem* SvxPaperBinItem::Create( SvStream& rStrm, sal_uInt16 ) const
 bool SvxPaperBinItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
@@ -322,8 +322,8 @@ SfxPoolItem* SvxSizeItem::Clone( SfxItemPool* ) const
 bool SvxSizeItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    MapUnit             eCoreUnit,
+    MapUnit             ePresUnit,
     OUString&           rText, const IntlWrapper *pIntl
 )   const
 {
@@ -596,8 +596,8 @@ SfxPoolItem* SvxLRSpaceItem::Clone( SfxItemPool* ) const
 bool SvxLRSpaceItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    MapUnit             eCoreUnit,
+    MapUnit             ePresUnit,
     OUString&           rText, const IntlWrapper* pIntl
 )   const
 {
@@ -973,8 +973,8 @@ SfxPoolItem* SvxULSpaceItem::Clone( SfxItemPool* ) const
 bool SvxULSpaceItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    MapUnit             eCoreUnit,
+    MapUnit             ePresUnit,
     OUString&           rText,
     const IntlWrapper  *pIntl
 )   const
@@ -1123,8 +1123,8 @@ SfxPoolItem* SvxPrintItem::Create( SvStream& rStrm, sal_uInt16 ) const
 bool SvxPrintItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
@@ -1161,8 +1161,8 @@ SfxPoolItem* SvxOpaqueItem::Create( SvStream& rStrm, sal_uInt16 ) const
 bool SvxOpaqueItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
@@ -1231,8 +1231,8 @@ SfxPoolItem* SvxProtectItem::Clone( SfxItemPool* ) const
 bool SvxProtectItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
@@ -1457,8 +1457,8 @@ sal_uInt16 SvxShadowItem::CalcShadowSpace( SvxShadowItemSide nShadow ) const
 bool SvxShadowItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    MapUnit             eCoreUnit,
+    MapUnit             ePresUnit,
     OUString&           rText, const IntlWrapper *pIntl
 )   const
 {
@@ -2058,8 +2058,8 @@ SfxPoolItem* SvxBoxItem::Clone( SfxItemPool* ) const
 bool SvxBoxItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    MapUnit             eCoreUnit,
+    MapUnit             ePresUnit,
     OUString&           rText, const IntlWrapper *pIntl
 )   const
 {
@@ -2557,8 +2557,8 @@ SfxPoolItem* SvxBoxInfoItem::Clone( SfxItemPool* ) const
 bool SvxBoxInfoItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
@@ -2893,8 +2893,8 @@ bool SvxFormatBreakItem::operator==( const SfxPoolItem& rAttr ) const
 bool SvxFormatBreakItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
@@ -3023,8 +3023,8 @@ SfxPoolItem* SvxFormatKeepItem::Create( SvStream& rStrm, sal_uInt16 ) const
 bool SvxFormatKeepItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
     ) const
 {
@@ -3153,8 +3153,8 @@ bool SvxLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemId )
 bool SvxLineItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    MapUnit             eCoreUnit,
+    MapUnit             ePresUnit,
     OUString&           rText, const IntlWrapper *pIntl
 )   const
 {
@@ -3667,8 +3667,8 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 bool SvxBrushItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
     ) const
 {
@@ -4131,8 +4131,8 @@ sal_uInt16 SvxFrameDirectionItem::GetVersion( sal_uInt16 nFVer ) const
 
 bool SvxFrameDirectionItem::GetPresentation(
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *) const
 {
     rText = EE_RESSTR( RID_SVXITEMS_FRMDIR_BEGIN + GetValue() );

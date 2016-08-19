@@ -204,7 +204,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     SetScaleFraction(Fraction(1, 1));
     SetDefaultFontHeight(847);     // 24p
 
-    pItemPool->SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
+    pItemPool->SetDefaultMetric(MAP_100TH_MM);
     pItemPool->FreezeIdRanges();
     SetTextDefaults();
 

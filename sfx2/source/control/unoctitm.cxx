@@ -426,7 +426,7 @@ void SfxDispatchController_Impl::addParametersToArgs( const css::util::URL& aURL
     }
 }
 
-SfxMapUnit SfxDispatchController_Impl::GetCoreMetric( SfxItemPool& rPool, sal_uInt16 nSlotId )
+MapUnit SfxDispatchController_Impl::GetCoreMetric( SfxItemPool& rPool, sal_uInt16 nSlotId )
 {
     sal_uInt16 nWhich = rPool.GetWhich( nSlotId );
     return rPool.GetMetric( nWhich );
@@ -665,7 +665,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
 
         bool bSuccess = false;
         const SfxPoolItem* pItem = nullptr;
-        SfxMapUnit eMapUnit( SFX_MAPUNIT_100TH_MM );
+        MapUnit eMapUnit( MAP_100TH_MM );
 
         // Extra scope so that aInternalSet is destroyed before
         // rListener->dispatchFinished potentially calls
@@ -775,7 +775,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
             if ( bSuccess && pItem && dynamic_cast< const SfxVoidItem *>( pItem ) ==  nullptr )
             {
                 sal_uInt16 nSubId( 0 );
-                if ( eMapUnit == SFX_MAPUNIT_TWIP )
+                if ( eMapUnit == MAP_TWIP )
                     nSubId |= CONVERT_TWIPS;
                 pItem->QueryValue( aEvent.Result, (sal_uInt8)nSubId );
             }
@@ -892,7 +892,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         {
             // Retrieve metric from pool to have correct sub ID when calling QueryValue
             sal_uInt16     nSubId( 0 );
-            SfxMapUnit eMapUnit( SFX_MAPUNIT_100TH_MM );
+            MapUnit eMapUnit( MAP_100TH_MM );
 
             // retrieve the core metric
             // it's enough to check the objectshell, the only shell that does not use the pool of the document
@@ -906,7 +906,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
                     eMapUnit = GetCoreMetric( pShell->GetPool(), nSID );
             }
 
-            if ( eMapUnit == SFX_MAPUNIT_TWIP )
+            if ( eMapUnit == MAP_TWIP )
                 nSubId |= CONVERT_TWIPS;
 
             pState->QueryValue( aState, (sal_uInt8)nSubId );

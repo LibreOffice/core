@@ -528,9 +528,9 @@ throw(uno::RuntimeException)
 
             if(bDoIt)
             {
-                const SfxMapUnit eMapUnit(rSet.GetPool()->GetMetric(rEntry.nWID));
+                const MapUnit eMapUnit(rSet.GetPool()->GetMetric(rEntry.nWID));
 
-                if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+                if(eMapUnit != MAP_100TH_MM)
                 {
                     SvxUnoConvertToMM(eMapUnit, rAny);
                 }

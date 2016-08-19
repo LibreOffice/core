@@ -153,7 +153,7 @@ public:
 
     /// Get attribute-description. Returns passed string.
     void GetPresentation( SfxItemPresentation ePres,
-        SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString &rText ) const
+        MapUnit eCoreMetric, MapUnit ePresMetric, OUString &rText ) const
         { m_aSet.GetPresentation( ePres, eCoreMetric, ePresMetric, rText ); }
 
     /// Format-ID for reading/writing:
