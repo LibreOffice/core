@@ -332,7 +332,8 @@ IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, AddHdl, Button*, void)
                     // Format with the name does not already exist, so take up.
                     std::unique_ptr<SwTableAutoFormat> pNewData(
                             new SwTableAutoFormat(aFormatName));
-                    pShell->GetTableAutoFormat( *pNewData );
+                    bool bGetOk = pShell->GetTableAutoFormat( *pNewData );
+                    SAL_WARN_IF(!bGetOk, "sw.ui", "GetTableAutoFormat failed for: " << aFormatName);
 
                     // Insert sorted!!
                     for( n = 1; n < pTableTable->size(); ++n )
