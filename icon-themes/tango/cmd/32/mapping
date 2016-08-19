@@ -63,3 +63,6 @@ cmd/32/helpindex.png                apps/help-browser.png
 cmd/32/delete                       actions/edit-delete.png
 cmd/32/quit.png                     actions/application-exit.png
 
+cmd/32/avmediaplayer.png            categories/applications-multimedia.png
+avmedia/res/32/avl02054.png         status/audio-volume-muted.png
+avmedia/res/32/avl02052.png         status/media-playlist-repeat.png
