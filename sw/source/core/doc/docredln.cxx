@@ -310,6 +310,7 @@ static void lcl_RedlineNotification(bool bAdd, size_t nPos, SwRangeRedline* pRed
     aRedline.put("author", pRedline->GetAuthorString(1).toUtf8().getStr());
     aRedline.put("type", SwRedlineTypeToOUString(pRedline->GetRedlineData().GetType()).toUtf8().getStr());
     aRedline.put("comment", pRedline->GetRedlineData().GetComment().toUtf8().getStr());
+    aRedline.put("description", pRedline->GetDescr().toUtf8().getStr());
     OUString sDateTime = utl::toISO8601(pRedline->GetRedlineData().GetTimeStamp().GetUNODateTime());
     aRedline.put("dateTime", sDateTime.toUtf8().getStr());
     boost::property_tree::ptree aTree;
@@ -1654,6 +1655,7 @@ void SwRangeRedline::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("id"), BAD_CAST(OString::number(GetSeqNo()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("author"), BAD_CAST(SW_MOD()->GetRedlineAuthor(GetAuthor()).toUtf8().getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("date"), BAD_CAST(DateTimeToOString(GetTimeStamp()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("descr"), BAD_CAST(const_cast<SwRangeRedline*>(this)->GetDescr().toUtf8().getStr()));
 
     OString sRedlineType;
     switch (GetType())

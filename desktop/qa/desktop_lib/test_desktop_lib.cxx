@@ -1434,6 +1434,10 @@ void DesktopLOKTest::testRedlineWriter()
     // Make sure that pressing a key creates exactly one redline.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTree.get_child("redlines").size());
 
+    for (boost::property_tree::ptree::value_type& rRedline : aTree.get_child("redlines"))
+        // This failed with boost::property_tree::ptree_bad_path, as there were no description field.
+        CPPUNIT_ASSERT_EQUAL(std::string("Insert 't'"), rRedline.second.get<std::string>("description"));
+
     comphelper::LibreOfficeKit::setActive(false);
 }
 
