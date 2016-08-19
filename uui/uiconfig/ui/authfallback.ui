@@ -95,9 +95,11 @@
               <object class="GtkBox" id="box1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">center</property>
                 <child>
                   <object class="GtkLabel" id="google_prefix_label">
                     <property name="can_focus">False</property>
+                    <property name="margin_right">3</property>
                     <property name="label" translatable="no">G-</property>
                   </object>
                   <packing>
@@ -111,6 +113,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="invisible_char">●</property>
+                    <property name="width_chars">6</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
