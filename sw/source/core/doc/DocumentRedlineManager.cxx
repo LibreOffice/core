@@ -1178,9 +1178,9 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                         pRedl->IsOwnRedline( *pNewRedl ) )
                     {
 
-              // Set to NONE, so that the Delete::Redo merges the Redline data correctly!
-              // The ShowMode needs to be retained!
-              meRedlineMode = (RedlineMode_t)(eOld & ~(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE));
+                        // Set to NONE, so that the Delete::Redo merges the Redline data correctly!
+                        // The ShowMode needs to be retained!
+                        meRedlineMode = (RedlineMode_t)(eOld & ~(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE));
                         switch( eCmpPos )
                         {
                         case POS_EQUAL:
@@ -1192,7 +1192,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                         case POS_INSIDE:
                             if( bCallDelete )
                             {
-                              meRedlineMode = (RedlineMode_t)(meRedlineMode | nsRedlineMode_t::REDLINE_IGNOREDELETE_REDLINES);
+                                meRedlineMode = (RedlineMode_t)(meRedlineMode | nsRedlineMode_t::REDLINE_IGNOREDELETE_REDLINES);
 
                                 // DeleteAndJoin does not yield the
                                 // desired result if there is no paragraph to
