@@ -5,3 +5,5 @@ LibreOffice needs:
 
 firefox/modules/libmar -> onlineupdate/source/libmar
 firefox/toolkit/mozapps/update -> onlineupdate/source/update
+
+The source/service directory contains the code for the silent windows updater that avoids the repeated administrator check for an update.
