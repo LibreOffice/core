@@ -180,7 +180,7 @@ public:
 
     bool            GetTextAndFields( ScEditEngineDefaulter& rDestEngine );
 
-    bool            KeyInput( const KeyEvent& rKEvt, bool bStartEdit = false );
+    bool            KeyInput( const KeyEvent& rKEvt, bool bStartEdit );
     void            EnterHandler( ScEnterMode nBlockMode = ScEnterMode::NORMAL );
     void            CancelHandler();
     void            SetReference( const ScRange& rRef, ScDocument* pDoc );
@@ -192,7 +192,7 @@ public:
     void            ClearText();
 
     void            InputSelection( EditView* pView );
-    void            InputChanged( EditView* pView, bool bFromNotify = false );
+    void            InputChanged( EditView* pView, bool bFromNotify );
 
     void            ViewShellGone(ScTabViewShell* pViewSh);
     void            SetRefViewShell(ScTabViewShell* pRefVsh) {pRefViewSh=pRefVsh;}

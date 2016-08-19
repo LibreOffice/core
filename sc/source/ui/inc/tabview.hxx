@@ -216,7 +216,7 @@ protected:
     bool            IsDrawTextEdit() const;
     void            DrawEnableAnim(bool bSet);
 
-    void            MakeDrawView( TriState nForceDesignMode = TRISTATE_INDET );
+    void            MakeDrawView( TriState nForceDesignMode );
 
     void            HideNoteMarker();
 
@@ -384,10 +384,10 @@ public:
 
     bool            MoveCursorKeyInput( const KeyEvent& rKeyEvent );
 
-    void            FindNextUnprot( bool bShift, bool bInSelection = true );
+    void            FindNextUnprot( bool bShift, bool bInSelection );
 
     SC_DLLPUBLIC void SetTabNo( SCTAB nTab, bool bNew = false, bool bExtendSelection = false, bool bSameTabButMoved = false );
-    void            SelectNextTab( short nDir, bool bExtendSelection = false );
+    void            SelectNextTab( short nDir, bool bExtendSelection );
     void            SelectTabPage( const sal_uInt16 nTab );
 
     void            ActivateView( bool bActivate, bool bFirst );
@@ -435,7 +435,7 @@ public:
     void            CheckNeedsRepaint();
     bool            NeedsRepaint();
 
-    void            PaintRangeFinder( long nNumber = -1 );
+    void            PaintRangeFinder( long nNumber );
     void            AddHighlightRange( const ScRange& rRange, const Color& rColor );
     void            ClearHighlightRanges();
 
@@ -501,7 +501,7 @@ public:
     bool            IsMarking( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
     void            PaintMarks( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
-    void            PaintBlock( bool bReset = false );
+    void            PaintBlock( bool bReset );
 
     void            SetMarkData( const ScMarkData& rNew );
     void            MarkDataChanged();
@@ -509,7 +509,7 @@ public:
     void            LockModifiers( sal_uInt16 nModifiers );
     sal_uInt16          GetLockedModifiers() const;
     void            ViewOptionsHasChanged( bool bHScrollChanged,
-                                           bool bGraphicsChanged = false);
+                                           bool bGraphicsChanged);
 
     Point           GetMousePosPixel();
 
@@ -521,7 +521,7 @@ public:
 
     void            ErrorMessage( sal_uInt16 nGlobStrId );
 
-    void            EnableRefInput(bool bFlag = true);
+    void            EnableRefInput(bool bFlag);
 
     vcl::Window*         GetFrameWin() const { return pFrameWin; }
 

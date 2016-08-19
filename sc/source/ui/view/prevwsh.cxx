@@ -220,7 +220,7 @@ void ScPreviewShell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
     else if ( SvxZoomType::PAGEWIDTH == eZoom )
         pPreview->SetZoom( pPreview->GetOptimalZoom(true) );
 
-    UpdateNeededScrollBars();
+    UpdateNeededScrollBars(false);
 }
 
 void ScPreviewShell::InnerResizePixel( const Point &rOfs, const Size &rSize )

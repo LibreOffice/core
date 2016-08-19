@@ -118,15 +118,15 @@ public:
 
     /** Returns the selected object, if it is the caption object of a cell note.
         @param ppCaptData  (out-param) If not null, returns the pointer to the caption object data. */
-    SdrObject*      GetMarkedNoteCaption( ScDrawObjData** ppCaptData = nullptr );
+    SdrObject*      GetMarkedNoteCaption( ScDrawObjData** ppCaptData );
 
     /** Locks/unlocks the specified layer in the draw page.
         Unlocked layer is required to be able to edit the contained objects. */
-    void            LockCalcLayer( SdrLayerID nLayer, bool bLock = true );
+    void            LockCalcLayer( SdrLayerID nLayer, bool bLock );
 
     /** Locks/unlocks the background layer that contains background objects.
         Unlocked layer is required to be able to edit the objects. */
-    inline void     LockBackgroundLayer( bool bLock = true ) { LockCalcLayer( SC_LAYER_BACK, bLock ); }
+    inline void     LockBackgroundLayer( bool bLock ) { LockCalcLayer( SC_LAYER_BACK, bLock ); }
     /** Unlocks the background layer that contains background objects. */
     inline void     UnlockBackgroundLayer() { LockBackgroundLayer( false ); }
 

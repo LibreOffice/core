@@ -236,7 +236,7 @@ public:
 
     void            SetOkCancelMode();
     void            SetSumAssignMode();
-    void            EnableButtons( bool bEnable = true );
+    void            EnableButtons( bool bEnable );
 
     void            SetFormulaMode( bool bSet );
 

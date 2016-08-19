@@ -93,7 +93,7 @@ private:
     static ScPasteFunc  nPreviousFormulaChecks;
     static sal_uInt16   nPreviousMoveMode;          // enum InsCellCmd
 
-    void DisableChecks( bool bInsAllChecked = true );
+    void DisableChecks( bool bInsAllChecked );
     void TestModes();
 
     // Handler

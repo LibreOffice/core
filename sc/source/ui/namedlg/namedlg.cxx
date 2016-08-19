@@ -425,7 +425,7 @@ void ScNameDlg::NameModified()
         aLine.aName = aNewName;
         aLine.aExpression = aExpr;
         aLine.aScope = aNewScope;
-        m_pRangeManagerTable->addEntry(aLine);
+        m_pRangeManagerTable->addEntry(aLine, true);
         mbNeedUpdate = true;
         mbDataChanged = true;
     }

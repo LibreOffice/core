@@ -43,7 +43,7 @@ public:
 
     void      autoReplaceRange(const OUString& aVariable, const ScRange& rRange);
     void      autoReplaceAddress(const OUString& aVariable, ScAddress const & aAddress);
-    void      autoReplaceUses3D(bool bUse3D = true) { mbUse3D = bUse3D; }
+    void      autoReplaceUses3D(bool bUse3D) { mbUse3D = bUse3D; }
 
     void      applyRange(const OUString& aVariable, const ScRange& aRange, bool b3D = true);
     void      applyRangeList(const OUString& aVariable, const ScRangeList& aRangeList);

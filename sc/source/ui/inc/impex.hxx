@@ -119,12 +119,12 @@ public:
 
     void            SetStreamPath( const OUString& rPath ) { aStreamPath = rPath; }
 
-    bool ImportString( const OUString&, SotClipboardFormatId=SotClipboardFormatId::STRING );
-    bool ExportString( OUString&, SotClipboardFormatId=SotClipboardFormatId::STRING );
-    bool ExportByteString( OString&, rtl_TextEncoding, SotClipboardFormatId=SotClipboardFormatId::STRING );
+    bool ImportString( const OUString&, SotClipboardFormatId );
+    bool ExportString( OUString&, SotClipboardFormatId );
+    bool ExportByteString( OString&, rtl_TextEncoding, SotClipboardFormatId );
 
-    bool ImportStream( SvStream&, const OUString& rBaseURL, SotClipboardFormatId=SotClipboardFormatId::STRING );
-    bool ExportStream( SvStream&, const OUString& rBaseURL, SotClipboardFormatId=SotClipboardFormatId::STRING );
+    bool ImportStream( SvStream&, const OUString& rBaseURL, SotClipboardFormatId );
+    bool ExportStream( SvStream&, const OUString& rBaseURL, SotClipboardFormatId );
 
     static bool ImportData( const OUString& rMimeType,
                      const css::uno::Any & rValue );

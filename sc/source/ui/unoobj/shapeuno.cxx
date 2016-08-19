@@ -1361,7 +1361,7 @@ class ShapeUnoEventAccessImpl : public ::cppu::WeakImplHelper< container::XNameR
 private:
     ScShapeObj* mpShape;
 
-    ScMacroInfo* getInfo( bool bCreate = false )
+    ScMacroInfo* getInfo( bool bCreate )
     {
         return ScShapeObj_getShapeHyperMacroInfo( mpShape, bCreate );
     }
@@ -1416,7 +1416,7 @@ public:
                uno::RuntimeException, std::exception) override
     {
         uno::Sequence< beans::PropertyValue > aProperties;
-        ScMacroInfo* pInfo = getInfo();
+        ScMacroInfo* pInfo = getInfo(false);
 
         if ( aName == SC_EVENTACC_ONCLICK )
         {

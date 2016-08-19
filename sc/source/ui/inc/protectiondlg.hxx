@@ -49,7 +49,7 @@ public:
 private:
     void Init();
 
-    void EnableOptionalWidgets(bool bEnable = true);
+    void EnableOptionalWidgets(bool bEnable);
 
     VclPtr<CheckBox>        m_pBtnProtect;
 

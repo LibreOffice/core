@@ -541,7 +541,7 @@ void ScVbaWorksheets::PrintPreview( const css::uno::Any& /*EnableChanges*/ ) thr
                 ScMarkData::MarkedTabsType aOldTabs = pPrvView->GetSelectedTabs();
                 pPrvView->SetSelectedTabs( aMarkData );
                 // force update
-                pPrvView->DataChanged();
+                pPrvView->DataChanged(false);
                 // set sensible first page
                 long nPage = pPrvView->GetFirstPage( 1 );
                 pPrvView->SetPageNo( nPage );

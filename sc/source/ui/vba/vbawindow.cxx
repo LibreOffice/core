@@ -248,7 +248,7 @@ ScVbaWindow::Scroll( const uno::Any& Down, const uno::Any& Up, const uno::Any& T
 void SAL_CALL
 ScVbaWindow::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any& ToRight, const uno::Any& ToLeft ) throw (uno::RuntimeException, std::exception)
 {
-    Scroll( Down, Up, ToRight, ToLeft );
+    Scroll( Down, Up, ToRight, ToLeft, false );
 }
 
 void SAL_CALL

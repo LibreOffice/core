@@ -803,7 +803,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case SID_STATUS_SUM:
                 {
                     OUString aFuncStr;
-                    if ( pTabViewShell->GetFunction( aFuncStr ) )
+                    if ( pTabViewShell->GetFunction( aFuncStr, 0 ) )
                         rSet.Put( SfxStringItem( nWhich, aFuncStr ) );
                 }
                 break;

@@ -5366,7 +5366,7 @@ void Test::testImportStream()
     ScImportExport aObj(m_pDoc, ScAddress(0,0,0));
     aObj.SetImportBroadcast(true);
     aObj.SetExtOptions(aOpt);
-    aObj.ImportString("1,2,3");
+    aObj.ImportString("1,2,3", SotClipboardFormatId::STRING);
 
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,0,0)));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,0,0)));

@@ -91,7 +91,7 @@ public:
     void            InitStartTable(SCTAB nTab);
 
     void            UpdateScrollBars();
-    void            UpdateNeededScrollBars(bool bFromZoom = false);
+    void            UpdateNeededScrollBars(bool bFromZoom);
     bool            ScrollCommand( const CommandEvent& rCEvt );
 
     void            Execute( SfxRequest& rReq );

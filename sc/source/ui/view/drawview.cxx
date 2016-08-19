@@ -390,7 +390,7 @@ void ScDrawView::MarkListHasChanged()
     if ( nMarkCount == 0 && !pViewData->GetViewShell()->IsDrawSelMode() && !bInConstruct )
     {
         //  relock layers that may have been unlocked before
-        LockBackgroundLayer();
+        LockBackgroundLayer(true);
         LockInternalLayer();
     }
 

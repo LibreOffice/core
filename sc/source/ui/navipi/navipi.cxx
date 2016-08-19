@@ -352,7 +352,7 @@ void CommandToolBox::Select( sal_uInt16 nSelId )
             else
                 eNewMode = NAV_LMODE_NONE;
         }
-        rDlg.SetListMode( eNewMode );
+        rDlg.SetListMode( eNewMode, true );
         UpdateButtons();
     }
     else
@@ -641,13 +641,13 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
         aLbEntries->SetRootType( nLastRoot );
 
     aLbEntries->Refresh();
-    GetDocNames();
+    GetDocNames(nullptr);
 
     aTbxCmd->UpdateButtons();
 
     UpdateColumn();
     UpdateRow();
-    UpdateTable();
+    UpdateTable(nullptr);
     aLbEntries->Hide();
     aWndScenarios->Hide();
     aWndScenarios->SetPosPixel( aLbEntries->GetPosPixel() );

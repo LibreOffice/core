@@ -564,7 +564,7 @@ void ScTPValidationValue::RemoveRefDlg()
 {
     if( ScValidationDlg *pValidationDlg = GetValidationDlg() )
     {
-        if( pValidationDlg->RemoveRefDlg() )
+        if( pValidationDlg->RemoveRefDlg(true) )
         {
             pValidationDlg->SetHandler( nullptr );
             pValidationDlg->SetSetRefHdl( nullptr );

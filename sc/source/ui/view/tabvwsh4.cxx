@@ -1512,7 +1512,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
             // if the ViewShell is not yet constructed...
     if (rDoc.GetDrawLayer())
         MakeDrawView( nForceDesignMode );
-    ViewOptionsHasChanged(false);   // possibly also creates DrawView
+    ViewOptionsHasChanged(false, false);   // possibly also creates DrawView
 
     ::svl::IUndoManager* pMgr = pDocSh->GetUndoManager();
     SetUndoManager( pMgr );

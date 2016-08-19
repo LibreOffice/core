@@ -762,7 +762,7 @@ IMPL_LINK_TYPED( ScHFEditPage, ListHdl_Impl, ListBox&, rList, void )
         ScHFEntryId eSel = static_cast<ScHFEntryId>(m_pLbDefined->GetSelectEntryPos());
         if(!m_pLbDefined->IsTravelSelect())
         {
-            ProcessDefinedListSel(eSel);
+            ProcessDefinedListSel(eSel, false);
 
             // check if we need to remove the customized entry.
             if(eSel < eEntryCount)

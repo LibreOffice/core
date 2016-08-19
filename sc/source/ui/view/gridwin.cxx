@@ -2571,7 +2571,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         // range finder
 
         RfCorner rCorner = NONE;
-        if ( HitRangeFinder( rMEvt.GetPosPixel(), rCorner ) )
+        if ( HitRangeFinder( rMEvt.GetPosPixel(), rCorner, nullptr, nullptr, nullptr ) )
         {
             if (rCorner != NONE)
                 SetPointer( Pointer( PointerStyle::Cross ) );
@@ -2584,7 +2584,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
 
         sal_uInt16 nBreakType;
         if ( !nButtonDown && pViewData->IsPagebreakMode() &&
-                ( nBreakType = HitPageBreak( rMEvt.GetPosPixel() ) ) != 0 )
+                ( nBreakType = HitPageBreak( rMEvt.GetPosPixel(), nullptr, nullptr, nullptr ) ) != 0 )
         {
             PointerStyle eNew = PointerStyle::Arrow;
             switch ( nBreakType )
@@ -3889,7 +3889,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
     return nRet;
 }
 
-static SotClipboardFormatId lcl_GetDropFormatId( const uno::Reference<datatransfer::XTransferable>& xTransfer, bool bPreferText = false )
+static SotClipboardFormatId lcl_GetDropFormatId( const uno::Reference<datatransfer::XTransferable>& xTransfer, bool bPreferText )
 {
     TransferableDataHelper aDataHelper( xTransfer );
 
@@ -4475,7 +4475,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     SotClipboardFormatId nFormatId = bIsLink ?
                         lcl_GetDropLinkId( rEvt.maDropEvent.Transferable ) :
-                        lcl_GetDropFormatId( rEvt.maDropEvent.Transferable );
+                        lcl_GetDropFormatId( rEvt.maDropEvent.Transferable, false );
     if ( nFormatId != SotClipboardFormatId::NONE )
     {
         pScMod->SetInExecuteDrop( true );   // #i28468# prevent error messages from PasteDataFormat

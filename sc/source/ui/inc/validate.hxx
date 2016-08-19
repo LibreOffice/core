@@ -194,7 +194,7 @@ public:
     }
 
     bool    SetupRefDlg();
-    bool    RemoveRefDlg( bool bRestoreModal = true );
+    bool    RemoveRefDlg( bool bRestoreModal );
 
     void            SetModal( bool bModal ){ ScValidationDlgBase::SetModalInputMode( bModal ); }
 

@@ -122,7 +122,7 @@ public:
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    SC_DLLPUBLIC void    DataChanged(bool bNewTime = false);             //  Instead of calling Invalidate
+    SC_DLLPUBLIC void    DataChanged(bool bNewTime);             //  Instead of calling Invalidate
     void    DoInvalidate();
 
     void    SetXOffset( long nX );

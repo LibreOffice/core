@@ -660,7 +660,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
         OUString aName;
         uno::Reference < embed::XEmbeddedObject > xObj = aCnt.InsertEmbeddedObject( aMedium, aName );
         if( xObj.is() )
-            return PasteObject( rPos, xObj );
+            return PasteObject( rPos, xObj, nullptr );
 
         // If an OLE object can't be created, insert a URL button
 

@@ -367,7 +367,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 }
                 else
                 {
-                    pTabViewShell->ExecuteCellFormatDlg( rReq );
+                    pTabViewShell->ExecuteCellFormatDlg( rReq, "" );
                 }
             }
             break;

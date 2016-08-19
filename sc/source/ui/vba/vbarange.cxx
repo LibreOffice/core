@@ -2910,7 +2910,7 @@ ScVbaRange::getEntireRow() throw (uno::RuntimeException, std::exception)
 uno::Reference< excel::XRange > SAL_CALL
 ScVbaRange::getEntireColumn() throw (uno::RuntimeException, std::exception)
 {
-    return getEntireColumnOrRow();
+    return getEntireColumnOrRow(true);
 }
 
 uno::Reference< excel::XComment > SAL_CALL
@@ -5177,7 +5177,7 @@ ScVbaRange::groupUnGroup( bool bUnGroup ) throw ( script::BasicErrorException, u
 void SAL_CALL
 ScVbaRange::Group(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
-    groupUnGroup();
+    groupUnGroup(false);
 }
 void SAL_CALL
 ScVbaRange::Ungroup(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
@@ -5185,7 +5185,7 @@ ScVbaRange::Ungroup(  ) throw (script::BasicErrorException, uno::RuntimeExceptio
     groupUnGroup(true);
 }
 
-static void lcl_mergeCellsOfRange( const uno::Reference< table::XCellRange >& xCellRange, bool _bMerge = true ) throw ( uno::RuntimeException )
+static void lcl_mergeCellsOfRange( const uno::Reference< table::XCellRange >& xCellRange, bool _bMerge ) throw ( uno::RuntimeException )
 {
         uno::Reference< util::XMergeable > xMergeable( xCellRange, uno::UNO_QUERY_THROW );
         xMergeable->merge(_bMerge);
@@ -5207,7 +5207,7 @@ ScVbaRange::Merge( const uno::Any& Across ) throw (script::BasicErrorException, 
     bool bAcross = false;
     Across >>= bAcross;
     if ( !bAcross )
-        lcl_mergeCellsOfRange( mxRange );
+        lcl_mergeCellsOfRange( mxRange, true );
     else
     {
         uno::Reference< excel::XRange > oRangeRowsImpl = Rows( uno::Any() );

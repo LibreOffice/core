@@ -1098,7 +1098,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequenceFro
  * @return true if the corner was added, false otherwise.
  */
 bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
-            SCROW nCornerRowCount=1, SCCOL nCornerColumnCount=1)
+            SCROW nCornerRowCount, SCCOL nCornerColumnCount)
 {
     using ::std::max;
     using ::std::min;
@@ -1512,7 +1512,7 @@ ScChart2DataProvider::createDataSource(
         shrinkToDataRange(m_pDocument, aRefTokens);
 
     if (bLabel)
-        lcl_addUpperLeftCornerIfMissing(aRefTokens); //#i90669#
+        lcl_addUpperLeftCornerIfMissing(aRefTokens, 1, 1); //#i90669#
 
     bool bColHeaders = (bOrientCol ? bLabel : bCategories );
     bool bRowHeaders = (bOrientCol ? bCategories : bLabel );

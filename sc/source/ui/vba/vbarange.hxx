@@ -93,7 +93,7 @@ class ScVbaRange : public ScVbaRange_BASE
         throw (css::uno::RuntimeException, std::exception);
     void visitArray( ArrayVisitor& vistor );
 
-    css::uno::Reference< ov::excel::XRange > getEntireColumnOrRow( bool bColumn = true ) throw( css::uno::RuntimeException );
+    css::uno::Reference< ov::excel::XRange > getEntireColumnOrRow( bool bColumn ) throw( css::uno::RuntimeException );
 
     void fillSeries(  css::sheet::FillDirection nFillDirection, css::sheet::FillMode nFillMode, css::sheet::FillDateMode nFillDateMode, double fStep, double fEndValue ) throw( css::uno::RuntimeException );
 
@@ -108,7 +108,7 @@ class ScVbaRange : public ScVbaRange_BASE
     css::uno::Reference< ov::excel::XRange > getArea( sal_Int32 nIndex  ) throw( css::uno::RuntimeException );
     ScCellRangeObj* getCellRangeObj( )  throw ( css::uno::RuntimeException );
     css::uno::Reference< ov::XCollection >& getBorders();
-    void groupUnGroup( bool bUnGroup = false ) throw ( css::script::BasicErrorException, css::uno::RuntimeException );
+    void groupUnGroup( bool bUnGroup ) throw ( css::script::BasicErrorException, css::uno::RuntimeException );
      css::uno::Reference< ov::excel::XRange > PreviousNext( bool bIsPrevious );
      css::uno::Reference< ov::excel::XRange > SpecialCellsImpl( sal_Int32 nType, const css::uno::Any& _oValue) throw ( css::script::BasicErrorException );
     css::awt::Point getPosition() throw ( css::uno::RuntimeException );
@@ -143,7 +143,7 @@ public:
     static css::uno::Reference< ov::excel::XRange > getRangeObjectForName(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const OUString& sRangeName, ScDocShell* pDocSh,
-        formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1  ) throw ( css::uno::RuntimeException, std::exception );
+        formula::FormulaGrammar::AddressConvention eConv  ) throw ( css::uno::RuntimeException, std::exception );
 
     static css::uno::Reference< ov::excel::XRange > CellsHelper(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
@@ -290,7 +290,7 @@ public:
 //     * object should be a lightweight as possible
 //     * we shouldn't need hacks like this below
     static css::uno::Reference< ov::excel::XRange > ApplicationRange( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Any &Cell1, const css::uno::Any &Cell2 ) throw (css::uno::RuntimeException, std::exception);
-    static bool getCellRangesForAddress(ScRefFlags &rResFlags, const OUString& sAddress, ScDocShell* pDocSh, ScRangeList& rCellRanges, formula::FormulaGrammar::AddressConvention& eConv, char cDelimiter = 0 );
+    static bool getCellRangesForAddress(ScRefFlags &rResFlags, const OUString& sAddress, ScDocShell* pDocSh, ScRangeList& rCellRanges, formula::FormulaGrammar::AddressConvention& eConv, char cDelimiter );
     virtual sal_Bool SAL_CALL GoalSeek( const css::uno::Any& Goal, const css::uno::Reference< ov::excel::XRange >& ChangingCell ) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL SpecialCells( const css::uno::Any& _oType, const css::uno::Any& _oValue)
         throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;

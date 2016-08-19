@@ -1202,7 +1202,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 {
                     pInStream->SetStreamCharSet( aOptions.GetCharSet() );
                     pInStream->Seek( 0 );
-                    bRet = aImpEx.ImportStream( *pInStream, rMedium.GetBaseURL() );
+                    bRet = aImpEx.ImportStream( *pInStream, rMedium.GetBaseURL(), SotClipboardFormatId::STRING );
                     eError = bRet ? eERR_OK : SCERR_IMPORT_CONNECT;
                     aDocument.StartAllListeners();
                     sc::SetFormulaDirtyContext aCxt;

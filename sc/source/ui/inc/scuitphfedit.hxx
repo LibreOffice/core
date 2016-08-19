@@ -90,7 +90,7 @@ private:
 
 private:
     void InitPreDefinedList();
-    void ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling = false);
+    void ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling);
     void InsertToDefinedList();
     void RemoveFromDefinedList();
     void SetSelectDefinedList();

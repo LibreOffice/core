@@ -275,12 +275,12 @@ private:
 
     void    UpdateColumn    ( const SCCOL* pCol = nullptr );
     void    UpdateRow       ( const SCROW* pRow = nullptr );
-    void    UpdateTable     ( const SCTAB* pTab = nullptr );
+    void    UpdateTable     ( const SCTAB* pTab );
     void    UpdateAll       ();
 
-    void    GetDocNames(const OUString* pSelEntry = nullptr);
+    void    GetDocNames(const OUString* pSelEntry);
 
-    void    SetListMode     ( NavListMode eMode, bool bSetSize = true );
+    void    SetListMode     ( NavListMode eMode, bool bSetSize );
     void    ShowList        ( bool bShow, bool bSetSize );
     void    ShowScenarios   ( bool bSetSize );
 

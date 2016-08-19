@@ -688,7 +688,7 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
                 return;
 
             PasteDataFormat( nFormatId, aDataHelper.GetTransferable(),
-                GetViewData().GetCurX(), GetViewData().GetCurY() );
+                GetViewData().GetCurX(), GetViewData().GetCurY(), nullptr );
         }
     }
 }

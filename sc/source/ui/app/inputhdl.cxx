@@ -3198,7 +3198,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
         EnterHandler();
 
         if (pActiveViewSh)
-            pActiveViewSh->FindNextUnprot( bShift );
+            pActiveViewSh->FindNextUnprot( bShift, true );
         return true;
     }
 

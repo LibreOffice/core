@@ -76,7 +76,7 @@ public:
 
     void setInitListener( InitListener* pListener );
 
-    void addEntry( const ScRangeNameLine& rLine, bool bSetCurEntry = true );
+    void addEntry( const ScRangeNameLine& rLine, bool bSetCurEntry );
     void DeleteSelectedEntries();
     void SetEntry( const ScRangeNameLine& rLine );
 

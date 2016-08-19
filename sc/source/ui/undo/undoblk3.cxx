@@ -752,7 +752,7 @@ void ScUndoMerge::Repeat(SfxRepeatTarget& rTarget)
     {
         ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
         bool bCont = false;
-        rViewShell.MergeCells( false, bCont );
+        rViewShell.MergeCells( false, bCont, false );
     }
 }
 

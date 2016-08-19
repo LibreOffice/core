@@ -309,7 +309,7 @@ ScVbaValidation::getFormula1() throw (uno::RuntimeException, std::exception)
     // In VBA both formula and address can have a leading '='
     // in result of getFormula1, however it *seems* that a named range or
     // real formula has to (or is expected to) have the '='
-    if ( pDocSh && !ScVbaRange::getCellRangesForAddress(  nFlags, sString, pDocSh, aCellRanges, eConv ) )
+    if ( pDocSh && !ScVbaRange::getCellRangesForAddress(  nFlags, sString, pDocSh, aCellRanges, eConv, 0 ) )
         sString = "=" + sString;
     return sString;
 }

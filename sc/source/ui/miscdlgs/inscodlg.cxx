@@ -233,7 +233,7 @@ void ScInsertContentsDlg::TestModes()
         mpRbMoveRight->Disable();
 
         mpBtnInsAll->Disable();
-        DisableChecks();
+        DisableChecks(true);
     }
     else
     {

@@ -82,7 +82,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
 
             case SC_HINT_DRWLAYER_NEW:
-                MakeDrawView();
+                MakeDrawView(TRISTATE_INDET);
                 break;
 
             case SC_HINT_DOC_SAVED:
@@ -120,7 +120,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
 
             case SC_HINT_SHOWRANGEFINDER:
-                PaintRangeFinder();
+                PaintRangeFinder(-1);
                 break;
 
             case SC_HINT_FORCESETTAB:

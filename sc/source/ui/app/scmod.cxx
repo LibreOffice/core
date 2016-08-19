@@ -1431,7 +1431,7 @@ void ScModule::InputChanged( EditView* pView )
 {
     ScInputHandler* pHdl = GetInputHdl();
     if (pHdl)
-        pHdl->InputChanged( pView );
+        pHdl->InputChanged( pView, false );
 }
 
 void ScModule::ViewShellGone( ScTabViewShell* pViewSh )

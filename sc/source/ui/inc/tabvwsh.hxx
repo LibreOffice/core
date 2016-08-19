@@ -168,7 +168,7 @@ private:
     OUString   maScope;
 
 private:
-    void    Construct( TriState nForceDesignMode = TRISTATE_INDET );
+    void    Construct( TriState nForceDesignMode );
 
     SfxShell*       GetMySubShell() const;
 
@@ -344,7 +344,7 @@ public:
     void    InsertURL( const OUString& rName, const OUString& rURL, const OUString& rTarget,
                             sal_uInt16 nMode );
     void    InsertURLButton( const OUString& rName, const OUString& rURL, const OUString& rTarget,
-                            const Point* pInsPos = nullptr );
+                            const Point* pInsPos );
     void    InsertURLField( const OUString& rName, const OUString& rURL, const OUString& rTarget );
 
     bool    SelectObject( const OUString& rName );
@@ -357,9 +357,9 @@ public:
 
     static void UpdateNumberFormatter( const SvxNumberInfoItem&  rInfoItem );
 
-    void    ExecuteCellFormatDlg( SfxRequest& rReq, const OString &rTabPage = OString());
+    void    ExecuteCellFormatDlg( SfxRequest& rReq, const OString &rTabPage);
 
-    bool    GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode = 0 );
+    bool    GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode );
 
     void    StartSimpleRefDialog( const OUString& rTitle, const OUString& rInitVal,
                                     bool bCloseOnButtonUp, bool bSingleCell, bool bMultiSelection );

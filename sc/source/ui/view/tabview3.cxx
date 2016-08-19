@@ -1376,7 +1376,7 @@ bool ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
         {
             case MOD_NONE:  MoveCursorPage( 0, static_cast<SCsCOLROW>(nDX), SC_FOLLOW_FIX, bSel );  break;
             case MOD_ALT:   MoveCursorPage( nDX, 0, SC_FOLLOW_FIX, bSel );  break;
-            case MOD_CTRL:  SelectNextTab( nDX );                           break;
+            case MOD_CTRL:  SelectNextTab( nDX, false );                    break;
             default:
             {
                 // added to avoid warnings
@@ -2001,7 +2001,7 @@ void ScTabView::KillEditView( bool bNoPaint )
                 // #i73567# the cell still has to be repainted
                 if (bExtended || ( bAtCursor && !bNoPaint ))
                 {
-                    pGridWin[i]->Draw( nCol1, nRow1, nCol2, nRow2 );
+                    pGridWin[i]->Draw( nCol1, nRow1, nCol2, nRow2, SC_UPDATE_ALL );
                     pGridWin[i]->UpdateSelectionOverlay();
                 }
             }
@@ -2531,7 +2531,7 @@ void ScTabView::ActivateView( bool bActivate, bool bFirst )
 
     aViewData.Activate(bActivate);
 
-    PaintBlock();                  // repaint, selection after active status
+    PaintBlock(false);                  // repaint, selection after active status
 
     if (!bActivate)
         HideAllCursors();               // Cursor

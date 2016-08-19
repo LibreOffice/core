@@ -286,9 +286,9 @@ public:
     void    SetSingleGrid( bool bNewMode );
     void    SetGridColor( const Color& rColor );
     void    SetMarkClipped( bool bSet );
-    void    SetShowNullValues ( bool bSet = true );
-    void    SetShowFormulas   ( bool bSet = true );
-    void    SetShowSpellErrors( bool bSet = true );
+    void    SetShowNullValues ( bool bSet );
+    void    SetShowFormulas   ( bool bSet );
+    void    SetShowSpellErrors( bool bSet );
     void    SetMirrorWidth( long nNew );
     long    GetScrW() const     { return nScrW; }
     long    GetScrH() const     { return nScrH; }
