@@ -34,6 +34,24 @@
       "revId": "5e5bd85c3e5ba8341d95f716a5e5bcc762887c55",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_0f2bb531",
+        "filename": "uui/uiconfig/ui/authfallback.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-08-19T22:07:41Z",
+      "side": 1,
+      "message": "Because 6 is just a convention, there\u0027s no technical constraints (except for the one you\u0027re adding).",
+      "parentUuid": "fa6399be_cf3b7d9b",
+      "revId": "5e5bd85c3e5ba8341d95f716a5e5bcc762887c55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
