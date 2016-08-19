@@ -417,6 +417,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_CELL_FORMULA";
     case LOK_CALLBACK_VIEW_LOCK:
         return "LOK_CALLBACK_VIEW_LOCK";
+    case LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
+        return "LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED";
     }
     g_assert(false);
     return nullptr;
@@ -1322,6 +1324,10 @@ callback (gpointer pData)
                 priv->m_aViewLockRectangles.erase(it);
         }
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
+        break;
+    }
+    case LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
+    {
         break;
     }
     default:
