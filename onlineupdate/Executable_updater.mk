@@ -10,6 +10,7 @@
 $(eval $(call gb_Executable_Executable,updater))
 
 $(eval $(call gb_Executable_set_include,updater,\
+	-I$(SRCDIR)/onlineupdate/inc \
 	-I$(SRCDIR)/onlineupdate/source/update/common \
 	-I$(SRCDIR)/onlineupdate/source/update/updater/xpcom/glue \
 	$$(INCLUDE) \
@@ -18,7 +19,7 @@ $(eval $(call gb_Executable_set_include,updater,\
 $(eval $(call gb_Executable_use_static_libraries,updater,\
     libmar \
 	$(if $(filter WNT,$(OS)), \
-		winhelper \
+		winhelper )\
 ))
 
 ifeq ($(OS),WNT)

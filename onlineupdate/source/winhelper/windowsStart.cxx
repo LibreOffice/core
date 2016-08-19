@@ -2,7 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+#include <windows.h>
 #include <shellapi.h>
+
+#include <cstddef>
+#include <cwchar>
 
 // Needed for CreateEnvironmentBlock
 #include <userenv.h>
@@ -138,36 +142,6 @@ MakeCommandLine(int argc, wchar_t **argv)
 }
 
 /**
- * Convert UTF8 to UTF16 without using the normal XPCOM goop, which we
- * can't link to updater.exe.
- */
-static char16_t*
-AllocConvertUTF8toUTF16(const char *arg)
-{
-  // UTF16 can't be longer in units than UTF8
-  int len = strlen(arg);
-  char16_t *s = new char16_t[(len + 1) * sizeof(char16_t)];
-  if (!s)
-    return nullptr;
-
-  ConvertUTF8toUTF16 convert(s);
-  convert.write(arg, len);
-  convert.write_terminator();
-  return s;
-}
-
-static void
-FreeAllocStrings(int argc, wchar_t **argv)
-{
-  while (argc) {
-    --argc;
-    delete [] argv[argc];
-  }
-
-  delete [] argv;
-}
-
-/**
  * Launch a child process with the specified arguments.
  * @note argv[0] is ignored
  * @note The form of this function that takes char **argv expects UTF-8
@@ -177,29 +151,6 @@ WinLaunchChild(const wchar_t *exePath,
                int argc, wchar_t **argv,
                HANDLE userToken = nullptr,
                HANDLE *hProcess = nullptr);
-
-BOOL
-WinLaunchChild(const wchar_t *exePath,
-               int argc, char **argv,
-               HANDLE userToken,
-               HANDLE *hProcess)
-{
-  wchar_t** argvConverted = new wchar_t*[argc];
-  if (!argvConverted)
-    return FALSE;
-
-  for (int i = 0; i < argc; ++i) {
-      argvConverted[i] = reinterpret_cast<wchar_t*>(AllocConvertUTF8toUTF16(argv[i]));
-    if (!argvConverted[i]) {
-      FreeAllocStrings(i, argvConverted);
-      return FALSE;
-    }
-  }
-
-  BOOL ok = WinLaunchChild(exePath, argc, argvConverted, userToken, hProcess);
-  FreeAllocStrings(argc, argvConverted);
-  return ok;
-}
 
 BOOL
 WinLaunchChild(const wchar_t *exePath,
