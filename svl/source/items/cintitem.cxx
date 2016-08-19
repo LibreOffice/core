@@ -32,10 +32,9 @@ bool CntByteItem::operator ==(const SfxPoolItem & rItem) const
 }
 
 // virtual
-bool CntByteItem::GetPresentation(SfxItemPresentation,
-                                                 SfxMapUnit, SfxMapUnit,
-                                                 OUString & rText,
-                                                 const IntlWrapper *) const
+bool CntByteItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit,
+                                  OUString & rText,
+                                  const IntlWrapper *) const
 {
     rText = OUString::number( m_nValue );
     return true;
@@ -104,9 +103,9 @@ bool CntUInt16Item::operator ==(const SfxPoolItem & rItem) const
 
 // virtual
 bool CntUInt16Item::GetPresentation(SfxItemPresentation,
-                                                   SfxMapUnit, SfxMapUnit,
-                                                   OUString & rText,
-                                                   const IntlWrapper *)
+                                    MapUnit, MapUnit,
+                                    OUString & rText,
+                                    const IntlWrapper *)
     const
 {
     rText = OUString::number( m_nValue );
@@ -174,9 +173,9 @@ bool CntInt32Item::operator ==(const SfxPoolItem & rItem) const
 
 // virtual
 bool CntInt32Item::GetPresentation(SfxItemPresentation,
-                                                  SfxMapUnit, SfxMapUnit,
-                                                  OUString & rText,
-                                                  const IntlWrapper *) const
+                                   MapUnit, MapUnit,
+                                   OUString & rText,
+                                   const IntlWrapper *) const
 {
     rText = OUString::number( m_nValue );
     return true;
@@ -243,9 +242,9 @@ bool CntUInt32Item::operator ==(const SfxPoolItem & rItem) const
 
 // virtual
 bool CntUInt32Item::GetPresentation(SfxItemPresentation,
-                                                   SfxMapUnit, SfxMapUnit,
-                                                   OUString & rText,
-                                                   const IntlWrapper *)
+                                    MapUnit, MapUnit,
+                                    OUString & rText,
+                                    const IntlWrapper *)
     const
 {
     rText = OUString::number(m_nValue);

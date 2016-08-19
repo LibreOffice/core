@@ -105,8 +105,8 @@ bool SvxGridItem::operator==( const SfxPoolItem& rAttr ) const
 bool  SvxGridItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *
 )   const
 {
@@ -216,7 +216,7 @@ bool SvxGridTabPage::FillItemSet( SfxItemSet* rCoreSet )
         aGridItem.bSynchronize  = pCbxSynchronize->IsChecked();
         aGridItem.bGridVisible  = pCbxGridVisible->IsChecked();
 
-        SfxMapUnit eUnit =
+        MapUnit eUnit =
             rCoreSet->GetPool()->GetMetric( GetWhich( SID_ATTR_GRID_OPTIONS ) );
         long nX =GetCoreValue(  *pMtrFldDrawX, eUnit );
         long nY = GetCoreValue( *pMtrFldDrawY, eUnit );
@@ -244,7 +244,7 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
         pCbxSynchronize->Check( pGridAttr->bSynchronize );
         pCbxGridVisible->Check( pGridAttr->bGridVisible );
 
-        SfxMapUnit eUnit =
+        MapUnit eUnit =
             rSet->GetPool()->GetMetric( GetWhich( SID_ATTR_GRID_OPTIONS ) );
         SetMetricValue( *pMtrFldDrawX , pGridAttr->nFldDrawX, eUnit );
         SetMetricValue( *pMtrFldDrawY , pGridAttr->nFldDrawY, eUnit );

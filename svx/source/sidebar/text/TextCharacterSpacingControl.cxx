@@ -125,7 +125,7 @@ void TextCharacterSpacingControl::Initialize()
 
     if(eState >= SfxItemState::DEFAULT)
     {
-        SfxMapUnit eUnit = GetCoreMetric();
+        MapUnit eUnit = GetCoreMetric();
         MapUnit eOrgUnit = (MapUnit)eUnit;
         MapUnit ePntUnit(MAP_POINT);
         long nBig = maEditKerning->Normalize(nKerning);
@@ -146,7 +146,7 @@ void TextCharacterSpacingControl::Initialize()
 
 void TextCharacterSpacingControl::ExecuteCharacterSpacing(long nValue, bool bClose)
 {
-    SfxMapUnit eUnit = GetCoreMetric();
+    MapUnit eUnit = GetCoreMetric();
 
     long nSign = (nValue < 0) ? -1 : 1;
     nValue = nValue * nSign;
@@ -201,7 +201,7 @@ IMPL_LINK_NOARG_TYPED(TextCharacterSpacingControl, KerningModifyHdl, Edit&, void
     ExecuteCharacterSpacing(mnCustomKern, false);
 }
 
-SfxMapUnit TextCharacterSpacingControl::GetCoreMetric() const
+MapUnit TextCharacterSpacingControl::GetCoreMetric() const
 {
     SfxItemPool &rPool = SfxGetpApp()->GetPool();
     sal_uInt16 nWhich = rPool.GetWhich(mnId);

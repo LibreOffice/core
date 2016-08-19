@@ -53,8 +53,8 @@ SfxSpellCheckItem::SfxSpellCheckItem( const SfxSpellCheckItem& rItem ) :
 bool SfxSpellCheckItem::GetPresentation
 (
     SfxItemPresentation ,
-    SfxMapUnit          ,
-    SfxMapUnit          ,
+    MapUnit             ,
+    MapUnit             ,
     OUString&           ,
     const IntlWrapper*
 )   const
@@ -113,8 +113,8 @@ SfxPoolItem* SfxHyphenRegionItem::Clone( SfxItemPool* ) const
 bool SfxHyphenRegionItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          ,
-    SfxMapUnit          ,
+    MapUnit             ,
+    MapUnit             ,
     OUString&           rText,
     const IntlWrapper*
 )   const

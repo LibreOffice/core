@@ -838,7 +838,7 @@ bool  SwDocStyleSheet::HasClearParentSupport() const
 }
 
 // determine textual description
-OUString  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
+OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
 {
     IntlWrapper aIntlWrapper( SvtSysLocale().GetLanguageTag() );
 

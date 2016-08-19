@@ -249,7 +249,7 @@ private:
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
 
-    SfxMapUnit          m_ePoolUnit;
+    MapUnit             m_ePoolUnit;
 
     DECL_LINK_TYPED(SelectDialogTypeHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED( ModifyColorHdl_Impl, ListBox&, void );
@@ -328,7 +328,7 @@ private:
 
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
-    SfxMapUnit          m_ePoolUnit;
+    MapUnit             m_ePoolUnit;
 
     DECL_LINK_TYPED( ClickShadowHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ModifyShadowHdl_Impl, Edit&, void );
@@ -481,7 +481,7 @@ private:
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
 
-    SfxMapUnit          m_ePoolUnit;
+    MapUnit             m_ePoolUnit;
 
     DECL_LINK_TYPED( ChangeHatchHdl, ValueSet*, void );
     void ChangeHatchHdl_Impl();
@@ -574,7 +574,7 @@ private:
     XFillAttrSetItem           m_aXFillAttr;
     SfxItemSet&                m_rXFSet;
     const SdrView*             mpView;
-    SfxMapUnit                 mePoolUnit;
+    MapUnit                    mePoolUnit;
     Size                       rBitmapSize;
     Size                       rFilledSize;
     Size                       rZoomedSize;

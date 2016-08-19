@@ -37,8 +37,8 @@ SfxPoolItem* SvxCharHiddenItem::Clone( SfxItemPool * ) const
 bool SvxCharHiddenItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText,
     const IntlWrapper * /*pIntl*/
 )   const

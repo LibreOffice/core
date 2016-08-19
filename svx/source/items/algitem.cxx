@@ -60,8 +60,8 @@ SvxOrientationItem::SvxOrientationItem( sal_Int32 nRotation, bool bStacked, cons
 bool SvxOrientationItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper * ) const
 {
     rText = GetValueText( GetValue() );
@@ -206,8 +206,8 @@ SvxMarginItem::SvxMarginItem( const SvxMarginItem& rItem ) :
 bool SvxMarginItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    MapUnit             eCoreUnit,
+    MapUnit             ePresUnit,
     OUString&           rText, const IntlWrapper *pIntl
 )   const
 {

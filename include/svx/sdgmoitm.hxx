@@ -44,10 +44,9 @@ public:
 
     virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
-                                                 SfxMapUnit eCoreMetric,
-                                                 SfxMapUnit ePresMetric,
-                                                 OUString& rText, const IntlWrapper * = nullptr) const override;
-
+                                  MapUnit eCoreMetric,
+                                  MapUnit ePresMetric,
+                                  OUString& rText, const IntlWrapper * = nullptr) const override;
 };
 
 #endif // INCLUDED_SVX_SDGMOITM_HXX

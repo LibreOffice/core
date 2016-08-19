@@ -46,10 +46,9 @@ public:
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,
-                                                SfxMapUnit, SfxMapUnit,
-                                                OUString & rText,
-                                                const IntlWrapper * = nullptr)
-        const override;
+                                 MapUnit, MapUnit,
+                                 OUString & rText,
+                                 const IntlWrapper * = nullptr) const override;
 
     virtual bool QueryValue(css::uno::Any& rVal,
                             sal_uInt8 nMemberId = 0) const override;

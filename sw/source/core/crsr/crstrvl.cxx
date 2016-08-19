@@ -1601,7 +1601,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                         {
                             OUString aStr;
                             GetDoc()->GetAttrPool().GetPresentation( *pItem,
-                                SFX_MAPUNIT_CM, aStr );
+                                MAP_CM, aStr );
                             if (!sAttrs.isEmpty())
                                 sAttrs += ", ";
                             sAttrs += aStr;

@@ -648,7 +648,7 @@ static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
                     sal_Int32 nHeight, sal_uInt16 nFontHeightWhich)
 {
     float fSize = (float)nHeight / 10;
-    nHeight = CalcToUnit( fSize, SFX_MAPUNIT_TWIP );
+    nHeight = CalcToUnit( fSize, MAP_TWIP );
     SwTextFormatColl *pColl = pWrtShell->GetTextCollFromPool(nType);
     pColl->SetFormatAttr(SvxFontHeightItem(nHeight, 100, nFontHeightWhich));
 }
@@ -677,27 +677,27 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
     if(bStandardHeightChanged)
     {
         float fSize = (float)m_pStandardHeightLB->GetValue() / 10;
-        m_pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_STANDARD, m_nFontGroup );
+        m_pFontConfig->SetFontHeight( CalcToUnit( fSize, MAP_TWIP ), FONT_STANDARD, m_nFontGroup );
     }
     if(bTitleHeightChanged)
     {
         float fSize = (float)m_pTitleHeightLB->GetValue() / 10;
-        m_pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_OUTLINE, m_nFontGroup );
+        m_pFontConfig->SetFontHeight( CalcToUnit( fSize, MAP_TWIP ), FONT_OUTLINE, m_nFontGroup );
     }
     if(bListHeightChanged)
     {
         float fSize = (float)m_pListHeightLB->GetValue() / 10;
-        m_pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_LIST, m_nFontGroup );
+        m_pFontConfig->SetFontHeight( CalcToUnit( fSize, MAP_TWIP ), FONT_LIST, m_nFontGroup );
     }
     if(bLabelHeightChanged)
     {
         float fSize = (float)m_pLabelHeightLB->GetValue() / 10;
-        m_pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_CAPTION, m_nFontGroup );
+        m_pFontConfig->SetFontHeight( CalcToUnit( fSize, MAP_TWIP ), FONT_CAPTION, m_nFontGroup );
     }
     if(bIndexHeightChanged)
     {
         float fSize = (float)m_pIndexHeightLB->GetValue() / 10;
-        m_pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_INDEX, m_nFontGroup );
+        m_pFontConfig->SetFontHeight( CalcToUnit( fSize, MAP_TWIP ), FONT_INDEX, m_nFontGroup );
     }
 
     if(m_pWrtShell)
@@ -725,7 +725,7 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
         if(bStandardHeightChanged)
         {
             float fSize = (float)m_pStandardHeightLB->GetValue() / 10;
-            m_pWrtShell->SetDefault(SvxFontHeightItem( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), 100, nFontHeightWhich ) );
+            m_pWrtShell->SetDefault(SvxFontHeightItem( CalcToUnit( fSize, MAP_TWIP ), 100, nFontHeightWhich ) );
             SwTextFormatColl *pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_STANDARD);
             pColl->ResetFormatAttr(nFontHeightWhich);
             bMod = true;
@@ -949,11 +949,11 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
     aFontMetric = m_pFontList->Get(sIdxBackup, sIdxBackup );
     m_pIndexHeightLB->Fill( &aFontMetric, m_pFontList );
 
-    m_pStandardHeightLB->SetValue( CalcToPoint( nStandardHeight, SFX_MAPUNIT_TWIP, 10 ) );
-    m_pTitleHeightLB->   SetValue( CalcToPoint( nTitleHeight   , SFX_MAPUNIT_TWIP, 10 ) );
-    m_pListHeightLB->    SetValue( CalcToPoint( nListHeight    , SFX_MAPUNIT_TWIP, 10 ) );
-    m_pLabelHeightLB->   SetValue( CalcToPoint( nLabelHeight   , SFX_MAPUNIT_TWIP, 10 ));
-    m_pIndexHeightLB->   SetValue( CalcToPoint( nIndexHeight   , SFX_MAPUNIT_TWIP, 10 ));
+    m_pStandardHeightLB->SetValue( CalcToPoint( nStandardHeight, MAP_TWIP, 10 ) );
+    m_pTitleHeightLB->   SetValue( CalcToPoint( nTitleHeight   , MAP_TWIP, 10 ) );
+    m_pListHeightLB->    SetValue( CalcToPoint( nListHeight    , MAP_TWIP, 10 ) );
+    m_pLabelHeightLB->   SetValue( CalcToPoint( nLabelHeight   , MAP_TWIP, 10 ));
+    m_pIndexHeightLB->   SetValue( CalcToPoint( nIndexHeight   , MAP_TWIP, 10 ));
 
     m_pStandardBox->SaveValue();
     m_pTitleBox->SaveValue();
@@ -985,19 +985,19 @@ IMPL_LINK_NOARG_TYPED(SwStdFontTabPage, StandardHdl, Button*, void)
 
     m_pStandardHeightLB->SetValue( CalcToPoint(
         SwStdFontConfig::GetDefaultHeightFor(FONT_STANDARD + nFontOffset, m_eLanguage),
-            SFX_MAPUNIT_TWIP, 10 ) );
+            MAP_TWIP, 10 ) );
     m_pTitleHeightLB   ->SetValue(CalcToPoint(
         SwStdFontConfig::GetDefaultHeightFor(FONT_OUTLINE  +
-            nFontOffset, m_eLanguage), SFX_MAPUNIT_TWIP, 10 ));
+            nFontOffset, m_eLanguage), MAP_TWIP, 10 ));
     m_pListHeightLB    ->SetValue(CalcToPoint(
         SwStdFontConfig::GetDefaultHeightFor(FONT_LIST + nFontOffset, m_eLanguage),
-            SFX_MAPUNIT_TWIP, 10 ));
+            MAP_TWIP, 10 ));
     m_pLabelHeightLB   ->SetValue(CalcToPoint(
         SwStdFontConfig::GetDefaultHeightFor(FONT_CAPTION  + nFontOffset, m_eLanguage),
-            SFX_MAPUNIT_TWIP, 10 ));
+            MAP_TWIP, 10 ));
     m_pIndexHeightLB   ->SetValue(CalcToPoint(
         SwStdFontConfig::GetDefaultHeightFor(FONT_INDEX    + nFontOffset, m_eLanguage),
-            SFX_MAPUNIT_TWIP, 10 ));
+            MAP_TWIP, 10 ));
 }
 
 IMPL_LINK_TYPED( SwStdFontTabPage, ModifyHdl, Edit&, rBox, void )

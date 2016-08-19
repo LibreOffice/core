@@ -164,7 +164,7 @@ private:
     sal_Int32*          m_pPosDashLb;
     sal_Int32*          m_pPosLineEndLb;
 
-    SfxMapUnit          m_ePoolUnit;
+    MapUnit             m_ePoolUnit;
 
     sal_Int32           m_nActLineWidth;
 
@@ -280,7 +280,7 @@ private:
     sal_uInt16          nDlgType;
     sal_Int32*          pPosDashLb;
 
-    SfxMapUnit          ePoolUnit;
+    MapUnit             ePoolUnit;
     FieldUnit           eFUnit;
 
     void FillDash_Impl();

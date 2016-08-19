@@ -88,13 +88,13 @@ ScMessagePool::~ScMessagePool()
     SfxItemPool::Free(pDocPool);
 }
 
-SfxMapUnit ScMessagePool::GetMetric( sal_uInt16 nWhich ) const
+MapUnit ScMessagePool::GetMetric( sal_uInt16 nWhich ) const
 {
     // Own attributes: Twips, everything else 1/100 mm
     if ( nWhich >= ATTR_STARTINDEX && nWhich <= ATTR_ENDINDEX )
-        return SFX_MAPUNIT_TWIP;
+        return MAP_TWIP;
     else
-        return SFX_MAPUNIT_100TH_MM;
+        return MAP_100TH_MM;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

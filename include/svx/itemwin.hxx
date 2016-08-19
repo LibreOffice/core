@@ -66,7 +66,7 @@ class SVX_DLLPUBLIC SvxMetricField : public MetricField
     using Window::Update;
 
     OUString        aCurTxt;
-    SfxMapUnit      ePoolUnit;
+    MapUnit         ePoolUnit;
     FieldUnit       eDlgUnit;
     Size            aLogicalSize;
     css::uno::Reference< css::frame::XFrame > mxFrame;
@@ -86,7 +86,7 @@ public:
                     WinBits nBits = WB_BORDER | WB_SPIN | WB_REPEAT );
 
     void            Update( const XLineWidthItem* pItem );
-    void            SetCoreUnit( SfxMapUnit eUnit );
+    void            SetCoreUnit( MapUnit eUnit );
     void            RefreshDlgUnit();
 };
 

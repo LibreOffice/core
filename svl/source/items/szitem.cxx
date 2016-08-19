@@ -45,8 +45,8 @@ SfxSizeItem::SfxSizeItem( const SfxSizeItem& rItem ) :
 bool SfxSizeItem::GetPresentation
 (
     SfxItemPresentation     /*ePresentation*/,
-    SfxMapUnit              /*eCoreMetric*/,
-    SfxMapUnit              /*ePresentationMetric*/,
+    MapUnit                 /*eCoreMetric*/,
+    MapUnit                 /*ePresentationMetric*/,
     OUString&               rText,
     const IntlWrapper *
 )   const

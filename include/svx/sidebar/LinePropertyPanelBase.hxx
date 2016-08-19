@@ -111,7 +111,7 @@ protected:
     void SelectLineStyle();
     void ActivateControls();
 
-    void setMapUnit(SfxMapUnit eMapUnit);
+    void setMapUnit(MapUnit eMapUnit);
 
     void disableArrowHead();
 
@@ -139,7 +139,7 @@ private:
     std::unique_ptr<XLineDashItem>  mpDashItem;
 
     sal_uInt16      mnTrans;
-    SfxMapUnit      meMapUnit;
+    MapUnit         meMapUnit;
     sal_Int32       mnWidthCoreValue;
     XLineEndListRef mxLineEndList;
     XDashListRef    mxLineStyleList;

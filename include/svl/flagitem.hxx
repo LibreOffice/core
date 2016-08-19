@@ -43,10 +43,10 @@ public:
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
-                                    SfxMapUnit eCoreMetric,
-                                    SfxMapUnit ePresMetric,
-                                    OUString & rText,
-                                    const IntlWrapper * = nullptr ) const override;
+                                  MapUnit eCoreMetric,
+                                  MapUnit ePresMetric,
+                                  OUString & rText,
+                                  const IntlWrapper * = nullptr ) const override;
             sal_uInt16           GetValue() const { return nVal; }
             void             SetValue( sal_uInt16 nNewVal ) {
                                  DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );

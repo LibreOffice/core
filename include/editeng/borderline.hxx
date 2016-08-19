@@ -127,7 +127,7 @@ namespace editeng {
 
         bool            operator==( const SvxBorderLine &rCmp ) const;
 
-        OUString        GetValueString( SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit,
+        OUString        GetValueString( MapUnit eSrcUnit, MapUnit eDestUnit,
                                         const IntlWrapper* pIntl,
                                         bool bMetricStr = false ) const;
 

@@ -26,7 +26,7 @@
 #include <rtl/ustrbuf.hxx>
 
 
-OUString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, const IntlWrapper* pIntl )
+OUString GetMetricText( long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const IntlWrapper* pIntl )
 {
     bool bNeg = false;
     sal_Int32 nRet = 0;
@@ -39,45 +39,45 @@ OUString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, co
 
     switch ( eDestUnit )
     {
-        case SFX_MAPUNIT_100TH_MM:
-        case SFX_MAPUNIT_10TH_MM:
-        case SFX_MAPUNIT_MM:
-        case SFX_MAPUNIT_CM:
+        case MAP_100TH_MM:
+        case MAP_10TH_MM:
+        case MAP_MM:
+        case MAP_CM:
         {
             nRet = (long)OutputDevice::LogicToLogic(
-                nVal, (MapUnit)eSrcUnit, (MapUnit)SFX_MAPUNIT_100TH_MM );
+                nVal, (MapUnit)eSrcUnit, (MapUnit)MAP_100TH_MM );
 
             switch ( eDestUnit )
             {
-                case SFX_MAPUNIT_100TH_MM:  nRet *= 1000; break;
-                case SFX_MAPUNIT_10TH_MM:   nRet *= 100; break;
-                case SFX_MAPUNIT_MM:        nRet *= 10; break;
+                case MAP_100TH_MM:  nRet *= 1000; break;
+                case MAP_10TH_MM:   nRet *= 100; break;
+                case MAP_MM:        nRet *= 10; break;
                 default: ;//prevent warning
             }
             break;
         }
 
-        case SFX_MAPUNIT_1000TH_INCH:
-        case SFX_MAPUNIT_100TH_INCH:
-        case SFX_MAPUNIT_10TH_INCH:
-        case SFX_MAPUNIT_INCH:
+        case MAP_1000TH_INCH:
+        case MAP_100TH_INCH:
+        case MAP_10TH_INCH:
+        case MAP_INCH:
         {
             nRet = OutputDevice::LogicToLogic(
-                nVal, (MapUnit)eSrcUnit, (MapUnit)SFX_MAPUNIT_1000TH_INCH );
+                nVal, (MapUnit)eSrcUnit, (MapUnit)MAP_1000TH_INCH );
 
             switch ( eDestUnit )
             {
-                case SFX_MAPUNIT_1000TH_INCH:   nRet *= 1000; break;
-                case SFX_MAPUNIT_100TH_INCH:    nRet *= 100; break;
-                case SFX_MAPUNIT_10TH_INCH:     nRet *= 10; break;
+                case MAP_1000TH_INCH:   nRet *= 1000; break;
+                case MAP_100TH_INCH:    nRet *= 100; break;
+                case MAP_10TH_INCH:     nRet *= 10; break;
                 default: ;//prevent warning
             }
             break;
         }
 
-        case SFX_MAPUNIT_POINT:
-        case SFX_MAPUNIT_TWIP:
-        case SFX_MAPUNIT_PIXEL:
+        case MAP_POINT:
+        case MAP_TWIP:
+        case MAP_PIXEL:
             return OUString::number( (long)OutputDevice::LogicToLogic(
                         nVal, (MapUnit)eSrcUnit, (MapUnit)eDestUnit ));
 
@@ -86,7 +86,7 @@ OUString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, co
             return OUString();
     }
 
-    if ( SFX_MAPUNIT_CM == eDestUnit || SFX_MAPUNIT_INCH == eDestUnit )
+    if ( MAP_CM == eDestUnit || MAP_INCH == eDestUnit )
     {
         sal_Int32 nMod = nRet % 10;
 
@@ -168,38 +168,38 @@ OUString GetColorString( const Color& rCol )
 }
 
 
-sal_uInt16 GetMetricId( SfxMapUnit eUnit )
+sal_uInt16 GetMetricId( MapUnit eUnit )
 {
     sal_uInt16 nId = RID_SVXITEMS_METRIC_MM;
 
     switch ( eUnit )
     {
-        case SFX_MAPUNIT_100TH_MM:
-        case SFX_MAPUNIT_10TH_MM:
-        case SFX_MAPUNIT_MM:
+        case MAP_100TH_MM:
+        case MAP_10TH_MM:
+        case MAP_MM:
             nId = RID_SVXITEMS_METRIC_MM;
             break;
 
-        case SFX_MAPUNIT_CM:
+        case MAP_CM:
             nId = RID_SVXITEMS_METRIC_CM;
             break;
 
-        case SFX_MAPUNIT_1000TH_INCH:
-        case SFX_MAPUNIT_100TH_INCH:
-        case SFX_MAPUNIT_10TH_INCH:
-        case SFX_MAPUNIT_INCH:
+        case MAP_1000TH_INCH:
+        case MAP_100TH_INCH:
+        case MAP_10TH_INCH:
+        case MAP_INCH:
             nId = RID_SVXITEMS_METRIC_INCH;
             break;
 
-        case SFX_MAPUNIT_POINT:
+        case MAP_POINT:
             nId = RID_SVXITEMS_METRIC_POINT;
             break;
 
-        case SFX_MAPUNIT_TWIP:
+        case MAP_TWIP:
             nId = RID_SVXITEMS_METRIC_TWIP;
             break;
 
-        case SFX_MAPUNIT_PIXEL:
+        case MAP_PIXEL:
             nId = RID_SVXITEMS_METRIC_PIXEL;
             break;
 

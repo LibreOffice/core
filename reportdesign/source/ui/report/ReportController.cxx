@@ -2420,7 +2420,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
     pPool->SetDefaults(pDefaults);
 
 
-    pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );    // ripped, don't understand why
+    pPool->SetDefaultMetric( MAP_100TH_MM );    // ripped, don't understand why
     pPool->FreezeIdRanges();                        // the same
 
     try
@@ -4217,7 +4217,7 @@ void OReportController::openZoomDialog()
             0
         };
         SfxItemPool* pPool( new SfxItemPool(OUString("ZoomProperties"), SID_ATTR_ZOOM,SID_ATTR_ZOOM, aItemInfos, pDefaults) );
-        pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );    // ripped, don't understand why
+        pPool->SetDefaultMetric( MAP_100TH_MM );    // ripped, don't understand why
         pPool->FreezeIdRanges();                        // the same
         try
         {

@@ -220,7 +220,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
            m_pLineDistAtMetricBox->IsValueModified() ) )
     {
         nWhich = GetWhich( SID_ATTR_PARA_LINESPACE );
-        SfxMapUnit eUnit = pPool->GetMetric( nWhich );
+        MapUnit eUnit = pPool->GetMetric( nWhich );
         SvxLineSpacingItem aSpacing(
             static_cast<const SvxLineSpacingItem&>(GetItemSet().Get( nWhich )) );
 
@@ -265,7 +265,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
          || m_pContextualCB->IsValueChangedFromSaved())
     {
         nWhich = GetWhich( SID_ATTR_ULSPACE );
-        SfxMapUnit eUnit = pPool->GetMetric( nWhich );
+        MapUnit eUnit = pPool->GetMetric( nWhich );
         pOld = GetOldItem( *rOutSet, SID_ATTR_ULSPACE );
         SvxULSpaceItem aMargin( nWhich );
 
@@ -312,7 +312,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
          m_pAutoCB->IsValueChangedFromSaved() )
     {
         nWhich = GetWhich( SID_ATTR_LRSPACE );
-        SfxMapUnit eUnit = pPool->GetMetric( nWhich );
+        MapUnit eUnit = pPool->GetMetric( nWhich );
         SvxLRSpaceItem aMargin( nWhich );
         pOld = GetOldItem( *rOutSet, SID_ATTR_LRSPACE );
 
@@ -441,7 +441,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
 
     if ( eItemState >= SfxItemState::DEFAULT )
     {
-        SfxMapUnit eUnit = pPool->GetMetric( _nWhich );
+        MapUnit eUnit = pPool->GetMetric( _nWhich );
 
         if ( bRelativeMode )
         {
@@ -511,7 +511,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
 
     if ( eItemState >= SfxItemState::DEFAULT )
     {
-        SfxMapUnit eUnit = pPool->GetMetric( _nWhich );
+        MapUnit eUnit = pPool->GetMetric( _nWhich );
 
         const SvxULSpaceItem& rOldItem =
             static_cast<const SvxULSpaceItem&>(rSet->Get( _nWhich ));
@@ -714,7 +714,7 @@ void SvxStdParagraphTabPage::SetLineSpacing_Impl
     const SvxLineSpacingItem &rAttr
 )
 {
-    SfxMapUnit eUnit = GetItemSet().GetPool()->GetMetric( rAttr.Which() );
+    MapUnit eUnit = GetItemSet().GetPool()->GetMetric( rAttr.Which() );
 
     switch( rAttr.GetLineSpaceRule() )
     {
@@ -837,7 +837,7 @@ IMPL_LINK_TYPED( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox&, rBox, void 
             // if the value has been changed at SetMin,
             // it is time for the default
             if ( m_pLineDistAtMetricBox->GetValue() != nTemp )
-                SetMetricValue( *m_pLineDistAtMetricBox, FIX_DIST_DEF, SFX_MAPUNIT_TWIP ); // fix is only in Writer
+                SetMetricValue( *m_pLineDistAtMetricBox, FIX_DIST_DEF, MAP_TWIP ); // fix is only in Writer
             m_pLineDistAtPercentBox->Hide();
             m_pLineDistAtMetricBox->Show();
             m_pLineDistAtMetricBox->Enable();
@@ -908,7 +908,7 @@ void SvxStdParagraphTabPage::UpdateExample_Impl()
         case LLINESPACE_DURCH:
         case LLINESPACE_FIX:
             m_pExampleWin->SetLineSpace( (SvxPrevLineSpace)nPos,
-                (sal_uInt16)GetCoreValue( *m_pLineDistAtMetricBox, SFX_MAPUNIT_TWIP ) );
+                (sal_uInt16)GetCoreValue( *m_pLineDistAtMetricBox, MAP_TWIP ) );
             break;
     }
     m_pExampleWin->Invalidate();

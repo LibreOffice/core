@@ -37,8 +37,8 @@ public:
     SVX_DLLPRIVATE virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
 
     SVX_DLLPRIVATE virtual bool GetPresentation( SfxItemPresentation ePres,
-                                    SfxMapUnit eCoreMetric,
-                                    SfxMapUnit ePresMetric,
+                                    MapUnit eCoreMetric,
+                                    MapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = nullptr ) const override;
 
     SVX_DLLPRIVATE virtual sal_uInt16 GetVersion( sal_uInt16 nFileFormatVersion ) const override;

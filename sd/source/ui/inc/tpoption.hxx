@@ -112,7 +112,7 @@ private:
     OUString aInfo1;
     OUString aInfo2;
 
-    SfxMapUnit          ePoolUnit;
+    MapUnit             ePoolUnit;
 
     static OUString        GetScale( sal_Int32 nX, sal_Int32 nY );
     static bool            SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32& rY );

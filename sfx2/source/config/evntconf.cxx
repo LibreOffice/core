@@ -94,10 +94,10 @@ bool SfxEventNamesItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 bool SfxEventNamesItem::GetPresentation( SfxItemPresentation,
-                                    SfxMapUnit,
-                                    SfxMapUnit,
-                                    OUString &rText,
-                                    const IntlWrapper* ) const
+                                         MapUnit,
+                                         MapUnit,
+                                         OUString &rText,
+                                         const IntlWrapper* ) const
 {
     rText.clear();
     return false;

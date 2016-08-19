@@ -261,7 +261,7 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
     const SfxItemSet& rOldSet = GetItemSet();
     SfxItemPool* pPool = rOldSet.GetPool();
     DBG_ASSERT(pPool,"no pool :-(");
-    SfxMapUnit eUnit = pPool->GetMetric(nWSize);
+    MapUnit eUnit = pPool->GetMetric(nWSize);
     SfxItemSet aSet(*pPool,aWhichTab);
 
     if(mbEnableDrawingLayerFillStyles)
@@ -367,7 +367,7 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
 
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Where is the pool" );
-    SfxMapUnit eUnit = pPool->GetMetric( GetWhich( SID_ATTR_PAGE_SIZE ) );
+    MapUnit eUnit = pPool->GetMetric( GetWhich( SID_ATTR_PAGE_SIZE ) );
 
     //hide "same content on first page when this is calc
     bool bIsCalc = false;
@@ -439,8 +439,8 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
     {
         // defaults for distance and height
         long nDefaultDist = bIsCalc ? DEF_DIST_CALC : DEF_DIST_WRITER;
-        SetMetricValue( *m_pDistEdit, nDefaultDist, SFX_MAPUNIT_100TH_MM );
-        SetMetricValue( *m_pHeightEdit, 500, SFX_MAPUNIT_100TH_MM );
+        SetMetricValue( *m_pDistEdit, nDefaultDist, MAP_100TH_MM );
+        SetMetricValue( *m_pHeightEdit, 500, MAP_100TH_MM );
     }
 
     if ( !pSetItem )
@@ -747,18 +747,18 @@ void SvxHFPage::UpdateExample()
     if ( nId == SID_ATTR_PAGE_HEADERSET )
     {
         m_pBspWin->SetHeader( m_pTurnOnBox->IsChecked() );
-        m_pBspWin->SetHdHeight( GetCoreValue( *m_pHeightEdit, SFX_MAPUNIT_TWIP ) );
-        m_pBspWin->SetHdDist( GetCoreValue( *m_pDistEdit, SFX_MAPUNIT_TWIP ) );
-        m_pBspWin->SetHdLeft( GetCoreValue( *m_pLMEdit, SFX_MAPUNIT_TWIP ) );
-        m_pBspWin->SetHdRight( GetCoreValue( *m_pRMEdit, SFX_MAPUNIT_TWIP ) );
+        m_pBspWin->SetHdHeight( GetCoreValue( *m_pHeightEdit, MAP_TWIP ) );
+        m_pBspWin->SetHdDist( GetCoreValue( *m_pDistEdit, MAP_TWIP ) );
+        m_pBspWin->SetHdLeft( GetCoreValue( *m_pLMEdit, MAP_TWIP ) );
+        m_pBspWin->SetHdRight( GetCoreValue( *m_pRMEdit, MAP_TWIP ) );
     }
     else
     {
         m_pBspWin->SetFooter( m_pTurnOnBox->IsChecked() );
-        m_pBspWin->SetFtHeight( GetCoreValue( *m_pHeightEdit, SFX_MAPUNIT_TWIP ) );
-        m_pBspWin->SetFtDist( GetCoreValue( *m_pDistEdit, SFX_MAPUNIT_TWIP ) );
-        m_pBspWin->SetFtLeft( GetCoreValue( *m_pLMEdit, SFX_MAPUNIT_TWIP ) );
-        m_pBspWin->SetFtRight( GetCoreValue( *m_pRMEdit, SFX_MAPUNIT_TWIP ) );
+        m_pBspWin->SetFtHeight( GetCoreValue( *m_pHeightEdit, MAP_TWIP ) );
+        m_pBspWin->SetFtDist( GetCoreValue( *m_pDistEdit, MAP_TWIP ) );
+        m_pBspWin->SetFtLeft( GetCoreValue( *m_pLMEdit, MAP_TWIP ) );
+        m_pBspWin->SetFtRight( GetCoreValue( *m_pRMEdit, MAP_TWIP ) );
     }
     m_pBspWin->Invalidate();
 }

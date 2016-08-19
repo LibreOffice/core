@@ -205,7 +205,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         }
 
         sal_uInt16 nWhich = rSet.GetPool()->GetWhich(nSlotId);
-        bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
+        bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == MAP_TWIP );
         pItem->SetWhich( nWhich );
         sal_uInt16 nSubCount = pType->nAttribs;
 
@@ -322,7 +322,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         }
 
         sal_uInt16 nWhich = rSet.GetPool()->GetWhich(rArg.nSlotId);
-        bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
+        bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == MAP_TWIP );
         pItem->SetWhich( nWhich );
         const SfxType* pType = rArg.pType;
         sal_uInt16 nSubCount = pType->nAttribs;
@@ -1273,7 +1273,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
     {
         // slot is a property
         sal_uInt16 nWhich = rSet.GetPool()->GetWhich(nSlotId);
-        bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
+        bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == MAP_TWIP );
         const SfxPoolItem* pItem = rSet.GetItem<SfxPoolItem>(nWhich, false);
         if ( pItem ) //???
         {
@@ -1325,7 +1325,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
     {
         const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
         sal_uInt16 nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
-        bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
+        bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == MAP_TWIP );
         const SfxPoolItem* pItem = rSet.GetItem<SfxPoolItem>(nWhich, false);
         if ( pItem ) //???
         {

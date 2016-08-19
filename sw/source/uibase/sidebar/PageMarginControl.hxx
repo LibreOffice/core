@@ -60,7 +60,7 @@ public:
         const Size& rPageSize,
         const bool bLandscape,
         const FieldUnit eFUnit,
-        const SfxMapUnit eUnit );
+        const MapUnit eUnit );
     virtual ~PageMarginControl();
     virtual void dispose() override;
 
@@ -88,7 +88,7 @@ private:
     long mnPageBottomMargin;
     bool mbMirrored;
 
-    const SfxMapUnit meUnit;
+    const MapUnit meUnit;
 
     bool mbUserCustomValuesAvailable;
     long mnUserCustomPageLeftMargin;

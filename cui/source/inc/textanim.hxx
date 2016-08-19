@@ -63,7 +63,7 @@ private:
     const SfxItemSet&   rOutAttrs;
     SdrTextAniKind      eAniKind;
     FieldUnit           eFUnit;
-    SfxMapUnit          eUnit;
+    MapUnit             eUnit;
 
     DECL_LINK_TYPED( SelectEffectHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ClickEndlessHdl_Impl, Button*, void );

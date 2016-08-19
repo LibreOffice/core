@@ -63,10 +63,10 @@ public:
 };
 
 /** converts the given any with a metric to 100th/mm if needed */
-EDITENG_DLLPUBLIC void SvxUnoConvertToMM( const SfxMapUnit eSourceMapUnit, css::uno::Any & rMetric ) throw();
+EDITENG_DLLPUBLIC void SvxUnoConvertToMM( const MapUnit eSourceMapUnit, css::uno::Any & rMetric ) throw();
 
 /** converts the given any with a metric from 100th/mm to the given metric if needed */
-EDITENG_DLLPUBLIC void SvxUnoConvertFromMM( const SfxMapUnit eDestinationMapUnit, css::uno::Any & rMetric ) throw();
+EDITENG_DLLPUBLIC void SvxUnoConvertFromMM( const MapUnit eDestinationMapUnit, css::uno::Any & rMetric ) throw();
 
 #endif // INCLUDED_EDITENG_UNOIPSET_HXX
 

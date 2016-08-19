@@ -117,8 +117,8 @@ bool SfxStringListItem::operator==( const SfxPoolItem& rItem ) const
 bool SfxStringListItem::GetPresentation
 (
     SfxItemPresentation     /*ePresentation*/,
-    SfxMapUnit              /*eCoreMetric*/,
-    SfxMapUnit              /*ePresentationMetric*/,
+    MapUnit                 /*eCoreMetric*/,
+    MapUnit                 /*ePresentationMetric*/,
     OUString&               rText,
     const IntlWrapper *
 )   const

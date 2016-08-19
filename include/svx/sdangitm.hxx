@@ -33,11 +33,11 @@ public:
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const override;
 
     virtual bool GetPresentation(SfxItemPresentation ePres,
-                                                SfxMapUnit eCoreMetric,
-                                                SfxMapUnit ePresMetric,
-                                                OUString& rText,
-                                                const IntlWrapper *
-                                                 pIntlWrapper = nullptr) const override;
+                                 MapUnit eCoreMetric,
+                                 MapUnit ePresMetric,
+                                 OUString& rText,
+                                 const IntlWrapper *
+                                 pIntlWrapper = nullptr) const override;
 };
 
 

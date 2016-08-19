@@ -59,9 +59,9 @@ bool SfxSetItem::operator==( const SfxPoolItem& rCmp) const
 
 bool SfxSetItem::GetPresentation
 (
-    SfxItemPresentation     /*ePresentation*/,
-    SfxMapUnit              /*eCoreMetric*/,
-    SfxMapUnit              /*ePresentationMetric*/,
+    SfxItemPresentation    /*ePresentation*/,
+    MapUnit                /*eCoreMetric*/,
+    MapUnit                /*ePresentationMetric*/,
     OUString&              /*rText*/,
     const IntlWrapper *
 )   const

@@ -35,7 +35,7 @@ public:
     virtual void dispose() override;
 
 private:
-    SfxMapUnit              meLNSpaceUnit;
+    MapUnit                        meLNSpaceUnit;
 
     VclPtr<Edit>                   mpActLineDistFld;
 

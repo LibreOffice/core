@@ -80,7 +80,7 @@ IMPL_LINK_NOARG_TYPED(ScNoteMarker, TimeHdl, Timer *, void)
         pModel = new SdrModel(aPath, nullptr, nullptr, false);
         pModel->SetScaleUnit(MAP_100TH_MM);
         SfxItemPool& rPool = pModel->GetItemPool();
-        rPool.SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
+        rPool.SetDefaultMetric(MAP_100TH_MM);
         rPool.FreezeIdRanges();
 
         OutputDevice* pPrinter = pDoc->GetRefDevice();

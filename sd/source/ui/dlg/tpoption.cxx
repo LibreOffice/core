@@ -433,7 +433,7 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
     if( m_pMtrFldTabstop->IsValueChangedFromSaved() )
     {
         sal_uInt16 nWh = GetWhich( SID_ATTR_DEFTABSTOP );
-        SfxMapUnit eUnit = rAttrs->GetPool()->GetMetric( nWh );
+        MapUnit eUnit = rAttrs->GetPool()->GetMetric( nWh );
         SfxUInt16Item aDef( nWh,(sal_uInt16)GetCoreValue( *m_pMtrFldTabstop, eUnit ) );
         rAttrs->Put( aDef );
         bModified = true;
@@ -501,7 +501,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     nWhich = GetWhich( SID_ATTR_DEFTABSTOP );
     if( rAttrs->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
     {
-        SfxMapUnit eUnit = rAttrs->GetPool()->GetMetric( nWhich );
+        MapUnit eUnit = rAttrs->GetPool()->GetMetric( nWhich );
         const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(rAttrs->Get( nWhich ));
         SetMetricValue( *m_pMtrFldTabstop, rItem.GetValue(), eUnit );
     }

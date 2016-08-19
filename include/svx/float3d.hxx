@@ -180,7 +180,7 @@ private:
     SvxConvertTo3DItem*         pConvertTo3DLatheItem;
 
     std::unique_ptr<Svx3DWinImpl>        mpImpl;
-    SfxMapUnit          ePoolUnit;
+    MapUnit             ePoolUnit;
     FieldUnit           eFUnit;
 
     // ItemSet used to remember set 2d attributes

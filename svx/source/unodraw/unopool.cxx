@@ -73,7 +73,7 @@ void SvxUnoDrawPool::init()
     mpDefaultsPool->SetSecondaryPool(pOutlPool);
 
     SdrModel::SetTextDefaults( mpDefaultsPool, SdrEngineDefaults::GetFontHeight() );
-    mpDefaultsPool->SetDefaultMetric((SfxMapUnit)SdrEngineDefaults::GetMapUnit());
+    mpDefaultsPool->SetDefaultMetric(SdrEngineDefaults::GetMapUnit());
     mpDefaultsPool->FreezeIdRanges();
 }
 
@@ -117,10 +117,10 @@ void SvxUnoDrawPool::getAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
         }
     default:
         {
-            const SfxMapUnit eMapUnit = pPool->GetMetric((sal_uInt16)pEntry->mnHandle);
+            const MapUnit eMapUnit = pPool->GetMetric((sal_uInt16)pEntry->mnHandle);
 
             sal_uInt8 nMemberId = pEntry->mnMemberId & (~SFX_METRIC_ITEM);
-            if( eMapUnit == SFX_MAPUNIT_100TH_MM )
+            if( eMapUnit == MAP_100TH_MM )
                 nMemberId &= (~CONVERT_TWIPS);
 
             // DVO, OD 10.10.2003 #i18732#
@@ -132,8 +132,8 @@ void SvxUnoDrawPool::getAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
 
 
     // check for needed metric translation
-    const SfxMapUnit eMapUnit = pPool->GetMetric((sal_uInt16)pEntry->mnHandle);
-    if(pEntry->mnMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
+    const MapUnit eMapUnit = pPool->GetMetric((sal_uInt16)pEntry->mnHandle);
+    if(pEntry->mnMemberId & SFX_METRIC_ITEM && eMapUnit != MAP_100TH_MM)
     {
         SvxUnoConvertToMM( eMapUnit, rValue );
     }
@@ -152,8 +152,8 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
 {
     uno::Any aValue( rValue );
 
-    const SfxMapUnit eMapUnit = pPool->GetMetric((sal_uInt16)pEntry->mnHandle);
-    if(pEntry->mnMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
+    const MapUnit eMapUnit = pPool->GetMetric((sal_uInt16)pEntry->mnHandle);
+    if(pEntry->mnMemberId & SFX_METRIC_ITEM && eMapUnit != MAP_100TH_MM)
     {
         SvxUnoConvertFromMM( eMapUnit, aValue );
     }
@@ -187,7 +187,7 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
         {
             std::unique_ptr<SfxPoolItem> pNewItem( pPool->GetDefaultItem( nWhich ).Clone() );
             sal_uInt8 nMemberId = pEntry->mnMemberId & (~SFX_METRIC_ITEM);
-            if( pPool->GetMetric(nWhich) == SFX_MAPUNIT_100TH_MM )
+            if( pPool->GetMetric(nWhich) == MAP_100TH_MM )
                 nMemberId &= (~CONVERT_TWIPS);
 
             if( !pNewItem->PutValue( aValue, nMemberId ) )

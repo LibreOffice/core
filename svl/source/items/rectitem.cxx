@@ -53,8 +53,8 @@ SfxRectangleItem::SfxRectangleItem( const SfxRectangleItem& rItem ) :
 bool SfxRectangleItem::GetPresentation
 (
     SfxItemPresentation     /*ePresentation*/,
-    SfxMapUnit              /*eCoreMetric*/,
-    SfxMapUnit              /*ePresentationMetric*/,
+    MapUnit                 /*eCoreMetric*/,
+    MapUnit                 /*ePresentationMetric*/,
     OUString&               rText,
     const IntlWrapper *
 )   const

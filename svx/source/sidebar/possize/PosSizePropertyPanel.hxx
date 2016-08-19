@@ -117,7 +117,7 @@ private:
     long                                    mlRotX;
     long                                    mlRotY;
     Fraction                                maUIScale;
-    SfxMapUnit                              mePoolUnit;
+    MapUnit                                 mePoolUnit;
     FieldUnit                               meDlgUnit;
 
     // Controller Items

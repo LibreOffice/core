@@ -340,7 +340,7 @@ bool SfxStyleSheetBase::IsUsed() const
 /**
  * Return set attributes
  */
-OUString SfxStyleSheetBase::GetDescription( SfxMapUnit eMetric )
+OUString SfxStyleSheetBase::GetDescription( MapUnit eMetric )
 {
     SfxItemIter aIter( GetItemSet() );
     OUString aDesc;

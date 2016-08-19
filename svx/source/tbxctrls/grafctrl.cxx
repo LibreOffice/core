@@ -671,12 +671,12 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                     ( pObj->GetGraphicType() != GraphicType::Default ) )
                 {
                     SfxItemSet          aGrfAttr( rPool, SDRATTR_GRAFCROP, SDRATTR_GRAFCROP, 0 );
-                    const SfxMapUnit    eOldMetric = rPool.GetMetric( 0 );
+                    const MapUnit       eOldMetric = rPool.GetMetric( 0 );
                     const MapMode       aMap100( MAP_100TH_MM );
                     const MapMode       aMapTwip( MAP_TWIP );
 
                     aGrfAttr.Put(pObj->GetMergedItemSet());
-                    rPool.SetDefaultMetric( SFX_MAPUNIT_TWIP );
+                    rPool.SetDefaultMetric( MAP_TWIP );
 
                     SfxItemSet  aCropDlgAttr( rPool,
                                             SDRATTR_GRAFCROP, SDRATTR_GRAFCROP,

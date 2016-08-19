@@ -122,7 +122,7 @@ public:
     virtual bool HasParentSupport() const;      // Default true
     virtual bool HasClearParentSupport() const; // Default false
     virtual bool IsUsed() const;                // Default true
-    virtual OUString GetDescription( SfxMapUnit eMetric );
+    virtual OUString GetDescription( MapUnit eMetric );
 
     SfxStyleSheetBasePool& GetPool() { return *pPool; }
     SfxStyleFamily GetFamily() const     { return nFamily; }
