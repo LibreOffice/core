@@ -199,7 +199,7 @@ bool SetOptimalHeightsToRows(
                 if (nLast)
                 {
                     ScFlatUInt16RowSegments::RangeData aRangeData;
-                    rCxt.getHeightArray().getRangeData(nInner, aRangeData);
+                    (void)rCxt.getHeightArray().getRangeData(nInner, aRangeData);
                     if (aRangeData.mnValue + nExtraHeight == nLast)
                     {
                         nRngEnd = std::min<SCSIZE>(i + nMoreRows, aRangeData.mnRow2);
