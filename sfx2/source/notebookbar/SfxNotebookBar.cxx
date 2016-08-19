@@ -104,7 +104,7 @@ void SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             pSysWindow->SetNotebookBar(aBuf.makeStringAndClear(), xFrame);
 
             pSysWindow->GetNotebookBar()->Show();
-            pSysWindow->GetNotebookBar()->SetIconClickHdl(LINK(nullptr, SfxNotebookBar, ToggleMenubar));
+            pSysWindow->GetNotebookBar()->SetIconClickHdl(LINK(nullptr, SfxNotebookBar, OpenNotebookbarPopupMenu));
 
             SfxViewFrame* pView = SfxViewFrame::Current();
 
@@ -140,7 +140,7 @@ void SfxNotebookBar::RemoveListeners(SystemWindow* pSysWindow)
     }
 }
 
-IMPL_STATIC_LINK_TYPED(SfxNotebookBar, ToggleMenubar, NotebookBar*, pNotebookbar, void)
+IMPL_STATIC_LINK_TYPED(SfxNotebookBar, OpenNotebookbarPopupMenu, NotebookBar*, pNotebookbar, void)
 {
     if (pNotebookbar)
     {
