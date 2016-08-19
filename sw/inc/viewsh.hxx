@@ -190,8 +190,6 @@ protected:
     sal_uInt16 mnLockPaint;   ///< != 0 if Paint is locked.
     bool      mbSelectAll; ///< Special select all mode: whole document selected, even if doc starts with table.
 
-    bool mbInLibreOfficeKitCallback;
-
     /// The virtual device we paint to will end up on the screen.
     bool mbOutputToWindow;
 
