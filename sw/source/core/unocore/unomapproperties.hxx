@@ -68,6 +68,7 @@
     {OUString(UNO_NAME_REDLINE_AUTHOR), 0, cppu::UnoType<OUString>::get(),                     PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
     {OUString(UNO_NAME_REDLINE_DATE_TIME), 0, cppu::UnoType<css::util::DateTime>::get(),                  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
     {OUString(UNO_NAME_REDLINE_COMMENT), 0, cppu::UnoType<OUString>::get(),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
+    {OUString(UNO_NAME_REDLINE_DESCRIPTION), 0, cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID | PropertyAttribute::READONLY, 0}, \
     {OUString(UNO_NAME_REDLINE_TYPE), 0, cppu::UnoType<OUString>::get(),                       PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
     {OUString(UNO_NAME_REDLINE_SUCCESSOR_DATA), 0, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
     {OUString(UNO_NAME_REDLINE_IDENTIFIER), 0, cppu::UnoType<OUString>::get(),                         PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0},\

@@ -287,6 +287,8 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
     }
     else if(rPropertyName == UNO_NAME_REDLINE_COMMENT)
         aRet <<= rRedline.GetComment();
+    else if(rPropertyName == UNO_NAME_REDLINE_DESCRIPTION)
+        aRet <<= const_cast<SwRangeRedline&>(rRedline).GetDescr();
     else if(rPropertyName == UNO_NAME_REDLINE_TYPE)
     {
         aRet <<= SwRedlineTypeToOUString(rRedline.GetType());
@@ -315,7 +317,7 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
 uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties(
     const SwRangeRedline& rRedline, bool bIsStart ) throw()
 {
-    uno::Sequence< beans::PropertyValue > aRet(11);
+    uno::Sequence< beans::PropertyValue > aRet(12);
     const SwRedlineData* pNext = rRedline.GetRedlineData().Next();
     beans::PropertyValue* pRet = aRet.getArray();
 
@@ -326,6 +328,8 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
     pRet[nPropIdx++].Value <<= rRedline.GetTimeStamp().GetUNODateTime();
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_COMMENT;
     pRet[nPropIdx++].Value <<= rRedline.GetComment();
+    pRet[nPropIdx].Name = UNO_NAME_REDLINE_DESCRIPTION;
+    pRet[nPropIdx++].Value <<= const_cast<SwRangeRedline&>(rRedline).GetDescr();
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_TYPE;
     pRet[nPropIdx++].Value <<= SwRedlineTypeToOUString(rRedline.GetType());
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_IDENTIFIER;
@@ -400,6 +404,10 @@ void SwXRedline::setPropertyValue( const OUString& rPropertyName, const uno::Any
     {
         OUString sTmp; aValue >>= sTmp;
         pRedline->SetComment(sTmp);
+    }
+    else if(rPropertyName == UNO_NAME_REDLINE_DESCRIPTION)
+    {
+        SAL_WARN("sw.uno", "SwXRedline::setPropertyValue: can't set Description");
     }
     else if(rPropertyName == UNO_NAME_REDLINE_TYPE)
     {

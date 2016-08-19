@@ -417,6 +417,7 @@ typedef enum
      *         "author": "Unknown Author",
      *         "type": "Delete",
      *         "comment": "",
+     *         "description": "Delete 'abc'",
      *         "dateTime": "2016-08-18T12:14:00"
      *     }
      * }

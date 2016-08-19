@@ -485,7 +485,7 @@ static void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
     GtkWidget* pContentArea = gtk_dialog_get_content_area(GTK_DIALOG (pDialog));
 
     // Build the table.
-    GtkTreeStore* pTreeStore = gtk_tree_store_new(5, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+    GtkTreeStore* pTreeStore = gtk_tree_store_new(6, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
     for (const auto& rValue : aTree.get_child("redlines"))
     {
         GtkTreeIter aTreeIter;
@@ -495,11 +495,12 @@ static void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
                            1, rValue.second.get<std::string>("author").c_str(),
                            2, rValue.second.get<std::string>("type").c_str(),
                            3, rValue.second.get<std::string>("comment").c_str(),
-                           4, rValue.second.get<std::string>("dateTime").c_str(),
+                           4, rValue.second.get<std::string>("description").c_str(),
+                           5, rValue.second.get<std::string>("dateTime").c_str(),
                            -1);
     }
     GtkWidget* pTreeView = gtk_tree_view_new_with_model(GTK_TREE_MODEL(pTreeStore));
-    std::vector<std::string> aColumns = {"Index", "Author", "Type", "Comment", "Timestamp"};
+    std::vector<std::string> aColumns = {"Index", "Author", "Type", "Comment", "Description", "Timestamp"};
     for (size_t nColumn = 0; nColumn < aColumns.size(); ++nColumn)
     {
         GtkCellRenderer* pRenderer = gtk_cell_renderer_text_new();
