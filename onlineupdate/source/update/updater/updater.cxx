@@ -59,6 +59,7 @@
 #include <onlineupdate/mozilla/Types.h>
 
 #ifdef _WIN32
+#include <winhelper/windowsStart.hxx>
 #include "uachelper.h"
 #include "pathhash.h"
 #endif
@@ -79,10 +80,6 @@
 // These functions are defined in launchchild_osx.mm
 void LaunchChild(int argc, char **argv);
 void LaunchMacPostProcess(const char* aAppBundle);
-#endif
-
-#ifndef NULL
-# define NULL (0)
 #endif
 
 #ifndef SSIZE_MAX
