@@ -22,6 +22,30 @@
       "revId": "cae7a627e52da2e5219b7a4dcacc737124dd5b93",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_d493144e",
+        "filename": "sfx2/source/appl/workwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-08-19T07:21:59Z",
+      "side": 1,
+      "message": "I wrote a script to decode SIDs to their numeric values, it\u0027s in\n  bin/find-duplicated-sids.py\nmaybe you can convert that to the same thing to RIDs, might find these?",
+      "parentUuid": "fa6399be_e9c921ae",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 73
+      },
+      "revId": "cae7a627e52da2e5219b7a4dcacc737124dd5b93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
