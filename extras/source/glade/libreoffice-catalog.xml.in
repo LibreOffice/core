@@ -834,5 +834,8 @@
     <glade-widget-class title="Big ToolBox" name="sfxlo-BigToolBox"
                         generic-name="Big ToolBox" parent="GtkToolbar"
                         icon-name="widget-gtk-toolbar"/>
+    <glade-widget-class title="Notebookbar ToolBox" name="sfxlo-NotebookbarToolBox"
+                        generic-name="Notebookbar ToolBox" parent="GtkToolbar"
+                        icon-name="widget-gtk-toolbar"/>
   </glade-widget-classes>
 </glade-catalog>
