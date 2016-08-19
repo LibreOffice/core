@@ -22,11 +22,12 @@ $(eval $(call gb_Executable_add_libs,update_service,\
 ))
 
 $(eval $(call gb_Executable_add_cxxobjects,update_service,\
-	onlineupdate/source/libmar/sign/nss_secutil \
-	onlineupdate/source/libmar/sign/mar_sign \
-	onlineupdate/source/libmar/verify/cryptox \
-	onlineupdate/source/libmar/verify/mar_verify \
-	onlineupdate/source/libmar/tool/mar \
+	onlineupdate/source/service/certificatecheck \
+	onlineupdate/source/service/maintenanceservice \
+	onlineupdate/source/service/registrycertificates \
+	onlineupdate/source/service/servicebase \
+	onlineupdate/source/service/serviceinstall \
+	onlineupdate/source/service/workmonitor \
 ))
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab: */
