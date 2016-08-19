@@ -4634,8 +4634,29 @@ static void lcl_SvNumberformat_AddLimitStringImpl( OUString& rStr,
     }
 }
 
+void lcl_insertLCID( OUStringBuffer& aFormatStr, const OUString& rLCIDString )
+{
+    OUStringBuffer aLCIDString;
+    if ( !rLCIDString.isEmpty() )
+    {
+        aLCIDString = "[$-" + rLCIDString + "]";
+    }
+    sal_Int32 nPosDBNum = aFormatStr.lastIndexOf("[DBNum");
+    if ( nPosDBNum >= 0 )
+    {
+        if ( rLCIDString.getLength() > 4 )  // remove DBNumX code if long LCID
+            aFormatStr.remove( nPosDBNum, 8 );
+        else
+            nPosDBNum += 8;                 // other insert LCID after DBNum
+    }
+    else
+        nPosDBNum = 0;
+    aFormatStr.insert( nPosDBNum, aLCIDString.toString() );
+}
+
 OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
-                                                const LocaleDataWrapper& rLocWrp ) const
+                                                const LocaleDataWrapper& rLocWrp,
+                                                LanguageType nOriginalLang /* =LANGUAGE_DONTKNOW */ ) const
 {
     OUStringBuffer aStr;
     bool bDefault[4];
@@ -4724,12 +4745,17 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
             }
         }
 
-        const SvNumberNatNum& rNum = NumFor[n].GetNatNum();
-        if ( rNum.IsComplete() && rNum.GetDBNum() > 0 )
-        {
-            aPrefix += "[DBNum";
-            aPrefix += OUString::number( rNum.GetDBNum() );
-            aPrefix += "]";
+        SvNumberNatNum rNum = NumFor[n].GetNatNum();
+        if (rNum.IsComplete() && (rNum.GetDBNum() > 0 || nOriginalLang != LANGUAGE_DONTKNOW))
+        {   // GetFormatStringForExcel() may have changed language to en_US
+            if (rNum.GetLang() == LANGUAGE_ENGLISH_US && nOriginalLang != LANGUAGE_DONTKNOW)
+                rNum.SetLang( nOriginalLang );
+            if ( rNum.GetDBNum() > 0 )
+            {
+                aPrefix += "[DBNum";
+                aPrefix += OUString::number( rNum.GetDBNum() );
+                aPrefix += "]";
+            }
         }
 
         sal_uInt16 nAnz = NumFor[n].GetCount();
@@ -4809,11 +4835,11 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                                  MsLangId::getRealLanguage( rNum.GetLang() ) ==
                                  LANGUAGE_THAI )
                             {
-                                aStr.insert( 0, "[$-D07041E]" ); // date in Thai digit, Buddhist era
+                                lcl_insertLCID( aStr, "D07041E" ); // date in Thai digit, Buddhist era
                             }
                             else
                             {
-                                aStr.insert( 0, "[$-107041E]" ); // date in Arabic digit, Buddhist era
+                                lcl_insertLCID( aStr, "107041E" ); // date in Arabic digit, Buddhist era
                             }
                             j = j+2;
                             bLCIDInserted = true;
@@ -4825,14 +4851,20 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                 }
             }
         }
-        // The Thai T NatNum modifier during Xcl export.
-        if (rNum.IsSet() && rNum.GetNatNum() == 1 &&
-            rKeywords[NF_KEY_THAI_T] == "T" &&
-            MsLangId::getRealLanguage( rNum.GetLang()) ==
-            LANGUAGE_THAI && !bLCIDInserted )
+        if (rNum.IsSet() && !bLCIDInserted)
         {
-
-            aStr.insert( 0, "[$-D00041E]" ); // number in Thai digit
+            // The Thai T NatNum modifier during Xcl export.
+            if (rNum.GetNatNum() == 1 &&
+                rKeywords[NF_KEY_THAI_T] == "T" &&
+                MsLangId::getRealLanguage( rNum.GetLang()) == LANGUAGE_THAI )
+            {
+                lcl_insertLCID( aStr, "D00041E" ); // number in Thai digit
+            }
+            else if ( rNum.IsComplete() && rNum.GetDBNum() > 0 )
+            {
+                lcl_insertLCID( aStr, OUString::number( sal::static_int_cast<sal_Int32>(
+                                MsLangId::getRealLanguage( rNum.GetLang())), 16).toAsciiUpperCase());
+            }
         }
     }
     for ( ; nSub<4 && bDefault[nSub]; ++nSub )

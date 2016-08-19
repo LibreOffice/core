@@ -837,7 +837,7 @@ OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKe
                 // before (which doesn't do anything if it was the same locale
                 // already).
                 rTempFormatter.ChangeIntl( LANGUAGE_ENGLISH_US);
-                aFormatStr = pEntry->GetMappedFormatstring( rKeywords, *rTempFormatter.GetLocaleData());
+                aFormatStr = pEntry->GetMappedFormatstring( rKeywords, *rTempFormatter.GetLocaleData(), nLang );
             }
         }
     }
