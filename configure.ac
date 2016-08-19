@@ -7321,7 +7321,7 @@ if test "$with_export_validation" = yes; then
         ODFVALIDATOR="$SRC_ROOT/bin/odfvalidator.sh"
 
         # and fetch name of odfvalidator jar name from download.lst
-        ODFVALIDATOR_JAR=`sed -ne "s/export *ODFVALIDATOR_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
+        ODFVALIDATOR_JAR=`$SED -n -e "s/export *ODFVALIDATOR_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
         AC_SUBST(ODFVALIDATOR_JAR)
 
         if test -z "$ODFVALIDATOR_JAR"; then
@@ -7348,7 +7348,7 @@ if test "$with_export_validation" = yes; then
         OFFICEOTRON="$SRC_ROOT/bin/officeotron.sh"
 
         # and fetch name of officeotron jar name from download.lst
-        OFFICEOTRON_JAR=`sed -ne "s/export *OFFICEOTRON_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
+        OFFICEOTRON_JAR=`$SED -n -e "s/export *OFFICEOTRON_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
         AC_SUBST(OFFICEOTRON_JAR)
 
         if test -z "$OFFICEOTRON_JAR"; then
