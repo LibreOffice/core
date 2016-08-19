@@ -7322,7 +7322,7 @@ if test "$with_export_validation" = yes; then
         ODFVALIDATOR="$SRC_ROOT/bin/odfvalidator.sh"
 
         # and fetch name of odfvalidator jar name from download.lst
-        ODFVALIDATOR_JAR=`sed -ne "s/export *ODFVALIDATOR_JAR *:= *\(.*\) */\1/p" download.lst`
+        ODFVALIDATOR_JAR=`sed -ne "s/export *ODFVALIDATOR_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
         AC_SUBST(ODFVALIDATOR_JAR)
 
         if test -z "$ODFVALIDATOR_JAR"; then
