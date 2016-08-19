@@ -188,7 +188,7 @@ void FuConstPolygon::Activate()
 
     pView->SetCurrentObj(sal::static_int_cast<sal_uInt16>(eKind));
 
-    pView->SetEditMode(SDREDITMODE_CREATE);
+    pView->SetEditMode(SdrViewEditMode::Create);
 
     FuConstruct::Activate();
 
@@ -205,7 +205,7 @@ void FuConstPolygon::Activate()
 
 void FuConstPolygon::Deactivate()
 {
-    pView->SetEditMode(SDREDITMODE_EDIT);
+    pView->SetEditMode(SdrViewEditMode::Edit);
 
     pView->EnableExtendedMouseEventDispatcher(false);
 

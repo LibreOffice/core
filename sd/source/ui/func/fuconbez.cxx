@@ -79,11 +79,11 @@ bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (eHit == SdrHitKind::Handle || rMEvt.IsMod1())
     {
-        mpView->SetEditMode(SDREDITMODE_EDIT);
+        mpView->SetEditMode(SdrViewEditMode::Edit);
     }
     else
     {
-        mpView->SetEditMode(SDREDITMODE_CREATE);
+        mpView->SetEditMode(SdrViewEditMode::Create);
     }
 
     if (aVEvt.eEvent == SdrEventKind::BeginTextEdit)

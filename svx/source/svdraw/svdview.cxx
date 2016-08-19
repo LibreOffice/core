@@ -1150,7 +1150,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
             return Pointer(PointerStyle::Move);
         }
     }
-    if (meEditMode==SDREDITMODE_CREATE) return aAktCreatePointer;
+    if (meEditMode==SdrViewEditMode::Create) return aAktCreatePointer;
     return Pointer(PointerStyle::Arrow);
 }
 

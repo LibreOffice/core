@@ -187,7 +187,7 @@ void FuText::DoExecute( SfxRequest& )
         RID_DRAW_TEXT_TOOLBOX);
 
     mpView->SetCurrentObj(OBJ_TEXT);
-    mpView->SetEditMode(SDREDITMODE_EDIT);
+    mpView->SetEditMode(SdrViewEditMode::Edit);
 
     MouseEvent aMEvt(mpWindow->GetPointerPosPixel());
 
@@ -284,7 +284,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
             }
 
             mpView->SetCurrentObj(OBJ_TEXT);
-            mpView->SetEditMode(SDREDITMODE_EDIT);
+            mpView->SetEditMode(SdrViewEditMode::Edit);
         }
 
         if (rMEvt.IsLeft() || rMEvt.IsRight())
@@ -416,7 +416,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 {
                     // create object
                     mpView->SetCurrentObj(OBJ_TEXT);
-                    mpView->SetEditMode(SDREDITMODE_CREATE);
+                    mpView->SetEditMode(SdrViewEditMode::Create);
                     sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
                     mpView->BegCreateObj(aMDPos, nullptr, nDrgLog);
                 }
@@ -761,7 +761,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
         {
             // text body (left-justified AutoGrow)
             mpView->SetCurrentObj(OBJ_TEXT);
-            mpView->SetEditMode(SDREDITMODE_CREATE);
+            mpView->SetEditMode(SdrViewEditMode::Create);
             sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
             mpView->BegCreateObj(aMDPos, nullptr, nDrgLog);
 
@@ -957,7 +957,7 @@ bool FuText::KeyInput(const KeyEvent& rKEvt)
     if( bPermanent )
     {
         mpView->SetCurrentObj(OBJ_TEXT);
-        mpView->SetEditMode(SDREDITMODE_CREATE);
+        mpView->SetEditMode(SdrViewEditMode::Create);
     }
 
     if (!bReturn)
@@ -984,7 +984,7 @@ void FuText::Activate()
     FuConstruct::Activate();
 
     if( pOLV )
-        mpView->SetEditMode(SDREDITMODE_EDIT);
+        mpView->SetEditMode(SdrViewEditMode::Edit);
 }
 
 void FuText::Deactivate()
@@ -1010,9 +1010,9 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
         mpView->SetCurrentObj(OBJ_TEXT);
 
         if( bPermanent )
-            mpView->SetEditMode(SDREDITMODE_CREATE);
+            mpView->SetEditMode(SdrViewEditMode::Create);
         else
-            mpView->SetEditMode(SDREDITMODE_EDIT);
+            mpView->SetEditMode(SdrViewEditMode::Edit);
 
         bool bEmptyOutliner = false;
 
@@ -1334,7 +1334,7 @@ bool FuText::cancel()
             mxTextObj.reset(nullptr);
 
         mpView->SetCurrentObj(OBJ_TEXT);
-        mpView->SetEditMode(SDREDITMODE_EDIT);
+        mpView->SetEditMode(SdrViewEditMode::Edit);
         return true;
     }
     else

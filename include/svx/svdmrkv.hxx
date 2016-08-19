@@ -72,9 +72,11 @@ enum class SdrHitKind
     Cell             // hit on a cell inside a table shape (outside of the cells text area)
 };
 
-enum SdrViewEditMode {SDREDITMODE_EDIT,           // Also known as arrow or pointer mode
-                      SDREDITMODE_CREATE,         // Tool for object creation
-                      SDREDITMODE_GLUEPOINTEDIT}; // Glue point editing mode
+enum class SdrViewEditMode {
+    Edit,           // Also known as arrow or pointer mode
+    Create,         // Tool for object creation
+    GluePointEdit   // Glue point editing mode
+};
 
 /** options for ImpTakeDescriptionStr() */
 enum class ImpTakeDescriptionOptions
@@ -204,12 +206,12 @@ public:
     void SetEditMode(SdrViewEditMode eMode);
     SdrViewEditMode GetEditMode() const { return meEditMode; }
 
-    void SetEditMode(bool bOn=true) { SetEditMode(bOn?SDREDITMODE_EDIT:SDREDITMODE_CREATE); }
-    bool IsEditMode() const { return meEditMode==SDREDITMODE_EDIT; }
-    void SetCreateMode(bool bOn=true) { SetEditMode(bOn?SDREDITMODE_CREATE:SDREDITMODE_EDIT); }
-    bool IsCreateMode() const { return meEditMode==SDREDITMODE_CREATE; }
-    void SetGluePointEditMode(bool bOn=true) { SetEditMode(bOn?SDREDITMODE_GLUEPOINTEDIT:meEditMode0); }
-    bool IsGluePointEditMode() const { return meEditMode==SDREDITMODE_GLUEPOINTEDIT; }
+    void SetEditMode(bool bOn=true) { SetEditMode(bOn?SdrViewEditMode::Edit:SdrViewEditMode::Create); }
+    bool IsEditMode() const { return meEditMode==SdrViewEditMode::Edit; }
+    void SetCreateMode(bool bOn=true) { SetEditMode(bOn?SdrViewEditMode::Create:SdrViewEditMode::Edit); }
+    bool IsCreateMode() const { return meEditMode==SdrViewEditMode::Create; }
+    void SetGluePointEditMode(bool bOn=true) { SetEditMode(bOn?SdrViewEditMode::GluePointEdit:meEditMode0); }
+    bool IsGluePointEditMode() const { return meEditMode==SdrViewEditMode::GluePointEdit; }
 
     void SetDesignMode(bool bOn = true);
     bool IsDesignMode() const { return mbDesignMode; }

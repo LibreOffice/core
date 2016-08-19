@@ -205,7 +205,7 @@ bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 
         if ( bHelpLine
             && !mpView->IsCreateObj()
-            && ((mpView->GetEditMode() == SDREDITMODE_EDIT && !bHitHdl) || (rMEvt.IsShift() && bSnapModPressed)) )
+            && ((mpView->GetEditMode() == SdrViewEditMode::Edit && !bHitHdl) || (rMEvt.IsShift() && bSnapModPressed)) )
         {
             mpWindow->CaptureMouse();
             mpView->BegDragHelpLine(nHelpLine, pPV);

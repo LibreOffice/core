@@ -228,14 +228,14 @@ bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
 
 void FuConstruct::Activate()
 {
-    mpView->SetEditMode(SDREDITMODE_CREATE);
+    mpView->SetEditMode(SdrViewEditMode::Create);
     FuDraw::Activate();
 }
 
 void FuConstruct::Deactivate()
 {
     FuDraw::Deactivate();
-    mpView->SetEditMode(SDREDITMODE_EDIT);
+    mpView->SetEditMode(SdrViewEditMode::Edit);
 }
 
 /**

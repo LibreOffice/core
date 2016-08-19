@@ -129,8 +129,8 @@ void ImplMarkingOverlay::SetSecondPosition(const basegfx::B2DPoint& rNewPosition
 void SdrMarkView::ImpClearVars()
 {
     meDragMode=SdrDragMode::Move;
-    meEditMode=SDREDITMODE_EDIT;
-    meEditMode0=SDREDITMODE_EDIT;
+    meEditMode=SdrViewEditMode::Edit;
+    meEditMode0=SdrViewEditMode::Edit;
     mbDesignMode=false;
     mpMarkedObj=nullptr;
     mpMarkedPV=nullptr;
@@ -1336,11 +1336,11 @@ void SdrMarkView::SetFrameHandles(bool bOn)
 void SdrMarkView::SetEditMode(SdrViewEditMode eMode)
 {
     if (eMode!=meEditMode) {
-        bool bGlue0=meEditMode==SDREDITMODE_GLUEPOINTEDIT;
+        bool bGlue0=meEditMode==SdrViewEditMode::GluePointEdit;
         bool bEdge0=static_cast<SdrCreateView*>(this)->IsEdgeTool();
         meEditMode0=meEditMode;
         meEditMode=eMode;
-        bool bGlue1=meEditMode==SDREDITMODE_GLUEPOINTEDIT;
+        bool bGlue1=meEditMode==SdrViewEditMode::GluePointEdit;
         bool bEdge1=static_cast<SdrCreateView*>(this)->IsEdgeTool();
         // avoid flickering when switching between GlueEdit and EdgeTool
         if (bGlue1 && !bGlue0) ImpSetGlueVisible2(bGlue1);

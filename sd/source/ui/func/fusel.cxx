@@ -1013,7 +1013,7 @@ void FuSelection::Activate()
 {
     SdrDragMode eMode;
     mpView->ResetCreationActive();
-    mpView->SetEditMode(SDREDITMODE_EDIT);
+    mpView->SetEditMode(SdrViewEditMode::Edit);
 
     switch( nSlotId )
     {

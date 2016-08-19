@@ -656,7 +656,7 @@ void SwFEShell::StartCropImage()
     }
 
     // Activate CROP mode
-    pView->SetEditMode( SDREDITMODE_EDIT );
+    pView->SetEditMode( SdrViewEditMode::Edit );
     SetDragMode( SdrDragMode::Crop );
 }
 
