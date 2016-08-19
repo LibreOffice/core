@@ -42,6 +42,7 @@
 #include <unocrsr.hxx>
 #include <calbck.hxx>
 #include <unobaseclass.hxx>
+#include <IDocumentRedlineAccess.hxx>
 
 class SwFormatField;
 class SwFrameFormat;
@@ -308,6 +309,8 @@ public:
                 css::lang::WrappedTargetException,
                 css::uno::RuntimeException, std::exception) override;
 };
+
+OUString SwRedlineTypeToOUString(RedlineType_t eType);
 
 #endif
 

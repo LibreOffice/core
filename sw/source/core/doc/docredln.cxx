@@ -18,6 +18,8 @@
  */
 
 #include <libxml/xmlwriter.h>
+#include <boost/property_tree/json_parser.hpp>
+
 #include <tools/datetimeutils.hxx>
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
@@ -25,6 +27,10 @@
 #include <editeng/colritem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <unotools/datetime.hxx>
+#include <sfx2/viewsh.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include <docredln.hxx>
@@ -47,6 +53,7 @@
 #include <rootfrm.hxx>
 
 #include <comcore.hrc>
+#include <unoport.hxx>
 
 using namespace com::sun::star;
 
@@ -291,12 +298,41 @@ bool SwExtraRedlineTable::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox&
     return bChg;
 }
 
+/// Emits LOK notification about one addition / removal of a redline item.
+static void lcl_RedlineNotification(bool bAdd, size_t nPos, SwRangeRedline* pRedline)
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    boost::property_tree::ptree aRedline;
+    aRedline.put("action", (bAdd ? "Add" : "Remove"));
+    aRedline.put("index", nPos);
+    aRedline.put("author", pRedline->GetAuthorString(1).toUtf8().getStr());
+    aRedline.put("type", SwRedlineTypeToOUString(pRedline->GetRedlineData().GetType()).toUtf8().getStr());
+    aRedline.put("comment", pRedline->GetRedlineData().GetComment().toUtf8().getStr());
+    OUString sDateTime = utl::toISO8601(pRedline->GetRedlineData().GetTimeStamp().GetUNODateTime());
+    aRedline.put("dateTime", sDateTime.toUtf8().getStr());
+    boost::property_tree::ptree aTree;
+    aTree.add_child("redline", aRedline);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    std::string aPayload = aStream.str();
+
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED, aPayload.c_str());
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
 bool SwRedlineTable::Insert( SwRangeRedline* p )
 {
     if( p->HasValidRange() )
     {
         std::pair<vector_type::const_iterator, bool> rv = maVector.insert( p );
         size_t nP = rv.first - begin();
+        lcl_RedlineNotification(/*bAdd=*/true, nP, p);
         p->CallDisplayFunc(nP);
         return rv.second;
     }
@@ -456,6 +492,7 @@ bool SwRedlineTable::Remove( const SwRangeRedline* p )
 
 void SwRedlineTable::Remove( sal_uInt16 nP )
 {
+    lcl_RedlineNotification(/*bAdd=*/false, nP, maVector[nP]);
     SwDoc* pDoc = nullptr;
     if( !nP && 1 == size() )
         pDoc = maVector.front()->GetDoc();
@@ -479,8 +516,13 @@ void SwRedlineTable::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
     if( !nP && nL && nL == size() )
         pDoc = maVector.front()->GetDoc();
 
+    size_t nCount = 0;
     for( vector_type::const_iterator it = maVector.begin() + nP; it != maVector.begin() + nP + nL; ++it )
+    {
+        lcl_RedlineNotification(/*bAdd=*/false, nP + nCount, *it);
         delete *it;
+        ++nCount;
+    }
     maVector.erase( maVector.begin() + nP, maVector.begin() + nP + nL );
 
     SwViewShell* pSh;

@@ -68,6 +68,7 @@ public:
     void testShapeTextUndoShells();
     void testShapeTextUndoGroupShells();
     void testTrackChanges();
+    void testTrackChangesCallback();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -101,6 +102,7 @@ public:
     CPPUNIT_TEST(testShapeTextUndoShells);
     CPPUNIT_TEST(testShapeTextUndoGroupShells);
     CPPUNIT_TEST(testTrackChanges);
+    CPPUNIT_TEST(testTrackChangesCallback);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -116,13 +118,15 @@ private:
     int m_nSelectionBeforeSearchResult;
     int m_nSelectionAfterSearchResult;
     int m_nInvalidations;
+    int m_nRedlineTableSizeChanged;
 };
 
 SwTiledRenderingTest::SwTiledRenderingTest()
     : m_bFound(true),
       m_nSelectionBeforeSearchResult(0),
       m_nSelectionAfterSearchResult(0),
-      m_nInvalidations(0)
+      m_nInvalidations(0),
+      m_nRedlineTableSizeChanged(0)
 {
 }
 
@@ -194,6 +198,11 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
             m_aSearchResultSelection.push_back(rValue.second.get<std::string>("rectangles").c_str());
             m_aSearchResultPart.push_back(std::atoi(rValue.second.get<std::string>("part").c_str()));
         }
+    }
+    break;
+    case LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
+    {
+        ++m_nRedlineTableSizeChanged;
     }
     break;
     }
@@ -1165,6 +1174,27 @@ void SwTiledRenderingTest::testTrackChanges()
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     // This was 'Aaa bbb.zzz', the change wasn't rejected.
     CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb."), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testTrackChangesCallback()
+{
+    // Load a document.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
+
+    // Turn on track changes and type "x".
+    uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
+    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    m_nRedlineTableSizeChanged = 0;
+    pWrtShell->Insert("x");
+
+    // Assert that we get exactly one notification about the redline insert.
+    // This was 0, as LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED wasn't sent.
+    CPPUNIT_ASSERT_EQUAL(1, m_nRedlineTableSizeChanged);
 
     comphelper::LibreOfficeKit::setActive(false);
 }
