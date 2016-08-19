@@ -14,13 +14,11 @@
 #include "updatehelper.h"
 #include "uachelper.h"
 #include "pathhash.h"
-#include "mozilla/UniquePtr.h"
+
+#include <memory>
 
 // Needed for PathAppendW
 #include <shlwapi.h>
-
-using mozilla::MakeUnique;
-using mozilla::UniquePtr;
 
 BOOL PathAppendSafe(LPWSTR base, LPCWSTR extra);
 
@@ -225,7 +223,7 @@ StartServiceUpdate(LPCWSTR installDir)
 
   // Get the service config information, in particular we want the binary
   // path of the service.
-  UniquePtr<char[]> serviceConfigBuffer = MakeUnique<char[]>(bytesNeeded);
+  std::unique_ptr<char[]> serviceConfigBuffer = std::make_unique<char[]>(bytesNeeded);
   if (!QueryServiceConfigW(svc,
       reinterpret_cast<QUERY_SERVICE_CONFIGW*>(serviceConfigBuffer.get()),
       bytesNeeded, &bytesNeeded)) {
@@ -739,7 +737,8 @@ IsUnpromptedElevation(BOOL &isUnpromptedElevation)
     return FALSE;
   }
 
-  DWORD consent, secureDesktop;
+  DWORD consent;
+  DWORD secureDesktop = 0;
   BOOL success = GetDWORDValue(baseKey, L"ConsentPromptBehaviorAdmin",
                                consent);
   success = success &&
