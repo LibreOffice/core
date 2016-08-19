@@ -227,7 +227,7 @@ public:
              ContentProvider* pProvider,
              const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
              rtl::Reference< DAVSessionFactory > const & rSessionFactory )
-        throw ( css::ucb::ContentCreationException );
+        throw (css::ucb::ContentCreationException, css::uno::RuntimeException);
     Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
              ContentProvider* pProvider,
              const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,

@@ -109,7 +109,7 @@ Content::Content(
           ContentProvider* pProvider,
           const uno::Reference< ucb::XContentIdentifier >& Identifier,
           rtl::Reference< DAVSessionFactory > const & rSessionFactory )
-  throw ( ucb::ContentCreationException )
+  throw (ucb::ContentCreationException, css::uno::RuntimeException)
 : ContentImplHelper( rxContext, pProvider, Identifier ),
   m_eResourceType( UNKNOWN ),
   m_eResourceTypeForLocks( UNKNOWN ),
