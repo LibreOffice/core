@@ -26,9 +26,6 @@ public:
 
     TokenmapTest();
 
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
     void test_roundTrip();
 
     CPPUNIT_TEST_SUITE(TokenmapTest);
@@ -42,16 +39,6 @@ private:
 
 TokenmapTest::TokenmapTest() : pTokenMap(new token::TokenMap)
 {
-}
-
-void TokenmapTest::setUp()
-{
-    CppUnit::TestFixture::setUp();
-}
-
-void TokenmapTest::tearDown()
-{
-    CppUnit::TestFixture::tearDown();
 }
 
 void TokenmapTest::test_roundTrip()
