@@ -20,6 +20,10 @@ $(eval $(call gb_Executable_use_static_libraries,mar,\
     libmar \
 ))
 
+$(eval $(call gb_Executable_use_externals,mar,\
+	nss3 \
+))
+
 ifeq ($(OS),WNT)
 $(eval $(call gb_Executable_add_libs,mar,\
     ws2_32.lib \
