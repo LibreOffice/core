@@ -1843,6 +1843,10 @@ static char* getTrackedChanges(LibreOfficeKitDocument* pThis)
         xRedline->getPropertyValue("RedlineComment") >>= sComment;
         aRedline.put("comment", sComment.toUtf8().getStr());
 
+        OUString sDescription;
+        xRedline->getPropertyValue("RedlineDescription") >>= sDescription;
+        aRedline.put("description", sDescription.toUtf8().getStr());
+
         util::DateTime aDateTime;
         xRedline->getPropertyValue("RedlineDateTime") >>= aDateTime;
         OUString sDateTime = utl::toISO8601(aDateTime);
