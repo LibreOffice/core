@@ -1505,7 +1505,8 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
 
             std::stringstream aStream;
             boost::property_tree::write_json(aStream, aTree);
-            pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, strdup(aStream.str().c_str()));
+            OString aPayload = aStream.str().c_str();
+            pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aPayload.getStr());
             return;
         }
     }
