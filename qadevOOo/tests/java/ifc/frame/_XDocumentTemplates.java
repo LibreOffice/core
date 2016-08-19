@@ -248,18 +248,19 @@ public class _XDocumentTemplates extends MultiMethodTest {
         XRow row = UnoRuntime.queryInterface(XRow.class, statRes);
         XContentAccess contAcc = UnoRuntime.queryInterface(XContentAccess.class, statRes);
         XContent subContent = null;
-        try {
-            statRes.first();
-            while(!statRes.isAfterLast()) {
-                if ( subName.equals(row.getString(1)) ) {
-                    subContent = contAcc.queryContent();
+        if (statRes != null) {
+            try {
+                statRes.first();
+                while(!statRes.isAfterLast()) {
+                    if ( subName.equals(row.getString(1)) ) {
+                        subContent = contAcc.queryContent();
+                    }
+                    statRes.next();
                 }
-                statRes.next();
+            } catch(com.sun.star.sdbc.SQLException e) {
+                log.println("Exception occurred:" + e);
             }
-        } catch(com.sun.star.sdbc.SQLException e) {
-            log.println("Exception occurred:" + e);
         }
-
         return subContent;
     }
 }
