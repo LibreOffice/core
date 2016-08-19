@@ -7349,7 +7349,7 @@ if test "$with_export_validation" = yes; then
         OFFICEOTRON="$SRC_ROOT/bin/officeotron.sh"
 
         # and fetch name of officeotron jar name from download.lst
-        OFFICEOTRON_JAR=`sed -ne "s/export *OFFICEOTRON_JAR *:= *\(.*\) */\1/p" download.lst`
+        OFFICEOTRON_JAR=`sed -ne "s/export *OFFICEOTRON_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
         AC_SUBST(OFFICEOTRON_JAR)
 
         if test -z "$OFFICEOTRON_JAR"; then
