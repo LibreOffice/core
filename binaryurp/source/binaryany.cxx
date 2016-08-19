@@ -20,6 +20,7 @@
 #include "sal/config.h"
 
 #include <cassert>
+#include <utility>
 
 #include "typelib/typeclass.h"
 #include "typelib/typedescription.hxx"
@@ -28,6 +29,26 @@
 #include "binaryany.hxx"
 
 namespace binaryurp {
+
+namespace {
+
+// Cf. com::sun::star::uno::detail::moveAnyInternals in
+// include/com/sun/star/uno/Any.hxx:
+void moveInternals(uno_Any & from, uno_Any & to) {
+    uno_any_construct(&to, nullptr, nullptr, nullptr);
+    std::swap(from.pType, to.pType);
+    std::swap(from.pData, to.pData);
+    std::swap(from.pReserved, to.pReserved);
+    if (to.pData == &from.pReserved) {
+        to.pData = &to.pReserved;
+    }
+    // This leaves to.pData (where "to" is now VOID) dangling to somewhere (cf.
+    // CONSTRUCT_EMPTY_ANY, cppu/source/uno/prim.hxx), but what's relevant is
+    // only that it isn't a nullptr (as e.g. >>= -> uno_type_assignData ->
+    // _assignData takes a null pSource to mean "construct a default value").
+}
+
+}
 
 BinaryAny::BinaryAny() throw () {
     uno_any_construct(&data_, nullptr, nullptr, nullptr);
@@ -52,6 +73,10 @@ BinaryAny::BinaryAny(BinaryAny const & other) throw () {
     uno_type_any_construct(&data_, other.data_.pData, other.data_.pType, nullptr);
 }
 
+BinaryAny::BinaryAny(BinaryAny && other) throw () {
+    moveInternals(other.data_, data_);
+}
+
 BinaryAny::~BinaryAny() throw () {
     uno_any_destruct(&data_, nullptr);
 }
@@ -60,6 +85,12 @@ BinaryAny & BinaryAny::operator =(BinaryAny const & other) throw () {
     if (&other != this) {
         uno_type_any_assign(&data_, other.data_.pData, other.data_.pType, nullptr, nullptr);
     }
+    return *this;
+}
+
+BinaryAny & BinaryAny::operator =(BinaryAny && other) throw () {
+    uno_any_destruct(&data_, nullptr);
+    moveInternals(other.data_, data_);
     return *this;
 }
 

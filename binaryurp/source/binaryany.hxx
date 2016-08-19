@@ -43,9 +43,13 @@ public:
 
     BinaryAny(BinaryAny const & other) throw ();
 
+    BinaryAny(BinaryAny && other) throw ();
+
     ~BinaryAny() throw ();
 
     BinaryAny & operator =(BinaryAny const & other) throw ();
+
+    BinaryAny & operator =(BinaryAny && other) throw ();
 
     uno_Any& get() throw () { return data_; }
 
