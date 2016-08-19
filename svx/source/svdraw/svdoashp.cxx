@@ -1108,7 +1108,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
     const OUString sPath( "Path" );
     switch( eDefaultType )
     {
-        case DEFAULT_VIEWBOX :
+        case DefaultType::Viewbox :
         {
             const OUString sViewBox( "ViewBox" );
             const Any* pViewBox = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sViewBox );
@@ -1122,7 +1122,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
         }
         break;
 
-        case DEFAULT_PATH :
+        case DefaultType::Path :
         {
             const OUString sCoordinates( "Coordinates" );
             pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sPath, sCoordinates );
@@ -1147,7 +1147,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
         }
         break;
 
-        case DEFAULT_GLUEPOINTS :
+        case DefaultType::Gluepoints :
         {
             const OUString sGluePoints( "GluePoints" );
             pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sPath, sGluePoints );
@@ -1172,7 +1172,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
         }
         break;
 
-        case DEFAULT_SEGMENTS :
+        case DefaultType::Segments :
         {
             // Path/Segments
             const OUString sSegments( "Segments" );
@@ -1217,7 +1217,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
         }
         break;
 
-        case DEFAULT_STRETCHX :
+        case DefaultType::StretchX :
         {
             const OUString sStretchX( "StretchX" );
             pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sPath, sStretchX );
@@ -1235,7 +1235,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
         }
         break;
 
-        case DEFAULT_STRETCHY :
+        case DefaultType::StretchY :
         {
             const OUString sStretchY( "StretchY" );
             pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sPath, sStretchY );
@@ -1253,7 +1253,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
         }
         break;
 
-        case DEFAULT_EQUATIONS :
+        case DefaultType::Equations :
         {
             const OUString sEquations(  "Equations"  );
             pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sEquations );
@@ -1278,7 +1278,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
         }
         break;
 
-        case DEFAULT_TEXTFRAMES :
+        case DefaultType::TextFrames :
         {
             const OUString sTextFrames(  "TextFrames"  );
             pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sPath, sTextFrames );
@@ -1306,7 +1306,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
         }
         break;
 
-        case DEFAULT_HANDLES :
+        case DefaultType::Handles :
         {
             const OUString sHandles(  "Handles"  );
             pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sHandles );

@@ -169,17 +169,17 @@ public:
     void MergeDefaultAttributes( const OUString* pType = nullptr );
 
     /* the method is checking if the geometry data is unchanged/default, in this case the data might not be stored */
-    enum DefaultType
+    enum class DefaultType
     {
-        DEFAULT_PATH,
-        DEFAULT_VIEWBOX,
-        DEFAULT_SEGMENTS,
-        DEFAULT_GLUEPOINTS,
-        DEFAULT_STRETCHX,
-        DEFAULT_STRETCHY,
-        DEFAULT_EQUATIONS,
-        DEFAULT_HANDLES,
-        DEFAULT_TEXTFRAMES
+        Path,
+        Viewbox,
+        Segments,
+        Gluepoints,
+        StretchX,
+        StretchY,
+        Equations,
+        Handles,
+        TextFrames
     };
     bool IsDefaultGeometry( const DefaultType eDefaultType ) const;
 

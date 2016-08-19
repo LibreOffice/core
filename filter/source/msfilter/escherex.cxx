@@ -2553,14 +2553,14 @@ bool EscherPropertyContainer::IsDefaultObject( SdrObjCustomShape* pCustoShape , 
 
     if ( pCustoShape )
     {
-    if (   pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_EQUATIONS )
-           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_VIEWBOX )
-           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_PATH )
-           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_GLUEPOINTS )
-           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_SEGMENTS )
-           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_STRETCHX )
-           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_STRETCHY )
-           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_TEXTFRAMES ) )
+    if (   pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DefaultType::Equations )
+           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DefaultType::Viewbox )
+           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DefaultType::Path )
+           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DefaultType::Gluepoints )
+           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DefaultType::Segments )
+           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DefaultType::StretchX )
+           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DefaultType::StretchY )
+           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DefaultType::TextFrames ) )
         bIsDefaultObject = true;
     }
 
