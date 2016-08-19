@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_2fc4f990",
+        "filename": "uui/uiconfig/ui/authfallback.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-08-19T17:18:51Z",
+      "side": 1,
+      "message": "That\u0027s just asking for trouble, going forward, no?",
+      "revId": "5e5bd85c3e5ba8341d95f716a5e5bcc762887c55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
