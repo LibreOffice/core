@@ -4635,7 +4635,8 @@ static void lcl_SvNumberformat_AddLimitStringImpl( OUString& rStr,
 }
 
 OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
-                                                const LocaleDataWrapper& rLocWrp ) const
+                                                const LocaleDataWrapper& rLocWrp,
+                                                LanguageType nRealLang /* =LANGUAGE_ENGLISH_US */ ) const
 {
     OUStringBuffer aStr;
     bool bDefault[4];
@@ -4724,12 +4725,16 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
             }
         }
 
-        const SvNumberNatNum& rNum = NumFor[n].GetNatNum();
-        if ( rNum.IsComplete() && rNum.GetDBNum() > 0 )
+        SvNumberNatNum rNum = NumFor[n].GetNatNum();
+        if ( rNum.IsComplete() && nRealLang != LANGUAGE_ENGLISH_US )
         {
-            aPrefix += "[DBNum";
-            aPrefix += OUString::number( rNum.GetDBNum() );
-            aPrefix += "]";
+            rNum.SetLang( nRealLang );
+            if ( rNum.GetDBNum() >= 0 )
+            {
+                aPrefix += "[DBNum";
+                aPrefix += OUString::number( rNum.GetDBNum() );
+                aPrefix += "]";
+            }
         }
 
         sal_uInt16 nAnz = NumFor[n].GetCount();
@@ -4825,14 +4830,29 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                 }
             }
         }
-        // The Thai T NatNum modifier during Xcl export.
-        if (rNum.IsSet() && rNum.GetNatNum() == 1 &&
-            rKeywords[NF_KEY_THAI_T] == "T" &&
-            MsLangId::getRealLanguage( rNum.GetLang()) ==
-            LANGUAGE_THAI && !bLCIDInserted )
+        if (rNum.IsSet() && !bLCIDInserted)
         {
-
-            aStr.insert( 0, "[$-D00041E]" ); // number in Thai digit
+            // The Thai T NatNum modifier during Xcl export.
+            if (rNum.GetNatNum() == 1 &&
+                rKeywords[NF_KEY_THAI_T] == "T" &&
+                MsLangId::getRealLanguage( rNum.GetLang()) == LANGUAGE_THAI )
+            {
+                aStr.insert( 0, "[$-D00041E]" ); // number in Thai digit
+                bLCIDInserted =true;
+            }
+            else if ( rNum.IsComplete() && rNum.GetDBNum() >= 0 )
+            {
+                OUStringBuffer aLCIDString = "[$-";
+                aLCIDString.append( OUString::number( sal::static_int_cast<sal_Int32>(MsLangId::getRealLanguage( rNum.GetLang() )), 16 ) );
+                aLCIDString.append("]");
+                sal_Int32 posDBNum = aStr.lastIndexOf("[DBNum");
+                if ( posDBNum >= 0 )
+                    posDBNum += 8;
+                else
+                    posDBNum = 0;
+                aStr.insert( posDBNum, aLCIDString.toString() );
+                bLCIDInserted = true;
+            }
         }
     }
     for ( ; nSub<4 && bDefault[nSub]; ++nSub )

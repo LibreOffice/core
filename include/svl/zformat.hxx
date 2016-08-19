@@ -184,7 +184,8 @@ public:
 
     // Build a format string of application defined keywords
     OUString GetMappedFormatstring( const NfKeywordTable& rKeywords,
-                                    const LocaleDataWrapper& rLoc ) const;
+                                    const LocaleDataWrapper& rLoc,
+                                    LanguageType nRealLang = LANGUAGE_ENGLISH_US ) const;
 
     void SetStarFormatSupport( bool b )         { bStarFlag = b; }
 
