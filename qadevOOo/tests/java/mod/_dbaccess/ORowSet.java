@@ -453,6 +453,7 @@ public class ORowSet extends TestCase {
                 }
                 catch(Exception ex)
                 {
+                    System.out.println("caught exception: " + ex);
                 }
             }
         }
