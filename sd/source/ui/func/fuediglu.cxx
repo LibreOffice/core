@@ -100,7 +100,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
         SdrViewEvent aVEvt;
         SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-        if (eHit == SDRHIT_HANDLE)
+        if (eHit == SdrHitKind::Handle)
         {
             // drag handle
             SdrHdl* pHdl = aVEvt.pHdl;
@@ -117,12 +117,12 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
                 mpView->BegDragObj(aMDPos, nullptr, aVEvt.pHdl, nDrgLog);
             }
         }
-        else if (eHit == SDRHIT_MARKEDOBJECT && mpView->IsInsGluePointMode())
+        else if (eHit == SdrHitKind::MarkedObject && mpView->IsInsGluePointMode())
         {
             // insert glue points
             mpView->BegInsGluePoint(aMDPos);
         }
-        else if (eHit == SDRHIT_MARKEDOBJECT && rMEvt.IsMod1())
+        else if (eHit == SdrHitKind::MarkedObject && rMEvt.IsMod1())
         {
             // select glue points
             if (!rMEvt.IsShift())
@@ -130,12 +130,12 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
 
             mpView->BegMarkGluePoints(aMDPos);
         }
-        else if (eHit == SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() && !rMEvt.IsMod2())
+        else if (eHit == SdrHitKind::MarkedObject && !rMEvt.IsShift() && !rMEvt.IsMod2())
         {
             // move object
             mpView->BegDragObj(aMDPos, nullptr, nullptr, nDrgLog);
         }
-        else if (eHit == SDRHIT_GLUEPOINT)
+        else if (eHit == SdrHitKind::Gluepoint)
         {
             // select glue points
             if (!rMEvt.IsShift())
@@ -152,7 +152,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
         else
         {
             // select or drag object
-            if (!rMEvt.IsShift() && !rMEvt.IsMod2() && eHit == SDRHIT_UNMARKEDOBJECT)
+            if (!rMEvt.IsShift() && !rMEvt.IsMod2() && eHit == SdrHitKind::UnmarkedObject)
             {
                mpView->UnmarkAllObj();
             }
@@ -172,7 +172,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
             }
 
             if (bMarked &&
-                (!rMEvt.IsShift() || eHit == SDRHIT_MARKEDOBJECT))
+                (!rMEvt.IsShift() || eHit == SdrHitKind::MarkedObject))
             {
                 // move object
                 mpView->BegDragObj(aMDPos, nullptr, aVEvt.pHdl, nDrgLog);
@@ -241,7 +241,7 @@ bool FuEditGluePoints::MouseButtonUp(const MouseEvent& rMEvt)
         SdrViewEvent aVEvt;
         SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-        if (eHit == SDRHIT_NONE)
+        if (eHit == SdrHitKind::NONE)
         {
             // click on position: deselect
             mpView->UnmarkAllObj();

@@ -3915,7 +3915,7 @@ void FmXFormShell::handleMouseButtonDown( const SdrViewEvent& _rViewEvent )
     // catch simple double clicks
     if ( ( _rViewEvent.nMouseClicks == 2 ) && ( _rViewEvent.nMouseCode == MOUSE_LEFT ) )
     {
-        if ( _rViewEvent.eHit == SDRHIT_MARKEDOBJECT )
+        if ( _rViewEvent.eHit == SdrHitKind::MarkedObject )
         {
             if ( onlyControlsAreMarked() )
                 ShowSelectionProperties( true );

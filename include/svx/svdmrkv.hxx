@@ -56,19 +56,21 @@ namespace o3tl
     template<> struct typed_flags<SdrSearchOptions> : is_typed_flags<SdrSearchOptions, 0xbfff> {};
 }
 
-enum SdrHitKind {SDRHIT_NONE,      // No hit
-                 SDRHIT_OBJECT,    // Hit
-                 /*SDRHIT_REFPOINT*/ // Reference point (Rotation axis, axis of reflextion) hit
-                 SDRHIT_HANDLE,          // Marking handle
-                 SDRHIT_HELPLINE,        // Reference line
-                 SDRHIT_GLUEPOINT,       // Glue point
-                 SDRHIT_TEXTEDIT,        // Open OutlinerView was hit
-                 SDRHIT_TEXTEDITOBJ,     // Object for SdrBeginTextEdit (Textbereich)
-                 SDRHIT_URLFIELD,        // Field in TextObj was hit (while it is currently not edited)
-                 SDRHIT_MACRO,           // Object for BegMacroObj
-                 SDRHIT_MARKEDOBJECT,    // Marked object (e.g. for dragging)
-                 SDRHIT_UNMARKEDOBJECT, // non-marked Object (e.g. for marking)
-                 SDRHIT_CELL};          // hit on a cell inside a table shape (outside of the cells text area)
+enum class SdrHitKind
+{
+    NONE,            // No hit
+    Object,          // Hit
+    Handle,          // Marking handle
+    HelpLine,        // Reference line
+    Gluepoint,       // Glue point
+    TextEdit,        // Open OutlinerView was hit
+    TextEditObj,     // Object for SdrBeginTextEdit (Textbereich)
+    UrlField,        // Field in TextObj was hit (while it is currently not edited)
+    Macro,           // Object for BegMacroObj
+    MarkedObject,    // Marked object (e.g. for dragging)
+    UnmarkedObject,  // non-marked Object (e.g. for marking)
+    Cell             // hit on a cell inside a table shape (outside of the cells text area)
+};
 
 enum SdrViewEditMode {SDREDITMODE_EDIT,           // Also known as arrow or pointer mode
                       SDREDITMODE_CREATE,         // Tool for object creation

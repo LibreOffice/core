@@ -44,6 +44,7 @@ struct  SwApplyTemplate;
 struct  QuickHelpData;
 class   SdrDropMarkerOverlay;
 class   SwFrameControlsManager;
+enum class SdrHitKind;
 
 // input window
 
@@ -107,7 +108,7 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
 
     SwView         &m_rView;
 
-    int             m_aActHitType;    // current mouse pointer
+    SdrHitKind      m_aActHitType;    // current mouse pointer
 
     SotClipboardFormatId m_nDropFormat;  // format from the last QueryDrop
     sal_uInt8       m_nDropAction;       // action from the last QueryDrop

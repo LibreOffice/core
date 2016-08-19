@@ -197,7 +197,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         SdrViewEvent aVEvt;
         SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-        if ( eHit == SDRHIT_TEXTEDITOBJ && ( mpViewShell->GetFrameView()->IsQuickEdit() || dynamic_cast< sdr::table::SdrTableObj* >( aVEvt.pObj ) != nullptr ) )
+        if ( eHit == SdrHitKind::TextEditObj && ( mpViewShell->GetFrameView()->IsQuickEdit() || dynamic_cast< sdr::table::SdrTableObj* >( aVEvt.pObj ) != nullptr ) )
         {
             bTextEdit = true;
         }
@@ -438,7 +438,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         SdrViewEvent aVEvt;
         SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-        if (eHit == SDRHIT_HANDLE && aVEvt.pHdl->GetKind() == HDL_BWGT)
+        if (eHit == SdrHitKind::Handle && aVEvt.pHdl->GetKind() == HDL_BWGT)
         {
             /******************************************************************
             * Drag Handle
@@ -446,14 +446,14 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             if ( ! rMEvt.IsRight())
                 mpView->BegDragObj(aMDPos, nullptr, aVEvt.pHdl, nDrgLog);
         }
-        else if (eHit == SDRHIT_MARKEDOBJECT && nEditMode == SID_BEZIER_INSERT)
+        else if (eHit == SdrHitKind::MarkedObject && nEditMode == SID_BEZIER_INSERT)
         {
             /******************************************************************
             * Insert glue point
             ******************************************************************/
             mpView->BegInsObjPoint(aMDPos, rMEvt.IsMod1());
         }
-        else if (eHit == SDRHIT_MARKEDOBJECT && rMEvt.IsMod1())
+        else if (eHit == SdrHitKind::MarkedObject && rMEvt.IsMod1())
         {
             /******************************************************************
             * Select glue point
@@ -464,7 +464,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             if ( ! rMEvt.IsRight())
                 mpView->BegMarkPoints(aMDPos);
         }
-        else if (eHit == SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() && !rMEvt.IsMod2())
+        else if (eHit == SdrHitKind::MarkedObject && !rMEvt.IsShift() && !rMEvt.IsMod2())
         {
             /******************************************************************
             * Move object
@@ -472,7 +472,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             if ( ! rMEvt.IsRight())
                 mpView->BegDragObj(aMDPos, nullptr, nullptr, nDrgLog);
         }
-        else if (eHit == SDRHIT_HANDLE)
+        else if (eHit == SdrHitKind::Handle)
         {
             /******************************************************************
             * Select glue point
@@ -520,7 +520,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             /******************************************************************
             * Select or drag object
             ******************************************************************/
-            if (!rMEvt.IsShift() && !rMEvt.IsMod2() && eHit == SDRHIT_UNMARKEDOBJECT)
+            if (!rMEvt.IsShift() && !rMEvt.IsMod2() && eHit == SdrHitKind::UnmarkedObject)
             {
                mpView->UnmarkAllObj();
             }
@@ -540,7 +540,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             }
 
             if (bMarked &&
-                (!rMEvt.IsShift() || eHit == SDRHIT_MARKEDOBJECT))
+                (!rMEvt.IsShift() || eHit == SdrHitKind::MarkedObject))
             {
                 // Move object
                 if ( ! rMEvt.IsRight())
@@ -876,7 +876,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     SdrViewEvent aVEvt;
                     SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-                    if (eHit == SDRHIT_NONE)
+                    if (eHit == SdrHitKind::NONE)
                     {
                         // Click on the same place - unselect
                         mpView->UnmarkAllObj();

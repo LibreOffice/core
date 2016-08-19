@@ -60,7 +60,7 @@ bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
 
     // Only new object; if not in base mode (or pure selection mode)
     if (rMEvt.IsLeft() && !m_pWin->IsDrawAction() &&
-        (eHit == SDRHIT_UNMARKEDOBJECT || eHit == SDRHIT_NONE || m_pSh->IsDrawCreate()))
+        (eHit == SdrHitKind::UnmarkedObject || eHit == SdrHitKind::NONE || m_pSh->IsDrawCreate()))
     {
         g_bNoInterrupt = true;
         m_pWin->CaptureMouse();

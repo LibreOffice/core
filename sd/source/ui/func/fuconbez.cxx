@@ -77,7 +77,7 @@ bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
     SdrViewEvent aVEvt;
     SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-    if (eHit == SDRHIT_HANDLE || rMEvt.IsMod1())
+    if (eHit == SdrHitKind::Handle || rMEvt.IsMod1())
     {
         mpView->SetEditMode(SDREDITMODE_EDIT);
     }
@@ -97,7 +97,7 @@ bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
         mpView->EnableExtendedMouseEventDispatcher(true);
     }
 
-    if (eHit == SDRHIT_MARKEDOBJECT && nEditMode == SID_BEZIER_INSERT)
+    if (eHit == SdrHitKind::MarkedObject && nEditMode == SID_BEZIER_INSERT)
     {
         // insert glue point
         mpView->BegInsObjPoint(aMDPos, rMEvt.IsMod1());

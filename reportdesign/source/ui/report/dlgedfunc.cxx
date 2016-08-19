@@ -202,7 +202,7 @@ bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
     {
         SdrPageView* pPV = m_rView.GetSdrPageView();
         SdrViewEvent aVEvt;
-        if ( m_rView.PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt) != SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() )
+        if ( m_rView.PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt) != SdrHitKind::MarkedObject && !rMEvt.IsShift() )
             m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(nullptr);
         if ( aVEvt.pRootObj )
             m_rView.MarkObj(aVEvt.pRootObj, pPV);
@@ -490,7 +490,7 @@ void DlgEdFunc::unColorizeOverlappedObj()
 bool DlgEdFunc::isOverlapping(const MouseEvent& rMEvt)
 {
     SdrViewEvent aVEvt;
-    bool bOverlapping = m_rView.PickAnything(rMEvt, SdrMouseEventKind::BUTTONUP, aVEvt) != SDRHIT_NONE;
+    bool bOverlapping = m_rView.PickAnything(rMEvt, SdrMouseEventKind::BUTTONUP, aVEvt) != SdrHitKind::NONE;
     if (bOverlapping && aVEvt.pObj)
     {
         colorizeOverlappedObject(aVEvt.pObj);
@@ -570,7 +570,7 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
 
     SdrViewEvent aVEvt;
     const SdrHitKind eHit = m_rView.PickAnything(rMEvt, SdrMouseEventKind::MOVE, aVEvt);
-    bool bIsSetPoint = (eHit == SDRHIT_UNMARKEDOBJECT);
+    bool bIsSetPoint = (eHit == SdrHitKind::UnmarkedObject);
     if ( !bIsSetPoint )
     {
         // no drag rect, we have to check every single select rect
@@ -660,7 +660,7 @@ bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
 
     const SdrHitKind eHit = m_rView.PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-    if (eHit == SDRHIT_UNMARKEDOBJECT && nId != OBJ_CUSTOMSHAPE)
+    if (eHit == SdrHitKind::UnmarkedObject && nId != OBJ_CUSTOMSHAPE)
     {
         // there is an object under the mouse cursor, but not a customshape
         m_pParent->getSectionWindow()->getViewsWindow()->BrkAction();
@@ -797,7 +797,7 @@ bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
 
     SdrViewEvent aVEvt;
     const SdrHitKind eHit = m_rView.PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
-    if( eHit == SDRHIT_UNMARKEDOBJECT )
+    if( eHit == SdrHitKind::UnmarkedObject )
     {
         // if not multi selection, unmark all
         if ( !rMEvt.IsShift() )

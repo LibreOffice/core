@@ -272,7 +272,7 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window*
         return false;
 
     SdrViewEvent aVEvt;
-    if( !rMEvt.IsRight() && mpView->PickAnything(rMEvt,SdrMouseEventKind::BUTTONDOWN, aVEvt) == SDRHIT_HANDLE )
+    if( !rMEvt.IsRight() && mpView->PickAnything(rMEvt,SdrMouseEventKind::BUTTONDOWN, aVEvt) == SdrHitKind::Handle )
         return false;
 
     TableHitKind eHit = static_cast< SdrTableObj* >(mxTableObj.get())->CheckTableHit(pixelToLogic(rMEvt.GetPosPixel(), pWindow), maMouseDownPos.mnCol, maMouseDownPos.mnRow);
@@ -1911,7 +1911,7 @@ void SvxTableController::EditCell( const CellPos& rPos, vcl::Window* pWindow, co
                     SdrViewEvent aVEvt;
                     SdrHitKind eHit = mpView->PickAnything(aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-                    if (eHit == SDRHIT_TEXTEDIT)
+                    if (eHit == SdrHitKind::TextEdit)
                     {
                         // Text getroffen
                         pOLV->MouseButtonDown(aMEvt);

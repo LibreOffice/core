@@ -257,7 +257,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
     SdrViewEvent aVEvt;
     SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-    if (eHit == SDRHIT_TEXTEDIT)
+    if (eHit == SdrHitKind::TextEdit)
     {
         // hit text -> SdrView handles event
         if (mpView->MouseButtonDown(rMEvt, mpWindow))
@@ -266,19 +266,19 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (rMEvt.GetClicks() == 1)
     {
-        if (mpView->IsTextEdit() && eHit != SDRHIT_MARKEDOBJECT && eHit != SDRHIT_HANDLE)
+        if (mpView->IsTextEdit() && eHit != SdrHitKind::MarkedObject && eHit != SdrHitKind::Handle)
         {
             // finish text input
             if(mpView->SdrEndTextEdit() == SDRENDTEXTEDIT_DELETED)
             {
                 /* Bugfix from MBA: during a double click onto the unused? area
                    in text mode, we get with the second click eHit =
-                   SDRHIT_TEXTEDITOBJ since it goes to the TextObject which was
+                   SdrHitKind::TextEditObj since it goes to the TextObject which was
                    created with the first click. But this is removed by
                    SdrEndTextEdit since it is empty. But it is still in the mark
                    list. The call MarkObj further below accesses then the dead
                    object. As a simple fix, we determine eHit after
-                   SdrEndTextEdit again, this returns then SDRHIT_NONE. */
+                   SdrEndTextEdit again, this returns then SdrHitKind::NONE. */
                 mxTextObj.reset( nullptr );
                 eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
             }
@@ -292,16 +292,16 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
             mpWindow->CaptureMouse();
             SdrPageView* pPV = mpView->GetSdrPageView();
 
-            if (eHit == SDRHIT_TEXTEDIT)
+            if (eHit == SdrHitKind::TextEdit)
             {
                 SetInEditMode(rMEvt, false);
             }
             else
             {
-                if (eHit != SDRHIT_HANDLE)
+                if (eHit != SdrHitKind::Handle)
                 {
                     // deselect selection
-                    if (!rMEvt.IsShift() && eHit == SDRHIT_TEXTEDITOBJ)
+                    if (!rMEvt.IsShift() && eHit == SdrHitKind::TextEditObj)
                     {
                         mpView->UnmarkAll();
                         mpView->SetDragMode(SdrDragMode::Move);
@@ -309,14 +309,14 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 }
 
                 if ( aVEvt.eEvent == SdrEventKind::ExecuteUrl                   ||
-                     eHit == SDRHIT_HANDLE                                 ||
-                     eHit == SDRHIT_MARKEDOBJECT                           ||
-                     eHit == SDRHIT_TEXTEDITOBJ                            ||
-                     ( eHit == SDRHIT_UNMARKEDOBJECT && bFirstObjCreated &&
+                     eHit == SdrHitKind::Handle                                 ||
+                     eHit == SdrHitKind::MarkedObject                           ||
+                     eHit == SdrHitKind::TextEditObj                            ||
+                     ( eHit == SdrHitKind::UnmarkedObject && bFirstObjCreated &&
                        !bPermanent ) )
                 {
                     // Handle, hit marked or umarked object
-                    if (eHit == SDRHIT_TEXTEDITOBJ)
+                    if (eHit == SdrHitKind::TextEditObj)
                     {
                         /* hit text of unmarked object:
                            select object and set to EditMode */
@@ -385,7 +385,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
                         if (!aVEvt.pHdl)
                         {
-                            if( eHit == SDRHIT_UNMARKEDOBJECT )
+                            if( eHit == SdrHitKind::UnmarkedObject )
                             {
                                 if ( !rMEvt.IsShift() )
                                     mpView->UnmarkAll();
@@ -402,7 +402,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                         {
                             // we need to pick again since SdrEndTextEdit can rebuild the handles list
                             eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
-                            if( (eHit == SDRHIT_HANDLE) || (eHit == SDRHIT_MARKEDOBJECT) )
+                            if( (eHit == SdrHitKind::Handle) || (eHit == SdrHitKind::MarkedObject) )
                             {
                                 sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
                                 mpView->BegDragObj(aMDPos, nullptr, aVEvt.pHdl, nDrgLog);
@@ -1074,7 +1074,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
                         SdrViewEvent aVEvt;
                         SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-                        if (eHit == SDRHIT_TEXTEDIT)
+                        if (eHit == SdrHitKind::TextEdit)
                         {
                             // hit text
                             if (nSdrObjKind == OBJ_TEXT ||

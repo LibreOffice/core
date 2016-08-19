@@ -1064,7 +1064,7 @@ void SwFEShell::EndTextEdit()
     EndAllAction();
 }
 
-int SwFEShell::IsInsideSelectedObj( const Point &rPt )
+bool SwFEShell::IsInsideSelectedObj( const Point &rPt )
 {
     if( Imp()->HasDrawView() )
     {
@@ -1073,10 +1073,10 @@ int SwFEShell::IsInsideSelectedObj( const Point &rPt )
         if( pDView->GetMarkedObjectList().GetMarkCount() &&
             pDView->IsMarkedObjHit( rPt ) )
         {
-            return SDRHIT_OBJECT;
+            return true;
         }
     }
-    return SDRHIT_NONE;
+    return false;
 }
 
 bool SwFEShell::IsObjSelectable( const Point& rPt )

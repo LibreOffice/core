@@ -676,7 +676,7 @@ static bool lcl_UrlHit( SdrView* pView, const Point& rPosPixel, vcl::Window* pWi
     MouseEvent aMEvt( rPosPixel, 1, MouseEventModifiers::NONE, MOUSE_LEFT );
     SdrHitKind eHit = pView->PickAnything( aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt );
 
-    if ( eHit != SDRHIT_NONE && aVEvt.pObj != nullptr )
+    if ( eHit != SdrHitKind::NONE && aVEvt.pObj != nullptr )
     {
         if ( ScDrawLayer::GetIMapInfo( aVEvt.pObj ) && ScDrawLayer::GetHitIMapObject(
                                 aVEvt.pObj, pWindow->PixelToLogic(rPosPixel), *pWindow ) )

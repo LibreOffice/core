@@ -97,7 +97,7 @@ bool FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
         SdrViewEvent aVEvt;
         SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-        if( (eHit == SDRHIT_TEXTEDIT) || (eHit == SDRHIT_TEXTEDITOBJ && ( mpViewShell->GetFrameView()->IsQuickEdit() || dynamic_cast< sdr::table::SdrTableObj* >( aVEvt.pObj ) != nullptr ) ))
+        if( (eHit == SdrHitKind::TextEdit) || (eHit == SdrHitKind::TextEditObj && ( mpViewShell->GetFrameView()->IsQuickEdit() || dynamic_cast< sdr::table::SdrTableObj* >( aVEvt.pObj ) != nullptr ) ))
         {
             SdrObject* pPickObj=nullptr;
             SdrPageView* pPV=nullptr;

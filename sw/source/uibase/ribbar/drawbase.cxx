@@ -86,7 +86,7 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
     // Only new object, if not in the basic mode (or pure selection mode).
     if (rMEvt.IsLeft() && !m_pWin->IsDrawAction())
     {
-        if (IsCreateObj() && (eHit == SDRHIT_UNMARKEDOBJECT || eHit == SDRHIT_NONE || m_pSh->IsDrawCreate()))
+        if (IsCreateObj() && (eHit == SdrHitKind::UnmarkedObject || eHit == SdrHitKind::NONE || m_pSh->IsDrawCreate()))
         {
             g_bNoInterrupt = true;
             m_pWin->CaptureMouse();
@@ -107,21 +107,21 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
             m_aStartPos = m_pWin->PixelToLogic(rMEvt.GetPosPixel());
             sal_uInt16 nEditMode = m_pWin->GetBezierMode();
 
-            if (eHit == SDRHIT_HANDLE && aVEvt.pHdl->GetKind() == HDL_BWGT)
+            if (eHit == SdrHitKind::Handle && aVEvt.pHdl->GetKind() == HDL_BWGT)
             {
                 // Drag handle
                 g_bNoInterrupt = true;
                 bReturn = pSdrView->BegDragObj(m_aStartPos, nullptr, aVEvt.pHdl);
                 m_pWin->SetDrawAction(true);
             }
-            else if (eHit == SDRHIT_MARKEDOBJECT && nEditMode == SID_BEZIER_INSERT)
+            else if (eHit == SdrHitKind::MarkedObject && nEditMode == SID_BEZIER_INSERT)
             {
                 // Insert gluepoint
                 g_bNoInterrupt = true;
                 bReturn = pSdrView->BegInsObjPoint(m_aStartPos, rMEvt.IsMod1());
                 m_pWin->SetDrawAction(true);
             }
-            else if (eHit == SDRHIT_MARKEDOBJECT && rMEvt.IsMod1())
+            else if (eHit == SdrHitKind::MarkedObject && rMEvt.IsMod1())
             {
                 // Select gluepoint
                 if (!rMEvt.IsShift())
@@ -130,12 +130,12 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                 bReturn = pSdrView->BegMarkPoints(m_aStartPos);
                 m_pWin->SetDrawAction(true);
             }
-            else if (eHit == SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() && !rMEvt.IsMod2())
+            else if (eHit == SdrHitKind::MarkedObject && !rMEvt.IsShift() && !rMEvt.IsMod2())
             {
                 // Move objekt
                 return false;
             }
-            else if (eHit == SDRHIT_HANDLE)
+            else if (eHit == SdrHitKind::Handle)
             {
                 // Select gluepoint
                 if (pSdrView->HasMarkablePoints() && (!pSdrView->IsPointMarked(*aVEvt.pHdl) || rMEvt.IsShift()))
@@ -170,7 +170,7 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
             else
             {
                 // Select or drag object
-                if (m_pSh->IsObjSelectable(m_aStartPos) && eHit == SDRHIT_UNMARKEDOBJECT)
+                if (m_pSh->IsObjSelectable(m_aStartPos) && eHit == SdrHitKind::UnmarkedObject)
                 {
                     if (pSdrView->HasMarkablePoints())
                         pSdrView->UnmarkAllPoints();

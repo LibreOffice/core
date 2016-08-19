@@ -302,7 +302,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
             MouseEvent aMEvt( aPosPixel, 1, MouseEventModifiers::NONE, MOUSE_LEFT );
             SdrHitKind eHit = pDrView->PickAnything( aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt );
 
-            if ( eHit != SDRHIT_NONE && aVEvt.pObj != nullptr )
+            if ( eHit != SdrHitKind::NONE && aVEvt.pObj != nullptr )
             {
                 // URL for IMapObject below Pointer is help text
                 if ( ScDrawLayer::GetIMapInfo( aVEvt.pObj ) )

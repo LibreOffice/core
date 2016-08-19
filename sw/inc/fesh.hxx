@@ -290,7 +290,7 @@ public:
     bool IsObjSelectable( const Point& rPt );
     /// Same as IsObjSelectable(), but return the object as well.
     SdrObject* GetObjAt(const Point& rPt);
-    int IsInsideSelectedObj( const Point& rPt );    ///< returns enum values
+    bool IsInsideSelectedObj( const Point& rPt );    ///< returns enum values
     /** Test if there is a draw object at that position and if it should be selected.
      The 'should' is aimed at Writer text fly frames which may be in front of
      the draw object. */

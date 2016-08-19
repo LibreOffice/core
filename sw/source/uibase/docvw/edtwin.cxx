@@ -448,13 +448,13 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
     bool bCntAtPos = false;
     bool bIsDocReadOnly = m_rView.GetDocShell()->IsReadOnly() &&
                           rSh.IsCursorReadonly();
-    m_aActHitType = SDRHIT_NONE;
+    m_aActHitType = SdrHitKind::NONE;
     PointerStyle eStyle = PointerStyle::Text;
     if ( !pSdrView )
         bCntAtPos = true;
     else if ( (bHitHandle = pSdrView->PickHandle( rLPt ) != nullptr) )
     {
-        m_aActHitType = SDRHIT_OBJECT;
+        m_aActHitType = SdrHitKind::Object;
         bPrefSdrPointer = true;
     }
     else
@@ -462,7 +462,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
         const bool bNotInSelObj = !rSh.IsInsideSelectedObj( rLPt );
         if ( m_rView.GetDrawFuncPtr() && !m_bInsDraw && bNotInSelObj )
         {
-            m_aActHitType = SDRHIT_OBJECT;
+            m_aActHitType = SdrHitKind::Object;
             if (IsObjectSelect())
                 eStyle = PointerStyle::Arrow;
             else
@@ -490,7 +490,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                 {
                     if (pSdrView->IsTextEdit())
                     {
-                        m_aActHitType = SDRHIT_NONE;
+                        m_aActHitType = SdrHitKind::NONE;
                         bPrefSdrPointer = true;
                     }
                     else
@@ -498,9 +498,9 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                         SdrViewEvent aVEvt;
                         SdrHitKind eHit = pSdrView->PickAnything(rLPt, aVEvt);
 
-                        if (eHit == SDRHIT_URLFIELD && bExecHyperlinks)
+                        if (eHit == SdrHitKind::UrlField && bExecHyperlinks)
                         {
-                            m_aActHitType = SDRHIT_OBJECT;
+                            m_aActHitType = SdrHitKind::Object;
                             bPrefSdrPointer = true;
                         }
                         else
@@ -518,7 +518,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                             // Don't update pointer if this is a background image only.
                             if (pSelectableObj->GetLayer() != rSh.GetDoc()->getIDocumentDrawModelAccess().GetHellId())
                                 eStyle = bMovable ? PointerStyle::Move : PointerStyle::Arrow;
-                            m_aActHitType = SDRHIT_OBJECT;
+                            m_aActHitType = SdrHitKind::Object;
                         }
                     }
                 }
@@ -538,7 +538,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                             eStyle = PointerStyle::NotAllowed;
                         else
                             eStyle = PointerStyle::Move;
-                        m_aActHitType = SDRHIT_OBJECT;
+                        m_aActHitType = SdrHitKind::Object;
                     }
                     else
                     {
@@ -3212,7 +3212,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     bHandledFlyClick = true;
                     // only try to select frame, if pointer already was
                     // switched accordingly
-                    if ( m_aActHitType != SDRHIT_NONE && !rSh.IsSelFrameMode() &&
+                    if ( m_aActHitType != SdrHitKind::NONE && !rSh.IsSelFrameMode() &&
                         !GetView().GetViewFrame()->GetDispatcher()->IsLocked() &&
                         !bExecDrawTextLink)
                     {
@@ -3263,7 +3263,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             bOnlyText = KEY_MOD1 != rMEvt.GetModifier();
                     }
                     else if ( rSh.IsSelFrameMode() &&
-                              (m_aActHitType == SDRHIT_NONE ||
+                              (m_aActHitType == SdrHitKind::NONE ||
                                !rSh.IsInsideSelectedObj( aDocPos )))
                     {
                         m_rView.NoRotate();
@@ -4975,7 +4975,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         SdrViewEvent aViewEvent;
         SdrHitKind eHit = pSdrView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONUP, aViewEvent);
         const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-        if (eHit == SDRHIT_TEXTEDITOBJ && rMarkList.GetMarkCount() == 1)
+        if (eHit == SdrHitKind::TextEditObj && rMarkList.GetMarkCount() == 1)
         {
             if (SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj())
             {
@@ -5061,7 +5061,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
 
     m_rView( rMyView ),
 
-    m_aActHitType(SDRHIT_NONE),
+    m_aActHitType(SdrHitKind::NONE),
     m_nDropFormat( SotClipboardFormatId::NONE ),
     m_nDropAction( 0 ),
     m_nDropDestination( SotExchangeDest::NONE ),
@@ -5799,7 +5799,7 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
         }
     }
     else if ( rSh.IsSelFrameMode() &&
-              (m_aActHitType == SDRHIT_NONE ||
+              (m_aActHitType == SdrHitKind::NONE ||
                !bIsInsideSelectedObj))
     {
         m_rView.NoRotate();

@@ -516,7 +516,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
             SdrObject* pObj = nullptr;
             SdrPageView* pPV = nullptr;
             SdrViewEvent aVEvt;
-            SdrHitKind eHit = SDRHIT_NONE;
+            SdrHitKind eHit = SdrHitKind::NONE;
             SdrDragMode eDragMode = mpView->GetDragMode();
 
             if (pMEvt)
@@ -524,7 +524,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                 eHit = mpView->PickAnything(*pMEvt, SdrMouseEventKind::MOVE, aVEvt);
             }
 
-            if ((eDragMode == SdrDragMode::Rotate) && (eHit == SDRHIT_MARKEDOBJECT))
+            if ((eDragMode == SdrDragMode::Rotate) && (eHit == SdrHitKind::MarkedObject))
             {
                 // The goal of this request is show always the rotation-arrow for 3D-objects at rotation-modus
                 // Independent of the settings at Extras->Optionen->Grafik "Objekte immer verschieben"
@@ -539,16 +539,16 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                 }
             }
 
-            if (eHit == SDRHIT_NONE)
+            if (eHit == SdrHitKind::NONE)
             {
                 // found nothing -> look after at the masterpage
                 mpView->PickObj(aPnt, mpView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER);
             }
-            else if (eHit == SDRHIT_UNMARKEDOBJECT)
+            else if (eHit == SdrHitKind::UnmarkedObject)
             {
                 pObj = aVEvt.pObj;
             }
-            else if (eHit == SDRHIT_TEXTEDITOBJ && dynamic_cast< const FuSelection *>( this ) !=  nullptr)
+            else if (eHit == SdrHitKind::TextEditObj && dynamic_cast< const FuSelection *>( this ) !=  nullptr)
             {
                 sal_uInt16 nSdrObjKind = aVEvt.pObj->GetObjIdentifier();
 
@@ -747,7 +747,7 @@ bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
 
         SdrObject* pObj = aVEvt.pObj;
 
-        if (eHit != SDRHIT_NONE && pObj != nullptr)
+        if (eHit != SdrHitKind::NONE && pObj != nullptr)
         {
             Point aPosPixel = rHEvt.GetMousePosPixel();
 
