@@ -322,8 +322,10 @@ sal_Int32 SetGetExpField::GetCntPosFromContent() const
         switch( eSetGetExpFieldType )
         {
         case TEXTFIELD:
-        case TEXTINET:
             nRet = CNTNT.pTextField->GetStart();
+            break;
+        case TEXTINET:
+            nRet = CNTNT.pTextINet->GetStart();
             break;
         case TEXTTOXMARK:
             nRet = CNTNT.pTextTOX->GetStart();
