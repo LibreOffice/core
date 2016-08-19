@@ -35,8 +35,16 @@ namespace desktop {
         virtual void Invoke() override;
         static void callback(const int type, const char* payload, void* data);
         void queue(const int type, const char* data);
-        void setPartTilePainting(const bool bPartPainting);
-        bool isPartTilePainting() const;
+
+        /// When enabled events are queued but callback not invoked.
+        void setEventLatch(const bool bEventLatch)
+        {
+            m_bEventLatch = bEventLatch;
+        }
+
+        bool isEventLatchOn() const { return m_bEventLatch; }
+        void setPartTilePainting(const bool bPartPainting) { m_bPartTilePainting = bPartPainting; }
+        bool isPartTilePainting() const { return m_bPartTilePainting; }
 
     private:
         void flush();
@@ -48,6 +56,7 @@ namespace desktop {
         LibreOfficeKitCallback m_pCallback;
         void *m_pData;
         bool m_bPartTilePainting;
+        bool m_bEventLatch;
         std::mutex m_mutex;
     };
 

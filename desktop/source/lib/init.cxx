@@ -325,6 +325,16 @@ static boost::property_tree::ptree unoAnyToPropertyTree(const uno::Any& anyItem)
     return aTree;
 }
 
+Rectangle lcl_ParseRect(const std::string& payload)
+{
+    std::istringstream iss(payload);
+    long left, top, right, bottom;
+    char comma;
+    iss >> left >> comma >> top >> comma >> right >> comma >> bottom;
+    Rectangle rc(left, top, left + right, top + bottom);
+    return rc;
+}
+
 extern "C"
 {
 
@@ -467,7 +477,8 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
       m_pDocument(pDocument),
       m_pCallback(pCallback),
       m_pData(pData),
-      m_bPartTilePainting(false)
+      m_bPartTilePainting(false),
+      m_bEventLatch(false)
 {
     SetPriority(SchedulerPriority::POST_PAINT);
 
@@ -488,6 +499,7 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
     m_states.emplace(LOK_CALLBACK_CURSOR_VISIBLE, "NIL");
     m_states.emplace(LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "NIL");
     m_states.emplace(LOK_CALLBACK_SET_PART, "NIL");
+    m_states.emplace(LOK_CALLBACK_TEXT_VIEW_SELECTION, "NIL");
 
     Start();
 }
@@ -495,9 +507,6 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
 CallbackFlushHandler::~CallbackFlushHandler()
 {
     Stop();
-
-    // We might have important notification (.uno:save?).
-    flush();
 }
 
 void CallbackFlushHandler::Invoke()
@@ -533,7 +542,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             type != LOK_CALLBACK_VIEW_CURSOR_VISIBLE &&
             type != LOK_CALLBACK_TEXT_SELECTION)
         {
-            //SAL_WARN("lokevt", "Skipping while painting [" + std::to_string(type) + "]: [" + payload + "].");
+            SAL_WARN("lok", "Skipping while painting [" + std::to_string(type) + "]: [" + payload + "].");
             return;
         }
 
@@ -550,7 +559,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         // issueing it, instead of the absolute one that we expect.
         // This is temporary however, and, once the control is created and initialized
         // correctly, it eventually emits the correct absolute coordinates.
-        //SAL_WARN("lokevt", "Skipping invalid event [" + std::to_string(type) + "]: [" + payload + "].");
+        SAL_WARN("lok", "Skipping invalid event [" + std::to_string(type) + "]: [" + payload + "].");
         return;
     }
 
@@ -562,7 +571,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         // If the state didn't change, it's safe to ignore.
         if (stateIt->second == payload)
         {
-            //SAL_WARN("lokevt", "Skipping duplicate [" + std::to_string(type) + "]: [" + payload + "].");
+            //SAL_WARN("lok", "Skipping duplicate [" + std::to_string(type) + "]: [" + payload + "].");
             return;
         }
 
@@ -595,6 +604,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
         case LOK_CALLBACK_SET_PART:
         case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
+        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
             removeAllButLast(type, false);
         break;
 
@@ -609,9 +619,42 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                 // invalidated tiles can be dropped.
                 removeAllButLast(type, false);
             }
-            else
+            else if (type == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR)
             {
                 removeAllButLast(type, true);
+            }
+            else if (type == LOK_CALLBACK_INVALIDATE_TILES)
+            {
+                Rectangle rcNew = lcl_ParseRect(payload);
+                //SAL_WARN("lok", "New: " << rcNew.toString());
+                const auto rcOrig = rcNew;
+                int i = m_queue.size();
+                i -= 2;
+                for (; i >= 0; --i)
+                {
+                    if (m_queue[i].first == type)
+                    {
+                        const Rectangle rcOld = lcl_ParseRect(m_queue[i].second);
+                        //SAL_WARN("lok", "#" << i << " Old: " << rcOld.toString());
+                        const Rectangle rcOverlap = rcNew.GetIntersection(rcOld);
+                        //SAL_WARN("lok", "#" << i << " Overlap: " << rcOverlap.toString());
+                        if (rcOverlap.GetWidth() > 0 && rcOverlap.GetHeight() > 0)
+                        {
+                            //SAL_WARN("lok", rcOld.toString() << " U " << rcNew.toString());
+                            rcNew.Union(rcOld);
+                            //SAL_WARN("lok", "#" << i << " Union: " << rcNew.toString());
+                            m_queue.erase(m_queue.begin() + i);
+                        }
+                    }
+                }
+
+                assert(!m_queue.empty());
+                if (rcNew != rcOrig)
+                {
+                    SAL_WARN("lok", "Replacing: " << rcOrig.toString() << " by " << rcNew.toString());
+                    m_queue.erase(m_queue.begin() + m_queue.size() - 1);
+                    m_queue.emplace_back(type, rcNew.toString().getStr());
+                }
             }
 
         break;
@@ -624,19 +667,9 @@ void CallbackFlushHandler::queue(const int type, const char* data)
     }
 }
 
-void CallbackFlushHandler::setPartTilePainting(const bool bPartPainting)
-{
-    m_bPartTilePainting = bPartPainting;
-}
-
-bool CallbackFlushHandler::isPartTilePainting() const
-{
-    return m_bPartTilePainting;
-}
-
 void CallbackFlushHandler::flush()
 {
-    if (m_pCallback)
+    if (m_pCallback && !m_bEventLatch)
     {
         std::unique_lock<std::mutex> lock(m_mutex);
         for (auto& pair : m_queue)
@@ -657,7 +690,7 @@ void CallbackFlushHandler::removeAllButLast(const int type, const bool identical
         if (m_queue[i].first == type)
         {
             payload = m_queue[i].second;
-            //SAL_WARN("lokevt", "Found [" + std::to_string(type) + "] at " + std::to_string(i) + ": [" + payload + "].");
+            //SAL_WARN("lok", "Found [" + std::to_string(type) + "] at " + std::to_string(i) + ": [" + payload + "].");
             break;
         }
     }
@@ -667,7 +700,7 @@ void CallbackFlushHandler::removeAllButLast(const int type, const bool identical
         if (m_queue[i].first == type &&
             (!identical || m_queue[i].second == payload))
         {
-            //SAL_WARN("lokevt", "Removing [" + std::to_string(type) + "] at " + std::to_string(i) + ": " + m_queue[i].second + "].");
+            //SAL_WARN("lok", "Removing [" + std::to_string(type) + "] at " + std::to_string(i) + ": " + m_queue[i].second + "].");
             m_queue.erase(m_queue.begin() + i);
         }
     }
