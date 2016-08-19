@@ -1066,10 +1066,10 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     getCorrectExportOrder(xNameContainer, aLibraryMap);
 
     // start here with the VBA export
-    SotStorage* pVBAStream = pRootStorage->OpenSotStorage("VBA", STREAM_READWRITE);
-    SotStorageStream* pDirStream = pVBAStream->OpenSotStream("dir", STREAM_READWRITE);
+    tools::SvRef<SotStorage> xVBAStream = pRootStorage->OpenSotStorage("VBA", STREAM_READWRITE);
+    SotStorageStream* pDirStream = xVBAStream->OpenSotStream("dir", STREAM_READWRITE);
 
-    SotStorageStream* pVBAProjectStream = pVBAStream->OpenSotStream("_VBA_PROJECT", STREAM_READWRITE);
+    SotStorageStream* pVBAProjectStream = xVBAStream->OpenSotStream("_VBA_PROJECT", STREAM_READWRITE);
     SotStorageStream* pPROJECTStream = pRootStorage->OpenSotStream("PROJECT", STREAM_READWRITE);
     SotStorageStream* pPROJECTwmStream = pRootStorage->OpenSotStream("PROJECTwm", STREAM_READWRITE);
 
@@ -1107,11 +1107,11 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     OUString aSheet2Path = "/home/moggi/Documents/testfiles/vba/VBA/Sheet2";
     OUString aSheet3Path = "/home/moggi/Documents/testfiles/vba/VBA/Sheet3";
     OUString aWorkbookPath = "/home/moggi/Documents/testfiles/vba/VBA/ThisWorkbook";
-    SotStorageStream* pModule1Stream = pVBAStream->OpenSotStream("Module1", STREAM_READWRITE);
-    SotStorageStream* pSheet1Stream = pVBAStream->OpenSotStream("Sheet1", STREAM_READWRITE);
-    SotStorageStream* pSheet2Stream = pVBAStream->OpenSotStream("Sheet2", STREAM_READWRITE);
-    SotStorageStream* pSheet3Stream = pVBAStream->OpenSotStream("Sheet3", STREAM_READWRITE);
-    SotStorageStream* pWorkbookStream = pVBAStream->OpenSotStream("ThisWorkbook", STREAM_READWRITE);
+    SotStorageStream* pModule1Stream = xVBAStream->OpenSotStream("Module1", STREAM_READWRITE);
+    SotStorageStream* pSheet1Stream = xVBAStream->OpenSotStream("Sheet1", STREAM_READWRITE);
+    SotStorageStream* pSheet2Stream = xVBAStream->OpenSotStream("Sheet2", STREAM_READWRITE);
+    SotStorageStream* pSheet3Stream = xVBAStream->OpenSotStream("Sheet3", STREAM_READWRITE);
+    SotStorageStream* pWorkbookStream = xVBAStream->OpenSotStream("ThisWorkbook", STREAM_READWRITE);
     addFileStreamToSotStream(aModule1Path, pModule1Stream);
     addFileStreamToSotStream(aSheet1Path, pSheet1Stream);
     addFileStreamToSotStream(aSheet2Path, pSheet2Stream);
@@ -1129,7 +1129,7 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     for (sal_Int32 i = 0; i < n; ++i)
     {
         const OUString& rModuleName = aElementNames[aLibraryMap[i]];
-        SotStorageStream* pModuleStream = pVBAStream->OpenSotStream(rModuleName, STREAM_READWRITE);
+        SotStorageStream* pModuleStream = xVBAStream->OpenSotStream(rModuleName, STREAM_READWRITE);
         css::uno::Any aCode = xNameContainer->getByName(rModuleName);
         css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(rModuleName);
         OUString aSourceCode;
@@ -1143,7 +1143,7 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     pVBAProjectStream->Commit();
 
     pDirStream->Commit();
-    pVBAStream->Commit();
+    xVBAStream->Commit();
     pPROJECTStream->Commit();
     pPROJECTwmStream->Commit();
     pRootStorage->Commit();
