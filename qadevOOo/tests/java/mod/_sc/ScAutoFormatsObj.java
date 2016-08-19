@@ -121,7 +121,7 @@ public class ScAutoFormatsObj extends TestCase{
         log.println( "adding INSTANCEn as mod relation to environment" );
         int THRCNT = 1;
         if ((String)Param.get("THRCNT") != null) {
-            Integer.parseInt((String)Param.get("THRCNT"));
+            THRCNT = Integer.parseInt((String)Param.get("THRCNT"));
         }
         for (int n = 1; n < (THRCNT+1) ;n++ ) {
             log.println( "adding INSTANCE" + n
