@@ -233,7 +233,7 @@ public:
              const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
              rtl::Reference< DAVSessionFactory > const & rSessionFactory,
              bool isCollection )
-        throw ( css::ucb::ContentCreationException );
+        throw (css::ucb::ContentCreationException, css::uno::RuntimeException);
     virtual ~Content();
 
     // XInterface
