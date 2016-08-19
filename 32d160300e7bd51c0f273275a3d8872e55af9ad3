@@ -16,6 +16,24 @@
       "revId": "32d160300e7bd51c0f273275a3d8872e55af9ad3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_0f465523",
+        "filename": "uui/uiconfig/ui/authfallback.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2016-08-19T18:37:40Z",
+      "side": 1,
+      "message": "so are you suggesting that we allow an undefined number of characters in the field so that if more than 6 characters are needed in the future, this dialog will still work? If so the instructions to enter in a 6 digit pin wont be accurate as well.",
+      "parentUuid": "fa6399be_8fbb450e",
+      "revId": "32d160300e7bd51c0f273275a3d8872e55af9ad3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
