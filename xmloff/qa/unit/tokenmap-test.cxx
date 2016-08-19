@@ -37,22 +37,20 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    token::TokenMap* pTokenMap;
+    std::unique_ptr<token::TokenMap> pTokenMap;
 };
 
-TokenmapTest::TokenmapTest() : pTokenMap(nullptr)
+TokenmapTest::TokenmapTest() : pTokenMap(new token::TokenMap)
 {
 }
 
 void TokenmapTest::setUp()
 {
     CppUnit::TestFixture::setUp();
-    pTokenMap = new token::TokenMap;
 }
 
 void TokenmapTest::tearDown()
 {
-    delete pTokenMap;
     CppUnit::TestFixture::tearDown();
 }
 
