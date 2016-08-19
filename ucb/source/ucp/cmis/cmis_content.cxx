@@ -361,7 +361,7 @@ namespace cmis
             libcmis::SessionFactory::setCertificateValidationHandler( certHandler );
 
             // Get the auth credentials
-            AuthProvider authProvider( xEnv, m_xIdentifier->getContentIdentifier( ), m_aURL.getBindingUrl( ) );
+            AuthProvider aAuthProvider(xEnv, m_xIdentifier->getContentIdentifier(), m_aURL.getBindingUrl());
             AuthProvider::setXEnv( xEnv );
 
             string rUsername = OUSTR_TO_STDSTR( m_aURL.getUsername( ) );
@@ -371,13 +371,13 @@ namespace cmis
 
             while ( !bIsDone )
             {
-                if ( authProvider.authenticationQuery( rUsername, rPassword ) )
+                if (aAuthProvider.authenticationQuery(rUsername, rPassword))
                 {
                     // Initiate a CMIS session and register it as we found nothing
                     libcmis::OAuth2DataPtr oauth2Data;
                     if ( m_aURL.getBindingUrl( ) == GDRIVE_BASE_URL )
                     {
-                        libcmis::SessionFactory::setOAuth2AuthCodeProvider( authProvider.gdriveAuthCodeFallback );
+                        libcmis::SessionFactory::setOAuth2AuthCodeProvider(aAuthProvider.gdriveAuthCodeFallback);
                         oauth2Data.reset( new libcmis::OAuth2Data(
                             GDRIVE_AUTH_URL, GDRIVE_TOKEN_URL,
                             GDRIVE_SCOPE, GDRIVE_REDIRECT_URI,
@@ -390,7 +390,7 @@ namespace cmis
                             ALFRESCO_CLOUD_CLIENT_ID, ALFRESCO_CLOUD_CLIENT_SECRET ) );
                     if ( m_aURL.getBindingUrl( ) == ONEDRIVE_BASE_URL )
                     {
-                        libcmis::SessionFactory::setOAuth2AuthCodeProvider( authProvider.onedriveAuthCodeFallback );
+                        libcmis::SessionFactory::setOAuth2AuthCodeProvider(aAuthProvider.onedriveAuthCodeFallback);
                         oauth2Data.reset( new libcmis::OAuth2Data(
                             ONEDRIVE_AUTH_URL, ONEDRIVE_TOKEN_URL,
                             ONEDRIVE_SCOPE, ONEDRIVE_REDIRECT_URI,
