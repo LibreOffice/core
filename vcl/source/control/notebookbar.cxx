@@ -8,6 +8,7 @@
  */
 
 #include <vcl/layout.hxx>
+#include <vcl/tabctrl.hxx>
 #include <vcl/notebookbar.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -37,7 +38,10 @@ NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rU
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame);
-    get(m_pTabControl, "notebook1");
+
+    // In the Notebookbar's .ui file must exist control handling context
+    // - implementing NotebookbarContextControl interface with id "ContextContainer"
+    m_pContextContainer = dynamic_cast<NotebookbarContextControl*>(m_pUIBuilder->get<Window>("ContextContainer"));
 }
 
 NotebookBar::~NotebookBar()
@@ -49,7 +53,6 @@ void NotebookBar::dispose()
 {
     disposeBuilder();
     m_pEventListener.clear();
-    m_pTabControl.clear();
     Control::dispose();
 }
 
@@ -92,7 +95,8 @@ void NotebookBar::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, P
 
 void NotebookBar::SetIconClickHdl(Link<NotebookBar*, void> aHdl)
 {
-    m_pTabControl->SetIconClickHdl(aHdl);
+    if (m_pContextContainer)
+        m_pContextContainer->SetIconClickHdl(aHdl);
 }
 
 void NotebookBar::StateChanged(StateChangedType nType)
@@ -109,8 +113,8 @@ void NotebookBar::StateChanged(StateChangedType nType)
 void SAL_CALL NotebookBarContextChangeEventListener::notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent)
         throw (css::uno::RuntimeException, std::exception)
 {
-    if (mpParent && mpParent->m_pTabControl)
-        mpParent->m_pTabControl->SetContext(vcl::EnumContext::GetContextEnum(rEvent.ContextName));
+    if (mpParent && mpParent->m_pContextContainer)
+        mpParent->m_pContextContainer->SetContext(vcl::EnumContext::GetContextEnum(rEvent.ContextName));
 }
 
 
