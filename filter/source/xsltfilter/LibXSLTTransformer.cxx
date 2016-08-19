@@ -217,7 +217,7 @@ namespace XSLT
         if (buffer == nullptr || len < 0)
             return (-1);
         sal_Int32 n;
-        css::uno::Reference<XInputStream> xis = this->m_transformer->getInputStream();
+        css::uno::Reference<XInputStream> xis = m_transformer->getInputStream();
         n = xis.get()->readBytes(m_readBuf, len);
         if (n > 0)
             {
@@ -235,8 +235,7 @@ namespace XSLT
             {
                 css::uno::Reference<XOutputStream> xos = m_transformer->getOutputStream();
                 sal_Int32 writeLen = len;
-                sal_Int32 bufLen = ::std::min(writeLen,
-                        this->OUTPUT_BUFFER_SIZE);
+                sal_Int32 bufLen = ::std::min(writeLen, OUTPUT_BUFFER_SIZE);
                 const sal_uInt8* memPtr =
                         reinterpret_cast<const sal_uInt8*> (buffer);
                 while (writeLen > 0)
