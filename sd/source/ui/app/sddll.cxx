@@ -292,7 +292,7 @@ void SdDLL::Init()
     FmFormObjFactory();
 
     // register Object-Factory
-    SdrObjFactory::InsertMakeUserDataHdl(LINK(&aSdObjectFactory, SdObjectFactory, MakeUserData));
+    SdrObjFactory::InsertMakeUserDataHdl(SdObjectFactory::MakeUserData);
 
     // register your exotic remote controls here
 #ifdef ENABLE_SDREMOTE

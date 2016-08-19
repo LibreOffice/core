@@ -23,30 +23,27 @@
 
 ScDrawObjFactory::ScDrawObjFactory()
 {
-    SdrObjFactory::InsertMakeUserDataHdl( LINK ( this, ScDrawObjFactory, MakeUserData ) );
+    SdrObjFactory::InsertMakeUserDataHdl( ScDrawObjFactory::MakeUserData );
 }
 
 ScDrawObjFactory::~ScDrawObjFactory()
 {
-    SdrObjFactory::RemoveMakeUserDataHdl( LINK ( this, ScDrawObjFactory, MakeUserData ) );
+    SdrObjFactory::RemoveMakeUserDataHdl( ScDrawObjFactory::MakeUserData );
 }
 
-IMPL_STATIC_LINK_TYPED(
-    ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFactory, void )
+SdrObjUserData* ScDrawObjFactory::MakeUserData(sal_uInt32 nInventor, sal_uInt16 nObjIdentifier, SdrObject* /*pObject*/)
 {
-    if ( pObjFactory->nInventor == SC_DRAWLAYER )
+    if ( nInventor == SC_DRAWLAYER )
     {
-        if ( pObjFactory->nIdentifier == SC_UD_OBJDATA )
-            pObjFactory->pNewData = new ScDrawObjData;
-        else if ( pObjFactory->nIdentifier == SC_UD_IMAPDATA )
-            pObjFactory->pNewData = new ScIMapInfo;
-        else if ( pObjFactory->nIdentifier == SC_UD_MACRODATA )
-            pObjFactory->pNewData = new ScMacroInfo;
-        else
-        {
-            OSL_FAIL("MakeUserData: wrong ID");
-        }
+        if ( nObjIdentifier == SC_UD_OBJDATA )
+            return new ScDrawObjData;
+        else if ( nObjIdentifier == SC_UD_IMAPDATA )
+            return new ScIMapInfo;
+        else if ( nObjIdentifier == SC_UD_MACRODATA )
+            return new ScMacroInfo;
+        OSL_FAIL("MakeUserData: wrong ID");
     }
+    return nullptr;
 }
 
 ScDrawObjData::ScDrawObjData() :

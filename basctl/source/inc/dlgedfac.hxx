@@ -34,11 +34,12 @@ namespace basctl
 class DlgEdFactory
 {
     const css::uno::Reference< css::frame::XModel > mxModel;
+    SdrObjCreatorFunc aObjCreatorFunc;
 public:
     DlgEdFactory( const css::uno::Reference< css::frame::XModel >& xModel );
     ~DlgEdFactory();
-
-    DECL_LINK_TYPED( MakeObject, SdrObjFactory *, void );
+private:
+    SdrObject* MakeObject(sal_uInt32 nInventor, sal_uInt16 nObjIdentifier);
 };
 
 } // namespace basctl

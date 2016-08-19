@@ -127,10 +127,10 @@ public:
 class SgaUserDataFactory
 {
 public:
-    SgaUserDataFactory() { SdrObjFactory::InsertMakeUserDataHdl( LINK(this,SgaUserDataFactory,MakeUserData) ); }
-    ~SgaUserDataFactory() { SdrObjFactory::RemoveMakeUserDataHdl( LINK(this,SgaUserDataFactory,MakeUserData) ); }
-
-    DECL_STATIC_LINK_TYPED( SgaUserDataFactory, MakeUserData, SdrObjFactory*, void );
+    SgaUserDataFactory()  { SdrObjFactory::InsertMakeUserDataHdl(SgaUserDataFactory::MakeUserData); }
+    ~SgaUserDataFactory() { SdrObjFactory::RemoveMakeUserDataHdl(SgaUserDataFactory::MakeUserData); }
+private:
+    static SdrObjUserData* MakeUserData(sal_uInt32 nInventor, sal_uInt16 nObjIdentifier, SdrObject* pObject);
 };
 
 class GraphicFilter;

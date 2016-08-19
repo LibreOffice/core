@@ -30,17 +30,16 @@
 \************************************************************************/
 
 class SdrObjFactory;
-
-
-#include <tools/link.hxx>
+class SdrObject;
 
 class SVX_DLLPUBLIC E3dObjFactory
 {
 public:
     E3dObjFactory();
     ~E3dObjFactory();
+private:
 
-    DECL_STATIC_LINK_TYPED(E3dObjFactory, MakeObject, SdrObjFactory*, void);
+    static SdrObject* MakeObject(sal_uInt32 nInventor, sal_uInt16 nObjIdentifier);
 };
 
 

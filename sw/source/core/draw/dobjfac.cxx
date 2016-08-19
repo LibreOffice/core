@@ -23,16 +23,16 @@
 
 SwObjectFactory aSwObjectFactory;
 
-IMPL_STATIC_LINK_TYPED(
-    SwObjectFactory, MakeObject, SdrObjFactory*, pObjFactory, void )
+SdrObject* SwObjectFactory::MakeObject(sal_uInt32 nInventor, sal_uInt16 nObjIdentifier)
 {
-    if ( pObjFactory->nInventor == SWGInventor )
+    if ( nInventor == SWGInventor )
     {
         // No switch, there's only one at the moment
-        OSL_ENSURE( pObjFactory->nIdentifier == SwFlyDrawObjIdentifier,
+        OSL_ENSURE( nObjIdentifier == SwFlyDrawObjIdentifier,
                                         "Wrong inventor or identifier" );
-        pObjFactory->pNewObj = new SwFlyDrawObj();
+        return new SwFlyDrawObj;
     }
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

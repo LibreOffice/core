@@ -21,7 +21,6 @@
 #define INCLUDED_SC_INC_USERDAT_HXX
 
 #include <svx/svdobj.hxx>
-#include <tools/link.hxx>
 #include <svtools/imap.hxx>
 #include "global.hxx"
 #include "address.hxx"
@@ -35,7 +34,7 @@
 
 class ScDrawObjFactory
 {
-    DECL_STATIC_LINK_TYPED( ScDrawObjFactory, MakeUserData, SdrObjFactory *, void );
+    static SdrObjUserData* MakeUserData(sal_uInt32 nInventor, sal_uInt16 nObjIdentifier, SdrObject* pObject);
 public:
     ScDrawObjFactory();
    ~ScDrawObjFactory();

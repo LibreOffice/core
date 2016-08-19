@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_SVDOBJ_HXX
 #define INCLUDED_SVX_SVDOBJ_HXX
 
-#include <typeinfo>
 #include <com/sun/star/uno/Any.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ustring.hxx>
@@ -35,6 +34,8 @@
 #include <tools/weakbase.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/gen.hxx>
+#include <typeinfo>
+#include <functional>
 
 class SfxBroadcaster;
 class Pointer;
@@ -973,6 +974,12 @@ private:
 };
 
 /**
+ * params are (nInventor, nObjIdentifier)
+ */
+typedef std::function<SdrObject* (sal_uInt32, sal_uInt16)> SdrObjCreatorFunc;
+typedef std::function<SdrObjUserData* (sal_uInt32, sal_uInt16, SdrObject*)> SdrObjUserDataCreatorFunc;
+
+/**
  * Whoever creates his own objects must set a link in the SdrObjFactory class.
  * The handler must have the following signature:
  *      void Hdl(SdrObjFactory*)
@@ -983,32 +990,18 @@ private:
 class SVX_DLLPUBLIC SdrObjFactory
 {
 public:
-    sal_uInt32                  nInventor;
-    sal_uInt16                  nIdentifier;
-
-    // for MakeNewObj():
-    SdrPage*                    pPage;
-    SdrModel*                   pModel;
-    SdrObject*                  pNewObj;
-
-    // for MakeNewObjUserData():
-    SdrObject*                  pObj;
-    SdrObjUserData*             pNewData;
+    static SdrObject* MakeNewObject(sal_uInt32 nInventor, sal_uInt16 nObjIdentifier, SdrPage* pPage, SdrModel* pModel=nullptr);
+    static SdrObject* MakeNewObject(sal_uInt32 nInventor, sal_uInt16 nObjIdentifier, const Rectangle& rSnapRect, SdrPage* pPage);
+    static void InsertMakeObjectHdl(SdrObjCreatorFunc rLink);
+    static void RemoveMakeObjectHdl(SdrObjCreatorFunc rLink);
+    static void InsertMakeUserDataHdl(SdrObjUserDataCreatorFunc rLink);
+    static void RemoveMakeUserDataHdl(SdrObjUserDataCreatorFunc rLink);
 
 private:
-
     static SVX_DLLPRIVATE SdrObject* CreateObjectFromFactory(
         sal_uInt32 nInventor, sal_uInt16 nIdentifier, SdrPage* pPage, SdrModel* pModel );
 
-    SVX_DLLPRIVATE SdrObjFactory(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pNewPage, SdrModel* pNewModel);
-
-public:
-    static SdrObject* MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pPage, SdrModel* pModel=nullptr);
-    static SdrObject* MakeNewObject( sal_uInt32 nInventor, sal_uInt16 nIdentifier, const Rectangle& rSnapRect, SdrPage* pPage );
-    static void InsertMakeObjectHdl(const Link<SdrObjFactory*,void>& rLink);
-    static void RemoveMakeObjectHdl(const Link<SdrObjFactory*,void>& rLink);
-    static void InsertMakeUserDataHdl(const Link<SdrObjFactory*,void>& rLink);
-    static void RemoveMakeUserDataHdl(const Link<SdrObjFactory*,void>& rLink);
+    SdrObjFactory() = delete;
 };
 
 typedef tools::WeakReference< SdrObject > SdrObjectWeakRef;

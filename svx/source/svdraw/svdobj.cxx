@@ -3098,33 +3098,15 @@ bool SdrObject::HasText() const
     return false;
 }
 
-SdrObjFactory::SdrObjFactory(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pNewPage, SdrModel* pNewModel)
+SdrObject* SdrObjFactory::CreateObjectFromFactory( sal_uInt32 nInventor, sal_uInt16 nObjIdentifier, SdrPage* , SdrModel*  )
 {
-    nInventor=nInvent;
-    nIdentifier=nIdent;
-    pNewObj=nullptr;
-    pPage=pNewPage;
-    pModel=pNewModel;
-    pObj=nullptr;
-    pNewData=nullptr;
-}
-
-SdrObject* SdrObjFactory::CreateObjectFromFactory( sal_uInt32 nInventor, sal_uInt16 nIdentifier, SdrPage* pPage, SdrModel* pModel )
-{
-    std::unique_ptr<SdrObjFactory> pFact(new SdrObjFactory(nInventor, nIdentifier, pPage, pModel));
-
-    SdrLinkList& rLL = ImpGetUserMakeObjHdl();
-    unsigned n = rLL.GetLinkCount();
-    unsigned i = 0;
-    SdrObject* pObj = nullptr;
-    while (i < n && !pObj)
-    {
-        rLL.GetLink(i).Call(pFact.get());
-        pObj = pFact->pNewObj;
-        i++;
+    for (const auto & i : ImpGetUserMakeObjHdl()) {
+        SdrObject* pObj = i(nInventor, nObjIdentifier);
+        if (pObj) {
+            return pObj;
+        }
     }
-
-    return pObj;
+    return nullptr;
 }
 
 SdrObject* SdrObjFactory::MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pPage, SdrModel* pModel)
@@ -3279,28 +3261,54 @@ SdrObject* SdrObjFactory::MakeNewObject(
     return pObj;
 }
 
-void SdrObjFactory::InsertMakeObjectHdl(const Link<SdrObjFactory*,void>& rLink)
+void SdrObjFactory::InsertMakeObjectHdl(SdrObjCreatorFunc rLink)
 {
-    SdrLinkList& rLL=ImpGetUserMakeObjHdl();
-    rLL.InsertLink(rLink);
+    std::vector<SdrObjCreatorFunc>& rLL=ImpGetUserMakeObjHdl();
+    auto it = std::find_if(rLL.begin(), rLL.end(),
+                        [&rLink] (const SdrObjCreatorFunc& i) {
+                            return rLink.target<SdrObject* (*)(sal_uInt32, sal_uInt16)>() == i.target<SdrObject* (*)(sal_uInt32, sal_uInt16)>();
+                        });
+    if (it != rLL.end()) {
+        OSL_FAIL("SdrObjFactory::InsertMakeObjectHdl(): Link already in place.");
+    } else {
+        rLL.push_back(rLink);
+    }
 }
 
-void SdrObjFactory::RemoveMakeObjectHdl(const Link<SdrObjFactory*,void>& rLink)
+void SdrObjFactory::RemoveMakeObjectHdl(SdrObjCreatorFunc rLink)
 {
-    SdrLinkList& rLL=ImpGetUserMakeObjHdl();
-    rLL.RemoveLink(rLink);
+    std::vector<SdrObjCreatorFunc>& rLL=ImpGetUserMakeObjHdl();
+    auto it = std::find_if(rLL.begin(), rLL.end(),
+                        [&rLink] (const SdrObjCreatorFunc& i) {
+                            return rLink.target<SdrObject* (*)(sal_uInt32, sal_uInt16)>() == i.target<SdrObject* (*)(sal_uInt32, sal_uInt16)>();
+                        });
+    if (it != rLL.end())
+        rLL.erase(it);
 }
 
-void SdrObjFactory::InsertMakeUserDataHdl(const Link<SdrObjFactory*,void>& rLink)
+void SdrObjFactory::InsertMakeUserDataHdl(SdrObjUserDataCreatorFunc rLink)
 {
-    SdrLinkList& rLL=ImpGetUserMakeObjUserDataHdl();
-    rLL.InsertLink(rLink);
+    std::vector<SdrObjUserDataCreatorFunc>& rLL=ImpGetUserMakeObjUserDataHdl();
+    auto it = std::find_if(rLL.begin(), rLL.end(),
+                        [&rLink] (const SdrObjUserDataCreatorFunc& i) {
+                            return rLink.target<SdrObjUserData* (*)(sal_uInt32, sal_uInt16, SdrObject*)>() == i.target<SdrObjUserData* (*)(sal_uInt32, sal_uInt16, SdrObject*)>();
+                        });
+    if (it != rLL.end()) {
+        OSL_FAIL("SdrObjFactory::InsertMakeUserDataHdl(): Link already in place.");
+    } else {
+        rLL.push_back(rLink);
+    }
 }
 
-void SdrObjFactory::RemoveMakeUserDataHdl(const Link<SdrObjFactory*,void>& rLink)
+void SdrObjFactory::RemoveMakeUserDataHdl(SdrObjUserDataCreatorFunc rLink)
 {
-    SdrLinkList& rLL=ImpGetUserMakeObjUserDataHdl();
-    rLL.RemoveLink(rLink);
+    std::vector<SdrObjUserDataCreatorFunc>& rLL=ImpGetUserMakeObjUserDataHdl();
+    auto it = std::find_if(rLL.begin(), rLL.end(),
+                        [&rLink] (const SdrObjUserDataCreatorFunc& i) {
+                            return rLink.target<SdrObjUserData* (*)(sal_uInt32, sal_uInt16, SdrObject*)>() == i.target<SdrObjUserData* (*)(sal_uInt32, sal_uInt16, SdrObject*)>();
+                        });
+    if (it != rLL.end())
+        rLL.erase(it);
 }
 
 namespace svx

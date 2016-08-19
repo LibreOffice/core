@@ -118,7 +118,7 @@ SwDLL::SwDLL()
     // register form::component::Form-Objekt-Factory
     FmFormObjFactory();
 
-    SdrObjFactory::InsertMakeObjectHdl( LINK( &aSwObjectFactory, SwObjectFactory, MakeObject ) );
+    SdrObjFactory::InsertMakeObjectHdl( SwObjectFactory::MakeObject );
 
     SAL_INFO( "sw.ui", "Init Core/UI/Filter" );
     // Initialisation of Statics
@@ -165,7 +165,7 @@ SwDLL::~SwDLL()
     filters_.reset();
     ::FinitCore();
     // sign out Objekt-Factory
-    SdrObjFactory::RemoveMakeObjectHdl(LINK(&aSwObjectFactory, SwObjectFactory, MakeObject ));
+    SdrObjFactory::RemoveMakeObjectHdl( SwObjectFactory::MakeObject );
 #if 0
     // the SwModule must be destroyed
     SwModule** ppShlPtr = (SwModule**) GetAppData(SHL_WRITER);

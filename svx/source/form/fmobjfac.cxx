@@ -57,7 +57,7 @@ FmFormObjFactory::FmFormObjFactory()
 {
     if ( !bInit )
     {
-        SdrObjFactory::InsertMakeObjectHdl(LINK(this, FmFormObjFactory, MakeObject));
+        SdrObjFactory::InsertMakeObjectHdl(FmFormObjFactory::MakeObject);
 
 
         // Konfigurations-css::frame::Controller und NavigationBar registrieren
@@ -108,17 +108,17 @@ namespace
     }
 }
 
-IMPL_STATIC_LINK_TYPED(
-    FmFormObjFactory, MakeObject, SdrObjFactory*, pObjFactory, void)
+SdrObject* FmFormObjFactory::MakeObject(sal_uInt32 nInventor, sal_uInt16 nObjIdentifier)
 {
-    if (pObjFactory->nInventor == FmFormInventor)
+    SdrObject* pNewObj = nullptr;
+    if (nInventor == FmFormInventor)
     {
         OUString sServiceSpecifier;
 
         typedef ::std::vector< ::std::pair< OUString, Any > > PropertyValueArray;
         PropertyValueArray aInitialProperties;
 
-        switch ( pObjFactory->nIdentifier )
+        switch ( nObjIdentifier )
         {
             case OBJ_FM_EDIT:
                 sServiceSpecifier = FM_COMPONENT_EDIT;
@@ -214,9 +214,9 @@ IMPL_STATIC_LINK_TYPED(
 
         // create the actual object
         if ( !sServiceSpecifier.isEmpty() )
-            pObjFactory->pNewObj = new FmFormObj(sServiceSpecifier);
+            pNewObj = new FmFormObj(sServiceSpecifier);
         else
-            pObjFactory->pNewObj = new FmFormObj();
+            pNewObj = new FmFormObj();
 
         // initialize some properties which we want to differ from the defaults
         for (   PropertyValueArray::const_iterator aInitProp = aInitialProperties.begin();
@@ -225,12 +225,13 @@ IMPL_STATIC_LINK_TYPED(
             )
         {
             lcl_initProperty(
-                static_cast< FmFormObj* >( pObjFactory->pNewObj ),
+                static_cast< FmFormObj* >( pNewObj ),
                 aInitProp->first,
                 aInitProp->second
             );
         }
     }
+    return pNewObj;
 }
 
 
