@@ -42,17 +42,17 @@ TARGET=openssl
     @echo "openssl disabled...."
 .ENDIF
 
-OPENSSL_NAME=openssl-0.9.8zh
+OPENSSL_NAME=openssl-1.0.2h
 
 TARFILE_NAME=$(OPENSSL_NAME)
-TARFILE_MD5=c813c065dd53d7bd0a560a870ddd0af5
+TARFILE_MD5=9392e65072ce4b614c1392eefc1f23d0
 
 CONFIGURE_DIR=.
 CONFIGURE_ACTION=config
 CONFIGURE_FLAGS=-I$(SYSBASE)$/usr$/include -L$(SYSBASE)$/usr$/lib shared 
 
 BUILD_DIR=.
-BUILD_ACTION=make CC='$(CC)'
+BUILD_ACTION=make CC='$(CC)' build_libs
 
 OUT2LIB = libssl.*
 OUT2LIB += libcrypto.*
@@ -60,25 +60,32 @@ OUT2INC += include/openssl/*
 
 UNAME=$(shell uname)
 
+.IF "$(COM)"=="GCC" && "$(CCNUMVER)">="000400060000" || "$(OS)"=="WNT" && "$(NASM_PATH)"=="NO_NASM_HOME"
+  NO_ASM="no-asm"
+.ELSE
+  NO_ASM=
+.ENDIF
+
 .IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
     PATCH_FILES=openssllnx.patch
-    ADDITIONAL_FILES:= \
-        libcrypto_OOo_0_9_8zh.map \
-        libssl_OOo_0_9_8zh.map
     .IF "$(CPU)" == "I"
         .IF "$(UNAME)" == "GNU/kFreeBSD"
-            CONFIGURE_ACTION=Configure debian-kfreebsd-i386
+            CONFIGURE_ACTION=Configure debian-kfreebsd-i386 no-dso no-shared $(NO_ASM)
+        .ELIF "$(UNAME)" == "FreeBSD"
+            CONFIGURE_ACTION=Configure BSD-x86-elf no-dso no-shared $(NO_ASM)
         .ELSE
-            CONFIGURE_ACTION=Configure linux-elf
+            CONFIGURE_ACTION=Configure linux-generic32 no-dso no-shared $(NO_ASM)
         .ENDIF
     .ELIF "$(BUILD64)" == "1"
         .IF "$(UNAME)" == "GNU/kFreeBSD"
-            CONFIGURE_ACTION=Configure debian-kfreebsd-amd64
+            CONFIGURE_ACTION=Configure debian-kfreebsd-amd64 no-dso no-shared $(NO_ASM)
+        .ELIF "$(UNAME)" == "FreeBSD"
+            CONFIGURE_ACTION=Configure BSD-x86_64 no-dso no-shared $(NO_ASM)
         .ELSE
-            CONFIGURE_ACTION=Configure linux-generic64
+            CONFIGURE_ACTION=Configure linux-x86_64 no-dso no-shared $(NO_ASM)
         .ENDIF
     .ELSE
-        CONFIGURE_ACTION=Configure linux-generic32
+        CONFIGURE_ACTION=Configure linux-generic32 no-dso no-shared $(NO_ASM)
     .ENDIF
     # if you build openssl as shared library you have to patch the Makefile.Shared "LD_LIBRARY_PATH=$$LD_LIBRARY_PATH \"
     #BUILD_ACTION=make 'SHARED_LDFLAGS=-Wl,--version-script=./lib$$(SHLIBDIRS)_OOo_0_9_8e.map'
@@ -86,9 +93,6 @@ UNAME=$(shell uname)
 
 .IF "$(OS)" == "SOLARIS"
     PATCH_FILES=opensslsol.patch
-    ADDITIONAL_FILES:= \
-        libcrypto_OOo_0_9_8zh.map \
-        libssl_OOo_0_9_8zh.map
     #BUILD_ACTION=make 'SHARED_LDFLAGS=-G -dy -z text -M./lib$$$$$$$$(SHLIBDIRS)_OOo_0_9_8e.map'
 
     # Use BUILD64 when 1 to select new specific 64bit Configurations if necessary
@@ -147,9 +151,13 @@ OUT2BIN += out/libeay32.dll
         .ENDIF
 
         #CONFIGURE_ACTION=cmd /c $(PERL:s!\!/!) configure
-        CONFIGURE_ACTION=$(PERL) configure
+        CONFIGURE_ACTION=$(PERL) configure $(NO_ASM)
         CONFIGURE_FLAGS=VC-WIN32
-        BUILD_ACTION=cmd /c "ms$(EMQ)\do_ms.bat $(subst,/,\ $(normpath,1 $(PERL)))" && nmake -f ms/ntdll.mak
+        .IF "$(NASM_PATH)"=="NO_NASM_HOME"
+          BUILD_ACTION=cmd /c "ms$(EMQ)\do_ms.bat $(subst,/,\ $(normpath,1 $(PERL)))" && nmake -f ms/ntdll.mak
+        .ELSE
+          BUILD_ACTION=cmd /c "ms$(EMQ)\do_nasm.bat $(subst,/,\ $(normpath,1 $(PERL)))" && nmake -f ms/ntdll.mak
+        .ENDIF
 
         OUT2LIB = out32dll$/ssleay32.lib
         OUT2LIB += out32dll$/libeay32.lib
@@ -158,8 +166,6 @@ OUT2BIN += out/libeay32.dll
         OUT2INC = inc32$/openssl$/*
     .ENDIF
 .ENDIF
-
-PATCH_FILES += openssl-0.9.8zh-clang.patch
 
 #set INCLUDE=D:\sol_temp\n\msvc7net3\PlatformSDK\include;D:\sol_temp\n\msvc7net3\include\ && set path=%path%;D:\sol_temp\r\btw\SRC680\perl\bin &&
 

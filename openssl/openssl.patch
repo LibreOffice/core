@@ -1,27 +1,72 @@
---- misc/openssl-0.9.8zh/crypto/x509v3/v3_pci.c	2007-03-05 01:06:47.000000000 +0100
-+++ misc/build/openssl-0.9.8zh/crypto/x509v3/v3_pci.c	2010-03-26 12:04:20.961547300 +0100
-@@ -2,7 +2,7 @@
- /* Contributed to the OpenSSL Project 2004
-  * by Richard Levitte (richard@levitte.org)
-  */
--/* Copyright (c) 2004 Kungliga Tekniska Högskolan
-+/* Copyright (c) 2004 Kungliga Tekniska Hoegskolan
-  * (Royal Institute of Technology, Stockholm, Sweden).
-  * All rights reserved.
-  *
---- misc/openssl-0.9.8zh/crypto/x509v3/v3_pcia.c	2004-12-28 01:21:33.000000000 +0100
-+++ misc/build/openssl-0.9.8zh/crypto/x509v3/v3_pcia.c	2010-03-26 12:04:20.961547300 +0100
-@@ -3,7 +3,7 @@
- /* Contributed to the OpenSSL Project 2004
-  * by Richard Levitte (richard@levitte.org)
-  */
--/* Copyright (c) 2004 Kungliga Tekniska Högskolan
-+/* Copyright (c) 2004 Kungliga Tekniska Hoegskolan
-  * (Royal Institute of Technology, Stockholm, Sweden).
-  * All rights reserved.
-  *
---- misc/openssl-0.9.8zh/ms/do_ms.bat	2009-07-28 14:51:19.000000000 +0200
-+++ misc/build/openssl-0.9.8zh/ms/do_ms.bat	2010-03-26 12:19:19.399047300 +0100
+diff -ur misc/openssl-1.0.2h/Configure misc/build/openssl-1.0.2h/Configure
+--- misc/openssl-1.0.2h/Configure	2016-05-03 06:44:42.000000000 -0700
++++ misc/build/openssl-1.0.2h/Configure	2016-08-14 23:51:42.672229000 -0700
+@@ -475,19 +475,20 @@
+ "android-mips","gcc:-mandroid -I\$(ANDROID_DEV)/include -B\$(ANDROID_DEV)/lib -O3 -Wall::-D_REENTRANT::-ldl:BN_LLONG RC4_CHAR RC4_CHUNK DES_INT DES_UNROLL BF_PTR:${mips32_asm}:o32:dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+ 
+ #### *BSD [do see comment about ${BSDthreads} above!]
+-"BSD-generic32","gcc:-O3 -fomit-frame-pointer -Wall::${BSDthreads}:::BN_LLONG RC2_CHAR RC4_INDEX DES_INT DES_UNROLL:${no_asm}:dlfcn:bsd-gcc-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+-"BSD-x86",	"gcc:-DL_ENDIAN -O3 -fomit-frame-pointer -Wall::${BSDthreads}:::BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:${x86_asm}:a.out:dlfcn:bsd-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+-"BSD-x86-elf",	"gcc:-DL_ENDIAN -O3 -fomit-frame-pointer -Wall::${BSDthreads}:::BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:${x86_elf_asm}:dlfcn:bsd-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+-"debug-BSD-x86-elf",	"gcc:-DL_ENDIAN -O3 -Wall -g::${BSDthreads}:::BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:${x86_elf_asm}:dlfcn:bsd-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+-"BSD-sparcv8",	"gcc:-DB_ENDIAN -O3 -mcpu=v8 -Wall::${BSDthreads}:::BN_LLONG RC2_CHAR RC4_INDEX DES_INT DES_UNROLL:${sparcv8_asm}:dlfcn:bsd-gcc-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
++"BSD-generic32","$ENV{'FREEBSDCC'}:-O3 -fomit-frame-pointer -Wall $ENV{'CFLAGS'}::${BSDthreads}:::BN_LLONG RC2_CHAR RC4_INDEX DES_INT DES_UNROLL:${no_asm}:dlfcn:bsd-gcc-shared:-fPIC::.so.\$(SHLIBVER)",
++"BSD-x86",	"$ENV{'FREEBSDCC'}:-DL_ENDIAN -O3 -fomit-frame-pointer -Wall $ENV{'CFLAGS'}::${BSDthreads}:::BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:${x86_asm}:a.out:dlfcn:bsd-shared:-fPIC::.so.\$(SHLIBVER)",
++"BSD-x86-elf",	"$ENV{'FREEBSDCC'}:-DL_ENDIAN -O3 -fomit-frame-pointer -Wall $ENV{'CFLAGS'}::${BSDthreads}:::BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:${x86_elf_asm}:dlfcn:bsd-shared:-fPIC::.so.\$(SHLIBVER)",
++"debug-BSD-x86-elf",	"$ENV{'FREEBSDCC'}:-DL_ENDIAN -O3 -Wall -g $ENV{'CFLAGS'}::${BSDthreads}:::BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:${x86_elf_asm}:dlfcn:bsd-shared:-fPIC::.so.\$(SHLIBVER)",
++"BSD-sparcv8", "$ENV{'FREEBSDCC'}:-DB_ENDIAN -O3 -mcpu=v8 -Wall $ENV{'CFLAGS'}::${BSDthreads}:::BN_LLONG RC2_CHAR RC4_INDEX DES_INT DES_UNROLL:${sparcv8_asm}:dlfcn:bsd-gcc-shared:-fPIC::.so.\$(SHLIBVER)",
+ 
+-"BSD-generic64","gcc:-O3 -Wall::${BSDthreads}:::SIXTY_FOUR_BIT_LONG RC4_CHUNK DES_INT DES_UNROLL:${no_asm}:dlfcn:bsd-gcc-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
++"BSD-generic64","$ENV{'FREEBSDCC'}:-O3 -Wall $ENV{'CFLAGS'}::${BSDthreads}:::SIXTY_FOUR_BIT_LONG RC4_CHUNK DES_INT DES_UNROLL:${no_asm}:dlfcn:bsd-gcc-shared:-fPIC::.so.\$(SHLIBVER)",
+ # -DMD32_REG_T=int doesn't actually belong in sparc64 target, it
+ # simply *happens* to work around a compiler bug in gcc 3.3.3,
+ # triggered by RIPEMD160 code.
+-"BSD-sparc64",	"gcc:-DB_ENDIAN -O3 -DMD32_REG_T=int -Wall::${BSDthreads}:::BN_LLONG RC2_CHAR RC4_CHUNK DES_INT DES_PTR DES_RISC2 BF_PTR:${sparcv9_asm}:dlfcn:bsd-gcc-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+-"BSD-ia64",	"gcc:-DL_ENDIAN -O3 -Wall::${BSDthreads}:::SIXTY_FOUR_BIT_LONG RC4_CHUNK DES_UNROLL DES_INT:${ia64_asm}:dlfcn:bsd-gcc-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+-"BSD-x86_64",	"cc:-DL_ENDIAN -O3 -Wall::${BSDthreads}:::SIXTY_FOUR_BIT_LONG RC4_CHUNK DES_INT DES_UNROLL:${x86_64_asm}:elf:dlfcn:bsd-gcc-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
++"BSD-sparc64",	"$ENV{'FREEBSDCC'}:-DB_ENDIAN -O3 -DMD32_REG_T=int -Wall $ENV{'CFLAGS'}::${BSDthreads}:::BN_LLONG RC2_CHAR RC4_CHUNK DES_INT DES_PTR DES_RISC2 BF_PTR:${sparcv9_asm}:dlfcn:bsd-gcc-shared:-fPIC::.so.\$(SHLIBVER)",
++"BSD-ia64",	"$ENV{'FREEBSDCC'}:-DL_ENDIAN -O3 -Wall $ENV{'CFLAGS'}::${BSDthreads}:::SIXTY_FOUR_BIT_LONG RC4_CHUNK DES_UNROLL DES_INT:${ia64_asm}:dlfcn:bsd-gcc-shared:-fPIC::.so.\$(SHLIBVER)",
++"BSD-x86_64",	"$ENV{'FREEBSDCC'}:-DL_ENDIAN -O3 -Wall $ENV{'CFLAGS'}::${BSDthreads}:::SIXTY_FOUR_BIT_LONG RC4_CHUNK DES_INT DES_UNROLL:${x86_64_asm}:elf:dlfcn:bsd-gcc-shared:-fPIC::.so.\$(SHLIBVER)",
++"BSD-alpha",	"$ENV{'FREEBSDCC'}:-DL_ENDIAN -O -Wall $ENV{'CFLAGS'}::${BSDthreads}:::SIXTY_FOUR_BIT_LONG RC4_CHUNK DES_UNROLL DES_RISC1:${no_asm}:dlfcn:bsd-gcc-shared:-fPIC::.so.\$(SHLIBVER)",
+ 
+ "bsdi-elf-gcc",     "gcc:-DPERL5 -DL_ENDIAN -fomit-frame-pointer -O3 -march=i486 -Wall::(unknown)::-ldl:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:${x86_elf_asm}:dlfcn:bsd-gcc-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+ 
+@@ -2031,10 +2032,12 @@
+ 	if ( $perl =~ m@^/@) {
+ 	    &dofile("tools/c_rehash",$perl,'^#!/', '#!%s','^my \$dir;$', 'my $dir = "' . $openssldir . '";', '^my \$prefix;$', 'my $prefix = "' . $prefix . '";');
+ 	    &dofile("apps/CA.pl",$perl,'^#!/', '#!%s');
++	    &dofile("apps/tsget",$perl,'^#!/', '#!%s');
+ 	} else {
+ 	    # No path for Perl known ...
+ 	    &dofile("tools/c_rehash",'/usr/local/bin/perl','^#!/', '#!%s','^my \$dir;$', 'my $dir = "' . $openssldir . '";',  '^my \$prefix;$', 'my $prefix = "' . $prefix . '";');
+ 	    &dofile("apps/CA.pl",'/usr/local/bin/perl','^#!/', '#!%s');
++	    &dofile("apps/tsget",'/usr/local/bin/perl',,'^#!/', '#!%s');
+ 	}
+ 	if ($depflags ne $default_depflags && !$make_depend) {
+             $warn_make_depend++;
+diff -ur misc/openssl-1.0.2h/config misc/build/openssl-1.0.2h/config
+--- misc/openssl-1.0.2h/config	2016-05-03 06:44:42.000000000 -0700
++++ misc/build/openssl-1.0.2h/config	2016-08-15 00:25:50.870874000 -0700
+@@ -753,14 +753,8 @@
+   sparc64-*-*bsd*)	OUT="BSD-sparc64" ;;
+   ia64-*-*bsd*)		OUT="BSD-ia64" ;;
+   amd64-*-*bsd*)	OUT="BSD-x86_64" ;;
+-  *86*-*-*bsd*)		# mimic ld behaviour when it's looking for libc...
+-			if [ -L /usr/lib/libc.so ]; then	# [Free|Net]BSD
+-			    libc=/usr/lib/libc.so
+-			else					# OpenBSD
+-			    # ld searches for highest libc.so.* and so do we
+-			    libc=`(ls /usr/lib/libc.so.* /lib/libc.so.* | tail -1) 2>/dev/null`
+-			fi
+-			case "`(file -L $libc) 2>/dev/null`" in
++  *86*-*-*bsd*)	
++			case "`(file -L /bin/sh) 2>/dev/null`" in
+ 			*ELF*)	OUT="BSD-x86-elf" ;;
+ 			*)	OUT="BSD-x86"; options="$options no-sse2" ;;
+ 			esac ;;
+diff -ur misc/openssl-1.0.2h/ms/do_ms.bat misc/build/openssl-1.0.2h/ms/do_ms.bat
+--- misc/openssl-1.0.2h/ms/do_ms.bat	2016-05-03 06:44:42.000000000 -0700
++++ misc/build/openssl-1.0.2h/ms/do_ms.bat	2016-08-14 23:49:39.418111000 -0700
 @@ -1,11 +1,11 @@
  
 -perl util\mkfiles.pl >MINFO
@@ -41,9 +86,10 @@
 -perl util\mkdef.pl 32 ssleay > ms\ssleay32.def
 +%1 util\mkdef.pl 32 libeay > ms\libeay32.def
 +%1 util\mkdef.pl 32 ssleay > ms\ssleay32.def
---- misc/openssl-0.9.8zh/util/mk1mf.pl	2009-09-20 14:46:42.000000000 +0200
-+++ misc/build/openssl-0.9.8zh/util/mk1mf.pl	2010-03-26 12:04:20.977172300 +0100
-@@ -128,7 +128,7 @@
+diff -ur misc/openssl-1.0.2h/util/mk1mf.pl misc/build/openssl-1.0.2h/util/mk1mf.pl
+--- misc/openssl-1.0.2h/util/mk1mf.pl	2016-05-03 06:44:42.000000000 -0700
++++ misc/build/openssl-1.0.2h/util/mk1mf.pl	2016-08-14 23:49:39.419397000 -0700
+@@ -163,7 +163,7 @@
  $inc_def="outinc";
  $tmp_def="tmp";
  
@@ -52,8 +98,8 @@
  $mkdir="-mkdir" unless defined $mkdir;
  
  ($ssl,$crypto)=("ssl","crypto");
-@@ -290,6 +290,11 @@
- 	chop;
+@@ -345,6 +345,11 @@
+ 	s/\s*$//; # was chop, didn't work in mixture of perls for Windows...
  
  	($key,$val)=/^([^=]+)=(.*)/;
 +
@@ -64,19 +110,11 @@
  	if ($key eq "RELATIVE_DIRECTORY")
  		{
  		if ($lib ne "")
-@@ -730,7 +735,7 @@
- printf OUT <<EOF;
- #ifdef $platform_cpp_symbol
-   /* auto-generated/updated by util/mk1mf.pl for crypto/cversion.c */
--  #define CFLAGS "$cc $cflags"
-+  #define CFLAGS "$cflags"
-   #define PLATFORM "$platform"
- EOF
- printf OUT "  #define DATE \"%s\"\n", scalar gmtime();
---- misc/openssl-0.9.8zh/util/pl/VC-32.pl	2010-02-04 02:10:24.000000000 +0100
-+++ misc/build/openssl-0.9.8zh/util/pl/VC-32.pl	2010-03-26 12:04:20.977172300 +0100
-@@ -32,7 +32,7 @@
- $l_flags =~ s/-L(\S+)/\/libpath:$1/g;
+diff -ur misc/openssl-1.0.2h/util/pl/VC-32.pl misc/build/openssl-1.0.2h/util/pl/VC-32.pl
+--- misc/openssl-1.0.2h/util/pl/VC-32.pl	2016-05-03 06:44:42.000000000 -0700
++++ misc/build/openssl-1.0.2h/util/pl/VC-32.pl	2016-08-14 23:49:39.420331000 -0700
+@@ -30,7 +30,7 @@
+ my $ff = "";
  
  # C compiler stuff
 -$cc='cl';
@@ -84,51 +122,3 @@
  if ($FLAVOR =~ /WIN64/)
      {
      # Note that we currently don't have /WX on Win64! There is a lot of
-@@ -103,21 +103,21 @@
-     }
- 
-     $cc='$(CC)';
--    $base_cflags=' /W3 /WX /GF /Gy /nologo -DUNICODE -D_UNICODE -DOPENSSL_SYSNAME_WINCE -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DNO_CHMOD -I$(WCECOMPAT)/include -DOPENSSL_SMALL_FOOTPRINT';
-+    $base_cflags=' -W3 -WX -GF -Gy -nologo -DUNICODE -D_UNICODE -DOPENSSL_SYSNAME_WINCE -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DNO_CHMOD -I$(WCECOMPAT)/include -DOPENSSL_SMALL_FOOTPRINT';
-     $base_cflags.=" $wcecdefs";
--    $opt_cflags=' /MC /O1i';	# optimize for space, but with intrinsics...
--    $dbg_clfags=' /MC /Od -DDEBUG -D_DEBUG';
-+    $opt_cflags=' -MC -O1i';	# optimize for space, but with intrinsics...
-+    $dbg_clfags=' -MC -Od -DDEBUG -D_DEBUG';
-     $lflags="/nologo /opt:ref $wcelflag";
-     }
- else	# Win32
-     {
--    $base_cflags=' /W3 /WX /Gs0 /GF /Gy /nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32';
-+    $base_cflags=' -W3 -WX -Gs0 -GF -Gy -nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32';
-     $base_cflags.=' -D_CRT_SECURE_NO_DEPRECATE';	# shut up VC8
-     $base_cflags.=' -D_CRT_NONSTDC_NO_DEPRECATE';	# shut up VC8
--    my $f = $shlib || $fips ?' /MD':' /MT';
--    $lib_cflag='/Zl' if (!$shlib);	# remove /DEFAULTLIBs from static lib
--    $opt_cflags=$f.' /Ox /O2 /Ob2';
--    $dbg_cflags=$f.'d /Od -DDEBUG -D_DEBUG';
-+    my $f = $shlib || $fips ?' -MD':' -MT';
-+    $lib_cflag='-Zl' if (!$shlib);	# remove /DEFAULTLIBs from static lib
-+    $opt_cflags=$f.' -Ox -O2 -Ob2';
-+    $dbg_cflags=$f.'d -Od -DDEBUG -D_DEBUG';
-     $lflags="/nologo /subsystem:console /opt:ref";
-     }
- $mlflags='';
-@@ -138,7 +138,7 @@
- 	}
- 
- $obj='.obj';
--$ofile="/Fo";
-+$ofile="-Fo.\\";
- 
- # EXE linking stuff
- $link="link";
-@@ -298,7 +298,7 @@
- 	$tmp_def='tmp32dll_$(TARGETCPU)';
- 	}
- 
--$cflags.=" /Fd$out_def";
-+$cflags.=" -Fd$out_def";
- 
- sub do_lib_rule
- 	{

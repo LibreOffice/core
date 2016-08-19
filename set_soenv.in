@@ -88,7 +88,7 @@ my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE,
 my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV, $SOLVER, $CONFIG, 
      $USR_BIN, $USR_LIB, $USR_LOCAL, $USR_CCS, $JAVA_BIN, $JAVA_LIB, $JAVA_INCLUDE,
      $SOLARENVINC, $USR_DT, $USR_OPENWIN, $XLIB, $XINC,
-     $CYGWIN_PATH, $language, $dict, $ASM_PATH, $NSIS_PATH, $PERL_PATH );
+     $CYGWIN_PATH, $language, $dict, $ASM_PATH, $NASM_PATH, $NSIS_PATH, $PERL_PATH );
 
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
@@ -905,6 +905,11 @@ if ($platform =~ m/cygwin/)
 {  $ASM_PATH = PathFormat('@ASM_HOME@');
 }
 
+# nasm.exe assembler path for Windows users.
+if ($platform =~ m/cygwin/)
+{  $NASM_PATH = PathFormat('@NASM_HOME@');
+}
+
 #
 # E. Determining the envionment values based on the information
 #    that was gathered earlier on.
@@ -1209,6 +1214,9 @@ elsif ($platform =~ m/cygwin/)
 
    if ( $ASM_PATH ne "ASM_IN_PATH" )
    {   $PATH          .= $ps.CygFormat($ASM_PATH);
+   } 
+   if ( $NASM_PATH ne "NASM_IN_PATH" && $NASM_PATH ne "NO_NASM_HOME" && $NASM_PATH ne "" )
+   {   $PATH          .= $ps.CygFormat($NASM_PATH);
    } 
    # zip.exe / unzip.exe path for Windows users.
    my $zip_home_path = PathFormat('@ZIP_HOME@');
@@ -1554,6 +1562,7 @@ ToFile( "ANT_LIB",           PathFormat("@ANT_LIB@"), "e" );
 ToFile( "ANT",               PathFormat("@ANT@"), "e" );
 ToFile( "JDKLIB",            $JAVA_LIB,          "e" );
 ToFile( "ASM_PATH",          $ASM_PATH,          "e" );
+ToFile( "NASM_PATH",         $NASM_PATH,         "e" );
 ToFile( "BUILD_SOSL",        $BUILD_SOSL,        "e" );
 ToFile( "FRAMEWORKSHOME",    $FRAMEWORKSHOME,    "e" );
 ToFile( "Empty",             $empty,             "n" );
