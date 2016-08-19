@@ -1032,7 +1032,8 @@ static void doc_iniUnoCommands ()
         OUString(".uno:NumberFormatPercent"),
         OUString(".uno:NumberFormatDate"),
         OUString(".uno:SortAscending"),
-        OUString(".uno:SortDescending")
+        OUString(".uno:SortDescending"),
+        OUString(".uno:TrackChanges"),
     };
 
     util::URL aCommandURL;

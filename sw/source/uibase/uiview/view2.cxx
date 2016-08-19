@@ -600,6 +600,14 @@ void SwView::Execute(SfxRequest &rReq)
                     ? nsRedlineMode_t::REDLINE_ON : 0;
                 const sal_uInt16 nMode = m_pWrtShell->GetRedlineMode();
                 m_pWrtShell->SetRedlineModeAndCheckInsMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
+
+                // Notify all view shells of this document, as the track changes mode is document-global.
+                SwDocShell* pDocShell = GetDocShell();
+                for (SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst(pDocShell); pViewFrame; pViewFrame = SfxViewFrame::GetNext(*pViewFrame, pDocShell))
+                {
+                    pViewFrame->GetBindings().Invalidate(FN_REDLINE_ON);
+                    pViewFrame->GetBindings().Update(FN_REDLINE_ON);
+                }
             }
         }
         break;

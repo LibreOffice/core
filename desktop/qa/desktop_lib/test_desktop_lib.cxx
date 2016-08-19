@@ -29,6 +29,9 @@
 #include <svl/srchitem.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <unotools/tempfile.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/bindings.hxx>
 #include <cairo.h>
 
 #include <lib/init.hxx>
@@ -42,7 +45,8 @@ public:
     DesktopLOKTest() : UnoApiTest("/desktop/qa/data/"),
     m_nSelectionBeforeSearchResult(0),
     m_nSelectionAfterSearchResult(0),
-    m_bModified(false)
+    m_bModified(false),
+    m_nTrackChanges(0)
     {
     }
 
@@ -93,6 +97,7 @@ public:
     void testContextMenuImpress();
     void testNotificationCompression();
     void testRedlineWriter();
+    void testTrackChanges();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -121,6 +126,7 @@ public:
     CPPUNIT_TEST(testContextMenuImpress);
     CPPUNIT_TEST(testNotificationCompression);
     CPPUNIT_TEST(testRedlineWriter);
+    CPPUNIT_TEST(testTrackChanges);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -137,6 +143,7 @@ public:
     // for testModifiedStatus
     osl::Condition m_aStateChangedCondition;
     bool m_bModified;
+    int m_nTrackChanges;
 
     // for testContextMenu{Calc, Writer}
     osl::Condition m_aContextMenuCondition;
@@ -226,6 +233,8 @@ void DesktopLOKTest::callbackImpl(int nType, const char* pPayload)
             m_bModified = aPayload.copy(aPrefix.getLength()).toBoolean();
             m_aStateChangedCondition.set();
         }
+        else if (aPayload.startsWith(".uno:TrackChanges=") && aPayload.endsWith("=true"))
+            ++m_nTrackChanges;
     }
     break;
     case LOK_CALLBACK_CONTEXT_MENU:
@@ -786,6 +795,29 @@ void DesktopLOKTest::testModifiedStatus()
     // There was no callback about the modified status change.
     CPPUNIT_ASSERT(!m_bModified);
     */
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void DesktopLOKTest::testTrackChanges()
+{
+    // Load a document and create two views.
+    LibLibreOffice_Impl aOffice;
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    pDocument->pClass->initializeForRendering(pDocument, nullptr);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->createView(pDocument);
+    pDocument->pClass->initializeForRendering(pDocument, nullptr);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    Scheduler::ProcessEventsToIdle();
+
+    // Enable trak changes and assert that both views get notified.
+    m_nTrackChanges = 0;
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:TrackChanges", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+    // This was 1, only the active view was notified.
+    CPPUNIT_ASSERT_EQUAL(2, m_nTrackChanges);
 
     comphelper::LibreOfficeKit::setActive(false);
 }
