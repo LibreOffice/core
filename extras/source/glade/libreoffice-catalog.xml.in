@@ -837,5 +837,8 @@
     <glade-widget-class title="Notebookbar ToolBox" name="sfxlo-NotebookbarToolBox"
                         generic-name="Notebookbar ToolBox" parent="GtkToolbar"
                         icon-name="widget-gtk-toolbar"/>
+    <glade-widget-class title="Vertical box hiding childs depending on context" name="sfxlo-ContextVBox"
+                        generic-name="ContextVBox" parent="GtkBox"
+                        icon-name="widget-gtk-box"/>
   </glade-widget-classes>
 </glade-catalog>

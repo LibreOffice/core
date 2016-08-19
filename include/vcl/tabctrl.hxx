@@ -23,6 +23,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 #include <vcl/EnumContext.hxx>
+#include <sfx2/notebookbar/NotebookbarContextControl.hxx>
 
 struct ImplTabItem;
 struct ImplTabCtrlData;
@@ -196,13 +197,14 @@ public:
 
 class NotebookBar;
 
-class VCL_DLLPUBLIC NotebookbarTabControl : public TabControl
+class VCL_DLLPUBLIC NotebookbarTabControl : public TabControl,
+                                            public NotebookbarContextControl
 {
 public:
     NotebookbarTabControl( vcl::Window* pParent );
 
-    void SetContext( vcl::EnumContext::Context eContext );
-    void SetIconClickHdl( Link<NotebookBar*, void> aHdl );
+    void SetContext( vcl::EnumContext::Context eContext ) override;
+    void SetIconClickHdl( Link<NotebookBar*, void> aHdl ) override;
 
     virtual sal_uInt16  GetPageId( const Point& rPos ) const override;
     virtual void        SelectTabPage( sal_uInt16 nPageId ) override;

@@ -19,10 +19,12 @@
 #include <vcl/vclmedit.hxx>
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/IContext.hxx>
 #include <set>
 
 class VCL_DLLPUBLIC VclContainer : public vcl::Window,
-                                   public vcl::IPrioritable
+                                   public vcl::IPrioritable,
+                                   public vcl::IContext
 {
 public:
     VclContainer(vcl::Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN);

@@ -44,8 +44,6 @@ void TabPage::ImplInit( vcl::Window* pParent, WinBits nStyle )
     // otherwise they will paint with a wrong background
     if( IsNativeControlSupported(ControlType::TabBody, ControlPart::Entire) && GetParent() && (GetParent()->GetType() == WINDOW_TABCONTROL) )
         EnableChildTransparentMode();
-
-    maContext.push_back( vcl::EnumContext::Context::Context_Any );
 }
 
 void TabPage::ImplInitSettings()
@@ -73,12 +71,14 @@ void TabPage::ImplInitSettings()
 
 TabPage::TabPage( vcl::Window* pParent, WinBits nStyle ) :
     Window( WINDOW_TABPAGE )
+    , IContext()
 {
     ImplInit( pParent, nStyle );
 }
 
 TabPage::TabPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription)
     : Window(WINDOW_TABPAGE)
+    , IContext()
 {
     ImplInit(pParent, 0);
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
@@ -221,24 +221,6 @@ void TabPage::SetPosPixel(const Point& rAllocPos)
     {
         VclContainer::setLayoutAllocation(*GetWindow(GetWindowType::FirstChild), Point(0, 0), aAllocation);
     }
-}
-
-void TabPage::SetContext(const std::vector<vcl::EnumContext::Context>& aContext)
-{
-    maContext = aContext;
-}
-
-bool TabPage::HasContext( const vcl::EnumContext::Context eContext ) const
-{
-    auto aFind = std::find(maContext.begin(), maContext.end(), eContext);
-    if (aFind == maContext.end())
-        return false;
-    return true;
-}
-
-const std::vector< vcl::EnumContext::Context >& TabPage::GetContext() const
-{
-    return maContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

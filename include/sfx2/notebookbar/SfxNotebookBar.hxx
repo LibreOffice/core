@@ -46,7 +46,7 @@ private:
     static css::uno::Reference<css::frame::XLayoutManager> m_xLayoutManager;
     static css::uno::Reference<css::frame::XFrame> m_xFrame;
 
-    DECL_STATIC_LINK_TYPED(SfxNotebookBar, ToggleMenubar, NotebookBar*, void);
+    DECL_STATIC_LINK_TYPED(SfxNotebookBar, OpenNotebookbarPopupMenu, NotebookBar*, void);
 };
 
 } // namespace sfx2

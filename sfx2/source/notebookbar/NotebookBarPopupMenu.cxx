@@ -15,6 +15,7 @@
 #include <sfxlocal.hrc>
 #include <sfx2/sfxresid.hxx>
 #include "NotebookBarPopupMenu.hxx"
+#include <vcl/tabctrl.hxx>
 
 using namespace sfx2;
 using namespace css::uno;

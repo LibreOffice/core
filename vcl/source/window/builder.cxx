@@ -2867,9 +2867,11 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
             else if (name.equals("style"))
             {
                 int nPriority = 0;
-                handleStyle(reader, nPriority);
+                std::vector<vcl::EnumContext::Context> aContext = handleStyle(reader, nPriority);
                 if (nPriority != 0)
                     dynamic_cast<vcl::IPrioritable*>(pCurrentChild.get())->SetPriority(nPriority);
+                if (aContext.size() != 0)
+                    dynamic_cast<vcl::IContext*>(pCurrentChild.get())->SetContext(aContext);
             }
             else
             {
