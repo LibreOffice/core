@@ -460,7 +460,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 // --display and its argument are handled "out of line"
                 // in Unix-only desktop/unx/source/splashx.c and vcl/unx/*,
                 // and just ignored here
-                supplier.next(&aArg);
+                (void)supplier.next(&aArg);
             }
             else if ( oArg == "convert-to" )
             {
