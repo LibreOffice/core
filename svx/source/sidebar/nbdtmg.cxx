@@ -253,13 +253,15 @@ BulletsTypeMgr::BulletsTypeMgr()
 BulletsTypeMgr::BulletsTypeMgr(const BulletsTypeMgr& aTypeMgr):
     NBOTypeMgrBase(aTypeMgr)
 {
-    for (sal_uInt16 i=0;i<DEFAULT_BULLET_TYPES;i++)
+    for (sal_uInt16 i=0; i < DEFAULT_BULLET_TYPES; ++i)
     {
-        pActualBullets[i]->bIsCustomized = aTypeMgr.pActualBullets[i]->bIsCustomized;
-        pActualBullets[i]->cBulletChar = aTypeMgr.pActualBullets[i]->cBulletChar;
-        pActualBullets[i]->aFont = aTypeMgr.pActualBullets[i]->aFont;
-        pActualBullets[i]->sDescription = aTypeMgr. pActualBullets[i]->sDescription;
-        pActualBullets[i]->eType = aTypeMgr. pActualBullets[i]->eType;
+        const BulletsSettings_Impl* pSrcBullet = aTypeMgr.pActualBullets[i];
+        BulletsSettings_Impl* pTargetBullet = pActualBullets[i];
+        pTargetBullet->bIsCustomized = pSrcBullet->bIsCustomized;
+        pTargetBullet->cBulletChar = pSrcBullet->cBulletChar;
+        pTargetBullet->aFont = pSrcBullet->aFont;
+        pTargetBullet->sDescription = pSrcBullet->sDescription;
+        pTargetBullet->eType = pSrcBullet->eType;
     }
 }
 
