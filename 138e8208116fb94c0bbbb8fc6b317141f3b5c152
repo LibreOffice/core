@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_0f3ad536",
+        "filename": "avmedia/source/framework/mediacontrol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-20T22:26:25Z",
+      "side": 1,
+      "message": "Perhaps \"[No media selected]\" would be more appropriate, one should normally see this label only when a media toolbar is set to be visible and no media is selected ... \n\nYou really don\u0027t want users to insert anything here (they should use \u0027Insert\u0027 button for that)",
+      "revId": "138e8208116fb94c0bbbb8fc6b317141f3b5c152",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_ef34c14b",
+        "filename": "include/avmedia/MediaControlBase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-20T22:26:25Z",
+      "side": 1,
+      "message": "Edit is an editable field. Isn\u0027t this meant to be a fixed label that the users actually can\u0027t edit? (FixedText is appropriate then)\n\nAlso, unless you really intend to add URL label to *both* sidebar and toolbar, maybe it\u0027s not so ideal to add it to a base class (but to a derived MediaControl class instead)",
+      "revId": "138e8208116fb94c0bbbb8fc6b317141f3b5c152",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
