@@ -101,10 +101,11 @@ private:
     ::sfx2::sidebar::ControllerItem maMetricController;
     ::sfx2::sidebar::ControllerItem maCloseMasterController;
 
-    std::unique_ptr< XFillColorItem > mpColorItem;
-    std::unique_ptr< XFillGradientItem > mpGradientItem;
-    std::unique_ptr< XFillHatchItem > mpHatchItem;
-    std::unique_ptr< XFillBitmapItem > mpBitmapItem;
+    std::unique_ptr< SvxPageItem >          mpPageItem;
+    std::unique_ptr< XFillColorItem >       mpColorItem;
+    std::unique_ptr< XFillGradientItem >    mpGradientItem;
+    std::unique_ptr< XFillHatchItem >       mpHatchItem;
+    std::unique_ptr< XFillBitmapItem >      mpBitmapItem;
 
     bool mbEditModeChangePending;
 

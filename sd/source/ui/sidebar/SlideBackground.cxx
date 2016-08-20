@@ -102,6 +102,7 @@ SlideBackground::SlideBackground(
     maDspObjController(SID_DISPLAY_MASTER_OBJECTS, *pBindings, *this),
     maMetricController(SID_ATTR_METRIC, *pBindings, *this),
     maCloseMasterController(SID_CLOSE_MASTER_VIEW, *pBindings, *this),
+    mpPageItem( new SvxPageItem(SID_ATTR_PAGE) ),
     mpColorItem(),
     mpGradientItem(),
     mpHatchItem(),
@@ -529,6 +530,10 @@ void SlideBackground::dispose()
     maMetricController.dispose();
     maCloseMasterController.dispose();
 
+    mpPageItem.reset();
+    mpColorItem.reset();
+    mpHatchItem.reset();
+    mpBitmapItem.reset();
     PanelLayout::dispose();
 }
 
@@ -725,13 +730,11 @@ void SlideBackground::NotifyItemUpdate(
 
         case SID_ATTR_PAGE:
         {
-            const SvxPageItem* pPageItem = nullptr;
-            if (eState >= SfxItemState::DEFAULT)
-                pPageItem = dynamic_cast< const SvxPageItem* >(pState);
-            if (pPageItem)
+            if (eState >= SfxItemState::DEFAULT &&
+                pState && dynamic_cast< const SvxPageItem *>( pState ) !=  nullptr)
             {
-                bool bIsLandscape = pPageItem->IsLandscape();
-
+                mpPageItem.reset( static_cast<SvxPageItem*>(pState->Clone()) );
+                bool bIsLandscape = mpPageItem->IsLandscape();
                 mpPaperOrientation->SelectEntryPos( bIsLandscape ? 0 : 1 );
             }
         }
@@ -827,8 +830,9 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
     if(mpPaperOrientation->GetSelectEntryPos() == 0)
         Swap(aSize);
 
-    SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE,aSize);
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem });
+    mpPageItem->SetLandscape(mpPaperOrientation->GetSelectEntryPos() == 0);
+    SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE, aSize);
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem, mpPageItem.get() });
 }
 
 IMPL_LINK_NOARG_TYPED(SlideBackground, FillColorHdl, ListBox&, void)
