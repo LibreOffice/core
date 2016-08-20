@@ -52,6 +52,7 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     mpZoomToolBox = VclPtr<ToolBox>::Create(this, WB_3DLOOK) ;
     mpZoomListBox = VclPtr<ListBox>::Create( mpZoomToolBox.get(), WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL | WB_3DLOOK ) ;
     mpTimeEdit = VclPtr<Edit>::Create(this, WB_CENTER | WB_READONLY | WB_BORDER | WB_3DLOOK ) ;
+    mpMediaPath = VclPtr<Edit>::Create(this, WB_CENTER | WB_READONLY | WB_BORDER | WB_3DLOOK ) ;
 
     SetBackground();
     SetPaintTransparent( true );
@@ -74,6 +75,14 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     mpTimeEdit->SetSizePixel( Size( mpTimeEdit->GetTextWidth( aTimeText ) + 8, mpPlayToolBox->GetSizePixel().Height() ) );
     mpTimeEdit->SetControlBackground( Application::GetSettings().GetStyleSettings().GetWindowColor() );
     maMinSize.Width() += mpTimeEdit->GetSizePixel().Width();
+
+    const OUString aMediaPath( " Insert Media Path Here " );
+    mpMediaPath->SetText(aMediaPath);
+    mpMediaPath->SetUpdateMode( false );
+    mpMediaPath->SetSizePixel( Size( mpMediaPath->GetTextWidth( aMediaPath ) + 8, mpPlayToolBox->GetSizePixel().Height() ) );
+    mpMediaPath->SetControlBackground( Application::GetSettings().GetStyleSettings().GetWindowColor() );
+    mpMediaPath->Show();
+    maMinSize.Width() += mpMediaPath->GetSizePixel().Width();
 
     mpMuteToolBox->SetSelectHdl( LINK( this, MediaControl, implSelectHdl ) );
     mpMuteToolBox->SetSizePixel( mpMuteToolBox->CalcWindowSizePixel() );
@@ -145,6 +154,7 @@ void MediaControl::dispose()
     mpZoomToolBox->SetItemWindow( AVMEDIA_TOOLBOXITEM_ZOOM, nullptr );
     mpZoomListBox.disposeAndClear();
     mpTimeEdit.disposeAndClear();
+    mpMediaPath.disposeAndClear();
     mpZoomToolBox.disposeAndClear();
     mpVolumeSlider.disposeAndClear();
     mpMuteToolBox.disposeAndClear();
@@ -166,12 +176,13 @@ void MediaControl::Resize()
     const sal_Int32 nVolumeSliderWidth = mpVolumeSlider->GetSizePixel().Width();
     const sal_Int32 nZoomToolBoxWidth = mpZoomToolBox->GetSizePixel().Width();
     const sal_Int32 nTimeEditWidth = mpTimeEdit->GetSizePixel().Width();
+    const sal_Int32 nMediaPathWidth = mpMediaPath->GetSizePixel().Width();
     const sal_Int32 nTimeSliderHeight = mpTimeSlider->GetSizePixel().Height();
 
     if( MEDIACONTROLSTYLE_SINGLELINE == meControlStyle )
     {
-        const sal_Int32 nTimeSliderWidth = GetSizePixel().Width() - ( AVMEDIA_CONTROLOFFSET * 3 ) -
-                                           nPlayToolBoxWidth - nMuteToolBoxWidth - nVolumeSliderWidth - nTimeEditWidth - nZoomToolBoxWidth;
+        const sal_Int32 nTimeSliderWidth = GetSizePixel().Width() - ( AVMEDIA_CONTROLOFFSET * 4 ) -
+                                           nPlayToolBoxWidth - nMuteToolBoxWidth - nVolumeSliderWidth - nTimeEditWidth - nZoomToolBoxWidth - nMediaPathWidth;
 
         mpPlayToolBox->SetPosSizePixel( aPos, mpPlayToolBox->GetSizePixel() );
 
@@ -182,6 +193,9 @@ void MediaControl::Resize()
         mpTimeEdit->SetPosSizePixel( aPos, mpTimeEdit->GetSizePixel() );
 
         aPos.X() += nTimeEditWidth + AVMEDIA_CONTROLOFFSET;
+        mpMediaPath->SetPosSizePixel( aPos, mpMediaPath->GetSizePixel() );
+
+        aPos.X() += nMediaPathWidth + AVMEDIA_CONTROLOFFSET;
         mpMuteToolBox->SetPosSizePixel( aPos, mpMuteToolBox->GetSizePixel() );
 
         aPos.X() += nMuteToolBoxWidth;
