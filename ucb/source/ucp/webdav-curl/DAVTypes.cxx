@@ -100,7 +100,7 @@ bool DAVOptionsCache::getDAVOptions( const OUString & rURL, DAVOptions & rDAVOpt
         if ( (*it).second.getStaleTime() < t1.Seconds )
         {
             // if stale, remove from cache, do not restore
-            removeDAVOptions( rURL );
+            m_aTheCache.erase( it );
             return false;
             // return false instead
         }
