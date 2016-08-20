@@ -158,7 +158,7 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
 
     *_imp_lib = NULL;
 
-#if !(defined(__APPLE__) && defined(__arm__))
+#if !(defined(__APPLE__) && (defined(__arm__) || defined(__arm64__)))
     size_t partial_length;
 
     if (!install_path)
