@@ -79,6 +79,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>200</value>
         </prop>
+        <prop oor:name="IsExperimental" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
       </node>
 
 
