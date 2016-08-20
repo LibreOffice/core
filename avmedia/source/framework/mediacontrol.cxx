@@ -52,6 +52,7 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     mpZoomToolBox = VclPtr<ToolBox>::Create(this, WB_3DLOOK) ;
     mpZoomListBox = VclPtr<ListBox>::Create( mpZoomToolBox.get(), WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL | WB_3DLOOK ) ;
     mpTimeEdit = VclPtr<Edit>::Create(this, WB_CENTER | WB_READONLY | WB_BORDER | WB_3DLOOK ) ;
+    mpMediaPath = VclPtr<FixedText>::Create(this, WB_VCENTER | WB_READONLY | WB_BORDER | WB_3DLOOK ) ;
 
     SetBackground();
     SetPaintTransparent( true );
@@ -96,6 +97,14 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     mpZoomToolBox->SetSizePixel( mpZoomToolBox->CalcWindowSizePixel() );
     mpZoomToolBox->Show();
     maMinSize.Width() += mpZoomToolBox->GetSizePixel().Width();
+
+    const OUString aMediaPath( AVMEDIA_RESSTR( AVMEDIA_MEDIA_PATH_DEFAULT ) );
+    mpMediaPath->SetText(aMediaPath);
+    mpMediaPath->SetUpdateMode( false );
+    mpMediaPath->SetSizePixel( Size( mpMediaPath->GetTextWidth( aMediaPath ) + 400, mpPlayToolBox->GetSizePixel().Height() ) ); // maybe extend the no. 400 to span the screen width
+    mpMediaPath->SetControlBackground( Application::GetSettings().GetStyleSettings().GetWindowColor() );
+    mpMediaPath->Show();
+    maMinSize.Width() += mpMediaPath->GetSizePixel().Width();
 
     if( MEDIACONTROLSTYLE_MULTILINE == meControlStyle )
     {
@@ -145,6 +154,7 @@ void MediaControl::dispose()
     mpZoomToolBox->SetItemWindow( AVMEDIA_TOOLBOXITEM_ZOOM, nullptr );
     mpZoomListBox.disposeAndClear();
     mpTimeEdit.disposeAndClear();
+    mpMediaPath.disposeAndClear();
     mpZoomToolBox.disposeAndClear();
     mpVolumeSlider.disposeAndClear();
     mpMuteToolBox.disposeAndClear();
@@ -158,6 +168,17 @@ const Size& MediaControl::getMinSizePixel() const
     return maMinSize;
 }
 
+void MediaControl::UpdateURLField(MediaItem tempItem)
+{
+    const OUString aURL( AVMEDIA_RESSTR( AVMEDIA_MEDIA_PATH ) + ":  " + tempItem.getURL() ) ;
+    mpMediaPath->SetText(aURL);
+    mpMediaPath->SetUpdateMode( false );
+    mpMediaPath->SetSizePixel( Size( mpMediaPath->GetTextWidth( aURL ) + 8, mpPlayToolBox->GetSizePixel().Height() ) );
+    mpMediaPath->SetControlBackground( Application::GetSettings().GetStyleSettings().GetWindowColor() );
+    mpMediaPath->Show();
+    maMinSize.Width() += mpMediaPath->GetSizePixel().Width();
+}
+
 void MediaControl::Resize()
 {
     Point           aPos( 0, 0 );
@@ -166,12 +187,13 @@ void MediaControl::Resize()
     const sal_Int32 nVolumeSliderWidth = mpVolumeSlider->GetSizePixel().Width();
     const sal_Int32 nZoomToolBoxWidth = mpZoomToolBox->GetSizePixel().Width();
     const sal_Int32 nTimeEditWidth = mpTimeEdit->GetSizePixel().Width();
+    const sal_Int32 nMediaPathWidth = mpMediaPath->GetSizePixel().Width();
     const sal_Int32 nTimeSliderHeight = mpTimeSlider->GetSizePixel().Height();
 
     if( MEDIACONTROLSTYLE_SINGLELINE == meControlStyle )
     {
-        const sal_Int32 nTimeSliderWidth = GetSizePixel().Width() - ( AVMEDIA_CONTROLOFFSET * 3 ) -
-                                           nPlayToolBoxWidth - nMuteToolBoxWidth - nVolumeSliderWidth - nTimeEditWidth - nZoomToolBoxWidth;
+        const sal_Int32 nTimeSliderWidth = GetSizePixel().Width() - ( AVMEDIA_CONTROLOFFSET * 4 ) -
+                                           nPlayToolBoxWidth - nMuteToolBoxWidth - nVolumeSliderWidth - nTimeEditWidth - nZoomToolBoxWidth - nMediaPathWidth;
 
         mpPlayToolBox->SetPosSizePixel( aPos, mpPlayToolBox->GetSizePixel() );
 
@@ -189,6 +211,9 @@ void MediaControl::Resize()
 
         aPos.X() += nVolumeSliderWidth + AVMEDIA_CONTROLOFFSET;
         mpZoomToolBox->SetPosSizePixel( aPos, mpZoomToolBox->GetSizePixel() );
+
+        aPos.X() += nZoomToolBoxWidth + AVMEDIA_CONTROLOFFSET;
+        mpMediaPath->SetPosSizePixel( aPos, mpMediaPath->GetSizePixel() );
     }
     else
     {
@@ -226,6 +251,7 @@ void MediaControl::setState( const MediaItem& rItem )
         UpdateTimeSlider( maItem );
         UpdateVolumeSlider( maItem );
         UpdateTimeField( maItem, maItem.getTime() );
+        UpdateURLField(maItem);
     }
 }
 

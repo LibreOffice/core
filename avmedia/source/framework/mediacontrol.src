@@ -118,4 +118,15 @@ ImageList AVMEDIA_IMGLST_L
     IdCount = 7;
 };
 
+String AVMEDIA_MEDIA_PATH
+{
+    Text[en-US] = "Media Path";
+};
+
+String AVMEDIA_MEDIA_PATH_DEFAULT
+{
+    Text[en-US] = "No Media Selected";
+};
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

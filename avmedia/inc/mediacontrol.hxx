@@ -28,6 +28,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/image.hxx>
+#include <vcl/fixed.hxx>
 #include <avmedia/MediaControlBase.hxx>
 
 #define AVMEDIA_CONTROLOFFSET 6
@@ -50,6 +51,7 @@ public:
     const Size&         getMinSizePixel() const;
 
     void                setState( const MediaItem& rItem );
+    void                UpdateURLField(MediaItem maItem);
 
 protected:
 
@@ -58,6 +60,7 @@ protected:
 
     virtual void        Resize() override;
     virtual void        InitializeWidgets() override;
+    VclPtr<FixedText>        mpMediaPath;
 
 private:
 
