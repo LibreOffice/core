@@ -11,7 +11,6 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include "DAVTypes.hxx"
 
-
 namespace
 {
 
