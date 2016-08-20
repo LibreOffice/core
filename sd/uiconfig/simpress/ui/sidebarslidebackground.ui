@@ -68,6 +68,7 @@
         </child>
         <child>
           <object class="svxlo-ColorLB" id="fillattr">
+            <property name="width_request">150</property>
             <property name="can_focus">False</property>
             <property name="has_tooltip">True</property>
           </object>
@@ -129,6 +130,7 @@
         </child>
         <child>
           <object class="svxlo-SvxFillAttrBox" id="fillattr1">
+            <property name="width_request">150</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
@@ -139,6 +141,7 @@
         </child>
         <child>
           <object class="svxlo-ColorLB" id="fillattr2">
+            <property name="width_request">150</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
