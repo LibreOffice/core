@@ -68,6 +68,7 @@ protected:
     VclPtr<Slider>      mpVolumeSlider;
     VclPtr<ListBox>     mpZoomListBox;
     VclPtr<Edit>        mpTimeEdit;
+    VclPtr<Edit>        mpMediaPath;
     Image GetImage( sal_Int32 nImageId ) const;
     virtual void InitializeWidgets();
     virtual void UpdateToolBoxes( MediaItem aMediaItem );

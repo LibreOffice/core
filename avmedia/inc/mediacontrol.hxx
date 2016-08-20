@@ -50,6 +50,7 @@ public:
     const Size&         getMinSizePixel() const;
 
     void                setState( const MediaItem& rItem );
+    void                implUpdateURLField(MediaItem maItem);
 
 protected:
 
