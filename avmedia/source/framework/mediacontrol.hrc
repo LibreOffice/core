@@ -42,4 +42,7 @@
 #define AVMEDIA_IMGLST          3072
 #define AVMEDIA_IMGLST_L        3074
 
+#define AVMEDIA_MEDIA_PATH      4076
+#define AVMEDIA_MEDIA_PATH_DEFAULT 4078
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
