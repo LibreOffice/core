@@ -49,6 +49,11 @@ struct DAVResource
 struct DAVResourceInfo
 {
     std::vector < OUString > properties;
+
+    bool operator==( const struct DAVResourceInfo& a ) const
+    {
+        return (properties == a.properties );
+    }
 };
 
 } // namespace http_dav_ucp
