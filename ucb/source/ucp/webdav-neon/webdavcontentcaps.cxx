@@ -282,6 +282,8 @@ bool ContentProvider::getProperty(
 }
 
 
+static PropertyNamesCache aStaticPropertyNamesCache;
+
 // Content implementation.
 
 
@@ -321,7 +323,21 @@ uno::Sequence< beans::Property > Content::getProperties(
             try
             {
                 std::vector< DAVResourceInfo > props;
-                xResAccess->PROPFIND( DAVZERO, props, xEnv );
+                OUString aTheURL( xResAccess->getURL() );
+                PropertyNames aPropsNames( aTheURL );
+
+                if( !aStaticPropertyNamesCache.getCachedPropertyNames( aTheURL, aPropsNames ) )
+                {
+
+                    xResAccess->PROPFIND( DAVZERO, props, xEnv );
+                    aPropsNames.setPropertiesNames( props );
+
+                    aStaticPropertyNamesCache.addCachePropertyNames( aPropsNames, 10 );
+                }
+                else
+                {
+                    props = aPropsNames.getPropertiesNames();
+                }
 
                 // Note: vector always contains exactly one resource info, because
                 //       we used a depth of DAVZERO for PROPFIND.
