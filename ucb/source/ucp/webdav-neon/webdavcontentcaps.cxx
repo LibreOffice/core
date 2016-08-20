@@ -52,6 +52,7 @@
 #include "webdavprovider.hxx"
 #include "DAVSession.hxx"
 #include "ContentProperties.hxx"
+#include "PropfindCache.hxx"
 
 using namespace com::sun::star;
 using namespace webdav_ucp;

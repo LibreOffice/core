@@ -53,6 +53,7 @@ $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 	ucb/source/ucp/webdav-neon/NeonPropFindRequest \
 	ucb/source/ucp/webdav-neon/NeonSession \
 	ucb/source/ucp/webdav-neon/NeonUri \
+	ucb/source/ucp/webdav-neon/PropfindCache \
 	ucb/source/ucp/webdav-neon/UCBDeadPropertyValue \
 	ucb/source/ucp/webdav-neon/webdavcontentcaps \
 	ucb/source/ucp/webdav-neon/webdavcontent \

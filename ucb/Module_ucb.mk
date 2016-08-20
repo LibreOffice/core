@@ -36,6 +36,7 @@ ifeq ($(WITH_WEBDAV),neon)
 $(eval $(call gb_Module_add_check_targets,ucb,\
     CppunitTest_ucb_webdav_local_neon \
     CppunitTest_ucb_webdav_neon_opts \
+    CppunitTest_ucb_webdav_propfindcache \
 ))
 
 endif
