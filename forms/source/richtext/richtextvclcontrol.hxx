@@ -26,6 +26,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include "rtattributes.hxx"
 #include "textattributelistener.hxx"
+#include <memory>
 
 class EditView;
 class EditEngine;
@@ -40,7 +41,7 @@ namespace frm
     class RichTextControl : public Control, public IMultiAttributeDispatcher
     {
     private:
-        RichTextControlImpl*    m_pImpl;
+        std::unique_ptr<RichTextControlImpl>    m_pImpl;
 
     public:
         RichTextControl(
