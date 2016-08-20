@@ -1115,35 +1115,6 @@ sal_Int32 lcl_getCurrentNumberingProperty(
     return nRet;
 }
 
-// In rtl-paragraphs the meaning of left/right are to be exchanged
-static bool ExchangeLeftRight(const PropertyMapPtr& rContext, DomainMapper_Impl& rImpl)
-{
-    bool bExchangeLeftRight = false;
-    boost::optional<PropertyMap::Property> aPropPara = rContext->getProperty(PROP_WRITING_MODE);
-    if( aPropPara )
-    {
-        sal_Int32 aAdjust ;
-        if( (aPropPara->second >>= aAdjust) && aAdjust == text::WritingMode2::RL_TB )
-            bExchangeLeftRight = true;
-    }
-    else
-    {
-        // check if there RTL <bidi> in default style for the paragraph
-        StyleSheetEntryPtr pTable = rImpl.GetStyleSheetTable()->FindDefaultParaStyle();
-        if ( pTable )
-        {
-            boost::optional<PropertyMap::Property> aPropStyle = pTable->pProperties->getProperty(PROP_WRITING_MODE);
-            if( aPropStyle )
-            {
-                sal_Int32 aDirect;
-                if( (aPropStyle->second >>= aDirect) && aDirect == text::WritingMode2::RL_TB )
-                    bExchangeLeftRight = true;
-            }
-        }
-    }
-    return bExchangeLeftRight;
-}
-
 /// Check if the style or its parent has a list id, recursively.
 static sal_Int32 lcl_getListId(const StyleSheetEntryPtr& rEntry, const StyleSheetTablePtr& rStyleTable)
 {
@@ -1194,7 +1165,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     switch(nSprmId)
     {
     case NS_ooxml::LN_CT_PPrBase_jc:
-        handleParaJustification(nIntValue, rContext, ExchangeLeftRight( rContext, *m_pImpl ));
+        handleParaJustification(nIntValue, rContext, m_pImpl->ExchangeLeftRight());
         break;
     case NS_ooxml::LN_CT_PPrBase_keepLines:
         rContext->Insert(PROP_PARA_SPLIT, uno::makeAny(nIntValue == 0));

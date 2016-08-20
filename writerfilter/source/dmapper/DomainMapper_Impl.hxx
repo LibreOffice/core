@@ -832,6 +832,8 @@ public:
     /// Pending floating tables: they may be converted to text frames at the section end.
     std::vector<FloatingTableInfo> m_aPendingFloatingTables;
 
+    bool ExchangeLeftRight();
+
     /// Append a property to a sub-grabbag if necessary (e.g. 'lineRule', 'auto')
     void appendGrabBag(std::vector<css::beans::PropertyValue>& rInteropGrabBag, const OUString& aKey, const OUString& aValue);
     void appendGrabBag(std::vector<css::beans::PropertyValue>& rInteropGrabBag, const OUString& aKey, std::vector<css::beans::PropertyValue>& rValue);
