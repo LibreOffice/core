@@ -32,6 +32,8 @@
 #define HID_AVMEDIA_TIMEEDIT                               "AVMEDIA_HID_AVMEDIA_TIMEEDIT"
 #define HID_AVMEDIA_VOLUMESLIDER                           "AVMEDIA_HID_AVMEDIA_VOLUMESLIDER"
 #define HID_AVMEDIA_PLAYERWINDOW                           "AVMEDIA_HID_AVMEDIA_PLAYERWINDOW"
+#define HID_AVMEDIA_DEFAULT_MEDIA_PATH                     "NO_MEDIA"
+#define HID_AVMEDIA_MEDIA_PATH_SUFFIX                      "Media Path"
 
 #endif
 
