@@ -93,13 +93,6 @@ namespace connectivity
             bool            m_bIsEmbedded;
 
             /**
-             * Denotes that the database stored in the .odb file is an
-             * archive file (.fbk). Older version of LO had a .fdb file, not a
-             * .fbk.
-             * (Only used if m_bIsEmbedded is true).
-             */
-            bool            m_bIsFbkStored;
-            /**
              * Handle for the parent DatabaseDocument. We need to notify this
              * whenever any data is written to our temporary database so that
              * the user is able to save this back to the .odb file.
