@@ -22,6 +22,7 @@
 
 #include <svx/svdmodel.hxx>
 #include <svx/svxdllapi.h>
+#include <memory>
 
 class SfxObjectShell;
 class SfxItemPool;
@@ -36,7 +37,7 @@ class SVX_DLLPUBLIC FmFormModel :
     public SdrModel
 {
 private:
-    FmFormModelImplData*    m_pImpl;
+    std::unique_ptr<FmFormModelImplData>    m_pImpl;
     SfxObjectShell*         m_pObjShell;
 
     bool            m_bOpenInDesignMode : 1;
