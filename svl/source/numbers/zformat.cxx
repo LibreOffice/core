@@ -1419,7 +1419,7 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                 nLen--;
                 break;
             case '$' :
-                if ( rString[nPos] == '-' )
+                if ( nPos < nLen && rString[nPos] == '-' )
                 {
                     // [$-xxx] locale
                     sBuffSymbol.stripStart('[');
