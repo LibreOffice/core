@@ -517,6 +517,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_LOJBAN                0x0658  /* no locale */
 #define LANGUAGE_USER_KABYLE                0x0659
 #define LANGUAGE_USER_HAITIAN               0x065A
+#define LANGUAGE_USER_VENETAN               0x065B
 
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
