@@ -315,7 +315,7 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
 }
 
 uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties(
-    const SwRangeRedline& rRedline, bool bIsStart ) throw()
+    const SwRangeRedline& rRedline, bool bIsStart ) throw (std::exception)
 {
     uno::Sequence< beans::PropertyValue > aRet(12);
     const SwRedlineData* pNext = rRedline.GetRedlineData().Next();

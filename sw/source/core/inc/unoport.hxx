@@ -297,7 +297,7 @@ public:
     static css::uno::Any  GetPropertyValue(
             OUString const& PropertyName, SwRangeRedline const& rRedline) throw (std::exception);
     static css::uno::Sequence< css::beans::PropertyValue > CreateRedlineProperties(
-                SwRangeRedline const& rRedline, bool const bIsStart) throw();
+                SwRangeRedline const& rRedline, bool const bIsStart) throw (std::exception);
 
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL
         getImplementationId() throw (css::uno::RuntimeException, std::exception) override;
