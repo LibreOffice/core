@@ -11,9 +11,9 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">center</property>
-        <property name="valign">center</property>
-        <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
+        <property name="valign">start</property>
+        <property name="margin_left">9</property>
+        <property name="margin_right">15</property>
         <property name="border_width">6</property>
         <property name="row_spacing">6</property>
         <property name="column_spacing">6</property>
