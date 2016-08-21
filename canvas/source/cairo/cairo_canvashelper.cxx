@@ -973,27 +973,6 @@ namespace cairocanvas
             if( nPointCount > 1)
             {
                 bool bIsBezier = aPolygon.areControlPointsUsed();
-                bool bIsRectangle = ::basegfx::tools::isRectangle(aPolygon);
-                if (bIsRectangle)
-                {
-                    //tdf#86473, if this rectangle will end up after rounding
-                    //to have no area, then nothing will be drawn, so remove
-                    //such rectangles from the rounding optimization(?) effort
-                    basegfx::B2DRange aRange = ::basegfx::tools::getRange(aPolygon);
-                    double x1 = aRange.getMinX();
-                    double x2 = aRange.getMaxX();
-                    double y1 = aRange.getMinY();
-                    double y2 = aRange.getMaxY();
-                    cairo_matrix_transform_point(&aOrigMatrix, &x1, &y1);
-                    cairo_matrix_transform_point(&aOrigMatrix, &x2, &y2);
-                    basegfx::B2DRange aRoundedRange(basegfx::fround(x1),
-                                                    basegfx::fround(y1),
-                                                    basegfx::fround(x2),
-                                                    basegfx::fround(y2));
-                    bIsRectangle = aRoundedRange.getWidth() != 0.0 &&
-                                   aRoundedRange.getHeight() != 0.0;
-                }
-
                 ::basegfx::B2DPoint aA, aB, aP;
 
                 for( sal_uInt32 j=0; j < nExtendedPointCount; j++ )
@@ -1004,7 +983,7 @@ namespace cairocanvas
                     nY = aP.getY();
                     cairo_matrix_transform_point( &aOrigMatrix, &nX, &nY );
 
-                    if( ! bIsBezier && (bIsRectangle || aOperation == Clip) )
+                    if (!bIsBezier && aOperation == Clip)
                     {
                         nX = basegfx::fround( nX );
                         nY = basegfx::fround( nY );
