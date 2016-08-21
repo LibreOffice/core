@@ -141,6 +141,8 @@
 
 #define STR_DATABASE_NOTFOUND       95
 
+#define STR_COND_AND                96
+
 #define STR_UNDO_PRINTRANGES        97
 
 #define STR_UNDO_DEC_INDENT         98

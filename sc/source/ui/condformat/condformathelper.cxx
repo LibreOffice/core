@@ -134,7 +134,9 @@ OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rFormat, c
                         if(eMode == SC_COND_BETWEEN || eMode == SC_COND_NOTBETWEEN)
                         {
                             aBuffer.append(pEntry->GetExpression(rPos, 0));
-                            aBuffer.append(" and ");
+                            aBuffer.append(" ");
+                            aBuffer.append(ScGlobal::GetRscString(STR_COND_AND));
+                            aBuffer.append(" ");
                             aBuffer.append(pEntry->GetExpression(rPos, 1));
                         }
                         else if(eMode <= SC_COND_NOTEQUAL || eMode >= SC_COND_BEGINS_WITH)
@@ -184,7 +186,10 @@ OUString ScCondFormatHelper::GetExpression( ScCondFormatEntryType eType, sal_Int
             aBuffer.append(" ").append(aStr1);
             if(nIndex == 6 || nIndex == 7)
             {
-                aBuffer.append(" and ").append(aStr2);
+                aBuffer.append(" ");
+                aBuffer.append(ScGlobal::GetRscString(STR_COND_AND));
+                aBuffer.append(" ");
+                aBuffer.append(aStr2);
             }
         }
     }
