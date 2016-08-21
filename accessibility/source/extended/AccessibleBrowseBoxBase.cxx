@@ -316,8 +316,7 @@ sal_Bool SAL_CALL AccessibleBrowseBoxBase::supportsService(
 Sequence< OUString > SAL_CALL AccessibleBrowseBoxBase::getSupportedServiceNames()
     throw ( uno::RuntimeException, std::exception )
 {
-    const OUString aServiceName( "com.sun.star.accessibility.AccessibleContext" );
-    return Sequence< OUString >( &aServiceName, 1 );
+    return css::uno::Sequence<OUString>{ "com.sun.star.accessibility.AccessibleContext" }
 }
 
 // other public methods
