@@ -124,8 +124,7 @@ namespace comphelper
 
     Sequence< OUString > SAL_CALL OPropertyBag::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
-        Sequence< OUString > aServices { "com.sun.star.beans.PropertyBag" };
-        return aServices;
+         return { "com.sun.star.beans.PropertyBag" };
     }
 
     void OPropertyBag::fireEvents(
