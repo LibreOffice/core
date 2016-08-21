@@ -1063,7 +1063,7 @@ void ScHelperFunctions::ApplyBorder( ScDocShell* pDocShell, const ScRangeList& r
                 pUndoDoc->InitUndo( &rDoc, nTab, nTab );
             else
                 pUndoDoc->AddUndoTab( nTab, nTab );
-            rDoc.CopyToDocument( aRange, InsertDeleteFlags::ATTRIB, false, pUndoDoc );
+            rDoc.CopyToDocument(aRange, InsertDeleteFlags::ATTRIB, false, *pUndoDoc);
         }
 
         ScMarkData aMark;
@@ -1123,7 +1123,7 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
     {
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pUndoDoc->InitUndo( &rDoc, nTab, nTab );
-        rDoc.CopyToDocument( rRange, InsertDeleteFlags::CONTENTS|InsertDeleteFlags::NOCAPTIONS, false, pUndoDoc );
+        rDoc.CopyToDocument(rRange, InsertDeleteFlags::CONTENTS|InsertDeleteFlags::NOCAPTIONS, false, *pUndoDoc);
     }
 
     rDoc.DeleteAreaTab( nStartCol, nStartRow, nEndCol, nEndRow, nTab, InsertDeleteFlags::CONTENTS );
@@ -1262,7 +1262,7 @@ static bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
     {
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pUndoDoc->InitUndo( &rDoc, nTab, nTab );
-        rDoc.CopyToDocument( rRange, InsertDeleteFlags::CONTENTS, false, pUndoDoc );
+        rDoc.CopyToDocument(rRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc);
     }
 
     rDoc.DeleteAreaTab( nStartCol, nStartRow, nEndCol, nEndRow, nTab, InsertDeleteFlags::CONTENTS );
@@ -7126,7 +7126,7 @@ void SAL_CALL ScTableSheetObj::removeAllManualPageBreaks() throw(uno::RuntimeExc
         {
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
-            rDoc.CopyToDocument( 0,0,nTab, MAXCOL,MAXROW,nTab, InsertDeleteFlags::NONE, false, pUndoDoc );
+            rDoc.CopyToDocument(0,0,nTab, MAXCOL,MAXROW,nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
             pDocSh->GetUndoManager()->AddUndoAction(
                                     new ScUndoRemoveBreaks( pDocSh, nTab, pUndoDoc ) );
         }

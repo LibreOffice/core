@@ -1340,7 +1340,7 @@ void Test::testSharedFormulasCopyPaste()
     ScRange aRange(1,0,0,1,9,0); // B1:B10
     ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
     pUndoDoc->InitUndo(m_pDoc, 0, 0, true, true);
-    m_pDoc->CopyToDocument(aRange, InsertDeleteFlags::CONTENTS, false, pUndoDoc);
+    m_pDoc->CopyToDocument(aRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc);
     std::unique_ptr<ScUndoPaste> pUndo(createUndoPaste(getDocShell(), aRange, pUndoDoc));
 
     // First, make sure the formula cells are shared in the undo document.
@@ -1842,7 +1842,7 @@ void Test::testSharedFormulaUpdateOnReplacement()
     aMark.SetMultiMarkArea(aUndoRange);
     std::unique_ptr<ScDocument> pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(m_pDoc, 0, 0);
-    m_pDoc->CopyToDocument(aUndoRange, InsertDeleteFlags::CONTENTS, false, pUndoDoc.get(), &aMark);
+    m_pDoc->CopyToDocument(aUndoRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc, &aMark);
     ScUndoDeleteContents aUndo(&getDocShell(), aMark, aUndoRange, std::move(pUndoDoc), false, InsertDeleteFlags::CONTENTS, true);
 
     // Delete A4.

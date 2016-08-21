@@ -120,7 +120,7 @@ void ScViewFunc::CutToClip()
             ScRange aCopyRange = aRange;
             aCopyRange.aStart.SetTab(0);
             aCopyRange.aEnd.SetTab(pDoc->GetTableCount()-1);
-            pDoc->CopyToDocument( aCopyRange, (InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS) | InsertDeleteFlags::NOCAPTIONS, false, pUndoDoc );
+            pDoc->CopyToDocument( aCopyRange, (InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS) | InsertDeleteFlags::NOCAPTIONS, false, *pUndoDoc );
             pDoc->BeginDrawUndo();
         }
 
@@ -1228,7 +1228,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         // all sheets - CopyToDocument skips those that don't exist in pUndoDoc
         SCTAB nTabCount = pDoc->GetTableCount();
         pDoc->CopyToDocument( nStartCol, nStartRow, 0, nUndoEndCol, nUndoEndRow, nTabCount-1,
-                              nUndoFlags, false, pUndoDoc );
+                              nUndoFlags, false, *pUndoDoc );
 
         if ( bCutMode )
         {
@@ -1262,8 +1262,8 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         {
             pMixDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
             pMixDoc->InitUndo( pDoc, nStartTab, nEndTab );
-            pDoc->CopyToDocument( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab,
-                                  InsertDeleteFlags::CONTENTS, false, pMixDoc.get() );
+            pDoc->CopyToDocument(nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab,
+                                 InsertDeleteFlags::CONTENTS, false, *pMixDoc);
         }
     }
 
@@ -1372,7 +1372,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
             pUndoDoc->AddUndoTab( 0, nTabCount-1 );
             pRefUndoDoc->DeleteArea( nStartCol, nStartRow, nEndCol, nEndRow, aFilteredMark, InsertDeleteFlags::ALL );
             pRefUndoDoc->CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTabCount-1,
-                                            InsertDeleteFlags::FORMULA, false, pUndoDoc );
+                                            InsertDeleteFlags::FORMULA, false, *pUndoDoc );
             delete pRefUndoDoc;
         }
 
@@ -1522,7 +1522,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
     {
         pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
         pUndoDoc->InitUndoSelected(pDoc, aMark, false, bRowInfo);
-        pDoc->CopyToDocument(aMarkedRange, nUndoFlags, false, pUndoDoc.get(), &aMark);
+        pDoc->CopyToDocument(aMarkedRange, nUndoFlags, false, *pUndoDoc, &aMark);
     }
 
     ::std::unique_ptr<ScDocument> pMixDoc;
@@ -1532,7 +1532,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
         {
             pMixDoc.reset(new ScDocument(SCDOCMODE_UNDO));
             pMixDoc->InitUndoSelected(pDoc, aMark);
-            pDoc->CopyToDocument(aMarkedRange, InsertDeleteFlags::CONTENTS, false, pMixDoc.get(), &aMark);
+            pDoc->CopyToDocument(aMarkedRange, InsertDeleteFlags::CONTENTS, false, *pMixDoc, &aMark);
         }
     }
 
@@ -1676,7 +1676,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         for (size_t i = 0, n = aRanges.size(); i < n; ++i)
         {
             pDoc->CopyToDocument(
-                *aRanges[i], nUndoFlags, false, pUndoDoc.get(), &aMark);
+                *aRanges[i], nUndoFlags, false, *pUndoDoc, &aMark);
         }
     }
 
@@ -1690,7 +1690,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
             for (size_t i = 0, n = aRanges.size(); i < n; ++i)
             {
                 pDoc->CopyToDocument(
-                    *aRanges[i], InsertDeleteFlags::CONTENTS, false, pMixDoc.get(), &aMark);
+                    *aRanges[i], InsertDeleteFlags::CONTENTS, false, *pMixDoc, &aMark);
             }
         }
     }
@@ -1954,7 +1954,7 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
         {
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pUndoDoc->InitUndoSelected( pDoc , rMark , bColInfo , bRowInfo );
-            pDoc->CopyToDocument( aUserRange , InsertDeleteFlags::VALUE , false , pUndoDoc );
+            pDoc->CopyToDocument( aUserRange , InsertDeleteFlags::VALUE , false, *pUndoDoc );
         }
         sal_uInt16 nExtFlags = 0;
         pDocSh->UpdatePaintExt( nExtFlags, nStartCol, nStartRow, nStartTab , nEndCol, nEndRow, nEndTab ); // content before the change

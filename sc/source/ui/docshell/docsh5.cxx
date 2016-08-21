@@ -564,21 +564,21 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
             pUndoDoc->InitUndo( &aDocument, 0, nTabCount-1, false, true );
 
             // Zeilenstatus
-            aDocument.CopyToDocument( 0,0,nDestTab, MAXCOL,MAXROW,nDestTab,
-                                    InsertDeleteFlags::NONE, false, pUndoDoc );
+            aDocument.CopyToDocument(0, 0, nDestTab, MAXCOL, MAXROW, nDestTab,
+                                     InsertDeleteFlags::NONE, false, *pUndoDoc);
 
             // alle Formeln
-            aDocument.CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTabCount-1,
-                                        InsertDeleteFlags::FORMULA, false, pUndoDoc );
+            aDocument.CopyToDocument(0, 0, 0, MAXCOL, MAXROW, nTabCount-1,
+                                     InsertDeleteFlags::FORMULA, false, *pUndoDoc);
 
             // komplette Ausgangszeilen
-            aDocument.CopyToDocument( 0,aDestArea.nRowStart,nDestTab,
-                                    MAXCOL,aDestArea.nRowEnd,nDestTab,
-                                    InsertDeleteFlags::ALL, false, pUndoDoc );
+            aDocument.CopyToDocument(0, aDestArea.nRowStart, nDestTab,
+                                     MAXCOL,aDestArea.nRowEnd, nDestTab,
+                                     InsertDeleteFlags::ALL, false, *pUndoDoc);
 
             // alten Ausgabebereich
             if (pDestData)
-                aDocument.CopyToDocument( aOldDest, InsertDeleteFlags::ALL, false, pUndoDoc );
+                aDocument.CopyToDocument(aOldDest, InsertDeleteFlags::ALL, false, *pUndoDoc);
 
             GetUndoManager()->AddUndoAction(
                     new ScUndoConsolidate( this, aDestArea, rParam, pUndoDoc,
@@ -589,13 +589,13 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pUndoDoc->InitUndo( &aDocument, aDestArea.nTab, aDestArea.nTab );
 
-            aDocument.CopyToDocument( aDestArea.nColStart, aDestArea.nRowStart, aDestArea.nTab,
-                                    aDestArea.nColEnd, aDestArea.nRowEnd, aDestArea.nTab,
-                                    InsertDeleteFlags::ALL, false, pUndoDoc );
+            aDocument.CopyToDocument(aDestArea.nColStart, aDestArea.nRowStart, aDestArea.nTab,
+                                     aDestArea.nColEnd, aDestArea.nRowEnd, aDestArea.nTab,
+                                     InsertDeleteFlags::ALL, false, *pUndoDoc);
 
             // alten Ausgabebereich
             if (pDestData)
-                aDocument.CopyToDocument( aOldDest, InsertDeleteFlags::ALL, false, pUndoDoc );
+                aDocument.CopyToDocument(aOldDest, InsertDeleteFlags::ALL, false, *pUndoDoc);
 
             GetUndoManager()->AddUndoAction(
                     new ScUndoConsolidate( this, aDestArea, rParam, pUndoDoc,
@@ -678,8 +678,9 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
                     ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
                     pUndoDoc->InitUndo( &aDocument, nTab,nEndTab );             // auch alle Szenarien
                     //  angezeigte Tabelle:
-                    aDocument.CopyToDocument( nStartCol,nStartRow,nTab,
-                                    nEndCol,nEndRow,nTab, InsertDeleteFlags::ALL,true, pUndoDoc, &aScenMark );
+                    aDocument.CopyToDocument(nStartCol, nStartRow, nTab,
+                                             nEndCol, nEndRow, nTab, InsertDeleteFlags::ALL,
+                                             true, *pUndoDoc, &aScenMark);
                     //  Szenarien
                     for (SCTAB i=nTab+1; i<=nEndTab; i++)
                     {
@@ -693,8 +694,8 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
                         pUndoDoc->SetActiveScenario( i, bActive );
                         //  Bei Zurueckkopier-Szenarios auch Inhalte
                         if ( nScenFlags & ScScenarioFlags::TwoWay )
-                            aDocument.CopyToDocument( 0,0,i, MAXCOL,MAXROW,i,
-                                                        InsertDeleteFlags::ALL,false, pUndoDoc );
+                            aDocument.CopyToDocument(0, 0, i, MAXCOL, MAXROW, i,
+                                                     InsertDeleteFlags::ALL, false, *pUndoDoc );
                     }
 
                     GetUndoManager()->AddUndoAction(

@@ -749,7 +749,7 @@ bool ScDocFunc::TransliterateText( const ScMarkData& rMark, sal_Int32 nType,
         ScRange aCopyRange = aMarkRange;
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);
-        rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::CONTENTS, true, pUndoDoc, &aMultiMark );
+        rDoc.CopyToDocument(aCopyRange, InsertDeleteFlags::CONTENTS, true, *pUndoDoc, &aMultiMark);
 
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoTransliterate( &rDocShell, aMultiMark, pUndoDoc, nType ) );
@@ -1343,7 +1343,7 @@ bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& r
     {
         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pUndoDoc->InitUndo( &rDoc, aMultiRange.aStart.Tab(), aMultiRange.aEnd.Tab() );
-        rDoc.CopyToDocument( aMultiRange, InsertDeleteFlags::ATTRIB, bMulti, pUndoDoc, &rMark );
+        rDoc.CopyToDocument(aMultiRange, InsertDeleteFlags::ATTRIB, bMulti, *pUndoDoc, &rMark);
 
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoSelectionAttr(
@@ -1419,7 +1419,7 @@ bool ScDocFunc::ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
         ScRange aCopyRange = aMultiRange;
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);
-        rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, bMulti, pUndoDoc, &rMark );
+        rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, bMulti, *pUndoDoc, &rMark );
 
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoSelectionStyle(
@@ -2380,7 +2380,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                 nScenarioCount ++;
 
             rDoc.CopyToDocument( nUndoStartCol, nUndoStartRow, *itr, nUndoEndCol, nUndoEndRow, *itr+nScenarioCount,
-                InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, pUndoDoc );
+                InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, *pUndoDoc );
         }
 
         pRefUndoDoc = new ScDocument( SCDOCMODE_UNDO );
@@ -2441,7 +2441,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         pUndoDoc->AddUndoTab( 0, nTabCount-1 );
 
             //  kopieren mit bColRowFlags=false (#54194#)
-        pRefUndoDoc->CopyToDocument(0,0,0,MAXCOL,MAXROW,MAXTAB,InsertDeleteFlags::FORMULA,false,pUndoDoc,nullptr,false);
+        pRefUndoDoc->CopyToDocument(0,0,0,MAXCOL,MAXROW,MAXTAB,InsertDeleteFlags::FORMULA,false,*pUndoDoc,nullptr,false);
         delete pRefUndoDoc;
 
         SCTAB* pTabs      = new SCTAB[nSelCount];
@@ -2739,14 +2739,14 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         if (bCut)
         {
             rDoc.CopyToDocument( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab,
-                                    nUndoFlags, false, pUndoDoc );
+                                    nUndoFlags, false, *pUndoDoc );
         }
 
         if ( nDestTab != nStartTab )
             pUndoDoc->AddUndoTab( nDestTab, nDestEndTab, bWholeCols, bWholeRows );
         rDoc.CopyToDocument( nDestCol, nDestRow, nDestTab,
                                     nDestEndCol, nDestEndRow, nDestEndTab,
-                                    nUndoFlags, false, pUndoDoc );
+                                    nUndoFlags, false, *pUndoDoc );
         rDoc.BeginDrawUndo();
     }
 
@@ -3090,7 +3090,7 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord, bool /* bApi */ )
         pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );     // nur nTab mit Flags
         pUndoDoc->AddUndoTab( 0, nCount-1 );                    // alle Tabs fuer Referenzen
 
-        rDoc.CopyToDocument(0,0,nTab, MAXCOL,MAXROW,nTab, InsertDeleteFlags::ALL,false, pUndoDoc );
+        rDoc.CopyToDocument(0,0,nTab, MAXCOL,MAXROW,nTab, InsertDeleteFlags::ALL,false, *pUndoDoc );
         OUString aOldName;
         rDoc.GetName( nTab, aOldName );
         pUndoDoc->RenameTab( nTab, aOldName, false );
@@ -3444,12 +3444,12 @@ bool ScDocFunc::SetWidthOrHeight(
         if (bWidth)
         {
             pUndoDoc->InitUndo( &rDoc, nTab, nTab, true );
-            rDoc.CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab, static_cast<SCCOL>(nEnd), MAXROW, nTab, InsertDeleteFlags::NONE, false, pUndoDoc );
+            rDoc.CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab, static_cast<SCCOL>(nEnd), MAXROW, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
         }
         else
         {
             pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, true );
-            rDoc.CopyToDocument( 0, static_cast<SCROW>(nStart), nTab, MAXCOL, static_cast<SCROW>(nEnd), nTab, InsertDeleteFlags::NONE, false, pUndoDoc );
+            rDoc.CopyToDocument( 0, static_cast<SCROW>(nStart), nTab, MAXCOL, static_cast<SCROW>(nEnd), nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
         }
 
         aUndoRanges = rRanges;
@@ -3881,7 +3881,7 @@ void ScDocFunc::ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, b
 
         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pUndoDoc->InitUndo( &rDoc, nStartTab, nEndTab );
-        rDoc.CopyToDocument( aMarkRange, InsertDeleteFlags::ATTRIB, true, pUndoDoc, &aMultiMark );
+        rDoc.CopyToDocument( aMarkRange, InsertDeleteFlags::ATTRIB, true, *pUndoDoc, &aMultiMark );
 
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoClearItems( &rDocShell, aMultiMark, pUndoDoc, pWhich ) );
@@ -3927,7 +3927,7 @@ bool ScDocFunc::ChangeIndent( const ScMarkData& rMark, bool bIncrement, bool bAp
         ScRange aCopyRange = aMarkRange;
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);
-        rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, true, pUndoDoc, &rMark );
+        rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, true, *pUndoDoc, &rMark );
 
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoIndent( &rDocShell, rMark, pUndoDoc, bIncrement ) );
@@ -4009,13 +4009,13 @@ bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
             ScRange aCopyRange = rRange;
             aCopyRange.aStart.SetTab(0);
             aCopyRange.aStart.SetTab(nTabCount-1);
-            rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, false, pUndoDoc, &aMark );
+            rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, false, *pUndoDoc, &aMark );
             if (bSize)
             {
                 rDoc.CopyToDocument( nStartCol,0,0, nEndCol,MAXROW,nTabCount-1,
-                                                            InsertDeleteFlags::NONE, false, pUndoDoc, &aMark );
+                                                            InsertDeleteFlags::NONE, false, *pUndoDoc, &aMark );
                 rDoc.CopyToDocument( 0,nStartRow,0, MAXCOL,nEndRow,nTabCount-1,
-                                                            InsertDeleteFlags::NONE, false, pUndoDoc, &aMark );
+                                                            InsertDeleteFlags::NONE, false, *pUndoDoc, &aMark );
             }
             rDoc.BeginDrawUndo();
         }
@@ -4106,7 +4106,7 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
             //! auch bei Undo selektierte Tabellen beruecksichtigen
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pUndoDoc->InitUndo( &rDoc, nStartTab, nEndTab );
-            rDoc.CopyToDocument( rRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, pUndoDoc );
+            rDoc.CopyToDocument( rRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, *pUndoDoc );
         }
 
         // use TokenArray if given, string (and flags) otherwise
@@ -4191,7 +4191,7 @@ bool ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
             //! auch bei Undo selektierte Tabellen beruecksichtigen
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pUndoDoc->InitUndo( &rDoc, nStartTab, nEndTab );
-            rDoc.CopyToDocument( rRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, pUndoDoc );
+            rDoc.CopyToDocument( rRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, *pUndoDoc );
 
             rDocShell.GetUndoManager()->AddUndoAction(
                     new ScUndoTabOp( &rDocShell,
@@ -4370,7 +4370,7 @@ bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
             ScRange aCopyRange = aDestArea;
             aCopyRange.aStart.SetTab(0);
             aCopyRange.aEnd.SetTab(nTabCount-1);
-            rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::AUTOFILL, false, pUndoDoc, &aMark );
+            rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::AUTOFILL, false, *pUndoDoc, &aMark );
         }
 
         sal_uLong nProgCount;
@@ -4486,7 +4486,7 @@ bool ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
             rDoc.CopyToDocument(
                 aDestArea.aStart.Col(), aDestArea.aStart.Row(), 0,
                 aDestArea.aEnd.Col(), aDestArea.aEnd.Row(), nTabCount-1,
-                InsertDeleteFlags::AUTOFILL, false, pUndoDoc, &aMark );
+                InsertDeleteFlags::AUTOFILL, false, *pUndoDoc, &aMark );
         }
 
         if (aDestArea.aStart.Col() <= aDestArea.aEnd.Col() &&
@@ -4641,7 +4641,7 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
         rDoc.CopyToDocument(
             aDestArea.aStart.Col(), aDestArea.aStart.Row(), 0,
             aDestArea.aEnd.Col(), aDestArea.aEnd.Row(), nTabCount-1,
-            InsertDeleteFlags::AUTOFILL, false, pUndoDoc, &aMark );
+            InsertDeleteFlags::AUTOFILL, false, *pUndoDoc, &aMark );
     }
 
     sal_uLong nProgCount;
@@ -4743,7 +4743,7 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
             }
             // note captions are collected by drawing undo
             rDoc.CopyToDocument( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab,
-                                  InsertDeleteFlags::ALL|InsertDeleteFlags::NOCAPTIONS, false, pUndoDoc );
+                                  InsertDeleteFlags::ALL|InsertDeleteFlags::NOCAPTIONS, false, *pUndoDoc );
             if( bHasNotes )
                 rDoc.BeginDrawUndo();
         }
@@ -4837,7 +4837,7 @@ bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, bool bRecord )
                 pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
                 pUndoDoc->InitUndo(&rDoc, *rOption.maTabs.begin(), *rOption.maTabs.rbegin());
             }
-            rDoc.CopyToDocument(aExtended, InsertDeleteFlags::ATTRIB, false, pUndoDoc);
+            rDoc.CopyToDocument(aExtended, InsertDeleteFlags::ATTRIB, false, *pUndoDoc);
         }
 
         const SfxPoolItem& rDefAttr = rDoc.GetPool()->GetDefaultItem( ATTR_MERGE );
@@ -5136,8 +5136,8 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
             {
                 pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
                 pUndoDoc->InitUndo( &rDoc, nTab, nTab );
-                rDoc.CopyToDocument( nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab,
-                                        InsertDeleteFlags::ALL, false, pUndoDoc );
+                rDoc.CopyToDocument(nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab,
+                                    InsertDeleteFlags::ALL, false, *pUndoDoc);
 
                 rDoc.BeginDrawUndo();      // wegen Hoehenanpassung
             }
@@ -5182,8 +5182,8 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
             {
                 ScDocument* pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
                 pRedoDoc->InitUndo( &rDoc, nTab, nTab );
-                rDoc.CopyToDocument( nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab,
-                                        InsertDeleteFlags::ALL, false, pRedoDoc );
+                rDoc.CopyToDocument(nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab,
+                                    InsertDeleteFlags::ALL, false, *pRedoDoc);
 
                 rDocShell.GetUndoManager()->AddUndoAction(
                     new ScUndoListNames( &rDocShell,
@@ -5362,9 +5362,9 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
                 aCompleteRange.ExtendTo(pOldFormat->GetRange().Combine());
         }
 
-        rDoc.CopyToDocument( aCompleteRange.aStart.Col(),aCompleteRange.aStart.Row(),nTab,
-                aCompleteRange.aEnd.Col(),aCompleteRange.aEnd.Row(),nTab,
-                InsertDeleteFlags::ALL, false, pUndoDoc );
+        rDoc.CopyToDocument(aCompleteRange.aStart.Col(),aCompleteRange.aStart.Row(),nTab,
+                            aCompleteRange.aEnd.Col(),aCompleteRange.aEnd.Row(),nTab,
+                            InsertDeleteFlags::ALL, false, *pUndoDoc);
     }
 
     std::unique_ptr<ScRange> pRepaintRange;
@@ -5397,9 +5397,9 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
     {
         ScDocument* pRedoDoc = new ScDocument(SCDOCMODE_UNDO);
         pRedoDoc->InitUndo( &rDoc, nTab, nTab );
-        rDoc.CopyToDocument( aCompleteRange.aStart.Col(),aCompleteRange.aStart.Row(),nTab,
-                aCompleteRange.aEnd.Col(),aCompleteRange.aEnd.Row(),nTab,
-                InsertDeleteFlags::ALL, false, pRedoDoc );
+        rDoc.CopyToDocument(aCompleteRange.aStart.Col(),aCompleteRange.aStart.Row(),nTab,
+                            aCompleteRange.aEnd.Col(),aCompleteRange.aEnd.Row(),nTab,
+                            InsertDeleteFlags::ALL, false, *pRedoDoc);
         rDocShell.GetUndoManager()->AddUndoAction(
                 new ScUndoConditionalFormat(&rDocShell, pUndoDoc, pRedoDoc, aCompleteRange));
     }

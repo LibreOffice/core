@@ -100,16 +100,16 @@ void ScUndoWidthOrHeight::Undo()
     {
         if (bWidth) // Width
         {
-            pUndoDoc->CopyToDocument( static_cast<SCCOL>(nStart), 0, *itr,
-                    static_cast<SCCOL>(nEnd), MAXROW, *itr, InsertDeleteFlags::NONE,
-                    false, &rDoc );
+            pUndoDoc->CopyToDocument(static_cast<SCCOL>(nStart), 0, *itr,
+                                     static_cast<SCCOL>(nEnd), MAXROW, *itr, InsertDeleteFlags::NONE,
+                                     false, rDoc);
             rDoc.UpdatePageBreaks( *itr );
             pDocShell->PostPaint( static_cast<SCCOL>(nPaintStart), 0, *itr,
                     MAXCOL, MAXROW, *itr, PAINT_GRID | PAINT_TOP );
         }
         else        // Height
         {
-            pUndoDoc->CopyToDocument( 0, nStart, *itr, MAXCOL, nEnd, *itr, InsertDeleteFlags::NONE, false, &rDoc );
+            pUndoDoc->CopyToDocument(0, nStart, *itr, MAXCOL, nEnd, *itr, InsertDeleteFlags::NONE, false, rDoc);
             rDoc.UpdatePageBreaks( *itr );
             pDocShell->PostPaint( 0, nPaintStart, *itr, MAXCOL, MAXROW, *itr, PAINT_GRID | PAINT_LEFT );
         }

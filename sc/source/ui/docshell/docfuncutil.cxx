@@ -69,7 +69,7 @@ std::unique_ptr<ScDocument> DocFuncUtil::createDeleteContentsUndoDoc(
         nUndoDocFlags |= InsertDeleteFlags::CONTENTS;  // copy all cells with their notes
     // do not copy note captions to undo document
     nUndoDocFlags |= InsertDeleteFlags::NOCAPTIONS;
-    rDoc.CopyToDocument(aCopyRange, nUndoDocFlags, bOnlyMarked, pUndoDoc.get(), &rMark);
+    rDoc.CopyToDocument(aCopyRange, nUndoDocFlags, bOnlyMarked, *pUndoDoc, &rMark);
 
     return pUndoDoc;
 }

@@ -66,7 +66,7 @@ void Test::testCopyPasteSkipEmptyConditionalFormatting()
     // Create undo document.
     ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
     pUndoDoc->InitUndo(m_pDoc, 0, 0);
-    m_pDoc->CopyToDocument(aDestRange, InsertDeleteFlags::CONTENTS, false, pUndoDoc, &aMark);
+    m_pDoc->CopyToDocument(aDestRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc, &aMark);
 
     // Paste clipboard content onto A1:A5 but skip empty cells.
     bool bSkipEmpty = true;

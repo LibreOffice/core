@@ -1494,17 +1494,17 @@ public:
                     //  don't use anymore:
     void            CopyToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                InsertDeleteFlags nFlags, bool bMarked, ScDocument* pDestDoc,
+                                InsertDeleteFlags nFlags, bool bMarked, ScDocument& rDestDoc,
                                 const ScMarkData* pMarks = nullptr, bool bColRowFlags = true);
     void            UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                InsertDeleteFlags nFlags, bool bMarked, ScDocument* pDestDoc);
+                                InsertDeleteFlags nFlags, bool bMarked, ScDocument& rDestDoc);
 
     void            CopyToDocument(const ScRange& rRange,
-                                InsertDeleteFlags nFlags, bool bMarked, ScDocument* pDestDoc,
+                                InsertDeleteFlags nFlags, bool bMarked, ScDocument& rDestDoc,
                                 const ScMarkData* pMarks = nullptr, bool bColRowFlags = true);
     void            UndoToDocument(const ScRange& rRange,
-                                InsertDeleteFlags nFlags, bool bMarked, ScDocument* pDestDoc);
+                                InsertDeleteFlags nFlags, bool bMarked, ScDocument& rDestDoc);
 
     void            CopyScenario( SCTAB nSrcTab, SCTAB nDestTab, bool bNewScenario = false );
     bool            TestCopyScenario( SCTAB nSrcTab, SCTAB nDestTab ) const;

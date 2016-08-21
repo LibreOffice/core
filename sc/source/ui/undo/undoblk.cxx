@@ -406,8 +406,8 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
     // if Undo, restore references
     for( i=0; i<nCount && bUndo; i++ )
     {
-        pRefUndoDoc->CopyToDocument( aEffRange.aStart.Col(), aEffRange.aStart.Row(), pTabs[i], aEffRange.aEnd.Col(), aEffRange.aEnd.Row(), pTabs[i]+pScenarios[i],
-            InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, &rDoc );
+        pRefUndoDoc->CopyToDocument(aEffRange.aStart.Col(), aEffRange.aStart.Row(), pTabs[i], aEffRange.aEnd.Col(), aEffRange.aEnd.Row(), pTabs[i]+pScenarios[i],
+            InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, rDoc);
     }
 
     ScRange aWorkRange( aEffRange );
@@ -667,10 +667,10 @@ void ScUndoDeleteMulti::Undo()
         SCCOLROW nStart = it->mnStart;
         SCCOLROW nEnd = it->mnEnd;
         if (mbRows)
-            pRefUndoDoc->CopyToDocument( 0,nStart,nTab, MAXCOL,nEnd,nTab, InsertDeleteFlags::ALL,false, &rDoc );
+            pRefUndoDoc->CopyToDocument(0, nStart, nTab, MAXCOL, nEnd, nTab, InsertDeleteFlags::ALL, false, rDoc);
         else
-            pRefUndoDoc->CopyToDocument( static_cast<SCCOL>(nStart),0,nTab,
-                    static_cast<SCCOL>(nEnd),MAXROW,nTab, InsertDeleteFlags::ALL,false, &rDoc );
+            pRefUndoDoc->CopyToDocument(static_cast<SCCOL>(nStart),0,nTab,
+                    static_cast<SCCOL>(nEnd), MAXROW, nTab, InsertDeleteFlags::ALL, false, rDoc);
     }
 
     ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
@@ -771,7 +771,7 @@ void ScUndoCut::DoChange( const bool bUndo )
         ScRange aCopyRange = aExtendedRange;
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);
-        pUndoDoc->CopyToDocument( aCopyRange, nUndoFlags, false, &rDoc );
+        pUndoDoc->CopyToDocument(aCopyRange, nUndoFlags, false, rDoc);
         ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
         if ( pChangeTrack )
             pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
@@ -931,7 +931,7 @@ void ScUndoPaste::DoChange(bool bUndo)
             ScRange aCopyRange = *maBlockRanges[i];
             aCopyRange.aStart.SetTab(0);
             aCopyRange.aEnd.SetTab(nTabCount-1);
-            rDoc.CopyToDocument( aCopyRange, nUndoFlags, false, pRedoDoc );
+            rDoc.CopyToDocument(aCopyRange, nUndoFlags, false, *pRedoDoc);
             bRedoFilled = true;
         }
     }
@@ -956,7 +956,7 @@ void ScUndoPaste::DoChange(bool bUndo)
             ScRange aRange = *maBlockRanges[i];
             aRange.aStart.SetTab(nFirstSelected);
             aRange.aEnd.SetTab(nFirstSelected);
-            pRedoDoc->UndoToDocument(aRange, nUndoFlags, false, &rDoc);
+            pRedoDoc->UndoToDocument(aRange, nUndoFlags, false, rDoc);
             ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
             for (; itr != itrEnd && *itr < nTabCount; ++itr)
             {
@@ -965,7 +965,7 @@ void ScUndoPaste::DoChange(bool bUndo)
 
                 aRange.aStart.SetTab(*itr);
                 aRange.aEnd.SetTab(*itr);
-                pRedoDoc->CopyToDocument( aRange, nUndoFlags, false, &rDoc );
+                pRedoDoc->CopyToDocument(aRange, nUndoFlags, false, rDoc);
             }
         }
     }
@@ -991,7 +991,7 @@ void ScUndoPaste::DoChange(bool bUndo)
             {
                 aRange.aStart.SetTab(*itr);
                 aRange.aEnd.SetTab(*itr);
-                pUndoDoc->UndoToDocument(aRange, nUndoFlags, false, &rDoc);
+                pUndoDoc->UndoToDocument(aRange, nUndoFlags, false, rDoc);
             }
         }
     }
@@ -1234,7 +1234,7 @@ void ScUndoDragDrop::DoUndo( ScRange aRange )
     InsertDeleteFlags nDelFlags = nUndoFlags | InsertDeleteFlags::FORGETCAPTIONS;
 
     rDoc.DeleteAreaTab( aRange, nDelFlags );
-    pRefUndoDoc->CopyToDocument( aRange, nUndoFlags, false, &rDoc );
+    pRefUndoDoc->CopyToDocument(aRange, nUndoFlags, false, rDoc);
     if ( rDoc.HasAttrib( aRange, HASATTR_MERGED ) )
         rDoc.ExtendMerge( aRange, true );
 
@@ -1457,7 +1457,7 @@ void ScUndoListNames::DoChange( ScDocument* pSrcDoc ) const
     ScDocument& rDoc = pDocShell->GetDocument();
 
     rDoc.DeleteAreaTab( aBlockRange, InsertDeleteFlags::ALL );
-    pSrcDoc->CopyToDocument( aBlockRange, InsertDeleteFlags::ALL, false, &rDoc );
+    pSrcDoc->CopyToDocument(aBlockRange, InsertDeleteFlags::ALL, false, rDoc);
     pDocShell->PostPaint( aBlockRange, PAINT_GRID );
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -1523,7 +1523,7 @@ void ScUndoConditionalFormat::DoChange(ScDocument* pSrcDoc)
     ScDocument& rDoc = pDocShell->GetDocument();
 
     rDoc.DeleteAreaTab( maRange, InsertDeleteFlags::ALL );
-    pSrcDoc->CopyToDocument( maRange, InsertDeleteFlags::ALL, false, &rDoc );
+    pSrcDoc->CopyToDocument(maRange, InsertDeleteFlags::ALL, false, rDoc);
     pDocShell->PostPaint( maRange, PAINT_GRID );
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -1581,7 +1581,7 @@ void ScUndoUseScenario::Undo()
 
     ScDocument& rDoc = pDocShell->GetDocument();
     rDoc.DeleteSelection( InsertDeleteFlags::ALL, aMarkData );
-    pUndoDoc->CopyToDocument( aRange, InsertDeleteFlags::ALL, true, &rDoc, &aMarkData );
+    pUndoDoc->CopyToDocument(aRange, InsertDeleteFlags::ALL, true, rDoc, &aMarkData);
 
     // scenario table
     bool bFrame = false;
@@ -1603,7 +1603,7 @@ void ScUndoUseScenario::Undo()
         if ( nScenFlags & ScScenarioFlags::TwoWay )
         {
             rDoc.DeleteAreaTab( 0,0, MAXCOL,MAXROW, i, InsertDeleteFlags::ALL );
-            pUndoDoc->CopyToDocument( 0,0,i, MAXCOL,MAXROW,i, InsertDeleteFlags::ALL,false, &rDoc );
+            pUndoDoc->CopyToDocument(0,0,i, MAXCOL,MAXROW,i, InsertDeleteFlags::ALL,false, rDoc);
         }
         if ( nScenFlags & ScScenarioFlags::ShowFrame )
             bFrame = true;
@@ -1703,7 +1703,7 @@ void ScUndoSelectionStyle::DoChange( const bool bUndo )
         ScRange aCopyRange = aWorkRange;
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);
-        pUndoDoc->CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, true, &rDoc, &aMarkData );
+        pUndoDoc->CopyToDocument(aCopyRange, InsertDeleteFlags::ATTRIB, true, rDoc, &aMarkData);
     }
     else            // if Redo, then reapply style
     {
@@ -1807,7 +1807,7 @@ void ScUndoEnterMatrix::Undo()
     ScDocument& rDoc = pDocShell->GetDocument();
 
     rDoc.DeleteAreaTab( aBlockRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE );
-    pUndoDoc->CopyToDocument( aBlockRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, &rDoc );
+    pUndoDoc->CopyToDocument(aBlockRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, rDoc);
     pDocShell->PostPaint( aBlockRange, PAINT_GRID );
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -1893,7 +1893,7 @@ void ScUndoIndent::Undo()
     ScRange aCopyRange = aBlockRange;
     aCopyRange.aStart.SetTab(0);
     aCopyRange.aEnd.SetTab(nTabCount-1);
-    pUndoDoc->CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, true, &rDoc, &aMarkData );
+    pUndoDoc->CopyToDocument(aCopyRange, InsertDeleteFlags::ATTRIB, true, rDoc, &aMarkData);
     pDocShell->PostPaint( aBlockRange, PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
 
     EndUndo();
@@ -1949,7 +1949,7 @@ void ScUndoTransliterate::Undo()
     ScRange aCopyRange = aBlockRange;
     aCopyRange.aStart.SetTab(0);
     aCopyRange.aEnd.SetTab(nTabCount-1);
-    pUndoDoc->CopyToDocument( aCopyRange, InsertDeleteFlags::CONTENTS, true, &rDoc, &aMarkData );
+    pUndoDoc->CopyToDocument(aCopyRange, InsertDeleteFlags::CONTENTS, true, rDoc, &aMarkData);
     pDocShell->PostPaint( aBlockRange, PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
 
     EndUndo();
@@ -2010,7 +2010,7 @@ void ScUndoClearItems::Undo()
     BeginUndo();
 
     ScDocument& rDoc = pDocShell->GetDocument();
-    pUndoDoc->CopyToDocument( aBlockRange, InsertDeleteFlags::ATTRIB, true, &rDoc, &aMarkData );
+    pUndoDoc->CopyToDocument(aBlockRange, InsertDeleteFlags::ATTRIB, true, rDoc, &aMarkData);
     pDocShell->PostPaint( aBlockRange, PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
 
     EndUndo();
@@ -2067,7 +2067,7 @@ void ScUndoRemoveBreaks::Undo()
     ScDocument& rDoc = pDocShell->GetDocument();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    pUndoDoc->CopyToDocument( 0,0,nTab, MAXCOL,MAXROW,nTab, InsertDeleteFlags::NONE, false, &rDoc );
+    pUndoDoc->CopyToDocument(0,0,nTab, MAXCOL,MAXROW,nTab, InsertDeleteFlags::NONE, false, rDoc);
     if (pViewShell)
         pViewShell->UpdatePageBreakData( true );
     pDocShell->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID );
@@ -2142,7 +2142,7 @@ void ScUndoRemoveMerge::Undo()
         // There is no need to extend merge area because it's already been extended.
         ScRange aRange = maOption.getSingleRange(*itr);
         rDoc.DeleteAreaTab(aRange, InsertDeleteFlags::ATTRIB);
-        pUndoDoc->CopyToDocument(aRange, InsertDeleteFlags::ATTRIB, false, &rDoc);
+        pUndoDoc->CopyToDocument(aRange, InsertDeleteFlags::ATTRIB, false, rDoc);
 
         bool bDidPaint = false;
         if ( pViewShell )
@@ -2272,7 +2272,7 @@ void ScUndoBorder::Undo()
     ScDocument& rDoc = pDocShell->GetDocument();
     ScMarkData aMarkData;
     aMarkData.MarkFromRangeList( *pRanges, false );
-    pUndoDoc->CopyToDocument( aBlockRange, InsertDeleteFlags::ATTRIB, true, &rDoc, &aMarkData );
+    pUndoDoc->CopyToDocument(aBlockRange, InsertDeleteFlags::ATTRIB, true, rDoc, &aMarkData);
     pDocShell->PostPaint( aBlockRange, PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
 
     EndUndo();

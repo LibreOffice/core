@@ -3419,7 +3419,7 @@ void Test::testCopyPasteSkipEmpty()
     // Create undo document.
     ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
     pUndoDoc->InitUndo(m_pDoc, 0, 0);
-    m_pDoc->CopyToDocument(aDestRange, InsertDeleteFlags::ALL, false, pUndoDoc, &aMark);
+    m_pDoc->CopyToDocument(aDestRange, InsertDeleteFlags::ALL, false, *pUndoDoc, &aMark);
 
     // Paste clipboard content onto A1:A5 but skip empty cells.
     bool bSkipEmpty = true;
@@ -3428,7 +3428,7 @@ void Test::testCopyPasteSkipEmpty()
     // Create redo document.
     ScDocument* pRedoDoc = new ScDocument(SCDOCMODE_UNDO);
     pRedoDoc->InitUndo(m_pDoc, 0, 0);
-    m_pDoc->CopyToDocument(aDestRange, InsertDeleteFlags::ALL, false, pRedoDoc, &aMark);
+    m_pDoc->CopyToDocument(aDestRange, InsertDeleteFlags::ALL, false, *pRedoDoc, &aMark);
 
     // Create an undo object for this.
     ScRefUndoData* pRefUndoData = new ScRefUndoData(m_pDoc);
@@ -3620,7 +3620,7 @@ void Test::testUndoCut()
     // Set up an undo object for cutting A1:A3.
     ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
     pUndoDoc->InitUndo(m_pDoc, 0 ,0);
-    m_pDoc->CopyToDocument(aRange, InsertDeleteFlags::ALL, false, pUndoDoc);
+    m_pDoc->CopyToDocument(aRange, InsertDeleteFlags::ALL, false, *pUndoDoc);
     ASSERT_DOUBLES_EQUAL(  1.0, pUndoDoc->GetValue(ScAddress(0,0,0)));
     ASSERT_DOUBLES_EQUAL( 10.0, pUndoDoc->GetValue(ScAddress(0,1,0)));
     ASSERT_DOUBLES_EQUAL(100.0, pUndoDoc->GetValue(ScAddress(0,2,0)));
@@ -5427,7 +5427,7 @@ void Test::testDeleteContents()
 
     std::unique_ptr<ScDocument> pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(m_pDoc, 0, 0);
-    m_pDoc->CopyToDocument(aRange, InsertDeleteFlags::CONTENTS, false, pUndoDoc.get(), &aMark);
+    m_pDoc->CopyToDocument(aRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc, &aMark);
     ScUndoDeleteContents aUndo(&getDocShell(), aMark, aRange, std::move(pUndoDoc), false, InsertDeleteFlags::CONTENTS, true);
 
     clearRange(m_pDoc, aRange);

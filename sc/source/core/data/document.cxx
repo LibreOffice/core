@@ -2015,79 +2015,79 @@ bool ScDocument::IsCutMode()
 
 void ScDocument::CopyToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                            InsertDeleteFlags nFlags, bool bOnlyMarked, ScDocument* pDestDoc,
+                            InsertDeleteFlags nFlags, bool bOnlyMarked, ScDocument& rDestDoc,
                             const ScMarkData* pMarks, bool bColRowFlags )
 {
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
     PutInOrder( nTab1, nTab2 );
-    if( pDestDoc->aDocName.isEmpty() )
-        pDestDoc->aDocName = aDocName;
+    if (rDestDoc.aDocName.isEmpty())
+        rDestDoc.aDocName = aDocName;
     if (ValidTab(nTab1) && ValidTab(nTab2))
     {
-        sc::CopyToDocContext aCxt(*pDestDoc);
-        bool bOldAutoCalc = pDestDoc->GetAutoCalc();
-        pDestDoc->SetAutoCalc( false );     // avoid multiple calculations
-        SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), pDestDoc->maTabs.size()));
+        sc::CopyToDocContext aCxt(rDestDoc);
+        bool bOldAutoCalc = rDestDoc.GetAutoCalc();
+        rDestDoc.SetAutoCalc( false );     // avoid multiple calculations
+        SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), rDestDoc.maTabs.size()));
         for (SCTAB i = nTab1; i <= nTab2 && i < nMinSizeBothTabs; i++)
         {
-            if (maTabs[i] && pDestDoc->maTabs[i])
+            if (maTabs[i] && rDestDoc.maTabs[i])
                 maTabs[i]->CopyToTable(aCxt, nCol1, nRow1, nCol2, nRow2, nFlags,
-                                      bOnlyMarked, pDestDoc->maTabs[i], pMarks,
+                                      bOnlyMarked, rDestDoc.maTabs[i], pMarks,
                                       false, bColRowFlags );
         }
-        pDestDoc->SetAutoCalc( bOldAutoCalc );
+        rDestDoc.SetAutoCalc(bOldAutoCalc);
     }
 }
 
 void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                            InsertDeleteFlags nFlags, bool bOnlyMarked, ScDocument* pDestDoc)
+                            InsertDeleteFlags nFlags, bool bOnlyMarked, ScDocument& rDestDoc)
 {
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
     PutInOrder( nTab1, nTab2 );
     if (ValidTab(nTab1) && ValidTab(nTab2))
     {
-        sc::AutoCalcSwitch aACSwitch(*pDestDoc, false); // avoid multiple calculations
+        sc::AutoCalcSwitch aACSwitch(rDestDoc, false); // avoid multiple calculations
 
         if (nTab1 > 0)
-            CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, InsertDeleteFlags::FORMULA, false, pDestDoc );
+            CopyToDocument(0, 0, 0, MAXCOL, MAXROW, nTab1-1, InsertDeleteFlags::FORMULA, false, rDestDoc);
 
-        sc::CopyToDocContext aCxt(*pDestDoc);
-        OSL_ASSERT( nTab2 < static_cast<SCTAB>(maTabs.size()) && nTab2 < static_cast<SCTAB>(pDestDoc->maTabs.size()));
+        sc::CopyToDocContext aCxt(rDestDoc);
+        OSL_ASSERT( nTab2 < static_cast<SCTAB>(maTabs.size()) && nTab2 < static_cast<SCTAB>(rDestDoc.maTabs.size()));
         for (SCTAB i = nTab1; i <= nTab2; i++)
         {
-            if (maTabs[i] && pDestDoc->maTabs[i])
+            if (maTabs[i] && rDestDoc.maTabs[i])
                 maTabs[i]->UndoToTable(aCxt, nCol1, nRow1, nCol2, nRow2, nFlags,
-                                    bOnlyMarked, pDestDoc->maTabs[i]);
+                                    bOnlyMarked, rDestDoc.maTabs[i]);
         }
 
         if (nTab2 < MAXTAB)
-            CopyToDocument( 0,0,nTab2+1, MAXCOL,MAXROW,MAXTAB, InsertDeleteFlags::FORMULA, false, pDestDoc );
+            CopyToDocument(0, 0, nTab2+1, MAXCOL, MAXROW, MAXTAB, InsertDeleteFlags::FORMULA, false, rDestDoc);
     }
 }
 
 void ScDocument::CopyToDocument(const ScRange& rRange,
-                            InsertDeleteFlags nFlags, bool bOnlyMarked, ScDocument* pDestDoc,
+                            InsertDeleteFlags nFlags, bool bOnlyMarked, ScDocument& rDestDoc,
                             const ScMarkData* pMarks, bool bColRowFlags)
 {
     ScRange aNewRange = rRange;
     aNewRange.PutInOrder();
 
-    if( pDestDoc->aDocName.isEmpty() )
-        pDestDoc->aDocName = aDocName;
+    if (rDestDoc.aDocName.isEmpty())
+        rDestDoc.aDocName = aDocName;
 
-    sc::AutoCalcSwitch aACSwitch(*pDestDoc, false); // avoid multiple calculations
+    sc::AutoCalcSwitch aACSwitch(rDestDoc, false); // avoid multiple calculations
 
-    sc::CopyToDocContext aCxt(*pDestDoc);
+    sc::CopyToDocContext aCxt(rDestDoc);
     aCxt.setStartListening(false);
 
-    SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), pDestDoc->maTabs.size()));
+    SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), rDestDoc.maTabs.size()));
     for (SCTAB i = aNewRange.aStart.Tab(); i <= aNewRange.aEnd.Tab() && i < nMinSizeBothTabs; i++)
     {
         ScTable* pTab = FetchTable(i);
-        ScTable* pDestTab = pDestDoc->FetchTable(i);
+        ScTable* pDestTab = rDestDoc.FetchTable(i);
         if (!pTab || !pDestTab)
             continue;
 
@@ -2096,11 +2096,11 @@ void ScDocument::CopyToDocument(const ScRange& rRange,
             nFlags, bOnlyMarked, pDestTab, pMarks, false, bColRowFlags);
     }
 
-    pDestDoc->StartAllListeners(aNewRange);
+    rDestDoc.StartAllListeners(aNewRange);
 }
 
 void ScDocument::UndoToDocument(const ScRange& rRange,
-                            InsertDeleteFlags nFlags, bool bOnlyMarked, ScDocument* pDestDoc)
+                            InsertDeleteFlags nFlags, bool bOnlyMarked, ScDocument& rDestDoc)
 {
     sc::AutoCalcSwitch aAutoCalcSwitch(*this, false);
 
@@ -2109,21 +2109,21 @@ void ScDocument::UndoToDocument(const ScRange& rRange,
     SCTAB nTab1 = aNewRange.aStart.Tab();
     SCTAB nTab2 = aNewRange.aEnd.Tab();
 
-    sc::CopyToDocContext aCxt(*pDestDoc);
+    sc::CopyToDocContext aCxt(rDestDoc);
     if (nTab1 > 0)
-        CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, InsertDeleteFlags::FORMULA, false, pDestDoc );
+        CopyToDocument(0, 0, 0, MAXCOL, MAXROW, nTab1-1, InsertDeleteFlags::FORMULA, false, rDestDoc);
 
-    SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), pDestDoc->maTabs.size()));
+    SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), rDestDoc.maTabs.size()));
     for (SCTAB i = nTab1; i <= nTab2 && i < nMinSizeBothTabs; i++)
     {
-        if (maTabs[i] && pDestDoc->maTabs[i])
+        if (maTabs[i] && rDestDoc.maTabs[i])
             maTabs[i]->UndoToTable(aCxt, aNewRange.aStart.Col(), aNewRange.aStart.Row(),
                                     aNewRange.aEnd.Col(), aNewRange.aEnd.Row(),
-                                    nFlags, bOnlyMarked, pDestDoc->maTabs[i]);
+                                    nFlags, bOnlyMarked, rDestDoc.maTabs[i]);
     }
 
     if (nTab2 < static_cast<SCTAB>(maTabs.size()))
-        CopyToDocument( 0,0,nTab2+1, MAXCOL,MAXROW,maTabs.size(), InsertDeleteFlags::FORMULA, false, pDestDoc );
+        CopyToDocument(0, 0 , nTab2+1, MAXCOL, MAXROW, maTabs.size(), InsertDeleteFlags::FORMULA, false, rDestDoc);
 }
 
 void ScDocument::CopyToClip(const ScClipParam& rClipParam,

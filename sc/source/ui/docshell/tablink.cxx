@@ -234,7 +234,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                     pUndoDoc->AddUndoTab( nTab, nTab, true, true );
                 bFirst = false;
                 ScRange aRange(0,0,nTab,MAXCOL,MAXROW,nTab);
-                rDoc.CopyToDocument(aRange, InsertDeleteFlags::ALL, false, pUndoDoc);
+                rDoc.CopyToDocument(aRange, InsertDeleteFlags::ALL, false, *pUndoDoc);
                 pUndoDoc->TransferDrawPage( &rDoc, nTab, nTab );
                 pUndoDoc->SetLink( nTab, nMode, aFileName, aFilterName,
                                    aOptions, aTabName, GetRefreshDelay() );

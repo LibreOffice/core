@@ -1052,7 +1052,7 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
         ScRange aCopyRange = aMarkRangeWithEnvelope;
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);
-        pDoc->CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, bCopyOnlyMarked, pUndoDoc, &aFuncMark );
+        pDoc->CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, bCopyOnlyMarked, *pUndoDoc, &aFuncMark );
 
         pDocSh->GetUndoManager()->AddUndoAction(
             new ScUndoSelectionAttr(
@@ -1160,7 +1160,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
             for (; itr != itrEnd; ++itr)
                 if (*itr != nStartTab)
                     pUndoDoc->AddUndoTab( *itr, *itr );
-            rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, bMulti, pUndoDoc, &aFuncMark );
+            rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, bMulti, *pUndoDoc, &aFuncMark );
 
             aFuncMark.MarkToMulti();
 
@@ -1337,7 +1337,7 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet )
             ScRange aCopyRange = aMarkRange;
             aCopyRange.aStart.SetTab(0);
             aCopyRange.aEnd.SetTab(nTabCount-1);
-            rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, true, pUndoDoc, &aFuncMark );
+            rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, true, *pUndoDoc, &aFuncMark );
             aFuncMark.MarkToMulti();
 
             OUString aName = pStyleSheet->GetName();
@@ -1368,7 +1368,7 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet )
                     pUndoDoc->AddUndoTab( *itr, *itr );
 
             ScRange aCopyRange( nCol, nRow, 0, nCol, nRow, nTabCount-1 );
-            rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, false, pUndoDoc );
+            rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, false, *pUndoDoc );
 
             ScRange aMarkRange ( nCol, nRow, nTab );
             ScMarkData aUndoMark = aFuncMark;
@@ -1653,17 +1653,17 @@ void ScViewFunc::DeleteMulti( bool bRows )
             SCCOLROW nStart = rSpan.mnStart;
             SCCOLROW nEnd = rSpan.mnEnd;
             if (bRows)
-                rDoc.CopyToDocument( 0,nStart,nTab, MAXCOL,nEnd,nTab, InsertDeleteFlags::ALL,false,pUndoDoc );
+                rDoc.CopyToDocument( 0,nStart,nTab, MAXCOL,nEnd,nTab, InsertDeleteFlags::ALL,false,*pUndoDoc );
             else
                 rDoc.CopyToDocument( static_cast<SCCOL>(nStart),0,nTab,
                         static_cast<SCCOL>(nEnd),MAXROW,nTab,
-                        InsertDeleteFlags::ALL,false,pUndoDoc );
+                        InsertDeleteFlags::ALL,false,*pUndoDoc );
         }
 
         //  all Formulas because of references
         SCTAB nTabCount = rDoc.GetTableCount();
         pUndoDoc->AddUndoTab( 0, nTabCount-1 );
-        rDoc.CopyToDocument( 0,0,0, MAXCOL,MAXROW,MAXTAB, InsertDeleteFlags::FORMULA,false,pUndoDoc );
+        rDoc.CopyToDocument( 0,0,0, MAXCOL,MAXROW,MAXTAB, InsertDeleteFlags::FORMULA,false,*pUndoDoc );
 
         pUndoData = new ScRefUndoData( &rDoc );
 
@@ -1899,7 +1899,7 @@ void ScViewFunc::SetWidthOrHeight(
                     pUndoDoc->AddUndoTab( *itr, *itr, true );
                 rDoc.CopyToDocument( static_cast<SCCOL>(nStart), 0, *itr,
                         static_cast<SCCOL>(nEnd), MAXROW, *itr, InsertDeleteFlags::NONE,
-                        false, pUndoDoc );
+                        false, *pUndoDoc );
             }
             else
             {
@@ -1907,7 +1907,7 @@ void ScViewFunc::SetWidthOrHeight(
                     pUndoDoc->InitUndo( &rDoc, *itr, *itr, false, true );
                 else
                     pUndoDoc->AddUndoTab( *itr, *itr, false, true );
-                rDoc.CopyToDocument( 0, nStart, *itr, MAXCOL, nEnd, *itr, InsertDeleteFlags::NONE, false, pUndoDoc );
+                rDoc.CopyToDocument( 0, nStart, *itr, MAXCOL, nEnd, *itr, InsertDeleteFlags::NONE, false, *pUndoDoc );
             }
         }
 

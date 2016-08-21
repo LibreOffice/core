@@ -328,17 +328,17 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
                 if ( nNewEndX != nOldEndX || nNewEndY != nOldEndY )             // Bereich veraendert?
                 {
                     pUndoDoc->InitUndo( &rDoc, 0, rDoc.GetTableCount()-1 );
-                    rDoc.CopyToDocument( 0,0,0,MAXCOL,MAXROW,MAXTAB,
-                                            InsertDeleteFlags::FORMULA, false, pUndoDoc );     // alle Formeln
+                    rDoc.CopyToDocument(0, 0, 0, MAXCOL, MAXROW, MAXTAB,
+                                        InsertDeleteFlags::FORMULA, false, *pUndoDoc);     // alle Formeln
                 }
                 else
                     pUndoDoc->InitUndo( &rDoc, nDestTab, nDestTab );             // nur Zieltabelle
-                rDoc.CopyToDocument( aOldRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, pUndoDoc );
+                rDoc.CopyToDocument(aOldRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, *pUndoDoc);
             }
             else        // ohne Einfuegen
             {
                 pUndoDoc->InitUndo( &rDoc, nDestTab, nDestTab );             // nur Zieltabelle
-                rDoc.CopyToDocument( aMaxRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, pUndoDoc );
+                rDoc.CopyToDocument(aMaxRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, *pUndoDoc);
             }
         }
 
@@ -404,7 +404,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
         {
             ScDocument* pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
             pRedoDoc->InitUndo( &rDoc, nDestTab, nDestTab );
-            rDoc.CopyToDocument( aNewRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, pRedoDoc );
+            rDoc.CopyToDocument(aNewRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, *pRedoDoc);
 
             pImpl->m_pDocSh->GetUndoManager()->AddUndoAction(
                 new ScUndoUpdateAreaLink( pImpl->m_pDocSh,
