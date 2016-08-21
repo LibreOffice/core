@@ -59,7 +59,7 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers)
     , m_bOpenInDesignMode(false)
     , m_bAutoControlFocus(false)
 {
-    m_pImpl = new FmFormModelImplData;
+    m_pImpl.reset( new FmFormModelImplData );
     m_pImpl->pUndoEnv = new FmXUndoEnvironment(*this);
     m_pImpl->pUndoEnv->acquire();
 }
@@ -71,7 +71,7 @@ FmFormModel::FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShe
     , m_bOpenInDesignMode(false)
     , m_bAutoControlFocus(false)
 {
-    m_pImpl = new FmFormModelImplData;
+    m_pImpl.reset( new FmFormModelImplData );
     m_pImpl->pUndoEnv = new FmXUndoEnvironment(*this);
     m_pImpl->pUndoEnv->acquire();
 }
@@ -84,7 +84,7 @@ FmFormModel::FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShe
     , m_bOpenInDesignMode(false)
     , m_bAutoControlFocus(false)
 {
-    m_pImpl = new FmFormModelImplData;
+    m_pImpl.reset( new FmFormModelImplData );
     m_pImpl->pUndoEnv = new FmXUndoEnvironment(*this);
     m_pImpl->pUndoEnv->acquire();
 }
@@ -99,7 +99,7 @@ FmFormModel::~FmFormModel()
     SetMaxUndoActionCount(1);
 
     m_pImpl->pUndoEnv->release();
-    delete m_pImpl;
+    m_pImpl.reset();
 
 }
 
