@@ -295,7 +295,7 @@ public:
         bool const bIsStart);
 
     static css::uno::Any  GetPropertyValue(
-            OUString const& PropertyName, SwRangeRedline const& rRedline) throw();
+            OUString const& PropertyName, SwRangeRedline const& rRedline) throw (std::exception);
     static css::uno::Sequence< css::beans::PropertyValue > CreateRedlineProperties(
                 SwRangeRedline const& rRedline, bool const bIsStart) throw();
 

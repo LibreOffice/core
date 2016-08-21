@@ -276,7 +276,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SwXRedlinePortion::getImplementationId(  ) th
     return css::uno::Sequence<sal_Int8>();
 }
 
-uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, const SwRangeRedline& rRedline ) throw()
+uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, const SwRangeRedline& rRedline ) throw(std::exception)
 {
     uno::Any aRet;
     if(rPropertyName == UNO_NAME_REDLINE_AUTHOR)
