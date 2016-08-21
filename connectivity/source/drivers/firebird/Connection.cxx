@@ -839,7 +839,19 @@ void SAL_CALL Connection::documentEventOccured( const DocumentEvent& Event )
         if ( m_bIsEmbedded && m_xEmbeddedStorage.is() )
         {
             SAL_INFO("connectivity.firebird", "Writing .fbk from running db");
-            runBackupService(isc_action_svc_backup);
+            try
+            {
+                runBackupService(isc_action_svc_backup);
+            }
+            catch (const SQLException& e)
+            {
+                WrappedTargetException aExceptionWrapper;
+                aExceptionWrapper.Context = e.Context;
+                aExceptionWrapper.Message = e.Message;
+                aExceptionWrapper.TargetException <<= e;
+                throw WrappedTargetException( aExceptionWrapper );
+            }
+
 
             Reference< XStream > xDBStream(m_xEmbeddedStorage->openStreamElement(our_sFBKLocation,
                                                             ElementModes::WRITE));
