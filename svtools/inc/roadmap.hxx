@@ -24,6 +24,7 @@
 #include <vcl/imgctrl.hxx>
 
 #include <svtools/hyperlabel.hxx>
+#include <memory>
 
 class Bitmap;
 
@@ -43,7 +44,7 @@ class RoadmapItem;
 class SVT_DLLPUBLIC ORoadmap : public Control, public RoadmapTypes
 {
 protected:
-    RoadmapImpl*    m_pImpl;
+    std::unique_ptr<RoadmapImpl>    m_pImpl;
     // Window overridables
     void            Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect) override;
     void            implInit(vcl::RenderContext& rRenderContext);

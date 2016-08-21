@@ -241,8 +241,7 @@ void ORoadmap::dispose()
     }
     if ( ! m_pImpl->isComplete() )
         delete m_pImpl->InCompleteHyperLabel;
-    delete m_pImpl;
-    m_pImpl = nullptr;
+    m_pImpl.reset();
     Control::dispose();
 }
 
