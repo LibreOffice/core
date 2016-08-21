@@ -192,7 +192,6 @@ SdrUnoObj::~SdrUnoObj()
     {
         OSL_FAIL( "SdrUnoObj::~SdrUnoObj: caught an exception!" );
     }
-    delete m_pImpl;
 }
 
 void SdrUnoObj::SetModel(SdrModel* pNewModel)
