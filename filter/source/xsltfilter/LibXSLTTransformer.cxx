@@ -298,7 +298,7 @@ namespace XSLT
         if (styleSheet)
         {
             m_tcontext = xsltNewTransformContext(styleSheet, doc);
-            m_tcontext->_private = static_cast<void *> (oh.get());
+            oh->registercontext(m_tcontext);
             xsltQuoteUserParams(m_tcontext, &params[0]);
             result = xsltApplyStylesheetUser(styleSheet, doc, nullptr, nullptr, nullptr,
                                              m_tcontext);
