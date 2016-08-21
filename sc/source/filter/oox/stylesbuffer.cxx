@@ -369,7 +369,7 @@ ColorPalette::ColorPalette( const WorkbookHelper& rHelper )
     , mnAppendIndex(0)
 {
     // default colors
-    maColors.insert( maColors.begin(), spnDefColors8, ::std::end(spnDefColors8) );
+    maColors.insert( maColors.begin(), spnDefColors8, spnDefColors8 + SAL_N_ELEMENTS(spnDefColors8) );
     mnAppendIndex = OOX_COLOR_USEROFFSET;
 }
 
