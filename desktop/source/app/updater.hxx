@@ -12,6 +12,7 @@
 
 #include <rtl/ustring.hxx>
 
+void CreateValidUpdateDir(const OUString& rInstallDir);
 void Update(const OUString& rInstallDir);
 
 #endif

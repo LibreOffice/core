@@ -1451,9 +1451,15 @@ int Desktop::Main()
         if ( !InitializeConfiguration() )
             return EXIT_FAILURE;
 
-        if (true)
+        OUString aInstallationDir( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER );
+
+        CreateValidUpdateDir(aInstallationDir);
+
+        osl::DirectoryItem aDirectoryItem;
+        osl::DirectoryItem::get("file:///lo/users/moggi/test-inst/updated"/*aInstallationDir + "/updated"*/, aDirectoryItem);
+        bool bValidUpdateDirExists = aDirectoryItem.is();
+        if (bValidUpdateDirExists)
         {
-            OUString aInstallationDir( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER );
             rtl::Bootstrap::expandMacros(aInstallationDir);
             Update(aInstallationDir);
         }
