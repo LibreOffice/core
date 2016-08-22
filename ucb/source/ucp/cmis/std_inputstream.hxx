@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_UCBHELPER_STD_INPUTSTREAM_HXX
-#define INCLUDED_UCBHELPER_STD_INPUTSTREAM_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_CMIS_STD_INPUTSTREAM_HXX
+#define INCLUDED_UCB_SOURCE_UCP_CMIS_STD_INPUTSTREAM_HXX
 
 #include <boost/shared_ptr.hpp>
 #include <istream>
@@ -20,14 +20,12 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 
-#include <ucbhelper/ucbhelperdllapi.h>
-
-namespace ucbhelper
+namespace cmis
 {
     /** Implements a seekable InputStream
      *  working on an std::istream
      */
-    class UCBHELPER_DLLPUBLIC StdInputStream
+    class StdInputStream
         : public cppu::OWeakObject,
           public css::io::XInputStream,
           public css::io::XSeekable

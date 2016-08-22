@@ -46,8 +46,6 @@
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/contentidentifier.hxx>
-#include <ucbhelper/std_inputstream.hxx>
-#include <ucbhelper/std_outputstream.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/proxydecider.hxx>
 #include <sax/tools/converter.hxx>
@@ -58,6 +56,8 @@
 #include "cmis_provider.hxx"
 #include "cmis_resultset.hxx"
 #include "cmis_strings.hxx"
+#include <std_inputstream.hxx>
+#include <std_outputstream.hxx>
 
 #define OUSTR_TO_STDSTR(s) string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
 #define STD_TO_OUSTR( str ) OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
@@ -1066,7 +1066,7 @@ namespace cmis
         }
 
         boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
-        uno::Reference < io::XOutputStream > xOutput = new ucbhelper::StdOutputStream( pOut );
+        uno::Reference < io::XOutputStream > xOutput = new StdOutputStream( pOut );
         copyData( xIn, xOutput );
 
         map< string, libcmis::PropertyPtr > newProperties;
@@ -1341,7 +1341,7 @@ namespace cmis
                     if ( nullptr != document )
                     {
                         boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
-                        uno::Reference < io::XOutputStream > xOutput = new ucbhelper::StdOutputStream( pOut );
+                        uno::Reference < io::XOutputStream > xOutput = new StdOutputStream( pOut );
                         copyData( xInputStream, xOutput );
                         try
                         {
@@ -1380,7 +1380,7 @@ namespace cmis
                     else
                     {
                         boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
-                        uno::Reference < io::XOutputStream > xOutput = new ucbhelper::StdOutputStream( pOut );
+                        uno::Reference < io::XOutputStream > xOutput = new StdOutputStream( pOut );
                         copyData( xInputStream, xOutput );
                         try
                         {
@@ -1548,7 +1548,7 @@ namespace cmis
 
             boost::shared_ptr< istream > aIn = document->getContentStream( );
 
-            uno::Reference< io::XInputStream > xIn = new ucbhelper::StdInputStream( aIn );
+            uno::Reference< io::XInputStream > xIn = new StdInputStream( aIn );
             if( !xIn.is( ) )
                 return false;
 

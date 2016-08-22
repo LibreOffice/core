@@ -43,6 +43,8 @@ $(eval $(call gb_Library_add_exception_objects,ucpcmis1,\
 	ucb/source/ucp/cmis/cmis_provider \
 	ucb/source/ucp/cmis/cmis_resultset \
 	ucb/source/ucp/cmis/cmis_url \
+	ucb/source/ucp/cmis/std_inputstream \
+	ucb/source/ucp/cmis/std_outputstream \
 ))
 
 # vim: set noet sw=4 ts=4:

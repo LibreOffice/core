@@ -11,12 +11,12 @@
 
 #include <sal/log.hxx>
 
-#include "ucbhelper/std_outputstream.hxx"
+#include <std_outputstream.hxx>
 
 using namespace std;
 using namespace com::sun::star;
 
-namespace ucbhelper
+namespace cmis
 {
     StdOutputStream::StdOutputStream( boost::shared_ptr< ostream > const & pStream ) :
         m_pStream( pStream )
@@ -61,7 +61,7 @@ namespace ucbhelper
         }
         catch ( const ios_base::failure& e )
         {
-            SAL_INFO( "ucbhelper", "Exception caught when calling write: " << e.what() );
+            SAL_INFO( "ucb.ucp.cmis", "Exception caught when calling write: " << e.what() );
             throw io::IOException( );
         }
     }
@@ -81,7 +81,7 @@ namespace ucbhelper
         }
         catch ( const ios_base::failure& e )
         {
-            SAL_INFO( "ucbhelper", "Exception caught when calling flush: " << e.what() );
+            SAL_INFO( "ucb.ucp.cmis", "Exception caught when calling flush: " << e.what() );
             throw io::IOException( );
         }
     }

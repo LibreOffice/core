@@ -11,8 +11,6 @@ $(eval $(call gb_Library_Library,ucbhelper))
 
 $(eval $(call gb_Library_use_sdk_api,ucbhelper))
 
-$(eval $(call gb_Library_use_external,ucbhelper,boost_headers))
-
 $(eval $(call gb_Library_use_libraries,ucbhelper,\
     cppu \
     cppuhelper \
@@ -51,8 +49,6 @@ $(eval $(call gb_Library_add_exception_objects,ucbhelper,\
     ucbhelper/source/provider/simpleinteractionrequest \
     ucbhelper/source/provider/simpleioerrorrequest \
     ucbhelper/source/provider/simplenameclashresolverequest \
-    ucbhelper/source/provider/std_inputstream \
-    ucbhelper/source/provider/std_outputstream \
 ))
 
 # vim: set noet sw=4 ts=4:

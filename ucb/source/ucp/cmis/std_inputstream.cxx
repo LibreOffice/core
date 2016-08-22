@@ -11,12 +11,12 @@
 
 #include <sal/log.hxx>
 
-#include "ucbhelper/std_inputstream.hxx"
+#include <std_inputstream.hxx>
 
 using namespace std;
 using namespace com::sun::star;
 
-namespace ucbhelper
+namespace cmis
 {
     StdInputStream::StdInputStream( boost::shared_ptr< istream > const & pStream ) :
         m_pStream( pStream ),
@@ -76,7 +76,7 @@ namespace ucbhelper
         }
         catch ( const ios_base::failure& e )
         {
-            SAL_INFO( "ucbhelper", "StdInputStream::readBytes() error: " << e.what() );
+            SAL_INFO( "ucb.ucp.cmis", "StdInputStream::readBytes() error: " << e.what() );
             throw io::IOException( );
         }
 
@@ -103,7 +103,7 @@ namespace ucbhelper
         }
         catch ( const ios_base::failure& e )
         {
-            SAL_INFO( "ucbhelper", "StdInputStream::readBytes() error: " << e.what() );
+            SAL_INFO( "ucb.ucp.cmis", "StdInputStream::readBytes() error: " << e.what() );
             throw io::IOException( );
         }
         return nRead;
@@ -124,7 +124,7 @@ namespace ucbhelper
         }
         catch ( const ios_base::failure& e )
         {
-            SAL_INFO( "ucbhelper", "StdInputStream::readBytes() error: " << e.what() );
+            SAL_INFO( "ucb.ucp.cmis", "StdInputStream::readBytes() error: " << e.what() );
             throw io::IOException( );
         }
     }
@@ -161,7 +161,7 @@ namespace ucbhelper
         }
         catch ( const ios_base::failure& e )
         {
-            SAL_INFO( "ucbhelper", "StdInputStream::readBytes() error: " << e.what() );
+            SAL_INFO( "ucb.ucp.cmis", "StdInputStream::readBytes() error: " << e.what() );
             throw io::IOException( );
         }
     }
