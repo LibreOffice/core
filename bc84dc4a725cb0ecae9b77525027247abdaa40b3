@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_61ce055c",
+        "filename": "accessibility/source/extended/AccessibleBrowseBoxBase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-08-22T06:34:31Z",
+      "side": 1,
+      "message": "you can just go\n   return { \"com.sun.star.accessibility.AccessibleContext\" };",
+      "revId": "bc84dc4a725cb0ecae9b77525027247abdaa40b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
