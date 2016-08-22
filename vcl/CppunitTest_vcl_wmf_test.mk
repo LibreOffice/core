@@ -14,34 +14,200 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_wmf_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_wmf_test,\
-	boost_headers \
+    boost_headers \
     libxml2 \
 ))
-
 
 $(eval $(call gb_CppunitTest_set_include,vcl_wmf_test,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
+    -I$(SRCDIR)/vcl/source/filter/wmf \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,vcl_wmf_test, \
-	comphelper \
-	cppu \
-	cppuhelper \
-	sal \
-    svt \
-	test \
-	tl \
-	unotest \
-	vcl \
-	utl \
-	$(gb_UWINAPI) \
+$(eval $(call gb_CppunitTest_use_library_objects,vcl_wmf_test, \
+    test-setupvcl \
+    vcl \
 ))
+
+$(eval $(call gb_CppunitTest_use_externals,vcl_wmf_test,\
+    $(if $(filter LINUX MACOSX %BSD SOLARIS,$(OS)), \
+            curl) \
+    jpeg \
+    $(if $(filter-out IOS WNT,$(OS)), \
+            nss3 \
+            plc4) \
+    libeot \
+))
+
+$(eval $(call gb_CppunitTest_use_libraries,vcl_wmf_test,\
+    $(call gb_Helper_optional,BREAKPAD, \
+               crashreport) \
+    basegfx \
+    comphelper \
+    cppu \
+    cppuhelper \
+    i18nlangtag \
+    i18nutil \
+    $(if $(filter OPENCL,$(BUILD_TYPE)),opencl) \
+    sal \
+    salhelper \
+    sot \
+    svl \
+    svt \
+    test \
+    tl \
+    ucbhelper \
+    unotest \
+    utl \
+    xmlreader \
+    $(gb_UWINAPI) \
+))
+
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_CppunitTest_add_libs,vcl_wmf_test,\
+    -framework IOKit \
+    -F/System/Library/PrivateFrameworks \
+    -framework CoreUI \
+    -lobjc \
+))
+endif
+
+ifeq ($(ENABLE_JAVA),TRUE)
+$(eval $(call gb_CppunitTest_use_libraries,vcl_wmf_test,\
+    jvmaccess \
+))
+endif
+
+$(eval $(call gb_CppunitTest_use_externals,vcl_wmf_test,\
+    gio \
+    harfbuzz \
+    icuuc \
+    lcms2 \
+))
+ifeq ($(ENABLE_HEADLESS),)
+$(eval $(call gb_CppunitTest_use_externals,vcl_wmf_test,\
+     glew \
+ ))
+endif
+
+ifeq ($(ENABLE_GRAPHITE),TRUE)
+$(eval $(call gb_CppunitTest_use_external,vcl_wmf_test,graphite))
+endif
+
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_CppunitTest_use_system_darwin_frameworks,vcl_wmf_test,\
+    ApplicationServices \
+))
+$(eval $(call gb_CppunitTest_use_system_darwin_frameworks,vcl_wmf_test,\
+    $(if $(filter X86_64,$(CPUNAME)),,QuickTime) \
+    Cocoa \
+    Carbon \
+    CoreFoundation \
+    OpenGL \
+))
+ifneq ($(ENABLE_MACOSX_SANDBOX),TRUE)
+$(eval $(call gb_CppunitTest_use_libraries,vcl_wmf_test,\
+    AppleRemote \
+))
+endif
+endif
+
+ifeq ($(USING_X11),TRUE)
+$(eval $(call gb_CppunitTest_use_externals,vcl_wmf_test,\
+    cairo \
+    cups \
+    dbus \
+    fontconfig \
+    freetype \
+    valgrind \
+))
+endif
+
+ifeq ($(ENABLE_HEADLESS),TRUE)
+$(eval $(call gb_CppunitTest_use_externals,vcl_wmf_test,\
+    cairo \
+    freetype \
+))
+ifneq ($(OS),EMSCRIPTEN)
+$(eval $(call gb_CppunitTest_use_externals,vcl_wmf_test,\
+    fontconfig \
+))
+endif
+else
+ifeq ($(OS),LINUX)
+$(eval $(call gb_CppunitTest_add_libs,vcl_wmf_test,\
+    -lm \
+    -ldl \
+    -lpthread \
+    -lGL \
+    -lX11 \
+))
+endif
+endif
+
+ifeq ($(OS),ANDROID)
+$(eval $(call gb_CppunitTest_add_libs,vcl_wmf_test,\
+    -llog \
+    -landroid \
+    -llo-bootstrap \
+))
+$(eval $(call gb_CppunitTest_use_externals,vcl_wmf_test,\
+    cairo \
+    fontconfig \
+    freetype \
+    expat \
+))
+endif
+
+ifeq ($(OS),IOS)
+$(eval $(call gb_CppunitTest_use_system_darwin_frameworks,vcl_wmf_test,\
+    UIKit \
+    CoreFoundation \
+))
+endif
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_CppunitTest_use_system_win32_libs,vcl_wmf_test,\
+    advapi32 \
+    crypt32 \
+    gdi32 \
+    gdiplus \
+    glu32 \
+    imm32 \
+    mpr \
+    msimg32 \
+    opengl32 \
+    ole32 \
+    shell32 \
+    usp10 \
+    uuid \
+    version \
+    winspool \
+    setupapi \
+    shlwapi \
+))
+#$(eval $(call gb_CppunitTest_add_nativeres,vcl_wmf_test,vcl/salsrc))
+endif
+
+ifeq ($(OS), WNT)
+$(eval $(call gb_CppunitTest_use_externals,vcl_wmf_test,\
+    glyphy \
+))
+endif
+
+ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
+$(eval $(call gb_CppunitTest_add_libs,vcl_wmf_test,\
+    -lm $(DLOPEN_LIBS) \
+    -lpthread \
+    -lGL \
+    -lX11 \
+    -lXext \
+))
+endif
 
 $(eval $(call gb_CppunitTest_use_sdk_api,vcl_wmf_test))
 
 $(eval $(call gb_CppunitTest_use_ure,vcl_wmf_test))
-$(eval $(call gb_CppunitTest_use_vcl,vcl_wmf_test))
 
 $(eval $(call gb_CppunitTest_use_components,vcl_wmf_test,\
     configmgr/source/configmgr \
@@ -51,5 +217,11 @@ $(eval $(call gb_CppunitTest_use_components,vcl_wmf_test,\
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_wmf_test))
+
+# See gb_CppunitTest__use_vcl (solenv/gbuild/CppunitTest.mk; headless):
+ifeq ($(USING_X11),TRUE)
+$(call gb_CppunitTest_get_target,vcl_wmf_test): \
+    $(call gb_Library_get_target,desktop_detector)
+endif
 
 # vim: set noet sw=4 ts=4:
