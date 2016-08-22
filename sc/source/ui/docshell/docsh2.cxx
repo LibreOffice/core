@@ -19,6 +19,7 @@
 
 #include "scitems.hxx"
 #include <rtl/bootstrap.hxx>
+#include <osl/file.hxx>
 #include <svx/drawitem.hxx>
 #include <svl/asiancfg.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
@@ -26,6 +27,7 @@
 #include <orcus/orcus_import_ods.hpp>
 #include <orcusfiltersimpl.hxx>
 #include <config_orcus.h>
+#include <config_folders.h>
 
 #include "drwlayer.hxx"
 #include "stlpool.hxx"
@@ -58,29 +60,20 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     aDocument.GetStyleSheetPool()->CreateStandardStyles();
     aDocument.UpdStlShtPtrsFrmNms();
 
-    #if ENABLE_ORCUS
+#if ENABLE_ORCUS
     /* Create styles that are imported through Orcus */
 
-    OUString aPath("$BRAND_BASE_DIR/");  /* Read the comment below before changing this */
-    rtl::Bootstrap::expandMacros(aPath);
-    OUString aValidPath;
+    OUString aURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/calc/styles.xml");
+    rtl::Bootstrap::expandMacros(aURL);
 
-    /* The Following loop trims 'file://' from start of string and
-     * '../' from the end of string. If you ever happen to change the above macro
-     * please consider changing the following range too, otherwise app would
-     * crash!!
-     */
-    for (sal_Int32 i = 7; i < aPath.getLength() - 3; ++i)
-        aValidPath += OUString(aPath[i]);
-
-    OUString aFileName = "styles.xml";
-    aValidPath += aFileName;
+    OUString aPath;
+    osl::FileBase::getSystemPathFromFileURL(aURL, aPath);
 
     ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
     if (!pOrcus)
         return false;
-    pOrcus->importODS_Styles(aDocument, aValidPath);
-    #endif
+    pOrcus->importODS_Styles(aDocument, aPath);
+#endif
 
     //  SetDocumentModified is not allowed anymore in Load/InitNew!
     InitItems();
