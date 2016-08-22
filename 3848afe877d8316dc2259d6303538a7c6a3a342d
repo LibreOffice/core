@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_01354945",
+        "filename": "include/xmloff/xmlimp.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-08-22T07:12:21Z",
+      "side": 1,
+      "message": "please rename this to SvXMLImportFastNamespaceHandler\n\nfor two reasons\n(1) it\u0027s be easier to distinging going forward, since we\u0027re going to be having two separate parsing stuffs operating in the same code files\n(2) don\u0027t want name conflicts, since this name is globally visible",
+      "revId": "3848afe877d8316dc2259d6303538a7c6a3a342d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
