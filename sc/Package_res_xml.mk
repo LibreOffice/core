@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,sc_res_xml,$(SRCDIR)/sc/res/xml))
 
-$(eval $(call gb_Package_add_files,sc_res_xml,$(LIBO_BIN_FOLDER),\
+$(eval $(call gb_Package_add_files,sc_res_xml,$(LIBO_SHARE_FOLDER)/calc,\
 	styles.xml \
 ))
 
