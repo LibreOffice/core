@@ -2007,11 +2007,17 @@ void MenuBarManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XComp
                 nActiveItemId = nItemId;
 
             vcl::Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+            OUString sWindowTitle;
             if ( pWin && pWin->IsVisible() )
-            {
-                aNewWindowListVector.push_back( pWin->GetText() );
-                ++nItemId;
-            }
+                sWindowTitle = pWin->GetText();
+
+            // tdf#101658 In case the frame is embedded somewhere, LO has no control over it.
+            // So we just skip it.
+            if ( sWindowTitle.isEmpty() )
+                continue;
+
+            aNewWindowListVector.push_back( sWindowTitle );
+            ++nItemId;
         }
     }
 
