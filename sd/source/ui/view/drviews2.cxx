@@ -2456,7 +2456,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_OBJECT_ALIGN_LEFT:  // BASIC
         {
-            mpDrawView->AlignMarkedObjects(SDRHALIGN_LEFT, SdrVertAlign::NONE);
+            mpDrawView->AlignMarkedObjects(SdrHorAlign::Left, SdrVertAlign::NONE);
             Cancel();
             rReq.Done ();
         }
@@ -2464,7 +2464,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_OBJECT_ALIGN_CENTER:  // BASIC
         {
-            mpDrawView->AlignMarkedObjects(SDRHALIGN_CENTER, SdrVertAlign::NONE);
+            mpDrawView->AlignMarkedObjects(SdrHorAlign::Center, SdrVertAlign::NONE);
             Cancel();
             rReq.Done ();
         }
@@ -2472,7 +2472,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_OBJECT_ALIGN_RIGHT:  // BASIC
         {
-            mpDrawView->AlignMarkedObjects(SDRHALIGN_RIGHT, SdrVertAlign::NONE);
+            mpDrawView->AlignMarkedObjects(SdrHorAlign::Right, SdrVertAlign::NONE);
             Cancel();
             rReq.Done ();
         }
@@ -2480,7 +2480,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_OBJECT_ALIGN_UP:  // BASIC
         {
-            mpDrawView->AlignMarkedObjects(SDRHALIGN_NONE, SdrVertAlign::Top);
+            mpDrawView->AlignMarkedObjects(SdrHorAlign::NONE, SdrVertAlign::Top);
             Cancel();
             rReq.Done ();
         }
@@ -2488,7 +2488,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_OBJECT_ALIGN_MIDDLE:  // BASIC
         {
-            mpDrawView->AlignMarkedObjects(SDRHALIGN_NONE, SdrVertAlign::Center);
+            mpDrawView->AlignMarkedObjects(SdrHorAlign::NONE, SdrVertAlign::Center);
             Cancel();
             rReq.Done ();
         }
@@ -2496,7 +2496,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_OBJECT_ALIGN_DOWN:  // BASIC
         {
-            mpDrawView->AlignMarkedObjects(SDRHALIGN_NONE, SdrVertAlign::Bottom);
+            mpDrawView->AlignMarkedObjects(SdrHorAlign::NONE, SdrVertAlign::Bottom);
             Cancel();
             rReq.Done ();
         }

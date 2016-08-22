@@ -1748,7 +1748,7 @@ bool SdrEditView::IsAlignPossible() const
 
 void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
 {
-    if (eHor==SDRHALIGN_NONE && eVert==SdrVertAlign::NONE)
+    if (eHor==SdrHorAlign::NONE && eVert==SdrVertAlign::NONE)
         return;
 
     SortMarkedObjects();
@@ -1759,7 +1759,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
     if( bUndo )
     {
         OUString aStr(GetDescriptionOfMarkedObjects());
-        if (eHor==SDRHALIGN_NONE)
+        if (eHor==SdrHorAlign::NONE)
         {
             switch (eVert)
             {
@@ -1773,13 +1773,13 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
         {
             switch (eHor)
             {
-                case SDRHALIGN_LEFT  : ImpTakeDescriptionStr(STR_EditAlignHLeft  ,aStr); break;
-                case SDRHALIGN_RIGHT : ImpTakeDescriptionStr(STR_EditAlignHRight ,aStr); break;
-                case SDRHALIGN_CENTER: ImpTakeDescriptionStr(STR_EditAlignHCenter,aStr); break;
+                case SdrHorAlign::Left  : ImpTakeDescriptionStr(STR_EditAlignHLeft  ,aStr); break;
+                case SdrHorAlign::Right : ImpTakeDescriptionStr(STR_EditAlignHRight ,aStr); break;
+                case SdrHorAlign::Center: ImpTakeDescriptionStr(STR_EditAlignHCenter,aStr); break;
                 default: break;
             }
         }
-        else if (eHor==SDRHALIGN_CENTER && eVert==SdrVertAlign::Center)
+        else if (eHor==SdrHorAlign::Center && eVert==SdrVertAlign::Center)
         {
             ImpTakeDescriptionStr(STR_EditAlignCenter,aStr);
         }
@@ -1856,9 +1856,9 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
             }
             switch (eHor)
             {
-                case SDRHALIGN_LEFT  : nXMov=aBound.Left()  -aObjRect.Left()      ; break;
-                case SDRHALIGN_RIGHT : nXMov=aBound.Right() -aObjRect.Right()     ; break;
-                case SDRHALIGN_CENTER: nXMov=aCenter.X()    -aObjRect.Center().X(); break;
+                case SdrHorAlign::Left  : nXMov=aBound.Left()  -aObjRect.Left()      ; break;
+                case SdrHorAlign::Right : nXMov=aBound.Right() -aObjRect.Right()     ; break;
+                case SdrHorAlign::Center: nXMov=aCenter.X()    -aObjRect.Center().X(); break;
                 default: break;
             }
             if (nXMov!=0 || nYMov!=0)

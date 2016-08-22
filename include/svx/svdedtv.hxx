@@ -33,11 +33,11 @@ class SfxStyleSheet;
 class SdrLayer;
 class SvdProgressInfo;
 
-enum SdrHorAlign  {
-    SDRHALIGN_NONE,
-    SDRHALIGN_LEFT,
-    SDRHALIGN_RIGHT,
-    SDRHALIGN_CENTER
+enum class SdrHorAlign  {
+    NONE,
+    Left,
+    Right,
+    Center
 };
 
 enum class SdrVertAlign {

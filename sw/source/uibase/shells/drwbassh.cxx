@@ -472,22 +472,22 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                 switch (nSlotId)
                 {
                     case SID_OBJECT_ALIGN_LEFT:
-                        pSdrView->AlignMarkedObjects(SDRHALIGN_LEFT, SdrVertAlign::NONE);
+                        pSdrView->AlignMarkedObjects(SdrHorAlign::Left, SdrVertAlign::NONE);
                         break;
                     case SID_OBJECT_ALIGN_CENTER:
-                        pSdrView->AlignMarkedObjects(SDRHALIGN_CENTER, SdrVertAlign::NONE);
+                        pSdrView->AlignMarkedObjects(SdrHorAlign::Center, SdrVertAlign::NONE);
                         break;
                     case SID_OBJECT_ALIGN_RIGHT:
-                        pSdrView->AlignMarkedObjects(SDRHALIGN_RIGHT, SdrVertAlign::NONE);
+                        pSdrView->AlignMarkedObjects(SdrHorAlign::Right, SdrVertAlign::NONE);
                         break;
                     case SID_OBJECT_ALIGN_UP:
-                        pSdrView->AlignMarkedObjects(SDRHALIGN_NONE, SdrVertAlign::Top);
+                        pSdrView->AlignMarkedObjects(SdrHorAlign::NONE, SdrVertAlign::Top);
                         break;
                     case SID_OBJECT_ALIGN_MIDDLE:
-                        pSdrView->AlignMarkedObjects(SDRHALIGN_NONE, SdrVertAlign::Center);
+                        pSdrView->AlignMarkedObjects(SdrHorAlign::NONE, SdrVertAlign::Center);
                         break;
                     case SID_OBJECT_ALIGN_DOWN:
-                        pSdrView->AlignMarkedObjects(SDRHALIGN_NONE, SdrVertAlign::Bottom);
+                        pSdrView->AlignMarkedObjects(SdrHorAlign::NONE, SdrVertAlign::Bottom);
                         break;
                 }
                 pSh->EndAction();
