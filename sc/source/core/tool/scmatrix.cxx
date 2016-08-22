@@ -317,7 +317,8 @@ public:
 
     void ExecuteOperation(const std::pair<size_t, size_t>& rStartPos,
             const std::pair<size_t, size_t>& rEndPos, const ScFullMatrix::DoubleOpFunction& aDoubleFunc,
-            const ScFullMatrix::BoolOpFunction& aBoolFunc, const ScFullMatrix::StringOpFunction& aStringFunc) const;
+            const ScFullMatrix::BoolOpFunction& aBoolFunc, const ScFullMatrix::StringOpFunction& aStringFunc,
+            const ScFullMatrix::EmptyOpFunction& aEmptyFunc) const;
 
     template<typename T>
     std::vector<ScMatrix::IterateResult> ApplyCollectOperation(bool bTextAsZero, const std::vector<std::unique_ptr<T>>& aOp);
@@ -2254,13 +2255,15 @@ public:
     WalkElementBlockOperation(size_t nRowSize, size_t /*nColSize*/,
             ScFullMatrix::DoubleOpFunction aDoubleFunc,
             ScFullMatrix::BoolOpFunction aBoolFunc,
-            ScFullMatrix::StringOpFunction aStringFunc):
+            ScFullMatrix::StringOpFunction aStringFunc,
+            ScFullMatrix::EmptyOpFunction aEmptyFunc):
         mnRowSize(nRowSize),
         mnRowPos(0),
         mnColPos(0),
         maDoubleFunc(aDoubleFunc),
         maBoolFunc(aBoolFunc),
-        maStringFunc(aStringFunc)
+        maStringFunc(aStringFunc),
+        maEmptyFunc(aEmptyFunc)
     {
     }
 
@@ -2328,8 +2331,32 @@ public:
                 }
             }
             break;
-            case mdds::mtm::element_integer:
             case mdds::mtm::element_empty:
+            {
+                for (size_t i=0; i < node.size; ++i)
+                {
+                    maEmptyFunc(mnRowPos, mnColPos);
+                    ++mnRowPos;
+                    if (mnRowPos >= mnRowSize)
+                    {
+                        mnRowPos = 0;
+                        ++mnColPos;
+                    }
+                }
+            }
+            break;
+            case mdds::mtm::element_integer:
+            {
+                SAL_WARN("sc.core","WalkElementBlockOperation - unhandled element_integer");
+                // No function (yet?), but advance row and column count.
+                mnColPos += node.size / mnRowSize;
+                mnRowPos += node.size % mnRowSize;
+                if (mnRowPos >= mnRowSize)
+                {
+                    mnRowPos = 0;
+                    ++mnColPos;
+                }
+            }
             break;
         }
     }
@@ -2343,16 +2370,18 @@ private:
     ScFullMatrix::DoubleOpFunction maDoubleFunc;
     ScFullMatrix::BoolOpFunction maBoolFunc;
     ScFullMatrix::StringOpFunction maStringFunc;
+    ScFullMatrix::EmptyOpFunction maEmptyFunc;
 };
 
 }
 
 void ScMatrixImpl::ExecuteOperation(const std::pair<size_t, size_t>& rStartPos,
         const std::pair<size_t, size_t>& rEndPos, const ScMatrix::DoubleOpFunction& aDoubleFunc,
-        const ScMatrix::BoolOpFunction& aBoolFunc, const ScMatrix::StringOpFunction& aStringFunc) const
+        const ScMatrix::BoolOpFunction& aBoolFunc, const ScMatrix::StringOpFunction& aStringFunc,
+        const ScMatrix::EmptyOpFunction& aEmptyFunc) const
 {
     WalkElementBlockOperation aFunc(maMat.size().row, maMat.size().column,
-            aDoubleFunc, aBoolFunc, aStringFunc);
+            aDoubleFunc, aBoolFunc, aStringFunc, aEmptyFunc);
     maMat.walk(aFunc, MatrixImplType::size_pair_type(rStartPos.first, rStartPos.second),
             MatrixImplType::size_pair_type(rEndPos.first, rEndPos.second));
 }
@@ -2456,6 +2485,12 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
             aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] + aStr.getString();
         };
 
+    std::function<void(size_t, size_t)> aEmptyFunc =
+        [&](size_t /*nRow*/, size_t /*nCol*/)
+        {
+            // Nothing. Concatenating an empty string to an existing string.
+        };
+
 
     if (nC1 == 1 || nR1 == 1)
     {
@@ -2468,12 +2503,18 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
             for (size_t j = 0; j < nColRep; ++j)
             {
                 nColOffset = j;
-                xMat1->ExecuteOperation(std::pair<size_t, size_t>(0, 0), std::pair<size_t, size_t>(std::min(nR1, nMaxRow) - 1, std::min(nC1, nMaxCol) - 1), aDoubleFunc, aBoolFunc, aStringFunc);
+                xMat1->ExecuteOperation(
+                        std::pair<size_t, size_t>(0, 0),
+                        std::pair<size_t, size_t>(std::min(nR1, nMaxRow) - 1, std::min(nC1, nMaxCol) - 1),
+                        aDoubleFunc, aBoolFunc, aStringFunc, aEmptyFunc);
             }
         }
     }
     else
-        xMat1->ExecuteOperation(std::pair<size_t, size_t>(0, 0), std::pair<size_t, size_t>(nMaxRow - 1, nMaxCol - 1), aDoubleFunc, aBoolFunc, aStringFunc);
+        xMat1->ExecuteOperation(
+                std::pair<size_t, size_t>(0, 0),
+                std::pair<size_t, size_t>(nMaxRow - 1, nMaxCol - 1),
+                aDoubleFunc, aBoolFunc, aStringFunc, aEmptyFunc);
 
     std::vector<svl::SharedString> aSharedString(nMaxCol*nMaxRow);
 
@@ -2507,6 +2548,13 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
                 rStringPool.intern(aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] + aStr.getString());
         };
 
+    std::function<void(size_t, size_t)> aEmptyFunc2 =
+        [&](size_t nRow, size_t nCol)
+        {
+            aSharedString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] =
+                rStringPool.intern(aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)]);
+        };
+
     nRowOffset = 0;
     nColOffset = 0;
     if (nC2 == 1 || nR2 == 1)
@@ -2520,12 +2568,18 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
             for (size_t j = 0; j < nColRep; ++j)
             {
                 nColOffset = j;
-                xMat2->ExecuteOperation(std::pair<size_t, size_t>(0, 0), std::pair<size_t, size_t>(std::min(nR2, nMaxRow) - 1, std::min(nC2, nMaxCol) - 1), aDoubleFunc2, aBoolFunc2, aStringFunc2);
+                xMat2->ExecuteOperation(
+                        std::pair<size_t, size_t>(0, 0),
+                        std::pair<size_t, size_t>(std::min(nR2, nMaxRow) - 1, std::min(nC2, nMaxCol) - 1),
+                        aDoubleFunc2, aBoolFunc2, aStringFunc2, aEmptyFunc2);
             }
         }
     }
     else
-        xMat2->ExecuteOperation(std::pair<size_t, size_t>(0, 0), std::pair<size_t, size_t>(nMaxRow - 1, nMaxCol - 1), aDoubleFunc2, aBoolFunc2, aStringFunc2);
+        xMat2->ExecuteOperation(
+                std::pair<size_t, size_t>(0, 0),
+                std::pair<size_t, size_t>(nMaxRow - 1, nMaxCol - 1),
+                aDoubleFunc2, aBoolFunc2, aStringFunc2, aEmptyFunc2);
 
     aString.clear();
 
@@ -3189,9 +3243,9 @@ void ScFullMatrix::PowOp( bool bFlag, double fVal, ScMatrix& rMat)
 
 void ScFullMatrix::ExecuteOperation(const std::pair<size_t, size_t>& rStartPos,
         const std::pair<size_t, size_t>& rEndPos, DoubleOpFunction aDoubleFunc,
-        BoolOpFunction aBoolFunc, StringOpFunction aStringFunc) const
+        BoolOpFunction aBoolFunc, StringOpFunction aStringFunc, EmptyOpFunction aEmptyFunc) const
 {
-    pImpl->ExecuteOperation(rStartPos, rEndPos, aDoubleFunc, aBoolFunc, aStringFunc);
+    pImpl->ExecuteOperation(rStartPos, rEndPos, aDoubleFunc, aBoolFunc, aStringFunc, aEmptyFunc);
 }
 
 std::vector<ScMatrix::IterateResult> ScFullMatrix::Collect(bool bTextAsZero, const std::vector<std::unique_ptr<sc::op::Op>>& aOp)
@@ -3954,10 +4008,10 @@ std::vector<ScMatrix::IterateResult> ScVectorRefMatrix::Collect(bool bTextAsZero
 
 void ScVectorRefMatrix::ExecuteOperation(const std::pair<size_t, size_t>& rStartPos,
         const std::pair<size_t, size_t>& rEndPos, DoubleOpFunction aDoubleFunc,
-        BoolOpFunction aBoolFunc, StringOpFunction aStringFunc) const
+        BoolOpFunction aBoolFunc, StringOpFunction aStringFunc, EmptyOpFunction aEmptyFunc) const
 {
     const_cast<ScVectorRefMatrix*>(this)->ensureFullMatrix();
-    mpFullMatrix->ExecuteOperation(rStartPos, rEndPos, aDoubleFunc, aBoolFunc, aStringFunc);
+    mpFullMatrix->ExecuteOperation(rStartPos, rEndPos, aDoubleFunc, aBoolFunc, aStringFunc, aEmptyFunc);
 }
 
 void ScFullMatrix::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow,
