@@ -22,6 +22,7 @@
 #include <test/mtfxmldump.hxx>
 #include <vcl/wmf.hxx>
 #include <vcl/metaact.hxx>
+#include <winmtf.hxx>
 
 using namespace css;
 
@@ -46,6 +47,7 @@ public:
     void testEmfLineStyles();
     void testWorldTransformFontSize();
     void testTdf93750();
+    void testTdf99402();
 
     CPPUNIT_TEST_SUITE(WmfTest);
     CPPUNIT_TEST(testNonPlaceableWmf);
@@ -54,6 +56,7 @@ public:
     CPPUNIT_TEST(testEmfLineStyles);
     CPPUNIT_TEST(testWorldTransformFontSize);
     CPPUNIT_TEST(testTdf93750);
+    CPPUNIT_TEST(testTdf99402);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -225,6 +228,31 @@ void WmfTest::testTdf93750()
 
     assertXPath(pDoc, "/metafile/push[1]/comment[2]", "datasize", "28");
     assertXPath(pDoc, "/metafile/push[1]/comment[3]", "datasize", "72");
+}
+
+void WmfTest::testTdf99402()
+{
+    // Symbol font should arrive with RTL_TEXTENCODING_SYMBOL encoding,
+    // even if charset is OEM_CHARSET/DEFAULT_CHARSET in WMF
+    LOGFONTW logfontw;
+    logfontw.lfHeight = 0;
+    logfontw.lfWidth = 0;
+    logfontw.lfEscapement = 0;
+    logfontw.lfOrientation = 0;
+    logfontw.lfWeight = 0;
+    logfontw.lfItalic = FALSE;
+    logfontw.lfUnderline = FALSE;
+    logfontw.lfStrikeOut = FALSE;
+    logfontw.lfCharSet = OEM_CHARSET;
+    logfontw.lfOutPrecision = 0; // OUT_DEFAULT_PRECIS
+    logfontw.lfClipPrecision = 0; // CLIP_DEFAULT_PRECIS
+    logfontw.lfQuality = 0; // DEFAULT_QUALITY
+    logfontw.lfPitchAndFamily = FF_ROMAN | DEFAULT_PITCH;
+    logfontw.alfFaceName = "Symbol";
+
+    WinMtfFontStyle fontStyle(logfontw);
+
+    CPPUNIT_ASSERT_EQUAL(RTL_TEXTENCODING_SYMBOL, fontStyle.aFont.GetCharSet());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WmfTest);

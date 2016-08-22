@@ -170,6 +170,8 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_getTextEncodingInfo(
     @return
     The corresponding rtl_TextEncoding value, or RTL_TEXTENCODING_DONTKNOW if
     no mapping is applicable.
+    If nWinCharset is 255 (OEM_CHARSET), then return value is RTL_TEXTENCODING_IBM_850,
+    regardless of current locale.
  */
 SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromWindowsCharset(
         sal_uInt8 nWinCharset );
@@ -185,6 +187,32 @@ SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromWindowsCharset(
  */
 SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset(
         const sal_Char* pMimeCharset );
+
+/** Map from a ISO-639 language code (and optionally ISO-3166 country/region code)
+    to a text encoding of corresponding Windows ANSI codepage.
+
+    @param pLanguage
+    Any language-country string.  Must not be null.
+
+    @return
+    The corresponding rtl_TextEncoding value.
+    If no mapping is found, RTL_TEXTENCODING_MS_1252 is returned.
+ */
+SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL rtl_getWindowsTextEncodingFromLanguageString(
+        const sal_Char* pLanguage);
+
+/** Map from a ISO-639 language code (and optionally ISO-3166 country/region code)
+    to a text encoding of corresponding Windows OEM codepage.
+
+    @param pLanguage
+    Any language-country string.  Must not be null.
+
+    @return
+    The corresponding rtl_TextEncoding value.
+    If no mapping is found, RTL_TEXTENCODING_IBM_850 is returned.
+ */
+SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL rtl_getWindowsOEMTextEncodingFromLanguageString(
+        const sal_Char* pLanguage);
 
 /** Map from a Unix charset to a text encoding.
 
