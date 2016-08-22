@@ -51,10 +51,6 @@ void SvxFormatCellsDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         rAreaPage.SetGradientList( mpGradientList );
         rAreaPage.SetHatchingList( mpHatchingList );
         rAreaPage.SetBitmapList( mpBitmapList );
-        rAreaPage.SetPageType( PageType::Area );
-        rAreaPage.SetDlgType( 1 );
-        rAreaPage.SetPos( 0 );
-        rAreaPage.Construct();
         rAreaPage.ActivatePage( mrOutAttrs );
     }
     else if (nId == m_nBorderPageId)
