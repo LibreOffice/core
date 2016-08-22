@@ -59,12 +59,12 @@ using namespace com::sun::star;
 
 struct SvxColorTabPageShadow
 {
-    PageType nUnknownType;
+    sal_uInt16 nUnknownType;
     sal_Int32  nUnknownPos;
     bool   bIsAreaTP;
     ChangeType nChangeType;
     SvxColorTabPageShadow()
-        : nUnknownType( PageType::Unknown )
+        : nUnknownType( COLORPAGE_UNKNOWN )
         , nUnknownPos( LISTBOX_ENTRY_NOTFOUND )
         , bIsAreaTP( false )
         , nChangeType( ChangeType::NONE )
@@ -81,10 +81,7 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     , rOutAttrs           ( rInAttrs )
     // All the horrific pointers we store and should not
     , pnColorListState( nullptr )
-    , pPageType( nullptr )
-    , nDlgType( 0 )
     , pPos( nullptr )
-    , pbAreaTP( nullptr )
     , aXFStyleItem( drawing::FillStyle_SOLID )
     , aXFillColorItem( OUString(), Color( COL_BLACK ) )
     , aXFillAttr( static_cast<XOutdevItemPool*>( rInAttrs.GetPool() ))
@@ -262,47 +259,40 @@ void SvxColorTabPage::Construct()
 
 void SvxColorTabPage::ActivatePage( const SfxItemSet& )
 {
-    if( nDlgType == 0 ) // area dialog
+    if( pColorList.is() )
     {
-        *pbAreaTP = false;
-
-        if( pColorList.is() )
+        if( *pPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            if( *pPageType == PageType::Color && *pPos != LISTBOX_ENTRY_NOTFOUND )
-            {
-                m_pValSetColorList->SelectItem( m_pValSetColorList->GetItemId( static_cast<size_t>(*pPos) ) );
-                const XColorEntry* pEntry = pColorList->GetColor(*pPos);
-                aPreviousColor = pEntry->GetColor();
-                ChangeColor(pEntry->GetColor());
-            }
-            else if( *pPageType == PageType::Color && *pPos == LISTBOX_ENTRY_NOTFOUND )
-            {
-                const SfxPoolItem* pPoolItem = nullptr;
-                if( SfxItemState::SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), true, &pPoolItem ) )
-                {
-                    SetColorModel( ColorModel::RGB );
-                    ChangeColorModel();
-
-                    aPreviousColor = static_cast<const XFillColorItem*>(pPoolItem)->GetColorValue();
-                    ChangeColor( aPreviousColor );
-
-
-                    m_pRcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetRed() ) );
-                    m_pGcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetGreen() ) );
-                    m_pBcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetBlue() ) );
-                    m_pHexcustom->SetColor( aCurrentColor.GetColor() );
-
-                }
-            }
-
-            m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
-            m_pCtlPreviewOld->Invalidate();
-
-            SelectValSetHdl_Impl( m_pValSetColorList );
-
-            *pPageType = PageType::Color;
-            *pPos = LISTBOX_ENTRY_NOTFOUND;
+            m_pValSetColorList->SelectItem( m_pValSetColorList->GetItemId( static_cast<size_t>(*pPos) ) );
+            const XColorEntry* pEntry = pColorList->GetColor(*pPos);
+            aPreviousColor = pEntry->GetColor();
+            ChangeColor(pEntry->GetColor());
         }
+        else if( *pPos == LISTBOX_ENTRY_NOTFOUND )
+        {
+            const SfxPoolItem* pPoolItem = nullptr;
+            if( SfxItemState::SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), true, &pPoolItem ) )
+            {
+                SetColorModel( ColorModel::RGB );
+                ChangeColorModel();
+
+                aPreviousColor = static_cast<const XFillColorItem*>(pPoolItem)->GetColorValue();
+                ChangeColor( aPreviousColor );
+
+                m_pRcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetRed() ) );
+                m_pGcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetGreen() ) );
+                m_pBcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetBlue() ) );
+                m_pHexcustom->SetColor( aCurrentColor.GetColor() );
+
+            }
+        }
+
+        m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
+        m_pCtlPreviewOld->Invalidate();
+
+        SelectValSetHdl_Impl( m_pValSetColorList );
+
+        *pPos = LISTBOX_ENTRY_NOTFOUND;
     }
 }
 
@@ -356,13 +346,9 @@ long SvxColorTabPage::CheckChanges_Impl()
 
 bool SvxColorTabPage::FillItemSet( SfxItemSet* rSet )
 {
-    if( ( nDlgType != 0 ) ||
-        ( *pPageType == PageType::Color && !*pbAreaTP ) )
-    {
-        maPaletteManager.AddRecentColor( aCurrentColor );
-        rSet->Put( XFillColorItem( OUString(), aCurrentColor ) );
-        rSet->Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
-    }
+    maPaletteManager.AddRecentColor( aCurrentColor );
+    rSet->Put( XFillColorItem( OUString(), aCurrentColor ) );
+    rSet->Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
     return true;
 }
 
@@ -846,10 +832,7 @@ void SvxColorTabPage::SetupForViewFrame( SfxViewFrame *pViewFrame )
                                       SfxCallMode::SYNCHRON ));
     pColorList = pPtr ? pPtr->GetValue() : XColorList::GetStdColorList();
 
-    SetPageType( &pShadow->nUnknownType );
-    SetDlgType( COLORPAGE_UNKNOWN );
     SetPos( &pShadow->nUnknownPos );
-    SetAreaTP( &pShadow->bIsAreaTP );
     SetColorChgd( &pShadow->nChangeType );
     Construct();
 }
