@@ -50,17 +50,18 @@ $(eval $(call gb_Executable_add_exception_objects,updater,\
 	onlineupdate/source/update/updater/xpcom/glue/nsVersionComparator \
 	onlineupdate/source/update/updater/archivereader \
 	onlineupdate/source/update/updater/bspatch \
-	onlineupdate/source/update/updater/loaddlls \
 	onlineupdate/source/update/updater/progressui_gtk \
 	onlineupdate/source/update/updater/progressui_null \
-	onlineupdate/source/update/updater/progressui_win \
 	onlineupdate/source/update/updater/updater \
-	onlineupdate/source/update/updater/win_dirent \
 	onlineupdate/source/update/common/pathhash \
 	onlineupdate/source/update/common/readstrings \
 	onlineupdate/source/update/common/uachelper \
 	onlineupdate/source/update/common/updatehelper \
 	onlineupdate/source/update/common/updatelogging \
+	$(if $(filter WNT,$(OS)),\
+		onlineupdate/source/update/updater/loaddlls \
+		onlineupdate/source/update/updater/progressui_win \
+		onlineupdate/source/update/updater/win_dirent )\
 ))
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab: */
