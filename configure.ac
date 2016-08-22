@@ -9622,7 +9622,7 @@ if test "$enable_coinmp" != "no"; then
     AC_MSG_RESULT([yes])
     if test "$with_system_coinmp" = "yes"; then
         SYSTEM_COINMP=TRUE
-        PKG_CHECK_MODULES( COINMP, coinmp )
+        PKG_CHECK_MODULES(COINMP, coinmp coinutils)
         FilterLibs "${COINMP_LIBS}"
         COINMP_LIBS="${filteredlibs}"
     else
