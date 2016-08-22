@@ -113,6 +113,8 @@ SvxPatternTabPage::SvxPatternTabPage(  vcl::Window* pParent, const SfxItemSet& r
 
     // size of the bitmap display
     Size aSize = getDrawPreviewOptimalSize(this);
+    m_pPatternLB->set_width_request(aSize.Width());
+    m_pPatternLB->set_height_request(aSize.Height());
     m_pCtlPreview->set_width_request(aSize.Width());
     m_pCtlPreview->set_height_request(aSize.Height());
 

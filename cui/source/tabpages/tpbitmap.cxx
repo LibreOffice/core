@@ -41,7 +41,7 @@
 #include <vcl/layout.hxx>
 #include <svx/svxdlg.hxx>
 #include <sfx2/viewsh.hxx>
-
+#include <sfx2/dialoghelper.hxx>
 #include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
@@ -132,7 +132,9 @@ SvxBitmapTabPage::SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInA
     m_pBtnImport->SetClickHdl( LINK(this, SvxBitmapTabPage, ClickImportHdl) );
 
     // Calculate size of display boxes
-    Size aSize = LogicToPixel(Size(90, 42), MAP_APPFONT);
+    Size aSize = getDrawPreviewOptimalSize(this);
+    m_pBitmapLB->set_width_request(aSize.Width());
+    m_pBitmapLB->set_height_request(aSize.Height());
     m_pCtlBitmapPreview->set_width_request(aSize.Width());
     m_pCtlBitmapPreview->set_height_request(aSize.Height());
 
