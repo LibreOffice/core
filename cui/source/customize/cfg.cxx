@@ -1750,6 +1750,7 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     get(m_pContentsLabel, "contentslabel");
     get(m_pAddCommandsButton, "add");
     get(m_pModifyCommandButton, "modify");
+    get(m_pDeleteCommandButton, "deletebtn");
     get(m_pMoveUpButton, "up");
     get(m_pMoveDownButton, "down");
     get(m_pSaveInListBox, "savein");
@@ -1781,6 +1782,7 @@ void SvxConfigPage::dispose()
     m_pEntries.clear();
     m_pAddCommandsButton.clear();
     m_pModifyCommandButton.clear();
+    m_pDeleteCommandButton.clear();
     m_pMoveUpButton.clear();
     m_pMoveDownButton.clear();
     m_pSaveInListBox.clear();
@@ -2432,6 +2434,9 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
     m_pAddCommandsButton->SetClickHdl  (
         LINK( this, SvxMenuConfigPage, AddCommandsHdl ) );
 
+    m_pDeleteCommandButton->SetClickHdl  (
+        LINK( this, SvxMenuConfigPage, DeleteCommandHdl ) );
+
     PopupMenu* pMenu = m_pModifyTopLevelButton->GetPopupMenu();
     pMenu->SetMenuFlags(
         pMenu->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
@@ -2500,10 +2505,10 @@ void SvxMenuConfigPage::UpdateButtonStates()
     {
         m_pMoveUpButton->Enable( false );
         m_pMoveDownButton->Enable( false );
+        m_pDeleteCommandButton->Enable(false);
 
         pPopup->EnableItem( "addseparator" );
         pPopup->EnableItem( "modrename", false );
-        pPopup->EnableItem( "moddelete", false );
 
         m_pDescriptionField->SetText("");
 
@@ -2521,17 +2526,19 @@ void SvxMenuConfigPage::UpdateButtonStates()
 
     if ( pEntryData->IsSeparator() )
     {
-        pPopup->EnableItem( "moddelete" );
         pPopup->EnableItem( "addseparator", false );
         pPopup->EnableItem( "modrename", false );
 
         m_pDescriptionField->SetText("");
+
+        m_pDeleteCommandButton->Enable();
     }
     else
     {
         pPopup->EnableItem( "addseparator" );
-        pPopup->EnableItem( "moddelete" );
         pPopup->EnableItem( "modrename" );
+
+        m_pDeleteCommandButton->Enable();
 
         m_pDescriptionField->SetText(pEntryData->GetHelpText());
     }
@@ -2707,10 +2714,6 @@ IMPL_LINK_TYPED( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton, void 
         pNewEntryData->SetUserDefined();
         InsertEntry( pNewEntryData );
     }
-    else if (sIdent == "moddelete")
-    {
-        DeleteSelectedContent();
-    }
     else if (sIdent == "modrename")
     {
         SvTreeListEntry* pActEntry = m_pContentsListBox->GetCurEntry();
@@ -2782,6 +2785,15 @@ IMPL_LINK_NOARG_TYPED( SvxMenuConfigPage, AddCommandsHdl, Button *, void )
     m_pSelectorDlg->SetImageProvider( GetSaveInData() );
 
     m_pSelectorDlg->Execute();
+}
+
+IMPL_LINK_NOARG_TYPED( SvxMenuConfigPage, DeleteCommandHdl, Button *, void )
+{
+    DeleteSelectedContent();
+    if ( GetSaveInData()->IsModified() )
+    {
+        UpdateButtonStates();
+    }
 }
 
 SaveInData* SvxMenuConfigPage::CreateSaveInData(
@@ -3099,6 +3111,9 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
 
     m_pAddCommandsButton->SetClickHdl  (
         LINK( this, SvxToolbarConfigPage, AddCommandsHdl ) );
+
+    m_pDeleteCommandButton->SetClickHdl  (
+        LINK( this, SvxToolbarConfigPage, DeleteCommandHdl ) );
 
     m_pMoveUpButton->SetClickHdl ( LINK( this, SvxToolbarConfigPage, MoveHdl) );
     m_pMoveDownButton->SetClickHdl ( LINK( this, SvxToolbarConfigPage, MoveHdl) );
@@ -3454,11 +3469,6 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, vo
                 pNewLBEntry, SvButtonState::Tristate );
 
             bNeedsApply = true;
-            break;
-        }
-        case ID_DELETE:
-        {
-            DeleteSelectedContent();
             break;
         }
         case ID_ICON_ONLY:
@@ -4464,7 +4474,6 @@ void SvxToolbarConfigPage::UpdateButtonStates()
 {
     PopupMenu* pPopup = m_pModifyCommandButton->GetPopupMenu();
     pPopup->EnableItem( ID_RENAME, false );
-    pPopup->EnableItem( ID_DELETE, false );
     pPopup->EnableItem( ID_BEGIN_GROUP, false );
     pPopup->EnableItem( ID_DEFAULT_COMMAND, false );
     pPopup->EnableItem( ID_ICON_ONLY, false );
@@ -4472,6 +4481,8 @@ void SvxToolbarConfigPage::UpdateButtonStates()
     pPopup->EnableItem( ID_TEXT_ONLY, false );
     pPopup->EnableItem( ID_CHANGE_SYMBOL, false );
     pPopup->EnableItem( ID_RESET_SYMBOL, false );
+
+    m_pDeleteCommandButton->Enable(false);
 
     m_pDescriptionField->SetText("");
 
@@ -4483,16 +4494,19 @@ void SvxToolbarConfigPage::UpdateButtonStates()
 
     SvxConfigEntry* pEntryData = static_cast<SvxConfigEntry*>(selection->GetUserData());
     if ( pEntryData->IsSeparator() )
-        pPopup->EnableItem( ID_DELETE );
+    {
+        m_pDeleteCommandButton->Enable();
+    }
     else
     {
         pPopup->EnableItem( ID_BEGIN_GROUP );
-        pPopup->EnableItem( ID_DELETE );
         pPopup->EnableItem( ID_RENAME );
         pPopup->EnableItem( ID_ICON_ONLY );
         pPopup->EnableItem( ID_ICON_AND_TEXT );
         pPopup->EnableItem( ID_TEXT_ONLY );
         pPopup->EnableItem( ID_CHANGE_SYMBOL );
+
+        m_pDeleteCommandButton->Enable();
 
         if ( !pEntryData->IsUserDefined() )
             pPopup->EnableItem( ID_DEFAULT_COMMAND );
@@ -4528,6 +4542,7 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
         m_pModifyTopLevelButton->Enable( false );
         m_pModifyCommandButton->Enable( false );
         m_pAddCommandsButton->Enable( false );
+        m_pDeleteCommandButton->Enable( false );
 
         return;
     }
@@ -4664,6 +4679,11 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, AddCommandsHdl, Button *, void )
     m_pSelectorDlg->SetImageProvider( GetSaveInData() );
 
     m_pSelectorDlg->Execute();
+}
+
+IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, DeleteCommandHdl, Button *, void )
+{
+    DeleteSelectedContent();
 }
 
 IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, AddFunctionHdl, SvxScriptSelectorDialog&, void )
