@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "fa6399be_a45f4b0d",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4729,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-22T13:00:39Z",
+      "side": 1,
+      "message": "But we don\u0027t know here if that is the case. Note that GetMappedFormatstring() may be called from other places than from GetFormatStringForExcel() and the format does not have to be en-US.",
+      "parentUuid": "fa6399be_443aefce",
+      "range": {
+        "startLine": 4729,
+        "startChar": 34,
+        "endLine": 4729,
+        "endChar": 66
+      },
+      "revId": "729e2f6cd4896e3a0a69ddc98e1078c09e465c40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_e14e9595",
         "filename": "svl/source/numbers/zformat.cxx",
         "patchSetId": 2
