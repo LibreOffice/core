@@ -2212,7 +2212,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             else
             {
                 WaitObject aWait( GetActiveWindow() );
-                mpDrawView->MergeMarkedObjects(SDR_MERGE_MERGE);
+                mpDrawView->MergeMarkedObjects(SdrMergeMode::Merge);
             }
             Cancel();
             rReq.Done ();
@@ -2233,7 +2233,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             else
             {
                 WaitObject aWait( GetActiveWindow() );
-                mpDrawView->MergeMarkedObjects(SDR_MERGE_SUBSTRACT);
+                mpDrawView->MergeMarkedObjects(SdrMergeMode::Subtract);
             }
             Cancel();
             rReq.Done ();
@@ -2254,7 +2254,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             else
             {
                 WaitObject aWait( GetActiveWindow() );
-                mpDrawView->MergeMarkedObjects(SDR_MERGE_INTERSECT);
+                mpDrawView->MergeMarkedObjects(SdrMergeMode::Intersect);
             }
             Cancel();
             rReq.Done ();

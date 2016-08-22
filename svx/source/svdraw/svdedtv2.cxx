@@ -1096,7 +1096,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
 
         switch(eMode)
         {
-            case SDR_MERGE_MERGE:
+            case SdrMergeMode::Merge:
             {
                 // merge all contained parts (OR)
                 static bool bTestXOR(false);
@@ -1110,13 +1110,13 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
                 }
                 break;
             }
-            case SDR_MERGE_SUBSTRACT:
+            case SdrMergeMode::Subtract:
             {
                 // Subtract B from A
                 aMergePolyPolygonA = basegfx::tools::solvePolygonOperationDiff(aMergePolyPolygonA, aMergePolyPolygonB);
                 break;
             }
-            case SDR_MERGE_INTERSECT:
+            case SdrMergeMode::Intersect:
             {
                 // AND B and A
                 aMergePolyPolygonA = basegfx::tools::solvePolygonOperationAnd(aMergePolyPolygonA, aMergePolyPolygonB);
@@ -1145,21 +1145,21 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
         aRemove.ForceSort();
         switch(eMode)
         {
-            case SDR_MERGE_MERGE:
+            case SdrMergeMode::Merge:
             {
                 SetUndoComment(
                     ImpGetResStr(STR_EditMergeMergePoly),
                     aRemove.GetMarkDescription());
                 break;
             }
-            case SDR_MERGE_SUBSTRACT:
+            case SdrMergeMode::Subtract:
             {
                 SetUndoComment(
                     ImpGetResStr(STR_EditMergeSubstractPoly),
                     aRemove.GetMarkDescription());
                 break;
             }
-            case SDR_MERGE_INTERSECT:
+            case SdrMergeMode::Intersect:
             {
                 SetUndoComment(
                     ImpGetResStr(STR_EditMergeIntersectPoly),

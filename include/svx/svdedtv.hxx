@@ -47,10 +47,10 @@ enum SdrVertAlign {
     SDRVALIGN_CENTER
 };
 
-enum SdrMergeMode {
-    SDR_MERGE_MERGE,
-    SDR_MERGE_SUBSTRACT,
-    SDR_MERGE_INTERSECT
+enum class SdrMergeMode {
+    Merge,
+    Subtract,
+    Intersect
 };
 
 // Options for InsertObject()
