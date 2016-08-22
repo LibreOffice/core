@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa6399be_0409d72c",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2016-08-22T12:53:41Z",
+      "side": 1,
+      "message": "But pEntry was modified on line#831 with\npEntry \u003d rTempFormatter.GetEntry( nTempKey);\nand if I\u0027m not wrong, its language is set to LANGUAGE_ENGLISH_US",
+      "parentUuid": "fa6399be_01446972",
+      "range": {
+        "startLine": 840,
+        "startChar": 104,
+        "endLine": 840,
+        "endChar": 109
+      },
+      "revId": "729e2f6cd4896e3a0a69ddc98e1078c09e465c40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_c1499190",
         "filename": "svl/source/numbers/zformat.cxx",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2016-08-22T12:34:31Z",
       "side": 1,
       "message": "What exactly are you trying to accomplish for locales !\u003d en-US, and why not for en-US?\n\nThis looks odd to me.",
+      "range": {
+        "startLine": 4729,
+        "startChar": 34,
+        "endLine": 4729,
+        "endChar": 66
+      },
+      "revId": "729e2f6cd4896e3a0a69ddc98e1078c09e465c40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_443aefce",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4729,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2016-08-22T12:53:41Z",
+      "side": 1,
+      "message": "rNum has its language set to en-US. So we need to restore real language to calculate the correct DBNum#\nen-US is the default value and does not need any DBNum# code.",
+      "parentUuid": "fa6399be_c1499190",
       "range": {
         "startLine": 4729,
         "startChar": 34,
@@ -88,6 +136,30 @@
     },
     {
       "key": {
+        "uuid": "fa6399be_04571703",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4846,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2016-08-22T12:53:41Z",
+      "side": 1,
+      "message": "Right. I will correct it.",
+      "parentUuid": "fa6399be_21496d8c",
+      "range": {
+        "startLine": 4846,
+        "startChar": 36,
+        "endLine": 4846,
+        "endChar": 136
+      },
+      "revId": "729e2f6cd4896e3a0a69ddc98e1078c09e465c40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_415e6146",
         "filename": "svl/source/numbers/zformat.cxx",
         "patchSetId": 2
@@ -99,6 +171,30 @@
       "writtenOn": "2016-08-22T12:34:31Z",
       "side": 1,
       "message": "Can we please stick with the prefixes, nPosDBNum, so posDBNum doesn\u0027t read like a pointer? ;-)",
+      "range": {
+        "startLine": 4848,
+        "startChar": 26,
+        "endLine": 4848,
+        "endChar": 34
+      },
+      "revId": "729e2f6cd4896e3a0a69ddc98e1078c09e465c40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_e4514310",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4848,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2016-08-22T12:53:41Z",
+      "side": 1,
+      "message": "Oups! I will correct it.",
+      "parentUuid": "fa6399be_415e6146",
       "range": {
         "startLine": 4848,
         "startChar": 26,
