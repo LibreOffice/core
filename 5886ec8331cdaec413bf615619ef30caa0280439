@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa6399be_6479b32f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-08-22T19:21:02Z",
+      "side": 1,
+      "message": "We prefer having the tdf# nr at the beginning of the line.",
+      "revId": "5886ec8331cdaec413bf615619ef30caa0280439",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_447caf20",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-08-22T19:21:02Z",
+      "side": 1,
+      "message": "What does this line do here? There should be no text after the change-id.",
+      "revId": "5886ec8331cdaec413bf615619ef30caa0280439",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_e48ce337",
         "filename": "cui/source/customize/cfg.cxx",
         "patchSetId": 1
