@@ -467,6 +467,7 @@
                       <object class="GtkSpinButton" id="colorfrommtr:%">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="margin_left">6</property>
                         <property name="invisible_char">●</property>
                         <property name="adjustment">percentadjustment</property>
                       </object>
@@ -482,7 +483,7 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="expand">True</property>
                     <property name="fill">True</property>
                     <property name="position">5</property>
                   </packing>
@@ -512,6 +513,7 @@
                       <object class="GtkSpinButton" id="colortomtr:%">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="margin_left">6</property>
                         <property name="invisible_char">●</property>
                         <property name="adjustment">percentadjustment</property>
                       </object>
