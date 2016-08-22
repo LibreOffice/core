@@ -30,7 +30,7 @@
 class OutputDevice;
 
 
-enum SdrHelpLineKind {SDRHELPLINE_POINT,SDRHELPLINE_VERTICAL,SDRHELPLINE_HORIZONTAL};
+enum class SdrHelpLineKind { Point, Vertical, Horizontal };
 
 #define SDRHELPLINE_POINT_PIXELSIZE 15 /* Tatsaechliche Groesse= PIXELSIZE*2+1 */
 
@@ -39,7 +39,7 @@ class SdrHelpLine {
     SdrHelpLineKind  eKind;
 
 public:
-    explicit SdrHelpLine(SdrHelpLineKind eNewKind=SDRHELPLINE_POINT): eKind(eNewKind) {}
+    explicit SdrHelpLine(SdrHelpLineKind eNewKind=SdrHelpLineKind::Point): eKind(eNewKind) {}
     SdrHelpLine(SdrHelpLineKind eNewKind, const Point& rNewPos): aPos(rNewPos), eKind(eNewKind) {}
     bool operator==(const SdrHelpLine& rCmp) const { return aPos==rCmp.aPos && eKind==rCmp.eKind; }
     bool operator!=(const SdrHelpLine& rCmp) const { return !operator==(rCmp); }

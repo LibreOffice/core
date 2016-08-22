@@ -349,17 +349,17 @@ static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
 
         switch( rHelpLine.GetKind() )
         {
-            case SDRHELPLINE_POINT:
+            case SdrHelpLineKind::Point:
                 aLines.append( 'P' );
                 aLines.append( (sal_Int32)rPos.X() );
                 aLines.append( ',' );
                 aLines.append( (sal_Int32)rPos.Y() );
                 break;
-            case SDRHELPLINE_VERTICAL:
+            case SdrHelpLineKind::Vertical:
                 aLines.append( 'V' );
                 aLines.append( (sal_Int32)rPos.X() );
                 break;
-            case SDRHELPLINE_HORIZONTAL:
+            case SdrHelpLineKind::Horizontal:
                 aLines.append( 'H' );
                 aLines.append( (sal_Int32)rPos.Y() );
                 break;
@@ -473,13 +473,13 @@ static void createHelpLinesFromString( const OUString& rLines, SdrHelpLineList& 
         switch( *pStr )
         {
         case (sal_Unicode)'P':
-            aNewHelpLine.SetKind( SDRHELPLINE_POINT );
+            aNewHelpLine.SetKind( SdrHelpLineKind::Point );
             break;
         case (sal_Unicode)'V':
-            aNewHelpLine.SetKind( SDRHELPLINE_VERTICAL );
+            aNewHelpLine.SetKind( SdrHelpLineKind::Vertical );
             break;
         case (sal_Unicode)'H':
-            aNewHelpLine.SetKind( SDRHELPLINE_HORIZONTAL );
+            aNewHelpLine.SetKind( SdrHelpLineKind::Horizontal );
             break;
         default:
             OSL_FAIL( "syntax error in snap lines settings string" );
@@ -495,7 +495,7 @@ static void createHelpLinesFromString( const OUString& rLines, SdrHelpLineList& 
 
         sal_Int32 nValue = sBuffer.makeStringAndClear().toInt32();
 
-        if( aNewHelpLine.GetKind() == SDRHELPLINE_HORIZONTAL )
+        if( aNewHelpLine.GetKind() == SdrHelpLineKind::Horizontal )
         {
             aPoint.Y() = nValue;
         }
@@ -503,7 +503,7 @@ static void createHelpLinesFromString( const OUString& rLines, SdrHelpLineList& 
         {
             aPoint.X() = nValue;
 
-            if( aNewHelpLine.GetKind() == SDRHELPLINE_POINT )
+            if( aNewHelpLine.GetKind() == SdrHelpLineKind::Point )
             {
                 if( *pStr++ != ',' )
                     return;

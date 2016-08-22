@@ -38,8 +38,8 @@ namespace sdr
                 const basegfx::BColor aRGBColorB(getOverlayManager()->getStripeColorB().getBColor());
                 const double fStripeLengthPixel(getOverlayManager()->getStripeLengthPixel());
                 const drawinglayer::primitive2d::HelplineStyle aStyle(
-                    SDRHELPLINE_POINT == getKind() ? drawinglayer::primitive2d::HELPLINESTYLE_POINT :
-                        SDRHELPLINE_VERTICAL == getKind() ? drawinglayer::primitive2d::HELPLINESTYLE_VERTICAL :
+                    SdrHelpLineKind::Point == getKind() ? drawinglayer::primitive2d::HELPLINESTYLE_POINT :
+                        SdrHelpLineKind::Vertical == getKind() ? drawinglayer::primitive2d::HELPLINESTYLE_VERTICAL :
                             drawinglayer::primitive2d::HELPLINESTYLE_HORIZONTAL);
 
                 const drawinglayer::primitive2d::Primitive2DReference aReference(

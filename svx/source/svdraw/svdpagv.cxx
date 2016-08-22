@@ -748,8 +748,8 @@ void SdrPageView::SetHelpLine(sal_uInt16 nNum, const SdrHelpLine& rNewHelpLine)
         bool bNeedRedraw = true;
         if (aHelpLines[nNum].GetKind()==rNewHelpLine.GetKind()) {
             switch (rNewHelpLine.GetKind()) {
-                case SDRHELPLINE_VERTICAL  : if (aHelpLines[nNum].GetPos().X()==rNewHelpLine.GetPos().X()) bNeedRedraw = false; break;
-                case SDRHELPLINE_HORIZONTAL: if (aHelpLines[nNum].GetPos().Y()==rNewHelpLine.GetPos().Y()) bNeedRedraw = false; break;
+                case SdrHelpLineKind::Vertical  : if (aHelpLines[nNum].GetPos().X()==rNewHelpLine.GetPos().X()) bNeedRedraw = false; break;
+                case SdrHelpLineKind::Horizontal: if (aHelpLines[nNum].GetPos().Y()==rNewHelpLine.GetPos().Y()) bNeedRedraw = false; break;
                 default: break;
             } // switch
         }

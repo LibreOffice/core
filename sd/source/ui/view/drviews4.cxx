@@ -230,11 +230,11 @@ void DrawViewShell::StartRulerDrag (
         SdrHelpLineKind eKind;
 
         if ( rMEvt.IsMod1() )
-            eKind = SDRHELPLINE_POINT;
+            eKind = SdrHelpLineKind::Point;
         else if ( rRuler.IsHorizontal() )
-            eKind = SDRHELPLINE_HORIZONTAL;
+            eKind = SdrHelpLineKind::Horizontal;
         else
-            eKind = SDRHELPLINE_VERTICAL;
+            eKind = SdrHelpLineKind::Vertical;
 
         mpDrawView->BegDragHelpLine(aWPos, eKind);
         mbIsRulerDrag = true;
@@ -878,7 +878,7 @@ void DrawViewShell::ShowSnapLineContextMenu (
     const SdrHelpLine& rHelpLine (rPageView.GetHelpLines()[nSnapLineIndex]);
     ScopedVclPtrInstance<PopupMenu> pMenu;
 
-    if (rHelpLine.GetKind() == SDRHELPLINE_POINT)
+    if (rHelpLine.GetKind() == SdrHelpLineKind::Point)
     {
         pMenu->InsertItem(
             SID_SET_SNAPITEM,

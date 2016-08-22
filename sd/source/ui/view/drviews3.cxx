@@ -1046,7 +1046,7 @@ void  DrawViewShell::GetSnapItemState( SfxItemSet &rSet )
     {
         const SdrHelpLine& rHelpLine = (pPV->GetHelpLines())[nHelpLine];
 
-        if ( rHelpLine.GetKind() == SDRHELPLINE_POINT )
+        if ( rHelpLine.GetKind() == SdrHelpLineKind::Point )
         {
             rSet.Put( SfxStringItem( SID_SET_SNAPITEM,
                                 SD_RESSTR( STR_POPUP_EDIT_SNAPPOINT)) );

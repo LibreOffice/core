@@ -40,7 +40,7 @@ namespace sdr
         public:
             explicit OverlayHelplineStriped(
                 const basegfx::B2DPoint& rBasePos,
-                SdrHelpLineKind eNewKind = SDRHELPLINE_POINT);
+                SdrHelpLineKind eNewKind = SdrHelpLineKind::Point);
             virtual ~OverlayHelplineStriped();
 
             // dat read access

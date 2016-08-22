@@ -548,21 +548,21 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageHelplines
 
                 switch(rHelpLine.GetKind())
                 {
-                    default : // SDRHELPLINE_POINT
+                    default : // SdrHelpLineKind::Point
                     {
                         xRetval[a] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::HelplinePrimitive2D(
                             aPosition, basegfx::B2DVector(1.0, 0.0), drawinglayer::primitive2d::HelplineStyle2D::Point,
                             aRGBColorA, aRGBColorB, fDiscreteDashLength));
                         break;
                     }
-                    case SDRHELPLINE_VERTICAL :
+                    case SdrHelpLineKind::Vertical :
                     {
                         xRetval[a] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::HelplinePrimitive2D(
                             aPosition, basegfx::B2DVector(0.0, 1.0), drawinglayer::primitive2d::HelplineStyle2D::Line,
                             aRGBColorA, aRGBColorB, fDiscreteDashLength));
                         break;
                     }
-                    case SDRHELPLINE_HORIZONTAL :
+                    case SdrHelpLineKind::Horizontal :
                     {
                         xRetval[a] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::HelplinePrimitive2D(
                             aPosition, basegfx::B2DVector(1.0, 0.0), drawinglayer::primitive2d::HelplineStyle2D::Line,

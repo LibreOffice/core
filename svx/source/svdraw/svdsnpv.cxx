@@ -290,15 +290,15 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
             const SdrHelpLine& rHL=rHLL[i];
             const Point& rPos=rHL.GetPos();
             switch (rHL.GetKind()) {
-                case SDRHELPLINE_VERTICAL: {
+                case SdrHelpLineKind::Vertical: {
                     long a=x-rPos.X();
                     if (std::abs(a)<=mx) { dx1=-a; if (std::abs(dx1)<std::abs(dx)) dx=dx1; }
                 } break;
-                case SDRHELPLINE_HORIZONTAL: {
+                case SdrHelpLineKind::Horizontal: {
                     long b=y-rPos.Y();
                     if (std::abs(b)<=my) { dy1=-b; if (std::abs(dy1)<std::abs(dy)) dy=dy1; }
                 } break;
-                case SDRHELPLINE_POINT: {
+                case SdrHelpLineKind::Point: {
                     long a=x-rPos.X();
                     long b=y-rPos.Y();
                     if (std::abs(a)<=mx && std::abs(b)<=my) {
@@ -558,8 +558,8 @@ Pointer SdrSnapView::GetDraggedHelpLinePointer() const
     {
         switch(mpHelpLineOverlay->GetHelpLineKind())
         {
-            case SDRHELPLINE_VERTICAL  : return Pointer(PointerStyle::ESize);
-            case SDRHELPLINE_HORIZONTAL: return Pointer(PointerStyle::SSize);
+            case SdrHelpLineKind::Vertical  : return Pointer(PointerStyle::ESize);
+            case SdrHelpLineKind::Horizontal: return Pointer(PointerStyle::SSize);
             default                    : return Pointer(PointerStyle::Move);
         }
     }

@@ -121,7 +121,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
 
             const SdrHelpLine& rHelpLine = (pPV->GetHelpLines())[nHelpLine];
 
-            if ( rHelpLine.GetKind() == SDRHELPLINE_POINT )
+            if ( rHelpLine.GetKind() == SdrHelpLineKind::Point )
             {
                 pDlg->SetText(SD_RESSTR(STR_SNAPDLG_SETPOINT));
                 pDlg->SetInputFields(true, true);
@@ -130,7 +130,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
             {
                 pDlg->SetText(SD_RESSTR(STR_SNAPDLG_SETLINE));
 
-                if ( rHelpLine.GetKind() == SDRHELPLINE_VERTICAL )
+                if ( rHelpLine.GetKind() == SdrHelpLineKind::Vertical )
                     pDlg->SetInputFields(true, false);
                 else
                     pDlg->SetInputFields(false, true);
@@ -176,9 +176,9 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
         switch ( (SnapKind) static_cast<const SfxAllEnumItem&>(
                  pArgs->Get(ATTR_SNAPLINE_KIND)).GetValue() )
         {
-            case SK_HORIZONTAL  : eKind = SDRHELPLINE_HORIZONTAL;   break;
-            case SK_VERTICAL    : eKind = SDRHELPLINE_VERTICAL;     break;
-            default             : eKind = SDRHELPLINE_POINT;        break;
+            case SK_HORIZONTAL  : eKind = SdrHelpLineKind::Horizontal;   break;
+            case SK_VERTICAL    : eKind = SdrHelpLineKind::Vertical;     break;
+            default             : eKind = SdrHelpLineKind::Point;        break;
         }
         pPV->InsertHelpLine(SdrHelpLine(eKind, aHlpPos));
     }
