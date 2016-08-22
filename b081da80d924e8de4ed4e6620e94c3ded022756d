@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_819319fa",
+        "filename": "cui/source/tabpages/tparea.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-22T11:55:59Z",
+      "side": 1,
+      "message": "So this is already going the right way, but you still didn\u0027t make this anti-pattern of long chain of if-elseif-else go away ...\n\nButtonBox::SelectButton method can take a pointer or a reference (which you\u0027re going to obtain from pButton here) to a button as an argument. The implementation will then take care of finding the matching pointer in the list( use e.g. std::find or whatever appropriate, no for-loops please) and pressing given button",
+      "revId": "b081da80d924e8de4ed4e6620e94c3ded022756d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
