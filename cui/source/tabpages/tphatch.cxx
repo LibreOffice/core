@@ -255,62 +255,12 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
 
 DeactivateRC SvxHatchTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if ( CheckChanges_Impl() == -1L )
-        return DeactivateRC::KeepPage;
-
     if( _pSet )
         FillItemSet( _pSet );
 
     return DeactivateRC::LeavePage;
 }
 
-
-long SvxHatchTabPage::CheckChanges_Impl()
-{
-    if( m_pMtrDistance->IsValueChangedFromSaved() ||
-        m_pMtrAngle->IsValueChangedFromSaved() ||
-        m_pLbLineType->IsValueChangedFromSaved()  ||
-        m_pLbLineColor->IsValueChangedFromSaved() ||
-        m_pHatchLB->IsValueChangedFromSaved() )
-    {
-        ResMgr& rMgr = CUI_MGR();
-        Image aWarningBoxImage = WarningBox::GetStandardImage();
-        ScopedVclPtrInstance<SvxMessDialog> aMessDlg( GetParentDialog(),
-                                                      SVX_RESSTR( RID_SVXSTR_HATCH ),
-                                                      CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_HATCH ),
-                                                      &aWarningBoxImage );
-        assert(aMessDlg && "Dialog creation failed!");
-        aMessDlg->SetButtonText( SvxMessDialogButton::N1,
-                                OUString( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
-        aMessDlg->SetButtonText( SvxMessDialogButton::N2,
-                                OUString( ResId( RID_SVXSTR_ADD, rMgr ) ) );
-
-        short nRet = aMessDlg->Execute();
-
-        switch( nRet )
-        {
-            case RET_BTN_1:
-            {
-                ClickModifyHdl_Impl( nullptr );
-            }
-            break;
-
-            case RET_BTN_2:
-            {
-                ClickAddHdl_Impl( nullptr );
-            }
-            break;
-
-            case RET_CANCEL:
-            break;
-        }
-    }
-
-    size_t nPos = m_pHatchLB->GetSelectItemPos();
-    if( nPos != VALUESET_ITEM_NOTFOUND )
-        *m_pPos = static_cast<sal_Int32>(nPos);
-    return 0L;
-}
 
 sal_Int32 SvxHatchTabPage::SearchHatchList(const OUString& rHatchName)
 {
@@ -335,24 +285,22 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
     {
         if( *m_pPageType == PageType::Hatch )
         {
-            // CheckChanges(); <-- duplicate inquiry ?
-
             std::unique_ptr<XHatch> pXHatch;
+            pXHatch.reset(new XHatch( m_pLbLineColor->GetSelectEntryColor(),
+                            (css::drawing::HatchStyle) m_pLbLineType->GetSelectEntryPos(),
+                            GetCoreValue( *m_pMtrDistance, m_ePoolUnit ),
+                            static_cast<long>(m_pMtrAngle->GetValue() * 10) ));
+
             OUString  aString;
-            size_t nPos = m_pHatchLB->GetSelectItemPos();
-            if( nPos != VALUESET_ITEM_NOTFOUND )
+            if( !( m_pMtrDistance->IsValueChangedFromSaved() ||
+                m_pMtrAngle->IsValueChangedFromSaved() ||
+                m_pLbLineType->IsValueChangedFromSaved() ||
+                m_pLbLineColor->IsValueChangedFromSaved() ||
+                m_pHatchLB->IsValueChangedFromSaved() ) )
             {
-                pXHatch.reset(new XHatch(m_pHatchingList->GetHatch(nPos)->GetHatch()));
-                aString = m_pHatchLB->GetItemText( m_pHatchLB->GetSelectItemId() );
+                aString = m_pHatchLB->GetItemText( m_pHatchLB->GetSelectItemId() );;
             }
-            // gradient has been (unidentifiedly) passed
-            else
-            {
-                pXHatch.reset(new XHatch( m_pLbLineColor->GetSelectEntryColor(),
-                                 (css::drawing::HatchStyle) m_pLbLineType->GetSelectEntryPos(),
-                                 GetCoreValue( *m_pMtrDistance, m_ePoolUnit ),
-                                 static_cast<long>(m_pMtrAngle->GetValue() * 10) ));
-            }
+
             assert( pXHatch && "XHatch couldn't be created" );
             rSet->Put( XFillStyleItem( drawing::FillStyle_HATCH ) );
             rSet->Put( XFillHatchItem( aString, *pXHatch ) );

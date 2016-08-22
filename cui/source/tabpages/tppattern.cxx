@@ -245,9 +245,6 @@ void SvxPatternTabPage::ActivatePage( const SfxItemSet&  )
 
 DeactivateRC SvxPatternTabPage::DeactivatePage( SfxItemSet* _pSet)
 {
-    if ( CheckChanges_Impl() == -1L )
-        return DeactivateRC::KeepPage;
-
     if( _pSet )
         FillItemSet( _pSet );
 
@@ -263,7 +260,7 @@ bool SvxPatternTabPage::FillItemSet( SfxItemSet* _rOutAttrs )
         {
             _rOutAttrs->Put(XFillStyleItem(drawing::FillStyle_BITMAP));
             size_t nPos = m_pPatternLB->GetSelectItemPos();
-            if(VALUESET_ITEM_NOTFOUND != nPos)
+            if( !m_bPtrnChanged && VALUESET_ITEM_NOTFOUND != nPos)
             {
                 const XBitmapEntry* pXBitmapEntry = m_pPatternList->GetBitmap(nPos);
                 const OUString aString( m_pPatternLB->GetItemText( m_pPatternLB->GetSelectItemId() ) );
@@ -420,51 +417,6 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ChangePatternHdl_Impl, ValueSet*, void)
 
         m_bPtrnChanged = false;
     }
-}
-
-
-long SvxPatternTabPage::CheckChanges_Impl()
-{
-    size_t nPos = m_pPatternLB->GetSelectItemPos();
-    if( nPos != VALUESET_ITEM_NOTFOUND )
-    {
-        if( m_bPtrnChanged )
-        {
-            ResMgr& rMgr = CUI_MGR();
-            Image aWarningBoxImage = WarningBox::GetStandardImage();
-            ScopedVclPtrInstance<SvxMessDialog> aMessDlg( GetParentDialog(),
-                                                          SVX_RES( RID_SVXSTR_PATTERN ),
-                                                          CUI_RES( RID_SVXSTR_ASK_CHANGE_PATTERN ),
-                                                          &aWarningBoxImage );
-            assert(aMessDlg && "Dialog creation failed!");
-            aMessDlg->SetButtonText( SvxMessDialogButton::N1, ResId( RID_SVXSTR_CHANGE, rMgr ) );
-            aMessDlg->SetButtonText( SvxMessDialogButton::N2, ResId( RID_SVXSTR_ADD, rMgr ) );
-
-            short nRet = aMessDlg->Execute();
-
-            switch( nRet )
-            {
-                case RET_BTN_1:
-                {
-                    ClickModifyHdl_Impl( nullptr );
-                }
-                break;
-
-                case RET_BTN_2:
-                {
-                    ClickAddHdl_Impl( nullptr );
-                }
-                break;
-
-                case RET_CANCEL:
-                break;
-            }
-        }
-    }
-    nPos = m_pPatternLB->GetSelectItemPos();
-    if( nPos != VALUESET_ITEM_NOTFOUND )
-        *m_pPos = static_cast<sal_Int32>(nPos);
-    return 0L;
 }
 
 

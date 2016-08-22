@@ -254,9 +254,6 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
 
 DeactivateRC SvxGradientTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if( CheckChanges_Impl() == -1L )
-        return DeactivateRC::KeepPage;
-
     if( _pSet )
         FillItemSet( _pSet );
 
@@ -264,94 +261,28 @@ DeactivateRC SvxGradientTabPage::DeactivatePage( SfxItemSet* _pSet )
 }
 
 
-long SvxGradientTabPage::CheckChanges_Impl()
-{
-    // is used here in order to NOT lose changes
-    XGradient aTmpGradient( m_pLbColorFrom->GetSelectEntryColor(),
-                          m_pLbColorTo->GetSelectEntryColor(),
-                          (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos(),
-                          static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
-                          (sal_uInt16) m_pMtrCenterX->GetValue(),
-                          (sal_uInt16) m_pMtrCenterY->GetValue(),
-                          (sal_uInt16) m_pMtrBorder->GetValue(),
-                          (sal_uInt16) m_pMtrColorFrom->GetValue(),
-                          (sal_uInt16) m_pMtrColorTo->GetValue() );
-
-    size_t nPos = m_pGradientLB->GetSelectItemPos();
-    if( nPos != VALUESET_ITEM_NOTFOUND )
-    {
-        XGradient aGradient = m_pGradientList->GetGradient(nPos)->GetGradient();
-
-        if( !( aTmpGradient == aGradient ) )
-        {
-            ResMgr& rMgr = CUI_MGR();
-            Image aWarningBoxImage = WarningBox::GetStandardImage();
-            ScopedVclPtrInstance<SvxMessDialog> aMessDlg( GetParentDialog(),
-                                                          SVX_RESSTR( RID_SVXSTR_GRADIENT ),
-                                                          CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_GRADIENT ),
-                                                          &aWarningBoxImage );
-            assert(aMessDlg && "Dialog creation failed!");
-            aMessDlg->SetButtonText( SvxMessDialogButton::N1,
-                                    OUString( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
-            aMessDlg->SetButtonText( SvxMessDialogButton::N2,
-                                    OUString( ResId( RID_SVXSTR_ADD, rMgr ) ) );
-
-            short nRet = aMessDlg->Execute();
-
-            switch( nRet )
-            {
-                case RET_BTN_1:
-                {
-                    ClickModifyHdl_Impl( nullptr );
-                }
-                break;
-
-                case RET_BTN_2:
-                {
-                    ClickAddHdl_Impl( nullptr );
-                }
-                break;
-
-                case RET_CANCEL:
-                break;
-            }
-        }
-    }
-    nPos = m_pGradientLB->GetSelectItemPos();
-    if( nPos != VALUESET_ITEM_NOTFOUND )
-    {
-        *m_pPos = static_cast<sal_Int32>(nPos);
-    }
-    return 0L;
-}
-
-
 bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
 {
     if( m_nDlgType == 0 && *m_pPageType == PageType::Gradient && !*m_pbAreaTP )
     {
-        // CheckChanges(); <-- duplicate inquiry ?
-
         std::unique_ptr<XGradient> pXGradient;
+        pXGradient.reset(new XGradient( m_pLbColorFrom->GetSelectEntryColor(),
+                    m_pLbColorTo->GetSelectEntryColor(),
+                    (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos(),
+                    static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
+                    (sal_uInt16) m_pMtrCenterX->GetValue(),
+                    (sal_uInt16) m_pMtrCenterY->GetValue(),
+                    (sal_uInt16) m_pMtrBorder->GetValue(),
+                    (sal_uInt16) m_pMtrColorFrom->GetValue(),
+                    (sal_uInt16) m_pMtrColorTo->GetValue() ));
+
         OUString      aString;
         size_t        nPos = m_pGradientLB->GetSelectItemPos();
         if( nPos != VALUESET_ITEM_NOTFOUND )
         {
-            pXGradient.reset(new XGradient(m_pGradientList->GetGradient(nPos)->GetGradient()));
-            aString = m_pGradientLB->GetItemText( m_pGradientLB->GetSelectItemId() );
-        }
-        else
-        // gradient was passed (unidentified)
-        {
-            pXGradient.reset(new XGradient( m_pLbColorFrom->GetSelectEntryColor(),
-                        m_pLbColorTo->GetSelectEntryColor(),
-                        (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos(),
-                        static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
-                        (sal_uInt16) m_pMtrCenterX->GetValue(),
-                        (sal_uInt16) m_pMtrCenterY->GetValue(),
-                        (sal_uInt16) m_pMtrBorder->GetValue(),
-                        (sal_uInt16) m_pMtrColorFrom->GetValue(),
-                        (sal_uInt16) m_pMtrColorTo->GetValue() ));
+            XGradient aTmpGradient = m_pGradientList->GetGradient( static_cast<sal_uInt16>(nPos) )->GetGradient();
+            if( *pXGradient ==  aTmpGradient )
+                aString = m_pGradientLB->GetItemText( m_pGradientLB->GetSelectItemId() );
         }
 
         sal_uInt16 nValue = 0;

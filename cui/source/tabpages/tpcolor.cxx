@@ -303,49 +303,10 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
 
 DeactivateRC SvxColorTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if ( CheckChanges_Impl() == -1L )
-        return DeactivateRC::KeepPage;
-
     if( _pSet )
         FillItemSet( _pSet );
 
     return DeactivateRC::LeavePage;
-}
-
-
-long SvxColorTabPage::CheckChanges_Impl()
-{
-    if( ColorToPercent_Impl( aCurrentColor.GetRed() ) != ColorToPercent_Impl( aPreviousColor.GetRed() ) ||
-        ColorToPercent_Impl( aCurrentColor.GetGreen() ) != ColorToPercent_Impl( aPreviousColor.GetGreen() ) ||
-        ColorToPercent_Impl( aCurrentColor.GetBlue() ) != ColorToPercent_Impl( aPreviousColor.GetBlue() ) )
-    {
-        ResMgr& rMgr = CUI_MGR();
-        Image aWarningBoxImage = WarningBox::GetStandardImage();
-        ScopedVclPtrInstance<SvxMessDialog> aMessDlg( GetParentDialog(),
-                        SVX_RESSTR( RID_SVXSTR_COLOR ),
-                        ResId( RID_SVXSTR_ASK_CHANGE_COLOR, rMgr ),
-                        &aWarningBoxImage );
-        aMessDlg->SetButtonText( SvxMessDialogButton::N1,
-                                    ResId( RID_SVXSTR_CHANGE, rMgr ) );
-        aMessDlg->SetButtonText( SvxMessDialogButton::N2,
-                                    ResId( RID_SVXSTR_ADD, rMgr ) );
-        aMessDlg->DisableButton( SvxMessDialogButton::N1 );
-
-        short nRet = aMessDlg->Execute();
-
-        switch( nRet )
-        {
-            case RET_BTN_2:
-            {
-                ClickAddHdl_Impl( nullptr );
-            }
-            break;
-
-            case RET_CANCEL:
-            break;
-        }
-    }
-    return 0;
 }
 
 
