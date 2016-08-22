@@ -9,9 +9,12 @@
 
 #include "updater.hxx"
 
+#if UNX
 #include <unistd.h>
 #include <errno.h>
 #include <fstream>
+
+#endif
 
 #include <config_folders.h>
 #include <rtl/bootstrap.hxx>
@@ -37,7 +40,13 @@ class error_updater : public std::exception
 
 static const char kUserAgent[] = "UpdateChecker/1.0 (Linux)";
 
+#if UNX
 const char* pUpdaterName = "updater";
+#elif WNT
+const char* pUpdaterName = "updater.exe";
+#else
+#error "Need implementation"
+#endif
 
 const char* pSofficeExeName = "soffice";
 
@@ -170,10 +179,13 @@ void Update()
 
     char** pArgs = createCommandLine();
 
+#if UNX
     if (execv(aPath.getStr(), pArgs))
     {
         printf("execv failed with error %d %s\n",errno,strerror(errno));
     }
+#endif
+
     for (size_t i = 0; i < 8; ++i)
     {
         delete[] pArgs[i];
