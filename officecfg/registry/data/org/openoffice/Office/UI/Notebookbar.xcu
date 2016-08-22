@@ -29,5 +29,13 @@
         <value>notebookbar_groups.ui</value>
       </prop>
     </node>
+    <node oor:name="Single" oor:op="replace">
+      <prop oor:name="Label">
+        <value xml:lang="en-US">Contextual single</value>
+      </prop>
+      <prop oor:name="File">
+        <value>notebookbar_single.ui</value>
+      </prop>
+    </node>
   </node>
 </oor:component-data>
