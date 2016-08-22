@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_01446972",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-22T12:34:31Z",
+      "side": 1,
+      "message": "pEntry (SvNumberformat) already knows it\u0027s locale, this is where nLang was obtained, pEntry-\u003eGetLanguage(), so passing that to the GetMappedFormatstring() call is moot.",
+      "range": {
+        "startLine": 840,
+        "startChar": 104,
+        "endLine": 840,
+        "endChar": 109
+      },
+      "revId": "729e2f6cd4896e3a0a69ddc98e1078c09e465c40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_c1499190",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4729,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-22T12:34:31Z",
+      "side": 1,
+      "message": "What exactly are you trying to accomplish for locales !\u003d en-US, and why not for en-US?\n\nThis looks odd to me.",
+      "range": {
+        "startLine": 4729,
+        "startChar": 34,
+        "endLine": 4729,
+        "endChar": 66
+      },
+      "revId": "729e2f6cd4896e3a0a69ddc98e1078c09e465c40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_e14e9595",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4731,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-22T12:34:31Z",
+      "side": 1,
+      "message": "Overwriting the locale here looks also wrong.",
+      "revId": "729e2f6cd4896e3a0a69ddc98e1078c09e465c40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_21496d8c",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4846,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-22T12:34:31Z",
+      "side": 1,
+      "message": "Always use upper case with these hex locale identifiers in format codes, so formats don\u0027t differ only by case.",
+      "range": {
+        "startLine": 4846,
+        "startChar": 36,
+        "endLine": 4846,
+        "endChar": 136
+      },
+      "revId": "729e2f6cd4896e3a0a69ddc98e1078c09e465c40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_415e6146",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4848,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-22T12:34:31Z",
+      "side": 1,
+      "message": "Can we please stick with the prefixes, nPosDBNum, so posDBNum doesn\u0027t read like a pointer? ;-)",
+      "range": {
+        "startLine": 4848,
+        "startChar": 26,
+        "endLine": 4848,
+        "endChar": 34
+      },
+      "revId": "729e2f6cd4896e3a0a69ddc98e1078c09e465c40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
