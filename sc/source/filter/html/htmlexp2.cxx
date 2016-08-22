@@ -72,7 +72,7 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
         Rectangle aRect;
         if ( !bAll )
             aRect = pDoc->GetMMRect( nStartCol, nStartRow, nEndCol, nEndRow, nTab );
-        SdrObjListIter aIter( *pPage, IM_FLAT );
+        SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
         SdrObject* pObject = aIter.Next();
         while ( pObject )
         {

@@ -354,7 +354,7 @@ static bool lcl_HasOnlyControls( SdrModel* pModel )
         SdrPage* pPage = pModel->GetPage(0);
         if (pPage)
         {
-            SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+            SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
             SdrObject* pObj = aIter.Next();
             if ( pObj )
             {

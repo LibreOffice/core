@@ -510,7 +510,7 @@ basegfx::B2DPolyPolygon GetOutlinesFromShape2d( const SdrObject* pShape2d )
 {
     basegfx::B2DPolyPolygon aOutlines2d;
 
-    SdrObjListIter aObjListIter( *pShape2d, IM_DEEPWITHGROUPS );
+    SdrObjListIter aObjListIter( *pShape2d, SdrIterMode::DeepWithGroups );
     while( aObjListIter.IsMore() )
     {
         SdrObject* pPartObj = aObjListIter.Next();

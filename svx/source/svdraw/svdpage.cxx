@@ -645,7 +645,7 @@ void SdrObjList::ReformatAllTextObjects()
 void SdrObjList::ReformatAllEdgeObjects()
 {
     // #i120437# go over whole hierarchy, not only over object level null (seen from grouping)
-    SdrObjListIter aIter(*this, IM_DEEPNOGROUPS);
+    SdrObjListIter aIter(*this, SdrIterMode::DeepNoGroups);
 
     while(aIter.IsMore())
     {
@@ -1641,7 +1641,7 @@ void SdrPage::SetInserted( bool bIns )
         mbInserted = bIns;
 
         // #i120437# go over whole hierarchy, not only over object level null (seen from grouping)
-        SdrObjListIter aIter(*this, IM_DEEPNOGROUPS);
+        SdrObjListIter aIter(*this, SdrIterMode::DeepNoGroups);
 
          while ( aIter.IsMore() )
         {

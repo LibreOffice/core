@@ -86,10 +86,10 @@ void SdrObjListIter::ImpProcessObj(SdrObject* pObj, SdrIterMode eMode, bool bUse
     if( bIsGroup && dynamic_cast<const E3dObject* >(pObj) != nullptr && dynamic_cast<const E3dScene* >(pObj) == nullptr)
         bIsGroup = false;
 
-    if( !bIsGroup || (eMode != IM_DEEPNOGROUPS) )
+    if( !bIsGroup || (eMode != SdrIterMode::DeepNoGroups) )
         maObjList.push_back(pObj);
 
-    if( bIsGroup && (eMode != IM_FLAT) )
+    if( bIsGroup && (eMode != SdrIterMode::Flat) )
         ImpProcessObjectList( *pObj->GetSubList(), eMode, bUseZOrder );
 }
 

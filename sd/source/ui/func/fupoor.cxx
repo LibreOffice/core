@@ -209,7 +209,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                     if(pActualPage)
                     {
-                        SdrObjListIter aIter(*pActualPage, IM_DEEPNOGROUPS);
+                        SdrObjListIter aIter(*pActualPage, SdrIterMode::DeepNoGroups);
 
                         while(aIter.IsMore() && !pCandidate)
                         {
@@ -841,7 +841,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                     if(pActualPage)
                     {
-                        SdrObjListIter aIter(*pActualPage, IM_DEEPNOGROUPS);
+                        SdrObjListIter aIter(*pActualPage, SdrIterMode::DeepNoGroups);
 
                         while(aIter.IsMore() && !pCandidate)
                         {

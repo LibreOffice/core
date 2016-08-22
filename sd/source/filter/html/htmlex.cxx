@@ -1295,7 +1295,7 @@ void HtmlExport::WriteTable(OUStringBuffer& aStr, SdrTableObj* pTableObject, Sdr
 void HtmlExport::WriteObjectGroup(OUStringBuffer& aStr, SdrObjGroup* pObjectGroup, SdrOutliner* pOutliner,
                                   const Color& rBackgroundColor, bool bHeadLine)
 {
-    SdrObjListIter aGroupIterator(*pObjectGroup->GetSubList(), IM_DEEPNOGROUPS);
+    SdrObjListIter aGroupIterator(*pObjectGroup->GetSubList(), SdrIterMode::DeepNoGroups);
     while (aGroupIterator.IsMore())
     {
         SdrObject* pCurrentObject = aGroupIterator.Next();
@@ -1562,7 +1562,7 @@ bool HtmlExport::CreateHtmlForPresPages()
         while (!bMasterDone)
         {
             // sal_True = backwards
-            SdrObjListIter aIter(*pPage, IM_DEEPWITHGROUPS, true);
+            SdrObjListIter aIter(*pPage, SdrIterMode::DeepWithGroups, true);
 
             SdrObject* pObject = aIter.Next();
             while (pObject)

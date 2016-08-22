@@ -1257,7 +1257,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     if ( pOriginalObj && dynamic_cast< const SdrObjGroup* >(pRet) !=  nullptr )
                     {   /* check if the original object from the escherimport is part of the group object,
                         if this is the case, we will use the original object to connect to */
-                        SdrObjListIter aIter( *pRet, IM_DEEPWITHGROUPS );
+                        SdrObjListIter aIter( *pRet, SdrIterMode::DeepWithGroups );
                         while( aIter.IsMore() )
                         {
                             SdrObject* pPartObj = aIter.Next();
@@ -7587,7 +7587,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
             std::set< sal_Int32 > aRows;
             std::set< sal_Int32 > aColumns;
 
-            SdrObjListIter aGroupIter( *pSubList, IM_DEEPNOGROUPS, false );
+            SdrObjListIter aGroupIter( *pSubList, SdrIterMode::DeepNoGroups, false );
             while( aGroupIter.IsMore() )
             {
                 const SdrObject* pObj( aGroupIter.Next() );
@@ -7687,7 +7687,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                             pPtr->pBObj = nullptr;
 
                         // check connections to all its subobjects
-                        SdrObjListIter aIter( *pGroup, IM_DEEPWITHGROUPS );
+                        SdrObjListIter aIter( *pGroup, SdrIterMode::DeepWithGroups );
                         while( aIter.IsMore() )
                         {
                             SdrObject* pPartObj = aIter.Next();
@@ -7713,7 +7713,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                 pRet = pTable;
 
                 //Remove Objects from shape map
-                SdrObjListIter aIter( *pGroup, IM_DEEPWITHGROUPS );
+                SdrObjListIter aIter( *pGroup, SdrIterMode::DeepWithGroups );
                 while( aIter.IsMore() )
                 {
                     SdrObject* pPartObj = aIter.Next();

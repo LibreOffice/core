@@ -70,7 +70,7 @@ void ScDrawView::CheckOle( const SdrMarkList& rMarkList, bool& rAnyOle, bool& rO
         }
         else if ( dynamic_cast<const SdrObjGroup*>( pObj) !=  nullptr )
         {
-            SdrObjListIter aIter( *pObj, IM_DEEPNOGROUPS );
+            SdrObjListIter aIter( *pObj, SdrIterMode::DeepNoGroups );
             SdrObject* pSubObj = aIter.Next();
             while (pSubObj)
             {
@@ -251,7 +251,7 @@ void getChartSourceRanges(ScDocument* pDoc, const SdrMarkList& rObjs, std::vecto
             break;
             case OBJ_GRUP:
             {
-                SdrObjListIter aIter(*pObj, IM_DEEPNOGROUPS);
+                SdrObjListIter aIter(*pObj, SdrIterMode::DeepNoGroups);
                 for (SdrObject* pSubObj = aIter.Next(); pSubObj; pSubObj = aIter.Next())
                 {
                     if (pSubObj->GetObjIdentifier() != OBJ_OLE2)

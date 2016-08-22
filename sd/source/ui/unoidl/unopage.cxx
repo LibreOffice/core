@@ -1933,7 +1933,7 @@ sal_Bool SAL_CALL SdPageLinkTargets::hasElements()
     SdPage* pPage = mpUnoPage->GetPage();
     if( pPage != nullptr )
     {
-        SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
+        SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );
 
         while( aIter.IsMore() )
         {
@@ -1981,7 +1981,7 @@ Sequence< OUString > SAL_CALL SdPageLinkTargets::getElementNames()
     SdPage* pPage = mpUnoPage->GetPage();
     if( pPage != nullptr )
     {
-        SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
+        SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );
         while( aIter.IsMore() )
         {
             SdrObject* pObj = aIter.Next();
@@ -1998,7 +1998,7 @@ Sequence< OUString > SAL_CALL SdPageLinkTargets::getElementNames()
     {
         OUString* pStr = aSeq.getArray();
 
-        SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
+        SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );
         while( aIter.IsMore() )
         {
             SdrObject* pObj = aIter.Next();
@@ -2027,7 +2027,7 @@ SdrObject* SdPageLinkTargets::FindObject( const OUString& rName ) const throw()
     if( pPage == nullptr )
         return nullptr;
 
-    SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
+    SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );
 
     while( aIter.IsMore() )
     {

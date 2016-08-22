@@ -286,7 +286,7 @@ namespace sdr
 
                 if(pSubList && rObj.GetScene() == &rObj)
                 {
-                    SdrObjListIter a3DIterator(*pSubList, IM_DEEPWITHGROUPS);
+                    SdrObjListIter a3DIterator(*pSubList, SdrIterMode::DeepWithGroups);
 
                     while(a3DIterator.IsMore())
                     {

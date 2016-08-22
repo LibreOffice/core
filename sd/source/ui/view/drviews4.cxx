@@ -147,7 +147,7 @@ bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
                 GetView()->SdrEndTextEdit();
 
                 // look for a new candidate, a successor of pOldObj
-                SdrObjListIter aIter(*pActualPage, IM_DEEPNOGROUPS);
+                SdrObjListIter aIter(*pActualPage, SdrIterMode::DeepNoGroups);
                 bool bDidVisitOldObject(false);
 
                 while(aIter.IsMore() && !pCandidate)

@@ -52,7 +52,7 @@ sal_uInt16 lcl_DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bool bAl
         SdrPage* pPage = pModel->GetPage(nPageNo);
         OSL_ENSURE(pPage,"Page ?");
 
-        SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+        SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
@@ -130,7 +130,7 @@ void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( ScDocument* pSrcDoc, 
     SdrPage* pDestPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nDestTab));
     if( pDestPage )
     {
-        SdrObjListIter aIter( *pDestPage, IM_FLAT );
+        SdrObjListIter aIter( *pDestPage, SdrIterMode::Flat );
         SdrObject* pObject = aIter.Next();
         while( pObject )
         {
@@ -170,7 +170,7 @@ void ScChartHelper::UpdateChartsOnDestinationPage( ScDocument* pDestDoc, const S
     SdrPage* pDestPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nDestTab));
     if( pDestPage )
     {
-        SdrObjListIter aIter( *pDestPage, IM_FLAT );
+        SdrObjListIter aIter( *pDestPage, SdrIterMode::Flat );
         SdrObject* pObject = aIter.Next();
         while( pObject )
         {
@@ -345,7 +345,7 @@ void ScChartHelper::FillProtectedChartRangesVector( ScRangeListVector& rRangesVe
 {
     if ( pDocument && pPage )
     {
-        SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+        SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
         SdrObject* pObject = aIter.Next();
         while ( pObject )
         {
@@ -359,7 +359,7 @@ void ScChartHelper::GetChartNames( ::std::vector< OUString >& rChartNames, SdrPa
 {
     if ( pPage )
     {
-        SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+        SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
         SdrObject* pObject = aIter.Next();
         while ( pObject )
         {
@@ -383,7 +383,7 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, Sd
     {
         size_t nRangeListCount = rRangesVector.size();
         size_t nRangeList = 0;
-        SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+        SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
         SdrObject* pObject = aIter.Next();
         while ( pObject )
         {

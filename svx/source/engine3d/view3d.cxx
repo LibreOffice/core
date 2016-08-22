@@ -636,7 +636,7 @@ void E3dView::ImpIsConvertTo3DPossible(SdrObject* pObj, bool& rAny3D,
         {
             if(pObj->IsGroupObject())
             {
-                SdrObjListIter aIter(*pObj, IM_DEEPNOGROUPS);
+                SdrObjListIter aIter(*pObj, SdrIterMode::DeepNoGroups);
                 while(aIter.IsMore())
                 {
                     SdrObject* pNewObj = aIter.Next();
@@ -770,7 +770,7 @@ void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude
         // change text color attribute for not so dark colors
         if(pObj->IsGroupObject())
         {
-            SdrObjListIter aIter(*pObj, IM_DEEPWITHGROUPS);
+            SdrObjListIter aIter(*pObj, SdrIterMode::DeepWithGroups);
             while(aIter.IsMore())
             {
                 SdrObject* pGroupMember = aIter.Next();
@@ -788,7 +788,7 @@ void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude
             // change text color attribute for not so dark colors
             if(pNewObj1->IsGroupObject())
             {
-                SdrObjListIter aIter(*pNewObj1, IM_DEEPWITHGROUPS);
+                SdrObjListIter aIter(*pNewObj1, SdrIterMode::DeepWithGroups);
                 while(aIter.IsMore())
                 {
                     SdrObject* pGroupMember = aIter.Next();
@@ -806,7 +806,7 @@ void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude
                 // add all to flat scene
                 if(pNewObj2->IsGroupObject())
                 {
-                    SdrObjListIter aIter(*pNewObj2, IM_DEEPWITHGROUPS);
+                    SdrObjListIter aIter(*pNewObj2, SdrIterMode::DeepWithGroups);
                     while(aIter.IsMore())
                     {
                         SdrObject* pGroupMember = aIter.Next();
@@ -1044,7 +1044,7 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
     if(pScene && pScene->GetSubList() && pScene->GetSubList()->GetObjCount() > 1)
     {
         SdrObjList* pSubList = pScene->GetSubList();
-        SdrObjListIter aIter(*pSubList, IM_FLAT);
+        SdrObjListIter aIter(*pSubList, SdrIterMode::Flat);
         E3dDepthLayer* pBaseLayer = nullptr;
         E3dDepthLayer* pLayer = nullptr;
         sal_Int32 nNumLayers = 0;
@@ -1585,7 +1585,7 @@ void E3dView::BreakSingle3DObj(E3dObject* pObj)
     if(dynamic_cast< const E3dScene* >(pObj) !=  nullptr)
     {
         SdrObjList* pSubList = pObj->GetSubList();
-        SdrObjListIter aIter(*pSubList, IM_FLAT);
+        SdrObjListIter aIter(*pSubList, SdrIterMode::Flat);
 
         while(aIter.IsMore())
         {

@@ -66,7 +66,7 @@ static SdrOle2Obj* lcl_FindChartObj( ScDocShell* pDocShell, SCTAB nTab, const OU
             OSL_ENSURE(pPage, "Page nicht gefunden");
             if (pPage)
             {
-                SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+                SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {
@@ -128,7 +128,7 @@ ScChartObj* ScChartsObj::GetObjectByIndex_Impl(long nIndex) const
             if (pPage)
             {
                 long nPos = 0;
-                SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+                SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {
@@ -340,7 +340,7 @@ sal_Int32 SAL_CALL ScChartsObj::getCount() throw(uno::RuntimeException, std::exc
             OSL_ENSURE(pPage, "Page nicht gefunden");
             if (pPage)
             {
-                SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+                SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {
@@ -409,7 +409,7 @@ uno::Sequence<OUString> SAL_CALL ScChartsObj::getElementNames() throw(uno::Runti
             OSL_ENSURE(pPage, "Page nicht gefunden");
             if (pPage)
             {
-                SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+                SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {

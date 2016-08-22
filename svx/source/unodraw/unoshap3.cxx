@@ -322,7 +322,7 @@ bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             aSceneTAR.maRect = pScene->GetSnapRect();
 
             // rescue object transformations
-            SdrObjListIter aIter(*pScene->GetSubList(), IM_DEEPWITHGROUPS);
+            SdrObjListIter aIter(*pScene->GetSubList(), SdrIterMode::DeepWithGroups);
             std::vector<basegfx::B3DHomMatrix*> aObjTrans;
             while(aIter.IsMore())
             {

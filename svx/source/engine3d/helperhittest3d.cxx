@@ -175,7 +175,7 @@ void getAllHit3DObjectsSortedFrontToBack(
         // check if test point is inside scene's area at all
         if(aRelativePoint.getX() >= 0.0 && aRelativePoint.getX() <= 1.0 && aRelativePoint.getY() >= 0.0 && aRelativePoint.getY() <= 1.0)
         {
-            SdrObjListIter aIterator(*pList, IM_DEEPNOGROUPS);
+            SdrObjListIter aIterator(*pList, SdrIterMode::DeepNoGroups);
             ::std::vector< ImplPairDephAndObject > aDepthAndObjectResults;
             const uno::Sequence< beans::PropertyValue > aEmptyParameters;
             drawinglayer::geometry::ViewInformation3D aViewInfo3D(aEmptyParameters);

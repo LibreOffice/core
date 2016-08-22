@@ -30,10 +30,10 @@ class SdrObject;
 class SdrMarkList;
 
 // SdrObjListIter methods:
-// IM_FLAT              : Flat over the list
-// IM_DEEPWITHGROUPS    : With recursive descent parser, Next() also returns group objects
-// IM_DEEPNOGROUPS      : With recursive descent parser, Next() returns no group objects
-enum SdrIterMode { IM_FLAT, IM_DEEPWITHGROUPS, IM_DEEPNOGROUPS};
+// SdrIterMode::Flat              : Flat over the list
+// SdrIterMode::DeepWithGroups    : With recursive descent parser, Next() also returns group objects
+// SdrIterMode::DeepNoGroups      : With recursive descent parser, Next() returns no group objects
+enum class SdrIterMode { Flat, DeepWithGroups, DeepNoGroups };
 
 class SVX_DLLPUBLIC SdrObjListIter
 {
@@ -46,7 +46,7 @@ class SVX_DLLPUBLIC SdrObjListIter
     void ImpProcessObj(SdrObject* pObj, SdrIterMode eMode, bool bUseZOrder);
 
 public:
-    explicit SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode = IM_DEEPNOGROUPS, bool bReverse = false);
+    explicit SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode = SdrIterMode::DeepNoGroups, bool bReverse = false);
     /** This variant lets the user choose the order in which to travel over
         the objects.
         @param bUseZOrder
@@ -54,14 +54,14 @@ public:
             Otherwise the navigation position as returned by
             SdrObject::GetNavigationPosition() is used.
     */
-    SdrObjListIter(const SdrObjList& rObjList, bool bUseZOrder, SdrIterMode eMode = IM_DEEPNOGROUPS);
+    SdrObjListIter(const SdrObjList& rObjList, bool bUseZOrder, SdrIterMode eMode = SdrIterMode::DeepNoGroups);
 
     /* SJ: the following function can now be used with every
        SdrObject and is no longer limited to group objects */
-    explicit SdrObjListIter(const SdrObject& rObj, SdrIterMode eMode = IM_DEEPNOGROUPS);
+    explicit SdrObjListIter(const SdrObject& rObj, SdrIterMode eMode = SdrIterMode::DeepNoGroups);
 
     /** Iterates over a list of marked objects received from the SdrMarkView. */
-    explicit SdrObjListIter(const SdrMarkList& rMarkList, SdrIterMode eMode = IM_DEEPNOGROUPS);
+    explicit SdrObjListIter(const SdrMarkList& rMarkList, SdrIterMode eMode = SdrIterMode::DeepNoGroups);
 
     void Reset() { mnIndex = (mbReverse ? maObjList.size() : 0L); }
     bool IsMore() const { return (mbReverse ? mnIndex != 0 : ( mnIndex < maObjList.size())); }

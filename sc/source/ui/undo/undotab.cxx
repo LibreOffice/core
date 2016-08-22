@@ -1462,7 +1462,7 @@ SdrObject* ScUndoRenameObject::GetObject()
             SdrPage* pPage = pDrawLayer->GetPage(nTab);
             assert(pPage && "Page ?");
 
-            SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+            SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
             SdrObject* pObject = aIter.Next();
             while (pObject)
             {

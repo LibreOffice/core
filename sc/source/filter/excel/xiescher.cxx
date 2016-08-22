@@ -3170,7 +3170,7 @@ void XclImpSolverContainer::RemoveSdrObjectInfo( SdrObject& rSdrObj )
         if( SdrObjList* pSubList = pGroupObj->GetSubList() )
         {
             // iterate flat over the list because this function already works recursively
-            SdrObjListIter aObjIt( *pSubList, IM_FLAT );
+            SdrObjListIter aObjIt( *pSubList, SdrIterMode::Flat );
             for( SdrObject* pChildObj = aObjIt.Next(); pChildObj; pChildObj = aObjIt.Next() )
                 RemoveSdrObjectInfo( *pChildObj );
         }

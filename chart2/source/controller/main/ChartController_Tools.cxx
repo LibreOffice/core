@@ -387,7 +387,7 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
             for ( sal_uInt16 i = 0; i < nCount; ++i )
             {
                 const SdrPage* pPage = pModel->GetPage( i );
-                SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+                SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
                 while ( aIter.IsMore() )
                 {
                     SdrObject* pObj = aIter.Next();

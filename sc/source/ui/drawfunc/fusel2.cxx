@@ -52,7 +52,7 @@ bool FuSelection::TestDetective( SdrPageView* pPV, const Point& rPos )
         return false;
 
     bool bFound = false;
-    SdrObjListIter aIter( *pPV->GetObjList(), IM_FLAT );
+    SdrObjListIter aIter( *pPV->GetObjList(), SdrIterMode::Flat );
     SdrObject* pObject = aIter.Next();
     while (pObject && !bFound)
     {
@@ -131,7 +131,7 @@ bool FuSelection::IsNoteCaptionClicked( const Point& rPos ) const
         bool bProtectDoc =  rDoc.IsTabProtected( nTab ) || (pDocSh && pDocSh->IsReadOnly());
 
         // search the last object (on top) in the object list
-        SdrObjListIter aIter( *pPageView->GetObjList(), IM_DEEPNOGROUPS, true );
+        SdrObjListIter aIter( *pPageView->GetObjList(), SdrIterMode::DeepNoGroups, true );
         for( SdrObject* pObj = aIter.Next(); pObj; pObj = aIter.Next() )
         {
             if( pObj->GetLogicRect().IsInside( rPos ) )

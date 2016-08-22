@@ -604,7 +604,7 @@ IMPL_LINK_TYPED( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxObjectNameD
     {
         bRet = true;
         SwDrawModel* pModel = rSh.getIDocumentDrawModelAccess().GetDrawModel();
-        SdrObjListIter aIter( *(pModel->GetPage(0)), IM_DEEPWITHGROUPS );
+        SdrObjListIter aIter( *(pModel->GetPage(0)), SdrIterMode::DeepWithGroups );
         while( aIter.IsMore() )
         {
             SdrObject* pTempObj = aIter.Next();

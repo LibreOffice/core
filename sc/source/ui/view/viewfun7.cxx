@@ -232,7 +232,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         // controls must be on SC_LAYER_CONTROLS
         if (pPage)
         {
-            SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+            SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
             SdrObject* pObject = aIter.Next();
             while (pObject)
             {

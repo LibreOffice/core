@@ -196,7 +196,7 @@ std::set<OUString> collect_charts(VclPtr<ScGridWindow> const & xGridWindow)
     if (!pPage)
         return aRet;
 
-    SdrObjListIter aIter( *pPage, IM_FLAT );
+    SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
     SdrObject* pObject = aIter.Next();
     while (pObject)
     {

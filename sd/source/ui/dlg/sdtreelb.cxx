@@ -285,7 +285,7 @@ OUString SdPageObjsTLB::getAltLongDescText(SvTreeListEntry* pEntry , bool isAltT
         const SdPage* pPage = static_cast<const SdPage*>( mpDoc->GetPage( pageNo ) );
         if( pPage->GetPageKind() != PK_STANDARD ) continue;
         if( pPage->GetName() !=  ParentName ) continue;
-        SdrObjListIter aIter( *pPage, IM_FLAT );
+        SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
         while( aIter.IsMore() )
         {
             pObj = aIter.Next();
@@ -600,7 +600,7 @@ void SdPageObjsTLB::AddShapeList (
     SdrObjListIter aIter(
         rList,
         !rList.HasObjectNavigationOrder() /* use navigation order, if available */,
-        IM_FLAT);
+        SdrIterMode::Flat);
 
     bool  bMarked=false;
     if(bisInSdNavigatorWin)
@@ -838,7 +838,7 @@ bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
             SdrObjListIter aIter(
                 *pPage,
                 !pPage->HasObjectNavigationOrder() /* use navigation order, if available */,
-                IM_DEEPWITHGROUPS );
+                SdrIterMode::DeepWithGroups );
 
             while( aIter.IsMore() )
             {
@@ -928,7 +928,7 @@ void SdPageObjsTLB::RequestingChildren( SvTreeListEntry* pFileEntry )
                                               TREELIST_APPEND,
                                               reinterpret_cast< void* >( 1 ) );
 
-                    SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
+                    SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );
 
                     while( aIter.IsMore() )
                     {

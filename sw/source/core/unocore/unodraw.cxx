@@ -963,7 +963,7 @@ SwXShape::SwXShape(uno::Reference< uno::XInterface > & xShape) :
 
 void SwXShape::AddExistingShapeToFormat( SdrObject& _rObj )
 {
-    SdrObjListIter aIter( _rObj, IM_DEEPNOGROUPS );
+    SdrObjListIter aIter( _rObj, SdrIterMode::DeepNoGroups );
     while ( aIter.IsMore() )
     {
         SdrObject* pCurrent = aIter.Next();

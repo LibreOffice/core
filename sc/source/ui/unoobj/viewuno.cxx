@@ -655,7 +655,7 @@ static void lcl_ShowObject( ScTabViewShell& rViewSh, ScDrawView& rDrawView, SdrO
         SdrPage* pPage = pModel->GetPage(i);
         if (pPage)
         {
-            SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
+            SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );
             SdrObject* pObject = aIter.Next();
             while (pObject && !bFound)
             {

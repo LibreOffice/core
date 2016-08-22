@@ -844,7 +844,7 @@ void notifySystemWindow(vcl::Window* _pWindow, vcl::Window* _pToRegister, const 
 SdrObject* isOver(const Rectangle& _rRect, SdrPage& _rPage, SdrView& _rView, bool _bAllObjects, SdrObject* _pIgnore, sal_Int16 _nIgnoreType)
 {
     SdrObject* pOverlappedObj = nullptr;
-    SdrObjListIter aIter(_rPage,IM_DEEPNOGROUPS);
+    SdrObjListIter aIter(_rPage,SdrIterMode::DeepNoGroups);
     SdrObject* pObjIter = nullptr;
 
     while( !pOverlappedObj && (pObjIter = aIter.Next()) != nullptr )
@@ -885,7 +885,7 @@ bool checkArrayForOccurrence(SdrObject* _pObjToCheck, SdrUnoObj* _pIgnore[], int
 SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _bAllObjects, SdrUnoObj * _pIgnoreList[], int _nIgnoreListLength)
 {
     SdrObject* pOverlappedObj = nullptr;
-    SdrObjListIter aIter(_rPage,IM_DEEPNOGROUPS);
+    SdrObjListIter aIter(_rPage,SdrIterMode::DeepNoGroups);
     SdrObject* pObjIter = nullptr;
 
     while( !pOverlappedObj && (pObjIter = aIter.Next()) != nullptr )

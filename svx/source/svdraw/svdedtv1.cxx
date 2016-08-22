@@ -147,7 +147,7 @@ std::vector< SdrUndoAction* > SdrEditView::CreateConnectorUndo( SdrObject& rO )
         const SdrPage* pPage = rO.GetPage();
         if ( pPage )
         {
-            SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
+            SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );
             while( aIter.IsMore() )
             {
                 SdrObject* pPartObj = aIter.Next();
@@ -609,7 +609,7 @@ void SdrEditView::CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookM
         if (bNoContortion || pOL==nullptr) {
             ImpCrookObj(pO,rRef,rRad,eMode,bVertical,bNoContortion,bRotate,aMarkRect);
         } else {
-            SdrObjListIter aIter(*pOL,IM_DEEPNOGROUPS);
+            SdrObjListIter aIter(*pOL,SdrIterMode::DeepNoGroups);
             while (aIter.IsMore()) {
                 SdrObject* pO1=aIter.Next();
                 ImpCrookObj(pO1,rRef,rRad,eMode,bVertical,bNoContortion,bRotate,aMarkRect);
@@ -684,7 +684,7 @@ void SdrEditView::DistortMarkedObj(const Rectangle& rRef, const XPolygon& rDisto
         if (bNoContortion || pOL==nullptr) {
             ImpDistortObj(pO,aRefRect,rDistortedRect,bNoContortion);
         } else {
-            SdrObjListIter aIter(*pOL,IM_DEEPNOGROUPS);
+            SdrObjListIter aIter(*pOL,SdrIterMode::DeepNoGroups);
             while (aIter.IsMore()) {
                 SdrObject* pO1=aIter.Next();
                 ImpDistortObj(pO1,aRefRect,rDistortedRect,bNoContortion);

@@ -164,7 +164,7 @@ OUString ScContentTree::getAltLongDescText( SvTreeListEntry* pEntry, bool isAltT
         {
             SdrObject* pFound = nullptr;
             ScDocument* pDoc = ( const_cast< ScContentTree* >(this) )->GetSourceDocument();
-            SdrIterMode eIter = ( nType == ScContentId::DRAWING ) ? IM_FLAT : IM_DEEPNOGROUPS;
+            SdrIterMode eIter = ( nType == ScContentId::DRAWING ) ? SdrIterMode::Flat : SdrIterMode::DeepNoGroups;
             ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
             SfxObjectShell* pShell = pDoc->GetDocumentShell();
             if (pDrawLayer && pShell)
@@ -933,7 +933,7 @@ void ScContentTree::GetDrawNames( ScContentId nType )
         return;
 
     // iterate in flat mode for groups
-    SdrIterMode eIter = ( nType == ScContentId::DRAWING ) ? IM_FLAT : IM_DEEPNOGROUPS;
+    SdrIterMode eIter = ( nType == ScContentId::DRAWING ) ? SdrIterMode::Flat : SdrIterMode::DeepNoGroups;
 
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     SfxObjectShell* pShell = pDoc->GetDocumentShell();
@@ -1140,7 +1140,7 @@ bool ScContentTree::DrawNamesChanged( ScContentId nType )
     SvTreeListEntry* pEntry = FirstChild( pParent );
 
     // iterate in flat mode for groups
-    SdrIterMode eIter = ( nType == ScContentId::DRAWING ) ? IM_FLAT : IM_DEEPNOGROUPS;
+    SdrIterMode eIter = ( nType == ScContentId::DRAWING ) ? SdrIterMode::Flat : SdrIterMode::DeepNoGroups;
 
     bool bEqual = true;
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();

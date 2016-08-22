@@ -510,7 +510,7 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj, bool bScale)
                 {
                     // recursively add created conversion; per definition this shall not
                     // contain further SdrTextObjs. Visit only non-group objects
-                    SdrObjListIter aIter(*pConverted, IM_DEEPNOGROUPS);
+                    SdrObjListIter aIter(*pConverted, SdrIterMode::DeepNoGroups);
 
                     // work with clones; the created conversion may contain group objects
                     // and when working with the original objects the loop itself could
@@ -519,7 +519,7 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj, bool bScale)
                     while(aIter.IsMore())
                     {
                         SdrObject* pCandidate = aIter.Next();
-                        OSL_ENSURE(pCandidate && dynamic_cast< SdrObjGroup* >(pCandidate) ==  nullptr, "SdrObjListIter with IM_DEEPNOGROUPS error (!)");
+                        OSL_ENSURE(pCandidate && dynamic_cast< SdrObjGroup* >(pCandidate) ==  nullptr, "SdrObjListIter with SdrIterMode::DeepNoGroups error (!)");
                         SdrObject* pNewClone = pCandidate->Clone();
 
                         if(pNewClone)

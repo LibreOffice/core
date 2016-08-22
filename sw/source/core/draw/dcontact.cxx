@@ -639,7 +639,7 @@ void SwDrawContact::GetTextObjectsFromFormat( std::list<SdrTextObj*>& rTextObjec
                 {
                     if ( dynamic_cast<const SdrObjGroup*>(pSdrO) !=  nullptr )
                     {
-                        SdrObjListIter aListIter( *pSdrO, IM_DEEPNOGROUPS );
+                        SdrObjListIter aListIter( *pSdrO, SdrIterMode::DeepNoGroups );
                         //iterate inside of a grouped object
                         while( aListIter.IsMore() )
                         {

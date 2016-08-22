@@ -406,7 +406,7 @@ bool ScDetectiveFunc::HasArrow( const ScAddress& rStart,
     OSL_ENSURE(pPage,"Page ?");
 
     bool bFound = false;
-    SdrObjListIter aIter( *pPage, IM_FLAT );
+    SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
     SdrObject* pObject = aIter.Next();
     while (pObject && !bFound)
     {
@@ -674,7 +674,7 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, bool bDestPnt )
         size_t nDelCount = 0;
         std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
 
-        SdrObjListIter aIter( *pPage, IM_FLAT );
+        SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
@@ -747,7 +747,7 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
         size_t nDelCount = 0;
         std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
 
-        SdrObjListIter aIter( *pPage, IM_FLAT );
+        SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
@@ -1249,7 +1249,7 @@ bool ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
     {
         std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
 
-        SdrObjListIter aIter( *pPage, IM_FLAT );
+        SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
@@ -1424,7 +1424,7 @@ void ScDetectiveFunc::UpdateAllComments( ScDocument& rDoc )
         OSL_ENSURE( pPage, "Page ?" );
         if( pPage )
         {
-            SdrObjListIter aIter( *pPage, IM_FLAT );
+            SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
             for( SdrObject* pObject = aIter.Next(); pObject; pObject = aIter.Next() )
             {
                 if ( ScDrawObjData* pData = ScDrawLayer::GetNoteCaptionData( pObject, nObjTab ) )
@@ -1465,7 +1465,7 @@ void ScDetectiveFunc::UpdateAllArrowColors()
         OSL_ENSURE( pPage, "Page ?" );
         if( pPage )
         {
-            SdrObjListIter aIter( *pPage, IM_FLAT );
+            SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
             for( SdrObject* pObject = aIter.Next(); pObject; pObject = aIter.Next() )
             {
                 if ( pObject->GetLayer() == SC_LAYER_INTERN )

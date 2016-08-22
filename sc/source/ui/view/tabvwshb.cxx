@@ -400,7 +400,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                                 pNewDBField->NbcSetLayer(SC_LAYER_FRONT);
                             if (dynamic_cast<const SdrObjGroup*>( pNewDBField) !=  nullptr)
                             {
-                                SdrObjListIter aIter( *pNewDBField, IM_DEEPWITHGROUPS );
+                                SdrObjListIter aIter( *pNewDBField, SdrIterMode::DeepWithGroups );
                                 SdrObject* pSubObj = aIter.Next();
                                 while (pSubObj)
                                 {

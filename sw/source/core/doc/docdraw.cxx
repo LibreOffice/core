@@ -603,7 +603,7 @@ namespace docfunc
         {
             const SdrPage& rSdrPage( *(p_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 )) );
 
-            SdrObjListIter aIter( rSdrPage, IM_FLAT );
+            SdrObjListIter aIter( rSdrPage, SdrIterMode::Flat );
             while( aIter.IsMore() )
             {
                 SdrObject* pObj( aIter.Next() );
@@ -628,7 +628,7 @@ namespace docfunc
         {
             const SdrPage& rSdrPage( *(p_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 )) );
 
-            SdrObjListIter aIter( rSdrPage, IM_FLAT );
+            SdrObjListIter aIter( rSdrPage, SdrIterMode::Flat );
             while( aIter.IsMore() )
             {
                 SdrObject* pObj( aIter.Next() );

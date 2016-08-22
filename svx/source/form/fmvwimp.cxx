@@ -888,7 +888,7 @@ namespace
         {
             Reference< XInterface > xNormalizedForm( _rxForm, UNO_QUERY_THROW );
 
-            SdrObjListIter aSdrObjectLoop( _rPage, IM_DEEPNOGROUPS );
+            SdrObjListIter aSdrObjectLoop( _rPage, SdrIterMode::DeepNoGroups );
             while ( aSdrObjectLoop.IsMore() )
             {
                 FmFormObj* pFormObject = FmFormObj::GetFormObject( aSdrObjectLoop.Next() );

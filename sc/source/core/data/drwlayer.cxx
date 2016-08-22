@@ -450,7 +450,7 @@ void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
         SCTAB nOldTab = static_cast<SCTAB>(nOldPos);
         SCTAB nNewTab = static_cast<SCTAB>(nNewPos);
 
-        SdrObjListIter aIter( *pOldPage, IM_FLAT );
+        SdrObjListIter aIter( *pOldPage, SdrIterMode::Flat );
         SdrObject* pOldObject = aIter.Next();
         while (pOldObject)
         {
@@ -505,7 +505,7 @@ void ScDrawLayer::ResetTab( SCTAB nStart, SCTAB nEnd )
         if (!pPage)
             continue;
 
-        SdrObjListIter aIter(*pPage, IM_FLAT);
+        SdrObjListIter aIter(*pPage, SdrIterMode::Flat);
         for (SdrObject* pObj = aIter.Next(); pObj; pObj = aIter.Next())
         {
             ScDrawObjData* pData = GetObjData(pObj);
@@ -1019,7 +1019,7 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
     OSL_ENSURE(pPage,"Page not found");
     if (pPage)
     {
-        SdrObjListIter aIter( *pPage, IM_FLAT );
+        SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
@@ -1258,7 +1258,7 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
 
         std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
 
-        SdrObjListIter aIter( *pPage, IM_FLAT );
+        SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
@@ -1315,7 +1315,7 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
 
                 std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
 
-                SdrObjListIter aIter( *pPage, IM_FLAT );
+                SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {
@@ -1362,7 +1362,7 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle&
         ScDrawLayer* pDestModel = nullptr;
         SdrPage* pDestPage = nullptr;
 
-        SdrObjListIter aIter( *pSrcPage, IM_FLAT );
+        SdrObjListIter aIter( *pSrcPage, SdrIterMode::Flat );
         SdrObject* pOldObject = aIter.Next();
         while (pOldObject)
         {
@@ -1488,7 +1488,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
     if ( !pSrcPage || !pDestPage )
         return;
 
-    SdrObjListIter aIter( *pSrcPage, IM_FLAT );
+    SdrObjListIter aIter( *pSrcPage, SdrIterMode::Flat );
     SdrObject* pOldObject = aIter.Next();
 
     ScDocument* pClipDoc = pClipModel->GetDocument();
@@ -1776,7 +1776,7 @@ SdrObject* ScDrawLayer::GetNamedObject( const OUString& rName, sal_uInt16 nId, S
         OSL_ENSURE(pPage,"Page ?");
         if (pPage)
         {
-            SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
+            SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );
             SdrObject* pObject = aIter.Next();
             while (pObject)
             {
@@ -1829,7 +1829,7 @@ void ScDrawLayer::EnsureGraphicNames()
         OSL_ENSURE(pPage,"Page ?");
         if (pPage)
         {
-            SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
+            SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );
             SdrObject* pObject = aIter.Next();
 
             /* The index passed to GetNewGraphicName() will be set to

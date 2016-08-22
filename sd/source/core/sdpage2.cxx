@@ -442,8 +442,8 @@ SdrPage* SdPage::Clone(SdrModel* pNewModel) const
     cloneAnimations( *pNewPage );
 
     // fix user calls for duplicated slide
-    SdrObjListIter aSourceIter( *this, IM_DEEPWITHGROUPS );
-    SdrObjListIter aTargetIter( *pNewPage, IM_DEEPWITHGROUPS );
+    SdrObjListIter aSourceIter( *this, SdrIterMode::DeepWithGroups );
+    SdrObjListIter aTargetIter( *pNewPage, SdrIterMode::DeepWithGroups );
 
     while( aSourceIter.IsMore() && aTargetIter.IsMore() )
     {
@@ -513,7 +513,7 @@ void SdPage::getAlienAttributes( css::uno::Any& rAttributes )
 
 void SdPage::RemoveEmptyPresentationObjects()
 {
-    SdrObjListIter  aShapeIter( *this, IM_DEEPWITHGROUPS );
+    SdrObjListIter  aShapeIter( *this, SdrIterMode::DeepWithGroups );
 
     SdrObject* pShape;
     for( pShape = aShapeIter.Next(); pShape; pShape = aShapeIter.Next() )

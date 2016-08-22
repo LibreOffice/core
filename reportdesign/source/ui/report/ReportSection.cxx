@@ -417,7 +417,7 @@ void OReportSection::SelectAll(const sal_uInt16 _nObjectType)
         else
         {
             m_pView->UnmarkAll();
-            SdrObjListIter aIter(*m_pPage,IM_DEEPNOGROUPS);
+            SdrObjListIter aIter(*m_pPage,SdrIterMode::DeepNoGroups);
             SdrObject* pObjIter = nullptr;
             while( (pObjIter = aIter.Next()) != nullptr )
             {

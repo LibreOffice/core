@@ -91,7 +91,7 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDes
 
         if (pOldPage && pNewPage)
         {
-            SdrObjListIter aIter( *pOldPage, IM_FLAT );
+            SdrObjListIter aIter( *pOldPage, SdrIterMode::Flat );
             SdrObject* pOldObject = aIter.Next();
             while (pOldObject)
             {
@@ -315,7 +315,7 @@ bool ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* p
             OSL_ENSURE(pPage,"Page ?");
             if (pPage)
             {
-                SdrObjListIter aIter( *pPage, IM_FLAT );
+                SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {
@@ -341,7 +341,7 @@ void ScDocument::StartAnimations( SCTAB nTab, vcl::Window* pWin )
     if (!pPage)
         return;
 
-    SdrObjListIter aIter( *pPage, IM_FLAT );
+    SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
     SdrObject* pObject = aIter.Next();
     while (pObject)
     {
@@ -370,7 +370,7 @@ bool ScDocument::HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect ) const
 
     bool bFound = false;
 
-    SdrObjListIter aIter( *pPage, IM_FLAT );
+    SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
     SdrObject* pObject = aIter.Next();
     while (pObject && !bFound)
     {
@@ -395,7 +395,7 @@ bool ScDocument::HasAnyDraw( SCTAB nTab, const Rectangle& rMMRect ) const
 
     bool bFound = false;
 
-    SdrObjListIter aIter( *pPage, IM_FLAT );
+    SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
     SdrObject* pObject = aIter.Next();
     while (pObject && !bFound)
     {
@@ -423,7 +423,7 @@ SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
         OSL_ENSURE(pPage,"Page ?");
         if (pPage)
         {
-            SdrObjListIter aIter( *pPage, IM_FLAT );
+            SdrObjListIter aIter( *pPage, SdrIterMode::Flat );
             SdrObject* pObject = aIter.Next();
             while (pObject)
             {
@@ -548,7 +548,7 @@ bool ScDocument::HasDetectiveObjects(SCTAB nTab) const
         OSL_ENSURE(pPage,"Page ?");
         if (pPage)
         {
-            SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+            SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
             SdrObject* pObject = aIter.Next();
             while (pObject && !bFound)
             {

@@ -368,7 +368,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         }
 
         Rectangle aBoundRect2d;
-        SdrObjListIter aIter( *pShape2d, IM_DEEPNOGROUPS );
+        SdrObjListIter aIter( *pShape2d, SdrIterMode::DeepNoGroups );
         const bool bMultipleSubObjects(aIter.Count() > 1);
 
         while( aIter.IsMore() )

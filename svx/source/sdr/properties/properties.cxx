@@ -142,7 +142,7 @@ namespace sdr
             // invalidate all new rectangles
             if(dynamic_cast<const SdrObjGroup*>( &GetSdrObject() ) != nullptr)
             {
-                SdrObjListIter aIter(static_cast<SdrObjGroup&>(GetSdrObject()), IM_DEEPNOGROUPS);
+                SdrObjListIter aIter(static_cast<SdrObjGroup&>(GetSdrObject()), SdrIterMode::DeepNoGroups);
 
                 while(aIter.IsMore())
                 {

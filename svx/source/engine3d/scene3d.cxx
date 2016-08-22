@@ -474,7 +474,7 @@ void E3dScene::RebuildLists()
     // first delete
     SdrLayerID nCurrLayerID = GetLayer();
 
-    SdrObjListIter a3DIterator(maSubList, IM_FLAT);
+    SdrObjListIter a3DIterator(maSubList, SdrIterMode::Flat);
 
     // then examine all the objects in the scene
     while ( a3DIterator.IsMore() )
@@ -651,7 +651,7 @@ void E3dScene::RecalcSnapRect()
 bool E3dScene::IsBreakObjPossible()
 {
     // Break scene, if all members are able to break
-    SdrObjListIter a3DIterator(maSubList, IM_DEEPWITHGROUPS);
+    SdrObjListIter a3DIterator(maSubList, SdrIterMode::DeepWithGroups);
 
     while ( a3DIterator.IsMore() )
     {

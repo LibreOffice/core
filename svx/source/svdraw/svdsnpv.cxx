@@ -331,8 +331,8 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
         sal_uIntPtr nMaxPointSnapCount=200;
         sal_uIntPtr nMaxFrameSnapCount=200;
 
-        // go back to IM_DEEPNOGROUPS runthrough for snap to object comparisons
-        SdrObjListIter aIter(*pPV->GetPage(),IM_DEEPNOGROUPS,true);
+        // go back to SdrIterMode::DeepNoGroups runthrough for snap to object comparisons
+        SdrObjListIter aIter(*pPV->GetPage(),SdrIterMode::DeepNoGroups,true);
 
         while (aIter.IsMore() && (nMaxPointSnapCount>0 || nMaxFrameSnapCount>0)) {
             SdrObject* pO=aIter.Next();

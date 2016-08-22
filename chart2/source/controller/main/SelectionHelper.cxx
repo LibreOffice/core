@@ -489,7 +489,7 @@ SdrObject* SelectionHelper::getMarkHandlesObject( SdrObject* pObj )
     SdrObjList* pSubList = pObj->GetSubList();
     if(pSubList)
     {
-        SdrObjListIter aIterator(*pSubList, IM_FLAT);
+        SdrObjListIter aIterator(*pSubList, SdrIterMode::Flat);
         while (aIterator.IsMore())
         {
             SdrObject* pMarkHandles = SelectionHelper::getMarkHandlesObject( aIterator.Next() );
@@ -514,7 +514,7 @@ SdrObject* SelectionHelper::getObjectToMark()
         SdrObjList* pSubList = pObj->GetSubList();
         if(pSubList)
         {
-            SdrObjListIter aIterator(*pSubList, IM_FLAT);
+            SdrObjListIter aIterator(*pSubList, SdrIterMode::Flat);
             while (aIterator.IsMore())
             {
                 SdrObject* pMarkHandles = SelectionHelper::getMarkHandlesObject( aIterator.Next() );
@@ -545,7 +545,7 @@ E3dScene* SelectionHelper::getSceneToRotate( SdrObject* pObj )
             SdrObjList* pSubList = pObj->GetSubList();
             if(pSubList)
             {
-                SdrObjListIter aIterator(*pSubList, IM_DEEPWITHGROUPS);
+                SdrObjListIter aIterator(*pSubList, SdrIterMode::DeepWithGroups);
                 while( aIterator.IsMore() && !pRotateable )
                 {
                     SdrObject* pSubObj = aIterator.Next();
@@ -634,7 +634,7 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
         return false;
     }
 
-    SdrObjListIter aIterator(*pSubList, IM_FLAT);
+    SdrObjListIter aIterator(*pSubList, SdrIterMode::Flat);
 
     while (aIterator.IsMore())
     {

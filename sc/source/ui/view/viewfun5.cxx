@@ -438,7 +438,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     pObj->NbcSetLayer(SC_LAYER_FRONT);
                 if (dynamic_cast<const SdrObjGroup*>( pObj) !=  nullptr)
                 {
-                    SdrObjListIter aIter( *pObj, IM_DEEPWITHGROUPS );
+                    SdrObjListIter aIter( *pObj, SdrIterMode::DeepWithGroups );
                     SdrObject* pSubObj = aIter.Next();
                     while (pSubObj)
                     {
@@ -505,7 +505,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             for (sal_uInt16 i=0; i<nPages; i++)
             {
                 SdrPage* pPage = pModel->GetPage(i);
-                SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
+                SdrObjListIter aIter( *pPage, SdrIterMode::DeepWithGroups );
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {
