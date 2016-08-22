@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa6399be_843407df",
+        "filename": "include/svl/zformat.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-22T12:56:19Z",
+      "side": 1,
+      "message": "I\u0027d rather name this nOriginalLanguage then, and not default to LANGUAGE_ENGLISH_US but to LANGUAGE_DONTKNOW instead.",
+      "range": {
+        "startLine": 188,
+        "startChar": 49,
+        "endLine": 188,
+        "endChar": 80
+      },
+      "revId": "729e2f6cd4896e3a0a69ddc98e1078c09e465c40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_01446972",
         "filename": "svl/source/numbers/zforlist.cxx",
         "patchSetId": 2
@@ -36,6 +59,30 @@
       "writtenOn": "2016-08-22T12:53:41Z",
       "side": 1,
       "message": "But pEntry was modified on line#831 with\npEntry \u003d rTempFormatter.GetEntry( nTempKey);\nand if I\u0027m not wrong, its language is set to LANGUAGE_ENGLISH_US",
+      "parentUuid": "fa6399be_01446972",
+      "range": {
+        "startLine": 840,
+        "startChar": 104,
+        "endLine": 840,
+        "endChar": 109
+      },
+      "revId": "729e2f6cd4896e3a0a69ddc98e1078c09e465c40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_4413cf5c",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-22T12:56:19Z",
+      "side": 1,
+      "message": "Or actually I missed that nLang is the original locale, which with PutandConvertEntry() may have changed..",
       "parentUuid": "fa6399be_01446972",
       "range": {
         "startLine": 840,
@@ -96,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "fa6399be_643e13ba",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4729,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-22T12:56:19Z",
+      "side": 1,
+      "message": "And here, given my comment for zformat.hxx, test for LANGUAGE_DONTKNOW and if so use SvNumberformat::GetLanguage() to obtain the current locale of the format.",
+      "parentUuid": "fa6399be_c1499190",
+      "range": {
+        "startLine": 4729,
+        "startChar": 34,
+        "endLine": 4729,
+        "endChar": 66
+      },
+      "revId": "729e2f6cd4896e3a0a69ddc98e1078c09e465c40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_e14e9595",
         "filename": "svl/source/numbers/zformat.cxx",
         "patchSetId": 2
@@ -107,6 +178,24 @@
       "writtenOn": "2016-08-22T12:34:31Z",
       "side": 1,
       "message": "Overwriting the locale here looks also wrong.",
+      "revId": "729e2f6cd4896e3a0a69ddc98e1078c09e465c40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_a4482b5d",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4731,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-22T12:56:19Z",
+      "side": 1,
+      "message": "I.e., what happens with the buddhist calendar cases and the Thai case below then?",
+      "parentUuid": "fa6399be_e14e9595",
       "revId": "729e2f6cd4896e3a0a69ddc98e1078c09e465c40",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
