@@ -487,7 +487,8 @@ SwCaptionOptPage::SwCaptionOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
         for ( auto i = pMgr->GetFieldTypeCount(); i; )
         {
             SwFieldType* pFieldType = pMgr->GetFieldType(USHRT_MAX, --i);
-            if (pFieldType->GetName().equals(m_pCategoryBox->GetText()))
+            if (!pFieldType->GetName().isEmpty()
+                && pFieldType->GetName().equals(m_pCategoryBox->GetText()))
             {
                 nSelFormat = (sal_uInt16)static_cast<SwSetExpFieldType*>(pFieldType)->GetSeqFormat();
                 break;
