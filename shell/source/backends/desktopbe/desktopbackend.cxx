@@ -252,6 +252,14 @@ OUString xdg_user_dir_lookup (const char *type)
     return aHomeDirURL + "/" + OUString::createFromAscii(type);
 }
 
+css::uno::Any xdgDirectoryIfExists(char const * type) {
+    auto url = xdg_user_dir_lookup(type);
+    return css::uno::Any(
+        osl::Directory(url).open() == osl::FileBase::E_None
+        ? css::beans::Optional<css::uno::Any>(true, css::uno::Any(url))
+        : css::beans::Optional<css::uno::Any>(false, css::uno::Any()));
+}
+
 } // namespace
 
 css::uno::Any Default::getPropertyValue(OUString const & PropertyName)
@@ -261,16 +269,12 @@ css::uno::Any Default::getPropertyValue(OUString const & PropertyName)
 {
     if (PropertyName == "TemplatePathVariable")
     {
-        OUString aDirURL = xdg_user_dir_lookup("Templates");
-        css::uno::Any aValue(aDirURL);
-        return css::uno::makeAny(css::beans::Optional<css::uno::Any>(true, aValue));
+        return xdgDirectoryIfExists("Templates");
     }
 
     if (PropertyName == "WorkPathVariable")
     {
-        OUString aDirURL = xdg_user_dir_lookup("Documents");
-        css::uno::Any aValue(aDirURL);
-        return css::uno::makeAny(css::beans::Optional<css::uno::Any>(true, aValue));
+        return xdgDirectoryIfExists("Documents");
     }
 
     if ( PropertyName == "EnableATToolSupport" ||
