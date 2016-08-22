@@ -29,6 +29,7 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/fltcall.hxx>
 #include <o3tl/make_unique.hxx>
+#include <vcl/dllapi.h>
 
 #define ERROR                   0
 #define NULLREGION              1
@@ -289,16 +290,16 @@ public:
     void        AddPolyPolygon( const tools::PolyPolygon& rPolyPolygon );
 };
 
-struct GDIObj
+VCL_DLLPUBLIC struct GDIObj
 {
-    virtual ~GDIObj(); // Polymorphic base class
+    VCL_DLLPUBLIC virtual ~GDIObj(); // Polymorphic base class
 };
 
 struct WinMtfFontStyle : GDIObj
 {
     vcl::Font    aFont;
 
-    explicit WinMtfFontStyle( LOGFONTW& rLogFont );
+    VCL_DLLPUBLIC explicit WinMtfFontStyle(LOGFONTW& rLogFont);
 };
 
 

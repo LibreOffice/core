@@ -14,28 +14,28 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_wmf_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_wmf_test,\
-	boost_headers \
+    boost_headers \
     libxml2 \
 ))
-
 
 $(eval $(call gb_CppunitTest_set_include,vcl_wmf_test,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
+    -I$(SRCDIR)/vcl/source/filter/wmf \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,vcl_wmf_test, \
-	comphelper \
-	cppu \
-	cppuhelper \
-	sal \
+    comphelper \
+    cppu \
+    cppuhelper \
+    sal \
     svt \
-	test \
-	tl \
-	unotest \
-	vcl \
-	utl \
-	$(gb_UWINAPI) \
+    test \
+    tl \
+    unotest \
+    vcl \
+    utl \
+    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,vcl_wmf_test))
