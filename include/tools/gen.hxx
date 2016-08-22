@@ -379,6 +379,7 @@ public:
      * Expands the rectangle in all directions by the input value.
      */
     inline void expand(long nExpandBy);
+    inline void shrink(long nShrinkBy);
 
 private:
     long                nLeft;
@@ -620,6 +621,13 @@ inline void Rectangle::expand(long nExpandBy)
     nBottom += nExpandBy;
 }
 
+inline void Rectangle::shrink(long nShrinkBy)
+{
+    nLeft   += nShrinkBy;
+    nTop    += nShrinkBy;
+    nRight  -= nShrinkBy;
+    nBottom -= nShrinkBy;
+}
 
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(

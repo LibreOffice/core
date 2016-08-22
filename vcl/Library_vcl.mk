@@ -399,6 +399,16 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/uitest/uitest \
     vcl/source/uitest/uno/uiobject_uno \
     vcl/source/uitest/uno/uitest_uno \
+    vcl/backendtest/outputdevice/bitmap \
+    vcl/backendtest/outputdevice/common \
+    vcl/backendtest/outputdevice/gradient \
+    vcl/backendtest/outputdevice/line \
+    vcl/backendtest/outputdevice/outputdevice \
+    vcl/backendtest/outputdevice/pixel \
+    vcl/backendtest/outputdevice/polygon \
+    vcl/backendtest/outputdevice/polypolygon \
+    vcl/backendtest/outputdevice/polyline \
+    vcl/backendtest/outputdevice/rectangle \
 ))
 
 $(eval $(call gb_Library_add_cobjects,vcl,\

@@ -35,6 +35,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
 			$(if $(ENABLE_HEADLESS),, \
 				Executable_vcldemo \
 				Executable_icontest \
+				Executable_visualbackendtest \
 				Executable_mtfdemo ))) \
     $(if $(filter-out ANDROID IOS WNT,$(OS)), \
         Executable_svdemo \
