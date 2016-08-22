@@ -127,6 +127,7 @@ public:
     typedef std::function<void(size_t, size_t, double)> DoubleOpFunction;
     typedef std::function<void(size_t, size_t, bool)> BoolOpFunction;
     typedef std::function<void(size_t, size_t, svl::SharedString)> StringOpFunction;
+    typedef std::function<void(size_t, size_t)> EmptyOpFunction;
 
     /**
      * When adding all numerical matrix elements for a scalar result such as
@@ -407,7 +408,8 @@ public:
     virtual std::vector<ScMatrix::IterateResult> Collect(bool bTextAsZero, const std::vector<std::unique_ptr<sc::op::Op>>& aOp) = 0;
 
     virtual void ExecuteOperation(const std::pair<size_t, size_t>& rStartPos, const std::pair<size_t, size_t>& rEndPos,
-            DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc) const = 0;
+            DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc,
+            EmptyOpFunction aEmptyFunc) const = 0;
 
     virtual void MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
             SvNumberFormatter& rFormatter, svl::SharedStringPool& rPool) = 0;
@@ -620,7 +622,8 @@ public:
     virtual std::vector<ScMatrix::IterateResult> Collect(bool bTextAsZero, const std::vector<std::unique_ptr<sc::op::Op>>& aOp) override;
 
     virtual void ExecuteOperation(const std::pair<size_t, size_t>& rStartPos, const std::pair<size_t, size_t>& rEndPos,
-            DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc) const override;
+            DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc,
+            EmptyOpFunction aEmptyFunc) const override;
     ScFullMatrix& operator+= ( const ScFullMatrix& r );
 
     virtual void MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
@@ -835,7 +838,8 @@ public:
     virtual std::vector<ScMatrix::IterateResult> Collect(bool bTextAsZero, const std::vector<std::unique_ptr<sc::op::Op>>& aOp) override;
 
     virtual void ExecuteOperation(const std::pair<size_t, size_t>& rStartPos, const std::pair<size_t, size_t>& rEndPos,
-            DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc) const override;
+            DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc,
+            EmptyOpFunction aEmptyFunc) const override;
 
     ScVectorRefMatrix& operator+=(const ScVectorRefMatrix& r);
 
