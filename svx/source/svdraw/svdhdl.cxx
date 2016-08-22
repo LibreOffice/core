@@ -411,19 +411,19 @@ void SdrHdl::CreateB2dIAObject()
 
     if(pHdlList && pHdlList->GetView() && !pHdlList->GetView()->areMarkHandlesHidden())
     {
-        BitmapColorIndex eColIndex = LightGreen;
+        BitmapColorIndex eColIndex = BitmapColorIndex::LightGreen;
         BitmapMarkerKind eKindOfMarker = BitmapMarkerKind::Rect_7x7;
 
         bool bRot = pHdlList->IsRotateShear();
         if(pObj)
-            eColIndex = (bSelect) ? Cyan : LightCyan;
+            eColIndex = bSelect ? BitmapColorIndex::Cyan : BitmapColorIndex::LightCyan;
         if(bRot)
         {
             // red rotation handles
             if(pObj && bSelect)
-                eColIndex = Red;
+                eColIndex = BitmapColorIndex::Red;
             else
-                eColIndex = LightRed;
+                eColIndex = BitmapColorIndex::LightRed;
         }
 
         switch(eKind)
@@ -535,7 +535,7 @@ void SdrHdl::CreateB2dIAObject()
             case HDL_CUSTOMSHAPE1:
             {
                 eKindOfMarker = b1PixMore ? BitmapMarkerKind::Customshape_9x9 : BitmapMarkerKind::Customshape_7x7;
-                eColIndex = Yellow;
+                eColIndex = BitmapColorIndex::Yellow;
                 break;
             }
             default:
@@ -598,19 +598,19 @@ void SdrHdl::CreateB2dIAObject()
                             Color aHandleFillColor(COL_LIGHTGREEN);
                             switch (eColIndex)
                             {
-                                case Cyan:
+                                case BitmapColorIndex::Cyan:
                                     aHandleFillColor = Color(COL_CYAN);
                                     break;
-                                case LightCyan:
+                                case BitmapColorIndex::LightCyan:
                                     aHandleFillColor = Color(COL_LIGHTCYAN);
                                     break;
-                                case Red:
+                                case BitmapColorIndex::Red:
                                     aHandleFillColor = Color(COL_RED);
                                     break;
-                                case LightRed:
+                                case BitmapColorIndex::LightRed:
                                     aHandleFillColor = Color(COL_LIGHTRED);
                                     break;
-                                case Yellow:
+                                case BitmapColorIndex::Yellow:
                                     aHandleFillColor = Color(COL_YELLOW);
                                     break;
                                 default:
@@ -1474,7 +1474,7 @@ void ImpEdgeHdl::CreateB2dIAObject()
         // first throw away old one
         GetRidOfIAObject();
 
-        BitmapColorIndex eColIndex = LightCyan;
+        BitmapColorIndex eColIndex = BitmapColorIndex::LightCyan;
         BitmapMarkerKind eKindOfMarker = BitmapMarkerKind::Rect_7x7;
 
         if(pHdlList)
@@ -1486,7 +1486,7 @@ void ImpEdgeHdl::CreateB2dIAObject()
                 const SdrEdgeObj* pEdge = static_cast<SdrEdgeObj*>(pObj);
 
                 if(pEdge->GetConnectedNode(nObjHdlNum == 0) != nullptr)
-                    eColIndex = LightRed;
+                    eColIndex = BitmapColorIndex::LightRed;
 
                 if(nPPntNum < 2)
                 {
@@ -1602,7 +1602,7 @@ void ImpMeasureHdl::CreateB2dIAObject()
 
         if(pView && !pView->areMarkHandlesHidden())
         {
-            BitmapColorIndex eColIndex = LightCyan;
+            BitmapColorIndex eColIndex = BitmapColorIndex::LightCyan;
             BitmapMarkerKind eKindOfMarker = BitmapMarkerKind::Rect_9x9;
 
             if(nObjHdlNum > 1)
@@ -1612,7 +1612,7 @@ void ImpMeasureHdl::CreateB2dIAObject()
 
             if(bSelect)
             {
-                eColIndex = Cyan;
+                eColIndex = BitmapColorIndex::Cyan;
             }
 
             SdrPageView* pPageView = pView->GetSdrPageView();

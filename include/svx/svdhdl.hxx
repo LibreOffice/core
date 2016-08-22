@@ -82,7 +82,7 @@ enum SdrHdlKind
 };
 
 
-enum BitmapColorIndex
+enum class BitmapColorIndex
 {
     LightGreen,
     Cyan,
