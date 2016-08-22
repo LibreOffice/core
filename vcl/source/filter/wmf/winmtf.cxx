@@ -145,8 +145,12 @@ void WinMtfPathObj::ClosePath()
 WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
 {
     rtl_TextEncoding eCharSet;
-    if ( ( rFont.lfCharSet == OEM_CHARSET ) || ( rFont.lfCharSet == DEFAULT_CHARSET ) )
-        eCharSet = osl_getThreadTextEncoding();
+    if ((rFont.lfCharSet == OEM_CHARSET) || (rFont.lfCharSet == DEFAULT_CHARSET))
+        if (rFont.alfFaceName == "Symbol")
+            // Workaround for incorrect charset for the Symbol nonstandard font
+            eCharSet = RTL_TEXTENCODING_SYMBOL;
+        else
+            eCharSet = osl_getThreadTextEncoding();
     else
         eCharSet = rtl_getTextEncodingFromWindowsCharset( rFont.lfCharSet );
     if ( eCharSet == RTL_TEXTENCODING_DONTKNOW )
