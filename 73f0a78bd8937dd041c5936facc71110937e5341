@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_0441d70b",
+        "filename": "cui/source/inc/cuitabarea.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-22T14:30:43Z",
+      "side": 1,
+      "message": "You will need some typedefs here for the function pointers, e.g.\n\ntypedef void (*SomeFunction)(void); \n\n(if you know how to do that with std::function, even better)",
+      "revId": "73f0a78bd8937dd041c5936facc71110937e5341",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_e43b039b",
+        "filename": "cui/source/inc/cuitabarea.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-22T14:30:43Z",
+      "side": 1,
+      "message": "Now, add one more (at the end of the day you will need 3 more) map here:\n\nstd::map\u003cVclPtr*, SomeFunction\u003e maResetFunctionMap (typedef from above)",
+      "revId": "73f0a78bd8937dd041c5936facc71110937e5341",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_24cfbbb1",
+        "filename": "cui/source/inc/cuitabarea.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-22T14:30:43Z",
+      "side": 1,
+      "message": "Consider unifying those two variables, now you have lot of redundant information here\n\nTry e.g. map\u003c sal_Int*, VclPtr*\u003e  maButtons ...",
+      "revId": "73f0a78bd8937dd041c5936facc71110937e5341",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_a4bbcb0d",
+        "filename": "cui/source/inc/cuitabarea.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-22T14:30:43Z",
+      "side": 1,
+      "message": "... and then you can simply do maButtons[nPos]-\u003eSetPressed() ;",
+      "revId": "73f0a78bd8937dd041c5936facc71110937e5341",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_04cab7a1",
+        "filename": "cui/source/inc/cuitabarea.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-22T14:30:43Z",
+      "side": 1,
+      "message": "Ook .. it is easier to search map, esp. with std::find, I admit.",
+      "revId": "73f0a78bd8937dd041c5936facc71110937e5341",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_2446db23",
+        "filename": "cui/source/inc/cuitabarea.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-22T14:30:43Z",
+      "side": 1,
+      "message": "You\u0027ll need some methods populating your function maps, e.g. InsertResetFunction, InsertFillItemSetFunction. They\u0027d take pointer or reference to 1. button 2. function that will be called if that particular button is active. Then you\u0027d do make_pair and insert them into the map\n\nYou\u0027ll also need calling functions e.g. CallResetFunction, CallFillItemSetFunction (that will look up currently selected button, take the corresponding function from this map and call it)",
+      "revId": "73f0a78bd8937dd041c5936facc71110937e5341",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_6448d32e",
+        "filename": "cui/source/tabpages/tparea.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-22T14:30:43Z",
+      "side": 1,
+      "message": "Populate your function maps of maBox here, with corresponding pointers and Reset_Impl, DeactivatePage_Impl functions (with corresponting \u003cTabPageType\u003e for each button,of course, you can\u0027t pass pointers to template function)",
+      "revId": "73f0a78bd8937dd041c5936facc71110937e5341",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_c45d1fee",
+        "filename": "cui/source/tabpages/tparea.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-22T14:30:43Z",
+      "side": 1,
+      "message": "Please make this TTabPage, or TabPageType, so that no buggy compiler ever confuses this with vcl::TabPage",
+      "revId": "73f0a78bd8937dd041c5936facc71110937e5341",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_8455e7c7",
+        "filename": "cui/source/tabpages/tparea.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-22T14:30:43Z",
+      "side": 1,
+      "message": "And here you will simply call maButtonBox.CallDeactivatePageFunction( _pSet );",
+      "revId": "73f0a78bd8937dd041c5936facc71110937e5341",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_a452ebdb",
+        "filename": "cui/source/tabpages/tparea.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-22T14:30:43Z",
+      "side": 1,
+      "message": "the same here, maButtonBox.CallResetFunction( rAttrs);",
+      "revId": "73f0a78bd8937dd041c5936facc71110937e5341",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
