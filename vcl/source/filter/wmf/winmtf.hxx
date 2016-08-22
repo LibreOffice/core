@@ -29,6 +29,7 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/fltcall.hxx>
 #include <o3tl/make_unique.hxx>
+#include <vcl/dllapi.h>
 
 #define ERROR                   0
 #define NULLREGION              1
@@ -298,7 +299,7 @@ struct WinMtfFontStyle : GDIObj
 {
     vcl::Font    aFont;
 
-    explicit WinMtfFontStyle( LOGFONTW& rLogFont );
+    explicit WinMtfFontStyle(LOGFONTW& rLogFont);
 };
 
 
