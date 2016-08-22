@@ -39,6 +39,7 @@
 #include <svl/documentlockfile.hxx>
 #include <svl/sharecontrolfile.hxx>
 #include <svl/urihelper.hxx>
+#include <osl/file.hxx>
 #include "chgtrack.hxx"
 #include "chgviset.hxx"
 #include <com/sun/star/awt/Key.hpp>
@@ -61,6 +62,8 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/frame/XStorable2.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+
+#include <config_folders.h>
 
 #include "scabstdlg.hxx"
 #include <sot/formats.hxx>
@@ -590,29 +593,21 @@ bool ScDocShell::Load( SfxMedium& rMedium )
             aDocument.GetStyleSheetPool()->CreateStandardStyles();
             aDocument.UpdStlShtPtrsFrmNms();
 
-            #if ENABLE_ORCUS
+#if ENABLE_ORCUS
             /* Create styles that are imported through Orcus */
 
-            OUString aPath("$BRAND_BASE_DIR/");  /* Read the comment below before changing this */
-            rtl::Bootstrap::expandMacros(aPath);
-            OUString aValidPath;
+            OUString aURL("$BRAND_BASE_DIR" LIBO_SHARE_FOLDER "/calc/styles.xml");
+            rtl::Bootstrap::expandMacros(aURL);
 
-            /* The Following loop trims 'file://' from start of string and
-             * '../' from the end of string. If you ever happen to change the above macro
-             * please consider changing the following range too, otherwise app would
-             * crash!!
-             */
-            for (sal_Int32 i = 7; i < aPath.getLength() - 3; ++i)
-                aValidPath += OUString(aPath[i]);
-
-            OUString aFileName = "styles.xml";
-            aValidPath += aFileName;
+            OUString aPath;
+            osl::FileBase::getSystemPathFromFileURL(aURL, aPath);
 
             ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
             if (!pOrcus)
                 return false;
-            pOrcus->importODS_Styles(aDocument, aValidPath);
-            #endif
+
+            pOrcus->importODS_Styles(aDocument, aPath);
+#endif
 
             bRet = LoadXML( &rMedium, nullptr );
         }
