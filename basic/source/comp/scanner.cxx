@@ -421,7 +421,7 @@ bool SbiScanner::NextSym()
     }
 
     // Hex/octal number? Read in and convert:
-    else if(nCol < aLine.getLength() && aLine[nCol] == '&')
+    else if(aLine.getLength() - nCol > 1 && aLine[nCol] == '&')
     {
         ++pLine; ++nCol;
         sal_Unicode base = 16;
