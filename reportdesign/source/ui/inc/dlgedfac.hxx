@@ -35,7 +35,7 @@ public:
     DlgEdFactory();
     ~DlgEdFactory();
 
-    DECL_STATIC_LINK_TYPED( DlgEdFactory, MakeObject, SdrObjFactory *, void );
+    DECL_STATIC_LINK_TYPED( DlgEdFactory, MakeObject, SdrObjCreatorParams, SdrObject* );
 };
 }
 #endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDFAC_HXX

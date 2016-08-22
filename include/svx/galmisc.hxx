@@ -130,7 +130,7 @@ public:
     SgaUserDataFactory() { SdrObjFactory::InsertMakeUserDataHdl( LINK(this,SgaUserDataFactory,MakeUserData) ); }
     ~SgaUserDataFactory() { SdrObjFactory::RemoveMakeUserDataHdl( LINK(this,SgaUserDataFactory,MakeUserData) ); }
 
-    DECL_STATIC_LINK_TYPED( SgaUserDataFactory, MakeUserData, SdrObjFactory*, void );
+    DECL_STATIC_LINK_TYPED( SgaUserDataFactory, MakeUserData, SdrObjUserDataCreatorParams, SdrObjUserData* );
 };
 
 class GraphicFilter;

@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_OBJFAC3D_HXX
 
 #include <svx/svxdllapi.h>
+#include <tools/link.hxx>
 
 
 /*************************************************************************
@@ -30,9 +31,8 @@
 \************************************************************************/
 
 class SdrObjFactory;
-
-
-#include <tools/link.hxx>
+class SdrObject;
+struct SdrObjCreatorParams;
 
 class SVX_DLLPUBLIC E3dObjFactory
 {
@@ -40,7 +40,7 @@ public:
     E3dObjFactory();
     ~E3dObjFactory();
 
-    DECL_STATIC_LINK_TYPED(E3dObjFactory, MakeObject, SdrObjFactory*, void);
+    DECL_STATIC_LINK_TYPED(E3dObjFactory, MakeObject, SdrObjCreatorParams, SdrObject*);
 };
 
 

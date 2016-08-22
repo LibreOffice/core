@@ -24,6 +24,8 @@
 #include <svx/svxdllapi.h>
 
 class SdrObjFactory;
+class SdrObject;
+struct SdrObjCreatorParams;
 
 class SVX_DLLPUBLIC FmFormObjFactory
 {
@@ -31,7 +33,7 @@ public:
     FmFormObjFactory();
     ~FmFormObjFactory();
 
-    DECL_STATIC_LINK_TYPED(FmFormObjFactory, MakeObject, SdrObjFactory*, void);
+    DECL_STATIC_LINK_TYPED(FmFormObjFactory, MakeObject, SdrObjCreatorParams, SdrObject* );
 };
 
 #endif          // _FM_FMOBJFAC_HXX

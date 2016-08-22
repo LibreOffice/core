@@ -32,21 +32,19 @@ ScDrawObjFactory::~ScDrawObjFactory()
 }
 
 IMPL_STATIC_LINK_TYPED(
-    ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFactory, void )
+    ScDrawObjFactory, MakeUserData, SdrObjUserDataCreatorParams, aParams, SdrObjUserData* )
 {
-    if ( pObjFactory->nInventor == SC_DRAWLAYER )
+    if ( aParams.nInventor == SC_DRAWLAYER )
     {
-        if ( pObjFactory->nIdentifier == SC_UD_OBJDATA )
-            pObjFactory->pNewData = new ScDrawObjData;
-        else if ( pObjFactory->nIdentifier == SC_UD_IMAPDATA )
-            pObjFactory->pNewData = new ScIMapInfo;
-        else if ( pObjFactory->nIdentifier == SC_UD_MACRODATA )
-            pObjFactory->pNewData = new ScMacroInfo;
-        else
-        {
-            OSL_FAIL("MakeUserData: wrong ID");
-        }
+        if ( aParams.nObjIdentifier == SC_UD_OBJDATA )
+            return new ScDrawObjData;
+        else if ( aParams.nObjIdentifier == SC_UD_IMAPDATA )
+            return new ScIMapInfo;
+        else if ( aParams.nObjIdentifier == SC_UD_MACRODATA )
+            return new ScMacroInfo;
+        OSL_FAIL("MakeUserData: wrong ID");
     }
+    return nullptr;
 }
 
 ScDrawObjData::ScDrawObjData() :

@@ -254,45 +254,6 @@ IMPL_LINK_NOARG_TYPED(OLEObjCache, UnloadCheckHdl, Timer*, void)
 }
 
 
-void SdrLinkList::Clear()
-{
-    aList.clear();
-}
-
-unsigned SdrLinkList::FindEntry(const Link<SdrObjFactory*,void>& rLink) const
-{
-    unsigned nCount=GetLinkCount();
-    for (unsigned i=0; i<nCount; i++) {
-        if (GetLink(i)==rLink) return i;
-    }
-    return 0xFFFF;
-}
-
-void SdrLinkList::InsertLink(const Link<SdrObjFactory*,void>& rLink)
-{
-    unsigned nFnd=FindEntry(rLink);
-    if (nFnd==0xFFFF) {
-        if (rLink.IsSet()) {
-            aList.push_back(rLink);
-        } else {
-            OSL_FAIL("SdrLinkList::InsertLink(): Tried to insert a link that was not set already.");
-        }
-    } else {
-        OSL_FAIL("SdrLinkList::InsertLink(): Link already in place.");
-    }
-}
-
-void SdrLinkList::RemoveLink(const Link<SdrObjFactory*,void>& rLink)
-{
-    unsigned nFnd=FindEntry(rLink);
-    if (nFnd!=0xFFFF) {
-        aList.erase( aList.begin() + nFnd );
-    } else {
-        OSL_FAIL("SdrLinkList::RemoveLink(): Link not found.");
-    }
-}
-
-
 bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 {
     drawing::FillStyle eFill=static_cast<const XFillStyleItem&>(rSet.Get(XATTR_FILLSTYLE)).GetValue();
@@ -418,13 +379,13 @@ SdrOutliner* SdrMakeOutliner(OutlinerMode nOutlinerMode, SdrModel& rModel)
     return pOutl;
 }
 
-SdrLinkList& ImpGetUserMakeObjHdl()
+std::vector<Link<SdrObjCreatorParams, SdrObject*>>& ImpGetUserMakeObjHdl()
 {
     SdrGlobalData& rGlobalData=GetSdrGlobalData();
     return rGlobalData.aUserMakeObjHdl;
 }
 
-SdrLinkList& ImpGetUserMakeObjUserDataHdl()
+std::vector<Link<SdrObjUserDataCreatorParams, SdrObjUserData*>>& ImpGetUserMakeObjUserDataHdl()
 {
     SdrGlobalData& rGlobalData=GetSdrGlobalData();
     return rGlobalData.aUserMakeObjUserDataHdl;

@@ -26,6 +26,7 @@
 #include <tools/link.hxx>
 #include <tools/fract.hxx>
 #include <vcl/outdev.hxx>
+#include <svx/svdobj.hxx>
 
 
 /**
@@ -168,26 +169,8 @@ public:
 };
 
 
-class SdrObjFactory;
-
-class SdrLinkList
-{
-    std::vector<Link<SdrObjFactory*,void> > aList;
-protected:
-    unsigned FindEntry(const Link<SdrObjFactory*,void>& rLink) const;
-public:
-    SdrLinkList(): aList()                   {}
-    ~SdrLinkList()                           { Clear(); }
-    SVX_DLLPUBLIC void Clear();
-    unsigned GetLinkCount() const            { return (unsigned)aList.size(); }
-    Link<SdrObjFactory*,void>& GetLink(unsigned nNum)           { return aList[nNum]; }
-    const Link<SdrObjFactory*,void>& GetLink(unsigned nNum) const { return aList[nNum]; }
-    void InsertLink(const Link<SdrObjFactory*,void>& rLink);
-    void RemoveLink(const Link<SdrObjFactory*,void>& rLink);
-};
-
-SdrLinkList& ImpGetUserMakeObjHdl();
-SdrLinkList& ImpGetUserMakeObjUserDataHdl();
+std::vector<Link<SdrObjCreatorParams, SdrObject*>>& ImpGetUserMakeObjHdl();
+std::vector<Link<SdrObjUserDataCreatorParams, SdrObjUserData*>>& ImpGetUserMakeObjUserDataHdl();
 
 class SdrOle2Obj;
 class AutoTimer;
@@ -221,8 +204,10 @@ class SVX_DLLPUBLIC SdrGlobalData
     const SvtSysLocale*         pSysLocale;     // follows always locale settings
     const LocaleDataWrapper*    pLocaleData;    // follows always SysLocale
 public:
-    SdrLinkList         aUserMakeObjHdl;
-    SdrLinkList         aUserMakeObjUserDataHdl;
+    std::vector<Link<SdrObjCreatorParams, SdrObject*>>
+                        aUserMakeObjHdl;
+    std::vector<Link<SdrObjUserDataCreatorParams, SdrObjUserData*>>
+                        aUserMakeObjUserDataHdl;
     SdrEngineDefaults*  pDefaults;
     ResMgr*             pResMgr;
     OLEObjCache         aOLEObjCache;

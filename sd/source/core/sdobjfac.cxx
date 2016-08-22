@@ -35,24 +35,25 @@ SdObjectFactory aSdObjectFactory;
 |*
 \************************************************************************/
 
-IMPL_STATIC_LINK_TYPED( SdObjectFactory, MakeUserData, SdrObjFactory *, pObjFactory, void )
+IMPL_STATIC_LINK_TYPED( SdObjectFactory, MakeUserData, SdrObjUserDataCreatorParams, aParams, SdrObjUserData* )
 {
-    if ( pObjFactory->nInventor == SdUDInventor )
+    if ( aParams.nInventor == SdUDInventor )
     {
-        switch( pObjFactory->nIdentifier )
+        switch( aParams.nObjIdentifier )
         {
             case SD_ANIMATIONINFO_ID:
-                pObjFactory->pNewData = new SdAnimationInfo( *pObjFactory->pObj );
+                return new SdAnimationInfo( *aParams.pObject );
             break;
 
             case SD_IMAPINFO_ID:
-                pObjFactory->pNewData = new SdIMapInfo;
+                return new SdIMapInfo;
             break;
 
             default:
             break;
         }
     }
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
