@@ -59,10 +59,7 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     , rOutAttrs           ( rInAttrs )
     // All the horrific pointers we store and should not
     , pnColorListState( nullptr )
-    , pPageType( nullptr )
-    , nDlgType( 0 )
     , pPos( nullptr )
-    , pbAreaTP( nullptr )
     , aXFStyleItem( drawing::FillStyle_SOLID )
     , aXFillColorItem( OUString(), Color( COL_BLACK ) )
     , aXFillAttr( static_cast<XOutdevItemPool*>( rInAttrs.GetPool() ))
@@ -238,47 +235,40 @@ void SvxColorTabPage::Construct()
 
 void SvxColorTabPage::ActivatePage( const SfxItemSet& )
 {
-    if( nDlgType == 0 ) // area dialog
+    if( pColorList.is() )
     {
-        *pbAreaTP = false;
-
-        if( pColorList.is() )
+        if( *pPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            if( *pPageType == PageType::Color && *pPos != LISTBOX_ENTRY_NOTFOUND )
-            {
-                m_pValSetColorList->SelectItem( m_pValSetColorList->GetItemId( static_cast<size_t>(*pPos) ) );
-                const XColorEntry* pEntry = pColorList->GetColor(*pPos);
-                aPreviousColor = pEntry->GetColor();
-                ChangeColor(pEntry->GetColor());
-            }
-            else if( *pPageType == PageType::Color && *pPos == LISTBOX_ENTRY_NOTFOUND )
-            {
-                const SfxPoolItem* pPoolItem = nullptr;
-                if( SfxItemState::SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), true, &pPoolItem ) )
-                {
-                    SetColorModel( ColorModel::RGB );
-                    ChangeColorModel();
-
-                    aPreviousColor = static_cast<const XFillColorItem*>(pPoolItem)->GetColorValue();
-                    ChangeColor( aPreviousColor );
-
-
-                    m_pRcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetRed() ) );
-                    m_pGcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetGreen() ) );
-                    m_pBcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetBlue() ) );
-                    m_pHexcustom->SetColor( aCurrentColor.GetColor() );
-
-                }
-            }
-
-            m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
-            m_pCtlPreviewOld->Invalidate();
-
-            SelectValSetHdl_Impl( m_pValSetColorList );
-
-            *pPageType = PageType::Color;
-            *pPos = LISTBOX_ENTRY_NOTFOUND;
+            m_pValSetColorList->SelectItem( m_pValSetColorList->GetItemId( static_cast<size_t>(*pPos) ) );
+            const XColorEntry* pEntry = pColorList->GetColor(*pPos);
+            aPreviousColor = pEntry->GetColor();
+            ChangeColor(pEntry->GetColor());
         }
+        else if( *pPos == LISTBOX_ENTRY_NOTFOUND )
+        {
+            const SfxPoolItem* pPoolItem = nullptr;
+            if( SfxItemState::SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), true, &pPoolItem ) )
+            {
+                SetColorModel( ColorModel::RGB );
+                ChangeColorModel();
+
+                aPreviousColor = static_cast<const XFillColorItem*>(pPoolItem)->GetColorValue();
+                ChangeColor( aPreviousColor );
+
+                m_pRcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetRed() ) );
+                m_pGcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetGreen() ) );
+                m_pBcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetBlue() ) );
+                m_pHexcustom->SetColor( aCurrentColor.GetColor() );
+
+            }
+        }
+
+        m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
+        m_pCtlPreviewOld->Invalidate();
+
+        SelectValSetHdl_Impl( m_pValSetColorList );
+
+        *pPos = LISTBOX_ENTRY_NOTFOUND;
     }
 }
 
@@ -293,13 +283,9 @@ DeactivateRC SvxColorTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 bool SvxColorTabPage::FillItemSet( SfxItemSet* rSet )
 {
-    if( ( nDlgType != 0 ) ||
-        ( *pPageType == PageType::Color && !*pbAreaTP ) )
-    {
-        maPaletteManager.AddRecentColor(aCurrentColor, "#" + aCurrentColor.AsRGBHexString().toAsciiUpperCase());
-        rSet->Put( XFillColorItem( OUString(), aCurrentColor ) );
-        rSet->Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
-    }
+    maPaletteManager.AddRecentColor( aCurrentColor, OUString() );
+    rSet->Put( XFillColorItem( OUString(), aCurrentColor ) );
+    rSet->Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
     return true;
 }
 
@@ -773,6 +759,46 @@ void SvxColorTabPage::FillUserData()
     SetUserData( OUString::number( (int)eCM ) );
 }
 
+
+void SvxColorTabPage::SetupForViewFrame( SfxViewFrame *pViewFrame )
+{
+    const OfaRefItem<XColorList> *pPtr = nullptr;
+    if ( pViewFrame != nullptr && pViewFrame->GetDispatcher() )
+        pPtr = static_cast<const OfaRefItem<XColorList> *>(pViewFrame->
+            GetDispatcher()->Execute( SID_GET_COLORLIST,
+                                      SfxCallMode::SYNCHRON ));
+    pColorList = pPtr ? pPtr->GetValue() : XColorList::GetStdColorList();
+
+    //SetPos( &pShadow->nUnknownPos );
+    //SetColorChgd( &pShadow->nChangeType );
+    Construct();
+}
+
+void SvxColorTabPage::SaveToViewFrame( SfxViewFrame *pViewFrame )
+{
+    if( !pColorList.is() )
+        return;
+
+    if( !pViewFrame )
+        return;
+
+    // notify current viewframe that it uses the same color table
+    if ( !pViewFrame->GetDispatcher() )
+        return;
+
+    const OfaRefItem<XColorList> * pPtr;
+    pPtr = static_cast<const OfaRefItem<XColorList>*>(pViewFrame->GetDispatcher()->Execute( SID_GET_COLORLIST, SfxCallMode::SYNCHRON ));
+    if( pPtr )
+    {
+        XColorListRef pReference = pPtr->GetValue();
+
+        if( pReference.is() &&
+            pReference->GetPath() == pColorList->GetPath() &&
+            pReference->GetName() == pColorList->GetName() )
+            SfxObjectShell::Current()->PutItem( SvxColorListItem( pColorList,
+                                                                  SID_COLOR_TABLE ) );
+    }
+}
 
 void SvxColorTabPage::SetPropertyList( XPropertyListType t, const XPropertyListRef &xRef )
 {
