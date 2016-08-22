@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_e48ce337",
+        "filename": "cui/source/customize/cfg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3093,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-08-22T19:19:45Z",
+      "side": 1,
+      "message": "Please remove the commented out code.",
+      "revId": "5886ec8331cdaec413bf615619ef30caa0280439",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_0482b700",
+        "filename": "cui/source/customize/cfg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4554,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-08-22T19:19:45Z",
+      "side": 1,
+      "message": "If you verified that it works without this line, please remove it.",
+      "revId": "5886ec8331cdaec413bf615619ef30caa0280439",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_a49cab6a",
+        "filename": "cui/uiconfig/ui/menuassignpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-08-22T19:19:45Z",
+      "side": 1,
+      "message": "I\u0027d rather name it \"Remove\", that sounds less dangerous (nothing is deleted here).",
+      "revId": "5886ec8331cdaec413bf615619ef30caa0280439",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_c487df10",
+        "filename": "cui/uiconfig/ui/menuassignpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-08-22T19:19:45Z",
+      "side": 1,
+      "message": "Can you remove these placeholders please?",
+      "revId": "5886ec8331cdaec413bf615619ef30caa0280439",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_849fa75e",
+        "filename": "cui/source/customize/cfg.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-08-22T19:19:45Z",
+      "side": 0,
+      "message": "Maybe you can delete these constants where they are defined.",
+      "revId": "f97bc791b0879af3fd1bc2d1f7753ce5ffa6ac5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
