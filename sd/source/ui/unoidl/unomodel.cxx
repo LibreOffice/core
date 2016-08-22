@@ -158,7 +158,7 @@ void SdUnoForbiddenCharsTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) t
 
     if( pSdrHint )
     {
-        if( HINT_MODELCLEARED == pSdrHint->GetKind() )
+        if( SdrHintKind::ModelCleared == pSdrHint->GetKind() )
         {
             mpModel = nullptr;
         }
@@ -417,7 +417,7 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     notifyEvent( aEvent );
             }
 
-            if( pSdrHint->GetKind() == HINT_MODELCLEARED )
+            if( pSdrHint->GetKind() == SdrHintKind::ModelCleared )
             {
                 if( mpDoc )
                     EndListening( *mpDoc );

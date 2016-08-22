@@ -166,9 +166,9 @@ namespace accessibility
             edit/non-edit mode (i.e. there are times when
             SvxEditSource::GetEditViewForwarder(sal_False) returns
             NULL), then the two additional hints are required:
-            HINT_BEGEDIT and HINT_ENDEDIT. When the
-            AccessibleTextHelper receives a HINT_BEGEDIT, it expects
-            the SvxEditSource already in edit mode. On a HINT_ENDEDIT,
+            SdrHintKind::BeginEdit and SdrHintKind::EndEdit. When the
+            AccessibleTextHelper receives a SdrHintKind::BeginEdit, it expects
+            the SvxEditSource already in edit mode. On a SdrHintKind::EndEdit,
             edit mode must already been left. The rationale for these
             events are the fact that focus and selection have to be
             updated in edit mode, and completely relinquished and

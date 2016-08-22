@@ -2812,19 +2812,19 @@ void ChartView::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     bool bShapeChanged = false;
     switch( pSdrHint->GetKind() )
     {
-         case HINT_OBJCHG:
+         case SdrHintKind::ObjectChange:
             bShapeChanged = true;
             break;
-        case HINT_OBJINSERTED:
+        case SdrHintKind::ObjectInserted:
             bShapeChanged = true;
             break;
-        case HINT_OBJREMOVED:
+        case SdrHintKind::ObjectRemoved:
             bShapeChanged = true;
             break;
-        case HINT_MODELCLEARED:
+        case SdrHintKind::ModelCleared:
             bShapeChanged = true;
             break;
-        case HINT_ENDEDIT:
+        case SdrHintKind::EndEdit:
             bShapeChanged = true;
             break;
         default:

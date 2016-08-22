@@ -377,17 +377,17 @@ void DrawView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     {
         SdrHintKind eHintKind = static_cast<const SdrHint&>(rHint).GetKind();
 
-        if ( mnPOCHSmph == 0 && eHintKind == HINT_PAGEORDERCHG )
+        if ( mnPOCHSmph == 0 && eHintKind == SdrHintKind::PageOrderChange )
         {
             mpDrawViewShell->ResetActualPage();
         }
-        else if ( eHintKind == HINT_LAYERCHG || eHintKind == HINT_LAYERORDERCHG )
+        else if ( eHintKind == SdrHintKind::LayerChange || eHintKind == SdrHintKind::LayerOrderChange )
         {
             mpDrawViewShell->ResetActualLayer();
         }
 
         // switch to that page when it's not a master page
-        if(HINT_SWITCHTOPAGE == eHintKind)
+        if(SdrHintKind::SwitchToPage == eHintKind)
         {
             const SdrPage* pPage = static_cast<const SdrHint&>(rHint).GetPage();
 

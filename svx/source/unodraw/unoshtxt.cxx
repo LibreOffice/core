@@ -99,7 +99,7 @@ private:
     bool                            mbNeedsUpdate;
     bool                            mbOldUndoMode;
     bool                            mbForwarderIsEditMode;      // have to reflect that, since ENDEDIT can happen more often
-    bool                            mbShapeIsEditMode;          // #104157# only true, if HINT_BEGEDIT was received
+    bool                            mbShapeIsEditMode;          // #104157# only true, if SdrHintKind::BeginEdit was received
     bool                            mbNotificationsDisabled;    // prevent EditEngine/Outliner notifications (e.g. when setting up forwarder)
 
     SvxUnoTextRangeBaseList         maTextRanges;
@@ -340,7 +340,7 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     {
         switch( pSdrHint->GetKind() )
         {
-            case HINT_OBJCHG:
+            case SdrHintKind::ObjectChange:
             {
                 mbDataValid = false;                        // Text muss neu geholt werden
 
@@ -359,10 +359,10 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                 break;
             }
 
-            case HINT_BEGEDIT:
+            case SdrHintKind::BeginEdit:
                 if( mpObject == pSdrHint->GetObject() )
                 {
-                    // Once HINT_BEGEDIT is broadcast, each EditSource of
+                    // Once SdrHintKind::BeginEdit is broadcast, each EditSource of
                     // AccessibleCell will handle it here and call below:
                     // mpView->GetTextEditOutliner()->SetNotifyHdl(), which
                     // will replace the Notifer for current editable cell. It
@@ -403,7 +403,7 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                 }
                 break;
 
-            case HINT_ENDEDIT:
+            case SdrHintKind::EndEdit:
                 if( mpObject == pSdrHint->GetObject() )
                 {
                     Broadcast( *pSdrHint );
@@ -434,7 +434,7 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                 }
                 break;
 
-            case HINT_MODELCLEARED:
+            case SdrHintKind::ModelCleared:
                 dispose();
                 break;
             default:

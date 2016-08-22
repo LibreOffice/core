@@ -1170,15 +1170,15 @@ void ScAccessibleEditLineTextData::StartEdit()
     ResetEditMode();
     mpEditView = nullptr;
 
-    // send HINT_BEGEDIT
-    SdrHint aHint(HINT_BEGEDIT);
+    // send SdrHintKind::BeginEdit
+    SdrHint aHint(SdrHintKind::BeginEdit);
     GetBroadcaster().Broadcast( aHint );
 }
 
 void ScAccessibleEditLineTextData::EndEdit()
 {
-    // send HINT_ENDEDIT
-    SdrHint aHint(HINT_ENDEDIT);
+    // send SdrHintKind::EndEdit
+    SdrHint aHint(SdrHintKind::EndEdit);
     GetBroadcaster().Broadcast( aHint );
 
     ResetEditMode();

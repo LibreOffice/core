@@ -247,7 +247,7 @@ void SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         return;
 
     SdrHintKind eKind = pSdrHint->GetKind();
-    if (eKind==HINT_OBJCHG || eKind==HINT_OBJINSERTED || eKind==HINT_OBJREMOVED)
+    if (eKind==SdrHintKind::ObjectChange || eKind==SdrHintKind::ObjectInserted || eKind==SdrHintKind::ObjectRemoved)
     {
         bool bObjChg = !mbSomeObjChgdFlag; // if true, evaluate for ComeBack timer
         if (bObjChg)
@@ -257,7 +257,7 @@ void SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         }
     }
 
-    if (eKind==HINT_PAGEORDERCHG)
+    if (eKind==SdrHintKind::PageOrderChange)
     {
         const SdrPage* pPg=pSdrHint->GetPage();
         if (pPg && !pPg->IsInserted())

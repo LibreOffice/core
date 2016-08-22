@@ -244,7 +244,7 @@ protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
     void GlueInvalidate() const;
 
-    // ModelHasChanged is called, as soon as the system is idle again after many HINT_OBJCHG.
+    // ModelHasChanged is called, as soon as the system is idle again after many SdrHintKind::ObjectChange.
     //
     // Any sub-class override this method, MUST call the base class' ModelHasChanged() method
     virtual void ModelHasChanged();

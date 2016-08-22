@@ -1586,7 +1586,7 @@ void SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         if (bDataChg                                ||
             (bObj1 && aCon1.pObj->GetPage()==pPage) ||
             (bObj2 && aCon2.pObj->GetPage()==pPage) ||
-            (pSdrHint && pSdrHint->GetKind()==HINT_OBJREMOVED))
+            (pSdrHint && pSdrHint->GetKind()==SdrHintKind::ObjectRemoved))
         {
             // broadcasting only, if on the same page
             Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetCurrentBoundRect();

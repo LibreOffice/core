@@ -1275,7 +1275,7 @@ namespace accessibility
                     {
                         switch( pSdrHint->GetKind() )
                         {
-                            case HINT_BEGEDIT:
+                            case SdrHintKind::BeginEdit:
                             {
                                 if(!IsActive())
                                 {
@@ -1289,7 +1289,7 @@ namespace accessibility
                                 break;
                             }
 
-                            case HINT_ENDEDIT:
+                            case SdrHintKind::EndEdit:
                             {
                                 // focused child now loses focus
                                 ESelection aSelection;

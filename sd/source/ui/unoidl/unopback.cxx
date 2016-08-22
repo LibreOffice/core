@@ -85,7 +85,7 @@ void SdUnoPageBackground::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         // delete item set if document is dying because then the pool
         // will also die
-        if( pSdrHint->GetKind() == HINT_MODELCLEARED )
+        if( pSdrHint->GetKind() == SdrHintKind::ModelCleared )
         {
             delete mpSet;
             mpSet = nullptr;

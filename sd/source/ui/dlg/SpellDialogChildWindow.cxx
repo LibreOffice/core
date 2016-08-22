@@ -115,7 +115,7 @@ void SpellDialogChildWindow::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
     if (const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint))
     {
-        if (HINT_MODELCLEARED == pSdrHint->GetKind())
+        if (SdrHintKind::ModelCleared == pSdrHint->GetKind())
         {
             EndSpellingAndClearOutliner();
         }

@@ -477,7 +477,7 @@ void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         switch ( pSdrHint->GetKind() )
         {
-            case HINT_OBJINSERTED:
+            case SdrHintKind::ObjectInserted:
             {
                 if (DlgEdObj const* pDlgEdObj = dynamic_cast<DlgEdObj const*>(pSdrHint->GetObject()))
                 {
@@ -487,7 +487,7 @@ void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 }
             }
             break;
-            case HINT_OBJREMOVED:
+            case SdrHintKind::ObjectRemoved:
             {
                 if (DlgEdObj const* pDlgEdObj = dynamic_cast<DlgEdObj const*>(pSdrHint->GetObject()))
                     RemoveChild( ChildDescriptor(const_cast<DlgEdObj*>(pDlgEdObj)) );

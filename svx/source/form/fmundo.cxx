@@ -290,12 +290,12 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
         switch (pSdrHint->GetKind())
         {
-            case HINT_OBJINSERTED:
+            case SdrHintKind::ObjectInserted:
             {
                 SdrObject* pSdrObj = const_cast<SdrObject*>(pSdrHint->GetObject());
                 Inserted( pSdrObj );
             }   break;
-            case HINT_OBJREMOVED:
+            case SdrHintKind::ObjectRemoved:
             {
                 SdrObject* pSdrObj = const_cast<SdrObject*>(pSdrHint->GetObject());
                 Removed( pSdrObj );

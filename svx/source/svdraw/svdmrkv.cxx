@@ -179,7 +179,7 @@ void SdrMarkView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     {
         SdrHintKind eKind=pSdrHint->GetKind();
 
-        if (eKind==HINT_OBJCHG || eKind==HINT_OBJINSERTED || eKind==HINT_OBJREMOVED)
+        if (eKind==SdrHintKind::ObjectChange || eKind==SdrHintKind::ObjectInserted || eKind==SdrHintKind::ObjectRemoved)
         {
             mbMarkedObjRectDirty=true;
             mbMarkedPointsRectsDirty=true;

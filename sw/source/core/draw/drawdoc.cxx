@@ -105,7 +105,7 @@ SwDrawModel::SwDrawModel(SwDoc *const pDoc)
 
 SwDrawModel::~SwDrawModel()
 {
-    Broadcast(SdrHint(HINT_MODELCLEARED));
+    Broadcast(SdrHint(SdrHintKind::ModelCleared));
 
     ClearModel(true);
 }

@@ -282,14 +282,14 @@ void Listener::Notify (
     {
         switch (pSdrHint->GetKind())
         {
-            case HINT_MODELCLEARED:
+            case SdrHintKind::ModelCleared:
                 if (&rBroadcaster == mrSlideSorter.GetModel().GetDocument())
                 {   // rhbz#965646 stop listening to dying document
                     EndListening(rBroadcaster);
                     return;
                 }
                 break;
-            case HINT_PAGEORDERCHG:
+            case SdrHintKind::PageOrderChange:
                 if (&rBroadcaster == mrSlideSorter.GetModel().GetDocument())
                     HandleModelChange(pSdrHint->GetPage());
                 break;

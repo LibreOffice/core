@@ -890,7 +890,7 @@ void SdrObject::BroadcastObjectChange() const
 
     if(bPlusDataBroadcast || bObjectChange)
     {
-        SdrHint aHint(*this);
+        SdrHint aHint(SdrHintKind::ObjectChange, *this);
 
         if(bPlusDataBroadcast)
         {
@@ -2628,8 +2628,7 @@ void SdrObject::SetInserted(bool bIns)
         else SendUserCall(SdrUserCallType::Removed,aBoundRect0);
 
         if (pPlusData!=nullptr && pPlusData->pBroadcast!=nullptr) {
-            SdrHint aHint(*this);
-            aHint.SetKind(bIns?HINT_OBJINSERTED:HINT_OBJREMOVED);
+            SdrHint aHint(bIns?SdrHintKind::ObjectInserted:SdrHintKind::ObjectRemoved, *this);
             pPlusData->pBroadcast->Broadcast(aHint);
         }
     }
@@ -2665,7 +2664,7 @@ void SdrObject::SetPrintable(bool bPrn)
         SetChanged();
         if (IsInserted() && pModel!=nullptr)
         {
-            SdrHint aHint(*this);
+            SdrHint aHint(SdrHintKind::ObjectChange, *this);
             pModel->Broadcast(aHint);
         }
     }
@@ -2679,7 +2678,7 @@ void SdrObject::SetVisible(bool bVisible)
         SetChanged();
         if (IsInserted() && pModel!=nullptr)
         {
-            SdrHint aHint(*this);
+            SdrHint aHint(SdrHintKind::ObjectChange, *this);
             pModel->Broadcast(aHint);
         }
     }

@@ -641,26 +641,26 @@ void EventMultiplexer::Implementation::Notify (
     {
         switch (pSdrHint->GetKind())
         {
-            case HINT_MODELCLEARED:
-            case HINT_PAGEORDERCHG:
+            case SdrHintKind::ModelCleared:
+            case SdrHintKind::PageOrderChange:
                 CallListeners (EventMultiplexerEvent::EID_PAGE_ORDER);
                 break;
 
-            case HINT_SWITCHTOPAGE:
+            case SdrHintKind::SwitchToPage:
                 CallListeners (EventMultiplexerEvent::EID_CURRENT_PAGE);
                 break;
 
-            case HINT_OBJCHG:
+            case SdrHintKind::ObjectChange:
                 CallListeners(EventMultiplexerEvent::EID_SHAPE_CHANGED,
                     const_cast<void*>(static_cast<const void*>(pSdrHint->GetPage())));
                 break;
 
-            case HINT_OBJINSERTED:
+            case SdrHintKind::ObjectInserted:
                 CallListeners(EventMultiplexerEvent::EID_SHAPE_INSERTED,
                     const_cast<void*>(static_cast<const void*>(pSdrHint->GetPage())));
                 break;
 
-            case HINT_OBJREMOVED:
+            case SdrHintKind::ObjectRemoved:
                 CallListeners(EventMultiplexerEvent::EID_SHAPE_REMOVED,
                     const_cast<void*>(static_cast<const void*>(pSdrHint->GetPage())));
                 break;

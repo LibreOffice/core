@@ -740,7 +740,7 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
     {
         switch( pSdrHint->GetKind() )
         {
-            case HINT_OBJCHG:
+            case SdrHintKind::ObjectChange:
                 {
                     ShapesMapType::iterator iter = mxShapes.find( pSdrHint->GetObject() );
 
@@ -755,13 +755,13 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
                 }
                 break;
 
-            case HINT_OBJINSERTED:
+            case SdrHintKind::ObjectInserted:
                 CommitChange( AccessibleEventId::CHILD, makeAny( getAccessible( pSdrHint->GetObject() ) ) , uno::Any());
                 break;
-            case HINT_OBJREMOVED:
+            case SdrHintKind::ObjectRemoved:
                 CommitChange( AccessibleEventId::CHILD, uno::Any(), makeAny( getAccessible( pSdrHint->GetObject() ) )  );
                 break;
-            case HINT_MODELCLEARED:
+            case SdrHintKind::ModelCleared:
                 dispose();
                 break;
             default:

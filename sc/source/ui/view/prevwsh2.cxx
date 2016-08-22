@@ -59,7 +59,7 @@ void ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     else if (dynamic_cast<const SdrHint*>(&rHint))
     {
         // SdrHints are no longer used for invalidating, thus react on objectchange instead
-        if(HINT_OBJCHG == static_cast<const SdrHint&>(rHint).GetKind())
+        if(SdrHintKind::ObjectChange == static_cast<const SdrHint&>(rHint).GetKind())
             bDataChanged = true;
     }
 

@@ -847,13 +847,11 @@ bool SdDrawDocument::InsertBookmarkAsPage(
                 // Get the name to use from Exchange list
                 OUString aExchangeName(*pExchangeIter);
                 pRefPage->SetName(aExchangeName);
-                SdrHint aHint(HINT_PAGEORDERCHG);
-                aHint.SetPage(pRefPage);
-                Broadcast(aHint);
+                Broadcast(SdrHint(SdrHintKind::PageOrderChange, pRefPage));
+
                 SdPage* pNewNotesPage = GetSdPage(nSdPage, PK_NOTES);
                 pNewNotesPage->SetName(aExchangeName);
-                aHint.SetPage(pNewNotesPage);
-                Broadcast(aHint);
+                Broadcast(SdrHint(SdrHintKind::PageOrderChange, pNewNotesPage));
 
                 ++pExchangeIter;
             }

@@ -186,7 +186,7 @@ namespace accessibility
         {
             const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >( &rHint );
 
-            if( pSdrHint && ( pSdrHint->GetKind() == HINT_MODELCLEARED ) )
+            if( pSdrHint && ( pSdrHint->GetKind() == SdrHintKind::ModelCleared ) )
             {
                 // model is dying under us, going defunc
                 bDispose = true;

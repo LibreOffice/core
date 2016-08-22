@@ -690,10 +690,10 @@ namespace svxform
         {
             switch( pSdrHint->GetKind() )
             {
-                case HINT_OBJINSERTED:
+                case SdrHintKind::ObjectInserted:
                     InsertSdrObj(pSdrHint->GetObject());
                     break;
-                case HINT_OBJREMOVED:
+                case SdrHintKind::ObjectRemoved:
                     RemoveSdrObj(pSdrHint->GetObject());
                     break;
                 default:

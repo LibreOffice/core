@@ -120,8 +120,8 @@ bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* pSdr
 
     switch( pSdrHint->GetKind() )
     {
-//              case HINT_LAYERCHG:             // layer definition changed
-//              case HINT_LAYERORDERCHG:        // layer order changed (Insert/Remove/ChangePos)
+//              case SdrHintKind::LayerChange:             // layer definition changed
+//              case SdrHintKind::LayerOrderChange:        // layer order changed (Insert/Remove/ChangePos)
 //              case HINT_LAYERSETCHG:          // layer set changed
 //              case HINT_LAYERSETORDERCHG:     // layer set order changed (Insert/Remove/ChangePos)
 
@@ -129,25 +129,25 @@ bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* pSdr
 //          aEvent.EventName = "PageModified";
 //          pPage = pSdrHint->GetPage();
 //          break;
-        case HINT_PAGEORDERCHG:         // draw or master page order changed (Insert/Remove/ChangePos)
+        case SdrHintKind::PageOrderChange:         // draw or master page order changed (Insert/Remove/ChangePos)
             aEvent.EventName = "PageOrderModified";
             pPage = pSdrHint->GetPage();
             break;
-        case HINT_OBJCHG:               // object changed
+        case SdrHintKind::ObjectChange:               // object changed
             aEvent.EventName = "ShapeModified";
             pObj = pSdrHint->GetObject();
             break;
-        case HINT_OBJINSERTED:          // add new draw object
+        case SdrHintKind::ObjectInserted:          // add new draw object
             aEvent.EventName = "ShapeInserted";
             pObj = pSdrHint->GetObject();
             break;
-        case HINT_OBJREMOVED:           // removed draw object from list
+        case SdrHintKind::ObjectRemoved:           // removed draw object from list
             aEvent.EventName = "ShapeRemoved";
             pObj = pSdrHint->GetObject();
             break;
-//                HINT_DEFAULTTABCHG,   // default tab width changed
-//                HINT_DEFFONTHGTCHG,   // default FontHeight changed
-//                HINT_SWITCHTOPAGE,    // #94278# UNDO/REDO at an object evtl. on another page
+//                SdrHintKind::DefaultTabChange,   // default tab width changed
+//                SdrHintKind::DefaultFontHeightChange,   // default FontHeight changed
+//                SdrHintKind::SwitchToPage,    // #94278# UNDO/REDO at an object evtl. on another page
 //                HINT_OBJLISTCLEAR     // Is called before an SdrObjList will be cleared
         default:
             return false;

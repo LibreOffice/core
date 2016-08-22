@@ -249,7 +249,7 @@ SdrModel::~SdrModel()
 
     mbInDestruction = true;
 
-    Broadcast(SdrHint(HINT_MODELCLEARED));
+    Broadcast(SdrHint(SdrHintKind::ModelCleared));
 
     delete mpOutlinerCache;
 
@@ -898,7 +898,7 @@ void SdrModel::BurnInStyleSheetAttributes()
 
 void SdrModel::RefDeviceChanged()
 {
-    Broadcast(SdrHint(HINT_REFDEVICECHG));
+    Broadcast(SdrHint(SdrHintKind::RefDeviceChange));
     ImpReformatAllTextObjects();
 }
 
@@ -906,7 +906,7 @@ void SdrModel::SetDefaultFontHeight(sal_uIntPtr nVal)
 {
     if (nVal!=nDefTextHgt) {
         nDefTextHgt=nVal;
-        Broadcast(SdrHint(HINT_DEFFONTHGTCHG));
+        Broadcast(SdrHint(SdrHintKind::DefaultFontHeightChange));
         ImpReformatAllTextObjects();
     }
 }
@@ -917,7 +917,7 @@ void SdrModel::SetDefaultTabulator(sal_uInt16 nVal)
         nDefaultTabulator=nVal;
         Outliner& rOutliner=GetDrawOutliner();
         rOutliner.SetDefTab(nVal);
-        Broadcast(SdrHint(HINT_DEFAULTTABCHG));
+        Broadcast(SdrHint(SdrHintKind::DefaultTabChange));
         ImpReformatAllTextObjects();
     }
 }
@@ -1397,8 +1397,7 @@ void SdrModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
     pPage->SetModel(this);
     if (nPos<nCount) bPagNumsDirty=true;
     SetChanged();
-    SdrHint aHint(HINT_PAGEORDERCHG);
-    aHint.SetPage(pPage);
+    SdrHint aHint(SdrHintKind::PageOrderChange, pPage);
     Broadcast(aHint);
 }
 
@@ -1418,8 +1417,7 @@ SdrPage* SdrModel::RemovePage(sal_uInt16 nPgNum)
     }
     bPagNumsDirty=true;
     SetChanged();
-    SdrHint aHint(HINT_PAGEORDERCHG);
-    aHint.SetPage(pPg);
+    SdrHint aHint(SdrHintKind::PageOrderChange, pPg);
     Broadcast(aHint);
     return pPg;
 }
@@ -1450,8 +1448,7 @@ void SdrModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
         bMPgNumsDirty=true;
     }
     SetChanged();
-    SdrHint aHint(HINT_PAGEORDERCHG);
-    aHint.SetPage(pPage);
+    SdrHint aHint(SdrHintKind::PageOrderChange, pPage);
     Broadcast(aHint);
 }
 
@@ -1482,8 +1479,7 @@ SdrPage* SdrModel::RemoveMasterPage(sal_uInt16 nPgNum)
 
     bMPgNumsDirty=true;
     SetChanged();
-    SdrHint aHint(HINT_PAGEORDERCHG);
-    aHint.SetPage(pRetPg);
+    SdrHint aHint(SdrHintKind::PageOrderChange, pRetPg);
     Broadcast(aHint);
     return pRetPg;
 }
@@ -1500,8 +1496,7 @@ void SdrModel::MoveMasterPage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
     }
     bMPgNumsDirty=true;
     SetChanged();
-    SdrHint aHint(HINT_PAGEORDERCHG);
-    aHint.SetPage(pPg);
+    SdrHint aHint(SdrHintKind::PageOrderChange, pPg);
     Broadcast(aHint);
 }
 
@@ -2085,34 +2080,32 @@ const css::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelImplementationId()
 
 
 SdrHint::SdrHint(SdrHintKind eNewHint)
-:   mpPage(nullptr),
+:   meHint(eNewHint),
     mpObj(nullptr),
-    meHint(eNewHint)
+    mpPage(nullptr)
 {
 }
 
-SdrHint::SdrHint(const SdrObject& rNewObj)
-:   mpPage(rNewObj.GetPage()),
+SdrHint::SdrHint(SdrHintKind eNewHint, const SdrObject& rNewObj)
+:   meHint(eNewHint),
     mpObj(&rNewObj),
-    meHint(HINT_OBJCHG)
+    mpPage(rNewObj.GetPage()),
+    maRectangle(rNewObj.GetLastBoundRect())
 {
-    maRectangle = rNewObj.GetLastBoundRect();
 }
 
-void SdrHint::SetPage(const SdrPage* pNewPage)
+SdrHint::SdrHint(SdrHintKind eNewHint, const SdrPage* pPage)
+:   meHint(eNewHint),
+    mpObj(nullptr),
+    mpPage(pPage)
 {
-    mpPage = pNewPage;
 }
 
-void SdrHint::SetObject(const SdrObject* pNewObj)
+SdrHint::SdrHint(SdrHintKind eNewHint, const SdrObject& rNewObj, const SdrPage* pPage)
+:   meHint(eNewHint),
+    mpObj(&rNewObj),
+    mpPage(pPage)
 {
-    mpObj = pNewObj;
 }
-
-void SdrHint::SetKind(SdrHintKind eNewKind)
-{
-    meHint = eNewKind;
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

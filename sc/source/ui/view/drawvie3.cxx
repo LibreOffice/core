@@ -139,7 +139,7 @@ namespace {
  */
 void adjustAnchoredPosition(const SdrHint& rHint, const ScDocument& rDoc, SCTAB nTab)
 {
-    if (rHint.GetKind() != HINT_OBJCHG && rHint.GetKind() != HINT_OBJINSERTED)
+    if (rHint.GetKind() != SdrHintKind::ObjectChange && rHint.GetKind() != SdrHintKind::ObjectInserted)
         return;
 
     SdrObject* pObj = const_cast<SdrObject*>(rHint.GetObject());

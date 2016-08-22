@@ -309,7 +309,7 @@ namespace accessibility
     {
         const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>( &rHint );
 
-        if( pSdrHint && pSdrHint->GetKind() == HINT_BEGEDIT &&
+        if( pSdrHint && pSdrHint->GetKind() == SdrHintKind::BeginEdit &&
             &mrObj == pSdrHint->GetObject() && mpEditSource.get() )
         {
             // switch edit source, if not yet done. This is necessary

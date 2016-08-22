@@ -235,9 +235,7 @@ void SdrObjList::Clear()
         // sent remove hint (after removal, see RemoveObject())
         if(pModel)
         {
-            SdrHint aHint(*pObj);
-            aHint.SetKind(HINT_OBJREMOVED);
-            aHint.SetPage(pPage);
+            SdrHint aHint(SdrHintKind::ObjectRemoved, *pObj, pPage);
             pModel->Broadcast(aHint);
         }
 
@@ -385,9 +383,7 @@ void SdrObjList::InsertObject(SdrObject* pObj, size_t nPos, const SdrInsertReaso
             // Repaint from object number ... (heads-up: GroupObj)
             if(pObj->GetPage())
             {
-                SdrHint aHint(*pObj);
-
-                aHint.SetKind(HINT_OBJINSERTED);
+                SdrHint aHint(SdrHintKind::ObjectInserted, *pObj);
                 pModel->Broadcast(aHint);
             }
 
@@ -449,8 +445,7 @@ SdrObject* SdrObjList::RemoveObject(size_t nObjNum)
         if (pModel!=nullptr) {
             // TODO: We need a different broadcast here.
             if (pObj->GetPage()!=nullptr) {
-                SdrHint aHint(*pObj);
-                aHint.SetKind(HINT_OBJREMOVED);
+                SdrHint aHint(SdrHintKind::ObjectRemoved, *pObj);
                 pModel->Broadcast(aHint);
             }
             pModel->SetChanged();
@@ -530,8 +525,7 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
         if (pModel!=nullptr) {
             // TODO: We need a different broadcast here.
             if (pObj->GetPage()!=nullptr) {
-                SdrHint aHint(*pObj);
-                aHint.SetKind(HINT_OBJREMOVED);
+                SdrHint aHint(SdrHintKind::ObjectRemoved, *pObj);
                 pModel->Broadcast(aHint);
             }
         }
@@ -555,8 +549,7 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
         if (pModel!=nullptr) {
             // TODO: We need a different broadcast here.
             if (pNewObj->GetPage()!=nullptr) {
-                SdrHint aHint(*pNewObj);
-                aHint.SetKind(HINT_OBJINSERTED);
+                SdrHint aHint(SdrHintKind::ObjectInserted, *pNewObj);
                 pModel->Broadcast(aHint);
             }
             pModel->SetChanged();
@@ -592,7 +585,8 @@ SdrObject* SdrObjList::SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum)
         if (pModel!=nullptr)
         {
             // TODO: We need a different broadcast here.
-            if (pObj->GetPage()!=nullptr) pModel->Broadcast(SdrHint(*pObj));
+            if (pObj->GetPage()!=nullptr)
+                pModel->Broadcast(SdrHint(SdrHintKind::ObjectChange, *pObj));
             pModel->SetChanged();
         }
     }
@@ -1080,8 +1074,7 @@ void ImpPageChange(SdrPage& rSdrPage)
     if(rSdrPage.GetModel())
     {
         rSdrPage.GetModel()->SetChanged();
-        SdrHint aHint(HINT_PAGEORDERCHG);
-        aHint.SetPage(&rSdrPage);
+        SdrHint aHint(SdrHintKind::PageOrderChange, &rSdrPage);
         rSdrPage.GetModel()->Broadcast(aHint);
     }
 }

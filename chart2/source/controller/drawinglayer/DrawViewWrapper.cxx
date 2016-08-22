@@ -334,7 +334,7 @@ void DrawViewWrapper::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     if( pSdrHint != nullptr )
     {
         SdrHintKind eKind = pSdrHint->GetKind();
-        if( eKind == HINT_BEGEDIT )
+        if( eKind == SdrHintKind::BeginEdit )
         {
             // #i79965# remember map mode
             OSL_ASSERT( ! m_bRestoreMapMode );
@@ -345,7 +345,7 @@ void DrawViewWrapper::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                 m_bRestoreMapMode = true;
             }
         }
-        else if( eKind == HINT_ENDEDIT )
+        else if( eKind == SdrHintKind::EndEdit )
         {
             // #i79965# scroll back view when ending text edit
             OSL_ASSERT( m_bRestoreMapMode );

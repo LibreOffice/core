@@ -224,16 +224,16 @@ void SdrObjEditView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
     if (pSdrHint!=nullptr && pTextEditOutliner!=nullptr) {
         SdrHintKind eKind=pSdrHint->GetKind();
-        if (eKind==HINT_REFDEVICECHG) {
+        if (eKind==SdrHintKind::RefDeviceChange) {
             pTextEditOutliner->SetRefDevice(mpModel->GetRefDevice());
         }
-        if (eKind==HINT_DEFAULTTABCHG) {
+        if (eKind==SdrHintKind::DefaultTabChange) {
             pTextEditOutliner->SetDefTab(mpModel->GetDefaultTabulator());
         }
-        if (eKind==HINT_DEFFONTHGTCHG) {
+        if (eKind==SdrHintKind::DefaultFontHeightChange) {
 
         }
-        if (eKind==HINT_MODELSAVED) {
+        if (eKind==SdrHintKind::ModelSaved) {
             pTextEditOutliner->ClearModifyFlag();
         }
     }
@@ -941,8 +941,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
 
             if( GetModel() )
             {
-                SdrHint aHint(*pTextObj);
-                aHint.SetKind(HINT_BEGEDIT);
+                SdrHint aHint(SdrHintKind::BeginEdit, *pTextObj);
                 GetModel()->Broadcast(aHint);
             }
 
@@ -1076,8 +1075,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
 
     if( GetModel() && mxTextEditObj.is() )
     {
-        SdrHint aHint(*mxTextEditObj.get());
-        aHint.SetKind(HINT_ENDEDIT);
+        SdrHint aHint(SdrHintKind::EndEdit, *mxTextEditObj.get());
         GetModel()->Broadcast(aHint);
     }
 
@@ -1255,8 +1253,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
         !pTEObj->GetModel()->isLocked() &&
         pTEObj->GetBroadcaster())
     {
-        SdrHint aHint(HINT_ENDEDIT);
-        aHint.SetObject(pTEObj);
+        SdrHint aHint(SdrHintKind::EndEdit, *pTEObj);
         const_cast<SfxBroadcaster*>(pTEObj->GetBroadcaster())->Broadcast(aHint);
     }
 

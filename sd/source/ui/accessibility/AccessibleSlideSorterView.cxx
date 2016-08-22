@@ -853,7 +853,7 @@ void AccessibleSlideSorterView::Implementation::Notify (
     {
         switch (pSdrHint->GetKind())
         {
-            case HINT_PAGEORDERCHG:
+            case SdrHintKind::PageOrderChange:
                 RequestUpdateChildren();
                 break;
             default:

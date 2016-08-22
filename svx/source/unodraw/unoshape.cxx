@@ -1005,13 +1005,13 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
     if( !mpObj.is() )
         return;
 
-    // #i55919# HINT_OBJCHG is only interesting if it's for this object
+    // #i55919# SdrHintKind::ObjectChange is only interesting if it's for this object
 
     const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
-    if (!pSdrHint || ( /* (pSdrHint->GetKind() != HINT_OBJREMOVED)  && */
-        (pSdrHint->GetKind() != HINT_MODELCLEARED) &&
+    if (!pSdrHint || ( /* (pSdrHint->GetKind() != SdrHintKind::ObjectRemoved)  && */
+        (pSdrHint->GetKind() != SdrHintKind::ModelCleared) &&
         // #110094#-9 (pSdrHint->GetKind() != HINT_OBJLISTCLEAR) &&
-        ((pSdrHint->GetKind() != HINT_OBJCHG || pSdrHint->GetObject() != mpObj.get() ))))
+        ((pSdrHint->GetKind() != SdrHintKind::ObjectChange || pSdrHint->GetObject() != mpObj.get() ))))
         return;
 
     uno::Reference< uno::XInterface > xSelf( mpObj->getWeakUnoShape() );
@@ -1025,12 +1025,12 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 
     switch( pSdrHint->GetKind() )
     {
-        case HINT_OBJCHG:
+        case SdrHintKind::ObjectChange:
         {
             updateShapeKind();
             break;
         }
-        case HINT_MODELCLEARED:
+        case SdrHintKind::ModelCleared:
         {
             bClearMe = true;
             mpModel = nullptr;

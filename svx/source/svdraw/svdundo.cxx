@@ -247,11 +247,7 @@ void SdrUndoObj::ImpShowPageOfThisObject()
 {
     if(pObj && pObj->IsInserted() && pObj->GetPage() && pObj->GetModel())
     {
-        SdrHint aHint(HINT_SWITCHTOPAGE);
-
-        aHint.SetObject(pObj);
-        aHint.SetPage(pObj->GetPage());
-
+        SdrHint aHint(SdrHintKind::SwitchToPage, *pObj, pObj->GetPage());
         pObj->GetModel()->Broadcast(aHint);
     }
 }

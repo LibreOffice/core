@@ -387,7 +387,7 @@ void ScAccessibleEditObject::CreateTextHelper()
             // do not activate cell object, if top edit line is active
             if( pInputHdl && !pInputHdl->IsTopMode() )
             {
-                SdrHint aHint( HINT_BEGEDIT );
+                SdrHint aHint( SdrHintKind::BeginEdit );
                 mpTextHelper->GetEditSource().GetBroadcaster().Broadcast( aHint );
             }
         }

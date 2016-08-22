@@ -226,7 +226,7 @@ void MasterPageObserver::Implementation::Notify(
     {
         switch (pSdrHint->GetKind())
         {
-            case HINT_PAGEORDERCHG:
+            case SdrHintKind::PageOrderChange:
                 // Process the modified set of pages only when the number of
                 // standard and notes master pages are equal.  This test
                 // filters out events that are sent in between the insertion

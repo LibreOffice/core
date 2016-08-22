@@ -162,7 +162,7 @@ void ScUndoAnchorData::Undo()
     // Trigger Object Change
     if (pObj->IsInserted() && pObj->GetPage() && pObj->GetModel())
     {
-        SdrHint aHint(*pObj);
+        SdrHint aHint(SdrHintKind::ObjectChange, *pObj);
         pObj->GetModel()->Broadcast(aHint);
     }
 
@@ -182,7 +182,7 @@ void ScUndoAnchorData::Redo()
     // Trigger Object Change
     if (pObj->IsInserted() && pObj->GetPage() && pObj->GetModel())
     {
-        SdrHint aHint(*pObj);
+        SdrHint aHint(SdrHintKind::ObjectChange, *pObj);
         pObj->GetModel()->Broadcast(aHint);
     }
 }
@@ -336,7 +336,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
 
 ScDrawLayer::~ScDrawLayer()
 {
-    Broadcast(SdrHint(HINT_MODELCLEARED));
+    Broadcast(SdrHint(SdrHintKind::ModelCleared));
 
     ClearModel(true);
 

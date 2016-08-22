@@ -101,44 +101,43 @@ namespace o3tl
 }
 
 
-enum SdrHintKind
+enum class SdrHintKind
 {
-                  HINT_UNKNOWN,         // Unknown
-                  HINT_LAYERCHG,        // changed layer definition
-                  HINT_LAYERORDERCHG,   // order of layer changed (Insert/Remove/ChangePos)
-                  HINT_PAGEORDERCHG,    // order of pages (object pages or master pages) changed (Insert/Remove/ChangePos)
-                  HINT_OBJCHG,          // object changed
-                  HINT_OBJINSERTED,     // new object inserted
-                  HINT_OBJREMOVED,      // symbol object removed from list
-                  HINT_MODELCLEARED,    // deleted the whole model (no pages exist anymore). not impl.
-                  HINT_REFDEVICECHG,    // RefDevice changed
-                  HINT_DEFAULTTABCHG,   // Default tabulator width changed
-                  HINT_DEFFONTHGTCHG,   // Default FontHeight changed
-                  HINT_MODELSAVED,      // Document was saved
-                  HINT_SWITCHTOPAGE,    // #94278# UNDO/REDO at an object evtl. on another page
-                  HINT_BEGEDIT,         // Is called after the object has entered text edit mode
-                  HINT_ENDEDIT          // Is called after the object has left text edit mode
+    Unknown,              // Unknown
+    LayerChange,          // changed layer definition
+    LayerOrderChange,     // order of layer changed (Insert/Remove/ChangePos)
+    PageOrderChange,      // order of pages (object pages or master pages) changed (Insert/Remove/ChangePos)
+    ObjectChange,         // object changed
+    ObjectInserted,       // new object inserted
+    ObjectRemoved,        // symbol object removed from list
+    ModelCleared,         // deleted the whole model (no pages exist anymore). not impl.
+    RefDeviceChange,      // RefDevice changed
+    DefaultTabChange,     // Default tabulator width changed
+    DefaultFontHeightChange,   // Default FontHeight changed
+    ModelSaved,            // Document was saved
+    SwitchToPage,          // #94278# UNDO/REDO at an object evtl. on another page
+    BeginEdit,             // Is called after the object has entered text edit mode
+    EndEdit                // Is called after the object has left text edit mode
 };
 
 class SVX_DLLPUBLIC SdrHint: public SfxHint
 {
-public:
-    Rectangle                               maRectangle;
-    const SdrPage*                          mpPage;
-    const SdrObject*                        mpObj;
+private:
     SdrHintKind                             meHint;
+    const SdrObject*                        mpObj;
+    const SdrPage*                          mpPage;
+    Rectangle                               maRectangle;
 
 public:
     explicit SdrHint(SdrHintKind eNewHint);
-    explicit SdrHint(const SdrObject& rNewObj);
+    explicit SdrHint(SdrHintKind eNewHint, const SdrObject& rNewObj);
+    explicit SdrHint(SdrHintKind eNewHint, const SdrPage* pPage);
+    explicit SdrHint(SdrHintKind eNewHint, const SdrObject& rNewObj, const SdrPage* pPage);
 
-    void SetPage(const SdrPage* pNewPage);
-    void SetObject(const SdrObject* pNewObj);
-    void SetKind(SdrHintKind eNewKind);
-
-    const SdrPage* GetPage() const { return mpPage;}
+    const SdrPage*   GetPage() const { return mpPage;}
     const SdrObject* GetObject() const { return mpObj;}
-    SdrHintKind GetKind() const { return meHint;}
+    SdrHintKind      GetKind() const { return meHint;}
+    const Rectangle& GetRectangle() const { return maRectangle;}
 };
 
 

@@ -125,7 +125,7 @@ void SvxUnoMarkerTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 {
     const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
 
-    if( pSdrHint && HINT_MODELCLEARED == pSdrHint->GetKind() )
+    if( pSdrHint && SdrHintKind::ModelCleared == pSdrHint->GetKind() )
         dispose();
 }
 

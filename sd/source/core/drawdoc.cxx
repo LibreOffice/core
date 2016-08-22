@@ -373,7 +373,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 // Destructor
 SdDrawDocument::~SdDrawDocument()
 {
-    Broadcast(SdrHint(HINT_MODELCLEARED));
+    Broadcast(SdrHint(SdrHintKind::ModelCleared));
 
     if (mpWorkStartupTimer)
     {
