@@ -377,6 +377,8 @@ protected:
     VclPtr<PushButton>                         m_pAddCommandsButton;
     VclPtr<MenuButton>                         m_pModifyCommandButton;
 
+    VclPtr<PushButton>                         m_pDeleteCommandButton;
+
     VclPtr<PushButton>                         m_pMoveUpButton;
     VclPtr<PushButton>                         m_pMoveDownButton;
 
@@ -474,6 +476,7 @@ private:
     DECL_LINK_TYPED( MenuSelectHdl, MenuButton *, void );
     DECL_LINK_TYPED( EntrySelectHdl, MenuButton *, void );
     DECL_LINK_TYPED( AddCommandsHdl, Button *, void );
+    DECL_LINK_TYPED( DeleteCommandHdl, Button *, void );
     DECL_LINK_TYPED( AddFunctionHdl, SvxScriptSelectorDialog&, void );
 
     void            Init() override;
@@ -566,6 +569,7 @@ private:
     DECL_LINK_TYPED( EntrySelectHdl, MenuButton *, void );
     DECL_LINK_TYPED( NewToolbarHdl, Button *, void );
     DECL_LINK_TYPED( AddCommandsHdl, Button *, void );
+    DECL_LINK_TYPED( DeleteCommandHdl, Button *, void );
     DECL_LINK_TYPED( AddFunctionHdl, SvxScriptSelectorDialog&, void );
     DECL_LINK_TYPED( MoveHdl, Button *, void );
 

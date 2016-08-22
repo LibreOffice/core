@@ -88,11 +88,6 @@ Menu MODIFY_TOOLBAR_CONTENT
         };
         MenuItem
         {
-            Identifier = ID_DELETE ;
-            TEXT_DELETE_NODOTS
-        };
-        MenuItem
-        {
             Identifier = ID_DEFAULT_COMMAND ;
             Text [ en-US ] = "Restore Default Command" ;
         };
