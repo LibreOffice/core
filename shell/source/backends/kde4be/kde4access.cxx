@@ -86,17 +86,6 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
         bool ATToolSupport = false;
         return css::beans::Optional< css::uno::Any >(
             true, uno::makeAny( OUString::boolean( ATToolSupport ) ) );
-    } else if (id == "WorkPathVariable")
-    {
-        QString aDocumentsDir( KGlobalSettings::documentPath() );
-        OUString sDocumentsDir;
-        OUString sDocumentsURL;
-        if ( aDocumentsDir.endsWith(QChar('/')) )
-            aDocumentsDir.truncate ( aDocumentsDir.length() - 1 );
-        sDocumentsDir = reinterpret_cast<const sal_Unicode *>(aDocumentsDir.utf16());
-        osl_getFileURLFromSystemPath( sDocumentsDir.pData, &sDocumentsURL.pData );
-        return css::beans::Optional< css::uno::Any >(
-            true, uno::makeAny( sDocumentsURL ) );
     } else if (id == "ooInetFTPProxyName")
     {
         QString aFTPProxy;

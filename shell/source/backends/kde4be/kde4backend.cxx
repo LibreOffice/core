@@ -167,7 +167,7 @@ css::uno::Any Service::getPropertyValue(OUString const & PropertyName)
         css::uno::RuntimeException, std::exception)
 {
     if (PropertyName == "EnableATToolSupport" || PropertyName == "ExternalMailer" || PropertyName == "SourceViewFontHeight"
-     || PropertyName == "SourceViewFontName" || PropertyName == "WorkPathVariable" || PropertyName == "ooInetFTPProxyName"
+     || PropertyName == "SourceViewFontName" || PropertyName == "ooInetFTPProxyName"
      || PropertyName == "ooInetFTPProxyPort" || PropertyName == "ooInetHTTPProxyName" || PropertyName == "ooInetHTTPProxyPort"
      || PropertyName == "ooInetHTTPSProxyName" || PropertyName == "ooInetHTTPSProxyPort" || PropertyName == "ooInetNoProxy"
      || PropertyName == "ooInetProxyType" )
