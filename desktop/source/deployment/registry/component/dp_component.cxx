@@ -76,7 +76,7 @@ typedef ::std::vector< ::std::pair<OUString, OUString> > t_stringpairvec;
     {
         OUString arg;
         osl_getCommandArg(i, &arg.pData);
-        if (arg.match("-env:"))
+        if (arg.startsWith("-env:"))
             ret.push_back(arg);
     }
     return ret;
