@@ -45,11 +45,13 @@ namespace sdr {
     class SelectionController;
 }
 
-enum SdrEndTextEditKind {SDRENDTEXTEDIT_UNCHANGED, // textobject unchanged
-                         SDRENDTEXTEDIT_CHANGED,   // textobject changed
-                         SDRENDTEXTEDIT_DELETED,   // textobject implicitly deleted
-                         SDRENDTEXTEDIT_SHOULDBEDELETED}; // for writer: textobject should be deleted
-
+enum class SdrEndTextEditKind
+{
+    Unchanged,      // textobject unchanged
+    Changed,        // textobject changed
+    Deleted,        // textobject implicitly deleted
+    ShouldBeDeleted // for writer: textobject should be deleted
+};
 
 // - general edit for objectspecific properties
 // - textedit for all drawobjects, inherited from SdrTextObj
@@ -188,7 +190,7 @@ public:
         bool bDontDeleteOutliner = false, bool bOnlyOneView = false, bool bGrabFocus = true);
     // bDontDeleteReally is a special parameter for writer
     // If this flag is set, then a maybe empty textobject is not deleted.
-    // Instead you get a return code SDRENDTEXTEDIT_SHOULDBEDELETED
+    // Instead you get a return code SdrEndTextEditKind::ShouldBeDeleted
     // (in place of SDRENDTEXTEDIT_BEDELETED), which says, the obj should be
     // deleted.
     virtual SdrEndTextEditKind SdrEndTextEdit(bool bDontDeleteReally = false);

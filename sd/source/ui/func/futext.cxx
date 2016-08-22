@@ -155,7 +155,7 @@ void FuText::disposing()
 {
     if(mpView)
     {
-        if(mpView->SdrEndTextEdit() == SDRENDTEXTEDIT_DELETED)
+        if(mpView->SdrEndTextEdit() == SdrEndTextEditKind::Deleted)
             mxTextObj.reset( nullptr );
 
         // reset the RequestHandler of the used Outliner to the handler of the document
@@ -269,7 +269,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
         if (mpView->IsTextEdit() && eHit != SdrHitKind::MarkedObject && eHit != SdrHitKind::Handle)
         {
             // finish text input
-            if(mpView->SdrEndTextEdit() == SDRENDTEXTEDIT_DELETED)
+            if(mpView->SdrEndTextEdit() == SdrEndTextEditKind::Deleted)
             {
                 /* Bugfix from MBA: during a double click onto the unused? area
                    in text mode, we get with the second click eHit =
@@ -872,7 +872,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
         else
         {
             // switch to selection
-            if (mpView->SdrEndTextEdit() == SDRENDTEXTEDIT_DELETED)
+            if (mpView->SdrEndTextEdit() == SdrEndTextEditKind::Deleted)
             {
                 mxTextObj.reset(nullptr);
             }
@@ -1330,7 +1330,7 @@ bool FuText::cancel()
 {
     if ( mpView->IsTextEdit() )
     {
-        if(mpView->SdrEndTextEdit() == SDRENDTEXTEDIT_DELETED)
+        if(mpView->SdrEndTextEdit() == SdrEndTextEditKind::Deleted)
             mxTextObj.reset(nullptr);
 
         mpView->SetCurrentObj(OBJ_TEXT);

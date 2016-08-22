@@ -792,7 +792,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
         }
         else
         {
-            eKind = SDRENDTEXTEDIT_UNCHANGED;
+            eKind = SdrEndTextEditKind::Unchanged;
         }
     }
     else if( xObj.is() && xObj->IsEmptyPresObj() )

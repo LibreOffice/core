@@ -1021,7 +1021,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
 
 SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
 {
-    SdrEndTextEditKind eRet=SDRENDTEXTEDIT_UNCHANGED;
+    SdrEndTextEditKind eRet=SdrEndTextEditKind::Unchanged;
     SdrTextObj* pTEObj = dynamic_cast< SdrTextObj* >( mxTextEditObj.get() );
     vcl::Window*       pTEWin         =pTextEditWin;
     SdrOutliner*  pTEOutliner    =pTextEditOutliner;
@@ -1164,7 +1164,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             {
                 if( bUndo )
                     AddUndo(pTxtUndo);
-                eRet=SDRENDTEXTEDIT_CHANGED;
+                eRet=SdrEndTextEditKind::Changed;
             }
             if (pDelUndo!=nullptr)
             {
@@ -1176,7 +1176,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
                 {
                     delete pDelUndo;
                 }
-                eRet=SDRENDTEXTEDIT_DELETED;
+                eRet=SdrEndTextEditKind::Deleted;
                 DBG_ASSERT(pTEObj->GetObjList()!=nullptr,"SdrObjEditView::SdrEndTextEdit(): Fatal: Object edited doesn't have an ObjList!");
                 if (pTEObj->GetObjList()!=nullptr)
                 {
@@ -1186,7 +1186,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             }
             else if (bDelObj)
             { // for Writer: the app has to do the deletion itself.
-                eRet=SDRENDTEXTEDIT_SHOULDBEDELETED;
+                eRet=SdrEndTextEditKind::ShouldBeDeleted;
             }
 
             if( bUndo )
@@ -1235,7 +1235,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             pTEWin->SetCursor(pTECursorMerker);
         }
         maHdlList.SetMoveOutside(false);
-        if (eRet!=SDRENDTEXTEDIT_UNCHANGED)
+        if (eRet!=SdrEndTextEditKind::Unchanged)
         {
             GetMarkedObjectListWriteAccess().SetNameDirty();
         }

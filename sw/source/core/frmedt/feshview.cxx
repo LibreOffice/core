@@ -1036,7 +1036,7 @@ void SwFEShell::EndTextEdit()
     }
     if ( !pObj->GetUpGroup() )
     {
-        if ( SDRENDTEXTEDIT_SHOULDBEDELETED == pView->SdrEndTextEdit(true) )
+        if ( SdrEndTextEditKind::ShouldBeDeleted == pView->SdrEndTextEdit(true) )
         {
             if ( pView->GetMarkedObjectList().GetMarkCount() > 1 )
             {
