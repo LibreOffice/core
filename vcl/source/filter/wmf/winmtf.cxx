@@ -30,6 +30,9 @@
 #include <rtl/tencinfo.h>
 #include <vcl/virdev.hxx>
 #include <o3tl/make_unique.hxx>
+#include "officecfg/Setup.hxx"
+#include "officecfg/Office/Linguistic.hxx"
+#include "unotools/wincodepage.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
 #define EMFP_DEBUG(x) x
@@ -142,11 +145,28 @@ void WinMtfPathObj::ClosePath()
     bClosed = true;
 }
 
+namespace {
+
+OUString getLODefaultLanguage()
+{
+    OUString result(officecfg::Office::Linguistic::General::DefaultLocale::get());
+    if (result.isEmpty())
+        result = officecfg::Setup::L10N::ooSetupSystemLocale::get();
+    return result;
+}
+
+}
+
 WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
 {
     rtl_TextEncoding eCharSet;
-    if ( ( rFont.lfCharSet == OEM_CHARSET ) || ( rFont.lfCharSet == DEFAULT_CHARSET ) )
-        eCharSet = osl_getThreadTextEncoding();
+    if ((rFont.lfCharSet == DEFAULT_CHARSET) || (rFont.lfCharSet == OEM_CHARSET))
+        if (rFont.alfFaceName == "Symbol")
+            // Workaround for incorrect charset for the Symbol nonstandard font
+            eCharSet = RTL_TEXTENCODING_SYMBOL;
+        else
+            eCharSet = utl_getWinTextEncodingFromLangStr(getLODefaultLanguage().toUtf8().getStr(),
+                                                         rFont.lfCharSet == OEM_CHARSET);
     else
         eCharSet = rtl_getTextEncodingFromWindowsCharset( rFont.lfCharSet );
     if ( eCharSet == RTL_TEXTENCODING_DONTKNOW )
@@ -198,7 +218,9 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
     aFont.SetPitch( ePitch );
 
     FontWeight eWeight;
-    if( rFont.lfWeight <= FW_THIN )
+    if (rFont.lfWeight == 0) // default weight SHOULD be used
+        eWeight = WEIGHT_DONTKNOW;
+    else if (rFont.lfWeight <= FW_THIN)
         eWeight = WEIGHT_THIN;
     else if( rFont.lfWeight <= FW_ULTRALIGHT )
         eWeight = WEIGHT_ULTRALIGHT;
