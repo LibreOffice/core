@@ -17,15 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
 #include <test/mtfxmldump.hxx>
+#include <test/setupvcl.hxx>
+#include <unotest/bootstrapfixturebase.hxx>
 #include <vcl/wmf.hxx>
 #include <vcl/metaact.hxx>
+#include <winmtf.hxx>
 
 using namespace css;
 
-class WmfTest : public test::BootstrapFixture, public XmlTestTools
+class WmfTest : public test::BootstrapFixtureBase, public XmlTestTools
 {
     OUString maDataUrl;
 
@@ -36,9 +38,19 @@ class WmfTest : public test::BootstrapFixture, public XmlTestTools
 
 public:
     WmfTest() :
-        BootstrapFixture(true, false),
         maDataUrl("/vcl/qa/cppunit/wmf/data/")
     {}
+
+    // Hack around missing "once per class" setUp/tearDown in CppUnit; must be
+    // called before/after all other tests:
+    void globalSetUp() { test::setUpVcl(); }
+    void globalTearDown() { /* DeInitVCL(); */ }
+        // on e.g. Mac OS X, DeInitVCL() causes more trouble than it's worth,
+        // calling VclPtr<WorkWindow>::disposeAndClear -> ... ->
+        // vcl::Window::dispose -> UnoWrapper::WindowDestroy (tk) -> ... ->
+        // Application::GetSolarMutex in the vcl library (linked from tk)
+        // instead of the vcl objects linked into the unit test library, which
+        // isn't initialized
 
     void testNonPlaceableWmf();
     void testSine();
@@ -46,15 +58,18 @@ public:
     void testEmfLineStyles();
     void testWorldTransformFontSize();
     void testTdf93750();
+    void testTdf99402();
 
     CPPUNIT_TEST_SUITE(WmfTest);
+    CPPUNIT_TEST(globalSetUp);
     CPPUNIT_TEST(testNonPlaceableWmf);
     CPPUNIT_TEST(testSine);
     CPPUNIT_TEST(testEmfProblem);
     CPPUNIT_TEST(testEmfLineStyles);
     CPPUNIT_TEST(testWorldTransformFontSize);
     CPPUNIT_TEST(testTdf93750);
-
+    CPPUNIT_TEST(testTdf99402);
+    CPPUNIT_TEST(globalTearDown);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -225,6 +240,31 @@ void WmfTest::testTdf93750()
 
     assertXPath(pDoc, "/metafile/push[1]/comment[2]", "datasize", "28");
     assertXPath(pDoc, "/metafile/push[1]/comment[3]", "datasize", "72");
+}
+
+void WmfTest::testTdf99402()
+{
+    // Symbol font should arrive with RTL_TEXTENCODING_SYMBOL encoding,
+    // even if charset is OEM_CHARSET/DEFAULT_CHARSET in WMF
+    LOGFONTW logfontw;
+    logfontw.lfHeight = 0;
+    logfontw.lfWidth = 0;
+    logfontw.lfEscapement = 0;
+    logfontw.lfOrientation = 0;
+    logfontw.lfWeight = 0;
+    logfontw.lfItalic = 0;
+    logfontw.lfUnderline = 0;
+    logfontw.lfStrikeOut = 0;
+    logfontw.lfCharSet = OEM_CHARSET;
+    logfontw.lfOutPrecision = 0; // OUT_DEFAULT_PRECIS
+    logfontw.lfClipPrecision = 0; // CLIP_DEFAULT_PRECIS
+    logfontw.lfQuality = 0; // DEFAULT_QUALITY
+    logfontw.lfPitchAndFamily = FF_ROMAN | DEFAULT_PITCH;
+    logfontw.alfFaceName = "Symbol";
+
+    WinMtfFontStyle fontStyle(logfontw);
+
+    CPPUNIT_ASSERT_EQUAL(RTL_TEXTENCODING_SYMBOL, fontStyle.aFont.GetCharSet());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WmfTest);
