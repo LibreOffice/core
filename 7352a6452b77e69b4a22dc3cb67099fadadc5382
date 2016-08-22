@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_c1dc311b",
+        "filename": "svx/source/form/fmmodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-08-22T06:29:36Z",
+      "side": 1,
+      "message": "this line can be remove",
+      "revId": "7352a6452b77e69b4a22dc3cb67099fadadc5382",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
