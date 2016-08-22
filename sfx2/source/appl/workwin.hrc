@@ -1,0 +1,91 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+#include "app.hrc"
+#include <svx/fmresids.hrc>
+#include <svx/dialogs.hrc>
+
+//starmath/inc/starmath.hrc
+#define RID_MATH_TOOLBOX            (RID_APP_START + 50)
+
+//sc/inc/sc.hrc
+#define SC_RESOURCE_START           (RID_APP_START+5000)
+#define RID_OBJECTBAR_APP           (SC_RESOURCE_START)
+#define RID_OBJECTBAR_FORMAT        (SC_RESOURCE_START+1)
+#define RID_TEXT_TOOLBOX_SC         (SC_RESOURCE_START+5) /* RID_TEXT_TOOLBOX */
+#define RID_OBJECTBAR_PREVIEW       (SC_RESOURCE_START+6)
+#define RID_OBJECTBAR_TOOLS         (SC_RESOURCE_START+35)
+#define RID_DRAW_OBJECTBAR          (SC_RESOURCE_START+53)
+#define RID_GRAPHIC_OBJECTBAR       (SC_RESOURCE_START+54)
+#define RID_MEDIA_OBJECTBAR         (SC_RESOURCE_START+60)
+
+//basctl/inc/basidesh.hrc
+#define RID_BASICIDE_OBJECTBAR      (RID_BASICIDE_START +  0)
+
+//sw/inc/rcid.hrc
+#define RC_BASE                      RID_SW_START //20000 include/svl/solar.hrc
+#define RC_WEB                      (RC_BASE + 400)
+#define RC_VIEW                     (RC_BASE + 600)
+#define RC_SHELLS                   (RC_BASE + 3250)
+#define RC_WEB_BEGIN                 RC_WEB
+#define RC_VIEW_BEGIN                RC_VIEW
+#define RC_SHELLS_BEGIN              RC_SHELLS
+//sw/source/uibase/inc/shells.hrc
+#define RID_TEXT_TOOLBOX_SW         (RC_SHELLS_BEGIN +  15) /* RID_TEXT_TOOLBOX */
+#define RID_TABLE_TOOLBOX           (RC_SHELLS_BEGIN +  16)
+#define RID_FRAME_TOOLBOX           (RC_SHELLS_BEGIN +  17)
+#define RID_GRAFIK_TOOLBOX          (RC_SHELLS_BEGIN +  18)
+#define RID_DRAW_TOOLBOX_SW         (RC_SHELLS_BEGIN +  19) /* RID_DRAW_TOOLBOX */
+#define RID_DRAW_TEXT_TOOLBOX_SW    (RC_SHELLS_BEGIN +  20) /* RID_DRAW_TEXT_TOOLBOX */
+#define RID_NUM_TOOLBOX             (RC_SHELLS_BEGIN +  21)
+#define RID_OLE_TOOLBOX             (RC_SHELLS_BEGIN +  22)
+#define RID_TOOLS_TOOLBOX           (RC_SHELLS_BEGIN +  23)
+#define RID_BEZIER_TOOLBOX_SW       (RC_SHELLS_BEGIN +  33) /* RID_BEZIER_TOOLBOX */
+#define RID_MODULE_TOOLBOX          (RC_SHELLS_BEGIN + 60)
+#define RID_MEDIA_TOOLBOX           (RC_SHELLS_BEGIN + 61)
+
+//sw/source/uibase/inc/web.hrc
+#define RID_WEBTOOLS_TOOLBOX        (RC_WEB_BEGIN + 2)
+#define RID_WEBTEXT_TOOLBOX         (RC_WEB_BEGIN + 3)
+#define RID_WEBFRAME_TOOLBOX        (RC_WEB_BEGIN + 8)
+#define RID_WEBGRAPHIC_TOOLBOX      (RC_WEB_BEGIN + 10)
+#define RID_WEBOLE_TOOLBOX          (RC_WEB_BEGIN + 11)
+
+//sw/source/uibase/uiview/view.hrc
+#define RID_PVIEW_TOOLBOX           (RC_VIEW_BEGIN + 31)
+
+//sd/source/ui/inc/cfgids.hxx
+#define RID_DRAW_TOOLBOX_SD         (SFX_ITEMTYPE_SD_BEGIN + 11) /* RID_DRAW_TOOLBOX */
+#define RID_SLIDE_TOOLBOX           (SFX_ITEMTYPE_SD_BEGIN + 12)
+#define RID_DRAW_OBJ_TOOLBOX        (SFX_ITEMTYPE_SD_BEGIN + 13)
+#define RID_SLIDE_OBJ_TOOLBOX       (SFX_ITEMTYPE_SD_BEGIN + 14)
+#define RID_BEZIER_TOOLBOX_SD       (SFX_ITEMTYPE_SD_BEGIN + 15) /* RID_BEZIER_TOOLBOX */
+#define RID_DRAW_TEXT_TOOLBOX_SD    (SFX_ITEMTYPE_SD_BEGIN + 16) /* RID_DRAW_TEXT_TOOLBOX */
+#define RID_OUTLINE_TOOLBOX         (SFX_ITEMTYPE_SD_BEGIN + 17)
+#define RID_GLUEPOINTS_TOOLBOX      (SFX_ITEMTYPE_SD_BEGIN + 19)
+#define RID_DRAW_OPTIONS_TOOLBOX    (SFX_ITEMTYPE_SD_BEGIN + 20)
+#define RID_DRAW_COMMONTASK_TOOLBOX (SFX_ITEMTYPE_SD_BEGIN + 21)
+#define RID_FORMLAYER_TOOLBOX       (SFX_ITEMTYPE_SD_BEGIN + 22)
+#define RID_DRAW_VIEWER_TOOLBOX     (SFX_ITEMTYPE_SD_BEGIN + 23)
+#define RID_GRAPHIC_OBJ_TOOLBOX     (SFX_ITEMTYPE_SD_BEGIN + 27)
+#define RID_DRAW_GRAF_TOOLBOX       (SFX_ITEMTYPE_SD_BEGIN + 30)
+#define RID_DRAW_MEDIA_TOOLBOX      (SFX_ITEMTYPE_SD_BEGIN + 31)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
