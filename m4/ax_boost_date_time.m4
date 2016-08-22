@@ -100,7 +100,7 @@ AC_DEFUN([AX_BOOST_DATE_TIME],
 
             fi
             if test "x$ax_lib" = "x"; then
-                AC_MSG_ERROR(Could not find a version of the library!)
+                AC_MSG_ERROR(Could not find a version of the boost date_time library!)
             fi
 			if test "x$link_date_time" != "xyes"; then
 				AC_MSG_ERROR(Could not link against $ax_lib !)
