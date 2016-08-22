@@ -87,8 +87,6 @@ static const ResIdToResName pToolBarResToName[] =
     { 18005,    "moreformcontrols"     },
     { 18006,    "formdesign"           },
     { 20050,    "toolbar"              },      //math
-    { 30001,    "objectbar"            },      //chart
-    { 30513,    "toolbar"              },      //chart
     { 25005,    "textobjectbar"        },      //calc
     { 25053,    "drawobjectbar"        },
     { 25054,    "graphicobjectbar"     },
