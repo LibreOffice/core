@@ -92,6 +92,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Recovery.hxx>
+#include <officecfg/Office/Update.hxx>
 #include <officecfg/Setup.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -1451,17 +1452,21 @@ int Desktop::Main()
         if ( !InitializeConfiguration() )
             return EXIT_FAILURE;
 
-        OUString aInstallationDir( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER );
-
-        CreateValidUpdateDir(aInstallationDir);
-
-        osl::DirectoryItem aDirectoryItem;
-        osl::DirectoryItem::get("file:///lo/users/moggi/test-inst/updated"/*aInstallationDir + "/updated"*/, aDirectoryItem);
-        bool bValidUpdateDirExists = aDirectoryItem.is();
-        if (bValidUpdateDirExists)
+        if (officecfg::Office::Update::Update::Enabled::get())
         {
-            rtl::Bootstrap::expandMacros(aInstallationDir);
-            Update(aInstallationDir);
+
+            OUString aInstallationDir( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER );
+
+            CreateValidUpdateDir(aInstallationDir);
+
+            osl::DirectoryItem aDirectoryItem;
+            osl::DirectoryItem::get("file:///lo/users/moggi/test-inst/updated"/*aInstallationDir + "/updated"*/, aDirectoryItem);
+            bool bValidUpdateDirExists = aDirectoryItem.is();
+            if (bValidUpdateDirExists)
+            {
+                rtl::Bootstrap::expandMacros(aInstallationDir);
+                Update(aInstallationDir);
+            }
         }
 
         SetSplashScreenProgress(30);
