@@ -121,8 +121,6 @@ LastPageSaver* OfaTreeOptionsDialog::pLastPageSaver = nullptr;
 static const sal_Char*      pViewOptDataName = "page data";
 #define VIEWOPT_DATANAME    OUString::createFromAscii( pViewOptDataName )
 
-static XOutdevItemPool* mpStaticXOutdevItemPool = nullptr;
-
 static inline void SetViewOptUserItem( SvtViewOptions& rOpt, const OUString& rData )
 {
     rOpt.SetUserItem( VIEWOPT_DATANAME, makeAny( OUString( rData ) ) );
@@ -298,7 +296,6 @@ VclPtr<SfxTabPage> CreateGeneralTabPage( sal_uInt16 nId, vcl::Window* pParent, c
         case RID_SFXPAGE_PRINTOPTIONS:              fnCreate = &SfxCommonPrintOptionsTabPage::Create; break;
         case OFA_TP_LANGUAGES:                      fnCreate = &OfaLanguagesTabPage::Create; break;
         case RID_SFXPAGE_LINGU:                     fnCreate = &SvxLinguTabPage::Create; break;
-        case RID_SVXPAGE_COLOR:                     fnCreate = &SvxColorTabPage::Create; break;
         case OFA_TP_VIEW:                           fnCreate = &OfaViewTabPage::Create; break;
         case OFA_TP_MISC:                           fnCreate = &OfaMiscTabPage::Create; break;
         case OFA_TP_MEMORY:                         fnCreate = &OfaMemoryOptionsPage::Create; break;
@@ -349,7 +346,6 @@ static OptionsMapping_Impl const OptionsMap_Impl[] =
     { "ProductName",        "View",                 OFA_TP_VIEW },
     { "ProductName",        "Print",                RID_SFXPAGE_PRINTOPTIONS },
     { "ProductName",        "Paths",                RID_SFXPAGE_PATH },
-    { "ProductName",        "Colors",               RID_SVXPAGE_COLOR },
     { "ProductName",        "Fonts",                RID_SVX_FONT_SUBSTITUTION },
     { "ProductName",        "Security",             RID_SVXPAGE_INET_SECURITY },
     { "ProductName",        "Personalization",      RID_SVXPAGE_PERSONALIZATION },
@@ -492,8 +488,6 @@ struct OptionsGroupInfo
     pCurrentPageEntry   ( nullptr ),\
     sTitle              ( GetText() ),\
     sNotLoadedError     (       CUI_RES( RID_SVXSTR_LOAD_ERROR ) ),\
-    pColorPageItemSet   ( nullptr ),\
-    mpColorPage         ( nullptr ),\
     bForgetSelection    ( false ),\
     bIsFromExtensionManager( false ), \
     bIsForSetDocumentLanguage( false )
@@ -604,14 +598,11 @@ void OfaTreeOptionsDialog::dispose()
         }
         pEntry = pTreeLB->Next(pEntry);
     }
-    delete pColorPageItemSet;
-    pColorPageItemSet = nullptr;
     deleteGroupNames();
     pOkPB.clear();
     pBackPB.clear();
     pTreeLB.clear();
     pTabBox.clear();
-    mpColorPage.clear();
     SfxModalDialog::dispose();
 }
 
@@ -661,10 +652,7 @@ IMPL_LINK_NOARG_TYPED(OfaTreeOptionsDialog, BackHdl_Impl, Button*, void)
         {
             OptionsGroupInfo* pGroupInfo =
                 static_cast<OptionsGroupInfo*>(pTreeLB->GetParent( pCurrentPageEntry )->GetUserData());
-            if ( RID_SVXPAGE_COLOR == pPageInfo->m_nPageId )
-                pPageInfo->m_pPage->Reset( pColorPageItemSet );
-            else
-                pPageInfo->m_pPage->Reset( pGroupInfo->m_pInItemSet );
+            pPageInfo->m_pPage->Reset( pGroupInfo->m_pInItemSet );
         }
         else if ( pPageInfo->m_pExtPage )
             pPageInfo->m_pExtPage->ResetPage();
@@ -984,18 +972,6 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     {
         if(pGroupInfo->m_bLoadError)
             return;
-        if ( RID_SVXPAGE_COLOR == pPageInfo->m_nPageId )
-        {
-            if(!pColorPageItemSet)
-            {
-                // Move usage of a static XOutdevItemPool instance here
-                if(!mpStaticXOutdevItemPool)
-                    mpStaticXOutdevItemPool = new XOutdevItemPool();
-
-                pColorPageItemSet = new SfxItemSet( *mpStaticXOutdevItemPool, XATTR_FILLSTYLE, XATTR_FILLCOLOR);
-                pColorPageItemSet->Put( XFillColorItem() );
-            }
-        }
         else
         {
             if(pGroupInfo->m_pModule /*&& !pGroupInfo->pModule->IsLoaded()*/)
@@ -1041,37 +1017,17 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
                     pGroupInfo->m_pInItemSet->GetRanges());
         }
 
-        if(pPageInfo->m_nPageId == RID_SVXPAGE_COLOR)
-        {
-            pPageInfo->m_pPage.disposeAndReset( ::CreateGeneralTabPage(
-                pPageInfo->m_nPageId, pTabBox, *pColorPageItemSet ) );
-            mpColorPage = static_cast<SvxColorTabPage*>(pPageInfo->m_pPage.get());
-            mpColorPage->SetupForViewFrame( SfxViewFrame::Current() );
-        }
-        else
-        {
-            pPageInfo->m_pPage.disposeAndReset( ::CreateGeneralTabPage(pPageInfo->m_nPageId, pTabBox, *pGroupInfo->m_pInItemSet ) );
+        pPageInfo->m_pPage.disposeAndReset( ::CreateGeneralTabPage(pPageInfo->m_nPageId, pTabBox, *pGroupInfo->m_pInItemSet ) );
 
-            if(!pPageInfo->m_pPage && pGroupInfo->m_pModule)
-                pPageInfo->m_pPage.disposeAndReset( pGroupInfo->m_pModule->CreateTabPage(pPageInfo->m_nPageId, pTabBox, *pGroupInfo->m_pInItemSet) );
-
-        }
+        if(!pPageInfo->m_pPage && pGroupInfo->m_pModule)
+            pPageInfo->m_pPage.disposeAndReset( pGroupInfo->m_pModule->CreateTabPage(pPageInfo->m_nPageId, pTabBox, *pGroupInfo->m_pInItemSet) );
 
         DBG_ASSERT( pPageInfo->m_pPage, "tabpage could not created");
         if ( pPageInfo->m_pPage )
         {
             SvtViewOptions aTabPageOpt( E_TABPAGE, OUString::number( pPageInfo->m_nPageId) );
             pPageInfo->m_pPage->SetUserData( GetViewOptUserItem( aTabPageOpt ) );
-
-            if ( RID_SVXPAGE_COLOR == pPageInfo->m_nPageId )
-            {
-                pPageInfo->m_pPage->Reset( pColorPageItemSet );
-                pPageInfo->m_pPage->ActivatePage( *pColorPageItemSet );
-            }
-            else
-            {
-                pPageInfo->m_pPage->Reset( pGroupInfo->m_pInItemSet );
-            }
+            pPageInfo->m_pPage->Reset( pGroupInfo->m_pInItemSet );
         }
     }
     else if ( 0 == pPageInfo->m_nPageId && !pPageInfo->m_pExtPage )
@@ -2137,8 +2093,6 @@ short OfaTreeOptionsDialog::Execute()
     if( RET_OK == nRet )
     {
         ApplyItemSets();
-        if( mpColorPage )
-            mpColorPage->SaveToViewFrame( SfxViewFrame::Current() );
         utl::ConfigManager::storeConfigItems();
     }
 

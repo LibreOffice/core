@@ -137,10 +137,6 @@ private:
     OUString               sTitle;
     OUString               sNotLoadedError;
 
-    // for the ColorTabPage
-    SfxItemSet*            pColorPageItemSet;
-    VclPtr<SvxColorTabPage> mpColorPage;
-
     bool                   bForgetSelection;
     bool                   bIsFromExtensionManager;
 

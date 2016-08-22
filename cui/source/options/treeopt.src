@@ -34,7 +34,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "View" ; OFA_TP_VIEW ; > ;
             < "Print" ; RID_SFXPAGE_PRINTOPTIONS; > ;
             < "Paths" ;  RID_SFXPAGE_PATH; > ;
-            < "Colors" ;  RID_SVXPAGE_COLOR; > ;
             < "Fonts" ; RID_SVX_FONT_SUBSTITUTION ; > ;
             < "Security" ; RID_SVXPAGE_INET_SECURITY ; > ;
             < "Personalization" ; RID_SVXPAGE_PERSONALIZATION ; > ;
