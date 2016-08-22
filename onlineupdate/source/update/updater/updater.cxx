@@ -2259,24 +2259,6 @@ UpdateThreadFunc(void * /*param*/)
 
 int NS_main(int argc, NS_tchar **argv)
 {
-#if defined(MOZ_WIDGET_GONK)
-  if (EnvHasValue("LD_PRELOAD")) {
-    // If the updater is launched with LD_PRELOAD set, then we wind up
-    // preloading libmozglue.so. Under some circumstances, this can cause
-    // the remount of /system to fail when going from rw to ro, so if we
-    // detect LD_PRELOAD we unsetenv it and relaunch ourselves without it.
-    // This will cause the offending preloaded library to be closed.
-    //
-    // For a variety of reasons, this is really hard to do in a safe manner
-    // in the parent process, so we do it here.
-    unsetenv("LD_PRELOAD");
-    execv(argv[0], argv);
-    __android_log_print(ANDROID_LOG_INFO, "updater",
-                        "execve failed: errno: %d. Exiting...", errno);
-    _exit(1);
-  }
-#endif
-
 #if defined(MOZ_VERIFY_MAR_SIGNATURE) && !defined(_WIN32) && !defined(MACOSX)
   // On Windows and Mac we rely on native APIs to do verifications so we don't
   // need to initialize NSS at all there.
@@ -2433,36 +2415,6 @@ int NS_main(int argc, NS_tchar **argv)
   LOG(("PATCH DIRECTORY " LOG_S, gPatchDirPath));
   LOG(("INSTALLATION DIRECTORY " LOG_S, gInstallDirPath));
   LOG(("WORKING DIRECTORY " LOG_S, gWorkingDirPath));
-
-#ifdef MOZ_WIDGET_GONK
-  const char *prioEnv = getenv("MOZ_UPDATER_PRIO");
-  if (prioEnv) {
-    int32_t prioVal;
-    int32_t oomScoreAdj;
-    int32_t ioprioClass;
-    int32_t ioprioLevel;
-    if (sscanf(prioEnv, "%d/%d/%d/%d",
-               &prioVal, &oomScoreAdj, &ioprioClass, &ioprioLevel) == 4) {
-      LOG(("MOZ_UPDATER_PRIO=%s", prioEnv));
-      if (setpriority(PRIO_PROCESS, 0, prioVal)) {
-        LOG(("setpriority(%d) failed, errno = %d", prioVal, errno));
-      }
-      if (ioprio_set(IOPRIO_WHO_PROCESS, 0,
-                     IOPRIO_PRIO_VALUE(ioprioClass, ioprioLevel))) {
-        LOG(("ioprio_set(%d,%d) failed: errno = %d",
-             ioprioClass, ioprioLevel, errno));
-      }
-      FILE *fs = fopen("/proc/self/oom_score_adj", "w");
-      if (fs) {
-        fprintf(fs, "%d", oomScoreAdj);
-        fclose(fs);
-      } else {
-        LOG(("Unable to open /proc/self/oom_score_adj for writing, errno = %d",
-             errno));
-      }
-    }
-  }
-#endif
 
 #ifdef _WIN32
   if (pid > 0) {
@@ -2799,25 +2751,6 @@ int NS_main(int argc, NS_tchar **argv)
   }
 #endif
 
-#if defined(MOZ_WIDGET_GONK)
-  // In gonk, the master b2g process sets its umask to 0027 because
-  // there's no reason for it to ever create world-readable files.
-  // The updater binary, however, needs to do this, and it inherits
-  // the master process's cautious umask.  So we drop down a bit here.
-  umask(0022);
-
-  // Remount the /system partition as read-write for gonk. The destructor will
-  // remount /system as read-only. We add an extra level of scope here to avoid
-  // calling LogFinish() before the GonkAutoMounter destructor has a chance
-  // to be called
-  {
-    GonkAutoMounter mounter;
-    if (mounter.GetAccess() != MountAccess::ReadWrite) {
-      WriteStatusFile(FILESYSTEM_MOUNT_READWRITE_ERROR);
-      return 1;
-    }
-#endif
-
   if (sStagedUpdate) {
     // When staging updates, blow away the old installation directory and create
     // it from scratch.
@@ -3071,10 +3004,6 @@ int NS_main(int argc, NS_tchar **argv)
     }
   }
 #endif /* WNT */
-
-#if defined(MOZ_WIDGET_GONK)
-  } // end the extra level of scope for the GonkAutoMounter
-#endif
 
 #ifdef MACOSX
   // When the update is successful remove the precomplete file in the root of
