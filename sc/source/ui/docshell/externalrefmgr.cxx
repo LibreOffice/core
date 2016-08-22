@@ -865,9 +865,13 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
             {
                 pTabData->setCell(col + nCol1, row + nRow1, new formula::FormulaStringToken(val), 0, false);
             };
+            ScFullMatrix::EmptyOpFunction aEmptyFunc = [=](size_t /*row*/, size_t /*col*/) -> void
+            {
+                // Nothing. Empty cell.
+            };
             pMat->ExecuteOperation(std::pair<size_t, size_t>(0, 0),
                     std::pair<size_t, size_t>(nRow2-nRow1, nCol2-nCol1),
-                    aDoubleFunc, aBoolFunc, aStringFunc);
+                    aDoubleFunc, aBoolFunc, aStringFunc, aEmptyFunc);
             // Mark the whole range 'cached'.
             pTabData->setCachedCellRange(nCol1, nRow1, nCol2, nRow2);
         }
