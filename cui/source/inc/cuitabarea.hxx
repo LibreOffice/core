@@ -821,8 +821,6 @@ public:
 
     void    SetColorList( const XColorListRef& pColList );
     const XColorListRef& GetColorList() { return pColorList; }
-    void    SaveToViewFrame( SfxViewFrame *pViewFrame );
-    void    SetupForViewFrame( SfxViewFrame *pViewFrame );
 
     void    SetPageType( PageType* pInType ) { pPageType = pInType; }
     void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
