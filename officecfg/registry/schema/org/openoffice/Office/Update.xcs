@@ -25,7 +25,7 @@
         </prop>
         <prop oor:name="Mode" oor:type="xs:int" oor:nillable="false">
             <info>
-                <desc>Selects if the the user should be asked about updates or nor</desc>
+                <desc>Selects if the the user should be asked about updates or not</desc>
             </info>
             <value>Some Value</value>
         </prop>
@@ -43,7 +43,7 @@
         </prop>
         <prop oor:name="UpdateChannel" oor:type="xs:string" oor:nillable="false">
             <info>
-                <desc>The update channel that is current use</desc>
+                <desc>The update channel that is currently in use</desc>
             </info>
             <value>Release</value>
         </prop>
