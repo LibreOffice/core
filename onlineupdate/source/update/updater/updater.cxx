@@ -92,30 +92,7 @@ void LaunchMacPostProcess(const char* aAppBundle);
 #define USE_EXECV
 #endif
 
-#if defined(MOZ_WIDGET_GONK)
-# include "automounter_gonk.h"
-# include <unistd.h>
-# include <android/log.h>
-# include <linux/ioprio.h>
-# include <sys/resource.h>
-
-#if ANDROID_VERSION < 21
-// The only header file in bionic which has a function prototype for ioprio_set
-// is libc/include/sys/linux-unistd.h. However, linux-unistd.h conflicts
-// badly with unistd.h, so we declare the prototype for ioprio_set directly.
-extern "C" MOZ_EXPORT int ioprio_set(int which, int who, int ioprio);
-#else
-# include <sys/syscall.h>
-static int ioprio_set(int which, int who, int ioprio) {
-      return syscall(__NR_ioprio_set, which, who, ioprio);
-}
-#endif
-
-# define MAYBE_USE_HARD_LINKS 1
-static bool sUseHardLinks = true;
-#else
 # define MAYBE_USE_HARD_LINKS 0
-#endif
 
 #if defined(MOZ_VERIFY_MAR_SIGNATURE) && !defined(_WIN32) && !defined(MACOSX)
 #include "nss.h"
@@ -2077,44 +2054,8 @@ ReadMARChannelIDs(const NS_tchar *path, MARChannelStringTable *results)
 static int
 GetUpdateFileName(NS_tchar *fileName, int maxChars)
 {
-#if defined(MOZ_WIDGET_GONK)
-  // If an update.link file exists, then it will contain the name
-  // of the update file (terminated by a newline).
-
-  NS_tchar linkFileName[MAXPATHLEN];
-  NS_tsnprintf(linkFileName, sizeof(linkFileName)/sizeof(linkFileName[0]),
-               NS_T("%s/update.link"), gPatchDirPath);
-  AutoFile linkFile(NS_tfopen(linkFileName, NS_T("rb")));
-  if (linkFile == nullptr) {
-    NS_tsnprintf(fileName, maxChars,
-                 NS_T("%s/update.mar"), gPatchDirPath);
-    return OK;
-  }
-
-  char dataFileName[MAXPATHLEN];
-  size_t bytesRead;
-
-  if ((bytesRead = fread(dataFileName, 1, sizeof(dataFileName)-1, linkFile)) <= 0) {
-    *fileName = NS_T('\0');
-    return READ_ERROR;
-  }
-  if (dataFileName[bytesRead-1] == '\n') {
-    // Strip trailing newline (for \n and \r\n)
-    bytesRead--;
-  }
-  if (dataFileName[bytesRead-1] == '\r') {
-    // Strip trailing CR (for \r, \r\n)
-    bytesRead--;
-  }
-  dataFileName[bytesRead] = '\0';
-
-  strncpy(fileName, dataFileName, maxChars-1);
-  fileName[maxChars-1] = '\0';
-#else
-  // We currently only support update.link files under GONK
   NS_tsnprintf(fileName, maxChars,
                NS_T("%s/update.mar"), gPatchDirPath);
-#endif
   return OK;
 }
 
