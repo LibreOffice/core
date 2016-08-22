@@ -411,7 +411,6 @@ private:
     DECL_LINK_TYPED( ModifiedSliderHdl_Impl, Slider*, void );
     void ModifiedHdl_Impl(void*);
 
-    long CheckChanges_Impl();
     void SetControlState_Impl( css::awt::GradientStyle eXGS );
     sal_Int32 SearchGradientList(const OUString& rGradientName);
 
@@ -494,7 +493,6 @@ private:
     DECL_LINK_TYPED( ClickRenameHdl_Impl, SvxPresetListBox*, void );
     DECL_LINK_TYPED( ClickDeleteHdl_Impl, SvxPresetListBox*, void );
 
-    long CheckChanges_Impl();
     sal_Int32 SearchHatchList(const OUString& rHatchName);
 
 public:
@@ -666,8 +664,6 @@ private:
     DECL_LINK_TYPED( ClickRenameHdl_Impl, SvxPresetListBox*, void );
     DECL_LINK_TYPED( ClickDeleteHdl_Impl, SvxPresetListBox*, void );
 
-    long CheckChanges_Impl();
-
 public:
     SvxPatternTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
     virtual ~SvxPatternTabPage();
@@ -791,8 +787,6 @@ private:
     void UpdateColorValues();
     static sal_Int32 SearchColorList(OUString const & aColorName);
     DECL_LINK_TYPED( ModifiedHdl_Impl, Edit&, void );
-
-    long CheckChanges_Impl();
 
     void UpdateModified();
     css::uno::Reference< css::uno::XComponentContext > m_context;
