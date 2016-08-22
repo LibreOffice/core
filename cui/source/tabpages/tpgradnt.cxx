@@ -86,6 +86,8 @@ SvxGradientTabPage::SvxGradientTabPage
     get(m_pGradientLB,     "gradientpresetlist");
     get(m_pCtlPreview,     "previewctl");
     Size aSize = getDrawPreviewOptimalSize(this);
+    m_pGradientLB->set_width_request(aSize.Width());
+    m_pGradientLB->set_height_request(aSize.Height());
     m_pCtlPreview->set_width_request(aSize.Width());
     m_pCtlPreview->set_height_request(aSize.Height());
     get(m_pBtnAdd,         "add");
