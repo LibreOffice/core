@@ -40,11 +40,11 @@ enum SdrHorAlign  {
     SDRHALIGN_CENTER
 };
 
-enum SdrVertAlign {
-    SDRVALIGN_NONE,
-    SDRVALIGN_TOP,
-    SDRVALIGN_BOTTOM,
-    SDRVALIGN_CENTER
+enum class SdrVertAlign {
+    NONE,
+    Top,
+    Bottom,
+    Center
 };
 
 enum class SdrMergeMode {

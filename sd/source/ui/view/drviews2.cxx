@@ -2456,7 +2456,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_OBJECT_ALIGN_LEFT:  // BASIC
         {
-            mpDrawView->AlignMarkedObjects(SDRHALIGN_LEFT, SDRVALIGN_NONE);
+            mpDrawView->AlignMarkedObjects(SDRHALIGN_LEFT, SdrVertAlign::NONE);
             Cancel();
             rReq.Done ();
         }
@@ -2464,7 +2464,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_OBJECT_ALIGN_CENTER:  // BASIC
         {
-            mpDrawView->AlignMarkedObjects(SDRHALIGN_CENTER, SDRVALIGN_NONE);
+            mpDrawView->AlignMarkedObjects(SDRHALIGN_CENTER, SdrVertAlign::NONE);
             Cancel();
             rReq.Done ();
         }
@@ -2472,7 +2472,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_OBJECT_ALIGN_RIGHT:  // BASIC
         {
-            mpDrawView->AlignMarkedObjects(SDRHALIGN_RIGHT, SDRVALIGN_NONE);
+            mpDrawView->AlignMarkedObjects(SDRHALIGN_RIGHT, SdrVertAlign::NONE);
             Cancel();
             rReq.Done ();
         }
@@ -2480,7 +2480,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_OBJECT_ALIGN_UP:  // BASIC
         {
-            mpDrawView->AlignMarkedObjects(SDRHALIGN_NONE, SDRVALIGN_TOP);
+            mpDrawView->AlignMarkedObjects(SDRHALIGN_NONE, SdrVertAlign::Top);
             Cancel();
             rReq.Done ();
         }
@@ -2488,7 +2488,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_OBJECT_ALIGN_MIDDLE:  // BASIC
         {
-            mpDrawView->AlignMarkedObjects(SDRHALIGN_NONE, SDRVALIGN_CENTER);
+            mpDrawView->AlignMarkedObjects(SDRHALIGN_NONE, SdrVertAlign::Center);
             Cancel();
             rReq.Done ();
         }
@@ -2496,7 +2496,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_OBJECT_ALIGN_DOWN:  // BASIC
         {
-            mpDrawView->AlignMarkedObjects(SDRHALIGN_NONE, SDRVALIGN_BOTTOM);
+            mpDrawView->AlignMarkedObjects(SDRHALIGN_NONE, SdrVertAlign::Bottom);
             Cancel();
             rReq.Done ();
         }

@@ -1748,7 +1748,7 @@ bool SdrEditView::IsAlignPossible() const
 
 void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
 {
-    if (eHor==SDRHALIGN_NONE && eVert==SDRVALIGN_NONE)
+    if (eHor==SDRHALIGN_NONE && eVert==SdrVertAlign::NONE)
         return;
 
     SortMarkedObjects();
@@ -1763,13 +1763,13 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
         {
             switch (eVert)
             {
-                case SDRVALIGN_TOP   : ImpTakeDescriptionStr(STR_EditAlignVTop   ,aStr); break;
-                case SDRVALIGN_BOTTOM: ImpTakeDescriptionStr(STR_EditAlignVBottom,aStr); break;
-                case SDRVALIGN_CENTER: ImpTakeDescriptionStr(STR_EditAlignVCenter,aStr); break;
+                case SdrVertAlign::Top   : ImpTakeDescriptionStr(STR_EditAlignVTop   ,aStr); break;
+                case SdrVertAlign::Bottom: ImpTakeDescriptionStr(STR_EditAlignVBottom,aStr); break;
+                case SdrVertAlign::Center: ImpTakeDescriptionStr(STR_EditAlignVCenter,aStr); break;
                 default: break;
             }
         }
-        else if (eVert==SDRVALIGN_NONE)
+        else if (eVert==SdrVertAlign::NONE)
         {
             switch (eHor)
             {
@@ -1779,7 +1779,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
                 default: break;
             }
         }
-        else if (eHor==SDRHALIGN_CENTER && eVert==SDRVALIGN_CENTER)
+        else if (eHor==SDRHALIGN_CENTER && eVert==SdrVertAlign::Center)
         {
             ImpTakeDescriptionStr(STR_EditAlignCenter,aStr);
         }
@@ -1849,9 +1849,9 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
             Rectangle aObjRect(pObj->GetSnapRect());
             switch (eVert)
             {
-                case SDRVALIGN_TOP   : nYMov=aBound.Top()   -aObjRect.Top()       ; break;
-                case SDRVALIGN_BOTTOM: nYMov=aBound.Bottom()-aObjRect.Bottom()    ; break;
-                case SDRVALIGN_CENTER: nYMov=aCenter.Y()    -aObjRect.Center().Y(); break;
+                case SdrVertAlign::Top   : nYMov=aBound.Top()   -aObjRect.Top()       ; break;
+                case SdrVertAlign::Bottom: nYMov=aBound.Bottom()-aObjRect.Bottom()    ; break;
+                case SdrVertAlign::Center: nYMov=aCenter.Y()    -aObjRect.Center().Y(); break;
                 default: break;
             }
             switch (eHor)

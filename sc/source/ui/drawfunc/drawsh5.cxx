@@ -305,32 +305,32 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
         case SID_OBJECT_ALIGN_LEFT:
         case SID_ALIGN_ANY_LEFT:
             if (pView->IsAlignPossible())
-                pView->AlignMarkedObjects(SDRHALIGN_LEFT, SDRVALIGN_NONE);
+                pView->AlignMarkedObjects(SDRHALIGN_LEFT, SdrVertAlign::NONE);
             break;
         case SID_OBJECT_ALIGN_CENTER:
         case SID_ALIGN_ANY_HCENTER:
             if (pView->IsAlignPossible())
-                pView->AlignMarkedObjects(SDRHALIGN_CENTER, SDRVALIGN_NONE);
+                pView->AlignMarkedObjects(SDRHALIGN_CENTER, SdrVertAlign::NONE);
             break;
         case SID_OBJECT_ALIGN_RIGHT:
         case SID_ALIGN_ANY_RIGHT:
             if (pView->IsAlignPossible())
-                pView->AlignMarkedObjects(SDRHALIGN_RIGHT, SDRVALIGN_NONE);
+                pView->AlignMarkedObjects(SDRHALIGN_RIGHT, SdrVertAlign::NONE);
             break;
         case SID_OBJECT_ALIGN_UP:
         case SID_ALIGN_ANY_TOP:
             if (pView->IsAlignPossible())
-                pView->AlignMarkedObjects(SDRHALIGN_NONE, SDRVALIGN_TOP);
+                pView->AlignMarkedObjects(SDRHALIGN_NONE, SdrVertAlign::Top);
             break;
         case SID_OBJECT_ALIGN_MIDDLE:
         case SID_ALIGN_ANY_VCENTER:
             if (pView->IsAlignPossible())
-                pView->AlignMarkedObjects(SDRHALIGN_NONE, SDRVALIGN_CENTER);
+                pView->AlignMarkedObjects(SDRHALIGN_NONE, SdrVertAlign::Center);
             break;
         case SID_OBJECT_ALIGN_DOWN:
         case SID_ALIGN_ANY_BOTTOM:
             if (pView->IsAlignPossible())
-                pView->AlignMarkedObjects(SDRHALIGN_NONE, SDRVALIGN_BOTTOM);
+                pView->AlignMarkedObjects(SDRHALIGN_NONE, SdrVertAlign::Bottom);
             break;
 
         case SID_DELETE:
