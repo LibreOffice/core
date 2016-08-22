@@ -136,22 +136,22 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
             OSL_FAIL( "Unknown kind of marker." );
             SAL_FALLTHROUGH; // return Rect_9x9 as default
         }
-        case Rect_9x9:
+        case BitmapMarkerKind::Rect_9x9:
         {
             return impGetOrCreateTargetBitmap((1 * INDEX_COUNT) + nInd, Rectangle(Point(7, nYPos), Size(9, 9)));
         }
 
-        case Rect_7x7:
+        case BitmapMarkerKind::Rect_7x7:
         {
             return impGetOrCreateTargetBitmap((0 * INDEX_COUNT) + nInd, Rectangle(Point(0, nYPos), Size(7, 7)));
         }
 
-        case Rect_11x11:
+        case BitmapMarkerKind::Rect_11x11:
         {
             return impGetOrCreateTargetBitmap((2 * INDEX_COUNT) + nInd, Rectangle(Point(16, nYPos), Size(11, 11)));
         }
 
-        case Rect_13x13:
+        case BitmapMarkerKind::Rect_13x13:
         {
             const sal_uInt16 nIndex((3 * INDEX_COUNT) + nInd);
 
@@ -184,83 +184,83 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
             }
         }
 
-        case Circ_7x7:
-        case Customshape_7x7:
+        case BitmapMarkerKind::Circ_7x7:
+        case BitmapMarkerKind::Customshape_7x7:
         {
             return impGetOrCreateTargetBitmap((4 * INDEX_COUNT) + nInd, Rectangle(Point(27, nYPos), Size(7, 7)));
         }
 
-        case Circ_9x9:
-        case Customshape_9x9:
+        case BitmapMarkerKind::Circ_9x9:
+        case BitmapMarkerKind::Customshape_9x9:
         {
             return impGetOrCreateTargetBitmap((5 * INDEX_COUNT) + nInd, Rectangle(Point(34, nYPos), Size(9, 9)));
         }
 
-        case Circ_11x11:
-        case Customshape_11x11:
+        case BitmapMarkerKind::Circ_11x11:
+        case BitmapMarkerKind::Customshape_11x11:
         {
             return impGetOrCreateTargetBitmap((6 * INDEX_COUNT) + nInd, Rectangle(Point(43, nYPos), Size(11, 11)));
         }
 
-        case Elli_7x9:
+        case BitmapMarkerKind::Elli_7x9:
         {
             return impGetOrCreateTargetBitmap((7 * INDEX_COUNT) + nInd, Rectangle(Point(54, nYPos), Size(7, 9)));
         }
 
-        case Elli_9x11:
+        case BitmapMarkerKind::Elli_9x11:
         {
             return impGetOrCreateTargetBitmap((8 * INDEX_COUNT) + nInd, Rectangle(Point(61, nYPos), Size(9, 11)));
         }
 
-        case Elli_9x7:
+        case BitmapMarkerKind::Elli_9x7:
         {
             return impGetOrCreateTargetBitmap((9 * INDEX_COUNT) + nInd, Rectangle(Point(70, nYPos), Size(9, 7)));
         }
 
-        case Elli_11x9:
+        case BitmapMarkerKind::Elli_11x9:
         {
             return impGetOrCreateTargetBitmap((10 * INDEX_COUNT) + nInd, Rectangle(Point(79, nYPos), Size(11, 9)));
         }
 
-        case RectPlus_7x7:
+        case BitmapMarkerKind::RectPlus_7x7:
         {
             return impGetOrCreateTargetBitmap((11 * INDEX_COUNT) + nInd, Rectangle(Point(90, nYPos), Size(7, 7)));
         }
 
-        case RectPlus_9x9:
+        case BitmapMarkerKind::RectPlus_9x9:
         {
             return impGetOrCreateTargetBitmap((12 * INDEX_COUNT) + nInd, Rectangle(Point(97, nYPos), Size(9, 9)));
         }
 
-        case RectPlus_11x11:
+        case BitmapMarkerKind::RectPlus_11x11:
         {
             return impGetOrCreateTargetBitmap((13 * INDEX_COUNT) + nInd, Rectangle(Point(106, nYPos), Size(11, 11)));
         }
 
-        case Crosshair:
+        case BitmapMarkerKind::Crosshair:
         {
             return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 0, Rectangle(Point(0, 68), Size(15, 15)));
         }
 
-        case Glue:
+        case BitmapMarkerKind::Glue:
         {
             return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 1, Rectangle(Point(15, 76), Size(9, 9)));
         }
 
-        case Glue_Deselected:
+        case BitmapMarkerKind::Glue_Deselected:
         {
             return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 2, Rectangle(Point(15, 67), Size(9, 9)));
         }
 
-        case Anchor: // AnchorTR for SW
-        case AnchorTR:
+        case BitmapMarkerKind::Anchor: // AnchorTR for SW
+        case BitmapMarkerKind::AnchorTR:
         {
             return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 3, Rectangle(Point(24, 67), Size(24, 24)));
         }
 
         // add AnchorPressed to be able to animate anchor control
-        case AnchorPressed:
-        case AnchorPressedTR:
+        case BitmapMarkerKind::AnchorPressed:
+        case BitmapMarkerKind::AnchorPressedTR:
         {
             return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 4, Rectangle(Point(48, 67), Size(24, 24)));
         }
@@ -412,7 +412,7 @@ void SdrHdl::CreateB2dIAObject()
     if(pHdlList && pHdlList->GetView() && !pHdlList->GetView()->areMarkHandlesHidden())
     {
         BitmapColorIndex eColIndex = LightGreen;
-        BitmapMarkerKind eKindOfMarker = Rect_7x7;
+        BitmapMarkerKind eKindOfMarker = BitmapMarkerKind::Rect_7x7;
 
         bool bRot = pHdlList->IsRotateShear();
         if(pObj)
@@ -430,7 +430,7 @@ void SdrHdl::CreateB2dIAObject()
         {
             case HDL_MOVE:
             {
-                eKindOfMarker = (b1PixMore) ? Rect_9x9 : Rect_7x7;
+                eKindOfMarker = (b1PixMore) ? BitmapMarkerKind::Rect_9x9 : BitmapMarkerKind::Rect_7x7;
                 break;
             }
             case HDL_UPLFT:
@@ -441,11 +441,11 @@ void SdrHdl::CreateB2dIAObject()
                 // corner handles
                 if(bRot)
                 {
-                    eKindOfMarker = Circ_7x7;
+                    eKindOfMarker = BitmapMarkerKind::Circ_7x7;
                 }
                 else
                 {
-                    eKindOfMarker = Rect_7x7;
+                    eKindOfMarker = BitmapMarkerKind::Rect_7x7;
                 }
                 break;
             }
@@ -455,11 +455,11 @@ void SdrHdl::CreateB2dIAObject()
                 // Upper/Lower handles
                 if(bRot)
                 {
-                    eKindOfMarker = Elli_9x7;
+                    eKindOfMarker = BitmapMarkerKind::Elli_9x7;
                 }
                 else
                 {
-                    eKindOfMarker = Rect_7x7;
+                    eKindOfMarker = BitmapMarkerKind::Rect_7x7;
                 }
                 break;
             }
@@ -469,11 +469,11 @@ void SdrHdl::CreateB2dIAObject()
                 // Left/Right handles
                 if(bRot)
                 {
-                    eKindOfMarker = Elli_7x9;
+                    eKindOfMarker = BitmapMarkerKind::Elli_7x9;
                 }
                 else
                 {
-                    eKindOfMarker = Rect_7x7;
+                    eKindOfMarker = BitmapMarkerKind::Rect_7x7;
                 }
                 break;
             }
@@ -481,43 +481,43 @@ void SdrHdl::CreateB2dIAObject()
             {
                 if(bRot)
                 {
-                    eKindOfMarker = (b1PixMore) ? Circ_9x9 : Circ_7x7;
+                    eKindOfMarker = b1PixMore ? BitmapMarkerKind::Circ_9x9 : BitmapMarkerKind::Circ_7x7;
                 }
                 else
                 {
-                    eKindOfMarker = (b1PixMore) ? Rect_9x9 : Rect_7x7;
+                    eKindOfMarker = b1PixMore ? BitmapMarkerKind::Rect_9x9 : BitmapMarkerKind::Rect_7x7;
                 }
                 break;
             }
             case HDL_BWGT: // weight at poly
             {
-                eKindOfMarker = Circ_7x7;
+                eKindOfMarker = BitmapMarkerKind::Circ_7x7;
                 break;
             }
             case HDL_CIRC:
             {
-                eKindOfMarker = Rect_11x11;
+                eKindOfMarker = BitmapMarkerKind::Rect_11x11;
                 break;
             }
             case HDL_REF1:
             case HDL_REF2:
             {
-                eKindOfMarker = Crosshair;
+                eKindOfMarker = BitmapMarkerKind::Crosshair;
                 break;
             }
             case HDL_GLUE:
             {
-                eKindOfMarker = Glue;
+                eKindOfMarker = BitmapMarkerKind::Glue;
                 break;
             }
             case HDL_GLUE_DESELECTED:
             {
-                eKindOfMarker = Glue_Deselected;
+                eKindOfMarker = BitmapMarkerKind::Glue_Deselected;
                 break;
             }
             case HDL_ANCHOR:
             {
-                eKindOfMarker = Anchor;
+                eKindOfMarker = BitmapMarkerKind::Anchor;
                 break;
             }
             case HDL_USER:
@@ -527,14 +527,14 @@ void SdrHdl::CreateB2dIAObject()
             // top right anchor for SW
             case HDL_ANCHOR_TR:
             {
-                eKindOfMarker = AnchorTR;
+                eKindOfMarker = BitmapMarkerKind::AnchorTR;
                 break;
             }
 
             // for SJ and the CustomShapeHandles:
             case HDL_CUSTOMSHAPE1:
             {
-                eKindOfMarker = (b1PixMore) ? Customshape_9x9 : Customshape_7x7;
+                eKindOfMarker = b1PixMore ? BitmapMarkerKind::Customshape_9x9 : BitmapMarkerKind::Customshape_7x7;
                 eColIndex = Yellow;
                 break;
             }
@@ -577,15 +577,15 @@ void SdrHdl::CreateB2dIAObject()
                     {
                         basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
                         sdr::overlay::OverlayObject* pNewOverlayObject = nullptr;
-                        if (getenv ("SVX_DRAW_HANDLES") && (eKindOfMarker == Rect_7x7 || eKindOfMarker == Rect_9x9 || eKindOfMarker == Rect_11x11))
+                        if (getenv ("SVX_DRAW_HANDLES") && (eKindOfMarker == BitmapMarkerKind::Rect_7x7 || eKindOfMarker == BitmapMarkerKind::Rect_9x9 || eKindOfMarker == BitmapMarkerKind::Rect_11x11))
                         {
                             double fSize = 7.0;
                             switch (eKindOfMarker)
                             {
-                                case Rect_9x9:
+                                case BitmapMarkerKind::Rect_9x9:
                                     fSize = 9.0;
                                     break;
-                                case Rect_11x11:
+                                case BitmapMarkerKind::Rect_11x11:
                                     fSize = 11.0;
                                     break;
                                 default:
@@ -643,29 +643,29 @@ BitmapMarkerKind SdrHdl::GetNextBigger(BitmapMarkerKind eKnd)
 
     switch(eKnd)
     {
-        case Rect_7x7:          eRetval = Rect_9x9;         break;
-        case Rect_9x9:          eRetval = Rect_11x11;       break;
-        case Rect_11x11:        eRetval = Rect_13x13;       break;
+        case BitmapMarkerKind::Rect_7x7:          eRetval = BitmapMarkerKind::Rect_9x9;         break;
+        case BitmapMarkerKind::Rect_9x9:          eRetval = BitmapMarkerKind::Rect_11x11;       break;
+        case BitmapMarkerKind::Rect_11x11:        eRetval = BitmapMarkerKind::Rect_13x13;       break;
 
-        case Circ_7x7:          eRetval = Circ_9x9;         break;
-        case Circ_9x9:          eRetval = Circ_11x11;       break;
+        case BitmapMarkerKind::Circ_7x7:          eRetval = BitmapMarkerKind::Circ_9x9;         break;
+        case BitmapMarkerKind::Circ_9x9:          eRetval = BitmapMarkerKind::Circ_11x11;       break;
 
-        case Customshape_7x7:       eRetval = Customshape_9x9;      break;
-        case Customshape_9x9:       eRetval = Customshape_11x11;    break;
-        //case Customshape_11x11:   eRetval = ; break;
+        case BitmapMarkerKind::Customshape_7x7:       eRetval = BitmapMarkerKind::Customshape_9x9;      break;
+        case BitmapMarkerKind::Customshape_9x9:       eRetval = BitmapMarkerKind::Customshape_11x11;    break;
+        //case BitmapMarkerKind::Customshape_11x11:   eRetval = ; break;
 
-        case Elli_7x9:          eRetval = Elli_9x11;        break;
+        case BitmapMarkerKind::Elli_7x9:          eRetval = BitmapMarkerKind::Elli_9x11;        break;
 
-        case Elli_9x7:          eRetval = Elli_11x9;        break;
+        case BitmapMarkerKind::Elli_9x7:          eRetval = BitmapMarkerKind::Elli_11x9;        break;
 
-        case RectPlus_7x7:      eRetval = RectPlus_9x9;     break;
-        case RectPlus_9x9:      eRetval = RectPlus_11x11;   break;
+        case BitmapMarkerKind::RectPlus_7x7:      eRetval = BitmapMarkerKind::RectPlus_9x9;     break;
+        case BitmapMarkerKind::RectPlus_9x9:      eRetval = BitmapMarkerKind::RectPlus_11x11;   break;
 
         // let anchor blink with its pressed state
-        case Anchor:            eRetval = AnchorPressed;    break;
+        case BitmapMarkerKind::Anchor:            eRetval = BitmapMarkerKind::AnchorPressed;    break;
 
         // same for AnchorTR
-        case AnchorTR:          eRetval = AnchorPressedTR;  break;
+        case BitmapMarkerKind::AnchorTR:          eRetval = BitmapMarkerKind::AnchorPressedTR;  break;
         default:
             break;
     }
@@ -692,10 +692,10 @@ sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
     {
         switch(eKindOfMarker)
         {
-            case Anchor:
-            case AnchorPressed:
-            case AnchorTR:
-            case AnchorPressedTR:
+            case BitmapMarkerKind::Anchor:
+            case BitmapMarkerKind::AnchorPressed:
+            case BitmapMarkerKind::AnchorTR:
+            case BitmapMarkerKind::AnchorPressedTR:
             {
                 // #i121463# For anchor, do not simply make bigger because of HdlSize,
                 // do it dependent of IsSelected() which Writer can set in drag mode
@@ -730,21 +730,21 @@ sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
             // Choose an alternative here
             switch(eKindOfMarker)
             {
-                case Rect_13x13:        eNextBigger = Rect_11x11;   break;
-                case Circ_11x11:        eNextBigger = Elli_11x9;    break;
-                case Elli_9x11:         eNextBigger = Elli_11x9;    break;
-                case Elli_11x9:         eNextBigger = Elli_9x11;    break;
-                case RectPlus_11x11:    eNextBigger = Rect_13x13;   break;
+                case BitmapMarkerKind::Rect_13x13:        eNextBigger = BitmapMarkerKind::Rect_11x11;   break;
+                case BitmapMarkerKind::Circ_11x11:        eNextBigger = BitmapMarkerKind::Elli_11x9;    break;
+                case BitmapMarkerKind::Elli_9x11:         eNextBigger = BitmapMarkerKind::Elli_11x9;    break;
+                case BitmapMarkerKind::Elli_11x9:         eNextBigger = BitmapMarkerKind::Elli_9x11;    break;
+                case BitmapMarkerKind::RectPlus_11x11:    eNextBigger = BitmapMarkerKind::Rect_13x13;   break;
 
-                case Crosshair:
-                    eNextBigger = Glue;
+                case BitmapMarkerKind::Crosshair:
+                    eNextBigger = BitmapMarkerKind::Glue;
                     break;
 
-                case Glue:
-                    eNextBigger = Crosshair;
+                case BitmapMarkerKind::Glue:
+                    eNextBigger = BitmapMarkerKind::Crosshair;
                     break;
-                case Glue_Deselected:
-                    eNextBigger = Glue;
+                case BitmapMarkerKind::Glue_Deselected:
+                    eNextBigger = BitmapMarkerKind::Glue;
                     break;
                 default:
                     break;
@@ -759,12 +759,12 @@ sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
         const sal_uInt64 nBlinkTime(rStyleSettings.GetCursorBlinkTime());
 
-        if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
+        if(eKindOfMarker == BitmapMarkerKind::Anchor || eKindOfMarker == BitmapMarkerKind::AnchorPressed)
         {
             // when anchor is used take upper left as reference point inside the handle
             pRetval = new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime);
         }
-        else if(eKindOfMarker == AnchorTR || eKindOfMarker == AnchorPressedTR)
+        else if(eKindOfMarker == BitmapMarkerKind::AnchorTR || eKindOfMarker == BitmapMarkerKind::AnchorPressedTR)
         {
             // AnchorTR for SW, take top right as (0,0)
             pRetval = new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime,
@@ -803,12 +803,12 @@ sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
         sal_Int32 nScaleFactor = rOutDev.GetDPIScaleFactor();
         aBmpEx.Scale(nScaleFactor, nScaleFactor);
 
-        if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
+        if(eKindOfMarker == BitmapMarkerKind::Anchor || eKindOfMarker == BitmapMarkerKind::AnchorPressed)
         {
             // upper left as reference point inside the handle for AnchorPressed, too
             pRetval = new sdr::overlay::OverlayBitmapEx(rPos, aBmpEx);
         }
-        else if(eKindOfMarker == AnchorTR || eKindOfMarker == AnchorPressedTR)
+        else if(eKindOfMarker == BitmapMarkerKind::AnchorTR || eKindOfMarker == BitmapMarkerKind::AnchorPressedTR)
         {
             // AnchorTR for SW, take top right as (0,0)
             pRetval = new sdr::overlay::OverlayBitmapEx(rPos, aBmpEx,
@@ -1475,7 +1475,7 @@ void ImpEdgeHdl::CreateB2dIAObject()
         GetRidOfIAObject();
 
         BitmapColorIndex eColIndex = LightCyan;
-        BitmapMarkerKind eKindOfMarker = Rect_7x7;
+        BitmapMarkerKind eKindOfMarker = BitmapMarkerKind::Rect_7x7;
 
         if(pHdlList)
         {
@@ -1491,7 +1491,7 @@ void ImpEdgeHdl::CreateB2dIAObject()
                 if(nPPntNum < 2)
                 {
                     // Handle with plus sign inside
-                    eKindOfMarker = Circ_7x7;
+                    eKindOfMarker = BitmapMarkerKind::Circ_7x7;
                 }
 
                 SdrPageView* pPageView = pView->GetSdrPageView();
@@ -1603,11 +1603,11 @@ void ImpMeasureHdl::CreateB2dIAObject()
         if(pView && !pView->areMarkHandlesHidden())
         {
             BitmapColorIndex eColIndex = LightCyan;
-            BitmapMarkerKind eKindOfMarker = Rect_9x9;
+            BitmapMarkerKind eKindOfMarker = BitmapMarkerKind::Rect_9x9;
 
             if(nObjHdlNum > 1)
             {
-                eKindOfMarker = Rect_7x7;
+                eKindOfMarker = BitmapMarkerKind::Rect_7x7;
             }
 
             if(bSelect)

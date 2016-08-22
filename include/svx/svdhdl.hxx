@@ -93,7 +93,7 @@ enum BitmapColorIndex
 };
 
 
-enum BitmapMarkerKind
+enum class BitmapMarkerKind
 {
     Rect_7x7,
     Rect_9x9,
@@ -234,7 +234,7 @@ public:
         visualisation during mouse over it must override this method and call Touch(). */
     virtual void onMouseLeave();
 
-    static BitmapEx createGluePointBitmap() { return ImpGetBitmapEx(Glue_Deselected, 0); }
+    static BitmapEx createGluePointBitmap() { return ImpGetBitmapEx(BitmapMarkerKind::Glue_Deselected, 0); }
 };
 
 
