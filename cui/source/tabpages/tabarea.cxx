@@ -262,10 +262,8 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             static_cast<SvxAreaTabPage&>(rPage).SetGradientList( mpGradientList );
             static_cast<SvxAreaTabPage&>(rPage).SetHatchingList( mpHatchingList );
             static_cast<SvxAreaTabPage&>(rPage).SetBitmapList( mpBitmapList );
-            static_cast<SvxAreaTabPage&>(rPage).SetPageType( mnPageType );
-            static_cast<SvxAreaTabPage&>(rPage).SetDlgType( 0 );
-            static_cast<SvxAreaTabPage&>(rPage).SetPos( mnPos );
-            static_cast<SvxAreaTabPage&>(rPage).SetAreaTP( &mbAreaTP );
+            static_cast<SvxAreaTabPage&>(rPage).SetPatternList( mpPatternList );
+            static_cast<SvxAreaTabPage&>(rPage).SetDrawModel( mpDrawModel );
             static_cast<SvxAreaTabPage&>(rPage).SetGrdChgd( &mnGradientListState );
             static_cast<SvxAreaTabPage&>(rPage).SetHtchChgd( &mnHatchingListState );
             static_cast<SvxAreaTabPage&>(rPage).SetBmpChgd( &mnBitmapListState );
