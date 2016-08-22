@@ -1,6 +1,5 @@
-diff -ru nss.orig/nss/lib/certdb/crl.c nss/nss/lib/certdb/crl.c
---- nss/lib/certdb/crl.c	2016-02-12 15:36:18.000000000 +0100
-+++ nss/lib/certdb/crl.c	2016-02-23 20:57:17.067924598 +0100
+--- nss/lib/certdb/crl.c
++++ nss/lib/certdb/crl.c
 @@ -1982,7 +1982,7 @@
          return SECSuccess;
      }
