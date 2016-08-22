@@ -170,6 +170,8 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_getTextEncodingInfo(
     @return
     The corresponding rtl_TextEncoding value, or RTL_TEXTENCODING_DONTKNOW if
     no mapping is applicable.
+    If nWinCharset is 255 (OEM_CHARSET), then return value is RTL_TEXTENCODING_IBM_850,
+    regardless of current locale.
  */
 SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromWindowsCharset(
         sal_uInt8 nWinCharset );
