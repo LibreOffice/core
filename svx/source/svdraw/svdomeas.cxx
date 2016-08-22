@@ -786,7 +786,7 @@ SdrHdl* SdrMeasureObj::GetHdl(sal_uInt32 nHdlNum) const
         case 4: aPt=aMPol.aHelpline1.aP2; break;
         case 5: aPt=aMPol.aHelpline2.aP2; break;
     } // switch
-    SdrHdl* pHdl=new ImpMeasureHdl(aPt,HDL_USER);
+    SdrHdl* pHdl=new ImpMeasureHdl(aPt,SdrHdlKind::User);
     pHdl->SetObjHdlNum(nHdlNum);
     pHdl->SetRotationAngle(aMPol.nLineAngle);
     return pHdl;

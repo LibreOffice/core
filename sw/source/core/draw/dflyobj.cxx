@@ -940,14 +940,14 @@ void SwVirtFlyDrawObj::addCropHandles(SdrHdlList& rTarget) const
 
     if(!aRect.IsEmpty())
     {
-       rTarget.AddHdl(new SdrCropHdl(aRect.TopLeft()     , HDL_UPLFT, 0, 0));
-       rTarget.AddHdl(new SdrCropHdl(aRect.TopCenter()   , HDL_UPPER, 0, 0));
-       rTarget.AddHdl(new SdrCropHdl(aRect.TopRight()    , HDL_UPRGT, 0, 0));
-       rTarget.AddHdl(new SdrCropHdl(aRect.LeftCenter()  , HDL_LEFT , 0, 0));
-       rTarget.AddHdl(new SdrCropHdl(aRect.RightCenter() , HDL_RIGHT, 0, 0));
-       rTarget.AddHdl(new SdrCropHdl(aRect.BottomLeft()  , HDL_LWLFT, 0, 0));
-       rTarget.AddHdl(new SdrCropHdl(aRect.BottomCenter(), HDL_LOWER, 0, 0));
-       rTarget.AddHdl(new SdrCropHdl(aRect.BottomRight() , HDL_LWRGT, 0, 0));
+       rTarget.AddHdl(new SdrCropHdl(aRect.TopLeft()     , SdrHdlKind::UpperLeft, 0, 0));
+       rTarget.AddHdl(new SdrCropHdl(aRect.TopCenter()   , SdrHdlKind::Upper, 0, 0));
+       rTarget.AddHdl(new SdrCropHdl(aRect.TopRight()    , SdrHdlKind::UpperRight, 0, 0));
+       rTarget.AddHdl(new SdrCropHdl(aRect.LeftCenter()  , SdrHdlKind::Left , 0, 0));
+       rTarget.AddHdl(new SdrCropHdl(aRect.RightCenter() , SdrHdlKind::Right, 0, 0));
+       rTarget.AddHdl(new SdrCropHdl(aRect.BottomLeft()  , SdrHdlKind::LowerLeft, 0, 0));
+       rTarget.AddHdl(new SdrCropHdl(aRect.BottomCenter(), SdrHdlKind::Lower, 0, 0));
+       rTarget.AddHdl(new SdrCropHdl(aRect.BottomRight() , SdrHdlKind::LowerRight, 0, 0));
     }
 }
 

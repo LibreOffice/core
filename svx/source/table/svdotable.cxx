@@ -2149,14 +2149,14 @@ void SdrTableObj::AddToHdlList(SdrHdlList& rHdlList) const
     // add remaining handles
     SdrHdl* pH=nullptr;
     rHdlList.AddHdl( pH = new TableBorderHdl( maRect, !IsTextEditActive() ) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(maRect.TopLeft(),HDL_UPLFT) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(maRect.TopCenter(),HDL_UPPER) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(maRect.TopRight(),HDL_UPRGT) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(maRect.LeftCenter(),HDL_LEFT) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(maRect.RightCenter(),HDL_RIGHT) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(maRect.BottomLeft(),HDL_LWLFT) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(maRect.BottomCenter(),HDL_LOWER) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(maRect.BottomRight(),HDL_LWRGT) ); pH->SetMoveOutside( true );
+    rHdlList.AddHdl( pH = new SdrHdl(maRect.TopLeft(),SdrHdlKind::UpperLeft) ); pH->SetMoveOutside( true );
+    rHdlList.AddHdl( pH = new SdrHdl(maRect.TopCenter(),SdrHdlKind::Upper) ); pH->SetMoveOutside( true );
+    rHdlList.AddHdl( pH = new SdrHdl(maRect.TopRight(),SdrHdlKind::UpperRight) ); pH->SetMoveOutside( true );
+    rHdlList.AddHdl( pH = new SdrHdl(maRect.LeftCenter(),SdrHdlKind::Left) ); pH->SetMoveOutside( true );
+    rHdlList.AddHdl( pH = new SdrHdl(maRect.RightCenter(),SdrHdlKind::Right) ); pH->SetMoveOutside( true );
+    rHdlList.AddHdl( pH = new SdrHdl(maRect.BottomLeft(),SdrHdlKind::LowerLeft) ); pH->SetMoveOutside( true );
+    rHdlList.AddHdl( pH = new SdrHdl(maRect.BottomCenter(),SdrHdlKind::Lower) ); pH->SetMoveOutside( true );
+    rHdlList.AddHdl( pH = new SdrHdl(maRect.BottomRight(),SdrHdlKind::LowerRight) ); pH->SetMoveOutside( true );
 
     const size_t nHdlCount = rHdlList.GetHdlCount();
     for( size_t nHdl = 0; nHdl < nHdlCount; ++nHdl )
@@ -2196,24 +2196,24 @@ bool SdrTableObj::hasSpecialDrag() const
 bool SdrTableObj::beginSpecialDrag(SdrDragStat& rDrag) const
 {
     const SdrHdl* pHdl = rDrag.GetHdl();
-    const SdrHdlKind eHdl((pHdl == nullptr) ? HDL_MOVE : pHdl->GetKind());
+    const SdrHdlKind eHdl((pHdl == nullptr) ? SdrHdlKind::Move : pHdl->GetKind());
 
     switch( eHdl )
     {
-        case HDL_UPLFT:
-        case HDL_UPPER:
-        case HDL_UPRGT:
-        case HDL_LEFT:
-        case HDL_RIGHT:
-        case HDL_LWLFT:
-        case HDL_LOWER:
-        case HDL_LWRGT:
-        case HDL_MOVE:
+        case SdrHdlKind::UpperLeft:
+        case SdrHdlKind::Upper:
+        case SdrHdlKind::UpperRight:
+        case SdrHdlKind::Left:
+        case SdrHdlKind::Right:
+        case SdrHdlKind::LowerLeft:
+        case SdrHdlKind::Lower:
+        case SdrHdlKind::LowerRight:
+        case SdrHdlKind::Move:
         {
             break;
         }
 
-        case HDL_USER:
+        case SdrHdlKind::User:
         {
             rDrag.SetEndDragChangesAttributes(false);
             rDrag.SetNoSnap();
@@ -2233,18 +2233,18 @@ bool SdrTableObj::applySpecialDrag(SdrDragStat& rDrag)
 {
     bool bRet(true);
     const SdrHdl* pHdl = rDrag.GetHdl();
-    const SdrHdlKind eHdl((pHdl == nullptr) ? HDL_MOVE : pHdl->GetKind());
+    const SdrHdlKind eHdl((pHdl == nullptr) ? SdrHdlKind::Move : pHdl->GetKind());
 
     switch( eHdl )
     {
-        case HDL_UPLFT:
-        case HDL_UPPER:
-        case HDL_UPRGT:
-        case HDL_LEFT:
-        case HDL_RIGHT:
-        case HDL_LWLFT:
-        case HDL_LOWER:
-        case HDL_LWRGT:
+        case SdrHdlKind::UpperLeft:
+        case SdrHdlKind::Upper:
+        case SdrHdlKind::UpperRight:
+        case SdrHdlKind::Left:
+        case SdrHdlKind::Right:
+        case SdrHdlKind::LowerLeft:
+        case SdrHdlKind::Lower:
+        case SdrHdlKind::LowerRight:
         {
             const Rectangle aNewRectangle(ImpDragCalcRect(rDrag));
 
@@ -2256,13 +2256,13 @@ bool SdrTableObj::applySpecialDrag(SdrDragStat& rDrag)
             break;
         }
 
-        case HDL_MOVE:
+        case SdrHdlKind::Move:
         {
                NbcMove( Size( rDrag.GetDX(), rDrag.GetDY() ) );
             break;
         }
 
-        case HDL_USER:
+        case SdrHdlKind::User:
         {
             rDrag.SetEndDragChangesAttributes(false);
             rDrag.SetNoSnap();
@@ -2300,7 +2300,7 @@ basegfx::B2DPolyPolygon SdrTableObj::getSpecialDragPoly(const SdrDragStat& rDrag
     basegfx::B2DPolyPolygon aRetval;
     const SdrHdl* pHdl = rDrag.GetHdl();
 
-    if( pHdl && (HDL_USER == pHdl->GetKind()) )
+    if( pHdl && (SdrHdlKind::User == pHdl->GetKind()) )
     {
         const TableEdgeHdl* pEdgeHdl = dynamic_cast< const TableEdgeHdl* >( pHdl );
 

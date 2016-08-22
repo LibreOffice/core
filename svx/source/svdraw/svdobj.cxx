@@ -1163,14 +1163,14 @@ SdrHdl* SdrObject::GetHdl(sal_uInt32 nHdlNum) const
     SdrHdl* pH=nullptr;
     const Rectangle& rR=GetSnapRect();
     switch (nHdlNum) {
-        case 0: pH=new SdrHdl(rR.TopLeft(),     HDL_UPLFT); break;
-        case 1: pH=new SdrHdl(rR.TopCenter(),   HDL_UPPER); break;
-        case 2: pH=new SdrHdl(rR.TopRight(),    HDL_UPRGT); break;
-        case 3: pH=new SdrHdl(rR.LeftCenter(),  HDL_LEFT ); break;
-        case 4: pH=new SdrHdl(rR.RightCenter(), HDL_RIGHT); break;
-        case 5: pH=new SdrHdl(rR.BottomLeft(),  HDL_LWLFT); break;
-        case 6: pH=new SdrHdl(rR.BottomCenter(),HDL_LOWER); break;
-        case 7: pH=new SdrHdl(rR.BottomRight(), HDL_LWRGT); break;
+        case 0: pH=new SdrHdl(rR.TopLeft(),     SdrHdlKind::UpperLeft); break;
+        case 1: pH=new SdrHdl(rR.TopCenter(),   SdrHdlKind::Upper); break;
+        case 2: pH=new SdrHdl(rR.TopRight(),    SdrHdlKind::UpperRight); break;
+        case 3: pH=new SdrHdl(rR.LeftCenter(),  SdrHdlKind::Left ); break;
+        case 4: pH=new SdrHdl(rR.RightCenter(), SdrHdlKind::Right); break;
+        case 5: pH=new SdrHdl(rR.BottomLeft(),  SdrHdlKind::LowerLeft); break;
+        case 6: pH=new SdrHdl(rR.BottomCenter(),SdrHdlKind::Lower); break;
+        case 7: pH=new SdrHdl(rR.BottomRight(), SdrHdlKind::LowerRight); break;
     }
     return pH;
 }
@@ -1207,15 +1207,15 @@ Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
     Rectangle aTmpRect(GetSnapRect());
     Rectangle aRect(aTmpRect);
     const SdrHdl* pHdl=rDrag.GetHdl();
-    SdrHdlKind eHdl=pHdl==nullptr ? HDL_MOVE : pHdl->GetKind();
-    bool bEcke=(eHdl==HDL_UPLFT || eHdl==HDL_UPRGT || eHdl==HDL_LWLFT || eHdl==HDL_LWRGT);
+    SdrHdlKind eHdl=pHdl==nullptr ? SdrHdlKind::Move : pHdl->GetKind();
+    bool bEcke=(eHdl==SdrHdlKind::UpperLeft || eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::LowerLeft || eHdl==SdrHdlKind::LowerRight);
     bool bOrtho=rDrag.GetView()!=nullptr && rDrag.GetView()->IsOrtho();
     bool bBigOrtho=bEcke && bOrtho && rDrag.GetView()->IsBigOrtho();
     Point aPos(rDrag.GetNow());
-    bool bLft=(eHdl==HDL_UPLFT || eHdl==HDL_LEFT  || eHdl==HDL_LWLFT);
-    bool bRgt=(eHdl==HDL_UPRGT || eHdl==HDL_RIGHT || eHdl==HDL_LWRGT);
-    bool bTop=(eHdl==HDL_UPRGT || eHdl==HDL_UPPER || eHdl==HDL_UPLFT);
-    bool bBtm=(eHdl==HDL_LWRGT || eHdl==HDL_LOWER || eHdl==HDL_LWLFT);
+    bool bLft=(eHdl==SdrHdlKind::UpperLeft || eHdl==SdrHdlKind::Left  || eHdl==SdrHdlKind::LowerLeft);
+    bool bRgt=(eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::Right || eHdl==SdrHdlKind::LowerRight);
+    bool bTop=(eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::Upper || eHdl==SdrHdlKind::UpperLeft);
+    bool bBtm=(eHdl==SdrHdlKind::LowerRight || eHdl==SdrHdlKind::Lower || eHdl==SdrHdlKind::LowerLeft);
     if (bLft) aTmpRect.Left()  =aPos.X();
     if (bRgt) aTmpRect.Right() =aPos.X();
     if (bTop) aTmpRect.Top()   =aPos.Y();
@@ -1292,11 +1292,11 @@ bool SdrObject::beginSpecialDrag(SdrDragStat& rDrag) const
 {
     const SdrHdl* pHdl = rDrag.GetHdl();
 
-    SdrHdlKind eHdl = (pHdl == nullptr) ? HDL_MOVE : pHdl->GetKind();
+    SdrHdlKind eHdl = (pHdl == nullptr) ? SdrHdlKind::Move : pHdl->GetKind();
 
-    if(eHdl==HDL_UPLFT || eHdl==HDL_UPPER || eHdl==HDL_UPRGT ||
-        eHdl==HDL_LEFT || eHdl==HDL_RIGHT || eHdl==HDL_LWLFT ||
-        eHdl==HDL_LOWER || eHdl==HDL_LWRGT)
+    if(eHdl==SdrHdlKind::UpperLeft || eHdl==SdrHdlKind::Upper || eHdl==SdrHdlKind::UpperRight ||
+        eHdl==SdrHdlKind::Left || eHdl==SdrHdlKind::Right || eHdl==SdrHdlKind::LowerLeft ||
+        eHdl==SdrHdlKind::Lower || eHdl==SdrHdlKind::LowerRight)
     {
         return true;
     }

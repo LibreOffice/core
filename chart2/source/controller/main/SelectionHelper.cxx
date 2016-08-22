@@ -602,7 +602,7 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
                 for( sal_uInt32 nM = 0L; nM < aPolygon.count(); nM++)
                 {
                     const ::basegfx::B2DPoint aPoint(aPolygon.getB2DPoint(nM));
-                    SdrHdl* pHdl = new SdrHdl(Point(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY())), HDL_POLY);
+                    SdrHdl* pHdl = new SdrHdl(Point(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY())), SdrHdlKind::Poly);
                     rHdlList.AddHdl(pHdl);
                 }
             }
@@ -648,7 +648,7 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
         }
 
         Point aPos = pSubObj->GetCurrentBoundRect().Center();
-        SdrHdl* pHdl = new SdrHdl(aPos,HDL_POLY);
+        SdrHdl* pHdl = new SdrHdl(aPos,SdrHdlKind::Poly);
         rHdlList.AddHdl(pHdl);
     }
     return true;

@@ -393,52 +393,52 @@ SdrHdl* SdrCircObj::GetHdl(sal_uInt32 nHdlNum) const
 
     SdrHdl* pH = nullptr;
     Point aPnt;
-    SdrHdlKind eLocalKind(HDL_MOVE);
+    SdrHdlKind eLocalKind(SdrHdlKind::Move);
     sal_uInt32 nPNum(0);
 
     switch (nHdlNum)
     {
         case 0:
             aPnt = GetAnglePnt(maRect,nStartAngle);
-            eLocalKind = HDL_CIRC;
+            eLocalKind = SdrHdlKind::Circle;
             nPNum = 1;
             break;
         case 1:
             aPnt = GetAnglePnt(maRect,nEndAngle);
-            eLocalKind = HDL_CIRC;
+            eLocalKind = SdrHdlKind::Circle;
             nPNum = 2L;
             break;
         case 2:
             aPnt = maRect.TopLeft();
-            eLocalKind = HDL_UPLFT;
+            eLocalKind = SdrHdlKind::UpperLeft;
             break;
         case 3:
             aPnt = maRect.TopCenter();
-            eLocalKind = HDL_UPPER;
+            eLocalKind = SdrHdlKind::Upper;
             break;
         case 4:
             aPnt = maRect.TopRight();
-            eLocalKind = HDL_UPRGT;
+            eLocalKind = SdrHdlKind::UpperRight;
             break;
         case 5:
             aPnt = maRect.LeftCenter();
-            eLocalKind = HDL_LEFT;
+            eLocalKind = SdrHdlKind::Left;
             break;
         case 6:
             aPnt = maRect.RightCenter();
-            eLocalKind = HDL_RIGHT;
+            eLocalKind = SdrHdlKind::Right;
             break;
         case 7:
             aPnt = maRect.BottomLeft();
-            eLocalKind = HDL_LWLFT;
+            eLocalKind = SdrHdlKind::LowerLeft;
             break;
         case 8:
             aPnt = maRect.BottomCenter();
-            eLocalKind = HDL_LOWER;
+            eLocalKind = SdrHdlKind::Lower;
             break;
         case 9:
             aPnt = maRect.BottomRight();
-            eLocalKind = HDL_LWRGT;
+            eLocalKind = SdrHdlKind::LowerRight;
             break;
     }
 
@@ -452,7 +452,7 @@ SdrHdl* SdrCircObj::GetHdl(sal_uInt32 nHdlNum) const
         RotatePoint(aPnt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
     }
 
-    if (eLocalKind != HDL_MOVE)
+    if (eLocalKind != SdrHdlKind::Move)
     {
         pH = new SdrHdl(aPnt,eLocalKind);
         pH->SetPointNum(nPNum);
@@ -471,7 +471,7 @@ bool SdrCircObj::hasSpecialDrag() const
 
 bool SdrCircObj::beginSpecialDrag(SdrDragStat& rDrag) const
 {
-    const bool bAngle(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
+    const bool bAngle(rDrag.GetHdl() && SdrHdlKind::Circle == rDrag.GetHdl()->GetKind());
 
     if(bAngle)
     {
@@ -488,7 +488,7 @@ bool SdrCircObj::beginSpecialDrag(SdrDragStat& rDrag) const
 
 bool SdrCircObj::applySpecialDrag(SdrDragStat& rDrag)
 {
-    const bool bAngle(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
+    const bool bAngle(rDrag.GetHdl() && SdrHdlKind::Circle == rDrag.GetHdl()->GetKind());
 
     if(bAngle)
     {
@@ -586,7 +586,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
     }
     else
     {
-        const bool bAngle(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
+        const bool bAngle(rDrag.GetHdl() && SdrHdlKind::Circle == rDrag.GetHdl()->GetKind());
 
         if(bAngle)
         {

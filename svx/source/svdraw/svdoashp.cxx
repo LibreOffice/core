@@ -1894,7 +1894,7 @@ SdrHdl* SdrObjCustomShape::GetHdl( sal_uInt32 nHdlNum ) const
                 try
                 {
                     css::awt::Point aPosition( aInteractionHandles[ nCustomShapeHdlNum ].xInteraction->getPosition() );
-                    pH = new SdrHdl( Point( aPosition.X, aPosition.Y ), HDL_CUSTOMSHAPE1 );
+                    pH = new SdrHdl( Point( aPosition.X, aPosition.Y ), SdrHdlKind::CustomShape1 );
                     pH->SetPointNum( nCustomShapeHdlNum );
                     pH->SetObj( const_cast<SdrObjCustomShape*>(this) );
                 }
@@ -1917,7 +1917,7 @@ bool SdrObjCustomShape::beginSpecialDrag(SdrDragStat& rDrag) const
 {
     const SdrHdl* pHdl = rDrag.GetHdl();
 
-    if(pHdl && HDL_CUSTOMSHAPE1 == pHdl->GetKind())
+    if(pHdl && SdrHdlKind::CustomShape1 == pHdl->GetKind())
     {
         rDrag.SetEndDragChangesAttributes(true);
         rDrag.SetNoSnap();
@@ -1925,19 +1925,19 @@ bool SdrObjCustomShape::beginSpecialDrag(SdrDragStat& rDrag) const
     else
     {
         const SdrHdl* pHdl2 = rDrag.GetHdl();
-        const SdrHdlKind eHdl((pHdl2 == nullptr) ? HDL_MOVE : pHdl2->GetKind());
+        const SdrHdlKind eHdl((pHdl2 == nullptr) ? SdrHdlKind::Move : pHdl2->GetKind());
 
         switch( eHdl )
         {
-            case HDL_UPLFT :
-            case HDL_UPPER :
-            case HDL_UPRGT :
-            case HDL_LEFT  :
-            case HDL_RIGHT :
-            case HDL_LWLFT :
-            case HDL_LOWER :
-            case HDL_LWRGT :
-            case HDL_MOVE  :
+            case SdrHdlKind::UpperLeft :
+            case SdrHdlKind::Upper :
+            case SdrHdlKind::UpperRight :
+            case SdrHdlKind::Left  :
+            case SdrHdlKind::Right :
+            case SdrHdlKind::LowerLeft :
+            case SdrHdlKind::Lower :
+            case SdrHdlKind::LowerRight :
+            case SdrHdlKind::Move  :
             {
                 break;
             }
@@ -2091,11 +2091,11 @@ void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point& rDestination,
 bool SdrObjCustomShape::applySpecialDrag(SdrDragStat& rDrag)
 {
     const SdrHdl* pHdl = rDrag.GetHdl();
-    const SdrHdlKind eHdl((pHdl == nullptr) ? HDL_MOVE : pHdl->GetKind());
+    const SdrHdlKind eHdl((pHdl == nullptr) ? SdrHdlKind::Move : pHdl->GetKind());
 
     switch(eHdl)
     {
-        case HDL_CUSTOMSHAPE1 :
+        case SdrHdlKind::CustomShape1 :
         {
             rDrag.SetEndDragChangesGeoAndAttributes(true);
             DragMoveCustomShapeHdl( rDrag.GetNow(), (sal_uInt16)pHdl->GetPointNum(), !rDrag.GetDragMethod()->IsShiftPressed() );
@@ -2105,19 +2105,19 @@ bool SdrObjCustomShape::applySpecialDrag(SdrDragStat& rDrag)
             break;
         }
 
-        case HDL_UPLFT :
-        case HDL_UPPER :
-        case HDL_UPRGT :
-        case HDL_LEFT  :
-        case HDL_RIGHT :
-        case HDL_LWLFT :
-        case HDL_LOWER :
-        case HDL_LWRGT :
+        case SdrHdlKind::UpperLeft :
+        case SdrHdlKind::Upper :
+        case SdrHdlKind::UpperRight :
+        case SdrHdlKind::Left  :
+        case SdrHdlKind::Right :
+        case SdrHdlKind::LowerLeft :
+        case SdrHdlKind::Lower :
+        case SdrHdlKind::LowerRight :
         {
             DragResizeCustomShape( ImpDragCalcRect(rDrag) );
             break;
         }
-        case HDL_MOVE :
+        case SdrHdlKind::Move :
         {
             Move(Size(rDrag.GetDX(), rDrag.GetDY()));
             break;

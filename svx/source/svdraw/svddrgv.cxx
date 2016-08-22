@@ -53,7 +53,7 @@ void SdrDragView::ImpClearVars()
     meDragMode=SdrDragMode::Move;
     mbDragLimit=false;
     mbMarkedHitMovesAlways=false;
-    meDragHdl=HDL_MOVE;
+    meDragHdl=SdrHdlKind::Move;
     mpDragHdl=nullptr;
     mbDragHdl=false;
     mbDragSpecial=false;
@@ -169,7 +169,7 @@ bool SdrDragView::TakeDragObjAnchorPos(Point& rPos, bool bTR ) const
         if (dynamic_cast<const SdrCaptionObj*>( pObj) !=  nullptr)
         {
             Point aPt(static_cast<SdrCaptionObj*>(pObj)->GetTailPos());
-            bool bTail=meDragHdl==HDL_POLY; // drag tail
+            bool bTail=meDragHdl==SdrHdlKind::Poly; // drag tail
             bool bOwn=dynamic_cast<const SdrDragObjOwn*>( mpCurrentSdrDragMethod) !=  nullptr; // specific to object
             if (!bTail)
             { // for bTail, TakeActionRect already does the right thing
@@ -209,7 +209,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
         mbDragSpecial=false;
         mbDragLimit=false;
         SdrDragMode eTmpMode=meDragMode;
-        if (eTmpMode==SdrDragMode::Move && pHdl!=nullptr && pHdl->GetKind()!=HDL_MOVE) {
+        if (eTmpMode==SdrDragMode::Move && pHdl!=nullptr && pHdl->GetKind()!=SdrHdlKind::Move) {
             eTmpMode=SdrDragMode::Resize;
         }
         mbDragLimit=TakeDragLimit(eTmpMode,maDragLimit);
@@ -222,10 +222,10 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
 
         Point aPnt(rPnt);
         if(pHdl == nullptr
-            || pHdl->GetKind() == HDL_MOVE
-            || pHdl->GetKind() == HDL_MIRX
-            || pHdl->GetKind() == HDL_TRNS
-            || pHdl->GetKind() == HDL_GRAD)
+            || pHdl->GetKind() == SdrHdlKind::Move
+            || pHdl->GetKind() == SdrHdlKind::MirrorAxis
+            || pHdl->GetKind() == SdrHdlKind::Transparence
+            || pHdl->GetKind() == SdrHdlKind::Gradient)
         {
             maDragStat.Reset(aPnt);
         }
@@ -241,13 +241,13 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
         maDragStat.NextPoint();
         mpDragWin=pOut;
         mpDragHdl=pHdl;
-        meDragHdl= pHdl==nullptr ? HDL_MOVE : pHdl->GetKind();
-        mbDragHdl=meDragHdl==HDL_REF1 || meDragHdl==HDL_REF2 || meDragHdl==HDL_MIRX;
+        meDragHdl= pHdl==nullptr ? SdrHdlKind::Move : pHdl->GetKind();
+        mbDragHdl=meDragHdl==SdrHdlKind::Ref1 || meDragHdl==SdrHdlKind::Ref2 || meDragHdl==SdrHdlKind::MirrorAxis;
 
-        // Expand test for HDL_ANCHOR_TR
-        bool bNotDraggable = (HDL_ANCHOR == meDragHdl || HDL_ANCHOR_TR == meDragHdl);
+        // Expand test for SdrHdlKind::Anchor_TR
+        bool bNotDraggable = (SdrHdlKind::Anchor == meDragHdl || SdrHdlKind::Anchor_TR == meDragHdl);
 
-        if(pHdl && (pHdl->GetKind() == HDL_SMARTTAG) && pForcedMeth )
+        if(pHdl && (pHdl->GetKind() == SdrHdlKind::SmartTag) && pForcedMeth )
         {
             // just use the forced method for smart tags
         }
@@ -263,8 +263,8 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                 {
                     switch (meDragHdl)
                     {
-                        case HDL_LEFT:  case HDL_RIGHT:
-                        case HDL_UPPER: case HDL_LOWER:
+                        case SdrHdlKind::Left:  case SdrHdlKind::Right:
+                        case SdrHdlKind::Upper: case SdrHdlKind::Lower:
                         {
                             // are 3D objects selected?
                             bool b3DObjSelected = false;
@@ -280,8 +280,8 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                                 return false;
                             mpCurrentSdrDragMethod = new SdrDragShear(*this,meDragMode==SdrDragMode::Rotate);
                         } break;
-                        case HDL_UPLFT: case HDL_UPRGT:
-                        case HDL_LWLFT: case HDL_LWRGT:
+                        case SdrHdlKind::UpperLeft: case SdrHdlKind::UpperRight:
+                        case SdrHdlKind::LowerLeft: case SdrHdlKind::LowerRight:
                         {
                             if (meDragMode==SdrDragMode::Shear || meDragMode==SdrDragMode::Distort)
                             {
@@ -296,8 +296,8 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                         } break;
                         default:
                         {
-                            if (IsMarkedHitMovesAlways() && meDragHdl==HDL_MOVE)
-                            { // HDL_MOVE is true, even if Obj is hit directly
+                            if (IsMarkedHitMovesAlways() && meDragHdl==SdrHdlKind::Move)
+                            { // SdrHdlKind::Move is true, even if Obj is hit directly
                                 if (!IsMoveAllowed()) return false;
                                 mpCurrentSdrDragMethod = new SdrDragMove(*this);
                             }
@@ -311,7 +311,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                 } break;
                 case SdrDragMode::Mirror:
                 {
-                    if (meDragHdl==HDL_MOVE && IsMarkedHitMovesAlways())
+                    if (meDragHdl==SdrHdlKind::Move && IsMarkedHitMovesAlways())
                     {
                         if (!IsMoveAllowed()) return false;
                         mpCurrentSdrDragMethod = new SdrDragMove(*this);
@@ -325,7 +325,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
 
                 case SdrDragMode::Crop:
                 {
-                    if (meDragHdl==HDL_MOVE && IsMarkedHitMovesAlways())
+                    if (meDragHdl==SdrHdlKind::Move && IsMarkedHitMovesAlways())
                     {
                         if (!IsMoveAllowed())
                             return false;
@@ -342,7 +342,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
 
                 case SdrDragMode::Transparence:
                 {
-                    if(meDragHdl == HDL_MOVE && IsMarkedHitMovesAlways())
+                    if(meDragHdl == SdrHdlKind::Move && IsMarkedHitMovesAlways())
                     {
                         if(!IsMoveAllowed())
                             return false;
@@ -359,7 +359,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                 }
                 case SdrDragMode::Gradient:
                 {
-                    if(meDragHdl == HDL_MOVE && IsMarkedHitMovesAlways())
+                    if(meDragHdl == SdrHdlKind::Move && IsMarkedHitMovesAlways())
                     {
                         if(!IsMoveAllowed())
                             return false;
@@ -377,7 +377,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
 
                 case SdrDragMode::Crook :
                 {
-                    if (meDragHdl==HDL_MOVE && IsMarkedHitMovesAlways())
+                    if (meDragHdl==SdrHdlKind::Move && IsMarkedHitMovesAlways())
                     {
                         if (!IsMoveAllowed()) return false;
                         mpCurrentSdrDragMethod = new SdrDragMove(*this);
@@ -392,11 +392,11 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                 default:
                 {
                     // SdrDragMode::Move
-                    if((meDragHdl == HDL_MOVE) && !IsMoveAllowed())
+                    if((meDragHdl == SdrHdlKind::Move) && !IsMoveAllowed())
                     {
                         return false;
                     }
-                    else if(meDragHdl == HDL_GLUE)
+                    else if(meDragHdl == SdrHdlKind::Glue)
                     {
                         mpCurrentSdrDragMethod = new SdrDragMove(*this);
                     }
@@ -404,7 +404,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                     {
                         if(mbFramDrag)
                         {
-                            if(meDragHdl == HDL_MOVE)
+                            if(meDragHdl == SdrHdlKind::Move)
                             {
                                 mpCurrentSdrDragMethod = new SdrDragMove(*this);
                             }
@@ -432,7 +432,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                         }
                         else
                         {
-                            if(HDL_MOVE == meDragHdl)
+                            if(SdrHdlKind::Move == meDragHdl)
                             {
                                 const bool bCustomShapeSelected(1 == GetMarkedObjectCount() && dynamic_cast<const SdrObjCustomShape*>(GetMarkedObjectByIndex(0)) != nullptr);
 
@@ -441,7 +441,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                                     mpCurrentSdrDragMethod = new SdrDragMove( *this );
                                 }
                             }
-                            else if(HDL_POLY == meDragHdl)
+                            else if(SdrHdlKind::Poly == meDragHdl)
                             {
                                 const bool bConnectorSelected(1 == GetMarkedObjectCount() && dynamic_cast<const SdrEdgeObj*>(GetMarkedObjectByIndex(0)) != nullptr);
 
@@ -568,7 +568,7 @@ bool SdrDragView::EndDragObj(bool bCopy)
             }
         }
 
-        meDragHdl=HDL_MOVE;
+        meDragHdl=SdrHdlKind::Move;
         mpDragHdl=nullptr;
 
         if (!mbSomeObjChgdFlag)
@@ -617,7 +617,7 @@ void SdrDragView::BrkDragObj()
             SetInsertGluePoint(false);
         }
 
-        meDragHdl=HDL_MOVE;
+        meDragHdl=SdrHdlKind::Move;
         mpDragHdl=nullptr;
     }
 }
@@ -757,7 +757,7 @@ bool SdrDragView::BegInsGluePoint(const Point& rPnt)
             {
                 pHdl=GetGluePointHdl(pObj,nGlueId);
             }
-            if (pHdl!=nullptr && pHdl->GetKind()==HDL_GLUE && pHdl->GetObj()==pObj && pHdl->GetObjHdlNum()==nGlueId)
+            if (pHdl!=nullptr && pHdl->GetKind()==SdrHdlKind::Glue && pHdl->GetObj()==pObj && pHdl->GetObjHdlNum()==nGlueId)
             {
                 SetInsertGluePoint(true);
                 bRet=BegDragObj(rPnt,nullptr,pHdl,0);

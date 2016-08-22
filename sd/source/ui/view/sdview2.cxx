@@ -518,7 +518,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                     {
                         SdrHdl* pIAOHandle = rHdlList.GetHdl( n );
 
-                        if( pIAOHandle && ( HDL_COLR == pIAOHandle->GetKind() ) )
+                        if( pIAOHandle && ( SdrHdlKind::Color == pIAOHandle->GetKind() ) )
                         {
                             if(pIAOHandle->getOverlayObjectList().isHitPixel(rEvt.maPosPixel))
                             {
@@ -672,7 +672,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
                 {
                     SdrHdl* pIAOHandle = rHdlList.GetHdl( n );
 
-                    if( pIAOHandle && ( HDL_COLR == pIAOHandle->GetKind() ) )
+                    if( pIAOHandle && ( SdrHdlKind::Color == pIAOHandle->GetKind() ) )
                     {
                         if(pIAOHandle->getOverlayObjectList().isHitPixel(rEvt.maPosPixel))
                         {

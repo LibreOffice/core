@@ -621,7 +621,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         else if (eHit==SdrHitKind::Handle)
         {
             eEvent=SdrEventKind::BeginDragObj;    // Mark+Drag,AddMark+Drag,DeepMark+Drag,Unmark
-            bool bGlue=pHdl->GetKind()==HDL_GLUE;
+            bool bGlue=pHdl->GetKind()==SdrHdlKind::Glue;
             bool bPoly=!bGlue && IsPointMarkable(*pHdl);
             bool bMarked=bGlue || (bPoly && pHdl->IsSelected());
             if (bGlue || bPoly)
@@ -1049,10 +1049,10 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
     SdrHdl* pHdl=aVEvt.pHdl;
     // now check the pointers for dragging
     if (pHdl!=nullptr || bMarkHit) {
-        SdrHdlKind eHdl= pHdl!=nullptr ? pHdl->GetKind() : HDL_MOVE;
+        SdrHdlKind eHdl= pHdl!=nullptr ? pHdl->GetKind() : SdrHdlKind::Move;
         bool bCorner=pHdl!=nullptr && pHdl->IsCornerHdl();
         bool bVertex=pHdl!=nullptr && pHdl->IsVertexHdl();
-        bool bMov=eHdl==HDL_MOVE;
+        bool bMov=eHdl==SdrHdlKind::Move;
         if (bMov && (meDragMode==SdrDragMode::Move || meDragMode==SdrDragMode::Resize || mbMarkedHitMovesAlways)) {
             if (!IsMoveAllowed()) return Pointer(PointerStyle::Arrow); // because double click or drag & drop is possible
             return Pointer(PointerStyle::Move);
@@ -1089,8 +1089,8 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
             } break;
             case SdrDragMode::Mirror: {
                 if (bCorner || bVertex || bMov) {
-                    SdrHdl* pH1=maHdlList.GetHdl(HDL_REF1);
-                    SdrHdl* pH2=maHdlList.GetHdl(HDL_REF2);
+                    SdrHdl* pH1=maHdlList.GetHdl(SdrHdlKind::Ref1);
+                    SdrHdl* pH2=maHdlList.GetHdl(SdrHdlKind::Ref2);
                     bool b90=false;
                     bool b45=false;
                     Point aDif;

@@ -329,7 +329,7 @@ void SwTiledRenderingTest::testSetGraphicSelection()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(8), pObject->GetHdlCount());
     // Take the bottom center one.
     SdrHdl* pHdl = pObject->GetHdl(6);
-    CPPUNIT_ASSERT_EQUAL(HDL_LOWER, pHdl->GetKind());
+    CPPUNIT_ASSERT_EQUAL((int)SdrHdlKind::Lower, (int)pHdl->GetKind());
     Rectangle aShapeBefore = pObject->GetSnapRect();
     // Resize.
     pXTextDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, pHdl->GetPos().getX(), pHdl->GetPos().getY());

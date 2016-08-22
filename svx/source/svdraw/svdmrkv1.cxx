@@ -102,7 +102,7 @@ sal_uIntPtr SdrMarkView::GetMarkedPointCount() const
 
 bool SdrMarkView::IsPointMarkable(const SdrHdl& rHdl) const
 {
-    return !ImpIsFrameHandles() && !rHdl.IsPlusHdl() && rHdl.GetKind()!=HDL_GLUE && rHdl.GetKind()!=HDL_SMARTTAG && rHdl.GetObj()!=nullptr && rHdl.GetObj()->IsPolyObj();
+    return !ImpIsFrameHandles() && !rHdl.IsPlusHdl() && rHdl.GetKind()!=SdrHdlKind::Glue && rHdl.GetKind()!=SdrHdlKind::SmartTag && rHdl.GetObj()!=nullptr && rHdl.GetObj()->IsPolyObj();
 }
 
 bool SdrMarkView::MarkPointHelper(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark)
@@ -112,7 +112,7 @@ bool SdrMarkView::MarkPointHelper(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark)
 
 bool SdrMarkView::ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark)
 {
-    if (pHdl==nullptr || pHdl->IsPlusHdl() || pHdl->GetKind()==HDL_GLUE)
+    if (pHdl==nullptr || pHdl->IsPlusHdl() || pHdl->GetKind()==SdrHdlKind::Glue)
         return false;
 
     if (pHdl->IsSelected() != bUnmark)
@@ -288,9 +288,9 @@ void SdrMarkView::ImpSetPointsRects() const
     for (size_t nHdlNum=0; nHdlNum<nHdlAnz; ++nHdlNum) {
         const SdrHdl* pHdl=maHdlList.GetHdl(nHdlNum);
         SdrHdlKind eKind=pHdl->GetKind();
-        if ((eKind==HDL_POLY && pHdl->IsSelected()) || eKind==HDL_GLUE) {
+        if ((eKind==SdrHdlKind::Poly && pHdl->IsSelected()) || eKind==SdrHdlKind::Glue) {
             Point aPt(pHdl->GetPos());
-            Rectangle& rR=eKind==HDL_GLUE ? aGlue : aPnts;
+            Rectangle& rR=eKind==SdrHdlKind::Glue ? aGlue : aPnts;
             if (rR.IsEmpty()) {
                 rR=Rectangle(aPt,aPt);
             } else {
@@ -556,7 +556,7 @@ SdrHdl* SdrMarkView::GetGluePointHdl(const SdrObject* pObj, sal_uInt16 nId) cons
     for (size_t nHdlNum=0; nHdlNum<nHdlAnz; ++nHdlNum) {
         SdrHdl* pHdl=maHdlList.GetHdl(nHdlNum);
         if (pHdl->GetObj()==pObj &&
-            pHdl->GetKind()==HDL_GLUE &&
+            pHdl->GetKind()==SdrHdlKind::Glue &&
             pHdl->GetObjHdlNum()==nId ) return pHdl;
     }
     return nullptr;

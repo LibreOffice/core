@@ -164,8 +164,8 @@ private:
 class SmartHdl : public SdrHdl
 {
 public:
-    SmartHdl( const SmartTagReference& xTag, SdrObject* pObject, const Point& rPnt, SdrHdlKind eNewKind=HDL_SMARTTAG );
-    SmartHdl( const SmartTagReference& xTag, const Point& rPnt, SdrHdlKind eNewKind=HDL_SMARTTAG );
+    SmartHdl( const SmartTagReference& xTag, SdrObject* pObject, const Point& rPnt, SdrHdlKind eNewKind=SdrHdlKind::SmartTag );
+    SmartHdl( const SmartTagReference& xTag, const Point& rPnt, SdrHdlKind eNewKind=SdrHdlKind::SmartTag );
 
     const SmartTagReference& getTag() const { return mxTag; }
 

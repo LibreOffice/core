@@ -441,39 +441,39 @@ E3dDragMove::E3dDragMove(SdrDragView &_rView,
 {
     switch(meWhatDragHdl)
     {
-        case HDL_LEFT:
+        case SdrHdlKind::Left:
             maScaleFixPos = maFullBound.RightCenter();
             break;
-        case HDL_RIGHT:
+        case SdrHdlKind::Right:
             maScaleFixPos = maFullBound.LeftCenter();
             break;
-        case HDL_UPPER:
+        case SdrHdlKind::Upper:
             maScaleFixPos = maFullBound.BottomCenter();
             break;
-        case HDL_LOWER:
+        case SdrHdlKind::Lower:
             maScaleFixPos = maFullBound.TopCenter();
             break;
-        case HDL_UPLFT:
+        case SdrHdlKind::UpperLeft:
             maScaleFixPos = maFullBound.BottomRight();
             break;
-        case HDL_UPRGT:
+        case SdrHdlKind::UpperRight:
             maScaleFixPos = maFullBound.BottomLeft();
             break;
-        case HDL_LWLFT:
+        case SdrHdlKind::LowerLeft:
             maScaleFixPos = maFullBound.TopRight();
             break;
-        case HDL_LWRGT:
+        case SdrHdlKind::LowerRight:
             maScaleFixPos = maFullBound.TopLeft();
             break;
         default:
-            // Moving the object, HDL_MOVE
+            // Moving the object, SdrHdlKind::Move
             break;
     }
 
     // Override when IsResizeAtCenter()
     if(getSdrDragView().IsResizeAtCenter())
     {
-        meWhatDragHdl = HDL_USER;
+        meWhatDragHdl = SdrHdlKind::User;
         maScaleFixPos = maFullBound.Center();
     }
 }
@@ -487,7 +487,7 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
 
     if(DragStat().CheckMinMoved(rPnt))
     {
-        if(HDL_MOVE == meWhatDragHdl)
+        if(SdrHdlKind::Move == meWhatDragHdl)
         {
             // Translation
             // Determine the motion vector
@@ -605,13 +605,13 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
                 // constraints?
                 switch(meWhatDragHdl)
                 {
-                    case HDL_LEFT:
-                    case HDL_RIGHT:
+                    case SdrHdlKind::Left:
+                    case SdrHdlKind::Right:
                         // to constrain on X -> Y equal
                         aScNext.setY(aScFixPos.getY());
                         break;
-                    case HDL_UPPER:
-                    case HDL_LOWER:
+                    case SdrHdlKind::Upper:
+                    case SdrHdlKind::Lower:
                         // constrain to auf Y -> X equal
                         aScNext.setX(aScFixPos.getX());
                         break;

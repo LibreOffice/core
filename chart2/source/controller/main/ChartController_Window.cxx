@@ -675,11 +675,11 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
                 if(pHitSelectionHdl)
                 {
                     SdrHdlKind eKind = pHitSelectionHdl->GetKind();
-                    if( eKind==HDL_UPPER || eKind==HDL_LOWER )
+                    if( eKind==SdrHdlKind::Upper || eKind==SdrHdlKind::Lower )
                         eRotationDirection = DragMethod_RotateDiagram::ROTATIONDIRECTION_X;
-                    else if( eKind==HDL_LEFT || eKind==HDL_RIGHT )
+                    else if( eKind==SdrHdlKind::Left || eKind==SdrHdlKind::Right )
                         eRotationDirection = DragMethod_RotateDiagram::ROTATIONDIRECTION_Y;
-                    else if( eKind==HDL_UPLFT || eKind==HDL_UPRGT || eKind==HDL_LWLFT || eKind==HDL_LWRGT )
+                    else if( eKind==SdrHdlKind::UpperLeft || eKind==SdrHdlKind::UpperRight || eKind==SdrHdlKind::LowerLeft || eKind==SdrHdlKind::LowerRight )
                         eRotationDirection = DragMethod_RotateDiagram::ROTATIONDIRECTION_Z;
                 }
                 pDragMethod = new DragMethod_RotateDiagram( *pDrawViewWrapper, m_aSelection.getSelectedCID(), getModel(), eRotationDirection );

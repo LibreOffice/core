@@ -1224,7 +1224,7 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
             }
             if( bThereAre3DObjects )
             {
-                meDragHdl = ( pHdl == nullptr ? HDL_MOVE : pHdl->GetKind() );
+                meDragHdl = ( pHdl == nullptr ? SdrHdlKind::Move : pHdl->GetKind() );
                 switch ( meDragMode )
                 {
                     case SdrDragMode::Rotate:
@@ -1232,24 +1232,24 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                     {
                         switch ( meDragHdl )
                         {
-                            case HDL_LEFT:
-                            case HDL_RIGHT:
+                            case SdrHdlKind::Left:
+                            case SdrHdlKind::Right:
                             {
                                 eConstraint = E3DDRAG_CONSTR_X;
                             }
                             break;
 
-                            case HDL_UPPER:
-                            case HDL_LOWER:
+                            case SdrHdlKind::Upper:
+                            case SdrHdlKind::Lower:
                             {
                                 eConstraint = E3DDRAG_CONSTR_Y;
                             }
                             break;
 
-                            case HDL_UPLFT:
-                            case HDL_UPRGT:
-                            case HDL_LWLFT:
-                            case HDL_LWRGT:
+                            case SdrHdlKind::UpperLeft:
+                            case SdrHdlKind::UpperRight:
+                            case SdrHdlKind::LowerLeft:
+                            case SdrHdlKind::LowerRight:
                             {
                                 eConstraint = E3DDRAG_CONSTR_Z;
                             }
@@ -1417,7 +1417,7 @@ void E3dView::Start3DCreation()
         // Show mirror polygon IMMEDIATELY
         const SdrHdlList &aHdlList = GetHdlList();
         mpMirrorOverlay = new Impl3DMirrorConstructOverlay(*this);
-        mpMirrorOverlay->SetMirrorAxis(aHdlList.GetHdl(HDL_REF1)->GetPos(), aHdlList.GetHdl(HDL_REF2)->GetPos());
+        mpMirrorOverlay->SetMirrorAxis(aHdlList.GetHdl(SdrHdlKind::Ref1)->GetPos(), aHdlList.GetHdl(SdrHdlKind::Ref2)->GetPos());
     }
 }
 
@@ -1434,9 +1434,9 @@ void E3dView::MovAction(const Point& rPnt)
             SdrHdlKind eHdlKind = pHdl->GetKind();
 
             // reacts only due to a mirror axis
-            if ((eHdlKind == HDL_REF1) ||
-                (eHdlKind == HDL_REF2) ||
-                (eHdlKind == HDL_MIRX))
+            if ((eHdlKind == SdrHdlKind::Ref1) ||
+                (eHdlKind == SdrHdlKind::Ref2) ||
+                (eHdlKind == SdrHdlKind::MirrorAxis))
             {
                 const SdrHdlList &aHdlList = GetHdlList ();
 
@@ -1444,8 +1444,8 @@ void E3dView::MovAction(const Point& rPnt)
                 // it anew
                 SdrView::MovAction (rPnt);
                 mpMirrorOverlay->SetMirrorAxis(
-                    aHdlList.GetHdl (HDL_REF1)->GetPos(),
-                    aHdlList.GetHdl (HDL_REF2)->GetPos());
+                    aHdlList.GetHdl (SdrHdlKind::Ref1)->GetPos(),
+                    aHdlList.GetHdl (SdrHdlKind::Ref2)->GetPos());
             }
         }
         else
@@ -1490,8 +1490,8 @@ void E3dView::End3DCreation(bool bUseDefaultValuesForMirrorAxes)
             // Determine from the handle positions and the displacement of
             // the points
             const SdrHdlList &aHdlList = GetHdlList();
-            Point aMirrorRef1 = aHdlList.GetHdl(HDL_REF1)->GetPos();
-            Point aMirrorRef2 = aHdlList.GetHdl(HDL_REF2)->GetPos();
+            Point aMirrorRef1 = aHdlList.GetHdl(SdrHdlKind::Ref1)->GetPos();
+            Point aMirrorRef2 = aHdlList.GetHdl(SdrHdlKind::Ref2)->GetPos();
 
             basegfx::B2DPoint aPnt1(aMirrorRef1.X(), -aMirrorRef1.Y());
             basegfx::B2DPoint aPnt2(aMirrorRef2.X(), -aMirrorRef2.Y());

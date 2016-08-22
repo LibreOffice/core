@@ -57,7 +57,7 @@ public:
 
 
 TableEdgeHdl::TableEdgeHdl( const Point& rPnt, bool bHorizontal, sal_Int32 nMin, sal_Int32 nMax, sal_Int32 nEdges )
-: SdrHdl( rPnt, HDL_USER )
+: SdrHdl( rPnt, SdrHdlKind::User )
 , mbHorizontal( bHorizontal )
 , mnMin( nMin )
 , mnMax( nMax )
@@ -245,7 +245,7 @@ drawinglayer::primitive2d::Primitive2DContainer OverlayTableEdge::createOverlayO
 TableBorderHdl::TableBorderHdl(
     const Rectangle& rRect,
     bool bAnimate)
-:   SdrHdl(rRect.TopLeft(), HDL_MOVE),
+:   SdrHdl(rRect.TopLeft(), SdrHdlKind::Move),
     maRectangle(rRect),
     mbAnimate(bAnimate)
 {

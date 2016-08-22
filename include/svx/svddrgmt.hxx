@@ -209,8 +209,8 @@ public:
 
 inline const Rectangle& SdrDragMethod::GetMarkedRect() const
 {
-    return getSdrDragView().meDragHdl==HDL_POLY ? getSdrDragView().GetMarkedPointsRect() :
-           getSdrDragView().meDragHdl==HDL_GLUE ? getSdrDragView().GetMarkedGluePointsRect() :
+    return getSdrDragView().meDragHdl==SdrHdlKind::Poly ? getSdrDragView().GetMarkedPointsRect() :
+           getSdrDragView().meDragHdl==SdrHdlKind::Glue ? getSdrDragView().GetMarkedGluePointsRect() :
            getSdrDragView().GetMarkedObjRect();
 }
 

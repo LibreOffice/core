@@ -967,10 +967,10 @@ bool SdrDragMovHdl::BeginSdrDrag()
     DragStat().Ref1()=GetDragHdl()->GetPos();
     DragStat().SetShown(!DragStat().IsShown());
     SdrHdlKind eKind=GetDragHdl()->GetKind();
-    SdrHdl* pH1=GetHdlList().GetHdl(HDL_REF1);
-    SdrHdl* pH2=GetHdlList().GetHdl(HDL_REF2);
+    SdrHdl* pH1=GetHdlList().GetHdl(SdrHdlKind::Ref1);
+    SdrHdl* pH2=GetHdlList().GetHdl(SdrHdlKind::Ref2);
 
-    if (eKind==HDL_MIRX)
+    if (eKind==SdrHdlKind::MirrorAxis)
     {
         if (pH1==nullptr || pH2==nullptr)
         {
@@ -995,10 +995,10 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
 
     if ( GetDragHdl() && DragStat().CheckMinMoved(rNoSnapPnt))
     {
-        if (GetDragHdl()->GetKind()==HDL_MIRX)
+        if (GetDragHdl()->GetKind()==SdrHdlKind::MirrorAxis)
         {
-            SdrHdl* pH1=GetHdlList().GetHdl(HDL_REF1);
-            SdrHdl* pH2=GetHdlList().GetHdl(HDL_REF2);
+            SdrHdl* pH1=GetHdlList().GetHdl(SdrHdlKind::Ref1);
+            SdrHdl* pH2=GetHdlList().GetHdl(SdrHdlKind::Ref2);
 
             if (pH1==nullptr || pH2==nullptr)
                 return;
@@ -1024,7 +1024,7 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
                 pH1->SetPos(Ref1()+aDif);
                 pH2->SetPos(Ref2()+aDif);
 
-                SdrHdl* pHM = GetHdlList().GetHdl(HDL_MIRX);
+                SdrHdl* pHM = GetHdlList().GetHdl(SdrHdlKind::MirrorAxis);
 
                 if(pHM)
                     pHM->Touch();
@@ -1052,10 +1052,10 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
 
             if (nSA!=0)
             { // angle snapping
-                SdrHdlKind eRef=HDL_REF1;
+                SdrHdlKind eRef=SdrHdlKind::Ref1;
 
-                if (GetDragHdl()->GetKind()==HDL_REF1)
-                    eRef=HDL_REF2;
+                if (GetDragHdl()->GetKind()==SdrHdlKind::Ref1)
+                    eRef=SdrHdlKind::Ref2;
 
                 SdrHdl* pH=GetHdlList().GetHdl(eRef);
 
@@ -1090,7 +1090,7 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
                 Hide();
                 DragStat().NextMove(aPnt);
                 GetDragHdl()->SetPos(DragStat().GetNow());
-                SdrHdl* pHM = GetHdlList().GetHdl(HDL_MIRX);
+                SdrHdl* pHM = GetHdlList().GetHdl(SdrHdlKind::MirrorAxis);
 
                 if(pHM)
                     pHM->Touch();
@@ -1108,15 +1108,15 @@ bool SdrDragMovHdl::EndSdrDrag(bool /*bCopy*/)
     {
         switch (GetDragHdl()->GetKind())
         {
-            case HDL_REF1:
+            case SdrHdlKind::Ref1:
                 Ref1()=DragStat().GetNow();
                 break;
 
-            case HDL_REF2:
+            case SdrHdlKind::Ref2:
                 Ref2()=DragStat().GetNow();
                 break;
 
-            case HDL_MIRX:
+            case SdrHdlKind::MirrorAxis:
                 Ref1()+=DragStat().GetNow()-DragStat().GetStart();
                 Ref2()+=DragStat().GetNow()-DragStat().GetStart();
                 break;
@@ -1136,7 +1136,7 @@ void SdrDragMovHdl::CancelSdrDrag()
     if( pHdl )
         pHdl->SetPos(DragStat().GetRef1());
 
-    SdrHdl* pHM = GetHdlList().GetHdl(HDL_MIRX);
+    SdrHdl* pHM = GetHdlList().GetHdl(SdrHdlKind::MirrorAxis);
 
     if(pHM)
         pHM->Touch();
@@ -1802,23 +1802,23 @@ void SdrDragResize::TakeSdrDragComment(OUString& rStr) const
 
 bool SdrDragResize::BeginSdrDrag()
 {
-    SdrHdlKind eRefHdl=HDL_MOVE;
+    SdrHdlKind eRefHdl=SdrHdlKind::Move;
     SdrHdl* pRefHdl=nullptr;
 
     switch (GetDragHdlKind())
     {
-        case HDL_UPLFT: eRefHdl=HDL_LWRGT; break;
-        case HDL_UPPER: eRefHdl=HDL_LOWER; DragStat().SetHorFixed(true); break;
-        case HDL_UPRGT: eRefHdl=HDL_LWLFT; break;
-        case HDL_LEFT : eRefHdl=HDL_RIGHT; DragStat().SetVerFixed(true); break;
-        case HDL_RIGHT: eRefHdl=HDL_LEFT ; DragStat().SetVerFixed(true); break;
-        case HDL_LWLFT: eRefHdl=HDL_UPRGT; break;
-        case HDL_LOWER: eRefHdl=HDL_UPPER; DragStat().SetHorFixed(true); break;
-        case HDL_LWRGT: eRefHdl=HDL_UPLFT; break;
+        case SdrHdlKind::UpperLeft: eRefHdl=SdrHdlKind::LowerRight; break;
+        case SdrHdlKind::Upper: eRefHdl=SdrHdlKind::Lower; DragStat().SetHorFixed(true); break;
+        case SdrHdlKind::UpperRight: eRefHdl=SdrHdlKind::LowerLeft; break;
+        case SdrHdlKind::Left : eRefHdl=SdrHdlKind::Right; DragStat().SetVerFixed(true); break;
+        case SdrHdlKind::Right: eRefHdl=SdrHdlKind::Left ; DragStat().SetVerFixed(true); break;
+        case SdrHdlKind::LowerLeft: eRefHdl=SdrHdlKind::UpperRight; break;
+        case SdrHdlKind::Lower: eRefHdl=SdrHdlKind::Upper; DragStat().SetHorFixed(true); break;
+        case SdrHdlKind::LowerRight: eRefHdl=SdrHdlKind::UpperLeft; break;
         default: break;
     }
 
-    if (eRefHdl!=HDL_MOVE)
+    if (eRefHdl!=SdrHdlKind::Move)
         pRefHdl=GetHdlList().GetHdl(eRefHdl);
 
     if (pRefHdl!=nullptr && !getSdrDragView().IsResizeAtCenter())
@@ -1828,8 +1828,8 @@ bool SdrDragResize::BeginSdrDrag()
     }
     else
     {
-        SdrHdl* pRef1=GetHdlList().GetHdl(HDL_UPLFT);
-        SdrHdl* pRef2=GetHdlList().GetHdl(HDL_LWRGT);
+        SdrHdl* pRef1=GetHdlList().GetHdl(SdrHdlKind::UpperLeft);
+        SdrHdl* pRef2=GetHdlList().GetHdl(SdrHdlKind::LowerRight);
 
         if (pRef1!=nullptr && pRef2!=nullptr)
         {
@@ -2111,7 +2111,7 @@ void SdrDragRotate::TakeSdrDragComment(OUString& rStr) const
 
 bool SdrDragRotate::BeginSdrDrag()
 {
-    SdrHdl* pH=GetHdlList().GetHdl(HDL_REF1);
+    SdrHdl* pH=GetHdlList().GetHdl(SdrHdlKind::Ref1);
 
     if (pH!=nullptr)
     {
@@ -2244,19 +2244,19 @@ void SdrDragShear::TakeSdrDragComment(OUString& rStr) const
 
 bool SdrDragShear::BeginSdrDrag()
 {
-    SdrHdlKind eRefHdl=HDL_MOVE;
+    SdrHdlKind eRefHdl=SdrHdlKind::Move;
     SdrHdl* pRefHdl=nullptr;
 
     switch (GetDragHdlKind())
     {
-        case HDL_UPPER: eRefHdl=HDL_LOWER; break;
-        case HDL_LOWER: eRefHdl=HDL_UPPER; break;
-        case HDL_LEFT : eRefHdl=HDL_RIGHT; bVertical=true; break;
-        case HDL_RIGHT: eRefHdl=HDL_LEFT ; bVertical=true; break;
+        case SdrHdlKind::Upper: eRefHdl=SdrHdlKind::Lower; break;
+        case SdrHdlKind::Lower: eRefHdl=SdrHdlKind::Upper; break;
+        case SdrHdlKind::Left : eRefHdl=SdrHdlKind::Right; bVertical=true; break;
+        case SdrHdlKind::Right: eRefHdl=SdrHdlKind::Left ; bVertical=true; break;
         default: break;
     }
 
-    if (eRefHdl!=HDL_MOVE)
+    if (eRefHdl!=SdrHdlKind::Move)
         pRefHdl=GetHdlList().GetHdl(eRefHdl);
 
     if (pRefHdl!=nullptr)
@@ -2530,8 +2530,8 @@ void SdrDragMirror::TakeSdrDragComment(OUString& rStr) const
 
 bool SdrDragMirror::BeginSdrDrag()
 {
-    SdrHdl* pH1=GetHdlList().GetHdl(HDL_REF1);
-    SdrHdl* pH2=GetHdlList().GetHdl(HDL_REF2);
+    SdrHdl* pH1=GetHdlList().GetHdl(SdrHdlKind::Ref1);
+    SdrHdl* pH2=GetHdlList().GetHdl(SdrHdlKind::Ref2);
 
     if (pH1!=nullptr && pH2!=nullptr)
     {
@@ -2635,7 +2635,7 @@ bool SdrDragGradient::BeginSdrDrag()
 {
     bool bRetval(false);
 
-    pIAOHandle = static_cast<SdrHdlGradient*>(GetHdlList().GetHdl(IsGradient() ? HDL_GRAD : HDL_TRNS));
+    pIAOHandle = static_cast<SdrHdlGradient*>(GetHdlList().GetHdl(IsGradient() ? SdrHdlKind::Gradient : SdrHdlKind::Transparence));
 
     if(pIAOHandle)
     {
@@ -2924,7 +2924,7 @@ bool SdrDragCrook::BeginSdrDrag()
 
     if (bContortionAllowed || bNoContortionAllowed)
     {
-        bVertical=(GetDragHdlKind()==HDL_LOWER || GetDragHdlKind()==HDL_UPPER);
+        bVertical=(GetDragHdlKind()==SdrHdlKind::Lower || GetDragHdlKind()==SdrHdlKind::Upper);
         aMarkRect=GetMarkedRect();
         aMarkCenter=aMarkRect.Center();
         nMarkSize=bVertical ? (aMarkRect.GetHeight()-1) : (aMarkRect.GetWidth()-1);
@@ -3127,14 +3127,14 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
         {
             switch (GetDragHdlKind())
             {
-                case HDL_UPLFT: aNeuCenter.X()=aMarkRect.Right();  bLft=true; break;
-                case HDL_UPPER: aNeuCenter.Y()=aMarkRect.Bottom(); bUpr=true; break;
-                case HDL_UPRGT: aNeuCenter.X()=aMarkRect.Left();   bRgt=true; break;
-                case HDL_LEFT : aNeuCenter.X()=aMarkRect.Right();  bLft=true; break;
-                case HDL_RIGHT: aNeuCenter.X()=aMarkRect.Left();   bRgt=true; break;
-                case HDL_LWLFT: aNeuCenter.X()=aMarkRect.Right();  bLft=true; break;
-                case HDL_LOWER: aNeuCenter.Y()=aMarkRect.Top();    bLwr=true; break;
-                case HDL_LWRGT: aNeuCenter.X()=aMarkRect.Left();   bRgt=true; break;
+                case SdrHdlKind::UpperLeft: aNeuCenter.X()=aMarkRect.Right();  bLft=true; break;
+                case SdrHdlKind::Upper: aNeuCenter.Y()=aMarkRect.Bottom(); bUpr=true; break;
+                case SdrHdlKind::UpperRight: aNeuCenter.X()=aMarkRect.Left();   bRgt=true; break;
+                case SdrHdlKind::Left : aNeuCenter.X()=aMarkRect.Right();  bLft=true; break;
+                case SdrHdlKind::Right: aNeuCenter.X()=aMarkRect.Left();   bRgt=true; break;
+                case SdrHdlKind::LowerLeft: aNeuCenter.X()=aMarkRect.Right();  bLft=true; break;
+                case SdrHdlKind::Lower: aNeuCenter.Y()=aMarkRect.Top();    bLwr=true; break;
+                case SdrHdlKind::LowerRight: aNeuCenter.X()=aMarkRect.Left();   bRgt=true; break;
                 default: bAtCenter=true;
             }
         }
@@ -3460,10 +3460,10 @@ bool SdrDragDistort::BeginSdrDrag()
         SdrHdlKind eKind=GetDragHdlKind();
         nPolyPt=0xFFFF;
 
-        if (eKind==HDL_UPLFT) nPolyPt=0;
-        if (eKind==HDL_UPRGT) nPolyPt=1;
-        if (eKind==HDL_LWRGT) nPolyPt=2;
-        if (eKind==HDL_LWLFT) nPolyPt=3;
+        if (eKind==SdrHdlKind::UpperLeft) nPolyPt=0;
+        if (eKind==SdrHdlKind::UpperRight) nPolyPt=1;
+        if (eKind==SdrHdlKind::LowerRight) nPolyPt=2;
+        if (eKind==SdrHdlKind::LowerLeft) nPolyPt=3;
         if (nPolyPt>3) return false;
 
         aMarkRect=GetMarkedRect();
@@ -3632,8 +3632,8 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         }
 
         // We need to produce a reference point and two (X & Y) scales
-        SdrHdl* pRef1=GetHdlList().GetHdl(HDL_UPLFT);
-        SdrHdl* pRef2=GetHdlList().GetHdl(HDL_LWRGT);
+        SdrHdl* pRef1=GetHdlList().GetHdl(SdrHdlKind::UpperLeft);
+        SdrHdl* pRef2=GetHdlList().GetHdl(SdrHdlKind::LowerRight);
 
         if (pRef1==nullptr || pRef2==nullptr)
             return false;
@@ -3647,14 +3647,14 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         // Reference point is the point opposed to the dragged handle
         switch(GetDragHdlKind())
         {
-            case HDL_UPLFT: aRef = rect.BottomRight();                                  break;
-            case HDL_UPPER: aRef = rect.BottomCenter(); DragStat().SetHorFixed(true);   break;
-            case HDL_UPRGT: aRef = rect.BottomLeft();                                   break;
-            case HDL_LEFT : aRef = rect.RightCenter();  DragStat().SetVerFixed(true);   break;
-            case HDL_RIGHT: aRef = rect.LeftCenter();   DragStat().SetVerFixed(true);   break;
-            case HDL_LWLFT: aRef = rect.TopRight();                                     break;
-            case HDL_LOWER: aRef = rect.TopCenter();    DragStat().SetHorFixed(true);   break;
-            case HDL_LWRGT: aRef = rect.TopLeft();                                      break;
+            case SdrHdlKind::UpperLeft: aRef = rect.BottomRight();                                  break;
+            case SdrHdlKind::Upper: aRef = rect.BottomCenter(); DragStat().SetHorFixed(true);   break;
+            case SdrHdlKind::UpperRight: aRef = rect.BottomLeft();                                   break;
+            case SdrHdlKind::Left : aRef = rect.RightCenter();  DragStat().SetVerFixed(true);   break;
+            case SdrHdlKind::Right: aRef = rect.LeftCenter();   DragStat().SetVerFixed(true);   break;
+            case SdrHdlKind::LowerLeft: aRef = rect.TopRight();                                     break;
+            case SdrHdlKind::Lower: aRef = rect.TopCenter();    DragStat().SetHorFixed(true);   break;
+            case SdrHdlKind::LowerRight: aRef = rect.TopLeft();                                      break;
             default: break;
         }
 
@@ -3844,14 +3844,14 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
 
     switch(GetDragHdlKind())
     {
-        case HDL_UPLFT: aLocalStart.setX(1.0); aLocalStart.setY(1.0); break;
-        case HDL_UPPER: aLocalStart.setX(0.5); aLocalStart.setY(1.0); bOnAxis = true; break;
-        case HDL_UPRGT: aLocalStart.setX(0.0); aLocalStart.setY(1.0); break;
-        case HDL_LEFT : aLocalStart.setX(1.0); aLocalStart.setY(0.5); bOnAxis = true; break;
-        case HDL_RIGHT: aLocalStart.setX(0.0); aLocalStart.setY(0.5); bOnAxis = true; break;
-        case HDL_LWLFT: aLocalStart.setX(1.0); aLocalStart.setY(0.0); break;
-        case HDL_LOWER: aLocalStart.setX(0.5); aLocalStart.setY(0.0); bOnAxis = true; break;
-        case HDL_LWRGT: aLocalStart.setX(0.0); aLocalStart.setY(0.0); break;
+        case SdrHdlKind::UpperLeft: aLocalStart.setX(1.0); aLocalStart.setY(1.0); break;
+        case SdrHdlKind::Upper: aLocalStart.setX(0.5); aLocalStart.setY(1.0); bOnAxis = true; break;
+        case SdrHdlKind::UpperRight: aLocalStart.setX(0.0); aLocalStart.setY(1.0); break;
+        case SdrHdlKind::Left : aLocalStart.setX(1.0); aLocalStart.setY(0.5); bOnAxis = true; break;
+        case SdrHdlKind::Right: aLocalStart.setX(0.0); aLocalStart.setY(0.5); bOnAxis = true; break;
+        case SdrHdlKind::LowerLeft: aLocalStart.setX(1.0); aLocalStart.setY(0.0); break;
+        case SdrHdlKind::Lower: aLocalStart.setX(0.5); aLocalStart.setY(0.0); bOnAxis = true; break;
+        case SdrHdlKind::LowerRight: aLocalStart.setX(0.0); aLocalStart.setY(0.0); break;
         default: break;
     }
 

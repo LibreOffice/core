@@ -178,7 +178,7 @@ bool g_bModePushed                = false;
 bool g_bDDTimerStarted            = false;
 bool g_bFlushCharBuffer           = false;
 bool g_bDDINetAttr                = false;
-SdrHdlKind g_eSdrMoveHdl          = HDL_USER;
+SdrHdlKind g_eSdrMoveHdl          = SdrHdlKind::User;
 
 QuickHelpData* SwEditWin::m_pQuickHlpData = nullptr;
 
@@ -230,7 +230,7 @@ public:
         : pHdl( pH )
         , aHdlPos( pH->GetPos() )
         , aLastPos( pH->GetPos() )
-        , bTopRightHandle( pH->GetKind() == HDL_ANCHOR_TR )
+        , bTopRightHandle( pH->GetKind() == SdrHdlKind::Anchor_TR )
     {}
     const Point& GetLastPos() const { return aLastPos; }
     void SetLastPos( const Point& rNew ) { aLastPos = rNew; }
@@ -243,7 +243,7 @@ public:
         pHdl = pNew;
         if ( pHdl )
         {
-            bTopRightHandle = (pHdl->GetKind() == HDL_ANCHOR_TR);
+            bTopRightHandle = (pHdl->GetKind() == SdrHdlKind::Anchor_TR);
         }
     }
     const Point GetPosForHitTest( const OutputDevice& rOut )
@@ -1301,8 +1301,8 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
             // move handle with index nHandleIndex
             if(pHdl && (nX || nY))
             {
-                if( HDL_ANCHOR == pHdl->GetKind() ||
-                    HDL_ANCHOR_TR == pHdl->GetKind() )
+                if( SdrHdlKind::Anchor == pHdl->GetKind() ||
+                    SdrHdlKind::Anchor_TR == pHdl->GetKind() )
                 {
                     // anchor move cannot be allowed when position is protected
                     if(!(nProtect&FlyProtectFlags::Pos))
@@ -1537,9 +1537,9 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                 rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() == 1))))
     {
         SdrHdlList& rHdlList = (SdrHdlList&)rSh.GetDrawView()->GetHdlList();
-        SdrHdl* pAnchor = rHdlList.GetHdl(HDL_ANCHOR);
+        SdrHdl* pAnchor = rHdlList.GetHdl(SdrHdlKind::Anchor);
         if ( ! pAnchor )
-            pAnchor = rHdlList.GetHdl(HDL_ANCHOR_TR);
+            pAnchor = rHdlList.GetHdl(SdrHdlKind::Anchor_TR);
         if(pAnchor)
             rHdlList.SetFocusHdl(pAnchor);
         return;
@@ -3111,8 +3111,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         !m_pAnchorMarker &&
                         pSdrView &&
                         nullptr != ( pHdl = pSdrView->PickHandle(aDocPos) ) &&
-                            ( pHdl->GetKind() == HDL_ANCHOR ||
-                              pHdl->GetKind() == HDL_ANCHOR_TR ) )
+                            ( pHdl->GetKind() == SdrHdlKind::Anchor ||
+                              pHdl->GetKind() == SdrHdlKind::Anchor_TR ) )
                     {
                         // #i121463# Set selected during drag
                         pHdl->SetSelected();
@@ -3138,8 +3138,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     if ( rSh.IsSelFrameMode())
                     {
                         SdrHdl* pHdl = rSh.GetDrawView()->PickHandle(aDocPos);
-                        bool bHitHandle = pHdl && pHdl->GetKind() != HDL_ANCHOR &&
-                                                  pHdl->GetKind() != HDL_ANCHOR_TR;
+                        bool bHitHandle = pHdl && pHdl->GetKind() != SdrHdlKind::Anchor &&
+                                                  pHdl->GetKind() != SdrHdlKind::Anchor_TR;
 
                         if ((rSh.IsInsideSelectedObj(aDocPos) || bHitHandle) &&
                             !(rMEvt.GetModifier() == KEY_SHIFT && !bHitHandle))
@@ -3270,8 +3270,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         SdrHdl *pHdl;
                         if( !bIsDocReadOnly && !m_pAnchorMarker && nullptr !=
                             ( pHdl = pSdrView->PickHandle(aDocPos) ) &&
-                                ( pHdl->GetKind() == HDL_ANCHOR ||
-                                  pHdl->GetKind() == HDL_ANCHOR_TR ) )
+                                ( pHdl->GetKind() == SdrHdlKind::Anchor ||
+                                  pHdl->GetKind() == SdrHdlKind::Anchor_TR ) )
                         {
                             m_pAnchorMarker = new SwAnchorMarker( pHdl );
                             UpdatePointer( aDocPos, rMEvt.GetModifier() );
@@ -3994,8 +3994,8 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 SdrHdl* pHdl;
                 if( pSdrView && (nullptr!=( pHdl = pSdrView->PickHandle( aOld ) )||
                     nullptr !=(pHdl = pSdrView->PickHandle( m_pAnchorMarker->GetHdlPos()) ) ) &&
-                        ( pHdl->GetKind() == HDL_ANCHOR ||
-                          pHdl->GetKind() == HDL_ANCHOR_TR ) )
+                        ( pHdl->GetKind() == SdrHdlKind::Anchor ||
+                          pHdl->GetKind() == SdrHdlKind::Anchor_TR ) )
                 {
                     m_pAnchorMarker->ChgHdl( pHdl );
                     if( aNew.X() || aNew.Y() )
@@ -4059,13 +4059,13 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                         const Point aSttPt( PixelToLogic( m_aStartPos ) );
 
                         // can we start?
-                        if( HDL_USER == g_eSdrMoveHdl )
+                        if( SdrHdlKind::User == g_eSdrMoveHdl )
                         {
                             SdrHdl* pHdl = pSdrView->PickHandle( aSttPt );
-                            g_eSdrMoveHdl = pHdl ? pHdl->GetKind() : HDL_MOVE;
+                            g_eSdrMoveHdl = pHdl ? pHdl->GetKind() : SdrHdlKind::Move;
                         }
 
-                        sal_uInt16 nEvent = HDL_MOVE == g_eSdrMoveHdl
+                        sal_uInt16 nEvent = SdrHdlKind::Move == g_eSdrMoveHdl
                                             ? SW_EVENT_FRM_MOVE
                                             : SW_EVENT_FRM_RESIZE;
 
@@ -4116,7 +4116,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     bool bResizeKeepRatio = rSh.GetSelectionType() & nsSelectionType::SEL_GRF ||
                                             rSh.GetSelectionType() & nsSelectionType::SEL_MEDIA ||
                                             rSh.GetSelectionType() & nsSelectionType::SEL_OLE;
-                    bool bisResize = g_eSdrMoveHdl != HDL_MOVE;
+                    bool bisResize = g_eSdrMoveHdl != SdrHdlKind::Move;
 
                     if (pSdrView)
                     {
@@ -4341,7 +4341,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         DELETEZ( m_pRowColumnSelectionStart );
 
     SdrHdlKind eOldSdrMoveHdl = g_eSdrMoveHdl;
-    g_eSdrMoveHdl = HDL_USER;     // for MoveEvents - reset again
+    g_eSdrMoveHdl = SdrHdlKind::User;     // for MoveEvents - reset again
 
     // preventively reset
     m_rView.SetTabColFromDoc( false );
@@ -4530,7 +4530,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         const SwFrameFormat* pFlyFormat;
                         const SvxMacro* pMacro;
 
-                        sal_uInt16 nEvent = HDL_MOVE == eOldSdrMoveHdl
+                        sal_uInt16 nEvent = SdrHdlKind::Move == eOldSdrMoveHdl
                                             ? SW_EVENT_FRM_MOVE
                                             : SW_EVENT_FRM_RESIZE;
 

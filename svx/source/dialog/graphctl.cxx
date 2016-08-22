@@ -541,7 +541,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 
             if(pHdl)
             {
-                if(pHdl->GetKind() == HDL_POLY)
+                if(pHdl->GetKind() == SdrHdlKind::Poly)
                 {
                     // rescue ID of point with focus
                     sal_uInt32 nPol(pHdl->GetPolyNum());
@@ -574,7 +574,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                             SdrHdl* pAct = rHdlList.GetHdl(a);
 
                             if(pAct
-                                && pAct->GetKind() == HDL_POLY
+                                && pAct->GetKind() == SdrHdlKind::Poly
                                 && pAct->GetPolyNum() == nPol
                                 && pAct->GetPointNum() == nPnt)
                             {

@@ -107,7 +107,7 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
             m_aStartPos = m_pWin->PixelToLogic(rMEvt.GetPosPixel());
             sal_uInt16 nEditMode = m_pWin->GetBezierMode();
 
-            if (eHit == SdrHitKind::Handle && aVEvt.pHdl->GetKind() == HDL_BWGT)
+            if (eHit == SdrHitKind::Handle && aVEvt.pHdl->GetKind() == SdrHdlKind::BezierWeight)
             {
                 // Drag handle
                 g_bNoInterrupt = true;

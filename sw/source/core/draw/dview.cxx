@@ -64,13 +64,13 @@ class SwSdrHdl : public SdrHdl
 {
 public:
     SwSdrHdl(const Point& rPnt, bool bTopRight ) :
-        SdrHdl( rPnt, bTopRight ? HDL_ANCHOR_TR : HDL_ANCHOR ) {}
+        SdrHdl( rPnt, bTopRight ? SdrHdlKind::Anchor_TR : SdrHdlKind::Anchor ) {}
     virtual bool IsFocusHdl() const override;
 };
 
 bool SwSdrHdl::IsFocusHdl() const
 {
-    if( HDL_ANCHOR == eKind || HDL_ANCHOR_TR == eKind )
+    if( SdrHdlKind::Anchor == eKind || SdrHdlKind::Anchor_TR == eKind )
         return true;
     return SdrHdl::IsFocusHdl();
 }
@@ -746,9 +746,9 @@ const SwFrame* SwDrawView::CalcAnchor()
 
 void SwDrawView::ShowDragAnchor()
 {
-    SdrHdl* pHdl = maHdlList.GetHdl(HDL_ANCHOR);
+    SdrHdl* pHdl = maHdlList.GetHdl(SdrHdlKind::Anchor);
     if ( ! pHdl )
-        pHdl = maHdlList.GetHdl(HDL_ANCHOR_TR);
+        pHdl = maHdlList.GetHdl(SdrHdlKind::Anchor_TR);
 
     if(pHdl)
     {

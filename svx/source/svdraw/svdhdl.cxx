@@ -272,7 +272,7 @@ SdrHdl::SdrHdl():
     pObj(nullptr),
     pPV(nullptr),
     pHdlList(nullptr),
-    eKind(HDL_MOVE),
+    eKind(SdrHdlKind::Move),
     nRotationAngle(0),
     nObjHdlNum(0),
     nPolyNum(0),
@@ -428,15 +428,15 @@ void SdrHdl::CreateB2dIAObject()
 
         switch(eKind)
         {
-            case HDL_MOVE:
+            case SdrHdlKind::Move:
             {
                 eKindOfMarker = (b1PixMore) ? BitmapMarkerKind::Rect_9x9 : BitmapMarkerKind::Rect_7x7;
                 break;
             }
-            case HDL_UPLFT:
-            case HDL_UPRGT:
-            case HDL_LWLFT:
-            case HDL_LWRGT:
+            case SdrHdlKind::UpperLeft:
+            case SdrHdlKind::UpperRight:
+            case SdrHdlKind::LowerLeft:
+            case SdrHdlKind::LowerRight:
             {
                 // corner handles
                 if(bRot)
@@ -449,8 +449,8 @@ void SdrHdl::CreateB2dIAObject()
                 }
                 break;
             }
-            case HDL_UPPER:
-            case HDL_LOWER:
+            case SdrHdlKind::Upper:
+            case SdrHdlKind::Lower:
             {
                 // Upper/Lower handles
                 if(bRot)
@@ -463,8 +463,8 @@ void SdrHdl::CreateB2dIAObject()
                 }
                 break;
             }
-            case HDL_LEFT:
-            case HDL_RIGHT:
+            case SdrHdlKind::Left:
+            case SdrHdlKind::Right:
             {
                 // Left/Right handles
                 if(bRot)
@@ -477,7 +477,7 @@ void SdrHdl::CreateB2dIAObject()
                 }
                 break;
             }
-            case HDL_POLY:
+            case SdrHdlKind::Poly:
             {
                 if(bRot)
                 {
@@ -489,50 +489,50 @@ void SdrHdl::CreateB2dIAObject()
                 }
                 break;
             }
-            case HDL_BWGT: // weight at poly
+            case SdrHdlKind::BezierWeight: // weight at poly
             {
                 eKindOfMarker = BitmapMarkerKind::Circ_7x7;
                 break;
             }
-            case HDL_CIRC:
+            case SdrHdlKind::Circle:
             {
                 eKindOfMarker = BitmapMarkerKind::Rect_11x11;
                 break;
             }
-            case HDL_REF1:
-            case HDL_REF2:
+            case SdrHdlKind::Ref1:
+            case SdrHdlKind::Ref2:
             {
                 eKindOfMarker = BitmapMarkerKind::Crosshair;
                 break;
             }
-            case HDL_GLUE:
+            case SdrHdlKind::Glue:
             {
                 eKindOfMarker = BitmapMarkerKind::Glue;
                 break;
             }
-            case HDL_GLUE_DESELECTED:
+            case SdrHdlKind::GlueDeselected:
             {
                 eKindOfMarker = BitmapMarkerKind::Glue_Deselected;
                 break;
             }
-            case HDL_ANCHOR:
+            case SdrHdlKind::Anchor:
             {
                 eKindOfMarker = BitmapMarkerKind::Anchor;
                 break;
             }
-            case HDL_USER:
+            case SdrHdlKind::User:
             {
                 break;
             }
             // top right anchor for SW
-            case HDL_ANCHOR_TR:
+            case SdrHdlKind::Anchor_TR:
             {
                 eKindOfMarker = BitmapMarkerKind::AnchorTR;
                 break;
             }
 
             // for SJ and the CustomShapeHandles:
-            case HDL_CUSTOMSHAPE1:
+            case SdrHdlKind::CustomShape1:
             {
                 eKindOfMarker = b1PixMore ? BitmapMarkerKind::Customshape_9x9 : BitmapMarkerKind::Customshape_7x7;
                 eColIndex = BitmapColorIndex::Yellow;
@@ -562,13 +562,13 @@ void SdrHdl::CreateB2dIAObject()
                     {
                         Size aOffset = rOutDev.PixelToLogic(Size(4, 4));
 
-                        if(eKind == HDL_UPLFT || eKind == HDL_UPPER || eKind == HDL_UPRGT)
+                        if(eKind == SdrHdlKind::UpperLeft || eKind == SdrHdlKind::Upper || eKind == SdrHdlKind::UpperRight)
                             aMoveOutsideOffset.Y() -= aOffset.Width();
-                        if(eKind == HDL_LWLFT || eKind == HDL_LOWER || eKind == HDL_LWRGT)
+                        if(eKind == SdrHdlKind::LowerLeft || eKind == SdrHdlKind::Lower || eKind == SdrHdlKind::LowerRight)
                             aMoveOutsideOffset.Y() += aOffset.Height();
-                        if(eKind == HDL_UPLFT || eKind == HDL_LEFT  || eKind == HDL_LWLFT)
+                        if(eKind == SdrHdlKind::UpperLeft || eKind == SdrHdlKind::Left  || eKind == SdrHdlKind::LowerLeft)
                             aMoveOutsideOffset.X() -= aOffset.Width();
-                        if(eKind == HDL_UPRGT || eKind == HDL_RIGHT || eKind == HDL_LWRGT)
+                        if(eKind == SdrHdlKind::UpperRight || eKind == SdrHdlKind::Right || eKind == SdrHdlKind::LowerRight)
                             aMoveOutsideOffset.X() += aOffset.Height();
                     }
 
@@ -855,15 +855,15 @@ bool SdrHdl::IsHdlHit(const Point& rPnt) const
 Pointer SdrHdl::GetPointer() const
 {
     PointerStyle ePtr=PointerStyle::Move;
-    const bool bSize=eKind>=HDL_UPLFT && eKind<=HDL_LWRGT;
+    const bool bSize=eKind>=SdrHdlKind::UpperLeft && eKind<=SdrHdlKind::LowerRight;
     const bool bRot=pHdlList!=nullptr && pHdlList->IsRotateShear();
     const bool bDis=pHdlList!=nullptr && pHdlList->IsDistortShear();
     if (bSize && pHdlList!=nullptr && (bRot || bDis)) {
         switch (eKind) {
-            case HDL_UPLFT: case HDL_UPRGT:
-            case HDL_LWLFT: case HDL_LWRGT: ePtr=bRot ? PointerStyle::Rotate : PointerStyle::RefHand; break;
-            case HDL_LEFT : case HDL_RIGHT: ePtr=PointerStyle::VShear; break;
-            case HDL_UPPER: case HDL_LOWER: ePtr=PointerStyle::HShear; break;
+            case SdrHdlKind::UpperLeft: case SdrHdlKind::UpperRight:
+            case SdrHdlKind::LowerLeft: case SdrHdlKind::LowerRight: ePtr=bRot ? PointerStyle::Rotate : PointerStyle::RefHand; break;
+            case SdrHdlKind::Left : case SdrHdlKind::Right: ePtr=PointerStyle::VShear; break;
+            case SdrHdlKind::Upper: case SdrHdlKind::Lower: ePtr=PointerStyle::HShear; break;
             default:
                 break;
         }
@@ -872,14 +872,14 @@ Pointer SdrHdl::GetPointer() const
         if (bSize && nRotationAngle!=0) {
             long nHdlAngle=0;
             switch (eKind) {
-                case HDL_LWRGT: nHdlAngle=31500; break;
-                case HDL_LOWER: nHdlAngle=27000; break;
-                case HDL_LWLFT: nHdlAngle=22500; break;
-                case HDL_LEFT : nHdlAngle=18000; break;
-                case HDL_UPLFT: nHdlAngle=13500; break;
-                case HDL_UPPER: nHdlAngle=9000;  break;
-                case HDL_UPRGT: nHdlAngle=4500;  break;
-                case HDL_RIGHT: nHdlAngle=0;     break;
+                case SdrHdlKind::LowerRight: nHdlAngle=31500; break;
+                case SdrHdlKind::Lower: nHdlAngle=27000; break;
+                case SdrHdlKind::LowerLeft: nHdlAngle=22500; break;
+                case SdrHdlKind::Left : nHdlAngle=18000; break;
+                case SdrHdlKind::UpperLeft: nHdlAngle=13500; break;
+                case SdrHdlKind::Upper: nHdlAngle=9000;  break;
+                case SdrHdlKind::UpperRight: nHdlAngle=4500;  break;
+                case SdrHdlKind::Right: nHdlAngle=0;     break;
                 default:
                     break;
             }
@@ -899,22 +899,22 @@ Pointer SdrHdl::GetPointer() const
             } // switch
         } else {
             switch (eKind) {
-                case HDL_UPLFT: ePtr=PointerStyle::NWSize;  break;
-                case HDL_UPPER: ePtr=PointerStyle::NSize;     break;
-                case HDL_UPRGT: ePtr=PointerStyle::NESize;  break;
-                case HDL_LEFT : ePtr=PointerStyle::WSize;     break;
-                case HDL_RIGHT: ePtr=PointerStyle::ESize;     break;
-                case HDL_LWLFT: ePtr=PointerStyle::SWSize;  break;
-                case HDL_LOWER: ePtr=PointerStyle::SSize;     break;
-                case HDL_LWRGT: ePtr=PointerStyle::SESize;  break;
-                case HDL_POLY : ePtr=PointerStyle::MovePoint; break;
-                case HDL_CIRC : ePtr=PointerStyle::Hand;      break;
-                case HDL_REF1 : ePtr=PointerStyle::RefHand;   break;
-                case HDL_REF2 : ePtr=PointerStyle::RefHand;   break;
-                case HDL_BWGT : ePtr=PointerStyle::MoveBezierWeight; break;
-                case HDL_GLUE : ePtr=PointerStyle::MovePoint; break;
-                case HDL_GLUE_DESELECTED : ePtr=PointerStyle::MovePoint; break;
-                case HDL_CUSTOMSHAPE1 : ePtr=PointerStyle::Hand; break;
+                case SdrHdlKind::UpperLeft: ePtr=PointerStyle::NWSize;  break;
+                case SdrHdlKind::Upper: ePtr=PointerStyle::NSize;     break;
+                case SdrHdlKind::UpperRight: ePtr=PointerStyle::NESize;  break;
+                case SdrHdlKind::Left : ePtr=PointerStyle::WSize;     break;
+                case SdrHdlKind::Right: ePtr=PointerStyle::ESize;     break;
+                case SdrHdlKind::LowerLeft: ePtr=PointerStyle::SWSize;  break;
+                case SdrHdlKind::Lower: ePtr=PointerStyle::SSize;     break;
+                case SdrHdlKind::LowerRight: ePtr=PointerStyle::SESize;  break;
+                case SdrHdlKind::Poly : ePtr=PointerStyle::MovePoint; break;
+                case SdrHdlKind::Circle : ePtr=PointerStyle::Hand;      break;
+                case SdrHdlKind::Ref1 : ePtr=PointerStyle::RefHand;   break;
+                case SdrHdlKind::Ref2 : ePtr=PointerStyle::RefHand;   break;
+                case SdrHdlKind::BezierWeight : ePtr=PointerStyle::MoveBezierWeight; break;
+                case SdrHdlKind::Glue : ePtr=PointerStyle::MovePoint; break;
+                case SdrHdlKind::GlueDeselected : ePtr=PointerStyle::MovePoint; break;
+                case SdrHdlKind::CustomShape1 : ePtr=PointerStyle::Hand; break;
                 default:
                     break;
             }
@@ -927,14 +927,14 @@ bool SdrHdl::IsFocusHdl() const
 {
     switch(eKind)
     {
-        case HDL_UPLFT:
-        case HDL_UPPER:
-        case HDL_UPRGT:
-        case HDL_LEFT:
-        case HDL_RIGHT:
-        case HDL_LWLFT:
-        case HDL_LOWER:
-        case HDL_LWRGT:
+        case SdrHdlKind::UpperLeft:
+        case SdrHdlKind::Upper:
+        case SdrHdlKind::UpperRight:
+        case SdrHdlKind::Left:
+        case SdrHdlKind::Right:
+        case SdrHdlKind::LowerLeft:
+        case SdrHdlKind::Lower:
+        case SdrHdlKind::LowerRight:
         {
             // if it's an activated TextEdit, it's moved to extended points
             if(pHdlList && pHdlList->IsMoveOutside())
@@ -943,19 +943,19 @@ bool SdrHdl::IsFocusHdl() const
                 return true;
         }
 
-        case HDL_MOVE:      // handle to move object
-        case HDL_POLY:      // selected point of polygon or curve
-        case HDL_BWGT:      // weight at a curve
-        case HDL_CIRC:      // angle of circle segments, corner radius of rectangles
-        case HDL_REF1:      // reference point 1, e. g. center of rotation
-        case HDL_REF2:      // reference point 2, e. g. endpoint of reflection axis
-        case HDL_GLUE:      // glue point
-        case HDL_GLUE_DESELECTED:      // deselected glue point, used to be a little blue cross
+        case SdrHdlKind::Move:      // handle to move object
+        case SdrHdlKind::Poly:      // selected point of polygon or curve
+        case SdrHdlKind::BezierWeight:      // weight at a curve
+        case SdrHdlKind::Circle:      // angle of circle segments, corner radius of rectangles
+        case SdrHdlKind::Ref1:      // reference point 1, e. g. center of rotation
+        case SdrHdlKind::Ref2:      // reference point 2, e. g. endpoint of reflection axis
+        case SdrHdlKind::Glue:      // glue point
+        case SdrHdlKind::GlueDeselected:      // deselected glue point, used to be a little blue cross
 
         // for SJ and the CustomShapeHandles:
-        case HDL_CUSTOMSHAPE1:
+        case SdrHdlKind::CustomShape1:
 
-        case HDL_USER:
+        case SdrHdlKind::User:
         {
             return true;
         }
@@ -976,7 +976,7 @@ void SdrHdl::onMouseLeave()
 }
 
 SdrHdlColor::SdrHdlColor(const Point& rRef, Color aCol, const Size& rSize, bool bLum)
-:   SdrHdl(rRef, HDL_COLR),
+:   SdrHdl(rRef, SdrHdlKind::Color),
     aMarkerSize(rSize),
     bUseLuminance(bLum)
 {
@@ -1125,7 +1125,7 @@ void SdrHdlColor::SetSize(const Size& rNew)
 }
 
 SdrHdlGradient::SdrHdlGradient(const Point& rRef1, const Point& rRef2, bool bGrad)
-    : SdrHdl(rRef1, bGrad ? HDL_GRAD : HDL_TRNS)
+    : SdrHdl(rRef1, bGrad ? SdrHdlKind::Gradient : SdrHdlKind::Transparence)
     , pColHdl1(nullptr)
     , pColHdl2(nullptr)
     , a2ndPos(rRef2)
@@ -1663,7 +1663,7 @@ Pointer ImpMeasureHdl::GetPointer() const
 
 
 ImpTextframeHdl::ImpTextframeHdl(const Rectangle& rRect) :
-    SdrHdl(rRect.TopLeft(),HDL_MOVE),
+    SdrHdl(rRect.TopLeft(),SdrHdlKind::Move),
     maRect(rRect)
 {
 }
@@ -1731,14 +1731,14 @@ static bool ImpSdrHdlListSorter(SdrHdl* const& lhs, SdrHdl* const& rhs)
     unsigned n2=1;
     if (eKind1!=eKind2)
     {
-        if (eKind1==HDL_REF1 || eKind1==HDL_REF2 || eKind1==HDL_MIRX) n1=5;
-        else if (eKind1==HDL_GLUE || eKind1==HDL_GLUE_DESELECTED) n1=2;
-        else if (eKind1==HDL_USER) n1=3;
-        else if (eKind1==HDL_SMARTTAG) n1=0;
-        if (eKind2==HDL_REF1 || eKind2==HDL_REF2 || eKind2==HDL_MIRX) n2=5;
-        else if (eKind2==HDL_GLUE || eKind2==HDL_GLUE_DESELECTED) n2=2;
-        else if (eKind2==HDL_USER) n2=3;
-        else if (eKind2==HDL_SMARTTAG) n2=0;
+        if (eKind1==SdrHdlKind::Ref1 || eKind1==SdrHdlKind::Ref2 || eKind1==SdrHdlKind::MirrorAxis) n1=5;
+        else if (eKind1==SdrHdlKind::Glue || eKind1==SdrHdlKind::GlueDeselected) n1=2;
+        else if (eKind1==SdrHdlKind::User) n1=3;
+        else if (eKind1==SdrHdlKind::SmartTag) n1=0;
+        if (eKind2==SdrHdlKind::Ref1 || eKind2==SdrHdlKind::Ref2 || eKind2==SdrHdlKind::MirrorAxis) n2=5;
+        else if (eKind2==SdrHdlKind::Glue || eKind2==SdrHdlKind::GlueDeselected) n2=2;
+        else if (eKind2==SdrHdlKind::User) n2=3;
+        else if (eKind2==SdrHdlKind::SmartTag) n2=0;
     }
     if (lhs->IsPlusHdl()) n1=4;
     if (rhs->IsPlusHdl()) n2=4;
@@ -1801,8 +1801,8 @@ extern "C" int SAL_CALL ImplSortHdlFunc( const void* pVoid1, const void* pVoid2 
         if(p1->mpHdl->GetObj() && dynamic_cast<const SdrPathObj*>(p1->mpHdl->GetObj()) != nullptr)
         {
             // same object and a path object
-            if((p1->mpHdl->GetKind() == HDL_POLY || p1->mpHdl->GetKind() == HDL_BWGT)
-                && (p2->mpHdl->GetKind() == HDL_POLY || p2->mpHdl->GetKind() == HDL_BWGT))
+            if((p1->mpHdl->GetKind() == SdrHdlKind::Poly || p1->mpHdl->GetKind() == SdrHdlKind::BezierWeight)
+                && (p2->mpHdl->GetKind() == SdrHdlKind::Poly || p2->mpHdl->GetKind() == SdrHdlKind::BezierWeight))
             {
                 // both handles are point or control handles
                 if(p1->mpHdl->GetPolyNum() == p2->mpHdl->GetPolyNum())
@@ -2247,14 +2247,14 @@ BitmapEx SdrCropHdl::GetBitmapForHandle( const BitmapEx& rBitmap, int nSize )
 
     switch( eKind )
     {
-        case HDL_UPLFT: nX = 0; nY = 0; break;
-        case HDL_UPPER: nX = 1; nY = 0; break;
-        case HDL_UPRGT: nX = 2; nY = 0; break;
-        case HDL_LEFT:  nX = 0; nY = 1; break;
-        case HDL_RIGHT: nX = 2; nY = 1; break;
-        case HDL_LWLFT: nX = 0; nY = 2; break;
-        case HDL_LOWER: nX = 1; nY = 2; break;
-        case HDL_LWRGT: nX = 2; nY = 2; break;
+        case SdrHdlKind::UpperLeft: nX = 0; nY = 0; break;
+        case SdrHdlKind::Upper: nX = 1; nY = 0; break;
+        case SdrHdlKind::UpperRight: nX = 2; nY = 0; break;
+        case SdrHdlKind::Left:  nX = 0; nY = 1; break;
+        case SdrHdlKind::Right: nX = 2; nY = 1; break;
+        case SdrHdlKind::LowerLeft: nX = 0; nY = 2; break;
+        case SdrHdlKind::Lower: nX = 1; nY = 2; break;
+        case SdrHdlKind::LowerRight: nX = 2; nY = 2; break;
         default: break;
     }
 
@@ -2353,7 +2353,7 @@ SdrCropViewHdl::SdrCropViewHdl(
     double fCropTop,
     double fCropRight,
     double fCropBottom)
-:   SdrHdl(Point(), HDL_USER),
+:   SdrHdl(Point(), SdrHdlKind::User),
     maObjectTransform(rObjectTransform),
     maGraphic(rGraphic),
     mfCropLeft(fCropLeft),

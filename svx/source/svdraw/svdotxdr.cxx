@@ -41,20 +41,20 @@ SdrHdl* SdrTextObj::GetHdl(sal_uInt32 nHdlNum) const
 {
     SdrHdl* pH=nullptr;
     Point aPnt;
-    SdrHdlKind eKind=HDL_MOVE;
+    SdrHdlKind eKind=SdrHdlKind::Move;
     switch (nHdlNum) {
-        case 0: aPnt=maRect.TopLeft();      eKind=HDL_UPLFT; break;
-        case 1: aPnt=maRect.TopCenter();    eKind=HDL_UPPER; break;
-        case 2: aPnt=maRect.TopRight();     eKind=HDL_UPRGT; break;
-        case 3: aPnt=maRect.LeftCenter();   eKind=HDL_LEFT ; break;
-        case 4: aPnt=maRect.RightCenter();  eKind=HDL_RIGHT; break;
-        case 5: aPnt=maRect.BottomLeft();   eKind=HDL_LWLFT; break;
-        case 6: aPnt=maRect.BottomCenter(); eKind=HDL_LOWER; break;
-        case 7: aPnt=maRect.BottomRight();  eKind=HDL_LWRGT; break;
+        case 0: aPnt=maRect.TopLeft();      eKind=SdrHdlKind::UpperLeft; break;
+        case 1: aPnt=maRect.TopCenter();    eKind=SdrHdlKind::Upper; break;
+        case 2: aPnt=maRect.TopRight();     eKind=SdrHdlKind::UpperRight; break;
+        case 3: aPnt=maRect.LeftCenter();   eKind=SdrHdlKind::Left ; break;
+        case 4: aPnt=maRect.RightCenter();  eKind=SdrHdlKind::Right; break;
+        case 5: aPnt=maRect.BottomLeft();   eKind=SdrHdlKind::LowerLeft; break;
+        case 6: aPnt=maRect.BottomCenter(); eKind=SdrHdlKind::Lower; break;
+        case 7: aPnt=maRect.BottomRight();  eKind=SdrHdlKind::LowerRight; break;
     }
     if (aGeo.nShearAngle!=0) ShearPoint(aPnt,maRect.TopLeft(),aGeo.nTan);
     if (aGeo.nRotationAngle!=0) RotatePoint(aPnt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-    if (eKind!=HDL_MOVE) {
+    if (eKind!=SdrHdlKind::Move) {
         pH=new SdrHdl(aPnt,eKind);
         pH->SetObj(const_cast<SdrTextObj*>(this));
         pH->SetRotationAngle(aGeo.nRotationAngle);
@@ -72,8 +72,8 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
 {
     Rectangle aTmpRect(maRect);
     const SdrHdl* pHdl=rDrag.GetHdl();
-    SdrHdlKind eHdl=pHdl==nullptr ? HDL_MOVE : pHdl->GetKind();
-    bool bEcke=(eHdl==HDL_UPLFT || eHdl==HDL_UPRGT || eHdl==HDL_LWLFT || eHdl==HDL_LWRGT);
+    SdrHdlKind eHdl=pHdl==nullptr ? SdrHdlKind::Move : pHdl->GetKind();
+    bool bEcke=(eHdl==SdrHdlKind::UpperLeft || eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::LowerLeft || eHdl==SdrHdlKind::LowerRight);
     bool bOrtho=rDrag.GetView()!=nullptr && rDrag.GetView()->IsOrtho();
     bool bBigOrtho=bEcke && bOrtho && rDrag.GetView()->IsBigOrtho();
     Point aPos(rDrag.GetNow());
@@ -82,10 +82,10 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
     // Unshear:
     if (aGeo.nShearAngle!=0) ShearPoint(aPos,aTmpRect.TopLeft(),-aGeo.nTan);
 
-    bool bLft=(eHdl==HDL_UPLFT || eHdl==HDL_LEFT  || eHdl==HDL_LWLFT);
-    bool bRgt=(eHdl==HDL_UPRGT || eHdl==HDL_RIGHT || eHdl==HDL_LWRGT);
-    bool bTop=(eHdl==HDL_UPRGT || eHdl==HDL_UPPER || eHdl==HDL_UPLFT);
-    bool bBtm=(eHdl==HDL_LWRGT || eHdl==HDL_LOWER || eHdl==HDL_LWLFT);
+    bool bLft=(eHdl==SdrHdlKind::UpperLeft || eHdl==SdrHdlKind::Left  || eHdl==SdrHdlKind::LowerLeft);
+    bool bRgt=(eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::Right || eHdl==SdrHdlKind::LowerRight);
+    bool bTop=(eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::Upper || eHdl==SdrHdlKind::UpperLeft);
+    bool bBtm=(eHdl==SdrHdlKind::LowerRight || eHdl==SdrHdlKind::Lower || eHdl==SdrHdlKind::LowerLeft);
     if (bLft) aTmpRect.Left()  =aPos.X();
     if (bRgt) aTmpRect.Right() =aPos.X();
     if (bTop) aTmpRect.Top()   =aPos.Y();

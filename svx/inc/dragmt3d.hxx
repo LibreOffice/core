@@ -105,7 +105,7 @@ public:
     E3dDragMove(
         SdrDragView &rView,
         const SdrMarkList& rMark,
-        SdrHdlKind eDrgHdl = HDL_MOVE,
+        SdrHdlKind eDrgHdl = SdrHdlKind::Move,
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
         bool bFull = false);
 

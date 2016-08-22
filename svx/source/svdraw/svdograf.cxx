@@ -1541,21 +1541,21 @@ void SdrGrafObj::addCropHandles(SdrHdlList& rTarget) const
     basegfx::B2DPoint aPos;
 
     aPos = aMatrix * basegfx::B2DPoint(0.0, 0.0);
-    rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), HDL_UPLFT, fShearX, fRotate));
+    rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::UpperLeft, fShearX, fRotate));
     aPos = aMatrix * basegfx::B2DPoint(0.5, 0.0);
-    rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), HDL_UPPER, fShearX, fRotate));
+    rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Upper, fShearX, fRotate));
     aPos = aMatrix * basegfx::B2DPoint(1.0, 0.0);
-    rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), HDL_UPRGT, fShearX, fRotate));
+    rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::UpperRight, fShearX, fRotate));
     aPos = aMatrix * basegfx::B2DPoint(0.0, 0.5);
-    rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), HDL_LEFT , fShearX, fRotate));
+    rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Left , fShearX, fRotate));
     aPos = aMatrix * basegfx::B2DPoint(1.0, 0.5);
-    rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), HDL_RIGHT, fShearX, fRotate));
+    rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Right, fShearX, fRotate));
     aPos = aMatrix * basegfx::B2DPoint(0.0, 1.0);
-    rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), HDL_LWLFT, fShearX, fRotate));
+    rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::LowerLeft, fShearX, fRotate));
     aPos = aMatrix * basegfx::B2DPoint(0.5, 1.0);
-    rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), HDL_LOWER, fShearX, fRotate));
+    rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Lower, fShearX, fRotate));
     aPos = aMatrix * basegfx::B2DPoint(1.0, 1.0);
-    rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), HDL_LWRGT, fShearX, fRotate));
+    rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::LowerRight, fShearX, fRotate));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

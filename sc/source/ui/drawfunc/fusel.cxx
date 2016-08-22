@@ -126,7 +126,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 if( ScDrawLayer::IsNoteCaption( pMarkedObj ) )
                 {
                     // move using the valid caption handles for note text box.
-                    if(pHdl && (pHdl->GetKind() != HDL_POLY && pHdl->GetKind() != HDL_CIRC))
+                    if(pHdl && (pHdl->GetKind() != SdrHdlKind::Poly && pHdl->GetKind() != SdrHdlKind::Circle))
                         bDrag = true;
                     // move the complete note box.
                     else if(!pHdl)

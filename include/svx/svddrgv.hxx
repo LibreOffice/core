@@ -101,8 +101,8 @@ public:
     bool IsDragObj() const { return mpCurrentSdrDragMethod && !mbInsPolyPoint && !mbInsGluePoint; }
     SdrHdl* GetDragHdl() const { return mpDragHdl; }
     SdrDragMethod* GetDragMethod() const { return mpCurrentSdrDragMethod; }
-    bool IsDraggingPoints() const { return meDragHdl==HDL_POLY; }
-    bool IsDraggingGluePoints() const { return meDragHdl==HDL_GLUE; }
+    bool IsDraggingPoints() const { return meDragHdl==SdrHdlKind::Poly; }
+    bool IsDraggingGluePoints() const { return meDragHdl==SdrHdlKind::Glue; }
 
     // If you want to define that already during BegDrag
     // or in the middle.

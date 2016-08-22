@@ -319,7 +319,7 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
 {
     SdrHdl* pH = nullptr;
     Point aPnt;
-    SdrHdlKind eKind = HDL_MOVE;
+    SdrHdlKind eKind = SdrHdlKind::Move;
 
     if(!IsTextFrame())
     {
@@ -346,17 +346,17 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
             if (a<0) a=0;
             aPnt=maRect.TopLeft();
             aPnt.X()+=a;
-            eKind = HDL_CIRC;
+            eKind = SdrHdlKind::Circle;
             break;
         }
-        case 2: aPnt=maRect.TopLeft();      eKind = HDL_UPLFT; break;
-        case 3: aPnt=maRect.TopCenter();    eKind = HDL_UPPER; break;
-        case 4: aPnt=maRect.TopRight();     eKind = HDL_UPRGT; break;
-        case 5: aPnt=maRect.LeftCenter();   eKind = HDL_LEFT ; break;
-        case 6: aPnt=maRect.RightCenter();  eKind = HDL_RIGHT; break;
-        case 7: aPnt=maRect.BottomLeft();   eKind = HDL_LWLFT; break;
-        case 8: aPnt=maRect.BottomCenter(); eKind = HDL_LOWER; break;
-        case 9: aPnt=maRect.BottomRight();  eKind = HDL_LWRGT; break;
+        case 2: aPnt=maRect.TopLeft();      eKind = SdrHdlKind::UpperLeft; break;
+        case 3: aPnt=maRect.TopCenter();    eKind = SdrHdlKind::Upper; break;
+        case 4: aPnt=maRect.TopRight();     eKind = SdrHdlKind::UpperRight; break;
+        case 5: aPnt=maRect.LeftCenter();   eKind = SdrHdlKind::Left ; break;
+        case 6: aPnt=maRect.RightCenter();  eKind = SdrHdlKind::Right; break;
+        case 7: aPnt=maRect.BottomLeft();   eKind = SdrHdlKind::LowerLeft; break;
+        case 8: aPnt=maRect.BottomCenter(); eKind = SdrHdlKind::Lower; break;
+        case 9: aPnt=maRect.BottomRight();  eKind = SdrHdlKind::LowerRight; break;
     }
 
     if(!pH)
@@ -387,7 +387,7 @@ bool SdrRectObj::hasSpecialDrag() const
 
 bool SdrRectObj::beginSpecialDrag(SdrDragStat& rDrag) const
 {
-    const bool bRad(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
+    const bool bRad(rDrag.GetHdl() && SdrHdlKind::Circle == rDrag.GetHdl()->GetKind());
 
     if(bRad)
     {
@@ -401,7 +401,7 @@ bool SdrRectObj::beginSpecialDrag(SdrDragStat& rDrag) const
 
 bool SdrRectObj::applySpecialDrag(SdrDragStat& rDrag)
 {
-    const bool bRad(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
+    const bool bRad(rDrag.GetHdl() && SdrHdlKind::Circle == rDrag.GetHdl()->GetKind());
 
     if (bRad)
     {
@@ -438,7 +438,7 @@ OUString SdrRectObj::getSpecialDragComment(const SdrDragStat& rDrag) const
     }
     else
     {
-        const bool bRad(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
+        const bool bRad(rDrag.GetHdl() && SdrHdlKind::Circle == rDrag.GetHdl()->GetKind());
 
         if(bRad)
         {

@@ -2054,7 +2054,7 @@ void SdrPathObj::AddToHdlList(SdrHdlList& rHdlList) const
         for (sal_uInt16 j=0; j<nPntCnt; j++) {
             if (rXPoly.GetFlags(j)!=XPolyFlags::Control) {
                 const Point& rPnt=rXPoly[j];
-                SdrHdl* pHdl=new SdrHdl(rPnt,HDL_POLY);
+                SdrHdl* pHdl=new SdrHdl(rPnt,SdrHdlKind::Poly);
                 pHdl->SetPolyNum(i);
                 pHdl->SetPointNum(j);
                 pHdl->Set1PixMore(j==0);

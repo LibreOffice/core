@@ -527,12 +527,12 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
                     // to create the needed local SdrDragEntry for it in createSdrDragEntries()
                     const basegfx::B2DPolyPolygon aDragPoly(mpPathObj->GetPathPoly());
 
-                    if( (pHdl->GetKind() == HDL_MOVE) || (pHdl->GetKind() == HDL_SMARTTAG) )
+                    if( (pHdl->GetKind() == SdrHdlKind::Move) || (pHdl->GetKind() == SdrHdlKind::SmartTag) )
                     {
                         pDragMethod = new PathDragMove( mrView, xTag, aDragPoly );
                         pHdl->SetPos( aMDPos );
                     }
-                    else if( pHdl->GetKind() == HDL_POLY )
+                    else if( pHdl->GetKind() == SdrHdlKind::Poly )
                     {
                         pDragMethod = new PathDragObjOwn( mrView, aDragPoly );
                     }
@@ -628,7 +628,7 @@ bool MotionPathTag::OnMarkHandle( const KeyEvent& rKEvt )
     const SdrHdlList& rHdlList = mrView.GetHdlList();
     SdrHdl* pHdl = rHdlList.GetFocusHdl();
 
-    if(pHdl && pHdl->GetKind() == HDL_POLY )
+    if(pHdl && pHdl->GetKind() == SdrHdlKind::Poly )
     {
         // rescue ID of point with focus
         sal_uInt32 nPol(pHdl->GetPolyNum());
@@ -659,7 +659,7 @@ bool MotionPathTag::OnMarkHandle( const KeyEvent& rKEvt )
             {
                 SdrHdl* pAct = rHdlList.GetHdl(a);
 
-                if(pAct && pAct->GetKind() == HDL_POLY && pAct->GetPolyNum() == nPol && pAct->GetPointNum() == nPnt)
+                if(pAct && pAct->GetKind() == SdrHdlKind::Poly && pAct->GetPolyNum() == nPol && pAct->GetPointNum() == nPnt)
                     pNewOne = pAct;
             }
 
@@ -714,15 +714,15 @@ bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
             // start dragging
             rtl::Reference< MotionPathTag > xTag( this );
             SdrDragMethod* pDragMethod = nullptr;
-            if( (pHdl->GetKind() == HDL_MOVE) || (pHdl->GetKind() == HDL_SMARTTAG) )
+            if( (pHdl->GetKind() == SdrHdlKind::Move) || (pHdl->GetKind() == SdrHdlKind::SmartTag) )
             {
                 pDragMethod = new PathDragMove( mrView, xTag );
             }
-            else if( pHdl->GetKind() == HDL_POLY )
+            else if( pHdl->GetKind() == SdrHdlKind::Poly )
             {
                 pDragMethod = new PathDragObjOwn( mrView );
             }
-            else if( pHdl->GetKind() != HDL_BWGT )
+            else if( pHdl->GetKind() != SdrHdlKind::BezierWeight )
             {
                 pDragMethod = new PathDragResize( mrView, xTag );
             }
@@ -787,7 +787,7 @@ sal_uLong MotionPathTag::GetMarkedPointCount() const
 bool MotionPathTag::MarkPoint(SdrHdl& rHdl, bool bUnmark )
 {
     bool bRet=false;
-    if( mpPathObj && mrView.IsPointMarkable( rHdl ) && (rHdl.GetKind() != HDL_SMARTTAG) )
+    if( mpPathObj && mrView.IsPointMarkable( rHdl ) && (rHdl.GetKind() != SdrHdlKind::SmartTag) )
     {
         SmartHdl* pSmartHdl = dynamic_cast< SmartHdl* >( &rHdl );
         if( pSmartHdl && pSmartHdl->getTag().get() == this )
@@ -955,23 +955,23 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
                     bool bHgt0=aRect.Top()==aRect.Bottom();
                     if (bWdt0 && bHgt0)
                     {
-                        rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.TopLeft(),HDL_UPLFT));
+                        rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.TopLeft(),SdrHdlKind::UpperLeft));
                     }
                     else if (bWdt0 || bHgt0)
                     {
-                        rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.TopLeft()    ,HDL_UPLFT));
-                        rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.BottomRight(),HDL_LWRGT));
+                        rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.TopLeft()    ,SdrHdlKind::UpperLeft));
+                        rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.BottomRight(),SdrHdlKind::LowerRight));
                     }
                     else
                     {
-                        if (!bWdt0 && !bHgt0) rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.TopLeft()     ,HDL_UPLFT));
-                        if (          !bHgt0) rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.TopCenter()   ,HDL_UPPER));
-                        if (!bWdt0 && !bHgt0) rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.TopRight()    ,HDL_UPRGT));
-                        if (!bWdt0          ) rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.LeftCenter()  ,HDL_LEFT ));
-                        if (!bWdt0          ) rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.RightCenter() ,HDL_RIGHT));
-                        if (!bWdt0 && !bHgt0) rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.BottomLeft()  ,HDL_LWLFT));
-                        if (          !bHgt0) rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.BottomCenter(),HDL_LOWER));
-                        if (!bWdt0 && !bHgt0) rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.BottomRight() ,HDL_LWRGT));
+                        if (!bWdt0 && !bHgt0) rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.TopLeft()     ,SdrHdlKind::UpperLeft));
+                        if (          !bHgt0) rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.TopCenter()   ,SdrHdlKind::Upper));
+                        if (!bWdt0 && !bHgt0) rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.TopRight()    ,SdrHdlKind::UpperRight));
+                        if (!bWdt0          ) rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.LeftCenter()  ,SdrHdlKind::Left ));
+                        if (!bWdt0          ) rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.RightCenter() ,SdrHdlKind::Right));
+                        if (!bWdt0 && !bHgt0) rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.BottomLeft()  ,SdrHdlKind::LowerLeft));
+                        if (          !bHgt0) rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.BottomCenter(),SdrHdlKind::Lower));
+                        if (!bWdt0 && !bHgt0) rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.BottomRight() ,SdrHdlKind::LowerRight));
                     }
 
                     while( nCount < rHandlerList.GetHdlCount() )

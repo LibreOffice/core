@@ -622,13 +622,13 @@ void SdrMarkView::SetMarkHandles()
     const SdrHdl* pSaveOldFocusHdl = maHdlList.GetFocusHdl();
     bool bSaveOldFocus(false);
     sal_uInt32 nSavePolyNum(0L), nSavePointNum(0L);
-    SdrHdlKind eSaveKind(HDL_MOVE);
+    SdrHdlKind eSaveKind(SdrHdlKind::Move);
     SdrObject* pSaveObj = nullptr;
 
     if(pSaveOldFocusHdl
         && pSaveOldFocusHdl->GetObj()
         && dynamic_cast<const SdrPathObj*>(pSaveOldFocusHdl->GetObj()) != nullptr
-        && (pSaveOldFocusHdl->GetKind() == HDL_POLY || pSaveOldFocusHdl->GetKind() == HDL_BWGT))
+        && (pSaveOldFocusHdl->GetKind() == SdrHdlKind::Poly || pSaveOldFocusHdl->GetKind() == SdrHdlKind::BezierWeight))
     {
         bSaveOldFocus = true;
         nSavePolyNum = pSaveOldFocusHdl->GetPolyNum();
@@ -796,23 +796,23 @@ void SdrMarkView::SetMarkHandles()
                     bool bHgt0=aRect.Top()==aRect.Bottom();
                     if (bWdt0 && bHgt0)
                     {
-                        maHdlList.AddHdl(new SdrHdl(aRect.TopLeft(),HDL_UPLFT));
+                        maHdlList.AddHdl(new SdrHdl(aRect.TopLeft(),SdrHdlKind::UpperLeft));
                     }
                     else if (!bStdDrag && (bWdt0 || bHgt0))
                     {
-                        maHdlList.AddHdl(new SdrHdl(aRect.TopLeft()    ,HDL_UPLFT));
-                        maHdlList.AddHdl(new SdrHdl(aRect.BottomRight(),HDL_LWRGT));
+                        maHdlList.AddHdl(new SdrHdl(aRect.TopLeft()    ,SdrHdlKind::UpperLeft));
+                        maHdlList.AddHdl(new SdrHdl(aRect.BottomRight(),SdrHdlKind::LowerRight));
                     }
                     else
                     {
-                        if (!bWdt0 && !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.TopLeft()     ,HDL_UPLFT));
-                        if (          !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.TopCenter()   ,HDL_UPPER));
-                        if (!bWdt0 && !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.TopRight()    ,HDL_UPRGT));
-                        if (!bWdt0          ) maHdlList.AddHdl(new SdrHdl(aRect.LeftCenter()  ,HDL_LEFT ));
-                        if (!bWdt0          ) maHdlList.AddHdl(new SdrHdl(aRect.RightCenter() ,HDL_RIGHT));
-                        if (!bWdt0 && !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.BottomLeft()  ,HDL_LWLFT));
-                        if (          !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.BottomCenter(),HDL_LOWER));
-                        if (!bWdt0 && !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.BottomRight() ,HDL_LWRGT));
+                        if (!bWdt0 && !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.TopLeft()     ,SdrHdlKind::UpperLeft));
+                        if (          !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.TopCenter()   ,SdrHdlKind::Upper));
+                        if (!bWdt0 && !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.TopRight()    ,SdrHdlKind::UpperRight));
+                        if (!bWdt0          ) maHdlList.AddHdl(new SdrHdl(aRect.LeftCenter()  ,SdrHdlKind::Left ));
+                        if (!bWdt0          ) maHdlList.AddHdl(new SdrHdl(aRect.RightCenter() ,SdrHdlKind::Right));
+                        if (!bWdt0 && !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.BottomLeft()  ,SdrHdlKind::LowerLeft));
+                        if (          !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.BottomCenter(),SdrHdlKind::Lower));
+                        if (!bWdt0 && !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.BottomRight() ,SdrHdlKind::LowerRight));
                     }
                 }
             }
@@ -898,7 +898,7 @@ void SdrMarkView::SetMarkHandles()
                         {
                             const SdrGluePoint& rGP=(*pGPL)[nNumGP];
                             Point aPos(rGP.GetAbsolutePos(*pObj));
-                            SdrHdl* pGlueHdl=new SdrHdl(aPos,HDL_GLUE);
+                            SdrHdl* pGlueHdl=new SdrHdl(aPos,SdrHdlKind::Glue);
                             pGlueHdl->SetObj(pObj);
                             pGlueHdl->SetPageView(pPV);
                             pGlueHdl->SetObjHdlNum(nId);
@@ -965,7 +965,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
         case SdrDragMode::Rotate:
         {
             // add rotation center
-            SdrHdl* pHdl = new SdrHdl(maRef1, HDL_REF1);
+            SdrHdl* pHdl = new SdrHdl(maRef1, SdrHdlKind::Ref1);
 
             maHdlList.AddHdl(pHdl);
 
@@ -974,9 +974,9 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
         case SdrDragMode::Mirror:
         {
             // add axis of reflection
-            SdrHdl* pHdl3 = new SdrHdl(maRef2, HDL_REF2);
-            SdrHdl* pHdl2 = new SdrHdl(maRef1, HDL_REF1);
-            SdrHdl* pHdl1 = new SdrHdlLine(*pHdl2, *pHdl3, HDL_MIRX);
+            SdrHdl* pHdl3 = new SdrHdl(maRef2, SdrHdlKind::Ref2);
+            SdrHdl* pHdl2 = new SdrHdl(maRef1, SdrHdlKind::Ref1);
+            SdrHdl* pHdl1 = new SdrHdlLine(*pHdl2, *pHdl3, SdrHdlKind::MirrorAxis);
 
             pHdl1->SetObjHdlNum(1); // for sorting
             pHdl2->SetObjHdlNum(2); // for sorting
@@ -1237,7 +1237,7 @@ void SdrMarkView::SetRef1(const Point& rPt)
     if(meDragMode == SdrDragMode::Rotate || meDragMode == SdrDragMode::Mirror)
     {
         maRef1 = rPt;
-        SdrHdl* pH = maHdlList.GetHdl(HDL_REF1);
+        SdrHdl* pH = maHdlList.GetHdl(SdrHdlKind::Ref1);
         if(pH)
             pH->SetPos(rPt);
     }
@@ -1248,7 +1248,7 @@ void SdrMarkView::SetRef2(const Point& rPt)
     if(meDragMode == SdrDragMode::Mirror)
     {
         maRef2 = rPt;
-        SdrHdl* pH = maHdlList.GetHdl(HDL_REF2);
+        SdrHdl* pH = maHdlList.GetHdl(SdrHdlKind::Ref2);
         if(pH)
             pH->SetPos(rPt);
     }

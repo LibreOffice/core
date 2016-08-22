@@ -438,7 +438,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         SdrViewEvent aVEvt;
         SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
-        if (eHit == SdrHitKind::Handle && aVEvt.pHdl->GetKind() == HDL_BWGT)
+        if (eHit == SdrHitKind::Handle && aVEvt.pHdl->GetKind() == SdrHdlKind::BezierWeight)
         {
             /******************************************************************
             * Drag Handle
@@ -718,9 +718,9 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     mpView->Start3DCreation();
                     bSuppressChangesOfSelection = false;
                 }
-                else if (pHdl->GetKind() != HDL_MIRX &&
-                         pHdl->GetKind() != HDL_REF1 &&
-                         pHdl->GetKind() != HDL_REF2 && mpView->Is3DRotationCreationActive())
+                else if (pHdl->GetKind() != SdrHdlKind::MirrorAxis &&
+                         pHdl->GetKind() != SdrHdlKind::Ref1 &&
+                         pHdl->GetKind() != SdrHdlKind::Ref2 && mpView->Is3DRotationCreationActive())
                 {
                     /*********************************************************
                     * If 3D-rotation bodies are about to be created,

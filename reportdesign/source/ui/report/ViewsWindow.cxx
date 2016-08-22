@@ -1642,17 +1642,17 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
 
                         switch(pHdl->GetKind())
                         {
-                            case HDL_LEFT:
-                            case HDL_UPLFT:
-                            case HDL_LWLFT:
-                            case HDL_UPPER:
+                            case SdrHdlKind::Left:
+                            case SdrHdlKind::UpperLeft:
+                            case SdrHdlKind::LowerLeft:
+                            case SdrHdlKind::Upper:
                                 aNewRect.Left() += nX;
                                 aNewRect.Top()  += nY;
                                 break;
-                            case HDL_UPRGT:
-                            case HDL_RIGHT:
-                            case HDL_LWRGT:
-                            case HDL_LOWER:
+                            case SdrHdlKind::UpperRight:
+                            case SdrHdlKind::Right:
+                            case SdrHdlKind::LowerRight:
+                            case SdrHdlKind::Lower:
                                 aNewRect.setWidth(aNewRect.getWidth() + nX);
                                 aNewRect.setHeight(aNewRect.getHeight() + nY);
                                 break;
