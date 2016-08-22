@@ -7255,6 +7255,40 @@ void Test::testMatConcat()
             CPPUNIT_ASSERT_EQUAL(OUString(OUString::number(nCol * (nRow - 12)) + OUString::number(nCol * (nRow - 12))), aStr);
         }
     }
+
+    {   // Data in A12:B16
+        const char* aData[][2] = {
+            { "q", "w" },
+            { "a",  "" },
+            {  "", "x" },
+            {  "",  "" },
+            { "e", "r" },
+        };
+
+        ScAddress aPos(0,11,0);
+        ScRange aRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        CPPUNIT_ASSERT_EQUAL(aPos, aRange.aStart);
+    }
+    // Matrix formula in C17:C21
+    m_pDoc->InsertMatrixFormula(2, 16, 2, 20, aMark, "=A12:A16&B12:B16");
+    // Check proper concatenation including empty cells.
+    OUString aStr;
+    ScAddress aPos(2,16,0);
+    aStr = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL(OUString("qw"),aStr);
+    aPos.IncRow();
+    aStr = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL(OUString("a"),aStr);
+    aPos.IncRow();
+    aStr = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL(OUString("x"),aStr);
+    aPos.IncRow();
+    aStr = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL(OUString(""),aStr);
+    aPos.IncRow();
+    aStr = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL(OUString("er"),aStr);
+
     m_pDoc->DeleteTab(0);
 }
 
