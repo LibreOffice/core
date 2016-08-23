@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_bafe8603",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3250,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-23T13:56:19Z",
+      "side": 1,
+      "message": "Clearly this copy\u0026paste error should not go in as is, compare with commit b69503ea67cea885fde8a36f41af37a56455fe19 on master.",
+      "range": {
+        "startLine": 3250,
+        "startChar": 23,
+        "endLine": 3250,
+        "endChar": 89
+      },
+      "revId": "7a0906caac830adaa4b4c460a48520d2bf7039d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_da033a0c",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3273,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-23T13:56:19Z",
+      "side": 1,
+      "message": "Ditto.",
+      "range": {
+        "startLine": 3273,
+        "startChar": 23,
+        "endLine": 3273,
+        "endChar": 89
+      },
+      "revId": "7a0906caac830adaa4b4c460a48520d2bf7039d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
