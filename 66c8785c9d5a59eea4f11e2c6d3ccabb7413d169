@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_37b0cf8b",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4749,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-23T12:39:46Z",
+      "side": 1,
+      "message": "I think this should be\n\n if (rNum.IsComplete() \u0026\u0026 (rNum.GetDBNum() \u003e 0 || nOriginalLang !\u003d LANGUAGE_DONTKNOW))\n\nbecause otherwise if nOriginalLang\u003dLANGUAGE_DONTKNOW was passed the DBNum is not written even if the format\u0027s locale matches the SvNumberNatNum locale, or if it is of a completely different locale.",
+      "range": {
+        "startLine": 4749,
+        "startChar": 8,
+        "endLine": 4749,
+        "endChar": 70
+      },
+      "revId": "66c8785c9d5a59eea4f11e2c6d3ccabb7413d169",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_77aa471b",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4751,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-23T12:39:46Z",
+      "side": 1,
+      "message": "So this then needs to check for\n\n if (rNum.GetLang() \u003d\u003d LANGUAGE_ENGLISH_US \u0026\u0026 nOriginalLang !\u003d LANGUAGE_DONTKNOW)",
+      "range": {
+        "startLine": 4751,
+        "startChar": 12,
+        "endLine": 4751,
+        "endChar": 56
+      },
+      "revId": "66c8785c9d5a59eea4f11e2c6d3ccabb7413d169",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_1772ebe5",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4862,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-23T12:39:46Z",
+      "side": 1,
+      "message": "Setting bLCIDInserted here is not necessary, there\u0027s no code checking it hereafter.",
+      "range": {
+        "startLine": 4862,
+        "startChar": 16,
+        "endLine": 4862,
+        "endChar": 36
+      },
+      "revId": "66c8785c9d5a59eea4f11e2c6d3ccabb7413d169",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_f76c970a",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4866,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-23T12:39:46Z",
+      "side": 1,
+      "message": "Nitpick: avoid overly long lines, 120 characters is enough to wrap the head around.. ;-) and make it look ugly in the debugger..",
+      "revId": "66c8785c9d5a59eea4f11e2c6d3ccabb7413d169",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
