@@ -4745,15 +4745,15 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
             }
         }
 
-        SvNumberNatNum rNum = NumFor[n].GetNatNum();
-        if (rNum.IsComplete() && (rNum.GetDBNum() > 0 || nOriginalLang != LANGUAGE_DONTKNOW))
+        SvNumberNatNum aNatNum = NumFor[n].GetNatNum();
+        if (aNatNum.IsComplete() && (aNatNum.GetDBNum() > 0 || nOriginalLang != LANGUAGE_DONTKNOW))
         {   // GetFormatStringForExcel() may have changed language to en_US
-            if (rNum.GetLang() == LANGUAGE_ENGLISH_US && nOriginalLang != LANGUAGE_DONTKNOW)
-                rNum.SetLang( nOriginalLang );
-            if ( rNum.GetDBNum() > 0 )
+            if (aNatNum.GetLang() == LANGUAGE_ENGLISH_US && nOriginalLang != LANGUAGE_DONTKNOW)
+                aNatNum.SetLang( nOriginalLang );
+            if ( aNatNum.GetDBNum() > 0 )
             {
                 aPrefix += "[DBNum";
-                aPrefix += OUString::number( rNum.GetDBNum() );
+                aPrefix += OUString::number( aNatNum.GetDBNum() );
                 aPrefix += "]";
             }
         }
@@ -4831,8 +4831,8 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                     case NF_SYMBOLTYPE_CALDEL :
                         if ( pStr[j+1] == "buddhist" )
                         {
-                            if ( rNum.IsSet() && rNum.GetNatNum() == 1 &&
-                                 MsLangId::getRealLanguage( rNum.GetLang() ) ==
+                            if ( aNatNum.IsSet() && aNatNum.GetNatNum() == 1 &&
+                                 MsLangId::getRealLanguage( aNatNum.GetLang() ) ==
                                  LANGUAGE_THAI )
                             {
                                 lcl_insertLCID( aStr, "D07041E" ); // date in Thai digit, Buddhist era
@@ -4851,19 +4851,19 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                 }
             }
         }
-        if (rNum.IsSet() && !bLCIDInserted)
+        if (aNatNum.IsSet() && !bLCIDInserted)
         {
             // The Thai T NatNum modifier during Xcl export.
-            if (rNum.GetNatNum() == 1 &&
+            if (aNatNum.GetNatNum() == 1 &&
                 rKeywords[NF_KEY_THAI_T] == "T" &&
-                MsLangId::getRealLanguage( rNum.GetLang()) == LANGUAGE_THAI )
+                MsLangId::getRealLanguage( aNatNum.GetLang()) == LANGUAGE_THAI )
             {
                 lcl_insertLCID( aStr, "D00041E" ); // number in Thai digit
             }
-            else if ( rNum.IsComplete() && rNum.GetDBNum() > 0 )
+            else if ( aNatNum.IsComplete() && aNatNum.GetDBNum() > 0 )
             {
                 lcl_insertLCID( aStr, OUString::number( sal::static_int_cast<sal_Int32>(
-                                MsLangId::getRealLanguage( rNum.GetLang())), 16).toAsciiUpperCase());
+                                MsLangId::getRealLanguage( aNatNum.GetLang())), 16).toAsciiUpperCase());
             }
         }
     }
