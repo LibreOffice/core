@@ -24,10 +24,10 @@
 #include <svx/svxdllapi.h>
 #include <vcl/lstbox.hxx>
 
-enum PaperSizeApp
+enum class PaperSizeApp
 {
-    PaperSizeStd,
-    PaperSizeDraw
+    Std,
+    Draw
 };
 
 class SVX_DLLPUBLIC PaperSizeListBox : public ListBox

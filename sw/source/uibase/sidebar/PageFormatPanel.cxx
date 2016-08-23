@@ -109,7 +109,7 @@ void PageFormatPanel::dispose()
 
 void PageFormatPanel::Initialize()
 {
-    mpPaperSizeBox->FillPaperSizeEntries( PaperSizeStd );
+    mpPaperSizeBox->FillPaperSizeEntries( PaperSizeApp::Std );
     mpPaperSizeBox->SetDropDownLineCount(6);
     meUnit = maPaperSizeController.GetCoreMetric();
     SetFieldUnit( *mpPaperWidth, meFUnit );

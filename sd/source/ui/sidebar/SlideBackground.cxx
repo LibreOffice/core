@@ -147,7 +147,7 @@ bool SlideBackground::IsImpress()
 
 void SlideBackground::Initialize()
 {
-    mpPaperSizeBox->FillPaperSizeEntries( PaperSizeDraw );
+    mpPaperSizeBox->FillPaperSizeEntries( PaperSizeApp::Draw );
     mpPaperSizeBox->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
     mpPaperOrientation->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
     mpCloseMaster->Hide();

@@ -553,7 +553,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     SetMetricValue( *m_pPaperWidthEdit, aPaperSize.Width(), MAP_100TH_MM );
     m_pPaperSizeBox->Clear();
 
-    m_pPaperSizeBox->FillPaperSizeEntries( ( ePaperStart == PAPER_A3 ) ? PaperSizeStd : PaperSizeDraw );
+    m_pPaperSizeBox->FillPaperSizeEntries( ( ePaperStart == PAPER_A3 ) ? PaperSizeApp::Std : PaperSizeApp::Draw );
     m_pPaperSizeBox->SetSelection( ePaper );
 
     // application specific
