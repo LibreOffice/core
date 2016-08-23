@@ -34,9 +34,8 @@ namespace sdr
 {
     namespace overlay
     {
-        OverlayObjectCell::OverlayObjectCell( CellOverlayType eType, const Color& rColor, const RangeVector& rRects )
+        OverlayObjectCell::OverlayObjectCell( const Color& rColor, const RangeVector& rRects )
         :   OverlayObject( rColor ),
-            mePaintType( eType ),
             maRectangles( rRects )
         {
             // no AA for selection overlays
@@ -70,25 +69,13 @@ namespace sdr
                 }
 
 
-                if(mePaintType == CELL_OVERLAY_TRANSPARENT)
-                {
-                    // embed in 50% transparent paint
-                    const drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparence(
-                        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                            aRetval,
-                            0.5));
+                // embed in 50% transparent paint
+                const drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparence(
+                    new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
+                        aRetval,
+                        0.5));
 
-                    aRetval = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparence };
-                }
-                else // CELL_OVERLAY_INVERT
-                {
-                    // embed in invert primitive
-                    const drawinglayer::primitive2d::Primitive2DReference aInvert(
-                        new drawinglayer::primitive2d::InvertPrimitive2D(
-                            aRetval));
-
-                    aRetval = drawinglayer::primitive2d::Primitive2DContainer { aInvert };
-                }
+                aRetval = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparence };
             }
 
             return aRetval;
