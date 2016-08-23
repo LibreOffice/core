@@ -39,13 +39,13 @@ public:
     static vcl::EnumContext::Context GetContextForSelection_SC (
         const SdrMarkList& rMarkList);
 
-    enum ViewType
+    enum class ViewType
     {
-        VT_Standard,
-        VT_Master,
-        VT_Handout,
-        VT_Notes,
-        VT_Outline
+        Standard,
+        Master,
+        Handout,
+        Notes,
+        Outline
     };
     static vcl::EnumContext::Context GetContextForSelection_SD (
         const SdrMarkList& rMarkList,

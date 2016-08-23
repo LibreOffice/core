@@ -103,19 +103,19 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD (
         case 0:
             switch(eViewType)
             {
-                case VT_Standard:
+                case ViewType::Standard:
                     eContext = EnumContext::Context_DrawPage;
                     break;
-                case VT_Master:
+                case ViewType::Master:
                     eContext = EnumContext::Context_MasterPage;
                     break;
-                case VT_Handout:
+                case ViewType::Handout:
                     eContext = EnumContext::Context_HandoutPage;
                     break;
-                case VT_Notes:
+                case ViewType::Notes:
                     eContext = EnumContext::Context_NotesPage;
                     break;
-                case VT_Outline:
+                case ViewType::Outline:
                     eContext = EnumContext::Context_OutlineText;
                     break;
             }
@@ -289,11 +289,11 @@ EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SD (
         case OBJ_PAGE:
             switch (eViewType)
             {
-                case VT_Handout:
+                case ViewType::Handout:
                     return EnumContext::Context_HandoutPage;
-                case VT_Notes:
+                case ViewType::Notes:
                     return EnumContext::Context_NotesPage;
-                case VT_Outline:
+                case ViewType::Outline:
                     return EnumContext::Context_OutlineText;
                 default:
                     return EnumContext::Context_Unknown;
