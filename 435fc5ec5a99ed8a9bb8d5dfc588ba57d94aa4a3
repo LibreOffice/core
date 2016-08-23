@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_573e23b9",
+        "filename": "sw/uiconfig/swriter/ui/notebookbar_single.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-08-23T05:51:26Z",
+      "side": 1,
+      "message": "Please use the NotebookbarToolBox instead of the SidebarToolBox.",
+      "revId": "435fc5ec5a99ed8a9bb8d5dfc588ba57d94aa4a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
