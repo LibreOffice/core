@@ -91,6 +91,10 @@ enum SwPageNumSubType
     PG_PREV
 };
 
+// NOTE: Possibly the first 15 values in the below enum are required
+// to exactly match the published constants in css::text::UserDataPart
+// (see offapi/com/sun/star/text/UserDataPart.idl).
+
 enum SwExtUserSubType
 {
     EU_COMPANY,
