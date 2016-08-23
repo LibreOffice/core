@@ -207,8 +207,8 @@ void Migration::migrateSettingsIfNecessary()
     try {
         bResult = aImpl.doMigration();
     } catch (const Exception& e) {
-        OString aMsg("doMigration() exception: ");
-        aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
+        OString aMsg = "doMigration() exception: "
+                     + OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
         OSL_FAIL(aMsg.getStr());
     }
     OSL_ENSURE(bResult, "Migration has not been successful");
@@ -850,9 +850,10 @@ void MigrationImpl::copyFiles()
             _checkAndCreateDirectory(aURL);
             FileBase::RC copyResult = File::copy(*i_file, destName);
             if (copyResult != FileBase::E_None) {
-                OString msg("Cannot copy ");
-                msg += OUStringToOString(*i_file, RTL_TEXTENCODING_UTF8) + " to "
-                       +  OUStringToOString(destName, RTL_TEXTENCODING_UTF8);
+                OString msg = "Cannot copy "
+                            + OUStringToOString(*i_file, RTL_TEXTENCODING_UTF8)
+                            + " to "
+                            + OUStringToOString(destName, RTL_TEXTENCODING_UTF8);
                 OSL_FAIL(msg.getStr());
             }
             ++i_file;

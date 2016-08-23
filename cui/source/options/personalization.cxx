@@ -214,8 +214,7 @@ IMPL_LINK_TYPED( SelectPersonaDialog, SelectPersona, Button*, pButton, void )
                 // get the persona name from the setting variable to show in the progress.
                 sal_Int32 nNameIndex = m_aSelectedPersona.indexOf( ';' );
                 OUString aName = m_aSelectedPersona.copy( 0, nNameIndex );
-                OUString aProgress( CUI_RES( RID_SVXSTR_SELECTEDPERSONA ) );
-                aProgress += aName;
+                OUString aProgress = CUI_RESSTR( RID_SVXSTR_SELECTEDPERSONA ) + aName;
                 SetProgress( aProgress );
             }
             break;
@@ -417,9 +416,9 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
 {
     // Load the pre saved personas
 
-    OUString gallery( "" );
-    gallery = "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER;
-    gallery += "/gallery/personas/";
+    OUString gallery = "$BRAND_BASE_DIR/"
+                     + OUString(LIBO_SHARE_FOLDER)
+                     + "/gallery/personas/";
     rtl::Bootstrap::expandMacros( gallery );
     OUString aPersonasList = gallery + "personas_list.txt";
     SvFileStream aStream( aPersonasList, StreamMode::READ );
