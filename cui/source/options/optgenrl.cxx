@@ -300,7 +300,7 @@ bool SvxGeneralTabPage::FillItemSet( SfxItemSet* )
         vFields[i]->pEdit->SetText(comphelper::string::strip(vFields[i]->pEdit->GetText(), ' '));
 
     bool bModified = false;
-    bModified |= GetAddress_Impl();
+    bModified |= GetData_Impl();
     SvtSaveOptions aSaveOpt;
     if ( m_pUseDataCB->IsChecked() != aSaveOpt.IsUseUserData() )
     {
@@ -312,7 +312,7 @@ bool SvxGeneralTabPage::FillItemSet( SfxItemSet* )
 
 void SvxGeneralTabPage::Reset( const SfxItemSet* rSet )
 {
-    SetAddress_Impl();
+    SetData_Impl();
 
     sal_uInt16 const nWhich = GetWhich(SID_FIELD_GRABFOCUS);
 
@@ -369,7 +369,7 @@ IMPL_LINK_TYPED( SvxGeneralTabPage, ModifyHdl_Impl, Edit&, rEdit, void )
 }
 
 
-bool SvxGeneralTabPage::GetAddress_Impl()
+bool SvxGeneralTabPage::GetData_Impl()
 {
     // updating
     SvtUserOptions aUserOpt;
@@ -387,7 +387,7 @@ bool SvxGeneralTabPage::GetAddress_Impl()
 }
 
 
-void SvxGeneralTabPage::SetAddress_Impl()
+void SvxGeneralTabPage::SetData_Impl()
 {
     // updating and disabling edit boxes
     SvtUserOptions aUserOpt;

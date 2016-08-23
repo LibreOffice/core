@@ -52,8 +52,8 @@ private:
 
     DECL_LINK_TYPED( ModifyHdl_Impl, Edit&, void );
 
-    bool                GetAddress_Impl();
-    void                SetAddress_Impl();
+    bool                GetData_Impl();
+    void                SetData_Impl();
 
     void InitControls ();
     void SetLinks ();
