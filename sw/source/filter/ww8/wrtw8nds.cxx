@@ -2079,6 +2079,36 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
         }
     }
 
+    // Emulate: If 1-row table is marked as don't split, then set the row as don't split.
+    if ( IsInTable() )
+    {
+        const SwTableNode* pTableNode = rNode.FindTableNode();
+        if ( pTableNode )
+        {
+            const SwTable& rTable = pTableNode->GetTable();
+            const bool bKeep = rTable.GetFrameFormat()->GetKeep().GetValue();
+            const bool bDontSplit = !rTable.GetFrameFormat()->GetLayoutSplit().GetValue();
+            // bKeep handles this a different way later on, so ignore now
+            if ( !bKeep && bDontSplit && rTable.GetTabLines().size() == 1 )
+            {
+                // bDontSplit : set don't split once for the row
+                // but only for non-complex tables
+                const SwTableBox* pBox = rNode.GetTableBox();
+                const SwTableLine* pLine = pBox ? pBox->GetUpper() : nullptr;
+                if ( pLine && !pLine->GetUpper() )
+                {
+                    // check if box is first in that line:
+                    if ( 0 == pLine->GetBoxPos( pBox ) && pBox->GetSttNd() )
+                    {
+                        // check if paragraph is first in that line:
+                        if ( 1 == ( rNode.GetIndex() - pBox->GetSttNd()->GetIndex() ) )
+                            pLine->GetFrameFormat()->SetFormatAttr(SwFormatRowSplit(!bDontSplit));
+                    }
+                }
+            }
+        }
+    }
+
     AttrOutput().StartParagraph( pTextNodeInfo );
 
     const SwSection* pTOXSect = nullptr;
