@@ -73,7 +73,7 @@ SvxRectCtl::SvxRectCtl(vcl::Window* pParent, RECT_POINT eRpt,
     , nBorderWidth(nBorder)
     , nRadius(nCircle)
     , eDefRP(eRpt)
-    , eCS(CS_RECT)
+    , eCS(CTL_STYLE::Rect)
     , pBitmap(nullptr)
     , m_nState(CTL_STATE::NONE)
     , mbCompleteDisable(false)
@@ -89,7 +89,7 @@ void SvxRectCtl::SetControlSettings(RECT_POINT eRpt, sal_uInt16 nBorder, sal_uIn
     nBorderWidth = nBorder;
     nRadius = nCircle;
     eDefRP = eRpt;
-    eCS = CS_RECT;
+    eCS = CTL_STYLE::Rect;
     Resize_Impl();
 }
 
@@ -127,9 +127,9 @@ void SvxRectCtl::Resize_Impl()
 
     switch( eCS )
     {
-        case CS_RECT:
-        case CS_ANGLE:
-        case CS_SHADOW:
+        case CTL_STYLE::Rect:
+        case CTL_STYLE::Angle:
+        case CTL_STYLE::Shadow:
             aPtLT = Point( 0 + nBorderWidth,  0 + nBorderWidth );
             aPtMT = Point( aSize.Width() / 2, 0 + nBorderWidth );
             aPtRT = Point( aSize.Width() - nBorderWidth, 0 + nBorderWidth );
@@ -143,7 +143,7 @@ void SvxRectCtl::Resize_Impl()
             aPtRB = Point( aSize.Width() - nBorderWidth, aSize.Height() - nBorderWidth );
         break;
 
-        case CS_LINE:
+        case CTL_STYLE::Line:
             aPtLT = Point( 0 + 3 * nBorderWidth,  0 + nBorderWidth );
             aPtMT = Point( aSize.Width() / 2, 0 + nBorderWidth );
             aPtRT = Point( aSize.Width() - 3 * nBorderWidth, 0 + nBorderWidth );
@@ -255,7 +255,7 @@ void SvxRectCtl::MouseButtonDown( const MouseEvent& rMEvt )
 
         aPtNew = GetApproxLogPtFromPixPt( rMEvt.GetPosPixel() );
 
-        if( aPtNew == aPtMM && ( eCS == CS_SHADOW || eCS == CS_ANGLE ) )
+        if( aPtNew == aPtMM && ( eCS == CTL_STYLE::Shadow || eCS == CTL_STYLE::Angle ) )
         {
             aPtNew = aPtLast;
         }
@@ -282,7 +282,7 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
     if(!IsCompletelyDisabled())
     {
         RECT_POINT eNewRP = eRP;
-        bool bUseMM = (eCS != CS_SHADOW) && (eCS != CS_ANGLE);
+        bool bUseMM = (eCS != CTL_STYLE::Shadow) && (eCS != CTL_STYLE::Angle);
 
         switch( rKeyEvt.GetKeyCode().GetCode() )
         {
@@ -407,8 +407,8 @@ void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     switch (eCS)
     {
 
-        case CS_RECT:
-        case CS_SHADOW:
+        case CTL_STYLE::Rect:
+        case CTL_STYLE::Shadow:
             if (!IsEnabled())
             {
                 Color aOldCol = rRenderContext.GetLineColor();
@@ -419,7 +419,7 @@ void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
             rRenderContext.DrawRect(Rectangle(aPtLT, aPtRB));
         break;
 
-        case CS_LINE:
+        case CTL_STYLE::Line:
             if (!IsEnabled())
             {
                 Color aOldCol = rRenderContext.GetLineColor();
@@ -432,7 +432,7 @@ void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
                                     aPtRM + Point(2 * nBorderWidth, 0));
         break;
 
-        case CS_ANGLE:
+        case CTL_STYLE::Angle:
             if (!IsEnabled())
             {
                 Color aOldCol = rRenderContext.GetLineColor();
@@ -473,7 +473,7 @@ void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
         rRenderContext.DrawBitmap(aPtMT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
         rRenderContext.DrawBitmap(aPtRT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
         rRenderContext.DrawBitmap(aPtLM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
-        if (eCS == CS_RECT || eCS == CS_LINE)
+        if (eCS == CTL_STYLE::Rect || eCS == CTL_STYLE::Line)
             rRenderContext.DrawBitmap(aPtMM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
         rRenderContext.DrawBitmap(aPtRM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
         rRenderContext.DrawBitmap(aPtLB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
@@ -488,7 +488,7 @@ void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
         rRenderContext.DrawBitmap(aPtLM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
 
         // Center for rectangle and line
-        if (eCS == CS_RECT || eCS == CS_LINE)
+        if (eCS == CTL_STYLE::Rect || eCS == CTL_STYLE::Line)
             rRenderContext.DrawBitmap(aPtMM - aToCenter, aDstBtnSize, aBtnPnt1, aBtnSize, rBitmap);
 
         rRenderContext.DrawBitmap(aPtRM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
@@ -501,7 +501,7 @@ void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     // CompletelyDisabled() added to have a disabled state for SvxRectCtl
     if (!IsCompletelyDisabled())
     {
-        if (IsEnabled() && (eCS != CS_ANGLE || aPtNew != aPtMM))
+        if (IsEnabled() && (eCS != CTL_STYLE::Angle || aPtNew != aPtMM))
         {
             Point aCenterPt(aPtNew);
             aCenterPt -= aToCenter;
@@ -677,7 +677,7 @@ void SvxRectCtl::SetState( CTL_STATE nState )
 
 sal_uInt8 SvxRectCtl::GetNumOfChildren() const
 {
-    return ( eCS == CS_ANGLE )? 8 : 9;
+    return ( eCS == CTL_STYLE::Angle )? 8 : 9;
 }
 
 Rectangle SvxRectCtl::CalculateFocusRectangle() const
