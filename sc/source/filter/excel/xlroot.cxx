@@ -73,7 +73,7 @@ XclDebugObjCounter::~XclDebugObjCounter()
 #endif
 
 XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
-        tools::SvRef<SotStorage> xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc, bool bExport ) :
+        tools::SvRef<SotStorage> const & xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc, bool bExport ) :
     meBiff( eBiff ),
     meOutput( EXC_OUTPUT_BINARY ),
     mrMedium( rMedium ),

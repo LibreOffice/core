@@ -57,7 +57,7 @@ class ToxTabStopTokenHandler;
 class ToxTextGenerator
 {
 public:
-    ToxTextGenerator(const SwForm& toxForm, std::shared_ptr<ToxTabStopTokenHandler> tabStopHandler);
+    ToxTextGenerator(const SwForm& toxForm, std::shared_ptr<ToxTabStopTokenHandler> const & tabStopHandler);
 
     virtual ~ToxTextGenerator();
 

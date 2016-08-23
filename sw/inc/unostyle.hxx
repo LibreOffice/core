@@ -209,7 +209,7 @@ private:
 
 public:
 
-    SwXAutoStyle( SwDoc* pDoc, std::shared_ptr<SfxItemSet> pInitSet, IStyleAccess::SwAutoStyleFamily eFam );
+    SwXAutoStyle( SwDoc* pDoc, std::shared_ptr<SfxItemSet> const & pInitSet, IStyleAccess::SwAutoStyleFamily eFam );
     virtual ~SwXAutoStyle();
 
     //XPropertySet

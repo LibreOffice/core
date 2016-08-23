@@ -77,7 +77,7 @@ class OOXMLBinaryValue : public OOXMLValue
 protected:
     mutable OOXMLBinaryObjectReference::Pointer_t mpBinaryObj;
 public:
-    explicit OOXMLBinaryValue(OOXMLBinaryObjectReference::Pointer_t pBinaryObj);
+    explicit OOXMLBinaryValue(OOXMLBinaryObjectReference::Pointer_t const & pBinaryObj);
     virtual ~OOXMLBinaryValue();
 
     virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() override;

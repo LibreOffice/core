@@ -29,7 +29,7 @@ namespace xls {
 
 using ::oox::core::ContextHandlerRef;
 
-ColorScaleContext::ColorScaleContext( CondFormatContext& rFragment, CondFormatRuleRef xRule ) :
+ColorScaleContext::ColorScaleContext( CondFormatContext& rFragment, CondFormatRuleRef const & xRule ) :
     WorksheetContextBase( rFragment ),
     mxRule( xRule )
 {
@@ -65,7 +65,7 @@ void ColorScaleContext::onStartElement( const AttributeList& rAttribs )
     }
 }
 
-DataBarContext::DataBarContext( CondFormatContext& rFragment, CondFormatRuleRef xRule ) :
+DataBarContext::DataBarContext( CondFormatContext& rFragment, CondFormatRuleRef const & xRule ) :
     WorksheetContextBase( rFragment ),
     mxRule( xRule )
 {

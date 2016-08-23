@@ -38,7 +38,7 @@ protected:
     sal_uInt16 nUnknownWhich;
 
 public:
-    SvXMLImportItemMapper( SvXMLItemMapEntriesRef rMapEntries ,
+    SvXMLImportItemMapper( SvXMLItemMapEntriesRef const & rMapEntries ,
                            sal_uInt16 nUnknWhich=USHRT_MAX );
     virtual ~SvXMLImportItemMapper();
 

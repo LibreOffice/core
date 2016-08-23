@@ -130,7 +130,7 @@ uno::Reference<container::XIndexContainer> FormControlHelper::FormControlHelper_
 
 FormControlHelper::FormControlHelper(FieldId eFieldId,
                                      uno::Reference<text::XTextDocument> const& xTextDocument,
-                                     FFDataHandler::Pointer_t pFFData)
+                                     FFDataHandler::Pointer_t const & pFFData)
     : m_pFFData(pFFData), m_pImpl(new FormControlHelper_Impl)
 {
     m_pImpl->m_eFieldId = eFieldId;

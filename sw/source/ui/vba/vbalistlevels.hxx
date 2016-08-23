@@ -32,7 +32,7 @@ private:
     SwVbaListHelperRef pListHelper;
 
 public:
-    SwVbaListLevels( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, SwVbaListHelperRef pHelper ) throw ( css::uno::RuntimeException );
+    SwVbaListLevels( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, SwVbaListHelperRef const & pHelper ) throw ( css::uno::RuntimeException );
     virtual ~SwVbaListLevels() {}
 
     virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException) override;

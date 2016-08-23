@@ -2053,7 +2053,7 @@ private:
 
 public:
 
-    wrapped_iterator(typename T::const_iterator it_, U aOp):
+    wrapped_iterator(typename T::const_iterator const & it_, U const & aOp):
         it(it_),
         val(value_type()),
         maOp(aOp)
@@ -2118,7 +2118,7 @@ private:
     typename T::const_iterator m_itEnd;
     U maOp;
 public:
-    MatrixIteratorWrapper(typename T::const_iterator itBegin, typename T::const_iterator itEnd, U aOp):
+    MatrixIteratorWrapper(typename T::const_iterator const & itBegin, typename T::const_iterator const & itEnd, U const & aOp):
         m_itBegin(itBegin),
         m_itEnd(itEnd),
         maOp(aOp)
@@ -2170,7 +2170,7 @@ private:
     T maOp;
 
 public:
-    MatrixOpWrapper(MatrixImplType& rMat, T aOp):
+    MatrixOpWrapper(MatrixImplType& rMat, T const & aOp):
         mrMat(rMat),
         pos(rMat.position(0,0)),
         maOp(aOp)
@@ -2253,10 +2253,10 @@ class WalkElementBlockOperation
 public:
 
     WalkElementBlockOperation(size_t nRowSize, size_t /*nColSize*/,
-            ScFullMatrix::DoubleOpFunction aDoubleFunc,
-            ScFullMatrix::BoolOpFunction aBoolFunc,
-            ScFullMatrix::StringOpFunction aStringFunc,
-            ScFullMatrix::EmptyOpFunction aEmptyFunc):
+            ScFullMatrix::DoubleOpFunction const & aDoubleFunc,
+            ScFullMatrix::BoolOpFunction const & aBoolFunc,
+            ScFullMatrix::StringOpFunction const & aStringFunc,
+            ScFullMatrix::EmptyOpFunction const & aEmptyFunc):
         mnRowSize(nRowSize),
         mnRowPos(0),
         mnColPos(0),

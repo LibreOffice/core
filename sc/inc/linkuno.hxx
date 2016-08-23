@@ -474,7 +474,7 @@ public:
 class ScExternalSheetCacheObj : public cppu::WeakImplHelper< css::sheet::XExternalSheetCache >
 {
 public:
-    explicit ScExternalSheetCacheObj(ScDocShell* pDocShell, ScExternalRefCache::TableTypeRef pTable, size_t nIndex);
+    explicit ScExternalSheetCacheObj(ScDocShell* pDocShell, ScExternalRefCache::TableTypeRef const & pTable, size_t nIndex);
     virtual ~ScExternalSheetCacheObj();
 
                             // XExternalSheetCache

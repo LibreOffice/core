@@ -193,7 +193,7 @@ class XclExpXct : public XclExpRecordBase, protected XclExpRoot
 public:
     explicit            XclExpXct( const XclExpRoot& rRoot,
                             const OUString& rTabName, sal_uInt16 nSBTab,
-                            ScExternalRefCache::TableTypeRef xCacheTable );
+                            ScExternalRefCache::TableTypeRef const & xCacheTable );
 
     /** Returns the external sheet name. */
     inline const XclExpString& GetTabName() const { return maTabName; }
@@ -1276,7 +1276,7 @@ void XclExpCrn::SaveXml( XclExpXmlStream& rStrm )
 // Cached cells of a sheet ====================================================
 
 XclExpXct::XclExpXct( const XclExpRoot& rRoot, const OUString& rTabName,
-        sal_uInt16 nSBTab, ScExternalRefCache::TableTypeRef xCacheTable ) :
+        sal_uInt16 nSBTab, ScExternalRefCache::TableTypeRef const & xCacheTable ) :
     XclExpRoot( rRoot ),
     mxCacheTable( xCacheTable ),
     maBoundRange( ScAddress::INITIALIZE_INVALID ),

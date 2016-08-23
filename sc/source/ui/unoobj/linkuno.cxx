@@ -1430,7 +1430,7 @@ uno::Reference< sheet::XDDELink > ScDDELinksObj::addDDELink(
     return xLink;
 }
 
-ScExternalSheetCacheObj::ScExternalSheetCacheObj(ScDocShell* pDocShell, ScExternalRefCache::TableTypeRef pTable, size_t nIndex) :
+ScExternalSheetCacheObj::ScExternalSheetCacheObj(ScDocShell* pDocShell, ScExternalRefCache::TableTypeRef const & pTable, size_t nIndex) :
     mpDocShell(pDocShell),
     mpTable(pTable),
     mnIndex(nIndex)

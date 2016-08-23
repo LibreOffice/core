@@ -48,7 +48,7 @@ using namespace ::com::sun::star;
 
 namespace sw {
 
-UndoManager::UndoManager(std::shared_ptr<SwNodes> xUndoNodes,
+UndoManager::UndoManager(std::shared_ptr<SwNodes> const & xUndoNodes,
             IDocumentDrawModelAccess & rDrawModelAccess,
             IDocumentRedlineAccess & rRedlineAccess,
             IDocumentState & rState)

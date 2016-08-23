@@ -112,7 +112,7 @@ namespace
         GetCountOrName_t m_fGetCountOrName;
         CreateStyle_t m_fCreateStyle;
         TranslateIndex_t m_fTranslateIndex;
-        StyleFamilyEntry(SfxStyleFamily eFamily, sal_uInt16 nPropMapType, SwGetPoolIdFromName aPoolId, OUString const& sName, sal_uInt32 nResId, GetCountOrName_t fGetCountOrName, CreateStyle_t fCreateStyle, TranslateIndex_t fTranslateIndex)
+        StyleFamilyEntry(SfxStyleFamily eFamily, sal_uInt16 nPropMapType, SwGetPoolIdFromName aPoolId, OUString const& sName, sal_uInt32 nResId, GetCountOrName_t const & fGetCountOrName, CreateStyle_t const & fCreateStyle, TranslateIndex_t const & fTranslateIndex)
                 : m_eFamily(eFamily)
                 , m_nPropMapType(nPropMapType)
                 , m_xPSInfo(aSwMapProvider.GetPropertySet(nPropMapType)->getPropertySetInfo())
@@ -3849,7 +3849,7 @@ uno::Any SwXAutoStylesEnumerator::nextElement(  )
 
 SwXAutoStyle::SwXAutoStyle(
     SwDoc* pDoc,
-    std::shared_ptr<SfxItemSet> pInitSet,
+    std::shared_ptr<SfxItemSet> const & pInitSet,
     IStyleAccess::SwAutoStyleFamily eFam)
 :   mpSet(pInitSet),
     meFamily(eFam),

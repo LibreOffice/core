@@ -38,7 +38,7 @@ class UndoManager
     , public SdrUndoManager
 {
 public:
-    UndoManager(std::shared_ptr<SwNodes> pUndoNodes,
+    UndoManager(std::shared_ptr<SwNodes> const & pUndoNodes,
         IDocumentDrawModelAccess & rDrawModelAccess,
         IDocumentRedlineAccess & rRedlineAccess,
         IDocumentState & rState);

@@ -69,7 +69,7 @@ private:
     DECL_LINK_TYPED(SelectHdl, ListBox&, void);
 
 public:
-    ManageLanguageDialog( vcl::Window* pParent, std::shared_ptr<LocalizationMgr> _pLMgr );
+    ManageLanguageDialog( vcl::Window* pParent, std::shared_ptr<LocalizationMgr> const & _pLMgr );
     virtual ~ManageLanguageDialog();
     virtual void dispose() override;
 };
@@ -89,7 +89,7 @@ private:
     void                FillLanguageBox();
 
 public:
-    SetDefaultLanguageDialog(vcl::Window* pParent, std::shared_ptr<LocalizationMgr> xLMgr);
+    SetDefaultLanguageDialog(vcl::Window* pParent, std::shared_ptr<LocalizationMgr> const & xLMgr);
     virtual ~SetDefaultLanguageDialog();
     virtual void dispose() override;
 

@@ -1253,7 +1253,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
                                           const Reference< XFrame >& rFrame,
                                           const OUString&            rWndTitle,
                                           vcl::Window*                    pParentWindow,
-                                          std::function<void(const OUString&, const Color&)> aFunction):
+                                          std::function<void(const OUString&, const Color&)> const & aFunction):
 
     SfxPopupWindow( nSlotId, pParentWindow,
                     "palette_popup_window", "svx/ui/colorwindow.ui",

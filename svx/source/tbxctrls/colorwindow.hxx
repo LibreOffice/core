@@ -70,7 +70,7 @@ public:
                          const css::uno::Reference< css::frame::XFrame >& rFrame,
                          const OUString& rWndTitle,
                          vcl::Window* pParentWindow,
-                         std::function<void(const OUString&, const Color&)> maColorSelectFunction);
+                         std::function<void(const OUString&, const Color&)> const & maColorSelectFunction);
     virtual ~SvxColorWindow_Impl();
     virtual void        dispose() override;
     void                StartSelection();

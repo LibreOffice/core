@@ -42,7 +42,7 @@ public:
     }
 };
 
-SwVbaListLevels::SwVbaListLevels( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, SwVbaListHelperRef pHelper ) throw (uno::RuntimeException) : SwVbaListLevels_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >() ), pListHelper( pHelper )
+SwVbaListLevels::SwVbaListLevels( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, SwVbaListHelperRef const & pHelper ) throw (uno::RuntimeException) : SwVbaListLevels_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >() ), pListHelper( pHelper )
 {
 }
 

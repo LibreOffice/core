@@ -181,7 +181,7 @@ OOXMLValue * OOXMLValue::clone() const
   class OOXMLBinaryValue
  */
 
-OOXMLBinaryValue::OOXMLBinaryValue(OOXMLBinaryObjectReference::Pointer_t
+OOXMLBinaryValue::OOXMLBinaryValue(OOXMLBinaryObjectReference::Pointer_t const &
                                    pBinaryObj)
 : mpBinaryObj(pBinaryObj)
 {

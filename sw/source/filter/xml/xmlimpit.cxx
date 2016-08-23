@@ -57,7 +57,7 @@ using namespace ::xmloff::token;
 using uno::Any;
 
 SvXMLImportItemMapper::SvXMLImportItemMapper(
-                                SvXMLItemMapEntriesRef rMapEntries,
+                                SvXMLItemMapEntriesRef const & rMapEntries,
                                 sal_uInt16 nUnknWhich ) :
     mrMapEntries( rMapEntries ),
     nUnknownWhich( nUnknWhich )

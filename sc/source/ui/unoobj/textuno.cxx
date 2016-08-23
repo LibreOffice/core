@@ -184,7 +184,7 @@ void ScHeaderFooterContentObj::Init( const EditTextObject* pLeft,
 }
 
 ScHeaderFooterTextData::ScHeaderFooterTextData(
-    uno::WeakReference<sheet::XHeaderFooterContent> xContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj) :
+    uno::WeakReference<sheet::XHeaderFooterContent> const & xContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj) :
     mpTextObj(pTextObj ? pTextObj->Clone() : nullptr),
     xContentObj( xContent ),
     nPart( nP ),
