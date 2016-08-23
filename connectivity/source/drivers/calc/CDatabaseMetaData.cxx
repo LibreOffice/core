@@ -375,8 +375,8 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
 
     // get the sheet names from the document
 
-    OCalcConnection::ODocHolder aDocHodler(static_cast<OCalcConnection*>(m_pConnection));
-    Reference<XSpreadsheetDocument> xDoc = aDocHodler.getDoc();
+    OCalcConnection::ODocHolder aDocHolder(static_cast<OCalcConnection*>(m_pConnection));
+    Reference<XSpreadsheetDocument> xDoc = aDocHolder.getDoc();
     if ( !xDoc.is() )
         throw SQLException();
     Reference<XSpreadsheets> xSheets = xDoc->getSheets();

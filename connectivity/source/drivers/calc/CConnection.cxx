@@ -97,7 +97,7 @@ void OCalcConnection::construct(const OUString& url,const Sequence< PropertyValu
             break;
         }
     } // for(;pIter != pEnd;++pIter)
-    ODocHolder aDocHodler(this); // just to test that the doc can be loaded
+    ODocHolder aDocHolder(this); // just to test that the doc can be loaded
     acquireDoc();
 }
 
