@@ -150,9 +150,9 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
             SdrPathSegmentKind eSegm = pIPPEC->GetMarkedSegmentsKind();
             switch (eSegm)
             {
-                case SDRPATHSEGMENT_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CONVERT); break;
-                case SDRPATHSEGMENT_LINE    : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,false)); break; // Button down = curve
-                case SDRPATHSEGMENT_CURVE   : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,true));  break;
+                case SdrPathSegmentKind::DontCare: rSet.InvalidateItem(SID_BEZIER_CONVERT); break;
+                case SdrPathSegmentKind::Line    : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,false)); break; // Button down = curve
+                case SdrPathSegmentKind::Curve   : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,true));  break;
                 default: break;
             }
         }
@@ -236,7 +236,7 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
 
                     case SID_BEZIER_CONVERT:
                     {
-                        pIPPEC->SetMarkedSegmentsKind(SDRPATHSEGMENT_TOGGLE);
+                        pIPPEC->SetMarkedSegmentsKind(SdrPathSegmentKind::Toggle);
                         break;
                     }
 

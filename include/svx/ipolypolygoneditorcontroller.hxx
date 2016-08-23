@@ -32,11 +32,13 @@ enum SdrPathSmoothKind  {SDRPATHSMOOTH_DONTCARE,   // only for status query
                          SDRPATHSMOOTH_ASYMMETRIC, // asymmetric, normal Smooth
                          SDRPATHSMOOTH_SYMMETRIC}; // symmetric
 
-enum SdrPathSegmentKind {SDRPATHSEGMENT_DONTCARE,  // only for status query
-                         SDRPATHSEGMENT_LINE,      // straight path segment
-                         SDRPATHSEGMENT_CURVE,     // curve path segment (Bezier)
-                         SDRPATHSEGMENT_TOGGLE};   // only for Set: Toggle
-
+enum class SdrPathSegmentKind
+{
+    DontCare,  // only for status query
+    Line,      // straight path segment
+    Curve,     // curve path segment (Bezier)
+    Toggle     // only for Set: Toggle
+};
 enum class SdrObjClosedKind
 {
     DontCare,    // only for status query

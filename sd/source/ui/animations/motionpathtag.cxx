@@ -1091,7 +1091,7 @@ SdrPathSegmentKind MotionPathTag::GetMarkedSegmentsKind() const
     if( mpPathObj )
         return mrView.GetMarkedSegmentsKind();
     else
-        return SDRPATHSEGMENT_LINE;
+        return SdrPathSegmentKind::Line;
 }
 
 void MotionPathTag::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)

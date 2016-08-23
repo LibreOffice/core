@@ -88,7 +88,7 @@ bool PolyPolygonEditor::SetSegmentsKind(SdrPathSegmentKind eKind, const std::set
 
                 if(bContolUsed)
                 {
-                    if(SDRPATHSEGMENT_TOGGLE == eKind || SDRPATHSEGMENT_LINE == eKind)
+                    if(SdrPathSegmentKind::Toggle == eKind || SdrPathSegmentKind::Line == eKind)
                     {
                         // remove control
                         aCandidate.resetNextControlPoint(nPntNum);
@@ -98,7 +98,7 @@ bool PolyPolygonEditor::SetSegmentsKind(SdrPathSegmentKind eKind, const std::set
                 }
                 else
                 {
-                    if(SDRPATHSEGMENT_TOGGLE == eKind || SDRPATHSEGMENT_CURVE == eKind)
+                    if(SdrPathSegmentKind::Toggle == eKind || SdrPathSegmentKind::Curve == eKind)
                     {
                         // add control
                         const basegfx::B2DPoint aStart(aCandidate.getB2DPoint(nPntNum));

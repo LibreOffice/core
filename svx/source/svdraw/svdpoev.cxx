@@ -39,7 +39,7 @@ using namespace sdr;
 void SdrPolyEditView::ImpResetPolyPossibilityFlags()
 {
     eMarkedPointsSmooth=SDRPATHSMOOTH_DONTCARE;
-    eMarkedSegmentsKind=SDRPATHSEGMENT_DONTCARE;
+    eMarkedSegmentsKind=SdrPathSegmentKind::DontCare;
     bSetMarkedPointsSmoothPossible=false;
     bSetMarkedSegmentsKindPossible=false;
 }
@@ -169,7 +169,7 @@ void SdrPolyEditView::CheckPolyPossibilitiesHelper( SdrMark* pM, bool& b1stSmoot
 
             if(!b1stSegm && !bSegmFuz)
             {
-                eMarkedSegmentsKind = (bCurve) ? SDRPATHSEGMENT_CURVE : SDRPATHSEGMENT_LINE;
+                eMarkedSegmentsKind = (bCurve) ? SdrPathSegmentKind::Curve : SdrPathSegmentKind::Line;
             }
         }
     }
