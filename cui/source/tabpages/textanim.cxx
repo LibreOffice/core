@@ -618,26 +618,26 @@ IMPL_LINK_TYPED( SvxTextAnimationPage, ClickDirectionHdl_Impl, Button *, pBtn, v
 
 void SvxTextAnimationPage::SelectDirection( SdrTextAniDirection nValue )
 {
-    m_pBtnUp->Check( nValue == SDRTEXTANI_UP );
-    m_pBtnLeft->Check( nValue == SDRTEXTANI_LEFT );
-    m_pBtnRight->Check( nValue == SDRTEXTANI_RIGHT );
-    m_pBtnDown->Check( nValue == SDRTEXTANI_DOWN );
+    m_pBtnUp->Check( nValue == SdrTextAniDirection::Up );
+    m_pBtnLeft->Check( nValue == SdrTextAniDirection::Left );
+    m_pBtnRight->Check( nValue == SdrTextAniDirection::Right );
+    m_pBtnDown->Check( nValue == SdrTextAniDirection::Down );
 }
 
 sal_uInt16 SvxTextAnimationPage::GetSelectedDirection()
 {
-    sal_uInt16 nValue = 0;
+    SdrTextAniDirection nValue = SdrTextAniDirection::Left;
 
     if( m_pBtnUp->IsChecked() )
-        nValue = SDRTEXTANI_UP;
+        nValue = SdrTextAniDirection::Up;
     else if( m_pBtnLeft->IsChecked() )
-        nValue = SDRTEXTANI_LEFT;
+        nValue = SdrTextAniDirection::Left;
     else if( m_pBtnRight->IsChecked() )
-        nValue = SDRTEXTANI_RIGHT;
+        nValue = SdrTextAniDirection::Right;
     else if( m_pBtnDown->IsChecked() )
-        nValue = SDRTEXTANI_DOWN;
+        nValue = SdrTextAniDirection::Down;
 
-    return nValue;
+    return (sal_uInt16)nValue;
 }
 
 

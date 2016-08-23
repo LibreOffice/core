@@ -2890,7 +2890,7 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
                 aSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
                 aSet.Put( makeSdrTextAutoGrowHeightItem( false ) );
                 aSet.Put( SdrTextAniKindItem( SDRTEXTANI_SLIDE ) );
-                aSet.Put( SdrTextAniDirectionItem( SDRTEXTANI_LEFT ) );
+                aSet.Put( SdrTextAniDirectionItem( SdrTextAniDirection::Left ) );
                 aSet.Put( SdrTextAniCountItem( 1 ) );
                 aSet.Put( SdrTextAniAmountItem( (sal_Int16)GetWin()->PixelToLogic(Size(2,1)).Width()) );
                 pObj->SetMergedItemSetAndBroadcast(aSet);

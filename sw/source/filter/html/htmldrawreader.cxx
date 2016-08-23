@@ -65,9 +65,9 @@ static HTMLOptionEnum aHTMLMarqBehaviorTable[] =
 
 static HTMLOptionEnum aHTMLMarqDirectionTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_AL_left,          SDRTEXTANI_LEFT         },
-    { OOO_STRING_SVTOOLS_HTML_AL_right,         SDRTEXTANI_RIGHT        },
-    { nullptr,                                        0                       }
+    { OOO_STRING_SVTOOLS_HTML_AL_left,          (sal_uInt16)SdrTextAniDirection::Left   },
+    { OOO_STRING_SVTOOLS_HTML_AL_right,         (sal_uInt16)SdrTextAniDirection::Right  },
+    { nullptr,                                  0                       }
 };
 
 void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
@@ -260,7 +260,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
     SdrTextAniKind eAniKind = SDRTEXTANI_SCROLL;
-    SdrTextAniDirection eAniDir = SDRTEXTANI_LEFT;
+    SdrTextAniDirection eAniDir = SdrTextAniDirection::Left;
     sal_uInt16 nCount = 0, nDelay = 60;
     sal_Int16 nAmount = -6;
     Color aBGColor;
@@ -370,7 +370,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
     // (Nur) Alternate leueft per Default von links nach rechts
     if( SDRTEXTANI_ALTERNATE==eAniKind && !bDirection )
-        eAniDir = SDRTEXTANI_RIGHT;
+        eAniDir = SdrTextAniDirection::Right;
 
     // die fuer das Scrollen benoetigten Attribute umsetzen
     sal_uInt16 aWhichMap[7] =   { XATTR_FILL_FIRST,   XATTR_FILL_LAST,
@@ -390,7 +390,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         // (Nur) Alternate startet und stoppt per default Inside
         aItemSet.Put( SdrTextAniStartInsideItem(true) );
         aItemSet.Put( SdrTextAniStopInsideItem(true) );
-        if( SDRTEXTANI_LEFT==eAniDir )
+        if( SdrTextAniDirection::Left==eAniDir )
             aItemSet.Put( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT) );
     }
 

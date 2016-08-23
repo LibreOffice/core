@@ -369,7 +369,7 @@ namespace drawinglayer
                 {
                     // get scroll direction
                     const SdrTextAniDirection eDirection(rText.getSdrText().GetObject().GetTextAniDirection());
-                    const bool bHorizontal(SDRTEXTANI_LEFT == eDirection || SDRTEXTANI_RIGHT == eDirection);
+                    const bool bHorizontal(SdrTextAniDirection::Left == eDirection || SdrTextAniDirection::Right == eDirection);
 
                     // decompose to get separated values for the scroll box
                     basegfx::B2DVector aScale, aTranslate;

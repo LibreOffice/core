@@ -27,14 +27,14 @@
 // class SdrTextAniDirectionItem
 
 
-enum SdrTextAniDirection {SDRTEXTANI_LEFT,
-                          SDRTEXTANI_RIGHT,
-                          SDRTEXTANI_UP,
-                          SDRTEXTANI_DOWN};
+enum class SdrTextAniDirection
+{
+    Left, Right, Up, Down
+};
 
 class SVX_DLLPUBLIC SdrTextAniDirectionItem: public SfxEnumItem {
 public:
-    SdrTextAniDirectionItem(SdrTextAniDirection eDir=SDRTEXTANI_LEFT): SfxEnumItem(SDRATTR_TEXT_ANIDIRECTION,(sal_uInt16)eDir) {}
+    SdrTextAniDirectionItem(SdrTextAniDirection eDir=SdrTextAniDirection::Left): SfxEnumItem(SDRATTR_TEXT_ANIDIRECTION,(sal_uInt16)eDir) {}
     SdrTextAniDirectionItem(SvStream& rIn)                           : SfxEnumItem(SDRATTR_TEXT_ANIDIRECTION,rIn)  {}
     virtual SfxPoolItem*   Clone(SfxItemPool* pPool=nullptr) const override;
     virtual SfxPoolItem*   Create(SvStream& rIn, sal_uInt16 nVer) const override;

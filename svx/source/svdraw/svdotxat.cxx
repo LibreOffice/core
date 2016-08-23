@@ -85,8 +85,8 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( Rectangle& rR, bool bHgt, bool b
     SdrTextAniDirection eAniDir = GetTextAniDirection();
 
     bool bScroll = eAniKind == SDRTEXTANI_SCROLL || eAniKind == SDRTEXTANI_ALTERNATE || eAniKind == SDRTEXTANI_SLIDE;
-    bool bHScroll = bScroll && (eAniDir == SDRTEXTANI_LEFT || eAniDir == SDRTEXTANI_RIGHT);
-    bool bVScroll = bScroll && (eAniDir == SDRTEXTANI_UP || eAniDir == SDRTEXTANI_DOWN);
+    bool bHScroll = bScroll && (eAniDir == SdrTextAniDirection::Left || eAniDir == SdrTextAniDirection::Right);
+    bool bVScroll = bScroll && (eAniDir == SdrTextAniDirection::Up || eAniDir == SdrTextAniDirection::Down);
 
     Rectangle aOldRect = rR;
     long nHgt = 0, nMinHgt = 0, nMaxHgt = 0;

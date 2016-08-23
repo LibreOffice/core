@@ -296,7 +296,7 @@ bool SdrTextObj::IsAutoGrowHeight() const
         {
             SdrTextAniDirection eDirection = static_cast<const SdrTextAniDirectionItem&>(rSet.Get(SDRATTR_TEXT_ANIDIRECTION)).GetValue();
 
-            if(eDirection == SDRTEXTANI_UP || eDirection == SDRTEXTANI_DOWN)
+            if(eDirection == SdrTextAniDirection::Up || eDirection == SdrTextAniDirection::Down)
             {
                 bRet = false;
             }
@@ -323,7 +323,7 @@ bool SdrTextObj::IsAutoGrowWidth() const
         {
             SdrTextAniDirection eDirection = static_cast<const SdrTextAniDirectionItem&>(rSet.Get(SDRATTR_TEXT_ANIDIRECTION)).GetValue();
 
-            if(eDirection == SDRTEXTANI_LEFT || eDirection == SDRTEXTANI_RIGHT)
+            if(eDirection == SdrTextAniDirection::Left || eDirection == SdrTextAniDirection::Right)
             {
                 bRet = false;
             }
@@ -354,7 +354,7 @@ SdrTextHorzAdjust SdrTextObj::GetTextHorizontalAdjust(const SfxItemSet& rSet) co
         {
             SdrTextAniDirection eDirection = static_cast<const SdrTextAniDirectionItem&>(rSet.Get(SDRATTR_TEXT_ANIDIRECTION)).GetValue();
 
-            if(eDirection == SDRTEXTANI_LEFT || eDirection == SDRTEXTANI_RIGHT)
+            if(eDirection == SdrTextAniDirection::Left || eDirection == SdrTextAniDirection::Right)
             {
                 eRet = SDRTEXTHORZADJUST_LEFT;
             }
@@ -387,7 +387,7 @@ SdrTextVertAdjust SdrTextObj::GetTextVerticalAdjust(const SfxItemSet& rSet) cons
         {
             SdrTextAniDirection eDirection = static_cast<const SdrTextAniDirectionItem&>(rSet.Get(SDRATTR_TEXT_ANIDIRECTION)).GetValue();
 
-            if(eDirection == SDRTEXTANI_LEFT || eDirection == SDRTEXTANI_RIGHT)
+            if(eDirection == SdrTextAniDirection::Left || eDirection == SdrTextAniDirection::Right)
             {
                 eRet = SDRTEXTVERTADJUST_TOP;
             }
@@ -721,8 +721,8 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, boo
             if (!bInEditMode && (eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE))
             {
                 // unlimited paper size for ticker text
-                if (eAniDirection==SDRTEXTANI_LEFT || eAniDirection==SDRTEXTANI_RIGHT) nWdt=1000000;
-                if (eAniDirection==SDRTEXTANI_UP || eAniDirection==SDRTEXTANI_DOWN) nHgt=1000000;
+                if (eAniDirection==SdrTextAniDirection::Left || eAniDirection==SdrTextAniDirection::Right) nWdt=1000000;
+                if (eAniDirection==SdrTextAniDirection::Up || eAniDirection==SdrTextAniDirection::Down) nHgt=1000000;
             }
 
             bool bChainedFrame = IsChainable();
@@ -1877,13 +1877,13 @@ GDIMetaFile* SdrTextObj::GetTextScrollMetaFileAndRectangle(
     const SfxItemSet& rSet = GetObjectItemSet();
     SdrTextAniDirection eDirection = static_cast<const SdrTextAniDirectionItem&>(rSet.Get(SDRATTR_TEXT_ANIDIRECTION)).GetValue();
 
-    if(SDRTEXTANI_LEFT == eDirection || SDRTEXTANI_RIGHT == eDirection)
+    if(SdrTextAniDirection::Left == eDirection || SdrTextAniDirection::Right == eDirection)
     {
         aScrollFrameRect.Left() = aAnchorRect.Left();
         aScrollFrameRect.Right() = aAnchorRect.Right();
     }
 
-    if(SDRTEXTANI_UP == eDirection || SDRTEXTANI_DOWN == eDirection)
+    if(SdrTextAniDirection::Up == eDirection || SdrTextAniDirection::Down == eDirection)
     {
         aScrollFrameRect.Top() = aAnchorRect.Top();
         aScrollFrameRect.Bottom() = aAnchorRect.Bottom();

@@ -87,7 +87,7 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                     aItemSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
                     aItemSet.Put( makeSdrTextAutoGrowHeightItem( false ) );
                     aItemSet.Put( SdrTextAniKindItem( SDRTEXTANI_SCROLL ) );
-                    aItemSet.Put( SdrTextAniDirectionItem( SDRTEXTANI_LEFT ) );
+                    aItemSet.Put( SdrTextAniDirectionItem( SdrTextAniDirection::Left ) );
                     aItemSet.Put( SdrTextAniCountItem( 0 ) );
                     aItemSet.Put( SdrTextAniAmountItem(
                             (sal_Int16)m_pWin->PixelToLogic(Size(2,1)).Width()) );

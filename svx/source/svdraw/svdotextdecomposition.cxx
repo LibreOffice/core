@@ -1368,7 +1368,7 @@ void SdrTextObj::impGetScrollTextTiming(drawinglayer::animation::AnimationEntryL
         double fAnimationDelay((double)static_cast<const SdrTextAniDelayItem&>(rSet.Get(SDRATTR_TEXT_ANIDELAY)).GetValue());
         double fSingleStepWidth((double)static_cast<const SdrTextAniAmountItem&>(rSet.Get(SDRATTR_TEXT_ANIAMOUNT)).GetValue());
         const SdrTextAniDirection eDirection(GetTextAniDirection());
-        const bool bForward(SDRTEXTANI_RIGHT == eDirection || SDRTEXTANI_DOWN == eDirection);
+        const bool bForward(SdrTextAniDirection::Right == eDirection || SdrTextAniDirection::Down == eDirection);
 
         if(basegfx::fTools::equalZero(fAnimationDelay))
         {
