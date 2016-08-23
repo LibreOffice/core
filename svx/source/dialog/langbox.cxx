@@ -499,7 +499,7 @@ SvxLanguageComboBox::SvxLanguageComboBox( vcl::Window* pParent, WinBits nBits )
     : ComboBox( pParent, nBits )
     , SvxLanguageBoxBase( false )
     , mnSavedValuePos( COMBOBOX_ENTRY_NOTFOUND )
-    , meEditedAndValid( EDITED_NO )
+    , meEditedAndValid( EditedAndValid::No )
 {
     // display entries sorted
     SetStyle( GetStyle() | WB_SORT );
@@ -682,7 +682,7 @@ IMPL_LINK_NOARG_TYPED( SvxLanguageComboBox, EditModifyHdl, Edit&, void )
     EditedAndValid eOldState = meEditedAndValid;
     OUString aStr( vcl::I18nHelper::filterFormattingChars( GetText()));
     if (aStr.isEmpty())
-        meEditedAndValid = EDITED_INVALID;
+        meEditedAndValid = EditedAndValid::Invalid;
     else
     {
         const sal_Int32 nPos = GetEntryPos( aStr);
@@ -721,13 +721,13 @@ IMPL_LINK_NOARG_TYPED( SvxLanguageComboBox, EditModifyHdl, Edit&, void )
             if (bSetEditSelection)
                 SetSelection( aSel);
 
-            meEditedAndValid = EDITED_NO;
+            meEditedAndValid = EditedAndValid::No;
         }
         else
         {
             OUString aCanonicalized;
             bool bValid = LanguageTag::isValidBcp47( aStr, &aCanonicalized, true);
-            meEditedAndValid = (bValid ? EDITED_VALID : EDITED_INVALID);
+            meEditedAndValid = (bValid ? EditedAndValid::Valid : EditedAndValid::Invalid);
             if (bValid && aCanonicalized != aStr)
             {
                 SetText( aCanonicalized);
@@ -737,7 +737,7 @@ IMPL_LINK_NOARG_TYPED( SvxLanguageComboBox, EditModifyHdl, Edit&, void )
     }
     if (eOldState != meEditedAndValid)
     {
-        if (meEditedAndValid == EDITED_INVALID)
+        if (meEditedAndValid == EditedAndValid::Invalid)
         {
 #if 0
             //! Gives white on white!?! instead of white on reddish.
@@ -758,7 +758,7 @@ IMPL_LINK_NOARG_TYPED( SvxLanguageComboBox, EditModifyHdl, Edit&, void )
 
 sal_Int32 SvxLanguageComboBox::SaveEditedAsEntry()
 {
-    if (meEditedAndValid != EDITED_VALID)
+    if (meEditedAndValid != EditedAndValid::Valid)
         return COMBOBOX_ENTRY_NOTFOUND;
 
     LanguageTag aLanguageTag( vcl::I18nHelper::filterFormattingChars( GetText()));

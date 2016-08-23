@@ -149,11 +149,11 @@ class SVX_DLLPUBLIC SvxLanguageComboBox : public ComboBox, public SvxLanguageBox
 public:
     SvxLanguageComboBox( vcl::Window* pParent, WinBits nBits );
 
-    enum EditedAndValid
+    enum class EditedAndValid
     {
-        EDITED_NO,
-        EDITED_VALID,
-        EDITED_INVALID
+        No,
+        Valid,
+        Invalid
     };
 
     EditedAndValid      GetEditedAndValid() const { return meEditedAndValid;}

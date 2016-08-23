@@ -1122,17 +1122,17 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     {
         switch (pLangComboBox->GetEditedAndValid())
         {
-            case SvxLanguageComboBox::EDITED_NO:
+            case SvxLanguageComboBox::EditedAndValid::No:
                 ;   // nothing to do
                 break;
-            case SvxLanguageComboBox::EDITED_VALID:
+            case SvxLanguageComboBox::EditedAndValid::Valid:
                 {
                     const sal_Int32 nPos = pLangComboBox->SaveEditedAsEntry();
                     if (nPos != COMBOBOX_ENTRY_NOTFOUND)
                         pLangComboBox->SelectEntryPos( nPos);
                 }
                 break;
-            case SvxLanguageComboBox::EDITED_INVALID:
+            case SvxLanguageComboBox::EditedAndValid::Invalid:
                 pLangComboBox->SelectEntryPos( pLangComboBox->GetSavedValueLBB());
                 break;
         }
