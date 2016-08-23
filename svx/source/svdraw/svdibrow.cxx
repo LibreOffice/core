@@ -799,7 +799,7 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
         case SDRATTR_TEXT_HORZADJUST: {
             if (ImpGetItem(*pSet,SDRATTR_TEXT_FITTOSIZE,pItem)) {
                 SdrFitToSizeType eFit=static_cast<const SdrTextFitToSizeTypeItem*>(pItem)->GetValue();
-                if (eFit!=SDRTEXTFIT_NONE) return true;
+                if (eFit!=SdrFitToSizeType::NONE) return true;
             }
         } break;
 

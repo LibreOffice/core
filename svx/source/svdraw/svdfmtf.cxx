@@ -1009,7 +1009,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
         pText->ClearMergedItem( SDRATTR_TEXT_AUTOGROWWIDTH );
         pText->SetMergedItem( makeSdrTextAutoGrowHeightItem( false ) );
         // don't let the margins eat the space needed for the text
-        pText->SetMergedItem( SdrTextFitToSizeTypeItem( SDRTEXTFIT_ALLLINES ) );
+        pText->SetMergedItem( SdrTextFitToSizeTypeItem( SdrFitToSizeType::AllLines ) );
     }
     else
     {

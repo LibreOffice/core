@@ -1047,11 +1047,11 @@ bool SdrTextFitToSizeTypeItem::GetPresentation(SfxItemPresentation ePres,
 
 bool SdrTextFitToSizeTypeItem::HasBoolValue() const { return true; }
 
-bool SdrTextFitToSizeTypeItem::GetBoolValue() const { return GetValue()!=SDRTEXTFIT_NONE; }
+bool SdrTextFitToSizeTypeItem::GetBoolValue() const { return GetValue()!=SdrFitToSizeType::NONE; }
 
 void SdrTextFitToSizeTypeItem::SetBoolValue(bool bVal)
 {
-    SetValue(sal::static_int_cast< sal_uInt16 >(bVal ? SDRTEXTFIT_PROPORTIONAL : SDRTEXTFIT_NONE));
+    SetValue(sal::static_int_cast< sal_uInt16 >(bVal ? SdrFitToSizeType::Proportional : SdrFitToSizeType::NONE));
 }
 
 bool SdrTextFitToSizeTypeItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const

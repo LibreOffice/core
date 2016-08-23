@@ -23,19 +23,21 @@
 #include <svx/svddef.hxx>
 #include <svx/svxdllapi.h>
 
-enum SdrFitToSizeType {
-    SDRTEXTFIT_NONE,         // - no fit-to-size
-    SDRTEXTFIT_PROPORTIONAL, // - resize all glyphs proportionally
-                             //   (might scale anisotrophically)
-    SDRTEXTFIT_ALLLINES,     // - like SDRTEXTFIT_PROPORTIONAL, but
-                             //   scales each line separately
-    SDRTEXTFIT_AUTOFIT};     // - mimics PPT's automatic adaption of
-                             //   font size to text rect - comparable
-                             //   to SDRTEXTFIT_PROPORTIONAL, but
-                             //   scales isotrophically
+enum class SdrFitToSizeType
+{
+    NONE,         // - no fit-to-size
+    Proportional, // - resize all glyphs proportionally
+                  //   (might scale anisotrophically)
+    AllLines,     // - like SdrFitToSizeType::Proportional, but
+                  //   scales each line separately
+    Autofit       // - mimics PPT's automatic adaption of
+                  //   font size to text rect - comparable
+                  //   to SdrFitToSizeType::Proportional, but
+                  //   scales isotrophically
+};
 
 // No AutoGrow and no automatic line breaks for
-// SDRTEXTFIT_PROPORTIONAL and SDRTEXTFIT_ALLLINES.
+// SdrFitToSizeType::Proportional and SdrFitToSizeType::AllLines.
 // No automatic line breaks for AutoGrowingWidth as well (only if
 // TextMaxFrameWidth is reached).
 
@@ -45,7 +47,7 @@ enum SdrFitToSizeType {
 class SVX_DLLPUBLIC SdrTextFitToSizeTypeItem: public SfxEnumItem {
 public:
     static SfxPoolItem* CreateDefault();
-    SdrTextFitToSizeTypeItem(SdrFitToSizeType eFit=SDRTEXTFIT_NONE): SfxEnumItem(SDRATTR_TEXT_FITTOSIZE,(sal_uInt16)eFit) {}
+    SdrTextFitToSizeTypeItem(SdrFitToSizeType eFit=SdrFitToSizeType::NONE): SfxEnumItem(SDRATTR_TEXT_FITTOSIZE,(sal_uInt16)eFit) {}
     SdrTextFitToSizeTypeItem(SvStream& rIn)                        : SfxEnumItem(SDRATTR_TEXT_FITTOSIZE,rIn)  {}
     virtual SfxPoolItem*     Clone(SfxItemPool* pPool=nullptr) const override;
     virtual SfxPoolItem*     Create(SvStream& rIn, sal_uInt16 nVer) const override;

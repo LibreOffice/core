@@ -433,7 +433,7 @@ void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
     while ( aTextAreaIter != aTextAreaIEnd )
     {
         GetTextAreaOutline( rFWData, pCustomShape, *aTextAreaIter, bSameLetterHeights );
-        if ( eFTS == SDRTEXTFIT_ALLLINES )
+        if ( eFTS == SdrFitToSizeType::AllLines )
         {
             std::vector< FWParagraphData >::iterator aParagraphIter( aTextAreaIter->vParagraphs.begin() );
             std::vector< FWParagraphData >::const_iterator aParagraphIEnd( aTextAreaIter->vParagraphs.end() );

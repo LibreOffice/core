@@ -250,7 +250,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
                 rSet.Put( SvxBackgroundColorItem( Color (COL_AUTO), EE_CHAR_BKGCOLOR )  );
                 rSet.Put( XLineStyleItem(css::drawing::LineStyle_NONE) );
                 rSet.Put( XFillStyleItem(drawing::FillStyle_NONE) );
-                rSet.Put( SdrTextFitToSizeTypeItem(SDRTEXTFIT_AUTOFIT) );
+                rSet.Put( SdrTextFitToSizeTypeItem(SdrFitToSizeType::Autofit) );
                 rSet.Put( makeSdrTextAutoGrowHeightItem(false) );
                 // #i16874# enable kerning by default but only for new documents
                 rSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );

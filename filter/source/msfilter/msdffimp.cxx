@@ -4389,9 +4389,9 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             }
                             aSet.Put( SdrTextHorzAdjustItem( eHorzAdjust ) );
 
-                            SdrFitToSizeType eFTS = SDRTEXTFIT_NONE;
+                            SdrFitToSizeType eFTS = SdrFitToSizeType::NONE;
                             if ( eGeoTextAlign == mso_alignTextStretch )
-                                eFTS = SDRTEXTFIT_ALLLINES;
+                                eFTS = SdrFitToSizeType::AllLines;
                             aSet.Put( SdrTextFitToSizeTypeItem( eFTS ) );
                         }
                         if ( IsProperty( DFF_Prop_gtextSpacing ) )

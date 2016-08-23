@@ -215,7 +215,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 mpDrawView->BegUndo();
 
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                bool bSet = static_cast<const SdrTextFitToSizeTypeItem*>(pObj->GetMergedItemSet().GetItem(SDRATTR_TEXT_FITTOSIZE))->GetValue() != SDRTEXTFIT_NONE;
+                bool bSet = static_cast<const SdrTextFitToSizeTypeItem*>(pObj->GetMergedItemSet().GetItem(SDRATTR_TEXT_FITTOSIZE))->GetValue() != SdrFitToSizeType::NONE;
 
                 mpDrawView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
 
@@ -228,7 +228,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         pObj->SetMergedItem(makeSdrTextAutoGrowWidthItem(false));
                 }
 
-                pObj->SetMergedItem(SdrTextFitToSizeTypeItem(bSet ? SDRTEXTFIT_NONE : SDRTEXTFIT_AUTOFIT));
+                pObj->SetMergedItem(SdrTextFitToSizeTypeItem(bSet ? SdrFitToSizeType::NONE : SdrFitToSizeType::Autofit));
 
                 mpDrawView->EndUndo();
                 pUndoManager->LeaveListAction();

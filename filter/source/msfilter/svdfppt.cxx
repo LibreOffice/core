@@ -1097,7 +1097,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 //See fdo#41245
                 if (bAutoFit && !bAutoGrowHeight && !bAutoGrowWidth)
                 {
-                    pTObj->SetMergedItem( SdrTextFitToSizeTypeItem(SDRTEXTFIT_AUTOFIT) );
+                    pTObj->SetMergedItem( SdrTextFitToSizeTypeItem(SdrFitToSizeType::Autofit) );
                 }
 
             if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr )
