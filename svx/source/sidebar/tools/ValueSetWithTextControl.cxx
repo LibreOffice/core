@@ -31,7 +31,7 @@
 namespace svx { namespace sidebar {
 
 ValueSetWithTextControl::ValueSetWithTextControl(
-    const tControlType eControlType,
+    const ControlType eControlType,
     vcl::Window* pParent,
     const ResId& rResId)
     : ValueSet( pParent, rResId )
@@ -47,7 +47,7 @@ void ValueSetWithTextControl::AddItem(
     const OUString& rItemText,
     const OUString* pItemHelpText )
 {
-    if ( meControlType != IMAGE_TEXT )
+    if ( meControlType != ControlType::ImageText )
     {
         return;
     }
@@ -87,7 +87,7 @@ void ValueSetWithTextControl::AddItem(
     const OUString& rItemText2,
     const OUString* pItemHelpText )
 {
-    if ( meControlType != TEXT_TEXT )
+    if ( meControlType != ControlType::TextText )
     {
         return;
     }
@@ -156,7 +156,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
 
         switch ( meControlType )
         {
-        case IMAGE_TEXT:
+        case ControlType::ImageText:
             {
                 Point aImgStart(
                     aBLPos.X() + 4,
@@ -168,7 +168,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
                 pDev->DrawText(aStrRect, maItems[nItemId-1].maItemText, DrawTextFlags::EndEllipsis);
             }
             break;
-        case TEXT_TEXT:
+        case ControlType::TextText:
             {
                 const long nRectWidth = aRect.GetWidth();
                 aStrRect.Left() += 8;

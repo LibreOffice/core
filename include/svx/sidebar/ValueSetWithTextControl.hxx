@@ -41,14 +41,14 @@ public:
     // control type of specialized <ValueSet>:
     // - image + text
     // - text + text
-    enum tControlType
+    enum class ControlType
     {
-        IMAGE_TEXT,
-        TEXT_TEXT
+        ImageText,
+        TextText
     };
 
     ValueSetWithTextControl(
-        const tControlType eControlType,
+        const ControlType eControlType,
         vcl::Window* pParent,
         const ResId& rResId);
 
@@ -86,7 +86,7 @@ private:
 
     typedef ::std::vector< ValueSetWithTextItem > tItemList;
 
-    const tControlType meControlType;
+    const ControlType meControlType;
     tItemList maItems;
 };
 
