@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa6399be_b75dbfee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2016-08-23T07:24:15Z",
+      "side": 1,
+      "message": "Noted. :)",
+      "parentUuid": "fa6399be_6479b32f",
+      "revId": "5886ec8331cdaec413bf615619ef30caa0280439",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_447caf20",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-08-22T19:21:02Z",
       "side": 1,
       "message": "What does this line do here? There should be no text after the change-id.",
+      "revId": "5886ec8331cdaec413bf615619ef30caa0280439",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_175d8be9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2016-08-23T07:24:15Z",
+      "side": 1,
+      "message": "I have no idea. When I saw that line, I thought it was added automatically, and it was a new feature I was not aware of. :) (It is the headline of the related bug report. Maybe I accidentally pasted there.) Removing now.",
+      "parentUuid": "fa6399be_447caf20",
       "revId": "5886ec8331cdaec413bf615619ef30caa0280439",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "fa6399be_f7f2d705",
+        "filename": "cui/source/customize/cfg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3093,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2016-08-23T07:24:15Z",
+      "side": 1,
+      "message": "Done. Should I also remove the TODO?",
+      "parentUuid": "fa6399be_e48ce337",
+      "revId": "5886ec8331cdaec413bf615619ef30caa0280439",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_0482b700",
         "filename": "cui/source/customize/cfg.cxx",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2016-08-22T19:19:45Z",
       "side": 1,
       "message": "If you verified that it works without this line, please remove it.",
+      "revId": "5886ec8331cdaec413bf615619ef30caa0280439",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_f740170a",
+        "filename": "cui/source/customize/cfg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4554,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2016-08-23T07:24:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa6399be_0482b700",
       "revId": "5886ec8331cdaec413bf615619ef30caa0280439",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "fa6399be_5748e32d",
+        "filename": "cui/uiconfig/ui/menuassignpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2016-08-23T07:24:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa6399be_a49cab6a",
+      "revId": "5886ec8331cdaec413bf615619ef30caa0280439",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_c487df10",
         "filename": "cui/uiconfig/ui/menuassignpage.ui",
         "patchSetId": 1
@@ -98,6 +188,24 @@
       "writtenOn": "2016-08-22T19:19:45Z",
       "side": 1,
       "message": "Can you remove these placeholders please?",
+      "revId": "5886ec8331cdaec413bf615619ef30caa0280439",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_97527bdc",
+        "filename": "cui/uiconfig/ui/menuassignpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2016-08-23T07:24:15Z",
+      "side": 1,
+      "message": "Sure, done. But Why? They are automatically added by Glade.",
+      "parentUuid": "fa6399be_c487df10",
       "revId": "5886ec8331cdaec413bf615619ef30caa0280439",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false

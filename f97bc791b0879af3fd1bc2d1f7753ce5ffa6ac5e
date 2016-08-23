@@ -16,6 +16,24 @@
       "revId": "f97bc791b0879af3fd1bc2d1f7753ce5ffa6ac5e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_374b6f2d",
+        "filename": "cui/source/customize/cfg.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2016-08-23T07:24:15Z",
+      "side": 0,
+      "message": "I didn\u0027t delete their definitions because they are also used here: http://opengrok.libreoffice.org/xref/core/cui/source/customize/cfg.src#38",
+      "parentUuid": "fa6399be_849fa75e",
+      "revId": "f97bc791b0879af3fd1bc2d1f7753ce5ffa6ac5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
