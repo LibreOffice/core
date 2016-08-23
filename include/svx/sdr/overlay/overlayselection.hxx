@@ -29,11 +29,11 @@ namespace sdr
     namespace overlay
     {
         // overlay type definition
-        enum OverlayType
+        enum class OverlayType
         {
-            OVERLAY_INVERT,
-            OVERLAY_SOLID,
-            OVERLAY_TRANSPARENT
+            Invert,
+            Solid,
+            Transparent
         };
 
         class SVX_DLLPUBLIC OverlaySelection : public OverlayObject

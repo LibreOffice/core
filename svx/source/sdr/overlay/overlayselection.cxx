@@ -58,18 +58,18 @@ namespace sdr
             return aRetval;
         }
 
-        // check if wanted type OVERLAY_TRANSPARENT or OVERLAY_SOLID
+        // check if wanted type OverlayType::Transparent or OverlayType::Solid
         // is possible. If not, fallback to invert mode (classic mode)
         OverlayType impCheckPossibleOverlayType(OverlayType aOverlayType)
         {
-            if(OVERLAY_INVERT != aOverlayType)
+            if(OverlayType::Invert != aOverlayType)
             {
                 const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
 
                 if(!aSvtOptionsDrawinglayer.IsTransparentSelection())
                 {
                     // not possible when switched off by user
-                    return OVERLAY_INVERT;
+                    return OverlayType::Invert;
                 }
                 else if (const OutputDevice* pOut = Application::GetDefaultDevice())
                 {
@@ -77,13 +77,13 @@ namespace sdr
                     if(pOut->GetSettings().GetStyleSettings().GetHighContrastMode())
                     {
                         // not possible when in high contrast mode
-                        return  OVERLAY_INVERT;
+                        return  OverlayType::Invert;
                     }
 
                     if(!pOut->SupportsOperation(OutDevSupport_TransparentRect))
                     {
                         // not possible when no fast transparence paint is supported on the system
-                        return OVERLAY_INVERT;
+                        return OverlayType::Invert;
                     }
                 }
             }
@@ -99,7 +99,7 @@ namespace sdr
             if(nCount)
             {
                 // create range primitives
-                const bool bInvert(OVERLAY_INVERT == maLastOverlayType);
+                const bool bInvert(OverlayType::Invert == maLastOverlayType);
                 basegfx::BColor aRGBColor(getBaseColor().getBColor());
                 aRetval.resize(nCount);
 
@@ -126,7 +126,7 @@ namespace sdr
                             aRetval));
                     aRetval = drawinglayer::primitive2d::Primitive2DContainer { aInvert };
                 }
-                else if(OVERLAY_TRANSPARENT == maLastOverlayType)
+                else if(OverlayType::Transparent == maLastOverlayType)
                 {
                     // embed all rectangles in transparent paint
                     const double fTransparence(mnLastTransparence / 100.0);

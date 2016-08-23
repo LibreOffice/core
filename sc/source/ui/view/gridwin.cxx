@@ -6034,7 +6034,7 @@ void ScGridWindow::UpdateCursorOverlay()
                 }
 
                 sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
-                    sdr::overlay::OVERLAY_SOLID,
+                    sdr::overlay::OverlayType::Solid,
                     aCursorColor,
                     aRanges,
                     false);
@@ -6110,7 +6110,7 @@ void ScGridWindow::UpdateSelectionOverlay()
             const Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
 
             sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
-                sdr::overlay::OVERLAY_TRANSPARENT,
+                sdr::overlay::OverlayType::Transparent,
                 aHighlight,
                 aRanges,
                 true);
@@ -6207,7 +6207,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
             aRanges.push_back(aRB);
 
             sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
-                sdr::overlay::OVERLAY_SOLID,
+                sdr::overlay::OverlayType::Solid,
                 aHandleColor,
                 aRanges,
                 false);
@@ -6334,7 +6334,7 @@ void ScGridWindow::UpdateDragRectOverlay()
             }
 
             sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
-                sdr::overlay::OVERLAY_INVERT,
+                sdr::overlay::OverlayType::Invert,
                 Color(COL_BLACK),
                 aRanges,
                 false);
@@ -6380,7 +6380,7 @@ void ScGridWindow::UpdateHeaderOverlay()
             aRanges.push_back(aRB);
 
             sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
-                sdr::overlay::OVERLAY_INVERT,
+                sdr::overlay::OverlayType::Invert,
                 Color(COL_BLACK),
                 aRanges,
                 false);
@@ -6447,7 +6447,7 @@ void ScGridWindow::UpdateShrinkOverlay()
             aRanges.push_back(aRB);
 
             sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
-                sdr::overlay::OVERLAY_INVERT,
+                sdr::overlay::OverlayType::Invert,
                 Color(COL_BLACK),
                 aRanges,
                 false);
