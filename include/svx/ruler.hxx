@@ -218,13 +218,13 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     DECL_LINK_TYPED( MenuSelect, Menu *, bool );
     void PrepareProportional_Impl(RulerType);
 
-    enum UpdateType
+    enum class UpdateType
     {
-        MOVE_ALL,
-        MOVE_LEFT,
-        MOVE_RIGHT
+        MoveAll,
+        MoveLeft,
+        MoveRight
     };
-    void UpdateParaContents_Impl(long lDiff, UpdateType = MOVE_ALL);
+    void UpdateParaContents_Impl(long lDiff, UpdateType = UpdateType::MoveAll);
 
 protected:
     virtual void    Command( const CommandEvent& rCEvt ) override;

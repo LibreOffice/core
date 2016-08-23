@@ -1714,13 +1714,13 @@ void SvxRuler::UpdateParaContents_Impl(
     /* Helper function; carry Tabs and Paragraph Margins */
     switch(eType)
     {
-        case MOVE_RIGHT:
+        case UpdateType::MoveRight:
             mpIndents[INDENT_RIGHT_MARGIN].nPos += lDifference;
             break;
-        case MOVE_ALL:
+        case UpdateType::MoveAll:
             mpIndents[INDENT_RIGHT_MARGIN].nPos += lDifference;
             SAL_FALLTHROUGH;
-        case MOVE_LEFT:
+        case UpdateType::MoveLeft:
         {
             mpIndents[INDENT_FIRST_LINE].nPos += lDifference;
             mpIndents[INDENT_LEFT_MARGIN].nPos += lDifference;
@@ -1783,13 +1783,13 @@ ADD_DEBUG_TEXT("lLastLMargin: ", OUString::number(mxRulerImpl->lLastLMargin))
                     // RR update the column
                     if(i == GetActRightColumn())
                     {
-                        UpdateParaContents_Impl(mpBorders[i].nPos - l, MOVE_RIGHT);
+                        UpdateParaContents_Impl(mpBorders[i].nPos - l, UpdateType::MoveRight);
                         bRightIndentsCorrected = true;
                     }
                     // LAR, EZE update the column
                     else if(i == GetActLeftColumn())
                     {
-                        UpdateParaContents_Impl(mpBorders[i].nPos - l, MOVE_LEFT);
+                        UpdateParaContents_Impl(mpBorders[i].nPos - l, UpdateType::MoveLeft);
                         bLeftIndentsCorrected = true;
                     }
                 }
@@ -1857,13 +1857,13 @@ ADD_DEBUG_TEXT("lLastLMargin: ", OUString::number(mxRulerImpl->lLastLMargin))
                     {
                         if(i == GetActRightColumn())
                         {
-                            UpdateParaContents_Impl(mpBorders[i].nPos - l, MOVE_RIGHT);
+                            UpdateParaContents_Impl(mpBorders[i].nPos - l, UpdateType::MoveRight);
                             bRightIndentsCorrected = true;
                         }
                         // LAR, EZE update the column
                         else if(i == GetActLeftColumn())
                         {
-                            UpdateParaContents_Impl(mpBorders[i].nPos - l, MOVE_LEFT);
+                            UpdateParaContents_Impl(mpBorders[i].nPos - l, UpdateType::MoveLeft);
                             bLeftIndentsCorrected = true;
                         }
                     }
@@ -1946,14 +1946,14 @@ ADD_DEBUG_TEXT("lLastLMargin: ", OUString::number(mxRulerImpl->lLastLMargin))
        !mpIndents.empty() &&
        !mxRulerImpl->bIsTableRows)
     {
-        UpdateParaContents_Impl(lDiff, MOVE_RIGHT);
+        UpdateParaContents_Impl(lDiff, UpdateType::MoveRight);
     }
     else if(!bLeftIndentsCorrected &&
             GetActLeftColumn() == nIndex &&
             nDragSize != RulerDragSize::N1 &&
             !mpIndents.empty())
     {
-        UpdateParaContents_Impl(lDiff, MOVE_LEFT);
+        UpdateParaContents_Impl(lDiff, UpdateType::MoveLeft);
     }
     SetBorders(mxColumnItem->Count() - 1, &mpBorders[0]);
 }
