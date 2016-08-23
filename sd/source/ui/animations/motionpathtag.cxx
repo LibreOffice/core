@@ -1174,7 +1174,7 @@ bool MotionPathTag::IsOpenCloseMarkedObjectsPossible() const
 SdrObjClosedKind MotionPathTag::GetMarkedObjectsClosedState() const
 {
     // not supported for motion path
-    return SDROBJCLOSED_OPEN;
+    return SdrObjClosedKind::Open;
 }
 
 // XChangesListener

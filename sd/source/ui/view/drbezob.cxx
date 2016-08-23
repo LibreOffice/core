@@ -182,9 +182,9 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
             SdrObjClosedKind eClose = pIPPEC->GetMarkedObjectsClosedState();
             switch (eClose)
             {
-                case SDROBJCLOSED_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CLOSE); break;
-                case SDROBJCLOSED_OPEN    : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,false)); break;
-                case SDROBJCLOSED_CLOSED  : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,true)); break;
+                case SdrObjClosedKind::DontCare: rSet.InvalidateItem(SID_BEZIER_CLOSE); break;
+                case SdrObjClosedKind::Open    : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,false)); break;
+                case SdrObjClosedKind::Closed  : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,true)); break;
                 default: break;
             }
         }

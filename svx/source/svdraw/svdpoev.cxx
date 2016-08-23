@@ -525,15 +525,15 @@ SdrObjClosedKind SdrPolyEditView::GetMarkedObjectsClosedState() const
 
     if(bOpen && bClosed)
     {
-        return SDROBJCLOSED_DONTCARE;
+        return SdrObjClosedKind::DontCare;
     }
     else if(bOpen)
     {
-        return SDROBJCLOSED_OPEN;
+        return SdrObjClosedKind::Open;
     }
     else
     {
-        return SDROBJCLOSED_CLOSED;
+        return SdrObjClosedKind::Closed;
     }
 }
 

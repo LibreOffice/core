@@ -37,9 +37,12 @@ enum SdrPathSegmentKind {SDRPATHSEGMENT_DONTCARE,  // only for status query
                          SDRPATHSEGMENT_CURVE,     // curve path segment (Bezier)
                          SDRPATHSEGMENT_TOGGLE};   // only for Set: Toggle
 
-enum SdrObjClosedKind   {SDROBJCLOSED_DONTCARE,    // only for status query
-                         SDROBJCLOSED_OPEN,        // non-closed object (line, polyline, ...)
-                         SDROBJCLOSED_CLOSED};     // closed object (polygon, ...)
+enum class SdrObjClosedKind
+{
+    DontCare,    // only for status query
+    Open,        // non-closed object (line, polyline, ...)
+    Closed       // closed object (polygon, ...)
+};
 
 class IPolyPolygonEditorController
 {
