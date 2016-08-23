@@ -258,7 +258,7 @@ void SmCursor::Delete(){
 
     //Find an arbitrary selected node
     SmNode* pSNode = FindSelectedNode(mpTree);
-    OSL_ENSURE(pSNode != nullptr, "There must be a selection when HasSelection is true!");
+    assert(pSNode);
 
     //Find the topmost node of the line that holds the selection
     SmNode* pLine = FindTopMostNodeInLine(pSNode, true);
@@ -488,7 +488,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     SmNode *pLine;
     if(HasSelection()) {
         SmNode *pSNode = FindSelectedNode(mpTree);
-        OSL_ENSURE(pSNode != nullptr, "There must be a selected node when HasSelection is true!");
+        assert(pSNode);
         pLine = FindTopMostNodeInLine(pSNode, true);
     } else
         pLine = FindTopMostNodeInLine(mpPosition->CaretPos.pSelectedNode);
@@ -658,7 +658,7 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     SmNode *pLine;
     if(HasSelection()) {
         SmNode *pSNode = FindSelectedNode(mpTree);
-        OSL_ENSURE(pSNode != nullptr, "There must be a selected node if HasSelection()");
+        assert(pSNode);
         pLine = FindTopMostNodeInLine(pSNode, true);
     } else
         pLine = FindTopMostNodeInLine(mpPosition->CaretPos.pSelectedNode);
@@ -793,7 +793,7 @@ bool SmCursor::InsertRow() {
     SmNode *pLine;
     if(HasSelection()) {
         SmNode *pSNode = FindSelectedNode(mpTree);
-        OSL_ENSURE(pSNode != nullptr, "There must be a selected node if HasSelection()");
+        assert(pSNode);
         pLine = FindTopMostNodeInLine(pSNode, true);
     } else
         pLine = FindTopMostNodeInLine(mpPosition->CaretPos.pSelectedNode);
@@ -912,7 +912,7 @@ void SmCursor::InsertFraction() {
     SmNode *pLine;
     if(HasSelection()) {
         SmNode *pSNode = FindSelectedNode(mpTree);
-        OSL_ENSURE(pSNode != nullptr, "There must be a selected node when HasSelection is true!");
+        assert(pSNode);
         pLine = FindTopMostNodeInLine(pSNode, true);
     } else
         pLine = FindTopMostNodeInLine(mpPosition->CaretPos.pSelectedNode);
@@ -1160,6 +1160,7 @@ void SmCursor::Copy(){
     AnnotateSelection();
     //Find selected node
     SmNode* pSNode = FindSelectedNode(mpTree);
+    assert(pSNode);
     //Find visual line
     SmNode* pLine = FindTopMostNodeInLine(pSNode, true);
     assert(pLine);
@@ -1212,10 +1213,7 @@ SmNodeList* SmCursor::CloneList(SmClipboard &rClipboard){
 }
 
 SmNode* SmCursor::FindTopMostNodeInLine(SmNode* pSNode, bool MoveUpIfSelected){
-    //If we haven't got a subnode
-    if(!pSNode)
-        return nullptr;
-
+    assert(pSNode);
     //Move up parent until we find a node who's
     //parent is NULL or isn't selected and not a type of:
     //      SmExpressionNode
