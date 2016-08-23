@@ -932,6 +932,12 @@ DECLARE_OOXMLEXPORT_TEST(testcantSplit, "2_table_doc.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:cantSplit","val","true");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testDontSplitTable, "tdf101589_dontSplitTable.odt")
+{
+    //single row tables need to prevent split by setting row to no split
+    CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[2]/body/tab[1]/row[1]/cell[1]/txt[1]") );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testExtraSectionBreak, "1_page.docx")
 {
     // There was a problem for some documents during export.Invalid sectPr getting added
