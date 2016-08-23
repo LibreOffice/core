@@ -318,14 +318,13 @@ static inline bool icopyConstructFromElements(
     typelib_TypeDescriptionReference * pElementType,
     sal_Int32 nStartIndex, sal_Int32 nStopIndex,
     uno_AcquireFunc acquire,
-    sal_Int32 nAlloc ) // >= 0 means (re)alloc memory for nAlloc elements
+    sal_Int32 nAlloc )
 {
     uno_Sequence * pSeq = *ppSeq;
     switch (pElementType->eTypeClass)
     {
     case typelib_TypeClass_CHAR:
-        if (nAlloc >= 0)
-            pSeq = reallocSeq( pSeq, sizeof(sal_Unicode), nAlloc );
+        pSeq = reallocSeq( pSeq, sizeof(sal_Unicode), nAlloc );
         if (pSeq != nullptr)
         {
             memcpy(
@@ -335,8 +334,7 @@ static inline bool icopyConstructFromElements(
         }
         break;
     case typelib_TypeClass_BOOLEAN:
-        if (nAlloc >= 0)
-            pSeq = reallocSeq( pSeq, sizeof(sal_Bool), nAlloc );
+        pSeq = reallocSeq( pSeq, sizeof(sal_Bool), nAlloc );
         if (pSeq != nullptr)
         {
             memcpy(
@@ -346,8 +344,7 @@ static inline bool icopyConstructFromElements(
         }
         break;
     case typelib_TypeClass_BYTE:
-        if (nAlloc >= 0)
-            pSeq = reallocSeq( pSeq, sizeof(sal_Int8), nAlloc );
+        pSeq = reallocSeq( pSeq, sizeof(sal_Int8), nAlloc );
         if (pSeq != nullptr)
         {
             memcpy(
@@ -358,8 +355,7 @@ static inline bool icopyConstructFromElements(
         break;
     case typelib_TypeClass_SHORT:
     case typelib_TypeClass_UNSIGNED_SHORT:
-        if (nAlloc >= 0)
-            pSeq = reallocSeq( pSeq, sizeof(sal_Int16), nAlloc );
+        pSeq = reallocSeq( pSeq, sizeof(sal_Int16), nAlloc );
         if (pSeq != nullptr)
         {
             memcpy(
@@ -370,8 +366,7 @@ static inline bool icopyConstructFromElements(
         break;
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
-        if (nAlloc >= 0)
-            pSeq = reallocSeq( pSeq, sizeof(sal_Int32), nAlloc );
+        pSeq = reallocSeq( pSeq, sizeof(sal_Int32), nAlloc );
         if (pSeq != nullptr)
         {
             memcpy(
@@ -382,8 +377,7 @@ static inline bool icopyConstructFromElements(
         break;
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
-        if (nAlloc >= 0)
-            pSeq = reallocSeq( pSeq, sizeof(sal_Int64), nAlloc );
+        pSeq = reallocSeq( pSeq, sizeof(sal_Int64), nAlloc );
         if (pSeq != nullptr)
         {
             memcpy(
@@ -393,8 +387,7 @@ static inline bool icopyConstructFromElements(
         }
         break;
     case typelib_TypeClass_FLOAT:
-        if (nAlloc >= 0)
-            pSeq = reallocSeq( pSeq, sizeof(float), nAlloc );
+        pSeq = reallocSeq( pSeq, sizeof(float), nAlloc );
         if (pSeq != nullptr)
         {
             memcpy(
@@ -404,8 +397,7 @@ static inline bool icopyConstructFromElements(
         }
         break;
     case typelib_TypeClass_DOUBLE:
-        if (nAlloc >= 0)
-            pSeq = reallocSeq( pSeq, sizeof(double), nAlloc );
+        pSeq = reallocSeq( pSeq, sizeof(double), nAlloc );
         if (pSeq != nullptr)
         {
             memcpy(
@@ -415,8 +407,7 @@ static inline bool icopyConstructFromElements(
         }
         break;
     case typelib_TypeClass_ENUM:
-        if (nAlloc >= 0)
-            pSeq = reallocSeq( pSeq, sizeof(sal_Int32), nAlloc );
+        pSeq = reallocSeq( pSeq, sizeof(sal_Int32), nAlloc );
         if (pSeq != nullptr)
         {
             memcpy(
@@ -427,8 +418,7 @@ static inline bool icopyConstructFromElements(
         break;
     case typelib_TypeClass_STRING:
     {
-        if (nAlloc >= 0)
-            pSeq = reallocSeq( pSeq, sizeof(rtl_uString *), nAlloc );
+        pSeq = reallocSeq( pSeq, sizeof(rtl_uString *), nAlloc );
         if (pSeq != nullptr)
         {
             rtl_uString ** pDestElements = reinterpret_cast<rtl_uString **>(pSeq->elements);
@@ -445,11 +435,8 @@ static inline bool icopyConstructFromElements(
     }
     case typelib_TypeClass_TYPE:
     {
-        if (nAlloc >= 0)
-        {
-            pSeq = reallocSeq(
-                pSeq, sizeof(typelib_TypeDescriptionReference *), nAlloc );
-        }
+        pSeq = reallocSeq(
+            pSeq, sizeof(typelib_TypeDescriptionReference *), nAlloc );
         if (pSeq != nullptr)
         {
             typelib_TypeDescriptionReference ** pDestElements =
@@ -468,8 +455,7 @@ static inline bool icopyConstructFromElements(
     }
     case typelib_TypeClass_ANY:
     {
-        if (nAlloc >= 0)
-            pSeq = reallocSeq( pSeq, sizeof(uno_Any), nAlloc );
+        pSeq = reallocSeq( pSeq, sizeof(uno_Any), nAlloc );
         if (pSeq != nullptr)
         {
             uno_Any * pDestElements = reinterpret_cast<uno_Any *>(pSeq->elements);
@@ -492,8 +478,7 @@ static inline bool icopyConstructFromElements(
         TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
         sal_Int32 nElementSize = pElementTypeDescr->nSize;
 
-        if (nAlloc >= 0)
-            pSeq = reallocSeq( pSeq, nElementSize, nAlloc );
+        pSeq = reallocSeq( pSeq, nElementSize, nAlloc );
         if (pSeq != nullptr)
         {
             char * pDestElements = pSeq->elements;
@@ -536,11 +521,8 @@ static inline bool icopyConstructFromElements(
     }
     case typelib_TypeClass_SEQUENCE: // sequence of sequence
     {
-        if (nAlloc >= 0)
-        {
-            // coverity[suspicious_sizeof] - sizeof(uno_Sequence*) is correct here
-            pSeq = reallocSeq(pSeq, sizeof(uno_Sequence*), nAlloc);
-        }
+        // coverity[suspicious_sizeof] - sizeof(uno_Sequence*) is correct here
+        pSeq = reallocSeq(pSeq, sizeof(uno_Sequence*), nAlloc);
         if (pSeq != nullptr)
         {
             typelib_TypeDescription * pElementTypeDescr = nullptr;
@@ -564,8 +546,7 @@ static inline bool icopyConstructFromElements(
     }
     case typelib_TypeClass_INTERFACE:
     {
-        if (nAlloc >= 0)
-            pSeq = reallocSeq( pSeq, sizeof(void *), nAlloc );
+        pSeq = reallocSeq( pSeq, sizeof(void *), nAlloc );
         if (pSeq != nullptr)
         {
             void ** pDestElements = reinterpret_cast<void **>(pSeq->elements);
@@ -585,8 +566,7 @@ static inline bool icopyConstructFromElements(
 
     if (pSeq == nullptr)
     {
-        OSL_ASSERT( nAlloc >= 0 ); // must have been an allocation failure
-        return false;
+        return false; // allocation failure
     }
     else
     {
