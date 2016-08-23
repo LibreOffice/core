@@ -653,7 +653,7 @@ void ScInterpreter::Push( FormulaToken& r )
                 PushWithoutError( r);
             }
             else
-                PushWithoutError( *(new FormulaErrorToken( nGlobalError)));
+                PushTempTokenWithoutError( new FormulaErrorToken( nGlobalError));
         }
         else
             PushWithoutError( r);
