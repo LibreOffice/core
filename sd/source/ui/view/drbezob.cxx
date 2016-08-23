@@ -167,10 +167,10 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
             SdrPathSmoothKind eSmooth = pIPPEC->GetMarkedPointsSmooth();
             switch (eSmooth)
             {
-                case SDRPATHSMOOTH_DONTCARE  : break;
-                case SDRPATHSMOOTH_ANGULAR   : rSet.Put(SfxBoolItem(SID_BEZIER_EDGE,  true)); break;
-                case SDRPATHSMOOTH_ASYMMETRIC: rSet.Put(SfxBoolItem(SID_BEZIER_SMOOTH,true)); break;
-                case SDRPATHSMOOTH_SYMMETRIC : rSet.Put(SfxBoolItem(SID_BEZIER_SYMMTR,true)); break;
+                case SdrPathSmoothKind::DontCare  : break;
+                case SdrPathSmoothKind::Angular   : rSet.Put(SfxBoolItem(SID_BEZIER_EDGE,  true)); break;
+                case SdrPathSmoothKind::Asymmetric: rSet.Put(SfxBoolItem(SID_BEZIER_SMOOTH,true)); break;
+                case SdrPathSmoothKind::Symmetric : rSet.Put(SfxBoolItem(SID_BEZIER_SYMMTR,true)); break;
             }
         }
         if (!pIPPEC || !pIPPEC->IsOpenCloseMarkedObjectsPossible())
@@ -249,9 +249,9 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
                         switch (nSId)
                         {
                             default:
-                            case SID_BEZIER_EDGE:   eKind = SDRPATHSMOOTH_ANGULAR; break;
-                            case SID_BEZIER_SMOOTH: eKind = SDRPATHSMOOTH_ASYMMETRIC; break;
-                            case SID_BEZIER_SYMMTR: eKind = SDRPATHSMOOTH_SYMMETRIC; break;
+                            case SID_BEZIER_EDGE:   eKind = SdrPathSmoothKind::Angular; break;
+                            case SID_BEZIER_SMOOTH: eKind = SdrPathSmoothKind::Asymmetric; break;
+                            case SID_BEZIER_SYMMTR: eKind = SdrPathSmoothKind::Symmetric; break;
                         }
 
                         pIPPEC->SetMarkedPointsSmooth(eKind);

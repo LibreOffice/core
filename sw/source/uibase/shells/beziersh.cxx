@@ -168,13 +168,13 @@ void SwBezierShell::Execute(SfxRequest &rReq)
                     case SID_BEZIER_SMOOTH:
                     case SID_BEZIER_SYMMTR:
                     {
-                        SdrPathSmoothKind eKind = SDRPATHSMOOTH_ASYMMETRIC;
+                        SdrPathSmoothKind eKind = SdrPathSmoothKind::Asymmetric;
 
                         switch (nSlotId)
                         {
-                            case SID_BEZIER_EDGE:   eKind = SDRPATHSMOOTH_ANGULAR; break;
-                            case SID_BEZIER_SMOOTH: eKind = SDRPATHSMOOTH_ASYMMETRIC; break;
-                            case SID_BEZIER_SYMMTR: eKind = SDRPATHSMOOTH_SYMMETRIC; break;
+                            case SID_BEZIER_EDGE:   eKind = SdrPathSmoothKind::Angular; break;
+                            case SID_BEZIER_SMOOTH: eKind = SdrPathSmoothKind::Asymmetric; break;
+                            case SID_BEZIER_SYMMTR: eKind = SdrPathSmoothKind::Symmetric; break;
                         }
 
                         SdrPathSmoothKind eSmooth = pSdrView->GetMarkedPointsSmooth();
@@ -284,15 +284,15 @@ void SwBezierShell::GetState(SfxItemSet &rSet)
                     bool bEnable = false;
                     switch (eSmooth)
                     {
-                        case SDRPATHSMOOTH_DONTCARE  :
+                        case SdrPathSmoothKind::DontCare  :
                             break;
-                        case SDRPATHSMOOTH_ANGULAR   :
+                        case SdrPathSmoothKind::Angular   :
                             bEnable = nWhich == SID_BEZIER_EDGE;
                             break;
-                        case SDRPATHSMOOTH_ASYMMETRIC:
+                        case SdrPathSmoothKind::Asymmetric:
                             bEnable = nWhich == SID_BEZIER_SMOOTH;
                             break;
-                        case SDRPATHSMOOTH_SYMMETRIC :
+                        case SdrPathSmoothKind::Symmetric :
                             bEnable = nWhich == SID_BEZIER_SYMMTR;
                             break;
                     }

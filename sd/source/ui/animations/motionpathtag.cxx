@@ -1125,22 +1125,22 @@ SdrPathSmoothKind MotionPathTag::GetMarkedPointsSmooth() const
     if( mpPathObj )
         return mrView.GetMarkedPointsSmooth();
     else
-        return SDRPATHSMOOTH_ANGULAR;
+        return SdrPathSmoothKind::Angular;
 }
 
 void MotionPathTag::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
 {
     basegfx::B2VectorContinuity eFlags;
 
-    if(SDRPATHSMOOTH_ANGULAR == eKind)
+    if(SdrPathSmoothKind::Angular == eKind)
     {
         eFlags = basegfx::B2VectorContinuity::NONE;
     }
-    else if(SDRPATHSMOOTH_ASYMMETRIC == eKind)
+    else if(SdrPathSmoothKind::Asymmetric == eKind)
     {
         eFlags = basegfx::B2VectorContinuity::C1;
     }
-    else if(SDRPATHSMOOTH_SYMMETRIC == eKind)
+    else if(SdrPathSmoothKind::Symmetric == eKind)
     {
         eFlags = basegfx::B2VectorContinuity::C2;
     }

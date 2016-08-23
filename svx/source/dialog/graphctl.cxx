@@ -156,7 +156,7 @@ void GraphCtrl::InitSdrModel()
     pView->EnableExtendedMouseEventDispatcher( true );
     pView->ShowSdrPage(pView->GetModel()->GetPage(0));
     pView->SetFrameDragSingles();
-    pView->SetMarkedPointsSmooth( SDRPATHSMOOTH_SYMMETRIC );
+    pView->SetMarkedPointsSmooth( SdrPathSmoothKind::Symmetric );
     pView->SetEditMode();
 
     // #i72889# set needed flags

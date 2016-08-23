@@ -26,12 +26,13 @@
 
 //   Defines
 
-
-enum SdrPathSmoothKind  {SDRPATHSMOOTH_DONTCARE,   // only for status query
-                         SDRPATHSMOOTH_ANGULAR,    // angular
-                         SDRPATHSMOOTH_ASYMMETRIC, // asymmetric, normal Smooth
-                         SDRPATHSMOOTH_SYMMETRIC}; // symmetric
-
+enum class SdrPathSmoothKind
+{
+    DontCare,   // only for status query
+    Angular,    // angular
+    Asymmetric, // asymmetric, normal Smooth
+    Symmetric   // symmetric
+};
 enum class SdrPathSegmentKind
 {
     DontCare,  // only for status query
