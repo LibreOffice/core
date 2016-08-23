@@ -2799,10 +2799,10 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundR
     switch ( eUserCall )
     {
     case SdrUserCallType::Resize:
-        notifyShapePropertyChange( svx::eShapeSize );
+        notifyShapePropertyChange( svx::ShapeProperty::Size );
         SAL_FALLTHROUGH; // RESIZE might also imply a change of the position
     case SdrUserCallType::MoveOnly:
-        notifyShapePropertyChange( svx::eShapePosition );
+        notifyShapePropertyChange( svx::ShapeProperty::Position );
         break;
     default:
         // not interested in

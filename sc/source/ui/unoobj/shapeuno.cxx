@@ -85,7 +85,7 @@ namespace
     void lcl_initializeNotifier( SdrObject& _rSdrObj, ::cppu::OWeakObject& _rShape )
     {
         std::shared_ptr<svx::IPropertyValueProvider> pProvider( new svx::PropertyValueProvider( _rShape, "Anchor" ) );
-        _rSdrObj.getShapePropertyChangeNotifier().registerProvider( svx::eSpreadsheetAnchor, pProvider );
+        _rSdrObj.getShapePropertyChangeNotifier().registerProvider( svx::ShapeProperty::CalcDocAnchor, pProvider );
     }
 }
 
