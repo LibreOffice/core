@@ -47,7 +47,7 @@ using namespace utl;
 using namespace com::sun::star;
 
 // vOptionNames[] -- names of the user option entries
-// The order corresponds to the #define USER_OPT_* list in useroptions.hxx.
+// The order must correspond to the enum class UserOptToken in useroptions.hxx.
 static o3tl::enumarray<UserOptToken, char const *> vOptionNames = {
     "l",                         // UserOptToken::City
     "o",                         // UserOptToken::Company
