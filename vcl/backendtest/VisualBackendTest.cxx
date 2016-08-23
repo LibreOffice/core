@@ -112,7 +112,7 @@ private:
 
 public:
     VisualBackendTestWindow()
-        : WorkWindow(NULL, WB_APP | WB_STDWORK)
+        : WorkWindow(nullptr, WB_APP | WB_STDWORK)
         , mnNumberOfTests(6)
         , mnTest(10 * mnNumberOfTests)
         , mbAnimate(mnTest % mnNumberOfTests == mnNumberOfTests - 1)
@@ -163,7 +163,7 @@ public:
         }
     }
 
-    std::vector<Rectangle> setupRegions(int nPartitionsX, int nPartitionsY, int nWidth, int nHeight)
+    static std::vector<Rectangle> setupRegions(int nPartitionsX, int nPartitionsY, int nWidth, int nHeight)
     {
         std::vector<Rectangle> aRegions;
 
@@ -440,7 +440,7 @@ public:
                                       Point(), mpVDev->GetOutputSizePixel(),
                                       *mpVDev.get());
             rRenderContext.SetTextColor(COL_LIGHTRED);
-            rRenderContext.DrawText(Point(10, 10), OUString("FPS: ") + OUString::number(int(fps)));
+            rRenderContext.DrawText(Point(10, 10), "FPS: " + OUString::number(int(fps)));
             return;
         }
 
