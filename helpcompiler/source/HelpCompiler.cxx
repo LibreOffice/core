@@ -330,14 +330,12 @@ void myparser::traverse( xmlNodePtr parentNode )
             xmlFree (branchxml);
             xmlFree (idxml);
 
-            std::string hid;
-
             if (branch.compare(0, 3, "hid") == 0)
             {
                 size_t index = branch.find('/');
                 if (index != std::string::npos)
                 {
-                    hid = branch.substr(1 + index);
+                    auto hid = branch.substr(1 + index);
                     // one shall serve as a documentId
                     if (documentId.empty())
                         documentId = hid;
