@@ -273,7 +273,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                     if( !bQuiet )
                     {
                         m_pWrtShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_NOT_FOUND, m_pSrchItem->GetSearchString().toUtf8().getStr());
-                        SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
+                        SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::NotFound);
                     }
 #endif
                     m_bFound = false;
@@ -394,7 +394,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                         if( !bQuiet )
                         {
                             m_pWrtShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_NOT_FOUND, m_pSrchItem->GetSearchString().toUtf8().getStr());
-                            SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
+                            SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::NotFound);
                         }
 #endif
                         m_bFound = false;
@@ -590,7 +590,7 @@ bool SwView::SearchAndWrap(bool bApi)
         {
 #if HAVE_FEATURE_DESKTOP
             m_pWrtShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_NOT_FOUND, m_pSrchItem->GetSearchString().toUtf8().getStr());
-            SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
+            SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::NotFound);
 #endif
         }
         m_bFound = false;
@@ -636,14 +636,14 @@ bool SwView::SearchAndWrap(bool bApi)
     if (m_bFound)
     {
         if (!bSrchBkwrd)
-            SvxSearchDialogWrapper::SetSearchLabel(SL_End);
+            SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::End);
         else
-            SvxSearchDialogWrapper::SetSearchLabel(SL_Start);
+            SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::Start);
     }
     else if(!bApi)
     {
         m_pWrtShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_NOT_FOUND, m_pSrchItem->GetSearchString().toUtf8().getStr());
-        SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
+        SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::NotFound);
     }
 #endif
     return m_bFound;
@@ -786,7 +786,7 @@ SwSearchOptions::SwSearchOptions( SwWrtShell* pSh, bool bBackward )
 sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
 {
 #if HAVE_FEATURE_DESKTOP
-    SvxSearchDialogWrapper::SetSearchLabel(SL_Empty);
+    SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::Empty);
 #endif
     bool bDoReplace = m_pSrchItem->GetCommand() == SvxSearchCmd::REPLACE ||
                       m_pSrchItem->GetCommand() == SvxSearchCmd::REPLACE_ALL;

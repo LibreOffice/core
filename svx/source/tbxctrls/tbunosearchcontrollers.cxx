@@ -210,7 +210,7 @@ bool FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
         {
             // Clear SearchLabel when altering the search string
             #if HAVE_FEATURE_DESKTOP
-                SvxSearchDialogWrapper::SetSearchLabel(SL_Empty);
+                SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::Empty);
             #endif
 
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();

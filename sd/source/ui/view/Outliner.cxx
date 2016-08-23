@@ -442,7 +442,7 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
     bool bEndOfSearch = true;
 
     // clear the search toolbar entry
-    SvxSearchDialogWrapper::SetSearchLabel(SL_Empty);
+    SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::Empty);
 
     mpDrawDocument->GetDocSh()->SetWaitCursor( true );
     if (mbPrepareSpellingPending)
@@ -1170,7 +1170,7 @@ void Outliner::ShowEndOfSearchDialog()
     {
         if (!mbStringFound)
         {
-            SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
+            SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::NotFound);
             std::shared_ptr<ViewShell> pViewShell(mpWeakViewShell.lock());
             if (pViewShell)
             {
@@ -1205,9 +1205,9 @@ bool Outliner::ShowWrapArroundDialog()
         if (nCommand == SvxSearchCmd::REPLACE || nCommand == SvxSearchCmd::FIND)
         {
             if (mbDirectionIsForward)
-                SvxSearchDialogWrapper::SetSearchLabel(SL_End);
+                SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::End);
             else
-                SvxSearchDialogWrapper::SetSearchLabel(SL_Start);
+                SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::Start);
 
             return true;
         }
@@ -1481,7 +1481,7 @@ bool Outliner::HandleFailedSearch()
         if (HasNoPreviousMatch ())
         {
             // No match found in the whole presentation.
-            SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
+            SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::NotFound);
         }
 
         else

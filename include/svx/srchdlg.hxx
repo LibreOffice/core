@@ -78,13 +78,13 @@ public:
 
 // class SvxSearchDialogWrapper ------------------------------------------
 
-enum SearchLabel
+enum class SearchLabel
 {
-    SL_Empty,
-    SL_End,
-    SL_Start,
-    SL_EndSheet,
-    SL_NotFound
+    Empty,
+    End,
+    Start,
+    EndSheet,
+    NotFound
 };
 
 class SvxSearchDialog;

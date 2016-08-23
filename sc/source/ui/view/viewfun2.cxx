@@ -1657,7 +1657,7 @@ void ScViewFunc::AutoFormat( sal_uInt16 nFormatNo )
 bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                                         bool bAddUndo, bool bIsApi )
 {
-    SvxSearchDialogWrapper::SetSearchLabel(SL_Empty);
+    SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::Empty);
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
     ScMarkData& rMark = GetViewData().GetMarkData();
@@ -1792,9 +1792,9 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
             if (!bIsApi)
             {
                 if ( nStartTab == nEndTab )
-                    SvxSearchDialogWrapper::SetSearchLabel(SL_EndSheet);
+                    SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::EndSheet);
                 else
-                    SvxSearchDialogWrapper::SetSearchLabel(SL_End);
+                    SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::End);
 
                 ScDocument::GetSearchAndReplaceStart( *pSearchItem, nCol, nRow );
                 if (pSearchItem->GetBackward())
@@ -1818,7 +1818,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
             if (!bIsApi)
             {
                 GetViewData().GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_NOT_FOUND, pSearchItem->GetSearchString().toUtf8().getStr());
-                SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
+                SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::NotFound);
             }
 
             break;                      // break 'while (TRUE)'

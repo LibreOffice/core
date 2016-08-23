@@ -2401,13 +2401,13 @@ static vcl::Window* lcl_GetSearchLabelWindow()
 void SvxSearchDialogWrapper::SetSearchLabel(const SearchLabel& rSL)
 {
     OUString sStr;
-    if (rSL == SL_End)
+    if (rSL == SearchLabel::End)
         sStr = SVX_RESSTR(RID_SVXSTR_SEARCH_END);
-    else if (rSL == SL_Start)
+    else if (rSL == SearchLabel::Start)
         sStr = SVX_RESSTR(RID_SVXSTR_SEARCH_START);
-    else if (rSL == SL_EndSheet)
+    else if (rSL == SearchLabel::EndSheet)
         sStr = SVX_RESSTR(RID_SVXSTR_SEARCH_END_SHEET);
-    else if (rSL == SL_NotFound)
+    else if (rSL == SearchLabel::NotFound)
         sStr = SVX_RESSTR(RID_SVXSTR_SEARCH_NOT_FOUND);
 
     if (vcl::Window *pSearchLabel = lcl_GetSearchLabelWindow())
