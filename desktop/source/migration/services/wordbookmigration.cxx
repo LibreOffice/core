@@ -171,9 +171,10 @@ bool IsUserWordbook( const OUString& rFile )
                     ::osl::FileBase::RC aResult = ::osl::File::copy( *aI, sTargetName );
                     if ( aResult != ::osl::FileBase::E_None )
                     {
-                        OString aMsg( "WordbookMigration::copyFiles: cannot copy " );
-                        aMsg += OUStringToOString( *aI, RTL_TEXTENCODING_UTF8 ) + " to "
-                             +  OUStringToOString( sTargetName, RTL_TEXTENCODING_UTF8 );
+                        OString aMsg = "WordbookMigration::copyFiles: cannot copy "
+                                     + OUStringToOString( *aI, RTL_TEXTENCODING_UTF8 )
+                                     + " to "
+                                     + OUStringToOString( sTargetName, RTL_TEXTENCODING_UTF8 );
                         OSL_FAIL( aMsg.getStr() );
                     }
                 }
