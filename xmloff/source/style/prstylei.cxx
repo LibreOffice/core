@@ -71,11 +71,80 @@ void XMLPropStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 }
 
 
-//UUUU
-OldFillStyleDefinitionSet XMLPropStyleContext::maStandardSet;
-OldFillStyleDefinitionSet XMLPropStyleContext::maHeaderSet;
-OldFillStyleDefinitionSet XMLPropStyleContext::maFooterSet;
-OldFillStyleDefinitionSet XMLPropStyleContext::maParaSet;
+namespace
+{
+    struct theStandardSet :
+        public rtl::StaticWithInit<OldFillStyleDefinitionSet, theStandardSet>
+    {
+        OldFillStyleDefinitionSet operator () ()
+        {
+            OldFillStyleDefinitionSet aSet;
+            aSet.insert("BackColorRGB");
+            aSet.insert("BackTransparent");
+            aSet.insert("BackColorTransparency");
+            aSet.insert("BackGraphicURL");
+            aSet.insert("BackGraphicFilter");
+            aSet.insert("BackGraphicLocation");
+            aSet.insert("BackGraphicTransparency");
+            return aSet;
+        }
+    };
+    struct theHeaderSet :
+        public rtl::StaticWithInit<OldFillStyleDefinitionSet, theHeaderSet>
+    {
+        OldFillStyleDefinitionSet operator () ()
+        {
+            OldFillStyleDefinitionSet aSet;
+            aSet.insert("HeaderBackColorRGB");
+            aSet.insert("HeaderBackTransparent");
+            aSet.insert("HeaderBackColorTransparency");
+            aSet.insert("HeaderBackGraphicURL");
+            aSet.insert("HeaderBackGraphicFilter");
+            aSet.insert("HeaderBackGraphicLocation");
+            aSet.insert("HeaderBackGraphicTransparency");
+            return aSet;
+        }
+    };
+    struct theFooterSet :
+        public rtl::StaticWithInit<OldFillStyleDefinitionSet, theFooterSet>
+    {
+        OldFillStyleDefinitionSet operator () ()
+        {
+            OldFillStyleDefinitionSet aSet;
+            aSet.insert("FooterBackColorRGB");
+            aSet.insert("FooterBackTransparent");
+            aSet.insert("FooterBackColorTransparency");
+            aSet.insert("FooterBackGraphicURL");
+            aSet.insert("FooterBackGraphicFilter");
+            aSet.insert("FooterBackGraphicLocation");
+            aSet.insert("FooterBackGraphicTransparency");
+            return aSet;
+        }
+    };
+    struct theParaSet :
+        public rtl::StaticWithInit<OldFillStyleDefinitionSet, theParaSet>
+    {
+        OldFillStyleDefinitionSet operator () ()
+        {
+            OldFillStyleDefinitionSet aSet;
+            // Caution: here it is *not* 'ParaBackColorRGB' as it should be, but indeed
+            // 'ParaBackColor' is used, see aXMLParaPropMap definition (line 313)
+            aSet.insert("ParaBackColor");
+            aSet.insert("ParaBackTransparent");
+            aSet.insert("ParaBackGraphicLocation");
+            aSet.insert("ParaBackGraphicFilter");
+            aSet.insert("ParaBackGraphicURL");
+
+            // These are not used in aXMLParaPropMap definition, thus not needed here
+            // aSet.insert("ParaBackColorTransparency");
+            // aSet.insert("ParaBackGraphicTransparency");
+            return aSet;
+        }
+    };
+}
+
+
+
 
 XMLPropStyleContext::XMLPropStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
@@ -95,70 +164,22 @@ XMLPropStyleContext::~XMLPropStyleContext()
 
 const OldFillStyleDefinitionSet& XMLPropStyleContext::getStandardSet()
 {
-    if(maStandardSet.empty())
-    {
-        maStandardSet.insert("BackColorRGB");
-        maStandardSet.insert("BackTransparent");
-        maStandardSet.insert("BackColorTransparency");
-        maStandardSet.insert("BackGraphicURL");
-        maStandardSet.insert("BackGraphicFilter");
-        maStandardSet.insert("BackGraphicLocation");
-        maStandardSet.insert("BackGraphicTransparency");
-    }
-
-    return maStandardSet;
+    return theStandardSet::get();
 }
 
 const OldFillStyleDefinitionSet& XMLPropStyleContext::getHeaderSet()
 {
-    if(maHeaderSet.empty())
-    {
-        maHeaderSet.insert("HeaderBackColorRGB");
-        maHeaderSet.insert("HeaderBackTransparent");
-        maHeaderSet.insert("HeaderBackColorTransparency");
-        maHeaderSet.insert("HeaderBackGraphicURL");
-        maHeaderSet.insert("HeaderBackGraphicFilter");
-        maHeaderSet.insert("HeaderBackGraphicLocation");
-        maHeaderSet.insert("HeaderBackGraphicTransparency");
-    }
-
-    return maHeaderSet;
+    return theHeaderSet::get();
 }
 
 const OldFillStyleDefinitionSet& XMLPropStyleContext::getFooterSet()
 {
-    if(maFooterSet.empty())
-    {
-        maFooterSet.insert("FooterBackColorRGB");
-        maFooterSet.insert("FooterBackTransparent");
-        maFooterSet.insert("FooterBackColorTransparency");
-        maFooterSet.insert("FooterBackGraphicURL");
-        maFooterSet.insert("FooterBackGraphicFilter");
-        maFooterSet.insert("FooterBackGraphicLocation");
-        maFooterSet.insert("FooterBackGraphicTransparency");
-    }
-
-    return maFooterSet;
+    return theFooterSet::get();
 }
 
 const OldFillStyleDefinitionSet& XMLPropStyleContext::getParaSet()
 {
-    if(maParaSet.empty())
-    {
-        // Caution: here it is *not* 'ParaBackColorRGB' as it should be, but indeed
-        // 'ParaBackColor' is used, see aXMLParaPropMap definition (line 313)
-        maParaSet.insert("ParaBackColor");
-        maParaSet.insert("ParaBackTransparent");
-        maParaSet.insert("ParaBackGraphicLocation");
-        maParaSet.insert("ParaBackGraphicFilter");
-        maParaSet.insert("ParaBackGraphicURL");
-
-        // These are not used in aXMLParaPropMap definition, thus not needed here
-        // maParaSet.insert("ParaBackColorTransparency");
-        // maParaSet.insert("ParaBackGraphicTransparency");
-    }
-
-    return maParaSet;
+    return theParaSet::get();
 }
 
 SvXMLImportContext *XMLPropStyleContext::CreateChildContext(

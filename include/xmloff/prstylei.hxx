@@ -48,12 +48,6 @@ private:
     css::uno::Reference < css::style::XStyle > mxStyle;
     SvXMLImportContextRef                      mxStyles;
 
-    //UUUU
-    static OldFillStyleDefinitionSet maStandardSet;
-    static OldFillStyleDefinitionSet maHeaderSet;
-    static OldFillStyleDefinitionSet maFooterSet;
-    static OldFillStyleDefinitionSet maParaSet;
-
     XMLPropStyleContext(XMLPropStyleContext &) = delete;
     void operator =(XMLPropStyleContext &) = delete;
 
