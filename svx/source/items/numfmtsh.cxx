@@ -103,16 +103,16 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
 
     switch ( eValType )
     {
-        case SVX_VALUE_TYPE_STRING:
+        case SvxNumberValueType::String:
             aValStr = rNumStr;
             break;
-        case SVX_VALUE_TYPE_NUMBER:
+        case SvxNumberValueType::Number:
             if ( pFormatter )
             {
                 nValNum = GetDefaultValNum( pFormatter->GetType( nCurFormatKey ) );
             }
             SAL_FALLTHROUGH;
-        case SVX_VALUE_TYPE_UNDEFINED:
+        case SvxNumberValueType::Undefined:
         default:
             aValStr.clear();
     }
@@ -144,11 +144,11 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
 
     switch ( eValType )
     {
-        case SVX_VALUE_TYPE_NUMBER:
+        case SvxNumberValueType::Number:
             nValNum = nNumVal;
             break;
-        case SVX_VALUE_TYPE_STRING:
-        case SVX_VALUE_TYPE_UNDEFINED:
+        case SvxNumberValueType::String:
+        case SvxNumberValueType::Undefined:
         default:
             nValNum = SVX_NUMVAL_STANDARD;
             bIsDefaultValNum = true;
@@ -454,7 +454,7 @@ void SvxNumberFormatShell::MakePreviewString( const OUString& rFormatStr,
         //  format exists
 
         //  #50441# if a string was set in addition to the value, use it for text formats
-        bool bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
+        bool bUseText = ( eValType == SvxNumberValueType::String ||
                             ( !aValStr.isEmpty() && ( pFormatter->GetType(nExistingFormat) & css::util::NumberFormat::TEXT ) ) );
         if ( bUseText )
         {
@@ -539,7 +539,7 @@ void SvxNumberFormatShell::GetInitSettings( sal_uInt16& nCatLbPos,
     short                   nSelPos     = SELPOS_NONE;
 
     // Sonderbehandlung fuer undefiniertes Zahlenformat:
-    if ( (eValType == SVX_VALUE_TYPE_UNDEFINED) && (nCurFormatKey == 0) )
+    if ( (eValType == SvxNumberValueType::Undefined) && (nCurFormatKey == 0) )
         PosToCategory_Impl( CAT_ALL, nCurCategory );        // Kategorie = Alle
     else
         nCurCategory = css::util::NumberFormat::UNDEFINED;      // Kategorie = Undefiniert
@@ -1116,7 +1116,7 @@ void SvxNumberFormatShell::GetPreviewString_Impl( OUString& rString, Color*& rpC
     rpColor = nullptr;
 
     //  #50441# if a string was set in addition to the value, use it for text formats
-    bool bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
+    bool bUseText = ( eValType == SvxNumberValueType::String ||
                         ( !aValStr.isEmpty() && ( pFormatter->GetType(nCurFormatKey) & css::util::NumberFormat::TEXT ) ) );
 
     if ( bUseText )

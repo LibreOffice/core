@@ -412,7 +412,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     sal_uInt16                  nFmtLbSelPos    = 0;
     LanguageType                eLangType       = LANGUAGE_DONTKNOW;
     std::vector<OUString>       aFmtEntryList;
-    SvxNumberValueType          eValType        = SVX_VALUE_TYPE_UNDEFINED;
+    SvxNumberValueType          eValType        = SvxNumberValueType::Undefined;
     double                      nValDouble      = 0;
     OUString                    aValString;
 
@@ -501,15 +501,15 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
     switch ( eValType )
     {
-        case SVX_VALUE_TYPE_STRING:
+        case SvxNumberValueType::String:
             aValString = pNumItem->GetValueString();
             break;
-        case SVX_VALUE_TYPE_NUMBER:
+        case SvxNumberValueType::Number:
             //  #50441# string may be set in addition to the value
             aValString = pNumItem->GetValueString();
             nValDouble = pNumItem->GetValueDouble();
             break;
-        case SVX_VALUE_TYPE_UNDEFINED:
+        case SvxNumberValueType::Undefined:
         default:
             break;
     }
@@ -521,7 +521,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
                     : ULONG_MAX;                // == DONT_KNOW
 
 
-    if ( eValType == SVX_VALUE_TYPE_STRING )
+    if ( eValType == SvxNumberValueType::String )
         pNumFmtShell =SvxNumberFormatShell::Create(
                                 pNumItem->GetNumberFormatter(),
                                 (pValFmtAttr) ? nInitFormat : 0L,

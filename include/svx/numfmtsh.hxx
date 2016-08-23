@@ -30,11 +30,11 @@
 
 class Color;
 
-enum SvxNumberValueType
+enum class SvxNumberValueType
 {
-    SVX_VALUE_TYPE_UNDEFINED = 0,
-    SVX_VALUE_TYPE_NUMBER,
-    SVX_VALUE_TYPE_STRING
+    Undefined,
+    Number,
+    String
 };
 
 // sort order of the category ListBox entries in the TabPage

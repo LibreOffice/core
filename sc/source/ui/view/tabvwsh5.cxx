@@ -309,7 +309,7 @@ SvxNumberInfoItem* ScTabViewShell::MakeNumberInfoItem( ScDocument* pDoc, ScViewD
 
     // NumberInfo-Item konstruieren:
 
-    SvxNumberValueType  eValType        = SVX_VALUE_TYPE_UNDEFINED;
+    SvxNumberValueType  eValType        = SvxNumberValueType::Undefined;
     double              nCellValue      = 0;
     OUString aCellString;
 
@@ -320,14 +320,14 @@ SvxNumberInfoItem* ScTabViewShell::MakeNumberInfoItem( ScDocument* pDoc, ScViewD
         case CELLTYPE_VALUE:
         {
             nCellValue = aCell.mfValue;
-            eValType = SVX_VALUE_TYPE_NUMBER;
+            eValType = SvxNumberValueType::Number;
         }
         break;
 
         case CELLTYPE_STRING:
         {
             aCellString = aCell.mpString->getString();
-            eValType = SVX_VALUE_TYPE_STRING;
+            eValType = SvxNumberValueType::String;
         }
         break;
 
@@ -336,36 +336,36 @@ SvxNumberInfoItem* ScTabViewShell::MakeNumberInfoItem( ScDocument* pDoc, ScViewD
             if (aCell.mpFormula->IsValue())
             {
                 nCellValue = aCell.mpFormula->GetValue();
-                eValType = SVX_VALUE_TYPE_NUMBER;
+                eValType = SvxNumberValueType::Number;
             }
             else
             {
                 nCellValue = 0;
-                eValType   = SVX_VALUE_TYPE_UNDEFINED;
+                eValType   = SvxNumberValueType::Undefined;
             }
         }
         break;
 
         default:
             nCellValue = 0;
-            eValType   = SVX_VALUE_TYPE_UNDEFINED;
+            eValType   = SvxNumberValueType::Undefined;
     }
 
     switch ( eValType )
     {
-        case SVX_VALUE_TYPE_STRING:
+        case SvxNumberValueType::String:
             return new SvxNumberInfoItem(
                                 pDoc->GetFormatTable(),
                                 aCellString,
                                 SID_ATTR_NUMBERFORMAT_INFO );
 
-        case SVX_VALUE_TYPE_NUMBER:
+        case SvxNumberValueType::Number:
             return new SvxNumberInfoItem(
                                 pDoc->GetFormatTable(),
                                 nCellValue,
                                 SID_ATTR_NUMBERFORMAT_INFO );
 
-        case SVX_VALUE_TYPE_UNDEFINED:
+        case SvxNumberValueType::Undefined:
         default:
             ;
     }
