@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_971d1bc0",
+        "filename": "avmedia/inc/mediacontrol.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-23T11:05:56Z",
+      "side": 1,
+      "message": "Mhm, just \u0027UpdateURLField\u0027 (I know I suggested this name, but I was wrong :) this is better style)",
+      "revId": "5deeda39eee9338ce65189b9f21c15a458f90a3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_d7cb131d",
+        "filename": "avmedia/source/framework/mediacontrol.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-23T11:05:56Z",
+      "side": 1,
+      "message": "So the way it is now, this string is not translatable (i.e. it\u0027ll always be English)\n\nYou need to make it translatable by adding it to mediacontrol.src file and then retrieve it using AVMEDIA_RESID macro (look elsewhere in avmedia/source/framework/ folder how\u0027s that done)",
+      "revId": "5deeda39eee9338ce65189b9f21c15a458f90a3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_b7785ffa",
+        "filename": "include/avmedia/MediaControlBase.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-23T11:05:56Z",
+      "side": 1,
+      "message": "If at all possible, please move this to the derived class, where it is used. You\u0027re not doing anything with this control in the base class, so it shouldn\u0027t be here",
+      "revId": "5deeda39eee9338ce65189b9f21c15a458f90a3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
