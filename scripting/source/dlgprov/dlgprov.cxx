@@ -280,10 +280,8 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
             uriRef.set( xFac->parse( aURL ), UNO_QUERY );
             if ( !uriRef.is() )
             {
-                OUString errorMsg("DialogProviderImpl::getDialogModel: failed to parse URI: ");
-                errorMsg += aURL;
-                throw IllegalArgumentException( errorMsg,
-                                                Reference< XInterface >(), 1 );
+                OUString errorMsg = "DialogProviderImpl::getDialogModel: failed to parse URI: " + aURL;
+                throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 1 );
             }
             Reference < uri::XVndSunStarExpandUrl > sxUri( uriRef, UNO_QUERY );
             if( !sxUri.is() )

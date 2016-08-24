@@ -50,10 +50,10 @@ ItemHolder2::ItemHolder2()
         if(bMessage)
         {
             bMessage = false;
-            OString sMsg("CreateInstance with arguments exception: ");
-            sMsg += OString(rEx.Message.getStr(),
-                        rEx.Message.getLength(),
-                        RTL_TEXTENCODING_ASCII_US);
+            OString sMsg = "CreateInstance with arguments exception: "
+                         + OString(rEx.Message.getStr(),
+                                   rEx.Message.getLength(),
+                                   RTL_TEXTENCODING_ASCII_US);
             OSL_FAIL(sMsg.getStr());
         }
     }

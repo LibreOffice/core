@@ -286,14 +286,12 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
         // read ftp proxy name
         css::uno::Reference<css::registry::XRegistryKey> ftpProxy_name = xRegistryRootKey->openKey("Settings/ooInetFTPProxyName");
         if(ftpProxy_name.is() && !ftpProxy_name->getStringValue().isEmpty()) {
-            OUString ftpHost = "ftp.proxyHost=";
-            ftpHost += ftpProxy_name->getStringValue();
+            OUString ftpHost = "ftp.proxyHost=" + ftpProxy_name->getStringValue();
 
             // read ftp proxy port
             css::uno::Reference<css::registry::XRegistryKey> ftpProxy_port = xRegistryRootKey->openKey("Settings/ooInetFTPProxyPort");
             if(ftpProxy_port.is() && ftpProxy_port->getLongValue()) {
-                OUString ftpPort = "ftp.proxyPort=";
-                ftpPort += OUString::number(ftpProxy_port->getLongValue());
+                OUString ftpPort = "ftp.proxyPort=" + OUString::number(ftpProxy_port->getLongValue());
 
                 pjvm->pushProp(ftpHost);
                 pjvm->pushProp(ftpPort);
@@ -303,14 +301,12 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
         // read http proxy name
         css::uno::Reference<css::registry::XRegistryKey> httpProxy_name = xRegistryRootKey->openKey("Settings/ooInetHTTPProxyName");
         if(httpProxy_name.is() && !httpProxy_name->getStringValue().isEmpty()) {
-            OUString httpHost = "http.proxyHost=";
-            httpHost += httpProxy_name->getStringValue();
+            OUString httpHost = "http.proxyHost=" + httpProxy_name->getStringValue();
 
             // read http proxy port
             css::uno::Reference<css::registry::XRegistryKey> httpProxy_port = xRegistryRootKey->openKey("Settings/ooInetHTTPProxyPort");
             if(httpProxy_port.is() && httpProxy_port->getLongValue()) {
-                OUString httpPort = "http.proxyPort=";
-                httpPort += OUString::number(httpProxy_port->getLongValue());
+                OUString httpPort = "http.proxyPort=" + OUString::number(httpProxy_port->getLongValue());
 
                 pjvm->pushProp(httpHost);
                 pjvm->pushProp(httpPort);
@@ -320,14 +316,12 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
         // read https proxy name
         css::uno::Reference<css::registry::XRegistryKey> httpsProxy_name = xRegistryRootKey->openKey("Settings/ooInetHTTPSProxyName");
         if(httpsProxy_name.is() && !httpsProxy_name->getStringValue().isEmpty()) {
-            OUString httpsHost = "https.proxyHost=";
-            httpsHost += httpsProxy_name->getStringValue();
+            OUString httpsHost = "https.proxyHost=" + httpsProxy_name->getStringValue();
 
             // read https proxy port
             css::uno::Reference<css::registry::XRegistryKey> httpsProxy_port = xRegistryRootKey->openKey("Settings/ooInetHTTPSProxyPort");
             if(httpsProxy_port.is() && httpsProxy_port->getLongValue()) {
-                OUString httpsPort = "https.proxyPort=";
-                httpsPort += OUString::number(httpsProxy_port->getLongValue());
+                OUString httpsPort = "https.proxyPort=" + OUString::number(httpsProxy_port->getLongValue());
 
                 pjvm->pushProp(httpsHost);
                 pjvm->pushProp(httpsPort);
@@ -337,14 +331,12 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
         // read  nonProxyHosts
         css::uno::Reference<css::registry::XRegistryKey> nonProxies_name = xRegistryRootKey->openKey("Settings/ooInetNoProxy");
         if(nonProxies_name.is() && !nonProxies_name->getStringValue().isEmpty()) {
-            OUString httpNonProxyHosts = "http.nonProxyHosts=";
-            OUString ftpNonProxyHosts = "ftp.nonProxyHosts=";
-            OUString value= nonProxies_name->getStringValue();
+            OUString value = nonProxies_name->getStringValue();
             // replace the separator ";" by "|"
-            value= value.replace((sal_Unicode)';', (sal_Unicode)'|');
+            value = value.replace((sal_Unicode)';', (sal_Unicode)'|');
 
-            httpNonProxyHosts += value;
-            ftpNonProxyHosts += value;
+            OUString httpNonProxyHosts = "http.nonProxyHosts=" + value;
+            OUString ftpNonProxyHosts = "ftp.nonProxyHosts=" + value;
 
             pjvm->pushProp(httpNonProxyHosts);
             pjvm->pushProp(ftpNonProxyHosts);
@@ -386,15 +378,15 @@ void getDefaultLocaleFromConfig(
             country = locale->getStringValue().copy(index + 1);
 
             if(!language.isEmpty()) {
-                OUString prop("user.language=");
-                prop += language;
+                OUString prop = "user.language="
+                              + language;
 
                 pjvm->pushProp(prop);
             }
 
             if(!country.isEmpty()) {
-                OUString prop("user.country=");
-                prop += country;
+                OUString prop = "user.country="
+                              + country;
 
                 pjvm->pushProp(prop);
             }

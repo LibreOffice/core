@@ -1912,8 +1912,8 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl()
         SvTreeListEntry* pEntry = pTreeBox ? pTreeBox->FirstSelected() : aFmtLb->FirstSelected();
         const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
 
-        OUString aMsg = SfxResId(STR_DELETE_STYLE_USED).toString();
-        aMsg += SfxResId(STR_DELETE_STYLE).toString();
+        OUString aMsg = SfxResId(STR_DELETE_STYLE_USED).toString()
+                      + SfxResId(STR_DELETE_STYLE).toString();
 
         while (pEntry)
         {

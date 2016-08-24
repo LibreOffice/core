@@ -166,17 +166,16 @@ uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme)
         { RTL_CONSTASCII_USTRINGPARAM("/SQLComment"),  false }
     };
     int nIndex = 0;
-    OUString sColor = cColor;
-    OUString sBase(cColorSchemes);
-    sBase += utl::wrapConfigurationElementName(rScheme);
+    OUString sBase = cColorSchemes
+                   + utl::wrapConfigurationElementName(rScheme);
     const int nCount = ColorConfigEntryCount;
     for(sal_Int32 i = 0; i < 4 * nCount; i+= 4)
     {
-        OUString sBaseName(sBase);
         sal_Int32 nPos = i / 4;
-        sBaseName += OUString(cNames[nPos].cName, cNames[nPos].nLength, cNames[nPos].eEncoding);
+        OUString sBaseName = sBase
+                           + OUString(cNames[nPos].cName, cNames[nPos].nLength, cNames[nPos].eEncoding);
         pNames[nIndex] += sBaseName;
-        pNames[nIndex++] += sColor;
+        pNames[nIndex++] += cColor;
         if(cNames[nPos].bCanBeVisible)
         {
             pNames[nIndex] += sBaseName;

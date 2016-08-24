@@ -253,8 +253,8 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
     for(sal_Int32 i = 0;pIter != pEnd;++pIter,++i)
     {
         uno::Sequence < OUString > aComponentDisplayNames(1);
-        aComponentDisplayNames[0] = *pIter;
-        aComponentDisplayNames[0] += sDisplayName;
+        aComponentDisplayNames[0] = *pIter
+                                  + sDisplayName;
         uno::Sequence< uno::Any > aComponentDisplayNamesValue = GetProperties( aComponentDisplayNames );
         OUString sComponentDisplayName;
         if ( aComponentDisplayNamesValue.getLength() && (aComponentDisplayNamesValue[0] >>= sComponentDisplayName) )
@@ -295,8 +295,8 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
     } // if(!sScheme.getLength())
 
     m_sLoadedScheme = sScheme;
-    OUString sBase("ExtendedColorScheme/ColorSchemes/");
-    sBase += sScheme;
+    OUString sBase = "ExtendedColorScheme/ColorSchemes/"
+                   + sScheme;
 
     bool bFound = ExistsScheme(sScheme);
     if ( bFound )
@@ -335,8 +335,8 @@ void ExtendedColorConfig_Impl::FillComponentColors(uno::Sequence < OUString >& _
         OUString sComponentName = pIter->copy(pIter->lastIndexOf('/')+1);
         if ( m_aConfigValues.find(sComponentName) == m_aConfigValues.end() )
         {
-            OUString sEntry = *pIter;
-            sEntry += sColorEntries;
+            OUString sEntry = *pIter
+                            + sColorEntries;
 
             uno::Sequence < OUString > aColorNames = GetPropertyNames(sEntry);
             uno::Sequence < OUString > aDefaultColorNames = aColorNames;
@@ -411,25 +411,22 @@ void ExtendedColorConfig_Impl::ImplCommit()
         return;
     const OUString sColorEntries("Entries");
     const OUString sColor("/Color");
-    OUString sBase("ExtendedColorScheme/ColorSchemes/");
+    OUString sBase = "ExtendedColorScheme/ColorSchemes/"
+                   + m_sLoadedScheme;
     const OUString s_sSep("/");
-    sBase += m_sLoadedScheme;
 
     TComponents::iterator aIter = m_aConfigValues.begin();
     TComponents::iterator aEnd = m_aConfigValues.end();
     for( ;aIter != aEnd;++aIter )
     {
-        OUString sEntry = aIter->first;
-        sEntry += sColorEntries;
-
         if ( ConfigItem::AddNode(sBase, aIter->first) )
         {
-            OUString sNode = sBase;
-            sNode += s_sSep;
-            sNode += aIter->first;
+            OUString sNode = sBase
+                           + s_sSep
+                           + aIter->first
             //ConfigItem::AddNode(sNode, sColorEntries);
-            sNode += s_sSep;
-            sNode += sColorEntries;
+                           + s_sSep
+                           + sColorEntries;
 
             uno::Sequence < beans::PropertyValue > aPropValues(aIter->second.first.size());
             beans::PropertyValue* pPropValues = aPropValues.getArray();

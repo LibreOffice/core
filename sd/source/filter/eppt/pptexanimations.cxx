@@ -1429,23 +1429,23 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
         OUString aP( "," );
         if ( rSourceValue >>= aHSL )
         {
-            aDest += "hsl(";
-            aDest += OUString::number( (sal_Int32)( aHSL[ 0 ] / ( 360.0 / 255 ) ) );
-            aDest += aP;
-            aDest += OUString::number( (sal_Int32)( aHSL[ 1 ] * 255.0 ) );
-            aDest += aP;
-            aDest += OUString::number( (sal_Int32)( aHSL[ 2 ] * 255.0 ) );
-            aDest += ")";
+            aDest += "hsl("
+                  +  OUString::number( (sal_Int32)( aHSL[ 0 ] / ( 360.0 / 255 ) ) )
+                  +  aP
+                  +  OUString::number( (sal_Int32)( aHSL[ 1 ] * 255.0 ) )
+                  +  aP
+                  +  OUString::number( (sal_Int32)( aHSL[ 2 ] * 255.0 ) )
+                  +  ")";
         }
         else if ( rSourceValue >>= nColor )
         {
-            aDest += "rgb(";
-            aDest += OUString::number( ( (sal_Int8)nColor ) );
-            aDest += aP;
-            aDest += OUString::number( ( (sal_Int8)( nColor >> 8 ) ) );
-            aDest += aP;
-            aDest += OUString::number( ( (sal_Int8)( nColor >> 16 ) ) );
-            aDest += ")";
+            aDest += "rgb("
+                  +  OUString::number( ( (sal_Int8)nColor ) )
+                  +  aP
+                  +  OUString::number( ( (sal_Int8)( nColor >> 8 ) ) )
+                  +  aP
+                  +  OUString::number( ( (sal_Int8)( nColor >> 16 ) ) )
+                  +  ")";
         }
     }
     else if ( rAttributeName == "FillStyle" )
