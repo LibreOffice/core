@@ -18,7 +18,6 @@
  */
 
 #include <svx/dataaccessdescriptor.hxx>
-#include <comphelper/propertysetinfo.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -33,6 +32,15 @@ namespace svx
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::ucb;
     using namespace ::comphelper;
+
+    struct PropertyMapEntry
+    {
+        OUString       maName;
+        DataAccessDescriptorProperty      mnHandle;
+        css::uno::Type maType;
+        sal_Int16      mnAttributes;
+        sal_uInt8      mnMemberId;
+    };
 
     class ODADescriptorImpl
     {
@@ -175,29 +183,24 @@ namespace svx
         {
             static PropertyMapEntry const s_aDesriptorProperties[] =
             {
-                { OUString("ActiveConnection"),   daConnection,           cppu::UnoType<XConnection>::get(),   PropertyAttribute::TRANSIENT, 0 },
-                { OUString("BookmarkSelection"),  daBookmarkSelection,    cppu::UnoType<bool>::get(),                                           PropertyAttribute::TRANSIENT, 0 },
-                { OUString("Column"),             daColumnObject,         cppu::UnoType<XPropertySet>::get(),  PropertyAttribute::TRANSIENT, 0 },
-                { OUString("ColumnName"),         daColumnName,           ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
-                { OUString("Command"),            daCommand,              ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
-                { OUString("CommandType"),        daCommandType,          ::cppu::UnoType<sal_Int32>::get(),                  PropertyAttribute::TRANSIENT, 0 },
-                { OUString("Component"),          daComponent,            cppu::UnoType<XContent>::get(),      PropertyAttribute::TRANSIENT, 0 },
-                { OUString("ConnectionResource"), daConnectionResource,   ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
-                { OUString("Cursor"),             daCursor,               cppu::UnoType<XResultSet>::get(),     PropertyAttribute::TRANSIENT, 0 },
-                { OUString("DataSourceName"),     daDataSource,           ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
-                { OUString("DatabaseLocation"),   daDatabaseLocation,     ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
-                { OUString("EscapeProcessing"),   daEscapeProcessing,     cppu::UnoType<bool>::get(),                                           PropertyAttribute::TRANSIENT, 0 },
-                { OUString("Filter"),             daFilter,               ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
-                { OUString("Selection"),          daSelection,            cppu::UnoType<Sequence< Any >>::get(),            PropertyAttribute::TRANSIENT, 0 },
-                { OUString(), 0, css::uno::Type(), 0, 0 }
+                { OUString("ActiveConnection"),   DataAccessDescriptorProperty::Connection,           cppu::UnoType<XConnection>::get(),   PropertyAttribute::TRANSIENT, 0 },
+                { OUString("BookmarkSelection"),  DataAccessDescriptorProperty::BookmarkSelection,    cppu::UnoType<bool>::get(),                                           PropertyAttribute::TRANSIENT, 0 },
+                { OUString("Column"),             DataAccessDescriptorProperty::ColumnObject,         cppu::UnoType<XPropertySet>::get(),  PropertyAttribute::TRANSIENT, 0 },
+                { OUString("ColumnName"),         DataAccessDescriptorProperty::ColumnName,           ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
+                { OUString("Command"),            DataAccessDescriptorProperty::Command,              ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
+                { OUString("CommandType"),        DataAccessDescriptorProperty::CommandType,          ::cppu::UnoType<sal_Int32>::get(),                  PropertyAttribute::TRANSIENT, 0 },
+                { OUString("Component"),          DataAccessDescriptorProperty::Component,            cppu::UnoType<XContent>::get(),      PropertyAttribute::TRANSIENT, 0 },
+                { OUString("ConnectionResource"), DataAccessDescriptorProperty::ConnectionResource,   ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
+                { OUString("Cursor"),             DataAccessDescriptorProperty::Cursor,               cppu::UnoType<XResultSet>::get(),     PropertyAttribute::TRANSIENT, 0 },
+                { OUString("DataSourceName"),     DataAccessDescriptorProperty::DataSource,           ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
+                { OUString("DatabaseLocation"),   DataAccessDescriptorProperty::DatabaseLocation,     ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
+                { OUString("EscapeProcessing"),   DataAccessDescriptorProperty::EscapeProcessing,     cppu::UnoType<bool>::get(),                                           PropertyAttribute::TRANSIENT, 0 },
+                { OUString("Filter"),             DataAccessDescriptorProperty::Filter,               ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
+                { OUString("Selection"),          DataAccessDescriptorProperty::Selection,            cppu::UnoType<Sequence< Any >>::get(),            PropertyAttribute::TRANSIENT, 0 }
             };
 
-            PropertyMapEntry const * pEntry = s_aDesriptorProperties;
-            while ( !pEntry->maName.isEmpty() )
-            {
-                s_aProperties[ pEntry->maName ] = pEntry;
-                ++pEntry;
-            }
+            for (unsigned i=0; i<SAL_N_ELEMENTS(s_aDesriptorProperties); ++i)
+                s_aProperties[ s_aDesriptorProperties[i].maName ] = &s_aDesriptorProperties[i];
         }
 
         return s_aProperties;
@@ -207,7 +210,7 @@ namespace svx
     {
         const MapString2PropertyEntry& rProperties = getPropertyMap();
 
-        sal_Int32 nNeededHandle = (sal_Int32)(_rPos->first);
+        DataAccessDescriptorProperty nNeededHandle = _rPos->first;
 
         for ( MapString2PropertyEntry::const_iterator loop = rProperties.begin();
               loop != rProperties.end();
@@ -228,7 +231,7 @@ namespace svx
         // build the property value
         PropertyValue aReturn;
         aReturn.Name    = pProperty->maName;
-        aReturn.Handle  = pProperty->mnHandle;
+        aReturn.Handle  = (sal_Int32)pProperty->mnHandle;
         aReturn.Value   = _rPos->second;
         aReturn.State   = PropertyState_DIRECT_VALUE;
 
@@ -351,10 +354,10 @@ namespace svx
     OUString ODataAccessDescriptor::getDataSource() const
     {
         OUString sDataSourceName;
-        if ( has(daDataSource) )
-            (*this)[daDataSource] >>= sDataSourceName;
-        else if ( has(daDatabaseLocation) )
-            (*this)[daDatabaseLocation] >>= sDataSourceName;
+        if ( has(DataAccessDescriptorProperty::DataSource) )
+            (*this)[DataAccessDescriptorProperty::DataSource] >>= sDataSourceName;
+        else if ( has(DataAccessDescriptorProperty::DatabaseLocation) )
+            (*this)[DataAccessDescriptorProperty::DatabaseLocation] >>= sDataSourceName;
         return sDataSourceName;
     }
 
@@ -363,10 +366,10 @@ namespace svx
         if ( !_sDataSourceNameOrLocation.isEmpty() )
         {
             INetURLObject aURL(_sDataSourceNameOrLocation);
-            (*this)[ (( aURL.GetProtocol() == INetProtocol::File ) ? daDatabaseLocation : daDataSource)] <<= _sDataSourceNameOrLocation;
+            (*this)[ (( aURL.GetProtocol() == INetProtocol::File ) ? DataAccessDescriptorProperty::DatabaseLocation : DataAccessDescriptorProperty::DataSource)] <<= _sDataSourceNameOrLocation;
         }
         else
-            (*this)[ daDataSource ] <<= OUString();
+            (*this)[ DataAccessDescriptorProperty::DataSource ] <<= OUString();
     }
 }
 

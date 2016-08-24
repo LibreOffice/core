@@ -88,8 +88,8 @@ void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFram
 
             svx::ODataAccessDescriptor aSelection;
             aSelection.setDataSource(rParam.aDBName);
-            aSelection[svx::daCommand]      <<= rParam.aStatement;
-            aSelection[svx::daCommandType]  <<= nType;
+            aSelection[svx::DataAccessDescriptorProperty::Command]      <<= rParam.aStatement;
+            aSelection[svx::DataAccessDescriptorProperty::CommandType]  <<= nType;
 
             xControllerSelection->select(uno::makeAny(aSelection.createPropertyValueSequence()));
         }
@@ -158,15 +158,15 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     sal_Int32 nListCount = 0;
 
     uno::Sequence<uno::Any> aSelection;
-    if ( pDescriptor && pDescriptor->has(svx::daSelection) )
+    if ( pDescriptor && pDescriptor->has(svx::DataAccessDescriptorProperty::Selection) )
     {
-        (*pDescriptor)[svx::daSelection] >>= aSelection;
+        (*pDescriptor)[svx::DataAccessDescriptorProperty::Selection] >>= aSelection;
         nListCount = aSelection.getLength();
         if ( nListCount > 0 )
         {
             bDoSelection = true;
-            if ( pDescriptor->has(svx::daBookmarkSelection) )
-                bBookmarkSelection = ScUnoHelpFunctions::GetBoolFromAny( (*pDescriptor)[svx::daBookmarkSelection] );
+            if ( pDescriptor->has(svx::DataAccessDescriptorProperty::BookmarkSelection) )
+                bBookmarkSelection = ScUnoHelpFunctions::GetBoolFromAny( (*pDescriptor)[svx::DataAccessDescriptorProperty::BookmarkSelection] );
             if ( bBookmarkSelection )
             {
                 // From bookmarks, there's no way to detect if all records are selected.
@@ -177,8 +177,8 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     }
 
     uno::Reference<sdbc::XResultSet> xResultSet;
-    if ( pDescriptor && pDescriptor->has(svx::daCursor) )
-        xResultSet.set((*pDescriptor)[svx::daCursor], uno::UNO_QUERY);
+    if ( pDescriptor && pDescriptor->has(svx::DataAccessDescriptorProperty::Cursor) )
+        xResultSet.set((*pDescriptor)[svx::DataAccessDescriptorProperty::Cursor], uno::UNO_QUERY);
 
     // ImportDoc - also used for Redo
     ScDocument* pImportDoc = new ScDocument( SCDOCMODE_UNDO );

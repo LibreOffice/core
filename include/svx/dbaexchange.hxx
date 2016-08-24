@@ -76,7 +76,7 @@ namespace svx
         @param _rDescriptor
             The descriptor for the column. It must contain at least
             <ul><li>information sufficient to create a connection, that is, either one of DataSource, DatabaseLocation,
-                    ConnectionResource, and daConnection</li>
+                    ConnectionResource, and DataAccessDescriptorProperty::Connection</li>
                 <li>a Command</li>
                 <li>a CommandType</li>
                 <li>a ColumnName or ColumnObject</li>
@@ -244,7 +244,7 @@ namespace svx
         void    addCompatibleSelectionDescription(
             const css::uno::Sequence< css::uno::Any >& _rSelRows
         );
-            // normally, a derived class could simply access getDescriptor[daSelection] and place the sequence therein
+            // normally, a derived class could simply access getDescriptor[DataAccessDescriptorProperty::Selection] and place the sequence therein
             // but unfortunately, we have this damned compatible format, and this can't be accessed in
             // derived classes (our class is the only one which should be contaminated with this)
 

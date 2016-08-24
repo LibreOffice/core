@@ -47,7 +47,7 @@ namespace svx
             ,const Reference< XContent>& _xContent)
     {
         m_aDescriptor.setDataSource(_rDatasourceOrLocation);
-        m_aDescriptor[daComponent] <<= _xContent;
+        m_aDescriptor[DataAccessDescriptorProperty::Component] <<= _xContent;
     }
 
 
@@ -75,7 +75,7 @@ namespace svx
         try
         {
             Reference<XPropertySet> xProp;
-            m_aDescriptor[daComponent] >>= xProp;
+            m_aDescriptor[DataAccessDescriptorProperty::Component] >>= xProp;
             if ( xProp.is() )
                 xProp->getPropertyValue("IsForm") >>= bForm;
         }

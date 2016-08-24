@@ -3364,16 +3364,16 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             // clear all selections
             getDesignView()->unmarkAllObjects();
 
-            uno::Reference< beans::XPropertySet > xField( aDescriptor[ svx::daColumnObject ], uno::UNO_QUERY );
+            uno::Reference< beans::XPropertySet > xField( aDescriptor[ svx::DataAccessDescriptorProperty::ColumnObject ], uno::UNO_QUERY );
             uno::Reference< lang::XComponent > xHoldAlive;
             if ( !xField.is() )
             {
                 OUString sCommand;
                 OUString sColumnName;
                 sal_Int32 nCommandType( -1 );
-                OSL_VERIFY( aDescriptor[ svx::daCommand ] >>= sCommand );
-                OSL_VERIFY( aDescriptor[ svx::daColumnName ] >>= sColumnName );
-                OSL_VERIFY( aDescriptor[ svx::daCommandType ] >>= nCommandType );
+                OSL_VERIFY( aDescriptor[ svx::DataAccessDescriptorProperty::Command ] >>= sCommand );
+                OSL_VERIFY( aDescriptor[ svx::DataAccessDescriptorProperty::ColumnName ] >>= sColumnName );
+                OSL_VERIFY( aDescriptor[ svx::DataAccessDescriptorProperty::CommandType ] >>= nCommandType );
 
                 uno::Reference< container::XNameAccess > xColumns;
                 uno::Reference< sdbc::XConnection > xConnection( getConnection() );

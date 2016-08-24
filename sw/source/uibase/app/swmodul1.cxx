@@ -379,8 +379,8 @@ void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData)
 
             ODataAccessDescriptor aSelection;
             aSelection.setDataSource(rData.sDataSource);
-            aSelection[daCommand]       <<= rData.sCommand;
-            aSelection[daCommandType]   <<= rData.nCommandType;
+            aSelection[DataAccessDescriptorProperty::Command]       <<= rData.sCommand;
+            aSelection[DataAccessDescriptorProperty::CommandType]   <<= rData.nCommandType;
             xControllerSelection->select(makeAny(aSelection.createPropertyValueSequence()));
         }
         else {

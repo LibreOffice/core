@@ -795,9 +795,9 @@ SwFieldType* SwXFieldMaster::GetFieldType(bool const bDontCreate) const
         // set DataSource
         svx::ODataAccessDescriptor aAcc;
         if (!m_pImpl->m_sParam1.isEmpty())
-            aAcc[svx::daDataSource]        <<= m_pImpl->m_sParam1; // DataBaseName
+            aAcc[svx::DataAccessDescriptorProperty::DataSource]        <<= m_pImpl->m_sParam1; // DataBaseName
         else if (!m_pImpl->m_sParam5.isEmpty())
-            aAcc[svx::daDatabaseLocation]  <<= m_pImpl->m_sParam5; // DataBaseURL
+            aAcc[svx::DataAccessDescriptorProperty::DatabaseLocation]  <<= m_pImpl->m_sParam5; // DataBaseURL
         aData.sDataSource = aAcc.getDataSource();
 
         aData.sCommand = m_pImpl->m_sParam2;

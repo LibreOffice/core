@@ -71,11 +71,11 @@ sal_Int8 ConditionEdit::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 sDBName += sTmp;
                 sDBName += ".";
 
-                aColDesc[daCommand] >>= sTmp;
+                aColDesc[DataAccessDescriptorProperty::Command] >>= sTmp;
                 sDBName += sTmp;
                 sDBName += ".";
 
-                aColDesc[daColumnName] >>= sTmp;
+                aColDesc[DataAccessDescriptorProperty::ColumnName] >>= sTmp;
                 sDBName += sTmp;
                 if (bBrackets)
                     sDBName += "]";

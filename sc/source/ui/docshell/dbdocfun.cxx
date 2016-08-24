@@ -1618,8 +1618,8 @@ void ScDBDocFunc::UpdateImport( const OUString& rTarget, const svx::ODataAccessD
     OUString sDBTable;
     sal_Int32 nCommandType = 0;
     sDBName = rDescriptor.getDataSource();
-    rDescriptor[svx::daCommand]     >>= sDBTable;
-    rDescriptor[svx::daCommandType] >>= nCommandType;
+    rDescriptor[svx::DataAccessDescriptorProperty::Command]     >>= sDBTable;
+    rDescriptor[svx::DataAccessDescriptorProperty::CommandType] >>= nCommandType;
 
     aImportParam.aDBName    = sDBName;
     aImportParam.bSql       = ( nCommandType == sdb::CommandType::COMMAND );

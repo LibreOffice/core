@@ -152,12 +152,12 @@ void FmFieldWinListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPi
         return;
 
     svx::ODataAccessDescriptor aDescriptor;
-    aDescriptor[ daDataSource ] <<= pTabWin->GetDatabaseName();
-    aDescriptor[ daConnection ] <<= pTabWin->GetConnection().getTyped();
-    aDescriptor[ daCommand ]    <<= pTabWin->GetObjectName();
-    aDescriptor[ daCommandType ]<<= pTabWin->GetObjectType();
+    aDescriptor[ DataAccessDescriptorProperty::DataSource ] <<= pTabWin->GetDatabaseName();
+    aDescriptor[ DataAccessDescriptorProperty::Connection ] <<= pTabWin->GetConnection().getTyped();
+    aDescriptor[ DataAccessDescriptorProperty::Command ]    <<= pTabWin->GetObjectName();
+    aDescriptor[ DataAccessDescriptorProperty::CommandType ]<<= pTabWin->GetObjectType();
     ColumnInfo* pInfo = static_cast<ColumnInfo*>(pSelected->GetUserData());
-    aDescriptor[ daColumnName ] <<= pInfo->sColumnName;
+    aDescriptor[ DataAccessDescriptorProperty::ColumnName ] <<= pInfo->sColumnName;
 
     TransferableHelper* pTransferColumn = new OColumnTransferable(
         aDescriptor, ColumnTransferFormatFlags::FIELD_DESCRIPTOR | ColumnTransferFormatFlags::CONTROL_EXCHANGE | ColumnTransferFormatFlags::COLUMN_DESCRIPTOR
@@ -219,12 +219,12 @@ bool FmFieldWin::createSelectionControls( )
         ODataAccessDescriptor aDescr;
         aDescr.setDataSource(GetDatabaseName());
 
-        aDescr[ daConnection ]  <<= GetConnection().getTyped();
+        aDescr[ DataAccessDescriptorProperty::Connection ]  <<= GetConnection().getTyped();
 
-        aDescr[ daCommand ]     <<= GetObjectName();
-        aDescr[ daCommandType ] <<= GetObjectType();
+        aDescr[ DataAccessDescriptorProperty::Command ]     <<= GetObjectName();
+        aDescr[ DataAccessDescriptorProperty::CommandType ] <<= GetObjectType();
         ColumnInfo* pInfo = static_cast<ColumnInfo*>(pSelected->GetUserData());
-        aDescr[ daColumnName ]  <<= pInfo->sColumnName;//OUString( pListBox->GetEntryText( pSelected) );
+        aDescr[ DataAccessDescriptorProperty::ColumnName ]  <<= pInfo->sColumnName;//OUString( pListBox->GetEntryText( pSelected) );
 
         // transfer this to the SFX world
         SfxUnoAnyItem aDescriptorItem( SID_FM_DATACCESS_DESCRIPTOR, makeAny( aDescr.createPropertyValueSequence() ) );

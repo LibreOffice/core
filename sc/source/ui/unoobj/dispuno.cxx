@@ -249,16 +249,16 @@ static void lcl_FillDataSource( frame::FeatureStateEvent& rEvent, const ScImport
                                                     sdb::CommandType::TABLE );
 
         aDescriptor.setDataSource(rParam.aDBName);
-        aDescriptor[svx::daCommand]     <<= rParam.aStatement;
-        aDescriptor[svx::daCommandType] <<= nType;
+        aDescriptor[svx::DataAccessDescriptorProperty::Command]     <<= rParam.aStatement;
+        aDescriptor[svx::DataAccessDescriptorProperty::CommandType] <<= nType;
     }
     else
     {
         //  descriptor has to be complete anyway
 
-        aDescriptor[svx::daDataSource]  <<= OUString();
-        aDescriptor[svx::daCommand]     <<= OUString();
-        aDescriptor[svx::daCommandType] <<= (sal_Int32)sdb::CommandType::TABLE;
+        aDescriptor[svx::DataAccessDescriptorProperty::DataSource]  <<= OUString();
+        aDescriptor[svx::DataAccessDescriptorProperty::Command]     <<= OUString();
+        aDescriptor[svx::DataAccessDescriptorProperty::CommandType] <<= (sal_Int32)sdb::CommandType::TABLE;
     }
     rEvent.State <<= aDescriptor.createPropertyValueSequence();
 }

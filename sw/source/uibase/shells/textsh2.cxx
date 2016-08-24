@@ -172,10 +172,10 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
 
                 ODataAccessDescriptor aDescriptor;
                 aDescriptor.setDataSource(sSourceArg);
-                aDescriptor[daCommand]      <<= sCommandArg;
-                aDescriptor[daCursor]       <<= xCursor;
-                aDescriptor[daSelection]    <<= aSelection;
-                aDescriptor[daCommandType]  <<= nCommandTypeArg;
+                aDescriptor[DataAccessDescriptorProperty::Command]      <<= sCommandArg;
+                aDescriptor[DataAccessDescriptorProperty::Cursor]       <<= xCursor;
+                aDescriptor[DataAccessDescriptorProperty::Selection]    <<= aSelection;
+                aDescriptor[DataAccessDescriptorProperty::CommandType]  <<= nCommandTypeArg;
 
                 SwMergeDescriptor aMergeDesc( DBMGR_MERGE, *GetShellPtr(), aDescriptor );
                 pDBManager->Merge(aMergeDesc);

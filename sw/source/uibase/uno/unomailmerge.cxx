@@ -654,14 +654,14 @@ uno::Any SAL_CALL SwXMailMerge::execute(
 
     svx::ODataAccessDescriptor aDescriptor;
     aDescriptor.setDataSource(aCurDataSourceName);
-    aDescriptor[ svx::daConnection ]         <<= xCurConnection;
-    aDescriptor[ svx::daCommand ]            <<= aCurDataCommand;
-    aDescriptor[ svx::daCommandType ]        <<= nCurDataCommandType;
-    aDescriptor[ svx::daEscapeProcessing ]   <<= bCurEscapeProcessing;
-    aDescriptor[ svx::daCursor ]             <<= xCurResultSet;
-    // aDescriptor[ svx::daColumnName ]      not used
-    // aDescriptor[ svx::daColumnObject ]    not used
-    aDescriptor[ svx::daSelection ]          <<= aCurSelection;
+    aDescriptor[ svx::DataAccessDescriptorProperty::Connection ]         <<= xCurConnection;
+    aDescriptor[ svx::DataAccessDescriptorProperty::Command ]            <<= aCurDataCommand;
+    aDescriptor[ svx::DataAccessDescriptorProperty::CommandType ]        <<= nCurDataCommandType;
+    aDescriptor[ svx::DataAccessDescriptorProperty::EscapeProcessing ]   <<= bCurEscapeProcessing;
+    aDescriptor[ svx::DataAccessDescriptorProperty::Cursor ]             <<= xCurResultSet;
+    // aDescriptor[ svx::DataAccessDescriptorProperty::ColumnName ]      not used
+    // aDescriptor[ svx::DataAccessDescriptorProperty::ColumnObject ]    not used
+    aDescriptor[ svx::DataAccessDescriptorProperty::Selection ]          <<= aCurSelection;
 
     DBManagerOptions nMergeType;
     switch (nCurOutputType)

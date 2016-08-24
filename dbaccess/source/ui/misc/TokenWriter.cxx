@@ -190,12 +190,12 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
     if ( !_bPlusDefaultInit )
     {
         m_sDataSourceName = _aDataDescriptor.getDataSource();
-        _aDataDescriptor[daCommandType] >>= m_nCommandType;
-        _aDataDescriptor[daCommand]     >>= m_sName;
+        _aDataDescriptor[DataAccessDescriptorProperty::CommandType] >>= m_nCommandType;
+        _aDataDescriptor[DataAccessDescriptorProperty::Command]     >>= m_sName;
         // some additional information
-        if(_aDataDescriptor.has(daConnection))
+        if(_aDataDescriptor.has(DataAccessDescriptorProperty::Connection))
         {
-            Reference< XConnection > xPureConn( _aDataDescriptor[daConnection], UNO_QUERY );
+            Reference< XConnection > xPureConn( _aDataDescriptor[DataAccessDescriptorProperty::Connection], UNO_QUERY );
             m_xConnection.reset( xPureConn, SharedConnection::NoTakeOwnership );
             Reference< XEventListener> xEvt(static_cast<cppu::OWeakObject*>(this),UNO_QUERY);
             Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
@@ -203,15 +203,15 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
                 xComponent->addEventListener(xEvt);
         }
 
-        if ( _aDataDescriptor.has( daSelection ) )
-            _aDataDescriptor[ daSelection ] >>= m_aSelection;
+        if ( _aDataDescriptor.has( DataAccessDescriptorProperty::Selection ) )
+            _aDataDescriptor[ DataAccessDescriptorProperty::Selection ] >>= m_aSelection;
 
-        if ( _aDataDescriptor.has( daBookmarkSelection ) )
-            _aDataDescriptor[ daBookmarkSelection ] >>= m_bBookmarkSelection;
+        if ( _aDataDescriptor.has( DataAccessDescriptorProperty::BookmarkSelection ) )
+            _aDataDescriptor[ DataAccessDescriptorProperty::BookmarkSelection ] >>= m_bBookmarkSelection;
 
-        if ( _aDataDescriptor.has( daCursor ) )
+        if ( _aDataDescriptor.has( DataAccessDescriptorProperty::Cursor ) )
         {
-            _aDataDescriptor[ daCursor ] >>= m_xResultSet;
+            _aDataDescriptor[ DataAccessDescriptorProperty::Cursor ] >>= m_xResultSet;
             m_xRowLocate.set( m_xResultSet, UNO_QUERY );
         }
 

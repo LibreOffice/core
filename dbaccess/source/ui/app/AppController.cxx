@@ -2447,7 +2447,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
 
         sal_Int8 nAction = _rEvt.mnAction;
         Reference<XContent> xContent;
-        m_aAsyncDrop.aDroppedData[daComponent] >>= xContent;
+        m_aAsyncDrop.aDroppedData[DataAccessDescriptorProperty::Component] >>= xContent;
         if ( xContent.is() )
         {
             OUString sName = xContent->getIdentifier()->getContentIdentifier();

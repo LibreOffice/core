@@ -418,9 +418,9 @@ SdrObject* FmFormView::CreateFieldControl(const OUString& rFieldDesc) const
 
     ODataAccessDescriptor aColumnDescriptor;
     aColumnDescriptor.setDataSource(sDataSource);
-    aColumnDescriptor[ daCommand ]          <<= sObjectName;
-    aColumnDescriptor[ daCommandType ]      <<= nObjectType;
-    aColumnDescriptor[ daColumnName ]       <<= sFieldName;
+    aColumnDescriptor[ DataAccessDescriptorProperty::Command ]          <<= sObjectName;
+    aColumnDescriptor[ DataAccessDescriptorProperty::CommandType ]      <<= nObjectType;
+    aColumnDescriptor[ DataAccessDescriptorProperty::ColumnName ]       <<= sFieldName;
 
     return pImpl->implCreateFieldControl( aColumnDescriptor );
 }

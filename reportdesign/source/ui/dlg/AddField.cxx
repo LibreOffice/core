@@ -444,19 +444,19 @@ void OAddFieldWindow::fillDescriptor(SvTreeListEntry* _pSelected,svx::ODataAcces
             {
                 uno::Reference<frame::XModel> xModel(xDocument->getDatabaseDocument(),uno::UNO_QUERY);
                 if ( xModel.is() )
-                    _rDescriptor[ daDatabaseLocation ] <<= xModel->getURL();
+                    _rDescriptor[ DataAccessDescriptorProperty::DatabaseLocation ] <<= xModel->getURL();
             }
         }
 
-        _rDescriptor[ svx::daCommand ]            <<= GetCommand();
-        _rDescriptor[ svx::daCommandType ]        <<= GetCommandType();
-        _rDescriptor[ svx::daEscapeProcessing ]   <<= GetEscapeProcessing();
-        _rDescriptor[ svx::daConnection ]         <<= getConnection();
+        _rDescriptor[ svx::DataAccessDescriptorProperty::Command ]            <<= GetCommand();
+        _rDescriptor[ svx::DataAccessDescriptorProperty::CommandType ]        <<= GetCommandType();
+        _rDescriptor[ svx::DataAccessDescriptorProperty::EscapeProcessing ]   <<= GetEscapeProcessing();
+        _rDescriptor[ svx::DataAccessDescriptorProperty::Connection ]         <<= getConnection();
 
         ColumnInfo* pInfo = static_cast<ColumnInfo*>(_pSelected->GetUserData());
-        _rDescriptor[ svx::daColumnName ]         <<= pInfo->sColumnName;
+        _rDescriptor[ svx::DataAccessDescriptorProperty::ColumnName ]         <<= pInfo->sColumnName;
         if ( m_xColumns->hasByName( pInfo->sColumnName ) )
-            _rDescriptor[ svx::daColumnObject ] <<= m_xColumns->getByName(pInfo->sColumnName);
+            _rDescriptor[ svx::DataAccessDescriptorProperty::ColumnObject ] <<= m_xColumns->getByName(pInfo->sColumnName);
     }
 }
 

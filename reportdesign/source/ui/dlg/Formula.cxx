@@ -227,7 +227,7 @@ IMPL_LINK_TYPED( FormulaDialog, OnClickHdl, OAddFieldWindow& ,_rAddFieldDlg, voi
         aArgs[0].Value >>= aValue;
         svx::ODataAccessDescriptor aDescriptor(aValue);
         OUString sName;
-        aDescriptor[ svx::daColumnName ] >>= sName;
+        aDescriptor[ svx::DataAccessDescriptorProperty::ColumnName ] >>= sName;
         if ( !sName.isEmpty() )
         {
             sName = "[" + sName + "]";

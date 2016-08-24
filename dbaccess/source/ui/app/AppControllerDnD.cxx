@@ -586,8 +586,8 @@ bool OApplicationController::paste( ElementType _eType, const svx::ODataAccessDe
         if ( _eType == E_QUERY )
         {
             sal_Int32 nCommandType = CommandType::TABLE;
-            if ( _rPasteData.has(daCommandType) )
-                _rPasteData[daCommandType]      >>= nCommandType;
+            if ( _rPasteData.has(DataAccessDescriptorProperty::CommandType) )
+                _rPasteData[DataAccessDescriptorProperty::CommandType]      >>= nCommandType;
 
             if ( CommandType::QUERY == nCommandType || CommandType::COMMAND == nCommandType )
             {
@@ -596,9 +596,9 @@ bool OApplicationController::paste( ElementType _eType, const svx::ODataAccessDe
                 OUString sCommand;
                 bool bEscapeProcessing = true;
 
-                _rPasteData[daCommand] >>= sCommand;
-                if ( _rPasteData.has(daEscapeProcessing) )
-                    _rPasteData[daEscapeProcessing] >>= bEscapeProcessing;
+                _rPasteData[DataAccessDescriptorProperty::Command] >>= sCommand;
+                if ( _rPasteData.has(DataAccessDescriptorProperty::EscapeProcessing) )
+                    _rPasteData[DataAccessDescriptorProperty::EscapeProcessing] >>= bEscapeProcessing;
 
                 // plausibility check
                 bool bValidDescriptor = false;
@@ -749,10 +749,10 @@ bool OApplicationController::paste( ElementType _eType, const svx::ODataAccessDe
                 OSL_TRACE("There should be a sequence in it!");
             return true;
         }
-        else if ( _rPasteData.has(daComponent) ) // forms or reports
+        else if ( _rPasteData.has(DataAccessDescriptorProperty::Component) ) // forms or reports
         {
             Reference<XContent> xContent;
-            _rPasteData[daComponent] >>= xContent;
+            _rPasteData[DataAccessDescriptorProperty::Component] >>= xContent;
             return insertHierachyElement(_eType,_sParentFolder,Reference<XNameAccess>(xContent,UNO_QUERY).is(),xContent,_bMove);
         }
     }
@@ -815,7 +815,7 @@ IMPL_LINK_NOARG_TYPED( OApplicationController, OnAsyncDrop, void*, void )
             && m_aAsyncDrop.nAction == DND_ACTION_MOVE )
         {
             Reference<XContent> xContent;
-            m_aAsyncDrop.aDroppedData[daComponent] >>= xContent;
+            m_aAsyncDrop.aDroppedData[DataAccessDescriptorProperty::Component] >>= xContent;
             ::std::vector< OUString> aList;
             sal_Int32 nIndex = 0;
             OUString sName = xContent->getIdentifier()->getContentIdentifier();

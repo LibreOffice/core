@@ -464,15 +464,15 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
     uno::Reference< sdbc::XConnection> xConnection;
 
     aData.sDataSource = rMergeDesc.rDescriptor.getDataSource();
-    rMergeDesc.rDescriptor[svx::daCommand]      >>= aData.sCommand;
-    rMergeDesc.rDescriptor[svx::daCommandType]  >>= aData.nCommandType;
+    rMergeDesc.rDescriptor[svx::DataAccessDescriptorProperty::Command]      >>= aData.sCommand;
+    rMergeDesc.rDescriptor[svx::DataAccessDescriptorProperty::CommandType]  >>= aData.nCommandType;
 
-    if ( rMergeDesc.rDescriptor.has(svx::daCursor) )
-        rMergeDesc.rDescriptor[svx::daCursor] >>= xResSet;
-    if ( rMergeDesc.rDescriptor.has(svx::daSelection) )
-        rMergeDesc.rDescriptor[svx::daSelection] >>= aSelection;
-    if ( rMergeDesc.rDescriptor.has(svx::daConnection) )
-        rMergeDesc.rDescriptor[svx::daConnection] >>= xConnection;
+    if ( rMergeDesc.rDescriptor.has(svx::DataAccessDescriptorProperty::Cursor) )
+        rMergeDesc.rDescriptor[svx::DataAccessDescriptorProperty::Cursor] >>= xResSet;
+    if ( rMergeDesc.rDescriptor.has(svx::DataAccessDescriptorProperty::Selection) )
+        rMergeDesc.rDescriptor[svx::DataAccessDescriptorProperty::Selection] >>= aSelection;
+    if ( rMergeDesc.rDescriptor.has(svx::DataAccessDescriptorProperty::Connection) )
+        rMergeDesc.rDescriptor[svx::DataAccessDescriptorProperty::Connection] >>= xConnection;
 
     if(aData.sDataSource.isEmpty() || aData.sCommand.isEmpty() || !xResSet.is())
     {
@@ -2796,13 +2796,13 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
 
     svx::ODataAccessDescriptor aDescriptor(rProperties);
     sDataSource = aDescriptor.getDataSource();
-    OSL_VERIFY(aDescriptor[svx::daCommand]      >>= sDataTableOrQuery);
-    OSL_VERIFY(aDescriptor[svx::daCommandType]  >>= nCmdType);
+    OSL_VERIFY(aDescriptor[svx::DataAccessDescriptorProperty::Command]      >>= sDataTableOrQuery);
+    OSL_VERIFY(aDescriptor[svx::DataAccessDescriptorProperty::CommandType]  >>= nCmdType);
 
-    if ( aDescriptor.has(svx::daSelection) )
-        aDescriptor[svx::daSelection] >>= aSelection;
-    if ( aDescriptor.has(svx::daConnection) )
-        aDescriptor[svx::daConnection] >>= xConnection;
+    if ( aDescriptor.has(svx::DataAccessDescriptorProperty::Selection) )
+        aDescriptor[svx::DataAccessDescriptorProperty::Selection] >>= aSelection;
+    if ( aDescriptor.has(svx::DataAccessDescriptorProperty::Connection) )
+        aDescriptor[svx::DataAccessDescriptorProperty::Connection] >>= xConnection;
 
     if(sDataSource.isEmpty() || sDataTableOrQuery.isEmpty())
     {
@@ -2828,11 +2828,11 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
     assert( pImpl->pMergeDialog && "Dialog creation failed!" );
     if(pImpl->pMergeDialog->Execute() == RET_OK)
     {
-        aDescriptor[svx::daSelection] <<= pImpl->pMergeDialog->GetSelection();
+        aDescriptor[svx::DataAccessDescriptorProperty::Selection] <<= pImpl->pMergeDialog->GetSelection();
 
         uno::Reference<sdbc::XResultSet> xResSet = pImpl->pMergeDialog->GetResultSet();
         if(xResSet.is())
-            aDescriptor[svx::daCursor] <<= xResSet;
+            aDescriptor[svx::DataAccessDescriptorProperty::Cursor] <<= xResSet;
 
         // SfxObjectShellRef is ok, since there should be no control over the document lifetime here
         SfxObjectShellRef xDocShell = rSh.GetView().GetViewFrame()->GetObjectShell();
@@ -2855,7 +2855,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
 
         // reset the cursor inside
         xResSet = nullptr;
-        aDescriptor[svx::daCursor] <<= xResSet;
+        aDescriptor[svx::DataAccessDescriptorProperty::Cursor] <<= xResSet;
     }
     if(pFound)
     {
@@ -3078,11 +3078,11 @@ std::shared_ptr<SwMailMergeConfigItem> SwDBManager::PerformMailMerge(SwView* pVi
 
     svx::ODataAccessDescriptor aDescriptor;
     aDescriptor.setDataSource(xConfigItem->GetCurrentDBData().sDataSource);
-    aDescriptor[ svx::daConnection ]  <<= xConfigItem->GetConnection().getTyped();
-    aDescriptor[ svx::daCursor ]      <<= xConfigItem->GetResultSet();
-    aDescriptor[ svx::daCommand ]     <<= xConfigItem->GetCurrentDBData().sCommand;
-    aDescriptor[ svx::daCommandType ] <<= xConfigItem->GetCurrentDBData().nCommandType;
-    aDescriptor[ svx::daSelection ]   <<= xConfigItem->GetSelection();
+    aDescriptor[ svx::DataAccessDescriptorProperty::Connection ]  <<= xConfigItem->GetConnection().getTyped();
+    aDescriptor[ svx::DataAccessDescriptorProperty::Cursor ]      <<= xConfigItem->GetResultSet();
+    aDescriptor[ svx::DataAccessDescriptorProperty::Command ]     <<= xConfigItem->GetCurrentDBData().sCommand;
+    aDescriptor[ svx::DataAccessDescriptorProperty::CommandType ] <<= xConfigItem->GetCurrentDBData().nCommandType;
+    aDescriptor[ svx::DataAccessDescriptorProperty::Selection ]   <<= xConfigItem->GetSelection();
 
     SwWrtShell& rSh = pView->GetWrtShell();
     xConfigItem->SetTargetView(nullptr);

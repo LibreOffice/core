@@ -1158,12 +1158,12 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
     SharedConnection xConnection;
 
     OUString sDataSource = _rColumnDescriptor.getDataSource();
-    _rColumnDescriptor[ daCommand ]     >>= sCommand;
-    _rColumnDescriptor[ daColumnName ]  >>= sFieldName;
-    _rColumnDescriptor[ daCommandType ] >>= nCommandType;
+    _rColumnDescriptor[ DataAccessDescriptorProperty::Command ]     >>= sCommand;
+    _rColumnDescriptor[ DataAccessDescriptorProperty::ColumnName ]  >>= sFieldName;
+    _rColumnDescriptor[ DataAccessDescriptorProperty::CommandType ] >>= nCommandType;
     {
         Reference< XConnection > xExternalConnection;
-        _rColumnDescriptor[ daConnection ]  >>= xExternalConnection;
+        _rColumnDescriptor[ DataAccessDescriptorProperty::Connection ]  >>= xExternalConnection;
         xConnection.reset( xExternalConnection, SharedConnection::NoTakeOwnership );
     }
 

@@ -104,7 +104,7 @@ namespace dbaui
         osl_atomic_increment( &m_refCount );
 
         Reference<XConnection> xConnection;
-        getDescriptor()[ daConnection ] >>= xConnection;
+        getDescriptor()[ DataAccessDescriptorProperty::Connection ] >>= xConnection;
         lcl_setListener( xConnection, this, true );
 
         // do not pass the form itself as source result set, since the client might operate on the form, which
@@ -116,9 +116,9 @@ namespace dbaui
         OSL_ENSURE( xResultSetClone.is(), "ODataClipboard::ODataClipboard: could not clone the form's result set" );
         lcl_setListener( xResultSetClone, this, true );
 
-        getDescriptor()[daCursor]           <<= xResultSetClone;
-        getDescriptor()[daSelection]        <<= i_rSelectedRows;
-        getDescriptor()[daBookmarkSelection]<<= i_bBookmarkSelection;
+        getDescriptor()[DataAccessDescriptorProperty::Cursor]           <<= xResultSetClone;
+        getDescriptor()[DataAccessDescriptorProperty::Selection]        <<= i_rSelectedRows;
+        getDescriptor()[DataAccessDescriptorProperty::BookmarkSelection]<<= i_bBookmarkSelection;
         addCompatibleSelectionDescription( i_rSelectedRows );
 
         if ( xConnection.is() && i_rORB.is() )
@@ -194,15 +194,15 @@ namespace dbaui
             m_pRtf.clear();
         }
 
-        if ( getDescriptor().has( daConnection ) )
+        if ( getDescriptor().has( DataAccessDescriptorProperty::Connection ) )
         {
-            Reference<XConnection> xConnection( getDescriptor()[daConnection], UNO_QUERY );
+            Reference<XConnection> xConnection( getDescriptor()[DataAccessDescriptorProperty::Connection], UNO_QUERY );
             lcl_setListener( xConnection, this, false );
         }
 
-        if ( getDescriptor().has( daCursor ) )
+        if ( getDescriptor().has( DataAccessDescriptorProperty::Cursor ) )
         {
-            Reference< XResultSet > xResultSet( getDescriptor()[ daCursor ], UNO_QUERY );
+            Reference< XResultSet > xResultSet( getDescriptor()[ DataAccessDescriptorProperty::Cursor ], UNO_QUERY );
             lcl_setListener( xResultSet, this, false );
         }
 
@@ -213,26 +213,26 @@ namespace dbaui
     {
         ODataAccessDescriptor& rDescriptor( getDescriptor() );
 
-        if ( rDescriptor.has( daConnection ) )
+        if ( rDescriptor.has( DataAccessDescriptorProperty::Connection ) )
         {
-            Reference< XConnection > xConnection( rDescriptor[daConnection], UNO_QUERY );
+            Reference< XConnection > xConnection( rDescriptor[DataAccessDescriptorProperty::Connection], UNO_QUERY );
             if ( xConnection == i_rSource.Source )
             {
-                rDescriptor.erase( daConnection );
+                rDescriptor.erase( DataAccessDescriptorProperty::Connection );
             }
         }
 
-        if ( rDescriptor.has( daCursor ) )
+        if ( rDescriptor.has( DataAccessDescriptorProperty::Cursor ) )
         {
-            Reference< XResultSet > xResultSet( rDescriptor[ daCursor ], UNO_QUERY );
+            Reference< XResultSet > xResultSet( rDescriptor[ DataAccessDescriptorProperty::Cursor ], UNO_QUERY );
             if ( xResultSet == i_rSource.Source )
             {
-                rDescriptor.erase( daCursor );
+                rDescriptor.erase( DataAccessDescriptorProperty::Cursor );
                 // Selection and BookmarkSelection are meaningless without a result set
-                if ( rDescriptor.has( daSelection ) )
-                    rDescriptor.erase( daSelection );
-                if ( rDescriptor.has( daBookmarkSelection ) )
-                    rDescriptor.erase( daBookmarkSelection );
+                if ( rDescriptor.has( DataAccessDescriptorProperty::Selection ) )
+                    rDescriptor.erase( DataAccessDescriptorProperty::Selection );
+                if ( rDescriptor.has( DataAccessDescriptorProperty::BookmarkSelection ) )
+                    rDescriptor.erase( DataAccessDescriptorProperty::BookmarkSelection );
             }
         }
 

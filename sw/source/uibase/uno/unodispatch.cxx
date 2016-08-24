@@ -257,8 +257,8 @@ void SwXDispatch::dispatch(const util::URL& aURL,
         const SwDBData& rData = m_pView->GetWrtShell().GetDBDesc();
         svx::ODataAccessDescriptor aDescriptor;
         aDescriptor.setDataSource(rData.sDataSource);
-        aDescriptor[svx::daCommand]       <<= rData.sCommand;
-        aDescriptor[svx::daCommandType]   <<= rData.nCommandType;
+        aDescriptor[svx::DataAccessDescriptorProperty::Command]       <<= rData.sCommand;
+        aDescriptor[svx::DataAccessDescriptorProperty::CommandType]   <<= rData.nCommandType;
 
         aEvent.State <<= aDescriptor.createPropertyValueSequence();
         aEvent.IsEnabled = !rData.sDataSource.isEmpty();
@@ -303,8 +303,8 @@ void SwXDispatch::addStatusListener(
 
         svx::ODataAccessDescriptor aDescriptor;
         aDescriptor.setDataSource(rData.sDataSource);
-        aDescriptor[svx::daCommand]       <<= rData.sCommand;
-        aDescriptor[svx::daCommandType]   <<= rData.nCommandType;
+        aDescriptor[svx::DataAccessDescriptorProperty::Command]       <<= rData.sCommand;
+        aDescriptor[svx::DataAccessDescriptorProperty::CommandType]   <<= rData.nCommandType;
 
         aEvent.State <<= aDescriptor.createPropertyValueSequence();
         aEvent.IsEnabled = !rData.sDataSource.isEmpty();

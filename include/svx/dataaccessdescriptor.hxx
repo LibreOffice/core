@@ -30,26 +30,26 @@ namespace svx
     class ODADescriptorImpl;
 
     //= DataAccessDescriptorProperty
-    enum DataAccessDescriptorProperty
+    enum class DataAccessDescriptorProperty
     {
-        daDataSource,           /// data source name            (string)
-        daDatabaseLocation,     /// database file URL           (string)
-        daConnectionResource,   /// database driver URL         (string)
-        daConnection,           /// connection                  (XConnection)
+        DataSource,           /// data source name            (string)
+        DatabaseLocation,     /// database file URL           (string)
+        ConnectionResource,   /// database driver URL         (string)
+        Connection,           /// connection                  (XConnection)
 
-        daCommand,              /// command                     (string)
-        daCommandType,          /// command type                (long)
-        daEscapeProcessing,     /// escape processing           (boolean)
-        daFilter,               /// additional filter           (string)
-        daCursor,               /// the cursor                  (XResultSet)
+        Command,              /// command                     (string)
+        CommandType,          /// command type                (long)
+        EscapeProcessing,     /// escape processing           (boolean)
+        Filter,               /// additional filter           (string)
+        Cursor,               /// the cursor                  (XResultSet)
 
-        daColumnName,           /// column name                 (string)
-        daColumnObject,         /// column object               (XPropertySet)
+        ColumnName,           /// column name                 (string)
+        ColumnObject,         /// column object               (XPropertySet)
 
-        daSelection,            /// selection                   (sequence< any >)
-        daBookmarkSelection,    /// selection are bookmarks?    (boolean)
+        Selection,            /// selection                   (sequence< any >)
+        BookmarkSelection,    /// selection are bookmarks?    (boolean)
 
-        daComponent             /// component name              (XContent)
+        Component             /// component name              (XContent)
     };
 
     //= ODataAccessDescriptor

@@ -140,37 +140,37 @@ void OTableCopyHelper::pasteTable( const svx::ODataAccessDescriptor& _rPasteData
     OUString sSrcDataSourceName = _rPasteData.getDataSource();
 
     OUString sCommand;
-    _rPasteData[ daCommand ] >>= sCommand;
+    _rPasteData[ DataAccessDescriptorProperty::Command ] >>= sCommand;
 
     Reference<XConnection> xSrcConnection;
-    if ( _rPasteData.has(daConnection) )
+    if ( _rPasteData.has(DataAccessDescriptorProperty::Connection) )
     {
-        OSL_VERIFY( _rPasteData[daConnection] >>= xSrcConnection );
+        OSL_VERIFY( _rPasteData[DataAccessDescriptorProperty::Connection] >>= xSrcConnection );
     }
 
     Reference< XResultSet > xResultSet;
-    if ( _rPasteData.has(daCursor) )
+    if ( _rPasteData.has(DataAccessDescriptorProperty::Cursor) )
     {
-        OSL_VERIFY( _rPasteData[ daCursor ] >>= xResultSet );
+        OSL_VERIFY( _rPasteData[ DataAccessDescriptorProperty::Cursor ] >>= xResultSet );
     }
 
     Sequence< Any > aSelection;
-    if ( _rPasteData.has( daSelection ) )
+    if ( _rPasteData.has( DataAccessDescriptorProperty::Selection ) )
     {
-        OSL_VERIFY( _rPasteData[ daSelection ] >>= aSelection );
-        OSL_ENSURE( _rPasteData.has( daBookmarkSelection ), "OTableCopyHelper::pasteTable: you should specify BookmarkSelection, too, to be on the safe side!" );
+        OSL_VERIFY( _rPasteData[ DataAccessDescriptorProperty::Selection ] >>= aSelection );
+        OSL_ENSURE( _rPasteData.has( DataAccessDescriptorProperty::BookmarkSelection ), "OTableCopyHelper::pasteTable: you should specify BookmarkSelection, too, to be on the safe side!" );
     }
 
     bool bBookmarkSelection( true );
-    if ( _rPasteData.has( daBookmarkSelection ) )
+    if ( _rPasteData.has( DataAccessDescriptorProperty::BookmarkSelection ) )
     {
-        OSL_VERIFY( _rPasteData[ daBookmarkSelection ] >>= bBookmarkSelection );
+        OSL_VERIFY( _rPasteData[ DataAccessDescriptorProperty::BookmarkSelection ] >>= bBookmarkSelection );
     }
     OSL_ENSURE( bBookmarkSelection, "OTableCopyHelper::pasteTable: working with selection-indicies (instead of bookmarks) is error-prone, and thus deprecated!" );
 
     sal_Int32 nCommandType = CommandType::COMMAND;
-    if ( _rPasteData.has(daCommandType) )
-        _rPasteData[daCommandType] >>= nCommandType;
+    if ( _rPasteData.has(DataAccessDescriptorProperty::CommandType) )
+        _rPasteData[DataAccessDescriptorProperty::CommandType] >>= nCommandType;
 
     insertTable( sSrcDataSourceName, xSrcConnection, sCommand, nCommandType,
                  xResultSet, aSelection, bBookmarkSelection,

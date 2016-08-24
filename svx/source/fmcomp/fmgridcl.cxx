@@ -253,14 +253,14 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     Reference< XConnection >            xConnection;
 
     ODataAccessDescriptor aColumn = OColumnTransferable::extractColumnDescriptor(aDroppedData);
-    if (aColumn.has(daDataSource))  aColumn[daDataSource]   >>= sDatasource;
-    if (aColumn.has(daDatabaseLocation))    aColumn[daDatabaseLocation] >>= sDatabaseLocation;
-    if (aColumn.has(daConnectionResource))  aColumn[daConnectionResource] >>= sConnnectionResource;
-    if (aColumn.has(daCommand))     aColumn[daCommand]      >>= sCommand;
-    if (aColumn.has(daCommandType)) aColumn[daCommandType]  >>= nCommandType;
-    if (aColumn.has(daColumnName))  aColumn[daColumnName]   >>= sFieldName;
-    if (aColumn.has(daColumnObject))aColumn[daColumnObject] >>= xField;
-    if (aColumn.has(daConnection))  aColumn[daConnection]   >>= xConnection;
+    if (aColumn.has(DataAccessDescriptorProperty::DataSource))  aColumn[DataAccessDescriptorProperty::DataSource]   >>= sDatasource;
+    if (aColumn.has(DataAccessDescriptorProperty::DatabaseLocation))    aColumn[DataAccessDescriptorProperty::DatabaseLocation] >>= sDatabaseLocation;
+    if (aColumn.has(DataAccessDescriptorProperty::ConnectionResource))  aColumn[DataAccessDescriptorProperty::ConnectionResource] >>= sConnnectionResource;
+    if (aColumn.has(DataAccessDescriptorProperty::Command))     aColumn[DataAccessDescriptorProperty::Command]      >>= sCommand;
+    if (aColumn.has(DataAccessDescriptorProperty::CommandType)) aColumn[DataAccessDescriptorProperty::CommandType]  >>= nCommandType;
+    if (aColumn.has(DataAccessDescriptorProperty::ColumnName))  aColumn[DataAccessDescriptorProperty::ColumnName]   >>= sFieldName;
+    if (aColumn.has(DataAccessDescriptorProperty::ColumnObject))aColumn[DataAccessDescriptorProperty::ColumnObject] >>= xField;
+    if (aColumn.has(DataAccessDescriptorProperty::Connection))  aColumn[DataAccessDescriptorProperty::Connection]   >>= xConnection;
 
     if  (   sFieldName.isEmpty()
         ||  sCommand.isEmpty()
@@ -355,8 +355,8 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         // do the drop asynchronously
         // (85957 - UI actions within the drop are not allowed, but we want to open a popup menu)
         m_pImpl->aDropData = aColumn;
-        m_pImpl->aDropData[daConnection] <<= xConnection;
-        m_pImpl->aDropData[daColumnObject] <<= xField;
+        m_pImpl->aDropData[DataAccessDescriptorProperty::Connection] <<= xConnection;
+        m_pImpl->aDropData[DataAccessDescriptorProperty::ColumnObject] <<= xField;
 
         m_pImpl->nDropAction = _rEvt.mnAction;
         m_pImpl->aDropPosPixel = _rEvt.maPosPixel;
@@ -383,13 +383,13 @@ IMPL_LINK_NOARG_TYPED( FmGridHeader, OnAsyncExecuteDrop, void*, void )
     Reference< XConnection >    xConnection;
 
     OUString sDatasource = m_pImpl->aDropData.getDataSource();
-    if ( sDatasource.isEmpty() && m_pImpl->aDropData.has(daConnectionResource) )
-        m_pImpl->aDropData[daConnectionResource]    >>= sURL;
-    m_pImpl->aDropData[daCommand]       >>= sCommand;
-    m_pImpl->aDropData[daCommandType]   >>= nCommandType;
-    m_pImpl->aDropData[daColumnName]    >>= sFieldName;
-    m_pImpl->aDropData[daConnection]    >>= xConnection;
-    m_pImpl->aDropData[daColumnObject]  >>= xField;
+    if ( sDatasource.isEmpty() && m_pImpl->aDropData.has(DataAccessDescriptorProperty::ConnectionResource) )
+        m_pImpl->aDropData[DataAccessDescriptorProperty::ConnectionResource]    >>= sURL;
+    m_pImpl->aDropData[DataAccessDescriptorProperty::Command]       >>= sCommand;
+    m_pImpl->aDropData[DataAccessDescriptorProperty::CommandType]   >>= nCommandType;
+    m_pImpl->aDropData[DataAccessDescriptorProperty::ColumnName]    >>= sFieldName;
+    m_pImpl->aDropData[DataAccessDescriptorProperty::Connection]    >>= xConnection;
+    m_pImpl->aDropData[DataAccessDescriptorProperty::ColumnObject]  >>= xField;
 
     try
     {

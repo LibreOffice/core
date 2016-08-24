@@ -1002,11 +1002,11 @@ void SAL_CALL SbaTableQueryBrowser::statusChanged( const FeatureStateEvent& _rEv
                     OSL_ENSURE(bProperFormat, "SbaTableQueryBrowser::statusChanged: need a data access descriptor here!");
                     m_aDocumentDataSource.initializeFrom(aDescriptor);
 
-                    OSL_ENSURE( (   m_aDocumentDataSource.has(daDataSource)
-                                ||  m_aDocumentDataSource.has(daDatabaseLocation)
+                    OSL_ENSURE( (   m_aDocumentDataSource.has(DataAccessDescriptorProperty::DataSource)
+                                ||  m_aDocumentDataSource.has(DataAccessDescriptorProperty::DatabaseLocation)
                                 )
-                                &&  m_aDocumentDataSource.has(daCommand)
-                                &&  m_aDocumentDataSource.has(daCommandType),
+                                &&  m_aDocumentDataSource.has(DataAccessDescriptorProperty::Command)
+                                &&  m_aDocumentDataSource.has(DataAccessDescriptorProperty::CommandType),
                         "SbaTableQueryBrowser::statusChanged: incomplete descriptor!");
 
                     // check if we know the object which is set as document data source
@@ -1041,13 +1041,13 @@ void SbaTableQueryBrowser::checkDocumentDataSource()
                 // TODO: should we expand the object container? This may be too expensive just for checking ....
             else
             {
-                if ((nullptr == pObjectEntry) && m_aDocumentDataSource.has(daCommandType) && m_aDocumentDataSource.has(daCommand))
+                if ((nullptr == pObjectEntry) && m_aDocumentDataSource.has(DataAccessDescriptorProperty::CommandType) && m_aDocumentDataSource.has(DataAccessDescriptorProperty::Command))
                 {   // maybe we have a command to be displayed ?
                     sal_Int32 nCommandType = CommandType::TABLE;
-                    m_aDocumentDataSource[daCommandType] >>= nCommandType;
+                    m_aDocumentDataSource[DataAccessDescriptorProperty::CommandType] >>= nCommandType;
 
                     OUString sCommand;
-                    m_aDocumentDataSource[daCommand] >>= sCommand;
+                    m_aDocumentDataSource[DataAccessDescriptorProperty::Command] >>= sCommand;
 
                     bKnownDocDataSource = (CommandType::COMMAND == nCommandType) && (!sCommand.isEmpty());
                 }
@@ -1065,15 +1065,15 @@ void SbaTableQueryBrowser::checkDocumentDataSource()
 void SbaTableQueryBrowser::extractDescriptorProps(const svx::ODataAccessDescriptor& _rDescriptor, OUString& _rDataSource, OUString& _rCommand, sal_Int32& _rCommandType, bool& _rEscapeProcessing)
 {
     _rDataSource = _rDescriptor.getDataSource();
-    if ( _rDescriptor.has(daCommand) )
-        _rDescriptor[daCommand] >>= _rCommand;
-    if ( _rDescriptor.has(daCommandType) )
-        _rDescriptor[daCommandType] >>= _rCommandType;
+    if ( _rDescriptor.has(DataAccessDescriptorProperty::Command) )
+        _rDescriptor[DataAccessDescriptorProperty::Command] >>= _rCommand;
+    if ( _rDescriptor.has(DataAccessDescriptorProperty::CommandType) )
+        _rDescriptor[DataAccessDescriptorProperty::CommandType] >>= _rCommandType;
 
     // escape processing is the only one allowed not to be present
     _rEscapeProcessing = true;
-    if (_rDescriptor.has(daEscapeProcessing))
-        _rEscapeProcessing = ::cppu::any2bool(_rDescriptor[daEscapeProcessing]);
+    if (_rDescriptor.has(DataAccessDescriptorProperty::EscapeProcessing))
+        _rEscapeProcessing = ::cppu::any2bool(_rDescriptor[DataAccessDescriptorProperty::EscapeProcessing]);
 }
 
 namespace
@@ -1446,7 +1446,7 @@ sal_Bool SAL_CALL SbaTableQueryBrowser::select( const Any& _rSelection ) throw (
     }
 
     // check the presence of the props we need
-    if ( !(aDescriptor.has(daDataSource) || aDescriptor.has(daDatabaseLocation)) || !aDescriptor.has(daCommand) || !aDescriptor.has(daCommandType))
+    if ( !(aDescriptor.has(DataAccessDescriptorProperty::DataSource) || aDescriptor.has(DataAccessDescriptorProperty::DatabaseLocation)) || !aDescriptor.has(DataAccessDescriptorProperty::Command) || !aDescriptor.has(DataAccessDescriptorProperty::CommandType))
         throw IllegalArgumentException(OUString(), *this, 1);
         // TODO: error message
 
@@ -1465,8 +1465,8 @@ Any SAL_CALL SbaTableQueryBrowser::getSelection(  ) throw (RuntimeException, std
             Reference< XPropertySet > aFormProps(getRowSet(), UNO_QUERY);
             ODataAccessDescriptor aDescriptor(aFormProps);
             // remove properties which are not part of our "selection"
-            aDescriptor.erase(daConnection);
-            aDescriptor.erase(daCursor);
+            aDescriptor.erase(DataAccessDescriptorProperty::Connection);
+            aDescriptor.erase(DataAccessDescriptorProperty::Cursor);
 
             aReturn <<= aDescriptor.createPropertyValueSequence();
         }
@@ -1974,14 +1974,14 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
                         xProp->getPropertyValue(PROPERTY_DATASOURCENAME) >>= sDataSourceName;
 
                         aDescriptor.setDataSource(sDataSourceName);
-                        aDescriptor[daCommand]      =   xProp->getPropertyValue(PROPERTY_COMMAND);
-                        aDescriptor[daCommandType]  =   xProp->getPropertyValue(PROPERTY_COMMAND_TYPE);
-                        aDescriptor[daConnection]   =   xProp->getPropertyValue(PROPERTY_ACTIVE_CONNECTION);
-                        aDescriptor[daCursor]       <<= xCursorClone;
+                        aDescriptor[DataAccessDescriptorProperty::Command]      =   xProp->getPropertyValue(PROPERTY_COMMAND);
+                        aDescriptor[DataAccessDescriptorProperty::CommandType]  =   xProp->getPropertyValue(PROPERTY_COMMAND_TYPE);
+                        aDescriptor[DataAccessDescriptorProperty::Connection]   =   xProp->getPropertyValue(PROPERTY_ACTIVE_CONNECTION);
+                        aDescriptor[DataAccessDescriptorProperty::Cursor]       <<= xCursorClone;
                         if ( aSelection.getLength() )
                         {
-                            aDescriptor[daSelection]            <<= aSelection;
-                            aDescriptor[daBookmarkSelection]    <<= false;
+                            aDescriptor[DataAccessDescriptorProperty::Selection]            <<= aSelection;
+                            aDescriptor[DataAccessDescriptorProperty::BookmarkSelection]    <<= false;
                                 // these are selection indices
                                 // before we change this, all clients have to be adjusted
                                 // so that they recognize the new BookmarkSelection property!
@@ -3543,8 +3543,8 @@ bool SbaTableQueryBrowser::implGetQuerySignature( OUString& _rCommand, bool& _bE
         Reference< XPropertySet > xRowsetProps( getRowSet(), UNO_QUERY );
         ODataAccessDescriptor aDesc( xRowsetProps );
         sDataSourceName = aDesc.getDataSource();
-        aDesc[ daCommand ]      >>= sCommand;
-        aDesc[ daCommandType ]  >>= nCommandType;
+        aDesc[ DataAccessDescriptorProperty::Command ]      >>= sCommand;
+        aDesc[ DataAccessDescriptorProperty::CommandType ]  >>= nCommandType;
 
         // do we need to do anything?
         if ( CommandType::QUERY != nCommandType )

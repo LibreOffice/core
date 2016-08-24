@@ -227,11 +227,11 @@ private:
 
         svx::ODataAccessDescriptor aDescriptor;
         aDescriptor.setDataSource(aParam.aDBName);
-        if (aDescriptor.has(svx::daDataSource))
+        if (aDescriptor.has(svx::DataAccessDescriptorProperty::DataSource))
         {
             sDatabaseName = aParam.aDBName;
         }
-        else if (aDescriptor.has(svx::daConnectionResource))
+        else if (aDescriptor.has(svx::DataAccessDescriptorProperty::ConnectionResource))
         {
             sConRes = aParam.aDBName;
         }

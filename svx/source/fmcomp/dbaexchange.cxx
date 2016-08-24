@@ -58,14 +58,14 @@ namespace svx
         :m_nFormatFlags(_nFormats)
     {
         OUString sDataSource, sDatabaseLocation, sConnectionResource, sCommand, sFieldName;
-        if ( _rDescriptor.has( daDataSource ) )         _rDescriptor[ daDataSource ] >>= sDataSource;
-        if ( _rDescriptor.has( daDatabaseLocation ) )   _rDescriptor[ daDatabaseLocation ] >>= sDatabaseLocation;
-        if ( _rDescriptor.has( daConnectionResource ) ) _rDescriptor[ daConnectionResource ] >>= sConnectionResource;
-        if ( _rDescriptor.has( daCommand ) )            _rDescriptor[ daCommand ] >>= sCommand;
-        if ( _rDescriptor.has( daColumnName ) )         _rDescriptor[ daColumnName ] >>= sFieldName;
+        if ( _rDescriptor.has( DataAccessDescriptorProperty::DataSource ) )         _rDescriptor[ DataAccessDescriptorProperty::DataSource ] >>= sDataSource;
+        if ( _rDescriptor.has( DataAccessDescriptorProperty::DatabaseLocation ) )   _rDescriptor[ DataAccessDescriptorProperty::DatabaseLocation ] >>= sDatabaseLocation;
+        if ( _rDescriptor.has( DataAccessDescriptorProperty::ConnectionResource ) ) _rDescriptor[ DataAccessDescriptorProperty::ConnectionResource ] >>= sConnectionResource;
+        if ( _rDescriptor.has( DataAccessDescriptorProperty::Command ) )            _rDescriptor[ DataAccessDescriptorProperty::Command ] >>= sCommand;
+        if ( _rDescriptor.has( DataAccessDescriptorProperty::ColumnName ) )         _rDescriptor[ DataAccessDescriptorProperty::ColumnName ] >>= sFieldName;
 
         sal_Int32 nCommandType = CommandType::TABLE;
-        OSL_VERIFY( _rDescriptor[ daCommandType ] >>= nCommandType );
+        OSL_VERIFY( _rDescriptor[ DataAccessDescriptorProperty::CommandType ] >>= nCommandType );
 
 
         implConstruct(
@@ -74,10 +74,10 @@ namespace svx
 
         if ( m_nFormatFlags & ColumnTransferFormatFlags::COLUMN_DESCRIPTOR )
         {
-            if ( _rDescriptor.has( daConnection ) )
-                m_aDescriptor[ daConnection ] = _rDescriptor[ daConnection ];
-            if ( _rDescriptor.has( daColumnObject ) )
-                m_aDescriptor[ daColumnObject ] = _rDescriptor[ daColumnObject ];
+            if ( _rDescriptor.has( DataAccessDescriptorProperty::Connection ) )
+                m_aDescriptor[ DataAccessDescriptorProperty::Connection ] = _rDescriptor[ DataAccessDescriptorProperty::Connection ];
+            if ( _rDescriptor.has( DataAccessDescriptorProperty::ColumnObject ) )
+                m_aDescriptor[ DataAccessDescriptorProperty::ColumnObject ] = _rDescriptor[ DataAccessDescriptorProperty::ColumnObject ];
         }
     }
 
@@ -141,9 +141,9 @@ namespace svx
         if ((m_nFormatFlags & ColumnTransferFormatFlags::COLUMN_DESCRIPTOR) == ColumnTransferFormatFlags::COLUMN_DESCRIPTOR)
         {
             if (_rxColumn.is())
-                m_aDescriptor[daColumnObject] <<= _rxColumn;
+                m_aDescriptor[DataAccessDescriptorProperty::ColumnObject] <<= _rxColumn;
             if (_rxConnection.is())
-                m_aDescriptor[daConnection] <<= _rxConnection;
+                m_aDescriptor[DataAccessDescriptorProperty::Connection] <<= _rxConnection;
         }
     }
 
@@ -197,11 +197,11 @@ namespace svx
         {
             m_aDescriptor.setDataSource(_rDatasource);
             if ( !_rConnectionResource.isEmpty() )
-                m_aDescriptor[daConnectionResource] <<= _rConnectionResource;
+                m_aDescriptor[DataAccessDescriptorProperty::ConnectionResource] <<= _rConnectionResource;
 
-            m_aDescriptor[daCommand]        <<= _rCommand;
-            m_aDescriptor[daCommandType]    <<= _nCommandType;
-            m_aDescriptor[daColumnName]     <<= _rFieldName;
+            m_aDescriptor[DataAccessDescriptorProperty::Command]        <<= _rCommand;
+            m_aDescriptor[DataAccessDescriptorProperty::CommandType]    <<= _nCommandType;
+            m_aDescriptor[DataAccessDescriptorProperty::ColumnName]     <<= _rFieldName;
         }
     }
 
@@ -290,15 +290,15 @@ namespace svx
         {
             // and build an own descriptor
             if ( !sDatasource.isEmpty() )
-                aDescriptor[daDataSource]   <<= sDatasource;
+                aDescriptor[DataAccessDescriptorProperty::DataSource]   <<= sDatasource;
             if ( !sDatabaseLocation.isEmpty() )
-                aDescriptor[daDatabaseLocation] <<= sDatabaseLocation;
+                aDescriptor[DataAccessDescriptorProperty::DatabaseLocation] <<= sDatabaseLocation;
             if ( !sConnectionResource.isEmpty() )
-                aDescriptor[daConnectionResource]   <<= sConnectionResource;
+                aDescriptor[DataAccessDescriptorProperty::ConnectionResource]   <<= sConnectionResource;
 
-            aDescriptor[daCommand]      <<= sCommand;
-            aDescriptor[daCommandType]  <<= nCommandType;
-            aDescriptor[daColumnName]   <<= sFieldName;
+            aDescriptor[DataAccessDescriptorProperty::Command]      <<= sCommand;
+            aDescriptor[DataAccessDescriptorProperty::CommandType]  <<= nCommandType;
+            aDescriptor[DataAccessDescriptorProperty::ColumnName]   <<= sFieldName;
         }
         return aDescriptor;
     }
@@ -315,16 +315,16 @@ namespace svx
         if ( _rData.HasFormat(getDescriptorFormatId()) )
         {
             ODataAccessDescriptor aDescriptor = extractColumnDescriptor(_rData);
-            if ( aDescriptor.has(daDataSource) )
-                aDescriptor[daDataSource]           >>= _rDatasource;
-            if ( aDescriptor.has(daDatabaseLocation) )
-                aDescriptor[daDatabaseLocation]     >>= _rDatabaseLocation;
-            if ( aDescriptor.has(daConnectionResource) )
-                aDescriptor[daConnectionResource]   >>= _rConnectionResource;
+            if ( aDescriptor.has(DataAccessDescriptorProperty::DataSource) )
+                aDescriptor[DataAccessDescriptorProperty::DataSource]           >>= _rDatasource;
+            if ( aDescriptor.has(DataAccessDescriptorProperty::DatabaseLocation) )
+                aDescriptor[DataAccessDescriptorProperty::DatabaseLocation]     >>= _rDatabaseLocation;
+            if ( aDescriptor.has(DataAccessDescriptorProperty::ConnectionResource) )
+                aDescriptor[DataAccessDescriptorProperty::ConnectionResource]   >>= _rConnectionResource;
 
-            aDescriptor[daCommand]              >>= _rCommand;
-            aDescriptor[daCommandType]          >>= _nCommandType;
-            aDescriptor[daColumnName]           >>= _rFieldName;
+            aDescriptor[DataAccessDescriptorProperty::Command]              >>= _rCommand;
+            aDescriptor[DataAccessDescriptorProperty::CommandType]          >>= _nCommandType;
+            aDescriptor[DataAccessDescriptorProperty::ColumnName]           >>= _rFieldName;
             return true;
         }
 
@@ -436,7 +436,7 @@ namespace svx
     void ODataAccessObjectTransferable::AddSupportedFormats()
     {
         sal_Int32 nObjectType = CommandType::COMMAND;
-        m_aDescriptor[daCommandType] >>= nObjectType;
+        m_aDescriptor[DataAccessDescriptorProperty::CommandType] >>= nObjectType;
         switch (nObjectType)
         {
             case CommandType::TABLE:
@@ -559,11 +559,11 @@ namespace svx
         m_aDescriptor.setDataSource(_rDatasource);
         // build the descriptor (the property sequence)
         if ( !_rConnectionResource.isEmpty() )
-            m_aDescriptor[daConnectionResource] <<= _rConnectionResource;
+            m_aDescriptor[DataAccessDescriptorProperty::ConnectionResource] <<= _rConnectionResource;
         if ( _rxConnection.is() )
-            m_aDescriptor[daConnection]     <<= _rxConnection;
-        m_aDescriptor[daCommand]        <<= _rCommand;
-        m_aDescriptor[daCommandType]    <<= _nCommandType;
+            m_aDescriptor[DataAccessDescriptorProperty::Connection]     <<= _rxConnection;
+        m_aDescriptor[DataAccessDescriptorProperty::Command]        <<= _rCommand;
+        m_aDescriptor[DataAccessDescriptorProperty::CommandType]    <<= _nCommandType;
 
         // extract the single values from the sequence
 

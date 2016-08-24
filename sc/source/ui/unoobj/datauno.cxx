@@ -179,12 +179,12 @@ void ScImportDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rS
 
     svx::ODataAccessDescriptor aDescriptor;
     aDescriptor.setDataSource(rParam.aDBName);
-    if (aDescriptor.has( svx::daDataSource ))
+    if (aDescriptor.has( svx::DataAccessDescriptorProperty::DataSource ))
     {
         pArray[0].Name = SC_UNONAME_DBNAME;
         pArray[0].Value <<= rParam.aDBName;
     }
-    else if (aDescriptor.has( svx::daConnectionResource ))
+    else if (aDescriptor.has( svx::DataAccessDescriptorProperty::ConnectionResource ))
     {
         pArray[0].Name = SC_UNONAME_CONRES;
         pArray[0].Value <<= rParam.aDBName;
