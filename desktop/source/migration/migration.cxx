@@ -900,14 +900,15 @@ void MigrationImpl::runServices()
 
 
             } catch (const Exception& e) {
-                OString aMsg("Execution of migration service failed (Exception caught).\nService: ");
-                aMsg += OUStringToOString(i_mig->service, RTL_TEXTENCODING_ASCII_US) + "\nMessage: ";
-                aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
+                OString aMsg = "Execution of migration service failed (Exception caught).\nService: "
+                             + OUStringToOString(i_mig->service, RTL_TEXTENCODING_ASCII_US)
+                             + "\nMessage: "
+                             + OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
                 OSL_FAIL(aMsg.getStr());
             } catch (...) {
-                OString aMsg("Execution of migration service failed (Exception caught).\nService: ");
-                aMsg += OUStringToOString(i_mig->service, RTL_TEXTENCODING_ASCII_US) +
-                        "\nNo message available";
+                OString aMsg = "Execution of migration service failed (Exception caught).\nService: "
+                             + OUStringToOString(i_mig->service, RTL_TEXTENCODING_ASCII_US)
+                             + "\nNo message available";
                 OSL_FAIL(aMsg.getStr());
             }
 
