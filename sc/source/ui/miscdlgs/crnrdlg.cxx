@@ -595,10 +595,9 @@ IMPL_LINK_NOARG_TYPED(ScColRowNameRangesDlg, RemoveBtnHdl, Button*, void)
     if ( bFound )
     {
         OUString aStrDelMsg = ScGlobal::GetRscString( STR_QUERY_DELENTRY );
-        OUString aMsg       = aStrDelMsg.getToken( 0, '#' );
-
-        aMsg += aRangeStr;
-        aMsg += aStrDelMsg.getToken( 1, '#' );
+        OUString aMsg       = aStrDelMsg.getToken( 0, '#' )
+                            + aRangeStr
+                            + aStrDelMsg.getToken( 1, '#' );
 
         if ( RET_YES == QUERYBOX(aMsg) )
         {

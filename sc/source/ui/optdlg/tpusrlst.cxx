@@ -382,8 +382,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
 
                         if ( !aStrField.isEmpty() )
                         {
-                            aStrList += aStrField;
-                            aStrList += "\n";
+                            aStrList += aStrField + "\n";
                         }
                     }
                     else
@@ -406,8 +405,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
 
                         if ( !aStrField.isEmpty() )
                         {
-                            aStrList += aStrField;
-                            aStrList += "\n";
+                            aStrList += aStrField + "\n";
                         }
                     }
                     else
@@ -611,10 +609,9 @@ IMPL_LINK_TYPED( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
         if ( mpLbLists->GetEntryCount() > 0 )
         {
             sal_Int32 nRemovePos   = mpLbLists->GetSelectEntryPos();
-            OUString aMsg         ( aStrQueryRemove.getToken( 0, '#' ) );
-
-            aMsg += mpLbLists->GetEntry( nRemovePos );
-            aMsg += aStrQueryRemove.getToken( 1, '#' );
+            OUString aMsg = aStrQueryRemove.getToken( 0, '#' )
+                          + mpLbLists->GetEntry( nRemovePos )
+                          + aStrQueryRemove.getToken( 1, '#' );
 
             if ( RET_YES == ScopedVclPtrInstance<QueryBox>( this,
                                       WinBits( WB_YES_NO | WB_DEF_YES ),

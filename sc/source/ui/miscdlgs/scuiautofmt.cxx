@@ -280,10 +280,9 @@ IMPL_LINK_NOARG_TYPED(ScAutoFormatDlg, RemoveHdl, Button*, void)
 {
     if ( (nIndex > 0) && (m_pLbFormat->GetEntryCount() > 0) )
     {
-        OUString aMsg( aStrDelMsg.getToken( 0, '#' ) );
-
-        aMsg += m_pLbFormat->GetSelectEntry();
-        aMsg += aStrDelMsg.getToken( 1, '#' );
+        OUString aMsg = aStrDelMsg.getToken( 0, '#' )
+                      + m_pLbFormat->GetSelectEntry()
+                      + aStrDelMsg.getToken( 1, '#' );
 
         if ( RET_YES ==
              ScopedVclPtrInstance<QueryBox>( this, WinBits( WB_YES_NO | WB_DEF_YES ), aMsg )->Execute() )

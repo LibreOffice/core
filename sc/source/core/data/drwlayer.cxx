@@ -1797,8 +1797,7 @@ SdrObject* ScDrawLayer::GetNamedObject( const OUString& rName, sal_uInt16 nId, S
 
 OUString ScDrawLayer::GetNewGraphicName( long* pnCounter ) const
 {
-    OUString aBase = ScGlobal::GetRscString(STR_GRAPHICNAME);
-    aBase += " ";
+    OUString aBase = ScGlobal::GetRscString(STR_GRAPHICNAME) + " ";
 
     bool bThere = true;
     OUString aGraphicName;

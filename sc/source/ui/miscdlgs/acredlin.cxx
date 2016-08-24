@@ -667,8 +667,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
         aString+=a2String;
         //aString+="\'";
 
-        aDesc=aStrChildOrgContent;
-        aDesc += ": ";
+        aDesc = aStrChildOrgContent + ": ";
     }
     else
     {
@@ -677,15 +676,13 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
         a2String = aTmp;
         if(a2String.isEmpty())
         {
-            a2String=aStrEmpty;
-            aString+=a2String;
+            a2String = aStrEmpty;
+            aString += a2String;
         }
         else
         {
-            aString += "\'";
-            aString += a2String;
-            aString += "\'";
-            a2String =aString;
+            aString += "\'" + a2String + "\'";
+            a2String = aString;
         }
         aDesc = aStrChildContent;
 
@@ -694,35 +691,27 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
     aDesc += a2String;
     aString += "\t";
     pScChangeAction->GetRefString(aRefStr, pDoc, true);
-    aString += aRefStr;
-    aString += "\t";
+    aString += aRefStr + "\t";
 
     if(!bIsGenerated)
     {
-        aString += aUser;
-        aString += "\t";
-
-        aString += ScGlobal::pLocaleData->getDate(aDateTime);
-        aString += " ";
-        aString += ScGlobal::pLocaleData->getTime(aDateTime);
-        aString += "\t";
+        aString += aUser + "\t"
+                +  ScGlobal::pLocaleData->getDate(aDateTime) + " "
+                +  ScGlobal::pLocaleData->getTime(aDateTime) + "\t";
     }
     else
     {
-        aString += "\t";
-        aString += "\t";
+        aString += "\t\t";
     }
 
     OUString aComment = pScChangeAction->GetComment().replaceAll("\n", "");
 
     if(!aDesc.isEmpty())
     {
-        aComment += " (" ;
-        aComment += aDesc;
-        aComment += ")";
+        aComment += " (" + aDesc + ")";
     }
 
-    aString+=aComment;
+    aString += aComment;
 
     ScRedlinData* pNewData=new ScRedlinData;
     pNewData->nInfo=nSpecial;
