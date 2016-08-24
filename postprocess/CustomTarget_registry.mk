@@ -191,6 +191,7 @@ postprocess_FILES_main := \
 	$(postprocess_XCS)/Office/UI/WindowContentFactories.xcs \
 	$(postprocess_XCS)/Office/UI/WindowState.xcs \
 	$(postprocess_XCS)/Office/UI.xcs \
+	$(postprocess_XCS)/Office/Update.xcs \
 	$(postprocess_XCS)/Office/Views.xcs \
 	$(postprocess_XCS)/Office/Writer.xcs \
 	$(postprocess_XCS)/Office/WriterWeb.xcs \
