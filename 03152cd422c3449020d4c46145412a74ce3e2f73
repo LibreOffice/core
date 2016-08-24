@@ -1,0 +1,146 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_baeda690",
+        "filename": "include/svx/svxids.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-08-24T21:06:38Z",
+      "side": 1,
+      "message": "As the comment above suggests, SID_SVX_FIRSTFREE is supposed to be the last one. All the real SIDs should be smaller.",
+      "revId": "03152cd422c3449020d4c46145412a74ce3e2f73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_daf25a6f",
+        "filename": "sw/sdi/viewsh.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-08-24T21:06:38Z",
+      "side": 1,
+      "message": "Not needed.",
+      "revId": "03152cd422c3449020d4c46145412a74ce3e2f73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_5a864aba",
+        "filename": "sw/sdi/viewsh.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-08-24T21:06:38Z",
+      "side": 1,
+      "message": "The actual implementation in GetDrawState is still missing. I think it should be disabled for the Web mode, like the other drawing slots.",
+      "revId": "03152cd422c3449020d4c46145412a74ce3e2f73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_fae71eaa",
+        "filename": "sw/source/uibase/ribbar/conrect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-08-24T21:06:38Z",
+      "side": 1,
+      "message": "Please put it inside unnamed namespace.",
+      "revId": "03152cd422c3449020d4c46145412a74ce3e2f73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_7afcee3e",
+        "filename": "sw/source/uibase/ribbar/conrect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-08-24T21:06:38Z",
+      "side": 1,
+      "message": "Why is this needed here? (And as Jenkins points out, bReturn will be uninitialized if !rMEvt.IsLeft().)",
+      "range": {
+        "startLine": 91,
+        "startChar": 9,
+        "endLine": 91,
+        "endChar": 23
+      },
+      "revId": "03152cd422c3449020d4c46145412a74ce3e2f73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_da997a21",
+        "filename": "sw/source/uibase/ribbar/conrect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-08-24T21:06:38Z",
+      "side": 1,
+      "message": "Previously this block was executing only for the OBJ_CAPTION case. Now it turns on the \"Edit Points\" mode whenever you draw a line.",
+      "revId": "03152cd422c3449020d4c46145412a74ce3e2f73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_fa9e3e06",
+        "filename": "sw/source/uibase/ribbar/conrect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-08-24T21:06:38Z",
+      "side": 1,
+      "message": "Looks like this already happens in SwFEShell::BeginCreate. No need to repeat here.",
+      "revId": "03152cd422c3449020d4c46145412a74ce3e2f73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_3a8996cb",
+        "filename": "sw/source/uibase/ribbar/conrect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-08-24T21:06:38Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "03152cd422c3449020d4c46145412a74ce3e2f73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
