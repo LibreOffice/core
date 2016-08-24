@@ -370,59 +370,48 @@ void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const
             maStylesPerColumn[ nCol ].insert( aStyleRows );
         else
         {
-            RowStyles& rRowStyles =  maStylesPerColumn[ nCol ];
+            RowStyles& rRowStyles = maStylesPerColumn[ nCol ];
             // Reset row range for each column
             aStyleRows.mnStartRow = rAddress.StartRow;
             aStyleRows.mnEndRow = rAddress.EndRow;
 
-            // If the rowrange style includes rows already
-            // allocated to a style then we need to split
-            // the range style Rows into sections ( to
-            // occupy only rows that have no style definition )
+            // If aStyleRows includes rows already allocated to a style
+            // in rRowStyles, then we need to split it into parts.
+            // ( to occupy only rows that have no style definition)
 
-            // We don't want to set any rowstyle 'rows'
-            // for rows where there is an existing 'style' )
-            std::vector< RowRangeStyle > aRangeRowsSplits;
-
-            RowStyles::iterator rows_it = rRowStyles.begin();
+            // Start iterating at the first element that is not completely before aStyleRows
+            RowStyles::iterator rows_it = rRowStyles.lower_bound(aStyleRows);
             RowStyles::iterator rows_end = rRowStyles.end();
             bool bAddRange = true;
             for ( ; rows_it != rows_end; ++rows_it )
             {
                 const RowRangeStyle& r = *rows_it;
-                // if row is completely within existing style, discard it
-                if ( aStyleRows.mnStartRow >= r.mnStartRow && aStyleRows.mnEndRow <= r.mnEndRow )
-                    bAddRange = false;
-                else if ( aStyleRows.mnStartRow <= r.mnStartRow )
+
+                // Add the part of aStyleRows that does not overlap with r
+                if ( aStyleRows.mnStartRow < r.mnStartRow )
                 {
-                    // not intersecting at all?, if so finish as none left
-                    // to check ( row ranges are in ascending order
-                    if ( aStyleRows.mnEndRow < r.mnStartRow )
-                        break;
-                    else if ( aStyleRows.mnEndRow <= r.mnEndRow )
-                    {
-                        aStyleRows.mnEndRow = r.mnStartRow - 1;
-                        break;
-                    }
-                    if ( aStyleRows.mnStartRow < r.mnStartRow )
-                    {
-                        RowRangeStyle aSplit = aStyleRows;
-                        aSplit.mnEndRow = r.mnStartRow - 1;
-                        aRangeRowsSplits.push_back( aSplit );
-                    }
+                    RowRangeStyle aSplit = aStyleRows;
+                    aSplit.mnEndRow = std::min(aStyleRows.mnEndRow, r.mnStartRow - 1);
+                    // Insert with hint that aSplit comes directly before the current position
+                    rRowStyles.insert( rows_it, aSplit );
                 }
-                if ( aStyleRows.mnStartRow <= r.mnEndRow && r.mnEndRow < aStyleRows.mnEndRow )
-                    aStyleRows.mnStartRow = r.mnEndRow + 1;
+
+                // Done if no part of aStyleRows extends beyond r
+                if ( aStyleRows.mnEndRow <= r.mnEndRow )
+                {
+                    bAddRange = false;
+                    break;
+                }
+
+                // Cut off the part aStyleRows that was handled above
+                aStyleRows.mnStartRow = r.mnEndRow + 1;
             }
-            std::vector< RowRangeStyle >::iterator splits_it = aRangeRowsSplits.begin();
-            std::vector< RowRangeStyle >::iterator splits_end = aRangeRowsSplits.end();
-            for ( ; splits_it != splits_end; ++splits_it )
-                rRowStyles.insert( *splits_it );
             if ( bAddRange )
                 rRowStyles.insert( aStyleRows );
         }
     }
 }
+
 void SheetDataBuffer::finalizeImport()
 {
     // create all array formulas
