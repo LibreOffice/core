@@ -30,22 +30,25 @@ class SvXMLTokenMapEntry_Impl
     sal_uInt16  nPrefixKey;
     OUString    sLocalName;
     sal_uInt16  nToken;
+    sal_Int32   nFastToken;
 
 public:
 
     sal_uInt16 GetToken() const { return nToken; }
 
     SvXMLTokenMapEntry_Impl( sal_uInt16 nPrefix, const OUString& rLName,
-                             sal_uInt16 nTok=XML_TOK_UNKNOWN ) :
+                             sal_uInt16 nTok = XML_TOK_UNKNOWN, sal_Int32 nFastTok = 0 ) :
         nPrefixKey( nPrefix ),
         sLocalName( rLName  ),
-        nToken( nTok )
+        nToken( nTok ),
+        nFastToken( nFastTok )
     {}
 
     explicit SvXMLTokenMapEntry_Impl( const SvXMLTokenMapEntry& rEntry ) :
         nPrefixKey( rEntry.nPrefixKey ),
         sLocalName( GetXMLToken( rEntry.eLocalName ) ),
-        nToken( rEntry.nToken )
+        nToken( rEntry.nToken ),
+        nFastToken( rEntry.nFastToken )
     {}
 
     bool operator<( const SvXMLTokenMapEntry_Impl& r ) const
@@ -72,13 +75,10 @@ SvXMLTokenMap::~SvXMLTokenMap()
 {
 }
 
-sal_uInt16 SvXMLTokenMap::Get( sal_uInt16 nKeyPrefix,
-                               const OUString& rLName ) const
+sal_uInt16 SvXMLTokenMap::Get( const SvXMLTokenMapEntry_Impl& rEntry ) const
 {
     SvXMLTokenMapEntry_Impl const* pEntry = nullptr;
-    SvXMLTokenMapEntry_Impl aTst( nKeyPrefix, rLName );
-
-    SvXMLTokenMap_Impl::iterator it = m_pImpl->find( aTst );
+    SvXMLTokenMap_Impl::iterator it = m_pImpl->find( rEntry );
     if (it != m_pImpl->end())
     {
         pEntry = &*it;
@@ -88,6 +88,20 @@ sal_uInt16 SvXMLTokenMap::Get( sal_uInt16 nKeyPrefix,
         return pEntry->GetToken();
     else
         return XML_TOK_UNKNOWN;
+}
+
+sal_uInt16 SvXMLTokenMap::Get( sal_uInt16 nKeyPrefix,
+                               const OUString& rLName ) const
+{
+    SvXMLTokenMapEntry_Impl aTst( nKeyPrefix, rLName );
+    return( Get( aTst ) );
+}
+
+sal_uInt16 SvXMLTokenMap::Get( sal_Int32 nFastTok ) const
+{
+    static const OUString sEmptyString("");
+    SvXMLTokenMapEntry_Impl aTst( 0, sEmptyString, XML_TOK_UNKNOWN, nFastTok );
+    return( Get( aTst ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
