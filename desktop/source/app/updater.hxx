@@ -15,6 +15,8 @@
 void CreateValidUpdateDir(const OUString& rInstallDir);
 void Update(const OUString& rInstallDir);
 
+void update_checker();
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
