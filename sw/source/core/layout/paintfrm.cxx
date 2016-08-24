@@ -2994,10 +2994,10 @@ void SwTabFramePainter::Insert( const SwFrame& rFrame, const SvxBoxItem& rBoxIte
     const SwTwips nTop    = aBorderRect.Top_();
     const SwTwips nBottom = aBorderRect.Bottom_();
 
-    aL.SetRefMode( svx::frame::REFMODE_CENTERED );
-    aR.SetRefMode( svx::frame::REFMODE_CENTERED );
-    aT.SetRefMode( !bVert ? svx::frame::REFMODE_BEGIN : svx::frame::REFMODE_END );
-    aB.SetRefMode( !bVert ? svx::frame::REFMODE_BEGIN : svx::frame::REFMODE_END );
+    aL.SetRefMode( svx::frame::RefMode::Centered );
+    aR.SetRefMode( svx::frame::RefMode::Centered );
+    aT.SetRefMode( !bVert ? svx::frame::RefMode::Begin : svx::frame::RefMode::End );
+    aB.SetRefMode( !bVert ? svx::frame::RefMode::Begin : svx::frame::RefMode::End );
 
     SwLineEntry aLeft  (nLeft,   nTop,  nBottom,
             (bVert) ? aB                         : ((bR2L) ? aR : aL));

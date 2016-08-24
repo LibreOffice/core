@@ -42,24 +42,24 @@ namespace frame {
 
 /** Specifies how the reference points for frame borders are used.
  */
-enum RefMode
+enum class RefMode
 {
     /** Frame borders are drawn centered to the reference points. */
-    REFMODE_CENTERED,
+    Centered,
 
     /** The reference points specify the begin of the frame border width.
 
         The result is that horizontal lines are drawn below, and vertical lines
         are drawn right of the reference points.
      */
-    REFMODE_BEGIN,
+    Begin,
 
     /** The reference points specify the end of the frame border width.
 
         The result is that horizontal lines are drawn above, and vertical lines
         are drawn left of the reference points.
      */
-    REFMODE_END
+    End
 };
 
 

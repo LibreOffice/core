@@ -213,14 +213,14 @@ double lclScaleValue( double nValue, double fScale, sal_uInt16 nMaxWidth )
 
     The functions regard the reference point handling mode of the passed border
     style.
-    REFMODE_CENTERED:
+    RefMode::Centered:
         All returned offsets are relative to the middle position of the frame
         border (offsets left of the middle are returned negative, offsets right
         of the middle are returned positive).
-    REFMODE_BEGIN:
+    RefMode::Begin:
         All returned offsets are relative to the begin of the frame border
         (lclGetBeg() always returns 0).
-    REFMODE_END:
+    RefMode::End:
         All returned offsets are relative to the end of the frame border
         (lclGetEnd() always returns 0).
 
@@ -264,9 +264,9 @@ long lclGetBeg( const Style& rBorder )
     long nPos = 0;
     switch( rBorder.GetRefMode() )
     {
-        case REFMODE_CENTERED:  if( rBorder.Prim() ) nPos = -128 * (rBorder.GetWidth() - 1); break;
-        case REFMODE_END:       if( rBorder.Prim() ) nPos = -256 * (rBorder.GetWidth() - 1); break;
-        case REFMODE_BEGIN:     break;
+        case RefMode::Centered:  if( rBorder.Prim() ) nPos = -128 * (rBorder.GetWidth() - 1); break;
+        case RefMode::End:       if( rBorder.Prim() ) nPos = -256 * (rBorder.GetWidth() - 1); break;
+        case RefMode::Begin:     break;
     }
     return nPos;
 }
@@ -281,9 +281,9 @@ long lclGetEnd( const Style& rBorder )
     long nPos = 0;
     switch( rBorder.GetRefMode() )
     {
-        case REFMODE_CENTERED:  if( rBorder.Prim() ) nPos = 128 * (rBorder.GetWidth() - 1); break;
-        case REFMODE_BEGIN:     if( rBorder.Prim() ) nPos = 256 * (rBorder.GetWidth() - 1); break;
-        case REFMODE_END:     break;
+        case RefMode::Centered:  if( rBorder.Prim() ) nPos = 128 * (rBorder.GetWidth() - 1); break;
+        case RefMode::Begin:     if( rBorder.Prim() ) nPos = 256 * (rBorder.GetWidth() - 1); break;
+        case RefMode::End:     break;
     }
     return nPos;
 }
@@ -1120,7 +1120,7 @@ void lclDrawDiagFrameBorders(
 #define SCALEVALUE( value ) lclScaleValue( value, fScale, nMaxWidth )
 
 Style::Style() :
-    meRefMode(REFMODE_CENTERED),
+    meRefMode(RefMode::Centered),
     mfPatternScale(1.0),
     mnType(table::BorderLineStyle::SOLID)
 {
@@ -1128,7 +1128,7 @@ Style::Style() :
 }
 
 Style::Style( double nP, double nD, double nS, editeng::SvxBorderStyle nType ) :
-    meRefMode(REFMODE_CENTERED),
+    meRefMode(RefMode::Centered),
     mfPatternScale(1.0),
     mnType(nType)
 {
@@ -1138,7 +1138,7 @@ Style::Style( double nP, double nD, double nS, editeng::SvxBorderStyle nType ) :
 
 Style::Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
               double nP, double nD, double nS, editeng::SvxBorderStyle nType ) :
-    meRefMode(REFMODE_CENTERED),
+    meRefMode(RefMode::Centered),
     mfPatternScale(1.0),
     mnType(nType)
 {
@@ -1146,7 +1146,7 @@ Style::Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rCo
 }
 
 Style::Style( const editeng::SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWidth ) :
-    meRefMode(REFMODE_CENTERED),
+    meRefMode(RefMode::Centered),
     mfPatternScale(fScale)
 {
     Set( pBorder, fScale, nMaxWidth );
@@ -1252,8 +1252,8 @@ Style& Style::MirrorSelf()
 {
     if (mfSecn)
         std::swap( mfPrim, mfSecn );
-    if( meRefMode != REFMODE_CENTERED )
-        meRefMode = (meRefMode == REFMODE_BEGIN) ? REFMODE_END : REFMODE_BEGIN;
+    if( meRefMode != RefMode::Centered )
+        meRefMode = (meRefMode == RefMode::Begin) ? RefMode::End : RefMode::Begin;
     return *this;
 }
 
