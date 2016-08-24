@@ -883,7 +883,7 @@ void SdrEditView::DistributeMarkedObjects()
                     aEntryList.clear();
                 }
 
-                if(eVer != SvxDistributeVerticalNone)
+                if(eVer != SvxDistributeVertical::NONE)
                 {
                     // build sorted entry list
                     nFullLength = 0L;
@@ -897,24 +897,24 @@ void SdrEditView::DistributeMarkedObjects()
 
                         switch(eVer)
                         {
-                            case SvxDistributeVerticalTop:
+                            case SvxDistributeVertical::Top:
                             {
                                 pNew->mnPos = pNew->mpObj->GetSnapRect().Top();
                                 break;
                             }
-                            case SvxDistributeVerticalCenter:
+                            case SvxDistributeVertical::Center:
                             {
                                 pNew->mnPos = (pNew->mpObj->GetSnapRect().Bottom() + pNew->mpObj->GetSnapRect().Top()) / 2;
                                 break;
                             }
-                            case SvxDistributeVerticalDistance:
+                            case SvxDistributeVertical::Distance:
                             {
                                 pNew->mnLength = pNew->mpObj->GetSnapRect().GetHeight() + 1;
                                 nFullLength += pNew->mnLength;
                                 pNew->mnPos = (pNew->mpObj->GetSnapRect().Bottom() + pNew->mpObj->GetSnapRect().Top()) / 2;
                                 break;
                             }
-                            case SvxDistributeVerticalBottom:
+                            case SvxDistributeVertical::Bottom:
                             {
                                 pNew->mnPos = pNew->mpObj->GetSnapRect().Bottom();
                                 break;
@@ -932,7 +932,7 @@ void SdrEditView::DistributeMarkedObjects()
                             aEntryList.push_back( pNew );
                     }
 
-                    if(eVer == SvxDistributeVerticalDistance)
+                    if(eVer == SvxDistributeVertical::Distance)
                     {
                         // calculate room in-between
                         sal_Int32 nHeight = GetAllMarkedBoundRect().GetHeight() + 1;

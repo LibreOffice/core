@@ -43,7 +43,7 @@ class SvxDistributePage : public SvxTabPage
 public:
     SvxDistributePage(vcl::Window* pWindow, const SfxItemSet& rInAttrs,
         SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone,
-        SvxDistributeVertical eVer = SvxDistributeVerticalNone);
+        SvxDistributeVertical eVer = SvxDistributeVertical::NONE);
     virtual ~SvxDistributePage();
     virtual void dispose() override;
 
@@ -62,7 +62,7 @@ class SvxDistributeDialog : public SfxSingleTabDialog
 public:
     SvxDistributeDialog(vcl::Window* pParent, const SfxItemSet& rAttr,
         SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone,
-        SvxDistributeVertical eVer = SvxDistributeVerticalNone);
+        SvxDistributeVertical eVer = SvxDistributeVertical::NONE);
     virtual ~SvxDistributeDialog();
     virtual void dispose() override;
 

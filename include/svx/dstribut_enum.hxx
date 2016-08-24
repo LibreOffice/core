@@ -28,13 +28,13 @@ enum SvxDistributeHorizontal
     SvxDistributeHorizontalRight
 };
 
-enum SvxDistributeVertical
+enum class SvxDistributeVertical
 {
-    SvxDistributeVerticalNone = 0,
-    SvxDistributeVerticalTop,
-    SvxDistributeVerticalCenter,
-    SvxDistributeVerticalDistance,
-    SvxDistributeVerticalBottom
+    NONE = 0,
+    Top,
+    Center,
+    Distance,
+    Bottom
 };
 
 #endif // INCLUDED_SVX_DSTRIBUT_ENUM_HXX

@@ -135,11 +135,11 @@ void SvxDistributePage::Reset(const SfxItemSet* )
 
     switch(m_eDistributeVer)
     {
-        case SvxDistributeVerticalNone : m_pBtnVerNone->SetState(true); break;
-        case SvxDistributeVerticalTop : m_pBtnVerTop->SetState(true); break;
-        case SvxDistributeVerticalCenter : m_pBtnVerCenter->SetState(true); break;
-        case SvxDistributeVerticalDistance : m_pBtnVerDistance->SetState(true); break;
-        case SvxDistributeVerticalBottom : m_pBtnVerBottom->SetState(true); break;
+        case SvxDistributeVertical::NONE : m_pBtnVerNone->SetState(true); break;
+        case SvxDistributeVertical::Top : m_pBtnVerTop->SetState(true); break;
+        case SvxDistributeVertical::Center : m_pBtnVerCenter->SetState(true); break;
+        case SvxDistributeVertical::Distance : m_pBtnVerDistance->SetState(true); break;
+        case SvxDistributeVertical::Bottom : m_pBtnVerBottom->SetState(true); break;
     }
 }
 
@@ -152,7 +152,7 @@ void SvxDistributePage::Reset(const SfxItemSet* )
 bool SvxDistributePage::FillItemSet( SfxItemSet* )
 {
     SvxDistributeHorizontal eDistributeHor(SvxDistributeHorizontalNone);
-    SvxDistributeVertical eDistributeVer(SvxDistributeVerticalNone);
+    SvxDistributeVertical eDistributeVer(SvxDistributeVertical::NONE);
 
     if(m_pBtnHorLeft->IsChecked())
         eDistributeHor = SvxDistributeHorizontalLeft;
@@ -164,13 +164,13 @@ bool SvxDistributePage::FillItemSet( SfxItemSet* )
         eDistributeHor = SvxDistributeHorizontalRight;
 
     if(m_pBtnVerTop->IsChecked())
-        eDistributeVer = SvxDistributeVerticalTop;
+        eDistributeVer = SvxDistributeVertical::Top;
     else if(m_pBtnVerCenter->IsChecked())
-        eDistributeVer = SvxDistributeVerticalCenter;
+        eDistributeVer = SvxDistributeVertical::Center;
     else if(m_pBtnVerDistance->IsChecked())
-        eDistributeVer = SvxDistributeVerticalDistance;
+        eDistributeVer = SvxDistributeVertical::Distance;
     else if(m_pBtnVerBottom->IsChecked())
-        eDistributeVer = SvxDistributeVerticalBottom;
+        eDistributeVer = SvxDistributeVertical::Bottom;
 
     if(eDistributeHor != m_eDistributeHor || eDistributeVer != m_eDistributeVer)
     {
