@@ -22,14 +22,14 @@
 #include <svl/eitem.hxx>
 #include <svx/svxdllapi.h>
 
-enum SvxChartStyle
+enum class SvxChartStyle
 {
-    CHSTYLE_2D_LINE,
-    CHSTYLE_2D_COLUMN,
-    CHSTYLE_ADDIN
+    Line2D,
+    Column2D,
+    AddIn
 };
 
-#define CHSTYLE_COUNT   (CHSTYLE_ADDIN + 1)
+#define CHSTYLE_COUNT   ((sal_uInt16)SvxChartStyle::AddIn + 1)
 
 enum class SvxChartTextOrder
 {
@@ -83,7 +83,7 @@ enum class SvxChartRegress
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxChartStyleItem : public SfxEnumItem
 {
 public:
-    SvxChartStyleItem(SvxChartStyle eStyle /*= CHSTYLE_2D_LINE*/,
+    SvxChartStyleItem(SvxChartStyle eStyle /*= SvxChartStyle::Line2D*/,
                       sal_uInt16 nId );
     SvxChartStyleItem(SvStream& rIn, sal_uInt16 nId );
 
