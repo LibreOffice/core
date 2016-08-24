@@ -203,13 +203,13 @@ ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const OUString& aM
     m_bGenericDataRetrieved( false )
 {
     // Create configuration hierarchical access name
-    m_aConfigCmdAccess += aModuleName;
-    m_aConfigCmdAccess += CONFIGURATION_CMD_ELEMENT_ACCESS;
+    m_aConfigCmdAccess += aModuleName
+                       +  CONFIGURATION_CMD_ELEMENT_ACCESS;
 
     m_xConfigProvider = theDefaultProvider::get( rxContext );
 
-    m_aConfigPopupAccess += aModuleName;
-    m_aConfigPopupAccess += CONFIGURATION_POP_ELEMENT_ACCESS;
+    m_aConfigPopupAccess += aModuleName
+                         +  CONFIGURATION_POP_ELEMENT_ACCESS;
 }
 
 ConfigurationAccess_UICommand::~ConfigurationAccess_UICommand()

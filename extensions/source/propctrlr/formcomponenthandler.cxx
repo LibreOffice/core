@@ -384,13 +384,13 @@ namespace pcr
 
                         // Create new Ids
                         std::unique_ptr<OUString[]> pNewPureIds(new OUString[nNewCount]);
-                        OUString aIdStrBase = aDot;
                         Any aNameAny = m_xComponent->getPropertyValue(PROPERTY_NAME);
                         OUString sControlName;
                         aNameAny >>= sControlName;
-                        aIdStrBase += sControlName;
-                        aIdStrBase += aDot;
-                        aIdStrBase += _rPropertyName;
+                        OUString aIdStrBase = aDot
+                                            + sControlName
+                                            + aDot
+                                            + _rPropertyName;
                         sal_Int32 i;
                         OUString aDummyStr;
                         for ( i = 0; i < nNewCount; ++i )

@@ -52,8 +52,7 @@ namespace pcr
             }
         }
 
-        OUString sNameBase( _rNameBase.copy( 0, nStripUntil ? nStripUntil + 1 : 0 ) );
-        sNameBase += " ";
+        OUString sNameBase = _rNameBase.copy( 0, nStripUntil ? nStripUntil + 1 : 0 ) + " ";
         OUString sInitialName;
         sal_Int32 nPostfixNumber = 1;
         do
