@@ -31,14 +31,6 @@ enum SvxChartStyle
 
 #define CHSTYLE_COUNT   (CHSTYLE_ADDIN + 1)
 
-enum SvxChartDataDescr
-{
-    CHDESCR_NONE,
-    CHDESCR_TEXTANDVALUE
-};
-
-#define CHDESCR_COUNT   (CHDESCR_TEXTANDVALUE + 1)
-
 enum class SvxChartTextOrder
 {
     SideBySide,
@@ -116,18 +108,6 @@ public:
     SvxChartRegress GetValue() const
         { return (SvxChartRegress)SfxEnumItem::GetValue(); }
     sal_uInt16 GetVersion (sal_uInt16 nFileFormatVersion) const override;
-};
-
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxChartDataDescrItem : public SfxEnumItem
-{
-public:
-    SvxChartDataDescrItem(SvStream& rIn,
-                          sal_uInt16 nId );
-
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const override;
-
-    sal_uInt16 GetValueCount() const override { return CHDESCR_COUNT; }
 };
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxChartTextOrderItem : public SfxEnumItem

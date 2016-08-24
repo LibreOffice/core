@@ -55,23 +55,6 @@ SfxPoolItem* SvxChartStyleItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
     return new SvxChartStyleItem(rIn, Which());
 }
 
-SvxChartDataDescrItem::SvxChartDataDescrItem(SvStream& rIn, sal_uInt16 nId) :
-    SfxEnumItem(nId, rIn)
-{
-}
-
-
-SfxPoolItem* SvxChartDataDescrItem::Clone(SfxItemPool* /*pPool*/) const
-{
-    return new SvxChartDataDescrItem(*this);
-}
-
-
-SfxPoolItem* SvxChartDataDescrItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new SvxChartDataDescrItem(rIn, Which());
-}
-
 SvxChartTextOrderItem::SvxChartTextOrderItem(SvxChartTextOrder eOrder,
                                              sal_uInt16 nId) :
     SfxEnumItem(nId, (sal_uInt16)eOrder)
