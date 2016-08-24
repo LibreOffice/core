@@ -33,13 +33,13 @@
 #include <svx/dlgctrl.hxx>
 #include <svx/svdmodel.hxx>
 
-enum ViewType3D
+enum class ViewType3D
 {
-    VIEWTYPE_GEO = 1,
-    VIEWTYPE_REPRESENTATION,
-    VIEWTYPE_LIGHT,
-    VIEWTYPE_TEXTURE,
-    VIEWTYPE_MATERIAL
+    Geo = 1,
+    Representation,
+    Light,
+    Texture,
+    Material
 };
 
 class SdrModel;

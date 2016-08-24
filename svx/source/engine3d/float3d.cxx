@@ -89,7 +89,7 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     , aImgLightOn(SVX_RES(RID_SVXIMAGE_LIGHT_ON))
     , aImgLightOff(SVX_RES(RID_SVXIMAGE_LIGHT_OFF))
     , bUpdate(false)
-    , eViewType(VIEWTYPE_GEO)
+    , eViewType(ViewType3D::Geo)
     , pModel(nullptr)
     , pVDev(nullptr)
     , pBindings(pInBindings)
@@ -2259,18 +2259,18 @@ IMPL_LINK_TYPED( Svx3DWin, ClickViewTypeHdl, Button*, pBtn, void )
         m_pBtnMaterial->Check(m_pBtnMaterial == pBtn);
 
         if( m_pBtnGeo->IsChecked() )
-            eViewType = VIEWTYPE_GEO;
+            eViewType = ViewType3D::Geo;
         if( m_pBtnRepresentation->IsChecked() )
-            eViewType = VIEWTYPE_REPRESENTATION;
+            eViewType = ViewType3D::Representation;
         if( m_pBtnLight->IsChecked() )
-            eViewType = VIEWTYPE_LIGHT;
+            eViewType = ViewType3D::Light;
         if( m_pBtnTexture->IsChecked() )
-            eViewType = VIEWTYPE_TEXTURE;
+            eViewType = ViewType3D::Texture;
         if( m_pBtnMaterial->IsChecked() )
-            eViewType = VIEWTYPE_MATERIAL;
+            eViewType = ViewType3D::Material;
 
         // Geometry
-        if( eViewType == VIEWTYPE_GEO )
+        if( eViewType == ViewType3D::Geo )
         {
             m_pFLSegments->Show();
             m_pFLGeometrie->Show();
@@ -2284,7 +2284,7 @@ IMPL_LINK_TYPED( Svx3DWin, ClickViewTypeHdl, Button*, pBtn, void )
         }
 
         // Representation
-        if( eViewType == VIEWTYPE_REPRESENTATION )
+        if( eViewType == ViewType3D::Representation )
         {
             m_pFLShadow->Show();
             m_pFLCamera->Show();
@@ -2298,7 +2298,7 @@ IMPL_LINK_TYPED( Svx3DWin, ClickViewTypeHdl, Button*, pBtn, void )
         }
 
         // Lighting
-        if( eViewType == VIEWTYPE_LIGHT )
+        if( eViewType == ViewType3D::Light )
         {
             m_pFLLight->Show();
 
@@ -2321,13 +2321,13 @@ IMPL_LINK_TYPED( Svx3DWin, ClickViewTypeHdl, Button*, pBtn, void )
         }
 
         // Textures
-        if (eViewType == VIEWTYPE_TEXTURE)
+        if (eViewType == ViewType3D::Texture)
             m_pFLTexture->Show();
         else
             m_pFLTexture->Hide();
 
         // Material
-        if( eViewType == VIEWTYPE_MATERIAL )
+        if( eViewType == ViewType3D::Material )
         {
             m_pFLMatSpecular->Show();
             m_pFLMaterial->Show();
@@ -2343,11 +2343,11 @@ IMPL_LINK_TYPED( Svx3DWin, ClickViewTypeHdl, Button*, pBtn, void )
     }
     else
     {
-        m_pBtnGeo->Check( eViewType == VIEWTYPE_GEO );
-        m_pBtnRepresentation->Check( eViewType == VIEWTYPE_REPRESENTATION );
-        m_pBtnLight->Check( eViewType == VIEWTYPE_LIGHT );
-        m_pBtnTexture->Check( eViewType == VIEWTYPE_TEXTURE );
-        m_pBtnMaterial->Check( eViewType == VIEWTYPE_MATERIAL );
+        m_pBtnGeo->Check( eViewType == ViewType3D::Geo );
+        m_pBtnRepresentation->Check( eViewType == ViewType3D::Representation );
+        m_pBtnLight->Check( eViewType == ViewType3D::Light );
+        m_pBtnTexture->Check( eViewType == ViewType3D::Texture );
+        m_pBtnMaterial->Check( eViewType == ViewType3D::Material );
      }
 }
 
