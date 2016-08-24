@@ -238,6 +238,7 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_CREATE_FROM_OUTLINE    :    sName = "CreateFromOutline"; break;
         case PROP_CREATE_FROM_MARKS      :    sName = "CreateFromMarks"; break;
         case PROP_STANDARD               :    sName = "Standard"; break;
+        case PROP_SPLIT                  :    sName = "Split"; break;
         case PROP_IS_SPLIT_ALLOWED       :    sName = "IsSplitAllowed"; break;
         case META_PROP_VERTICAL_BORDER   :    sName = "VerticalBorder"; break;
         case META_PROP_HORIZONTAL_BORDER :    sName = "HorizontalBorder"; break;

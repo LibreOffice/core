@@ -260,6 +260,7 @@ enum PropertyIds
         ,PROP_SIZE_PROTECTED
         ,PROP_SIZE_TYPE
         ,PROP_SOURCE_NAME
+        ,PROP_SPLIT
         ,PROP_STANDARD
         ,PROP_START_AT
         ,PROP_START_WITH

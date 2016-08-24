@@ -53,6 +53,7 @@
 #include <frmfmt.hxx>
 #include <ftnidx.hxx>
 #include <fmtftn.hxx>
+#include <fmtlsplt.hxx>
 #include <charfmt.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <fltshell.hxx>
@@ -3130,6 +3131,10 @@ void WW8TabDesc::AdjustNewBand()
     //we can split the row
     bool bSetCantSplit = pActBand->bCantSplit;
     pTabLine->GetFrameFormat()->SetFormatAttr(SwFormatRowSplit(!bSetCantSplit));
+
+    //  if table is only a single row, and row is set as don't split, set the same value for the whole table.
+    if( bSetCantSplit && pTable && pTabLines && pTabLines->size() == 1 )
+        pTable->GetFrameFormat()->SetFormatAttr(SwFormatLayoutSplit( !bSetCantSplit ));
 
     short i;    // SW-Index
     short j;    // WW-Index

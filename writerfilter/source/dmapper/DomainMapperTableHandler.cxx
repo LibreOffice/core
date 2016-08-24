@@ -576,6 +576,19 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         //fill default value - if not available
         m_aTableProperties->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny( (sal_Int32)0), false);
 
+        // if table is only a single row, and row is set as don't split, set the same value for the whole table.
+        if( m_aRowProperties.size() == 1 && m_aRowProperties[0].get() )
+        {
+            boost::optional<PropertyMap::Property> oSplitAllowed = m_aRowProperties[0]->getProperty(PROP_IS_SPLIT_ALLOWED);
+            if( oSplitAllowed )
+            {
+                bool bRowCanSplit = true;
+                oSplitAllowed->second >>= bRowCanSplit;
+                if( !bRowCanSplit )
+                    m_aTableProperties->Insert( PROP_SPLIT, uno::makeAny(bRowCanSplit) );
+            }
+        }
+
         rInfo.aTableProperties = m_aTableProperties->GetPropertyValues();
 
 #ifdef DEBUG_WRITERFILTER
