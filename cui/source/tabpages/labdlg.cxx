@@ -507,7 +507,7 @@ void SvxCaptionTabPage::FillValueSet()
 
 
 SvxCaptionTabDialog::SvxCaptionTabDialog(vcl::Window* pParent, const SdrView* pSdrView,
-    sal_uInt16 nAnchorTypes)
+    SvxAnchorIds nAnchorTypes)
     : SfxTabDialog( pParent, "CalloutDialog", "cui/ui/calloutdialog.ui")
     , pView(pSdrView)
     , nAnchorCtrls(nAnchorTypes)
@@ -518,7 +518,7 @@ SvxCaptionTabDialog::SvxCaptionTabDialog(vcl::Window* pParent, const SdrView* pS
     assert(pView); //Keine gueltige View Uebergeben!
 
     //different positioning page in Writer
-    if (nAnchorCtrls & 0x00ff)
+    if (nAnchorCtrls & (SvxAnchorIds::Paragraph | SvxAnchorIds::Character | SvxAnchorIds::Page | SvxAnchorIds::Fly))
     {
         m_nSwPosSizePageId = AddTabPage("RID_SVXPAGE_SWPOSSIZE", SvxSwPosSizeTabPage::Create,
             SvxSwPosSizeTabPage::GetRanges );
@@ -540,10 +540,10 @@ void SvxCaptionTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     {
         static_cast<SvxPositionSizeTabPage&>( rPage ).SetView( pView );
         static_cast<SvxPositionSizeTabPage&>( rPage ).Construct();
-        if( nAnchorCtrls & SVX_OBJ_NORESIZE )
+        if( nAnchorCtrls & SvxAnchorIds::NoResize )
             static_cast<SvxPositionSizeTabPage&>( rPage ).DisableResize();
 
-        if( nAnchorCtrls & SVX_OBJ_NOPROTECT )
+        if( nAnchorCtrls & SvxAnchorIds::NoProtect )
             static_cast<SvxPositionSizeTabPage&>( rPage ).DisableProtect();
     }
     else if (nId == m_nSwPosSizePageId)

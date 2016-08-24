@@ -26,6 +26,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/sxctitm.hxx>
 #include <svx/sxcecitm.hxx>
+#include <svx/anchorid.hxx>
 
 
 class SdrView;
@@ -101,7 +102,7 @@ class SvxCaptionTabDialog : public SfxTabDialog
 {
 private:
     const SdrView* pView;
-    sal_uInt16 nAnchorCtrls;
+    SvxAnchorIds nAnchorCtrls;
     sal_uInt16 m_nSwPosSizePageId;
     sal_uInt16 m_nPositionSizePageId;
     sal_uInt16 m_nCaptionPageId;
@@ -112,7 +113,7 @@ private:
 
 public:
     SvxCaptionTabDialog(vcl::Window* pParent, const SdrView* pView,
-                            sal_uInt16 nAnchorTypes = 0);
+                            SvxAnchorIds nAnchorTypes = SvxAnchorIds::NONE);
 
     /// link for the Writer to validate positions
     void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink );

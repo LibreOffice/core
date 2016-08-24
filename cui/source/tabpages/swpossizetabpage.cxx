@@ -1096,11 +1096,11 @@ DeactivateRC SvxSwPosSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-void SvxSwPosSizeTabPage::EnableAnchorTypes(sal_uInt16 nAnchorEnable)
+void SvxSwPosSizeTabPage::EnableAnchorTypes(SvxAnchorIds nAnchorEnable)
 {
-    if((nAnchorEnable & SVX_OBJ_AT_FLY))
+    if((nAnchorEnable & SvxAnchorIds::Fly))
         m_pToFrameRB->Show();
-    if(!(nAnchorEnable & SVX_OBJ_PAGE))
+    if(!(nAnchorEnable & SvxAnchorIds::Page))
         m_pToPageRB->Enable(false);
 }
 

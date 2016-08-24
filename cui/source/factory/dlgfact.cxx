@@ -921,7 +921,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTextTabDialog( vcl::Wind
 // TabDialog that use functionality of the drawing layer and add AnchorTypes -- for SvxCaptionTabDialog
 AbstractSvxCaptionDialog*       AbstractDialogFactory_Impl::CreateCaptionDialog( vcl::Window* pParent,
                                             const SdrView* pView,
-                                            sal_uInt16 nAnchorTypes )
+                                            SvxAnchorIds nAnchorTypes )
 {
     VclPtrInstance<SvxCaptionTabDialog> pDlg( pParent, pView, nAnchorTypes );
     return new AbstractSvxCaptionDialog_Impl( pDlg );
@@ -1095,7 +1095,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxBorderBackgroundDlg(
 AbstractSvxTransformTabDialog* AbstractDialogFactory_Impl::CreateSvxTransformTabDialog( vcl::Window* pParent,
                                                                               const SfxItemSet* pAttr,
                                                                                 const SdrView* pView,
-                                                                                sal_uInt16 nAnchorTypes )
+                                                                                SvxAnchorIds nAnchorTypes )
 {
     VclPtrInstance<SvxTransformTabDialog> pDlg( pParent, pAttr,pView, nAnchorTypes);
     return new AbstractSvxTransformTabDialog_Impl( pDlg );
@@ -1113,14 +1113,14 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSchTransformTabDialog( v
     {
         case RID_SCH_TransformTabDLG_SVXPAGE_ANGLE :
             {
-            pDlg.reset( VclPtr<SvxTransformTabDialog>::Create( pParent, pAttr,pSdrView, bSizeTabPage ? SVX_OBJ_NOPROTECT :  SVX_OBJ_NOPROTECT|SVX_OBJ_NORESIZE) );
+            pDlg.reset( VclPtr<SvxTransformTabDialog>::Create( pParent, pAttr,pSdrView, bSizeTabPage ? SvxAnchorIds::NoProtect :  SvxAnchorIds::NoProtect|SvxAnchorIds::NoResize) );
             pDlg->RemoveTabPage( "RID_SVXPAGE_ANGLE" );
             pDlg->RemoveTabPage( "RID_SVXPAGE_SLANT" );
             }
             break;
         case RID_SCH_TransformTabDLG_SVXPAGE_SLANT:
             {
-            pDlg.reset(VclPtr<SvxTransformTabDialog>::Create ( pParent, pAttr,pSdrView, bSizeTabPage ? SVX_OBJ_NOPROTECT :  SVX_OBJ_NOPROTECT|SVX_OBJ_NORESIZE ) );
+            pDlg.reset(VclPtr<SvxTransformTabDialog>::Create ( pParent, pAttr,pSdrView, bSizeTabPage ? SvxAnchorIds::NoProtect :  SvxAnchorIds::NoProtect|SvxAnchorIds::NoResize ) );
             pDlg->RemoveTabPage( "RID_SVXPAGE_SLANT" );
             }
             break;

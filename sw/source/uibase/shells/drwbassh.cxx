@@ -187,11 +187,11 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                         // Allowed anchorages:
                         short nAnchor = pSh->GetAnchorId();
-                        sal_uInt16 nAllowedAnchors = SVX_OBJ_AT_CNTNT | SVX_OBJ_IN_CNTNT | SVX_OBJ_PAGE;
+                        SvxAnchorIds nAllowedAnchors = SvxAnchorIds::Paragraph | SvxAnchorIds::Character | SvxAnchorIds::Page;
                         sal_uInt16 nHtmlMode = ::GetHtmlMode(pSh->GetView().GetDocShell());
 
                         if ( pSh->IsFlyInFly() )
-                            nAllowedAnchors |= SVX_OBJ_AT_FLY;
+                            nAllowedAnchors |= SvxAnchorIds::Fly;
 
                         if (pObj->GetObjIdentifier() == OBJ_CAPTION )
                             bCaption = true;

@@ -88,7 +88,7 @@ const sal_uInt16 SvxSlantTabPage::pSlantRanges[] =
 \************************************************************************/
 
 SvxTransformTabDialog::SvxTransformTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
-                                const SdrView* pSdrView, sal_uInt16 nAnchorTypes )
+                                const SdrView* pSdrView, SvxAnchorIds nAnchorTypes )
     : SfxTabDialog( pParent
                   ,"PositionAndSizeDialog"
                   ,"cui/ui/positionsizedialog.ui"
@@ -101,7 +101,7 @@ SvxTransformTabDialog::SvxTransformTabDialog( vcl::Window* pParent, const SfxIte
     DBG_ASSERT(pView, "no valid view (!)");
 
     //different positioning page in Writer
-    if(nAnchorCtrls & 0x00ff)
+    if(nAnchorCtrls & (SvxAnchorIds::Paragraph | SvxAnchorIds::Character | SvxAnchorIds::Page | SvxAnchorIds::Fly))
     {
         nSWPosSize = AddTabPage("RID_SVXPAGE_SWPOSSIZE", SvxSwPosSizeTabPage::Create, SvxSwPosSizeTabPage::GetRanges);
         RemoveTabPage("RID_SVXPAGE_POSITION_SIZE");
@@ -125,12 +125,12 @@ void SvxTransformTabDialog::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
             rSvxPos.SetView(pView);
             rSvxPos.Construct();
 
-            if(nAnchorCtrls & SVX_OBJ_NORESIZE)
+            if(nAnchorCtrls & SvxAnchorIds::NoResize)
             {
                 rSvxPos.DisableResize();
             }
 
-            if(nAnchorCtrls & SVX_OBJ_NOPROTECT)
+            if(nAnchorCtrls & SvxAnchorIds::NoProtect)
             {
                 rSvxPos.DisableProtect();
                 rSvxPos.UpdateControlStates();

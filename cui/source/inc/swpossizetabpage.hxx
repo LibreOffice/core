@@ -31,6 +31,7 @@
 struct FrmMap;
 class SdrView;
 struct SvxSwFrameValidation;
+enum class SvxAnchorIds;
 
 class SvxSwPosSizeTabPage : public SfxTabPage
 {
@@ -136,7 +137,7 @@ public:
 
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
-    void    EnableAnchorTypes(sal_uInt16 nAnchorEnable);
+    void    EnableAnchorTypes(SvxAnchorIds nAnchorEnable);
 
     void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink )
             {m_aValidateLink = rLink;}

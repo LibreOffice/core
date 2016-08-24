@@ -20,6 +20,7 @@
 #define INCLUDED_SVX_SVXDLG_HXX
 
 #include <sfx2/sfxdlg.hxx>
+#include <svx/anchorid.hxx>
 #include <svx/zoom_def.hxx>
 #include <editeng/edtdlg.hxx>
 
@@ -281,7 +282,7 @@ public:
 
     virtual AbstractSvxCaptionDialog* CreateCaptionDialog( vcl::Window* pParent,
                                         const SdrView* pView,
-                                        sal_uInt16 nAnchorTypes = 0 ) = 0;
+                                        SvxAnchorIds nAnchorTypes = SvxAnchorIds::NONE ) = 0;
 
     virtual AbstractSvxDistributeDialog*    CreateSvxDistributeDialog(
                                             const SfxItemSet& rAttr)= 0;
@@ -329,7 +330,7 @@ public:
     virtual AbstractSvxTransformTabDialog* CreateSvxTransformTabDialog( vcl::Window* pParent,
                                                                 const SfxItemSet* pAttr,
                                                                 const SdrView* pView,
-                                                                sal_uInt16 nAnchorTypes = 0) = 0;
+                                                                SvxAnchorIds nAnchorTypes = SvxAnchorIds::NONE) = 0;
     virtual SfxAbstractTabDialog* CreateSchTransformTabDialog( vcl::Window* pParent,
                                                                 const SfxItemSet* pAttr,
                                                                 const SdrView* pSdrView,

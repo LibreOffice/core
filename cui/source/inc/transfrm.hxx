@@ -21,6 +21,7 @@
 
 #include <svx/dlgctrl.hxx>
 #include <svx/dialcontrol.hxx>
+#include <svx/anchorid.hxx>
 
 #include <vcl/fixed.hxx>
 
@@ -35,14 +36,6 @@ class SdrView;
 |*
 \************************************************************************/
 
-/** put this into the nAnchorTypes parameter of the SvxTransformTabDialog c'tor
-    to disable the size controls */
-const sal_uInt16 SVX_OBJ_NORESIZE = 0x0100;
-
-/** put this into the nAnchorTypes parameter of the SvxTransformTabDialog c'tor
-    to disable the protect controls */
-const sal_uInt16 SVX_OBJ_NOPROTECT = 0x0200;
-
 struct SvxSwFrameValidation;
 class SvxTransformTabDialog : public SfxTabDialog
 {
@@ -53,7 +46,7 @@ class SvxTransformTabDialog : public SfxTabDialog
 private:
     const SdrView*      pView;
 
-    sal_uInt16          nAnchorCtrls;
+    SvxAnchorIds        nAnchorCtrls;
     Link<SvxSwFrameValidation&,void> aValidateLink;
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
@@ -62,7 +55,7 @@ public:
 
             SvxTransformTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
                             const SdrView* pView,
-                            sal_uInt16 nAnchorTypes = 0);
+                            SvxAnchorIds nAnchorTypes = SvxAnchorIds::NONE);
 
             //link for the Writer to validate positions
             void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink );

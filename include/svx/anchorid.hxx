@@ -19,15 +19,26 @@
 #ifndef INCLUDED_SVX_ANCHORID_HXX
 #define INCLUDED_SVX_ANCHORID_HXX
 
+#include <o3tl/typed_flags_set.hxx>
 
-enum SvxAnchorIds
+enum class SvxAnchorIds
 {
-    SVX_OBJ_AT_CNTNT    = 0x01,     // Frame bound to paragraph
-    SVX_OBJ_IN_CNTNT    = 0x02,     // Frame bound to character
-    SVX_OBJ_PAGE        = 0x04,     // Frame bound to page
-    SVX_OBJ_AT_FLY      = 0x08      // Frame bound to other frame
-//  SVX_OBJ_AUTO_CNTNT  = 0x10      // Automatically positioned frame bound to paragraph
+    NONE         = 0x0000,
+    Paragraph    = 0x0001,     // Frame bound to paragraph
+    Character    = 0x0002,     // Frame bound to character
+    Page         = 0x0004,     // Frame bound to page
+    Fly          = 0x0008,      // Frame bound to other frame
+    /** put this into the nAnchorTypes parameter of the SvxTransformTabDialog c'tor
+    to disable the size controls */
+    NoResize     = 0x0100,
+    /** put this into the nAnchorTypes parameter of the SvxTransformTabDialog c'tor
+    to disable the protect controls */
+    NoProtect    = 0x0200
 };
+namespace o3tl
+{
+    template<> struct typed_flags<SvxAnchorIds> : is_typed_flags<SvxAnchorIds, 0x030f> {};
+}
 
 
 #endif

@@ -476,7 +476,7 @@ public:
                                             const SfxItemSet& rSet) override;
     virtual AbstractSvxCaptionDialog*   CreateCaptionDialog( vcl::Window* pParent,
                                             const SdrView* pView,
-                                            sal_uInt16 nAnchorTypes = 0 ) override;
+                                            SvxAnchorIds nAnchorTypes = SvxAnchorIds::NONE ) override;
     virtual AbstractSvxDistributeDialog*    CreateSvxDistributeDialog(const SfxItemSet& rAttr) override;
     virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( vcl::Window* pParent, const OUString& rCommmand,
             const css::uno::Reference < css::embed::XStorage >& xStor,
@@ -509,7 +509,7 @@ public:
    virtual AbstractSvxTransformTabDialog* CreateSvxTransformTabDialog( vcl::Window* pParent,
                                                                 const SfxItemSet* pAttr,
                                                                 const SdrView* pView,
-                                                                sal_uInt16 nAnchorTypes = 0) override ;
+                                                                SvxAnchorIds nAnchorTypes = SvxAnchorIds::NONE) override ;
     virtual SfxAbstractTabDialog* CreateSchTransformTabDialog( vcl::Window* pParent,
                                                                 const SfxItemSet* pAttr,
                                                                 const SdrView* pSdrView,
