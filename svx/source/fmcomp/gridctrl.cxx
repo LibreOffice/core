@@ -76,7 +76,7 @@ using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::container;
 using namespace com::sun::star::accessibility;
 
-#define ROWSTATUS(row) (!row.Is() ? "NULL" : row->GetStatus() == GRS_CLEAN ? "CLEAN" : row->GetStatus() == GRS_MODIFIED ? "MODIFIED" : row->GetStatus() == GRS_DELETED ? "DELETED" : "INVALID")
+#define ROWSTATUS(row) (!row.Is() ? "NULL" : row->GetStatus() == GridRowStatus::Clean ? "CLEAN" : row->GetStatus() == GridRowStatus::Modified ? "MODIFIED" : row->GetStatus() == GridRowStatus::Deleted ? "DELETED" : "INVALID")
 
 #define DEFAULT_BROWSE_MODE             \
               BrowserMode::COLUMNSELECTION   \
@@ -849,11 +849,11 @@ DbGridRow::DbGridRow(CursorWrapper* pCur, bool bPaintCursor)
         }
 
         if (pCur->rowDeleted())
-            m_eStatus = GRS_DELETED;
+            m_eStatus = GridRowStatus::Deleted;
         else
         {
             if (bPaintCursor)
-                m_eStatus = (pCur->isAfterLast() || pCur->isBeforeFirst()) ? GRS_INVALID : GRS_CLEAN;
+                m_eStatus = (pCur->isAfterLast() || pCur->isBeforeFirst()) ? GridRowStatus::Invalid : GridRowStatus::Clean;
             else
             {
                 Reference< XPropertySet > xSet = pCur->getPropertySet();
@@ -861,14 +861,14 @@ DbGridRow::DbGridRow(CursorWrapper* pCur, bool bPaintCursor)
                 {
                     m_bIsNew = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISNEW));
                     if (!m_bIsNew && (pCur->isAfterLast() || pCur->isBeforeFirst()))
-                        m_eStatus = GRS_INVALID;
+                        m_eStatus = GridRowStatus::Invalid;
                     else if (::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISMODIFIED)))
-                        m_eStatus = GRS_MODIFIED;
+                        m_eStatus = GridRowStatus::Modified;
                     else
-                        m_eStatus = GRS_CLEAN;
+                        m_eStatus = GridRowStatus::Clean;
                 }
                 else
-                    m_eStatus = GRS_INVALID;
+                    m_eStatus = GridRowStatus::Invalid;
             }
         }
         if (!m_bIsNew && IsValid())
@@ -877,7 +877,7 @@ DbGridRow::DbGridRow(CursorWrapper* pCur, bool bPaintCursor)
             m_aBookmark = Any();
     }
     else
-        m_eStatus = GRS_INVALID;
+        m_eStatus = GridRowStatus::Invalid;
 }
 
 DbGridRow::~DbGridRow()
@@ -893,19 +893,19 @@ void DbGridRow::SetState(CursorWrapper* pCur, bool bPaintCursor)
     {
         if (pCur->rowDeleted())
         {
-            m_eStatus = GRS_DELETED;
+            m_eStatus = GridRowStatus::Deleted;
             m_bIsNew = false;
         }
         else
         {
-            m_eStatus = GRS_CLEAN;
+            m_eStatus = GridRowStatus::Clean;
             if (!bPaintCursor)
             {
                 Reference< XPropertySet > xSet = pCur->getPropertySet();
                 DBG_ASSERT(xSet.is(), "DbGridRow::SetState : invalid cursor !");
 
                 if (::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISMODIFIED)))
-                    m_eStatus = GRS_MODIFIED;
+                    m_eStatus = GridRowStatus::Modified;
                 m_bIsNew = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISNEW));
             }
             else
@@ -923,14 +923,14 @@ void DbGridRow::SetState(CursorWrapper* pCur, bool bPaintCursor)
         {
             DBG_UNHANDLED_EXCEPTION();
             m_aBookmark = Any();
-            m_eStatus = GRS_INVALID;
+            m_eStatus = GridRowStatus::Invalid;
             m_bIsNew = false;
         }
     }
     else
     {
         m_aBookmark = Any();
-        m_eStatus = GRS_INVALID;
+        m_eStatus = GridRowStatus::Invalid;
         m_bIsNew = false;
     }
 }
@@ -2776,7 +2776,7 @@ void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt) th
         }
         if (m_xCurrentRow.Is())
         {
-            m_xCurrentRow->SetStatus(::comphelper::getBOOL(evt.NewValue) ? GRS_MODIFIED : GRS_CLEAN);
+            m_xCurrentRow->SetStatus(::comphelper::getBOOL(evt.NewValue) ? GridRowStatus::Modified : GridRowStatus::Clean);
             m_xCurrentRow->SetNew( bIsNew );
             InvalidateStatusCell(m_nCurrentPos);
             SAL_INFO("svx.fmcomp", "modified flag changed, new state: " << ROWSTATUS(m_xCurrentRow));
@@ -2962,7 +2962,7 @@ void DbGridControl::CellModified()
         // a data set should be inserted
         if (m_xCurrentRow->IsNew())
         {
-            m_xCurrentRow->SetStatus(GRS_MODIFIED);
+            m_xCurrentRow->SetStatus(GridRowStatus::Modified);
             SAL_INFO("svx.fmcomp", "current row is new, new state: MODIFIED");
             // if no row was added yet, do it now
             if (m_nCurrentPos == GetRowCount() - 1)
@@ -2973,11 +2973,11 @@ void DbGridControl::CellModified()
                 m_aBar->InvalidateAll(m_nCurrentPos);
             }
         }
-        else if (m_xCurrentRow->GetStatus() != GRS_MODIFIED)
+        else if (m_xCurrentRow->GetStatus() != GridRowStatus::Modified)
         {
             m_xCurrentRow->SetState(m_pDataCursor, false);
             SAL_INFO("svx.fmcomp", "current row is not new, after SetState, new state: " << ROWSTATUS(m_xCurrentRow));
-            m_xCurrentRow->SetStatus(GRS_MODIFIED);
+            m_xCurrentRow->SetStatus(GridRowStatus::Modified);
             SAL_INFO("svx.fmcomp", "current row is not new, new state: MODIFIED");
             InvalidateStatusCell(m_nCurrentPos);
         }

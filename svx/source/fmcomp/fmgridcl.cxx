@@ -1069,7 +1069,7 @@ void FmGridControl::propertyChange(const css::beans::PropertyChangeEvent& evt)
         if (evt.PropertyName == FM_PROP_ISMODIFIED)
         {
             // modified or clean ?
-            GridRowStatus eStatus = ::comphelper::getBOOL(evt.NewValue) ? GRS_MODIFIED : GRS_CLEAN;
+            GridRowStatus eStatus = ::comphelper::getBOOL(evt.NewValue) ? GridRowStatus::Modified : GridRowStatus::Clean;
             if (eStatus != xRow->GetStatus())
             {
                 xRow->SetStatus(eStatus);

@@ -49,12 +49,12 @@ namespace svxform
     class DataColumn;
 }
 
-enum GridRowStatus
+enum class GridRowStatus
 {
-    GRS_CLEAN,
-    GRS_MODIFIED,
-    GRS_DELETED,
-    GRS_INVALID
+    Clean,
+    Modified,
+    Deleted,
+    Invalid
 };
 
 
@@ -71,7 +71,7 @@ class DbGridRow : public SvRefBase
                                                     // row is no longer valid
                                                     // is removed on the next positioning
 public:
-    DbGridRow():m_eStatus(GRS_CLEAN), m_bIsNew(true) { }
+    DbGridRow():m_eStatus(GridRowStatus::Clean), m_bIsNew(true) { }
     DbGridRow(CursorWrapper* pCur, bool bPaintCursor);
     void SetState(CursorWrapper* pCur, bool bPaintCursor);
 
@@ -87,8 +87,8 @@ public:
 
     const css::uno::Any& GetBookmark() const { return m_aBookmark; }
 
-    bool    IsValid() const { return m_eStatus == GRS_CLEAN || m_eStatus == GRS_MODIFIED; }
-    bool    IsModified() const { return m_eStatus == GRS_MODIFIED; }
+    bool    IsValid() const { return m_eStatus == GridRowStatus::Clean || m_eStatus == GridRowStatus::Modified; }
+    bool    IsModified() const { return m_eStatus == GridRowStatus::Modified; }
 };
 
 typedef tools::SvRef<DbGridRow> DbGridRowRef;
