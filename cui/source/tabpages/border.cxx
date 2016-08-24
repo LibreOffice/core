@@ -709,10 +709,10 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
                 if ( ((mbHorEnabled || mbVerEnabled || (nSWMode & SwBorderModes::TABLE)) &&
                         (m_pLeftMF->IsModified()||m_pRightMF->IsModified()||
                             m_pTopMF->IsModified()||m_pBottomMF->IsModified()) )||
-                     m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_TOP ) != svx::FRAMESTATE_HIDE
-                     || m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_BOTTOM ) != svx::FRAMESTATE_HIDE
-                     || m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_LEFT ) != svx::FRAMESTATE_HIDE
-                     || m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_RIGHT ) != svx::FRAMESTATE_HIDE )
+                     m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_TOP ) != svx::FrameBorderState::Hide
+                     || m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_BOTTOM ) != svx::FrameBorderState::Hide
+                     || m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_LEFT ) != svx::FrameBorderState::Hide
+                     || m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_RIGHT ) != svx::FrameBorderState::Hide )
                 {
                     const SvxBoxInfoItem* pOldBoxInfoItem = static_cast<const SvxBoxInfoItem*>(GetOldItem(
                                                         *rCoreAttrs, SID_ATTR_BORDER_INNER ));
@@ -752,12 +752,12 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 
     // note Don't Care Status in the Info-Item:
 
-    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::TOP,    m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_TOP )    != svx::FRAMESTATE_DONTCARE );
-    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::BOTTOM, m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_BOTTOM ) != svx::FRAMESTATE_DONTCARE );
-    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::LEFT,   m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_LEFT )   != svx::FRAMESTATE_DONTCARE );
-    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::RIGHT,  m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_RIGHT )  != svx::FRAMESTATE_DONTCARE );
-    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::HORI,   m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_HOR )    != svx::FRAMESTATE_DONTCARE );
-    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::VERT,   m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_VER )    != svx::FRAMESTATE_DONTCARE );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::TOP,    m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_TOP )    != svx::FrameBorderState::DontCare );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::BOTTOM, m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_BOTTOM ) != svx::FrameBorderState::DontCare );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::LEFT,   m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_LEFT )   != svx::FrameBorderState::DontCare );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::RIGHT,  m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_RIGHT )  != svx::FrameBorderState::DontCare );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::HORI,   m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_HOR )    != svx::FrameBorderState::DontCare );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::VERT,   m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_VER )    != svx::FrameBorderState::DontCare );
 
 
     // Put or Clear of the border?
@@ -811,9 +811,9 @@ void SvxBorderTabPage::HideShadowControls()
 
 IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, SelPreHdl_Impl, ValueSet*, void)
 {
-    const svx::FrameBorderState SHOW = svx::FRAMESTATE_SHOW;
-    const svx::FrameBorderState HIDE = svx::FRAMESTATE_HIDE;
-    const svx::FrameBorderState DONT = svx::FRAMESTATE_DONTCARE;
+    const svx::FrameBorderState SHOW = svx::FrameBorderState::Show;
+    const svx::FrameBorderState HIDE = svx::FrameBorderState::Hide;
+    const svx::FrameBorderState DONT = svx::FrameBorderState::DontCare;
 
     static const svx::FrameBorderState ppeStates[][ svx::FRAMEBORDERTYPE_COUNT ] =
     {                   /*    Left  Right Top   Bot   Hor   Ver   TLBR  BLTR */
@@ -1180,10 +1180,10 @@ IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, LinesChanged_Impl, LinkParamNone*, void)
         {
             if(bLineSet)
             {
-                nValid  = (m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_TOP)    == svx::FRAMESTATE_SHOW) ? SvxBoxInfoItemValidFlags::TOP : SvxBoxInfoItemValidFlags::NONE;
-                nValid |= (m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_BOTTOM) == svx::FRAMESTATE_SHOW) ? SvxBoxInfoItemValidFlags::BOTTOM : SvxBoxInfoItemValidFlags::NONE;
-                nValid |= (m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_LEFT)   == svx::FRAMESTATE_SHOW) ? SvxBoxInfoItemValidFlags::LEFT : SvxBoxInfoItemValidFlags::NONE;
-                nValid |= (m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_RIGHT ) == svx::FRAMESTATE_SHOW) ? SvxBoxInfoItemValidFlags::RIGHT : SvxBoxInfoItemValidFlags::NONE;
+                nValid  = (m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_TOP)    == svx::FrameBorderState::Show) ? SvxBoxInfoItemValidFlags::TOP : SvxBoxInfoItemValidFlags::NONE;
+                nValid |= (m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_BOTTOM) == svx::FrameBorderState::Show) ? SvxBoxInfoItemValidFlags::BOTTOM : SvxBoxInfoItemValidFlags::NONE;
+                nValid |= (m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_LEFT)   == svx::FrameBorderState::Show) ? SvxBoxInfoItemValidFlags::LEFT : SvxBoxInfoItemValidFlags::NONE;
+                nValid |= (m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_RIGHT ) == svx::FrameBorderState::Show) ? SvxBoxInfoItemValidFlags::RIGHT : SvxBoxInfoItemValidFlags::NONE;
             }
             else
                 nValid = SvxBoxInfoItemValidFlags::NONE;
@@ -1257,7 +1257,7 @@ void SvxBorderTabPage::UpdateRemoveAdjCellBorderCB( sal_uInt16 nPreset )
     {
         if( pOldBoxItem->GetLine( eTypes2[i] ) || !( pOldBoxInfoItem->IsValid( eTypes1[i].second ) ) )
         {
-            if( m_pFrameSel->GetFrameBorderState( eTypes1[i].first ) == svx::FRAMESTATE_HIDE )
+            if( m_pFrameSel->GetFrameBorderState( eTypes1[i].first ) == svx::FrameBorderState::Hide )
             {
                 bBorderDeletionReq = true;
                 break;

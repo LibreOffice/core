@@ -108,7 +108,7 @@ inline void lclPolyPolyUnion( tools::PolyPolygon& rDest, const tools::PolyPolygo
 
 FrameBorder::FrameBorder( FrameBorderType eType ) :
     meType( eType ),
-    meState( FRAMESTATE_HIDE ),
+    meState( FrameBorderState::Hide ),
     meKeyLeft( FRAMEBORDER_NONE ),
     meKeyRight( FRAMEBORDER_NONE ),
     meKeyTop( FRAMEBORDER_NONE ),
@@ -122,7 +122,7 @@ void FrameBorder::Enable( FrameSelFlags nFlags )
 {
     mbEnabled = (nFlags & lclGetFlagFromType( meType )) != 0;
     if( !mbEnabled )
-        SetState( FRAMESTATE_HIDE );
+        SetState( FrameBorderState::Hide );
 }
 
 void FrameBorder::SetCoreStyle( const SvxBorderLine* pStyle )
@@ -134,7 +134,7 @@ void FrameBorder::SetCoreStyle( const SvxBorderLine* pStyle )
 
     // from twips to points
     maUIStyle.Set( maCoreStyle, 0.05, FRAMESEL_GEOM_WIDTH );
-    meState = maUIStyle.Prim() ? FRAMESTATE_SHOW : FRAMESTATE_HIDE;
+    meState = maUIStyle.Prim() ? FrameBorderState::Show : FrameBorderState::Hide;
 }
 
 void FrameBorder::SetState( FrameBorderState eState )
@@ -142,14 +142,14 @@ void FrameBorder::SetState( FrameBorderState eState )
     meState = eState;
     switch( meState )
     {
-        case FRAMESTATE_SHOW:
+        case FrameBorderState::Show:
             SAL_WARN( "svx.dialog", "svx::FrameBorder::SetState - use SetCoreStyle to make border visible" );
         break;
-        case FRAMESTATE_HIDE:
+        case FrameBorderState::Hide:
             maCoreStyle = SvxBorderLine();
             maUIStyle.Clear();
         break;
-        case FRAMESTATE_DONTCARE:
+        case FrameBorderState::DontCare:
             maCoreStyle = SvxBorderLine();
             maUIStyle = frame::Style(3, 0, 0, table::BorderLineStyle::SOLID); //OBJ_FRAMESTYLE_DONTCARE
         break;
@@ -610,8 +610,8 @@ void FrameSelectorImpl::DrawAllFrameBorders()
     // Translate core colors to current UI colors (regards current background and HC mode).
     for( FrameBorderIter aIt( maEnabBorders ); aIt.Is(); ++aIt )
     {
-        Color aCoreColorPrim = ((*aIt)->GetState() == FRAMESTATE_DONTCARE) ? maMarkCol : (*aIt)->GetCoreStyle().GetColorOut();
-        Color aCoreColorSecn = ((*aIt)->GetState() == FRAMESTATE_DONTCARE) ? maMarkCol : (*aIt)->GetCoreStyle().GetColorIn();
+        Color aCoreColorPrim = ((*aIt)->GetState() == FrameBorderState::DontCare) ? maMarkCol : (*aIt)->GetCoreStyle().GetColorOut();
+        Color aCoreColorSecn = ((*aIt)->GetState() == FrameBorderState::DontCare) ? maMarkCol : (*aIt)->GetCoreStyle().GetColorIn();
         (*aIt)->SetUIColorPrim( GetDrawLineColor( aCoreColorPrim ) );
         (*aIt)->SetUIColorSecn( GetDrawLineColor( aCoreColorSecn ) );
     }
@@ -709,7 +709,7 @@ void FrameSelectorImpl::SetBorderState( FrameBorder& rBorder, FrameBorderState e
     DBG_ASSERT( rBorder.IsEnabled(), "svx::FrameSelectorImpl::SetBorderState - access to disabled border" );
     Any aOld;
     Any aNew;
-    Any& rMod = eState == FRAMESTATE_SHOW ? aNew : aOld;
+    Any& rMod = eState == FrameBorderState::Show ? aNew : aOld;
     rMod <<= AccessibleStateType::CHECKED;
     Reference< XAccessible > xRet;
     size_t nVecIdx = static_cast< size_t >( rBorder.GetType() );
@@ -717,7 +717,7 @@ void FrameSelectorImpl::SetBorderState( FrameBorder& rBorder, FrameBorderState e
         xRet = mxChildVec[ --nVecIdx ];
     a11y::AccFrameSelector* pFrameSelector = static_cast<a11y::AccFrameSelector*>(xRet.get());
 
-    if( eState == FRAMESTATE_SHOW )
+    if( eState == FrameBorderState::Show )
         SetBorderCoreStyle( rBorder, &maCurrStyle );
     else
         rBorder.SetState( eState );
@@ -739,14 +739,14 @@ void FrameSelectorImpl::ToggleBorderState( FrameBorder& rBorder )
     switch( rBorder.GetState() )
     {
         // same order as tristate check box: visible -> don't care -> hidden
-        case FRAMESTATE_SHOW:
-            SetBorderState( rBorder, bDontCare ? FRAMESTATE_DONTCARE : FRAMESTATE_HIDE );
+        case FrameBorderState::Show:
+            SetBorderState( rBorder, bDontCare ? FrameBorderState::DontCare : FrameBorderState::Hide );
         break;
-        case FRAMESTATE_HIDE:
-            SetBorderState( rBorder, FRAMESTATE_SHOW );
+        case FrameBorderState::Hide:
+            SetBorderState( rBorder, FrameBorderState::Show );
         break;
-        case FRAMESTATE_DONTCARE:
-            SetBorderState( rBorder, FRAMESTATE_HIDE );
+        case FrameBorderState::DontCare:
+            SetBorderState( rBorder, FrameBorderState::Hide );
         break;
     }
 }
@@ -863,21 +863,21 @@ void FrameSelector::ShowBorder( FrameBorderType eBorder, const SvxBorderLine* pS
 
 void FrameSelector::SetBorderDontCare( FrameBorderType eBorder )
 {
-    mxImpl->SetBorderState( mxImpl->GetBorderAccess( eBorder ), FRAMESTATE_DONTCARE );
+    mxImpl->SetBorderState( mxImpl->GetBorderAccess( eBorder ), FrameBorderState::DontCare );
 }
 
 bool FrameSelector::IsAnyBorderVisible() const
 {
     bool bIsSet = false;
     for( FrameBorderCIter aIt( mxImpl->maEnabBorders ); !bIsSet && aIt.Is(); ++aIt )
-        bIsSet = ((*aIt)->GetState() == FRAMESTATE_SHOW);
+        bIsSet = ((*aIt)->GetState() == FrameBorderState::Show);
     return bIsSet;
 }
 
 void FrameSelector::HideAllBorders()
 {
     for( FrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
-        mxImpl->SetBorderState( **aIt, FRAMESTATE_HIDE );
+        mxImpl->SetBorderState( **aIt, FrameBorderState::Hide );
 }
 
 bool FrameSelector::GetVisibleWidth( long& rnWidth, SvxBorderStyle& rnStyle ) const
@@ -976,14 +976,14 @@ void FrameSelector::SetStyleToSelection( long nWidth, SvxBorderStyle nStyle )
     mxImpl->maCurrStyle.SetBorderLineStyle( nStyle );
     mxImpl->maCurrStyle.SetWidth( nWidth );
     for( SelFrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
-        mxImpl->SetBorderState( **aIt, FRAMESTATE_SHOW );
+        mxImpl->SetBorderState( **aIt, FrameBorderState::Show );
 }
 
 void FrameSelector::SetColorToSelection( const Color& rColor )
 {
     mxImpl->maCurrStyle.SetColor( rColor );
     for( SelFrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
-        mxImpl->SetBorderState( **aIt, FRAMESTATE_SHOW );
+        mxImpl->SetBorderState( **aIt, FrameBorderState::Show );
 }
 
 // accessibility
@@ -1101,8 +1101,8 @@ void FrameSelector::MouseButtonDown( const MouseEvent& rMEvt )
             else
             {
                 // hide a "don't care" frame border only if it is not clicked
-                if( bHideDontCare && ((*aIt)->GetState() == FRAMESTATE_DONTCARE) )
-                    mxImpl->SetBorderState( **aIt, FRAMESTATE_HIDE );
+                if( bHideDontCare && ((*aIt)->GetState() == FrameBorderState::DontCare) )
+                    mxImpl->SetBorderState( **aIt, FrameBorderState::Hide );
 
                 // deselect frame borders not clicked (if SHIFT or CTRL are not pressed)
                 if( !rMEvt.IsShift() && !rMEvt.IsMod1() )
@@ -1121,7 +1121,7 @@ void FrameSelector::MouseButtonDown( const MouseEvent& rMEvt )
                 // new frame border selected, selection extended, or selected borders different? -> show
                 for( SelFrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
                     // SetBorderState() sets current style and color to the frame border
-                    mxImpl->SetBorderState( **aIt, FRAMESTATE_SHOW );
+                    mxImpl->SetBorderState( **aIt, FrameBorderState::Show );
             }
             else
             {
@@ -1216,7 +1216,7 @@ void FrameSelector::GetFocus()
         SelectBorder(borderType);
     }
     for( SelFrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
-            mxImpl->SetBorderState( **aIt, FRAMESTATE_SHOW );
+            mxImpl->SetBorderState( **aIt, FrameBorderState::Show );
     Control::GetFocus();
 }
 

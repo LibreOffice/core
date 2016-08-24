@@ -230,7 +230,7 @@ struct FrameBorderDummy_Pred
 /** Predicate for frame border iterators to use only visible borders in a container. */
 struct FrameBorderVisible_Pred
 {
-    inline bool operator()( const FrameBorder* pBorder ) const { return pBorder->GetState() == FRAMESTATE_SHOW; }
+    inline bool operator()( const FrameBorder* pBorder ) const { return pBorder->GetState() == FrameBorderState::Show; }
 };
 
 /** Predicate for frame border iterators to use only selected borders in a container. */

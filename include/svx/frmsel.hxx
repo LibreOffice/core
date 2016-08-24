@@ -69,11 +69,11 @@ const FrameSelFlags FRAMESEL_DONTCARE   = 0x0100;
 
 
 /** All possible states of a frame border. */
-enum FrameBorderState
+enum class FrameBorderState
 {
-    FRAMESTATE_SHOW,        /// Frame border has a visible style.
-    FRAMESTATE_HIDE,        /// Frame border is hidden (off).
-    FRAMESTATE_DONTCARE     /// Frame border is in don't care state (if enabled).
+    Show,        /// Frame border has a visible style.
+    Hide,        /// Frame border is hidden (off).
+    DontCare     /// Frame border is in don't care state (if enabled).
 };
 
 

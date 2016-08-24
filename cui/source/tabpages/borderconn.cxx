@@ -70,7 +70,7 @@ private:
 
 bool FrameSelectorWrapper::IsControlDontKnow() const
 {
-    return GetControl().GetFrameBorderState( meBorder ) == FRAMESTATE_DONTCARE;
+    return GetControl().GetFrameBorderState( meBorder ) == FrameBorderState::DontCare;
 }
 
 void FrameSelectorWrapper::SetControlDontKnow( bool bSet )
