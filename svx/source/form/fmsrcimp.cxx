@@ -638,7 +638,7 @@ FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
     ,m_nCurrentFieldIndex(-2)   // -1 hat schon eine Bedeutung, also nehme ich -2 fuer 'ungueltig'
     ,m_xOriginalIterator(xCursor)
     ,m_xClonedIterator(m_xOriginalIterator, true)
-    ,m_eSearchForType(SEARCHFOR_STRING)
+    ,m_eSearchForType(SearchFor::String)
     ,m_srResult(SR_FOUND)
     ,m_bSearchingCurrently(false)
     ,m_bCancelAsynchRequest(false)
@@ -957,8 +957,8 @@ void FmSearchEngine::SearchNextImpl()
 
     PropagateProgress(true);
     SEARCH_RESULT srResult;
-    if (m_eSearchForType != SEARCHFOR_STRING)
-        srResult = SearchSpecial(m_eSearchForType == SEARCHFOR_NULL, nFieldPos, iterFieldCheck, iterBegin, iterEnd);
+    if (m_eSearchForType != SearchFor::String)
+        srResult = SearchSpecial(m_eSearchForType == SearchFor::Null, nFieldPos, iterFieldCheck, iterBegin, iterEnd);
     else if (!m_bRegular && !m_bLevenshtein)
         srResult = SearchWildcard(strSearchExpression, nFieldPos, iterFieldCheck, iterBegin, iterEnd);
     else
@@ -1084,14 +1084,14 @@ void FmSearchEngine::ImplStartNextSearch()
 void FmSearchEngine::SearchNext(const OUString& strExpression)
 {
     m_strSearchExpression = strExpression;
-    m_eSearchForType = SEARCHFOR_STRING;
+    m_eSearchForType = SearchFor::String;
     ImplStartNextSearch();
 }
 
 
 void FmSearchEngine::SearchNextSpecial(bool _bSearchForNull)
 {
-    m_eSearchForType = _bSearchForNull ? SEARCHFOR_NULL : SEARCHFOR_NOTNULL;
+    m_eSearchForType = _bSearchForNull ? SearchFor::Null : SearchFor::NotNull;
     ImplStartNextSearch();
 }
 

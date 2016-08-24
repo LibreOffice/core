@@ -166,7 +166,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine
     friend class FmSearchThread;
 
     enum SEARCH_RESULT { SR_FOUND, SR_NOTFOUND, SR_ERROR, SR_CANCELED };
-    enum SEARCHFOR_TYPE { SEARCHFOR_STRING, SEARCHFOR_NULL, SEARCHFOR_NOTNULL };
+    enum class SearchFor { String, Null, NotNull };
 
     CursorWrapper                   m_xSearchCursor;
     std::deque<sal_Int32>           m_arrFieldMapping;
@@ -204,7 +204,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine
 
     // Communication with the thread that does the actual searching
     OUString            m_strSearchExpression;              // forward direction
-    SEARCHFOR_TYPE      m_eSearchForType;                   // ditto
+    SearchFor      m_eSearchForType;                   // ditto
     SEARCH_RESULT       m_srResult;                         // backward direction
 
     // The link we broadcast the progress and the result to
