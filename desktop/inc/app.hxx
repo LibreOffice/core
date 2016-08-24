@@ -31,7 +31,9 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <osl/mutex.hxx>
+
 #include <memory>
+#include <thread>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
@@ -174,6 +176,7 @@ class Desktop : public Application
 
         std::unique_ptr<Lockfile> m_xLockfile;
         Timer                   m_firstRunTimer;
+        std::thread             m_aUpdateThread;
 
         static ResMgr*          pResMgr;
 };

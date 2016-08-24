@@ -31,6 +31,7 @@ $(eval $(call gb_Library_use_externals,sofficeapp, \
     icu_headers \
     icui18n \
     icuuc \
+    curl \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,sofficeapp,\
@@ -106,7 +107,8 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
     desktop/source/app/officeipcthread \
     desktop/source/app/opencl \
     desktop/source/app/sofficemain \
-    desktop/source/app/updater \
+    $(if $(ENABLE_ONLINE_UPDATE_MAR),\
+        desktop/source/app/updater )\
     desktop/source/app/userinstall \
     desktop/source/migration/migration \
 ))
