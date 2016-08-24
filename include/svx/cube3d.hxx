@@ -22,6 +22,7 @@
 
 #include <svx/obj3d.hxx>
 #include <svx/svxdllapi.h>
+#include <o3tl/typed_flags_set.hxx>
 
 /*************************************************************************
 |*
@@ -36,10 +37,23 @@
 |*
 \************************************************************************/
 
-enum { CUBE_BOTTOM = 0x0001, CUBE_BACK = 0x0002, CUBE_LEFT = 0x0004,
-       CUBE_TOP = 0x0008, CUBE_RIGHT = 0x0010, CUBE_FRONT = 0x0020,
-       CUBE_FULL = 0x003F, CUBE_OPEN_TB = 0x0036, CUBE_OPEN_LR = 0x002B,
-       CUBE_OPEN_FB = 0x001D };
+enum class CubeFaces
+{
+    Bottom        = 0x0001,
+    Back          = 0x0002,
+    Left          = 0x0004,
+    Top           = 0x0008,
+    Right         = 0x0010,
+    Front         = 0x0020,
+    Full          = Bottom | Back | Left | Top | Right | Front,
+    OpenTopBottom = Back | Left | Right | Front,
+    OpenLeftRight = Bottom | Back | Top | Front,
+    OpenFrontBack = Bottom | Left | Top | Right
+};
+namespace o3tl
+{
+    template<> struct typed_flags<CubeFaces> : is_typed_flags<CubeFaces, 0x003f> {};
+}
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC E3dCubeObj : public E3dCompoundObject
 {
@@ -47,7 +61,7 @@ private:
     // Parameter
     basegfx::B3DPoint                   aCubePos;
     basegfx::B3DVector                  aCubeSize;
-    sal_uInt16                          nSideFlags;
+    CubeFaces                           nSideFlags;
 
     // BOOLeans
     bool                                bPosIsCenter : 1;
