@@ -55,7 +55,7 @@ FrameBorderType GetFrameBorderTypeFromIndex( size_t nIndex )
 
 size_t GetIndexFromFrameBorderType( FrameBorderType eBorder )
 {
-    DBG_ASSERT( eBorder != FRAMEBORDER_NONE,
+    DBG_ASSERT( eBorder != FrameBorderType::NONE,
         "svx::GetIndexFromFrameBorderType - invalid frame border type" );
     return static_cast< size_t >( eBorder ) - 1;
 }
@@ -84,15 +84,15 @@ FrameSelFlags lclGetFlagFromType( FrameBorderType eBorder )
 {
     switch( eBorder )
     {
-        case FRAMEBORDER_LEFT:      return FrameSelFlags::Left;
-        case FRAMEBORDER_RIGHT:     return FrameSelFlags::Right;
-        case FRAMEBORDER_TOP:       return FrameSelFlags::Top;
-        case FRAMEBORDER_BOTTOM:    return FrameSelFlags::Bottom;
-        case FRAMEBORDER_HOR:       return FrameSelFlags::InnerHorizontal;
-        case FRAMEBORDER_VER:       return FrameSelFlags::InnerVertical;
-        case FRAMEBORDER_TLBR:      return FrameSelFlags::DiagonalTLBR;
-        case FRAMEBORDER_BLTR:      return FrameSelFlags::DiagonalBLTR;
-        case FRAMEBORDER_NONE : break;
+        case FrameBorderType::Left:      return FrameSelFlags::Left;
+        case FrameBorderType::Right:     return FrameSelFlags::Right;
+        case FrameBorderType::Top:       return FrameSelFlags::Top;
+        case FrameBorderType::Bottom:    return FrameSelFlags::Bottom;
+        case FrameBorderType::Horizontal:       return FrameSelFlags::InnerHorizontal;
+        case FrameBorderType::Vertical:       return FrameSelFlags::InnerVertical;
+        case FrameBorderType::TLBR:      return FrameSelFlags::DiagonalTLBR;
+        case FrameBorderType::BLTR:      return FrameSelFlags::DiagonalBLTR;
+        case FrameBorderType::NONE : break;
     }
     return FrameSelFlags::NONE;
 }
@@ -109,10 +109,10 @@ inline void lclPolyPolyUnion( tools::PolyPolygon& rDest, const tools::PolyPolygo
 FrameBorder::FrameBorder( FrameBorderType eType ) :
     meType( eType ),
     meState( FrameBorderState::Hide ),
-    meKeyLeft( FRAMEBORDER_NONE ),
-    meKeyRight( FRAMEBORDER_NONE ),
-    meKeyTop( FRAMEBORDER_NONE ),
-    meKeyBottom( FRAMEBORDER_NONE ),
+    meKeyLeft( FrameBorderType::NONE ),
+    meKeyRight( FrameBorderType::NONE ),
+    meKeyTop( FrameBorderType::NONE ),
+    meKeyBottom( FrameBorderType::NONE ),
     mbEnabled( false ),
     mbSelected( false )
 {
@@ -192,7 +192,7 @@ void FrameBorder::SetKeyboardNeighbors(
 
 FrameBorderType FrameBorder::GetKeyboardNeighbor( sal_uInt16 nKeyCode ) const
 {
-    FrameBorderType eBorder = FRAMEBORDER_NONE;
+    FrameBorderType eBorder = FrameBorderType::NONE;
     switch( nKeyCode )
     {
         case KEY_LEFT:  eBorder = meKeyLeft;      break;
@@ -209,14 +209,14 @@ FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
     mrFrameSel( rFrameSel ),
     mpVirDev( VclPtr<VirtualDevice>::Create() ),
     maILArrows(),
-    maLeft( FRAMEBORDER_LEFT ),
-    maRight( FRAMEBORDER_RIGHT ),
-    maTop( FRAMEBORDER_TOP ),
-    maBottom( FRAMEBORDER_BOTTOM ),
-    maHor( FRAMEBORDER_HOR ),
-    maVer( FRAMEBORDER_VER ),
-    maTLBR( FRAMEBORDER_TLBR ),
-    maBLTR( FRAMEBORDER_BLTR ),
+    maLeft( FrameBorderType::Left ),
+    maRight( FrameBorderType::Right ),
+    maTop( FrameBorderType::Top ),
+    maBottom( FrameBorderType::Bottom ),
+    maHor( FrameBorderType::Horizontal ),
+    maVer( FrameBorderType::Vertical ),
+    maTLBR( FrameBorderType::TLBR ),
+    maBLTR( FrameBorderType::BLTR ),
     mnFlags( FrameSelFlags::Outer ),
     mnCtrlSize( 0 ),
     mnArrowSize( 0 ),
@@ -239,14 +239,14 @@ FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
     FreeResource();
 
     maAllBorders.resize( FRAMEBORDERTYPE_COUNT, nullptr );
-    maAllBorders[ GetIndexFromFrameBorderType( FRAMEBORDER_LEFT   ) ] = &maLeft;
-    maAllBorders[ GetIndexFromFrameBorderType( FRAMEBORDER_RIGHT  ) ] = &maRight;
-    maAllBorders[ GetIndexFromFrameBorderType( FRAMEBORDER_TOP    ) ] = &maTop;
-    maAllBorders[ GetIndexFromFrameBorderType( FRAMEBORDER_BOTTOM ) ] = &maBottom;
-    maAllBorders[ GetIndexFromFrameBorderType( FRAMEBORDER_HOR    ) ] = &maHor;
-    maAllBorders[ GetIndexFromFrameBorderType( FRAMEBORDER_VER    ) ] = &maVer;
-    maAllBorders[ GetIndexFromFrameBorderType( FRAMEBORDER_TLBR   ) ] = &maTLBR;
-    maAllBorders[ GetIndexFromFrameBorderType( FRAMEBORDER_BLTR   ) ] = &maBLTR;
+    maAllBorders[ GetIndexFromFrameBorderType( FrameBorderType::Left   ) ] = &maLeft;
+    maAllBorders[ GetIndexFromFrameBorderType( FrameBorderType::Right  ) ] = &maRight;
+    maAllBorders[ GetIndexFromFrameBorderType( FrameBorderType::Top    ) ] = &maTop;
+    maAllBorders[ GetIndexFromFrameBorderType( FrameBorderType::Bottom ) ] = &maBottom;
+    maAllBorders[ GetIndexFromFrameBorderType( FrameBorderType::Horizontal    ) ] = &maHor;
+    maAllBorders[ GetIndexFromFrameBorderType( FrameBorderType::Vertical    ) ] = &maVer;
+    maAllBorders[ GetIndexFromFrameBorderType( FrameBorderType::TLBR   ) ] = &maTLBR;
+    maAllBorders[ GetIndexFromFrameBorderType( FrameBorderType::BLTR   ) ] = &maBLTR;
 #if OSL_DEBUG_LEVEL >= 2
     {
         bool bOk = true;
@@ -255,14 +255,14 @@ FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
     }
 #endif
     //                             left neighbor     right neighbor     upper neighbor    lower neighbor
-    maLeft.SetKeyboardNeighbors(   FRAMEBORDER_NONE, FRAMEBORDER_TLBR,  FRAMEBORDER_TOP,  FRAMEBORDER_BOTTOM );
-    maRight.SetKeyboardNeighbors(  FRAMEBORDER_BLTR, FRAMEBORDER_NONE,  FRAMEBORDER_TOP,  FRAMEBORDER_BOTTOM );
-    maTop.SetKeyboardNeighbors(    FRAMEBORDER_LEFT, FRAMEBORDER_RIGHT, FRAMEBORDER_NONE, FRAMEBORDER_TLBR );
-    maBottom.SetKeyboardNeighbors( FRAMEBORDER_LEFT, FRAMEBORDER_RIGHT, FRAMEBORDER_BLTR, FRAMEBORDER_NONE );
-    maHor.SetKeyboardNeighbors(    FRAMEBORDER_LEFT, FRAMEBORDER_RIGHT, FRAMEBORDER_TLBR, FRAMEBORDER_BLTR );
-    maVer.SetKeyboardNeighbors(    FRAMEBORDER_TLBR, FRAMEBORDER_BLTR,  FRAMEBORDER_TOP,  FRAMEBORDER_BOTTOM );
-    maTLBR.SetKeyboardNeighbors(   FRAMEBORDER_LEFT, FRAMEBORDER_VER,   FRAMEBORDER_TOP,  FRAMEBORDER_HOR );
-    maBLTR.SetKeyboardNeighbors(   FRAMEBORDER_VER,  FRAMEBORDER_RIGHT, FRAMEBORDER_HOR,  FRAMEBORDER_BOTTOM );
+    maLeft.SetKeyboardNeighbors(   FrameBorderType::NONE, FrameBorderType::TLBR,  FrameBorderType::Top,  FrameBorderType::Bottom );
+    maRight.SetKeyboardNeighbors(  FrameBorderType::BLTR, FrameBorderType::NONE,  FrameBorderType::Top,  FrameBorderType::Bottom );
+    maTop.SetKeyboardNeighbors(    FrameBorderType::Left, FrameBorderType::Right, FrameBorderType::NONE, FrameBorderType::TLBR );
+    maBottom.SetKeyboardNeighbors( FrameBorderType::Left, FrameBorderType::Right, FrameBorderType::BLTR, FrameBorderType::NONE );
+    maHor.SetKeyboardNeighbors(    FrameBorderType::Left, FrameBorderType::Right, FrameBorderType::TLBR, FrameBorderType::BLTR );
+    maVer.SetKeyboardNeighbors(    FrameBorderType::TLBR, FrameBorderType::BLTR,  FrameBorderType::Top,  FrameBorderType::Bottom );
+    maTLBR.SetKeyboardNeighbors(   FrameBorderType::Left, FrameBorderType::Vertical,   FrameBorderType::Top,  FrameBorderType::Horizontal );
+    maBLTR.SetKeyboardNeighbors(   FrameBorderType::Vertical,  FrameBorderType::Right, FrameBorderType::Horizontal,  FrameBorderType::Bottom );
 
     Initialize(mnFlags);
 }
@@ -544,12 +544,12 @@ void FrameSelectorImpl::DrawArrows( const FrameBorder& rBorder )
     long nLinePos = 0;
     switch( rBorder.GetType() )
     {
-        case FRAMEBORDER_LEFT:
-        case FRAMEBORDER_TOP:       nLinePos = mnLine1; break;
-        case FRAMEBORDER_VER:
-        case FRAMEBORDER_HOR:       nLinePos = mnLine2; break;
-        case FRAMEBORDER_RIGHT:
-        case FRAMEBORDER_BOTTOM:    nLinePos = mnLine3; break;
+        case FrameBorderType::Left:
+        case FrameBorderType::Top:       nLinePos = mnLine1; break;
+        case FrameBorderType::Vertical:
+        case FrameBorderType::Horizontal:       nLinePos = mnLine2; break;
+        case FrameBorderType::Right:
+        case FrameBorderType::Bottom:    nLinePos = mnLine3; break;
         default: ; //prevent warning
     }
     nLinePos -= mnArrowSize / 2;
@@ -560,25 +560,25 @@ void FrameSelectorImpl::DrawArrows( const FrameBorder& rBorder )
     sal_uInt16 nImgId1 = 0, nImgId2 = 0;
     switch( rBorder.GetType() )
     {
-        case FRAMEBORDER_LEFT:
-        case FRAMEBORDER_RIGHT:
-        case FRAMEBORDER_VER:
+        case FrameBorderType::Left:
+        case FrameBorderType::Right:
+        case FrameBorderType::Vertical:
             aPos1 = Point( nLinePos, nTLPos ); nImgId1 = 1;
             aPos2 = Point( nLinePos, nBRPos ); nImgId2 = 2;
         break;
 
-        case FRAMEBORDER_TOP:
-        case FRAMEBORDER_BOTTOM:
-        case FRAMEBORDER_HOR:
+        case FrameBorderType::Top:
+        case FrameBorderType::Bottom:
+        case FrameBorderType::Horizontal:
             aPos1 = Point( nTLPos, nLinePos ); nImgId1 = 3;
             aPos2 = Point( nBRPos, nLinePos ); nImgId2 = 4;
         break;
 
-        case FRAMEBORDER_TLBR:
+        case FrameBorderType::TLBR:
             aPos1 = Point( nTLPos, nTLPos ); nImgId1 = 5;
             aPos2 = Point( nBRPos, nBRPos ); nImgId2 = 6;
         break;
-        case FRAMEBORDER_BLTR:
+        case FrameBorderType::BLTR:
             aPos1 = Point( nTLPos, nBRPos ); nImgId1 = 7;
             aPos2 = Point( nBRPos, nTLPos ); nImgId2 = 8;
         break;
@@ -819,7 +819,7 @@ sal_Int32 FrameSelector::GetEnabledBorderCount() const
 
 FrameBorderType FrameSelector::GetEnabledBorderType( sal_Int32 nIndex ) const
 {
-    FrameBorderType eBorder = FRAMEBORDER_NONE;
+    FrameBorderType eBorder = FrameBorderType::NONE;
     if( nIndex >= 0 )
     {
         size_t nVecIdx = static_cast< size_t >( nIndex );
@@ -991,7 +991,7 @@ Reference< XAccessible > FrameSelector::CreateAccessible()
 {
     if( !mxImpl->mxAccess.is() )
         mxImpl->mxAccess = mxImpl->mpAccess =
-            new a11y::AccFrameSelector( *this, FRAMEBORDER_NONE );
+            new a11y::AccFrameSelector( *this, FrameBorderType::NONE );
     return mxImpl->mxAccess;
 }
 
@@ -1168,10 +1168,10 @@ void FrameSelector::KeyInput( const KeyEvent& rKEvt )
                     {
                         eBorder = mxImpl->GetBorder( eBorder ).GetKeyboardNeighbor( nCode );
                     }
-                    while( (eBorder != FRAMEBORDER_NONE) && !IsBorderEnabled( eBorder ) );
+                    while( (eBorder != FrameBorderType::NONE) && !IsBorderEnabled( eBorder ) );
 
                     // select the frame border
-                    if( eBorder != FRAMEBORDER_NONE )
+                    if( eBorder != FrameBorderType::NONE )
                     {
                         DeselectAllBorders();
                         SelectBorder( eBorder );
@@ -1196,23 +1196,23 @@ void FrameSelector::GetFocus()
         mxImpl->mpAccess->NotifyFocusListeners( true );
     if (IsAnyBorderSelected())
     {
-        FrameBorderType borderType = FRAMEBORDER_NONE;
+        FrameBorderType borderType = FrameBorderType::NONE;
         if (mxImpl->maLeft.IsSelected())
-            borderType = FRAMEBORDER_LEFT;
+            borderType = FrameBorderType::Left;
         else if (mxImpl->maRight.IsSelected())
-            borderType = FRAMEBORDER_RIGHT;
+            borderType = FrameBorderType::Right;
         else if (mxImpl->maTop.IsSelected())
-            borderType = FRAMEBORDER_TOP;
+            borderType = FrameBorderType::Top;
         else if (mxImpl->maBottom.IsSelected())
-            borderType = FRAMEBORDER_BOTTOM;
+            borderType = FrameBorderType::Bottom;
         else if (mxImpl->maHor.IsSelected())
-            borderType = FRAMEBORDER_HOR;
+            borderType = FrameBorderType::Horizontal;
         else if (mxImpl->maVer.IsSelected())
-            borderType = FRAMEBORDER_VER;
+            borderType = FrameBorderType::Vertical;
         else if (mxImpl->maTLBR.IsSelected())
-            borderType = FRAMEBORDER_TLBR;
+            borderType = FrameBorderType::TLBR;
         else if (mxImpl->maBLTR.IsSelected())
-            borderType = FRAMEBORDER_BLTR;
+            borderType = FrameBorderType::BLTR;
         SelectBorder(borderType);
     }
     for( SelFrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )

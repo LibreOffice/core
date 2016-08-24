@@ -335,10 +335,10 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
 
     if( mbUseMarginItem )
         AddItemConnection( svx::CreateMarginConnection( rCoreAttrs, *m_pLeftMF, *m_pRightMF, *m_pTopMF, *m_pBottomMF ) );
-    if( m_pFrameSel->IsBorderEnabled( svx::FRAMEBORDER_TLBR ) )
-        AddItemConnection( svx::CreateFrameLineConnection( SID_ATTR_BORDER_DIAG_TLBR, *m_pFrameSel, svx::FRAMEBORDER_TLBR ) );
-    if( m_pFrameSel->IsBorderEnabled( svx::FRAMEBORDER_BLTR ) )
-        AddItemConnection( svx::CreateFrameLineConnection( SID_ATTR_BORDER_DIAG_BLTR, *m_pFrameSel, svx::FRAMEBORDER_BLTR ) );
+    if( m_pFrameSel->IsBorderEnabled( svx::FrameBorderType::TLBR ) )
+        AddItemConnection( svx::CreateFrameLineConnection( SID_ATTR_BORDER_DIAG_TLBR, *m_pFrameSel, svx::FrameBorderType::TLBR ) );
+    if( m_pFrameSel->IsBorderEnabled( svx::FrameBorderType::BLTR ) )
+        AddItemConnection( svx::CreateFrameLineConnection( SID_ATTR_BORDER_DIAG_BLTR, *m_pFrameSel, svx::FrameBorderType::BLTR ) );
     // #i43593# - item connection doesn't work for Writer,
     // because the Writer item sets contain these items
     // checkbox "Merge with next paragraph" only visible for Writer dialog format.paragraph
@@ -444,12 +444,12 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
 
     if ( pBoxItem && pBoxInfoItem ) // -> Don't Care
     {
-        ResetFrameLine_Impl( svx::FRAMEBORDER_LEFT,   pBoxItem->GetLeft(),     pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::LEFT ) );
-        ResetFrameLine_Impl( svx::FRAMEBORDER_RIGHT,  pBoxItem->GetRight(),    pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::RIGHT ) );
-        ResetFrameLine_Impl( svx::FRAMEBORDER_TOP,    pBoxItem->GetTop(),      pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::TOP ) );
-        ResetFrameLine_Impl( svx::FRAMEBORDER_BOTTOM, pBoxItem->GetBottom(),   pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::BOTTOM ) );
-        ResetFrameLine_Impl( svx::FRAMEBORDER_VER,    pBoxInfoItem->GetVert(), pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::VERT ) );
-        ResetFrameLine_Impl( svx::FRAMEBORDER_HOR,    pBoxInfoItem->GetHori(), pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::HORI ) );
+        ResetFrameLine_Impl( svx::FrameBorderType::Left,   pBoxItem->GetLeft(),     pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::LEFT ) );
+        ResetFrameLine_Impl( svx::FrameBorderType::Right,  pBoxItem->GetRight(),    pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::RIGHT ) );
+        ResetFrameLine_Impl( svx::FrameBorderType::Top,    pBoxItem->GetTop(),      pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::TOP ) );
+        ResetFrameLine_Impl( svx::FrameBorderType::Bottom, pBoxItem->GetBottom(),   pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::BOTTOM ) );
+        ResetFrameLine_Impl( svx::FrameBorderType::Vertical,    pBoxInfoItem->GetVert(), pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::VERT ) );
+        ResetFrameLine_Impl( svx::FrameBorderType::Horizontal,    pBoxInfoItem->GetHori(), pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::HORI ) );
 
 
         // distance inside
@@ -669,10 +669,10 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
     // outer border:
 
     ::std::pair<svx::FrameBorderType,SvxBoxItemLine> eTypes1[] = {
-                                { svx::FRAMEBORDER_TOP,SvxBoxItemLine::TOP },
-                                { svx::FRAMEBORDER_BOTTOM,SvxBoxItemLine::BOTTOM },
-                                { svx::FRAMEBORDER_LEFT,SvxBoxItemLine::LEFT },
-                                { svx::FRAMEBORDER_RIGHT,SvxBoxItemLine::RIGHT },
+                                { svx::FrameBorderType::Top,SvxBoxItemLine::TOP },
+                                { svx::FrameBorderType::Bottom,SvxBoxItemLine::BOTTOM },
+                                { svx::FrameBorderType::Left,SvxBoxItemLine::LEFT },
+                                { svx::FrameBorderType::Right,SvxBoxItemLine::RIGHT },
                             };
 
     for (std::pair<svx::FrameBorderType,SvxBoxItemLine> const & i : eTypes1)
@@ -683,8 +683,8 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
     // border hor/ver and TableFlag
 
     ::std::pair<svx::FrameBorderType,SvxBoxInfoItemLine> eTypes2[] = {
-                                { svx::FRAMEBORDER_HOR,SvxBoxInfoItemLine::HORI },
-                                { svx::FRAMEBORDER_VER,SvxBoxInfoItemLine::VERT }
+                                { svx::FrameBorderType::Horizontal,SvxBoxInfoItemLine::HORI },
+                                { svx::FrameBorderType::Vertical,SvxBoxInfoItemLine::VERT }
                             };
     for (std::pair<svx::FrameBorderType,SvxBoxInfoItemLine> const & j : eTypes2)
         aBoxInfoItem.SetLine( m_pFrameSel->GetFrameBorderStyle( j.first ), j.second );
@@ -709,10 +709,10 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
                 if ( ((mbHorEnabled || mbVerEnabled || (nSWMode & SwBorderModes::TABLE)) &&
                         (m_pLeftMF->IsModified()||m_pRightMF->IsModified()||
                             m_pTopMF->IsModified()||m_pBottomMF->IsModified()) )||
-                     m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_TOP ) != svx::FrameBorderState::Hide
-                     || m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_BOTTOM ) != svx::FrameBorderState::Hide
-                     || m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_LEFT ) != svx::FrameBorderState::Hide
-                     || m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_RIGHT ) != svx::FrameBorderState::Hide )
+                     m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Top ) != svx::FrameBorderState::Hide
+                     || m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Bottom ) != svx::FrameBorderState::Hide
+                     || m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Left ) != svx::FrameBorderState::Hide
+                     || m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Right ) != svx::FrameBorderState::Hide )
                 {
                     const SvxBoxInfoItem* pOldBoxInfoItem = static_cast<const SvxBoxInfoItem*>(GetOldItem(
                                                         *rCoreAttrs, SID_ATTR_BORDER_INNER ));
@@ -752,12 +752,12 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 
     // note Don't Care Status in the Info-Item:
 
-    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::TOP,    m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_TOP )    != svx::FrameBorderState::DontCare );
-    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::BOTTOM, m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_BOTTOM ) != svx::FrameBorderState::DontCare );
-    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::LEFT,   m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_LEFT )   != svx::FrameBorderState::DontCare );
-    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::RIGHT,  m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_RIGHT )  != svx::FrameBorderState::DontCare );
-    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::HORI,   m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_HOR )    != svx::FrameBorderState::DontCare );
-    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::VERT,   m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_VER )    != svx::FrameBorderState::DontCare );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::TOP,    m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Top )    != svx::FrameBorderState::DontCare );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::BOTTOM, m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Bottom ) != svx::FrameBorderState::DontCare );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::LEFT,   m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Left )   != svx::FrameBorderState::DontCare );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::RIGHT,  m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Right )  != svx::FrameBorderState::DontCare );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::HORI,   m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Horizontal )    != svx::FrameBorderState::DontCare );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::VERT,   m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Vertical )    != svx::FrameBorderState::DontCare );
 
 
     // Put or Clear of the border?
@@ -1180,10 +1180,10 @@ IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, LinesChanged_Impl, LinkParamNone*, void)
         {
             if(bLineSet)
             {
-                nValid  = (m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_TOP)    == svx::FrameBorderState::Show) ? SvxBoxInfoItemValidFlags::TOP : SvxBoxInfoItemValidFlags::NONE;
-                nValid |= (m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_BOTTOM) == svx::FrameBorderState::Show) ? SvxBoxInfoItemValidFlags::BOTTOM : SvxBoxInfoItemValidFlags::NONE;
-                nValid |= (m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_LEFT)   == svx::FrameBorderState::Show) ? SvxBoxInfoItemValidFlags::LEFT : SvxBoxInfoItemValidFlags::NONE;
-                nValid |= (m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_RIGHT ) == svx::FrameBorderState::Show) ? SvxBoxInfoItemValidFlags::RIGHT : SvxBoxInfoItemValidFlags::NONE;
+                nValid  = (m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Top)    == svx::FrameBorderState::Show) ? SvxBoxInfoItemValidFlags::TOP : SvxBoxInfoItemValidFlags::NONE;
+                nValid |= (m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Bottom) == svx::FrameBorderState::Show) ? SvxBoxInfoItemValidFlags::BOTTOM : SvxBoxInfoItemValidFlags::NONE;
+                nValid |= (m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Left)   == svx::FrameBorderState::Show) ? SvxBoxInfoItemValidFlags::LEFT : SvxBoxInfoItemValidFlags::NONE;
+                nValid |= (m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Right ) == svx::FrameBorderState::Show) ? SvxBoxInfoItemValidFlags::RIGHT : SvxBoxInfoItemValidFlags::NONE;
             }
             else
                 nValid = SvxBoxInfoItemValidFlags::NONE;
@@ -1239,10 +1239,10 @@ void SvxBorderTabPage::UpdateRemoveAdjCellBorderCB( sal_uInt16 nPreset )
     if( !pOldBoxInfoItem || !pOldBoxItem )
         return;
     ::std::pair<svx::FrameBorderType, SvxBoxInfoItemValidFlags> eTypes1[] = {
-        { svx::FRAMEBORDER_TOP,SvxBoxInfoItemValidFlags::TOP },
-        { svx::FRAMEBORDER_BOTTOM,SvxBoxInfoItemValidFlags::BOTTOM },
-        { svx::FRAMEBORDER_LEFT,SvxBoxInfoItemValidFlags::LEFT },
-        { svx::FRAMEBORDER_RIGHT,SvxBoxInfoItemValidFlags::RIGHT },
+        { svx::FrameBorderType::Top,SvxBoxInfoItemValidFlags::TOP },
+        { svx::FrameBorderType::Bottom,SvxBoxInfoItemValidFlags::BOTTOM },
+        { svx::FrameBorderType::Left,SvxBoxInfoItemValidFlags::LEFT },
+        { svx::FrameBorderType::Right,SvxBoxInfoItemValidFlags::RIGHT },
     };
     SvxBoxItemLine eTypes2[] = {
         SvxBoxItemLine::TOP,

@@ -26,20 +26,20 @@ namespace svx {
 
 
 /** Enumerates all borders a frame selection control can contain. */
-enum FrameBorderType
+enum class FrameBorderType
 {
-    FRAMEBORDER_NONE,       /// No border (special state).
-    FRAMEBORDER_LEFT,       /// Left frame border.
-    FRAMEBORDER_RIGHT,      /// Right frame border.
-    FRAMEBORDER_TOP,        /// Top frame border.
-    FRAMEBORDER_BOTTOM,     /// Bottom frame border.
-    FRAMEBORDER_HOR,        /// Inner horizontal frame border.
-    FRAMEBORDER_VER,        /// Inner vertical frame border.
-    FRAMEBORDER_TLBR,       /// Top-left to bottom-right frame border.
-    FRAMEBORDER_BLTR        /// Bottom-left to top-right frame border.
+    NONE,       /// No border (special state).
+    Left,       /// Left frame border.
+    Right,      /// Right frame border.
+    Top,        /// Top frame border.
+    Bottom,     /// Bottom frame border.
+    Horizontal, /// Inner horizontal frame border.
+    Vertical,   /// Inner vertical frame border.
+    TLBR,       /// Top-left to bottom-right frame border.
+    BLTR        /// Bottom-left to top-right frame border.
 };
 
-/** The number of valid frame border types (excluding FRAMEBORDER_NONE). */
+/** The number of valid frame border types (excluding FrameBorderType::NONE). */
 const int FRAMEBORDERTYPE_COUNT = 8;
 
 /** Returns the frame border type from a 0-based integer index. */
