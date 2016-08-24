@@ -622,9 +622,9 @@ ERRTYPE RscCompiler::Link()
             catch (RscIoError&)
             {
                 OString sMsg("Error with paths:\n");
-                sMsg += "temporary rc file: " + aRcTmp + "\n";
-                sMsg += "temporary ilst file: " + aSysListTmp + "\n";
-                sMsg += "ilst file: " + aSysList + "\n";
+                sMsg += "temporary rc file: " + aRcTmp + "\n"
+                        "temporary ilst file: " + aSysListTmp + "\n"
+                        "ilst file: " + aSysList + "\n";
                 pTC->pEH->FatalError(ERR_OPENFILE, RscId(), sMsg.getStr());
             }
             if ( nullptr == (fExitFile = foutput = fopen( aRcTmp.getStr(), "wb" )) )

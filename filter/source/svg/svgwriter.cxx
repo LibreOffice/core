@@ -1222,8 +1222,7 @@ bool SVGTextWriter::nextTextPortion()
                                             const OUString& rTextPortionId = implGetValidIDFromInterface( Reference<XInterface>(xPortionTextRange, UNO_QUERY) );
                                             if( !rTextPortionId.isEmpty() )
                                             {
-                                                msHyperlinkIdList += rTextPortionId;
-                                                msHyperlinkIdList += " ";
+                                                msHyperlinkIdList += rTextPortionId + " ";
                                             }
                                         }
                                     }
