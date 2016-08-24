@@ -36,6 +36,10 @@ public:
     TextUnderlinePopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
     virtual ~TextUnderlinePopup();
 
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+        throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
+
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
 };
 

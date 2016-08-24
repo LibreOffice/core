@@ -828,6 +828,8 @@ cmd/sc_dsbrowserexplorer.png cmd/sc_showfmexplorer.png
 
 cmd/lc_savesimple.png cmd/lc_save.png
 cmd/sc_savesimple.png cmd/sc_save.png
+cmd/lc_underlinesimple.png cmd/lc_underline.png
+cmd/sc_underlinesimple.png cmd/sc_underline.png
 
 # Slide command aliases
 cmd/lc_insertslide.png cmd/lc_insertpage.png

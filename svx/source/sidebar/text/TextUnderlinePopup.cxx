@@ -28,11 +28,18 @@ SFX_IMPL_TOOLBOX_CONTROL(TextUnderlinePopup, SvxTextLineItem);
 TextUnderlinePopup::TextUnderlinePopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
     : SfxToolBoxControl(nSlotId, nId, rTbx)
 {
-    rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits(nId));
 }
 
 TextUnderlinePopup::~TextUnderlinePopup()
 {
+}
+
+void TextUnderlinePopup::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+    throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
+{
+    SfxToolBoxControl::initialize(aArguments);
+    if (GetToolBox().GetItemCommand(GetId()) == m_aCommandURL)
+        GetToolBox().SetItemBits(GetId(), ToolBoxItemBits::DROPDOWN | GetToolBox().GetItemBits(GetId()));
 }
 
 VclPtr<SfxPopupWindow> TextUnderlinePopup::CreatePopupWindow()
