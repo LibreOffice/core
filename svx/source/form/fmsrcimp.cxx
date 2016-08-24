@@ -370,13 +370,13 @@ OUString FmSearchEngine::FormatField(sal_Int32 nWhich)
 }
 
 
-FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(bool _bSearchForNull, sal_Int32& nFieldPos,
+FmSearchEngine::SearchResult FmSearchEngine::SearchSpecial(bool _bSearchForNull, sal_Int32& nFieldPos,
     FieldCollection::iterator& iterFieldLoop, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd)
 {
     // die Startposition merken
     Any aStartMark;
     try { aStartMark = m_xSearchCursor.getBookmark(); }
-    catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SR_ERROR; }
+    catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SearchResult::Error; }
     FieldCollection::const_iterator iterInitialField = iterFieldLoop;
 
 
@@ -407,12 +407,12 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(bool _bSearchForNull
             catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
             m_iterPreviousLocField = iterFieldLoop;
             // und wech
-            return SR_ERROR;
+            return SearchResult::Error;
         }
 
         Any aCurrentBookmark;
         try { aCurrentBookmark = m_xSearchCursor.getBookmark(); }
-        catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SR_ERROR; }
+        catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SearchResult::Error; }
 
         bMovedAround = EQUAL_BOOKMARKS(aStartMark, aCurrentBookmark) && (iterFieldLoop == iterInitialField);
 
@@ -424,21 +424,21 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(bool _bSearchForNull
 
         // abbrechen gefordert ?
         if (CancelRequested())
-            return SR_CANCELED;
+            return SearchResult::Cancelled;
 
     } while (!bMovedAround);
 
-    return bFound ? SR_FOUND : SR_NOTFOUND;
+    return bFound ? SearchResult::Found : SearchResult::NotFound;
 }
 
 
-FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const OUString& strExpression, sal_Int32& nFieldPos,
+FmSearchEngine::SearchResult FmSearchEngine::SearchWildcard(const OUString& strExpression, sal_Int32& nFieldPos,
     FieldCollection::iterator& iterFieldLoop, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd)
 {
     // die Startposition merken
     Any aStartMark;
     try { aStartMark = m_xSearchCursor.getBookmark(); }
-    catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SR_ERROR; }
+    catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SearchResult::Error; }
     FieldCollection::const_iterator iterInitialField = iterFieldLoop;
 
     WildCard aSearchExpression(strExpression);
@@ -482,12 +482,12 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const OUString& str
             catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
             m_iterPreviousLocField = iterFieldLoop;
             // und wech
-            return SR_ERROR;
+            return SearchResult::Error;
         }
 
         Any aCurrentBookmark;
         try { aCurrentBookmark = m_xSearchCursor.getBookmark(); }
-        catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SR_ERROR; }
+        catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SearchResult::Error; }
 
         bMovedAround = EQUAL_BOOKMARKS(aStartMark, aCurrentBookmark) && (iterFieldLoop == iterInitialField);
 
@@ -499,15 +499,15 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const OUString& str
 
         // abbrechen gefordert ?
         if (CancelRequested())
-            return SR_CANCELED;
+            return SearchResult::Cancelled;
 
     } while (!bMovedAround);
 
-    return bFound ? SR_FOUND : SR_NOTFOUND;
+    return bFound ? SearchResult::Found : SearchResult::NotFound;
 }
 
 
-FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString& strExpression, sal_Int32& nFieldPos,
+FmSearchEngine::SearchResult FmSearchEngine::SearchRegularApprox(const OUString& strExpression, sal_Int32& nFieldPos,
     FieldCollection::iterator& iterFieldLoop, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd)
 {
     DBG_ASSERT(m_bLevenshtein || m_bRegular,
@@ -518,7 +518,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
     // Startposition merken
     Any aStartMark;
     try { aStartMark = m_xSearchCursor.getBookmark(); }
-    catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SR_ERROR; }
+    catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SearchResult::Error; }
     FieldCollection::const_iterator iterInitialField = iterFieldLoop;
 
     // Parameter sammeln
@@ -605,12 +605,12 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
             catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
             m_iterPreviousLocField = iterFieldLoop;
             // und wech
-            return SR_ERROR;
+            return SearchResult::Error;
         }
 
         Any aCurrentBookmark;
         try { aCurrentBookmark = m_xSearchCursor.getBookmark(); }
-        catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SR_ERROR; }
+        catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SearchResult::Error; }
         bMovedAround = EQUAL_BOOKMARKS(aStartMark, aCurrentBookmark) && (iterFieldLoop == iterInitialField);
 
         if (nFieldPos == 0)
@@ -621,11 +621,11 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
 
         // abbrechen gefordert ?
         if (CancelRequested())
-            return SR_CANCELED;
+            return SearchResult::Cancelled;
 
     } while (!bMovedAround);
 
-    return bFound ? SR_FOUND : SR_NOTFOUND;
+    return bFound ? SearchResult::Found : SearchResult::NotFound;
 }
 
 
@@ -639,7 +639,7 @@ FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
     ,m_xOriginalIterator(xCursor)
     ,m_xClonedIterator(m_xOriginalIterator, true)
     ,m_eSearchForType(SearchFor::String)
-    ,m_srResult(SR_FOUND)
+    ,m_srResult(SearchResult::Found)
     ,m_bSearchingCurrently(false)
     ,m_bCancelAsynchRequest(false)
     ,m_bFormatter(true)     // das muss konsistent sein mit m_xSearchCursor, der i.A. == m_xOriginalIterator ist
@@ -956,7 +956,7 @@ void FmSearchEngine::SearchNextImpl()
     }
 
     PropagateProgress(true);
-    SEARCH_RESULT srResult;
+    SearchResult srResult;
     if (m_eSearchForType != SearchFor::String)
         srResult = SearchSpecial(m_eSearchForType == SearchFor::Null, nFieldPos, iterFieldCheck, iterBegin, iterEnd);
     else if (!m_bRegular && !m_bLevenshtein)
@@ -966,11 +966,11 @@ void FmSearchEngine::SearchNextImpl()
 
     m_srResult = srResult;
 
-    if (SR_ERROR == m_srResult)
+    if (SearchResult::Error == m_srResult)
         return;
 
     // gefunden ?
-    if (SR_FOUND == m_srResult)
+    if (SearchResult::Found == m_srResult)
     {
         // die Pos merken
         try { m_aPreviousLocBookmark = m_xSearchCursor.getBookmark(); }
@@ -993,19 +993,19 @@ IMPL_LINK_NOARG_TYPED(FmSearchEngine, OnSearchTerminated, FmSearchThread*, void)
     {
         switch (m_srResult)
         {
-            case SR_ERROR :
+            case SearchResult::Error :
                 aProgress.aSearchState = FmSearchProgress::STATE_ERROR;
                 break;
-            case SR_FOUND :
+            case SearchResult::Found :
                 aProgress.aSearchState = FmSearchProgress::STATE_SUCCESSFULL;
                 aProgress.aBookmark = m_aPreviousLocBookmark;
                 aProgress.nFieldIndex = m_iterPreviousLocField - m_arrUsedFields.begin();
                 break;
-            case SR_NOTFOUND :
+            case SearchResult::NotFound :
                 aProgress.aSearchState = FmSearchProgress::STATE_NOTHINGFOUND;
                 aProgress.aBookmark = m_xSearchCursor.getBookmark();
                 break;
-            case SR_CANCELED :
+            case SearchResult::Cancelled :
                 aProgress.aSearchState = FmSearchProgress::STATE_CANCELED;
                 aProgress.aBookmark = m_xSearchCursor.getBookmark();
                 break;

@@ -165,7 +165,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine
 {
     friend class FmSearchThread;
 
-    enum SEARCH_RESULT { SR_FOUND, SR_NOTFOUND, SR_ERROR, SR_CANCELED };
+    enum class SearchResult { Found, NotFound, Error, Cancelled };
     enum class SearchFor { String, Null, NotNull };
 
     CursorWrapper                   m_xSearchCursor;
@@ -205,7 +205,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine
     // Communication with the thread that does the actual searching
     OUString            m_strSearchExpression;              // forward direction
     SearchFor      m_eSearchForType;                   // ditto
-    SEARCH_RESULT       m_srResult;                         // backward direction
+    SearchResult       m_srResult;                         // backward direction
 
     // The link we broadcast the progress and the result to
     Link<const FmSearchProgress*,void>  m_aProgressHandler;
@@ -344,11 +344,11 @@ private:
     // three methods implementing a complete search loop (null/not null, wildcard, SearchText)
     // (they all have some code in common, but with this solution we have to do a distinction only once per search (before
     // starting the loop), not in every loop step
-    SVX_DLLPRIVATE SEARCH_RESULT SearchSpecial(bool _bSearchForNull, sal_Int32& nFieldPos, FieldCollection::iterator& iterFieldLoop,
+    SVX_DLLPRIVATE SearchResult SearchSpecial(bool _bSearchForNull, sal_Int32& nFieldPos, FieldCollection::iterator& iterFieldLoop,
         const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd);
-    SVX_DLLPRIVATE SEARCH_RESULT SearchWildcard(const OUString& strExpression, sal_Int32& nFieldPos, FieldCollection::iterator& iterFieldLoop,
+    SVX_DLLPRIVATE SearchResult SearchWildcard(const OUString& strExpression, sal_Int32& nFieldPos, FieldCollection::iterator& iterFieldLoop,
         const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd);
-    SVX_DLLPRIVATE SEARCH_RESULT SearchRegularApprox(const OUString& strExpression, sal_Int32& nFieldPos, FieldCollection::iterator& iterFieldLoop,
+    SVX_DLLPRIVATE SearchResult SearchRegularApprox(const OUString& strExpression, sal_Int32& nFieldPos, FieldCollection::iterator& iterFieldLoop,
         const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd);
 
     SVX_DLLPRIVATE void PropagateProgress(bool _bDontPropagateOverflow);
