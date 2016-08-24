@@ -155,7 +155,7 @@ bool ErrorBarItemConverter::ApplySpecialItem(
                 static_cast< const SvxChartKindErrorItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
 
-            if( !xErrorBarProp.is() && eErrorKind == CHERROR_NONE)
+            if( !xErrorBarProp.is() && eErrorKind == SvxChartKindError::NONE)
             {
                 //nothing to do
             }
@@ -165,21 +165,21 @@ bool ErrorBarItemConverter::ApplySpecialItem(
 
                 switch( eErrorKind )
                 {
-                    case CHERROR_NONE:
+                    case SvxChartKindError::NONE:
                         nStyle = css::chart::ErrorBarStyle::NONE; break;
-                    case CHERROR_VARIANT:
+                    case SvxChartKindError::Variant:
                         nStyle = css::chart::ErrorBarStyle::VARIANCE; break;
-                    case CHERROR_SIGMA:
+                    case SvxChartKindError::Sigma:
                         nStyle = css::chart::ErrorBarStyle::STANDARD_DEVIATION; break;
-                    case CHERROR_PERCENT:
+                    case SvxChartKindError::Percent:
                         nStyle = css::chart::ErrorBarStyle::RELATIVE; break;
-                    case CHERROR_BIGERROR:
+                    case SvxChartKindError::BigError:
                         nStyle = css::chart::ErrorBarStyle::ERROR_MARGIN; break;
-                    case CHERROR_CONST:
+                    case SvxChartKindError::Const:
                         nStyle = css::chart::ErrorBarStyle::ABSOLUTE; break;
-                    case CHERROR_STDERROR:
+                    case SvxChartKindError::StdError:
                         nStyle = css::chart::ErrorBarStyle::STANDARD_ERROR; break;
-                    case CHERROR_RANGE:
+                    case SvxChartKindError::Range:
                         nStyle = css::chart::ErrorBarStyle::FROM_DATA; break;
                 }
 
@@ -337,7 +337,7 @@ void ErrorBarItemConverter::FillSpecialItem(
     {
         case SCHATTR_STAT_KIND_ERROR:
         {
-            SvxChartKindError eErrorKind = CHERROR_NONE;
+            SvxChartKindError eErrorKind = SvxChartKindError::NONE;
             uno::Reference< beans::XPropertySet > xErrorBarProp( GetPropertySet());
 
             sal_Int32 nStyle = 0;
@@ -348,19 +348,19 @@ void ErrorBarItemConverter::FillSpecialItem(
                     case css::chart::ErrorBarStyle::NONE:
                         break;
                     case css::chart::ErrorBarStyle::VARIANCE:
-                        eErrorKind = CHERROR_VARIANT; break;
+                        eErrorKind = SvxChartKindError::Variant; break;
                     case css::chart::ErrorBarStyle::STANDARD_DEVIATION:
-                        eErrorKind = CHERROR_SIGMA; break;
+                        eErrorKind = SvxChartKindError::Sigma; break;
                     case css::chart::ErrorBarStyle::ABSOLUTE:
-                        eErrorKind = CHERROR_CONST; break;
+                        eErrorKind = SvxChartKindError::Const; break;
                     case css::chart::ErrorBarStyle::RELATIVE:
-                        eErrorKind = CHERROR_PERCENT; break;
+                        eErrorKind = SvxChartKindError::Percent; break;
                     case css::chart::ErrorBarStyle::ERROR_MARGIN:
-                        eErrorKind = CHERROR_BIGERROR; break;
+                        eErrorKind = SvxChartKindError::BigError; break;
                     case css::chart::ErrorBarStyle::STANDARD_ERROR:
-                        eErrorKind = CHERROR_STDERROR; break;
+                        eErrorKind = SvxChartKindError::StdError; break;
                     case css::chart::ErrorBarStyle::FROM_DATA:
-                        eErrorKind = CHERROR_RANGE; break;
+                        eErrorKind = SvxChartKindError::Range; break;
                 }
             }
             rOutItemSet.Put( SvxChartKindErrorItem( eErrorKind, SCHATTR_STAT_KIND_ERROR ));

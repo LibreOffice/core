@@ -51,19 +51,19 @@ enum SvxChartTextOrder
 
 #define CHTXTORIENT_COUNT   (CHTXTORIENT_TOPBOTTOM + 1)
 
-enum SvxChartKindError
+enum class SvxChartKindError
 {
-    CHERROR_NONE,
-    CHERROR_VARIANT,
-    CHERROR_SIGMA,
-    CHERROR_PERCENT,
-    CHERROR_BIGERROR,
-    CHERROR_CONST,
-    CHERROR_STDERROR,
-    CHERROR_RANGE
+    NONE,
+    Variant,
+    Sigma,
+    Percent,
+    BigError,
+    Const,
+    StdError,
+    Range
 };
 
-#define CHERROR_COUNT   (CHERROR_RANGE + 1)
+#define CHERROR_COUNT   ((sal_uInt16)SvxChartKindError::Range + 1)
 
 enum class SvxChartIndicate
 {
@@ -166,7 +166,7 @@ public:
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxChartKindErrorItem : public SfxEnumItem
 {
 public:
-    SvxChartKindErrorItem(SvxChartKindError /*eOrient = CHERROR_NONE*/,
+    SvxChartKindErrorItem(SvxChartKindError /*eOrient = SvxChartKindError::NONE*/,
                            sal_uInt16 nId );
     SvxChartKindErrorItem(SvStream& rIn,
                            sal_uInt16 nId );

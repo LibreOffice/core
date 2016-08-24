@@ -66,7 +66,7 @@ ChartItemPool::ChartItemPool():
 
     //statistic
     ppPoolDefaults[SCHATTR_STAT_AVERAGE             - SCHATTR_START] = new SfxBoolItem (SCHATTR_STAT_AVERAGE);
-    ppPoolDefaults[SCHATTR_STAT_KIND_ERROR          - SCHATTR_START] = new SvxChartKindErrorItem (CHERROR_NONE, SCHATTR_STAT_KIND_ERROR);
+    ppPoolDefaults[SCHATTR_STAT_KIND_ERROR          - SCHATTR_START] = new SvxChartKindErrorItem (SvxChartKindError::NONE, SCHATTR_STAT_KIND_ERROR);
     ppPoolDefaults[SCHATTR_STAT_PERCENT             - SCHATTR_START] = new SvxDoubleItem (0.0, SCHATTR_STAT_PERCENT);
     ppPoolDefaults[SCHATTR_STAT_BIGERROR            - SCHATTR_START] = new SvxDoubleItem (0.0, SCHATTR_STAT_BIGERROR);
     ppPoolDefaults[SCHATTR_STAT_CONSTPLUS           - SCHATTR_START] = new SvxDoubleItem (0.0, SCHATTR_STAT_CONSTPLUS);
