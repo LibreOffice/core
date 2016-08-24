@@ -188,6 +188,7 @@ public:
     bool m_bGotDateTime:1;
     bool m_bRemoveBackup:1;
     bool m_bOriginallyReadOnly:1;
+    bool m_bOriginallyLoadedReadOnly:1;
     bool m_bTriedStorage:1;
     bool m_bRemote:1;
     bool m_bInputStreamIsReadOnly:1;
@@ -266,6 +267,7 @@ SfxMedium_Impl::SfxMedium_Impl() :
     m_bGotDateTime( false ),
     m_bRemoveBackup( false ),
     m_bOriginallyReadOnly(false),
+    m_bOriginallyLoadedReadOnly(false),
     m_bTriedStorage(false),
     m_bRemote(false),
     m_bInputStreamIsReadOnly(false),
@@ -3019,15 +3021,15 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
         }
     }
 
-    bool readOnly = false;
     const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem<SfxBoolItem>(pImpl->m_pSet, SID_DOC_READONLY, false);
     if ( pReadOnlyItem && pReadOnlyItem->GetValue() )
-        readOnly = true;
+        pImpl->m_bOriginallyLoadedReadOnly = true;
 
     const SfxStringItem* pFileNameItem = SfxItemSet::GetItem<SfxStringItem>(pImpl->m_pSet, SID_FILE_NAME, false);
     if (!pFileNameItem) throw uno::RuntimeException();
     pImpl->m_aLogicName = pFileNameItem->GetValue();
-    pImpl->m_nStorOpenMode = readOnly ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE;
+    pImpl->m_nStorOpenMode = pImpl->m_bOriginallyLoadedReadOnly
+        ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE;
     Init_Impl();
 }
 
@@ -3334,6 +3336,10 @@ bool SfxMedium::IsOriginallyReadOnly() const
     return pImpl->m_bOriginallyReadOnly;
 }
 
+bool SfxMedium::IsOriginallyLoadedReadOnly() const
+{
+    return pImpl->m_bOriginallyLoadedReadOnly;
+}
 
 bool SfxMedium::SetWritableForUserOnly( const OUString& aURL )
 {

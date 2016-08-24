@@ -615,7 +615,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     // let the current security settings be checked again
                     pNewSet->Put( SfxUInt16Item( SID_MACROEXECMODE, document::MacroExecMode::USE_CONFIG ) );
 
-                    if ( pSh->IsOriginallyReadOnlyMedium() )
+                    if ( pSh->IsOriginallyReadOnlyMedium()
+                         || pSh->IsOriginallyLoadedReadOnlyMedium() )
                         // edit mode is switched or reload of readonly document
                         pNewSet->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
                     else

@@ -283,6 +283,7 @@ public:
     bool                        IsReadOnly() const;
     bool                        IsReadOnlyMedium() const;
     bool                        IsOriginallyReadOnlyMedium() const;
+    bool                        IsOriginallyLoadedReadOnlyMedium() const;
     void                        SetReadOnlyUI( bool bReadOnly = true );
     bool                        IsReadOnlyUI() const;
     void                        SetNoName();

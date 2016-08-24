@@ -382,6 +382,11 @@ bool SfxObjectShell::IsOriginallyReadOnlyMedium() const
     return pMedium == nullptr || pMedium->IsOriginallyReadOnly();
 }
 
+bool SfxObjectShell::IsOriginallyLoadedReadOnlyMedium() const
+{
+    return pMedium != nullptr && pMedium->IsOriginallyLoadedReadOnly();
+}
+
 
 void SfxObjectShell::SetReadOnlyUI( bool bReadOnly )
 
