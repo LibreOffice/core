@@ -806,7 +806,7 @@ namespace
         {
             if (rAccShapeData.mpAccShape.is())
             {
-                rAccShapeData.mpAccShape->ViewForwarderChanged(::accessibility::IAccessibleViewForwarderListener::VISIBLE_AREA, mpViewForwarder);
+                rAccShapeData.mpAccShape->ViewForwarderChanged();
             }
         }
     };

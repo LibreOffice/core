@@ -134,8 +134,7 @@ public:
         windowResized... methods it will be sufficient in most cases just to
         override this method.
      */
-    virtual void ViewForwarderChanged (ChangeType aChangeType,
-        const IAccessibleViewForwarder* pViewForwarder) override;
+    virtual void ViewForwarderChanged() override;
 
     //=====  XAccessibleContext  ==============================================
 

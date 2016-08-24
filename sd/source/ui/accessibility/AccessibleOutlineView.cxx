@@ -103,10 +103,9 @@ void AccessibleOutlineView::Init()
     AccessibleDocumentViewBase::Init ();
 }
 
-void AccessibleOutlineView::ViewForwarderChanged (ChangeType aChangeType,
-    const IAccessibleViewForwarder* pViewForwarder)
+void AccessibleOutlineView::ViewForwarderChanged()
 {
-    AccessibleDocumentViewBase::ViewForwarderChanged (aChangeType, pViewForwarder);
+    AccessibleDocumentViewBase::ViewForwarderChanged();
 
     UpdateChildren();
 }

@@ -1087,8 +1087,7 @@ sal_Int64 SAL_CALL
 }
 
 // IAccessibleViewForwarderListener
-void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
-        const IAccessibleViewForwarder* pViewForwarder)
+void AccessibleShape::ViewForwarderChanged()
 {
     // Inform all listeners that the graphical representation (i.e. size
     // and/or position) of the shape has changed.
@@ -1098,7 +1097,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
 
     // Tell children manager of the modified view forwarder.
     if (mpChildrenManager != nullptr)
-        mpChildrenManager->ViewForwarderChanged (aChangeType, pViewForwarder);
+        mpChildrenManager->ViewForwarderChanged();
 
     // update our children that our screen position might have changed
     if( mpText )

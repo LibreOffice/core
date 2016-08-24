@@ -115,11 +115,9 @@ void ChildrenManager::RemoveFocus()
 }
 
 // IAccessibleViewForwarderListener
-void ChildrenManager::ViewForwarderChanged(
-    IAccessibleViewForwarderListener::ChangeType aChangeType,
-    const IAccessibleViewForwarder* pViewForwarder)
+void ChildrenManager::ViewForwarderChanged()
 {
-    mpImpl->ViewForwarderChanged (aChangeType, pViewForwarder);
+    mpImpl->ViewForwarderChanged();
 }
 
 } // end of namespace accessibility

@@ -1377,13 +1377,12 @@ namespace
 {
     struct ScVisAreaChanged
     {
-        ScAccessibleDocument* mpAccDoc;
-        explicit ScVisAreaChanged(ScAccessibleDocument* pAccDoc) : mpAccDoc(pAccDoc) {}
+        explicit ScVisAreaChanged() {}
         void operator() (const ScAccessibleShapeData* pAccShapeData) const
         {
             if (pAccShapeData && pAccShapeData->pAccShape.is())
             {
-                pAccShapeData->pAccShape->ViewForwarderChanged(::accessibility::IAccessibleViewForwarderListener::VISIBLE_AREA, mpAccDoc);
+                pAccShapeData->pAccShape->ViewForwarderChanged();
             }
         }
     };
@@ -1391,7 +1390,7 @@ namespace
 
 void ScChildrenShapes::VisAreaChanged() const
 {
-    ScVisAreaChanged aVisAreaChanged(mpAccessibleDocument);
+    ScVisAreaChanged aVisAreaChanged;
     std::for_each(maZOrderedShapes.begin(), maZOrderedShapes.end(), aVisAreaChanged);
 }
 

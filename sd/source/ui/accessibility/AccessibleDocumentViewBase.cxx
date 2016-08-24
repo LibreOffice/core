@@ -212,7 +212,7 @@ IMPL_LINK_TYPED(AccessibleDocumentViewBase, WindowChildEventListener,
 
 //=====  IAccessibleViewForwarderListener  ====================================
 
-void AccessibleDocumentViewBase::ViewForwarderChanged(ChangeType, const IAccessibleViewForwarder* )
+void AccessibleDocumentViewBase::ViewForwarderChanged()
 {
     // Empty
 }
@@ -558,9 +558,7 @@ void SAL_CALL
     if( IsDisposed() )
         return;
 
-    ViewForwarderChanged (
-        IAccessibleViewForwarderListener::VISIBLE_AREA,
-        &maViewForwarder);
+    ViewForwarderChanged();
 }
 
 void SAL_CALL
@@ -570,9 +568,7 @@ void SAL_CALL
     if( IsDisposed() )
         return;
 
-    ViewForwarderChanged (
-        IAccessibleViewForwarderListener::VISIBLE_AREA,
-        &maViewForwarder);
+    ViewForwarderChanged();
 }
 
 void SAL_CALL
@@ -582,9 +578,7 @@ void SAL_CALL
     if( IsDisposed() )
         return;
 
-    ViewForwarderChanged (
-        IAccessibleViewForwarderListener::VISIBLE_AREA,
-        &maViewForwarder);
+    ViewForwarderChanged();
 }
 
 void SAL_CALL
@@ -594,9 +588,7 @@ void SAL_CALL
     if( IsDisposed() )
         return;
 
-    ViewForwarderChanged (
-        IAccessibleViewForwarderListener::VISIBLE_AREA,
-        &maViewForwarder);
+    ViewForwarderChanged();
 }
 
 //=====  XFocusListener  ==================================================

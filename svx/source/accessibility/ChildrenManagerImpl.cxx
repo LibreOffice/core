@@ -403,9 +403,7 @@ void ChildrenManagerImpl::SendVisibleAreaEvents (
         // as a result of a change of the view forwarder).
         AccessibleShape* pShape = I->GetAccessibleShape ();
         if (pShape != nullptr)
-            pShape->ViewForwarderChanged (
-                IAccessibleViewForwarderListener::VISIBLE_AREA,
-                maShapeTreeInfo.GetViewForwarder());
+            pShape->ViewForwarderChanged();
     }
 }
 
@@ -729,22 +727,9 @@ void SAL_CALL ChildrenManagerImpl::disposing()
 }
 
 // IAccessibleViewForwarderListener
-void ChildrenManagerImpl::ViewForwarderChanged (ChangeType aChangeType,
-        const IAccessibleViewForwarder* pViewForwarder)
+void ChildrenManagerImpl::ViewForwarderChanged()
 {
-    if (aChangeType == IAccessibleViewForwarderListener::VISIBLE_AREA)
-        Update (false);
-    else
-    {
-        SolarMutexGuard g;
-        ChildDescriptorListType::const_iterator aEnd = maVisibleChildren.end();
-        for (ChildDescriptorListType::iterator I=maVisibleChildren.begin(); I != aEnd; ++I)
-        {
-            AccessibleShape* pShape = I->GetAccessibleShape();
-            if (pShape != nullptr)
-                pShape->ViewForwarderChanged (aChangeType, pViewForwarder);
-        }
-    }
+    Update(false);
 }
 
 // IAccessibleParent

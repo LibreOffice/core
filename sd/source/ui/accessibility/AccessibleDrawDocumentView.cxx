@@ -123,12 +123,11 @@ void AccessibleDrawDocumentView::Init()
     mpChildrenManager->UpdateSelection ();
 }
 
-void AccessibleDrawDocumentView::ViewForwarderChanged (ChangeType aChangeType,
-    const IAccessibleViewForwarder* pViewForwarder)
+void AccessibleDrawDocumentView::ViewForwarderChanged()
 {
-    AccessibleDocumentViewBase::ViewForwarderChanged (aChangeType, pViewForwarder);
+    AccessibleDocumentViewBase::ViewForwarderChanged();
     if (mpChildrenManager != nullptr)
-        mpChildrenManager->ViewForwarderChanged (aChangeType, pViewForwarder);
+        mpChildrenManager->ViewForwarderChanged();
 }
 
 /**  The page shape is created on every call at the moment (provided that
@@ -335,9 +334,7 @@ void SAL_CALL
     {
         OSL_TRACE ("    visible area changed");
         if (mpChildrenManager != nullptr)
-            mpChildrenManager->ViewForwarderChanged (
-                IAccessibleViewForwarderListener::VISIBLE_AREA,
-                &maViewForwarder);
+            mpChildrenManager->ViewForwarderChanged();
     }
     else if (rEventObject.PropertyName == "ActiveLayer")
     {

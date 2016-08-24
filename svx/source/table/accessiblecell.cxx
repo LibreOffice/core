@@ -492,7 +492,7 @@ Sequence<OUString> SAL_CALL AccessibleCell::getSupportedServiceNames() throw (Ru
 // IAccessibleViewForwarderListener
 
 
-void AccessibleCell::ViewForwarderChanged (ChangeType /*aChangeType*/, const IAccessibleViewForwarder* /*pViewForwarder*/)
+void AccessibleCell::ViewForwarderChanged()
 {
     // Inform all listeners that the graphical representation (i.e. size
     // and/or position) of the shape has changed.

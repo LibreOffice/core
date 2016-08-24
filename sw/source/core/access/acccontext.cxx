@@ -227,9 +227,7 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrame *pFrame,
                         {
                         case Action::SCROLLED:
                         case Action::SCROLLED_WITHIN:
-                            xAccImpl->ViewForwarderChanged(
-                                ::accessibility::IAccessibleViewForwarderListener::VISIBLE_AREA,
-                                GetMap() );
+                            xAccImpl->ViewForwarderChanged();
                             break;
                         case Action::SCROLLED_IN:
                             ScrolledInShape( rLower.GetDrawObject(),
@@ -237,9 +235,7 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrame *pFrame,
                             break;
                         case Action::SCROLLED_OUT:
                             {
-                                xAccImpl->ViewForwarderChanged(
-                                    ::accessibility::IAccessibleViewForwarderListener::VISIBLE_AREA,
-                                    GetMap() );
+                                xAccImpl->ViewForwarderChanged();
                                 // this DisposeShape call was removed by
                                 // IAccessibility2 implementation
                                 // without giving any reason why

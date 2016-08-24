@@ -323,8 +323,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
     //=====  IAccessibleViewForwarderListener  ================================
-    virtual void ViewForwarderChanged (ChangeType aChangeType,
-        const IAccessibleViewForwarder* pViewForwarder) override;
+    virtual void ViewForwarderChanged() override;
 
     //=====  lang::XEventListener  ============================================
 

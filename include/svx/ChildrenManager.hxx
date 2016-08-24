@@ -192,9 +192,7 @@ public:
     */
     void RemoveFocus();
 
-    void ViewForwarderChanged(
-        IAccessibleViewForwarderListener::ChangeType aChangeType,
-        const IAccessibleViewForwarder* pViewForwarder);
+    void ViewForwarderChanged();
 
 private:
     rtl::Reference<ChildrenManagerImpl> mpImpl;

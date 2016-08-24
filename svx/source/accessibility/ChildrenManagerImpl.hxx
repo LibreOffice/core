@@ -262,8 +262,7 @@ public:
         @param pViewForwarder
             The modified view forwarder.  Use this one from now on.
     */
-    virtual void ViewForwarderChanged (ChangeType aChangeType,
-        const IAccessibleViewForwarder* pViewForwarder) override;
+    virtual void ViewForwarderChanged() override;
 
     // IAccessibleParent
     /** Replace the specified child with a replacement.
@@ -393,7 +392,7 @@ private:
             Events are sent to all entries of this list that already contain
             an accessible object.
     */
-    void SendVisibleAreaEvents (ChildDescriptorListType& raChildList);
+    static void SendVisibleAreaEvents (ChildDescriptorListType& raChildList);
 
     /** If children have to be created immediately and not on demand the
         create the missing accessible objects now.

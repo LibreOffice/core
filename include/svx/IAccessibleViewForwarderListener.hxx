@@ -39,25 +39,11 @@ class IAccessibleViewForwarder;
 class IAccessibleViewForwarderListener
 {
 public:
-    /** Enumeration of the different change types.
-    */
-    enum ChangeType {TRANSFORMATION, VISIBLE_AREA, STATE};
 
     /** This method is called to indicate a change of the specified view
-        forwarder.
-        @param aChangeType
-            The type of the change.  TRANSFORMATION indicates a change of
-            the coordinate transformation with a constant visible area.  If
-            the visible area changes, just use VISIBLE_AREA.  This changes
-            the transformation implicitly.  The value STATE indicates a
-            change of the validity state.  Check the IsValid method of the
-            view forwarder before doing further calls.
-        @param pViewForwarder
-            The modified view forwarder.  It is specified just in case that
-            there is more than one view forwarder in use at the same time.
+        forwarder, specifically, a change in visible area.
     */
-    virtual void ViewForwarderChanged (ChangeType aChangeType,
-        const IAccessibleViewForwarder* pViewForwarder) = 0;
+    virtual void ViewForwarderChanged() = 0;
 
 protected:
     ~IAccessibleViewForwarderListener() {}

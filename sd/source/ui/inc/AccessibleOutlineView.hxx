@@ -52,8 +52,7 @@ public:
 
     //=====  IAccessibleViewForwarderListener  ================================
 
-    virtual void ViewForwarderChanged (ChangeType aChangeType,
-        const IAccessibleViewForwarder* pViewForwarder) override;
+    virtual void ViewForwarderChanged() override;
 
     //=====  XAccessibleContext  ==============================================
 
