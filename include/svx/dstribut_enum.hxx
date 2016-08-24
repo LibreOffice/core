@@ -19,13 +19,13 @@
 #ifndef INCLUDED_SVX_DSTRIBUT_ENUM_HXX
 #define INCLUDED_SVX_DSTRIBUT_ENUM_HXX
 
-enum SvxDistributeHorizontal
+enum class SvxDistributeHorizontal
 {
-    SvxDistributeHorizontalNone = 0,
-    SvxDistributeHorizontalLeft,
-    SvxDistributeHorizontalCenter,
-    SvxDistributeHorizontalDistance,
-    SvxDistributeHorizontalRight
+    NONE = 0,
+    Left,
+    Center,
+    Distance,
+    Right
 };
 
 enum class SvxDistributeVertical
