@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_DEF3D_HXX
 #define INCLUDED_SVX_DEF3D_HXX
 
+#include <o3tl/typed_flags_set.hxx>
 #include <math.h>
 
 const double fPiDiv180 = 0.01745329251994;
@@ -29,11 +30,17 @@ const double EPSILON = 1e-06;
 
 // 3D helper functions
 
-enum E3dDragConstraint { E3DDRAG_CONSTR_X   = 0x0001,
-                         E3DDRAG_CONSTR_Y   = 0x0002,
-                         E3DDRAG_CONSTR_Z   = 0x0004,
-                         E3DDRAG_CONSTR_XYZ = 0x0007
+enum class E3dDragConstraint
+{
+    X   = 0x0001,
+    Y   = 0x0002,
+    Z   = 0x0004,
+    XYZ = X | Y | Z
 };
+namespace o3tl
+{
+    template<> struct typed_flags<E3dDragConstraint> : is_typed_flags<E3dDragConstraint, 0x7> {};
+}
 
 #endif
 

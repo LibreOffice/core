@@ -1207,7 +1207,7 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
 
         if(bOwnActionNecessary && GetMarkedObjectCount() > 0)
         {
-            E3dDragConstraint eConstraint = E3DDRAG_CONSTR_XYZ;
+            E3dDragConstraint eConstraint = E3dDragConstraint::XYZ;
             bool bThereAreRootScenes = false;
             bool bThereAre3DObjects = false;
             const size_t nCnt = GetMarkedObjectCount();
@@ -1235,14 +1235,14 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                             case SdrHdlKind::Left:
                             case SdrHdlKind::Right:
                             {
-                                eConstraint = E3DDRAG_CONSTR_X;
+                                eConstraint = E3dDragConstraint::X;
                             }
                             break;
 
                             case SdrHdlKind::Upper:
                             case SdrHdlKind::Lower:
                             {
-                                eConstraint = E3DDRAG_CONSTR_Y;
+                                eConstraint = E3dDragConstraint::Y;
                             }
                             break;
 
@@ -1251,7 +1251,7 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                             case SdrHdlKind::LowerLeft:
                             case SdrHdlKind::LowerRight:
                             {
-                                eConstraint = E3DDRAG_CONSTR_Z;
+                                eConstraint = E3dDragConstraint::Z;
                             }
                             break;
                             default: break;
@@ -1516,7 +1516,7 @@ void E3dView::ResetCreationActive ()
 
 void E3dView::InitView ()
 {
-    eDragConstraint          = E3DDRAG_CONSTR_XYZ;
+    eDragConstraint          = E3dDragConstraint::XYZ;
     fDefaultScaleX           =
     fDefaultScaleY           =
     fDefaultScaleZ           = 1.0;

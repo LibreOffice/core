@@ -112,7 +112,7 @@ void E3dDragMethod::TakeSdrDragComment(OUString& /*rStr*/) const
 
 bool E3dDragMethod::BeginSdrDrag()
 {
-    if(E3DDRAG_CONSTR_Z == meConstraint)
+    if(E3dDragConstraint::Z == meConstraint)
     {
         const sal_uInt32 nCnt(maGrp.size());
         DragStat().Ref1() = maFullBound.Center();
@@ -334,7 +334,7 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
             double fWAngle, fHAngle;
             E3dDragMethodUnit& rCandidate = maGrp[nOb];
 
-            if(E3DDRAG_CONSTR_Z == meConstraint)
+            if(E3dDragConstraint::Z == meConstraint)
             {
                 fWAngle = NormAngle360(GetAngle(rPnt - DragStat().GetRef1()) -
                     rCandidate.mnStartAngle) - rCandidate.mnLastAngle;
@@ -368,21 +368,21 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
 
             // Determine transformation
             basegfx::B3DHomMatrix aRotMat;
-            if(E3DDRAG_CONSTR_Y & meConstraint)
+            if(E3dDragConstraint::Y & meConstraint)
             {
                 if(nModifier & KEY_MOD2)
                     aRotMat.rotate(0.0, 0.0, fWAngle);
                 else
                     aRotMat.rotate(0.0, fWAngle, 0.0);
             }
-            else if(E3DDRAG_CONSTR_Z & meConstraint)
+            else if(E3dDragConstraint::Z & meConstraint)
             {
                 if(nModifier & KEY_MOD2)
                     aRotMat.rotate(0.0, fWAngle, 0.0);
                 else
                     aRotMat.rotate(0.0, 0.0, fWAngle);
             }
-            if(E3DDRAG_CONSTR_X & meConstraint)
+            if(E3dDragConstraint::X & meConstraint)
             {
                 aRotMat.rotate(fHAngle, 0.0, 0.0);
             }
