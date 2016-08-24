@@ -416,9 +416,8 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
 {
     // Load the pre saved personas
 
-    OUString gallery = "$BRAND_BASE_DIR/"
-                     + OUString(LIBO_SHARE_FOLDER)
-                     + "/gallery/personas/";
+    OUString gallery
+        = "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/gallery/personas/";
     rtl::Bootstrap::expandMacros( gallery );
     OUString aPersonasList = gallery + "personas_list.txt";
     SvFileStream aStream( aPersonasList, StreamMode::READ );
