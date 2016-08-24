@@ -253,8 +253,8 @@ bool ErrorBarItemConverter::ApplySpecialItem(
                 static_cast< const SvxChartIndicateItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
 
-            bool bNewIndPos = (eIndicate == CHINDICATE_BOTH || eIndicate == CHINDICATE_UP );
-            bool bNewIndNeg = (eIndicate == CHINDICATE_BOTH || eIndicate == CHINDICATE_DOWN );
+            bool bNewIndPos = (eIndicate == SvxChartIndicate::Both || eIndicate == SvxChartIndicate::Up );
+            bool bNewIndNeg = (eIndicate == SvxChartIndicate::Both || eIndicate == SvxChartIndicate::Down );
 
             bool bShowPos(false), bShowNeg(false);
             lcl_getErrorIndicatorValues( xErrorBarProp, bShowPos, bShowNeg );
@@ -401,23 +401,23 @@ void ErrorBarItemConverter::FillSpecialItem(
 
         case SCHATTR_STAT_INDICATE:
         {
-            SvxChartIndicate eIndicate = CHINDICATE_BOTH;
+            SvxChartIndicate eIndicate = SvxChartIndicate::Both;
             bool bShowPos(false), bShowNeg(false);
             lcl_getErrorIndicatorValues( GetPropertySet(), bShowPos, bShowNeg );
 
             if( bShowPos )
             {
                 if( bShowNeg )
-                    eIndicate = CHINDICATE_BOTH;
+                    eIndicate = SvxChartIndicate::Both;
                 else
-                    eIndicate = CHINDICATE_UP;
+                    eIndicate = SvxChartIndicate::Up;
             }
             else
             {
                 if( bShowNeg )
-                    eIndicate = CHINDICATE_DOWN;
+                    eIndicate = SvxChartIndicate::Down;
                 else
-                    eIndicate = CHINDICATE_NONE;
+                    eIndicate = SvxChartIndicate::NONE;
             }
             rOutItemSet.Put( SvxChartIndicateItem( eIndicate, SCHATTR_STAT_INDICATE ));
         }

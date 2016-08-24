@@ -82,7 +82,7 @@ ErrorBarResources::ErrorBarResources( VclBuilderContainer* pParent, Dialog * pPa
                                       const SfxItemSet& rInAttrs, bool bNoneAvailable,
                                       tErrorBarType eType /* = ERROR_BAR_Y */ ) :
         m_eErrorKind( CHERROR_NONE ),
-        m_eIndicate( CHINDICATE_BOTH ),
+        m_eIndicate( SvxChartIndicate::Both ),
         m_bErrorKindUnique( true ),
         m_bIndicatorUnique( true ),
         m_bPlusUnique( true ),
@@ -427,11 +427,11 @@ IMPL_LINK_NOARG_TYPED(ErrorBarResources, IndicatorChanged, Button*, void)
 {
     m_bIndicatorUnique = true;
     if( m_pRbBoth->IsChecked())
-        m_eIndicate = CHINDICATE_BOTH;
+        m_eIndicate = SvxChartIndicate::Both;
     else if( m_pRbPositive->IsChecked())
-        m_eIndicate = CHINDICATE_UP;
+        m_eIndicate = SvxChartIndicate::Up;
     else if( m_pRbNegative->IsChecked())
-        m_eIndicate = CHINDICATE_DOWN;
+        m_eIndicate = SvxChartIndicate::Down;
     else
         m_bIndicatorUnique = false;
 
@@ -560,15 +560,15 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
     {
         switch( m_eIndicate )
         {
-            case CHINDICATE_NONE :
+            case SvxChartIndicate::NONE :
                 // no longer used, use both as default
-                m_eIndicate = CHINDICATE_BOTH;
+                m_eIndicate = SvxChartIndicate::Both;
                 SAL_FALLTHROUGH; // to BOTH
-            case CHINDICATE_BOTH :
+            case SvxChartIndicate::Both :
                 m_pRbBoth->Check(); break;
-            case CHINDICATE_UP :
+            case SvxChartIndicate::Up :
                 m_pRbPositive->Check(); break;
-            case CHINDICATE_DOWN :
+            case SvxChartIndicate::Down :
                 m_pRbNegative->Check(); break;
         }
     }

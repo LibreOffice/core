@@ -65,15 +65,15 @@ enum SvxChartKindError
 
 #define CHERROR_COUNT   (CHERROR_RANGE + 1)
 
-enum SvxChartIndicate
+enum class SvxChartIndicate
 {
-    CHINDICATE_NONE,
-    CHINDICATE_BOTH,
-    CHINDICATE_UP,
-    CHINDICATE_DOWN
+    NONE,
+    Both,
+    Up,
+    Down
 };
 
-#define CHINDICATE_COUNT    (CHINDICATE_DOWN + 1)
+#define CHINDICATE_COUNT    ((sal_uInt16)SvxChartIndicate::Down + 1)
 
 enum class SvxChartRegress
 {
@@ -184,7 +184,7 @@ public:
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxChartIndicateItem : public SfxEnumItem
 {
 public:
-    SvxChartIndicateItem(SvxChartIndicate eOrient /*= CHINDICATE_NONE*/,
+    SvxChartIndicateItem(SvxChartIndicate eOrient /*= SvxChartIndicate::NONE*/,
                            sal_uInt16 nId );
     SvxChartIndicateItem(SvStream& rIn,
                            sal_uInt16 nId );

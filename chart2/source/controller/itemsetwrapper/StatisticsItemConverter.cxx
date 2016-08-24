@@ -540,8 +540,8 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 static_cast< const SvxChartIndicateItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
 
-            bool bNewIndPos = (eIndicate == CHINDICATE_BOTH || eIndicate == CHINDICATE_UP );
-            bool bNewIndNeg = (eIndicate == CHINDICATE_BOTH || eIndicate == CHINDICATE_DOWN );
+            bool bNewIndPos = (eIndicate == SvxChartIndicate::Both || eIndicate == SvxChartIndicate::Up );
+            bool bNewIndNeg = (eIndicate == SvxChartIndicate::Both || eIndicate == SvxChartIndicate::Down );
 
             bool bShowPos(false), bShowNeg(false);
             lcl_getErrorIndicatorValues( xErrorBarProp, bShowPos, bShowNeg );
@@ -816,7 +816,7 @@ void StatisticsItemConverter::FillSpecialItem(
             bool bYError =
                 static_cast<const SfxBoolItem&>(rOutItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE)).GetValue();
             uno::Reference< beans::XPropertySet > xErrorBarProp( lcl_GetErrorBar( GetPropertySet(),bYError));
-            SvxChartIndicate eIndicate = CHINDICATE_BOTH;
+            SvxChartIndicate eIndicate = SvxChartIndicate::Both;
             if( xErrorBarProp.is())
             {
                 bool bShowPos(false), bShowNeg(false);
@@ -825,16 +825,16 @@ void StatisticsItemConverter::FillSpecialItem(
                 if( bShowPos )
                 {
                     if( bShowNeg )
-                        eIndicate = CHINDICATE_BOTH;
+                        eIndicate = SvxChartIndicate::Both;
                     else
-                        eIndicate = CHINDICATE_UP;
+                        eIndicate = SvxChartIndicate::Up;
                 }
                 else
                 {
                     if( bShowNeg )
-                        eIndicate = CHINDICATE_DOWN;
+                        eIndicate = SvxChartIndicate::Down;
                     else
-                        eIndicate = CHINDICATE_NONE;
+                        eIndicate = SvxChartIndicate::NONE;
                 }
             }
             rOutItemSet.Put( SvxChartIndicateItem( eIndicate, SCHATTR_STAT_INDICATE ));
