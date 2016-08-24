@@ -121,12 +121,11 @@ namespace xmloff
     {
         addModelAttributes(_rExp);
 
-        m_pImplElement = new SvXMLElementExport(_rExp, XML_NAMESPACE_OFFICE, XML_FORMS, true, true);
+        m_pImplElement.reset( new SvXMLElementExport(_rExp, XML_NAMESPACE_OFFICE, XML_FORMS, true, true) );
     }
 
     OFormsRootExport::~OFormsRootExport( )
     {
-        delete m_pImplElement;
     }
 
     void OFormsRootExport::implExportBool(SvXMLExport& _rExp, OfficeFormsAttributes _eAttribute,
