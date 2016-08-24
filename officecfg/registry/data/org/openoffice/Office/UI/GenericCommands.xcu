@@ -1523,6 +1523,17 @@
           <value>9</value>
         </prop>
       </node>
+      <node oor:name=".uno:UnderlineSimple" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Underline</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>9</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:Underline</value>
+        </prop>
+      </node>
       <node oor:name=".uno:Overline" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Overline</value>
