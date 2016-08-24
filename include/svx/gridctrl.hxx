@@ -36,6 +36,7 @@
 #include <comphelper/propmultiplex.hxx>
 #include <svtools/transfer.hxx>
 #include <svx/svxdllapi.h>
+#include <o3tl/typed_flags_set.hxx>
 #include <vector>
 
 class DbGridControl;
@@ -114,14 +115,18 @@ protected:
 
 // InitWindowFacet, describing which aspect of a column's Window to (re-)initialize
 
-enum InitWindowFacet
+enum class InitWindowFacet
 {
-    InitFontFacet   = 0x01,
-    InitForeground  = 0x02,
-    InitBackground  = 0x04,
-    InitWritingMode = 0x08,
-    InitAll         = 0xFF
+    Font        = 0x01,
+    Foreground  = 0x02,
+    Background  = 0x04,
+    WritingMode = 0x08,
+    All         = 0x0F
 };
+namespace o3tl
+{
+    template<> struct typed_flags<InitWindowFacet> : is_typed_flags<InitWindowFacet, 0x0f> {};
+}
 
 
 class FmXGridSourcePropListener;

@@ -975,7 +975,7 @@ DbGridControl::DbGridControl(
     OUString sName(SVX_RESSTR(RID_STR_NAVIGATIONBAR));
     m_aBar->SetAccessibleName(sName);
     m_aBar->Show();
-    ImplInitWindow( InitAll );
+    ImplInitWindow( InitWindowFacet::All );
 }
 
 void DbGridControl::InsertHandleColumn()
@@ -1050,13 +1050,13 @@ void DbGridControl::StateChanged( StateChangedType nType )
     switch (nType)
     {
         case StateChangedType::Mirroring:
-            ImplInitWindow( InitWritingMode );
+            ImplInitWindow( InitWindowFacet::WritingMode );
             Invalidate();
             break;
 
         case StateChangedType::Zoom:
         {
-            ImplInitWindow( InitFontFacet );
+            ImplInitWindow( InitWindowFacet::Font );
 
             // and give it a chance to rearrange
             Point aPoint = GetControlArea().TopLeft();
@@ -1066,15 +1066,15 @@ void DbGridControl::StateChanged( StateChangedType nType )
         }
         break;
         case StateChangedType::ControlFont:
-            ImplInitWindow( InitFontFacet );
+            ImplInitWindow( InitWindowFacet::Font );
             Invalidate();
             break;
         case StateChangedType::ControlForeground:
-            ImplInitWindow( InitForeground );
+            ImplInitWindow( InitWindowFacet::Foreground );
             Invalidate();
             break;
         case StateChangedType::ControlBackground:
-            ImplInitWindow( InitBackground );
+            ImplInitWindow( InitWindowFacet::Background );
             Invalidate();
             break;
        default:;
@@ -1087,7 +1087,7 @@ void DbGridControl::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS ) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        ImplInitWindow( InitAll );
+        ImplInitWindow( InitWindowFacet::All );
         Invalidate();
     }
 }
@@ -1111,7 +1111,7 @@ void DbGridControl::ImplInitWindow( const InitWindowFacet _eInitWhat )
             pCol->ImplInitWindow( GetDataWindow(), _eInitWhat );
     }
 
-    if ( ( _eInitWhat & InitWritingMode ) != 0 )
+    if ( _eInitWhat & InitWindowFacet::WritingMode )
     {
         if ( m_bNavigationBar )
         {
@@ -1119,7 +1119,7 @@ void DbGridControl::ImplInitWindow( const InitWindowFacet _eInitWhat )
         }
     }
 
-    if ( ( _eInitWhat & InitFontFacet ) != 0 )
+    if ( _eInitWhat & InitWindowFacet::Font )
     {
         if ( m_bNavigationBar )
         {
@@ -1133,7 +1133,7 @@ void DbGridControl::ImplInitWindow( const InitWindowFacet _eInitWhat )
         }
     }
 
-    if ( ( _eInitWhat & InitBackground ) != 0 )
+    if ( _eInitWhat & InitWindowFacet::Background )
     {
         if (IsControlBackground())
         {

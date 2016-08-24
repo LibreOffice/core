@@ -710,7 +710,7 @@ void DbCellControl::ImplInitWindow( vcl::Window& rParent, const InitWindowFacet 
 {
     vcl::Window* pWindows[] = { m_pPainter, m_pWindow };
 
-    if ((_eInitWhat & InitWritingMode) != 0)
+    if (_eInitWhat & InitWindowFacet::WritingMode)
     {
         for (vcl::Window* pWindow : pWindows)
         {
@@ -719,7 +719,7 @@ void DbCellControl::ImplInitWindow( vcl::Window& rParent, const InitWindowFacet 
         }
     }
 
-    if ((_eInitWhat & InitFontFacet) != 0)
+    if (_eInitWhat & InitWindowFacet::Font)
     {
         for (vcl::Window* pWindow : pWindows)
         {
@@ -744,7 +744,7 @@ void DbCellControl::ImplInitWindow( vcl::Window& rParent, const InitWindowFacet 
         }
     }
 
-    if (((_eInitWhat & InitFontFacet) != 0) || ((_eInitWhat & InitForeground) != 0))
+    if ((_eInitWhat & InitWindowFacet::Font) || (_eInitWhat & InitWindowFacet::Foreground))
     {
         Color aTextColor(rParent.IsControlForeground() ? rParent.GetControlForeground() : rParent.GetTextColor());
 
@@ -767,7 +767,7 @@ void DbCellControl::ImplInitWindow( vcl::Window& rParent, const InitWindowFacet 
         }
     }
 
-    if ((_eInitWhat & InitBackground) != 0)
+    if (_eInitWhat & InitWindowFacet::Background)
     {
         if (rParent.IsControlBackground())
         {
@@ -845,7 +845,7 @@ void DbCellControl::implAdjustEnabled( const Reference< XPropertySet >& _rxModel
 
 void DbCellControl::Init( vcl::Window& rParent, const Reference< XRowSet >& _rxCursor )
 {
-    ImplInitWindow( rParent, InitAll );
+    ImplInitWindow( rParent, InitWindowFacet::All );
 
     if ( m_pWindow )
     {
