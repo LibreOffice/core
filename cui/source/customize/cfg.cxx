@@ -1751,6 +1751,7 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     get(m_pAddCommandsButton, "add");
     get(m_pModifyCommandButton, "modify");
     get(m_pDeleteCommandButton, "deletebtn");
+    get(m_pResetCommandButton, "resetbtn");
     get(m_pMoveUpButton, "up");
     get(m_pMoveDownButton, "down");
     get(m_pSaveInListBox, "savein");
@@ -1763,6 +1764,10 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
 
     m_pDescriptionField->SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
     m_pDescriptionField->EnableCursor( false );
+
+    //This functionality exists only in the "Toolbars" tab
+    m_pResetCommandButton->Enable( false );
+    m_pResetCommandButton->Hide();
 }
 
 SvxConfigPage::~SvxConfigPage()
@@ -1783,6 +1788,7 @@ void SvxConfigPage::dispose()
     m_pAddCommandsButton.clear();
     m_pModifyCommandButton.clear();
     m_pDeleteCommandButton.clear();
+    m_pResetCommandButton.clear();
     m_pMoveUpButton.clear();
     m_pMoveDownButton.clear();
     m_pSaveInListBox.clear();
@@ -3115,6 +3121,11 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     m_pDeleteCommandButton->SetClickHdl  (
         LINK( this, SvxToolbarConfigPage, DeleteCommandHdl ) );
 
+    m_pResetCommandButton->SetClickHdl  (
+        LINK( this, SvxToolbarConfigPage, ResetCommandHdl ) );
+    //Make the Reset button visible again. It was hidden by the parent's ctor.
+    m_pResetCommandButton->Show();
+
     m_pMoveUpButton->SetClickHdl ( LINK( this, SvxToolbarConfigPage, MoveHdl) );
     m_pMoveDownButton->SetClickHdl ( LINK( this, SvxToolbarConfigPage, MoveHdl) );
     // Always enable Up and Down buttons
@@ -3388,72 +3399,6 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, vo
 
                 m_pContentsListBox->SetEntryText( pActEntry, aNewName );
                 bNeedsApply = true;
-            }
-            break;
-        }
-        case ID_DEFAULT_COMMAND:
-        {
-            SvTreeListEntry* pActEntry = m_pContentsListBox->GetCurEntry();
-            SvxConfigEntry* pEntry =
-                static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
-
-            sal_uInt16 nSelectionPos = 0;
-
-            // find position of entry within the list
-            for ( sal_uLong i = 0; i < m_pContentsListBox->GetEntryCount(); ++i )
-            {
-                if ( m_pContentsListBox->GetEntry( nullptr, i ) == pActEntry )
-                {
-                    nSelectionPos = i;
-                    break;
-                }
-            }
-
-            ToolbarSaveInData* pSaveInData =
-                static_cast<ToolbarSaveInData*>( GetSaveInData() );
-
-            OUString aSystemName =
-                pSaveInData->GetSystemUIName( pEntry->GetCommand() );
-
-            if ( !pEntry->GetName().equals( aSystemName ) )
-            {
-                pEntry->SetName( aSystemName );
-                m_pContentsListBox->SetEntryText(
-                    pActEntry, stripHotKey( aSystemName ) );
-                bNeedsApply = true;
-            }
-
-            uno::Sequence<OUString> aURLSeq { pEntry->GetCommand() };
-
-            try
-            {
-                GetSaveInData()->GetImageManager()->removeImages(
-                    GetImageType(), aURLSeq );
-
-                // reset backup in entry
-                pEntry->SetBackupGraphic(
-                    uno::Reference< graphic::XGraphic >() );
-
-                GetSaveInData()->PersistChanges(
-                    GetSaveInData()->GetImageManager() );
-
-                m_pContentsListBox->GetModel()->Remove( pActEntry );
-
-                SvTreeListEntry* pNewLBEntry =
-                    InsertEntryIntoUI( pEntry, nSelectionPos );
-
-                m_pContentsListBox->SetCheckButtonState( pNewLBEntry,
-                    pEntry->IsVisible() ?
-                        SvButtonState::Checked : SvButtonState::Unchecked );
-
-                m_pContentsListBox->Select( pNewLBEntry );
-                m_pContentsListBox->MakeVisible( pNewLBEntry );
-
-                bNeedsApply = true;
-            }
-            catch ( uno::Exception& )
-            {
-                OSL_TRACE("Error restoring image");
             }
             break;
         }
@@ -4475,14 +4420,14 @@ void SvxToolbarConfigPage::UpdateButtonStates()
     PopupMenu* pPopup = m_pModifyCommandButton->GetPopupMenu();
     pPopup->EnableItem( ID_RENAME, false );
     pPopup->EnableItem( ID_BEGIN_GROUP, false );
-    pPopup->EnableItem( ID_DEFAULT_COMMAND, false );
     pPopup->EnableItem( ID_ICON_ONLY, false );
     pPopup->EnableItem( ID_ICON_AND_TEXT, false );
     pPopup->EnableItem( ID_TEXT_ONLY, false );
     pPopup->EnableItem( ID_CHANGE_SYMBOL, false );
     pPopup->EnableItem( ID_RESET_SYMBOL, false );
 
-    m_pDeleteCommandButton->Enable(false);
+    m_pDeleteCommandButton->Enable( false );
+    m_pResetCommandButton->Enable( false );
 
     m_pDescriptionField->SetText("");
 
@@ -4509,7 +4454,7 @@ void SvxToolbarConfigPage::UpdateButtonStates()
         m_pDeleteCommandButton->Enable();
 
         if ( !pEntryData->IsUserDefined() )
-            pPopup->EnableItem( ID_DEFAULT_COMMAND );
+            m_pResetCommandButton->Enable();
 
         if ( pEntryData->IsIconModified() )
             pPopup->EnableItem( ID_RESET_SYMBOL );
@@ -4684,6 +4629,81 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, AddCommandsHdl, Button *, void )
 IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, DeleteCommandHdl, Button *, void )
 {
     DeleteSelectedContent();
+}
+
+IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, ResetCommandHdl, Button *, void )
+{
+    bool bNeedsApply = false;
+
+    SvTreeListEntry* pActEntry = m_pContentsListBox->GetCurEntry();
+    SvxConfigEntry* pEntry =
+        static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
+
+    sal_uLong nSelectionPos = 0;
+    // find position of entry within the list
+    for ( sal_uLong i = 0; i < m_pContentsListBox->GetEntryCount(); ++i )
+    {
+        if ( m_pContentsListBox->GetEntry( nullptr, i ) == pActEntry )
+        {
+            nSelectionPos = i;
+            break;
+        }
+    }
+
+    ToolbarSaveInData* pSaveInData =
+    static_cast<ToolbarSaveInData*>( GetSaveInData() );
+
+    OUString aSystemName =
+        pSaveInData->GetSystemUIName( pEntry->GetCommand() );
+
+    if ( !pEntry->GetName().equals( aSystemName ) )
+    {
+        pEntry->SetName( aSystemName );
+        m_pContentsListBox->SetEntryText(
+            pActEntry, stripHotKey( aSystemName ) );
+        bNeedsApply = true;
+    }
+
+    uno::Sequence<OUString> aURLSeq { pEntry->GetCommand() };
+
+    try
+    {
+        GetSaveInData()->GetImageManager()->removeImages(
+            GetImageType(), aURLSeq );
+
+        // reset backup in entry
+        pEntry->SetBackupGraphic(
+            uno::Reference< graphic::XGraphic >() );
+
+        GetSaveInData()->PersistChanges(
+        GetSaveInData()->GetImageManager() );
+
+        m_pContentsListBox->GetModel()->Remove( pActEntry );
+
+        SvTreeListEntry* pNewLBEntry =
+            InsertEntryIntoUI( pEntry, nSelectionPos );
+
+        m_pContentsListBox->SetCheckButtonState( pNewLBEntry,
+            pEntry->IsVisible() ?
+                SvButtonState::Checked : SvButtonState::Unchecked );
+
+        m_pContentsListBox->Select( pNewLBEntry );
+        m_pContentsListBox->MakeVisible( pNewLBEntry );
+
+        bNeedsApply = true;
+    }
+    catch ( uno::Exception& )
+    {
+        OSL_TRACE("Error restoring image");
+    }
+
+    if ( bNeedsApply )
+    {
+        // get currently selected toolbar
+        SvxConfigEntry* pToolbar = GetTopLevelSelection();
+        static_cast<ToolbarSaveInData*>( GetSaveInData())->ApplyToolbar( pToolbar );
+        UpdateButtonStates();
+    }
 }
 
 IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, AddFunctionHdl, SvxScriptSelectorDialog&, void )
