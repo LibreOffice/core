@@ -11937,7 +11937,6 @@ if test "$test_cairo" = "yes"; then
         AC_MSG_RESULT([no])
 
         BUILD_TYPE="$BUILD_TYPE CAIRO"
-        SCPDEFS="$SCPDEFS -DNEED_CAIRO"
     fi
 fi
 
