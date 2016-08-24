@@ -438,42 +438,42 @@ IMPL_LINK_TYPED( NumFormatListBox, SelectHdl, ListBox&, rBox, void )
 
 double NumFormatListBox::GetDefValue(const short nFormatType) const
 {
-    double fDefValue = 0.0;
+    SvxNumValCategory nDefValue = SvxNumValCategory::Standard;
 
     switch (nFormatType)
     {
         case css::util::NumberFormat::DATE:
         case css::util::NumberFormat::DATE|css::util::NumberFormat::TIME:
-            fDefValue = SVX_NUMVAL_DATE;
+            nDefValue = SvxNumValCategory::Date;
             break;
 
         case css::util::NumberFormat::TIME:
-            fDefValue = SVX_NUMVAL_TIME;
+            nDefValue = SvxNumValCategory::Time;
             break;
 
         case css::util::NumberFormat::TEXT:
         case css::util::NumberFormat::UNDEFINED:
-            fDefValue = 0;
+            nDefValue = SvxNumValCategory::Standard;
             break;
 
         case css::util::NumberFormat::CURRENCY:
-            fDefValue = SVX_NUMVAL_CURRENCY;
+            nDefValue = SvxNumValCategory::Currency;
             break;
 
         case css::util::NumberFormat::PERCENT:
-            fDefValue = SVX_NUMVAL_PERCENT;
+            nDefValue = SvxNumValCategory::Percent;
             break;
 
         case css::util::NumberFormat::LOGICAL:
-            fDefValue = SVX_NUMVAL_BOOLEAN;
+            nDefValue = SvxNumValCategory::Boolean;
             break;
 
         default:
-            fDefValue = SVX_NUMVAL_STANDARD;
+            nDefValue = SvxNumValCategory::Standard;
             break;
     }
 
-    return fDefValue;
+    return fSvxNumValConst[nDefValue];
 }
 
 void NumFormatListBox::Clear()

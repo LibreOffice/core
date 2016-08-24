@@ -1722,28 +1722,28 @@ OUString SvxNumberFormatTabPage::GetExpColorString(
     SvxNumValCategory i;
     switch (nTmpCatPos)
     {
-        case CAT_ALL:           i=SVX_NUMVAL_STANDARD; break;
+        case CAT_ALL:           i=SvxNumValCategory::Standard; break;
 
-        case CAT_NUMBER:        i=SVX_NUMVAL_STANDARD; break;
+        case CAT_NUMBER:        i=SvxNumValCategory::Standard; break;
 
-        case CAT_PERCENT:       i=SVX_NUMVAL_PERCENT; break;
+        case CAT_PERCENT:       i=SvxNumValCategory::Percent; break;
 
-        case CAT_CURRENCY:      i=SVX_NUMVAL_CURRENCY; break;
+        case CAT_CURRENCY:      i=SvxNumValCategory::Currency; break;
 
-        case CAT_DATE:          i=SVX_NUMVAL_DATE; break;
+        case CAT_DATE:          i=SvxNumValCategory::Date; break;
 
-        case CAT_TIME:          i=SVX_NUMVAL_TIME; break;
+        case CAT_TIME:          i=SvxNumValCategory::Time; break;
 
-        case CAT_SCIENTIFIC:    i=SVX_NUMVAL_SCIENTIFIC; break;
+        case CAT_SCIENTIFIC:    i=SvxNumValCategory::Scientific; break;
 
-        case CAT_FRACTION:      i=SVX_NUMVAL_FRACTION; break;
+        case CAT_FRACTION:      i=SvxNumValCategory::Fraction; break;
 
-        case CAT_BOOLEAN:       i=SVX_NUMVAL_BOOLEAN; break;
+        case CAT_BOOLEAN:       i=SvxNumValCategory::Boolean; break;
 
-        case CAT_USERDEFINED:   i=SVX_NUMVAL_STANDARD; break;
+        case CAT_USERDEFINED:   i=SvxNumValCategory::Standard; break;
 
         case CAT_TEXT:
-        default:                i=SVX_NUMVAL_NOVALUE;break;
+        default:                i=SvxNumValCategory::NoValue;break;
     }
     double fVal = fSvxNumValConst[i];
 

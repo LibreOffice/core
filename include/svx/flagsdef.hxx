@@ -20,6 +20,7 @@
 #define INCLUDED_SVX_FLAGSDEF_HXX
 
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/enumarray.hxx>
 
 // defines ---------------------------------------------------------------
 
@@ -71,28 +72,29 @@ namespace o3tl
 
 
 // Default values for Number Format Category List and Preview
-enum SvxNumValCategory
+enum class SvxNumValCategory
 {
-    SVX_NUMVAL_STANDARD = 0,
-    SVX_NUMVAL_PERCENT,
-    SVX_NUMVAL_CURRENCY,
-    SVX_NUMVAL_DATE,
-    SVX_NUMVAL_TIME,
-    SVX_NUMVAL_SCIENTIFIC,
-    SVX_NUMVAL_FRACTION,
-    SVX_NUMVAL_BOOLEAN,
-    SVX_NUMVAL_NOVALUE
+    Standard = 0,
+    Percent,
+    Currency,
+    Date,
+    Time,
+    Scientific,
+    Fraction,
+    Boolean,
+    NoValue,
+    LAST = NoValue
 };
-const double fSvxNumValConst[] = {
-    -1234.56789012345678,   // SVX_NUMVAL_STANDARD
-    -0.1295,                // SVX_NUMVAL_PERCENT
-    -1234.0,                // SVX_NUMVAL_CURRENCY
-    36525.5678935185,       // SVX_NUMVAL_DATE
-    36525.5678935185,       // SVX_NUMVAL_TIME
-    12345.67889,            // SVX_NUMVAL_SCIENTIFIC
-    123.456,                // SVX_NUMVAL_FRACTION
-    1.0,                    // SVX_NUMVAL_BOOLEAN
-    0.0                     // SVX_NUMVAL_NOVALUE
+const o3tl::enumarray<SvxNumValCategory, double> fSvxNumValConst = {
+    -1234.56789012345678,   // SvxNumValCategory::Standard
+    -0.1295,                // SvxNumValCategory::Percent
+    -1234.0,                // SvxNumValCategory::Currency
+    36525.5678935185,       // SvxNumValCategory::Date
+    36525.5678935185,       // SvxNumValCategory::Time
+    12345.67889,            // SvxNumValCategory::Scientific
+    123.456,                // SvxNumValCategory::Fraction
+    1.0,                    // SvxNumValCategory::Boolean
+    0.0                     // SvxNumValCategory::NoValue
 };
 
 // copy from page.hxx

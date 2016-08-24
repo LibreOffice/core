@@ -39,25 +39,25 @@ double GetDefaultValNum( const short nType )
     switch( nType )
     {
         case css::util::NumberFormat::NUMBER:
-            return fSvxNumValConst[SVX_NUMVAL_STANDARD];
+            return fSvxNumValConst[SvxNumValCategory::Standard];
         case css::util::NumberFormat::CURRENCY:
-            return fSvxNumValConst[SVX_NUMVAL_CURRENCY];
+            return fSvxNumValConst[SvxNumValCategory::Currency];
         case css::util::NumberFormat::PERCENT:
-            return fSvxNumValConst[SVX_NUMVAL_PERCENT];
+            return fSvxNumValConst[SvxNumValCategory::Percent];
         case css::util::NumberFormat::DATE:
         case css::util::NumberFormat::DATETIME:
-            return fSvxNumValConst[SVX_NUMVAL_DATE];
+            return fSvxNumValConst[SvxNumValCategory::Date];
         case css::util::NumberFormat::TIME:
-            return fSvxNumValConst[SVX_NUMVAL_TIME];
+            return fSvxNumValConst[SvxNumValCategory::Time];
         case css::util::NumberFormat::SCIENTIFIC:
-            return fSvxNumValConst[SVX_NUMVAL_SCIENTIFIC];
+            return fSvxNumValConst[SvxNumValCategory::Scientific];
         case css::util::NumberFormat::FRACTION:
-            return fSvxNumValConst[SVX_NUMVAL_FRACTION];
+            return fSvxNumValConst[SvxNumValCategory::Fraction];
         case css::util::NumberFormat::LOGICAL:
-            return fSvxNumValConst[SVX_NUMVAL_BOOLEAN];
+            return fSvxNumValConst[SvxNumValCategory::Boolean];
         default: break;
     }
-    return fSvxNumValConst[SVX_NUMVAL_NOVALUE];
+    return fSvxNumValConst[SvxNumValCategory::NoValue];
 }
 
 }
@@ -99,7 +99,7 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
     , bUseStarFormat  (false)
     , bIsDefaultValNum (true)
 {
-    nValNum = SVX_NUMVAL_STANDARD;
+    nValNum = 0;
 
     switch ( eValType )
     {
@@ -150,7 +150,7 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
         case SvxNumberValueType::String:
         case SvxNumberValueType::Undefined:
         default:
-            nValNum = SVX_NUMVAL_STANDARD;
+            nValNum = 0;
             bIsDefaultValNum = true;
     }
 }
