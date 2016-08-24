@@ -121,7 +121,7 @@ ChartItemPool::ChartItemPool():
 
     //axis label
     ppPoolDefaults[SCHATTR_AXIS_SHOWDESCR       - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_SHOWDESCR,false);
-    ppPoolDefaults[SCHATTR_AXIS_LABEL_ORDER     - SCHATTR_START] = new SvxChartTextOrderItem(CHTXTORDER_SIDEBYSIDE, SCHATTR_AXIS_LABEL_ORDER);
+    ppPoolDefaults[SCHATTR_AXIS_LABEL_ORDER     - SCHATTR_START] = new SvxChartTextOrderItem(SvxChartTextOrder::SideBySide, SCHATTR_AXIS_LABEL_ORDER);
     ppPoolDefaults[SCHATTR_AXIS_LABEL_OVERLAP   - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_LABEL_OVERLAP,false);
     ppPoolDefaults[SCHATTR_AXIS_LABEL_BREAK     - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_LABEL_BREAK, false );
 

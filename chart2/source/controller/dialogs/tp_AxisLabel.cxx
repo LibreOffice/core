@@ -123,17 +123,17 @@ bool SchAxisLabelTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 
     if( m_bShowStaggeringControls )
     {
-        SvxChartTextOrder eOrder = CHTXTORDER_SIDEBYSIDE;
+        SvxChartTextOrder eOrder = SvxChartTextOrder::SideBySide;
         bool bRadioButtonChecked = true;
 
         if( m_pRbUpDown->IsChecked())
-            eOrder = CHTXTORDER_UPDOWN;
+            eOrder = SvxChartTextOrder::UpDown;
         else if( m_pRbDownUp->IsChecked())
-            eOrder = CHTXTORDER_DOWNUP;
+            eOrder = SvxChartTextOrder::DownUp;
         else if( m_pRbAuto->IsChecked())
-            eOrder = CHTXTORDER_AUTO;
+            eOrder = SvxChartTextOrder::Auto;
         else if( m_pRbSideBySide->IsChecked())
-            eOrder = CHTXTORDER_SIDEBYSIDE;
+            eOrder = SvxChartTextOrder::SideBySide;
         else
             bRadioButtonChecked = false;
 
@@ -258,16 +258,16 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
 
             switch( eOrder )
             {
-                case CHTXTORDER_SIDEBYSIDE:
+                case SvxChartTextOrder::SideBySide:
                     m_pRbSideBySide->Check();
                     break;
-                case CHTXTORDER_UPDOWN:
+                case SvxChartTextOrder::UpDown:
                     m_pRbUpDown->Check();
                     break;
-                case CHTXTORDER_DOWNUP:
+                case SvxChartTextOrder::DownUp:
                     m_pRbDownUp->Check();
                     break;
-                case CHTXTORDER_AUTO:
+                case SvxChartTextOrder::Auto:
                     m_pRbAuto->Check();
                     break;
             }

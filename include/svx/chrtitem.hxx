@@ -39,17 +39,15 @@ enum SvxChartDataDescr
 
 #define CHDESCR_COUNT   (CHDESCR_TEXTANDVALUE + 1)
 
-enum SvxChartTextOrder
+enum class SvxChartTextOrder
 {
-    CHTXTORDER_SIDEBYSIDE,
-    CHTXTORDER_UPDOWN,
-    CHTXTORDER_DOWNUP,
-    CHTXTORDER_AUTO
+    SideBySide,
+    UpDown,
+    DownUp,
+    Auto
 };
 
-#define CHTXTORDER_COUNT    (CHTXTORDER_AUTO + 1)
-
-#define CHTXTORIENT_COUNT   (CHTXTORIENT_TOPBOTTOM + 1)
+#define CHTXTORDER_COUNT    ((sal_uInt16)SvxChartTextOrder::Auto + 1)
 
 enum class SvxChartKindError
 {
@@ -135,7 +133,7 @@ public:
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxChartTextOrderItem : public SfxEnumItem
 {
 public:
-    SvxChartTextOrderItem(SvxChartTextOrder eOrder /*= CHTXTORDER_SIDEBYSIDE*/,
+    SvxChartTextOrderItem(SvxChartTextOrder eOrder /*= SvxChartTextOrder::SideBySide*/,
                           sal_uInt16 nId );
     SvxChartTextOrderItem(SvStream& rIn,
                           sal_uInt16 nId );

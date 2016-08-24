@@ -105,13 +105,13 @@ bool SvxChartTextOrderItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMember
 
     switch( eOrder )
     {
-        case CHTXTORDER_SIDEBYSIDE:
+        case SvxChartTextOrder::SideBySide:
             eAO = css::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE; break;
-        case CHTXTORDER_UPDOWN:
+        case SvxChartTextOrder::UpDown:
             eAO = css::chart::ChartAxisArrangeOrderType_STAGGER_ODD; break;
-        case CHTXTORDER_DOWNUP:
+        case SvxChartTextOrder::DownUp:
             eAO = css::chart::ChartAxisArrangeOrderType_STAGGER_EVEN; break;
-        case CHTXTORDER_AUTO:
+        case SvxChartTextOrder::Auto:
             eAO = css::chart::ChartAxisArrangeOrderType_AUTO; break;
     }
 
@@ -139,13 +139,13 @@ bool SvxChartTextOrderItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMe
     switch( eAO )
     {
         case css::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE:
-            eOrder = CHTXTORDER_SIDEBYSIDE; break;
+            eOrder = SvxChartTextOrder::SideBySide; break;
         case css::chart::ChartAxisArrangeOrderType_STAGGER_ODD:
-            eOrder = CHTXTORDER_UPDOWN; break;
+            eOrder = SvxChartTextOrder::UpDown; break;
         case css::chart::ChartAxisArrangeOrderType_STAGGER_EVEN:
-            eOrder = CHTXTORDER_DOWNUP; break;
+            eOrder = SvxChartTextOrder::DownUp; break;
         case css::chart::ChartAxisArrangeOrderType_AUTO:
-            eOrder = CHTXTORDER_AUTO; break;
+            eOrder = SvxChartTextOrder::Auto; break;
         default:
             return false;
     }
