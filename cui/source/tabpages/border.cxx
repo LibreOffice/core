@@ -271,17 +271,17 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
         lcl_SetDecimalDigitsTo1(*m_pEdShadowSize);
     }
 
-    svx::FrameSelFlags nFlags = svx::FRAMESEL_OUTER;
+    FrameSelFlags nFlags = FrameSelFlags::Outer;
     if( mbHorEnabled )
-        nFlags |= svx::FRAMESEL_INNER_HOR;
+        nFlags |= FrameSelFlags::InnerHorizontal;
     if( mbVerEnabled )
-        nFlags |= svx::FRAMESEL_INNER_VER;
+        nFlags |= FrameSelFlags::InnerVertical;
     if( mbTLBREnabled )
-        nFlags |= svx::FRAMESEL_DIAG_TLBR;
+        nFlags |= FrameSelFlags::DiagonalTLBR;
     if( mbBLTREnabled )
-        nFlags |= svx::FRAMESEL_DIAG_BLTR;
+        nFlags |= FrameSelFlags::DiagonalBLTR;
     if( bIsDontCare )
-        nFlags |= svx::FRAMESEL_DONTCARE;
+        nFlags |= FrameSelFlags::DontCare;
     m_pFrameSel->Initialize( nFlags );
 
     m_pFrameSel->SetSelectHdl(LINK(this, SvxBorderTabPage, LinesChanged_Impl));

@@ -84,17 +84,17 @@ FrameSelFlags lclGetFlagFromType( FrameBorderType eBorder )
 {
     switch( eBorder )
     {
-        case FRAMEBORDER_LEFT:      return FRAMESEL_LEFT;
-        case FRAMEBORDER_RIGHT:     return FRAMESEL_RIGHT;
-        case FRAMEBORDER_TOP:       return FRAMESEL_TOP;
-        case FRAMEBORDER_BOTTOM:    return FRAMESEL_BOTTOM;
-        case FRAMEBORDER_HOR:       return FRAMESEL_INNER_HOR;
-        case FRAMEBORDER_VER:       return FRAMESEL_INNER_VER;
-        case FRAMEBORDER_TLBR:      return FRAMESEL_DIAG_TLBR;
-        case FRAMEBORDER_BLTR:      return FRAMESEL_DIAG_BLTR;
+        case FRAMEBORDER_LEFT:      return FrameSelFlags::Left;
+        case FRAMEBORDER_RIGHT:     return FrameSelFlags::Right;
+        case FRAMEBORDER_TOP:       return FrameSelFlags::Top;
+        case FRAMEBORDER_BOTTOM:    return FrameSelFlags::Bottom;
+        case FRAMEBORDER_HOR:       return FrameSelFlags::InnerHorizontal;
+        case FRAMEBORDER_VER:       return FrameSelFlags::InnerVertical;
+        case FRAMEBORDER_TLBR:      return FrameSelFlags::DiagonalTLBR;
+        case FRAMEBORDER_BLTR:      return FrameSelFlags::DiagonalBLTR;
         case FRAMEBORDER_NONE : break;
     }
-    return FRAMESEL_NONE;
+    return FrameSelFlags::NONE;
 }
 
 /** Merges the rSource polypolygon into the rDest polypolygon. */
@@ -120,7 +120,7 @@ FrameBorder::FrameBorder( FrameBorderType eType ) :
 
 void FrameBorder::Enable( FrameSelFlags nFlags )
 {
-    mbEnabled = (nFlags & lclGetFlagFromType( meType )) != 0;
+    mbEnabled = bool(nFlags & lclGetFlagFromType( meType ));
     if( !mbEnabled )
         SetState( FrameBorderState::Hide );
 }
@@ -217,7 +217,7 @@ FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
     maVer( FRAMEBORDER_VER ),
     maTLBR( FRAMEBORDER_TLBR ),
     maBLTR( FRAMEBORDER_BLTR ),
-    mnFlags( FRAMESEL_OUTER ),
+    mnFlags( FrameSelFlags::Outer ),
     mnCtrlSize( 0 ),
     mnArrowSize( 0 ),
     mnLine1( 0 ),
@@ -841,7 +841,7 @@ sal_Int32 FrameSelector::GetEnabledBorderIndex( FrameBorderType eBorder ) const
 // frame border state and style
 bool FrameSelector::SupportsDontCareState() const
 {
-    return (mxImpl->mnFlags & FRAMESEL_DONTCARE) != 0;
+    return bool(mxImpl->mnFlags & FrameSelFlags::DontCare);
 }
 
 FrameBorderState FrameSelector::GetFrameBorderState( FrameBorderType eBorder ) const
