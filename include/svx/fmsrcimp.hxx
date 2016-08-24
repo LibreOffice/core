@@ -61,10 +61,10 @@ public:
  */
 struct FmSearchProgress
 {
-    enum STATE { STATE_PROGRESS, STATE_PROGRESS_COUNTING, STATE_CANCELED, STATE_SUCCESSFULL, STATE_NOTHINGFOUND, STATE_ERROR };
+    enum class State { Progress, ProgressCounting, Canceled, Successful, NothingFound, Error };
     // (move to new record; progress during counting of records; cancelled; record found; nothing found;
     // any non-processable error)
-    STATE       aSearchState;
+    State       aSearchState;
 
     // current record - always valid (e.g. of interest for continuing search in case of cancellation)
     sal_uInt32  nCurrentRecord;

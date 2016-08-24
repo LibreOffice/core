@@ -701,7 +701,7 @@ IMPL_LINK_TYPED(FmSearchDialog, OnSearchProgress, const FmSearchProgress*, pProg
 
     switch (pProgress->aSearchState)
     {
-        case FmSearchProgress::STATE_PROGRESS:
+        case FmSearchProgress::State::Progress:
             if (pProgress->bOverflow)
             {
                 OUString sHint( CUI_RES( m_pcbBackwards->IsChecked() ? RID_STR_OVERFLOW_BACKWARD : RID_STR_OVERFLOW_FORWARD ) );
@@ -713,7 +713,7 @@ IMPL_LINK_TYPED(FmSearchDialog, OnSearchProgress, const FmSearchProgress*, pProg
             m_pftRecord->Invalidate();
             break;
 
-        case FmSearchProgress::STATE_PROGRESS_COUNTING:
+        case FmSearchProgress::State::ProgressCounting:
             m_pftHint->SetText(CUI_RESSTR(RID_STR_SEARCH_COUNTING));
             m_pftHint->Invalidate();
 
@@ -721,21 +721,21 @@ IMPL_LINK_TYPED(FmSearchDialog, OnSearchProgress, const FmSearchProgress*, pProg
             m_pftRecord->Invalidate();
             break;
 
-        case FmSearchProgress::STATE_SUCCESSFULL:
+        case FmSearchProgress::State::Successful:
             OnFound(pProgress->aBookmark, (sal_Int16)pProgress->nFieldIndex);
             EnableSearchUI(true);
             break;
 
-        case FmSearchProgress::STATE_ERROR:
-        case FmSearchProgress::STATE_NOTHINGFOUND:
+        case FmSearchProgress::State::Error:
+        case FmSearchProgress::State::NothingFound:
         {
-            sal_uInt16 nErrorId = (FmSearchProgress::STATE_ERROR == pProgress->aSearchState)
+            sal_uInt16 nErrorId = (FmSearchProgress::State::Error == pProgress->aSearchState)
                 ? RID_STR_SEARCH_GENERAL_ERROR
                 : RID_STR_SEARCH_NORECORD;
             ScopedVclPtrInstance<MessageDialog>(this, CUI_RES(nErrorId))->Execute();
             SAL_FALLTHROUGH;
         }
-        case FmSearchProgress::STATE_CANCELED:
+        case FmSearchProgress::State::Canceled:
             EnableSearchUI(true);
             if (m_lnkCanceledNotFoundHdl.IsSet())
             {

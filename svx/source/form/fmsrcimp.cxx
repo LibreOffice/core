@@ -865,7 +865,7 @@ void FmSearchEngine::PropagateProgress(bool _bDontPropagateOverflow)
         FmSearchProgress aProgress;
         try
         {
-            aProgress.aSearchState = FmSearchProgress::STATE_PROGRESS;
+            aProgress.aSearchState = FmSearchProgress::State::Progress;
             aProgress.nCurrentRecord = m_xSearchCursor.getRow() - 1;
             if (m_bForward)
                 aProgress.bOverflow = !_bDontPropagateOverflow && m_xSearchCursor.isFirst();
@@ -994,19 +994,19 @@ IMPL_LINK_NOARG_TYPED(FmSearchEngine, OnSearchTerminated, FmSearchThread*, void)
         switch (m_srResult)
         {
             case SearchResult::Error :
-                aProgress.aSearchState = FmSearchProgress::STATE_ERROR;
+                aProgress.aSearchState = FmSearchProgress::State::Error;
                 break;
             case SearchResult::Found :
-                aProgress.aSearchState = FmSearchProgress::STATE_SUCCESSFULL;
+                aProgress.aSearchState = FmSearchProgress::State::Successful;
                 aProgress.aBookmark = m_aPreviousLocBookmark;
                 aProgress.nFieldIndex = m_iterPreviousLocField - m_arrUsedFields.begin();
                 break;
             case SearchResult::NotFound :
-                aProgress.aSearchState = FmSearchProgress::STATE_NOTHINGFOUND;
+                aProgress.aSearchState = FmSearchProgress::State::NothingFound;
                 aProgress.aBookmark = m_xSearchCursor.getBookmark();
                 break;
             case SearchResult::Cancelled :
-                aProgress.aSearchState = FmSearchProgress::STATE_CANCELED;
+                aProgress.aSearchState = FmSearchProgress::State::Canceled;
                 aProgress.aBookmark = m_xSearchCursor.getBookmark();
                 break;
         }
@@ -1031,7 +1031,7 @@ IMPL_LINK_TYPED(FmSearchEngine, OnNewRecordCount, sal_Int32, theCounter, void)
 
     FmSearchProgress aProgress;
     aProgress.nCurrentRecord = theCounter;
-    aProgress.aSearchState = FmSearchProgress::STATE_PROGRESS_COUNTING;
+    aProgress.aSearchState = FmSearchProgress::State::ProgressCounting;
     m_aProgressHandler.Call(&aProgress);
 }
 
