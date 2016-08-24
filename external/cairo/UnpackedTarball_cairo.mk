@@ -13,17 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,cairo,$(CAIRO_TARBALL),,cairo))
 
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
 	external/cairo/cairo/cairo-1.10.2.patch \
-	external/cairo/cairo/cairo.dlsym.lcdfilter.patch \
-	external/cairo/cairo/cairo-1.10.2-oldfontconfig.patch \
 ))
 
-ifeq ($(OS)$(COM),WNTMSC)
-$(eval $(call gb_UnpackedTarball_add_patches,cairo,\
-	external/cairo/cairo/cairo-1.10.2.wntmsc.patch \
-))
-endif
-
-# FIXME add cairo/cairo/cairo-1.10.2.no-atsui.patch for MACOSX >= 1070
 ifeq ($(OS),IOS)
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
 	external/cairo/cairo/cairo-1.10.2.no-atsui.patch \
@@ -41,9 +32,5 @@ endif
 ifneq (,$(filter ANDROID IOS,$(OS)))
 $(eval $(call gb_UnpackedTarball_add_file,cairo,.,external/cairo/cairo/dummy_pkg_config))
 endif
-
-$(eval $(call gb_UnpackedTarball_add_patches,cairo,\
-	external/cairo/cairo/no-flto-clang.patch \
-))
 
 # vim: set noet sw=4 ts=4:

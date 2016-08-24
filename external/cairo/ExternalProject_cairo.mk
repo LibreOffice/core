@@ -42,14 +42,12 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 		$(if $(filter ANDROID IOS,$(OS)),PKG_CONFIG=./dummy_pkg_config) \
 		pixman_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,pixman)/pixman" \
 		pixman_LIBS="-L$(call gb_UnpackedTarball_get_dir,pixman)/pixman/.libs -lpixman-1" \
-		COMPRESS=$(if $(SYSTEM_ZLIB),compress,z_compress) \
 		ZLIB3RDLIB="$(if $(SYSTEM_ZLIB),,-L$(WORKDIR)/LinkTarget/StaticLibrary) -lz" \
 		png_REQUIRES="trick_configure_into_using_png_CFLAGS_and_LIBS" \
 		png_CFLAGS="$(LIBPNG_CFLAGS)" png_LIBS="$(LIBPNG_LIBS)" \
 		$(if $(SYSTEM_FREETYPE),,FREETYPE_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,freetype)/include") \
 		$(if $(SYSTEM_FONTCONFIG),,FONTCONFIG_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,fontconfig)") \
-		$(if $(filter IOS,$(OS)),--disable-shared,--disable-static) \
-		$(if $(filter ANDROID,$(OS)),--disable-shared,--disable-static) \
+		$(if $(filter ANDROID IOS,$(OS)),--disable-shared,--disable-static) \
 		$(if $(filter ANDROID IOS,$(OS)),--disable-xlib,--enable-xlib) \
 		$(if $(filter IOS,$(OS)),--enable-quartz --enable-quartz-font) \
 		--disable-valgrind \
