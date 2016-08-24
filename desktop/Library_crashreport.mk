@@ -16,7 +16,7 @@ $(eval $(call gb_Library_set_include,crashreport,\
 
 $(eval $(call gb_Library_use_externals,crashreport,\
     breakpad \
-curl \
+    curl \
 ))
 
 $(eval $(call gb_Library_add_defs,crashreport,\
