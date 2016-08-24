@@ -242,7 +242,7 @@ void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos 
     const_cast< GalleryTheme* >( mpTheme )->GetURL( mnObjectPos, aURL );
     const bool bValidURL = ( aURL.GetProtocol() != INetProtocol::NotValid );
 
-    mpPopupMenu->EnableItem( MN_ADD, bValidURL && SGA_OBJ_SOUND != eObjKind );
+    mpPopupMenu->EnableItem( MN_ADD, bValidURL && SgaObjKind::Sound != eObjKind );
 
     mpPopupMenu->EnableItem( MN_PREVIEW, bValidURL );
 
@@ -303,7 +303,7 @@ void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos 
         {}
     }
 
-    if( !mpBackgroundPopup->GetItemCount() || ( eObjKind == SGA_OBJ_SVDRAW ) || ( eObjKind == SGA_OBJ_SOUND ) )
+    if( !mpBackgroundPopup->GetItemCount() || ( eObjKind == SgaObjKind::SvDraw ) || ( eObjKind == SgaObjKind::Sound ) )
         mpPopupMenu->EnableItem( MN_BACKGROUND, false );
     else
     {
@@ -815,7 +815,7 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
                     mpPreview->SetGraphic( aGraphic );
                      mpPreview->Show();
 
-                    if( mpCurTheme && mpCurTheme->GetObjectKind( nPos ) == SGA_OBJ_SOUND )
+                    if( mpCurTheme && mpCurTheme->GetObjectKind( nPos ) == SgaObjKind::Sound )
                         GalleryPreview::PreviewMedia( mpCurTheme->GetObjectURL( nPos ) );
 
                     maViewBox->EnableItem( TBX_ID_ICON, false );
@@ -888,7 +888,7 @@ void GalleryBrowser2::Travel( GalleryBrowserTravel eTravel )
                     mpCurTheme->GetGraphic( nPos, aGraphic );
                     mpPreview->SetGraphic( aGraphic );
 
-                    if( SGA_OBJ_SOUND == mpCurTheme->GetObjectKind( nPos ) )
+                    if( SgaObjKind::Sound == mpCurTheme->GetObjectKind( nPos ) )
                         GalleryPreview::PreviewMedia( mpCurTheme->GetObjectURL( nPos ) );
 
                     mpPreview->Invalidate();
@@ -1060,15 +1060,15 @@ void GalleryBrowser2::Dispatch(
 
             switch( mpCurTheme->GetObjectKind( mnCurActionPos ) )
             {
-                case SGA_OBJ_BMP:
-                case SGA_OBJ_ANIM:
-                case SGA_OBJ_INET:
+                case SgaObjKind::Bitmap:
+                case SgaObjKind::Animation:
+                case SgaObjKind::Inet:
                 // TODO drawing objects are inserted as drawings only via drag&drop
-                case SGA_OBJ_SVDRAW:
+                case SgaObjKind::SvDraw:
                     nType = css::gallery::GalleryItemType::GRAPHIC;
                 break;
 
-                case SGA_OBJ_SOUND :
+                case SgaObjKind::Sound :
                     nType = css::gallery::GalleryItemType::MEDIA;
                 break;
 
@@ -1271,7 +1271,7 @@ OUString GalleryBrowser2::GetFilterName() const
     {
         const SgaObjKind eObjKind = mpCurTheme->GetObjectKind( mnCurActionPos );
 
-        if( ( SGA_OBJ_BMP == eObjKind ) || ( SGA_OBJ_ANIM == eObjKind ) )
+        if( ( SgaObjKind::Bitmap == eObjKind ) || ( SgaObjKind::Animation == eObjKind ) )
         {
             GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
             INetURLObject       aURL;

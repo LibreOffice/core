@@ -419,7 +419,7 @@ void GalleryTransferable::InitData( bool bLazy )
 {
     switch( meObjectKind )
     {
-        case SGA_OBJ_SVDRAW:
+        case SgaObjKind::SvDraw:
         {
             if( !bLazy )
             {
@@ -445,10 +445,10 @@ void GalleryTransferable::InitData( bool bLazy )
         }
         break;
 
-        case SGA_OBJ_ANIM:
-        case SGA_OBJ_BMP:
-        case SGA_OBJ_INET:
-        case SGA_OBJ_SOUND:
+        case SgaObjKind::Animation:
+        case SgaObjKind::Bitmap:
+        case SgaObjKind::Inet:
+        case SgaObjKind::Sound:
         {
             if( !mpURL )
             {
@@ -461,7 +461,7 @@ void GalleryTransferable::InitData( bool bLazy )
                 }
             }
 
-            if( ( SGA_OBJ_SOUND != meObjectKind ) && !mpGraphicObject )
+            if( ( SgaObjKind::Sound != meObjectKind ) && !mpGraphicObject )
             {
                 Graphic aGraphic;
 
@@ -479,7 +479,7 @@ void GalleryTransferable::InitData( bool bLazy )
 
 void GalleryTransferable::AddSupportedFormats()
 {
-    if( SGA_OBJ_SVDRAW == meObjectKind )
+    if( SgaObjKind::SvDraw == meObjectKind )
     {
         AddFormat( SotClipboardFormatId::DRAWING );
         AddFormat( SotClipboardFormatId::SVXB );
@@ -516,7 +516,7 @@ bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor, cons
 
     InitData( false );
 
-    if( ( SotClipboardFormatId::DRAWING == nFormat ) && ( SGA_OBJ_SVDRAW == meObjectKind ) )
+    if( ( SotClipboardFormatId::DRAWING == nFormat ) && ( SgaObjKind::SvDraw == meObjectKind ) )
     {
         bRet = ( mxModelStream.Is() && SetObject( &mxModelStream, SotClipboardFormatId::NONE, rFlavor ) );
     }

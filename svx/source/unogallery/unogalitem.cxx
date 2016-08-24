@@ -182,12 +182,12 @@ sal_Int8 SAL_CALL GalleryItem::getType()
     {
         switch( implGetObject()->eObjKind )
         {
-            case SGA_OBJ_SOUND:
-            case SGA_OBJ_VIDEO:
+            case SgaObjKind::Sound:
+            case SgaObjKind::Video:
                 nRet = gallery::GalleryItemType::MEDIA;
             break;
 
-            case SGA_OBJ_SVDRAW:
+            case SgaObjKind::SvDraw:
                 nRet = gallery::GalleryItemType::DRAWING;
             break;
 

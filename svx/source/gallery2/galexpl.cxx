@@ -183,7 +183,7 @@ sal_uInt32 GalleryExplorer::GetSdrObjCount( const OUString& rThemeName )
         if( pTheme )
         {
             for( sal_uInt32 i = 0, nCount = pTheme->GetObjectCount(); i < nCount; i++ )
-                if( SGA_OBJ_SVDRAW == pTheme->GetObjectKind( i ) )
+                if( SgaObjKind::SvDraw == pTheme->GetObjectKind( i ) )
                     nRet++;
 
             pGal->ReleaseTheme( pTheme, aListener );
@@ -214,7 +214,7 @@ bool GalleryExplorer::GetSdrObj( const OUString& rThemeName, sal_uInt32 nSdrMode
         {
             for( sal_uInt32 i = 0, nCount = pTheme->GetObjectCount(), nActPos = 0; ( i < nCount ) && !bRet; i++ )
             {
-                if( SGA_OBJ_SVDRAW == pTheme->GetObjectKind( i ) )
+                if( SgaObjKind::SvDraw == pTheme->GetObjectKind( i ) )
                 {
                     if( nActPos++ == nSdrModelPos )
                     {

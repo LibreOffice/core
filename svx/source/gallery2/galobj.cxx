@@ -55,7 +55,7 @@ BitmapEx SgaObject::createPreviewBitmapEx(const Size& rSizePixel) const
 
     if(rSizePixel.Width() && rSizePixel.Height())
     {
-        if(SGA_OBJ_SOUND == GetObjKind())
+        if(SgaObjKind::Sound == GetObjKind())
         {
             aRetval = GAL_RES(RID_SVXBMP_GALLERY_MEDIA);
         }
@@ -171,7 +171,7 @@ void SgaObject::WriteData( SvStream& rOut, const OUString& rDestDir ) const
 {
     static const sal_uInt32 nInventor = COMPAT_FORMAT( 'S', 'G', 'A', '3' );
 
-    rOut.WriteUInt32( nInventor ).WriteUInt16( 0x0004 ).WriteUInt16( GetVersion() ).WriteUInt16( GetObjKind() );
+    rOut.WriteUInt32( nInventor ).WriteUInt16( 0x0004 ).WriteUInt16( GetVersion() ).WriteUInt16( (sal_uInt16)GetObjKind() );
     rOut.WriteBool( bIsThumbBmp );
 
     if( bIsThumbBmp )
