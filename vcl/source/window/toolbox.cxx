@@ -3050,7 +3050,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
         if ( pItem->mnBits & ToolBoxItemBits::DROPDOWN &&
             ((pItem->mnBits & ToolBoxItemBits::DROPDOWNONLY) != ToolBoxItemBits::DROPDOWNONLY) )
         {
-            Rectangle aArrowRect = pItem->GetDropDownRect( mbHorz );
+            Rectangle aArrowRect = pItem->GetDropDownRect( mbHorz && ( meTextPosition == ToolBoxTextPosition::Right ) );
             if( aArrowRect.Top() == pItem->maRect.Top() ) // dropdown arrow on right side
                 aBtnSize.Width() -= aArrowRect.GetWidth();
             else // dropdown arrow on bottom side
@@ -3265,6 +3265,10 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
             {
                 long nArrowHeight = ( pItem->mnBits & ToolBoxItemBits::DROPDOWN )
                                         ? TB_DROPDOWNARROWWIDTH : 0;
+
+                if ( ImplGetSVData()->maNWFData.mbToolboxDropDownSeparate )
+                    nArrowHeight = 0;
+
                 nTextOffY += nBtnHeight - aTxtSize.Height() - nArrowHeight;
             }
         }
