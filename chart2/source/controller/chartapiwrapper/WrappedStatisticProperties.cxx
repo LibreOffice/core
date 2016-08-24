@@ -60,22 +60,22 @@ css::chart::ChartRegressionCurveType lcl_getRegressionCurveType(SvxChartRegress 
     css::chart::ChartRegressionCurveType eRet = css::chart::ChartRegressionCurveType_NONE;
     switch(eRegressionType)
     {
-        case CHREGRESS_LINEAR:
+        case SvxChartRegress::Linear:
             eRet = css::chart::ChartRegressionCurveType_LINEAR;
             break;
-        case CHREGRESS_LOG:
+        case SvxChartRegress::Log:
             eRet = css::chart::ChartRegressionCurveType_LOGARITHM;
             break;
-        case CHREGRESS_EXP:
+        case SvxChartRegress::Exp:
             eRet = css::chart::ChartRegressionCurveType_EXPONENTIAL;
             break;
-        case CHREGRESS_POWER:
+        case SvxChartRegress::Power:
             eRet = css::chart::ChartRegressionCurveType_POWER;
             break;
-        case CHREGRESS_POLYNOMIAL:
+        case SvxChartRegress::Polynomial:
             eRet = css::chart::ChartRegressionCurveType_POLYNOMIAL;
             break;
-        /*case CHREGRESS_MOVING_AVERAGE:
+        /*case SvxChartRegress::MovingAverage:
             eRet = css::chart::ChartRegressionCurveType_MOVING_AVERAGE;
             break;*/
         default:
@@ -91,21 +91,21 @@ SvxChartRegress lcl_getRegressionType( css::chart::ChartRegressionCurveType eReg
     switch (eRegressionCurveType)
     {
         case css::chart::ChartRegressionCurveType_LINEAR:
-            eRet = CHREGRESS_LINEAR;
+            eRet = SvxChartRegress::Linear;
             break;
         case css::chart::ChartRegressionCurveType_LOGARITHM:
-            eRet = CHREGRESS_LOG;
+            eRet = SvxChartRegress::Log;
             break;
         case css::chart::ChartRegressionCurveType_EXPONENTIAL:
-            eRet = CHREGRESS_EXP;
+            eRet = SvxChartRegress::Exp;
             break;
         case css::chart::ChartRegressionCurveType_POLYNOMIAL:
         //case css::chart::ChartRegressionCurveType_MOVING_AVERAGE:
         case css::chart::ChartRegressionCurveType_POWER:
-            eRet = CHREGRESS_POWER;
+            eRet = SvxChartRegress::Power;
             break;
         default:
-            eRet = CHREGRESS_NONE;
+            eRet = SvxChartRegress::NONE;
             break;
     }
     return eRet;

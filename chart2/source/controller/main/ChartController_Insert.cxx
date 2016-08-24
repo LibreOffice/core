@@ -367,7 +367,7 @@ void ChartController::executeDispatch_InsertTrendline()
 
     uno::Reference< chart2::XRegressionCurve > xCurve =
         RegressionCurveHelper::addRegressionCurve(
-            CHREGRESS_LINEAR,
+            SvxChartRegress::Linear,
             xRegressionCurveContainer,
             m_xCC );
 

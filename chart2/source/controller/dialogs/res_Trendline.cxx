@@ -40,7 +40,7 @@ void lcl_setValue( FormattedField& rFmtField, double fValue )
 }
 
 TrendlineResources::TrendlineResources( vcl::Window * pParent, const SfxItemSet& rInAttrs ) :
-        m_eTrendLineType( CHREGRESS_LINEAR ),
+        m_eTrendLineType( SvxChartRegress::Linear ),
         m_bTrendLineUnique( true ),
         m_pNumFormatter( nullptr ),
         m_nNbPoints( 0 )
@@ -96,17 +96,17 @@ TrendlineResources::~TrendlineResources()
 IMPL_LINK_TYPED( TrendlineResources, SelectTrendLine, Button *, pRadioButton, void )
 {
     if( pRadioButton == m_pRB_Linear )
-        m_eTrendLineType = CHREGRESS_LINEAR;
+        m_eTrendLineType = SvxChartRegress::Linear;
     else if( pRadioButton == m_pRB_Logarithmic )
-        m_eTrendLineType = CHREGRESS_LOG;
+        m_eTrendLineType = SvxChartRegress::Log;
     else if( pRadioButton == m_pRB_Exponential )
-        m_eTrendLineType = CHREGRESS_EXP;
+        m_eTrendLineType = SvxChartRegress::Exp;
     else if( pRadioButton == m_pRB_Power )
-        m_eTrendLineType = CHREGRESS_POWER;
+        m_eTrendLineType = SvxChartRegress::Power;
     else if( pRadioButton == m_pRB_Polynomial )
-        m_eTrendLineType = CHREGRESS_POLYNOMIAL;
+        m_eTrendLineType = SvxChartRegress::Polynomial;
     else if( pRadioButton == m_pRB_MovingAverage )
-        m_eTrendLineType = CHREGRESS_MOVING_AVERAGE;
+        m_eTrendLineType = SvxChartRegress::MovingAverage;
     m_bTrendLineUnique = true;
 
     UpdateControlStates();
@@ -239,22 +239,22 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     {
         switch( m_eTrendLineType )
         {
-            case CHREGRESS_LINEAR :
+            case SvxChartRegress::Linear :
                 m_pRB_Linear->Check();
                 break;
-            case CHREGRESS_LOG :
+            case SvxChartRegress::Log :
                 m_pRB_Logarithmic->Check();
                 break;
-            case CHREGRESS_EXP :
+            case SvxChartRegress::Exp :
                 m_pRB_Exponential->Check();
                 break;
-            case CHREGRESS_POWER :
+            case SvxChartRegress::Power :
                 m_pRB_Power->Check();
                 break;
-            case CHREGRESS_POLYNOMIAL :
+            case SvxChartRegress::Polynomial :
                 m_pRB_Polynomial->Check();
                 break;
-            case CHREGRESS_MOVING_AVERAGE :
+            case SvxChartRegress::MovingAverage :
                 m_pRB_MovingAverage->Check();
                 break;
             default:
@@ -329,10 +329,10 @@ void TrendlineResources::UpdateControlStates()
         m_pNF_Degree->SetMax( nMaxValue );
         m_pNF_Period->SetMax( m_nNbPoints - 1 );
     }
-    bool bMovingAverage = ( m_eTrendLineType == CHREGRESS_MOVING_AVERAGE );
-    bool bInterceptAvailable = ( m_eTrendLineType == CHREGRESS_LINEAR )
-                            || ( m_eTrendLineType == CHREGRESS_POLYNOMIAL )
-                            || ( m_eTrendLineType == CHREGRESS_EXP );
+    bool bMovingAverage = ( m_eTrendLineType == SvxChartRegress::MovingAverage );
+    bool bInterceptAvailable = ( m_eTrendLineType == SvxChartRegress::Linear )
+                            || ( m_eTrendLineType == SvxChartRegress::Polynomial )
+                            || ( m_eTrendLineType == SvxChartRegress::Exp );
     m_pFmtFld_ExtrapolateForward->Enable( !bMovingAverage );
     m_pFmtFld_ExtrapolateBackward->Enable( !bMovingAverage );
     m_pCB_SetIntercept->Enable( bInterceptAvailable );

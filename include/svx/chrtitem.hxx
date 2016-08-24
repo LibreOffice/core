@@ -75,20 +75,20 @@ enum SvxChartIndicate
 
 #define CHINDICATE_COUNT    (CHINDICATE_DOWN + 1)
 
-enum SvxChartRegress
+enum class SvxChartRegress
 {
-    CHREGRESS_NONE,
-    CHREGRESS_LINEAR,
-    CHREGRESS_LOG,
-    CHREGRESS_EXP,
-    CHREGRESS_POWER,
-    CHREGRESS_POLYNOMIAL,
-    CHREGRESS_MOVING_AVERAGE,
-    CHREGRESS_MEAN_VALUE,
-    CHREGRESS_UNKNOWN
+    NONE,
+    Linear,
+    Log,
+    Exp,
+    Power,
+    Polynomial,
+    MovingAverage,
+    MeanValue,
+    Unknown
 };
 
-#define CHREGRESS_COUNT (CHREGRESS_UNKNOWN + 1)
+#define CHREGRESS_COUNT ((sal_uInt16)SvxChartRegress::Unknown + 1)
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxChartStyleItem : public SfxEnumItem
 {
@@ -107,7 +107,7 @@ public:
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxChartRegressItem : public SfxEnumItem
 {
 public:
-    SvxChartRegressItem(SvxChartRegress eRegress /*= CHREGRESS_LINEAR*/,
+    SvxChartRegressItem(SvxChartRegress eRegress /*= SvxChartRegress::Linear*/,
                         sal_uInt16 nId );
     SvxChartRegressItem(SvStream& rIn, sal_uInt16 nId );
 

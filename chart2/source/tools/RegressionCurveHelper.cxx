@@ -53,22 +53,22 @@ OUString lcl_getServiceNameForType(SvxChartRegress eType)
     OUString aServiceName;
     switch( eType )
     {
-        case CHREGRESS_LINEAR:
+        case SvxChartRegress::Linear:
             aServiceName = "com.sun.star.chart2.LinearRegressionCurve";
             break;
-        case CHREGRESS_LOG:
+        case SvxChartRegress::Log:
             aServiceName = "com.sun.star.chart2.LogarithmicRegressionCurve";
             break;
-        case CHREGRESS_EXP:
+        case SvxChartRegress::Exp:
             aServiceName = "com.sun.star.chart2.ExponentialRegressionCurve";
             break;
-        case CHREGRESS_POWER:
+        case SvxChartRegress::Power:
             aServiceName = "com.sun.star.chart2.PotentialRegressionCurve";
             break;
-        case CHREGRESS_POLYNOMIAL:
+        case SvxChartRegress::Polynomial:
             aServiceName = "com.sun.star.chart2.PolynomialRegressionCurve";
             break;
-        case CHREGRESS_MOVING_AVERAGE:
+        case SvxChartRegress::MovingAverage:
             aServiceName = "com.sun.star.chart2.MovingAverageRegressionCurve";
             break;
         default:
@@ -362,7 +362,7 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::addRegressionC
     if( !xRegressionCurveContainer.is() )
         return xCurve;
 
-    if( eType == CHREGRESS_NONE )
+    if( eType == SvxChartRegress::NONE )
     {
         OSL_FAIL("don't create a regression curve of type none");
         return xCurve;
@@ -539,7 +539,7 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getRegressionC
 SvxChartRegress RegressionCurveHelper::getRegressionType(
     const Reference< XRegressionCurve > & xCurve )
 {
-    SvxChartRegress eResult = CHREGRESS_UNKNOWN;
+    SvxChartRegress eResult = SvxChartRegress::Unknown;
 
     try
     {
@@ -550,31 +550,31 @@ SvxChartRegress RegressionCurveHelper::getRegressionType(
 
             if( aServiceName == "com.sun.star.chart2.LinearRegressionCurve" )
             {
-                eResult = CHREGRESS_LINEAR;
+                eResult = SvxChartRegress::Linear;
             }
             else if( aServiceName == "com.sun.star.chart2.LogarithmicRegressionCurve" )
             {
-                eResult = CHREGRESS_LOG;
+                eResult = SvxChartRegress::Log;
             }
             else if( aServiceName == "com.sun.star.chart2.ExponentialRegressionCurve" )
             {
-                eResult = CHREGRESS_EXP;
+                eResult = SvxChartRegress::Exp;
             }
             else if( aServiceName == "com.sun.star.chart2.PotentialRegressionCurve" )
             {
-                eResult = CHREGRESS_POWER;
+                eResult = SvxChartRegress::Power;
             }
             else if( aServiceName == "com.sun.star.chart2.MeanValueRegressionCurve" )
             {
-                eResult = CHREGRESS_MEAN_VALUE;
+                eResult = SvxChartRegress::MeanValue;
             }
             else if( aServiceName == "com.sun.star.chart2.PolynomialRegressionCurve" )
             {
-                eResult = CHREGRESS_POLYNOMIAL;
+                eResult = SvxChartRegress::Polynomial;
             }
             else if( aServiceName == "com.sun.star.chart2.MovingAverageRegressionCurve" )
             {
-                eResult = CHREGRESS_MOVING_AVERAGE;
+                eResult = SvxChartRegress::MovingAverage;
             }
         }
     }
@@ -589,7 +589,7 @@ SvxChartRegress RegressionCurveHelper::getRegressionType(
 SvxChartRegress RegressionCurveHelper::getFirstRegressTypeNotMeanValueLine(
     const Reference< XRegressionCurveContainer > & xRegCnt )
 {
-    SvxChartRegress eResult = CHREGRESS_NONE;
+    SvxChartRegress eResult = SvxChartRegress::NONE;
 
     if( xRegCnt.is())
     {
@@ -598,8 +598,8 @@ SvxChartRegress RegressionCurveHelper::getFirstRegressTypeNotMeanValueLine(
         for( sal_Int32 i = 0; i < aCurves.getLength(); ++i )
         {
             SvxChartRegress eType = getRegressionType( aCurves[i] );
-            if( eType != CHREGRESS_MEAN_VALUE &&
-                eType != CHREGRESS_UNKNOWN )
+            if( eType != SvxChartRegress::MeanValue &&
+                eType != SvxChartRegress::Unknown )
             {
                 eResult = eType;
                 break;
