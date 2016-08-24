@@ -22,6 +22,7 @@
 
 #include "formattributes.hxx"
 #include <xmloff/xmlictxt.hxx>
+#include <memory>
 #include "logging.hxx"
 
 class SvXMLElementExport;
@@ -61,7 +62,7 @@ namespace xmloff
     class OFormsRootExport
     {
     private:
-        SvXMLElementExport*     m_pImplElement;
+        std::unique_ptr<SvXMLElementExport>     m_pImplElement;
 
     public:
         explicit OFormsRootExport( SvXMLExport& _rExp );
