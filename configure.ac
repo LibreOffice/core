@@ -11314,6 +11314,7 @@ else
     if test "$enable_online_update" = "mar"; then
         AC_MSG_RESULT([yes - MAR-based online update])
         ENABLE_ONLINE_UPDATE_MAR="TRUE"
+        AC_DEFINE(HAVE_FEATURE_UPDATE_MAR)
     elif test "$enable_online_update" = "yes"; then
         AC_MSG_RESULT([yes])
         ENABLE_ONLINE_UPDATE="TRUE"
