@@ -3186,6 +3186,10 @@ void WW8TabDesc::AdjustNewBand()
     bool bSetCantSplit = pActBand->bCantSplit;
     pTabLine->GetFrameFormat()->SetFormatAttr(SwFormatRowSplit(!bSetCantSplit));
 
+    //  if table is only a single row, and row is set as don't split, set the same value for the whole table.
+    if( bSetCantSplit && pTabLines->size() == 1 )
+        pTable->GetFrameFormat()->SetFormatAttr(SwFormatLayoutSplit( !bSetCantSplit ));
+
     short i;    // SW-Index
     short j;    // WW-Index
     short nW;   // Width
