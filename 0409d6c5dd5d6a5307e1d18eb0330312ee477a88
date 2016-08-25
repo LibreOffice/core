@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_5541bb38",
+        "filename": "cui/uiconfig/ui/pageformatpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-25T08:48:01Z",
+      "side": 1,
+      "message": "So to me, \u0027page numbers\u0027 sounds odd in this context, then again I\u0027m not an English native speaker. \n\n\u0027Page numbering format\u0027, if anything ... some better suggestions?",
+      "revId": "0409d6c5dd5d6a5307e1d18eb0330312ee477a88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
