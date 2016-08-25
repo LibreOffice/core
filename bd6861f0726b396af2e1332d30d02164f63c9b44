@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_951d1369",
+        "filename": "canvas/source/cairo/cairo_canvashelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 974,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-08-25T08:16:30Z",
+      "side": 1,
+      "message": "Some comments for more effective basegfx usage:\n- bIsBezier and nIsRectangle should be const\n-\u003e const basegfx::B2IRange aIRange(basegfx::fround(aPolygon.getB2DRange().transform(m)));\n- getB2DRange at polygon(s) is buffered\n- B2DRange can be directly transformed, m should be available somewhere as basegfx::B2DHomMatrix (hopefully?)\n- fround helper for B2DRange to B2IRange for getting to integer\n-\u003e bIsRectangle \u003d !aIRange.getWidth()||!aIRange.getHeight()\nJust FYI :)",
+      "revId": "bd6861f0726b396af2e1332d30d02164f63c9b44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
