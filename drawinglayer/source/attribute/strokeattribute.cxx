@@ -107,6 +107,12 @@ namespace drawinglayer
             return *this;
         }
 
+        StrokeAttribute& StrokeAttribute::operator=(StrokeAttribute&& rCandidate)
+        {
+            mpStrokeAttribute = rCandidate.mpStrokeAttribute;
+            return *this;
+        }
+
         bool StrokeAttribute::operator==(const StrokeAttribute& rCandidate) const
         {
             // tdf#87509 default attr is always != non-default attr, even with same values
