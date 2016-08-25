@@ -244,7 +244,7 @@ public:
     SvXMLImport(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         OUString const & implementationName,
-        SvXMLImportFlags nImportFlags = SvXMLImportFlags::ALL ) throw();
+        SvXMLImportFlags nImportFlags = SvXMLImportFlags::ALL );
 
     virtual ~SvXMLImport() throw();
 

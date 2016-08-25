@@ -420,7 +420,7 @@ void SvXMLImport::InitCtor_()
 
 SvXMLImport::SvXMLImport(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
-    OUString const & implementationName, SvXMLImportFlags nImportFlags ) throw ()
+    OUString const & implementationName, SvXMLImportFlags nImportFlags )
 :   mpImpl( new SvXMLImport_Impl(xContext, implementationName) ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
 
