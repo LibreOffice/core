@@ -464,6 +464,23 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
     return *this;
 }
 
+ORowSetValue& ORowSetValue::operator=(ORowSetValue&& _rRH)
+{
+    if ( m_eTypeKind != _rRH.m_eTypeKind || !m_bNull)
+        free();
+    if(!_rRH.m_bNull)
+    {
+        m_aValue    = _rRH.m_aValue;
+        memset(&_rRH.m_aValue, 0, sizeof(_rRH.m_aValue));
+    }
+    m_bBound    = _rRH.m_bBound;
+    m_eTypeKind = _rRH.m_eTypeKind;
+    m_bSigned   = _rRH.m_bSigned;
+    m_bNull     = _rRH.m_bNull;
+    _rRH.m_bNull = true;
+    return *this;
+}
+
 
 ORowSetValue& ORowSetValue::operator=(const Date& _rRH)
 {
