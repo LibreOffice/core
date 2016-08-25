@@ -1508,6 +1508,11 @@ namespace basegfx
     {
     }
 
+    B3DPolygon::B3DPolygon(B3DPolygon&& rPolygon) :
+        mpPolygon(std::move(rPolygon.mpPolygon))
+    {
+    }
+
     B3DPolygon::~B3DPolygon()
     {
     }
@@ -1515,6 +1520,12 @@ namespace basegfx
     B3DPolygon& B3DPolygon::operator=(const B3DPolygon& rPolygon)
     {
         mpPolygon = rPolygon.mpPolygon;
+        return *this;
+    }
+
+    B3DPolygon& B3DPolygon::operator=(B3DPolygon&& rPolygon)
+    {
+        mpPolygon = std::move(rPolygon.mpPolygon);
         return *this;
     }
 
