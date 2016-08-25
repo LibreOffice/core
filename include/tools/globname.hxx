@@ -62,6 +62,10 @@ public:
         pImp( rObj.pImp )
     {
     }
+    SvGlobalName( SvGlobalName && rObj ) :
+        pImp( std::move(rObj.pImp) )
+    {
+    }
 
     SvGlobalName( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
                   sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
@@ -73,6 +77,7 @@ public:
     SvGlobalName( const SvGUID & rId );
 
     SvGlobalName & operator = ( const SvGlobalName & rObj );
+    SvGlobalName & operator = ( SvGlobalName && rObj );
     ~SvGlobalName();
 
     TOOLS_DLLPUBLIC friend SvStream & operator >> ( SvStream &, SvGlobalName & );

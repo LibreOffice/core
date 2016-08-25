@@ -106,6 +106,12 @@ SvGlobalName & SvGlobalName::operator = ( const SvGlobalName & rObj )
     return *this;
 }
 
+SvGlobalName & SvGlobalName::operator = ( SvGlobalName && rObj )
+{
+    pImp = std::move(rObj.pImp);
+    return *this;
+}
+
 SvStream& WriteSvGlobalName( SvStream& rOStr, const SvGlobalName & rObj )
 {
     rOStr.WriteUInt32( rObj.pImp->szData.Data1 );
