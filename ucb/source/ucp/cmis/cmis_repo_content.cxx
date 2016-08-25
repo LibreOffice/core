@@ -176,7 +176,7 @@ namespace cmis
                         libcmis::OAuth2DataPtr oauth2Data;
                         if ( m_aURL.getBindingUrl( ) == GDRIVE_BASE_URL )
                         {
-                            libcmis::SessionFactory::setOAuth2AuthCodeProvider( authProvider.gdriveAuthCodeFallback );
+                            libcmis::SessionFactory::setOAuth2AuthCodeProvider( AuthProvider::gdriveAuthCodeFallback );
                             oauth2Data.reset( new libcmis::OAuth2Data(
                                 GDRIVE_AUTH_URL, GDRIVE_TOKEN_URL,
                                 GDRIVE_SCOPE, GDRIVE_REDIRECT_URI,
@@ -189,7 +189,7 @@ namespace cmis
                                 ALFRESCO_CLOUD_CLIENT_ID, ALFRESCO_CLOUD_CLIENT_SECRET ) );
                         if ( m_aURL.getBindingUrl( ) == ONEDRIVE_BASE_URL )
                         {
-                            libcmis::SessionFactory::setOAuth2AuthCodeProvider( authProvider.onedriveAuthCodeFallback );
+                            libcmis::SessionFactory::setOAuth2AuthCodeProvider( AuthProvider::onedriveAuthCodeFallback );
                             oauth2Data.reset( new libcmis::OAuth2Data(
                                 ONEDRIVE_AUTH_URL, ONEDRIVE_TOKEN_URL,
                                 ONEDRIVE_SCOPE, ONEDRIVE_REDIRECT_URI,
