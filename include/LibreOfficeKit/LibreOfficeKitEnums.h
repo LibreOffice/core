@@ -431,6 +431,29 @@ typedef enum
      */
     LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED,
 
+    /**
+     * An entry in the change tracking table has been modified.
+     *
+     * The payload example:
+     * {
+     *     "redline": {
+     *         "action": "Modify",
+     *         "index": "1",
+     *         "author": "Unknown Author",
+     *         "type": "Insert",
+     *         "comment": "",
+     *         "description": "Insert 'abcd'",
+     *         "dateTime": "2016-08-18T13:13:00"
+     *     }
+     * }
+     *
+     * The format is the same as an entry of
+     * lok::Document::getCommandValues('.uno:AcceptTrackedChanges'), extra
+     * fields:
+     *
+     * - 'action' is 'Modify'.
+     */
+    LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED,
 }
 LibreOfficeKitCallbackType;
 
