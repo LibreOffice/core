@@ -65,6 +65,10 @@ namespace comphelper
         *this = _rCopySource;
     }
 
+    NamedValueCollection::NamedValueCollection( NamedValueCollection&& _rCopySource )
+        :m_pImpl( std::move(_rCopySource.m_pImpl) )
+    {
+    }
 
     NamedValueCollection& NamedValueCollection::operator=( const NamedValueCollection& i_rCopySource )
     {
@@ -72,6 +76,11 @@ namespace comphelper
         return *this;
     }
 
+    NamedValueCollection& NamedValueCollection::operator=( NamedValueCollection&& i_rCopySource )
+    {
+        m_pImpl = std::move(i_rCopySource.m_pImpl);
+        return *this;
+    }
 
     NamedValueCollection::NamedValueCollection( const Any& _rElements )
         :m_pImpl( new NamedValueCollection_Impl )
