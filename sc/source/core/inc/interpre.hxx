@@ -257,7 +257,7 @@ bool CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 /** Does substitute with formula::FormulaErrorToken in case nGlobalError is set and the token
     passed is not formula::FormulaErrorToken.
     Increments RefCount of the original token if not substituted. */
-void Push( formula::FormulaToken& r );
+void Push( const formula::FormulaToken& r );
 
 /** Does not substitute with formula::FormulaErrorToken in case nGlobalError is set.
     Used to push RPN tokens or from within Push() or tokens that are already

@@ -639,7 +639,7 @@ void ScInterpreter::PushWithoutError( const FormulaToken& r )
     }
 }
 
-void ScInterpreter::Push( FormulaToken& r )
+void ScInterpreter::Push( const FormulaToken& r )
 {
     if ( sp >= MAXSTACK )
         SetError( errStackOverflow );
@@ -648,10 +648,7 @@ void ScInterpreter::Push( FormulaToken& r )
         if (nGlobalError)
         {
             if (r.GetType() == svError)
-            {
-                r.SetError( nGlobalError);
                 PushWithoutError( r);
-            }
             else
                 PushTempTokenWithoutError( new FormulaErrorToken( nGlobalError));
         }

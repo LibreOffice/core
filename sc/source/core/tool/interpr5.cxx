@@ -3180,8 +3180,8 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
 
 void ScInterpreter::ScMatRef()
 {
-    // Falls Deltarefs drin sind...
-    Push( (FormulaToken&)*pCur );
+    // In case it contains relative references resolve them as usual.
+    Push( *pCur );
     ScAddress aAdr;
     PopSingleRef( aAdr );
 
