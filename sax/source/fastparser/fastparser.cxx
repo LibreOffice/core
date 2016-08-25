@@ -925,11 +925,11 @@ void FastSaxParserImpl::produce( bool bForceFlush )
 {
     Entity& rEntity = getEntity();
     if (bForceFlush ||
-        rEntity.mnProducedEventsSize == rEntity.mnEventListSize)
+        rEntity.mnProducedEventsSize == Entity::mnEventListSize)
     {
         osl::ResettableMutexGuard aGuard(rEntity.maEventProtector);
 
-        while (rEntity.maPendingEvents.size() >= rEntity.mnEventHighWater)
+        while (rEntity.maPendingEvents.size() >= Entity::mnEventHighWater)
         { // pause parsing for a bit
             aGuard.clear(); // unlock
             rEntity.maProduceResume.wait();
