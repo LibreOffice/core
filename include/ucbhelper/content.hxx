@@ -145,6 +145,11 @@ public:
     Content( const Content& rOther );
 
     /**
+      * Move constructor.
+      */
+    Content( Content&& rOther );
+
+    /**
       * Destructor.
       */
     ~Content();
@@ -155,6 +160,11 @@ public:
       * @param rContent is the content this content shall be a copy of.
       */
     Content& operator=( const Content& rOther );
+
+    /**
+      * Move assignment operator.
+      */
+    Content& operator=( Content&& rOther );
 
     /**
       * Constructor. This method should be used, if the exception thrown
