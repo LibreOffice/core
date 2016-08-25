@@ -98,6 +98,17 @@ namespace connectivity
             operator=(_rRH);
         }
 
+        ORowSetValue(ORowSetValue&& _rRH)
+            :m_eTypeKind(css::sdbc::DataType::VARCHAR)
+            ,m_bNull(true)
+            ,m_bBound(true)
+            ,m_bModified(false)
+            ,m_bSigned(true)
+        {
+            m_aValue.m_pString = nullptr;
+            operator=(_rRH);
+        }
+
         ORowSetValue(const OUString& _rRH)
             :m_eTypeKind(css::sdbc::DataType::VARCHAR)
             ,m_bNull(true)
