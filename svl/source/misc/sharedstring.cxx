@@ -44,6 +44,12 @@ SharedString::SharedString( const SharedString& r ) : mpData(r.mpData), mpDataIg
         rtl_uString_acquire(mpDataIgnoreCase);
 }
 
+SharedString::SharedString( SharedString&& r ) : mpData(r.mpData), mpDataIgnoreCase(r.mpDataIgnoreCase)
+{
+    r.mpData = nullptr;
+    r.mpDataIgnoreCase = nullptr;
+}
+
 SharedString::~SharedString()
 {
     if (mpData)
@@ -66,6 +72,22 @@ SharedString& SharedString::operator= ( const SharedString& r )
         rtl_uString_acquire(mpData);
     if (mpDataIgnoreCase)
         rtl_uString_acquire(mpDataIgnoreCase);
+
+    return *this;
+}
+
+SharedString& SharedString::operator= ( SharedString&& r )
+{
+    if (mpData)
+        rtl_uString_release(mpData);
+    if (mpDataIgnoreCase)
+        rtl_uString_release(mpDataIgnoreCase);
+
+    mpData = r.mpData;
+    mpDataIgnoreCase = r.mpDataIgnoreCase;
+
+    r.mpData = nullptr;
+    r.mpDataIgnoreCase = nullptr;
 
     return *this;
 }
