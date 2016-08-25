@@ -40,6 +40,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
@@ -845,11 +846,11 @@ void SAL_CALL Connection::documentEventOccured( const DocumentEvent& Event )
             }
             catch (const SQLException& e)
             {
-                WrappedTargetException aExceptionWrapper;
+                WrappedTargetRuntimeException aExceptionWrapper;
                 aExceptionWrapper.Context = e.Context;
                 aExceptionWrapper.Message = e.Message;
                 aExceptionWrapper.TargetException <<= e;
-                throw WrappedTargetException( aExceptionWrapper );
+                throw WrappedTargetRuntimeException( aExceptionWrapper );
             }
 
 
