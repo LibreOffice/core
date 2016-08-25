@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_d5b5cbd0",
+        "filename": "include/rtl/tencinfo.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-08-25T14:40:14Z",
+      "side": 1,
+      "message": "please don\u0027t add those two functions to the stable URE interface; add them to the single place where they\u0027re used for now (we can revisit should they turn out to be used widely in the future)",
+      "revId": "a25768715387d6d32cac05a65dd286776578620c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_b5aa176f",
+        "filename": "vcl/source/filter/wmf/winmtf.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-08-25T14:40:14Z",
+      "side": 1,
+      "message": "best avoid making entities DLLPUBLIC only because of test code\u0027s needs; \"best\" approach is to make the test link against the library\u0027s objects (see gb_CppunitTest_use_library_objects); if all else fails, at least document clearly that the DLLPUBLIC is only due to test code\u0027s needs",
+      "revId": "a25768715387d6d32cac05a65dd286776578620c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
