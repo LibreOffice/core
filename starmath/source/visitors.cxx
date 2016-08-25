@@ -369,9 +369,8 @@ void SmDrawingVisitor::Visit( SmMathSymbolNode* pNode )
     DrawSpecialNode( pNode );
 }
 
-void SmDrawingVisitor::Visit( SmBlankNode* pNode )
+void SmDrawingVisitor::Visit( SmBlankNode* )
 {
-    DrawChildren( pNode );
 }
 
 void SmDrawingVisitor::Visit( SmErrorNode* pNode )
@@ -531,7 +530,7 @@ void SmDrawingVisitor::DrawSpecialNode( SmSpecialNode* pNode )
     DrawTextNode( pNode );
 }
 
-void SmDrawingVisitor::DrawChildren( SmNode* pNode )
+void SmDrawingVisitor::DrawChildren( SmStructureNode* pNode )
 {
     if ( pNode->IsPhantom( ) )
         return;
