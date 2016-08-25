@@ -49,6 +49,12 @@ inline WeakReference< reference_type >::WeakReference( const WeakReference< refe
 }
 
 template< class reference_type >
+inline WeakReference< reference_type >::WeakReference( WeakReference< reference_type >&& rWeakRef )
+{
+    mpWeakConnection = std::move(rWeakRef.mpWeakConnection);
+}
+
+template< class reference_type >
 inline WeakReference< reference_type >::~WeakReference()
 {
 }
@@ -119,6 +125,14 @@ inline WeakReference<reference_type>& WeakReference<reference_type>::operator= (
     {
         mpWeakConnection = rReference.mpWeakConnection;
     }
+    return *this;
+}
+
+template< class reference_type >
+inline WeakReference<reference_type>& WeakReference<reference_type>::operator= (
+    WeakReference<reference_type>&& rReference)
+{
+    mpWeakConnection = std::move(rReference.mpWeakConnection);
     return *this;
 }
 

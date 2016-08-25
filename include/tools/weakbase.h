@@ -78,8 +78,11 @@ public:
     /** constructs a reference with a pointer to a class derived from WeakBase */
     inline WeakReference( reference_type* pReference );
 
-    /** constructs a reference with another reference */
+    /** constructs a reference from another reference */
     inline WeakReference( const WeakReference< reference_type >& rWeakRef );
+
+    /** constructs a reference from another reference */
+    inline WeakReference( WeakReference< reference_type >&& rWeakRef );
 
     inline ~WeakReference();
 
@@ -112,6 +115,9 @@ public:
 
     /** the assignment operator */
     inline WeakReference<reference_type>& operator= (const WeakReference<reference_type> & handle);
+
+    /** the move assignment operator */
+    inline WeakReference<reference_type>& operator= (WeakReference<reference_type> && handle);
 
 private:
     rtl::Reference<WeakConnection< reference_type >> mpWeakConnection;
