@@ -776,31 +776,31 @@ MixBulletsTypeMgr::MixBulletsTypeMgr(const MixBulletsTypeMgr& aTypeMgr):
 {
     for (sal_uInt16 i=0;i<DEFAULT_BULLET_TYPES;i++)
     {
-        if ( aTypeMgr.pActualBullets[i]->eType == eNBType::BULLETS )
+        if ( MixBulletsTypeMgr::pActualBullets[i]->eType == eNBType::BULLETS )
         {
-            pActualBullets[i]->eType = aTypeMgr.pActualBullets[i]->eType;
-            pActualBullets[i]->nIndex = aTypeMgr.pActualBullets[i]->nIndex; //index in the tab page display
-            pActualBullets[i]->nIndexDefault = aTypeMgr.pActualBullets[i]->nIndexDefault;
+            pActualBullets[i]->eType = MixBulletsTypeMgr::pActualBullets[i]->eType;
+            pActualBullets[i]->nIndex = MixBulletsTypeMgr::pActualBullets[i]->nIndex; //index in the tab page display
+            pActualBullets[i]->nIndexDefault = MixBulletsTypeMgr::pActualBullets[i]->nIndexDefault;
             pActualBullets[i]->pBullets = new BulletsSettings_Impl(eNBType::BULLETS) ;
-            static_cast<BulletsSettings_Impl*>(pActualBullets[i]->pBullets)->cBulletChar = static_cast<BulletsSettings_Impl*>(aTypeMgr.pActualBullets[i]->pBullets)->cBulletChar;
-            static_cast<BulletsSettings_Impl*>(pActualBullets[i]->pBullets)->aFont = static_cast<BulletsSettings_Impl*>(aTypeMgr.pActualBullets[i]->pBullets)->aFont;
-            static_cast<BulletsSettings_Impl*>(pActualBullets[i]->pBullets)->sDescription = static_cast<BulletsSettings_Impl*>(aTypeMgr.pActualBullets[i]->pBullets)->sDescription;
-            static_cast<BulletsSettings_Impl*>(pActualBullets[i]->pBullets)->bIsCustomized = static_cast<BulletsSettings_Impl*>(aTypeMgr.pActualBullets[i]->pBullets)->bIsCustomized;
-            static_cast<BulletsSettings_Impl*>(pActualBullets[i]->pBullets)->eType = static_cast<BulletsSettings_Impl*>(aTypeMgr.pActualBullets[i]->pBullets)->eType;
+            static_cast<BulletsSettings_Impl*>(pActualBullets[i]->pBullets)->cBulletChar = static_cast<BulletsSettings_Impl*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->cBulletChar;
+            static_cast<BulletsSettings_Impl*>(pActualBullets[i]->pBullets)->aFont = static_cast<BulletsSettings_Impl*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->aFont;
+            static_cast<BulletsSettings_Impl*>(pActualBullets[i]->pBullets)->sDescription = static_cast<BulletsSettings_Impl*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->sDescription;
+            static_cast<BulletsSettings_Impl*>(pActualBullets[i]->pBullets)->bIsCustomized = static_cast<BulletsSettings_Impl*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->bIsCustomized;
+            static_cast<BulletsSettings_Impl*>(pActualBullets[i]->pBullets)->eType = static_cast<BulletsSettings_Impl*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->eType;
         }
-        else if ( aTypeMgr.pActualBullets[i]->eType == eNBType::GRAPHICBULLETS )
+        else if ( MixBulletsTypeMgr::pActualBullets[i]->eType == eNBType::GRAPHICBULLETS )
         {
-            pActualBullets[i]->eType = aTypeMgr.pActualBullets[i]->eType;
-            pActualBullets[i]->nIndex = aTypeMgr.pActualBullets[i]->nIndex; //index in the tab page display
-            pActualBullets[i]->nIndexDefault = aTypeMgr.pActualBullets[i]->nIndexDefault;
+            pActualBullets[i]->eType = MixBulletsTypeMgr::pActualBullets[i]->eType;
+            pActualBullets[i]->nIndex = MixBulletsTypeMgr::pActualBullets[i]->nIndex; //index in the tab page display
+            pActualBullets[i]->nIndexDefault = MixBulletsTypeMgr::pActualBullets[i]->nIndexDefault;
             pActualBullets[i]->pBullets = new GrfBulDataRelation(eNBType::GRAPHICBULLETS) ;
-            static_cast<GrfBulDataRelation*>(pActualBullets[i]->pBullets)->sGrfName = static_cast<GrfBulDataRelation*>(aTypeMgr.pActualBullets[i]->pBullets)->sGrfName;
-            static_cast<GrfBulDataRelation*>(pActualBullets[i]->pBullets)->sDescription = static_cast<GrfBulDataRelation*>(aTypeMgr.pActualBullets[i]->pBullets)->sDescription;
-            static_cast<GrfBulDataRelation*>(pActualBullets[i]->pBullets)->bIsCustomized = static_cast<GrfBulDataRelation*>(aTypeMgr.pActualBullets[i]->pBullets)->bIsCustomized;
-            static_cast<GrfBulDataRelation*>(pActualBullets[i]->pBullets)->eType = static_cast<GrfBulDataRelation*>(aTypeMgr.pActualBullets[i]->pBullets)->eType;
-            if ( static_cast<GrfBulDataRelation*>(aTypeMgr.pActualBullets[i]->pBullets)->bIsCustomized && static_cast<GrfBulDataRelation*>(aTypeMgr.pActualBullets[i]->pBullets)->pGrfObj != nullptr)
+            static_cast<GrfBulDataRelation*>(pActualBullets[i]->pBullets)->sGrfName = static_cast<GrfBulDataRelation*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->sGrfName;
+            static_cast<GrfBulDataRelation*>(pActualBullets[i]->pBullets)->sDescription = static_cast<GrfBulDataRelation*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->sDescription;
+            static_cast<GrfBulDataRelation*>(pActualBullets[i]->pBullets)->bIsCustomized = static_cast<GrfBulDataRelation*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->bIsCustomized;
+            static_cast<GrfBulDataRelation*>(pActualBullets[i]->pBullets)->eType = static_cast<GrfBulDataRelation*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->eType;
+            if ( static_cast<GrfBulDataRelation*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->bIsCustomized && static_cast<GrfBulDataRelation*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->pGrfObj != nullptr)
             {
-                static_cast<GrfBulDataRelation*>(pActualBullets[i]->pBullets)->pGrfObj = static_cast<GrfBulDataRelation*>(aTypeMgr.pActualBullets[i]->pBullets)->pGrfObj;
+                static_cast<GrfBulDataRelation*>(pActualBullets[i]->pBullets)->pGrfObj = static_cast<GrfBulDataRelation*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->pGrfObj;
             }
         }
     }
