@@ -126,6 +126,11 @@ namespace drawinglayer
         {
         }
 
+        SdrLineStartEndAttribute::SdrLineStartEndAttribute(SdrLineStartEndAttribute&& rCandidate)
+        :   mpSdrLineStartEndAttribute(std::move(rCandidate.mpSdrLineStartEndAttribute))
+        {
+        }
+
         SdrLineStartEndAttribute::~SdrLineStartEndAttribute()
         {
         }
@@ -138,6 +143,12 @@ namespace drawinglayer
         SdrLineStartEndAttribute& SdrLineStartEndAttribute::operator=(const SdrLineStartEndAttribute& rCandidate)
         {
             mpSdrLineStartEndAttribute = rCandidate.mpSdrLineStartEndAttribute;
+            return *this;
+        }
+
+        SdrLineStartEndAttribute& SdrLineStartEndAttribute::operator=(SdrLineStartEndAttribute&& rCandidate)
+        {
+            mpSdrLineStartEndAttribute = std::move(rCandidate.mpSdrLineStartEndAttribute);
             return *this;
         }
 

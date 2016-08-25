@@ -60,7 +60,9 @@ namespace drawinglayer
                 bool bEndCentered);
             SdrLineStartEndAttribute();
             SdrLineStartEndAttribute(const SdrLineStartEndAttribute& rCandidate);
+            SdrLineStartEndAttribute(SdrLineStartEndAttribute&& rCandidate);
             SdrLineStartEndAttribute& operator=(const SdrLineStartEndAttribute& rCandidate);
+            SdrLineStartEndAttribute& operator=(SdrLineStartEndAttribute&& rCandidate);
             ~SdrLineStartEndAttribute();
 
             // checks if the incarnation is default constructed
