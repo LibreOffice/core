@@ -42,6 +42,7 @@ namespace basegfx
     public:
         B3DHomMatrix();
         B3DHomMatrix(const B3DHomMatrix& rMat);
+        B3DHomMatrix(B3DHomMatrix&& rMat);
         ~B3DHomMatrix();
 
         double get(sal_uInt16 nRow, sal_uInt16 nColumn) const;
@@ -107,6 +108,7 @@ namespace basegfx
 
         // assignment operator
         B3DHomMatrix& operator=(const B3DHomMatrix& rMat);
+        B3DHomMatrix& operator=(B3DHomMatrix&& rMat);
 
         // decomposition
         bool decompose(B3DTuple& rScale, B3DTuple& rTranslate, B3DTuple& rRotate, B3DTuple& rShear) const;
