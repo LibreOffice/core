@@ -282,6 +282,11 @@ namespace drawinglayer
         {
         }
 
+        SdrTextAttribute::SdrTextAttribute(SdrTextAttribute&& rCandidate)
+        :   mpSdrTextAttribute(std::move(rCandidate.mpSdrTextAttribute))
+        {
+        }
+
         SdrTextAttribute::~SdrTextAttribute()
         {
         }
@@ -294,6 +299,12 @@ namespace drawinglayer
         SdrTextAttribute& SdrTextAttribute::operator=(const SdrTextAttribute& rCandidate)
         {
             mpSdrTextAttribute = rCandidate.mpSdrTextAttribute;
+            return *this;
+        }
+
+        SdrTextAttribute& SdrTextAttribute::operator=(SdrTextAttribute&& rCandidate)
+        {
+            mpSdrTextAttribute = std::move(rCandidate.mpSdrTextAttribute);
             return *this;
         }
 
