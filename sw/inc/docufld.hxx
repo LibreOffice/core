@@ -136,7 +136,7 @@ public:
     OUString Expand( sal_uInt32 nFormat, short nOff, sal_uInt16 const nPageNumber,
                      sal_uInt16 const nMaxPage, const OUString& ) const;
     void ChangeExpansion( SwDoc* pDoc,
-                            bool bVirtPageNum, const sal_Int16* pNumFormat = nullptr );
+                          bool bVirtPageNum, const sal_Int16* pNumFormat );
     virtual SwFieldType* Copy() const override;
 };
 
@@ -288,7 +288,7 @@ public:
 
     virtual SwFieldType*    Copy() const override;
 
-    void                    SetHiddenFlag( bool bSetHidden = true );
+    void                    SetHiddenFlag( bool bSetHidden );
     inline bool             GetHiddenFlag() const { return bHidden; }
 };
 

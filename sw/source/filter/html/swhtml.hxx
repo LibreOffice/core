@@ -607,7 +607,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void NewNumBulList( int nToken );
     void EndNumBulList( int nToken=0 );
     void NewNumBulListItem( int nToken );
-    void EndNumBulListItem( int nToken, bool bSetColl=true,
+    void EndNumBulListItem( int nToken, bool bSetColl,
                             bool bLastPara=false );
 
     // Definitions-Listen <DL> mit <DD>, <DT>

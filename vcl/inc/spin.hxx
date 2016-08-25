@@ -34,8 +34,8 @@ void ImplDrawSpinButton(vcl::RenderContext& rRenderContext, vcl::Window* pWindow
 // Draw Up/Down buttons suitable for use in any context
 void ImplDrawUpDownButtons(vcl::RenderContext& rRenderContext,
                            const Rectangle& rUpperRect, const Rectangle& rLowerRect,
-                           bool bUpperIn, bool bLowerIn, bool bUpperEnabled, bool bLowerEnabled = true,
-                           bool bHorz = false, bool bMirrorHorz = false);
+                           bool bUpperIn, bool bLowerIn, bool bUpperEnabled, bool bLowerEnabled,
+                           bool bHorz, bool bMirrorHorz = false);
 
 
 #endif // INCLUDED_VCL_INC_SPIN_HXX

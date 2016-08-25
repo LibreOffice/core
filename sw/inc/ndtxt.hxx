@@ -689,7 +689,7 @@ public:
                             const bool bWithSpacesForLevel = false,
                             const bool bWithFootnote = true ) const;
     bool GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
-                           sal_Int32 nIdx = 0, sal_Int32 nLen = -1,
+                           sal_Int32 nIdx, sal_Int32 nLen = -1,
                            bool bWithNum = false, bool bWithFootnote = true,
                            bool bReplaceTabsWithSpaces = false ) const;
 

@@ -144,7 +144,7 @@ class WW8_WrFkp
 public:
     WW8_WrFkp(ePLCFT ePl, WW8_FC nStartFc);
     ~WW8_WrFkp();
-    bool Append( WW8_FC nEndFc, sal_uInt16 nVarLen, const sal_uInt8* pSprms = nullptr );
+    bool Append( WW8_FC nEndFc, sal_uInt16 nVarLen, const sal_uInt8* pSprms );
     void Combine();
     void Write( SvStream& rStrm, SwWW8WrGrf& rGrf );
 

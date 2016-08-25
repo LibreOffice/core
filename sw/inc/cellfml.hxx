@@ -56,29 +56,29 @@ class SwTableFormula
 typedef void (SwTableFormula:: *FnScanFormula)( const SwTable&, OUString&,
                                                 OUString&, OUString*, void* ) const;
 
-    void BoxNmsToPtr( const SwTable&, OUString&, OUString&, OUString* = nullptr,
+    void BoxNmsToPtr( const SwTable&, OUString&, OUString&, OUString*,
                         void* pPara = nullptr ) const;
-    void PtrToBoxNms( const SwTable&, OUString&, OUString&, OUString* = nullptr,
+    void PtrToBoxNms( const SwTable&, OUString&, OUString&, OUString*,
                         void* pPara = nullptr ) const;
-    void RelNmsToBoxNms( const SwTable&, OUString&, OUString&, OUString* = nullptr,
+    void RelNmsToBoxNms( const SwTable&, OUString&, OUString&, OUString*,
                         void* pPara = nullptr ) const;
-    void RelBoxNmsToPtr( const SwTable&, OUString&, OUString&, OUString* = nullptr,
+    void RelBoxNmsToPtr( const SwTable&, OUString&, OUString&, OUString*,
                         void* pPara = nullptr ) const;
-    void BoxNmsToRelNm( const SwTable&, OUString&, OUString&, OUString* = nullptr,
+    void BoxNmsToRelNm( const SwTable&, OUString&, OUString&, OUString*,
                         void* pPara = nullptr ) const;
-    void MakeFormula_( const SwTable&, OUString&, OUString&, OUString* = nullptr,
+    void MakeFormula_( const SwTable&, OUString&, OUString&, OUString*,
                         void* pPara = nullptr ) const;
-    void GetFormulaBoxes( const SwTable&, OUString&, OUString&, OUString* = nullptr,
+    void GetFormulaBoxes( const SwTable&, OUString&, OUString&, OUString*,
                         void* pPara = nullptr ) const;
-    void HasValidBoxes_( const SwTable&, OUString&, OUString&, OUString* = nullptr,
+    void HasValidBoxes_( const SwTable&, OUString&, OUString&, OUString*,
                         void* pPara = nullptr ) const;
-    void SplitMergeBoxNm_( const SwTable&, OUString&, OUString&, OUString* = nullptr,
+    void SplitMergeBoxNm_( const SwTable&, OUString&, OUString&, OUString*,
                         void* pPara = nullptr ) const;
 
     static void GetBoxes( const SwTableBox& rStt, const SwTableBox& rEnd,
                     SwSelBoxes& rBoxes );
     OUString ScanString( FnScanFormula fnFormula, const SwTable& rTable,
-                        void* = nullptr ) const;
+                        void*) const;
 
     static const SwTable* FindTable( SwDoc& rDoc, const OUString& rNm );
 

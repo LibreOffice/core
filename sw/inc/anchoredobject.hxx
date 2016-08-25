@@ -286,7 +286,7 @@ class SW_DLLPUBLIC SwAnchoredObject
             input parameter - boolean indicating, if check on paragraph portion
             information has to be done.
         */
-        void CheckCharRectAndTopOfLine( const bool _bCheckForParaPorInf = true );
+        void CheckCharRectAndTopOfLine( const bool _bCheckForParaPorInf );
 
         // accessors to member <maLastCharRect>
         const SwRect& GetLastCharRect() const { return maLastCharRect;}

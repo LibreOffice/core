@@ -390,7 +390,7 @@ public:
     inline bool     UseFormat() const                   { return m_bUseFormat; }
     inline void     EnableFormat(bool bFormat = true)   { m_bUseFormat = bFormat; }
 
-    OUString        ExpandValue(const double& rVal, sal_uInt32 nFormat, sal_uInt16 nLng=0) const;
+    OUString        ExpandValue(const double& rVal, sal_uInt32 nFormat, sal_uInt16 nLng) const;
     OUString        DoubleToString(const double &rVal, LanguageType eLng) const;
     OUString        DoubleToString(const double &rVal, sal_uInt32 nFormat) const;
 };
@@ -415,7 +415,7 @@ public:
     virtual double          GetValue() const;
     virtual void            SetValue( const double& rVal );
 
-    inline OUString ExpandValue(const double& rVal, sal_uInt32 nFormat, sal_uInt16 nLng=0) const
+    inline OUString ExpandValue(const double& rVal, sal_uInt32 nFormat, sal_uInt16 nLng) const
         { return static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(rVal, nFormat, nLng); }
 
     static sal_uInt32       GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt32 nFormat);

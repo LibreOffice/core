@@ -208,7 +208,7 @@ public:
     const SwAttrSet* GetTheChgdSet() const { return m_pTheChgdSet; }
 
     sal_uInt16 Count() const { return m_pChgSet->Count(); }
-    void ClearItem( sal_uInt16 nWhichL = 0 )
+    void ClearItem( sal_uInt16 nWhichL )
 #ifdef DBG_UTIL
         ;
 #else

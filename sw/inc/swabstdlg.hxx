@@ -361,7 +361,7 @@ public:
                                                     SwView& rVw,
                                                     const SfxItemSet& rCoreSet,
                                                     const OUString *pCollName,
-                                                    bool bDraw = false,
+                                                    bool bDraw,
                                                     const OString& sDefPage = OString() ) = 0;
 
     virtual AbstractSwSelGlossaryDlg * CreateSwSelGlossaryDlg(const OUString &rShortName) = 0;
@@ -400,7 +400,7 @@ public:
                                                 SfxStyleSheetBase&  rBase,
                                                 SfxStyleFamily      nRegion,
                                                 const OString&      sPage,
-                                                SwWrtShell*         pActShell = nullptr,
+                                                SwWrtShell*         pActShell,
                                                 bool                bNew = false) = 0;
     virtual AbstractGlossaryDlg*        CreateGlossaryDlg(SfxViewFrame* pViewFrame,
                                                 SwGlossaryHdl* pGlosHdl,
@@ -431,7 +431,7 @@ public:
                                                 vcl::Window* pParent, const SfxItemSet& rSet,
                                                 SwWrtShell &rShell,
                                                 SwTOXBase* pCurTOX, sal_uInt16 nToxType,
-                                                bool bGlobal = false) = 0;
+                                                bool bGlobal) = 0;
     virtual AbstractEditRegionDlg*      CreateEditRegionDlg(vcl::Window* pParent, SwWrtShell& rWrtSh) = 0;
     virtual AbstractInsertSectionTabDialog*     CreateInsertSectionTabDialog(
         vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh) = 0;

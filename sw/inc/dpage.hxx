@@ -53,7 +53,7 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > createUnoPage() override;
 
 protected:
-    void lateInit(const SwDPage& rPage, SwDrawModel* pNewModel = nullptr);
+    void lateInit(const SwDPage& rPage, SwDrawModel* pNewModel);
 
 private:
     SwDPage(const SwDPage& rSrcPage);

@@ -1118,7 +1118,7 @@ class HTMLEndPosLst
     // Insert without taking care of script
     void InsertNoScript( const SfxPoolItem& rItem, sal_Int32 nStart,
                           sal_Int32 nEnd, SwHTMLFormatInfos& rFormatInfos,
-                         bool bParaAttrs=false );
+                         bool bParaAttrs );
 
     const SwHTMLFormatInfo *GetFormatInfo( const SwFormat& rFormat,
                                      SwHTMLFormatInfos& rFormatInfos );
@@ -1140,7 +1140,7 @@ public:
                  SwHTMLFormatInfos& rFormatInfos );
 
     sal_uInt16 GetScriptAtPos( sal_Int32 nPos,
-                               sal_uInt16 nWeak=CSS1_OUTMODE_ANY_SCRIPT );
+                               sal_uInt16 nWeak );
 
     void OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
                         HTMLOutContext *pContext = nullptr );

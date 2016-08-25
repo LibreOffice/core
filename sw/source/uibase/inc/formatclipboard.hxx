@@ -58,7 +58,7 @@ public:
      * Do not paste the paragraph formats.
      */
     void Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPool
-        , bool bNoCharacterFormats, bool bNoParagraphFormats=false );
+        , bool bNoCharacterFormats, bool bNoParagraphFormats );
 
     /**
      * Clear the currently stored text and paragraph attributes.

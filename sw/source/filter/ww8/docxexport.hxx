@@ -200,7 +200,7 @@ protected:
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,
                                      const SwNode& rNd,
                                      const SwFormatPageDesc* pNewPgDescFormat,
-                                     const SwPageDesc* pNewPgDesc = nullptr ) override;
+                                     const SwPageDesc* pNewPgDesc ) override;
 
 private:
     /// Setup pStyles and write styles.xml

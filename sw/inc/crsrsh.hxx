@@ -376,13 +376,13 @@ public:
     sal_uLong Find( const SwTextFormatColl& rFormatColl,
                 SwDocPositions eStart, SwDocPositions eEnd,
                 bool& bCancel,
-                FindRanges eRng, const SwTextFormatColl* pReplFormat = nullptr );
+                FindRanges eRng, const SwTextFormatColl* pReplFormat );
 
     sal_uLong Find( const SfxItemSet& rSet, bool bNoCollections,
                 SwDocPositions eStart, SwDocPositions eEnd,
                 bool& bCancel,
                 FindRanges eRng,
-                const css::util::SearchOptions2* pSearchOpt = nullptr,
+                const css::util::SearchOptions2* pSearchOpt,
                 const SfxItemSet* rReplSet = nullptr );
 
     //  Position the Cursor
@@ -608,7 +608,7 @@ public:
     // select the given range of OutlineNodes. Optionally including the children
     // the sal_uInt16s are the positions in OutlineNodes-Array (EditShell)
     bool MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
-                         bool bWithChildren = false );
+                         bool bWithChildren );
 
     bool GotoNextOutline();
     bool GotoPrevOutline();
@@ -649,7 +649,7 @@ public:
     bool GotoHeaderText();       ///< jump from the content to the header
     bool GotoFooterText();       ///< jump from the content to the footer
     // jump to the header/footer of the given or current PageDesc
-    bool SetCursorInHdFt( size_t nDescNo = SIZE_MAX,
+    bool SetCursorInHdFt( size_t nDescNo,
                         bool bInHeader = true );
     // is point of cursor in header/footer. pbInHeader return true if it is
     // in a headerframe otherwise in a footerframe
@@ -669,9 +669,9 @@ public:
                                bool bOnlyErrors = false );
     // jump to the next / previous hyperlink - inside text and also
     // on graphics
-    bool SelectNxtPrvHyperlink( bool bNext = true );
+    bool SelectNxtPrvHyperlink( bool bNext );
 
-    bool GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType = 0,
+    bool GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType,
                             sal_uInt16 nSeqNo = 0 );
 
     // get the nth character from the start or end of the  current selection
@@ -718,7 +718,7 @@ public:
     bool GoNextSentence();
     bool GoStartSentence();
     bool GoEndSentence();
-    bool SelectWord( const Point* pPt = nullptr );
+    bool SelectWord( const Point* pPt );
     bool ExpandToSentenceBorders();
 
     // get position from current cursor
@@ -758,7 +758,7 @@ public:
     virtual void MakeSelVisible();
 
     // set the cursor to a NOT protected/hidden node
-    bool FindValidContentNode( bool bOnlyText = false );
+    bool FindValidContentNode( bool bOnlyText );
 
     bool GetContentAtPos( const Point& rPt,
                           SwContentAtPos& rContentAtPos,
@@ -801,7 +801,7 @@ public:
 
     const SwRangeRedline* SelNextRedline();
     const SwRangeRedline* SelPrevRedline();
-    const SwRangeRedline* GotoRedline( sal_uInt16 nArrPos, bool bSelect = false );
+    const SwRangeRedline* GotoRedline( sal_uInt16 nArrPos, bool bSelect );
 
     // is cursor or the point in/over a vertical formatted text?
     bool IsInVerticalText( const Point* pPt = nullptr ) const;

@@ -203,7 +203,7 @@ public:
 
     void AppendSection( const SwPageDesc* pPd,
                     const SwSectionFormat* pSectionFormat,
-                    sal_uLong nLnNumRestartNo = 0,
+                    sal_uLong nLnNumRestartNo,
                     bool bIsFirstParagraph = false );
     void AppendSection( const SwFormatPageDesc& rPd,
                     const SwNode& rNd,
@@ -250,7 +250,7 @@ public:
     void AppendSep( WW8_CP nStartCp,
                     const SwPageDesc* pPd,
                     const SwSectionFormat* pSectionFormat,
-                    sal_uLong nLnNumRestartNo = 0 );
+                    sal_uLong nLnNumRestartNo );
     void AppendSep( WW8_CP nStartCp, const SwFormatPageDesc& rPd,
                     const SwNode& rNd,
                     const SwSectionFormat* pSectionFormat,
@@ -807,7 +807,7 @@ protected:
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,
                                      const SwNode& rNd,
                                      const SwFormatPageDesc* pNewPgDescFormat,
-                                     const SwPageDesc* pNewPgDesc = nullptr ) = 0;
+                                     const SwPageDesc* pNewPgDesc ) = 0;
 
     /// Return value indicates if an inherited outline numbering is suppressed.
     virtual bool DisallowInheritingOutlineNumbering(const SwFormat &rFormat) = 0;
@@ -1067,7 +1067,7 @@ public:
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,
                                      const SwNode& rNd,
                                      const SwFormatPageDesc* pNewPgDescFormat,
-                                     const SwPageDesc* pNewPgDesc = nullptr ) override;
+                                     const SwPageDesc* pNewPgDesc ) override;
 
     static void Out_BorderLine(ww::bytes& rO, const ::editeng::SvxBorderLine* pLine,
         sal_uInt16 nDist, sal_uInt16 nSprmNo, sal_uInt16 nSprmNoVer9,

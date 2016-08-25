@@ -219,7 +219,7 @@ public:
                            OldMerge( pDoc, rBoxes, pMergeBox, pUndo );
     }
     bool SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
-                   bool bSameHeight = false )
+                   bool bSameHeight )
     {
 #ifdef DBG_UTIL
         m_bDontChangeModel = true;

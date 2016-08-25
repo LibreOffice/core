@@ -176,7 +176,7 @@ public:
      bRegExpRplc - replace tabs (\\t) and insert found string (not \&).
      E.g.: Fnd: "zzz", Repl: "xx\t\\t..&..\&"
            --> "xx\t<Tab>..zzz..&" */
-    bool Replace( const OUString& rNewStr, bool bRegExpRplc = false );
+    bool Replace( const OUString& rNewStr, bool bRegExpRplc );
 
     /** Delete content of all ranges.
      If whole nodes are selected, these nodes get deleted. */
@@ -202,7 +202,7 @@ public:
     void SetLinkUpdMode( sal_uInt16 nMode );
 
     /// Copy content of all ranges at current position of cursor to given Shell.
-    bool Copy( SwEditShell* pDestShell = nullptr );
+    bool Copy( SwEditShell* pDestShell );
 
     /** For copying via ClipBoard:
        If table is copied into table, move all cursors away from it.
@@ -363,7 +363,7 @@ public:
 
     void SetClassification(const OUString& rName, SfxClassificationPolicyType eType);
 
-    void Insert2(SwField&, const bool bForceExpandHints = false);
+    void Insert2(SwField&, const bool bForceExpandHints);
 
     void UpdateFields( SwField & );   ///< One single field.
 
@@ -385,7 +385,7 @@ public:
     void ChangeDBFields( const std::vector<OUString>& rOldNames,
                          const OUString& rNewName );
     void GetAllUsedDB( std::vector<OUString>& rDBNameList,
-                       std::vector<OUString>* pAllDBNames = nullptr );
+                       std::vector<OUString>* pAllDBNames );
 
     bool IsAnyDatabaseFieldInDoc()const;
 
@@ -435,10 +435,10 @@ public:
 
     sal_uInt16              GetTOXCount() const;
     const SwTOXBase*    GetTOX( sal_uInt16 nPos ) const;
-    bool                DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes = false );
+    bool                DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes );
 
     /// After reading file update all content tables.
-    void SetUpdateTOX( bool bFlag = true );
+    void SetUpdateTOX( bool bFlag );
     bool IsUpdateTOX() const;
 
     /// Manage types of content tables.
@@ -529,11 +529,11 @@ public:
     void ChgNumRuleFormats( const SwNumRule& rRule );
 
     /// Set (and query if) a numbering with StartFlag starts at current PointPos.
-    void SetNumRuleStart( bool bFlag = true, SwPaM* pCursor = nullptr );
+    void SetNumRuleStart( bool bFlag, SwPaM* pCursor = nullptr );
     bool IsNumRuleStart( SwPaM* pPaM = nullptr ) const;
     void SetNodeNumStart( sal_uInt16 nStt );
 
-    sal_uInt16 GetNodeNumStart( SwPaM* pPaM = nullptr ) const;
+    sal_uInt16 GetNodeNumStart( SwPaM* pPaM ) const;
 
     bool ReplaceNumRule( const OUString& rOldRule, const OUString& rNewRule );
 
@@ -658,13 +658,13 @@ public:
     /** Make current selection glossary and insert into glossary document
      including styles. */
     sal_uInt16 MakeGlossary( SwTextBlocks& rToFill, const OUString& rName,
-                         const OUString& rShortName, bool bSaveRelFile = false,
+                         const OUString& rShortName, bool bSaveRelFile,
                          const OUString* pOnlyText=nullptr );
 
     /// Save complete content of doc as glossary.
     sal_uInt16 SaveGlossaryDoc( SwTextBlocks& rGlossary, const OUString& rName,
                             const OUString& rShortName,
-                            bool bSaveRelFile = false,
+                            bool bSaveRelFile,
                             bool bOnlyText = false );
 
     // Linguistics...
@@ -718,7 +718,7 @@ public:
      Can Merge checks if Prev or Next are possible.
         If pointer pChkNxtPrv is passed possible direction is given. */
     bool CanMergeTable( bool bWithPrev = true, bool* pChkNxtPrv = nullptr ) const;
-    bool MergeTable( bool bWithPrev = true );
+    bool MergeTable( bool bWithPrev );
 
     /// Set up InsertDB as table Undo.
     void AppendUndoForInsertFromDB( bool bIsTable );
@@ -733,7 +733,7 @@ public:
     void SpellEnd( SwConversionArgs *pConvArgs = nullptr, bool bRestoreSelection = true );
     css::uno::Any SpellContinue(
                     sal_uInt16* pPageCnt, sal_uInt16* pPageSt,
-                    SwConversionArgs *pConvArgs = nullptr );
+                    SwConversionArgs *pConvArgs );
 
     /** Spells on a sentence basis - the SpellPortions are needed
      @return false if no error could be found. */
@@ -782,7 +782,7 @@ public:
     bool GetPrevAutoCorrWord( SvxAutoCorrect& rACorr, OUString& rWord );
 
     /// Set our styles according to the respective rules.
-    void AutoFormat( const SvxSwAutoFormatFlags* pAFlags = nullptr );
+    void AutoFormat( const SvxSwAutoFormatFlags* pAFlags );
 
     static SvxSwAutoFormatFlags* GetAutoFormatFlags();
     static void SetAutoFormatFlags(SvxSwAutoFormatFlags *);
@@ -859,8 +859,8 @@ public:
     /** Adjust left margin via object bar (similar to adjustment of numerations).
      One can either change the margin "by" adding or subtracting a given
      offset or set it "to" this position @param (bModulus = true). */
-    bool IsMoveLeftMargin( bool bRight = true, bool bModulus = true ) const;
-    void MoveLeftMargin( bool bRight = true, bool bModulus = true );
+    bool IsMoveLeftMargin( bool bRight, bool bModulus = true ) const;
+    void MoveLeftMargin( bool bRight, bool bModulus = true );
 
     /// Query NumberFormater from document.
           SvNumberFormatter* GetNumberFormatter();
@@ -869,7 +869,7 @@ public:
 
     /// Interfaces for GlobalDocument.
     bool IsGlobalDoc() const;
-    void SetGlblDocSaveLinks( bool bFlag = true );
+    void SetGlblDocSaveLinks( bool bFlag );
     bool IsGlblDocSaveLinks() const;
     void GetGlobalDocContent( SwGlblDocContents& rArr ) const;
     bool InsertGlobalDocContent( const SwGlblDocContent& rPos,
@@ -922,7 +922,7 @@ public:
     void  SetLineNumberInfo( const SwLineNumberInfo& rInfo);
 
     /// Labels: Synchronize ranges.
-    void SetLabelDoc( bool bFlag = true );
+    void SetLabelDoc( bool bFlag );
     bool IsLabelDoc() const;
 
     /// Interface for TextInputData - (for input of Japanese/Chinese chars.)

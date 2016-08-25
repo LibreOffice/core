@@ -77,7 +77,7 @@ public:
     void IncRefCnt() {  if( !nRefCnt++ && pDoc ) RefCntChgd(); }
     void DecRefCnt() {  if( !--nRefCnt && pDoc ) RefCntChgd(); }
 
-    void SetCRLFDelFlag( bool bFlag = true )    { bCRLFFlag = bFlag; }
+    void SetCRLFDelFlag( bool bFlag )    { bCRLFFlag = bFlag; }
 };
 
 // DDE-field

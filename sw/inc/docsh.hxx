@@ -124,7 +124,7 @@ class SW_DLLPUBLIC SwDocShell
         const SfxStyleFamily nFamily,
         sal_uInt16 nMask,
         const bool bNew,
-        const OString& sPageId = OString(),
+        const OString& sPageId,
         SwWrtShell* pActShell = nullptr,
         const bool bBasic = false );
 
@@ -132,12 +132,12 @@ class SW_DLLPUBLIC SwDocShell
     SAL_DLLPRIVATE bool                  Hide(const OUString &rName, SfxStyleFamily nFamily, bool bHidden);
     SAL_DLLPRIVATE SfxStyleFamily        ApplyStyles(const OUString &rName,
         const SfxStyleFamily nFamily,
-        SwWrtShell* pShell = nullptr,
+        SwWrtShell* pShell,
         sal_uInt16 nMode = 0);
     SAL_DLLPRIVATE SfxStyleFamily        DoWaterCan( const OUString &rName, SfxStyleFamily nFamily);
-    SAL_DLLPRIVATE SfxStyleFamily        UpdateStyle(const OUString &rName, SfxStyleFamily nFamily, SwWrtShell* pShell = nullptr);
+    SAL_DLLPRIVATE SfxStyleFamily        UpdateStyle(const OUString &rName, SfxStyleFamily nFamily, SwWrtShell* pShell);
     SAL_DLLPRIVATE SfxStyleFamily        MakeByExample(const OUString &rName,
-                                               SfxStyleFamily nFamily, sal_uInt16 nMask, SwWrtShell* pShell = nullptr);
+                                               SfxStyleFamily nFamily, sal_uInt16 nMask, SwWrtShell* pShell);
 
     SAL_DLLPRIVATE void                  SubInitNew();   ///< for InitNew and HtmlSourceMode.
 

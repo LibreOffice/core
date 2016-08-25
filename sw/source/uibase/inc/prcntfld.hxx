@@ -71,17 +71,17 @@ public:
 
     void SetPrcntValue(sal_Int64 nNewValue, FieldUnit eInUnit = FUNIT_NONE);
 
-    void SetUserValue(sal_Int64 nNewValue, FieldUnit eInUnit = FUNIT_NONE);
+    void SetUserValue(sal_Int64 nNewValue, FieldUnit eInUnit);
 
-    void SetBaseValue(sal_Int64 nNewValue, FieldUnit eInUnit = FUNIT_NONE);
+    void SetBaseValue(sal_Int64 nNewValue, FieldUnit eInUnit);
 
     sal_Int64 GetValue(FieldUnit eOutUnit = FUNIT_NONE);
 
     bool IsValueModified();
 
-    void SetMax(sal_Int64 nNewMax, FieldUnit eInUnit = FUNIT_NONE);
+    void SetMax(sal_Int64 nNewMax, FieldUnit eInUnit);
 
-    void SetMin(sal_Int64 nNewMin, FieldUnit eInUnit = FUNIT_NONE);
+    void SetMin(sal_Int64 nNewMin, FieldUnit eInUnit);
 
     sal_Int64 GetMin() const { return m_pField->GetMin(); }
 
@@ -91,7 +91,7 @@ public:
     sal_Int64 Normalize( sal_Int64 nValue ) const { return m_pField->Normalize(nValue); }
 
     void SetRefValue(sal_Int64 nValue);
-    sal_Int64 GetRealValue(FieldUnit eOutUnit = FUNIT_NONE);
+    sal_Int64 GetRealValue(FieldUnit eOutUnit);
 
     sal_Int64 Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit eOutUnit);
 

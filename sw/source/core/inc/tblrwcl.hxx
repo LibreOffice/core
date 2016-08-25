@@ -53,7 +53,7 @@ void InsTableBox( SwDoc* pDoc, SwTableNode* pTableNd,
                 SwTableBox* pBox, sal_uInt16 nInsPos, sal_uInt16 nCnt = 1 );
 
 SW_DLLPUBLIC void DeleteBox_( SwTable& rTable, SwTableBox* pBox, SwUndo* pUndo,
-                bool bCalcNewSize = true, const bool bCorrBorder = true,
+                bool bCalcNewSize, const bool bCorrBorder = true,
                 SwShareBoxFormats* pShareFormats = nullptr );
 
 /**

@@ -94,9 +94,9 @@ public:
 
     // space to content
     void                SetLRSpace( long nLeft,
-                                    long nRight = LONG_MAX );
+                                    long nRight );
     void                SetULSpace( long nTop,
-                                    long nBottom= LONG_MAX );
+                                    long nBottom );
 
     void                SetCol( const SwFormatCol &rCol);
 

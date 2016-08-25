@@ -320,7 +320,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     //OLE
     void    InsertObject(     /*SvInPlaceObjectRef *pObj, */       // != 0 for clipboard
                           const svt::EmbeddedObjectRef&,
-                          SvGlobalName *pName = nullptr,      // != 0 create object accordingly
+                          SvGlobalName *pName,      // != 0 create object accordingly
                           sal_uInt16 nSlotId = 0);       // SlotId for dialog
 
     bool    InsertOleObject( const svt::EmbeddedObjectRef& xObj, SwFlyFrameFormat **pFlyFrameFormat = nullptr );
@@ -406,7 +406,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
 
     // jump to the next / previous hyperlink - inside text and also
     // on graphics
-    void SelectNextPrevHyperlink( bool bNext = true );
+    void SelectNextPrevHyperlink( bool bNext );
 
     // determine corresponding SwView
     const SwView&       GetView() const { return m_rView; }
@@ -465,7 +465,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     bool GotoNextTOXBase( const OUString* pName = nullptr);
     bool GotoTable( const OUString& rName );
     bool GotoFormatField( const SwFormatField& rField );
-    const SwRangeRedline* GotoRedline( sal_uInt16 nArrPos, bool bSelect = false);
+    const SwRangeRedline* GotoRedline( sal_uInt16 nArrPos, bool bSelect);
 
     void ChangeHeaderOrFooter(const OUString& rStyleName, bool bHeader, bool bOn, bool bShowWarning);
     virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow ) override;
@@ -585,7 +585,7 @@ private:
 
     SAL_DLLPRIVATE void  LeaveExtSel() { m_bSelWrd = m_bSelLn = false;}
 
-    SAL_DLLPRIVATE bool  GoStart(bool KeepArea = false, bool * = nullptr,
+    SAL_DLLPRIVATE bool  GoStart(bool KeepArea, bool * = nullptr,
             bool bSelect = false, bool bDontMoveRegion = false);
     SAL_DLLPRIVATE bool  GoEnd(bool KeepArea = false, bool * = nullptr);
 

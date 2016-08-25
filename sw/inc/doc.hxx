@@ -381,7 +381,7 @@ private:
     SwFlyFrameFormat* MakeFlySection_( const SwPosition& rAnchPos,
                                 const SwContentNode& rNode, RndStdIds eRequestId,
                                 const SfxItemSet* pFlyAttrSet,
-                                SwFrameFormat* = nullptr );
+                                SwFrameFormat* );
     sal_Int8 SetFlyFrameAnchor( SwFrameFormat& rFlyFormat, SfxItemSet& rSet, bool bNewFrames );
 
     typedef SwFormat* (SwDoc:: *FNCopyFormat)( const OUString&, SwFormat*, bool, bool );
@@ -607,7 +607,7 @@ public:
      have to be surrounded completely by css::awt::Selection.
      ( Start < Pos < End ) !!!
      (Required for Writers.) */
-    SwPosFlyFrames GetAllFlyFormats( const SwPaM* = nullptr,
+    SwPosFlyFrames GetAllFlyFormats( const SwPaM*,
                         bool bDrawAlso = false,
                         bool bAsCharAlso = false ) const;
 
@@ -634,7 +634,7 @@ public:
                                  SwFrameFormat *pParent = nullptr,
                                  bool bCalledFromShell = false );
     SwFlyFrameFormat* MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
-                                const SwSelBoxes* pSelBoxes = nullptr,
+                                const SwSelBoxes* pSelBoxes,
                                 SwFrameFormat *pParent = nullptr );
 
     //UUUU Helper that checks for unique items for DrawingLayer items of type NameOrIndex
@@ -843,10 +843,10 @@ public:
 
     /** Access to frames.
     Iterate over Flys - for Basic-Collections. */
-    size_t GetFlyCount( FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false ) const;
-    SwFrameFormat* GetFlyNum(size_t nIdx, FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false );
+    size_t GetFlyCount( FlyCntType eType, bool bIgnoreTextBoxes = false ) const;
+    SwFrameFormat* GetFlyNum(size_t nIdx, FlyCntType eType, bool bIgnoreTextBoxes = false );
     std::vector<SwFrameFormat const*> GetFlyFrameFormats(
-            FlyCntType eType = FLYCNTTYPE_ALL,
+            FlyCntType eType,
             bool bIgnoreTextBoxes = false);
 
     // Copy formats in own arrays and return them.
@@ -958,14 +958,14 @@ public:
     static SwTOXBase* GetCurTOX( const SwPosition& rPos );
     static const SwAttrSet& GetTOXBaseAttrSet(const SwTOXBase& rTOX);
 
-    bool DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes = false );
+    bool DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes );
     OUString GetUniqueTOXBaseName( const SwTOXType& rType,
                                    const OUString& sChkStr ) const;
 
     bool SetTOXBaseName(const SwTOXBase& rTOXBase, const OUString& rName);
 
     // After reading file update all tables/indices
-    void SetUpdateTOX( bool bFlag = true )     { mbUpdateTOX = bFlag; }
+    void SetUpdateTOX( bool bFlag )            { mbUpdateTOX = bFlag; }
     bool IsUpdateTOX() const                   { return mbUpdateTOX; }
 
     const OUString& GetTOIAutoMarkURL() const {return msTOIAutoMarkURL;}
@@ -993,7 +993,7 @@ public:
     const SwTOXType* InsertTOXType( const SwTOXType& rTyp );
     const SwTOXTypes& GetTOXTypes() const { return *mpTOXTypes; }
 
-    const SwTOXBase*    GetDefaultTOXBase( TOXTypes eTyp, bool bCreate = false );
+    const SwTOXBase*    GetDefaultTOXBase( TOXTypes eTyp, bool bCreate );
     void                SetDefaultTOXBase(const SwTOXBase& rBase);
 
     // Key for management of index.
@@ -1043,10 +1043,10 @@ public:
     void PropagateOutlineRule();
 
     // Outline - promote / demote.
-    bool OutlineUpDown( const SwPaM& rPam, short nOffset = 1 );
+    bool OutlineUpDown( const SwPaM& rPam, short nOffset );
 
     // Ountline - move up / move down.
-    bool MoveOutlinePara( const SwPaM& rPam, short nOffset = 1);
+    bool MoveOutlinePara( const SwPaM& rPam, short nOffset);
 
     bool GotoOutline( SwPosition& rPos, const OUString& rName ) const;
 
@@ -1152,11 +1152,11 @@ public:
     // Invalidates all numrules
     void InvalidateNumRules();
 
-    bool NumUpDown( const SwPaM&, bool bDown = true );
+    bool NumUpDown( const SwPaM&, bool bDown );
 
     /** Move selected paragraphes (not only numberings)
      according to offsets. (if negative: go to doc start). */
-    bool MoveParagraph( const SwPaM&, long nOffset = 1, bool bIsOutlMv = false );
+    bool MoveParagraph( const SwPaM&, long nOffset, bool bIsOutlMv = false );
 
     bool NumOrNoNum( const SwNodeIndex& rIdx, bool bDel = false);
 
@@ -1188,7 +1188,7 @@ public:
     const SwTable* TextToTable( const SwInsertTableOptions& rInsTableOpts, // HEADLINE_NO_BORDER,
                                 const SwPaM& rRange, sal_Unicode cCh,
                                 short eAdjust,
-                                const SwTableAutoFormat* = nullptr );
+                                const SwTableAutoFormat* );
 
     // text to table conversion - API support
     const SwTable* TextToTable( const std::vector< std::vector<SwNodeRange> >& rTableNodes );
@@ -1211,7 +1211,7 @@ public:
     bool DeleteCol( const SwCursor& rCursor );
 
     // Split / concatenate boxes in table.
-    bool SplitTable( const SwSelBoxes& rBoxes, bool bVert = true,
+    bool SplitTable( const SwSelBoxes& rBoxes, bool bVert,
                        sal_uInt16 nCnt = 1, bool bSameHeight = false );
 
     // @return enum TableMergeErr.
@@ -1223,13 +1223,13 @@ public:
 
     // From FEShell (for Undo and BModified).
     static void GetTabCols( SwTabCols &rFill, const SwCursor* pCursor,
-                    const SwCellFrame* pBoxFrame = nullptr );
+                    const SwCellFrame* pBoxFrame );
     void SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
-                    const SwCursor* pCursor, const SwCellFrame* pBoxFrame = nullptr );
+                    const SwCursor* pCursor, const SwCellFrame* pBoxFrame );
     static void GetTabRows( SwTabCols &rFill, const SwCursor* pCursor,
-                    const SwCellFrame* pBoxFrame = nullptr );
+                    const SwCellFrame* pBoxFrame );
     void SetTabRows( const SwTabCols &rNew, bool bCurColOnly, const SwCursor* pCursor,
-                     const SwCellFrame* pBoxFrame = nullptr );
+                     const SwCellFrame* pBoxFrame );
 
     // Direct access for UNO.
     void SetTabCols(SwTable& rTab, const SwTabCols &rNew, const SwTabCols &rOld,
@@ -1271,23 +1271,23 @@ public:
     void ClearLineNumAttrs( SwPosition & rPos );
 
     bool InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
-                        const SwTable* pCpyTable = nullptr, bool bCpyName = false,
+                        const SwTable* pCpyTable, bool bCpyName = false,
                         bool bCorrPos = false );
 
     bool UnProtectCells( const OUString& rTableName );
     bool UnProtectCells( const SwSelBoxes& rBoxes );
     bool UnProtectTables( const SwPaM& rPam );
     bool HasTableAnyProtection( const SwPosition* pPos,
-                              const OUString* pTableName = nullptr,
+                              const OUString* pTableName,
                               bool* pFullTableProtection = nullptr );
 
     // Split table at baseline position, i.e. create a new table.
-    bool SplitTable( const SwPosition& rPos, sal_uInt16 eMode = 0,
+    bool SplitTable( const SwPosition& rPos, sal_uInt16 eMode,
                         bool bCalcNewSize = false );
 
     /** And vice versa: rPos must be in the table that remains. The flag indicates
      whether the current table is merged with the one before or behind it. */
-    bool MergeTable( const SwPosition& rPos, bool bWithPrev = true,
+    bool MergeTable( const SwPosition& rPos, bool bWithPrev,
                         sal_uInt16 nMode = 0 );
 
     // Make charts of given table update.
@@ -1314,7 +1314,7 @@ public:
                     const OUString& rNumberingSeparator,
                     const bool bBefore, const sal_uInt16 nId, const sal_uLong nIdx,
                     const OUString& rCharacterStyle,
-                    const bool bCpyBrd = true );
+                    const bool bCpyBrd );
     SwFlyFrameFormat* InsertDrawLabel(
         const OUString &rText, const OUString& rSeparator, const OUString& rNumberSeparator,
         const sal_uInt16 nId, const OUString& rCharacterStyle, SdrObject& rObj );
@@ -1334,7 +1334,7 @@ public:
 
     // insert section (the ODF kind of section, not the nodesarray kind)
     SwSection * InsertSwSection(SwPaM const& rRange, SwSectionData &,
-            SwTOXBase const*const pTOXBase = nullptr,
+            SwTOXBase const*const pTOXBase,
             SfxItemSet const*const pAttr = nullptr, bool const bUpdate = true);
     static sal_uInt16 IsInsRegionAvailable( const SwPaM& rRange,
                                 const SwNode** ppSttNd = nullptr );
@@ -1399,7 +1399,7 @@ public:
     const SwFormatINetFormat* FindINetAttr( const OUString& rName ) const;
 
     // Call into intransparent Basic; expect possible Return String.
-    bool ExecMacro( const SvxMacro& rMacro, OUString* pRet = nullptr, SbxArray* pArgs = nullptr );
+    bool ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs = nullptr );
 
     // Call into intransparent Basic / JavaScript.
     sal_uInt16 CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
@@ -1408,7 +1408,7 @@ public:
     /** Adjust left margin via object bar (similar to adjustment of numerations).
      One can either change the margin "by" adding or subtracting a given
      offset or set it "to" this position (bModulus = true). */
-    void MoveLeftMargin( const SwPaM& rPam, bool bRight = true,
+    void MoveLeftMargin( const SwPaM& rPam, bool bRight,
                         bool bModulus = true );
 
     // Query NumberFormatter.
@@ -1426,11 +1426,11 @@ public:
     // Create sub-documents according to given collection.
     // If no collection is given, use chapter styles for 1st level.
     bool GenerateGlobalDoc( const OUString& rPath,
-                                const SwTextFormatColl* pSplitColl = nullptr );
-    bool GenerateGlobalDoc( const OUString& rPath, int nOutlineLevel = 0 );
+                                const SwTextFormatColl* pSplitColl );
+    bool GenerateGlobalDoc( const OUString& rPath, int nOutlineLevel );
     bool GenerateHTMLDoc( const OUString& rPath,
-                                const SwTextFormatColl* pSplitColl = nullptr );
-    bool GenerateHTMLDoc( const OUString& rPath, int nOutlineLevel = 0 );
+                                const SwTextFormatColl* pSplitColl );
+    bool GenerateHTMLDoc( const OUString& rPath, int nOutlineLevel );
 
     //  Compare two documents.
     long CompareDoc( const SwDoc& rDoc );
@@ -1443,7 +1443,7 @@ public:
 
     // For AutoFormat: with Undo/Redlining.
     void SetTextFormatCollByAutoFormat( const SwPosition& rPos, sal_uInt16 nPoolId,
-                                const SfxItemSet* pSet = nullptr );
+                                const SfxItemSet* pSet );
     void SetFormatItemByAutoFormat( const SwPaM& rPam, const SfxItemSet& );
 
     // Only for SW-textbloxks! Does not pay any attention to layout!
@@ -1475,7 +1475,7 @@ public:
     static void GetRowHeight( const SwCursor& rCursor, SwFormatFrameSize *& rpSz );
     void SetRowSplit( const SwCursor& rCursor, const SwFormatRowSplit &rNew );
     static void GetRowSplit( const SwCursor& rCursor, SwFormatRowSplit *& rpSz );
-    bool BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly = true );
+    bool BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly );
     void SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew );
     static bool GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill );
     void SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet );
@@ -1497,7 +1497,7 @@ public:
     static bool GetBoxAttr( const SwCursor& rCursor, SfxPoolItem &rToFill );
     void SetBoxAlign( const SwCursor& rCursor, sal_uInt16 nAlign );
     static sal_uInt16 GetBoxAlign( const SwCursor& rCursor );
-    void AdjustCellWidth( const SwCursor& rCursor, bool bBalance = false );
+    void AdjustCellWidth( const SwCursor& rCursor, bool bBalance );
 
     SwChainRet Chainable( const SwFrameFormat &rSource, const SwFrameFormat &rDest );
     SwChainRet Chain( SwFrameFormat &rSource, const SwFrameFormat &rDest );
@@ -1627,7 +1627,7 @@ public:
 
     SfxObjectShell* CreateCopy(bool bCallInitNew, bool bEmpty) const;
     SwNodeIndex AppendDoc(const SwDoc& rSource, sal_uInt16 nStartPageNumber,
-                 bool bDeletePrevious = false, int physicalPageOffset = 0,
+                 bool bDeletePrevious, int physicalPageOffset = 0,
                  const sal_uLong nDocNo = 1);
 
     /**

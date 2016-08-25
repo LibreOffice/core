@@ -457,7 +457,7 @@ protected:
         return properties->getPropertySetInfo()->hasPropertyByName(name);
     }
 
-    xml::AttributeData getUserDefineAttribute(const uno::Any& obj, const OUString& name, const OUString& rValue = OUString()) const
+    xml::AttributeData getUserDefineAttribute(const uno::Any& obj, const OUString& name, const OUString& rValue) const
     {
         uno::Reference<container::XNameContainer> attrsCnt(getProperty<uno::Any>(obj, "UserDefinedAttributes"), uno::UNO_QUERY_THROW);
 

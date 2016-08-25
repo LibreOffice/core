@@ -47,7 +47,7 @@ public:
     }
 
     bool GetAutoFlag() const                    { return bAuto; }
-    void SetAutoFlag( bool bFlag = true )       { bAuto = bFlag; }
+    void SetAutoFlag( bool bFlag )              { bAuto = bFlag; }
 };
 
 class SwTableBoxFormula : public SfxPoolItem, public SwTableFormula

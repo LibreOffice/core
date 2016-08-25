@@ -293,9 +293,9 @@ public:
     virtual bool RightMargin(SwPaM *, bool bAPI = false) const override;
 
     virtual bool UnitUp(SwPaM *, const SwTwips nOffset,
-                            bool bSetInReadOnly = false ) const override;
+                            bool bSetInReadOnly ) const override;
     virtual bool UnitDown(SwPaM *, const SwTwips nOffset,
-                            bool bSetInReadOnly = false ) const override;
+                            bool bSetInReadOnly ) const override;
     bool UnitUp_(SwPaM *, const SwTwips nOffset = 0,
                             bool bSetInReadOnly = false ) const;
     bool UnitDown_(SwPaM *, const SwTwips nOffset = 0,

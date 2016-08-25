@@ -318,7 +318,7 @@ class SwBorderAttrs : public SwCacheObj
     // #i25029# - If <_pPrevFrame> is set, its value is taken for testing, if
     // borders/shadow have to be joined with previous frame.
     void CalcJoinedWithPrev( const SwFrame& _rFrame,
-                              const SwFrame* _pPrevFrame = nullptr );
+                              const SwFrame* _pPrevFrame );
     void CalcJoinedWithNext( const SwFrame& _rFrame );
 
     // internal helper method for CalcJoinedWithPrev and CalcJoinedWithNext

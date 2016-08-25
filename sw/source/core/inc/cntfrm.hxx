@@ -83,9 +83,9 @@ public:
     virtual bool LeftMargin( SwPaM * ) const;
     virtual bool RightMargin( SwPaM *, bool bAPI = false ) const;
     virtual bool UnitUp( SwPaM *, const SwTwips nOffset,
-                         bool bSetInReadOnly = false ) const;
+                         bool bSetInReadOnly ) const;
     virtual bool UnitDown( SwPaM *, const SwTwips nOffset,
-                           bool bSetInReadOnly = false ) const;
+                           bool bSetInReadOnly ) const;
 
     // nMaxHeight is the required height
     // bSplit indicates that the paragraph has to be split

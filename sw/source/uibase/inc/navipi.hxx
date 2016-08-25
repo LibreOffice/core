@@ -173,7 +173,7 @@ public:
     //! soon obsolete !
     static  SfxChildWindowContext* CreateImpl(vcl::Window *pParent,
                 SfxBindings *pBindings, SfxChildWinInfo* pInfo );
-    static  void RegisterChildWindowContext(SfxModule *pMod=nullptr);
+    static  void RegisterChildWindowContext(SfxModule *pMod);
 };
 
 #endif

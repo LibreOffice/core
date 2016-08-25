@@ -415,11 +415,11 @@ public:
                                 { return GotoObj( false, eType); }
 
     /// Iterate over flys  - for Basic-collections.
-    size_t GetFlyCount( FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false ) const;
-    const SwFrameFormat* GetFlyNum(size_t nIdx, FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false) const;
+    size_t GetFlyCount( FlyCntType eType, bool bIgnoreTextBoxes = false ) const;
+    const SwFrameFormat* GetFlyNum(size_t nIdx, FlyCntType eType, bool bIgnoreTextBoxes = false) const;
 
     std::vector<SwFrameFormat const*> GetFlyFrameFormats(
-            FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false);
+            FlyCntType eType, bool bIgnoreTextBoxes = false);
 
     /// If a fly is selected, it draws cursor into the first ContentFrame.
     const SwFrameFormat* SelFlyGrabCursor();
@@ -470,7 +470,7 @@ public:
     OUString GetUniqueShapeName() const;
 
     /// Jump to named Fly (graphic/OLE).
-    bool GotoFly( const OUString& rName, FlyCntType eType = FLYCNTTYPE_ALL,
+    bool GotoFly( const OUString& rName, FlyCntType eType,
                   bool bSelFrame = true );
 
     /// Position is a graphic with URL?
@@ -496,7 +496,7 @@ public:
     bool GetObjAttr( SfxItemSet &rSet ) const;
     bool SetObjAttr( const SfxItemSet &rSet );
 
-    const SdrObject* GetBestObject( bool bNext, GotoObjFlags eType = GotoObjFlags::DrawAny, bool bFlat = true, const svx::ISdrObjectFilter* pFilter = nullptr );
+    const SdrObject* GetBestObject( bool bNext, GotoObjFlags eType, bool bFlat = true, const svx::ISdrObjectFilter* pFilter = nullptr );
     bool GotoObj( bool bNext, GotoObjFlags eType = GotoObjFlags::DrawAny);
 
     /// Set DragMode (e.g. Rotate), but do nothing when frame is selected.
@@ -561,7 +561,7 @@ public:
      Return value indicates if it was converted. */
     bool GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf ) const;
 
-    void Paste( SvStream& rStm, SwPasteSdr nAction, const Point* pPt = nullptr );
+    void Paste( SvStream& rStm, SwPasteSdr nAction, const Point* pPt );
     bool Paste( const Graphic &rGrf, const OUString& rURL );
 
     bool IsAlignPossible() const;
@@ -569,7 +569,7 @@ public:
 
     void Insert(const OUString& rGrfName,
                 const OUString& rFltName,
-                const Graphic* pGraphic = nullptr,
+                const Graphic* pGraphic,
                 const SfxItemSet* pFlyAttrSet = nullptr,
                 const SfxItemSet* pGrfAttrSet = nullptr,
                 SwFrameFormat* = nullptr );
@@ -579,7 +579,7 @@ public:
                         const Point& rInsertPosition );
 
     bool ReplaceSdrObj( const OUString& rGrfName, const OUString& rFltName,
-                        const Graphic* pGrf = nullptr );
+                        const Graphic* pGrf );
 
     // --> #i972#
     /** for starmath formulas anchored 'as char' it aligns it baseline to baseline
@@ -624,7 +624,7 @@ public:
     bool GetPageNumber( long nYPos, bool bAtCursorPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay ) const;
 
     SwFlyFrameFormat* InsertObject( const svt::EmbeddedObjectRef&,
-                const SfxItemSet* pFlyAttrSet = nullptr,
+                const SfxItemSet* pFlyAttrSet,
                 const SfxItemSet* pGrfAttrSet = nullptr,
                 SwFrameFormat* = nullptr );
     bool    FinishOLEObj(); ///< Shutdown server.
@@ -649,7 +649,7 @@ public:
                                       @return error via enum. */
 
     /// Split cell vertically or horizontally.
-    bool SplitTab( bool bVert = true, sal_uInt16 nCnt = 1, bool bSameHeight = false );
+    bool SplitTab( bool bVert, sal_uInt16 nCnt = 1, bool bSameHeight = false );
     bool Sort(const SwSortOptions&);    //Sortieren.
 
     void SetRowHeight( const SwFormatFrameSize &rSz );
@@ -684,13 +684,13 @@ public:
 
     SwTab WhichMouseTabCol( const Point &rPt ) const;
     void GetTabCols( SwTabCols &rToFill ) const; ///< Info about columns and margins.
-    void SetTabCols( const SwTabCols &rNew, bool bCurRowOnly = true );
+    void SetTabCols( const SwTabCols &rNew, bool bCurRowOnly );
     void GetMouseTabCols( SwTabCols &rToFill, const Point &rPt ) const;
     void SetMouseTabCols( const SwTabCols &rNew, bool bCurRowOnly,
                           const Point &rPt );
 
     /// pEnd will be used during MouseMove
-    bool SelTableRowCol( const Point& rPt, const Point* pEnd = nullptr, bool bRowDrag = false );
+    bool SelTableRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag = false );
 
     void GetTabRows( SwTabCols &rToFill ) const;
     void SetTabRows( const SwTabCols &rNew, bool bCurColOnly );
@@ -701,7 +701,7 @@ public:
                              cursor is not allowed in readonly. */
     void UnProtectCells();  ///< Refers to table selection.
     void UnProtectTables();   ///< Unprotect all tables in selection.
-    bool HasTableAnyProtection( const OUString* pTableName = nullptr,
+    bool HasTableAnyProtection( const OUString* pTableName,
                               bool* pFullTableProtection = nullptr );
     bool CanUnProtectCells() const;
 
@@ -719,7 +719,7 @@ public:
     /** Adjusts cell widths in such a way, that their content
      does not need to be wrapped (if possible).
      bBalance provides for adjustment of selected columns. */
-    void AdjustCellWidth( bool bBalance = false );
+    void AdjustCellWidth( bool bBalance );
 
     /// Not allowed if only empty cells are selected.
     bool IsAdjustCellWidthAllowed( bool bBalance = false ) const;
@@ -736,7 +736,7 @@ public:
 
     bool GetTableAutoFormat( SwTableAutoFormat& rGet );
 
-    bool SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff = 283 );
+    bool SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff );
 
     bool GetAutoSum( OUString& rFormula ) const;
 
@@ -752,7 +752,7 @@ public:
                       const OUString& rNumberSeparator,
                       const bool bBefore, const sal_uInt16 nId,
                       const OUString& rCharacterStyle,
-                      const bool bCpyBrd = true );
+                      const bool bCpyBrd );
 
     /// The ruler needs some information too.
     sal_uInt16 GetCurColNum( SwGetCurColNumPara* pPara = nullptr ) const; //0 == not in any column.

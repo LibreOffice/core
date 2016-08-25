@@ -123,7 +123,7 @@ public:
     }
 
     /// Set a new MacroTable or clear the current one.
-    void SetMacroTable( const SvxMacroTableDtor* pTable = nullptr );
+    void SetMacroTable( const SvxMacroTableDtor* pTable );
     const SvxMacroTableDtor* GetMacroTable() const
     {
         return mpMacroTable;

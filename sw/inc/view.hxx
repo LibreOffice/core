@@ -273,12 +273,12 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     DECL_DLLPRIVATE_LINK_TYPED( FieldPopupModeEndHdl, FloatingWindow*, void );
 
-    inline long     GetXScroll() const;
-    inline long     GetYScroll() const;
-    SAL_DLLPRIVATE  Point    AlignToPixel(const Point& rPt) const;
-    SAL_DLLPRIVATE   void        CalcPt( Point* pPt,const Rectangle& rRect,
-                            sal_uInt16 nRangeX,
-                            sal_uInt16 nRangeY = USHRT_MAX);
+    inline long                  GetXScroll() const;
+    inline long                  GetYScroll() const;
+    SAL_DLLPRIVATE Point         AlignToPixel(const Point& rPt) const;
+    SAL_DLLPRIVATE void          CalcPt( Point* pPt,const Rectangle& rRect,
+                                    sal_uInt16 nRangeX,
+                                    sal_uInt16 nRangeY);
 
     SAL_DLLPRIVATE bool          GetPageScrollUpOffset(SwTwips& rOff) const;
     SAL_DLLPRIVATE bool          GetPageScrollDownOffset(SwTwips& rOff) const;
@@ -325,9 +325,9 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SAL_DLLPRIVATE void          SwapPageMargin(const SwPageDesc&, SvxLRSpaceItem& rLR);
 
     SAL_DLLPRIVATE void          SetZoom_( const Size &rEditSz,
-                              SvxZoomType eZoomType,
-                              short nFactor,
-                              bool bViewOnly = false);
+                                      SvxZoomType eZoomType,
+                                      short nFactor,
+                                      bool bViewOnly);
     SAL_DLLPRIVATE void          CalcAndSetBorderPixel( SvBorder &rToFill, bool bInner );
 
     SAL_DLLPRIVATE void          ShowAtResize();
@@ -621,7 +621,7 @@ public:
 
     //public fuer D&D
     int     InsertGraphic( const OUString &rPath, const OUString &rFilter,
-                            bool bLink, GraphicFilter *pFlt = nullptr,
+                            bool bLink, GraphicFilter *pFlt,
                             Graphic* pPreviewGrf = nullptr );
 
     void ExecuteScan( SfxRequest& rReq );
