@@ -949,7 +949,7 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
                                       ScXMLDataPilotTableContext* pTempDataPilotTable) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pDataPilotTable(pTempDataPilotTable),
-    pDim(nullptr),
+    xDim(),
     fStart(0.0),
     fEnd(0.0),
     fStep(0.0),
@@ -1032,9 +1032,9 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
 
     if (bHasName)
     {
-        pDim = new ScDPSaveDimension(sName, bDataLayout);
+        xDim.reset(new ScDPSaveDimension(sName, bDataLayout));
         if (!aDisplayName.isEmpty())
-            pDim->SetLayoutName(aDisplayName);
+            xDim->SetLayoutName(aDisplayName);
     }
 }
 
@@ -1070,9 +1070,9 @@ SvXMLImportContext *ScXMLDataPilotFieldContext::CreateChildContext( sal_uInt16 n
 
 void ScXMLDataPilotFieldContext::AddMember(ScDPSaveMember* pMember)
 {
-    if (pDim)
+    if (xDim)
     {
-        pDim->AddMember(pMember);
+        xDim->AddMember(pMember);
         if (!pMember->GetIsVisible())
             // This member is hidden.
             mbHasHiddenMember = true;
@@ -1083,8 +1083,8 @@ void ScXMLDataPilotFieldContext::AddMember(ScDPSaveMember* pMember)
 
 void ScXMLDataPilotFieldContext::SetSubTotalName(const OUString& rName)
 {
-    if (pDim)
-        pDim->SetSubtotalName(rName);
+    if (xDim)
+        xDim->SetSubtotalName(rName);
 }
 
 void ScXMLDataPilotFieldContext::AddGroup(const ::std::vector<OUString>& rMembers, const OUString& rName)
@@ -1097,16 +1097,16 @@ void ScXMLDataPilotFieldContext::AddGroup(const ::std::vector<OUString>& rMember
 
 void ScXMLDataPilotFieldContext::EndElement()
 {
-    if (pDim)
+    if (xDim)
     {
-        pDim->SetUsedHierarchy(nUsedHierarchy);
-        pDim->SetFunction(nFunction);
-        pDim->SetOrientation(nOrientation);
+        xDim->SetUsedHierarchy(nUsedHierarchy);
+        xDim->SetFunction(nFunction);
+        xDim->SetOrientation(nOrientation);
         if (bSelectedPage)
         {
-            pDataPilotTable->SetSelectedPage(pDim->GetName(), sSelectedPage);
+            pDataPilotTable->SetSelectedPage(xDim->GetName(), sSelectedPage);
         }
-        pDataPilotTable->AddDimension(pDim);
+        pDataPilotTable->AddDimension(xDim.release());
         if (bIsGroupField)
         {
             ScDPNumGroupInfo aInfo;

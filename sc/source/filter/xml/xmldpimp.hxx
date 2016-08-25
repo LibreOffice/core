@@ -304,7 +304,7 @@ struct ScXMLDataPilotGroup
 class ScXMLDataPilotFieldContext : public SvXMLImportContext
 {
     ScXMLDataPilotTableContext* pDataPilotTable;
-    ScDPSaveDimension*          pDim;
+    std::unique_ptr<ScDPSaveDimension> xDim;
 
     ::std::vector<ScXMLDataPilotGroup> aGroups;
     OUString                    sGroupSource;
@@ -342,15 +342,15 @@ public:
 
     virtual void EndElement() override;
 
-    void SetShowEmpty(const bool bValue) { if (pDim) pDim->SetShowEmpty(bValue); }
-    void SetRepeatItemLabels(const bool bSet) { if (pDim) pDim->SetRepeatItemLabels(bSet); }
-    void SetSubTotals(const sal_uInt16* pFunctions, const sal_Int16 nCount) { if(pDim) pDim->SetSubTotals(nCount, pFunctions); }
+    void SetShowEmpty(const bool bValue) { if (xDim) xDim->SetShowEmpty(bValue); }
+    void SetRepeatItemLabels(const bool bSet) { if (xDim) xDim->SetRepeatItemLabels(bSet); }
+    void SetSubTotals(const sal_uInt16* pFunctions, const sal_Int16 nCount) { if (xDim) xDim->SetSubTotals(nCount, pFunctions); }
     void AddMember(ScDPSaveMember* pMember);
     void SetSubTotalName(const OUString& rName);
-    void SetFieldReference(const css::sheet::DataPilotFieldReference& aRef) { if (pDim) pDim->SetReferenceValue(&aRef); }
-    void SetAutoShowInfo(const css::sheet::DataPilotFieldAutoShowInfo& aInfo) { if (pDim) pDim->SetAutoShowInfo(&aInfo); }
-    void SetSortInfo(const css::sheet::DataPilotFieldSortInfo& aInfo) { if (pDim) pDim->SetSortInfo(&aInfo); }
-    void SetLayoutInfo(const css::sheet::DataPilotFieldLayoutInfo& aInfo) { if (pDim) pDim->SetLayoutInfo(&aInfo); }
+    void SetFieldReference(const css::sheet::DataPilotFieldReference& aRef) { if (xDim) xDim->SetReferenceValue(&aRef); }
+    void SetAutoShowInfo(const css::sheet::DataPilotFieldAutoShowInfo& aInfo) { if (xDim) xDim->SetAutoShowInfo(&aInfo); }
+    void SetSortInfo(const css::sheet::DataPilotFieldSortInfo& aInfo) { if (xDim) xDim->SetSortInfo(&aInfo); }
+    void SetLayoutInfo(const css::sheet::DataPilotFieldLayoutInfo& aInfo) { if (xDim) xDim->SetLayoutInfo(&aInfo); }
     void SetGrouping(const OUString& rGroupSource, const double& rStart, const double& rEnd, const double& rStep,
         sal_Int32 nPart, bool bDate, bool bAutoSt, bool bAutoE)
     {
