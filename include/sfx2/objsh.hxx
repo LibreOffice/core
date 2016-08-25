@@ -760,16 +760,24 @@ public:
     inline               ~SfxObjectShellLock();
     inline SfxObjectShellLock & operator = ( const SfxObjectShellLock & rObj );
     inline SfxObjectShellLock & operator = ( SfxObjectShell * pObj );
-    inline bool        Is() const { return pObj != nullptr; }
+    inline bool                 Is() const { return pObj != nullptr; }
     inline SfxObjectShell *     operator &  () const { return pObj; }
     inline SfxObjectShell *     operator -> () const { return pObj; }
     inline SfxObjectShell &     operator *  () const { return *pObj; }
     inline operator SfxObjectShell * () const { return pObj; }
 };
 inline SfxObjectShellLock::SfxObjectShellLock( const SfxObjectShellLock & rObj )
-    { pObj = rObj.pObj; if( pObj ) { pObj->OwnerLock( true ); } }
+{
+    pObj = rObj.pObj;
+    if( pObj )
+        pObj->OwnerLock( true );
+}
 inline SfxObjectShellLock::SfxObjectShellLock( SfxObjectShell * pObjP )
-{ pObj = pObjP; if( pObj ) { pObj->OwnerLock( true ); } }
+{
+    pObj = pObjP;
+    if( pObj )
+        pObj->OwnerLock( true );
+}
 inline void SfxObjectShellLock::Clear()
 {
     if( pObj )
@@ -780,18 +788,24 @@ inline void SfxObjectShellLock::Clear()
     }
 }
 inline SfxObjectShellLock::~SfxObjectShellLock()
-{ if( pObj ) { pObj->OwnerLock( false ); } }
-inline SfxObjectShellLock & SfxObjectShellLock::
-            operator = ( const SfxObjectShellLock & rObj )
 {
-    if( rObj.pObj ) rObj.pObj->OwnerLock( true );
+    if( pObj )
+        pObj->OwnerLock( false );
+}
+inline SfxObjectShellLock & SfxObjectShellLock::operator=( const SfxObjectShellLock & rObj )
+{
+    if( rObj.pObj )
+        rObj.pObj->OwnerLock( true );
     SfxObjectShell* const pRefObj = pObj;
     pObj = rObj.pObj;
-    if( pRefObj ) { pRefObj->OwnerLock( false ); }
+    if( pRefObj )
+        pRefObj->OwnerLock( false );
     return *this;
 }
-inline SfxObjectShellLock & SfxObjectShellLock::operator = ( SfxObjectShell * pObjP )
-{ return *this = SfxObjectShellLock( pObjP ); }
+inline SfxObjectShellLock & SfxObjectShellLock::operator=( SfxObjectShell * pObjP )
+{
+    return *this = SfxObjectShellLock( pObjP );
+}
 
 class SFX2_DLLPUBLIC SfxObjectShellItem: public SfxPoolItem
 {
