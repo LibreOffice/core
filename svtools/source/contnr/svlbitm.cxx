@@ -238,49 +238,6 @@ void SvLBoxString::InitViewData(
 }
 
 // ***************************************************************
-// class SvLBoxBmp
-// ***************************************************************
-
-
-SvLBoxBmp::SvLBoxBmp() : SvLBoxItem()
-{
-}
-
-SvLBoxBmp::~SvLBoxBmp()
-{
-}
-
-SvLBoxItemType SvLBoxBmp::GetType() const
-{
-    return SvLBoxItemType::Bmp;
-}
-
-void SvLBoxBmp::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
-    SvViewDataItem* pViewData)
-{
-    if( !pViewData )
-        pViewData = pView->GetViewDataItem( pEntry, this );
-    pViewData->maSize = aBmp.GetSizePixel();
-}
-
-void SvLBoxBmp::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                      const SvViewDataEntry* /*pView*/, const SvTreeListEntry& /*rEntry*/)
-{
-    DrawImageFlags nStyle = rDev.IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable;
-    rRenderContext.DrawImage(rPos, aBmp ,nStyle);
-}
-
-SvLBoxItem* SvLBoxBmp::Create() const
-{
-    return new SvLBoxBmp;
-}
-
-void SvLBoxBmp::Clone( SvLBoxItem* pSource )
-{
-    aBmp = static_cast<SvLBoxBmp*>(pSource)->aBmp;
-}
-
-// ***************************************************************
 // class SvLBoxButton
 // ***************************************************************
 

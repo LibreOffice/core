@@ -133,21 +133,6 @@ public:
     virtual void Clone(SvLBoxItem* pSource) override;
 };
 
-class SvLBoxBmp : public SvLBoxItem
-{
-    Image aBmp;
-public:
-    SvLBoxBmp();
-    virtual ~SvLBoxBmp();
-    virtual SvLBoxItemType GetType() const override;
-    virtual void InitViewData( SvTreeListBox* ,SvTreeListEntry*, SvViewDataItem* = nullptr ) override;
-    virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev,  vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
-    virtual SvLBoxItem* Create() const override;
-    virtual void Clone( SvLBoxItem* pSource ) override;
-};
-
-
 class SVT_DLLPUBLIC SvLBoxButton : public SvLBoxItem
 {
     bool    isVis;

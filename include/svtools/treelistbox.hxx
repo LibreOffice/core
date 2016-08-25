@@ -50,7 +50,6 @@ class SvInplaceEdit2;
 class SvLBoxString;
 class SvLBoxButton;
 class SvLBoxContextBmp;
-class SvLBoxBmp;
 class SvImpLBox;
 class SvLBoxButtonData;
 struct SvLBoxDDInfo;
@@ -125,7 +124,7 @@ typedef sal_Int64   ExtendedWinBits;
 // disable the behavior of automatically selecting a "CurEntry" upon painting the control
 #define EWB_NO_AUTO_CURENTRY        0x00000001
 
-enum class SvLBoxItemType {String, Bmp, Button, ContextBmp};
+enum class SvLBoxItemType {String, Button, ContextBmp};
 
 class SvLBoxTab
 {
