@@ -7318,7 +7318,7 @@ void ScInterpreter::ScIndirect()
                         case svSingleRef:
                         case svDoubleRef:
                         case svError:
-                            PushTempToken( xTok.get());
+                            PushTokenRef( xTok);
                             // success!
                             return;
                         default:
