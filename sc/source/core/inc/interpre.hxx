@@ -76,7 +76,7 @@ class ScTokenStack
 {
 public:
     DECL_FIXEDMEMPOOL_NEWDEL( ScTokenStack )
-    formula::FormulaToken* pPointer[ MAXSTACK ];
+    const formula::FormulaToken* pPointer[ MAXSTACK ];
 };
 
 enum ScIterFunc {
@@ -121,7 +121,7 @@ struct FormulaTokenRef_less
     bool operator () ( const formula::FormulaConstTokenRef& r1, const formula::FormulaConstTokenRef& r2 ) const
         { return r1.get() < r2.get(); }
 };
-typedef ::std::map< const formula::FormulaConstTokenRef, formula::FormulaTokenRef, FormulaTokenRef_less> ScTokenMatrixMap;
+typedef ::std::map< const formula::FormulaConstTokenRef, formula::FormulaConstTokenRef, FormulaTokenRef_less> ScTokenMatrixMap;
 
 class ScInterpreter
 {
@@ -187,7 +187,7 @@ private:
     ScDocument* pDok;
     sfx2::LinkManager* mpLinkManager;
     svl::SharedStringPool& mrStrPool;
-    formula::FormulaTokenRef  xResult;
+    formula::FormulaConstTokenRef  xResult;
     ScJumpMatrix*   pJumpMatrix;        // currently active array condition, if any
     ScTokenMatrixMap* pTokenMatrixMap;  // map FormulaToken* to formula::FormulaTokenRef if in array condition
     ScFormulaCell* pMyFormulaCell;      // the cell of this formula expression
@@ -196,7 +196,7 @@ private:
     const formula::FormulaToken*
                 pCur;                   // current token
     ScTokenStack* pStackObj;            // contains the stacks
-    formula::FormulaToken**   pStack;   // the current stack
+    const formula::FormulaToken ** pStack;  // the current stack
     sal_uInt16  nGlobalError;           // global (local to this formula expression) error
     sal_uInt16  sp;                     // stack pointer
     sal_uInt16  maxsp;                  // the maximal used stack pointer
@@ -262,7 +262,7 @@ void Push( formula::FormulaToken& r );
 /** Does not substitute with formula::FormulaErrorToken in case nGlobalError is set.
     Used to push RPN tokens or from within Push() or tokens that are already
     explicit formula::FormulaErrorToken. Increments RefCount. */
-void PushWithoutError( formula::FormulaToken& r );
+void PushWithoutError( const formula::FormulaToken& r );
 
 /** Clones the token to be pushed or substitutes with formula::FormulaErrorToken if
     nGlobalError is set and the token passed is not formula::FormulaErrorToken. */
@@ -276,13 +276,18 @@ void PushTempToken( const formula::FormulaToken& );
     deleted in case of an errStackOverflow or if substituted with formula::FormulaErrorToken! */
 void PushTempToken( formula::FormulaToken* );
 
+/** Pushes the token or substitutes with formula::FormulaErrorToken in case
+    nGlobalError is set and the token passed is not formula::FormulaErrorToken.
+    Increments RefCount of the original token if not substituted. */
+void PushTokenRef( const formula::FormulaConstTokenRef& );
+
 /** Does not substitute with formula::FormulaErrorToken in case nGlobalError is set.
     Used to push tokens from within PushTempToken() or tokens that are already
     explicit formula::FormulaErrorToken. Increments RefCount.
     ATTENTION! The token had to be allocated with `new' and must not be used
     after this call if no RefCount was set because possibly it gets immediately
     decremented again and thus deleted in case of an errStackOverflow! */
-void PushTempTokenWithoutError( formula::FormulaToken* );
+void PushTempTokenWithoutError( const formula::FormulaToken* );
 
 /** If nGlobalError is set push formula::FormulaErrorToken.
     If nGlobalError is not set do nothing.
@@ -316,7 +321,7 @@ inline bool IfErrorPushError()
 void PushCellResultToken( bool bDisplayEmptyAsString, const ScAddress & rAddress,
         short * pRetTypeExpr, sal_uLong * pRetIndexExpr, bool bFinalResult = false );
 
-formula::FormulaTokenRef PopToken();
+formula::FormulaConstTokenRef PopToken();
 void Pop();
 void PopError();
 double PopDouble();
@@ -976,7 +981,7 @@ public:
     formula::StackVar           GetResultType() const       { return xResult->GetType(); }
     svl::SharedString GetStringResult() const;
     double                      GetNumResult() const        { return xResult->GetDouble(); }
-    const formula::FormulaTokenRef& GetResultToken() const      { return xResult; }
+    const formula::FormulaConstTokenRef& GetResultToken() const { return xResult; }
     short                       GetRetFormatType() const    { return nRetFmtType; }
     sal_uLong                   GetRetFormatIndex() const   { return nRetFmtIndex; }
 };

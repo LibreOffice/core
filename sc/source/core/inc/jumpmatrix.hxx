@@ -27,7 +27,7 @@
 #include "types.hxx"
 #include "address.hxx"
 
-typedef ::std::vector< formula::FormulaToken*> ScTokenVec;
+typedef ::std::vector< const formula::FormulaToken*> ScTokenVec;
 
 struct ScJumpMatrixEntry
 {

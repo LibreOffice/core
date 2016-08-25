@@ -2257,7 +2257,7 @@ void ScTable::SetFormulaResults( SCCOL nCol, SCROW nRow, const double* pResults,
 }
 
 void ScTable::SetFormulaResults(
-    SCCOL nCol, SCROW nRow, const formula::FormulaTokenRef* pResults, size_t nLen )
+    SCCOL nCol, SCROW nRow, const formula::FormulaConstTokenRef* pResults, size_t nLen )
 {
     if (!ValidCol(nCol))
         return;

@@ -1268,7 +1268,7 @@ void ScInterpreter::ScNPV()
     {
         double nVal = 0.0;
         //We turn the stack upside down!
-        FormulaToken* pTemp[ 31 ];
+        const FormulaToken* pTemp[ 31 ];
         for( short i = 0; i < nParamCount; i++ )
             pTemp[ i ] = pStack[ sp - i - 1 ];
         memcpy( &pStack[ sp - nParamCount ], pTemp, nParamCount * sizeof( FormulaToken* ) );
@@ -2357,8 +2357,8 @@ void ScInterpreter::ScMod()
 
 void ScInterpreter::ScIntersect()
 {
-    formula::FormulaTokenRef p2nd = PopToken();
-    formula::FormulaTokenRef p1st = PopToken();
+    formula::FormulaConstTokenRef p2nd = PopToken();
+    formula::FormulaConstTokenRef p1st = PopToken();
 
     if (nGlobalError || !p2nd || !p1st)
     {
@@ -2375,14 +2375,14 @@ void ScInterpreter::ScIntersect()
         return;
     }
 
-    formula::FormulaToken* x1 = p1st.get();
-    formula::FormulaToken* x2 = p2nd.get();
+    const formula::FormulaToken* x1 = p1st.get();
+    const formula::FormulaToken* x2 = p2nd.get();
     if (sv1 == svRefList || sv2 == svRefList)
     {
         // Now this is a bit nasty but it simplifies things, and having
         // intersections with lists isn't too common, if at all..
         // Convert a reference to list.
-        formula::FormulaToken* xt[2] = { x1, x2 };
+        const formula::FormulaToken* xt[2] = { x1, x2 };
         StackVar sv[2] = { sv1, sv2 };
         for (size_t i=0; i<2; ++i)
         {
@@ -2390,14 +2390,16 @@ void ScInterpreter::ScIntersect()
             {
                 ScComplexRefData aRef;
                 aRef.Ref1 = aRef.Ref2 = *xt[i]->GetSingleRef();
-                xt[i] = new ScRefListToken;
-                xt[i]->GetRefList()->push_back( aRef);
+                formula::FormulaToken* p = new ScRefListToken;
+                p->GetRefList()->push_back( aRef);
+                xt[i] = p;
             }
             else if (sv[i] == svDoubleRef)
             {
                 ScComplexRefData aRef = *xt[i]->GetDoubleRef();
-                xt[i] = new ScRefListToken;
-                xt[i]->GetRefList()->push_back( aRef);
+                formula::FormulaToken* p = new ScRefListToken;
+                p->GetRefList()->push_back( aRef);
+                xt[i] = p;
             }
         }
         x1 = xt[0];
@@ -2445,11 +2447,11 @@ void ScInterpreter::ScIntersect()
                 PushTempToken( new ScDoubleRefToken( rRef));
         }
         else
-            PushTempToken( xRes.get());
+            PushTokenRef( xRes);
     }
     else
     {
-        formula::FormulaToken* pt[2] = { x1, x2 };
+        const formula::FormulaToken* pt[2] = { x1, x2 };
         StackVar sv[2] = { sv1, sv2 };
         SCCOL nC1[2], nC2[2];
         SCROW nR1[2], nR2[2];
@@ -2503,25 +2505,28 @@ void ScInterpreter::ScIntersect()
 
 void ScInterpreter::ScRangeFunc()
 {
-    formula::FormulaTokenRef x2 = PopToken();
-    formula::FormulaTokenRef x1 = PopToken();
+    formula::FormulaConstTokenRef x2 = PopToken();
+    formula::FormulaConstTokenRef x1 = PopToken();
 
     if (nGlobalError || !x2 || !x1)
     {
         PushIllegalArgument();
         return;
     }
-    FormulaTokenRef xRes = extendRangeReference( *x1, *x2, aPos, false);
+    // We explicitly tell extendRangeReference() to not reuse the token,
+    // casting const away spares two clones.
+    FormulaTokenRef xRes = extendRangeReference(
+            const_cast<FormulaToken&>(*x1), const_cast<FormulaToken&>(*x2), aPos, false);
     if (!xRes)
         PushIllegalArgument();
     else
-        PushTempToken( xRes.get());
+        PushTokenRef( xRes);
 }
 
 void ScInterpreter::ScUnionFunc()
 {
-    formula::FormulaTokenRef p2nd = PopToken();
-    formula::FormulaTokenRef p1st = PopToken();
+    formula::FormulaConstTokenRef p2nd = PopToken();
+    formula::FormulaConstTokenRef p1st = PopToken();
 
     if (nGlobalError || !p2nd || !p1st)
     {
@@ -2538,25 +2543,25 @@ void ScInterpreter::ScUnionFunc()
         return;
     }
 
-    formula::FormulaToken* x1 = p1st.get();
-    formula::FormulaToken* x2 = p2nd.get();
+    const formula::FormulaToken* x1 = p1st.get();
+    const formula::FormulaToken* x2 = p2nd.get();
 
     ScTokenRef xRes;
     // Append to an existing RefList if there is one.
     if (sv1 == svRefList)
     {
-        xRes = x1;
+        xRes = x1->Clone();
         sv1 = svUnknown;    // mark as handled
     }
     else if (sv2 == svRefList)
     {
-        xRes = x2;
+        xRes = x2->Clone();
         sv2 = svUnknown;    // mark as handled
     }
     else
         xRes = new ScRefListToken;
     ScRefList* pRes = xRes->GetRefList();
-    formula::FormulaToken* pt[2] = { x1, x2 };
+    const formula::FormulaToken* pt[2] = { x1, x2 };
     StackVar sv[2] = { sv1, sv2 };
     for (size_t i=0; i<2; ++i)
     {
@@ -2590,16 +2595,16 @@ void ScInterpreter::ScUnionFunc()
         }
     }
     ValidateRef( *pRes);    // set #REF! if needed
-    PushTempToken( xRes.get());
+    PushTokenRef( xRes);
 }
 
 void ScInterpreter::ScCurrent()
 {
-    FormulaTokenRef xTok( PopToken());
+    FormulaConstTokenRef xTok( PopToken());
     if (xTok)
     {
-        PushTempToken( xTok.get());
-        PushTempToken( xTok.get());
+        PushTokenRef( xTok);
+        PushTokenRef( xTok);
     }
     else
         PushError( errUnknownStackVariable);

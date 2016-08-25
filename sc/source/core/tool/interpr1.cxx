@@ -97,7 +97,7 @@ void ScInterpreter::ScIfJump()
                 PushIllegalParameter();
             else
             {
-                FormulaTokenRef xNew;
+                FormulaConstTokenRef xNew;
                 ScTokenMatrixMap::const_iterator aMapIter;
                 // DoubleError handled by JumpMatrix
                 pMat->SetErrorInterpreter( nullptr);
@@ -108,8 +108,7 @@ void ScInterpreter::ScIfJump()
                     PushIllegalArgument();
                     return;
                 }
-                else if (pTokenMatrixMap && ((aMapIter = pTokenMatrixMap->find(
-                                    pCur)) != pTokenMatrixMap->end()))
+                else if (pTokenMatrixMap && ((aMapIter = pTokenMatrixMap->find( pCur)) != pTokenMatrixMap->end()))
                     xNew = (*aMapIter).second;
                 else
                 {
@@ -178,7 +177,7 @@ void ScInterpreter::ScIfJump()
                     PushIllegalArgument();
                     return;
                 }
-                PushTempToken( xNew.get());
+                PushTokenRef( xNew);
                 // set endpoint of path for main code line
                 aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
             }
@@ -250,7 +249,7 @@ void ScInterpreter::ScIfError( bool bNAonly )
         return;
     }
 
-    FormulaTokenRef xToken( pStack[ sp - 1 ] );
+    FormulaConstTokenRef xToken( pStack[ sp - 1 ] );
     bool bError = false;
     sal_uInt16 nOldGlobalError = nGlobalError;
     nGlobalError = 0;
@@ -333,7 +332,7 @@ void ScInterpreter::ScIfError( bool bNAonly )
                 if (!bError)
                     break;  // switch, we're done and have the result
 
-                FormulaTokenRef xNew;
+                FormulaConstTokenRef xNew;
                 ScTokenMatrixMap::const_iterator aMapIter;
                 if (pTokenMatrixMap && ((aMapIter = pTokenMatrixMap->find( pCur)) != pTokenMatrixMap->end()))
                 {
@@ -380,7 +379,7 @@ void ScInterpreter::ScIfError( bool bNAonly )
                     GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type( pCur, xNew ));
                 }
                 nGlobalError = nOldGlobalError;
-                PushTempToken( xNew.get() );
+                PushTokenRef( xNew );
                 // set endpoint of path for main code line
                 aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
                 return;
@@ -398,7 +397,7 @@ void ScInterpreter::ScIfError( bool bNAonly )
     {
         // no error, push 1st argument and continue
         nGlobalError = nOldGlobalError;
-        PushTempToken( xToken.get());
+        PushTokenRef( xToken);
         aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
     }
 }
@@ -420,7 +419,7 @@ void ScInterpreter::ScChooseJump()
                 PushIllegalParameter();
             else
             {
-                FormulaTokenRef xNew;
+                FormulaConstTokenRef xNew;
                 ScTokenMatrixMap::const_iterator aMapIter;
                 // DoubleError handled by JumpMatrix
                 pMat->SetErrorInterpreter( nullptr);
@@ -479,7 +478,7 @@ void ScInterpreter::ScChooseJump()
                 }
                 if (xNew.get())
                 {
-                    PushTempToken( xNew.get());
+                    PushTokenRef( xNew);
                     // set endpoint of path for main code line
                     aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
                     bHaveJump = true;
@@ -768,8 +767,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
             const ScTokenVec* pParams = pJumpMatrix->GetJumpParameters();
             if ( pParams )
             {
-                for ( ScTokenVec::const_iterator i = pParams->begin();
-                        i != pParams->end(); ++i )
+                for ( ScTokenVec::const_iterator i = pParams->begin(); i != pParams->end(); ++i )
                 {
                     // This is not the current state of the interpreter, so
                     // push without error, and elements' errors are coded into
@@ -1814,7 +1812,7 @@ void ScInterpreter::ScIsEmpty()
     {
         case svEmptyCell:
         {
-            FormulaTokenRef p = PopToken();
+            FormulaConstTokenRef p = PopToken();
             if (!static_cast<const ScEmptyCellToken*>(p.get())->IsInherited())
                 nRes = 1;
         }
@@ -2478,7 +2476,7 @@ void ScInterpreter::ScIsRef()
         break;
         case svRefList :
         {
-            FormulaTokenRef x = PopToken();
+            FormulaConstTokenRef x = PopToken();
             if ( !nGlobalError )
                 bRes = !x.get()->GetRefList()->empty();
         }
@@ -7720,7 +7718,7 @@ void ScInterpreter::ScIndex()
                     bool bRowArray = false;
                     if (GetStackType() == svRefList)
                     {
-                        FormulaTokenRef xRef = PopToken();
+                        FormulaConstTokenRef xRef = PopToken();
                         if (nGlobalError || !xRef)
                         {
                             PushIllegalParameter();
@@ -7805,21 +7803,21 @@ void ScInterpreter::ScAreas()
         {
             case svSingleRef:
                 {
-                    FormulaTokenRef xT = PopToken();
+                    FormulaConstTokenRef xT = PopToken();
                     ValidateRef( *xT.get()->GetSingleRef());
                     ++nCount;
                 }
                 break;
             case svDoubleRef:
                 {
-                    FormulaTokenRef xT = PopToken();
+                    FormulaConstTokenRef xT = PopToken();
                     ValidateRef( *xT.get()->GetDoubleRef());
                     ++nCount;
                 }
                 break;
             case svRefList:
                 {
-                    FormulaTokenRef xT = PopToken();
+                    FormulaConstTokenRef xT = PopToken();
                     ValidateRef( *(xT.get()->GetRefList()));
                     nCount += xT.get()->GetRefList()->size();
                 }
@@ -8316,10 +8314,10 @@ void ScInterpreter::ScText()
                 break;
             default:
                 {
-                    FormulaTokenRef xTok( PopToken());
+                    FormulaConstTokenRef xTok( PopToken());
                     if (!nGlobalError)
                     {
-                        PushTempToken( xTok.get());
+                        PushTokenRef( xTok);
                         // Temporarily override the ConvertStringToValue()
                         // error for GetCellValue() / GetCellValueOrZero()
                         sal_uInt16 nSErr = mnStringNoValueError;
@@ -8330,7 +8328,7 @@ void ScInterpreter::ScText()
                         {
                             // Not numeric.
                             nGlobalError = 0;
-                            PushTempToken( xTok.get());
+                            PushTokenRef( xTok);
                             aStr = GetString();
                             bString = true;
                         }
@@ -8471,7 +8469,7 @@ sal_uInt16 ScInterpreter::GetErrorType()
     {
         case svRefList :
         {
-            FormulaTokenRef x = PopToken();
+            FormulaConstTokenRef x = PopToken();
             if (nGlobalError)
                 nErr = nGlobalError;
             else

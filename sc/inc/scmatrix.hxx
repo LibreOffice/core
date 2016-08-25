@@ -113,7 +113,7 @@ struct ScMatrixValue
 class SC_DLLPUBLIC ScMatrix
 {
     mutable size_t  nRefCnt;    // reference count
-    bool            mbCloneIfConst; // Whether the matrix is cloned with a CloneIfConst() call.
+    mutable bool    mbCloneIfConst; // Whether the matrix is cloned with a CloneIfConst() call.
 
     ScMatrix( const ScMatrix& ) = delete;
     ScMatrix& operator=( const ScMatrix&) = delete;
@@ -219,9 +219,13 @@ public:
         return _this_ matrix, to be assigned to a ScMatrixRef. */
     ScMatrix* CloneIfConst();
 
-    /** Set the matrix to (im)mutable for CloneIfConst(), only the interpreter
+    /** Set the matrix to mutable for CloneIfConst(), only the interpreter
         should do this and know the consequences. */
-    void SetImmutable( bool bVal );
+    void SetMutable();
+
+    /** Set the matrix to immutable for CloneIfConst(), only the interpreter
+        should do this and know the consequences. */
+    void SetImmutable() const;
 
     /**
      * Resize the matrix to specified new dimension.

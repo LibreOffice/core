@@ -2696,9 +2696,14 @@ ScMatrix* ScMatrix::CloneIfConst()
     return mbCloneIfConst ? Clone() : this;
 }
 
-void ScMatrix::SetImmutable( bool bVal )
+void ScMatrix::SetMutable()
 {
-    mbCloneIfConst = bVal;
+    mbCloneIfConst = false;
+}
+
+void ScMatrix::SetImmutable() const
+{
+    mbCloneIfConst = true;
 }
 
 void ScFullMatrix::Resize( SCSIZE nC, SCSIZE nR)
