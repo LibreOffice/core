@@ -28,7 +28,7 @@ int deltaColor(BitmapColor aColor1, BitmapColor aColor2)
 void checkValue(Bitmap::ScopedWriteAccess& pAccess, int x, int y, Color aExpected,
                       int& nNumberOfQuirks, int& nNumberOfErrors, bool bQuirkMode, int nColorDeltaThresh = 0)
 {
-    bool bColorize = false;
+    const bool bColorize = false;
     Color aColor = pAccess->GetPixel(y, x);
     int nColorDelta = deltaColor(aColor, aExpected);
 
