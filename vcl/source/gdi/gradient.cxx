@@ -77,6 +77,11 @@ Gradient::Gradient( const Gradient& rGradient ) :
 {
 }
 
+Gradient::Gradient( Gradient&& rGradient ) :
+    mpImplGradient( std::move(rGradient.mpImplGradient) )
+{
+}
+
 Gradient::Gradient( GradientStyle eStyle,
                     const Color& rStartColor, const Color& rEndColor ) :
     mpImplGradient()
@@ -222,6 +227,12 @@ Gradient& Gradient::operator=( const Gradient& rGradient )
 {
     mpImplGradient = rGradient.mpImplGradient;
 
+    return *this;
+}
+
+Gradient& Gradient::operator=( Gradient&& rGradient )
+{
+    mpImplGradient = std::move(rGradient.mpImplGradient);
     return *this;
 }
 
