@@ -47,11 +47,11 @@ generate_Opcodes(LotusContext &rContext, SvStream& aStream,
     {
         case eWK_1:
         case eWK_2:
-            pOps = rContext.pOpFkt;
+            pOps = LotusContext::pOpFkt;
             nOps = FKT_LIMIT;
         break;
         case eWK123:
-            pOps = rContext.pOpFkt123;
+            pOps = LotusContext::pOpFkt123;
             nOps = FKT_LIMIT123;
         break;
         case eWK3:      return eERR_NI;
