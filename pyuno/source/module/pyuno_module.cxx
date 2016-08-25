@@ -268,7 +268,7 @@ static PyObject* getComponentContext(
             iniFileName.append( SAL_CONFIGFILE( "pyuno" ) );
             iniFile = iniFileName.makeStringAndClear();
             osl::DirectoryItem item;
-            if( osl::DirectoryItem::get( iniFile, item ) == item.E_None )
+            if( osl::DirectoryItem::get( iniFile, item ) == osl::FileBase::E_None )
             {
                 // in case pyuno.ini exists, use this file for bootstrapping
                 PyThreadDetach antiguard;

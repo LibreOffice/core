@@ -457,8 +457,8 @@ namespace editeng
             }
 
             // save currently used value for possible later use
-            m_pAntiImpl->m_bTryBothDirectionsSave = m_bTryBothDirections;
-            m_pAntiImpl->m_ePrimaryConversionDirectionSave = m_eCurrentConversionDirection;
+            HangulHanjaConversion::m_bTryBothDirectionsSave = m_bTryBothDirections;
+            HangulHanjaConversion::m_ePrimaryConversionDirectionSave = m_eCurrentConversionDirection;
         }
 
         bool bFoundAny = implUpdateSuggestions( true, _nStartAt );
@@ -652,8 +652,8 @@ namespace editeng
 
             if (HangulHanjaConversion::IsUseSavedConversionDirectionState())
             {
-                m_ePrimaryConversionDirection = m_pAntiImpl->m_ePrimaryConversionDirectionSave;
-                m_bTryBothDirections = m_pAntiImpl->m_bTryBothDirectionsSave;
+                m_ePrimaryConversionDirection = HangulHanjaConversion::m_ePrimaryConversionDirectionSave;
+                m_bTryBothDirections = HangulHanjaConversion::m_bTryBothDirectionsSave;
                 if( m_bTryBothDirections )
                     m_eCurrentConversionDirection = eDirection;
                 else

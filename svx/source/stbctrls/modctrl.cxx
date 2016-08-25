@@ -69,7 +69,7 @@ SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, Status
 //#ifndef MACOSX
     if ( rStb.GetDPIScaleFactor() > 1 )
     {
-        for (int i = 0; i < mxImpl->MODIFICATION_STATE_SIZE; i++)
+        for (int i = 0; i < ImplData::MODIFICATION_STATE_SIZE; i++)
         {
             BitmapEx b = mxImpl->maImages[i].GetBitmapEx();
             b.Scale(rStb.GetDPIScaleFactor(), rStb.GetDPIScaleFactor(), BmpScaleFlag::Fast);

@@ -26,7 +26,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/enumrange.hxx>
-
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 
@@ -389,7 +389,8 @@ OUString GlobalEventConfig::GetEventName( GlobalEventId nIndex )
 {
     if (utl::ConfigManager::IsAvoidConfig())
         return OUString();
-    return GlobalEventConfig().m_pImpl->GetEventName( nIndex );
+    rtl::Reference<GlobalEventConfig> createImpl(new GlobalEventConfig);
+    return GlobalEventConfig::m_pImpl->GetEventName( nIndex );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

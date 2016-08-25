@@ -170,7 +170,7 @@ void DrawXmlEmitter::visit( ParagraphElement& elem, const std::list< Element* >:
         aProps[ "text:style-name" ] = m_rEmitContext.rStyles.getStyleName( elem.StyleId );
     }
     const char* pTagType = "text:p";
-    if( elem.Type == elem.Headline )
+    if( elem.Type == ParagraphElement::Headline )
         pTagType = "text:h";
     m_rEmitContext.rEmitter.beginTag( pTagType, aProps );
 

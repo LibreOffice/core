@@ -91,7 +91,7 @@ void WriterXmlEmitter::visit( ParagraphElement& elem, const std::list< Element* 
         aProps[ "text:style-name" ] = m_rEmitContext.rStyles.getStyleName( elem.StyleId );
     }
     const char* pTagType = "text:p";
-    if( elem.Type == elem.Headline )
+    if( elem.Type == ParagraphElement::Headline )
         pTagType = "text:h";
     m_rEmitContext.rEmitter.beginTag( pTagType, aProps );
 
@@ -456,7 +456,7 @@ void WriterXmlOptimizer::visit( ParagraphElement& elem, const std::list< Element
                         // check for larger font
                         if( head_line_height > elem.getLineHeight( m_rProcessor ) )
                         {
-                            pPrevPara->Type = elem.Headline;
+                            pPrevPara->Type = ParagraphElement::Headline;
                         }
                         else
                         {
@@ -469,7 +469,7 @@ void WriterXmlOptimizer::visit( ParagraphElement& elem, const std::list< Element
                                 const FontAttributes& rPrevFont = m_rProcessor.getFont( pPrevText->FontId );
                                 const FontAttributes& rThisFont = m_rProcessor.getFont( pThisText->FontId );
                                 if( rPrevFont.isBold && ! rThisFont.isBold )
-                                    pPrevPara->Type = elem.Headline;
+                                    pPrevPara->Type = ParagraphElement::Headline;
                             }
                         }
                     }

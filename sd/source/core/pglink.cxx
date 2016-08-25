@@ -96,7 +96,7 @@ SdPageLink::~SdPageLink()
             bool bNoDialogs = false;
             bool bCopy = false;
 
-            if (pDoc->s_pDocLockedInsertingLinks)
+            if (SdDrawDocument::s_pDocLockedInsertingLinks)
             {
                 // resolving links while loading pDoc
                 bNoDialogs = true;
@@ -106,7 +106,7 @@ SdPageLink::~SdPageLink()
             pDoc->InsertBookmarkAsPage(aBookmarkList, nullptr, bLink, bReplace,
                                        nInsertPos, bNoDialogs, nullptr, bCopy, true, true);
 
-            if (!pDoc->s_pDocLockedInsertingLinks)
+            if (!SdDrawDocument::s_pDocLockedInsertingLinks)
                 pDoc->CloseBookmarkDoc();
         }
     }
