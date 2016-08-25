@@ -705,12 +705,6 @@ void ScInterpreter::PushTempTokenWithoutError( const FormulaToken* p )
     }
 }
 
-void ScInterpreter::PushTempToken( const FormulaToken& r )
-{
-    if (!IfErrorPushError())
-        PushTempTokenWithoutError( r.Clone());
-}
-
 void ScInterpreter::PushTokenRef( const formula::FormulaConstTokenRef& x )
 {
     if ( sp >= MAXSTACK )

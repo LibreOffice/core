@@ -264,10 +264,6 @@ void Push( const formula::FormulaToken& r );
     explicit formula::FormulaErrorToken. Increments RefCount. */
 void PushWithoutError( const formula::FormulaToken& r );
 
-/** Clones the token to be pushed or substitutes with formula::FormulaErrorToken if
-    nGlobalError is set and the token passed is not formula::FormulaErrorToken. */
-void PushTempToken( const formula::FormulaToken& );
-
 /** Does substitute with formula::FormulaErrorToken in case nGlobalError is set and the token
     passed is not formula::FormulaErrorToken.
     Increments RefCount of the original token if not substituted.
