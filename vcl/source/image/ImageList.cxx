@@ -109,6 +109,12 @@ ImageList::ImageList( const ImageList& rImageList ) :
         ++mpImplData->mnRefCount;
 }
 
+ImageList::ImageList( ImageList&& rImageList ) :
+    mpImplData( rImageList.mpImplData )
+{
+    rImageList.mpImplData = nullptr;
+}
+
 ImageList::~ImageList()
 {
     if( mpImplData && ( 0 == --mpImplData->mnRefCount ) )
@@ -431,6 +437,17 @@ ImageList& ImageList::operator=( const ImageList& rImageList )
         delete mpImplData;
 
     mpImplData = rImageList.mpImplData;
+
+    return *this;
+}
+
+ImageList& ImageList::operator=( ImageList&& rImageList )
+{
+    if( mpImplData && ( 0 == --mpImplData->mnRefCount ) )
+        delete mpImplData;
+
+    mpImplData = rImageList.mpImplData;
+    rImageList.mpImplData = nullptr;
 
     return *this;
 }

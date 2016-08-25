@@ -82,6 +82,7 @@ public:
                     ImageList( const std::vector<OUString>& rNameVector,
                                const OUString& rPrefix);
                     ImageList( const ImageList& rImageList );
+                    ImageList( ImageList&& rImageList );
                     ~ImageList();
 
     void                    InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
@@ -93,7 +94,7 @@ public:
                                     const Color *pReplaceColors = nullptr,
                                     sal_uLong        nColorCount = 0);
     BitmapEx        GetAsHorizontalStrip() const;
-    sal_uInt16          GetImageCount() const;
+    sal_uInt16      GetImageCount() const;
     Size            GetImageSize() const;
 
     void            AddImage( const OUString& rImageName, const Image& rImage );
@@ -105,16 +106,17 @@ public:
     Image           GetImage( sal_uInt16 nId ) const;
     Image           GetImage( const OUString& rImageName ) const;
 
-    sal_uInt16          GetImagePos( sal_uInt16 nId ) const;
+    sal_uInt16      GetImagePos( sal_uInt16 nId ) const;
     bool            HasImageAtPos( sal_uInt16 nId ) const;
-    sal_uInt16          GetImagePos( const OUString& rImageName ) const;
+    sal_uInt16      GetImagePos( const OUString& rImageName ) const;
 
-    sal_uInt16          GetImageId( sal_uInt16 nPos ) const;
+    sal_uInt16      GetImageId( sal_uInt16 nPos ) const;
 
-    OUString GetImageName( sal_uInt16 nPos ) const;
+    OUString        GetImageName( sal_uInt16 nPos ) const;
     void            GetImageNames( ::std::vector< OUString >& rNames ) const;
 
     ImageList&      operator=( const ImageList& rImageList );
+    ImageList&      operator=( ImageList&& rImageList );
     bool            operator==( const ImageList& rImageList ) const;
     bool            operator!=( const ImageList& rImageList ) const { return !(ImageList::operator==( rImageList )); }
 
