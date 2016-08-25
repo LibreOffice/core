@@ -178,6 +178,11 @@ Wallpaper::Wallpaper( const Wallpaper& rWallpaper )
 {
 }
 
+Wallpaper::Wallpaper( Wallpaper&& rWallpaper )
+    : mpImplWallpaper( std::move(rWallpaper.mpImplWallpaper) )
+{
+}
+
 Wallpaper::Wallpaper( const Color& rColor ) : mpImplWallpaper()
 {
     mpImplWallpaper->maColor    = rColor;
@@ -393,6 +398,12 @@ bool Wallpaper::IsScrollable() const
 Wallpaper& Wallpaper::operator=( const Wallpaper& rWallpaper )
 {
     mpImplWallpaper = rWallpaper.mpImplWallpaper;
+    return *this;
+}
+
+Wallpaper& Wallpaper::operator=( Wallpaper&& rWallpaper )
+{
+    mpImplWallpaper = std::move(rWallpaper.mpImplWallpaper);
     return *this;
 }
 
