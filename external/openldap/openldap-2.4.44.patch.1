@@ -1,0 +1,73 @@
+--- openldap.org/configure
++++ openldap/configure
+@@ -15735,7 +15735,7 @@
+   $as_echo_n "(cached) " >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lnss3  $LIBS"
++LIBS="-lnss3  -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4  $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+--- openldap.org/configure.in
++++ openldap/configure.in
+@@ -1239,7 +1239,8 @@
+ 		AC_CHECK_HEADERS([nssutil.h])
+ 		if test "$ac_cv_header_nssutil_h" = yes ; then
+ 			AC_CHECK_LIB([nss3], [NSS_Initialize],
+-						 [ have_moznss=yes ], [ have_moznss=no ])
++						 [ have_moznss=yes ], [ have_moznss=no ],
++						 [ -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4 ])
+ 		fi
+ 
+ 		if test "$have_moznss" = yes ; then
+--- openldap.org/libraries/libldap/tls_m.c
++++ openldap/libraries/libldap/tls_m.c
+@@ -49,17 +49,17 @@
+ #include <termios.h> /* for echo on/off */
+ #endif
+ 
+-#include <nspr/nspr.h>
+-#include <nspr/private/pprio.h>
+-#include <nss/nss.h>
+-#include <nss/ssl.h>
+-#include <nss/sslerr.h>
+-#include <nss/sslproto.h>
+-#include <nss/pk11pub.h>
+-#include <nss/secerr.h>
+-#include <nss/keyhi.h>
+-#include <nss/secmod.h>
+-#include <nss/cert.h>
++#include <nspr.h>
++#include <private/pprio.h>
++#include <nss.h>
++#include <ssl.h>
++#include <sslerr.h>
++#include <sslproto.h>
++#include <pk11pub.h>
++#include <secerr.h>
++#include <keyhi.h>
++#include <secmod.h>
++#include <cert.h>
+ 
+ #undef NSS_VERSION_INT
+ #define	NSS_VERSION_INT	((NSS_VMAJOR << 24) | (NSS_VMINOR << 16) | \
+--- openldap.org/Makefile.in
++++ openldap/Makefile.in
+@@ -13,7 +13,7 @@
+ ## top-level directory of the distribution or, alternatively, at
+ ## <http://www.OpenLDAP.org/license.html>.
+ 
+-SUBDIRS= include libraries clients servers tests doc
++SUBDIRS= include libraries
+ CLEANDIRS=
+ INSTALLDIRS= 
+ 
+@@ -32,7 +32,3 @@
+ 	$(RM) config.status libtool stamp-h stamp-h.in
+ 
+ distclean: veryclean FORCE
+-
+-check: test
+-test: FORCE
+-	cd tests; $(MAKE) test
