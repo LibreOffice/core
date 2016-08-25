@@ -209,7 +209,7 @@ private:
     /** Draw the children of a pNode
      * This the default method, use by most pNodes
      */
-    void DrawChildren( SmNode* pNode );
+    void DrawChildren( SmStructureNode* pNode );
 
     /** Draw an SmTextNode or a subclass of this */
     void DrawTextNode( SmTextNode* pNode );
