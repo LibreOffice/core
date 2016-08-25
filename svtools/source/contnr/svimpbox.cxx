@@ -186,7 +186,7 @@ void SvImpLBox::UpdateContextBmpWidthVectorFromMovedEntry( SvTreeListEntry* pEnt
 {
     DBG_ASSERT( pEntry, "Moved Entry is invalid!" );
 
-    SvLBoxContextBmp* pBmpItem = static_cast< SvLBoxContextBmp* >( pEntry->GetFirstItem( SV_ITEM_ID_LBOXCONTEXTBMP ) );
+    SvLBoxContextBmp* pBmpItem = static_cast< SvLBoxContextBmp* >( pEntry->GetFirstItem(SvLBoxItemType::ContextBmp) );
     short nExpWidth = (short)pBmpItem->GetBitmap1().GetSizePixel().Width();
     short nColWidth = (short)pBmpItem->GetBitmap2().GetSizePixel().Width();
     short nMax = std::max(nExpWidth, nColWidth);
@@ -788,7 +788,7 @@ bool SvImpLBox::EntryReallyHit(SvTreeListEntry* pEntry, const Point& rPosPixel, 
     Rectangle aRect( pView->GetFocusRect( pEntry, nLine ));
     aRect.Right() = GetOutputSize().Width() - pView->GetMapMode().GetOrigin().X();
 
-    SvLBoxContextBmp* pBmp = static_cast<SvLBoxContextBmp*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
+    SvLBoxContextBmp* pBmp = static_cast<SvLBoxContextBmp*>(pEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
     aRect.Left() -= pBmp->GetSize(pView,pEntry).Width();
     aRect.Left() -= 4; // a little tolerance
 
@@ -1869,7 +1869,7 @@ void SvImpLBox::EntryInserted( SvTreeListEntry* pEntry )
 bool SvImpLBox::ButtonDownCheckCtrl(const MouseEvent& rMEvt, SvTreeListEntry* pEntry, long /*nY*/)
 {
     SvLBoxItem* pItem = pView->GetItem(pEntry,rMEvt.GetPosPixel().X(),&pActiveTab);
-    if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
+    if (pItem && pItem->GetType() == SvLBoxItemType::Button)
     {
         pActiveButton = static_cast<SvLBoxButton*>(pItem);
         pActiveEntry = pEntry;
@@ -3140,7 +3140,7 @@ bool SvImpLBox::RequestHelp( const HelpEvent& rHEvt )
             // recalculate text rectangle
             SvLBoxTab* pTab;
             SvLBoxItem* pItem = pView->GetItem( pEntry, aPos.X(), &pTab );
-            if (!pItem || pItem->GetType() != SV_ITEM_ID_LBOXSTRING)
+            if (!pItem || pItem->GetType() != SvLBoxItemType::String)
                 return false;
 
             aPos = GetEntryPosition( pEntry );

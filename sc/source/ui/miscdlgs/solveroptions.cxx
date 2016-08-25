@@ -381,8 +381,8 @@ IMPL_LINK_NOARG_TYPED(ScSolverOptionsDialog, SettingsSelHdl, SvTreeListBox*, voi
     SvTreeListEntry* pEntry = m_pLbSettings->GetCurEntry();
     if (pEntry)
     {
-        SvLBoxItem* pItem = pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON);
-        if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
+        SvLBoxItem* pItem = pEntry->GetFirstItem(SvLBoxItemType::Button);
+        if (pItem && pItem->GetType() == SvLBoxItemType::Button)
             bCheckbox = true;
     }
 

@@ -181,7 +181,7 @@ void SvxCheckListBox::MouseButtonDown( const MouseEvent& rMEvt )
             bool bCheck = GetCheckButtonState( pEntry ) == SvButtonState::Checked;
             SvLBoxItem* pItem = GetItem( pEntry, aPnt.X() );
 
-            if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
+            if (pItem && pItem->GetType() == SvLBoxItemType::Button)
             {
                 SvTreeListBox::MouseButtonDown( rMEvt );
                 Select( pEntry );

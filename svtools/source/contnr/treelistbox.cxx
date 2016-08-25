@@ -1391,9 +1391,8 @@ OUString SvTreeListBox::SearchEntryTextWithHeadTitle( SvTreeListEntry* pEntry )
     sal_uInt16 nHeaderCur = 0;
     while( nCur < nCount )
     {
-        // MT: SV_ITEM_ID_EXTENDRLBOXSTRING / GetExtendText() was in use in IA2 cws, but only used in sc: ScSolverOptionsString. Needed?
         SvLBoxItem& rItem = pEntry->GetItem( nCur );
-        if ( (rItem.GetType() == SV_ITEM_ID_LBOXSTRING ) &&
+        if ( (rItem.GetType() == SvLBoxItemType::String) &&
              !static_cast<SvLBoxString&>( rItem ).GetText().isEmpty() )
         {
             //want the column header
@@ -1691,7 +1690,7 @@ void SvTreeListBox::InitEntry(SvTreeListEntry* pEntry,
 OUString SvTreeListBox::GetEntryText(SvTreeListEntry* pEntry) const
 {
     DBG_ASSERT( pEntry, "SvTreeListBox::GetEntryText(): no entry" );
-    SvLBoxString* pItem = static_cast<SvLBoxString*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
+    SvLBoxString* pItem = static_cast<SvLBoxString*>(pEntry->GetFirstItem(SvLBoxItemType::String));
     DBG_ASSERT( pEntry, "SvTreeListBox::GetEntryText(): item not found" );
     return pItem->GetText();
 }
@@ -1699,7 +1698,7 @@ OUString SvTreeListBox::GetEntryText(SvTreeListEntry* pEntry) const
 const Image& SvTreeListBox::GetExpandedEntryBmp(const SvTreeListEntry* pEntry)
 {
     DBG_ASSERT(pEntry,"Entry?");
-    const SvLBoxContextBmp* pItem = static_cast<const SvLBoxContextBmp*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
+    const SvLBoxContextBmp* pItem = static_cast<const SvLBoxContextBmp*>(pEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
     DBG_ASSERT(pItem,"GetContextBmp:Item not found");
     return pItem->GetBitmap2( );
 }
@@ -1707,7 +1706,7 @@ const Image& SvTreeListBox::GetExpandedEntryBmp(const SvTreeListEntry* pEntry)
 const Image& SvTreeListBox::GetCollapsedEntryBmp( const SvTreeListEntry* pEntry )
 {
     DBG_ASSERT(pEntry,"Entry?");
-    const SvLBoxContextBmp* pItem = static_cast<const SvLBoxContextBmp*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
+    const SvLBoxContextBmp* pItem = static_cast<const SvLBoxContextBmp*>(pEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
     DBG_ASSERT(pItem,"GetContextBmp:Item not found");
     return pItem->GetBitmap1( );
 }
@@ -1783,7 +1782,7 @@ SvTreeListEntry* SvTreeListBox::InsertEntry( const OUString& rText,
 
 void SvTreeListBox::SetEntryText(SvTreeListEntry* pEntry, const OUString& rStr)
 {
-    SvLBoxString* pItem = static_cast<SvLBoxString*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
+    SvLBoxString* pItem = static_cast<SvLBoxString*>(pEntry->GetFirstItem(SvLBoxItemType::String));
     DBG_ASSERT(pItem,"SetText:Item not found");
     pItem->SetText(rStr);
     pItem->InitViewData( this, pEntry );
@@ -1792,7 +1791,7 @@ void SvTreeListBox::SetEntryText(SvTreeListEntry* pEntry, const OUString& rStr)
 
 void SvTreeListBox::SetExpandedEntryBmp( SvTreeListEntry* pEntry, const Image& aBmp )
 {
-    SvLBoxContextBmp* pItem = static_cast<SvLBoxContextBmp*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
+    SvLBoxContextBmp* pItem = static_cast<SvLBoxContextBmp*>(pEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
 
     DBG_ASSERT(pItem,"SetExpBmp:Item not found");
     pItem->SetBitmap2( aBmp );
@@ -1810,7 +1809,7 @@ void SvTreeListBox::SetExpandedEntryBmp( SvTreeListEntry* pEntry, const Image& a
 
 void SvTreeListBox::SetCollapsedEntryBmp(SvTreeListEntry* pEntry,const Image& aBmp )
 {
-    SvLBoxContextBmp* pItem = static_cast<SvLBoxContextBmp*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
+    SvLBoxContextBmp* pItem = static_cast<SvLBoxContextBmp*>(pEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
 
     DBG_ASSERT(pItem,"SetExpBmp:Item not found");
     pItem->SetBitmap1( aBmp );
@@ -1858,7 +1857,7 @@ void SvTreeListBox::ImpEntryInserted( SvTreeListEntry* pEntry )
 
     if( nTreeFlags & SvTreeFlags::CHKBTN )
     {
-        SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
+        SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
         if( pItem )
         {
             long nWidth = pItem->GetSize(this, pEntry).Width();
@@ -1876,7 +1875,7 @@ void SvTreeListBox::SetCheckButtonState( SvTreeListEntry* pEntry, SvButtonState 
 {
     if( nTreeFlags & SvTreeFlags::CHKBTN )
     {
-        SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
+        SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
         if(!(pItem && pItem->CheckModification()))
             return ;
         switch( eState )
@@ -1901,7 +1900,7 @@ void SvTreeListBox::SetCheckButtonInvisible( SvTreeListEntry* pEntry)
 {
     if( nTreeFlags & SvTreeFlags::CHKBTN )
     {
-        SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
+        SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
         pItem->SetStateInvisible();
         InvalidateEntry( pEntry );
     }
@@ -1912,7 +1911,7 @@ SvButtonState SvTreeListBox::GetCheckButtonState( SvTreeListEntry* pEntry ) cons
     SvButtonState eState = SvButtonState::Unchecked;
     if( pEntry && ( nTreeFlags & SvTreeFlags::CHKBTN ) )
     {
-        SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
+        SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
         if(!pItem)
             return SvButtonState::Tristate;
         SvItemStateFlags nButtonFlags = pItem->GetButtonFlags();
@@ -1942,16 +1941,16 @@ SvTreeListEntry* SvTreeListBox::CloneEntry( SvTreeListEntry* pSource )
     Image aExpEntryBmp;
     SvLBoxButtonKind eButtonKind = SvLBoxButtonKind::EnabledCheckbox;
 
-    SvLBoxString* pStringItem = static_cast<SvLBoxString*>(pSource->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
+    SvLBoxString* pStringItem = static_cast<SvLBoxString*>(pSource->GetFirstItem(SvLBoxItemType::String));
     if( pStringItem )
         aStr = pStringItem->GetText();
-    SvLBoxContextBmp* pBmpItem = static_cast<SvLBoxContextBmp*>(pSource->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
+    SvLBoxContextBmp* pBmpItem = static_cast<SvLBoxContextBmp*>(pSource->GetFirstItem(SvLBoxItemType::ContextBmp));
     if( pBmpItem )
     {
         aCollEntryBmp = pBmpItem->GetBitmap1( );
         aExpEntryBmp  = pBmpItem->GetBitmap2( );
     }
-    SvLBoxButton* pButtonItem = static_cast<SvLBoxButton*>(pSource->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
+    SvLBoxButton* pButtonItem = static_cast<SvLBoxButton*>(pSource->GetFirstItem(SvLBoxItemType::Button));
     if( pButtonItem )
         eButtonKind = pButtonItem->GetKind();
     SvTreeListEntry* pClone = CreateEntry();
@@ -2630,7 +2629,7 @@ void SvTreeListBox::ImplEditEntry( SvTreeListEntry* pEntry )
         for( sal_uInt16 i = 0 ; i < nCount ; i++ )
         {
             SvLBoxItem& rTmpItem = pEntry->GetItem( i );
-            if (rTmpItem.GetType() != SV_ITEM_ID_LBOXSTRING)
+            if (rTmpItem.GetType() != SvLBoxItemType::String)
                 continue;
 
             SvLBoxTab* pTab = GetTab( pEntry, &rTmpItem );
@@ -2852,12 +2851,12 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         Wallpaper aWallpaper = rRenderContext.GetBackground();
 
         bool bSelTab = bool(nFlags & SvLBoxTabFlags::SHOW_SELECTION);
-        sal_uInt16 nItemType = pItem->GetType();
+        SvLBoxItemType nItemType = pItem->GetType();
 
         if (pViewDataEntry->IsHighlighted() && bSelTab)
         {
             Color aNewWallColor = rSettings.GetHighlightColor();
-            if (!bInUse || nItemType != SV_ITEM_ID_LBOXCONTEXTBMP)
+            if (!bInUse || nItemType != SvLBoxItemType::ContextBmp)
             {
                 // if the face color is bright then the deactive color is also bright
                 // -> so you can't see any deactive selection
@@ -2878,7 +2877,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         }
         else  // no selection
         {
-            if (bInUse && nItemType == SV_ITEM_ID_LBOXCONTEXTBMP)
+            if (bInUse && nItemType == SvLBoxItemType::ContextBmp)
             {
                 aWallpaper.SetColor(rSettings.GetFieldColor());
             }
@@ -2948,7 +2947,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         pItem->Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
 
         // division line between tabs
-        if (pNextTab && pItem->GetType() == SV_ITEM_ID_LBOXSTRING &&
+        if (pNextTab && pItem->GetType() == SvLBoxItemType::String &&
             // not at the right edge of the window!
             aRect.Right() < nMaxRight)
         {
@@ -3502,8 +3501,8 @@ IMPL_LINK_TYPED( SvTreeListBox, DefaultCompare, const SvSortData&, rData, sal_In
 {
     const SvTreeListEntry* pLeft = rData.pLeft;
     const SvTreeListEntry* pRight = rData.pRight;
-    OUString aLeft( static_cast<const SvLBoxString*>(pLeft->GetFirstItem(SV_ITEM_ID_LBOXSTRING))->GetText());
-    OUString aRight( static_cast<const SvLBoxString*>(pRight->GetFirstItem(SV_ITEM_ID_LBOXSTRING))->GetText());
+    OUString aLeft( static_cast<const SvLBoxString*>(pLeft->GetFirstItem(SvLBoxItemType::String))->GetText());
+    OUString aRight( static_cast<const SvLBoxString*>(pRight->GetFirstItem(SvLBoxItemType::String))->GetText());
     pImpl->UpdateStringSorter();
     return pImpl->m_pStringSorter->compare(aLeft, aRight);
 }
@@ -3528,7 +3527,7 @@ void SvTreeListBox::ModelNotification( SvListAction nActionId, SvTreeListEntry* 
                 break;
             }
 
-            SvLBoxContextBmp* pBmpItem = static_cast< SvLBoxContextBmp* >( pEntry->GetFirstItem( SV_ITEM_ID_LBOXCONTEXTBMP ) );
+            SvLBoxContextBmp* pBmpItem = static_cast< SvLBoxContextBmp* >( pEntry->GetFirstItem( SvLBoxItemType::ContextBmp ) );
             if ( !pBmpItem )
                 break;
             const Image& rBitmap1( pBmpItem->GetBitmap1() );

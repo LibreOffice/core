@@ -436,7 +436,7 @@ void SfxMacroTabPage::FillEvents()
         if( pE )
         {
             SvLBoxString&     rLItem = static_cast<SvLBoxString&>( pE->GetItem( LB_MACROS_ITEMPOS ) );
-            DBG_ASSERT( SV_ITEM_ID_LBOXSTRING == rLItem.GetType(), "SfxMacroTabPage::FillEvents(): no LBoxString" );
+            DBG_ASSERT( SvLBoxItemType::String == rLItem.GetType(), "SfxMacroTabPage::FillEvents(): no LBoxString" );
 
             OUString          sOld( rLItem.GetText() );
             OUString          sNew;

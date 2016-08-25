@@ -473,7 +473,7 @@ void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
             bParent = false;
             SvLBoxTab* pTab;
             SvLBoxItem* pItem = GetItem( pEntry, aPos.X(), &pTab );
-            if (pItem && SV_ITEM_ID_LBOXSTRING == pItem->GetType())
+            if (pItem && SvLBoxItemType::String == pItem->GetType())
             {
                 const SwSection* pSect = pCont->GetSection();
                 OUString sEntry = pSect->GetLinkFileName().getToken(0, sfx2::cTokenSeparator);

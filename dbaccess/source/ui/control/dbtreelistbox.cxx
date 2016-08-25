@@ -104,7 +104,7 @@ SvTreeListEntry* DBTreeListBox::GetEntryPosByName( const OUString& aName, SvTree
     {
         pEntry = (*it).get();
         const SvLBoxString* pItem = static_cast<const SvLBoxString*>(
-            pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
+            pEntry->GetFirstItem(SvLBoxItemType::String));
 
         if (pItem && pItem->GetText().equals(aName))
         {
@@ -137,7 +137,7 @@ void DBTreeListBox::RequestingChildren( SvTreeListEntry* pParent )
 void DBTreeListBox::InitEntry(SvTreeListEntry* _pEntry, const OUString& aStr, const Image& _rCollEntryBmp, const Image& _rExpEntryBmp, SvLBoxButtonKind eButtonKind)
 {
     SvTreeListBox::InitEntry( _pEntry, aStr, _rCollEntryBmp,_rExpEntryBmp, eButtonKind);
-    SvLBoxItem* pTextItem(_pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
+    SvLBoxItem* pTextItem(_pEntry->GetFirstItem(SvLBoxItemType::String));
     _pEntry->ReplaceItem(o3tl::make_unique<OBoldListboxString>(aStr), _pEntry->GetPos(pTextItem));
 }
 

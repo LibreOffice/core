@@ -1879,11 +1879,11 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, ColCompareHdl, const SvSortData*, pSortData, sa
 
         if(pLeftItem != nullptr && pRightItem != nullptr)
         {
-            sal_uInt16 nLeftKind = pLeftItem->GetType();
-            sal_uInt16 nRightKind = pRightItem->GetType();
+            SvLBoxItemType nLeftKind = pLeftItem->GetType();
+            SvLBoxItemType nRightKind = pRightItem->GetType();
 
-            if(nRightKind == SV_ITEM_ID_LBOXSTRING &&
-                nLeftKind == SV_ITEM_ID_LBOXSTRING )
+            if (nRightKind == SvLBoxItemType::String &&
+                 nLeftKind == SvLBoxItemType::String)
             {
                 nCompare = ScGlobal::GetCaseCollator()->compareString(
                                         static_cast<SvLBoxString*>(pLeftItem)->GetText(),

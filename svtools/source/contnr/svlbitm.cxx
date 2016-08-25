@@ -180,9 +180,9 @@ SvLBoxString::~SvLBoxString()
 {
 }
 
-sal_uInt16 SvLBoxString::GetType() const
+SvLBoxItemType SvLBoxString::GetType() const
 {
-    return SV_ITEM_ID_LBOXSTRING;
+    return SvLBoxItemType::String;
 }
 
 void SvLBoxString::Paint(
@@ -250,9 +250,9 @@ SvLBoxBmp::~SvLBoxBmp()
 {
 }
 
-sal_uInt16 SvLBoxBmp::GetType() const
+SvLBoxItemType SvLBoxBmp::GetType() const
 {
-    return SV_ITEM_ID_LBOXBMP;
+    return SvLBoxItemType::Bmp;
 }
 
 void SvLBoxBmp::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
@@ -309,9 +309,9 @@ SvLBoxButton::~SvLBoxButton()
 {
 }
 
-sal_uInt16 SvLBoxButton::GetType() const
+SvLBoxItemType SvLBoxButton::GetType() const
 {
-    return SV_ITEM_ID_LBOXBUTTON;
+    return SvLBoxItemType::Button;
 }
 
 bool SvLBoxButton::ClickHdl( SvTreeListBox*, SvTreeListEntry* pEntry )
@@ -465,9 +465,9 @@ SvLBoxContextBmp::~SvLBoxContextBmp()
 {
 }
 
-sal_uInt16 SvLBoxContextBmp::GetType() const
+SvLBoxItemType SvLBoxContextBmp::GetType() const
 {
-    return SV_ITEM_ID_LBOXCONTEXTBMP;
+    return SvLBoxItemType::ContextBmp;
 }
 
 void SvLBoxContextBmp::SetModeImages( const Image& _rBitmap1, const Image& _rBitmap2 )

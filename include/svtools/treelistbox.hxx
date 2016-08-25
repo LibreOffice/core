@@ -125,11 +125,7 @@ typedef sal_Int64   ExtendedWinBits;
 // disable the behavior of automatically selecting a "CurEntry" upon painting the control
 #define EWB_NO_AUTO_CURENTRY        0x00000001
 
-#define SV_ITEM_ID_LBOXSTRING       1
-#define SV_ITEM_ID_LBOXBMP          2
-#define SV_ITEM_ID_LBOXBUTTON       3
-#define SV_ITEM_ID_LBOXCONTEXTBMP   4
-#define SV_ITEM_ID_EXTENDRLBOXSTRING    5
+enum class SvLBoxItemType {String, Bmp, Button, ContextBmp};
 
 class SvLBoxTab
 {
@@ -156,7 +152,7 @@ class SVT_DLLPUBLIC SvLBoxItem
 public:
                         SvLBoxItem();
     virtual             ~SvLBoxItem();
-    virtual sal_uInt16 GetType() const = 0;
+    virtual SvLBoxItemType GetType() const = 0;
     const Size&         GetSize(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const;
     static const Size&  GetSize(const SvViewDataEntry* pData, sal_uInt16 nItemPos);
 
