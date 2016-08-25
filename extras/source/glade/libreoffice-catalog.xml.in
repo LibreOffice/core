@@ -711,6 +711,22 @@
                         generic-name="Fill Attr ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
 
+    <glade-widget-class title="Page Size ListBox" name="svxcorelo-PaperSizeListBox"
+                        generic-name="Page Size ListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
+
+    <glade-widget-class title="Page Numbering ListBox" name="svxcorelo-PageNumberListBox"
+                        generic-name="Page Numbering ListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
+
+    <glade-widget-class title="Spacing Preset ListBox" name="svxcorelo-SpacingListBox"
+                        generic-name="Spacing Preset ListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
+
+    <glade-widget-class title="Same Content Preset ListBox" name="svxcorelo-SameContentListBox"
+                        generic-name="Same Content Preset ListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
+
     <glade-widget-class title="Open Document Button" name="dbulo-OpenDocumentButton"
                         generic-name="Open Document Button" parent="GtkButton"
                         icon-name="widget-gtk-button"/>
