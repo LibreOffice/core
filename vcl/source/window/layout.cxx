@@ -18,6 +18,7 @@
 #include <vcl/settings.hxx>
 #include "window.h"
 #include <boost/multi_array.hpp>
+#include <officecfg/Office/Common.hxx>
 
 VclContainer::VclContainer(vcl::Window *pParent, WinBits nStyle)
     : Window(WINDOW_CONTAINER)
@@ -167,6 +168,614 @@ void VclContainer::queue_resize(StateChangedType eReason)
     markLayoutDirty();
     Window::queue_resize(eReason);
 }
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+#include <comphelper/random.hxx>
+#include <basegfx/range/b2irange.hxx>
+
+class ControlDataEntry
+{
+public:
+    ControlDataEntry(
+        const vcl::Window& rControl,
+        const basegfx::B2IRange& rB2IRange)
+    :   mrControl(rControl),
+        maB2IRange(rB2IRange)
+    {
+    }
+
+    const vcl::Window& getControl() const
+    {
+        return mrControl;
+    }
+
+    const basegfx::B2IRange& getB2IRange() const
+    {
+        return maB2IRange;
+    }
+
+private:
+    const vcl::Window&  mrControl;
+    basegfx::B2IRange   maB2IRange;
+};
+
+typedef ::std::vector< ControlDataEntry > ControlDataCollection;
+typedef ::std::set< ControlDataEntry* > ControlDataSet;
+
+class ScreenshotAnnotationDlg : public ModalDialog
+{
+public:
+    ScreenshotAnnotationDlg(
+        vcl::Window* pParent,
+        Dialog& rParentDialog);
+    virtual ~ScreenshotAnnotationDlg();
+    virtual void dispose() override;
+
+private:
+    // Handler for click on save
+    DECL_LINK_TYPED(saveButtonHandler, Button*, void);
+
+    // Handler for clicks on picture frame
+    DECL_LINK_TYPED(pictureFrameListener, VclWindowEvent&, void);
+
+    // helper methods
+    void CollectChildren(
+        const vcl::Window& rCurrent,
+        const basegfx::B2IPoint& rTopLeft,
+        ControlDataCollection& rControlDataCollection);
+    ControlDataEntry* CheckHit(const basegfx::B2IPoint& rPosition);
+    void PaintControlDataEntry(
+        const ControlDataEntry& rEntry,
+        const Color& rColor,
+        double fLineWidth,
+        double fTransparency = 0.0);
+    void RepaintPictureElement();
+    Point GetOffsetInPicture() const;
+
+    // local variables
+    Dialog&                     mrParentDialog;
+    Bitmap                      maParentDialogBitmap;
+    Size                        maParentDialogSize;
+
+    // VirtualDevice for buffered interation paints
+    VclPtr<VirtualDevice>       mpVirtualBufferDevice;
+
+    // all detected children
+    ControlDataCollection       maAllChildren;
+
+    // hilighted/selected children
+    ControlDataEntry*           mpHilighted;
+    ControlDataSet              maSelected;
+
+    // list of detected controls
+    VclPtr<FixedImage>          mpPicture;
+    VclPtr<VclMultiLineEdit>    mpText;
+    VclPtr<PushButton>          mpSave;
+};
+
+void ScreenshotAnnotationDlg::CollectChildren(
+    const vcl::Window& rCurrent,
+    const basegfx::B2IPoint& rTopLeft,
+    ControlDataCollection& rControlDataCollection)
+{
+    if (rCurrent.IsVisible())
+    {
+        const Point aCurrentPos(rCurrent.GetPosPixel());
+        const Size aCurrentSize(rCurrent.GetSizePixel());
+        const basegfx::B2IPoint aCurrentTopLeft(rTopLeft.getX() + aCurrentPos.X(), rTopLeft.getY() + aCurrentPos.Y());
+        const basegfx::B2IRange aCurrentRange(aCurrentTopLeft, aCurrentTopLeft + basegfx::B2IPoint(aCurrentSize.Width(), aCurrentSize.Height()));
+
+        if (!aCurrentRange.isEmpty())
+        {
+            rControlDataCollection.push_back(
+                ControlDataEntry(
+                rCurrent,
+                aCurrentRange));
+        }
+
+        for (sal_uInt16 a(0); a < rCurrent.GetChildCount(); a++)
+        {
+            vcl::Window* pChild = rCurrent.GetChild(a);
+
+            if (nullptr != pChild)
+            {
+                CollectChildren(*pChild, aCurrentTopLeft, rControlDataCollection);
+            }
+        }
+    }
+}
+
+ScreenshotAnnotationDlg::ScreenshotAnnotationDlg(
+    vcl::Window* pParent,
+    Dialog& rParentDialog)
+    : ModalDialog(pParent, "ScreenshotAnnotationDialog", "vcl/ui/screenshotannotationdialog.ui"),
+    mrParentDialog(rParentDialog),
+    maParentDialogBitmap(rParentDialog.createScreenshot()),
+    maParentDialogSize(maParentDialogBitmap.GetSizePixel()),
+    mpVirtualBufferDevice(nullptr),
+    maAllChildren(),
+    mpHilighted(nullptr),
+    maSelected(),
+    mpPicture(nullptr),
+    mpText(nullptr),
+    mpSave(nullptr)
+{
+    // image ain't empty
+    assert(!maParentDialogBitmap.IsEmpty());
+    assert(0 != maParentDialogBitmap.GetSizePixel().Width());
+    assert(0 != maParentDialogBitmap.GetSizePixel().Height());
+
+    // get needed widgets
+    get(mpPicture, "picture");
+    assert(mpPicture.get());
+    get(mpText, "text");
+    assert(mpText.get());
+    get(mpSave, "save");
+    assert(mpSave.get());
+
+    // set screenshot image at FixedImage, resize, set event listener
+    if (mpPicture)
+    {
+        // colelct all children. Choose start pos to be negative
+        // of target dialog's position to get all positions relative to (0,0)
+        const Point aParentPos(rParentDialog.GetPosPixel());
+        const basegfx::B2IPoint aTopLeft(-aParentPos.X(), -aParentPos.Y());
+
+        CollectChildren(
+            rParentDialog,
+            aTopLeft,
+            maAllChildren);
+
+        // to make clear that maParentDialogBitmap is a background image, adjust
+        // luminance a bit - other methods may be applied
+        maParentDialogBitmap.Adjust(-15);
+
+        // init paint buffering VuirtualDevice
+        mpVirtualBufferDevice = new VirtualDevice(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::BITMASK);
+        mpVirtualBufferDevice->SetOutputSizePixel(maParentDialogSize);
+        mpVirtualBufferDevice->SetFillColor(COL_TRANSPARENT);
+
+        // do paint all collected children for test purposes
+        static bool bTestPaint(true);
+
+        if (bTestPaint)
+        {
+            mpVirtualBufferDevice->DrawBitmap(Point(0, 0), maParentDialogBitmap);
+
+            for (auto aCandidate = maAllChildren.begin(); aCandidate != maAllChildren.end(); aCandidate++)
+            {
+                ControlDataEntry& rCandidate = *aCandidate;
+
+                const basegfx::B2IRange& rB2IRange(rCandidate.getB2IRange());
+                const Rectangle aRect(rB2IRange.getMinX(), rB2IRange.getMinY(), rB2IRange.getMaxX(), rB2IRange.getMaxY());
+                const Color aRandomColor(comphelper::rng::uniform_uint_distribution(0, 255), comphelper::rng::uniform_uint_distribution(0, 255), comphelper::rng::uniform_uint_distribution(0, 255));
+
+                mpVirtualBufferDevice->SetLineColor(aRandomColor);
+                mpVirtualBufferDevice->DrawRect(aRect);
+            }
+
+            maParentDialogBitmap = mpVirtualBufferDevice->GetBitmap(Point(0, 0), maParentDialogSize);
+        }
+
+        // set image for picture control
+        mpPicture->SetImage(Image(maParentDialogBitmap));
+
+        // set size for picture control, this will re-layout so that
+        // the picture control shows the whole dialog
+        mpPicture->set_width_request(maParentDialogSize.Width());
+        mpPicture->set_height_request(maParentDialogSize.Height());
+
+        // add local event listener to allow interactions with mouse
+        mpPicture->AddEventListener(LINK(this, ScreenshotAnnotationDlg, pictureFrameListener));
+
+        // avoid image scaling, this is needed for images smaller than the
+        // minimal dialog size
+        const WinBits aWinBits(mpPicture->GetStyle());
+        mpPicture->SetStyle(aWinBits & (!WinBits(WB_SCALE)));
+    }
+
+    // set some test text at VclMultiLineEdit and make read-only - only
+    // copying content to clipboard is allowed
+    if (mpText)
+    {
+        mpText->SetText("The quick brown fox jumps over the lazy dog :)");
+        mpText->SetReadOnly(true);
+    }
+
+    // set click handler for save button
+    if (mpSave)
+    {
+        mpSave->SetClickHdl(LINK(this, ScreenshotAnnotationDlg, saveButtonHandler));
+    }
+}
+
+ScreenshotAnnotationDlg::~ScreenshotAnnotationDlg()
+{
+    mpVirtualBufferDevice.disposeAndClear();
+    disposeOnce();
+}
+
+void ScreenshotAnnotationDlg::dispose()
+{
+    ModalDialog::dispose();
+}
+
+IMPL_LINK_TYPED(ScreenshotAnnotationDlg, saveButtonHandler, Button*, pButton, void)
+{
+    // 'save screenshot...' pressed, offer to save maParentDialogBitmap
+    // as PNG image, use *.id file name as screenshot file name offering
+    const OString& rUIFileName = mrParentDialog.getUIFile();
+
+
+
+
+    bool bBla = true;
+}
+
+ControlDataEntry* ScreenshotAnnotationDlg::CheckHit(const basegfx::B2IPoint& rPosition)
+{
+    ControlDataEntry* pRetval = nullptr;
+
+    for (auto aCandidate = maAllChildren.begin(); aCandidate != maAllChildren.end(); aCandidate++)
+    {
+        ControlDataEntry& rCandidate = *aCandidate;
+
+        if (rCandidate.getB2IRange().isInside(rPosition))
+        {
+            if (pRetval)
+            {
+                if (pRetval->getB2IRange().isInside(rCandidate.getB2IRange().getMinimum())
+                    && pRetval->getB2IRange().isInside(rCandidate.getB2IRange().getMaximum()))
+                {
+                    pRetval = &rCandidate;
+                }
+            }
+            else
+            {
+                pRetval = &rCandidate;
+            }
+        }
+    }
+
+    return pRetval;
+}
+
+void ScreenshotAnnotationDlg::PaintControlDataEntry(
+    const ControlDataEntry& rEntry,
+    const Color& rColor,
+    double fLineWidth,
+    double fTransparency)
+{
+    if (mpPicture && mpVirtualBufferDevice)
+    {
+        const basegfx::B2IRange& rRange = rEntry.getB2IRange();
+        const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(rRange)));
+        mpVirtualBufferDevice->SetLineColor(rColor);
+
+        if (!mpVirtualBufferDevice->DrawPolyLineDirect(
+            aPolygon,
+            fLineWidth,
+            fTransparency,
+            basegfx::B2DLineJoin::Round))
+        {
+            mpVirtualBufferDevice->DrawPolyLine(
+                aPolygon,
+                fLineWidth,
+                basegfx::B2DLineJoin::Round);
+        }
+    }
+}
+
+Point ScreenshotAnnotationDlg::GetOffsetInPicture() const
+{
+    if (!mpPicture)
+    {
+        return Point(0, 0);
+    }
+
+    const Size aPixelSizeTarget(mpPicture->GetOutputSizePixel());
+
+    return Point(
+        aPixelSizeTarget.Width() > maParentDialogSize.Width() ? (aPixelSizeTarget.Width() - maParentDialogSize.Width()) >> 1 : 0,
+        aPixelSizeTarget.Height() > maParentDialogSize.Height() ? (aPixelSizeTarget.Height() - maParentDialogSize.Height()) >> 1 : 0);
+}
+
+void ScreenshotAnnotationDlg::RepaintPictureElement()
+{
+    if (mpPicture && mpVirtualBufferDevice)
+    {
+        // restore with start bitmap
+        mpVirtualBufferDevice->DrawBitmap(Point(0, 0), maParentDialogBitmap);
+
+        // get various options - sorry, no SvtOptionsDrawinglayer in vcl
+        const Color aHilightColor(Application::GetSettings().GetStyleSettings().GetHighlightColor());
+        const bool bIsAntiAliasing(true);
+        const double fTransparence(0.4);
+        const AntialiasingFlags nOldAA(mpVirtualBufferDevice->GetAntialiasing());
+
+        if (bIsAntiAliasing)
+        {
+            mpVirtualBufferDevice->SetAntialiasing(AntialiasingFlags::EnableB2dDraw);
+        }
+
+        // paint selected
+        for (auto candidate = maSelected.begin(); candidate != maSelected.end(); candidate++)
+        {
+            PaintControlDataEntry(**candidate, Color(COL_LIGHTRED), 3.0);
+        }
+
+        // paint hilight
+        if (mpHilighted)
+        {
+            PaintControlDataEntry(*mpHilighted, aHilightColor, 5.0, fTransparence);
+        }
+
+        if (bIsAntiAliasing)
+        {
+            mpVirtualBufferDevice->SetAntialiasing(nOldAA);
+        }
+
+        // copy new content to picture control
+        mpPicture->DrawOutDev(
+            GetOffsetInPicture(),
+            maParentDialogSize,
+            Point(0, 0),
+            maParentDialogSize,
+            *mpVirtualBufferDevice);
+
+        // also set image to get repaints right, but trigger no repaint
+        mpPicture->SetImage(Image(mpVirtualBufferDevice->GetBitmap(Point(0, 0), mpVirtualBufferDevice->GetOutputSizePixel())));
+        mpPicture->Validate();
+
+        // const Color aRandomColor(comphelper::rng::uniform_uint_distribution(0, 255), comphelper::rng::uniform_uint_distribution(0, 255), comphelper::rng::uniform_uint_distribution(0, 255));
+        // mpPicture->SetImage(Image(mpVirtualBufferDevice->GetBitmap(Point(0, 0), mpVirtualBufferDevice->GetOutputSizePixel())));
+    }
+}
+
+IMPL_LINK_TYPED(ScreenshotAnnotationDlg, pictureFrameListener, VclWindowEvent&, rEvent, void)
+{
+    // event in picture frame
+    bool bRepaint(false);
+
+    switch (rEvent.GetId())
+    {
+        case VCLEVENT_WINDOW_MOUSEMOVE:
+        // case VCLEVENT_WINDOW_MOUSEBUTTONDOWN:
+        case VCLEVENT_WINDOW_MOUSEBUTTONUP:
+        {
+            MouseEvent* pMouseEvent = static_cast< MouseEvent* >(rEvent.GetData());
+
+            if (pMouseEvent)
+            {
+                switch (rEvent.GetId())
+                {
+                    case VCLEVENT_WINDOW_MOUSEMOVE:
+                    {
+                        if (mpPicture->IsMouseOver())
+                        {
+                            const ControlDataEntry* pOldHit = mpHilighted;
+                            const Point aOffset(GetOffsetInPicture());
+                            const basegfx::B2IPoint aMousePos(
+                                pMouseEvent->GetPosPixel().X() - aOffset.X(),
+                                pMouseEvent->GetPosPixel().Y() - aOffset.Y());
+                            const ControlDataEntry* pHit = CheckHit(aMousePos);
+
+                            if (pHit && pOldHit != pHit)
+                            {
+                                mpHilighted = const_cast< ControlDataEntry* >(pHit);
+                                bRepaint = true;
+                            }
+                        }
+                        else if (mpHilighted)
+                        {
+                            mpHilighted = nullptr;
+                            bRepaint = true;
+                        }
+                        break;
+                    }
+                    case VCLEVENT_WINDOW_MOUSEBUTTONUP:
+                    {
+                        if (mpPicture->IsMouseOver() && mpHilighted)
+                        {
+                            if (maSelected.find(mpHilighted) != maSelected.end())
+                            {
+                                maSelected.erase(mpHilighted);
+                            }
+                            else
+                            {
+                                maSelected.insert(mpHilighted);
+                            }
+
+                            bRepaint = true;
+                        }
+                        break;
+                    }
+                    default:
+                    {
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+
+    if (bRepaint)
+    {
+        RepaintPictureElement();
+    }
+}
+
+Button* isVisibleButtonWithText(vcl::Window* pCandidate)
+{
+    if (!pCandidate)
+        return nullptr;
+
+    if (!pCandidate->IsVisible())
+        return nullptr;
+
+    if (pCandidate->GetText().isEmpty())
+        return nullptr;
+
+    return dynamic_cast<Button*>(pCandidate);
+}
+
+// evtl. support for screenshot context menu
+void VclContainer::Command(const CommandEvent& rCEvt)
+{
+    if (rCEvt.IsMouseEvent() && CommandEventId::ContextMenu == rCEvt.GetCommand())
+    {
+        const bool bIsExperimentalMode(officecfg::Office::Common::Misc::ExperimentalMode::get());
+
+        if (bIsExperimentalMode)
+        {
+            bool bVisibleChildren(false);
+            vcl::Window* pChild(nullptr);
+
+            for (pChild = GetWindow(GetWindowType::FirstChild); !bVisibleChildren && pChild; pChild = pChild->GetWindow(GetWindowType::Next))
+            {
+                Button* pCandidate = isVisibleButtonWithText(pChild);
+
+                if (nullptr == pCandidate)
+                    continue;
+
+                bVisibleChildren = true;
+            }
+
+            if (bVisibleChildren)
+            {
+                static bool bAddButtonsToMenu(true);
+                static bool bAddScreenshotButtonToMenu(true);
+
+                if (bAddButtonsToMenu || bAddScreenshotButtonToMenu)
+                {
+                    const Point aMenuPos(rCEvt.GetMousePosPixel());
+                    ScopedVclPtrInstance<PopupMenu> aMenu;
+                    sal_uInt16 nLocalID(1);
+                    sal_uInt16 nScreenshotButtonID(0);
+
+                    if (bAddButtonsToMenu)
+                    {
+                        for (pChild = GetWindow(GetWindowType::FirstChild); pChild; pChild = pChild->GetWindow(GetWindowType::Next))
+                        {
+                            Button* pCandidate = isVisibleButtonWithText(pChild);
+
+                            if (nullptr == pCandidate)
+                                continue;
+
+                            aMenu->InsertItem(
+                                nLocalID,
+                                pChild->GetText(),
+                                MenuItemBits::NONE); // MenuItemBits::CHECKABLE | MenuItemBits::RADIOCHECK);
+                            aMenu->SetHelpText(
+                                nLocalID,
+                                pChild->GetHelpText());
+                            aMenu->SetHelpId(
+                                nLocalID,
+                                pChild->GetHelpId());
+                            aMenu->EnableItem(
+                                nLocalID,
+                                pChild->IsEnabled());
+                            nLocalID++;
+                        }
+                    }
+
+                    if (bAddScreenshotButtonToMenu)
+                    {
+                        if (nLocalID > 1)
+                        {
+                            aMenu->InsertSeparator();
+                        }
+
+                        aMenu->InsertItem(
+                            nLocalID,
+                            "Screenshot",
+                            MenuItemBits::NONE); // MenuItemBits::CHECKABLE | MenuItemBits::RADIOCHECK);
+                        aMenu->SetHelpText(
+                            nLocalID,
+                            "Go into interactive screenshot annotation mode");
+                        aMenu->SetHelpId(
+                            nLocalID,
+                            "InteractiveScreenshotMode");
+                        aMenu->EnableItem(
+                            nLocalID,
+                            true);
+                        nScreenshotButtonID = nLocalID;
+                    }
+
+                    const sal_uInt16 nId(aMenu->Execute(this, aMenuPos));
+
+                    // 0 == no selection (so not usable as ID)
+                    if (0 != nId)
+                    {
+                        if (bAddButtonsToMenu && nId < nLocalID)
+                        {
+                            nLocalID = 1;
+
+                            for (pChild = GetWindow(GetWindowType::FirstChild); pChild; pChild = pChild->GetWindow(GetWindowType::Next))
+                            {
+                                Button* pCandidate = isVisibleButtonWithText(pChild);
+
+                                if (nullptr == pCandidate)
+                                    continue;
+
+                                if (nLocalID++ == nId)
+                                {
+                                    // pCandidate is the selected button, trigger it
+                                    pCandidate->Click();
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (bAddScreenshotButtonToMenu && nId == nScreenshotButtonID)
+                        {
+                            // screenshot was selected, access parent dialog (needed for
+                            // screenshot and other data access)
+                            Dialog* pParentDialog = GetParentDialog();
+
+                            if (pParentDialog)
+                            {
+                                // open annotation work dialog
+                                VclPtr<ScreenshotAnnotationDlg> pDlg = VclPtr<ScreenshotAnnotationDlg>::Create(
+                                    Application::GetDefDialogParent(),
+                                    *pParentDialog);
+
+                                if (pDlg && pDlg->Execute() == RET_OK)
+                                {
+
+
+
+
+
+                                    bool bBla2 = true;
+                                }
+                            }
+                        }
+                    }
+
+                    // consume event when:
+                    // - CommandEventId::ContextMenu
+                    // - bIsExperimentalMode
+                    // - bVisibleChildren
+                    return;
+                }
+            }
+        }
+    }
+
+    Window::Command(rCEvt);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 
 void VclBox::accumulateMaxes(const Size &rChildSize, Size &rSize) const
 {

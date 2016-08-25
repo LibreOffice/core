@@ -728,7 +728,7 @@ ${MYCMD} --files tubes/uiconfig/ui/contacts.ui
 
 ${MYCMD} --base uui/uiconfig/ui --files authfallback.ui filterselect.ui logindialog.ui macrowarnmedium.ui masterpassworddlg.ui password.ui setmasterpassworddlg.ui simplenameclash.ui sslwarndialog.ui unknownauthdialog.ui
 
-${MYCMD} --base vcl/uiconfig/ui --files cupspassworddialog.ui errornocontentdialog.ui errornoprinterdialog.ui notebookbar.ui printdialog.ui printerdevicepage.ui printerpaperpage.ui printerpropertiesdialog.ui printprogressdialog.ui querydialog.ui
+${MYCMD} --base vcl/uiconfig/ui --files cupspassworddialog.ui errornocontentdialog.ui errornoprinterdialog.ui notebookbar.ui printdialog.ui printerdevicepage.ui printerpaperpage.ui printerpropertiesdialog.ui printprogressdialog.ui querydialog.ui screenshotannotationdialog.ui
 
 ${MYCMD} --base xmlsecurity/uiconfig/ui --files certdetails.ui certgeneral.ui certpage.ui digitalsignaturesdialog.ui macrosecuritydialog.ui securitylevelpage.ui securitytrustpage.ui selectcertificatedialog.ui viewcertdialog.ui
 

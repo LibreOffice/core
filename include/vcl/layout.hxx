@@ -53,6 +53,10 @@ protected:
     virtual void setAllocation(const Size &rAllocation) = 0;
 
     virtual sal_uInt16 getDefaultAccessibleRole() const override;
+
+    // evtl. support for screenshot context menu
+    virtual void Command(const CommandEvent& rCEvt) override;
+
 public:
     //you don't want to override these
     virtual Size GetOptimalSize() const override;
