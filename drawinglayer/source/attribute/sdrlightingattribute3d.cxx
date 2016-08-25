@@ -104,6 +104,12 @@ namespace drawinglayer
             return *this;
         }
 
+        SdrLightingAttribute& SdrLightingAttribute::operator=(SdrLightingAttribute&& rCandidate)
+        {
+            mpSdrLightingAttribute = std::move(rCandidate.mpSdrLightingAttribute);
+            return *this;
+        }
+
         bool SdrLightingAttribute::operator==(const SdrLightingAttribute& rCandidate) const
         {
             // tdf#87509 default attr is always != non-default attr, even with same values
