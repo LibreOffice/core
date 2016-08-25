@@ -92,7 +92,10 @@ namespace drawinglayer
         {
         }
 
-        StrokeAttribute::StrokeAttribute(StrokeAttribute&& rCandidate) = default;
+        StrokeAttribute::StrokeAttribute(StrokeAttribute&& rCandidate)
+        :   mpStrokeAttribute(std::move(rCandidate.mpStrokeAttribute))
+        {
+        }
 
         StrokeAttribute::~StrokeAttribute()
         {
@@ -109,7 +112,11 @@ namespace drawinglayer
             return *this;
         }
 
-        StrokeAttribute& StrokeAttribute::operator=(StrokeAttribute&& rCandidate) = default;
+        StrokeAttribute& StrokeAttribute::operator=(StrokeAttribute&& rCandidate)
+        {
+            mpStrokeAttribute = std::move(rCandidate.mpStrokeAttribute);
+            return *this;
+        }
 
         bool StrokeAttribute::operator==(const StrokeAttribute& rCandidate) const
         {

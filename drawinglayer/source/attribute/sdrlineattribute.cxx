@@ -124,7 +124,10 @@ namespace drawinglayer
         {
         }
 
-        SdrLineAttribute::SdrLineAttribute(SdrLineAttribute&& rCandidate) = default;
+        SdrLineAttribute::SdrLineAttribute(SdrLineAttribute&& rCandidate)
+        :   mpSdrLineAttribute(std::move(rCandidate.mpSdrLineAttribute))
+        {
+        }
 
         SdrLineAttribute::~SdrLineAttribute()
         {
@@ -141,7 +144,11 @@ namespace drawinglayer
             return *this;
         }
 
-        SdrLineAttribute& SdrLineAttribute::operator=(SdrLineAttribute&& rCandidate) = default;
+        SdrLineAttribute& SdrLineAttribute::operator=(SdrLineAttribute&& rCandidate)
+        {
+            mpSdrLineAttribute = std::move(rCandidate.mpSdrLineAttribute);
+            return *this;
+        }
 
         bool SdrLineAttribute::operator==(const SdrLineAttribute& rCandidate) const
         {
