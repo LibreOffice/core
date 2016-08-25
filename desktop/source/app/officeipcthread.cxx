@@ -1202,7 +1202,7 @@ void PipeIpcThread::execute()
             m_handler->cReady.wait();
 
             // we might have decided to shutdown while we were sleeping
-            if (!m_handler->pGlobal.is()) return;
+            if (!RequestHandler::pGlobal.is()) return;
 
             // only lock the mutex when processing starts, othewise we deadlock when the office goes
             // down during wait
