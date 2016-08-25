@@ -77,6 +77,10 @@ LineInfo::LineInfo( const LineInfo& rLineInfo ) : mpImplLineInfo(rLineInfo.mpImp
 {
 }
 
+LineInfo::LineInfo( LineInfo&& rLineInfo ) : mpImplLineInfo(std::move(rLineInfo.mpImplLineInfo))
+{
+}
+
 LineInfo::~LineInfo()
 {
 }
@@ -84,6 +88,12 @@ LineInfo::~LineInfo()
 LineInfo& LineInfo::operator=( const LineInfo& rLineInfo )
 {
     mpImplLineInfo = rLineInfo.mpImplLineInfo;
+    return *this;
+}
+
+LineInfo& LineInfo::operator=( LineInfo&& rLineInfo )
+{
+    mpImplLineInfo = std::move(rLineInfo.mpImplLineInfo);
     return *this;
 }
 

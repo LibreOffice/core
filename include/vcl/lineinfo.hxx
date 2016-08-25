@@ -55,9 +55,11 @@ class VCL_DLLPUBLIC LineInfo
 public:
                     LineInfo( LineStyle eLineStyle = LINE_SOLID, long nWidth = 0L );
                     LineInfo( const LineInfo& rLineInfo );
+                    LineInfo( LineInfo&& rLineInfo );
                     ~LineInfo();
 
     LineInfo&       operator=( const LineInfo& rLineInfo );
+    LineInfo&       operator=( LineInfo&& rLineInfo );
     bool            operator==( const LineInfo& rLineInfo ) const;
     bool            operator!=( const LineInfo& rLineInfo ) const { return !(LineInfo::operator==( rLineInfo ) ); }
 
