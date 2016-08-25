@@ -395,7 +395,7 @@ class SwPageDescs
 
     typedef SwPageDescsBase::nth_index<0>::type ByPos;
     typedef SwPageDescsBase::nth_index<1>::type ByName;
-    typedef typename ByPos::iterator iterator;
+    typedef ByPos::iterator iterator;
 
     iterator find_( const OUString &name ) const;
 
@@ -404,9 +404,9 @@ class SwPageDescs
     ByName           &m_NameIndex;
 
 public:
-    typedef typename ByPos::const_iterator const_iterator;
-    typedef typename SwPageDescsBase::size_type size_type;
-    typedef typename SwPageDescsBase::value_type value_type;
+    typedef ByPos::const_iterator const_iterator;
+    typedef SwPageDescsBase::size_type size_type;
+    typedef SwPageDescsBase::value_type value_type;
 
     SwPageDescs();
 

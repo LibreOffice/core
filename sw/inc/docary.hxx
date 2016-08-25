@@ -174,17 +174,17 @@ class SW_DLLPUBLIC SwFrameFormats : public SwFormatsBase
 
     typedef SwFrameFormatsBase::nth_index<0>::type ByPos;
     typedef SwFrameFormatsBase::nth_index<1>::type ByTypeAndName;
-    typedef typename ByPos::iterator iterator;
+    typedef ByPos::iterator iterator;
 
     SwFrameFormatsBase   m_Array;
     ByPos               &m_PosIndex;
     ByTypeAndName       &m_TypeAndNameIndex;
 
 public:
-    typedef typename ByPos::const_iterator const_iterator;
-    typedef typename ByTypeAndName::const_iterator const_range_iterator;
-    typedef typename SwFrameFormatsBase::size_type size_type;
-    typedef typename SwFrameFormatsBase::value_type value_type;
+    typedef ByPos::const_iterator const_iterator;
+    typedef ByTypeAndName::const_iterator const_range_iterator;
+    typedef SwFrameFormatsBase::size_type size_type;
+    typedef SwFrameFormatsBase::value_type value_type;
 
     SwFrameFormats();
     // frees all SwFrameFormat!
