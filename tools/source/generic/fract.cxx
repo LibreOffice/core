@@ -62,6 +62,10 @@ Fraction::Fraction( const Fraction& rFrac ) : mpImpl(new Impl)
         mpImpl->value.assign( rFrac.mpImpl->value.numerator(), rFrac.mpImpl->value.denominator() );
 }
 
+Fraction::Fraction( Fraction&& rFrac ) : mpImpl(std::move(rFrac.mpImpl))
+{
+}
+
 // Initialized by setting nNum as nominator and nDen as denominator
 // Negative values in the denominator are invalid and cause the
 // inversion of both nominator and denominator signs
@@ -268,6 +272,12 @@ Fraction& Fraction::operator=( const Fraction& rFrac )
 
     Fraction tmp(rFrac);
     std::swap(mpImpl, tmp.mpImpl);
+    return *this;
+}
+
+Fraction& Fraction::operator=( Fraction&& rFrac )
+{
+    mpImpl = std::move(rFrac.mpImpl);
     return *this;
 }
 
