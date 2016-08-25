@@ -64,6 +64,7 @@ namespace svx
     public:
         ODataAccessDescriptor();
         ODataAccessDescriptor( const ODataAccessDescriptor& _rSource );
+        ODataAccessDescriptor( ODataAccessDescriptor&& _rSource );
         ODataAccessDescriptor( const css::uno::Reference< css::beans::XPropertySet >& _rValues );
         ODataAccessDescriptor( const css::uno::Sequence< css::beans::PropertyValue >& _rValues );
 
@@ -71,6 +72,7 @@ namespace svx
         ODataAccessDescriptor( const css::uno::Any& _rValues );
 
         ODataAccessDescriptor& operator=(const ODataAccessDescriptor& _rSource);
+        ODataAccessDescriptor& operator=(ODataAccessDescriptor&& _rSource);
 
         ~ODataAccessDescriptor();
 

@@ -270,9 +270,20 @@ namespace svx
     {
     }
 
+    ODataAccessDescriptor::ODataAccessDescriptor( ODataAccessDescriptor&& _rSource )
+        :m_pImpl(std::move(_rSource.m_pImpl))
+    {
+    }
+
     ODataAccessDescriptor& ODataAccessDescriptor::operator=(const ODataAccessDescriptor& _rSource)
     {
         m_pImpl.reset(new ODADescriptorImpl(*_rSource.m_pImpl));
+        return *this;
+    }
+
+    ODataAccessDescriptor& ODataAccessDescriptor::operator=(ODataAccessDescriptor&& _rSource)
+    {
+        m_pImpl = std::move(_rSource.m_pImpl);
         return *this;
     }
 
