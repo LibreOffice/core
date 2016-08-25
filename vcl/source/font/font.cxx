@@ -52,6 +52,10 @@ Font::Font( const vcl::Font& rFont ) : mpImplFont( rFont.mpImplFont )
 {
 }
 
+Font::Font( vcl::Font&& rFont ) : mpImplFont( std::move(rFont.mpImplFont) )
+{
+}
+
 Font::Font( const OUString& rFamilyName, const Size& rSize ) : mpImplFont()
 {
     mpImplFont->SetFamilyName( rFamilyName );
@@ -279,6 +283,12 @@ void Font::SetWordLineMode( bool bWordLine )
 Font& Font::operator=( const vcl::Font& rFont )
 {
     mpImplFont = rFont.mpImplFont;
+    return *this;
+}
+
+Font& Font::operator=( vcl::Font&& rFont )
+{
+    mpImplFont = std::move(rFont.mpImplFont);
     return *this;
 }
 
