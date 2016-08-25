@@ -629,6 +629,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 case ControlPart::TrackHorzRight: iPart = SBP_LOWERTRACKHORZ; break;
                 case ControlPart::TrackVertUpper: iPart = SBP_UPPERTRACKVERT; break;
                 case ControlPart::TrackVertLower: iPart = SBP_LOWERTRACKVERT; break;
+                default: break;
             }
 
             if( nState & ControlState::PRESSED )
