@@ -3887,7 +3887,7 @@ StackVar ScInterpreter::Interpret()
         if ( eOp == ocPush )
         {
             // RPN code push without error
-            PushWithoutError( (FormulaToken&) *pCur );
+            PushWithoutError( *pCur );
         }
         else if (pTokenMatrixMap &&
                  !(eOp == ocIf || eOp == ocIfError || eOp == ocIfNA || eOp == ocChoose) &&
