@@ -4394,10 +4394,10 @@ StackVar ScInterpreter::Interpret()
             // Not all functions pop all parameters in case an error is
             // generated. Clean up stack. Assumes that every function pushes a
             // result, may be arbitrary in case of error.
-            const FormulaToken* pLocalResult = pStack[ sp - 1 ];
+            FormulaConstTokenRef xLocalResult = pStack[ sp - 1 ];
             while (sp > nStackBase)
                 Pop();
-            PushTempToken( *pLocalResult );
+            PushTokenRef( xLocalResult );
         }
 
         bool bGotResult;
@@ -4543,13 +4543,13 @@ StackVar ScInterpreter::Interpret()
                 break;
                 case svExternalSingleRef:
                 {
-                    ScExternalRefCache::TokenRef pToken;
+                    FormulaTokenRef xToken;
                     ScExternalRefCache::CellFormat aFmt;
-                    PopExternalSingleRef(pToken, &aFmt);
+                    PopExternalSingleRef(xToken, &aFmt);
                     if (nGlobalError)
                         break;
 
-                    PushTempToken(*pToken);
+                    PushTokenRef(xToken);
 
                     if (aFmt.mbIsSet)
                     {
