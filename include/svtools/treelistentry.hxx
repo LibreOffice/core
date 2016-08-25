@@ -98,8 +98,8 @@ public:
     void ReplaceItem(std::unique_ptr<SvLBoxItem> pNewItem, size_t nPos);
     const SvLBoxItem& GetItem( size_t nPos ) const;
     SvLBoxItem& GetItem( size_t nPos );
-    const SvLBoxItem* GetFirstItem( sal_uInt16 nId ) const;
-    SvLBoxItem* GetFirstItem( sal_uInt16 nId );
+    const SvLBoxItem* GetFirstItem(SvLBoxItemType eType) const;
+    SvLBoxItem* GetFirstItem(SvLBoxItemType eType);
     size_t GetPos( const SvLBoxItem* pItem ) const;
     void*       GetUserData() const { return pUserData;}
     void        SetUserData( void* pPtr );

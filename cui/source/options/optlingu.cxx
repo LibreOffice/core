@@ -243,10 +243,10 @@ DicUserData::DicUserData(
 
 static void lcl_SetCheckButton( SvTreeListEntry* pEntry, bool bCheck )
 {
-    SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
+    SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
 
     DBG_ASSERT(pItem,"SetCheckButton:Item not found");
-    if (pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
+    if (pItem->GetType() == SvLBoxItemType::Button)
     {
         if (bCheck)
             pItem->SetStateChecked();

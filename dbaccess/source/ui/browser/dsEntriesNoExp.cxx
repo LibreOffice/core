@@ -232,7 +232,7 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
             for (sal_uInt16 i=0;i<nCount;++i)
             {
                 SvLBoxItem& rItem = pEntryLoop->GetItem(i);
-                if (rItem.GetType() != SV_ITEM_ID_LBOXCONTEXTBMP)
+                if (rItem.GetType() != SvLBoxItemType::ContextBmp)
                     continue;
 
                 SvLBoxContextBmp& rContextBitmapItem = static_cast< SvLBoxContextBmp& >( rItem );

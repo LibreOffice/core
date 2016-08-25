@@ -462,7 +462,7 @@ namespace accessibility
         while( iCount < iTotleItemCount )
         {
             const SvLBoxItem& rItem = pEntry->GetItem( iCount );
-            if ( rItem.GetType() == SV_ITEM_ID_LBOXSTRING &&
+            if ( rItem.GetType() == SvLBoxItemType::String &&
                  !static_cast<const SvLBoxString&>( rItem ).GetText().isEmpty() )
             {
                 iRealItemCount++;

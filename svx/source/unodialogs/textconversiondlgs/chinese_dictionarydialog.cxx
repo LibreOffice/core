@@ -305,11 +305,11 @@ sal_Int32 DictionaryList::ColumnCompare( SvTreeListEntry* pLeft, SvTreeListEntry
 
     if(pLeftItem != nullptr && pRightItem != nullptr)
     {
-        sal_uInt16 nLeftKind = pLeftItem->GetType();
-        sal_uInt16 nRightKind = pRightItem->GetType();
+        SvLBoxItemType nLeftKind = pLeftItem->GetType();
+        SvLBoxItemType nRightKind = pRightItem->GetType();
 
-        if(nRightKind == SV_ITEM_ID_LBOXSTRING &&
-            nLeftKind == SV_ITEM_ID_LBOXSTRING )
+        if (nRightKind == SvLBoxItemType::String &&
+             nLeftKind == SvLBoxItemType::String)
         {
             IntlWrapper aIntlWrapper( Application::GetSettings().GetLanguageTag() );
             const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();

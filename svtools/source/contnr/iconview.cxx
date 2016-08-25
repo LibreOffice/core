@@ -121,9 +121,9 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, long nX, long nY,
     while (nCurItem < nItemCount)
     {
         SvLBoxItem* pItem = nCurItem < nItemCount ? &rEntry.GetItem(nCurItem) : nullptr;
-        sal_uInt16 nItemType = pItem->GetType();
+        SvLBoxItemType nItemType = pItem->GetType();
 
-        if(nItemType == SV_ITEM_ID_LBOXCONTEXTBMP)
+        if (nItemType == SvLBoxItemType::ContextBmp)
         {
             nIconItem = nCurItem;
             nCurItem++;

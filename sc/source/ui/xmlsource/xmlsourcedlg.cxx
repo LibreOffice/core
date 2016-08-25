@@ -47,7 +47,7 @@ OUString getXPath(
     OUStringBuffer aBuf;
     for (const SvTreeListEntry* p = &rEntry; p; p = rTree.GetParent(p))
     {
-        const SvLBoxItem* pItem = p->GetFirstItem(SV_ITEM_ID_LBOXSTRING);
+        const SvLBoxItem* pItem = p->GetFirstItem(SvLBoxItemType::String);
         if (!pItem)
             continue;
 
