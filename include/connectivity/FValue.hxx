@@ -286,6 +286,7 @@ namespace connectivity
             {  }
 
         ORowSetValue& operator=(const ORowSetValue& _rRH);
+        ORowSetValue& operator=(ORowSetValue&& _rRH);
 
         // simple types
         ORowSetValue& operator=(bool _rRH);
