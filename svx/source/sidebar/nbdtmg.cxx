@@ -255,7 +255,7 @@ BulletsTypeMgr::BulletsTypeMgr(const BulletsTypeMgr& aTypeMgr):
 {
     for (sal_uInt16 i=0; i < DEFAULT_BULLET_TYPES; ++i)
     {
-        const BulletsSettings_Impl* pSrcBullet = aTypeMgr.pActualBullets[i];
+        const BulletsSettings_Impl* pSrcBullet = BulletsTypeMgr::pActualBullets[i];
         BulletsSettings_Impl* pTargetBullet = pActualBullets[i];
         pTargetBullet->bIsCustomized = pSrcBullet->bIsCustomized;
         pTargetBullet->cBulletChar = pSrcBullet->cBulletChar;
