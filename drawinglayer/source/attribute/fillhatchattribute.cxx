@@ -113,6 +113,11 @@ namespace drawinglayer
         {
         }
 
+        FillHatchAttribute::FillHatchAttribute(FillHatchAttribute&& rCandidate)
+        :   mpFillHatchAttribute(std::move(rCandidate.mpFillHatchAttribute))
+        {
+        }
+
         FillHatchAttribute::~FillHatchAttribute()
         {
         }
@@ -125,6 +130,12 @@ namespace drawinglayer
         FillHatchAttribute& FillHatchAttribute::operator=(const FillHatchAttribute& rCandidate)
         {
             mpFillHatchAttribute = rCandidate.mpFillHatchAttribute;
+            return *this;
+        }
+
+        FillHatchAttribute& FillHatchAttribute::operator=(FillHatchAttribute&& rCandidate)
+        {
+            mpFillHatchAttribute = std::move(rCandidate.mpFillHatchAttribute);
             return *this;
         }
 

@@ -72,7 +72,9 @@ namespace drawinglayer
                 bool bFillBackground);
             FillHatchAttribute();
             FillHatchAttribute(const FillHatchAttribute& rCandidate);
+            FillHatchAttribute(FillHatchAttribute&& rCandidate);
             FillHatchAttribute& operator=(const FillHatchAttribute& rCandidate);
+            FillHatchAttribute& operator=(FillHatchAttribute&& rCandidate);
             ~FillHatchAttribute();
 
             // checks if the incarnation is default constructed
