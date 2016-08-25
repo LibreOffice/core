@@ -371,6 +371,10 @@ void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const
         else
         {
             RowStyles& rRowStyles =  maStylesPerColumn[ nCol ];
+            // Reset row range for each column
+            aStyleRows.mnStartRow = rAddress.StartRow;
+            aStyleRows.mnEndRow = rAddress.EndRow;
+
             // If the rowrange style includes rows already
             // allocated to a style then we need to split
             // the range style Rows into sections ( to
@@ -407,6 +411,8 @@ void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const
                         aRangeRowsSplits.push_back( aSplit );
                     }
                 }
+                if ( aStyleRows.mnStartRow <= r.mnEndRow && r.mnEndRow < aStyleRows.mnEndRow )
+                    aStyleRows.mnStartRow = r.mnEndRow + 1;
             }
             std::vector< RowRangeStyle >::iterator splits_it = aRangeRowsSplits.begin();
             std::vector< RowRangeStyle >::iterator splits_end = aRangeRowsSplits.end();
