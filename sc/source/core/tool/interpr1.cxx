@@ -6645,7 +6645,7 @@ void ScInterpreter::ScSubTotal()
     {
         // We must fish the 1st parameter deep from the stack! And push it on top.
         const FormulaToken* p = pStack[ sp - nParamCount ];
-        PushTempToken( *p );    /* TODO: use FormulaTokenRef instead */
+        PushWithoutError( *p );
         sal_Int32 nFunc = GetInt32();
         mnSubTotalFlags |= SUBTOTAL_IGN_NESTED_ST_AG | SUBTOTAL_IGN_FILTERED;
         if (nFunc > 100)
@@ -6692,11 +6692,11 @@ void ScInterpreter::ScAggregate()
     {
         // fish the 1st parameter from the stack and push it on top.
         const FormulaToken* p = pStack[ sp - nParamCount ];
-        PushTempToken( *p );    /* TODO: use FormulaTokenRef instead */
+        PushWithoutError( *p );
         sal_Int32 nFunc = GetInt32();
         // fish the 2nd parameter from the stack and push it on top.
         const FormulaToken* p2 = pStack[ sp - ( nParamCount - 1 ) ];
-        PushTempToken( *p2 );   /* TODO: use FormulaTokenRef instead */
+        PushWithoutError( *p2 );
         sal_Int32 nOption = GetInt32();
 
         if ( nGlobalError || nFunc < 1 || nFunc > 19 )
