@@ -78,6 +78,16 @@ public:
         return *this;
     }
 
+    SvRef & operator =(SvRef && rObj)
+    {
+        if (pObj != nullptr) {
+            pObj->ReleaseRef();
+        }
+        pObj = rObj.pObj;
+        rObj.pObj = nullptr;
+        return *this;
+    }
+
     bool Is()         const { return pObj != nullptr; }
 
     T * get()         const { return pObj; }
