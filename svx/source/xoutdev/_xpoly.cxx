@@ -885,6 +885,11 @@ XPolyPolygon::XPolyPolygon( const XPolyPolygon& rXPolyPoly )
 {
 }
 
+XPolyPolygon::XPolyPolygon( XPolyPolygon&& rXPolyPoly )
+    : pImpXPolyPolygon( std::move(rXPolyPoly.pImpXPolyPolygon) )
+{
+}
+
 XPolyPolygon::XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
     : pImpXPolyPolygon()
 {
@@ -967,6 +972,12 @@ XPolygon& XPolyPolygon::operator[]( sal_uInt16 nPos )
 XPolyPolygon& XPolyPolygon::operator=( const XPolyPolygon& rXPolyPoly )
 {
     pImpXPolyPolygon = rXPolyPoly.pImpXPolyPolygon;
+    return *this;
+}
+
+XPolyPolygon& XPolyPolygon::operator=( XPolyPolygon&& rXPolyPoly )
+{
+    pImpXPolyPolygon = std::move(rXPolyPoly.pImpXPolyPolygon);
     return *this;
 }
 

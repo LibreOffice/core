@@ -126,6 +126,7 @@ protected:
 public:
                     XPolyPolygon();
                     XPolyPolygon( const XPolyPolygon& rXPolyPoly );
+                    XPolyPolygon( XPolyPolygon&& rXPolyPoly );
 
                     ~XPolyPolygon();
 
@@ -144,6 +145,7 @@ public:
     XPolygon&       operator[]( sal_uInt16 nPos );
 
     XPolyPolygon&   operator=( const XPolyPolygon& rXPolyPoly );
+    XPolyPolygon&   operator=( XPolyPolygon&& rXPolyPoly );
 
     // transformations
     void Distort(const Rectangle& rRefRect, const XPolygon& rDistortedRect);
