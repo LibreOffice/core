@@ -21,7 +21,6 @@
 
 #include <ThemePanel.hxx>
 #include <StylePresetsPanel.hxx>
-#include <PagePropertyPanel.hxx>
 #include <PageStylesPanel.hxx>
 #include <PageFormatPanel.hxx>
 #include <PageHeaderPanel.hxx>
@@ -124,16 +123,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
             "PanelFactory::createUIElement called without SfxBindings",
             nullptr);
 
-    if (rsResourceURL.endsWith("/PagePropertyPanel"))
-    {
-        VclPtr<vcl::Window> pPanel = sw::sidebar::PagePropertyPanel::Create( pParentWindow, xFrame, pBindings );
-        xElement = sfx2::sidebar::SidebarPanelBase::Create(
-            rsResourceURL,
-            xFrame,
-            pPanel,
-            ui::LayoutSize(-1,-1,-1));
-    }
-    else if(rsResourceURL.endsWith("/PageStylesPanel"))
+    if(rsResourceURL.endsWith("/PageStylesPanel"))
     {
         VclPtr<vcl::Window> pPanel = sw::sidebar::PageStylesPanel::Create( pParentWindow, xFrame, pBindings );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(

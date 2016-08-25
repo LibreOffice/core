@@ -373,34 +373,6 @@
         </prop>
       </node>
 
-      <node oor:name="PagePropertyPanel" oor:op="replace">
-        <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Page</value>
-        </prop>
-        <prop oor:name="Id" oor:type="xs:string">
-          <value>PagePropertyPanel</value>
-        </prop>
-        <prop oor:name="DeckId" oor:type="xs:string">
-          <value>PropertyDeck</value>
-        </prop>
-        <prop oor:name="DefaultMenuCommand">
-          <value>.uno:PageDialog</value>
-        </prop>
-        <prop oor:name="ContextList">
-          <value oor:separator=";">
-            Writer, Table,    hidden ;
-            Writer, Text,     hidden ;
-            Writer, default,  hidden ;
-          </value>
-        </prop>
-        <prop oor:name="ImplementationURL" oor:type="xs:string">
-          <value>private:resource/toolpanel/SwPanelFactory/PagePropertyPanel</value>
-        </prop>
-        <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>300</value>
-        </prop>
-      </node>
-
       <node oor:name="MediaPlaybackPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Media Playback</value>
