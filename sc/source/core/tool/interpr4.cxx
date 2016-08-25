@@ -628,7 +628,6 @@ void ScInterpreter::PushWithoutError( const FormulaToken& r )
         SetError( errStackOverflow );
     else
     {
-        nCurFmtType = css::util::NumberFormat::UNDEFINED;
         r.IncRef();
         if( sp >= maxsp )
             maxsp = sp + 1;
@@ -3885,6 +3884,7 @@ StackVar ScInterpreter::Interpret()
         {
             // RPN code push without error
             PushWithoutError( *pCur );
+            nCurFmtType = css::util::NumberFormat::UNDEFINED;
         }
         else if (pTokenMatrixMap &&
                  !(eOp == ocIf || eOp == ocIfError || eOp == ocIfNA || eOp == ocChoose) &&
