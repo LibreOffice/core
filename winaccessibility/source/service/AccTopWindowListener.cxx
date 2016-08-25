@@ -21,7 +21,7 @@
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/window.hxx>
-#include <toolkit/awt/Vclxwindow.hxx>
+#include <toolkit/awt/vclxwindow.hxx>
 
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCTEXT_H
 #define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCTEXT_H
 
-#include "resource.h"       // main symbols
+#include "Resource.h"       // main symbols
 
 #include "AccTextBase.h"
 

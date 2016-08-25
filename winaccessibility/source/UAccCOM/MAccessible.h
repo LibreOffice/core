@@ -20,7 +20,7 @@
 #ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_MACCESSIBLE_H
 #define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_MACCESSIBLE_H
 
-#include "resource.h"       // main symbols
+#include "Resource.h"       // main symbols
 #include <map>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>

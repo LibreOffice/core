@@ -22,7 +22,7 @@
 #ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCACTIONBASE_H
 #define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCACTIONBASE_H
 
-#include <com/sun/star/uno/reference.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include "UNOXWrapper.h"
 

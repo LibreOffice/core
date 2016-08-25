@@ -24,7 +24,7 @@
 //      run nmake -f so_activexps.mk in the project directory.
 
 #include "stdio.h"
-#include "stdafx2.h"
+#include "StdAfx2.h"
 #include "resource.h"
 #include <initguid.h>
 

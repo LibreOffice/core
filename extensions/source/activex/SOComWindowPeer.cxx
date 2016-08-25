@@ -23,7 +23,7 @@
 
 #include <cstddef>
 
-#include "stdafx2.h"
+#include "StdAfx2.h"
 #include "SOComWindowPeer.h"
 #include <sal/macros.h>
 

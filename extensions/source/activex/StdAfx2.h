@@ -52,6 +52,7 @@
 #pragma clang diagnostic ignored "-Wmissing-field-initializers"
 #pragma clang diagnostic ignored "-Wnon-pod-varargs"
 #pragma clang diagnostic ignored "-Wnon-virtual-dtor"
+#pragma clang diagnostic ignored "-Wnonportable-include-path"
 #pragma clang diagnostic ignored "-Wsequence-point"
 #pragma clang diagnostic ignored "-Wsign-compare"
 #pragma clang diagnostic ignored "-Wtypename-missing"

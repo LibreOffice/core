@@ -28,7 +28,7 @@
 #include <objidl.h>
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/SEQUENCE.h>
+#include <com/sun/star/uno/Sequence.h>
 #include <unordered_map>
 
 #include "embeddocaccess.hxx"

@@ -18,7 +18,7 @@
  */
 
 #include "stdafx.h"
-#include "resource.h"
+#include "Resource.h"
 #include <initguid.h>
 #include <accHelper.hxx>
 
@@ -54,7 +54,7 @@
 #include "AccValue.h"
 #include "AccTable.h"
 #include "AccHyperLink.h"
-#include "AccHyperText.h"
+#include "AccHypertext.h"
 
 
 CComModule _Module;

@@ -52,7 +52,7 @@
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
-#include <com/sun/star/accessibility/XAccessibleHyperText.hpp>
+#include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
 #include <com/sun/star/accessibility/XAccessibleHyperlink.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

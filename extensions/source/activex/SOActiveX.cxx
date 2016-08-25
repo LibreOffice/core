@@ -22,7 +22,7 @@
 #pragma warning (push,1)
 #pragma warning (disable:4265)
 
-#include "stdafx2.h"
+#include "StdAfx2.h"
 #include "SOActiveX.h"
 #include "SOComWindowPeer.h"
 #include "SODispatchInterceptor.h"

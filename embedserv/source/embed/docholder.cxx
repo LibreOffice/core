@@ -59,7 +59,7 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
-#include <com/sun/star/util/XCloseAble.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>

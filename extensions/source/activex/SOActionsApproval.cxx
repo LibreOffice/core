@@ -23,7 +23,7 @@
 
 #include <cstddef>
 
-#include "stdafx2.h"
+#include "StdAfx2.h"
 
 #include "SOActionsApproval.h"
 #include <sal/macros.h>

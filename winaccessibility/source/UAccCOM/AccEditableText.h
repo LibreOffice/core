@@ -20,8 +20,8 @@
 #ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCEDITABLETEXT_H
 #define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCEDITABLETEXT_H
 
-#include "resource.h"
-#include <com/sun/star/uno/reference.hxx>
+#include "Resource.h"
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include "UNOXWrapper.h"
 

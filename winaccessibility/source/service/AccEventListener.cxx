@@ -23,7 +23,7 @@
 
 #include <vcl/svapp.hxx>
 
-#include <toolkit/awt/Vclxwindow.hxx>
+#include <toolkit/awt/vclxwindow.hxx>
 
 #include "AccEventListener.hxx"
 #include "AccObjectManagerAgent.hxx"

@@ -24,7 +24,7 @@
 #include <cstddef>
 
 #include "stdio.h"
-#include "stdafx2.h"
+#include "StdAfx2.h"
 #include "SOActiveX.h"
 #include "SODispatchInterceptor.h"
 #include "com_uno_helper.h"

@@ -20,9 +20,9 @@
 #ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCIMAGE_H
 #define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCIMAGE_H
 
-#include "resource.h"        // main symbols
+#include "Resource.h"        // main symbols
 
-#include <com/sun/star/uno/reference.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleImage.hpp>
 #include "UNOXWrapper.h"
 
