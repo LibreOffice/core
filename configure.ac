@@ -6879,7 +6879,6 @@ if test "$ENABLE_JAVA" != ""; then
     fi
 fi
 
-HAVE_JAVA6=
 HAVE_JAVA9=
 dnl ===================================================================
 dnl Checks for JDK.
@@ -6911,11 +6910,8 @@ if test "$ENABLE_JAVA" != ""; then
             _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED s/[[-A-Za-z]]*//`
             _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
 
-            if test "$_jdk_ver" -lt 10500; then
-                AC_MSG_ERROR([IBM JDK is too old, you need at least 1.5])
-            fi
-            if test "$_jdk_ver" -ge 10600; then
-                HAVE_JAVA6=TRUE
+            if test "$_jdk_ver" -lt 10600; then
+                AC_MSG_ERROR([IBM JDK is too old, you need at least 1.6])
             fi
 
             AC_MSG_RESULT([checked (IBM JDK $_jdk)])
@@ -6933,14 +6929,11 @@ you must use the "--with-jdk-home" configure option explicitly])
             _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED s/[[-A-Za-z]]*//`
             _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
 
-            if test "$_jdk_ver" -lt 10500; then
-                AC_MSG_ERROR([JDK is too old, you need at least 1.5])
+            if test "$_jdk_ver" -lt 10600; then
+                AC_MSG_ERROR([JDK is too old, you need at least 1.6])
             fi
             if test "$_jdk_ver" -gt 10600; then
                 JAVA_CLASSPATH_NOT_SET="1"
-            fi
-            if test "$_jdk_ver" -ge 10600; then
-                HAVE_JAVA6=TRUE
             fi
             if test "$_jdk_ver" -ge 10900; then
                 HAVE_JAVA9=TRUE
@@ -6965,8 +6958,6 @@ else
     JAVA_HOME=
     export JAVA_HOME
 fi
-AC_SUBST([HAVE_JAVA6])
-AC_SUBST([HAVE_JAVA9])
 
 dnl ===================================================================
 dnl Set target Java bytecode version
@@ -7309,9 +7300,6 @@ if test "$with_export_validation" = yes; then
     if test -z "$ENABLE_JAVA"; then
         AC_MSG_RESULT([no, as Java is disabled])
     else
-        if test "$HAVE_JAVA6" != "TRUE"; then
-            AC_MSG_ERROR([officeotron needs at least JRE 1.6; update or specify --without-export-validation])
-        fi
         AC_MSG_RESULT([yes])
         AC_DEFINE(HAVE_EXPORT_VALIDATION)
 
