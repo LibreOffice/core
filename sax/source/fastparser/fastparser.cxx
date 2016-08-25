@@ -777,7 +777,7 @@ void FastSaxParserImpl::parseStream(const InputSource& maStructSource)
                 osl::ResettableMutexGuard aGuard(rEntity.maEventProtector);
                 while (!rEntity.maPendingEvents.empty())
                 {
-                    if (rEntity.maPendingEvents.size() <= rEntity.mnEventLowWater)
+                    if (rEntity.maPendingEvents.size() <= Entity::mnEventLowWater)
                         rEntity.maProduceResume.set(); // start producer again
 
                     EventList *pEventList = rEntity.maPendingEvents.front();
@@ -789,7 +789,7 @@ void FastSaxParserImpl::parseStream(const InputSource& maStructSource)
 
                     aGuard.reset(); // lock
 
-                    if ( rEntity.maPendingEvents.size() <= rEntity.mnEventLowWater )
+                    if ( rEntity.maPendingEvents.size() <= Entity::mnEventLowWater )
                     {
                         aGuard.clear();
                         for (auto aEventIt = pEventList->maEvents.begin();
