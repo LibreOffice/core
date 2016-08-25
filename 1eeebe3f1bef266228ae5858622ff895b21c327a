@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "fa6399be_15abc38a",
+        "filename": "include/xmloff/xmltkmap.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1001192
+      },
+      "writtenOn": "2016-08-25T13:32:00Z",
+      "side": 1,
+      "message": "We will add fasttokens for all those entries in the arrays, before we adopt the respective contexts to use fast contexts.",
+      "parentUuid": "fa6399be_d5cf8bb1",
+      "revId": "1eeebe3f1bef266228ae5858622ff895b21c327a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_55dd3b6f",
         "filename": "include/xmloff/xmltkmap.hxx",
         "patchSetId": 3
