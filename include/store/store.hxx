@@ -156,6 +156,14 @@ public:
             (void) store_acquireHandle (m_hImpl);
     }
 
+    /** Move construction.
+     */
+    inline OStoreDirectory (OStoreDirectory && rhs)
+        : m_hImpl (rhs.m_hImpl)
+    {
+        rhs.m_hImpl = nullptr;
+    }
+
     /** Assignment.
      */
     inline OStoreDirectory & operator= (OStoreDirectory const & rhs)
@@ -165,6 +173,17 @@ public:
         if (m_hImpl)
             (void) store_releaseHandle (m_hImpl);
         m_hImpl = rhs.m_hImpl;
+        return *this;
+    }
+
+    /** Move assignment.
+     */
+    inline OStoreDirectory & operator= (OStoreDirectory && rhs)
+    {
+        if (m_hImpl)
+            (void) store_releaseHandle (m_hImpl);
+        m_hImpl = rhs.m_hImpl;
+        rhs.m_hImpl = nullptr;
         return *this;
     }
 
