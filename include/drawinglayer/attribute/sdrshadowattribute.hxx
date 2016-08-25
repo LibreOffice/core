@@ -56,7 +56,9 @@ namespace drawinglayer
                 const basegfx::BColor& rColor);
             SdrShadowAttribute();
             SdrShadowAttribute(const SdrShadowAttribute& rCandidate);
+            SdrShadowAttribute(SdrShadowAttribute&& rCandidate);
             SdrShadowAttribute& operator=(const SdrShadowAttribute& rCandidate);
+            SdrShadowAttribute& operator=(SdrShadowAttribute&& rCandidate);
             ~SdrShadowAttribute();
 
             // checks if the incarnation is default constructed

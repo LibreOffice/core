@@ -119,6 +119,8 @@ namespace drawinglayer
             /// copy constructor
             ViewInformation3D(const ViewInformation3D& rCandidate);
 
+            ViewInformation3D(ViewInformation3D&& rCandidate);
+
             /// destructor
             ~ViewInformation3D();
 
@@ -127,6 +129,7 @@ namespace drawinglayer
 
             /// assignment operator
             ViewInformation3D& operator=(const ViewInformation3D& rCandidate);
+            ViewInformation3D& operator=(ViewInformation3D&& rCandidate);
 
             /// compare operators
             bool operator==(const ViewInformation3D& rCandidate) const;

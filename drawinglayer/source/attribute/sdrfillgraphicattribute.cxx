@@ -143,6 +143,11 @@ namespace drawinglayer
         {
         }
 
+        SdrFillGraphicAttribute::SdrFillGraphicAttribute(SdrFillGraphicAttribute&& rCandidate)
+        :   mpSdrFillGraphicAttribute(std::move(rCandidate.mpSdrFillGraphicAttribute))
+        {
+        }
+
         SdrFillGraphicAttribute::~SdrFillGraphicAttribute()
         {
         }
@@ -155,6 +160,12 @@ namespace drawinglayer
         SdrFillGraphicAttribute& SdrFillGraphicAttribute::operator=(const SdrFillGraphicAttribute& rCandidate)
         {
             mpSdrFillGraphicAttribute = rCandidate.mpSdrFillGraphicAttribute;
+            return *this;
+        }
+
+        SdrFillGraphicAttribute& SdrFillGraphicAttribute::operator=(SdrFillGraphicAttribute&& rCandidate)
+        {
+            mpSdrFillGraphicAttribute = std::move(rCandidate.mpSdrFillGraphicAttribute);
             return *this;
         }
 

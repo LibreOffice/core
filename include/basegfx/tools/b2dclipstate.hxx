@@ -59,8 +59,10 @@ namespace basegfx
             B2DClipState();
             ~B2DClipState();
             B2DClipState( const B2DClipState& );
+            B2DClipState( B2DClipState&& );
             explicit B2DClipState( const B2DPolyPolygon& );
             B2DClipState& operator=( const B2DClipState& );
+            B2DClipState& operator=( B2DClipState&& );
 
             /// Set clip to 'null' - nothing is visible
             void makeNull();

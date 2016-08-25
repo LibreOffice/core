@@ -105,6 +105,11 @@ namespace drawinglayer
         {
         }
 
+        SdrSceneAttribute::SdrSceneAttribute(SdrSceneAttribute&& rCandidate)
+        :   mpSdrSceneAttribute(std::move(rCandidate.mpSdrSceneAttribute))
+        {
+        }
+
         SdrSceneAttribute::~SdrSceneAttribute()
         {
         }
@@ -117,6 +122,12 @@ namespace drawinglayer
         SdrSceneAttribute& SdrSceneAttribute::operator=(const SdrSceneAttribute& rCandidate)
         {
             mpSdrSceneAttribute = rCandidate.mpSdrSceneAttribute;
+            return *this;
+        }
+
+        SdrSceneAttribute& SdrSceneAttribute::operator=(SdrSceneAttribute&& rCandidate)
+        {
+            mpSdrSceneAttribute = std::move(rCandidate.mpSdrSceneAttribute);
             return *this;
         }
 

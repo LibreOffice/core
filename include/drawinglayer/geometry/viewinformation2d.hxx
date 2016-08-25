@@ -114,11 +114,14 @@ namespace drawinglayer
             /// copy constructor
             ViewInformation2D(const ViewInformation2D& rCandidate);
 
+            ViewInformation2D(ViewInformation2D&& rCandidate);
+
             /// destructor
             ~ViewInformation2D();
 
             /// assignment operator
             ViewInformation2D& operator=(const ViewInformation2D& rCandidate);
+            ViewInformation2D& operator=(ViewInformation2D&& rCandidate);
 
             /// compare operators
             bool operator==(const ViewInformation2D& rCandidate) const;

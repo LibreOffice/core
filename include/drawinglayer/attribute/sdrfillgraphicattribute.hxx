@@ -64,7 +64,9 @@ namespace drawinglayer
                 bool bLogSize);
             SdrFillGraphicAttribute();
             SdrFillGraphicAttribute(const SdrFillGraphicAttribute& rCandidate);
+            SdrFillGraphicAttribute(SdrFillGraphicAttribute&& rCandidate);
             SdrFillGraphicAttribute& operator=(const SdrFillGraphicAttribute& rCandidate);
+            SdrFillGraphicAttribute& operator=(SdrFillGraphicAttribute&& rCandidate);
             ~SdrFillGraphicAttribute();
 
             // checks if the incarnation is default constructed

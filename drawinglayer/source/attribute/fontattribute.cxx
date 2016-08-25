@@ -140,6 +140,11 @@ namespace drawinglayer
         {
         }
 
+        FontAttribute::FontAttribute(FontAttribute&& rCandidate)
+        :   mpFontAttribute(std::move(rCandidate.mpFontAttribute))
+        {
+        }
+
         FontAttribute::~FontAttribute()
         {
         }
@@ -147,6 +152,12 @@ namespace drawinglayer
         FontAttribute& FontAttribute::operator=(const FontAttribute& rCandidate)
         {
             mpFontAttribute = rCandidate.mpFontAttribute;
+            return *this;
+        }
+
+        FontAttribute& FontAttribute::operator=(FontAttribute&& rCandidate)
+        {
+            mpFontAttribute = std::move(rCandidate.mpFontAttribute);
             return *this;
         }
 

@@ -393,6 +393,10 @@ namespace tools
         mpImpl(rOrig.mpImpl)
     {}
 
+    B2DClipState::B2DClipState( B2DClipState&& rOrig ) :
+        mpImpl(std::move(rOrig.mpImpl))
+    {}
+
     B2DClipState::B2DClipState( const B2DPolyPolygon& rPolyPoly ) :
         mpImpl( ImplB2DClipState(rPolyPoly) )
     {}
@@ -400,6 +404,12 @@ namespace tools
     B2DClipState& B2DClipState::operator=( const B2DClipState& rRHS )
     {
         mpImpl = rRHS.mpImpl;
+        return *this;
+    }
+
+    B2DClipState& B2DClipState::operator=( B2DClipState&& rRHS )
+    {
+        mpImpl = std::move(rRHS.mpImpl);
         return *this;
     }
 
