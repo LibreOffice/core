@@ -45,6 +45,11 @@ namespace basegfx
     {
     }
 
+    B2DHomMatrix::B2DHomMatrix(B2DHomMatrix&& rMat) :
+        mpImpl(std::move(rMat.mpImpl))
+    {
+    }
+
     B2DHomMatrix::~B2DHomMatrix()
     {
     }
@@ -63,6 +68,12 @@ namespace basegfx
     B2DHomMatrix& B2DHomMatrix::operator=(const B2DHomMatrix& rMat)
     {
         mpImpl = rMat.mpImpl;
+        return *this;
+    }
+
+    B2DHomMatrix& B2DHomMatrix::operator=(B2DHomMatrix&& rMat)
+    {
+        mpImpl = std::move(rMat.mpImpl);
         return *this;
     }
 

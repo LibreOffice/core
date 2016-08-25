@@ -54,6 +54,7 @@ namespace basegfx
         /// diverse constructors
         B2DPolygon();
         B2DPolygon(const B2DPolygon& rPolygon);
+        B2DPolygon(B2DPolygon&& rPolygon);
         B2DPolygon(const B2DPolygon& rPolygon, sal_uInt32 nIndex, sal_uInt32 nCount);
         B2DPolygon(std::initializer_list<basegfx::B2DPoint> rPoints);
 
@@ -61,6 +62,7 @@ namespace basegfx
 
         /// assignment operator
         B2DPolygon& operator=(const B2DPolygon& rPolygon);
+        B2DPolygon& operator=(B2DPolygon&& rPolygon);
 
         /// unshare this polygon with all internally shared instances
         void makeUnique();

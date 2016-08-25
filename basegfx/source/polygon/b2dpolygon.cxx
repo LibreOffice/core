@@ -1118,6 +1118,10 @@ namespace basegfx
     :   mpPolygon(rPolygon.mpPolygon)
     {}
 
+    B2DPolygon::B2DPolygon(B2DPolygon&& rPolygon)
+    :   mpPolygon(std::move(rPolygon.mpPolygon))
+    {}
+
     B2DPolygon::B2DPolygon(const B2DPolygon& rPolygon, sal_uInt32 nIndex, sal_uInt32 nCount)
     :   mpPolygon(ImplB2DPolygon(*rPolygon.mpPolygon, nIndex, nCount))
     {
@@ -1133,6 +1137,12 @@ namespace basegfx
     B2DPolygon& B2DPolygon::operator=(const B2DPolygon& rPolygon)
     {
         mpPolygon = rPolygon.mpPolygon;
+        return *this;
+    }
+
+    B2DPolygon& B2DPolygon::operator=(B2DPolygon&& rPolygon)
+    {
+        mpPolygon = std::move(rPolygon.mpPolygon);
         return *this;
     }
 

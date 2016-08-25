@@ -49,11 +49,13 @@ namespace basegfx
     public:
         B2DPolyPolygon();
         B2DPolyPolygon(const B2DPolyPolygon& rPolyPolygon);
+        B2DPolyPolygon(B2DPolyPolygon&& rPolyPolygon);
         explicit B2DPolyPolygon(const B2DPolygon& rPolygon);
         ~B2DPolyPolygon();
 
         // assignment operator
         B2DPolyPolygon& operator=(const B2DPolyPolygon& rPolyPolygon);
+        B2DPolyPolygon& operator=(B2DPolyPolygon&& rPolyPolygon);
 
         /// unshare this poly-polygon (and all included polygons) with all internally shared instances
         void makeUnique();
