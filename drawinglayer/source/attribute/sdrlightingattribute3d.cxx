@@ -84,6 +84,11 @@ namespace drawinglayer
         {
         }
 
+        SdrLightingAttribute::SdrLightingAttribute(SdrLightingAttribute&& rCandidate)
+        :   mpSdrLightingAttribute(std::move(rCandidate.mpSdrLightingAttribute))
+        {
+        }
+
         SdrLightingAttribute::~SdrLightingAttribute()
         {
         }
