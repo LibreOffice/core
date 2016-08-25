@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "fa6399be_15d103ce",
+        "filename": "include/rtl/tencinfo.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-08-25T21:53:23Z",
+      "side": 1,
+      "message": "Another place with duplicating functionality:\ngetBestTextEncodingFromLocale() in filter/source/msfilter/util.cxx",
+      "parentUuid": "fa6399be_d5c6ab15",
+      "revId": "a25768715387d6d32cac05a65dd286776578620c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_b5aa176f",
         "filename": "vcl/source/filter/wmf/winmtf.hxx",
         "patchSetId": 11
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "That\u0027s what I\u0027ve already tried (remembering your advise from previous time) - this time, no success.\nWill comment about this.",
       "parentUuid": "fa6399be_b5aa176f",
+      "revId": "a25768715387d6d32cac05a65dd286776578620c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_35d607c6",
+        "filename": "vcl/source/filter/wmf/winmtf.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-08-25T21:53:23Z",
+      "side": 1,
+      "message": "Here\u0027s where you made me that lesson: :-)\nhttps://gerrit.libreoffice.org/#/c/27094/\nThanks BTW!",
+      "parentUuid": "fa6399be_954ef3bf",
       "revId": "a25768715387d6d32cac05a65dd286776578620c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
