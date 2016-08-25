@@ -326,7 +326,7 @@ ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR, bool bEmpty)
     pMat->SetErrorInterpreter( this);
     // A temporary matrix is mutable and ScMatrix::CloneIfConst() returns the
     // very matrix.
-    pMat->SetImmutable( false);
+    pMat->SetMutable();
     SCSIZE nCols, nRows;
     pMat->GetDimensions( nCols, nRows);
     if ( nCols != nC || nRows != nR )
@@ -358,10 +358,15 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
     }
 
     ScTokenMatrixMap::const_iterator aIter;
-    if (pTokenMatrixMap && ((aIter = pTokenMatrixMap->find( pToken))
-                != pTokenMatrixMap->end()))
+    if (pTokenMatrixMap && ((aIter = pTokenMatrixMap->find( pToken)) != pTokenMatrixMap->end()))
     {
-        return (*aIter).second.get()->GetMatrix();
+        /* XXX casting const away here is ugly; ScMatrixToken (to which the
+         * result of this function usually is assigned) should not be forced to
+         * carry a ScConstMatrixRef though.
+         * TODO: a matrix already stored in pTokenMatrixMap should be
+         * read-only and have a copy-on-write mechanism. Previously all tokens
+         * were modifiable so we're already better than before ... */
+        return const_cast<FormulaToken*>((*aIter).second.get())->GetMatrix();
     }
 
     ScMatrixRef pMat = GetNewMat( nMatCols, nMatRows, true);
@@ -371,8 +376,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
     pDok->FillMatrix(*pMat, nTab1, nCol1, nRow1, nCol2, nRow2);
 
     if (pTokenMatrixMap)
-        pTokenMatrixMap->insert( ScTokenMatrixMap::value_type(
-                    pToken, new ScMatrixToken( pMat)));
+        pTokenMatrixMap->insert( ScTokenMatrixMap::value_type( pToken, new ScMatrixToken( pMat)));
 
     return pMat;
 }

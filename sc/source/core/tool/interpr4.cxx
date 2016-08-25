@@ -622,7 +622,7 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 
 // Also releases a TempToken if appropriate.
 
-void ScInterpreter::PushWithoutError( FormulaToken& r )
+void ScInterpreter::PushWithoutError( const FormulaToken& r )
 {
     if ( sp >= MAXSTACK )
         SetError( errStackOverflow );
@@ -689,7 +689,7 @@ void ScInterpreter::PushTempToken( FormulaToken* p )
     }
 }
 
-void ScInterpreter::PushTempTokenWithoutError( FormulaToken* p )
+void ScInterpreter::PushTempTokenWithoutError( const FormulaToken* p )
 {
     p->IncRef();
     if ( sp >= MAXSTACK )
@@ -713,6 +713,26 @@ void ScInterpreter::PushTempToken( const FormulaToken& r )
 {
     if (!IfErrorPushError())
         PushTempTokenWithoutError( r.Clone());
+}
+
+void ScInterpreter::PushTokenRef( const formula::FormulaConstTokenRef& x )
+{
+    if ( sp >= MAXSTACK )
+    {
+        SetError( errStackOverflow );
+    }
+    else
+    {
+        if (nGlobalError)
+        {
+            if (x->GetType() == svError && x->GetError() == nGlobalError)
+                PushTempTokenWithoutError( x.get());
+            else
+                PushTempTokenWithoutError( new FormulaErrorToken( nGlobalError));
+        }
+        else
+            PushTempTokenWithoutError( x.get());
+    }
 }
 
 void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
@@ -794,12 +814,12 @@ void ScInterpreter::PopError()
         SetError(errUnknownStackVariable);
 }
 
-FormulaTokenRef ScInterpreter::PopToken()
+FormulaConstTokenRef ScInterpreter::PopToken()
 {
     if (sp)
     {
         sp--;
-        FormulaToken* p = pStack[ sp ];
+        const FormulaToken* p = pStack[ sp ];
         if (p->GetType() == svError)
             nGlobalError = p->GetError();
         return p;
@@ -816,7 +836,7 @@ double ScInterpreter::PopDouble()
     if( sp )
     {
         --sp;
-        FormulaToken* p = pStack[ sp ];
+        const FormulaToken* p = pStack[ sp ];
         switch (p->GetType())
         {
             case svError:
@@ -848,7 +868,7 @@ svl::SharedString ScInterpreter::PopString()
     if( sp )
     {
         --sp;
-        FormulaToken* p = pStack[ sp ];
+        const FormulaToken* p = pStack[ sp ];
         switch (p->GetType())
         {
             case svError:
@@ -933,7 +953,7 @@ void ScInterpreter::PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab)
     if( sp )
     {
         --sp;
-        FormulaToken* p = pStack[ sp ];
+        const FormulaToken* p = pStack[ sp ];
         switch (p->GetType())
         {
             case svError:
@@ -957,7 +977,7 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
     if( sp )
     {
         --sp;
-        FormulaToken* p = pStack[ sp ];
+        const FormulaToken* p = pStack[ sp ];
         switch (p->GetType())
         {
             case svError:
@@ -1044,7 +1064,7 @@ void ScInterpreter::PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
     if( sp )
     {
         --sp;
-        FormulaToken* p = pStack[ sp ];
+        const FormulaToken* p = pStack[ sp ];
         switch (p->GetType())
         {
             case svError:
@@ -1083,7 +1103,7 @@ void ScInterpreter::PopDoubleRef( ScRange & rRange, short & rParam, size_t & rRe
 {
     if (sp)
     {
-        formula::FormulaToken* pToken = pStack[ sp-1 ];
+        const formula::FormulaToken* pToken = pStack[ sp-1 ];
         switch (pToken->GetType())
         {
             case svError:
@@ -1128,7 +1148,7 @@ void ScInterpreter::PopDoubleRef( ScRange& rRange, bool bDontCheckForTableOp )
     if( sp )
     {
         --sp;
-        FormulaToken* p = pStack[ sp ];
+        const FormulaToken* p = pStack[ sp ];
         switch (p->GetType())
         {
             case svError:
@@ -1154,7 +1174,7 @@ void ScInterpreter::PopExternalSingleRef(sal_uInt16& rFileId, OUString& rTabName
     }
 
     --sp;
-    FormulaToken* p = pStack[sp];
+    const FormulaToken* p = pStack[sp];
     StackVar eType = p->GetType();
 
     if (eType == svError)
@@ -1233,7 +1253,7 @@ void ScInterpreter::PopExternalDoubleRef(sal_uInt16& rFileId, OUString& rTabName
     }
 
     --sp;
-    FormulaToken* p = pStack[sp];
+    const FormulaToken* p = pStack[sp];
     StackVar eType = p->GetType();
 
     if (eType == svError)
@@ -1405,7 +1425,7 @@ bool ScInterpreter::ConvertMatrixParameters()
     SCSIZE nJumpCols = 0, nJumpRows = 0;
     for ( sal_uInt16 i=1; i <= nParams && i <= sp; ++i )
     {
-        FormulaToken* p = pStack[ sp - i ];
+        const FormulaToken* p = pStack[ sp - i ];
         if ( p->GetOpCode() != ocPush && p->GetOpCode() != ocMissing)
         {
             OSL_FAIL( "ConvertMatrixParameters: not a push");
@@ -1428,7 +1448,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                     if ( ScParameterClassification::GetParameterType( pCur, nParams - i)
                             == ScParameterClassification::Value )
                     {   // only if single value expected
-                        ScMatrixRef pMat = p->GetMatrix();
+                        ScConstMatrixRef pMat = p->GetMatrix();
                         if ( !pMat )
                             SetError( errUnknownVariable);
                         else
@@ -1532,10 +1552,9 @@ bool ScInterpreter::ConvertMatrixParameters()
         short nStart = nPC - 1;     // restart on current code (-1)
         short nNext = nPC;          // next instruction after subroutine
         short nStop = nPC + 1;      // stop subroutine before reaching that
-        FormulaTokenRef xNew;
+        FormulaConstTokenRef xNew;
         ScTokenMatrixMap::const_iterator aMapIter;
-        if (pTokenMatrixMap && ((aMapIter = pTokenMatrixMap->find( pCur)) !=
-                    pTokenMatrixMap->end()))
+        if (pTokenMatrixMap && ((aMapIter = pTokenMatrixMap->find( pCur)) != pTokenMatrixMap->end()))
             xNew = (*aMapIter).second;
         else
         {
@@ -1545,15 +1564,14 @@ bool ScInterpreter::ConvertMatrixParameters()
             ScTokenVec* pParams = new ScTokenVec( nParams);
             for ( sal_uInt16 i=1; i <= nParams && sp > 0; ++i )
             {
-                FormulaToken* p = pStack[ --sp ];
+                const FormulaToken* p = pStack[ --sp ];
                 p->IncRef();
                 // store in reverse order such that a push may simply iterate
                 (*pParams)[ nParams - i ] = p;
             }
             pJumpMat->SetJumpParameters( pParams);
             xNew = new ScJumpMatrixToken( pJumpMat );
-            GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type( pCur,
-                        xNew));
+            GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type( pCur, xNew));
         }
         PushTempTokenWithoutError( xNew.get());
         // set continuation point of path for main code line
@@ -1568,7 +1586,7 @@ ScMatrixRef ScInterpreter::PopMatrix()
     if( sp )
     {
         --sp;
-        FormulaToken* p = pStack[ sp ];
+        const FormulaToken* p = pStack[ sp ];
         switch (p->GetType())
         {
             case svError:
@@ -1576,7 +1594,10 @@ ScMatrixRef ScInterpreter::PopMatrix()
                 break;
             case svMatrix:
                 {
-                    ScMatrix* pMat = p->GetMatrix();
+                    // ScMatrix itself maintains an im/mutable flag that should
+                    // be obeyed where necessary.. so we can return ScMatrixRef
+                    // here instead of ScConstMatrixRef.
+                    ScMatrix* pMat = const_cast<FormulaToken*>(p)->GetMatrix();
                     if ( pMat )
                         pMat->SetErrorInterpreter( this);
                     else
@@ -1602,8 +1623,8 @@ sc::RangeMatrix ScInterpreter::PopRangeMatrix()
             case svMatrix:
             {
                 --sp;
-                FormulaToken* p = pStack[sp];
-                aRet.mpMat = p->GetMatrix();
+                const FormulaToken* p = pStack[sp];
+                aRet.mpMat = const_cast<FormulaToken*>(p)->GetMatrix();
                 if (aRet.mpMat)
                 {
                     aRet.mpMat->SetErrorInterpreter(this);
@@ -1906,7 +1927,7 @@ StackVar ScInterpreter::GetStackType( sal_uInt8 nParam )
 void ScInterpreter::ReverseStack( sal_uInt8 nParamCount )
 {
     //reverse order of parameter stack
-    FormulaToken* p;
+    const FormulaToken* p;
     assert( sp >= nParamCount && " less stack elements than parameters");
     short nStackParams = std::min<short>( sp, nParamCount);
     for ( short i = 0; i < short( nStackParams / 2 ); i++ )
@@ -3879,7 +3900,7 @@ StackVar ScInterpreter::Interpret()
             if ( nStackBase > sp )
                 nStackBase = sp;        // underflow?!?
             sp = nStackBase;
-            PushTempToken( (*aTokenMatrixMapIter).second.get());
+            PushTokenRef( (*aTokenMatrixMapIter).second);
         }
         else
         {
@@ -4572,7 +4593,7 @@ StackVar ScInterpreter::Interpret()
         xResult = new FormulaErrorToken( errUnknownStackVariable);
 
     // release tokens in expression stack
-    FormulaToken** p = pStack;
+    const FormulaToken** p = pStack;
     while( maxsp-- )
         (*p++)->DecRef();
 
@@ -4580,7 +4601,7 @@ StackVar ScInterpreter::Interpret()
     if (eType == svMatrix)
         // Results are immutable in case they would be reused as input for new
         // interpreters.
-        xResult.get()->GetMatrix()->SetImmutable( true);
+        xResult.get()->GetMatrix()->SetImmutable();
     return eType;
 }
 

@@ -1895,7 +1895,7 @@ void ScInterpreter::ScIfs_MS()
     }
 
     //push result :
-    FormulaTokenRef xToken( PopToken() );
+    FormulaConstTokenRef xToken( PopToken() );
     if ( xToken )
     {
         // Remove unused arguments of IFS from the stack before pushing the result.
@@ -1904,7 +1904,7 @@ void ScInterpreter::ScIfs_MS()
             Pop();
             nParamCount--;
         }
-        PushTempToken( xToken.get() );
+        PushTokenRef( xToken );
     }
     else
         PushError( errUnknownStackVariable );
@@ -2006,7 +2006,7 @@ void ScInterpreter::ScSwitch_MS()
     }
 
     // push result
-    FormulaTokenRef xToken( PopToken() );
+    FormulaConstTokenRef xToken( PopToken() );
     if ( xToken )
     {
         // Remove unused arguments of SWITCH from the stack before pushing the result.
@@ -2015,7 +2015,7 @@ void ScInterpreter::ScSwitch_MS()
             Pop();
             nParamCount--;
         }
-        PushTempToken( xToken.get() );
+        PushTokenRef( xToken );
     }
     else
         PushError( errUnknownStackVariable );

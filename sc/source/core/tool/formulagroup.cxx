@@ -158,7 +158,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
     // the group.
 
     ScAddress aTmpPos = rTopPos;
-    std::vector<formula::FormulaTokenRef> aResults;
+    std::vector<formula::FormulaConstTokenRef> aResults;
     aResults.reserve(xGroup->mnLength);
     CachedTokensType aCachedTokens;
 

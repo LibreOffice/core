@@ -419,7 +419,7 @@ void ScDocument::SetFormulaResults( const ScAddress& rTopPos, const double* pRes
 }
 
 void ScDocument::SetFormulaResults(
-    const ScAddress& rTopPos, const formula::FormulaTokenRef* pResults, size_t nLen )
+    const ScAddress& rTopPos, const formula::FormulaConstTokenRef* pResults, size_t nLen )
 {
     ScTable* pTab = FetchTable(rTopPos.Tab());
     if (!pTab)

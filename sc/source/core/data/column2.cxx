@@ -2752,7 +2752,7 @@ void ScColumn::SetFormulaResults( SCROW nRow, const double* pResults, size_t nLe
     }
 }
 
-void ScColumn::SetFormulaResults( SCROW nRow, const formula::FormulaTokenRef* pResults, size_t nLen )
+void ScColumn::SetFormulaResults( SCROW nRow, const formula::FormulaConstTokenRef* pResults, size_t nLen )
 {
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
     sc::CellStoreType::iterator it = aPos.first;
@@ -2768,7 +2768,7 @@ void ScColumn::SetFormulaResults( SCROW nRow, const formula::FormulaTokenRef* pR
     sc::formula_block::iterator itCell = sc::formula_block::begin(*it->data);
     std::advance(itCell, aPos.second);
 
-    const formula::FormulaTokenRef* pResEnd = pResults + nLen;
+    const formula::FormulaConstTokenRef* pResEnd = pResults + nLen;
     for (; pResults != pResEnd; ++pResults, ++itCell)
     {
         ScFormulaCell& rCell = **itCell;

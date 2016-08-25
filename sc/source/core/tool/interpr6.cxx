@@ -915,7 +915,7 @@ void ScInterpreter::ScRawSubtract()
         return;
 
     // Fish the 1st parameter from the stack and push it on top.
-    FormulaToken* p = pStack[ sp - nParamCount ];
+    const FormulaToken* p = pStack[ sp - nParamCount ];
     PushWithoutError( *p );
     // Obtain the minuend.
     double fRes = GetDouble();
