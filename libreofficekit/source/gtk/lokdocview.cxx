@@ -424,6 +424,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_VIEW_LOCK";
     case LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
         return "LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED";
+    case LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
+        return "LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED";
     }
     g_assert(false);
     return nullptr;
@@ -1343,6 +1345,10 @@ callback (gpointer pData)
         break;
     }
     case LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
+    {
+        break;
+    }
+    case LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
     {
         break;
     }

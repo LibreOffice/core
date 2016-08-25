@@ -190,6 +190,7 @@ class SW_DLLPUBLIC SwRangeRedline : public SwPaM
     void CopyToSection();
     void DelCopyOfSection(size_t nMyPos);
     void MoveFromSection(size_t nMyPos);
+    void MaybeNotifyModification();
 
 public:
     SwRangeRedline( RedlineType_t eType, const SwPaM& rPam );
@@ -211,16 +212,9 @@ public:
     bool IsVisible() const { return bIsVisible; }
     bool IsDelLastPara() const { return bDelLastPara; }
 
-    void SetStart( const SwPosition& rPos, SwPosition* pSttPtr = nullptr )
-    {
-        if( !pSttPtr ) pSttPtr = Start();
-        *pSttPtr = rPos;
-    }
-    void SetEnd( const SwPosition& rPos, SwPosition* pEndPtr = nullptr )
-    {
-        if( !pEndPtr ) pEndPtr = End();
-        *pEndPtr = rPos;
-    }
+    void SetStart( const SwPosition& rPos, SwPosition* pSttPtr = nullptr );
+    void SetEnd( const SwPosition& rPos, SwPosition* pEndPtr = nullptr );
+
     /// Do we have a valid selection?
     bool HasValidRange() const;
 

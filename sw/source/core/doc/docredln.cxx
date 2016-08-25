@@ -57,6 +57,8 @@
 
 using namespace com::sun::star;
 
+enum class RedlineNotification { Add, Remove, Modify };
+
 #ifdef DBG_UTIL
 
     void sw_DebugRedline( const SwDoc* pDoc )
@@ -299,13 +301,15 @@ bool SwExtraRedlineTable::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox&
 }
 
 /// Emits LOK notification about one addition / removal of a redline item.
-static void lcl_RedlineNotification(bool bAdd, size_t nPos, SwRangeRedline* pRedline)
+static void lcl_RedlineNotification(RedlineNotification nType, size_t nPos, SwRangeRedline* pRedline)
 {
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
     boost::property_tree::ptree aRedline;
-    aRedline.put("action", (bAdd ? "Add" : "Remove"));
+    aRedline.put("action", (nType == RedlineNotification::Add ? "Add" :
+                            (nType == RedlineNotification::Remove ? "Remove" :
+                             (nType == RedlineNotification::Modify ? "Modify" : "???"))));
     aRedline.put("index", nPos);
     aRedline.put("author", pRedline->GetAuthorString(1).toUtf8().getStr());
     aRedline.put("type", SwRedlineTypeToOUString(pRedline->GetRedlineData().GetType()).toUtf8().getStr());
@@ -322,7 +326,7 @@ static void lcl_RedlineNotification(bool bAdd, size_t nPos, SwRangeRedline* pRed
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED, aPayload.c_str());
+        pViewShell->libreOfficeKitViewCallback(nType == RedlineNotification::Modify ? LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED : LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED, aPayload.c_str());
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }
@@ -333,7 +337,7 @@ bool SwRedlineTable::Insert( SwRangeRedline* p )
     {
         std::pair<vector_type::const_iterator, bool> rv = maVector.insert( p );
         size_t nP = rv.first - begin();
-        lcl_RedlineNotification(/*bAdd=*/true, nP, p);
+        lcl_RedlineNotification(RedlineNotification::Add, nP, p);
         p->CallDisplayFunc(nP);
         return rv.second;
     }
@@ -493,7 +497,7 @@ bool SwRedlineTable::Remove( const SwRangeRedline* p )
 
 void SwRedlineTable::Remove( sal_uInt16 nP )
 {
-    lcl_RedlineNotification(/*bAdd=*/false, nP, maVector[nP]);
+    lcl_RedlineNotification(RedlineNotification::Remove, nP, maVector[nP]);
     SwDoc* pDoc = nullptr;
     if( !nP && 1 == size() )
         pDoc = maVector.front()->GetDoc();
@@ -520,7 +524,7 @@ void SwRedlineTable::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
     size_t nCount = 0;
     for( vector_type::const_iterator it = maVector.begin() + nP; it != maVector.begin() + nP + nL; ++it )
     {
-        lcl_RedlineNotification(/*bAdd=*/false, nP + nCount, *it);
+        lcl_RedlineNotification(RedlineNotification::Remove, nP + nCount, *it);
         delete *it;
         ++nCount;
     }
@@ -938,6 +942,38 @@ SwRangeRedline::~SwRangeRedline()
         delete pContentSect;
     }
     delete pRedlineData;
+}
+
+void SwRangeRedline::MaybeNotifyModification()
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    const SwRedlineTable& rRedTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    for (SwRedlineTable::size_type i = 0; i < rRedTable.size(); ++i)
+    {
+        if (rRedTable[i] == this)
+        {
+            lcl_RedlineNotification(RedlineNotification::Modify, i, this);
+            break;
+        }
+    }
+}
+
+void SwRangeRedline::SetStart( const SwPosition& rPos, SwPosition* pSttPtr )
+{
+    if( !pSttPtr ) pSttPtr = Start();
+    *pSttPtr = rPos;
+
+    MaybeNotifyModification();
+}
+
+void SwRangeRedline::SetEnd( const SwPosition& rPos, SwPosition* pEndPtr )
+{
+    if( !pEndPtr ) pEndPtr = End();
+    *pEndPtr = rPos;
+
+    MaybeNotifyModification();
 }
 
 /// Do we have a valid Selection?
