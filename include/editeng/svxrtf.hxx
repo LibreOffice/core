@@ -89,8 +89,6 @@ public:
     EditNodeIdx* MakeNodeIdx() const;
 };
 
-#define ACTION_INSERTTEXT       1
-
 typedef std::map<short, std::unique_ptr<vcl::Font>> SvxRTFFontTbl;
 typedef std::map<sal_uInt16, std::unique_ptr<SvxRTFStyleType>> SvxRTFStyleTbl;
 

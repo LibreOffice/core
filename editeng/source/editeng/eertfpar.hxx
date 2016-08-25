@@ -26,9 +26,6 @@
 
 class EditEngine;
 
-
-#define ACTION_INSERTPARABRK    2
-
 class EditRTFParser : public SvxRTFParser
 {
 private:
@@ -39,7 +36,7 @@ private:
 
     sal_uInt16              nDefFont;
     sal_uInt16              nDefTab;
-    sal_uInt8               nLastAction;
+    bool                bLastActionInsertParaBreak;
 
 protected:
     virtual void        InsertPara() override;

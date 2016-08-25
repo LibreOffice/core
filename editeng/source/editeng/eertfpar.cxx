@@ -53,14 +53,13 @@ ImportInfo::~ImportInfo()
 EditRTFParser::EditRTFParser(
     SvStream& rIn, EditSelection aSel, SfxItemPool& rAttrPool, EditEngine* pEditEngine) :
     SvxRTFParser(rAttrPool, rIn, nullptr),
+    aCurSel(aSel),
     mpEditEngine(pEditEngine),
-    aRTFMapMode(MAP_TWIP)
+    aRTFMapMode(MAP_TWIP),
+    nDefFont(0),
+    nDefTab(0),
+    bLastActionInsertParaBreak(false)
 {
-    aCurSel         = aSel;
-    nDefFont        = 0;
-    nDefTab         = 0;
-    nLastAction     = 0;
-
     SetInsPos(EditPosition(mpEditEngine, &aCurSel));
 
     // Convert the twips values ...
@@ -106,7 +105,7 @@ SvParserState EditRTFParser::CallParser()
         mpEditEngine->CallImportHandler(aImportInfo);
     }
 
-    if ( nLastAction == ACTION_INSERTPARABRK )
+    if (bLastActionInsertParaBreak)
     {
         ContentNode* pCurNode = aCurSel.Max().GetNode();
         sal_Int32 nPara = mpEditEngine->GetEditDoc().GetPos(pCurNode);
@@ -247,7 +246,7 @@ void EditRTFParser::InsertText()
         mpEditEngine->CallImportHandler(aImportInfo);
     }
     aCurSel = mpEditEngine->InsertText(aCurSel, aText);
-    nLastAction = ACTION_INSERTTEXT;
+    bLastActionInsertParaBreak = false;
 }
 
 void EditRTFParser::InsertPara()
@@ -258,7 +257,7 @@ void EditRTFParser::InsertPara()
         mpEditEngine->CallImportHandler(aImportInfo);
     }
     aCurSel = mpEditEngine->InsertParaBreak(aCurSel);
-    nLastAction = ACTION_INSERTPARABRK;
+    bLastActionInsertParaBreak = true;
 }
 
 void EditRTFParser::MovePos( bool const bForward )
@@ -564,7 +563,7 @@ void EditRTFParser::ReadField()
             SvxFieldItem aField( SvxURLField( aFldInst, aFldRslt, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD  );
             aCurSel = mpEditEngine->InsertField(aCurSel, aField);
             mpEditEngine->UpdateFieldsOnly();
-            nLastAction = ACTION_INSERTTEXT;
+            bLastActionInsertParaBreak = false;
         }
     }
 
