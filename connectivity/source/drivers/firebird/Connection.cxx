@@ -55,6 +55,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -846,11 +847,8 @@ void SAL_CALL Connection::documentEventOccured( const DocumentEvent& Event )
             }
             catch (const SQLException& e)
             {
-                WrappedTargetRuntimeException aExceptionWrapper;
-                aExceptionWrapper.Context = e.Context;
-                aExceptionWrapper.Message = e.Message;
-                aExceptionWrapper.TargetException <<= e;
-                throw WrappedTargetRuntimeException( aExceptionWrapper );
+                auto a = cppu::getCaughtException();
+                throw WrappedTargetRuntimeException(e.Message, e.Context, a);
             }
 
 
