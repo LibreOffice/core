@@ -212,6 +212,11 @@ XPolygon::XPolygon( const XPolygon& rXPoly )
 {
 }
 
+XPolygon::XPolygon( XPolygon&& rXPoly )
+    : pImpXPolygon(std::move(rXPoly.pImpXPolygon))
+{
+}
+
 /// create a XPolygon out of a standard polygon
 XPolygon::XPolygon( const tools::Polygon& rPoly )
     : pImpXPolygon( rPoly.GetSize() )
@@ -450,6 +455,12 @@ Point& XPolygon::operator[]( sal_uInt16 nPos )
 XPolygon& XPolygon::operator=( const XPolygon& rXPoly )
 {
     pImpXPolygon = rXPoly.pImpXPolygon;
+    return *this;
+}
+
+XPolygon& XPolygon::operator=( XPolygon&& rXPoly )
+{
+    pImpXPolygon = std::move(rXPoly.pImpXPolygon);
     return *this;
 }
 

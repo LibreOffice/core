@@ -63,6 +63,7 @@ protected:
 public:
     XPolygon( sal_uInt16 nSize=16, sal_uInt16 nResize=16 );
     XPolygon( const XPolygon& rXPoly );
+    XPolygon( XPolygon&& rXPoly );
     XPolygon( const tools::Polygon& rPoly );
     XPolygon( const Rectangle& rRect, long nRx = 0, long nRy = 0 );
     XPolygon( const Point& rCenter, long nRx, long nRy,
@@ -85,6 +86,7 @@ public:
     const Point&    operator[]( sal_uInt16 nPos ) const;
           Point&    operator[]( sal_uInt16 nPos );
     XPolygon&       operator=( const XPolygon& rXPoly );
+    XPolygon&       operator=( XPolygon&& rXPoly );
     bool            operator==( const XPolygon& rXPoly ) const;
 
     XPolyFlags  GetFlags( sal_uInt16 nPos ) const;
