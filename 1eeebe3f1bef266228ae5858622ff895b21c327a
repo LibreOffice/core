@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_55c45b91",
+        "filename": "include/xmloff/xmltkmap.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-25T11:36:12Z",
+      "side": 1,
+      "message": "Please no leading :: in namespaces.",
+      "range": {
+        "startLine": 34,
+        "startChar": 37,
+        "endLine": 34,
+        "endChar": 39
+      },
+      "revId": "1eeebe3f1bef266228ae5858622ff895b21c327a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_d5cf8bb1",
+        "filename": "include/xmloff/xmltkmap.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-25T11:36:12Z",
+      "side": 1,
+      "message": "So what happens with all the places that define arrays of SvXMLTokenMapEntry, they now have a nFastToken member with an undefined value. Unless all compilers emit a 0 in that case (do they?)",
+      "revId": "1eeebe3f1bef266228ae5858622ff895b21c327a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_55dd3b6f",
+        "filename": "include/xmloff/xmltkmap.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-25T11:36:12Z",
+      "side": 1,
+      "message": "Should be\n\n const SvXMLTokenMapEntry_Impl\u0026 rEntry\n\nAnd as this gets the _Impl struct passed it should be a private member function.",
+      "range": {
+        "startLine": 61,
+        "startChar": 20,
+        "endLine": 61,
+        "endChar": 51
+      },
+      "revId": "1eeebe3f1bef266228ae5858622ff895b21c327a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_15cae3a1",
+        "filename": "xmloff/source/core/xmltkmap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-25T11:36:12Z",
+      "side": 1,
+      "message": "Inserting a defaulted parameter before another defaulted parameter isn\u0027t a good idea. Places that passed a nTok value already would now pass the value as nFastTok instead. Yes this is an _Impl that is only used internally, but..",
+      "range": {
+        "startLine": 40,
+        "startChar": 29,
+        "endLine": 40,
+        "endChar": 51
+      },
+      "revId": "1eeebe3f1bef266228ae5858622ff895b21c327a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_35cfe7b1",
+        "filename": "xmloff/source/core/xmltkmap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-25T11:36:12Z",
+      "side": 1,
+      "message": "Use OUString() instead of \"\". Since that still would create an instance upon each call, a static instance of an empty OUString local to this function would be better.",
+      "range": {
+        "startLine": 102,
+        "startChar": 37,
+        "endLine": 102,
+        "endChar": 39
+      },
+      "revId": "1eeebe3f1bef266228ae5858622ff895b21c327a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
