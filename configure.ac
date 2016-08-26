@@ -6896,11 +6896,7 @@ if test "$ENABLE_JAVA" != ""; then
         if test `$JAVAINTERPRETER -version 2>&1 | $GREP -c "Kaffe"` -gt 0; then
             AC_MSG_ERROR([No valid check available. Please check the block for your desired java in configure.ac])
         elif test `$JAVAINTERPRETER --version 2>&1 | $GREP -c "GNU libgcj"` -gt 0; then
-            JDK=gcj
-            AC_MSG_RESULT([checked (gcj)])
-            _gij_version=`$JAVAINTERPRETER --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`
-            _gij_longver=`echo $_gij_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-
+            AC_MSG_ERROR([No valid check available. Please check the block for your desired java in configure.ac])
         elif test `$JAVAINTERPRETER -version 2>&1 | $AWK '{ print }' | $GREP -c "BEA"` -gt 0; then
             AC_MSG_ERROR([No valid check available. Please check the block for your desired java in configure.ac])
         elif test `$JAVAINTERPRETER -version 2>&1 | $AWK '{ print }' | $GREP -c "IBM"` -gt 0; then
@@ -6951,7 +6947,7 @@ you must use the "--with-jdk-home" configure option explicitly])
             JAVAFLAGS=-J-Xmx128M
         fi
     else
-        AC_MSG_ERROR([Java not found. You need at least jdk-1.5, or gcj-4])
+        AC_MSG_ERROR([Java not found. You need at least jdk-1.6])
     fi
 else
     dnl Java disabled
@@ -6976,11 +6972,7 @@ dnl ===================================================================
 dnl Checks for javac
 dnl ===================================================================
 if test "$ENABLE_JAVA" != ""; then
-    if test "$JDK" = "gcj"; then
-        javacompiler=`echo $with_java | $SED -e "s/gij/gcj/g" | $SED -e "s/java/javac/g"`
-    else
-        javacompiler="javac"
-    fi
+    javacompiler="javac"
     if test -z "$with_jdk_home"; then
         AC_PATH_PROG(JAVACOMPILER, $javacompiler)
     else
@@ -6999,25 +6991,7 @@ if test "$ENABLE_JAVA" != ""; then
         fi
         JAVACOMPILER=`win_short_path_for_make "$JAVACOMPILER"`
     fi
-
-    if test `$JAVACOMPILER -version 2>&1 | $GREP -c "Eclipse Java Compiler"` -gt 0; then
-        AC_MSG_CHECKING([re-checking JDK])
-        JDK=gcj
-        AC_MSG_RESULT([checked (ecj)])
-        _gij_longver="40200"
-    fi
 fi
-
-JAVACISGCJ=""
-dnl ===================================================================
-dnl Checks that javac is gcj
-dnl ===================================================================
-if test "$ENABLE_JAVA" != ""; then
-    if test `$JAVACOMPILER --version 2>&1 | $GREP -c "GCC"` -gt 0; then
-        JAVACISGCJ="yes"
-    fi
-fi
-AC_SUBST(JAVACISGCJ)
 
 dnl ===================================================================
 dnl Checks for javadoc
@@ -7134,24 +7108,21 @@ _ACEOF
         fi
     fi
 
-    dnl second sanity check JAVA_HOME if possible
-    if test "$JDK" != "gcj" -o "$_gij_longver" -ge "40200"; then
-        # now check if $JAVA_HOME is really valid
-        if test "$_os" = "Darwin" -o "$OS_FOR_BUILD" = MACOSX; then
-            if test ! -f "$JAVA_HOME/lib/jvm.cfg" -a "x$with_jdk_home" = "x"; then
-                JAVA_HOME_OK="NO"
-            fi
-        elif test ! -d "$JAVA_HOME/jre" -a "x$with_jdk_home" = "x"; then
+    # now check if $JAVA_HOME is really valid
+    if test "$_os" = "Darwin" -o "$OS_FOR_BUILD" = MACOSX; then
+        if test ! -f "$JAVA_HOME/lib/jvm.cfg" -a "x$with_jdk_home" = "x"; then
             JAVA_HOME_OK="NO"
         fi
-        if test "$JAVA_HOME_OK" = "NO"; then
-            AC_MSG_WARN([JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script])
-            AC_MSG_WARN([attempted to find JAVA_HOME automatically, but apparently it failed])
-            AC_MSG_WARN([in case JAVA_HOME is incorrectly set, some projects with not be built correctly])
-            add_warning "JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script"
-            add_warning "attempted to find JAVA_HOME automatically, but apparently it failed"
-            add_warning "in case JAVA_HOME is incorrectly set, some projects with not be built correctly"
-        fi
+    elif test ! -d "$JAVA_HOME/jre" -a "x$with_jdk_home" = "x"; then
+        JAVA_HOME_OK="NO"
+    fi
+    if test "$JAVA_HOME_OK" = "NO"; then
+        AC_MSG_WARN([JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script])
+        AC_MSG_WARN([attempted to find JAVA_HOME automatically, but apparently it failed])
+        AC_MSG_WARN([in case JAVA_HOME is incorrectly set, some projects with not be built correctly])
+        add_warning "JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script"
+        add_warning "attempted to find JAVA_HOME automatically, but apparently it failed"
+        add_warning "in case JAVA_HOME is incorrectly set, some projects with not be built correctly"
     fi
     PathFormat "$JAVA_HOME"
     JAVA_HOME="$formatted_path"
@@ -12080,12 +12051,7 @@ EOF
         </project>
 EOF
 
-        oldJAVA_HOME=$JAVA_HOME
-        if test "$JAVACISGCJ" = "yes"; then
-            JAVA_HOME=; export JAVA_HOME
-            ant_gcj="-Dbuild.compiler=gcj"
-        fi
-        AC_TRY_COMMAND("$ANT" $ant_gcj -buildfile conftest.xml 1>&2)
+        AC_TRY_COMMAND("$ANT" -buildfile conftest.xml 1>&2)
         if test $? = 0 -a -f ./conftest.class; then
             AC_MSG_RESULT([Ant works])
             if test -z "$WITH_ANT_HOME"; then
@@ -12104,7 +12070,6 @@ EOF
             ANT_HOME=""
             add_warning "Ant does not work - Some Java projects will not build!"
         fi
-        JAVA_HOME=$oldJAVA_HOME
         rm -f conftest* core core.* *.core
     fi
     if test -z "$ANT_HOME"; then
@@ -12997,7 +12962,7 @@ else
     case "$host_os" in
 
     aix*|dragonfly*|freebsd*|linux-gnu*|*netbsd*|openbsd*)
-        if test "$ENABLE_JAVA" != "" -a "$JDK"!="gcj"; then
+        if test "$ENABLE_JAVA" != ""; then
             pathmunge "$JAVA_HOME/bin" "after"
         fi
         ;;
@@ -13036,7 +13001,7 @@ else
             pathmunge "$COMPATH/bin" "before"
             pathmunge "$WINDOWS_SDK_HOME/bin/x86" "before"
         fi
-        if test "$ENABLE_JAVA" != "" -a "$JDK"!="gcj"; then
+        if test "$ENABLE_JAVA" != ""; then
             if test -d "$JAVA_HOME/jre/bin/client"; then
                 pathmunge "$JAVA_HOME/jre/bin/client" "before"
             fi
@@ -13049,7 +13014,7 @@ else
 
     solaris*)
         pathmunge "/usr/css/bin" "before"
-        if test "$ENABLE_JAVA" != "" -a "$JDK"!="gcj"; then
+        if test "$ENABLE_JAVA" != ""; then
             pathmunge "$JAVA_HOME/bin" "after"
         fi
         ;;

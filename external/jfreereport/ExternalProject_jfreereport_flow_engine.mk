@@ -32,11 +32,8 @@ $(call gb_ExternalProject_get_state_target,jfreereport_flow_engine,build) :
 			-Dlibloader.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libloader)/dist/libloader-$(LIBLOADER_VERSION).jar \
 			-Dlibserializer.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libserializer)/dist/libserializer-$(LIBBASE_VERSION).jar \
 			-Dlibxml.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libxml)/dist/libxml-$(LIBXML_VERSION).jar \
-			$(if $(filter yes,$(JAVACISGCJ))\
-				,-Dbuild.compiler=gcj \
-				,-Dant.build.javac.source=$(JAVA_SOURCE_VER) \
-				 -Dant.build.javac.target=$(JAVA_TARGET_VER) \
-			) \
+			-Dant.build.javac.source=$(JAVA_SOURCE_VER) \
+			-Dant.build.javac.target=$(JAVA_TARGET_VER) \
 			$(if $(debug),-Dbuild.debug="on") jar \
 	)
 
