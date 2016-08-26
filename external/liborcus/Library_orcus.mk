@@ -30,6 +30,10 @@ $(eval $(call gb_Library_set_include,orcus,\
 $(eval $(call gb_Library_add_defs,orcus,\
 	-DBOOST_ALL_NO_LIB \
 	-D__ORCUS_BUILDING_DLL \
+	-D__ORCUS_GNUMERIC \
+	-D__ORCUS_ODS \
+	-D__ORCUS_XLSX \
+	-D__ORCUS_XLS_XML \
 ))
 
 $(eval $(call gb_Library_use_libraries,orcus,\
