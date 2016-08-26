@@ -272,7 +272,7 @@ IMPL_LINK_TYPED(ScreenshotAnnotationDlg_Impl, saveButtonHandler, Button*, pButto
 
     uno::Reference< uno::XComponentContext > xContext = cppu::defaultBootstrap_InitialComponentContext();
     const uno::Reference< ui::dialogs::XFilePicker3 > xFilePicker =
-        ui::dialogs::FilePicker::createWithMode(xContext, ui::dialogs::TemplateDescription::FILESAVE_SIMPLE);
+        ui::dialogs::FilePicker::createWithMode(xContext, ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION);
 
     xFilePicker->setTitle(maSaveAsText);
 
@@ -281,9 +281,10 @@ IMPL_LINK_TYPED(ScreenshotAnnotationDlg_Impl, saveButtonHandler, Button*, pButto
         xFilePicker->setDisplayDirectory(maLastFolderURL);
     }
 
-    xFilePicker->appendFilter("*.png", "*.PNG");
+    xFilePicker->appendFilter("*.png", "*.png");
     xFilePicker->setCurrentFilter("*.png");
-    xFilePicker->setDefaultName(OStringToOUString(aDerivedFileName, RTL_TEXTENCODING_UTF8)); // +".png");
+    xFilePicker->setDefaultName(OStringToOUString(aDerivedFileName, RTL_TEXTENCODING_UTF8));
+    xFilePicker->setMultiSelectionMode(sal_False);
 
     if (xFilePicker->execute() == ui::dialogs::ExecutableDialogResults::OK)
     {
@@ -370,26 +371,34 @@ void ScreenshotAnnotationDlg_Impl::PaintControlDataEntry(
 {
     if (mpPicture && mpVirtualBufferDevice)
     {
-        const basegfx::B2IRange& rRange = rEntry.getB2IRange();
-        static double fRelativeEdgeRadius(0.1);
-        basegfx::B2DRange aB2DRange(rRange);
+        basegfx::B2DRange aB2DRange(rEntry.getB2IRange());
 
-        // grow one pixel to be a little bit outside
-        aB2DRange.grow(1);
+        // grow in pixels to be a little bit 'outside'. This also
+        // ensures that getWidth()/getHeight() ain't 0.0 (see division below)
+        static double fGrowTopLeft(1.5);
+        static double fGrowBottomRight(0.5);
+        aB2DRange.expand(aB2DRange.getMinimum() - basegfx::B2DPoint(fGrowTopLeft, fGrowTopLeft));
+        aB2DRange.expand(aB2DRange.getMaximum() + basegfx::B2DPoint(fGrowBottomRight, fGrowBottomRight));
 
+        // edge rounding in pixel. Need to convert, value for
+        // createPolygonFromRect is relative [0.0 .. 1.0]
+        static double fEdgeRoundPixel(8.0);
         const basegfx::B2DPolygon aPolygon(
             basegfx::tools::createPolygonFromRect(
             aB2DRange,
-            fRelativeEdgeRadius,
-            fRelativeEdgeRadius));
+            fEdgeRoundPixel / aB2DRange.getWidth(),
+            fEdgeRoundPixel / aB2DRange.getHeight()));
+
         mpVirtualBufferDevice->SetLineColor(rColor);
 
+        // try to use transparency
         if (!mpVirtualBufferDevice->DrawPolyLineDirect(
             aPolygon,
             fLineWidth,
             fTransparency,
             basegfx::B2DLineJoin::Round))
         {
+            // no transparency, draw without
             mpVirtualBufferDevice->DrawPolyLine(
                 aPolygon,
                 fLineWidth,
@@ -423,10 +432,11 @@ void ScreenshotAnnotationDlg_Impl::RepaintToBuffer(
             Point(0, 0),
             bUseDimmed ? maDimmedDialogBitmap : maParentDialogBitmap);
 
-        // get various options - sorry, no SvtOptionsDrawinglayer in vcl
-        const Color aHilightColor(Application::GetSettings().GetStyleSettings().GetHighlightColor());
-        const bool bIsAntiAliasing(true);
-        const double fTransparence(0.4);
+        // get various options
+        const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+        const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
+        const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+        const bool bIsAntiAliasing(aSvtOptionsDrawinglayer.IsAntiAliasing());
         const AntialiasingFlags nOldAA(mpVirtualBufferDevice->GetAntialiasing());
 
         if (bIsAntiAliasing)
@@ -437,13 +447,15 @@ void ScreenshotAnnotationDlg_Impl::RepaintToBuffer(
         // paint selected entries
         for (auto candidate = maSelected.begin(); candidate != maSelected.end(); candidate++)
         {
-            PaintControlDataEntry(**candidate, Color(COL_LIGHTRED), 3.0);
+            static double fLineWidthEntries(5.0);
+            PaintControlDataEntry(**candidate, Color(COL_LIGHTRED), fLineWidthEntries, fTransparence * 0.2);
         }
 
         // paint hilighted entry
         if (mpHilighted && bPaintHilight)
         {
-            PaintControlDataEntry(*mpHilighted, aHilightColor, 5.0, fTransparence);
+            static double fLineWidthHilight(7.0);
+            PaintControlDataEntry(*mpHilighted, aHilightColor, fLineWidthHilight, fTransparence);
         }
 
         if (bIsAntiAliasing)
