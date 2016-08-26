@@ -22,14 +22,6 @@
 #include "PagePropertyPanel.hrc"
 #include "helpid.h"
 
-Image IMG_PAGE_PORTRAIT
-{
-    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/portraitcopy_24x24.png";};
-};
-Image IMG_PAGE_LANDSCAPE
-{
-    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/Landscapecopy_24x24.png";};
-};
 Image IMG_PAGE_NARROW
 {
     ImageBitmap = Bitmap{File = "sidebar/pageproppanel/format_L_narrow_24x24.png";};
@@ -189,40 +181,6 @@ Image IMG_PAGE_COLUMN_RIGHT_L
 Image IMG_PAGE_COLUMN_NONE_L
 {
     ImageBitmap = Bitmap{File = "sidebar/pageproppanel/columncopy_24x24.png";};
-};
-
-// popup for page orientation attribute
-Control RID_POPUP_SWPAGE_ORIENTATION
-{
-    OutputSize = TRUE;
-    DialogControl = TRUE;
-    Border = FALSE;
-    Size = MAP_APPFONT( POPUPPANEL_MARGIN_SMALL * 2 + POPUP_BORDER_WIDTH + VS_WIDTH, ITEM_HEIGHT*2 + POPUPPANEL_MARGIN_SMALL*2 );
-
-    Control VS_ORIENTATION
-    {
-        Pos = MAP_APPFONT(  POPUPPANEL_MARGIN_SMALL + OFFSET_X, POPUPPANEL_MARGIN_SMALL + OFFSET_Y);
-        Size = MAP_APPFONT ( VS_WIDTH  , ITEM_HEIGHT*2);
-        HelpID = HID_SWPAGE_VS_ORIENTATION;
-        TabStop = TRUE ;
-        Text = "Orientation";
-    };
-    Image IMG_PORTRAIT
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/portraitcopy_24x24.png";};
-    };
-    Image IMG_LANDSCAPE
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/Landscapecopy_24x24.png";};
-    };
-    String STR_PORTRAIT
-    {
-        Text [ en-US ] = "Portrait";
-    };
-    String STR_LANDSCAPE
-    {
-        Text [ en-US ] = "Landscape";
-    };
 };
 
 // popup for page style's margin attributes

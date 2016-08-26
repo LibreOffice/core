@@ -16,16 +16,31 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PROPERTYPANEL_HRC
-#define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PROPERTYPANEL_HRC
+#include <PageOrientationPopup.hxx>
+#include "PageOrientationControl.hxx"
+#include <svx/pageitem.hxx>
+#include <vcl/toolbox.hxx>
 
-#include "rcid.hrc"
+SFX_IMPL_TOOLBOX_CONTROL(PageOrientationPopup, SvxPageItem);
 
-#define RID_POPUP_SWPAGE_MARGIN             (RC_PROPERTYPANEL_BEGIN + 3)
-#define RID_POPUP_SWPAGE_COLUMN             (RC_PROPERTYPANEL_BEGIN + 5)
-#define RID_POPUP_SWPAGE_SIZE               (RC_PROPERTYPANEL_BEGIN + 6)
+PageOrientationPopup::PageOrientationPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
+    : SfxToolBoxControl(nSlotId, nId, rTbx)
+{
+    rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits(nId));
+}
 
+PageOrientationPopup::~PageOrientationPopup()
+{
+}
 
-#endif
+VclPtr<SfxPopupWindow> PageOrientationPopup::CreatePopupWindow()
+{
+    VclPtr<sw::sidebar::PageOrientationControl> pControl = VclPtr<sw::sidebar::PageOrientationControl>::Create(GetSlotId());
+    pControl->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus|FloatWinPopupFlags::NoAppFocusClose);
+    SetPopupWindow(pControl);
+
+    return pControl;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

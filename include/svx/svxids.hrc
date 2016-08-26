@@ -242,6 +242,7 @@
 #define SID_ATTR_PAGE                                   ( SID_SVX_START + 50 )
 #define SID_ATTR_PAGE_SIZE                              ( SID_SVX_START + 51 )
 #define SID_ATTR_PAGE_MAXSIZE                           ( SID_SVX_START + 52 )
+#define SID_ATTR_PAGE_ORIENTATION                       ( SID_SVX_START + 53 )
 #define SID_ATTR_PAGE_PAPERBIN                          ( SID_SVX_START + 54 )
 #define SID_ATTR_PAGE_EXT1                              ( SID_SVX_START + 56 )
 #define SID_ATTR_PAGE_EXT2                              ( SID_SVX_START + 57 )

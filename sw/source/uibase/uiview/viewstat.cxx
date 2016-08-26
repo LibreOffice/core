@@ -147,6 +147,7 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_PRINTDOCDIRECT:
                 GetSlotState( nWhich, SfxViewShell::GetInterface(), &rSet );
             break;
+            case SID_ATTR_PAGE_ORIENTATION:
             case SID_ATTR_PAGE:
             case SID_ATTR_PAGE_SIZE:
             case SID_ATTR_PAGE_PAPERBIN:
