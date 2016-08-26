@@ -134,6 +134,13 @@ public:
          const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw ( DAVException );
 
+    css::uno::Reference< css::io::XInputStream >
+    GET( DAVRequestHeaders & rRequestHeaders,
+         const std::vector< rtl::OUString > & rHeaderNames, // empty == 'all'
+         DAVResource & rResource,
+         const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
+        throw ( DAVException );
+
     void
     GET( css::uno::Reference< css::io::XOutputStream > & rStream,
          const std::vector< OUString > & rHeaderNames, // empty == 'all'
