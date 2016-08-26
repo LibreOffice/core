@@ -82,6 +82,7 @@
 #include "acccfg.hxx"
 #include "insrc.hxx"
 #include "passwdomdlg.hxx"
+#include "screenshotannotationdlg.hxx"
 #include "hyphen.hxx"
 #include "thesdlg.hxx"
 #include "about.hxx"
@@ -133,6 +134,7 @@ IMPL_ABSTDLG_BASE(AbstractLinksDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSpellDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxPostItDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractPasswordToOpenModifyDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractScreenshotAnnotationDlg_Impl);
 
 
 // VclAbstractDialog2_Impl
@@ -1594,5 +1596,12 @@ AbstractPasswordToOpenModifyDialog * AbstractDialogFactory_Impl::CreatePasswordT
     return new AbstractPasswordToOpenModifyDialog_Impl( pDlg );
 }
 
+AbstractScreenshotAnnotationDlg* AbstractDialogFactory_Impl::CreateScreenshotAnnotationDlg(
+    vcl::Window * pParent,
+    Dialog& rParentDialog)
+{
+    VclPtrInstance<ScreenshotAnnotationDlg> pDlg(pParent, rParentDialog);
+    return new AbstractScreenshotAnnotationDlg_Impl(pDlg);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

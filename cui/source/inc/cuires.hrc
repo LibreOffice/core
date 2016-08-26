@@ -418,6 +418,7 @@
 #define RID_SVXSTR_LOAD_ERROR                               (RID_SVX_START + 1265)
 
 #define RID_SVXSTR_EDITHINT                                 (RID_SVX_START + 1266)
+#define RID_SVXSTR_SAVE_SCREENSHOT_AS                       (RID_SVX_START + 1267)
 
 // Hangul/Hanja Dialog
 #define RID_SVXSTR_HANGUL                                   (RID_SVX_START + 1270)
