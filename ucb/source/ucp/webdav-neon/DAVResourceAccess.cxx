@@ -497,6 +497,51 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
 }
 
 
+uno::Reference< io::XInputStream > DAVResourceAccess::GET(
+    DAVRequestHeaders &rRequestHeaders,
+    const std::vector< OUString > & rHeaderNames,
+    DAVResource & rResource,
+    const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+  throw( DAVException )
+{
+    initialize();
+
+    uno::Reference< io::XInputStream > xStream;
+    int errorCount = 0;
+    bool bRetry;
+    do
+    {
+        bRetry = false;
+        try
+        {
+            getUserRequestHeaders( xEnv,
+                                   getRequestURI(),
+                                   ucb::WebDAVHTTPMethod_GET,
+                                   rRequestHeaders );
+
+            xStream = m_xSession->GET( getRequestURI(),
+                                       rHeaderNames,
+                                       rResource,
+                                       DAVRequestEnvironment(
+                                           getRequestURI(),
+                                           new DAVAuthListener_Impl(
+                                               xEnv, m_aURL ),
+                                           rRequestHeaders, xEnv ) );
+        }
+        catch ( const DAVException & e )
+        {
+            errorCount++;
+            bRetry = handleException( e, errorCount );
+            if ( !bRetry )
+                throw;
+        }
+    }
+    while ( bRetry );
+
+    return xStream;
+}
+
+
 void DAVResourceAccess::GET(
     uno::Reference< io::XOutputStream > & rStream,
     const std::vector< OUString > & rHeaderNames,
