@@ -611,7 +611,7 @@ void Test::testSortWithCellFormats()
                 // Check if the italics is applied.
                 if (static_cast<const SvxPostureItem*>(pItem)->GetEnumValue() == ITALIC_NORMAL)
                 {
-                    cerr << "This cell is bold, but shouldn't." << endl;
+                    cerr << "This cell is italic, but shouldn't." << endl;
                     return false;
                 }
             }
