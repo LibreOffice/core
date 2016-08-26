@@ -21,8 +21,6 @@
 #include "PropertyPanel.hrc"
 
 // global definitions
-#define IMG_PAGE_PORTRAIT       (RC_SIDEBAR_BEGIN +  0)
-#define IMG_PAGE_LANDSCAPE      (RC_SIDEBAR_BEGIN +  1)
 #define IMG_PAGE_NARROW         (RC_SIDEBAR_BEGIN +  2)
 #define IMG_PAGE_NORMAL         (RC_SIDEBAR_BEGIN +  3)
 #define IMG_PAGE_WIDE           (RC_SIDEBAR_BEGIN +  4)
@@ -65,10 +63,6 @@
 #define IMG_PAGE_COLUMN_NONE_L  (RC_SIDEBAR_BEGIN + 41)
 
 // local
-#define IMG_PORTRAIT            10
-#define IMG_LANDSCAPE           11
-#define STR_PORTRAIT            12
-#define STR_LANDSCAPE           13
 
 #define MF_SWLEFT_MARGIN        18
 #define MF_SWRIGHT_MARGIN       19
@@ -79,7 +73,6 @@
 #define FT_CUSTOM               25
 #define FLD_WIDTH_HEIGHT        26
 
-#define VS_ORIENTATION          29
 #define IMG_NARROW              32
 #define IMG_NORMAL              33
 #define IMG_WIDE                34

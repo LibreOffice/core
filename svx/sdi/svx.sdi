@@ -6099,6 +6099,25 @@ SvxPageItem AttributePage SID_ATTR_PAGE
 ]
 
 
+SvxPageItem Orientation SID_ATTR_PAGE_ORIENTATION
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+
 SvxAutoKernItem PairKerning SID_ATTR_CHAR_AUTOKERN
 
 [

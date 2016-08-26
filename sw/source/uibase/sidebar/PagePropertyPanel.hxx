@@ -71,10 +71,6 @@ namespace sw { namespace sidebar {
             return mpBindings;
         }
 
-        VclPtr< svx::sidebar::PopupControl> CreatePageOrientationControl( svx::sidebar::PopupContainer* pParent );
-        void ExecuteOrientationChange( const bool bLandscape );
-        void ClosePageOrientationPopup();
-
         VclPtr< svx::sidebar::PopupControl> CreatePageMarginControl( svx::sidebar::PopupContainer* pParent );
         void ExecuteMarginLRChange(
             const long nPageLeftMargin,
@@ -107,15 +103,12 @@ namespace sw { namespace sidebar {
         SfxBindings* mpBindings;
 
         // toolboxes - on click open corresponding popup
-        VclPtr<ToolBox>                mpToolBoxOrientation;
         VclPtr<ToolBox>                mpToolBoxMargin;
         VclPtr<ToolBox>                mpToolBoxSize;
         VclPtr<ToolBox>                mpToolBoxColumn;
 
         Image*                  maImgSize;
         Image*                  maImgSize_L;
-        Image                   mImgPortrait;
-        Image                   mImgLandscape;
         Image                   mImgNarrow;
         Image                   mImgNormal;
         Image                   mImgWide;
@@ -189,7 +182,6 @@ namespace sw { namespace sidebar {
         ::sfx2::sidebar::ControllerItem m_aSwPagePgMetricControl;
 
         // popups
-        svx::sidebar::Popup maOrientationPopup;
         svx::sidebar::Popup maMarginPopup;
         svx::sidebar::Popup maSizePopup;
         svx::sidebar::Popup maColumnPopup;
@@ -199,7 +191,6 @@ namespace sw { namespace sidebar {
         bool mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify;
 
         // handler for popup toolboxes to show the popups
-        DECL_LINK_TYPED(ClickOrientationHdl, ToolBox*, void);
         DECL_LINK_TYPED(ClickMarginHdl, ToolBox*, void);
         DECL_LINK_TYPED(ClickSizeHdl, ToolBox*, void);
         DECL_LINK_TYPED(ClickColumnHdl, ToolBox*, void);

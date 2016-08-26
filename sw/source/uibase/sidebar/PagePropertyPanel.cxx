@@ -27,7 +27,6 @@
 #include "PropertyPanel.hrc"
 
 #include <svx/sidebar/PopupContainer.hxx>
-#include "PageOrientationControl.hxx"
 #include "PageMarginControl.hxx"
 #include "PageSizeControl.hxx"
 #include "PageColumnControl.hxx"
@@ -52,7 +51,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 
-const char UNO_ORIENTATION[] = ".uno:Orientation";
 const char UNO_MARGIN[]      = ".uno:Margin";
 const char UNO_SIZE[]        = ".uno:Size";
 const char UNO_COLUMN[]      = ".uno:Column";
@@ -108,8 +106,6 @@ PagePropertyPanel::PagePropertyPanel(
     // image resources
     , maImgSize                 (nullptr)
     , maImgSize_L                   (nullptr)
-    , mImgPortrait              (SW_RES(IMG_PAGE_PORTRAIT))
-    , mImgLandscape             (SW_RES(IMG_PAGE_LANDSCAPE))
     , mImgNarrow                    (SW_RES(IMG_PAGE_NARROW))
     , mImgNormal                    (SW_RES(IMG_PAGE_NORMAL))
     , mImgWide                  (SW_RES(IMG_PAGE_WIDE))
@@ -168,9 +164,6 @@ PagePropertyPanel::PagePropertyPanel(
     , m_aSwPageColControl(SID_ATTR_PAGE_COLUMN, *pBindings, *this)
     , m_aSwPagePgMetricControl(SID_ATTR_METRIC, *pBindings, *this)
 
-    , maOrientationPopup( this,
-            [this] (svx::sidebar::PopupContainer *parent)  { return this->CreatePageOrientationControl(parent); },
-                          OUString("Page orientation") )
     , maMarginPopup( this,
             [this] (svx::sidebar::PopupContainer *parent) { return this->CreatePageMarginControl(parent); },
                      OUString("Page margins") )
@@ -186,7 +179,6 @@ PagePropertyPanel::PagePropertyPanel(
     , mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify( false )
 {
     // visible controls
-    get(mpToolBoxOrientation, "selectorientation");
     get(mpToolBoxMargin, "selectmargin");
     get(mpToolBoxSize, "selectsize");
     get(mpToolBoxColumn, "selectcolumn");
@@ -212,7 +204,6 @@ void PagePropertyPanel::dispose()
     mpPageULMarginItem.reset();
     mpPageSizeItem.reset();
 
-    mpToolBoxOrientation.clear();
     mpToolBoxMargin.clear();
     mpToolBoxSize.clear();
     mpToolBoxColumn.clear();
@@ -227,24 +218,15 @@ void PagePropertyPanel::dispose()
     maColumnPopup.dispose();
     maSizePopup.dispose();
     maMarginPopup.dispose();
-    maOrientationPopup.dispose();
 
     PanelLayout::dispose();
 }
 
 void PagePropertyPanel::Initialize()
 {
-    // popup for page orientation
-    const sal_uInt16 nIdOrientation = mpToolBoxOrientation->GetItemId(UNO_ORIENTATION);
-    Link<ToolBox *, void> aLink = LINK( this, PagePropertyPanel, ClickOrientationHdl );
-    mpToolBoxOrientation->SetDropdownClickHdl( aLink );
-    mpToolBoxOrientation->SetSelectHdl( aLink );
-    mpToolBoxOrientation->SetItemImage( nIdOrientation, mImgPortrait);
-    mpToolBoxOrientation->SetItemBits( nIdOrientation, mpToolBoxOrientation->GetItemBits( nIdOrientation ) | ToolBoxItemBits::DROPDOWNONLY );
-
     // popup for page margins
     const sal_uInt16 nIdMargin = mpToolBoxMargin->GetItemId(UNO_MARGIN);
-    aLink = LINK( this, PagePropertyPanel, ClickMarginHdl );
+    Link<ToolBox *, void> aLink = LINK( this, PagePropertyPanel, ClickMarginHdl );
     mpToolBoxMargin->SetDropdownClickHdl( aLink );
     mpToolBoxMargin->SetSelectHdl( aLink );
     mpToolBoxMargin->SetItemImage(nIdMargin, mImgNormal);
@@ -292,82 +274,6 @@ void PagePropertyPanel::Initialize()
     mpBindings->Update( SID_ATTR_PAGE_ULSPACE );
     mpBindings->Update( SID_ATTR_PAGE );
     mpBindings->Update( SID_ATTR_PAGE_SIZE );
-}
-
-VclPtr< svx::sidebar::PopupControl> PagePropertyPanel::CreatePageOrientationControl( svx::sidebar::PopupContainer* pParent )
-{
-    return VclPtr<PageOrientationControl>::Create( pParent, *this , mpPageItem->IsLandscape() );
-}
-
-IMPL_LINK_TYPED( PagePropertyPanel, ClickOrientationHdl, ToolBox*, pToolBox, void )
-{
-    maOrientationPopup.Show( *pToolBox );
-}
-
-void PagePropertyPanel::ExecuteOrientationChange( const bool bLandscape )
-{
-    StartUndo();
-
-    {
-        // set new page orientation
-        mpPageItem->SetLandscape( bLandscape );
-
-        // swap the width and height of the page size
-        const long nRotatedWidth = mpPageSizeItem->GetSize().Height();
-        const long nRotatedHeight = mpPageSizeItem->GetSize().Width();
-        mpPageSizeItem->SetSize(Size(nRotatedWidth, nRotatedHeight));
-
-        // apply changed attributes
-        GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE,
-            SfxCallMode::RECORD, { mpPageSizeItem.get(), mpPageItem.get() });
-    }
-
-    // check, if margin values still fit to the changed page size.
-    // if not, adjust margin values
-    {
-        const long nML = mpPageLRMarginItem->GetLeft();
-        const long nMR = mpPageLRMarginItem->GetRight();
-        const long nTmpPW = nML + nMR + MINBODY;
-
-        const long nPW  = mpPageSizeItem->GetSize().Width();
-
-        if ( nTmpPW > nPW )
-        {
-            if ( nML <= nMR )
-            {
-                ExecuteMarginLRChange( mpPageLRMarginItem->GetLeft(), nMR - (nTmpPW - nPW ) );
-            }
-            else
-            {
-                ExecuteMarginLRChange( nML - (nTmpPW - nPW ), mpPageLRMarginItem->GetRight() );
-            }
-        }
-
-        const long nMT = mpPageULMarginItem->GetUpper();
-        const long nMB = mpPageULMarginItem->GetLower();
-        const long nTmpPH = nMT + nMB + MINBODY;
-
-        const long nPH  = mpPageSizeItem->GetSize().Height();
-
-        if ( nTmpPH > nPH )
-        {
-            if ( nMT <= nMB )
-            {
-                ExecuteMarginULChange( mpPageULMarginItem->GetUpper(), nMB - ( nTmpPH - nPH ) );
-            }
-            else
-            {
-                ExecuteMarginULChange( nMT - ( nTmpPH - nPH ), mpPageULMarginItem->GetLower() );
-            }
-        }
-    }
-
-    EndUndo();
-}
-
-void PagePropertyPanel::ClosePageOrientationPopup()
-{
-    maOrientationPopup.Hide();
 }
 
 VclPtr< svx::sidebar::PopupControl> PagePropertyPanel::CreatePageMarginControl( svx::sidebar::PopupContainer* pParent )
@@ -521,26 +427,6 @@ void PagePropertyPanel::NotifyItemUpdate(
         {
             mpPageULMarginItem.reset( static_cast<SvxLongULSpaceItem*>(pState->Clone()) );
             ChangeMarginImage();
-        }
-        break;
-
-    case SID_ATTR_PAGE:
-        if ( eState >= SfxItemState::DEFAULT &&
-             pState && dynamic_cast< const SvxPageItem *>( pState ) !=  nullptr )
-        {
-            const sal_uInt16 nIdOrientation = mpToolBoxOrientation->GetItemId(UNO_ORIENTATION);
-            mpPageItem.reset( static_cast<SvxPageItem*>(pState->Clone()) );
-            if ( mpPageItem->IsLandscape() )
-            {
-                mpToolBoxOrientation->SetItemImage(nIdOrientation, mImgLandscape);
-            }
-            else
-            {
-                mpToolBoxOrientation->SetItemImage(nIdOrientation, mImgPortrait);
-            }
-            ChangeMarginImage();
-            ChangeSizeImage();
-            ChangeColumnImage( mpPageColumnTypeItem->GetValue() );
         }
         break;
 
