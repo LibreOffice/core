@@ -83,10 +83,7 @@ bool isDerivedFrom(const CXXRecordDecl *decl, const char *pString) {
     if (!decl->hasDefinition()) {
         return false;
     }
-    if (// not sure what hasAnyDependentBases() does,
-        // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
-        !decl->hasAnyDependentBases() &&
-        !compat::forallBases(
+    if (!compat::forallBases(
             *decl,
 #if CLANG_VERSION < 30800
             BaseCheckNotSubclass,
@@ -222,14 +219,6 @@ bool containsXInterfaceSubclass(const Type* pType0) {
                     .GlobalNamespace()))
             {
                 return false;
-            }
-            for(unsigned i=0; i<pTemplate->getTemplateArgs().size(); ++i) {
-                const TemplateArgument& rArg = pTemplate->getTemplateArgs()[i];
-                if (rArg.getKind() == TemplateArgument::ArgKind::Type &&
-                    containsXInterfaceSubclass(rArg.getAsType()))
-                {
-                    return true;
-                }
             }
         }
     }
