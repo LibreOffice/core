@@ -243,11 +243,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     // If the current application language is a language that uses right-to-left text...
     LanguageType eRealCTLLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
-    if( MsLangId::isRightToLeft( eRealCTLLanguage ) )
-    {
-        // ... then we have to set this as a default
-        SetDefaultWritingMode( css::text::WritingMode_RL_TB );
-    }
 
     // for korean and japanese languages we have a different default for apply spacing between asian, latin and ctl text
     if (MsLangId::isKorean(eRealCTLLanguage) || (LANGUAGE_JAPANESE == eRealCTLLanguage))
