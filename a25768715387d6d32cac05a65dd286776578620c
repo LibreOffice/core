@@ -141,6 +141,24 @@
       "revId": "a25768715387d6d32cac05a65dd286776578620c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_9558b358",
+        "filename": "vcl/source/filter/wmf/winmtf.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-08-26T07:53:55Z",
+      "side": 1,
+      "message": "What was the actual problem?  See \u003chttps://gerrit.libreoffice.org/#/c/28399/\u003e \"WIP: dummy CppunitTest with gb_CppunitTest_use_library_objects,vcl\" for a successful example of using that (building it failed on all platforms with the forced CPPUNIT_FAIL in the test, demonstrating that linking the test succeded on all platforms).  (Remember that you generally need to copy all the gb_Library_* settings relevant for linking from the Library_*.mk to the CppunitTest_*.mk.)",
+      "parentUuid": "fa6399be_954ef3bf",
+      "revId": "a25768715387d6d32cac05a65dd286776578620c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
