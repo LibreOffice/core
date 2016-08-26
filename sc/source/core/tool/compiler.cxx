@@ -2691,6 +2691,24 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             else if (rName.equals(mxSymbols->getSymbol(ocArrayRowSep)))
                 eOp = ocArrayRowSep;
         }
+        else if (eOp == ocArrayColSep || eOp == ocArrayRowSep)
+        {
+            if (rName.equals(mxSymbols->getSymbol(ocSep)))
+                eOp = ocSep;
+            else if (rName == ";")
+            {
+                switch (FormulaGrammar::extractFormulaLanguage( meGrammar))
+                {
+                    // Only for languages/grammars that actually use ';'
+                    // parameter separator.
+                    case css::sheet::FormulaLanguage::NATIVE:
+                    case css::sheet::FormulaLanguage::ENGLISH:
+                    case css::sheet::FormulaLanguage::ODFF:
+                    case css::sheet::FormulaLanguage::ODF_11:
+                        eOp = ocSep;
+                }
+            }
+        }
         else if (eOp == ocCeil && mxSymbols->isOOXML())
         {
             // Ensure that _xlfn.CEILING.MATH maps to ocCeil_Math. ocCeil is

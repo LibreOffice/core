@@ -617,14 +617,91 @@ void FormulaCompiler::OpCodeMap::putOpCode( const OUString & rStr, const OpCode 
 {
     if (0 < eOp && sal_uInt16(eOp) < mnSymbols)
     {
-        SAL_WARN_IF( !(mpTable[eOp].isEmpty() || (mpTable[eOp] == rStr) ||
-                    (eOp == ocCurrency) || (eOp == ocSep) || (eOp == ocArrayColSep) ||
-                    (eOp == ocArrayRowSep)), "formula.core",
-                "OpCodeMap::putOpCode: reusing OpCode " << static_cast<sal_uInt16>(eOp)
-                << ", replacing '" << mpTable[eOp] << "' with '" << rStr << "' in "
-                << (mbEnglish ? "" : "non-") << "English map 0x" << ::std::hex << meGrammar);
+        bool bPutOp = mpTable[eOp].isEmpty();
+        bool bRemoveFromMap = false;
+        if (!bPutOp)
+        {
+            switch (eOp)
+            {
+                // These OpCodes are meant to overwrite and also remove an
+                // existing mapping.
+                case ocCurrency:
+                    bPutOp = true;
+                    bRemoveFromMap = true;
+                break;
+                // These separator OpCodes are meant to overwrite and also
+                // remove an existing mapping if it is not used for one of the
+                // other separators.
+                case ocArrayColSep:
+                    bPutOp = true;
+                    bRemoveFromMap = (mpTable[ocArrayRowSep] != mpTable[eOp] && mpTable[ocSep] != mpTable[eOp]);
+                break;
+                case ocArrayRowSep:
+                    bPutOp = true;
+                    bRemoveFromMap = (mpTable[ocArrayColSep] != mpTable[eOp] && mpTable[ocSep] != mpTable[eOp]);
+                break;
+                // For ocSep keep the ";" in map but remove any other if it is
+                // not used for ocArrayColSep or ocArrayRowSep.
+                case ocSep:
+                    bPutOp = true;
+                    bRemoveFromMap = (mpTable[eOp] != ";" &&
+                            mpTable[ocArrayColSep] != mpTable[eOp] &&
+                            mpTable[ocArrayColSep] != mpTable[eOp]);
+                break;
+                // These OpCodes are known to be duplicates in the Excel
+                // external API mapping because of different parameter counts
+                // in different BIFF versions. Names are identical and entries
+                // are ignored.
+                case ocLinest:
+                case ocTrend:
+                case ocLogest:
+                case ocGrowth:
+                case ocTrunc:
+                case ocFixed:
+                case ocGetDayOfWeek:
+                case ocHLookup:
+                case ocVLookup:
+                case ocGetDiffDate360:
+                    if (rStr == mpTable[eOp])
+                        return;
+                    SAL_FALLTHROUGH;
+                // These OpCodes are known to be added to an existing mapping,
+                // but only for the OOXML external API mapping. This is *not*
+                // FormulaLanguage::OOXML. Keep the first
+                // (correct) definition for the OpCode, all following are
+                // additional alias entries in the map.
+                case ocErrorType:
+                case ocMultiArea:
+                case ocBackSolver:
+                case ocEasterSunday:
+                case ocCurrent:
+                case ocStyle:
+                    if (mbEnglish &&
+                            FormulaGrammar::extractFormulaLanguage( meGrammar) == FormulaGrammar::GRAM_EXTERNAL)
+                    {
+                        // Both bPutOp and bRemoveFromMap stay false.
+                        break;
+                    }
+                    SAL_FALLTHROUGH;
+                default:
+                    SAL_WARN("formula.core",
+                            "OpCodeMap::putOpCode: reusing OpCode " << static_cast<sal_uInt16>(eOp)
+                            << ", replacing '" << mpTable[eOp] << "' with '" << rStr << "' in "
+                            << (mbEnglish ? "" : "non-") << "English map 0x" << ::std::hex << meGrammar);
+            }
+        }
+
         // Case preserving opcode -> string, upper string -> opcode
-        mpTable[eOp] = rStr;
+        if (bRemoveFromMap)
+        {
+            OUString aUpper( pCharClass ? pCharClass->uppercase( mpTable[eOp]) : rStr.toAsciiUpperCase());
+            // Ensure we remove a mapping only for the requested OpCode.
+            OpCodeHashMap::const_iterator it( mpHashMap->find( aUpper));
+            if (it != mpHashMap->end() && (*it).second == eOp)
+                mpHashMap->erase( it);
+        }
+        if (bPutOp)
+            mpTable[eOp] = rStr;
         OUString aUpper( pCharClass ? pCharClass->uppercase( rStr) : rStr.toAsciiUpperCase());
         mpHashMap->insert( OpCodeHashMap::value_type( aUpper, eOp));
     }
