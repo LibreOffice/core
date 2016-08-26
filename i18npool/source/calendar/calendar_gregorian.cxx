@@ -189,8 +189,8 @@ Calendar_hanja::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16
     if ( displayIndex == CalendarDisplayIndex::AM_PM ) {
         // Am/Pm string for Korean Hanja calendar will refer to Japanese locale
         css::lang::Locale jaLocale(OUString("ja"), OUString(), OUString());
-        if (idx == 0) return LocaleDataImpl().getLocaleItem(jaLocale).timeAM;
-        else if (idx == 1) return LocaleDataImpl().getLocaleItem(jaLocale).timePM;
+        if (idx == 0) return LocaleDataImpl::get()->getLocaleItem(jaLocale).timeAM;
+        else if (idx == 1) return LocaleDataImpl::get()->getLocaleItem(jaLocale).timePM;
         else throw ERROR;
     }
     else
@@ -242,7 +242,7 @@ Calendar_gregorian::loadCalendar( const OUString& uniqueID, const css::lang::Loc
     getValue();
 
     aLocale = rLocale;
-    Sequence< Calendar2 > xC = LocaleDataImpl().getAllCalendars2(rLocale);
+    Sequence< Calendar2 > xC = LocaleDataImpl::get()->getAllCalendars2(rLocale);
     for (sal_Int32 i = 0; i < xC.getLength(); i++)
     {
         if (uniqueID == xC[i].Name)
@@ -776,8 +776,8 @@ Calendar_gregorian::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_I
 
     switch( displayIndex ) {
         case CalendarDisplayIndex::AM_PM:/* ==0 */
-            if (idx == 0) aStr = LocaleDataImpl().getLocaleItem(aLocale).timeAM;
-            else if (idx == 1) aStr = LocaleDataImpl().getLocaleItem(aLocale).timePM;
+            if (idx == 0) aStr = LocaleDataImpl::get()->getLocaleItem(aLocale).timeAM;
+            else if (idx == 1) aStr = LocaleDataImpl::get()->getLocaleItem(aLocale).timePM;
             else throw ERROR;
             break;
         case CalendarDisplayIndex::DAY:
@@ -839,7 +839,7 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
 
     if (nCalendarDisplayCode == CalendarDisplayCode::SHORT_QUARTER ||
             nCalendarDisplayCode == CalendarDisplayCode::LONG_QUARTER) {
-        Sequence< OUString> xR = LocaleDataImpl().getReservedWord(aLocale);
+        Sequence< OUString> xR = LocaleDataImpl::get()->getReservedWord(aLocale);
         sal_Int16 quarter = value / 3;
         // Since this base class method may be called by derived calendar
         // classes where a year consists of more than 12 months we need a check

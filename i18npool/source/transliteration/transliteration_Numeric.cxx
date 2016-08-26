@@ -22,6 +22,7 @@
 #include <nativenumbersupplier.hxx>
 #include <defaultnumberingprovider.hxx>
 #include <comphelper/string.hxx>
+#include <rtl/ref.hxx>
 
 using namespace com::sun::star::uno;
 
@@ -119,7 +120,7 @@ transliteration_Numeric::transliterate( const OUString& inStr, sal_Int32 startPo
     if (tableSize)
         return transliterateBullet( inStr, startPos, nCount, offset);
     else
-        return NativeNumberSupplierService(useOffset).getNativeNumberString( inStr.copy(startPos, nCount), aLocale, nNativeNumberMode, offset );
+        return rtl::Reference<NativeNumberSupplierService>(new NativeNumberSupplierService(useOffset))->getNativeNumberString( inStr.copy(startPos, nCount), aLocale, nNativeNumberMode, offset );
 }
 
 sal_Unicode SAL_CALL
@@ -134,7 +135,7 @@ transliteration_Numeric::transliterateChar2Char( sal_Unicode inChar ) throw(Runt
         return inChar;
     }
     else
-        return NativeNumberSupplierService().getNativeNumberChar( inChar, aLocale, nNativeNumberMode );
+        return rtl::Reference<NativeNumberSupplierService>(new NativeNumberSupplierService)->getNativeNumberChar( inChar, aLocale, nNativeNumberMode );
 }
 
 } } } }

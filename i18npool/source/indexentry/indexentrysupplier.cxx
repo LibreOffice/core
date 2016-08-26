@@ -34,12 +34,12 @@ IndexEntrySupplier::IndexEntrySupplier( const Reference < XComponentContext >& r
 
 Sequence < Locale > SAL_CALL IndexEntrySupplier::getLocaleList() throw (RuntimeException, std::exception)
 {
-    return LocaleDataImpl().getAllInstalledLocaleNames();
+    return LocaleDataImpl::get()->getAllInstalledLocaleNames();
 }
 
 Sequence < OUString > SAL_CALL IndexEntrySupplier::getAlgorithmList( const Locale& rLocale ) throw (RuntimeException, std::exception)
 {
-    return LocaleDataImpl().getIndexAlgorithm(rLocale);
+    return LocaleDataImpl::get()->getIndexAlgorithm(rLocale);
 }
 
 sal_Bool SAL_CALL IndexEntrySupplier::loadAlgorithm( const Locale& rLocale, const OUString& SortAlgorithm,
@@ -57,7 +57,7 @@ sal_Bool SAL_CALL IndexEntrySupplier::loadAlgorithm( const Locale& rLocale, cons
 
 sal_Bool SAL_CALL IndexEntrySupplier::usePhoneticEntry( const Locale& rLocale ) throw (RuntimeException, std::exception)
 {
-    return LocaleDataImpl().hasPhonetic(rLocale);
+    return LocaleDataImpl::get()->hasPhonetic(rLocale);
 }
 
 OUString SAL_CALL IndexEntrySupplier::getPhoneticCandidate( const OUString& rIndexEntry,
@@ -167,7 +167,7 @@ IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, c
 OUString SAL_CALL IndexEntrySupplier::getIndexFollowPageWord( sal_Bool bMorePages,
         const Locale& rLocale ) throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aFollowPageWords = LocaleDataImpl().getFollowPageWords(rLocale);
+    Sequence< OUString > aFollowPageWords = LocaleDataImpl::get()->getFollowPageWords(rLocale);
 
     return (bMorePages && aFollowPageWords.getLength() > 1) ?
         aFollowPageWords[1] : (aFollowPageWords.getLength() > 0 ?

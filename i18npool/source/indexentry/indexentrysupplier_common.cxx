@@ -63,7 +63,7 @@ sal_Bool SAL_CALL IndexEntrySupplier_Common::usePhoneticEntry( const lang::Local
 sal_Bool SAL_CALL IndexEntrySupplier_Common::loadAlgorithm( const lang::Locale& rLocale,
     const OUString& rAlgorithm, sal_Int32 collatorOptions ) throw (RuntimeException, std::exception)
 {
-    usePhonetic = LocaleDataImpl().isPhonetic(rLocale, rAlgorithm);
+    usePhonetic = LocaleDataImpl::get()->isPhonetic(rLocale, rAlgorithm);
     collator->loadCollatorAlgorithm(rAlgorithm, rLocale, collatorOptions);
     aLocale = rLocale;
     aAlgorithm = rAlgorithm;

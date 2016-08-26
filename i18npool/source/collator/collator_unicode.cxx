@@ -136,7 +136,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
 {
     if (!collator) {
         UErrorCode status = U_ZERO_ERROR;
-        OUString rule = LocaleDataImpl().getCollatorRuleByAlgorithm(rLocale, rAlgorithm);
+        OUString rule = LocaleDataImpl::get()->getCollatorRuleByAlgorithm(rLocale, rAlgorithm);
         if (!rule.isEmpty()) {
             collator = new RuleBasedCollator(reinterpret_cast<const UChar *>(rule.getStr()), status);   // UChar != sal_Unicode in MinGW
             if (! U_SUCCESS(status)) throw RuntimeException();

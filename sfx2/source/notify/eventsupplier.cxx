@@ -317,7 +317,7 @@ SfxEvents_Impl::SfxEvents_Impl( SfxObjectShell* pShell,
     if ( pShell )
         maEventNames = pShell->GetEventNames();
     else
-        maEventNames = GlobalEventConfig().getElementNames();
+        maEventNames = rtl::Reference<GlobalEventConfig>(new GlobalEventConfig)->getElementNames();
 
     maEventData = uno::Sequence < uno::Any > ( maEventNames.getLength() );
 

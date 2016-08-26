@@ -39,6 +39,7 @@
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <memory>
@@ -67,6 +68,8 @@ class LocaleDataImpl : public cppu::WeakImplHelper
 public:
     LocaleDataImpl();
     virtual ~LocaleDataImpl();
+
+    static rtl::Reference<LocaleDataImpl> get() { return new LocaleDataImpl; }
 
     static css::uno::Sequence< css::i18n::CalendarItem > downcastCalendarItems( const css::uno::Sequence< css::i18n::CalendarItem2 > & rCi );
     static css::i18n::Calendar downcastCalendar( const css::i18n::Calendar2 & rC );

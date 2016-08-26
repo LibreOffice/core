@@ -167,11 +167,11 @@ OUString Index::getIndexDescription(const OUString& rIndexEntry)
 
 void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm) throw (RuntimeException)
 {
-    OUString keyStr = LocaleDataImpl().getIndexKeysByAlgorithm(rLocale, algorithm);
+    OUString keyStr = LocaleDataImpl::get()->getIndexKeysByAlgorithm(rLocale, algorithm);
 
     if (keyStr.isEmpty()) {
-        keyStr = LocaleDataImpl().getIndexKeysByAlgorithm(LOCALE_EN,
-                    LocaleDataImpl().getDefaultIndexAlgorithm(LOCALE_EN));
+        keyStr = LocaleDataImpl::get()->getIndexKeysByAlgorithm(LOCALE_EN,
+                    LocaleDataImpl::get()->getDefaultIndexAlgorithm(LOCALE_EN));
         if (keyStr.isEmpty())
             throw RuntimeException();
     }
@@ -255,10 +255,10 @@ void Index::init(const lang::Locale &rLocale, const OUString& algorithm) throw (
 {
     makeIndexKeys(rLocale, algorithm);
 
-    Sequence< UnicodeScript > scriptList = LocaleDataImpl().getUnicodeScripts( rLocale );
+    Sequence< UnicodeScript > scriptList = LocaleDataImpl::get()->getUnicodeScripts( rLocale );
 
     if (scriptList.getLength() == 0) {
-        scriptList = LocaleDataImpl().getUnicodeScripts(LOCALE_EN);
+        scriptList = LocaleDataImpl::get()->getUnicodeScripts(LOCALE_EN);
         if (scriptList.getLength() == 0)
             throw RuntimeException();
     }

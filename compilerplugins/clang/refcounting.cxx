@@ -53,6 +53,14 @@ public:
     bool VisitVarDecl(const VarDecl *);
     bool VisitFunctionDecl(const FunctionDecl *);
 
+    // Creation of temporaries with one argument are represented by
+    // CXXFunctionalCastExpr, while any other number of arguments are
+    // represented by CXXTemporaryObjectExpr:
+    bool VisitCXXTemporaryObjectExpr(CXXTemporaryObjectExpr const * expr)
+    { return visitTemporaryObjectExpr(expr); }
+    bool VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * expr)
+    { return visitTemporaryObjectExpr(expr); }
+
     bool WalkUpFromObjCIvarDecl(ObjCIvarDecl * decl) {
         // Don't recurse into WalkUpFromFieldDecl, as VisitFieldDecl calls
         // FieldDecl::getParent, which triggers an assertion at least with
@@ -63,6 +71,8 @@ public:
 private:
     void checkUnoReference(QualType qt, const Decl* decl,
                            const std::string& rParentName, const std::string& rDeclName);
+
+    bool visitTemporaryObjectExpr(Expr const * expr);
 };
 
 bool BaseCheckNotSubclass(const CXXRecordDecl *BaseDefinition, void *p) {
@@ -341,6 +351,38 @@ void RefCounting::checkUnoReference(QualType qt, const Decl* decl, const std::st
               << decl->getSourceRange();
         }
     }
+}
+
+bool RefCounting::visitTemporaryObjectExpr(Expr const * expr) {
+    if (ignoreLocation(expr)) {
+        return true;
+    }
+    auto t = expr->getType();
+    if (containsSvRefBaseSubclass(t.getTypePtr())) {
+        report(
+            DiagnosticsEngine::Warning,
+            ("Temporary object of SvRefBase subclass %0 being directly stack"
+             " managed, should be managed via tools::SvRef"),
+            expr->getLocStart())
+            << t.getUnqualifiedType() << expr->getSourceRange();
+    } else if (containsSalhelperReferenceObjectSubclass(t.getTypePtr())) {
+        report(
+            DiagnosticsEngine::Warning,
+            ("Temporary object of salhelper::SimpleReferenceObject subclass %0"
+             " being directly stack managed, should be managed via"
+             " rtl::Reference"),
+            expr->getLocStart())
+            << t.getUnqualifiedType() << expr->getSourceRange();
+    } else if (containsXInterfaceSubclass(t)) {
+        report(
+            DiagnosticsEngine::Warning,
+            ("Temporary object of css::uno::XInterface subclass %0 being"
+             " directly stack managed, should be managed via"
+             " css::uno::Reference"),
+            expr->getLocStart())
+            << t.getUnqualifiedType() << expr->getSourceRange();
+    }
+    return true;
 }
 
 bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
