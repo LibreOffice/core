@@ -88,6 +88,8 @@ CreationWizard::CreationWizard( vcl::Window* pParent, const uno::Reference< fram
     ActivatePage();
 }
 
+CreationWizard::~CreationWizard() = default;
+
 VclPtr<TabPage> CreationWizard::createPage(WizardState nState)
 {
     VclPtr<svt::OWizardPage> pRet;

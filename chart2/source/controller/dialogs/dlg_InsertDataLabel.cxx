@@ -34,6 +34,8 @@ DataLabelsDialog::DataLabelsDialog(vcl::Window* pWindow, const SfxItemSet& rInAt
     Reset();
 }
 
+DataLabelsDialog::~DataLabelsDialog() = default;
+
 void DataLabelsDialog::Reset()
 {
     m_apDataLabelResources->Reset(m_rInAttrs);
