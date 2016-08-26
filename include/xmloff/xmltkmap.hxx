@@ -28,7 +28,6 @@
 
 
 class SvXMLTokenMap_Impl;
-class SvXMLTokenMapEntry_Impl;
 
 #define XML_TOK_UNKNOWN 0xffffU
 #define XML_TOKEN_MAP_END { 0xffffU, xmloff::token::XML_TOKEN_INVALID, 0U, 0 }
@@ -41,19 +40,21 @@ struct SvXMLTokenMapEntry
     sal_Int32 nFastToken;
 
     SvXMLTokenMapEntry( sal_uInt16 nPrefix, xmloff::token::XMLTokenEnum eName,
-                        sal_uInt16 nTok = XML_TOK_UNKNOWN, sal_Int32 nFastTok = 0 ) :
+                        sal_uInt16 nTok, sal_Int32 nFastTok = 0 ) :
         nPrefixKey( nPrefix ),
         eLocalName( eName ),
         nToken( nTok ),
-        nFastToken( nFastTok )
-    {}
+        nFastToken( ( nPrefixKey + 1 ) << 16 | eLocalName )
+    {
+        if ( nFastTok )     // alternative value for duplicate/dummy tokens
+            nFastToken = nFastTok;
+    }
 };
 
 class XMLOFF_DLLPUBLIC SvXMLTokenMap
 {
 private:
     std::unique_ptr<SvXMLTokenMap_Impl>  m_pImpl;
-    sal_uInt16 Get( const SvXMLTokenMapEntry_Impl& rEntry ) const;
 
 public:
 

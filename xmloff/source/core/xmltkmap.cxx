@@ -21,52 +21,63 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
 
-#include <set>
+#include <unordered_map>
+#include <utility>
 
 using namespace ::xmloff::token;
 
-class SvXMLTokenMapEntry_Impl
+class SvXMLTokenMap_Impl
 {
-    sal_uInt16  nPrefixKey;
-    OUString    sLocalName;
-    sal_uInt16  nToken;
-    sal_Int32   nFastToken;
+private:
+    struct PairHash
+    {
+        std::size_t operator()(const std::pair<sal_uInt16,OUString> &pair) const
+        {
+            return static_cast<std::size_t>( pair.first | pair.second.hashCode() );
+        }
+    };
+    std::unordered_map< std::pair<sal_uInt16, OUString>,
+                        sal_uInt16, PairHash> m_aPrefixAndNameToTokenMap;
+    std::unordered_map< sal_Int32, sal_uInt16> m_aFastTokenToTokenMap;
 
 public:
-
-    sal_uInt16 GetToken() const { return nToken; }
-
-    SvXMLTokenMapEntry_Impl( sal_uInt16 nPrefix, const OUString& rLName,
-                             sal_uInt16 nTok = XML_TOK_UNKNOWN, sal_Int32 nFastTok = 0 ) :
-        nPrefixKey( nPrefix ),
-        sLocalName( rLName  ),
-        nToken( nTok ),
-        nFastToken( nFastTok )
-    {}
-
-    explicit SvXMLTokenMapEntry_Impl( const SvXMLTokenMapEntry& rEntry ) :
-        nPrefixKey( rEntry.nPrefixKey ),
-        sLocalName( GetXMLToken( rEntry.eLocalName ) ),
-        nToken( rEntry.nToken ),
-        nFastToken( rEntry.nFastToken )
-    {}
-
-    bool operator<( const SvXMLTokenMapEntry_Impl& r ) const
-    {
-        return nPrefixKey < r.nPrefixKey ||
-               ( nPrefixKey == r.nPrefixKey &&
-                 sLocalName < r.sLocalName);
-    }
+    void insert( const SvXMLTokenMapEntry& rEntry );
+    sal_uInt16 get( sal_uInt16 nKeyPrefix, const OUString& rLName ) const;
+    sal_uInt16 get( sal_Int32 nFastTok ) const;
 };
 
-class SvXMLTokenMap_Impl : public std::set<SvXMLTokenMapEntry_Impl> {};
+void SvXMLTokenMap_Impl::insert( const SvXMLTokenMapEntry& rEntry )
+{
+    m_aPrefixAndNameToTokenMap.insert( std::make_pair( std::make_pair( rEntry.nPrefixKey,
+                                       GetXMLToken( rEntry.eLocalName ) ), rEntry.nToken ) );
+    if( rEntry.nFastToken )
+        m_aFastTokenToTokenMap.insert( std::make_pair( rEntry.nFastToken, rEntry.nToken ) );
+}
+
+sal_uInt16 SvXMLTokenMap_Impl::get( sal_uInt16 nKeyPrefix, const OUString& rLName ) const
+{
+    auto aIter( m_aPrefixAndNameToTokenMap.find( std::make_pair( nKeyPrefix, rLName ) ) );
+    if ( aIter != m_aPrefixAndNameToTokenMap.end() )
+        return (*aIter).second;
+    else
+        return XML_TOK_UNKNOWN;
+}
+
+sal_uInt16 SvXMLTokenMap_Impl::get( sal_Int32 nFastTok ) const
+{
+    auto aIter( m_aFastTokenToTokenMap.find( nFastTok ) );
+    if ( aIter != m_aFastTokenToTokenMap.end() )
+        return (*aIter).second;
+    else
+        return XML_TOK_UNKNOWN;
+}
 
 SvXMLTokenMap::SvXMLTokenMap( const SvXMLTokenMapEntry *pMap )
     : m_pImpl( new SvXMLTokenMap_Impl )
 {
     while( pMap->eLocalName != XML_TOKEN_INVALID )
     {
-        m_pImpl->insert(SvXMLTokenMapEntry_Impl( *pMap ));
+        m_pImpl->insert( *pMap );
         pMap++;
     }
 }
@@ -75,33 +86,15 @@ SvXMLTokenMap::~SvXMLTokenMap()
 {
 }
 
-sal_uInt16 SvXMLTokenMap::Get( const SvXMLTokenMapEntry_Impl& rEntry ) const
-{
-    SvXMLTokenMapEntry_Impl const* pEntry = nullptr;
-    SvXMLTokenMap_Impl::iterator it = m_pImpl->find( rEntry );
-    if (it != m_pImpl->end())
-    {
-        pEntry = &*it;
-    }
-
-    if( pEntry )
-        return pEntry->GetToken();
-    else
-        return XML_TOK_UNKNOWN;
-}
-
 sal_uInt16 SvXMLTokenMap::Get( sal_uInt16 nKeyPrefix,
                                const OUString& rLName ) const
 {
-    SvXMLTokenMapEntry_Impl aTst( nKeyPrefix, rLName );
-    return( Get( aTst ) );
+    return m_pImpl->get( nKeyPrefix, rLName );
 }
 
 sal_uInt16 SvXMLTokenMap::Get( sal_Int32 nFastTok ) const
 {
-    static const OUString sEmptyString("");
-    SvXMLTokenMapEntry_Impl aTst( 0, sEmptyString, XML_TOK_UNKNOWN, nFastTok );
-    return( Get( aTst ) );
+    return m_pImpl->get( nFastTok );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -61,6 +61,8 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
 
+#define NAMESPACE_TOKEN( prefixToken ) ( ( prefixToken + 1 ) << NMSP_SHIFT )
+
 const size_t NMSP_SHIFT = 16;
 const sal_Int32 TOKEN_MASK = 0xffff;
 const sal_Int32 NMSP_MASK = 0xffff0000;
