@@ -143,3 +143,6 @@ cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
 cmd/sc_columnoperations.png cmd/sc_entirecolumn.png 
 cmd/lc_rowoperations.png cmd/lc_entirerow.png 
 cmd/sc_rowoperations.png cmd/sc_entirerow.png
+
+cmd/sc_attributepage.png sw/res/sidebar/pageproppanel/portraitcopy_24x24.png
+cmd/lc_attributepage.png sw/res/sidebar/pageproppanel/portraitcopy_24x24.png
