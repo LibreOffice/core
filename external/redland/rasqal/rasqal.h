@@ -39,14 +39,14 @@ extern "C" {
  *
  * Format: major * 10000 + minor * 100 + release
  */
-#define RASQAL_VERSION 930
+#define RASQAL_VERSION 933
 
 /**
  * RASQAL_VERSION_STRING:
  *
  * Rasqal library version string
  */
-#define RASQAL_VERSION_STRING "0.9.30"
+#define RASQAL_VERSION_STRING "0.9.33"
 
 /**
  * RASQAL_VERSION_MAJOR:
@@ -67,7 +67,7 @@ extern "C" {
  *
  * Rasqal library release
  */
-#define RASQAL_VERSION_RELEASE 30
+#define RASQAL_VERSION_RELEASE 33
 
 
 /**
@@ -202,7 +202,7 @@ extern const char * const rasqal_home_url_string;
  *
  * Version of Raptor that Rasqal was configured against.
  */
-#define RASQAL_RAPTOR_VERSION 0
+#define RASQAL_RAPTOR_VERSION 20015
 
 
 /* Public structures */
@@ -363,7 +363,7 @@ typedef struct {
 typedef enum {
   RASQAL_DATA_GRAPH_NONE  = 0,
   RASQAL_DATA_GRAPH_NAMED = 1,
-  RASQAL_DATA_GRAPH_BACKGROUND = 2,
+  RASQAL_DATA_GRAPH_BACKGROUND = 2
 } rasqal_data_graph_flags;
 
 
@@ -393,7 +393,7 @@ typedef struct {
   rasqal_world* world;
   raptor_uri* uri;
   raptor_uri* name_uri;
-  int flags;
+  unsigned int flags;
   char* format_type;
   char* format_name;
   raptor_uri* format_uri;
@@ -612,7 +612,7 @@ struct rasqal_literal_s {
   } value;
 
   /* for string */
-  const char *language;
+  char *language;
   raptor_uri *datatype;
 
   /* various flags for literal types:
@@ -856,6 +856,7 @@ typedef enum {
  * @args: args for extension function qname(args...), cast-to-uri and COALESCE
  * @params: args for extension function parameters (SPARQL 1.1) (Rasqal 0.9.20+)
  * @flags: bitflags from #rasqal_expression_flags for expressions (Rasqal 0.9.20+)
+ * @arg4: fourth argument (for #RASQAL_EXPR_REPLACE )
  *
  * Expression with arguments
  *
@@ -970,6 +971,7 @@ typedef enum {
  * @RASQAL_QUERY_RESULTS_GRAPH: an RDF graph
  * @RASQAL_QUERY_RESULTS_SYNTAX: a syntax
  * @RASQAL_QUERY_RESULTS_UNKNOWN: unknown type
+ * @RASQAL_QUERY_RESULTS_LAST: internal
  *
  * Query result type.
  */
@@ -979,7 +981,8 @@ typedef enum {
   RASQAL_QUERY_RESULTS_BOOLEAN,
   RASQAL_QUERY_RESULTS_GRAPH,
   RASQAL_QUERY_RESULTS_SYNTAX,
-  RASQAL_QUERY_RESULTS_UNKNOWN
+  RASQAL_QUERY_RESULTS_UNKNOWN,
+  RASQAL_QUERY_RESULTS_LAST = RASQAL_QUERY_RESULTS_UNKNOWN
 } rasqal_query_results_type;
 
 
@@ -991,7 +994,7 @@ typedef enum {
  * @RASQAL_UPDATE_TYPE_LOAD: Load graph.
  * @RASQAL_UPDATE_TYPE_UPDATE: Insert or Delete graph or triples.
  * @RASQAL_UPDATE_TYPE_ADD: Add graph to another graph.
- * @RASQAL_UPDATE_TYPE_MOVE: Move graph to another graph.
+ * @RASQAL_UPDATE_TYPE_MOVE: Move graph to another grpah.
  * @RASQAL_UPDATE_TYPE_COPY: Copy graph to another graph.
  * @RASQAL_UPDATE_TYPE_UNKNOWN: Internal
  * @RASQAL_UPDATE_TYPE_LAST: Internal
@@ -1100,6 +1103,7 @@ typedef struct {
  * @RASQAL_GRAPH_PATTERN_OPERATOR_SELECT: SELECT graph pattern
  * @RASQAL_GRAPH_PATTERN_OPERATOR_SERVICE: SERVICE graph pattern
  * @RASQAL_GRAPH_PATTERN_OPERATOR_MINUS: MINUS graph pattern
+ * @RASQAL_GRAPH_PATTERN_OPERATOR_VALUES: VALUES graph pattern
  * @RASQAL_GRAPH_PATTERN_OPERATOR_UNKNOWN: Internal.
  * @RASQAL_GRAPH_PATTERN_OPERATOR_LAST: Internal.
  *
@@ -1117,8 +1121,9 @@ typedef enum {
   RASQAL_GRAPH_PATTERN_OPERATOR_SELECT    = 8,
   RASQAL_GRAPH_PATTERN_OPERATOR_SERVICE   = 9,
   RASQAL_GRAPH_PATTERN_OPERATOR_MINUS     = 10,
+  RASQAL_GRAPH_PATTERN_OPERATOR_VALUES    = 11,
 
-  RASQAL_GRAPH_PATTERN_OPERATOR_LAST = RASQAL_GRAPH_PATTERN_OPERATOR_MINUS
+  RASQAL_GRAPH_PATTERN_OPERATOR_LAST = RASQAL_GRAPH_PATTERN_OPERATOR_VALUES
 } rasqal_graph_pattern_operator;
 
 
@@ -1352,6 +1357,9 @@ RASQAL_API
 rasqal_literal* rasqal_graph_pattern_get_service(rasqal_graph_pattern* graph_pattern);
 RASQAL_API
 raptor_sequence* rasqal_graph_pattern_get_flattened_triples(rasqal_query* query, rasqal_graph_pattern* graph_pattern);
+RASQAL_API
+raptor_sequence* rasqal_graph_pattern_get_triples(rasqal_query* query, rasqal_graph_pattern* graph_pattern);
+
 
 /* Utility methods */
 RASQAL_API
@@ -1383,7 +1391,11 @@ rasqal_query_results_type rasqal_query_get_result_type(rasqal_query* query);
 
 /* query results */
 RASQAL_API
+rasqal_query_results* rasqal_new_query_results2(rasqal_world* world, rasqal_query* query, rasqal_query_results_type type);
+RASQAL_API RASQAL_DEPRECATED
 rasqal_query_results* rasqal_new_query_results(rasqal_world* world, rasqal_query* query, rasqal_query_results_type type, rasqal_variables_table* vars_table);
+RASQAL_API
+rasqal_query_results* rasqal_new_query_results_from_string(rasqal_world* world, rasqal_query_results_type type, raptor_uri* base_uri, const char* string, size_t string_len);
 RASQAL_API
 void rasqal_free_query_results(rasqal_query_results *query_results);
 
@@ -1393,6 +1405,8 @@ rasqal_query* rasqal_query_results_get_query(rasqal_query_results* query_results
 /* Bindings result format */
 RASQAL_API
 rasqal_query_results_type rasqal_query_results_get_type(rasqal_query_results* query_results);
+RASQAL_API
+const char* rasqal_query_results_type_label(rasqal_query_results_type type);
 RASQAL_API
 int rasqal_query_results_is_bindings(rasqal_query_results *query_results);
 RASQAL_API
@@ -1458,6 +1472,8 @@ typedef enum {
 
 
 RASQAL_API
+int rasqal_query_results_formats_check2(rasqal_world* world, const char *name, raptor_uri* uri, const char *mime_type, int flags);
+RASQAL_API RASQAL_DEPRECATED
 int rasqal_query_results_formats_check(rasqal_world* world, const char *name, raptor_uri* uri, const char *mime_type, int flags);
 RASQAL_API
 rasqal_query_results_formatter* rasqal_new_query_results_formatter(rasqal_world* world, const char *name, const char *mime_type, raptor_uri* format_uri);
@@ -1478,7 +1494,7 @@ unsigned char* rasqal_query_escape_counted_string(rasqal_query* query, const uns
 
 /* Data graph class */
 RASQAL_API
-rasqal_data_graph* rasqal_new_data_graph_from_uri(rasqal_world* world, raptor_uri* uri, raptor_uri* name_uri, int flags, const char* format_type, const char* format_name, raptor_uri* format_uri);
+rasqal_data_graph* rasqal_new_data_graph_from_uri(rasqal_world* world, raptor_uri* uri, raptor_uri* name_uri, unsigned int flags, const char* format_type, const char* format_name, raptor_uri* format_uri);
 RASQAL_API
 rasqal_data_graph* rasqal_new_data_graph_from_iostream(rasqal_world* world, raptor_iostream* iostr, raptor_uri* base_uri, raptor_uri* name_uri, unsigned int flags, const char* format_type, const char* format_name, raptor_uri* format_uri);
 RASQAL_API
@@ -1492,8 +1508,8 @@ int rasqal_data_graph_print(rasqal_data_graph* dg, FILE* fh);
 /**
  * rasqal_compare_flags:
  * @RASQAL_COMPARE_NOCASE: String comparisons are case independent.
- * @RASQAL_COMPARE_XQUERY: XQuery comparison rules apply.
- * @RASQAL_COMPARE_RDF:    RDF Term comparison rules apply.
+ * @RASQAL_COMPARE_XQUERY: XQuery comparsion rules apply.
+ * @RASQAL_COMPARE_RDF:    RDF Term comparsion rules apply.
  * @RASQAL_COMPARE_URI:    Allow comparison of URIs and allow strings to have a boolean value (unused; was for RDQL)
  * @RASQAL_COMPARE_SAMETERM: SPARQL sameTerm() builtin rules apply.
  *
@@ -1523,7 +1539,7 @@ typedef struct rasqal_random_s rasqal_random;
  * @base_uri: base URI of expression context (or NULL)
  * @locator: locator or NULL
  * @flags: expression comparison flags
- * @seed: random seed
+ * @seed: random seeed
  * @random: random number generator object
  *
  * A context for evaluating an expression such as with
@@ -1565,7 +1581,7 @@ rasqal_expression* rasqal_new_expr_seq_expression(rasqal_world* world, rasqal_op
 RASQAL_API
 rasqal_expression* rasqal_new_set_expression(rasqal_world* world, rasqal_op op, rasqal_expression* arg1, raptor_sequence* args);
 RASQAL_API
-rasqal_expression* rasqal_new_group_concat_expression(rasqal_world* world,  int flags, raptor_sequence* args, rasqal_literal* separator);
+rasqal_expression* rasqal_new_group_concat_expression(rasqal_world* world, unsigned int flags, raptor_sequence* args, rasqal_literal* separator);
 RASQAL_API
 rasqal_expression* rasqal_new_expression_from_expression(rasqal_expression* e);
 
@@ -1675,6 +1691,10 @@ int rasqal_literal_same_term(rasqal_literal* l1, rasqal_literal* l2);
 RASQAL_API
 rasqal_literal_type rasqal_literal_get_rdf_term_type(rasqal_literal* l);
 RASQAL_API
+rasqal_literal_type rasqal_literal_get_type(rasqal_literal* l);
+RASQAL_API
+char* rasqal_literal_get_language(rasqal_literal* l);
+RASQAL_API
 int rasqal_literal_is_rdf_literal(rasqal_literal* l);
 
 
@@ -1725,8 +1745,10 @@ RASQAL_API
 rasqal_variables_table* rasqal_new_variables_table(rasqal_world* world);
 RASQAL_API
 void rasqal_free_variables_table(rasqal_variables_table* vt);
-RASQAL_API
+RASQAL_API RASQAL_DEPRECATED
 rasqal_variable* rasqal_variables_table_add(rasqal_variables_table* vt, rasqal_variable_type type, const unsigned char *name, rasqal_literal *value);
+RASQAL_API
+rasqal_variable* rasqal_variables_table_add2(rasqal_variables_table* vt, rasqal_variable_type type, const unsigned char *name, size_t name_len, rasqal_literal *value);
 RASQAL_API
 int rasqal_variables_table_add_variable(rasqal_variables_table* vt, rasqal_variable* variable);
 RASQAL_API
@@ -1988,7 +2010,7 @@ typedef enum {
  * @version: API version - only V1 is defined for now
  * @query: Source for this query.
  * @user_data: Context user data passed into the factory methods.
- * @init_triples_match: Factory method to initialise a new #rasqal_triples_match.
+ * @init_triples_match: Factory method to initalise a new #rasqal_triples_match.
  * @triple_present: Factory method to return presence or absence of a complete triple.
  * @free_triples_source: Factory method to deallocate resources.
  * @support_feature: Factory method to test support for a feature, returning non-0 if supported
@@ -2027,7 +2049,7 @@ typedef struct rasqal_triples_source_s rasqal_triples_source;
  *
  * Highest accepted @rasqal_triples_source_factory API version
  */
-#define RASQAL_TRIPLES_SOURCE_FACTORY_MAX_VERSION 2
+#define RASQAL_TRIPLES_SOURCE_FACTORY_MAX_VERSION 3
 
 
 /**
@@ -2042,12 +2064,24 @@ typedef void (*rasqal_triples_error_handler)(rasqal_query* query, raptor_locator
 
 
 /**
+ * rasqal_triples_error_handler2:
+ * @world: world object
+ * @locator: error locator (or NULL)
+ * @message: error message
+ *
+ * Triples source factory error handler callback.
+ */
+typedef void (*rasqal_triples_error_handler2)(rasqal_world* world, raptor_locator* locator, const char* message);
+
+
+/**
  * rasqal_triples_source_factory:
- * @version: API factory version from 1 to 2
+ * @version: API factory version from 1 to 3
  * @user_data: User data for triples_source_factory.
  * @user_data_size: Size of @user_data for new_triples_source.
  * @new_triples_source: Create a new triples source - returns non-zero on failure &lt; 0 is a 'no rdf data error', &gt; 0 is an unspecified error. Error messages are generated by rasqal internally. (V1)
  * @init_triples_source: Initialise a new triples source V2 for a particular source URI/base URI and syntax. Returns non-zero on failure with errors reported via the handler callback by the implementation. (V2)
+ * @init_triples_source2: Initialise a new triples source V3 for a particular source URI/base URI and syntax and given data graphs. Returns non-zero on failure with errors reported via the handler callback by the implementation. If bit 0 of flags is 1, enforce RAPTOR_FEATURE_NO_NET (V3)
  *
  * A factory that initialises #rasqal_triples_source structures to
  * returning matches to a triple pattern across the dataset formed
@@ -2063,6 +2097,8 @@ typedef struct {
   int (*new_triples_source)(rasqal_query* query, void *factory_user_data, void *user_data, rasqal_triples_source* rts);
   /* API v2 onwards */
   int (*init_triples_source)(rasqal_query* query, void *factory_user_data, void *user_data, rasqal_triples_source* rts, rasqal_triples_error_handler handler);
+  /* API v3 onwards */
+  int (*init_triples_source2)(rasqal_world* world, raptor_sequence* data_graphs, void *factory_user_data, void *user_data, rasqal_triples_source *rts, rasqal_triples_error_handler2 handler, unsigned int flags);
 } rasqal_triples_source_factory;
 
 
@@ -2112,6 +2148,7 @@ int rasqal_set_triples_source_factory(rasqal_world* world, rasqal_triples_source
 
 /**
  * rasqal_expression_s:
+ * @world: Internal
  * @usage: Internal
  * @op: Internal
  * @arg1: Internal
@@ -2123,6 +2160,7 @@ int rasqal_set_triples_source_factory(rasqal_world* world, rasqal_triples_source
  * @args: Internal
  * @params: Internal
  * @flags: Internal
+ * @arg4: Internal
  *
  * Internal - see #rasqal_expression.
  *

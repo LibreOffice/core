@@ -1,12 +1,9 @@
 --- redland.orig/src/win32_rdf_config.h	2015-09-02 23:12:12.894126138 +0200
 +++ redland/src/win32_rdf_config.h	2015-09-02 23:23:54.600173246 +0200
-@@ -43,8 +43,11 @@
- #define HAVE_STRICMP 1
- 
+@@ -43,7 +43,9 @@
  /* MS names for these functions */
--#define vsnprintf _vsnprintf
-+// next line breaks build on wntmsci12
-+//#define vsnprintf _vsnprintf
+ // next line breaks build on wntmsci12
+ //#define vsnprintf _vsnprintf
 +#if _MSC_VER < 1900 // older than VC 2015
  #define snprintf _snprintf
 +#endif
@@ -99,25 +96,6 @@
  
  /* Define to 1 if you have the <stdint.h> header file. */
  #define HAVE_STDINT_H 1
-@@ -246,7 +252,7 @@
- #define SIZEOF_UNSIGNED_LONG_LONG 8
- 
- /* SQLite API version */
--#define REDLAND_SQLITE_API 3
-+// #define REDLAND_SQLITE_API 3
- 
- /* Define to 1 if you have the ANSI C header files. */
- #define STDC_HEADERS 1
-@@ -254,6 +260,9 @@
- /* Building file storage */
- #define STORAGE_FILE 1
- 
-+#define STORAGE_HASHES 1
-+#define STORAGE_MEMORY 1
-+
- /* Building MySQL storage */
- /* #define STORAGE_MYSQL 1 */
- 
 @@ -261,7 +270,7 @@
  /*#undef STORAGE_POSTGRESQL*/
  
@@ -127,12 +105,3 @@
  
  /* Building 3store storage */
  /*#undef STORAGE_TSTORE*/
-@@ -273,7 +282,7 @@
- #define VERSION "1.0.16"
- 
- /* Use POSIX threads */
--#define WITH_THREADS
-+#undef WITH_THREADS
- 
- /* Define to 1 if your processor stores words with the most significant byte
-    first (like Motorola and SPARC, unlike Intel and VAX). */

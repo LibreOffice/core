@@ -1,93 +1,51 @@
-diff -ru rasqal.orig/src/rasqal_digest_md5.c rasqal/src/rasqal_digest_md5.c
---- rasqal.orig/src/rasqal_digest_md5.c	2012-02-11 00:41:11.000000000 +0100
-+++ rasqal/src/rasqal_digest_md5.c	2015-09-02 23:26:38.094184222 +0200
-@@ -50,7 +50,6 @@
- 
- #include <stdio.h>
- #include <string.h>
--#include <stdint.h>
- #include <stdarg.h>
- 
- #include "rasqal.h"
-diff -ru rasqal.orig/src/rasqal_digest_sha1.c rasqal/src/rasqal_digest_sha1.c
---- rasqal.orig/src/rasqal_digest_sha1.c	2012-02-16 06:54:24.000000000 +0100
-+++ rasqal/src/rasqal_digest_sha1.c	2015-09-02 23:26:44.922184681 +0200
-@@ -93,7 +93,6 @@
- #include <stdio.h>
- #include <string.h>
- #include <stdarg.h>
--#include <stdint.h>
- 
- #include "rasqal.h"
- #include "rasqal_internal.h"
-diff -ru rasqal.orig/src/rasqal_internal.h rasqal/src/rasqal_internal.h
---- rasqal.orig/src/rasqal_internal.h	2012-07-30 00:21:11.000000000 +0200
-+++ rasqal/src/rasqal_internal.h	2015-09-02 23:26:50.240185038 +0200
-@@ -26,6 +26,13 @@
- #ifndef RASQAL_INTERNAL_H
- #define RASQAL_INTERNAL_H
- 
-+#if defined(_MSC_VER) && _MSC_VER < 1600
-+typedef unsigned __int32 uint32_t;
-+typedef __int16 int16_t;
-+#else
-+#include <stdint.h>
-+#endif
-+
- #ifdef __cplusplus
- extern "C" {
- #define RASQAL_EXTERN_C extern "C"
 diff -ru rasqal.orig/src/win32_rasqal_config.h rasqal/src/win32_rasqal_config.h
 --- rasqal.orig/src/win32_rasqal_config.h	2015-09-02 23:12:00.733125322 +0200
 +++ rasqal/src/win32_rasqal_config.h	2015-09-02 23:28:10.152190403 +0200
-@@ -31,17 +31,23 @@
- #endif
- 
- #define WIN32_LEAN_AND_MEAN 1
-+#include <windows.h>
- 
- /* getopt is not in standard win32 C library - define if we have it */
- /* #define HAVE_GETOPT_H 1 */
- 
- #define HAVE_STDLIB_H 1
- 
-+#define HAVE_ERRNO_H 1
-+
- #define HAVE_STRICMP 1
- 
+@@ -31,7 +31,9 @@
  /* MS names for these functions */
--#define vsnprintf _vsnprintf
-+// next line breaks build on wntmsci12
-+//#define vsnprintf _vsnprintf
+ // next line breaks build on wntmsci12
+ //#define vsnprintf _vsnprintf
 +#if _MSC_VER < 1900 // older than VC 2015
  #define snprintf _snprintf
 +#endif
  #define access _access
  #define stricmp _stricmp
  #define strnicmp _strnicmp
-@@ -101,7 +107,6 @@
-  * Defines that come from config.h
-  */
+--- rasqal/src/rasqal_ntriples.c.orig	2016-08-26 23:29:58.343472683 +0200
++++ rasqal/src/rasqal_ntriples.c	2016-08-26 23:30:10.553471736 +0200
+@@ -25,6 +25,10 @@
+ #include <rasqal_config.h>
+ #endif
  
--#include <windows.h>
- #include <io.h>
- #include <memory.h>
- 
-@@ -149,7 +154,15 @@
- /* #define RAPTOR_TRIPLES_SOURCE_REDLAND 1 */
- 
- /* Use PCRE regex library */
--#define RASQAL_REGEX_PCRE 1
-+//#define RASQAL_REGEX_PCRE 1
++#ifdef WIN32
++#include <win32_rasqal_config.h>
++#endif
 +
-+#define HAVE_LIBXML_SCHEMASINTERNALS_H 1
-+#define HAVE_LIBXML_XMLSCHEMASTYPES_H 1
-+#define HAVE_LIBXML_XMLSCHEMAS_H 1
-+
-+#define RASQAL_DECIMAL_NONE 1
-+#define RASQAL_UUID_INTERNAL 1
-+#define RASQAL_DIGEST_INTERNAL 1
+ #include <stdio.h>
+ #include <string.h>
+ #include <ctype.h>
+--- rasqal/src/sv_config.h.orig	2016-08-26 23:29:42.408473919 +0200
++++ rasqal/src/sv_config.h	2016-08-26 23:29:44.760473737 +0200
+@@ -29,7 +29,11 @@
+ extern "C" {
+ #endif
  
- #ifdef _DEBUG
- #define RASQAL_DEBUG 1
- #define RASQAL_EXTERN_C extern "C"
++#ifdef WIN32
++#include <win32_rasqal_config.h>
++#else
+ #include <rasqal_config.h>
++#endif
+ 
+ #define sv_new rasqal_sv_new
+ #define sv_free rasqal_sv_free
+--- rasqal/src/rasqal.h.in.orig	2016-08-26 23:42:23.198414915 +0200
++++ rasqal/src/rasqal.h.in	2016-08-26 23:42:34.627414028 +0200
+@@ -1473,7 +1473,7 @@
+ 
+ RASQAL_API
+ int rasqal_query_results_formats_check2(rasqal_world* world, const char *name, raptor_uri* uri, const char *mime_type, int flags);
+-RASQAL_API RASQAL_API RASQAL_DEPRECATED
++RASQAL_API RASQAL_DEPRECATED
+ int rasqal_query_results_formats_check(rasqal_world* world, const char *name, raptor_uri* uri, const char *mime_type, int flags);
+ RASQAL_API
+ rasqal_query_results_formatter* rasqal_new_query_results_formatter(rasqal_world* world, const char *name, const char *mime_type, raptor_uri* format_uri);

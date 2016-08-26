@@ -100,14 +100,14 @@ extern "C" {
  *
  * Format: major * 10000 + minor * 100 + release
  */
-#define LIBRDF_VERSION 10016
+#define LIBRDF_VERSION 10017
 
 /**
  * LIBRDF_VERSION_STRING:
  *
  * Redland librdf library version string
  */
-#define LIBRDF_VERSION_STRING "1.0.16"
+#define LIBRDF_VERSION_STRING "1.0.17"
 
 /**
  * LIBRDF_VERSION_MAJOR:
@@ -128,7 +128,7 @@ extern "C" {
  *
  * Redland librdf library release
  */
-#define LIBRDF_VERSION_RELEASE 16
+#define LIBRDF_VERSION_RELEASE 17
 
 
 

@@ -53,14 +53,14 @@ extern "C" {
  *
  * Format: major * 10000 + minor * 100 + release
  */
-#define RAPTOR_VERSION 20009
+#define RAPTOR_VERSION 20015
 
 /**
  * RAPTOR_VERSION_STRING:
  *
  * Raptor library version string
  */
-#define RAPTOR_VERSION_STRING "2.0.9"
+#define RAPTOR_VERSION_STRING "2.0.15"
 
 /**
  * RAPTOR_VERSION_MAJOR:
@@ -81,7 +81,7 @@ extern "C" {
  *
  * Raptor library release
  */
-#define RAPTOR_VERSION_RELEASE 9
+#define RAPTOR_VERSION_RELEASE 15
 
 /**
  * RAPTOR_API:
@@ -929,11 +929,27 @@ typedef enum {
 
 
 /**
+ * raptor_data_compare_arg_handler:
+ * @data1: first object
+ * @data2: second object
+ * @user_data: user data argument
+ *
+ * Function to compare two data objects with a user data argument
+ *
+ * Designed to be used with raptor_sort_r() and compatible functions
+ * such as raptor_sequence_sort_r() which uses it.
+ *
+ * Return value: compare value <0 if @data1 is before @data2, =0 if equal, >0 if @data1 is after @data2
+ */
+typedef int (*raptor_data_compare_arg_handler)(const void *data1, const void *data2, void *user_data);
+
+
+/**
  * raptor_data_compare_handler:
  * @data1: first data object
  * @data2: second data object
  *
- * Function to compare two data objects - signature like strcmp() and function passed to qsort()
+ * Function to compare two data objects - signature like strcmp() and function pssed to qsort()
  *
  * Designed to be passed into generic data structure constructors
  * like raptor_new_avltree().
@@ -1052,6 +1068,10 @@ int raptor_world_is_serializer_name(raptor_world* world, const char *name);
 
 /* Syntax descriptions */
 RAPTOR_API
+int raptor_world_get_parsers_count(raptor_world* world);
+RAPTOR_API
+int raptor_world_get_serializers_count(raptor_world* world);
+RAPTOR_API
 const raptor_syntax_description* raptor_world_get_parser_description(raptor_world* world, unsigned int counter);
 RAPTOR_API
 const raptor_syntax_description* raptor_world_get_serializer_description(raptor_world* world, unsigned int counter);
@@ -1078,6 +1098,8 @@ raptor_term* raptor_new_term_from_blank(raptor_world* world, const unsigned char
 RAPTOR_API
 raptor_term* raptor_new_term_from_counted_blank(raptor_world* world, const unsigned char* blank, size_t length);
 RAPTOR_API
+raptor_term* raptor_new_term_from_counted_string(raptor_world* world, unsigned char* string, size_t length);
+RAPTOR_API
 raptor_term* raptor_term_copy(raptor_term* term);
 RAPTOR_API
 int raptor_term_compare(const raptor_term *t1, const raptor_term *t2);
@@ -1091,6 +1113,8 @@ unsigned char* raptor_term_to_counted_string(raptor_term *term, size_t* len_p);
 RAPTOR_API
 unsigned char* raptor_term_to_string(raptor_term *term);
 RAPTOR_API
+int raptor_term_escaped_write(const raptor_term *term, unsigned int flags, raptor_iostream* iostr);
+RAPTOR_API RAPTOR_DEPRECATED
 int raptor_term_ntriples_write(const raptor_term *term, raptor_iostream* iostr);
 RAPTOR_API
 int raptor_uri_turtle_write(raptor_world *world, raptor_iostream* iostr, raptor_uri* uri, raptor_namespace_stack *nstack, raptor_uri *base_uri);
@@ -1309,6 +1333,8 @@ RAPTOR_API
 raptor_world* raptor_uri_get_world(raptor_uri *uri);
 RAPTOR_API
 int raptor_uri_file_exists(raptor_uri* uri);
+RAPTOR_API
+int raptor_uri_escaped_write(raptor_uri* uri, raptor_uri* base_uri, unsigned int flags, raptor_iostream *iostr);
 
 /* XML utility functions */
 RAPTOR_API
@@ -1339,6 +1365,8 @@ size_t raptor_uri_resolve_uri_reference(const unsigned char *base_uri, const uns
 
 /* URI String utility functions */
 RAPTOR_API
+unsigned char* raptor_uri_counted_filename_to_uri_string(const char *filename, size_t filename_len);
+RAPTOR_API
 unsigned char* raptor_uri_filename_to_uri_string(const char *filename);
 RAPTOR_API
 int raptor_uri_filename_exists(const unsigned char* path);
@@ -1352,6 +1380,8 @@ RAPTOR_API
 int raptor_stringbuffer_append_uri_escaped_counted_string(raptor_stringbuffer* sb, const char* string, size_t length, int space_is_plus);
 RAPTOR_API
 char* raptor_uri_uri_string_to_counted_filename_fragment(const unsigned char *uri_string, size_t* len_p, unsigned char **fragment_p, size_t* fragment_len_p);
+RAPTOR_API
+int raptor_uri_uri_string_is_absolute(const unsigned char* uri_string);
 
 
 /**
@@ -1461,6 +1491,8 @@ int raptor_qname_write(raptor_qname *qname, raptor_iostream* iostr);
 /* QName String utility functions */
 RAPTOR_API
 raptor_uri* raptor_qname_string_to_uri(raptor_namespace_stack *nstack,  const unsigned char *name, size_t name_len);
+RAPTOR_API
+unsigned char* raptor_qname_format_as_xml(const raptor_qname *qname, size_t *length_p);
 
 /* XML Namespaces Stack class */
 RAPTOR_API
@@ -1551,6 +1583,8 @@ void* raptor_sequence_delete_at(raptor_sequence* seq, int idx);
 
 RAPTOR_API
 void raptor_sequence_sort(raptor_sequence* seq, raptor_data_compare_handler compare);
+RAPTOR_API
+void raptor_sequence_sort_r(raptor_sequence* seq, raptor_data_compare_arg_handler compare, void* user_data);
 RAPTOR_API
 int raptor_sequence_swap(raptor_sequence* seq, int i, int j);
 RAPTOR_API
@@ -1774,15 +1808,64 @@ RAPTOR_API
 int raptor_iostream_read_eof(raptor_iostream *iostr);
 
 /* I/O Stream utility functions */
+
+/**
+ * raptor_escaped_write_bitflags:
+ * @RAPTOR_ESCAPED_WRITE_BITFLAG_BS_ESCAPES_BF   : Allow \b \f,
+ * @RAPTOR_ESCAPED_WRITE_BITFLAG_BS_ESCAPES_TNRU : ALlow \t \n \r \u
+ * @RAPTOR_ESCAPED_WRITE_BITFLAG_UTF8            : Allow UTF-8 for printable U *
+ * @RAPTOR_ESCAPED_WRITE_BITFLAG_SPARQL_URI_ESCAPES: Must escape #x00-#x20<>\"{}|^` in URIs
+ * @RAPTOR_ESCAPED_WRITE_NTRIPLES_LITERAL: N-Triples literal
+ * @RAPTOR_ESCAPED_WRITE_NTRIPLES_URI: N-Triples URI
+ * @RAPTOR_ESCAPED_WRITE_SPARQL_LITERAL: SPARQL literal: allows raw UTF8 for printable literals
+ * @RAPTOR_ESCAPED_WRITE_SPARQL_LONG_LITERAL: SPARQL long literal: no BS-escapes allowed
+ * @RAPTOR_ESCAPED_WRITE_SPARQL_URI: SPARQL uri: have to escape certain characters
+ * @RAPTOR_ESCAPED_WRITE_TURTLE_URI: Turtle 2013 URIs (like SPARQL)
+ * @RAPTOR_ESCAPED_WRITE_TURTLE_LITERAL: Turtle 2013 literals (like SPARQL)
+ * @RAPTOR_ESCAPED_WRITE_TURTLE_LONG_LITERAL: Turtle 2013 long literals (like SPARQL)
+ * @RAPTOR_ESCAPED_WRITE_JSON_LITERAL: JSON literals: \b \f \t \r \n and \u \U
+ *
+ * Bit flags for raptor_string_escaped_write() and friends.
+ */
+typedef enum {
+  RAPTOR_ESCAPED_WRITE_BITFLAG_BS_ESCAPES_BF      = 1,
+  RAPTOR_ESCAPED_WRITE_BITFLAG_BS_ESCAPES_TNRU    = 2,
+  RAPTOR_ESCAPED_WRITE_BITFLAG_UTF8               = 4,
+  RAPTOR_ESCAPED_WRITE_BITFLAG_SPARQL_URI_ESCAPES = 8,
+
+  /* N-Triples - favour writing \u, \U over UTF8 */
+  RAPTOR_ESCAPED_WRITE_NTRIPLES_LITERAL = RAPTOR_ESCAPED_WRITE_BITFLAG_BS_ESCAPES_TNRU | RAPTOR_ESCAPED_WRITE_BITFLAG_BS_ESCAPES_BF,
+  RAPTOR_ESCAPED_WRITE_NTRIPLES_URI     = RAPTOR_ESCAPED_WRITE_BITFLAG_SPARQL_URI_ESCAPES,
+
+  /* SPARQL literal: allows raw UTF8 for printable literals */
+  RAPTOR_ESCAPED_WRITE_SPARQL_LITERAL = RAPTOR_ESCAPED_WRITE_BITFLAG_UTF8,
+
+  /* SPARQL long literal: no BS-escapes allowed */
+  RAPTOR_ESCAPED_WRITE_SPARQL_LONG_LITERAL = RAPTOR_ESCAPED_WRITE_BITFLAG_UTF8,
+
+  /* SPARQL uri: have to escape certain characters */
+  RAPTOR_ESCAPED_WRITE_SPARQL_URI     = RAPTOR_ESCAPED_WRITE_BITFLAG_UTF8 | RAPTOR_ESCAPED_WRITE_BITFLAG_SPARQL_URI_ESCAPES,
+
+  /* Turtle (2013) escapes are like SPARQL */
+  RAPTOR_ESCAPED_WRITE_TURTLE_URI     = RAPTOR_ESCAPED_WRITE_SPARQL_URI,
+  RAPTOR_ESCAPED_WRITE_TURTLE_LITERAL = RAPTOR_ESCAPED_WRITE_SPARQL_LITERAL,
+  RAPTOR_ESCAPED_WRITE_TURTLE_LONG_LITERAL = RAPTOR_ESCAPED_WRITE_SPARQL_LONG_LITERAL,
+
+  /* JSON literals: \b \f \t \r \n and \u \U */
+  RAPTOR_ESCAPED_WRITE_JSON_LITERAL = RAPTOR_ESCAPED_WRITE_BITFLAG_BS_ESCAPES_TNRU | RAPTOR_ESCAPED_WRITE_BITFLAG_BS_ESCAPES_BF
+} raptor_escaped_write_bitflags;
+
+
 RAPTOR_API
 int raptor_string_ntriples_write(const unsigned char *string, size_t len, const char delim, raptor_iostream *iostr);
 RAPTOR_API
 int raptor_bnodeid_ntriples_write(const unsigned char *bnodeid, size_t len, raptor_iostream *iostr);
-RAPTOR_API
-int raptor_string_python_write(const unsigned char *string, size_t len, const char delim, int flags, raptor_iostream *iostr);
+RAPTOR_API RAPTOR_DEPRECATED
+int raptor_string_python_write(const unsigned char *string, size_t len, const char delim, unsigned int mode, raptor_iostream *iostr);
 RAPTOR_API
 int raptor_statement_ntriples_write(const raptor_statement *statement, raptor_iostream* iostr, int write_graph_term);
-
+RAPTOR_API
+int raptor_string_escaped_write(const unsigned char *string, size_t len, const char delim, unsigned int flags, raptor_iostream *iostr);
 
 
 /* Parser and Serializer options */
@@ -2091,6 +2174,10 @@ RAPTOR_API
 int raptor_avltree_iterator_next(raptor_avltree_iterator* iterator);
 RAPTOR_API
 void* raptor_avltree_iterator_get(raptor_avltree_iterator* iterator);
+
+/* utility methods */
+RAPTOR_API
+void raptor_sort_r(void *base, size_t nel, size_t width, raptor_data_compare_arg_handler compar, void *user_data);
 
 
 #ifdef __cplusplus
