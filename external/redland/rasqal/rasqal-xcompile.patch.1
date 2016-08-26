@@ -8,8 +8,9 @@ libxml2 and libm, at least for Android.)
  top_srcdir = @top_srcdir@
  noinst_SCRIPTS = rasqal-src-config
  ACLOCAL_AMFLAGS = -I build
--SUBDIRS = src utils tests docs data win32 scripts
-+SUBDIRS = src docs data win32 scripts
+-SUBDIRS = libsv $(am__append_1) $(am__append_2) src utils tests docs \
++SUBDIRS = libsv $(am__append_1) $(am__append_2) src docs \
+ 	data win32 scripts
+ DIST_SUBDIRS = libsv libmtwist getopt src utils tests docs data win32 scripts
  pkgconfigdir = $(libdir)/pkgconfig
  pkgconfig_DATA = rasqal.pc
- EXTRA_DIST = \
