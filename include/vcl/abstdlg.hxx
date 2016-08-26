@@ -71,6 +71,10 @@ public:
     virtual bool        IsRecommendToOpenReadonly() const = 0;
 };
 
+class VCL_DLLPUBLIC AbstractScreenshotAnnotationDlg : public VclAbstractDialog
+{
+};
+
 class VCL_DLLPUBLIC VclAbstractDialogFactory
 {
 public:
@@ -82,6 +86,11 @@ public:
 
     // creates instance of PasswordToOpenModifyDialog from cui
     virtual AbstractPasswordToOpenModifyDialog* CreatePasswordToOpenModifyDialog( vcl::Window * pParent, sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify ) = 0;
+
+    // creates instance of ScreenshotAnnotationDlg from cui
+    virtual AbstractScreenshotAnnotationDlg* CreateScreenshotAnnotationDlg(
+        vcl::Window* pParent,
+        Dialog& rParentDialog) = 0;
 };
 
 #endif

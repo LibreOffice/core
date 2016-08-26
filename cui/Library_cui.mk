@@ -115,6 +115,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/dialogs/multipat \
     cui/source/dialogs/newtabledlg \
     cui/source/dialogs/passwdomdlg \
+    cui/source/dialogs/screenshotannotationdlg \
     cui/source/dialogs/pastedlg \
     cui/source/dialogs/postdlg \
     cui/source/dialogs/scriptdlg \

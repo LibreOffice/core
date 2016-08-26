@@ -37,6 +37,7 @@
 #include "linkdlg.hxx"
 #include "postdlg.hxx"
 #include "passwdomdlg.hxx"
+#include "screenshotannotationdlg.hxx"
 #include "cuihyperdlg.hxx"
 #include "selector.hxx"
 #include "SpellDialog.hxx"

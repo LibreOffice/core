@@ -32,6 +32,7 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/dialogs/hyperdlg.src \
     cui/source/dialogs/multipat.src \
     cui/source/dialogs/passwdomdlg.src \
+    cui/source/dialogs/screenshotannotationdlg.src \
     cui/source/dialogs/scriptdlg.src \
     cui/source/dialogs/svuidlg.src \
     cui/source/options/connpooloptions.src \
