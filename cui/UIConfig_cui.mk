@@ -144,6 +144,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/paraindentspacing \
 	cui/uiconfig/ui/paratabspage \
 	cui/uiconfig/ui/password \
+	cui/uiconfig/ui/screenshotannotationdialog \
 	cui/uiconfig/ui/pastespecial \
 	cui/uiconfig/ui/patterntabpage \
 	cui/uiconfig/ui/percentdialog \

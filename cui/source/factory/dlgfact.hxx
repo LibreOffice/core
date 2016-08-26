@@ -444,6 +444,12 @@ class AbstractPasswordToOpenModifyDialog_Impl : public AbstractPasswordToOpenMod
     virtual bool      IsRecommendToOpenReadonly() const override;
 };
 
+class ScreenshotAnnotationDlg;
+class AbstractScreenshotAnnotationDlg_Impl : public AbstractScreenshotAnnotationDlg
+{
+    DECL_ABSTDLG_BASE(AbstractScreenshotAnnotationDlg_Impl, ScreenshotAnnotationDlg)
+};
+
 //AbstractDialogFactory_Impl implementations
 class AbstractDialogFactory_Impl : public SvxAbstractDialogFactory
 {
@@ -622,7 +628,9 @@ public:
 
     virtual SvxAbstractInsRowColDlg* CreateSvxInsRowColDlg( vcl::Window* pParent, bool bCol, const OString& sHelpId ) override;
 
-    virtual AbstractPasswordToOpenModifyDialog *    CreatePasswordToOpenModifyDialog( vcl::Window * pParent, sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify ) override;
+    virtual AbstractPasswordToOpenModifyDialog *    CreatePasswordToOpenModifyDialog(vcl::Window * pParent, sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify) override;
+
+    virtual AbstractScreenshotAnnotationDlg* CreateScreenshotAnnotationDlg(vcl::Window * pParent, Dialog& rParentDialog) override;
 };
 
 #endif
