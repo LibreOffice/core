@@ -1322,7 +1322,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             aEntry.removeSegment();
             sPath = aEntry.GetMainURL( INetURLObject::NO_DECODE );
             OUString sExt(comphelper::string::stripStart(pStoreToFilter->GetDefaultExtension(), '*'));
-            aTempFile.reset( new utl::TempFile(sLeading, true, &sExt, &sPath) );
+            aTempFile.reset( new utl::TempFile(sLeading, sColumnData.isEmpty(), &sExt, &sPath) );
             if( !aTempFile->IsValid() )
             {
                 ErrorHandler::HandleError( ERRCODE_IO_NOTSUPPORTED );
