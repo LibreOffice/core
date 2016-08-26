@@ -29,6 +29,14 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <vcl/pngwrite.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <tools/urlobj.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/salgtype.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/vclmedit.hxx>
+#include <vcl/button.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 
 using namespace com::sun::star;
 
