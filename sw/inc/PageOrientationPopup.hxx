@@ -16,16 +16,26 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PROPERTYPANEL_HRC
-#define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PROPERTYPANEL_HRC
+#ifndef INCLUDED_SW_INC_PAGEORIENTATIONPOPUP_HXX
+#define INCLUDED_SW_INC_PAGEORIENTATIONPOPUP_HXX
 
-#include "rcid.hrc"
+#include <sfx2/tbxctrl.hxx>
+#include <swdllapi.h>
+#include <vcl/vclenum.hxx>
+#include <functional>
 
-#define RID_POPUP_SWPAGE_MARGIN             (RC_PROPERTYPANEL_BEGIN + 3)
-#define RID_POPUP_SWPAGE_COLUMN             (RC_PROPERTYPANEL_BEGIN + 5)
-#define RID_POPUP_SWPAGE_SIZE               (RC_PROPERTYPANEL_BEGIN + 6)
+class SW_DLLPUBLIC PageOrientationPopup : public SfxToolBoxControl
+{
+public:
+    SFX_DECL_TOOLBOX_CONTROL();
 
+    PageOrientationPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    virtual ~PageOrientationPopup();
+
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
+};
 
 #endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
