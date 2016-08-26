@@ -845,18 +845,19 @@ void NeonSession::OPTIONS( const OUString & inPath,
                            const DAVRequestEnvironment & rEnv )
     throw( std::exception )
 {
-
-    osl::Guard< osl::Mutex > theGuard( m_aMutex );
     SAL_INFO( "ucb.ucp.webdav", "OPTIONS - relative URL <" << inPath << ">" );
 
     rOptions.reset();
 
     Init( rEnv );
+    int theRetVal;
 
     ne_request *req = ne_request_create(m_pHttpSession, "OPTIONS", OUStringToOString(
                                             inPath, RTL_TEXTENCODING_UTF8 ).getStr());
-
-    int theRetVal = ne_request_dispatch(req);
+    {
+        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        theRetVal = ne_request_dispatch(req);
+    }
 
     //check if http error is in the 200 class (no error)
     if (theRetVal == NE_OK && ne_get_status(req)->klass != 2) {
