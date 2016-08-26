@@ -18,7 +18,9 @@ bool isStatic(ValueDecl const * decl, bool * memberEnumerator) {
     // clang::MemberExpr::getMemberDecl is documented to return either a
     // FieldDecl or a CXXMethodDecl, but can apparently also return a VarDecl
     // (as C++ static data members are modeled by VarDecl, not FieldDecl) or an
-    // EnumConstantDecl (struct { enum {E}; } s; s.E;):
+    // EnumConstantDecl (struct { enum {E}; } s; s.E;), see
+    // <https://reviews.llvm.org/D23907> "Fix documentation of
+    // MemberExpr::getMemberDecl":
     auto fd = dyn_cast<FieldDecl>(decl);
     if (fd != nullptr) {
         *memberEnumerator = false;
@@ -27,7 +29,8 @@ bool isStatic(ValueDecl const * decl, bool * memberEnumerator) {
     auto vd = dyn_cast<VarDecl>(decl);
     if (vd != nullptr) {
         *memberEnumerator = false;
-        return vd->isStaticDataMember();
+        assert(vd->isStaticDataMember());
+        return true;
     }
     auto md = dyn_cast<CXXMethodDecl>(decl);
     if (md != nullptr) {
