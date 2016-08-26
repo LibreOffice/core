@@ -1,0 +1,21 @@
+diff -ur misc/redland-1.0.17/configure misc/build/redland-1.0.17/configure
+--- misc/redland-1.0.17/configure	2013-12-28 08:26:53.000000000 -0800
++++ misc/build/redland-1.0.17/configure	2016-08-20 23:29:33.101405000 -0700
+@@ -6613,7 +6613,7 @@
+ 
+ cygwin*)
+   # func_win32_libid is a shell function defined in ltmain.sh
+-  lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
++  lt_cv_deplibs_check_method='file_magic ^x86 archive|^x86 DLL'
+   lt_cv_file_magic_cmd='func_win32_libid'
+   ;;
+ 
+@@ -6623,7 +6623,7 @@
+   # unless we find 'file', for example because we are cross-compiling.
+   # func_win32_libid assumes BSD nm, so disallow it if using MS dumpbin.
+   if ( test "$lt_cv_nm_interface" = "BSD nm" && file / ) >/dev/null 2>&1; then
+-    lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
++    lt_cv_deplibs_check_method='file_magic ^x86 archive|^x86 DLL'
+     lt_cv_file_magic_cmd='func_win32_libid'
+   else
+     # Keep this pattern in sync with the one in func_win32_libid.

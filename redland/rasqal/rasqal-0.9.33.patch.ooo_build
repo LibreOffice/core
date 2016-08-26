@@ -1,0 +1,14 @@
+--- misc/rasqal-0.9.33/Makefile.am	2014-03-27 21:54:42.000000000 -0700
++++ misc/build/rasqal-0.9.33/Makefile.am	2016-08-20 21:20:09.715947000 -0700
+@@ -31,9 +31,9 @@
+ if GETOPT
+ SUBDIRS += getopt
+ endif
+-SUBDIRS += src utils tests docs data win32 scripts
++SUBDIRS += src tests docs data win32 scripts
+ 
+-DIST_SUBDIRS=libsv libmtwist getopt src utils tests docs data win32 scripts
++DIST_SUBDIRS=libsv libmtwist getopt src tests docs data win32 scripts
+ 
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = rasqal.pc

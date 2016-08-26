@@ -89,21 +89,21 @@ if (ENABLE_NSS_MODULE!=NO && SYSTEM_NSS!=YES)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_REDLAND != YES)
-    MD5 = 284e768eeda0e2898b0d5bf7e26a016e
-    name = raptor-1.4.18.tar.gz
-    URL1 = http://download.librdf.org/source/raptor-1.4.18.tar.gz
+    MD5 = a39f6c07ddb20d7dd2ff1f95fa21e2cd
+    name = raptor2-2.0.15.tar.gz
+    URL1 = http://download.librdf.org/source/raptor2-2.0.15.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_REDLAND != YES)
-    MD5 = ca66e26082cab8bb817185a116db809b
-    name = redland-1.0.8.tar.gz
-    URL1 = http://download.librdf.org/source/redland-1.0.8.tar.gz
+    MD5 = e5be03eda13ef68aabab6e42aa67715e
+    name = redland-1.0.17.tar.gz
+    URL1 = http://download.librdf.org/source/redland-1.0.17.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_REDLAND != YES)
-    MD5 = fca8706f2c4619e2fa3f8f42f8fc1e9d
-    name = rasqal-0.9.16.tar.gz
-    URL1 = http://download.librdf.org/source/rasqal-0.9.16.tar.gz
+    MD5 = 1f5def51ca0026cd192958ef07228b52
+    name = rasqal-0.9.33.tar.gz
+    URL1 = http://download.librdf.org/source/rasqal-0.9.33.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (GUI!=UNX || SYSTEM_ZLIB!=YES)

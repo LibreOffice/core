@@ -40,18 +40,17 @@ all:
 
 .INCLUDE :	../redlandversion.mk
 
-REDLANDVERSION=1.0.8
+REDLANDVERSION=1.0.17
 
 TARFILE_NAME=redland-$(REDLANDVERSION)
-TARFILE_MD5=ca66e26082cab8bb817185a116db809b
+TARFILE_MD5=e5be03eda13ef68aabab6e42aa67715e
 
-ADDITIONAL_FILES=librdf/makefile.mk librdf/rdf_config.h
+ADDITIONAL_FILES=src/makefile.mk src/rdf_config.h
 
 OOO_PATCH_FILES= \
     $(TARFILE_NAME).patch.autotools \
     $(TARFILE_NAME).patch.dmake \
     $(TARFILE_NAME).patch.ooo_build \
-    $(TARFILE_NAME).patch.win32
 
 PATCH_FILES=$(OOO_PATCH_FILES) \
 
@@ -80,8 +79,11 @@ BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE
 # there is no wntmsci build environment in the tarball; we use custom dmakefile
+OOO_PATCH_FILES+= $(TARFILE_NAME).patch.win32
+CONFIGURE_ACTION= \
+    $(COPY) src/rdf_config.h.in src/rdf_config.h
 BUILD_ACTION=dmake
-BUILD_DIR=$(CONFIGURE_DIR)$/librdf
+BUILD_DIR=$(CONFIGURE_DIR)$/src
 .ENDIF
 .ELSE # "WNT"
 
@@ -122,8 +124,9 @@ XSLTLIB!:=$(XSLTLIB) # expand dmake variables for xslt-config
 .EXPORT: XSLTLIB
 
 CONFIGURE_DIR=
-CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH"
-CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --with-raptor=system --with-rasqual=system --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
+#CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH" RAPTOR2_CFLAGS=-I${PWD}$/..$/${INPATH}/inc RAPTOR2_LIBS="-L${PWD}/..$/${INPATH}/lib -lraptor2" PKG_CONFIG_PATH="../raptor2-2.0.15:../rasqal-0.9.33"
+CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH" PKG_CONFIG_PATH="../raptor2-2.0.15:../rasqal-0.9.33"
+CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --with-raptor=system --with-rasqual=system --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore -without-iodbc --without-unixodbc --without-datadirect --without-virtuoso --with-regex-library=posix --with-decimal=none --with-www=xml --disable-ltdl-install --disable-modular --without-included-ltdl --disable-ltdl-convenience
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -132,21 +135,40 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .ENDIF
 
 
-OUT2INC+=librdf$/*.h
+OUT2INC+=src$/librdf.h src$/redland.h \
+    src$/rdf_concepts.h \
+    src$/rdf_digest.h \
+    src$/rdf_hash.h \
+    src$/rdf_init.h \
+    src$/rdf_iterator.h \
+    src$/rdf_list.h \
+    src$/rdf_log.h \
+    src$/rdf_model.h \
+    src$/rdf_node.h \
+    src$/rdf_parser.h \
+    src$/rdf_query.h \
+    src$/rdf_raptor.h \
+    src$/rdf_serializer.h \
+    src$/rdf_statement.h \
+    src$/rdf_storage.h \
+    src$/rdf_storage_module.h \
+    src$/rdf_stream.h \
+    src$/rdf_uri.h \
+    src$/rdf_utf8.h \
 
 .IF "$(OS)"=="MACOSX"
-OUT2LIB+=librdf$/.libs$/librdf.$(REDLAND_MAJOR).dylib
+OUT2LIB+=src$/.libs$/librdf.$(REDLAND_MAJOR).dylib
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
-OUT2LIB+=librdf$/.libs$/*.a
-OUT2BIN+=librdf$/.libs$/*.dll
+OUT2LIB+=src$/.libs$/*.a
+OUT2BIN+=src$/.libs$/*.dll
 .ELSE
 # if we use dmake, this is done automagically
 .ENDIF
 .ELIF "$(OS)"=="OS2"
 # if we use dmake, this is done automagically
 .ELSE
-OUT2LIB+=librdf$/.libs$/librdf.so.$(REDLAND_MAJOR)
+OUT2LIB+=src$/.libs$/librdf.so.$(REDLAND_MAJOR)
 .ENDIF
 
 # --- Targets ------------------------------------------------------

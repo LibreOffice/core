@@ -1,6 +1,7 @@
---- misc/raptor-1.4.18/src/makefile.mk	Thu Nov  6 15:25:51 2008
-+++ misc/build/raptor-1.4.18/src/makefile.mk	Thu Nov  6 15:33:14 2008
-@@ -1,1 +1,116 @@
+--- misc/raptor2-2.0.15/src/makefile.mk	Thu Nov  6 15:25:51 2008
++++ misc/build/raptor2-2.0.15/src/makefile.mk	2016-08-22 16:00:54.772429000 -0700
++++ misc/build/raptor2-2.0.15/src/makefile.mk	2016-08-22 19:12:56.321912000 -0700
+@@ -1 +1,131 @@
 -dummy
 +#**************************************************************
 +#  
@@ -38,25 +39,28 @@
 +
 +.INCLUDE :  settings.mk
 +
-+CDEFS+=-DRAPTOR_INTERNAL -DWIN32 -DNDEBUG -D_WINDOWS -D_USRDLL -DWIN32_EXPORTS
++CDEFS+=-DRAPTOR_INTERNAL -DWIN32 -DNDEBUG -D_WINDOWS -D_USRDLL -DWIN32_EXPORTS -DHAVE_CONFIG_H
 +
 +# --- Files --------------------------------------------------------
 +
 +SLOFILES =	\
-+   $(SLO)$/n3_lexer.obj \
-+   $(SLO)$/n3_parser.obj \
 +   $(SLO)$/ntriples_parse.obj \
 +   $(SLO)$/parsedate.obj \
-+   $(SLO)$/raptor_feature.obj \
++   $(SLO)$/raptor_abbrev.obj \
++   $(SLO)$/raptor_avltree.obj \
++   $(SLO)$/raptor_concepts.obj \
++   $(SLO)$/raptor_escaped.obj \
 +   $(SLO)$/raptor_general.obj \
 +   $(SLO)$/raptor_guess.obj \
-+   $(SLO)$/raptor_identifier.obj \
 +   $(SLO)$/raptor_iostream.obj \
++   $(SLO)$/raptor_json_writer.obj \
 +   $(SLO)$/raptor_libxml.obj \
 +   $(SLO)$/raptor_locator.obj \
++   $(SLO)$/raptor_log.obj \
++   $(SLO)$/raptor_memstr.obj \
 +   $(SLO)$/raptor_namespace.obj \
-+   $(SLO)$/raptor_nfc.obj \
-+   $(SLO)$/raptor_nfc_data.obj \
++   $(SLO)$/raptor_ntriples.obj \
++   $(SLO)$/raptor_option.obj \
 +   $(SLO)$/raptor_parse.obj \
 +   $(SLO)$/raptor_qname.obj \
 +   $(SLO)$/raptor_rdfxml.obj \
@@ -66,31 +70,43 @@
 +   $(SLO)$/raptor_sax2.obj \
 +   $(SLO)$/raptor_sequence.obj \
 +   $(SLO)$/raptor_serialize.obj \
++   $(SLO)$/raptor_serialize_dot.obj \
++   $(SLO)$/raptor_serialize_html.obj \
++   $(SLO)$/raptor_serialize_json.obj \
 +   $(SLO)$/raptor_serialize_ntriples.obj \
 +   $(SLO)$/raptor_serialize_rdfxml.obj \
 +   $(SLO)$/raptor_serialize_rdfxmla.obj \
-+   $(SLO)$/raptor_serialize_simple.obj \
++   $(SLO)$/raptor_serialize_rss.obj \
++   $(SLO)$/raptor_serialize_turtle.obj \
 +   $(SLO)$/raptor_set.obj \
++   $(SLO)$/raptor_statement.obj \
 +   $(SLO)$/raptor_stringbuffer.obj \
++   $(SLO)$/raptor_syntax_description.obj \
++   $(SLO)$/raptor_term.obj \
++   $(SLO)$/raptor_turtle_writer.obj \
++   $(SLO)$/raptor_unicode.obj \
 +   $(SLO)$/raptor_uri.obj \
-+   $(SLO)$/raptor_utf8.obj \
-+   $(SLO)$/raptor_win32.obj \
 +   $(SLO)$/raptor_www.obj \
++   $(SLO)$/raptor_www_curl.obj \
++   $(SLO)$/raptor_www_libfetch.obj \
 +   $(SLO)$/raptor_www_libxml.obj \
 +   $(SLO)$/raptor_xml.obj \
 +   $(SLO)$/raptor_xml_writer.obj \
-+   $(SLO)$/raptor_xsd.obj \
-+   $(SLO)$/raptor_strcasecmp.obj \
++   $(SLO)$/snprintf.obj \
++   $(SLO)$/sort_r.obj \
++   $(SLO)$/strcasecmp.obj \
 +   $(SLO)$/turtle_common.obj \
 +   $(SLO)$/turtle_lexer.obj \
-+   $(SLO)$/turtle_parser.obj \
-+   $(SLO)$/raptor_abbrev.obj \
-+   $(SLO)$/raptor_avltree.obj \
-+   $(SLO)$/raptor_statement.obj \
-+   $(SLO)$/raptor_turtle_writer.obj \
++   $(SLO)$/turtle_parser.obj
 +
 +#   $(SLO)$/raptor_grddl.obj \
-+#   $(SLO)$/raptor_serialize_rss.obj \
++#   $(SLO)$/raptor_json.obj \
++#   $(SLO)$/raptor_librdfa.obj \
++#   $(SLO)$/raptor_permute_test.obj \
++#   $(SLO)$/raptor_www_test.obj \
++#   $(SLO)$/raptor_nfc_icu.obj \
++#   $(SLO)$/raptor_nfc_test.obj \
++#   $(SLO)$/raptor_win32.obj \
 +
 +
 +SHL1DEPN=   makefile.mk
@@ -118,4 +134,3 @@
 +
 +$(MISC)$/raptor_strcasecmp.c : strcasecmp.c
 +	$(COPY) $< $@
-+

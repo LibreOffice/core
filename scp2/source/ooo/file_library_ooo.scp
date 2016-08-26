@@ -1850,9 +1850,9 @@ File gid_File_Lib_Raptor
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     #ifdef MACOSX
-       Name = STRING(CONCAT4(libraptor,.,RAPTOR_MAJOR,UNXSUFFIX));
+       Name = STRING(CONCAT4(libraptor2,.,RAPTOR_MAJOR,UNXSUFFIX));
     #else
-       Name = STRING(CONCAT4(libraptor,UNXSUFFIX,.,RAPTOR_MAJOR));
+       Name = STRING(CONCAT4(libraptor2,UNXSUFFIX,.,RAPTOR_MAJOR));
     #endif
   #elif defined(OS2)
     Name = "raptor.dll";

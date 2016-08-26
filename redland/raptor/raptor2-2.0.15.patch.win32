@@ -1,0 +1,487 @@
+diff -ur misc/raptor2-2.0.15/src/raptor_config.h.in misc/build/raptor2-2.0.15/src/raptor_config.h.in
+--- misc/raptor2-2.0.15/src/raptor_config.h.in	2014-11-01 23:04:51.000000000 -0700
++++ misc/build/raptor2-2.0.15/src/raptor_config.h.in	2016-08-22 19:14:14.557872000 -0700
+@@ -1,317 +1,318 @@
++/* src/raptor_config.h.  Generated from raptor_config.h.in by configure.  */
+ /* src/raptor_config.h.in.  Generated from configure.ac by autoheader.  */
+ 
+ /* Define if building universal (internal helper macro) */
+-#undef AC_APPLE_UNIVERSAL_BUILD
++/* #undef AC_APPLE_UNIVERSAL_BUILD */
+ 
+ /* have to check C99 vsnprintf at runtime because cross compiling */
+-#undef CHECK_VSNPRINTF_RUNTIME
++/* #undef CHECK_VSNPRINTF_RUNTIME */
+ 
+ /* Flex version as a decimal */
+-#undef FLEX_VERSION_DECIMAL
++#define FLEX_VERSION_DECIMAL 00000
+ 
+ /* vsnprintf has C99 compatible return value */
+-#undef HAVE_C99_VSNPRINTF
++/* #undef HAVE_C99_VSNPRINTF */
+ 
+ /* Have curl/curl.h */
+-#undef HAVE_CURL_CURL_H
++/* #undef HAVE_CURL_CURL_H */
+ 
+ /* Define to 1 if you have the <dlfcn.h> header file. */
+-#undef HAVE_DLFCN_H
++/* #undef HAVE_DLFCN_H 1 */
+ 
+ /* Define to 1 if you have the <errno.h> header file. */
+-#undef HAVE_ERRNO_H
++#define HAVE_ERRNO_H 1
+ 
+ /* Define to 1 if you have the <fcntl.h> header file. */
+-#undef HAVE_FCNTL_H
++#define HAVE_FCNTL_H 1
+ 
+ /* Define to 1 if you have the <fetch.h> header file. */
+-#undef HAVE_FETCH_H
++/* #undef HAVE_FETCH_H */
+ 
+ /* Define to 1 if you have the `getopt' function. */
+-#undef HAVE_GETOPT
++#define HAVE_GETOPT 1
+ 
+ /* Define to 1 if you have the <getopt.h> header file. */
+-#undef HAVE_GETOPT_H
++#define HAVE_GETOPT_H 1
+ 
+ /* Define to 1 if you have the `getopt_long' function. */
+-#undef HAVE_GETOPT_LONG
++#define HAVE_GETOPT_LONG 1
+ 
+ /* Define to 1 if you have the `gettimeofday' function. */
+-#undef HAVE_GETTIMEOFDAY
++/* #undef HAVE_GETTIMEOFDAY */
+ 
+ /* INN parsedate function present */
+-#undef HAVE_INN_PARSEDATE
++/* #undef HAVE_INN_PARSEDATE */
+ 
+ /* Define to 1 if you have the <inttypes.h> header file. */
+-#undef HAVE_INTTYPES_H
++#define HAVE_INTTYPES_H 1
+ 
+ /* Define to 1 if you have the `isascii' function. */
+-#undef HAVE_ISASCII
++#define HAVE_ISASCII 1
+ 
+ /* Define to 1 if you have the <libxml/hash.h> header file. */
+-#undef HAVE_LIBXML_HASH_H
++#define HAVE_LIBXML_HASH_H 1
+ 
+ /* Define to 1 if you have the <libxml/HTMLparser.h> header file. */
+-#undef HAVE_LIBXML_HTMLPARSER_H
++#define HAVE_LIBXML_HTMLPARSER_H 1
+ 
+ /* Define to 1 if you have the <libxml/nanohttp.h> header file. */
+-#undef HAVE_LIBXML_NANOHTTP_H
++#define HAVE_LIBXML_NANOHTTP_H 1
+ 
+ /* Define to 1 if you have the <libxml/parser.h> header file. */
+-#undef HAVE_LIBXML_PARSER_H
++#define HAVE_LIBXML_PARSER_H 1
+ 
+ /* Define to 1 if you have the <libxml/SAX2.h> header file. */
+-#undef HAVE_LIBXML_SAX2_H
++#define HAVE_LIBXML_SAX2_H 1
+ 
+ /* Define to 1 if you have the <libxslt/xslt.h> header file. */
+-#undef HAVE_LIBXSLT_XSLT_H
++#define HAVE_LIBXSLT_XSLT_H 1
+ 
+ /* Define to 1 if you have the <limits.h> header file. */
+-#undef HAVE_LIMITS_H
++#define HAVE_LIMITS_H 1
+ 
+ /* Define to 1 if you have the <math.h> header file. */
+-#undef HAVE_MATH_H
++#define HAVE_MATH_H 1
+ 
+ /* Define to 1 if you have the <memory.h> header file. */
+-#undef HAVE_MEMORY_H
++#define HAVE_MEMORY_H 1
+ 
+ /* Define to 1 if you have the `qsort_r' function. */
+-#undef HAVE_QSORT_R
++/* #undef HAVE_QSORT_R */
+ 
+ /* Define to 1 if you have the `qsort_s' function. */
+-#undef HAVE_QSORT_S
++/* #undef HAVE_QSORT_S */
+ 
+ /* Raptor raptor_parse_date available */
+-#undef HAVE_RAPTOR_PARSE_DATE
++#define HAVE_RAPTOR_PARSE_DATE 1
+ 
+ /* Define to 1 if you have the `setjmp' function. */
+-#undef HAVE_SETJMP
++#define HAVE_SETJMP 1
+ 
+ /* Define to 1 if you have the <setjmp.h> header file. */
+-#undef HAVE_SETJMP_H
++#define HAVE_SETJMP_H 1
+ 
+ /* Define to 1 if you have the `stat' function. */
+-#undef HAVE_STAT
++#define HAVE_STAT 1
+ 
+ /* Define to 1 if you have the <stddef.h> header file. */
+-#undef HAVE_STDDEF_H
++#define HAVE_STDDEF_H 1
+ 
+ /* Define to 1 if you have the <stdint.h> header file. */
+-#undef HAVE_STDINT_H
++/* #undef HAVE_STDINT_H */
+ 
+ /* Define to 1 if you have the <stdlib.h> header file. */
+-#undef HAVE_STDLIB_H
++#define HAVE_STDLIB_H 1
+ 
+ /* Define to 1 if you have the `strcasecmp' function. */
+-#undef HAVE_STRCASECMP
++/* #undef HAVE_STRCASECMP */
+ 
+ /* Define to 1 if you have the `stricmp' function. */
+-#undef HAVE_STRICMP
++/* #undef HAVE_STRICMP */
+ 
+ /* Define to 1 if you have the <strings.h> header file. */
+-#undef HAVE_STRINGS_H
++/* #undef HAVE_STRINGS_H */
+ 
+ /* Define to 1 if you have the <string.h> header file. */
+-#undef HAVE_STRING_H
++#define HAVE_STRING_H 1
+ 
+ /* Define to 1 if you have the `strtok_r' function. */
+-#undef HAVE_STRTOK_R
++#define HAVE_STRTOK_R 1
+ 
+ /* Define to 1 if you have the <sys/param.h> header file. */
+-#undef HAVE_SYS_PARAM_H
++#define HAVE_SYS_PARAM_H 1
+ 
+ /* Define to 1 if you have the <sys/stat.h> header file. */
+-#undef HAVE_SYS_STAT_H
++#define HAVE_SYS_STAT_H 1
+ 
+ /* Define to 1 if you have the <sys/time.h> header file. */
+-#undef HAVE_SYS_TIME_H
++/* #undef HAVE_SYS_TIME_H */
+ 
+ /* Define to 1 if you have the <sys/types.h> header file. */
+-#undef HAVE_SYS_TYPES_H
++#define HAVE_SYS_TYPES_H 1
+ 
+ /* Define to 1 if you have the <unistd.h> header file. */
+-#undef HAVE_UNISTD_H
++#define HAVE_UNISTD_H 1
+ 
+ /* Define to 1 if you have the `vasprintf' function. */
+-#undef HAVE_VASPRINTF
++/* #undef HAVE_VASPRINTF */
+ 
+ /* Define to 1 if you have the `vsnprintf' function. */
+-#undef HAVE_VSNPRINTF
++#define HAVE_VSNPRINTF 1
+ 
+ /* Define to 1 if you have the `xmlCtxtUseOptions' function. */
+-#undef HAVE_XMLCTXTUSEOPTIONS
++#define HAVE_XMLCTXTUSEOPTIONS 1
+ 
+ /* Define to 1 if you have the `xmlSAX2InternalSubset' function. */
+-#undef HAVE_XMLSAX2INTERNALSUBSET
++#define HAVE_XMLSAX2INTERNALSUBSET 1
+ 
+ /* YAJL has API version 2 */
+-#undef HAVE_YAJL2
++/* #undef HAVE_YAJL2 */
+ 
+ /* Define to 1 if you have the <yajl/yajl_parse.h> header file. */
+-#undef HAVE_YAJL_YAJL_PARSE_H
++/* #undef HAVE_YAJL_YAJL_PARSE_H */
+ 
+ /* Is __FUNCTION__ available */
+-#undef HAVE___FUNCTION__
++#define HAVE___FUNCTION__ 1
+ 
+ /* Define to the sub-directory in which libtool stores uninstalled libraries.
+    */
+-#undef LT_OBJDIR
++#define LT_OBJDIR ".libs/"
+ 
+ /* Define to 1 if maintainer mode is enabled. */
+-#undef MAINTAINER_MODE
++/* #undef MAINTAINER_MODE */
+ 
+ /* need 'extern int optind' declaration? */
+-#undef NEED_OPTIND_DECLARATION
++/* #undef NEED_OPTIND_DECLARATION */
+ 
+ /* Define to 1 if your C compiler doesn't accept -c and -o together. */
+-#undef NO_MINUS_C_MINUS_O
++/* #undef NO_MINUS_C_MINUS_O */
+ 
+ /* Name of package */
+-#undef PACKAGE
++#define PACKAGE "raptor2"
+ 
+ /* Define to the address where bug reports for this package should be sent. */
+-#undef PACKAGE_BUGREPORT
++#define PACKAGE_BUGREPORT "http://bugs.librdf.org/"
+ 
+ /* Define to the full name of this package. */
+-#undef PACKAGE_NAME
++#define PACKAGE_NAME "Raptor RDF Parser and Serializer library"
+ 
+ /* Define to the full name and version of this package. */
+-#undef PACKAGE_STRING
++#define PACKAGE_STRING "Raptor RDF Parser and Serializer library 2.0.15"
+ 
+ /* Define to the one symbol short name of this package. */
+-#undef PACKAGE_TARNAME
++#define PACKAGE_TARNAME "raptor2"
+ 
+ /* Define to the home page for this package. */
+-#undef PACKAGE_URL
++#define PACKAGE_URL ""
+ 
+ /* Define to the version of this package. */
+-#undef PACKAGE_VERSION
++#define PACKAGE_VERSION "2.0.15"
+ 
+ /* Define to 1 if debug messages are enabled. */
+-#undef RAPTOR_DEBUG
++/* #undef RAPTOR_DEBUG */
+ 
+ /* Use ICU for Unicode NFC check */
+-#undef RAPTOR_ICU_NFC
++/* #undef RAPTOR_ICU_NFC */
+ 
+ /* does libxml struct xmlEntity have a field etype */
+-#undef RAPTOR_LIBXML_ENTITY_ETYPE
++#define RAPTOR_LIBXML_ENTITY_ETYPE 1
+ 
+ /* does libxml struct xmlEntity have a field name_length */
+-#undef RAPTOR_LIBXML_ENTITY_NAME_LENGTH
++/* #undef RAPTOR_LIBXML_ENTITY_NAME_LENGTH */
+ 
+ /* does libxml have HTML_PARSE_NONET */
+-#undef RAPTOR_LIBXML_HTML_PARSE_NONET
++#define RAPTOR_LIBXML_HTML_PARSE_NONET 1
+ 
+ /* does libxml xmlSAXHandler have externalSubset field */
+-#undef RAPTOR_LIBXML_XMLSAXHANDLER_EXTERNALSUBSET
++#define RAPTOR_LIBXML_XMLSAXHANDLER_EXTERNALSUBSET 1
+ 
+ /* does libxml xmlSAXHandler have initialized field */
+-#undef RAPTOR_LIBXML_XMLSAXHANDLER_INITIALIZED
++#define RAPTOR_LIBXML_XMLSAXHANDLER_INITIALIZED 1
+ 
+ /* does libxml have XML_PARSE_NONET */
+-#undef RAPTOR_LIBXML_XML_PARSE_NONET
++#define RAPTOR_LIBXML_XML_PARSE_NONET 1
+ 
+ /* Minimum supported package version */
+-#undef RAPTOR_MIN_VERSION_DECIMAL
++#define RAPTOR_MIN_VERSION_DECIMAL 20000
+ 
+ /* Building GRDDL parser */
+-#undef RAPTOR_PARSER_GRDDL
++/* #undef RAPTOR_PARSER_GRDDL */
+ 
+ /* Building guess parser */
+-#undef RAPTOR_PARSER_GUESS
++#define RAPTOR_PARSER_GUESS 1
+ 
+ /* Building JSON parser */
+-#undef RAPTOR_PARSER_JSON
++/* #undef RAPTOR_PARSER_JSON */
+ 
+ /* Building N-Quads parser */
+-#undef RAPTOR_PARSER_NQUADS
++/* #undef RAPTOR_PARSER_NQUADS */
+ 
+ /* Building N-Triples parser */
+-#undef RAPTOR_PARSER_NTRIPLES
++#define RAPTOR_PARSER_NTRIPLES 1
+ 
+ /* Building RDFA parser */
+-#undef RAPTOR_PARSER_RDFA
++/* #undef RAPTOR_PARSER_RDFA */
+ 
+ /* Building RDF/XML parser */
+-#undef RAPTOR_PARSER_RDFXML
++#define RAPTOR_PARSER_RDFXML 1
+ 
+ /* Building RSS Tag Soup parser */
+-#undef RAPTOR_PARSER_RSS
++#define RAPTOR_PARSER_RSS 1
+ 
+ /* Building TRiG parser */
+-#undef RAPTOR_PARSER_TRIG
++#define RAPTOR_PARSER_TRIG 1
+ 
+ /* Building Turtle parser */
+-#undef RAPTOR_PARSER_TURTLE
++#define RAPTOR_PARSER_TURTLE 1
+ 
+ /* Building Atom 1.0 serializer */
+-#undef RAPTOR_SERIALIZER_ATOM
++#define RAPTOR_SERIALIZER_ATOM 1
+ 
+ /* Building GraphViz DOT serializer */
+-#undef RAPTOR_SERIALIZER_DOT
++#define RAPTOR_SERIALIZER_DOT 1
+ 
+ /* Building HTML Table serializer */
+-#undef RAPTOR_SERIALIZER_HTML
++#define RAPTOR_SERIALIZER_HTML 1
+ 
+ /* Building JSON serializer */
+-#undef RAPTOR_SERIALIZER_JSON
++#define RAPTOR_SERIALIZER_JSON 1
+ 
+ /* Building N-Quads serializer */
+-#undef RAPTOR_SERIALIZER_NQUADS
++#define RAPTOR_SERIALIZER_NQUADS 1
+ 
+ /* Building N-Triples serializer */
+-#undef RAPTOR_SERIALIZER_NTRIPLES
++#define RAPTOR_SERIALIZER_NTRIPLES 1
+ 
+ /* Building RDF/XML serializer */
+-#undef RAPTOR_SERIALIZER_RDFXML
++#define RAPTOR_SERIALIZER_RDFXML 1
+ 
+ /* Building RDF/XML-abbreviated serializer */
+-#undef RAPTOR_SERIALIZER_RDFXML_ABBREV
++#define RAPTOR_SERIALIZER_RDFXML_ABBREV 1
+ 
+ /* Building RSS 1.0 serializer */
+-#undef RAPTOR_SERIALIZER_RSS_1_0
++#define RAPTOR_SERIALIZER_RSS_1_0 1
+ 
+ /* Building Turtle serializer */
+-#undef RAPTOR_SERIALIZER_TURTLE
++#define RAPTOR_SERIALIZER_TURTLE 1
+ 
+ /* Release version as a decimal */
+-#undef RAPTOR_VERSION_DECIMAL
++#define RAPTOR_VERSION_DECIMAL 20015
+ 
+ /* Major version number */
+-#undef RAPTOR_VERSION_MAJOR
++#define RAPTOR_VERSION_MAJOR 2
+ 
+ /* Minor version number */
+-#undef RAPTOR_VERSION_MINOR
++#define RAPTOR_VERSION_MINOR 0
+ 
+ /* Release version number */
+-#undef RAPTOR_VERSION_RELEASE
++#define RAPTOR_VERSION_RELEASE 15
+ 
+ /* Have libcurl WWW library */
+-#undef RAPTOR_WWW_LIBCURL
++/* #undef RAPTOR_WWW_LIBCURL */
+ 
+ /* Have libfetch WWW library */
+-#undef RAPTOR_WWW_LIBFETCH
++/* #undef RAPTOR_WWW_LIBFETCH */
+ 
+ /* Have libxml available as a WWW library */
+-#undef RAPTOR_WWW_LIBXML
++#define RAPTOR_WWW_LIBXML 1
+ 
+ /* No WWW library */
+-#undef RAPTOR_WWW_NONE
++/* #undef RAPTOR_WWW_NONE */
+ 
+ /* Check XML 1.1 Names */
+-#undef RAPTOR_XML_1_1
++/* #undef RAPTOR_XML_1_1 */
+ 
+ /* Use libxml XML parser */
+-#undef RAPTOR_XML_LIBXML
++#define RAPTOR_XML_LIBXML 1
+ 
+ /* Define to 1 if you have the ANSI C header files. */
+-#undef STDC_HEADERS
++#define STDC_HEADERS 1
+ 
+ /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
+-#undef TIME_WITH_SYS_TIME
++/* #undef TIME_WITH_SYS_TIME */
+ 
+ /* Version number of package */
+-#undef VERSION
++#define VERSION "2.0.15"
+ 
+ /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
+    significant byte first (like Motorola and SPARC, unlike Intel). */
+@@ -321,13 +322,13 @@
+ # endif
+ #else
+ # ifndef WORDS_BIGENDIAN
+-#  undef WORDS_BIGENDIAN
++/* #  undef WORDS_BIGENDIAN */
+ # endif
+ #endif
+ 
+ /* Define to 1 if `lex' declares `yytext' as a `char *' by default, not a
+    `char[]'. */
+-#undef YYTEXT_POINTER
++#define YYTEXT_POINTER 1
+ 
+ /* Enable large inode numbers on Mac OS X 10.5.  */
+ #ifndef _DARWIN_USE_64_BIT_INODE
+@@ -335,16 +336,20 @@
+ #endif
+ 
+ /* Number of bits in a file offset, on hosts where this is settable. */
+-#undef _FILE_OFFSET_BITS
++/* #undef _FILE_OFFSET_BITS */
+ 
+ /* Define for large files, on AIX-style hosts. */
+-#undef _LARGE_FILES
++/* #undef _LARGE_FILES */
+ 
+ /* Define to empty if `const' does not conform to ANSI C. */
+-#undef const
++/* #undef const */
+ 
+ /* Define to `__inline__' or `__inline' if that's what the C compiler
+    calls it, or to nothing if 'inline' is not supported under any name.  */
+ #ifndef __cplusplus
+-#undef inline
++/* #undef inline */
+ #endif
++
++#  define S_ISTYPE(mode, mask)	(((mode) & _S_IFMT) == (mask))
++#  define S_ISDIR(mode)		S_ISTYPE((mode), _S_IFDIR)
++#  define S_ISREG(mode)		S_ISTYPE((mode), _S_IFREG)
+--- misc/raptor2-2.0.15/src/sort_r.c	2014-06-30 10:09:40.000000000 -0700
++++ misc/build/raptor2-2.0.15/src/sort_r.c	2016-08-23 11:02:51.651428000 -0700
+@@ -60,6 +60,7 @@
+  * data2, @user_data) and returns <0, 0, or >0 for object comparison.
+  *
+  */
++RAPTOR_EXTERN_C
+ void
+ raptor_sort_r(void *base, size_t nel, size_t width,
+               raptor_data_compare_arg_handler compar, void *user_data)
+--- misc/raptor2-2.0.15/src/raptor2.h.in	2014-11-01 21:44:04.000000000 -0700
++++ misc/build/raptor2-2.0.15/src/raptor2.h.in	2016-08-23 11:46:20.581017000 -0700
+@@ -2176,6 +2176,7 @@
+ void* raptor_avltree_iterator_get(raptor_avltree_iterator* iterator);
+ 
+ /* utility methods */
++RAPTOR_API
+ void raptor_sort_r(void *base, size_t nel, size_t width, raptor_data_compare_arg_handler compar, void *user_data);
+ 
+ 

@@ -1,6 +1,6 @@
---- misc/redland-1.0.8/librdf/makefile.mk	Mon Jun 16 19:32:46 2008
-+++ misc/build/redland-1.0.8/librdf/makefile.mk	Mon Jun 16 19:26:20 2008
-@@ -1,1 +1,115 @@
+--- misc/redland-1.0.17/src/makefile.mk	2016-08-23 14:55:21.874698000 -0700
++++ misc/build/redland-1.0.17/src/makefile.mk	2016-08-25 15:05:47.091064000 -0700
+@@ -1 +1,118 @@
 -dummy
 +#**************************************************************
 +#  
@@ -37,7 +37,7 @@
 +
 +.INCLUDE :  settings.mk
 +
-+CDEFS+=-DLIBRDF_INTERNAL -DWIN32 -DNDEBUG -D_WINDOWS -D_USRDLL -DWIN32_EXPORTS
++CDEFS+=-DRAPTOR_INTERNAL -DWIN32 -DNDEBUG -D_WINDOWS -D_USRDLL -DWIN32_EXPORTS -DHAVE_CONFIG_H -DLIBRDF_INTERNAL -I$(PRJ)$/$(INPATH)$/inc
 +
 +# --- Files --------------------------------------------------------
 +
@@ -45,7 +45,6 @@
 +   $(SLO)$/rdf_concepts.obj \
 +   $(SLO)$/rdf_digest.obj \
 +   $(SLO)$/rdf_digest_md5.obj \
-+   $(SLO)$/rdf_digest_openssl.obj \
 +   $(SLO)$/rdf_digest_sha1.obj \
 +   $(SLO)$/rdf_files.obj \
 +   $(SLO)$/rdf_hash.obj \
@@ -59,28 +58,35 @@
 +   $(SLO)$/rdf_model.obj \
 +   $(SLO)$/rdf_model_storage.obj \
 +   $(SLO)$/rdf_node.obj \
++   $(SLO)$/rdf_node_common.obj \
 +   $(SLO)$/rdf_parser.obj \
 +   $(SLO)$/rdf_parser_raptor.obj \
 +   $(SLO)$/rdf_query.obj \
 +   $(SLO)$/rdf_query_rasqal.obj \
 +   $(SLO)$/rdf_query_results.obj \
-+   $(SLO)$/rdf_query_triples.obj \
++   $(SLO)$/rdf_raptor.obj \
 +   $(SLO)$/rdf_serializer.obj \
 +   $(SLO)$/rdf_serializer_raptor.obj \
 +   $(SLO)$/rdf_statement.obj \
++   $(SLO)$/rdf_statement_common.obj \
 +   $(SLO)$/rdf_storage.obj \
 +   $(SLO)$/rdf_storage_file.obj \
-+   $(SLO)$/rdf_storage_list.obj \
 +   $(SLO)$/rdf_storage_hashes.obj \
++   $(SLO)$/rdf_storage_list.obj \
++   $(SLO)$/rdf_storage_trees.obj \
 +   $(SLO)$/rdf_stream.obj \
 +   $(SLO)$/rdf_uri.obj \
 +   $(SLO)$/rdf_utf8.obj \
 +
-+
 +#   $(SLO)$/rdf_hash_bdb.obj \
++#   $(SLO)$/rdf_query_virtuoso.obj \
 +#   $(SLO)$/rdf_storage_mysql.obj \
++#   $(SLO)$/rdf_storage_postgresql.obj \
++#   $(SLO)$/rdf_storage_sql.obj \
++#   $(SLO)$/rdf_storage_sql_test.obj \
 +#   $(SLO)$/rdf_storage_sqlite.obj \
-+
++#   $(SLO)$/rdf_storage_tstore.obj \
++#   $(SLO)$/rdf_storage_virtuoso.obj \
 +
 +SHL1DEPN=   makefile.mk
 +SHL1OBJS=   $(SLOFILES)
@@ -92,7 +98,7 @@
 +
 +#SHL1VERSIONMAP=../service/exports.map
 +.IF "$(GUI)"=="OS2"
-+SHL1VERSIONMAP=$(PRJ)/redland/redland2.map
++SHL1VERSIONMAP=$(PRJ)/raptor/raptor2.map
 +.ENDIF
 +SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 +DEF1NAME=$(SHL1TARGET)
@@ -104,14 +110,11 @@
 +    $(PRJ)$/$(INPATH)$/lib$/rasqal.lib
 +.ELSE
 +SHL1STDLIBS= \
-+    $(OPENSSLLIB) \
++    $(LIBXML2LIB) \
++    $(XSLTLIB) \
 +    $(PRJ)$/$(INPATH)$/lib$/libraptor.lib \
 +    $(PRJ)$/$(INPATH)$/lib$/librasqal.lib
 +.ENDIF
-+
-+
-+#$(LIBXML2LIB) \
-+#    $(XSLTLIB) \
 +
 +# --- Targets ------------------------------------------------------
 +

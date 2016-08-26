@@ -40,18 +40,16 @@ all:
 
 .INCLUDE :	../redlandversion.mk
 
-RASQALVERSION=0.9.16
+RASQALVERSION=0.9.33
 
 TARFILE_NAME=rasqal-$(RASQALVERSION)
-TARFILE_MD5=fca8706f2c4619e2fa3f8f42f8fc1e9d
+TARFILE_MD5=1f5def51ca0026cd192958ef07228b52
 
-ADDITIONAL_FILES=src/makefile.mk src/rasqal_config.h
+ADDITIONAL_FILES=src/makefile.mk
 
 OOO_PATCH_FILES= \
-    $(TARFILE_NAME).patch.autotools \
     $(TARFILE_NAME).patch.ooo_build \
     $(TARFILE_NAME).patch.dmake \
-    $(TARFILE_NAME).patch.win32
 
 PATCH_FILES=$(OOO_PATCH_FILES)
 
@@ -80,6 +78,12 @@ BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE
 # there is no wntmsci build environment in the tarball; we use custom dmakefile
+OOO_PATCH_FILES+= $(TARFILE_NAME).patch.win32
+CONFIGURE_ACTION= ${PERL} -p -e '$$prefix="'$(PWD)/$(OUT)'"; $$libdir="'$(PWD)/$(LB)'"; $$incdir="'$(PWD)/$(INCCOM)'"; $$ldflags="-L$(SOLARLIBDIR) -lraptor2 -lm";' -e 's/\@prefix\@/$$prefix/; s/\@exec_prefix\@/\$${prefix}/; s/\@libdir\@/$$libdir/; s/\@includedir\@/$$incdir/; s/\@PACKAGE\@/rasqal/; s/\@VERSION\@/0.9.33/; s/\@PKG_CONFIG_REQUIRES\@/raptor2 >= 2.0.7/; s/\@RAPTOR_LDFLAGS\@/$$ldflags/;'  < rasqal.pc.in > rasqal.pc && \
+    ${PERL} -p -e 's/\@RASQAL_VERSION_DECIMAL\@/933/;s/\@VERSION\@/0.9.33/;s/\@RASQAL_VERSION_MAJOR\@/0/;s/\@RASQAL_VERSION_MINOR\@/9/;s/\@RASQAL_VERSION_RELEASE\@/33/;s/\@HAVE_SYS_TIME_H\@/0/;s/\@HAVE_TIME_H\@/1/;s/\@RAPTOR_VERSION_DEC\@/2.0.15/' < src/rasqal.h.in > src/rasqal.h && \
+    $(COPY) src/rasqal_config.h.in src/rasqal_config.h && \
+    $(COPY) src/snprintf.c src/rasqal_snprintf.c && \
+    $(COPY) libsv/sv.c src/sv.c
 BUILD_ACTION=dmake
 BUILD_DIR=$(CONFIGURE_DIR)$/src
 .ENDIF
@@ -118,8 +122,11 @@ XSLTLIB!:=$(XSLTLIB) # expand dmake variables for xslt-config
 .EXPORT: XSLTLIB
 
 CONFIGURE_DIR=
-CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH"
-CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
+CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH" RASQAL_CFLAGS=-I${PWD}$/..$/${INPATH}/inc RASQAL_LIBS="-L${PWD}/..$/${INPATH}/lib -lrasqual" RAPTOR2_CFLAGS=-I${PWD}$/..$/${INPATH}/inc RAPTOR2_LIBS="-L${PWD}/..$/${INPATH}/lib -lraptor2" PKG_CONFIG_PATH="../raptor2-2.0.15:../rasqal-0.9.33"
+CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-regex-library=posix --with-decimal=none
+.IF "$(SYSTEM_LIBXML)" == "NO"
+CONFIGURE_FLAGS+=--with-xml2-config=${SOLARVERSION}/${INPATH}/bin/xml2-config
+.ENDIF
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)

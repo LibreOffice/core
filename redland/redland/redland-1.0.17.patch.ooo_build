@@ -1,0 +1,32 @@
+diff -ur misc/redland-1.0.17/Makefile.am misc/build/redland-1.0.17/Makefile.am
+--- misc/redland-1.0.17/Makefile.am	2012-06-27 12:58:16.000000000 -0700
++++ misc/build/redland-1.0.17/Makefile.am	2016-08-20 23:32:23.298025000 -0700
+@@ -34,7 +34,7 @@
+ DISTCHECK_CONFIGURE_FLAGS=--enable-gtk-doc
+ 
+ # Subdirectories to build/install/distribute etc.
+-SUBDIRS=$(subdirs) src examples utils demos docs data scripts
++SUBDIRS=$(subdirs) src examples demos docs data scripts
+ 
+ EXTRA_DIST=\
+ ChangeLog.1 ChangeLog.2 ChangeLog.3 ChangeLog.4 \
+diff -ur misc/redland-1.0.17/configure misc/build/redland-1.0.17/configure
+--- misc/redland-1.0.17/configure	2013-12-28 08:26:53.000000000 -0800
++++ misc/build/redland-1.0.17/configure	2016-08-22 10:18:20.693404000 -0700
+@@ -13852,6 +13852,7 @@
+   with_ltdl_lib=no
+ fi
+ 
++with_included_ltdl=no
+ case ,$with_included_ltdl,$with_ltdl_include,$with_ltdl_lib, in
+   ,yes,no,no,)
+ 	case $enable_ltdl_convenience in
+@@ -13934,7 +13935,7 @@
+ 
+ 
+ 
+-    subdirs="$subdirs libltdl"
++#    subdirs="$subdirs libltdl"
+ 
+ 
+ 

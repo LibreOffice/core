@@ -1,0 +1,153 @@
+diff -ur misc/rasqal-0.9.33/src/makefile.mk misc/build/rasqal-0.9.33/src/makefile.mk
+--- misc/rasqal-0.9.33/src/makefile.mk	2016-08-23 00:04:52.311517000 -0700
++++ misc/build/rasqal-0.9.33/src/makefile.mk	2016-08-23 00:04:28.509749000 -0700
+@@ -1 +1,148 @@
+-dummy
++#**************************************************************
++#  
++#  Licensed to the Apache Software Foundation (ASF) under one
++#  or more contributor license agreements.  See the NOTICE file
++#  distributed with this work for additional information
++#  regarding copyright ownership.  The ASF licenses this file
++#  to you under the Apache License, Version 2.0 (the
++#  "License"); you may not use this file except in compliance
++#  with the License.  You may obtain a copy of the License at
++#  
++#    http://www.apache.org/licenses/LICENSE-2.0
++#  
++#  Unless required by applicable law or agreed to in writing,
++#  software distributed under the License is distributed on an
++#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++#  KIND, either express or implied.  See the License for the
++#  specific language governing permissions and limitations
++#  under the License.
++#  
++#**************************************************************
++
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=redland
++TARGET=rasqal
++LIBTARGET=NO
++UWINAPILIB=
++
++EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
++
++
++# --- Settings -----------------------------------------------------
++
++.INCLUDE :  settings.mk
++
++CDEFS+=-DRASQAL_INTERNAL -DWIN32 -DNDEBUG -D_WINDOWS -D_USRDLL -DWIN32_EXPORTS -D_MT -DHAVE_CONFIG_H -I../libsv -I$(PRJ)$/$(INPATH)$/inc -DSV_CONFIG
++
++# --- Files --------------------------------------------------------
++
++SLOFILES =	\
++   $(SLO)$/rasqal_algebra.obj \
++   $(SLO)$/rasqal_bindings.obj \
++   $(SLO)$/rasqal_data_graph.obj \
++   $(SLO)$/rasqal_dataset.obj \
++   $(SLO)$/rasqal_datetime.obj \
++   $(SLO)$/rasqal_decimal.obj \
++   $(SLO)$/rasqal_digest.obj \
++   $(SLO)$/rasqal_digest_md5.obj \
++   $(SLO)$/rasqal_digest_sha1.obj \
++   $(SLO)$/rasqal_double.obj \
++   $(SLO)$/rasqal_engine.obj \
++   $(SLO)$/rasqal_engine_algebra.obj \
++   $(SLO)$/rasqal_engine_sort.obj \
++   $(SLO)$/rasqal_expr.obj \
++   $(SLO)$/rasqal_expr_datetimes.obj \
++   $(SLO)$/rasqal_expr_evaluate.obj \
++   $(SLO)$/rasqal_expr_numerics.obj \
++   $(SLO)$/rasqal_expr_strings.obj \
++   $(SLO)$/rasqal_feature.obj \
++   $(SLO)$/rasqal_format_html.obj \
++   $(SLO)$/rasqal_format_json.obj \
++   $(SLO)$/rasqal_format_rdf.obj \
++   $(SLO)$/rasqal_format_sparql_xml.obj \
++   $(SLO)$/rasqal_format_sv.obj \
++   $(SLO)$/rasqal_format_table.obj \
++   $(SLO)$/rasqal_formula.obj \
++   $(SLO)$/rasqal_general.obj \
++   $(SLO)$/rasqal_graph_pattern.obj \
++   $(SLO)$/rasqal_iostream.obj \
++   $(SLO)$/rasqal_literal.obj \
++   $(SLO)$/rasqal_map.obj \
++   $(SLO)$/rasqal_ntriples.obj \
++   $(SLO)$/rasqal_prefix.obj \
++   $(SLO)$/rasqal_projection.obj \
++   $(SLO)$/rasqal_query.obj \
++   $(SLO)$/rasqal_query_results.obj \
++   $(SLO)$/rasqal_query_transform.obj \
++   $(SLO)$/rasqal_query_write.obj \
++   $(SLO)$/rasqal_random.obj \
++   $(SLO)$/rasqal_raptor.obj \
++   $(SLO)$/rasqal_regex.obj \
++   $(SLO)$/rasqal_result_formats.obj \
++   $(SLO)$/rasqal_results_compare.obj \
++   $(SLO)$/rasqal_row.obj \
++   $(SLO)$/rasqal_row_compatible.obj \
++   $(SLO)$/rasqal_rowsource.obj \
++   $(SLO)$/rasqal_rowsource_aggregation.obj \
++   $(SLO)$/rasqal_rowsource_assignment.obj \
++   $(SLO)$/rasqal_rowsource_bindings.obj \
++   $(SLO)$/rasqal_rowsource_distinct.obj \
++   $(SLO)$/rasqal_rowsource_empty.obj \
++   $(SLO)$/rasqal_rowsource_filter.obj \
++   $(SLO)$/rasqal_rowsource_graph.obj \
++   $(SLO)$/rasqal_rowsource_groupby.obj \
++   $(SLO)$/rasqal_rowsource_having.obj \
++   $(SLO)$/rasqal_rowsource_join.obj \
++   $(SLO)$/rasqal_rowsource_project.obj \
++   $(SLO)$/rasqal_rowsource_rowsequence.obj \
++   $(SLO)$/rasqal_rowsource_service.obj \
++   $(SLO)$/rasqal_rowsource_slice.obj \
++   $(SLO)$/rasqal_rowsource_sort.obj \
++   $(SLO)$/rasqal_rowsource_triples.obj \
++   $(SLO)$/rasqal_rowsource_union.obj \
++   $(SLO)$/rasqal_service.obj \
++   $(SLO)$/rasqal_solution_modifier.obj \
++   $(SLO)$/rasqal_triple.obj \
++   $(SLO)$/rasqal_triples_source.obj \
++   $(SLO)$/rasqal_update.obj \
++   $(SLO)$/rasqal_variable.obj \
++   $(SLO)$/rasqal_xsd_datatypes.obj \
++   $(SLO)$/rasqal_snprintf.obj \
++   $(SLO)$/sparql_lexer.obj \
++   $(SLO)$/sparql_parser.obj \
++   $(SLO)$/sv.obj \
++   $(SLO)$/gettimeofday.obj \
++   $(SLO)$/timegm.obj \
++
++SHL1DEPN=   makefile.mk
++SHL1OBJS=   $(SLOFILES)
++SHL1USE_EXPORTS=name
++
++#SHL1TARGET=	$(TARGET)$(DLLPOSTFIX)
++SHL1TARGET=	$(TARGET)
++SHL1IMPLIB= lib$(TARGET)
++
++#SHL1VERSIONMAP=../service/exports.map
++.IF "$(GUI)"=="OS2"
++SHL1VERSIONMAP=$(PRJ)/rasqal/rasqal2.map
++.ENDIF
++SHL1DEF=$(MISC)$/$(SHL1TARGET).def
++DEF1NAME=$(SHL1TARGET)
++
++.IF "$(GUI)"=="OS2"
++SHL1STDLIBS= \
++    $(PRJ)$/$(INPATH)$/lib$/raptor.lib
++.ELSE
++SHL1STDLIBS= \
++    $(PRJ)$/$(INPATH)$/lib$/libraptor.lib
++.ENDIF
++
++
++#$(LIBXML2LIB) \
++#    $(XSLTLIB) \
++
++# --- Targets ------------------------------------------------------
++
++.INCLUDE :  target.mk
++
