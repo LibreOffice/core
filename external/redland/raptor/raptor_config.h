@@ -72,6 +72,15 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
+/* Define to 1 if you have the `qsort_r' function. */
+#undef HAVE_QSORT_R
+
+/* Define to 1 if you have the `qsort_s' function. */
+/* note: MSVC has qsort_s but the sort_r.h code uses advanced features like
+ * "inline" that MSVC 2013 doesn't understand; fortunately there's another
+ * level of fallback... */
+#undef HAVE_QSORT_S
+
 /* Raptor raptor_parse_date available */
 #undef HAVE_RAPTOR_PARSE_DATE
 
@@ -129,6 +138,9 @@
 /* Define to 1 if you have the `vsnprintf' function. */
 #define HAVE_VSNPRINTF 1
 
+/* Flex version as a decimal */
+#define FLEX_VERSION_DECIMAL 20539
+
 /* Define to 1 if you have the `xmlCtxtUseOptions' function. */
 #define HAVE_XMLCTXTUSEOPTIONS 1
 
@@ -140,6 +152,9 @@
 
 /* Define to 1 if you have the <yajl/yajl_parse.h> header file. */
 #undef HAVE_YAJL_YAJL_PARSE_H
+
+/* Is __FUNCTION__ available */
+#define HAVE___FUNCTION__ 1
 
 /* Define to the sub-directory in which libtool stores uninstalled libraries.
    */
@@ -263,7 +278,7 @@
 #undef RAPTOR_SERIALIZER_TURTLE
 
 /* Release version as a decimal */
-#define RAPTOR_VERSION_DECIMAL 20009
+#define RAPTOR_VERSION_DECIMAL 20015
 
 /* Major version number */
 #define RAPTOR_VERSION_MAJOR 2
@@ -272,7 +287,7 @@
 #define RAPTOR_VERSION_MINOR 0
 
 /* Release version number */
-#define RAPTOR_VERSION_RELEASE 9
+#define RAPTOR_VERSION_RELEASE 15
 
 /* Have libcurl WWW library */
 #undef RAPTOR_WWW_LIBCURL
@@ -299,7 +314,7 @@
 #undef TIME_WITH_SYS_TIME
 
 /* Version number of package */
-#define VERSION "2.0.9"
+#define VERSION "2.0.15"
 
 /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
    significant byte first (like Motorola and SPARC, unlike Intel). */

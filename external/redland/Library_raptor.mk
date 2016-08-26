@@ -35,6 +35,7 @@ $(eval $(call gb_Library_add_generated_cobjects,raptor2,\
 	UnpackedTarball/raptor/src/raptor_abbrev \
 	UnpackedTarball/raptor/src/raptor_avltree \
 	UnpackedTarball/raptor/src/raptor_concepts \
+	UnpackedTarball/raptor/src/raptor_escaped \
 	UnpackedTarball/raptor/src/raptor_general \
 	UnpackedTarball/raptor/src/raptor_guess \
 	UnpackedTarball/raptor/src/raptor_iostream \
@@ -44,6 +45,7 @@ $(eval $(call gb_Library_add_generated_cobjects,raptor2,\
 	UnpackedTarball/raptor/src/raptor_log \
 	UnpackedTarball/raptor/src/raptor_memstr \
 	UnpackedTarball/raptor/src/raptor_namespace \
+	UnpackedTarball/raptor/src/raptor_ntriples \
 	UnpackedTarball/raptor/src/raptor_option \
 	UnpackedTarball/raptor/src/raptor_parse \
 	UnpackedTarball/raptor/src/raptor_qname \
@@ -55,6 +57,7 @@ $(eval $(call gb_Library_add_generated_cobjects,raptor2,\
 	UnpackedTarball/raptor/src/raptor_serialize_ntriples \
 	UnpackedTarball/raptor/src/raptor_serialize_rdfxml \
 	UnpackedTarball/raptor/src/raptor_serialize_rdfxmla \
+	UnpackedTarball/raptor/src/raptor_serialize_turtle \
 	UnpackedTarball/raptor/src/raptor_set \
 	UnpackedTarball/raptor/src/raptor_statement \
 	UnpackedTarball/raptor/src/raptor_stringbuffer \
@@ -67,6 +70,7 @@ $(eval $(call gb_Library_add_generated_cobjects,raptor2,\
 	UnpackedTarball/raptor/src/raptor_xml \
 	UnpackedTarball/raptor/src/raptor_xml_writer \
 	UnpackedTarball/raptor/src/snprintf \
+	UnpackedTarball/raptor/src/sort_r \
 	UnpackedTarball/raptor/src/strcasecmp \
 	UnpackedTarball/raptor/src/turtle_common \
 	UnpackedTarball/raptor/src/turtle_lexer \
