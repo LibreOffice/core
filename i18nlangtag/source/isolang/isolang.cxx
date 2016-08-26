@@ -747,6 +747,7 @@ static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_USER_CREE_PLAINS_SYLLABICS,         "crk-Cans", "CA", 0     },
     { LANGUAGE_USER_CREE_PLAINS_LATIN,             "crk-Latn", "CN", kSAME },   // erroneous tdf#73973
     { LANGUAGE_USER_CREE_PLAINS_SYLLABICS,         "crk-Cans", "CN", kSAME },   // erroneous tdf#73973
+    { LANGUAGE_USER_HUNGARIAN_RUNIC,                "hu-Hung", "HU", 0     },
     { LANGUAGE_DONTKNOW,                            "",        ""  , 0     }    // marks end of table
 };
 
