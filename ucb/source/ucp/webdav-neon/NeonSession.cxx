@@ -845,6 +845,8 @@ void NeonSession::OPTIONS( const OUString & inPath,
                            const DAVRequestEnvironment & rEnv )
     throw( std::exception )
 {
+    osl::Guard< osl::Mutex > theGuard( m_aMutex );
+
     SAL_INFO( "ucb.ucp.webdav", "OPTIONS - relative URL <" << inPath << ">" );
 
     rOptions.reset();
