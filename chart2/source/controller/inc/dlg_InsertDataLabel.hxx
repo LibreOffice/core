@@ -23,12 +23,12 @@
 #include <vcl/button.hxx>
 #include <svl/itemset.hxx>
 #include <memory>
-#include "../dialogs/res_DataLabel.hxx"
 
 class SvNumberFormatter;
 
 namespace chart
 {
+class DataLabelResources;
 
 class DataLabelsDialog : public ModalDialog
 {
