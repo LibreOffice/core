@@ -32,6 +32,9 @@ $(eval $(call gb_Library_use_externals,sofficeapp, \
     icui18n \
     icuuc \
     curl \
+    $(if $(ENABLE_ONLINE_UPDATE_MAR),\
+        orcus-parser \
+        orcus )\
 ))
 
 $(eval $(call gb_Library_use_custom_headers,sofficeapp,\
