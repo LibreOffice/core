@@ -172,6 +172,15 @@ struct ConstCharArrayDetector< const char[ N ], T >
     static char const * toPointer(char const (& literal)[N]) { return literal; }
 };
 #if defined LIBO_INTERNAL_ONLY
+template<std::size_t N, typename T>
+struct ConstCharArrayDetector<sal_Unicode const [N], T> {
+    using TypeUtf16 = T;
+    static SAL_CONSTEXPR bool const ok = true;
+    static SAL_CONSTEXPR std::size_t const length = N - 1;
+    static SAL_CONSTEXPR sal_Unicode const * toPointer(
+        sal_Unicode const (& literal)[N])
+    { return literal; }
+};
 template<char C, typename T> struct ConstCharArrayDetector<
 #if defined __GNUC__ && __GNUC__ == 4 && __GNUC_MINOR__ <= 8 \
         && !defined __clang__
@@ -201,6 +210,8 @@ struct ExceptConstCharArrayDetector< const char[ N ] >
 {
 };
 #if defined LIBO_INTERNAL_ONLY
+template<std::size_t N>
+struct ExceptConstCharArrayDetector<sal_Unicode const[N]> {};
 template<char C> struct ExceptConstCharArrayDetector<
 #if defined __GNUC__ && __GNUC__ == 4 && __GNUC_MINOR__ <= 8 \
         && !defined __clang__
@@ -230,6 +241,8 @@ struct ExceptCharArrayDetector< const char[ N ] >
 {
 };
 #if defined LIBO_INTERNAL_ONLY
+template<std::size_t N> struct ExceptCharArrayDetector<sal_Unicode[N]> {};
+template<std::size_t N> struct ExceptCharArrayDetector<sal_Unicode const[N]> {};
 template<char C> struct ExceptCharArrayDetector<OUStringLiteral1_<C>> {};
 #endif
 

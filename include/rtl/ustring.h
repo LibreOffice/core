@@ -1458,6 +1458,28 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newConcatAsciiL(
     rtl_uString ** newString, rtl_uString * left, char const * right,
     sal_Int32 rightLength);
 
+/** Create a new string that is the concatenation of two other strings.
+
+    The new string does not necessarily have a reference count of 1 (in cases
+    where the UTF-16 string is empty), so it must not be modified without
+    checking the reference count.
+
+    @param newString pointer to the new string. The pointed-to data must be null
+    or a valid string.
+
+    @param left a valid string.
+
+    @param right must not be null and must point to memory of at least
+    \p rightLength UTF-16 code units
+
+    @param rightLength the length of the \p right string; must be non-negative
+
+    @since LibreOffice 5.3
+ */
+SAL_DLLPUBLIC void SAL_CALL rtl_uString_newConcatUtf16L(
+    rtl_uString ** newString, rtl_uString * left, sal_Unicode const * right,
+    sal_Int32 rightLength);
+
 /** Create a new string by replacing a substring of another string.
 
     The new string results from replacing a number of characters (count),
@@ -1632,6 +1654,114 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceFirstAsciiLAsciiL(
     sal_Int32 fromLength, char const * to, sal_Int32 toLength,
     sal_Int32 * index) SAL_THROW_EXTERN_C();
 
+/** Create a new string by replacing the first occurrence of a given substring
+    with another substring.
+
+    @param[in, out] newStr  pointer to the new string; must not be null; must
+    point to null or a valid rtl_uString; upon return, points to the newly
+    allocated string or to null if there was either an out-of-memory condition
+    or the resulting number of UTF-16 code units would have been larger than
+    SAL_MAX_INT32
+
+    @param str  pointer to the original string; must not be null
+
+    @param from  pointer to the substring to be replaced; must not be null and
+    must point to memory of at least \p fromLength ASCII bytes
+
+    @param fromLength  the length of the \p from substring; must be non-negative
+
+    @param to  pointer to the substring to be replaced; must not be null and
+    must point to memory of at least \p toLength UTF-16 code units
+
+    @param toLength  the length of the \p to substring; must be non-negative
+
+    @param[in,out] index  pointer to a start index, must not be null; upon entry
+    to the function its value is the index into the original string at which to
+    start searching for the \p from substring, the value must be non-negative
+    and not greater than the original string's length; upon exit from the
+    function its value is the index into the original string at which the
+    replacement took place (or would have taken place if \p newStr points to
+    null upon return) or -1 if no replacement took place
+
+    @since LibreOffice 5.3
+*/
+SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceFirstAsciiLUtf16L(
+    rtl_uString ** newStr, rtl_uString * str, char const * from,
+    sal_Int32 fromLength, sal_Unicode const * to, sal_Int32 toLength,
+    sal_Int32 * index) SAL_THROW_EXTERN_C();
+
+/** Create a new string by replacing the first occurrence of a given substring
+    with another substring.
+
+    @param[in, out] newStr  pointer to the new string; must not be null; must
+    point to null or a valid rtl_uString; upon return, points to the newly
+    allocated string or to null if there was either an out-of-memory condition
+    or the resulting number of UTF-16 code units would have been larger than
+    SAL_MAX_INT32
+
+    @param str  pointer to the original string; must not be null
+
+    @param from  pointer to the substring to be replaced; must not be null and
+    must point to memory of at least \p fromLength UTF-16 code units
+
+    @param fromLength  the length of the \p from substring; must be non-negative
+
+    @param to  pointer to the substring to be replaced; must not be null and
+    must point to memory of at least \p toLength ASCII bytes
+
+    @param toLength  the length of the \p to substring; must be non-negative
+
+    @param[in,out] index  pointer to a start index, must not be null; upon entry
+    to the function its value is the index into the original string at which to
+    start searching for the \p from substring, the value must be non-negative
+    and not greater than the original string's length; upon exit from the
+    function its value is the index into the original string at which the
+    replacement took place (or would have taken place if \p newStr points to
+    null upon return) or -1 if no replacement took place
+
+    @since LibreOffice 5.3
+*/
+SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceFirstUtf16LAsciiL(
+    rtl_uString ** newStr, rtl_uString * str, sal_Unicode const * from,
+    sal_Int32 fromLength, char const * to, sal_Int32 toLength,
+    sal_Int32 * index) SAL_THROW_EXTERN_C();
+
+/** Create a new string by replacing the first occurrence of a given substring
+    with another substring.
+
+    @param[in, out] newStr  pointer to the new string; must not be null; must
+    point to null or a valid rtl_uString; upon return, points to the newly
+    allocated string or to null if there was either an out-of-memory condition
+    or the resulting number of UTF-16 code units would have been larger than
+    SAL_MAX_INT32
+
+    @param str  pointer to the original string; must not be null
+
+    @param from  pointer to the substring to be replaced; must not be null and
+    must point to memory of at least \p fromLength UTF-16 code units
+
+    @param fromLength  the length of the \p from substring; must be non-negative
+
+    @param to  pointer to the substring to be replaced; must not be null and
+    must point to memory of at least \p toLength UTF-16 code units
+
+    @param toLength  the length of the \p to substring; must be non-negative
+
+    @param[in,out] index  pointer to a start index, must not be null; upon entry
+    to the function its value is the index into the original string at which to
+    start searching for the \p from substring, the value must be non-negative
+    and not greater than the original string's length; upon exit from the
+    function its value is the index into the original string at which the
+    replacement took place (or would have taken place if \p newStr points to
+    null upon return) or -1 if no replacement took place
+
+    @since LibreOffice 5.3
+*/
+SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceFirstUtf16LUtf16L(
+    rtl_uString ** newStr, rtl_uString * str, sal_Unicode const * from,
+    sal_Int32 fromLength, sal_Unicode const * to, sal_Int32 toLength,
+    sal_Int32 * index) SAL_THROW_EXTERN_C();
+
 /** Create a new string by replacing all occurrences of a given substring with
     another substring.
 
@@ -1750,6 +1880,99 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceAllToAsciiL(
 SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceAllAsciiLAsciiL(
     rtl_uString ** newStr, rtl_uString * str, char const * from,
     sal_Int32 fromLength, char const * to, sal_Int32 toLength)
+    SAL_THROW_EXTERN_C();
+
+/** Create a new string by replacing all occurrences of a given substring with
+    another substring.
+
+    Replacing subsequent occurrences picks up only after a given replacement.
+    That is, replacing from "xa" to "xx" in "xaa" results in "xxa", not "xxx".
+
+    @param[in, out] newStr  pointer to the new string; must not be null; must
+    point to null or a valid rtl_uString; upon return, points to the newly
+    allocated string or to null if there was either an out-of-memory condition
+    or the resulting number of UTF-16 code units would have been larger than
+    SAL_MAX_INT32
+
+    @param str  pointer to the original string; must not be null
+
+    @param from  pointer to the substring to be replaced; must not be null and
+    must point to memory of at least \p fromLength ASCII bytes
+
+    @param fromLength  the length of the \p from substring; must be non-negative
+
+    @param to  pointer to the substring to be replaced; must not be null and
+    must point to memory of at least \p toLength UTF-16 code units
+
+    @param toLength  the length of the \p to substring; must be non-negative
+
+    @since LibreOffice 3.6
+*/
+SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceAllAsciiLUtf16L(
+    rtl_uString ** newStr, rtl_uString * str, char const * from,
+    sal_Int32 fromLength, sal_Unicode const * to, sal_Int32 toLength)
+    SAL_THROW_EXTERN_C();
+
+/** Create a new string by replacing all occurrences of a given substring with
+    another substring.
+
+    Replacing subsequent occurrences picks up only after a given replacement.
+    That is, replacing from "xa" to "xx" in "xaa" results in "xxa", not "xxx".
+
+    @param[in, out] newStr  pointer to the new string; must not be null; must
+    point to null or a valid rtl_uString; upon return, points to the newly
+    allocated string or to null if there was either an out-of-memory condition
+    or the resulting number of UTF-16 code units would have been larger than
+    SAL_MAX_INT32
+
+    @param str  pointer to the original string; must not be null
+
+    @param from  pointer to the substring to be replaced; must not be null and
+    must point to memory of at least \p fromLength UTF-16 code units
+
+    @param fromLength  the length of the \p from substring; must be non-negative
+
+    @param to  pointer to the substring to be replaced; must not be null and
+    must point to memory of at least \p toLength ASCII bytes
+
+    @param toLength  the length of the \p to substring; must be non-negative
+
+    @since LibreOffice 3.6
+*/
+SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceAllUtf16LAsciiL(
+    rtl_uString ** newStr, rtl_uString * str, sal_Unicode const * from,
+    sal_Int32 fromLength, char const * to, sal_Int32 toLength)
+    SAL_THROW_EXTERN_C();
+
+/** Create a new string by replacing all occurrences of a given substring with
+    another substring.
+
+    Replacing subsequent occurrences picks up only after a given replacement.
+    That is, replacing from "xa" to "xx" in "xaa" results in "xxa", not "xxx".
+
+    @param[in, out] newStr  pointer to the new string; must not be null; must
+    point to null or a valid rtl_uString; upon return, points to the newly
+    allocated string or to null if there was either an out-of-memory condition
+    or the resulting number of UTF-16 code units would have been larger than
+    SAL_MAX_INT32
+
+    @param str  pointer to the original string; must not be null
+
+    @param from  pointer to the substring to be replaced; must not be null and
+    must point to memory of at least \p fromLength UTF-16 code units
+
+    @param fromLength  the length of the \p from substring; must be non-negative
+
+    @param to  pointer to the substring to be replaced; must not be null and
+    must point to memory of at least \p toLength UTF-16 code units
+
+    @param toLength  the length of the \p to substring; must be non-negative
+
+    @since LibreOffice 3.6
+*/
+SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceAllUtf16LUtf16L(
+    rtl_uString ** newStr, rtl_uString * str, sal_Unicode const * from,
+    sal_Int32 fromLength, sal_Unicode const * to, sal_Int32 toLength)
     SAL_THROW_EXTERN_C();
 
 /** Create a new string by converting all ASCII uppercase letters to lowercase
