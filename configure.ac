@@ -6390,6 +6390,20 @@ if test "$cxx11_ref_qualifier" = yes; then
     AC_DEFINE([HAVE_CXX11_REF_QUALIFIER])
 fi
 
+AC_MSG_CHECKING([whether $CXX supports C++11 char16_t string literals])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+AC_LANG_PUSH([C++])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+    auto s = u"";
+    ]])], [cxx11_utf16_string_literal=yes], [cxx11_utf16_string_literal=no])
+AC_LANG_POP([C++])
+CXXFLAGS=$save_CXXFLAGS
+AC_MSG_RESULT([$cxx11_utf16_string_literal])
+if test "$cxx11_utf16_string_literal" = yes; then
+    AC_DEFINE([HAVE_CXX11_UTF16_STRING_LITERAL])
+fi
+
 AC_MSG_CHECKING([whether $CXX supports C++14 sized deallocation])
 dnl At least Clang -fsanitize=address causes "multiple definition of
 dnl `operator delete(void*, unsigned long)'" also defined in

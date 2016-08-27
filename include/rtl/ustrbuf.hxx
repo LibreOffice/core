@@ -146,6 +146,24 @@ public:
 #endif
     }
 
+#if defined LIBO_INTERNAL_ONLY
+    /** @overload @since LibreOffice 5.3 */
+    template<typename T>
+    OUStringBuffer(
+        T & literal,
+        typename libreoffice_internal::ConstCharArrayDetector<
+            T, libreoffice_internal::Dummy>::TypeUtf16
+                = libreoffice_internal::Dummy()):
+        pData(nullptr),
+        nCapacity(libreoffice_internal::ConstCharArrayDetector<T>::length + 16)
+    {
+        rtl_uStringbuffer_newFromStr_WithLength(
+            &pData,
+            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
+            libreoffice_internal::ConstCharArrayDetector<T>::length);
+    }
+#endif
+
 #ifdef RTL_STRING_UNITTEST
     /**
      * Only used by unittests to detect incorrect conversions.
@@ -483,6 +501,20 @@ public:
             libreoffice_internal::ConstCharArrayDetector<T>::length);
         return *this;
     }
+
+#if defined LIBO_INTERNAL_ONLY
+    /** @overload @since LibreOffice 5.3 */
+    template<typename T>
+    typename libreoffice_internal::ConstCharArrayDetector<
+        T, OUStringBuffer &>::TypeUtf16
+    append(T & literal) {
+        rtl_uStringbuffer_insert(
+            &pData, &nCapacity, getLength(),
+            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
+            libreoffice_internal::ConstCharArrayDetector<T>::length);
+        return *this;
+    }
+#endif
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
@@ -835,6 +867,20 @@ public:
             libreoffice_internal::ConstCharArrayDetector<T>::length);
         return *this;
     }
+
+#if defined LIBO_INTERNAL_ONLY
+    /** @overload @since LibreOffice 5.3 */
+    template<typename T>
+    typename libreoffice_internal::ConstCharArrayDetector<
+        T, OUStringBuffer &>::TypeUtf16
+    insert(sal_Int32 offset, T & literal) {
+        rtl_uStringbuffer_insert(
+            &pData, &nCapacity, offset,
+            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
+            libreoffice_internal::ConstCharArrayDetector<T>::length);
+        return *this;
+    }
+#endif
 
     /**
         Inserts the string representation of the <code>sal_Bool</code>
@@ -1225,6 +1271,21 @@ public:
         return n < 0 ? n : n + fromIndex;
     }
 
+#if defined LIBO_INTERNAL_ONLY
+    /** @overload @since LibreOffice 5.3 */
+    template<typename T>
+    typename
+        libreoffice_internal::ConstCharArrayDetector<T, sal_Int32>::TypeUtf16
+    indexOf(T & literal, sal_Int32 fromIndex = 0) const {
+        assert(fromIndex >= 0);
+        auto n = rtl_ustr_indexOfStr_WithLength(
+            pData->buffer + fromIndex, pData->length - fromIndex,
+            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
+            libreoffice_internal::ConstCharArrayDetector<T>::length);
+        return n < 0 ? n : n + fromIndex;
+    }
+#endif
+
     /**
        Returns the index within this string of the last occurrence of
        the specified substring, searching backward starting at the end.
@@ -1289,6 +1350,19 @@ public:
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
             libreoffice_internal::ConstCharArrayDetector<T>::length);
     }
+
+#if defined LIBO_INTERNAL_ONLY
+    /** @overload @since LibreOffice 5.3 */
+    template<typename T>
+    typename
+        libreoffice_internal::ConstCharArrayDetector<T, sal_Int32>::TypeUtf16
+    lastIndexOf(T & literal) const {
+        return rtl_ustr_lastIndexOfStr_WithLength(
+            pData->buffer, pData->length,
+            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
+            libreoffice_internal::ConstCharArrayDetector<T>::length);
+    }
+#endif
 
     /**
        Strip the given character from the start of the buffer.
