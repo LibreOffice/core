@@ -46,6 +46,7 @@ if (ENABLE_UNIT_TESTS == YES)
     MD5 = 2d6ec8ccdf5c46b05ba54a9fd1d130d7
     name = gtest-1.7.0.zip
     URL1 = http://googletest.googlecode.com/files/gtest-1.7.0.zip
+    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if ( true )
     MD5 = 067201ea8b126597670b5eff72e1f66c
