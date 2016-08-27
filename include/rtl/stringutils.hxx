@@ -200,6 +200,18 @@ template< int N >
 struct ExceptConstCharArrayDetector< const char[ N ] >
 {
 };
+#if defined LIBO_INTERNAL_ONLY
+template<char C> struct ExceptConstCharArrayDetector<
+#if defined __GNUC__ && __GNUC__ == 4 && __GNUC_MINOR__ <= 8 \
+        && !defined __clang__
+    OUStringLiteral1_<C> const
+#else
+    OUStringLiteral1<C>
+#endif
+    >
+{};
+#endif
+
 // this one is used to rule out only const char[N]
 // (const will be brought in by 'const T&' in the function call)
 // msvc needs const char[N] here (not sure whether gcc or msvc
@@ -217,9 +229,8 @@ template< int N >
 struct ExceptCharArrayDetector< const char[ N ] >
 {
 };
-#if defined LIBO_INTERNAL_ONLY && defined _MSC_VER && _MSC_VER <= 1900
-    // Visual Studio 2015
-template<char C> struct ExceptCharArrayDetector<OUStringLiteral1<C>> {};
+#if defined LIBO_INTERNAL_ONLY
+template<char C> struct ExceptCharArrayDetector<OUStringLiteral1_<C>> {};
 #endif
 
 template< typename T1, typename T2 = void >
