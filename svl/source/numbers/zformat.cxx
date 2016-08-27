@@ -4633,24 +4633,22 @@ static void lcl_SvNumberformat_AddLimitStringImpl( OUString& rStr,
     }
 }
 
-void lcl_insertLCID( OUStringBuffer& aFormatStr, const OUString& rLCIDString )
+void lcl_insertLCID( OUStringBuffer& aFormatStr, const OUString& rLCIDString, sal_Int32 nPosInsertLCID )
 {
     OUStringBuffer aLCIDString;
     if ( !rLCIDString.isEmpty() )
     {
         aLCIDString = "[$-" + rLCIDString + "]";
     }
-    sal_Int32 nPosDBNum = aFormatStr.lastIndexOf("[DBNum");
-    if ( nPosDBNum >= 0 )
-    {
-        if ( rLCIDString.getLength() > 4 )  // remove DBNumX code if long LCID
-            aFormatStr.remove( nPosDBNum, 8 );
-        else
-            nPosDBNum += 8;                 // other insert LCID after DBNum
+    // Search for only last DBNum
+    if ( nPosInsertLCID >= 8
+        && rLCIDString.getLength() > 4
+        && aFormatStr.toString().copy( nPosInsertLCID-8, 6 ).equals( "[DBNum" ) )
+    {   // remove DBNumX code if long LCID
+        nPosInsertLCID -= 8;
+        aFormatStr.remove( nPosInsertLCID, 8 );
     }
-    else
-        nPosDBNum = 0;
-    aFormatStr.insert( nPosDBNum, aLCIDString.toString() );
+    aFormatStr.insert( nPosInsertLCID, aLCIDString.toString() );
 }
 
 OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
@@ -4712,6 +4710,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
         }
         OUString aPrefix;
         bool bLCIDInserted = false;
+        sal_Int32 nPosInsertLCID = aStr.getLength();
 
         if ( !bDefaults )
         {
@@ -4763,6 +4762,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
             for ( ; nSem; --nSem )
             {
                 aStr.append( ';' );
+                nPosInsertLCID = aStr.getLength(); // insert LCID after semicolon
             }
             for ( ; nSub <= n; ++nSub )
             {
@@ -4773,6 +4773,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
         if ( !aPrefix.isEmpty() )
         {
             aStr.append( aPrefix );
+            nPosInsertLCID = aStr.getLength(); // insert LCID after DBNum
         }
         if ( nAnz )
         {
@@ -4834,11 +4835,11 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                                  MsLangId::getRealLanguage( aNatNum.GetLang() ) ==
                                  LANGUAGE_THAI )
                             {
-                                lcl_insertLCID( aStr, "D07041E" ); // date in Thai digit, Buddhist era
+                                lcl_insertLCID( aStr, "D07041E", nPosInsertLCID ); // date in Thai digit, Buddhist era
                             }
                             else
                             {
-                                lcl_insertLCID( aStr, "107041E" ); // date in Arabic digit, Buddhist era
+                                lcl_insertLCID( aStr, "107041E", nPosInsertLCID ); // date in Arabic digit, Buddhist era
                             }
                             j = j+2;
                             bLCIDInserted = true;
@@ -4857,12 +4858,13 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                 rKeywords[NF_KEY_THAI_T] == "T" &&
                 MsLangId::getRealLanguage( aNatNum.GetLang()) == LANGUAGE_THAI )
             {
-                lcl_insertLCID( aStr, "D00041E" ); // number in Thai digit
+                lcl_insertLCID( aStr, "D00041E", nPosInsertLCID ); // number in Thai digit
             }
             else if ( aNatNum.IsComplete() && aNatNum.GetDBNum() > 0 )
             {
                 lcl_insertLCID( aStr, OUString::number( sal::static_int_cast<sal_Int32>(
-                                MsLangId::getRealLanguage( aNatNum.GetLang())), 16).toAsciiUpperCase());
+                                MsLangId::getRealLanguage( aNatNum.GetLang())), 16).toAsciiUpperCase(),
+                                nPosInsertLCID);
             }
         }
     }
