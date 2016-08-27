@@ -276,7 +276,8 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             m_pImpl->SetSymbolFont(sStringValue);
         break;
         case NS_ooxml::LN_CT_Underline_val:
-            handleUnderlineType(nIntValue, m_pImpl->GetTopContext());
+            if (m_pImpl->GetTopContext())
+                handleUnderlineType(nIntValue, m_pImpl->GetTopContext());
             break;
         case NS_ooxml::LN_CT_Color_val:
             if (m_pImpl->GetTopContext())
