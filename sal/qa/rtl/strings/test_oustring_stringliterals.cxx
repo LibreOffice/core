@@ -19,6 +19,7 @@ extern bool rtl_string_unittest_non_const_literal_function;
 #include <utility>
 
 #include <sal/types.h>
+#include <config_global.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include "rtl/string.h"
@@ -37,6 +38,7 @@ private:
     void checkBuffer();
     void checkOUStringLiteral();
     void checkOUStringLiteral1();
+    void checkUtf16();
 
     void testcall( const char str[] );
 
@@ -48,6 +50,7 @@ CPPUNIT_TEST(checkNonconstChar);
 CPPUNIT_TEST(checkBuffer);
 CPPUNIT_TEST(checkOUStringLiteral);
 CPPUNIT_TEST(checkOUStringLiteral1);
+CPPUNIT_TEST(checkUtf16);
 CPPUNIT_TEST_SUITE_END();
 };
 
@@ -245,6 +248,76 @@ void test::oustring::StringLiterals::checkOUStringLiteral1()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), s2.getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Unicode('A'), s2[0]);
     CPPUNIT_ASSERT_EQUAL(sal_Unicode('b'), s2[1]);
+}
+
+void test::oustring::StringLiterals::checkUtf16() {
+#if HAVE_CXX11_UTF16_STRING_LITERAL
+    rtl::OUString s1(u"abc");
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString("abc"), s1);
+    s1 = u"de";
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString("de"), s1);
+    s1 += u"fde";
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString("defde"), s1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), s1.reverseCompareTo(u"defde"));
+    CPPUNIT_ASSERT(s1.equalIgnoreAsciiCase(u"DEFDE"));
+    CPPUNIT_ASSERT(s1.match(u"fde", 2));
+    CPPUNIT_ASSERT(s1.matchIgnoreAsciiCase(u"FDE", 2));
+    rtl::OUString s2;
+    CPPUNIT_ASSERT(s1.startsWith(u"de", &s2));
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString(u"fde"), s2);
+    CPPUNIT_ASSERT(s1.startsWithIgnoreAsciiCase(u"DEFD", &s2));
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString(u"e"), s2);
+    CPPUNIT_ASSERT(s1.endsWith(u"de", &s2));
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString(u"def"), s2);
+    CPPUNIT_ASSERT(s1.endsWithIgnoreAsciiCase(u"EFDE", &s2));
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString(u"d"), s2);
+    CPPUNIT_ASSERT(s1 == u"defde");
+    CPPUNIT_ASSERT(u"defde" == s1);
+    CPPUNIT_ASSERT(s1 != u"abc");
+    CPPUNIT_ASSERT(u"abc" != s1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), s1.indexOf(u"de", 1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), s1.lastIndexOf(u"de"));
+    sal_Int32 i = 0;
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString(u"abcfde"),
+        s1.replaceFirst(u"de", rtl::OUString("abc"), &i));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), i);
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString(u"abcfde"),
+        s1.replaceFirst(rtl::OUString("de"), u"abc", &i));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), i);
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString(u"abcfde"), s1.replaceFirst(u"de", u"abc", &i));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), i);
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString(u"abcfde"), s1.replaceFirst(u"de", "abc", &i));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), i);
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString(u"abcfde"), s1.replaceFirst("de", u"abc", &i));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), i);
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString(u"abcfabc"), s1.replaceAll(u"de", rtl::OUString("abc")));
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString(u"abcfabc"), s1.replaceAll(rtl::OUString("de"), u"abc"));
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString(u"abcfabc"), s1.replaceAll(u"de", u"abc"));
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString(u"abcfabc"), s1.replaceAll(u"de", "abc"));
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString(u"abcfabc"), s1.replaceAll("de", u"abc"));
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString("abcdef"), rtl::OUString(rtl::OUString("abc") + u"def"));
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString("abcdef"), rtl::OUString(u"abc" + rtl::OUString("def")));
+    rtl::OUStringBuffer b(u"abc");
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString("abc"), b.toString());
+    b.append(u"def");
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString("abcdef"), b.toString());
+    b.insert(2, u"gabab");
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString("abgababcdef"), b.toString());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), b.indexOf(u"ab", 1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), b.lastIndexOf(u"ab"));
+#endif
 }
 
 }} // namespace
