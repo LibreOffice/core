@@ -631,6 +631,27 @@ void rtl_uString_newConcatAsciiL(
     (*newString)->length = n;
 }
 
+void rtl_uString_newConcatUtf16L(
+    rtl_uString ** newString, rtl_uString * left, sal_Unicode const * right,
+    sal_Int32 rightLength)
+{
+    assert(newString != nullptr);
+    assert(left != nullptr);
+    assert(right != nullptr);
+    assert(rightLength >= 0);
+    if (left->length > std::numeric_limits<sal_Int32>::max() - rightLength) {
+        throw std::length_error("rtl_uString_newConcatUtf16L");
+    }
+    sal_Int32 n = left->length + rightLength;
+    rtl_uString_assign(newString, left);
+    rtl_uString_ensureCapacity(newString, n);
+    memcpy(
+        (*newString)->buffer + (*newString)->length, right,
+        rightLength * sizeof (sal_Unicode));
+    (*newString)->buffer[n] = 0;
+    (*newString)->length = n;
+}
+
 /* ======================================================================= */
 
 static int rtl_ImplGetFastUTF8UnicodeLen( const sal_Char* pStr, sal_Int32 nLen, bool * ascii )
@@ -1296,6 +1317,140 @@ void rtl_uString_newReplaceFirstAsciiLAsciiL(
     *index = i;
 }
 
+void rtl_uString_newReplaceFirstAsciiLUtf16L(
+    rtl_uString ** newStr, rtl_uString * str, char const * from,
+    sal_Int32 fromLength, sal_Unicode const * to, sal_Int32 toLength,
+    sal_Int32 * index) SAL_THROW_EXTERN_C()
+{
+    assert(str != nullptr);
+    assert(index != nullptr);
+    assert(*index >= 0 && *index <= str->length);
+    assert(fromLength >= 0);
+    assert(to != nullptr);
+    assert(toLength >= 0);
+    sal_Int32 i = rtl_ustr_indexOfAscii_WithLength(
+        str->buffer + *index, str->length - *index, from, fromLength);
+    if (i == -1) {
+        rtl_uString_assign(newStr, str);
+    } else {
+        assert(i <= str->length - *index);
+        i += *index;
+        assert(fromLength <= str->length);
+        if (str->length - fromLength > SAL_MAX_INT32 - toLength) {
+            rtl_uString_release(*newStr);
+            *newStr = nullptr;
+        } else {
+            sal_Int32 n = str->length - fromLength + toLength;
+            rtl_uString_acquire(str); // in case *newStr == str
+            rtl_uString_new_WithLength(newStr, n);
+            if (n != 0 && /*TODO:*/ *newStr != nullptr) {
+                (*newStr)->length = n;
+                assert(i >= 0 && i < str->length);
+                memcpy(
+                    (*newStr)->buffer, str->buffer, i * sizeof (sal_Unicode));
+                memcpy(
+                    (*newStr)->buffer + i, to, toLength * sizeof (sal_Unicode));
+                memcpy(
+                    (*newStr)->buffer + i + toLength,
+                    str->buffer + i + fromLength,
+                    (str->length - i - fromLength) * sizeof (sal_Unicode));
+            }
+            rtl_uString_release(str);
+        }
+    }
+    *index = i;
+}
+
+void rtl_uString_newReplaceFirstUtf16LAsciiL(
+    rtl_uString ** newStr, rtl_uString * str, sal_Unicode const * from,
+    sal_Int32 fromLength, char const * to, sal_Int32 toLength,
+    sal_Int32 * index) SAL_THROW_EXTERN_C()
+{
+    assert(str != nullptr);
+    assert(index != nullptr);
+    assert(*index >= 0 && *index <= str->length);
+    assert(fromLength >= 0);
+    assert(to != nullptr);
+    assert(toLength >= 0);
+    sal_Int32 i = rtl_ustr_indexOfStr_WithLength(
+        str->buffer + *index, str->length - *index, from, fromLength);
+    if (i == -1) {
+        rtl_uString_assign(newStr, str);
+    } else {
+        assert(i <= str->length - *index);
+        i += *index;
+        assert(fromLength <= str->length);
+        if (str->length - fromLength > SAL_MAX_INT32 - toLength) {
+            rtl_uString_release(*newStr);
+            *newStr = nullptr;
+        } else {
+            sal_Int32 n = str->length - fromLength + toLength;
+            rtl_uString_acquire(str); // in case *newStr == str
+            rtl_uString_new_WithLength(newStr, n);
+            if (n != 0 && /*TODO:*/ *newStr != nullptr) {
+                (*newStr)->length = n;
+                assert(i >= 0 && i < str->length);
+                memcpy(
+                    (*newStr)->buffer, str->buffer, i * sizeof (sal_Unicode));
+                for (sal_Int32 j = 0; j != toLength; ++j) {
+                    assert(static_cast< unsigned char >(to[j]) <= 0x7F);
+                    (*newStr)->buffer[i + j] = to[j];
+                }
+                memcpy(
+                    (*newStr)->buffer + i + toLength,
+                    str->buffer + i + fromLength,
+                    (str->length - i - fromLength) * sizeof (sal_Unicode));
+            }
+            rtl_uString_release(str);
+        }
+    }
+    *index = i;
+}
+
+void rtl_uString_newReplaceFirstUtf16LUtf16L(
+    rtl_uString ** newStr, rtl_uString * str, sal_Unicode const * from,
+    sal_Int32 fromLength, sal_Unicode const * to, sal_Int32 toLength,
+    sal_Int32 * index) SAL_THROW_EXTERN_C()
+{
+    assert(str != nullptr);
+    assert(index != nullptr);
+    assert(*index >= 0 && *index <= str->length);
+    assert(fromLength >= 0);
+    assert(to != nullptr);
+    assert(toLength >= 0);
+    sal_Int32 i = rtl_ustr_indexOfStr_WithLength(
+        str->buffer + *index, str->length - *index, from, fromLength);
+    if (i == -1) {
+        rtl_uString_assign(newStr, str);
+    } else {
+        assert(i <= str->length - *index);
+        i += *index;
+        assert(fromLength <= str->length);
+        if (str->length - fromLength > SAL_MAX_INT32 - toLength) {
+            rtl_uString_release(*newStr);
+            *newStr = nullptr;
+        } else {
+            sal_Int32 n = str->length - fromLength + toLength;
+            rtl_uString_acquire(str); // in case *newStr == str
+            rtl_uString_new_WithLength(newStr, n);
+            if (n != 0 && /*TODO:*/ *newStr != nullptr) {
+                (*newStr)->length = n;
+                assert(i >= 0 && i < str->length);
+                memcpy(
+                    (*newStr)->buffer, str->buffer, i * sizeof (sal_Unicode));
+                memcpy(
+                    (*newStr)->buffer + i, to, toLength * sizeof (sal_Unicode));
+                memcpy(
+                    (*newStr)->buffer + i + toLength,
+                    str->buffer + i + fromLength,
+                    (str->length - i - fromLength) * sizeof (sal_Unicode));
+            }
+            rtl_uString_release(str);
+        }
+    }
+    *index = i;
+}
+
 void rtl_uString_newReplaceAll(
     rtl_uString ** newStr, rtl_uString * str, rtl_uString const * from,
     rtl_uString const * to) SAL_THROW_EXTERN_C()
@@ -1359,6 +1514,54 @@ void rtl_uString_newReplaceAllAsciiLAsciiL(
         rtl_uString_newReplaceFirstAsciiLAsciiL(
             newStr, *newStr, from, fromLength, to, toLength, &i);
         if (i == -1) {
+            break;
+        }
+    }
+}
+
+void rtl_uString_newReplaceAllAsciiLUtf16L(
+    rtl_uString ** newStr, rtl_uString * str, char const * from,
+    sal_Int32 fromLength, sal_Unicode const * to, sal_Int32 toLength)
+    SAL_THROW_EXTERN_C()
+{
+    assert(toLength >= 0);
+    rtl_uString_assign(newStr, str);
+    for (sal_Int32 i = 0;; i += toLength) {
+        rtl_uString_newReplaceFirstAsciiLUtf16L(
+            newStr, *newStr, from, fromLength, to, toLength, &i);
+        if (i == -1 || *newStr == nullptr) {
+            break;
+        }
+    }
+}
+
+void rtl_uString_newReplaceAllUtf16LAsciiL(
+    rtl_uString ** newStr, rtl_uString * str, sal_Unicode const * from,
+    sal_Int32 fromLength, char const * to, sal_Int32 toLength)
+    SAL_THROW_EXTERN_C()
+{
+    assert(toLength >= 0);
+    rtl_uString_assign(newStr, str);
+    for (sal_Int32 i = 0;; i += toLength) {
+        rtl_uString_newReplaceFirstUtf16LAsciiL(
+            newStr, *newStr, from, fromLength, to, toLength, &i);
+        if (i == -1 || *newStr == nullptr) {
+            break;
+        }
+    }
+}
+
+void rtl_uString_newReplaceAllUtf16LUtf16L(
+    rtl_uString ** newStr, rtl_uString * str, sal_Unicode const * from,
+    sal_Int32 fromLength, sal_Unicode const * to, sal_Int32 toLength)
+    SAL_THROW_EXTERN_C()
+{
+    assert(toLength >= 0);
+    rtl_uString_assign(newStr, str);
+    for (sal_Int32 i = 0;; i += toLength) {
+        rtl_uString_newReplaceFirstUtf16LUtf16L(
+            newStr, *newStr, from, fromLength, to, toLength, &i);
+        if (i == -1 || *newStr == nullptr) {
             break;
         }
     }
