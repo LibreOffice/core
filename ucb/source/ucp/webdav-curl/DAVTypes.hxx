@@ -71,6 +71,8 @@ namespace http_dav_ucp
         bool    m_isClass1;
         bool    m_isClass2;
         bool    m_isClass3;
+        // for server that do not implement it
+        bool    m_isHeadAllowed;
         // Internally used to maintain locked stated of the resource, only
         // if it's a Class 2 resource
         bool    m_isLocked;
@@ -101,6 +103,9 @@ namespace http_dav_ucp
         bool isClass3() { return m_isClass3; };
         void setClass3( bool Class3 = true ) { m_isClass3 = Class3; };
 
+        bool isHeadAllowed() { return m_isHeadAllowed; };
+        void setHeadAllowed( bool HeadAllowed = true ) { m_isHeadAllowed = HeadAllowed; };
+
         sal_uInt32  getStaleTime() const { return m_nStaleTime ; };
         void setStaleTime( const sal_uInt32 nStaleTime ) { m_nStaleTime = nStaleTime; };
 
@@ -123,6 +128,7 @@ namespace http_dav_ucp
             m_isClass1 = false;
             m_isClass2 = false;
             m_isClass3 = false;
+            m_isHeadAllowed = true;
             m_isLocked = false;
             m_aAllowedMethods.clear();
             m_nStaleTime = 0;
@@ -167,6 +173,8 @@ namespace http_dav_ucp
                     false if resource was not found
         */
         bool isResourceFound( const OUString & rURL );
+
+        bool isHeadAllowed( const OUString & rURL );
 
     private:
 
