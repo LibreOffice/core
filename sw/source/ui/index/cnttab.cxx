@@ -4167,7 +4167,7 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(vcl::Window* pParent, const OUString& rAu
         m_pEntriesBB->RowInserted(0);
     else
     {
-        SfxMedium aMed( sAutoMarkURL, STREAM_STD_READ );
+        SfxMedium aMed( sAutoMarkURL, StreamMode::STD_READ );
         if( aMed.GetInStream() && !aMed.GetInStream()->GetError() )
             m_pEntriesBB->ReadEntries( *aMed.GetInStream() );
         else

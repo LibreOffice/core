@@ -244,7 +244,7 @@ namespace svgio
 
                         if (!aAbsUrl.isEmpty() && !rPath.equals(aAbsUrl))
                         {
-                            SvFileStream aStream(aAbsUrl, STREAM_STD_READ);
+                            SvFileStream aStream(aAbsUrl, StreamMode::STD_READ);
                             Graphic aGraphic;
 
                             if(GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(

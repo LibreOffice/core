@@ -326,7 +326,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotSt
             catch ( const uno::Exception& )
             {}
 
-            tools::SvRef<SotStorage> xOLEStor = SotStorage::OpenOLEStorage( xStor, aTempName, STREAM_STD_READ );
+            tools::SvRef<SotStorage> xOLEStor = SotStorage::OpenOLEStorage( xStor, aTempName, StreamMode::STD_READ );
             xOLEStor->CopyTo( &rDestStg );
             rDestStg.Commit();
         }

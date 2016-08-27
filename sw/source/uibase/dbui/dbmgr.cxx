@@ -874,7 +874,7 @@ static void lcl_SaveDebugDoc( SfxObjectShell *xTargetDocShell,
     INetURLObject aTempFileURL( aTempFile.GetURL() );
     SfxMedium* pDstMed = new SfxMedium(
         aTempFileURL.GetMainURL( INetURLObject::NO_DECODE ),
-        STREAM_STD_READWRITE );
+        StreamMode::STD_READWRITE );
     bool bAnyError = !xTargetDocShell->DoSaveAs( *pDstMed );
     // xObjectShell->DoSaveCompleted crashes the mail merge unit tests, so skip it
     bAnyError |= (0 != xTargetDocShell->GetError());
@@ -899,7 +899,7 @@ static bool lcl_SaveDoc(
     if( decodedURL )
         (*decodedURL) = url;
 
-    SfxMedium* pDstMed = new SfxMedium( url, STREAM_STD_READWRITE );
+    SfxMedium* pDstMed = new SfxMedium( url, StreamMode::STD_READWRITE );
     pDstMed->SetFilter( pStoreToFilter );
     if( pDstMed->GetItemSet() )
     {

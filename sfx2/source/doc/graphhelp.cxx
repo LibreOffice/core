@@ -90,7 +90,7 @@ void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
         OUString aMetaURL = aTempFile.GetURL();
         OString aWinFile = OUStringToOString( aMetaFile, osl_getThreadTextEncoding() );
 
-        SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aMetaURL, STREAM_STD_READWRITE );
+        SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aMetaURL, StreamMode::STD_READWRITE );
         if ( pStream )
         {
             Graphic aGraph( *pGDIMeta );

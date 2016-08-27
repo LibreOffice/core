@@ -722,7 +722,7 @@ namespace frm
        {
             delete m_pMedium;
 
-            m_pMedium = new SfxMedium(rURL, STREAM_STD_READ);
+            m_pMedium = new SfxMedium(rURL, StreamMode::STD_READ);
 
             // Find the XModel to get to the Object shell or at least the
             // Referer.

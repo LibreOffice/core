@@ -1413,7 +1413,7 @@ sal_uLong SwDocShell::LoadStylesFromFile( const OUString& rURL,
     SfxFilterMatcher aMatcher( sFactory );
 
     // search for filter in WebDocShell, too
-    SfxMedium aMed( rURL, STREAM_STD_READ );
+    SfxMedium aMed( rURL, StreamMode::STD_READ );
     std::shared_ptr<const SfxFilter> pFlt;
     aMatcher.DetectFilter( aMed, pFlt );
     if(!pFlt)

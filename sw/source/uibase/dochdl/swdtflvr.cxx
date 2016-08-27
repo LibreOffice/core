@@ -2429,7 +2429,7 @@ bool SwTransferable::PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         // or should the file be an ImageMap-File?
         ImageMap aMap;
         SfxMedium aMed( INetURLObject(aBkmk.GetURL()).GetFull(),
-                            STREAM_STD_READ );
+                            StreamMode::STD_READ );
         SvStream* pStream = aMed.GetInStream();
         if( pStream != nullptr  &&
             !pStream->GetError()  &&

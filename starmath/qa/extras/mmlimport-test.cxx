@@ -61,7 +61,7 @@ private:
                                     SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
                                     SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
 
-        SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
+        SfxMedium* pSrcMed = new SfxMedium(rURL, StreamMode::STD_READ);
         pSrcMed->SetFilter(pFilter);
         pSrcMed->UseInteractionHandler(false);
         bool bLoaded = mxDocShell->DoLoad(pSrcMed);

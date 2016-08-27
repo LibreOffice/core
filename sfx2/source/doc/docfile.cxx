@@ -593,7 +593,7 @@ SvStream* SfxMedium::GetOutStream()
             // On Unix don't try to re-use XOutStream from xStream if that exists;
             // it causes fdo#59022 (fails opening files via SMB on Linux)
                 pImpl->m_pOutStream = new SvFileStream(
-                            pImpl->m_aName, STREAM_STD_READWRITE);
+                            pImpl->m_aName, StreamMode::STD_READWRITE);
             }
             CloseStorage();
         }

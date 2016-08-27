@@ -126,7 +126,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                             }
                             else
                             {
-                                pStream = aTmp.GetStream( STREAM_STD_READWRITE );
+                                pStream = aTmp.GetStream( StreamMode::STD_READWRITE );
                                 uno::Reference < embed::XStorage > xStor = comphelper::OStorageHelper::GetStorageFromStream( new utl::OStreamWrapper( *pStream ) );
                                 xStg->openStorageElement( aName, embed::ElementModes::READ )->copyToStorage( xStor );
                             }

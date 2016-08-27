@@ -491,7 +491,7 @@ bool SotStorage::IsStorageFile( const OUString & rFileName )
         aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
     }
 
-    std::unique_ptr<SvStream> pStm(::utl::UcbStreamHelper::CreateStream( aName, STREAM_STD_READ ));
+    std::unique_ptr<SvStream> pStm(::utl::UcbStreamHelper::CreateStream( aName, StreamMode::STD_READ ));
     bool bRet = SotStorage::IsStorageFile( pStm.get() );
     return bRet;
 }

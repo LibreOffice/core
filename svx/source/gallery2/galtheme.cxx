@@ -91,7 +91,7 @@ void GalleryTheme::ImplCreateSvDrawStorage()
 {
     try
     {
-        aSvDrawStorageRef = new SotStorage( false, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), pThm->IsReadOnly() ? StreamMode::READ : STREAM_STD_READWRITE );
+        aSvDrawStorageRef = new SotStorage( false, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), pThm->IsReadOnly() ? StreamMode::READ : StreamMode::STD_READWRITE );
         // #i50423# ReadOnly may not been set though the file can't be written (because of security reasons)
         if ( ( aSvDrawStorageRef->GetError() != ERRCODE_NONE ) && !pThm->IsReadOnly() )
             aSvDrawStorageRef = new SotStorage( false, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ );
@@ -656,7 +656,7 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
 
         try
         {
-            tools::SvRef<SotStorage> aTempStorageRef( new SotStorage( false, aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READWRITE ) );
+            tools::SvRef<SotStorage> aTempStorageRef( new SotStorage( false, aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::STD_READWRITE ) );
             aSvDrawStorageRef->CopyTo( aTempStorageRef );
             nStorErr = aSvDrawStorageRef->GetError();
         }

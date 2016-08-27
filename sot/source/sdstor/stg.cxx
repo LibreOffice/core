@@ -128,7 +128,7 @@ bool OLEStorageBase::ValidateMode_Impl( StreamMode m, StgDirEntry* p )
     if( m == INTERNAL_MODE )
         return true;
     StreamMode nCurMode = ( p && p->m_nRefCnt ) ? p->m_nMode : StreamMode::SHARE_DENYALL;
-    if( ( m & STREAM_READWRITE ) == StreamMode::READ )
+    if( ( m & StreamMode::READWRITE ) == StreamMode::READ )
     {
         // only SHARE_DENYWRITE or SHARE_DENYALL allowed
         if( ( ( m & StreamMode::SHARE_DENYWRITE )
@@ -166,7 +166,7 @@ StorageStream::StorageStream( StgIo* p, StgDirEntry* q, StreamMode m )
         }
     }
     else
-        m &= ~StreamMode(STREAM_READWRITE);
+        m &= ~StreamMode(StreamMode::READWRITE);
     m_nMode = m;
 }
 
@@ -304,7 +304,7 @@ SvStorageInfo::SvStorageInfo( const StgDirEntry& rE )
 bool Storage::IsStorageFile( const OUString & rFileName )
 {
     StgIo aIo;
-    if( aIo.Open( rFileName, STREAM_STD_READ ) )
+    if( aIo.Open( rFileName, StreamMode::STD_READ ) )
         return aIo.Load();
     return false;
 }
@@ -478,7 +478,7 @@ Storage::Storage( StgIo* p, StgDirEntry* q, StreamMode m )
     if( q )
         q->m_aEntry.GetName( aName );
     else
-        m &= ~StreamMode(STREAM_READWRITE);
+        m &= ~StreamMode(StreamMode::READWRITE);
     m_nMode   = m;
     if( q && q->m_nRefCnt == 1 )
         q->m_nMode = m;

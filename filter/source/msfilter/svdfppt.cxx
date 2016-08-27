@@ -1862,7 +1862,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                             bool bGetItAsOle = (sizeof(aTestA) == xSrcTst->ReadBytes(aTestA, sizeof(aTestA)));
                             if ( !bGetItAsOle )
                             {   // maybe there is a contents stream in here
-                                xSrcTst = xObjStor->OpenSotStream( "Contents", STREAM_READWRITE | StreamMode::NOCREATE );
+                                xSrcTst = xObjStor->OpenSotStream( "Contents", StreamMode::READWRITE | StreamMode::NOCREATE );
                                 bGetItAsOle = (xSrcTst.Is() &&
                                     sizeof(aTestA) == xSrcTst->ReadBytes(aTestA, sizeof(aTestA)));
                             }
@@ -1899,7 +1899,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                     aNm = pOe->pShell->getEmbeddedObjectContainer().CreateUniqueObjectName();
 
                                     // object is not an own object
-                                    tools::SvRef<SotStorage> xTarget = SotStorage::OpenOLEStorage( pOe->pShell->GetStorage(), aNm, STREAM_READWRITE );
+                                    tools::SvRef<SotStorage> xTarget = SotStorage::OpenOLEStorage( pOe->pShell->GetStorage(), aNm, StreamMode::READWRITE );
                                     if ( xObjStor.Is() && xTarget.Is() )
                                     {
                                         xObjStor->CopyTo( xTarget );
@@ -2021,7 +2021,7 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                             {
                                 // is this a visual basic storage ?
                                 tools::SvRef<SotStorage> xSubStorage = xSource->OpenSotStorage( "VBA",
-                                    STREAM_READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL );
+                                    StreamMode::READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL );
                                 if( xSubStorage.Is() && ( SVSTREAM_OK == xSubStorage->GetError() ) )
                                 {
                                     tools::SvRef<SotStorage> xMacros = xDest->OpenSotStorage( "MACROS" );

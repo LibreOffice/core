@@ -1291,7 +1291,7 @@ bool SwTableAutoFormatTable::Load()
     SvtPathOptions aOpt;
     if( aOpt.SearchFile( sNm ))
     {
-        SfxMedium aStream( sNm, STREAM_STD_READ );
+        SfxMedium aStream( sNm, StreamMode::STD_READ );
         bRet = Load( *aStream.GetInStream() );
     }
     else
@@ -1303,7 +1303,7 @@ bool SwTableAutoFormatTable::Save() const
 {
     SvtPathOptions aPathOpt;
     const OUString sNm( aPathOpt.GetUserConfigPath() + "/" AUTOTABLE_FORMAT_NAME );
-    SfxMedium aStream(sNm, STREAM_STD_WRITE );
+    SfxMedium aStream(sNm, StreamMode::STD_WRITE );
     return Save( *aStream.GetOutStream() ) && aStream.Commit();
 }
 

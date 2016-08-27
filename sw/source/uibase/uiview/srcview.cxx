@@ -826,7 +826,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         SvtSaveOptions aOpt;
 
         {
-            SfxMedium aMedium( sFileURL,STREAM_READWRITE );
+            SfxMedium aMedium( sFileURL,StreamMode::READWRITE );
             SwWriter aWriter( aMedium, *pDocShell->GetDoc() );
             WriterRef xWriter;
             ::GetHTMLWriter(OUString(), aMedium.GetBaseURL( true ), xWriter);

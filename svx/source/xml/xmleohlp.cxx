@@ -88,7 +88,7 @@ OutputStorageWrapper_Impl::OutputStorageWrapper_Impl()
     , pStream(nullptr)
 {
     aTempFile.EnableKillingFile();
-    pStream = aTempFile.GetStream( STREAM_READWRITE );
+    pStream = aTempFile.GetStream( StreamMode::READWRITE );
     xOut = new OOutputStreamWrapper( *pStream );
 }
 

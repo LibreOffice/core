@@ -3216,9 +3216,9 @@ void WW8Export::ExportDocument_Impl()
 
     pFib->fWhichTableStm = true;
     xTableStrm = GetWriter().GetStorage().OpenSotStream(OUString(SL::a1Table),
-        STREAM_STD_WRITE );
+        StreamMode::STD_WRITE );
     xDataStrm = GetWriter().GetStorage().OpenSotStream(OUString(SL::aData),
-        STREAM_STD_WRITE );
+        StreamMode::STD_WRITE );
 
     xDataStrm->SetBufferSize( 32768 );  // for graphics
     xTableStrm->SetBufferSize( 16384 ); // for the Font-/Style-Table, etc.
@@ -3244,11 +3244,11 @@ void WW8Export::ExportDocument_Impl()
     if ( bEncrypt )
     {
         GetWriter().SetStream(
-            aTempMain.GetStream( STREAM_READWRITE | StreamMode::SHARE_DENYWRITE ) );
+            aTempMain.GetStream( StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE ) );
 
-        pTableStrm = aTempTable.GetStream( STREAM_READWRITE | StreamMode::SHARE_DENYWRITE );
+        pTableStrm = aTempTable.GetStream( StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE );
 
-        pDataStrm = aTempData.GetStream( STREAM_READWRITE | StreamMode::SHARE_DENYWRITE );
+        pDataStrm = aTempData.GetStream( StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE );
 
         sal_uInt8 aRC4EncryptionHeader[ 52 ] = {0};
         pTableStrm->WriteBytes(aRC4EncryptionHeader, 52);

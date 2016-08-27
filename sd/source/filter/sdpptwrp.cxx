@@ -84,10 +84,10 @@ bool SdPPTFilter::Import()
         OUString sDualStorage( "PP97_DUALSTORAGE"  );
         if ( pStorage->IsContained( sDualStorage ) )
         {
-            xDualStorage = pStorage->OpenSotStorage( sDualStorage, STREAM_STD_READ );
+            xDualStorage = pStorage->OpenSotStorage( sDualStorage, StreamMode::STD_READ );
             pStorage = xDualStorage;
         }
-        SvStream* pDocStream = pStorage->OpenSotStream( "PowerPoint Document" , STREAM_STD_READ );
+        SvStream* pDocStream = pStorage->OpenSotStream( "PowerPoint Document" , StreamMode::STD_READ );
         if( pDocStream )
         {
             pDocStream->SetVersion( pStorage->GetVersion() );

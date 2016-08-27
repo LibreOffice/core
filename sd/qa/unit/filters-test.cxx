@@ -70,7 +70,7 @@ bool SdFiltersTest::load(const OUString &rFilter, const OUString &rURL,
     const_cast<SfxFilter*>(pFilter.get())->SetVersion(nFilterVersion);
 
     ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
-    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
+    SfxMedium* pSrcMed = new SfxMedium(rURL, StreamMode::STD_READ);
     pSrcMed->SetFilter(pFilter);
     bool bLoaded = xDocShRef->DoLoad(pSrcMed);
     xDocShRef->DoClose();

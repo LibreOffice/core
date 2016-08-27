@@ -2586,7 +2586,7 @@ bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
             pFilter = SfxFilterMatcher( OUString::createFromAscii( GetFactory().GetShortName()) ).GetFilter4FilterName( aFilterName );
 
         SfxMedium *pMed = new SfxMedium(
-            pSalvageItem->GetValue(), STREAM_READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC, pFilter );
+            pSalvageItem->GetValue(), StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC, pFilter );
 
         const SfxStringItem* pPasswordItem = SfxItemSet::GetItem<SfxStringItem>(GetMedium()->GetItemSet(), SID_PASSWORD, false);
         if ( pPasswordItem )
@@ -2779,7 +2779,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
     pMergedParams->ClearItem( SID_DOC_SALVAGE );
 
     // create a medium for the target URL
-    SfxMedium *pNewFile = new SfxMedium( rFileName, STREAM_READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC, nullptr, pMergedParams );
+    SfxMedium *pNewFile = new SfxMedium( rFileName, StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC, nullptr, pMergedParams );
 
     // set filter; if no filter is given, take the default filter of the factory
     if ( !aFilterName.isEmpty() )

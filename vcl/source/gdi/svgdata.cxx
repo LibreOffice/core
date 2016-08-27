@@ -168,7 +168,7 @@ SvgData::SvgData(const OUString& rPath):
     maSequence(),
     maReplacement()
 {
-    SvFileStream rIStm(rPath, STREAM_STD_READ);
+    SvFileStream rIStm(rPath, StreamMode::STD_READ);
     if(rIStm.GetError())
         return;
     const sal_uInt32 nStmLen(rIStm.remainingSize());

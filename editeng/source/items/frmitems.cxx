@@ -3824,7 +3824,7 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
         bool bGraphicLoaded = false;
 
         // try to create stream directly from given URL
-        pImpl->pStream = utl::UcbStreamHelper::CreateStream( maStrLink, STREAM_STD_READ );
+        pImpl->pStream = utl::UcbStreamHelper::CreateStream( maStrLink, StreamMode::STD_READ );
 
         // tdf#94088 if we have a stream, try to load it directly as graphic
         if( pImpl->pStream && !pImpl->pStream->GetError() )

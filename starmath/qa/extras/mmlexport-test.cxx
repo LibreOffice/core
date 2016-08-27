@@ -75,7 +75,7 @@ xmlDocPtr MathMLExportTest::exportAndParse()
 {
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
-    SfxMedium aStoreMedium(aTempFile.GetURL(), STREAM_STD_WRITE);
+    SfxMedium aStoreMedium(aTempFile.GetURL(), StreamMode::STD_WRITE);
     std::shared_ptr<const SfxFilter> pExportFilter = SfxFilter::GetFilterByName(MATHML_XML);
     aStoreMedium.SetFilter(pExportFilter);
     CPPUNIT_ASSERT(mxDocShell->ConvertTo(aStoreMedium));

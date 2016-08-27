@@ -203,7 +203,7 @@ namespace vclcanvas
         {
             OUString aFilename = "dbg_frontbuffer" + OUString::number(nFilePostfixCount) + ".bmp";
 
-            SvFileStream aStream( aFilename, STREAM_STD_READWRITE );
+            SvFileStream aStream( aFilename, StreamMode::STD_READWRITE );
 
             const ::Point aEmptyPoint;
             OutputDevice& rOutDev = mpOutDev->getOutDev();

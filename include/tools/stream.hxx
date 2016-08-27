@@ -54,18 +54,17 @@ enum class StreamMode {
     SHARE_DENYREAD           = 0x0200,  // overrides denynone
     SHARE_DENYWRITE          = 0x0400,  // overrides denynone
     SHARE_DENYALL            = 0x0800,  // overrides denyread,write,none
+// masks
+    READWRITE                = READ | WRITE,
+    SHARE_DENYREADWRITE      = SHARE_DENYREAD | SHARE_DENYWRITE,
+    STD_READ                 = READ | SHARE_DENYNONE | NOCREATE,
+    STD_WRITE                = WRITE | SHARE_DENYALL,
+    STD_READWRITE            = READWRITE | SHARE_DENYALL
 };
 namespace o3tl
 {
     template<> struct typed_flags<StreamMode> : is_typed_flags<StreamMode, 0x0f1f> {};
 }
-
-#define STREAM_READWRITE                (StreamMode::READ | StreamMode::WRITE)
-#define STREAM_SHARE_DENYREADWRITE      (StreamMode::SHARE_DENYREAD | StreamMode::SHARE_DENYWRITE)
-
-#define STREAM_STD_READ                 (StreamMode::READ | StreamMode::SHARE_DENYNONE | StreamMode::NOCREATE)
-#define STREAM_STD_WRITE                (StreamMode::WRITE | StreamMode::SHARE_DENYALL)
-#define STREAM_STD_READWRITE            (STREAM_READWRITE | StreamMode::SHARE_DENYALL)
 
 #define STREAM_SEEK_TO_BEGIN            0L
 #define STREAM_SEEK_TO_END              SAL_MAX_UINT64

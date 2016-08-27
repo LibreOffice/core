@@ -5293,7 +5293,7 @@ void Test::testExternalRef()
     OUString aExtSh1Name("Data1");
     OUString aExtSh2Name("Data2");
     OUString aExtSh3Name("Data3");
-    SfxMedium* pMed = new SfxMedium(aExtDocName, STREAM_STD_READWRITE);
+    SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
                            findLoadedDocShellByName(aExtDocName) != nullptr);
@@ -5463,7 +5463,7 @@ void Test::testExternalRangeName()
     ScDocShellRef xExtDocSh = new ScDocShell;
     OUString aExtDocName("file:///extdata.fake");
     OUString aExtSh1Name("Data1");
-    SfxMedium* pMed = new SfxMedium(aExtDocName, STREAM_STD_READWRITE);
+    SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
                            findLoadedDocShellByName(aExtDocName) != nullptr);
@@ -5558,7 +5558,7 @@ void Test::testExternalRefFunctions()
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
     OUString aExtDocName("file:///extdata.fake");
-    SfxMedium* pMed = new SfxMedium(aExtDocName, STREAM_STD_READWRITE);
+    SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
                            findLoadedDocShellByName(aExtDocName) != nullptr);

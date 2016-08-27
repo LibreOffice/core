@@ -86,7 +86,7 @@ void  SwChapterNumRules::Init()
     SvtPathOptions aOpt;
     if( aOpt.SearchFile( sNm ))
     {
-        SfxMedium aStrm( sNm, STREAM_STD_READ );
+        SfxMedium aStrm( sNm, StreamMode::STD_READ );
         sw::ImportStoredChapterNumberingRules(*this, *aStrm.GetInStream(),
                 CHAPTER_FILENAME);
     }

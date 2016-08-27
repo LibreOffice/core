@@ -148,7 +148,7 @@ void GfxLink::SwapOut()
         if( !aURL.isEmpty() )
         {
             std::shared_ptr<GfxLink::SwapOutData> pSwapOut = std::make_shared<SwapOutData>(aURL);    // aURL is removed in the destructor
-            std::unique_ptr<SvStream> xOStm(::utl::UcbStreamHelper::CreateStream( aURL, STREAM_READWRITE | StreamMode::SHARE_DENYWRITE ));
+            std::unique_ptr<SvStream> xOStm(::utl::UcbStreamHelper::CreateStream( aURL, StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE ));
             if( xOStm )
             {
                 xOStm->WriteBytes( mpSwapInData.get(), mnSwapInDataSize );
@@ -267,7 +267,7 @@ std::shared_ptr<sal_uInt8> GfxLink::GetSwapInData() const
 
     std::shared_ptr<sal_uInt8> pData;
 
-    std::unique_ptr<SvStream> xIStm(::utl::UcbStreamHelper::CreateStream( mpSwapOutData->maURL, STREAM_READWRITE ));
+    std::unique_ptr<SvStream> xIStm(::utl::UcbStreamHelper::CreateStream( mpSwapOutData->maURL, StreamMode::READWRITE ));
     if( xIStm )
     {
         pData = o3tl::make_shared_array<sal_uInt8>(mnSwapInDataSize);

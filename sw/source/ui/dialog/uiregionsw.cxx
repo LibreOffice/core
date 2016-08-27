@@ -1357,7 +1357,7 @@ IMPL_LINK_TYPED( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent&, rEvent, vo
                     aAbs, sFileName, URIHelper::GetMaybeFileHdl() );
 
             //load file and set the shell
-            SfxMedium aMedium( sFileName, STREAM_STD_READ );
+            SfxMedium aMedium( sFileName, StreamMode::STD_READ );
             sFileName = aMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
             ::lcl_ReadSections(aMedium, *m_pSubRegionED);
         }

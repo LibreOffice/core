@@ -4431,7 +4431,7 @@ void Test::testCopyPasteFormulas()
 void Test::testCopyPasteFormulasExternalDoc()
 {
     OUString aDocName("file:///source.fake");
-    SfxMedium* pMedium = new SfxMedium(aDocName, STREAM_STD_READWRITE);
+    SfxMedium* pMedium = new SfxMedium(aDocName, StreamMode::STD_READWRITE);
     getDocShell().DoInitNew(pMedium);
     m_pDoc = &getDocShell().GetDocument();
 
@@ -4439,7 +4439,7 @@ void Test::testCopyPasteFormulasExternalDoc()
     OUString aExtDocName("file:///extdata.fake");
     OUString aExtSh1Name("ExtSheet1");
     OUString aExtSh2Name("ExtSheet2");
-    SfxMedium* pMed = new SfxMedium(aExtDocName, STREAM_STD_READWRITE);
+    SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
                            findLoadedDocShellByName(aExtDocName) != nullptr);
