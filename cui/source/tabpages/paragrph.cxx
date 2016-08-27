@@ -247,7 +247,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
             break;
 
             default:
-                OSL_FAIL( "unbekannter Type fuer Zeilenabstand." );
+                OSL_FAIL( "unknown LineDist entry" );
                 break;
         }
         eState = GetItemSet().GetItemState( nWhich );

@@ -1371,7 +1371,7 @@ SdrObject* SwWW8ImplReader::ReadGrafPrimitive(short& rLeft, SfxAllItemSet &rSet)
             case 7:
                 pRet = ReadCaptionBox(&aHd, rSet);
                 break;
-            default:    // unbekannt
+            default:    // unknown
                 m_pStrm->SeekRel(SVBT16ToShort(aHd.cb) - sizeof(WW8_DPHEAD));
                 break;
         }

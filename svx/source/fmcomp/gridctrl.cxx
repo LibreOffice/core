@@ -2016,7 +2016,7 @@ DbGridControl_Base::RowStatus DbGridControl::GetRowStatus(long nRow) const
         return DbGridControl_Base::FILTER;
     else if (m_nCurrentPos >= 0 && nRow == m_nCurrentPos)
     {
-        // neue Zeile
+        // new row
         if (!IsValid(m_xCurrentRow))
             return DbGridControl_Base::DELETED;
         else if (IsModified())

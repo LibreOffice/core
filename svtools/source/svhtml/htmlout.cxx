@@ -702,7 +702,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 }
                 break;
             default:
-                DBG_ASSERT( pShape, "unbekanntes IMapObject" );
+                DBG_ASSERT( pShape, "unknown IMapObject" );
                 break;
             }
 

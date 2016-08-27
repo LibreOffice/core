@@ -536,9 +536,9 @@ IMPL_LINK_TYPED( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
         }
         else
         {
-            OSL_FAIL( "PageHdl: Unbekannte ID!" );
+            OSL_FAIL( "PageHdl: Unknown ID" );
         }
-        DBG_ASSERT( pNewTabPage, "Keine Page!" );
+        DBG_ASSERT( pNewTabPage, "No page" );
         pTabCtrl->SetTabPage( nId, pNewTabPage );
     }
 }

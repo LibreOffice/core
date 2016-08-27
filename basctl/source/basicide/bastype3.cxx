@@ -240,7 +240,7 @@ SbxVariable* TreeListBox::FindVariable( SvTreeListEntry* pEntry )
                 // skip, to find the child entry.
                 continue;
             default:
-                OSL_FAIL( "FindVariable: Unbekannter Typ!" );
+                OSL_FAIL( "FindVariable: unknown type" );
                 pVar = nullptr;
                 break;
             }
@@ -339,7 +339,7 @@ EntryDescriptor TreeListBox::GetEntryDescriptor( SvTreeListEntry* pEntry )
                 break;
                 default:
                 {
-                    OSL_FAIL( "GetEntryDescriptor: Unbekannter Typ!" );
+                    OSL_FAIL( "GetEntryDescriptor: unknown type" );
                     eType = OBJ_TYPE_UNKNOWN;
                 }
                 break;
