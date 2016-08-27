@@ -12,6 +12,7 @@
 
 #include <rtl/stringutils.hxx>
 
+#include <cstddef>
 #include <string.h>
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
@@ -140,6 +141,14 @@ struct ToStringHelper< const char[ N ] >
     static const bool allowOStringConcat = true;
     static const bool allowOUStringConcat = true;
     };
+
+template<std::size_t N> struct ToStringHelper<sal_Unicode const[N]> {
+    static int length(sal_Unicode const[N]) { return N - 1; }
+    static sal_Unicode * addData(sal_Unicode * buffer, sal_Unicode const str[N])
+    { return addDataHelper(buffer, str, N - 1); }
+    static bool const allowOStringConcat = false;
+    static bool const allowOUStringConcat = true;
+};
 
 template<char C> struct ToStringHelper<OUStringLiteral1_<C>> {
     static int length(OUStringLiteral1_<C>) { return 1; }
