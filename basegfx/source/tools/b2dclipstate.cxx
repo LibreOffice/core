@@ -196,7 +196,7 @@ namespace tools
             switch(mePendingOps)
             {
                 case UNION:
-                    OSL_ASSERT( !bIsCleared );
+                    assert( !bIsCleared );
 
                     if( bIsEmpty )
                         maClipPoly = maPendingPolygons;
@@ -206,7 +206,7 @@ namespace tools
                             maPendingPolygons);
                     break;
                 case INTERSECT:
-                    OSL_ASSERT( !bIsEmpty );
+                    assert( !bIsEmpty );
 
                     if( bIsCleared )
                         maClipPoly = maPendingPolygons;
@@ -240,7 +240,7 @@ namespace tools
                             maPendingPolygons);
                     break;
                 case SUBTRACT:
-                    OSL_ASSERT( !bIsEmpty );
+                    assert( !bIsEmpty );
 
                     // first union all pending ones, subtract en bloc then
                     maPendingPolygons = solveCrossovers(maPendingPolygons);
@@ -286,7 +286,7 @@ namespace tools
             switch(mePendingOps)
             {
                 case UNION:
-                    OSL_ASSERT( !bIsCleared );
+                    assert( !bIsCleared );
 
                     aCollectedRanges = maPendingRanges.solveCrossovers();
                     aCollectedRanges = stripNeutralPolygons(aCollectedRanges);
@@ -299,7 +299,7 @@ namespace tools
                             aCollectedRanges);
                     break;
                 case INTERSECT:
-                    OSL_ASSERT( !bIsEmpty );
+                    assert( !bIsEmpty );
 
                     aCollectedRanges = maPendingRanges.solveCrossovers();
                     aCollectedRanges = stripNeutralPolygons(aCollectedRanges);
@@ -342,7 +342,7 @@ namespace tools
                             aCollectedRanges);
                     break;
                 case SUBTRACT:
-                    OSL_ASSERT( !bIsEmpty );
+                    assert( !bIsEmpty );
 
                     // first union all pending ranges, subtract en bloc then
                     aCollectedRanges = maPendingRanges.solveCrossovers();
