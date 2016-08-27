@@ -330,10 +330,10 @@ void RscError::ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
         StdErr( "\n" );
         StdErr( pFI->GetLine() );
         StdErr( "\n" );
-        // Fehlerposition anzeigen
+        // Show location of error
         for( i = 0; (i +1) < pFI->GetScanPos(); i++ )
             StdLstErr( " " );
-        LstOut( "     ^" ); //Zeilennummern beachten
+        LstOut( "     ^" ); // for the linenumber
         StdErr( "^" );
         StdLstErr( "\n" );
     }
@@ -375,7 +375,7 @@ void RscError::ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
 void RscError::Error( const ERRTYPE& rError, RscTop * pClass,
                       const RscId & aId, const char * pMessage )
 {
-    if( WRN_LOCALID == rError ) // Keine Warning erzeugen
+    if( WRN_LOCALID == rError ) // ignore warnings
         return;
     if( rError.IsError() )
         nErrors++;

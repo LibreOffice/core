@@ -1917,7 +1917,7 @@ beans::PropertyState ScCellRangesBase::GetOnePropertyState( sal_uInt16 nItemWhic
                 eRet = beans::PropertyState_AMBIGUOUS_VALUE;
             else
             {
-                OSL_FAIL("unbekannter ItemState");
+                OSL_FAIL("unknown ItemState");
             }
         }
     }

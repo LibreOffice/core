@@ -155,7 +155,7 @@ typedef sal_uIntPtr SbxError;           // Preserve old type
 #define ERRCODE_SBX_PROP_READONLY       (15UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_READ)      // Property is read only
 #define ERRCODE_SBX_PROP_WRITEONLY      (16UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_WRITE)     // Property is write only
 #define ERRCODE_SBX_INVALID_OBJECT      (17UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_ACCESS)    // Invalid object reference
-#define ERRCODE_SBX_NO_METHOD           (18UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // Property oder Methode unbekannt
+#define ERRCODE_SBX_NO_METHOD           (18UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // Property or Method unknown
 #define ERRCODE_SBX_INVALID_USAGE_OBJECT (19UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_ACCESS)   // Invalid object usage
 #define ERRCODE_SBX_NO_OLE              (20UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_ACCESS)    // No OLE-Object
 #define ERRCODE_SBX_BAD_METHOD          (21UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // Method not supported

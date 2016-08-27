@@ -124,7 +124,7 @@ class RscError
 public:
     virtual ~RscError() {}
 
-    sal_uInt32  nErrors;// Anzahl der Fehler
+    sal_uInt32  nErrors;    // Number of errors
                     RscError( RscVerbosity _verbosity )
                         {
                             fListing = nullptr;

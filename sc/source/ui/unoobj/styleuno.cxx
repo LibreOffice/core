@@ -1235,10 +1235,10 @@ beans::PropertyState SAL_CALL ScStyleObj::getPropertyState( const OUString& aPro
             else if ( eState == SfxItemState::DEFAULT )
                 eRet = beans::PropertyState_DEFAULT_VALUE;
             else if ( eState == SfxItemState::DONTCARE )
-                eRet = beans::PropertyState_AMBIGUOUS_VALUE;    // kann eigentlich nicht sein...
+                eRet = beans::PropertyState_AMBIGUOUS_VALUE;    // should not happen
             else
             {
-                OSL_FAIL("unbekannter ItemState");
+                OSL_FAIL("unknown ItemState");
             }
         }
     }

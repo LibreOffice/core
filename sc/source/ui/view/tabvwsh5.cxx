@@ -229,7 +229,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 GetViewData().DeleteTabs( nTab1, nTab2 );
                 break;
             default:
-                OSL_FAIL("unbekannter ScTablesHint");
+                OSL_FAIL("unknown ScTablesHint");
         }
 
         //  hier keine Abfrage auf IsActive() mehr, weil die Aktion von Basic ausgehen

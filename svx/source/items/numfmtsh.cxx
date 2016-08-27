@@ -606,7 +606,7 @@ void SvxNumberFormatShell::FillEListWithStd_Impl( std::vector<OUString>& rList,
      * Ist die Liste leer oder gibt es kein aktuelles Format,
      * so wird SELPOS_NONE geliefert.
      */
-    DBG_ASSERT( pCurFmtTable != nullptr, "Unbekanntes Zahlenformat!" );
+    DBG_ASSERT( pCurFmtTable != nullptr, "unknown NumberFormat" );
 
     aCurrencyFormatList.clear();
 
@@ -753,7 +753,7 @@ short SvxNumberFormatShell::FillEListWithCurrency_Impl( std::vector<OUString>& r
      * Ist die Liste leer oder gibt es kein aktuelles Format,
      * so wird SELPOS_NONE geliefert.
      */
-    DBG_ASSERT( pCurFmtTable != nullptr, "Unbekanntes Zahlenformat!" );
+    DBG_ASSERT( pCurFmtTable != nullptr, "unknown NumberFormat" );
 
     const NfCurrencyEntry* pTmpCurrencyEntry;
     bool             bTmpBanking;
@@ -789,7 +789,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
      */
     sal_uInt16  nMyType;
 
-    DBG_ASSERT( pCurFmtTable != nullptr, "Unbekanntes Zahlenformat!" );
+    DBG_ASSERT( pCurFmtTable != nullptr, "unknown NumberFormat" );
 
     sal_uInt32          nNFEntry;
     OUString            aStrComment;
@@ -875,7 +875,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
      */
     sal_uInt16 nMyType;
 
-    DBG_ASSERT( pCurFmtTable != nullptr, "Unbekanntes Zahlenformat!" );
+    DBG_ASSERT( pCurFmtTable != nullptr, "unknown NumberFormat" );
 
     OUString        aStrComment;
     OUString        aNewFormNInfo;
@@ -1067,7 +1067,7 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<OUString>& rList,
      */
     sal_uInt16 nMyType;
 
-    DBG_ASSERT( pCurFmtTable != nullptr, "Unbekanntes Zahlenformat!" );
+    DBG_ASSERT( pCurFmtTable != nullptr, "unknown NumberFormat" );
 
     OUString        aStrComment;
     OUString        aNewFormNInfo;

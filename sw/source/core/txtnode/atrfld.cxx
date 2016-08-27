@@ -451,7 +451,7 @@ void SwTextField::CopyTextField( SwTextField *pDest ) const
             static_cast<SwDDEFieldType*>(pFieldType)->IncRefCnt();
         }
 
-        OSL_ENSURE( pFieldType, "unbekannter FieldType" );
+        OSL_ENSURE( pFieldType, "unknown FieldType" );
         pFieldType->Add( &rDestFormatField );          // ummelden
         rDestFormatField.GetField()->ChgTyp( pFieldType );
     }
