@@ -4641,6 +4641,32 @@ void lcl_insertLCID( OUStringBuffer& aFormatStr, const OUString& rLCIDString )
     {
         aLCIDString = "[$-" + rLCIDString + "]";
     }
+    sal_Int32 nPosInsertion = -1;
+    for ( sal_Int32 i = aFormatStr.getLength() - 1; i >= 0 ; i-- )
+    {   // look for format separator (;) but skip escape characters, quoted strings or conditions ([])
+        if ( i > 0 && aFormatStr[i-1] == '\\' )
+            i--;
+        else
+        {
+            sal_Unicode aChar = aFormatStr[i];
+            if ( aChar == ';' )
+            {
+                nPosInsertion = i;
+                i = 0;
+            }
+            else  if ( i > 0 )
+            {
+                if ( aChar == '"' )
+                    i = aFormatStr.lastIndexOf( "\"", i-1 );
+                else if ( aChar == ']' )
+                    i = aFormatStr.lastIndexOf( "[", i-1 );
+            }
+        }
+    }
+    if ( nPosInsertion >= 0 )
+        nPosInsertion++;
+    else
+        nPosInsertion = 0;
     sal_Int32 nPosDBNum = aFormatStr.lastIndexOf("[DBNum");
     if ( nPosDBNum >= 0 )
     {
@@ -4651,7 +4677,9 @@ void lcl_insertLCID( OUStringBuffer& aFormatStr, const OUString& rLCIDString )
     }
     else
         nPosDBNum = 0;
-    aFormatStr.insert( nPosDBNum, aLCIDString.toString() );
+    if ( nPosDBNum > nPosInsertion )
+        nPosInsertion = nPosDBNum;
+    aFormatStr.insert( nPosInsertion, aLCIDString.toString() );
 }
 
 OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
