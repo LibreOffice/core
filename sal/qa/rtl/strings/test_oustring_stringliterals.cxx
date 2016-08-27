@@ -228,8 +228,7 @@ void test::oustring::StringLiterals::checkOUStringLiteral1()
 
     // auto l5 = rtlunittest::OUStringLiteral1<sal_Unicode(0x100)>();
 
-    rtl::OUString s1;
-    s1 = rtlunittest::OUStringLiteral1<'A'>();
+    rtl::OUString s1{rtlunittest::OUStringLiteral1<'A'>()};
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), s1.getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Unicode('A'), s1[0]);
 
