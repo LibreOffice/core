@@ -84,7 +84,7 @@ void createStr(const OUString& rStr, char** pArgs, size_t i)
     pArgs[i] = pStr;
 }
 
-char** createCommandLine(const OUString& rInstallDir)
+char** createCommandLine(const OUString& rInstallDir, bool bReplace)
 {
     size_t nArgs = 6;
     char** pArgs = new char*[nArgs];
@@ -105,7 +105,7 @@ char** createCommandLine(const OUString& rInstallDir)
         createStr(aWorkingDir, pArgs, 3);
     }
     {
-        const char* pPID = "/replace";
+        const char* pPID = bReplace ? "/replace" : "-1";
         createStr(pPID, pArgs, 4);
     }
     pArgs[nArgs - 1] = nullptr;
@@ -115,16 +115,19 @@ char** createCommandLine(const OUString& rInstallDir)
 
 }
 
-void Update(const OUString& rInstallDirURL)
+void Update()
 {
+    OUString aLibExecDirURL( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER );
+    rtl::Bootstrap::expandMacros(aLibExecDirURL);
+
     utl::TempFile aTempDir(nullptr, true);
     OUString aTempDirURL = aTempDir.GetURL();
-    CopyUpdaterToTempDir(rInstallDirURL, aTempDirURL);
+    CopyUpdaterToTempDir(aLibExecDirURL, aTempDirURL);
 
     OUString aTempDirPath = getPathFromURL(aTempDirURL);
     OString aPath = OUStringToOString(aTempDirPath + "/" + OUString::fromUtf8(pUpdaterName), RTL_TEXTENCODING_UTF8);
 
-    char** pArgs = createCommandLine(rInstallDirURL);
+    char** pArgs = createCommandLine(aLibExecDirURL, true);
 
     if (execv(aPath.getStr(), pArgs))
     {
@@ -137,16 +140,18 @@ void Update(const OUString& rInstallDirURL)
     delete[] pArgs;
 }
 
-void CreateValidUpdateDir(const OUString& rInstallDir)
+void CreateValidUpdateDir()
 {
-    OUString aInstallPath = getPathFromURL(rInstallDir);
-    OUString aWorkdirPath = getPathFromURL(rInstallDir + "/updated");
+    OUString aInstallDir("$BRAND_BASE_DIR");
+    rtl::Bootstrap::expandMacros(aInstallDir);
+    OUString aInstallPath = getPathFromURL(aInstallDir);
+    OUString aWorkdirPath = getPathFromURL(aInstallDir + "/updated");
 
     OUString aPatchDirPath("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/patch/");
     rtl::Bootstrap::expandMacros(aPatchDirPath);
     OUString aPatchDir = getPathFromURL(aPatchDirPath);
 
-    OUString aUpdaterPath = getPathFromURL(rInstallDir + "/program/" + OUString::fromUtf8(pUpdaterName));
+    OUString aUpdaterPath = getPathFromURL(aInstallDir + "/program/" + OUString::fromUtf8(pUpdaterName));
 
     OUString aCommand = aUpdaterPath + " " + aPatchDir + " " + aInstallPath + " " + aWorkdirPath + " -1";
 
@@ -488,6 +493,7 @@ void update_checker()
         {
             update_info aUpdateInfo = parse_response(response_body);
             download_file(aUpdateInfo.aUpdateFile.aURL, aUpdateInfo.aUpdateFile.nSize, aUpdateInfo.aUpdateFile.aHash, "update.mar");
+            CreateValidUpdateDir();
         }
     }
     catch (const invalid_update_info&)

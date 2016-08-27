@@ -12,8 +12,8 @@
 
 #include <rtl/ustring.hxx>
 
-void CreateValidUpdateDir(const OUString& rInstallDir);
-void Update(const OUString& rInstallDir);
+void CreateValidUpdateDir();
+void Update();
 
 void update_checker();
 
