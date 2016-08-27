@@ -3925,8 +3925,17 @@ void Content::getResourceOptions(
                         break;
                         case SC_NOT_FOUND:
                         {
+                            // Apparently on IIS 10.0, if you disabled OPTIONS method, this error is the one reported,
+                            // instead of SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED.
+                            // So check if this is an available resource, or a real 'Not Found' event.
+                            sal_uInt32 nLifeTime = m_nOptsCacheLifeNotFound;
+                            if( isResourceExistent(xEnv, rResAccess ) )
+                            {
+                                nLifeTime = m_nOptsCacheLifeNotImpl;
+                                rDAVOptions.setResourceFound(); // means it exists, but it's not DAV
+                            }
                             aStaticDAVOptionsCache.addDAVOptions( rDAVOptions,
-                                                                  m_nOptsCacheLifeNotFound );
+                                                                  nLifeTime );
                             SAL_WARN( "ucb.ucp.webdav", "OPTIONS - Resource not found for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
                         }
                         break;
@@ -3973,6 +3982,29 @@ void Content::getResourceOptions(
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
+    }
+}
+
+
+//static
+bool Content::isResourceExistent( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
+                                  const std::unique_ptr< DAVResourceAccess > & rResAccess )
+{
+    try
+    {
+        // To check for the physical URL resource existence, using a simple HEAD command
+        // if HEAD is successfull, set element found.
+        std::vector< OUString > aHeaderNames;
+        DAVResource resource;
+        rResAccess->HEAD( aHeaderNames, resource, xEnv );
+        return true;
+    }
+    catch ( ... )
+    {
+        // some error... so set as not found
+        // retry errors are taken care of
+        // in rResAccess function method.
+        return false;
     }
 }
 
