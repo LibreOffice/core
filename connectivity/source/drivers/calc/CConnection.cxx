@@ -31,7 +31,6 @@
 #include "calc/CPreparedStatement.hxx"
 #include "calc/CStatement.hxx"
 #include <unotools/pathoptions.hxx>
-#include <unotools/closeveto.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/processfactory.hxx>
@@ -164,7 +163,8 @@ Reference< XSpreadsheetDocument> const & OCalcConnection::acquireDoc()
         ::dbtools::throwGenericSQLException( sError, *this, aErrorDetails );
     }
     osl_atomic_increment(&m_nDocCount);
-    m_pCloseListener.reset(new utl::CloseVeto(m_xDoc, true));
+    m_xCloseVetoButTerminateListener.set(new CloseVetoButTerminateListener);
+    m_xCloseVetoButTerminateListener->start(m_xDoc, xDesktop);
     return m_xDoc;
 }
 
@@ -172,7 +172,11 @@ void OCalcConnection::releaseDoc()
 {
     if ( osl_atomic_decrement(&m_nDocCount) == 0 )
     {
-        m_pCloseListener.reset(); // dispose m_xDoc
+        if (m_xCloseVetoButTerminateListener.is())
+        {
+            m_xCloseVetoButTerminateListener->stop();   // dispose m_xDoc
+            m_xCloseVetoButTerminateListener.clear();
+        }
         m_xDoc.clear();
     }
 }
@@ -182,7 +186,11 @@ void OCalcConnection::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
 
     m_nDocCount = 0;
-    m_pCloseListener.reset(); // dispose m_xDoc
+    if (m_xCloseVetoButTerminateListener.is())
+    {
+        m_xCloseVetoButTerminateListener->stop();   // dispose m_xDoc
+        m_xCloseVetoButTerminateListener.clear();
+    }
     m_xDoc.clear();
 
     OConnection::disposing();
