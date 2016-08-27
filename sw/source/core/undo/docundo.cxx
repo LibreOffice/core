@@ -40,6 +40,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentState.hxx>
 #include <comphelper/lok.hxx>
+#include <assert.h>
 
 using namespace ::com::sun::star;
 
@@ -64,7 +65,7 @@ UndoManager::UndoManager(std::shared_ptr<SwNodes> const & xUndoNodes,
     ,   m_pDocShell(nullptr)
     ,   m_pView(nullptr)
 {
-    OSL_ASSERT(m_xUndoNodes.get());
+    assert(m_xUndoNodes.get());
     // writer expects it to be disabled initially
     // Undo is enabled by SwEditShell constructor
     SdrUndoManager::EnableUndo(false);
@@ -271,13 +272,13 @@ UndoManager::StartUndo(SwUndoId const i_eUndoId,
 
     SwUndoId const eUndoId( (i_eUndoId == UNDO_EMPTY) ? UNDO_START : i_eUndoId );
 
-    OSL_ASSERT(UNDO_END != eUndoId);
+    assert(UNDO_END != eUndoId);
     OUString comment( (UNDO_START == eUndoId)
         ?   OUString("??")
         :   OUString(SW_RES(UNDO_BASE + eUndoId)) );
     if (pRewriter)
     {
-        OSL_ASSERT(UNDO_START != eUndoId);
+        assert(UNDO_START != eUndoId);
         comment = pRewriter->Apply(comment);
     }
 
@@ -313,12 +314,12 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
 
     if (nCount) // otherwise: empty list action not inserted!
     {
-        OSL_ASSERT(pLastUndo);
-        OSL_ASSERT(UNDO_START != eUndoId);
+        assert(pLastUndo);
+        assert(UNDO_START != eUndoId);
         SfxUndoAction *const pUndoAction(SdrUndoManager::GetUndoAction());
         SfxListUndoAction *const pListAction(
             dynamic_cast<SfxListUndoAction*>(pUndoAction));
-        OSL_ASSERT(pListAction);
+        assert(pListAction);
         if (pListAction)
         {
             if (UNDO_END != eUndoId)
@@ -644,7 +645,7 @@ bool UndoManager::Repeat(::sw::RepeatContext & rContext,
         return false;
     }
     SfxUndoAction *const pRepeatAction(GetUndoAction());
-    OSL_ASSERT(pRepeatAction);
+    assert(pRepeatAction);
     if (!pRepeatAction || !pRepeatAction->CanRepeat(rContext))
     {
         return false;
