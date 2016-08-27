@@ -1098,7 +1098,7 @@ ErrCode SfxOlePropertySet::LoadPropertySet( SotStorage* pStrg, const OUString& r
 {
     if( pStrg )
     {
-        tools::SvRef<SotStorageStream> xStrm = pStrg->OpenSotStream( rStrmName, STREAM_STD_READ );
+        tools::SvRef<SotStorageStream> xStrm = pStrg->OpenSotStream( rStrmName, StreamMode::STD_READ );
         if( xStrm.Is() && (xStrm->GetError() == SVSTREAM_OK) )
         {
             xStrm->SetBufferSize( STREAM_BUFFER_SIZE );
@@ -1116,7 +1116,7 @@ ErrCode SfxOlePropertySet::SavePropertySet( SotStorage* pStrg, const OUString& r
 {
     if( pStrg )
     {
-        tools::SvRef<SotStorageStream> xStrm = pStrg->OpenSotStream( rStrmName, StreamMode::TRUNC | STREAM_STD_WRITE );
+        tools::SvRef<SotStorageStream> xStrm = pStrg->OpenSotStream( rStrmName, StreamMode::TRUNC | StreamMode::STD_WRITE );
         if( xStrm.Is() )
             Save( *xStrm );
         else

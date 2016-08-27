@@ -132,7 +132,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SotSt
 #endif
 
     PowerPointImportParam aParam( rDocStream, nImportFlags );
-    SvStream* pCurrentUserStream = rStorage.OpenSotStream( "Current User", STREAM_STD_READ );
+    SvStream* pCurrentUserStream = rStorage.OpenSotStream( "Current User", StreamMode::STD_READ );
     if( pCurrentUserStream )
     {
         ReadPptCurrentUserAtom( *pCurrentUserStream, aParam.aCurrentUserAtom );
@@ -191,7 +191,7 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SotStorage& rStorag
         {
             sal_uLong nPosMerk = rStCtrl.Tell();
 
-            pStData = rStorage_.OpenSotStream( "Pictures", STREAM_STD_READ );
+            pStData = rStorage_.OpenSotStream( "Pictures", StreamMode::STD_READ );
 
             rStCtrl.Seek( maDocHd.GetRecBegFilePos() + 8 );
             sal_uLong nDocLen = maDocHd.GetRecEndFilePos();
@@ -2761,13 +2761,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportPPT(const OUString &rURL
     if (xStorage->GetError())
         return false;
 
-    tools::SvRef<SotStorageStream> xDocStream(xStorage->OpenSotStream( "PowerPoint Document", STREAM_STD_READ));
+    tools::SvRef<SotStorageStream> xDocStream(xStorage->OpenSotStream( "PowerPoint Document", StreamMode::STD_READ));
     if (!xDocStream)
         return false;
 
     SdDLL::Init();
 
-    SfxMedium aSrcMed(rURL, STREAM_STD_READ);
+    SfxMedium aSrcMed(rURL, StreamMode::STD_READ);
 
     xDocStream->SetVersion(xStorage->GetVersion());
     xDocStream->SetCryptMaskKey(xStorage->GetKey());

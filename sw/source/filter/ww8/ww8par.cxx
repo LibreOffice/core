@@ -4887,7 +4887,7 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
         if ( !aURL.endsWithIgnoreAsciiCase( ".dot" ) || ( !sCreatedFrom.isEmpty() && sCreatedFrom.equals( aURL ) ) )
             continue; // don't try and read the same document as ourselves
 
-        tools::SvRef<SotStorage> rRoot = new SotStorage( aURL, STREAM_STD_READWRITE );
+        tools::SvRef<SotStorage> rRoot = new SotStorage( aURL, StreamMode::STD_READWRITE );
 
         BasicProjImportHelper aBasicImporter( *m_pDocShell );
         // Import vba via oox filter
@@ -4897,7 +4897,7 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
         tools::SvRef<SotStorageStream> refMainStream = rRoot->OpenSotStream( "WordDocument");
         refMainStream->SetEndian(SvStreamEndian::LITTLE);
         WW8Fib aWwFib( *refMainStream, 8 );
-        tools::SvRef<SotStorageStream> xTableStream = rRoot->OpenSotStream(OUString::createFromAscii( aWwFib.fWhichTableStm ? SL::a1Table : SL::a0Table), STREAM_STD_READ);
+        tools::SvRef<SotStorageStream> xTableStream = rRoot->OpenSotStream(OUString::createFromAscii( aWwFib.fWhichTableStm ? SL::a1Table : SL::a0Table), StreamMode::STD_READ);
 
         if (xTableStream.Is() && SVSTREAM_OK == xTableStream->GetError())
         {
@@ -5438,13 +5438,13 @@ sal_uLong SwWW8ImplReader::SetSubStreams(tools::SvRef<SotStorageStream> &rTableS
 
             rTableStream = m_pStg->OpenSotStream( OUString::createFromAscii(
                 m_pWwFib->fWhichTableStm ? SL::a1Table : SL::a0Table),
-                STREAM_STD_READ);
+                StreamMode::STD_READ);
 
             m_pTableStream = &rTableStream;
             m_pTableStream->SetEndian( SvStreamEndian::LITTLE );
 
             rDataStream = m_pStg->OpenSotStream(OUString(SL::aData),
-                STREAM_STD_READ );
+                StreamMode::STD_READ );
 
             if (rDataStream.Is() && SVSTREAM_OK == rDataStream->GetError())
             {
@@ -5469,7 +5469,7 @@ namespace
     {
         utl::TempFile *pT = new utl::TempFile;
         pT->EnableKillingFile();
-        rSt.Open(pT->GetFileName(), STREAM_READWRITE | StreamMode::SHARE_DENYWRITE);
+        rSt.Open(pT->GetFileName(), StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE);
         return pT;
     }
 

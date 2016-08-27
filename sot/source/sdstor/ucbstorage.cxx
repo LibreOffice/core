@@ -287,7 +287,7 @@ void FileStreamWrapper_Impl::checkConnected()
         throw NotConnectedException(OUString(), const_cast<XWeak*>(static_cast<const XWeak*>(this)));
     if ( !m_pSvStream )
     {
-        m_pSvStream = ::utl::UcbStreamHelper::CreateStream( m_aURL, STREAM_STD_READ );
+        m_pSvStream = ::utl::UcbStreamHelper::CreateStream( m_aURL, StreamMode::STD_READ );
 #if OSL_DEBUG_LEVEL > 0
         ++nOpenFiles;
 #endif
@@ -726,7 +726,7 @@ bool UCBStorageStream_Impl::Init()
         if ( m_aTempURL.isEmpty() )
             m_aTempURL = ::utl::TempFile().GetURL();
 
-        m_pStream = ::utl::UcbStreamHelper::CreateStream( m_aTempURL, STREAM_STD_READWRITE, true /* bFileExists */ );
+        m_pStream = ::utl::UcbStreamHelper::CreateStream( m_aTempURL, StreamMode::STD_READWRITE, true /* bFileExists */ );
 #if OSL_DEBUG_LEVEL > 0
         ++nOpenFiles;
 #endif
@@ -1314,7 +1314,7 @@ bool UCBStorageStream::ValidateMode( StreamMode m ) const
     // ???
     if( m == ( StreamMode::READ | StreamMode::TRUNC ) )  // from stg.cxx
         return true;
-    if( ( m & STREAM_READWRITE) == StreamMode::READ )
+    if( ( m & StreamMode::READWRITE) == StreamMode::READ )
     {
         // only SHARE_DENYWRITE or SHARE_DENYALL allowed
         if( ( m & StreamMode::SHARE_DENYWRITE )
@@ -1561,7 +1561,7 @@ UCBStorage_Impl::UCBStorage_Impl( const OUString& rName, StreamMode nMode, UCBSt
         if ( m_nMode & StreamMode::WRITE )
         {
             // the root storage opens the package, so make sure that there is any
-            SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aName, STREAM_STD_READWRITE, m_pTempFile != nullptr /* bFileExists */ );
+            SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aName, StreamMode::STD_READWRITE, m_pTempFile != nullptr /* bFileExists */ );
             delete pStream;
         }
     }
@@ -1603,7 +1603,7 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, bool 
     m_aURL = aTemp;
 
     // copy data into the temporary file
-    std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READWRITE, true /* bFileExists */ ));
+    std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), StreamMode::STD_READWRITE, true /* bFileExists */ ));
     if ( pStream )
     {
         rStream.Seek(0);
@@ -1646,7 +1646,7 @@ void UCBStorage_Impl::Init()
                     aObj.Append( "manifest.xml" );
 
                     // create input stream
-                    std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ ));
+                    std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::STD_READ ));
                     // no stream means no manifest.xml
                     if ( pStream )
                     {
@@ -1815,7 +1815,7 @@ void UCBStorage_Impl::ReadContent()
                     else if ( aMediaType.isEmpty() )
                     {
                         // older files didn't have that special content type, so they must be detected
-                        OpenStream( pElement, STREAM_STD_READ, m_bDirect, nullptr );
+                        OpenStream( pElement, StreamMode::STD_READ, m_bDirect, nullptr );
                         if ( Storage::IsStorageFile( pElement->m_xStream ) )
                             pElement->m_bIsStorage = true;
                         else
@@ -2218,7 +2218,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                             std::unique_ptr< ::utl::TempFile> pTempFile(new ::utl::TempFile( &aURL ));
 
                             // get the stream from the temp file and create an output stream wrapper
-                            SvStream* pStream = pTempFile->GetStream( STREAM_STD_READWRITE );
+                            SvStream* pStream = pTempFile->GetStream( StreamMode::STD_READWRITE );
                             ::utl::OOutputStreamWrapper* pHelper = new ::utl::OOutputStreamWrapper( *pStream );
                             css::uno::Reference < css::io::XOutputStream > xOutputStream( pHelper );
 
@@ -2251,7 +2251,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         m_pContent->executeCommand( "flush", aAny );
                         if ( m_pSource != nullptr )
                         {
-                            std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READ ));
+                            std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), StreamMode::STD_READ ));
                             m_pSource->SetStreamSize(0);
                             // m_pSource->Seek(0);
                             pStream->ReadStream( *m_pSource );
@@ -2473,7 +2473,7 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
             pStream = rElement.m_xStream->m_pAntiImpl;
         if ( !pStream )
         {
-            pStream = ( const_cast < UCBStorage* > (this) )->OpenStream( rElement.m_aName, STREAM_STD_READ, pImp->m_bDirect );
+            pStream = ( const_cast < UCBStorage* > (this) )->OpenStream( rElement.m_aName, StreamMode::STD_READ, pImp->m_bDirect );
             bDeleteStream = true;
         }
 

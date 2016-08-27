@@ -182,7 +182,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
     if (!aOptions.isEmpty())
         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
 
-    SfxMedium* pMed = new SfxMedium(aNewUrl, STREAM_STD_READ, pFilter, pSet);
+    SfxMedium* pMed = new SfxMedium(aNewUrl, StreamMode::STD_READ, pFilter, pSet);
 
     if ( bInEdit )                              // only if using the edit dialog,
         pMed->UseInteractionHandler(true);    // enable the filter options dialog
@@ -450,7 +450,7 @@ bool ScDocumentLoader::GetFilterName( const OUString& rFileName,
     //  Filter-Detection
 
     std::shared_ptr<const SfxFilter> pSfxFilter;
-    SfxMedium* pMedium = new SfxMedium( rFileName, STREAM_STD_READ );
+    SfxMedium* pMedium = new SfxMedium( rFileName, StreamMode::STD_READ );
     if ( pMedium->GetError() == ERRCODE_NONE )
     {
         if ( bWithInteraction )
@@ -492,7 +492,7 @@ SfxMedium* ScDocumentLoader::CreateMedium( const OUString& rFileName, std::share
     if ( !rOptions.isEmpty() )
         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, rOptions ) );
 
-    return new SfxMedium( rFileName, STREAM_STD_READ, pFilter, pSet );
+    return new SfxMedium( rFileName, StreamMode::STD_READ, pFilter, pSet );
 }
 
 ScDocumentLoader::ScDocumentLoader( const OUString& rFileName,

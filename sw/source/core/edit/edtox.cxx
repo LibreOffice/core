@@ -302,7 +302,7 @@ void SwEditShell::ApplyAutoMark()
         }
 
         //2.
-        SfxMedium aMedium( sAutoMarkURL, STREAM_STD_READ );
+        SfxMedium aMedium( sAutoMarkURL, StreamMode::STD_READ );
         SvStream& rStrm = *aMedium.GetInStream();
         Push();
         rtl_TextEncoding eChrSet = ::osl_getThreadTextEncoding();

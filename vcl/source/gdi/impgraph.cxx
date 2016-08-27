@@ -1129,7 +1129,7 @@ bool ImpGraphic::ImplSwapOut()
             std::unique_ptr<SvStream> xOStm;
             try
             {
-                xOStm.reset(::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | StreamMode::SHARE_DENYWRITE ));
+                xOStm.reset(::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE ));
             }
             catch( const css::uno::Exception& )
             {
@@ -1225,7 +1225,7 @@ bool ImpGraphic::ImplSwapIn()
             std::unique_ptr<SvStream> xIStm;
             try
             {
-                xIStm.reset(::utl::UcbStreamHelper::CreateStream( aSwapURL, STREAM_READWRITE | StreamMode::SHARE_DENYWRITE ));
+                xIStm.reset(::utl::UcbStreamHelper::CreateStream( aSwapURL, StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE ));
             }
             catch( const css::uno::Exception& )
             {

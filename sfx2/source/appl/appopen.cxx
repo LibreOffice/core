@@ -340,7 +340,7 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStri
             xDoc = SfxObjectShell::CreateObject( pFilter->GetServiceName() );
 
         //pMedium takes ownership of pSet
-        SfxMedium *pMedium = new SfxMedium( rFileName, STREAM_STD_READ, pFilter, pSet );
+        SfxMedium *pMedium = new SfxMedium( rFileName, StreamMode::STD_READ, pFilter, pSet );
         if(!xDoc->DoLoad(pMedium))
         {
             ErrCode nErrCode = xDoc->GetErrorCode();

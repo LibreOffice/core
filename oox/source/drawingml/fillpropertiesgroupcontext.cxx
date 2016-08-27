@@ -159,7 +159,7 @@ BlipContext::BlipContext( ContextHandler2Helper& rParent,
         // code rework.
         OUString aRelId = rAttribs.getString( R_TOKEN( link ), OUString() );
         OUString aTargetLink = getFilter().getAbsoluteUrl( getRelations().getExternalTargetFromRelId( aRelId ) );
-        SfxMedium aMed( aTargetLink, STREAM_STD_READ );
+        SfxMedium aMed( aTargetLink, StreamMode::STD_READ );
         aMed.Download();
         Reference< io::XInputStream > xInStrm = aMed.GetInputStream();
         if ( xInStrm.is() )

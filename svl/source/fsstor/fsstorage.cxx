@@ -406,7 +406,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
             {
                 // TODO: test whether it really works for http and fwp
                 SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aFileURL.GetMainURL( INetURLObject::NO_DECODE ),
-                                                                          STREAM_STD_WRITE );
+                                                                          StreamMode::STD_WRITE );
                 if ( pStream )
                 {
                     if ( !pStream->GetError() )
@@ -1354,7 +1354,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
             {
                 // TODO: test whether it really works for http and fwp
                 SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aFileURL,
-                                                                          STREAM_STD_WRITE );
+                                                                          StreamMode::STD_WRITE );
                 if ( pStream )
                 {
                     if ( !pStream->GetError() )

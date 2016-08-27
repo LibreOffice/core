@@ -548,7 +548,7 @@ ScDocShellRef ScBootstrapFixture::load( bool bReadWrite,
 
     ScDocShellRef xDocShRef = new ScDocShell;
     xDocShRef->GetDocument().EnableUserInteraction(false);
-    SfxMedium* pSrcMed = new SfxMedium(rURL, bReadWrite ? STREAM_STD_READWRITE : STREAM_STD_READ );
+    SfxMedium* pSrcMed = new SfxMedium(rURL, bReadWrite ? StreamMode::STD_READWRITE : StreamMode::STD_READ );
     pSrcMed->SetFilter(pFilter);
     pSrcMed->UseInteractionHandler(false);
     SfxItemSet* pSet = pSrcMed->GetItemSet();
@@ -628,7 +628,7 @@ ScDocShellRef ScBootstrapFixture::saveAndReload(
 {
 
     utl::TempFile aTempFile;
-    SfxMedium aStoreMedium( aTempFile.GetURL(), STREAM_STD_WRITE );
+    SfxMedium aStoreMedium( aTempFile.GetURL(), StreamMode::STD_WRITE );
     SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
     if (nFormatType == ODS_FORMAT_TYPE)
         nExportFormat = SotClipboardFormatId::STARCHART_8;
@@ -673,7 +673,7 @@ std::shared_ptr<utl::TempFile> ScBootstrapFixture::exportTo( ScDocShell* pShell,
 
     std::shared_ptr<utl::TempFile> pTempFile(new utl::TempFile());
     pTempFile->EnableKillingFile();
-    SfxMedium aStoreMedium( pTempFile->GetURL(), STREAM_STD_WRITE );
+    SfxMedium aStoreMedium( pTempFile->GetURL(), StreamMode::STD_WRITE );
     SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
     SfxFilterFlags nFormatType = aFileFormats[nFormat].nFormatType;
     if (nFormatType == ODS_FORMAT_TYPE)

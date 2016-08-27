@@ -20,7 +20,7 @@
 #define INCLUDED_SFX2_SOURCE_INC_OPENFLAG_HXX
 
 // Open file for editing, then only the third option (reading a copy) works
-#define SFX_STREAM_READWRITE  (STREAM_READWRITE |  StreamMode::SHARE_DENYWRITE)
+#define SFX_STREAM_READWRITE  (StreamMode::READWRITE |  StreamMode::SHARE_DENYWRITE)
 // I work on the original, not a copy
 // -> file then can not be opened for editing
 #define SFX_STREAM_READONLY   (StreamMode::READ | StreamMode::SHARE_DENYWRITE) // + !bDirect

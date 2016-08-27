@@ -1197,7 +1197,7 @@ void StgTmpStrm::SetSize(sal_uInt64 n)
         if( n > THRESHOLD )
         {
             m_aName = utl::TempFile(nullptr, false).GetURL();
-            SvFileStream* s = new SvFileStream( m_aName, STREAM_READWRITE );
+            SvFileStream* s = new SvFileStream( m_aName, StreamMode::READWRITE );
             const sal_uInt64 nCur = Tell();
             sal_uInt64 i = nEndOfData;
             std::unique_ptr<sal_uInt8[]> p(new sal_uInt8[ 4096 ]);

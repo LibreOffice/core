@@ -32,7 +32,7 @@ namespace {
     bool loadPng( const OUString & rPath, BitmapEx &rBitmap)
     {
         INetURLObject aObj( rPath );
-        SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
+        SvFileStream aStrm( aObj.PathToFileName(), StreamMode::STD_READ );
         if ( !aStrm.GetError() ) {
             vcl::PNGReader aReader( aStrm );
             rBitmap = aReader.Read();

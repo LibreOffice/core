@@ -502,7 +502,7 @@ void ODbaseTable::construct()
         "ODbaseTable::ODbaseTable: invalid extension!");
         // getEntry is expected to ensure the correct file name
 
-    m_pFileStream = createStream_simpleError( sFileName, STREAM_READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
+    m_pFileStream = createStream_simpleError( sFileName, StreamMode::READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
     m_bWriteable = ( m_pFileStream != nullptr );
 
     if ( !m_pFileStream )
@@ -527,7 +527,7 @@ void ODbaseTable::construct()
             // If the memo file isn't found, the data will be displayed anyhow.
             // However, updates can't be done
             // but the operation is executed
-            m_pMemoStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
+            m_pMemoStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::NO_DECODE), StreamMode::READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
             if ( !m_pMemoStream )
             {
                 m_bWriteableMemo = false;
@@ -1170,7 +1170,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
     bCreateMemo = false;
     Date aDate( Date::SYSTEM );                     // current date
 
-    m_pFileStream = createStream_simpleError( aFile.GetMainURL(INetURLObject::NO_DECODE),STREAM_READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC );
+    m_pFileStream = createStream_simpleError( aFile.GetMainURL(INetURLObject::NO_DECODE),StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC );
 
     if (!m_pFileStream)
         return false;
@@ -1416,7 +1416,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
 bool ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
 {
     // filehandling macro for table creation
-    m_pMemoStream = createStream_simpleError( aFile.GetMainURL(INetURLObject::NO_DECODE),STREAM_READWRITE | StreamMode::SHARE_DENYWRITE);
+    m_pMemoStream = createStream_simpleError( aFile.GetMainURL(INetURLObject::NO_DECODE),StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE);
 
     if (!m_pMemoStream)
         return false;

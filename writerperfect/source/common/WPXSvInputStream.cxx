@@ -227,7 +227,7 @@ void OLEStorageImpl::traverse(const tools::SvRef<SotStorage> &rStorage, const rt
         {
             const rtl::OUString aPath = concatPath(rPath, aIt->GetName());
             SotStorageRefWrapper aStorage;
-            aStorage.ref = rStorage->OpenSotStorage(aIt->GetName(), STREAM_STD_READ);
+            aStorage.ref = rStorage->OpenSotStorage(aIt->GetName(), StreamMode::STD_READ);
             maStorageMap[aPath] = aStorage;
 
             // deep-first traversal
@@ -245,7 +245,7 @@ tools::SvRef<SotStorageStream> OLEStorageImpl::createStream(const rtl::OUString 
     const sal_Int32 nDelim = rPath.lastIndexOf(sal_Unicode('/'));
 
     if (-1 == nDelim)
-        return mxRootStorage.ref->OpenSotStream(rPath, STREAM_STD_READ);
+        return mxRootStorage.ref->OpenSotStream(rPath, StreamMode::STD_READ);
 
     const rtl::OUString aDir = rPath.copy(0, nDelim);
     const rtl::OUString aName = rPath.copy(nDelim + 1);
@@ -255,7 +255,7 @@ tools::SvRef<SotStorageStream> OLEStorageImpl::createStream(const rtl::OUString 
     if (maStorageMap.end() == aIt)
         return nullptr;
 
-    return aIt->second.ref->OpenSotStream(aName, STREAM_STD_READ);
+    return aIt->second.ref->OpenSotStream(aName, StreamMode::STD_READ);
 }
 
 }

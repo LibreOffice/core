@@ -1173,7 +1173,7 @@ bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
         if (xStorage.Is() && xStorage->IsStorage(szBasicStorage))
         {
             tools::SvRef<SotStorage> xBasicStorage = xStorage->OpenSotStorage
-                            ( szBasicStorage, STREAM_STD_READWRITE, false );
+                            ( szBasicStorage, StreamMode::STD_READWRITE, false );
 
             if ( !xBasicStorage.Is() || xBasicStorage->GetError() )
             {

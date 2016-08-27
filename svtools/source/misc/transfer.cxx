@@ -1891,7 +1891,7 @@ bool TransferableDataHelper::GetINetBookmark( const css::datatransfer::DataFlavo
                     if( ( aDesc.getLength() > 4 ) && aDesc.copy(aDesc.getLength() - 4).equalsIgnoreAsciiCase(".URL") )
                     {
                         std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( INetURLObject( OStringToOUString(aDesc, eTextEncoding) ).GetMainURL( INetURLObject::NO_DECODE ),
-                                                                                  STREAM_STD_READ ));
+                                                                                  StreamMode::STD_READ ));
 
                         if( !pStream || pStream->GetError() )
                         {
@@ -1904,7 +1904,7 @@ bool TransferableDataHelper::GetINetBookmark( const css::datatransfer::DataFlavo
                             {
                                 aSeq = GetSequence(aFileContentFlavor, OUString());
                                 if (aSeq.getLength())
-                                    pStream.reset(new SvMemoryStream( (sal_Char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_STD_READ ));
+                                    pStream.reset(new SvMemoryStream( (sal_Char*) aSeq.getConstArray(), aSeq.getLength(), StreamMode::STD_READ ));
                             }
                         }
 

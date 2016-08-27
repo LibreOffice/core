@@ -71,7 +71,7 @@ const Graphic ImpLoadLinkedGraphic( const OUString& aFileName, const OUString& a
 {
     Graphic aGraphic;
 
-    SfxMedium aMed( aFileName, aReferer, STREAM_STD_READ );
+    SfxMedium aMed( aFileName, aReferer, StreamMode::STD_READ );
     aMed.Download();
 
     SvStream* pInStrm = aMed.GetInStream();

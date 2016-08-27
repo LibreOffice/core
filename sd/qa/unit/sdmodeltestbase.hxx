@@ -135,7 +135,7 @@ protected:
         std::shared_ptr<const SfxFilter> pFilt(pFilter);
 
         ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
-        SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ, pFilt, pParams);
+        SfxMedium* pSrcMed = new SfxMedium(rURL, StreamMode::STD_READ, pFilt, pParams);
         if ( !xDocShRef->DoLoad(pSrcMed) || !xDocShRef.Is() )
         {
             if (xDocShRef.Is())
@@ -157,7 +157,7 @@ protected:
 
     void exportTo(sd::DrawDocShell* pShell, FileFormat* pFormat, utl::TempFile& rTempFile)
     {
-        SfxMedium aStoreMedium(rTempFile.GetURL(), STREAM_STD_WRITE);
+        SfxMedium aStoreMedium(rTempFile.GetURL(), StreamMode::STD_WRITE);
         SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
         if (pFormat->nFormatType == ODP_FORMAT_TYPE)
             nExportFormat = SotClipboardFormatId::STARCALC_8;
@@ -176,7 +176,7 @@ protected:
 
     void save(sd::DrawDocShell* pShell, FileFormat* pFormat, utl::TempFile& rTempFile)
     {
-        SfxMedium aStoreMedium(rTempFile.GetURL(), STREAM_STD_WRITE);
+        SfxMedium aStoreMedium(rTempFile.GetURL(), StreamMode::STD_WRITE);
         SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
         if (pFormat->nFormatType == ODP_FORMAT_TYPE)
             nExportFormat = SotClipboardFormatId::STARCHART_8;

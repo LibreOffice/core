@@ -183,7 +183,7 @@ tools::SvRef<SotStorageStream> SdModule::GetOptionStream( const OUString& rOptio
 
             aURL.Append( "drawing.cfg" );
 
-            SvStream* pStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE );
+            SvStream* pStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READWRITE );
 
             if( pStm )
                 xOptionStorage = new SotStorage( pStm, true );

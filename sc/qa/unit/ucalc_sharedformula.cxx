@@ -744,7 +744,7 @@ void Test::testSharedFormulasRefUpdateExternal()
     ScDocShellRef xExtDocSh = new ScDocShell;
     OUString aExtDocName("file:///extdata.fake");
 
-    SfxMedium* pMed = new SfxMedium(aExtDocName, STREAM_STD_READWRITE);
+    SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
     ScDocument& rExtDoc = xExtDocSh->GetDocument();
 

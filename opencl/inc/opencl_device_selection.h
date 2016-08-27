@@ -410,7 +410,7 @@ inline ds_status writeProfile(const OUString& rStreamName, std::unique_ptr<ds_pr
         return DS_INVALID_PROFILE;
 
     std::unique_ptr<SvStream> pStream;
-    pStream.reset(new SvFileStream(rStreamName, STREAM_STD_READWRITE | StreamMode::TRUNC));
+    pStream.reset(new SvFileStream(rStreamName, StreamMode::STD_READWRITE | StreamMode::TRUNC));
 
     XmlWriter aXmlWriter(pStream.get());
 

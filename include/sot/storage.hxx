@@ -45,7 +45,7 @@ protected:
                         virtual ~SotStorageStream();
 public:
                         SotStorageStream( const OUString &,
-                                          StreamMode = STREAM_STD_READWRITE );
+                                          StreamMode = StreamMode::STD_READWRITE );
                         SotStorageStream( BaseStorageStream *pStm );
 
     virtual void        ResetError() override;
@@ -77,9 +77,9 @@ protected:
    void                 CreateStorage( bool bUCBStorage, StreamMode );
 public:
                         SotStorage( const OUString &,
-                                    StreamMode = STREAM_STD_READWRITE );
+                                    StreamMode = StreamMode::STD_READWRITE );
                         SotStorage( bool bUCBStorage, const OUString &,
-                                    StreamMode = STREAM_STD_READWRITE );
+                                    StreamMode = StreamMode::STD_READWRITE );
                         SotStorage( BaseStorage * );
                         SotStorage( SvStream & rStm );
                         SotStorage( bool bUCBStorage, SvStream & rStm );
@@ -130,9 +130,9 @@ public:
                         // create stream with connection to Storage,
                         // more or less a Parent-Child relationship
     SotStorageStream *  OpenSotStream( const OUString & rEleName,
-                                       StreamMode = STREAM_STD_READWRITE );
+                                       StreamMode = StreamMode::STD_READWRITE );
     SotStorage *        OpenSotStorage( const OUString & rEleName,
-                                        StreamMode = STREAM_STD_READWRITE,
+                                        StreamMode = StreamMode::STD_READWRITE,
                                         bool transacted = true );
                         // query whether Storage or Stream
     bool                IsStream( const OUString & rEleName ) const;
@@ -148,7 +148,7 @@ public:
     static bool         IsOLEStorage( SvStream* pStream );
 
     static SotStorage*  OpenOLEStorage( const css::uno::Reference < css::embed::XStorage >& xStorage,
-                                        const OUString& rEleName, StreamMode = STREAM_STD_READWRITE );
+                                        const OUString& rEleName, StreamMode = StreamMode::STD_READWRITE );
     static SotClipboardFormatId  GetFormatID( const css::uno::Reference < css::embed::XStorage >& xStorage );
     static sal_Int32    GetVersion( const css::uno::Reference < css::embed::XStorage >& xStorage );
 };

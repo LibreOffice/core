@@ -489,7 +489,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                 //xTemplDoc->SetBaseURL( aFoundName );
 
                 // TODO/LATER: make sure that we don't use binary templates!
-                SfxMedium aMedium( aFoundName, STREAM_STD_READ );
+                SfxMedium aMedium( aFoundName, StreamMode::STD_READ );
                 if ( xTemplDoc->LoadFrom( aMedium ) )
                 {
                     // transfer styles from xTemplDoc to this document

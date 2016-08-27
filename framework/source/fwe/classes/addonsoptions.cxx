@@ -1273,7 +1273,7 @@ Image AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)
 {
     Image aImage;
 
-    SvStream* pStream = UcbStreamHelper::CreateStream( aImageURL, STREAM_STD_READ );
+    SvStream* pStream = UcbStreamHelper::CreateStream( aImageURL, StreamMode::STD_READ );
     if ( pStream && ( pStream->GetErrorCode() == 0 ))
     {
         // Use graphic class to also support more graphic formats (bmp,png,...)
@@ -1376,7 +1376,7 @@ bool AddonsOptions_Impl::CreateImageFromSequence( Image& rImage, Sequence< sal_I
 
     if ( rBitmapDataSeq.getLength() > 0 )
     {
-        SvMemoryStream  aMemStream( rBitmapDataSeq.getArray(), rBitmapDataSeq.getLength(), STREAM_STD_READ );
+        SvMemoryStream  aMemStream( rBitmapDataSeq.getArray(), rBitmapDataSeq.getLength(), StreamMode::STD_READ );
         BitmapEx        aBitmapEx;
 
         ReadDIBBitmapEx(aBitmapEx, aMemStream);

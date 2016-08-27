@@ -297,7 +297,7 @@ ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const OUSt
 {
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
-    SfxMedium aStoreMedium( aTempFile.GetURL(), STREAM_STD_WRITE );
+    SfxMedium aStoreMedium( aTempFile.GetURL(), StreamMode::STD_WRITE );
     SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
     if (nFormatType == ODS_FORMAT_TYPE)
         nExportFormat = SotClipboardFormatId::STARCHART_8;

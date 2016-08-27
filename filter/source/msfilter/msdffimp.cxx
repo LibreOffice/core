@@ -6943,7 +6943,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
         if ( pName )
         {
             // TODO/LATER: perhaps we need to retrieve VisArea and Metafile from the storage also
-            tools::SvRef<SotStorageStream> xStr = rSrcStg.OpenSotStream( "package_stream", STREAM_STD_READ );
+            tools::SvRef<SotStorageStream> xStr = rSrcStg.OpenSotStream( "package_stream", StreamMode::STD_READ );
             xStr->ReadStream( *xMemStream );
         }
         else
@@ -7112,7 +7112,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                         // TODO/LATER: should the caller be notified if the aspect changes in future?
 
                         tools::SvRef<SotStorageStream> xObjInfoSrc = xObjStg->OpenSotStream(
-                            "\3ObjInfo", STREAM_STD_READ );
+                            "\3ObjInfo", StreamMode::STD_READ );
                         if ( xObjInfoSrc.Is() && !xObjInfoSrc->GetError() )
                         {
                             sal_uInt8 nByte = 0;
@@ -7144,7 +7144,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
         if( bValidStorage )
         {
             // object is not an own object
-            tools::SvRef<SotStorage> xObjStor = SotStorage::OpenOLEStorage( xDestStorage, aDstStgName, STREAM_READWRITE );
+            tools::SvRef<SotStorage> xObjStor = SotStorage::OpenOLEStorage( xDestStorage, aDstStgName, StreamMode::READWRITE );
 
             if ( xObjStor.Is() )
             {

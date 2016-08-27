@@ -187,7 +187,7 @@ void SwDocTest::testFileNameFields()
 
     INetURLObject aTempFileURL(aTempFile.GetURL());
     OUString sFileURL = aTempFileURL.GetMainURL(INetURLObject::NO_DECODE);
-    SfxMedium aDstMed(sFileURL, STREAM_STD_READWRITE);
+    SfxMedium aDstMed(sFileURL, StreamMode::STD_READWRITE);
 
     std::shared_ptr<SfxFilter> pFilter(new SfxFilter(
         OUString("Text"),

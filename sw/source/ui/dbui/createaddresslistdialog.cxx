@@ -641,7 +641,7 @@ IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, OkHdl_Impl, Button*, void)
     }
     if(!m_sURL.isEmpty())
     {
-        SfxMedium aMedium( m_sURL, STREAM_READWRITE|StreamMode::TRUNC );
+        SfxMedium aMedium( m_sURL, StreamMode::READWRITE|StreamMode::TRUNC );
         SvStream* pStream = aMedium.GetOutStream();
         pStream->SetLineDelimiter( LINEEND_LF );
         pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);

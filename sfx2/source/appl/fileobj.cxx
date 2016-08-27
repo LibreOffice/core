@@ -252,7 +252,7 @@ bool SvFileObject::LoadFile_Impl()
         return false;
 
     // at the moment on the current DocShell
-    xMed = new SfxMedium( sFileNm, sReferer, STREAM_STD_READ );
+    xMed = new SfxMedium( sFileNm, sReferer, StreamMode::STD_READ );
     SvLinkSource::StreamToLoadFrom aStreamToLoadFrom =
         getStreamToLoadFrom();
     xMed->setStreamToLoadFrom(

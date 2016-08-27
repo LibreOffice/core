@@ -224,7 +224,7 @@ void ImageProducer::SetImage( const OUString& rPath )
     }
     else if( !maURL.isEmpty() )
     {
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( maURL, STREAM_STD_READ );
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( maURL, StreamMode::STD_READ );
         mpStm = pIStm ? new SvStream( new ImgProdLockBytes( pIStm, true ) ) : nullptr;
     }
     else

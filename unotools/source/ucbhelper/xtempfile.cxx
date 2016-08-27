@@ -312,7 +312,7 @@ void OTempFileService::checkConnected ()
 {
     if (!mpStream && mpTempFile)
     {
-        mpStream = mpTempFile->GetStream( STREAM_STD_READWRITE );
+        mpStream = mpTempFile->GetStream( StreamMode::STD_READWRITE );
         if ( mpStream && mbHasCachedPos )
         {
             mpStream->Seek( sal::static_int_cast<sal_Size>(mnCachedPos) );

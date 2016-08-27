@@ -378,7 +378,7 @@ static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, bool bDetectFol
             sal_uInt16 nId = IMG_WRITERTEMPLATE;
             try
             {
-                tools::SvRef<SotStorage> aStorage = new SotStorage( sURL, STREAM_STD_READ );
+                tools::SvRef<SotStorage> aStorage = new SotStorage( sURL, StreamMode::STD_READ );
                 if ( !aStorage->GetError() )
                 {
                     SvGlobalName aGlobalName = aStorage->GetClassName();
