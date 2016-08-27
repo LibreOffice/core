@@ -1461,6 +1461,10 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                         // clean cached value of PROPFIND property names
                         // PROPPATCH can change them
                         removeCachedPropertyNames( xResAccess->getURL() );
+                        // test if HEAD allowed, if not, throw, will be catched immediately
+                        if ( !aStaticDAVOptionsCache.isHeadAllowed( xResAccess->getURL() ) )
+                            throw DAVException( DAVException::DAV_HTTP_ERROR, "405 Not Implemented" );
+
                         xResAccess->HEAD( aHeaderNames, resource, xEnv );
                         m_bDidGetOrHead = true;
 
@@ -3971,7 +3975,7 @@ void Content::getResourceOptions(
                             // instead of SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED.
                             // So check if this is an available resource, or a real 'Not Found' event.
                             sal_uInt32 nLifeTime = m_nOptsCacheLifeNotFound;
-                            if( isResourceAvailable(xEnv, rResAccess ) )
+                            if( isResourceAvailable( xEnv, rResAccess, rDAVOptions ) )
                             {
                                 nLifeTime = m_nOptsCacheLifeNotImpl;
                                 rDAVOptions.setResourceFound(); // means it exists, but it's not DAV
@@ -4028,16 +4032,53 @@ void Content::getResourceOptions(
 
 //static
 bool Content::isResourceAvailable( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
-                                  const std::unique_ptr< DAVResourceAccess > & rResAccess )
+                                  const std::unique_ptr< DAVResourceAccess > & rResAccess,
+                                  DAVOptions& rDAVOptions )
 {
+    std::vector< rtl::OUString > aHeaderNames;
+    DAVResource aResource;
+
     try
     {
-        // To check for the physical URL resource availability, using a simple HEAD command
-        // if HEAD is successfull, set element found.
-        std::vector< OUString > aHeaderNames;
-        DAVResource resource;
-        rResAccess->HEAD( aHeaderNames, resource, xEnv );
+        // To check for the physical URL resource availability, first
+        // try using a simple HEAD command
+        // if HEAD is successful, set element found.
+        rResAccess->HEAD( aHeaderNames, aResource, xEnv );
         return true;
+    }
+    catch ( DAVException const & e )
+    {
+        if ( e.getStatus() == SC_NOT_IMPLEMENTED ||
+             e.getStatus() == SC_METHOD_NOT_ALLOWED ||
+             e.getStatus() == SC_NOT_FOUND )
+        {
+            SAL_WARN( "ucb.ucp.webdav", "HEAD not implemented: fall back to a partial GET" );
+            // set in cached OPTIONS "HEAD not implemented"
+            // so it won't be used again on this resource
+            rDAVOptions.setHeadAllowed( false );
+            try
+            {
+                // do a GET with a payload of 0, the server does not
+                // support HEAD (or has HEAD disabled)
+                DAVRequestHeaders aPartialGet;
+                aPartialGet.push_back(
+                    DAVRequestHeader(
+                        OUString( "Range" ),
+                        OUString( "bytes=0-0" )));
+
+                rResAccess->GET( aPartialGet,
+                                 aHeaderNames,
+                                 aResource,
+                                 xEnv );
+                return true;
+            }
+            catch (...)
+            {
+                return false;
+            }
+        }
+        else
+            return false;
     }
     catch ( ... )
     {
@@ -4046,6 +4087,7 @@ bool Content::isResourceAvailable( const css::uno::Reference< css::ucb::XCommand
         // in rResAccess function method.
         return false;
     }
+    return false;
 }
 
 
