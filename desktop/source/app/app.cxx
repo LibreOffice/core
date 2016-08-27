@@ -1470,17 +1470,15 @@ int Desktop::Main()
 
             if (aPatchInfo.is())
             {
-                OUString aInstallationDir( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER );
+                OUString aInstallationDir( "$BRAND_BASE_DIR/");
                 rtl::Bootstrap::expandMacros(aInstallationDir);
-                CreateValidUpdateDir(aInstallationDir);
 
                 osl::DirectoryItem aDirectoryItem;
                 osl::DirectoryItem::get(aInstallationDir + "/updated", aDirectoryItem);
                 bool bValidUpdateDirExists = aDirectoryItem.is();
                 if (bValidUpdateDirExists)
                 {
-                    rtl::Bootstrap::expandMacros(aInstallationDir);
-                    Update(aInstallationDir);
+                    Update();
                 }
             }
 
