@@ -328,6 +328,9 @@ public:
                              DAVOptions& rDAVOptions )
         throw ( css::uno::Exception, std::exception );
 
+    static bool isResourceAvailable( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
+                             const std::unique_ptr< DAVResourceAccess > & rResAccess);
+
     static void removeCachedPropertyNames( const OUString & rURL );
 };
 
