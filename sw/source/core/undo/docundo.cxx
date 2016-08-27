@@ -40,7 +40,6 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentState.hxx>
 #include <comphelper/lok.hxx>
-#include <assert.h>
 
 using namespace ::com::sun::star;
 
