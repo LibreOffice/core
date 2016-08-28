@@ -1073,7 +1073,14 @@ IMPL_LINK_NOARG_TYPED ( RemoteFilesDialog, NewFolderHdl, Button*, void )
 {
     m_pFileView->EndInplaceEditing();
 
-    SmartContent aContent( m_pFileView->GetViewURL() );
+    // will be bound after InteractionHandler is enabled
+    SmartContent aContent;
+    aContent.enableDefaultInteractionHandler();
+    // now it can be bound
+    aContent.bindTo( m_pFileView->GetViewURL() );
+    if( !aContent.canCreateFolder() )
+        return;
+
     OUString aTitle;
     aContent.getTitle( aTitle );
     ScopedVclPtrInstance< QueryFolderNameDialog > aDlg( this, aTitle, fpicker::SVT_RESSTR( STR_SVT_NEW_FOLDER ) );
