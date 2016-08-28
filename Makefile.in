@@ -420,6 +420,9 @@ create-mar:
 upload-symbols:
 	$(MAKE) -f $(SRCDIR)/Makefile.gbuild upload-symbols
 
+create-update-info:
+	$(MAKE) -f $(SRCDIR)/Makefile.gbuild create-update-info
+
 dump-deps:
 	@$(SRCDIR)/bin/module-deps.pl $(MAKE) $(SRCDIR)/Makefile.gbuild
 
