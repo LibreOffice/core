@@ -2537,7 +2537,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
             SwDBData aData = GetExport().m_pDoc->GetDBData();
             const OUString sStr = FieldString(ww::eDATABASE)
                 + aData.sDataSource
-                + OUString(DB_DELIM)
+                + OUStringLiteral1<DB_DELIM>()
                 + aData.sCommand;
             GetExport().OutputField(pField, ww::eDATABASE, sStr);
         }

@@ -312,21 +312,25 @@ OUString SmOoxmlImport::handleD()
         opening = "left lbrace ";
     if( closing == "}" )
         closing = " right rbrace";
-    if( opening == OUString( sal_Unicode( 0x27e6 )))
+    if( opening == OUStringLiteral1<0x27e6>() )
         opening = "left ldbracket ";
-    if( closing == OUString( sal_Unicode( 0x27e7 )))
+    if( closing == OUStringLiteral1<0x27e7>() )
         closing = " right rdbracket";
     if( opening == "|" )
         opening = "left lline ";
     if( closing == "|" )
         closing = " right rline";
-    if (opening == OUString(MS_DLINE) || opening == OUString(MS_DVERTLINE))
+    if (opening == OUStringLiteral1<MS_DLINE>()
+        || opening == OUStringLiteral1<MS_DVERTLINE>())
         opening = "left ldline ";
-    if (closing == OUString(MS_DLINE) || closing == OUString(MS_DVERTLINE))
+    if (closing == OUStringLiteral1<MS_DLINE>()
+        || closing == OUStringLiteral1<MS_DVERTLINE>())
         closing = " right rdline";
-    if (opening == OUString(MS_LANGLE) || opening == OUString(MS_LMATHANGLE))
+    if (opening == OUStringLiteral1<MS_LANGLE>()
+        || opening == OUStringLiteral1<MS_LMATHANGLE>())
         opening = "left langle ";
-    if (closing == OUString(MS_RANGLE) || closing == OUString(MS_RMATHANGLE))
+    if (closing == OUStringLiteral1<MS_RANGLE>()
+        || closing == OUStringLiteral1<MS_RMATHANGLE>())
         closing = " right rangle";
     // use scalable brackets (the explicit "left" or "right")
     if( opening == "(" || opening == "[" )
