@@ -291,7 +291,7 @@ IMPL_LINK_TYPED(ScreenshotAnnotationDlg_Impl, saveButtonHandler, Button*, pButto
     xFilePicker->appendFilter("*.png", "*.png");
     xFilePicker->setCurrentFilter("*.png");
     xFilePicker->setDefaultName(OStringToOUString(aDerivedFileName, RTL_TEXTENCODING_UTF8));
-    xFilePicker->setMultiSelectionMode(sal_False);
+    xFilePicker->setMultiSelectionMode(false);
 
     if (xFilePicker->execute() == ui::dialogs::ExecutableDialogResults::OK)
     {
