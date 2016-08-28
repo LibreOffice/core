@@ -35,7 +35,7 @@ class BASIC_DLLPUBLIC SbProperty : public SbxProperty
     BASIC_DLLPRIVATE SbProperty( const OUString&, SbxDataType, SbModule* );
     virtual ~SbProperty();
 public:
-    SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICPROP,1);
+    SBX_DECL_PERSIST_NODATA(SBXID_BASICPROP,1);
     SbModule* GetModule() { return pMod; }
 };
 

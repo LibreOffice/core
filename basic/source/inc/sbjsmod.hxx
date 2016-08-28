@@ -31,7 +31,7 @@ class SbJScriptModule : public SbModule
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
     virtual bool StoreData( SvStream& ) const override;
 public:
-    SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_JSCRIPTMOD,1);
+    SBX_DECL_PERSIST_NODATA(SBXID_JSCRIPTMOD,1);
     SbJScriptModule( const OUString& );       // hand through
 };
 

@@ -28,7 +28,7 @@ class BASIC_DLLPUBLIC SbxMethod : public SbxVariable
     bool           mbIsRuntimeFunction;
     SbxDataType    mbRuntimeFunctionReturnType;
 public:
-    SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_METHOD,1);
+    SBX_DECL_PERSIST_NODATA(SBXID_METHOD,1);
     SbxMethod( const OUString& r, SbxDataType t, bool bIsRuntimeFunction=false );
     SbxMethod( const SbxMethod& r );
     virtual ~SbxMethod();
