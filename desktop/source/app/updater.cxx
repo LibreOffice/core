@@ -147,9 +147,9 @@ void CreateValidUpdateDir()
     OUString aInstallPath = getPathFromURL(aInstallDir);
     OUString aWorkdirPath = getPathFromURL(aInstallDir + "/updated");
 
-    OUString aPatchDirPath("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/patch/");
-    rtl::Bootstrap::expandMacros(aPatchDirPath);
-    OUString aPatchDir = getPathFromURL(aPatchDirPath);
+    OUString aPatchDirURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/patch/");
+    rtl::Bootstrap::expandMacros(aPatchDirURL);
+    OUString aPatchDir = getPathFromURL(aPatchDirURL);
 
     OUString aUpdaterPath = getPathFromURL(aInstallDir + "/program/" + OUString::fromUtf8(pUpdaterName));
 
