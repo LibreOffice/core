@@ -312,6 +312,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		-x c++-header \
 		$(4) $(5) \
 		-I$(dir $(3)) \
+		-DPRECOMPILED_HEADERS \
 		$(6) \
 		-c $(3) \
 		-o$(1))
@@ -355,6 +356,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		-x c++-header \
 		$(4) $(5) \
 		-I$(dir $(3)) \
+		-DPRECOMPILED_HEADERS \
 		$(6) \
 		-c $(3) \
 		-o$(1))

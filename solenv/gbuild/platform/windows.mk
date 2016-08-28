@@ -309,7 +309,7 @@ endef
 
 # PrecompiledHeader class
 
-gb_PrecompiledHeader_get_enableflags = -Yu$(1).hxx \
+gb_PrecompiledHeader_get_enableflags = -DPRECOMPILED_HEADERS -Yu$(1).hxx \
 									   -Fp$(call gb_PrecompiledHeader_get_target,$(1))
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -344,6 +344,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		-I$(dir $(3)) \
 		$(6) \
 		-c $(3) \
+		-DPRECOMPILED_HEADERS \
 		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj)
 $(call gb_PrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 endef
@@ -385,6 +386,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		-I$(dir $(3)) \
 		$(6) \
 		-c $(3) \
+		-DPRECOMPILED_HEADERS \
 		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj)
 $(call gb_NoexPrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 endef
