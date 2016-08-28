@@ -87,7 +87,7 @@ enum RecursiveMode
     PREVENT_CALL
 };
 
-class SbiExprNode {                  // operators (and operands)
+class SbiExprNode final {           // operators (and operands)
     friend class SbiExpression;
     friend class SbiConstExpression;
     union {
@@ -125,7 +125,7 @@ public:
     SbiExprNode( SbiExprNode*, SbiToken, SbiExprNode* );
     SbiExprNode( SbiExprNode*, sal_uInt16 );    // #120061 TypeOf
     SbiExprNode( sal_uInt16 );                  // new <type>
-    virtual ~SbiExprNode();
+    ~SbiExprNode();
 
     bool IsValid()                  { return !bError; }
     bool IsConstant()               // true: constant operand
