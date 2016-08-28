@@ -198,7 +198,7 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
         // avoid image scaling, this is needed for images smaller than the
         // minimal dialog size
         const WinBits aWinBits(mpPicture->GetStyle());
-        mpPicture->SetStyle(aWinBits & (!WinBits(WB_SCALE)));
+        mpPicture->SetStyle(aWinBits & ~WB_SCALE);
     }
 
     // set some test text at VclMultiLineEdit and make read-only - only
