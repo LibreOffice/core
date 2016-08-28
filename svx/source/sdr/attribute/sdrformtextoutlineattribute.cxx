@@ -108,6 +108,12 @@ namespace drawinglayer
             return *this;
         }
 
+        SdrFormTextOutlineAttribute& SdrFormTextOutlineAttribute::operator=(SdrFormTextOutlineAttribute&& rCandidate)
+        {
+            mpSdrFormTextOutlineAttribute = std::move(rCandidate.mpSdrFormTextOutlineAttribute);
+            return *this;
+        }
+
         bool SdrFormTextOutlineAttribute::operator==(const SdrFormTextOutlineAttribute& rCandidate) const
         {
             // tdf#87509 default attr is always != non-default attr, even with same values
