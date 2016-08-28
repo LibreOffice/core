@@ -24,6 +24,8 @@
 #include <svtools/svtdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 
+#include <unordered_set>
+
 enum class GraphicManagerDrawFlags
 {
     CACHED                  = 0x01,
@@ -504,8 +506,6 @@ public:
     sal_uLong GetDataChangeTimeStamp() const { return mnDataChangeTimeStamp; }
 };
 
-typedef ::std::vector< GraphicObject* > GraphicObjectList_impl;
-
 class SVT_DLLPUBLIC GraphicManager
 {
     friend class GraphicObject;
@@ -513,7 +513,7 @@ class SVT_DLLPUBLIC GraphicManager
 
 private:
 
-    GraphicObjectList_impl  maObjList;
+    std::unordered_set< GraphicObject* >    maObjList;
     sal_uLong               mnUsedSize; // currently used memory footprint of all swapped in graphics
     GraphicCache*           mpCache;
 
