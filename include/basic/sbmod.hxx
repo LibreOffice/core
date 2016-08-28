@@ -94,7 +94,7 @@ protected:
     void handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rHint );
     virtual ~SbModule();
 public:
-    SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICMOD,2);
+    SBX_DECL_PERSIST_NODATA(SBXID_BASICMOD,2);
                     SbModule( const OUString&, bool bCompat = false );
     virtual void    SetParent( SbxObject* ) override;
     virtual void    Clear() override;

@@ -51,7 +51,7 @@ class BASIC_DLLPUBLIC SbMethod : public SbxMethod
     virtual ~SbMethod();
 
 public:
-    SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICMETHOD,2);
+    SBX_DECL_PERSIST_NODATA(SBXID_BASICMETHOD,2);
     virtual SbxInfo* GetInfo() override;
     SbxArray*  GetStatics();
     void       ClearStatics();
