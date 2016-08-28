@@ -243,7 +243,7 @@ bool SbxBase::Store( SvStream& rStrm )
 {
     if( ( nFlags & SbxFlagBits::DontStore ) == SbxFlagBits::NONE )
     {
-        rStrm.WriteUInt32( GetCreator() )
+        rStrm.WriteUInt32( SBXCR_SBX )
              .WriteUInt16( GetSbxId() )
              .WriteUInt16( static_cast<sal_uInt16>(GetFlags()) )
              .WriteUInt16( GetVersion() );

@@ -133,7 +133,7 @@ protected:
     virtual bool StoreData( SvStream& ) const override;
 
 public:
-    SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_ARRAY,1);
+    SBX_DECL_PERSIST_NODATA(SBXID_ARRAY,1);
     SbxArray( SbxDataType=SbxVARIANT );
     SbxArray( const SbxArray& );
     SbxArray& operator=( const SbxArray& );
@@ -180,7 +180,7 @@ protected:
     virtual bool StoreData( SvStream& ) const override;
     virtual ~SbxDimArray();
 public:
-    SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_DIMARRAY,1);
+    SBX_DECL_PERSIST_NODATA(SBXID_DIMARRAY,1);
     SbxDimArray( SbxDataType=SbxVARIANT );
     SbxDimArray( const SbxDimArray& );
     SbxDimArray& operator=( const SbxDimArray& );
@@ -222,7 +222,7 @@ protected:
     virtual void CollRemove( SbxArray* pPar );
 
 public:
-    SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_COLLECTION,1);
+    SBX_DECL_PERSIST_NODATA(SBXID_COLLECTION,1);
     SbxCollection( const OUString& rClassname );
     SbxCollection( const SbxCollection& );
     SbxCollection& operator=( const SbxCollection& );
@@ -242,7 +242,7 @@ protected:
     virtual void CollAdd( SbxArray* pPar ) override;
     virtual void CollRemove( SbxArray* pPar ) override;
 public:
-    SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_FIXCOLLECTION,1);
+    SBX_DECL_PERSIST_NODATA(SBXID_FIXCOLLECTION,1);
     SbxStdCollection( const OUString& rClassname, const OUString& rElemClass );
     SbxStdCollection( const SbxStdCollection& );
     SbxStdCollection& operator=( const SbxStdCollection& );

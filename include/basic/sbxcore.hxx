@@ -33,8 +33,7 @@ class SvStream;
 // Load() and Store() must not be overridden.
 
 // This version of the Macros does not define Load/StorePrivateData()-methods
-#define SBX_DECL_PERSIST_NODATA( nCre, nSbxId, nVer )       \
-    virtual sal_uInt32 GetCreator() const override { return nCre;   }    \
+#define SBX_DECL_PERSIST_NODATA( nSbxId, nVer )       \
     virtual sal_uInt16 GetVersion() const override { return nVer;   }    \
     virtual sal_uInt16 GetSbxId() const override   { return nSbxId; }
 
@@ -53,7 +52,6 @@ protected:
     SbxBase& operator=( const SbxBase& );
     virtual ~SbxBase();
 
-    virtual sal_uInt32 GetCreator() const = 0 ;
     virtual sal_uInt16 GetVersion() const = 0;
     virtual sal_uInt16 GetSbxId() const = 0;
 

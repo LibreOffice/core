@@ -88,7 +88,7 @@ protected:
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
     virtual bool StoreData( SvStream& ) const override;
 public:
-    SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_VALUE,1);
+    SBX_DECL_PERSIST_NODATA(SBXID_VALUE,1);
     SbxValue();
     SbxValue( SbxDataType, void* = nullptr );
     SbxValue( const SbxValue& );
@@ -240,7 +240,7 @@ protected:
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
     virtual bool StoreData( SvStream& ) const override;
 public:
-    SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_VARIABLE,2);
+    SBX_DECL_PERSIST_NODATA(SBXID_VARIABLE,2);
     SbxVariable();
     SbxVariable( SbxDataType, void* = nullptr );
     SbxVariable( const SbxVariable& );

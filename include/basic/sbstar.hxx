@@ -85,7 +85,7 @@ protected:
 
 public:
 
-    SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASIC,1);
+    SBX_DECL_PERSIST_NODATA(SBXID_BASIC,1);
 
     StarBASIC( StarBASIC* pParent = nullptr, bool bIsDocBasic = false );
 
