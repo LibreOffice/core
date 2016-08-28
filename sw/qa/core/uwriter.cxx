@@ -377,7 +377,7 @@ void SwDocTest::testModelToViewHelperExpandFieldsExpandFootnoteReplaceMode()
             ExpandMode::ExpandFields | ExpandMode::ExpandFootnote | ExpandMode::ReplaceMode);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
-        OUString("AAAAA BBBBB " + OUString(CHAR_ZWSP) + " CCCCC " + OUString(CHAR_ZWSP) + " DDDDD"),
+        OUString("AAAAA BBBBB " + OUStringLiteral1<CHAR_ZWSP>() + " CCCCC " + OUStringLiteral1<CHAR_ZWSP>() + " DDDDD"),
         sViewText);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2),
         aModelToViewHelper.getFootnotePositions().size());
@@ -453,7 +453,7 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideInvisibleExpandFootnoteRepl
         ExpandMode::ExpandFields | ExpandMode::HideInvisible | ExpandMode::ExpandFootnote | ExpandMode::ReplaceMode);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
-        OUString("AAAAA CCCCC " + OUString(CHAR_ZWSP) + " DDDDD"),
+        OUString("AAAAA CCCCC " + OUStringLiteral1<CHAR_ZWSP>() + " DDDDD"),
         sViewText);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
         aModelToViewHelper.getFootnotePositions().size());
@@ -481,7 +481,7 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideHideRedlinedExpandFootnoteR
         ExpandMode::ExpandFields | ExpandMode::HideDeletions | ExpandMode::ExpandFootnote | ExpandMode::ReplaceMode);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
-       OUString("AAAABB " + OUString(CHAR_ZWSP) + " CCCCC " + OUString(CHAR_ZWSP) + " DDDDD"),
+       OUString("AAAABB " + OUStringLiteral1<CHAR_ZWSP>() + " CCCCC " + OUStringLiteral1<CHAR_ZWSP>() + " DDDDD"),
        sViewText);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2),
         aModelToViewHelper.getFootnotePositions().size());
@@ -523,7 +523,7 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideInvisibleHideRedlinedExpand
         ExpandMode::ExpandFields | ExpandMode::HideInvisible | ExpandMode::HideDeletions | ExpandMode::ExpandFootnote | ExpandMode::ReplaceMode);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(sViewText,
-        OUString("AAAACCCCC " + OUString(CHAR_ZWSP) + " DDDDD"));
+        OUString("AAAACCCCC " + OUStringLiteral1<CHAR_ZWSP>() + " DDDDD"));
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
         aModelToViewHelper.getFootnotePositions().size());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10),
@@ -549,7 +549,7 @@ void SwDocTest::testModelToViewHelperExpandFieldsExpandFootnoteReplaceMode2()
         ExpandMode::ExpandFields | ExpandMode::ExpandFootnote | ExpandMode::ReplaceMode);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
-        OUString("AAAAA" + OUString(CHAR_ZWSP) + "CCCCC"),
+        OUString("AAAAA" + OUStringLiteral1<CHAR_ZWSP>() + "CCCCC"),
         sViewText);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
         aModelToViewHelper.getFootnotePositions().size());
