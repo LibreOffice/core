@@ -159,14 +159,28 @@ void ResourceMenuController::updatePopupMenu()
         {}
     }
 
-    if ( !m_xMenuContainer.is() )
+    if ( !m_xMenuContainer.is() && m_xConfigManager.is() )
     {
         try
         {
-            if ( m_xConfigManager.is() && m_xConfigManager->hasSettings( m_aMenuURL ) )
-                m_xMenuContainer.set( m_xConfigManager->getSettings( m_aMenuURL, false ) );
-            else if ( m_xModuleConfigManager.is() && m_xModuleConfigManager->hasSettings( m_aMenuURL ) )
-                m_xMenuContainer.set( m_xModuleConfigManager->getSettings( m_aMenuURL, false ) );
+            m_xMenuContainer.set( m_xConfigManager->getSettings( m_aMenuURL, false ) );
+        }
+        catch ( const css::container::NoSuchElementException& )
+        {
+            // Not an error - element may exist only in the module.
+        }
+        catch ( const css::lang::IllegalArgumentException& )
+        {
+            SAL_WARN( "fwk.uielement", "The given URL is not valid: " << m_aMenuURL );
+            return;
+        }
+    }
+
+    if ( !m_xMenuContainer.is() && m_xModuleConfigManager.is() )
+    {
+        try
+        {
+            m_xMenuContainer.set( m_xModuleConfigManager->getSettings( m_aMenuURL, false ) );
         }
         catch ( const css::container::NoSuchElementException& )
         {
@@ -179,6 +193,9 @@ void ResourceMenuController::updatePopupMenu()
             return;
         }
     }
+
+    if ( !m_xMenuContainer.is() )
+        return;
 
     // Clear previous content.
     if ( m_xMenuBarManager.is() )
@@ -245,9 +262,6 @@ void ResourceMenuController::addVerbs( const css::uno::Sequence< css::embed::Ver
 
 void ResourceMenuController::fillToolbarData()
 {
-    if ( !m_xMenuContainer.is() )
-        return;
-
     VCLXMenu* pAwtMenu = VCLXMenu::GetImplementation( m_xPopupMenu );
     Menu* pVCLMenu = pAwtMenu->GetMenu();
 
