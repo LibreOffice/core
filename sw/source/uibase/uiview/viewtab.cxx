@@ -1211,7 +1211,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();
-    bool bPutContentProtection = false;
 
     while ( nWhich )
     {
@@ -1941,10 +1940,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     nEnd = aTabCols.GetRight();
                 else
                     nEnd = aTabCols.GetLeft();
-                // put a position protection when the last row cannot be moved
-                // due to a page break inside of a row
-                if(!aTabCols.IsLastRowAllowedToChange())
-                    bPutContentProtection = true;
 
                 SvxColumnDescription aColDesc( nStart, nEnd,
                                             aTabCols.GetRight(),
@@ -2328,12 +2323,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         break;
         }
         nWhich = aIter.NextWhich();
-    }
-    if(bPutContentProtection)
-    {
-        SvxProtectItem aProtect(SID_RULER_PROTECT);
-        aProtect.SetContentProtect(true);
-        rSet.Put(aProtect);
     }
 }
 

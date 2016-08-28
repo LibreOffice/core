@@ -2621,7 +2621,6 @@ void SvxRuler::CalcMinMax()
             {
                 //top border is not moveable when table rows are displayed
                 // protection of content means the margin is not moveable
-                // - it's just a page break inside of a cell
                 if(bHorz && !mxRulerImpl->aProtectItem.IsContentProtected())
                 {
                     nMaxLeft = mpBorders[0].nMinPos + lNullPix;
@@ -2712,7 +2711,7 @@ void SvxRuler::CalcMinMax()
             else if(mxRulerImpl->bIsTableRows)
             {
                 // get the bottom move range from the last border position - only available for rows!
-                // protection of content means the margin is not moveable - it's just a page break inside of a cell
+                // protection of content means the margin is not moveable
                 if(bHorz || mxRulerImpl->aProtectItem.IsContentProtected())
                 {
                     nMaxLeft = nMaxRight = mpBorders[mxColumnItem->Count() - 1].nMaxPos + lNullPix;
