@@ -234,6 +234,7 @@ struct LOKDocViewPrivateImpl
         m_bInDragEndHandle(false),
         m_nViewId(0),
         m_nPartId(0),
+        m_eDocumentType(LOK_DOCTYPE_OTHER),
         m_nTileSizeTwips(0),
         m_aVisibleArea({0, 0, 0, 0}),
         m_bVisibleAreaSet(false),
