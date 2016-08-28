@@ -2427,9 +2427,8 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* /*pF*/, OUString& rSt
     {
         // Bereich aus Quelle ( kein Switch ) ?
         ConvertUFName(aBook);
-        aPara += OUString(sfx2::cTokenSeparator);
-        aPara += OUString(sfx2::cTokenSeparator);
-        aPara += aBook;
+        aPara += OUStringLiteral1<sfx2::cTokenSeparator>()
+            + OUStringLiteral1<sfx2::cTokenSeparator>() + aBook;
     }
 
     /*

@@ -287,17 +287,17 @@ void SwHTMLParser::NewDivision( int nToken )
             }
             else
             {
-                aURL = URIHelper::SmartRel2Abs(INetURLObject( m_sBaseURL ), aHRef.copy( 0, nPos ), Link<OUString *, bool>(), false );
-                aURL += OUString(sfx2::cTokenSeparator);
+                aURL = URIHelper::SmartRel2Abs(INetURLObject( m_sBaseURL ), aHRef.copy( 0, nPos ), Link<OUString *, bool>(), false )
+                    + OUStringLiteral1<sfx2::cTokenSeparator>();
                 if( nPos2 == -1 )
                 {
                     aURL += aHRef.copy( nPos+1 );
                 }
                 else
                 {
-                    aURL += aHRef.copy( nPos+1, nPos2 - (nPos+1) );
-                    aURL += OUString(sfx2::cTokenSeparator);
-                    aURL += rtl::Uri::decode( aHRef.copy( nPos2+1 ),
+                    aURL += aHRef.copy( nPos+1, nPos2 - (nPos+1) )
+                        + OUStringLiteral1<sfx2::cTokenSeparator>()
+                        + rtl::Uri::decode( aHRef.copy( nPos2+1 ),
                                               rtl_UriDecodeWithCharset,
                                               RTL_TEXTENCODING_ISO_8859_1 );
                 }

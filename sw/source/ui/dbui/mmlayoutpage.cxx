@@ -318,10 +318,10 @@ SwFrameFormat* SwMailMergeLayoutPage::InsertAddressFrame(
         SwFieldMgr aFieldMgr(&rShell);
         //create a database string source.command.commandtype.column
         const SwDBData& rData = rConfigItem.GetCurrentDBData();
-        OUString sDBName(rData.sDataSource + OUString(DB_DELIM)
-            + rData.sCommand + OUString(DB_DELIM));
+        OUString sDBName(rData.sDataSource + OUStringLiteral1<DB_DELIM>()
+            + rData.sCommand + OUStringLiteral1<DB_DELIM>());
         const OUString sDatabaseConditionPrefix(sDBName.replace(DB_DELIM, '.'));
-        sDBName += OUString::number(rData.nCommandType) + OUString(DB_DELIM);
+        sDBName += OUString::number(rData.nCommandType) + OUStringLiteral1<DB_DELIM>();
 
         // if only the country is in an address line the
         // paragraph has to be hidden depending on the
@@ -510,9 +510,9 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
             const OUString sConditionBase("[" + sCommonBase + sGenderColumn + "]");
             const OUString sNameColumnBase("[" + sCommonBase + sNameColumn + "]");
 
-            const OUString sDBName(rData.sDataSource + OUString(DB_DELIM)
-                + rData.sCommand + OUString(DB_DELIM)
-                + OUString::number(rData.nCommandType) + OUString(DB_DELIM));
+            const OUString sDBName(rData.sDataSource + OUStringLiteral1<DB_DELIM>()
+                + rData.sCommand + OUStringLiteral1<DB_DELIM>()
+                + OUString::number(rData.nCommandType) + OUStringLiteral1<DB_DELIM>());
 
 //          Female:  [database.sGenderColumn] != "rFemaleGenderValue" && [database.NameColumn]
 //          Male:    [database.sGenderColumn] == "rFemaleGenderValue" && [database.rGenderColumn]

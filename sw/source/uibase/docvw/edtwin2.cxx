@@ -202,7 +202,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
                             if( !sText.isEmpty() )
                             {
-                                OUStringBuffer sTmp(sText.replaceAll(OUString(sal_Unicode(0xad)), ""));
+                                OUStringBuffer sTmp(sText.replaceAll(OUStringLiteral1<0xad>(), ""));
                                 for (sal_Int32 i = 0; i < sTmp.getLength(); ++i)
                                 {
                                     if (sTmp[i] < 0x20)
