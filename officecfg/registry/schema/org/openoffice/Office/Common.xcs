@@ -5704,6 +5704,7 @@
             </info>
           </enumeration>
         </constraints>
+        <value>0</value>
       </prop>
       <prop oor:name="NotebookbarIconSize" oor:type="xs:short" oor:nillable="false">
         <!-- UIHints: Tools  Options General View -->
@@ -5728,6 +5729,7 @@
             </info>
           </enumeration>
         </constraints>
+        <value>0</value>
       </prop>
       <prop oor:name="SymbolStyle" oor:type="xs:string" oor:nillable="false">
         <!-- UIHints: Tools  Options General View -->
