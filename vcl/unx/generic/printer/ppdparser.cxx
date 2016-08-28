@@ -588,6 +588,7 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
 
 PPDParser::PPDParser( const OUString& rFile ) :
         m_aFile( rFile ),
+        m_bColorDevice( false ),
         m_bType42Capable( false ),
         m_nLanguageLevel( 0 ),
         m_aFileEncoding( RTL_TEXTENCODING_MS_1252 ),
