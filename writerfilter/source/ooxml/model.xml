@@ -3873,7 +3873,7 @@
       </define>
       <define name="CT_NonVisualDrawingProps">
         <element name="a:hlinkClick">
-          <ref name="BUILT_IN_ANY_TYPE"/>
+          <ref name="CT_Hyperlink_URL"/>
         </element>
         <element name="hlinkHover">
           <ref name="CT_Hyperlink"/>
@@ -3894,6 +3894,11 @@
           <data type="boolean"/>
         </attribute>
         <attribute name="title">
+          <data type="string"/>
+        </attribute>
+      </define>
+      <define name="CT_Hyperlink_URL">
+        <attribute name="r:id">
           <data type="string"/>
         </attribute>
       </define>
@@ -3950,6 +3955,10 @@
         </element>
       </define>
     </grammar>
+    <resource name="CT_Hyperlink_URL" resource="Properties">
+      <attribute name="r:id" tokenid="ooxml:CT_Hyperlink_URL"/>
+      <action name="start" action="handleHyperlinkURL"/>
+    </resource>
     <resource name="CT_GraphicalObjectFrameLocking" resource="Properties">
       <element name="extLst" tokenid="ooxml:CT_GraphicalObjectFrameLocking_extLst"/>
       <attribute name="noGrp" tokenid="ooxml:CT_GraphicalObjectFrameLocking_noGrp"/>
