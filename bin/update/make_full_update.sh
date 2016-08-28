@@ -97,6 +97,7 @@ for ((i=0; $i<$num_files; i=$i+1)); do
   copy_perm "$targetdir/$f" "$workdir/$f"
 
   targetfiles="$targetfiles \"$f\""
+  echo $f >> $workdir/files.txt
 done
 
 # Append remove instructions for any dead files.
@@ -107,7 +108,7 @@ append_remove_instructions "$targetdir" "$updatemanifestv2" "$updatemanifestv3"
 $BZIP2 -z9 "$updatemanifestv2" && mv -f "$updatemanifestv2.bz2" "$updatemanifestv2"
 $BZIP2 -z9 "$updatemanifestv3" && mv -f "$updatemanifestv3.bz2" "$updatemanifestv3"
 
-eval "$MAR -C \"$workdir\" -c output.mar $targetfiles"
+eval "$MAR -C \"$workdir\" -c output.mar -f $workdir/files.txt"
 mv -f "$workdir/output.mar" "$archive"
 
 # cleanup
