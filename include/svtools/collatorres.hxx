@@ -22,19 +22,33 @@
 
 #include <svtools/svtdllapi.h>
 #include <rtl/ustring.hxx>
+#include <vector>
 
 class CollatorResourceData;
 
 class SVT_DLLPUBLIC CollatorResource
 {
+private:
+    //  wrapper for locale specific translations data of collator algorithm
+    class CollatorResourceData
+    {
+        friend class CollatorResource;
     private:
-
-        CollatorResourceData  *mp_Data;
-
+        OUString m_aName;
+        OUString m_aTranslation;
     public:
-        CollatorResource();
-        ~CollatorResource();
-        const OUString& GetTranslation (const OUString& r_Algorithm);
+        CollatorResourceData(const OUString& rAlgorithm, const OUString& rTranslation)
+            : m_aName(rAlgorithm)
+            , m_aTranslation(rTranslation)
+        {
+        }
+        const OUString& GetAlgorithm() const { return m_aName; }
+        const OUString& GetTranslation() const { return m_aTranslation; }
+    };
+    std::vector<CollatorResourceData> m_aData;
+public:
+    CollatorResource();
+    const OUString& GetTranslation(const OUString& rAlgorithm);
 };
 
 #endif // INCLUDED_SVTOOLS_COLLATORRES_HXX
