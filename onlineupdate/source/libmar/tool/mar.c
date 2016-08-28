@@ -16,6 +16,7 @@
 #define chdir _chdir
 #else
 #include <unistd.h>
+#include <errno.h>
 #endif
 
 #define MOZ_APP_VERSION "5" /* Dummy value; replace or remove in the
@@ -45,6 +46,8 @@ static void print_usage(void) {
   printf("Create a MAR file:\n");
   printf("  mar [-H MARChannelID] [-V ProductVersion] [-C workingDir] "
          "-c archive.mar [files...]\n");
+  printf("  mar [-H MARChannelID] [-V ProductVersion] [-C workingDir] "
+         "-c archive.mar -f input_file.txt\n");
 
   printf("Extract a MAR file:\n");
   printf("  mar [-C workingDir] -x archive.mar\n");
@@ -247,7 +250,39 @@ int main(int argc, char **argv) {
     struct ProductInformationBlock infoBlock;
     infoBlock.MARChannelID = MARChannelID;
     infoBlock.productVersion = productVersion;
-    return mar_create(argv[2], argc - 3, argv + 3, &infoBlock);
+    if (argv[argc - 2][0] == '-' && argv[argc - 2][1] == 'f')
+    {
+      char buf[1000];
+      FILE* file;
+      char** files;
+      int num_files = 0;
+
+      files = (char **)malloc(sizeof(char*)*10000);
+      errno = 0;
+      file = fopen(argv[argc - 1], "r");
+      if (!file)
+      {
+        printf("%d %s", errno, strerror(errno));
+        printf("Could not open file: %s", argv[argc - 1]);
+        exit(1);
+      }
+
+      while(fgets(buf, 1000, file) != NULL)
+      {
+        int j;
+        for (j=strlen(buf)-1;j>=0 && (buf[j]=='\n' || buf[j]=='\r');j--)
+          ;
+        buf[j+1]='\0';
+        size_t str_len = strlen(buf) + 1;
+        files[num_files] = (char*)malloc(sizeof(char)*str_len);
+        strcpy(files[num_files], buf);
+        ++num_files;
+      }
+      fclose(file);
+      return mar_create(argv[2], num_files, files, &infoBlock);
+    }
+    else
+      return mar_create(argv[2], argc - 3, argv + 3, &infoBlock);
   }
   case 'i': {
     struct ProductInformationBlock infoBlock;
