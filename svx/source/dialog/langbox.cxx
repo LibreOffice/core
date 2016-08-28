@@ -258,11 +258,15 @@ void SvxLanguageBoxBase::SetLanguageList( SvxLanguageListFlags nLangList,
                 nLangType = pKnown[i];
             else
                 nLangType = SvtLanguageTable::GetLanguageTypeAtIndex( i );
+            // If either nLangList doesn't have flag
+            // SvxLanguageListFlags::ALSO_PRIMARY_ONLY
+            // or the language has no sublanguage, the
+            // language should be added into language list.
             if ( nLangType != LANGUAGE_DONTKNOW &&
                  nLangType != LANGUAGE_SYSTEM &&
                  nLangType != LANGUAGE_NONE &&
                  !MsLangId::isLegacy( nLangType) &&
-                 (MsLangId::getSubLanguage( nLangType) ||
+                 !(MsLangId::getSubLanguage( nLangType) &&
                   bool(nLangList & SvxLanguageListFlags::ALSO_PRIMARY_ONLY)) &&
                  (bool(nLangList & SvxLanguageListFlags::ALL) ||
                   (bool(nLangList & SvxLanguageListFlags::WESTERN) &&
