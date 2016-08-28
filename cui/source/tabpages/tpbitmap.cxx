@@ -92,7 +92,11 @@ SvxBitmapTabPage::SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInA
 
     m_aXFillAttr          ( rInAttrs.GetPool() ),
     m_rXFSet              ( m_aXFillAttr.GetItemSet() ),
-    mpView(nullptr)
+    mpView(nullptr),
+    nFilledWidthPercent(0),
+    nFilledHeightPercent(0),
+    nZoomedWidthPercent(0),
+    nZoomedHeightPercent(0)
 {
     get(m_pBitmapLB,"BITMAP");
     get(m_pBitmapStyleLB, "bitmapstyle");
