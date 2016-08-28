@@ -146,7 +146,7 @@ class GraphicCacheEntry
 {
 private:
 
-    GraphicObjectList_impl  maGraphicObjectList;
+    std::vector< GraphicObject* >   maGraphicObjectList;
 
     GraphicID           maID;
     GfxLink             maGfxLink;
@@ -336,7 +336,7 @@ void GraphicCacheEntry::AddGraphicObjectReference( const GraphicObject& rObj, Gr
 bool GraphicCacheEntry::ReleaseGraphicObjectReference( const GraphicObject& rObj )
 {
     for(
-        GraphicObjectList_impl::iterator it = maGraphicObjectList.begin();
+        auto it = maGraphicObjectList.begin();
         it != maGraphicObjectList.end();
         ++it
     ) {

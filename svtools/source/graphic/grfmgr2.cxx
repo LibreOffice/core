@@ -141,10 +141,10 @@ bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& 
 void GraphicManager::ImplRegisterObj( const GraphicObject& rObj, Graphic& rSubstitute,
                                       const OString* pID, const GraphicObject* pCopyObj )
 {
-    assert(std::find(maObjList.begin(), maObjList.end(),
-               const_cast<GraphicObject*>(&rObj)) == maObjList.end());
+    assert(maObjList.find(const_cast<GraphicObject*>(&rObj)) == maObjList.end());
 
-    maObjList.push_back( const_cast<GraphicObject*>(&rObj) );
+    maObjList.emplace( const_cast<GraphicObject*>(&rObj) );
+
     mpCache->AddGraphicObject( rObj, rSubstitute, pID, pCopyObj );
     if( !rObj.IsSwappedOut() )
         mnUsedSize += rObj.maGraphic.GetSizeBytes();
@@ -158,13 +158,9 @@ void GraphicManager::ImplUnregisterObj( const GraphicObject& rObj )
         assert(mnUsedSize >= rObj.maGraphic.GetSizeBytes());
         mnUsedSize -= rObj.maGraphic.GetSizeBytes();
     }
-    for( GraphicObjectList_impl::iterator it = maObjList.begin(); it != maObjList.end(); ++it )
-    {
-        if ( *it == &rObj ) {
-            maObjList.erase( it );
-            return;
-        }
-    }
+    if ( 0 < maObjList.erase( const_cast<GraphicObject*>(&rObj) ) )
+        return;
+
     assert(false); // surely it should have been registered?
 }
 
@@ -203,7 +199,7 @@ void GraphicManager::ImplCheckSizeOfSwappedInGraphics(const GraphicObject* pGrap
         std::vector< GraphicObject* > aCandidates(maObjList.begin(), maObjList.end());
         // if we use more currently, sort by last DataChangeTimeStamp
         // sort by DataChangeTimeStamp so that the oldest get removed first
-        ::std::sort(aCandidates.begin(), aCandidates.end(), simpleSortByDataChangeTimeStamp());
+        std::sort(aCandidates.begin(), aCandidates.end(), simpleSortByDataChangeTimeStamp());
 
         for(sal_uInt32 a(0); mnUsedSize >= nMaxCacheSize && a < aCandidates.size(); a++)
         {
@@ -214,7 +210,7 @@ void GraphicManager::ImplCheckSizeOfSwappedInGraphics(const GraphicObject* pGrap
             {
                 continue;
             }
-            if (std::find(maObjList.begin(), maObjList.end(), pObj) == maObjList.end())
+            if (maObjList.find(pObj) == maObjList.end())
             {
                 // object has been deleted when swapping out another one
                 continue;
