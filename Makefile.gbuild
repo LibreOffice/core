@@ -29,10 +29,11 @@ create-update-info:
 	mkdir -p $(WORKDIR)/update-info
 	$(eval BUILDID := $(shell git -C $(SRCDIR) log -1 --format=%H))
 	$(eval VERSION := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX))
-	$(SRCDIR)/bin/update/create_build_config.py "$(PRODUCTNAME)" "$(VERSION)" "$(BUILDID)" "$(UPDATE_CHANNEL)" "$(WORKDIR)/update-info"
+	$(eval PLATFORM := $(RTL_OS)_$(RTL_ARCH))
+	$(SRCDIR)/bin/update/create_build_config.py "$(PRODUCTNAME)" "$(VERSION)" "$(BUILDID)" "$(UPDATE_CHANNEL)" "$(PLATFORM)" "$(WORKDIR)/update-info"
 	mkdir -p $(WORKDIR)/mar/current-build
 	tar zxvf $(WORKDIR)/installation/$(PRODUCTNAME)/archive/install/en-US/*tar.gz -C $(WORKDIR)/mar/current-build/
 	strip -g $(WORKDIR)/mar/current-build/*/program/* || true
-	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/make_full_update.sh $(WORKDIR)/update-info/$(PRODUCTNAME)_$(VERSION)_$(RTL_OS)_$(RTL_ARCH)_$(BUILDID)_complete.mar $(WORKDIR)/mar/current-build/*/
+	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/make_full_update.sh $(WORKDIR)/update-info/$(PRODUCTNAME)_$(VERSION)_$(PLATFORM)_$(BUILDID)_complete.mar $(WORKDIR)/mar/current-build/*/
 
 # vim: set noet sw=4 ts=4:
