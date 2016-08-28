@@ -174,8 +174,8 @@ if ( true )
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_LIBXML != YES)
-    MD5 = daece17e045f1c107610e137ab50c179
-    name = libxml2-2.9.3.tar.gz
+    MD5 = ae249165c173b1ff386ee8ad676815f5
+    name = libxml2-2.9.4.tar.gz
     URL1 = http://xmlsoft.org/sources/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 

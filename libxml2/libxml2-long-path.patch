@@ -1,5 +1,5 @@
---- misc/libxml2-2.9.3/uri.c	2015-11-02 23:28:09.000000000 -0800
-+++ misc/build/libxml2-2.9.3/uri.c	2016-03-26 10:19:45.838472000 -0700
+--- misc/libxml2-2.9.4/uri.c	2015-11-02 23:28:09.000000000 -0800
++++ misc/build/libxml2-2.9.4/uri.c	2016-03-26 10:19:45.838472000 -0700
 @@ -2412,6 +2412,15 @@
  	return xmlStrdup((const xmlChar *) path);
  #endif
