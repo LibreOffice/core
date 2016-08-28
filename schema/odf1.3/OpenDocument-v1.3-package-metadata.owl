@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+        Open Document Format for Office Applications (OpenDocument) Version 1.3
+        OASIS Standard, In progress
+	OWL Metadata Manifest Description
+        Source: https://tools.oasis-open.org/version-control/svn/office/
+        Copyright (c) OASIS Open 2002-2015. All Rights Reserved.
+
+	All capitalized terms in the following text have the meanings assigned to them
+   	in the OASIS Intellectual Property Rights Policy (the "OASIS IPR Policy"). The
+	full Policy may be found at the OASIS website.
+
+	This document and translations of it may be copied and furnished to others, and
+	derivative works that comment on or otherwise explain it or assist in its
+	implementation may be prepared, copied, published, and distributed, in whole or
+	in part, without restriction of any kind, provided that the above copyright
+	notice and this section are included on all such copies and derivative works.
+	However, this document itself may not be modified in any way, including by
+	removing the copyright notice or references to OASIS, except as needed for the
+	purpose of developing any document or deliverable produced by an OASIS
+	Technical Committee (in which case the rules applicable to copyrights, as set
+	forth in the OASIS IPR Policy, must be followed) or as required to translate it
+	into languages other than English.
+
+	The limited permissions granted above are perpetual and will not be revoked by
+	OASIS or its successors or assigns.
+
+	This document and the information contained herein is provided on an "AS IS"
+	basis and OASIS DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+	LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT
+	INFRINGE ANY OWNERSHIP RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR
+	FITNESS FOR A PARTICULAR PURPOSE. 
+-->
+<rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:pkg="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/01/rdf-schema#">
+
+<owl:Ontology rdf:about="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+	<dc:title xml:lang="en">Open Document Package Metadata Manifest Ontology</dc:title>
+	<label xml:lang="en">ODF Package Metadata Manifest</label>
+</owl:Ontology>
+
+<owl:Class rdf:about="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#Document">
+	<label xml:lang="en">OpenDocument Document</label>
+</owl:Class>
+
+<owl:Class rdf:about="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#File">
+	<label xml:lang="en"> OpenDocument Document Package File</label>
+</owl:Class>
+
+<owl:ObjectProperty rdf:about="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#hasPart">
+	<domain rdf:resource="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#Document"/>
+	<range rdf:resource="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#File"/>
+	<label xml:lang="en">contains</label>
+	<comment xml:lang="en">Related to dcterms:hasPart of the Dublin Core Metadata Initiative</comment>
+</owl:ObjectProperty>
+
+<owl:Class rdf:about="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#MetadataFile">
+	<label xml:lang="en">An OpenDocument Metadata File</label>
+	<comment xml:lang="en">Used for any metadata file in the document</comment>
+	<subClassOf rdf:resource="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#File"/>
+</owl:Class>
+
+<owl:DatatypeProperty rdf:about="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#mimeType">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+	<domain rdf:resource="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#File"/>
+	<range rdf:resource="http://www.w3.org/2001/XMLSchema-datatypes#string"/>
+	<label xml:lang="en">the MIME type</label>
+	<comment xml:lang="en">A string representing the MIME media type of a file (see RFC4288).</comment>
+</owl:DatatypeProperty>
+
+<owl:Class rdf:about="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#Element">
+	<label xml:lang="en">OpenDocument Package XML Element</label>
+</owl:Class>
+
+</rdf:RDF>
