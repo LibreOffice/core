@@ -79,7 +79,6 @@ public:
     sal_uInt16 GetBlue();
     bool IsValidColor();
     sal_uInt32 To24Color();
-    LwpColor& operator = (const LwpColor& rOther);
     bool IsTransparent();
 private:
     sal_uInt16 m_nRed;          // When extra is AGLRGB_INDEX, m_nRed holds the
