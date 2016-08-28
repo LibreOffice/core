@@ -66,13 +66,6 @@ bool StringStatic::VisitVarDecl(VarDecl const* varDecl)
     if (ignoreLocation(varDecl)) {
         return true;
     }
-    // We could use OUStringLiteral1 here, but we'd need to update OUStringLiteral1 to allow BMP chars first:
-    if (compiler.getSourceManager().getFilename(varDecl->getLocation())
-        == SRCDIR "/chart2/inc/SpecialUnicodes.hxx")
-    {
-        return true;
-    }
-
     QualType qt = varDecl->getType();
     if (!varDecl->hasGlobalStorage()
         || !varDecl->isThisDeclarationADefinition()

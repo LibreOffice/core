@@ -150,13 +150,11 @@ template<std::size_t N> struct ToStringHelper<sal_Unicode const[N]> {
     static bool const allowOUStringConcat = true;
 };
 
-template<char C> struct ToStringHelper<OUStringLiteral1_<C>> {
+template<sal_Unicode C> struct ToStringHelper<OUStringLiteral1_<C>> {
     static int length(OUStringLiteral1_<C>) { return 1; }
-    static char * addData(char * buffer, OUStringLiteral1_<C> literal)
-    { return addDataHelper(buffer, &literal.c, 1); }
     static sal_Unicode * addData(
         sal_Unicode * buffer, OUStringLiteral1_<C> literal)
-    { return addDataLiteral(buffer, &literal.c, 1); }
+    { return addDataHelper(buffer, &literal.c, 1); }
     static bool const allowOStringConcat = false;
     static bool const allowOUStringConcat = true;
 };
