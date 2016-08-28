@@ -23,7 +23,7 @@
 
 /* Make sure the file is less than 500MB.  We do this to protect against
    invalid MAR files. */
-#define MAX_SIZE_OF_MAR_FILE ((int64_t)524288000)
+#define MAX_SIZE_OF_MAR_FILE ((int64_t)1824288000)
 
 /* Existing code makes assumptions that the file size is
    smaller than LONG_MAX. */
