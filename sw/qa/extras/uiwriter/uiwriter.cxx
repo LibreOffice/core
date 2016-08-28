@@ -1984,10 +1984,10 @@ void SwUiWriterTest::testTdf73660()
 {
     SwDoc* pDoc = createDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    OUString aData1 = "First" + OUString(CHAR_SOFTHYPHEN) + "Word";
-    OUString aData2 = "Seco" + OUString(CHAR_SOFTHYPHEN) + "nd";
-    OUString aData3 = OUString(CHAR_SOFTHYPHEN) + "Third";
-    OUString aData4 = "Fourth" + OUString(CHAR_SOFTHYPHEN);
+    OUString aData1 = "First" + OUStringLiteral1<CHAR_SOFTHYPHEN>() + "Word";
+    OUString aData2 = "Seco" + OUStringLiteral1<CHAR_SOFTHYPHEN>() + "nd";
+    OUString aData3 = OUStringLiteral1<CHAR_SOFTHYPHEN>() + "Third";
+    OUString aData4 = "Fourth" + OUStringLiteral1<CHAR_SOFTHYPHEN>();
     OUString aData5 = "Fifth";
     pWrtShell->Insert("We are inserting some text in the document to check the search feature ");
     pWrtShell->Insert(aData1 + " ");

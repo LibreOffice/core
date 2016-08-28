@@ -410,10 +410,10 @@ void SvFileObject::Edit( vcl::Window* /*pParent*/, sfx2::SvBaseLink* pLink, cons
 
                 if( !aDlg.Execute() )
                 {
-                    sFile = aDlg.GetPath();
-                    sFile += OUString(::sfx2::cTokenSeparator);
-                    sFile += OUString(::sfx2::cTokenSeparator);
-                    sFile += aDlg.GetCurrentFilter();
+                    sFile = aDlg.GetPath()
+                        + OUStringLiteral1<sfx2::cTokenSeparator>()
+                        + OUStringLiteral1<sfx2::cTokenSeparator>()
+                        + aDlg.GetCurrentFilter();
 
                     aEndEditLink.Call( sFile );
                 }
@@ -501,10 +501,9 @@ IMPL_LINK_TYPED( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileD
         if ( _pFileDlg && _pFileDlg->GetError() == ERRCODE_NONE )
         {
             OUString sURL( _pFileDlg->GetPath() );
-            sFile = sURL;
-            sFile += OUString(::sfx2::cTokenSeparator);
-            sFile += OUString(::sfx2::cTokenSeparator);
-            sFile += impl_getFilter( sURL );
+            sFile = sURL + OUStringLiteral1<sfx2::cTokenSeparator>()
+                + OUStringLiteral1<sfx2::cTokenSeparator>()
+                + impl_getFilter( sURL );
         }
     }
     else

@@ -1369,10 +1369,10 @@ IMPL_LINK_TYPED( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileD
         sal_Int32 nPos = 0;
         for (SfxMedium* pMed : *pMedList)
         {
-            OUString sFileName = pMed->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
-            sFileName += OUString(sfx2::cTokenSeparator);
-            sFileName += pMed->GetFilter()->GetFilterName();
-            sFileName += OUString(sfx2::cTokenSeparator);
+            OUString sFileName = pMed->GetURLObject().GetMainURL( INetURLObject::NO_DECODE )
+                + OUStringLiteral1<sfx2::cTokenSeparator>()
+                + pMed->GetFilter()->GetFilterName()
+                + OUStringLiteral1<sfx2::cTokenSeparator>();
             pFileNames[nPos++] = sFileName;
         }
         pMedList.reset();

@@ -748,8 +748,9 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 {
                     if (m_pImpl->m_sParam1.isEmpty())
                     {
-                        m_pImpl->m_sParam1 = OUString(sfx2::cTokenSeparator)
-                                + OUString(sfx2::cTokenSeparator);
+                        m_pImpl->m_sParam1
+                            = OUStringLiteral1<sfx2::cTokenSeparator>()
+                            + OUStringLiteral1<sfx2::cTokenSeparator>();
                     }
                     OUString sTmp;
                     rValue >>= sTmp;
@@ -2780,7 +2781,7 @@ bool SwXTextFieldMasters::getInstanceName(
         break;
 
     case RES_DBFLD:
-        sField = "DataBase." + rFieldType.GetName().replaceAll(OUString(DB_DELIM), ".");
+        sField = "DataBase." + rFieldType.GetName().replaceAll(OUStringLiteral1<DB_DELIM>(), ".");
         break;
 
     case RES_AUTHORITY:

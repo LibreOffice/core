@@ -1494,10 +1494,7 @@ OUString SwCalc::GetDBName(const OUString& rName)
             return rName.copy( 0, nPos );
     }
     SwDBData aData = m_rDoc.GetDBData();
-    OUString sRet = aData.sDataSource;
-    sRet += OUString(DB_DELIM);
-    sRet += aData.sCommand;
-    return sRet;
+    return aData.sDataSource + OUStringLiteral1<DB_DELIM>() + aData.sCommand;
 }
 
 namespace

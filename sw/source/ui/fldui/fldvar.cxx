@@ -473,8 +473,8 @@ void SwFieldVarPage::SubTypeHdl(ListBox* pBox)
                         //              That's not considered here yet
                         OUString sCmd( pType->GetCmd() );
                         sal_Int32 nTmpPos = 0;
-                        sCmd = sCmd.replaceFirst( OUString(sfx2::cTokenSeparator), " ", &nTmpPos );
-                        sCmd = sCmd.replaceFirst( OUString(sfx2::cTokenSeparator), " ", &nTmpPos );
+                        sCmd = sCmd.replaceFirst( OUStringLiteral1<sfx2::cTokenSeparator>(), " ", &nTmpPos );
+                        sCmd = sCmd.replaceFirst( OUStringLiteral1<sfx2::cTokenSeparator>(), " ", &nTmpPos );
 
                         m_pValueED->SetText( sCmd );
                         m_pFormatLB->SelectEntryPos(static_cast<int>(pType->GetType()));
@@ -1040,8 +1040,8 @@ IMPL_LINK_TYPED( SwFieldVarPage, TBClickHdl, ToolBox *, pBox, void )
                         // DDE-Topics/-Items can have blanks in their names!
                         //  That's not being considered here yet.
                         sal_Int32 nTmpPos = 0;
-                        sValue = sValue.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nTmpPos );
-                        sValue = sValue.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nTmpPos );
+                        sValue = sValue.replaceFirst( " ", OUStringLiteral1<sfx2::cTokenSeparator>(), &nTmpPos );
+                        sValue = sValue.replaceFirst( " ", OUStringLiteral1<sfx2::cTokenSeparator>(), &nTmpPos );
                         static_cast<SwDDEFieldType*>(pType)->SetCmd(sValue);
                         static_cast<SwDDEFieldType*>(pType)->SetType(static_cast<SfxLinkUpdateMode>(nFormat));
                     }
@@ -1079,8 +1079,8 @@ IMPL_LINK_TYPED( SwFieldVarPage, TBClickHdl, ToolBox *, pBox, void )
                     // DDE-Topics/-Items can have blanks in their names!
                     //  That's not being considered here yet.
                     sal_Int32 nTmpPos = 0;
-                    sValue = sValue.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nTmpPos );
-                    sValue = sValue.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nTmpPos );
+                    sValue = sValue.replaceFirst( " ", OUStringLiteral1<sfx2::cTokenSeparator>(), &nTmpPos );
+                    sValue = sValue.replaceFirst( " ", OUStringLiteral1<sfx2::cTokenSeparator>(), &nTmpPos );
 
                     SwDDEFieldType aType(sName, sValue, static_cast<SfxLinkUpdateMode>(nFormat));
                     m_pSelectionLB->InsertEntry(sName);

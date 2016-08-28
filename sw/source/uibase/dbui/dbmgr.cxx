@@ -527,11 +527,10 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
         std::vector<OUString> aDBNames;
         aDBNames.push_back(OUString());
         SwDBData aInsertData = pWorkShell->GetDBData();
-        OUString sDBName = aInsertData.sDataSource;
-        sDBName += OUString(DB_DELIM);
-        sDBName += aInsertData.sCommand;
-        sDBName += OUString(DB_DELIM);
-        sDBName += OUString::number(aInsertData.nCommandType);
+        OUString sDBName = aInsertData.sDataSource
+            + OUStringLiteral1<DB_DELIM>() + aInsertData.sCommand
+            + OUStringLiteral1<DB_DELIM>()
+            + OUString::number(aInsertData.nCommandType);
         pWorkShell->ChangeDBFields( aDBNames, sDBName);
         SetInitDBFields(false);
     }
