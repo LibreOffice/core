@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+        Open Document Format for Office Applications (OpenDocument) Version 1.3
+        OASIS Standard in progress
+       Manifest Relax-NG Schema
+        Source: https://tools.oasis-open.org/version-control/svn/office/
+        Copyright (c) OASIS Open 2002-2011. All Rights Reserved.
+
+	All capitalized terms in the following text have the meanings assigned to them
+   	in the OASIS Intellectual Property Rights Policy (the "OASIS IPR Policy"). The
+	full Policy may be found at the OASIS website.
+
+	This document and translations of it may be copied and furnished to others, and
+	derivative works that comment on or otherwise explain it or assist in its
+	implementation may be prepared, copied, published, and distributed, in whole or
+	in part, without restriction of any kind, provided that the above copyright
+	notice and this section are included on all such copies and derivative works.
+	However, this document itself may not be modified in any way, including by
+	removing the copyright notice or references to OASIS, except as needed for the
+	purpose of developing any document or deliverable produced by an OASIS
+	Technical Committee (in which case the rules applicable to copyrights, as set
+	forth in the OASIS IPR Policy, must be followed) or as required to translate it
+	into languages other than English.
+
+	The limited permissions granted above are perpetual and will not be revoked by
+	OASIS or its successors or assigns.
+
+	This document and the information contained herein is provided on an "AS IS"
+	basis and OASIS DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+	LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT
+	INFRINGE ANY OWNERSHIP RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR
+	FITNESS FOR A PARTICULAR PURPOSE. 
+-->
+<rng:grammar xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <rng:start>
+    <rng:choice>
+      <rng:ref name="manifest"/>
+    </rng:choice>
+  </rng:start>
+  <rng:define name="algorithm">
+    <rng:element name="manifest:algorithm">
+      <rng:ref name="algorithm-attlist"/>
+      <rng:ref name="anyElements"/>
+    </rng:element>
+  </rng:define>
+  <rng:define name="algorithm-attlist">
+    <rng:interleave>
+      <rng:attribute name="manifest:algorithm-name">
+        <rng:choice>
+          <rng:value>Blowfish CFB</rng:value>
+          <rng:ref name="anyURI"/>
+        </rng:choice>
+      </rng:attribute>
+      <rng:attribute name="manifest:initialisation-vector">
+        <rng:ref name="base64Binary"/>
+      </rng:attribute>
+    </rng:interleave>
+  </rng:define>
+  <rng:define name="anyAttListOrElements">
+    <rng:zeroOrMore>
+      <rng:attribute>
+        <rng:anyName/>
+        <rng:text/>
+      </rng:attribute>
+    </rng:zeroOrMore>
+    <rng:ref name="anyElements"/>
+  </rng:define>
+  <rng:define name="anyElements">
+    <rng:zeroOrMore>
+      <rng:element>
+        <rng:anyName/>
+        <rng:mixed>
+          <rng:ref name="anyAttListOrElements"/>
+        </rng:mixed>
+      </rng:element>
+    </rng:zeroOrMore>
+  </rng:define>
+  <rng:define name="anyURI">
+    <rng:data type="anyURI"/>
+  </rng:define>
+  <rng:define name="base64Binary">
+    <rng:data type="base64Binary"/>
+  </rng:define>
+  <rng:define name="encryption-data">
+    <rng:element name="manifest:encryption-data">
+      <rng:ref name="encryption-data-attlist"/>
+      <rng:ref name="algorithm"/>
+      <rng:optional>
+        <rng:ref name="start-key-generation"/>
+      </rng:optional>
+      <rng:ref name="key-derivation"/>
+    </rng:element>
+  </rng:define>
+  <rng:define name="encryption-data-attlist">
+    <rng:interleave>
+      <rng:attribute name="manifest:checksum-type">
+        <rng:choice>
+          <rng:value>SHA1/1K</rng:value>
+          <rng:ref name="anyURI"/>
+        </rng:choice>
+      </rng:attribute>
+      <rng:attribute name="manifest:checksum">
+        <rng:ref name="base64Binary"/>
+      </rng:attribute>
+    </rng:interleave>
+  </rng:define>
+  <rng:define name="file-entry">
+    <rng:element name="manifest:file-entry">
+      <rng:ref name="file-entry-attlist"/>
+      <rng:optional>
+        <rng:ref name="encryption-data"/>
+      </rng:optional>
+    </rng:element>
+  </rng:define>
+  <rng:define name="file-entry-attlist">
+    <rng:interleave>
+      <rng:attribute name="manifest:full-path">
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:optional>
+        <rng:attribute name="manifest:size">
+          <rng:ref name="nonNegativeInteger"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:attribute name="manifest:media-type">
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:optional>
+        <rng:attribute name="manifest:preferred-view-mode">
+          <rng:choice>
+            <rng:value>edit</rng:value>
+            <rng:value>presentation-slide-show</rng:value>
+            <rng:value>read-only</rng:value>
+            <rng:ref name="namespacedToken"/>
+          </rng:choice>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="manifest:version">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+    </rng:interleave>
+  </rng:define>
+  <rng:define name="key-derivation">
+    <rng:element name="manifest:key-derivation">
+      <rng:ref name="key-derivation-attlist"/>
+      <rng:empty/>
+    </rng:element>
+  </rng:define>
+  <rng:define name="key-derivation-attlist">
+    <rng:interleave>
+      <rng:attribute name="manifest:key-derivation-name">
+        <rng:choice>
+          <rng:value>PBKDF2</rng:value>
+          <rng:ref name="anyURI"/>
+        </rng:choice>
+      </rng:attribute>
+      <rng:attribute name="manifest:salt">
+        <rng:ref name="base64Binary"/>
+      </rng:attribute>
+      <rng:attribute name="manifest:iteration-count">
+        <rng:ref name="nonNegativeInteger"/>
+      </rng:attribute>
+      <rng:optional>
+        <rng:attribute name="manifest:key-size">
+          <rng:ref name="nonNegativeInteger"/>
+        </rng:attribute>
+      </rng:optional>
+    </rng:interleave>
+  </rng:define>
+  <rng:define name="manifest">
+    <rng:element name="manifest:manifest">
+      <rng:ref name="manifest-attlist"/>
+      <rng:oneOrMore>
+        <rng:ref name="file-entry"/>
+      </rng:oneOrMore>
+    </rng:element>
+  </rng:define>
+  <rng:define name="manifest-attlist">
+    <rng:attribute name="manifest:version">
+      <rng:value>1.3</rng:value>
+    </rng:attribute>
+  </rng:define>
+  <rng:define name="namespacedToken">
+    <rng:data type="QName">
+      <rng:param name="pattern">[^:]+:[^:]+</rng:param>
+    </rng:data>
+  </rng:define>
+  <rng:define name="nonNegativeInteger">
+    <rng:data type="nonNegativeInteger"/>
+  </rng:define>
+  <rng:define name="start-key-generation">
+    <rng:element name="manifest:start-key-generation">
+      <rng:ref name="start-key-generation-attlist"/>
+      <rng:empty/>
+    </rng:element>
+  </rng:define>
+  <rng:define name="start-key-generation-attlist">
+    <rng:interleave>
+      <rng:attribute name="manifest:start-key-generation-name">
+        <rng:choice>
+          <rng:value>SHA1</rng:value>
+          <rng:ref name="anyURI"/>
+        </rng:choice>
+      </rng:attribute>
+      <rng:optional>
+        <rng:attribute name="manifest:key-size">
+          <rng:ref name="nonNegativeInteger"/>
+        </rng:attribute>
+      </rng:optional>
+    </rng:interleave>
+  </rng:define>
+  <rng:define name="string">
+    <rng:data type="string"/>
+  </rng:define>
+</rng:grammar>
