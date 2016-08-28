@@ -99,7 +99,7 @@ public:
 private:
     enum class TreatEmpty { DefaultCtor, CheckEmpty, Error };
 
-    enum class ChangeKind { Char, CharLen, SingleChar };
+    enum class ChangeKind { Char, CharLen, SingleChar, OUStringLiteral1 };
 
     enum class PassThrough { No, EmptyConstantString, NonEmptyConstantString };
 
@@ -666,7 +666,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                 {
                     return true;
                 }
-                if (v == 0 || v.uge(0x80)) {
+                if (v.ugt(0xFFFF)) {
                     return true;
                 }
                 kind = ChangeKind::SingleChar;
@@ -675,36 +675,44 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
             }
         case 2:
             {
-                unsigned n;
-                bool non;
-                bool emb;
-                bool trm;
-                if (!isStringConstant(
-                        expr->getArg(0)->IgnoreParenImpCasts(), &n, &non, &emb,
-                        &trm))
+                auto arg = expr->getArg(0);
+                if (loplugin::TypeCheck(arg->getType())
+                    .Class("OUStringLiteral1_").Namespace("rtl")
+                    .GlobalNamespace())
                 {
-                    return true;
+                    kind = ChangeKind::OUStringLiteral1;
+                    pass = PassThrough::NonEmptyConstantString;
+                } else {
+                    unsigned n;
+                    bool non;
+                    bool emb;
+                    bool trm;
+                    if (!isStringConstant(
+                            arg->IgnoreParenImpCasts(), &n, &non, &emb, &trm))
+                    {
+                        return true;
+                    }
+                    if (non) {
+                        report(
+                            DiagnosticsEngine::Warning,
+                            ("construction of %0 with string constant argument"
+                             " containging non-ASCII characters"),
+                            expr->getExprLoc())
+                            << cdecl << expr->getSourceRange();
+                    }
+                    if (emb) {
+                        report(
+                            DiagnosticsEngine::Warning,
+                            ("construction of %0 with string constant argument"
+                             " containging embedded NULs"),
+                            expr->getExprLoc())
+                            << cdecl << expr->getSourceRange();
+                    }
+                    kind = ChangeKind::Char;
+                    pass = n == 0
+                        ? PassThrough::EmptyConstantString
+                        : PassThrough::NonEmptyConstantString;
                 }
-                if (non) {
-                    report(
-                        DiagnosticsEngine::Warning,
-                        ("construction of %0 with string constant argument"
-                         " containging non-ASCII characters"),
-                        expr->getExprLoc())
-                        << cdecl << expr->getSourceRange();
-                }
-                if (emb) {
-                    report(
-                        DiagnosticsEngine::Warning,
-                        ("construction of %0 with string constant argument"
-                         " containging embedded NULs"),
-                        expr->getExprLoc())
-                        << cdecl << expr->getSourceRange();
-                }
-                kind = ChangeKind::Char;
-                pass = n == 0
-                    ? PassThrough::EmptyConstantString
-                    : PassThrough::NonEmptyConstantString;
                 break;
             }
         default:
@@ -860,15 +868,28 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                                 {
                                     return true;
                                 }
-                                report(
-                                    DiagnosticsEngine::Warning,
-                                    ("elide construction of %0 with "
-                                     + describeChangeKind(kind)
-                                     + " in call of %1"),
-                                    getMemberLocation(expr))
-                                    << cdecl
-                                    << fdecl->getQualifiedNameAsString()
-                                    << expr->getSourceRange();
+                                if (kind == ChangeKind::SingleChar) {
+                                    report(
+                                        DiagnosticsEngine::Warning,
+                                        ("rewrite construction of %0 with "
+                                         + describeChangeKind(kind)
+                                         + (" in call of %1 as construction of"
+                                            " OUStringLiteral1")),
+                                        getMemberLocation(expr))
+                                        << cdecl
+                                        << fdecl->getQualifiedNameAsString()
+                                        << expr->getSourceRange();
+                                } else {
+                                    report(
+                                        DiagnosticsEngine::Warning,
+                                        ("elide construction of %0 with "
+                                         + describeChangeKind(kind)
+                                         + " in call of %1"),
+                                        getMemberLocation(expr))
+                                        << cdecl
+                                        << fdecl->getQualifiedNameAsString()
+                                        << expr->getSourceRange();
+                                }
                                 return true;
                             }
                         }
@@ -892,7 +913,9 @@ std::string StringConstant::describeChangeKind(ChangeKind kind) {
     case ChangeKind::CharLen:
         return "string constant and matching length arguments";
     case ChangeKind::SingleChar:
-        return "ASCII sal_Unicode argument";
+        return "sal_Unicode argument";
+    case ChangeKind::OUStringLiteral1:
+        return "OUStringLiteral1 argument";
     default:
         std::abort();
     }
@@ -1422,11 +1445,11 @@ void StringConstant::handleOUStringCtor(
         // OUString ctor taking an OUStringLiteral1 arg, so don't warn there:
         if (!explicitFunctionalCastNotation) {
             uint64_t n = res.getZExtValue();
-            if (n != 0 && n <= 127) {
+            if (n <= 0xFFFF) {
                 report(
                     DiagnosticsEngine::Warning,
-                    ("in call of %0, replace OUString constructed from an ASCII"
-                     " char constant with a string literal"),
+                    ("in call of %0, replace OUString constructed from a"
+                     " sal_Unicode constant with an OUStringLiteral1"),
                     e3->getExprLoc())
                     << callee->getQualifiedNameAsString()
                     << expr->getSourceRange();

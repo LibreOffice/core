@@ -210,11 +210,11 @@ void SectRepr::SetFile( const OUString& rFile )
 
     if( !rFile.isEmpty() || !sSub.isEmpty() )
     {
-        sNewFile += OUString(sfx2::cTokenSeparator);
+        sNewFile += OUStringLiteral1<sfx2::cTokenSeparator>();
         if( !rFile.isEmpty() ) // Filter only with FileName
             sNewFile += sOldFileName.getToken( 1, sfx2::cTokenSeparator );
 
-        sNewFile += OUString(sfx2::cTokenSeparator) + sSub;
+        sNewFile += OUStringLiteral1<sfx2::cTokenSeparator>() + sSub;
     }
 
     m_SectionData.SetLinkFileName( sNewFile );
@@ -237,10 +237,10 @@ void SectRepr::SetFilter( const OUString& rFilter )
     const OUString sSub( sOldFileName.getToken( 2, sfx2::cTokenSeparator ) );
 
     if( !sFile.isEmpty() )
-        sNewFile = sFile + OUString(sfx2::cTokenSeparator) +
-                   rFilter + OUString(sfx2::cTokenSeparator) + sSub;
+        sNewFile = sFile + OUStringLiteral1<sfx2::cTokenSeparator>() +
+                   rFilter + OUStringLiteral1<sfx2::cTokenSeparator>() + sSub;
     else if( !sSub.isEmpty() )
-        sNewFile = OUString(sfx2::cTokenSeparator) + OUString(sfx2::cTokenSeparator) + sSub;
+        sNewFile = OUStringLiteral1<sfx2::cTokenSeparator>() + OUStringLiteral1<sfx2::cTokenSeparator>() + sSub;
 
     m_SectionData.SetLinkFileName( sNewFile );
 
@@ -259,8 +259,8 @@ void SectRepr::SetSubRegion(const OUString& rSubRegion)
     const OUString sFilter( sLinkFileName.getToken( 0, sfx2::cTokenSeparator, n ) );
 
     if( !rSubRegion.isEmpty() || !sOldFileName.isEmpty() )
-        sNewFile = sOldFileName + OUString(sfx2::cTokenSeparator) +
-                   sFilter + OUString(sfx2::cTokenSeparator) + rSubRegion;
+        sNewFile = sOldFileName + OUStringLiteral1<sfx2::cTokenSeparator>() +
+                   sFilter + OUStringLiteral1<sfx2::cTokenSeparator>() + rSubRegion;
 
     m_SectionData.SetLinkFileName( sNewFile );
 
@@ -285,8 +285,8 @@ OUString SectRepr::GetFile() const
     if (DDE_LINK_SECTION == m_SectionData.GetType())
     {
         sal_Int32 n = 0;
-        return sLinkFile.replaceFirst( OUString(sfx2::cTokenSeparator), " ", &n )
-                        .replaceFirst( OUString(sfx2::cTokenSeparator), " ", &n );
+        return sLinkFile.replaceFirst( OUStringLiteral1<sfx2::cTokenSeparator>(), " ", &n )
+                        .replaceFirst( OUStringLiteral1<sfx2::cTokenSeparator>(), " ", &n );
     }
     return INetURLObject::decode( sLinkFile.getToken( 0, sfx2::cTokenSeparator ),
                                   INetURLObject::DECODE_UNAMBIGUOUS );
@@ -1144,10 +1144,10 @@ IMPL_LINK_TYPED( SwEditRegionDlg, FileNameHdl, Edit&, rEdit, void )
         {
             OUString sLink( SwSectionData::CollapseWhiteSpaces(rEdit.GetText()) );
             sal_Int32 nPos = 0;
-            sLink = sLink.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nPos );
+            sLink = sLink.replaceFirst( " ", OUStringLiteral1<sfx2::cTokenSeparator>(), &nPos );
             if (nPos>=0)
             {
-                sLink = sLink.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nPos );
+                sLink = sLink.replaceFirst( " ", OUStringLiteral1<sfx2::cTokenSeparator>(), &nPos );
             }
 
             pSectRepr->GetSectionData().SetLinkFileName( sLink );
@@ -1619,10 +1619,10 @@ bool SwInsertSectionTabPage::FillItemSet( SfxItemSet* )
         {
             aLinkFile = SwSectionData::CollapseWhiteSpaces(sFileName);
             sal_Int32 nPos = 0;
-            aLinkFile = aLinkFile.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nPos );
+            aLinkFile = aLinkFile.replaceFirst( " ", OUStringLiteral1<sfx2::cTokenSeparator>(), &nPos );
             if (nPos>=0)
             {
-                aLinkFile = aLinkFile.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nPos );
+                aLinkFile = aLinkFile.replaceFirst( " ", OUStringLiteral1<sfx2::cTokenSeparator>(), &nPos );
             }
         }
         else
@@ -1638,8 +1638,8 @@ bool SwInsertSectionTabPage::FillItemSet( SfxItemSet* )
                 aSection.SetLinkFilePassword( m_sFilePasswd );
             }
 
-            aLinkFile += OUString(sfx2::cTokenSeparator) + m_sFilterName
-                      +  OUString(sfx2::cTokenSeparator) + sSubRegion;
+            aLinkFile += OUStringLiteral1<sfx2::cTokenSeparator>() + m_sFilterName
+                      +  OUStringLiteral1<sfx2::cTokenSeparator>() + sSubRegion;
         }
 
         aSection.SetLinkFileName(aLinkFile);
