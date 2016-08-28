@@ -114,6 +114,8 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(vcl::Window* pParent, const SfxItemSet* _pSet )
 
     if( SvtLanguageOptions().IsCTLFontEnabled() )
         nLangList |= SvxLanguageListFlags::CTL;
+    if( SvtLanguageOptions().IsCJKFontEnabled() )
+        nLangList |= SvxLanguageListFlags::CJK;
     m_pLanguageLB->SetLanguageList( nLangList, true, true );
     m_pLanguageLB->SelectLanguage( LANGUAGE_NONE );
     sal_Int32 nPos = m_pLanguageLB->GetSelectEntryPos();
