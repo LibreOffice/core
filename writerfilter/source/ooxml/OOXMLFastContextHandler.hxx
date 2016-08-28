@@ -280,6 +280,7 @@ public:
     void handleBreak();
     void handleOLE();
     void handleFontRel();
+    void handleHyperlinkURL();
 
     virtual void setPropertySet(OOXMLPropertySet::Pointer_t pPropertySet) override;
     virtual OOXMLPropertySet::Pointer_t getPropertySet() const override;

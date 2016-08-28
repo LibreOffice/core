@@ -159,6 +159,12 @@ public:
     }
 };
 
+DECLARE_OOXMLIMPORT_TEST(testImageHyperlink, "image-hyperlink.docx")
+{
+    OUString URL = getProperty<OUString>(getShape(1), "HyperLinkURL");
+    CPPUNIT_ASSERT_EQUAL(OUString("http://www.libreoffice.org/"), URL);
+}
+
 #if !defined(WNT)
 
 DECLARE_SW_IMPORT_TEST(testMathMalformedXml, "math-malformed_xml.docx", FailTest)
