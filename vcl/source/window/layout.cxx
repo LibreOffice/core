@@ -230,8 +230,7 @@ void VclContainer::Command(const CommandEvent& rCEvt)
 
                             aMenu->InsertItem(
                                 nLocalID,
-                                pChild->GetText(),
-                                MenuItemBits::NONE);
+                                pChild->GetText());
                             aMenu->SetHelpText(
                                 nLocalID,
                                 pChild->GetHelpText());
@@ -254,8 +253,7 @@ void VclContainer::Command(const CommandEvent& rCEvt)
 
                         aMenu->InsertItem(
                             nLocalID,
-                            "Screenshot",
-                            MenuItemBits::NONE);
+                            "Screenshot");
                         aMenu->SetHelpText(
                             nLocalID,
                             "Go into interactive screenshot annotation mode");
@@ -263,8 +261,7 @@ void VclContainer::Command(const CommandEvent& rCEvt)
                             nLocalID,
                             "InteractiveScreenshotMode");
                         aMenu->EnableItem(
-                            nLocalID,
-                            true);
+                            nLocalID);
                         nScreenshotButtonID = nLocalID;
                     }
 
