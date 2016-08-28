@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+        Open Document Format for Office Applications (OpenDocument) Version 1.3
+        OASIS Standard, in progress
+	Digital Signatures Relax-NG Schema
+        Source: https://tools.oasis-open.org/version-control/svn/office/
+        Copyright (c) OASIS Open 2002-2011. All Rights Reserved.
+
+	All capitalized terms in the following text have the meanings assigned to them
+   	in the OASIS Intellectual Property Rights Policy (the "OASIS IPR Policy"). The
+	full Policy may be found at the OASIS website.
+
+	This document and translations of it may be copied and furnished to others, and
+	derivative works that comment on or otherwise explain it or assist in its
+	implementation may be prepared, copied, published, and distributed, in whole or
+	in part, without restriction of any kind, provided that the above copyright
+	notice and this section are included on all such copies and derivative works.
+	However, this document itself may not be modified in any way, including by
+	removing the copyright notice or references to OASIS, except as needed for the
+	purpose of developing any document or deliverable produced by an OASIS
+	Technical Committee (in which case the rules applicable to copyrights, as set
+	forth in the OASIS IPR Policy, must be followed) or as required to translate it
+	into languages other than English.
+
+	The limited permissions granted above are perpetual and will not be revoked by
+	OASIS or its successors or assigns.
+
+	This document and the information contained herein is provided on an "AS IS"
+	basis and OASIS DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+	LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT
+	INFRINGE ANY OWNERSHIP RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR
+	FITNESS FOR A PARTICULAR PURPOSE. 
+-->
+<rng:grammar xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:dsig="urn:oasis:names:tc:opendocument:xmlns:digitalsignature:1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <rng:start>
+    <rng:choice>
+      <rng:ref name="dsig-document-signatures"/>
+    </rng:choice>
+  </rng:start>
+  <rng:define name="ds-signature">
+    <rng:element name="ds:Signature">
+      <!-- The permitted content of this element is the permitted -->
+      <!-- content of the Signature element defined by W3C XML    -->
+      <!-- Signature Syntax and Processing (Second Edition).      -->
+      <!-- See OpenDocument v1.3 part 2, section 5.3.             -->
+      <!-- resolved by https://issues.oasis-open.org/browse/OFFICE-3874 -->
+      <rng:ref name="dsMarkup"/>
+    </rng:element>
+  </rng:define>
+  <rng:define name="dsMarkup">
+    <rng:zeroOrMore>
+      <rng:choice>
+        <rng:attribute>
+          <rng:anyName/>
+        </rng:attribute>
+        <rng:text/>
+        <rng:element>
+          <rng:anyName/>
+          <rng:ref name="dsMarkup"/>
+        </rng:element>
+      </rng:choice>
+    </rng:zeroOrMore>
+  </rng:define>
+  <rng:define name="dsig-document-signatures">
+    <rng:element name="dsig:document-signatures">
+      <rng:ref name="dsig-document-signatures-attlist"/>
+      <rng:oneOrMore>
+        <rng:ref name="ds-signature"/>
+      </rng:oneOrMore>
+    </rng:element>
+  </rng:define>
+  <rng:define name="dsig-document-signatures-attlist">
+    <rng:attribute name="dsig:version">
+      <rng:value>1.3</rng:value>
+    </rng:attribute>
+  </rng:define>
+</rng:grammar>
