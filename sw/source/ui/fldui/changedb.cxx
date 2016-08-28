@@ -192,7 +192,7 @@ void SwChangeDBDlg::UpdateFields()
         if( m_pUsedDBTLB->GetParent( pEntry ))
         {
             OUString sTmp(m_pUsedDBTLB->GetEntryText( m_pUsedDBTLB->GetParent( pEntry )) +
-                          OUString(DB_DELIM) + m_pUsedDBTLB->GetEntryText( pEntry ) + OUString(DB_DELIM) +
+                          OUStringLiteral1<DB_DELIM>() + m_pUsedDBTLB->GetEntryText( pEntry ) + OUStringLiteral1<DB_DELIM>() +
                           OUString::number((int)reinterpret_cast<sal_uLong>(pEntry->GetUserData())));
             aDBNames.push_back(sTmp);
         }
@@ -205,9 +205,9 @@ void SwChangeDBDlg::UpdateFields()
     sal_Bool bIsTable = false;
     const OUString DBName(m_pAvailDBTLB->GetDBName(sTableName, sColumnName, &bIsTable));
     const OUString sTemp = DBName
-        + OUString(DB_DELIM)
+        + OUStringLiteral1<DB_DELIM>()
         + sTableName
-        + OUString(DB_DELIM)
+        + OUStringLiteral1<DB_DELIM>()
         + OUString::number(bIsTable
                             ? CommandType::TABLE
                             : CommandType::QUERY);

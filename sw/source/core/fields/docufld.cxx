@@ -1548,7 +1548,7 @@ OUString SwHiddenTextField::GetDBName(const OUString& rName, SwDoc *pDoc)
     }
 
     SwDBData aData = pDoc->GetDBData();
-    return aData.sDataSource + OUString(DB_DELIM) + aData.sCommand;
+    return aData.sDataSource + OUStringLiteral1<DB_DELIM>() + aData.sCommand;
 }
 
 // field type for line height 0

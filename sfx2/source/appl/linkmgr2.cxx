@@ -377,22 +377,20 @@ void MakeLnkName( OUString& rName, const OUString* pType, const OUString& rFile,
 {
     if( pType )
     {
-        rName = comphelper::string::strip(*pType, ' ');
-        rName += OUString(cTokenSeparator);
+        rName = comphelper::string::strip(*pType, ' ')
+            + OUStringLiteral1<cTokenSeparator>();
     }
-    else if( !rName.isEmpty() )
+    else
         rName.clear();
 
     rName += rFile;
 
-    rName = comphelper::string::strip(rName, ' ');
-    rName += OUString(cTokenSeparator);
-    rName = comphelper::string::strip(rName, ' ');
-    rName += rLink;
+    rName = comphelper::string::strip(rName, ' ')
+        + OUStringLiteral1<cTokenSeparator>();
+    rName = comphelper::string::strip(rName, ' ') + rLink;
     if( pFilter )
     {
-        rName += OUString(cTokenSeparator);
-        rName += *pFilter;
+        rName += OUStringLiteral1<cTokenSeparator>() + *pFilter;
         rName = comphelper::string::strip(rName, ' ');
     }
 }
