@@ -206,7 +206,7 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     if (mpText)
     {
         mpText->SetText("The quick brown fox jumps over the lazy dog :)");
-        mpText->SetReadOnly(true);
+        mpText->SetReadOnly();
     }
 
     // set click handler for save button
@@ -406,8 +406,7 @@ void ScreenshotAnnotationDlg_Impl::PaintControlDataEntry(
             // no transparency, draw without
             mpVirtualBufferDevice->DrawPolyLine(
                 aPolygon,
-                fLineWidth,
-                basegfx::B2DLineJoin::Round);
+                fLineWidth);
         }
     }
 }
