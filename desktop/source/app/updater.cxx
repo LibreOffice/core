@@ -113,6 +113,29 @@ char** createCommandLine(const OUString& rInstallDir, bool bReplace)
     return pArgs;
 }
 
+struct update_file
+{
+    OUString aURL;
+    OUString aHash;
+    size_t nSize;
+};
+
+struct language_file
+{
+    update_file aUpdateFile;
+    OUString aLangCode;
+};
+
+struct update_info
+{
+    OUString aFromBuildID;
+    OUString aSeeAlsoURL;
+    OUString aNewVersion;
+
+    update_file aUpdateFile;
+    std::vector<language_file> aLanguageFiles;
+};
+
 }
 
 void Update()
@@ -140,7 +163,7 @@ void Update()
     delete[] pArgs;
 }
 
-void CreateValidUpdateDir()
+void CreateValidUpdateDir(const update_info& update_info)
 {
     OUString aInstallDir("$BRAND_BASE_DIR");
     rtl::Bootstrap::expandMacros(aInstallDir);
@@ -162,6 +185,14 @@ void CreateValidUpdateDir()
     {
         // TODO: remove the update directory
         SAL_WARN("desktop.updater", "failed to update");
+    }
+    else
+    {
+        OUString aUpdateInfoURL(aPatchDirURL + "/update.info");
+        OUString aUpdateInfoPath = getPathFromURL(aUpdateInfoURL);
+        SvFileStream aUpdateInfoFile(aUpdateInfoPath, StreamMode::WRITE | StreamMode::TRUNC);
+        aUpdateInfoFile.WriteCharPtr("[UpdateInfo]\nOldBuildId=");
+        aUpdateInfoFile.WriteByteStringLine(update_info.aFromBuildID, RTL_TEXTENCODING_UTF8);
     }
 }
 
@@ -196,29 +227,6 @@ static size_t WriteCallbackFile(void *ptr, size_t size,
 
 class invalid_update_info : public std::exception
 {
-};
-
-struct update_file
-{
-    OUString aURL;
-    OUString aHash;
-    size_t nSize;
-};
-
-struct language_file
-{
-    update_file aUpdateFile;
-    OUString aLangCode;
-};
-
-struct update_info
-{
-    OUString aFromBuildID;
-    OUString aSeeAlsoURL;
-    OUString aNewVersion;
-
-    update_file aUpdateFile;
-    std::vector<language_file> aLanguageFiles;
 };
 
 OUString toOUString(const std::string& rStr)
