@@ -130,8 +130,7 @@ CalculateRegistryPathFromFilePath(const LPCWSTR filePath,
   }
   delete[] lowercasePath;
 
-  LPCWSTR baseRegPath = L"SOFTWARE\\Mozilla\\"
-    L"MaintenanceService\\";
+  LPCWSTR baseRegPath = L"SOFTWARE\\LibreOffice\\MaintenanceService\\";
   wcsncpy(registryPath, baseRegPath, MAX_PATH);
   BinaryDataToHexString(hash, hashSize,
                         registryPath + wcslen(baseRegPath));
