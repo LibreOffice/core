@@ -248,6 +248,7 @@ public:
     OUString sName;
     OUString sAlternativeText;
     OUString title;
+    OUString sHyperlinkURL;
     std::pair<OUString, OUString>& m_rPositionOffsets;
     std::pair<OUString, OUString>& m_rAligns;
     std::queue<OUString>& m_rPositivePercentages;
@@ -390,6 +391,9 @@ public:
             uno::Reference< container::XNamed > xNamed( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
             xNamed->setName(rDomainMapper.GetGraphicNamingHelper().NameGraphic(sName));
 
+            if ( sHyperlinkURL.getLength() > 0 )
+                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_HYPER_LINK_U_R_L ),
+                    uno::makeAny ( sHyperlinkURL ));
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_DESCRIPTION ),
                 uno::makeAny( sAlternativeText ));
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_TITLE ),
@@ -500,6 +504,9 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
     sal_Int32 nIntValue = rValue.getInt();
     switch( nName )
     {
+        case NS_ooxml::LN_CT_Hyperlink_URL://90682;
+            m_pImpl->sHyperlinkURL = rValue.getString();
+        break;
         case NS_ooxml::LN_blip: //the binary graphic data in a shape
             {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rValue.getProperties();
@@ -1101,6 +1108,13 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
                     pProperties->resolve(*this);
+            }
+        break;
+        case NS_ooxml::LN_CT_NonVisualDrawingProps_a_hlinkClick: // 90689;
+            {
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if( pProperties.get( ) )
+                    pProperties->resolve( *this );
             }
         break;
         default:

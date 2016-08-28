@@ -277,6 +277,7 @@ public:
     void handleBreak();
     void handleOLE();
     void handleFontRel();
+    void handleHyperlinkURL();
 
     virtual void setPropertySet(const OOXMLPropertySet::Pointer_t& pPropertySet) override;
     virtual OOXMLPropertySet::Pointer_t getPropertySet() const override;

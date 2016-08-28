@@ -862,7 +862,6 @@ void OOXMLFastContextHandler::sendPropertiesToParent()
     }
 }
 
-
 /*
   class OOXMLFastContextHandlerStream
  */
@@ -1054,6 +1053,11 @@ void OOXMLFastContextHandlerProperties::handleFontRel()
 {
     OOXMLEmbeddedFontHandler handler(this);
     getPropertySet()->resolve(handler);
+}
+
+void OOXMLFastContextHandlerProperties::handleHyperlinkURL() {
+    OOXMLHyperlinkURLHandler aHyperlinkURLHandler(this);
+    getPropertySet()->resolve(aHyperlinkURLHandler);
 }
 
 void OOXMLFastContextHandlerProperties::setParent
