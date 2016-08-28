@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_cb9a8ac5",
+        "filename": "cui/source/tabpages/autocdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2016-08-28T13:50:38Z",
+      "side": 1,
+      "message": "Maybe add |SvxLanguageListFlags::ALSO_PRIMARY_ONLY here so that primary only languages will not be excluded.",
+      "range": {
+        "startLine": 113,
+        "startChar": 3,
+        "endLine": 113,
+        "endChar": 67
+      },
+      "revId": "1681bed019e8c23162fb5dbf56cb0a036e163462",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_eb9f4eb2",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2016-08-28T13:50:38Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem to be necessary. Original code snippet is if nLangType has sub language, or nLangList specify that primary only language should not be excluded. Maybe it is enough to set   ALSO_PRIMARY_ONLY flag in nLangType for caller.",
+      "range": {
+        "startLine": 269,
+        "startChar": 9,
+        "endLine": 270,
+        "endChar": 79
+      },
+      "revId": "1681bed019e8c23162fb5dbf56cb0a036e163462",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
