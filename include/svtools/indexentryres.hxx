@@ -22,18 +22,17 @@
 
 #include <svtools/svtdllapi.h>
 #include <rtl/ustring.hxx>
+#include <vector>
 
 class IndexEntryResourceData;
 
 class SVT_DLLPUBLIC IndexEntryResource
 {
-    private:
-        IndexEntryResourceData  *mp_Data;
-
-    public:
-        IndexEntryResource ();
-        ~IndexEntryResource ();
-        const OUString& GetTranslation (const OUString& r_Algorithm);
+private:
+    std::vector<IndexEntryResourceData> m_aData;
+public:
+    IndexEntryResource();
+    const OUString& GetTranslation (const OUString& r_Algorithm);
 };
 
 #endif // INCLUDED_SVTOOLS_INDEXENTRYRES_HXX
