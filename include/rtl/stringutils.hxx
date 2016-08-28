@@ -36,13 +36,13 @@ namespace rtl
 #if defined LIBO_INTERNAL_ONLY
 /// @cond INTERNAL
 
-/** A simple wrapper around an ASCII character literal.
+/** A simple wrapper around a sal_Unicode character literal.
 
-    Can be useful to pass a char constant with ASCII value into a
-    OUString-related function that is optimized for ASCII string literal
-    arguments.  That is, instead of
+    Can be useful to pass a sal_Unicode constant into an OUString-related
+    function that is optimized for UTF-16 string literal arguments.  That is,
+    instead of
 
-      char const WILDCARD = '%';
+      sal_Unicode const WILDCARD = '%';
       ...
       if (s[i] == WILDCARD) ...
       ...
@@ -50,7 +50,7 @@ namespace rtl
 
     use
 
-      char const WILDCARD = '%';
+      sal_Unicode const WILDCARD = '%';
       ...
       if (s[i] == WILDCARD) ...
       ...
@@ -58,7 +58,7 @@ namespace rtl
 
     to avoid creating a temporary OUString instance, and instead pick the
     endsWith overload actually designed to take an argument of type
-    char const[N].
+    sal_Unicode const[N].
 
     Instances of OUStringLiteral1 need to be const, as those literal-optimized
     functions take the literal argument by non-const lvalue reference, for
@@ -71,18 +71,15 @@ namespace rtl
 
     @since LibreOffice 5.0
 */
-template<char C> struct SAL_WARN_UNUSED OUStringLiteral1_ {
-    static_assert(
-        static_cast<unsigned char>(C) < 0x80,
-        "non-ASCII character in OUStringLiteral1");
-    char const c = C;
+template<sal_Unicode C> struct SAL_WARN_UNUSED OUStringLiteral1_ {
+    sal_Unicode const c = C;
 };
 #if defined _MSC_VER && _MSC_VER <= 1900 && !defined __clang__
     // Visual Studio 2015
-template<char C> using OUStringLiteral1 = OUStringLiteral1_<C>;
+template<sal_Unicode C> using OUStringLiteral1 = OUStringLiteral1_<C>;
 #pragma warning(disable: 4239)
 #else
-template<char C> using OUStringLiteral1 = OUStringLiteral1_<C> const;
+template<sal_Unicode C> using OUStringLiteral1 = OUStringLiteral1_<C> const;
 #endif
 
 /// @endcond
@@ -181,7 +178,7 @@ struct ConstCharArrayDetector<sal_Unicode const [N], T> {
         sal_Unicode const (& literal)[N])
     { return literal; }
 };
-template<char C, typename T> struct ConstCharArrayDetector<
+template<sal_Unicode C, typename T> struct ConstCharArrayDetector<
 #if defined __GNUC__ && __GNUC__ == 4 && __GNUC_MINOR__ <= 8 \
         && !defined __clang__
     OUStringLiteral1_<C> const,
@@ -190,11 +187,11 @@ template<char C, typename T> struct ConstCharArrayDetector<
 #endif
     T>
 {
-    typedef T Type;
-    static const std::size_t length = 1;
-    static const bool ok = true;
-    static bool isValid(OUStringLiteral1_<C>) { return true; }
-    static char const * toPointer(OUStringLiteral1_<C> const & literal)
+    using TypeUtf16 = T;
+    static SAL_CONSTEXPR bool const ok = true;
+    static SAL_CONSTEXPR std::size_t const length = 1;
+    static SAL_CONSTEXPR sal_Unicode const * toPointer(
+        OUStringLiteral1_<C> const & literal)
     { return &literal.c; }
 };
 #endif
@@ -212,7 +209,7 @@ struct ExceptConstCharArrayDetector< const char[ N ] >
 #if defined LIBO_INTERNAL_ONLY
 template<std::size_t N>
 struct ExceptConstCharArrayDetector<sal_Unicode const[N]> {};
-template<char C> struct ExceptConstCharArrayDetector<
+template<sal_Unicode C> struct ExceptConstCharArrayDetector<
 #if defined __GNUC__ && __GNUC__ == 4 && __GNUC_MINOR__ <= 8 \
         && !defined __clang__
     OUStringLiteral1_<C> const
@@ -243,7 +240,7 @@ struct ExceptCharArrayDetector< const char[ N ] >
 #if defined LIBO_INTERNAL_ONLY
 template<std::size_t N> struct ExceptCharArrayDetector<sal_Unicode[N]> {};
 template<std::size_t N> struct ExceptCharArrayDetector<sal_Unicode const[N]> {};
-template<char C> struct ExceptCharArrayDetector<OUStringLiteral1_<C>> {};
+template<sal_Unicode C> struct ExceptCharArrayDetector<OUStringLiteral1_<C>> {};
 #endif
 
 template< typename T1, typename T2 = void >
