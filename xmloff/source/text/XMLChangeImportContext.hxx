@@ -28,6 +28,7 @@
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax {
         class XAttributeList;
+        class XFastAttributeList;
     } }
 } } }
 
@@ -62,10 +63,23 @@ public:
         /// (usually before a section or table)
         bool bIsOutsideOfParagraph = false);
 
+    XMLChangeImportContext(
+        SvXMLImport& rImport,
+        sal_Int32 nElement,
+        bool bIsStart,  /// mark start of a change
+        bool bIsEnd,    /// mark end of a change
+        /// true if change mark is encountered outside of a paragraph
+        /// (usually before a section or table)
+        bool bIsOutsideOfParagraph = false);
+
     virtual ~XMLChangeImportContext();
 
     virtual void StartElement(
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
+
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 };
 
 #endif

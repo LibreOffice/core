@@ -1341,6 +1341,7 @@ XMLTextFrameContext::XMLTextFrameContext(
 :   SvXMLImportContext( rImport, nPrfx, rLName )
 ,   MultiImageImportHelper()
 ,   m_xAttrList( new SvXMLAttributeList( xAttrList ) )
+,   m_xFastAttrList( nullptr )
 ,   m_pHyperlink( nullptr )
     // Implement Title/Description Elements UI (#i73249#)
 ,   m_sTitle()
@@ -1391,12 +1392,72 @@ XMLTextFrameContext::XMLTextFrameContext(
     }
 }
 
+XMLTextFrameContext::XMLTextFrameContext(
+        SvXMLImport& rImport, sal_Int32 /*nElement*/,
+        const Reference< XFastAttributeList >& xAttrList,
+        TextContentAnchorType eATyp )
+:   SvXMLImportContext( rImport ),
+    MultiImageImportHelper(),
+    m_xAttrList( nullptr ),
+    m_xFastAttrList( xAttrList ),
+    m_pHyperlink( nullptr ),
+    // Implement Title/Description Elements UI (#i73249#)
+    m_sTitle(),
+    m_sDesc(),
+    m_eDefaultAnchorType( eATyp ),
+    // Shapes in Writer cannot be named via context menu (#i51726#)
+    m_HasAutomaticStyleWithoutParentStyle( false ),
+    m_bSupportsReplacement( false )
+{
+}
+
 XMLTextFrameContext::~XMLTextFrameContext()
 {
     delete m_pHyperlink;
 }
 
 void XMLTextFrameContext::EndElement()
+{
+    /// solve if multiple image child contexts were imported
+    SvXMLImportContextRef const pMultiContext(solveMultipleImages());
+
+    SvXMLImportContext const*const pContext =
+        (pMultiContext) ? &pMultiContext : &m_xImplContext;
+    XMLTextFrameContext_Impl *pImpl = const_cast<XMLTextFrameContext_Impl*>(dynamic_cast< const XMLTextFrameContext_Impl*>( pContext ));
+    assert(!pMultiContext || pImpl);
+    if( pImpl )
+    {
+        pImpl->CreateIfNotThere();
+
+        // fdo#68839: in case the surviving image was not the first one,
+        // it will have a counter added to its name - set the original name
+        if (pMultiContext) // do this only when necessary; esp. not for text
+        {                  // frames that may have entries in GetRenameMap()!
+            pImpl->SetName();
+        }
+
+        if( !m_sTitle.isEmpty() )
+        {
+            pImpl->SetTitle( m_sTitle );
+        }
+        if( !m_sDesc.isEmpty() )
+        {
+            pImpl->SetDesc( m_sDesc );
+        }
+
+        if( m_pHyperlink )
+        {
+            pImpl->SetHyperlink( m_pHyperlink->GetHRef(), m_pHyperlink->GetName(),
+                          m_pHyperlink->GetTargetFrameName(), m_pHyperlink->GetMap() );
+            delete m_pHyperlink;
+            m_pHyperlink = nullptr;
+        }
+
+    }
+}
+
+void SAL_CALL XMLTextFrameContext::endFastElement( sal_Int32 /*nElement*/ )
+    throw(RuntimeException, SAXException, std::exception)
 {
     /// solve if multiple image child contexts were imported
     SvXMLImportContextRef const pMultiContext(solveMultipleImages());
@@ -1643,6 +1704,15 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
         pContext = new SvXMLImportContext( GetImport(), p_nPrefix, rLocalName );
 
     return pContext;
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLTextFrameContext::createFastChildContext( sal_Int32 nElement,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    // TODO: implement fast child context here
+    return SvXMLImportContext::createFastChildContext( nElement, xAttrList );
 }
 
 void XMLTextFrameContext::SetHyperlink( const OUString& rHRef,

@@ -28,6 +28,8 @@
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
+using css::xml::sax::XFastAttributeList;
+using css::xml::sax::XFastContextHandler;
 
 
 XMLFootnoteBodyImportContext::XMLFootnoteBodyImportContext(
@@ -35,6 +37,13 @@ XMLFootnoteBodyImportContext::XMLFootnoteBodyImportContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName ) :
         SvXMLImportContext(rImport, nPrfx, rLocalName)
+{
+}
+
+XMLFootnoteBodyImportContext::XMLFootnoteBodyImportContext(
+    SvXMLImport& rImport,
+    sal_Int32 /*nElement*/ )
+:   SvXMLImportContext( rImport )
 {
 }
 
@@ -54,6 +63,14 @@ SvXMLImportContext* XMLFootnoteBodyImportContext::CreateChildContext(
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     return pContext;
+}
+
+Reference< XFastContextHandler > SAL_CALL XMLFootnoteBodyImportContext::createFastChildContext(
+    sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList )
+    throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
+{
+    // TODO: Finish this after implementing XMLTextImportHelper
+    return SvXMLImportContext::createFastChildContext( nElement, xAttrList );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

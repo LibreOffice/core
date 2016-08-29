@@ -26,6 +26,7 @@
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
+using css::xml::sax::XFastAttributeList;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_CHANGE_ID;
 
@@ -38,6 +39,20 @@ XMLChangeImportContext::XMLChangeImportContext(
     bool bEnd,
     bool bOutsideOfParagraph) :
         SvXMLImportContext(rImport, nPrefix, rLocalName),
+        bIsStart(bStart),
+        bIsEnd(bEnd),
+        bIsOutsideOfParagraph(bOutsideOfParagraph)
+{
+    DBG_ASSERT(bStart || bEnd, "Must be either start, end, or both!");
+}
+
+XMLChangeImportContext::XMLChangeImportContext(
+    SvXMLImport& rImport,
+    sal_Int32 /*nElement*/,
+    bool bStart,
+    bool bEnd,
+    bool bOutsideOfParagraph )
+    :   SvXMLImportContext( rImport ),
         bIsStart(bStart),
         bIsEnd(bEnd),
         bIsOutsideOfParagraph(bOutsideOfParagraph)
@@ -83,6 +98,35 @@ void XMLChangeImportContext::StartElement(
         }
         // else: ignore
     }
+}
+
+void SAL_CALL XMLChangeImportContext::startFastElement( sal_Int32 /*nElement*/,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw( css::uno::RuntimeException, css::xml::sax::SAXException, std::exception )
+{
+    if( xAttrList.is() &&
+        xAttrList->hasAttribute( NAMESPACE_TOKEN( XML_NAMESPACE_TEXT ) | XML_CHANGE_ID ) )
+    {
+        // Id found! Now call RedlineImportHelper
+
+        // prepare parameters
+        rtl::Reference<XMLTextImportHelper> rHelper =
+            GetImport().GetTextImport();
+        OUString sID = xAttrList->getValue( NAMESPACE_TOKEN( XML_NAMESPACE_TEXT ) | XML_CHANGE_ID );
+
+        // call for bStart and bEnd (may both be true)
+        if( bIsStart )
+            rHelper->RedlineSetCursor(sID, true, bIsOutsideOfParagraph);
+        if( bIsEnd )
+            rHelper->RedlineSetCursor(sID, false, bIsOutsideOfParagraph);
+
+        // outside of paragraph and still open? set open redline ID
+        if( bIsOutsideOfParagraph )
+        {
+            rHelper->SetOpenRedlineId(sID);
+        }
+    }
+    // else: ignore
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

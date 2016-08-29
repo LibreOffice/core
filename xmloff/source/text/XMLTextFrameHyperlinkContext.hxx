@@ -54,6 +54,20 @@ public:
                 const OUString& rLocalName,
                  const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
+    XMLTextFrameHyperlinkContext( SvXMLImport& rImport,
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+            css::text::TextContentAnchorType eDefaultAnchorType );
+
+
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+
     css::text::TextContentAnchorType GetAnchorType() const;
 
     css::uno::Reference < css::text::XTextContent > GetTextContent() const;
