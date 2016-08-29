@@ -28,6 +28,12 @@
 #define OOO_DLLPUBLIC_TEST SAL_DLLPUBLIC_IMPORT
 #endif
 
+#if defined OOO_DLLIMPLEMENTATION_TEST_SETUPVCL
+#define OOO_DLLPUBLIC_TEST_SETUPVCL SAL_DLLPUBLIC_EXPORT
+#else
+#define OOO_DLLPUBLIC_TEST_SETUPVCL SAL_DLLPUBLIC_IMPORT
+#endif
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -484,6 +484,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	smoketest \
 	subsequenttest \
 	test \
+	test-setupvcl \
 	testtools_cppobj \
 	testtools_bridgetest \
 	testtools_constructors \
