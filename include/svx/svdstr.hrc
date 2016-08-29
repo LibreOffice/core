@@ -245,8 +245,7 @@
 
 #define STR_ExchangeBegin            (STR_EditEnd+1)
 #define STR_ExchangePaste            (STR_ExchangeBegin +0)
-#define STR_ExchangeClpCut           (STR_ExchangeBegin +1)
-#define STR_ExchangeEnd              (STR_ExchangeClpCut)
+#define STR_ExchangeEnd              (STR_ExchangePaste)
 
 #define STR_DragBegin                (STR_ExchangeEnd+1)
 #define STR_DragInsertPoint          (STR_DragBegin + 0)

@@ -810,9 +810,9 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                         if( pE3dObject )
                             aObjectRect = pE3dObject->GetScene()->GetSnapRect();
 
-                        ActionDescriptionProvider::ActionType eActionType(ActionDescriptionProvider::MOVE);
+                        ActionDescriptionProvider::ActionType eActionType(ActionDescriptionProvider::ActionType::Move);
                         if( !bIsMoveOnly && m_aSelection.isResizeableObjectSelected() )
-                            eActionType = ActionDescriptionProvider::RESIZE;
+                            eActionType = ActionDescriptionProvider::ActionType::Resize;
 
                         ObjectType eObjectType = ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() );
 
@@ -1749,9 +1749,9 @@ bool ChartController::impl_moveOrResizeObject(
 
         if( bResult )
         {
-            ActionDescriptionProvider::ActionType eActionType(ActionDescriptionProvider::MOVE);
+            ActionDescriptionProvider::ActionType eActionType(ActionDescriptionProvider::ActionType::Move);
             if( bNeedResize )
-                eActionType = ActionDescriptionProvider::RESIZE;
+                eActionType = ActionDescriptionProvider::ActionType::Resize;
 
             ObjectType eObjectType = ObjectIdentifier::getObjectType( rCID );
             UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription(

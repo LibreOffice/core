@@ -847,10 +847,6 @@ String STR_ExchangePaste
 {
     Text [ en-US ] = "Insert object(s)" ;
 };
-String STR_ExchangeClpCut
-{
-    Text [ en-US ] = "Cut %1" ;
-};
 String STR_DragInsertPoint
 {
     Text [ en-US ] = "Insert point to %1" ;

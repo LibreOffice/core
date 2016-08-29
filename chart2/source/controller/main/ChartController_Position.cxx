@@ -125,7 +125,7 @@ void ChartController::executeDispatch_PositionAndSize()
 
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
-            ActionDescriptionProvider::POS_SIZE,
+            ActionDescriptionProvider::ActionType::PosSize,
             ObjectNameProvider::getName( eObjectType)),
         m_xUndoManager );
 

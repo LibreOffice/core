@@ -702,7 +702,7 @@ void ChartController::executeDlg_ObjectProperties( const OUString& rSelectedObje
     OUString aObjectCID = lcl_getFormatCIDforSelectedCID( rSelectedObjectCID );
 
     UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription(
-                ActionDescriptionProvider::FORMAT,
+                ActionDescriptionProvider::ActionType::Format,
                 ObjectNameProvider::getName( ObjectIdentifier::getObjectType( aObjectCID ))),
             m_xUndoManager );
 

@@ -1406,7 +1406,7 @@ void ChartController::executeDispatch_MoveSeries( bool bForward )
 
     UndoGuardWithSelection aUndoGuard(
         ActionDescriptionProvider::createDescription(
-            (bForward ? ActionDescriptionProvider::MOVE_TOTOP : ActionDescriptionProvider::MOVE_TOBOTTOM),
+            (bForward ? ActionDescriptionProvider::ActionType::MoveToTop : ActionDescriptionProvider::ActionType::MoveToBottom),
             SCH_RESSTR(STR_OBJECT_DATASERIES)),
         m_xUndoManager );
 
