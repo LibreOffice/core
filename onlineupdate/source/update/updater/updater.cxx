@@ -53,6 +53,8 @@
 #include <errno.h>
 #include <algorithm>
 
+#include <config_version.h>
+
 #include "updatelogging.h"
 
 #include <onlineupdate/mozilla/Compiler.h>
@@ -94,9 +96,9 @@ void LaunchMacPostProcess(const char* aAppBundle);
 
 # define MAYBE_USE_HARD_LINKS 0
 
-#include "nss.h"
-#include "prerror.h"
 #if defined(VERIFY_MAR_SIGNATURE) && !defined(_WIN32) && !defined(MACOSX)
+#include <nss.h>
+#include <nspr.h>
 #endif
 
 #ifdef _WIN32
@@ -2132,7 +2134,7 @@ UpdateThreadFunc(void * /*param*/)
                 }
 
                 rv = gArchiveReader.VerifyProductInformation(MARStrings.MARChannelID,
-                        MOZ_APP_VERSION);
+                        LIBO_VERSION_DOTTED);
             }
         }
 #endif
