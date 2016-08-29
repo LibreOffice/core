@@ -828,8 +828,7 @@ static SwPageDesc* lcl_FindPageDesc( const SwPageDescs *pPageDescs,
 
 SwPageDesc* SwDoc::FindPageDesc( const OUString & rName, size_t* pPos ) const
 {
-    return lcl_FindPageDesc(
-        const_cast <SwPageDescs *>( &m_PageDescs ), pPos, rName );
+    return lcl_FindPageDesc( &m_PageDescs, pPos, rName );
 }
 
 bool SwDoc::ContainsPageDesc( const SwPageDesc *pDesc, size_t* pPos ) const
