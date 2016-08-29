@@ -1,0 +1,170 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_eb4e6e95",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4646,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-29T11:49:07Z",
+      "side": 1,
+      "message": "This makes no sense to me because lcl_insertLCID() is already called within the for ( int n\u003d0; n\u003c4; n++ ) loop, so we would just have to insert the LCID at the proper \"point in time\" instead of awkwardly parsing the string.",
+      "revId": "39ebdd4274be761e8f29ed5d28009b94e31d879a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_0b448272",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4652,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-29T11:49:07Z",
+      "side": 1,
+      "message": "Apart from the above, when looping backwards this would have missed an escaped \\;",
+      "revId": "39ebdd4274be761e8f29ed5d28009b94e31d879a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_4b5e7a46",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4660,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-29T11:49:07Z",
+      "side": 1,
+      "message": "Note that lastIndexOf() starts to search backwards at the position before fromIndex, so actually fromIndex is an exclusive position. Effectively the search starts at i-2 then.",
+      "range": {
+        "startLine": 4660,
+        "startChar": 54,
+        "endLine": 4660,
+        "endChar": 57
+      },
+      "revId": "39ebdd4274be761e8f29ed5d28009b94e31d879a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_0b3ba2ec",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4804,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-29T11:49:07Z",
+      "side": 1,
+      "message": "Actually remember the buffer position (length) hereafter; we also know that [DBNumX] was added last to the prefix, so making that a pre-requirement it can be directly checked in lcl_insertLCID() if there is such before the remembered position.",
+      "revId": "39ebdd4274be761e8f29ed5d28009b94e31d879a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_2b406656",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4866,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-29T11:49:07Z",
+      "side": 1,
+      "message": "Call lcl_insertLCID() with the position that was remembered after inserting aPrefix.",
+      "range": {
+        "startLine": 4866,
+        "startChar": 32,
+        "endLine": 4866,
+        "endChar": 52
+      },
+      "revId": "39ebdd4274be761e8f29ed5d28009b94e31d879a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_4b259ac0",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4870,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-29T11:49:07Z",
+      "side": 1,
+      "message": "Call lcl_insertLCID() with the position that was remembered after inserting aPrefix.",
+      "range": {
+        "startLine": 4870,
+        "startChar": 32,
+        "endLine": 4870,
+        "endChar": 52
+      },
+      "revId": "39ebdd4274be761e8f29ed5d28009b94e31d879a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_6b225ebb",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4889,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-29T11:49:07Z",
+      "side": 1,
+      "message": "Call lcl_insertLCID() with the position that was remembered after inserting aPrefix.",
+      "range": {
+        "startLine": 4889,
+        "startChar": 16,
+        "endLine": 4889,
+        "endChar": 36
+      },
+      "revId": "39ebdd4274be761e8f29ed5d28009b94e31d879a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_8b2fb2a0",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4893,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-29T11:49:07Z",
+      "side": 1,
+      "message": "Call lcl_insertLCID() with the position that was remembered after inserting aPrefix.",
+      "range": {
+        "startLine": 4893,
+        "startChar": 16,
+        "endLine": 4893,
+        "endChar": 36
+      },
+      "revId": "39ebdd4274be761e8f29ed5d28009b94e31d879a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
