@@ -19,10 +19,13 @@ rm -rf ${GENDIR}
 mkdir ${GENDIR}
 
 # note: clucene contains a copy of half of boost, so ignore it too
+# note: firebird contains a copy of half of boost, so ignore it too
 
 cat <(cd ${SRCDIR} && git grep '^# *include') \
     <(find ${WORKDIR}/UnpackedTarball/ -mindepth 1 -maxdepth 1 -type d \
-         | grep -v boost | grep -v clucene \
+         | grep -v boost \
+         | grep -v clucene \
+         | grep -v firebird \
          | xargs grep -r '^# *include') \
  | grep -o '\bboost.*\.\(h\|hpp\|ipp\)' \
  | sort | uniq \
