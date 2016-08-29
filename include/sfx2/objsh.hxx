@@ -755,10 +755,12 @@ protected:
 public:
     inline               SfxObjectShellLock() { pObj = nullptr; }
     inline               SfxObjectShellLock( const SfxObjectShellLock & rObj );
+    inline               SfxObjectShellLock( SfxObjectShellLock && rObj );
     inline               SfxObjectShellLock( SfxObjectShell * pObjP );
     inline void          Clear();
     inline               ~SfxObjectShellLock();
     inline SfxObjectShellLock & operator = ( const SfxObjectShellLock & rObj );
+    inline SfxObjectShellLock & operator = ( SfxObjectShellLock && rObj );
     inline SfxObjectShellLock & operator = ( SfxObjectShell * pObj );
     inline bool                 Is() const { return pObj != nullptr; }
     inline SfxObjectShell *     operator &  () const { return pObj; }
@@ -771,6 +773,11 @@ inline SfxObjectShellLock::SfxObjectShellLock( const SfxObjectShellLock & rObj )
     pObj = rObj.pObj;
     if( pObj )
         pObj->OwnerLock( true );
+}
+inline SfxObjectShellLock::SfxObjectShellLock( SfxObjectShellLock && rObj )
+{
+    pObj = rObj.pObj;
+    rObj.pObj = nullptr;
 }
 inline SfxObjectShellLock::SfxObjectShellLock( SfxObjectShell * pObjP )
 {
@@ -800,6 +807,14 @@ inline SfxObjectShellLock & SfxObjectShellLock::operator=( const SfxObjectShellL
     pObj = rObj.pObj;
     if( pRefObj )
         pRefObj->OwnerLock( false );
+    return *this;
+}
+inline SfxObjectShellLock & SfxObjectShellLock::operator=( SfxObjectShellLock && rObj )
+{
+    if (pObj)
+        pObj->OwnerLock( false );
+    pObj = rObj.pObj;
+    rObj.pObj = nullptr;
     return *this;
 }
 inline SfxObjectShellLock & SfxObjectShellLock::operator=( SfxObjectShell * pObjP )
