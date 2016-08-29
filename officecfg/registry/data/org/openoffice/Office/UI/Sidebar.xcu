@@ -220,7 +220,7 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            WriterVariants, Text, hidden;
+            WriterVariants, Text, visible;
           </value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
