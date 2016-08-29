@@ -113,7 +113,7 @@ namespace basic
             @precond
                 our mutex is locked
         */
-        bool impl_hasLocationForModel( const Reference< XModel >& _rxDocumentModel );
+        bool impl_hasLocationForModel( const Reference< XModel >& _rxDocumentModel ) const;
 
         /** creates a new BasicManager instance for the given model
 
@@ -372,7 +372,7 @@ namespace basic
         return location;
     }
 
-    bool ImplRepository::impl_hasLocationForModel( const Reference< XModel >& _rxDocumentModel )
+    bool ImplRepository::impl_hasLocationForModel( const Reference< XModel >& _rxDocumentModel ) const
     {
         Reference< XInterface > xNormalized( _rxDocumentModel, UNO_QUERY );
         DBG_ASSERT( _rxDocumentModel.is(), "ImplRepository::impl_getLocationForModel: invalid model!" );
