@@ -204,7 +204,7 @@ bool SwWrtShell::GoStart( bool bKeepArea, bool *pMoveTable,
                 SttSelect();
         }
             // Table cell ?
-        if ( !bBoxSelection && (MoveSection( fnSectionCurr, fnSectionStart)
+        if ( !bBoxSelection && (MoveSection( GoCurrSection, fnSectionStart)
                 || bDontMoveRegion))
         {
             if ( pMoveTable )
@@ -239,14 +239,14 @@ bool SwWrtShell::GoStart( bool bKeepArea, bool *pMoveTable,
     const FrameTypeFlags nFrameType = GetFrameType(nullptr,false);
     if ( FrameTypeFlags::FLY_ANY & nFrameType )
     {
-        if( MoveSection( fnSectionCurr, fnSectionStart ) )
+        if( MoveSection( GoCurrSection, fnSectionStart ) )
             return true;
         else if ( FrameTypeFlags::FLY_FREE & nFrameType || bDontMoveRegion )
             return false;
     }
     if(( FrameTypeFlags::HEADER | FrameTypeFlags::FOOTER | FrameTypeFlags::FOOTNOTE ) & nFrameType )
     {
-        if ( MoveSection( fnSectionCurr, fnSectionStart ) )
+        if ( MoveSection( GoCurrSection, fnSectionStart ) )
             return true;
         else if ( bKeepArea )
             return true;
@@ -263,7 +263,7 @@ bool SwWrtShell::GoEnd(bool bKeepArea, bool *pMoveTable)
 
     if ( IsCursorInTable() )
     {
-        if ( MoveSection( fnSectionCurr, fnSectionEnd ) ||
+        if ( MoveSection( GoCurrSection, fnSectionEnd ) ||
              MoveTable( fnTableCurr, fnTableEnd ) )
             return true;
     }
@@ -272,14 +272,14 @@ bool SwWrtShell::GoEnd(bool bKeepArea, bool *pMoveTable)
         const FrameTypeFlags nFrameType = GetFrameType(nullptr,false);
         if ( FrameTypeFlags::FLY_ANY & nFrameType )
         {
-            if ( MoveSection( fnSectionCurr, fnSectionEnd ) )
+            if ( MoveSection( GoCurrSection, fnSectionEnd ) )
                 return true;
             else if ( FrameTypeFlags::FLY_FREE & nFrameType )
                 return false;
         }
         if(( FrameTypeFlags::HEADER | FrameTypeFlags::FOOTER | FrameTypeFlags::FOOTNOTE ) & nFrameType )
         {
-            if ( MoveSection( fnSectionCurr, fnSectionEnd) )
+            if ( MoveSection( GoCurrSection, fnSectionEnd) )
                 return true;
             else if ( bKeepArea )
                 return true;

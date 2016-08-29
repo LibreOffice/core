@@ -1640,7 +1640,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                 // at the beginning of the table's cell a '=' ->
                 // call EditRow (F2-functionality)
                 rSh.Push();
-                if( !rSh.MoveSection( fnSectionCurr, fnSectionStart) &&
+                if( !rSh.MoveSection( GoCurrSection, fnSectionStart) &&
                     !rSh.IsTableBoxTextFormat() )
                 {
                     // is at the beginning of the box
@@ -1649,7 +1649,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                         rSh.SwapPam();
                     else
                         rSh.SttSelect();
-                    rSh.MoveSection( fnSectionCurr, fnSectionEnd );
+                    rSh.MoveSection( GoCurrSection, fnSectionEnd );
                     rSh.Pop();
                     rSh.EndSelect();
                     sFormulaEntry = "=";
@@ -2357,7 +2357,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             rSh.UnSelectFrame();
                             rSh.LeaveSelFrameMode();
                             m_rView.AttrChangedNotify(&rSh);
-                            rSh.MoveSection( fnSectionCurr, fnSectionEnd );
+                            rSh.MoveSection( GoCurrSection, fnSectionEnd );
                         }
                         eKeyState = KS_InsChar;
                     }
@@ -2380,7 +2380,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             rSh.UnSelectFrame();
             rSh.LeaveSelFrameMode();
             m_rView.AttrChangedNotify(&rSh);
-            rSh.MoveSection( fnSectionCurr, fnSectionEnd );
+            rSh.MoveSection( GoCurrSection, fnSectionEnd );
             eKeyState = KS_End;
         }
         break;

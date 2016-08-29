@@ -254,9 +254,9 @@ void SwInputWindow::ShowWin()
 
                 if( !pWrtShell->SwCursorShell::HasSelection() )
                 {
-                    pWrtShell->MoveSection( fnSectionCurr, fnSectionStart );
+                    pWrtShell->MoveSection( GoCurrSection, fnSectionStart );
                     pWrtShell->SetMark();
-                    pWrtShell->MoveSection( fnSectionCurr, fnSectionEnd );
+                    pWrtShell->MoveSection( GoCurrSection, fnSectionEnd );
                 }
                 if( pWrtShell->SwCursorShell::HasSelection() )
                 {
@@ -497,9 +497,9 @@ void SwInputWindow::DelBoxContent()
         pWrtShell->ClearMark();
         pWrtShell->Pop( false );
         pWrtShell->Push();
-        pWrtShell->MoveSection( fnSectionCurr, fnSectionStart );
+        pWrtShell->MoveSection( GoCurrSection, fnSectionStart );
         pWrtShell->SetMark();
-        pWrtShell->MoveSection( fnSectionCurr, fnSectionEnd );
+        pWrtShell->MoveSection( GoCurrSection, fnSectionEnd );
         pWrtShell->SwEditShell::Delete();
         pWrtShell->EndAllAction();
     }

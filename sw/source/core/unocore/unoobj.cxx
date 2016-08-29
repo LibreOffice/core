@@ -1015,7 +1015,7 @@ SwXTextCursor::gotoStart(sal_Bool Expand) throw (uno::RuntimeException, std::exc
             ||  (CURSOR_FOOTNOTE== m_pImpl->m_eType)
             ||  (CURSOR_REDLINE == m_pImpl->m_eType))
     {
-        rUnoCursor.MoveSection(fnSectionCurr, fnSectionStart);
+        rUnoCursor.MoveSection(GoCurrSection, fnSectionStart);
     }
     else if (CURSOR_META == m_pImpl->m_eType)
     {
@@ -1042,7 +1042,7 @@ SwXTextCursor::gotoEnd(sal_Bool Expand) throw (uno::RuntimeException, std::excep
             ||  (CURSOR_FOOTNOTE== m_pImpl->m_eType)
             ||  (CURSOR_REDLINE == m_pImpl->m_eType))
     {
-        rUnoCursor.MoveSection( fnSectionCurr, fnSectionEnd);
+        rUnoCursor.MoveSection( GoCurrSection, fnSectionEnd);
     }
     else if (CURSOR_META == m_pImpl->m_eType)
     {

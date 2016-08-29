@@ -147,9 +147,9 @@ long SwWrtShell::SelAll()
                 pEndPos.reset(new SwPosition( *pTmpCursor->GetMark() ));
             }
             Push();
-            bool bIsFullSel = !MoveSection( fnSectionCurr, fnSectionStart);
+            bool bIsFullSel = !MoveSection( GoCurrSection, fnSectionStart);
             SwapPam();
-            bIsFullSel &= !MoveSection( fnSectionCurr, fnSectionEnd);
+            bIsFullSel &= !MoveSection( GoCurrSection, fnSectionEnd);
             Pop(false);
             GoStart(true, &bMoveTable, false, !bIsFullSel);
         }

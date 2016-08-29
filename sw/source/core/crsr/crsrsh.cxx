@@ -1517,7 +1517,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
                 }
 
                 *m_pCurrentCursor->GetPoint() = *m_pCurrentCursor->GetMark();
-                (*fnSectionCurr)( *m_pCurrentCursor, fnPosSect );
+                GoCurrSection( *m_pCurrentCursor, fnPosSect );
             }
         }
 
