@@ -3888,6 +3888,15 @@ void SwUiWriterTest::testRedlineViewAuthor()
     SwRangeRedline* pRedline = rTable[0];
     // This was 'Unknown Author' instead of 'A U. Thor'.
     CPPUNIT_ASSERT_EQUAL(aAuthor, pRedline->GetAuthorString());
+
+    // Insert a comment and assert that SwView::SetRedlineAuthor() affects this as well.
+    lcl_dispatchCommand(mxComponent, ".uno:.uno:InsertAnnotation", {});
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<beans::XPropertySet> xField(xFields->nextElement(), uno::UNO_QUERY);
+    // This was 'Unknown Author' instead of 'A U. Thor'.
+    CPPUNIT_ASSERT_EQUAL(aAuthor, xField->getPropertyValue("Author").get<OUString>());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
