@@ -78,7 +78,7 @@ public:
 //   Hilfsklasse SdrEdgeInfoRec
 
 
-enum SdrEdgeLineCode {OBJ1LINE2,OBJ1LINE3,OBJ2LINE2,OBJ2LINE3,MIDDLELINE};
+enum class SdrEdgeLineCode { Obj1Line2, Obj1Line3, Obj2Line2, Obj2Line3, MiddleLine };
 
 class SdrEdgeInfoRec
 {
@@ -95,9 +95,9 @@ public:
     // Nachfolgende Werte werden von ImpCalcEdgeTrack gesetzt
     long                        nAngle1;           // Austrittswinkel am Obj1
     long                        nAngle2;           // Austrittswinkel am Obj2
-    sal_uInt16                      nObj1Lines;        // 1..3
-    sal_uInt16                      nObj2Lines;        // 1..3
-    sal_uInt16                      nMiddleLine;       // 0xFFFF=keine, sonst Punktnummer des Linienbeginns
+    sal_uInt16                  nObj1Lines;        // 1..3
+    sal_uInt16                  nObj2Lines;        // 1..3
+    sal_uInt16                  nMiddleLine;       // 0xFFFF=keine, sonst Punktnummer des Linienbeginns
     char                        cOrthoForm;        // Form des Ortho-Verbindes, z.B. 'Z','U',I','L','S',...
 
 public:

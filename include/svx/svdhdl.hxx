@@ -382,7 +382,7 @@ class ImpEdgeHdl: public SdrHdl
     virtual void CreateB2dIAObject() override;
 
 public:
-    ImpEdgeHdl(const Point& rPnt, SdrHdlKind eNewKind): SdrHdl(rPnt,eNewKind),eLineCode(MIDDLELINE) {}
+    ImpEdgeHdl(const Point& rPnt, SdrHdlKind eNewKind): SdrHdl(rPnt,eNewKind),eLineCode(SdrEdgeLineCode::MiddleLine) {}
     virtual ~ImpEdgeHdl();
 
     void SetLineCode(SdrEdgeLineCode eCode);
