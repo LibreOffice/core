@@ -12,7 +12,7 @@ srcs = [
 
 have_progressui = 0
 
-if CONFIG['MOZ_VERIFY_MAR_SIGNATURE']:
+if CONFIG['VERIFY_MAR_SIGNATURE']:
     USE_LIBS += [
         'verifymar',
     ]
@@ -45,7 +45,7 @@ if CONFIG['OS_ARCH'] == 'WINNT':
         'crypt32',
         'advapi32',
     ]
-elif CONFIG['OS_ARCH'] == 'Linux' and CONFIG['MOZ_VERIFY_MAR_SIGNATURE']:
+elif CONFIG['OS_ARCH'] == 'Linux' and CONFIG['VERIFY_MAR_SIGNATURE']:
     USE_LIBS += [
         'nss',
         'signmar',

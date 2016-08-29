@@ -94,9 +94,9 @@ void LaunchMacPostProcess(const char* aAppBundle);
 
 # define MAYBE_USE_HARD_LINKS 0
 
-#if defined(MOZ_VERIFY_MAR_SIGNATURE) && !defined(_WIN32) && !defined(MACOSX)
 #include "nss.h"
 #include "prerror.h"
+#if defined(VERIFY_MAR_SIGNATURE) && !defined(_WIN32) && !defined(MACOSX)
 #endif
 
 #ifdef _WIN32
@@ -2026,7 +2026,7 @@ WaitForServiceFinishThread(void *param)
 }
 #endif
 
-#ifdef MOZ_VERIFY_MAR_SIGNATURE
+#ifdef VERIFY_MAR_SIGNATURE
 /**
  * This function reads in the ACCEPTED_MAR_CHANNEL_IDS from update-settings.ini
  *
@@ -2073,7 +2073,7 @@ UpdateThreadFunc(void * /*param*/)
             rv = gArchiveReader.Open(dataFile);
         }
 
-#ifdef MOZ_VERIFY_MAR_SIGNATURE
+#ifdef VERIFY_MAR_SIGNATURE
         if (rv == OK) {
 #ifdef _WIN32
             HKEY baseKey = nullptr;
@@ -2200,7 +2200,7 @@ UpdateThreadFunc(void * /*param*/)
 
 int NS_main(int argc, NS_tchar **argv)
 {
-#if defined(MOZ_VERIFY_MAR_SIGNATURE) && !defined(_WIN32) && !defined(MACOSX)
+#if defined(VERIFY_MAR_SIGNATURE) && !defined(_WIN32) && !defined(MACOSX)
     // On Windows and Mac we rely on native APIs to do verifications so we don't
     // need to initialize NSS at all there.
     // Otherwise, minimize the amount of NSS we depend on by avoiding all the NSS
