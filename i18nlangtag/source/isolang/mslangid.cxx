@@ -224,6 +224,7 @@ bool MsLangId::isRightToLeft( LanguageType nLang )
         case LANGUAGE_KURDISH_ARABIC_LSO:
         case LANGUAGE_USER_KURDISH_SOUTHERN_IRAN:
         case LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ:
+        case LANGUAGE_USER_HUNGARIAN_RUNIC:
             return true;
 
         default:
@@ -352,6 +353,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
         case LANGUAGE_USER_KURDISH_SOUTHERN_IRAN:
         case LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ:
         case LANGUAGE_USER_KYRGYZ_CHINA:
+        case LANGUAGE_USER_HUNGARIAN_RUNIC:
             nScript = css::i18n::ScriptType::COMPLEX;
             break;
 
