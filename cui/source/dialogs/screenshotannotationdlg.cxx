@@ -175,7 +175,7 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
         maDimmedDialogBitmap.Adjust(-15);
 
         // init paint buffering VirtualDevice
-        mpVirtualBufferDevice = new VirtualDevice(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::BITMASK);
+        mpVirtualBufferDevice = VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::BITMASK);
         mpVirtualBufferDevice->SetOutputSizePixel(maParentDialogSize);
         mpVirtualBufferDevice->SetFillColor(COL_TRANSPARENT);
 
