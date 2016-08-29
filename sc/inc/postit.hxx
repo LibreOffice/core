@@ -133,7 +133,7 @@ public:
     void                ForgetCaption();
 
     /** Shows or hides the note caption object. */
-    void                ShowCaption( const ScAddress& rPos, bool bShow = true );
+    void                ShowCaption( const ScAddress& rPos, bool bShow );
     /** Returns true, if the caption object is visible. */
     bool IsCaptionShown() const { return maNoteData.mbShown;}
 

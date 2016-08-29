@@ -49,7 +49,7 @@ public:
 
     ExcScenario( XclImpStream& rIn, const RootData& rRoot );
 
-    void Apply( const XclImpRoot& rRoot, const bool bLast = false );
+    void Apply( const XclImpRoot& rRoot, const bool bLast );
 
 protected:
 

@@ -299,7 +299,7 @@ public:
     void    DrawStrings( bool bPixelToLogic = false );
 
     /// Draw all strings, or provide Rectangle where the text (defined by rAddress) would be drawn.
-    Rectangle LayoutStrings(bool bPixelToLogic = false, bool bPaint = true, const ScAddress &rAddress = ScAddress());
+    Rectangle LayoutStrings(bool bPixelToLogic, bool bPaint = true, const ScAddress &rAddress = ScAddress());
 
     void    DrawDocumentBackground();
     void    DrawBackground(vcl::RenderContext& rRenderContext);

@@ -122,7 +122,7 @@ public:
 
     static void SetToDocument(
         ScDocumentImport& rDoc, const ScAddress& rPos, const XclImpRoot& rRoot,
-        const XclImpString& rString, sal_uInt16 nXFIndex = 0 );
+        const XclImpString& rString, sal_uInt16 nXFIndex );
 };
 
 // Header/footer conversion ===================================================

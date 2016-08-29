@@ -133,7 +133,7 @@ public:
      * @param nLocalTab sheet index where this name belongs, or -1 for global
      *                  name.
      */
-    void UpdateReference( sc::RefUpdateContext& rCxt, SCTAB nLocalTab = -1 );
+    void UpdateReference( sc::RefUpdateContext& rCxt, SCTAB nLocalTab );
     bool            IsModified() const              { return bModified; }
 
     SC_DLLPUBLIC void           GuessPosition();
@@ -146,9 +146,9 @@ public:
     SC_DLLPUBLIC bool           IsValidReference( ScRange& rRef ) const;
     bool                        IsRangeAtBlock( const ScRange& ) const;
 
-    void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt, SCTAB nLocalTab = -1 );
-    void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt, SCTAB nLocalTab = -1 );
-    void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nLocalTab = -1 );
+    void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt, SCTAB nLocalTab );
+    void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt, SCTAB nLocalTab );
+    void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nLocalTab );
 
     void            ValidateTabRefs();
 

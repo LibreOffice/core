@@ -98,9 +98,9 @@ public:
     void            EnterDataAtCursor( const OUString& rString );         //! Not used?
 
     SC_DLLPUBLIC void           CutToClip();
-    SC_DLLPUBLIC bool           CopyToClip( ScDocument* pClipDoc = nullptr, bool bCut = false, bool bApi = false,
+    SC_DLLPUBLIC bool           CopyToClip( ScDocument* pClipDoc, bool bCut = false, bool bApi = false,
                                             bool bIncludeObjects = false, bool bStopEdit = true );
-    SC_DLLPUBLIC bool           CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRange, bool bCut = false,
+    SC_DLLPUBLIC bool           CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRange, bool bCut,
                                             bool bApi = false, bool bIncludeObjects = false, bool bStopEdit = true );
     ScTransferObj*              CopyToTransferable();
     SC_DLLPUBLIC bool           PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,

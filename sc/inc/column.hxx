@@ -257,7 +257,7 @@ public:
      * @param pGroupPos when non-NULL, stores the top position of formula
      *                  group that's been merged as a result of row deletion.
      */
-    void DeleteRow( SCROW nStartRow, SCSIZE nSize, std::vector<ScAddress>* pGroupPos = nullptr );
+    void DeleteRow( SCROW nStartRow, SCSIZE nSize, std::vector<ScAddress>* pGroupPos );
 
     void DeleteArea(
         SCROW nStartRow, SCROW nEndRow, InsertDeleteFlags nDelFlag,
@@ -416,7 +416,7 @@ public:
      * @return true if reference of at least one formula cell has been
      *         updated, false otherwise.
      */
-    bool UpdateReference( sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = nullptr );
+    bool UpdateReference( sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc );
 
     void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
     void UpdateInsertTabOnlyCells( sc::RefUpdateInsertTabContext& rCxt );
@@ -494,7 +494,7 @@ public:
 
     void        RemoveProtected( SCROW nStartRow, SCROW nEndRow );
 
-    SCsROW      ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray = nullptr );
+    SCsROW      ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray );
     void DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast );
 
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
@@ -531,7 +531,7 @@ public:
 
     void EndListeningFormulaCells(
         sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2,
-        SCROW* pStartRow = nullptr, SCROW* pEndRow = nullptr );
+        SCROW* pStartRow, SCROW* pEndRow = nullptr );
 
     void        StartListening( SvtListener& rLst, SCROW nRow );
     void        EndListening( SvtListener& rLst, SCROW nRow );
@@ -571,7 +571,7 @@ public:
     ScFormulaVectorState GetFormulaVectorState( SCROW nRow ) const;
     formula::FormulaTokenRef ResolveStaticReference( SCROW nRow );
     bool ResolveStaticReference( ScMatrix& rMat, SCCOL nMatCol, SCROW nRow1, SCROW nRow2 );
-    void FillMatrix( ScMatrix& rMat, size_t nMatCol, SCROW nRow1, SCROW nRow2, svl::SharedStringPool* pPool = nullptr ) const;
+    void FillMatrix( ScMatrix& rMat, size_t nMatCol, SCROW nRow1, SCROW nRow2, svl::SharedStringPool* pPool ) const;
     formula::VectorRefArray FetchVectorRefArray( SCROW nRow1, SCROW nRow2 );
     void SetFormulaResults( SCROW nRow, const double* pResults, size_t nLen );
     void SetFormulaResults( SCROW nRow, const formula::FormulaConstTokenRef* pResults, size_t nLen );
@@ -613,7 +613,7 @@ public:
         SCROW nRowOffsetDest = 0) const;
 
     void DuplicateNotes(SCROW nStartRow, size_t nDataSize, ScColumn& rDestCol,
-                            sc::ColumnBlockPosition& maDestBlockPos, bool bCloneCaption = true, SCROW nRowOffsetDest=0 ) const;
+                            sc::ColumnBlockPosition& maDestBlockPos, bool bCloneCaption, SCROW nRowOffsetDest=0 ) const;
 
     void UpdateNoteCaptions( SCROW nRow1, SCROW nRow2 );
 
@@ -715,10 +715,10 @@ private:
     std::vector<sc::FormulaGroupEntry> GetFormulaGroupEntries();
 
     void EndListeningIntersectedGroup(
-        sc::EndListeningContext& rCxt, SCROW nRow, std::vector<ScAddress>* pGroupPos = nullptr );
+        sc::EndListeningContext& rCxt, SCROW nRow, std::vector<ScAddress>* pGroupPos );
 
     void EndListeningIntersectedGroups(
-        sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2, std::vector<ScAddress>* pGroupPos = nullptr );
+        sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2, std::vector<ScAddress>* pGroupPos );
 
     void EndListeningGroup( sc::EndListeningContext& rCxt, SCROW nRow );
     void SetNeedsListeningGroup( SCROW nRow );

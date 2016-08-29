@@ -264,7 +264,7 @@ public:
     /** Converts and writes the contained data to the passed property set. */
     void                Convert( const XclImpChRoot& rRoot,
                             ScfPropertySet& rPropSet, XclChObjectType eObjType,
-                            sal_uInt16 nFormatIdx = EXC_CHDATAFORMAT_UNKNOWN ) const;
+                            sal_uInt16 nFormatIdx ) const;
 
 private:
     XclChAreaFormat     maData;             /// Contents of the CHAREAFORMAT record.

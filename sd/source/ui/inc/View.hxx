@@ -102,12 +102,12 @@ public:
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow,
         sal_uInt16 nPage,
-        sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
+        sal_uInt16 nLayer);
     virtual sal_Int8 ExecuteDrop (
         const ExecuteDropEvent& rEvt,
         ::sd::Window* pTargetWindow,
         sal_uInt16 nPage,
-        sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
+        sal_uInt16 nLayer);
 
     css::uno::Reference<css::datatransfer::XTransferable>
         CreateClipboardDataObject (::sd::View*, vcl::Window& rWindow);

@@ -96,7 +96,7 @@ public:
     /** Reads a CRN record (external referenced cell). */
     void                ReadCrn( XclImpStream& rStrm );
     /** Reads an EXTERNNAME record. */
-    void                ReadExternname( XclImpStream& rStrm, ExcelToSc* pFormulaConv = nullptr );
+    void                ReadExternname( XclImpStream& rStrm, ExcelToSc* pFormulaConv );
 
     /** Returns the SUPBOOK record type. */
     inline XclSupbookType GetType() const { return meType; }
@@ -169,7 +169,7 @@ public:
     /** Reads a CRN record and appends it to the current SUPBOOK. */
     void                ReadCrn( XclImpStream& rStrm );
     /** Reads an EXTERNNAME record and appends it to the current SUPBOOK. */
-    void                ReadExternname( XclImpStream& rStrm, ExcelToSc* pFormulaConv = nullptr );
+    void                ReadExternname( XclImpStream& rStrm, ExcelToSc* pFormulaConv );
 
     /** Returns true, if the specified XTI entry contains an internal reference. */
     bool                IsSelfRef( sal_uInt16 nXtiIndex ) const;

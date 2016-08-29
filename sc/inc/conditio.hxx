@@ -152,7 +152,7 @@ public:
     virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) = 0;
     virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt ) = 0;
 
-    virtual ScFormatEntry* Clone( ScDocument* pDoc = nullptr ) const = 0;
+    virtual ScFormatEntry* Clone( ScDocument* pDoc ) const = 0;
 
     virtual void SetParent( ScConditionalFormat* pNew ) = 0;
 
@@ -268,7 +268,7 @@ public:
 
     virtual condformat::ScFormatEntryType GetType() const override { return condformat::CONDITION; }
 
-    virtual ScFormatEntry* Clone(ScDocument* pDoc = nullptr) const override;
+    virtual ScFormatEntry* Clone(ScDocument* pDoc) const override;
 
     static ScConditionMode GetModeFromApi(sal_Int32 nOperator);
 
@@ -341,7 +341,7 @@ public:
 
     const OUString&   GetStyle() const        { return aStyleName; }
     void            UpdateStyleName(const OUString& rNew)  { aStyleName=rNew; }
-    virtual ScFormatEntry* Clone(ScDocument* pDoc = nullptr) const override;
+    virtual ScFormatEntry* Clone(ScDocument* pDoc) const override;
 
 protected:
     virtual void    DataChanged( const ScRange* pModified ) const override;
@@ -388,7 +388,7 @@ public:
     virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& ) override {}
     virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& ) override {}
 
-    virtual ScFormatEntry* Clone( ScDocument* pDoc = nullptr ) const override;
+    virtual ScFormatEntry* Clone( ScDocument* pDoc ) const override;
 
     virtual void SetParent( ScConditionalFormat* ) override {}
 

@@ -42,7 +42,7 @@ private:
     static bool         bPreviousAllCheck;
     static InsertDeleteFlags nPreviousChecks;
 
-    void DisableChecks( bool bDelAllChecked = true );
+    void DisableChecks( bool bDelAllChecked );
     DECL_LINK_TYPED( DelAllHdl, Button*, void );
 
 public:

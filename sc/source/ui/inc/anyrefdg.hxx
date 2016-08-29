@@ -84,9 +84,9 @@ public:
     void                ShowReference(const OUString& rStr);
     void                ReleaseFocus( formula::RefEdit* pEdit );
     void                HideReference( bool bDoneRefMode = true );
-    void                RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr );
-    void                RefInputDone( bool bForced = false );
-    void                ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr );
+    void                RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton );
+    void                RefInputDone( bool bForced );
+    void                ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton );
 
     inline void         SetWindow(vcl::Window* _pWindow) { m_pWindow = _pWindow; }
     void                DoClose( sal_uInt16 nId );

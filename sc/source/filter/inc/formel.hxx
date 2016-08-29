@@ -73,7 +73,7 @@ public:
     void Append( const ScAddress& aSRD, SCTAB nTab );
     void Append( const ScRange& aCRD, SCTAB nTab );
 
-    const ScRange* First ( SCTAB nTab = 0 );
+    const ScRange* First ( SCTAB nTab );
     const ScRange* Next ();
 
     bool HasRanges () const { return !m_TabRanges.empty(); }

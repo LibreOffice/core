@@ -388,7 +388,7 @@ public:
     virtual double GetMinValue( bool bTextAsZero ) const = 0;
 
     virtual ScMatrixRef CompareMatrix(
-        sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions = nullptr ) const = 0;
+        sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions ) const = 0;
 
     /**
      * Convert the content of matrix into a linear array of numeric values.
@@ -602,7 +602,7 @@ public:
     virtual double GetMinValue( bool bTextAsZero ) const override;
 
     virtual ScMatrixRef CompareMatrix(
-        sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions = nullptr ) const override;
+        sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions ) const override;
 
     /**
      * Convert the content of matrix into a linear array of numeric values.
@@ -818,7 +818,7 @@ public:
     virtual double GetMaxValue(bool bTextAsZero) const override;
     virtual double GetMinValue(bool bTextAsZero) const override;
 
-    virtual ScMatrixRef CompareMatrix(sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions = nullptr) const override;
+    virtual ScMatrixRef CompareMatrix(sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions) const override;
 
     /**
      * Convert the content of matrix into a linear array of numeric values.

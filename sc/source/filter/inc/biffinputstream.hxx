@@ -230,7 +230,7 @@ public:
             True = NUL characters are inserted into the imported string.
             False = NUL characters are replaced by question marks (default).
      */
-    OString      readByteString( bool b16BitLen, bool bAllowNulChars = false );
+    OString      readByteString( bool b16BitLen, bool bAllowNulChars );
 
     /** Reads 8/16 bit string length and character array, and returns a Unicode string.
         @param b16BitLen

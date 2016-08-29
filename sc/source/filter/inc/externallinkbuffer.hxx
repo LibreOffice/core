@@ -229,7 +229,7 @@ public:
     /** Returns the token index of the external document. */
     sal_Int32           getDocumentLinkIndex() const;
     /** Returns the external sheet cache index or for the passed sheet. */
-    sal_Int32           getSheetCacheIndex( sal_Int32 nTabId = 0 ) const;
+    sal_Int32           getSheetCacheIndex( sal_Int32 nTabId ) const;
     /** Returns the sheet cache of the external sheet with the passed index. */
     css::uno::Reference< css::sheet::XExternalSheetCache >
                         getSheetCache( sal_Int32 nTabId ) const;

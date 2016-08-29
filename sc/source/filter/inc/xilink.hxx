@@ -80,7 +80,7 @@ public:
         @return  The 0-based index of the sheet nCreatedId if it is contained in the list.
         Example: The buffer is 3;5;2;4;1, nCreatedId is 1 and nMaxTabId is 3. The function will
         return 2 which is the 0-based index of sheet 1 in the list 3;2;1. */
-    sal_uInt16          GetCurrentIndex( sal_uInt16 nCreatedId, sal_uInt16 nMaxTabId = 0xFFFF ) const;
+    sal_uInt16          GetCurrentIndex( sal_uInt16 nCreatedId, sal_uInt16 nMaxTabId ) const;
 
 private:
     typedef ::std::map< OUString, SCTAB > XclTabNameMap;
@@ -194,7 +194,7 @@ public:
     /** Reads a CRN record and appends it to the current SUPBOOK. */
     void                ReadCrn( XclImpStream& rStrm );
     /** Reads an EXTERNNAME record and appends it to the current SUPBOOK. */
-    void                ReadExternname( XclImpStream& rStrm, ExcelToSc* pFormulaConv = nullptr );
+    void                ReadExternname( XclImpStream& rStrm, ExcelToSc* pFormulaConv );
 
     /** Returns true, if the specified XTI entry contains an internal reference. */
     bool                IsSelfRef( sal_uInt16 nXtiIndex ) const;

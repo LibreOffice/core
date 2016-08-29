@@ -411,7 +411,7 @@ public:
     /** Returns the resulting Calc position of the top left edge of the table. */
     inline const ScHTMLPos& GetDocPos() const { return maDocBasePos; }
     /** Calculates the resulting Calc position of the specified HTML column/row. */
-    SCCOLROW            GetDocPos( ScHTMLOrient eOrient, SCCOLROW nCellPos = 0 ) const;
+    SCCOLROW            GetDocPos( ScHTMLOrient eOrient, SCCOLROW nCellPos ) const;
     /** Calculates the resulting Calc position of the specified HTML cell. */
     ScHTMLPos           GetDocPos( const ScHTMLPos& rCellPos ) const;
 
