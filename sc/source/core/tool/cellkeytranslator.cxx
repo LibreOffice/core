@@ -75,7 +75,7 @@ ScCellKeyword::ScCellKeyword(const sal_Char* pName, OpCode eOpCode, const lang::
 ::std::unique_ptr<ScCellKeywordTranslator> ScCellKeywordTranslator::spInstance;
 
 static void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
-                            OpCode eOpCode = ocNone, const lang::Locale* pLocale = nullptr)
+                            OpCode eOpCode, const lang::Locale* pLocale = nullptr)
 {
     ScCellKeywordHashMap::const_iterator itrEnd = aMap.end();
     ScCellKeywordHashMap::const_iterator itr = aMap.find(rName);

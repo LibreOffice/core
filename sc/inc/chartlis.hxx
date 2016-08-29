@@ -94,7 +94,7 @@ public:
     void            StartListeningTo();
     void            EndListeningTo();
     void            ChangeListening( const ScRangeListRef& rRangeListRef,
-                                    bool bDirty = false );
+                                    bool bDirty );
     void            Update();
     ScRangeListRef  GetRangeList() const;
     void            SetRangeList( const ScRangeListRef& rNew );
@@ -184,7 +184,7 @@ public:
     void            UpdateDirtyCharts();
     void            SetDirty();
     void            SetDiffDirty( const ScChartListenerCollection&,
-                        bool bSetChartRangeLists = false );
+                        bool bSetChartRangeLists );
 
     void            SetRangeDirty( const ScRange& rRange );     // for example rows/columns
 

@@ -227,7 +227,7 @@ class ScCheckListBox : public SvTreeListBox
     ScTabStops*         mpTabStops;
     bool                mbSeenMouseButtonDown;
     void            CountCheckedEntries( SvTreeListEntry* pParent, sal_uLong& nCount ) const;
-    void            CheckAllChildren( SvTreeListEntry* pEntry, bool bCheck = true );
+    void            CheckAllChildren( SvTreeListEntry* pEntry, bool bCheck );
 
     public:
 
@@ -235,8 +235,8 @@ class ScCheckListBox : public SvTreeListBox
     virtual ~ScCheckListBox() { disposeOnce(); }
     virtual void dispose() override { delete mpCheckButton; SvTreeListBox::dispose(); }
     void Init();
-    void CheckEntry( const OUString& sName, SvTreeListEntry* pParent, bool bCheck = true );
-    void CheckEntry( SvTreeListEntry* pEntry, bool bCheck = true );
+    void CheckEntry( const OUString& sName, SvTreeListEntry* pParent, bool bCheck );
+    void CheckEntry( SvTreeListEntry* pEntry, bool bCheck );
     SvTreeListEntry* ShowCheckEntry( const OUString& sName, ScCheckListMember& rMember, bool bShow = true, bool bCheck = true );
     bool IsChecked( const OUString& sName, SvTreeListEntry* pParent );
     SvTreeListEntry* FindEntry( SvTreeListEntry* pParent, const OUString& sNode );

@@ -232,7 +232,7 @@ public:
         @param bAppFont  true = Sets the application font; false = Inserts a new font.
         @return  The resulting Excel font index. */
     sal_uInt16          Insert( const vcl::Font& rFont,
-                            XclExpColorType eColorType, bool bAppFont = false );
+                            XclExpColorType eColorType, bool bAppFont );
     /** Inserts the SvxFont into the buffer if not present, e.g. where escapements are used.
         @return  The resulting Excel font index. */
     sal_uInt16          Insert( const SvxFont& rFont,
@@ -242,7 +242,7 @@ public:
         @param bAppFont  true = Sets the application font; false = Inserts a new font.
         @return  The resulting Excel font index. */
     sal_uInt16          Insert( const SfxItemSet& rItemSet, sal_Int16 nScript,
-                            XclExpColorType eColorType, bool bAppFont = false );
+                            XclExpColorType eColorType, bool bAppFont );
 
     /** Writes all FONT records contained in this buffer. */
     virtual void        Save( XclExpStream& rStrm ) override;
@@ -396,7 +396,7 @@ struct XclExpCellArea : public XclCellArea
         @return  true = At least one area item is set. */
     bool                FillFromItemSet(
                             const SfxItemSet& rItemSet, XclExpPalette& rPalette,
-                            bool bStyle = false );
+                            bool bStyle );
     /** Fills the mn***Color base members from the mn***ColorId members. */
     void                SetFinalColors( const XclExpPalette& rPalette );
 
@@ -648,7 +648,7 @@ private:
     sal_uInt32          FindXF( const SfxStyleSheetBase& rStyleSheet ) const;
 
     /** Returns the XF ID of a built-in style XF, searches by style identifier. */
-    sal_uInt32          FindBuiltInXF( sal_uInt8 nStyleId, sal_uInt8 nLevel = EXC_STYLE_NOLEVEL ) const;
+    sal_uInt32          FindBuiltInXF( sal_uInt8 nStyleId, sal_uInt8 nLevel ) const;
 
     /** Tries to find the XF record containing the passed format or inserts a new record.
         @return  The XF record ID. */

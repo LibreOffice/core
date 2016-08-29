@@ -231,7 +231,7 @@ public:
         if there is only one unformatted portion. */
     bool                extractPlainString(
                             OUString& orString,
-                            const oox::xls::Font* pFirstPortionFont = nullptr ) const;
+                            const oox::xls::Font* pFirstPortionFont ) const;
 
     /** Converts the string and writes it into the passed XText.
         @param rxText  The XText interface of the target object.

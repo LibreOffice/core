@@ -428,7 +428,7 @@ public:
                             const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray );
 
     XclExpXti           GetXti( sal_uInt16 nFileId, const OUString& rTabName, sal_uInt16 nXclTabSpan,
-                                XclExpRefLogEntry* pRefLogEntry = nullptr );
+                                XclExpRefLogEntry* pRefLogEntry );
 
     /** Writes all SUPBOOK records with their sub records. */
     virtual void        Save( XclExpStream& rStrm ) override;

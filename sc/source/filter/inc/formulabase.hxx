@@ -732,7 +732,7 @@ public:
                             ApiCellRangeList& orRanges,
                             const ApiTokenSequence& rTokens,
                             bool bAllowRelative,
-                            sal_Int32 nFilterBySheet = -1 ) const;
+                            sal_Int32 nFilterBySheet ) const;
 
     /** Tries to extract a string from a formula token sequence.
 

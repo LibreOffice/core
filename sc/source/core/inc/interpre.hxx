@@ -902,7 +902,7 @@ double GetMedian( ::std::vector<double> & rArray );
 double GetPercentileExclusive( ::std::vector<double> & rArray, double fPercentile );
 void GetNumberSequenceArray( sal_uInt8 nParamCount, ::std::vector<double>& rArray, bool bConvertTextInArray );
 void GetSortArray( sal_uInt8 nParamCount, ::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder, bool bConvertTextInArray, bool bAllowEmptyArray );
-static void QuickSort(::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder = nullptr);
+static void QuickSort(::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder);
 void ScModalValue();
 void ScModalValue_Multi();
 void ScAveDev();

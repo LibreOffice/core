@@ -1114,8 +1114,8 @@ public:
                         // adjust references for MergeDocument
                         //! may only be used in a temporary opened document.
                         //! the Track (?) is unclean afterwards
-    void                MergePrepare( ScChangeAction* pFirstMerge, bool bShared = false );
-    void                MergeOwn( ScChangeAction* pAct, sal_uLong nFirstMerge, bool bShared = false );
+    void                MergePrepare( ScChangeAction* pFirstMerge, bool bShared );
+    void                MergeOwn( ScChangeAction* pAct, sal_uLong nFirstMerge, bool bShared );
     static bool MergeIgnore( const ScChangeAction&, sal_uLong nFirstMerge );
 
                                 // This comment was already really strange in German.

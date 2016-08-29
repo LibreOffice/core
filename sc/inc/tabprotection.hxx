@@ -66,7 +66,7 @@ public:
         ScPasswordHash eHash, ScPasswordHash eHas2 = PASSHASH_UNSPECIFIED) const = 0;
     virtual void setPasswordHash(
         const css::uno::Sequence<sal_Int8>& aPassword,
-        ScPasswordHash eHash = PASSHASH_SHA1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) = 0;
+        ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) = 0;
     virtual bool verifyPassword(const OUString& aPassText) const = 0;
 };
 
@@ -95,7 +95,7 @@ public:
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const override;
     virtual void setPasswordHash(
         const css::uno::Sequence<sal_Int8>& aPassword,
-        ScPasswordHash eHash = PASSHASH_SHA1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) override;
+        ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) override;
     virtual bool verifyPassword(const OUString& aPassText) const override;
 
     bool isOptionEnabled(Option eOption) const;
@@ -180,7 +180,7 @@ public:
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const override;
     virtual void setPasswordHash(
         const css::uno::Sequence<sal_Int8>& aPassword,
-        ScPasswordHash eHash = PASSHASH_SHA1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) override;
+        ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) override;
     virtual bool verifyPassword(const OUString& aPassText) const override;
 
     bool isOptionEnabled(Option eOption) const;

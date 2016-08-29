@@ -63,7 +63,7 @@ typedef std::unordered_map< OUString, ::std::list<ScCellKeyword>, OUStringHash >
 class ScCellKeywordTranslator
 {
 public:
-    static void transKeyword(OUString& rName, const css::lang::Locale* pLocale = nullptr, OpCode eOpCode = ocNone);
+    static void transKeyword(OUString& rName, const css::lang::Locale* pLocale, OpCode eOpCode = ocNone);
     ~ScCellKeywordTranslator();
 
 private:
@@ -72,7 +72,7 @@ private:
     void init();
     void addToMap(const OUString& rKey, const sal_Char* pName,
                   const css::lang::Locale& rLocale,
-                  OpCode eOpCode = ocNone);
+                  OpCode eOpCode);
     void addToMap(const TransItem* pItems, const css::lang::Locale& rLocale);
 
     static ::std::unique_ptr<ScCellKeywordTranslator> spInstance;

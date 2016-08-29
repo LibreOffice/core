@@ -74,7 +74,7 @@ class ScEEAbsImport {
 class SAL_DLLPUBLIC_RTTI ScFormatFilterPlugin {
   public:
     // various import filters
-    virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding eSrc = RTL_TEXTENCODING_DONTKNOW ) = 0;
+    virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding eSrc ) = 0;
     virtual FltError ScImportQuattroPro( SfxMedium &rMedium, ScDocument *pDoc ) = 0;
     virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) = 0;
         // eFormat == EIF_AUTO  -> matching filter is used automatically
@@ -83,9 +83,9 @@ class SAL_DLLPUBLIC_RTTI ScFormatFilterPlugin {
         // eFormat == EIF_BIFF_LE4 -> only non storage files _might_ be read successfully
     virtual FltError ScImportStarCalc10( SvStream&, ScDocument* ) = 0;
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
-                 const rtl_TextEncoding eSrc = RTL_TEXTENCODING_DONTKNOW ) = 0;
+                 const rtl_TextEncoding eSrc ) = 0;
     virtual FltError ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange ) = 0;
-    virtual FltError ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor = 1.0,
+    virtual FltError ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor,
                                    bool bCalcWidthHeight = true, SvNumberFormatter* pFormatter = nullptr, bool bConvertDate = true ) = 0;
 
     // various import helpers

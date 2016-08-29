@@ -157,13 +157,13 @@ public:
     void                FindExtSheet( sal_uInt16& rnExtSheet,
                             sal_uInt16& rnFirstXclTab, sal_uInt16& rnLastXclTab,
                             SCTAB nFirstScTab, SCTAB nLastScTab,
-                            XclExpRefLogEntry* pRefLogEntry = nullptr );
+                            XclExpRefLogEntry* pRefLogEntry );
     /** Searches for a special EXTERNSHEET index for the own document. */
     sal_uInt16          FindExtSheet( sal_Unicode cCode );
 
     void                FindExtSheet( sal_uInt16 nFileId, const OUString& rTabName, sal_uInt16 nXclTabSpan,
                                       sal_uInt16& rnExtSheet, sal_uInt16& rnFirstSBTab, sal_uInt16& rnLastSBTab,
-                                      XclExpRefLogEntry* pRefLogEntry = nullptr );
+                                      XclExpRefLogEntry* pRefLogEntry );
 
     /** Stores the cell with the given address in a CRN record list. */
     void StoreCell( const ScSingleRefData& rRef, const ScAddress& rPos );

@@ -403,7 +403,7 @@ public:
 
     void                ApplyPatternToAttrList(
                             ::std::list<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2,
-                            sal_uInt32 nForceScNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND);
+                            sal_uInt32 nForceScNumFmt);
 
     /** Inserts all formatting attributes to the specified area in the Calc document.
         @param nForcedNumFmt  If not set to NUMBERFORMAT_ENTRY_NOT_FOUND, it will overwrite

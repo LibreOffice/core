@@ -132,7 +132,7 @@ public:
 
                     //      automatic adjustments
 
-    void            EnableAdjust( bool bSet = true )    { bAdjustEnabled = bSet; }
+    void            EnableAdjust( bool bSet )    { bAdjustEnabled = bSet; }
 
     void            BeginCalcUndo(bool bDisableTextEditUsesCommonUndoManager);
     SdrUndoGroup*   GetCalcUndo();
@@ -140,7 +140,7 @@ public:
     void            AddCalcUndo( SdrUndoAction* pUndo );
 
     void            MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
-                                SCsCOL nDx,SCsROW nDy, bool bInsDel, bool bUpdateNoteCaptionPos = true );
+                                SCsCOL nDx,SCsROW nDy, bool bInsDel, bool bUpdateNoteCaptionPos );
 
     bool            HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow );
 
@@ -153,7 +153,7 @@ public:
                                     SCTAB nSourceTab, const Rectangle& rSourceRange,
                                     const ScAddress& rDestPos, const Rectangle& rDestRange );
 
-    void            SetPageSize( sal_uInt16 nPageNo, const Size& rSize, bool bUpdateNoteCaptionPos = true );
+    void            SetPageSize( sal_uInt16 nPageNo, const Size& rSize, bool bUpdateNoteCaptionPos );
 
                     //  mirror or move between positive and negative positions for RTL
     void            MirrorRTL( SdrObject* pObj );

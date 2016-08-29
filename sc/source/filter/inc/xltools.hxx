@@ -234,7 +234,7 @@ public:
     // Basic macro names ------------------------------------------------------
 
     /** Returns the full StarBasic macro URL from an Excel macro name. */
-    static OUString GetSbMacroUrl( const OUString& rMacroName, SfxObjectShell* pDocShell = nullptr );
+    static OUString GetSbMacroUrl( const OUString& rMacroName, SfxObjectShell* pDocShell );
     /** Returns the Excel macro name from a full StarBasic macro URL. */
     static OUString GetXclMacroName( const OUString& rSbMacroUrl );
 

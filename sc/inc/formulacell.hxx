@@ -219,7 +219,7 @@ public:
     bool NeedsNumberFormat() const { return mbNeedsNumberFormat;}
     short GetFormatType() const { return nFormatType; }
     void            Compile(const OUString& rFormula,
-                            bool bNoListening = false,
+                            bool bNoListening,
                             const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
     void Compile(
         sc::CompileFormulaContext& rCxt, const OUString& rFormula, bool bNoListening = false );
@@ -278,7 +278,7 @@ public:
     void            UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
     void            UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nTabNo );
     bool            TestTabRefAbs(SCTAB nTable);
-    void            UpdateCompile( bool bForceIfNameInUse = false );
+    void            UpdateCompile( bool bForceIfNameInUse );
     void            FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes) const;
     bool            IsSubTotal() const { return bSubTotal;}
     bool            IsChanged() const { return bChanged;}

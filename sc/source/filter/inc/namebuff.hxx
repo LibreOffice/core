@@ -91,7 +91,7 @@ public:
     inline                  NameBuffer( RootData*, sal_uInt16 nNewBase );
 
     virtual                 ~NameBuffer();
-    inline void             SetBase( sal_uInt16 nNewBase = 0 );
+    inline void             SetBase( sal_uInt16 nNewBase );
     void                    operator <<( const OUString& rNewString );
 };
 
@@ -207,7 +207,7 @@ public:
     inline          ExtSheetBuffer( RootData* );
 
     sal_Int16       Add( const OUString& rFilePathAndName,
-                        const OUString& rTabName, const bool bSameWorkbook = false );
+                        const OUString& rTabName, const bool bSameWorkbook );
 
     bool            GetScTabIndex( sal_uInt16 nExcSheetIndex, sal_uInt16& rIn_LastTab_Out_ScIndex );
     void            GetLink( const sal_uInt16 nExcSheetIndex, OUString &rAppl, OUString &rDoc ) const;

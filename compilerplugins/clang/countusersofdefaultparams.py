@@ -53,6 +53,8 @@ for k,v in callDict.iteritems():
         continue
     if k.endswith("::RegisterChildWindow(_Bool,class SfxModule *,enum SfxChildWindowFlags)"):
         continue
+    if k.endswith("::RegisterChildWindowContext(unsigned short,class SfxModule *)"):
+        continue
     if k.endswith("::RegisterControl(unsigned short,class SfxModule *)"):
         continue
     if k.endswith("::RegisterFactory(unsigned short)"):

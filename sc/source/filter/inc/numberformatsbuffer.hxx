@@ -98,7 +98,7 @@ public:
     /** Final processing after import of all style settings. */
     void                finalizeImport();
 
-    sal_uLong           fillToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs = false ) const;
+    sal_uLong           fillToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs ) const;
 
     /** Writes the specified number format to the passed property map. */
     void                writeToPropertyMap( PropertyMap& rPropMap, sal_Int32 nNumFmtId ) const;

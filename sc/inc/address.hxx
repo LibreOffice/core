@@ -322,11 +322,11 @@ public:
                     sal_Int32* pSheetEndPos = nullptr,
                     const OUString* pErrRef = nullptr );
 
-    SC_DLLPUBLIC void Format( OStringBuffer& r, ScRefFlags nFlags = ScRefFlags::ZERO,
+    SC_DLLPUBLIC void Format( OStringBuffer& r, ScRefFlags nFlags,
                                   const ScDocument* pDocument = nullptr,
                                   const Details& rDetails = detailsOOOa1) const;
 
-    SC_DLLPUBLIC OUString Format( ScRefFlags nFlags = ScRefFlags::ZERO,
+    SC_DLLPUBLIC OUString Format( ScRefFlags nFlags,
                                   const ScDocument* pDocument = nullptr,
                                   const Details& rDetails = detailsOOOa1) const;
 
@@ -507,11 +507,11 @@ public:
                                    const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
                                    const OUString* pErrRef = nullptr );
 
-    SC_DLLPUBLIC ScRefFlags ParseAny( const OUString&, ScDocument* = nullptr,
+    SC_DLLPUBLIC ScRefFlags ParseAny( const OUString&, ScDocument*,
                                       const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    SC_DLLPUBLIC ScRefFlags ParseCols( const OUString&, ScDocument* = nullptr,
+    SC_DLLPUBLIC ScRefFlags ParseCols( const OUString&, ScDocument*,
                                        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    SC_DLLPUBLIC void ParseRows( const OUString&, ScDocument* = nullptr,
+    SC_DLLPUBLIC void ParseRows( const OUString&, ScDocument*,
                                        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
 
     /** Parse an Excel style reference up to and including the sheet name
@@ -852,13 +852,13 @@ template< typename T > void PutInOrder( T& nStart, T& nEnd )
 
 bool ConvertSingleRef( ScDocument* pDocument, const OUString& rRefString,
                        SCTAB nDefTab, ScRefAddress& rRefAddress,
-                       const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
+                       const ScAddress::Details& rDetails,
                        ScAddress::ExternalInfo* pExtInfo = nullptr );
 
 bool ConvertDoubleRef( ScDocument* pDocument, const OUString& rRefString,
                        SCTAB nDefTab, ScRefAddress& rStartRefAddress,
                        ScRefAddress& rEndRefAddress,
-                       const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
+                       const ScAddress::Details& rDetails,
                        ScAddress::ExternalInfo* pExtInfo = nullptr );
 
 /// append alpha representation of column to buffer

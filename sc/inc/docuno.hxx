@@ -139,8 +139,7 @@ public:
     bool                    HasChangesListeners() const;
 
     void                    NotifyChanges( const OUString& rOperation, const ScRangeList& rRanges,
-                                           const css::uno::Sequence< css::beans::PropertyValue >& rProperties =
-                                               css::uno::Sequence< css::beans::PropertyValue >() );
+                                           const css::uno::Sequence< css::beans::PropertyValue >& rProperties );
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
                                     throw(css::uno::RuntimeException, std::exception) override;

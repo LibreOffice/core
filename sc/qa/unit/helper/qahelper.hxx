@@ -190,7 +190,7 @@ SCQAHELPER_DLLPUBLIC bool isFormulaWithoutError(ScDocument& rDoc, const ScAddres
  */
 SCQAHELPER_DLLPUBLIC OUString toString(
     ScDocument& rDoc, const ScAddress& rPos, ScTokenArray& rArray,
-    formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_NATIVE);
+    formula::FormulaGrammar::Grammar eGram);
 
 inline std::string print(const ScAddress& rAddr)
 {

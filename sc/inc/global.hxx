@@ -602,20 +602,20 @@ public:
                                 bool bForceSep = false );
 
     /** Returns true, if the first and last character of the string is cQuote. */
-    SC_DLLPUBLIC static bool             IsQuoted( const OUString& rString, sal_Unicode cQuote = '\'' );
+    SC_DLLPUBLIC static bool             IsQuoted( const OUString& rString, sal_Unicode cQuote );
 
     /** Inserts the character cQuote at beginning and end of rString.
         @param bEscapeEmbedded      If <TRUE/>, embedded quote characters are
                                     escaped by doubling them.
      */
-SC_DLLPUBLIC    static void             AddQuotes( OUString& rString, sal_Unicode cQuote = '\'', bool bEscapeEmbedded = true );
+SC_DLLPUBLIC    static void             AddQuotes( OUString& rString, sal_Unicode cQuote, bool bEscapeEmbedded = true );
 
     /** Erases the character cQuote from rString, if it exists at beginning AND end.
         @param bUnescapeEmbedded    If <TRUE/>, embedded doubled quote characters
                                     are unescaped by replacing them with a
                                     single instance.
      */
-SC_DLLPUBLIC    static void             EraseQuotes( OUString& rString, sal_Unicode cQuote = '\'', bool bUnescapeEmbedded = true );
+SC_DLLPUBLIC    static void             EraseQuotes( OUString& rString, sal_Unicode cQuote, bool bUnescapeEmbedded = true );
 
     /** Finds an unquoted instance of cChar in rString, starting at
         offset nStart. Unquoted instances may occur when concatenating two

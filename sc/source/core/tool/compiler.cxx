@@ -479,7 +479,7 @@ static bool lcl_parseExternalName(
         OUString& rFile,
         OUString& rName,
         const sal_Unicode cSep,
-        const ScDocument* pDoc = nullptr,
+        const ScDocument* pDoc,
         const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks = nullptr )
 {
     /* TODO: future versions will have to support sheet-local names too, thus

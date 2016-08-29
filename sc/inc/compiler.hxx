@@ -311,7 +311,7 @@ private:
     };
     std::vector<TableRefEntry> maTableRefs;     /// "stack" of currently active ocTableRef tokens
 
-    bool   NextNewToken(bool bInArray = false);
+    bool   NextNewToken(bool bInArray);
 
     virtual void SetError(sal_uInt16 nError) override;
     sal_Int32 NextSymbol(bool bInArray);

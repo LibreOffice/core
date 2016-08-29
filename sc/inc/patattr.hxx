@@ -78,7 +78,7 @@ public:
 
     void                    DeleteUnchanged( const ScPatternAttr* pOldAttrs );
 
-    static SvxCellOrientation GetCellOrientation( const SfxItemSet& rItemSet, const SfxItemSet* pCondSet = nullptr );
+    static SvxCellOrientation GetCellOrientation( const SfxItemSet& rItemSet, const SfxItemSet* pCondSet );
     SvxCellOrientation      GetCellOrientation( const SfxItemSet* pCondSet = nullptr ) const;
 
     /** Static helper function to fill a font object from the passed item set. */
