@@ -603,7 +603,7 @@ void SAL_CALL SvXMLImport::endDocument()
           uno::RuntimeException,
           std::exception)
 {
-    SAL_INFO( "xmloff.core", "} SvXMLImport::startDocument" );
+    SAL_INFO( "xmloff.core", "} SvXMLImport::endDocument" );
     //  #i9518# All the stuff that accesses the document has to be done here, not in the dtor,
     //  because the SvXMLImport dtor might not be called until after the document has been closed.
 
