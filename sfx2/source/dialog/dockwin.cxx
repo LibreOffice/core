@@ -406,6 +406,7 @@ friend class SfxDockingWindow;
     bool                bDockingPrevented;
     OString aWinState;
 
+                        SfxDockingWindow_Impl(SfxDockingWindow *pBase);
     SfxChildAlignment   GetLastAlignment() const
                         { return eLastAlignment; }
     void                SetLastAlignment(SfxChildAlignment eAlign)
@@ -415,6 +416,26 @@ friend class SfxDockingWindow;
     void                SetDockAlignment(SfxChildAlignment eAlign)
                         { eDockAlignment = eAlign; }
 };
+
+SfxDockingWindow_Impl::SfxDockingWindow_Impl(SfxDockingWindow* pBase)
+    :eLastAlignment(SfxChildAlignment::NOALIGNMENT)
+    ,eDockAlignment(SfxChildAlignment::NOALIGNMENT)
+    ,bConstructed(false)
+    ,pSplitWin(nullptr)
+    ,bSplitable(true)
+    ,bEndDocked(false)
+    ,nHorizontalSize(0)
+    ,nVerticalSize(0)
+    ,nLine(0)
+    ,nPos(0)
+    ,nDockLine(0)
+    ,nDockPos(0)
+    ,bNewLine(false)
+    ,bDockingPrevented(false)
+{
+    aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
+    aMoveIdle.SetIdleHdl(LINK(pBase,SfxDockingWindow,TimerHdl));
+}
 
 /*  [Description]
 
@@ -814,22 +835,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pBindings(pBindinx),
     pMgr(pCW)
 {
-    pImpl.reset( new SfxDockingWindow_Impl );
-    pImpl->bConstructed = false;
-    pImpl->pSplitWin = nullptr;
-    pImpl->bEndDocked = false;
-    pImpl->bDockingPrevented = false;
-
-    pImpl->bSplitable = true;
-
-    // Initially set to default, the alignment is set in the subclass
-    pImpl->nLine = pImpl->nDockLine = 0;
-    pImpl->nPos  = pImpl->nDockPos = 0;
-    pImpl->bNewLine = false;
-    pImpl->SetDockAlignment(SfxChildAlignment::NOALIGNMENT);
-    pImpl->SetLastAlignment(SfxChildAlignment::NOALIGNMENT);
-    pImpl->aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
-    pImpl->aMoveIdle.SetIdleHdl(LINK(this,SfxDockingWindow,TimerHdl));
+    pImpl.reset(new SfxDockingWindow_Impl(this));
 }
 
 /** Constructor for the SfxDockingWindow class. A SfxChildWindow will be
@@ -841,22 +847,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     , pBindings(pBindinx)
     , pMgr(pCW)
 {
-    pImpl.reset( new SfxDockingWindow_Impl );
-    pImpl->bConstructed = false;
-    pImpl->pSplitWin = nullptr;
-    pImpl->bEndDocked = false;
-    pImpl->bDockingPrevented = false;
-
-    pImpl->bSplitable = true;
-
-    // Initially set to default, the alignment is set in the subclass
-    pImpl->nLine = pImpl->nDockLine = 0;
-    pImpl->nPos  = pImpl->nDockPos = 0;
-    pImpl->bNewLine = false;
-    pImpl->SetDockAlignment(SfxChildAlignment::NOALIGNMENT);
-    pImpl->SetLastAlignment(SfxChildAlignment::NOALIGNMENT);
-    pImpl->aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
-    pImpl->aMoveIdle.SetIdleHdl(LINK(this,SfxDockingWindow,TimerHdl));
+    pImpl.reset(new SfxDockingWindow_Impl(this));
 }
 
 /** Initialization of the SfxDockingDialog class via a SfxChildWinInfo.
