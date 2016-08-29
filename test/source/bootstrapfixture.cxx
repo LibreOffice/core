@@ -10,6 +10,7 @@
 #include <config_features.h>
 
 #include <test/bootstrapfixture.hxx>
+#include <test/setupvcl.hxx>
 #include <tools/errinf.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/bootstrap.hxx>
@@ -84,39 +85,13 @@ void test_init_impl(bool bAssertOnDialog, bool bNeedUCB,
     }
 }
 
-struct InitHook {
-    DECL_STATIC_LINK_TYPED(InitHook, deinitHook, LinkParamNone*, void);
-};
-
-IMPL_STATIC_LINK_NOARG_TYPED(InitHook, deinitHook, LinkParamNone*, void) {
-    // nothing to do for now
-}
-
 // this is called from pyuno
 SAL_DLLPUBLIC_EXPORT void test_init(lang::XMultiServiceFactory *pFactory)
 {
     try
     {
         ::comphelper::setProcessServiceFactory(pFactory);
-
-        // force locale (and resource files loaded) to en-US
-        OUString aLangISO( "en-US" );
-        ResMgr::SetDefaultLocale( LanguageTag( aLangISO) );
-
-        SvtSysLocaleOptions aLocalOptions;
-        aLocalOptions.SetLocaleConfigString( aLangISO );
-        aLocalOptions.SetUILocaleConfigString( aLangISO );
-
-        MsLangId::setConfiguredSystemUILanguage(LANGUAGE_ENGLISH_US);
-        LanguageTag::setConfiguredSystemLanguage(LANGUAGE_ENGLISH_US);
-
-        InitVCL();
-        if (test::isHeadless())
-            Application::EnableHeadlessMode(true);
-
-        // avoid VCLXToolkit thinking that InitVCL hasn't been called
-        Application::setDeInitHook(LINK(nullptr, InitHook, deinitHook));
-
+        test::setUpVcl();
         test_init_impl(false, true, pFactory);
     }
     catch (...) { abort(); }

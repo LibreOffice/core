@@ -13,6 +13,7 @@
 #include <sal/config.h>
 
 #include <rtl/process.h>
+#include <rtl/ustring.hxx>
 #include <sal/types.h>
 
 namespace test {

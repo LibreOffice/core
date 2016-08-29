@@ -23,6 +23,7 @@ $(eval $(call gb_Library_use_libraries,vclbootstrapprotector, \
     cppu \
     i18nlangtag \
     sal \
+    test \
     tl \
     utl \
     vcl \
