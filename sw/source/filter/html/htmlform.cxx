@@ -175,35 +175,35 @@ const sal_Char * aEventOptionTable[] =
 
 class SwHTMLForm_Impl
 {
-    SwDocShell                  *pDocSh;
+    SwDocShell                  *m_pDocShell;
 
-    SvKeyValueIterator          *pHeaderAttrs;
+    SvKeyValueIterator          *m_pHeaderAttrs;
 
     // gecachte Interfaces
-    uno::Reference< drawing::XDrawPage >            xDrawPage;
-    uno::Reference< container::XIndexContainer >    xForms;
-    uno::Reference< drawing::XShapes >              xShapes;
-    uno::Reference< XMultiServiceFactory >          xServiceFactory;
+    uno::Reference< drawing::XDrawPage >            m_xDrawPage;
+    uno::Reference< container::XIndexContainer >    m_xForms;
+    uno::Reference< drawing::XShapes >              m_xShapes;
+    uno::Reference< XMultiServiceFactory >          m_xServiceFactory;
 
-    uno::Reference< script::XEventAttacherManager >     xControlEventManager;
-    uno::Reference< script::XEventAttacherManager >     xFormEventManager;
+    uno::Reference< script::XEventAttacherManager >     m_xControlEventManager;
+    uno::Reference< script::XEventAttacherManager >     m_xFormEventManager;
 
     // Kontext-Informationen
-    uno::Reference< container::XIndexContainer >    xFormComps;
-    uno::Reference< beans::XPropertySet >           xFCompPropSet;
-    uno::Reference< drawing::XShape >               xShape;
+    uno::Reference< container::XIndexContainer >    m_xFormComps;
+    uno::Reference< beans::XPropertySet >           m_xFCompPropertySet;
+    uno::Reference< drawing::XShape >               m_xShape;
 
-    OUString                    sText;
-    std::vector<OUString>         aStringList;
-    std::vector<OUString>         aValueList;
-    std::vector<sal_uInt16>     aSelectedList;
+    OUString                    m_sText;
+    std::vector<OUString>         m_aStringList;
+    std::vector<OUString>         m_aValueList;
+    std::vector<sal_uInt16>     m_aSelectedList;
 
 public:
     explicit SwHTMLForm_Impl( SwDocShell *pDSh ) :
-        pDocSh( pDSh ),
-        pHeaderAttrs( pDSh ? pDSh->GetHeaderAttributes() : nullptr )
+        m_pDocShell( pDSh ),
+        m_pHeaderAttrs( pDSh ? pDSh->GetHeaderAttributes() : nullptr )
     {
-        OSL_ENSURE( pDocSh, "Keine DocShell, keine Controls" );
+        OSL_ENSURE( m_pDocShell, "Keine DocShell, keine Controls" );
     }
 
     const uno::Reference< XMultiServiceFactory >& GetServiceFactory();
@@ -215,147 +215,147 @@ public:
 
     const uno::Reference< container::XIndexContainer >& GetFormComps() const
     {
-        return xFormComps;
+        return m_xFormComps;
     }
 
     void SetFormComps( const uno::Reference< container::XIndexContainer >& r )
     {
-        xFormComps = r;
+        m_xFormComps = r;
     }
 
-    void ReleaseFormComps() { xFormComps = nullptr; xControlEventManager = nullptr; }
+    void ReleaseFormComps() { m_xFormComps = nullptr; m_xControlEventManager = nullptr; }
 
     const uno::Reference< beans::XPropertySet >& GetFCompPropSet() const
     {
-        return xFCompPropSet;
+        return m_xFCompPropertySet;
     }
 
     void SetFCompPropSet( const uno::Reference< beans::XPropertySet >& r )
     {
-        xFCompPropSet = r;
+        m_xFCompPropertySet = r;
     }
 
-    void ReleaseFCompPropSet() { xFCompPropSet = nullptr; }
+    void ReleaseFCompPropSet() { m_xFCompPropertySet = nullptr; }
 
-    const uno::Reference< drawing::XShape >& GetShape() const { return xShape; }
-    void SetShape( const uno::Reference< drawing::XShape >& r ) { xShape = r; }
+    const uno::Reference< drawing::XShape >& GetShape() const { return m_xShape; }
+    void SetShape( const uno::Reference< drawing::XShape >& r ) { m_xShape = r; }
 
-    OUString& GetText() { return sText; }
-    void EraseText() { sText = aEmptyOUStr; }
+    OUString& GetText() { return m_sText; }
+    void EraseText() { m_sText = aEmptyOUStr; }
 
-    std::vector<OUString>& GetStringList() { return aStringList; }
+    std::vector<OUString>& GetStringList() { return m_aStringList; }
     void EraseStringList()
     {
-        aStringList.clear();
+        m_aStringList.clear();
     }
 
-    std::vector<OUString>& GetValueList() { return aValueList; }
+    std::vector<OUString>& GetValueList() { return m_aValueList; }
     void EraseValueList()
     {
-        aValueList.clear();
+        m_aValueList.clear();
     }
 
-    std::vector<sal_uInt16>& GetSelectedList() { return aSelectedList; }
+    std::vector<sal_uInt16>& GetSelectedList() { return m_aSelectedList; }
     void EraseSelectedList()
     {
-        aSelectedList.clear();
+        m_aSelectedList.clear();
     }
 
-    SvKeyValueIterator *GetHeaderAttrs() const { return pHeaderAttrs; }
+    SvKeyValueIterator *GetHeaderAttrs() const { return m_pHeaderAttrs; }
 };
 
 const uno::Reference< XMultiServiceFactory >& SwHTMLForm_Impl::GetServiceFactory()
 {
-    if( !xServiceFactory.is() && pDocSh )
+    if( !m_xServiceFactory.is() && m_pDocShell )
     {
-        xServiceFactory =
-            uno::Reference< XMultiServiceFactory >( pDocSh->GetBaseModel(),
+        m_xServiceFactory =
+            uno::Reference< XMultiServiceFactory >( m_pDocShell->GetBaseModel(),
                                                UNO_QUERY );
-        OSL_ENSURE( xServiceFactory.is(),
+        OSL_ENSURE( m_xServiceFactory.is(),
                 "XServiceFactory nicht vom Model erhalten" );
     }
-    return xServiceFactory;
+    return m_xServiceFactory;
 }
 
 void SwHTMLForm_Impl::GetDrawPage()
 {
-    if( !xDrawPage.is() && pDocSh )
+    if( !m_xDrawPage.is() && m_pDocShell )
     {
-        uno::Reference< drawing::XDrawPageSupplier > xTextDoc( pDocSh->GetBaseModel(),
+        uno::Reference< drawing::XDrawPageSupplier > xTextDoc( m_pDocShell->GetBaseModel(),
                                                          UNO_QUERY );
         OSL_ENSURE( xTextDoc.is(),
                 "drawing::XDrawPageSupplier nicht vom XModel erhalten" );
-        xDrawPage = xTextDoc->getDrawPage();
-        OSL_ENSURE( xDrawPage.is(), "drawing::XDrawPage nicht erhalten" );
+        m_xDrawPage = xTextDoc->getDrawPage();
+        OSL_ENSURE( m_xDrawPage.is(), "drawing::XDrawPage nicht erhalten" );
     }
 }
 
 const uno::Reference< container::XIndexContainer >& SwHTMLForm_Impl::GetForms()
 {
-    if( !xForms.is() )
+    if( !m_xForms.is() )
     {
         GetDrawPage();
-        if( xDrawPage.is() )
+        if( m_xDrawPage.is() )
         {
-            uno::Reference< XFormsSupplier > xFormsSupplier( xDrawPage, UNO_QUERY );
+            uno::Reference< XFormsSupplier > xFormsSupplier( m_xDrawPage, UNO_QUERY );
             OSL_ENSURE( xFormsSupplier.is(),
                     "XFormsSupplier nicht vom drawing::XDrawPage erhalten" );
 
             uno::Reference< container::XNameContainer > xNameCont =
                 xFormsSupplier->getForms();
-            xForms.set( xNameCont, UNO_QUERY );
+            m_xForms.set( xNameCont, UNO_QUERY );
 
-            OSL_ENSURE( xForms.is(), "XForms nicht erhalten" );
+            OSL_ENSURE( m_xForms.is(), "XForms nicht erhalten" );
         }
     }
-    return xForms;
+    return m_xForms;
 }
 
 const uno::Reference< drawing::XShapes > & SwHTMLForm_Impl::GetShapes()
 {
-    if( !xShapes.is() )
+    if( !m_xShapes.is() )
     {
         GetDrawPage();
-        if( xDrawPage.is() )
+        if( m_xDrawPage.is() )
         {
-            xShapes.set( xDrawPage, UNO_QUERY );
-            OSL_ENSURE( xShapes.is(),
+            m_xShapes.set( m_xDrawPage, UNO_QUERY );
+            OSL_ENSURE( m_xShapes.is(),
                     "XShapes nicht vom drawing::XDrawPage erhalten" );
         }
     }
-    return xShapes;
+    return m_xShapes;
 }
 
 const uno::Reference< script::XEventAttacherManager >&
                                     SwHTMLForm_Impl::GetControlEventManager()
 {
-    if( !xControlEventManager.is() && xFormComps.is() )
+    if( !m_xControlEventManager.is() && m_xFormComps.is() )
     {
-        xControlEventManager =
-            uno::Reference< script::XEventAttacherManager >( xFormComps, UNO_QUERY );
-        OSL_ENSURE( xControlEventManager.is(),
+        m_xControlEventManager =
+            uno::Reference< script::XEventAttacherManager >( m_xFormComps, UNO_QUERY );
+        OSL_ENSURE( m_xControlEventManager.is(),
     "uno::Reference< XEventAttacherManager > nicht von xFormComps erhalten" );
     }
 
-    return xControlEventManager;
+    return m_xControlEventManager;
 }
 
 const uno::Reference< script::XEventAttacherManager >&
     SwHTMLForm_Impl::GetFormEventManager()
 {
-    if( !xFormEventManager.is() )
+    if( !m_xFormEventManager.is() )
     {
         GetForms();
-        if( xForms.is() )
+        if( m_xForms.is() )
         {
-            xFormEventManager =
-                uno::Reference< script::XEventAttacherManager >( xForms, UNO_QUERY );
-            OSL_ENSURE( xFormEventManager.is(),
+            m_xFormEventManager =
+                uno::Reference< script::XEventAttacherManager >( m_xForms, UNO_QUERY );
+            OSL_ENSURE( m_xFormEventManager.is(),
         "uno::Reference< XEventAttacherManager > nicht von xForms erhalten" );
         }
     }
 
-    return xFormEventManager;
+    return m_xFormEventManager;
 }
 
 class SwHTMLImageWatcher :
