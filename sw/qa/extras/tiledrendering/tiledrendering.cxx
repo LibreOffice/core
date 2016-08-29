@@ -70,6 +70,7 @@ public:
     void testShapeTextUndoGroupShells();
     void testTrackChanges();
     void testTrackChangesCallback();
+    void testRedlineUpdateCallback();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -104,6 +105,7 @@ public:
     CPPUNIT_TEST(testShapeTextUndoGroupShells);
     CPPUNIT_TEST(testTrackChanges);
     CPPUNIT_TEST(testTrackChangesCallback);
+    CPPUNIT_TEST(testRedlineUpdateCallback);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -120,6 +122,7 @@ private:
     int m_nSelectionAfterSearchResult;
     int m_nInvalidations;
     int m_nRedlineTableSizeChanged;
+    int m_nRedlineTableEntryModified;
 };
 
 SwTiledRenderingTest::SwTiledRenderingTest()
@@ -127,7 +130,8 @@ SwTiledRenderingTest::SwTiledRenderingTest()
       m_nSelectionBeforeSearchResult(0),
       m_nSelectionAfterSearchResult(0),
       m_nInvalidations(0),
-      m_nRedlineTableSizeChanged(0)
+      m_nRedlineTableSizeChanged(0),
+      m_nRedlineTableEntryModified(0)
 {
 }
 
@@ -204,6 +208,11 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
     case LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
     {
         ++m_nRedlineTableSizeChanged;
+    }
+    break;
+    case LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
+    {
+        ++m_nRedlineTableEntryModified;
     }
     break;
     }
@@ -1196,6 +1205,28 @@ void SwTiledRenderingTest::testTrackChangesCallback()
     // Assert that we get exactly one notification about the redline insert.
     // This was 0, as LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED wasn't sent.
     CPPUNIT_ASSERT_EQUAL(1, m_nRedlineTableSizeChanged);
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testRedlineUpdateCallback()
+{
+    // Load a document.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
+
+    // Turn on track changes, type "xx" and delete the second one.
+    uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
+    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    pWrtShell->Insert("xx");
+    m_nRedlineTableEntryModified = 0;
+    pWrtShell->DelLeft();
+
+    // Assert that we get exactly one notification about the redline update.
+    // This was 0, as LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED wasn't sent.
+    CPPUNIT_ASSERT_EQUAL(1, m_nRedlineTableEntryModified);
 
     comphelper::LibreOfficeKit::setActive(false);
 }

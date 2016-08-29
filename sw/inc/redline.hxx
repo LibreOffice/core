@@ -192,7 +192,6 @@ class SW_DLLPUBLIC SwRangeRedline : public SwPaM
     void CopyToSection();
     void DelCopyOfSection(size_t nMyPos);
     void MoveFromSection(size_t nMyPos);
-    void MaybeNotifyModification();
 
 public:
     SwRangeRedline( RedlineType_t eType, const SwPaM& rPam );
@@ -289,6 +288,7 @@ public:
     bool operator==( const SwRangeRedline& ) const;
     bool operator<( const SwRangeRedline& ) const;
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void MaybeNotifyModification();
 };
 
 /// Base object for 'Redlines' that are not of 'Ranged' type (like table row insert\delete)
