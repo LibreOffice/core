@@ -61,6 +61,7 @@ EOF
 
 date '+%F %T' >> $output
 cat - >> $output <<EOF
+    | <a href="http://www.documentfoundation.org/privacy">Privacy Policy</a> | <a href="http://www.documentfoundation.org/imprint">Impressum (Legal Info)</a>
     </p>
   </small>
 </div>
