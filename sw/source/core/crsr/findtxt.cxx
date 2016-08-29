@@ -615,7 +615,7 @@ bool SwPaM::DoSearch( const SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
          * search, it probably never did. (pSttNd != &rNdIdx.GetNode())
          * is never true in this case. */
         if( (bSrchForward || pSttNd != &rNdIdx.GetNode()) &&
-            Move( fnMoveForward, fnGoContent ) &&
+            Move( fnMoveForward, GoInContent ) &&
             (!bSrchForward || pSttNd != &GetPoint()->nNode.GetNode()) &&
             1 == std::abs( (int)( GetPoint()->nNode.GetIndex() -
                              GetMark()->nNode.GetIndex()) ) )

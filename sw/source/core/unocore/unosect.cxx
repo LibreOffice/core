@@ -446,11 +446,11 @@ SwXTextSection::getAnchor() throw (uno::RuntimeException, std::exception)
             pIdx->GetNode().GetNodes().IsDocNodes() )
         {
             SwPaM aPaM(*pIdx);
-            aPaM.Move( fnMoveForward, fnGoContent );
+            aPaM.Move( fnMoveForward, GoInContent );
 
             const SwEndNode* pEndNode = pIdx->GetNode().EndOfSectionNode();
             SwPaM aEnd(*pEndNode);
-            aEnd.Move( fnMoveBackward, fnGoContent );
+            aEnd.Move( fnMoveBackward, GoInContent );
             xRet = SwXTextRange::CreateXTextRange(*pSectFormat->GetDoc(),
                 *aPaM.Start(), aEnd.Start());
         }

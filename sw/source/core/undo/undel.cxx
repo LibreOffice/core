@@ -342,7 +342,7 @@ SwUndoDelete::SwUndoDelete(
     if( !pSttTextNd && !pEndTextNd )
     {
         m_nNdDiff = nSttNode - rPam.GetPoint()->nNode.GetIndex() - (bFullPara ? 0 : 1);
-        rPam.Move( fnMoveForward, fnGoNode );
+        rPam.Move( fnMoveForward, GoInNode );
     }
     else
     {
@@ -1051,10 +1051,10 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
 
         // avoid asserts from ~SwIndexReg for deleted nodes
         SwPaM aTmp(*rPam.End());
-        if (!aTmp.Move(fnMoveForward, fnGoNode))
+        if (!aTmp.Move(fnMoveForward, GoInNode))
         {
             *aTmp.GetPoint() = *rPam.Start();
-            aTmp.Move(fnMoveBackward, fnGoNode);
+            aTmp.Move(fnMoveBackward, GoInNode);
         }
         assert(aTmp.GetPoint()->nNode != rPam.GetPoint()->nNode
             && aTmp.GetPoint()->nNode != rPam.GetMark()->nNode);
@@ -1090,7 +1090,7 @@ void SwUndoDelete::RepeatImpl(::sw::RepeatContext & rContext)
     if( !rPam.HasMark() )
     {
         rPam.SetMark();
-        rPam.Move( fnMoveForward, fnGoContent );
+        rPam.Move( fnMoveForward, GoInContent );
     }
     if( m_bDelFullPara )
         rDoc.getIDocumentContentOperations().DelFullPara( rPam );

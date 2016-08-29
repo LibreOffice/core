@@ -84,7 +84,7 @@ void SwUndRng::SetPaM( SwPaM & rPam, bool bCorrToContent ) const
     if( rNd.IsContentNode() )
         rPam.GetPoint()->nContent.Assign( rNd.GetContentNode(), nSttContent );
     else if( bCorrToContent )
-        rPam.Move( fnMoveForward, fnGoContent );
+        rPam.Move( fnMoveForward, GoInContent );
     else
         rPam.GetPoint()->nContent.Assign( nullptr, 0 );
 
@@ -99,7 +99,7 @@ void SwUndRng::SetPaM( SwPaM & rPam, bool bCorrToContent ) const
     if( rPam.GetNode().IsContentNode() )
         rPam.GetPoint()->nContent.Assign( rPam.GetNode().GetContentNode(), nEndContent );
     else if( bCorrToContent )
-        rPam.Move( fnMoveBackward, fnGoContent );
+        rPam.Move( fnMoveBackward, GoInContent );
     else
         rPam.GetPoint()->nContent.Assign( nullptr, 0 );
 }

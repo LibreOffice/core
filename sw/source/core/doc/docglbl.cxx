@@ -359,11 +359,11 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                             SwNodeIndex aEIdx( aTmp.GetPoint()->nNode );
 
                             // Try to move past the end
-                            if( !aTmp.Move( fnMoveForward, fnGoNode ) )
+                            if( !aTmp.Move( fnMoveForward, GoInNode ) )
                             {
                                 // well then, back to the beginning
                                 aTmp.Exchange();
-                                if( !aTmp.Move( fnMoveBackward, fnGoNode ))
+                                if( !aTmp.Move( fnMoveBackward, GoInNode ))
                                 {
                                     OSL_FAIL( "no more Nodes!" );
                                 }

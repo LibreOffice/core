@@ -233,10 +233,10 @@ bool SwCursorShell::SelTableRowOrCol( bool bRow, bool bRowSimple )
 
     // set start and end of a column
     m_pTableCursor->GetPoint()->nNode = *pEnd->GetSttNd();
-    m_pTableCursor->Move( fnMoveForward, fnGoContent );
+    m_pTableCursor->Move( fnMoveForward, GoInContent );
     m_pTableCursor->SetMark();
     m_pTableCursor->GetPoint()->nNode = *pStt->GetSttNd()->EndOfSectionNode();
-    m_pTableCursor->Move( fnMoveBackward, fnGoContent );
+    m_pTableCursor->Move( fnMoveBackward, GoInContent );
 
     // set PtPos 'close' to the reference table, otherwise we might get problems
     // with the repeated headlines check in UpdateCursor():
@@ -271,13 +271,13 @@ bool SwCursorShell::SelTable()
 
     m_pTableCursor->DeleteMark();
     m_pTableCursor->GetPoint()->nNode = *pTableNd;
-    m_pTableCursor->Move( fnMoveForward, fnGoContent );
+    m_pTableCursor->Move( fnMoveForward, GoInContent );
     m_pTableCursor->SetMark();
     // set MkPos 'close' to the master table, otherwise we might get problems
     // with the repeated headlines check in UpdateCursor():
     m_pTableCursor->GetMkPos() = pMasterTabFrame->IsVertical() ? pMasterTabFrame->Frame().TopRight() : pMasterTabFrame->Frame().TopLeft();
     m_pTableCursor->GetPoint()->nNode = *pTableNd->EndOfSectionNode();
-    m_pTableCursor->Move( fnMoveBackward, fnGoContent );
+    m_pTableCursor->Move( fnMoveBackward, GoInContent );
     UpdateCursor();
     return true;
 }
@@ -316,12 +316,12 @@ bool SwCursorShell::SelTableBox()
     // 1. delete mark, and move point to first content node in box
     m_pTableCursor->DeleteMark();
     *(m_pTableCursor->GetPoint()) = SwPosition( *pStartNode );
-    m_pTableCursor->Move( fnMoveForward, fnGoNode );
+    m_pTableCursor->Move( fnMoveForward, GoInNode );
 
     // 2. set mark, and move point to last content node in box
     m_pTableCursor->SetMark();
     *(m_pTableCursor->GetPoint()) = SwPosition( *(pStartNode->EndOfSectionNode()) );
-    m_pTableCursor->Move( fnMoveBackward, fnGoNode );
+    m_pTableCursor->Move( fnMoveBackward, GoInNode );
 
     // 3. exchange
     m_pTableCursor->Exchange();

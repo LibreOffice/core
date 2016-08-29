@@ -1932,7 +1932,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                 {
                     SwNode& rNode = pDoc->GetNodes().GetEndOfContent();
                     SwPaM aPam(rNode);
-                    aPam.Move( fnMoveBackward, fnGoDoc );
+                    aPam.Move( fnMoveBackward, GoInDoc );
                     aAnchor.SetAnchor( aPam.Start() );
                     aSet.Put(aAnchor);
                 }
@@ -2721,7 +2721,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
 
         SwNode& rNode = pDoc->GetNodes().GetEndOfContent();
         SwPaM aPam(rNode);
-        aPam.Move( fnMoveBackward, fnGoDoc );
+        aPam.Move( fnMoveBackward, GoInDoc );
         static sal_uInt16 const aFrameAttrRange[] =
         {
             RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
@@ -3235,7 +3235,7 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor() throw( uno
         const SwStartNode* pOwnStartNode = rNode.FindSttNodeByType(SwFlyStartNode);
 
         SwPaM aPam(rNode);
-        aPam.Move(fnMoveForward, fnGoNode);
+        aPam.Move(fnMoveForward, GoInNode);
         SwTableNode* pTableNode = aPam.GetNode().FindTableNode();
         SwContentNode* pCont = nullptr;
         while( pTableNode )
@@ -3294,7 +3294,7 @@ uno::Reference< container::XEnumeration >  SwXTextFrame::createEnumeration() thr
         return nullptr;
     SwPosition aPos(pFormat->GetContent().GetContentIdx()->GetNode());
     auto pUnoCursor(GetDoc()->CreateUnoCursor(aPos));
-    pUnoCursor->Move(fnMoveForward, fnGoNode);
+    pUnoCursor->Move(fnMoveForward, GoInNode);
     return SwXParagraphEnumeration::Create(this, pUnoCursor, CURSOR_FRAME);
 }
 

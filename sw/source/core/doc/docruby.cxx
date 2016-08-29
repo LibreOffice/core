@@ -77,7 +77,7 @@ sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
                      {
                         // goto next paragraph
                         aPam.DeleteMark();
-                        aPam.Move( fnMoveForward, fnGoNode );
+                        aPam.Move( fnMoveForward, GoInNode );
                      }
                      else
                         break;
@@ -148,7 +148,7 @@ void SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                      {
                         // goto next paragraph
                         aPam.DeleteMark();
-                        aPam.Move( fnMoveForward, fnGoNode );
+                        aPam.Move( fnMoveForward, GoInNode );
                      }
                      else
                     {

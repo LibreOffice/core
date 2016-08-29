@@ -1533,7 +1533,7 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
         pCursorShell->StartAction();
         // Set cursor into current cell. This deletes any table cursor.
         SwPaM aPaM( *pStartNode );
-        aPaM.Move( fnMoveForward, fnGoNode );
+        aPaM.Move( fnMoveForward, GoInNode );
         Select( aPaM );
         // Move cursor to the end of the table creating a selection and a table
         // cursor.
@@ -1552,7 +1552,7 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
         // expand the current selection (i.e., set
         // point to new position; keep mark)
         SwPaM aPaM( *pStartNode );
-        aPaM.Move( fnMoveForward, fnGoNode );
+        aPaM.Move( fnMoveForward, GoInNode );
         aPaM.SetMark();
         const SwPaM *pPaM = pCursorShell->GetTableCrs() ? pCursorShell->GetTableCrs()
                                                     : pCursorShell->GetCursor();

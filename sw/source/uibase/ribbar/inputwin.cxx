@@ -444,9 +444,9 @@ IMPL_LINK_TYPED( SwInputWindow, SelTableCellsNotify, SwWrtShell&, rCaller, void 
             pWrtShell->StartAllAction();
 
             SwPaM aPam( *pWrtShell->GetStackCursor()->GetPoint() );
-            aPam.Move( fnMoveBackward, fnGoSection );
+            aPam.Move( fnMoveBackward, GoInSection );
             aPam.SetMark();
-            aPam.Move( fnMoveForward, fnGoSection );
+            aPam.Move( fnMoveForward, GoInSection );
 
             IDocumentContentOperations& rIDCO = pWrtShell->getIDocumentContentOperations();
             rIDCO.DeleteRange( aPam );

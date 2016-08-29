@@ -71,7 +71,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
             {
                 // then go to the end of the selection
                 aDelPam.GetPoint()->nNode = rEndNd;
-                aDelPam.Move( fnMoveBackward, fnGoContent );
+                aDelPam.Move( fnMoveBackward, GoInContent );
             }
             // skip protected boxes
             if( !rNd.IsContentNode() ||
@@ -85,7 +85,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
             if( !pEndSelPos ) // at the end of a selection
                 break;
             aDelPam.DeleteMark();
-            aDelPam.Move( fnMoveForward, fnGoContent ); // next box
+            aDelPam.Move( fnMoveForward, GoInContent ); // next box
         } while( pEndSelPos );
     }
     else

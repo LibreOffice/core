@@ -120,9 +120,9 @@ void SwImpBlocks::ClearDoc()
 SwPaM* SwImpBlocks::MakePaM()
 {
     SwPaM* pPam = new SwPaM( pDoc->GetNodes().GetEndOfContent() );
-    pPam->Move( fnMoveBackward, fnGoDoc );
+    pPam->Move( fnMoveBackward, GoInDoc );
     pPam->SetMark();
-    pPam->Move( fnMoveForward, fnGoDoc );
+    pPam->Move( fnMoveForward, GoInDoc );
     pPam->Exchange();
     return pPam;
 }

@@ -1667,7 +1667,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
         // move point; forward if it's the start, backwards if it's the end
         if( ! rCmp.GetPoint()->nNode.GetNode().IsContentNode() )
             rCmp.Move( bPointIsStart ? fnMoveForward : fnMoveBackward,
-                        fnGoContent );
+                        GoInContent );
 
         // move mark (if exists); forward if it's the start, else backwards
         if( rCmp.HasMark() )
@@ -1676,7 +1676,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
             {
                 rCmp.Exchange();
                 rCmp.Move( !bPointIsStart ? fnMoveForward : fnMoveBackward,
-                            fnGoContent );
+                            GoInContent );
                 rCmp.Exchange();
             }
         }
@@ -2877,7 +2877,7 @@ bool SwCursorShell::FindValidContentNode( bool bOnlyText )
         // move forward into non-protected area.
         SwPaM aPam( rNdIdx.GetNode(), 0 );
         while( aPam.GetNode().IsProtect() &&
-               aPam.Move( fnMoveForward, fnGoContent ) )
+               aPam.Move( fnMoveForward, GoInContent ) )
             ; // nothing to do in the loop; the aPam.Move does the moving!
 
         // didn't work? then go backwards!
@@ -2886,7 +2886,7 @@ bool SwCursorShell::FindValidContentNode( bool bOnlyText )
             SwPaM aTmpPaM( rNdIdx.GetNode(), 0 );
             aPam = aTmpPaM;
             while( aPam.GetNode().IsProtect() &&
-                   aPam.Move( fnMoveBackward, fnGoContent ) )
+                   aPam.Move( fnMoveBackward, GoInContent ) )
                 ; // nothing to do in the loop; the aPam.Move does the moving!
         }
 

@@ -806,7 +806,7 @@ void wwSectionManager::CreateSep(const long nTextPos, bool /*bMustHaveBreak*/)
     {
         bool insert = true;
         SwPaM pam( *mrReader.m_pLastAnchorPos );
-        if( pam.Move(fnMoveBackward, fnGoNode))
+        if( pam.Move(fnMoveBackward, GoInNode))
             if( SwTextNode* txtNode = pam.GetPoint()->nNode.GetNode().GetTextNode())
                 if( txtNode->Len() == 0 )
                     insert = false;

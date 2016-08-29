@@ -184,7 +184,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
             MoveToUndoNds(rPam, m_pUndoNodeIndex.get());
 
             if( !bSttWasTextNd )
-                rPam.Move( fnMoveBackward, fnGoContent );
+                rPam.Move( fnMoveBackward, GoInContent );
         }
     }
 

@@ -44,14 +44,6 @@ static SwMoveFnCollection aBwrd = {
     /* fnSection    */  &SwNodes::GoEndOfSection
 };
 
-SwGoInDoc fnGoDoc       = &GoInDoc;
-SwGoInDoc fnGoSection   = &GoInSection;
-SwGoInDoc fnGoNode      = &GoInNode;
-SwGoInDoc fnGoContent     = &GoInContent;
-SwGoInDoc fnGoContentCells = &GoInContentCells;
-SwGoInDoc fnGoContentSkipHidden      = &GoInContentSkipHidden;
-SwGoInDoc fnGoContentCellsSkipHidden = &GoInContentCellsSkipHidden;
-
 SwWhichPara fnParaPrev  = &GoPrevPara;
 SwWhichPara fnParaCurr  = &GoCurrPara;
 SwWhichPara fnParaNext  = &GoNextPara;

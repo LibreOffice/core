@@ -535,7 +535,7 @@ void SwHHCWrapper::Convert()
             // get PaM that points to the start of the document
             SwNode& rNode = m_pView->GetDocShell()->GetDoc()->GetNodes().GetEndOfContent();
             SwPaM aPam(rNode);
-            aPam.Move( fnMoveBackward, fnGoDoc ); // move to start of document
+            aPam.Move( fnMoveBackward, GoInDoc ); // move to start of document
 
             pSttPos = aPam.GetPoint();  //! using a PaM here makes sure we will get only text nodes
             SwTextNode *pTextNode = pSttPos->nNode.GetNode().GetTextNode();

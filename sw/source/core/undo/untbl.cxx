@@ -517,9 +517,9 @@ void SwUndoTableToText::UndoImpl(::sw::UndoRedoContext & rContext)
     pPam->GetPoint()->nNode = *pTableNd->EndOfSectionNode();
     pPam->SetMark();
     pPam->GetPoint()->nNode = *pPam->GetNode().StartOfSectionNode();
-    pPam->Move( fnMoveForward, fnGoContent );
+    pPam->Move( fnMoveForward, GoInContent );
     pPam->Exchange();
-    pPam->Move( fnMoveBackward, fnGoContent );
+    pPam->Move( fnMoveBackward, GoInContent );
 
     ClearFEShellTabCols();
 }
@@ -677,7 +677,7 @@ void SwUndoTableToText::RepeatImpl(::sw::RepeatContext & rContext)
     {
         // move cursor out of table
         pPam->GetPoint()->nNode = *pTableNd->EndOfSectionNode();
-        pPam->Move( fnMoveForward, fnGoContent );
+        pPam->Move( fnMoveForward, GoInContent );
         pPam->SetMark();
         pPam->DeleteMark();
 
@@ -767,7 +767,7 @@ void SwUndoTextToTable::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         pPos->nNode = nTableNd;
         pPos->nContent.Assign(pPos->nNode.GetNode().GetContentNode(), 0);
-        if (aPam.Move(fnMoveBackward, fnGoContent))
+        if (aPam.Move(fnMoveBackward, GoInContent))
         {
             SwNodeIndex & rIdx = aPam.GetPoint()->nNode;
 
@@ -2928,7 +2928,7 @@ void SwUndoSplitTable::UndoImpl(::sw::UndoRedoContext & rContext)
         SwNodeIndex const idx(pDoc->GetNodes(), nTableNode + nOffset);
         {
             SwPaM pam(idx);
-            pam.Move(fnMoveBackward, fnGoContent);
+            pam.Move(fnMoveBackward, GoInContent);
             ::PaMCorrAbs(*pPam, *pam.GetPoint());
         }
 

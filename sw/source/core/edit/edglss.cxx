@@ -212,7 +212,7 @@ bool SwEditShell::CopySelToDoc( SwDoc* pInsDoc )
                         ( bColSel || !pNd->GetTextNode() ) )
                     {
                         rPaM.SetMark();
-                        rPaM.Move( fnMoveForward, fnGoContent );
+                        rPaM.Move( fnMoveForward, GoInContent );
                         bRet = GetDoc()->getIDocumentContentOperations().CopyRange( rPaM, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true )
                             || bRet;
                         rPaM.Exchange();

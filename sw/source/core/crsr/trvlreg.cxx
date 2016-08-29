@@ -247,7 +247,7 @@ bool SwCursor::GotoRegion( const OUString& rName )
             SwCursorSaveState aSaveState( *this );
 
             GetPoint()->nNode = *pIdx;
-            Move( fnMoveForward, fnGoContent );
+            Move( fnMoveForward, GoInContent );
             bRet = !IsSelOvr();
         }
     }

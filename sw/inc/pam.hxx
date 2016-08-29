@@ -146,13 +146,13 @@ SW_DLLPUBLIC extern SwMoveFn fnMoveBackward;
 // also works: using SwGoInDoc = bool (*) (SwPaM& rPam, SwMoveFn fnMove);
 // no works: using SwGoInDoc = [](SwPaM& rPam, SwMoveFn fnMove) -> bool;
 using SwGoInDoc = auto (*)(SwPaM& rPam, SwMoveFn fnMove) -> bool;
-SW_DLLPUBLIC extern SwGoInDoc fnGoDoc;
-extern SwGoInDoc fnGoSection;
-SW_DLLPUBLIC extern SwGoInDoc fnGoNode;
-SW_DLLPUBLIC extern SwGoInDoc fnGoContent; ///< SwPam::Move() default argument.
-extern SwGoInDoc fnGoContentCells;
-extern SwGoInDoc fnGoContentSkipHidden;
-extern SwGoInDoc fnGoContentCellsSkipHidden;
+SW_DLLPUBLIC bool GoInDoc( SwPaM&, SwMoveFn);
+SW_DLLPUBLIC bool GoInSection( SwPaM&, SwMoveFn);
+SW_DLLPUBLIC bool GoInNode( SwPaM&, SwMoveFn);
+SW_DLLPUBLIC bool GoInContent( SwPaM&, SwMoveFn);
+SW_DLLPUBLIC bool GoInContentCells( SwPaM&, SwMoveFn);
+SW_DLLPUBLIC bool GoInContentSkipHidden( SwPaM&, SwMoveFn);
+SW_DLLPUBLIC bool GoInContentCellsSkipHidden( SwPaM&, SwMoveFn);
 
 /// PaM is Point and Mark: a selection of the document model.
 class SW_DLLPUBLIC SwPaM : public sw::Ring<SwPaM>
@@ -190,7 +190,7 @@ public:
 
     /// Movement of cursor.
     bool Move( SwMoveFn fnMove = fnMoveForward,
-                SwGoInDoc fnGo = fnGoContent );
+                SwGoInDoc fnGo = GoInContent );
 
     /// Search.
     bool Find(  const css::util::SearchOptions2& rSearchOpt,

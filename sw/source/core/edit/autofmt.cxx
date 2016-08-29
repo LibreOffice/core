@@ -2582,7 +2582,7 @@ void SwEditShell::AutoFormatBySplitNode()
 {
     SET_CURR_SHELL( this );
     SwPaM* pCursor = GetCursor();
-    if( !pCursor->IsMultiSelection() && pCursor->Move( fnMoveBackward, fnGoNode ) )
+    if( !pCursor->IsMultiSelection() && pCursor->Move( fnMoveBackward, GoInNode ) )
     {
         StartAllAction();
         StartUndo( UNDO_AUTOFORMAT );
@@ -2622,7 +2622,7 @@ void SwEditShell::AutoFormatBySplitNode()
             pCursor = GetCursor();
         }
         pCursor->DeleteMark();
-        pCursor->Move( fnMoveForward, fnGoNode );
+        pCursor->Move( fnMoveForward, GoInNode );
 
         EndUndo( UNDO_AUTOFORMAT );
         EndAllAction();

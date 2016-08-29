@@ -409,10 +409,10 @@ void SwUiWriterTest::testBookmarkCopy()
     // copy range
     rIDCO.SplitNode(*aPaM.GetPoint(), false);
     SwPosition target(*aPaM.GetPoint());
-    aPaM.Move(fnMoveBackward, fnGoContent);
+    aPaM.Move(fnMoveBackward, GoInContent);
     aPaM.SetMark();
     aPaM.SttEndDoc(true/*start*/);
-    aPaM.Move(fnMoveForward, fnGoContent); // partially select 1st para
+    aPaM.Move(fnMoveForward, GoInContent); // partially select 1st para
 
     rIDCO.CopyRange(aPaM, target, /*bCopyAll=*/false, /*bCheckPos=*/true);
 
@@ -1251,7 +1251,7 @@ void SwUiWriterTest::testTdf63214()
         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
         SwPaM aPaM( SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1) );
         aPaM.SetMark();
-        aPaM.Move(fnMoveForward, fnGoContent);
+        aPaM.Move(fnMoveForward, GoInContent);
         //Inserting a crossRefBookmark
         pMarkAccess->makeMark(aPaM, "Bookmark", IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
@@ -2829,30 +2829,30 @@ void SwUiWriterTest::testTdf83798()
     pWrtShell->UpdateTableOf(*pTOXBase);
     SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
     pCursor->SetMark();
-    pCursor->Move(fnMoveForward, fnGoNode);
+    pCursor->Move(fnMoveForward, GoInNode);
     CPPUNIT_ASSERT_EQUAL(OUString("Table of Contents"), pCursor->GetText());
     pCursor->DeleteMark();
     pCursor->SetMark();
-    pCursor->Move(fnMoveForward, fnGoContent);
+    pCursor->Move(fnMoveForward, GoInContent);
     CPPUNIT_ASSERT_EQUAL(OUString("1"), pCursor->GetText());
     pCursor->DeleteMark();
-    pCursor->Move(fnMoveForward, fnGoNode);
+    pCursor->Move(fnMoveForward, GoInNode);
     pCursor->SetMark();
-    pCursor->Move(fnMoveForward, fnGoContent);
-    pCursor->Move(fnMoveForward, fnGoContent);
-    pCursor->Move(fnMoveForward, fnGoContent);
+    pCursor->Move(fnMoveForward, GoInContent);
+    pCursor->Move(fnMoveForward, GoInContent);
+    pCursor->Move(fnMoveForward, GoInContent);
     CPPUNIT_ASSERT_EQUAL(OUString("1.A"), pCursor->GetText());
     pCursor->DeleteMark();
-    pCursor->Move(fnMoveForward, fnGoNode);
+    pCursor->Move(fnMoveForward, GoInNode);
     pCursor->SetMark();
-    pCursor->Move(fnMoveForward, fnGoContent);
+    pCursor->Move(fnMoveForward, GoInContent);
     CPPUNIT_ASSERT_EQUAL(OUString("2"), pCursor->GetText());
     pCursor->DeleteMark();
-    pCursor->Move(fnMoveForward, fnGoNode);
+    pCursor->Move(fnMoveForward, GoInNode);
     pCursor->SetMark();
-    pCursor->Move(fnMoveForward, fnGoContent);
-    pCursor->Move(fnMoveForward, fnGoContent);
-    pCursor->Move(fnMoveForward, fnGoContent);
+    pCursor->Move(fnMoveForward, GoInContent);
+    pCursor->Move(fnMoveForward, GoInContent);
+    pCursor->Move(fnMoveForward, GoInContent);
     CPPUNIT_ASSERT_EQUAL(OUString("2.A"), pCursor->GetText());
     pCursor->DeleteMark();
 }

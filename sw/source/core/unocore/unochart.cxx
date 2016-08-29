@@ -409,7 +409,7 @@ static void GetFormatAndCreateCursorFromRangeRep(
 
             // set cursor to top left box of range
             auto pUnoCursor = pTableFormat->GetDoc()->CreateUnoCursor(aPos, true);
-            pUnoCursor->Move( fnMoveForward, fnGoNode );
+            pUnoCursor->Move( fnMoveForward, GoInNode );
             pUnoCursor->SetRemainInSection( false );
 
             // #i80314#
@@ -419,7 +419,7 @@ static void GetFormatAndCreateCursorFromRangeRep(
             {
                 pUnoCursor->SetMark();
                 pUnoCursor->GetPoint()->nNode = *pBRBox->GetSttNd();
-                pUnoCursor->Move( fnMoveForward, fnGoNode );
+                pUnoCursor->Move( fnMoveForward, GoInNode );
                 SwUnoTableCursor* pCursor =
                     dynamic_cast<SwUnoTableCursor*>(pUnoCursor.get());
                 // HACK: remove pending actions for old style tables
@@ -2650,7 +2650,7 @@ bool SwChartDataSequence::ExtendTo( bool bExtendCol,
         pUnoTableCursor->SetMark();
         pUnoTableCursor->GetPoint()->nNode = *pNewEndBox->GetSttNd();
         pUnoTableCursor->GetMark()->nNode  = *pNewStartBox->GetSttNd();
-        pUnoTableCursor->Move( fnMoveForward, fnGoNode );
+        pUnoTableCursor->Move( fnMoveForward, GoInNode );
         pUnoTableCursor->MakeBoxSels();
     }
 

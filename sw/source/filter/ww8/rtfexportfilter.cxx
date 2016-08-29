@@ -70,7 +70,7 @@ sal_Bool RtfExportFilter::filter(const uno::Sequence< beans::PropertyValue >& aD
     // we get SwPaM for the entire document; copy&paste is handled internally, not via UNO
     SwPaM aPam(pDoc->GetNodes().GetEndOfContent());
     aPam.SetMark();
-    aPam.Move(fnMoveBackward, fnGoDoc);
+    aPam.Move(fnMoveBackward, GoInDoc);
 
     auto pCurPam = o3tl::make_unique<SwPaM>(*aPam.End(), *aPam.Start());
 

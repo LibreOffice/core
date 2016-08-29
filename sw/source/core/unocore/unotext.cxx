@@ -1275,7 +1275,7 @@ SwXText::Impl::finishOrAppendParagraph(
     m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_START , nullptr);
     // find end node, go backward - don't skip tables because the new
     // paragraph has to be the last node
-    //aPam.Move( fnMoveBackward, fnGoNode );
+    //aPam.Move( fnMoveBackward, GoInNode );
     SwPosition aInsertPosition(
             SwNodeIndex( *pStartNode->EndOfSectionNode(), -1 ) );
     SwPaM aPam(aInsertPosition);
@@ -1293,7 +1293,7 @@ SwXText::Impl::finishOrAppendParagraph(
     m_pDoc->ResetAttrs(aPam);
     // in case of finishParagraph the PaM needs to be moved to the
     // previous paragraph
-    aPam.Move( fnMoveBackward, fnGoNode );
+    aPam.Move( fnMoveBackward, GoInNode );
 
     try
     {
@@ -1700,7 +1700,7 @@ SwXText::convertToTextFrame(
             {   // has to be in a block to remove the SwIndexes before
                 // DelFullPara is called
                 SwPaM aMovePam( aStartPam.GetNode() );
-                if (aMovePam.Move( fnMoveForward, fnGoContent ))
+                if (aMovePam.Move( fnMoveForward, GoInContent ))
                 {
                     // move the anchor to the next paragraph
                     SwFormatAnchor aNewAnchor(rNewFrame.GetFrameFormat()->GetAnchor());
@@ -1958,10 +1958,10 @@ void SwXText::Impl::ConvertCell(
         // aStartCellPam has to point to the start of the new (previous) node
         // aEndCellPam has to point to the end of the new (previous) node
         aStartCellPam.DeleteMark();
-        aStartCellPam.Move(fnMoveBackward, fnGoNode);
+        aStartCellPam.Move(fnMoveBackward, GoInNode);
         aStartCellPam.GetPoint()->nContent = 0;
         aEndCellPam.DeleteMark();
-        aEndCellPam.Move(fnMoveBackward, fnGoNode);
+        aEndCellPam.Move(fnMoveBackward, GoInNode);
         aEndCellPam.GetPoint()->nContent =
             aEndCellPam.GetNode().GetTextNode()->Len();
     }
@@ -2461,7 +2461,7 @@ SwXTextCursor * SwXBodyText::CreateTextCursor(const bool bIgnoreTables)
 
     // the cursor has to skip tables contained in this text
     SwPaM aPam(GetDoc()->GetNodes().GetEndOfContent());
-    aPam.Move( fnMoveBackward, fnGoDoc );
+    aPam.Move( fnMoveBackward, GoInDoc );
     if (!bIgnoreTables)
     {
         SwTableNode * pTableNode = aPam.GetNode().FindTableNode();
@@ -2558,7 +2558,7 @@ throw (uno::RuntimeException, std::exception)
     SwNode& rNode = GetDoc()->GetNodes().GetEndOfContent();
     SwPosition aPos(rNode);
     auto pUnoCursor(GetDoc()->CreateUnoCursor(aPos));
-    pUnoCursor->Move(fnMoveBackward, fnGoDoc);
+    pUnoCursor->Move(fnMoveBackward, GoInDoc);
     return SwXParagraphEnumeration::Create(this, pUnoCursor, CURSOR_BODY);
 }
 
@@ -2739,7 +2739,7 @@ SwXHeadFootText::createTextCursor() throw (uno::RuntimeException, std::exception
     SwXTextCursor *const pXCursor = new SwXTextCursor(*GetDoc(), this,
             (m_pImpl->m_bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER, aPos);
     auto& rUnoCursor(pXCursor->GetCursor());
-    rUnoCursor.Move(fnMoveForward, fnGoNode);
+    rUnoCursor.Move(fnMoveForward, GoInNode);
 
     // save current start node to be able to check if there is content
     // after the table - otherwise the cursor would be in the body text!
@@ -2792,7 +2792,7 @@ throw (uno::RuntimeException, std::exception)
     SwNode& rNode = rHeadFootFormat.GetContent().GetContentIdx()->GetNode();
     SwPosition aPos(rNode);
     SwPaM aHFPam(aPos);
-    aHFPam.Move(fnMoveForward, fnGoNode);
+    aHFPam.Move(fnMoveForward, GoInNode);
     SwStartNode *const pOwnStartNode = aHFPam.GetNode().FindSttNodeByType(
             (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
     SwStartNode *const p1 = aPam.GetNode().FindSttNodeByType(
@@ -2820,7 +2820,7 @@ throw (uno::RuntimeException, std::exception)
     const SwNode& rNode = rFlyContent.GetContentIdx()->GetNode();
     SwPosition aPos(rNode);
     auto pUnoCursor(GetDoc()->CreateUnoCursor(aPos));
-    pUnoCursor->Move(fnMoveForward, fnGoNode);
+    pUnoCursor->Move(fnMoveForward, GoInNode);
     return SwXParagraphEnumeration::Create(this, pUnoCursor, (m_pImpl->m_bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER);
 }
 

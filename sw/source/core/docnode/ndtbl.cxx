@@ -2026,10 +2026,10 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
 
             // Save the cursors (UNO and otherwise)
             SwPaM aSavePaM( SwNodeIndex( *pTableNd->EndOfSectionNode() ) );
-            if( ! aSavePaM.Move( fnMoveForward, fnGoNode ) )
+            if( ! aSavePaM.Move( fnMoveForward, GoInNode ) )
             {
                 *aSavePaM.GetMark() = SwPosition( *pTableNd );
-                aSavePaM.Move( fnMoveBackward, fnGoNode );
+                aSavePaM.Move( fnMoveBackward, GoInNode );
             }
             {
                 SwPaM const tmpPaM(*pTableNd, *pTableNd->EndOfSectionNode());
@@ -2078,10 +2078,10 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
 
             // Save the cursors (UNO and otherwise)
             SwPaM aSavePaM( SwNodeIndex( *pTableNd->EndOfSectionNode() ) );
-            if( ! aSavePaM.Move( fnMoveForward, fnGoNode ) )
+            if( ! aSavePaM.Move( fnMoveForward, GoInNode ) )
             {
                 *aSavePaM.GetMark() = SwPosition( *pTableNd );
-                aSavePaM.Move( fnMoveBackward, fnGoNode );
+                aSavePaM.Move( fnMoveBackward, GoInNode );
             }
             {
                 SwPaM const tmpPaM(*pTableNd, *pTableNd->EndOfSectionNode());

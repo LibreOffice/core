@@ -798,7 +798,7 @@ if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
         else if( !IsNewDoc() )
         {
             if( pPos->nContent.GetIndex() )     // dann gabs am Ende kein <P>,
-                m_pPam->Move( fnMoveForward, fnGoNode );  // als zum naechsten Node
+                m_pPam->Move( fnMoveForward, GoInNode );  // als zum naechsten Node
             SwTextNode* pTextNode = pPos->nNode.GetNode().GetTextNode();
             SwNodeIndex aPrvIdx( pPos->nNode );
             if( pTextNode && pTextNode->CanJoinPrev( &aPrvIdx ) &&

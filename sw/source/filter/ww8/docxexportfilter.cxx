@@ -62,7 +62,7 @@ bool DocxExportFilter::exportDocument()
     // get the correct SwPaM* then...
     SwPaM aPam( pDoc->GetNodes().GetEndOfContent() );
     aPam.SetMark();
-    aPam.Move( fnMoveBackward, fnGoDoc );
+    aPam.Move( fnMoveBackward, GoInDoc );
 
     SwPaM *pCurPam = new SwPaM( *aPam.End(), *aPam.Start() );
 

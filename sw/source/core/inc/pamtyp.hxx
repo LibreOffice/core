@@ -34,13 +34,6 @@ void GoStartDoc( SwPosition*);
 void GoEndDoc( SwPosition*);
 void GoStartSection( SwPosition*);
 void GoEndSection( SwPosition*);
-bool GoInDoc( SwPaM&, SwMoveFn);
-bool GoInSection( SwPaM&, SwMoveFn);
-bool GoInNode( SwPaM&, SwMoveFn);
-bool GoInContent( SwPaM&, SwMoveFn);
-bool GoInContentCells( SwPaM&, SwMoveFn);
-bool GoInContentSkipHidden( SwPaM&, SwMoveFn);
-bool GoInContentCellsSkipHidden( SwPaM&, SwMoveFn);
 const SwTextAttr* GetFrwrdTextHint( const SwpHints&, sal_uInt16&, sal_Int32 );
 const SwTextAttr* GetBkwrdTextHint( const SwpHints&, sal_uInt16&, sal_Int32 );
 

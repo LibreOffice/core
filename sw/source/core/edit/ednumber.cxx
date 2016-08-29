@@ -506,13 +506,13 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
 
             if( nOffset )
             {
-                aCursor.Move( fnMoveBackward, fnGoNode );
+                aCursor.Move( fnMoveBackward, GoInNode );
                 bRet = GetDoc()->MoveParagraph( aCursor, nOffset );
             }
         }
         else if( (bUpperLeft ? nUpperLevel : nLowerLevel+1) < MAXLEVEL )
         {
-            aCursor.Move( fnMoveBackward, fnGoNode );
+            aCursor.Move( fnMoveBackward, GoInNode );
             bRet = GetDoc()->NumUpDown( aCursor, !bUpperLeft );
         }
     }

@@ -110,7 +110,7 @@ static void lcl_EnsureValidPam( SwPaM& rPam )
         rPam.GetPoint()->nNode =
             *rPam.GetDoc()->GetNodes().GetEndOfContent().StartOfSectionNode();
         ++ rPam.GetPoint()->nNode;
-        rPam.Move( fnMoveForward, fnGoContent ); // go into content
+        rPam.Move( fnMoveForward, GoInContent ); // go into content
     }
 }
 

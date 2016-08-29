@@ -702,12 +702,12 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
         SwContentNode* pCNd = aCpyPam.GetNode().GetContentNode();
         if( pCNd )
             aCpyPam.GetPoint()->nContent.Assign( pCNd, 0 );
-        else if( !aCpyPam.Move( fnMoveForward, fnGoNode ))
-            aCpyPam.Move( fnMoveBackward, fnGoNode );
+        else if( !aCpyPam.Move( fnMoveForward, GoInNode ))
+            aCpyPam.Move( fnMoveBackward, GoInNode );
     }
 
     aCpyPam.SetMark();
-    aCpyPam.Move( fnMoveForward, fnGoDoc );
+    aCpyPam.Move( fnMoveForward, GoInDoc );
 
     bool bRet = true;
     StartAllAction();

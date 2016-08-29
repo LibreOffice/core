@@ -589,7 +589,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl() throw (container::NoSuchElementE
             (CURSOR_SELECTION_IN_TABLE != m_eCursorType)) && pTableNode)
         {
             aNewCursor->GetPoint()->nNode = pTableNode->EndOfSectionIndex();
-            aNewCursor->Move(fnMoveForward, fnGoNode);
+            aNewCursor->Move(fnMoveForward, GoInNode);
         }
         else
         {
@@ -612,7 +612,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl() throw (container::NoSuchElementE
         {
             // this is a foreign table: go to end
             rUnoCursor.GetPoint()->nNode = pTableNode->EndOfSectionIndex();
-            if (!rUnoCursor.Move(fnMoveForward, fnGoNode))
+            if (!rUnoCursor.Move(fnMoveForward, GoInNode))
             {
                 return nullptr;
             }

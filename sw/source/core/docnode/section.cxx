@@ -1371,7 +1371,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                     if( 2 < pSectNd->EndOfSectionIndex() - pSectNd->GetIndex() )
                     {
                         aSave = rInsPos;
-                        pPam->Move( fnMoveBackward, fnGoNode );
+                        pPam->Move( fnMoveBackward, GoInNode );
                         pPam->SetMark(); // Rewire both SwPositions
 
                         pDoc->CorrAbs( aSave, *pPam->GetPoint(), 0, true );

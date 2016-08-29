@@ -844,9 +844,9 @@ void Test::testRedlineMode()
         | nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE);
 
     // need a delete redline to trigger mode switching
-    pam.Move(fnMoveForward, fnGoDoc);
+    pam.Move(fnMoveForward, GoInDoc);
     pam.SetMark();
-    pam.Move(fnMoveBackward, fnGoDoc);
+    pam.Move(fnMoveBackward, GoInDoc);
     pDoc->getIDocumentContentOperations().DeleteAndJoin(pam);
 
     // hide delete redlines

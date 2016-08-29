@@ -977,7 +977,7 @@ SwXTextCursor::gotoStart(sal_Bool Expand) throw (uno::RuntimeException, std::exc
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     if (CURSOR_BODY == m_pImpl->m_eType)
     {
-        rUnoCursor.Move( fnMoveBackward, fnGoDoc );
+        rUnoCursor.Move( fnMoveBackward, GoInDoc );
         //check, that the cursor is not in a table
         SwTableNode * pTableNode = rUnoCursor.GetNode().FindTableNode();
         SwContentNode * pCNode = nullptr;
@@ -1033,7 +1033,7 @@ SwXTextCursor::gotoEnd(sal_Bool Expand) throw (uno::RuntimeException, std::excep
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     if (CURSOR_BODY == m_pImpl->m_eType)
     {
-        rUnoCursor.Move( fnMoveForward, fnGoDoc );
+        rUnoCursor.Move( fnMoveForward, GoInDoc );
     }
     else if (   (CURSOR_FRAME   == m_pImpl->m_eType)
             ||  (CURSOR_TBLTEXT == m_pImpl->m_eType)

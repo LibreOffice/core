@@ -1411,7 +1411,7 @@ void SwHTMLParser::StripTrailingPara()
             m_pPam->SetMark();
             m_pPam->DeleteMark();
             m_pDoc->GetNodes().Delete( m_pPam->GetPoint()->nNode );
-            m_pPam->Move( fnMoveBackward, fnGoNode );
+            m_pPam->Move( fnMoveBackward, GoInNode );
         }
         else if( pCNd && pCNd->IsTextNode() && m_pTable )
         {

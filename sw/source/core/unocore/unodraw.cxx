@@ -1314,7 +1314,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                             else
                             {
                                 //without access to the layout the last node of the body will be used as anchor position
-                                aPam.Move( fnMoveBackward, fnGoDoc );
+                                aPam.Move( fnMoveBackward, GoInDoc );
                             }
                             //anchor position has to be inserted after the text attribute has been inserted
                             aNewAnchor.SetAnchor( aPam.GetPoint() );
@@ -1335,7 +1335,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                             else
                             {
                                 //without access to the layout the last node of the body will be used as anchor position
-                                aPam.Move( fnMoveBackward, fnGoDoc );
+                                aPam.Move( fnMoveBackward, GoInDoc );
                             }
                             //the RES_TXTATR_FLYCNT needs to be added now
                             SwTextNode *pNd = aPam.GetNode().GetTextNode();

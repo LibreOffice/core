@@ -793,9 +793,9 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
         // clear document and move to end of it
         SwDoc & rPostItDoc(*rData.m_pPostItShell->GetDoc());
         SwPaM aPam(rPostItDoc.GetNodes().GetEndOfContent());
-        aPam.Move( fnMoveBackward, fnGoDoc );
+        aPam.Move( fnMoveBackward, GoInDoc );
         aPam.SetMark();
-        aPam.Move( fnMoveForward, fnGoDoc );
+        aPam.Move( fnMoveForward, GoInDoc );
         rPostItDoc.getIDocumentContentOperations().DeleteRange( aPam );
 
         const StringRangeEnumerator aRangeEnum( rData.GetPageRange(), 1, nDocPageCount, 0 );

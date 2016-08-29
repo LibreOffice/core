@@ -111,7 +111,7 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor()
     SwXTextCursor *const pXCursor =
         new SwXTextCursor(*GetDoc(), this, CURSOR_REDLINE, aPos);
     auto& rUnoCursor(pXCursor->GetCursor());
-    rUnoCursor.Move(fnMoveForward, fnGoNode);
+    rUnoCursor.Move(fnMoveForward, GoInNode);
 
     // #101929# prevent a newly created text cursor from running inside a table
     // because table cells have their own XText.
@@ -160,7 +160,7 @@ uno::Reference<container::XEnumeration> SwXRedlineText::createEnumeration()
 {
     SolarMutexGuard aGuard;
     SwPaM aPam(aNodeIndex);
-    aPam.Move(fnMoveForward, fnGoNode);
+    aPam.Move(fnMoveForward, GoInNode);
     auto pUnoCursor(GetDoc()->CreateUnoCursor(*aPam.Start()));
     return SwXParagraphEnumeration::Create(this, pUnoCursor, CURSOR_REDLINE);
 }
@@ -542,7 +542,7 @@ uno::Reference< container::XEnumeration >  SwXRedline::createEnumeration() throw
     if(!pNodeIndex)
         return nullptr;
     SwPaM aPam(*pNodeIndex);
-    aPam.Move(fnMoveForward, fnGoNode);
+    aPam.Move(fnMoveForward, GoInNode);
     auto pUnoCursor(GetDoc()->CreateUnoCursor(*aPam.Start()));
     return SwXParagraphEnumeration::Create(this, pUnoCursor, CURSOR_REDLINE);
 }
@@ -573,7 +573,7 @@ uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor() throw( uno::
         SwXTextCursor *const pXCursor =
             new SwXTextCursor(*pDoc, this, CURSOR_REDLINE, aPos);
         auto& rUnoCursor(pXCursor->GetCursor());
-        rUnoCursor.Move(fnMoveForward, fnGoNode);
+        rUnoCursor.Move(fnMoveForward, GoInNode);
 
         // is here a table?
         SwTableNode* pTableNode = rUnoCursor.GetNode().FindTableNode();

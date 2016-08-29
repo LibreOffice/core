@@ -1633,9 +1633,9 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
 
     SwGoInDoc fnGo;
     if ( bSkipHidden )
-        fnGo = CRSR_SKIP_CELLS == nMode ? fnGoContentCellsSkipHidden : fnGoContentSkipHidden;
+        fnGo = CRSR_SKIP_CELLS == nMode ? GoInContentCellsSkipHidden : GoInContentSkipHidden;
     else
-        fnGo = CRSR_SKIP_CELLS == nMode ? fnGoContentCells : fnGoContent;
+        fnGo = CRSR_SKIP_CELLS == nMode ? GoInContentCells : GoInContent;
 
     while( nCnt )
     {
@@ -1828,7 +1828,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
             {
                 const SwNode* pEndNd = pTableNd->EndOfSectionNode();
                 GetPoint()->nNode = *pEndNd;
-                pTableCursor->Move( fnMoveBackward, fnGoNode );
+                pTableCursor->Move( fnMoveBackward, GoInNode );
                    pFrame = GetContentNode()->getLayoutFrame( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, GetPoint() );
             }
         }
@@ -1917,7 +1917,7 @@ bool SwCursor::SttEndDoc( bool bStt )
     // Can the cursor still moved on?
     SwMoveFn fnMove = bStt ? fnMoveBackward : fnMoveForward;
     bool bRet = (!HasMark() || !IsNoContent() ) &&
-                    Move( fnMove, fnGoDoc ) &&
+                    Move( fnMove, GoInDoc ) &&
                     !IsInProtectTable( true ) &&
                     !IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                nsSwCursorSelOverFlags::SELOVER_CHANGEPOS |
@@ -2004,7 +2004,7 @@ bool SwCursor::GotoTable( const OUString& rName )
             SwCursorSaveState aSave( *this );
             GetPoint()->nNode = *pTmpTable->GetTabSortBoxes()[ 0 ]->
                                 GetSttNd()->FindTableNode();
-            Move( fnMoveForward, fnGoContent );
+            Move( fnMoveForward, GoInContent );
             bRet = !IsSelOvr();
         }
     }
@@ -2025,7 +2025,7 @@ bool SwCursor::GotoTableBox( const OUString& rName )
         {
             SwCursorSaveState aSave( *this );
             GetPoint()->nNode = *pTableBox->GetSttNd();
-            Move( fnMoveForward, fnGoContent );
+            Move( fnMoveForward, GoInContent );
             bRet = !IsSelOvr();
         }
     }

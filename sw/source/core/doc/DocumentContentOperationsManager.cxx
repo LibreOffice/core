@@ -1849,11 +1849,11 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
             rPam.Exchange();
 
         // Try to move past the End
-        if( !rPam.Move( fnMoveForward, fnGoNode ) )
+        if( !rPam.Move( fnMoveForward, GoInNode ) )
         {
             // Fair enough, at the Beginning then
             rPam.Exchange();
-            if( !rPam.Move( fnMoveBackward, fnGoNode ))
+            if( !rPam.Move( fnMoveBackward, GoInNode ))
             {
                 OSL_FAIL( "no more Nodes" );
                 return false;
@@ -2029,7 +2029,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     // the manipulated range.
     // If there's no content anymore, set it to the StartNode (that's
     // always there).
-    const bool bNullContent = !aSavePam.Move( fnMoveBackward, fnGoContent );
+    const bool bNullContent = !aSavePam.Move( fnMoveBackward, GoInContent );
     if( bNullContent )
     {
         aSavePam.GetPoint()->nNode--;
@@ -2107,7 +2107,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
             }
             bJoin = false;
         }
-        else if ( !aSavePam.Move( fnMoveForward, fnGoContent ) )
+        else if ( !aSavePam.Move( fnMoveForward, GoInContent ) )
         {
             aSavePam.GetPoint()->nNode++;
         }
@@ -2138,7 +2138,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         }
         else if( bRemove ) // No move forward after joining with next paragraph
         {
-            aSavePam.Move( fnMoveForward, fnGoContent );
+            aSavePam.Move( fnMoveForward, GoInContent );
         }
     }
 
@@ -4175,7 +4175,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     // Move the PaM one node back from the insert position, so that
     // the position doesn't get moved
     pCopyPam->SetMark();
-    bool bCanMoveBack = pCopyPam->Move(fnMoveBackward, fnGoContent);
+    bool bCanMoveBack = pCopyPam->Move(fnMoveBackward, GoInContent);
     // If the position was shifted from more than one node, an end node has been skipped
     bool bAfterTable = false;
     if ((rPos.nNode.GetIndex() - pCopyPam->GetPoint()->nNode.GetIndex()) > 1)
@@ -4267,8 +4267,8 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     if (bCanMoveBack && rPos == *pCopyPam->GetPoint())
                     {
                         // after the SplitNode, span the CpyPam correctly again
-                        pCopyPam->Move( fnMoveBackward, fnGoContent );
-                        pCopyPam->Move( fnMoveBackward, fnGoContent );
+                        pCopyPam->Move( fnMoveBackward, GoInContent );
+                        pCopyPam->Move( fnMoveBackward, GoInContent );
                     }
 
                     pDestTextNd = pDoc->GetNodes()[ aInsPos.GetIndex()-1 ]->GetTextNode();
@@ -4281,7 +4281,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                         bool bChg = pEnd != rPam.GetPoint();
                         if( bChg )
                             rPam.Exchange();
-                        rPam.Move( fnMoveBackward, fnGoContent );
+                        rPam.Move( fnMoveBackward, GoInContent );
                         if( bChg )
                             rPam.Exchange();
                     }
@@ -4352,8 +4352,8 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 if (bCanMoveBack && rPos == *pCopyPam->GetPoint())
                 {
                     // after the SplitNode, span the CpyPam correctly again
-                    pCopyPam->Move( fnMoveBackward, fnGoContent );
-                    pCopyPam->Move( fnMoveBackward, fnGoContent );
+                    pCopyPam->Move( fnMoveBackward, GoInContent );
+                    pCopyPam->Move( fnMoveBackward, GoInContent );
                 }
 
                 // Correct the area again
@@ -4440,7 +4440,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             if (bCanMoveBack)
             {   // pCopyPam is actually 1 before the copy range so move it fwd
                 SwPaM temp(*pCopyPam->GetPoint());
-                temp.Move(fnMoveForward, fnGoContent);
+                temp.Move(fnMoveForward, GoInContent);
                 startPos = *temp.GetPoint();
             }
             assert(startPos.nNode.GetNode().IsContentNode());
@@ -4495,7 +4495,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         *pCopyPam->GetMark() = rPos;
 
     if ( !bAfterTable )
-        pCopyPam->Move( fnMoveForward, bCanMoveBack ? fnGoContent : fnGoNode );
+        pCopyPam->Move( fnMoveForward, bCanMoveBack ? GoInContent : GoInNode );
     else
     {
         // Reset the offset to 0 as it was before the insertion

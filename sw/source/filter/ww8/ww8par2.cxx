@@ -1070,7 +1070,7 @@ void SwWW8ImplReader::StopAnlToRestart(sal_uInt8 nNewType, bool bGoBack)
     if (bGoBack)
     {
         SwPosition aTmpPos(*m_pPaM->GetPoint());
-        m_pPaM->Move(fnMoveBackward, fnGoContent);
+        m_pPaM->Move(fnMoveBackward, GoInContent);
         m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_NUMRULE);
         *m_pPaM->GetPoint() = aTmpPos;
     }

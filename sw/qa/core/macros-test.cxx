@@ -202,21 +202,21 @@ void SwMacrosTest::testBookmarkDeleteAndJoin()
     rIDCO.AppendTextNode(*aPaM.GetPoint());
     rIDCO.InsertString(aPaM, "A");
     rIDCO.AppendTextNode(*aPaM.GetPoint());
-    aPaM.Move(fnMoveBackward, fnGoNode);
-    aPaM.Move(fnMoveBackward, fnGoNode);
-    aPaM.Move(fnMoveBackward, fnGoContent);
+    aPaM.Move(fnMoveBackward, GoInNode);
+    aPaM.Move(fnMoveBackward, GoInNode);
+    aPaM.Move(fnMoveBackward, GoInContent);
     aPaM.SetMark();
-    aPaM.Move(fnMoveForward, fnGoDoc);
+    aPaM.Move(fnMoveForward, GoInDoc);
     IDocumentMarkAccess & rIDMA = *pDoc->getIDocumentMarkAccess();
     sw::mark::IMark *pMark =
             rIDMA.makeMark(aPaM, "test", IDocumentMarkAccess::MarkType::BOOKMARK);
     CPPUNIT_ASSERT(pMark);
     // select so pMark start position is on a node that is fully deleted
-    aPaM.Move(fnMoveBackward, fnGoNode);
+    aPaM.Move(fnMoveBackward, GoInNode);
     // must leave un-selected content in last node to get the bJoinPrev flag!
-    aPaM.Move(fnMoveBackward, fnGoContent);
+    aPaM.Move(fnMoveBackward, GoInContent);
     aPaM.Exchange();
-    aPaM.Move(fnMoveBackward, fnGoDoc);
+    aPaM.Move(fnMoveBackward, GoInDoc);
     // delete
     rIDCO.DeleteAndJoin(aPaM);
 
@@ -238,9 +238,9 @@ void SwMacrosTest::testBookmarkDeleteTdf90816()
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
     rIDCO.AppendTextNode(*aPaM.GetPoint());
     rIDCO.InsertString(aPaM, "ABC");
-    aPaM.Move(fnMoveBackward, fnGoContent);
+    aPaM.Move(fnMoveBackward, GoInContent);
     aPaM.SetMark();
-    aPaM.Move(fnMoveBackward, fnGoContent);
+    aPaM.Move(fnMoveBackward, GoInContent);
     IDocumentMarkAccess & rIDMA = *pDoc->getIDocumentMarkAccess();
     sw::mark::IMark *pMark =
         rIDMA.makeMark(aPaM, "test", IDocumentMarkAccess::MarkType::BOOKMARK);
@@ -540,7 +540,7 @@ void SwMacrosTest::testFindReplace()
     rIDCO.InsertString(*pPaM, "bar");
     rIDCO.AppendTextNode(*pPaM->GetPoint());
     rIDCO.InsertString(*pPaM, "baz");
-    pPaM->Move(fnMoveBackward, fnGoDoc);
+    pPaM->Move(fnMoveBackward, GoInDoc);
 
     bool bCancel(false);
     util::SearchOptions2 opts(
@@ -574,12 +574,12 @@ void SwMacrosTest::testFindReplace()
     rIDCO.ReplaceRange(*pPaM, " ", true);
 
     pPaM->DeleteMark();
-    pPaM->Move(fnMoveBackward, fnGoDoc);
+    pPaM->Move(fnMoveBackward, GoInDoc);
 
     // problem was that after the 2nd Find, the wrong newline was selected
     CPPUNIT_ASSERT_EQUAL(OUString("foo bar"),
             pPaM->Start()->nNode.GetNode().GetTextNode()->GetText());
-    pPaM->Move(fnMoveForward, fnGoNode);
+    pPaM->Move(fnMoveForward, GoInNode);
     CPPUNIT_ASSERT_EQUAL(OUString("baz"),
             pPaM->End()->nNode.GetNode().GetTextNode()->GetText());
 }

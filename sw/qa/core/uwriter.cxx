@@ -1036,7 +1036,7 @@ getRandomPosition(SwDoc *pDoc, int /* nOffset */)
     SwPaM pam(aPos);
     for (sal_uLong i = 0; i < n; ++i)
     {
-        pam.Move(fnMoveBackward, fnGoNode);
+        pam.Move(fnMoveBackward, GoInNode);
     }
     return *pam.GetPoint();
 }

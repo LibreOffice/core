@@ -175,7 +175,7 @@ bool SwEditShell::TableToText( sal_Unicode cCh )
 
     SwContentNode* pCNd = pCursor->GetContentNode();
     if( !pCNd )
-        pCursor->Move( fnMoveForward, fnGoContent );
+        pCursor->Move( fnMoveForward, GoInContent );
     else
         pCursor->GetPoint()->nContent.Assign( pCNd, 0 );
 

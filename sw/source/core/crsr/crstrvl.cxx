@@ -1073,7 +1073,7 @@ bool SwCursorShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
     m_pCurrentCursor->GetPoint()->nContent.Assign( pSttNd->GetContentNode(), 0 );
     m_pCurrentCursor->SetMark();
     m_pCurrentCursor->GetPoint()->nNode = *pEndNd;
-    m_pCurrentCursor->Move( fnMoveBackward, fnGoNode ); // end of predecessor
+    m_pCurrentCursor->Move( fnMoveBackward, GoInNode ); // end of predecessor
 
     // and everything is already selected
     bool bRet = !m_pCurrentCursor->IsSelOvr();
@@ -1698,7 +1698,7 @@ bool SwContentAtPos::IsInRTLText()const
         {
             SwStartNode* pSttNd = pTextFootnote->GetStartNode()->GetNode().GetStartNode();
             SwPaM aTemp( *pSttNd );
-            aTemp.Move(fnMoveForward, fnGoNode);
+            aTemp.Move(fnMoveForward, GoInNode);
             SwContentNode* pContentNode = aTemp.GetContentNode();
             if(pContentNode && pContentNode->IsTextNode())
                 pNd = pContentNode->GetTextNode();

@@ -925,7 +925,7 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
                     {
                         // Is the last node part of a section?
                         SwPaM aPam(m_rDoc.GetNodes());
-                        aPam.Move(fnMoveForward, fnGoDoc);
+                        aPam.Move(fnMoveForward, GoInDoc);
                         if (aPam.Start()->nNode.GetNode().StartOfSectionNode()->IsSectionNode())
                         {
                             // This would be the last section, so set its condition to false, and avoid hiding it.

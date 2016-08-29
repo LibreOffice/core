@@ -512,7 +512,7 @@ SwPaM* SwPaM::MakeRegion( SwMoveFn fnMove, const SwPaM * pOrigRg )
     {
         pPam = new SwPaM( *m_pPoint );
         pPam->SetMark(); // set beginning
-        pPam->Move( fnMove, fnGoSection); // to beginning or end of a node
+        pPam->Move( fnMove, GoInSection); // to beginning or end of a node
 
         // set SPoint onto its old position; set GetMark to the "end"
         pPam->Exchange();
@@ -920,7 +920,7 @@ bool GoInContentCellsSkipHidden( SwPaM & rPam, SwMoveFn fnMove )
 
 bool GoPrevPara( SwPaM & rPam, SwPosPara aPosPara )
 {
-    if( rPam.Move( fnMoveBackward, fnGoNode ) )
+    if( rPam.Move( fnMoveBackward, GoInNode ) )
     {
         // always on a ContentNode
         SwPosition& rPos = *rPam.GetPoint();
@@ -962,7 +962,7 @@ bool GoCurrPara( SwPaM & rPam, SwPosPara aPosPara )
 
 bool GoNextPara( SwPaM & rPam, SwPosPara aPosPara )
 {
-    if( rPam.Move( fnMoveForward, fnGoNode ) )
+    if( rPam.Move( fnMoveForward, GoInNode ) )
     {
         // always on a ContentNode
         SwPosition& rPos = *rPam.GetPoint();

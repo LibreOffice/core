@@ -1406,10 +1406,10 @@ SwXDocumentIndex::getAnchor() throw (uno::RuntimeException, std::exception)
     if (pIdx && pIdx->GetNode().GetNodes().IsDocNodes())
     {
         SwPaM aPaM(*pIdx);
-        aPaM.Move( fnMoveForward, fnGoContent );
+        aPaM.Move( fnMoveForward, GoInContent );
         aPaM.SetMark();
         aPaM.GetPoint()->nNode = *pIdx->GetNode().EndOfSectionNode();
-        aPaM.Move( fnMoveBackward, fnGoContent );
+        aPaM.Move( fnMoveBackward, GoInContent );
         xRet = SwXTextRange::CreateXTextRange(*pSectionFormat->GetDoc(),
             *aPaM.GetMark(), aPaM.GetPoint());
     }

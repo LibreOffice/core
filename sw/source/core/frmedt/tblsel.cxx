@@ -866,10 +866,10 @@ static void lcl_InsTableBox( SwTableNode* pTableNd, SwDoc* pDoc, SwTableBox* pBo
 bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
 {
     rPam.GetPoint()->nNode = *rBox.GetSttNd()->EndOfSectionNode();
-    rPam.Move( fnMoveBackward, fnGoContent );
+    rPam.Move( fnMoveBackward, GoInContent );
     rPam.SetMark();
     rPam.GetPoint()->nNode = *rBox.GetSttNd();
-    rPam.Move( fnMoveForward, fnGoContent );
+    rPam.Move( fnMoveForward, GoInContent );
     bool bRet = *rPam.GetMark() == *rPam.GetPoint()
         && ( rBox.GetSttNd()->GetIndex() + 1 == rPam.GetPoint()->nNode.GetIndex() );
 

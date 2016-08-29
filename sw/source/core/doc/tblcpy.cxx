@@ -616,7 +616,7 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
             {
                 SwPaM aPam( aSavePos );
                 aPam.SetMark();
-                aPam.Move( fnMoveForward, fnGoSection );
+                aPam.Move( fnMoveForward, GoInSection );
                 pDoc->SetTextFormatColl( aPam, pColl );
             }
         }
