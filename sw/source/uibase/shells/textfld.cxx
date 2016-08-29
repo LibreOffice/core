@@ -70,6 +70,7 @@
 #include <PostItMgr.hxx>
 #include <calbck.hxx>
 #include <memory>
+#include <swmodule.hxx>
 
 using namespace nsSwDocInfoSubType;
 
@@ -381,10 +382,8 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         sAuthor = pAuthorItem->GetValue();
                     else
                     {
-                        SvtUserOptions aUserOpt;
-                        if( (sAuthor = aUserOpt.GetFullName()).isEmpty())
-                            if( (sAuthor = aUserOpt.GetID()).isEmpty() )
-                                sAuthor = SW_RES( STR_REDLINE_UNKNOWN_AUTHOR );
+                        sal_uInt16 nAuthor = SW_MOD()->GetRedlineAuthor();
+                        sAuthor = SW_MOD()->GetRedlineAuthor(nAuthor);
                     }
 
                     const SvxPostItTextItem* pTextItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_TEXT);
