@@ -1215,6 +1215,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             }
                             delete pNewRedl;
                             pNewRedl = nullptr;
+                            pRedl->MaybeNotifyModification();
                             break;
 
                         case POS_OUTSIDE:
