@@ -1026,8 +1026,8 @@ IMPL_LINK_TYPED( MenuBarManager, Select, Menu *, pMenu, bool )
     }
 
     if ( !m_bHasMenuBar )
-        // Standalone popup menu doesn't fire deactivate event in this case,
-        // so we have to reset the active flag here.
+        // Standalone (non-native) popup menu doesn't fire deactivate event
+        // in this case, so we have to reset the active flag here.
         m_bActive = false;
 
     return true;

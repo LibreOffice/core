@@ -399,6 +399,8 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const Rectangle& rRec
     }
     g_main_loop_unref(pLoop);
 
+    mpVCLMenu->Deactivate();
+
     gtk_widget_insert_action_group(mpFrame->getMouseEventWidget(), "win", nullptr);
 
     gtk_widget_destroy(pWidget);

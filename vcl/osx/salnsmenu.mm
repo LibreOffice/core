@@ -58,6 +58,7 @@
         else if( mpMenu->mpVCLMenu )
         {
             mpMenu->mpVCLMenu->Activate();
+            mpMenu->mpVCLMenu->Deactivate();
 
             // Hide disabled items
             NSArray* elements = [pMenu itemArray];
