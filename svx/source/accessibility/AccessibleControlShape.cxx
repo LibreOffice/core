@@ -339,8 +339,8 @@ OUString
             if ( sDesc.isEmpty() )
             {   // no -> use the default
                 aDG.Initialize (STR_ObjNameSingulUno);
-                aDG.AddProperty ("ControlBackground", DescriptionGenerator::COLOR, "");
-                aDG.AddProperty ( "ControlBorder", DescriptionGenerator::INTEGER, "");
+                aDG.AddProperty ("ControlBackground", DescriptionGenerator::PropertyType::Color, "");
+                aDG.AddProperty ( "ControlBorder", DescriptionGenerator::PropertyType::Integer, "");
             }
             // ensure that we are listening to the Name property
             m_bListeningForDesc = ensureListeningState( m_bListeningForDesc, true, lcl_getDescPropertyName() );

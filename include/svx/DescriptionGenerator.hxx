@@ -39,11 +39,11 @@ namespace accessibility {
 class SVX_DLLPUBLIC DescriptionGenerator
 {
 public:
-    enum PropertyType {
-        COLOR,
-        INTEGER,
-        STRING,
-        FILL_STYLE
+    enum class PropertyType {
+        Color,
+        Integer,
+        String,
+        FillStyle
     };
 
     /** Creates a new description generator with an empty description

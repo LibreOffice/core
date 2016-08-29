@@ -92,17 +92,17 @@ OUString
         case PRESENTATION_OLE:
             aDG.Initialize ("PresentationOLEShape");
             //SVX_RESSTR(RID_SVXSTR_A11Y_ST_RECTANGLE));
-            aDG.AddProperty ("CLSID" ,DescriptionGenerator::STRING);
+            aDG.AddProperty ("CLSID" ,DescriptionGenerator::PropertyType::String);
             break;
         case PRESENTATION_CHART:
             aDG.Initialize ("PresentationChartShape");
             //SVX_RESSTR(RID_SVXSTR_A11Y_ST_RECTANGLE));
-            aDG.AddProperty ( "CLSID" , DescriptionGenerator::STRING);
+            aDG.AddProperty ( "CLSID" , DescriptionGenerator::PropertyType::String);
             break;
         case PRESENTATION_TABLE:
             aDG.Initialize ("PresentationTableShape");
             //SVX_RESSTR(RID_SVXSTR_A11Y_ST_RECTANGLE));
-            aDG.AddProperty ("CLSID" , DescriptionGenerator::STRING);
+            aDG.AddProperty ("CLSID" , DescriptionGenerator::PropertyType::String);
             break;
         default:
             aDG.Initialize ("Unknown accessible presentation OLE shape");

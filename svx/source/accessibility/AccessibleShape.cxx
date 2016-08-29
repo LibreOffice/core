@@ -1198,8 +1198,8 @@ OUString
             break;
 
         case DRAWING_CONTROL:
-            aDG.AddProperty ("ControlBackground", DescriptionGenerator::COLOR, "");
-            aDG.AddProperty ("ControlBorder", DescriptionGenerator::INTEGER, "");
+            aDG.AddProperty ("ControlBackground", DescriptionGenerator::PropertyType::Color, "");
+            aDG.AddProperty ("ControlBorder", DescriptionGenerator::PropertyType::Integer, "");
             break;
 
         case DRAWING_TEXT:
