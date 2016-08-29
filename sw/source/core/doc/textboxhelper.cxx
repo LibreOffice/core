@@ -58,7 +58,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape)
 
         // Link FLY and DRAW formats, so it becomes a text box (needed for syncProperty calls).
         uno::Reference<text::XTextFrame> xRealTextFrame(xTextFrame, uno::UNO_QUERY);
-        SwXTextFrame* pTextFrame = dynamic_cast<SwXTextFrame *>(xRealTextFrame.get());
+        SwXTextFrame* pTextFrame = dynamic_cast<SwXTextFrame*>(xRealTextFrame.get());
         assert(nullptr != pTextFrame);
         SwFrameFormat* pFormat = pTextFrame->GetFrameFormat();
 
@@ -128,24 +128,24 @@ void SwTextBoxHelper::destroy(SwFrameFormat* pShape)
 
 bool SwTextBoxHelper::isTextBox(const SwFrameFormat* pShape, sal_uInt16 nType)
 {
-   assert(nType == RES_FLYFRMFMT || nType == RES_DRAWFRMFMT);
-   if (!pShape || pShape->Which() != nType || !pShape->GetAttrSet().HasItem(RES_CNTNT))
-       return false;
+    assert(nType == RES_FLYFRMFMT || nType == RES_DRAWFRMFMT);
+    if (!pShape || pShape->Which() != nType || !pShape->GetAttrSet().HasItem(RES_CNTNT))
+        return false;
 
-   sal_uInt16 nOtherType = (pShape->Which() == RES_FLYFRMFMT) ? RES_DRAWFRMFMT : RES_FLYFRMFMT;
-   SwFrameFormat* pFormat = pShape->GetOtherTextBoxFormat();
-   if (!pFormat)
-       return false;
+    sal_uInt16 nOtherType = (pShape->Which() == RES_FLYFRMFMT) ? RES_DRAWFRMFMT : RES_FLYFRMFMT;
+    SwFrameFormat* pFormat = pShape->GetOtherTextBoxFormat();
+    if (!pFormat)
+        return false;
 
-   assert(pFormat->Which() == nOtherType);
-   if (pFormat->Which() != nOtherType)
-       return false;
+    assert(pFormat->Which() == nOtherType);
+    if (pFormat->Which() != nOtherType)
+        return false;
 
-   const SwFormatContent& rContent = pShape->GetContent();
-   if (!pFormat->GetAttrSet().HasItem(RES_CNTNT) || pFormat->GetContent() != rContent)
-       return false;
+    const SwFormatContent& rContent = pShape->GetContent();
+    if (!pFormat->GetAttrSet().HasItem(RES_CNTNT) || pFormat->GetContent() != rContent)
+        return false;
 
-   return true;
+    return true;
 }
 
 bool SwTextBoxHelper::isTextBox(const SdrObject* pObject)
@@ -226,7 +226,7 @@ sal_Int32 SwTextBoxHelper::getOrdNum(const SdrObject* pObject)
 
 void SwTextBoxHelper::getShapeWrapThrough(const SwFrameFormat* pTextBox, bool& rWrapThrough)
 {
-    SwFrameFormat *pShape = SwTextBoxHelper::getOtherTextBoxFormat(pTextBox, RES_FLYFRMFMT);
+    SwFrameFormat* pShape = SwTextBoxHelper::getOtherTextBoxFormat(pTextBox, RES_FLYFRMFMT);
     if (pShape)
         rWrapThrough = pShape->GetSurround().GetSurround() == SURROUND_THROUGHT;
 }
@@ -238,13 +238,13 @@ SwFrameFormat* SwTextBoxHelper::getOtherTextBoxFormat(const SwFrameFormat* pForm
     return pFormat->GetOtherTextBoxFormat();
 }
 
-SwFrameFormat* SwTextBoxHelper::getOtherTextBoxFormat(uno::Reference<drawing::XShape> const & xShape)
+SwFrameFormat* SwTextBoxHelper::getOtherTextBoxFormat(uno::Reference<drawing::XShape> const& xShape)
 {
     SwXShape* pShape = dynamic_cast<SwXShape*>(xShape.get());
     if (!pShape)
         return nullptr;
 
-    SwFrameFormat *pFormat = pShape->GetFrameFormat();
+    SwFrameFormat* pFormat = pShape->GetFrameFormat();
     return getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT);
 }
 

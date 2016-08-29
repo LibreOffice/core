@@ -115,7 +115,7 @@ void SigningTest::setUp()
     // Set up cert8.db in workdir/CppunitTest/
     OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
     OUString aTargetDir = m_directories.getURLFromWorkdir(
-        "/CppunitTest/xmlsecurity_signing.test.user/");
+                              "/CppunitTest/xmlsecurity_signing.test.user/");
     osl::File::copy(aSourceDir + "cert8.db", aTargetDir + "cert8.db");
     OUString aTargetPath;
     osl::FileBase::getSystemPathFromFileURL(aTargetDir, aTargetPath);

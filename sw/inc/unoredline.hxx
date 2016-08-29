@@ -106,7 +106,7 @@ public:
     const SwRangeRedline*    GetRedline() const {return pRedline;}
 protected:
     //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 };
 #endif
 
