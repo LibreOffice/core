@@ -810,24 +810,28 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
         }
     }
 }
-double EnhancedCustomShape2d::GetEnumFunc( const EnumFunc eFunc ) const
+
+using EnhancedCustomShape::ExpressionFunct;
+
+double EnhancedCustomShape2d::GetEnumFunc( const ExpressionFunct eFunc ) const
 {
     double fRet = 0.0;
     switch( eFunc )
     {
-        case ENUM_FUNC_PI :         fRet = F_PI; break;
-        case ENUM_FUNC_LEFT :       fRet = 0.0; break;
-        case ENUM_FUNC_TOP :        fRet = 0.0; break;
-        case ENUM_FUNC_RIGHT :      fRet = (double)nCoordWidth * fXRatio;   break;
-        case ENUM_FUNC_BOTTOM :     fRet = (double)nCoordHeight * fYRatio; break;
-        case ENUM_FUNC_XSTRETCH :   fRet = nXRef; break;
-        case ENUM_FUNC_YSTRETCH :   fRet = nYRef; break;
-        case ENUM_FUNC_HASSTROKE :  fRet = bStroked ? 1.0 : 0.0; break;
-        case ENUM_FUNC_HASFILL :    fRet = bFilled ? 1.0 : 0.0; break;
-        case ENUM_FUNC_WIDTH :      fRet = nCoordWidth; break;
-        case ENUM_FUNC_HEIGHT :     fRet = nCoordHeight; break;
-        case ENUM_FUNC_LOGWIDTH :   fRet = aLogicRect.GetWidth(); break;
-        case ENUM_FUNC_LOGHEIGHT :  fRet = aLogicRect.GetHeight(); break;
+        case ExpressionFunct::EnumPi :         fRet = F_PI; break;
+        case ExpressionFunct::EnumLeft :       fRet = 0.0; break;
+        case ExpressionFunct::EnumTop :        fRet = 0.0; break;
+        case ExpressionFunct::EnumRight :      fRet = (double)nCoordWidth * fXRatio;   break;
+        case ExpressionFunct::EnumBottom :     fRet = (double)nCoordHeight * fYRatio; break;
+        case ExpressionFunct::EnumXStretch :   fRet = nXRef; break;
+        case ExpressionFunct::EnumYStretch :   fRet = nYRef; break;
+        case ExpressionFunct::EnumHasStroke :  fRet = bStroked ? 1.0 : 0.0; break;
+        case ExpressionFunct::EnumHasFill :    fRet = bFilled ? 1.0 : 0.0; break;
+        case ExpressionFunct::EnumWidth :      fRet = nCoordWidth; break;
+        case ExpressionFunct::EnumHeight :     fRet = nCoordHeight; break;
+        case ExpressionFunct::EnumLogWidth :   fRet = aLogicRect.GetWidth(); break;
+        case ExpressionFunct::EnumLogHeight :  fRet = aLogicRect.GetHeight(); break;
+        default: break;
     }
     return fRet;
 }

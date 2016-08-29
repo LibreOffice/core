@@ -44,43 +44,43 @@ class EnhancedCustomShape2d;
 
 namespace EnhancedCustomShape {
 
-enum ExpressionFunct
+enum class ExpressionFunct
 {
-    FUNC_CONST,
+    Const,
 
-    ENUM_FUNC_PI,
-    ENUM_FUNC_LEFT,
-    ENUM_FUNC_TOP,
-    ENUM_FUNC_RIGHT,
-    ENUM_FUNC_BOTTOM,
-    ENUM_FUNC_XSTRETCH,
-    ENUM_FUNC_YSTRETCH,
-    ENUM_FUNC_HASSTROKE,
-    ENUM_FUNC_HASFILL,
-    ENUM_FUNC_WIDTH,
-    ENUM_FUNC_HEIGHT,
-    ENUM_FUNC_LOGWIDTH,
-    ENUM_FUNC_LOGHEIGHT,
-    ENUM_FUNC_ADJUSTMENT,
-    ENUM_FUNC_EQUATION,
+    EnumPi,
+    EnumLeft,
+    EnumTop,
+    EnumRight,
+    EnumBottom,
+    EnumXStretch,
+    EnumYStretch,
+    EnumHasStroke,
+    EnumHasFill,
+    EnumWidth,
+    EnumHeight,
+    EnumLogWidth,
+    EnumLogHeight,
+    EnumAdjustment,
+    EnumEquation,
 
-    UNARY_FUNC_ABS,
-    UNARY_FUNC_SQRT,
-    UNARY_FUNC_SIN,
-    UNARY_FUNC_COS,
-    UNARY_FUNC_TAN,
-    UNARY_FUNC_ATAN,
-    UNARY_FUNC_NEG,
+    UnaryAbs,
+    UnarySqrt,
+    UnarySin,
+    UnaryCos,
+    UnaryTan,
+    UnaryAtan,
+    UnaryNeg,
 
-    BINARY_FUNC_PLUS,
-    BINARY_FUNC_MINUS,
-    BINARY_FUNC_MUL,
-    BINARY_FUNC_DIV,
-    BINARY_FUNC_MIN,
-    BINARY_FUNC_MAX,
-    BINARY_FUNC_ATAN2,
+    BinaryPlus,
+    BinaryMinus,
+    BinaryMul,
+    BinaryDiv,
+    BinaryMin,
+    BinaryMax,
+    BinaryAtan2,
 
-    TERNARY_FUNC_IF
+    TernaryIf
 };
 
 #define EXPRESSION_FLAG_SUMANGLE_MODE 1

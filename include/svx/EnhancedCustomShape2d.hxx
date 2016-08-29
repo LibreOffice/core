@@ -194,23 +194,7 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
         EnhancedCustomShape2d( SdrObject* pSdrObjCustomShape );
         virtual ~EnhancedCustomShape2d();
 
-        enum SAL_DLLPRIVATE EnumFunc
-        {
-            ENUM_FUNC_PI,
-            ENUM_FUNC_LEFT,
-            ENUM_FUNC_TOP,
-            ENUM_FUNC_RIGHT,
-            ENUM_FUNC_BOTTOM,
-            ENUM_FUNC_XSTRETCH,
-            ENUM_FUNC_YSTRETCH,
-            ENUM_FUNC_HASSTROKE,
-            ENUM_FUNC_HASFILL,
-            ENUM_FUNC_WIDTH,
-            ENUM_FUNC_HEIGHT,
-            ENUM_FUNC_LOGWIDTH,
-            ENUM_FUNC_LOGHEIGHT
-        };
-        SAL_DLLPRIVATE double   GetEnumFunc( const EnumFunc eVal ) const;
+        SAL_DLLPRIVATE double   GetEnumFunc( const EnhancedCustomShape::ExpressionFunct eVal ) const;
 
         SAL_DLLPRIVATE double   GetAdjustValueAsDouble( const sal_Int32 nIndex ) const;
         SAL_DLLPRIVATE double   GetEquationValueAsDouble( const sal_Int32 nIndex ) const;

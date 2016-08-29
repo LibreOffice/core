@@ -111,7 +111,7 @@ public:
     }
     virtual ExpressionFunct getType() const override
     {
-        return FUNC_CONST;
+        return ExpressionFunct::Const;
     }
     virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* /* pOptionalArg */, sal_uInt32 /* nFlags */ ) override
     {
@@ -166,7 +166,7 @@ public:
     }
     virtual ExpressionFunct getType() const override
     {
-        return ENUM_FUNC_ADJUSTMENT;
+        return ExpressionFunct::EnumAdjustment;
     }
     virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& /*rEquations*/, ExpressionNode* /*pOptionalArg*/, sal_uInt32 /*nFlags*/ ) override
     {
@@ -199,7 +199,7 @@ public:
     }
     virtual ExpressionFunct getType() const override
     {
-        return ENUM_FUNC_EQUATION;
+        return ExpressionFunct::EnumEquation;
     }
     virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& /*rEquations*/, ExpressionNode* /*pOptionalArg*/, sal_uInt32 /*nFlags*/ ) override
     {
@@ -222,57 +222,33 @@ public:
         , mrCustoShape  ( rCustoShape )
     {
     }
-    static double getValue( const EnhancedCustomShape2d& rCustoShape, const ExpressionFunct eFunc )
-    {
-        EnhancedCustomShape2d::EnumFunc eF;
-        switch( eFunc )
-        {
-            case ENUM_FUNC_PI :         eF = EnhancedCustomShape2d::ENUM_FUNC_PI; break;
-            case ENUM_FUNC_LEFT :       eF = EnhancedCustomShape2d::ENUM_FUNC_LEFT; break;
-            case ENUM_FUNC_TOP :        eF = EnhancedCustomShape2d::ENUM_FUNC_TOP; break;
-            case ENUM_FUNC_RIGHT :      eF = EnhancedCustomShape2d::ENUM_FUNC_RIGHT; break;
-            case ENUM_FUNC_BOTTOM :     eF = EnhancedCustomShape2d::ENUM_FUNC_BOTTOM; break;
-            case ENUM_FUNC_XSTRETCH :   eF = EnhancedCustomShape2d::ENUM_FUNC_XSTRETCH; break;
-            case ENUM_FUNC_YSTRETCH :   eF = EnhancedCustomShape2d::ENUM_FUNC_YSTRETCH; break;
-            case ENUM_FUNC_HASSTROKE :  eF = EnhancedCustomShape2d::ENUM_FUNC_HASSTROKE; break;
-            case ENUM_FUNC_HASFILL :    eF = EnhancedCustomShape2d::ENUM_FUNC_HASFILL; break;
-            case ENUM_FUNC_WIDTH :      eF = EnhancedCustomShape2d::ENUM_FUNC_WIDTH; break;
-            case ENUM_FUNC_HEIGHT :     eF = EnhancedCustomShape2d::ENUM_FUNC_HEIGHT; break;
-            case ENUM_FUNC_LOGWIDTH :   eF = EnhancedCustomShape2d::ENUM_FUNC_LOGWIDTH; break;
-            case ENUM_FUNC_LOGHEIGHT :  eF = EnhancedCustomShape2d::ENUM_FUNC_LOGHEIGHT; break;
-
-            default :
-                return 0.0;
-        }
-        return rCustoShape.GetEnumFunc( eF );
-    }
     virtual double operator()() const override
     {
 #if OSL_DEBUG_LEVEL > 0
         const char *funcName;
 
         switch (meFunct) {
-            case ENUM_FUNC_PI :         funcName = "pi"; break;
-            case ENUM_FUNC_LEFT :       funcName = "left"; break;
-            case ENUM_FUNC_TOP :        funcName = "top"; break;
-            case ENUM_FUNC_RIGHT :      funcName = "right"; break;
-            case ENUM_FUNC_BOTTOM :     funcName = "bottom"; break;
-            case ENUM_FUNC_XSTRETCH :   funcName = "xstretch"; break;
-            case ENUM_FUNC_YSTRETCH :   funcName = "ystretch"; break;
-            case ENUM_FUNC_HASSTROKE :  funcName = "hasstroke"; break;
-            case ENUM_FUNC_HASFILL :    funcName = "hasfill"; break;
-            case ENUM_FUNC_WIDTH :      funcName = "width"; break;
-            case ENUM_FUNC_HEIGHT :     funcName = "height"; break;
-            case ENUM_FUNC_LOGWIDTH :   funcName = "logwidth"; break;
-            case ENUM_FUNC_LOGHEIGHT :  funcName = "logheight"; break;
+            case ExpressionFunct::EnumPi :         funcName = "pi"; break;
+            case ExpressionFunct::EnumLeft :       funcName = "left"; break;
+            case ExpressionFunct::EnumTop :        funcName = "top"; break;
+            case ExpressionFunct::EnumRight :      funcName = "right"; break;
+            case ExpressionFunct::EnumBottom :     funcName = "bottom"; break;
+            case ExpressionFunct::EnumXStretch :   funcName = "xstretch"; break;
+            case ExpressionFunct::EnumYStretch :   funcName = "ystretch"; break;
+            case ExpressionFunct::EnumHasStroke :  funcName = "hasstroke"; break;
+            case ExpressionFunct::EnumHasFill :    funcName = "hasfill"; break;
+            case ExpressionFunct::EnumWidth :      funcName = "width"; break;
+            case ExpressionFunct::EnumHeight :     funcName = "height"; break;
+            case ExpressionFunct::EnumLogWidth :   funcName = "logwidth"; break;
+            case ExpressionFunct::EnumLogHeight :  funcName = "logheight"; break;
             default:                    funcName = "???"; break;
         }
 
-        SAL_INFO("svx", funcName << " --> " << getValue(mrCustoShape, meFunct) << "(angle: " <<
-                 180.0*getValue(mrCustoShape, meFunct)/10800000.0 << ")");
+        SAL_INFO("svx", funcName << " --> " << mrCustoShape.GetEnumFunc(meFunct) << "(angle: " <<
+                 180.0 * mrCustoShape.GetEnumFunc(meFunct) / 10800000.0 << ")");
 #endif
 
-        return getValue( mrCustoShape, meFunct );
+        return mrCustoShape.GetEnumFunc( meFunct );
     }
     virtual bool isConstant() const override
     {
@@ -291,26 +267,26 @@ public:
 
         switch( meFunct )
         {
-            case ENUM_FUNC_WIDTH :  // TODO: do not use this as constant value
-            case ENUM_FUNC_HEIGHT :
-            case ENUM_FUNC_LOGWIDTH :
-            case ENUM_FUNC_LOGHEIGHT :
-            case ENUM_FUNC_PI :
+            case ExpressionFunct::EnumWidth :  // TODO: do not use this as constant value
+            case ExpressionFunct::EnumHeight :
+            case ExpressionFunct::EnumLogWidth :
+            case ExpressionFunct::EnumLogHeight :
+            case ExpressionFunct::EnumPi :
             {
-                ConstantValueExpression aConstantValue( getValue( mrCustoShape, meFunct ) );
+                ConstantValueExpression aConstantValue( mrCustoShape.GetEnumFunc( meFunct ) );
                 aRet = aConstantValue.fillNode( rEquations, nullptr, nFlags );
             }
             break;
-            case ENUM_FUNC_LEFT :   aRet.Type = EnhancedCustomShapeParameterType::LEFT; break;
-            case ENUM_FUNC_TOP :    aRet.Type = EnhancedCustomShapeParameterType::TOP; break;
-            case ENUM_FUNC_RIGHT :  aRet.Type = EnhancedCustomShapeParameterType::RIGHT; break;
-            case ENUM_FUNC_BOTTOM : aRet.Type = EnhancedCustomShapeParameterType::BOTTOM; break;
+            case ExpressionFunct::EnumLeft :   aRet.Type = EnhancedCustomShapeParameterType::LEFT; break;
+            case ExpressionFunct::EnumTop :    aRet.Type = EnhancedCustomShapeParameterType::TOP; break;
+            case ExpressionFunct::EnumRight :  aRet.Type = EnhancedCustomShapeParameterType::RIGHT; break;
+            case ExpressionFunct::EnumBottom : aRet.Type = EnhancedCustomShapeParameterType::BOTTOM; break;
 
             // not implemented so far
-            case ENUM_FUNC_XSTRETCH :
-            case ENUM_FUNC_YSTRETCH :
-            case ENUM_FUNC_HASSTROKE :
-            case ENUM_FUNC_HASFILL : aRet.Type = EnhancedCustomShapeParameterType::NORMAL; break;
+            case ExpressionFunct::EnumXStretch :
+            case ExpressionFunct::EnumYStretch :
+            case ExpressionFunct::EnumHasStroke :
+            case ExpressionFunct::EnumHasFill : aRet.Type = EnhancedCustomShapeParameterType::NORMAL; break;
 
             default:
                 break;
@@ -338,13 +314,13 @@ public:
         double fRet = 0;
         switch( eFunct )
         {
-            case UNARY_FUNC_ABS : fRet = fabs( (*rArg)() ); break;
-            case UNARY_FUNC_SQRT: fRet = sqrt( (*rArg)() ); break;
-            case UNARY_FUNC_SIN : fRet = sin( (*rArg)() );  break;
-            case UNARY_FUNC_COS : fRet = cos( (*rArg)() );  break;
-            case UNARY_FUNC_TAN : fRet = tan( (*rArg)() );  break;
-            case UNARY_FUNC_ATAN: fRet = atan( (*rArg)() ); break;
-            case UNARY_FUNC_NEG : fRet = ::std::negate<double>()( (*rArg)() ); break;
+            case ExpressionFunct::UnaryAbs : fRet = fabs( (*rArg)() ); break;
+            case ExpressionFunct::UnarySqrt: fRet = sqrt( (*rArg)() ); break;
+            case ExpressionFunct::UnarySin : fRet = sin( (*rArg)() );  break;
+            case ExpressionFunct::UnaryCos : fRet = cos( (*rArg)() );  break;
+            case ExpressionFunct::UnaryTan : fRet = tan( (*rArg)() );  break;
+            case ExpressionFunct::UnaryAtan: fRet = atan( (*rArg)() ); break;
+            case ExpressionFunct::UnaryNeg : fRet = ::std::negate<double>()( (*rArg)() ); break;
             default:
                 break;
         }
@@ -367,7 +343,7 @@ public:
         EnhancedCustomShapeParameter aRet;
         switch( meFunct )
         {
-            case UNARY_FUNC_ABS :
+            case ExpressionFunct::UnaryAbs :
             {
                 EnhancedCustomShapeEquation aEquation;
                 aEquation.nOperation |= 3;
@@ -377,7 +353,7 @@ public:
                 rEquations.push_back( aEquation );
             }
             break;
-            case UNARY_FUNC_SQRT:
+            case ExpressionFunct::UnarySqrt:
             {
                 EnhancedCustomShapeEquation aEquation;
                 aEquation.nOperation |= 13;
@@ -387,7 +363,7 @@ public:
                 rEquations.push_back( aEquation );
             }
             break;
-            case UNARY_FUNC_SIN :
+            case ExpressionFunct::UnarySin :
             {
                 EnhancedCustomShapeEquation aEquation;
                 aEquation.nOperation |= 9;
@@ -412,7 +388,7 @@ public:
                 rEquations.push_back( aEquation );
             }
             break;
-            case UNARY_FUNC_COS :
+            case ExpressionFunct::UnaryCos :
             {
                 EnhancedCustomShapeEquation aEquation;
                 aEquation.nOperation |= 10;
@@ -437,7 +413,7 @@ public:
                 rEquations.push_back( aEquation );
             }
             break;
-            case UNARY_FUNC_TAN :
+            case ExpressionFunct::UnaryTan :
             {
                 EnhancedCustomShapeEquation aEquation;
                 aEquation.nOperation |= 16;
@@ -462,13 +438,13 @@ public:
                 rEquations.push_back( aEquation );
             }
             break;
-            case UNARY_FUNC_ATAN:
+            case ExpressionFunct::UnaryAtan:
             {
 // TODO:
                 aRet.Type = EnhancedCustomShapeParameterType::NORMAL;
             }
             break;
-            case UNARY_FUNC_NEG:
+            case ExpressionFunct::UnaryNeg:
             {
                 EnhancedCustomShapeEquation aEquation;
                 aEquation.nOperation |= 1;
@@ -509,13 +485,13 @@ public:
         double fRet = 0;
         switch( eFunct )
         {
-            case BINARY_FUNC_PLUS : fRet = (*rFirstArg)() + (*rSecondArg)(); break;
-            case BINARY_FUNC_MINUS: fRet = (*rFirstArg)() - (*rSecondArg)(); break;
-            case BINARY_FUNC_MUL :  fRet = (*rFirstArg)() * (*rSecondArg)(); break;
-            case BINARY_FUNC_DIV :  fRet = (*rFirstArg)() / (*rSecondArg)(); break;
-            case BINARY_FUNC_MIN :  fRet = ::std::min( (*rFirstArg)(), (*rSecondArg)() ); break;
-            case BINARY_FUNC_MAX :  fRet = ::std::max( (*rFirstArg)(), (*rSecondArg)() ); break;
-            case BINARY_FUNC_ATAN2: fRet = atan2( (*rFirstArg)(), (*rSecondArg)() ); break;
+            case ExpressionFunct::BinaryPlus : fRet = (*rFirstArg)() + (*rSecondArg)(); break;
+            case ExpressionFunct::BinaryMinus: fRet = (*rFirstArg)() - (*rSecondArg)(); break;
+            case ExpressionFunct::BinaryMul :  fRet = (*rFirstArg)() * (*rSecondArg)(); break;
+            case ExpressionFunct::BinaryDiv :  fRet = (*rFirstArg)() / (*rSecondArg)(); break;
+            case ExpressionFunct::BinaryMin :  fRet = ::std::min( (*rFirstArg)(), (*rSecondArg)() ); break;
+            case ExpressionFunct::BinaryMax :  fRet = ::std::max( (*rFirstArg)(), (*rSecondArg)() ); break;
+            case ExpressionFunct::BinaryAtan2: fRet = atan2( (*rFirstArg)(), (*rSecondArg)() ); break;
             default:
                 break;
         }
@@ -538,11 +514,11 @@ public:
         EnhancedCustomShapeParameter aRet;
         switch( meFunct )
         {
-            case BINARY_FUNC_PLUS :
+            case ExpressionFunct::BinaryPlus :
             {
                 if ( nFlags & EXPRESSION_FLAG_SUMANGLE_MODE )
                 {
-                    if ( mpFirstArg->getType() == ENUM_FUNC_ADJUSTMENT )
+                    if ( mpFirstArg->getType() == ExpressionFunct::EnumAdjustment )
                     {
                         EnhancedCustomShapeEquation aEquation;
                         aEquation.nOperation |= 0xe;    // sumangle
@@ -552,7 +528,7 @@ public:
                         aRet.Value <<= (sal_Int32)rEquations.size();
                         rEquations.push_back( aEquation );
                     }
-                    else if ( mpSecondArg->getType() == ENUM_FUNC_ADJUSTMENT )
+                    else if ( mpSecondArg->getType() == ExpressionFunct::EnumAdjustment )
                     {
                         EnhancedCustomShapeEquation aEquation;
                         aEquation.nOperation |= 0xe;    // sumangle
@@ -609,7 +585,7 @@ public:
                 }
             }
             break;
-            case BINARY_FUNC_MINUS:
+            case ExpressionFunct::BinaryMinus:
             {
                 EnhancedCustomShapeEquation aEquation;
                 aEquation.nOperation |= 0;
@@ -620,13 +596,13 @@ public:
                 rEquations.push_back( aEquation );
             }
             break;
-            case BINARY_FUNC_MUL :
+            case ExpressionFunct::BinaryMul :
             {
                 // in the dest. format the cos function is using integer as result :-(
                 // so we can't use the generic algorithm
-                if ( ( mpFirstArg->getType() == UNARY_FUNC_SIN ) || ( mpFirstArg->getType() == UNARY_FUNC_COS ) || ( mpFirstArg->getType() == UNARY_FUNC_TAN ) )
+                if ( ( mpFirstArg->getType() == ExpressionFunct::UnarySin ) || ( mpFirstArg->getType() == ExpressionFunct::UnaryCos ) || ( mpFirstArg->getType() == ExpressionFunct::UnaryTan ) )
                     aRet = mpFirstArg->fillNode( rEquations, mpSecondArg.get(), nFlags );
-                else if ( ( mpSecondArg->getType() == UNARY_FUNC_SIN ) || ( mpSecondArg->getType() == UNARY_FUNC_COS ) || ( mpSecondArg->getType() == UNARY_FUNC_TAN ) )
+                else if ( ( mpSecondArg->getType() == ExpressionFunct::UnarySin ) || ( mpSecondArg->getType() == ExpressionFunct::UnaryCos ) || ( mpSecondArg->getType() == ExpressionFunct::UnaryTan ) )
                     aRet = mpSecondArg->fillNode( rEquations, mpFirstArg.get(), nFlags );
                 else
                 {
@@ -634,15 +610,15 @@ public:
                         aRet = mpSecondArg->fillNode( rEquations, nullptr, nFlags );
                     else if ( mpSecondArg->isConstant() && (*mpSecondArg)() == 1 )
                         aRet = mpFirstArg->fillNode( rEquations, nullptr, nFlags );
-                    else if ( ( mpFirstArg->getType() == BINARY_FUNC_DIV )      // don't care of (pi/180)
-                        && ( static_cast<BinaryFunctionExpression*>(mpFirstArg.get())->mpFirstArg.get()->getType() == ENUM_FUNC_PI )
-                        && ( static_cast<BinaryFunctionExpression*>(mpFirstArg.get())->mpSecondArg.get()->getType() == FUNC_CONST ) )
+                    else if ( ( mpFirstArg->getType() == ExpressionFunct::BinaryDiv )      // don't care of (pi/180)
+                        && ( static_cast<BinaryFunctionExpression*>(mpFirstArg.get())->mpFirstArg.get()->getType() == ExpressionFunct::EnumPi )
+                        && ( static_cast<BinaryFunctionExpression*>(mpFirstArg.get())->mpSecondArg.get()->getType() == ExpressionFunct::Const ) )
                     {
                         aRet = mpSecondArg->fillNode( rEquations, nullptr, nFlags );
                     }
-                    else if ( ( mpSecondArg->getType() == BINARY_FUNC_DIV )     // don't care of (pi/180)
-                        && ( static_cast<BinaryFunctionExpression*>(mpSecondArg.get())->mpFirstArg.get()->getType() == ENUM_FUNC_PI )
-                        && ( static_cast<BinaryFunctionExpression*>(mpSecondArg.get())->mpSecondArg.get()->getType() == FUNC_CONST ) )
+                    else if ( ( mpSecondArg->getType() == ExpressionFunct::BinaryDiv )     // don't care of (pi/180)
+                        && ( static_cast<BinaryFunctionExpression*>(mpSecondArg.get())->mpFirstArg.get()->getType() == ExpressionFunct::EnumPi )
+                        && ( static_cast<BinaryFunctionExpression*>(mpSecondArg.get())->mpSecondArg.get()->getType() == ExpressionFunct::Const ) )
                     {
                         aRet = mpFirstArg->fillNode( rEquations, nullptr, nFlags );
                     }
@@ -660,7 +636,7 @@ public:
                 }
             }
             break;
-            case BINARY_FUNC_DIV :
+            case ExpressionFunct::BinaryDiv :
             {
                 EnhancedCustomShapeEquation aEquation;
                 aEquation.nOperation |= 1;
@@ -672,7 +648,7 @@ public:
                 rEquations.push_back( aEquation );
             }
             break;
-            case BINARY_FUNC_MIN :
+            case ExpressionFunct::BinaryMin :
             {
                 EnhancedCustomShapeEquation aEquation;
                 aEquation.nOperation |= 4;
@@ -683,7 +659,7 @@ public:
                 rEquations.push_back( aEquation );
             }
             break;
-            case BINARY_FUNC_MAX :
+            case ExpressionFunct::BinaryMax :
             {
                 EnhancedCustomShapeEquation aEquation;
                 aEquation.nOperation |= 5;
@@ -694,7 +670,7 @@ public:
                 rEquations.push_back( aEquation );
             }
             break;
-            case BINARY_FUNC_ATAN2:
+            case ExpressionFunct::BinaryAtan2:
             {
                 EnhancedCustomShapeEquation aEquation;
                 aEquation.nOperation |= 8;
@@ -741,7 +717,7 @@ public:
     }
     virtual ExpressionFunct getType() const override
     {
-        return TERNARY_FUNC_IF;
+        return ExpressionFunct::TernaryIf;
     }
     virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* /*pOptionalArg*/, sal_uInt32 nFlags ) override
     {
@@ -817,13 +793,13 @@ public:
         /*double nVal = mnValue;*/
         switch( meFunct )
         {
-            case ENUM_FUNC_ADJUSTMENT :
+            case ExpressionFunct::EnumAdjustment :
             {
                 OUString aVal( rFirst + 1, rSecond - rFirst, RTL_TEXTENCODING_UTF8 );
                 mxContext->maOperandStack.push( std::shared_ptr<ExpressionNode>( new AdjustmentExpression( *mxContext->mpCustoShape, aVal.toInt32() ) ) );
             }
             break;
-            case ENUM_FUNC_EQUATION :
+            case ExpressionFunct::EnumEquation :
                 {
                 OUString aVal( rFirst + 1, rSecond - rFirst, RTL_TEXTENCODING_UTF8 );
                 mxContext->maOperandStack.push( std::shared_ptr<ExpressionNode>( new EquationExpression( *mxContext->mpCustoShape, aVal.toInt32() ) ) );
@@ -1019,34 +995,34 @@ public:
             using ::boost::spirit::real_parser;
 
             identifier =
-                            str_p( "pi"         )[ EnumFunctor(ENUM_FUNC_PI,        self.getContext() ) ]
-                    |       str_p( "left"       )[ EnumFunctor(ENUM_FUNC_LEFT,      self.getContext() ) ]
-                    |       str_p( "top"        )[ EnumFunctor(ENUM_FUNC_TOP,       self.getContext() ) ]
-                    |       str_p( "right"      )[ EnumFunctor(ENUM_FUNC_RIGHT,     self.getContext() ) ]
-                    |       str_p( "bottom"     )[ EnumFunctor(ENUM_FUNC_BOTTOM,    self.getContext() ) ]
-                    |       str_p( "xstretch"   )[ EnumFunctor(ENUM_FUNC_XSTRETCH,  self.getContext() ) ]
-                    |       str_p( "ystretch"   )[ EnumFunctor(ENUM_FUNC_YSTRETCH,  self.getContext() ) ]
-                    |       str_p( "hasstroke"  )[ EnumFunctor(ENUM_FUNC_HASSTROKE, self.getContext() ) ]
-                    |       str_p( "hasfill"    )[ EnumFunctor(ENUM_FUNC_HASFILL,   self.getContext() ) ]
-                    |       str_p( "width"      )[ EnumFunctor(ENUM_FUNC_WIDTH,     self.getContext() ) ]
-                    |       str_p( "height"     )[ EnumFunctor(ENUM_FUNC_HEIGHT,    self.getContext() ) ]
-                    |       str_p( "logwidth"   )[ EnumFunctor(ENUM_FUNC_LOGWIDTH,  self.getContext() ) ]
-                    |       str_p( "logheight"  )[ EnumFunctor(ENUM_FUNC_LOGHEIGHT, self.getContext() ) ]
+                            str_p( "pi"         )[ EnumFunctor(ExpressionFunct::EnumPi,        self.getContext() ) ]
+                    |       str_p( "left"       )[ EnumFunctor(ExpressionFunct::EnumLeft,      self.getContext() ) ]
+                    |       str_p( "top"        )[ EnumFunctor(ExpressionFunct::EnumTop,       self.getContext() ) ]
+                    |       str_p( "right"      )[ EnumFunctor(ExpressionFunct::EnumRight,     self.getContext() ) ]
+                    |       str_p( "bottom"     )[ EnumFunctor(ExpressionFunct::EnumBottom,    self.getContext() ) ]
+                    |       str_p( "xstretch"   )[ EnumFunctor(ExpressionFunct::EnumXStretch,  self.getContext() ) ]
+                    |       str_p( "ystretch"   )[ EnumFunctor(ExpressionFunct::EnumYStretch,  self.getContext() ) ]
+                    |       str_p( "hasstroke"  )[ EnumFunctor(ExpressionFunct::EnumHasStroke, self.getContext() ) ]
+                    |       str_p( "hasfill"    )[ EnumFunctor(ExpressionFunct::EnumHasFill,   self.getContext() ) ]
+                    |       str_p( "width"      )[ EnumFunctor(ExpressionFunct::EnumWidth,     self.getContext() ) ]
+                    |       str_p( "height"     )[ EnumFunctor(ExpressionFunct::EnumHeight,    self.getContext() ) ]
+                    |       str_p( "logwidth"   )[ EnumFunctor(ExpressionFunct::EnumLogWidth,  self.getContext() ) ]
+                    |       str_p( "logheight"  )[ EnumFunctor(ExpressionFunct::EnumLogHeight, self.getContext() ) ]
                     ;
 
             unaryFunction =
-                    (str_p( "abs"  ) >> '(' >> additiveExpression >> ')' )[ UnaryFunctionFunctor( UNARY_FUNC_ABS,  self.getContext()) ]
-                |   (str_p( "sqrt" ) >> '(' >> additiveExpression >> ')' )[ UnaryFunctionFunctor( UNARY_FUNC_SQRT, self.getContext()) ]
-                |   (str_p( "sin"  ) >> '(' >> additiveExpression >> ')' )[ UnaryFunctionFunctor( UNARY_FUNC_SIN,  self.getContext()) ]
-                |   (str_p( "cos"  ) >> '(' >> additiveExpression >> ')' )[ UnaryFunctionFunctor( UNARY_FUNC_COS,  self.getContext()) ]
-                |   (str_p( "tan"  ) >> '(' >> additiveExpression >> ')' )[ UnaryFunctionFunctor( UNARY_FUNC_TAN,  self.getContext()) ]
-                |   (str_p( "atan" ) >> '(' >> additiveExpression >> ')' )[ UnaryFunctionFunctor( UNARY_FUNC_ATAN, self.getContext()) ]
+                    (str_p( "abs"  ) >> '(' >> additiveExpression >> ')' )[ UnaryFunctionFunctor( ExpressionFunct::UnaryAbs,  self.getContext()) ]
+                |   (str_p( "sqrt" ) >> '(' >> additiveExpression >> ')' )[ UnaryFunctionFunctor( ExpressionFunct::UnarySqrt, self.getContext()) ]
+                |   (str_p( "sin"  ) >> '(' >> additiveExpression >> ')' )[ UnaryFunctionFunctor( ExpressionFunct::UnarySin,  self.getContext()) ]
+                |   (str_p( "cos"  ) >> '(' >> additiveExpression >> ')' )[ UnaryFunctionFunctor( ExpressionFunct::UnaryCos,  self.getContext()) ]
+                |   (str_p( "tan"  ) >> '(' >> additiveExpression >> ')' )[ UnaryFunctionFunctor( ExpressionFunct::UnaryTan,  self.getContext()) ]
+                |   (str_p( "atan" ) >> '(' >> additiveExpression >> ')' )[ UnaryFunctionFunctor( ExpressionFunct::UnaryAtan, self.getContext()) ]
                 ;
 
             binaryFunction =
-                    (str_p( "min"  ) >> '(' >> additiveExpression >> ',' >> additiveExpression >> ')' )[ BinaryFunctionFunctor( BINARY_FUNC_MIN,  self.getContext()) ]
-                |   (str_p( "max"  ) >> '(' >> additiveExpression >> ',' >> additiveExpression >> ')' )[ BinaryFunctionFunctor( BINARY_FUNC_MAX,  self.getContext()) ]
-                |   (str_p( "atan2") >> '(' >> additiveExpression >> ',' >> additiveExpression >> ')' )[ BinaryFunctionFunctor( BINARY_FUNC_ATAN2,self.getContext()) ]
+                    (str_p( "min"  ) >> '(' >> additiveExpression >> ',' >> additiveExpression >> ')' )[ BinaryFunctionFunctor( ExpressionFunct::BinaryMin,  self.getContext()) ]
+                |   (str_p( "max"  ) >> '(' >> additiveExpression >> ',' >> additiveExpression >> ')' )[ BinaryFunctionFunctor( ExpressionFunct::BinaryMax,  self.getContext()) ]
+                |   (str_p( "atan2") >> '(' >> additiveExpression >> ',' >> additiveExpression >> ')' )[ BinaryFunctionFunctor( ExpressionFunct::BinaryAtan2,self.getContext()) ]
                 ;
 
             ternaryFunction =
@@ -1057,13 +1033,13 @@ public:
                 lexeme_d[ +( range_p('a','z') | range_p('A','Z') | range_p('0','9') ) ];
 
             functionReference =
-                (str_p( "?" ) >> funcRef_decl )[ EnumFunctor( ENUM_FUNC_EQUATION, self.getContext() ) ];
+                (str_p( "?" ) >> funcRef_decl )[ EnumFunctor( ExpressionFunct::EnumEquation, self.getContext() ) ];
 
             modRef_decl =
                 lexeme_d[ +( range_p('0','9') ) ];
 
             modifierReference =
-                (str_p( "$" ) >> modRef_decl )[ EnumFunctor( ENUM_FUNC_ADJUSTMENT, self.getContext() ) ];
+                (str_p( "$" ) >> modRef_decl )[ EnumFunctor( ExpressionFunct::EnumAdjustment, self.getContext() ) ];
 
             basicExpression =
                     real_parser<double, custom_real_parser_policies<double> >()[ DoubleConstantFunctor(self.getContext()) ]
@@ -1077,21 +1053,21 @@ public:
                 ;
 
             unaryExpression =
-                    ('-' >> basicExpression)[ UnaryFunctionFunctor( UNARY_FUNC_NEG, self.getContext()) ]
+                    ('-' >> basicExpression)[ UnaryFunctionFunctor( ExpressionFunct::UnaryNeg, self.getContext()) ]
                 |   basicExpression
                 ;
 
             multiplicativeExpression =
                     unaryExpression
-                >> *( ('*' >> unaryExpression)[ BinaryFunctionFunctor( BINARY_FUNC_MUL, self.getContext()) ]
-                    | ('/' >> unaryExpression)[ BinaryFunctionFunctor( BINARY_FUNC_DIV, self.getContext()) ]
+                >> *( ('*' >> unaryExpression)[ BinaryFunctionFunctor( ExpressionFunct::BinaryMul, self.getContext()) ]
+                    | ('/' >> unaryExpression)[ BinaryFunctionFunctor( ExpressionFunct::BinaryDiv, self.getContext()) ]
                     )
                 ;
 
             additiveExpression =
                     multiplicativeExpression
-                >> *( ('+' >> multiplicativeExpression)[ BinaryFunctionFunctor( BINARY_FUNC_PLUS,  self.getContext()) ]
-                    | ('-' >> multiplicativeExpression)[ BinaryFunctionFunctor( BINARY_FUNC_MINUS, self.getContext()) ]
+                >> *( ('+' >> multiplicativeExpression)[ BinaryFunctionFunctor( ExpressionFunct::BinaryPlus,  self.getContext()) ]
+                    | ('-' >> multiplicativeExpression)[ BinaryFunctionFunctor( ExpressionFunct::BinaryMinus, self.getContext()) ]
                     )
                 ;
 
