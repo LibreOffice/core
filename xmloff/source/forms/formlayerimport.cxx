@@ -30,8 +30,6 @@ namespace xmloff
     using namespace ::com::sun::star::drawing;
     using namespace ::com::sun::star;
 
-    //= OFormLayerXMLExport
-
     OFormLayerXMLImport::OFormLayerXMLImport(SvXMLImport& _rImporter)
         : m_pImpl( new OFormLayerXMLImport_Impl(_rImporter) )
     {
