@@ -52,7 +52,7 @@ class XMLOFF_DLLPUBLIC SvxXMLNumRuleExport
     SAL_DLLPRIVATE void exportLevelStyle(
             sal_Int32 nLevel,
             const css::uno::Sequence< css::beans::PropertyValue>& rProps,
-            bool bOutline=false );
+            bool bOutline );
 
 protected:
 
@@ -76,7 +76,7 @@ public:
 
     void exportStyles( bool bUsed,
                        XMLTextListAutoStylePool *pPool,
-                       bool bExportChapterNumbering = true );
+                       bool bExportChapterNumbering );
     void exportNumberingRule(
             const OUString& rName, bool bIsHidden,
             const css::uno::Reference< css::container::XIndexReplace > & xNumRule );

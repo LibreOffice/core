@@ -137,7 +137,7 @@ public:
                     const css::uno::Reference< css::chart2::XChartDocument > & xDoc,
                     sal_Int32 nCoordinateSystemIndex,
                     const OUString & rChartTypeName,
-                    bool bPushLastChartType = false );
+                    bool bPushLastChartType );
 
     static void DeleteDataSeries(
                     const css::uno::Reference< css::chart2::XDataSeries >& xSeries,

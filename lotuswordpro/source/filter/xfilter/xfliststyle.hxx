@@ -202,7 +202,7 @@ public:
                             OUString const & bullet_char,
                             const OUString& fontname,
                             const OUString& prefix,
-                            const OUString& suffix = ""
+                            const OUString& suffix
                             );
 
     void    SetListNumber( sal_Int32 level, XFNumFmt& numFmt, sal_Int16 nStartValue );
