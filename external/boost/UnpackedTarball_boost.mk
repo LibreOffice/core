@@ -40,10 +40,6 @@ boost_patches += boost_1_60_0.quadmath.patch
 boost_patches += boost_1_60_0.undef.warning.patch
 boost_patches += boost_1_60_0.android.undef.warning.patch
 
-# This patch is from upstream
-# https://github.com/boostorg/tuple/commit/8b6613e592824b30d48a9252604172abfa33c5f2
-boost_patches += boost.tuple_basic.Wundef.warnings.patch
-
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,boost,$(BOOST_TARBALL)))
