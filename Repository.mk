@@ -61,6 +61,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     svgio \
     editeng \
     file \
+    fileacc \
     for \
     forui \
     fwe \

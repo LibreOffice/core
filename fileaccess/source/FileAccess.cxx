@@ -24,6 +24,8 @@
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 
+#include "fileaccess/dllapi.h"
+
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>
@@ -904,13 +906,13 @@ Sequence< rtl::OUString > FileAccess_getSupportedServiceNames()
 extern "C"
 {
 //==================================================================================================
-void SAL_CALL component_getImplementationEnvironment(
+FILEACCESS_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 //==================================================================================================
-void * SAL_CALL component_getFactory(
+FILEACCESS_DLLPUBLIC void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;

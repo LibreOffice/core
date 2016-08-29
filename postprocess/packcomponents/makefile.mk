@@ -78,6 +78,7 @@ my_components = \
     component/dbaccess/util/dba \
     component/dbaccess/util/dbu \
     component/dbaccess/util/sdbt \
+    component/fileaccess/util/fileacc \
     component/formula/util/for \
     component/framework/util/fwk \
     component/framework/util/fwl \
@@ -129,7 +130,6 @@ my_components = \
     dlgprov \
     embobj \
     evtatt \
-    fileacc \
     filterconfig1 \
     flash \
     flat \
