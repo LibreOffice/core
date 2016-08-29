@@ -70,15 +70,29 @@ public:
 
     XMLEventsImportContext(
         SvXMLImport& rImport,
+        sal_Int32 nElement );
+
+    XMLEventsImportContext(
+        SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLocalName,
         const css::uno::Reference<css::document::XEventsSupplier> & xEventsSupplier);
 
     XMLEventsImportContext(
         SvXMLImport& rImport,
+        sal_Int32 nElement,
+        const css::uno::Reference< css::document::XEventsSupplier >& xEventsSupplier );
+
+    XMLEventsImportContext(
+        SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLocalName,
         const css::uno::Reference<css::container::XNameReplace> & xNameRepl);
+
+    XMLEventsImportContext(
+        SvXMLImport& rImport,
+        sal_Int32 nElement,
+        const css::uno::Reference< css::container::XNameReplace >& xNameRepl);
 
     virtual ~XMLEventsImportContext();
 
@@ -109,10 +123,22 @@ protected:
 
     virtual void EndElement() override;
 
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 };
 
 #endif
