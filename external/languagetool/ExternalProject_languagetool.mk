@@ -28,6 +28,9 @@ $(call gb_ExternalProject_get_state_target,languagetool,build) :
 		-Dbuild.label="build-$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO)" \
 		-Dant.build.javac.source=$(JAVA_SOURCE_VER) \
 		-Dant.build.javac.target=$(JAVA_TARGET_VER) \
+		$(if $(filter yes,$(JAVACISGCJ)), \
+			-Dbuild.compiler=gcj \
+		) \
 		$(if $(debug),-Dbuild.debug="on") \
 		-Dext.ooo.juh.lib="$(call gb_Jar_get_target,juh)" \
 		-Dext.ooo.jurt.lib="$(call gb_Jar_get_target,jurt)" \

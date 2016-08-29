@@ -24,8 +24,11 @@ $(call gb_ExternalProject_get_state_target,jfreereport_flute,build) :
 			-Dbuild.label="build-$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO)" \
 			-Dant.build.javac.source=$(JAVA_SOURCE_VER) \
 			-Dant.build.javac.target=$(JAVA_TARGET_VER) \
+			$(if $(filter yes,$(JAVACISGCJ)),\
+				-Dbuild.compiler=gcj \
+			) \
 			-Dantcontrib.available="true" \
-			-Dbuild.id="10682" \
+			-Dbuild.id="12398" \
 			-Dproject.revision="$(FLUTE_VERSION)" \
 			$(if $(debug),-Dbuild.debug="on") jar \
 	)

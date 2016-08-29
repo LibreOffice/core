@@ -23,6 +23,7 @@ $(call gb_ExternalProject_get_state_target,jfreereport_flow_engine,build) :
 			-q \
 			-f build.xml \
 			-Dbuild.label="build-$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO)" \
+			-Dant.build.javac.source=$(JAVA_SOURCE_VER) -Dant.build.javac.target=$(JAVA_TARGET_VER) \
 			$(if $(SYSTEM_APACHE_COMMONS),\
 				-Dcommons-logging.jar=$(COMMONS_LOGGING_JAR), \
 				-Dcommons-logging.jar="$(call gb_UnpackedTarball_get_dir,apache_commons_logging)/target/commons-logging-$(COMMONS_LOGGING_VERSION).jar") \
@@ -32,8 +33,9 @@ $(call gb_ExternalProject_get_state_target,jfreereport_flow_engine,build) :
 			-Dlibloader.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libloader)/dist/libloader-$(LIBLOADER_VERSION).jar \
 			-Dlibserializer.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libserializer)/dist/libserializer-$(LIBBASE_VERSION).jar \
 			-Dlibxml.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libxml)/dist/libxml-$(LIBXML_VERSION).jar \
-			-Dant.build.javac.source=$(JAVA_SOURCE_VER) \
-			-Dant.build.javac.target=$(JAVA_TARGET_VER) \
+			$(if $(filter yes,$(JAVACISGCJ)), \
+				-Dbuild.compiler=gcj \
+			) \
 			$(if $(debug),-Dbuild.debug="on") jar \
 	)
 
