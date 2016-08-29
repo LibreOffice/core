@@ -137,8 +137,6 @@ public:
     std::shared_ptr<TiledRowColumnBar> m_pRowBar;
     std::shared_ptr<TiledRowColumnBar> m_pColumnBar;
     std::shared_ptr<TiledCornerButton> m_pCornerButton;
-    /// Author string, used for comment insertion.
-    std::string m_aAuthor;
     /// Rendering arguments, which are the same for all views.
     boost::property_tree::ptree m_aRenderingArguments;
 
@@ -865,7 +863,6 @@ static void createView(GtkWidget* pButton, gpointer /*pItem*/)
     GtkWidget* pDocView = lok_doc_view_new_from_widget(LOK_DOC_VIEW(rWindow.m_pDocView), aArguments.c_str());
 
     TiledWindow& rNewWindow = setupWidgetAndCreateWindow(pDocView);
-    rNewWindow.m_aAuthor = aAuthor;
     // Hide the unused progress bar.
     gtk_widget_show_all(rNewWindow.m_pStatusBar);
     gtk_widget_hide(rNewWindow.m_pProgressBar);
@@ -917,9 +914,8 @@ static void createModelAndView(const char* pLOPath, const char* pDocPath, const 
     // Save rendering arguments for views which are created later.
     rWindow.m_aRenderingArguments = aTree;
 
-    rWindow.m_aAuthor = getNextAuthor();
     aTree.put(boost::property_tree::ptree::path_type(".uno:Author/type", '/'), "string");
-    aTree.put(boost::property_tree::ptree::path_type(".uno:Author/value", '/'), rWindow.m_aAuthor);
+    aTree.put(boost::property_tree::ptree::path_type(".uno:Author/value", '/'), getNextAuthor());
 
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
@@ -1316,18 +1312,7 @@ static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
         // notify about the finished Save
         gboolean bNotify = (rString == ".uno:Save");
 
-        std::string aArguments;
-        if (rString == ".uno:InsertAnnotation" && !rWindow.m_aAuthor.empty())
-        {
-            boost::property_tree::ptree aTree;
-            aTree.put(boost::property_tree::ptree::path_type("Author/type", '/'), "string");
-            aTree.put(boost::property_tree::ptree::path_type("Author/value", '/'), rWindow.m_aAuthor);
-            std::stringstream aStream;
-            boost::property_tree::write_json(aStream, aTree);
-            aArguments = aStream.str();
-        }
-
-        lok_doc_view_post_command(pLOKDocView, rString.c_str(), (aArguments.empty() ? nullptr : aArguments.c_str()), bNotify);
+        lok_doc_view_post_command(pLOKDocView, rString.c_str(), /*pArguments=*/nullptr, bNotify);
     }
 }
 
