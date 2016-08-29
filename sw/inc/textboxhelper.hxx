@@ -72,7 +72,7 @@ public:
      */
     static SwFrameFormat* getOtherTextBoxFormat(const SwFrameFormat* pFormat, sal_uInt16 nType);
     /// If we have an associated TextFrame, then return that.
-    static SwFrameFormat* getOtherTextBoxFormat(css::uno::Reference<css::drawing::XShape> xShape);
+    static SwFrameFormat* getOtherTextBoxFormat(css::uno::Reference<css::drawing::XShape> const & xShape);
     /// Return the textbox rectangle of a draw shape (in twips).
     static Rectangle getTextRectangle(SwFrameFormat* pShape, bool bAbsolute = true);
 

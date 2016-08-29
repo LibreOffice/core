@@ -238,7 +238,7 @@ SwFrameFormat* SwTextBoxHelper::getOtherTextBoxFormat(const SwFrameFormat* pForm
     return pFormat->GetOtherTextBoxFormat();
 }
 
-SwFrameFormat* SwTextBoxHelper::getOtherTextBoxFormat(uno::Reference<drawing::XShape> xShape)
+SwFrameFormat* SwTextBoxHelper::getOtherTextBoxFormat(uno::Reference<drawing::XShape> const & xShape)
 {
     SwXShape* pShape = dynamic_cast<SwXShape*>(xShape.get());
     if (!pShape)
