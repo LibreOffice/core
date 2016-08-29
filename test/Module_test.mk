@@ -13,6 +13,7 @@ ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 
 $(eval $(call gb_Module_add_targets,test,\
     Library_test \
+    Library_test-setupvcl \
     Library_subsequenttest \
     Library_vclbootstrapprotector \
     Package_unittest \

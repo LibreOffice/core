@@ -7,29 +7,31 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Library_Library,vclbootstrapprotector))
+$(eval $(call gb_Library_Library,test-setupvcl))
 
-$(eval $(call gb_Library_add_exception_objects,vclbootstrapprotector, \
-    test/source/vclbootstrapprotector \
+$(eval $(call gb_Library_add_defs,test-setupvcl,\
+    -DOOO_DLLIMPLEMENTATION_TEST_SETUPVCL \
 ))
 
-$(eval $(call gb_Library_use_externals,vclbootstrapprotector, \
+$(eval $(call gb_Library_add_exception_objects,test-setupvcl, \
+    test/source/setupvcl \
+))
+
+$(eval $(call gb_Library_use_externals,test-setupvcl, \
     boost_headers \
-    cppunit \
 ))
 
-$(eval $(call gb_Library_use_libraries,vclbootstrapprotector, \
+$(eval $(call gb_Library_use_libraries,test-setupvcl, \
     comphelper \
     cppu \
     i18nlangtag \
     sal \
-    test-setupvcl \
     tl \
     utl \
     vcl \
     $(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_use_sdk_api,vclbootstrapprotector))
+$(eval $(call gb_Library_use_sdk_api,test-setupvcl))
 
 # vim: set noet sw=4 ts=4:
