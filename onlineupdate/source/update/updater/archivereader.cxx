@@ -16,7 +16,7 @@
 
 // These are generated at compile time based on the DER file for the channel
 // being used
-#ifdef MOZ_VERIFY_MAR_SIGNATURE
+#ifdef VERIFY_MAR_SIGNATURE
 #ifdef TEST_UPDATER
 #include "../xpcshellCert.h"
 #else
@@ -55,7 +55,7 @@ VerifyLoadedCert(MarFile *archive, const uint8_t (&certData)[SIZE])
   (void)archive;
   (void)certData;
 
-#ifdef MOZ_VERIFY_MAR_SIGNATURE
+#ifdef VERIFY_MAR_SIGNATURE
   const uint32_t size = SIZE;
   const uint8_t* const data = &certData[0];
   if (mar_verify_signatures(archive, &data, &size, 1)) {
@@ -81,7 +81,7 @@ ArchiveReader::VerifySignature()
     return ARCHIVE_NOT_OPEN;
   }
 
-#ifndef MOZ_VERIFY_MAR_SIGNATURE
+#ifndef VERIFY_MAR_SIGNATURE
   return OK;
 #else
 #ifdef TEST_UPDATER
