@@ -74,6 +74,17 @@ XMLFootnoteImportContext::XMLFootnoteImportContext(
 {
 }
 
+XMLFootnoteImportContext::XMLFootnoteImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_Int32 /*nElement*/ )
+:   SvXMLImportContext( rImport ),
+    sPropertyReferenceId("ReferenceId"),
+    mbListContextPushed(false),
+    rHelper(rHlp)
+{
+}
+
 void XMLFootnoteImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
@@ -151,7 +162,75 @@ void XMLFootnoteImportContext::StartElement(
     // else: ignore footnote! Content will be merged into document.
 }
 
+void SAL_CALL XMLFootnoteImportContext::startFastElement( sal_Int32 /*nElement*/,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw (RuntimeException, SAXException, std::exception)
+{
+    // create footnote
+    Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(), UNO_QUERY);
+
+    if( xFactory.is() )
+    {
+        // create endnote or footnote
+        bool bIsEndnote = false;
+        if( xAttrList.is() &&
+            xAttrList->hasAttribute( NAMESPACE_TOKEN( XML_NAMESPACE_TEXT ) | XML_NOTE_CLASS ) )
+        {
+            if( IsXMLToken( xAttrList->getValue( NAMESPACE_TOKEN( XML_NAMESPACE_TEXT ) |
+                            XML_NOTE_CLASS ), XML_ENDNOTE ) )
+                bIsEndnote = true;
+        }
+
+        Reference<XInterface> xIfc = xFactory->createInstance(
+            bIsEndnote ?
+            OUString(sAPI_service_endnote) :
+            OUString(sAPI_service_footnote) );
+
+        // attach footnote to document
+        Reference<XTextContent> xTextContent(xIfc, UNO_QUERY);
+        rHelper.InsertTextContent(xTextContent);
+
+        // process id attribute
+        if( xAttrList.is() &&
+            xAttrList->hasAttribute( NAMESPACE_TOKEN( XML_NAMESPACE_TEXT ) | XML_ID ) )
+        {
+            // get ID ...
+            Reference<XPropertySet> xPropertySet(xTextContent, UNO_QUERY);
+            Any aAny = xPropertySet->getPropertyValue(sPropertyReferenceId);
+            sal_Int16 nID = 0;
+            aAny >>= nID;
+
+            // ... and insert into map
+            rHelper.InsertFootnoteID(
+                xAttrList->getValue( NAMESPACE_TOKEN( XML_NAMESPACE_TEXT ) | XML_ID ),
+                nID );
+        }
+
+        // save old cursor and install new one
+        xOldCursor = rHelper.GetCursor();
+        Reference<XText> xText(xTextContent, UNO_QUERY);
+        rHelper.SetCursor(xText->createTextCursor());
+
+        // remember old list item and block (#89891#) and reset them
+        // for the footnote
+        rHelper.PushListContext();
+        mbListContextPushed = true;
+
+        // remember footnote (for createFastChildContext)
+        Reference<XFootnote> xNote(xTextContent, UNO_QUERY);
+        xFootnote = xNote;
+    }
+    // else: ignore footnote! Content will be merged into document.
+}
+
 void XMLFootnoteImportContext::Characters(const OUString&)
+{
+    // ignore characters! Text must be contained in paragraphs!
+    // rHelper.InsertString(rString);
+}
+
+void SAL_CALL XMLFootnoteImportContext::characters(const OUString&)
+    throw (RuntimeException, SAXException, std::exception)
 {
     // ignore characters! Text must be contained in paragraphs!
     // rHelper.InsertString(rString);
@@ -171,6 +250,19 @@ void XMLFootnoteImportContext::EndElement()
     }
 }
 
+void SAL_CALL XMLFootnoteImportContext::endFastElement( sal_Int32 /*nElement*/ )
+    throw (RuntimeException, SAXException, std::exception)
+{
+    // get rid of last dumy paragraph
+    rHelper.DeleteParagraph();
+
+    // reinstall old cursor
+    rHelper.SetCursor(xOldCursor);
+
+    // reinstall old list item
+    if( mbListContextPushed )
+        rHelper.PopListContext();
+}
 
 SvXMLImportContext *XMLFootnoteImportContext::CreateChildContext(
     sal_uInt16 p_nPrefix,
@@ -219,6 +311,49 @@ SvXMLImportContext *XMLFootnoteImportContext::CreateChildContext(
             pContext = SvXMLImportContext::CreateChildContext(p_nPrefix,
                                                               rLocalName,
                                                               xAttrList);
+            break;
+    }
+
+    return pContext;
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLFootnoteImportContext::createFastChildContext(
+    sal_Int32 nElement,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw (RuntimeException, SAXException, std::exception)
+{
+    Reference< XFastContextHandler > pContext = NULL;
+
+    SvXMLTokenMap aTokenMap(aFootnoteChildTokenMap);
+
+    switch( aTokenMap.Get( nElement ) )
+    {
+        case XML_TOK_FTN_NOTE_CITATION:
+        {
+            // little hack: we only care for one attribute of the citation
+            //              element. We handle that here, and the return a
+            //              default context.
+            if( xAttrList.is() &&
+                xAttrList->hasAttribute( NAMESPACE_TOKEN( XML_NAMESPACE_TEXT ) | XML_LABEL ) )
+            {
+                xFootnote->setLabel(xAttrList->getValue(
+                        NAMESPACE_TOKEN( XML_NAMESPACE_TEXT ) | XML_LABEL ) );
+            }
+
+            // ignore content: return default context
+            pContext = new SvXMLImportContext( GetImport() );
+            break;
+        }
+
+        case XML_TOK_FTN_NOTE_BODY:
+            // return footnoe body
+            pContext = new XMLFootnoteBodyImportContext( GetImport(), nElement );
+            break;
+        default:
+            // default:
+            pContext = SvXMLImportContext::createFastChildContext(
+                            nElement, xAttrList );
             break;
     }
 

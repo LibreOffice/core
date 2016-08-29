@@ -46,8 +46,17 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLocalName );
 
+    XMLFieldParamImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_Int32 nElement );
+
     virtual void StartElement(
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
+
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 };
 
 
@@ -84,6 +93,12 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLocalName );
 
+    XMLTextMarkImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        css::uno::Reference<css::uno::XInterface> & io_rxCrossRefHeadingBookmark,
+        sal_Int32 nElement );
+
 protected:
 
     virtual void StartElement(
@@ -93,6 +108,17 @@ protected:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
                                                     const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement )
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+            throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 
 public:
     static css::uno::Reference< css::text::XTextContent > CreateAndInsertMark(
@@ -105,6 +131,10 @@ public:
     bool FindName(
         SvXMLImport& rImport,
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList);
+
+    bool FindName(
+        SvXMLImport& rImport,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList);
 };
 
 #endif
