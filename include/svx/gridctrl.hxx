@@ -143,6 +143,22 @@ namespace o3tl
     template<> struct typed_flags<DbGridControlOptions> : is_typed_flags<DbGridControlOptions, 0x07> {};
 }
 
+//  StatusIds for Controls of the Bar
+//  important for invalidation
+enum class DbGridControlNavigationBarState
+{
+    NONE,
+    Text,
+    Absolute,
+    Of,
+    Count,
+    First,
+    Next,
+    Prev,
+    Last,
+    New,
+    Undo // related to SID_FM_RECORD_UNDO
+};
 
 class FmXGridSourcePropListener;
 class DisposeListenerGridBridge;
@@ -186,30 +202,15 @@ public:
         bool                 m_bPositioning;     // protect PositionDataSource against recursion
 
     public:
-        //  StatusIds for Controls of the Bar
-        //  important for invalidation
-        enum State
-        {
-            RECORD_TEXT = 1,
-            RECORD_ABSOLUTE,
-            RECORD_OF,
-            RECORD_COUNT,
-            RECORD_FIRST,
-            RECORD_NEXT,
-            RECORD_PREV,
-            RECORD_LAST,
-            RECORD_NEW
-        };
-
         NavigationBar(vcl::Window* pParent);
         virtual ~NavigationBar();
         virtual void dispose() override;
 
         // Status methods for Controls
         void InvalidateAll(sal_Int32 nCurrentPos = -1, bool bAll = false);
-        void InvalidateState(sal_uInt16 nWhich) {SetState(nWhich);}
-        void SetState(sal_uInt16 nWhich);
-        bool GetState(sal_uInt16 nWhich) const;
+        void InvalidateState(DbGridControlNavigationBarState nWhich) {SetState(nWhich);}
+        void SetState(DbGridControlNavigationBarState nWhich);
+        bool GetState(DbGridControlNavigationBarState nWhich) const;
         sal_uInt16 ArrangeControls();
 
     protected:
@@ -226,8 +227,8 @@ public:
     friend class DbGridControl::NavigationBar;
 
 private:
-    Link<sal_uInt16,int>   m_aMasterStateProvider;
-    Link<sal_uInt16,bool>   m_aMasterSlotExecutor;
+    Link<DbGridControlNavigationBarState,int>    m_aMasterStateProvider;
+    Link<DbGridControlNavigationBarState,bool>   m_aMasterSlotExecutor;
 
     css::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;
     css::uno::Reference< css::uno::XComponentContext >    m_xContext;
@@ -480,13 +481,13 @@ public:
 
     const DbGridRowRef& GetCurrentRow() const {return m_xCurrentRow;}
 
-    void SetStateProvider(const Link<sal_uInt16,int>& rProvider) { m_aMasterStateProvider = rProvider; }
+    void SetStateProvider(const Link<DbGridControlNavigationBarState,int>& rProvider) { m_aMasterStateProvider = rProvider; }
         // if this link is set the given provider will be asked for the state of my items.
         // the return values are interpreted as follows :
         // <0 -> not specified (use default mechanism to determine the state)
         // ==0 -> the item is disabled
         // >0 -> the item is enabled
-    void SetSlotExecutor(const Link<sal_uInt16,bool>& rExecutor) { m_aMasterSlotExecutor = rExecutor; }
+    void SetSlotExecutor(const Link<DbGridControlNavigationBarState,bool>& rExecutor) { m_aMasterSlotExecutor = rExecutor; }
         // analogous : if this link is set, all nav-bar slots will be routed through it when executed
         // if the handler returns nonzero, no further handling of the slot occurs
 

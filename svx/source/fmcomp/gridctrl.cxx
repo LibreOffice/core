@@ -221,18 +221,18 @@ DisposeListenerGridBridge::~DisposeListenerGridBridge()
     }
 }
 
-static const sal_uInt16 ControlMap[] =
+static const DbGridControlNavigationBarState ControlMap[] =
     {
-        DbGridControl::NavigationBar::RECORD_TEXT,
-        DbGridControl::NavigationBar::RECORD_ABSOLUTE,
-        DbGridControl::NavigationBar::RECORD_OF,
-        DbGridControl::NavigationBar::RECORD_COUNT,
-        DbGridControl::NavigationBar::RECORD_FIRST,
-        DbGridControl::NavigationBar::RECORD_NEXT,
-        DbGridControl::NavigationBar::RECORD_PREV,
-        DbGridControl::NavigationBar::RECORD_LAST,
-        DbGridControl::NavigationBar::RECORD_NEW,
-        0
+        DbGridControlNavigationBarState::Text,
+        DbGridControlNavigationBarState::Absolute,
+        DbGridControlNavigationBarState::Of,
+        DbGridControlNavigationBarState::Count,
+        DbGridControlNavigationBarState::First,
+        DbGridControlNavigationBarState::Next,
+        DbGridControlNavigationBarState::Prev,
+        DbGridControlNavigationBarState::Last,
+        DbGridControlNavigationBarState::New,
+        DbGridControlNavigationBarState::NONE
     };
 
 bool CompareBookmark(const Any& aLeft, const Any& aRight)
@@ -308,7 +308,7 @@ void DbGridControl::NavigationBar::AbsolutePos::LoseFocus()
     else
     {
         static_cast<NavigationBar*>(GetParent())->PositionDataSource(static_cast<sal_Int32>(nRecord));
-        static_cast<NavigationBar*>(GetParent())->InvalidateState(NavigationBar::RECORD_ABSOLUTE);
+        static_cast<NavigationBar*>(GetParent())->InvalidateState(DbGridControlNavigationBarState::Absolute);
     }
 }
 
@@ -559,15 +559,15 @@ IMPL_LINK_TYPED(DbGridControl::NavigationBar, OnClick, Button *, pButton, void )
     {
         bool lResult = false;
         if (pButton == m_aFirstBtn.get())
-            lResult = pParent->m_aMasterSlotExecutor.Call(RECORD_FIRST);
+            lResult = pParent->m_aMasterSlotExecutor.Call(DbGridControlNavigationBarState::First);
         else if( pButton == m_aPrevBtn.get() )
-            lResult = pParent->m_aMasterSlotExecutor.Call(RECORD_PREV);
+            lResult = pParent->m_aMasterSlotExecutor.Call(DbGridControlNavigationBarState::Prev);
         else if( pButton == m_aNextBtn.get() )
-            lResult = pParent->m_aMasterSlotExecutor.Call(RECORD_NEXT);
+            lResult = pParent->m_aMasterSlotExecutor.Call(DbGridControlNavigationBarState::Next);
         else if( pButton == m_aLastBtn.get() )
-            lResult = pParent->m_aMasterSlotExecutor.Call(RECORD_LAST);
+            lResult = pParent->m_aMasterSlotExecutor.Call(DbGridControlNavigationBarState::Last);
         else if( pButton == m_aNewBtn.get() )
-            lResult = pParent->m_aMasterSlotExecutor.Call(RECORD_NEW);
+            lResult = pParent->m_aMasterSlotExecutor.Call(DbGridControlNavigationBarState::New);
 
         if (lResult)
             // the link already handled it
@@ -604,19 +604,19 @@ void DbGridControl::NavigationBar::InvalidateAll(sal_Int32 nCurrentPos, bool bAl
         {
             m_nCurrentPos = nCurrentPos;
             int i = 0;
-            while (ControlMap[i])
+            while (ControlMap[i] != DbGridControlNavigationBarState::NONE)
                 SetState(ControlMap[i++]);
         }
         else    // is in the center
         {
             m_nCurrentPos = nCurrentPos;
-            SetState(NavigationBar::RECORD_COUNT);
-            SetState(NavigationBar::RECORD_ABSOLUTE);
+            SetState(DbGridControlNavigationBarState::Count);
+            SetState(DbGridControlNavigationBarState::Absolute);
         }
     }
 }
 
-bool DbGridControl::NavigationBar::GetState(sal_uInt16 nWhich) const
+bool DbGridControl::NavigationBar::GetState(DbGridControlNavigationBarState nWhich) const
 {
     DbGridControl* pParent = static_cast<DbGridControl*>(GetParent());
 
@@ -637,11 +637,11 @@ bool DbGridControl::NavigationBar::GetState(sal_uInt16 nWhich) const
 
         switch (nWhich)
         {
-            case NavigationBar::RECORD_FIRST:
-            case NavigationBar::RECORD_PREV:
+            case DbGridControlNavigationBarState::First:
+            case DbGridControlNavigationBarState::Prev:
                 bAvailable = m_nCurrentPos > 0;
                 break;
-            case NavigationBar::RECORD_NEXT:
+            case DbGridControlNavigationBarState::Next:
                 if(pParent->m_bRecordCountFinal)
                 {
                     bAvailable = m_nCurrentPos < pParent->GetRowCount() - 1;
@@ -649,7 +649,7 @@ bool DbGridControl::NavigationBar::GetState(sal_uInt16 nWhich) const
                         bAvailable = (m_nCurrentPos == pParent->GetRowCount() - 2) && pParent->IsModified();
                 }
                 break;
-            case NavigationBar::RECORD_LAST:
+            case DbGridControlNavigationBarState::Last:
                 if(pParent->m_bRecordCountFinal)
                 {
                     if (pParent->GetOptions() & DbGridControlOptions::Insert)
@@ -659,40 +659,41 @@ bool DbGridControl::NavigationBar::GetState(sal_uInt16 nWhich) const
                         bAvailable = m_nCurrentPos != pParent->GetRowCount() - 1;
                 }
                 break;
-            case NavigationBar::RECORD_NEW:
+            case DbGridControlNavigationBarState::New:
                 bAvailable = (pParent->GetOptions() & DbGridControlOptions::Insert) && pParent->GetRowCount() && m_nCurrentPos < pParent->GetRowCount() - 1;
                 break;
-            case NavigationBar::RECORD_ABSOLUTE:
+            case DbGridControlNavigationBarState::Absolute:
                 bAvailable = pParent->GetRowCount() > 0;
                 break;
+            default: break;
         }
         return bAvailable;
     }
 }
 
-void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
+void DbGridControl::NavigationBar::SetState(DbGridControlNavigationBarState nWhich)
 {
     bool bAvailable = GetState(nWhich);
     DbGridControl* pParent = static_cast<DbGridControl*>(GetParent());
     vcl::Window* pWnd = nullptr;
     switch (nWhich)
     {
-        case NavigationBar::RECORD_FIRST:
+        case DbGridControlNavigationBarState::First:
             pWnd = m_aFirstBtn.get();
             break;
-        case NavigationBar::RECORD_PREV:
+        case DbGridControlNavigationBarState::Prev:
             pWnd = m_aPrevBtn.get();
             break;
-        case NavigationBar::RECORD_NEXT:
+        case DbGridControlNavigationBarState::Next:
             pWnd = m_aNextBtn.get();
             break;
-        case NavigationBar::RECORD_LAST:
+        case DbGridControlNavigationBarState::Last:
             pWnd = m_aLastBtn.get();
             break;
-        case NavigationBar::RECORD_NEW:
+        case DbGridControlNavigationBarState::New:
             pWnd = m_aNewBtn.get();
             break;
-        case NavigationBar::RECORD_ABSOLUTE:
+        case DbGridControlNavigationBarState::Absolute:
             pWnd = m_aAbsolute.get();
             if (bAvailable)
             {
@@ -711,13 +712,13 @@ void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
             else
                 m_aAbsolute->SetText(OUString());
             break;
-        case NavigationBar::RECORD_TEXT:
+        case DbGridControlNavigationBarState::Text:
             pWnd = m_aRecordText.get();
             break;
-        case NavigationBar::RECORD_OF:
+        case DbGridControlNavigationBarState::Of:
             pWnd = m_aRecordOf.get();
             break;
-        case NavigationBar::RECORD_COUNT:
+        case DbGridControlNavigationBarState::Count:
         {
             pWnd = m_aRecordCount.get();
             OUString aText;
@@ -752,6 +753,7 @@ void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
 
             pParent->SetRealRowCount(aText);
         }   break;
+        default: break;
     }
     DBG_ASSERT(pWnd, "kein Fenster");
     if (pWnd && (pWnd->IsEnabled() != bAvailable))
@@ -1097,7 +1099,7 @@ void DbGridControl::Select()
     DbGridControl_Base::Select();
 
     // as the selected rows may have changed, update the according display in our navigation bar
-    m_aBar->InvalidateState(NavigationBar::RECORD_COUNT);
+    m_aBar->InvalidateState(DbGridControlNavigationBarState::Count);
 
     if (m_pGridListener)
         m_pGridListener->selectionChanged();
@@ -1922,7 +1924,7 @@ void DbGridControl::RowInserted(long nRow, long nNumRows, bool bDoPaint)
             m_nTotalCount += nNumRows;
 
         DbGridControl_Base::RowInserted(nRow, nNumRows, bDoPaint);
-        m_aBar->InvalidateState(NavigationBar::RECORD_COUNT);
+        m_aBar->InvalidateState(DbGridControlNavigationBarState::Count);
     }
 }
 
@@ -1941,7 +1943,7 @@ void DbGridControl::RowRemoved(long nRow, long nNumRows, bool bDoPaint)
             m_nTotalCount -= nNumRows;
 
         DbGridControl_Base::RowRemoved(nRow, nNumRows, bDoPaint);
-        m_aBar->InvalidateState(NavigationBar::RECORD_COUNT);
+        m_aBar->InvalidateState(DbGridControlNavigationBarState::Count);
     }
 }
 
@@ -2005,7 +2007,7 @@ void DbGridControl::AdjustRows()
         else
             m_nTotalCount = GetRowCount();
     }
-    m_aBar->InvalidateState(NavigationBar::RECORD_COUNT);
+    m_aBar->InvalidateState(DbGridControlNavigationBarState::Count);
 }
 
 DbGridControl_Base::RowStatus DbGridControl::GetRowStatus(long nRow) const
@@ -2708,7 +2710,7 @@ void DbGridControl::PreExecuteRowContextMenu(sal_uInt16 /*nRow*/, PopupMenu& rMe
     bool bCanUndo = IsModified();
     int nState = -1;
     if (m_aMasterStateProvider.IsSet())
-        nState = m_aMasterStateProvider.Call(SID_FM_RECORD_UNDO);
+        nState = m_aMasterStateProvider.Call(DbGridControlNavigationBarState::Undo);
     bCanUndo &= ( 0 != nState );
 
     rMenu.EnableItem(SID_FM_RECORD_UNDO, bCanUndo);
@@ -3007,11 +3009,11 @@ void DbGridControl::Undo()
         // check if we have somebody doin' the UNDO for us
         int nState = -1;
         if (m_aMasterStateProvider.IsSet())
-            nState = m_aMasterStateProvider.Call(SID_FM_RECORD_UNDO);
+            nState = m_aMasterStateProvider.Call(DbGridControlNavigationBarState::Undo);
         if (nState>0)
         {   // yes, we have, and the slot is enabled
             DBG_ASSERT(m_aMasterSlotExecutor.IsSet(), "DbGridControl::Undo : a state, but no execute link ?");
-            bool lResult = m_aMasterSlotExecutor.Call(SID_FM_RECORD_UNDO);
+            bool lResult = m_aMasterSlotExecutor.Call(DbGridControlNavigationBarState::Undo);
             if (lResult)
                 // handled
                 return;

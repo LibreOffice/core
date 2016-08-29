@@ -50,6 +50,7 @@
 #include <cppuhelper/implbase10.hxx>
 
 class DbGridColumn;
+enum class DbGridControlNavigationBarState;
 
 class SAL_WARN_UNUSED OWeakSubObject : public ::cppu::OWeakObject
 {
@@ -503,7 +504,7 @@ protected:
     virtual VclPtr<FmGridControl>  imp_CreateControl(vcl::Window* pParent, WinBits nStyle);
 
     static css::uno::Sequence< css::util::URL>&       getSupportedURLs();
-    static css::uno::Sequence<sal_uInt16>& getSupportedGridSlots();
+    static const std::vector<DbGridControlNavigationBarState>& getSupportedGridSlots();
     void    ConnectToDispatcher();
     void    DisConnectFromDispatcher();
     void    UpdateDispatches(); // will connect if not already connected and just update else
@@ -519,8 +520,8 @@ protected:
     void selectionChanged();
     void columnChanged();
 
-    DECL_LINK_TYPED(OnQueryGridSlotState, sal_uInt16, int);
-    DECL_LINK_TYPED(OnExecuteGridSlot, sal_uInt16, bool);
+    DECL_LINK_TYPED(OnQueryGridSlotState, DbGridControlNavigationBarState, int);
+    DECL_LINK_TYPED(OnExecuteGridSlot, DbGridControlNavigationBarState, bool);
 };
 
 

@@ -2569,19 +2569,18 @@ void FmXGridPeer::statusChanged(const css::frame::FeatureStateEvent& Event) thro
     Sequence< css::util::URL>& aUrls = getSupportedURLs();
     const css::util::URL* pUrls = aUrls.getConstArray();
 
-    Sequence<sal_uInt16> aSlots = getSupportedGridSlots();
-    const sal_uInt16* pSlots = aSlots.getConstArray();
+    const std::vector<DbGridControlNavigationBarState>& aSlots = getSupportedGridSlots();
 
     sal_uInt16 i;
-    for (i=0; i<aUrls.getLength(); ++i, ++pUrls, ++pSlots)
+    for (i=0; i<aUrls.getLength(); ++i, ++pUrls)
     {
         if (pUrls->Main == Event.FeatureURL.Main)
         {
             DBG_ASSERT(m_pDispatchers[i] == Event.Source, "FmXGridPeer::statusChanged : the event source is a little bit suspect !");
             m_pStateCache[i] = Event.IsEnabled;
             VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
-            if (*pSlots != SID_FM_RECORD_UNDO)
-                pGrid->GetNavigationBar().InvalidateState(*pSlots);
+            if (aSlots[i] != DbGridControlNavigationBarState::Undo)
+                pGrid->GetNavigationBar().InvalidateState(aSlots[i]);
             break;
         }
     }
@@ -2653,24 +2652,16 @@ void FmXGridPeer::resetted(const EventObject& rEvent) throw( RuntimeException, s
 }
 
 
-Sequence<sal_uInt16>& FmXGridPeer::getSupportedGridSlots()
+const std::vector<DbGridControlNavigationBarState>& FmXGridPeer::getSupportedGridSlots()
 {
-    static Sequence<sal_uInt16> aSupported;
-    if (aSupported.getLength() == 0)
-    {
-        const sal_uInt16 nSupported[] = {
-            DbGridControl::NavigationBar::RECORD_FIRST,
-            DbGridControl::NavigationBar::RECORD_PREV,
-            DbGridControl::NavigationBar::RECORD_NEXT,
-            DbGridControl::NavigationBar::RECORD_LAST,
-            DbGridControl::NavigationBar::RECORD_NEW,
-            SID_FM_RECORD_UNDO
-        };
-        aSupported.realloc(SAL_N_ELEMENTS(nSupported));
-        sal_uInt16* pSupported = aSupported.getArray();
-        for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
-            *pSupported = nSupported[i];
-    }
+    static const std::vector<DbGridControlNavigationBarState> aSupported {
+        DbGridControlNavigationBarState::First,
+        DbGridControlNavigationBarState::Prev,
+        DbGridControlNavigationBarState::Next,
+        DbGridControlNavigationBarState::Last,
+        DbGridControlNavigationBarState::New,
+        DbGridControlNavigationBarState::Undo
+    };
     return aSupported;
 }
 
@@ -2803,17 +2794,16 @@ void FmXGridPeer::DisConnectFromDispatcher()
 }
 
 
-IMPL_LINK_TYPED(FmXGridPeer, OnQueryGridSlotState, sal_uInt16, nSlot, int)
+IMPL_LINK_TYPED(FmXGridPeer, OnQueryGridSlotState, DbGridControlNavigationBarState, nSlot, int)
 {
     if (!m_pStateCache)
         return -1;  // unspecified
 
     // search the given slot with our supported sequence
-    Sequence<sal_uInt16>& aSupported = getSupportedGridSlots();
-    const sal_uInt16* pSlots = aSupported.getConstArray();
-    for (sal_Int32 i=0; i<aSupported.getLength(); ++i)
+    const std::vector<DbGridControlNavigationBarState>& aSupported = getSupportedGridSlots();
+    for (size_t i=0; i<aSupported.size(); ++i)
     {
-        if (pSlots[i] == nSlot)
+        if (aSupported[i] == nSlot)
         {
             if (!m_pDispatchers[i].is())
                 return -1;  // nothing known about this slot
@@ -2826,7 +2816,7 @@ IMPL_LINK_TYPED(FmXGridPeer, OnQueryGridSlotState, sal_uInt16, nSlot, int)
 }
 
 
-IMPL_LINK_TYPED(FmXGridPeer, OnExecuteGridSlot, sal_uInt16, nSlot, bool)
+IMPL_LINK_TYPED(FmXGridPeer, OnExecuteGridSlot, DbGridControlNavigationBarState, nSlot, bool)
 {
     if (!m_pDispatchers)
         return false;   // not handled
@@ -2834,14 +2824,13 @@ IMPL_LINK_TYPED(FmXGridPeer, OnExecuteGridSlot, sal_uInt16, nSlot, bool)
     Sequence< css::util::URL>& aUrls = getSupportedURLs();
     const css::util::URL* pUrls = aUrls.getConstArray();
 
-    Sequence<sal_uInt16> aSlots = getSupportedGridSlots();
-    const sal_uInt16* pSlots = aSlots.getConstArray();
+    const std::vector<DbGridControlNavigationBarState>& aSlots = getSupportedGridSlots();
 
-    DBG_ASSERT(aSlots.getLength() == aUrls.getLength(), "FmXGridPeer::OnExecuteGridSlot : inconstent data returned by getSupportedURLs/getSupportedGridSlots !");
+    DBG_ASSERT((sal_Int32)aSlots.size() == aUrls.getLength(), "FmXGridPeer::OnExecuteGridSlot : inconstent data returned by getSupportedURLs/getSupportedGridSlots !");
 
-    for (sal_Int32 i=0; i<aSlots.getLength(); ++i, ++pUrls, ++pSlots)
+    for (size_t i=0; i<aSlots.size(); ++i, ++pUrls)
     {
-        if (*pSlots == nSlot)
+        if (aSlots[i] == nSlot)
         {
             if (m_pDispatchers[i].is())
             {
