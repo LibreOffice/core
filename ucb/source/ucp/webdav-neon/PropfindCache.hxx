@@ -41,7 +41,7 @@ namespace webdav_ucp
 
     public:
         PropertyNames();
-        PropertyNames( const OUString& rURL );
+        explicit PropertyNames( const OUString& rURL );
         PropertyNames( const PropertyNames& theOther );
         virtual ~PropertyNames();
 
