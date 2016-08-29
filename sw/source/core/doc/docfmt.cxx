@@ -2039,7 +2039,7 @@ SwFrameFormats::SwFrameFormats()
 
 SwFrameFormats::~SwFrameFormats()
 {
-    DeleteAndDestroyAll( false );
+    DeleteAndDestroyAll();
 }
 
 SwFrameFormats::iterator SwFrameFormats::find( const value_type& x ) const

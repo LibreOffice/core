@@ -1047,7 +1047,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
             {
                 pTargetShell->SttEndDoc( false );
                 --aBreakIdx;
-                GetNodes().Delete( aBreakIdx, 1 );
+                GetNodes().Delete( aBreakIdx );
             }
 
             // There is now a new empty text node on the new page. If it has
