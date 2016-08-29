@@ -496,7 +496,7 @@ public:
             const OUString& rTargetFrameName,
             const OUString& rStyleName,
             const OUString& rVisitedStyleName,
-            XMLEventsImportContext* pEvents = nullptr);
+            XMLEventsImportContext* pEvents);
     void SetRuby(
             SvXMLImport& rImport,
             const css::uno::Reference< css::text::XTextCursor >& rCursor,

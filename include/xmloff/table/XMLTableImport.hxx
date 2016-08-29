@@ -57,7 +57,7 @@ public:
 
     void addTableTemplate( const OUString& rsStyleName, XMLTableTemplate& xTableTemplate );
     /// Inserts to the doc template with given name.
-    void insertTabletemplate( const OUString& rsStyleName, bool bOverwrite = false);
+    void insertTabletemplate( const OUString& rsStyleName, bool bOverwrite);
     /// Inserts all table templates.
     void finishStyles();
 

@@ -133,7 +133,7 @@ public:
 
         // parameter for use by txtstyli.cxx; allows efficient
         // catching the combined characters property
-        ContextID_Index_Pair* pSpecialContextIds = nullptr );
+        ContextID_Index_Pair* pSpecialContextIds );
 
     /** implementation helper for FillPropertySet: fill an XMultiPropertySet.
      * If unsuccessul, set return value. */
@@ -145,7 +145,7 @@ public:
 
         // parameters for use by txtstyli.cxx; allows efficient
         // catching the combined characters property
-        ContextID_Index_Pair* pSpecialContextIds = nullptr );
+        ContextID_Index_Pair* pSpecialContextIds );
 
     /** implementation helper for FillPropertySet: fill an XTolerantMultiPropertySet.
      * If unsuccessul, set return value. */
@@ -157,7 +157,7 @@ public:
 
         // parameters for use by txtstyli.cxx; allows efficient
         // catching the combined characters property
-        ContextID_Index_Pair* pSpecialContextIds = nullptr );
+        ContextID_Index_Pair* pSpecialContextIds );
 
 
     static void PrepareForMultiPropertySet_(
