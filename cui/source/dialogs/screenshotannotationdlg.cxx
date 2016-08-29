@@ -51,11 +51,6 @@ public:
     {
     }
 
-    const vcl::Window& getControl() const
-    {
-        return mrControl;
-    }
-
     const basegfx::B2IRange& getB2IRange() const
     {
         return maB2IRange;
