@@ -133,7 +133,7 @@ public:
                 between the border and the top of the text.
      * @param   indent value of the padding.
      */
-    void    SetPadding(double left, double right, double top = -1, double bottom = -1);
+    void    SetPadding(double left, double right, double top, double bottom);
 
     /**
      * @descr   Set the Margins of the paragraph.

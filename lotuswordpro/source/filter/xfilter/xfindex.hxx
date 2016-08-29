@@ -97,7 +97,7 @@ public:
     /**
      * @descr   Add a tab entry in the template.
      */
-    void    AddTabEntry(enumXFTab type, double len, sal_Unicode leader, sal_Unicode delimiter, const OUString& styleName = "");
+    void    AddTabEntry(enumXFTab type, double len, sal_Unicode leader, sal_Unicode delimiter, const OUString& styleName);
 
     /**
      * @descr   Add a entry in the template.

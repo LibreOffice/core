@@ -119,7 +119,7 @@ public:
 
     /* This will replace the version with the unused 3rd default parameter */
     sal_uInt16 GetKeyByAttrName_( const OUString& rAttrName,
-                             OUString *pLocalName = nullptr) const;
+                             OUString *pLocalName) const;
 
     sal_uInt16 GetFirstKey() const;
     sal_uInt16 GetNextKey( sal_uInt16 nOldKey ) const;
@@ -134,7 +134,7 @@ public:
     static bool NormalizeURI( OUString& rName );
 
 /* deprecated */ void AddAtIndex( sal_uInt16 nIdx, const OUString& rPrefix,
-                     const OUString& rName, sal_uInt16 nKey = XML_NAMESPACE_UNKNOWN );
+                     const OUString& rName, sal_uInt16 nKey );
 /* deprecated */ static sal_uInt16 GetIndexByKey( sal_uInt16 nKey );
 /* deprecated */ sal_uInt16 GetIndexByPrefix( const OUString& rPrefix ) const;
 /* deprecated */ sal_uInt16 GetFirstIndex() const;
@@ -147,7 +147,7 @@ public:
 /* deprecated */ sal_uInt16 GetKeyByAttrName( const OUString& rAttrName,
                              OUString *pPrefix,
                              OUString *pLocalName,
-                             OUString *pNamespace=nullptr,
+                             OUString *pNamespace,
                              sal_uInt16 nIdxGuess = USHRT_MAX ) const;
 /* deprecated */ sal_uInt16 GetKeyByAttrName( const OUString& rAttrName,
                              OUString *pLocalName = nullptr,
