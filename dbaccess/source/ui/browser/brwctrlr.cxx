@@ -1577,8 +1577,8 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
 
                 aReturn.bEnabled = true;
 
-                sal_Int16 nGridMode = getBrowserView()->getVclControl()->GetOptions();
-                aReturn.bChecked = nGridMode > DbGridControl::OPT_READONLY;
+                DbGridControlOptions nGridMode = getBrowserView()->getVclControl()->GetOptions();
+                aReturn.bChecked = nGridMode > DbGridControlOptions::Readonly;
             }
             break;
             case ID_BROWSER_FILTERED:
@@ -1916,9 +1916,9 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             break;
         case ID_BROWSER_EDITDOC:
         {
-            sal_Int16 nGridMode = getBrowserView()->getVclControl()->GetOptions();
-            if (nGridMode == DbGridControl::OPT_READONLY)
-                getBrowserView()->getVclControl()->SetOptions(DbGridControl::OPT_UPDATE | DbGridControl::OPT_INSERT | DbGridControl::OPT_DELETE);
+            DbGridControlOptions nGridMode = getBrowserView()->getVclControl()->GetOptions();
+            if (nGridMode == DbGridControlOptions::Readonly)
+                getBrowserView()->getVclControl()->SetOptions(DbGridControlOptions::Update | DbGridControlOptions::Insert | DbGridControlOptions::Delete);
                     // the options not supported by the data source will be removed automatically
             else
             {
@@ -1930,7 +1930,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 if (GetState(ID_BROWSER_UNDORECORD).bEnabled)
                     Execute(ID_BROWSER_UNDORECORD,Sequence<PropertyValue>());
 
-                getBrowserView()->getVclControl()->SetOptions(DbGridControl::OPT_READONLY);
+                getBrowserView()->getVclControl()->SetOptions(DbGridControlOptions::Readonly);
             }
             InvalidateFeature(ID_BROWSER_EDITDOC);
         }

@@ -1065,7 +1065,7 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
         // so the row contains data which has no counter part within the data source
 
         long nCorrectRowCount = GetRowCount();
-        if (GetOptions() & OPT_INSERT)
+        if (GetOptions() & DbGridControlOptions::Insert)
             --nCorrectRowCount; // there is a empty row for inserting records
         if (bCurrentRowVirtual)
             --nCorrectRowCount;
@@ -1281,7 +1281,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
         sal_uInt16  nCol = GetColumnAtXPosPixel(rEvt.maPosPixel.X(), false);
 
         long nCorrectRowCount = GetRowCount();
-        if (GetOptions() & OPT_INSERT)
+        if (GetOptions() & DbGridControlOptions::Insert)
             --nCorrectRowCount; // there is a empty row for inserting records
         if (IsCurrentAppending())
             --nCorrectRowCount; // the current data record doesn't really exist, we are appending a new one
@@ -1375,7 +1375,7 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
         sal_uInt16  nCol = GetColumnAtXPosPixel(rEvt.maPosPixel.X(), false);
 
         long nCorrectRowCount = GetRowCount();
-        if (GetOptions() & OPT_INSERT)
+        if (GetOptions() & DbGridControlOptions::Insert)
             --nCorrectRowCount; // there is a empty row for inserting records
         if (IsCurrentAppending())
             --nCorrectRowCount; // the current data record doesn't really exist, we are appending a new one

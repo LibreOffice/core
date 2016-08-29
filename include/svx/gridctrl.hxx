@@ -129,6 +129,21 @@ namespace o3tl
 }
 
 
+// these options are or'ed and indicate, which of the single
+// features can be released, default is readonly which means 0
+enum class DbGridControlOptions
+{
+    Readonly    = 0x00,
+    Insert      = 0x01,
+    Update      = 0x02,
+    Delete      = 0x04
+};
+namespace o3tl
+{
+    template<> struct typed_flags<DbGridControlOptions> : is_typed_flags<DbGridControlOptions, 0x07> {};
+}
+
+
 class FmXGridSourcePropListener;
 class DisposeListenerGridBridge;
 typedef ::svt::EditBrowseBox    DbGridControl_Base;
@@ -210,17 +225,6 @@ public:
 
     friend class DbGridControl::NavigationBar;
 
-public:
-    // these options are or'ed and indicate, which of the single
-    // features can be released, default is readonly which means 0
-    enum Option
-    {
-        OPT_READONLY    = 0x00,
-        OPT_INSERT      = 0x01,
-        OPT_UPDATE      = 0x02,
-        OPT_DELETE      = 0x04
-    };
-
 private:
     Link<sal_uInt16,int>   m_aMasterStateProvider;
     Link<sal_uInt16,bool>   m_aMasterSlotExecutor;
@@ -277,11 +281,11 @@ private:
     BrowserMode         m_nMode;
     sal_Int32           m_nCurrentPos;      // Current position;
     ImplSVEvent *       m_nDeleteEvent;     // EventId for asychronous deletion of rows
-    sal_uInt16          m_nOptions;         // What is the able to do (Insert, Update, Delete)
-                                        // default readonly
-    sal_uInt16          m_nOptionMask;      // the mask of options to be enabled in setDataSource
-                                        // (with respect to the data source capabilities)
-                                        // defaults to (insert | update | delete)
+    DbGridControlOptions m_nOptions;        // What is the able to do (Insert, Update, Delete)
+                                            // default readonly
+    DbGridControlOptions m_nOptionMask;     // the mask of options to be enabled in setDataSource
+                                            // (with respect to the data source capabilities)
+                                            // defaults to (insert | update | delete)
     sal_uInt16          m_nLastColId;
     long                m_nLastRowId;
 
@@ -395,7 +399,7 @@ public:
     // the data source
     // the options can restrict but not extend the update abilities
     void setDataSource(const css::uno::Reference< css::sdbc::XRowSet >& rCursor,
-        sal_uInt16 nOpts = OPT_INSERT | OPT_UPDATE | OPT_DELETE);
+        DbGridControlOptions nOpts = DbGridControlOptions::Insert | DbGridControlOptions::Update | DbGridControlOptions::Delete);
     virtual void Dispatch(sal_uInt16 nId) override;
 
     CursorWrapper* getDataSource() const {return m_pDataCursor;}
@@ -431,9 +435,9 @@ public:
     void EnableNavigationBar(bool bEnable);
     bool HasNavigationBar() const {return m_bNavigationBar;}
 
-    sal_uInt16 GetOptions() const {return m_nOptions;}
+    DbGridControlOptions GetOptions() const {return m_nOptions;}
     NavigationBar& GetNavigationBar() {return *m_aBar.get();}
-    sal_uInt16 SetOptions(sal_uInt16 nOpt);
+    DbGridControlOptions SetOptions(DbGridControlOptions nOpt);
         // The new options are interpreted with respect to the current data source. If it is unable
         // to update, to insert or to restore, the according options are ignored. If the grid isn't
         // connected to a data source, all options except OPT_READONLY are ignored.

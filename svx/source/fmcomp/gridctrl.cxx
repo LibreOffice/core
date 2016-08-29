@@ -592,7 +592,7 @@ void DbGridControl::NavigationBar::InvalidateAll(sal_Int32 nCurrentPos, bool bAl
     {
         DbGridControl* pParent = static_cast<DbGridControl*>(GetParent());
 
-        sal_Int32 nAdjustedRowCount = pParent->GetRowCount() - ((pParent->GetOptions() & DbGridControl::OPT_INSERT) ? 2 : 1);
+        sal_Int32 nAdjustedRowCount = pParent->GetRowCount() - ((pParent->GetOptions() & DbGridControlOptions::Insert) ? 2 : 1);
 
         // check if everything needs to be invalidated
         bAll = bAll || m_nCurrentPos <= 0;
@@ -645,14 +645,14 @@ bool DbGridControl::NavigationBar::GetState(sal_uInt16 nWhich) const
                 if(pParent->m_bRecordCountFinal)
                 {
                     bAvailable = m_nCurrentPos < pParent->GetRowCount() - 1;
-                    if (!bAvailable && pParent->GetOptions() & DbGridControl::OPT_INSERT)
+                    if (!bAvailable && pParent->GetOptions() & DbGridControlOptions::Insert)
                         bAvailable = (m_nCurrentPos == pParent->GetRowCount() - 2) && pParent->IsModified();
                 }
                 break;
             case NavigationBar::RECORD_LAST:
                 if(pParent->m_bRecordCountFinal)
                 {
-                    if (pParent->GetOptions() & DbGridControl::OPT_INSERT)
+                    if (pParent->GetOptions() & DbGridControlOptions::Insert)
                         bAvailable = pParent->IsCurrentAppending() ? pParent->GetRowCount() > 1 :
                                      m_nCurrentPos != pParent->GetRowCount() - 2;
                     else
@@ -660,7 +660,7 @@ bool DbGridControl::NavigationBar::GetState(sal_uInt16 nWhich) const
                 }
                 break;
             case NavigationBar::RECORD_NEW:
-                bAvailable = (pParent->GetOptions() & DbGridControl::OPT_INSERT) && pParent->GetRowCount() && m_nCurrentPos < pParent->GetRowCount() - 1;
+                bAvailable = (pParent->GetOptions() & DbGridControlOptions::Insert) && pParent->GetRowCount() && m_nCurrentPos < pParent->GetRowCount() - 1;
                 break;
             case NavigationBar::RECORD_ABSOLUTE:
                 bAvailable = pParent->GetRowCount() > 0;
@@ -723,7 +723,7 @@ void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
             OUString aText;
             if (bAvailable)
             {
-                if (pParent->GetOptions() & DbGridControl::OPT_INSERT)
+                if (pParent->GetOptions() & DbGridControlOptions::Insert)
                 {
                     if (pParent->IsCurrentAppending() && !pParent->IsModified())
                         aText = m_aAbsolute->CreateFieldText(pParent->GetRowCount());
@@ -955,8 +955,8 @@ DbGridControl::DbGridControl(
             ,m_nMode(DEFAULT_BROWSE_MODE)
             ,m_nCurrentPos(-1)
             ,m_nDeleteEvent(nullptr)
-            ,m_nOptions(OPT_READONLY)
-            ,m_nOptionMask(OPT_INSERT | OPT_UPDATE | OPT_DELETE)
+            ,m_nOptions(DbGridControlOptions::Readonly)
+            ,m_nOptionMask(DbGridControlOptions::Insert | DbGridControlOptions::Update | DbGridControlOptions::Delete)
             ,m_nLastColId((sal_uInt16)-1)
             ,m_nLastRowId(-1)
             ,m_bDesignMode(false)
@@ -1157,7 +1157,7 @@ void DbGridControl::RemoveRows(bool bNewCursor)
         DELETEZ(m_pSeekCursor);
         m_xPaintRow = m_xDataRow = m_xEmptyRow  = m_xCurrentRow = m_xSeekRow = nullptr;
         m_nCurrentPos = m_nSeekPos = -1;
-        m_nOptions  = OPT_READONLY;
+        m_nOptions  = DbGridControlOptions::Readonly;
 
         RowRemoved(0, GetRowCount(), false);
         m_nTotalCount = -1;
@@ -1184,7 +1184,7 @@ void DbGridControl::RemoveRows()
 
     m_xPaintRow = m_xDataRow = m_xEmptyRow  = m_xCurrentRow = m_xSeekRow = nullptr;
     m_nCurrentPos = m_nSeekPos = m_nTotalCount  = -1;
-    m_nOptions  = OPT_READONLY;
+    m_nOptions  = DbGridControlOptions::Readonly;
 
     // reset number of sentences to zero in the browser
     DbGridControl_Base::RemoveRows();
@@ -1282,7 +1282,7 @@ void DbGridControl::EnableNavigationBar(bool bEnable)
     }
 }
 
-sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
+DbGridControlOptions DbGridControl::SetOptions(DbGridControlOptions nOpt)
 {
     DBG_ASSERT(!m_xCurrentRow || !m_xCurrentRow->IsModified(),
         "DbGridControl::SetOptions : please do not call when editing a record (things are much easier this way ;) !");
@@ -1298,14 +1298,14 @@ sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
         sal_Int32 nPrivileges = 0;
         xDataSourceSet->getPropertyValue(FM_PROP_PRIVILEGES) >>= nPrivileges;
         if ((nPrivileges & Privilege::INSERT) == 0)
-            nOpt &= ~OPT_INSERT;
+            nOpt &= ~DbGridControlOptions::Insert;
         if ((nPrivileges & Privilege::UPDATE) == 0)
-            nOpt &= ~OPT_UPDATE;
+            nOpt &= ~DbGridControlOptions::Update;
         if ((nPrivileges & Privilege::DELETE) == 0)
-            nOpt &= ~OPT_DELETE;
+            nOpt &= ~DbGridControlOptions::Delete;
     }
     else
-        nOpt = OPT_READONLY;
+        nOpt = DbGridControlOptions::Readonly;
 
     // need to do something after that ?
     if (nOpt == m_nOptions)
@@ -1315,7 +1315,7 @@ sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
     BrowserMode nNewMode = m_nMode;
     if (!(m_nMode & BrowserMode::CURSOR_WO_FOCUS))
     {
-        if (nOpt & OPT_UPDATE)
+        if (nOpt & DbGridControlOptions::Update)
             nNewMode |= BrowserMode::HIDECURSOR;
         else
             nNewMode &= ~BrowserMode::HIDECURSOR;
@@ -1333,14 +1333,14 @@ sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
     // _after_ setting the mode because this results in an ActivateCell
     DeactivateCell();
 
-    bool bInsertChanged = (nOpt & OPT_INSERT) != (m_nOptions & OPT_INSERT);
+    bool bInsertChanged = (nOpt & DbGridControlOptions::Insert) != (m_nOptions & DbGridControlOptions::Insert);
     m_nOptions = nOpt;
         // we need to set this before the code below because it indirectly uses m_nOptions
 
     // the 'insert' option affects our empty row
     if (bInsertChanged)
     {
-        if (m_nOptions & OPT_INSERT)
+        if (m_nOptions & DbGridControlOptions::Insert)
         {   // the insert option is to be set
             m_xEmptyRow = new DbGridRow();
             RowInserted(GetRowCount());
@@ -1384,7 +1384,7 @@ void DbGridControl::EnablePermanentCursor(bool bEnable)
     }
     else
     {
-        if (m_nOptions & OPT_UPDATE)
+        if (m_nOptions & DbGridControlOptions::Update)
             m_nMode |= BrowserMode::HIDECURSOR;      // no cursor at all
         else
             m_nMode &= ~BrowserMode::HIDECURSOR;     // at least the "non-permanent" cursor
@@ -1413,7 +1413,7 @@ void DbGridControl::refreshController(sal_uInt16 _nColId, GrantControlAccess /*_
     }
 }
 
-void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt16 nOpts)
+void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, DbGridControlOptions nOpts)
 {
     if (!_xCursor.is() && !m_pDataCursor)
         return;
@@ -1522,12 +1522,15 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
 
                     // Insert Option should be set if insert only otherwise you won't see any rows
                     // and no insertion is possible
-                    if ((m_nOptionMask & OPT_INSERT) && ((nPrivileges & Privilege::INSERT) == Privilege::INSERT) && (nOpts & OPT_INSERT))
-                        m_nOptions |= OPT_INSERT;
-                    if ((m_nOptionMask & OPT_UPDATE) && ((nPrivileges & Privilege::UPDATE) == Privilege::UPDATE) && (nOpts & OPT_UPDATE))
-                        m_nOptions |= OPT_UPDATE;
-                    if ((m_nOptionMask & OPT_DELETE) && ((nPrivileges & Privilege::DELETE) == Privilege::DELETE) && (nOpts & OPT_DELETE))
-                        m_nOptions |= OPT_DELETE;
+                    if ((m_nOptionMask & DbGridControlOptions::Insert)
+                        && ((nPrivileges & Privilege::INSERT) == Privilege::INSERT) && (nOpts & DbGridControlOptions::Insert))
+                        m_nOptions |= DbGridControlOptions::Insert;
+                    if ((m_nOptionMask & DbGridControlOptions::Update)
+                        && ((nPrivileges & Privilege::UPDATE) == Privilege::UPDATE) && (nOpts & DbGridControlOptions::Update))
+                        m_nOptions |= DbGridControlOptions::Update;
+                    if ((m_nOptionMask & DbGridControlOptions::Delete)
+                        && ((nPrivileges & Privilege::DELETE) == Privilege::DELETE) && (nOpts & DbGridControlOptions::Delete))
+                        m_nOptions |= DbGridControlOptions::Delete;
                 }
             }
         }
@@ -1547,7 +1550,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
         else
         {
             // updates are allowed -> no focus rectangle
-            if ( m_nOptions & OPT_UPDATE )
+            if ( m_nOptions & DbGridControlOptions::Update )
                 m_nMode |= BrowserMode::HIDECURSOR;
         }
 
@@ -1578,7 +1581,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
 
         // insert the currently known rows
         // and one row if we are able to insert rows
-        if (m_nOptions & OPT_INSERT)
+        if (m_nOptions & DbGridControlOptions::Insert)
         {
             // insert the empty row for insertion
             m_xEmptyRow = new DbGridRow();
@@ -1959,7 +1962,7 @@ void DbGridControl::AdjustRows()
     // Here we need to consider that there might be an additional row for adding new data sets
 
     // add additional AppendRow for insertion
-    if (m_nOptions & OPT_INSERT)
+    if (m_nOptions & DbGridControlOptions::Insert)
         ++nRecordCount;
 
     // If there is currently an insertion, so do not consider this added row in RecordCount or Appendrow
@@ -1997,7 +2000,7 @@ void DbGridControl::AdjustRows()
 
     if (m_bRecordCountFinal && m_nTotalCount < 0)
     {
-        if (m_nOptions & OPT_INSERT)
+        if (m_nOptions & DbGridControlOptions::Insert)
             m_nTotalCount = GetRowCount() - 1;
         else
             m_nTotalCount = GetRowCount();
@@ -2359,7 +2362,7 @@ bool DbGridControl::SeekCursor(long nRow, bool bAbsolute)
     }
     else if (IsInsertionRow(nRow)) // blank row for data insertion
         m_nSeekPos = nRow;
-    else if ((-1 == nRow) && (GetRowCount() == ((m_nOptions & OPT_INSERT) ? 1 : 0)) && m_pSeekCursor->isAfterLast())
+    else if ((-1 == nRow) && (GetRowCount() == ((m_nOptions & DbGridControlOptions::Insert) ? 1 : 0)) && m_pSeekCursor->isAfterLast())
         m_nSeekPos = nRow;
     else
     {
@@ -2485,7 +2488,7 @@ void DbGridControl::MoveToLast()
     }
 
     // position onto the last data set not on a blank row
-    if (m_nOptions & OPT_INSERT)
+    if (m_nOptions & DbGridControlOptions::Insert)
     {
         if ((GetRowCount() - 1) > 0)
             MoveToPosition(GetRowCount() - 2);
@@ -2574,7 +2577,7 @@ void DbGridControl::MoveToPosition(sal_uInt32 nPos)
 
 void DbGridControl::AppendNew()
 {
-    if (!m_pSeekCursor || !(m_nOptions & OPT_INSERT))
+    if (!m_pSeekCursor || !(m_nOptions & DbGridControlOptions::Insert))
         return;
 
     if (m_nTotalCount < 0) // no RecordCount, yet
@@ -2694,9 +2697,9 @@ sal_uInt32 DbGridControl::GetTotalCellWidth(long nRow, sal_uInt16 nColId)
 
 void DbGridControl::PreExecuteRowContextMenu(sal_uInt16 /*nRow*/, PopupMenu& rMenu)
 {
-    bool bDelete = (m_nOptions & OPT_DELETE) && GetSelectRowCount() && !IsCurrentAppending();
+    bool bDelete = (m_nOptions & DbGridControlOptions::Delete) && GetSelectRowCount() && !IsCurrentAppending();
     // if only a blank row is selected than do not delete
-    bDelete = bDelete && !((m_nOptions & OPT_INSERT) && GetSelectRowCount() == 1 && IsRowSelected(GetRowCount() - 1));
+    bDelete = bDelete && !((m_nOptions & DbGridControlOptions::Insert) && GetSelectRowCount() == 1 && IsRowSelected(GetRowCount() - 1));
 
     rMenu.EnableItem(SID_FM_DELETEROWS, bDelete);
     rMenu.EnableItem(SID_FM_RECORD_SAVE, IsModified());
@@ -2924,8 +2927,8 @@ CellController* DbGridControl::GetController(long /*nRow*/, sal_uInt16 nColumnId
                 return nullptr;
         }
 
-        bool bInsert = (m_xCurrentRow->IsNew() && (m_nOptions & OPT_INSERT));
-        bool bUpdate = (!m_xCurrentRow->IsNew() && (m_nOptions & OPT_UPDATE));
+        bool bInsert = (m_xCurrentRow->IsNew() && (m_nOptions & DbGridControlOptions::Insert));
+        bool bUpdate = (!m_xCurrentRow->IsNew() && (m_nOptions & DbGridControlOptions::Update));
 
         if ((bInsert && !pColumn->IsAutoValue()) || bUpdate)
         {
@@ -2988,7 +2991,7 @@ void DbGridControl::Dispatch(sal_uInt16 nId)
 {
     if (nId == BROWSER_CURSORENDOFFILE)
     {
-        if (m_nOptions & OPT_INSERT)
+        if (m_nOptions & DbGridControlOptions::Insert)
             AppendNew();
         else
             MoveToLast();
@@ -3119,7 +3122,7 @@ bool DbGridControl::IsCurrentAppending() const
 
 bool DbGridControl::IsInsertionRow(long nRow) const
 {
-    return (m_nOptions & OPT_INSERT) && m_nTotalCount >= 0 && (nRow == GetRowCount() - 1);
+    return (m_nOptions & DbGridControlOptions::Insert) && m_nTotalCount >= 0 && (nRow == GetRowCount() - 1);
 }
 
 bool DbGridControl::SaveModified()
@@ -3284,7 +3287,7 @@ bool DbGridControl::PreNotify(NotifyEvent& rEvt)
             }
             else if ( ( KEY_DELETE == nCode ) && !bShift && !bCtrl )    // delete rows
             {
-                if ((m_nOptions & OPT_DELETE) && GetSelectRowCount())
+                if ((m_nOptions & DbGridControlOptions::Delete) && GetSelectRowCount())
                 {
                     // delete asynchronously
                     if (m_nDeleteEvent)
@@ -3642,7 +3645,7 @@ void DbGridControl::disposing(sal_uInt16 _nId, const EventObject& /*_rEvt*/)
     if (_nId == 0)
     {   // the seek cursor is being disposed
         ::osl::MutexGuard aGuard(m_aAdjustSafety);
-        setDataSource(nullptr,0); // our clone was disposed so we set our datasource to null to avoid later access to it
+        setDataSource(nullptr, DbGridControlOptions::Readonly); // our clone was disposed so we set our datasource to null to avoid later access to it
         if (m_nAsynAdjustEvent)
         {
             RemoveUserEvent(m_nAsynAdjustEvent);
