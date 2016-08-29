@@ -1097,30 +1097,6 @@ throw ( css::beans::UnknownPropertyException,
         css::lang::WrappedTargetException,
         css::uno::RuntimeException, std::exception )
 {
-    // don't mess with even/odd headers.
-    // just replicate what was done before to avoid causing any regressions
-    if( rDM_Impl.GetSettingsTable()->GetEvenAndOddHeaders() )
-    {
-        if( m_nBreakType != static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_nextColumn) )
-        {
-            OUString aName = m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName;
-            if( !aName.isEmpty() )
-            {
-                HandleMarginsHeaderFooter( /*bFirstPage=*/false, rDM_Impl );
-                if( m_bTitlePage )
-                    HandleMarginsHeaderFooter( /*bFirstPage=*/true, rDM_Impl );
-                uno::Reference<beans::XPropertySet> xPageStyle( rDM_Impl.GetPageStyles()->getByName(aName), uno::UNO_QUERY_THROW );
-                if( rDM_Impl.IsNewDoc() )
-                {
-                    ApplyProperties_( xPageStyle );
-                    if( m_bTitlePage && m_aFollowPageStyle.is() )
-                        ApplyProperties_( m_aFollowPageStyle );
-                }
-            }
-        }
-        return;
-    }
-
     const uno::Reference< container::XNameContainer >& xPageStyles = rDM_Impl.GetPageStyles();
     const uno::Reference < lang::XMultiServiceFactory >& xTextFactory = rDM_Impl.GetTextFactory();
 
