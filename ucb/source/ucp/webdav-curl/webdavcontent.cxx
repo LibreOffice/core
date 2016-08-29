@@ -3063,13 +3063,13 @@ Content::ResourceType Content::resourceTypeForLocks(
                             case SC_METHOD_NOT_ALLOWED:     // <http://tools.ietf.org/html/rfc7231#section-6.5.5>
                                 // they all mean the resource is NON_DAV
                                 SAL_WARN( "ucb.ucp.webdav", "resourceTypeForLocks() DAVException (SC_FORBIDDEN, SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED) - URL: <"
-                                          << m_xIdentifier->getContentIdentifier() << ">, DAV error: " << e.getError() << ", HTTP error: " << e.getStatus() );
+                                          << m_xIdentifier->getContentIdentifier() << ">, DAV ExceptionCode: " << e.getError() << ", HTTP error: " << e.getStatus() );
                                 eResourceTypeForLocks = NON_DAV;
                                 break;
                             default:
                                 //fallthrough
                                 SAL_WARN( "ucb.ucp.webdav", "resourceTypeForLocks() DAVException - URL: <"
-                                          << m_xIdentifier->getContentIdentifier() << ">, DAV error: " << e.getError() << ", HTTP error: " << e.getStatus() );
+                                          << m_xIdentifier->getContentIdentifier() << ">, DAV ExceptionCode: " << e.getError() << ", HTTP error: " << e.getStatus() );
                                 eResourceTypeForLocks = UNKNOWN;
                         }
                     }
@@ -3223,7 +3223,7 @@ void Content::lock(
                     case SC_NOT_IMPLEMENTED:        // <http://tools.ietf.org/html/rfc7231#section-6.6.2>
                     case SC_METHOD_NOT_ALLOWED:     // <http://tools.ietf.org/html/rfc7231#section-6.5.5>
                         SAL_WARN( "ucb.ucp.webdav", "lock() DAVException (SC_NOT_FOUND, SC_PRECONDITION_FAILED, SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED) - URL: <"
-                                  << m_xIdentifier->getContentIdentifier() << ">, DAV error: " << e.getError() << ", HTTP error: " << e.getStatus() );
+                                  << m_xIdentifier->getContentIdentifier() << ">, DAV ExceptionCode: " << e.getError() << ", HTTP error: " << e.getStatus() );
                         // act as nothing happened
                         // that's because when a resource is first created
                         // the lock is sent before the put, so the resource
@@ -3252,8 +3252,8 @@ void Content::lock(
                 ;
         }
 
-        SAL_WARN( "ucb.ucp.webdav","lock(): DAVException - URL: <"
-                  << m_xIdentifier->getContentIdentifier() << ">, DAV error: " << e.getError() << ", HTTP error: " << e.getStatus() );
+        SAL_WARN( "ucb.ucp.webdav","lock() DAVException - URL: <"
+                  << m_xIdentifier->getContentIdentifier() << ">, DAV ExceptionCode: " << e.getError() << ", HTTP error: " << e.getStatus() );
         cancelCommandExecution( e, Environment, false );
         // Unreachable
     }
@@ -3315,7 +3315,7 @@ void Content::unlock(
                     case SC_NOT_IMPLEMENTED:        // <http://tools.ietf.org/html/rfc7231#section-6.6.2>
                     case SC_METHOD_NOT_ALLOWED:     // <http://tools.ietf.org/html/rfc7231#section-6.5.5>
                         SAL_WARN( "ucb.ucp.webdav", "unlock() DAVException (SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED) - URL: <"
-                                  << m_xIdentifier->getContentIdentifier() << ">, DAV error: " << e.getError() << ", HTTP error: " << e.getStatus() );
+                                  << m_xIdentifier->getContentIdentifier() << ">, DAV ExceptionCode: " << e.getError() << ", HTTP error: " << e.getStatus() );
                         return;
                         break;
                     default:
@@ -3327,8 +3327,8 @@ void Content::unlock(
                 //fallthrough
                 ;
         }
-        SAL_WARN( "ucb.ucp.webdav","unlock(): DAVException - URL: <"
-                  << m_xIdentifier->getContentIdentifier() << ">, DAV error: " << e.getError() << ", HTTP error: " << e.getStatus() );
+        SAL_WARN( "ucb.ucp.webdav","unlock() DAVException - URL: <"
+                  << m_xIdentifier->getContentIdentifier() << ">, DAV ExceptionCode: " << e.getError() << ", HTTP error: " << e.getStatus() );
         cancelCommandExecution( e, Environment, false );
         // Unreachable
     }
@@ -3740,7 +3740,7 @@ Content::ResourceType Content::getResourceType(
             {
                 rResAccess->resetUri();
 
-                SAL_WARN( "ucb.ucp.webdav", "Content::getResourceType returned errors, DAV: " << e.getError() << ", http error: "  << e.getStatus() );
+                SAL_WARN( "ucb.ucp.webdav", "Content::getResourceType returned errors, DAV ExceptionCode: " << e.getError() << ", HTTP error: "  << e.getStatus() );
 
                 if ( e.getStatus() == SC_METHOD_NOT_ALLOWED )
                 {
@@ -3980,7 +3980,7 @@ void Content::getResourceOptions(
                         }
                         break;
                         default:
-                            SAL_WARN( "ucb.ucp.webdav", "OPTIONS - DAVException, HTTP error: " << e.getError() << " for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
+                            SAL_WARN( "ucb.ucp.webdav", "OPTIONS - DAV_HTTP_ERROR, HTTP error: " << e.getError() << " for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
                             rDAVOptions.setResourceFound(); // it may exists, will be checked by HEAD or GET method, surely it's not DAV
                             // cache it, so OPTIONS won't be called again, this URL does not support it
                             aStaticDAVOptionsCache.addDAVOptions( rDAVOptions,
@@ -3995,7 +3995,7 @@ void Content::getResourceOptions(
                 case DAVException::DAV_HTTP_REDIRECT:
                 default: // leave the resource type as UNKNOWN, for now
                     // it means this will be managed as a standard http site
-                    SAL_WARN( "ucb.ucp.webdav","OPTIONS - DAVException for URL <" << m_xIdentifier->getContentIdentifier() << ">, DAV error: "
+                    SAL_WARN( "ucb.ucp.webdav","OPTIONS - DAVException for URL <" << m_xIdentifier->getContentIdentifier() << ">, DAV ExceptionCode: "
                               << e.getError() << ", HTTP error: "<<e.getStatus() );
                     rDAVOptions.setResourceFound(); // it may exists, will be checked by HEAD or GET method, surely it's not DAV
                     // cache it, so OPTIONS won't be called again, this URL does not support it
