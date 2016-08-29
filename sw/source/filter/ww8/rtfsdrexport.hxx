@@ -66,7 +66,7 @@ public:
     void AddSdrObject(const SdrObject& rObj);
 
     /// Is this a standalone TextFrame, or used as a TextBox of a shape?
-    bool isTextBox(const SwFrameFormat& rFrameFormat);
+    static bool isTextBox(const SwFrameFormat& rFrameFormat);
     /// Write editeng text, e.g. shape or comment.
     void WriteOutliner(const OutlinerParaObject& rParaObj, TextTypes eType);
 

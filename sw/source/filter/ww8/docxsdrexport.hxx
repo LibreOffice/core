@@ -106,7 +106,7 @@ public:
     /// Writes text frame in VML format.
     void writeVMLTextFrame(ww8::Frame* pParentFrame, bool bTextBoxOnly = false);
     /// Is this a standalone TextFrame, or used as a TextBox of a shape?
-    bool isTextBox(const SwFrameFormat& rFrameFormat);
+    static bool isTextBox(const SwFrameFormat& rFrameFormat);
     /// Writes text from Textbox for <w:framePr>
     void writeOnlyTextOfFrame(ww8::Frame* pParentFrame);
     /// Writes the drawingML <a:ln> markup of a box item.

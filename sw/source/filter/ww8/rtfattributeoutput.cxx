@@ -1852,7 +1852,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
     case ww8::Frame::eTextBox:
     {
         // If this is a TextBox of a shape, then ignore: it's handled in RtfSdrExport::StartShape().
-        if (m_rExport.SdrExporter().isTextBox(rFrame.GetFrameFormat()))
+        if (RtfSdrExport::isTextBox(rFrame.GetFrameFormat()))
             break;
 
         OSL_ENSURE(m_aRunText.getLength() == 0, "m_aRunText is not empty");

@@ -4977,7 +4977,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
         case ww8::Frame::eTextBox:
             {
                 // If this is a TextBox of a shape, then ignore: it's handled in WriteTextBox().
-                if (m_rExport.SdrExporter().isTextBox(rFrame.GetFrameFormat()))
+                if (DocxSdrExport::isTextBox(rFrame.GetFrameFormat()))
                     break;
 
                 // The frame output is postponed to the end of the anchor paragraph
