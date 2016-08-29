@@ -30,6 +30,7 @@ $(eval $(call gb_Library_use_libraries,test,\
 	i18nlangtag \
     sal \
     svt \
+    test-setupvcl \
 	tl \
 	utl \
 	unotest \
@@ -48,7 +49,6 @@ $(eval $(call gb_Library_add_exception_objects,test,\
     test/source/xmlwriter \
     test/source/primitive2dxmldump \
     test/source/screenshot_test \
-    test/source/setupvcl \
 ))
 
 # vim: set noet sw=4 ts=4:
