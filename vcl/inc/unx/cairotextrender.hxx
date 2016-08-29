@@ -26,39 +26,9 @@
 
 #include <deque>
 
-typedef struct FT_FaceRec_* FT_Face;
-
 class ServerFont;
 class GlyphCache;
 typedef struct _cairo cairo_t;
-
-class VCL_DLLPUBLIC CairoFontsCache
-{
-public:
-    struct CacheId
-    {
-        FT_Face maFace;
-        const void *mpOptions;
-        bool mbEmbolden;
-        bool mbVerticalMetrics;
-        bool operator ==(const CacheId& rOther) const
-        {
-            return maFace == rOther.maFace &&
-                mpOptions == rOther.mpOptions &&
-                mbEmbolden == rOther.mbEmbolden &&
-                mbVerticalMetrics == rOther.mbVerticalMetrics;
-        }
-    };
-
-private:
-    typedef         std::deque< std::pair<void *, CacheId> > LRUFonts;
-    static LRUFonts maLRUFonts;
-public:
-                                CairoFontsCache() = delete;
-
-    static void                 CacheFont(void *pFont, const CacheId &rId);
-    static void*                FindCachedFont(const CacheId &rId);
-};
 
 class VCL_DLLPUBLIC CairoTextRender : public TextRenderImpl
 {

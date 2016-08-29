@@ -43,6 +43,42 @@
 #include <cairo.h>
 #include <cairo-ft.h>
 
+namespace {
+
+typedef struct FT_FaceRec_* FT_Face;
+
+class CairoFontsCache
+{
+public:
+    struct CacheId
+    {
+        FT_Face maFace;
+        const void *mpOptions;
+        bool mbEmbolden;
+        bool mbVerticalMetrics;
+        bool operator ==(const CacheId& rOther) const
+        {
+            return maFace == rOther.maFace &&
+                mpOptions == rOther.mpOptions &&
+                mbEmbolden == rOther.mbEmbolden &&
+                mbVerticalMetrics == rOther.mbVerticalMetrics;
+        }
+    };
+
+private:
+    typedef         std::deque< std::pair<void *, CacheId> > LRUFonts;
+    static LRUFonts maLRUFonts;
+public:
+                                CairoFontsCache() = delete;
+
+    static void                 CacheFont(void *pFont, const CacheId &rId);
+    static void*                FindCachedFont(const CacheId &rId);
+};
+
+CairoFontsCache::LRUFonts CairoFontsCache::maLRUFonts;
+
+}
+
 CairoTextRender::CairoTextRender()
     : mnTextColor(MAKE_SALCOLOR(0x00, 0x00, 0x00)) //black
 {
@@ -117,8 +153,6 @@ void ServerFontInstance::HandleFontOptions()
     // apply the font options
     mpServerFont->SetFontOptions(mxFontOptions);
 }
-
-CairoFontsCache::LRUFonts CairoFontsCache::maLRUFonts;
 
 void CairoFontsCache::CacheFont(void *pFont, const CairoFontsCache::CacheId &rId)
 {
