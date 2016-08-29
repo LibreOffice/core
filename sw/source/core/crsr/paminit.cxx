@@ -50,9 +50,7 @@ SwWhichPara fnParaNext  = &GoNextPara;
 SwPosPara fnParaStart   = &aFwrd;
 SwPosPara fnParaEnd     = &aBwrd;
 
-SwWhichSection fnSectionPrev    = &GoPrevSection;
 SwWhichSection fnSectionCurr    = &GoCurrSection;
-SwWhichSection fnSectionNext    = &GoNextSection;
 SwPosSection fnSectionStart     = &aFwrd;
 SwPosSection fnSectionEnd       = &aBwrd;
 

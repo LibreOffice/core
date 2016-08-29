@@ -46,9 +46,7 @@ SwContentNode* GoPreviousNds( SwNodeIndex * pIdx, bool );
 bool GoPrevPara( SwPaM&, SwPosPara);
 bool GoCurrPara( SwPaM&, SwPosPara);
 bool GoNextPara( SwPaM&, SwPosPara);
-bool GoPrevSection( SwPaM&, SwPosSection);
 bool GoCurrSection( SwPaM&, SwPosSection);
-bool GoNextSection( SwPaM&, SwPosSection);
 
 // Typedefiniton fuer Funktionen
 typedef bool (*GoNd)( SwNode*, SwIndex*, sal_uInt16 );

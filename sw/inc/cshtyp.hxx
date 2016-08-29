@@ -46,7 +46,7 @@ extern SwPosPara fnParaStart, fnParaEnd;
 // Direction-parameter for MoveSection.
 typedef SwMoveFnCollection* SwPosSection;
 typedef bool (*SwWhichSection)( SwPaM&, SwPosSection );
-extern SwWhichSection fnSectionPrev, fnSectionCurr, fnSectionNext;
+extern SwWhichSection fnSectionCurr;
 extern SwPosSection fnSectionStart, fnSectionEnd;
 
 // Direction-parameter for MoveTable

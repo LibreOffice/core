@@ -992,44 +992,6 @@ bool GoCurrSection( SwPaM & rPam, SwMoveFn fnMove )
     return aSavePos != rPos;
 }
 
-bool GoNextSection( SwPaM & rPam, SwMoveFn fnMove )
-{
-    SwPosition& rPos = *rPam.GetPoint();
-    SwPosition aSavePos( rPos ); // position for comparison
-    SwNodes::GoEndOfSection( &rPos.nNode );
-
-    // no other ContentNode existent?
-    if( !GoInContent( rPam, fnMoveForward ) )
-    {
-        rPos = aSavePos; // do not change cursor
-        return false;
-    }
-    (fnMove->fnSection)( &rPos.nNode );
-    SwContentNode *pNd = rPos.nNode.GetNode().GetContentNode();
-    rPos.nContent.Assign( pNd,
-                        ::GetSttOrEnd( fnMove == fnMoveForward, *pNd ) );
-    return true;
-}
-
-bool GoPrevSection( SwPaM & rPam, SwMoveFn fnMove )
-{
-    SwPosition& rPos = *rPam.GetPoint();
-    SwPosition aSavePos( rPos ); // position for comparison
-    SwNodes::GoStartOfSection( &rPos.nNode );
-
-    // no further ContentNode existent?
-    if( !GoInContent( rPam, fnMoveBackward ))
-    {
-        rPos = aSavePos; // do not change cursor
-        return false;
-    }
-    (fnMove->fnSection)( &rPos.nNode );
-    SwContentNode *pNd = rPos.nNode.GetNode().GetContentNode();
-    rPos.nContent.Assign( pNd,
-                            ::GetSttOrEnd( fnMove == fnMoveForward, *pNd ));
-    return true;
-}
-
 OUString SwPaM::GetText() const
 {
     OUString aResult;
