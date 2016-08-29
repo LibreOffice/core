@@ -159,7 +159,6 @@ const char aEditModePropertyName[] = "IsMasterPageMode";
 EventMultiplexer::EventMultiplexer (ViewShellBase& rBase)
     : mpImpl (new EventMultiplexer::Implementation(rBase))
 {
-    mpImpl->acquire();
 }
 
 EventMultiplexer::~EventMultiplexer()
