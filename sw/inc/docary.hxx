@@ -229,8 +229,8 @@ public:
 
     void dumpAsXml(struct _xmlTextWriter* pWriter, const char* pName) const;
 
-    virtual size_t GetFormatCount() const { return m_Array.size(); }
-    virtual SwFormat* GetFormat(size_t idx) const { return operator[]( idx ); }
+    virtual size_t GetFormatCount() const override { return m_Array.size(); }
+    virtual SwFormat* GetFormat(size_t idx) const override { return operator[]( idx ); }
 
     bool Contains( const value_type& x ) const;
     inline bool Contains( const SwFormat* p ) const;
