@@ -132,6 +132,12 @@ public:
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& rLocalName);     /// element name w/o prefix
 
+    XMLTextFieldImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        const sal_Char* pService,
+        sal_Int32 nElement);
+
     virtual ~XMLTextFieldImportContext();
 
     /// process character data: will be collected in member sContentBuffer
@@ -1100,6 +1106,10 @@ public:
                              XMLTextImportHelper& rHlp,
                              sal_uInt16 nPrfx,
                              const OUString& sLocalName);
+
+    XMLUrlFieldImportContext(SvXMLImport& rImport,
+                             XMLTextImportHelper& rHlp,
+                             sal_Int32 nElement);
 
 protected:
     /// no attributes -> empty method

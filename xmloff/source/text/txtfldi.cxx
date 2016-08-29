@@ -204,6 +204,19 @@ XMLTextFieldImportContext::XMLTextFieldImportContext(
     sServiceName = OUString::createFromAscii(pService);
 }
 
+XMLTextFieldImportContext::XMLTextFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    const sal_Char* pService,
+    sal_Int32 /* nElement */)
+:   SvXMLImportContext( rImport )
+,   rTextImportHelper(rHlp)
+,   sServicePrefix(sAPI_textfield_prefix)
+,   bValid(false)
+{
+    DBG_ASSERT(nullptr != pService, "Need service name!");
+    sServiceName = OUString::createFromAscii(pService);
+}
+
 void XMLTextFieldImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
@@ -3078,6 +3091,18 @@ XMLUrlFieldImportContext::XMLUrlFieldImportContext(
         sPropertyRepresentation(
             sAPI_representation),
         bFrameOK(false)
+{
+}
+
+XMLUrlFieldImportContext::XMLUrlFieldImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_Int32 nElement)
+:   XMLTextFieldImportContext(rImport, rHlp, sAPI_url, nElement),
+    sPropertyURL(sAPI_url),
+    sPropertyTargetFrame(sAPI_target_frame),
+    sPropertyRepresentation(sAPI_representation),
+    bFrameOK(false)
 {
 }
 

@@ -27,6 +27,8 @@
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax {
         class XAttributeList;
+        class XFastAttributeList;
+        class XFastContextHandler;
     } }
 } } }
 
@@ -36,12 +38,14 @@ class XMLFootnoteBodyImportContext : public SvXMLImportContext
 {
 
 public:
-
-
     XMLFootnoteBodyImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLocalName );
+
+    XMLFootnoteBodyImportContext(
+        SvXMLImport& rImport,
+        sal_Int32 nElement );
 
 protected:
 
@@ -49,6 +53,11 @@ protected:
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 
 };
 
