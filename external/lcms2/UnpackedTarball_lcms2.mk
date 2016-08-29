@@ -19,6 +19,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,lcms2,\
 	external/lcms2/lcms2-vc2013-project.patch \
 	external/lcms2/lcms2-config-guess.patch.0 \
 	external/lcms2/ubsan.patch.0 \
+	external/lcms2/0001-Added-an-extra-check-to-MLU-bounds.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
