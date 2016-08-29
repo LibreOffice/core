@@ -45,6 +45,30 @@
       "revId": "1681bed019e8c23162fb5dbf56cb0a036e163462",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_2b7226e6",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-29T11:08:46Z",
+      "side": 1,
+      "message": "In fact it\u0027s wrong because it excludes all non-primary-only (those that have a sublanguage) if ALSO_PRIMARY_ONLY is given.",
+      "parentUuid": "fa6399be_eb9f4eb2",
+      "range": {
+        "startLine": 269,
+        "startChar": 9,
+        "endLine": 270,
+        "endChar": 79
+      },
+      "revId": "1681bed019e8c23162fb5dbf56cb0a036e163462",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
