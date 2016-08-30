@@ -1181,7 +1181,6 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
         ++aRg.aEnd;
     }
 
-    bool bFailure = false;
 
     {
         // TODO: this is not Undo-able - only good enough for file import
@@ -1189,17 +1188,11 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
         SwNodeIndex const prev(rTableNodes.begin()->begin()->aStart, -1);
         SwNodeIndex const* pPrev(&prev);
         // pPrev could point to non-textnode now
-        for (auto row = rTableNodes.begin(); row != rTableNodes.end() && !bFailure; ++row)
+        for (auto row = rTableNodes.begin(); row != rTableNodes.end(); ++row)
         {
             for (auto cell = row->begin(); cell != row->end(); ++cell)
             {
-                bFailure = (SwNodeIndex(*pPrev, +1) != cell->aStart);
-                if (bFailure)
-                {
-                    SAL_WARN("sw.core", "cell start is not directly after previous cell end");
-                    break;
-                }
-
+                assert(SwNodeIndex(*pPrev, +1) == cell->aStart);
                 SwPaM pam(cell->aStart, 0, *pPrev,
                         (pPrev->GetNode().IsContentNode())
                             ? pPrev->GetNode().GetContentNode()->Len() : 0);
@@ -1218,9 +1211,6 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     SwNode2Layout aNode2Layout( aRg.aStart.GetNode() );
 
     GetIDocumentUndoRedo().DoUndo(bUndo);
-
-    if (bFailure)
-        return nullptr;
 
     // Create the Box/Line/Table construct
     SwTableBoxFormat* pBoxFormat = MakeTableBoxFormat();
