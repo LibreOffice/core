@@ -319,9 +319,9 @@ IMPL_LINK_TYPED( SwView, MoveNavigationHdl, void*, p, void )
         case NID_TBL :
             rSh.EnterStdMode();
             if(bNext)
-                rSh.MoveTable(fnTableNext, fnTableStart);
+                rSh.MoveTable(GotoNextTable, fnTableStart);
             else
-                rSh.MoveTable(fnTablePrev, fnTableStart);
+                rSh.MoveTable(GotoPrevTable, fnTableStart);
         break;
         case NID_FRM :
         case NID_GRF:

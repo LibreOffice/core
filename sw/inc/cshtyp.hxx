@@ -57,7 +57,9 @@ bool GoCurrSection( SwPaM&, SwMoveFnCollection const &);
 
 // Direction-parameter for MoveTable
 typedef bool (*SwWhichTable)( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );
-extern SwWhichTable fnTablePrev, fnTableCurr, fnTableNext;
+SW_DLLPUBLIC bool GotoPrevTable( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );
+SW_DLLPUBLIC bool GotoCurrTable( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );
+bool GotoNextTable( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );
 extern SwMoveFnCollection const & fnTableStart;
 extern SwMoveFnCollection const & fnTableEnd;
 
@@ -106,8 +108,6 @@ enum class SwDocPositions
 SW_DLLPUBLIC SwMoveFnCollection const & GetfnParaStart();
 SW_DLLPUBLIC SwMoveFnCollection const & GetfnParaEnd();
 
-SW_DLLPUBLIC SwWhichTable GetfnTablePrev();
-SW_DLLPUBLIC SwWhichTable GetfnTableCurr();
 SW_DLLPUBLIC SwMoveFnCollection const & GetfnTableStart();
 SW_DLLPUBLIC SwMoveFnCollection const & GetfnTableEnd();
 

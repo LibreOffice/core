@@ -211,7 +211,7 @@ bool SwWrtShell::GoStart( bool bKeepArea, bool *pMoveTable,
                 *pMoveTable = false;
             return true;
         }
-        if( MoveTable( fnTableCurr, fnTableStart ) || bDontMoveRegion )
+        if( MoveTable( GotoCurrTable, fnTableStart ) || bDontMoveRegion )
         {
             if ( pMoveTable )
                 *pMoveTable = true;
@@ -259,12 +259,12 @@ bool SwWrtShell::GoStart( bool bKeepArea, bool *pMoveTable,
 bool SwWrtShell::GoEnd(bool bKeepArea, bool *pMoveTable)
 {
     if ( pMoveTable && *pMoveTable )
-        return MoveTable( fnTableCurr, fnTableEnd );
+        return MoveTable( GotoCurrTable, fnTableEnd );
 
     if ( IsCursorInTable() )
     {
         if ( MoveSection( GoCurrSection, fnSectionEnd ) ||
-             MoveTable( fnTableCurr, fnTableEnd ) )
+             MoveTable( GotoCurrTable, fnTableEnd ) )
             return true;
     }
     else

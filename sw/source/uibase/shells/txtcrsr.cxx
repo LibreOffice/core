@@ -396,10 +396,10 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
             rSh.GotoFootnoteText();
             break;
         case FN_PREV_TABLE:
-            bRet = rSh.MoveTable( fnTablePrev, fnTableStart);
+            bRet = rSh.MoveTable( GotoPrevTable, fnTableStart);
             break;
         case FN_NEXT_TABLE:
-            bRet = rSh.MoveTable(fnTableNext, fnTableStart);
+            bRet = rSh.MoveTable(GotoNextTable, fnTableStart);
             break;
         case FN_GOTO_NEXT_REGION :
             bRet = rSh.MoveRegion(fnRegionNext, fnRegionStart);

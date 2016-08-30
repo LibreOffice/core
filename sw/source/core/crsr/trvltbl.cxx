@@ -37,7 +37,6 @@
 #include <cellatr.hxx>
 #include <cellfrm.hxx>
 #include <rowfrm.hxx>
-#include <trvltbl.hxx>
 #include <IDocumentLayoutAccess.hxx>
 
 /// set cursor into next/previous cell

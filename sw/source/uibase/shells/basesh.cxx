@@ -2685,7 +2685,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                     rSh.DelRight();
 
                 rSh.InsertTable( aInsTableOpts, nRows, nCols, text::HoriOrientation::FULL, pTAFormat );
-                rSh.MoveTable( fnTablePrev, fnTableStart );
+                rSh.MoveTable( GotoPrevTable, fnTableStart );
 
                 if( !aTableName.isEmpty() && !rSh.GetTableStyle( aTableName ) )
                     rSh.GetTableFormat()->SetName( aTableName );

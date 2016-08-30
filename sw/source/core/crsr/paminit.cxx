@@ -20,7 +20,6 @@
 #include <pam.hxx>
 #include <pamtyp.hxx>
 #include <trvlreg.hxx>
-#include <trvltbl.hxx>
 
 static SwMoveFnCollection aFwrd = {
     /* fnNd         */  &GoNext,
@@ -50,9 +49,6 @@ SwMoveFnCollection const & fnParaEnd     = aBwrd;
 SwMoveFnCollection const & fnSectionStart     = aFwrd;
 SwMoveFnCollection const & fnSectionEnd       = aBwrd;
 
-SwWhichTable fnTablePrev = &GotoPrevTable;
-SwWhichTable fnTableCurr = &GotoCurrTable;
-SwWhichTable fnTableNext = &GotoNextTable;
 SwMoveFnCollection const & fnTableStart = aFwrd;
 SwMoveFnCollection const & fnTableEnd = aBwrd;
 
@@ -70,10 +66,6 @@ SwMoveFnCollection const & GetfnParaStart()
 {
      return  fnParaStart;
 }
-SwWhichTable GetfnTablePrev()
-{
-    return fnTablePrev;
-}
 SwMoveFnCollection const & GetfnParaEnd()
 {
      return  fnParaEnd;
@@ -81,10 +73,6 @@ SwMoveFnCollection const & GetfnParaEnd()
 SwMoveFnCollection const & GetfnTableStart()
 {
     return fnTableStart;
-}
-SwWhichTable GetfnTableCurr()
-{
-    return fnTableCurr;
 }
 SwMoveFnCollection const & GetfnTableEnd()
 {

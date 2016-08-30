@@ -1607,7 +1607,7 @@ void SwXTextTableCursor::gotoStart(sal_Bool bExpand) throw( uno::RuntimeExceptio
     SwUnoCursor& rUnoCursor = GetCursor();
     SwUnoTableCursor& rTableCursor = dynamic_cast<SwUnoTableCursor&>(rUnoCursor);
     lcl_CursorSelect(rTableCursor, bExpand);
-    rTableCursor.MoveTable(fnTableCurr, fnTableStart);
+    rTableCursor.MoveTable(GotoCurrTable, fnTableStart);
 }
 
 void SwXTextTableCursor::gotoEnd(sal_Bool bExpand) throw( uno::RuntimeException, std::exception )
@@ -1616,7 +1616,7 @@ void SwXTextTableCursor::gotoEnd(sal_Bool bExpand) throw( uno::RuntimeException,
     SwUnoCursor& rUnoCursor = GetCursor();
     SwUnoTableCursor& rTableCursor = dynamic_cast<SwUnoTableCursor&>(rUnoCursor);
     lcl_CursorSelect(rTableCursor, bExpand);
-    rTableCursor.MoveTable(fnTableCurr, fnTableEnd);
+    rTableCursor.MoveTable(GotoCurrTable, fnTableEnd);
 }
 
 sal_Bool SwXTextTableCursor::mergeRange()

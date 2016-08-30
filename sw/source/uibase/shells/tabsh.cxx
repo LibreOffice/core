@@ -724,11 +724,11 @@ void SwTableShell::Execute(SfxRequest &rReq)
             bCallDone = true;
             break;
         case FN_END_TABLE:
-            rSh.MoveTable( fnTableCurr, fnTableEnd );
+            rSh.MoveTable( GotoCurrTable, fnTableEnd );
             bCallDone = true;
             break;
         case FN_START_TABLE:
-            rSh.MoveTable( fnTableCurr, fnTableStart );
+            rSh.MoveTable( GotoCurrTable, fnTableStart );
             bCallDone = true;
             break;
         case FN_GOTO_NEXT_CELL:
@@ -793,9 +793,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
             break;
         case FN_TABLE_SELECT_ALL:
             rSh.EnterStdMode();
-            rSh.MoveTable( fnTableCurr, fnTableStart );
+            rSh.MoveTable( GotoCurrTable, fnTableStart );
             rSh.SttSelect();
-            rSh.MoveTable( fnTableCurr, fnTableEnd );
+            rSh.MoveTable( GotoCurrTable, fnTableEnd );
             rSh.EndSelect();
             bCallDone = true;
             break;

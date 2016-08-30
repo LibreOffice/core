@@ -1538,7 +1538,7 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
         // Move cursor to the end of the table creating a selection and a table
         // cursor.
         pCursorShell->SetMark();
-        pCursorShell->MoveTable( fnTableCurr, fnTableEnd );
+        pCursorShell->MoveTable( GotoCurrTable, fnTableEnd );
         // now set the cursor into the cell again.
         SwPaM *pPaM = pCursorShell->GetTableCrs() ? pCursorShell->GetTableCrs()
                                                     : pCursorShell->GetCursor();
@@ -1689,7 +1689,7 @@ void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
     // Move cursor to the end of the table creating a selection and a table
     // cursor.
     pCursorShell->SetMark();
-    pCursorShell->MoveTable( fnTableCurr, fnTableEnd );
+    pCursorShell->MoveTable( GotoCurrTable, fnTableEnd );
     // now set the cursor into the cell again.
     pPaM = pCursorShell->GetTableCrs() ? pCursorShell->GetTableCrs()
                                         : pCursorShell->GetCursor();

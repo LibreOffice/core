@@ -1036,7 +1036,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
         rSh.InsertTable(
             pModOpt->GetInsTableFlags(bHTML),
             nRows, nCols, text::HoriOrientation::FULL, (pSelection ? pTAutoFormat : nullptr) );
-        rSh.MoveTable( GetfnTablePrev(), GetfnTableStart() );
+        rSh.MoveTable( GotoPrevTable, GetfnTableStart() );
 
         if( pSelection && pTableSet )
             SetTabSet();
@@ -1173,7 +1173,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 pWait.reset(new SwWait( *pView->GetDocShell(), true ));
         }
 
-        rSh.MoveTable( GetfnTableCurr(), GetfnTableStart() );
+        rSh.MoveTable( GotoCurrTable, GetfnTableStart() );
         if( !pSelection && ( pTableSet || pTAutoFormat ))
         {
             if( pTableSet )
@@ -1462,14 +1462,14 @@ void SwInsertDBColAutoPilot::SetTabSet()
                     rSh.GetTableFormat()->GetName() )
         pTableSet->ClearItem( FN_PARAM_TABLE_NAME );
 
-    rSh.MoveTable( GetfnTableCurr(), GetfnTableStart() );
+    rSh.MoveTable( GotoCurrTable, GetfnTableStart() );
     rSh.SetMark();
-    rSh.MoveTable( GetfnTableCurr(), GetfnTableEnd() );
+    rSh.MoveTable( GotoCurrTable, GetfnTableEnd() );
 
     ItemSetToTableParam( *pTableSet, rSh );
 
     rSh.ClearMark();
-    rSh.MoveTable( GetfnTableCurr(), GetfnTableStart() );
+    rSh.MoveTable( GotoCurrTable, GetfnTableStart() );
 }
 
 DB_ColumnConfigData::~DB_ColumnConfigData() {}

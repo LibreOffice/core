@@ -204,7 +204,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
     {
         aName = pSh->GetTableFormat()->GetName();
         // insert node before table
-        pSh->MoveTable( fnTableCurr, fnTableStart );
+        pSh->MoveTable( GotoCurrTable, fnTableStart );
         pSh->Up( false );
         if ( pSh->IsCursorInTable() )
         {
