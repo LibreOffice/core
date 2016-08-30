@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SVX_RECTENUM_HXX
 #define INCLUDED_SVX_RECTENUM_HXX
 
-// enum ------------------------------------------------------------------
-
 enum class RectPoint
 {
     LT, // top left
@@ -41,7 +39,6 @@ enum class CTL_STYLE
     Angle,
     Shadow
 };
-
 
 #endif
 
