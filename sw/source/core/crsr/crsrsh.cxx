@@ -672,7 +672,7 @@ bool SwCursorShell::isInHiddenTextFrame(SwShellCursor* pShellCursor)
     return !pFrame || (pFrame->IsTextFrame() && static_cast<SwTextFrame*>(pFrame)->IsHiddenNow());
 }
 
-bool SwCursorShell::MovePara(SwWhichPara fnWhichPara, SwPosPara fnPosPara )
+bool SwCursorShell::MovePara(SwWhichPara fnWhichPara, SwMoveFnCollection const & fnPosPara )
 {
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
     SwShellCursor* pTmpCursor = getShellCursor( true );
@@ -696,7 +696,7 @@ bool SwCursorShell::MovePara(SwWhichPara fnWhichPara, SwPosPara fnPosPara )
 }
 
 bool SwCursorShell::MoveSection( SwWhichSection fnWhichSect,
-                                SwPosSection fnPosSect)
+                                SwMoveFnCollection const & fnPosSect)
 {
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
     SwCursor* pTmpCursor = getShellCursor( true );
@@ -1502,7 +1502,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
             {
                 pTableFrame = nullptr;
 
-                SwPosSection fnPosSect = *pPos <  *pITmpCursor->GetMark()
+                SwMoveFnCollection const & fnPosSect = *pPos <  *pITmpCursor->GetMark()
                                             ? fnSectionStart
                                             : fnSectionEnd;
 

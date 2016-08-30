@@ -267,7 +267,7 @@ typedef bool (SwCursor:: *FNCursor)();
 
 protected:
 
-    inline SwMoveFnCollection* MakeFindRange( sal_uInt16, sal_uInt16, SwPaM* ) const;
+    inline SwMoveFnCollection const & MakeFindRange( sal_uInt16, sal_uInt16, SwPaM* ) const;
 
     /*
      * Compare-Methode for the StackCursor and the current Cursor.
@@ -361,11 +361,11 @@ public:
     bool SttEndDoc( bool bStt );
 
     bool MovePage( SwWhichPage, SwPosPage );
-    bool MovePara( SwWhichPara, SwPosPara );
-    bool MoveSection( SwWhichSection, SwPosSection );
-    bool MoveTable( SwWhichTable, SwPosTable );
+    bool MovePara( SwWhichPara, SwMoveFnCollection const & );
+    bool MoveSection( SwWhichSection, SwMoveFnCollection const & );
+    bool MoveTable( SwWhichTable, SwMoveFnCollection const & );
     bool MoveColumn( SwWhichColumn, SwPosColumn );
-    bool MoveRegion( SwWhichRegion, SwPosRegion );
+    bool MoveRegion( SwWhichRegion, SwMoveFnCollection const & );
 
     sal_uLong Find( const css::util::SearchOptions2& rSearchOpt,
                 bool bSearchInNotes,
@@ -845,7 +845,7 @@ public:
 };
 
 // Cursor Inlines:
-inline SwMoveFnCollection* SwCursorShell::MakeFindRange(
+inline SwMoveFnCollection const & SwCursorShell::MakeFindRange(
             sal_uInt16 nStt, sal_uInt16 nEnd, SwPaM* pPam ) const
 {
     return m_pCurrentCursor->MakeFindRange( (SwDocPositions)nStt, (SwDocPositions)nEnd, pPam );

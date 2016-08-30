@@ -222,14 +222,14 @@ size_t GetPostIt(sal_Int32 aCount,const SwpHints *pHts)
 }
 
 bool SwPaM::Find( const SearchOptions2& rSearchOpt, bool bSearchInNotes , utl::TextSearch& rSText,
-                  SwMoveFn fnMove, const SwPaM * pRegion,
+                  SwMoveFnCollection const & fnMove, const SwPaM * pRegion,
                   bool bInReadOnly )
 {
     if( rSearchOpt.searchString.isEmpty() )
         return false;
 
     SwPaM* pPam = MakeRegion( fnMove, pRegion );
-    const bool bSrchForward = fnMove == fnMoveForward;
+    const bool bSrchForward = &fnMove == &fnMoveForward;
     SwNodeIndex& rNdIdx = pPam->GetPoint()->nNode;
     SwIndex& rContentIdx = pPam->GetPoint()->nContent;
 
@@ -470,7 +470,7 @@ bool SwPaM::Find( const SearchOptions2& rSearchOpt, bool bSearchInNotes , utl::T
 }
 
 bool SwPaM::DoSearch( const SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
-                      SwMoveFn fnMove, bool bSrchForward, bool bRegSearch,
+                      SwMoveFnCollection const & fnMove, bool bSrchForward, bool bRegSearch,
                       bool bChkEmptyPara, bool bChkParaEnd,
                       sal_Int32 &nStart, sal_Int32 &nEnd, sal_Int32 nTextLen,
                       SwNode* pNode, SwPaM* pPam)
@@ -553,7 +553,7 @@ bool SwPaM::DoSearch( const SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
         sal_Int32 nProxyStart = nStart;
         sal_Int32 nProxyEnd = nEnd;
         if( nSearchScript == nCurrScript &&
-                (rSText.*fnMove->fnSearch)( sCleanStr, &nProxyStart, &nProxyEnd, nullptr ) &&
+                (rSText.*fnMove.fnSearch)( sCleanStr, &nProxyStart, &nProxyEnd, nullptr ) &&
                 !(bZeroMatch = (nProxyStart == nProxyEnd)))
         {
             nStart = nProxyStart;
@@ -642,7 +642,7 @@ struct SwFindParaText : public SwFindParas
         : m_rSearchOpt( rOpt ), m_rCursor( rCursor ), m_aSText( utl::TextSearch::UpgradeToSearchOptions2( rOpt) ),
         m_bReplace( bRepl ), m_bSearchInNotes( bSearchInNotes )
     {}
-    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, bool bInReadOnly ) override;
+    virtual int Find( SwPaM* , SwMoveFnCollection const & , const SwPaM*, bool bInReadOnly ) override;
     virtual bool IsReplaceMode() const override;
     virtual ~SwFindParaText();
 };
@@ -651,7 +651,7 @@ SwFindParaText::~SwFindParaText()
 {
 }
 
-int SwFindParaText::Find( SwPaM* pCursor, SwMoveFn fnMove,
+int SwFindParaText::Find( SwPaM* pCursor, SwMoveFnCollection const & fnMove,
                           const SwPaM* pRegion, bool bInReadOnly )
 {
     if( bInReadOnly && m_bReplace )
@@ -695,7 +695,7 @@ int SwFindParaText::Find( SwPaM* pCursor, SwMoveFn fnMove,
         }
         if (bRegExp && !bReplaced)
         {   // fdo#80715 avoid infinite loop if join failed
-            bool bRet = ((fnMoveForward == fnMove) ? &GoNextPara : &GoPrevPara)
+            bool bRet = ((&fnMoveForward == &fnMove) ? &GoNextPara : &GoPrevPara)
                 (*pCursor, fnMove);
             (void) bRet;
             assert(bRet); // if join failed, next node must be SwTextNode

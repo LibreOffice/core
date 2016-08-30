@@ -281,7 +281,7 @@ void SwDropCapsPict::UpdatePaintSettings()
             mpPage->rSh.SttCursorMove();
             mpPage->rSh.ClearMark();
             SwWhichPara pSwuifnParaCurr = GetfnParaCurr();
-            SwPosPara pSwuifnParaStart = GetfnParaStart();
+            SwMoveFnCollection const & pSwuifnParaStart = GetfnParaStart();
             mpPage->rSh.MovePara(pSwuifnParaCurr,pSwuifnParaStart);
             // normal
             GetFontSettings( *mpPage, aFont, RES_CHRATR_FONT );

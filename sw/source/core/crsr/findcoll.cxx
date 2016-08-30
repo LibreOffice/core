@@ -35,11 +35,11 @@ struct SwFindParaFormatColl : public SwFindParas
         : pFormatColl( &rFormatColl ), pReplColl( pRpColl )
     {}
     virtual ~SwFindParaFormatColl() {}
-    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, bool bInReadOnly ) override;
+    virtual int Find( SwPaM* , SwMoveFnCollection const & , const SwPaM*, bool bInReadOnly ) override;
     virtual bool IsReplaceMode() const override;
 };
 
-int SwFindParaFormatColl::Find( SwPaM* pCursor, SwMoveFn fnMove, const SwPaM* pRegion,
+int SwFindParaFormatColl::Find( SwPaM* pCursor, SwMoveFnCollection const & fnMove, const SwPaM* pRegion,
                              bool bInReadOnly )
 {
     int nRet = FIND_FOUND;

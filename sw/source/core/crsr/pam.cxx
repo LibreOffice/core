@@ -487,7 +487,7 @@ void SwPaM::Exchange()
 #endif
 
 /// movement of cursor
-bool SwPaM::Move( SwMoveFn fnMove, SwGoInDoc fnGo )
+bool SwPaM::Move( SwMoveFnCollection const & fnMove, SwGoInDoc fnGo )
 {
     const bool bRet = (*fnGo)( *this, fnMove );
 
@@ -505,7 +505,7 @@ bool SwPaM::Move( SwMoveFn fnMove, SwGoInDoc fnGo )
 
     @return Newly created range, in Ring with parameter pOrigRg.
 */
-SwPaM* SwPaM::MakeRegion( SwMoveFn fnMove, const SwPaM * pOrigRg )
+SwPaM* SwPaM::MakeRegion( SwMoveFnCollection const & fnMove, const SwPaM * pOrigRg )
 {
     SwPaM* pPam;
     if( pOrigRg == nullptr )
@@ -523,7 +523,7 @@ SwPaM* SwPaM::MakeRegion( SwMoveFn fnMove, const SwPaM * pOrigRg )
         // make sure that SPoint is on the "real" start position
         // FORWARD: SPoint always smaller than GetMark
         // BACKWARD: SPoint always bigger than GetMark
-        if( (pPam->GetMark()->*fnMove->fnCmpOp)( *pPam->GetPoint() ) )
+        if( (pPam->GetMark()->*fnMove.fnCmpOp)( *pPam->GetPoint() ) )
             pPam->Exchange();
     }
     return pPam;
@@ -748,11 +748,11 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
 /// left or the next is out of the area, then a null-pointer is returned.
 /// @param rbFirst If <true> than first time request. If so than the position of
 ///        the PaM must not be changed!
-SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFn fnMove,
+SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & fnMove,
                       bool bInReadOnly )
 {
     SwContentNode * pNd = nullptr;
-    if( ((*rPam.GetPoint()).*fnMove->fnCmpOp)( *rPam.GetMark() ) ||
+    if( ((*rPam.GetPoint()).*fnMove.fnCmpOp)( *rPam.GetMark() ) ||
         ( *rPam.GetPoint() == *rPam.GetMark() && rbFirst ) )
     {
         SwContentFrame* pFrame;
@@ -781,7 +781,7 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFn fnMove,
         if( !pNd ) // is the cursor not on a ContentNode?
         {
             SwPosition aPos( *rPam.GetPoint() );
-            bool bSrchForward = fnMove == fnMoveForward;
+            bool bSrchForward = &fnMove == &fnMoveForward;
             SwNodes& rNodes = aPos.nNode.GetNodes();
 
             // go to next/previous ContentNode
@@ -794,7 +794,7 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFn fnMove,
                 {
                     aPos.nContent.Assign( pNd, ::GetSttOrEnd( bSrchForward,*pNd ));
                     // is the position still in the area
-                    if( (aPos.*fnMove->fnCmpOp)( *rPam.GetMark() ) )
+                    if( (aPos.*fnMove.fnCmpOp)( *rPam.GetMark() ) )
                     {
                         // only in AutoTextSection can be nodes that are hidden
                         if( nullptr == ( pFrame = pNd->getLayoutFrame( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) ) ||
@@ -865,60 +865,60 @@ void GoEndSection( SwPosition * pPos )
         pPos->nNode.GetNode().GetContentNode()->MakeEndIndex( &pPos->nContent );
 }
 
-bool GoInDoc( SwPaM & rPam, SwMoveFn fnMove )
+bool GoInDoc( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
-    (*fnMove->fnDoc)( rPam.GetPoint() );
+    (*fnMove.fnDoc)( rPam.GetPoint() );
     return true;
 }
 
-bool GoInSection( SwPaM & rPam, SwMoveFn fnMove )
+bool GoInSection( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
-    (*fnMove->fnSections)( rPam.GetPoint() );
+    (*fnMove.fnSections)( rPam.GetPoint() );
     return true;
 }
 
-bool GoInNode( SwPaM & rPam, SwMoveFn fnMove )
+bool GoInNode( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
-    SwContentNode *pNd = (*fnMove->fnNds)( &rPam.GetPoint()->nNode, true );
+    SwContentNode *pNd = (*fnMove.fnNds)( &rPam.GetPoint()->nNode, true );
     if( pNd )
         rPam.GetPoint()->nContent.Assign( pNd,
-                        ::GetSttOrEnd( fnMove == fnMoveForward, *pNd ) );
+                        ::GetSttOrEnd( &fnMove == &fnMoveForward, *pNd ) );
     return pNd;
 }
 
-bool GoInContent( SwPaM & rPam, SwMoveFn fnMove )
+bool GoInContent( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
-    if( (*fnMove->fnNd)( &rPam.GetPoint()->nNode.GetNode(),
+    if( (*fnMove.fnNd)( &rPam.GetPoint()->nNode.GetNode(),
                         &rPam.GetPoint()->nContent, CRSR_SKIP_CHARS ))
         return true;
     return GoInNode( rPam, fnMove );
 }
 
-bool GoInContentCells( SwPaM & rPam, SwMoveFn fnMove )
+bool GoInContentCells( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
-    if( (*fnMove->fnNd)( &rPam.GetPoint()->nNode.GetNode(),
+    if( (*fnMove.fnNd)( &rPam.GetPoint()->nNode.GetNode(),
                          &rPam.GetPoint()->nContent, CRSR_SKIP_CELLS ))
         return true;
     return GoInNode( rPam, fnMove );
 }
 
-bool GoInContentSkipHidden( SwPaM & rPam, SwMoveFn fnMove )
+bool GoInContentSkipHidden( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
-    if( (*fnMove->fnNd)( &rPam.GetPoint()->nNode.GetNode(),
+    if( (*fnMove.fnNd)( &rPam.GetPoint()->nNode.GetNode(),
                         &rPam.GetPoint()->nContent, CRSR_SKIP_CHARS | CRSR_SKIP_HIDDEN ) )
         return true;
     return GoInNode( rPam, fnMove );
 }
 
-bool GoInContentCellsSkipHidden( SwPaM & rPam, SwMoveFn fnMove )
+bool GoInContentCellsSkipHidden( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
-    if( (*fnMove->fnNd)( &rPam.GetPoint()->nNode.GetNode(),
+    if( (*fnMove.fnNd)( &rPam.GetPoint()->nNode.GetNode(),
                          &rPam.GetPoint()->nContent, CRSR_SKIP_CELLS | CRSR_SKIP_HIDDEN ) )
         return true;
     return GoInNode( rPam, fnMove );
 }
 
-bool GoPrevPara( SwPaM & rPam, SwPosPara aPosPara )
+bool GoPrevPara( SwPaM & rPam, SwMoveFnCollection const & aPosPara )
 {
     if( rPam.Move( fnMoveBackward, GoInNode ) )
     {
@@ -926,20 +926,20 @@ bool GoPrevPara( SwPaM & rPam, SwPosPara aPosPara )
         SwPosition& rPos = *rPam.GetPoint();
         SwContentNode * pNd = rPos.nNode.GetNode().GetContentNode();
         rPos.nContent.Assign( pNd,
-                            ::GetSttOrEnd( aPosPara == fnMoveForward, *pNd ) );
+                            ::GetSttOrEnd( &aPosPara == &fnMoveForward, *pNd ) );
         return true;
     }
     return false;
 }
 
-bool GoCurrPara( SwPaM & rPam, SwPosPara aPosPara )
+bool GoCurrPara( SwPaM & rPam, SwMoveFnCollection const & aPosPara )
 {
     SwPosition& rPos = *rPam.GetPoint();
     SwContentNode * pNd = rPos.nNode.GetNode().GetContentNode();
     if( pNd )
     {
         const sal_Int32 nOld = rPos.nContent.GetIndex();
-        const sal_Int32 nNew = aPosPara == fnMoveForward ? 0 : pNd->Len();
+        const sal_Int32 nNew = &aPosPara == &fnMoveForward ? 0 : pNd->Len();
         // if already at beginning/end then to the next/previous
         if( nOld != nNew )
         {
@@ -948,19 +948,19 @@ bool GoCurrPara( SwPaM & rPam, SwPosPara aPosPara )
         }
     }
     // move node to next/previous ContentNode
-    if( ( aPosPara==fnParaStart && nullptr != ( pNd =
+    if( ( &aPosPara==&fnParaStart && nullptr != ( pNd =
             GoPreviousNds( &rPos.nNode, true ))) ||
-        ( aPosPara==fnParaEnd && nullptr != ( pNd =
+        ( &aPosPara==&fnParaEnd && nullptr != ( pNd =
             GoNextNds( &rPos.nNode, true ))) )
     {
         rPos.nContent.Assign( pNd,
-                        ::GetSttOrEnd( aPosPara == fnMoveForward, *pNd ));
+                        ::GetSttOrEnd( &aPosPara == &fnMoveForward, *pNd ));
         return true;
     }
     return false;
 }
 
-bool GoNextPara( SwPaM & rPam, SwPosPara aPosPara )
+bool GoNextPara( SwPaM & rPam, SwMoveFnCollection const & aPosPara )
 {
     if( rPam.Move( fnMoveForward, GoInNode ) )
     {
@@ -968,27 +968,27 @@ bool GoNextPara( SwPaM & rPam, SwPosPara aPosPara )
         SwPosition& rPos = *rPam.GetPoint();
         SwContentNode * pNd = rPos.nNode.GetNode().GetContentNode();
         rPos.nContent.Assign( pNd,
-                        ::GetSttOrEnd( aPosPara == fnMoveForward, *pNd ) );
+                        ::GetSttOrEnd( &aPosPara == &fnMoveForward, *pNd ) );
         return true;
     }
     return false;
 }
 
-bool GoCurrSection( SwPaM & rPam, SwMoveFn fnMove )
+bool GoCurrSection( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
     SwPosition& rPos = *rPam.GetPoint();
     SwPosition aSavePos( rPos ); // position for comparison
-    (fnMove->fnSection)( &rPos.nNode );
+    (fnMove.fnSection)( &rPos.nNode );
     SwContentNode *pNd;
     if( nullptr == ( pNd = rPos.nNode.GetNode().GetContentNode()) &&
-        nullptr == ( pNd = (*fnMove->fnNds)( &rPos.nNode, true )) )
+        nullptr == ( pNd = (*fnMove.fnNds)( &rPos.nNode, true )) )
     {
         rPos = aSavePos; // do not change cursor
         return false;
     }
 
     rPos.nContent.Assign( pNd,
-                        ::GetSttOrEnd( fnMove == fnMoveForward, *pNd ) );
+                        ::GetSttOrEnd( &fnMove == &fnMoveForward, *pNd ) );
     return aSavePos != rPos;
 }
 

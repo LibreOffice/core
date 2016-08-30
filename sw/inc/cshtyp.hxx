@@ -28,7 +28,6 @@ class SwLayoutFrame;
 
 // Structure for SwPaM. Contains the method-pointers for cursor movement.
 struct SwMoveFnCollection;
-typedef SwMoveFnCollection* SwMoveFn;
 
 // Type definition for CursorShell.
 // Direction-parameter for MovePage (initialized in SwContentFrame).
@@ -41,23 +40,23 @@ SwContentFrame *GetFirstSub( const SwLayoutFrame *pLayout );
 SwContentFrame *GetLastSub( const SwLayoutFrame *pLayout );
 
 // Direction-parameter for MovePara (initialized in SwContentFrame).
-typedef SwMoveFnCollection* SwPosPara;
-typedef bool (*SwWhichPara)( SwPaM&, SwPosPara );
+typedef bool (*SwWhichPara)( SwPaM&, SwMoveFnCollection const & );
 extern SwWhichPara fnParaPrev, fnParaCurr, fnParaNext;
-extern SwPosPara fnParaStart, fnParaEnd;
+extern SwMoveFnCollection const & fnParaStart;
+extern SwMoveFnCollection const & fnParaEnd;
 
 // Direction-parameter for MoveSection.
-typedef SwMoveFnCollection* SwPosSection;
-typedef bool (*SwWhichSection)( SwPaM&, SwPosSection );
-extern SwPosSection fnSectionStart, fnSectionEnd;
+typedef bool (*SwWhichSection)( SwPaM&, SwMoveFnCollection const & );
+extern SwMoveFnCollection const & fnSectionStart;
+extern SwMoveFnCollection const & fnSectionEnd;
 
-bool GoCurrSection( SwPaM&, SwPosSection);
+bool GoCurrSection( SwPaM&, SwMoveFnCollection const &);
 
 // Direction-parameter for MoveTable
-typedef SwMoveFnCollection* SwPosTable;
-typedef bool (*SwWhichTable)( SwPaM&, SwPosTable, bool bInReadOnly );
+typedef bool (*SwWhichTable)( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );
 extern SwWhichTable fnTablePrev, fnTableCurr, fnTableNext;
-extern SwPosTable fnTableStart, fnTableEnd;
+extern SwMoveFnCollection const & fnTableStart;
+extern SwMoveFnCollection const & fnTableEnd;
 
 // Direction-parameter for MoveColumn
 typedef SwLayoutFrame * (*SwWhichColumn)( const SwLayoutFrame * );
@@ -66,10 +65,10 @@ extern SwWhichColumn fnColumnPrev, fnColumnCurr, fnColumnNext;
 extern SwPosColumn fnColumnStart, fnColumnEnd;
 
 // Direction-parameter for MoveRegion (ranges!)
-typedef SwMoveFnCollection* SwPosRegion;
-typedef bool (*SwWhichRegion)( SwPaM&, SwPosRegion, bool bInReadOnly );
+typedef bool (*SwWhichRegion)( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );
 extern SwWhichRegion fnRegionPrev, fnRegionCurr, fnRegionNext, fnRegionCurrAndSkip;
-extern SwPosRegion fnRegionStart, fnRegionEnd;
+extern SwMoveFnCollection const & fnRegionStart;
+extern SwMoveFnCollection const & fnRegionEnd;
 
 /*
  * The following combinations are allowed:
@@ -98,13 +97,13 @@ enum SwDocPositions
 };
 
 SW_DLLPUBLIC SwWhichPara GetfnParaCurr();
-SW_DLLPUBLIC SwPosPara GetfnParaStart();
-SW_DLLPUBLIC SwPosPara GetfnParaEnd();
+SW_DLLPUBLIC SwMoveFnCollection const & GetfnParaStart();
+SW_DLLPUBLIC SwMoveFnCollection const & GetfnParaEnd();
 
 SW_DLLPUBLIC SwWhichTable GetfnTablePrev();
 SW_DLLPUBLIC SwWhichTable GetfnTableCurr();
-SW_DLLPUBLIC SwPosTable GetfnTableStart();
-SW_DLLPUBLIC SwPosTable GetfnTableEnd();
+SW_DLLPUBLIC SwMoveFnCollection const & GetfnTableStart();
+SW_DLLPUBLIC SwMoveFnCollection const & GetfnTableEnd();
 
 #endif // INCLUDED_SW_INC_CSHTYP_HXX
 

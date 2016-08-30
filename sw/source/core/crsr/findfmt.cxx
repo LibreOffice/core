@@ -21,11 +21,11 @@
 #include <pamtyp.hxx>
 #include <memory>
 
-bool SwPaM::Find( const SwFormat& rFormat, SwMoveFn fnMove,
+bool SwPaM::Find( const SwFormat& rFormat, SwMoveFnCollection const & fnMove,
                   const SwPaM *pRegion, bool bInReadOnly  )
 {
     bool bFound = false;
-    const bool bSrchForward = (fnMove == fnMoveForward);
+    const bool bSrchForward = &fnMove == &fnMoveForward;
     std::unique_ptr<SwPaM> pPam(MakeRegion( fnMove, pRegion ));
 
     // if at beginning/end then move it out of the node
@@ -33,7 +33,7 @@ bool SwPaM::Find( const SwFormat& rFormat, SwMoveFn fnMove,
         ? pPam->GetPoint()->nContent.GetIndex() == pPam->GetContentNode()->Len()
         : !pPam->GetPoint()->nContent.GetIndex() )
     {
-        if( !(*fnMove->fnNds)( &pPam->GetPoint()->nNode, false ))
+        if( !(*fnMove.fnNds)( &pPam->GetPoint()->nNode, false ))
         {
             return false;
         }

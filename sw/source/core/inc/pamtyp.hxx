@@ -43,9 +43,9 @@ SW_DLLPUBLIC SwContentNode* GoNextNds( SwNodeIndex * pIdx, bool );
 SwContentNode* GoPreviousNds( SwNodeIndex * pIdx, bool );
 
 // Funktionsdefinitionen fuer die SwCursorShell
-bool GoPrevPara( SwPaM&, SwPosPara);
-bool GoCurrPara( SwPaM&, SwPosPara);
-bool GoNextPara( SwPaM&, SwPosPara);
+bool GoPrevPara( SwPaM&, SwMoveFnCollection const &);
+bool GoCurrPara( SwPaM&, SwMoveFnCollection const &);
+bool GoNextPara( SwPaM&, SwMoveFnCollection const &);
 
 // Typedefiniton fuer Funktionen
 typedef bool (*GoNd)( SwNode*, SwIndex*, sal_uInt16 );
@@ -71,7 +71,7 @@ struct SwMoveFnCollection
 };
 
 // Funktionsdefinitionen fuers Suchen
-SwContentNode* GetNode( SwPaM&, bool&, SwMoveFn, bool bInReadOnly = false );
+SwContentNode* GetNode( SwPaM&, bool&, SwMoveFnCollection const &, bool bInReadOnly = false );
 
 #endif
 

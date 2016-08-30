@@ -2135,7 +2135,7 @@ static bool lcl_GoTableRow( SwCursorShell* pShell, bool bUp )
     GoInContent( *pPam, fnMoveForward );
 
     // go to beginning end of table box
-    SwPosSection fnPosSect = bUp ? fnSectionStart : fnSectionEnd;
+    SwMoveFnCollection const & fnPosSect = bUp ? fnSectionStart : fnSectionEnd;
     pShell->MoveSection( GoCurrSection, fnPosSect );
 
     // and go up/down into next content

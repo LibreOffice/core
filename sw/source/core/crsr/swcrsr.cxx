@@ -721,7 +721,7 @@ bool SwCursor::IsAtValidPos( bool bPoint ) const
 void SwCursor::SaveTableBoxContent( const SwPosition* ) {}
 
 /// set range for search in document
-SwMoveFnCollection* SwCursor::MakeFindRange( SwDocPositions nStart,
+SwMoveFnCollection const & SwCursor::MakeFindRange( SwDocPositions nStart,
                                 SwDocPositions nEnd, SwPaM* pRange ) const
 {
     pRange->SetMark();
@@ -736,7 +736,7 @@ SwMoveFnCollection* SwCursor::MakeFindRange( SwDocPositions nStart,
 }
 
 static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCursor,
-                        SwMoveFn fnMove, SwCursor*& pFndRing,
+                        SwMoveFnCollection const & fnMove, SwCursor*& pFndRing,
                         SwPaM& aRegion, FindRanges eFndRngs,
                         bool bInReadOnly, bool& bCancel )
 {
@@ -744,7 +744,7 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
     bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
     int nFndRet = 0;
     sal_uLong nFound = 0;
-    const bool bSrchBkwrd = fnMove == fnMoveBackward;
+    const bool bSrchBkwrd = &fnMove == &fnMoveBackward;
     SwPaM *pTmpCursor = pCurrentCursor, *pSaveCursor = pCurrentCursor;
 
     // only create progress bar for ShellCursor
@@ -933,10 +933,10 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
 
     // create region without adding it to the ring
     SwPaM aRegion( *GetPoint() );
-    SwMoveFn fnMove = MakeFindRange( nStart, nEnde, &aRegion );
+    SwMoveFnCollection const & fnMove = MakeFindRange( nStart, nEnde, &aRegion );
 
     sal_uLong nFound = 0;
-    const bool bMvBkwrd = fnMove == fnMoveBackward;
+    const bool bMvBkwrd = &fnMove == &fnMoveBackward;
     bool bInReadOnly = IsReadOnlyAvailable();
 
     SwCursor* pFndRing = nullptr;
@@ -1629,7 +1629,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
 
     // can the cursor be moved n times?
     SwCursorSaveState aSave( *this );
-    SwMoveFn fnMove = bLeft ? fnMoveBackward : fnMoveForward;
+    SwMoveFnCollection const & fnMove = bLeft ? fnMoveBackward : fnMoveForward;
 
     SwGoInDoc fnGo;
     if ( bSkipHidden )
@@ -1915,7 +1915,7 @@ bool SwCursor::SttEndDoc( bool bStt )
     SwCursorSaveState aSave( *this );
     // Never jump over section boundaries during selection!
     // Can the cursor still moved on?
-    SwMoveFn fnMove = bStt ? fnMoveBackward : fnMoveForward;
+    SwMoveFnCollection const & fnMove = bStt ? fnMoveBackward : fnMoveForward;
     bool bRet = (!HasMark() || !IsNoContent() ) &&
                     Move( fnMove, GoInDoc ) &&
                     !IsInProtectTable( true ) &&
@@ -2032,7 +2032,7 @@ bool SwCursor::GotoTableBox( const OUString& rName )
     return bRet;
 }
 
-bool SwCursor::MovePara(SwWhichPara fnWhichPara, SwPosPara fnPosPara )
+bool SwCursor::MovePara(SwWhichPara fnWhichPara, SwMoveFnCollection const & fnPosPara )
 {
     // for optimization test something before
     const SwNode* pNd = &GetPoint()->nNode.GetNode();
@@ -2046,7 +2046,7 @@ bool SwCursor::MovePara(SwWhichPara fnWhichPara, SwPosPara fnPosPara )
         const SwContentNode* pContentNd = pNd->GetContentNode();
         if ( pContentNd )
         {
-            const sal_Int32 nSttEnd = fnPosPara == fnMoveForward ? 0 : pContentNd->Len();
+            const sal_Int32 nSttEnd = &fnPosPara == &fnMoveForward ? 0 : pContentNd->Len();
             if ( GetPoint()->nContent.GetIndex() != nSttEnd )
                 bShortCut = true;
         }
@@ -2072,7 +2072,7 @@ bool SwCursor::MovePara(SwWhichPara fnWhichPara, SwPosPara fnPosPara )
 }
 
 bool SwCursor::MoveSection( SwWhichSection fnWhichSect,
-                                SwPosSection fnPosSect)
+                                SwMoveFnCollection const & fnPosSect)
 {
     SwCursorSaveState aSave( *this );
     return (*fnWhichSect)( *this, fnPosSect ) &&

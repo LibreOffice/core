@@ -156,17 +156,17 @@ static void lcl_SetAttrPam( SwPaM& rPam, sal_Int32 nStart, const sal_Int32* pEnd
 */
 static bool lcl_Search( const SwTextNode& rTextNd, SwPaM& rPam,
                     const SfxPoolItem& rCmpItem,
-                    SwMoveFn fnMove, bool bValue )
+                    SwMoveFnCollection const & fnMove, bool bValue )
 {
     if ( !rTextNd.HasHints() )
         return false;
 
     const SwTextAttr *pTextHt = nullptr;
-    bool bForward = fnMove == fnMoveForward;
+    bool bForward = &fnMove == &fnMoveForward;
     sal_uInt16 nPos = bForward ? 0 : rTextNd.GetSwpHints().Count();
     sal_Int32 nContentPos = rPam.GetPoint()->nContent.GetIndex();
 
-    while( nullptr != ( pTextHt=(*fnMove->fnGetHint)(rTextNd.GetSwpHints(),nPos,nContentPos)))
+    while( nullptr != ( pTextHt=(*fnMove.fnGetHint)(rTextNd.GetSwpHints(),nPos,nContentPos)))
         if( pTextHt->Which() == rCmpItem.Which() &&
             ( !bValue || CmpAttr( pTextHt->GetAttr(), rCmpItem )))
         {
@@ -881,7 +881,7 @@ static bool lcl_Search( const SwContentNode& rCNd, const SfxItemSet& rCmpSet, bo
     return true; // found
 }
 
-bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFn fnMove,
+bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFnCollection const & fnMove,
                   const SwPaM *pRegion, bool bInReadOnly )
 {
     // determine which attribute is searched:
@@ -892,7 +892,7 @@ bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFn fnMove,
 
     bool bFound = false;
     bool bFirst = true;
-    const bool bSrchForward = fnMove == fnMoveForward;
+    const bool bSrchForward = &fnMove == &fnMoveForward;
     SwContentNode * pNode;
     const SfxPoolItem* pItem;
     SwpFormats aFormatArr;
@@ -902,7 +902,7 @@ bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFn fnMove,
         ? pPam->GetPoint()->nContent.GetIndex() == pPam->GetContentNode()->Len()
         : !pPam->GetPoint()->nContent.GetIndex() )
     {
-        if( !(*fnMove->fnNds)( &pPam->GetPoint()->nNode, false ))
+        if( !(*fnMove.fnNds)( &pPam->GetPoint()->nNode, false ))
         {
             return false;
         }
@@ -963,14 +963,14 @@ bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFn fnMove,
 
 typedef bool (*FnSearchAttr)( const SwTextNode&, SwAttrCheckArr&, SwPaM& );
 
-bool SwPaM::Find( const SfxItemSet& rSet, bool bNoColls, SwMoveFn fnMove,
+bool SwPaM::Find( const SfxItemSet& rSet, bool bNoColls, SwMoveFnCollection const & fnMove,
                   const SwPaM *pRegion, bool bInReadOnly, bool bMoveFirst )
 {
     std::unique_ptr<SwPaM> pPam(MakeRegion( fnMove, pRegion ));
 
     bool bFound = false;
     bool bFirst = true;
-    const bool bSrchForward = fnMove == fnMoveForward;
+    const bool bSrchForward = &fnMove == &fnMoveForward;
     SwContentNode * pNode;
     SwpFormats aFormatArr;
 
@@ -990,7 +990,7 @@ bool SwPaM::Find( const SfxItemSet& rSet, bool bNoColls, SwMoveFn fnMove,
         ? pPam->GetPoint()->nContent.GetIndex() == pPam->GetContentNode()->Len()
         : !pPam->GetPoint()->nContent.GetIndex() ) )
     {
-        if( !(*fnMove->fnNds)( &pPam->GetPoint()->nNode, false ))
+        if( !(*fnMove.fnNds)( &pPam->GetPoint()->nNode, false ))
         {
             return false;
         }
@@ -1068,11 +1068,11 @@ struct SwFindParaAttr : public SwFindParas
 
     virtual ~SwFindParaAttr()   { delete pSText; }
 
-    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, bool bInReadOnly ) override;
+    virtual int Find( SwPaM* , SwMoveFnCollection const & , const SwPaM*, bool bInReadOnly ) override;
     virtual bool IsReplaceMode() const override;
 };
 
-int SwFindParaAttr::Find( SwPaM* pCursor, SwMoveFn fnMove, const SwPaM* pRegion,
+int SwFindParaAttr::Find( SwPaM* pCursor, SwMoveFnCollection const & fnMove, const SwPaM* pRegion,
                           bool bInReadOnly )
 {
     // replace string (only if text given and search is not parameterized)?

@@ -23,10 +23,10 @@
 #include <sal/config.h>
 
 // Travelling in regions
-bool GotoPrevRegion( SwPaM&, SwPosRegion, bool bInReadOnly );
-bool GotoCurrRegion( SwPaM&, SwPosRegion, bool bInReadOnly );
-bool GotoCurrRegionAndSkip( SwPaM&, SwPosRegion, bool bInReadOnly );
-bool GotoNextRegion( SwPaM&, SwPosRegion, bool bInReadOnly );
+bool GotoPrevRegion( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );
+bool GotoCurrRegion( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );
+bool GotoCurrRegionAndSkip( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );
+bool GotoNextRegion( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );
 
 #endif
 

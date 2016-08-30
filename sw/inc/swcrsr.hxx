@@ -39,7 +39,7 @@ const int FIND_NO_RING      = 2;
 
 struct SwFindParas
 {
-    virtual int Find( SwPaM*, SwMoveFn, const SwPaM*, bool ) = 0;
+    virtual int Find( SwPaM*, SwMoveFnCollection const &, const SwPaM*, bool ) = 0;
     virtual bool IsReplaceMode() const = 0;
 
 protected:
@@ -109,7 +109,7 @@ public:
     virtual void SaveTableBoxContent( const SwPosition* pPos );
 
     void FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const;
-    SwMoveFnCollection* MakeFindRange( SwDocPositions, SwDocPositions,
+    SwMoveFnCollection const & MakeFindRange( SwDocPositions, SwDocPositions,
                                         SwPaM* ) const;
 
     sal_uLong Find( const css::util::SearchOptions2& rSearchOpt,
@@ -185,10 +185,10 @@ public:
     bool GotoNextFootnoteAnchor();
     bool GotoPrevFootnoteAnchor();
 
-    bool MovePara( SwWhichPara, SwPosPara );
-    bool MoveSection( SwWhichSection, SwPosSection );
-    bool MoveTable( SwWhichTable, SwPosTable );
-    bool MoveRegion( SwWhichRegion, SwPosRegion );
+    bool MovePara( SwWhichPara, SwMoveFnCollection const & );
+    bool MoveSection( SwWhichSection, SwMoveFnCollection const & );
+    bool MoveTable( SwWhichTable, SwMoveFnCollection const & );
+    bool MoveRegion( SwWhichRegion, SwMoveFnCollection const & );
 
     // Is there a selection of content in table?
     // Return value indicates if cursor remains at its old position.

@@ -47,33 +47,33 @@ static SwMoveFnCollection aBwrd = {
 SwWhichPara fnParaPrev  = &GoPrevPara;
 SwWhichPara fnParaCurr  = &GoCurrPara;
 SwWhichPara fnParaNext  = &GoNextPara;
-SwPosPara fnParaStart   = &aFwrd;
-SwPosPara fnParaEnd     = &aBwrd;
+SwMoveFnCollection const & fnParaStart   = aFwrd;
+SwMoveFnCollection const & fnParaEnd     = aBwrd;
 
-SwPosSection fnSectionStart     = &aFwrd;
-SwPosSection fnSectionEnd       = &aBwrd;
+SwMoveFnCollection const & fnSectionStart     = aFwrd;
+SwMoveFnCollection const & fnSectionEnd       = aBwrd;
 
 SwWhichTable fnTablePrev = &GotoPrevTable;
 SwWhichTable fnTableCurr = &GotoCurrTable;
 SwWhichTable fnTableNext = &GotoNextTable;
-SwPosTable fnTableStart = &aFwrd;
-SwPosTable fnTableEnd = &aBwrd;
+SwMoveFnCollection const & fnTableStart = aFwrd;
+SwMoveFnCollection const & fnTableEnd = aBwrd;
 
 SwWhichRegion fnRegionPrev = &GotoPrevRegion;
 SwWhichRegion fnRegionCurr = &GotoCurrRegion;
 SwWhichRegion fnRegionCurrAndSkip = &GotoCurrRegionAndSkip;
 SwWhichRegion fnRegionNext = &GotoNextRegion;
-SwPosRegion fnRegionStart = &aFwrd;
-SwPosRegion fnRegionEnd = &aBwrd;
+SwMoveFnCollection const & fnRegionStart = aFwrd;
+SwMoveFnCollection const & fnRegionEnd = aBwrd;
 
-SwMoveFn fnMoveBackward = &aBwrd;
-SwMoveFn fnMoveForward  = &aFwrd;
+SwMoveFnCollection const & fnMoveBackward = aBwrd;
+SwMoveFnCollection const & fnMoveForward  = aFwrd;
 
 SwWhichPara GetfnParaCurr()
 {
     return fnParaCurr;
 }
-SwPosPara GetfnParaStart()
+SwMoveFnCollection const & GetfnParaStart()
 {
      return  fnParaStart;
 }
@@ -81,11 +81,11 @@ SwWhichTable GetfnTablePrev()
 {
     return fnTablePrev;
 }
-SwPosPara GetfnParaEnd()
+SwMoveFnCollection const & GetfnParaEnd()
 {
      return  fnParaEnd;
 }
-SwPosTable GetfnTableStart()
+SwMoveFnCollection const & GetfnTableStart()
 {
     return fnTableStart;
 }
@@ -93,7 +93,7 @@ SwWhichTable GetfnTableCurr()
 {
     return fnTableCurr;
 }
-SwPosTable GetfnTableEnd()
+SwMoveFnCollection const & GetfnTableEnd()
 {
     return fnTableEnd;
 }

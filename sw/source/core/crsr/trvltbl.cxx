@@ -477,7 +477,7 @@ static bool lcl_FindPrevCell( SwNodeIndex& rIdx, bool bInReadOnly  )
     return true;
 }
 
-bool GotoPrevTable( SwPaM& rCurrentCursor, SwPosTable fnPosTable,
+bool GotoPrevTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable,
                     bool bInReadOnly )
 {
     SwNodeIndex aIdx( rCurrentCursor.GetPoint()->nNode );
@@ -504,7 +504,7 @@ bool GotoPrevTable( SwPaM& rCurrentCursor, SwPosTable fnPosTable,
 
         if( pTableNd ) // any further table node?
         {
-            if( fnPosTable == fnMoveForward ) // at the beginning?
+            if( &fnPosTable == &fnMoveForward ) // at the beginning?
             {
                 aIdx = *aIdx.GetNode().StartOfSectionNode();
                 if( !lcl_FindNextCell( aIdx, bInReadOnly ))
@@ -529,7 +529,7 @@ bool GotoPrevTable( SwPaM& rCurrentCursor, SwPosTable fnPosTable,
             if ( pTextNode )
             {
                 rCurrentCursor.GetPoint()->nNode = *pTextNode;
-                rCurrentCursor.GetPoint()->nContent.Assign( pTextNode, fnPosTable == fnMoveBackward ?
+                rCurrentCursor.GetPoint()->nContent.Assign( pTextNode, &fnPosTable == &fnMoveBackward ?
                                                       pTextNode->Len() :
                                                       0 );
             }
@@ -540,7 +540,7 @@ bool GotoPrevTable( SwPaM& rCurrentCursor, SwPosTable fnPosTable,
     return false;
 }
 
-bool GotoNextTable( SwPaM& rCurrentCursor, SwPosTable fnPosTable,
+bool GotoNextTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable,
                     bool bInReadOnly )
 {
     SwNodeIndex aIdx( rCurrentCursor.GetPoint()->nNode );
@@ -556,7 +556,7 @@ bool GotoNextTable( SwPaM& rCurrentCursor, SwPosTable fnPosTable,
             ++aIdx;
         if( pTableNd ) // any further table node?
         {
-            if( fnPosTable == fnMoveForward ) // at the beginning?
+            if( &fnPosTable == &fnMoveForward ) // at the beginning?
             {
                 if( !lcl_FindNextCell( aIdx, bInReadOnly ))
                 {
@@ -581,7 +581,7 @@ bool GotoNextTable( SwPaM& rCurrentCursor, SwPosTable fnPosTable,
             if ( pTextNode )
             {
                 rCurrentCursor.GetPoint()->nNode = *pTextNode;
-                rCurrentCursor.GetPoint()->nContent.Assign( pTextNode, fnPosTable == fnMoveBackward ?
+                rCurrentCursor.GetPoint()->nContent.Assign( pTextNode, &fnPosTable == &fnMoveBackward ?
                                                       pTextNode->Len() :
                                                       0 );
             }
@@ -592,7 +592,7 @@ bool GotoNextTable( SwPaM& rCurrentCursor, SwPosTable fnPosTable,
     return false;
 }
 
-bool GotoCurrTable( SwPaM& rCurrentCursor, SwPosTable fnPosTable,
+bool GotoCurrTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable,
                     bool bInReadOnly )
 {
     SwTableNode* pTableNd = rCurrentCursor.GetPoint()->nNode.GetNode().FindTableNode();
@@ -600,7 +600,7 @@ bool GotoCurrTable( SwPaM& rCurrentCursor, SwPosTable fnPosTable,
         return false;
 
     SwTextNode* pTextNode = nullptr;
-    if( fnPosTable == fnMoveBackward ) // to the end of the table
+    if( &fnPosTable == &fnMoveBackward ) // to the end of the table
     {
         SwNodeIndex aIdx( *pTableNd->EndOfSectionNode() );
         if( !lcl_FindPrevCell( aIdx, bInReadOnly ))
@@ -618,7 +618,7 @@ bool GotoCurrTable( SwPaM& rCurrentCursor, SwPosTable fnPosTable,
     if ( pTextNode )
     {
         rCurrentCursor.GetPoint()->nNode = *pTextNode;
-        rCurrentCursor.GetPoint()->nContent.Assign( pTextNode, fnPosTable == fnMoveBackward ?
+        rCurrentCursor.GetPoint()->nContent.Assign( pTextNode, &fnPosTable == &fnMoveBackward ?
                                                         pTextNode->Len() :
                                                         0 );
     }
@@ -626,7 +626,7 @@ bool GotoCurrTable( SwPaM& rCurrentCursor, SwPosTable fnPosTable,
     return true;
 }
 
-bool SwCursor::MoveTable( SwWhichTable fnWhichTable, SwPosTable fnPosTable )
+bool SwCursor::MoveTable( SwWhichTable fnWhichTable, SwMoveFnCollection const & fnPosTable )
 {
     bool bRet = false;
     SwTableCursor* pTableCursor = dynamic_cast<SwTableCursor*>(this);
@@ -641,7 +641,7 @@ bool SwCursor::MoveTable( SwWhichTable fnWhichTable, SwPosTable fnPosTable )
     return bRet;
 }
 
-bool SwCursorShell::MoveTable( SwWhichTable fnWhichTable, SwPosTable fnPosTable )
+bool SwCursorShell::MoveTable( SwWhichTable fnWhichTable, SwMoveFnCollection const & fnPosTable )
 {
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
 

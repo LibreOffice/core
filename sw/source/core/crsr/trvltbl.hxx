@@ -23,9 +23,9 @@
 #include <sal/config.h>
 
 // Travelling in tables
-bool GotoPrevTable( SwPaM&, SwPosTable, bool bInReadOnly );
-bool GotoCurrTable( SwPaM&, SwPosTable, bool bInReadOnly );
-bool GotoNextTable( SwPaM&, SwPosTable, bool bInReadOnly );
+bool GotoPrevTable( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );
+bool GotoCurrTable( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );
+bool GotoNextTable( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );
 
 #endif
 
