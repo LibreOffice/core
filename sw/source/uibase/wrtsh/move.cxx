@@ -357,37 +357,37 @@ void SwWrtShell::EndPara( bool bSelect )
 void SwWrtShell::StartOfColumn()
 {
     ShellMoveCursor aTmp( this, false/*bSelect*/);
-    MoveColumn(GetCurrColumn, fnColumnStart);
+    MoveColumn(GetCurrColumn, GetColumnStt);
 }
 
 void SwWrtShell::EndOfColumn()
 {
     ShellMoveCursor aTmp( this, false/*bSelect*/);
-    MoveColumn(GetCurrColumn, fnColumnEnd);
+    MoveColumn(GetCurrColumn, GetColumnEnd);
 }
 
 void SwWrtShell::StartOfNextColumn()
 {
     ShellMoveCursor aTmp( this, false/*bSelect*/);
-    MoveColumn( GetNextColumn, fnColumnStart);
+    MoveColumn( GetNextColumn, GetColumnStt);
 }
 
 void SwWrtShell::EndOfNextColumn()
 {
     ShellMoveCursor aTmp( this, false/*bSelect*/);
-    MoveColumn(GetNextColumn, fnColumnEnd);
+    MoveColumn(GetNextColumn, GetColumnEnd);
 }
 
 void SwWrtShell::StartOfPrevColumn()
 {
     ShellMoveCursor aTmp( this, false/*bSelect*/);
-    MoveColumn(GetPrevColumn, fnColumnStart);
+    MoveColumn(GetPrevColumn, GetColumnStt);
 }
 
 void SwWrtShell::EndOfPrevColumn()
 {
     ShellMoveCursor aTmp( this, false/*bSelect*/);
-    MoveColumn(GetPrevColumn, fnColumnEnd);
+    MoveColumn(GetPrevColumn, GetColumnEnd);
 }
 
 bool SwWrtShell::PushCursor(SwTwips lOffset, bool bSelect)

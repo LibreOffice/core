@@ -69,7 +69,8 @@ typedef SwContentFrame  * (*SwPosColumn)( const SwLayoutFrame * );
 SwLayoutFrame* GetPrevColumn( const SwLayoutFrame* pLayFrame );
 SwLayoutFrame* GetCurrColumn( const SwLayoutFrame* pLayFrame );
 SwLayoutFrame* GetNextColumn( const SwLayoutFrame* pLayFrame );
-extern SwPosColumn fnColumnStart, fnColumnEnd;
+SwContentFrame* GetColumnStt( const SwLayoutFrame* pColFrame );
+SwContentFrame* GetColumnEnd( const SwLayoutFrame* pColFrame );
 
 // Direction-parameter for MoveRegion (ranges!)
 typedef bool (*SwWhichRegion)( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );

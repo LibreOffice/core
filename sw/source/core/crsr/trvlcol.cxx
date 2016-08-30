@@ -64,9 +64,6 @@ SwContentFrame* GetColumnEnd( const SwLayoutFrame* pColFrame )
     return pRet;
 }
 
-SwPosColumn fnColumnStart = &GetColumnStt;
-SwPosColumn fnColumnEnd = &GetColumnEnd;
-
 bool SwCursorShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol )
 {
     bool bRet = false;
