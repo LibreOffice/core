@@ -79,7 +79,7 @@ OUString getToken(const OUString& string, sal_Int32& index)
             result += token.copy(i, p - i);
         if (p < token.getLength() - 2)
         {
-            result += OUString(static_cast<sal_Unicode>(token.copy(p+1, 2).toInt32(16)));
+            result += OUStringLiteral1(token.copy(p+1, 2).toInt32(16));
             i = p + 3;
         }
         else
