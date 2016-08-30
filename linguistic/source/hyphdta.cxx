@@ -40,7 +40,7 @@ namespace linguistic
 {
 
 
-HyphenatedWord::HyphenatedWord(const OUString &rWord, sal_Int16 nLang, sal_Int16 nHPos,
+HyphenatedWord::HyphenatedWord(const OUString &rWord, sal_uInt16 nLang, sal_Int16 nHPos,
                                const OUString &rHyphWord, sal_Int16 nPos ) :
     aWord           (rWord),
     aHyphenatedWord (rHyphWord),
@@ -119,7 +119,7 @@ sal_Bool SAL_CALL HyphenatedWord::isAlternativeSpelling()
 }
 
 
-PossibleHyphens::PossibleHyphens(const OUString &rWord, sal_Int16 nLang,
+PossibleHyphens::PossibleHyphens(const OUString &rWord, sal_uInt16 nLang,
             const OUString &rHyphWord,
             const Sequence< sal_Int16 > &rPositions) :
     aWord           (rWord),

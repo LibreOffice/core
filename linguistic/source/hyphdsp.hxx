@@ -71,11 +71,11 @@ class HyphenatorDispatcher :
     static css::uno::Reference< css::linguistic2::XHyphenatedWord>
             buildHyphWord( const OUString& rOrigWord,
                 const css::uno::Reference< css::linguistic2::XDictionaryEntry> &xEntry,
-                sal_Int16 nLang, sal_Int16 nMaxLeading );
+                LanguageType nLang, sal_Int16 nMaxLeading );
 
     static css::uno::Reference< css::linguistic2::XPossibleHyphens >
             buildPossHyphens( const css::uno::Reference< css::linguistic2::XDictionaryEntry > &xEntry,
-                    sal_Int16 nLanguage );
+                    LanguageType nLanguage );
 
 public:
     explicit HyphenatorDispatcher( LngSvcMgr &rLngSvcMgr );

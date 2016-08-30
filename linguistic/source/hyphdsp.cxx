@@ -70,7 +70,7 @@ void HyphenatorDispatcher::ClearSvcList()
 Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
             const OUString& rOrigWord,
             const Reference<XDictionaryEntry> &xEntry,
-            sal_Int16 nLang, sal_Int16 nMaxLeading )
+            LanguageType nLang, sal_Int16 nMaxLeading )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -182,7 +182,7 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
 
 
 Reference< XPossibleHyphens > HyphenatorDispatcher::buildPossHyphens(
-            const Reference< XDictionaryEntry > &xEntry, sal_Int16 nLanguage )
+            const Reference< XDictionaryEntry > &xEntry, LanguageType nLanguage )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -281,7 +281,7 @@ Reference< XHyphenatedWord > SAL_CALL
     Reference< XHyphenatedWord >    xRes;
 
     sal_Int32 nWordLen = rWord.getLength();
-    sal_Int16 nLanguage = LinguLocaleToLanguage( rLocale );
+    LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
     if (LinguIsUnspecified(nLanguage) || !nWordLen ||
         nMaxLeading == 0 || nMaxLeading == nWordLen)
         return xRes;
@@ -418,7 +418,7 @@ Reference< XHyphenatedWord > SAL_CALL
     Reference< XHyphenatedWord >    xRes;
 
     sal_Int32 nWordLen = rWord.getLength();
-    sal_Int16 nLanguage = LinguLocaleToLanguage( rLocale );
+    LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
     if (LinguIsUnspecified(nLanguage) || !nWordLen)
         return xRes;
 
@@ -549,7 +549,7 @@ Reference< XPossibleHyphens > SAL_CALL
 
     Reference< XPossibleHyphens >   xRes;
 
-    sal_Int16 nLanguage = LinguLocaleToLanguage( rLocale );
+    LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
     if (LinguIsUnspecified(nLanguage) || rWord.isEmpty())
         return xRes;
 
@@ -663,7 +663,7 @@ void HyphenatorDispatcher::SetServiceList( const Locale &rLocale,
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Int16 nLanguage = LinguLocaleToLanguage( rLocale );
+    LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
 
     sal_Int32 nLen = rSvcImplNames.getLength();
     if (0 == nLen)
@@ -698,7 +698,7 @@ Sequence< OUString >
     Sequence< OUString > aRes;
 
     // search for entry with that language and use data from that
-    sal_Int16 nLanguage = LinguLocaleToLanguage( rLocale );
+    LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
     const HyphSvcByLangMap_t::const_iterator  aIt( aSvcMap.find( nLanguage ) );
     const LangSvcEntries_Hyph       *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : nullptr;
     if (pEntry)

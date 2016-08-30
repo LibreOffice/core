@@ -35,14 +35,14 @@ class HyphenatedWord :
     OUString     aHyphenatedWord;
     sal_Int16    nHyphPos;
     sal_Int16    nHyphenationPos;
-    sal_Int16    nLanguage;
+    sal_uInt16   nLanguage;
     bool         bIsAltSpelling;
 
     HyphenatedWord(const HyphenatedWord &) = delete;
     HyphenatedWord & operator = (const HyphenatedWord &) = delete;
 
 public:
-    HyphenatedWord(const OUString &rWord, sal_Int16 nLang, sal_Int16 nHyphenationPos,
+    HyphenatedWord(const OUString &rWord, sal_uInt16 nLang, sal_Int16 nHyphenationPos,
                    const OUString &rHyphenatedWord, sal_Int16 nHyphenPos );
     virtual ~HyphenatedWord();
 
@@ -81,13 +81,13 @@ class PossibleHyphens :
     OUString             aWord;
     OUString             aWordWithHyphens;
     css::uno::Sequence< sal_Int16 > aOrigHyphenPos;
-    sal_Int16                       nLanguage;
+    sal_uInt16           nLanguage;
 
     PossibleHyphens(const PossibleHyphens &) = delete;
     PossibleHyphens & operator = (const PossibleHyphens &) = delete;
 
 public:
-    PossibleHyphens(const OUString &rWord, sal_Int16 nLang,
+    PossibleHyphens(const OUString &rWord, sal_uInt16 nLang,
             const OUString &rHyphWord,
             const css::uno::Sequence< sal_Int16 > &rPositions);
     virtual ~PossibleHyphens();
