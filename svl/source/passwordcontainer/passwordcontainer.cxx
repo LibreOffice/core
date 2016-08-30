@@ -97,7 +97,7 @@ static vector< OUString > getInfoFromInd( const OUString& aInd )
         while( *pLine && !( pLine[0] == '_' && pLine[1] == '_' ))
             if( *pLine != '_' )
             {
-                newItem += OUString( (sal_Unicode) *pLine );
+                newItem += OUStringLiteral1( *pLine );
                 pLine++;
             }
             else
@@ -114,10 +114,10 @@ static vector< OUString > getInfoFromInd( const OUString& aInd )
                         return aResult;
                     }
 
-                    aNum += OUString( (sal_Unicode) pLine[i] );
+                    aNum += OUStringLiteral1( pLine[i] );
                 }
 
-                newItem += OUString( (sal_Unicode) aNum.toUInt32( 16 ) );
+                newItem += OUStringLiteral1( aNum.toUInt32( 16 ) );
                 pLine += 3;
             }
 

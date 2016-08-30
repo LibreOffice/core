@@ -776,10 +776,9 @@ SvNumberformat::SvNumberformat(OUString& rString,
                     }
                     else
                     {
-                        sStr = "DBNum";
                         //! eSymbolType is negative
                         sal_uInt8 nNum = (sal_uInt8)(1 - (eSymbolType - BRACKET_SYMBOLTYPE_DBNUM1));
-                        sStr += OUString((sal_Unicode)('0' + nNum));
+                        sStr = "DBNum" + OUStringLiteral1('0' + nNum);
                         NumFor[nIndex].SetNatNumNum( nNum, true );
                     }
                     break;
