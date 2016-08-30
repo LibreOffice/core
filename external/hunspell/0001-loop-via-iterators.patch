@@ -1,0 +1,36 @@
+From f366e97fa8d7ad21060033b733dda15299edf7c5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Fri, 10 Feb 2017 15:37:11 +0000
+Subject: [PATCH 1/4] loop via iterators
+
+---
+ src/hunspell/csutil.cxx | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/src/hunspell/csutil.cxx b/src/hunspell/csutil.cxx
+index c1666a5..2408677 100644
+--- a/src/hunspell/csutil.cxx
++++ b/src/hunspell/csutil.cxx
+@@ -2537,13 +2537,17 @@ int get_captype_utf8(const std::vector<w_char>& word, int langnum) {
+   size_t ncap = 0;
+   size_t nneutral = 0;
+   size_t firstcap = 0;
+-  for (size_t i = 0; i < word.size(); ++i) {
+-    unsigned short idx = (word[i].h << 8) + word[i].l;
++
++  std::vector<w_char>::const_iterator it = word.begin();
++  std::vector<w_char>::const_iterator it_end = word.end();
++  while (it != it_end) {
++    unsigned short idx = (it->h << 8) + it->l;
+     unsigned short lwridx = unicodetolower(idx, langnum);
+     if (idx != lwridx)
+       ncap++;
+     if (unicodetoupper(idx, langnum) == lwridx)
+       nneutral++;
++    ++it;
+   }
+   if (ncap) {
+     unsigned short idx = (word[0].h << 8) + word[0].l;
+-- 
+2.9.3
+

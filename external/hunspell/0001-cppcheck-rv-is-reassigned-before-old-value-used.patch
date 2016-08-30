@@ -1,0 +1,57 @@
+From 93156ba9a8e644f8b0b724880668714adcb0d094 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Mon, 23 Jan 2017 12:05:07 +0000
+Subject: [PATCH] cppcheck: rv is reassigned before old value used
+
+---
+ src/hunspell/affixmgr.cxx   | 6 ++----
+ src/hunspell/suggestmgr.cxx | 3 +--
+ 2 files changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/src/hunspell/affixmgr.cxx b/src/hunspell/affixmgr.cxx
+index 680cbe9..21cf384 100644
+--- a/src/hunspell/affixmgr.cxx
++++ b/src/hunspell/affixmgr.cxx
+@@ -1494,9 +1494,8 @@ int AffixMgr::defcpd_check(hentry*** words,
+ }
+ 
+ inline int AffixMgr::candidate_check(const char* word, int len) {
+-  struct hentry* rv = NULL;
+ 
+-  rv = lookup(word);
++  struct hentry* rv = lookup(word);
+   if (rv)
+     return 1;
+ 
+@@ -3045,10 +3044,9 @@ struct hentry* AffixMgr::affix_check(const char* word,
+                                      int len,
+                                      const FLAG needflag,
+                                      char in_compound) {
+-  struct hentry* rv = NULL;
+ 
+   // check all prefixes (also crossed with suffixes if allowed)
+-  rv = prefix_check(word, len, in_compound, needflag);
++  struct hentry* rv = prefix_check(word, len, in_compound, needflag);
+   if (rv)
+     return rv;
+ 
+diff --git a/src/hunspell/suggestmgr.cxx b/src/hunspell/suggestmgr.cxx
+index 8d46dd6..54a474f 100644
+--- a/src/hunspell/suggestmgr.cxx
++++ b/src/hunspell/suggestmgr.cxx
+@@ -1675,11 +1675,10 @@ std::string SuggestMgr::suggest_hentry_gen(hentry* rv, const char* pattern) {
+   if (HENTRY_DATA(rv))
+     p = (char*)strstr(HENTRY_DATA2(rv), MORPH_ALLOMORPH);
+   while (p) {
+-    struct hentry* rv2 = NULL;
+     p += MORPH_TAG_LEN;
+     int plen = fieldlen(p);
+     std::string allomorph(p, plen);
+-    rv2 = pAMgr->lookup(allomorph.c_str());
++    struct hentry* rv2 = pAMgr->lookup(allomorph.c_str());
+     while (rv2) {
+       //            if (HENTRY_DATA(rv2) && get_sfxcount(HENTRY_DATA(rv2)) <=
+       //            sfxcount) {
+-- 
+2.9.3
+
