@@ -66,7 +66,9 @@ extern SwMoveFnCollection const & fnTableEnd;
 // Direction-parameter for MoveColumn
 typedef SwLayoutFrame * (*SwWhichColumn)( const SwLayoutFrame * );
 typedef SwContentFrame  * (*SwPosColumn)( const SwLayoutFrame * );
-extern SwWhichColumn fnColumnPrev, fnColumnCurr, fnColumnNext;
+SwLayoutFrame* GetPrevColumn( const SwLayoutFrame* pLayFrame );
+SwLayoutFrame* GetCurrColumn( const SwLayoutFrame* pLayFrame );
+SwLayoutFrame* GetNextColumn( const SwLayoutFrame* pLayFrame );
 extern SwPosColumn fnColumnStart, fnColumnEnd;
 
 // Direction-parameter for MoveRegion (ranges!)

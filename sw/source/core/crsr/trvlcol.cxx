@@ -64,9 +64,6 @@ SwContentFrame* GetColumnEnd( const SwLayoutFrame* pColFrame )
     return pRet;
 }
 
-SwWhichColumn fnColumnPrev = &GetPrevColumn;
-SwWhichColumn fnColumnCurr = &GetCurrColumn;
-SwWhichColumn fnColumnNext = &GetNextColumn;
 SwPosColumn fnColumnStart = &GetColumnStt;
 SwPosColumn fnColumnEnd = &GetColumnEnd;
 
