@@ -419,6 +419,9 @@ public:
 
     /// @see vcl::ITiledRenderable::getPointer().
     virtual Pointer getPointer() override;
+
+    /// @see vcl::ITiledRenderable::getTrackedChanges().
+    OUString getTrackedChanges() override;
 };
 
 class ScDrawPagesObj : public cppu::WeakImplHelper<

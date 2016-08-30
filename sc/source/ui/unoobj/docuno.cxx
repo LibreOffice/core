@@ -115,6 +115,7 @@
 #include "drawsh.hxx"
 #include "drtxtob.hxx"
 #include "transobj.hxx"
+#include "chgtrack.hxx"
 
 #include "sc.hrc"
 
@@ -944,6 +945,19 @@ Pointer ScModelObj::getPointer()
         return Pointer();
 
     return pGridWindow->GetPointer();
+}
+
+OUString ScModelObj::getTrackedChanges()
+{
+    OUString aRet;
+
+    if (pDocShell)
+    {
+        if (ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack())
+            aRet = pChangeTrack->GetChangeTrackInfo();
+    }
+
+    return aRet;
 }
 
 void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& /*rArguments*/)

@@ -1199,6 +1199,8 @@ public:
     void AppendCloned( ScChangeAction* pAppend );
     SC_DLLPUBLIC ScChangeTrack* Clone( ScDocument* pDocument ) const;
     static void MergeActionState( ScChangeAction* pAct, const ScChangeAction* pOtherAct );
+    /// Get info about all ScChangeAction elements.
+    OUString GetChangeTrackInfo();
 };
 
 #endif
