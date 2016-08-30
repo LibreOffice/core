@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_c8e28d9f",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4646,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-30T21:08:13Z",
+      "side": 1,
+      "message": "This unnecessarily creates an OUString from OUStringBuffer, copies 6 characters to create another OUString at which to compare if it equals \"[DBNum\".\n\nInstead, use\n\n aFormatStr.indexOf( \"[DBNum\", nPosInsertLCID-8) \u003d\u003d nPosInsertLCID-8",
+      "range": {
+        "startLine": 4646,
+        "startChar": 11,
+        "endLine": 4646,
+        "endChar": 79
+      },
+      "revId": "ce61cc70ce15bedcf43f7db5bce297e49b2243f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_e8c67115",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4713,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-30T21:08:13Z",
+      "side": 1,
+      "message": "Why remember the position here? All the next [] conditions, tags and modifiers are added to aPrefix before that is appended to aStr.",
+      "revId": "ce61cc70ce15bedcf43f7db5bce297e49b2243f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_08cc8534",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4765,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-30T21:08:13Z",
+      "side": 1,
+      "message": "Why remember the position here?",
+      "revId": "ce61cc70ce15bedcf43f7db5bce297e49b2243f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_48d67dc6",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4776,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-30T21:08:13Z",
+      "side": 1,
+      "message": "Why remember the position here?",
+      "revId": "ce61cc70ce15bedcf43f7db5bce297e49b2243f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_28d149ce",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4777,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-08-30T21:08:13Z",
+      "side": 1,
+      "message": "Actually the position is to be remembered only here, after the if ( !aPrefix.isEmpty() ) block that may add the prefix.",
+      "revId": "ce61cc70ce15bedcf43f7db5bce297e49b2243f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
