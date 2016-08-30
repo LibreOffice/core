@@ -461,13 +461,12 @@ bool SvxAutoCorrect::FnChgOrdinalNumber(
         bool bFoundEnd = false;
         bool isValidNumber = true;
         sal_Int32 i = nEndPos;
-
         while (i > nSttPos)
         {
             i--;
             bool isDigit = rCC.isDigit(rTxt, i);
             if (bFoundEnd)
-                isValidNumber |= isDigit;
+                isValidNumber &= (isDigit || !rCC.isLetter(rTxt, i));
 
             if (isDigit && !bFoundEnd)
             {
