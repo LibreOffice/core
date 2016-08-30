@@ -70,7 +70,8 @@ public:
      * The 'verify' method actually has to execute the mail merge by
      * calling executeMailMerge() after modifying the job arguments.
      */
-    void executeMailMergeTest(const char* filename, const char* datasource, const char* tablename, bool file, int selection)
+    void executeMailMergeTest( const char* filename, const char* datasource, const char* tablename,
+                               bool file, int selection, const char* column )
     {
         maMMtestFilename = filename;
         header();
@@ -79,8 +80,9 @@ public:
         utl::TempFile aTempDir(nullptr, true);
         const OUString aWorkDir = aTempDir.GetURL();
         const OUString aURI( m_directories.getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(datasource) );
-        OUString aDBName = registerDBsource( aURI, aWorkDir );
-        initMailMergeJobAndArgs( filename, tablename, aDBName, "LOMM_", aWorkDir, file, selection );
+        const OUString aPrefix = column ? OUString::createFromAscii( column ) : "LOMM_";
+        const OUString aDBName = registerDBsource( aURI, aWorkDir );
+        initMailMergeJobAndArgs( filename, tablename, aDBName, aPrefix, aWorkDir, file, selection, column != nullptr );
 
         verify();
         finish();
@@ -130,7 +132,8 @@ public:
     }
 
     void initMailMergeJobAndArgs( const char* filename, const char* tablename, const OUString &aDBName,
-                                  const OUString &aPrefix, const OUString &aWorkDir, bool file, int nDataSets )
+                                  const OUString &aPrefix, const OUString &aWorkDir, bool file, int nDataSets,
+                                  const bool bPrefixIsColumn )
     {
         uno::Reference< task::XJob > xJob( getMultiServiceFactory()->createInstance( "com.sun.star.text.MailMerge" ), uno::UNO_QUERY_THROW );
         mxJob.set( xJob );
@@ -143,6 +146,9 @@ public:
         args.push_back( beans::NamedValue( OUString( UNO_NAME_DATA_SOURCE_NAME ), uno::Any( aDBName ) ) );
         args.push_back( beans::NamedValue( OUString( UNO_NAME_OUTPUT_URL ), uno::Any( aWorkDir ) ) );
         args.push_back( beans::NamedValue( OUString( UNO_NAME_FILE_NAME_PREFIX ), uno::Any( aPrefix )) );
+
+        if (bPrefixIsColumn)
+            args.push_back( beans::NamedValue( OUString( UNO_NAME_FILE_NAME_FROM_COLUMN ), uno::Any( true ) ) );
 
         if (tablename)
         {
@@ -174,6 +180,7 @@ public:
 
         const beans::NamedValue *pArguments = mSeqMailMergeArgs.getConstArray();
         bool bOk = true;
+        bool bMMFilenameFromColumn = false;
         sal_Int32 nArgs = mSeqMailMergeArgs.getLength();
 
         for (sal_Int32 i = 0; i < nArgs; ++i) {
@@ -187,6 +194,8 @@ public:
                 bOk &= rValue >>= mailMergeOutputPrefix;
             else if (rName == UNO_NAME_OUTPUT_TYPE)
                 bOk &= rValue >>= mnCurOutputType;
+            else if (rName == UNO_NAME_FILE_NAME_FROM_COLUMN)
+                bOk &= rValue >>= bMMFilenameFromColumn;
         }
 
         CPPUNIT_ASSERT(bOk);
@@ -205,7 +214,8 @@ public:
         else
         {
             CPPUNIT_ASSERT(res == true);
-            loadMailMergeDocument( 0 );
+            if( !bMMFilenameFromColumn )
+                loadMailMergeDocument( 0 );
         }
     }
 
@@ -221,24 +231,29 @@ public:
         return parseExportInternal( mailMergeOutputURL + "/" + name, rStreamName );
     }
 
+    void loadMailMergeDocument( const OUString &filename )
+    {
+        assert( mnCurOutputType == text::MailMergeType::FILE );
+        if (mxComponent.is())
+            mxComponent->dispose();
+        // Output name early, so in the case of a hang, the name of the hanging input file is visible.
+        std::cout << filename << ",";
+        mnStartTime = osl_getGlobalTimer();
+        mxComponent = loadFromDesktop(mailMergeOutputURL + "/" + filename, "com.sun.star.text.TextDocument");
+        CPPUNIT_ASSERT( mxComponent.is());
+        OString name2 = OUStringToOString( filename, RTL_TEXTENCODING_UTF8 );
+        discardDumpedLayout();
+        if (mustCalcLayoutOf(name2.getStr()))
+            calcLayout();
+    }
+
     /**
      Loads number-th document from mail merge. Requires file output from mail merge.
     */
     void loadMailMergeDocument( int number )
     {
-        assert( mnCurOutputType == text::MailMergeType::FILE );
-        if (mxComponent.is())
-            mxComponent->dispose();
         OUString name = mailMergeOutputPrefix + OUString::number( number ) + ".odt";
-        // Output name early, so in the case of a hang, the name of the hanging input file is visible.
-        std::cout << name << ",";
-        mnStartTime = osl_getGlobalTimer();
-        mxComponent = loadFromDesktop(mailMergeOutputURL + "/" + name, "com.sun.star.text.TextDocument");
-        CPPUNIT_ASSERT( mxComponent.is());
-        OString name2 = OUStringToOString( name, RTL_TEXTENCODING_UTF8 );
-        discardDumpedLayout();
-        if (mustCalcLayoutOf(name2.getStr()))
-            calcLayout();
+        loadMailMergeDocument( name );
     }
 
 protected:
@@ -254,7 +269,7 @@ protected:
     const char* maMMtestFilename;
 };
 
-#define DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, file, BaseClass, selection) \
+#define DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, file, BaseClass, selection, column) \
     class TestName : public BaseClass { \
     protected: \
         virtual OUString getTestName() override { return OUString(#TestName); } \
@@ -264,7 +279,7 @@ protected:
         CPPUNIT_TEST_SUITE_END(); \
     \
         void MailMerge() { \
-            executeMailMergeTest(filename, datasource, tablename, file, selection); \
+            executeMailMergeTest(filename, datasource, tablename, file, selection, column); \
         } \
         void verify() override; \
     }; \
@@ -273,14 +288,17 @@ protected:
 
 // Will generate the resulting document in mxMMDocument.
 #define DECLARE_SHELL_MAILMERGE_TEST(TestName, filename, datasource, tablename) \
-    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, false, MMTest, 0)
+    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, false, MMTest, 0, nullptr)
 
 // Will generate documents as files, use loadMailMergeDocument().
 #define DECLARE_FILE_MAILMERGE_TEST(TestName, filename, datasource, tablename) \
-    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, true, MMTest, 0)
+    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, true, MMTest, 0, nullptr)
 
 #define DECLARE_SHELL_MAILMERGE_TEST_SELECTION(TestName, filename, datasource, tablename, selection) \
-    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, false, MMTest, selection)
+    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, false, MMTest, selection, nullptr)
+
+#define DECLARE_FILE_MAILMERGE_TEST_COLUMN(TestName, filename, datasource, tablename, column) \
+    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, true, MMTest, 0, column)
 
 int MMTest::documentStartPageNumber( int document ) const
 {   // See documentStartPageNumber() .
@@ -565,6 +583,23 @@ DECLARE_SHELL_MAILMERGE_TEST(test_sections_first_last, "sections_first_last.odt"
         CPPUNIT_ASSERT_EQUAL( !bOdd, pPageFrm->IsEmptyPage() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt16( bOdd ? 1 : 2 ), pPageFrm->GetVirtPageNum() );
         pPageFrm = static_cast<const SwPageFrame*>( pPageFrm->GetNext() );
+    }
+}
+
+DECLARE_FILE_MAILMERGE_TEST_COLUMN(testDirMailMerge, "simple-mail-merge.odt", "10-testing-addresses.ods", "testing-addresses", "Filename")
+{
+    executeMailMerge();
+    for( int doc = 1;
+         doc <= 10;
+         ++doc )
+    {
+        OUString filename = "sub/lastname" + OUString::number( doc )
+                          + " firstname" + OUString::number( doc ) + ".odt";
+        loadMailMergeDocument( filename );
+        CPPUNIT_ASSERT_EQUAL( 1, getPages());
+        CPPUNIT_ASSERT_EQUAL( OUString( "Fixed text." ), getRun( getParagraph( 1 ), 1 )->getString());
+        CPPUNIT_ASSERT_EQUAL( OUString( "lastname" + OUString::number( doc )), getRun( getParagraph( 2 ), 1 )->getString());
+        CPPUNIT_ASSERT_EQUAL( OUString( "Another fixed text." ), getRun( getParagraph( 3 ), 1 )->getString());
     }
 }
 

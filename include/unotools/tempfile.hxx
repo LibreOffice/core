@@ -66,8 +66,11 @@ public:
                     rLeadingChars="abc" means "abc0","abc1" and so on, depending on existing files in the folder ).
                     The extension string may be f.e. ".txt" or "", if no extension string is given, ".tmp" is used
                         @param  _bStartWithZero If set to false names will be generated like "abc","abc0","abc1"
+                        @param  bCreateParentDirs If rLeadingChars contains a slash, this will create the required
+                                parent directories.
                     */
-                    TempFile( const OUString& rLeadingChars, bool _bStartWithZero=true, const OUString* pExtension=nullptr, const OUString* pParent=nullptr);
+                    TempFile( const OUString& rLeadingChars, bool _bStartWithZero=true, const OUString* pExtension=nullptr,
+                              const OUString* pParent=nullptr, bool bCreateParentDirs=false );
 
                     /**
                     TempFile will be removed from disk in dtor if EnableKillingFile(true) was called before.

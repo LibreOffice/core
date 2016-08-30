@@ -225,11 +225,39 @@ private:
 
 sal_uInt32 UniqueTokens::globalValue = SAL_MAX_UINT32;
 
+namespace
+{
+    class TempDirCreatedObserver : public DirectoryCreationObserver
+    {
+    public:
+        virtual void DirectoryCreated(const rtl::OUString& aDirectoryUrl) override
+        {
+            File::setAttributes( aDirectoryUrl, osl_File_Attribute_OwnRead |
+                osl_File_Attribute_OwnWrite | osl_File_Attribute_OwnExe );
+        };
+    };
+};
+
 OUString lcl_createName(
     const OUString& rLeadingChars, Tokens & tokens, const OUString* pExtension,
-    const OUString* pParent, bool bDirectory, bool bKeep, bool bLock)
+    const OUString* pParent, bool bDirectory, bool bKeep, bool bLock,
+    bool bCreateParentDirs )
 {
-    OUString aName = ConstructTempDir_Impl( pParent ) + rLeadingChars;
+    OUString aName = ConstructTempDir_Impl( pParent );
+    if ( bCreateParentDirs )
+    {
+        sal_Int32 nOffset = rLeadingChars.lastIndexOf("/");
+        if (-1 != nOffset)
+        {
+            OUString aDirName = aName + OUString( rLeadingChars.getStr(), nOffset );
+            TempDirCreatedObserver observer;
+            FileBase::RC err = Directory::createPath( aDirName, &observer );
+            if ( err != FileBase::E_None && err != FileBase::E_EXIST )
+                return OUString();
+        }
+    }
+    aName += rLeadingChars;
+
     OUString token;
     while (tokens.next(&token))
     {
@@ -306,7 +334,8 @@ OUString CreateTempName_Impl( const OUString* pParent, bool bKeep, bool bDir = t
     aEyeCatcher += aPidString;
 #endif
     UniqueTokens t;
-    return lcl_createName(aEyeCatcher, t, nullptr, pParent, bDir, bKeep, false);
+    return lcl_createName( aEyeCatcher, t, nullptr, pParent, bDir, bKeep,
+                           false, false);
 }
 
 OUString TempFile::CreateTempName()
@@ -328,13 +357,16 @@ TempFile::TempFile( const OUString* pParent, bool bDirectory )
     aName = CreateTempName_Impl( pParent, true, bDirectory );
 }
 
-TempFile::TempFile( const OUString& rLeadingChars, bool _bStartWithZero, const OUString* pExtension, const OUString* pParent)
+TempFile::TempFile( const OUString& rLeadingChars, bool _bStartWithZero,
+                    const OUString* pExtension, const OUString* pParent,
+                    bool bCreateParentDirs )
     : pStream( nullptr )
     , bIsDirectory( false )
     , bKillingFileEnabled( false )
 {
     SequentialTokens t(_bStartWithZero);
-    aName = lcl_createName(rLeadingChars, t, pExtension, pParent, false/*bDirectory*/, true, true);
+    aName = lcl_createName( rLeadingChars, t, pExtension, pParent, false,
+                            true, true, bCreateParentDirs );
 }
 
 TempFile::~TempFile()

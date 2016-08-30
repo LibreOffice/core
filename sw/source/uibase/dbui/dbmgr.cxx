@@ -1314,7 +1314,6 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     {
         nStartRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
 
-        OUString sPath = rMergeDescriptor.sPath;
         OUString sColumnData;
 
         // Read the indicated data column, which should contain a valid mail
@@ -1322,28 +1321,32 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         if( bMT_EMAIL || bColumnName )
         {
             sColumnData = GetDBField( xColumnProp, aColumnDBFormat );
-            if( !bMT_EMAIL )
-            {
-                if (sColumnData.isEmpty())
-                    sColumnData = "_";
-                sPath += sColumnData;
-            }
         }
 
         // create a new temporary file name - only done once in case of bCreateSingleFile
         if( bNeedsTempFiles && ( !bWorkDocInitialized || !bCreateSingleFile ))
         {
-            INetURLObject aEntry(sPath);
+            OUString sPath = rMergeDescriptor.sPath;
             OUString sLeading;
+
             //#i97667# if the name is from a database field then it will be used _as is_
-            if( !sColumnData.isEmpty() )
-                sLeading = sColumnData;
+            if( bColumnName && !bMT_EMAIL )
+            {
+                if (!sColumnData.isEmpty())
+                    sLeading = sColumnData;
+                else
+                    sLeading = "_";
+            }
             else
+            {
+                INetURLObject aEntry( sPath );
                 sLeading = aEntry.GetBase();
-            aEntry.removeSegment();
-            sPath = aEntry.GetMainURL( INetURLObject::NO_DECODE );
+                aEntry.removeSegment();
+                sPath = aEntry.GetMainURL( INetURLObject::NO_DECODE );
+            }
+
             OUString sExt(comphelper::string::stripStart(pStoreToFilter->GetDefaultExtension(), '*'));
-            aTempFile.reset( new utl::TempFile(sLeading, sColumnData.isEmpty(), &sExt, &sPath) );
+            aTempFile.reset( new utl::TempFile(sLeading, sColumnData.isEmpty(), &sExt, &sPath, true) );
             if( !aTempFile->IsValid() )
             {
                 ErrorHandler::HandleError( ERRCODE_IO_NOTSUPPORTED );
