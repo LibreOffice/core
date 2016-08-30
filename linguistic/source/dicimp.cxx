@@ -122,7 +122,7 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, bool &bNeg )
                 if (aTagValue == "<none>")
                     nLng = LANGUAGE_NONE;
                 else
-                    nLng = LanguageTag::convertToLanguageTypeWithFallback(
+                    nLng = LanguageTag::convertToLanguageType(
                             OStringToOUString( aTagValue, RTL_TEXTENCODING_ASCII_US));
             }
 
