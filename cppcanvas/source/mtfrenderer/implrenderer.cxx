@@ -986,7 +986,7 @@ namespace cppcanvas
                 long nFullStrikeoutWidth = 0;
                 OUString aStrikeoutText;
                 while( (nFullStrikeoutWidth+=nStrikeoutWidth ) < nMaxWidth+1 )
-                    aStrikeoutText += OUString(pChars[0]);
+                    aStrikeoutText += OUStringLiteral1(pChars[0]);
 
                 sal_Int32 nLen = aStrikeoutText.getLength();
 
