@@ -72,10 +72,8 @@ LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang )
 {
     static LocaleDataWrapper aLclDtaWrp( SvtSysLocale().GetLanguageTag() );
 
-    const LanguageTag &rLcl = aLclDtaWrp.getLoadedLanguageTag();
-    LanguageTag aLcl( nLang );
-    if (aLcl != rLcl)
-        aLclDtaWrp.setLanguageTag( aLcl );
+    if (nLang != aLclDtaWrp.getLoadedLanguageTag().getLanguageType())
+        aLclDtaWrp.setLanguageTag( LanguageTag( nLang ) );
     return aLclDtaWrp;
 }
 
