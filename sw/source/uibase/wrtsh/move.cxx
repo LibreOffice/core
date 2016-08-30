@@ -252,7 +252,7 @@ bool SwWrtShell::GoStart( bool bKeepArea, bool *pMoveTable,
             return true;
     }
     // Regions ???
-    return SwCursorShell::MoveRegion( fnRegionCurrAndSkip, fnRegionStart ) ||
+    return SwCursorShell::MoveRegion( GotoCurrRegionAndSkip, fnRegionStart ) ||
            SwCursorShell::SttEndDoc(true);
 }
 
@@ -286,7 +286,7 @@ bool SwWrtShell::GoEnd(bool bKeepArea, bool *pMoveTable)
         }
     }
     // Regions ???
-    return SwCursorShell::MoveRegion( fnRegionCurrAndSkip, fnRegionEnd ) ||
+    return SwCursorShell::MoveRegion( GotoCurrRegionAndSkip, fnRegionEnd ) ||
            SwCursorShell::SttEndDoc(false);
 }
 

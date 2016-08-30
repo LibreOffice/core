@@ -73,7 +73,9 @@ extern SwPosColumn fnColumnStart, fnColumnEnd;
 
 // Direction-parameter for MoveRegion (ranges!)
 typedef bool (*SwWhichRegion)( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );
-extern SwWhichRegion fnRegionPrev, fnRegionCurr, fnRegionNext, fnRegionCurrAndSkip;
+bool GotoPrevRegion( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );
+bool GotoNextRegion( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );
+bool GotoCurrRegionAndSkip( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );
 extern SwMoveFnCollection const & fnRegionStart;
 extern SwMoveFnCollection const & fnRegionEnd;
 

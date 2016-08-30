@@ -19,7 +19,6 @@
 
 #include <pam.hxx>
 #include <pamtyp.hxx>
-#include <trvlreg.hxx>
 
 static SwMoveFnCollection aFwrd = {
     /* fnNd         */  &GoNext,
@@ -52,10 +51,6 @@ SwMoveFnCollection const & fnSectionEnd       = aBwrd;
 SwMoveFnCollection const & fnTableStart = aFwrd;
 SwMoveFnCollection const & fnTableEnd = aBwrd;
 
-SwWhichRegion fnRegionPrev = &GotoPrevRegion;
-SwWhichRegion fnRegionCurr = &GotoCurrRegion;
-SwWhichRegion fnRegionCurrAndSkip = &GotoCurrRegionAndSkip;
-SwWhichRegion fnRegionNext = &GotoNextRegion;
 SwMoveFnCollection const & fnRegionStart = aFwrd;
 SwMoveFnCollection const & fnRegionEnd = aBwrd;
 

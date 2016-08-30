@@ -352,9 +352,9 @@ IMPL_LINK_TYPED( SwView, MoveNavigationHdl, void*, p, void )
         case NID_REG :
             rSh.EnterStdMode();
             if(bNext)
-                rSh.MoveRegion(fnRegionNext, fnRegionStart);
+                rSh.MoveRegion(GotoNextRegion, fnRegionStart);
             else
-                rSh.MoveRegion(fnRegionPrev, fnRegionStart);
+                rSh.MoveRegion(GotoPrevRegion, fnRegionStart);
 
         break;
         case NID_BKM :

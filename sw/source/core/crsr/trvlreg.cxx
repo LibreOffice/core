@@ -26,7 +26,6 @@
 #include <callnk.hxx>
 #include <pamtyp.hxx>
 #include <section.hxx>
-#include <trvlreg.hxx>
 
 bool GotoPrevRegion( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegion,
                         bool bInReadOnly )
@@ -133,36 +132,6 @@ bool GotoNextRegion( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegi
         }
     } while( pNd );
     return false;
-}
-
-bool GotoCurrRegion( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegion,
-                        bool bInReadOnly )
-{
-    SwSectionNode* pNd = rCurrentCursor.GetNode().FindSectionNode();
-    if( !pNd )
-        return false;
-
-    SwPosition* pPos = rCurrentCursor.GetPoint();
-    bool bMoveBackward = &fnPosRegion == &fnMoveBackward;
-
-    SwContentNode* pCNd;
-    if( bMoveBackward )
-    {
-        SwNodeIndex aIdx( *pNd->EndOfSectionNode() );
-        pCNd = SwNodes::GoPrevSection( &aIdx, true, !bInReadOnly );
-    }
-    else
-    {
-        SwNodeIndex aIdx( *pNd );
-        pCNd = pNd->GetNodes().GoNextSection( &aIdx, true, !bInReadOnly );
-    }
-
-    if( pCNd )
-    {
-        pPos->nNode = *pCNd;
-        pPos->nContent.Assign( pCNd, bMoveBackward ? pCNd->Len() : 0 );
-    }
-    return nullptr != pCNd;
 }
 
 bool GotoCurrRegionAndSkip( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegion,
