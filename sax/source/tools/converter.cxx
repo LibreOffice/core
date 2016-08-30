@@ -820,7 +820,7 @@ bool Converter::convertDuration(double& rfTime,
                 }
                 else
                 {
-                    sDoubleStr += OUString(c);
+                    sDoubleStr += OUStringLiteral1(c);
                 }
             }
         }
