@@ -41,8 +41,10 @@
 #include <svl/itempool.hxx>
 #include <sfx2/app.hxx>
 #include <unotools/useroptions.hxx>
+#include <unotools/datetime.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <memory>
+#include <boost/property_tree/json_parser.hpp>
 
 IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionCellListEntry )
 IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionLinkEntry )
@@ -4704,6 +4706,56 @@ void ScChangeTrack::MergeActionState( ScChangeAction* pAct, const ScChangeAction
             pAct->SetRejected();
         }
     }
+}
+
+/// Get info about a single ScChangeAction element.
+static void lcl_getTrackedChange(ScDocument* pDoc, int nIndex, ScChangeAction* pAction, boost::property_tree::ptree& rRedlines)
+{
+    if (pAction->GetType() == SC_CAT_CONTENT)
+    {
+        boost::property_tree::ptree aRedline;
+        aRedline.put("index", nIndex);
+
+        const OUString& sAuthor = pAction->GetUser();
+        aRedline.put("author", sAuthor.toUtf8().getStr());
+
+        aRedline.put("type", "Modify");
+
+        aRedline.put("comment", pAction->GetComment().toUtf8().getStr());
+
+        OUString aDescription;
+        pAction->GetDescription(aDescription, pDoc, true);
+        aRedline.put("description", aDescription);
+
+        OUString sDateTime = utl::toISO8601(pAction->GetDateTimeUTC().GetUNODateTime());
+        aRedline.put("dateTime", sDateTime.toUtf8().getStr());
+
+        rRedlines.push_back(std::make_pair("", aRedline));
+    }
+}
+
+OUString ScChangeTrack::GetChangeTrackInfo()
+{
+    boost::property_tree::ptree aRedlines;
+
+    ScChangeAction* pAction = GetFirst();
+    if (pAction)
+    {
+        int i = 0;
+        lcl_getTrackedChange(pDoc, i++, pAction, aRedlines);
+        ScChangeAction* pLastAction = GetLast();
+        while (pAction != pLastAction)
+        {
+            pAction = pAction->GetNext();
+            lcl_getTrackedChange(pDoc, i++, pAction, aRedlines);
+        }
+    }
+
+    boost::property_tree::ptree aTree;
+    aTree.add_child("redlines", aRedlines);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    return OUString::fromUtf8(aStream.str().c_str());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

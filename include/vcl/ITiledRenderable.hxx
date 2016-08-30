@@ -204,6 +204,14 @@ public:
     virtual void setClientVisibleArea(const Rectangle& /*rRectangle*/)
     {
     }
+
+    /// Implementation for
+    /// lok::Document::getCommandValues(".uno:AcceptTrackedChanges") when there
+    /// is no matching UNO API.
+    virtual OUString getTrackedChanges()
+    {
+        return OUString();
+    }
 };
 
 } // namespace vcl

@@ -1820,45 +1820,57 @@ static char* getTrackedChanges(LibreOfficeKitDocument* pThis)
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
     uno::Reference<document::XRedlinesSupplier> xRedlinesSupplier(pDocument->mxComponent, uno::UNO_QUERY);
-    if (!xRedlinesSupplier.is())
-        return nullptr;
-
-    uno::Reference<container::XEnumeration> xRedlines = xRedlinesSupplier->getRedlines()->createEnumeration();
-    boost::property_tree::ptree aRedlines;
-    for (size_t nIndex = 0; xRedlines->hasMoreElements(); ++nIndex)
+    std::stringstream aStream;
+    if (xRedlinesSupplier.is())
     {
-        uno::Reference<beans::XPropertySet> xRedline(xRedlines->nextElement(), uno::UNO_QUERY);
-        boost::property_tree::ptree aRedline;
-        aRedline.put("index", nIndex);
+        uno::Reference<container::XEnumeration> xRedlines = xRedlinesSupplier->getRedlines()->createEnumeration();
+        boost::property_tree::ptree aRedlines;
+        for (size_t nIndex = 0; xRedlines->hasMoreElements(); ++nIndex)
+        {
+            uno::Reference<beans::XPropertySet> xRedline(xRedlines->nextElement(), uno::UNO_QUERY);
+            boost::property_tree::ptree aRedline;
+            aRedline.put("index", nIndex);
 
-        OUString sAuthor;
-        xRedline->getPropertyValue("RedlineAuthor") >>= sAuthor;
-        aRedline.put("author", sAuthor.toUtf8().getStr());
+            OUString sAuthor;
+            xRedline->getPropertyValue("RedlineAuthor") >>= sAuthor;
+            aRedline.put("author", sAuthor.toUtf8().getStr());
 
-        OUString sType;
-        xRedline->getPropertyValue("RedlineType") >>= sType;
-        aRedline.put("type", sType.toUtf8().getStr());
+            OUString sType;
+            xRedline->getPropertyValue("RedlineType") >>= sType;
+            aRedline.put("type", sType.toUtf8().getStr());
 
-        OUString sComment;
-        xRedline->getPropertyValue("RedlineComment") >>= sComment;
-        aRedline.put("comment", sComment.toUtf8().getStr());
+            OUString sComment;
+            xRedline->getPropertyValue("RedlineComment") >>= sComment;
+            aRedline.put("comment", sComment.toUtf8().getStr());
 
-        OUString sDescription;
-        xRedline->getPropertyValue("RedlineDescription") >>= sDescription;
-        aRedline.put("description", sDescription.toUtf8().getStr());
+            OUString sDescription;
+            xRedline->getPropertyValue("RedlineDescription") >>= sDescription;
+            aRedline.put("description", sDescription.toUtf8().getStr());
 
-        util::DateTime aDateTime;
-        xRedline->getPropertyValue("RedlineDateTime") >>= aDateTime;
-        OUString sDateTime = utl::toISO8601(aDateTime);
-        aRedline.put("dateTime", sDateTime.toUtf8().getStr());
+            util::DateTime aDateTime;
+            xRedline->getPropertyValue("RedlineDateTime") >>= aDateTime;
+            OUString sDateTime = utl::toISO8601(aDateTime);
+            aRedline.put("dateTime", sDateTime.toUtf8().getStr());
 
-        aRedlines.push_back(std::make_pair("", aRedline));
+            aRedlines.push_back(std::make_pair("", aRedline));
+        }
+
+        boost::property_tree::ptree aTree;
+        aTree.add_child("redlines", aRedlines);
+        boost::property_tree::write_json(aStream, aTree);
+    }
+    else
+    {
+        ITiledRenderable* pDoc = getTiledRenderable(pThis);
+        if (!pDoc)
+        {
+            gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+            return nullptr;
+        }
+        OUString aTrackedChanges = pDoc->getTrackedChanges();
+        aStream << aTrackedChanges.toUtf8();
     }
 
-    boost::property_tree::ptree aTree;
-    aTree.add_child("redlines", aRedlines);
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
     char* pJson = strdup(aStream.str().c_str());
     return pJson;
 }
