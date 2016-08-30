@@ -659,20 +659,15 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
         PassThrough pass;
         switch (expr->getConstructor()->getNumParams()) {
         case 1:
+            if (!loplugin::TypeCheck(
+                    expr->getConstructor()->getParamDecl(0)->getType())
+                .Typedef("sal_Unicode").GlobalNamespace())
             {
-                APSInt v;
-                if (!expr->getArg(0)->isIntegerConstantExpr(
-                        v, compiler.getASTContext()))
-                {
-                    return true;
-                }
-                if (v.ugt(0xFFFF)) {
-                    return true;
-                }
-                kind = ChangeKind::SingleChar;
-                pass = PassThrough::NonEmptyConstantString;
-                break;
+                return true;
             }
+            kind = ChangeKind::SingleChar;
+            pass = PassThrough::NonEmptyConstantString;
+            break;
         case 2:
             {
                 auto arg = expr->getArg(0);
@@ -1436,24 +1431,21 @@ void StringConstant::handleOUStringCtor(
             << callee->getQualifiedNameAsString() << expr->getSourceRange();
         return;
     }
-    APSInt res;
     if (e3->getNumArgs() == 1
-        && e3->getArg(0)->IgnoreParenImpCasts()->isIntegerConstantExpr(
-            res, compiler.getASTContext()))
+        && e3->getConstructor()->getNumParams() == 1
+        && (loplugin::TypeCheck(
+                e3->getConstructor()->getParamDecl(0)->getType())
+            .Typedef("sal_Unicode").GlobalNamespace()))
     {
         // It may not be easy to rewrite OUString(c), esp. given there is no
         // OUString ctor taking an OUStringLiteral1 arg, so don't warn there:
         if (!explicitFunctionalCastNotation) {
-            uint64_t n = res.getZExtValue();
-            if (n <= 0xFFFF) {
-                report(
-                    DiagnosticsEngine::Warning,
-                    ("in call of %0, replace OUString constructed from a"
-                     " sal_Unicode constant with an OUStringLiteral1"),
-                    e3->getExprLoc())
-                    << callee->getQualifiedNameAsString()
-                    << expr->getSourceRange();
-            }
+            report(
+                DiagnosticsEngine::Warning,
+                ("in call of %0, replace OUString constructed from a"
+                 " sal_Unicode with an OUStringLiteral1"),
+                e3->getExprLoc())
+                << callee->getQualifiedNameAsString() << expr->getSourceRange();
         }
         return;
     }
