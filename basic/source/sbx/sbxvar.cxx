@@ -255,7 +255,7 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
         }
         if( cType != ' ' )
         {
-            aTmp += OUString(sal_Unicode(cType));
+            aTmp += OUStringLiteral1(cType);
         }
     }
     aTmp += "(";
@@ -288,7 +288,7 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
         }
         if( cType != ' ' )
         {
-            aTmp += OUString((sal_Unicode)cType);
+            aTmp += OUStringLiteral1(cType);
             if( i->eType & SbxARRAY )
             {
                 aTmp += "()";

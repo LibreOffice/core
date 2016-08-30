@@ -156,7 +156,7 @@ static SbxVariableRef Operand
                     break;
                 }
             }
-            aString += OUString(*p++);
+            aString += OUStringLiteral1(*p++);
         }
         refVar->PutString( aString );
     }
