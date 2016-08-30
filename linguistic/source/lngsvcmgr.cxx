@@ -839,7 +839,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
 
                 LanguageType nLang = LANGUAGE_NONE;
                 if (!aKeyText.isEmpty())
-                    nLang = LanguageTag::convertToLanguageTypeWithFallback( aKeyText );
+                    nLang = LanguageTag::convertToLanguageType( aKeyText );
 
                 GetSpellCheckerDsp_Impl( false );     // don't set service list, it will be done below
                 pSpellDsp->SetServiceList( LanguageTag::convertToLocale(nLang), aSvcImplNames );
@@ -862,7 +862,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
 
                 LanguageType nLang = LANGUAGE_NONE;
                 if (!aKeyText.isEmpty())
-                    nLang = LanguageTag::convertToLanguageTypeWithFallback( aKeyText );
+                    nLang = LanguageTag::convertToLanguageType( aKeyText );
 
                 if (SvtLinguConfig().HasGrammarChecker())
                 {
@@ -888,7 +888,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
 
                 LanguageType nLang = LANGUAGE_NONE;
                 if (!aKeyText.isEmpty())
-                    nLang = LanguageTag::convertToLanguageTypeWithFallback( aKeyText );
+                    nLang = LanguageTag::convertToLanguageType( aKeyText );
 
                 GetHyphenatorDsp_Impl( false );   // don't set service list, it will be done below
                 pHyphDsp->SetServiceList( LanguageTag::convertToLocale(nLang), aSvcImplNames );
@@ -911,7 +911,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
 
                 LanguageType nLang = LANGUAGE_NONE;
                 if (!aKeyText.isEmpty())
-                    nLang = LanguageTag::convertToLanguageTypeWithFallback( aKeyText );
+                    nLang = LanguageTag::convertToLanguageType( aKeyText );
 
                 GetThesaurusDsp_Impl( false );  // don't set service list, it will be done below
                 pThesDsp->SetServiceList( LanguageTag::convertToLocale(nLang), aSvcImplNames );
