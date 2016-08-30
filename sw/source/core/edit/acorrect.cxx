@@ -163,7 +163,7 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
 
     // text attributes with dummy characters must not be replaced!
     bool bDoReplace = true;
-    sal_Int32 const nLen = rText.getLength();
+    sal_Int32 const nLen = pNd->GetText().getLength();
     for ( sal_Int32 n = 0; n < nLen; ++n )
     {
         sal_Unicode const Char = pNd->GetText()[n + nPos];
