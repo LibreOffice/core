@@ -2839,9 +2839,9 @@ bool SvxTwoLinesItem::GetPresentation( SfxItemPresentation /*ePres*/,
     {
         rText = EE_RESSTR( RID_SVXITEMS_TWOLINES );
         if( GetStartBracket() )
-            rText = OUString(GetStartBracket()) + rText;
+            rText = OUStringLiteral1(GetStartBracket()) + rText;
         if( GetEndBracket() )
-            rText += OUString(GetEndBracket());
+            rText += OUStringLiteral1(GetEndBracket());
     }
     return true;
 }

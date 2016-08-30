@@ -731,7 +731,7 @@ namespace accessibility
             // paragraphs inbetween are fully included
             for( ; i<aEndIndex.nPara; ++i )
             {
-                aRes += OUString(cNewLine);
+                aRes += OUStringLiteral1(cNewLine);
                 aRes += mpImpl->GetParagraph(i).getText();
             }
 
@@ -741,7 +741,7 @@ namespace accessibility
                 //we need to add a "\n" before we add the last part of the string.
                 if ( !bEnd && aEndIndex.nIndex )
                 {
-                    aRes += OUString(cNewLine);
+                    aRes += OUStringLiteral1(cNewLine);
                 }
                 aRes += mpImpl->GetParagraph(i).getTextRange( 0, aEndIndex.nIndex );
             }
@@ -750,11 +750,11 @@ namespace accessibility
         //or at the end of the result string.
         if ( bStart )
         {
-            aRes = OUString(cNewLine) + aRes;
+            aRes = OUStringLiteral1(cNewLine) + aRes;
         }
         if ( bEnd )
         {
-            aRes += OUString(cNewLine);
+            aRes += OUStringLiteral1(cNewLine);
         }
         return aRes;
     }
@@ -890,7 +890,7 @@ namespace accessibility
             mpImpl->CorrectTextSegment( aResult, aPos.nPara );
             if ( bLineBreak )
             {
-                aResult.SegmentText = OUString(cNewLine) + aResult.SegmentText;
+                aResult.SegmentText = OUStringLiteral1(cNewLine) + aResult.SegmentText;
             }
        }
 

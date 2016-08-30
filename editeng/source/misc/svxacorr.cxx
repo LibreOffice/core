@@ -1099,7 +1099,7 @@ bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const OUString& rT
             aConverted += rCC.lowercase(OUString(rTxt[i]));
         else
             // This is not an alphabetic letter.  Leave it as-is.
-            aConverted += OUString( rTxt[i] );
+            aConverted += OUStringLiteral1( rTxt[i] );
     }
 
     // Replace the word.
