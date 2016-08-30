@@ -44,8 +44,7 @@ namespace connectivity
         class OOO_DLLPUBLIC_FILE OCode
         {
         public:
-            OCode();
-            virtual ~OCode();
+            virtual ~OCode() = default;
 
             inline static void * SAL_CALL operator new( size_t nSize )
                 { return ::rtl_allocateMemory( nSize ); }

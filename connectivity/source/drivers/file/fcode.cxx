@@ -32,16 +32,6 @@ using namespace connectivity::file;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 
-
-OCode::OCode()
-{
-}
-
-OCode::~OCode()
-{
-}
-
-
 OOperandRow::OOperandRow(sal_uInt16 _nPos, sal_Int32 _rType)
     : OOperand(_rType)
     , m_nRowPos(_nPos)
