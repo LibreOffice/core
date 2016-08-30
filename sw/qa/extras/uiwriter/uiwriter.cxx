@@ -399,7 +399,7 @@ void SwUiWriterTest::testBookmarkCopy()
     rIDCO.SplitNode(*aPaM.GetPoint(), false);
     rIDCO.InsertString(aPaM, "bar");
     aPaM.SetMark();
-    aPaM.MovePara(GoCurrPara, GetfnParaStart());
+    aPaM.MovePara(GoCurrPara, fnParaStart);
     rIDMA.makeMark(aPaM, "Mark", IDocumentMarkAccess::MarkType::BOOKMARK);
     aPaM.Exchange();
     aPaM.DeleteMark();

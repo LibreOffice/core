@@ -1036,7 +1036,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
         rSh.InsertTable(
             pModOpt->GetInsTableFlags(bHTML),
             nRows, nCols, text::HoriOrientation::FULL, (pSelection ? pTAutoFormat : nullptr) );
-        rSh.MoveTable( GotoPrevTable, GetfnTableStart() );
+        rSh.MoveTable( GotoPrevTable, fnTableStart );
 
         if( pSelection && pTableSet )
             SetTabSet();
@@ -1173,7 +1173,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 pWait.reset(new SwWait( *pView->GetDocShell(), true ));
         }
 
-        rSh.MoveTable( GotoCurrTable, GetfnTableStart() );
+        rSh.MoveTable( GotoCurrTable, fnTableStart );
         if( !pSelection && ( pTableSet || pTAutoFormat ))
         {
             if( pTableSet )
@@ -1368,13 +1368,13 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                             // at the end.
 
                             rSh.SwCursorShell::MovePara(
-                                    GoCurrPara, GetfnParaStart() );
+                                    GoCurrPara, fnParaStart );
                             pMark = rSh.SetBookmark(
                                     vcl::KeyCode(),
                                     OUString(),
                                     OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
                             rSh.SwCursorShell::MovePara(
-                                    GoCurrPara, GetfnParaEnd() );
+                                    GoCurrPara, fnParaEnd );
                             bSetCursor = false;
                         }
                     }
@@ -1462,14 +1462,14 @@ void SwInsertDBColAutoPilot::SetTabSet()
                     rSh.GetTableFormat()->GetName() )
         pTableSet->ClearItem( FN_PARAM_TABLE_NAME );
 
-    rSh.MoveTable( GotoCurrTable, GetfnTableStart() );
+    rSh.MoveTable( GotoCurrTable, fnTableStart );
     rSh.SetMark();
-    rSh.MoveTable( GotoCurrTable, GetfnTableEnd() );
+    rSh.MoveTable( GotoCurrTable, fnTableEnd );
 
     ItemSetToTableParam( *pTableSet, rSh );
 
     rSh.ClearMark();
-    rSh.MoveTable( GotoCurrTable, GetfnTableStart() );
+    rSh.MoveTable( GotoCurrTable, fnTableStart );
 }
 
 DB_ColumnConfigData::~DB_ColumnConfigData() {}

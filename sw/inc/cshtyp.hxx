@@ -45,8 +45,8 @@ typedef bool (*SwWhichPara)( SwPaM&, SwMoveFnCollection const & );
 bool GoPrevPara( SwPaM&, SwMoveFnCollection const &);
 SW_DLLPUBLIC bool GoCurrPara( SwPaM&, SwMoveFnCollection const &);
 bool GoNextPara( SwPaM&, SwMoveFnCollection const &);
-extern SwMoveFnCollection const & fnParaStart;
-extern SwMoveFnCollection const & fnParaEnd;
+extern SW_DLLPUBLIC SwMoveFnCollection const & fnParaStart;
+extern SW_DLLPUBLIC SwMoveFnCollection const & fnParaEnd;
 
 // Direction-parameter for MoveSection.
 typedef bool (*SwWhichSection)( SwPaM&, SwMoveFnCollection const & );
@@ -60,8 +60,8 @@ typedef bool (*SwWhichTable)( SwPaM&, SwMoveFnCollection const &, bool bInReadOn
 SW_DLLPUBLIC bool GotoPrevTable( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );
 SW_DLLPUBLIC bool GotoCurrTable( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );
 bool GotoNextTable( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );
-extern SwMoveFnCollection const & fnTableStart;
-extern SwMoveFnCollection const & fnTableEnd;
+extern SW_DLLPUBLIC SwMoveFnCollection const & fnTableStart;
+extern SW_DLLPUBLIC SwMoveFnCollection const & fnTableEnd;
 
 // Direction-parameter for MoveColumn
 typedef SwLayoutFrame * (*SwWhichColumn)( const SwLayoutFrame * );
@@ -109,12 +109,6 @@ enum class SwDocPositions
     OtherStart,
     OtherEnd
 };
-
-SW_DLLPUBLIC SwMoveFnCollection const & GetfnParaStart();
-SW_DLLPUBLIC SwMoveFnCollection const & GetfnParaEnd();
-
-SW_DLLPUBLIC SwMoveFnCollection const & GetfnTableStart();
-SW_DLLPUBLIC SwMoveFnCollection const & GetfnTableEnd();
 
 #endif // INCLUDED_SW_INC_CSHTYP_HXX
 

@@ -57,21 +57,4 @@ SwMoveFnCollection const & fnRegionEnd = aBwrd;
 SwMoveFnCollection const & fnMoveBackward = aBwrd;
 SwMoveFnCollection const & fnMoveForward  = aFwrd;
 
-SwMoveFnCollection const & GetfnParaStart()
-{
-     return  fnParaStart;
-}
-SwMoveFnCollection const & GetfnParaEnd()
-{
-     return  fnParaEnd;
-}
-SwMoveFnCollection const & GetfnTableStart()
-{
-    return fnTableStart;
-}
-SwMoveFnCollection const & GetfnTableEnd()
-{
-    return fnTableEnd;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
