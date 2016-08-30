@@ -188,6 +188,8 @@ public:
     virtual void setDefaultStringValue();
 
     void sendPropertyToParent();
+    OOXMLFastContextHandler* getParent() const { return mpParent; }
+    void setGridAfter(const OOXMLValue::Pointer_t& pGridAfter) { mpGridAfter = pGridAfter; }
 
 protected:
     OOXMLFastContextHandler * mpParent;
@@ -222,6 +224,7 @@ protected:
     const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() { return m_xContext;}
 
     bool inPositionV;
+    OOXMLValue::Pointer_t mpGridAfter;
 
 private:
     void operator =(OOXMLFastContextHandler &) = delete;
@@ -403,6 +406,7 @@ public:
     static void startRow();
     void endRow();
     void handleGridBefore( const OOXMLValue::Pointer_t& val );
+    void handleGridAfter(const OOXMLValue::Pointer_t& rValue);
 private:
     static OOXMLProperty::Pointer_t fakeNoBorder( Id id );
 };

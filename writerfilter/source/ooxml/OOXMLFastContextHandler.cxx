@@ -1331,6 +1331,14 @@ void OOXMLFastContextHandlerTextTableRow::startRow()
 
 void OOXMLFastContextHandlerTextTableRow::endRow()
 {
+    if (mpGridAfter)
+    {
+        // Grid after is the same as grid before, the empty cells are just
+        // inserted after the real ones, not before.
+        handleGridBefore(mpGridAfter);
+        mpGridAfter = nullptr;
+    }
+
     startParagraphGroup();
 
     if (isForwardEvents())
@@ -1362,6 +1370,17 @@ void OOXMLFastContextHandlerTextTableRow::endRow()
 
     endCharacterGroup();
     endParagraphGroup();
+}
+
+void OOXMLFastContextHandlerTextTableRow::handleGridAfter(const OOXMLValue::Pointer_t& rValue)
+{
+    if (OOXMLFastContextHandler* pTableRowProperties = getParent())
+    {
+        if (OOXMLFastContextHandler* pTableRow = pTableRowProperties->getParent())
+            // Save the value into the table row context, so it can be handled
+            // right before the end of the row.
+            pTableRow->setGridAfter(rValue);
+    }
 }
 
 // Handle w:gridBefore here by faking necessary input that'll fake cells. I'm apparently
