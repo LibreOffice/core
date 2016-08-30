@@ -53,6 +53,7 @@
 #include <frmfmt.hxx>
 #include <ftnidx.hxx>
 #include <fmtftn.hxx>
+#include <fmtlsplt.hxx>
 #include <charfmt.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <fltshell.hxx>
