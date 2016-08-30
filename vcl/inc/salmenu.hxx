@@ -63,7 +63,7 @@ public:
 
     virtual bool VisibleMenuBar() = 0;  // must return true to actually DISPLAY native menu bars
                                             // otherwise only menu messages are processed (eg, OLE on Windows)
-
+    virtual void ShowMenuBar( bool ) {}
     virtual void InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos ) = 0;
     virtual void RemoveItem( unsigned nPos ) = 0;
     virtual void SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos ) = 0;
