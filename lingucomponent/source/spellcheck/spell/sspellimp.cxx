@@ -270,8 +270,11 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
     return bRes;
 }
 
-sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocale )
+sal_Int16 SpellChecker::GetSpellFailure(const OUString &rWord, const Locale &rLocale)
 {
+    if (rWord.getLength() > MAXWORDLEN)
+        return -1;
+
     Hunspell * pMS = nullptr;
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
 
@@ -334,7 +337,11 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
 #endif
 
                     aDicts[i] = new Hunspell(aTmpaff.getStr(),aTmpdict.getStr());
+#if defined(H_DEPRECATED)
+                    aDEncs[i] = getTextEncodingFromCharset(aDicts[i]->get_dict_encoding().c_str());
+#else
                     aDEncs[i] = getTextEncodingFromCharset(aDicts[i]->get_dic_encoding());
+#endif
                 }
                 pMS = aDicts[i];
                 eEnc = aDEncs[i];
@@ -351,8 +358,12 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
                     return -1;
 
                 OString aWrd(OU2ENC(nWord,eEnc));
-                int rVal = pMS->spell(aWrd.getStr());
-                if (rVal != 1) {
+#if defined(H_DEPRECATED)
+                bool bVal = pMS->spell(std::string(aWrd.getStr()));
+#else
+                bool bVal = pMS->spell(aWrd.getStr()) != 0;
+#endif
+                if (!bVal) {
                     if (extrachar && (eEnc != RTL_TEXTENCODING_UTF8)) {
                         OUStringBuffer aBuf(nWord);
                         n = aBuf.getLength();
@@ -370,8 +381,12 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
                         }
                         OUString aWord(aBuf.makeStringAndClear());
                         OString bWrd(OU2ENC(aWord, eEnc));
-                        rVal = pMS->spell(bWrd.getStr());
-                        if (rVal == 1) return -1;
+#if defined(H_DEPRECATED)
+                        bVal = pMS->spell(std::string(bWrd.getStr()));
+#else
+                        bVal = pMS->spell(bWrd.getStr()) != 0;
+#endif
+                        if (bVal) return -1;
                     }
                     nRes = SpellFailure::SPELLING_ERROR;
                 } else {
@@ -470,10 +485,23 @@ Reference< XSpellAlternatives >
 
             if (pMS)
             {
-                char ** suglst = nullptr;
                 OString aWrd(OU2ENC(nWord,eEnc));
+#if defined(H_DEPRECATED)
+                std::vector<std::string> suglst = pMS->suggest(std::string(aWrd.getStr()));
+                if (!suglst.empty())
+                {
+                    aStr.realloc(numsug + suglst.size());
+                    OUString *pStr = aStr.getArray();
+                    for (size_t ii = 0; ii < suglst.size(); ++ii)
+                    {
+                        OUString cvtwrd(suglst[ii].c_str(), suglst[ii].size(), eEnc);
+                        pStr[numsug + ii] = cvtwrd;
+                    }
+                    numsug += suglst.size();
+                }
+#else
+                char ** suglst = nullptr;
                 int count = pMS->suggest(&suglst, aWrd.getStr());
-
                 if (count)
                 {
                     aStr.realloc( numsug + count );
@@ -485,8 +513,8 @@ Reference< XSpellAlternatives >
                     }
                     numsug += count;
                 }
-
                 pMS->free_list(&suglst, count);
+#endif
             }
         }
 
