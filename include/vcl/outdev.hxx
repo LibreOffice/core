@@ -592,7 +592,7 @@ public:
 #endif
 protected:
 
-    virtual void                CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate = false);
+    virtual void                CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate);
 
     SAL_DLLPRIVATE void         drawOutDevDirect ( const OutputDevice* pSrcDev, SalTwoRect& rPosAry );
 
@@ -623,7 +623,7 @@ public:
     bool                        IsOutputEnabled() const { return mbOutput; }
     bool                        IsDeviceOutputNecessary() const { return (mbOutput && mbDevOutput); }
 
-    void                        SetAntialiasing( AntialiasingFlags nMode = AntialiasingFlags::NONE );
+    void                        SetAntialiasing( AntialiasingFlags nMode );
     AntialiasingFlags           GetAntialiasing() const { return mnAntialiasing; }
 
     void                        SetDrawMode( DrawModeFlags nDrawMode );
@@ -718,7 +718,7 @@ public:
 
     void                        DrawPixel( const Point& rPt );
     void                        DrawPixel( const Point& rPt, const Color& rColor );
-    void                        DrawPixel( const tools::Polygon& rPts, const Color* pColors = nullptr );
+    void                        DrawPixel( const tools::Polygon& rPts, const Color* pColors );
     void                        DrawPixel( const tools::Polygon& rPts, const Color& rColor );
 
     Color                       GetPixel( const Point& rPt ) const;
@@ -866,7 +866,7 @@ public:
 private:
 
     SAL_DLLPRIVATE void         ImplDrawPolygon( const tools::Polygon& rPoly, const tools::PolyPolygon* pClipPolyPoly = nullptr );
-    SAL_DLLPRIVATE void         ImplDrawPolyPolygon( const tools::PolyPolygon& rPolyPoly, const tools::PolyPolygon* pClipPolyPoly = nullptr );
+    SAL_DLLPRIVATE void         ImplDrawPolyPolygon( const tools::PolyPolygon& rPolyPoly, const tools::PolyPolygon* pClipPolyPoly );
     SAL_DLLPRIVATE void         ImplDrawPolyPolygon( sal_uInt16 nPoly, const tools::PolyPolygon& rPolyPoly );
     // #i101491#
     // Helper who implements the DrawPolyPolygon functionality for basegfx::B2DPolyPolygon
@@ -1095,7 +1095,7 @@ public:
                                                  sal_uLong nLayoutWidth = 0, const long* pDXArray = nullptr ) const;
 
     bool                        GetTextOutlines( basegfx::B2DPolyPolygonVector &rVector,
-                                                 const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
+                                                 const OUString& rStr, sal_Int32 nBase, sal_Int32 nIndex = 0,
                                                  sal_Int32 nLen = -1, bool bOptimize = true,
                                                  sal_uLong nLayoutWidth = 0, const long* pDXArray = nullptr ) const;
 
@@ -1159,11 +1159,11 @@ public:
     float                       approximate_char_width() const;
 
     void                        DrawTextArray( const Point& rStartPt, const OUString& rStr,
-                                               const long* pDXAry = nullptr,
+                                               const long* pDXAry,
                                                sal_Int32 nIndex = 0,
                                                sal_Int32 nLen = -1,
                                                SalLayoutFlags flags = SalLayoutFlags::NONE);
-    long                        GetTextArray( const OUString& rStr, long* pDXAry = nullptr,
+    long                        GetTextArray( const OUString& rStr, long* pDXAry,
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                               vcl::TextLayoutCache const* = nullptr) const;
 
@@ -1173,13 +1173,13 @@ public:
                                                  const OUString& rStr,
                                                  sal_Int32 nIndex = 0, sal_Int32 nLen = -1);
     sal_Int32                   GetTextBreak( const OUString& rStr, long nTextWidth,
-                                              sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
+                                              sal_Int32 nIndex, sal_Int32 nLen = -1,
                                               long nCharExtra = 0,
                                               vcl::TextLayoutCache const* = nullptr) const;
     sal_Int32                   GetTextBreak( const OUString& rStr, long nTextWidth,
                                               sal_Unicode nExtraChar, sal_Int32& rExtraCharPos,
                                               sal_Int32 nIndex, sal_Int32 nLen,
-                                              long nCharExtra = 0,
+                                              long nCharExtra,
                                               vcl::TextLayoutCache const* = nullptr) const;
     std::shared_ptr<vcl::TextLayoutCache> CreateTextLayoutCache(OUString const&) const;
 
@@ -1266,7 +1266,7 @@ public:
     static void                 EndFontSubstitution();
     static void                 AddFontSubstitute( const OUString& rFontName,
                                                    const OUString& rReplaceFontName,
-                                                   AddFontSubstituteFlags nFlags = AddFontSubstituteFlags::NONE );
+                                                   AddFontSubstituteFlags nFlags );
     static void                 RemoveFontSubstitute( sal_uInt16 n );
     static sal_uInt16           GetFontSubstituteCount();
 
@@ -1321,7 +1321,7 @@ private:
 public:
 
     SystemTextLayoutData        GetSysTextLayoutData( const Point& rStartPt, const OUString& rStr,
-                                                      sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
+                                                      sal_Int32 nIndex, sal_Int32 nLen = -1,
                                                       const long* pDXAry = nullptr ) const;
 
     SAL_DLLPRIVATE bool         ImplIsAntiparallel() const ;

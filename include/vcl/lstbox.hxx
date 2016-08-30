@@ -205,7 +205,7 @@ public:
     sal_Int32           GetSavedValue() const { return mnSaveValue; }
     bool                IsValueChangedFromSaved() const { return mnSaveValue != GetSelectEntryPos(); }
 
-    void                SetSeparatorPos( sal_Int32  n = LISTBOX_ENTRY_NOTFOUND );
+    void                SetSeparatorPos( sal_Int32 n );
     sal_Int32           GetSeparatorPos() const;
 
     bool                IsTravelSelect() const;

@@ -91,7 +91,7 @@ public:
                                        const Rectangle& rScreenRect,
                                        const OUString& rHelpText,
                                        const OUString& rLongHelpText,
-                                       QuickHelpFlags nStyle = QuickHelpFlags::NONE );
+                                       QuickHelpFlags nStyle );
     static bool         ShowQuickHelp( vcl::Window* pParent,
                                        const Rectangle& rScreenRect,
                                        const OUString& rHelpText,
@@ -103,7 +103,7 @@ public:
     static sal_uLong    ShowPopover(vcl::Window* pParent,
                                     const Rectangle& rScreenRect,
                                     const OUString& rText,
-                                    QuickHelpFlags nStyle = QuickHelpFlags::NONE);
+                                    QuickHelpFlags nStyle);
     static void         UpdatePopover(sal_uLong nId,
                                       vcl::Window* pParent,
                                       const Rectangle& rScreenRect,

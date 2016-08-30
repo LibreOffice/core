@@ -141,7 +141,7 @@ public:
     void            Resizing( Size& rSize );
     void            Tracking( const TrackingEvent& rTEvt );
 
-    void            ShowTitleButton( TitleButton nButton, bool bVisible = true );
+    void            ShowTitleButton( TitleButton nButton, bool bVisible );
 
     void            SetMinOutputSizePixel( const Size& rSize );
 
@@ -159,7 +159,7 @@ public:
 
     void            setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
-                                     PosSizeFlags nFlags = PosSizeFlags::All );
+                                     PosSizeFlags nFlags );
     Point           GetPosPixel() const;
     Size            GetSizePixel() const;
 };
@@ -196,7 +196,7 @@ public:
     // be availbale from the toolkit
     void        SetPosSizePixel( vcl::Window *pWin, long nX, long nY,
                                 long nWidth, long nHeight,
-                                PosSizeFlags nFlags = PosSizeFlags::All );
+                                PosSizeFlags nFlags );
     Rectangle   GetPosSizePixel( const vcl::Window *pWin );
 };
 

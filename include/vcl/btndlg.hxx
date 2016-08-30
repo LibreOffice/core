@@ -73,7 +73,7 @@ public:
     void                SetButtonText( sal_uInt16 nId, const OUString& rText );
     void                SetButtonHelpText( sal_uInt16 nId, const OUString& rText );
 
-    void                SetFocusButton( sal_uInt16 nId = BUTTONDIALOG_BUTTON_NOTFOUND ) { mnFocusButtonId = nId; }
+    void                SetFocusButton( sal_uInt16 nId ) { mnFocusButtonId = nId; }
 
 protected:
                         ButtonDialog( WindowType nType );

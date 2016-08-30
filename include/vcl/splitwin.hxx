@@ -145,16 +145,16 @@ public:
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
 
     void                InsertItem( sal_uInt16 nId, vcl::Window* pWindow, long nSize,
-                                    sal_uInt16 nPos = SPLITWINDOW_APPEND, sal_uInt16 nIntoSetId = 0,
+                                    sal_uInt16 nPos, sal_uInt16 nIntoSetId = 0,
                                     SplitWindowItemFlags nBits = SplitWindowItemFlags::NONE );
     void                InsertItem( sal_uInt16 nId, long nSize,
-                                    sal_uInt16 nPos = SPLITWINDOW_APPEND, sal_uInt16 nIntoSetId = 0,
+                                    sal_uInt16 nPos, sal_uInt16 nIntoSetId = 0,
                                     SplitWindowItemFlags nBits = SplitWindowItemFlags::NONE );
     void                RemoveItem( sal_uInt16 nId );
     void                Clear();
 
     void                SplitItem( sal_uInt16 nId, long nNewSize,
-                                   bool bPropSmall = false,
+                                   bool bPropSmall,
                                    bool bPropGreat = false );
     void                SetItemSize( sal_uInt16 nId, long nNewSize );
     long                GetItemSize( sal_uInt16 nId ) const;
@@ -178,7 +178,7 @@ public:
     sal_uInt16          GetItemCount( sal_uInt16 nSetId = 0 ) const;
     bool                IsItemValid( sal_uInt16 nId ) const;
 
-    void                SetAlign( WindowAlign eNewAlign = WindowAlign::Top );
+    void                SetAlign( WindowAlign eNewAlign );
     WindowAlign         GetAlign() const { return meAlign; }
     bool                IsHorizontal() const { return mbHorz; }
 
