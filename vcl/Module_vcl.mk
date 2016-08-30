@@ -107,7 +107,7 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
 	CppunitTest_vcl_mapmode \
 	CppunitTest_vcl_outdev \
 	CppunitTest_vcl_app_test \
-	CppunitTest_vcl_wmf_test \
+	$(if $(MERGELIBS),,CppunitTest_vcl_wmf_test) \
 ))
 
 
