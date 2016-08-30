@@ -274,12 +274,12 @@ OUString SvxMultiPathDialog::GetPath() const
         else
         {
             if ( !sNewPath.isEmpty() )
-                sNewPath += OUString(cDelim);
+                sNewPath += OUStringLiteral1(cDelim);
             sNewPath += *static_cast<OUString*>(pEntry->GetUserData());
         }
     }
     if ( !sNewPath.isEmpty() )
-        sNewPath += OUString(cDelim);
+        sNewPath += OUStringLiteral1(cDelim);
     sNewPath += sWritable;
 
     return sNewPath;
@@ -293,7 +293,7 @@ OUString SvxPathSelectDialog::GetPath() const
     for ( sal_Int32 i = 0; i < m_pPathLB->GetEntryCount(); ++i )
     {
         if ( !sNewPath.isEmpty() )
-            sNewPath += OUString(cDelim);
+            sNewPath += OUStringLiteral1(cDelim);
         sNewPath += *static_cast<OUString*>(m_pPathLB->GetEntryData(i));
     }
 
