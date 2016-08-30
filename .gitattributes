@@ -2,3 +2,4 @@
 *.sdw binary
 *.svg binary
 *.jcs binary
+schema/*/* export-ignore
