@@ -2317,7 +2317,7 @@ IMPL_LINK_TYPED( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
                     UCharSet::const_iterator aChar = pCharSet->begin();
                     for( ; aChar != pCharSet->end(); ++aChar )
                     {
-                        aRepresentation += OUString( *aChar );
+                        aRepresentation += OUStringLiteral1( *aChar );
                     }
                 }
                 pInfo->SetRepresentation( aRepresentation );
