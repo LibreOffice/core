@@ -23,12 +23,13 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include "xmlimprt.hxx"
+#include "importcontext.hxx"
 
 #include "tabprotection.hxx"
 
 class ScXMLChangeTrackingImportHelper;
 
-class ScXMLBodyContext : public SvXMLImportContext
+class ScXMLBodyContext : public ScXMLImportContext
 {
     OUString   sPassword;
     ScPasswordHash  meHash1;
@@ -37,19 +38,34 @@ class ScXMLBodyContext : public SvXMLImportContext
     bool            bHadCalculationSettings;
 
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScXMLBodyContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList );
+
+    ScXMLBodyContext( ScXMLImport& rImport, sal_Int32 nElement,
+                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList );
+
     virtual ~ScXMLBodyContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
                                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList )
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) override;
+
     virtual void EndElement() override;
+
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement)
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+
     virtual void Characters( const OUString& rChars ) override;
+
+    virtual void SAL_CALL characters(const OUString & aChars)
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 };
 
 #endif
