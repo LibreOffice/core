@@ -36,6 +36,7 @@
 
 #include <stddef.h>
 #include <string.h>
+#include <utility>
 
 /*========================================================================
  *
@@ -82,13 +83,6 @@ inline sal_uInt16 ntohs (sal_uInt16 n) { return n; }
 inline sal_uInt32 htonl (sal_uInt32 h) { return h; }
 inline sal_uInt32 ntohl (sal_uInt32 n) { return n; }
 #endif /* OSL_BIGENDIAN */
-
-/** swap.
- */
-template< typename T > void swap (T & lhs, T & rhs)
-{
-    T tmp = lhs; lhs = rhs; rhs = tmp;
-}
 
 /*========================================================================
  *
@@ -139,7 +133,7 @@ public:
 
     void swap (SharedCount & rhs) // nothrow
     {
-        store::swap(m_pCount, rhs.m_pCount);
+        std::swap(m_pCount, rhs.m_pCount);
     }
 
     SharedCount (SharedCount const & rhs) // nothrow
@@ -181,8 +175,8 @@ struct OStorePageGuard
 
     void swap (OStorePageGuard & rhs)
     {
-        store::swap(m_nMagic, rhs.m_nMagic);
-        store::swap(m_nCRC32, rhs.m_nCRC32);
+        std::swap(m_nMagic, rhs.m_nMagic);
+        std::swap(m_nCRC32, rhs.m_nCRC32);
     }
 
     OStorePageGuard (OStorePageGuard const & rhs)
@@ -234,9 +228,9 @@ struct OStorePageDescriptor
 
     void swap (OStorePageDescriptor & rhs)
     {
-        store::swap(m_nAddr, rhs.m_nAddr);
-        store::swap(m_nSize, rhs.m_nSize);
-        store::swap(m_nUsed, rhs.m_nUsed);
+        std::swap(m_nAddr, rhs.m_nAddr);
+        std::swap(m_nSize, rhs.m_nSize);
+        std::swap(m_nUsed, rhs.m_nUsed);
     }
 
     OStorePageDescriptor (const OStorePageDescriptor & rhs)
@@ -330,7 +324,7 @@ struct OStorePageLink
 
     void swap (OStorePageLink & rhs)
     {
-        store::swap(m_nAddr, rhs.m_nAddr);
+        std::swap(m_nAddr, rhs.m_nAddr);
     }
 
     OStorePageLink (const OStorePageLink & rhs)
@@ -552,8 +546,8 @@ public:
     void swap (PageHolder & rhs) // nothrow
     {
         m_refcount.swap(rhs.m_refcount);
-        store::swap(m_pagedata,  rhs.m_pagedata);
-        store::swap(m_allocator, rhs.m_allocator);
+        std::swap(m_pagedata,  rhs.m_pagedata);
+        std::swap(m_allocator, rhs.m_allocator);
     }
 
     PageHolder (PageHolder const & rhs) // nothrow
