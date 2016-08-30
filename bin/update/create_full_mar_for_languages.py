@@ -50,7 +50,10 @@ def main():
         mar_file_name = make_complete_mar_name(target_dir, filename_prefix, language)
 
         subprocess.call([os.path.join(current_dir_path, 'make_full_update.sh'), mar_file_name, directory])
-        subprocess.call([mar_executable, '-C', target_dir, '-d', certificate_path, '-n', certificate_name, '-s', mar_file_name, make_complete_mar_name(target_dir, filename_prefix + '_signed', language)])
+
+        signed_mar_file = make_complete_mar_name(target_dir, filename_prefix + '_signed', language)
+        subprocess.call([mar_executable, '-C', target_dir, '-d', certificate_path, '-n', certificate_name, '-s', mar_file_name, signed_mar_file])
+        os.rename(signed_mar_file, mar_file_name)
 
         lang_infos.append(create_lang_infos(mar_file_name, language))
 
