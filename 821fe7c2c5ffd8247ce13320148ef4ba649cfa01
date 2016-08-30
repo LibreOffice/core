@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_a81d5968",
+        "filename": "avmedia/inc/helpids.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-30T09:14:43Z",
+      "side": 1,
+      "message": "HID  stands for \u0027help ID\u0027 and that is something different than normal string you need in UI\n\nPlease add the string(s) to mediacontrol.hrc (#define) and mediacontrol.src (actual string) files (in avmedia/source/framework folder)\n\nOf course, you may define a new help ID here and assign it to the widget in MediaControl class, but a new HID has to come with a new help text as well ;-)",
+      "revId": "821fe7c2c5ffd8247ce13320148ef4ba649cfa01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_c81a8d6e",
+        "filename": "avmedia/source/framework/mediacontrol.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-30T09:14:43Z",
+      "side": 1,
+      "message": "Use the string from mediacontrol.src file here, as outlined in the other comment",
+      "revId": "821fe7c2c5ffd8247ce13320148ef4ba649cfa01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_e82591ae",
+        "filename": "avmedia/source/framework/mediacontrol.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-30T09:14:43Z",
+      "side": 1,
+      "message": "This chunk of code ...",
+      "revId": "821fe7c2c5ffd8247ce13320148ef4ba649cfa01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_082ba583",
+        "filename": "avmedia/source/framework/mediacontrol.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-08-30T09:14:43Z",
+      "side": 1,
+      "message": "is almost identical to this one. \n\nConsider making in a separate private function (that\u0027ll take OUString as an argument) and then call it from both places where you need it",
+      "revId": "821fe7c2c5ffd8247ce13320148ef4ba649cfa01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
