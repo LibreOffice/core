@@ -1330,8 +1330,7 @@ lcl_SetTableBoxWidths2(SwTable & rTable, size_t const nMaxBoxes,
     for (size_t nTmpLine = 0; nTmpLine < rLines.size(); ++nTmpLine)
     {
         SwTableBoxes & rBoxes = rLines[nTmpLine]->GetTabBoxes();
-        if (rBoxes.empty())
-            continue;
+        assert(!rBoxes.empty()); // ensured by convertToTable
         size_t const nMissing = nMaxBoxes - rBoxes.size();
         if (nMissing)
         {
