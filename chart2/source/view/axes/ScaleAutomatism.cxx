@@ -105,9 +105,6 @@ ScaleAutomatism::ScaleAutomatism( const ScaleData& rSourceScale, const Date& rNu
     if( m_aSourceScale.Origin >>= fExplicitOrigin )
         expandValueRange( fExplicitOrigin, fExplicitOrigin);
 }
-ScaleAutomatism::~ScaleAutomatism()
-{
-}
 
 void ScaleAutomatism::resetValueRange( )
 {

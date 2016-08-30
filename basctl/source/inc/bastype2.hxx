@@ -139,7 +139,6 @@ public:
         OUString      const& rMethodName,
         EntryType eType
     );
-    virtual ~EntryDescriptor ();
 
     ScriptDocument const&   GetDocument() const { return m_aDocument; }
 

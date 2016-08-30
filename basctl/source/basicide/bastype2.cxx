@@ -157,12 +157,7 @@ EntryDescriptor::EntryDescriptor (
     OSL_ENSURE( m_aDocument.isValid(), "EntryDescriptor::EntryDescriptor: invalid document!" );
 }
 
-EntryDescriptor::~EntryDescriptor()
-{ }
-
 // TreeListBox
-
-
 TreeListBox::TreeListBox (vcl::Window* pParent, ResId const& rRes)
     : SvTreeListBox( pParent, IDEResId( sal::static_int_cast<sal_uInt16>( rRes.GetId() ) ) )
     , m_aNotifier( *this )

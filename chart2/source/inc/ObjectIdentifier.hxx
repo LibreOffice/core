@@ -93,7 +93,6 @@ public:
     ObjectIdentifier( const OUString& rObjectCID );
     ObjectIdentifier( const css::uno::Reference< css::drawing::XShape >& rxShape );
     ObjectIdentifier( const css::uno::Any& rAny );
-    virtual ~ObjectIdentifier();
 
     ObjectIdentifier( const ObjectIdentifier& rOID );
     bool operator==( const ObjectIdentifier& rOID ) const;

@@ -271,10 +271,6 @@ ObjectIdentifier::ObjectIdentifier( const Any& rAny )
     }
 }
 
-ObjectIdentifier::~ObjectIdentifier()
-{
-}
-
 ObjectIdentifier::ObjectIdentifier( const ObjectIdentifier& rOID )
     :m_aObjectCID( rOID.m_aObjectCID )
     ,m_xAdditionalShape( rOID.m_xAdditionalShape )

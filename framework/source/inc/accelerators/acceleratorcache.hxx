@@ -85,9 +85,6 @@ class AcceleratorCache
         */
         AcceleratorCache(const AcceleratorCache& rCopy);
 
-        /** @short  does nothing real. */
-        virtual ~AcceleratorCache();
-
         /** @short  write changes back to the original container.
 
             @param  rCopy

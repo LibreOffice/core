@@ -60,13 +60,13 @@ public:
         , bHasId(false)
     {
     }
+
     SvStringHashEntry( const OString& rName )
         : aName(rName)
         , nValue(0)
         , bHasId(true)
     {
     }
-    virtual ~SvStringHashEntry();
 
     const OString&  GetName() const { return aName; }
     bool            HasId() const { return bHasId; }

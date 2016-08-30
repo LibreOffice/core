@@ -84,9 +84,6 @@ ChartTypeParameter::ChartTypeParameter( sal_Int32 SubTypeIndex, bool HasXAxisWit
                     , mbRoundedEdge(false)
 {
 }
-ChartTypeParameter::~ChartTypeParameter()
-{
-}
 
 bool ChartTypeParameter::mapsToSameService( const ChartTypeParameter& rParameter ) const
 {

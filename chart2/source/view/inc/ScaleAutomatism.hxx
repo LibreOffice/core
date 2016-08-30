@@ -42,7 +42,6 @@ class ScaleAutomatism
 public:
     explicit            ScaleAutomatism(
                             const css::chart2::ScaleData& rSourceScale, const Date& rNullDate );
-    virtual             ~ScaleAutomatism();
 
     /** Expands own value range with the passed minimum and maximum.
      *

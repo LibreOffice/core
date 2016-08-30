@@ -60,7 +60,6 @@ public:
                     ,  bool _bSymbols = true, bool _bLines = true
                     , css::chart2::CurveStyle eCurveStyle = css::chart2::CurveStyle_LINES );
     ChartTypeParameter();
-    virtual ~ChartTypeParameter();
 
     bool mapsToSameService( const ChartTypeParameter& rParameter ) const;
     bool mapsToSimilarService( const ChartTypeParameter& rParameter, sal_Int32 nTheHigherTheLess ) const;

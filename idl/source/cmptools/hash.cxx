@@ -28,8 +28,6 @@
 
 #include <rtl/character.hxx>
 
-SvStringHashEntry::~SvStringHashEntry() { };
-
 SvHashTable::SvHashTable( sal_uInt32 nMaxEntries )
 {
     nMax = nMaxEntries;     // set max entries
