@@ -501,7 +501,7 @@ void update_checker()
         {
             update_info aUpdateInfo = parse_response(response_body);
             download_file(aUpdateInfo.aUpdateFile.aURL, aUpdateInfo.aUpdateFile.nSize, aUpdateInfo.aUpdateFile.aHash, "update.mar");
-            CreateValidUpdateDir();
+            CreateValidUpdateDir(aUpdateInfo);
         }
     }
     catch (const invalid_update_info&)
