@@ -1986,13 +1986,25 @@ namespace svgio
 
                 if(pSvgStyleAttributes)
                 {
-                    return pSvgStyleAttributes->getFill();
+                    const basegfx::BColor* pFill = pSvgStyleAttributes->getFill();
+
+                    if(mbIsClipPathContent)
+                    {
+                        if (pFill)
+                        {
+                            return pFill;
+                        }
+                        else
+                        {
+                            static basegfx::BColor aBlack(0.0, 0.0, 0.0);
+                            return &aBlack;
+                        }
+                    }
+                    else
+                    {
+                        return pFill;
+                    }
                 }
-            }
-            else if(mbIsClipPathContent)
-            {
-                static basegfx::BColor aBlack(0.0, 0.0, 0.0);
-                return &aBlack;
             }
 
             return nullptr;
