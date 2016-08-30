@@ -1115,7 +1115,7 @@ bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
         Pop(false);
         return false;
     }
-    MovePage( fnPageCurr, fnPageStart );
+    MovePage( GetThisFrame, GetFirstSub );
     SwPaM aCpyPam( *GetCursor()->GetPoint() );
     OUString sStartingPageDesc = GetPageDesc( GetCurPageDesc()).GetName();
     SwPageDesc* pDesc = rToFill.FindPageDescByName( sStartingPageDesc, true );
@@ -1143,7 +1143,7 @@ bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
         EndUndo(UNDO_INSERT);
     }
 
-    MovePage( fnPageCurr, fnPageEnd );
+    MovePage( GetThisFrame, GetLastSub );
     aCpyPam.SetMark();
     *aCpyPam.GetMark() = *GetCursor()->GetPoint();
 

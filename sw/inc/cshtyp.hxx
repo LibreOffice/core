@@ -33,9 +33,12 @@ typedef SwMoveFnCollection* SwMoveFn;
 // Type definition for CursorShell.
 // Direction-parameter for MovePage (initialized in SwContentFrame).
 typedef SwLayoutFrame * (*SwWhichPage)( const SwLayoutFrame * );
+SwLayoutFrame *GetPrevFrame( const SwLayoutFrame *pFrame );
+SwLayoutFrame *GetThisFrame( const SwLayoutFrame *pFrame );
+SwLayoutFrame *GetNextFrame( const SwLayoutFrame *pFrame );
 typedef SwContentFrame  * (*SwPosPage)( const SwLayoutFrame * );
-extern SwWhichPage fnPagePrev, fnPageCurr, fnPageNext;
-extern SwPosPage fnPageStart, fnPageEnd;
+SwContentFrame *GetFirstSub( const SwLayoutFrame *pLayout );
+SwContentFrame *GetLastSub( const SwLayoutFrame *pLayout );
 
 // Direction-parameter for MovePara (initialized in SwContentFrame).
 typedef SwMoveFnCollection* SwPosPara;

@@ -1070,14 +1070,6 @@ SwLayoutFrame *GetPrevFrame( const SwLayoutFrame *pFrame )
     return pPrev;
 }
 
-//Now we can also initialize de function pointers;
-//they are declared in cshtyp.hxx
-SwPosPage fnPageStart = GetFirstSub;
-SwPosPage fnPageEnd = GetLastSub;
-SwWhichPage fnPagePrev = GetPrevFrame;
-SwWhichPage fnPageCurr = GetThisFrame;
-SwWhichPage fnPageNext = GetNextFrame;
-
 /**
  * Returns the first/last Contentframe (controlled using the parameter fnPosPage)
  * of the current/previous/next page (controlled using the parameter fnWhichPage).

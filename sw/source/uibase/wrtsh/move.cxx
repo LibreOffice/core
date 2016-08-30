@@ -305,37 +305,37 @@ bool SwWrtShell::EndDoc( bool bSelect)
 bool SwWrtShell::SttNxtPg( bool bSelect )
 {
     ShellMoveCursor aTmp( this, bSelect );
-    return MovePage( fnPageNext, fnPageStart );
+    return MovePage( GetNextFrame, GetFirstSub );
 }
 
 void SwWrtShell::SttPrvPg( bool bSelect )
 {
     ShellMoveCursor aTmp( this, bSelect );
-    MovePage( fnPagePrev, fnPageStart );
+    MovePage( GetPrevFrame, GetFirstSub );
 }
 
 void SwWrtShell::EndNxtPg( bool bSelect )
 {
     ShellMoveCursor aTmp( this, bSelect );
-    MovePage( fnPageNext, fnPageEnd );
+    MovePage( GetNextFrame, GetLastSub );
 }
 
 bool SwWrtShell::EndPrvPg( bool bSelect )
 {
     ShellMoveCursor aTmp( this, bSelect );
-    return MovePage( fnPagePrev, fnPageEnd );
+    return MovePage( GetPrevFrame, GetLastSub );
 }
 
 bool SwWrtShell::SttPg( bool bSelect )
 {
     ShellMoveCursor aTmp( this, bSelect );
-    return MovePage( fnPageCurr, fnPageStart );
+    return MovePage( GetThisFrame, GetFirstSub );
 }
 
 bool SwWrtShell::EndPg( bool bSelect )
 {
     ShellMoveCursor aTmp( this, bSelect );
-    return MovePage( fnPageCurr, fnPageEnd );
+    return MovePage( GetThisFrame, GetLastSub );
 }
 
 bool SwWrtShell::SttPara( bool bSelect )
