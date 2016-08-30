@@ -273,49 +273,49 @@ void SwView::SpellStart( SvxSpellArea eWhich,
     Reference< XLinguProperties >  xProp = ::GetLinguPropertySet();
     bool bIsWrapReverse = !pConvArgs && xProp.is() && xProp->getIsWrapReverse();
 
-    SwDocPositions eStart = DOCPOS_START;
-    SwDocPositions eEnd   = DOCPOS_END;
-    SwDocPositions eCurr  = DOCPOS_CURR;
+    SwDocPositions eStart = SwDocPositions::Start;
+    SwDocPositions eEnd   = SwDocPositions::End;
+    SwDocPositions eCurr  = SwDocPositions::Curr;
     switch ( eWhich )
     {
         case SvxSpellArea::Body:
             if( bIsWrapReverse )
-                eCurr = DOCPOS_END;
+                eCurr = SwDocPositions::End;
             else
-                eCurr = DOCPOS_START;
+                eCurr = SwDocPositions::Start;
             break;
         case SvxSpellArea::BodyEnd:
             if( bIsWrapReverse )
             {
                 if( bStartDone )
-                    eStart = DOCPOS_CURR;
-                eCurr = DOCPOS_END;
+                    eStart = SwDocPositions::Curr;
+                eCurr = SwDocPositions::End;
             }
             else if( bStartDone )
-                eCurr = DOCPOS_START;
+                eCurr = SwDocPositions::Start;
             break;
         case SvxSpellArea::BodyStart:
             if( !bIsWrapReverse )
             {
                 if( bEndDone )
-                    eEnd = DOCPOS_CURR;
-                eCurr = DOCPOS_START;
+                    eEnd = SwDocPositions::Curr;
+                eCurr = SwDocPositions::Start;
             }
             else if( bEndDone )
-                eCurr = DOCPOS_END;
+                eCurr = SwDocPositions::End;
             break;
         case SvxSpellArea::Other:
             if( bIsWrapReverse )
             {
-                eStart = DOCPOS_OTHERSTART;
-                eEnd  = DOCPOS_OTHEREND;
-                eCurr = DOCPOS_OTHEREND;
+                eStart = SwDocPositions::OtherStart;
+                eEnd  = SwDocPositions::OtherEnd;
+                eCurr = SwDocPositions::OtherEnd;
             }
             else
             {
-                eStart = DOCPOS_OTHERSTART;
-                eEnd  = DOCPOS_OTHEREND;
-                eCurr = DOCPOS_OTHERSTART;
+                eStart = SwDocPositions::OtherStart;
+                eEnd  = SwDocPositions::OtherEnd;
+                eCurr = SwDocPositions::OtherStart;
             }
             break;
         default:
@@ -398,16 +398,16 @@ void SwView::HyphStart( SvxSpellArea eWhich )
     switch ( eWhich )
     {
         case SvxSpellArea::Body:
-            m_pWrtShell->HyphStart( DOCPOS_START, DOCPOS_END );
+            m_pWrtShell->HyphStart( SwDocPositions::Start, SwDocPositions::End );
             break;
         case SvxSpellArea::BodyEnd:
-            m_pWrtShell->HyphStart( DOCPOS_CURR, DOCPOS_END );
+            m_pWrtShell->HyphStart( SwDocPositions::Curr, SwDocPositions::End );
             break;
         case SvxSpellArea::BodyStart:
-            m_pWrtShell->HyphStart( DOCPOS_START, DOCPOS_CURR );
+            m_pWrtShell->HyphStart( SwDocPositions::Start, SwDocPositions::Curr );
             break;
         case SvxSpellArea::Other:
-            m_pWrtShell->HyphStart( DOCPOS_OTHERSTART, DOCPOS_OTHEREND );
+            m_pWrtShell->HyphStart( SwDocPositions::OtherStart, SwDocPositions::OtherEnd );
             break;
         default:
             OSL_ENSURE( false, "HyphStart with unknown Area" );

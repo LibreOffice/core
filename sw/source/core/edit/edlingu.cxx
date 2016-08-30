@@ -617,7 +617,7 @@ bool SwEditShell::HasHyphIter()
 void SwEditShell::SetLinguRange( SwDocPositions eStart, SwDocPositions eEnd )
 {
     SwPaM *pCursor = GetCursor();
-    MakeFindRange( static_cast<sal_uInt16>(eStart), static_cast<sal_uInt16>(eEnd), pCursor );
+    MakeFindRange( eStart, eEnd, pCursor );
     if( *pCursor->GetPoint() > *pCursor->GetMark() )
         pCursor->Exchange();
 }

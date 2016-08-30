@@ -232,7 +232,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
                 {
                     m_pSpellState->pOtherCursor = new SwPaM(*pWrtShell->GetCursor()->GetPoint());
                     m_pSpellState->m_bStartedInOther = true;
-                    pWrtShell->SpellStart( DOCPOS_OTHERSTART, DOCPOS_OTHEREND, DOCPOS_CURR );
+                    pWrtShell->SpellStart( SwDocPositions::OtherStart, SwDocPositions::OtherEnd, SwDocPositions::Curr );
                 }
                 else
                 {
@@ -245,7 +245,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
                                 *pWrtShell->GetDoc(),
                                 *pCursor->Start(), pCursor->End());
                     }
-                    pWrtShell->SpellStart( DOCPOS_START, DOCPOS_END, DOCPOS_CURR );
+                    pWrtShell->SpellStart( SwDocPositions::Start, SwDocPositions::End, SwDocPositions::Curr );
                 }
             }
             else
@@ -290,7 +290,7 @@ The code below would only be part of the solution.
                     // if there's any that has not been spelled yet
                     if(!m_pSpellState->m_bOtherSpelled && pWrtShell->HasOtherCnt())
                     {
-                        pWrtShell->SpellStart(DOCPOS_OTHERSTART, DOCPOS_OTHEREND, DOCPOS_OTHERSTART );
+                        pWrtShell->SpellStart(SwDocPositions::OtherStart, SwDocPositions::OtherEnd, SwDocPositions::OtherStart );
                         if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
                         {
                             pWrtShell->SpellEnd();
@@ -302,7 +302,7 @@ The code below would only be part of the solution.
                     // if no result has been found try at the body text - completely
                     if(!m_pSpellState->m_bBodySpelled && aRet.empty())
                     {
-                        pWrtShell->SpellStart(DOCPOS_START, DOCPOS_END, DOCPOS_START );
+                        pWrtShell->SpellStart(SwDocPositions::Start, SwDocPositions::End, SwDocPositions::Start );
                         if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
                         {
                             m_pSpellState->m_bBodySpelled = true;
@@ -331,7 +331,7 @@ The code below would only be part of the solution.
                         pWrtShell->SpellEnd();
                         delete m_pSpellState->pOtherCursor;
                         m_pSpellState->pOtherCursor = nullptr;
-                        pWrtShell->SpellStart(DOCPOS_OTHERSTART, DOCPOS_CURR, DOCPOS_OTHERSTART );
+                        pWrtShell->SpellStart(SwDocPositions::OtherStart, SwDocPositions::Curr, SwDocPositions::OtherStart );
                         (void)pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn);
                     }
                     if(aRet.empty())
@@ -344,7 +344,7 @@ The code below would only be part of the solution.
                             // has the body been spelled?
                             if(!m_pSpellState->m_bBodySpelled)
                             {
-                                pWrtShell->SpellStart(DOCPOS_START, DOCPOS_END, DOCPOS_START );
+                                pWrtShell->SpellStart(SwDocPositions::Start, SwDocPositions::End, SwDocPositions::Start );
                                 if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
                                 {
                                     m_pSpellState->m_bBodySpelled = true;
@@ -357,7 +357,7 @@ The code below would only be part of the solution.
                              m_pSpellState->m_bBodySpelled = true;
                              if(!m_pSpellState->m_bOtherSpelled && pWrtShell->HasOtherCnt())
                              {
-                                pWrtShell->SpellStart(DOCPOS_OTHERSTART, DOCPOS_OTHEREND, DOCPOS_OTHERSTART );
+                                pWrtShell->SpellStart(SwDocPositions::OtherStart, SwDocPositions::OtherEnd, SwDocPositions::OtherStart );
                                 if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
                                 {
                                     pWrtShell->SpellEnd();
@@ -400,7 +400,7 @@ The code below would only be part of the solution.
                                 m_pSpellState->m_xStartRange))
                     {
                         pWrtShell->SetSelection(aPam);
-                        pWrtShell->SpellStart(DOCPOS_START, DOCPOS_CURR, DOCPOS_START);
+                        pWrtShell->SpellStart(SwDocPositions::Start, SwDocPositions::Curr, SwDocPositions::Start);
                         if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
                             pWrtShell->SpellEnd();
                     }

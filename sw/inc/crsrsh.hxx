@@ -267,7 +267,7 @@ typedef bool (SwCursor:: *FNCursor)();
 
 protected:
 
-    inline SwMoveFnCollection const & MakeFindRange( sal_uInt16, sal_uInt16, SwPaM* ) const;
+    inline SwMoveFnCollection const & MakeFindRange( SwDocPositions, SwDocPositions, SwPaM* ) const;
 
     /*
      * Compare-Methode for the StackCursor and the current Cursor.
@@ -846,9 +846,9 @@ public:
 
 // Cursor Inlines:
 inline SwMoveFnCollection const & SwCursorShell::MakeFindRange(
-            sal_uInt16 nStt, sal_uInt16 nEnd, SwPaM* pPam ) const
+            SwDocPositions nStt, SwDocPositions nEnd, SwPaM* pPam ) const
 {
-    return m_pCurrentCursor->MakeFindRange( (SwDocPositions)nStt, (SwDocPositions)nEnd, pPam );
+    return m_pCurrentCursor->MakeFindRange( nStt, nEnd, pPam );
 }
 
 inline SwCursor* SwCursorShell::GetSwCursor() const

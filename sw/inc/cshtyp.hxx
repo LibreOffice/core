@@ -87,13 +87,13 @@ enum FindRanges
     FND_IN_SELALL   = 0x01      ///< All (only in non-body and selections).
 };
 
-enum SwDocPositions
+enum class SwDocPositions
 {
-    DOCPOS_START,
-    DOCPOS_CURR,
-    DOCPOS_END,
-    DOCPOS_OTHERSTART,
-    DOCPOS_OTHEREND
+    Start,
+    Curr,
+    End,
+    OtherStart,
+    OtherEnd
 };
 
 SW_DLLPUBLIC SwWhichPara GetfnParaCurr();

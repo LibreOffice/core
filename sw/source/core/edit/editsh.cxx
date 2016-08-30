@@ -729,9 +729,9 @@ void SwEditShell::SetNumberingRestart()
     for(int i = 0; i < 2; i++)
     {
         if(!i)
-            MakeFindRange(DOCPOS_START, DOCPOS_END, pCursor); // body content
+            MakeFindRange(SwDocPositions::Start, SwDocPositions::End, pCursor); // body content
         else
-            MakeFindRange(DOCPOS_OTHERSTART, DOCPOS_OTHEREND, pCursor); // extra content
+            MakeFindRange(SwDocPositions::OtherStart, SwDocPositions::OtherEnd, pCursor); // extra content
         SwPosition* pSttPos = pCursor->Start(), *pEndPos = pCursor->End();
         sal_uLong nCurrNd = pSttPos->nNode.GetIndex();
         sal_uLong nEndNd = pEndPos->nNode.GetIndex();

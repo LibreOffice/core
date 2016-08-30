@@ -367,7 +367,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                             // i#8288 "replace all" should not change cursor
                             // position, so save current cursor
                             m_pWrtShell->Push();
-                            if (DOCPOS_START == aOpts.eEnd)
+                            if (SwDocPositions::Start == aOpts.eEnd)
                             {
                                 m_pWrtShell->EndDoc();
                             }
@@ -523,7 +523,7 @@ bool SwView::SearchAndWrap(bool bApi)
     // occurrence in the document instead of the second.
     if( m_eLastSearchCommand == SvxSearchCmd::FIND_ALL )
     {
-        if( DOCPOS_START == aOpts.eEnd )
+        if( SwDocPositions::Start == aOpts.eEnd )
             m_pWrtShell->EndDoc();
         else
             m_pWrtShell->SttDoc();
@@ -604,10 +604,10 @@ bool SwView::SearchAndWrap(bool bApi)
     m_pWrtShell->Pop(false);
     pWait.reset(new SwWait( *GetDocShell(), true ));
 
-    bool bSrchBkwrd = DOCPOS_START == aOpts.eEnd;
+    bool bSrchBkwrd = SwDocPositions::Start == aOpts.eEnd;
 
-    aOpts.eEnd =  bSrchBkwrd ? DOCPOS_START : DOCPOS_END;
-    aOpts.eStart = bSrchBkwrd ? DOCPOS_END : DOCPOS_START;
+    aOpts.eEnd =  bSrchBkwrd ? SwDocPositions::Start : SwDocPositions::End;
+    aOpts.eStart = bSrchBkwrd ? SwDocPositions::End : SwDocPositions::Start;
 
     if (bHasSrchInOther)
     {
@@ -661,7 +661,7 @@ bool SwView::SearchAll()
         // Cancel existing selections, if should not be sought in selected areas.
         m_pWrtShell->KillSelection(nullptr, false);
 
-        if( DOCPOS_START == aOpts.eEnd )
+        if( SwDocPositions::Start == aOpts.eEnd )
             m_pWrtShell->EndDoc();
         else
             m_pWrtShell->SttDoc();
@@ -770,15 +770,15 @@ void SwView::Replace()
 
 SwSearchOptions::SwSearchOptions( SwWrtShell* pSh, bool bBackward )
 {
-    eStart = DOCPOS_CURR;
+    eStart = SwDocPositions::Curr;
     if( bBackward )
     {
-        eEnd = DOCPOS_START;
+        eEnd = SwDocPositions::Start;
         bDontWrap = pSh->IsEndOfDoc();
     }
     else
     {
-        eEnd = DOCPOS_END;
+        eEnd = SwDocPositions::End;
         bDontWrap = pSh->IsStartOfDoc();
     }
 }

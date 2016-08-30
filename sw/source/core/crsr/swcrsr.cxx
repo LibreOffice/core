@@ -729,9 +729,9 @@ SwMoveFnCollection const & SwCursor::MakeFindRange( SwDocPositions nStart,
     FillFindPos( nEnd, *pRange->GetPoint() );
 
     // determine direction of search
-    return ( DOCPOS_START == nStart || DOCPOS_OTHERSTART == nStart ||
-              (DOCPOS_CURR == nStart &&
-                (DOCPOS_END == nEnd || DOCPOS_OTHEREND == nEnd ) ))
+    return ( SwDocPositions::Start == nStart || SwDocPositions::OtherStart == nStart ||
+              (SwDocPositions::Curr == nStart &&
+                (SwDocPositions::End == nEnd || SwDocPositions::OtherEnd == nEnd ) ))
                 ? fnMoveForward : fnMoveBackward;
 }
 
@@ -1086,20 +1086,20 @@ void SwCursor::FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const
 
     switch( ePos )
     {
-    case DOCPOS_START:
+    case SwDocPositions::Start:
         rPos.nNode = *rNds.GetEndOfContent().StartOfSectionNode();
         pCNd = rNds.GoNext( &rPos.nNode );
         break;
-    case DOCPOS_END:
+    case SwDocPositions::End:
         rPos.nNode = rNds.GetEndOfContent();
         pCNd = SwNodes::GoPrevious( &rPos.nNode );
         bIsStart = false;
         break;
-    case DOCPOS_OTHERSTART:
+    case SwDocPositions::OtherStart:
         rPos.nNode = *rNds[ sal_uLong(0) ];
         pCNd = rNds.GoNext( &rPos.nNode );
         break;
-    case DOCPOS_OTHEREND:
+    case SwDocPositions::OtherEnd:
         rPos.nNode = *rNds.GetEndOfContent().StartOfSectionNode();
         pCNd = SwNodes::GoPrevious( &rPos.nNode );
         bIsStart = false;

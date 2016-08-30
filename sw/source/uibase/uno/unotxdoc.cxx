@@ -761,8 +761,8 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     util::SearchOptions2 aSearchOpt;
     pSearch->FillSearchOptions( aSearchOpt );
 
-    SwDocPositions eStart = pSearch->m_bBack ? DOCPOS_END : DOCPOS_START;
-    SwDocPositions eEnd = pSearch->m_bBack ? DOCPOS_START : DOCPOS_END;
+    SwDocPositions eStart = pSearch->m_bBack ? SwDocPositions::End : SwDocPositions::Start;
+    SwDocPositions eEnd = pSearch->m_bBack ? SwDocPositions::Start : SwDocPositions::End;
 
     // Search should take place anywhere
     pUnoCursor->SetRemainInSection(false);
@@ -897,8 +897,8 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
         eRanges = FND_IN_OTHER;
     if(bAll) //always - everywhere?
         eRanges = FND_IN_SELALL;
-    SwDocPositions eStart = !bAll ? DOCPOS_CURR : pSearch->m_bBack ? DOCPOS_END : DOCPOS_START;
-    SwDocPositions eEnd = pSearch->m_bBack ? DOCPOS_START : DOCPOS_END;
+    SwDocPositions eStart = !bAll ? SwDocPositions::Curr : pSearch->m_bBack ? SwDocPositions::End : SwDocPositions::Start;
+    SwDocPositions eEnd = pSearch->m_bBack ? SwDocPositions::Start : SwDocPositions::End;
 
     nResult = 0;
     for (int nSearchProc = 0; nSearchProc < 2; ++nSearchProc)
