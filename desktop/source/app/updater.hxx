@@ -12,7 +12,6 @@
 
 #include <rtl/ustring.hxx>
 
-void CreateValidUpdateDir();
 void Update();
 
 void update_checker();
