@@ -202,7 +202,7 @@ OUString TextInputStream::createFinalString( const OUString& rString )
     if( mcPendingChar == 0 )
         return rString;
 
-    OUString aString = OUString( mcPendingChar ) + rString;
+    OUString aString = OUStringLiteral1( mcPendingChar ) + rString;
     mcPendingChar = 0;
     return aString;
 }
