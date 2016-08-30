@@ -180,7 +180,7 @@ private:
     SAL_DLLPRIVATE void            ImplFormat( bool bResize = false );
     SAL_DLLPRIVATE void            ImplDrawSpin(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void            ImplDrawSeparator(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, const Rectangle& rRect);
-    SAL_DLLPRIVATE void            ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, sal_uInt16 nHighlight = 0 );
+    SAL_DLLPRIVATE void            ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, sal_uInt16 nHighlight );
     using Window::ImplInvalidate;
     SAL_DLLPRIVATE void            ImplInvalidate( bool bNewCalc = false, bool bFullPaint = false );
     SAL_DLLPRIVATE void            ImplUpdateItem( sal_uInt16 nIndex = 0xFFFF );
@@ -215,7 +215,7 @@ private:
                           ToolBox& operator= (const ToolBox &) = delete;
 
 public:
-    SAL_DLLPRIVATE void            ImplFloatControl( bool bStart, FloatingWindow* pWindow = nullptr );
+    SAL_DLLPRIVATE void            ImplFloatControl( bool bStart, FloatingWindow* pWindow );
     SAL_DLLPRIVATE void            ImplDisableFlatButtons();
 
     static SAL_DLLPRIVATE int ImplGetDragWidth( ToolBox* pThis );
@@ -230,7 +230,7 @@ public:
     SAL_DLLPRIVATE void ImplDrawConstantBackground(vcl::RenderContext& rRenderContext, const vcl::Region &rRegion, bool bIsInPopupMode);
     SAL_DLLPRIVATE void ImplDrawBackground(vcl::RenderContext& rRenderContext, const Rectangle &rRect);
 
-    SAL_DLLPRIVATE void ImplErase(vcl::RenderContext& rRenderContext, const Rectangle &rRect, bool bHighlight = false, bool bHasOpenPopup = false );
+    SAL_DLLPRIVATE void ImplErase(vcl::RenderContext& rRenderContext, const Rectangle &rRect, bool bHighlight, bool bHasOpenPopup = false );
 
     SAL_DLLPRIVATE void ImplDrawBorder(vcl::RenderContext& rRenderContext);
     static SAL_DLLPRIVATE const ImplToolItem *ImplGetFirstClippedItem( const ToolBox* pThis );
@@ -300,7 +300,7 @@ public:
     /// Insert a command (like '.uno:Save').
     virtual void        InsertItem( const OUString& rCommand,
                                     const css::uno::Reference<css::frame::XFrame>& rFrame,
-                                    ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
+                                    ToolBoxItemBits nBits,
                                     const Size& rRequestedSize = Size(),
                                     sal_uInt16 nPos = TOOLBOX_APPEND );
     void                InsertItem( sal_uInt16 nItemId, const Image& rImage,
@@ -403,7 +403,7 @@ public:
     /// Shows or hides items.
     void                ShowItem(sal_uInt16 nItemId, bool bVisible = true);
     /// Overload to provide ShowItem via command id.
-    void                ShowItem(const OUString& rCommand, bool bVisible = true) { ShowItem(GetItemId(rCommand), bVisible); }
+    void                ShowItem(const OUString& rCommand, bool bVisible) { ShowItem(GetItemId(rCommand), bVisible); }
 
     /// Convenience method to hide items (via ShowItem).
     void                HideItem(sal_uInt16 nItemId) { ShowItem( nItemId, false ); }
@@ -447,7 +447,7 @@ public:
     WinBits             GetStyle() const { return mnWinStyle; }
 
     // enable/disable undocking
-    void                Lock( bool bLock = true );
+    void                Lock( bool bLock );
     // read configuration to determine locking behaviour
     static bool         AlwaysLocked();
 

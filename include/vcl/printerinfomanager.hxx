@@ -165,7 +165,7 @@ public:
     // is not writeable
     // if bCheckOnly is true, the printer is not really removed;
     // this is for checking if the removal would fail
-    virtual bool removePrinter( const OUString& rPrinterName, bool bCheckOnly = false );
+    virtual bool removePrinter( const OUString& rPrinterName, bool bCheckOnly );
 
     // save the changes to all printers. this fails if there
     // is no writable config file at all

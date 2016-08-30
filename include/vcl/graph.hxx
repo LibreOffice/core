@@ -180,7 +180,7 @@ public:
                           const Size& rDestSize,
                           long nExtraData = 0L,
                           OutputDevice* pFirstFrameOutDev = nullptr );
-    void            StopAnimation( OutputDevice* pOutputDevice = nullptr,
+    void            StopAnimation( OutputDevice* pOutputDevice,
                           long nExtraData = 0L );
 
     void            SetAnimationNotifyHdl( const Link<Animation*,void>& rLink );

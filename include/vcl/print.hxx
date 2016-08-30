@@ -292,7 +292,7 @@ public:
     bool                        SetJobSetup( const JobSetup& rSetup );
     const JobSetup&             GetJobSetup() const { return maJobSetup; }
 
-    bool                        Setup( vcl::Window* pWindow = nullptr, bool bPapersizeFromSetup = false );
+    bool                        Setup( vcl::Window* pWindow, bool bPapersizeFromSetup = false );
     bool                        SetPrinterProps( const Printer* pPrinter );
 
     /** SetPrinterOptions is used internally only now
@@ -338,7 +338,7 @@ public:
     const Point&                GetPageOffsetPixel() const { return maPageOffset; }
     Point                       GetPageOffset() const { return PixelToLogic( maPageOffset ); }
 
-    bool                        SetCopyCount( sal_uInt16 nCopy, bool bCollate = false );
+    bool                        SetCopyCount( sal_uInt16 nCopy, bool bCollate );
     sal_uInt16                  GetCopyCount() const { return mnCopyCount; }
     bool                        IsCollateCopy() const { return mbCollateCopy; }
 
@@ -599,7 +599,7 @@ public:
     /** @return An empty Any for not existing properties */
     css::uno::Any        getValue( const OUString& i_rPropertyName ) const;
 
-    bool                 getBoolValue( const OUString& i_rPropertyName, bool i_bDefault = false ) const;
+    bool                 getBoolValue( const OUString& i_rPropertyName, bool i_bDefault ) const;
     // convenience for fixed strings
     bool                 getBoolValue( const char* i_pPropName, bool i_bDefault = false ) const
                              { return getBoolValue( OUString::createFromAscii( i_pPropName ), i_bDefault ); }
@@ -682,7 +682,7 @@ public:
         note: max value < min value means do not apply min/max values
     */
     static css::uno::Any setRangeControlOpt( const OUString& i_rID, const OUString& i_rTitle, const OUString& i_rHelpId,
-                             const OUString& i_rProperty, sal_Int32 i_nValue, sal_Int32 i_nMinValue = -1,
+                             const OUString& i_rProperty, sal_Int32 i_nValue, sal_Int32 i_nMinValue,
                              sal_Int32 i_nMaxValue = -2, const UIControlOptions& i_rControlOptions = UIControlOptions());
 
     /** Show a string field
@@ -691,7 +691,7 @@ public:
     */
     static css::uno::Any setEditControlOpt( const OUString& i_rID, const OUString& i_rTitle, const OUString& i_rHelpId,
                              const OUString&  i_rProperty, const OUString& i_rValue,
-                             const UIControlOptions& i_rControlOptions = UIControlOptions());
+                             const UIControlOptions& i_rControlOptions);
 }; // class PrinterOptionsHelper
 
 } // namespace vcl

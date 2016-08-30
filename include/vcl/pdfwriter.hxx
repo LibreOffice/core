@@ -666,7 +666,7 @@ The following structure describes the permissions used in PDF security
         Colors and other state information MUST
         be set again or are undefined.
     */
-    void NewPage( sal_Int32 nPageWidth = 0, sal_Int32 nPageHeight = 0, Orientation eOrientation = Inherit );
+    void NewPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight = 0, Orientation eOrientation = Inherit );
     /** Play a metafile like an outputdevice would do
     */
     struct PlayMetafileContext
@@ -756,7 +756,7 @@ The following structure describes the permissions used in PDF security
                                          const OUString& rStr,
                                          sal_Int32 nIndex, sal_Int32 nLen );
     void                DrawText( const Rectangle& rRect,
-                                  const OUString& rStr, DrawTextFlags nStyle = DrawTextFlags::NONE );
+                                  const OUString& rStr, DrawTextFlags nStyle );
 
     void                DrawPixel( const Point& rPt, const Color& rColor );
     void                DrawPixel( const Point& rPt )
@@ -870,7 +870,7 @@ The following structure describes the permissions used in PDF security
     the destination id (to be used in SetLinkDest) or
     -1 if page id does not exist
     */
-    sal_Int32           CreateNamedDest( const OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr = -1, DestAreaType eType = XYZ );
+    sal_Int32           CreateNamedDest( const OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr, DestAreaType eType = XYZ );
     /** Create a new destination to be used in a link
 
     @param rRect
@@ -887,7 +887,7 @@ The following structure describes the permissions used in PDF security
     the destination id (to be used in SetLinkDest) or
     -1 if page id does not exist
     */
-    sal_Int32           CreateDest( const Rectangle& rRect, sal_Int32 nPageNr = -1, DestAreaType eType = XYZ );
+    sal_Int32           CreateDest( const Rectangle& rRect, sal_Int32 nPageNr, DestAreaType eType = XYZ );
     /** Create a new link on a page
 
     @param rRect
@@ -902,7 +902,7 @@ The following structure describes the permissions used in PDF security
     the link id (to be used in SetLinkDest, SetLinkURL) or
     -1 if page id does not exist
     */
-    sal_Int32           CreateLink( const Rectangle& rRect, sal_Int32 nPageNr = -1 );
+    sal_Int32           CreateLink( const Rectangle& rRect, sal_Int32 nPageNr );
 
     /** creates a destination which is not intended to be referred to by a link, but by a public destination Id.
 
@@ -926,7 +926,7 @@ The following structure describes the permissions used in PDF security
         @returns
             the internal destination Id.
     */
-    sal_Int32           RegisterDestReference( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr = -1, DestAreaType eType = XYZ );
+    sal_Int32           RegisterDestReference( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr, DestAreaType eType = XYZ );
 
 
     /** Set the destination for a link
@@ -993,7 +993,7 @@ The following structure describes the permissions used in PDF security
         @returns
         the outline item id of the new item
     */
-    sal_Int32 CreateOutlineItem( sal_Int32 nParent = 0, const OUString& rText = OUString(), sal_Int32 nDestID = -1 );
+    sal_Int32 CreateOutlineItem( sal_Int32 nParent, const OUString& rText = OUString(), sal_Int32 nDestID = -1 );
 
     /** Set an outline item's parent
 
@@ -1039,7 +1039,7 @@ The following structure describes the permissions used in PDF security
     number of page the note is on (as returned by NewPage)
     or -1 in which case the current page is used
     */
-    void CreateNote( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr = -1 );
+    void CreateNote( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr );
 
     /** begin a new logical structure element
 
@@ -1083,7 +1083,7 @@ The following structure describes the permissions used in PDF security
     @returns
     the new structure element's id for use in SetCurrentStructureElement
      */
-     sal_Int32 BeginStructureElement( enum StructElement eType, const OUString& rAlias = OUString() );
+     sal_Int32 BeginStructureElement( enum StructElement eType, const OUString& rAlias );
     /** end the current logical structure element
 
     Close the current structure element. The current element's
@@ -1191,7 +1191,7 @@ The following structure describes the permissions used in PDF security
         @param nPageNr
         the page number to apply the autoadvance time to; -1 denotes the current page
     */
-    void SetAutoAdvanceTime( sal_uInt32 nSeconds, sal_Int32 nPageNr = -1 );
+    void SetAutoAdvanceTime( sal_uInt32 nSeconds, sal_Int32 nPageNr );
 
     /** Sets the transitional effect to be applied when the current page gets shown.
 
@@ -1206,7 +1206,7 @@ The following structure describes the permissions used in PDF security
     @param nPageNr
     the page number to apply the effect to; -1 denotes the current page
     */
-    void SetPageTransition( PageTransition eType, sal_uInt32 nMilliSec, sal_Int32 nPageNr = -1 );
+    void SetPageTransition( PageTransition eType, sal_uInt32 nMilliSec, sal_Int32 nPageNr );
 
     /** create a new form control
 

@@ -89,7 +89,7 @@ public:
     /**
      @overload void StartPresentationMode( PresentationFlags nFlags, sal_uInt32 nDisplayScreen)
     */
-    void            StartPresentationMode( PresentationFlags nFlags = PresentationFlags::NONE );
+    void            StartPresentationMode( PresentationFlags nFlags );
     bool            IsPresentationMode() const { return mbPresentationMode; }
 
     bool            IsMinimized() const;

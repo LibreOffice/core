@@ -226,7 +226,7 @@ public:
 
     /** provides detailed information about a destination range which previously has been registered using RegisterDest.
     */
-    void        DescribeRegisteredDest( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr = -1, PDFWriter::DestAreaType eType = PDFWriter::XYZ );
+    void        DescribeRegisteredDest( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType = PDFWriter::XYZ );
 
 //<---i56629
 
@@ -309,7 +309,7 @@ public:
         @returns
         the outline item id of the new item
     */
-    sal_Int32 CreateOutlineItem( sal_Int32 nParent = 0, const OUString& rText = OUString(), sal_Int32 nDestID = -1 );
+    sal_Int32 CreateOutlineItem( sal_Int32 nParent, const OUString& rText = OUString(), sal_Int32 nDestID = -1 );
 
     /** Create a new note on a page
 

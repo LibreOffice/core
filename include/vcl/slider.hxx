@@ -73,7 +73,7 @@ private:
     SAL_DLLPRIVATE bool ImplIsPageDown( const Point& rPos );
     SAL_DLLPRIVATE long ImplSlide( long nNewPos, bool bCallEndSlide );
     SAL_DLLPRIVATE long ImplDoAction( bool bCallEndSlide );
-    SAL_DLLPRIVATE void ImplDoMouseAction( const Point& rPos, bool bCallAction = true );
+    SAL_DLLPRIVATE void ImplDoMouseAction( const Point& rPos, bool bCallAction );
     SAL_DLLPRIVATE void ImplDoSlide( long nNewPos );
     SAL_DLLPRIVATE void ImplDoSlideAction( ScrollType eScrollType );
     SAL_DLLPRIVATE void ImplUpdateLinkedField();

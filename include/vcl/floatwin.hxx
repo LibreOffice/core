@@ -126,7 +126,7 @@ public:
                                                  sal_uInt16& rArrangeIndex );
                    static Point     ImplConvertToAbsPos(vcl::Window* pReference, const Point& rPos);
                    static Rectangle ImplConvertToAbsPos(vcl::Window* pReference, const Rectangle& rRect);
-    SAL_DLLPRIVATE void             ImplEndPopupMode( FloatWinPopupEndFlags nFlags = FloatWinPopupEndFlags::NONE, const VclPtr<vcl::Window>& xFocusId = nullptr );
+    SAL_DLLPRIVATE void             ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPtr<vcl::Window>& xFocusId = nullptr );
     SAL_DLLPRIVATE Rectangle&       ImplGetItemEdgeClipRect();
     SAL_DLLPRIVATE bool             ImplIsInPrivatePopupMode() const { return mbInPopupMode; }
     virtual        void             doDeferredInit(WinBits nBits) override;
@@ -147,7 +147,7 @@ public:
     void            SetTitleType( FloatWinTitleType nTitle );
     FloatWinTitleType GetTitleType() const { return mnTitle; }
 
-    void            StartPopupMode( const Rectangle& rRect, FloatWinPopupFlags nFlags = FloatWinPopupFlags::NONE );
+    void            StartPopupMode( const Rectangle& rRect, FloatWinPopupFlags nFlags );
     void            StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags = FloatWinPopupFlags::NONE  );
     void            EndPopupMode( FloatWinPopupEndFlags nFlags = FloatWinPopupEndFlags::NONE );
     void            AddPopupModeWindow( vcl::Window* pWindow );

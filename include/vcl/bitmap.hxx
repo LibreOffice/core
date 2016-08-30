@@ -389,7 +389,7 @@ public:
     bool                    CopyPixel_AlphaOptimized(
                                 const Rectangle& rRectDst,
                                 const Rectangle& rRectSrc,
-                                const Bitmap* pBmpSrc = nullptr );
+                                const Bitmap* pBmpSrc );
 
     /** Perform boolean operations with another bitmap
 
@@ -616,7 +616,7 @@ public:
      */
     bool                    Vectorize(
                                 tools::PolyPolygon& rPolyPoly,
-                                BmpVectorizeFlags nFlags = BmpVectorizeFlags::Outer );
+                                BmpVectorizeFlags nFlags );
 
     /** Convert the bitmap to a meta file
 
@@ -641,7 +641,7 @@ public:
      */
     bool                    Vectorize(
                                 GDIMetaFile& rMtf,
-                                sal_uInt8 cReduce = 0,
+                                sal_uInt8 cReduce,
                                 BmpVectorizeFlags nFlags = BmpVectorizeFlags::Inner,
                                 const Link<long,void>* pProgress = nullptr );
 
@@ -676,7 +676,7 @@ public:
         @return true, if the operation was completed successfully.
      */
     bool                    Adjust(
-                                short nLuminancePercent = 0,
+                                short nLuminancePercent,
                                 short nContrastPercent = 0,
                                 short nChannelRPercent = 0,
                                 short nChannelGPercent = 0,
@@ -747,8 +747,8 @@ public:
     SAL_DLLPRIVATE bool     ImplMosaic( const BmpFilterParam* pFilterParam );
     SAL_DLLPRIVATE bool     ImplPopArt();
 
-    SAL_DLLPRIVATE bool     ImplSeparableBlurFilter( const double aRadius = 0.7 );
-    SAL_DLLPRIVATE bool     ImplSeparableUnsharpenFilter( const double aRadius = 0.7 );
+    SAL_DLLPRIVATE bool     ImplSeparableBlurFilter( const double aRadius );
+    SAL_DLLPRIVATE bool     ImplSeparableUnsharpenFilter( const double aRadius );
     SAL_DLLPRIVATE bool     ImplDuotoneFilter( const sal_uLong nColorOne,  sal_uLong nColorTwo );
     SAL_DLLPRIVATE void     ImplBlurContributions(
                                 const int aSize,

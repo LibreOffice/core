@@ -45,7 +45,7 @@ public:
 
     bool loadImage(
         OUString const & name, OUString const & style,
-        BitmapEx & bitmap, bool localized = false );
+        BitmapEx & bitmap, bool localized );
 
     bool loadDefaultImage(
         OUString const & style,

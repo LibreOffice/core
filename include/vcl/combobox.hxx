@@ -117,7 +117,7 @@ public:
     void            DrawEntry( const UserDrawEvent& rEvt, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos = false );
     void            SetBorderStyle( WindowBorderStyle nBorderStyle );
 
-    void            SetSeparatorPos( sal_Int32  n = COMBOBOX_ENTRY_NOTFOUND );
+    void            SetSeparatorPos( sal_Int32  n );
 
     void            EnableAutocomplete( bool bEnable, bool bMatchCase = false );
     bool            IsAutocompleteEnabled() const;

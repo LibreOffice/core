@@ -48,7 +48,7 @@ public:
     using ToolBox::InsertItem;
     virtual void InsertItem(const OUString& rCommand,
             const css::uno::Reference<css::frame::XFrame>& rFrame,
-            ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
+            ToolBoxItemBits nBits,
             const Size& rRequestedSize = Size(),
             sal_uInt16 nPos = TOOLBOX_APPEND) override;
 
