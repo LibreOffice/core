@@ -1121,8 +1121,6 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                         SfxBoolItem aItem( SID_MENUBAR, bState );
                         rSet.Put( aItem );
                     }
-                    if ( Application::GetToolkitName().compareTo( "gtk3" ) == 0 )
-                        rSet.DisableItem( SID_MENUBAR );
                     break;
                 }
 
