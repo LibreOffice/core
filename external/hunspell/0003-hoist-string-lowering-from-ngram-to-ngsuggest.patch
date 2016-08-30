@@ -1,0 +1,264 @@
+From cf0967951a25a2daa10a636092193af5c5497aa2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Fri, 10 Feb 2017 16:36:27 +0000
+Subject: [PATCH 3/4] hoist string lowering from ngram to ngsuggest
+
+only lower when we have to and reuse scratch buffers as
+tolower destination
+
+kcachegrind reports 830,529,143 -> 779,887,690 on
+
+echo Hollo | valgrind --tool=callgrind ./src/tools/.libs/hunspell -d nl_NL
+---
+ src/hunspell/suggestmgr.cxx | 143 +++++++++++++++++++++++++++++---------------
+ 1 file changed, 95 insertions(+), 48 deletions(-)
+
+diff --git a/src/hunspell/suggestmgr.cxx b/src/hunspell/suggestmgr.cxx
+index 54a474f..ea52707 100644
+--- a/src/hunspell/suggestmgr.cxx
++++ b/src/hunspell/suggestmgr.cxx
+@@ -1075,10 +1075,8 @@ void SuggestMgr::ngsuggest(std::vector<std::string>& wlst,
+     u8_u16(w_target, target);
+   }
+   
+-  std::vector<w_char> w_entry;
+   std::string f;
+   std::vector<w_char> w_f;
+-  std::vector<w_char> w_target2;
+   
+   for (size_t i = 0; i < rHMgr.size(); ++i) {
+     while (0 != (hp = rHMgr[i]->walk_hashtable(col, hp))) {
+@@ -1091,13 +1089,24 @@ void SuggestMgr::ngsuggest(std::vector<std::string>& wlst,
+         continue;
+ 
+       if (utf8) {
+-        w_entry.clear();
+-        u8_u16(w_entry, HENTRY_WORD(hp));
+-        sc = ngram(3, w_word, w_entry, NGRAM_LONGER_WORSE + low) +
+-             leftcommonsubstring(w_word, w_entry);
++        w_f.clear();
++        u8_u16(w_f, HENTRY_WORD(hp));
++
++        int leftcommon = leftcommonsubstring(w_word, w_f);
++        if (low) {
++          // lowering dictionary word
++          mkallsmall_utf(w_f, langnum);
++        }
++        sc = ngram(3, w_word, w_f, NGRAM_LONGER_WORSE) + leftcommon;
+       } else {
+-        sc = ngram(3, word, HENTRY_WORD(hp), NGRAM_LONGER_WORSE + low) +
+-             leftcommonsubstring(word, HENTRY_WORD(hp));
++        f.assign(HENTRY_WORD(hp));
++
++        int leftcommon = leftcommonsubstring(word, f.c_str());
++        if (low) {
++          // lowering dictionary word
++          mkallsmall(f, csconv);
++        }
++        sc = ngram(3, word, f, NGRAM_LONGER_WORSE) + leftcommon;
+       }
+ 
+       // check special pronounciation
+@@ -1108,11 +1117,20 @@ void SuggestMgr::ngsuggest(std::vector<std::string>& wlst,
+         if (utf8) {
+           w_f.clear();
+           u8_u16(w_f, f);
+-          sc2 = ngram(3, w_word, w_f, NGRAM_LONGER_WORSE + low) +
+-                leftcommonsubstring(w_word, w_f);
++
++          int leftcommon = leftcommonsubstring(w_word, w_f);
++          if (low) {
++            // lowering dictionary word
++            mkallsmall_utf(w_f, langnum);
++          }
++          sc2 = ngram(3, w_word, w_f, NGRAM_LONGER_WORSE) + leftcommon;
+         } else {
+-          sc2 = ngram(3, word, f, NGRAM_LONGER_WORSE + low) +
+-                leftcommonsubstring(word, f.c_str());
++          int leftcommon = leftcommonsubstring(word, f.c_str());
++          if (low) {
++            // lowering dictionary word
++            mkallsmall(f, csconv);
++          }
++          sc2 = ngram(3, word, f, NGRAM_LONGER_WORSE) + leftcommon;
+         }
+         if (sc2 > sc)
+           sc = sc2;
+@@ -1129,14 +1147,14 @@ void SuggestMgr::ngsuggest(std::vector<std::string>& wlst,
+           candidate = HENTRY_WORD(hp);
+           mkallcap(candidate, csconv);
+         }
+-        std::string target2 = phonet(candidate, *ph);
+-        w_target2.clear();
++        f = phonet(candidate, *ph);
++        w_f.clear();
+         if (utf8) {
+-          u8_u16(w_target2, target2);
+-          scphon = 2 * ngram(3, w_target, w_target2,
++          u8_u16(w_f, f);
++          scphon = 2 * ngram(3, w_target, w_f,
+                              NGRAM_LONGER_WORSE);
+         } else {
+-          scphon = 2 * ngram(3, target, target2,
++          scphon = 2 * ngram(3, target, f,
+                              NGRAM_LONGER_WORSE);
+         }
+       }
+@@ -1177,12 +1195,24 @@ void SuggestMgr::ngsuggest(std::vector<std::string>& wlst,
+         w_mw[k].l = '*';
+         w_mw[k].h = 0;
+       }
+-      thresh += ngram(n, w_word, w_mw, NGRAM_ANY_MISMATCH + low);
++
++      if (low) {
++        // lowering dictionary word
++        mkallsmall_utf(w_mw, langnum);
++      }
++
++      thresh += ngram(n, w_word, w_mw, NGRAM_ANY_MISMATCH);
+     } else {
+       std::string mw = word;
+       for (int k = sp; k < n; k += 4)
+         mw[k] = '*';
+-      thresh += ngram(n, word, mw, NGRAM_ANY_MISMATCH + low);
++
++      if (low) {
++        // lowering dictionary word
++        mkallsmall(mw, csconv);
++      }
++
++      thresh += ngram(n, word, mw, NGRAM_ANY_MISMATCH);
+     }
+   }
+   thresh = thresh / 3;
+@@ -1210,7 +1240,6 @@ void SuggestMgr::ngsuggest(std::vector<std::string>& wlst,
+     return;
+   }
+ 
+-  std::vector<w_char> w_glst_word;
+   for (int i = 0; i < MAX_ROOTS; i++) {
+     if (roots[i]) {
+       struct hentry* rp = roots[i];
+@@ -1225,15 +1254,26 @@ void SuggestMgr::ngsuggest(std::vector<std::string>& wlst,
+ 
+       for (int k = 0; k < nw; k++) {
+         if (utf8) {
+-          w_glst_word.clear();
+-          u8_u16(w_glst_word, glst[k].word);
+-          sc = ngram(n, w_word, w_glst_word,
+-                     NGRAM_ANY_MISMATCH + low) +
+-               leftcommonsubstring(w_word, w_glst_word);
++          w_f.clear();
++          u8_u16(w_f, glst[k].word);
++
++          int leftcommon = leftcommonsubstring(w_word, w_f);
++          if (low) {
++            // lowering dictionary word
++            mkallsmall_utf(w_f, langnum);
++          }
++
++          sc = ngram(n, w_word, w_f, NGRAM_ANY_MISMATCH) + leftcommon;
+         } else {
+-          sc = ngram(n, word, glst[k].word,
+-                     NGRAM_ANY_MISMATCH + low) +
+-               leftcommonsubstring(word, glst[k].word);
++          f = glst[k].word;
++
++          int leftcommon = leftcommonsubstring(word, f.c_str());
++          if (low) {
++            // lowering dictionary word
++            mkallsmall(f, csconv);
++          }
++
++          sc = ngram(n, word, f, NGRAM_ANY_MISMATCH) + leftcommon;
+         }
+ 
+         if (sc > thresh) {
+@@ -1318,19 +1358,37 @@ void SuggestMgr::ngsuggest(std::vector<std::string>& wlst,
+       w_gl.clear();
+       if (utf8) {
+         u8_u16(w_gl, gl);
+-        re = ngram(2, w_word, w_gl, NGRAM_ANY_MISMATCH + low + NGRAM_WEIGHTED) +
+-             ngram(2, w_gl, w_word, NGRAM_ANY_MISMATCH + low + NGRAM_WEIGHTED);
++        //w_gl is lowercase already at this point
++        re = ngram(2, w_word, w_gl, NGRAM_ANY_MISMATCH + NGRAM_WEIGHTED);
++        if (low) {
++          w_f = w_word;
++          // lowering dictionary word
++          mkallsmall_utf(w_f, langnum);
++          re += ngram(2, w_gl, w_f, NGRAM_ANY_MISMATCH + NGRAM_WEIGHTED);
++        } else {
++          re += ngram(2, w_gl, w_word, NGRAM_ANY_MISMATCH + NGRAM_WEIGHTED);
++        }
+       } else {
+-        re = ngram(2, word, gl, NGRAM_ANY_MISMATCH + low + NGRAM_WEIGHTED) +
+-             ngram(2, gl, word, NGRAM_ANY_MISMATCH + low + NGRAM_WEIGHTED);
++        //gl is lowercase already at this point
++        re = ngram(2, word, gl, NGRAM_ANY_MISMATCH + NGRAM_WEIGHTED);
++        if (low) {
++          f = word;
++          // lowering dictionary word
++          mkallsmall(f, csconv);
++          re += ngram(2, gl, f, NGRAM_ANY_MISMATCH + NGRAM_WEIGHTED);
++        } else {
++          re += ngram(2, gl, word, NGRAM_ANY_MISMATCH + NGRAM_WEIGHTED);
++        }
+       }
+ 
+       int ngram_score, leftcommon_score;
+       if (utf8) {
+-        ngram_score = ngram(4, w_word, w_gl, NGRAM_ANY_MISMATCH + low);
++        //w_gl is lowercase already at this point
++        ngram_score = ngram(4, w_word, w_gl, NGRAM_ANY_MISMATCH);
+         leftcommon_score = leftcommonsubstring(w_word, w_gl);
+       } else {
+-        ngram_score = ngram(4, word, gl, NGRAM_ANY_MISMATCH + low);
++        //gl is lowercase already at this point
++        ngram_score = ngram(4, word, gl, NGRAM_ANY_MISMATCH);
+         leftcommon_score = leftcommonsubstring(word, gl.c_str());
+       }
+       gscore[i] =
+@@ -1802,14 +1860,6 @@ int SuggestMgr::ngram(int n,
+   l2 = su2.size();
+   if (l2 == 0)
+     return 0;
+-  // lowering dictionary word
+-  const std::vector<w_char>* p_su2 = &su2;
+-  std::vector<w_char> su2_copy;
+-  if (opt & NGRAM_LOWERING) {
+-    su2_copy = su2;
+-    mkallsmall_utf(su2_copy, langnum);
+-    p_su2 = &su2_copy;
+-  }
+   for (int j = 1; j <= n; j++) {
+     ns = 0;
+     for (int i = 0; i <= (l1 - j); i++) {
+@@ -1817,7 +1867,7 @@ int SuggestMgr::ngram(int n,
+       for (int l = 0; l <= (l2 - j); l++) {
+         for (k = 0; k < j; k++) {
+           const w_char& c1 = su1[i + k];
+-          const w_char& c2 = (*p_su2)[l + k];
++          const w_char& c2 = su2[l + k];
+           if ((c1.l != c2.l) || (c1.h != c2.h))
+             break;
+         }
+@@ -1862,14 +1912,11 @@ int SuggestMgr::ngram(int n,
+   if (l2 == 0)
+     return 0;
+   l1 = s1.size();
+-  std::string t(s2);
+-  if (opt & NGRAM_LOWERING)
+-    mkallsmall(t, csconv);
+   for (int j = 1; j <= n; j++) {
+     ns = 0;
+     for (int i = 0; i <= (l1 - j); i++) {
+-      //t is haystack, s1[i..i+j) is needle
+-      if (t.find(s1.c_str()+i, 0, j) != std::string::npos) {
++      //s2 is haystack, s1[i..i+j) is needle
++      if (s2.find(s1.c_str()+i, 0, j) != std::string::npos) {
+         ns++;
+       } else if (opt & NGRAM_WEIGHTED) {
+         ns--;
+-- 
+2.9.3
+
