@@ -268,7 +268,10 @@ void SvxHyphenWordDialog::ContinueHyph_Impl( sal_Int32 nInsPos )
         }
     }
     else
-        EndDialog( RET_OK );
+    {
+        m_pCloseBtn->Disable();
+        EndDialog(RET_OK);
+    }
 }
 
 
@@ -399,7 +402,6 @@ IMPL_LINK_NOARG_TYPED(SvxHyphenWordDialog, CancelHdl_Impl, Button*, void)
     if( !m_bBusy )
     {
         m_bBusy = true;
-        m_pHyphWrapper->SpellEnd();
         EndDialog();
         m_bBusy = false;
     }
@@ -501,6 +503,8 @@ SvxHyphenWordDialog::~SvxHyphenWordDialog()
 
 void SvxHyphenWordDialog::dispose()
 {
+    if (m_pCloseBtn->IsEnabled())
+        m_pHyphWrapper->SpellEnd();
     m_pWordEdit.clear();
     m_pLeftBtn.clear();
     m_pRightBtn.clear();
@@ -511,7 +515,6 @@ void SvxHyphenWordDialog::dispose()
     m_pCloseBtn.clear();
     SfxModalDialog::dispose();
 }
-
 
 void SvxHyphenWordDialog::SetWindowTitle( LanguageType nLang )
 {
