@@ -42,8 +42,14 @@ $(eval $(call gb_Executable_add_libs,updater,\
 endif
 
 $(eval $(call gb_Executable_use_externals,updater,\
-	gtk \
 	bzip2 \
+	$(if $(filter LINUX,$(OS)), \
+		gtk \
+		nss3 )\
+))
+
+$(eval $(call gb_Executable_add_defs,updater,\
+	-DVERIFY_MAR_SIGNATURE \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,updater,\
