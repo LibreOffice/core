@@ -212,7 +212,7 @@ void ConvDicXMLDictionaryContext_Impl::StartElement(
         OUString aValue = rxAttrList->getValueByIndex(i);
 
         if ( nPrefix == XML_NAMESPACE_TCD && aLocalName == "lang" )
-            nLanguage = LanguageTag::convertToLanguageTypeWithFallback( aValue );
+            nLanguage = LanguageTag::convertToLanguageType( aValue );
         else if ( nPrefix == XML_NAMESPACE_TCD && aLocalName == "conversion-type" )
             nConversionType = GetConversionTypeFromText( aValue );
     }
