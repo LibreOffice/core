@@ -1,0 +1,11 @@
+<svg version="1.1" baseProfile="basic" id="svg-root"
+  width="100%" height="100%" viewBox="0 0 480 360"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none">
+
+  <clipPath id="p.0">
+    <path
+        d="m0 0l437.0 0l0 487.0l-437.0 0l0 -487.0z"
+        clip-rule="nonzero"/>
+  </clipPath>
+  <circle clip-path="url(#p.0)" id="c1" cx="100" cy="100" r="50" style="fill:red" stroke-width="5px" stroke="black"/>
+</svg>
