@@ -756,7 +756,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     const SwXTextSearch* pSearch = reinterpret_cast<const SwXTextSearch*>(
             xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()));
 
-    int eRanges(FND_IN_BODY|FND_IN_SELALL);
+    int eRanges(FindRanges::InBody|FindRanges::InSelAll);
 
     util::SearchOptions2 aSearchOpt;
     pSearch->FillSearchOptions( aSearchOpt );
@@ -886,17 +886,17 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
 
 /**
  * The following combinations are allowed:
- *  - Search in the body:                   -> FND_IN_BODY
- *  - Search all in the body:               -> FND_IN_BODYONLY | FND_IN_SELALL
- *  - Search in selections: one / all       -> FND_IN_SEL  [ | FND_IN_SELALL ]
- *  - Search outside the body: one / all    -> FND_IN_OTHER [ | FND_IN_SELALL ]
- *  - Search everywhere all:                -> FND_IN_SELALL
+ *  - Search in the body:                   -> FindRanges::InBody
+ *  - Search all in the body:               -> FindRanges::InBodyOnly | FindRanges::InSelAll
+ *  - Search in selections: one / all       -> FindRanges::InSel  [ | FindRanges::InSelAll ]
+ *  - Search outside the body: one / all    -> FindRanges::InOther [ | FindRanges::InSelAll ]
+ *  - Search everywhere all:                -> FindRanges::InSelAll
  */
-    int eRanges(FND_IN_BODY);
+    FindRanges eRanges(FindRanges::InBody);
     if(bParentInExtra)
-        eRanges = FND_IN_OTHER;
+        eRanges = FindRanges::InOther;
     if(bAll) //always - everywhere?
-        eRanges = FND_IN_SELALL;
+        eRanges = FindRanges::InSelAll;
     SwDocPositions eStart = !bAll ? SwDocPositions::Curr : pSearch->m_bBack ? SwDocPositions::End : SwDocPositions::Start;
     SwDocPositions eEnd = pSearch->m_bBack ? SwDocPositions::Start : SwDocPositions::End;
 
@@ -938,10 +938,10 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
                     eStart, eEnd, bCancel,
                     (FindRanges)eRanges );
         }
-        if(nResult || (eRanges&(FND_IN_SELALL|FND_IN_OTHER)))
+        if(nResult || (eRanges&(FindRanges::InSelAll|FindRanges::InOther)))
             break;
         //second step - find in other
-        eRanges = FND_IN_OTHER;
+        eRanges = FindRanges::InOther;
     }
     return pUnoCursor;
 }

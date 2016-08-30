@@ -729,7 +729,7 @@ sal_uLong SwCursor::Find( const SearchOptions2& rSearchOpt, bool bSearchInNotes,
 
     bool bSearchSel = 0 != (rSearchOpt.searchFlag & SearchFlags::REG_NOT_BEGINOFLINE);
     if( bSearchSel )
-        eFndRngs = (FindRanges)(eFndRngs | FND_IN_SEL);
+        eFndRngs = (FindRanges)(eFndRngs | FindRanges::InSel);
     SwFindParaText aSwFindParaText( rSearchOpt, bSearchInNotes, bReplace, *this );
     sal_uLong nRet = FindAll( aSwFindParaText, nStart, nEnd, eFndRngs, bCancel );
     pDoc->SetOle2Link( aLnk );

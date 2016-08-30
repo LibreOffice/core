@@ -456,7 +456,7 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, bool bWordOnly, bool bCaseSen
     //todo/mba: assuming that notes should not be searched
     bool bSearchInNotes = false;
     rSh.Find( aSearchOpt,  bSearchInNotes, SwDocPositions::Start, SwDocPositions::End, bCancel,
-                        (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY) );
+                        (FindRanges)(FindRanges::InSelAll|FindRanges::InBodyOnly) );
 }
 
 void SwIndexMarkPane::InsertMark()

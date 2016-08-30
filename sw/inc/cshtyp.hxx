@@ -21,6 +21,7 @@
 
 #include <tools/solar.h>
 #include "swdllapi.h"
+#include <o3tl/typed_flags_set.hxx>
 
 class SwPaM;
 class SwContentFrame;
@@ -72,20 +73,24 @@ extern SwMoveFnCollection const & fnRegionEnd;
 
 /*
  * The following combinations are allowed:
- *  - find one in body                      -> FND_IN_BODY
- *  - find all in body:                     -> FND_IN_BODYONLY | FND_IN_SELALL
- *  - find in selections: one/all           -> FND_IN_SEL  [ | FND_IN_SELALL ]
- *  - find not in body: one/all             -> FND_IN_OTHER [ | FND_IN_SELALL ]
- *  - find all everywhere                   -> FND_IN_SELALL
+ *  - find one in body                      -> FindRanges::InBody
+ *  - find all in body:                     -> FindRanges::InBodyOnly | FindRanges::InSelAll
+ *  - find in selections: one/all           -> FindRanges::InSel  [ | FindRanges::InSelAll ]
+ *  - find not in body: one/all             -> FindRanges::InOther [ | FindRanges::InSelAll ]
+ *  - find all everywhere                   -> FindRanges::InSelAll
  */
-enum FindRanges
+enum class FindRanges
 {
-    FND_IN_BODY     = 0x00,     ///< Find "one" only in body text.
-    FND_IN_OTHER    = 0x02,     ///< Find "all" in Footer/Header/Fly...
-    FND_IN_SEL      = 0x04,     ///< Find in selections.
-    FND_IN_BODYONLY = 0x08,     ///< Find only in body - only in combination with FND_IN_SELALL !!!
-    FND_IN_SELALL   = 0x01      ///< All (only in non-body and selections).
+    InBody     = 0x00,     ///< Find "one" only in body text.
+    InSelAll   = 0x01,     ///< All (only in non-body and selections).
+    InOther    = 0x02,     ///< Find "all" in Footer/Header/Fly...
+    InSel      = 0x04,     ///< Find in selections.
+    InBodyOnly = 0x08,     ///< Find only in body - only in combination with FindRanges::InSelAll !!!
 };
+namespace o3tl
+{
+    template<> struct typed_flags<FindRanges> : is_typed_flags<FindRanges, 0x0f> {};
+}
 
 enum class SwDocPositions
 {

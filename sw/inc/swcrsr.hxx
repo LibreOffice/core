@@ -116,17 +116,17 @@ public:
                 bool bSearchInNotes,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
-                FindRanges = FND_IN_BODY,
+                FindRanges = FindRanges::InBody,
                 bool bReplace = false );
     sal_uLong Find( const SwTextFormatColl& rFormatColl,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
-                FindRanges = FND_IN_BODY,
+                FindRanges = FindRanges::InBody,
                 const SwTextFormatColl* pReplFormat = nullptr );
     sal_uLong Find( const SfxItemSet& rSet, bool bNoCollections,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
-                FindRanges = FND_IN_BODY,
+                FindRanges = FindRanges::InBody,
                 const css::util::SearchOptions2* pSearchOpt = nullptr,
                 const SfxItemSet* rReplSet = nullptr );
 

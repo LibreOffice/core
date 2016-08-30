@@ -374,7 +374,7 @@ void SwEditShell::ApplyAutoMark()
                     // todo/mba: assuming that notes shouldn't be searched
                     bool bSearchInNotes = false;
                     sal_uLong nRet = Find( aSearchOpt,  bSearchInNotes, SwDocPositions::Start, SwDocPositions::End, bCancel,
-                                    (FindRanges)(FND_IN_SELALL) );
+                                    (FindRanges)(FindRanges::InSelAll) );
 
                     if(nRet)
                     {

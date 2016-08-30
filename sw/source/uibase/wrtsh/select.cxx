@@ -214,7 +214,7 @@ sal_uLong SwWrtShell::SearchPattern( const SearchOptions2& rSearchOpt, bool bSea
                                 FindRanges eFlags, bool bReplace )
 {
         // no enhancement of existing selections
-    if(!(eFlags & FND_IN_SEL))
+    if(!(eFlags & FindRanges::InSel))
         ClearMark();
     bool bCancel = false;
     sal_uLong nRet = Find( rSearchOpt, bSearchInNotes, eStt, eEnd, bCancel, eFlags, bReplace );
@@ -233,7 +233,7 @@ sal_uLong SwWrtShell::SearchTempl( const OUString &rTempl,
                                FindRanges eFlags, const OUString* pReplTempl )
 {
         // no enhancement of existing selections
-    if(!(eFlags & FND_IN_SEL))
+    if(!(eFlags & FindRanges::InSel))
         ClearMark();
     SwTextFormatColl *pColl = GetParaStyle(rTempl, SwWrtShell::GETSTYLE_CREATESOME);
     SwTextFormatColl *pReplaceColl = nullptr;
@@ -259,7 +259,7 @@ sal_uLong SwWrtShell::SearchAttr( const SfxItemSet& rFindSet, bool bNoColls,
                                 const SfxItemSet* pReplaceSet )
 {
     // no enhancement of existing selections
-    if (!(eFlags & FND_IN_SEL))
+    if (!(eFlags & FindRanges::InSel))
         ClearMark();
 
     // Searching

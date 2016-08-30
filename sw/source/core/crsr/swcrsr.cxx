@@ -751,7 +751,7 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
     bool bIsUnoCursor = dynamic_cast<SwUnoCursor*>(pCurrentCursor) !=  nullptr;
     std::unique_ptr<PercentHdl> pPHdl;
     sal_uInt16 nCursorCnt = 0;
-    if( FND_IN_SEL & eFndRngs )
+    if( FindRanges::InSel & eFndRngs )
     {
         while( pCurrentCursor != ( pTmpCursor = pTmpCursor->GetNext() ))
             ++nCursorCnt;
@@ -797,7 +797,7 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
 
             ++nFound;
 
-            if( !( eFndRngs & FND_IN_SELALL) )
+            if( !( eFndRngs & FindRanges::InSelAll) )
             {
                 bEnd = true;
                 break;
@@ -841,7 +841,7 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
             }
         }
 
-        if( bEnd || !( eFndRngs & ( FND_IN_SELALL | FND_IN_SEL )) )
+        if( bEnd || !( eFndRngs & ( FindRanges::InSelAll | FindRanges::InSel )) )
             break;
 
         pTmpCursor = pTmpCursor->GetNext();
@@ -943,7 +943,7 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
     SwNodes& rNds = GetDoc()->GetNodes();
 
     // search in sections?
-    if( FND_IN_SEL & eFndRngs )
+    if( FindRanges::InSel & eFndRngs )
     {
         // if string was not found in region then get all sections (cursors
         // stays unchanged)
@@ -962,7 +962,7 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
         pFndRing->GetRingContainer().merge( GetRingContainer() );
         delete pFndRing;
     }
-    else if( FND_IN_OTHER & eFndRngs )
+    else if( FindRanges::InOther & eFndRngs )
     {
         // put cursor as copy of current into ring
         // chaining points always to first created, so forward
@@ -999,7 +999,7 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
         }
         pSav.release();
 
-        if( !( FND_IN_SELALL & eFndRngs ))
+        if( !( FindRanges::InSelAll & eFndRngs ))
         {
             // there should only be a single one, thus add it
             // independent from search direction: SPoint is always bigger than
@@ -1021,11 +1021,11 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
         }
         delete pFndRing;
     }
-    else if( FND_IN_SELALL & eFndRngs )
+    else if( FindRanges::InSelAll & eFndRngs )
     {
         std::unique_ptr< SwCursor> pSav( Create( this ) );    // save the current cursor
 
-        const SwNode* pSttNd = ( FND_IN_BODYONLY & eFndRngs )
+        const SwNode* pSttNd = ( FindRanges::InBodyOnly & eFndRngs )
                             ? rNds.GetEndOfContent().StartOfSectionNode()
                             : rNds.GetEndOfPostIts().StartOfSectionNode();
 
@@ -1065,7 +1065,7 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
         // if a GetMark is set then keep the GetMark of the found object
         // This allows spanning an area with this search.
         SwPosition aMarkPos( *GetMark() );
-        const bool bMarkPos = HasMark() && !eFndRngs;
+        const bool bMarkPos = HasMark() && (eFndRngs == FindRanges::InBody);
 
         if( 0 != (nFound = rParas.Find( this, fnMove,
                                         &aRegion, bInReadOnly ) ? 1 : 0)

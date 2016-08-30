@@ -791,11 +791,13 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
     bool bDoReplace = m_pSrchItem->GetCommand() == SvxSearchCmd::REPLACE ||
                       m_pSrchItem->GetCommand() == SvxSearchCmd::REPLACE_ALL;
 
-    int eRanges = m_pSrchItem->GetSelection() ?
-        FND_IN_SEL : m_bExtra ? FND_IN_OTHER : FND_IN_BODY;
+    FindRanges eRanges = m_pSrchItem->GetSelection()
+                        ? FindRanges::InSel
+                        : m_bExtra
+                          ? FindRanges::InOther : FindRanges::InBody;
     if (m_pSrchItem->GetCommand() == SvxSearchCmd::FIND_ALL    ||
         m_pSrchItem->GetCommand() == SvxSearchCmd::REPLACE_ALL)
-        eRanges |= FND_IN_SELALL;
+        eRanges |= FindRanges::InSelAll;
 
     m_pWrtShell->SttSelect();
 
