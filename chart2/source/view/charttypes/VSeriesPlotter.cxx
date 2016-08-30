@@ -1286,7 +1286,7 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
             }
             if( bShowCorrCoeff )
             {
-                aFormula.append( "R" + OUString( aSuperscriptFigures[2] ) + " = " );
+                aFormula.append( "R" + OUStringLiteral1( aSuperscriptFigures[2] ) + " = " );
                 double fR( xRegressionCurveCalculator->getCorrelationCoefficient());
                 if( m_apNumberFormatterWrapper.get())
                 {
