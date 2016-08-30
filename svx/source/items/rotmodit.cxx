@@ -78,7 +78,7 @@ bool SvxRotateModeItem::GetPresentation(
             SAL_FALLTHROUGH; // break; // FALL THROUGH!!!
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            rText += OUString( sal_Unicode(GetValue()) );
+            rText += OUStringLiteral1( GetValue() );
             return true;
             break;
         default: ;//prevent warning

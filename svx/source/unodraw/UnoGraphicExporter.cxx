@@ -356,10 +356,10 @@ IMPL_LINK_TYPED(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
                 switch(mpDoc->GetPageNumType())
                 {
                     case SVX_CHARS_UPPER_LETTER:
-                        aPageNumValue += OUString( (sal_Unicode)(char)((mnPageNumber - 1) % 26 + 'A') );
+                        aPageNumValue += OUStringLiteral1( (mnPageNumber - 1) % 26 + 'A' );
                         break;
                     case SVX_CHARS_LOWER_LETTER:
-                        aPageNumValue += OUString( (sal_Unicode)(char)((mnPageNumber - 1) % 26 + 'a') );
+                        aPageNumValue += OUStringLiteral1( (mnPageNumber - 1) % 26 + 'a' );
                         break;
                     case SVX_ROMAN_UPPER:
                         bUpper = true;
