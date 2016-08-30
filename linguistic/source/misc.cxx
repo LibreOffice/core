@@ -68,7 +68,7 @@ osl::Mutex &    GetLinguMutex()
     return LinguMutex::get();
 }
 
-LocaleDataWrapper & GetLocaleDataWrapper( LanguageType nLang )
+const LocaleDataWrapper & GetLocaleDataWrapper( LanguageType nLang )
 {
     static LocaleDataWrapper aLclDtaWrp( SvtSysLocale().GetLanguageTag() );
 

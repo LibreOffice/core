@@ -80,7 +80,7 @@ enum class CapType
 
 LNG_DLLPUBLIC ::osl::Mutex& GetLinguMutex();
 
-LocaleDataWrapper & GetLocaleDataWrapper( LanguageType nLang );
+const LocaleDataWrapper & GetLocaleDataWrapper( LanguageType nLang );
 
 sal_Int32 LevDistance( const OUString &rTxt1, const OUString &rTxt2 );
 
