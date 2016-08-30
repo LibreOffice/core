@@ -315,7 +315,7 @@ extern "C"
 {
 
 static void doc_destroy(LibreOfficeKitDocument* pThis);
-static int  doc_saveAs(LibreOfficeKitDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
+static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
 static int doc_getDocumentType(LibreOfficeKitDocument* pThis);
 static int doc_getParts(LibreOfficeKitDocument* pThis);
 static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis);
@@ -323,12 +323,12 @@ static int doc_getPart(LibreOfficeKitDocument* pThis);
 static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart);
 static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart);
 static void doc_setPartMode(LibreOfficeKitDocument* pThis, int nPartMode);
-void        doc_paintTile(LibreOfficeKitDocument* pThis,
+static void doc_paintTile(LibreOfficeKitDocument* pThis,
                           unsigned char* pBuffer,
                           const int nCanvasWidth, const int nCanvasHeight,
                           const int nTilePosX, const int nTilePosY,
                           const int nTileWidth, const int nTileHeight);
-void        doc_paintPartTile(LibreOfficeKitDocument* pThis,
+static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               unsigned char* pBuffer,
                               const int nPart,
                               const int nCanvasWidth, const int nCanvasHeight,
@@ -1235,11 +1235,11 @@ static void doc_setPartMode(LibreOfficeKitDocument* pThis,
     }
 }
 
-void doc_paintTile(LibreOfficeKitDocument* pThis,
-                   unsigned char* pBuffer,
-                   const int nCanvasWidth, const int nCanvasHeight,
-                   const int nTilePosX, const int nTilePosY,
-                   const int nTileWidth, const int nTileHeight)
+static void doc_paintTile(LibreOfficeKitDocument* pThis,
+                          unsigned char* pBuffer,
+                          const int nCanvasWidth, const int nCanvasHeight,
+                          const int nTilePosX, const int nTilePosY,
+                          const int nTileWidth, const int nTileHeight)
 {
     SAL_INFO( "lok.tiledrendering", "paintTile: painting [" << nTileWidth << "x" << nTileHeight <<
               "]@(" << nTilePosX << ", " << nTilePosY << ") to [" <<
@@ -1305,12 +1305,12 @@ void doc_paintTile(LibreOfficeKitDocument* pThis,
 }
 
 
-void doc_paintPartTile(LibreOfficeKitDocument* pThis,
-                       unsigned char* pBuffer,
-                       const int nPart,
-                       const int nCanvasWidth, const int nCanvasHeight,
-                       const int nTilePosX, const int nTilePosY,
-                       const int nTileWidth, const int nTileHeight)
+static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
+                              unsigned char* pBuffer,
+                              const int nPart,
+                              const int nCanvasWidth, const int nCanvasHeight,
+                              const int nTilePosX, const int nTilePosY,
+                              const int nTileWidth, const int nTileHeight)
 {
     SAL_INFO( "lok.tiledrendering", "paintPartTile: painting @ " << nPart << " ["
                << nTileWidth << "x" << nTileHeight << "]@("
