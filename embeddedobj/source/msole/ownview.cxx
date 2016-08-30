@@ -299,7 +299,7 @@ bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io::XI
                 aReadSeq[0] == '.'
                )
             {
-                aFileSuffix += OUString( (sal_Unicode) aReadSeq[0] );
+                aFileSuffix += OUStringLiteral1( aReadSeq[0] );
             }
 
         } while( aReadSeq[0] );
