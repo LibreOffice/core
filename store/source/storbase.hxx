@@ -44,15 +44,6 @@
  *
  *======================================================================*/
 
-#ifndef STORE_IMPL_ISP2
-#define STORE_IMPL_ISP2(value) (((value) & ((value) - 1)) == 0)
-#endif
-
-#ifndef STORE_IMPL_CONCAT
-#define STORE_IMPL_CONCAT(x, y) STORE_IMPL_CONCAT2(x,y)
-#define STORE_IMPL_CONCAT2(x, y) x##y
-#endif
-
 namespace store
 {
 
