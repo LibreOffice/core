@@ -159,21 +159,19 @@ SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName &rCop
     return *this;
 }
 
-void SwNumRulesWithName::MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const
+SwNumRule SwNumRulesWithName::MakeNumRule(SwWrtShell& rSh) const
 {
     // #i89178#
-    rChg = SwNumRule( maName, numfunc::GetDefaultPositionAndSpaceMode() );
-    rChg.SetAutoRule( false );
-    for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
+    SwNumRule aChg(maName, numfunc::GetDefaultPositionAndSpaceMode());
+    aChg.SetAutoRule( false );
+    for (sal_uInt16 n = 0; n < MAXLEVEL; ++n)
     {
         SwNumFormatGlobal* pFormat = aFormats[ n ];
-        if( nullptr != pFormat)
-        {
-            SwNumFormat aNew;
-            pFormat->ChgNumFormat( rSh, aNew );
-            rChg.Set( n, aNew );
-        }
+        if (!pFormat)
+            continue;
+        aChg.Set(n, pFormat->MakeNumFormat(rSh));
     }
+    return aChg;
 }
 
 void SwNumRulesWithName::GetNumFormat(
@@ -236,8 +234,7 @@ SwNumRulesWithName::SwNumFormatGlobal::~SwNumFormatGlobal()
 {
 }
 
-void SwNumRulesWithName::SwNumFormatGlobal::ChgNumFormat( SwWrtShell& rSh,
-                            SwNumFormat& rNew ) const
+SwNumFormat SwNumRulesWithName::SwNumFormatGlobal::MakeNumFormat(SwWrtShell& rSh) const
 {
     SwCharFormat* pFormat = nullptr;
     if( !sCharFormatName.isEmpty() )
@@ -272,10 +269,11 @@ void SwNumRulesWithName::SwNumFormatGlobal::ChgNumFormat( SwWrtShell& rSh,
             }
         }
     }
-    const_cast<SwNumFormat&>(aFormat).SetCharFormat( pFormat );
-    rNew = aFormat;
-    if( pFormat )
-        const_cast<SwNumFormat&>(aFormat).SetCharFormat( nullptr );
+    const_cast<SwNumFormat&>(aFormat).SetCharFormat(pFormat);
+    SwNumFormat aNew = aFormat;
+    if (pFormat)
+        const_cast<SwNumFormat&>(aFormat).SetCharFormat(nullptr);
+    return aNew;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

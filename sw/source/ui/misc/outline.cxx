@@ -305,7 +305,7 @@ IMPL_LINK_TYPED( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu, bool )
         const SwNumRulesWithName *pRules = pChapterNumRules->GetRules( nLevelNo );
         if( pRules )
         {
-            pRules->MakeNumRule( rWrtSh, *pNumRule );
+            *pNumRule = pRules->MakeNumRule(rWrtSh);
             pNumRule->SetRuleType( OUTLINE_RULE );
         }
         else

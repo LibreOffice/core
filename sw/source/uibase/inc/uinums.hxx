@@ -53,7 +53,7 @@ class SW_DLLPUBLIC SwNumRulesWithName
         SwNumFormatGlobal( const SwNumFormatGlobal& );
         ~SwNumFormatGlobal();
 
-        void ChgNumFormat( SwWrtShell& rSh, SwNumFormat& rChg ) const;
+        SwNumFormat MakeNumFormat(SwWrtShell& rSh) const;
     };
 
     SwNumFormatGlobal* aFormats[ MAXLEVEL ];
@@ -73,8 +73,7 @@ public:
     SwNumRulesWithName &operator=(const SwNumRulesWithName &);
 
     const OUString& GetName() const               { return maName; }
-    void MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const;
-
+    SwNumRule MakeNumRule(SwWrtShell& rSh) const;
 
     void GetNumFormat(size_t, SwNumFormat const*&, OUString const*&) const;
 };
