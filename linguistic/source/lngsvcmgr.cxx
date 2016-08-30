@@ -715,7 +715,7 @@ void LngSvcMgr::UpdateAll()
         const OUString *pNodeName = aNodeNames.getConstArray();
         for (i = 0;  i < nNodeNames;  ++i)
         {
-            Locale aLocale( (LanguageTag(pNodeName[i])).getLocale() );
+            Locale aLocale( LanguageTag::convertToLocale( pNodeName[i]));
             Sequence< OUString > aCfgSvcs( getConfiguredServices( aService, aLocale ));
             Sequence< OUString > aAvailSvcs( getAvailableServices( aService, aLocale ));
 
@@ -734,7 +734,7 @@ void LngSvcMgr::UpdateAll()
         const Locale *pAvailLocale = aAvailLocales.getConstArray();
         for (i = 0;  i < nAvailLocales;  ++i)
         {
-            OUString aCfgLocaleStr( (LanguageTag(pAvailLocale[i])).getBcp47() );
+            OUString aCfgLocaleStr( LanguageTag::convertToBcp47( pAvailLocale[i]));
 
             Sequence< OUString > aAvailSvcs( getAvailableServices( aService, pAvailLocale[i] ));
 
@@ -1777,7 +1777,7 @@ bool LngSvcMgr::SaveCfgSvcs( const OUString &rServiceName )
             aCfgAny <<= aSvcImplNames;
             DBG_ASSERT( aCfgAny.hasValue(), "missing value for 'Any' type" );
 
-            OUString aCfgLocaleStr( (LanguageTag(pLocale[i])).getBcp47() );
+            OUString aCfgLocaleStr( LanguageTag::convertToBcp47( pLocale[i]));
             pValue->Value = aCfgAny;
             pValue->Name  = aNodeName + "/" + aCfgLocaleStr;
             pValue++;
