@@ -1177,7 +1177,7 @@ void SwHTMLWriter::OutImplicitMark( const OUString& rMark,
 {
     if( !rMark.isEmpty() && !m_aImplicitMarks.empty() )
     {
-        OUString sMark(rMark + OUStringLiteral1<cMarkSeparator>() + OUString::createFromAscii(pMarkType));
+        OUString sMark(rMark + OUStringLiteral1(cMarkSeparator) + OUString::createFromAscii(pMarkType));
         if( 0 != m_aImplicitMarks.erase( sMark ) )
         {
             OutAnchor(sMark.replace('?', '_')); // '?' causes problems in IE/Netscape 5

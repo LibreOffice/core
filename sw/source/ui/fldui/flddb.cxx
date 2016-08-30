@@ -219,14 +219,14 @@ bool SwFieldDBPage::FillItemSet(SfxItemSet* )
         sal_uInt16 nSubType = 0;
 
         OUString sDBName = aData.sDataSource
-            + OUStringLiteral1<DB_DELIM>()
+            + OUStringLiteral1(DB_DELIM)
             + aData.sCommand
-            + OUStringLiteral1<DB_DELIM>()
+            + OUStringLiteral1(DB_DELIM)
             + OUString::number(aData.nCommandType)
-            + OUStringLiteral1<DB_DELIM>();
+            + OUStringLiteral1(DB_DELIM);
         if (!sColumnName.isEmpty())
         {
-            sDBName += sColumnName + OUStringLiteral1<DB_DELIM>();
+            sDBName += sColumnName + OUStringLiteral1(DB_DELIM);
         }
         OUString aName = sDBName + m_pConditionED->GetText();
 

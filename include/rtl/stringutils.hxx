@@ -54,7 +54,7 @@ namespace rtl
       ...
       if (s[i] == WILDCARD) ...
       ...
-      if (s.endsWith(OUStringLiteral1<WILDCARD>())) ...
+      if (s.endsWith(OUStringLiteral1(WILDCARD))) ...
 
     to avoid creating a temporary OUString instance, and instead pick the
     endsWith overload actually designed to take an argument of type
@@ -64,22 +64,23 @@ namespace rtl
     functions take the literal argument by non-const lvalue reference, for
     technical reasons.  Except with MSVC, at least up to Visual Studio 2013:
     For one, it fails to take that const-ness into account when trying to match
-    "OUStringLiteral1_<C> const" against T in a "T & literal" parameter of a
+    "OUStringLiteral1_ const" against T in a "T & literal" parameter of a
     function template.  But for another, as a language extension, it allows to
     bind non-const temporary OUStringLiteral1_ instances to non-const lvalue
     references, but also with a warning that thus needs to be disabled.
 
     @since LibreOffice 5.0
 */
-template<sal_Unicode C> struct SAL_WARN_UNUSED OUStringLiteral1_ {
-    sal_Unicode const c = C;
+struct SAL_WARN_UNUSED OUStringLiteral1_ {
+    SAL_CONSTEXPR OUStringLiteral1_(sal_Unicode theC): c(theC) {}
+    sal_Unicode const c;
 };
 #if defined _MSC_VER && _MSC_VER <= 1900 && !defined __clang__
     // Visual Studio 2015
-template<sal_Unicode C> using OUStringLiteral1 = OUStringLiteral1_<C>;
+using OUStringLiteral1 = OUStringLiteral1_;
 #pragma warning(disable: 4239)
 #else
-template<sal_Unicode C> using OUStringLiteral1 = OUStringLiteral1_<C> const;
+using OUStringLiteral1 = OUStringLiteral1_ const;
 #endif
 
 /// @endcond
@@ -178,12 +179,12 @@ struct ConstCharArrayDetector<sal_Unicode const [N], T> {
         sal_Unicode const (& literal)[N])
     { return literal; }
 };
-template<sal_Unicode C, typename T> struct ConstCharArrayDetector<
+template<typename T> struct ConstCharArrayDetector<
 #if defined __GNUC__ && __GNUC__ == 4 && __GNUC_MINOR__ <= 8 \
         && !defined __clang__
-    OUStringLiteral1_<C> const,
+    OUStringLiteral1_ const,
 #else
-    OUStringLiteral1<C>,
+    OUStringLiteral1,
 #endif
     T>
 {
@@ -191,7 +192,7 @@ template<sal_Unicode C, typename T> struct ConstCharArrayDetector<
     static SAL_CONSTEXPR bool const ok = true;
     static SAL_CONSTEXPR std::size_t const length = 1;
     static SAL_CONSTEXPR sal_Unicode const * toPointer(
-        OUStringLiteral1_<C> const & literal)
+        OUStringLiteral1_ const & literal)
     { return &literal.c; }
 };
 #endif
@@ -209,12 +210,12 @@ struct ExceptConstCharArrayDetector< const char[ N ] >
 #if defined LIBO_INTERNAL_ONLY
 template<std::size_t N>
 struct ExceptConstCharArrayDetector<sal_Unicode const[N]> {};
-template<sal_Unicode C> struct ExceptConstCharArrayDetector<
+template<> struct ExceptConstCharArrayDetector<
 #if defined __GNUC__ && __GNUC__ == 4 && __GNUC_MINOR__ <= 8 \
         && !defined __clang__
-    OUStringLiteral1_<C> const
+    OUStringLiteral1_ const
 #else
-    OUStringLiteral1<C>
+    OUStringLiteral1
 #endif
     >
 {};
@@ -240,7 +241,7 @@ struct ExceptCharArrayDetector< const char[ N ] >
 #if defined LIBO_INTERNAL_ONLY
 template<std::size_t N> struct ExceptCharArrayDetector<sal_Unicode[N]> {};
 template<std::size_t N> struct ExceptCharArrayDetector<sal_Unicode const[N]> {};
-template<sal_Unicode C> struct ExceptCharArrayDetector<OUStringLiteral1_<C>> {};
+template<> struct ExceptCharArrayDetector<OUStringLiteral1_> {};
 #endif
 
 template< typename T1, typename T2 = void >

@@ -620,9 +620,9 @@ OUString SwFormToken::GetString() const
                   +  OUString::number( nOutlineLevel );
             break;
         case TOKEN_TEXT:
-            sData += OUStringLiteral1<TOX_STYLE_DELIMITER>()
-                  +  sText.replaceAll(OUStringLiteral1<TOX_STYLE_DELIMITER>(), "")
-                  +  OUStringLiteral1<TOX_STYLE_DELIMITER>();
+            sData += OUStringLiteral1(TOX_STYLE_DELIMITER)
+                  +  sText.replaceAll(OUStringLiteral1(TOX_STYLE_DELIMITER), "")
+                  +  OUStringLiteral1(TOX_STYLE_DELIMITER);
             break;
         case TOKEN_AUTHORITY:
             if (nAuthorityField<10)

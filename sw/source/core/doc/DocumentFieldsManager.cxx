@@ -65,8 +65,8 @@ namespace
 
         if( aDBData != aDocData )
         {
-            sDBNumNm = aDBData.sDataSource + OUStringLiteral1<DB_DELIM>()
-                + aDBData.sCommand + OUStringLiteral1<DB_DELIM>();
+            sDBNumNm = aDBData.sDataSource + OUStringLiteral1(DB_DELIM)
+                + aDBData.sCommand + OUStringLiteral1(DB_DELIM);
         }
         sDBNumNm += SwFieldType::GetTypeStr(TYP_DBSETNUMBERFLD);
 

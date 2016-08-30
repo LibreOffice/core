@@ -47,7 +47,7 @@ using namespace ::com::sun::star;
 /// replace database separator by dots for display
 static OUString lcl_DBTrennConv(const OUString& aContent)
 {
-    return aContent.replaceAll(OUStringLiteral1<DB_DELIM>(), ".");
+    return aContent.replaceAll(OUStringLiteral1(DB_DELIM), ".");
 }
 
 // database field type
@@ -62,9 +62,9 @@ SwDBFieldType::SwDBFieldType(SwDoc* pDocPtr, const OUString& rNam, const SwDBDat
     if(!aDBData.sDataSource.isEmpty() || !aDBData.sCommand.isEmpty())
     {
         sName = aDBData.sDataSource
-            + OUStringLiteral1<DB_DELIM>()
+            + OUStringLiteral1(DB_DELIM)
             + aDBData.sCommand
-            + OUStringLiteral1<DB_DELIM>()
+            + OUStringLiteral1(DB_DELIM)
             + sName;
     }
 }
@@ -237,9 +237,9 @@ OUString SwDBField::GetFieldName() const
 
     if (sContent.getLength() > 1)
     {
-        sContent += OUStringLiteral1<DB_DELIM>()
+        sContent += OUStringLiteral1(DB_DELIM)
             + rDBName.getToken(1, DB_DELIM)
-            + OUStringLiteral1<DB_DELIM>()
+            + OUStringLiteral1(DB_DELIM)
             + rDBName.getToken(2, DB_DELIM);
     }
     return lcl_DBTrennConv(sContent);
@@ -477,7 +477,7 @@ OUString SwDBNameInfField::GetFieldName() const
     {
         sStr += ":"
             + aDBData.sDataSource
-            + OUStringLiteral1<DB_DELIM>()
+            + OUStringLiteral1(DB_DELIM)
             + aDBData.sCommand;
     }
     return lcl_DBTrennConv(sStr);

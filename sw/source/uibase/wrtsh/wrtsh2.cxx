@@ -554,8 +554,8 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
     {
         SwSectionData aSection( FILE_LINK_SECTION, GetUniqueSectionName() );
         OUString aLinkFile = rBkmk.GetURL().getToken(0, '#')
-            + OUStringLiteral1<sfx2::cTokenSeparator>()
-            + OUStringLiteral1<sfx2::cTokenSeparator>()
+            + OUStringLiteral1(sfx2::cTokenSeparator)
+            + OUStringLiteral1(sfx2::cTokenSeparator)
             + rBkmk.GetURL().getToken(1, '#');
         aSection.SetLinkFileName( aLinkFile );
         aSection.SetProtectFlag( true );

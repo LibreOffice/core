@@ -1237,7 +1237,7 @@ IMPL_LINK_NOARG_TYPED(SwAuthorMarkPane, InsertHdl, Button*, void)
         OUString sFields;
         for(OUString & s : m_sFields)
         {
-            sFields += s + OUStringLiteral1<TOX_STYLE_DELIMITER>();
+            sFields += s + OUStringLiteral1(TOX_STYLE_DELIMITER);
         }
         if(bNewEntry)
         {

@@ -153,7 +153,7 @@ void SwVbaListHelper::CreateBulletListTemplate() throw( css::uno::RuntimeExcepti
         }
         case 2:
         {
-            aBulletChar = OUStringLiteral1<CHAR_EMPTY_DOT>();
+            aBulletChar = OUStringLiteral1(CHAR_EMPTY_DOT);
             break;
         }
         case 3:

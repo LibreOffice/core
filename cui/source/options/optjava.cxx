@@ -1117,7 +1117,7 @@ OUString SvxJavaClassPathDlg::GetClassPath() const
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
         if ( !sPath.isEmpty() )
-            sPath += OUStringLiteral1<CLASSPATH_DELIMITER>();
+            sPath += OUStringLiteral1(CLASSPATH_DELIMITER);
         OUString* pFullPath = static_cast< OUString* >( m_pPathList->GetEntryData(i) );
         if ( pFullPath )
             sPath += *pFullPath;

@@ -3225,7 +3225,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                 {
                                     if ( rTextPortion.GetExtraValue() )
                                         aText = OUString(rTextPortion.GetExtraValue());
-                                    aText += OUStringLiteral1<CH_HYPH>();
+                                    aText += OUStringLiteral1(CH_HYPH);
                                     nTextStart = 0;
                                     nTextLen = aText.getLength();
 

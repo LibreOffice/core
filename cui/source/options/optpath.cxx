@@ -161,7 +161,7 @@ static OUString Convert_Impl( const OUString& rValue )
             aReturn += aObj.PathToFileName();
         if ( nPos < 0 )
             break;
-        aReturn += OUStringLiteral1<MULTIPATH_DELIMITER>();
+        aReturn += OUStringLiteral1(MULTIPATH_DELIMITER);
     }
 
     return aReturn;
@@ -321,7 +321,7 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
                 GetPathList( i, sInternal, sUser, sWritable, bReadOnly );
                 OUString sTmpPath = sUser;
                 if ( !sTmpPath.isEmpty() && !sWritable.isEmpty() )
-                    sTmpPath += OUStringLiteral1<MULTIPATH_DELIMITER>();
+                    sTmpPath += OUStringLiteral1(MULTIPATH_DELIMITER);
                 sTmpPath += sWritable;
                 const OUString aValue = Convert_Impl( sTmpPath );
                 nWidth2 = std::max(nWidth2, pPathBox->GetTextWidth(aValue));
@@ -440,7 +440,7 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, StandardHdl_Impl, Button*, void)
                 if ( !bFound )
                 {
                     if ( !sTemp.isEmpty() )
-                        sTemp += OUStringLiteral1<MULTIPATH_DELIMITER>();
+                        sTemp += OUStringLiteral1(MULTIPATH_DELIMITER);
                     sTemp += sOnePath;
                 }
             }
@@ -460,7 +460,7 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, StandardHdl_Impl, Button*, void)
                         break;
                     }
                     if ( !sUserPath.isEmpty() )
-                        sUserPath += OUStringLiteral1<MULTIPATH_DELIMITER>();
+                        sUserPath += OUStringLiteral1(MULTIPATH_DELIMITER);
                     sUserPath += sToken;
                 }
             }
@@ -572,7 +572,7 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathHdl_Impl, Button*, void)
 
             OUString sPath( sUser );
             if ( !sPath.isEmpty() )
-                sPath += OUStringLiteral1<MULTIPATH_DELIMITER>();
+                sPath += OUStringLiteral1(MULTIPATH_DELIMITER);
             sPath += sWritable;
             pMultiDlg->SetPath( sPath );
 
@@ -599,12 +599,12 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathHdl_Impl, Button*, void)
                             break;
                         }
                         if ( !sUser.isEmpty() )
-                            sUser += OUStringLiteral1<MULTIPATH_DELIMITER>();
+                            sUser += OUStringLiteral1(MULTIPATH_DELIMITER);
                         sUser += sToken;
                     }
                     sFullPath = sUser;
                     if ( !sFullPath.isEmpty() )
-                        sFullPath += OUStringLiteral1<MULTIPATH_DELIMITER>();
+                        sFullPath += OUStringLiteral1(MULTIPATH_DELIMITER);
                     sFullPath += sWritable;
                 }
 

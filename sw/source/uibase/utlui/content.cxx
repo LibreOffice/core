@@ -1827,7 +1827,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
             sUrl += "#" + sEntry;
             if(!rToken.isEmpty())
             {
-                sUrl += OUStringLiteral1<cMarkSeparator>() + rToken;
+                sUrl += OUStringLiteral1(cMarkSeparator) + rToken;
             }
         }
         else

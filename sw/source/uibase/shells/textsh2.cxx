@@ -196,10 +196,10 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 OUString sColumnName;
                 if(pColumnNameItem)
                     static_cast<const SfxUsrAnyItem*>(pColumnNameItem)->GetValue() >>= sColumnName;
-                OUString sDBName = sSourceArg + OUStringLiteral1<DB_DELIM>()
-                    + sCommandArg + OUStringLiteral1<DB_DELIM>()
+                OUString sDBName = sSourceArg + OUStringLiteral1(DB_DELIM)
+                    + sCommandArg + OUStringLiteral1(DB_DELIM)
                     + OUString::number(nCommandTypeArg)
-                    + OUStringLiteral1<DB_DELIM>() + sColumnName;
+                    + OUStringLiteral1(DB_DELIM) + sColumnName;
 
                 SwFieldMgr aFieldMgr(GetShellPtr());
                 SwInsertField_Data aData(TYP_DBFLD, 0, sDBName, OUString(), 0);

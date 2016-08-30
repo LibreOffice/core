@@ -210,7 +210,7 @@ IMPL_LINK_NOARG_TYPED( SwGlossaryGroupDlg, SelectHdl, SvTreeListBox*, void )
 IMPL_LINK_NOARG_TYPED(SwGlossaryGroupDlg, NewHdl, Button*, void)
 {
     OUString sGroup = m_pNameED->GetText()
-        + OUStringLiteral1<GLOS_DELIM>()
+        + OUStringLiteral1(GLOS_DELIM)
         + OUString::number(m_pPathLB->GetSelectEntryPos());
     OSL_ENSURE(!pGlosHdl->FindGroupName(sGroup), "group already available!");
     m_InsertedArr.push_back(sGroup);
@@ -283,7 +283,7 @@ IMPL_LINK_NOARG_TYPED(SwGlossaryGroupDlg, RenameHdl, Button*, void)
 
     const OUString sNewTitle(m_pNameED->GetText());
     OUString sNewName = sNewTitle
-        + OUStringLiteral1<GLOS_DELIM>()
+        + OUStringLiteral1(GLOS_DELIM)
         + OUString::number(m_pPathLB->GetSelectEntryPos());
     OSL_ENSURE(!pGlosHdl->FindGroupName(sNewName), "group already available!");
 
@@ -302,8 +302,8 @@ IMPL_LINK_NOARG_TYPED(SwGlossaryGroupDlg, RenameHdl, Button*, void)
     }
     if(!bDone)
     {
-        sEntry += OUStringLiteral1<RENAME_TOKEN_DELIM>() + sNewName
-                + OUStringLiteral1<RENAME_TOKEN_DELIM>() + sNewTitle;
+        sEntry += OUStringLiteral1(RENAME_TOKEN_DELIM) + sNewName
+                + OUStringLiteral1(RENAME_TOKEN_DELIM) + sNewTitle;
         m_RenamedArr.push_back(sEntry);
     }
     delete static_cast<GlosBibUserData*>(pEntry->GetUserData());

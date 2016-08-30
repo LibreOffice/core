@@ -575,7 +575,7 @@ bool SwFieldFuncPage::FillItemSet(SfxItemSet* )
             for(sal_Int32 i = 0; i < m_pListItemsLB->GetEntryCount(); i++)
             {
                 if(i)
-                    aVal += OUStringLiteral1<DB_DELIM>();
+                    aVal += OUStringLiteral1(DB_DELIM);
                 aVal += m_pListItemsLB->GetEntry(i);
             }
         }

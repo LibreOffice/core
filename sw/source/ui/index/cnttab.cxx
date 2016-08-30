@@ -743,7 +743,7 @@ IMPL_LINK_NOARG_TYPED(SwAddStylesDlg_Impl, OkHdl, Button*, void)
         if(nLevel != USHRT_MAX)
         {
             if(!pStyleArr[nLevel].isEmpty())
-                pStyleArr[nLevel] += OUStringLiteral1<TOX_STYLE_DELIMITER>();
+                pStyleArr[nLevel] += OUStringLiteral1(TOX_STYLE_DELIMITER);
             pStyleArr[nLevel] += SvTabListBox::GetEntryText(pEntry, 0);
         }
         pEntry = m_pHeaderTree->Next(pEntry);
@@ -3670,9 +3670,9 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
     OUString aStr( SW_RES( STR_TITLE ));
     if( !m_pCurrentForm->GetTemplate( 0 ).isEmpty() )
     {
-        aStr += " " + OUStringLiteral1<aDeliStart>()
+        aStr += " " + OUStringLiteral1(aDeliStart)
               + m_pCurrentForm->GetTemplate( 0 )
-              + OUStringLiteral1<aDeliEnd>();
+              + OUStringLiteral1(aDeliEnd);
     }
     m_pLevelLB->InsertEntry(aStr);
 
@@ -3690,9 +3690,9 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
         }
         if( !m_pCurrentForm->GetTemplate( i ).isEmpty() )
         {
-            aStr += " " + OUStringLiteral1<aDeliStart>()
+            aStr += " " + OUStringLiteral1(aDeliStart)
                   + m_pCurrentForm->GetTemplate( i )
-                  + OUStringLiteral1<aDeliEnd>();
+                  + OUStringLiteral1(aDeliEnd);
         }
         m_pLevelLB->InsertEntry( aStr );
     }
@@ -3754,9 +3754,9 @@ IMPL_LINK_NOARG_TYPED(SwTOXStylesTabPage, AssignHdl, Button*, void)
        nTemplPos != LISTBOX_ENTRY_NOTFOUND)
     {
         const OUString aStr(m_pLevelLB->GetEntry(nLevPos).getToken(0, aDeliStart)
-            + OUStringLiteral1<aDeliStart>()
+            + OUStringLiteral1(aDeliStart)
             + m_pParaLayLB->GetSelectEntry()
-            + OUStringLiteral1<aDeliEnd>());
+            + OUStringLiteral1(aDeliEnd));
 
         m_pCurrentForm->SetTemplate(nLevPos, m_pParaLayLB->GetSelectEntry());
 

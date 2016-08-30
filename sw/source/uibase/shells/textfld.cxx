@@ -232,7 +232,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     if( SfxItemState::SET == pArgs->GetItemState( FN_PARAM_FIELD_TYPE,
                                                                 false, &pItem ))
                         nType = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
-                    aPar1 += OUStringLiteral1<DB_DELIM>();
+                    aPar1 += OUStringLiteral1(DB_DELIM);
                     if( SfxItemState::SET == pArgs->GetItemState(
                                         FN_PARAM_1, false, &pItem ))
                     {
@@ -241,9 +241,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     if( SfxItemState::SET == pArgs->GetItemState(
                                         FN_PARAM_3, false, &pItem ))
                         nCommand = static_cast<const SfxInt32Item*>(pItem)->GetValue();
-                    aPar1 += OUStringLiteral1<DB_DELIM>()
+                    aPar1 += OUStringLiteral1(DB_DELIM)
                         + OUString::number(nCommand)
-                        + OUStringLiteral1<DB_DELIM>();
+                        + OUStringLiteral1(DB_DELIM);
                     if( SfxItemState::SET == pArgs->GetItemState(
                                         FN_PARAM_2, false, &pItem ))
                     {

@@ -301,7 +301,7 @@ void SwGlossaryList::Update()
                 OUString sName( aTitle.copy( 0, aTitle.getLength() - sExt.getLength() ));
 
                 aFoundGroupNames.push_back(sName);
-                sName += OUStringLiteral1<GLOS_DELIM>() + OUString::number( static_cast<sal_uInt16>(nPath) );
+                sName += OUStringLiteral1(GLOS_DELIM) + OUString::number( static_cast<sal_uInt16>(nPath) );
                 AutoTextGroup* pFound = FindGroup( sName );
                 if( !pFound )
                 {
@@ -378,9 +378,9 @@ void SwGlossaryList::FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGlossaries)
     for(sal_uInt16 j = 0; j < pGroup->nCount; j++)
     {
         pGroup->sLongNames += pBlock->GetLongName(j)
-            + OUStringLiteral1<STRING_DELIM>();
+            + OUStringLiteral1(STRING_DELIM);
         pGroup->sShortNames += pBlock->GetShortName(j)
-            + OUStringLiteral1<STRING_DELIM>();
+            + OUStringLiteral1(STRING_DELIM);
     }
     delete pBlock;
 }

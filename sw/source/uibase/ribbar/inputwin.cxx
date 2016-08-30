@@ -433,8 +433,8 @@ IMPL_LINK_TYPED( SwInputWindow, SelTableCellsNotify, SwWrtShell&, rCaller, void 
 
         aEdit->UpdateRange( sBoxNms, sTableNm );
 
-        OUString sNew = OUStringLiteral1<CH_LRE>() + aEdit->GetText()
-            + OUStringLiteral1<CH_PDF>();
+        OUString sNew = OUStringLiteral1(CH_LRE) + aEdit->GetText()
+            + OUStringLiteral1(CH_PDF);
 
         if( sNew != sOldFormula )
         {
@@ -481,8 +481,8 @@ IMPL_LINK_NOARG_TYPED(SwInputWindow, ModifyHdl, Edit&, void)
     {
         pWrtShell->StartAllAction();
         DelBoxContent();
-        OUString sNew = OUStringLiteral1<CH_LRE>() + aEdit->GetText()
-            + OUStringLiteral1<CH_PDF>();
+        OUString sNew = OUStringLiteral1(CH_LRE) + aEdit->GetText()
+            + OUStringLiteral1(CH_PDF);
         pWrtShell->SwEditShell::Insert2( sNew );
         pWrtShell->EndAllAction();
         sOldFormula = sNew;

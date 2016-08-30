@@ -699,7 +699,7 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
         OUString sTemp = aFld->GetText();
         aFld->SetValue( aFld->Normalize( aOrigSize.Height() ), eUnit );
         // multiplication sign (U+00D7)
-        sTemp += OUStringLiteral1<0x00D7>() + aFld->GetText();
+        sTemp += OUStringLiteral1(0x00D7) + aFld->GetText();
 
         if ( aOrigPixelSize.Width() && aOrigPixelSize.Height() ) {
              sal_Int32 ax = sal_Int32(floor((float)aOrigPixelSize.Width() /
@@ -710,7 +710,7 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
              sTemp += CUI_RESSTR( RID_SVXSTR_PPI );
              OUString sPPI = OUString::number(ax);
              if (abs(ax - ay) > 1) {
-                sPPI += OUStringLiteral1<0x00D7>() + OUString::number(ay);
+                sPPI += OUStringLiteral1(0x00D7) + OUString::number(ay);
              }
              sTemp = sTemp.replaceAll("%1", sPPI);
         }

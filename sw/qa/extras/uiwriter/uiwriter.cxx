@@ -729,9 +729,9 @@ void SwUiWriterTest::testTdf98512()
     pWrtShell->SetMark();
     pWrtShell->SttEndDoc(/*bStt=*/false);
     OUString const expected1(
-        OUStringLiteral1<CH_TXT_ATR_INPUTFIELDSTART>() + "foo" + OUStringLiteral1<CH_TXT_ATR_INPUTFIELDEND>());
+        OUStringLiteral1(CH_TXT_ATR_INPUTFIELDSTART) + "foo" + OUStringLiteral1(CH_TXT_ATR_INPUTFIELDEND));
     OUString const expected2(
-        OUStringLiteral1<CH_TXT_ATR_INPUTFIELDSTART>() + "baz" + OUStringLiteral1<CH_TXT_ATR_INPUTFIELDEND>()
+        OUStringLiteral1(CH_TXT_ATR_INPUTFIELDSTART) + "baz" + OUStringLiteral1(CH_TXT_ATR_INPUTFIELDEND)
         + expected1);
     CPPUNIT_ASSERT_EQUAL(expected2, pWrtShell->getShellCursor(false)->GetText());
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
@@ -1984,10 +1984,10 @@ void SwUiWriterTest::testTdf73660()
 {
     SwDoc* pDoc = createDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    OUString aData1 = "First" + OUStringLiteral1<CHAR_SOFTHYPHEN>() + "Word";
-    OUString aData2 = "Seco" + OUStringLiteral1<CHAR_SOFTHYPHEN>() + "nd";
-    OUString aData3 = OUStringLiteral1<CHAR_SOFTHYPHEN>() + "Third";
-    OUString aData4 = "Fourth" + OUStringLiteral1<CHAR_SOFTHYPHEN>();
+    OUString aData1 = "First" + OUStringLiteral1(CHAR_SOFTHYPHEN) + "Word";
+    OUString aData2 = "Seco" + OUStringLiteral1(CHAR_SOFTHYPHEN) + "nd";
+    OUString aData3 = OUStringLiteral1(CHAR_SOFTHYPHEN) + "Third";
+    OUString aData4 = "Fourth" + OUStringLiteral1(CHAR_SOFTHYPHEN);
     OUString aData5 = "Fifth";
     pWrtShell->Insert("We are inserting some text in the document to check the search feature ");
     pWrtShell->Insert(aData1 + " ");
@@ -3534,7 +3534,7 @@ void SwUiWriterTest::testTdf96479()
 {
     // We want to verify the empty input text field in the bookmark
     static const OUString emptyInputTextField =
-        OUStringLiteral1<CH_TXT_ATR_INPUTFIELDSTART>() + OUStringLiteral1<CH_TXT_ATR_INPUTFIELDEND>();
+        OUStringLiteral1(CH_TXT_ATR_INPUTFIELDSTART) + OUStringLiteral1(CH_TXT_ATR_INPUTFIELDEND);
 
     SwDoc* pDoc = createDoc();
     SwXTextDocument *pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());

@@ -562,8 +562,8 @@ OUString SwSection::GetLinkFileName() const
                     sfx2::LinkManager::GetDisplayNames(
                         m_RefLink, nullptr, &sTmp, &sRange, &sFilter ))
                 {
-                    sTmp += OUStringLiteral1<sfx2::cTokenSeparator>() + sFilter
-                        + OUStringLiteral1<sfx2::cTokenSeparator>() + sRange;
+                    sTmp += OUStringLiteral1(sfx2::cTokenSeparator) + sFilter
+                        + OUStringLiteral1(sfx2::cTokenSeparator) + sRange;
                 }
                 else if( GetFormat() && !GetFormat()->GetSectionNode() )
                 {

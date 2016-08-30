@@ -120,7 +120,7 @@ const OUString ApplyLreOrRleEmbedding( const OUString &rText )
     if (bFound)
     {
         aRes = OUString(cStart) + aRes
-            + OUStringLiteral1<cPopDirectionalFormat>();
+            + OUStringLiteral1(cPopDirectionalFormat);
     }
 
     return aRes;

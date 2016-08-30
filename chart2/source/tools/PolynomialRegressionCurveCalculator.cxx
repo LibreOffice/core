@@ -278,7 +278,7 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
         {
             if ( bFindValue ) // if it is not the first aValue
                 aTmpBuf.append( " " );
-            aTmpBuf.append( OUStringLiteral1<aMinusSign>() + " ");
+            aTmpBuf.append( OUStringLiteral1(aMinusSign) + " ");
             aValue = - aValue;
         }
         else

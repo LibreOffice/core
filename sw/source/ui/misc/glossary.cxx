@@ -282,7 +282,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox, void )
     SvTreeListEntry* pParent = pBox->GetParent(pEntry) ? pBox->GetParent(pEntry) : pEntry;
     GroupUserData* pGroupData = static_cast<GroupUserData*>(pParent->GetUserData());
     ::SetCurrGlosGroup(pGroupData->sGroupName
-        + OUStringLiteral1<GLOS_DELIM>()
+        + OUStringLiteral1(GLOS_DELIM)
         + OUString::number(pGroupData->nPathIdx));
     pGlossaryHdl->SetCurGroup(::GetCurrGlosGroup());
     // set current text block
@@ -663,7 +663,7 @@ IMPL_LINK_NOARG_TYPED(SwGlossaryDlg, BibHdl, Button*, void)
                     {
                         GroupUserData* pGroupData = static_cast<GroupUserData*>(pEntry->GetUserData());
                         const OUString sGroup = pGroupData->sGroupName
-                            + OUStringLiteral1<GLOS_DELIM>()
+                            + OUStringLiteral1(GLOS_DELIM)
                             + OUString::number(pGroupData->nPathIdx);
                         if(sGroup == sNewGroup)
                         {
@@ -925,7 +925,7 @@ DragDropMode SwGlTreeListBox::NotifyStartDrag(
 
         GroupUserData* pGroupData = static_cast<GroupUserData*>(pParent->GetUserData());
         OUString sEntry = pGroupData->sGroupName
-            + OUStringLiteral1<GLOS_DELIM>()
+            + OUStringLiteral1(GLOS_DELIM)
             + OUString::number(pGroupData->nPathIdx);
         sal_Int8 nDragOption = DND_ACTION_COPY;
         eRet = DragDropMode::CTRL_COPY;
@@ -989,7 +989,7 @@ TriState SwGlTreeListBox::NotifyCopyingOrMoving(
 
         GroupUserData* pGroupData = static_cast<GroupUserData*>(pSrcParent->GetUserData());
         OUString sSourceGroup = pGroupData->sGroupName
-            + OUStringLiteral1<GLOS_DELIM>()
+            + OUStringLiteral1(GLOS_DELIM)
             + OUString::number(pGroupData->nPathIdx);
 
         pDlg->pGlossaryHdl->SetCurGroup(sSourceGroup);
@@ -998,7 +998,7 @@ TriState SwGlTreeListBox::NotifyCopyingOrMoving(
 
         GroupUserData* pDestData = static_cast<GroupUserData*>(pDestParent->GetUserData());
         OUString sDestName = pDestData->sGroupName
-            + OUStringLiteral1<GLOS_DELIM>()
+            + OUStringLiteral1(GLOS_DELIM)
             + OUString::number(pDestData->nPathIdx);
 
         const bool bRet = pDlg->pGlossaryHdl->CopyOrMove( sSourceGroup,  sShortName,
@@ -1030,7 +1030,7 @@ OUString SwGlossaryDlg::GetCurrGrpName() const
         pEntry =
             m_pCategoryBox->GetParent(pEntry) ? m_pCategoryBox->GetParent(pEntry) : pEntry;
         GroupUserData* pGroupData = static_cast<GroupUserData*>(pEntry->GetUserData());
-        return pGroupData->sGroupName + OUStringLiteral1<GLOS_DELIM>() + OUString::number(pGroupData->nPathIdx);
+        return pGroupData->sGroupName + OUStringLiteral1(GLOS_DELIM) + OUString::number(pGroupData->nPathIdx);
     }
     return OUString();
 }

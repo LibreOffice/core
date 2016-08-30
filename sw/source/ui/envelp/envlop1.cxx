@@ -226,7 +226,7 @@ SwEnvPage::SwEnvPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pPreview->SetBorderStyle( WindowBorderStyle::MONO );
 
     SwDBData aData = pSh->GetDBData();
-    sActDBName = aData.sDataSource + OUStringLiteral1<DB_DELIM>() + aData.sCommand;
+    sActDBName = aData.sDataSource + OUStringLiteral1(DB_DELIM) + aData.sCommand;
     InitDatabaseBox();
 }
 
@@ -256,7 +256,7 @@ IMPL_LINK_TYPED( SwEnvPage, DatabaseHdl, ListBox&, rListBox, void )
     {
         sActDBName = rListBox.GetSelectEntry();
         pSh->GetDBManager()->GetTableNames(m_pTableLB, sActDBName);
-        sActDBName += OUStringLiteral1<DB_DELIM>();
+        sActDBName += OUStringLiteral1(DB_DELIM);
     }
     else
     {

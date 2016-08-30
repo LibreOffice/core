@@ -1173,9 +1173,9 @@ static SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
 {
     // make command string
     const OUString sCommand(pContext->GetDDEApplication()
-        + OUStringLiteral1<sfx2::cTokenSeparator>()
+        + OUStringLiteral1(sfx2::cTokenSeparator)
         + pContext->GetDDEItem()
-        + OUStringLiteral1<sfx2::cTokenSeparator>()
+        + OUStringLiteral1(sfx2::cTokenSeparator)
         + pContext->GetDDETopic());
 
     const SfxLinkUpdateMode nType = pContext->GetIsAutomaticUpdate()

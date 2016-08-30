@@ -2321,7 +2321,7 @@ bool SwFEShell::GetAutoSum( OUString& rFormula ) const
                         GetTabBox()->GetFrameFormat()->GetTableBoxFormula(), aCells ))
                     break;
                 else if( USHRT_MAX != nBoxW )
-                    sFields = OUStringLiteral1<cListDelim>() + sFields;
+                    sFields = OUStringLiteral1(cListDelim) + sFields;
                 else
                     break;
             }
@@ -2346,7 +2346,7 @@ bool SwFEShell::GetAutoSum( OUString& rFormula ) const
                         }
                     }
                     else
-                        sFields = OUStringLiteral1<cListDelim>() + sFields;
+                        sFields = OUStringLiteral1(cListDelim) + sFields;
                 }
                 else if( USHRT_MAX == nBoxW )
                     break;

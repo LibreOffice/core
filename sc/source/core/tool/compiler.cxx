@@ -3851,7 +3851,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
         }
         else if ( c1 != cQuote && c2 == cQuote )
         {   // ..."
-            aCorrectedSymbol = OUStringLiteral1<cQuote>() + aCorrectedSymbol;
+            aCorrectedSymbol = OUStringLiteral1(cQuote) + aCorrectedSymbol;
             bCorrected = true;
         }
         else if ( nPos == 0 && (c1 == cx || c1 == cX) )
@@ -3865,13 +3865,13 @@ void ScCompiler::AutoCorrectParsedSymbol()
             if ( comphelper::string::getTokenCount(aCorrectedSymbol, cx) > 1 )
             {   // x => *
                 sal_Unicode c = mxSymbols->getSymbolChar(ocMul);
-                aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUStringLiteral1<cx>(), OUString(c));
+                aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUStringLiteral1(cx), OUString(c));
                 bCorrected = true;
             }
             if ( comphelper::string::getTokenCount(aCorrectedSymbol, cX) > 1 )
             {   // X => *
                 sal_Unicode c = mxSymbols->getSymbolChar(ocMul);
-                aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUStringLiteral1<cX>(), OUString(c));
+                aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUStringLiteral1(cX), OUString(c));
                 bCorrected = true;
             }
         }

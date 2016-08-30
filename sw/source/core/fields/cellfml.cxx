@@ -352,7 +352,7 @@ void SwTableFormula::MakeFormula_( const SwTable& rTable, OUString& rNewStr,
             if ( pTableBox->getRowSpan() >= 1 )
             {
                 if( bDelim )
-                    rNewStr += OUStringLiteral1<cListDelim>();
+                    rNewStr += OUStringLiteral1(cListDelim);
                 bDelim = true;
                 rNewStr += pCalcPara->rCalc.GetStrResult(
                             pTableBox->GetValue( *pCalcPara ), false );
@@ -858,12 +858,12 @@ static OUString lcl_BoxNmToRel( const SwTable& rTable, const SwTableNode& rTable
 
         const OUString sCpy = sTmp;        //JP 01.11.95: add rest from box name
 
-        sTmp = OUStringLiteral1<cRelIdentifier>() + OUString::number( nBox )
-             + OUStringLiteral1<cRelSeparator>() + OUString::number( nLine );
+        sTmp = OUStringLiteral1(cRelIdentifier) + OUString::number( nBox )
+             + OUStringLiteral1(cRelSeparator) + OUString::number( nLine );
 
         if (!sCpy.isEmpty())
         {
-            sTmp += OUStringLiteral1<cRelSeparator>() + sCpy;
+            sTmp += OUStringLiteral1(cRelSeparator) + sCpy;
         }
     }
 

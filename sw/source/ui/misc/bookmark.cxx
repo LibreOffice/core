@@ -192,7 +192,7 @@ IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, RenameHdl, Button*, void)
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
     std::unique_ptr<AbstractSwRenameXNamedDlg> pDlg(pFact->CreateSwRenameXNamedDlg(this, xNamed, xNameAccess));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
-    pDlg->SetForbiddenChars(BookmarkTable::aForbiddenChars + OUStringLiteral1<BookmarkTable::cSeparator>());
+    pDlg->SetForbiddenChars(BookmarkTable::aForbiddenChars + OUStringLiteral1(BookmarkTable::cSeparator));
 
     if (pDlg->Execute())
     {

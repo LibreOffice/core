@@ -217,36 +217,37 @@ void test::oustring::StringLiterals::checkOUStringLiteral()
 
 void test::oustring::StringLiterals::checkOUStringLiteral1()
 {
-    auto l1 = rtlunittest::OUStringLiteral1<'A'>();
+    auto l1 = rtlunittest::OUStringLiteral1('A');
     CPPUNIT_ASSERT_EQUAL(sal_Unicode('A'), l1.c);
 
     char const c2 = 'A';
-    auto l2 = rtlunittest::OUStringLiteral1<c2>();
+    auto l2 = rtlunittest::OUStringLiteral1(c2);
     CPPUNIT_ASSERT_EQUAL(sal_Unicode('A'), l2.c);
 
-    // char c3 = 'A'; auto l3 = rtlunittest::OUStringLiteral1<c3>();
+    char c3 = 'A'; auto l3 = rtlunittest::OUStringLiteral1(c3);
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode('A'), l3.c);
 
-    auto l4 = rtlunittest::OUStringLiteral1<sal_Unicode('A')>();
+    auto l4 = rtlunittest::OUStringLiteral1(sal_Unicode('A'));
     CPPUNIT_ASSERT_EQUAL(sal_Unicode('A'), l4.c);
 
     sal_Unicode const c5 = 0x100;
-    auto l5 = rtlunittest::OUStringLiteral1<c5>();
+    auto l5 = rtlunittest::OUStringLiteral1(c5);
     CPPUNIT_ASSERT_EQUAL(c5, l5.c);
 
-    rtl::OUString s1{rtlunittest::OUStringLiteral1<'A'>()};
+    rtl::OUString s1{rtlunittest::OUStringLiteral1('A')};
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), s1.getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Unicode('A'), s1[0]);
 
     CPPUNIT_ASSERT_EQUAL(
-        true, rtl::OUString("A") == rtlunittest::OUStringLiteral1<'A'>());
+        true, rtl::OUString("A") == rtlunittest::OUStringLiteral1('A'));
     CPPUNIT_ASSERT_EQUAL(
-        false, rtl::OUString("AB") == rtlunittest::OUStringLiteral1<'A'>());
+        false, rtl::OUString("AB") == rtlunittest::OUStringLiteral1('A'));
     CPPUNIT_ASSERT_EQUAL(
-        false, rtl::OUString("A") != rtlunittest::OUStringLiteral1<'A'>());
+        false, rtl::OUString("A") != rtlunittest::OUStringLiteral1('A'));
     CPPUNIT_ASSERT_EQUAL(
-        true, rtl::OUString("AB") != rtlunittest::OUStringLiteral1<'A'>());
+        true, rtl::OUString("AB") != rtlunittest::OUStringLiteral1('A'));
 
-    rtl::OUString s2("A" + rtlunittest::OUStringLiteral1<'b'>());
+    rtl::OUString s2("A" + rtlunittest::OUStringLiteral1('b'));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), s2.getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Unicode('A'), s2[0]);
     CPPUNIT_ASSERT_EQUAL(sal_Unicode('b'), s2[1]);

@@ -2097,7 +2097,7 @@ void EditEngine::SetWordDelimiters( const OUString& rDelimiters )
 {
     pImpEditEngine->aWordDelimiters = rDelimiters;
     if (pImpEditEngine->aWordDelimiters.indexOf(CH_FEATURE) == -1)
-        pImpEditEngine->aWordDelimiters += OUStringLiteral1<CH_FEATURE>();
+        pImpEditEngine->aWordDelimiters += OUStringLiteral1(CH_FEATURE);
 }
 
 const OUString& EditEngine::GetWordDelimiters() const

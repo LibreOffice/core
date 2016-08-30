@@ -831,7 +831,7 @@ OUString SdTPAction::GetEditText( bool bFullDocDestination )
         OUString aTmpStr( m_pLbTreeDocument->GetSelectEntry() );
         if( !aTmpStr.isEmpty() )
         {
-            aStr += OUStringLiteral1<DOCUMENT_TOKEN>() + aTmpStr;
+            aStr += OUStringLiteral1(DOCUMENT_TOKEN) + aTmpStr;
         }
     }
 

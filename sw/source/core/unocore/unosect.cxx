@@ -340,9 +340,9 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     SwSectionData aSect(eType, pDoc->GetUniqueSectionName(&m_pImpl->m_sName));
     aSect.SetCondition(m_pImpl->m_pProps->m_sCondition);
     aSect.SetLinkFileName(m_pImpl->m_pProps->m_sLinkFileName +
-        OUStringLiteral1<sfx2::cTokenSeparator>() +
+        OUStringLiteral1(sfx2::cTokenSeparator) +
         m_pImpl->m_pProps->m_sSectionFilter +
-        OUStringLiteral1<sfx2::cTokenSeparator>() +
+        OUStringLiteral1(sfx2::cTokenSeparator) +
         m_pImpl->m_pProps->m_sSectionRegion);
 
     aSect.SetHidden(m_pImpl->m_pProps->m_bHidden);
@@ -616,7 +616,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                     if (!m_pProps->m_bDDE)
                     {
                         m_pProps->m_sLinkFileName =
-                            OUStringLiteral1<sfx2::cTokenSeparator>() + OUStringLiteral1<sfx2::cTokenSeparator>();
+                            OUStringLiteral1(sfx2::cTokenSeparator) + OUStringLiteral1(sfx2::cTokenSeparator);
                         m_pProps->m_bDDE = true;
                     }
                     m_pProps->m_sLinkFileName = comphelper::string::setToken(
@@ -628,7 +628,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                     OUString sLinkFileName(pSectionData->GetLinkFileName());
                     if (pSectionData->GetType() != DDE_LINK_SECTION)
                     {
-                        sLinkFileName = OUStringLiteral1<sfx2::cTokenSeparator>() + OUStringLiteral1<sfx2::cTokenSeparator>();
+                        sLinkFileName = OUStringLiteral1(sfx2::cTokenSeparator) + OUStringLiteral1(sfx2::cTokenSeparator);
                         pSectionData->SetType(DDE_LINK_SECTION);
                     }
                     sLinkFileName = comphelper::string::setToken(sLinkFileName,
@@ -682,8 +682,8 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                             aLink.FileURL, URIHelper::GetMaybeFileHdl())
                         : OUString());
                     const OUString sFileName(
-                        sTmp + OUStringLiteral1<sfx2::cTokenSeparator>() +
-                        aLink.FilterName + OUStringLiteral1<sfx2::cTokenSeparator>() +
+                        sTmp + OUStringLiteral1(sfx2::cTokenSeparator) +
+                        aLink.FilterName + OUStringLiteral1(sfx2::cTokenSeparator) +
                         pSectionData->GetLinkFileName().getToken(2, sfx2::cTokenSeparator));
                     pSectionData->SetLinkFileName(sFileName);
                     if (sFileName.getLength() < 3)
@@ -713,7 +713,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                     for (sal_Int32 i = comphelper::string::getTokenCount(sSectLink, sfx2::cTokenSeparator);
                          i < 3; ++i)
                     {
-                        sSectLink += OUStringLiteral1<sfx2::cTokenSeparator>();
+                        sSectLink += OUStringLiteral1(sfx2::cTokenSeparator);
                     }
                     sSectLink = comphelper::string::setToken(sSectLink, 2, sfx2::cTokenSeparator, sLink);
                     pSectionData->SetLinkFileName(sSectLink);

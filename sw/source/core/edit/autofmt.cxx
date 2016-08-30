@@ -764,12 +764,12 @@ sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTextNode& rNd, sal_Int32& rPos,
                 }
 
                 if( pNumTypes )
-                    *pNumTypes += OUStringLiteral1<'0' + SVX_NUM_ARABIC>();
+                    *pNumTypes += OUStringLiteral1('0' + SVX_NUM_ARABIC);
 
                 eScan = eScan | CHG;
             }
             else if( pNumTypes && !(eScan & DIGIT) )
-                *pNumTypes += OUStringLiteral1<'0' + SVX_NUM_ARABIC>();
+                *pNumTypes += OUStringLiteral1('0' + SVX_NUM_ARABIC);
 
             eScan &= ~DELIM;        // remove Delim
             if( 0 != (eScan & ~CHG) && DIGIT != (eScan & ~CHG))

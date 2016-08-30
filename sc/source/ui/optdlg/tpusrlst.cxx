@@ -283,7 +283,7 @@ void ScTpUserLists::UpdateEntries( size_t nList )
         for ( size_t i=0; i<nSubCount; i++ )
         {
             if ( i!=0 )
-                aEntryListStr += OUStringLiteral1<CR>();
+                aEntryListStr += OUStringLiteral1(CR);
             aEntryListStr += rList.GetSubStr(i);
         }
 
@@ -305,7 +305,7 @@ void ScTpUserLists::MakeListStr( OUString& rListStr )
     {
         OUString aString = comphelper::string::strip(rListStr.getToken(i, LF), ' ');
         aStr += aString;
-        aStr += OUStringLiteral1<cDelimiter>();
+        aStr += OUStringLiteral1(cDelimiter);
     }
 
     aStr = comphelper::string::strip(aStr, cDelimiter);
