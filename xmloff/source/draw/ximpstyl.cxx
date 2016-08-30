@@ -1510,7 +1510,7 @@ SvXMLImportContext* SdXMLMasterStylesContext::CreateChildContext(
             }
         }
     }
-    else    if(nPrefix == XML_NAMESPACE_STYLE
+    else if(nPrefix == XML_NAMESPACE_STYLE
         && IsXMLToken( rLocalName, XML_HANDOUT_MASTER ) )
     {
         uno::Reference< presentation::XHandoutMasterSupplier > xHandoutSupp( GetSdImport().GetModel(), uno::UNO_QUERY );
