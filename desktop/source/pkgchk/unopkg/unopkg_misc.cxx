@@ -104,7 +104,7 @@ bool isOption( OptionInfo const * option_info, sal_uInt32 * pIndex )
     {
         ++(*pIndex);
         dp_misc::TRACE(__FILE__ ": identified option \'\'"
-            + OUString( option_info->m_short_option ) + "\n");
+            + OUStringLiteral1( option_info->m_short_option ) + "\n");
         return true;
     }
     if (arg[ 1 ] == '-' && rtl_ustr_ascii_compare(
