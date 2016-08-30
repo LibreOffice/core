@@ -1039,10 +1039,10 @@ OUString SdDrawDocument::CreatePageNumValue(sal_uInt16 nNum) const
     switch (mePageNumType)
     {
         case SVX_CHARS_UPPER_LETTER:
-            aPageNumValue += OUString( (sal_Unicode)(char)((nNum - 1) % 26 + 'A') );
+            aPageNumValue += OUStringLiteral1( (nNum - 1) % 26 + 'A' );
             break;
         case SVX_CHARS_LOWER_LETTER:
-            aPageNumValue += OUString( (sal_Unicode)(char)((nNum - 1) % 26 + 'a') );
+            aPageNumValue += OUStringLiteral1( (nNum - 1) % 26 + 'a' );
             break;
         case SVX_ROMAN_UPPER:
             bUpper = true;

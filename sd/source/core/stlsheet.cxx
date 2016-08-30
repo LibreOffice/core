@@ -624,7 +624,7 @@ void SdStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
     if( (nId >= HID_PSEUDOSHEET_OUTLINE1) && ( nId <= HID_PSEUDOSHEET_OUTLINE9 ) )
     {
         msApiName = "outline";
-        msApiName += OUString( (sal_Unicode)( '1' + (nId - HID_PSEUDOSHEET_OUTLINE1) ) );
+        msApiName += OUStringLiteral1( '1' + (nId - HID_PSEUDOSHEET_OUTLINE1) );
     }
     else
     {

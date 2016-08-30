@@ -1050,7 +1050,7 @@ static OUString getInitials( const OUString& rName )
         // take letter
         if( nLength )
         {
-            sInitials += OUString( *pStr );
+            sInitials += OUStringLiteral1( *pStr );
             nLength--; pStr++;
         }
 

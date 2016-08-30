@@ -601,7 +601,7 @@ bool PPTWriterBase::GetStyleSheets()
                                                 if ( nInstance == EPP_TEXTTYPE_Body )
                                                 {
                                                     sal_Unicode cTemp = aStyle[aStyle.getLength() - 1];
-                                                    aStyle = aStyle.copy(0, aStyle.getLength() - 1) + OUString(++cTemp);
+                                                    aStyle = aStyle.copy(0, aStyle.getLength() - 1) + OUStringLiteral1(++cTemp);
                                                     if ( aXFamily->hasByName( aStyle ) )
                                                     {
                                                         aXFamily->getByName( aStyle ) >>= xStyle;
