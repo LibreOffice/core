@@ -631,7 +631,7 @@ protected:
 
     SAL_DLLPRIVATE void                 ImplScroll( const Rectangle& rRect, long nHorzScroll, long nVertScroll, ScrollFlags nFlags );
 
-    SAL_DLLPRIVATE bool                 ImplSetClipFlagChildren( bool bSysObjOnlySmaller = false );
+    SAL_DLLPRIVATE bool                 ImplSetClipFlagChildren( bool bSysObjOnlySmaller );
     SAL_DLLPRIVATE bool                 ImplSetClipFlagOverlapWindows( bool bSysObjOnlySmaller = false );
 
     SAL_DLLPRIVATE WinBits              ImplInitRes( const ResId& rResId );
@@ -778,7 +778,7 @@ protected:
     // FIXME: this is a hack to workaround missing layout functionality
     SAL_DLLPRIVATE void                 ImplAdjustNWFSizes();
 
-    virtual void                        CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate = false) override;
+    virtual void                        CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate) override;
     virtual void                        ClipToPaintRegion( Rectangle& rDstRect ) override;
     virtual bool                        UsePolyPolygonForComplexGradient() override;
 
@@ -1194,9 +1194,8 @@ public:
     void                                ShowTracking( const Rectangle& rRect,
                                                       ShowTrackFlags nFlags = ShowTrackFlags::Small );
     void                                HideTracking();
-    void                                InvertTracking( const Rectangle& rRect,
-                                                        ShowTrackFlags nFlags = ShowTrackFlags::Small );
-    void                                InvertTracking( const tools::Polygon& rPoly, ShowTrackFlags nFlags = ShowTrackFlags::NONE );
+    void                                InvertTracking( const Rectangle& rRect, ShowTrackFlags nFlags );
+    void                                InvertTracking( const tools::Polygon& rPoly, ShowTrackFlags nFlags );
 
     void                                StartTracking( StartTrackingFlags nFlags = StartTrackingFlags::NONE );
     void                                EndTracking( TrackingEventFlags nFlags = TrackingEventFlags::NONE );
@@ -1206,7 +1205,7 @@ public:
     void                                EndAutoScroll();
 
     bool                                HandleScrollCommand( const CommandEvent& rCmd,
-                                                             ScrollBar* pHScrl = nullptr,
+                                                             ScrollBar* pHScrl,
                                                              ScrollBar* pVScrl = nullptr );
 
     void                                SaveBackground( const Point& rPos, const Size& rSize,

@@ -185,7 +185,7 @@ public:
     bool                CopyPixel(
                             const Rectangle& rRectDst,
                             const Rectangle& rRectSrc,
-                            const BitmapEx* pBmpExSrc = nullptr );
+                            const BitmapEx* pBmpExSrc );
 
     /** Fill the entire bitmap with the given color
 
@@ -330,7 +330,7 @@ public:
         @return true, if the operation was completed successfully.
      */
     bool                Adjust(
-                            short nLuminancePercent = 0,
+                            short nLuminancePercent,
                             short nContrastPercent = 0,
                             short nChannelRPercent = 0,
                             short nChannelGPercent = 0,
@@ -387,7 +387,7 @@ public:
                             double fWidth,
                             double fHeight,
                             const basegfx::B2DHomMatrix& rTransformation,
-                            bool bSmooth = true) const;
+                            bool bSmooth) const;
 
     /** Create transformed Bitmap
 
@@ -413,7 +413,7 @@ public:
     BitmapEx            getTransformed(
                             const basegfx::B2DHomMatrix& rTransformation,
                             const basegfx::B2DRange& rVisibleRange,
-                            double fMaximumArea = 500000.0,
+                            double fMaximumArea,
                             bool bSmooth = true) const;
 
     /** Create ColorStack-modified version of this BitmapEx

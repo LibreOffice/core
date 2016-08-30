@@ -157,7 +157,7 @@ protected:
     // to remain compatible in the minor release we copy the above ImpInsertText
     // function and add the extra parameter we need but make sure this function
     // gets not exported. First and second parameter swapped to have a different signatur.
-    SAL_DLLPRIVATE TextPaM  ImpInsertText( sal_Unicode c, const TextSelection& rSel, bool bOverwrite = false, bool bIsUserInput = false );
+    SAL_DLLPRIVATE TextPaM  ImpInsertText( sal_Unicode c, const TextSelection& rSel, bool bOverwrite, bool bIsUserInput = false );
     // some other new functions needed that must not be exported to remain compatible
     SAL_DLLPRIVATE css::uno::Reference< css::i18n::XExtendedInputSequenceChecker > const & GetInputSequenceChecker();
     SAL_DLLPRIVATE bool IsInputSequenceCheckingRequired( sal_Unicode c, const TextSelection& rCurSel ) const;
@@ -173,7 +173,7 @@ protected:
 
     DECL_LINK_TYPED(    IdleFormatHdl, Idle *, void );
     void                CheckIdleFormatter();
-    void                IdleFormatAndUpdate( TextView* pCurView = nullptr, sal_uInt16 nMaxTimerRestarts = 5 );
+    void                IdleFormatAndUpdate( TextView* pCurView, sal_uInt16 nMaxTimerRestarts = 5 );
 
     bool                CreateLines( sal_uInt32 nPara );
     void                CreateAndInsertEmptyLine( sal_uInt32 nPara );

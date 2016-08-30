@@ -345,7 +345,7 @@ public:
 
     bool            IsStateChanged() const { return mbStateChanged; }
 
-    void            EnableRadioCheck( bool bRadioCheck = true ) { mbRadioCheck = bRadioCheck; }
+    void            EnableRadioCheck( bool bRadioCheck ) { mbRadioCheck = bRadioCheck; }
     bool            IsRadioCheckEnabled() const { return mbRadioCheck; }
 
     bool            SetModeRadioImage( const Image& rImage );

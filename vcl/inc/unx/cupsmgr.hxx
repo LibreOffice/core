@@ -86,7 +86,7 @@ public:
     // members for administration
     // disable for CUPS
     virtual bool addPrinter( const OUString& rPrinterName, const OUString& rDriverName ) override;
-    virtual bool removePrinter( const OUString& rPrinterName, bool bCheckOnly = false ) override;
+    virtual bool removePrinter( const OUString& rPrinterName, bool bCheckOnly ) override;
     virtual bool writePrinterConfig() override;
     virtual bool setDefaultPrinter( const OUString& rPrinterName ) override;
 };

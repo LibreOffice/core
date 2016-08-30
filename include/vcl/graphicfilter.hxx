@@ -259,7 +259,7 @@ public:
     OUString        GetImportFormatMediaType( sal_uInt16 nFormat );
 #endif
     OUString        GetImportFormatShortName( sal_uInt16 nFormat );
-    OUString        GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
+    OUString        GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
 
     sal_uInt16      GetExportFormatCount();
     sal_uInt16      GetExportFormatNumber( const OUString& rFormatName );
@@ -274,14 +274,14 @@ public:
     bool            IsExportPixelFormat( sal_uInt16 nFormat );
 
     sal_uInt16          ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
-                                    sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
+                                    sal_uInt16 nFormat,
                                         const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr );
     sal_uInt16          ExportGraphic( const Graphic& rGraphic, const OUString& rPath,
-                                    SvStream& rOStm, sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
+                                    SvStream& rOStm, sal_uInt16 nFormat,
                                         const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr );
 
     sal_uInt16          CanImportGraphic( const INetURLObject& rPath,
-                                      sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
+                                      sal_uInt16 nFormat,
                                       sal_uInt16 * pDeterminedFormat = nullptr);
 
     sal_uInt16          ImportGraphic( Graphic& rGraphic, const INetURLObject& rPath,
@@ -289,7 +289,7 @@ public:
                                    sal_uInt16 * pDeterminedFormat = nullptr, GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE );
 
     sal_uInt16          CanImportGraphic( const OUString& rPath, SvStream& rStream,
-                                      sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
+                                      sal_uInt16 nFormat,
                                       sal_uInt16 * pDeterminedFormat = nullptr);
 
     sal_uInt16          ImportGraphic( Graphic& rGraphic, const OUString& rPath,
@@ -315,7 +315,7 @@ public:
                      GraphicFilter* pFilter = nullptr,
                      sal_uInt16* pDeterminedFormat = nullptr );
 
-    sal_uInt16 compressAsPNG(const Graphic& rGraphic, SvStream& rOutputStream, sal_uInt32 nCompression = 5);
+    sal_uInt16 compressAsPNG(const Graphic& rGraphic, SvStream& rOutputStream, sal_uInt32 nCompression);
 };
 
 #endif // INCLUDED_VCL_GRAPHICFILTER_HXX

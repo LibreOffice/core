@@ -216,7 +216,7 @@ public:
     // separately from the window title
     void            SetRepresentedURL( const OUString& );
 
-    void            ShowTitleButton( TitleButton nButton, bool bVisible = true );
+    void            ShowTitleButton( TitleButton nButton, bool bVisible );
     bool            IsTitleButtonVisible( TitleButton nButton ) const;
 
     void            SetPin( bool bPin );
