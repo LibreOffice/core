@@ -680,7 +680,7 @@ bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool 
                     else
                     {
                         if ( cThousandDelimiter )
-                            aStrConverted = aStr.replaceAll(OUString(cThousandDelimiter), "");
+                            aStrConverted = aStr.replaceAll(OUStringLiteral1(cThousandDelimiter), "");
                         else
                             aStrConverted = aStr;
                     }
