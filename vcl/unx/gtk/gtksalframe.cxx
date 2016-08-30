@@ -705,7 +705,6 @@ void on_registrar_available( GDBusConnection * /*connection*/,
     {
         GtkSalMenu* pGtkSalMenu = static_cast<GtkSalMenu*>(pSalMenu);
         pGtkSalMenu->EnableUnity(true);
-        pGtkSalMenu->UpdateFull();
     }
 }
 

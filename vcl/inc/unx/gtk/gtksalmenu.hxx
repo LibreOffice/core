@@ -110,6 +110,7 @@ public:
     static void                 Activate(const gchar* pMenuCommand);
     static void                 Deactivate(const gchar* pMenuCommand);
     void                        EnableUnity(bool bEnable);
+    virtual void                ShowMenuBar( bool bVisible ) override;
     bool                        PrepUpdate();
     virtual void                Update() override;  // Update this menu only.
     // Update full menu hierarchy from this menu.
