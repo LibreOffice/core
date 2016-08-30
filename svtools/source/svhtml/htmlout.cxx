@@ -470,7 +470,7 @@ static OString lcl_ConvertCharToHTML( sal_Unicode c,
                  .append(';');
             if( pNonConvertableChars &&
                 -1 == pNonConvertableChars->indexOf( c ) )
-                (*pNonConvertableChars) += OUString(c);
+                (*pNonConvertableChars) += OUStringLiteral1(c);
         }
     }
     return aDest.makeStringAndClear();

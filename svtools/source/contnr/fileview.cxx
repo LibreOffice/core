@@ -872,7 +872,7 @@ void ViewTabListBox_Impl::DoQuickSearch( sal_Unicode rChar )
     bool bFound = mpParent->SearchNextEntry( mnSearchIndex, maQuickSearchText, false );
 
     if ( !bFound && ( aLastText.getLength() == 1 ) &&
-         ( aLastText == OUString(rChar) ) )
+         ( aLastText == OUStringLiteral1(rChar) ) )
     {
         mnSearchIndex = aLastPos + 1;
         maQuickSearchText = aLastText;
