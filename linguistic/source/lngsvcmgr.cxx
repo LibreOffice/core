@@ -114,9 +114,8 @@ static uno::Sequence< lang::Locale > GetAvailLocales(
                     const lang::Locale *pLoc = aLoc.getConstArray();
                     LanguageType nLang = LinguLocaleToLanguage( pLoc[k] );
 
-                    // language not already added?
-                    if (aLanguages.find( nLang ) == aLanguages.end())
-                        aLanguages.insert( nLang );
+                    // It's a set, so insertion fails if language was already added.
+                    aLanguages.insert( nLang );
                 }
             }
             else
