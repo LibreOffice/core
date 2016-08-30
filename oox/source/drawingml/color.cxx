@@ -202,10 +202,6 @@ Color::Color() :
 {
 }
 
-Color::~Color()
-{
-}
-
 sal_Int32 Color::getDmlPresetColor( sal_Int32 nToken, sal_Int32 nDefaultRgb )
 {
     /*  Do not pass nDefaultRgb to ContainerHelper::getVectorElement(), to be

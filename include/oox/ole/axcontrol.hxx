@@ -906,7 +906,6 @@ class OOX_DLLPUBLIC EmbeddedControl
 {
 public:
     explicit            EmbeddedControl( const OUString& rName );
-    virtual             ~EmbeddedControl();
 
     /** Creates and returns the internal control model of the specified type. */
     template< typename ModelType >

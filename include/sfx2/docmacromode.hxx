@@ -190,7 +190,6 @@ namespace sfx2
             DocumentMacroMode instance lives, at least
         */
         DocumentMacroMode( IMacroDocumentAccess& _rDocumentAccess );
-        ~DocumentMacroMode();
 
         /** allows macro execution in the document
 

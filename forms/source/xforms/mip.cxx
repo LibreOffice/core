@@ -20,10 +20,8 @@
 
 #include "mip.hxx"
 
-
 namespace xforms
 {
-
 
 MIP::MIP()
 {
@@ -34,8 +32,6 @@ MIP::MIP()
     resetCalculate();
     resetTypeName();
 }
-
-MIP::~MIP() {}
 
 void MIP::inherit( const MIP& rMip )
 {
@@ -92,13 +88,11 @@ void MIP::resetConstraint()       { mbHasConstraint = false; mbConstraint = true
 
 void MIP::setConstraintExplanation( const OUString& s ) { msConstraintExplanation = s; }
 
-
 void MIP::setHasCalculate( bool b ) { mbHasCalculate = b; }
 void MIP::resetCalculate()        { mbHasCalculate = false; }
 
 void MIP::setTypeName( const OUString& s ) { msTypeName = s; mbHasTypeName = true; }
 void MIP::resetTypeName()         { msTypeName.clear(); mbHasTypeName = false; }
-
 
 } // namespace xforms
 

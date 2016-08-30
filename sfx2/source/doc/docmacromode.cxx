@@ -121,20 +121,11 @@ namespace sfx2
         }
     }
 
-
     //= DocumentMacroMode
-
-
     DocumentMacroMode::DocumentMacroMode( IMacroDocumentAccess& rDocumentAccess )
         :m_xData( new DocumentMacroMode_Data( rDocumentAccess ) )
     {
     }
-
-
-    DocumentMacroMode::~DocumentMacroMode()
-    {
-    }
-
 
     bool DocumentMacroMode::allowMacroExecution()
     {
@@ -142,13 +133,11 @@ namespace sfx2
         return true;
     }
 
-
     bool DocumentMacroMode::disallowMacroExecution()
     {
         m_xData->m_rDocumentAccess.setCurrentMacroExecMode( MacroExecMode::NEVER_EXECUTE );
         return false;
     }
-
 
     bool DocumentMacroMode::adjustMacroMode( const Reference< XInteractionHandler >& rxInteraction )
     {

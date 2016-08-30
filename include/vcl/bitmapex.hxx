@@ -53,7 +53,6 @@ public:
                         BitmapEx( const Bitmap& rBmp, const Bitmap& rMask );
                         BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask );
                         BitmapEx( const Bitmap& rBmp, const Color& rTransparentColor );
-                        ~BitmapEx();
 
     BitmapEx&           operator=( const BitmapEx& rBitmapEx );
     bool                operator==( const BitmapEx& rBitmapEx ) const;

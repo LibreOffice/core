@@ -51,7 +51,6 @@ namespace frm
         inline          AttributeState( );
         inline explicit AttributeState( AttributeCheckState _eCheckState );
         inline          AttributeState( const AttributeState& _rSource );
-        inline          ~AttributeState( );
 
         inline AttributeState& operator=( const AttributeState& _rSource );
 
@@ -78,11 +77,6 @@ namespace frm
         ,eSimpleState( eIndetermined )
     {
         operator=( _rSource );
-    }
-
-    inline AttributeState::~AttributeState( )
-    {
-//        delete(pItemHandle);
     }
 
     inline AttributeState& AttributeState::operator=( const AttributeState& _rSource )

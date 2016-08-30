@@ -52,7 +52,6 @@ class MIP
 
 public:
     MIP();
-    ~MIP();
 
     /// inherit from upper-level MIPs
     void inherit( const MIP& );

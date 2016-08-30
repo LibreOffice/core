@@ -2614,10 +2614,6 @@ EmbeddedControl::EmbeddedControl( const OUString& rName ) :
 {
 }
 
-EmbeddedControl::~EmbeddedControl()
-{
-}
-
 ControlModelBase* EmbeddedControl::createModelFromGuid( const OUString& rClassId )
 {
     if( rClassId.equalsIgnoreAsciiCase( AX_GUID_COMMANDBUTTON ) )     return &createModel< AxCommandButtonModel >();

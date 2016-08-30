@@ -38,8 +38,7 @@ namespace drawingml {
 class OOX_DLLPUBLIC Color
 {
 public:
-                        Color();
-                        ~Color();
+    Color();
 
     /** Returns the RGB value for the passed DrawingML color token, or nDefaultRgb on error. */
     static sal_Int32    getDmlPresetColor( sal_Int32 nToken, sal_Int32 nDefaultRgb );

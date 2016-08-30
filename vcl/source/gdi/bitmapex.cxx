@@ -184,10 +184,6 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Color& rTransparentColor ) :
                 "BitmapEx::BitmapEx(): size mismatch for bitmap and alpha mask." );
 }
 
-BitmapEx::~BitmapEx()
-{
-}
-
 BitmapEx& BitmapEx::operator=( const BitmapEx& rBitmapEx )
 {
     if( &rBitmapEx != this )
