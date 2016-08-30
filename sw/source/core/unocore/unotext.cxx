@@ -2230,20 +2230,23 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             pTableRanges[nRow].getConstArray();
         const sal_Int32 nCells(pTableRanges[nRow].getLength());
 
+        if (0 == nCells) // this would lead to no pLastCell below
+        {                // and make it impossible to detect node gaps
+            bExcept = true;
+            break;
+        }
+
         for (sal_Int32 nCell = 0; nCell < nCells; ++nCell)
         {
-            SwNodeRange *pLastCell;
-            if (nCell == 0 && nRow == 0)
-            {
-                pLastCell = nullptr;
-            }
-            else
-            {
-                std::vector<SwNodeRange>& rRowOfPrevCell = nCell ? aRowNodes : *aTableNodes.rbegin();
-                pLastCell = !rRowOfPrevCell.empty() ? &*rRowOfPrevCell.rbegin() : nullptr;
-            }
+            SwNodeRange *const pLastCell(
+                (nCell == 0)
+                    ? ((nRow == 0)
+                        ? nullptr
+                        : &*aTableNodes.rbegin()->rbegin())
+                    : &*aRowNodes.rbegin());
             m_pImpl->ConvertCell(pRow[nCell], aRowNodes, pLastCell, bExcept);
         }
+        assert(bExcept || !aRowNodes.empty());
         aTableNodes.push_back(aRowNodes);
     }
 
