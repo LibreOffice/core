@@ -2495,6 +2495,9 @@ void MenuBar::SetDisplayable( bool bDisplayable )
 {
     if( bDisplayable != mbDisplayable )
     {
+        if ( ImplGetSalMenu() )
+            ImplGetSalMenu()->ShowMenuBar( bDisplayable );
+
         mbDisplayable = bDisplayable;
         MenuBarWindow* pMenuWin = getMenuBarWindow();
         if (pMenuWin)

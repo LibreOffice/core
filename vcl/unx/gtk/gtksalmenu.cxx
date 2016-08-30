@@ -485,11 +485,7 @@ GtkSalMenu::~GtkSalMenu()
 
 bool GtkSalMenu::VisibleMenuBar()
 {
-#if GTK_CHECK_VERSION(3,0,0)
-    return mbMenuBar;
-#else
-    return mbMenuBar && bUnityMode;
-#endif
+    return mbMenuBar && (bUnityMode || mpMenuBarContainerWidget);
 }
 
 void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
@@ -540,7 +536,9 @@ void GtkSalMenu::ShowCloseButton(bool bShow)
 {
 #if GTK_CHECK_VERSION(3,0,0)
     assert(mbMenuBar);
-    MenuBar *pVclMenuBar = static_cast<MenuBar*>(mpVCLMenu.get());
+    if (!mpMenuBarContainerWidget)
+        return;
+
     if (!bShow)
     {
         if (mpCloseButton)
@@ -548,6 +546,7 @@ void GtkSalMenu::ShowCloseButton(bool bShow)
         return;
     }
 
+    MenuBar *pVclMenuBar = static_cast<MenuBar*>(mpVCLMenu.get());
     mpCloseButton = gtk_button_new();
     g_signal_connect(mpCloseButton, "clicked", G_CALLBACK(CloseMenuBar), pVclMenuBar);
 
@@ -703,6 +702,8 @@ void GtkSalMenu::CreateMenuBarWidget()
     g_signal_connect(G_OBJECT(mpMenuBarWidget), "key-press-event", G_CALLBACK(MenuBarSignalKey), this);
 
     gtk_widget_show_all(mpMenuBarContainerWidget);
+
+    ShowCloseButton( static_cast<MenuBar*>(mpVCLMenu.get())->HasCloseButton() );
 #else
     (void)mpMenuBarContainerWidget;
 #endif
@@ -715,6 +716,7 @@ void GtkSalMenu::DestroyMenuBarWidget()
     {
         gtk_widget_destroy(mpMenuBarContainerWidget);
         mpMenuBarContainerWidget = nullptr;
+        mpCloseButton = nullptr;
     }
 #else
     (void)mpMenuBarContainerWidget;
@@ -1082,12 +1084,17 @@ void GtkSalMenu::EnableUnity(bool bEnable)
 {
     if (bUnityMode != bEnable)
     {
-        if (!bEnable)
-            CreateMenuBarWidget();
-        else
-            DestroyMenuBarWidget();
         bUnityMode = bEnable;
+        static_cast<MenuBar*>(mpVCLMenu.get())->SetDisplayable(!bEnable);
     }
+}
+
+void GtkSalMenu::ShowMenuBar( bool bVisible )
+{
+    if (bVisible && !bUnityMode && !mpMenuBarContainerWidget)
+        CreateMenuBarWidget();
+    else
+        DestroyMenuBarWidget();
 }
 
 bool GtkSalMenu::IsItemVisible( unsigned nPos )
