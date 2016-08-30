@@ -135,11 +135,20 @@ public:
                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                        const bool bIsCovered, const sal_Int32 nRepeatedRows );
 
+    ScXMLTableRowCellContext( ScXMLImport& rImport, sal_Int32 nElement,
+                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                       const bool bIsCovered, const sal_Int32 nRepeatedRows );
+
     virtual ~ScXMLTableRowCellContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList )
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) override;
 
     void PushParagraphSpan(const OUString& rSpan, const OUString& rStyleName);
     void PushParagraphFieldDate(const OUString& rStyleName);
@@ -153,6 +162,9 @@ public:
     void SetCellRangeSource( const ScAddress& rPosition );
 
     virtual void EndElement() override;
+
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement)
+            throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 };
 
 #endif
