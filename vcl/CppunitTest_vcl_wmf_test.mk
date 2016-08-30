@@ -224,4 +224,11 @@ $(call gb_CppunitTest_get_target,vcl_wmf_test): \
     $(call gb_Library_get_target,desktop_detector)
 endif
 
+# Hack to suppress ASan ODR violation warnings about symbols present in both the
+# vcl objects linked into this test library and the vcl library (which gets
+# dynamically loaded during the test):
+$(call gb_CppunitTest_get_target,vcl_wmf_test): \
+    EXTRA_ENV_VARS := \
+        ASAN_OPTIONS="$${ASAN_OPTIONS+$$ASAN_OPTIONS:}"detect_odr_violation=0
+
 # vim: set noet sw=4 ts=4:

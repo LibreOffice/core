@@ -115,7 +115,7 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_RUNTIMEDEPS)
 		$(gb_CppunitTest_malloc_check) \
 		$(if $(strip $(PYTHON_URE)),\
 			PYTHONDONTWRITEBYTECODE=1) \
-		$(ICECREAM_RUN) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_CPPTESTCOMMAND) \
+		$(ICECREAM_RUN) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(EXTRA_ENV_VARS) $(gb_CppunitTest_CPPTESTCOMMAND) \
 		$(call gb_LinkTarget_get_target,$(call gb_CppunitTest_get_linktarget,$*)) \
 		$(call gb_CppunitTest__make_args) "-env:CPPUNITTESTTARGET=$@" \
 		$(if $(gb_CppunitTest__interactive),, \
@@ -159,6 +159,7 @@ $(call gb_CppunitTest_get_target,$(1)) : VCL := $(false)
 $(call gb_CppunitTest_get_target,$(1)) : UNO_SERVICES :=
 $(call gb_CppunitTest_get_target,$(1)) : UNO_TYPES :=
 $(call gb_CppunitTest_get_target,$(1)) : HEADLESS := --headless
+$(call gb_CppunitTest_get_target,$(1)) : EXTRA_ENV_VARS :=
 $$(eval $$(call gb_Module_register_target,$(call gb_CppunitTest_get_target,$(1)),$(call gb_CppunitTest_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),CppunitTest)
 
