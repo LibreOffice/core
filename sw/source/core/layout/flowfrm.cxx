@@ -1135,10 +1135,12 @@ bool SwFlowFrame::IsPageBreak( bool bAct ) const
             }
 
             //for compatibility, also break at column break if no columns exist
+            const IDocumentSettingAccess& rIDSA = m_rThis.GetUpper()->GetFormat()->getIDocumentSettingAccess();
+            const bool bTreatSingleColumnBreakAsPageBreak = rIDSA.get(DocumentSettingId::TREAT_SINGLE_COLUMN_BREAK_AS_PAGE_BREAK);
             const SvxBreak eBreak = pSet->GetBreak().GetBreak();
             if ( eBreak == SvxBreak::PageBefore ||
                  eBreak == SvxBreak::PageBoth ||
-                 (eBreak == SvxBreak::ColumnBefore && !m_rThis.FindColFrame()) )
+                 ( bTreatSingleColumnBreakAsPageBreak && eBreak == SvxBreak::ColumnBefore && !m_rThis.FindColFrame() ))
                 return true;
             else
             {
