@@ -422,11 +422,11 @@ IMPL_LINK_NOARG_TYPED(ComboBox::Impl, ImplSelectHdl, LinkParamNone*, void)
                 if ( !aSelInText.count( nP ) )
                 {
                     if (!aText.isEmpty() && (aText[aText.getLength()-1] != m_cMultiSep))
-                        aText += OUString(m_cMultiSep);
+                        aText += OUStringLiteral1(m_cMultiSep);
                     if ( !aText.isEmpty() )
                         aText += " ";   // slightly loosen
                     aText += m_pImplLB->GetEntryList()->GetEntryText( nP );
-                    aText += OUString(m_cMultiSep);
+                    aText += OUStringLiteral1(m_cMultiSep);
                 }
             }
             aText = comphelper::string::stripEnd( aText, m_cMultiSep );

@@ -2330,7 +2330,7 @@ OUString TextFilter::filter(const OUString &rText)
     OUString sTemp(rText);
     for (sal_Int32 i = 0; i < sForbiddenChars.getLength(); ++i)
     {
-        sTemp = sTemp.replaceAll(OUString(sForbiddenChars[i]), "");
+        sTemp = sTemp.replaceAll(OUStringLiteral1(sForbiddenChars[i]), "");
     }
     return sTemp;
 }

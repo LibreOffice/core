@@ -881,7 +881,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
                 {
                     pVector->push_back( *it );
                     if( pDisplayText )
-                        *pDisplayText += OUString(rStr[ nIndex ]);
+                        *pDisplayText += OUStringLiteral1(rStr[ nIndex ]);
                     bInserted = true;
                 }
             }
@@ -2043,7 +2043,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
             }
 
             if ( aStr.isEmpty() && (nStyle & DrawTextFlags::Clip) )
-                aStr += OUString(rOrigStr[ 0 ]);
+                aStr += OUStringLiteral1(rOrigStr[ 0 ]);
         }
         else if ( nStyle & DrawTextFlags::PathEllipsis )
         {

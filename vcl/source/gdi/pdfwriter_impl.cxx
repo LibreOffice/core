@@ -7715,7 +7715,7 @@ static void escapeStringXML( const OUString& rStr, OUString &rValue)
             rValue += "&quot;";
         break;
         default:
-            rValue += OUString( *pUni );
+            rValue += OUStringLiteral1( *pUni );
             break;
         }
     }

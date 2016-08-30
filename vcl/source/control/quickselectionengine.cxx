@@ -117,7 +117,7 @@ namespace vcl
 
             if ( ( c >= 32 ) && ( c != 127 ) && !_keyEvent.GetKeyCode().IsMod2() )
             {
-                m_pData->sCurrentSearchString += OUString(c);
+                m_pData->sCurrentSearchString += OUStringLiteral1(c);
                 OSL_TRACE( "QuickSelectionEngine::HandleKeyEvent: searching for %s", OUStringToOString(m_pData->sCurrentSearchString, RTL_TEXTENCODING_UTF8).getStr() );
 
                 if ( m_pData->sCurrentSearchString.getLength() == 1 )
