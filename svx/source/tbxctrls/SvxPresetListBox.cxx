@@ -30,9 +30,9 @@
 
 SvxPresetListBox::SvxPresetListBox(vcl::Window* pParent, WinBits nWinStyle)
     : ValueSet(pParent, nWinStyle),
-      nColCount(2),
+      nColCount(3),
       nRowCount(5),
-      aIconSize( Size(80,60) )
+      aIconSize( Size(60,64) )
 {
     SetEdgeBlending(true);
     SetExtraSpacing(4);
@@ -53,10 +53,7 @@ void SvxPresetListBox::Resize()
 {
     DrawLayout();
     WinBits aWinBits(GetStyle());
-    if( nColCount*nRowCount <  static_cast<sal_uInt16>(GetItemCount()) )
-        aWinBits |= WB_VSCROLL;
-    else
-        aWinBits &= ~WB_VSCROLL;
+    aWinBits |= WB_VSCROLL;
     SetStyle(aWinBits);
     ValueSet::Resize();
 }
