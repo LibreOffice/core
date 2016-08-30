@@ -580,20 +580,18 @@ namespace
     Sequence< OUString > lcl_GetLastFoundSvcs(
             SvtLinguConfig &rCfg,
             const OUString &rLastFoundList ,
-            const Locale &rAvailLocale )
+            const OUString& rCfgLocaleStr )
     {
         Sequence< OUString > aRes;
 
-        OUString aCfgLocaleStr( LanguageTag::convertToBcp47( rAvailLocale ) );
-
         Sequence< OUString > aNodeNames( rCfg.GetNodeNames(rLastFoundList) );
-        bool bFound = lcl_FindEntry( aCfgLocaleStr, aNodeNames);
+        bool bFound = lcl_FindEntry( rCfgLocaleStr, aNodeNames);
 
         if (bFound)
         {
             Sequence< OUString > aNames(1);
             OUString &rNodeName = aNames.getArray()[0];
-            rNodeName = rLastFoundList + "/" + aCfgLocaleStr;
+            rNodeName = rLastFoundList + "/" + rCfgLocaleStr;
             Sequence< Any > aValues( rCfg.GetProperties( aNames ) );
             if (aValues.getLength())
             {
@@ -741,7 +739,7 @@ void LngSvcMgr::UpdateAll()
             aLastFoundSvcs[k][ aCfgLocaleStr ] = aAvailSvcs;
 
             Sequence< OUString > aLastSvcs(
-                    lcl_GetLastFoundSvcs( aCfg, aLastFoundList , pAvailLocale[i] ));
+                    lcl_GetLastFoundSvcs( aCfg, aLastFoundList , aCfgLocaleStr ));
             Sequence< OUString > aNewSvcs =
                     lcl_GetNewEntries( aLastSvcs, aAvailSvcs );
 
