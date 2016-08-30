@@ -110,56 +110,56 @@ bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersion,
                 pC = " rightarrow ";
             else
             {
-                rRet += OUString( nChar );
+                rRet += OUStringLiteral1( nChar );
                 bRet=true;
             }
             break;
         case 0x00fb:
             if ((nVersion < 3) && (nTypeFace == 0x81))
                 nChar = 0xDF;
-            rRet += OUString( nChar );
+            rRet += OUStringLiteral1( nChar );
             bRet=true;
             break;
         case 'a':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3b1;
-            rRet += OUString( nChar );
+            rRet += OUStringLiteral1( nChar );
             bRet=true;
             break;
         case 'b':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3b2;
-            rRet += OUString( nChar );
+            rRet += OUStringLiteral1( nChar );
             bRet=true;
             break;
         case 'l':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3bb;
-            rRet += OUString( nChar );
+            rRet += OUStringLiteral1( nChar );
             bRet=true;
             break;
         case 'n':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3bd;
-            rRet += OUString( nChar );
+            rRet += OUStringLiteral1( nChar );
             bRet=true;
             break;
         case 'r':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3c1;
-            rRet += OUString( nChar );
+            rRet += OUStringLiteral1( nChar );
             bRet=true;
             break;
         case 'D':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x394;
-            rRet += OUString( nChar );
+            rRet += OUStringLiteral1( nChar );
             bRet=true;
             break;
         case 0xa9:
             if ((nVersion < 3) && (nTypeFace == 0x82))
                 nChar = '\'';
-            rRet += OUString( nChar );
+            rRet += OUStringLiteral1( nChar );
             bRet=true;
             break;
         case 0x00f1:
@@ -167,7 +167,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersion,
                 pC = " \\rangle ";
             else
             {
-                rRet += OUString( nChar );
+                rRet += OUStringLiteral1( nChar );
                 bRet=true;
             }
             break;
@@ -176,7 +176,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersion,
                 pC = " <= ";
             else
             {
-                rRet += OUString( nChar );
+                rRet += OUStringLiteral1( nChar );
                 bRet=true;
             }
             break;
@@ -185,7 +185,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersion,
                 pC = " drarrow ";
             else
             {
-                rRet += OUString( nChar );
+                rRet += OUStringLiteral1( nChar );
                 bRet=true;
             }
             break;
@@ -194,7 +194,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersion,
                 pC = " %OMEGA ";
             else
             {
-                rRet += OUString( nChar );
+                rRet += OUStringLiteral1( nChar );
                 bRet=true;
             }
             break;
@@ -442,7 +442,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersion,
             break;
         case 0x22b2:
         case 0x22b3:
-            rRet += " " + OUString( nChar ) + " ";
+            rRet += " " + OUStringLiteral1( nChar ) + " ";
             break;
         case 0x22a5:
             pC = " ortho ";
@@ -513,7 +513,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUString &rRet,sal_uInt8 nVersion,
             pC = " %OMEGA ";
             break;
         default:
-            rRet += OUString( nChar );
+            rRet += OUStringLiteral1( nChar );
             bRet=true;
             break;
     }

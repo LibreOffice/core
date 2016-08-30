@@ -462,9 +462,9 @@ OUString SmOoxmlImport::handleGroupChr()
     if( pos == bot && chr == sal_Unicode( 0x23df ))
         return "{" + e + "} underbrace { }";
     if( pos == top )
-        return "{" + e + "} csup {" + OUString( chr ) + "}";
+        return "{" + e + "} csup {" + OUStringLiteral1( chr ) + "}";
     else
-        return "{" + e + "} csub {" + OUString( chr ) + "}";
+        return "{" + e + "} csub {" + OUStringLiteral1( chr ) + "}";
 }
 
 OUString SmOoxmlImport::handleM()

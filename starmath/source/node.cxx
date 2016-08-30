@@ -2602,7 +2602,7 @@ void SmAttributNode::CreateTextFromNode(OUString &rText)
                 rText += "bar ";
                 break;
             default:
-                rText += OUString( nLast );
+                rText += OUStringLiteral1( nLast );
                 break;
             }
         }
