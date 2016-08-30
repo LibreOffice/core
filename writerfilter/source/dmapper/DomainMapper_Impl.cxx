@@ -2372,8 +2372,7 @@ bool lcl_FindInCommand(
     OUString& rValue )
 {
     bool bRet = false;
-    OUString sSearch('\\');
-    sSearch += OUString( cSwitch );
+    OUString sSearch = "\\" + OUStringLiteral1( cSwitch );
     sal_Int32 nIndex = rCommand.indexOf( sSearch  );
     if( nIndex >= 0 )
     {
