@@ -177,28 +177,33 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     KConfig *pConfig = KGlobal::config().data();
     if ( pConfig )
     {
-        KConfigGroup aGroup = pConfig->group( "WM" );
         const char *pKey;
 
-        pKey = "titleFont";
-        if ( aGroup.hasKey( pKey ) )
         {
-            vcl::Font aFont = toFont( aGroup.readEntry( pKey, QFont() ), rSettings.GetUILanguageTag().getLocale() );
-            style.SetTitleFont( aFont );
-            bSetTitleFont = true;
+            KConfigGroup aWMGroup = pConfig->group( "WM" );
+
+            pKey = "titleFont";
+            if (aWMGroup.hasKey(pKey))
+            {
+                vcl::Font aFont = toFont(aWMGroup.readEntry(pKey, QFont()),
+                                         rSettings.GetUILanguageTag().getLocale());
+                style.SetTitleFont( aFont );
+                bSetTitleFont = true;
+            }
         }
 
-        aGroup = pConfig->group( "Icons" );
+        KConfigGroup aIconsGroup = pConfig->group("Icons");
 
         pKey = "Theme";
-        if ( aGroup.hasKey( pKey ) )
-            style.SetPreferredIconTheme( readEntryUntranslated( &aGroup, pKey ) );
+        if (aIconsGroup.hasKey(pKey))
+            style.SetPreferredIconTheme( readEntryUntranslated(&aIconsGroup, pKey));
 
         //toolbar
         pKey = "toolbarFont";
-        if ( aGroup.hasKey( pKey ) )
+        if (aIconsGroup.hasKey(pKey))
         {
-            vcl::Font aFont = toFont( aGroup.readEntry( pKey, QFont() ), rSettings.GetUILanguageTag().getLocale() );
+            vcl::Font aFont = toFont(aIconsGroup.readEntry(pKey, QFont()),
+                                     rSettings.GetUILanguageTag().getLocale());
             style.SetToolFont( aFont );
         }
     }
