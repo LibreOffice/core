@@ -284,7 +284,7 @@ typedef enum
      * {
      *     "classification": "error" | "warning" | "info"
      *     "kind": "network" etc.
-     *     "code": 403 | 404 | ...
+     *     "code": a structured 32-bit error code, the ErrCode from LibreOffice's <tools/errcode.hxx>
      *     "message": freeform description
      * }
      */
