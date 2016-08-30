@@ -123,6 +123,7 @@ ug \
 uk \
 uz \
 ve \
+vec \
 vi \
 xh \
 zh-CN \
