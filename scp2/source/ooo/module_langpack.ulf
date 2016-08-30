@@ -484,6 +484,12 @@ en-US = "Venda"
 [STR_DESC_MODULE_LANGPACK_VE]
 en-US = "Installs the Venda user interface"
 
+[STR_NAME_MODULE_LANGPACK_VEC]
+en-US = "Venetian"
+
+[STR_DESC_MODULE_LANGPACK_VEC]
+en-US = "Installs the Venetian user interface"
+
 [STR_NAME_MODULE_LANGPACK_KN]
 en-US = "Kannada"
 

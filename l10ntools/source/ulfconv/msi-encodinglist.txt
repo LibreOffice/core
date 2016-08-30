@@ -166,6 +166,7 @@ ur       0  1056   # Urdu
 ur-IN    0  2080
 uz       0  1091   # Uzbek (Latin)
 ve       0  1075   # Venda
+vec      0  1685   # Venetian
 vi       0  1066   # Vietnamese
 xh       0  1076   # Xhosa
 yi       0  1085   # Yiddish
