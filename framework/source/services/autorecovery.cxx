@@ -118,9 +118,7 @@ public:
      DispatchParams();
      DispatchParams(const ::comphelper::SequenceAsHashMap&             lArgs ,
                     const css::uno::Reference< css::uno::XInterface >& xOwner);
-    ~DispatchParams();
 
-     DispatchParams& operator=(const DispatchParams& rCopy);
      void forget();
 
 public:
@@ -1218,18 +1216,6 @@ DispatchParams::DispatchParams(const ::comphelper::SequenceAsHashMap&           
     m_sSavePath               = lArgs.getUnpackedValueOrDefault(PROP_SAVEPATH, OUString()                                   );
     m_xHoldRefForAsyncOpAlive = xOwner;
 };
-
-DispatchParams::~DispatchParams()
-{};
-
-DispatchParams& DispatchParams::operator=(const DispatchParams& rCopy)
-{
-    m_xProgress               = rCopy.m_xProgress;
-    m_sSavePath               = rCopy.m_sSavePath;
-    m_nWorkingEntryID         = rCopy.m_nWorkingEntryID;
-    m_xHoldRefForAsyncOpAlive = rCopy.m_xHoldRefForAsyncOpAlive;
-    return *this;
-}
 
 void DispatchParams::forget()
 {

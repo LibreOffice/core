@@ -96,7 +96,6 @@ public:
     virtual ~ObjectIdentifier();
 
     ObjectIdentifier( const ObjectIdentifier& rOID );
-    ObjectIdentifier& operator=( const ObjectIdentifier& rOID );
     bool operator==( const ObjectIdentifier& rOID ) const;
     bool operator!=( const ObjectIdentifier& rOID ) const;
     bool operator<( const ObjectIdentifier& rOID ) const;

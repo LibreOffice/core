@@ -73,14 +73,6 @@ public:
 
     void            SetValue( sal_uLong n ) { nValue = n; }
     sal_uLong       GetValue() const { return nValue; }
-
-    SvStringHashEntry & operator = ( const SvStringHashEntry & rRef )
-        { SvRefBase::operator=( rRef );
-          aName   = rRef.aName;
-          nValue  = rRef.nValue;
-          bHasId  = rRef.bHasId;
-          return *this;
-        }
 };
 
 class SvStringHashTable : public SvHashTable
