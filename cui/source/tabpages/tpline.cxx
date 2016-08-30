@@ -96,7 +96,7 @@ SvxLineTabPage::SvxLineTabPage
     m_bSymbols(false),
 
     m_rOutAttrs           ( rInAttrs ),
-    m_eRP( RP_LT ),
+    m_eRP( RectPoint::LT ),
     m_bObjSelected( false ),
 
     m_aXLineAttr          ( rInAttrs.GetPool() ),
@@ -1696,7 +1696,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineTabPage, ChangeTransparentHdl_Impl, Edit&, void)
 }
 
 
-void SvxLineTabPage::PointChanged( vcl::Window*, RECT_POINT eRcPt )
+void SvxLineTabPage::PointChanged( vcl::Window*, RectPoint eRcPt )
 {
     m_eRP = eRcPt;
 }

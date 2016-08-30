@@ -664,7 +664,7 @@ void SvxPatternTabPage::ChangeColor_Impl()
 }
 
 
-void SvxPatternTabPage::PointChanged( vcl::Window* pWindow, RECT_POINT )
+void SvxPatternTabPage::PointChanged( vcl::Window* pWindow, RectPoint )
 {
     if( pWindow == m_pCtlPixel )
     {

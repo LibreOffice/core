@@ -72,7 +72,7 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
                 "cui/ui/areatabpage.ui",
                rInAttrs ),
     m_rOutAttrs (rInAttrs ),
-    m_eRP( RP_LT ),
+    m_eRP( RectPoint::LT ),
 
     m_pColorList( nullptr ),
     m_pGradientList( nullptr ),
@@ -880,7 +880,7 @@ IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyBitmapHdl_Impl, ListBox&, void)
     m_pCtlBitmapPreview->Invalidate();
 }
 
-void SvxAreaTabPage::PointChanged( vcl::Window* , RECT_POINT )
+void SvxAreaTabPage::PointChanged( vcl::Window* , RectPoint )
 {
 }
 

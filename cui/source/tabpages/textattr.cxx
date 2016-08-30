@@ -79,7 +79,7 @@ SvxTextAttrPage::SvxTextAttrPage(vcl::Window* pWindow, const SfxItemSet& rInAttr
     get(m_pMtrFldBottom,"MTR_FLD_BOTTOM");
     get(m_pFlPosition,"FL_POSITION");
     get(m_pCtlPosition,"CTL_POSITION");
-    m_pCtlPosition->SetControlSettings(RP_MM, 240, 100);
+    m_pCtlPosition->SetControlSettings(RectPoint::MM, 240, 100);
     get(m_pTsbFullWidth,"TSB_FULL_WIDTH");
 
 
@@ -238,7 +238,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
         // VertAdjust and HorAdjust are unequivocal, thus
         SdrTextVertAdjust eTVA = (SdrTextVertAdjust)static_cast<const SdrTextVertAdjustItem&>(rAttrs->Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
         SdrTextHorzAdjust eTHA = (SdrTextHorzAdjust)static_cast<const SdrTextHorzAdjustItem&>(rAttrs->Get(SDRATTR_TEXT_HORZADJUST)).GetValue();
-        RECT_POINT eRP = RP_LB;
+        RectPoint eRP = RectPoint::LB;
 
         m_pTsbFullWidth->EnableTriState( false );
 
@@ -249,10 +249,10 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
             {
                 switch (eTHA)
                 {
-                    case SDRTEXTHORZADJUST_LEFT: eRP = RP_LT; break;
+                    case SDRTEXTHORZADJUST_LEFT: eRP = RectPoint::LT; break;
                     case SDRTEXTHORZADJUST_BLOCK:
-                    case SDRTEXTHORZADJUST_CENTER: eRP = RP_MT; break;
-                    case SDRTEXTHORZADJUST_RIGHT: eRP = RP_RT; break;
+                    case SDRTEXTHORZADJUST_CENTER: eRP = RectPoint::MT; break;
+                    case SDRTEXTHORZADJUST_RIGHT: eRP = RectPoint::RT; break;
                 }
                 break;
             }
@@ -261,10 +261,10 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
             {
                 switch (eTHA)
                 {
-                    case SDRTEXTHORZADJUST_LEFT: eRP = RP_LM; break;
+                    case SDRTEXTHORZADJUST_LEFT: eRP = RectPoint::LM; break;
                     case SDRTEXTHORZADJUST_BLOCK:
-                    case SDRTEXTHORZADJUST_CENTER: eRP = RP_MM; break;
-                    case SDRTEXTHORZADJUST_RIGHT: eRP = RP_RM; break;
+                    case SDRTEXTHORZADJUST_CENTER: eRP = RectPoint::MM; break;
+                    case SDRTEXTHORZADJUST_RIGHT: eRP = RectPoint::RM; break;
                 }
                 break;
             }
@@ -272,10 +272,10 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
             {
                 switch (eTHA)
                 {
-                    case SDRTEXTHORZADJUST_LEFT: eRP = RP_LB; break;
+                    case SDRTEXTHORZADJUST_LEFT: eRP = RectPoint::LB; break;
                     case SDRTEXTHORZADJUST_BLOCK:
-                    case SDRTEXTHORZADJUST_CENTER: eRP = RP_MB; break;
-                    case SDRTEXTHORZADJUST_RIGHT: eRP = RP_RB; break;
+                    case SDRTEXTHORZADJUST_CENTER: eRP = RectPoint::MB; break;
+                    case SDRTEXTHORZADJUST_RIGHT: eRP = RectPoint::RB; break;
                 }
                 break;
             }
@@ -417,30 +417,30 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
     }
 
     // centered
-    RECT_POINT eRP = m_pCtlPosition->GetActualRP();
+    RectPoint eRP = m_pCtlPosition->GetActualRP();
     SdrTextVertAdjust eTVA, eOldTVA;
     SdrTextHorzAdjust eTHA, eOldTHA;
 
     switch( eRP )
     {
         default:
-        case RP_LT: eTVA = SDRTEXTVERTADJUST_TOP;
+        case RectPoint::LT: eTVA = SDRTEXTVERTADJUST_TOP;
                     eTHA = SDRTEXTHORZADJUST_LEFT; break;
-        case RP_LM: eTVA = SDRTEXTVERTADJUST_CENTER;
+        case RectPoint::LM: eTVA = SDRTEXTVERTADJUST_CENTER;
                     eTHA = SDRTEXTHORZADJUST_LEFT; break;
-        case RP_LB: eTVA = SDRTEXTVERTADJUST_BOTTOM;
+        case RectPoint::LB: eTVA = SDRTEXTVERTADJUST_BOTTOM;
                     eTHA = SDRTEXTHORZADJUST_LEFT; break;
-        case RP_MT: eTVA = SDRTEXTVERTADJUST_TOP;
+        case RectPoint::MT: eTVA = SDRTEXTVERTADJUST_TOP;
                     eTHA = SDRTEXTHORZADJUST_CENTER; break;
-        case RP_MM: eTVA = SDRTEXTVERTADJUST_CENTER;
+        case RectPoint::MM: eTVA = SDRTEXTVERTADJUST_CENTER;
                     eTHA = SDRTEXTHORZADJUST_CENTER; break;
-        case RP_MB: eTVA = SDRTEXTVERTADJUST_BOTTOM;
+        case RectPoint::MB: eTVA = SDRTEXTVERTADJUST_BOTTOM;
                     eTHA = SDRTEXTHORZADJUST_CENTER; break;
-        case RP_RT: eTVA = SDRTEXTVERTADJUST_TOP;
+        case RectPoint::RT: eTVA = SDRTEXTVERTADJUST_TOP;
                     eTHA = SDRTEXTHORZADJUST_RIGHT; break;
-        case RP_RM: eTVA = SDRTEXTVERTADJUST_CENTER;
+        case RectPoint::RM: eTVA = SDRTEXTVERTADJUST_CENTER;
                     eTHA = SDRTEXTHORZADJUST_RIGHT; break;
-        case RP_RB: eTVA = SDRTEXTVERTADJUST_BOTTOM;
+        case RectPoint::RB: eTVA = SDRTEXTVERTADJUST_BOTTOM;
                     eTHA = SDRTEXTHORZADJUST_RIGHT; break;
     }
 
@@ -534,7 +534,7 @@ VclPtr<SfxTabPage> SvxTextAttrPage::Create( vcl::Window* pWindow,
 
 /** Check whether we have to uncheck the "Full width" check box.
 */
-void SvxTextAttrPage::PointChanged( vcl::Window*, RECT_POINT eRP )
+void SvxTextAttrPage::PointChanged( vcl::Window*, RectPoint eRP )
 {
     if (m_pTsbFullWidth->GetState() == TRISTATE_TRUE)
     {
@@ -543,12 +543,12 @@ void SvxTextAttrPage::PointChanged( vcl::Window*, RECT_POINT eRP )
         if (IsTextDirectionLeftToRight())
             switch( eRP )
             {
-                case RP_LT:
-                case RP_LM:
-                case RP_LB:
-                case RP_RT:
-                case RP_RM:
-                case RP_RB:
+                case RectPoint::LT:
+                case RectPoint::LM:
+                case RectPoint::LB:
+                case RectPoint::RT:
+                case RectPoint::RM:
+                case RectPoint::RB:
                     m_pTsbFullWidth->SetState( TRISTATE_FALSE );
                 break;
                 default: ;//prevent warning
@@ -556,12 +556,12 @@ void SvxTextAttrPage::PointChanged( vcl::Window*, RECT_POINT eRP )
         else
             switch (eRP)
             {
-                case RP_LT:
-                case RP_MT:
-                case RP_RT:
-                case RP_LB:
-                case RP_MB:
-                case RP_RB:
+                case RectPoint::LT:
+                case RectPoint::MT:
+                case RectPoint::RT:
+                case RectPoint::LB:
+                case RectPoint::MB:
+                case RectPoint::RB:
                     m_pTsbFullWidth->SetState( TRISTATE_FALSE );
                 break;
                 default: ;//prevent warning
@@ -588,19 +588,19 @@ IMPL_LINK_NOARG_TYPED(SvxTextAttrPage, ClickFullWidthHdl_Impl, Button*, void)
             // Move text anchor to horizontal middle axis.
             switch( m_pCtlPosition->GetActualRP() )
             {
-                case RP_LT:
-                case RP_RT:
-                    m_pCtlPosition->SetActualRP( RP_MT );
+                case RectPoint::LT:
+                case RectPoint::RT:
+                    m_pCtlPosition->SetActualRP( RectPoint::MT );
                     break;
 
-                case RP_LM:
-                case RP_RM:
-                    m_pCtlPosition->SetActualRP( RP_MM );
+                case RectPoint::LM:
+                case RectPoint::RM:
+                    m_pCtlPosition->SetActualRP( RectPoint::MM );
                     break;
 
-                case RP_LB:
-                case RP_RB:
-                    m_pCtlPosition->SetActualRP( RP_MB );
+                case RectPoint::LB:
+                case RectPoint::RB:
+                    m_pCtlPosition->SetActualRP( RectPoint::MB );
                     break;
                 default: ;//prevent warning
             }
@@ -610,19 +610,19 @@ IMPL_LINK_NOARG_TYPED(SvxTextAttrPage, ClickFullWidthHdl_Impl, Button*, void)
             // Move text anchor to vertical middle axis.
             switch( m_pCtlPosition->GetActualRP() )
             {
-                case RP_LT:
-                case RP_LB:
-                    m_pCtlPosition->SetActualRP( RP_LM );
+                case RectPoint::LT:
+                case RectPoint::LB:
+                    m_pCtlPosition->SetActualRP( RectPoint::LM );
                     break;
 
-                case RP_MT:
-                case RP_MB:
-                    m_pCtlPosition->SetActualRP( RP_MM );
+                case RectPoint::MT:
+                case RectPoint::MB:
+                    m_pCtlPosition->SetActualRP( RectPoint::MM );
                     break;
 
-                case RP_RT:
-                case RP_RB:
-                    m_pCtlPosition->SetActualRP( RP_RM );
+                case RectPoint::RT:
+                case RectPoint::RB:
+                    m_pCtlPosition->SetActualRP( RectPoint::RM );
                 break;
                 default: ;//prevent warning
             }

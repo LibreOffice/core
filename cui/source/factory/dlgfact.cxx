@@ -1223,7 +1223,7 @@ AbstractFmSearchDialog*  AbstractDialogFactory_Impl::CreateFmSearchDialog(vcl::W
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterEmboss (vcl::Window* pParent,
                                             const Graphic& rGraphic,
-                                            RECT_POINT eLightSource)
+                                            RectPoint eLightSource)
 {
     VclPtrInstance<GraphicFilterEmboss> pDlg( pParent, rGraphic, eLightSource );
     return new AbstractGraphicFilterDialog_Impl( pDlg );

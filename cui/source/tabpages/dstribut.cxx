@@ -100,7 +100,7 @@ void SvxDistributePage::dispose()
 }
 
 
-void SvxDistributePage::PointChanged(vcl::Window* /*pWindow*/, RECT_POINT /*eRP*/)
+void SvxDistributePage::PointChanged(vcl::Window* /*pWindow*/, RectPoint /*eRP*/)
 {
 }
 

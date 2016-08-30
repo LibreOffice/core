@@ -175,7 +175,7 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    std::unique_ptr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterEmboss(pWindow, rGraphic, RP_MM));
+                    std::unique_ptr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterEmboss(pWindow, rGraphic, RectPoint::MM));
                     DBG_ASSERT(aDlg, "Dialog creation failed!");
                     if( aDlg->Execute() == RET_OK )
                         aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 );

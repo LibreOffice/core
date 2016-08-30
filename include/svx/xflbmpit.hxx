@@ -28,7 +28,7 @@ class SVX_DLLPUBLIC XFillBmpPosItem : public SfxEnumItem
 {
 public:
                             static SfxPoolItem* CreateDefault();
-                            XFillBmpPosItem( RECT_POINT eRP = RP_MM );
+                            XFillBmpPosItem( RectPoint eRP = RectPoint::MM );
                             SVX_DLLPRIVATE XFillBmpPosItem( SvStream& rIn );
 
     SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
@@ -40,7 +40,7 @@ public:
                                                  OUString &rText, const IntlWrapper * = nullptr ) const override;
 
     SVX_DLLPRIVATE virtual sal_uInt16           GetValueCount() const override;
-    SVX_DLLPRIVATE RECT_POINT               GetValue() const { return (RECT_POINT) SfxEnumItem::GetValue(); }
+    SVX_DLLPRIVATE RectPoint               GetValue() const { return (RectPoint) SfxEnumItem::GetValue(); }
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
 

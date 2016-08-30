@@ -54,7 +54,7 @@ void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, awt::Rectang
     long nSizX(0);
     long nSizY(0);
 
-    RECT_POINT eRP = (RECT_POINT)RP_LT;
+    RectPoint eRP = RectPoint::LT;
 
     const SfxPoolItem* pPoolItem=nullptr;
     //read position
@@ -68,37 +68,37 @@ void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, awt::Rectang
     if (SfxItemState::SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_HEIGHT,true,&pPoolItem))
         nSizY=static_cast<const SfxUInt32Item*>(pPoolItem)->GetValue();
     if (SfxItemState::SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_SIZE_POINT,true,&pPoolItem))
-        eRP=(RECT_POINT)static_cast<const SfxAllEnumItem*>(pPoolItem)->GetValue();
+        eRP=(RectPoint)static_cast<const SfxAllEnumItem*>(pPoolItem)->GetValue();
 
     switch( eRP )
     {
-        case RP_LT:
+        case RectPoint::LT:
             break;
-        case RP_MT:
+        case RectPoint::MT:
             nPosX += ( rOriginalSize.Width - nSizX ) / 2;
             break;
-        case RP_RT:
+        case RectPoint::RT:
             nPosX += rOriginalSize.Width - nSizX;
             break;
-        case RP_LM:
+        case RectPoint::LM:
             nPosY += ( rOriginalSize.Height - nSizY ) / 2;
             break;
-        case RP_MM:
+        case RectPoint::MM:
             nPosX += ( rOriginalSize.Width  - nSizX ) / 2;
             nPosY += ( rOriginalSize.Height - nSizY ) / 2;
             break;
-        case RP_RM:
+        case RectPoint::RM:
             nPosX += rOriginalSize.Width - nSizX;
             nPosY += ( rOriginalSize.Height - nSizY ) / 2;
             break;
-        case RP_LB:
+        case RectPoint::LB:
             nPosY += rOriginalSize.Height - nSizY;
             break;
-        case RP_MB:
+        case RectPoint::MB:
             nPosX += ( rOriginalSize.Width - nSizX ) / 2;
             nPosY += rOriginalSize.Height - nSizY;
             break;
-        case RP_RB:
+        case RectPoint::RB:
             nPosX += rOriginalSize.Width - nSizX;
             nPosY += rOriginalSize.Height - nSizY;
             break;

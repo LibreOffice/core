@@ -931,7 +931,7 @@ DeactivateRC SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-void SvxBackgroundTabPage::PointChanged( vcl::Window* , RECT_POINT  )
+void SvxBackgroundTabPage::PointChanged( vcl::Window* , RectPoint  )
 {
     // has to be implemented so that position control can work
 }
@@ -1083,19 +1083,19 @@ void SvxBackgroundTabPage::SetGraphicPosition_Impl( SvxGraphicPosition ePos )
         {
             m_pBtnPosition->Check();
             m_pWndPosition->Enable();
-            RECT_POINT eNewPos = RP_MM;
+            RectPoint eNewPos = RectPoint::MM;
 
             switch ( ePos )
             {
                 case GPOS_MM:   break;
-                case GPOS_LT:   eNewPos = RP_LT; break;
-                case GPOS_MT:   eNewPos = RP_MT; break;
-                case GPOS_RT:   eNewPos = RP_RT; break;
-                case GPOS_LM:   eNewPos = RP_LM; break;
-                case GPOS_RM:   eNewPos = RP_RM; break;
-                case GPOS_LB:   eNewPos = RP_LB; break;
-                case GPOS_MB:   eNewPos = RP_MB; break;
-                case GPOS_RB:   eNewPos = RP_RB; break;
+                case GPOS_LT:   eNewPos = RectPoint::LT; break;
+                case GPOS_MT:   eNewPos = RectPoint::MT; break;
+                case GPOS_RT:   eNewPos = RectPoint::RT; break;
+                case GPOS_LM:   eNewPos = RectPoint::LM; break;
+                case GPOS_RM:   eNewPos = RectPoint::RM; break;
+                case GPOS_LB:   eNewPos = RectPoint::LB; break;
+                case GPOS_MB:   eNewPos = RectPoint::MB; break;
+                case GPOS_RB:   eNewPos = RectPoint::RB; break;
                 default: ;//prevent warning
             }
             m_pWndPosition->SetActualRP( eNewPos );
@@ -1115,15 +1115,15 @@ SvxGraphicPosition SvxBackgroundTabPage::GetGraphicPosition_Impl()
     {
         switch ( m_pWndPosition->GetActualRP() )
         {
-            case RP_LT: return GPOS_LT;
-            case RP_MT: return GPOS_MT;
-            case RP_RT: return GPOS_RT;
-            case RP_LM: return GPOS_LM;
-            case RP_MM: return GPOS_MM;
-            case RP_RM: return GPOS_RM;
-            case RP_LB: return GPOS_LB;
-            case RP_MB: return GPOS_MB;
-            case RP_RB: return GPOS_RB;
+            case RectPoint::LT: return GPOS_LT;
+            case RectPoint::MT: return GPOS_MT;
+            case RectPoint::RT: return GPOS_RT;
+            case RectPoint::LM: return GPOS_LM;
+            case RectPoint::MM: return GPOS_MM;
+            case RectPoint::RM: return GPOS_RM;
+            case RectPoint::LB: return GPOS_LB;
+            case RectPoint::MB: return GPOS_MB;
+            case RectPoint::RB: return GPOS_RB;
         }
     }
     return GPOS_MM;

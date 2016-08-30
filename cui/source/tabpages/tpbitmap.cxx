@@ -270,7 +270,7 @@ bool SvxBitmapTabPage::FillItemSet( SfxItemSet* rAttrs )
             }
 
             if(m_pPositionLB->IsEnabled())
-                rAttrs->Put( XFillBmpPosItem( static_cast<RECT_POINT>( m_pPositionLB->GetSelectEntryPos() ) ) );
+                rAttrs->Put( XFillBmpPosItem( static_cast<RectPoint>( m_pPositionLB->GetSelectEntryPos() ) ) );
             if(m_pPositionOffX->IsEnabled())
                 rAttrs->Put( XFillBmpPosOffsetXItem( m_pPositionOffX->GetValue() ) );
             if(m_pPositionOffY->IsEnabled())
@@ -410,7 +410,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
 
     if( rAttrs->GetItemState( XATTR_FILLBMP_POS ) != SfxItemState::DONTCARE )
     {
-        RECT_POINT eValue = static_cast<const XFillBmpPosItem&>( rAttrs->Get( XATTR_FILLBMP_POS ) ).GetValue();
+        RectPoint eValue = static_cast<const XFillBmpPosItem&>( rAttrs->Get( XATTR_FILLBMP_POS ) ).GetValue();
         m_pPositionLB->SelectEntryPos( static_cast< sal_Int32 >(eValue) );
     }
 
@@ -719,7 +719,7 @@ IMPL_LINK_NOARG_TYPED( SvxBitmapTabPage, ModifyBitmapStyleHdl, ListBox&, void )
 IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ModifyBitmapPositionHdl, ListBox&, void)
 {
     if(m_pPositionLB->IsEnabled())
-        m_rXFSet.Put( XFillBmpPosItem( static_cast< RECT_POINT >( m_pPositionLB->GetSelectEntryPos() ) ) );
+        m_rXFSet.Put( XFillBmpPosItem( static_cast< RectPoint >( m_pPositionLB->GetSelectEntryPos() ) ) );
 
     m_pCtlBitmapPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlBitmapPreview->Invalidate();
@@ -852,7 +852,7 @@ sal_Int32 SvxBitmapTabPage::SearchBitmapList(const OUString& rBitmapName)
     return nPos;
 }
 
-void SvxBitmapTabPage::PointChanged( vcl::Window* , RECT_POINT )
+void SvxBitmapTabPage::PointChanged( vcl::Window* , RectPoint )
 {
 }
 

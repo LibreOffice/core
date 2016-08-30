@@ -54,7 +54,7 @@ SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInA
                           "cui/ui/shadowtabpage.ui",
                           rInAttrs ),
     m_rOutAttrs           ( rInAttrs ),
-    m_eRP                 ( RP_LT ),
+    m_eRP                 ( RectPoint::LT ),
     m_pnColorListState    ( nullptr ),
     m_nPageType           ( PageType::Area ),
     m_nDlgType            ( 0 ),
@@ -287,15 +287,15 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
 
     switch( m_pCtlPosition->GetActualRP() )
     {
-        case RP_LT: nX = nY = -nXY;      break;
-        case RP_MT: nY = -nXY;           break;
-        case RP_RT: nX = nXY; nY = -nXY; break;
-        case RP_LM: nX = -nXY;           break;
-        case RP_RM: nX = nXY;            break;
-        case RP_LB: nX = -nXY; nY = nXY; break;
-        case RP_MB: nY = nXY;            break;
-        case RP_RB: nX = nY = nXY;       break;
-        case RP_MM: break;
+        case RectPoint::LT: nX = nY = -nXY;      break;
+        case RectPoint::MT: nY = -nXY;           break;
+        case RectPoint::RT: nX = nXY; nY = -nXY; break;
+        case RectPoint::LM: nX = -nXY;           break;
+        case RectPoint::RM: nX = nXY;            break;
+        case RectPoint::LB: nX = -nXY; nY = nXY; break;
+        case RectPoint::MB: nY = nXY;            break;
+        case RectPoint::RB: nX = nY = nXY;       break;
+        case RectPoint::MM: break;
     }
 
     // If the values of the shadow distances==SfxItemState::DONTCARE and the displayed
@@ -402,16 +402,16 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
             SetMetricValue( *m_pMtrDistance, nY < 0L ? -nY : nY, m_ePoolUnit );
 
         // setting the shadow control
-        if     ( nX <  0L && nY <  0L ) m_pCtlPosition->SetActualRP( RP_LT );
-        else if( nX == 0L && nY <  0L ) m_pCtlPosition->SetActualRP( RP_MT );
-        else if( nX >  0L && nY <  0L ) m_pCtlPosition->SetActualRP( RP_RT );
-        else if( nX <  0L && nY == 0L ) m_pCtlPosition->SetActualRP( RP_LM );
+        if     ( nX <  0L && nY <  0L ) m_pCtlPosition->SetActualRP( RectPoint::LT );
+        else if( nX == 0L && nY <  0L ) m_pCtlPosition->SetActualRP( RectPoint::MT );
+        else if( nX >  0L && nY <  0L ) m_pCtlPosition->SetActualRP( RectPoint::RT );
+        else if( nX <  0L && nY == 0L ) m_pCtlPosition->SetActualRP( RectPoint::LM );
         // there's no center point anymore
-        else if( nX == 0L && nY == 0L ) m_pCtlPosition->SetActualRP( RP_RB );
-        else if( nX >  0L && nY == 0L ) m_pCtlPosition->SetActualRP( RP_RM );
-        else if( nX <  0L && nY >  0L ) m_pCtlPosition->SetActualRP( RP_LB );
-        else if( nX == 0L && nY >  0L ) m_pCtlPosition->SetActualRP( RP_MB );
-        else if( nX >  0L && nY >  0L ) m_pCtlPosition->SetActualRP( RP_RB );
+        else if( nX == 0L && nY == 0L ) m_pCtlPosition->SetActualRP( RectPoint::RB );
+        else if( nX >  0L && nY == 0L ) m_pCtlPosition->SetActualRP( RectPoint::RM );
+        else if( nX <  0L && nY >  0L ) m_pCtlPosition->SetActualRP( RectPoint::LB );
+        else if( nX == 0L && nY >  0L ) m_pCtlPosition->SetActualRP( RectPoint::MB );
+        else if( nX >  0L && nY >  0L ) m_pCtlPosition->SetActualRP( RectPoint::RB );
     }
     else
     {
@@ -433,7 +433,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
         // The text (which shall be displayed) of the MetricFields is set to "" and serves as an
         // identification in the method FillItemSet for the fact that the distance value was NOT changed !!!!
         m_pMtrDistance->SetText( "" );
-        m_pCtlPosition->SetActualRP( RP_MM );
+        m_pCtlPosition->SetActualRP( RectPoint::MM );
     }
 
     if( rAttrs->GetItemState( SDRATTR_SHADOWCOLOR ) != SfxItemState::DONTCARE )
@@ -514,15 +514,15 @@ IMPL_LINK_NOARG_TYPED(SvxShadowTabPage, ModifyShadowHdl_Impl, Edit&, void)
     sal_Int32 nXY = GetCoreValue( *m_pMtrDistance, m_ePoolUnit );
     switch( m_pCtlPosition->GetActualRP() )
     {
-        case RP_LT: nX = nY = -nXY;      break;
-        case RP_MT: nY = -nXY;           break;
-        case RP_RT: nX = nXY; nY = -nXY; break;
-        case RP_LM: nX = -nXY;           break;
-        case RP_RM: nX = nXY;            break;
-        case RP_LB: nX = -nXY; nY = nXY; break;
-        case RP_MB: nY = nXY;            break;
-        case RP_RB: nX = nY = nXY;       break;
-        case RP_MM: break;
+        case RectPoint::LT: nX = nY = -nXY;      break;
+        case RectPoint::MT: nY = -nXY;           break;
+        case RectPoint::RT: nX = nXY; nY = -nXY; break;
+        case RectPoint::LM: nX = -nXY;           break;
+        case RectPoint::RM: nX = nXY;            break;
+        case RectPoint::LB: nX = -nXY; nY = nXY; break;
+        case RectPoint::MB: nY = nXY;            break;
+        case RectPoint::RB: nX = nY = nXY;       break;
+        case RectPoint::MM: break;
     }
 
     m_pCtlXRectPreview->SetShadowPosition(Point(nX, nY));
@@ -533,7 +533,7 @@ IMPL_LINK_NOARG_TYPED(SvxShadowTabPage, ModifyShadowHdl_Impl, Edit&, void)
 }
 
 
-void SvxShadowTabPage::PointChanged( vcl::Window*, RECT_POINT eRcPt )
+void SvxShadowTabPage::PointChanged( vcl::Window*, RectPoint eRcPt )
 {
     m_eRP = eRcPt;
 

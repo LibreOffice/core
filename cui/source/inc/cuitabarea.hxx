@@ -133,7 +133,7 @@ class SvxTransparenceTabPage : public SvxTabPage
     static const sal_uInt16 pTransparenceRanges[];
 
     const SfxItemSet&   rOutAttrs;
-    RECT_POINT          eRP;
+    RectPoint          eRP;
 
     PageType               nPageType;
     sal_uInt16             nDlgType;
@@ -195,7 +195,7 @@ public:
     virtual void ChangesApplied() override;
     virtual void ActivatePage(const SfxItemSet& rSet) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
-    virtual void PointChanged(vcl::Window* pWindow, RECT_POINT eRP) override;
+    virtual void PointChanged(vcl::Window* pWindow, RectPoint eRP) override;
 
     void SetPageType(PageType nInType) { nPageType = nInType; }
     void SetDlgType(sal_uInt16 nInType) { nDlgType = nInType; }
@@ -221,7 +221,7 @@ private:
     VclPtr<SvxXRectPreview>    m_pCtlXRectPreview;
 
     const SfxItemSet&   m_rOutAttrs;
-    RECT_POINT          m_eRP;
+    RectPoint          m_eRP;
 
     XColorListRef         m_pColorList;
     XGradientListRef      m_pGradientList;
@@ -281,7 +281,7 @@ public:
     virtual void ChangesApplied() override;
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
-    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
+    virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
 
     void    SetColorList( XColorListRef const & pColorList ) { m_pColorList = pColorList; }
     void    SetGradientList( XGradientListRef const & pGrdLst)
@@ -318,7 +318,7 @@ private:
     VclPtr<SvxXShadowPreview>  m_pCtlXRectPreview;
 
     const SfxItemSet&   m_rOutAttrs;
-    RECT_POINT          m_eRP;
+    RectPoint          m_eRP;
 
     XColorListRef       m_pColorList;
     ChangeType*         m_pnColorListState;
@@ -347,7 +347,7 @@ public:
     virtual void Reset( const SfxItemSet * ) override;
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
-    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
+    virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
 
     void    SetColorList( XColorListRef const & pColorList ) { m_pColorList = pColorList; }
     void    SetPageType( PageType nInType ) { m_nPageType = nInType; }
@@ -511,7 +511,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
-    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
+    virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
 
     void    SetColorList( XColorListRef const & pColorList ) { m_pColorList = pColorList; }
     void    SetHatchingList( XHatchListRef const & pHtchLst)
@@ -608,7 +608,7 @@ public:
     virtual void Reset( const SfxItemSet * ) override;
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
-    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
+    virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
 
     void    SetBitmapList( const XBitmapListRef& pBmpLst) { m_pBitmapList = pBmpLst; }
 
@@ -679,7 +679,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
-    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
+    virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
 
     void    SetColorList( XColorListRef const & pColorList ) { m_pColorList = pColorList; }
     void    SetPatternList( XPatternListRef const & pPatternList) { m_pPatternList = pPatternList; }

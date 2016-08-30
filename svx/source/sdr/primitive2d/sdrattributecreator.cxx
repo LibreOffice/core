@@ -156,20 +156,20 @@ namespace drawinglayer
             }
         }
 
-        basegfx::B2DVector RectPointToB2DVector(RECT_POINT eRectPoint)
+        basegfx::B2DVector RectPointToB2DVector(RectPoint eRectPoint)
         {
             basegfx::B2DVector aRetval(0.0, 0.0);
 
             // position changes X
             switch(eRectPoint)
             {
-                case RP_LT: case RP_LM: case RP_LB:
+                case RectPoint::LT: case RectPoint::LM: case RectPoint::LB:
                 {
                     aRetval.setX(-1.0);
                     break;
                 }
 
-                case RP_RT: case RP_RM: case RP_RB:
+                case RectPoint::RT: case RectPoint::RM: case RectPoint::RB:
                 {
                     aRetval.setX(1.0);
                     break;
@@ -184,13 +184,13 @@ namespace drawinglayer
             // position changes Y
             switch(eRectPoint)
             {
-                case RP_LT: case RP_MT: case RP_RT:
+                case RectPoint::LT: case RectPoint::MT: case RectPoint::RT:
                 {
                     aRetval.setY(-1.0);
                     break;
                 }
 
-                case RP_LB: case RP_MB: case RP_RB:
+                case RectPoint::LB: case RectPoint::MB: case RectPoint::RB:
                 {
                     aRetval.setY(1.0);
                     break;
@@ -700,7 +700,7 @@ namespace drawinglayer
                 aOffset,
                 aOffsetPosition,
                 RectPointToB2DVector(
-                    (RECT_POINT)static_cast<const SfxEnumItem&>(rSet.Get(XATTR_FILLBMP_POS)).GetValue()),
+                    (RectPoint)static_cast<const SfxEnumItem&>(rSet.Get(XATTR_FILLBMP_POS)).GetValue()),
                     static_cast<const SfxBoolItem&>(rSet.Get(XATTR_FILLBMP_TILE)).GetValue(),
                     static_cast<const SfxBoolItem&>(rSet.Get(XATTR_FILLBMP_STRETCH)).GetValue(),
                     static_cast<const SfxBoolItem&>(rSet.Get(XATTR_FILLBMP_SIZELOG)).GetValue());

@@ -241,7 +241,7 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(vcl::Window* pParent, const SfxIt
                           "cui/ui/transparencytabpage.ui",
                           rInAttrs),
     rOutAttrs           ( rInAttrs ),
-    eRP                 ( RP_LT ),
+    eRP                 ( RectPoint::LT ),
     nPageType           ( PageType::Area ),
     nDlgType            (0),
     bBitmap             ( false ),
@@ -489,7 +489,7 @@ DeactivateRC SvxTransparenceTabPage::DeactivatePage(SfxItemSet* _pSet)
     return DeactivateRC::LeavePage;
 }
 
-void SvxTransparenceTabPage::PointChanged(vcl::Window* , RECT_POINT eRcPt)
+void SvxTransparenceTabPage::PointChanged(vcl::Window* , RectPoint eRcPt)
 {
     eRP = eRcPt;
 }

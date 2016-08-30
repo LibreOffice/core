@@ -557,7 +557,7 @@ void XFillBmpTileItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SfxPoolItem* XFillBmpPosItem::CreateDefault() {return new XFillBmpPosItem;}
 
-XFillBmpPosItem::XFillBmpPosItem( RECT_POINT eRP ) :
+XFillBmpPosItem::XFillBmpPosItem( RectPoint eRP ) :
     SfxEnumItem( XATTR_FILLBMP_POS, sal::static_int_cast< sal_uInt16 >( eRP ) )
 {
 }
@@ -598,7 +598,7 @@ void XFillBmpPosItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("xFillBmpPosItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number((int)GetValue()).getStr()));
     xmlTextWriterEndElement(pWriter);
 }
 

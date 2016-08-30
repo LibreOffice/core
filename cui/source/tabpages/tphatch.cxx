@@ -642,7 +642,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, v
 
 }
 
-void SvxHatchTabPage::PointChanged( vcl::Window*, RECT_POINT )
+void SvxHatchTabPage::PointChanged( vcl::Window*, RectPoint )
 {
 }
 

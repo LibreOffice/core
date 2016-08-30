@@ -571,7 +571,7 @@ public:
                                                         sal_Int16 nInitialContext,
                                                         const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier) override;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss(vcl::Window* pParent,
-                                                const Graphic& rGraphic, RECT_POINT eLightSource) override;
+                                                const Graphic& rGraphic, RectPoint eLightSource) override;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterPoster(vcl::Window* pParent,
                                                 const Graphic& rGraphic, sal_uInt16 nCount) override;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSepia (vcl::Window* pParent,

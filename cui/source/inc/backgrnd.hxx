@@ -55,7 +55,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual void        FillUserData() override;
-    virtual void        PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
+    virtual void        PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
 
     /// Shift-ListBox activation
     void                ShowSelector();

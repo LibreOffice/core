@@ -121,7 +121,7 @@ private:
     // #i75273#
     double              mfOldWidth;
     double              mfOldHeight;
-    RECT_POINT          meRP;
+    RectPoint          meRP;
 
 
     DECL_LINK_TYPED( ChangePosProtectHdl, Button*, void );
@@ -149,7 +149,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
-    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
+    virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { mpView = pSdrView; }
@@ -207,7 +207,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
-    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
+    virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
@@ -260,7 +260,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
-    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
+    virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }

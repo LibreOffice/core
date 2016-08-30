@@ -199,7 +199,7 @@ private:
     VclPtr<EmbossControl>  mpCtlLight;
 public:
     GraphicFilterEmboss( vcl::Window* pParent, const Graphic& rGraphic,
-                         RECT_POINT eLightSource );
+                         RectPoint eLightSource );
     virtual ~GraphicFilterEmboss();
     virtual void dispose() override;
 

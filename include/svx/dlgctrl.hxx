@@ -47,7 +47,7 @@ public:
         : SfxTabPage(pParent, rID, rUIXMLDescription, &rAttrSet)
     {
     }
-    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) = 0;
+    virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) = 0;
 };
 
 /*************************************************************************
@@ -86,7 +86,7 @@ protected:
     Point aPtLM, aPtMM, aPtRM;
     Point aPtLB, aPtMB, aPtRB;
     Point aPtNew;
-    RECT_POINT eRP, eDefRP;
+    RectPoint eRP, eDefRP;
     CTL_STYLE eCS;
     Bitmap* pBitmap;
     CTL_STATE m_nState;
@@ -97,19 +97,19 @@ protected:
 
     void MarkToResetSettings(bool bUpdateForeground, bool bUpdateBackground);
 
-    RECT_POINT          GetRPFromPoint( Point, bool bRTL = false ) const;
-    const Point&        GetPointFromRP( RECT_POINT ) const;
+    RectPoint          GetRPFromPoint( Point, bool bRTL = false ) const;
+    const Point&        GetPointFromRP( RectPoint ) const;
     void                SetFocusRect();
-    Point               SetActualRPWithoutInvalidate( RECT_POINT eNewRP );  // returns the last point
+    Point               SetActualRPWithoutInvalidate( RectPoint eNewRP );  // returns the last point
 
     virtual void        GetFocus() override;
     virtual void        LoseFocus() override;
 
     Point               GetApproxLogPtFromPixPt( const Point& rRoughPixelPoint ) const;
 public:
-    SvxRectCtl( vcl::Window* pParent, RECT_POINT eRpt = RP_MM,
+    SvxRectCtl( vcl::Window* pParent, RectPoint eRpt = RectPoint::MM,
                 sal_uInt16 nBorder = 200, sal_uInt16 nCircle = 80 );
-    void SetControlSettings(RECT_POINT eRpt = RP_MM, sal_uInt16 nBorder = 200,
+    void SetControlSettings(RectPoint eRpt = RectPoint::MM, sal_uInt16 nBorder = 200,
         sal_uInt16 nCircle = 80);
     virtual ~SvxRectCtl();
     virtual void dispose() override;
@@ -123,19 +123,19 @@ public:
     virtual Size        GetOptimalSize() const override;
 
     void                Reset();
-    RECT_POINT          GetActualRP() const { return eRP;}
-    void                SetActualRP( RECT_POINT eNewRP );
+    RectPoint          GetActualRP() const { return eRP;}
+    void                SetActualRP( RectPoint eNewRP );
 
     void                SetState( CTL_STATE nState );
 
     sal_uInt8               GetNumOfChildren() const;   // returns number of usable radio buttons
 
     Rectangle           CalculateFocusRectangle() const;
-    Rectangle           CalculateFocusRectangle( RECT_POINT eRectPoint ) const;
+    Rectangle           CalculateFocusRectangle( RectPoint eRectPoint ) const;
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
-    RECT_POINT          GetApproxRPFromPixPt( const css::awt::Point& rPixelPoint ) const;
+    RectPoint          GetApproxRPFromPixPt( const css::awt::Point& rPixelPoint ) const;
 
     bool IsCompletelyDisabled() const { return mbCompleteDisable; }
     void DoCompletelyDisable(bool bNew);

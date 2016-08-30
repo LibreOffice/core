@@ -344,61 +344,61 @@ DeactivateRC SvxAngleTabPage::DeactivatePage( SfxItemSet* _pSet )
 }
 
 
-void SvxAngleTabPage::PointChanged(vcl::Window* pWindow, RECT_POINT eRP)
+void SvxAngleTabPage::PointChanged(vcl::Window* pWindow, RectPoint eRP)
 {
     if(pWindow == m_pCtlRect)
     {
         switch(eRP)
         {
-            case RP_LT:
+            case RectPoint::LT:
             {
                 m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMinX()), FUNIT_NONE );
                 m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMinY()), FUNIT_NONE );
                 break;
             }
-            case RP_MT:
+            case RectPoint::MT:
             {
                 m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getCenter().getX()), FUNIT_NONE );
                 m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMinY()), FUNIT_NONE );
                 break;
             }
-            case RP_RT:
+            case RectPoint::RT:
             {
                 m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMaxX()), FUNIT_NONE );
                 m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMinY()), FUNIT_NONE );
                 break;
             }
-            case RP_LM:
+            case RectPoint::LM:
             {
                 m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMinX()), FUNIT_NONE );
                 m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getCenter().getY()), FUNIT_NONE );
                 break;
             }
-            case RP_MM:
+            case RectPoint::MM:
             {
                 m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getCenter().getX()), FUNIT_NONE );
                 m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getCenter().getY()), FUNIT_NONE );
                 break;
             }
-            case RP_RM:
+            case RectPoint::RM:
             {
                 m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMaxX()), FUNIT_NONE );
                 m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getCenter().getY()), FUNIT_NONE );
                 break;
             }
-            case RP_LB:
+            case RectPoint::LB:
             {
                 m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMinX()), FUNIT_NONE );
                 m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMaxY()), FUNIT_NONE );
                 break;
             }
-            case RP_MB:
+            case RectPoint::MB:
             {
                 m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getCenter().getX()), FUNIT_NONE );
                 m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMaxY()), FUNIT_NONE );
                 break;
             }
-            case RP_RB:
+            case RectPoint::RB:
             {
                 m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMaxX()), FUNIT_NONE );
                 m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMaxY()), FUNIT_NONE );
@@ -714,7 +714,7 @@ DeactivateRC SvxSlantTabPage::DeactivatePage( SfxItemSet* _pSet )
 }
 
 
-void SvxSlantTabPage::PointChanged( vcl::Window* , RECT_POINT  )
+void SvxSlantTabPage::PointChanged( vcl::Window* , RectPoint  )
 {
 }
 
@@ -765,9 +765,9 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage(vcl::Window* pParent, const SfxIt
     DBG_ASSERT( pPool, "no pool (!)" );
     mePoolUnit = pPool->GetMetric( SID_ATTR_TRANSFORM_POS_X );
 
-    m_pCtlPos->SetActualRP(RP_LT);
-    m_pCtlSize->SetActualRP(RP_LT);
-    meRP = RP_LT; // see above
+    m_pCtlPos->SetActualRP(RectPoint::LT);
+    m_pCtlSize->SetActualRP(RectPoint::LT);
+    meRP = RectPoint::LT; // see above
 
     m_pMtrWidth->SetModifyHdl( LINK( this, SvxPositionSizeTabPage, ChangeWidthHdl ) );
     m_pMtrHeight->SetModifyHdl( LINK( this, SvxPositionSizeTabPage, ChangeHeightHdl ) );
@@ -1248,33 +1248,33 @@ void SvxPositionSizeTabPage::SetMinMaxPosition()
 
     switch ( m_pCtlPos->GetActualRP() )
     {
-        case RP_LT:
+        case RectPoint::LT:
         {
             fRight  -= maRange.getWidth();
             fBottom -= maRange.getHeight();
             break;
         }
-        case RP_MT:
+        case RectPoint::MT:
         {
             fLeft   += maRange.getWidth() / 2.0;
             fRight  -= maRange.getWidth() / 2.0;
             fBottom -= maRange.getHeight();
             break;
         }
-        case RP_RT:
+        case RectPoint::RT:
         {
             fLeft   += maRange.getWidth();
             fBottom -= maRange.getHeight();
             break;
         }
-        case RP_LM:
+        case RectPoint::LM:
         {
             fRight  -= maRange.getWidth();
             fTop    += maRange.getHeight() / 2.0;
             fBottom -= maRange.getHeight() / 2.0;
             break;
         }
-        case RP_MM:
+        case RectPoint::MM:
         {
             fLeft   += maRange.getWidth() / 2.0;
             fRight  -= maRange.getWidth() / 2.0;
@@ -1282,27 +1282,27 @@ void SvxPositionSizeTabPage::SetMinMaxPosition()
             fBottom -= maRange.getHeight() / 2.0;
             break;
         }
-        case RP_RM:
+        case RectPoint::RM:
         {
             fLeft   += maRange.getWidth();
             fTop    += maRange.getHeight() / 2.0;
             fBottom -= maRange.getHeight() / 2.0;
             break;
         }
-        case RP_LB:
+        case RectPoint::LB:
         {
             fRight  -= maRange.getWidth();
             fTop    += maRange.getHeight();
             break;
         }
-        case RP_MB:
+        case RectPoint::MB:
         {
             fLeft   += maRange.getWidth() / 2.0;
             fRight  -= maRange.getWidth() / 2.0;
             fTop    += maRange.getHeight();
             break;
         }
-        case RP_RB:
+        case RectPoint::RB:
         {
             fLeft   += maRange.getWidth();
             fTop    += maRange.getHeight();
@@ -1336,31 +1336,31 @@ void SvxPositionSizeTabPage::SetMinMaxPosition()
 
     switch ( m_pCtlSize->GetActualRP() )
     {
-        case RP_LT:
+        case RectPoint::LT:
         {
             fNewX = maWorkRange.getWidth() - ( maRange.getMinX() - fLeft );
             fNewY = maWorkRange.getHeight() - ( maRange.getMinY() - fTop );
             break;
         }
-        case RP_MT:
+        case RectPoint::MT:
         {
             fNewX = std::min( maRange.getCenter().getX() - fLeft, fRight - maRange.getCenter().getX() ) * 2.0;
             fNewY = maWorkRange.getHeight() - ( maRange.getMinY() - fTop );
             break;
         }
-        case RP_RT:
+        case RectPoint::RT:
         {
             fNewX = maWorkRange.getWidth() - ( fRight - maRange.getMaxX() );
             fNewY = maWorkRange.getHeight() - ( maRange.getMinY() - fTop );
             break;
         }
-        case RP_LM:
+        case RectPoint::LM:
         {
             fNewX = maWorkRange.getWidth() - ( maRange.getMinX() - fLeft );
             fNewY = std::min( maRange.getCenter().getY() - fTop, fBottom - maRange.getCenter().getY() ) * 2.0;
             break;
         }
-        case RP_MM:
+        case RectPoint::MM:
         {
             const double f1(maRange.getCenter().getX() - fLeft);
             const double f2(fRight - maRange.getCenter().getX());
@@ -1374,25 +1374,25 @@ void SvxPositionSizeTabPage::SetMinMaxPosition()
 
             break;
         }
-        case RP_RM:
+        case RectPoint::RM:
         {
             fNewX = maWorkRange.getWidth() - ( fRight - maRange.getMaxX() );
             fNewY = std::min( maRange.getCenter().getY() - fTop, fBottom - maRange.getCenter().getY() ) * 2.0;
             break;
         }
-        case RP_LB:
+        case RectPoint::LB:
         {
             fNewX = maWorkRange.getWidth() - ( maRange.getMinX() - fLeft );
             fNewY = maWorkRange.getHeight() - ( fBottom - maRange.getMaxY() );
             break;
         }
-        case RP_MB:
+        case RectPoint::MB:
         {
             fNewX = std::min( maRange.getCenter().getX() - fLeft, fRight - maRange.getCenter().getX() ) * 2.0;
             fNewY = maWorkRange.getHeight() - ( maRange.getMaxY() - fBottom );
             break;
         }
-        case RP_RB:
+        case RectPoint::RB:
         {
             fNewX = maWorkRange.getWidth() - ( fRight - maRange.getMaxX() );
             fNewY = maWorkRange.getHeight() - ( fBottom - maRange.getMaxY() );
@@ -1412,49 +1412,49 @@ void SvxPositionSizeTabPage::GetTopLeftPosition(double& rfX, double& rfY, const 
 {
     switch (m_pCtlPos->GetActualRP())
     {
-        case RP_LT:
+        case RectPoint::LT:
         {
             break;
         }
-        case RP_MT:
+        case RectPoint::MT:
         {
             rfX -= rRange.getCenter().getX() - rRange.getMinX();
             break;
         }
-        case RP_RT:
+        case RectPoint::RT:
         {
             rfX -= rRange.getWidth();
             break;
         }
-        case RP_LM:
+        case RectPoint::LM:
         {
             rfY -= rRange.getCenter().getY() - rRange.getMinY();
             break;
         }
-        case RP_MM:
+        case RectPoint::MM:
         {
             rfX -= rRange.getCenter().getX() - rRange.getMinX();
             rfY -= rRange.getCenter().getY() - rRange.getMinY();
             break;
         }
-        case RP_RM:
+        case RectPoint::RM:
         {
             rfX -= rRange.getWidth();
             rfY -= rRange.getCenter().getY() - rRange.getMinY();
             break;
         }
-        case RP_LB:
+        case RectPoint::LB:
         {
             rfY -= rRange.getHeight();
             break;
         }
-        case RP_MB:
+        case RectPoint::MB:
         {
             rfX -= rRange.getCenter().getX() - rRange.getMinX();
             rfY -= rRange.getHeight();
             break;
         }
-        case RP_RB:
+        case RectPoint::RB:
         {
             rfX -= rRange.getWidth();
             rfY -= rRange.getHeight();
@@ -1464,62 +1464,62 @@ void SvxPositionSizeTabPage::GetTopLeftPosition(double& rfX, double& rfY, const 
 }
 
 
-void SvxPositionSizeTabPage::PointChanged( vcl::Window* pWindow, RECT_POINT eRP )
+void SvxPositionSizeTabPage::PointChanged( vcl::Window* pWindow, RectPoint eRP )
 {
     if( pWindow == m_pCtlPos )
     {
         SetMinMaxPosition();
         switch( eRP )
         {
-            case RP_LT:
+            case RectPoint::LT:
             {
                 m_pMtrPosX->SetValue( basegfx::fround64(maRange.getMinX()) );
                 m_pMtrPosY->SetValue( basegfx::fround64(maRange.getMinY()) );
                 break;
             }
-            case RP_MT:
+            case RectPoint::MT:
             {
                 m_pMtrPosX->SetValue( basegfx::fround64(maRange.getCenter().getX()) );
                 m_pMtrPosY->SetValue( basegfx::fround64(maRange.getMinY()) );
                 break;
             }
-            case RP_RT:
+            case RectPoint::RT:
             {
                 m_pMtrPosX->SetValue( basegfx::fround64(maRange.getMaxX()) );
                 m_pMtrPosY->SetValue( basegfx::fround64(maRange.getMinY()) );
                 break;
             }
-            case RP_LM:
+            case RectPoint::LM:
             {
                 m_pMtrPosX->SetValue( basegfx::fround64(maRange.getMinX()) );
                 m_pMtrPosY->SetValue( basegfx::fround64(maRange.getCenter().getY()) );
                 break;
             }
-            case RP_MM:
+            case RectPoint::MM:
             {
                 m_pMtrPosX->SetValue( basegfx::fround64(maRange.getCenter().getX()) );
                 m_pMtrPosY->SetValue( basegfx::fround64(maRange.getCenter().getY()) );
                 break;
             }
-            case RP_RM:
+            case RectPoint::RM:
             {
                 m_pMtrPosX->SetValue( basegfx::fround64(maRange.getMaxX()) );
                 m_pMtrPosY->SetValue( basegfx::fround64(maRange.getCenter().getY()) );
                 break;
             }
-            case RP_LB:
+            case RectPoint::LB:
             {
                 m_pMtrPosX->SetValue( basegfx::fround64(maRange.getMinX()) );
                 m_pMtrPosY->SetValue( basegfx::fround64(maRange.getMaxY()) );
                 break;
             }
-            case RP_MB:
+            case RectPoint::MB:
             {
                 m_pMtrPosX->SetValue( basegfx::fround64(maRange.getCenter().getX()) );
                 m_pMtrPosY->SetValue( basegfx::fround64(maRange.getMaxY()) );
                 break;
             }
-            case RP_RB:
+            case RectPoint::RB:
             {
                 m_pMtrPosX->SetValue( basegfx::fround64(maRange.getMaxX()) );
                 m_pMtrPosY->SetValue( basegfx::fround64(maRange.getMaxY()) );

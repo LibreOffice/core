@@ -146,7 +146,7 @@ private:
     bool                m_bSymbols;
 
     const SfxItemSet&   m_rOutAttrs;
-    RECT_POINT          m_eRP;
+    RectPoint          m_eRP;
     bool                m_bObjSelected;
 
     XLineAttrSetItem    m_aXLineAttr;
@@ -217,7 +217,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
-    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
+    virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
 
     virtual void FillUserData() override;
 

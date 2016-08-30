@@ -1434,18 +1434,18 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
     return aRetSet;
 }
 
-Point ImpGetPoint(const Rectangle& rRect, RECT_POINT eRP)
+Point ImpGetPoint(const Rectangle& rRect, RectPoint eRP)
 {
     switch(eRP) {
-        case RP_LT: return rRect.TopLeft();
-        case RP_MT: return rRect.TopCenter();
-        case RP_RT: return rRect.TopRight();
-        case RP_LM: return rRect.LeftCenter();
-        case RP_MM: return rRect.Center();
-        case RP_RM: return rRect.RightCenter();
-        case RP_LB: return rRect.BottomLeft();
-        case RP_MB: return rRect.BottomCenter();
-        case RP_RB: return rRect.BottomRight();
+        case RectPoint::LT: return rRect.TopLeft();
+        case RectPoint::MT: return rRect.TopCenter();
+        case RectPoint::RT: return rRect.TopRight();
+        case RectPoint::LM: return rRect.LeftCenter();
+        case RectPoint::MM: return rRect.Center();
+        case RectPoint::RM: return rRect.RightCenter();
+        case RectPoint::LB: return rRect.BottomLeft();
+        case RectPoint::MB: return rRect.BottomCenter();
+        case RectPoint::RB: return rRect.BottomRight();
     }
     return Point(); // Should not happen!
 }
@@ -1465,7 +1465,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     const size_t nMarkCount=rMarkList.GetMarkCount();
     SdrObject* pObj=nullptr;
 
-    RECT_POINT eSizePoint=RP_MM;
+    RectPoint eSizePoint=RectPoint::MM;
     long nPosDX=0;
     long nPosDY=0;
     long nSizX=0;
@@ -1528,7 +1528,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         bChgHgt=true;
     }
     if (bChgSiz) {
-        eSizePoint=(RECT_POINT)static_cast<const SfxAllEnumItem&>(rAttr.Get(SID_ATTR_TRANSFORM_SIZE_POINT)).GetValue();
+        eSizePoint=(RectPoint)static_cast<const SfxAllEnumItem&>(rAttr.Get(SID_ATTR_TRANSFORM_SIZE_POINT)).GetValue();
     }
 
     // rotation

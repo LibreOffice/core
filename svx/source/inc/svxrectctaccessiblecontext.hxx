@@ -225,8 +225,8 @@ public:
         @param eButton
             Button which belongs to the child which should be selected.
     */
-    void selectChild( RECT_POINT ePoint );
-    void FireChildFocus( RECT_POINT eButton );
+    void selectChild( RectPoint ePoint );
+    void FireChildFocus( RectPoint eButton );
 
 protected:
 

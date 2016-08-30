@@ -362,7 +362,7 @@ public:
                                                         const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier)=0;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss(vcl::Window* pParent,
                                                 const Graphic& rGraphic,
-                                                RECT_POINT eLightSource)=0;
+                                                RectPoint eLightSource)=0;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterPoster(vcl::Window* pParent,
                                                 const Graphic& rGraphic,
                                                 sal_uInt16 nCount)=0;

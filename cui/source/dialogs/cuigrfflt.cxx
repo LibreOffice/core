@@ -521,7 +521,7 @@ Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic, double
 
 void EmbossControl::MouseButtonDown( const MouseEvent& rEvt )
 {
-    const RECT_POINT eOldRP = GetActualRP();
+    const RectPoint eOldRP = GetActualRP();
 
     SvxRectCtl::MouseButtonDown( rEvt );
 
@@ -540,7 +540,7 @@ VCL_BUILDER_FACTORY(EmbossControl)
 
 
 GraphicFilterEmboss::GraphicFilterEmboss(vcl::Window* pParent,
-    const Graphic& rGraphic, RECT_POINT eLightSource)
+    const Graphic& rGraphic, RectPoint eLightSource)
     : GraphicFilterDialog (pParent, "EmbossDialog",
         "cui/ui/embossdialog.ui", rGraphic)
 {
@@ -573,15 +573,15 @@ Graphic GraphicFilterEmboss::GetFilteredGraphic( const Graphic& rGraphic, double
     {
         default:       OSL_FAIL("svx::GraphicFilterEmboss::GetFilteredGraphic(), unknown Reference Point!" );
                        SAL_FALLTHROUGH;
-        case RP_LT: nAzim = 4500;    nElev = 4500; break;
-        case RP_MT: nAzim = 9000;    nElev = 4500; break;
-        case RP_RT: nAzim = 13500;   nElev = 4500; break;
-        case RP_LM: nAzim = 0;       nElev = 4500; break;
-        case RP_MM: nAzim = 0;       nElev = 9000; break;
-        case RP_RM: nAzim = 18000;   nElev = 4500; break;
-        case RP_LB: nAzim = 31500;   nElev = 4500; break;
-        case RP_MB: nAzim = 27000;   nElev = 4500; break;
-        case RP_RB: nAzim = 22500;   nElev = 4500; break;
+        case RectPoint::LT: nAzim = 4500;    nElev = 4500; break;
+        case RectPoint::MT: nAzim = 9000;    nElev = 4500; break;
+        case RectPoint::RT: nAzim = 13500;   nElev = 4500; break;
+        case RectPoint::LM: nAzim = 0;       nElev = 4500; break;
+        case RectPoint::MM: nAzim = 0;       nElev = 9000; break;
+        case RectPoint::RM: nAzim = 18000;   nElev = 4500; break;
+        case RectPoint::LB: nAzim = 31500;   nElev = 4500; break;
+        case RectPoint::MB: nAzim = 27000;   nElev = 4500; break;
+        case RectPoint::RB: nAzim = 22500;   nElev = 4500; break;
     }
 
     BmpFilterParam aParam( nAzim, nElev );

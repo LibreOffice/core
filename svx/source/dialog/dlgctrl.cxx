@@ -67,7 +67,7 @@ Bitmap& SvxRectCtl::GetRectBitmap()
     return *pBitmap;
 }
 
-SvxRectCtl::SvxRectCtl(vcl::Window* pParent, RECT_POINT eRpt,
+SvxRectCtl::SvxRectCtl(vcl::Window* pParent, RectPoint eRpt,
     sal_uInt16 nBorder, sal_uInt16 nCircle)
     : Control(pParent, WB_BORDER | WB_TABSTOP)
     , nBorderWidth(nBorder)
@@ -84,7 +84,7 @@ SvxRectCtl::SvxRectCtl(vcl::Window* pParent, RECT_POINT eRpt,
     Resize_Impl();
 }
 
-void SvxRectCtl::SetControlSettings(RECT_POINT eRpt, sal_uInt16 nBorder, sal_uInt16 nCircle)
+void SvxRectCtl::SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder, sal_uInt16 nCircle)
 {
     nBorderWidth = nBorder;
     nRadius = nCircle;
@@ -281,7 +281,7 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
     // CompletelyDisabled() added to have a disabled state for SvxRectCtl
     if(!IsCompletelyDisabled())
     {
-        RECT_POINT eNewRP = eRP;
+        RectPoint eNewRP = eRP;
         bool bUseMM = (eCS != CTL_STYLE::Shadow) && (eCS != CTL_STYLE::Angle);
 
         switch( rKeyEvt.GetKeyCode().GetCode() )
@@ -291,12 +291,12 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
                 if( !(m_nState & CTL_STATE::NOVERT) )
                     switch( eNewRP )
                     {
-                        case RP_LT: eNewRP = RP_LM; break;
-                        case RP_MT: eNewRP = bUseMM ? RP_MM : RP_MB; break;
-                        case RP_RT: eNewRP = RP_RM; break;
-                        case RP_LM: eNewRP = RP_LB; break;
-                        case RP_MM: eNewRP = RP_MB; break;
-                        case RP_RM: eNewRP = RP_RB; break;
+                        case RectPoint::LT: eNewRP = RectPoint::LM; break;
+                        case RectPoint::MT: eNewRP = bUseMM ? RectPoint::MM : RectPoint::MB; break;
+                        case RectPoint::RT: eNewRP = RectPoint::RM; break;
+                        case RectPoint::LM: eNewRP = RectPoint::LB; break;
+                        case RectPoint::MM: eNewRP = RectPoint::MB; break;
+                        case RectPoint::RM: eNewRP = RectPoint::RB; break;
                         default: ; //prevent warning
                     }
             }
@@ -306,12 +306,12 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
                 if( !(m_nState & CTL_STATE::NOVERT) )
                     switch( eNewRP )
                     {
-                        case RP_LM: eNewRP = RP_LT; break;
-                        case RP_MM: eNewRP = RP_MT; break;
-                        case RP_RM: eNewRP = RP_RT; break;
-                        case RP_LB: eNewRP = RP_LM; break;
-                        case RP_MB: eNewRP = bUseMM ? RP_MM : RP_MT; break;
-                        case RP_RB: eNewRP = RP_RM; break;
+                        case RectPoint::LM: eNewRP = RectPoint::LT; break;
+                        case RectPoint::MM: eNewRP = RectPoint::MT; break;
+                        case RectPoint::RM: eNewRP = RectPoint::RT; break;
+                        case RectPoint::LB: eNewRP = RectPoint::LM; break;
+                        case RectPoint::MB: eNewRP = bUseMM ? RectPoint::MM : RectPoint::MT; break;
+                        case RectPoint::RB: eNewRP = RectPoint::RM; break;
                         default: ; //prevent warning
                     }
             }
@@ -321,12 +321,12 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
                 if( !(m_nState & CTL_STATE::NOHORZ) )
                     switch( eNewRP )
                     {
-                        case RP_MT: eNewRP = RP_LT; break;
-                        case RP_RT: eNewRP = RP_MT; break;
-                        case RP_MM: eNewRP = RP_LM; break;
-                        case RP_RM: eNewRP = bUseMM ? RP_MM : RP_LM; break;
-                        case RP_MB: eNewRP = RP_LB; break;
-                        case RP_RB: eNewRP = RP_MB; break;
+                        case RectPoint::MT: eNewRP = RectPoint::LT; break;
+                        case RectPoint::RT: eNewRP = RectPoint::MT; break;
+                        case RectPoint::MM: eNewRP = RectPoint::LM; break;
+                        case RectPoint::RM: eNewRP = bUseMM ? RectPoint::MM : RectPoint::LM; break;
+                        case RectPoint::MB: eNewRP = RectPoint::LB; break;
+                        case RectPoint::RB: eNewRP = RectPoint::MB; break;
                         default: ; //prevent warning
                     }
             }
@@ -336,12 +336,12 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
                 if( !(m_nState & CTL_STATE::NOHORZ) )
                     switch( eNewRP )
                     {
-                        case RP_LT: eNewRP = RP_MT; break;
-                        case RP_MT: eNewRP = RP_RT; break;
-                        case RP_LM: eNewRP = bUseMM ? RP_MM : RP_RM; break;
-                        case RP_MM: eNewRP = RP_RM; break;
-                        case RP_LB: eNewRP = RP_MB; break;
-                        case RP_MB: eNewRP = RP_RB; break;
+                        case RectPoint::LT: eNewRP = RectPoint::MT; break;
+                        case RectPoint::MT: eNewRP = RectPoint::RT; break;
+                        case RectPoint::LM: eNewRP = bUseMM ? RectPoint::MM : RectPoint::RM; break;
+                        case RectPoint::MM: eNewRP = RectPoint::RM; break;
+                        case RectPoint::LB: eNewRP = RectPoint::MB; break;
+                        case RectPoint::MB: eNewRP = RectPoint::RB; break;
                         default: ; //prevent warning
                     }
             }
@@ -511,21 +511,21 @@ void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     }
 }
 
-// Convert RECT_POINT Point
+// Convert RectPoint Point
 
-const Point& SvxRectCtl::GetPointFromRP( RECT_POINT _eRP) const
+const Point& SvxRectCtl::GetPointFromRP( RectPoint _eRP) const
 {
     switch( _eRP )
     {
-        case RP_LT: return aPtLT;
-        case RP_MT: return aPtMT;
-        case RP_RT: return aPtRT;
-        case RP_LM: return aPtLM;
-        case RP_MM: return aPtMM;
-        case RP_RM: return aPtRM;
-        case RP_LB: return aPtLB;
-        case RP_MB: return aPtMB;
-        case RP_RB: return aPtRB;
+        case RectPoint::LT: return aPtLT;
+        case RectPoint::MT: return aPtMT;
+        case RectPoint::RT: return aPtRT;
+        case RectPoint::LM: return aPtLM;
+        case RectPoint::MM: return aPtMM;
+        case RectPoint::RM: return aPtRM;
+        case RectPoint::LB: return aPtLB;
+        case RectPoint::MB: return aPtMB;
+        case RectPoint::RB: return aPtRB;
     }
     return aPtMM; // default
 }
@@ -538,7 +538,7 @@ void SvxRectCtl::SetFocusRect()
     ShowFocus( CalculateFocusRectangle() );
 }
 
-Point SvxRectCtl::SetActualRPWithoutInvalidate( RECT_POINT eNewRP )
+Point SvxRectCtl::SetActualRPWithoutInvalidate( RectPoint eNewRP )
 {
     Point aPtLast = aPtNew;
     aPtNew = GetPointFromRP( eNewRP );
@@ -612,20 +612,20 @@ Point SvxRectCtl::GetApproxLogPtFromPixPt( const Point& rPt ) const
 }
 
 
-// Converts Point in RECT_POINT
+// Converts Point in RectPoint
 
-RECT_POINT SvxRectCtl::GetRPFromPoint( Point aPt, bool bRTL ) const
+RectPoint SvxRectCtl::GetRPFromPoint( Point aPt, bool bRTL ) const
 {
-    RECT_POINT rPoint = RP_MM;  // default
+    RectPoint rPoint = RectPoint::MM;  // default
 
-    if     ( aPt == aPtLT) rPoint = bRTL ? RP_RT : RP_LT;
-    else if( aPt == aPtMT) rPoint = RP_MT;
-    else if( aPt == aPtRT) rPoint = bRTL ? RP_LT : RP_RT;
-    else if( aPt == aPtLM) rPoint = bRTL ? RP_RM : RP_LM;
-    else if( aPt == aPtRM) rPoint = bRTL ? RP_LM : RP_RM;
-    else if( aPt == aPtLB) rPoint = bRTL ? RP_RB : RP_LB;
-    else if( aPt == aPtMB) rPoint = RP_MB;
-    else if( aPt == aPtRB) rPoint = bRTL ? RP_LB : RP_RB;
+    if     ( aPt == aPtLT) rPoint = bRTL ? RectPoint::RT : RectPoint::LT;
+    else if( aPt == aPtMT) rPoint = RectPoint::MT;
+    else if( aPt == aPtRT) rPoint = bRTL ? RectPoint::LT : RectPoint::RT;
+    else if( aPt == aPtLM) rPoint = bRTL ? RectPoint::RM : RectPoint::LM;
+    else if( aPt == aPtRM) rPoint = bRTL ? RectPoint::LM : RectPoint::RM;
+    else if( aPt == aPtLB) rPoint = bRTL ? RectPoint::RB : RectPoint::LB;
+    else if( aPt == aPtMB) rPoint = RectPoint::MB;
+    else if( aPt == aPtRB) rPoint = bRTL ? RectPoint::LB : RectPoint::RB;
 
     return rPoint;
 }
@@ -639,10 +639,10 @@ void SvxRectCtl::Reset()
     Invalidate();
 }
 
-// Returns the currently selected RECT_POINT
+// Returns the currently selected RectPoint
 
 
-void SvxRectCtl::SetActualRP( RECT_POINT eNewRP )
+void SvxRectCtl::SetActualRP( RectPoint eNewRP )
 {
     Point aPtLast( SetActualRPWithoutInvalidate( eNewRP ) );
 
@@ -686,10 +686,10 @@ Rectangle SvxRectCtl::CalculateFocusRectangle() const
     return Rectangle( aPtNew - Point( aDstBtnSize.Width() >> 1, aDstBtnSize.Height() >> 1 ), aDstBtnSize );
 }
 
-Rectangle SvxRectCtl::CalculateFocusRectangle( RECT_POINT eRectPoint ) const
+Rectangle SvxRectCtl::CalculateFocusRectangle( RectPoint eRectPoint ) const
 {
     Rectangle   aRet;
-    RECT_POINT  eOldRectPoint = GetActualRP();
+    RectPoint  eOldRectPoint = GetActualRP();
 
     if( eOldRectPoint == eRectPoint )
         aRet = CalculateFocusRectangle();
@@ -725,7 +725,7 @@ Reference< XAccessible > SvxRectCtl::CreateAccessible()
         return Reference< XAccessible >();
 }
 
-RECT_POINT SvxRectCtl::GetApproxRPFromPixPt( const css::awt::Point& r ) const
+RectPoint SvxRectCtl::GetApproxRPFromPixPt( const css::awt::Point& r ) const
 {
     return GetRPFromPoint( GetApproxLogPtFromPixPt( Point( r.X, r.Y ) ) );
 }
@@ -793,7 +793,7 @@ long SvxPixelCtl::ShowPosition( const Point &pt)
 
     vcl::Window *pTabPage = getNonLayoutParent(this);
     if (pTabPage && WINDOW_TABPAGE == pTabPage->GetType())
-        static_cast<SvxTabPage*>(pTabPage)->PointChanged( this, RP_MM ); // RectPoint ist dummy
+        static_cast<SvxTabPage*>(pTabPage)->PointChanged( this, RectPoint::MM ); // RectPoint ist dummy
 
     return GetFocusPosIndex();
 
