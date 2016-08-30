@@ -70,8 +70,6 @@ public:
             mnBlue  ((nRGB & 0x000000ff)      ),
             meColorspace (eRGB)
     {}
-    ~PrinterColor ()
-    {}
 
     bool        Is () const
     { return meColorspace != eInvalid; }
@@ -91,15 +89,6 @@ public:
     }
     bool        operator!= (const PrinterColor& aColor) const
     { return ! (aColor==*this); }
-    PrinterColor&   operator= (const PrinterColor& aColor)
-    {
-        meColorspace = aColor.meColorspace;
-        mnRed   = aColor.mnRed;
-        mnGreen = aColor.mnGreen;
-        mnBlue  = aColor.mnBlue;
-
-        return *this;
-    }
 
     PrinterColor&   operator= (sal_uInt32 nRGB)
     {
