@@ -287,9 +287,9 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet&
                 {
                     OUString sBrackets;
                     if(pFType->GetPrefix())
-                        sBrackets += OUString(pFType->GetPrefix());
+                        sBrackets += OUStringLiteral1(pFType->GetPrefix());
                     if(pFType->GetSuffix())
-                        sBrackets += OUString(pFType->GetSuffix());
+                        sBrackets += OUStringLiteral1(pFType->GetSuffix());
                     pDescArr[nArrayIndex]->SetAuthBrackets(sBrackets);
                     pDescArr[nArrayIndex]->SetAuthSequence(pFType->IsSequence());
                 }
@@ -433,8 +433,8 @@ SwTOXDescription& SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
                                             rSh.GetFieldType(RES_AUTHORITY, aEmptyOUStr));
             if(pFType)
             {
-                pDescArr[nIndex]->SetAuthBrackets(OUString(pFType->GetPrefix()) +
-                                                  OUString(pFType->GetSuffix()));
+                pDescArr[nIndex]->SetAuthBrackets(OUStringLiteral1(pFType->GetPrefix()) +
+                                                  OUStringLiteral1(pFType->GetSuffix()));
                 pDescArr[nIndex]->SetAuthSequence(pFType->IsSequence());
             }
             else

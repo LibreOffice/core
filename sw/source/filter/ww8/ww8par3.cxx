@@ -487,7 +487,7 @@ static void lcl_CopyGreaterEight(OUString &rDest, OUString &rSrc,
     {
         sal_Unicode nChar = rSrc[nI];
         if (nChar > WW8ListManager::nMaxLevel)
-            rDest += OUString(nChar);
+            rDest += OUStringLiteral1(nChar);
     }
 }
 

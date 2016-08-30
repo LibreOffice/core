@@ -542,7 +542,7 @@ OUString SwAuthorityField::ConditionalExpandAuthIdentifier() const
             sRet += pEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER);
     }
     if(pAuthType->GetSuffix())
-        sRet += OUString(pAuthType->GetSuffix());
+        sRet += OUStringLiteral1(pAuthType->GetSuffix());
     return sRet;
 }
 

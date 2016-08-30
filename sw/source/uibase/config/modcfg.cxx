@@ -177,7 +177,7 @@ OUString SwModuleOptions::ConvertWordDelimiter(const OUString& rDelim, bool bFro
                             nChar += nVal;
                         }
                         if( bValidData )
-                            sReturn += OUString(nChar);
+                            sReturn += OUStringLiteral1(nChar);
                         break;
                     }
 
@@ -188,7 +188,7 @@ OUString SwModuleOptions::ConvertWordDelimiter(const OUString& rDelim, bool bFro
                 }
             }
             else
-                sReturn += OUString(c);
+                sReturn += OUStringLiteral1(c);
         }
     }
     else
@@ -210,7 +210,7 @@ OUString SwModuleOptions::ConvertWordDelimiter(const OUString& rDelim, bool bFro
                     }
                     else
                     {
-                        sReturn += OUString(c);
+                        sReturn += OUStringLiteral1(c);
                     }
             }
         }

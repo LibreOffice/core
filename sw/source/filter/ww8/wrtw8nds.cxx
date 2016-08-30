@@ -1684,7 +1684,7 @@ OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, sal_Int32 nAktPos,
             rStr, nAktPos, g_pBreakIt->GetLocale(nLanguage),
             i18n::WordType::ANYWORD_IGNOREWHITESPACES ) )
         {
-            aSnippet = OUString(rStr[nAktPos]) + aSnippet.copy(1);
+            aSnippet = OUStringLiteral1(rStr[nAktPos]) + aSnippet.copy(1);
         }
     }
     m_rExport.m_aCurrentCharPropStarts.pop();

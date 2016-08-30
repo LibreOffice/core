@@ -858,11 +858,11 @@ sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTextNode& rNd, sal_Int32& rPos,
                 }
 
                 if( pNumTypes )
-                    *pNumTypes += OUString(cNumTyp);
+                    *pNumTypes += OUStringLiteral1(cNumTyp);
                 eScan = eScan | CHG;
             }
             else if( pNumTypes && !(eScan & eTmpScan) )
-                *pNumTypes += OUString(cNumTyp);
+                *pNumTypes += OUStringLiteral1(cNumTyp);
 
             eScan &= ~DELIM;        // remove Delim
 
@@ -956,9 +956,9 @@ CHECK_ROMAN_5:
                 nClosingParentheses++;
             // only if no numbers were read until here
             if( pPrefix && !( eScan & ( NO_DELIM | CHG )) )
-                *pPrefix += OUString(rText[nPos]);
+                *pPrefix += OUStringLiteral1(rText[nPos]);
             else if( pPostfix )
-                *pPostfix += OUString(rText[nPos]);
+                *pPostfix += OUStringLiteral1(rText[nPos]);
 
             if( NO_DELIM & eScan )
             {
@@ -1631,7 +1631,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
         {
             OUString sChgStr('\t');
             if( bChgBullet )
-                sChgStr = OUString( m_aFlags.cBullet ) + sChgStr;
+                sChgStr = OUStringLiteral1( m_aFlags.cBullet ) + sChgStr;
             m_pDoc->getIDocumentContentOperations().InsertString( m_aDelPam, sChgStr );
 
             SfxItemSet aSet( m_pDoc->GetAttrPool(), aTextNodeSetRange );

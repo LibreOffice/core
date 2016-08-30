@@ -744,7 +744,7 @@ SwBulletPortion::SwBulletPortion( const sal_Unicode cBullet,
                                   const bool bCntr,
                                   const sal_uInt16 nMinDst,
                                   const bool bLabelAlignmentPosAndSpaceModeActive )
-    : SwNumberPortion( OUString(cBullet) + rBulletFollowedBy,
+    : SwNumberPortion( OUStringLiteral1(cBullet) + rBulletFollowedBy,
                        pFont, bLft, bCntr, nMinDst,
                        bLabelAlignmentPosAndSpaceModeActive )
 {

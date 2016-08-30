@@ -1605,7 +1605,7 @@ void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
             aTmpStr1 += SW_RES(STR_END_QUOTE);
             OUString aTmpStr3;
             aTmpStr3 += SW_RES(STR_START_QUOTE);
-            aTmpStr3 += OUString(cChar);
+            aTmpStr3 += OUStringLiteral1(cChar);
             aTmpStr3 += SW_RES(STR_END_QUOTE);
             aRewriter.AddRule( UndoArg1, aTmpStr1 );
             aRewriter.AddRule( UndoArg2, SW_RES(STR_YIELDS) );

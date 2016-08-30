@@ -343,12 +343,12 @@ ToxTextGenerator::ConstructPageNumberPlaceholder(size_t numberOfToxSources)
         return retval;
     }
     // Place holder for the PageNumber; we only respect the first one
-    retval += OUString(C_NUM_REPL);
+    retval += OUStringLiteral1(C_NUM_REPL);
     for (size_t i = 1; i < numberOfToxSources; ++i) {
         retval += S_PAGE_DELI;
-        retval += OUString(C_NUM_REPL);
+        retval += OUStringLiteral1(C_NUM_REPL);
     }
-    retval += OUString(C_END_PAGE_NUM);
+    retval += OUStringLiteral1(C_END_PAGE_NUM);
     return retval;
 }
 

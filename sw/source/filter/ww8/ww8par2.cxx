@@ -309,7 +309,7 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
     //There should have been a footnote char, we will replace this.
     if (pText && nPos)
     {
-        sChar += OUString(pText->GetText()[--nPos]);
+        sChar += OUStringLiteral1(pText->GetText()[--nPos]);
         m_pPaM->SetMark();
         --m_pPaM->GetMark()->nContent;
         m_rDoc.getIDocumentContentOperations().DeleteRange( *m_pPaM );
@@ -663,7 +663,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, WW8_ANLV const &rAV,
     {
         for(sal_Int32 i = 0; i < rAV.cbTextBefore + rAV.cbTextAfter; ++i, pText += 2)
         {
-            sText += OUString(sal_Unicode(SVBT16ToShort(*reinterpret_cast<SVBT16 const *>(pText))));
+            sText += OUStringLiteral1(SVBT16ToShort(*reinterpret_cast<SVBT16 const *>(pText)));
         }
     }
 

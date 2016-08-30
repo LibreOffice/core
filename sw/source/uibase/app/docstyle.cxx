@@ -400,7 +400,7 @@ sal_uInt32 SwStyleSheetIterator::SwPoolFormatList::FindName(SfxStyleFamily eFam,
             cStyle = ' ';
             break;
         }
-        const OUString sSrch = OUString(cStyle) + rName;
+        const OUString sSrch = OUStringLiteral1(cStyle) + rName;
 
         UniqueHash::const_iterator it = maUnique.find(sSrch);
         if (it != maUnique.end())

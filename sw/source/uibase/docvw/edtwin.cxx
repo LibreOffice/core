@@ -942,7 +942,7 @@ void SwEditWin::FlushInBuffer()
                         if (xISC->checkInputSequence( aNewText, nTmpPos - 1, cChar, nCheckMode ))
                         {
                             // character can be inserted:
-                            aNewText += OUString( (sal_Unicode) cChar );
+                            aNewText += OUStringLiteral1( cChar );
                             ++nTmpPos;
                         }
                     }

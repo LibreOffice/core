@@ -142,7 +142,7 @@ bool SwUndoInsert::CanGrouping( sal_Unicode cIns )
         nContent++;
 
         if (pUndoText)
-            (*pUndoText) += OUString(cIns);
+            (*pUndoText) += OUStringLiteral1(cIns);
 
         return true;
     }

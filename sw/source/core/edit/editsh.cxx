@@ -553,7 +553,7 @@ OUString SwEditShell::Calculate()
                         aFormel += sVar;
                 }
                 else
-                    aFormel += OUString(ch);
+                    aFormel += OUStringLiteral1(ch);
             }
         }
     }

@@ -40,7 +40,7 @@ static OUString lcl_CheckGroupName( const OUString& rGroupName )
         if (rtl::isAsciiAlphanumeric(cChar) ||
             cChar == '_' || cChar == 0x20)
         {
-            sRet += OUString(cChar);
+            sRet += OUStringLiteral1(cChar);
         }
     }
     return comphelper::string::strip(sRet, ' ');

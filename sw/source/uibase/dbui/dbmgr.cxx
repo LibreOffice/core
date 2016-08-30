@@ -629,7 +629,7 @@ static OUString  lcl_FindColumn(const OUString& sFormatStr,sal_uInt16  &nUsedPos
                 nSeparator = DB_SEP_NEWLINE;
             break;
             default:
-                sReturn += OUString(cAkt);
+                sReturn += OUStringLiteral1(cAkt);
         }
         nUsedPos++;
 

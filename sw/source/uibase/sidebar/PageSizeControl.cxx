@@ -74,7 +74,7 @@ PageSizeControl::PageSizeControl(
                 sal_Unicode c = aText[i];
                 if ( rtl::isAsciiAlpha(c) || (c == '\'') || (c == '\"') || (c == '%') )
                 {
-                    aMetricStr = OUString(c) + aMetricStr;
+                    aMetricStr = OUStringLiteral1(c) + aMetricStr;
                 }
                 else
                 {

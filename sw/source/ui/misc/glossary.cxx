@@ -98,7 +98,7 @@ static OUString lcl_GetValidShortCut( const OUString& rName )
     for( ; nStart < nSz; ++nStart )
     {
         if( rName[nStart-1]==' ' && rName[nStart]!=' ')
-            aBuf += OUString(rName[nStart]);
+            aBuf += OUStringLiteral1(rName[nStart]);
     }
     return aBuf;
 }

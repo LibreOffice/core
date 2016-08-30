@@ -610,7 +610,7 @@ OUString SwFormToken::GetString() const
         case TOKEN_TAB_STOP:
             sData += OUString::number( nTabStopPosition ) + ","
                   +  OUString::number( static_cast< sal_Int32 >(eTabAlign) ) + ","
-                  +  OUString(cTabFillChar) + ","
+                  +  OUStringLiteral1(cTabFillChar) + ","
                   +  OUString::number( bWithTab ? 1 : 0 );
             break;
         case TOKEN_CHAPTER_INFO:

@@ -1795,9 +1795,9 @@ void sw_GetTableBoxColStr( sal_uInt16 nCol, OUString& rNm )
     do {
         const sal_uInt16 nCalc = nCol % coDiff;
         if( nCalc >= 26 )
-            rNm = OUString( sal_Unicode('a' - 26 + nCalc ) ) + rNm;
+            rNm = OUStringLiteral1( 'a' - 26 + nCalc ) + rNm;
         else
-            rNm = OUString( sal_Unicode('A' + nCalc ) ) + rNm;
+            rNm = OUStringLiteral1( 'A' + nCalc ) + rNm;
 
         if( 0 == (nCol = nCol - nCalc) )
             break;
