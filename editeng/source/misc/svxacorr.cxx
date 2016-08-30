@@ -473,7 +473,7 @@ bool SvxAutoCorrect::FnChgOrdinalNumber(
             i--;
             bool isDigit = rCC.isDigit(rTxt, i);
             if (bFoundEnd)
-                isValidNumber &= (isDigit | !rCC.isLetter(rTxt, i));
+                isValidNumber &= (isDigit || !rCC.isLetter(rTxt, i));
 
             if (isDigit && !bFoundEnd)
             {
