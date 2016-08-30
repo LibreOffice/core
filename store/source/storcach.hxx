@@ -43,7 +43,7 @@ class PageCache :
 {
     // Representation
     static size_t const theTableSize = 32;
-    static_assert(STORE_IMPL_ISP2(theTableSize), "must be the case");
+    static_assert((theTableSize & (theTableSize-1)) == 0, "table size should be a power of 2");
 
     Entry **     m_hash_table;
     Entry *      m_hash_table_0[theTableSize];
