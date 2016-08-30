@@ -2037,10 +2037,10 @@ bool SwCursor::MovePara(SwWhichPara fnWhichPara, SwMoveFnCollection const & fnPo
     // for optimization test something before
     const SwNode* pNd = &GetPoint()->nNode.GetNode();
     bool bShortCut = false;
-    if ( fnWhichPara == fnParaCurr )
+    if ( fnWhichPara == GoCurrPara )
     {
         // #i41048#
-        // If fnWhichPara == fnParaCurr then (*fnWhichPara)( *this, fnPosPara )
+        // If fnWhichPara == GoCurrPara then (*fnWhichPara)( *this, fnPosPara )
         // can already move the cursor to a different text node. In this case
         // we better check if IsSelOvr().
         const SwContentNode* pContentNd = pNd->GetContentNode();
@@ -2055,7 +2055,7 @@ bool SwCursor::MovePara(SwWhichPara fnWhichPara, SwMoveFnCollection const & fnPo
     {
         if ( pNd->IsTextNode() &&
              pNd->GetNodes()[ pNd->GetIndex() +
-                    (fnWhichPara == fnParaNext ? 1 : -1 ) ]->IsTextNode() )
+                    (fnWhichPara == GoNextPara ? 1 : -1 ) ]->IsTextNode() )
             bShortCut = true;
     }
 

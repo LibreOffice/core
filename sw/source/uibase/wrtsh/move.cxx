@@ -341,13 +341,13 @@ bool SwWrtShell::EndPg( bool bSelect )
 bool SwWrtShell::SttPara( bool bSelect )
 {
     ShellMoveCursor aTmp( this, bSelect );
-    return MovePara( fnParaCurr, fnParaStart );
+    return MovePara( GoCurrPara, fnParaStart );
 }
 
 void SwWrtShell::EndPara( bool bSelect )
 {
     ShellMoveCursor aTmp( this, bSelect );
-    MovePara(fnParaCurr,fnParaEnd);
+    MovePara(GoCurrPara,fnParaEnd);
 }
 
 // Column-by-jumping.

@@ -593,7 +593,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl() throw (container::NoSuchElementE
         }
         else
         {
-            aNewCursor->MovePara(fnParaNext, fnParaStart);
+            aNewCursor->MovePara(GoNextPara, fnParaStart);
         }
         if (m_nEndIndex < aNewCursor->Start()->nNode.GetIndex())
         {
@@ -625,7 +625,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl() throw (container::NoSuchElementE
     // before AND after the movement...
     if (lcl_CursorIsInSection( &rUnoCursor, m_pOwnStartNode ) &&
         (m_bFirstParagraph || bInTable ||
-        (rUnoCursor.MovePara(fnParaNext, fnParaStart) &&
+        (rUnoCursor.MovePara(GoNextPara, fnParaStart) &&
             lcl_CursorIsInSection( &rUnoCursor, m_pOwnStartNode ))))
     {
         SwPosition* pStart = rUnoCursor.Start();

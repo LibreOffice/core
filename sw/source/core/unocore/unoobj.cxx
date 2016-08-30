@@ -1249,7 +1249,7 @@ SwXTextCursor::gotoNextWord(sal_Bool Expand) throw (uno::RuntimeException, std::
         // try to go to the start of the next paragraph
         if (!bTmp)
         {
-            rUnoCursor.MovePara(fnParaNext, fnParaStart);
+            rUnoCursor.MovePara(GoNextPara, fnParaStart);
         }
     }
 
@@ -1436,7 +1436,7 @@ SwXTextCursor::gotoNextSentence(sal_Bool Expand) throw (uno::RuntimeException, s
     bool bRet = rUnoCursor.GoSentence(SwCursor::NEXT_SENT);
     if (!bRet)
     {
-        bRet = rUnoCursor.MovePara(fnParaNext, fnParaStart);
+        bRet = rUnoCursor.MovePara(GoNextPara, fnParaStart);
     }
 
     // if at the end of the sentence (i.e. at the space after the '.')
@@ -1471,10 +1471,10 @@ throw (uno::RuntimeException, std::exception)
     bool bRet = rUnoCursor.GoSentence(SwCursor::PREV_SENT);
     if (!bRet)
     {
-        bRet = rUnoCursor.MovePara(fnParaPrev, fnParaStart);
+        bRet = rUnoCursor.MovePara(GoPrevPara, fnParaStart);
         if (bRet)
         {
-            rUnoCursor.MovePara(fnParaCurr, fnParaEnd);
+            rUnoCursor.MovePara(GoCurrPara, fnParaEnd);
             // at the end of a paragraph move to the sentence end again
             rUnoCursor.GoSentence(SwCursor::PREV_SENT);
         }
@@ -1526,7 +1526,7 @@ SwXTextCursor::gotoEndOfSentence(sal_Bool Expand) throw (uno::RuntimeException, 
     bool bAlreadyParaEnd = SwUnoCursorHelper::IsEndOfPara(rUnoCursor);
     bool bRet = !bAlreadyParaEnd
             &&  (rUnoCursor.GoSentence(SwCursor::END_SENT)
-                 || rUnoCursor.MovePara(fnParaCurr, fnParaEnd));
+                 || rUnoCursor.MovePara(GoCurrPara, fnParaEnd));
     if (CURSOR_META == m_pImpl->m_eType)
     {
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
@@ -1574,10 +1574,10 @@ throw (uno::RuntimeException, std::exception)
     bool bRet = SwUnoCursorHelper::IsStartOfPara(rUnoCursor);
     if (!bRet)
     {
-        bRet = rUnoCursor.MovePara(fnParaCurr, fnParaStart);
+        bRet = rUnoCursor.MovePara(GoCurrPara, fnParaStart);
     }
 
-    // since MovePara(fnParaCurr, fnParaStart) only returns false
+    // since MovePara(GoCurrPara, fnParaStart) only returns false
     // if we were already at the start of the paragraph this function
     // should always complete successfully.
     OSL_ENSURE( bRet, "gotoStartOfParagraph failed" );
@@ -1599,10 +1599,10 @@ SwXTextCursor::gotoEndOfParagraph(sal_Bool Expand) throw (uno::RuntimeException,
     bool bRet = SwUnoCursorHelper::IsEndOfPara(rUnoCursor);
     if (!bRet)
     {
-        bRet = rUnoCursor.MovePara(fnParaCurr, fnParaEnd);
+        bRet = rUnoCursor.MovePara(GoCurrPara, fnParaEnd);
     }
 
-    // since MovePara(fnParaCurr, fnParaEnd) only returns false
+    // since MovePara(GoCurrPara, fnParaEnd) only returns false
     // if we were already at the end of the paragraph this function
     // should always complete successfully.
     OSL_ENSURE( bRet, "gotoEndOfParagraph failed" );
@@ -1621,7 +1621,7 @@ SwXTextCursor::gotoNextParagraph(sal_Bool Expand) throw (uno::RuntimeException, 
         return false;
     }
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
-    const bool bRet = rUnoCursor.MovePara(fnParaNext, fnParaStart);
+    const bool bRet = rUnoCursor.MovePara(GoNextPara, fnParaStart);
     return bRet;
 }
 
@@ -1638,7 +1638,7 @@ throw (uno::RuntimeException, std::exception)
         return false;
     }
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
-    const bool bRet = rUnoCursor.MovePara(fnParaPrev, fnParaStart);
+    const bool bRet = rUnoCursor.MovePara(GoPrevPara, fnParaStart);
     return bRet;
 }
 
@@ -2002,14 +2002,14 @@ lcl_SelectParaAndReset( SwPaM &rPaM, SwDoc & rDoc,
     auto pTemp ( rDoc.CreateUnoCursor(aStart) );
     if(!SwUnoCursorHelper::IsStartOfPara(*pTemp))
     {
-        pTemp->MovePara(fnParaCurr, fnParaStart);
+        pTemp->MovePara(GoCurrPara, fnParaStart);
     }
     pTemp->SetMark();
     *pTemp->GetPoint() = aEnd;
     SwUnoCursorHelper::SelectPam(*pTemp, true);
     if(!SwUnoCursorHelper::IsEndOfPara(*pTemp))
     {
-        pTemp->MovePara(fnParaCurr, fnParaEnd);
+        pTemp->MovePara(GoCurrPara, fnParaEnd);
     }
     rDoc.ResetAttrs(*pTemp, true, rWhichIds);
 }

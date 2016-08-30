@@ -587,12 +587,12 @@ namespace SwLangHelper
     {
         // select current para
         if (!rWrtSh.IsSttPara())
-            rWrtSh.MovePara( fnParaCurr, fnParaStart );
+            rWrtSh.MovePara( GoCurrPara, fnParaStart );
         if (!rWrtSh.HasMark())
             rWrtSh.SetMark();
         rWrtSh.SwapPam();
         if (!rWrtSh.IsEndPara())
-            rWrtSh.MovePara( fnParaCurr, fnParaEnd );
+            rWrtSh.MovePara( GoCurrPara, fnParaEnd );
     #if OSL_DEBUG_LEVEL > 1
         OUString aSelText;
         rWrtSh.GetSelectedText( aSelText );

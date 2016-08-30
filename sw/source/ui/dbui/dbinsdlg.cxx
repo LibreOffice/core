@@ -1368,13 +1368,13 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                             // at the end.
 
                             rSh.SwCursorShell::MovePara(
-                                    GetfnParaCurr(), GetfnParaStart() );
+                                    GoCurrPara, GetfnParaStart() );
                             pMark = rSh.SetBookmark(
                                     vcl::KeyCode(),
                                     OUString(),
                                     OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
                             rSh.SwCursorShell::MovePara(
-                                    GetfnParaCurr(), GetfnParaEnd() );
+                                    GoCurrPara, GetfnParaEnd() );
                             bSetCursor = false;
                         }
                     }

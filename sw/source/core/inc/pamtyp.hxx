@@ -42,11 +42,6 @@ bool GoPrevious(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode );
 SW_DLLPUBLIC SwContentNode* GoNextNds( SwNodeIndex * pIdx, bool );
 SwContentNode* GoPreviousNds( SwNodeIndex * pIdx, bool );
 
-// Funktionsdefinitionen fuer die SwCursorShell
-bool GoPrevPara( SwPaM&, SwMoveFnCollection const &);
-bool GoCurrPara( SwPaM&, SwMoveFnCollection const &);
-bool GoNextPara( SwPaM&, SwMoveFnCollection const &);
-
 // Typedefiniton fuer Funktionen
 typedef bool (*GoNd)( SwNode*, SwIndex*, sal_uInt16 );
 typedef SwContentNode* (*GoNds)( SwNodeIndex*, bool );

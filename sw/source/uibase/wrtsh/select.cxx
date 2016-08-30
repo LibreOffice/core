@@ -108,9 +108,9 @@ void SwWrtShell::SelPara(const Point *pPt )
     {
         SwMvContext aMvContext(this);
         ClearMark();
-        SwCursorShell::MovePara( fnParaCurr, fnParaStart );
+        SwCursorShell::MovePara( GoCurrPara, fnParaStart );
         SttSelect();
-        SwCursorShell::MovePara( fnParaCurr, fnParaEnd );
+        SwCursorShell::MovePara( GoCurrPara, fnParaEnd );
     }
     EndSelect();
     if(pPt)

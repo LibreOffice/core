@@ -31,7 +31,7 @@ class SwLayoutFrame;
 struct SwMoveFnCollection;
 
 // Type definition for CursorShell.
-// Direction-parameter for MovePage (initialized in SwContentFrame).
+// Direction-parameter for MovePage.
 typedef SwLayoutFrame * (*SwWhichPage)( const SwLayoutFrame * );
 SwLayoutFrame *GetPrevFrame( const SwLayoutFrame *pFrame );
 SwLayoutFrame *GetThisFrame( const SwLayoutFrame *pFrame );
@@ -40,9 +40,11 @@ typedef SwContentFrame  * (*SwPosPage)( const SwLayoutFrame * );
 SwContentFrame *GetFirstSub( const SwLayoutFrame *pLayout );
 SwContentFrame *GetLastSub( const SwLayoutFrame *pLayout );
 
-// Direction-parameter for MovePara (initialized in SwContentFrame).
+// Direction-parameter for MovePara.
 typedef bool (*SwWhichPara)( SwPaM&, SwMoveFnCollection const & );
-extern SwWhichPara fnParaPrev, fnParaCurr, fnParaNext;
+bool GoPrevPara( SwPaM&, SwMoveFnCollection const &);
+SW_DLLPUBLIC bool GoCurrPara( SwPaM&, SwMoveFnCollection const &);
+bool GoNextPara( SwPaM&, SwMoveFnCollection const &);
 extern SwMoveFnCollection const & fnParaStart;
 extern SwMoveFnCollection const & fnParaEnd;
 
@@ -101,7 +103,6 @@ enum class SwDocPositions
     OtherEnd
 };
 
-SW_DLLPUBLIC SwWhichPara GetfnParaCurr();
 SW_DLLPUBLIC SwMoveFnCollection const & GetfnParaStart();
 SW_DLLPUBLIC SwMoveFnCollection const & GetfnParaEnd();
 

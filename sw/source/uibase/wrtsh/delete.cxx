@@ -394,7 +394,7 @@ void SwWrtShell::DelToEndOfPara()
     ResetCursorStack();
     Push();
     SetMark();
-    if( !MovePara(fnParaCurr,fnParaEnd))
+    if( !MovePara(GoCurrPara,fnParaEnd))
     {
         Pop(false);
         return;
@@ -411,7 +411,7 @@ void SwWrtShell::DelToStartOfPara()
     ResetCursorStack();
     Push();
     SetMark();
-    if( !MovePara(fnParaCurr,fnParaStart))
+    if( !MovePara(GoCurrPara,fnParaStart))
     {
         Pop(false);
         return;
@@ -452,7 +452,7 @@ long SwWrtShell::DelToEndOfSentence()
             SetMark();
             if (!IsEndPara()) // can only be at the end if it's empty
             {   // for an empty paragraph this would actually select the _next_
-                SwCursorShell::MovePara(fnParaCurr, fnParaEnd);
+                SwCursorShell::MovePara(GoCurrPara, fnParaEnd);
             }
             if (!IsEndOfDoc()) // do not delete last paragraph in body text
             {

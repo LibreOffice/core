@@ -765,7 +765,7 @@ if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
                             pCursorSh->GetCursor()->GetPoint()
                                    ->nNode.GetIndex() == nNodeIdx )
                         {
-                            pCursorSh->MovePara(fnParaPrev, fnParaEnd );
+                            pCursorSh->MovePara(GoPrevPara, fnParaEnd );
                             pCursorSh->SetMark();
                             pCursorSh->ClearMark();
                         }

@@ -44,9 +44,6 @@ static SwMoveFnCollection aBwrd = {
     /* fnSection    */  &SwNodes::GoEndOfSection
 };
 
-SwWhichPara fnParaPrev  = &GoPrevPara;
-SwWhichPara fnParaCurr  = &GoCurrPara;
-SwWhichPara fnParaNext  = &GoNextPara;
 SwMoveFnCollection const & fnParaStart   = aFwrd;
 SwMoveFnCollection const & fnParaEnd     = aBwrd;
 
@@ -69,10 +66,6 @@ SwMoveFnCollection const & fnRegionEnd = aBwrd;
 SwMoveFnCollection const & fnMoveBackward = aBwrd;
 SwMoveFnCollection const & fnMoveForward  = aFwrd;
 
-SwWhichPara GetfnParaCurr()
-{
-    return fnParaCurr;
-}
 SwMoveFnCollection const & GetfnParaStart()
 {
      return  fnParaStart;

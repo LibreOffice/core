@@ -1617,9 +1617,9 @@ SwXText::convertToTextFrame(
                 SwCursor aDelete(*aStartPam.GetPoint(), nullptr);
                 *aStartPam.GetPoint() = // park it because node is deleted
                     SwPosition(GetDoc()->GetNodes().GetEndOfContent());
-                aDelete.MovePara(fnParaCurr, fnParaStart);
+                aDelete.MovePara(GoCurrPara, fnParaStart);
                 aDelete.SetMark();
-                aDelete.MovePara(fnParaCurr, fnParaEnd);
+                aDelete.MovePara(GoCurrPara, fnParaEnd);
                 GetDoc()->getIDocumentContentOperations().DelFullPara(aDelete);
             }
             if (bParaAfterInserted)
@@ -1627,9 +1627,9 @@ SwXText::convertToTextFrame(
                 SwCursor aDelete(*pEndPam->GetPoint(), nullptr);
                 *pEndPam->GetPoint() = // park it because node is deleted
                     SwPosition(GetDoc()->GetNodes().GetEndOfContent());
-                aDelete.MovePara(fnParaCurr, fnParaStart);
+                aDelete.MovePara(GoCurrPara, fnParaStart);
                 aDelete.SetMark();
-                aDelete.MovePara(fnParaCurr, fnParaEnd);
+                aDelete.MovePara(GoCurrPara, fnParaEnd);
                 GetDoc()->getIDocumentContentOperations().DelFullPara(aDelete);
             }
             throw lang::IllegalArgumentException();

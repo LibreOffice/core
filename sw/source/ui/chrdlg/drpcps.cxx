@@ -280,7 +280,7 @@ void SwDropCapsPict::UpdatePaintSettings()
             mpPage->rSh.Push();
             mpPage->rSh.SttCursorMove();
             mpPage->rSh.ClearMark();
-            SwWhichPara pSwuifnParaCurr = GetfnParaCurr();
+            SwWhichPara pSwuifnParaCurr = GoCurrPara;
             SwMoveFnCollection const & pSwuifnParaStart = GetfnParaStart();
             mpPage->rSh.MovePara(pSwuifnParaCurr,pSwuifnParaStart);
             // normal
