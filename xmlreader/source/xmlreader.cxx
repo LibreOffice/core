@@ -64,7 +64,7 @@ XmlReader::XmlReader(char const *sStr, size_t nLength)
     namespaces_.push_back(NamespaceData(Span("xml"), NAMESPACE_XML));
     pos_ = sStr;
     end_ = pos_ + nLength;
-    state_ = STATE_CONTENT;
+    state_ = State::Content;
     firstAttribute_ = true;
 }
 
@@ -104,7 +104,7 @@ XmlReader::XmlReader(OUString const & fileUrl)
     namespaces_.push_back(NamespaceData(Span("xml"), NAMESPACE_XML));
     pos_ = static_cast< char * >(fileAddress_);
     end_ = pos_ + fileSize_;
-    state_ = STATE_CONTENT;
+    state_ = State::Content;
     firstAttribute_ = true;
 }
 
@@ -142,7 +142,7 @@ int XmlReader::registerNamespaceIri(Span const & iri) {
 XmlReader::Result XmlReader::nextItem(Text reportText, Span * data, int * nsId)
 {
     switch (state_) {
-    case STATE_CONTENT:
+    case State::Content:
         switch (reportText) {
         case Text::NONE:
             return handleSkippedText(data, nsId);
@@ -151,14 +151,14 @@ XmlReader::Result XmlReader::nextItem(Text reportText, Span * data, int * nsId)
         case Text::Normalized:
             return handleNormalizedText(data);
         }
-    case STATE_START_TAG:
+    case State::StartTag:
         return handleStartTag(nsId, data);
-    case STATE_END_TAG:
+    case State::EndTag:
         return handleEndTag();
-    case STATE_EMPTY_ELEMENT_TAG:
+    case State::EmptyElementTag:
         handleElementEnd();
         return Result::End;
-    default: // STATE_DONE
+    default: // State::Done
         return Result::Done;
     }
 }
@@ -676,10 +676,10 @@ XmlReader::Result XmlReader::handleStartTag(int * nsId, Span * localName) {
     }
     firstAttribute_ = true;
     if (peek() == '/') {
-        state_ = STATE_EMPTY_ELEMENT_TAG;
+        state_ = State::EmptyElementTag;
         ++pos_;
     } else {
-        state_ = STATE_CONTENT;
+        state_ = State::Content;
     }
     if (peek() != '>') {
         throw css::uno::RuntimeException(
@@ -727,7 +727,7 @@ void XmlReader::handleElementEnd() {
     assert(!elements_.empty());
     namespaces_.resize(elements_.top().inheritedNamespaces);
     elements_.pop();
-    state_ = elements_.empty() ? STATE_DONE : STATE_CONTENT;
+    state_ = elements_.empty() ? State::Done : State::Content;
 }
 
 XmlReader::Result XmlReader::handleSkippedText(Span * data, int * nsId) {
@@ -797,7 +797,7 @@ XmlReader::Result XmlReader::handleRawText(Span * text) {
             case '/':
                 *text = pad_.get();
                 ++pos_;
-                state_ = STATE_END_TAG;
+                state_ = State::EndTag;
                 return Result::Text;
             case '?':
                 ++pos_;
@@ -806,7 +806,7 @@ XmlReader::Result XmlReader::handleRawText(Span * text) {
                 break;
             default:
                 *text = pad_.get();
-                state_ = STATE_START_TAG;
+                state_ = State::StartTag;
                 return Result::Text;
             }
             break;
@@ -914,7 +914,7 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
                 ++pos_;
                 pad_.add(flowBegin, flowEnd - flowBegin);
                 *text = pad_.get();
-                state_ = STATE_END_TAG;
+                state_ = State::EndTag;
                 return Result::Text;
             case '?':
                 ++pos_;
@@ -924,7 +924,7 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
             default:
                 pad_.add(flowBegin, flowEnd - flowBegin);
                 *text = pad_.get();
-                state_ = STATE_START_TAG;
+                state_ = State::StartTag;
                 return Result::Text;
             }
             break;

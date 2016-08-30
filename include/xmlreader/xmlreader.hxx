@@ -127,9 +127,7 @@ private:
 
     typedef std::vector< AttributeData > Attributes;
 
-    enum State {
-        STATE_CONTENT, STATE_START_TAG, STATE_END_TAG, STATE_EMPTY_ELEMENT_TAG,
-        STATE_DONE };
+    enum class State { Content, StartTag, EndTag, EmptyElementTag, Done };
 
     SAL_DLLPRIVATE inline char read() { return pos_ == end_ ? '\0' : *pos_++; }
 
