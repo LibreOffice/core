@@ -651,7 +651,8 @@ void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
     }
 }
 
-void SmSetSelectionVisitor::VisitCompositionNode( SmNode* pNode ) {
+void SmSetSelectionVisitor::VisitCompositionNode( SmStructureNode* pNode )
+{
     //Change state if maStartPos is in front of this node
     if( maStartPos.pSelectedNode == pNode && maStartPos.Index == 0 )
         mbSelecting = !mbSelecting;

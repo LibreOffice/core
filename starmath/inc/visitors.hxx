@@ -253,7 +253,7 @@ private:
      * it.
      */
     void DefaultVisit( SmNode* pNode ) override;
-    void VisitCompositionNode( SmNode* pNode );
+    void VisitCompositionNode( SmStructureNode* pNode );
     /** Caret position where the selection starts */
     SmCaretPos maStartPos;
     /** Caret position where the selection ends */
