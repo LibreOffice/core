@@ -321,7 +321,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
                         InsertLineBreak();
                     break;
                     default:
-                        maCurrText += OUString(*pChar);
+                        maCurrText += OUStringLiteral1(*pChar);
                 }
             }
             break;
@@ -410,7 +410,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
                         eState = xlPSFontStyle;
                     break;
                     default:
-                        aReadFont += OUString(*pChar);
+                        aReadFont += OUStringLiteral1(*pChar);
                 }
             }
             break;
@@ -429,7 +429,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
                         eState = xlPSText;
                     break;
                     default:
-                        aReadStyle += OUString(*pChar);
+                        aReadStyle += OUStringLiteral1(*pChar);
                 }
             }
             break;
@@ -600,7 +600,7 @@ void lclAppendUrlChar( OUString& rUrl, sal_Unicode cChar )
     {
         case '#':   rUrl += "%23";  break;
         case '%':   rUrl += "%25";  break;
-        default:    rUrl += OUString( cChar );
+        default:    rUrl += OUStringLiteral1( cChar );
     }
 }
 
@@ -736,7 +736,7 @@ void XclImpUrlHelper::DecodeUrl(
 // --- sheet name ---
 
             case xlUrlSheetName:
-                rTabName += OUString( *pChar );
+                rTabName += OUStringLiteral1( *pChar );
             break;
 
 // --- raw read mode ---

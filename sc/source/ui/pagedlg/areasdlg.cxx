@@ -216,8 +216,7 @@ void ScPrintAreasDlg::AddRefEntry()
     if ( pRefInputEdit == pEdPrintArea )
     {
         const sal_Unicode sep = ScCompiler::GetNativeSymbolChar(ocSep);
-        OUString aVal = pEdPrintArea->GetText();
-        aVal += OUString(sep);
+        OUString aVal = pEdPrintArea->GetText() + OUStringLiteral1(sep);
         pEdPrintArea->SetText(aVal);
 
         sal_Int32 nLen = aVal.getLength();
@@ -286,7 +285,7 @@ void ScPrintAreasDlg::Impl_Reset()
         if (pPrintRange)
         {
             if ( !aStrRange.isEmpty() )
-                aStrRange += OUString(sep);
+                aStrRange += OUStringLiteral1(sep);
             aOne = pPrintRange->Format(ScRefFlags::RANGE_ABS, pDoc, eConv);
             aStrRange += aOne;
         }
@@ -771,7 +770,7 @@ static bool lcl_CheckRepeatString( const OUString& rStr, ScDocument* pDoc, bool 
             bEndPos = true;
         }
         else
-            aBuf += OUString(c);
+            aBuf += OUStringLiteral1(c);
     }
 
     if (!aBuf.isEmpty())

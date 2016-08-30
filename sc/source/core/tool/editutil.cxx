@@ -735,7 +735,7 @@ static OUString lcl_GetCharStr( sal_Int32 nNo )
         nCalc = nNo % coDiff;
         if( !nCalc )
             nCalc = coDiff;
-        aStr = OUString( (sal_Unicode)('a' - 1 + nCalc ) ) + aStr;
+        aStr = OUStringLiteral1( 'a' - 1 + nCalc ) + aStr;
         nNo = sal::static_int_cast<sal_Int32>( nNo - nCalc );
         if( nNo )
             nNo /= coDiff;

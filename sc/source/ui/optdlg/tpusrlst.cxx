@@ -317,12 +317,12 @@ void ScTpUserLists::MakeListStr( OUString& rListStr )
     sal_Int32 c = 0;
     while ( c < nLen )
     {
-        rListStr += OUString(aStr[c]);
+        rListStr += OUStringLiteral1(aStr[c]);
         ++c;
 
         if ((c < nLen) && (aStr[c] == cDelimiter))
         {
-            rListStr += OUString(aStr[c]);
+            rListStr += OUStringLiteral1(aStr[c]);
 
             while ((c < nLen) && (aStr[c] == cDelimiter))
                 ++c;

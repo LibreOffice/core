@@ -532,7 +532,7 @@ static bool lcl_parseExternalName(
                         {
                             // two consecutive quotes equal a single quote in
                             // the file name.
-                            aTmpFile += OUString(c);
+                            aTmpFile += OUStringLiteral1(c);
                             cPrev = 'a';
                         }
                         else
@@ -550,10 +550,10 @@ static bool lcl_parseExternalName(
 
                         i = j;
                         bInName = true;
-                        aTmpName += OUString(c); // Keep the separator as part of the name.
+                        aTmpName += OUStringLiteral1(c); // Keep the separator as part of the name.
                         break;
                     }
-                    aTmpFile += OUString(c);
+                    aTmpFile += OUStringLiteral1(c);
                     cPrev = c;
                 }
 
@@ -580,14 +580,14 @@ static bool lcl_parseExternalName(
                 // A second separator ?  Not a valid external name.
                 return false;
             }
-            aTmpName += OUString(c);
+            aTmpName += OUStringLiteral1(c);
         }
         else
         {
             if (c == cSep)
             {
                 bInName = true;
-                aTmpName += OUString(c); // Keep the separator as part of the name.
+                aTmpName += OUStringLiteral1(c); // Keep the separator as part of the name.
             }
             else
             {
@@ -617,7 +617,7 @@ static bool lcl_parseExternalName(
                     return false;
                 }
                 while (false);
-                aTmpFile += OUString(c);
+                aTmpFile += OUStringLiteral1(c);
             }
         }
     }
@@ -664,7 +664,7 @@ static OUString lcl_makeExternalNameStr(const OUString& rFile, const OUString& r
     OUStringBuffer aBuf(aFile.getLength() + aName.getLength() + 9);
     if (bODF)
         aBuf.append( '[');
-    aBuf.append( "'" + aFile + "'" + OUString(cSep));
+    aBuf.append( "'" + aFile + "'" + OUStringLiteral1(cSep));
     if (bODF)
         aBuf.append( "$$'" );
     aBuf.append( aName);
@@ -3865,13 +3865,13 @@ void ScCompiler::AutoCorrectParsedSymbol()
             if ( comphelper::string::getTokenCount(aCorrectedSymbol, cx) > 1 )
             {   // x => *
                 sal_Unicode c = mxSymbols->getSymbolChar(ocMul);
-                aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUStringLiteral1(cx), OUString(c));
+                aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUStringLiteral1(cx), OUStringLiteral1(c));
                 bCorrected = true;
             }
             if ( comphelper::string::getTokenCount(aCorrectedSymbol, cX) > 1 )
             {   // X => *
                 sal_Unicode c = mxSymbols->getSymbolChar(ocMul);
-                aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUStringLiteral1(cX), OUString(c));
+                aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUStringLiteral1(cX), OUStringLiteral1(c));
                 bCorrected = true;
             }
         }
@@ -3978,7 +3978,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                     OUString aStr2;
                     const sal_Unicode* p = aRef[j].getStr();
                     while ( *p && CharClass::isAsciiNumeric( OUString(*p) ) )
-                        aStr2 += OUString(*p++);
+                        aStr2 += OUStringLiteral1(*p++);
                     aRef[j] = OUString( p );
                     aRef[j] += aStr2;
                     if ( bColons || aRef[j] != aOld )

@@ -1140,7 +1140,7 @@ bool ScInputHandler::GetFuncName( OUString& aStart, OUString& aResult )
     ::std::vector<sal_Unicode>::reverse_iterator rIt = aTemp.rbegin();
     aResult = OUString( *rIt++ );
     while ( rIt != aTemp.rend() )
-        aResult += OUString( *rIt++ );
+        aResult += OUStringLiteral1( *rIt++ );
 
     return true;
 }

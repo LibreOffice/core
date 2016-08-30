@@ -389,8 +389,7 @@ void XclImpHyperlink::ConvertToValidTabName(OUString& rUrl)
                 // quite.  When this occurs, the whole table name needs to be
                 // quoted.
                 bQuoteTabName = true;
-                aTabName += OUString(c);
-                aTabName += OUString(c);
+                aTabName += OUStringLiteral1(c) + OUStringLiteral1(c);
                 ++i;
                 continue;
             }
@@ -406,9 +405,9 @@ void XclImpHyperlink::ConvertToValidTabName(OUString& rUrl)
             }
         }
         else if (bInQuote)
-            aTabName += OUString(c);
+            aTabName += OUStringLiteral1(c);
         else
-            aNewUrl += OUString(c);
+            aNewUrl += OUStringLiteral1(c);
     }
 
     if (bInQuote)

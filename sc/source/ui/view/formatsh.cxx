@@ -1191,7 +1191,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                         }
                         else
                         {
-                            sTmpStr += OUString(cChar);
+                            sTmpStr += OUStringLiteral1(cChar);
                         }
 
                         nCount++;

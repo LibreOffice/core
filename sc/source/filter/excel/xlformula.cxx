@@ -879,7 +879,7 @@ bool XclTokenArrayHelper::GetStringList( OUString& rStringList, const ScTokenArr
         break;
         case STATE_SEP:
             bRet = aIt->GetOpCode() == ocSep;
-            if( bRet ) rStringList += OUString(cSep);
+            if( bRet ) rStringList += OUStringLiteral1(cSep);
             eState = (bRet && (++aIt).Is()) ? STATE_STR : STATE_END;
         break;
         default:;

@@ -767,9 +767,9 @@ void ScGlobal::AddQuotes( OUString& rString, sal_Unicode cQuote, bool bEscapeEmb
         pQ[0] = pQ[1] = cQuote;
         pQ[2] = 0;
         OUString aQuotes( pQ );
-        rString = rString.replaceAll( OUString(cQuote), aQuotes);
+        rString = rString.replaceAll( OUStringLiteral1(cQuote), aQuotes);
     }
-    rString = OUString( cQuote ) + rString + OUString( cQuote );
+    rString = OUStringLiteral1( cQuote ) + rString + OUStringLiteral1( cQuote );
 }
 
 void ScGlobal::EraseQuotes( OUString& rString, sal_Unicode cQuote, bool bUnescapeEmbedded )
@@ -783,7 +783,7 @@ void ScGlobal::EraseQuotes( OUString& rString, sal_Unicode cQuote, bool bUnescap
             pQ[0] = pQ[1] = cQuote;
             pQ[2] = 0;
             OUString aQuotes( pQ );
-            rString = rString.replaceAll( aQuotes, OUString(cQuote));
+            rString = rString.replaceAll( aQuotes, OUStringLiteral1(cQuote));
         }
     }
 }

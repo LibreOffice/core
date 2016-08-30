@@ -163,7 +163,7 @@ FltError ScQProReader::import( ScDocument *pDoc )
                     if( nTab < 26 )
                     {
                         OUString aName;
-                        aName += OUString( sal_Unicode( 'A' + nTab ) );
+                        aName += OUStringLiteral1( 'A' + nTab );
                         if (!nTab)
                             pDoc->RenameTab( nTab, aName, false );
                         else

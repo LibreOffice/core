@@ -3032,8 +3032,8 @@ void ScInterpreter::ScRoman()
                         else
                             nSteps = nMode;
                     }
-                    aRoman += OUString( pChars[ nIndex ] );
-                    aRoman += OUString( pChars[ nIndex2 ] );
+                    aRoman += OUStringLiteral1( pChars[ nIndex ] )
+                        + OUStringLiteral1( pChars[ nIndex2 ] );
                     nVal = sal::static_int_cast<sal_uInt16>( nVal + pValues[ nIndex ] );
                     nVal = sal::static_int_cast<sal_uInt16>( nVal - pValues[ nIndex2 ] );
                 }
@@ -3043,7 +3043,7 @@ void ScInterpreter::ScRoman()
                     {
                         // assert can't happen with nVal<4000 precondition
                         assert( nIndex >= 1 );
-                        aRoman += OUString( pChars[ nIndex - 1 ] );
+                        aRoman += OUStringLiteral1( pChars[ nIndex - 1 ] );
                     }
                     sal_Int32 nPad = nDigit % 5;
                     if (nPad)

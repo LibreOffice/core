@@ -845,7 +845,7 @@ static void lcl_WriteString( SvStream& rStrm, OUString& rString, sal_Unicode cQu
 
     if (cQuote)
     {
-        rString = OUString(cQuote) + rString + OUString(cQuote);
+        rString = OUStringLiteral1(cQuote) + rString + OUStringLiteral1(cQuote);
     }
 
     ScImportExport::WriteUnicodeOrByteString( rStrm, rString );
@@ -1664,7 +1664,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                             }
 
                             if( mExportTextOptions.mcSeparatorConvertTo && cSep )
-                                aCellStr = aCellStr.replaceAll( OUString(cSep), OUString(mExportTextOptions.mcSeparatorConvertTo) );
+                                aCellStr = aCellStr.replaceAll( OUStringLiteral1(cSep), OUStringLiteral1(mExportTextOptions.mcSeparatorConvertTo) );
 
                             if( mExportTextOptions.mbAddQuotes && ( aCellStr.indexOf( cSep ) != -1 ) )
                                 lcl_WriteString( rStrm, aCellStr, cStr, cStr );
@@ -1697,7 +1697,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                         }
 
                         if( mExportTextOptions.mcSeparatorConvertTo && cSep )
-                            aCellStr = aCellStr.replaceAll( OUString(cSep), OUString(mExportTextOptions.mcSeparatorConvertTo) );
+                            aCellStr = aCellStr.replaceAll( OUStringLiteral1(cSep), OUStringLiteral1(mExportTextOptions.mcSeparatorConvertTo) );
 
                         if( mExportTextOptions.mbAddQuotes && hasLineBreaksOrSeps(aCellStr, cSep) )
                             lcl_WriteString( rStrm, aCellStr, cStr, cStr );

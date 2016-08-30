@@ -137,7 +137,7 @@ public:
         if (mbFirst)
             mbFirst = false;
         else
-            mrStr += OUString(mcDelim);
+            mrStr += OUStringLiteral1(mcDelim);
         mrStr += aStr;
     }
 private:

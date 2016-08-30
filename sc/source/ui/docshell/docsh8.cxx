@@ -564,7 +564,7 @@ void lcl_GetColumnTypes(
             for ( const sal_Unicode* p = aFieldName.getStr(); ( c = *p ) != 0; p++ )
             {
                 if ( rtl::isAsciiAlpha(c) || rtl::isAsciiDigit(c) || c == '_' )
-                    aTmpStr += OUString(c);
+                    aTmpStr += OUStringLiteral1(c);
                 else
                     aTmpStr += "_";
             }

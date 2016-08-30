@@ -867,7 +867,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
 
     if( !aText.isEmpty() )
     {
-        maHFString += "&" + OUString(cPortionCode) + aText;
+        maHFString += "&" + OUStringLiteral1(cPortionCode) + aText;
         mnTotalHeight = ::std::max( mnTotalHeight, nHeight );
     }
 }
