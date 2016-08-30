@@ -39,8 +39,6 @@ endif
 $(eval $(call gb_Executable_add_cobjects,mar,\
 	onlineupdate/source/libmar/sign/nss_secutil \
 	onlineupdate/source/libmar/sign/mar_sign \
-	onlineupdate/source/libmar/verify/cryptox \
-	onlineupdate/source/libmar/verify/mar_verify \
 	onlineupdate/source/libmar/tool/mar \
 ))
 

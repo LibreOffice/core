@@ -14,10 +14,20 @@ $(eval $(call gb_StaticLibrary_set_include,libmar,\
 	$$(INCLUDE) \
 ))
 
+$(eval $(call gb_StaticLibrary_add_defs,libmar,\
+	-DMAR_NSS \
+))
+
+$(eval $(call gb_StaticLibrary_use_externals,libmar,\
+	nss3 \
+))
+
 $(eval $(call gb_StaticLibrary_add_cobjects,libmar,\
 	onlineupdate/source/libmar/src/mar_create \
 	onlineupdate/source/libmar/src/mar_extract \
 	onlineupdate/source/libmar/src/mar_read \
+	onlineupdate/source/libmar/verify/mar_verify \
+	onlineupdate/source/libmar/verify/cryptox \
 ))
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab: */
