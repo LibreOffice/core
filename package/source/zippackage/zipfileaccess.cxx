@@ -106,7 +106,7 @@ uno::Sequence< OUString > OZipFileAccess::GetPatternsFromString_Impl( const OUSt
         }
         else
         {
-            aPattern[nInd] += OUString( *pString );
+            aPattern[nInd] += OUStringLiteral1( *pString );
             pString++;
         }
     }
