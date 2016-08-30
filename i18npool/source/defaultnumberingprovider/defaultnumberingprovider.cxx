@@ -343,7 +343,7 @@ void lcl_formatChars( const sal_Unicode table[], int tableSize, int n, OUString&
 
      if( n>=tableSize ) lcl_formatChars( table, tableSize, (n-tableSize)/tableSize, s );
 
-     s += OUString( table[ n % tableSize ] );
+     s += OUStringLiteral1( table[ n % tableSize ] );
 }
 
 static
@@ -356,7 +356,7 @@ void lcl_formatChars1( const sal_Unicode table[], int tableSize, int n, OUString
      int repeat_count = n / tableSize + 1;
 
      for( int i=0; i<repeat_count; i++ )
-         s += OUString( table[ n%tableSize ] );
+         s += OUStringLiteral1( table[ n%tableSize ] );
 }
 
 static
@@ -368,9 +368,9 @@ void lcl_formatChars2( const sal_Unicode table_capital[], const sal_Unicode tabl
      if( n>=tableSize )
      {
           lcl_formatChars2( table_capital, table_small, tableSize, (n-tableSize)/tableSize, s );
-          s += OUString( table_small[ n % tableSize ] );
+          s += OUStringLiteral1( table_small[ n % tableSize ] );
      } else
-          s += OUString( table_capital[ n % tableSize ] );
+          s += OUStringLiteral1( table_capital[ n % tableSize ] );
 }
 
 static
@@ -380,10 +380,10 @@ void lcl_formatChars3( const sal_Unicode table_capital[], const sal_Unicode tabl
      // if A=='A' then 0=>A, 1=>B, ..., 25=>Z, 26=>Aa, 27=>Bb, ...
 
      int repeat_count = n / tableSize + 1;
-     s += OUString( table_capital[ n%tableSize ] );
+     s += OUStringLiteral1( table_capital[ n%tableSize ] );
 
      for( int i=1; i<repeat_count; i++ )
-         s += OUString( table_small[ n%tableSize ] );
+         s += OUStringLiteral1( table_small[ n%tableSize ] );
 }
 
 

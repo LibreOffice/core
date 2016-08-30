@@ -267,7 +267,7 @@ void TestBreakIterator::testWordBoundaries()
             if (aBreakTests[i] == 0x200B)
                 continue;
 #endif
-            OUString aTest = "Word" + OUString(aBreakTests[i]) + "Word";
+            OUString aTest = "Word" + OUStringLiteral1(aBreakTests[i]) + "Word";
             aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale, mode, true);
             switch (mode)
             {
@@ -296,7 +296,7 @@ void TestBreakIterator::testWordBoundaries()
         //make sure that in all cases isBeginWord and isEndWord matches getWordBoundary
         for (size_t i = 0; i < SAL_N_ELEMENTS(aJoinTests); ++i)
         {
-            OUString aTest = "Word" + OUString(aJoinTests[i]) + "Word";
+            OUString aTest = "Word" + OUStringLiteral1(aJoinTests[i]) + "Word";
             aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale, mode, true);
             switch (mode)
             {
@@ -355,7 +355,7 @@ void TestBreakIterator::testWordBoundaries()
         const sal_Int32 aSinglePositions[] = {0, 1, 3, 4, 6, 7, 9, 10};
         for (size_t j = 1; j < SAL_N_ELEMENTS(aTests); ++j)
         {
-            OUString aTest = aBase.replaceAll("xx", OUString(aTests[j]));
+            OUString aTest = aBase.replaceAll("xx", OUStringLiteral1(aTests[j]));
             sal_Int32 nPos = -1;
             size_t i = 0;
             do
@@ -378,7 +378,7 @@ void TestBreakIterator::testWordBoundaries()
         const sal_Int32 aSingleQuotePositions[] = {0, 1, 9, 10};
         CPPUNIT_ASSERT(aTests[0] == '\'');
         {
-            OUString aTest = aBase.replaceAll("xx", OUString(aTests[0]));
+            OUString aTest = aBase.replaceAll("xx", OUStringLiteral1(aTests[0]));
             sal_Int32 nPos = -1;
             size_t i = 0;
             do

@@ -205,10 +205,10 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
                         continue;
                     } else if (keyStr[i] == '_') {
                         for (curr=keyStr[i-1]+1;  curr <= keyStr[i+1]; curr++)
-                            skipping_chars+=OUString(curr);
+                            skipping_chars+=OUStringLiteral1(curr);
                         i+=2;
                     } else {
-                        skipping_chars+=OUString(keyStr[i]);
+                        skipping_chars+=OUStringLiteral1(keyStr[i]);
                     }
                 }
                 break;
