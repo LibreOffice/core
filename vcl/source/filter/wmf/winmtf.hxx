@@ -291,7 +291,7 @@ public:
 
 struct GDIObj
 {
-    virtual ~GDIObj(); // Polymorphic base class
+    virtual ~GDIObj() = default; // Polymorphic base class
 };
 
 struct WinMtfFontStyle : GDIObj

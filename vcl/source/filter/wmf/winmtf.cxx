@@ -764,10 +764,6 @@ void WinMtfOutput::CreateObjectIndexed( sal_Int32 nIndex, std::unique_ptr<GDIObj
     }
 }
 
-GDIObj::~GDIObj()
-{
-}
-
 void WinMtfOutput::DeleteObject( sal_Int32 nIndex )
 {
     if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
