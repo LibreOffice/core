@@ -462,6 +462,9 @@ static void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
     // Get the data.
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pDocView);
     char* pValues = pDocument->pClass->getCommandValues(pDocument, ".uno:AcceptTrackedChanges");
+    if (!pValues)
+        return;
+
     std::stringstream aInfo;
     aInfo << "lok::Document::getCommandValues('.uno:AcceptTrackedChanges') returned '" << pValues << "'" << std::endl;
     g_info("%s", aInfo.str().c_str());
