@@ -28,6 +28,7 @@ $(packimages_DIR)/%.zip : \
 		$(packimages_DIR)/sorted.lst \
 		$(packimages_DIR)/commandimagelist.ilst \
 		$(call gb_Helper_optional,HELP,$(helpimages_DIR)/helpimg.ilst) \
+		$(call gb_Helper_optional,HELP,$(helpimages_DIR)/screenshotimg.ilst) \
 		$(call gb_Helper_optional,DBCONNECTIVITY,$(if $(ENABLE_JAVA),$(SRCDIR)/connectivity/source/drivers/hsqldb/hsqlui.ilst)) \
 		$(call gb_Helper_get_imagelists)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
@@ -39,6 +40,7 @@ $(packimages_DIR)/%.zip : \
 				-g $(SRCDIR)/icon-themes/$(subst images_,,$*) -m $(SRCDIR)/icon-themes/$(subst images_,,$*) -c $(SRCDIR)/icon-themes/$(subst images_,,$*) \
 			) \
 			$(INDUSTRIAL_FALLBACK) \
+			$(call gb_Helper_optional,HELP,-e $(SRCDIR)/helpcontent2/source) \
 			-l $${ILSTFILE} \
 			-s $< -o $@ \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null) && \
