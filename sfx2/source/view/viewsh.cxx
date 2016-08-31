@@ -1462,12 +1462,11 @@ void SfxViewShell::registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCa
     pImpl->m_pLibreOfficeKitViewCallback = pCallback;
     pImpl->m_pLibreOfficeKitViewData = pData;
 
-    // Ask other views to send their cursor position to the new view.
+    // Ask other views to tell us about their cursors.
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        pViewShell->ShowCursor(false);
-        pViewShell->ShowCursor();
+        pViewShell->NotifyCursor(this);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }
@@ -1493,6 +1492,10 @@ void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) c
 
     if (pImpl->m_pLibreOfficeKitViewCallback)
         pImpl->m_pLibreOfficeKitViewCallback(nType, pPayload, pImpl->m_pLibreOfficeKitViewData);
+}
+
+void SfxViewShell::NotifyCursor(SfxViewShell* /*pViewShell*/) const
+{
 }
 
 void SfxViewShell::setTiledSearching(bool bTiledSearching)

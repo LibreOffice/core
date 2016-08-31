@@ -1217,6 +1217,11 @@ OUString SwCursorShell::getPageRectangles()
     return OUString::fromUtf8(comphelper::string::join("; ", v).getStr());
 }
 
+void SwCursorShell::NotifyCursor(SfxViewShell* pViewShell) const
+{
+    m_pVisibleCursor->SetPosAndShow(pViewShell);
+}
+
 /// go to the next SSelection
 bool SwCursorShell::GoNextCursor()
 {

@@ -279,6 +279,11 @@ const OUString& SwView::GetRedlineAuthor()
     return m_pViewImpl->m_sRedlineAuthor;
 }
 
+void SwView::NotifyCursor(SfxViewShell* pViewShell) const
+{
+    m_pWrtShell->NotifyCursor(pViewShell);
+}
+
 // Create page printer/additions for SwView and SwPagePreview
 
 VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window *pParent,

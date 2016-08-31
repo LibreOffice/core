@@ -95,7 +95,7 @@ void SwVisibleCursor::Show()
 
         // display at all?
         if( m_pCursorShell->VisArea().IsOver( m_pCursorShell->m_aCharRect ) || comphelper::LibreOfficeKit::isActive() )
-            SetPosAndShow();
+            SetPosAndShow(nullptr);
     }
 }
 
@@ -110,7 +110,7 @@ void SwVisibleCursor::Hide()
     }
 }
 
-void SwVisibleCursor::SetPosAndShow()
+void SwVisibleCursor::SetPosAndShow(SfxViewShell* pViewShell)
 {
     SwRect aRect;
     long nTmpY = m_pCursorShell->m_aCursorHeight.getY();
@@ -199,8 +199,18 @@ void SwVisibleCursor::SetPosAndShow()
         // notify about the cursor position & size
         Rectangle aSVRect(aRect.Pos().getX(), aRect.Pos().getY(), aRect.Pos().getX() + aRect.SSize().Width(), aRect.Pos().getY() + aRect.SSize().Height());
         OString sRect = aSVRect.toString();
-        m_pCursorShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
-        SfxLokHelper::notifyOtherViews(m_pCursorShell->GetSfxViewShell(), LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
+        if (pViewShell)
+        {
+            if (pViewShell == m_pCursorShell->GetSfxViewShell())
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
+            else
+                SfxLokHelper::notifyOtherView(m_pCursorShell->GetSfxViewShell(), pViewShell, LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
+        }
+        else
+        {
+            m_pCursorShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
+            SfxLokHelper::notifyOtherViews(m_pCursorShell->GetSfxViewShell(), LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
+        }
     }
 
     if ( !m_pCursorShell->IsCursorReadonly()  || m_pCursorShell->GetViewOptions()->IsSelectionInReadonly() )

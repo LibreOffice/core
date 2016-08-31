@@ -648,6 +648,8 @@ public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
     void SetRedlineAuthor(const OUString& rAuthor);
     const OUString& GetRedlineAuthor();
+    /// See SfxViewShell::NotifyCursor().
+    void NotifyCursor(SfxViewShell* pViewShell) const override;
 };
 
 inline long SwView::GetXScroll() const
