@@ -1228,7 +1228,7 @@ bool OKeySet::doTryRefetch_throw()  throw(SQLException, RuntimeException)
     return m_xSet->next();
 }
 
-void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
+void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException, std::exception)
 {
     invalidateRow();
 

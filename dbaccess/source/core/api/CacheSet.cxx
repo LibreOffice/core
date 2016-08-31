@@ -572,7 +572,7 @@ bool OCacheSet::absolute_checked( sal_Int32 row,bool /*i_bFetchRow*/ )
     return absolute(row);
 }
 
-void SAL_CALL OCacheSet::refreshRow(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OCacheSet::refreshRow(  ) throw(SQLException, RuntimeException, std::exception)
 {
     m_xDriverSet->refreshRow();
 }
