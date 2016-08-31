@@ -318,7 +318,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
 
         DECL_LINK_TYPED( NumberTypeSelectHdl_Impl, ListBox&, void );
         DECL_LINK_TYPED( LevelHdl_Impl, ListBox&, void );
-        DECL_LINK_TYPED( PopupActivateHdl_Impl, Menu *, bool);
+        DECL_LINK_TYPED( PopupActivateHdl_Impl, MenuButton *, void );
         DECL_LINK_TYPED( GraphicHdl_Impl, MenuButton *, void );
         DECL_LINK_TYPED( BulletHdl_Impl, Button*, void);
         DECL_LINK_TYPED( SizeHdl_Impl, Edit&, void );
