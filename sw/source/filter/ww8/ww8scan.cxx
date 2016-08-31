@@ -3843,7 +3843,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
             const size_t nMaxPossibleStrings = rStrm.remainingSize() / nMinRecordSize;
             if (nStrings > nMaxPossibleStrings)
             {
-                SAL_WARN("sw.ww8", "STTBF claims " << nStrings << " entries, but only " << nMaxPossibleStrings << "are possible");
+                SAL_WARN("sw.ww8", "STTBF claims " << nStrings << " entries, but only " << nMaxPossibleStrings << " are possible");
                 nStrings = nMaxPossibleStrings;
             }
 
@@ -3852,7 +3852,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                 const size_t nMaxExtraLen = (rStrm.remainingSize() - (nStrings * nMinStringLen)) / nStrings;
                 if (nExtraLen > nMaxExtraLen)
                 {
-                    SAL_WARN("sw.ww8", "STTBF claims " << nMaxExtraLen << " extra len, but only " << nMaxExtraLen << "are possible");
+                    SAL_WARN("sw.ww8", "STTBF claims " << nMaxExtraLen << " extra len, but only " << nMaxExtraLen << " are possible");
                     nExtraLen = nMaxExtraLen;
                 }
             }
