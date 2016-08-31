@@ -619,13 +619,13 @@ IMPL_LINK_TYPED(SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl, Button*, pBu
     }
     else
     {
-        sal_uInt16 nMove = MOVE_ITEM_DOWN;
+        MoveItemFlags nMove = MoveItemFlags::Down;
         if (m_pUpIB == pButton)
-            nMove = MOVE_ITEM_UP;
+            nMove = MoveItemFlags::Up;
         else if (m_pLeftIB == pButton)
-            nMove = MOVE_ITEM_LEFT;
+            nMove = MoveItemFlags::Left;
         else if (m_pRightIB == pButton)
-            nMove = MOVE_ITEM_RIGHT;
+            nMove = MoveItemFlags::Right;
         m_pDragED->MoveCurrentItem(nMove);
     }
     UpdateImageButtons_Impl();
@@ -745,11 +745,11 @@ IMPL_LINK_NOARG_TYPED(SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl, Edit&,
 
 void SwCustomizeAddressBlockDialog::UpdateImageButtons_Impl()
 {
-    sal_uInt16 nMove = m_pDragED->IsCurrentItemMoveable();
-    m_pUpIB->Enable(nMove & MOVE_ITEM_UP );
-    m_pLeftIB->Enable(nMove & MOVE_ITEM_LEFT );
-    m_pRightIB->Enable(nMove & MOVE_ITEM_RIGHT );
-    m_pDownIB->Enable(nMove & MOVE_ITEM_DOWN);
+    MoveItemFlags nMove = m_pDragED->IsCurrentItemMoveable();
+    m_pUpIB->Enable( bool(nMove & MoveItemFlags::Up) );
+    m_pLeftIB->Enable( bool(nMove & MoveItemFlags::Left) );
+    m_pRightIB->Enable( bool(nMove & MoveItemFlags::Right) );
+    m_pDownIB->Enable( bool(nMove & MoveItemFlags::Down) );
     m_pRemoveFieldIB->Enable(m_pDragED->HasCurrentItem());
     SvTreeListEntry* pEntry = m_pAddressElementsLB->GetCurEntry();
     m_pInsertFieldIB->Enable( pEntry &&
@@ -1477,7 +1477,7 @@ void AddressMultiLineEdit::RemoveCurrentEntry()
     }
 }
 
-void AddressMultiLineEdit::MoveCurrentItem(sal_uInt16 nMove)
+void AddressMultiLineEdit::MoveCurrentItem(MoveItemFlags nMove)
 {
     ExtTextEngine* pTextEngine = GetTextEngine();
     ExtTextView* pTextView = GetTextView();
@@ -1496,7 +1496,7 @@ void AddressMultiLineEdit::MoveCurrentItem(sal_uInt16 nMove)
         pTextEngine->ReplaceText(aEntrySel, OUString());
         switch(nMove)
         {
-            case MOVE_ITEM_LEFT :
+            case MoveItemFlags::Left :
                 if(nIndex)
                 {
                     //go left to find a predecessor or simple text
@@ -1511,7 +1511,7 @@ void AddressMultiLineEdit::MoveCurrentItem(sal_uInt16 nMove)
                     }
                 }
             break;
-            case MOVE_ITEM_RIGHT:
+            case MoveItemFlags::Right:
             {
                 //go right to find a successor or simple text
                 ++nIndex;
@@ -1522,14 +1522,15 @@ void AddressMultiLineEdit::MoveCurrentItem(sal_uInt16 nMove)
                 }
             }
             break;
-            case MOVE_ITEM_UP   :
+            case MoveItemFlags::Up   :
                 --nPara;
                 nIndex = 0;
             break;
-            case MOVE_ITEM_DOWN :
+            case MoveItemFlags::Down :
                 ++nPara;
                 nIndex = 0;
             break;
+            default: break;
         }
         //add a new paragraph if there is none yet
         if(nPara >= pTextEngine->GetParagraphCount())
@@ -1550,9 +1551,9 @@ void AddressMultiLineEdit::MoveCurrentItem(sal_uInt16 nMove)
     }
 }
 
-sal_uInt16  AddressMultiLineEdit::IsCurrentItemMoveable()
+MoveItemFlags  AddressMultiLineEdit::IsCurrentItemMoveable()
 {
-    sal_uInt16 nRet = 0;
+    MoveItemFlags nRet = MoveItemFlags::NONE;
     ExtTextEngine* pTextEngine = GetTextEngine();
     ExtTextView* pTextView = GetTextView();
     const TextSelection& rSelection = pTextView->GetSelection();
@@ -1562,11 +1563,11 @@ sal_uInt16  AddressMultiLineEdit::IsCurrentItemMoveable()
                             && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
     {
         if(pBeginAttrib->GetStart())
-            nRet |= MOVE_ITEM_LEFT;
+            nRet |= MoveItemFlags::Left;
         //if there is an entry it can always be move to the right and down
-        nRet |= MOVE_ITEM_RIGHT|MOVE_ITEM_DOWN;
+        nRet |= MoveItemFlags::Right | MoveItemFlags::Down;
         if(rSelection.GetStart().GetPara() > 0)
-            nRet |= MOVE_ITEM_UP;
+            nRet |= MoveItemFlags::Up;
     }
     return nRet;
 }

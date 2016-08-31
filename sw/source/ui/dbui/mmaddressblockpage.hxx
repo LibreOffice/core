@@ -32,6 +32,8 @@
 #include <svtools/treelistbox.hxx>
 #include <vcl/combobox.hxx>
 #include <svl/lstner.hxx>
+#include <o3tl/typed_flags_set.hxx>
+
 class SwMailMergeWizard;
 class SwMailMergeConfigItem;
 
@@ -133,10 +135,16 @@ public:
     virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
 };
 
-#define MOVE_ITEM_LEFT           1
-#define MOVE_ITEM_RIGHT          2
-#define MOVE_ITEM_UP             4
-#define MOVE_ITEM_DOWN           8
+enum class MoveItemFlags {
+    NONE           = 0,
+    Left           = 1,
+    Right          = 2,
+    Up             = 4,
+    Down           = 8,
+};
+namespace o3tl {
+    template<> struct typed_flags<MoveItemFlags> : is_typed_flags<MoveItemFlags, 0x0f> {};
+}
 
 class AddressMultiLineEdit : public VclMultiLineEdit, public SfxListener
 {
@@ -169,8 +177,8 @@ public:
     void            InsertNewEntryAtPosition( const OUString& rStr, sal_uLong nPara, sal_uInt16 nIndex );
     void            RemoveCurrentEntry();
 
-    void            MoveCurrentItem(sal_uInt16 nMove);
-    sal_uInt16      IsCurrentItemMoveable();
+    void            MoveCurrentItem(MoveItemFlags nMove);
+    MoveItemFlags   IsCurrentItemMoveable();
     bool            HasCurrentItem();
     OUString        GetCurrentItem();
     void            SelectCurrentItem();
