@@ -141,7 +141,7 @@ void SAL_CALL OStaticSet::beforeFirst(  ) throw(SQLException, RuntimeException)
     m_aSetIter = m_aSet.begin();
 }
 
-void SAL_CALL OStaticSet::afterLast(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OStaticSet::afterLast(  ) throw(SQLException, RuntimeException, std::exception)
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     fillAllRows();

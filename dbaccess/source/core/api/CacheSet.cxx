@@ -522,7 +522,7 @@ void SAL_CALL OCacheSet::beforeFirst(  ) throw(SQLException, RuntimeException)
     m_xDriverSet->beforeFirst();
 }
 
-void SAL_CALL OCacheSet::afterLast(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OCacheSet::afterLast(  ) throw(SQLException, RuntimeException, std::exception)
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     m_xDriverSet->afterLast();
