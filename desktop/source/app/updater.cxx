@@ -39,6 +39,8 @@ static const char kUserAgent[] = "UpdateChecker/1.0 (Linux)";
 
 const char* pUpdaterName = "updater";
 
+const char* pSofficeExeName = "soffice";
+
 void CopyFileToDir(const OUString& rTempDirURL, const OUString rFileName, const OUString& rOldDir)
 {
     OUString aSourceURL = rOldDir + "/" + rFileName;
@@ -84,9 +86,12 @@ void createStr(const OUString& rStr, char** pArgs, size_t i)
     pArgs[i] = pStr;
 }
 
-char** createCommandLine(const OUString& rInstallDir, bool bReplace)
+char** createCommandLine()
 {
-    size_t nArgs = 6;
+    OUString aLibExecDirURL( "$BRAND_BASE_DIR/" );
+    rtl::Bootstrap::expandMacros(aLibExecDirURL);
+
+    size_t nArgs = 7;
     char** pArgs = new char*[nArgs];
     {
         createStr(pUpdaterName, pArgs, 0);
@@ -98,15 +103,21 @@ char** createCommandLine(const OUString& rInstallDir, bool bReplace)
         createStr(aPatchDir, pArgs, 1);
     }
     {
-        createStr(rInstallDir, pArgs, 2);
+        OUString aInstallPath = getPathFromURL(aLibExecDirURL);
+        createStr(aInstallPath, pArgs, 2);
     }
     {
-        OUString aWorkingDir = rInstallDir + "/updated";
+        OUString aWorkingDir = getPathFromURL(aLibExecDirURL + "/updated");
         createStr(aWorkingDir, pArgs, 3);
     }
     {
-        const char* pPID = bReplace ? "/replace" : "-1";
+        const char* pPID = "/replace";
         createStr(pPID, pArgs, 4);
+    }
+    {
+        OUString aSofficePathURL = aLibExecDirURL + OUString::fromUtf8(pSofficeExeName);
+        OUString aSofficePath = getPathFromURL(aSofficePathURL);
+        createStr(aSofficePath, pArgs, 5);
     }
     pArgs[nArgs - 1] = nullptr;
 
@@ -150,7 +161,7 @@ void Update()
     OUString aTempDirPath = getPathFromURL(aTempDirURL);
     OString aPath = OUStringToOString(aTempDirPath + "/" + OUString::fromUtf8(pUpdaterName), RTL_TEXTENCODING_UTF8);
 
-    char** pArgs = createCommandLine(aLibExecDirURL, true);
+    char** pArgs = createCommandLine();
 
     if (execv(aPath.getStr(), pArgs))
     {
