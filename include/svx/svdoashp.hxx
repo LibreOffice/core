@@ -233,7 +233,7 @@ public:
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const override;
     virtual void EndTextEdit( SdrOutliner& rOutl ) override;
     virtual void TakeTextAnchorRect( Rectangle& rAnchorRect ) const override;
-    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText = false,
+    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText,
         Rectangle* pAnchorRect=nullptr, bool bLineWidth = true ) const override;
     virtual SdrObjCustomShape* Clone() const override;
     SdrObjCustomShape& operator=(const SdrObjCustomShape& rObj);

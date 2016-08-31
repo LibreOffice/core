@@ -109,8 +109,8 @@ public:
     virtual bool Paste(
         const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions);
 
-    bool            Paste(const OUString& rStr, const Point& rPos, SdrObjList* pLst=nullptr, SdrInsertFlags nOptions=SdrInsertFlags::NONE);
-    bool            Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst=nullptr, SdrInsertFlags nOptions=SdrInsertFlags::NONE);
+    bool            Paste(const OUString& rStr, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions=SdrInsertFlags::NONE);
+    bool            Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions=SdrInsertFlags::NONE);
 };
 
 #endif // INCLUDED_SVX_SVDXCGV_HXX

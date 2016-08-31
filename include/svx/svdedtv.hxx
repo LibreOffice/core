@@ -192,7 +192,7 @@ public:
     void AddUndoActions( std::vector< SdrUndoAction* >& );
 
     // Layermanagement with Undo.
-    void InsertNewLayer(const OUString& rName, sal_uInt16 nPos=0xFFFF);
+    void InsertNewLayer(const OUString& rName, sal_uInt16 nPos);
     // Delete a layer including all objects contained
     void DeleteLayer(const OUString& rName);
 
@@ -218,8 +218,8 @@ public:
     void MirrorMarkedObjVertical();
     long GetMarkedObjShear() const;
     void ShearMarkedObj(const Point& rRef, long nAngle, bool bVShear=false, bool bCopy=false);
-    void CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookMode eMode, bool bVertical=false, bool bNoContortion=false, bool bCopy=false);
-    void DistortMarkedObj(const Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion=false, bool bCopy=false);
+    void CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookMode eMode, bool bVertical, bool bNoContortion=false, bool bCopy=false);
+    void DistortMarkedObj(const Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion, bool bCopy=false);
 
     // copy marked objects and mark them instead of the old ones
     void CopyMarkedObj();

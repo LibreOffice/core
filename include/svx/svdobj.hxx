@@ -826,7 +826,7 @@ public:
     // when there is no filled new polygon created from line-to-polygon conversion,
     // specially used for XLINE_DASH and 3D conversion
     SdrObject* ConvertToContourObj(SdrObject* pRet, bool bForceLineDash = false) const;
-    static SdrObject* ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDash = false);
+    static SdrObject* ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDash);
 
     // if true, reference onto an object
     bool IsVirtualObj() const { return bVirtObj;}
@@ -872,7 +872,7 @@ public:
     void DeleteUserData(sal_uInt16 nNum);
 
     // switch ItemPool for this object
-    void MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = nullptr);
+    void MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel);
 
     // access to the UNO representation of the shape
     virtual css::uno::Reference< css::uno::XInterface > getUnoShape();

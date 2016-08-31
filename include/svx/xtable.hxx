@@ -211,7 +211,7 @@ public:
     const OUString& GetPath() const { return maPath; }
     void SetPath(const OUString& rString) { maPath = rString; }
 
-    void SetDirty(bool bDirty = true) { mbListDirty = bDirty; }
+    void SetDirty(bool bDirty) { mbListDirty = bDirty; }
 
     bool IsEmbedInDocument() const { return mbEmbedInDocument; }
     void SetEmbedInDocument(bool b) { mbEmbedInDocument = b; }

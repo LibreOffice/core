@@ -162,12 +162,12 @@ public:
     void PrePaint();
 
     /// @param rReg refers to the OutDev and not to the Page
-    void CompleteRedraw( SdrPaintWindow& rPaintWindow, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr );
+    void CompleteRedraw( SdrPaintWindow& rPaintWindow, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector );
 
     /// Write access to mpPreparedPageWindow
     void setPreparedPageWindow(SdrPageWindow* pKnownTarget);
 
-    void DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget = nullptr, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr,
+    void DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr,
                    const Rectangle& rRect =  Rectangle());
     void DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, Color aColor = Color( COL_BLACK ) );
 
@@ -191,17 +191,17 @@ public:
     Rectangle& MarkBound() { return aMarkBound; }
     Rectangle& MarkSnap() { return aMarkSnap; }
 
-    void SetLayerVisible(const OUString& rName, bool bShow = true) {
+    void SetLayerVisible(const OUString& rName, bool bShow) {
         SetLayer(rName, aLayerVisi, bShow);
         if(!bShow) AdjHdl();
         InvalidateAllWin();
     }
     bool IsLayerVisible(const OUString& rName) const { return IsLayer(rName, aLayerVisi); }
 
-    void SetLayerLocked(const OUString& rName, bool bLock = true) { SetLayer(rName, aLayerLock, bLock); if(bLock) AdjHdl(); }
+    void SetLayerLocked(const OUString& rName, bool bLock) { SetLayer(rName, aLayerLock, bLock); if(bLock) AdjHdl(); }
     bool IsLayerLocked(const OUString& rName) const { return IsLayer(rName,aLayerLock); }
 
-    void SetLayerPrintable(const OUString& rName, bool bPrn = true) { SetLayer(rName, aLayerPrn, bPrn); }
+    void SetLayerPrintable(const OUString& rName, bool bPrn) { SetLayer(rName, aLayerPrn, bPrn); }
     bool IsLayerPrintable(const OUString& rName) const { return IsLayer(rName, aLayerPrn); }
 
     /// PV represents a RefPage or a SubList of a RefObj, or the Model is ReadOnly
