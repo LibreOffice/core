@@ -275,8 +275,9 @@ protected:
 public:
              bool determineReadOnly();
             // MozAddressbook Specific methods
-            void SAL_CALL executeQuery() throw( css::sdbc::SQLException,
-                                                css::uno::RuntimeException);
+            void SAL_CALL executeQuery() throw(css::sdbc::SQLException,
+                                               css::uno::RuntimeException,
+                                               std::exception);
 
             void setTable(OTable* _rTable);
 

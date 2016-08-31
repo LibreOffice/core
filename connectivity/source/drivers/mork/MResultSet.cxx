@@ -1105,9 +1105,9 @@ sal_Int32 OResultSet::getRowForCardNumber(sal_Int32 nCardNum)
     return 0;
 }
 
-
-void SAL_CALL OResultSet::executeQuery() throw( css::sdbc::SQLException,
-                                                css::uno::RuntimeException)
+void SAL_CALL OResultSet::executeQuery() throw(css::sdbc::SQLException,
+                                               css::uno::RuntimeException,
+                                               std::exception)
 {
     ResultSetEntryGuard aGuard( *this );
 
@@ -1280,7 +1280,6 @@ void SAL_CALL OResultSet::executeQuery() throw( css::sdbc::SQLException,
             break;
     }
 }
-
 
 void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                                    const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,
