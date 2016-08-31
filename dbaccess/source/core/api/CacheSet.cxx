@@ -545,7 +545,7 @@ sal_Int32 SAL_CALL OCacheSet::getRow(  ) throw(SQLException, RuntimeException)
     return m_xDriverSet->getRow();
 }
 
-bool SAL_CALL OCacheSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
+bool SAL_CALL OCacheSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException, std::exception)
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     return m_xDriverSet->absolute(row);

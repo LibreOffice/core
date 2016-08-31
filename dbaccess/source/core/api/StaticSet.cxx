@@ -177,7 +177,7 @@ sal_Int32 SAL_CALL OStaticSet::getRow(  ) throw(SQLException, RuntimeException)
     return nPos;
 }
 
-bool SAL_CALL OStaticSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
+bool SAL_CALL OStaticSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException, std::exception)
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     OSL_ENSURE(row,"OStaticSet::absolute: INVALID row number!");
