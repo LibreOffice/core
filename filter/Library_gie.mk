@@ -23,46 +23,50 @@ $(eval $(call gb_Library_use_external,gie,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,gie))
 
+$(eval $(call gb_Library_use_custom_headers,gie,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_libraries,gie,\
-	basegfx \
+    basegfx \
     comphelper \
     i18nlangtag \
     svt \
-	vcl \
+    vcl \
     utl \
-	tl \
+    tl \
     tk \
-	cppu \
-	sal \
-	$(gb_UWINAPI) \
+    cppu \
+    sal \
+    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,gie,\
-	filter/source/graphicfilter/egif/egif \
-	filter/source/graphicfilter/etiff/etiff \
-	filter/source/graphicfilter/eps/eps \
-	filter/source/graphicfilter/egif/giflzwc \
-	filter/source/graphicfilter/itiff/ccidecom \
-	filter/source/graphicfilter/itiff/itiff \
-	filter/source/graphicfilter/itiff/lzwdecom \
-	filter/source/graphicfilter/ipict/ipict \
-	filter/source/graphicfilter/ipict/shape \
-	filter/source/graphicfilter/ipcx/ipcx \
-	filter/source/graphicfilter/iras/iras \
-	filter/source/graphicfilter/itga/itga \
-	filter/source/graphicfilter/ieps/ieps \
-	filter/source/graphicfilter/ipsd/ipsd \
-	filter/source/graphicfilter/ipbm/ipbm \
-	filter/source/graphicfilter/ios2met/ios2met \
-	filter/source/graphicfilter/idxf/dxf2mtf \
-	filter/source/graphicfilter/idxf/dxfblkrd \
-	filter/source/graphicfilter/idxf/dxfentrd \
-	filter/source/graphicfilter/idxf/dxfgrprd \
-	filter/source/graphicfilter/idxf/dxfreprd \
-	filter/source/graphicfilter/idxf/dxftblrd \
-	filter/source/graphicfilter/idxf/dxfvec \
-	filter/source/graphicfilter/idxf/idxf \
-	filter/source/graphicfilter/ipcd/ipcd \
+    filter/source/graphicfilter/egif/egif \
+    filter/source/graphicfilter/etiff/etiff \
+    filter/source/graphicfilter/eps/eps \
+    filter/source/graphicfilter/egif/giflzwc \
+    filter/source/graphicfilter/itiff/ccidecom \
+    filter/source/graphicfilter/itiff/itiff \
+    filter/source/graphicfilter/itiff/lzwdecom \
+    filter/source/graphicfilter/ipict/ipict \
+    filter/source/graphicfilter/ipict/shape \
+    filter/source/graphicfilter/ipcx/ipcx \
+    filter/source/graphicfilter/iras/iras \
+    filter/source/graphicfilter/itga/itga \
+    filter/source/graphicfilter/ieps/ieps \
+    filter/source/graphicfilter/ipsd/ipsd \
+    filter/source/graphicfilter/ipbm/ipbm \
+    filter/source/graphicfilter/ios2met/ios2met \
+    filter/source/graphicfilter/idxf/dxf2mtf \
+    filter/source/graphicfilter/idxf/dxfblkrd \
+    filter/source/graphicfilter/idxf/dxfentrd \
+    filter/source/graphicfilter/idxf/dxfgrprd \
+    filter/source/graphicfilter/idxf/dxfreprd \
+    filter/source/graphicfilter/idxf/dxftblrd \
+    filter/source/graphicfilter/idxf/dxfvec \
+    filter/source/graphicfilter/idxf/idxf \
+    filter/source/graphicfilter/ipcd/ipcd \
 ))
 
 # vim: set noet sw=4 ts=4:
