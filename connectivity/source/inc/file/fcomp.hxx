@@ -72,7 +72,7 @@ namespace connectivity
             void execute_LIKE(connectivity::OSQLParseNode* pPredicateNode) throw(css::sdbc::SQLException, css::uno::RuntimeException);
             void execute_BETWEEN(connectivity::OSQLParseNode* pPredicateNode) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
             void execute_ISNULL(connectivity::OSQLParseNode* pPredicateNode) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-            OOperand* execute_Operand(connectivity::OSQLParseNode* pPredicateNode) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            OOperand* execute_Operand(connectivity::OSQLParseNode* pPredicateNode) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
             void execute_Fold(OSQLParseNode* pPredicateNode) throw( css::sdbc::SQLException, css::uno::RuntimeException);
             void executeFunction(OSQLParseNode* pPredicateNode) throw( css::sdbc::SQLException, css::uno::RuntimeException);
         };

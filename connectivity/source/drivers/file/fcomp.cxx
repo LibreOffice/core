@@ -410,7 +410,7 @@ void OPredicateCompiler::execute_ISNULL(OSQLParseNode* pPredicateNode) throw(SQL
     m_aCodeList.push_back(pOperator);
 }
 
-OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
+OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException, std::exception)
 {
     OOperand* pOperand = nullptr;
 
