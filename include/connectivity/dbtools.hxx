@@ -576,7 +576,7 @@ namespace dbtools
                             sal_Int32 parameterIndex,
                             const css::uno::Any& x,
                             sal_Int32 sqlType,
-                            sal_Int32 scale=0) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+                            sal_Int32 scale=0) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
 
     /** call the appropriate set method for the specific sql type @see css::sdbc::DataType
         @param  _xParams        the parameters where to set the value

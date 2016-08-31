@@ -1779,7 +1779,7 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
                        sal_Int32 parameterIndex,
                        const Any& x,
                        sal_Int32 sqlType,
-                       sal_Int32 scale)  throw(SQLException, RuntimeException)
+                       sal_Int32 scale)  throw(SQLException, RuntimeException, std::exception)
 {
     ORowSetValue aVal;
     aVal.fill(x);
