@@ -28,9 +28,8 @@
 
 RscConst::RscConst( Atom nId, sal_uInt32 nTypeId )
     : RscTop( nId, nTypeId )
+    , pVarArray(nullptr), nEntries(0)
 {
-    pVarArray = nullptr;
-    nEntries = 0;
 }
 
 RscConst::~RscConst()
@@ -102,7 +101,6 @@ sal_uInt32 RscConst::GetConstPos( Atom nConst )
 RscEnum::RscEnum( Atom nId, sal_uInt32 nTypeId )
     : RscConst( nId, nTypeId )
 {
-    nSize = ALIGNED_SIZE( sizeof( RscEnumInst ) );
 }
 
 ERRTYPE RscEnum::SetConst( const RSCINST & rInst, Atom nConst, sal_Int32 /*nVal*/ )

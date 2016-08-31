@@ -29,7 +29,7 @@ RscFlag::RscFlag( Atom nId, sal_uInt32 nTypeId )
 {
 }
 
-sal_uInt32 RscFlag::Size()
+sal_uInt32 RscFlag::Size() const
 {
     return ALIGNED_SIZE( sizeof( RscFlagInst ) *
             ( 1 + (nEntries -1) / (sizeof( sal_uInt32 ) * 8) ) );
@@ -294,10 +294,8 @@ ERRTYPE RscFlag::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
 
 RscClient::RscClient( Atom nId, sal_uInt32 nTypeId, RscFlag * pClass,
                       Atom nConstantId )
-    : RscTop ( nId, nTypeId )
+    : RscTop(nId, nTypeId), pRefClass(pClass), nConstId(nConstantId)
 {
-   pRefClass = pClass;
-   nConstId = nConstantId;
 }
 
 RSCCLASS_TYPE RscClient::GetClassType() const

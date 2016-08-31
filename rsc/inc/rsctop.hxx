@@ -72,7 +72,7 @@ public:
     virtual RscTop* GetTypeClass() const;
 
                     // returns the class size in bytes
-    virtual sal_uInt32  Size();
+    virtual sal_uInt32  Size() const;
 
                     // returns the reference
     virtual ERRTYPE GetRef( const RSCINST & rInst, RscId * );

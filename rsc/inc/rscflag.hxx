@@ -38,7 +38,7 @@ public:
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnClass = false ) override;
     RSCINST         CreateClient( RSCINST * pInst, const RSCINST & rDflt,
                                   bool bOwnClass, Atom nConsId );
-    sal_uInt32      Size() override;
+    sal_uInt32      Size() const override;
 
     virtual void    SetToDefault( const RSCINST & rInst ) override;
     bool            IsDefault( const RSCINST & rInst ) override;
@@ -71,7 +71,7 @@ public:
                                Atom nConstantId );
     virtual RSCCLASS_TYPE   GetClassType() const override;
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnClass = false ) override;
-    sal_uInt32      Size() override { return pRefClass->Size(); }
+    sal_uInt32      Size() const override { return pRefClass->Size(); }
 
                     // an assignment to a variable
     bool            IsDefault( const RSCINST & rInst ) override {

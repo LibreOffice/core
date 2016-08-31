@@ -31,7 +31,7 @@ RscMgr::RscMgr( Atom nId, sal_uInt32 nTypeId, RscTop * pSuperCl )
 {
 }
 
-sal_uInt32 RscMgr::Size()
+sal_uInt32 RscMgr::Size() const
 {
     return RscClass::Size() + ALIGNED_SIZE( sizeof( RscMgrInst ) );
 }

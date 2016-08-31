@@ -23,9 +23,8 @@
 
 
 RefNode::RefNode( Atom nTyp )
+    : nTypNameId(nTyp), pObjBiTree(nullptr)
 {
-    pObjBiTree = nullptr;
-    nTypNameId = nTyp;
 }
 
 sal_uInt32 RefNode::GetId() const
@@ -58,10 +57,10 @@ ObjNode * RefNode::GetObjNode( const RscId & rRscId )
 }
 
 ObjNode::ObjNode( const RscId & rId, CLASS_DATA pData, sal_uLong lKey )
+    : aRscId(rId)
+    , pRscObj(pData)
+    , lFileKey(lKey)
 {
-    pRscObj  = pData;
-    aRscId   = rId;
-    lFileKey = lKey;
 }
 
 ObjNode * ObjNode::DelObjNode( RscTop * pClass, sal_uLong nFileKey )

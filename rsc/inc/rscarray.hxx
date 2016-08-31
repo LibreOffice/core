@@ -54,8 +54,8 @@ class RscArray : public RscTop
 {
 protected:
     RscEnum *       pTypeClass; // type of entries
-    sal_uInt32      nSize;      // size of this class instance data with super class
-    sal_uInt32      nOffInstData;// Offset of self instance data
+    const sal_uInt32 nOffInstData;// Offset of self instance data
+    const sal_uInt32 nSize;      // size of this class instance data with super class
     void            WriteSrcArray( const RSCINST & rInst, FILE * fOutput,
                                    RscTypCont * pTC, sal_uInt32 nTab, const char * );
 public:
@@ -75,7 +75,7 @@ public:
                                  RSCINST * pGetInst ) override;
 
                     // gives the size of the class in bytes
-    sal_uInt32      Size() override { return nSize; }
+    sal_uInt32      Size() const override { return nSize; }
 
     bool            IsConsistent( const RSCINST & rInst ) override;
     virtual void    SetToDefault( const RSCINST & rInst ) override;

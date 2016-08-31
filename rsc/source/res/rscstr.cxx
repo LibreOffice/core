@@ -30,9 +30,8 @@
 
 RscString::RscString( Atom nId, sal_uInt32 nTypeId )
     : RscTop( nId, nTypeId )
+    , pRefClass(nullptr)
 {
-    nSize = ALIGNED_SIZE( sizeof( RscStringInst ) );
-    pRefClass = nullptr;
 }
 
 RSCCLASS_TYPE RscString::GetClassType() const
