@@ -795,7 +795,7 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
     assert(rItem.GetRefCount() && "RefCount == 0, Remove impossible");
 
     // Static Defaults are just there
-    if ( rItem.GetKind() == SFX_ITEMS_STATICDEFAULT &&
+    if ( IsStaticDefaultItem(&rItem) &&
          &rItem == *( pImpl->ppStaticDefaults + GetIndex_Impl(nWhich) ) )
         return;
 
