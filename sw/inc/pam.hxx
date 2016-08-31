@@ -142,8 +142,6 @@ struct SwMoveFnCollection;
 SW_DLLPUBLIC extern SwMoveFnCollection const & fnMoveForward; ///< SwPam::Move()/Find() default argument.
 SW_DLLPUBLIC extern SwMoveFnCollection const & fnMoveBackward;
 
-// also works: using SwGoInDoc = bool (*) (SwPaM& rPam, SwMoveFnCollection const & fnMove);
-// no works: using SwGoInDoc = [](SwPaM& rPam, SwMoveFnCollection const & fnMove) -> bool;
 using SwGoInDoc = auto (*)(SwPaM& rPam, SwMoveFnCollection const & fnMove) -> bool;
 SW_DLLPUBLIC bool GoInDoc( SwPaM&, SwMoveFnCollection const &);
 SW_DLLPUBLIC bool GoInSection( SwPaM&, SwMoveFnCollection const &);
