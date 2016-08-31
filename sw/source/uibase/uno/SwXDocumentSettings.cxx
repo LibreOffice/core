@@ -127,6 +127,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_EMBED_FONTS,
     HANDLE_EMBED_SYSTEM_FONTS,
     HANDLE_TAB_OVER_MARGIN,
+    HANDLE_TREAT_SINGLE_COLUMN_BREAK_AS_PAGE_BREAK,
     HANDLE_SURROUND_TEXT_WRAP_SMALL,
     HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING,
     HANDLE_PROP_LINE_SPACING_SHRINKS_FIRST_LINE,
@@ -202,6 +203,7 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("EmbedFonts"), HANDLE_EMBED_FONTS, cppu::UnoType<bool>::get(), 0},
         { OUString("EmbedSystemFonts"), HANDLE_EMBED_SYSTEM_FONTS, cppu::UnoType<bool>::get(), 0},
         { OUString("TabOverMargin"), HANDLE_TAB_OVER_MARGIN, cppu::UnoType<bool>::get(), 0},
+        { OUString("TreatSingleColumnBreakAsPageBreak"), HANDLE_TREAT_SINGLE_COLUMN_BREAK_AS_PAGE_BREAK, cppu::UnoType<bool>::get(), 0},
         { OUString("SurroundTextWrapSmall"), HANDLE_SURROUND_TEXT_WRAP_SMALL, cppu::UnoType<bool>::get(), 0},
         { OUString("ApplyParagraphMarkFormatToNumbering"), HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING, cppu::UnoType<bool>::get(), 0},
         { OUString("PropLineSpacingShrinksFirstLine"),       HANDLE_PROP_LINE_SPACING_SHRINKS_FIRST_LINE,         cppu::UnoType<bool>::get(),           0},
@@ -814,6 +816,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::TAB_OVER_MARGIN, bTmp);
         }
         break;
+        case HANDLE_TREAT_SINGLE_COLUMN_BREAK_AS_PAGE_BREAK:
+        {
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
+            mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::TREAT_SINGLE_COLUMN_BREAK_AS_PAGE_BREAK, bTmp);
+        }
+        break;
         case HANDLE_SURROUND_TEXT_WRAP_SMALL:
         {
             bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
@@ -1237,6 +1245,11 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_TAB_OVER_MARGIN:
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get( DocumentSettingId::TAB_OVER_MARGIN );
+        }
+        break;
+        case HANDLE_TREAT_SINGLE_COLUMN_BREAK_AS_PAGE_BREAK:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get( DocumentSettingId::TREAT_SINGLE_COLUMN_BREAK_AS_PAGE_BREAK );
         }
         break;
         case HANDLE_SURROUND_TEXT_WRAP_SMALL:
