@@ -37,14 +37,12 @@ void ENTRY_STRUCT::Destroy()
 
 RscBaseCont::RscBaseCont( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper,
                           bool bNoIdent )
-    : RscTop( nId, nTypeId, pSuper )
-    , nSize( 0 )
+    : RscTop(nId, nTypeId, pSuper)
+    , pTypeClass(nullptr), pTypeClass1(nullptr)
+    , bNoId(bNoIdent), nOffInstData(RscTop::Size())
+    , nSize(nOffInstData + ALIGNED_SIZE(sizeof(RscBaseContInst)))
+
 {
-    pTypeClass = nullptr;
-    pTypeClass1 = nullptr;
-    bNoId = bNoIdent;
-    nOffInstData = RscTop::Size();
-    nSize = nOffInstData + ALIGNED_SIZE( sizeof( RscBaseContInst ) );
 }
 
 RscBaseCont::~RscBaseCont()

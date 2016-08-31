@@ -43,8 +43,8 @@ protected:
     RscTop *        pTypeClass; // type of entries
     RscTop *        pTypeClass1;// two different types may exist
     bool            bNoId;      // whether there is no identifier
-    sal_uInt32      nSize;      // size of this class and super classes instance data
-    sal_uInt32      nOffInstData;// offset of own instance data
+    const sal_uInt32 nOffInstData;// offset of own instance data
+    const sal_uInt32 nSize;      // size of this class and super classes instance data
     static void     DestroyElements( RscBaseContInst * pClassData );
     RSCINST         SearchElePos( const RSCINST & rInst, const RscId & rEleName,
                                   RscTop * pClass, sal_uInt32 nPos );
@@ -86,7 +86,7 @@ public:
     ERRTYPE         SetRef( const RSCINST & rInst, const RscId & rRefId ) override;
 
                     // returns the class size in bytes
-    sal_uInt32      Size() override { return nSize; }
+    sal_uInt32      Size() const override { return nSize; }
 
     bool            IsConsistent( const RSCINST & rInst ) override;
     void            SetToDefault( const RSCINST & rInst ) override;

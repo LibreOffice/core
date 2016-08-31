@@ -66,7 +66,7 @@ RscTop * RscTop::GetTypeClass() const
         return nullptr;
 }
 
-sal_uInt32 RscTop::Size()
+sal_uInt32 RscTop::Size() const
 {
     if( pSuperClass )
         return pSuperClass->Size();

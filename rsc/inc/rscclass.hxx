@@ -82,7 +82,7 @@ public:
     RSCINST         GetCopyVar( const RSCINST & rInst, Atom nVarName ) override;
 
                     // gives the class size in bytes
-    sal_uInt32      Size() override { return nSize; }
+    sal_uInt32      Size() const override { return nSize; }
 
     bool            IsConsistent( const RSCINST & rInst ) override;
     void            SetToDefault( const RSCINST & rInst ) override;

@@ -34,7 +34,6 @@ protected:
     };
     sal_Int32       nMin;   // range minimum value
     sal_Int32       nMax;   // range maximum value
-    sal_uInt32      nSize;
 public:
                     RscRange( Atom nId, sal_uInt32 nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const override;
@@ -42,7 +41,7 @@ public:
                     // sets the allowed range
     void            SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum );
                     // returns the class size in bytes
-    sal_uInt32      Size() override { return nSize; }
+    sal_uInt32      Size() const override { return ALIGNED_SIZE(sizeof(RscRangeInst)); }
                     // an assignment to a variable
     virtual void    SetToDefault( const RSCINST & rInst ) override
                         {
@@ -72,7 +71,6 @@ protected:
     };
     sal_Int32    nMin;   // range minimum value
     sal_Int32    nMax;   // range maximum value
-    sal_uInt32  nSize;
 public:
                     RscLongRange( Atom nId, sal_uInt32 nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const override;
@@ -80,7 +78,7 @@ public:
                     // sets the allowed range
     void            SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum );
                     // returns the class size in bytes
-    sal_uInt32      Size() override { return nSize; }
+    sal_uInt32      Size() const override { return ALIGNED_SIZE(sizeof(RscLongRangeInst)); }
                     // an assignment to a variable
     virtual void    SetToDefault( const RSCINST & rInst ) override
                         {
@@ -112,7 +110,6 @@ public:
 
 class RscIdRange : public RscTop
 {
-    sal_uInt32  nSize;
 protected:
     sal_Int32    nMin;   // range minimum value
     sal_Int32    nMax;   // range maximum value
@@ -127,7 +124,7 @@ public:
                         }
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool bOwnClass = false ) override;
     void            Destroy( const RSCINST & rInst ) override;
-    sal_uInt32          Size() override { return nSize; }
+    sal_uInt32      Size() const override { return ALIGNED_SIZE(sizeof(RscId)); }
     virtual void    SetToDefault( const RSCINST & rInst ) override
                         {
                             reinterpret_cast<RscId*>(rInst.pData)->aExp.cUnused = true;
