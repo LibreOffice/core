@@ -213,7 +213,7 @@ void SwCharURLPage::Reset(const SfxItemSet* rSet)
         m_pURLED->SetText(INetURLObject::decode(pINetFormat->GetValue(),
             INetURLObject::DECODE_UNAMBIGUOUS));
         m_pURLED->SaveValue();
-        m_pURLED->SetText(pINetFormat->GetName());
+        m_pNameED->SetText(pINetFormat->GetName());
 
         OUString sEntry = pINetFormat->GetVisitedFormat();
         if (sEntry.isEmpty())
