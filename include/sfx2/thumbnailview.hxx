@@ -187,6 +187,8 @@ public:
 
     virtual void MouseMove(const MouseEvent& rMEvt) override;
 
+    virtual void RequestHelp(const HelpEvent& rHEvt) override;
+
     void AppendItem(ThumbnailViewItem *pItem);
 
     void RemoveItem(sal_uInt16 nItemId);
