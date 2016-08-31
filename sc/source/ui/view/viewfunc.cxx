@@ -954,8 +954,8 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
     {
         // if new items are default-items, overwrite the old items:
 
-        bool bDefNewOuter = ( SFX_ITEMS_STATICDEFAULT == pNewOuter->GetKind() );
-        bool bDefNewInner = ( SFX_ITEMS_STATICDEFAULT == pNewInner->GetKind() );
+        bool bDefNewOuter = IsStaticDefaultItem(pNewOuter);
+        bool bDefNewInner = IsStaticDefaultItem(pNewInner);
 
         ApplyPatternLines( aNewAttrs,
                            bDefNewOuter ? pOldOuter : pNewOuter,
