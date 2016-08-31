@@ -589,7 +589,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         ::sw::UnoTunnelGetImplementation<SwXMeta>(xContentTunnel);
     SwXTextField* pTextField =
         ::sw::UnoTunnelGetImplementation<SwXTextField>(xContentTunnel);
-    if (pTextField && pTextField->GetServiceId() != SW_SERVICE_FIELDTYPE_ANNOTATION)
+    if (pTextField && pTextField->GetServiceId() != SwServiceType::FieldTypeAnnotation)
         pTextField = nullptr;
 
     const bool bAttribute = pBookmark || pDocumentIndexMark

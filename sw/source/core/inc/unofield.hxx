@@ -29,6 +29,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <unobaseclass.hxx>
+#include <unocoll.hxx>
 
 class SwFieldType;
 class SwDoc;
@@ -162,15 +163,15 @@ private:
     SwXTextField(SwFormatField& rFormat, SwDoc & rDoc);
 
     /// descriptor
-    SwXTextField(sal_uInt16 nServiceId, SwDoc* pDoc=nullptr);
+    SwXTextField(SwServiceType nServiceId, SwDoc* pDoc=nullptr);
 
 public:
-    sal_uInt16 GetServiceId() const;
+    SwServiceType GetServiceId() const;
 
     /// @return an SwXTextField, either an already existing one or a new one
     static css::uno::Reference< css::text::XTextField>
         CreateXTextField(SwDoc * pDoc, SwFormatField const* pFormat,
-                sal_uInt16 nServiceId = 0xFFFF);
+                SwServiceType nServiceId = SwServiceType::Invalid);
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 

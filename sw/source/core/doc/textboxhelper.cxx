@@ -51,7 +51,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape)
     if (!pShape->GetAttrSet().HasItem(RES_CNTNT))
     {
         // Create the associated TextFrame and insert it into the document.
-        uno::Reference<text::XTextContent> xTextFrame(SwXServiceProvider::MakeInstance(SW_SERVICE_TYPE_TEXTFRAME, *pShape->GetDoc()), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xTextFrame(SwXServiceProvider::MakeInstance(SwServiceType::TypeTextFrame, *pShape->GetDoc()), uno::UNO_QUERY);
         uno::Reference<text::XTextDocument> xTextDocument(pShape->GetDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
         uno::Reference<text::XTextContentAppend> xTextContentAppend(xTextDocument->getText(), uno::UNO_QUERY);
         xTextContentAppend->appendTextContent(xTextFrame, uno::Sequence<beans::PropertyValue>());

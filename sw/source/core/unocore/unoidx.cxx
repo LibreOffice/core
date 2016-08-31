@@ -513,20 +513,20 @@ throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
-    sal_uInt16 nObjectType = SW_SERVICE_TYPE_INDEX;
+    SwServiceType nObjectType = SwServiceType::TypeIndex;
     switch (m_pImpl->m_eTOXType)
     {
-        case TOX_USER:          nObjectType = SW_SERVICE_USER_INDEX;
+        case TOX_USER:          nObjectType = SwServiceType::UserIndex;
         break;
-        case TOX_CONTENT:       nObjectType = SW_SERVICE_CONTENT_INDEX;
+        case TOX_CONTENT:       nObjectType = SwServiceType::ContentIndex;
         break;
-        case TOX_ILLUSTRATIONS: nObjectType = SW_SERVICE_INDEX_ILLUSTRATIONS;
+        case TOX_ILLUSTRATIONS: nObjectType = SwServiceType::IndexIllustrations;
         break;
-        case TOX_OBJECTS:       nObjectType = SW_SERVICE_INDEX_OBJECTS;
+        case TOX_OBJECTS:       nObjectType = SwServiceType::IndexObjects;
         break;
-        case TOX_TABLES:        nObjectType = SW_SERVICE_INDEX_TABLES;
+        case TOX_TABLES:        nObjectType = SwServiceType::IndexTables;
         break;
-        case TOX_AUTHORITIES:   nObjectType = SW_SERVICE_INDEX_BIBLIOGRAPHY;
+        case TOX_AUTHORITIES:   nObjectType = SwServiceType::IndexBibliography;
         break;
         default:
         break;

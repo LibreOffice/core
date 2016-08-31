@@ -69,123 +69,128 @@ class SwUnoCollection
     SwDoc*          GetDoc() const {return m_pDoc;}
 };
 
-#define SW_SERVICE_TYPE_TEXTTABLE                       0
-#define SW_SERVICE_TYPE_TEXTFRAME                       1
-#define SW_SERVICE_TYPE_GRAPHIC                         2
-#define SW_SERVICE_TYPE_OLE                             3
-#define SW_SERVICE_TYPE_BOOKMARK                        4
-#define SW_SERVICE_TYPE_FOOTNOTE                        5
-#define SW_SERVICE_TYPE_ENDNOTE                         6
-#define SW_SERVICE_TYPE_INDEXMARK                       7
-#define SW_SERVICE_TYPE_INDEX                           8
-#define SW_SERVICE_REFERENCE_MARK                       9
-#define SW_SERVICE_STYLE_CHARACTER_STYLE                10
-#define SW_SERVICE_STYLE_PARAGRAPH_STYLE                11
-#define SW_SERVICE_STYLE_FRAME_STYLE                    12
-#define SW_SERVICE_STYLE_PAGE_STYLE                     13
-#define SW_SERVICE_STYLE_NUMBERING_STYLE                14
-#define SW_SERVICE_CONTENT_INDEX_MARK                   15
-#define SW_SERVICE_CONTENT_INDEX                        16
-#define SW_SERVICE_USER_INDEX_MARK                      17
-#define SW_SERVICE_USER_INDEX                           18
-#define SW_SERVICE_TEXT_SECTION                         19
-#define SW_SERVICE_FIELDTYPE_DATETIME                   20
-#define SW_SERVICE_FIELDTYPE_USER                       21
-#define SW_SERVICE_FIELDTYPE_SET_EXP                    22
-#define SW_SERVICE_FIELDTYPE_GET_EXP                    23
-#define SW_SERVICE_FIELDTYPE_FILE_NAME                  24
-#define SW_SERVICE_FIELDTYPE_PAGE_NUM                   25
-#define SW_SERVICE_FIELDTYPE_AUTHOR                     26
-#define SW_SERVICE_FIELDTYPE_CHAPTER                    27
-#define SW_SERVICE_FIELDTYPE_DUMMY_0                    28
-#define SW_SERVICE_FIELDTYPE_GET_REFERENCE              29
-#define SW_SERVICE_FIELDTYPE_CONDITIONED_TEXT           30
-#define SW_SERVICE_FIELDTYPE_ANNOTATION                 31
-#define SW_SERVICE_FIELDTYPE_INPUT                      32
-#define SW_SERVICE_FIELDTYPE_MACRO                      33
-#define SW_SERVICE_FIELDTYPE_DDE                        34
-#define SW_SERVICE_FIELDTYPE_HIDDEN_PARA                35
-#define SW_SERVICE_FIELDTYPE_DOC_INFO                   36
-#define SW_SERVICE_FIELDTYPE_TEMPLATE_NAME              37
-#define SW_SERVICE_FIELDTYPE_USER_EXT                   38
-#define SW_SERVICE_FIELDTYPE_REF_PAGE_SET               39
-#define SW_SERVICE_FIELDTYPE_REF_PAGE_GET               40
-#define SW_SERVICE_FIELDTYPE_JUMP_EDIT                  41
-#define SW_SERVICE_FIELDTYPE_SCRIPT                     42
-#define SW_SERVICE_FIELDTYPE_DATABASE_NEXT_SET          43
-#define SW_SERVICE_FIELDTYPE_DATABASE_NUM_SET           44
-#define SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM           45
-#define SW_SERVICE_FIELDTYPE_DATABASE                   46
-#define SW_SERVICE_FIELDTYPE_DATABASE_NAME              47
-#define SW_SERVICE_FIELDTYPE_TABLE_FORMULA              48
-#define SW_SERVICE_FIELDTYPE_PAGE_COUNT                 49
-#define SW_SERVICE_FIELDTYPE_PARAGRAPH_COUNT            50
-#define SW_SERVICE_FIELDTYPE_WORD_COUNT                 51
-#define SW_SERVICE_FIELDTYPE_CHARACTER_COUNT            52
-#define SW_SERVICE_FIELDTYPE_TABLE_COUNT                53
-#define SW_SERVICE_FIELDTYPE_GRAPHIC_OBJECT_COUNT       54
-#define SW_SERVICE_FIELDTYPE_EMBEDDED_OBJECT_COUNT      55
-#define SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR      56
-#define SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_DATE_TIME   57
-#define SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME          58
-#define SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION        59
-#define SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_AUTHOR      60
-#define SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME   61
-#define SW_SERVICE_FIELDTYPE_DUMMY_1                    63
-#define SW_SERVICE_FIELDTYPE_DUMMY_2                    64
-#define SW_SERVICE_FIELDTYPE_DUMMY_3                    65
-#define SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM             66
-#define SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR       67
-#define SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME    68
-#define SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS          69
-#define SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT            70
-#define SW_SERVICE_FIELDTYPE_DOCINFO_TITLE              71
-#define SW_SERVICE_FIELDTYPE_DOCINFO_REVISION           72
-#define SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY               73
-#define SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS        74
-#define SW_SERVICE_FIELDTYPE_DROPDOWN                   75
-#define SW_SERVICE_FIELDTYPE_METAFIELD                  76
-#define SW_SERVICE_FIELDTYPE_DUMMY_4                    77
-#define SW_SERVICE_FIELDTYPE_DUMMY_5                    78
-#define SW_SERVICE_FIELDTYPE_DUMMY_6                    79
-#define SW_SERVICE_FIELDTYPE_DUMMY_7                    80
-#define SW_SERVICE_FIELDMASTER_USER                     81
-#define SW_SERVICE_FIELDMASTER_DDE                      82
-#define SW_SERVICE_FIELDMASTER_SET_EXP                  83
-#define SW_SERVICE_FIELDMASTER_DATABASE                 84
-#define SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY             85
-#define SW_SERVICE_FIELDMASTER_DUMMY2                   86
-#define SW_SERVICE_FIELDMASTER_DUMMY3                   87
-#define SW_SERVICE_FIELDMASTER_DUMMY4                   88
-#define SW_SERVICE_FIELDMASTER_DUMMY5                   89
-#define SW_SERVICE_INDEX_ILLUSTRATIONS                  90
-#define SW_SERVICE_INDEX_OBJECTS                        91
-#define SW_SERVICE_INDEX_TABLES                         92
-#define SW_SERVICE_INDEX_BIBLIOGRAPHY                   93
-#define SW_SERVICE_PARAGRAPH                            94
-#define SW_SERVICE_FIELDTYPE_INPUT_USER                 95
-#define SW_SERVICE_FIELDTYPE_HIDDEN_TEXT                96
-#define SW_SERVICE_STYLE_CONDITIONAL_PARAGRAPH_STYLE    97
-#define SW_SERVICE_NUMBERING_RULES                      98
-#define SW_SERVICE_TEXT_COLUMNS                         99
-#define SW_SERVICE_INDEX_HEADER_SECTION                 100
-#define SW_SERVICE_DEFAULTS                             101
-#define SW_SERVICE_IMAP_RECTANGLE                       102
-#define SW_SERVICE_IMAP_CIRCLE                          103
-#define SW_SERVICE_IMAP_POLYGON                         104
-#define SW_SERVICE_TYPE_TEXT_GRAPHIC                    105
-#define SW_SERVICE_CHART2_DATA_PROVIDER                 106
-#define SW_SERVICE_TYPE_FIELDMARK                       107
-#define SW_SERVICE_TYPE_FORMFIELDMARK                   108
-#define SW_SERVICE_TYPE_META                            109
-#define SW_SERVICE_VBAOBJECTPROVIDER                    110
-#define SW_SERVICE_VBACODENAMEPROVIDER                  111
-#define SW_SERVICE_VBAPROJECTNAMEPROVIDER               112
-#define SW_SERVICE_VBAGLOBALS                           113
-#define SW_SERVICE_STYLE_TABLE_STYLE                    114
-#define SW_SERVICE_STYLE_CELL_STYLE                     115
+/** entries in this enum are mapped in an array in unocoll.cxx */
+enum class SwServiceType {
+    TypeTextTable                   =   0,
+    TypeTextFrame                   =   1,
+    TypeGraphic                     =   2,
+    TypeOLE                         =   3,
+    TypeBookmark                    =   4,
+    TypeFootnote                    =   5,
+    TypeEndnote                     =   6,
+    TypeIndexMark                   =   7,
+    TypeIndex                       =   8,
+    ReferenceMark                   =   9,
+    StyleCharacter                  =  10,
+    StyleParagraph                  =  11,
+    StyleFrame                      =  12,
+    StylePage                       =  13,
+    StyleNumbering                  =  14,
+    ContentIndexMark                =  15,
+    ContentIndex                    =  16,
+    UserIndexMark                   =  17,
+    UserIndex                       =  18,
+    TextSection                     =  19,
+    FieldTypeDateTime               =  20,
+    FieldTypeUser                   =  21,
+    FieldTypeSetExp                 =  22,
+    FieldTypeGetExp                 =  23,
+    FieldTypeFileName               =  24,
+    FieldTypePageNum                =  25,
+    FieldTypeAuthor                 =  26,
+    FieldTypeChapter                =  27,
+    FieldTypeDummy0                 =  28,
+    FieldTypeGetReference           =  29,
+    FieldTypeConditionedText        =  30,
+    FieldTypeAnnotation             =  31,
+    FieldTypeInput                  =  32,
+    FieldTypeMacro                  =  33,
+    FieldTypeDDE                    =  34,
+    FieldTypeHiddenPara             =  35,
+    FieldTypeDocInfo                =  36,
+    FieldTypeTemplateName           =  37,
+    FieldTypeUserExt                =  38,
+    FieldTypeRefPageSet             =  39,
+    FieldTypeRefPageGet             =  40,
+    FieldTypeJumpEdit               =  41,
+    FieldTypeScript                 =  42,
+    FieldTypeDatabaseNextSet        =  43,
+    FieldTypeDatabaseNumSet         =  44,
+    FieldTypeDatabaseSetNum         =  45,
+    FieldTypeDatabase               =  46,
+    FieldTypeDatabaseName           =  47,
+    FieldTypeTableFormula           =  48,
+    FieldTypePageCount              =  49,
+    FieldTypeParagraphCount         =  50,
+    FieldTypeWordCount              =  51,
+    FieldTypeCharacterCount         =  52,
+    FieldTypeTableCount             =  53,
+    FieldTypeGraphicObjectCount     =  54,
+    FieldTypeEmbeddedObjectCount    =  55,
+    FieldTypeDocInfoChangeAuthor    =  56,
+    FieldTypeDocInfoChangeDateTime  =  57,
+    FieldTypeDocInfoEditTime        =  58,
+    FieldTypeDocInfoDescription     =  59,
+    FieldTypeDocInfoCreateAuthor    =  60,
+    FieldTypeDocInfoCreateDateTime  =  61,
+    FieldTypeDummy1                 =  63,
+    FieldTypeDummy2                 =  64,
+    FieldTypeDummy3                 =  65,
+    FieldTypeDocInfoCustom          =  66,
+    FieldTypeDocInfoPrintAuthor     =  67,
+    FieldTypeDocInfoPrintDateTime   =  68,
+    FieldTypeDocInfoKeywords        =  69,
+    FieldTypeDocInfoSubject         =  70,
+    FieldTypeDocInfoTitle           =  71,
+    FieldTypeDocInfoRevision        =  72,
+    FieldTypeBibliography           =  73,
+    FieldTypeCombinedCharacters     =  74,
+    FieldTypeDropdown               =  75,
+    FieldTypeMetafield              =  76,
+    FieldTypeDummy4                 =  77,
+    FieldTypeDummy5                 =  78,
+    FieldTypeDummy6                 =  79,
+    FieldTypeDummy7                 =  80,
+    FieldMasterUser                 =  81,
+    FieldMasterDDE                  =  82,
+    FieldMasterSetExp               =  83,
+    FieldMasterDatabase             =  84,
+    FieldMasterBibliography         =  85,
+    FieldMasterDummy2               =  86,
+    FieldMasterDummy3               =  87,
+    FieldMasterDummy4               =  88,
+    FieldMasterDummy5               =  89,
+    IndexIllustrations              =  90,
+    IndexObjects                    =  91,
+    IndexTables                     =  92,
+    IndexBibliography               =  93,
+    Paragraph                       =  94,
+    FieldTypeInputUser              =  95,
+    FieldTypeHiddenText             =  96,
+    StyleConditionalParagraph       =  97,
+    NumberingRules                  =  98,
+    TextColumns                     =  99,
+    IndexHeaderSection              = 100,
+    Defaults                        = 101,
+    IMapRectangle                   = 102,
+    IMapCircle                      = 103,
+    IMapPolygon                     = 104,
+    TypeTextGraphic                 = 105,
+    Chart2DataProvider              = 106,
+    TypeFieldMark                   = 107,
+    TypeFormFieldMark               = 108,
+    TypeMeta                        = 109,
+    VbaObjectProvider               = 110,
+    VbaCodeNameProvider             = 111,
+    VbaProjectNameProvider          = 112,
+    VbaGlobals                      = 113,
+    StyleTable                      = 114,
+    StyleCell                       = 115,
 
-#define SW_SERVICE_INVALID          USHRT_MAX
+    LAST = StyleCell,
+
+    Invalid                         = USHRT_MAX
+};
 
 // case-corrected versions of service-names (see #i67811)
 
@@ -250,9 +255,9 @@ class SwUnoCollection
 class SwXServiceProvider
 {
 public:
-    static OUString             GetProviderName(sal_uInt16 nObjectType);
-    static sal_uInt16           GetProviderType(const OUString& rServiceName);
-    static css::uno::Reference< css::uno::XInterface >        MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc);
+    static OUString             GetProviderName(SwServiceType nObjectType);
+    static SwServiceType        GetProviderType(const OUString& rServiceName);
+    static css::uno::Reference< css::uno::XInterface >  MakeInstance(SwServiceType nObjectType, SwDoc & rDoc);
     static css::uno::Sequence<OUString>   GetAllServiceNames();
 
 };

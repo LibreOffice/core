@@ -1622,8 +1622,8 @@ css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
     {
         throw RuntimeException();
     }
-    const sal_uInt16 nType = SwXServiceProvider::GetProviderType(rServiceName);
-    if (nType != SW_SERVICE_INVALID)
+    const SwServiceType nType = SwXServiceProvider::GetProviderType(rServiceName);
+    if (nType != SwServiceType::Invalid)
     {
         return SwXServiceProvider::MakeInstance(nType, *pDocShell->GetDoc());
     }
