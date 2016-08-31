@@ -73,7 +73,7 @@ public:
 
     // internal
     css::uno::Sequence<css::beans::PropertyValue> getNumberingRuleByIndex( sal_Int32 nIndex) const
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
     void setNumberingRuleByIndex(const css::uno::Sequence<css::beans::PropertyValue>& rProperties, sal_Int32 nIndex)
         throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception);
 

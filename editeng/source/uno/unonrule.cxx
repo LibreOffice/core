@@ -171,7 +171,7 @@ Sequence< OUString > SAL_CALL SvxUnoNumberingRules::getSupportedServiceNames(  )
 }
 
 Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal_Int32 nIndex) const
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     //  NumberingRule aRule;
     const SvxNumberFormat& rFmt = maRule.GetLevel((sal_uInt16) nIndex);
