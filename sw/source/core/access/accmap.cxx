@@ -3159,7 +3159,7 @@ bool SwAccessibleMap::ReplaceChild (
         const uno::Reference< drawing::XShape >& _rxShape,
         const long /*_nIndex*/,
         const ::accessibility::AccessibleShapeTreeInfo& /*_rShapeTreeInfo*/
-    )   throw (uno::RuntimeException)
+    )   throw (uno::RuntimeException, std::exception)
 {
     const SdrObject *pObj = nullptr;
     {
