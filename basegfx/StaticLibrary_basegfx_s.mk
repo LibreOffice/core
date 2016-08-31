@@ -62,6 +62,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,basegfx_s,\
 	CustomTarget/basegfx/source/tools/unopolypolygon \
 	CustomTarget/basegfx/source/tools/tools \
 	CustomTarget/basegfx/source/tools/b2dclipstate \
+	CustomTarget/basegfx/source/tools/stringconversiontools \
 	CustomTarget/basegfx/source/numeric/ftools \
 	CustomTarget/basegfx/source/tuple/b3ituple \
 	CustomTarget/basegfx/source/tuple/b3dtuple \
