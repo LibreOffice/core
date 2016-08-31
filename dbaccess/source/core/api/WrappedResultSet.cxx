@@ -78,7 +78,7 @@ sal_Int32 SAL_CALL WrappedResultSet::hashBookmark( const Any& bookmark ) throw(S
     return m_xRowLocate->hashBookmark(bookmark);
 }
 
-void SAL_CALL WrappedResultSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& /*_xTable*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL WrappedResultSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& /*_xTable*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     m_xUpd->moveToInsertRow();
     sal_Int32 i = 1;
