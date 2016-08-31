@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_INC_AREALINK_HXX
 #define INCLUDED_SC_INC_AREALINK_HXX
 
-#include "global.hxx"
 #include "refreshtimer.hxx"
 #include "address.hxx"
 #include <sfx2/lnkbase.hxx>
