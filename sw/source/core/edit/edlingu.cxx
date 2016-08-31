@@ -43,6 +43,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <rootfrm.hxx>
 #include <pam.hxx>
+#include <pamtyp.hxx>
 #include <swundo.hxx>
 #include <ndtxt.hxx>
 #include <viewopt.hxx>
