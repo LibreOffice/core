@@ -59,8 +59,8 @@ RTFError RTFTokenizer::resolveParse()
     RTFError ret;
     // for hex chars
     int b = 0, count = 2;
-    sal_uInt32 nPercentSize = 0;
-    sal_uInt32 nLastPos = 0;
+    sal_Size nPercentSize = 0;
+    sal_Size nLastPos = 0;
 
     if (m_xStatusIndicator.is())
     {
