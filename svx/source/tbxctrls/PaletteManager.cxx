@@ -159,7 +159,7 @@ void PaletteManager::ReloadRecentColorSet(SvxColorValueSet& rColorSet)
     for (int i = 0; i < Colorlist.getLength(); ++i)
     {
         Color aColor(Colorlist[i]);
-        OUString sColorName = bHasColorNames ? ColorNamelist[i] : (OUString("#") + aColor.AsRGBHexString().toAsciiUpperCase());
+        OUString sColorName = bHasColorNames ? ColorNamelist[i] : ("#" + aColor.AsRGBHexString().toAsciiUpperCase());
         maRecentColors.push_back(std::make_pair(aColor, sColorName));
         rColorSet.InsertItem(nIx, aColor, sColorName);
         ++nIx;
@@ -300,7 +300,7 @@ void PaletteManager::PopupColorPicker(const OUString& aCommand)
         if (mpBtnUpdater)
             mpBtnUpdater->Update( aColorDlg.GetColor() );
         mLastColor = aColorDlg.GetColor();
-        AddRecentColor(mLastColor, (OUString("#") + mLastColor.AsRGBHexString().toAsciiUpperCase()));
+        AddRecentColor(mLastColor, ("#" + mLastColor.AsRGBHexString().toAsciiUpperCase()));
         maColorSelectFunction(aCommandCopy, mLastColor);
     }
 }
