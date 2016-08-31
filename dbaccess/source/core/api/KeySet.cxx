@@ -1059,7 +1059,7 @@ void SAL_CALL OKeySet::afterLast(  ) throw(SQLException, RuntimeException)
     invalidateRow();
 }
 
-bool SAL_CALL OKeySet::first(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::first() throw(SQLException, RuntimeException, std::exception)
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     m_aKeyIter = m_aKeyMap.begin();
