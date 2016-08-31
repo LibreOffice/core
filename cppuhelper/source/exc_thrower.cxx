@@ -166,7 +166,7 @@ void ExceptionThrower::release() throw ()
 void ExceptionThrower::throwException( Any const & exc ) throw (Exception)
 {
     OSL_ENSURE( 0, "unexpected!" );
-    throwException( exc );
+    ::cppu::throwException( exc );
 }
 
 //______________________________________________________________________________
