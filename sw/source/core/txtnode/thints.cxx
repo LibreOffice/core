@@ -3296,7 +3296,7 @@ void SwpHints::DeleteAtPos( const size_t nPos )
 
     bool const done = m_HintsByEnd.erase(pHt);
     assert(done);
-    (void) done; // unused in NDEBUG
+    (void)done; // unused in NDEBUG
 
     if( pHint->Which() == RES_TXTATR_FIELD )
     {

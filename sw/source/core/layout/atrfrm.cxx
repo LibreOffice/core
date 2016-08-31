@@ -2546,12 +2546,11 @@ void SwFrameFormat::SetName( const OUString& rNewName, bool bBroadcast )
 
         SwStringMsgPoolItem aOld( RES_NAME_CHANGED, m_aFormatName );
         // As it's a non-unique list, rename should never fail!
-#if OSL_DEBUG_LEVEL > 0
-        bool renamed =
-#endif
+        bool const renamed =
             m_ffList->m_PosIndex.modify( it,
                 change_name( rNewName ), change_name( m_aFormatName ) );
         assert(renamed);
+        (void)renamed; // unused in NDEBUG
         if (bBroadcast) {
             SwStringMsgPoolItem aNew( RES_NAME_CHANGED, rNewName );
             ModifyNotification( &aOld, &aNew );
