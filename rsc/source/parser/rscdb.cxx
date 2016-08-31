@@ -42,6 +42,8 @@ RscTypCont::RscTypCont( RscError * pErrHdl,
     : nSourceCharSet( RTL_TEXTENCODING_UTF8 )
     , nByteOrder( nOrder )
     , aSearchPath( rSearchPath )
+    , nUniqueId(256)
+    , nPMId(RSC_VERSIONCONTROL +1) // at least one more
     , aBool( pHS->getID( "sal_Bool" ), RSC_NOTYPE )
     , aShort( pHS->getID( "short" ), RSC_NOTYPE )
     , aUShort( pHS->getID( "sal_uInt16" ), RSC_NOTYPE )
@@ -57,11 +59,9 @@ RscTypCont::RscTypCont( RscError * pErrHdl,
     , aLangType()
     , aLangString( pHS->getID( "Lang_Chars" ), RSC_NOTYPE, &aString, &aLangType )
     , aLangShort( pHS->getID( "Lang_short" ), RSC_NOTYPE, &aShort, &aLangType )
+    , pEH(pErrHdl)
     , nFlags( nFlagsP )
 {
-    nUniqueId = 256;
-    nPMId = RSC_VERSIONCONTROL +1; // at least one more
-    pEH = pErrHdl;
     Init();
 }
 
@@ -290,6 +290,14 @@ private:
     sal_uLong   lFileKey;   // what source file
     RscTop *    pClass;
 
+    RscEnumerateObj(RscTypCont* pTC, FILE* pOutputFile)
+        :pTypCont(pTC)
+        ,fOutput(pOutputFile)
+        ,lFileKey(0)
+        ,pClass(nullptr)
+    {
+    }
+
     DECL_LINK_TYPED( CallBackWriteRc, const NameNode&, void );
     DECL_LINK_TYPED( CallBackWriteSrc, const NameNode&, void );
 
@@ -388,12 +396,9 @@ private:
 public:
     RscEnumerateObj aEnumObj;
 
-    RscEnumerateRef( RscTypCont * pTC, RscTop * pR,
-                     FILE * fOutput )
+    RscEnumerateRef(RscTypCont* pTC, RscTop* pR, FILE* fOutput)
+        : pRoot(pR), aEnumObj(pTC, fOutput)
         {
-            aEnumObj.pTypCont = pTC;
-            aEnumObj.fOutput  = fOutput;
-            pRoot             = pR;
         }
     ERRTYPE const & WriteRc()
         {
@@ -475,8 +480,8 @@ public:
 
 
 inline RscDel::RscDel( RscTop * pRoot, sal_uLong lKey )
+    : lFileKey(lKey)
 {
-    lFileKey = lKey;
     pRoot->EnumNodes( LINK( this, RscDel, Delete ) );
 }
 
