@@ -336,8 +336,8 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
                                    bool bCalledFromShell,
                                    bool bNewModel )
 {
-    OSL_ENSURE( nRows, "Table without line?" );
-    OSL_ENSURE( nCols, "Table without rows?" );
+    assert(nRows && "Table without line?");
+    assert(nCols && "Table without rows?");
 
     {
         // Do not copy into Footnotes!
@@ -428,7 +428,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
         }
         nWidth = nLastPos - nSttPos;
     }
-    else if( nCols )
+    else
     {
         nWidth /= nCols;
         nWidth *= nCols; // to avoid rounding problems
