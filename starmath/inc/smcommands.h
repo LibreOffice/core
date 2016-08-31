@@ -20,7 +20,7 @@
  *************************************************************/
 
 
-#ifndef SM_SNCOMMANDS_HRC
+#ifndef SM_SMCOMMANDS_HRC
 #define SM_SMCOMMANDS_HRC
 
 #define CMD_SID_ADJUST                              ".uno:Adjust"
