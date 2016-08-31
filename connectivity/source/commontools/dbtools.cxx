@@ -1790,7 +1790,7 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
                        sal_Int32 parameterIndex,
                        const ::connectivity::ORowSetValue& _rValue,
                        sal_Int32 sqlType,
-                       sal_Int32 scale)  throw(SQLException, RuntimeException)
+                       sal_Int32 scale)  throw(SQLException, RuntimeException, std::exception)
 {
     if ( _rValue.isNull() )
         _xParams->setNull(parameterIndex,sqlType);

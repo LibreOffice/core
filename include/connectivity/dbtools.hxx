@@ -590,7 +590,7 @@ namespace dbtools
                             sal_Int32 parameterIndex,
                             const ::connectivity::ORowSetValue& x,
                             sal_Int32 sqlType,
-                            sal_Int32 scale) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+                            sal_Int32 scale) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
 
 
     /** implements <method scope="com.sun.star.sdb">XParameters::setObject</method>
