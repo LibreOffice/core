@@ -651,8 +651,7 @@ public:
 
     void*           SwitchBuffer();
     // the buffer is not owned by this class
-    void            SetBuffer( void* pBuf, sal_Size nSize,
-                               sal_Size nEOF=0 );
+    void            SetBuffer( void* pBuf, sal_Size nSize, sal_Size nEOF );
 
     void            ObjectOwnsMemory( bool bOwn ) { bOwnsData = bOwn; }
     void            SetResizeOffset( sal_Size nNewResize ) { nResize = nNewResize; }

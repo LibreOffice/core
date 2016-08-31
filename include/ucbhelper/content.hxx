@@ -431,7 +431,7 @@ public:
       */
     css::uno::Reference< css::ucb::XDynamicResultSet >
     createDynamicCursor( const css::uno::Sequence< OUString >& rPropertyNames,
-                         ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS )
+                         ResultSetInclude eMode )
         throw( css::ucb::CommandAbortedException,
                css::uno::RuntimeException,
                css::uno::Exception );
