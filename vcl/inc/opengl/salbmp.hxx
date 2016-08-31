@@ -23,7 +23,6 @@
 #include <vcl/opengl/OpenGLContext.hxx>
 
 #include <vcl/salbtype.hxx>
-#include "opengl/bmpop.hxx"
 #include "opengl/texture.hxx"
 
 #include <salbmp.hxx>
@@ -45,7 +44,6 @@ private:
     sal_uInt16                          mnBytesPerRow;
     int                                 mnWidth;
     int                                 mnHeight;
-    std::deque< OpenGLSalBitmapOp* >    maPendingOps;
 
     virtual void updateChecksum() const override;
 
@@ -71,7 +69,7 @@ public:
     Size            GetSize() const override;
     sal_uInt16      GetBitCount() const override;
 
-    BitmapBuffer   *AcquireBuffer( BitmapAccessMode nMode ) override;
+    BitmapBuffer*   AcquireBuffer( BitmapAccessMode nMode ) override;
     void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) override;
 
     bool            GetSystemData( BitmapSystemData& rData ) override;
@@ -89,7 +87,6 @@ public:
 
 private:
 
-    void            ExecuteOperations();
     GLuint          CreateTexture();
     bool            AllocateUserData();
     bool            ReadTexture();

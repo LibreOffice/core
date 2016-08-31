@@ -230,8 +230,6 @@ OpenGLTexture& OpenGLSalBitmap::GetTexture() const
     OpenGLSalBitmap* pThis = const_cast<OpenGLSalBitmap*>(this);
     if( !maTexture || mbDirtyTexture )
         pThis->CreateTexture();
-    else if( !maPendingOps.empty() )
-        pThis->ExecuteOperations();
     VCL_GL_INFO( "Got texture " << maTexture.Id() );
     return pThis->maTexture;
 }
@@ -241,7 +239,6 @@ void OpenGLSalBitmap::Destroy()
     OpenGLZone aZone;
 
     VCL_GL_INFO("Destroy OpenGLSalBitmap texture:" << maTexture.Id());
-    maPendingOps.clear();
     maTexture = OpenGLTexture();
     mpUserBuffer.reset();
 }
@@ -461,25 +458,7 @@ public:
 
 Size OpenGLSalBitmap::GetSize() const
 {
-    OpenGLZone aZone;
-
-    std::deque< OpenGLSalBitmapOp* >::const_iterator it = maPendingOps.begin();
-    Size aSize( mnWidth, mnHeight );
-
-    while( it != maPendingOps.end() )
-        (*it++)->GetSize( aSize );
-
-    return aSize;
-}
-
-void OpenGLSalBitmap::ExecuteOperations()
-{
-    while( !maPendingOps.empty() )
-    {
-        OpenGLSalBitmapOp* pOp = maPendingOps.front();
-        pOp->Execute();
-        maPendingOps.pop_front();
-    }
+    return Size(mnWidth, mnHeight);
 }
 
 GLuint OpenGLSalBitmap::CreateTexture()
@@ -561,7 +540,6 @@ GLuint OpenGLSalBitmap::CreateTexture()
     if( bAllocated )
         delete[] pData;
 
-    ExecuteOperations();
     mbDirtyTexture = false;
 
     CHECK_GL_ERROR();
@@ -775,13 +753,6 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
             if( !AllocateUserData() )
                 return nullptr;
             if( maTexture && !ReadTexture() )
-                return nullptr;
-        }
-
-        if( !maPendingOps.empty() )
-        {
-            VCL_GL_INFO( "** Creating texture and reading it back immediately" );
-            if( !CreateTexture() || !AllocateUserData() || !ReadTexture() )
                 return nullptr;
         }
     }
