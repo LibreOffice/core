@@ -99,6 +99,19 @@ using namespace vcl;
 using namespace desktop;
 using namespace utl;
 
+#if defined(ANDROID)
+namespace std
+{
+template<typename T>
+std::string to_string(T x)
+{
+    std::ostringstream stream;
+    stream << x;
+    return stream.str();
+}
+}
+#endif
+
 static LibLibreOffice_Impl *gImpl = nullptr;
 static std::weak_ptr< LibreOfficeKitClass > gOfficeClass;
 static std::weak_ptr< LibreOfficeKitDocumentClass > gDocumentClass;
