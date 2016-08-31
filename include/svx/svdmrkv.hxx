@@ -206,11 +206,11 @@ public:
     void SetEditMode(SdrViewEditMode eMode);
     SdrViewEditMode GetEditMode() const { return meEditMode; }
 
-    void SetEditMode(bool bOn=true) { SetEditMode(bOn?SdrViewEditMode::Edit:SdrViewEditMode::Create); }
+    void SetEditMode(bool bOn) { SetEditMode(bOn?SdrViewEditMode::Edit:SdrViewEditMode::Create); }
     bool IsEditMode() const { return meEditMode==SdrViewEditMode::Edit; }
-    void SetCreateMode(bool bOn=true) { SetEditMode(bOn?SdrViewEditMode::Create:SdrViewEditMode::Edit); }
+    void SetCreateMode(bool bOn) { SetEditMode(bOn?SdrViewEditMode::Create:SdrViewEditMode::Edit); }
     bool IsCreateMode() const { return meEditMode==SdrViewEditMode::Create; }
-    void SetGluePointEditMode(bool bOn=true) { SetEditMode(bOn?SdrViewEditMode::GluePointEdit:meEditMode0); }
+    void SetGluePointEditMode(bool bOn) { SetEditMode(bOn?SdrViewEditMode::GluePointEdit:meEditMode0); }
     bool IsGluePointEditMode() const { return meEditMode==SdrViewEditMode::GluePointEdit; }
 
     void SetDesignMode(bool bOn = true);
@@ -274,7 +274,7 @@ public:
     bool MarkObj(const Point& rPnt, short nTol=-2, bool bToggle=false, bool bDeep=false);
 
     // Pick: Supported options for nOptions are SdrSearchOptions::PASS2BOUND und SdrSearchOptions::PASS3NEAREST
-    bool PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageView*& rpPV, SdrSearchOptions nOptions=SdrSearchOptions::NONE) const;
+    bool PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageView*& rpPV, SdrSearchOptions nOptions) const;
 
     // Selects the most upper of the marked objects (O1) and scans from there
     // towards bottom direction, selecting the first non-marked object (O2).
@@ -288,11 +288,11 @@ public:
     // object (O2). In case of success the marking of O1 is deleted, a marking
     // is created at O2 and sal_True is returned. With the parameter
     // bPrev=sal_True the scan direction is turned to the other direction.
-    bool MarkNextObj(const Point& rPnt, short nTol=-2, bool bPrev=false);
+    bool MarkNextObj(const Point& rPnt, short nTol, bool bPrev=false);
 
     // Mark all objects within a rectangular area
     // Just objects are marked which are inclosed completely
-    void MarkObj(const Rectangle& rRect, bool bUnmark=false);
+    void MarkObj(const Rectangle& rRect, bool bUnmark);
     void MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark=false, bool bImpNoSetMarkHdl=false);
     void MarkAllObj(SdrPageView* pPV=nullptr); // pPage=NULL => all displayed pages
     void UnmarkAllObj(SdrPageView* pPV=nullptr); // pPage=NULL => all displayed pages
@@ -322,7 +322,7 @@ public:
     bool MarkPointHelper(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark);
 
     // Mark all points within this rectangular alle Punkte (View coordinates)
-    void MarkPoints(const Rectangle& rRect, bool bUnmark=false) { MarkPoints(&rRect,bUnmark); }
+    void MarkPoints(const Rectangle& rRect, bool bUnmark) { MarkPoints(&rRect,bUnmark); }
     bool UnmarkPoint(SdrHdl& rHdl) { return MarkPoint(rHdl,true); }
     bool IsPointMarked(const SdrHdl& rHdl) const { ForceUndirtyMrkPnt(); return rHdl.IsSelected(); }
     bool MarkAllPoints() { return MarkPoints(nullptr,false); }
@@ -333,7 +333,7 @@ public:
     // In case of success the marking of
     // P1 is deleted, a mark is set at P2 and sal_True is returned.
     // With the parameter bPrev=sal_True the scan direction is turned to the other direction.
-    bool MarkNextPoint(const Point& rPnt, bool bPrev=false);
+    bool MarkNextPoint(const Point& rPnt, bool bPrev);
 
     // Search for the number of the suitable handle. In case of empty search result,
     // SAL_MAX_SIZE is returned.
@@ -388,7 +388,7 @@ public:
     // In case of success the marking of
     // P1 is deleted, a mark is set at P2 and sal_True is returned.
     // With the parameter bPrev=sal_True the scan direction is turned to the other direction.
-    bool MarkNextGluePoint(const Point& rPnt, bool bPrev=false);
+    bool MarkNextGluePoint(const Point& rPnt, bool bPrev);
 
     // Draw a selection frame for glue point marking.
     // This routine will just be started in case that HasMarkablePoints() returns sal_True.

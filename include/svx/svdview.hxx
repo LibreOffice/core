@@ -203,7 +203,7 @@ public:
     virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) override;
 
     bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll=false) { return SdrCreateView::SetAttributes(rSet,bReplaceAll); }
-    bool SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr=false) { return SdrCreateView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr); }
+    bool SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr) { return SdrCreateView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr); }
 
     /* new interface src537 */
     bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr=false) const;
@@ -237,7 +237,7 @@ public:
     //   bAddMark=TRUE: add to existing selection (->Shift)
     //   bUnmark=TRUE: remove objects from selection which are inside of
     //                 the enveloped frame.
-    bool BegMark(const Point& rPnt, bool bAddMark=false, bool bUnmark=false);
+    bool BegMark(const Point& rPnt, bool bAddMark, bool bUnmark=false);
 
     // The following actions are possible:
     //   - ObjectCreating

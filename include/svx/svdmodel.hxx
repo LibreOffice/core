@@ -299,7 +299,7 @@ public:
     void                 SetTextDefaults() const;
     static void          SetTextDefaults( SfxItemPool* pItemPool, sal_uIntPtr nDefTextHgt );
 
-    SdrOutliner&         GetChainingOutliner(const SdrTextObj* pObj=nullptr) const;
+    SdrOutliner&         GetChainingOutliner(const SdrTextObj* pObj) const;
     TextChain *          GetTextChain() const;
 
     // ReferenceDevice for the EditEngine
@@ -440,7 +440,7 @@ public:
     // bTreadSourceAsConst.......: sal_True=the SourceModel will not be changed,
     //                             so pages will be copied.
     virtual void Merge(SdrModel& rSourceModel,
-               sal_uInt16 nFirstPageNum=0, sal_uInt16 nLastPageNum=0xFFFF,
+               sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum=0xFFFF,
                sal_uInt16 nDestPos=0xFFFF,
                bool bMergeMasterPages = false, bool bAllMasterPages = false,
                bool bUndo = true, bool bTreadSourceAsConst = false);
@@ -448,7 +448,7 @@ public:
     // Behaves like Merge(SourceModel=DestModel,nFirst,nLast,nDest,sal_False,sal_False,bUndo,!bMoveNoCopy);
     void CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
                    sal_uInt16 nDestPos,
-                   bool bUndo = true, bool bMoveNoCopy = false);
+                   bool bUndo, bool bMoveNoCopy = false);
 
     // BegUndo() / EndUndo() enables you to group arbitrarily many UndoActions
     // arbitrarily deeply. As comment for the UndoAction the first BegUndo(String) of all
@@ -459,7 +459,7 @@ public:
     // Actions on the SdrView however do generate those.
     void BegUndo();                       // open Undo group
     void BegUndo(const OUString& rComment); // open Undo group
-    void BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrRepeatFunc eFunc=SdrRepeatFunc::NONE); // open Undo group
+    void BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrRepeatFunc eFunc); // open Undo group
     void EndUndo();                       // close Undo group
     void AddUndo(SdrUndoAction* pUndo);
     sal_uInt16 GetUndoBracketLevel() const                       { return nUndoLevel; }

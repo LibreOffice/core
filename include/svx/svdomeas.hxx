@@ -135,7 +135,7 @@ public:
 
     virtual bool BegTextEdit(SdrOutliner& rOutl) override;
     virtual const Size& GetTextSize() const override;
-    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText = false,
+    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText,
         Rectangle* pAnchorRect=nullptr, bool bLineWidth = true ) const override;
     virtual void TakeTextAnchorRect(Rectangle& rAnchorRect) const override;
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const override;

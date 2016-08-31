@@ -324,7 +324,7 @@ public:
     virtual SfxAbstractTabDialog* CreateSvxBorderBackgroundDlg(
         vcl::Window* pParent,
         const SfxItemSet& rCoreSet,
-        bool bEnableSelector = false,
+        bool bEnableSelector,
         bool bEnableDrawingLayerFillStyles = false) = 0;
 
     virtual AbstractSvxTransformTabDialog* CreateSvxTransformTabDialog( vcl::Window* pParent,
@@ -335,7 +335,7 @@ public:
                                                                 const SfxItemSet* pAttr,
                                                                 const SdrView* pSdrView,
                                                                 sal_uInt32 nResId,
-                                                                bool bSizeTabPage = false
+                                                                bool bSizeTabPage
                                                                  )=0;
     virtual AbstractSvxJSearchOptionsDialog * CreateSvxJSearchOptionsDialog( vcl::Window* pParent,
                                                             const SfxItemSet& rOptionsSet,
@@ -384,7 +384,7 @@ public:
                                                             bool bShadow) = 0 ;
     virtual SfxAbstractTabDialog*           CreateSvxLineTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr, //add forSvxLineTabDialog
                                                                  SdrModel* pModel,
-                                                                 const SdrObject* pObj = nullptr,
+                                                                 const SdrObject* pObj,
                                                                  bool bHasObj = true )=0;
     virtual SfxAbstractDialog*              CreateSfxDialog( vcl::Window* pParent,
                                                                         const SfxItemSet& rAttr,
@@ -419,7 +419,7 @@ public:
                 const sal_uInt16 _nInitiallySelectedEvent
             ) = 0;
 
-    virtual SfxAbstractTabDialog* CreateSvxFormatCellsDialog( const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* pObj = nullptr )=0;
+    virtual SfxAbstractTabDialog* CreateSvxFormatCellsDialog( const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* pObj )=0;
 
     virtual SvxAbstractSplittTableDialog* CreateSvxSplittTableDialog( vcl::Window* pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal )=0;
 

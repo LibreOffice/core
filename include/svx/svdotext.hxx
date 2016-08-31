@@ -335,7 +335,7 @@ public:
     void SetTextLink(const OUString& rFileName, const OUString& rFilterName, rtl_TextEncoding eCharSet);
     void ReleaseTextLink();
     bool IsLinkedText() const { return pPlusData!=nullptr && GetLinkUserData()!=nullptr; }
-    bool ReloadLinkedText(bool bForceLoad = false);
+    bool ReloadLinkedText(bool bForceLoad);
     bool LoadText(const OUString& rFileName, const OUString& rFilterName, rtl_TextEncoding eCharSet);
 
     virtual bool AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt = true, bool bWdt = true) const;
@@ -395,7 +395,7 @@ public:
 
     // Simultaneously sets the text into the Outliner (possibly
     // the one of the EditOutliner) and sets the PaperSize.
-    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText = false,
+    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText,
         Rectangle* pAnchorRect=nullptr, bool bLineWidth = true ) const;
     virtual void TakeTextAnchorRect(::Rectangle& rAnchorRect) const;
     const GeoStat& GetGeoStat() const { return aGeo; }

@@ -173,7 +173,7 @@ public:
 
     // Internals
     void ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet);
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = nullptr );
+    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage );
     /** takes the ownership of the SdrObject.
 
         When the shape is disposed, and it has the ownership of its associated SdrObject, then
@@ -337,7 +337,7 @@ public:
     SvxShapeText( SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet ) throw ();
     virtual ~SvxShapeText() throw ();
 
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = nullptr ) override;
+    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -397,7 +397,7 @@ public:
     SvxShapeGroup( SdrObject* pObj,SvxDrawPage* pDrawPage ) throw ();
     virtual ~SvxShapeGroup() throw ();
 
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = nullptr ) override;
+    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -670,7 +670,7 @@ public:
 
     virtual ~Svx3DSceneObject() throw();
 
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = nullptr ) override;
+    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -808,7 +808,7 @@ public:
 
     virtual ~SvxCustomShape() throw ();
 
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = nullptr ) override;
+    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;

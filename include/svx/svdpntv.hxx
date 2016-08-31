@@ -107,7 +107,7 @@ typedef ::std::vector< SdrPaintWindow* > SdrPaintWindowVector;
 BitmapEx SVX_DLLPUBLIC convertMetafileToBitmapEx(
     const GDIMetaFile& rMtf,
     const basegfx::B2DRange& rTargetRange,
-    const sal_uInt32 nMaximumQuadraticPixels = 500000);
+    const sal_uInt32 nMaximumQuadraticPixels);
 
 
 class SVX_DLLPUBLIC SdrPaintView : public SfxListener, public SfxRepeatTarget, public SfxBroadcaster, public ::utl::ConfigurationListener
@@ -305,13 +305,13 @@ public:
     virtual void AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window* pWindow);
     virtual void DeleteWindowFromPaintView(OutputDevice* pOldWin);
 
-    void SetLayerVisible(const OUString& rName, bool bShow=true);
+    void SetLayerVisible(const OUString& rName, bool bShow);
     bool IsLayerVisible(const OUString& rName) const;
 
     void SetLayerLocked(const OUString& rName, bool bLock=true);
     bool IsLayerLocked(const OUString& rName) const;
 
-    void SetLayerPrintable(const OUString& rName, bool bPrn=true);
+    void SetLayerPrintable(const OUString& rName, bool bPrn);
     bool IsLayerPrintable(const OUString& rName) const;
 
     // PrePaint call forwarded from app windows
@@ -379,13 +379,13 @@ public:
 
     const Color& GetGridColor() const { return maGridColor;}
     void SetPageVisible(bool bOn = true) { mbPageVisible=bOn; InvalidateAllWin(); }
-    void SetPageShadowVisible(bool bOn = true) { mbPageShadowVisible=bOn; InvalidateAllWin(); }
+    void SetPageShadowVisible(bool bOn) { mbPageShadowVisible=bOn; InvalidateAllWin(); }
     void SetPageBorderVisible(bool bOn = true) { mbPageBorderVisible=bOn; InvalidateAllWin(); }
     void SetBordVisible(bool bOn = true) { mbBordVisible=bOn; InvalidateAllWin(); }
-    void SetGridVisible(bool bOn = true) { mbGridVisible=bOn; InvalidateAllWin(); }
-    void SetGridFront(bool bOn = true) { mbGridFront  =bOn; InvalidateAllWin(); }
+    void SetGridVisible(bool bOn) { mbGridVisible=bOn; InvalidateAllWin(); }
+    void SetGridFront(bool bOn) { mbGridFront  =bOn; InvalidateAllWin(); }
     void SetHlplVisible(bool bOn = true) { mbHlplVisible=bOn; InvalidateAllWin(); }
-    void SetHlplFront(bool bOn = true) { mbHlplFront  =bOn; InvalidateAllWin(); }
+    void SetHlplFront(bool bOn) { mbHlplFront  =bOn; InvalidateAllWin(); }
     void SetGlueVisible(bool bOn = true) { if (mbGlueVisible!=bOn) { mbGlueVisible=bOn; if (!mbGlueVisible2 && !mbGlueVisible3 && !mbGlueVisible4) GlueInvalidate(); } }
     void SetGridColor( Color aColor );
 
@@ -455,7 +455,7 @@ public:
     virtual bool MouseMove(const MouseEvent& /*rMEvt*/, vcl::Window* /*pWin*/) { return false; }
     virtual bool Command(const CommandEvent& /*rCEvt*/, vcl::Window* /*pWin*/) { return false; }
 
-    bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr=false) const;
+    bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const;
 
     bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll);
     SfxStyleSheet* GetStyleSheet() const; // SfxStyleSheet* GetStyleSheet(bool& rOk) const;
@@ -484,7 +484,7 @@ public:
 
     /// The Browser is destroyed for bShow=false
 #ifdef DBG_UTIL
-    void ShowItemBrowser(bool bShow=true);
+    void ShowItemBrowser(bool bShow);
     bool IsItemBrowserVisible() const { return mpItemBrowser!=nullptr && GetItemBrowser()->IsVisible(); }
     vcl::Window* GetItemBrowser() const;
 #endif
