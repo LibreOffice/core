@@ -241,7 +241,7 @@ protected:
             ::rtl::Reference<connectivity::OSQLColumns>  m_xParamColumns;
 
             void parseParameter( const OSQLParseNode* pNode, OUString& rMatchString );
-            void fillRowData() throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            void fillRowData() throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
             void analyseWhereClause( const OSQLParseNode*                 parseTree,
                                      MQueryExpression                    &queryExpression);
 

@@ -997,9 +997,8 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
     }
 }
 
-
 void OResultSet::fillRowData()
-    throw (css::sdbc::SQLException, css::uno::RuntimeException)
+    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     OSL_ENSURE( m_pStatement, "Require a statement" );
 
