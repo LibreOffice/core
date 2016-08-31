@@ -29,6 +29,7 @@
 class SwCursorShell;
 class SwShellCursor;
 class SwTextInputField;
+class SfxViewShell;
 
 // From here classes/methods for non-text cursor.
 
@@ -46,8 +47,6 @@ class SwVisibleCursor
     /// For LibreOfficeKit only - remember what page we were at the last time.
     sal_uInt16 m_nPageLastTime;
 
-    void SetPosAndShow();
-
 public:
     SwVisibleCursor( const SwCursorShell * pCShell );
     ~SwVisibleCursor();
@@ -57,6 +56,7 @@ public:
 
     bool IsVisible() const { return m_bIsVisible; }
     void SetDragCursor( bool bFlag = true ) { m_bIsDragCursor = bFlag; }
+    void SetPosAndShow(SfxViewShell* pViewShell);
 };
 
 // From here classes/methods for selections.

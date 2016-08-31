@@ -92,6 +92,19 @@ std::size_t SfxLokHelper::getViews()
     return rViewArr.size();
 }
 
+void SfxLokHelper::notifyOtherView(SfxViewShell* pThisView, SfxViewShell* pOtherView, int nType, const OString& rKey, const OString& rPayload)
+{
+    boost::property_tree::ptree aTree;
+    aTree.put("viewId", SfxLokHelper::getView(pThisView));
+    aTree.put(rKey.getStr(), rPayload.getStr());
+    aTree.put("part", pThisView->getPart());
+    aTree.put(rKey.getStr(), rPayload.getStr());
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    OString aPayload = aStream.str().c_str();
+    pOtherView->libreOfficeKitViewCallback(nType, aPayload.getStr());
+}
+
 void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OString& rKey, const OString& rPayload)
 {
     if (SfxLokHelper::getViews() <= 1)
@@ -101,17 +114,8 @@ void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OS
     while (pViewShell)
     {
         if (pViewShell != pThisView)
-        {
-            boost::property_tree::ptree aTree;
-            aTree.put("viewId", SfxLokHelper::getView(pThisView));
-            aTree.put(rKey.getStr(), rPayload.getStr());
-            aTree.put("part", pThisView->getPart());
-            aTree.put(rKey.getStr(), rPayload.getStr());
-            std::stringstream aStream;
-            boost::property_tree::write_json(aStream, aTree);
-            OString aPayload = aStream.str().c_str();
-            pViewShell->libreOfficeKitViewCallback(nType, aPayload.getStr());
-        }
+            notifyOtherView(pThisView, pViewShell, nType, rKey, rPayload);
+
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }

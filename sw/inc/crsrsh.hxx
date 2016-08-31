@@ -842,6 +842,9 @@ public:
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
     /// Implementation of lok::Document::getPartPageRectangles() for Writer.
     OUString getPageRectangles();
+
+    /// See SwView::NotifyCursor().
+    void NotifyCursor(SfxViewShell* pViewShell) const;
 };
 
 // Cursor Inlines:
