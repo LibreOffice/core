@@ -315,7 +315,7 @@ bool SvxColorTabPage::FillItemSet( SfxItemSet* rSet )
     if( ( nDlgType != 0 ) ||
         ( *pPageType == PageType::Color && !*pbAreaTP ) )
     {
-        maPaletteManager.AddRecentColor(aCurrentColor, OUString("#") + aCurrentColor.AsRGBHexString().toAsciiUpperCase());
+        maPaletteManager.AddRecentColor(aCurrentColor, "#" + aCurrentColor.AsRGBHexString().toAsciiUpperCase());
         rSet->Put( XFillColorItem( OUString(), aCurrentColor ) );
         rSet->Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
     }
