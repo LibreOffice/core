@@ -45,7 +45,7 @@ public:
 
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnClass = false ) override;
     void            Destroy( const RSCINST & rInst ) override;
-    sal_uInt32      Size() override;
+    sal_uInt32      Size() const override;
     void            WriteSrcHeader( const RSCINST & aInst, FILE * fOutput,
                                     RscTypCont * pTC, sal_uInt32 nTab,
                                     const RscId & rId, const char * ) override;

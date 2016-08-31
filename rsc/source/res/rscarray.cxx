@@ -26,9 +26,8 @@
 #include <rscarray.hxx>
 #include <rscdb.hxx>
 
-RscInstNode::RscInstNode( sal_uInt32 nId )
+RscInstNode::RscInstNode(sal_uInt32 nId) : nTypeId(nId)
 {
-    nTypeId = nId;
 }
 
 RscInstNode::~RscInstNode()
@@ -47,10 +46,10 @@ sal_uInt32 RscInstNode::GetId() const
 
 RscArray::RscArray( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper, RscEnum * pTypeCl )
     : RscTop( nId, nTypeId, pSuper )
+    , pTypeClass(pTypeCl)
+    , nOffInstData(RscTop::Size())
+    , nSize(nOffInstData + ALIGNED_SIZE(sizeof(RscArrayInst)))
 {
-    pTypeClass = pTypeCl;
-    nOffInstData = RscTop::Size();
-    nSize = nOffInstData + ALIGNED_SIZE( sizeof( RscArrayInst ) );
 }
 
 RscArray::~RscArray()

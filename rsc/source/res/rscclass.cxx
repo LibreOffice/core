@@ -30,11 +30,10 @@
 
 RscClass::RscClass( Atom nId, sal_uInt32 nTypeId, RscTop * pSuperCl )
     : RscTop( nId, nTypeId, pSuperCl )
+    , nSuperSize(RscTop::Size())
+    , nSize(nSuperSize + ALIGNED_SIZE(sizeof(RscClassInst )))
+    , nEntries(0), pVarTypeList(nullptr)
 {
-    nEntries = 0;
-    pVarTypeList = nullptr;
-    nSuperSize = RscTop::Size();
-    nSize = nSuperSize + ALIGNED_SIZE( sizeof( RscClassInst ) );
 }
 
 void RscClass::Pre_dtor()
