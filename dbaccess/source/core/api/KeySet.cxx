@@ -1006,7 +1006,7 @@ Reference<XNameAccess> OKeySet::getKeyColumns() const
     return xKeyColumns;
 }
 
-bool SAL_CALL OKeySet::next(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::next() throw(SQLException, RuntimeException, std::exception)
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
 
