@@ -209,7 +209,8 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
 
 VirtualDevice::VirtualDevice(DeviceFormat eFormat)
 :   mpVirDev( nullptr ),
-    meRefDevMode( REFDEV_NONE )
+    meRefDevMode( RefDevMode::NONE ),
+    mbForceZeroExtleadBug( false )
 {
     SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
 
@@ -218,7 +219,8 @@ VirtualDevice::VirtualDevice(DeviceFormat eFormat)
 
 VirtualDevice::VirtualDevice(const OutputDevice& rCompDev, DeviceFormat eFormat)
     : mpVirDev( nullptr ),
-    meRefDevMode( REFDEV_NONE )
+    meRefDevMode( RefDevMode::NONE ),
+    mbForceZeroExtleadBug( false )
 {
     SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
 
@@ -227,7 +229,8 @@ VirtualDevice::VirtualDevice(const OutputDevice& rCompDev, DeviceFormat eFormat)
 
 VirtualDevice::VirtualDevice(const OutputDevice& rCompDev, DeviceFormat eFormat, DeviceFormat eAlphaFormat)
     : mpVirDev( nullptr )
-    , meRefDevMode( REFDEV_NONE )
+    , meRefDevMode( RefDevMode::NONE )
+    , mbForceZeroExtleadBug( false )
 {
     SAL_INFO( "vcl.gdi",
             "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << ", " << static_cast<int>(eAlphaFormat) << " )" );
@@ -241,7 +244,8 @@ VirtualDevice::VirtualDevice(const OutputDevice& rCompDev, DeviceFormat eFormat,
 VirtualDevice::VirtualDevice(const SystemGraphicsData *pData, const Size &rSize,
                              DeviceFormat eFormat)
 :   mpVirDev( nullptr ),
-    meRefDevMode( REFDEV_NONE )
+    meRefDevMode( RefDevMode::NONE ),
+    mbForceZeroExtleadBug( false )
 {
     SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
 
@@ -456,17 +460,17 @@ void VirtualDevice::SetReferenceDevice( RefDevMode i_eRefDevMode )
     sal_Int32 nDPIX = 600, nDPIY = 600;
     switch( i_eRefDevMode )
     {
-    case REFDEV_NONE:
+    case RefDevMode::NONE:
     default:
         SAL_WARN( "vcl", "VDev::SetRefDev illegal argument!" );
         break;
-    case REFDEV_MODE06:
+    case RefDevMode::Dpi600:
         nDPIX = nDPIY = 600;
         break;
-    case REFDEV_MODE_MSO1:
+    case RefDevMode::MSO1:
         nDPIX = nDPIY = 6*1440;
         break;
-    case REFDEV_MODE_PDF1:
+    case RefDevMode::PDF1:
         nDPIX = nDPIY = 720;
         break;
     }
@@ -475,7 +479,7 @@ void VirtualDevice::SetReferenceDevice( RefDevMode i_eRefDevMode )
 
 void VirtualDevice::SetReferenceDevice( sal_Int32 i_nDPIX, sal_Int32 i_nDPIY )
 {
-    ImplSetReferenceDevice( REFDEV_CUSTOM, i_nDPIX, i_nDPIY );
+    ImplSetReferenceDevice( RefDevMode::Custom, i_nDPIX, i_nDPIY );
 }
 
 void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 i_nDPIX, sal_Int32 i_nDPIY )
@@ -492,10 +496,9 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
     mbNewFont = true;
 
     // avoid adjusting font lists when already in refdev mode
-    sal_uInt8 nOldRefDevMode = meRefDevMode;
-    sal_uInt8 nOldCompatFlag = (sal_uInt8)meRefDevMode & REFDEV_FORCE_ZERO_EXTLEAD;
-    meRefDevMode = (sal_uInt8)(i_eRefDevMode | nOldCompatFlag);
-    if( (nOldRefDevMode ^ nOldCompatFlag) != REFDEV_NONE )
+    RefDevMode nOldRefDevMode = meRefDevMode;
+    meRefDevMode = i_eRefDevMode;
+    if( nOldRefDevMode != RefDevMode::NONE )
         return;
 
     // the reference device should have only scalable fonts
@@ -543,7 +546,7 @@ bool VirtualDevice::UsePolyPolygonForComplexGradient()
 
 void VirtualDevice::Compat_ZeroExtleadBug()
 {
-    meRefDevMode = (sal_uInt8)meRefDevMode | REFDEV_FORCE_ZERO_EXTLEAD;
+    mbForceZeroExtleadBug = true;
 }
 
 long VirtualDevice::GetFontExtLeading() const

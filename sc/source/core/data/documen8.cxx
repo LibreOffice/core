@@ -195,7 +195,7 @@ VirtualDevice* ScDocument::GetVirtualDevice_100th_mm()
 #else
         pVirtualDevice_100th_mm = VclPtr<VirtualDevice>::Create(DeviceFormat::BITMASK);
 #endif
-        pVirtualDevice_100th_mm->SetReferenceDevice(VirtualDevice::REFDEV_MODE_MSO1);
+        pVirtualDevice_100th_mm->SetReferenceDevice(VirtualDevice::RefDevMode::MSO1);
         MapMode aMapMode( pVirtualDevice_100th_mm->GetMapMode() );
         aMapMode.SetMapUnit( MAP_100TH_MM );
         pVirtualDevice_100th_mm->SetMapMode( aMapMode );

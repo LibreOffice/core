@@ -100,7 +100,7 @@ namespace
         if(!mpVirDev)
         {
             mpVirDev = VclPtr<VirtualDevice>::Create();
-            mpVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
+            mpVirDev->SetReferenceDevice( VirtualDevice::RefDevMode::MSO1 );
         }
 
         if(!mnUseCount)

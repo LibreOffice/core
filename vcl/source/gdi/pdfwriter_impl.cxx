@@ -2203,7 +2203,7 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
         m_pReferenceDevice = pVDev;
 
         if( m_aContext.DPIx == 0 || m_aContext.DPIy == 0 )
-            pVDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_PDF1 );
+            pVDev->SetReferenceDevice( VirtualDevice::RefDevMode::PDF1 );
         else
             pVDev->SetReferenceDevice( m_aContext.DPIx, m_aContext.DPIy );
 

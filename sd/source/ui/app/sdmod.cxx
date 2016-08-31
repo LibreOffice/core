@@ -94,7 +94,7 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     // formatting of text in small sizes (6 point and below.)
     mpVirtualRefDevice.reset(VclPtr<VirtualDevice>::Create());
     mpVirtualRefDevice->SetMapMode( MAP_100TH_MM );
-    mpVirtualRefDevice->SetReferenceDevice ( VirtualDevice::REFDEV_MODE06 );
+    mpVirtualRefDevice->SetReferenceDevice ( VirtualDevice::RefDevMode::Dpi600 );
 }
 
 // Dtor

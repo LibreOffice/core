@@ -151,9 +151,9 @@ void DocumentDeviceManager::setReferenceDeviceType(/*[in]*/ bool bNewVirtual, /*
         {
             VirtualDevice* pMyVirDev = getVirtualDevice( true );
             if ( !bNewHiRes )
-                pMyVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE06 );
+                pMyVirDev->SetReferenceDevice( VirtualDevice::RefDevMode::Dpi600 );
             else
-                pMyVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
+                pMyVirDev->SetReferenceDevice( VirtualDevice::RefDevMode::MSO1 );
 
             if( m_rDoc.getIDocumentDrawModelAccess().GetDrawModel() )
                 m_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->SetRefDevice( pMyVirDev );
@@ -265,7 +265,7 @@ VirtualDevice& DocumentDeviceManager::CreateVirtualDevice_() const
     VclPtr<VirtualDevice> pNewVir = VclPtr<VirtualDevice>::Create(DeviceFormat::BITMASK);
 #endif
 
-    pNewVir->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
+    pNewVir->SetReferenceDevice( VirtualDevice::RefDevMode::MSO1 );
 
     // #i60945# External leading compatibility for unix systems.
     if ( m_rDoc.GetDocumentSettingManager().get(DocumentSettingId::UNIX_FORCE_ZERO_EXT_LEADING ) )

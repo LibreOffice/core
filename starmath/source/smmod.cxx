@@ -230,7 +230,7 @@ VirtualDevice &SmModule::GetDefaultVirtualDev()
     if (!mpVirtualDev)
     {
         mpVirtualDev.reset( VclPtr<VirtualDevice>::Create() );
-        mpVirtualDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
+        mpVirtualDev->SetReferenceDevice( VirtualDevice::RefDevMode::MSO1 );
     }
     return *mpVirtualDev;
 }
