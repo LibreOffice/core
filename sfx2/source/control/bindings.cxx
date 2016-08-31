@@ -1361,7 +1361,7 @@ void SfxBindings::UpdateControllers_Impl
             pCache->SetState( SfxItemState::DONTCARE, reinterpret_cast<SfxPoolItem *>(-1) );
         }
         else if ( SfxItemState::DEFAULT == eState &&
-                    rFound.nWhichId > SFX_WHICH_MAX )
+                  SfxItemPool::IsSlot(rFound.nWhichId) )
         {
             // no Status or Default but without Pool
             SfxVoidItem aVoid(0);

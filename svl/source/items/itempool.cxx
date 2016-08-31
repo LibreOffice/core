@@ -621,7 +621,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
         nWhich = rItem.Which();
 
     // Find correct Secondary Pool
-    bool bSID = nWhich > SFX_WHICH_MAX;
+    bool bSID = IsSlot(nWhich);
     if ( !bSID && !IsInRange(nWhich) )
     {
         if ( pImpl->mpSecondary )
@@ -767,7 +767,7 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
 
     // Find correct Secondary Pool
     const sal_uInt16 nWhich = rItem.Which();
-    bool bSID = nWhich > SFX_WHICH_MAX;
+    bool bSID = IsSlot(nWhich);
     if ( !bSID && !IsInRange(nWhich) )
     {
         if ( pImpl->mpSecondary )
