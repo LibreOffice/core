@@ -257,7 +257,7 @@ public:
                          */
     OUString       getLongDate( const Date& rDate,
                             CalendarWrapper& rCal,
-                            bool bTwoDigitYear = false
+                            bool bTwoDigitYear
                             ) const;
 
                         /** Simple number formatting

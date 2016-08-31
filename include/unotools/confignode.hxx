@@ -148,7 +148,7 @@ namespace utl
             escaping for such names may not be supported by the underlying API objects.
             @see getEscape
         */
-        void        setEscape(bool _bEnable = true);
+        void        setEscape(bool _bEnable);
         /** get the flag specifying the current escape behaviour
             @see setEscape
         */
@@ -252,7 +252,7 @@ namespace utl
         static OConfigurationTreeRoot createWithProvider(
                 const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxConfProvider,
                 const OUString& _rPath,
-                sal_Int32 _nDepth = -1,
+                sal_Int32 _nDepth,
                 CREATION_MODE _eMode = CM_UPDATABLE,
                 bool _bLazyWrite = true
             );

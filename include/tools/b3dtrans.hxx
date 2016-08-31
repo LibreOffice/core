@@ -103,7 +103,7 @@ public:
 
     // aspect ratio accessors and the defined method of keeping defined aspect ratio
     double GetRatio() { return mfRatio; }
-    void SetRatio(double fNew=1.0);
+    void SetRatio(double fNew);
 
     // Parameters of ViewportTransformation
     void SetDeviceRectangle(double fL=-1.0, double fR=1.0,
