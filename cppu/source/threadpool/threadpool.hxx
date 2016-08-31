@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CPPU_SOURCE_THREADPOOL_THREADPOOL_HXX
 #define INCLUDED_CPPU_SOURCE_THREADPOOL_THREADPOOL_HXX
 
-#include <list>
+#include <vector>
 #include <unordered_map>
 
 #include <osl/conditn.hxx>
@@ -63,9 +63,6 @@ namespace cppu_threadpool {
         EqualThreadId
     > ThreadIdHashMap;
 
-    typedef ::std::list < sal_Int64 > DisposedCallerList;
-
-
     struct WaitingThread
     {
         osl::Condition condition;
@@ -93,7 +90,7 @@ namespace cppu_threadpool {
 
     private:
         ::osl::Mutex m_mutex;
-        DisposedCallerList m_lst;
+        ::std::vector< sal_Int64 > m_lst;
     };
 
     class ThreadAdmin

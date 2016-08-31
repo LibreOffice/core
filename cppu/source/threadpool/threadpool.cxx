@@ -72,13 +72,13 @@ namespace cppu_threadpool
     void DisposedCallerAdmin::destroy( sal_Int64 nDisposeId )
     {
         MutexGuard guard( m_mutex );
-        for( DisposedCallerList::iterator ii = m_lst.begin() ;
-             ii != m_lst.end() ;
-             ++ ii )
+        for( auto it = m_lst.begin() ;
+             it != m_lst.end() ;
+             ++ it )
         {
-            if( (*ii) == nDisposeId )
+            if( (*it) == nDisposeId )
             {
-                m_lst.erase( ii );
+                m_lst.erase( it );
                 break;
             }
         }
@@ -87,11 +87,11 @@ namespace cppu_threadpool
     bool DisposedCallerAdmin::isDisposed( sal_Int64 nDisposeId )
     {
         MutexGuard guard( m_mutex );
-        for( DisposedCallerList::iterator ii = m_lst.begin() ;
-             ii != m_lst.end() ;
-             ++ ii )
+        for( auto it = m_lst.begin() ;
+             it != m_lst.end() ;
+             ++ it )
         {
-            if( (*ii) == nDisposeId )
+            if( (*it) == nDisposeId )
             {
                 return true;
             }
