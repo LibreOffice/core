@@ -1758,7 +1758,7 @@ void SvxRTFParser::RTFPardPlain( bool const bPard, SfxItemSet** ppSet )
                 // Item set and different -> Set the Default Pool
                 if( !*pPtr )
                     ;
-                else if( SFX_WHICH_MAX < *pPtr )
+                else if (SfxItemPool::IsSlot(*pPtr))
                     pAkt->aAttrSet.ClearItem( *pPtr );
                 else if( IsChkStyleAttr() )
                     pAkt->aAttrSet.Put( pDfltSet->Get( *pPtr ) );
