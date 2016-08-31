@@ -148,7 +148,9 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
         {
             const SfxUInt16Item *pStateItem = dynamic_cast< const SfxUInt16Item* >(pItem);
             if (pStateItem)
-                rTemplateDlg.SetFamily( pStateItem->GetValue() );
+            {
+                rTemplateDlg.SetFamily(static_cast<SfxStyleFamily>(pStateItem->GetValue()));
+            }
             break;
         }
     }
