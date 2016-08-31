@@ -32,6 +32,8 @@ public:
 
     /// Invoke the LOK callback of all views except pThisView, with a payload of rKey-rPayload.
     static void notifyOtherViews(SfxViewShell* pThisView, int nType, const OString& rKey, const OString& rPayload);
+    /// Same as notifyOtherViews(), but works on a selected "other" view, not on all of them.
+    static void notifyOtherView(SfxViewShell* pThisView, SfxViewShell* pOtherView, int nType, const OString& rKey, const OString& rPayload);
 };
 
 #endif
