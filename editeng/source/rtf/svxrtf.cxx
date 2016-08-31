@@ -825,7 +825,7 @@ void SvxRTFParser::ClearStyleAttr_( SvxRTFItemStackType& rStkType )
     {
         for( sal_uInt16 nWhich = aIter.GetCurWhich(); nWhich; nWhich = aIter.NextWhich() )
         {
-            if( SFX_WHICH_MAX > nWhich &&
+            if (SfxItemPool::IsWhich(nWhich) &&
                 SfxItemState::SET == rSet.GetItemState( nWhich, false, &pItem ) &&
                      rPool.GetDefaultItem( nWhich ) == *pItem )
                 rSet.ClearItem( nWhich );       // delete
@@ -846,7 +846,7 @@ void SvxRTFParser::ClearStyleAttr_( SvxRTFItemStackType& rStkType )
                     && *pItem == *pSItem )
                     rSet.ClearItem( nWhich );       // delete
             }
-            else if( SFX_WHICH_MAX > nWhich &&
+            else if (SfxItemPool::IsWhich(nWhich) &&
                     SfxItemState::SET == rSet.GetItemState( nWhich, false, &pItem ) &&
                      rPool.GetDefaultItem( nWhich ) == *pItem )
                 rSet.ClearItem( nWhich );       // delete

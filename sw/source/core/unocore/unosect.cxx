@@ -1563,7 +1563,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
         break;
         default:
         {
-            if (pEntry->nWID <= SFX_WHICH_MAX)
+            if (SfxItemPool::IsWhich(pEntry->nWID))
             {
                 if (pFormat)
                 {
@@ -1634,7 +1634,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             ::sw::GetDefaultTextContentValue(aRet, OUString(), pEntry->nWID);
         break;
         default:
-        if(pFormat && pEntry->nWID <= SFX_WHICH_MAX)
+        if(pFormat && SfxItemPool::IsWhich(pEntry->nWID))
         {
             SwDoc *const pDoc = pFormat->GetDoc();
             const SfxPoolItem& rDefItem =

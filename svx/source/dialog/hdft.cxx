@@ -277,7 +277,7 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
     aSet.Put( SfxBoolItem( nWShared,  m_pCntSharedBox->IsChecked() ) );
     if(m_pCntSharedFirstBox->IsVisible())
         aSet.Put( SfxBoolItem( nWSharedFirst,  m_pCntSharedFirstBox->IsChecked() ) );
-    if(m_pDynSpacingCB->IsVisible() && SFX_WHICH_MAX > nWDynSpacing)
+    if (m_pDynSpacingCB->IsVisible() && SfxItemPool::IsWhich(nWDynSpacing))
     {
         std::unique_ptr<SfxBoolItem> pBoolItem(static_cast<SfxBoolItem*>(pPool->GetDefaultItem(nWDynSpacing).Clone()));
         pBoolItem->SetValue(m_pDynSpacingCB->IsChecked());
