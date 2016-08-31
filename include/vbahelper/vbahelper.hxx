@@ -107,7 +107,7 @@ namespace ooo
         VBAHELPER_DLLPUBLIC OUString extractStringFromAny( const css::uno::Any& rAny, bool bUppercaseBool = false ) throw (css::uno::RuntimeException);
         /** Extracts a string from the passed Any, which may contain a Boolean, a value, or a string.
             Returns rDefault, if rAny is empty. Throws, if the Any contains an incompatible type. */
-        VBAHELPER_DLLPUBLIC OUString extractStringFromAny( const css::uno::Any& rAny, const OUString& rDefault, bool bUppercaseBool = false ) throw (css::uno::RuntimeException);
+        VBAHELPER_DLLPUBLIC OUString extractStringFromAny( const css::uno::Any& rAny, const OUString& rDefault, bool bUppercaseBool ) throw (css::uno::RuntimeException);
 
         VBAHELPER_DLLPUBLIC OUString getAnyAsString( const css::uno::Any& pvargItem ) throw ( css::uno::RuntimeException );
         VBAHELPER_DLLPUBLIC OUString VBAToRegexp(const OUString &rIn); // needs to be in an uno service ( already this code is duplicated in basic )
