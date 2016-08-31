@@ -1494,7 +1494,7 @@ void ValueSet::Resize()
 
 void ValueSet::RequestHelp( const HelpEvent& rHelpEvent )
 {
-    if ( (rHelpEvent.GetMode() & (HelpEventMode::QUICK | HelpEventMode::BALLOON)) == HelpEventMode::QUICK )
+    if (rHelpEvent.GetMode() & (HelpEventMode::QUICK | HelpEventMode::BALLOON))
     {
         Point aPos = ScreenToOutputPixel( rHelpEvent.GetMousePosPixel() );
         size_t nItemPos = ImplGetItem( aPos );
