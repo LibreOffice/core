@@ -190,9 +190,11 @@ public:
 private:
     /** Auxiliary method for visiting the children of a pNode */
     void VisitChildren( SmStructureNode* pNode ) {
-        SmNodeIterator it( pNode );
-        while( it.Next() )
-            it->Accept( this );
+        for (auto pChild : *pNode)
+        {
+            if (pChild)
+                pChild->Accept(this);
+        }
     }
 };
 

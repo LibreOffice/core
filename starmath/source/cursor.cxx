@@ -1232,11 +1232,15 @@ SmNode* SmCursor::FindTopMostNodeInLine(SmNode* pSNode, bool MoveUpIfSelected){
 }
 
 SmNode* SmCursor::FindSelectedNode(SmNode* pNode){
-    SmNodeIterator it(pNode);
-    while(it.Next()){
-        if(it->IsSelected())
-            return it.Current();
-        SmNode* pRetVal = FindSelectedNode(it.Current());
+    if(pNode->GetNumSubNodes() == 0)
+        return nullptr;
+    for(auto pChild : *static_cast<SmStructureNode*>(pNode))
+    {
+        if(!pChild)
+            continue;
+        if(pChild->IsSelected())
+            return pChild;
+        SmNode* pRetVal = FindSelectedNode(pChild);
         if(pRetVal)
             return pRetVal;
     }
@@ -1244,22 +1248,24 @@ SmNode* SmCursor::FindSelectedNode(SmNode* pNode){
 }
 
 SmNodeList* SmCursor::LineToList(SmStructureNode* pLine, SmNodeList* list){
-    SmNodeIterator it(pLine);
-    while(it.Next()){
-        switch(it->GetType()){
+    for(auto pChild : *pLine)
+    {
+        if (!pChild)
+            continue;
+        switch(pChild->GetType()){
             case NLINE:
             case NUNHOR:
             case NEXPRESSION:
             case NBINHOR:
             case NALIGN:
             case NFONT:
-                LineToList(static_cast<SmStructureNode*>(it.Current()), list);
+                LineToList(static_cast<SmStructureNode*>(pChild), list);
                 break;
             case NERROR:
-                delete it.Current();
+                delete pChild;
                 break;
             default:
-                list->push_back(it.Current());
+                list->push_back(pChild);
         }
     }
     SmNodeArray emptyArray(0);
@@ -1270,22 +1276,24 @@ SmNodeList* SmCursor::LineToList(SmStructureNode* pLine, SmNodeList* list){
 
 void SmCursor::CloneLineToClipboard(SmStructureNode* pLine, SmClipboard* pClipboard){
     SmCloningVisitor aCloneFactory;
-    SmNodeIterator it(pLine);
-    while(it.Next()){
-        if( IsLineCompositionNode( it.Current() ) )
-            CloneLineToClipboard( static_cast<SmStructureNode*>(it.Current()), pClipboard );
-        else if( it->IsSelected() && it->GetType() != NERROR ) {
+    for(auto pChild : *pLine)
+    {
+        if (!pChild)
+            continue;
+        if( IsLineCompositionNode( pChild ) )
+            CloneLineToClipboard( static_cast<SmStructureNode*>(pChild), pClipboard );
+        else if( pChild->IsSelected() && pChild->GetType() != NERROR ) {
             //Only clone selected text from SmTextNode
-            if(it->GetType() == NTEXT) {
-                SmTextNode *pText = static_cast<SmTextNode*>(it.Current());
-                std::unique_ptr<SmTextNode> pClone(new SmTextNode( it->GetToken(), pText->GetFontDesc() ));
+            if(pChild->GetType() == NTEXT) {
+                SmTextNode *pText = static_cast<SmTextNode*>(pChild);
+                std::unique_ptr<SmTextNode> pClone(new SmTextNode( pChild->GetToken(), pText->GetFontDesc() ));
                 int start = pText->GetSelectionStart(),
                     length = pText->GetSelectionEnd() - pText->GetSelectionStart();
                 pClone->ChangeText(pText->GetText().copy(start, length));
                 pClone->SetScaleMode(pText->GetScaleMode());
                 pClipboard->push_back(std::move(pClone));
             } else
-                pClipboard->push_back(std::unique_ptr<SmNode>(aCloneFactory.Clone(it.Current())));
+                pClipboard->push_back(std::unique_ptr<SmNode>(aCloneFactory.Clone(pChild)));
         }
     }
 }
@@ -1305,12 +1313,16 @@ bool SmCursor::IsLineCompositionNode(SmNode* pNode){
 }
 
 int SmCursor::CountSelectedNodes(SmNode* pNode){
+    if(pNode->GetNumSubNodes() == 0)
+        return 0;
     int nCount = 0;
-    SmNodeIterator it(pNode);
-    while(it.Next()){
-        if(it->IsSelected() && !IsLineCompositionNode(it.Current()))
+    for(auto pChild : *static_cast<SmStructureNode*>(pNode))
+    {
+        if (!pChild)
+            continue;
+        if(pChild->IsSelected() && !IsLineCompositionNode(pChild))
             nCount++;
-        nCount += CountSelectedNodes(it.Current());
+        nCount += CountSelectedNodes(pChild);
     }
     return nCount;
 }

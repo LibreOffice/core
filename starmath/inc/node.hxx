@@ -307,6 +307,9 @@ public:
 
     virtual void  GetAccessibleText( OUStringBuffer &rText ) const override;
 
+    SmNodeArray::iterator begin() {return aSubNodes.begin();}
+    SmNodeArray::iterator end() {return aSubNodes.end();}
+
     /** Get the index of a child node
      *
      * Returns -1, if pSubNode isn't a subnode of this.
