@@ -113,7 +113,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
         SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem.get());
         if (pFamilyItem)
         {
-            nActualFamily = SfxTemplate::NIdToSfxFamilyId(pFamilyItem->GetValue());
+            nActualFamily = static_cast<SfxStyleFamily>(pFamilyItem->GetValue());
         }
     }
 
