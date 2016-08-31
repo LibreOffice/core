@@ -1228,7 +1228,11 @@ callback (gpointer pData)
     break;
     case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
     {
-        payloadToSize(pCallback->m_aPayload.c_str(), priv->m_nDocumentWidthTwips, priv->m_nDocumentHeightTwips);
+        if (!pCallback->m_aPayload.empty())
+            payloadToSize(pCallback->m_aPayload.c_str(), priv->m_nDocumentWidthTwips, priv->m_nDocumentHeightTwips);
+        else
+            priv->m_pDocument->pClass->getDocumentSize(priv->m_pDocument, &priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
+
         gtk_widget_set_size_request(GTK_WIDGET(pDocView),
                                     twipToPixel(priv->m_nDocumentWidthTwips, priv->m_fZoom),
                                     twipToPixel(priv->m_nDocumentHeightTwips, priv->m_fZoom));
