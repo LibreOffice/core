@@ -86,7 +86,7 @@ public:
 
     void init(const css::lang::Locale& rLocale, const OUString& algorithm) throw (css::uno::RuntimeException);
 
-    void makeIndexKeys(const css::lang::Locale &rLocale, const OUString &algorithm) throw (css::uno::RuntimeException);
+    void makeIndexKeys(const css::lang::Locale &rLocale, const OUString &algorithm) throw (css::uno::RuntimeException, std::exception);
     sal_Int16 getIndexWeight(const OUString& rIndexEntry);
     OUString getIndexDescription(const OUString& rIndexEntry);
 

@@ -165,7 +165,7 @@ OUString Index::getIndexDescription(const OUString& rIndexEntry)
 
 #define LOCALE_EN lang::Locale(OUString("en"), OUString(), OUString())
 
-void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm) throw (RuntimeException)
+void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm) throw (RuntimeException, std::exception)
 {
     OUString keyStr = LocaleDataImpl::get()->getIndexKeysByAlgorithm(rLocale, algorithm);
 
