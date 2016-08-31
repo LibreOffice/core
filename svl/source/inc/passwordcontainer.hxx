@@ -321,7 +321,7 @@ public:
     static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL
                     impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& ServiceManager ) throw(css::uno::RuntimeException);
     static css::uno::Reference< css::uno::XInterface > SAL_CALL
-                    impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::RuntimeException );
+                    impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::RuntimeException, std::exception );
 
     // XServiceInfo
     virtual OUString SAL_CALL    getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;

@@ -1358,12 +1358,10 @@ OUString SAL_CALL PasswordContainer::impl_getStaticImplementationName() throw(un
     return OUString("stardiv.svl.PasswordContainer");
 }
 
-
-Reference< XInterface > SAL_CALL PasswordContainer::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager ) throw( RuntimeException )
+Reference< XInterface > SAL_CALL PasswordContainer::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager ) throw( RuntimeException, std::exception )
 {
     return Reference< XInterface >( *new PasswordContainer( xServiceManager ) );
 }
-
 
 Reference< XSingleServiceFactory > SAL_CALL PasswordContainer::impl_createFactory( const Reference< XMultiServiceFactory >& ServiceManager ) throw(RuntimeException)
 {
