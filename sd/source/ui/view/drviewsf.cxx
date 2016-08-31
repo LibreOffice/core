@@ -491,7 +491,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 std::unique_ptr<SfxPoolItem> pItem;
                 GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
                 SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem.get());
-                if (pFamilyItem && SfxTemplate::NIdToSfxFamilyId(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_PSEUDO)
+                if (pFamilyItem && static_cast<SfxStyleFamily>(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_PSEUDO)
                     rSet.Put(SfxBoolItem(nWhich,false));
                 else
                 {
@@ -506,7 +506,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 std::unique_ptr<SfxPoolItem> pItem;
                 GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
                 SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem.get());
-                if (pFamilyItem && SfxTemplate::NIdToSfxFamilyId(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_PSEUDO)
+                if (pFamilyItem && static_cast<SfxStyleFamily>(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_PSEUDO)
                 {
                     rSet.DisableItem(nWhich);
                 }
@@ -518,7 +518,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 std::unique_ptr<SfxPoolItem> pItem;
                 GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
                 SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem.get());
-                if (pFamilyItem && SfxTemplate::NIdToSfxFamilyId(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_PSEUDO)
+                if (pFamilyItem && static_cast<SfxStyleFamily>(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_PSEUDO)
                     rSet.DisableItem(nWhich);
             }
             break;
@@ -533,11 +533,11 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem.get());
                 if (pFamilyItem)
                 {
-                    if (SfxTemplate::NIdToSfxFamilyId(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_PSEUDO)
+                    if (static_cast<SfxStyleFamily>(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_PSEUDO)
                     {
                         rSet.DisableItem(nWhich);
                     }
-                    else if (SfxTemplate::NIdToSfxFamilyId(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_GRAPHICS)
+                    else if (static_cast<SfxStyleFamily>(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_GRAPHICS)
                     {
                         if (!mpDrawView->AreObjectsMarked())
                         {

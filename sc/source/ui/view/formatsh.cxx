@@ -217,7 +217,7 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
                 pTabViewShell->GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
                 SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem.get());
 
-                bool bPage = pFamilyItem && SfxStyleFamily::Page == SfxTemplate::NIdToSfxFamilyId(pFamilyItem->GetValue());
+                bool bPage = pFamilyItem && SfxStyleFamily::Page == static_cast<SfxStyleFamily>(pFamilyItem->GetValue());
 
                 if ( bProtected || bPage )
                     rSet.DisableItem( nSlotId );
@@ -232,7 +232,7 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
                 std::unique_ptr<SfxPoolItem> pItem;
                 pTabViewShell->GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
                 SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem.get());
-                bool bPage = pFamilyItem && SfxStyleFamily::Page == SfxTemplate::NIdToSfxFamilyId(pFamilyItem->GetValue());
+                bool bPage = pFamilyItem && SfxStyleFamily::Page == static_cast<SfxStyleFamily>(pFamilyItem->GetValue());
 
                 if ( bProtected && !bPage )
                     rSet.DisableItem( nSlotId );

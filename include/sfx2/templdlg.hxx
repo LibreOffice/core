@@ -28,14 +28,6 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>
 
-namespace SfxTemplate
-{
-    // converts from SFX_STYLE_FAMILY Ids to 1-5
-    sal_uInt16 SFX2_DLLPUBLIC SfxFamilyIdToNId(SfxStyleFamily nFamily);
-    // converts from 1-5 to SFX_STYLE_FAMILY Ids
-    SfxStyleFamily SFX2_DLLPUBLIC NIdToSfxFamilyId(sal_uInt16 nId);
-}
-
 class SfxTemplateDialog_Impl;
 
 class SFX2_DLLPUBLIC SfxTemplatePanelControl : public vcl::Window

@@ -89,7 +89,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
 {
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_STYLE_FAMILY ) )
     {
-        sal_uInt16 nFamily = (sal_uInt16)GetDocSh()->GetStyleFamily();
+        SfxStyleFamily const nFamily = GetDocSh()->GetStyleFamily();
 
         SdrView* pDrView = GetDrawView();
 
@@ -108,7 +108,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
             }
         }
 
-        rSet.Put(SfxUInt16Item(SID_STYLE_FAMILY, nFamily ));
+        rSet.Put(SfxUInt16Item(SID_STYLE_FAMILY, static_cast<sal_uInt16>(nFamily)));
     }
 
     if(SfxItemState::DEFAULT == rSet.GetItemState(SID_GETUNDOSTRINGS))

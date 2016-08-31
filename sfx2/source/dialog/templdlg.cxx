@@ -644,6 +644,38 @@ SvTreeListEntry* FillBox_Impl(SvTreeListBox* pBox,
     return pTreeListEntry;
 }
 
+
+namespace SfxTemplate
+{
+    // converts from SFX_STYLE_FAMILY Ids to 1-6
+    sal_uInt16 SfxFamilyIdToNId(SfxStyleFamily nFamily)
+    {
+        switch ( nFamily )
+        {
+            case SfxStyleFamily::Char:   return 1;
+            case SfxStyleFamily::Para:   return 2;
+            case SfxStyleFamily::Frame:  return 3;
+            case SfxStyleFamily::Page:   return 4;
+            case SfxStyleFamily::Pseudo: return 5;
+            default:                     return 0xffff;
+        }
+    }
+
+    // converts from 1-6 to SFX_STYLE_FAMILY Ids
+    SfxStyleFamily NIdToSfxFamilyId(sal_uInt16 nId)
+    {
+        switch (nId)
+        {
+            case 1: return SfxStyleFamily::Char;
+            case 2: return SfxStyleFamily::Para;
+            case 3: return SfxStyleFamily::Frame;
+            case 4: return SfxStyleFamily::Page;
+            case 5: return SfxStyleFamily::Pseudo;
+            default: return SfxStyleFamily::All;
+        }
+    }
+}
+
 // Constructor
 
 SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl::Window* pW, bool )
@@ -882,35 +914,6 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
         m_pDeletionWatcher->signal();
     aFmtLb.disposeAndClear();
     aFilterLb.disposeAndClear();
-}
-
-namespace SfxTemplate
-{
-    sal_uInt16 SfxFamilyIdToNId(SfxStyleFamily nFamily)
-    {
-        switch ( nFamily )
-        {
-            case SfxStyleFamily::Char:   return 1;
-            case SfxStyleFamily::Para:   return 2;
-            case SfxStyleFamily::Frame:  return 3;
-            case SfxStyleFamily::Page:   return 4;
-            case SfxStyleFamily::Pseudo: return 5;
-            default:                      return 0;
-        }
-    }
-
-    SfxStyleFamily NIdToSfxFamilyId(sal_uInt16 nId)
-    {
-        switch (nId)
-        {
-            case 1: return SfxStyleFamily::Char;
-            case 2: return SfxStyleFamily::Para;
-            case 3: return SfxStyleFamily::Frame;
-            case 4: return SfxStyleFamily::Page;
-            case 5: return SfxStyleFamily::Pseudo;
-            default: return SfxStyleFamily::All;
-        }
-    }
 }
 
 // Helper function: Access to the current family item
@@ -1697,12 +1700,14 @@ IMPL_LINK_TYPED( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox&, rBox, 
 // Select-Handler for the Toolbox
 void SfxCommonTemplateDialog_Impl::FamilySelect(sal_uInt16 nEntry)
 {
+    assert((0 < nEntry && nEntry <= MAX_FAMILIES) || 0xffff == nEntry);
     if( nEntry != nActFamily )
     {
         CheckItem( nActFamily, false );
         nActFamily = nEntry;
         SfxDispatcher* pDispat = pBindings->GetDispatcher_Impl();
-        SfxUInt16Item aItem( SID_STYLE_FAMILY, nEntry );
+        SfxUInt16Item const aItem(SID_STYLE_FAMILY,
+                static_cast<sal_uInt16>(SfxTemplate::NIdToSfxFamilyId(nEntry)));
         pDispat->ExecuteList(SID_STYLE_FAMILY, SfxCallMode::SYNCHRON, { &aItem });
         pBindings->Invalidate( SID_STYLE_FAMILY );
         pBindings->Update( SID_STYLE_FAMILY );
@@ -2525,8 +2530,10 @@ IMPL_LINK_TYPED( SfxTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu, bool)
     return false;
 }
 
-void SfxCommonTemplateDialog_Impl::SetFamily( sal_uInt16 nId )
+void SfxCommonTemplateDialog_Impl::SetFamily(SfxStyleFamily const nFamily)
 {
+    sal_uInt16 const nId(SfxTemplate::SfxFamilyIdToNId(nFamily));
+    assert((0 < nId && nId <= MAX_FAMILIES) || 0xffff == nId);
     if ( nId != nActFamily )
     {
         if ( nActFamily != 0xFFFF )
