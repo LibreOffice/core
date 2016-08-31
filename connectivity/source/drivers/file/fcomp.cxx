@@ -315,7 +315,7 @@ void OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(SQLEx
     m_aCodeList.push_back(pOperator);
 }
 
-void OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
+void OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException, std::exception)
 {
     DBG_ASSERT(pPredicateNode->count() == 2,"OFILECursor: Fehler im Parse Tree");
 
