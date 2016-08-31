@@ -164,7 +164,7 @@ SfxBroadcaster& SfxItemPool::BC()
 SfxItemPool::SfxItemPool
 (
     const OUString&     rName,          /* Pool name to identify in the file format */
-    sal_uInt16          nStartWhich,    /* First WhichId of the Pool */
+    sal_uInt16          nStartWhich,    /* First WhichId of the Pool (must be > 0) */
     sal_uInt16          nEndWhich,      /* Last WhichId of the Pool */
     const SfxItemInfo*  pInfo,         /* SID Map and Item flags */
     SfxPoolItem**       pDefaults,      /* Pointer to static Defaults;
