@@ -1217,6 +1217,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(vcl::Window* pParent,
     m_pBulletPB->SetClickHdl(LINK(this, SvxNumOptionsTabPage, BulletHdl_Impl));
     m_pFmtLB->SetSelectHdl(LINK(this, SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl));
     m_pBitmapMB->SetSelectHdl(LINK(this, SvxNumOptionsTabPage, GraphicHdl_Impl));
+    m_pBitmapMB->SetActivateHdl(LINK(this, SvxNumOptionsTabPage, PopupActivateHdl_Impl));
     m_pLevelLB->EnableMultiSelection(true);
     m_pLevelLB->SetSelectHdl(LINK(this, SvxNumOptionsTabPage, LevelHdl_Impl));
     m_pCharFmtLB->SetSelectHdl(LINK(this, SvxNumOptionsTabPage, CharFmtHdl_Impl));
@@ -1235,8 +1236,6 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(vcl::Window* pParent,
     aInvalidateTimer.SetTimeout(50);
 
     Menu *pBitmapMenu = m_pBitmapMB->GetPopupMenu();
-
-    pBitmapMenu->SetHighlightHdl(LINK(this, SvxNumOptionsTabPage, PopupActivateHdl_Impl));
     m_nGalleryId = pBitmapMenu->GetItemId("gallery");
     assert(m_nGalleryId != MENU_ITEM_NOTFOUND);
     PopupMenu* pPopup = new PopupMenu;
@@ -2116,7 +2115,7 @@ IMPL_LINK_TYPED( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton, v
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxNumOptionsTabPage, PopupActivateHdl_Impl, Menu *, bool)
+IMPL_LINK_NOARG_TYPED(SvxNumOptionsTabPage, PopupActivateHdl_Impl, MenuButton *, void)
 {
     if(!bMenuButtonInitialized)
     {
@@ -2168,7 +2167,6 @@ IMPL_LINK_NOARG_TYPED(SvxNumOptionsTabPage, PopupActivateHdl_Impl, Menu *, bool)
         }
         LeaveWait();
     }
-    return false;
 }
 
 IMPL_LINK_NOARG_TYPED(SvxNumOptionsTabPage, BulletHdl_Impl, Button*, void)
