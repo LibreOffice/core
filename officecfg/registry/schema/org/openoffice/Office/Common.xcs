@@ -3416,6 +3416,12 @@
         </info>
         <value/>
       </prop>
+      <prop oor:name="RecentColorName" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>List of Recent color names</desc>
+        </info>
+        <value/>
+      </prop>
       <prop oor:name="PaletteName" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>Name of selected palette</desc>
@@ -3430,7 +3436,7 @@
       </prop>
       <prop oor:name="CustomColorName" oor:type="oor:string-list" oor:nillable="false">
         <info>
-          <desc>List of Custom colors</desc>
+          <desc>List of Custom color names</desc>
         </info>
         <value/>
       </prop>

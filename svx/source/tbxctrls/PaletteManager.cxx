@@ -126,11 +126,10 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
         css::uno::Sequence< sal_Int32 > CustomColorList( officecfg::Office::Common::UserColors::CustomColor::get() );
         css::uno::Sequence< OUString > CustomColorNameList( officecfg::Office::Common::UserColors::CustomColorName::get() );
         int nIx = 1;
-        for( int i = 0;i < CustomColorList.getLength();i++ )
+        for (int i = 0; i < CustomColorList.getLength(); ++i)
         {
-            Color aColor( CustomColorList[i] );
-            OUString aColorName( CustomColorNameList[i] );
-            rColorSet.InsertItem( nIx, aColor, aColorName );
+            Color aColor(CustomColorList[i]);
+            rColorSet.InsertItem(nIx, aColor, CustomColorNameList[i]);
             ++nIx;
         }
     }
@@ -152,18 +151,17 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
 void PaletteManager::ReloadRecentColorSet(SvxColorValueSet& rColorSet)
 {
     maRecentColors.clear();
-    css::uno::Sequence< sal_Int32 > Colorlist(officecfg::Office::Common::UserColors::RecentColor::get());
-    for(int i = 0;i < Colorlist.getLength();i++)
-    {
-        Color aColor( Colorlist[i] );
-        maRecentColors.push_back( aColor );
-    }
     rColorSet.Clear();
+    css::uno::Sequence< sal_Int32 > Colorlist(officecfg::Office::Common::UserColors::RecentColor::get());
+    css::uno::Sequence< OUString > ColorNamelist(officecfg::Office::Common::UserColors::RecentColorName::get());
     int nIx = 1;
-    for(std::deque<Color>::const_iterator it = maRecentColors.begin();
-        it != maRecentColors.end(); ++it)
+    const bool bHasColorNames = Colorlist.getLength() == ColorNamelist.getLength();
+    for (int i = 0; i < Colorlist.getLength(); ++i)
     {
-        rColorSet.InsertItem(nIx, *it, "");
+        Color aColor(Colorlist[i]);
+        OUString sColorName = bHasColorNames ? ColorNamelist[i] : (OUString("#") + aColor.AsRGBHexString().toAsciiUpperCase());
+        maRecentColors.push_back(std::make_pair(aColor, sColorName));
+        rColorSet.InsertItem(nIx, aColor, sColorName);
         ++nIx;
     }
 }
@@ -255,24 +253,28 @@ void PaletteManager::SetLastColor(const Color& rLastColor)
     mLastColor = rLastColor;
 }
 
-void PaletteManager::AddRecentColor(const Color& rRecentColor)
+void PaletteManager::AddRecentColor(const Color& rRecentColor, const OUString& rName)
 {
-    std::deque<Color>::iterator itColor =
-        std::find(maRecentColors.begin(), maRecentColors.end(), rRecentColor);
+    auto itColor = std::find_if(maRecentColors.begin(),
+                                maRecentColors.end(),
+                                [rRecentColor] (const auto &a) { return a.first == rRecentColor; });
     // if recent color to be added is already in list, remove it
     if( itColor != maRecentColors.end() )
         maRecentColors.erase( itColor );
 
-    maRecentColors.push_front( rRecentColor );
+    maRecentColors.push_front(std::make_pair(rRecentColor, rName));
     if( maRecentColors.size() > mnMaxRecentColors )
         maRecentColors.pop_back();
     css::uno::Sequence< sal_Int32 > aColorList(maRecentColors.size());
-    for(std::deque<Color>::size_type i = 0;i < maRecentColors.size();i++)
+    css::uno::Sequence< OUString > aColorNameList(maRecentColors.size());
+    for (size_t i = 0; i < maRecentColors.size(); ++i)
     {
-        aColorList[i] = static_cast<sal_Int32>(maRecentColors[i].GetColor());
+        aColorList[i] = static_cast<sal_Int32>(maRecentColors[i].first.GetColor());
+        aColorNameList[i] = maRecentColors[i].second;
     }
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
     officecfg::Office::Common::UserColors::RecentColor::set(aColorList, batch);
+    officecfg::Office::Common::UserColors::RecentColorName::set(aColorNameList, batch);
     batch->commit();
 }
 
@@ -298,7 +300,7 @@ void PaletteManager::PopupColorPicker(const OUString& aCommand)
         if (mpBtnUpdater)
             mpBtnUpdater->Update( aColorDlg.GetColor() );
         mLastColor = aColorDlg.GetColor();
-        AddRecentColor( mLastColor );
+        AddRecentColor(mLastColor, (OUString("#") + mLastColor.AsRGBHexString().toAsciiUpperCase()));
         maColorSelectFunction(aCommandCopy, mLastColor);
     }
 }

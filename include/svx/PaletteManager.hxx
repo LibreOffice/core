@@ -48,7 +48,8 @@ class SVX_DLLPUBLIC PaletteManager
 
     XColorListRef           pColorList;
     Color                   mLastColor;
-    std::deque<Color>       maRecentColors;
+    typedef std::pair<Color, OUString>  color_and_name;
+    std::deque<color_and_name> maRecentColors;
     std::vector<std::unique_ptr<Palette>> m_Palettes;
 
     std::function<void(const OUString&, const Color&)> maColorSelectFunction;
@@ -73,7 +74,7 @@ public:
 
     const Color& GetLastColor();
     void        SetLastColor(const Color& rLastColor);
-    void        AddRecentColor(const Color& rRecentColor);
+    void        AddRecentColor(const Color& rRecentColor, const OUString& rColorName);
 
     void        SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater);
     void        PopupColorPicker(const OUString& aCommand);

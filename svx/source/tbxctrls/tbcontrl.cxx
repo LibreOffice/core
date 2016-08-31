@@ -1397,7 +1397,7 @@ IMPL_LINK_TYPED(SvxColorWindow_Impl, SelectHdl, ValueSet*, pColorSet, void)
 
     if ( pColorSet != mpRecentColorSet )
     {
-         mrPaletteManager.AddRecentColor( aColor );
+         mrPaletteManager.AddRecentColor(aColor, pColorSet->GetItemText(pColorSet->GetSelectItemId()));
          if ( !IsInPopupMode() )
             mrPaletteManager.ReloadRecentColorSet( *mpRecentColorSet );
     }
