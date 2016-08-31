@@ -115,7 +115,7 @@ namespace connectivity
             // returns NULL if the current result is not a ResultSet.
 
             css::uno::Reference<css::sdbc::XResultSet> getResultSet(bool checkCount)
-                throw (css::sdbc::SQLException, css::uno::RuntimeException);
+                throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
             /**
                 creates the driver specific resultset (factory)
             */
