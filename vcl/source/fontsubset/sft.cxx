@@ -2000,39 +2000,39 @@ int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname, /*FO
     TTGlyphMetrics metrics;
     int UPEm = ttf->unitsPerEm;
 
-    const char *h01 = "%%!PS-AdobeFont-%d.%d-%d.%d\n";
-    const char *h02 = "%% Creator: %s %s %s\n";
-    const char *h09 = "%% Original font name: %s\n";
+    const char * const h01 = "%%!PS-AdobeFont-%d.%d-%d.%d\n";
+    const char * const h02 = "%% Creator: %s %s %s\n";
+    const char * const h09 = "%% Original font name: %s\n";
 
-    const char *h10 =
+    const char * const h10 =
         "30 dict begin\n"
         "/PaintType 0 def\n"
         "/FontType 3 def\n"
         "/StrokeWidth 0 def\n";
 
-    const char *h11 = "/FontName (%s) cvn def\n";
+    const char * const h11 = "/FontName (%s) cvn def\n";
 
     /*
-      const char *h12 = "%/UniqueID %d def\n";
+      const char * const h12 = "%/UniqueID %d def\n";
     */
-    const char *h13 = "/FontMatrix [.001 0 0 .001 0 0] def\n";
-    const char *h14 = "/FontBBox [%d %d %d %d] def\n";
+    const char * const h13 = "/FontMatrix [.001 0 0 .001 0 0] def\n";
+    const char * const h14 = "/FontBBox [%d %d %d %d] def\n";
 
-    const char *h15=
+    const char * const h15=
         "/Encoding 256 array def\n"
         "    0 1 255 {Encoding exch /.notdef put} for\n";
 
-    const char *h16 = "    Encoding %d /glyph%d put\n";
-    const char *h17 = "/XUID [103 0 0 16#%08X %d 16#%08X 16#%08X] def\n";
+    const char * const h16 = "    Encoding %d /glyph%d put\n";
+    const char * const h17 = "/XUID [103 0 0 16#%08X %d 16#%08X 16#%08X] def\n";
 
-    const char *h30 = "/CharProcs %d dict def\n";
-    const char *h31 = "  CharProcs begin\n";
-    const char *h32 = "    /.notdef {} def\n";
-    const char *h33 = "    /glyph%d {\n";
-    const char *h34 = "    } bind def\n";
-    const char *h35 = "  end\n";
+    const char * const h30 = "/CharProcs %d dict def\n";
+    const char * const h31 = "  CharProcs begin\n";
+    const char * const h32 = "    /.notdef {} def\n";
+    const char * const h33 = "    /glyph%d {\n";
+    const char * const h34 = "    } bind def\n";
+    const char * const h35 = "  end\n";
 
-    const char *h40 =
+    const char * const h40 =
         "/BuildGlyph {\n"
         "  exch /CharProcs get exch\n"
         "  2 copy known not\n"
@@ -2045,7 +2045,7 @@ int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname, /*FO
         "} bind def\n"
         "currentdict end\n";
 
-    const char *h41 = "(%s) cvn exch definefont pop\n";
+    const char * const h41 = "(%s) cvn exch definefont pop\n";
 
 
     if (!((nGlyphs > 0) && (nGlyphs <= 256))) return SF_GLYPHNUM;
