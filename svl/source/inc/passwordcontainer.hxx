@@ -268,7 +268,7 @@ css::task::UrlRecord find(
                                                         throw(css::uno::RuntimeException, std::exception);
 
     static ::std::vector< OUString > DecodePasswords( const OUString& aLine, const OUString& aMasterPassword )
-                                                        throw(css::uno::RuntimeException);
+                                                        throw(css::uno::RuntimeException, std::exception);
 
     static OUString EncodePasswords(const std::vector< OUString >& lines, const OUString& aMasterPassword )
                                                         throw(css::uno::RuntimeException);

@@ -402,7 +402,6 @@ PasswordContainer::~PasswordContainer()
     }
 }
 
-
 void SAL_CALL PasswordContainer::disposing( const EventObject& ) throw(RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( mMutex );
@@ -420,8 +419,7 @@ void SAL_CALL PasswordContainer::disposing( const EventObject& ) throw(RuntimeEx
     }
 }
 
-
-vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLine, const OUString& aMasterPasswd ) throw(RuntimeException)
+vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLine, const OUString& aMasterPasswd ) throw(RuntimeException, std::exception)
 {
     if( !aMasterPasswd.isEmpty() )
     {
