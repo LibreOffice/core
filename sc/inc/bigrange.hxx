@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_INC_BIGRANGE_HXX
 #define INCLUDED_SC_INC_BIGRANGE_HXX
 
-#include "global.hxx"
+#include "address.hxx"
 #include <algorithm>
 
 static const sal_Int32 nInt32Min = 0x80000000;

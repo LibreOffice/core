@@ -24,7 +24,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <svl/lstner.hxx>
-#include "global.hxx"
 #include "address.hxx"
 
 class ScAddressConversionObj : public ::cppu::WeakImplHelper<

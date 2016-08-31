@@ -55,11 +55,12 @@
 #include <svl/intitem.hxx>
 #include <editeng/lineitem.hxx>
 #include "scdllapi.h"
-#include "global.hxx"
 #include "zforauto.hxx"
 
 #include <memory>
 #include <map>
+
+class ScDocument;
 
 /**
 A binary blob of writer-specific data. This data typically consists of types that are
