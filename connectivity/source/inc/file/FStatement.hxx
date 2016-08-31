@@ -137,7 +137,7 @@ namespace connectivity
 
             using OStatement_BASE::operator css::uno::Reference< css::uno::XInterface >;
 
-            virtual void construct(const OUString& sql)  throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            virtual void construct(const OUString& sql)  throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
 
             // OComponentHelper
             virtual void SAL_CALL disposing() override;

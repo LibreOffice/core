@@ -374,8 +374,7 @@ void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
     m_aOrderbyAscending.push_back((SQL_ISTOKEN(pAscendingDescending,DESC)) ? TAscendingOrder::DESC : TAscendingOrder::ASC);
 }
 
-
-void OStatement_Base::construct(const OUString& sql)  throw(SQLException, RuntimeException)
+void OStatement_Base::construct(const OUString& sql)  throw(SQLException, RuntimeException, std::exception)
 {
     OUString aErr;
     m_pParseTree = m_aParser.parseTree(aErr,sql);

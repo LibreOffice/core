@@ -75,7 +75,7 @@ void OPreparedStatement::disposing()
     }
 }
 
-void OPreparedStatement::construct(const OUString& sql)  throw(SQLException, RuntimeException)
+void OPreparedStatement::construct(const OUString& sql)  throw(SQLException, RuntimeException, std::exception)
 {
     OStatement_Base::construct(sql);
 

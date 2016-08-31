@@ -73,7 +73,7 @@ namespace connectivity
             // a Constructor, that is needed for when Returning the Object is needed:
             OPreparedStatement( OConnection* _pConnection);
 
-            virtual void construct(const OUString& sql)  throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+            virtual void construct(const OUString& sql)  throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
