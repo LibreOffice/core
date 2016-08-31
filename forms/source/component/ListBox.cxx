@@ -390,7 +390,7 @@ namespace frm
 
     sal_Bool OListBoxModel::convertFastPropertyValue(
         Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
-        throw (IllegalArgumentException)
+        throw (IllegalArgumentException, std::exception)
     {
         bool bModified(false);
         switch (_nHandle)
