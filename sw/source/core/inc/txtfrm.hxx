@@ -432,8 +432,6 @@ public:
                     const xub_StrLen nLen = STRING_LEN );
     inline SwTwips GetFtnFrmHeight() const;
     SwTxtFrm *FindFtnRef( const SwTxtFtn *pFtn );
-    inline const SwTxtFrm *FindFtnRef( const SwTxtFtn *pFtn ) const
-    { return FindFtnRef( pFtn ); }
     void ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine );
 
     // Wenn wir eine Ftn sind, die auf ihre Referenz zu waechst...
