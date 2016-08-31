@@ -196,7 +196,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
                                         ,const connectivity::OSQLTable& _xTable
                                         ,OUStringBuffer& _sCondition
                                         ,OUStringBuffer& _sParameter
-                                        ,::std::list< sal_Int32>& _rOrgValues)
+                                        ,::std::vector< sal_Int32>& _rOrgValues)
 {
     // use keys and indexes for exact positioning
     // first the keys
@@ -285,7 +285,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     // list all columns that should be set
 
     OUStringBuffer aCondition;
-    ::std::list< sal_Int32> aOrgValues;
+    ::std::vector< sal_Int32> aOrgValues;
     fillParameters(_rInsertRow,_xTable,aCondition,aSql,aOrgValues);
     aSql[aSql.getLength() - 1] = ' ';
     if ( !aCondition.isEmpty() )
@@ -311,8 +311,8 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
             ++i;
         }
     }
-    ::std::list< sal_Int32>::const_iterator aOrgValueEnd = aOrgValues.end();
-    for(::std::list< sal_Int32>::const_iterator aOrgValue = aOrgValues.begin(); aOrgValue != aOrgValueEnd;++aOrgValue,++i)
+    auto aOrgValueEnd = aOrgValues.cend();
+    for(auto aOrgValue = aOrgValues.cbegin(); aOrgValue != aOrgValueEnd;++aOrgValue,++i)
     {
         setParameter(i,xParameter,(_rOriginalRow->get())[*aOrgValue],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
     }
@@ -354,7 +354,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     }
 
     OUStringBuffer aColumnName;
-    ::std::list< sal_Int32> aOrgValues;
+    ::std::vector< sal_Int32> aOrgValues;
     fillParameters(_rDeleteRow,_xTable,aSql,aColumnName,aOrgValues);
 
     aSql.setLength(aSql.getLength()-5);
@@ -363,8 +363,8 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql.makeStringAndClear()));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
     sal_Int32 i = 1;
-    ::std::list< sal_Int32>::const_iterator aOrgValueEnd = aOrgValues.end();
-    for(::std::list< sal_Int32>::const_iterator j = aOrgValues.begin(); j != aOrgValueEnd;++j,++i)
+    auto aOrgValueEnd = aOrgValues.cend();
+    for(auto j = aOrgValues.cbegin(); j != aOrgValueEnd; ++j,++i)
     {
         setParameter(i,xParameter,(_rDeleteRow->get())[*j],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
     }

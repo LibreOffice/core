@@ -31,7 +31,8 @@
 #include "RowSetRow.hxx"
 #include <cppuhelper/implbase.hxx>
 
-#include <list>
+#include <vector>
+
 namespace com{ namespace sun { namespace star{namespace sdbc{ class XParameters; } } } }
 
 namespace dbaccess
@@ -67,7 +68,7 @@ namespace dbaccess
                             ,const connectivity::OSQLTable& _xTable
                             ,OUStringBuffer& _sCondition
                             ,OUStringBuffer& _sParameter
-                            ,::std::list< sal_Int32>& _rOrgValues);
+                            ,::std::vector< sal_Int32>& _rOrgValues);
         void fillTableName(const css::uno::Reference< css::beans::XPropertySet>& _xTable)  throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
         OUString getIdentifierQuoteString() const;
