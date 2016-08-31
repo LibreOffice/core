@@ -1,0 +1,12 @@
+diff -ur misc/icu/source/tools/ctestfw/uperf.cpp misc/build/icu/source/tools/ctestfw/uperf.cpp
+--- misc/icu/source/tools/ctestfw/uperf.cpp	2009-01-14 23:46:00.000000000 -0800
++++ misc/build/icu/source/tools/ctestfw/uperf.cpp	2016-08-30 22:19:11.917367000 -0700
+@@ -486,7 +486,7 @@
+         this->runIndexedTest( index, FALSE, name );
+         if (!name)
+             break;
+-        fprintf(stdout,name);
++        fprintf(stdout,"%s",name);
+         fprintf(stdout,"\n");
+         index++;
+     }while (name && (name[0] != 0));

@@ -1047,6 +1047,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
                                 GTK_DIALOG_MODAL,
                                 GTK_MESSAGE_QUESTION,
                                 GTK_BUTTONS_YES_NO,
+                                  "%s",
                                   OUStringToOString(
                                     aResProvider.getResString( FILE_PICKER_OVERWRITE ),
                                     RTL_TEXTENCODING_UTF8 ).getStr() );

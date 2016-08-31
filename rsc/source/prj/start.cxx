@@ -254,7 +254,7 @@ static sal_Bool CallRsc2( ByteString aRsc2Name,
 #ifdef OS2
         fprintf( fRspFile, "%s\n", aSrsName.GetBuffer() );
 #else
-        fprintf( fRspFile, aSrsName.GetBuffer() );
+        fprintf( fRspFile, "%s", aSrsName.GetBuffer() );
 #endif
 
         pString = pInputList->First();

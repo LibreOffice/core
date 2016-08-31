@@ -127,7 +127,7 @@ static sal_Bool s_quiet = false;
 static inline void out( const sal_Char * pText )
 {
     if (! s_quiet)
-        fprintf( stderr, pText );
+        fprintf( stderr, "%s", pText );
 }
 //--------------------------------------------------------------------------------------------------
 static inline void out( const OUString & rText )
@@ -135,7 +135,7 @@ static inline void out( const OUString & rText )
     if (! s_quiet)
     {
         OString aText( OUStringToOString( rText, RTL_TEXTENCODING_ASCII_US ) );
-        fprintf( stderr, aText.getStr() );
+        fprintf( stderr, "%s", aText.getStr() );
     }
 }
 
