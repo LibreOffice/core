@@ -273,7 +273,7 @@ protected:
     void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     void FamilySelect( sal_uInt16 nId );
-    void SetFamily( sal_uInt16 nId );
+    void SetFamily(SfxStyleFamily nFamily);
     void ActionSelect( sal_uInt16 nId );
 
     sal_Int32 LoadFactoryStyleFilter( SfxObjectShell* i_pObjSh );
