@@ -234,7 +234,7 @@ public:
     virtual SvtScriptType GetScriptType() const;
 
     /* new interface src537 */
-    bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr=false) const;
+    bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const;
 
     bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll);
     SfxStyleSheet* GetStyleSheet() const; // SfxStyleSheet* GetStyleSheet(bool& rOk) const;

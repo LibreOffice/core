@@ -39,7 +39,7 @@ private:
     DECL_LINK_TYPED( OnMenuItemSelected, Menu*, bool );
 
     template< typename ListType, typename EntryType >
-    void FillPresetListBoxImpl(ListType& pList, sal_uInt32 nStartIndex = 1);
+    void FillPresetListBoxImpl(ListType& pList, sal_uInt32 nStartIndex);
 
 public:
     SvxPresetListBox(vcl::Window* pParent, WinBits nWinStyle = WB_ITEMBORDER);

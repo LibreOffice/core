@@ -509,7 +509,7 @@ public:
    virtual SfxAbstractTabDialog* CreateSvxBorderBackgroundDlg(
        vcl::Window* pParent,
        const SfxItemSet& rCoreSet,
-       bool bEnableSelector = false,
+       bool bEnableSelector,
        bool bEnableDrawingLayerFillStyles = false) override;
 
    virtual AbstractSvxTransformTabDialog* CreateSvxTransformTabDialog( vcl::Window* pParent,
@@ -520,7 +520,7 @@ public:
                                                                 const SfxItemSet* pAttr,
                                                                 const SdrView* pSdrView,
                                                                 sal_uInt32 nResId,
-                                                                bool bSizeTabPage = false
+                                                                bool bSizeTabPage
                                                                  ) override;
     virtual AbstractSpellDialog *  CreateSvxSpellDialog(
                             vcl::Window* pParent,
@@ -588,7 +588,7 @@ public:
                                                             bool bShadow ) override;
     virtual SfxAbstractTabDialog*           CreateSvxLineTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
                                                                  SdrModel* pModel,
-                                                                 const SdrObject* pObj = nullptr,
+                                                                 const SdrObject* pObj,
                                                                  bool bHasObj = true ) override;
     virtual AbstractSvxPostItDialog*        CreateSvxPostItDialog( vcl::Window* pParent,
                                                                         const SfxItemSet& rCoreSet,
@@ -617,7 +617,7 @@ public:
                 const sal_uInt16 _nInitiallySelectedEvent
             ) override;
 
-    virtual SfxAbstractTabDialog* CreateSvxFormatCellsDialog( const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* pObj = nullptr ) override;
+    virtual SfxAbstractTabDialog* CreateSvxFormatCellsDialog( const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* pObj ) override;
 
     virtual SvxAbstractSplittTableDialog* CreateSvxSplittTableDialog( vcl::Window* pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal ) override;
 
