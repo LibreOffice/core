@@ -143,11 +143,11 @@ void FuChar::DoExecute( SfxRequest& rReq )
                     SID_ATTR_CHAR_UNDERLINE,
                     SID_ATTR_CHAR_FONTHEIGHT,
                     SID_ATTR_CHAR_COLOR,
-                    SID_ATTR_CHAR_BACK_COLOR,
                     SID_ATTR_CHAR_KERNING,
                     SID_ATTR_CHAR_CASEMAP,
                     SID_SET_SUPER_SCRIPT,
                     SID_SET_SUB_SCRIPT,
+                    SID_ATTR_CHAR_BACK_COLOR,
                     0 };
 
     mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
