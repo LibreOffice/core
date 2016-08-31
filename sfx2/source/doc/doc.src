@@ -86,7 +86,7 @@ String STR_RENAME_TEMPLATE
 };
 String STR_TEMPLATE_TOOLTIP
 {
-    Text [ en-US ] = "Title: $1 \nCategory: $2" ;
+    Text [ en-US ] = "Title: $1\nCategory: $2" ;
 };
 String STR_TEMPLATE_SELECTION
 {
