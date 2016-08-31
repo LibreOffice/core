@@ -108,7 +108,7 @@ void OStaticSet::fillAllRows()
 }
 
 // XResultSet
-bool SAL_CALL OStaticSet::next(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OStaticSet::next() throw(SQLException, RuntimeException, std::exception)
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
 

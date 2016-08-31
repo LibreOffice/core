@@ -500,7 +500,7 @@ Reference< XArray > SAL_CALL OCacheSet::getArray( sal_Int32 columnIndex ) throw(
 }
 
 // XResultSet
-bool SAL_CALL OCacheSet::next(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OCacheSet::next() throw(SQLException, RuntimeException, std::exception)
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     return m_xDriverSet->next();

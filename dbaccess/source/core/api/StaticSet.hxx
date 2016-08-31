@@ -52,7 +52,7 @@ namespace dbaccess
         virtual sal_Int32 SAL_CALL hashBookmark( const css::uno::Any& bookmark ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
 
         // css::sdbc::XResultSet
-        virtual bool SAL_CALL next(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+        virtual bool SAL_CALL next() throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
         virtual bool SAL_CALL isBeforeFirst(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
         virtual bool SAL_CALL isAfterLast(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
         virtual void SAL_CALL beforeFirst(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
