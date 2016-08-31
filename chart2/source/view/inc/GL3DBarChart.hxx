@@ -12,7 +12,7 @@
 
 #include <GL3DPlotterBase.hxx>
 
-#include <list>
+#include <deque>
 #include <vector>
 #include "VDataSeries.hxx"
 
@@ -180,7 +180,7 @@ private:
     TimeValue maFPSRenderEndTime;
     TimeValue maDataUpdateStartTime;
     TimeValue maDataUpdateEndTime;
-    std::map<sal_uInt32, std::list<float> > maBarHistory;
+    std::map<sal_uInt32, std::deque<float> > maBarHistory;
     std::vector<sal_uInt32> maVectorNearest;
     std::map<sal_uInt32, float> maDistanceMap;
     std::map<sal_uInt32, sal_uInt32> maBarColorMap;
