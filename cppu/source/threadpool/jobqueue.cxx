@@ -129,7 +129,7 @@ namespace cppu_threadpool {
     void JobQueue::dispose( sal_Int64 nDisposeId )
     {
         MutexGuard guard( m_mutex );
-        for( CallStackList::iterator ii = m_lstCallstack.begin() ;
+        for( auto ii = m_lstCallstack.begin() ;
              ii != m_lstCallstack.end() ;
              ++ii )
         {
