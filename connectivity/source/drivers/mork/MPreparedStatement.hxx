@@ -58,7 +58,7 @@ namespace connectivity
 
             // OCommonStatement overridables
             virtual StatementType
-                            parseSql( const OUString& sql , bool bAdjusted = false) throw ( css::sdbc::SQLException, css::uno::RuntimeException ) override;
+                            parseSql( const OUString& sql , bool bAdjusted = false) throw ( css::sdbc::SQLException, css::uno::RuntimeException, std::exception ) override;
             virtual void    initializeResultSet( OResultSet* _pResult ) override;
             virtual void    clearCachedResultSet() override;
             virtual void    cacheResultSet( const ::rtl::Reference< OResultSet >& _pResult ) override;

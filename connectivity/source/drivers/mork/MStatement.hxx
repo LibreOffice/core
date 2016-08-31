@@ -106,7 +106,7 @@ namespace connectivity
             /** called to do the parsing of a to-be-executed SQL statement, and set all members as needed
             */
             virtual StatementType
-                            parseSql( const OUString& sql , bool bAdjusted = false) throw ( css::sdbc::SQLException, css::uno::RuntimeException );
+                            parseSql( const OUString& sql , bool bAdjusted = false) throw ( css::sdbc::SQLException, css::uno::RuntimeException, std::exception );
             /** called to initialize a result set, according to a previously parsed SQL statement
             */
             virtual void    initializeResultSet( OResultSet* _pResult );

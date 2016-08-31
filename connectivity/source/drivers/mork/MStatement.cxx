@@ -119,9 +119,8 @@ void SAL_CALL OCommonStatement::close(  ) throw(SQLException, RuntimeException, 
     dispose();
 }
 
-
 OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql , bool bAdjusted)
-    throw ( SQLException, RuntimeException )
+    throw ( SQLException, RuntimeException, std::exception )
 {
     OUString aErr;
 

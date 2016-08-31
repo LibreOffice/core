@@ -62,9 +62,8 @@ void SAL_CALL OPreparedStatement::disposing()
     m_xParamColumns = nullptr;
 }
 
-
 OCommonStatement::StatementType OPreparedStatement::parseSql( const OUString& sql , bool bAdjusted )
-    throw ( css::sdbc::SQLException, css::uno::RuntimeException )
+    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     StatementType eStatementType = OCommonStatement::parseSql( sql, bAdjusted );
     if ( eStatementType != eSelect )
@@ -80,7 +79,6 @@ OCommonStatement::StatementType OPreparedStatement::parseSql( const OUString& sq
 
     return eStatementType;
 }
-
 
 void OPreparedStatement::initializeResultSet( OResultSet* _pResult )
 {
