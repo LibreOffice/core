@@ -88,9 +88,9 @@ OString RscTypCont::ChangeLanguage(const OString& rNewLang)
 
     aLangFallbacks.clear();
 
-    for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
+    for (OUString& rItem : aFallbacks)
     {
-        OString aLang( OUStringToOString( *it, RTL_TEXTENCODING_ASCII_US));
+        OString aLang(OUStringToOString(rItem, RTL_TEXTENCODING_ASCII_US));
         sal_uInt32 nID = GetLangId( aLang );
         bool bAdd = (nID == 0);
         if ( bAdd )
@@ -174,8 +174,8 @@ RscTypCont::~RscTypCont()
 
     // all classes are still valid, destroy each instance
     // of base types
-    for ( size_t i = 0, n = aBaseLst.size(); i < n; ++i )
-        aBaseLst[ i ]->Pre_dtor();
+    for (RscTop* pItem : aBaseLst)
+        pItem->Pre_dtor();
 
     aBool.Pre_dtor();
     aShort.Pre_dtor();
@@ -194,21 +194,17 @@ RscTypCont::~RscTypCont()
     delete aVersion.pClass;
     DestroyTree( pRoot );
 
-    for ( size_t i = 0, n = aBaseLst.size(); i < n; ++i )
-        delete aBaseLst[ i ];
+    for (RscTop* pItem : aBaseLst)
+        delete pItem;
 
-    aBaseLst.clear();
-
-    for ( size_t i = 0, n = aSysLst.size(); i < n; ++i )
-        delete aSysLst[ i ];
-
-    aSysLst.clear();
+    for (RscSysEntry* pItem: aSysLst)
+        delete pItem;
 }
 
 void RscTypCont::ClearSysNames()
 {
-    for ( size_t i = 0, n = aSysLst.size(); i < n; ++i )
-        delete aSysLst[ i ];
+    for (RscSysEntry* pItem: aSysLst)
+        delete pItem;
 
     aSysLst.clear();
 }
@@ -244,33 +240,30 @@ RscTop * RscTypCont::SearchType( Atom nId )
 // al least to not pollute
 #undef ELSE_IF
 
-    for ( size_t i = 0, n = aBaseLst.size(); i < n; ++i )
+    for (RscTop* pItem : aBaseLst)
     {
-        RscTop* pEle = aBaseLst[ i ];
-        if( pEle->GetId() == nId )
-            return pEle;
+        if (pItem->GetId() == nId)
+            return pItem;
     }
     return nullptr;
 }
 
 sal_uInt32 RscTypCont::PutSysName( sal_uInt32 nRscTyp, char * pFileName )
 {
-    RscSysEntry *pSysEntry;
     RscSysEntry *pFoundEntry = nullptr;
 
-    for ( size_t i = 0, n = aSysLst.size(); i < n; ++i )
+    for (RscSysEntry* pItem: aSysLst)
     {
-        pSysEntry = aSysLst[ i ];
-        if( !strcmp( pSysEntry->aFileName.getStr(), pFileName ) )
-            if(  pSysEntry->nRscTyp == nRscTyp &&
-                 pSysEntry->nTyp    == 0 &&
-                 pSysEntry->nRefId  == 0)
-            {
-                pFoundEntry = pSysEntry;
-                break;
-            }
+        if( !strcmp( pItem->aFileName.getStr(), pFileName ) &&
+            pItem->nRscTyp == nRscTyp &&
+            pItem->nTyp    == 0 &&
+            pItem->nRefId  == 0)
+        {
+            pFoundEntry = pItem;
+            break;
+        }
     }
-    pSysEntry = pFoundEntry;
+    RscSysEntry *pSysEntry = pFoundEntry;
 
     if ( !pSysEntry )
     {
@@ -366,13 +359,12 @@ void RscEnumerateObj::WriteRcFile( RscWriteRc & rMem, FILE * fOut )
         sal_uInt32 nSize = (nCount * (sizeof(sal_uInt64)+sizeof(sal_Int32))) + sizeof(sal_Int32);
 
         rMem.Put( nCount ); // save the count
-        for( std::map< sal_uInt64, sal_uLong >::const_iterator it =
-             pTypCont->aIdTranslator.begin(); it != pTypCont->aIdTranslator.end(); ++it )
+        for (auto& rItem : pTypCont->aIdTranslator)
         {
             // save the key
-            rMem.Put( it->first );
+            rMem.Put( rItem.first );
             // save the object id or position
-            rMem.Put( (sal_Int32)it->second );
+            rMem.Put( static_cast<sal_Int32>(rItem.second) );
         }
         rMem.Put( nSize ); // save the size next
     }
