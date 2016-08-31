@@ -267,7 +267,7 @@ const SfxPoolItem* SvXMLExportItemMapper::GetItem( const SfxItemSet& rSet,
         return pItem;
     }
     else if( (nFlags & SvXmlExportFlags::DEFAULTS) &&
-              SFX_WHICH_MAX > nWhichId )
+              SfxItemPool::IsWhich(nWhichId))
     {
         // if its not set, try the pool if we export defaults
         return &rSet.GetPool()->GetDefaultItem(nWhichId);

@@ -180,7 +180,7 @@ void SfxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry& rEn
     // get the SfxPoolItem
     const SfxPoolItem* pItem = nullptr;
     SfxItemState eState = rSet.GetItemState( rEntry.nWID, true, &pItem );
-    if(SfxItemState::SET != eState && SFX_WHICH_MAX > rEntry.nWID )
+    if (SfxItemState::SET != eState && SfxItemPool::IsWhich(rEntry.nWID) )
         pItem = &rSet.GetPool()->GetDefaultItem(rEntry.nWID);
     // return item values as uno::Any
     if(eState >= SfxItemState::DEFAULT && pItem)
@@ -235,7 +235,7 @@ void SfxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry& rEn
     const SfxPoolItem* pItem = nullptr;
     std::unique_ptr<SfxPoolItem> pNewItem;
     SfxItemState eState = rSet.GetItemState( rEntry.nWID, true, &pItem );
-    if(SfxItemState::SET != eState && SFX_WHICH_MAX > rEntry.nWID )
+    if (SfxItemState::SET != eState && SfxItemPool::IsWhich(rEntry.nWID))
         pItem = &rSet.GetPool()->GetDefaultItem(rEntry.nWID);
     //maybe there's another way to find an Item
     if(eState < SfxItemState::DEFAULT)

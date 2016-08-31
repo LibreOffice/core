@@ -217,7 +217,7 @@ void SwXMLImportTableItemMapper_Impl::finished(
                 rSet.GetItemState(Ids[i][0], true, &pItem);
 
             // if not set, try the pool
-            if ((SfxItemState::SET != eState) && (SFX_WHICH_MAX > Ids[i][0]))
+            if ((SfxItemState::SET != eState) && SfxItemPool::IsWhich(Ids[i][0]))
             {
                 pItem = &rSet.GetPool()->GetDefaultItem(Ids[i][0]);
             }
