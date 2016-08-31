@@ -290,6 +290,7 @@ void WriterFilter::setTargetDocument(const uno::Reference< lang::XComponent >& x
     xSettings->setPropertyValue("InvertBorderSpacing", uno::makeAny(true));
     xSettings->setPropertyValue("CollapseEmptyCellPara", uno::makeAny(true));
     xSettings->setPropertyValue("TabOverflow", uno::makeAny(true));
+    xSettings->setPropertyValue("TreatSingleColumnBreakAsPageBreak", uno::makeAny(true));
     xSettings->setPropertyValue("UnbreakableNumberings", uno::makeAny(true));
 
     xSettings->setPropertyValue("FloattableNomargins", uno::makeAny(true));

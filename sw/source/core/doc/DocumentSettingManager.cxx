@@ -81,6 +81,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbClippedPictures(false),
     mbBackgroundParaOverDrawings(false),
     mbTabOverMargin(false),
+    mbTreatSingleColumnBreakAsPageBreak(false),
     mbSurroundTextWrapSmall(false),
     mbPropLineSpacingShrinksFirstLine(true),
     mbSubtractFlys(false),
@@ -175,6 +176,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::CLIPPED_PICTURES: return mbClippedPictures;
         case DocumentSettingId::BACKGROUND_PARA_OVER_DRAWINGS: return mbBackgroundParaOverDrawings;
         case DocumentSettingId::TAB_OVER_MARGIN: return mbTabOverMargin;
+        case DocumentSettingId::TREAT_SINGLE_COLUMN_BREAK_AS_PAGE_BREAK: return mbTreatSingleColumnBreakAsPageBreak;
         case DocumentSettingId::SURROUND_TEXT_WRAP_SMALL: return mbSurroundTextWrapSmall;
         case DocumentSettingId::PROP_LINE_SPACING_SHRINKS_FIRST_LINE: return mbPropLineSpacingShrinksFirstLine;
         case DocumentSettingId::SUBTRACT_FLYS: return mbSubtractFlys;
@@ -337,6 +339,10 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
 
         case DocumentSettingId::TAB_OVER_MARGIN:
             mbTabOverMargin = value;
+            break;
+
+        case DocumentSettingId::TREAT_SINGLE_COLUMN_BREAK_AS_PAGE_BREAK:
+            mbTreatSingleColumnBreakAsPageBreak = value;
             break;
 
         case DocumentSettingId::SURROUND_TEXT_WRAP_SMALL:
