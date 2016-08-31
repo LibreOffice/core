@@ -147,6 +147,7 @@ class DocumentSettingManager :
     bool mbClippedPictures;
     bool mbBackgroundParaOverDrawings;
     bool mbTabOverMargin;
+    bool mbTreatSingleColumnBreakAsPageBreak;
     bool mbSurroundTextWrapSmall;
     bool mbPropLineSpacingShrinksFirstLine; // fdo#79602
     bool mbSubtractFlys; // tdf#86578
