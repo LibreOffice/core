@@ -30,8 +30,6 @@ class SvStream;
 class SfxBroadcaster;
 struct SfxItemPool_Impl;
 
-#define SFX_WHICH_MAX 4999
-
 struct SfxItemInfo
 {
     sal_uInt16       _nSID;
@@ -212,6 +210,8 @@ private:
     const SfxItemPool&              operator=(const SfxItemPool &) = delete;
 
     static const SfxItemPool*       pStoringPool_;
+     //IDs below or equal are Which IDs, IDs above slot IDs
+    static const sal_uInt16         SFX_WHICH_MAX = 4999;
 };
 
 // only the pool may manipulate the reference counts
