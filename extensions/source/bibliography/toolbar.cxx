@@ -181,6 +181,7 @@ BibToolBar::BibToolBar(vcl::Window* pParent, Link<void*,void> aLink)
     aLBSource(VclPtr<ListBox>::Create(this,WB_DROPDOWN)),
     aFtQuery(VclPtr<FixedText>::Create(this,WB_VCENTER)),
     aEdQuery(VclPtr<Edit>::Create(this)),
+    pPopupMenu(VclPtr<PopupMenu>::Create()),
     nMenuId(0),
     nSelMenuItem(0),
     aLayoutManager( aLink ),
