@@ -41,6 +41,7 @@
 #include <frame.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
+#include <pamtyp.hxx>
 #include <ndtxt.hxx>
 #include <grfatr.hxx>
 #include <flyfrm.hxx>
