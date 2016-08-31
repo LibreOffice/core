@@ -257,7 +257,7 @@ void PaletteManager::AddRecentColor(const Color& rRecentColor, const OUString& r
 {
     auto itColor = std::find_if(maRecentColors.begin(),
                                 maRecentColors.end(),
-                                [rRecentColor] (const auto &a) { return a.first == rRecentColor; });
+                                [rRecentColor] (const color_and_name &a) { return a.first == rRecentColor; });
     // if recent color to be added is already in list, remove it
     if( itColor != maRecentColors.end() )
         maRecentColors.erase( itColor );
