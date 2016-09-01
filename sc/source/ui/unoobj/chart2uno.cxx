@@ -2547,9 +2547,8 @@ void ScChart2DataSequence::BuildDataCache()
 
     StopListeningToAllExternalRefs();
 
-    ::std::list<sal_Int32> aHiddenValues;
+    ::std::vector<sal_Int32> aHiddenValues;
     sal_Int32 nDataCount = 0;
-    sal_Int32 nHiddenValueCount = 0;
 
     for (vector<ScTokenRef>::const_iterator itr = m_aTokens.begin(), itrEnd = m_aTokens.end();
           itr != itrEnd; ++itr)
@@ -2578,7 +2577,6 @@ void ScChart2DataSequence::BuildDataCache()
                         if (bColHidden || bRowHidden)
                         {
                             // hidden cell
-                            ++nHiddenValueCount;
                             aHiddenValues.push_back(nDataCount-1);
 
                             if( !m_bIncludeHiddenCells )
@@ -2629,11 +2627,8 @@ void ScChart2DataSequence::BuildDataCache()
     }
 
     // convert the hidden cell list to sequence.
-    m_aHiddenValues.realloc(nHiddenValueCount);
-    sal_Int32* pArr = m_aHiddenValues.getArray();
-    ::std::list<sal_Int32>::const_iterator itr = aHiddenValues.begin(), itrEnd = aHiddenValues.end();
-    for (;itr != itrEnd; ++itr, ++pArr)
-        *pArr = *itr;
+    m_aHiddenValues.realloc(aHiddenValues.size());
+    memcpy(m_aHiddenValues.getArray(), aHiddenValues.data(), sizeof(sal_Int32) * aHiddenValues.size());
 
     // Clear the data series cache when the array is re-built.
     m_aMixedDataCache.realloc(0);
