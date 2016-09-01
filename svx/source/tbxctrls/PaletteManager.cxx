@@ -190,7 +190,8 @@ void PaletteManager::SetPalette( sal_Int32 nPos )
         pColorList = XPropertyList::AsColorList(
                             XPropertyList::CreatePropertyListFromURL(
                             XCOLOR_LIST, GetSelectedPalettePath()));
-        pColorList->SetName(GetPaletteName());
+        auto name = GetPaletteName(); // may change pColorList
+        pColorList->SetName(name);
         if(pColorList->Load())
         {
             SfxObjectShell* pShell = SfxObjectShell::Current();
