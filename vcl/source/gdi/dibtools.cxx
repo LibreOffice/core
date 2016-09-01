@@ -1310,10 +1310,15 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess*
                 }
                 break;
 
+                case 24:
+                {
+                    //valgrind, zero out the trailing unused alignment bytes
+                    size_t nUnusedBytes = nAlignedWidth - nWidth * 3;
+                    memset(pBuf.get() + nAlignedWidth - nUnusedBytes, 0, nUnusedBytes);
+                }
+                SAL_FALLTHROUGH;
                 // #i59239# fallback to 24 bit format, if bitcount is non-default
                 default:
-                    // FALLTHROUGH intended
-                case 24:
                 {
                     BitmapColor aPixelColor;
                     const bool bWriteAlpha(32 == nBitCount && pAccAlpha);
