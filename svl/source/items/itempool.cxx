@@ -103,7 +103,7 @@ const SfxPoolItem* SfxItemPool::GetPoolDefaultItem( sal_uInt16 nWhich ) const
 {
     const SfxPoolItem* pRet;
     if( IsInRange( nWhich ) )
-        pRet = *(pImpl->ppPoolDefaults + GetIndex_Impl( nWhich ));
+        pRet = pImpl->maPoolDefaults[GetIndex_Impl(nWhich)];
     else if( pImpl->mpSecondary )
         pRet = pImpl->mpSecondary->GetPoolDefaultItem( nWhich );
     else
@@ -237,11 +237,11 @@ SfxItemPool::SfxItemPool
         SetDefaults( rPool.pImpl->ppStaticDefaults );
 
     // Copy Pool Defaults
-    for ( sal_uInt16 n = 0; n <= pImpl->mnEnd - pImpl->mnStart; ++n )
-        if ( (*( rPool.pImpl->ppPoolDefaults + n )) )
+    for (size_t n = 0; n < pImpl->maPoolDefaults.size(); ++n )
+        if (rPool.pImpl->maPoolDefaults[n])
         {
-            (*( pImpl->ppPoolDefaults + n )) = (*( rPool.pImpl->ppPoolDefaults + n ))->Clone(this);
-            (*( pImpl->ppPoolDefaults + n ))->SetKind( SFX_ITEMS_POOLDEFAULT );
+            pImpl->maPoolDefaults[n] = rPool.pImpl->maPoolDefaults[n]->Clone(this); //resets kind
+            pImpl->maPoolDefaults[n]->SetKind(SFX_ITEMS_POOLDEFAULT);
         }
 
     // Copy Version map
@@ -346,7 +346,7 @@ void SfxItemPool::ReleaseDefaults
 
 SfxItemPool::~SfxItemPool()
 {
-    if ( !pImpl->maPoolItems.empty() && pImpl->ppPoolDefaults )
+    if ( !pImpl->maPoolItems.empty() && !pImpl->maPoolDefaults.empty() )
         Delete();
 
     if (pImpl->mpMaster != nullptr && pImpl->mpMaster != this)
@@ -485,7 +485,7 @@ SfxItemPool* SfxItemPool::Clone() const
 void SfxItemPool::Delete()
 {
     // Already deleted?
-    if ( pImpl->maPoolItems.empty() || !pImpl->ppPoolDefaults )
+    if (pImpl->maPoolItems.empty() || pImpl->maPoolDefaults.empty())
         return;
 
     // Inform e.g. running Requests
@@ -494,7 +494,7 @@ void SfxItemPool::Delete()
     // Iterate through twice: first for the SetItems.
     // We separate this into two loops (for clarity's sake)
     std::vector<SfxPoolItemArray_Impl*>::iterator itrItemArr = pImpl->maPoolItems.begin();
-    SfxPoolItem** ppDefaultItem = pImpl->ppPoolDefaults;
+    auto itDefaultItem = pImpl->maPoolDefaults.begin();
     SfxPoolItem** ppStaticDefaultItem = pImpl->ppStaticDefaults;
     sal_uInt16 nArrCnt;
 
@@ -502,7 +502,7 @@ void SfxItemPool::Delete()
     if (pImpl->ppStaticDefaults != nullptr) {
         for ( nArrCnt = GetSize_Impl();
               nArrCnt;
-              --nArrCnt, ++itrItemArr, ++ppDefaultItem, ++ppStaticDefaultItem )
+              --nArrCnt, ++itrItemArr, ++itDefaultItem, ++ppStaticDefaultItem)
         {
             // *ppStaticDefaultItem could've already been deleted in a class derived
             // from SfxItemPool
@@ -522,24 +522,24 @@ void SfxItemPool::Delete()
                         }
                     DELETEZ( *itrItemArr );
                 }
-                if ( *ppDefaultItem )
+                if (*itDefaultItem)
                 {
 #ifdef DBG_UTIL
-                    SetRefCount( **ppDefaultItem, 0 );
+                    SetRefCount(**itDefaultItem, 0);
 #endif
-                    DELETEZ( *ppDefaultItem );
+                    DELETEZ(*itDefaultItem);
                 }
             }
         }
     }
 
     itrItemArr = pImpl->maPoolItems.begin();
-    ppDefaultItem = pImpl->ppPoolDefaults;
+    itDefaultItem = pImpl->maPoolDefaults.begin();
 
     // Now for the easy Items
     for ( nArrCnt = GetSize_Impl();
             nArrCnt;
-            --nArrCnt, ++itrItemArr, ++ppDefaultItem )
+            --nArrCnt, ++itrItemArr, ++itDefaultItem)
     {
         if ( *itrItemArr )
         {
@@ -554,12 +554,12 @@ void SfxItemPool::Delete()
                 }
             DELETEZ( *itrItemArr );
         }
-        if ( *ppDefaultItem )
+        if (*itDefaultItem)
         {
 #ifdef DBG_UTIL
-            SetRefCount( **ppDefaultItem, 0 );
+            SetRefCount(**itDefaultItem, 0);
 #endif
-            delete *ppDefaultItem;
+            DELETEZ(*itDefaultItem);
         }
     }
 
@@ -571,16 +571,16 @@ void SfxItemPool::SetPoolDefaultItem(const SfxPoolItem &rItem)
 {
     if ( IsInRange(rItem.Which()) )
     {
-        SfxPoolItem **ppOldDefault =
-            pImpl->ppPoolDefaults + GetIndex_Impl(rItem.Which());
+        auto& rOldDefault =
+            pImpl->maPoolDefaults[GetIndex_Impl(rItem.Which())];
         SfxPoolItem *pNewDefault = rItem.Clone(this);
         pNewDefault->SetKind(SFX_ITEMS_POOLDEFAULT);
-        if ( *ppOldDefault )
+        if (rOldDefault)
         {
-            (*ppOldDefault)->SetRefCount(0);
-            DELETEZ( *ppOldDefault );
+            rOldDefault->SetRefCount(0);
+            DELETEZ(rOldDefault);
         }
-        *ppOldDefault = pNewDefault;
+        rOldDefault = pNewDefault;
     }
     else if ( pImpl->mpSecondary )
         pImpl->mpSecondary->SetPoolDefaultItem(rItem);
@@ -598,12 +598,12 @@ void SfxItemPool::ResetPoolDefaultItem( sal_uInt16 nWhichId )
 {
     if ( IsInRange(nWhichId) )
     {
-        SfxPoolItem **ppOldDefault =
-            pImpl->ppPoolDefaults + GetIndex_Impl( nWhichId );
-        if ( *ppOldDefault )
+        auto& rOldDefault =
+            pImpl->maPoolDefaults[GetIndex_Impl(nWhichId)];
+        if (rOldDefault)
         {
-            (*ppOldDefault)->SetRefCount(0);
-            DELETEZ( *ppOldDefault );
+            rOldDefault->SetRefCount(0);
+            DELETEZ(rOldDefault);
         }
     }
     else if ( pImpl->mpSecondary )
@@ -844,7 +844,7 @@ const SfxPoolItem& SfxItemPool::GetDefaultItem( sal_uInt16 nWhich ) const
 
     DBG_ASSERT( pImpl->ppStaticDefaults, "no defaults known - don't ask me for defaults" );
     sal_uInt16 nPos = GetIndex_Impl(nWhich);
-    SfxPoolItem *pDefault = *(pImpl->ppPoolDefaults + nPos);
+    SfxPoolItem* pDefault = pImpl->maPoolDefaults[nPos];
     if ( pDefault )
         return *pDefault;
     return **(pImpl->ppStaticDefaults + nPos);
