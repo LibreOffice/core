@@ -462,7 +462,7 @@ void XclImpFont::GuessScriptType()
     if( OutputDevice* pPrinter = GetPrinter() )
     {
         vcl::Font aFont( maData.maName, Size( 0, 10 ) );
-        FontCharMapPtr xFontCharMap;
+        FontCharMapRef xFontCharMap;
 
         pPrinter->SetFont( aFont );
         if( pPrinter->GetFontCharMap( xFontCharMap ) )

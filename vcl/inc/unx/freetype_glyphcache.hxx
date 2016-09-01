@@ -82,7 +82,7 @@ public:
     void                  CacheGlyphIndex( sal_UCS4 cChar, int nGI ) const;
 
     bool                  GetFontCodeRanges( CmapResult& ) const;
-    const FontCharMapPtr& GetFontCharMap();
+    const FontCharMapRef& GetFontCharMap();
 
 private:
     FT_FaceRec_*    maFaceFT;
@@ -96,7 +96,7 @@ private:
     sal_IntPtr      mnFontId;
     FontAttributes  maDevFontAttributes;
 
-    FontCharMapPtr  mxFontCharMap;
+    FontCharMapRef  mxFontCharMap;
 
     // cache unicode->glyphid mapping because looking it up is expensive
     // TODO: change to std::unordered_multimap when a use case requires a m:n mapping

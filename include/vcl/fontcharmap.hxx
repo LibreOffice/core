@@ -24,30 +24,28 @@
 #include <vcl/font.hxx>
 #include <vcl/outdev.hxx>
 
-#include <boost/intrusive_ptr.hpp>
-
 class ImplFontCharMap;
 class CmapResult;
 
 typedef sal_uInt32 sal_UCS4;
-typedef boost::intrusive_ptr< ImplFontCharMap > ImplFontCharMapPtr;
-typedef boost::intrusive_ptr< FontCharMap > FontCharMapPtr;
+typedef tools::SvRef<ImplFontCharMap> ImplFontCharMapRef;
+typedef tools::SvRef<FontCharMap> FontCharMapRef;
 
-class VCL_DLLPUBLIC FontCharMap
+class VCL_DLLPUBLIC FontCharMap : public SvRefBase
 {
 public:
     /** A new FontCharMap is created based on a "default" map, which includes
         all codepoints in the Unicode BMP range, including surrogates.
      **/
-                        FontCharMap();
-                        FontCharMap( const CmapResult& rCR );
-                        ~FontCharMap();
+    FontCharMap();
+    FontCharMap( const CmapResult& rCR );
+    virtual ~FontCharMap();
 
     /** Get the default font character map
 
         @returns the default font character map.
      */
-    static FontCharMapPtr GetDefaultMap( bool bSymbols );
+    static FontCharMapRef GetDefaultMap( bool bSymbols );
 
     /** Determines if the font character map is the "default". The default map
         includes all codepoints in the Unicode BMP range, including surrogates.
@@ -136,34 +134,18 @@ public:
     int                 GetGlyphIndex( sal_UCS4 ) const;
 
 private:
-    ImplFontCharMapPtr  mpImplFontCharMap;
+    ImplFontCharMapRef mpImplFontCharMap;
 
     friend class ::OutputDevice;
-    friend void intrusive_ptr_release(FontCharMap* pFontCharMap);
-    friend void intrusive_ptr_add_ref(FontCharMap* pFontCharMap);
 
     int                 findRangeIndex( sal_uInt32 ) const;
 
-                        FontCharMap( ImplFontCharMapPtr const & pIFCMap );
-
-    sal_uInt32          mnRefCount;
+                        FontCharMap( ImplFontCharMapRef const & pIFCMap );
 
     // prevent assignment and copy construction
                         FontCharMap( const FontCharMap& ) = delete;
     void                operator=( const FontCharMap& ) = delete;
 };
-
-inline void intrusive_ptr_add_ref(FontCharMap* pFontCharMap)
-{
-    ++pFontCharMap->mnRefCount;
-}
-
-inline void intrusive_ptr_release(FontCharMap* pFontCharMap)
-{
-    if (--pFontCharMap->mnRefCount == 0)
-        delete pFontCharMap;
-}
-
 
 // CmapResult is a normalized version of the many CMAP formats
 class VCL_PLUGIN_PUBLIC CmapResult
