@@ -75,7 +75,7 @@ enum RasterOp { ROP_OVERPAINT, ROP_XOR, ROP_0, ROP_1, ROP_INVERT };
 
 enum FontAutoHint { AUTOHINT_DONTKNOW, AUTOHINT_FALSE, AUTOHINT_TRUE };
 
-enum FontHinting { HINTING_DONTKNOW, HINTING_FALSE, HINTING_TRUE };
+enum class FontHinting { DontKnow, No, Yes };
 
 enum class FontHintStyle { NONE, Slight, Medium, Full };
 

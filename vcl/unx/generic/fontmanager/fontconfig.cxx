@@ -1212,7 +1212,7 @@ FontConfigFontOptions* PrintFontManager::getFontOptions(
         if( eAutoHint == FcResultMatch )
             pOptions->meAutoHint = autohint ? AUTOHINT_TRUE : AUTOHINT_FALSE;
         if( eHinting == FcResultMatch )
-            pOptions->meHinting = hinting ? HINTING_TRUE : HINTING_FALSE;
+            pOptions->meHinting = hinting ? FontHinting::Yes : FontHinting::No;
         switch (hintstyle)
         {
             case FC_HINT_NONE:   pOptions->meHintStyle = FontHintStyle::NONE; break;
