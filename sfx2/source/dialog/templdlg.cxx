@@ -653,7 +653,7 @@ namespace SfxTemplate
             case SfxStyleFamily::Page:   return 4;
             case SfxStyleFamily::Pseudo: return 5;
             case SfxStyleFamily::Table:  return 6;
-            default:                      return 0;
+            default:                     return 0xffff;
         }
     }
 
