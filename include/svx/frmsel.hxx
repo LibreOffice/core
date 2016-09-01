@@ -145,7 +145,7 @@ public:
     /** Returns true, if any of the enabled frame borders is selected. */
     bool                IsAnyBorderSelected() const;
     /** Selects or deselects all frame borders. */
-    void                SelectAllBorders( bool bSelect = true );
+    void                SelectAllBorders( bool bSelect );
     /** Deselects all frame borders. */
     inline void         DeselectAllBorders() { SelectAllBorders( false ); }
 

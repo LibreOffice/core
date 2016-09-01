@@ -62,19 +62,19 @@ public:
     static bool                 InsertURL( sal_uInt32 nThemeId, const OUString& rURL );
 
     static bool                 GetGraphicObj( const OUString& rThemeName, sal_uInt32 nPos,
-                                               Graphic* pGraphic = nullptr, BitmapEx* pThumb = nullptr,
+                                               Graphic* pGraphic, BitmapEx* pThumb = nullptr,
                                                bool bProgess = false );
     static bool                 GetGraphicObj( sal_uInt32 nThemeId, sal_uInt32 nPos,
-                                               Graphic* pGraphic = nullptr, BitmapEx* pThumb = nullptr,
+                                               Graphic* pGraphic, BitmapEx* pThumb = nullptr,
                                                bool bProgess = false );
 
     static sal_uInt32           GetSdrObjCount( const OUString& rThemeName );
     static sal_uInt32           GetSdrObjCount( sal_uInt32 nThemeId );
 
     static bool                 GetSdrObj( const OUString& rThemeName, sal_uInt32 nSdrModelPos,
-                                           SdrModel* pModel = nullptr, BitmapEx* pThumb = nullptr );
+                                           SdrModel* pModel, BitmapEx* pThumb = nullptr );
     static bool                 GetSdrObj( sal_uInt32 nThemeId, sal_uInt32 nSdrModelPos,
-                                           SdrModel* pModel = nullptr, BitmapEx* pThumb = nullptr );
+                                           SdrModel* pModel, BitmapEx* pThumb = nullptr );
 
     static bool                 BeginLocking( const OUString& rThemeName );
     static bool                 BeginLocking( sal_uInt32 nThemeId );

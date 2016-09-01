@@ -126,12 +126,12 @@ namespace sdr
 
             // Clear a single item, iterate over hierarchies if necessary. Default
             // Implementation falls back to ClearObjectItem().
-            virtual void ClearMergedItem(const sal_uInt16 nWhich = 0);
+            virtual void ClearMergedItem(const sal_uInt16 nWhich);
 
             // Clear single item direct. Only uses AllowItemChange() and ItemChange(),
             // but not PostItemChange() and ItemSetChanged() calls.
             // Also supports complete deletion of items when default parameter 0 is used.
-            virtual void ClearObjectItemDirect(const sal_uInt16 nWhich = 0) = 0;
+            virtual void ClearObjectItemDirect(const sal_uInt16 nWhich) = 0;
 
             // Set a new StyleSheet. Registers as listener at the StyleSheet to get knowledge
             // of StyleSheet changes.
@@ -146,7 +146,7 @@ namespace sdr
 
             // Move local items to a new ItemPool.
             // Override this to do it for hierarchical objects like e.g. groups.
-            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = nullptr);
+            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel);
 
             // Set new model.
             virtual void SetModel(SdrModel* pOldModel, SdrModel* pNewModel);

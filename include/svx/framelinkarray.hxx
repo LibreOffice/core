@@ -82,7 +82,7 @@ public:
     size_t              GetCellCount() const;
 
     /** Returns the cell index from the cell address (nCol,nRow). */
-    size_t              GetCellIndex( size_t nCol, size_t nRow, bool bRTL = false) const;
+    size_t              GetCellIndex( size_t nCol, size_t nRow, bool bRTL) const;
 
     // cell border styles -----------------------------------------------------
 
@@ -334,7 +334,7 @@ public:
     void                DrawRange( drawinglayer::processor2d::BaseProcessor2D* rDev,
                             size_t nFirstCol, size_t nFirstRow,
                             size_t nLastCol, size_t nLastRow,
-                            const Color* pForceColor = nullptr ) const;
+                            const Color* pForceColor ) const;
 
     /** Draws the part of the specified range, that is inside the clipping range.
         @param pForceColor

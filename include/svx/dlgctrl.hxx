@@ -109,7 +109,7 @@ protected:
 public:
     SvxRectCtl( vcl::Window* pParent, RectPoint eRpt = RectPoint::MM,
                 sal_uInt16 nBorder = 200, sal_uInt16 nCircle = 80 );
-    void SetControlSettings(RectPoint eRpt = RectPoint::MM, sal_uInt16 nBorder = 200,
+    void SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder = 200,
         sal_uInt16 nCircle = 80);
     virtual ~SvxRectCtl();
     virtual void dispose() override;
