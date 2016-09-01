@@ -54,7 +54,7 @@ void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
     if( ImplIsRecordLayout() )
         return;
 
-    if( ROP_INVERT == meRasterOp )
+    if( RasterOp::Invert == meRasterOp )
     {
         DrawRect( Rectangle( rDestPt, rDestSize ) );
         return;

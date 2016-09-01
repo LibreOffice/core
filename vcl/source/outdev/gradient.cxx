@@ -160,12 +160,12 @@ void OutputDevice::ClipAndDrawGradientMetafile ( const Gradient &rGradient, cons
 
     EnableOutput( false );
     Push( PushFlags::RASTEROP );
-    SetRasterOp( ROP_XOR );
+    SetRasterOp( RasterOp::Xor );
     DrawGradient( aBoundRect, rGradient );
     SetFillColor( COL_BLACK );
-    SetRasterOp( ROP_0 );
+    SetRasterOp( RasterOp::N0 );
     DrawPolyPolygon( rPolyPoly );
-    SetRasterOp( ROP_XOR );
+    SetRasterOp( RasterOp::Xor );
     DrawGradient( aBoundRect, rGradient );
     Pop();
     EnableOutput( bOldOutput );

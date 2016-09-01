@@ -59,7 +59,7 @@ IMPL_XTYPEPROVIDER_END
 
 VCLXGraphics::VCLXGraphics()
     : mpOutputDevice(nullptr)
-    , meRasterOp(ROP_OVERPAINT)
+    , meRasterOp(RasterOp::OverPaint)
     , mpClipRegion(nullptr)
 {
 }
@@ -116,7 +116,7 @@ void VCLXGraphics::initAttrs()
     maTextFillColor = mpOutputDevice->GetTextFillColor(); /* COL_TRANSPARENT */
     maLineColor     = mpOutputDevice->GetLineColor(); /* COL_BLACK */
     maFillColor     = mpOutputDevice->GetFillColor(); /* COL_WHITE */
-    meRasterOp      = mpOutputDevice->GetRasterOp(); /* ROP_OVERPAINT */
+    meRasterOp      = mpOutputDevice->GetRasterOp(); /* RasterOp::OverPaint */
 }
 
 void VCLXGraphics::InitOutputDevice( InitOutDevFlags nFlags )

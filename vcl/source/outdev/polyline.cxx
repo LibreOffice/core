@@ -214,7 +214,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
 
         const bool bTryAA((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
                           mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
-                          ROP_OVERPAINT == GetRasterOp() &&
+                          RasterOp::OverPaint == GetRasterOp() &&
                           IsLineColor());
 
         // when AA it is necessary to also paint the filled polygon's outline
@@ -314,7 +314,7 @@ bool OutputDevice::DrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
     const bool bTryAA( bBypassAACheck ||
                       ((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
                       mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
-                      ROP_OVERPAINT == GetRasterOp() &&
+                      RasterOp::OverPaint == GetRasterOp() &&
                       IsLineColor()));
 
     if(bTryAA)

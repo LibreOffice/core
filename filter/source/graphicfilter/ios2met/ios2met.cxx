@@ -311,16 +311,16 @@ struct OSAttr
         , nPushOrder(0)
         , nIvAttrA(0)
         , nIvAttrP(0)
-        , eLinMix(ROP_OVERPAINT)
-        , eLinBgMix(ROP_OVERPAINT)
-        , eChrMix(ROP_OVERPAINT)
-        , eChrBgMix(ROP_OVERPAINT)
-        , eMrkMix(ROP_OVERPAINT)
-        , eMrkBgMix(ROP_OVERPAINT)
-        , ePatMix(ROP_OVERPAINT)
-        , ePatBgMix(ROP_OVERPAINT)
-        , eImgMix(ROP_OVERPAINT)
-        , eImgBgMix(ROP_OVERPAINT)
+        , eLinMix(RasterOp::OverPaint)
+        , eLinBgMix(RasterOp::OverPaint)
+        , eChrMix(RasterOp::OverPaint)
+        , eChrBgMix(RasterOp::OverPaint)
+        , eMrkMix(RasterOp::OverPaint)
+        , eMrkBgMix(RasterOp::OverPaint)
+        , ePatMix(RasterOp::OverPaint)
+        , ePatBgMix(RasterOp::OverPaint)
+        , eImgMix(RasterOp::OverPaint)
+        , eImgBgMix(RasterOp::OverPaint)
         , nArcP(0)
         , nArcQ(0)
         , nArcR(0)
@@ -814,10 +814,10 @@ Point OS2METReader::ReadPoint( const bool bAdjustBoundRect )
 RasterOp OS2METReader::OS2MixToRasterOp(sal_uInt8 nMix)
 {
     switch (nMix) {
-        case 0x0c: return ROP_INVERT;
-        case 0x04: return ROP_XOR;
-        case 0x0b: return ROP_XOR;
-        default:   return ROP_OVERPAINT;
+        case 0x0c: return RasterOp::Invert;
+        case 0x04: return RasterOp::Xor;
+        case 0x0b: return RasterOp::Xor;
+        default:   return RasterOp::OverPaint;
     }
 }
 
@@ -2622,24 +2622,24 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
 
     aDefAttr.aLinCol     =Color(COL_BLACK);
     aDefAttr.aLinBgCol   =Color(COL_WHITE);
-    aDefAttr.eLinMix     =ROP_OVERPAINT;
-    aDefAttr.eLinBgMix   =ROP_OVERPAINT;
+    aDefAttr.eLinMix     =RasterOp::OverPaint;
+    aDefAttr.eLinBgMix   =RasterOp::OverPaint;
     aDefAttr.aChrCol     =Color(COL_BLACK);
     aDefAttr.aChrBgCol   =Color(COL_WHITE);
-    aDefAttr.eChrMix     =ROP_OVERPAINT;
-    aDefAttr.eChrBgMix   =ROP_OVERPAINT;
+    aDefAttr.eChrMix     =RasterOp::OverPaint;
+    aDefAttr.eChrBgMix   =RasterOp::OverPaint;
     aDefAttr.aMrkCol     =Color(COL_BLACK);
     aDefAttr.aMrkBgCol   =Color(COL_WHITE);
-    aDefAttr.eMrkMix     =ROP_OVERPAINT;
-    aDefAttr.eMrkBgMix   =ROP_OVERPAINT;
+    aDefAttr.eMrkMix     =RasterOp::OverPaint;
+    aDefAttr.eMrkBgMix   =RasterOp::OverPaint;
     aDefAttr.aPatCol     =Color(COL_BLACK);
     aDefAttr.aPatBgCol   =Color(COL_WHITE);
-    aDefAttr.ePatMix     =ROP_OVERPAINT;
-    aDefAttr.ePatBgMix   =ROP_OVERPAINT;
+    aDefAttr.ePatMix     =RasterOp::OverPaint;
+    aDefAttr.ePatBgMix   =RasterOp::OverPaint;
     aDefAttr.aImgCol     =Color(COL_BLACK);
     aDefAttr.aImgBgCol   =Color(COL_WHITE);
-    aDefAttr.eImgMix     =ROP_OVERPAINT;
-    aDefAttr.eImgBgMix   =ROP_OVERPAINT;
+    aDefAttr.eImgMix     =RasterOp::OverPaint;
+    aDefAttr.eImgBgMix   =RasterOp::OverPaint;
     aDefAttr.nArcP       =1;
     aDefAttr.nArcQ       =1;
     aDefAttr.nArcR       =0;

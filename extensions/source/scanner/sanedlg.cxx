@@ -1243,7 +1243,7 @@ void ScanPreview::DrawDrag(vcl::RenderContext& rRenderContext)
         return;
 
     RasterOp eROP = rRenderContext.GetRasterOp();
-    rRenderContext.SetRasterOp(ROP_INVERT);
+    rRenderContext.SetRasterOp(RasterOp::Invert);
     rRenderContext.SetMapMode(MapMode(MAP_PIXEL));
 
     if (mbDragDrawn)

@@ -333,7 +333,7 @@ bool EMFWriter::WriteEMF(const GDIMetaFile& rMtf)
     m_rStm.WriteInt32( 0 ).WriteInt32( 0 );
     ImplEndRecord();
 
-    ImplWriteRasterOp( ROP_OVERPAINT );
+    ImplWriteRasterOp( RasterOp::OverPaint );
 
     ImplBeginRecord( WIN_EMR_SETBKMODE );
     m_rStm.WriteUInt32( 1 ); // TRANSPARENT
@@ -625,9 +625,9 @@ void EMFWriter::ImplWriteRasterOp( RasterOp eRop )
 
     switch( eRop )
     {
-        case ROP_INVERT: nROP2 = 6; break;
-        case ROP_XOR:    nROP2 = 7; break;
-        default:         nROP2 = 13;break;
+        case RasterOp::Invert: nROP2 = 6; break;
+        case RasterOp::Xor:    nROP2 = 7; break;
+        default:               nROP2 = 13;break;
     }
 
     ImplBeginRecord( WIN_EMR_SETROP2 );
@@ -839,7 +839,7 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
         const sal_uLong nOffPos = m_rStm.Tell();
         m_rStm.SeekRel( 16 );
 
-        m_rStm.WriteUInt32( 0 ).WriteInt32( ( ROP_XOR == maVDev->GetRasterOp() && WIN_SRCCOPY == nROP ) ? WIN_SRCINVERT : nROP );
+        m_rStm.WriteUInt32( 0 ).WriteInt32( ( RasterOp::Xor == maVDev->GetRasterOp() && WIN_SRCCOPY == nROP ) ? WIN_SRCINVERT : nROP );
         ImplWriteSize( rSz );
 
         WriteDIB(rBmp, aMemStm, true, false);

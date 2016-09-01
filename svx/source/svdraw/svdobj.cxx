@@ -1827,7 +1827,7 @@ void SdrObject::PaintMacro(OutputDevice& rOut, const Rectangle& , const SdrObjMa
 
     rOut.SetLineColor(COL_BLACK);
     rOut.SetFillColor();
-    rOut.SetRasterOp(ROP_INVERT);
+    rOut.SetRasterOp(RasterOp::Invert);
 
     for(sal_uInt32 a(0); a < nCount; a++)
     {

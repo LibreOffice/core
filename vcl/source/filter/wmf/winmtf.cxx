@@ -827,8 +827,8 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     mnTextLayoutMode    ( ComplexTextLayoutFlags::Default ),
     mnLatestBkMode      ( BkMode::NONE ),
     mnBkMode            ( BkMode::OPAQUE ),
-    meLatestRasterOp    ( ROP_INVERT ),
-    meRasterOp          ( ROP_OVERPAINT ),
+    meLatestRasterOp    ( RasterOp::Invert ),
+    meRasterOp          ( RasterOp::OverPaint ),
     maActPos            ( Point() ),
     mbNopMode           ( false ),
     mbFillStyleSelected ( false ),
@@ -865,8 +865,8 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     maLatestFillStyle.aFillColor = Color( 0x12, 0x34, 0x56 );
 
     mnRop = WMFRasterOp::Black;
-    meRasterOp = ROP_OVERPAINT;
-    mpGDIMetaFile->AddAction( new MetaRasterOpAction( ROP_OVERPAINT ) );
+    meRasterOp = RasterOp::OverPaint;
+    mpGDIMetaFile->AddAction( new MetaRasterOpAction( RasterOp::OverPaint ) );
 }
 
 WinMtfOutput::~WinMtfOutput()
@@ -952,16 +952,16 @@ WMFRasterOp WinMtfOutput::SetRasterOp( WMFRasterOp nRasterOp )
         switch( nRasterOp )
         {
             case WMFRasterOp::Not:
-                meRasterOp = ROP_INVERT;
+                meRasterOp = RasterOp::Invert;
             break;
 
             case WMFRasterOp::XorPen:
-                meRasterOp = ROP_XOR;
+                meRasterOp = RasterOp::Xor;
             break;
 
             case WMFRasterOp::Nop:
             {
-                meRasterOp = ROP_OVERPAINT;
+                meRasterOp = RasterOp::OverPaint;
                 if( !mbNopMode )
                 {
                     m_NopFillStyle = maFillStyle;
@@ -974,7 +974,7 @@ WMFRasterOp WinMtfOutput::SetRasterOp( WMFRasterOp nRasterOp )
             break;
 
             default:
-                meRasterOp = ROP_OVERPAINT;
+                meRasterOp = RasterOp::OverPaint;
             break;
         }
     }

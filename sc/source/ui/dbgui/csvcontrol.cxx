@@ -260,7 +260,7 @@ void ScCsvControl::ImplInvertRect( OutputDevice& rOutDev, const Rectangle& rRect
     rOutDev.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR | PushFlags::RASTEROP );
     rOutDev.SetLineColor( Color( COL_BLACK ) );
     rOutDev.SetFillColor( Color( COL_BLACK ) );
-    rOutDev.SetRasterOp( ROP_INVERT );
+    rOutDev.SetRasterOp( RasterOp::Invert );
     rOutDev.DrawRect( rRect );
     rOutDev.Pop();
 }

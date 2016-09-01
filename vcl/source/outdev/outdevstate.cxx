@@ -39,7 +39,7 @@ OutDevState::OutDevState()
     , mpOverlineColor(nullptr)
     , mpRefPoint(nullptr)
     , meTextAlign(ALIGN_TOP)
-    , meRasterOp(ROP_OVERPAINT)
+    , meRasterOp(RasterOp::OverPaint)
     , mnTextLayoutMode(ComplexTextLayoutFlags::Default)
     , meTextLanguage(0)
     , mnFlags(PushFlags::NONE)
@@ -297,7 +297,7 @@ void OutputDevice::SetRasterOp( RasterOp eRasterOp )
         mbInitLineColor = mbInitFillColor = true;
 
         if( mpGraphics || AcquireGraphics() )
-            mpGraphics->SetXORMode( (ROP_INVERT == meRasterOp) || (ROP_XOR == meRasterOp) );
+            mpGraphics->SetXORMode( (RasterOp::Invert == meRasterOp) || (RasterOp::Xor == meRasterOp) );
     }
 
     if( mpAlphaVDev )
@@ -576,11 +576,11 @@ void OutputDevice::InitLineColor()
 
     if( mbLineColor )
     {
-        if( ROP_0 == meRasterOp )
+        if( RasterOp::N0 == meRasterOp )
             mpGraphics->SetROPLineColor( SalROPColor::N0 );
-        else if( ROP_1 == meRasterOp )
+        else if( RasterOp::N1 == meRasterOp )
             mpGraphics->SetROPLineColor( SalROPColor::N1 );
-        else if( ROP_INVERT == meRasterOp )
+        else if( RasterOp::Invert == meRasterOp )
             mpGraphics->SetROPLineColor( SalROPColor::Invert );
         else
             mpGraphics->SetLineColor( ImplColorToSal( maLineColor ) );
@@ -598,11 +598,11 @@ void OutputDevice::InitFillColor()
 
     if( mbFillColor )
     {
-        if( ROP_0 == meRasterOp )
+        if( RasterOp::N0 == meRasterOp )
             mpGraphics->SetROPFillColor( SalROPColor::N0 );
-        else if( ROP_1 == meRasterOp )
+        else if( RasterOp::N1 == meRasterOp )
             mpGraphics->SetROPFillColor( SalROPColor::N1 );
-        else if( ROP_INVERT == meRasterOp )
+        else if( RasterOp::Invert == meRasterOp )
             mpGraphics->SetROPFillColor( SalROPColor::Invert );
         else
             mpGraphics->SetFillColor( ImplColorToSal( maFillColor ) );

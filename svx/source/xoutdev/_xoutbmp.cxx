@@ -289,7 +289,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                                 pVDev->Erase();
                                 rGraphic.Draw( pVDev.get(), aPt, aSize );
 
-                                pVDev->SetRasterOp( ROP_XOR );
+                                pVDev->SetRasterOp( RasterOp::Xor );
                                 pVDev->DrawBitmap( aPt, aSize, aBitmap );
                                 aGraphic = BitmapEx( aBitmap, pVDev->GetBitmap( aPt, aSize ) );
                             }

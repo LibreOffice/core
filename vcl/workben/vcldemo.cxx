@@ -625,9 +625,9 @@ public:
                         aTextRect.Left()+1, aTextRect.Top()+1,
                         aTextRect.Right()-1, aTextRect.Bottom()-1);
                     rDev.SetLineColor(COL_WHITE);
-                    rDev.SetRasterOp(ROP_XOR);
+                    rDev.SetRasterOp(RasterOp::Xor);
                     rDev.DrawRect(aInnerRect);
-                    rDev.SetRasterOp(ROP_OVERPAINT);
+                    rDev.SetRasterOp(RasterOp::OverPaint);
                 }
 
                 // DX array rendering
@@ -640,9 +640,9 @@ public:
                     aTop.Move(pItems[j], 0);
                     aBottom.Move(pItems[j], aTextRect.GetHeight());
                     rDev.SetLineColor(COL_RED);
-                    rDev.SetRasterOp(ROP_XOR);
+                    rDev.SetRasterOp(RasterOp::Xor);
                     rDev.DrawLine(aTop,aBottom);
-                    rDev.SetRasterOp(ROP_OVERPAINT);
+                    rDev.SetRasterOp(RasterOp::OverPaint);
                 }
                 delete[] pItems;
 
@@ -1154,7 +1154,7 @@ public:
 
             AntialiasingFlags nFlags = rDev.GetAntialiasing();
             rDev.SetAntialiasing(nFlags & ~AntialiasingFlags::EnableB2dDraw);
-            rDev.SetRasterOp( ROP_XOR );
+            rDev.SetRasterOp( RasterOp::Xor );
 
             rCtx.mpDemoRenderer->drawThumbs(rDev, r, true);
 

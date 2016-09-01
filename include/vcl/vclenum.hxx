@@ -71,7 +71,7 @@ enum LineStyle
     LineStyle_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
 
-enum RasterOp { ROP_OVERPAINT, ROP_XOR, ROP_0, ROP_1, ROP_INVERT };
+enum class RasterOp { OverPaint, Xor, N0, N1, Invert };
 
 enum class FontAutoHint { DontKnow, No, Yes };
 

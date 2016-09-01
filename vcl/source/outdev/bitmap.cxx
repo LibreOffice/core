@@ -69,7 +69,7 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
     {
         return;
     }
-    if ( ROP_INVERT == meRasterOp )
+    if ( RasterOp::Invert == meRasterOp )
     {
         DrawRect( Rectangle( rDestPt, rDestSize ) );
         return;
@@ -295,7 +295,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
         if ( mnDrawMode & DrawModeFlags::NoBitmap )
             return;
 
-        if ( ROP_INVERT == meRasterOp )
+        if ( RasterOp::Invert == meRasterOp )
         {
             DrawRect( Rectangle( rDestPt, rDestSize ) );
             return;
@@ -1216,7 +1216,7 @@ void OutputDevice::DrawTransformedBitmapEx(
 
     // we have rotation,shear or mirror, check if some crazy mode needs the
     // created transformed bitmap
-    const bool bInvert(ROP_INVERT == meRasterOp);
+    const bool bInvert(RasterOp::Invert == meRasterOp);
     const bool bBitmapChangedColor(mnDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap | DrawModeFlags::GrayBitmap | DrawModeFlags::GhostedBitmap));
     const bool bMetafile(mpMetaFile);
     bool bDone(false);

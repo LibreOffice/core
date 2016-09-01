@@ -94,7 +94,7 @@ OutputDevice::OutputDevice() :
     maTextColor                     = Color( COL_BLACK );
     maOverlineColor                 = Color( COL_TRANSPARENT );
     meTextAlign                     = maFont.GetAlignment();
-    meRasterOp                      = ROP_OVERPAINT;
+    meRasterOp                      = RasterOp::OverPaint;
     mnAntialiasing                  = AntialiasingFlags::NONE;
     meTextLanguage                  = 0;  // TODO: get default from configuration?
     mbLineColor                     = true;
@@ -418,7 +418,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
     if( ImplIsRecordLayout() )
         return;
 
-    if ( ROP_INVERT == meRasterOp )
+    if ( RasterOp::Invert == meRasterOp )
     {
         DrawRect( Rectangle( rDestPt, rDestSize ) );
         return;
@@ -475,7 +475,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
     if ( ImplIsRecordLayout() )
         return;
 
-    if ( ROP_INVERT == meRasterOp )
+    if ( RasterOp::Invert == meRasterOp )
     {
         DrawRect( Rectangle( rDestPt, rDestSize ) );
         return;
@@ -547,7 +547,7 @@ void OutputDevice::CopyArea( const Point& rDestPt,
         return;
 
     RasterOp eOldRop = GetRasterOp();
-    SetRasterOp( ROP_OVERPAINT );
+    SetRasterOp( RasterOp::OverPaint );
 
     if ( !IsDeviceOutputNecessary() )
         return;

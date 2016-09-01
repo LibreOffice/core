@@ -142,12 +142,12 @@ WMFWriter::WMFWriter()
     , nMetafileHeaderPos(0)
     , nMaxRecordSize(0)
     , nActRecordPos(0)
-    , eSrcRasterOp(ROP_OVERPAINT)
+    , eSrcRasterOp(RasterOp::OverPaint)
     , eSrcTextAlign(ALIGN_BASELINE)
     , bSrcIsClipping(false)
     , pAttrStack(nullptr)
     , eSrcHorTextAlign(W_TA_LEFT)
-    , eDstROP2(ROP_OVERPAINT)
+    , eDstROP2(RasterOp::OverPaint)
     , eDstTextAlign(ALIGN_BASELINE)
     , eDstHorTextAlign(W_TA_LEFT)
     , bDstIsClipping(false)
@@ -723,9 +723,9 @@ void WMFWriter::WMFRecord_SetROP2(RasterOp eROP)
     sal_uInt16 nROP2;
 
     switch (eROP) {
-        case ROP_INVERT: nROP2=W_R2_NOT;        break;
-        case ROP_XOR:    nROP2=W_R2_XORPEN;     break;
-        default:         nROP2=W_R2_COPYPEN;
+        case RasterOp::Invert: nROP2=W_R2_NOT;        break;
+        case RasterOp::Xor:    nROP2=W_R2_XORPEN;     break;
+        default:               nROP2=W_R2_COPYPEN;
     }
     WriteRecordHeader(0x00000004,W_META_SETROP2);
     pWMF->WriteUInt16( nROP2 );
@@ -797,9 +797,9 @@ void WMFWriter::WMFRecord_StretchDIB( const Point & rPoint, const Size & rSize,
     {
         switch( eSrcRasterOp )
         {
-            case ROP_INVERT: nROP = W_DSTINVERT; break;
-            case ROP_XOR:    nROP = W_SRCINVERT; break;
-            default:         nROP = W_SRCCOPY;
+            case RasterOp::Invert: nROP = W_DSTINVERT; break;
+            case RasterOp::Xor:    nROP = W_SRCINVERT; break;
+            default:               nROP = W_SRCCOPY;
         }
     }
 
@@ -1757,7 +1757,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     WMFRecord_SetWindowExt(rMTF.GetPrefSize());
     WMFRecord_SetBkMode( true );
 
-    eDstROP2 = eSrcRasterOp = ROP_OVERPAINT;
+    eDstROP2 = eSrcRasterOp = RasterOp::OverPaint;
     WMFRecord_SetROP2(eDstROP2);
 
     aDstLineInfo = LineInfo();

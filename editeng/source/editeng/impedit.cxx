@@ -484,7 +484,7 @@ void ImpEditView::ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rD
                 _pTarget->Push(PushFlags::LINECOLOR|PushFlags::FILLCOLOR|PushFlags::RASTEROP);
                 _pTarget->SetLineColor();
                 _pTarget->SetFillColor(COL_BLACK);
-                _pTarget->SetRasterOp(ROP_INVERT);
+                _pTarget->SetRasterOp(RasterOp::Invert);
                 _pTarget->DrawRect(aRect);
                 _pTarget->Pop();
             }

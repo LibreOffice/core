@@ -1516,10 +1516,10 @@ void Window::Erase(vcl::RenderContext& rRenderContext)
     if (mbBackground && !bNativeOK)
     {
         RasterOp eRasterOp = GetRasterOp();
-        if (eRasterOp != ROP_OVERPAINT)
-            SetRasterOp(ROP_OVERPAINT);
+        if (eRasterOp != RasterOp::OverPaint)
+            SetRasterOp(RasterOp::OverPaint);
         rRenderContext.DrawWallpaper(0, 0, mnOutWidth, mnOutHeight, maBackground);
-        if (eRasterOp != ROP_OVERPAINT)
+        if (eRasterOp != RasterOp::OverPaint)
             rRenderContext.SetRasterOp(eRasterOp);
     }
 

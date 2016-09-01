@@ -676,7 +676,7 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
                     // these actions actually output something (that's
                     // different from a bitmap)
                 case MetaActionType::RASTEROP:
-                    if( static_cast<MetaRasterOpAction*>(pAct)->GetRasterOp() == ROP_OVERPAINT )
+                    if( static_cast<MetaRasterOpAction*>(pAct)->GetRasterOp() == RasterOp::OverPaint )
                         break;
                     SAL_FALLTHROUGH;
                 case MetaActionType::PIXEL:

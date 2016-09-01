@@ -38,15 +38,15 @@ Bitmap OutputDeviceTestAnotherOutDev::setupXOR()
     Rectangle aScissorRectangle(maVDRectangle);
     aScissorRectangle.shrink(4);
 
-    mpVirtualDevice->SetRasterOp(ROP_XOR);
+    mpVirtualDevice->SetRasterOp(RasterOp::Xor);
     mpVirtualDevice->SetFillColor(constFillColor);
     mpVirtualDevice->DrawRect(aDrawRectangle);
 
-    mpVirtualDevice->SetRasterOp(ROP_0);
+    mpVirtualDevice->SetRasterOp(RasterOp::N0);
     mpVirtualDevice->SetFillColor(COL_BLACK);
     mpVirtualDevice->DrawRect(aScissorRectangle);
 
-    mpVirtualDevice->SetRasterOp(ROP_XOR);
+    mpVirtualDevice->SetRasterOp(RasterOp::Xor);
     mpVirtualDevice->SetFillColor(constFillColor);
     mpVirtualDevice->DrawRect(aDrawRectangle);
 

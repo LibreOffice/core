@@ -294,7 +294,7 @@ namespace drawinglayer
             // copy AA flag for new target
             mpContent->SetAntialiasing(mrOutDev.GetAntialiasing());
 
-            // copy RasterOp (e.g. may be ROP_XOR on destination)
+            // copy RasterOp (e.g. may be RasterOp::Xor on destination)
             mpContent->SetRasterOp(mrOutDev.GetRasterOp());
         }
     }
@@ -346,9 +346,9 @@ namespace drawinglayer
             }
 #endif
 
-            // during painting the buffer, disable evtl. set RasterOp (may be ROP_XOR)
+            // during painting the buffer, disable evtl. set RasterOp (may be RasterOp::Xor)
             const RasterOp aOrigRasterOp(mrOutDev.GetRasterOp());
-            mrOutDev.SetRasterOp(ROP_OVERPAINT);
+            mrOutDev.SetRasterOp(RasterOp::OverPaint);
 
             if(mpAlpha)
             {

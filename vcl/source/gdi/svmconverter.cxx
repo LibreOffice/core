@@ -744,7 +744,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 {
                     ImplReadRect( rIStm, aRect );
                     rMtf.AddAction( new MetaPushAction( PushFlags::RASTEROP ) );
-                    rMtf.AddAction( new MetaRasterOpAction( ROP_INVERT ) );
+                    rMtf.AddAction( new MetaRasterOpAction( RasterOp::Invert ) );
                     rMtf.AddAction( new MetaRectAction( aRect ) );
                     rMtf.AddAction( new MetaPopAction() );
                 }
@@ -1110,16 +1110,16 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     switch( nRasterOp )
                     {
                         case 1:
-                            eRasterOp = ROP_INVERT;
+                            eRasterOp = RasterOp::Invert;
                         break;
 
                         case 4:
                         case 5:
-                            eRasterOp = ROP_XOR;
+                            eRasterOp = RasterOp::Xor;
                         break;
 
                         default:
-                            eRasterOp = ROP_OVERPAINT;
+                            eRasterOp = RasterOp::OverPaint;
                         break;
                     }
 
@@ -2117,11 +2117,11 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 const MetaRasterOpAction* pAct = static_cast<const MetaRasterOpAction*>(pAction);
 
-                if( ( pAct->GetRasterOp() != ROP_0 ) && ( pAct->GetRasterOp() != ROP_1 ) )
+                if( ( pAct->GetRasterOp() != RasterOp::N0 ) && ( pAct->GetRasterOp() != RasterOp::N1 ) )
                 {
                     sal_Int16 nRasterOp;
 
-                    // If ROP_0/1 was set earlier, restore old state
+                    // If RasterOp::N0/1 was set earlier, restore old state
                     // via a Pop first
                     if( rRop_0_1 )
                     {
@@ -2133,10 +2133,10 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
                     switch( pAct->GetRasterOp() )
                     {
-                        case ROP_OVERPAINT : nRasterOp = 0; break;
-                        case ROP_XOR :       nRasterOp = 4; break;
-                        case ROP_INVERT:     nRasterOp = 1; break;
-                        default:                nRasterOp = 0; break;
+                        case RasterOp::OverPaint : nRasterOp = 0; break;
+                        case RasterOp::Xor :       nRasterOp = 4; break;
+                        case RasterOp::Invert:     nRasterOp = 1; break;
+                        default:                   nRasterOp = 0; break;
                     }
 
                     ImplWriteRasterOpAction( rOStm, nRasterOp );
@@ -2147,7 +2147,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                     ImplWritePushAction( rOStm );
                     rSaveVDev.Push();
 
-                    if( pAct->GetRasterOp() == ROP_0 )
+                    if( pAct->GetRasterOp() == RasterOp::N0 )
                     {
                         ImplWriteLineColor( rOStm, COL_BLACK, 1 );
                         ImplWriteFillColor( rOStm, COL_BLACK, 1 );

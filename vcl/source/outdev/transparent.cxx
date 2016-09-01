@@ -234,7 +234,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
 
     if((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
        mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
-       (ROP_OVERPAINT == GetRasterOp()) )
+       (RasterOp::OverPaint == GetRasterOp()) )
     {
         // b2dpolygon support not implemented yet on non-UNX platforms
         const basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();

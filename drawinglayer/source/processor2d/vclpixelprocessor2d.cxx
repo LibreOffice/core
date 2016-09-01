@@ -1197,7 +1197,7 @@ namespace drawinglayer
                     // (Not true, also used at least for the drawing of dragged column and row boundaries in SC.)
                     // Set OutDev to XOR and switch AA off (XOR does not work with AA)
                     mpOutputDevice->Push();
-                    mpOutputDevice->SetRasterOp( ROP_XOR );
+                    mpOutputDevice->SetRasterOp( RasterOp::Xor );
                     const AntialiasingFlags nAntiAliasing(mpOutputDevice->GetAntialiasing());
                     mpOutputDevice->SetAntialiasing(nAntiAliasing & ~AntialiasingFlags::EnableB2dDraw);
 

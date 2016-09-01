@@ -85,11 +85,11 @@ OUString convertRopToString(RasterOp eRop)
 {
     switch (eRop)
     {
-        case ROP_OVERPAINT: return OUString("overpaint");
-        case ROP_XOR:       return OUString("xor");
-        case ROP_0:         return OUString("0");
-        case ROP_1:         return OUString("1");
-        case ROP_INVERT:    return OUString("invert");
+        case RasterOp::OverPaint: return OUString("overpaint");
+        case RasterOp::Xor:       return OUString("xor");
+        case RasterOp::N0:        return OUString("0");
+        case RasterOp::N1:        return OUString("1");
+        case RasterOp::Invert:    return OUString("invert");
     }
     return OUString();
 }
@@ -335,7 +335,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
                 MetaRasterOpAction* pMetaRasterOpAction = static_cast<MetaRasterOpAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
 
-                if (pMetaRasterOpAction->GetRasterOp() != ROP_OVERPAINT)
+                if (pMetaRasterOpAction->GetRasterOp() != RasterOp::OverPaint)
                 {
                     rWriter.attribute("operation", convertRopToString(pMetaRasterOpAction->GetRasterOp()));
                 }

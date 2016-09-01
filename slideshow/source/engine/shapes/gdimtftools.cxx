@@ -81,7 +81,7 @@ bool hasUnsupportedActions( const GDIMetaFile& rMtf )
         {
             case MetaActionType::RASTEROP:
                 // overpaint is okay - that's the default, anyway
-                if( ROP_OVERPAINT ==
+                if( RasterOp::OverPaint ==
                     static_cast<MetaRasterOpAction*>(pCurrAct)->GetRasterOp() )
                 {
                     break;

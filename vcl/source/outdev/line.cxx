@@ -116,7 +116,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
     // #i101598# support AA and snap for lines, too
     if((mnAntialiasing & AntialiasingFlags::EnableB2dDraw)
         && mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
-        && ROP_OVERPAINT == GetRasterOp()
+        && RasterOp::OverPaint == GetRasterOp()
         && IsLineColor())
     {
         // at least transform with double precision to device coordinates; this will
@@ -160,7 +160,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
 {
     const bool bTryAA((mnAntialiasing & AntialiasingFlags::EnableB2dDraw)
         && mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
-        && ROP_OVERPAINT == GetRasterOp()
+        && RasterOp::OverPaint == GetRasterOp()
         && IsLineColor());
     basegfx::B2DPolyPolygon aFillPolyPolygon;
     const bool bDashUsed(LINE_DASH == rInfo.GetStyle());

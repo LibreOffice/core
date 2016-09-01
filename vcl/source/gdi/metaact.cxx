@@ -2894,7 +2894,7 @@ void MetaPopAction::Read( SvStream& rIStm, ImplMetaReadData* )
 
 MetaRasterOpAction::MetaRasterOpAction() :
     MetaAction  ( MetaActionType::RASTEROP ),
-    meRasterOp  ( ROP_OVERPAINT )
+    meRasterOp  ( RasterOp::OverPaint )
 {}
 
 MetaRasterOpAction::~MetaRasterOpAction()
@@ -2922,7 +2922,7 @@ void MetaRasterOpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
-    rOStm.WriteUInt16( meRasterOp );
+    rOStm.WriteUInt16( (sal_uInt16)meRasterOp );
 }
 
 void MetaRasterOpAction::Read( SvStream& rIStm, ImplMetaReadData* )

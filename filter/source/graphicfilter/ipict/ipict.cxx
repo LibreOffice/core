@@ -161,7 +161,7 @@ private:
     Pattern       eActFillPattern;
     Pattern       eActBackPattern;
     Size          nActPenSize;
- // Note: Postscript mode is stored by setting eActRop to ROP_1
+ // Note: Postscript mode is stored by setting eActRop to RasterOp::N1
     RasterOp      eActROP;
     PictDrawingMethod eActMethod;
     Size          aActOvalSize;
@@ -215,7 +215,7 @@ private:
 
         // returns true, if we do not need to print the shape/text/frame
         bool IsInvisible(PictDrawingMethod eMethod) const {
-      if (eActROP == ROP_1) return true;
+      if (eActROP == RasterOp::N1) return true;
       if (eMethod==PDM_FRAME && (nActPenSize.Width() == 0 || nActPenSize.Height() == 0)) return true;
       return false;
     }
@@ -247,7 +247,7 @@ public:
         , pVirDev(nullptr)
         , nOrigPos(0)
         , IsVersion2(false)
-        , eActROP(ROP_OVERPAINT)
+        , eActROP(RasterOp::OverPaint)
         , eActMethod(PDM_UNDEFINED)
     {
         aActFont.SetCharSet(GetTextEncoding());
@@ -648,12 +648,12 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
               SetFillColor( aActBackColor );// Osnola: previously aActForeColor
             else // checkMe
               SetFillColor(eActBackPattern.getColor(COL_BLACK, aActBackColor));
-            pVirDev->SetRasterOp(ROP_OVERPAINT);
+            pVirDev->SetRasterOp(RasterOp::OverPaint);
             break;
             case PDM_INVERT: // checkme
             SetLineColor( Color(COL_TRANSPARENT));
             SetFillColor( Color( COL_BLACK ) );
-            pVirDev->SetRasterOp(ROP_INVERT);
+            pVirDev->SetRasterOp(RasterOp::Invert);
             break;
         case PDM_FILL:
             SetLineColor( Color(COL_TRANSPARENT) );
@@ -661,14 +661,14 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
               SetFillColor( aActForeColor );
             else
               SetFillColor(eActFillPattern.getColor(aActBackColor, aActForeColor));
-            pVirDev->SetRasterOp(ROP_OVERPAINT);
+            pVirDev->SetRasterOp(RasterOp::OverPaint);
             break;
         case PDM_TEXT:
             aActFont.SetColor(aActForeColor);
             aActFont.SetFillColor(aActBackColor);
             aActFont.SetTransparent(true);
             pVirDev->SetFont(aActFont);
-            pVirDev->SetRasterOp(ROP_OVERPAINT);
+            pVirDev->SetRasterOp(RasterOp::OverPaint);
             break;
         default:
             break;  // -Wall undefined not handled...
@@ -1385,17 +1385,17 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
     case 0x0008:   // PnMode
         pPict->ReadUInt16( nUSHORT );
         // internal code for postscript command (Quickdraw Reference Drawing B-30,B-34)
-        if (nUSHORT==23) eActROP = ROP_1;
+        if (nUSHORT==23) eActROP = RasterOp::N1;
         else {
           switch (nUSHORT & 0x0007) {
-            case 0: eActROP=ROP_OVERPAINT; break; // Copy
-            case 1: eActROP=ROP_OVERPAINT; break; // Or
-            case 2: eActROP=ROP_XOR;       break; // Xor
-            case 3: eActROP=ROP_OVERPAINT; break; // Bic
-            case 4: eActROP=ROP_INVERT;    break; // notCopy
-            case 5: eActROP=ROP_OVERPAINT; break; // notOr
-            case 6: eActROP=ROP_XOR;       break; // notXor
-            case 7: eActROP=ROP_OVERPAINT; break; // notBic
+            case 0: eActROP=RasterOp::OverPaint; break; // Copy
+            case 1: eActROP=RasterOp::OverPaint; break; // Or
+            case 2: eActROP=RasterOp::Xor;       break; // Xor
+            case 3: eActROP=RasterOp::OverPaint; break; // Bic
+            case 4: eActROP=RasterOp::Invert;    break; // notCopy
+            case 5: eActROP=RasterOp::OverPaint; break; // notOr
+            case 6: eActROP=RasterOp::Xor;       break; // notXor
+            case 7: eActROP=RasterOp::OverPaint; break; // notBic
           }
         }
         eActMethod=PDM_UNDEFINED;
@@ -1888,7 +1888,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
     aActForeColor       = Color(COL_BLACK);
     aActBackColor       = Color(COL_WHITE);
     nActPenSize         = Size(1,1);
-    eActROP             = ROP_OVERPAINT;
+    eActROP             = RasterOp::OverPaint;
     eActMethod          = PDM_UNDEFINED;
     aActOvalSize        = Size(1,1);
 

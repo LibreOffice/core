@@ -114,7 +114,7 @@ namespace
             maOverlineColor(),
             maClipPolyPoygon(),
             maFont(),
-            maRasterOp(ROP_OVERPAINT),
+            maRasterOp(RasterOp::OverPaint),
             mnLayoutMode(ComplexTextLayoutFlags::Default),
             maLanguageType(0),
             mnPushFlags(PushFlags::NONE),
@@ -179,8 +179,8 @@ namespace
 
         const RasterOp& getRasterOp() const { return maRasterOp; }
         void setRasterOp(const RasterOp& rRasterOp) { if(rRasterOp != maRasterOp) maRasterOp = rRasterOp; }
-        bool isRasterOpInvert() const { return (ROP_XOR == maRasterOp || ROP_INVERT == maRasterOp); }
-        bool isRasterOpForceBlack() const { return ROP_0 == maRasterOp; }
+        bool isRasterOpInvert() const { return (RasterOp::Xor == maRasterOp || RasterOp::Invert == maRasterOp); }
+        bool isRasterOpForceBlack() const { return RasterOp::N0 == maRasterOp; }
         bool isRasterOpActive() const { return isRasterOpInvert() || isRasterOpForceBlack(); }
 
         ComplexTextLayoutFlags getLayoutMode() const { return mnLayoutMode; }
@@ -1015,8 +1015,8 @@ namespace
     /** helper to handle the change of RasterOp. It takes care of encapsulating all current
         geometry to the current RasterOp (if changed) and needs to be called on any RasterOp
         change. It will also start a new geometry target to embrace to the new RasterOp if
-        a changing RasterOp is used. Currently, ROP_XOR and ROP_INVERT are supported using
-        InvertPrimitive2D, and ROP_0 by using a ModifiedColorPrimitive2D to force to black paint
+        a changing RasterOp is used. Currently, RasterOp::Xor and RasterOp::Invert are supported using
+        InvertPrimitive2D, and RasterOp::N0 by using a ModifiedColorPrimitive2D to force to black paint
      */
     void HandleNewRasterOp(
         RasterOp aRasterOp,
@@ -2794,7 +2794,7 @@ namespace
                     if(bRasterOpMayChange && rPropertyHolders.Current().isRasterOpActive())
                     {
                         // end evtl. RasterOp
-                        HandleNewRasterOp(ROP_OVERPAINT, rTargetHolders, rPropertyHolders);
+                        HandleNewRasterOp(RasterOp::OverPaint, rTargetHolders, rPropertyHolders);
                     }
 
                     rPropertyHolders.Pop();
