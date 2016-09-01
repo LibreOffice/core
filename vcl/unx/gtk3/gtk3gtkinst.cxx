@@ -376,6 +376,10 @@ void VclGtkClipboard::OwnerPossiblyChanged(GtkClipboard* clipboard, GdkEvent* /*
     //our pid, in which case it's us.
     bool bSelf = false;
 
+    //disconnect and reconnect after gtk_clipboard_wait_for_targets to
+    //avoid possible recursion
+    g_signal_handler_disconnect(clipboard, m_nOwnerChangedSignalId);
+
     OString sTunnel = "application/x-libreoffice-internal-id-" + getPID();
     GdkAtom *targets;
     gint n_targets;
@@ -393,6 +397,9 @@ void VclGtkClipboard::OwnerPossiblyChanged(GtkClipboard* clipboard, GdkEvent* /*
 
         g_free(targets);
     }
+
+    m_nOwnerChangedSignalId = g_signal_connect(clipboard, "owner-change",
+                                               G_CALLBACK(handle_owner_change), this);
 
     if (!bSelf)
     {
