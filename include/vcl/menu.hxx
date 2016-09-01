@@ -140,8 +140,7 @@ private:
 
     Link<Menu*, bool> aActivateHdl;       // Active-Handler
     Link<Menu*, bool> aDeactivateHdl;     // Deactivate-Handler
-    Link<Menu*, bool> aHighlightHdl;      // Highlight-Handler
-    Link<Menu*, bool> aSelectHdl;         // Highlight-Handler
+    Link<Menu*, bool> aSelectHdl;         // Select-Handler
 
     std::list<Link<VclMenuEvent&,void> >  maEventListeners;
 
@@ -235,7 +234,6 @@ public:
 
     void Activate();
     void Deactivate();
-    virtual void Highlight();
     virtual void Select();
 
     void InsertItem(sal_uInt16 nItemId, const OUString& rStr,
@@ -342,11 +340,6 @@ public:
     void SetDeactivateHdl( const Link<Menu *, bool>& rLink )
     {
         aDeactivateHdl = rLink;
-    }
-
-    void SetHighlightHdl( const Link<Menu *, bool>& rLink )
-    {
-        aHighlightHdl = rLink;
     }
 
     void  SetSelectHdl( const Link<Menu*,bool>& rLink )

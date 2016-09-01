@@ -271,18 +271,6 @@ void Menu::Deactivate()
     }
 }
 
-void Menu::Highlight()
-{
-    ImplMenuDelData aDelData( this );
-
-    Menu* pStartMenu = ImplGetStartMenu();
-    if ( !aHighlightHdl.Call( this ) && !aDelData.isDeleted() )
-    {
-        if ( pStartMenu && ( pStartMenu != this ) )
-            pStartMenu->aHighlightHdl.Call( this );
-    }
-}
-
 void Menu::ImplSelect()
 {
     MenuItemData* pData = GetItemList()->GetData( nSelectedId );
@@ -1229,7 +1217,6 @@ Menu& Menu::operator=( const Menu& rMenu )
     nDefaultItem = rMenu.nDefaultItem;
     aActivateHdl = rMenu.aActivateHdl;
     aDeactivateHdl = rMenu.aDeactivateHdl;
-    aHighlightHdl = rMenu.aHighlightHdl;
     aSelectHdl = rMenu.aSelectHdl;
     aTitleText = rMenu.aTitleText;
     nTitleHeight = rMenu.nTitleHeight;
@@ -2166,10 +2153,7 @@ void Menu::ImplCallHighlight(sal_uInt16 nItem)
     ImplCallEventListeners( VCLEVENT_MENU_HIGHLIGHT, GetItemPos( GetCurItemId() ) );
 
     if( !aDelData.isDeleted() )
-    {
-        Highlight();
         nSelectedId = 0;
-    }
 }
 
 IMPL_LINK_NOARG_TYPED(Menu, ImplCallSelect, void*, void)
