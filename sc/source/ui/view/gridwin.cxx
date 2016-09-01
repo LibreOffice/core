@@ -5682,7 +5682,8 @@ OString ScGridWindow::getCellCursor( int nOutputWidth, int nOutputHeight,
     return getCellCursor(zoomX, zoomY);
 }
 
-OString ScGridWindow::getCellCursor(const Fraction& rZoomX, const Fraction& rZoomY) {
+OString ScGridWindow::getCellCursor(const Fraction& rZoomX, const Fraction& rZoomY) const
+{
     // GridWindow stores a shown cell cursor in mpOOCursors, hence
     // we can use that to determine whether we would want to be showing
     // one (client-side) for tiled rendering too.
@@ -5714,12 +5715,22 @@ OString ScGridWindow::getCellCursor(const Fraction& rZoomX, const Fraction& rZoo
     return aRect.toString();
 }
 
-void ScGridWindow::updateLibreOfficeKitCellCursor()
+void ScGridWindow::updateLibreOfficeKitCellCursor(SfxViewShell* pOtherShell) const
 {
     OString aCursor = getCellCursor(pViewData->GetZoomX(), pViewData->GetZoomY());
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, aCursor.getStr());
-    SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
+    if (pOtherShell)
+    {
+        if (pOtherShell == pViewShell)
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, aCursor.getStr());
+        else
+            SfxLokHelper::notifyOtherView(pViewShell, pOtherShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
+    }
+    else
+    {
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, aCursor.getStr());
+        SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
+    }
 }
 
 void ScGridWindow::CursorChanged()
@@ -6010,7 +6021,7 @@ void ScGridWindow::UpdateCursorOverlay()
         if (comphelper::LibreOfficeKit::isActive())
         {
             mpOOCursors.reset(new sdr::overlay::OverlayObjectList);
-            updateLibreOfficeKitCellCursor();
+            updateLibreOfficeKitCellCursor(nullptr);
         }
         else
         {

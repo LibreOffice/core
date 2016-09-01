@@ -541,4 +541,13 @@ int ScTabViewShell::getPart() const
     return GetViewData().GetTabNo();
 }
 
+void ScTabViewShell::NotifyCursor(SfxViewShell* pViewShell) const
+{
+    const ScGridWindow* pGridWindow = GetViewData().GetActiveWin();
+    if (!pGridWindow)
+        return;
+
+    pGridWindow->updateLibreOfficeKitCellCursor(pViewShell);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

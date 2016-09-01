@@ -285,7 +285,6 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     void            GetSelectionRects( ::std::vector< Rectangle >& rPixelRects );
 
 
-    void            updateLibreOfficeKitCellCursor();
 protected:
     virtual void    PrePaint(vcl::RenderContext& rRenderContext) override;
     virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
@@ -426,11 +425,12 @@ public:
 
     /// @see ScModelObj::getCellCursor().
     OString         getCellCursor(const Fraction& rZoomX,
-                                  const Fraction& rZoomY);
+                                  const Fraction& rZoomY) const;
     OString         getCellCursor(int nOutputWidth,
                                   int nOutputHeight,
                                   long nTileWidth,
                                   long nTileHeight);
+    void updateLibreOfficeKitCellCursor(SfxViewShell* pOtherShell) const;
 
     ScViewData* getViewData();
     virtual FactoryFunction GetUITestFactory() const override;

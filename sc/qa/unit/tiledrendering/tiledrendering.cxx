@@ -432,8 +432,14 @@ void ScTiledRenderingTest::testViewCursors()
     ViewCallback aView1;
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
     SfxLokHelper::createView();
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ViewCallback aView2;
+    aView2.m_bViewCursorInvalidated = false;
+    aView2.m_bOwnCursorInvalidated = false;
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    // This was false, the new view did not get the view (cell) cursor of the old view.
+    CPPUNIT_ASSERT(aView2.m_bViewCursorInvalidated);
+    CPPUNIT_ASSERT(aView2.m_bOwnCursorInvalidated);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DOWN);
     Scheduler::ProcessEventsToIdle();
