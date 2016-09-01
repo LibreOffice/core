@@ -291,13 +291,13 @@ void WriterFilter::setTargetDocument(const uno::Reference< lang::XComponent >& x
     xSettings->setPropertyValue("InvertBorderSpacing", uno::makeAny(true));
     xSettings->setPropertyValue("CollapseEmptyCellPara", uno::makeAny(true));
     xSettings->setPropertyValue("TabOverflow", uno::makeAny(true));
-    xSettings->setPropertyValue("TreatSingleColumnBreakAsPageBreak", uno::makeAny(true));
     xSettings->setPropertyValue("UnbreakableNumberings", uno::makeAny(true));
 
     xSettings->setPropertyValue("FloattableNomargins", uno::makeAny(true));
     xSettings->setPropertyValue("ClippedPictures", uno::makeAny(true));
     xSettings->setPropertyValue("BackgroundParaOverDrawings", uno::makeAny(true));
     xSettings->setPropertyValue("TabOverMargin", uno::makeAny(true));
+    xSettings->setPropertyValue("TreatSingleColumnBreakAsPageBreak", uno::makeAny(true));
     xSettings->setPropertyValue("PropLineSpacingShrinksFirstLine", uno::makeAny(true));
 }
 
