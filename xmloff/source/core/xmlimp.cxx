@@ -842,13 +842,13 @@ rName
 void SAL_CALL SvXMLImport::characters( const OUString& rChars )
     throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
-    if( !mpContexts->empty() )
-    {
-        mpContexts->back()->Characters( rChars );
-    }
-    else if ( !mpFastContexts->empty() )
+    if ( !mpFastContexts->empty() )
     {
         mpFastContexts->back()->characters( rChars );
+    }
+    else if( !mpContexts->empty() )
+    {
+        mpContexts->back()->Characters( rChars );
     }
 }
 
