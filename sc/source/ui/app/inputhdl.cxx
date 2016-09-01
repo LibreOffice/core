@@ -1242,14 +1242,21 @@ void ScInputHandler::UseFormulaData()
                 miAutoPosFormula = findTextAll(*pFormulaData, miAutoPosFormula, aText, aNewVec, false);
                 if (miAutoPosFormula != pFormulaData->end())
                 {
-                    // check if partial function name is not Between quotes
-                    bool bBetweenQuotes = false;
+                    // check if partial function name is not between quotes
+                    sal_Unicode cBetweenQuotes = 0;
                     for ( int n = 0; n < aSelText.getLength(); n++ )
                     {
-                        if ( aSelText[ n ] == '"' )
-                            bBetweenQuotes = !bBetweenQuotes;
+                        if (cBetweenQuotes)
+                        {
+                            if (aSelText[n] == cBetweenQuotes)
+                                cBetweenQuotes = 0;
+                        }
+                        else if ( aSelText[ n ] == '"' )
+                            cBetweenQuotes = '"';
+                        else if ( aSelText[ n ] == '\'' )
+                            cBetweenQuotes = '\'';
                     }
-                    if ( bBetweenQuotes )
+                    if ( cBetweenQuotes )
                         return;  // we're between quotes
 
                     ShowFuncList(aNewVec);
