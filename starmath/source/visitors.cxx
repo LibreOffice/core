@@ -537,12 +537,13 @@ void SmDrawingVisitor::DrawChildren( SmStructureNode* pNode )
 
     Point rPosition = maPosition;
 
-    SmNodeIterator it( pNode );
-    while( it.Next( ) )
+    for( auto pChild : *pNode )
     {
-        Point  aOffset ( it->GetTopLeft( ) - pNode->GetTopLeft( ) );
+        if(!pChild)
+            continue;
+        Point  aOffset ( pChild->GetTopLeft( ) - pNode->GetTopLeft( ) );
         maPosition = rPosition + aOffset;
-        it->Accept( this );
+        pChild->Accept( this );
     }
 }
 
@@ -566,13 +567,15 @@ SmSetSelectionVisitor::SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos en
         SAL_WARN_IF(mbSelecting, "starmath", "Caret positions needed to set mbSelecting about, shouldn't be possible!");
 
         //Visit lines
-        SmNodeIterator it( pTree );
-        while( it.Next( ) ) {
-            it->Accept( this );
+        for( auto pChild : *static_cast<SmStructureNode*>(pTree) )
+        {
+            if(!pChild)
+                continue;
+            pChild->Accept( this );
             //If we started a selection in this line and it haven't ended, we do that now!
             if(mbSelecting) {
                 mbSelecting = false;
-                SetSelectedOnAll(it.Current());
+                SetSelectedOnAll(pChild);
                 //Set maStartPos and maEndPos to invalid positions, this ensures that an unused
                 //start or end (because we forced end above), doesn't start a new selection.
                 maStartPos = maEndPos = SmCaretPos();
@@ -590,10 +593,15 @@ SmSetSelectionVisitor::SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos en
 void SmSetSelectionVisitor::SetSelectedOnAll( SmNode* pSubTree, bool IsSelected ) {
     pSubTree->SetSelected( IsSelected );
 
+    if(pSubTree->GetNumSubNodes() == 0)
+        return;
     //Quick BFS to set all selections
-    SmNodeIterator it( pSubTree );
-    while( it.Next( ) )
-        SetSelectedOnAll( it.Current( ), IsSelected );
+    for( auto pChild : *static_cast<SmStructureNode*>(pSubTree) )
+    {
+        if(!pChild)
+            continue;
+        SetSelectedOnAll( pChild, IsSelected );
+    }
 }
 
 void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
@@ -612,11 +620,15 @@ void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
     pNode->SetSelected( mbSelecting );
 
     //Visit children
-    SmNodeIterator it( pNode );
-    while( it.Next( ) )
+    if(pNode->GetNumSubNodes() > 0)
     {
-        it->Accept( this );
-        ChangedState = ( WasSelecting != mbSelecting ) || ChangedState;
+        for( auto pChild : *static_cast<SmStructureNode*>(pNode) )
+        {
+            if(!pChild)
+                continue;
+            pChild->Accept( this );
+            ChangedState = ( WasSelecting != mbSelecting ) || ChangedState;
+        }
     }
 
     //If state changed
@@ -664,9 +676,12 @@ void SmSetSelectionVisitor::VisitCompositionNode( SmStructureNode* pNode )
     bool WasSelecting = mbSelecting;
 
     //Visit children
-    SmNodeIterator it( pNode );
-    while( it.Next( ) )
-        it->Accept( this );
+    for( auto pChild : *pNode )
+    {
+        if(!pChild)
+            continue;
+        pChild->Accept( this );
+    }
 
     //Set selected, if everything was selected
     pNode->SetSelected( WasSelecting && mbSelecting );
@@ -758,19 +773,12 @@ SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNod
         //Children are SmLineNodes
         //Or so I thought... Apparently, the children can be instances of SmExpression
         //especially if there's a error in the formula... So he we go, a simple work around.
-        SmNodeIterator it( pRootNode );
-        while( it.Next( ) ){
-            //There's a special invariant between this method and the Visit( SmLineNode* )
-            //Usually mpRightMost may not be NULL, to avoid this mpRightMost should here be
-            //set to a new SmCaretPos in front of it.Current( ), however, if it.Current( ) is
-            //an instance of SmLineNode we let SmLineNode create this position in front of
-            //the visual line.
-            //The argument for doing this is that we now don't have to worry about SmLineNode
-            //being a visual line composition node. Thus, no need for yet another special case
-            //in SmCursor::IsLineCompositionNode and everywhere this method is used.
-            //if( it->GetType( ) != NLINE )
-                mpRightMost = mpGraph->Add( SmCaretPos( it.Current( ), 0 ) );
-            it->Accept( this );
+        for( auto pChild : *static_cast<SmStructureNode*>(pRootNode) )
+        {
+            if(!pChild)
+                continue;
+            mpRightMost = mpGraph->Add( SmCaretPos( pChild, 0 ) );
+            pChild->Accept( this );
         }
     }else
         pRootNode->Accept(this);
@@ -781,9 +789,11 @@ SmCaretPosGraphBuildingVisitor::~SmCaretPosGraphBuildingVisitor()
 }
 
 void SmCaretPosGraphBuildingVisitor::Visit( SmLineNode* pNode ){
-    SmNodeIterator it( pNode );
-    while( it.Next( ) ){
-        it->Accept( this );
+    for( auto pChild : *pNode )
+    {
+        if(!pChild)
+            continue;
+        pChild->Accept( this );
     }
 }
 
@@ -796,12 +806,14 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmTableNode* pNode ){
     SmCaretPosGraphEntry *left  = mpRightMost,
                          *right = mpGraph->Add( SmCaretPos( pNode, 1) );
     bool bIsFirst = true;
-    SmNodeIterator it( pNode );
-    while( it.Next() ){
-        mpRightMost = mpGraph->Add( SmCaretPos( it.Current(), 0 ), left);
+    for( auto pChild : *pNode )
+    {
+        if(!pChild)
+            continue;
+        mpRightMost = mpGraph->Add( SmCaretPos( pChild, 0 ), left);
         if(bIsFirst)
             left->SetRight(mpRightMost);
-        it->Accept( this );
+        pChild->Accept( this );
         mpRightMost->SetRight(right);
         if(bIsFirst)
             right->SetLeft(mpRightMost);
@@ -1266,32 +1278,43 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBinDiagonalNode* pNode )
 //Straigt forward ( I think )
 void SmCaretPosGraphBuildingVisitor::Visit( SmBinHorNode* pNode )
 {
-    SmNodeIterator it( pNode );
-    while( it.Next( ) )
-        it->Accept( this );
+    for( auto pChild : *pNode )
+    {
+        if(!pChild)
+            continue;
+        pChild->Accept( this );
+    }
 }
 void SmCaretPosGraphBuildingVisitor::Visit( SmUnHorNode* pNode )
 {
     // Unary operator node
-    SmNodeIterator it( pNode );
-    while( it.Next( ) )
-        it->Accept( this );
-
+    for( auto pChild : *pNode )
+    {
+        if(!pChild)
+            continue;
+        pChild->Accept( this );
+    }
 }
 
 void SmCaretPosGraphBuildingVisitor::Visit( SmExpressionNode* pNode )
 {
-    SmNodeIterator it( pNode );
-    while( it.Next( ) )
-        it->Accept( this );
+    for( auto pChild : *pNode )
+    {
+        if(!pChild)
+            continue;
+        pChild->Accept( this );
+    }
 }
 
 void SmCaretPosGraphBuildingVisitor::Visit( SmFontNode* pNode )
 {
     //Has only got one child, should act as an expression if possible
-    SmNodeIterator it( pNode );
-    while( it.Next( ) )
-        it->Accept( this );
+    for( auto pChild : *pNode )
+    {
+        if(!pChild)
+            continue;
+        pChild->Accept( this );
+    }
 }
 
 /** Build SmCaretPosGraph for SmBracebodyNode
@@ -1336,12 +1359,14 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmFontNode* pNode )
  */
 void SmCaretPosGraphBuildingVisitor::Visit( SmBracebodyNode* pNode )
 {
-    SmNodeIterator it( pNode );
-    while( it.Next( ) ) {
-        SmCaretPosGraphEntry* pStart = mpGraph->Add( SmCaretPos( it.Current(), 0), mpRightMost );
+    for( auto pChild : *pNode )
+    {
+        if(!pChild)
+            continue;
+        SmCaretPosGraphEntry* pStart = mpGraph->Add( SmCaretPos( pChild, 0), mpRightMost );
         mpRightMost->SetRight( pStart );
         mpRightMost = pStart;
-        it->Accept( this );
+        pChild->Accept( this );
     }
 }
 
@@ -1350,9 +1375,12 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBracebodyNode* pNode )
  */
 void SmCaretPosGraphBuildingVisitor::Visit( SmAlignNode* pNode )
 {
-    SmNodeIterator it( pNode );
-    while( it.Next( ) )
-        it->Accept( this );
+    for( auto pChild : *pNode )
+    {
+        if(!pChild)
+            continue;
+        pChild->Accept( this );
+    }
 }
 
 /** Build SmCaretPosGraph for SmRootNode
@@ -1918,9 +1946,14 @@ void SmSelectionDrawingVisitor::DefaultVisit( SmNode* pNode )
 
 void SmSelectionDrawingVisitor::VisitChildren( SmNode* pNode )
 {
-    SmNodeIterator it( pNode );
-    while( it.Next( ) )
-        it->Accept( this );
+    if(pNode->GetNumSubNodes() == 0)
+        return;
+    for( auto pChild : *static_cast<SmStructureNode*>(pNode) )
+    {
+        if(!pChild)
+            continue;
+        pChild->Accept( this );
+    }
 }
 
 void SmSelectionDrawingVisitor::Visit( SmTextNode* pNode )
@@ -1959,29 +1992,37 @@ void SmNodeToTextVisitor::Visit( SmTableNode* pNode )
         Append("} ");
     } else if( pNode->GetToken( ).eType == TSTACK ) {
         Append( "stack{ " );
-        SmNodeIterator it( pNode );
-        it.Next( );
-        while( true ) {
-            LineToText( it.Current( ) );
-            if( it.Next( ) ) {
+        bool bFirst = true;
+        for( auto pChild : *pNode )
+        {
+            if(!pChild)
+                continue;
+            if(bFirst)
+                bFirst = false;
+            else
+            {
                 Separate( );
                 Append( "# " );
-            }else
-                break;
+            }
+            LineToText( pChild );
         }
         Separate( );
         Append( "}" );
     } else { //Assume it's a toplevel table, containing lines
-        SmNodeIterator it( pNode );
-        it.Next( );
-        while( true ) {
-            Separate( );
-            it->Accept( this );
-            if( it.Next( ) ) {
+        bool bFirst = true;
+        for( auto pChild : *pNode )
+        {
+            if(!pChild)
+                continue;
+            if(bFirst)
+                bFirst = false;
+            else
+            {
                 Separate( );
                 Append( "newline" );
-            }else
-                break;
+            }
+            Separate( );
+            pChild->Accept( this );
         }
     }
 }
@@ -2010,10 +2051,12 @@ void SmNodeToTextVisitor::Visit( SmBraceNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmBracebodyNode* pNode )
 {
-    SmNodeIterator it( pNode );
-    while( it.Next( ) ){
+    for( auto pChild : *pNode )
+    {
+        if(!pChild)
+            continue;
         Separate( );
-        it->Accept( this );
+        pChild->Accept( this );
     }
 }
 
@@ -2177,10 +2220,27 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmUnHorNode* pNode )
 {
-    SmNodeIterator it( pNode, pNode->GetSubNode( 1 )->GetToken( ).eType == TFACT );
-    while( it.Next( ) ) {
-        Separate( );
-        it->Accept( this );
+    if(pNode->GetSubNode( 1 )->GetToken( ).eType == TFACT)
+    {
+        // visit children in the reverse order
+        for( auto it = pNode->rbegin(); it != pNode->rend(); ++it )
+        {
+            auto pChild = *it;
+            if(!pChild)
+                continue;
+            Separate( );
+            pChild->Accept( this );
+        }
+    }
+    else
+    {
+        for( auto pChild : *pNode )
+        {
+            if(!pChild)
+                continue;
+            Separate( );
+            pChild->Accept( this );
+        }
     }
 }
 
@@ -2327,10 +2387,12 @@ void SmNodeToTextVisitor::Visit( SmErrorNode* )
 
 void SmNodeToTextVisitor::Visit( SmLineNode* pNode )
 {
-    SmNodeIterator it( pNode );
-    while( it.Next( ) ){
+    for( auto pChild : *pNode )
+    {
+        if(!pChild)
+            continue;
         Separate( );
-        it->Accept( this );
+        pChild->Accept( this );
     }
 }
 
@@ -2350,9 +2412,11 @@ void SmNodeToTextVisitor::Visit( SmExpressionNode* pNode )
     if (bracketsNeeded) {
         Append( "{ " );
     }
-    SmNodeIterator it( pNode );
-    while( it.Next( ) ) {
-        it->Accept( this );
+    for( auto pChild : *pNode )
+    {
+        if(!pChild)
+            continue;
+        pChild->Accept( this );
         Separate( );
     }
     if (bracketsNeeded) {
