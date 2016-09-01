@@ -49,6 +49,7 @@
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <salhelper/thread.hxx>
+#include <comphelper/backupfilehelper.hxx>
 
 #include "additions.hxx"
 #include "components.hxx"
@@ -615,6 +616,22 @@ Components::~Components()
     flushModifications();
     for (WeakRootSet::iterator i(roots_.begin()); i != roots_.end(); ++i) {
         (*i)->setAlive(false);
+    }
+
+    // test backup of registrymodifications (currently off)
+    static bool bFeatureSecureUserConfig(false);
+
+    if (bFeatureSecureUserConfig && ModificationTarget::File == modificationTarget_ && !modificationFileUrl_.isEmpty())
+    {
+        static sal_uInt16 nNumCopies(5);
+        comphelper::BackupFileHelper aBackupFileHelper(modificationFileUrl_, nNumCopies);
+        aBackupFileHelper.tryPush();
+        static bool bTryPop(false);
+
+        if (bTryPop)
+        {
+            aBackupFileHelper.tryPop();
+        }
     }
 }
 
