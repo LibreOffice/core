@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_cea7f54d",
+        "filename": "accessibility/source/extended/textwindowaccessibility.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-01T09:42:45Z",
+      "side": 1,
+      "message": "this could work better as assert, since it\u0027s apparently a bug if endListening isn\u0027t called between 2 startListening calls",
+      "revId": "b3f3a699c40c0cfb1a12fc58b9ae30dbafa378a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_ee62f915",
+        "filename": "accessibility/source/extended/textwindowaccessibility.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-01T09:42:45Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "b3f3a699c40c0cfb1a12fc58b9ae30dbafa378a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_0e680df5",
+        "filename": "accessibility/source/extended/textwindowaccessibility.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-01T09:42:45Z",
+      "side": 1,
+      "message": "you can simplify this, no need to further encode rEx.Message which is already OUString",
+      "revId": "b3f3a699c40c0cfb1a12fc58b9ae30dbafa378a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_2e6dd104",
+        "filename": "accessibility/source/extended/textwindowaccessibility.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2005,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-01T09:42:45Z",
+      "side": 1,
+      "message": "this sounds like it wants to be \"assert\"",
+      "revId": "b3f3a699c40c0cfb1a12fc58b9ae30dbafa378a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_8e741dd0",
+        "filename": "animations/source/animcore/animcore.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-01T09:42:45Z",
+      "side": 1,
+      "message": "given the usage of mnNodeType as an index this should be \"assert\"",
+      "revId": "b3f3a699c40c0cfb1a12fc58b9ae30dbafa378a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_ae81e191",
+        "filename": "basegfx/source/polygon/b2dsvgpolypolygon.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-01T09:42:45Z",
+      "side": 1,
+      "message": "i think it\u0027s enough to have one of these messages, perhaps the second one since it\u0027s more informative, but as a SAL_WARN",
+      "revId": "b3f3a699c40c0cfb1a12fc58b9ae30dbafa378a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
