@@ -91,7 +91,6 @@ class CompileFormulaContext;
 
 // constants and data types internal to compiler
 
-
 struct ScRawToken
 {
     friend class ScCompiler;
@@ -99,19 +98,19 @@ struct ScRawToken
     // the private dtor) and know what they're doing..
     friend class ScTokenArray;
 protected:
-    OpCode   eOp;
-    formula::StackVar eType;    // type of data; this determines how the unions are used
+    OpCode              eOp;
+    formula::StackVar   eType;  // type of data; this determines how the unions are used
 public:
     union {
         double       nValue;
         struct {
-            sal_uInt8        cByte;
+            sal_uInt8   cByte;
             bool        bIsInForceArray;
         } sbyte;
         ScComplexRefData aRef;
         struct {
-            sal_uInt16      nFileId;
-            sal_Unicode     cTabName[MAXSTRLEN+1];
+            sal_uInt16          nFileId;
+            sal_Unicode         cTabName[MAXSTRLEN+1];
             ScComplexRefData    aRef;
         } extref;
         struct {
