@@ -364,6 +364,29 @@ namespace
     }
 }
 
+namespace
+{
+    void ClipboardGetFunc(GtkClipboard *clipboard, GtkSelectionData *selection_data,
+                          guint info,
+                          gpointer user_data_or_owner)
+    {
+        VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data_or_owner);
+        pThis->ClipboardGet(clipboard, selection_data, info);
+    }
+
+    void ClipboardClearFunc(GtkClipboard *clipboard, gpointer user_data_or_owner)
+    {
+        VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data_or_owner);
+        pThis->ClipboardClear(clipboard);
+    }
+
+    void handle_owner_change(GtkClipboard *clipboard, GdkEvent *event, gpointer user_data)
+    {
+        VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data);
+        pThis->OwnerPossiblyChanged(clipboard, event);
+    }
+}
+
 void VclGtkClipboard::OwnerPossiblyChanged(GtkClipboard* clipboard, GdkEvent* /*event*/)
 {
     if (!m_aContents.is())
@@ -375,6 +398,10 @@ void VclGtkClipboard::OwnerPossiblyChanged(GtkClipboard* clipboard, GdkEvent* /*
     //we see if the selection supports a dummy selection type identifying
     //our pid, in which case it's us.
     bool bSelf = false;
+
+    //disconnect and reconnect after gtk_clipboard_wait_for_targets to
+    //avoid possible recursion
+    g_signal_handler_disconnect(clipboard, m_nOwnerChangedSignalId);
 
     OString sTunnel = "application/x-libreoffice-internal-id-" + getPID();
     GdkAtom *targets;
@@ -393,6 +420,9 @@ void VclGtkClipboard::OwnerPossiblyChanged(GtkClipboard* clipboard, GdkEvent* /*
 
         g_free(targets);
     }
+
+    m_nOwnerChangedSignalId = g_signal_connect(clipboard, "owner-change",
+                                               G_CALLBACK(handle_owner_change), this);
 
     if (!bSelf)
     {
@@ -486,29 +516,6 @@ void VclToGtkHelper::setSelectionData(const Reference<css::datatransfer::XTransf
                            aData.getLength());
 }
 
-namespace
-{
-    void ClipboardGetFunc(GtkClipboard *clipboard, GtkSelectionData *selection_data,
-                          guint info,
-                          gpointer user_data_or_owner)
-    {
-        VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data_or_owner);
-        pThis->ClipboardGet(clipboard, selection_data, info);
-    }
-
-    void ClipboardClearFunc(GtkClipboard *clipboard, gpointer user_data_or_owner)
-    {
-        VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data_or_owner);
-        pThis->ClipboardClear(clipboard);
-    }
-
-    void handle_owner_change(GtkClipboard *clipboard, GdkEvent *event, gpointer user_data)
-    {
-        VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data);
-        pThis->OwnerPossiblyChanged(clipboard, event);
-    }
-}
-
 VclGtkClipboard::VclGtkClipboard(GdkAtom nSelection)
     : cppu::WeakComponentImplHelper<datatransfer::clipboard::XSystemClipboard,
                                     datatransfer::clipboard::XFlushableClipboard, XServiceInfo>
@@ -539,6 +546,7 @@ VclGtkClipboard::~VclGtkClipboard()
     if (!m_aGtkTargets.empty())
     {
         gtk_clipboard_clear(clipboard);
+        ClipboardClear(clipboard);
     }
     assert(m_aGtkTargets.empty());
 }
@@ -602,6 +610,7 @@ void VclGtkClipboard::setContents(
     if (!m_aGtkTargets.empty())
     {
         gtk_clipboard_clear(clipboard);
+        ClipboardClear(clipboard);
     }
     assert(m_aGtkTargets.empty());
     if (m_aContents.is())
