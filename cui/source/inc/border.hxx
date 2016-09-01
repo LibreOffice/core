@@ -111,6 +111,7 @@ private:
     bool                mbTLBREnabled;      ///< true = Top-left to bottom-right border enabled.
     bool                mbBLTREnabled;      ///< true = Bottom-left to top-right border enabled.
     bool                mbUseMarginItem;
+    bool                mbAllowSpacingWithoutBorders;
     bool                mbSync;
     bool                mbRemoveAdjacentCellBorders;
     bool                bIsCalcDoc;

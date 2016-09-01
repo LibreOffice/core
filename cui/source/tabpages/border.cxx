@@ -102,6 +102,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
         mbTLBREnabled( false ),
         mbBLTREnabled( false ),
         mbUseMarginItem( false ),
+        mbAllowSpacingWithoutBorders( false ),
         mbSync(true),
         mbRemoveAdjacentCellBorders( false ),
         bIsCalcDoc( false )
@@ -188,6 +189,11 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
         // The caller specifies default line width.  Honor it.
         const SfxInt64Item* p = static_cast<const SfxInt64Item*>(pItem);
         m_pLineWidthMF->SetValue(p->GetValue());
+    }
+
+    if (rCoreAttrs.HasItem(SID_ALLOW_SPACING_WITHOUT_BORDERS, &pItem))
+    {
+        mbAllowSpacingWithoutBorders = static_cast<const SfxBoolItem*>(pItem)->GetValue();
     }
 
     // set metric
@@ -709,6 +715,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
                 if ( ((mbHorEnabled || mbVerEnabled || (nSWMode & SwBorderModes::TABLE)) &&
                         (m_pLeftMF->IsModified()||m_pRightMF->IsModified()||
                             m_pTopMF->IsModified()||m_pBottomMF->IsModified()) )||
+                     mbAllowSpacingWithoutBorders ||
                      m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Top ) != svx::FrameBorderState::Hide
                      || m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Bottom ) != svx::FrameBorderState::Hide
                      || m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Left ) != svx::FrameBorderState::Hide
@@ -1137,7 +1144,7 @@ IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, LinesChanged_Impl, LinkParamNone*, void)
                                 m_pTopMF->IsModified()||
                                 m_pBottomMF->IsModified();
 
-        if(bLineSet)
+        if( bLineSet || mbAllowSpacingWithoutBorders )
         {
             if(!bMinAllowed)
             {
@@ -1176,7 +1183,7 @@ IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, LinesChanged_Impl, LinkParamNone*, void)
         SvxBoxInfoItemValidFlags nValid = SvxBoxInfoItemValidFlags::TOP|SvxBoxInfoItemValidFlags::BOTTOM|SvxBoxInfoItemValidFlags::LEFT|SvxBoxInfoItemValidFlags::RIGHT;
 
         // for other objects (paragraph, page, frame, character) the edit is disabled, if there's no border set
-        if(!(nSWMode & SwBorderModes::TABLE))
+        if( !(nSWMode & SwBorderModes::TABLE) && !mbAllowSpacingWithoutBorders )
         {
             if(bLineSet)
             {
