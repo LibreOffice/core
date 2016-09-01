@@ -20,12 +20,10 @@
 #ifndef INCLUDED_VCL_INC_IMPFONTMETRIC_HXX
 #define INCLUDED_VCL_INC_IMPFONTMETRIC_HXX
 
-#include <boost/intrusive_ptr.hpp>
-
 class ImplFontCharMap;
-typedef boost::intrusive_ptr< ImplFontCharMap > ImplFontCharMapPtr;
+typedef tools::SvRef<ImplFontCharMap> ImplFontCharMapRef;
 
-class ImplFontMetric
+class ImplFontMetric : public SvRefBase
 {
 public:
     explicit            ImplFontMetric();
@@ -58,8 +56,6 @@ public:
 
 private:
     friend class FontMetric;
-    friend void intrusive_ptr_add_ref(ImplFontMetric* pImplFontMetric);
-    friend void intrusive_ptr_release(ImplFontMetric* pImplFontMetric);
 
     long                mnAscent;                      // Ascent
     long                mnDescent;                     // Descent
@@ -68,24 +64,12 @@ private:
     long                mnLineHeight;                  // Ascent+Descent+EmphasisMark
     long                mnSlant;                       // Slant
     long                mnBulletOffset;                // Offset for non-printing character
-    sal_uInt32          mnRefCount;                    // Reference Counter
 
     bool                mbScalableFont;
     bool                mbFullstopCentered;
     bool                mbDevice;
 
 };
-
-inline void intrusive_ptr_add_ref(ImplFontMetric* pImplFontMetric)
-{
-    ++pImplFontMetric->mnRefCount;
-}
-
-inline void intrusive_ptr_release(ImplFontMetric* pImplFontMetric)
-{
-    if (--pImplFontMetric->mnRefCount == 0)
-        delete pImplFontMetric;
-}
 
 #endif // INCLUDED_VCL_INC_IMPFONTMETRIC_HXX
 

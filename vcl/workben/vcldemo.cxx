@@ -2121,7 +2121,7 @@ namespace {
 
             FontMetric aMetric = xDevice->GetFontMetric(aFont);
 
-            FontCharMapPtr xMap;
+            FontCharMapRef xMap;
             if (xDevice->GetFontCharMap(xMap))
             {
                 ... iterate through glyphs ...

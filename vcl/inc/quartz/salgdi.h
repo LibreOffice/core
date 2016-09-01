@@ -66,7 +66,7 @@ public:
 
     int                             GetFontTable( const char pTagName[5], unsigned char* ) const;
 
-    const FontCharMapPtr            GetFontCharMap() const;
+    const FontCharMapRef            GetFontCharMap() const;
     bool                            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     bool                            HasChar( sal_uInt32 cChar ) const;
 
@@ -78,7 +78,7 @@ protected:
 
 private:
     const sal_IntPtr                mnFontId;
-    mutable FontCharMapPtr          mxCharMap;
+    mutable FontCharMapRef          mxCharMap;
     mutable vcl::FontCapabilities   maFontCapabilities;
     mutable bool                    mbOs2Read;       // true if OS2-table related info is valid
     mutable bool                    mbHasOs2Table;
@@ -94,7 +94,7 @@ public:
 
     SalLayout* GetTextLayout( void ) const;
 
-    void       GetFontMetric( ImplFontMetricDataPtr& ) const;
+    void       GetFontMetric( ImplFontMetricDataRef& ) const;
     bool       GetGlyphBoundRect( sal_GlyphId, Rectangle& ) const;
     bool       GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) const;
 
@@ -337,9 +337,9 @@ public:
     // set the font
     virtual void            SetFont( FontSelectPattern*, int nFallbackLevel ) override;
     // get the current font's metrics
-    virtual void            GetFontMetric( ImplFontMetricDataPtr&, int nFallbackLevel ) override;
+    virtual void            GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) override;
     // get the repertoire of the current font
-    virtual const FontCharMapPtr GetFontCharMap() const override;
+    virtual const FontCharMapRef GetFontCharMap() const override;
     virtual bool            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const override;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( PhysicalFontCollection* ) override;

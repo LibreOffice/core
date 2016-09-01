@@ -446,7 +446,7 @@ void ImplGetLogFontFromFontSelect( HDC, const FontSelectPattern*,
 bool WinGlyphFallbackSubstititution::HasMissingChars( PhysicalFontFace* pFace, const OUString& rMissingChars ) const
 {
     WinFontFace* pWinFont = static_cast< WinFontFace* >(pFace);
-    FontCharMapPtr xFontCharMap = pWinFont->GetFontCharMap();
+    FontCharMapRef xFontCharMap = pWinFont->GetFontCharMap();
     if( !xFontCharMap )
     {
         // construct a Size structure as the parameter of constructor of class FontSelectPattern
@@ -1118,10 +1118,8 @@ bool WinFontFace::IsGSUBstituted( sal_UCS4 cChar ) const
     return( maGsubTable.find( cChar ) != maGsubTable.end() );
 }
 
-FontCharMapPtr WinFontFace::GetFontCharMap() const
+FontCharMapRef WinFontFace::GetFontCharMap() const
 {
-    if( !mxUnicodeMap )
-        return NULL;
     return mxUnicodeMap;
 }
 
@@ -1192,7 +1190,7 @@ void WinFontFace::ReadCmapTable( HDC hDC ) const
         aResult.mbSymbolic = bIsSymbolFont;
         if( aResult.mnRangeCount > 0 )
         {
-            FontCharMapPtr pUnicodeMap(new FontCharMap(aResult));
+            FontCharMapRef pUnicodeMap(new FontCharMap(aResult));
             mxUnicodeMap = pUnicodeMap;
         }
     }
@@ -1511,7 +1509,7 @@ void WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel )
     }
 }
 
-void WinSalGraphics::GetFontMetric( ImplFontMetricDataPtr& rxFontMetric, int nFallbackLevel )
+void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel )
 {
     // temporarily change the HDC to the font in the fallback level
     HFONT hOldFont = SelectFont( getHDC(), mhFonts[nFallbackLevel] );
@@ -1617,11 +1615,11 @@ sal_uLong WinSalGraphics::GetKernPairs()
     return mnFontKernPairCount;
 }
 
-const FontCharMapPtr WinSalGraphics::GetFontCharMap() const
+const FontCharMapRef WinSalGraphics::GetFontCharMap() const
 {
     if( !mpWinFontData[0] )
     {
-        FontCharMapPtr xDefFontCharMap( new FontCharMap() );
+        FontCharMapRef xDefFontCharMap( new FontCharMap() );
         return xDefFontCharMap;
     }
     return mpWinFontData[0]->GetFontCharMap();
@@ -2313,7 +2311,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     if( aRawCffData.get() )
     {
         pWinFontData->UpdateFromHDC( getHDC() );
-        FontCharMapPtr xFontCharMap = pWinFontData->GetFontCharMap();
+        FontCharMapRef xFontCharMap = pWinFontData->GetFontCharMap();
 
         sal_GlyphId aRealGlyphIds[ 256 ];
         for( int i = 0; i < nGlyphCount; ++i )
@@ -2563,7 +2561,7 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
                 rUnicodeEnc.clear();
             }
             const WinFontFace* pWinFont = static_cast<const WinFontFace*>(pFont);
-            FontCharMapPtr xFCMap = pWinFont->GetFontCharMap();
+            FontCharMapRef xFCMap = pWinFont->GetFontCharMap();
             SAL_WARN_IF( !xFCMap || !xFCMap->GetCharCount(), "vcl", "no map" );
 
             int nCharCount = xFCMap->GetCharCount();

@@ -2109,7 +2109,7 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
                 CmapResult aCmapResult;
                 if( ParseCMAP( pCmapData, nCmapSize, aCmapResult ) )
                 {
-                    FontCharMapPtr xFontCharMap( new FontCharMap(aCmapResult) );
+                    FontCharMapRef xFontCharMap( new FontCharMap(aCmapResult) );
                     for( sal_uInt32 cOld = 0;;)
                     {
                         // get next unicode covered by font

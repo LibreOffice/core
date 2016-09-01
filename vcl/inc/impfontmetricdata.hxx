@@ -21,18 +21,16 @@
 #define INCLUDED_VCL_INC_IMPFONTMETRICDATA_HXX
 
 #include <vcl/dllapi.h>
-
+#include <tools/ref.hxx>
 #include "fontattributes.hxx"
 
-#include <boost/intrusive_ptr.hpp>
-
 class ImplFontMetricData;
-typedef boost::intrusive_ptr< ImplFontMetricData > ImplFontMetricDataPtr;
+typedef tools::SvRef<ImplFontMetricData> ImplFontMetricDataRef;
 
 class OutputDevice;
 class FontSelectPattern;
 
-class ImplFontMetricData : public FontAttributes
+class ImplFontMetricData : public FontAttributes, public SvRefBase
 {
 public:
     explicit        ImplFontMetricData( const FontSelectPattern& );
@@ -102,11 +100,6 @@ public:
     void            ImplInitAboveTextLineSize();
 
 private:
-    friend void intrusive_ptr_add_ref(ImplFontMetricData* pImplFontMetricData);
-    friend void intrusive_ptr_release(ImplFontMetricData* pImplFontMetricData);
-
-    long            mnRefCount;
-
     // font instance attributes from the font request
     long            mnWidth;                    // Reference Width
     short           mnOrientation;              // Rotation in 1/10 degrees
@@ -154,17 +147,6 @@ private:
     long            mnDStrikeoutOffset2;        // Offset of double strike-out to baseline
 
 };
-
-inline void intrusive_ptr_add_ref(ImplFontMetricData* pImplFontMetricData)
-{
-    ++pImplFontMetricData->mnRefCount;
-}
-
-inline void intrusive_ptr_release(ImplFontMetricData* pImplFontMetricData)
-{
-    if (--pImplFontMetricData->mnRefCount == 0)
-        delete pImplFontMetricData;
-}
 
 #endif // INCLUDED_VCL_INC_IMPFONTMETRICDATA_HXX
 
