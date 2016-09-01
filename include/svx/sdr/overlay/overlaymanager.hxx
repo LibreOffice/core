@@ -118,15 +118,15 @@ namespace sdr
 
             // stripe support ColA
             const Color& getStripeColorA() const { return maStripeColorA; }
-            void setStripeColorA(Color aNew= Color(COL_BLACK));
+            void setStripeColorA(Color aNew);
 
             // stripe support ColB
             const Color& getStripeColorB() const { return maStripeColorB; }
-            void setStripeColorB(Color aNew = Color(COL_WHITE));
+            void setStripeColorB(Color aNew);
 
             // stripe support StripeLengthPixel
             sal_uInt32 getStripeLengthPixel() const { return mnStripeLengthPixel; }
-            void setStripeLengthPixel(sal_uInt32 nNew = 5L);
+            void setStripeLengthPixel(sal_uInt32 nNew);
 
             // access to maDrawinglayerOpt
             const SvtOptionsDrawinglayer& getDrawinglayerOpt() const { return maDrawinglayerOpt; }

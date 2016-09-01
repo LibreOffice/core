@@ -132,7 +132,7 @@ public:
     SAL_DLLPRIVATE const OUString& GetRealName() const;
 
     // used for building gallery themes during compilation:
-    SAL_DLLPRIVATE void         SetDestDir(const OUString& rDestDir, bool bRelative = true)
+    SAL_DLLPRIVATE void         SetDestDir(const OUString& rDestDir, bool bRelative)
                                 { m_aDestDir = rDestDir; m_bDestDirRelative = bRelative; }
 
     SAL_DLLPRIVATE const INetURLObject& GetThmURL() const;
@@ -185,17 +185,17 @@ public:
     SAL_DLLPRIVATE bool         GetThumb( sal_uIntPtr nPos, BitmapEx& rBmp, bool bProgress = false );
 
     bool                        GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, bool bProgress = false );
-    bool                        InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
+    bool                        InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPos );
 
     bool                        GetModel( sal_uIntPtr nPos, SdrModel& rModel, bool bProgress = false );
-    bool                        InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
+    bool                        InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPos );
 
     SAL_DLLPRIVATE bool         GetModelStream( sal_uIntPtr nPos, tools::SvRef<SotStorageStream>& rModelStreamRef );
-    SAL_DLLPRIVATE bool         InsertModelStream( const tools::SvRef<SotStorageStream>& rModelStream, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
+    SAL_DLLPRIVATE bool         InsertModelStream( const tools::SvRef<SotStorageStream>& rModelStream, sal_uIntPtr nInsertPos );
 
     SAL_DLLPRIVATE bool         GetURL( sal_uIntPtr nPos, INetURLObject& rURL );
     bool                        InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
-    SAL_DLLPRIVATE bool         InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
+    SAL_DLLPRIVATE bool         InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, sal_uIntPtr nInsertPos );
 
     SAL_DLLPRIVATE bool         InsertTransferable( const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable, sal_uIntPtr nInsertPos );
 

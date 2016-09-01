@@ -140,9 +140,9 @@ public:
     void                Set( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
                             double nP, double nD, double nS );
     /** Sets the frame style to the passed SvxBorderLine struct. */
-    void                Set( const editeng::SvxBorderLine& rBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
+    void                Set( const editeng::SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
     /** Sets the frame style to the passed SvxBorderLine struct. Clears the style, if pBorder is 0. */
-    void                Set( const editeng::SvxBorderLine* pBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
+    void                Set( const editeng::SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
 
     /** Sets a new reference point handling mode, does not modify other settings. */
     inline void         SetRefMode( RefMode eRefMode ) { meRefMode = eRefMode; }
@@ -446,7 +446,7 @@ SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DContainer CreateBorderPrimit
     const Style&        rRFromB,        /// Vertical frame border from bottom to right end of rBorder.
     const DiagStyle&    rRFromBL,       /// Diagonal frame border from bottom-left to right end of rBorder.
 
-    const Color*        pForceColor = nullptr,/// If specified, overrides frame border color.
+    const Color*        pForceColor,    /// If specified, overrides frame border color.
     const long          rRotationT = 9000, /// Angle of the top slanted frames in 100th of degree
     const long          rRotationB = 9000  /// Angle of the bottom slanted frames in 100th of degree
 );
@@ -464,7 +464,7 @@ SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DContainer CreateBorderPrimit
     const Style&        rRFromR,        /// Horizontal frame border from right to right end of rBorder.
     const Style&        rRFromB,        /// Vertical frame border from bottom to right end of rBorder.
 
-    const Color*        pForceColor = nullptr,/// If specified, overrides frame border color.
+    const Color*        pForceColor,    /// If specified, overrides frame border color.
     const long          rRotationT = 9000, /// Angle of the top slanted frame in 100th of degrees
     const long          rRotationB = 9000  /// Angle of the bottom slanted frame in 100th of degrees
 );
@@ -624,7 +624,7 @@ SVX_DLLPUBLIC void DrawDiagFrameBorders(
     const Style&        rTRFromB,       /// Vertical frame border from bottom to top-right end of rBLTR.
     const Style&        rTRFromL,       /// Horizontal frame border from left to top-right end of rBLTR.
 
-    const Color*        pForceColor = nullptr,        /// If specified, overrides frame border color.
+    const Color*        pForceColor,    /// If specified, overrides frame border color.
     bool                bDiagDblClip = false    /// true = Use clipping for crossing double frame borders.
 );
 

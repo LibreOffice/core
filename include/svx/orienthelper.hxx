@@ -73,7 +73,7 @@ public:
     void                Enable( bool bEnable = true );
 
     /** Shows or hides the dial control and all dependent windows. */
-    void                Show( bool bShow = true );
+    void                Show( bool bShow );
     /** Hides the dial control and all dependent windows. */
     inline void         Hide() { Show( false ); }
 
@@ -83,7 +83,7 @@ public:
     TriState            GetStackedState() const;
 
     /** Enables/disables the "don't know" state of the "Stacked text" check box. */
-    void                EnableStackedTriState( bool bEnable = true );
+    void                EnableStackedTriState( bool bEnable );
 
 private:
     std::unique_ptr< OrientationHelper_Impl > mpImpl;

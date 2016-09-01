@@ -201,7 +201,7 @@ private:
     SVX_DLLPRIVATE void         Reset();
 
     SVX_DLLPRIVATE bool         LBSelectColor( ColorLB* pLb, const Color& rColor );
-    SVX_DLLPRIVATE sal_uInt16   GetLightSource( const PushButton* pBtn = nullptr );
+    SVX_DLLPRIVATE sal_uInt16   GetLightSource( const PushButton* pBtn );
     SVX_DLLPRIVATE ColorLB*     GetLbByButton( const PushButton* pBtn = nullptr );
 
     SVX_DLLPRIVATE bool         GetUILightState( const PushButton& rBtn ) const;

@@ -89,12 +89,12 @@ public:
     // In case of return value 'false', the position could not be
     // determined (e.g. point shift, multiple selection, shift of the
     // mirror axis,...)
-    bool TakeDragObjAnchorPos(Point& rPos, bool bTopRight = false ) const;
+    bool TakeDragObjAnchorPos(Point& rPos, bool bTopRight ) const;
 
     // If pForcedMeth is passed, then pHdl, ... is not evaluated, but this Drag
     // method is used. In this, the ownership of the instance passes
     // to the View and is destroyed at the end of the dragging.
-    virtual bool BegDragObj(const Point& rPnt, OutputDevice* pOut=nullptr, SdrHdl* pHdl=nullptr, short nMinMov=-3, SdrDragMethod* pForcedMeth=nullptr);
+    virtual bool BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl=nullptr, short nMinMov=-3, SdrDragMethod* pForcedMeth=nullptr);
     void MovDragObj(const Point& rPnt);
     bool EndDragObj(bool bCopy=false);
     void BrkDragObj();

@@ -117,15 +117,15 @@ public:
     virtual void    dispose() override;
 
     // For FilterPage only {
-    void            SetFilterDate(bool bFlag=true);
+    void            SetFilterDate(bool bFlag);
     void            SetDateTimeMode(SvxRedlinDateMode nMode);
     void            SetFirstDate(const Date&);
     void            SetLastDate(const Date&);
     void            SetFirstTime(const tools::Time&);
     void            SetLastTime(const tools::Time&);
-    void            SetFilterAuthor(bool bFlag=true);
+    void            SetFilterAuthor(bool bFlag);
     void            SetAuthor(const OUString &);
-    void            SetFilterComment(bool bFlag=true);
+    void            SetFilterComment(bool bFlag);
     void            SetCommentParams( const utl::SearchParam* pSearchPara );
 
     void            UpdateFilterTest();
@@ -149,7 +149,7 @@ public:
         The rStr contains the entire redline entry; the columns are delimited by '\t'.
     */
     SvTreeListEntry* InsertEntry(const OUString &rStr, RedlinData *pUserData, const Color&,
-                                 SvTreeListEntry* pParent = nullptr, sal_uIntPtr nPos = TREELIST_APPEND);
+                                 SvTreeListEntry* pParent, sal_uIntPtr nPos = TREELIST_APPEND);
 
     /** Insert a redline entry.
 
@@ -157,7 +157,7 @@ public:
         rStr contains the rest of the redline entry; the columns are delimited by '\t'.
     */
     SvTreeListEntry* InsertEntry(const Image &rRedlineType, const OUString &rStr, RedlinData *pUserData,
-                                 SvTreeListEntry* pParent = nullptr, sal_uIntPtr nPos = TREELIST_APPEND);
+                                 SvTreeListEntry* pParent, sal_uIntPtr nPos = TREELIST_APPEND);
 
     virtual SvTreeListEntry* CreateEntry() const override;
 
@@ -251,11 +251,11 @@ public:
 
     void            ShowAction(bool bShow=true);
 
-    void            CheckDate(bool bFlag=true);
-    void            CheckAuthor(bool bFlag=true);
-    void            CheckRange(bool bFlag=true);
-    void            CheckAction(bool bFlag=true);
-    void            CheckComment(bool bFlag=true);
+    void            CheckDate(bool bFlag);
+    void            CheckAuthor(bool bFlag);
+    void            CheckRange(bool bFlag);
+    void            CheckAction(bool bFlag);
+    void            CheckComment(bool bFlag);
 
     ListBox*        GetLbAction() { return m_pLbAction;}
 
@@ -305,10 +305,10 @@ public:
     void            InsertCalcHeader();
     SvxRedlinTable* GetTableControl() { return m_pViewData;}
 
-    void            EnableAccept(bool bFlag=true);
-    void            EnableAcceptAll(bool bFlag=true);
-    void            EnableReject(bool bFlag=true);
-    void            EnableRejectAll(bool bFlag=true);
+    void            EnableAccept(bool bFlag);
+    void            EnableAcceptAll(bool bFlag);
+    void            EnableReject(bool bFlag);
+    void            EnableRejectAll(bool bFlag);
     void            EnableUndo(bool bFlag=true);
     void            DisableUndo()       {EnableUndo(false);}
     void            ShowUndo();

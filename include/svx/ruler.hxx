@@ -127,7 +127,7 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
 
     void StartListening_Impl();
     long GetCorrectedDragPos(bool bLeft = true, bool bRight = true );
-    void DrawLine_Impl(long &lTabPos, int, bool Horizontal = true);
+    void DrawLine_Impl(long &lTabPos, int, bool Horizontal);
     sal_uInt16 GetObjectBordersOff(sal_uInt16 nIdx) const;
 
     // page borders or surrounding frame
@@ -224,7 +224,7 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
         MoveLeft,
         MoveRight
     };
-    void UpdateParaContents_Impl(long lDiff, UpdateType = UpdateType::MoveAll);
+    void UpdateParaContents_Impl(long lDiff, UpdateType);
 
 protected:
     virtual void    Command( const CommandEvent& rCEvt ) override;
@@ -267,7 +267,7 @@ public:
     void SetDefTabDist(long);
 
     // set/get NullOffset in logic units
-    void SetNullOffsetLogic(long lOff = 0);
+    void SetNullOffsetLogic(long lOff);
 
     void SetActive(bool bOn = true);
 
@@ -277,7 +277,7 @@ public:
     }
 
     //#i24363# tab stops relative to indent
-    void SetTabsRelativeToIndent( bool bRel = true );
+    void SetTabsRelativeToIndent( bool bRel );
 };
 
 #endif

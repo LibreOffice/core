@@ -82,13 +82,13 @@ namespace sdr
 
             // clear single item direct, do not do any notifies or things like that.
             // Also supports complete deleteion of items when default parameter 0 is used.
-            virtual void ClearObjectItemDirect(const sal_uInt16 nWhich = 0) override;
+            virtual void ClearObjectItemDirect(const sal_uInt16 nWhich) override;
 
             // Set a single item, iterate over hierarchies if necessary.
             virtual void SetMergedItem(const SfxPoolItem& rItem) override;
 
             // Clear a single item, iterate over hierarchies if necessary.
-            virtual void ClearMergedItem(const sal_uInt16 nWhich = 0) override;
+            virtual void ClearMergedItem(const sal_uInt16 nWhich) override;
 
             // set complete item set
             virtual void SetObjectItemSet(const SfxItemSet& rSet) override;
@@ -104,7 +104,7 @@ namespace sdr
             virtual void ForceDefaultAttributes() override;
 
             // Move properties to a new ItemPool.
-            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = nullptr) override;
+            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel) override;
 
             // force all attributes which come from styles to hard attributes
             // to be able to live without the style.

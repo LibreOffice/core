@@ -62,7 +62,7 @@ public:
     /** Returns sal_True, if the item represents STACKED state. */
     bool                    IsStacked() const;
     /** Returns the rotation this item represents (returns nStdAngle for STANDARD and STACKED state). */
-    sal_Int32               GetRotation( sal_Int32 nStdAngle = 0 ) const;
+    sal_Int32               GetRotation( sal_Int32 nStdAngle ) const;
     /** Fills this item according to passed item values. */
     void                    SetFromRotation( sal_Int32 nRotation, bool bStacked );
 };

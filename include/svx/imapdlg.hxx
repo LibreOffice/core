@@ -51,7 +51,7 @@ class SVX_DLLPUBLIC SvxIMapDlgChildWindow : public SfxChildWindow
 
     SFX_DECL_CHILDWINDOW_WITHID( SvxIMapDlgChildWindow );
 
-    static void UpdateIMapDlg( const Graphic& rGraphic, const ImageMap* pImageMap = nullptr,
+    static void UpdateIMapDlg( const Graphic& rGraphic, const ImageMap* pImageMap,
                                const TargetList* pTargetList = nullptr, void* pEditingObj = nullptr );
 };
 
@@ -152,7 +152,7 @@ public:
 
     void                SetTargetList( const TargetList& rTargetList );
 
-    void                UpdateLink( const Graphic& rGraphic, const ImageMap* pImageMap = nullptr,
+    void                UpdateLink( const Graphic& rGraphic, const ImageMap* pImageMap,
                                 const TargetList* pTargetList = nullptr, void* pEditingObj = nullptr );
 
     virtual void        KeyInput( const KeyEvent& rKEvt ) override;
