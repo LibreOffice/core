@@ -254,10 +254,8 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
     if ( !rStream.GetError() )
     {
         SfxMultiMixRecordWriter aDefsRec( &rStream, SFX_ITEMPOOL_REC_DEFAULTS );
-        sal_uInt16 nCount = GetSize_Impl();
-        for ( sal_uInt16 n = 0; n < nCount; ++n )
+        for (const SfxPoolItem* pDefaultItem : pImpl->maPoolDefaults)
         {
-            const SfxPoolItem* pDefaultItem = pImpl->ppPoolDefaults[n];
             if ( pDefaultItem )
             {
                 // Get version
@@ -695,7 +693,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
                     ( *( pImpl->ppStaticDefaults + GetIndex_Impl(nWhich) ) )
                     ->Create( rStream, nVersion );
             pItem->SetKind( SFX_ITEMS_POOLDEFAULT );
-            *( pImpl->ppPoolDefaults + GetIndex_Impl(nWhich) ) = pItem;
+            pImpl->maPoolDefaults[GetIndex_Impl(nWhich)] = pItem;
         }
     }
 
