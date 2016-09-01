@@ -46,15 +46,6 @@ Menu MODIFY_TOOLBAR
         };
         MenuItem
         {
-            Identifier = ID_DEFAULT_STYLE ;
-            Text [ en-US ] = "Restore Default Settings" ;
-        };
-        MenuItem
-        {
-            Separator = TRUE ;
-        };
-        MenuItem
-        {
             Identifier = ID_ICONS_ONLY ;
             RadioCheck = TRUE ;
             AutoCheck = TRUE ;

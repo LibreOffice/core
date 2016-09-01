@@ -24,7 +24,7 @@
 #define ID_DELETE (44 + CFG_OFFSET)
 
 #define ID_BEGIN_GROUP (46 + CFG_OFFSET)
-#define ID_DEFAULT_STYLE (47 + CFG_OFFSET)
+// There is a gap here
 #define ID_ICONS_ONLY (48 + CFG_OFFSET)
 #define ID_ICONS_AND_TEXT (49 + CFG_OFFSET)
 #define ID_ICON_ONLY (50 + CFG_OFFSET)

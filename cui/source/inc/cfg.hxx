@@ -376,8 +376,9 @@ protected:
 
     VclPtr<PushButton>                         m_pAddCommandsButton;
     VclPtr<MenuButton>                         m_pModifyCommandButton;
-
     VclPtr<PushButton>                         m_pDeleteCommandButton;
+    // Resets the top level toolbar to default settings
+    VclPtr<PushButton>                         m_pResetTopLevelButton;
 
     VclPtr<PushButton>                         m_pMoveUpButton;
     VclPtr<PushButton>                         m_pMoveDownButton;
@@ -570,6 +571,7 @@ private:
     DECL_LINK_TYPED( NewToolbarHdl, Button *, void );
     DECL_LINK_TYPED( AddCommandsHdl, Button *, void );
     DECL_LINK_TYPED( DeleteCommandHdl, Button *, void );
+    DECL_LINK_TYPED( ResetTopLevelHdl, Button *, void );
     DECL_LINK_TYPED( AddFunctionHdl, SvxScriptSelectorDialog&, void );
     DECL_LINK_TYPED( MoveHdl, Button *, void );
 

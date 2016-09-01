@@ -1751,6 +1751,7 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     get(m_pAddCommandsButton, "add");
     get(m_pModifyCommandButton, "modify");
     get(m_pDeleteCommandButton, "deletebtn");
+    get(m_pResetTopLevelButton, "resetbtn");
     get(m_pMoveUpButton, "up");
     get(m_pMoveDownButton, "down");
     get(m_pSaveInListBox, "savein");
@@ -1763,6 +1764,10 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
 
     m_pDescriptionField->SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
     m_pDescriptionField->EnableCursor( false );
+
+    // This button is applicable only for the toolbar config tab
+    m_pResetTopLevelButton->Enable( false );
+    m_pResetTopLevelButton->Hide();
 }
 
 SvxConfigPage::~SvxConfigPage()
@@ -1783,6 +1788,7 @@ void SvxConfigPage::dispose()
     m_pAddCommandsButton.clear();
     m_pModifyCommandButton.clear();
     m_pDeleteCommandButton.clear();
+    m_pResetTopLevelButton.clear();
     m_pMoveUpButton.clear();
     m_pMoveDownButton.clear();
     m_pSaveInListBox.clear();
@@ -3101,6 +3107,9 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     m_pContents->set_label(CUI_RES(RID_SVXSTR_TOOLBAR_CONTENT));
     m_pContentsLabel->SetText( CUI_RES( RID_SVXSTR_COMMANDS ) );
 
+    // The reset button will be used in the toolbar config tab
+    m_pResetTopLevelButton->Show();
+
     m_pTopLevelListBox->SetSelectHdl(
         LINK( this, SvxToolbarConfigPage, SelectToolbar ) );
     m_pContentsListBox->SetSelectHdl(
@@ -3114,6 +3123,9 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
 
     m_pDeleteCommandButton->SetClickHdl  (
         LINK( this, SvxToolbarConfigPage, DeleteCommandHdl ) );
+
+    m_pResetTopLevelButton->SetClickHdl  (
+        LINK( this, SvxToolbarConfigPage, ResetTopLevelHdl ) );
 
     m_pMoveUpButton->SetClickHdl ( LINK( this, SvxToolbarConfigPage, MoveHdl) );
     m_pMoveDownButton->SetClickHdl ( LINK( this, SvxToolbarConfigPage, MoveHdl) );
@@ -3307,23 +3319,6 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton, 
                 m_pTopLevelListBox->SetEntryData( nSelectionPos, pToolbar );
                 m_pTopLevelListBox->SelectEntryPos( nSelectionPos );
             }
-            break;
-        }
-        case ID_DEFAULT_STYLE:
-        {
-            ScopedVclPtrInstance<MessageDialog> qbox(this,
-                CUI_RES(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT), VclMessageType::Question, VCL_BUTTONS_YES_NO);
-
-            if ( qbox->Execute() == RET_YES )
-            {
-                ToolbarSaveInData* pSaveInData_ =
-                    static_cast<ToolbarSaveInData*>(GetSaveInData());
-
-                pSaveInData_->RestoreToolbar( pToolbar );
-
-                m_pTopLevelListBox->GetSelectHdl().Call( *m_pTopLevelListBox );
-            }
-
             break;
         }
         case ID_ICONS_ONLY:
@@ -4543,6 +4538,7 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
         m_pModifyCommandButton->Enable( false );
         m_pAddCommandsButton->Enable( false );
         m_pDeleteCommandButton->Enable( false );
+        m_pResetTopLevelButton->Enable( false );
 
         return;
     }
@@ -4550,12 +4546,12 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
     m_pModifyTopLevelButton->Enable();
     m_pModifyCommandButton->Enable();
     m_pAddCommandsButton->Enable();
+    m_pResetTopLevelButton->Enable( !pToolbar->IsRenamable() );
 
     PopupMenu* pPopup = m_pModifyTopLevelButton->GetPopupMenu();
 
     pPopup->EnableItem( ID_DELETE, pToolbar->IsDeletable() );
     pPopup->EnableItem( ID_RENAME, pToolbar->IsRenamable() );
-    pPopup->EnableItem( ID_DEFAULT_STYLE, !pToolbar->IsRenamable() );
 
     switch( pToolbar->GetStyle() )
     {
@@ -4684,6 +4680,27 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, AddCommandsHdl, Button *, void )
 IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, DeleteCommandHdl, Button *, void )
 {
     DeleteSelectedContent();
+}
+
+IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, ResetTopLevelHdl, Button *, void )
+{
+    sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
+
+    SvxConfigEntry* pToolbar =
+        static_cast<SvxConfigEntry*>(m_pTopLevelListBox->GetEntryData( nSelectionPos ));
+
+    ScopedVclPtrInstance<MessageDialog> qbox(this,
+        CUI_RES(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT), VclMessageType::Question, VCL_BUTTONS_YES_NO);
+
+    if ( qbox->Execute() == RET_YES )
+    {
+        ToolbarSaveInData* pSaveInData_ =
+        static_cast<ToolbarSaveInData*>(GetSaveInData());
+
+        pSaveInData_->RestoreToolbar( pToolbar );
+
+        m_pTopLevelListBox->GetSelectHdl().Call( *m_pTopLevelListBox );
+    }
 }
 
 IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, AddFunctionHdl, SvxScriptSelectorDialog&, void )
