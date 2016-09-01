@@ -143,6 +143,8 @@ public:
     SalColor        GetColor( Pixel nPixel ) const;
 };
 
+class SalI18N_InputMethod;
+
 typedef int(*YieldFunc)(int fd, void* data);
 
 class VCLPLUG_GEN_PUBLIC SalXLib
@@ -156,6 +158,9 @@ protected:
     int             nFDs_;
     fd_set          aReadFDS_;
     fd_set          aExceptionFDS_;
+
+    Display             *m_pDisplay;
+    SalI18N_InputMethod *m_pInputMethod;
 
 public:
     SalXLib();
@@ -176,9 +181,12 @@ public:
     virtual void    StopTimer();
 
     bool            CheckTimeout( bool bExecuteTimers = true );
+
+    SalI18N_InputMethod* GetInputMethod() const { return m_pInputMethod; }
+    void                 SetInputMethod( SalI18N_InputMethod *pInputMethod );
+    Display*             GetDisplay() const { return m_pDisplay; }
 };
 
-class SalI18N_InputMethod;
 class SalI18N_KeyboardExtension;
 class AttributeProvider;
 
@@ -251,7 +259,6 @@ public:
 
 protected:
     SalXLib        *pXLib_;
-    SalI18N_InputMethod         *mpInputMethod;
     SalI18N_KeyboardExtension   *mpKbdExtension;
 
     AttributeProvider           *mpFactory;
@@ -359,10 +366,8 @@ public:
     bool            XIfEventWithTimeout( XEvent*, XPointer, X_if_predicate ) const;
     SalXLib*        GetXLib() const { return pXLib_; }
 
-    SalI18N_InputMethod*        GetInputMethod()  const { return mpInputMethod;  }
+    SalI18N_InputMethod*        GetInputMethod()  const { return pXLib_->GetInputMethod();  }
     SalI18N_KeyboardExtension*  GetKbdExtension() const { return mpKbdExtension; }
-    void            SetInputMethod( SalI18N_InputMethod *pInputMethod )
-    { mpInputMethod = pInputMethod; }
     void            SetKbdExtension(SalI18N_KeyboardExtension *pKbdExtension)
     { mpKbdExtension = pKbdExtension; }
     ::vcl_sal::WMAdaptor* getWMAdaptor() const { return m_pWMAdaptor; }
@@ -394,7 +399,7 @@ public:
     virtual void        PostUserEvent() override;
 
     bool                IsEvent();
-    void                SetupInput( SalI18N_InputMethod *pInputMethod );
+    void                SetupInput();
 };
 
 namespace vcl_sal {

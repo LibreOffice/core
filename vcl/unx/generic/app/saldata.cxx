@@ -334,6 +334,9 @@ SalXLib::SalXLib()
     FD_ZERO( &aReadFDS_ );
     FD_ZERO( &aExceptionFDS_ );
 
+    m_pInputMethod          = nullptr;
+    m_pDisplay              = nullptr;
+
     m_pTimeoutFDS[0] = m_pTimeoutFDS[1] = -1;
     if (pipe (m_pTimeoutFDS) != -1)
     {
@@ -375,6 +378,14 @@ SalXLib::~SalXLib()
     // close 'wakeup' pipe.
     close (m_pTimeoutFDS[0]);
     close (m_pTimeoutFDS[1]);
+
+    delete m_pInputMethod;
+}
+
+void SalXLib::SetInputMethod( SalI18N_InputMethod *pInputMethod )
+{
+    delete m_pInputMethod;
+    m_pInputMethod = pInputMethod;
 }
 
 static Display *OpenX11Display(OString& rDisplay)
@@ -431,14 +442,14 @@ static Display *OpenX11Display(OString& rDisplay)
 
 void SalXLib::Init()
 {
-    SalI18N_InputMethod* pInputMethod = new SalI18N_InputMethod;
-    pInputMethod->SetLocale();
+    m_pInputMethod = new SalI18N_InputMethod;
+    m_pInputMethod->SetLocale();
     XrmInitialize();
 
     OString aDisplay;
-    Display *pDisp = OpenX11Display(aDisplay);
+    m_pDisplay = OpenX11Display(aDisplay);
 
-    if ( !pDisp )
+    if ( !m_pDisplay )
     {
         OUString aProgramFileURL;
         osl_getExecutableFile( &aProgramFileURL.pData );
@@ -455,11 +466,6 @@ void SalXLib::Init()
         std::fflush( stderr );
         exit(0);
     }
-
-    SalX11Display *pSalDisplay = new SalX11Display( pDisp );
-
-    pInputMethod->CreateMethod( pDisp );
-    pSalDisplay->SetupInput( pInputMethod );
 }
 
 extern "C" {

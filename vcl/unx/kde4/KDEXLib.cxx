@@ -96,8 +96,8 @@ KDEXLib::~KDEXLib()
 
 void KDEXLib::Init()
 {
-    SalI18N_InputMethod* pInputMethod = new SalI18N_InputMethod;
-    pInputMethod->SetLocale();
+    m_pInputMethod = new SalI18N_InputMethod;
+    m_pInputMethod->SetLocale();
     XrmInitialize();
 
     KAboutData *kAboutData = new KAboutData( "LibreOffice",
@@ -195,11 +195,7 @@ void KDEXLib::Init()
 
     setupEventLoop();
 
-    Display* pDisp = QX11Info::display();
-    SalKDEDisplay *pSalDisplay = new SalKDEDisplay(pDisp);
-
-    pInputMethod->CreateMethod( pDisp );
-    pSalDisplay->SetupInput( pInputMethod );
+    m_pDisplay = QX11Info::display();
 }
 
 // When we use Qt event loop, it can actually use its own event loop handling, or wrap

@@ -71,6 +71,9 @@ public:
 
 class KDESalInstance : public X11SalInstance
 {
+protected:
+    virtual SalX11Display* CreateDisplay() const override;
+
 public:
     KDESalInstance( SalYieldMutex* pMutex )
             : X11SalInstance( pMutex ) {}

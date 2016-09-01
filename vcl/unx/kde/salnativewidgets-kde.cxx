@@ -27,6 +27,7 @@
 #include <unx/salgdi.h>
 #include <unx/kde/kdedata.hxx>
 #include "unx/pixmap.hxx"
+#include <unx/i18n_im.hxx>
 
 #include <vcl/settings.hxx>
 #include "unx/fontmanager.hxx"
@@ -2104,6 +2105,11 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDESalInstance::createFilePicker(
 {
     return uno::Reference< ui::dialogs::XFilePicker2 >(
                 new UnxFilePicker( xMSF ) );
+}
+
+SalX11Display* KDESalInstance::CreateDisplay() const
+{
+    return new SalKDEDisplay( QPaintDevice::x11AppDisplay() );
 }
 
 // KDESalData pieces

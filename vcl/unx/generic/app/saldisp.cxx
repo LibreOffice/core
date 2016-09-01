@@ -285,7 +285,6 @@ bool SalDisplay::BestVisual( Display     *pDisplay,
 
 SalDisplay::SalDisplay( Display *display ) :
         pXLib_( nullptr ),
-        mpInputMethod( nullptr ),
         mpKbdExtension( nullptr ),
         mpFactory( nullptr ),
         pDisp_( display ),
@@ -343,8 +342,6 @@ void SalDisplay::doDestruct()
 
     if( IsDisplay() )
     {
-        delete mpInputMethod;
-        mpInputMethod = nullptr;
         delete mpKbdExtension;
         mpKbdExtension = nullptr;
 
@@ -662,10 +659,8 @@ void SalDisplay::Init()
 #endif
 }
 
-void SalX11Display::SetupInput( SalI18N_InputMethod *pInputMethod )
+void SalX11Display::SetupInput()
 {
-    SetInputMethod( pInputMethod );
-
     GetGenericData()->ErrorTrapPush();
     SalI18N_KeyboardExtension *pKbdExtension = new SalI18N_KeyboardExtension( pDisp_ );
     XSync( pDisp_, False );
@@ -1444,10 +1439,14 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
     memset( pPrintable, 0, *pLen );
     *pStatusReturn = 0;
 
+    SalI18N_InputMethod *pInputMethod = nullptr;
+    if ( pXLib_ )
+        pInputMethod = pXLib_->GetInputMethod();
+
     // first get the printable of the possibly modified KeySym
     if (   (aInputContext == nullptr)
         || (pEvent->type == KeyRelease)
-        || (mpInputMethod != nullptr && mpInputMethod->PosixLocale()) )
+        || (pInputMethod != nullptr && pInputMethod->PosixLocale()) )
     {
         // XmbLookupString must not be called for KeyRelease events
         // Cannot enter space in c locale problem #89616# #88978# btraq #4478197
@@ -1960,6 +1959,10 @@ void SalX11Display::Yield()
 
 bool SalX11Display::Dispatch( XEvent *pEvent )
 {
+    SalI18N_InputMethod *pInputMethod = nullptr;
+    if ( pXLib_ )
+        pInputMethod = pXLib_->GetInputMethod();
+
     if( pEvent->type == KeyPress || pEvent->type == KeyRelease )
     {
         ::Window aWindow = pEvent->xkey.window;
@@ -1976,12 +1979,12 @@ bool SalX11Display::Dispatch( XEvent *pEvent )
         }
         if( it != m_aFrames.end() )
         {
-            if ( mpInputMethod->FilterEvent( pEvent , aWindow ) )
+            if ( pInputMethod && pInputMethod->FilterEvent( pEvent , aWindow ) )
                 return false;
         }
     }
     else
-        if ( mpInputMethod->FilterEvent( pEvent, None ) )
+        if ( pInputMethod && pInputMethod->FilterEvent( pEvent, None ) )
             return false;
 
     SalInstance* pInstance = GetSalData()->m_pInstance;

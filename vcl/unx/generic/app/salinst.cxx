@@ -31,6 +31,8 @@
 #include <unx/salframe.h>
 #include <unx/genprn.h>
 #include <unx/sm.hxx>
+#include <unx/i18n_im.hxx>
+#include <unx/saldisp.hxx>
 
 #include <vcl/inputtypes.hxx>
 #include <vcl/helper.hxx>
@@ -83,6 +85,11 @@ X11SalInstance::~X11SalInstance()
     // would be done in a static destructor else which is
     // a little late
     GetGenericData()->Dispose();
+}
+
+SalX11Display* X11SalInstance::CreateDisplay() const
+{
+    return new SalX11Display( mpXLib->GetDisplay() );
 }
 
 // AnyInput from sv/mow/source/app/svapp.cxx
@@ -193,6 +200,16 @@ SalFrame* X11SalInstance::CreateChildFrame( SystemParentData* pParentData, SalFr
 void X11SalInstance::DestroyFrame( SalFrame* pFrame )
 {
     delete pFrame;
+}
+
+void X11SalInstance::AfterAppInit()
+{
+    assert( mpXLib->GetDisplay() );
+    assert( mpXLib->GetInputMethod() );
+
+    SalX11Display *pSalDisplay = CreateDisplay();
+    mpXLib->GetInputMethod()->CreateMethod( mpXLib->GetDisplay() );
+    pSalDisplay->SetupInput();
 }
 
 extern "C" { static void SAL_CALL thisModule() {} }

@@ -34,6 +34,7 @@ namespace com { namespace sun { namespace star { namespace datatransfer {
 
 class SalXLib;
 class X11SalGraphics;
+class SalX11Display;
 
 class VCLPLUG_GEN_PUBLIC X11SalInstance : public SalGenericInstance
 {
@@ -42,6 +43,8 @@ private:
 
 protected:
     SalXLib *mpXLib;
+
+    virtual SalX11Display* CreateDisplay() const;
 
 public:
     explicit X11SalInstance(SalYieldMutex* pMutex);
@@ -76,6 +79,8 @@ public:
 
     virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes ) override;
     void                        SetLib( SalXLib *pXLib ) { mpXLib = pXLib; }
+
+    virtual void                AfterAppInit() override;
 
     // dtrans implementation
     virtual css::uno::Reference< css::uno::XInterface >
