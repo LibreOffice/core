@@ -614,7 +614,7 @@ ServerFont::~ServerFont()
 }
 
 
-void ServerFont::GetFontMetric( ImplFontMetricDataPtr& rxTo, long& rFactor ) const
+void ServerFont::GetFontMetric( ImplFontMetricDataRef& rxTo, long& rFactor ) const
 {
     rxTo->FontAttributes::operator =(mpFontInfo->GetFontAttributes());
 
@@ -971,13 +971,13 @@ bool ServerFont::GetAntialiasAdvice() const
 
 // determine unicode ranges in font
 
-const FontCharMapPtr ServerFont::GetFontCharMap() const
+const FontCharMapRef ServerFont::GetFontCharMap() const
 {
-    const FontCharMapPtr xFCMap = mpFontInfo->GetFontCharMap();
+    const FontCharMapRef xFCMap = mpFontInfo->GetFontCharMap();
     return xFCMap;
 }
 
-const FontCharMapPtr& FreetypeFontInfo::GetFontCharMap()
+const FontCharMapRef& FreetypeFontInfo::GetFontCharMap()
 {
     // check if the charmap is already cached
     if( mxFontCharMap )
@@ -988,12 +988,12 @@ const FontCharMapPtr& FreetypeFontInfo::GetFontCharMap()
     bool bOK = GetFontCodeRanges( aCmapResult );
     if( bOK )
     {
-        FontCharMapPtr xFontCharMap( new FontCharMap ( aCmapResult ) );
+        FontCharMapRef xFontCharMap( new FontCharMap ( aCmapResult ) );
         mxFontCharMap = xFontCharMap;
     }
     else
     {
-        FontCharMapPtr xFontCharMap( new FontCharMap() );
+        FontCharMapRef xFontCharMap( new FontCharMap() );
         mxFontCharMap = xFontCharMap;
     }
     // mxFontCharMap on either branch now has a refcount of 1

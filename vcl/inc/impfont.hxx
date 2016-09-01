@@ -26,8 +26,6 @@
 
 #include "fontinstance.hxx"
 
-#include <boost/intrusive_ptr.hpp>
-
 /* The following class is extraordinarily similar to FontAttributes. */
 
 class ImplFont

@@ -53,7 +53,6 @@
 #include <vector>
 #include <window.h>
 #include <boost/functional/hash.hpp>
-#include <boost/intrusive_ptr.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multi_array.hpp>
 #include <boost/optional.hpp>

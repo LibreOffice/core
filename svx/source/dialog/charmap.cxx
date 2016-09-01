@@ -755,7 +755,7 @@ FactoryFunction SvxShowCharSet::GetUITestFactory() const
 // TODO: should be moved into Font Attributes stuff
 // we let it mature here though because it is currently the only use
 
-SubsetMap::SubsetMap( const FontCharMapPtr& rxFontCharMap )
+SubsetMap::SubsetMap( const FontCharMapRef& rxFontCharMap )
 :   Resource( SVX_RES(RID_SUBSETMAP) )
 {
     InitList();
@@ -1619,7 +1619,7 @@ void SubsetMap::InitList()
     maSubsets = aAllSubsets;
 }
 
-void SubsetMap::ApplyCharMap( const FontCharMapPtr& rxFontCharMap )
+void SubsetMap::ApplyCharMap( const FontCharMapRef& rxFontCharMap )
 {
     if( !rxFontCharMap )
         return;

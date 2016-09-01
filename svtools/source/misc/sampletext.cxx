@@ -165,7 +165,7 @@ OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
 
     if (!bOpenSymbol)
     {
-        FontCharMapPtr xFontCharMap;
+        FontCharMapRef xFontCharMap;
         bool bHasCharMap = rDevice.GetFontCharMap(xFontCharMap);
         if( bHasCharMap )
         {
