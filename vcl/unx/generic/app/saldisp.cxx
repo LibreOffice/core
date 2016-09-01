@@ -77,7 +77,6 @@
 #include <memory>
 #include <vector>
 
-#include <com/sun/star/uno/DeploymentException.hpp>
 #include <officecfg/Office/Common.hxx>
 
 /* From <X11/Intrinsic.h> */
@@ -223,15 +222,9 @@ bool SalDisplay::BestVisual( Display     *pDisplay,
     if( nVID && sal_GetVisualInfo( pDisplay, nVID, rVI ) )
         return rVI.visualid == nDefVID;
 
-    try {
-        bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled();
-        if (bUseOpenGL && BestOpenGLVisual(pDisplay, nScreen, rVI))
-            return rVI.visualid == nDefVID;
-    }
-    catch (const css::uno::DeploymentException&)
-    {
-        // too early to try to access configmgr
-    }
+    bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled();
+    if (bUseOpenGL && BestOpenGLVisual(pDisplay, nScreen, rVI))
+        return rVI.visualid == nDefVID;
 
     XVisualInfo aVI;
     aVI.screen = nScreen;
