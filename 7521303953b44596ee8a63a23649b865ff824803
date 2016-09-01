@@ -16,6 +16,24 @@
       "revId": "7521303953b44596ee8a63a23649b865ff824803",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa6399be_9137e0e2",
+        "filename": "filter/source/graphicfilter/idxf/dxfreprd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-09-01T11:17:36Z",
+      "side": 1,
+      "message": "Thank you very much! Working at night is not good.\nAnd good commenting helps. (I\u0027m proud of myself :) )",
+      "parentUuid": "fa6399be_0e4f2d93",
+      "revId": "7521303953b44596ee8a63a23649b865ff824803",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
