@@ -968,7 +968,7 @@ void SwNodes::SectionUp(SwNodeRange *pRange)
     if( pAktNode->IsStartNode() )       // selbst StartNode
     {
         SwEndNode* pEndNd = pRange->aEnd.GetNode().GetEndNode();
-        if( pAktNode == pEndNd->m_pStartOfSection )
+        if (pEndNd && pAktNode == pEndNd->m_pStartOfSection)
         {
             // there was a pairwise reset, adjust only those in the range
             SwStartNode* pTmpSttNd = pAktNode->m_pStartOfSection;
