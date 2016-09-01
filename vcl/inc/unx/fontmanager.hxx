@@ -427,7 +427,7 @@ public:
     // helper for type 1 fonts
     std::list< OString > getAdobeNameFromUnicode( sal_Unicode aChar ) const;
 
-    std::list< sal_Unicode >  getUnicodeFromAdobeName( const OString& rName ) const;
+    std::vector< sal_Unicode >  getUnicodeFromAdobeName( const OString& rName ) const;
     std::pair< std::unordered_multimap< sal_uInt8, sal_Unicode >::const_iterator,
                  std::unordered_multimap< sal_uInt8, sal_Unicode >::const_iterator >
     getUnicodeFromAdobeCode( sal_uInt8 aChar ) const
