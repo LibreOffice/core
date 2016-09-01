@@ -1180,6 +1180,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sCharStyleName("CharStyleName"),
     sCharStyleNames("CharStyleNames"),
     sContourPolyPolygon("ContourPolyPolygon"),
+    sDocumentIndexMark("DocumentIndexMark"),
     sEndNotice("EndNotice"),
     sFootnote("Footnote"),
     sFootnoteCounting("FootnoteCounting"),
