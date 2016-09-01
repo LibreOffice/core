@@ -1631,18 +1631,20 @@ bool SwRangeRedline::operator<( const SwRangeRedline& rCmp ) const
     return *Start() == *rCmp.Start() && *End() < *rCmp.End();
 }
 
-const SwRedlineData & SwRangeRedline::GetRedlineData(sal_uInt16 nPos) const
+const SwRedlineData & SwRangeRedline::GetRedlineData(const sal_uInt16 nPos) const
 {
     SwRedlineData * pCur = pRedlineData;
 
-    while (nPos > 0 && nullptr != pCur->pNext)
+    sal_uInt16 nP = nPos;
+
+    while (nP > 0 && nullptr != pCur->pNext)
     {
         pCur = pCur->pNext;
 
-        nPos--;
+        nP--;
     }
 
-    OSL_ENSURE( 0 == nPos, "Pos is too big" );
+    SAL_WARN_IF( nP != 0, "sw.core", "Pos " << nPos << " is " << nP << " too big");
 
     return *pCur;
 }
