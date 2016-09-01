@@ -41,7 +41,7 @@ public:
                             meEmbeddedBitmap(EMBEDDEDBITMAP_DONTKNOW),
                             meAntiAlias(ANTIALIAS_DONTKNOW),
                             meAutoHint(AUTOHINT_DONTKNOW),
-                            meHinting(HINTING_DONTKNOW),
+                            meHinting(FontHinting::DontKnow),
                             meHintStyle(FontHintStyle::Slight),
                             mpPattern(pPattern) {}
                         ~FontConfigFontOptions();
@@ -50,7 +50,7 @@ public:
     FontHintStyle       GetHintStyle() const { return meHintStyle; }
     bool                DontUseEmbeddedBitmaps() const { return meEmbeddedBitmap == EMBEDDEDBITMAP_FALSE; }
     bool                DontUseAntiAlias() const { return meAntiAlias == ANTIALIAS_FALSE; }
-    bool                DontUseHinting() const { return (meHinting == HINTING_FALSE) || (GetHintStyle() == FontHintStyle::NONE); }
+    bool                DontUseHinting() const { return (meHinting == FontHinting::No) || (GetHintStyle() == FontHintStyle::NONE); }
     void*               GetPattern(void * /*pFace*/, bool /*bEmbolden*/) const;
 private:
     FcPattern* mpPattern;
