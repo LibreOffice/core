@@ -57,7 +57,7 @@ void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
     mxTextRenderImpl->DrawServerFontLayout(rLayout);
 }
 
-const FontCharMapPtr X11SalGraphics::GetFontCharMap() const
+const FontCharMapRef X11SalGraphics::GetFontCharMap() const
 {
     return mxTextRenderImpl->GetFontCharMap();
 }
@@ -100,7 +100,7 @@ void X11SalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
 }
 
 void
-X11SalGraphics::GetFontMetric( ImplFontMetricDataPtr &rxFontMetric, int nFallbackLevel )
+X11SalGraphics::GetFontMetric( ImplFontMetricDataRef &rxFontMetric, int nFallbackLevel )
 {
     mxTextRenderImpl->GetFontMetric(rxFontMetric, nFallbackLevel);
 }

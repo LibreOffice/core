@@ -954,7 +954,7 @@ void WMFWriter::SetAllAttr()
         pVirDev->SetFont(aSrcFont);
         if ( aDstFont.GetFamilyName() != aSrcFont.GetFamilyName() )
         {
-            FontCharMapPtr xFontCharMap;
+            FontCharMapRef xFontCharMap;
             if ( pVirDev->GetFontCharMap( xFontCharMap ) )
             {
                 if ( ( xFontCharMap->GetFirstChar() & 0xff00 ) == 0xf000 )

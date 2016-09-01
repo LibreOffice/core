@@ -117,7 +117,7 @@ CoreTextStyle::~CoreTextStyle()
         CFRelease( mpStyleDict );
 }
 
-void CoreTextStyle::GetFontMetric( ImplFontMetricDataPtr& rxFontMetric ) const
+void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef& rxFontMetric ) const
 {
     // get the matching CoreText font handle
     // TODO: is it worth it to cache the CTFontRef in SetFont() and reuse it here?
