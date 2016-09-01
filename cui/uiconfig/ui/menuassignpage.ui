@@ -38,6 +38,42 @@
                 <property name="can_focus">False</property>
                 <property name="column_spacing">12</property>
                 <child>
+                  <object class="GtkGrid" id="grid2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="column_spacing">12</property>
+                    <child>
+                      <object class="GtkLabel" id="toplevelft">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Menu</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">toplevellist</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="toplevellist">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkButtonBox" id="buttonbox1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -74,42 +110,6 @@
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkGrid" id="grid2">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="column_spacing">12</property>
-                    <child>
-                      <object class="GtkLabel" id="toplevelft">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Menu</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">toplevellist</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="toplevellist">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
                   </packing>
                 </child>
@@ -157,60 +157,6 @@
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="column_spacing">12</property>
-                <child>
-                  <object class="GtkButtonBox" id="buttonbox2">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <property name="layout_style">start</property>
-                    <child>
-                      <object class="GtkButton" id="add">
-                        <property name="label" translatable="yes">Add...</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="modify:modmenu">
-                        <property name="label" translatable="yes">Modify</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="deletebtn">
-                        <property name="label" translatable="yes">Remove</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
                 <child>
                   <object class="GtkGrid" id="grid4">
                     <property name="visible">True</property>
@@ -305,6 +251,30 @@
                         <child>
                           <placeholder/>
                         </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -314,6 +284,112 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkGrid" id="grid6">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkButtonBox" id="buttonbox5">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <property name="layout_style">start</property>
+                        <child>
+                          <object class="GtkButton" id="resetbtn">
+                            <property name="label" translatable="yes">Reset</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButtonBox" id="buttonbox4">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="margin_bottom">24</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <property name="layout_style">start</property>
+                        <child>
+                          <object class="GtkButton" id="modify:modmenu">
+                            <property name="label" translatable="yes">Modify</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="deletebtn">
+                            <property name="label" translatable="yes">Remove</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButtonBox" id="buttonbox3">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="margin_bottom">24</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <property name="layout_style">start</property>
+                        <child>
+                          <object class="GtkButton" id="add">
+                            <property name="label" translatable="yes">Add...</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
                   </packing>
                 </child>
@@ -389,8 +465,12 @@
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
-      <widget name="buttonbox1"/>
-      <widget name="buttonbox2"/>
+      <widget name="toplevelbutton"/>
+      <widget name="menuedit:menu"/>
+      <widget name="add"/>
+      <widget name="modify:modmenu"/>
+      <widget name="deletebtn"/>
+      <widget name="resetbtn"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">
