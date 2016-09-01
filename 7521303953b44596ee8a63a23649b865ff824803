@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6399be_0e4f2d93",
+        "filename": "filter/source/graphicfilter/idxf/dxfreprd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-01T09:55:46Z",
+      "side": 1,
+      "message": "the comment says \"if the encoding is not set yet\" but the conditional is the inverse?",
+      "revId": "7521303953b44596ee8a63a23649b865ff824803",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
