@@ -64,6 +64,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <algorithm>
+#include <deque>
 
 #include <cppuhelper/implbase.hxx>
 
@@ -2462,7 +2463,7 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( const CustomAnimatio
         Reference< XEnumerationAccess > xText( xTarget, UNO_QUERY_THROW );
         Reference< XEnumeration > xEnumeration( xText->createEnumeration(), UNO_QUERY_THROW );
 
-        std::list< sal_Int16 > aParaList;
+        std::deque< sal_Int16 > aParaList;
         sal_Int16 nPara;
 
         // fill the list with all valid paragraphs
@@ -2481,11 +2482,9 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( const CustomAnimatio
         ParagraphTarget aTarget;
         aTarget.Shape = xTarget;
 
-        std::list< sal_Int16 >::iterator aIter( aParaList.begin() );
-        std::list< sal_Int16 >::iterator aEnd( aParaList.end() );
-        while( aIter != aEnd )
+        for( const auto i : aParaList )
         {
-            aTarget.Paragraph = (*aIter++);
+            aTarget.Paragraph = i;
 
             CustomAnimationEffectPtr pNewEffect;
             if( bUsed )
