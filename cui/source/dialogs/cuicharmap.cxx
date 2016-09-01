@@ -445,7 +445,7 @@ IMPL_LINK_NOARG_TYPED(SvxCharacterMap, FontSelectHdl, ListBox&, void)
     bool bNeedSubset = (aFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL);
     if( bNeedSubset )
     {
-        FontCharMapPtr xFontCharMap( new FontCharMap() );
+        FontCharMapRef xFontCharMap( new FontCharMap() );
         m_pShowSet->GetFontCharMap( xFontCharMap );
         pSubsetMap = new SubsetMap( xFontCharMap );
 
@@ -586,7 +586,7 @@ void SvxCharacterMap::selectCharByCode(Radix radix)
     // Convert the code back to a character using the appropriate radix
     sal_UCS4 cChar = aCodeString.toUInt32(static_cast<sal_Int16> (radix));
     // Use FontCharMap::HasChar(sal_UCS4 cChar) to see if the desired character is in the font
-    FontCharMapPtr xFontCharMap(new FontCharMap());
+    FontCharMapRef xFontCharMap(new FontCharMap());
     m_pShowSet->GetFontCharMap(xFontCharMap);
     if (xFontCharMap->HasChar(cChar))
         // Select the corresponding character

@@ -2293,7 +2293,7 @@ void SmSymDefineDialog::SetFont(const OUString &rFontName, const OUString &rStyl
     pSymbolDisplay->SetFont(aFontMetric);
 
     // update subset listbox for new font's unicode subsets
-    FontCharMapPtr xFontCharMap;
+    FontCharMapRef xFontCharMap;
     pCharsetDisplay->GetFontCharMap( xFontCharMap );
     pSubsetMap.reset(new SubsetMap( xFontCharMap ));
 

@@ -767,12 +767,12 @@ void GenPspGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
     DrawPrinterLayout( rLayout, *m_pPrinterGfx, true );
 }
 
-const FontCharMapPtr GenPspGraphics::GetFontCharMap() const
+const FontCharMapRef GenPspGraphics::GetFontCharMap() const
 {
     if( !m_pServerFont[0] )
         return nullptr;
 
-    const FontCharMapPtr xFCMap = m_pServerFont[0]->GetFontCharMap();
+    const FontCharMapRef xFCMap = m_pServerFont[0]->GetFontCharMap();
     return xFCMap;
 }
 
@@ -915,7 +915,7 @@ void GenPspGraphics::ClearDevFontCache()
     GlyphCache::GetInstance().ClearFontCache();
 }
 
-void GenPspGraphics::GetFontMetric( ImplFontMetricDataPtr& rxFontMetric, int )
+void GenPspGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int )
 {
     const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     psp::PrintFontInfo aInfo;

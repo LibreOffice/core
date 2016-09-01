@@ -33,7 +33,7 @@ CmapResult::CmapResult( bool bSymbolic,
 ,   mbRecoded( false)
 {}
 
-static ImplFontCharMapPtr pDefaultImplFontCharMap;
+static ImplFontCharMapRef xDefaultImplFontCharMap;
 static const sal_UCS4 aDefaultUnicodeRanges[] = {0x0020,0xD800, 0xE000,0xFFF0};
 static const sal_UCS4 aDefaultSymbolRanges[] = {0x0020,0x0100, 0xF020,0xF100};
 
@@ -52,7 +52,6 @@ ImplFontCharMap::ImplFontCharMap( const CmapResult& rCR )
 ,   mpGlyphIds( rCR.mpGlyphIds )
 ,   mnRangeCount( rCR.mnRangeCount )
 ,   mnCharCount( 0 )
-,   mnRefCount( 0 )
 {
     const sal_UCS4* pRangePtr = mpRangeCodes;
     for( int i = mnRangeCount; --i >= 0; pRangePtr += 2 )
@@ -63,7 +62,7 @@ ImplFontCharMap::ImplFontCharMap( const CmapResult& rCR )
     }
 }
 
-ImplFontCharMapPtr const & ImplFontCharMap::getDefaultMap( bool bSymbols )
+ImplFontCharMapRef const & ImplFontCharMap::getDefaultMap( bool bSymbols )
 {
     const sal_UCS4* pRangeCodes = aDefaultUnicodeRanges;
     int nCodesCount = sizeof(aDefaultUnicodeRanges) / sizeof(*pRangeCodes);
@@ -74,9 +73,9 @@ ImplFontCharMapPtr const & ImplFontCharMap::getDefaultMap( bool bSymbols )
     }
 
     CmapResult aDefaultCR( bSymbols, pRangeCodes, nCodesCount/2 );
-    pDefaultImplFontCharMap.reset( new ImplFontCharMap( aDefaultCR ) );
+    xDefaultImplFontCharMap = ImplFontCharMapRef(new ImplFontCharMap(aDefaultCR));
 
-    return pDefaultImplFontCharMap;
+    return xDefaultImplFontCharMap;
 }
 
 bool ImplFontCharMap::isDefaultMap() const
@@ -385,19 +384,17 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 
 FontCharMap::FontCharMap()
     : mpImplFontCharMap( ImplFontCharMap::getDefaultMap() )
-    , mnRefCount(0)
-{}
+{
+}
 
-FontCharMap::FontCharMap( ImplFontCharMapPtr const & pIFCMap )
+FontCharMap::FontCharMap( ImplFontCharMapRef const & pIFCMap )
     : mpImplFontCharMap( pIFCMap )
-    , mnRefCount(0)
-{}
+{
+}
 
 FontCharMap::FontCharMap( const CmapResult& rCR )
-    : mnRefCount(0)
+    : mpImplFontCharMap(new ImplFontCharMap(rCR))
 {
-    ImplFontCharMapPtr pImplFontCharMap( new ImplFontCharMap(rCR) );
-    mpImplFontCharMap = pImplFontCharMap;
 }
 
 FontCharMap::~FontCharMap()
@@ -405,10 +402,10 @@ FontCharMap::~FontCharMap()
     mpImplFontCharMap = nullptr;
 }
 
-FontCharMapPtr FontCharMap::GetDefaultMap( bool bSymbol )
+FontCharMapRef FontCharMap::GetDefaultMap( bool bSymbol )
 {
-    FontCharMapPtr pFontCharMap( new FontCharMap( ImplFontCharMap::getDefaultMap( bSymbol ) ) );
-    return pFontCharMap;
+    FontCharMapRef xFontCharMap( new FontCharMap( ImplFontCharMap::getDefaultMap( bSymbol ) ) );
+    return xFontCharMap;
 }
 
 bool FontCharMap::IsDefaultMap() const
