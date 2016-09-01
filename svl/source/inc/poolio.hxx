@@ -91,7 +91,7 @@ struct SfxItemPool_Impl
     std::vector<SfxPoolItemArray_Impl*> maPoolItems;
     std::vector<SfxItemPoolUser*>   maSfxItemPoolUsers; /// ObjectUser section
     OUString                        aName;
-    SfxPoolItem**                   ppPoolDefaults;
+    std::vector<SfxPoolItem*>       maPoolDefaults;
     SfxPoolItem**                   ppStaticDefaults;
     SfxItemPool*                    mpMaster;
     SfxItemPool*                    mpSecondary;
@@ -114,7 +114,7 @@ struct SfxItemPool_Impl
     SfxItemPool_Impl( SfxItemPool* pMaster, const OUString& rName, sal_uInt16 nStart, sal_uInt16 nEnd )
         : maPoolItems(nEnd - nStart + 1, static_cast<SfxPoolItemArray_Impl*>(nullptr))
         , aName(rName)
-        , ppPoolDefaults(new SfxPoolItem* [nEnd - nStart + 1])
+        , maPoolDefaults(nEnd - nStart + 1)
         , ppStaticDefaults(nullptr)
         , mpMaster(pMaster)
         , mpSecondary(nullptr)
@@ -137,7 +137,6 @@ struct SfxItemPool_Impl
         , mbPersistentRefCounts(false)
     {
         DBG_ASSERT(mnStart, "Start-Which-Id must be greater 0" );
-        memset( ppPoolDefaults, 0, sizeof( SfxPoolItem* ) * (nEnd - nStart + 1));
     }
 
     ~SfxItemPool_Impl()
@@ -151,11 +150,10 @@ struct SfxItemPool_Impl
         for (; itr != itrEnd; ++itr)
             delete *itr;
         maPoolItems.clear();
+        maPoolDefaults.clear();
 
         delete[] mpPoolRanges;
         mpPoolRanges = nullptr;
-        delete[] ppPoolDefaults;
-        ppPoolDefaults = nullptr;
     }
 
     void readTheItems(SvStream & rStream, sal_uInt32 nCount, sal_uInt16 nVersion,
