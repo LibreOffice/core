@@ -91,10 +91,6 @@ class CompileFormulaContext;
 
 // constants and data types internal to compiler
 
-/*
-    OpCode              eOp;        // OpCode
-    formula::StackVar   eType;      // type of data
- */
 
 struct ScRawToken
 {
@@ -104,7 +100,7 @@ struct ScRawToken
     friend class ScTokenArray;
 protected:
     OpCode   eOp;
-    formula::StackVar eType;
+    formula::StackVar eType;    // type of data; this determines how the unions are used
 public:
     union {
         double       nValue;
