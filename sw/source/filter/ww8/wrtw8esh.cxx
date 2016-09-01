@@ -1967,6 +1967,7 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
     sal_Int32 nLineWidth=0;
     const SfxPoolItem* pItem;
     bool bFirstLine = true;
+    const bool bAllowSpacingWithoutBorders = rFormat.getIDocumentSettingAccess().get(DocumentSettingId::ALLOW_SPACING_WITHOUT_BORDERS);
     if (SfxItemState::SET == rFormat.GetItemState(RES_BOX, true, &pItem))
     {
         static const o3tl::enumarray<SvxBoxItemLine, sal_uInt16> aExhperProp =
@@ -2034,6 +2035,10 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
                 rPropOpt.AddOpt( aExhperProp[ n ], DrawModelToEmu(
                     static_cast<const SvxBoxItem*>(pItem)->GetDistance( n ) ));
             }
+            else if( bAllowSpacingWithoutBorders )
+            {
+                rPropOpt.AddOpt( aExhperProp[ n ], DrawModelToEmu(static_cast<const SvxBoxItem*>(pItem)->GetDistance( n )) );
+            }
             else
                 // MM If there is no line the distance should be set to 0
                 rPropOpt.AddOpt( aExhperProp[ n ], DrawModelToEmu(0));
@@ -2041,10 +2046,13 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
     if( bFirstLine )                // no valid line found
     {
         rPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
-        rPropOpt.AddOpt( ESCHER_Prop_dyTextTop, 0 );
-        rPropOpt.AddOpt( ESCHER_Prop_dyTextBottom, 0 );
-        rPropOpt.AddOpt( ESCHER_Prop_dxTextLeft, 0 );
-        rPropOpt.AddOpt( ESCHER_Prop_dxTextRight, 0 );
+        if( !bAllowSpacingWithoutBorders )
+        {
+            rPropOpt.AddOpt( ESCHER_Prop_dyTextTop, 0 );
+            rPropOpt.AddOpt( ESCHER_Prop_dyTextBottom, 0 );
+            rPropOpt.AddOpt( ESCHER_Prop_dxTextLeft, 0 );
+            rPropOpt.AddOpt( ESCHER_Prop_dxTextRight, 0 );
+        }
     }
     const SwAttrSet& rAttrSet = rFormat.GetAttrSet();
     if (SfxItemState::SET == rAttrSet.GetItemState(RES_BOX, false, &pItem))

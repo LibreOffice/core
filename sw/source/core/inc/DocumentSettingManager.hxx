@@ -109,6 +109,7 @@ class DocumentSettingManager :
     bool mbUseVirtualDevice                 : 1;
     bool mbAddFlyOffsets                    : 1;
     bool mbAddVerticalFlyOffsets            : 1;
+    bool mbAllowSpacingWithoutBorders       : 1;    // tdf#41542
     bool mbAddExternalLeading               : 1;
     bool mbUseHiResolutionVirtualDevice     : 1;
     bool mbOldLineSpacing                   : 1;    // #i11859#
@@ -147,7 +148,7 @@ class DocumentSettingManager :
     bool mbClippedPictures;
     bool mbBackgroundParaOverDrawings;
     bool mbTabOverMargin;
-    bool mbTreatSingleColumnBreakAsPageBreak;
+    bool mbTreatSingleColumnBreakAsPageBreak;              // tdf#76349
     bool mbSurroundTextWrapSmall;
     bool mbPropLineSpacingShrinksFirstLine; // fdo#79602
     bool mbSubtractFlys; // tdf#86578
