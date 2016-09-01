@@ -491,9 +491,12 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
                 SfxItemSet aSet(makeItemSetFromFormatAnchor(GetDoc()->GetAttrPool(), aAnc));
 
                 SwFlyFrame *pFly = GetSelectedOrCurrFlyFrame();
-                SwFlyFrameFormat* pInnerFlyFormat = pFly->GetFormat();
-                GetDoc()->SetFlyFrameAttr(*pInnerFlyFormat, aSet);
-
+                OSL_ENSURE(pFly, "SetFlyFrameAttr, no Fly selected.");
+                if (pFly)
+                {
+                    SwFlyFrameFormat* pInnerFlyFormat = pFly->GetFormat();
+                    GetDoc()->SetFlyFrameAttr(*pInnerFlyFormat, aSet);
+                }
                 //put a hard-break after the graphic to keep it separated
                 //from the caption text if the outer frame is resized
                 SwIndex aIdx(pTextNode, bBefore ? nInsertPos : 1);

@@ -1040,8 +1040,8 @@ bool SwFEShell::SetFlyFrameAttr( SfxItemSet& rSet )
     if( rSet.Count() )
     {
         SwFlyFrame *pFly = GetSelectedOrCurrFlyFrame();
-        OSL_ENSURE( pFly, "SetFlyFrameAttr, no Fly selected." );
-        if( pFly )
+        OSL_ENSURE(pFly, "SetFlyFrameAttr, no Fly selected.");
+        if (pFly)
         {
             StartAllAction();
             const Point aPt( pFly->Frame().Pos() );
