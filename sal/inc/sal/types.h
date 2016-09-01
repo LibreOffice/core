@@ -235,6 +235,14 @@ typedef void *                   sal_Handle;
 #   define SAL_MAX_ENUM 0x7fff
 #endif
 
+#if defined(__GNUC__) || defined(__clang__)
+#define SAL_UNUSED(__x__)   __x__ __attribute((__unused__))
+#elif defined(_MSC_VER)
+#define SAL_UNUSED(__x__)   __pragma(warning(suppress:4100;suppress:4101)) __x__
+#else
+#define SAL_UNUSED(__x__)   __x__
+#endif
+
 #if defined(_MSC_VER) || defined(__MINGW32__)
 #   define SAL_DLLPUBLIC_EXPORT    __declspec(dllexport)
 #if defined(_MSC_VER)
