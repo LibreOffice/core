@@ -160,11 +160,9 @@ IMPL_LINK_TYPED( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
     // 15 results so that invalid and duplicate search results whose names can't be retrieved can be skipped
     OUString rSearchURL = "https://services.addons.mozilla.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/15";
 
-    sal_Int32 nIndexOfFirefox = searchTerm.indexOf( "firefox" );
-
-    if ( searchTerm.startsWith( "https://addons.mozilla.org/" ) && nIndexOfFirefox != -1 )
+    if ( searchTerm.startsWith( "https://addons.mozilla.org/" ) )
     {
-        searchTerm = "https://addons.mozilla.org/en-US/" + searchTerm.copy( nIndexOfFirefox );
+        searchTerm = "https://addons.mozilla.org/en-US/" + searchTerm.copy( searchTerm.indexOf( "firefox" ) );
         m_pSearchThread = new SearchAndParseThread( this, searchTerm, true );
     }
     else
