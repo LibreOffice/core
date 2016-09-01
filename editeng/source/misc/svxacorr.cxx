@@ -2823,6 +2823,11 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
                         nSttWdPos = rTxt.indexOf( sTmp, nFndPos);
                         if (nSttWdPos != -1)
                         {
+                            sal_Int32 nTmp(nFndPos);
+                            while (nTmp < nSttWdPos && !IsWordDelim(rTxt[nTmp]))
+                                nTmp++;
+                            if (nTmp < nSttWdPos)
+                                break; // word delimiter found
                             buf.append(rTxt.copy(nFndPos, nSttWdPos - nFndPos)).append(pFnd->GetLong());
                             nFndPos = nSttWdPos + sTmp.getLength();
                         }
