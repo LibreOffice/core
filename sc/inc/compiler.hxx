@@ -96,19 +96,15 @@ class CompileFormulaContext;
     formula::StackVar   eType;      // type of data
  */
 
-struct ScRawTokenBase
-{
-protected:
-    OpCode   eOp;
-    formula::StackVar eType;
-};
-
-struct ScRawToken: private ScRawTokenBase
+struct ScRawToken
 {
     friend class ScCompiler;
     // Friends that use a temporary ScRawToken on the stack (and therefore need
     // the private dtor) and know what they're doing..
     friend class ScTokenArray;
+protected:
+    OpCode   eOp;
+    formula::StackVar eType;
 public:
     union {
         double       nValue;
