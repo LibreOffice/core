@@ -1033,11 +1033,6 @@ IMPL_LINK_TYPED( MenuBarManager, Select, Menu *, pMenu, bool )
     return true;
 }
 
-IMPL_LINK_NOARG_TYPED(MenuBarManager, Highlight, Menu *, bool)
-{
-    return false;
-}
-
 bool MenuBarManager::MustBeHidden( PopupMenu* pPopupMenu, const Reference< XURLTransformer >& rTransformer )
 {
     if ( pPopupMenu )
@@ -1973,7 +1968,6 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,Menu* pAddonMenu,boo
 
 void MenuBarManager::SetHdl()
 {
-    m_pVCLMenu->SetHighlightHdl( LINK( this, MenuBarManager, Highlight ));
     m_pVCLMenu->SetActivateHdl( LINK( this, MenuBarManager, Activate ));
     m_pVCLMenu->SetDeactivateHdl( LINK( this, MenuBarManager, Deactivate ));
     m_pVCLMenu->SetSelectHdl( LINK( this, MenuBarManager, Select ));

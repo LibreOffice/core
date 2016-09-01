@@ -152,7 +152,6 @@ class MenuBarManager : public css::frame::XStatusListener                ,
         void GetPopupController( PopupControllerCache& rPopupController );
 
     protected:
-        DECL_LINK_TYPED(Highlight, Menu *, bool);
         DECL_LINK_TYPED( Activate, Menu *, bool );
         DECL_LINK_TYPED( Deactivate, Menu *, bool );
         DECL_LINK_TYPED( AsyncSettingsHdl, Timer *, void );
