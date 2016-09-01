@@ -1400,8 +1400,8 @@ bool SvpSalGraphics::supportsOperation(OutDevSupportType eType) const
 {
     switch (eType)
     {
-        case OutDevSupport_TransparentRect:
-        case OutDevSupport_B2DDraw:
+        case OutDevSupportType::TransparentRect:
+        case OutDevSupportType::B2DDraw:
             return true;
     }
     return false;

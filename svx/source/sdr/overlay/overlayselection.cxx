@@ -80,7 +80,7 @@ namespace sdr
                         return  OverlayType::Invert;
                     }
 
-                    if(!pOut->SupportsOperation(OutDevSupport_TransparentRect))
+                    if(!pOut->SupportsOperation(OutDevSupportType::TransparentRect))
                     {
                         // not possible when no fast transparence paint is supported on the system
                         return OverlayType::Invert;

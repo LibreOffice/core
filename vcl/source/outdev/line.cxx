@@ -115,7 +115,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 
     // #i101598# support AA and snap for lines, too
     if((mnAntialiasing & AntialiasingFlags::EnableB2dDraw)
-        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
+        && mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
         && ROP_OVERPAINT == GetRasterOp()
         && IsLineColor())
     {
@@ -159,7 +159,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const LineInfo& rInfo )
 {
     const bool bTryAA((mnAntialiasing & AntialiasingFlags::EnableB2dDraw)
-        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
+        && mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
         && ROP_OVERPAINT == GetRasterOp()
         && IsLineColor());
     basegfx::B2DPolyPolygon aFillPolyPolygon;

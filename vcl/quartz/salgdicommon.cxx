@@ -1892,8 +1892,8 @@ bool AquaSalGraphics::supportsOperation( OutDevSupportType eType ) const
     bool bRet = false;
     switch( eType )
     {
-    case OutDevSupport_TransparentRect:
-    case OutDevSupport_B2DDraw:
+    case OutDevSupportType::TransparentRect:
+    case OutDevSupportType::B2DDraw:
         bRet = true;
         break;
     default:

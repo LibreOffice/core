@@ -213,7 +213,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         InitFillColor();
 
         const bool bTryAA((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
-                          mpGraphics->supportsOperation(OutDevSupport_B2DDraw) &&
+                          mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
                           ROP_OVERPAINT == GetRasterOp() &&
                           IsLineColor());
 
@@ -313,7 +313,7 @@ bool OutputDevice::DrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
 
     const bool bTryAA( bBypassAACheck ||
                       ((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
-                      mpGraphics->supportsOperation(OutDevSupport_B2DDraw) &&
+                      mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
                       ROP_OVERPAINT == GetRasterOp() &&
                       IsLineColor()));
 
