@@ -55,6 +55,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
 
     mbAddFlyOffsets(false),
     mbAddVerticalFlyOffsets(false),
+    mbAllowSpacingWithoutBorders( false ),
     mbUseHiResolutionVirtualDevice(true),
     mbMathBaselineAlignment(false), // default for *old* documents is 'off'
     mbStylesNoDefault(false),
@@ -146,6 +147,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::TAB_COMPAT: return mbTabCompat; //(n8Dummy1 & DUMMY_TAB_COMPAT);
         case DocumentSettingId::ADD_FLY_OFFSETS: return mbAddFlyOffsets; //(n8Dummy2 & DUMMY_ADD_FLY_OFFSETS);
         case DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS: return mbAddVerticalFlyOffsets;
+        case DocumentSettingId::ALLOW_SPACING_WITHOUT_BORDERS: return mbAllowSpacingWithoutBorders;
         case DocumentSettingId::ADD_EXT_LEADING: return mbAddExternalLeading; //(n8Dummy2 & DUMMY_ADD_EXTERNAL_LEADING);
         case DocumentSettingId::USE_VIRTUAL_DEVICE: return mbUseVirtualDevice; //(n8Dummy1 & DUMMY_USE_VIRTUAL_DEVICE);
         case DocumentSettingId::USE_HIRES_VIRTUAL_DEVICE: return mbUseHiResolutionVirtualDevice; //(n8Dummy2 & DUMMY_USE_HIRES_VIR_DEV);
@@ -220,6 +222,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
             break;
         case DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS:
             mbAddVerticalFlyOffsets = value;
+            break;
+        case DocumentSettingId::ALLOW_SPACING_WITHOUT_BORDERS:
+            mbAllowSpacingWithoutBorders = value;
             break;
         case DocumentSettingId::ADD_EXT_LEADING:
             mbAddExternalLeading = value;

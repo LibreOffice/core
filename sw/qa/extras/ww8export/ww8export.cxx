@@ -734,6 +734,12 @@ DECLARE_WW8EXPORT_TEST(testTdf91083_tableKeep, "tdf91083_tableKeep.doc")
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xTable, "Split"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf76349_textboxMargins, "tdf76349_textboxMargins.doc")
+{
+    // textboxes without borders were losing their spacing items in round-tripping
+    CPPUNIT_ASSERT( 0 < parseDump("/root/page/body/txt/anchored/fly/infos/prtBounds", "left").toInt32() );
+}
+
 DECLARE_WW8EXPORT_TEST(testMoveRange, "fdo66304-1.odt")
 {
     //the save must survive without asserting
