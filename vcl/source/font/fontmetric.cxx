@@ -35,26 +35,26 @@ using namespace ::rtl;
 using namespace ::utl;
 
 FontMetric::FontMetric()
-:   mpImplMetric( new ImplFontMetric() )
+:   mxImplMetric( new ImplFontMetric() )
 {}
 
 FontMetric::FontMetric( const FontMetric& rFontMetric )
     : Font( rFontMetric )
-    , mpImplMetric( rFontMetric.mpImplMetric )
+    , mxImplMetric( rFontMetric.mxImplMetric )
 {}
 
 FontMetric::~FontMetric()
 {
-    mpImplMetric = nullptr;
+    mxImplMetric = nullptr;
 }
 
 FontMetric& FontMetric::operator=( const FontMetric& rFontMetric )
 {
     Font::operator=( rFontMetric );
 
-    if( mpImplMetric != rFontMetric.mpImplMetric )
+    if( mxImplMetric != rFontMetric.mxImplMetric )
     {
-        mpImplMetric = rFontMetric.mpImplMetric;
+        mxImplMetric = rFontMetric.mxImplMetric;
     }
 
     return *this;
@@ -64,116 +64,116 @@ bool FontMetric::operator==( const FontMetric& rFontMetric ) const
 {
     if( !Font::operator==( rFontMetric ) )
         return false;
-    if( mpImplMetric == rFontMetric.mpImplMetric )
+    if( mxImplMetric == rFontMetric.mxImplMetric )
         return true;
-    if( *mpImplMetric == *rFontMetric.mpImplMetric  )
+    if( *mxImplMetric == *rFontMetric.mxImplMetric  )
         return true;
     return false;
 }
 
 FontType FontMetric::GetType() const
 {
-    return (mpImplMetric->IsScalable() ? TYPE_SCALABLE : TYPE_RASTER);
+    return (mxImplMetric->IsScalable() ? TYPE_SCALABLE : TYPE_RASTER);
 }
 
 long FontMetric::GetAscent() const
 {
-    return mpImplMetric->GetAscent();
+    return mxImplMetric->GetAscent();
 }
 
 void FontMetric::SetAscent( long nAscent )
 {
-    mpImplMetric->SetAscent( nAscent );
+    mxImplMetric->SetAscent( nAscent );
 }
 
 long FontMetric::GetDescent() const
 {
-    return mpImplMetric->GetDescent();
+    return mxImplMetric->GetDescent();
 }
 
 void FontMetric::SetDescent( long nDescent )
 {
-    mpImplMetric->SetDescent( nDescent );
+    mxImplMetric->SetDescent( nDescent );
 }
 
 long FontMetric::GetInternalLeading() const
 {
-    return mpImplMetric->GetInternalLeading();
+    return mxImplMetric->GetInternalLeading();
 }
 
 void FontMetric::SetInternalLeading( long nLeading )
 {
-    mpImplMetric->SetInternalLeading( nLeading );
+    mxImplMetric->SetInternalLeading( nLeading );
 }
 
 long FontMetric::GetExternalLeading() const
 {
-    return mpImplMetric->GetExternalLeading();
+    return mxImplMetric->GetExternalLeading();
 }
 
 void FontMetric::SetExternalLeading( long nLeading )
 {
-    mpImplMetric->SetExternalLeading( nLeading );
+    mxImplMetric->SetExternalLeading( nLeading );
 }
 
 long FontMetric::GetLineHeight() const
 {
-    return mpImplMetric->GetLineHeight();
+    return mxImplMetric->GetLineHeight();
 }
 
 void FontMetric::SetLineHeight( long nHeight )
 {
-    mpImplMetric->SetLineHeight( nHeight );
+    mxImplMetric->SetLineHeight( nHeight );
 }
 
 long FontMetric::GetSlant() const
 {
-    return mpImplMetric->GetSlant();
+    return mxImplMetric->GetSlant();
 }
 
 void FontMetric::SetSlant( long nSlant )
 {
-    mpImplMetric->SetSlant( nSlant );
+    mxImplMetric->SetSlant( nSlant );
 }
 
 long FontMetric::GetBulletOffset() const
 {
-    return mpImplMetric->GetBulletOffset();
+    return mxImplMetric->GetBulletOffset();
 }
 
 void FontMetric::SetBulletOffset( long nOffset )
 {
-    mpImplMetric->SetBulletOffset( nOffset );
+    mxImplMetric->SetBulletOffset( nOffset );
 }
 
 bool FontMetric::IsScalable() const
 {
-    return mpImplMetric->IsScalable();
+    return mxImplMetric->IsScalable();
 }
 
 void FontMetric::SetScalableFlag(bool bScalable)
 {
-    mpImplMetric->SetScalableFlag( bScalable );
+    mxImplMetric->SetScalableFlag( bScalable );
 }
 
 bool FontMetric::IsFullstopCentered() const
 {
-    return mpImplMetric->IsFullstopCentered();
+    return mxImplMetric->IsFullstopCentered();
 }
 
 void FontMetric::SetFullstopCenteredFlag(bool bScalable)
 {
-    mpImplMetric->SetFullstopCenteredFlag( bScalable );
+    mxImplMetric->SetFullstopCenteredFlag( bScalable );
 }
 
 bool FontMetric::IsBuiltInFont() const
 {
-    return mpImplMetric->IsBuiltInFont();
+    return mxImplMetric->IsBuiltInFont();
 }
 
 void FontMetric::SetBuiltInFontFlag( bool bIsBuiltInFont )
 {
-    mpImplMetric->SetBuiltInFontFlag( bIsBuiltInFont );
+    mxImplMetric->SetBuiltInFontFlag( bIsBuiltInFont );
 }
 
 
@@ -185,7 +185,6 @@ ImplFontMetric::ImplFontMetric()
     mnLineHeight( 0 ),
     mnSlant( 0 ),
     mnBulletOffset( 0 ),
-    mnRefCount( 0 ),
     mbScalableFont( false ),
     mbFullstopCentered( false ),
     mbDevice( false )
@@ -213,7 +212,6 @@ bool ImplFontMetric::operator==( const ImplFontMetric& r ) const
 
 ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
     : FontAttributes( rFontSelData )
-    , mnRefCount ( 0 )
     , mnWidth ( rFontSelData.mnWidth )
     , mnOrientation( (short)(rFontSelData.mnOrientation) )
     , mnAscent( 0 )

@@ -28,7 +28,7 @@ public:
 
 void VclFontCharMapTest::testDefaultFontCharMap()
 {
-    FontCharMapPtr xfcmap( new FontCharMap() ); // gets default map
+    FontCharMapRef xfcmap( new FontCharMap() ); // gets default map
 
     CPPUNIT_ASSERT( xfcmap->IsDefaultMap() );
 

@@ -50,6 +50,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/fltcall.hxx>
 #include <osl/file.hxx>
+#include <unistd.h>
 #include <signal.h>
 
 #include <../source/filter/igif/gifread.hxx>

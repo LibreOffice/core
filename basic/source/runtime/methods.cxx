@@ -94,6 +94,8 @@ using namespace com::sun::star::uno;
 #include <direct.h>
 #include <io.h>
 #include <postwin.h>
+#else
+#include <unistd.h>
 #endif
 
 #if HAVE_FEATURE_SCRIPTING

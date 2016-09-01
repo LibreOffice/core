@@ -48,12 +48,6 @@
 
 #include <unotools/fontdefs.hxx>
 
-#ifdef check
-#  //some problem with MacOSX and a check define
-#  undef check
-#endif
-#include <boost/intrusive_ptr.hpp>
-
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/uno/Reference.h>
 
@@ -308,7 +302,7 @@ enum OutDevViewType { OUTDEV_VIEWTYPE_DONTKNOW, OUTDEV_VIEWTYPE_PRINTPREVIEW, OU
 
 // OutputDevice
 
-typedef boost::intrusive_ptr< FontCharMap > FontCharMapPtr;
+typedef tools::SvRef<FontCharMap> FontCharMapRef;
 
 BmpMirrorFlags AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix );
 void AdjustTwoRect( SalTwoRect& rTwoRect, const Rectangle& rValidSrcRect );
@@ -1229,7 +1223,7 @@ public:
     FontMetric                  GetFontMetric() const;
     FontMetric                  GetFontMetric( const vcl::Font& rFont ) const;
 
-    bool                        GetFontCharMap( FontCharMapPtr& rxFontCharMap ) const;
+    bool                        GetFontCharMap( FontCharMapRef& rxFontCharMap ) const;
     bool                        GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const;
 
     /** Retrieve detailed font information in platform independent structure
