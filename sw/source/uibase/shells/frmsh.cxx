@@ -405,6 +405,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                     SID_COLOR_TABLE,        SID_PATTERN_LIST,                        // [10179
 
                     SID_HTML_MODE,          SID_HTML_MODE,                          // [10414
+                    SID_ALLOW_SPACING_WITHOUT_BORDERS, SID_ALLOW_SPACING_WITHOUT_BORDERS,   // [11139
                     FN_GET_PRINT_AREA,      FN_GET_PRINT_AREA,                      // [21032
                     FN_SURROUND,            FN_HORI_ORIENT,                         // [21303
                     FN_SET_FRM_NAME,        FN_KEEP_ASPECT_RATIO,                   // [21306
@@ -453,6 +454,10 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 // disable vertical positioning for Math Objects anchored 'as char' if baseline alignment is activated
                 aSet.Put( SfxBoolItem( FN_MATH_BASELINE_ALIGNMENT,
                         rSh.GetDoc()->getIDocumentSettingAccess().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT ) ) );
+
+                aSet.Put( SfxBoolItem( SID_ALLOW_SPACING_WITHOUT_BORDERS,
+                        rSh.GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::ALLOW_SPACING_WITHOUT_BORDERS) ) );
+
                 const uno::Reference < embed::XEmbeddedObject > xObj( rSh.GetOleRef() );
                 aSet.Put( SfxBoolItem( FN_OLE_IS_MATH, xObj.is() && SotExchange::IsMath( xObj->getClassID() ) ) );
 
