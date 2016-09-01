@@ -90,14 +90,14 @@ sal_IntPtr CoreTextFontFace::GetFontId() const
 
 static unsigned GetUShort( const unsigned char* p ){return((p[0]<<8)+p[1]);}
 
-const FontCharMapPtr CoreTextFontFace::GetFontCharMap() const
+const FontCharMapRef CoreTextFontFace::GetFontCharMap() const
 {
     // return the cached charmap
     if( mxCharMap )
         return mxCharMap;
 
     // set the default charmap
-    FontCharMapPtr pCharMap( new FontCharMap() );
+    FontCharMapRef pCharMap( new FontCharMap() );
     mxCharMap = pCharMap;
 
     // get the CMAP byte size
@@ -120,7 +120,7 @@ const FontCharMapPtr CoreTextFontFace::GetFontCharMap() const
     CmapResult aCmapResult;
     if( ParseCMAP( &aBuffer[0], nRawLength, aCmapResult ) )
     {
-        FontCharMapPtr xDefFontCharMap( new FontCharMap(aCmapResult) );
+        FontCharMapRef xDefFontCharMap( new FontCharMap(aCmapResult) );
         // create the matching charmap
         mxCharMap = xDefFontCharMap;
     }
@@ -307,7 +307,7 @@ void AquaSalGraphics::SetTextColor( SalColor nSalColor )
     // SAL_ DEBUG(std::hex << nSalColor << std::dec << "={" << maTextColor.GetRed() << ", " << maTextColor.GetGreen() << ", " << maTextColor.GetBlue() << ", " << maTextColor.GetAlpha() << "}");
 }
 
-void AquaSalGraphics::GetFontMetric( ImplFontMetricDataPtr& rxFontMetric, int /*nFallbackLevel*/ )
+void AquaSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int /*nFallbackLevel*/ )
 {
     mpTextStyle->GetFontMetric( rxFontMetric );
 }
@@ -454,11 +454,11 @@ SalLayout* AquaSalGraphics::GetTextLayout( ImplLayoutArgs& /*rArgs*/, int /*nFal
     return pSalLayout;
 }
 
-const FontCharMapPtr AquaSalGraphics::GetFontCharMap() const
+const FontCharMapRef AquaSalGraphics::GetFontCharMap() const
 {
     if( !mpFontData )
     {
-        FontCharMapPtr xFontCharMap( new FontCharMap() );
+        FontCharMapRef xFontCharMap( new FontCharMap() );
         return xFontCharMap;
     }
 
@@ -740,7 +740,7 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
             free( const_cast<TTSimpleGlyphMetrics *>(pGlyphMetrics) );
         }
 
-        FontCharMapPtr xFCMap = mpFontData->GetFontCharMap();
+        FontCharMapRef xFCMap = mpFontData->GetFontCharMap();
         SAL_WARN_IF( !xFCMap || !xFCMap->GetCharCount(), "vcl", "no charmap" );
 
         // get unicode<->glyph encoding

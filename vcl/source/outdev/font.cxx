@@ -179,7 +179,7 @@ FontMetric OutputDevice::GetFontMetric() const
         return aMetric;
 
     LogicalFontInstance* pFontInstance = mpFontInstance;
-    ImplFontMetricDataPtr xFontMetric = pFontInstance->mxFontMetric;
+    ImplFontMetricDataRef xFontMetric = pFontInstance->mxFontMetric;
 
     // prepare metric
     aMetric.Font::operator=( maFont );
@@ -236,7 +236,7 @@ FontMetric OutputDevice::GetFontMetric( const vcl::Font& rFont ) const
     return aMetric;
 }
 
-bool OutputDevice::GetFontCharMap( FontCharMapPtr& rxFontCharMap ) const
+bool OutputDevice::GetFontCharMap( FontCharMapRef& rxFontCharMap ) const
 {
     // we need a graphics
     if( !mpGraphics && !AcquireGraphics() )
@@ -249,10 +249,10 @@ bool OutputDevice::GetFontCharMap( FontCharMapPtr& rxFontCharMap ) const
     if( !mpFontInstance )
         return false;
 
-    FontCharMapPtr xFontCharMap ( mpGraphics->GetFontCharMap() );
+    FontCharMapRef xFontCharMap ( mpGraphics->GetFontCharMap() );
     if (!xFontCharMap)
     {
-        FontCharMapPtr xDefaultMap( new FontCharMap() );
+        FontCharMapRef xDefaultMap( new FontCharMap() );
         rxFontCharMap = xDefaultMap;
     }
     else
@@ -1530,7 +1530,7 @@ sal_Int32 OutputDevice::HasGlyphs( const vcl::Font& rTempFont, const OUString& r
     // to get the map temporarily set font
     const vcl::Font aOrigFont = GetFont();
     const_cast<OutputDevice&>(*this).SetFont( rTempFont );
-    FontCharMapPtr xFontCharMap ( new FontCharMap() );
+    FontCharMapRef xFontCharMap ( new FontCharMap() );
     bool bRet = GetFontCharMap( xFontCharMap );
     const_cast<OutputDevice&>(*this).SetFont( aOrigFont );
 

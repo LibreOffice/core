@@ -20,14 +20,12 @@
 #ifndef INCLUDED_VCL_INC_IMPFONTCHARMAP_HXX
 #define INCLUDED_VCL_INC_IMPFONTCHARMAP_HXX
 
-#include <boost/intrusive_ptr.hpp>
-
 class ImplFontCharMap;
-typedef boost::intrusive_ptr< ImplFontCharMap > ImplFontCharMapPtr;
+typedef tools::SvRef<ImplFontCharMap> ImplFontCharMapRef;
 
 class CmapResult;
 
-class VCL_PLUGIN_PUBLIC ImplFontCharMap
+class VCL_PLUGIN_PUBLIC ImplFontCharMap : public SvRefBase
 {
 public:
     explicit            ImplFontCharMap( const CmapResult& );
@@ -35,13 +33,11 @@ public:
 
 private:
     friend class FontCharMap;
-    friend void intrusive_ptr_add_ref(ImplFontCharMap* pImplFontCharMap);
-    friend void intrusive_ptr_release(ImplFontCharMap* pImplFontCharMap);
 
                         ImplFontCharMap( const ImplFontCharMap& ) = delete;
     void                operator=( const ImplFontCharMap& ) = delete;
 
-    static ImplFontCharMapPtr const & getDefaultMap( bool bSymbols=false);
+    static ImplFontCharMapRef const & getDefaultMap( bool bSymbols=false);
     bool                isDefaultMap() const;
 
 private:
@@ -50,19 +46,7 @@ private:
     const sal_uInt16*   mpGlyphIds;       // individual glyphid mappings
     int                 mnRangeCount;
     int                 mnCharCount;      // covered codepoints
-    mutable sal_uInt32  mnRefCount;
 };
-
-inline void intrusive_ptr_add_ref(ImplFontCharMap* pImplFontCharMap)
-{
-    ++pImplFontCharMap->mnRefCount;
-}
-
-inline void intrusive_ptr_release(ImplFontCharMap* pImplFontCharMap)
-{
-    if (--pImplFontCharMap->mnRefCount == 0)
-        delete pImplFontCharMap;
-}
 
 bool ParseCMAP( const unsigned char* pRawData, int nRawLength, CmapResult& );
 

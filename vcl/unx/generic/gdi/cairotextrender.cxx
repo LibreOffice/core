@@ -364,12 +364,12 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
     releaseCairoContext(cr);
 }
 
-const FontCharMapPtr CairoTextRender::GetFontCharMap() const
+const FontCharMapRef CairoTextRender::GetFontCharMap() const
 {
     if( !mpServerFont[0] )
         return nullptr;
 
-    const FontCharMapPtr xFCMap = mpServerFont[0]->GetFontCharMap();
+    const FontCharMapRef xFCMap = mpServerFont[0]->GetFontCharMap();
     return xFCMap;
 }
 
@@ -465,7 +465,7 @@ FontConfigFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, 
 }
 
 void
-CairoTextRender::GetFontMetric( ImplFontMetricDataPtr& rxFontMetric, int nFallbackLevel )
+CairoTextRender::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel )
 {
     if( nFallbackLevel >= MAX_FALLBACK )
         return;
