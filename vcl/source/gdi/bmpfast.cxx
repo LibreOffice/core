@@ -354,7 +354,7 @@ inline void ImplBlendPixels( const TrueColorPixelPtr<DSTFMT>& rDst,
 {
     if( !nAlphaVal )
         ImplConvertPixel( rDst, rSrc );
-    else if( nAlphaVal != ~(~0 << ALPHABITS) )
+    else if( nAlphaVal != ~(~0u << ALPHABITS) )
     {
         static const unsigned nAlphaShift = (ALPHABITS > 8) ? 8 : ALPHABITS;
         if( ALPHABITS > nAlphaShift )
