@@ -2178,7 +2178,7 @@ static bool lcl_ToNextRecord( SwDSParam* pParam, const SwDBNextRecord action )
             else
             {
                 sal_Int32 nPos = 0;
-                pParam->aSelection.getConstArray()[ pParam->nSelectionIndex++ ] >>= nPos;
+                pParam->aSelection.getConstArray()[ pParam->nSelectionIndex ] >>= nPos;
                 pParam->bEndOfDB = !pParam->xResultSet->absolute( nPos );
             }
         }
@@ -2193,11 +2193,11 @@ static bool lcl_ToNextRecord( SwDSParam* pParam, const SwDBNextRecord action )
             if( !pParam->bEndOfDB && nBefore == pParam->xResultSet->getRow() )
             {
                 // next returned true but it didn't move
-                pParam->bEndOfDB = true;
+                ::dbtools::throwFunctionSequenceException( pParam->xResultSet );
             }
-            ++pParam->nSelectionIndex;
         }
 
+        ++pParam->nSelectionIndex;
         bRet = !pParam->bEndOfDB;
     }
     catch( const uno::Exception &e )
