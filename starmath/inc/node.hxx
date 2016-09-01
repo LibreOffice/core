@@ -220,64 +220,6 @@ private:
 };
 
 
-/** A simple auxiliary iterator class for SmNode
- *
- * Example of iteration over children of pMyNode:
- * \code
- *  //Node to iterate over:
- *  SmNode* pMyNode = 0;// A pointer from somewhere
- *  //The iterator:
- *  SmNodeIterator it(pMyNode);
- *  //The iteration:
- *  while(it.Next()) {
- *      it->SetSelected(true);
- *  }
- * \endcode
- */
-class SmNodeIterator{
-public:
-    SmNodeIterator(SmNode* node, bool bReverse = false){
-        pNode = node;
-        nSize = pNode->GetNumSubNodes();
-        nIndex = 0;
-        pChildNode = nullptr;
-        bIsReverse = bReverse;
-    }
-    /** Get the subnode or NULL if none */
-    SmNode* Next(){
-        while(!bIsReverse && nIndex < nSize){
-            if(nullptr != (pChildNode = pNode->GetSubNode(nIndex++)))
-                return pChildNode;
-        }
-        while(bIsReverse && nSize > 0){
-            if(nullptr != (pChildNode = pNode->GetSubNode((nSize--)-1)))
-                return pChildNode;
-        }
-        pChildNode = nullptr;
-        return nullptr;
-    }
-    /** Get the current child node, NULL if none */
-    SmNode* Current(){
-        return pChildNode;
-    }
-    /** Get the current child node, NULL if none */
-    SmNode* operator->(){
-        return pChildNode;
-    }
-private:
-    /** Current child */
-    SmNode* pChildNode;
-    /** Node whos children we're iterating over */
-    SmNode* pNode;
-    /** Size of the node */
-    sal_uInt16 nSize;
-    /** Current index in the node */
-    sal_uInt16 nIndex;
-    /** Move reverse */
-    bool bIsReverse;
-};
-
-
 /** Abstract baseclass for all composite node
  *
  * Subclasses of this class can have subnodes. Nodes that doesn't derivate from
@@ -309,6 +251,8 @@ public:
 
     SmNodeArray::iterator begin() {return aSubNodes.begin();}
     SmNodeArray::iterator end() {return aSubNodes.end();}
+    SmNodeArray::reverse_iterator rbegin() {return aSubNodes.rbegin();}
+    SmNodeArray::reverse_iterator rend() {return aSubNodes.rend();}
 
     /** Get the index of a child node
      *
