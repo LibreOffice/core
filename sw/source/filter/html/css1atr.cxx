@@ -1561,16 +1561,16 @@ static Writer& OutCSS1_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     switch( nDeep )
     {
     case CSS1_FMT_ISTAG:
-        pRefFormat = SwHTMLWriter::GetTemplateFormat( nRefPoolId, &pTemplate->getIDocumentStylePoolAccess() );
+        pRefFormat = SwHTMLWriter::GetTemplateFormat( nRefPoolId, pTemplate == nullptr ? nullptr : &pTemplate->getIDocumentStylePoolAccess() );
         break;
     case CSS1_FMT_CMPREF:
         pRefFormat = SwHTMLWriter::GetTemplateFormat( nRefPoolId, pDoc );
-        pRefFormatScript = SwHTMLWriter::GetTemplateFormat( nRefPoolId, &pTemplate->getIDocumentStylePoolAccess() );
+        pRefFormatScript = SwHTMLWriter::GetTemplateFormat( nRefPoolId, pTemplate == nullptr ? nullptr : &pTemplate->getIDocumentStylePoolAccess() );
         bClearSame = false;
         break;
     default:
         pRefFormat = SwHTMLWriter::GetParentFormat( rFormat, nDeep );
-        pRefFormatScript = SwHTMLWriter::GetTemplateFormat( nRefPoolId, &pTemplate->getIDocumentStylePoolAccess() );
+        pRefFormatScript = SwHTMLWriter::GetTemplateFormat( nRefPoolId, pTemplate == nullptr ? nullptr : &pTemplate->getIDocumentStylePoolAccess() );
         bSetDefaults = false;
         break;
     }
