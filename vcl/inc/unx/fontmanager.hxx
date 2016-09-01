@@ -20,11 +20,6 @@
 #ifndef INCLUDED_VCL_INC_FONTMANAGER_HXX
 #define INCLUDED_VCL_INC_FONTMANAGER_HXX
 
-#include <list>
-#include <map>
-#include <set>
-#include <unordered_map>
-
 #include <vcl/dllapi.h>
 #include <vcl/helper.hxx>
 #include <vcl/timer.hxx>
@@ -33,7 +28,11 @@
 #include "salglyphid.hxx"
 #include "unx/fc_fontoptions.hxx"
 
+#include <list>
+#include <map>
+#include <set>
 #include <vector>
+#include <unordered_map>
 
 #include "config_dbus.h"
 
@@ -181,9 +180,9 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
 
         // font attributes
         int                                         m_nFamilyName;  // atom
-        std::list< int >                            m_aAliases;
+        std::vector< int >                          m_aAliases;
         int                                         m_nPSName;      // atom
-        OUString                               m_aStyleName;
+        OUString                                    m_aStyleName;
         FontItalic                                  m_eItalic;
         FontWidth                                   m_eWidth;
         FontWeight                                  m_eWeight;

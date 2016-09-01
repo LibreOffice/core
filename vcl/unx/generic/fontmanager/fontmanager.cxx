@@ -1234,9 +1234,8 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
                 int nAlias = m_pAtoms->getAtom( ATOM_FAMILYNAME, *it );
                 if( nAlias != pFont->m_nFamilyName )
                 {
-                    std::list< int >::const_iterator al_it;
-                    for( al_it = pFont->m_aAliases.begin(); al_it != pFont->m_aAliases.end() && *al_it != nAlias; ++al_it )
-                        ;
+                    std::vector< int >::const_iterator al_it =
+                        std::find( pFont->m_aAliases.begin(), pFont->m_aAliases.end(), nAlias );
                     if( al_it == pFont->m_aAliases.end() )
                         pFont->m_aAliases.push_back( nAlias );
                 }
@@ -1539,8 +1538,8 @@ void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& r
     rInfo.m_bSubsettable = (pFont->m_eType == fonttype::TrueType); // TODO: rename to SfntType
 
     rInfo.m_aAliases.clear();
-    for( ::std::list< int >::iterator it = pFont->m_aAliases.begin(); it != pFont->m_aAliases.end(); ++it )
-        rInfo.m_aAliases.push_back( m_pAtoms->getString( ATOM_FAMILYNAME, *it ) );
+    for( int i : pFont->m_aAliases )
+        rInfo.m_aAliases.push_back( m_pAtoms->getString( ATOM_FAMILYNAME, i ) );
 }
 
 void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo ) const

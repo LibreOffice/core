@@ -153,9 +153,9 @@ void FontCache::flush()
                     nSubEntry = 0;
 
                 aLine.append(OUStringToOString(pAtoms->getString( ATOM_FAMILYNAME, (*it)->m_nFamilyName), RTL_TEXTENCODING_UTF8));
-                for( ::std::list< int >::const_iterator name_it = (*it)->m_aAliases.begin(); name_it != (*it)->m_aAliases.end(); ++name_it )
+                for( int name : (*it)->m_aAliases )
                 {
-                    const OUString& rAdd( pAtoms->getString( ATOM_FAMILYNAME, *name_it ) );
+                    const OUString& rAdd( pAtoms->getString( ATOM_FAMILYNAME, name ) );
                     if( !rAdd.isEmpty() )
                     {
                         aLine.append(';');
@@ -567,7 +567,7 @@ bool FontCache::equalsPrintFont( const PrintFontManager::PrintFont* pLeft, Print
         pRight->m_bUserOverride     != pLeft->m_bUserOverride
         )
         return false;
-    std::list< int >::const_iterator lit, rit;
+    std::vector< int >::const_iterator lit, rit;
     for( lit = pLeft->m_aAliases.begin(), rit = pRight->m_aAliases.begin();
          lit != pLeft->m_aAliases.end() && rit != pRight->m_aAliases.end() && (*lit) == (*rit);
          ++lit, ++rit )
