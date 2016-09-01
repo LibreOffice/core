@@ -73,7 +73,7 @@ enum LineStyle
 
 enum RasterOp { ROP_OVERPAINT, ROP_XOR, ROP_0, ROP_1, ROP_INVERT };
 
-enum FontAutoHint { AUTOHINT_DONTKNOW, AUTOHINT_FALSE, AUTOHINT_TRUE };
+enum class FontAutoHint { DontKnow, No, Yes };
 
 enum class FontHinting { DontKnow, No, Yes };
 

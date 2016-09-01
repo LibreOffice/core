@@ -40,7 +40,7 @@ public:
                         FontConfigFontOptions(FcPattern* pPattern) :
                             meEmbeddedBitmap(EMBEDDEDBITMAP_DONTKNOW),
                             meAntiAlias(ANTIALIAS_DONTKNOW),
-                            meAutoHint(AUTOHINT_DONTKNOW),
+                            meAutoHint(FontAutoHint::DontKnow),
                             meHinting(FontHinting::DontKnow),
                             meHintStyle(FontHintStyle::Slight),
                             mpPattern(pPattern) {}

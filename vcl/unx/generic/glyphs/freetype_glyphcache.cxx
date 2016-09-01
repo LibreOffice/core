@@ -545,10 +545,10 @@ void ServerFont::SetFontOptions(const std::shared_ptr<FontConfigFontOptions>& xF
         return;
 
     FontAutoHint eHint = mxFontOptions->GetUseAutoHint();
-    if( eHint == AUTOHINT_DONTKNOW )
-        eHint = mbUseGamma ? AUTOHINT_TRUE : AUTOHINT_FALSE;
+    if( eHint == FontAutoHint::DontKnow )
+        eHint = mbUseGamma ? FontAutoHint::Yes : FontAutoHint::No;
 
-    if( eHint == AUTOHINT_TRUE )
+    if( eHint == FontAutoHint::Yes )
         mnLoadFlags |= FT_LOAD_FORCE_AUTOHINT;
 
     if( (mnSin != 0) && (mnCos != 0) ) // hinting for 0/90/180/270 degrees only

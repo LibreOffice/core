@@ -1210,7 +1210,7 @@ FontConfigFontOptions* PrintFontManager::getFontOptions(
         if( eAntialias == FcResultMatch )
             pOptions->meAntiAlias = antialias ? ANTIALIAS_TRUE : ANTIALIAS_FALSE;
         if( eAutoHint == FcResultMatch )
-            pOptions->meAutoHint = autohint ? AUTOHINT_TRUE : AUTOHINT_FALSE;
+            pOptions->meAutoHint = autohint ? FontAutoHint::Yes : FontAutoHint::No;
         if( eHinting == FcResultMatch )
             pOptions->meHinting = hinting ? FontHinting::Yes : FontHinting::No;
         switch (hintstyle)
