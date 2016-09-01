@@ -60,6 +60,7 @@ public:
     virtual bool IsNewFieldLst() const override;
     virtual void SetNewFieldLst( bool bFlag) override;
     virtual void InsDelFieldInFieldLst(bool bIns, const SwTextField& rField) override;
+    virtual sal_Int32 GetRecordsPerDocument() const override;
 
     //Non Interface methods
 

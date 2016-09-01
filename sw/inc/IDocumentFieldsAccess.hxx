@@ -130,6 +130,8 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
 
     virtual void InsDelFieldInFieldLst(bool bIns, const SwTextField& rField) = 0;
 
+    virtual sal_Int32 GetRecordsPerDocument() const = 0;
+
 protected:
     virtual ~IDocumentFieldsAccess() {};
  };

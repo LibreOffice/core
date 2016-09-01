@@ -177,10 +177,14 @@ static SfxObjectShell* lcl_CreateWorkingDocument(
     SwDBManager** const pDBManager,
     SwView** const pView, SwWrtShell** const pWrtShell, SwDoc** const pDoc );
 
-static bool lcl_getCountFromResultSet( sal_Int32& rCount, const uno::Reference<sdbc::XResultSet>& xResultSet )
+static bool lcl_getCountFromResultSet( sal_Int32& rCount, const SwDSParam* pParam )
 {
-    uno::Reference<beans::XPropertySet> xPrSet(xResultSet, uno::UNO_QUERY);
-    if(xPrSet.is())
+    rCount = pParam->aSelection.getLength();
+    if ( rCount > 0 )
+        return true;
+
+    uno::Reference<beans::XPropertySet> xPrSet(pParam->xResultSet, uno::UNO_QUERY);
+    if ( xPrSet.is() )
     {
         try
         {
@@ -189,8 +193,8 @@ static bool lcl_getCountFromResultSet( sal_Int32& rCount, const uno::Reference<s
             aFinal >>= bFinal;
             if(!bFinal)
             {
-                xResultSet->last();
-                xResultSet->first();
+                pParam->xResultSet->last();
+                pParam->xResultSet->first();
             }
             uno::Any aCount = xPrSet->getPropertyValue("RowCount");
             if( aCount >>= rCount )
@@ -1265,16 +1269,33 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     }
 
     sal_Int32 nDocNo = 1;
-    sal_Int32 nDocCount = 0;
+
     // For single file mode, the number of pages in the target document so far, which is used
     // by AppendDoc() to adjust position of page-bound objects. Getting this information directly
     // from the target doc would require repeated layouts of the doc, which is expensive, but
     // it can be manually computed from the source documents (for which we do layouts, so the page
     // count is known, and there is a blank page between each of them in the target document).
     int targetDocPageCount = 0;
-    if( !bIsMergeSilent && !bMT_PRINTER &&
-            lcl_getCountFromResultSet( nDocCount, pImpl->pMergeData->xResultSet ) )
-        static_cast<CreateMonitor*>( pProgressDlg.get() )->SetTotalCount( nDocCount );
+
+    if( !bIsMergeSilent && !bMT_PRINTER )
+    {
+        sal_Int32 nRecordCount = 1;
+        lcl_getCountFromResultSet( nRecordCount, pImpl->pMergeData );
+
+        // syncronized docs don't auto-advance the record set, but there is a
+        // "security" check, which will always advance the record set, if there
+        // is no "next record" field in a synchronized doc => nRecordPerDoc > 0
+        sal_Int32 nRecordPerDoc = pSourceShell->GetDoc()
+                ->getIDocumentFieldsAccess().GetRecordsPerDocument();
+        if ( bSynchronizedDoc && (nRecordPerDoc > 1) )
+            --nRecordPerDoc;
+        assert( nRecordPerDoc > 0 );
+
+        sal_Int32 nMaxDocs = nRecordCount / nRecordPerDoc;
+        if ( 0 != nRecordCount % nRecordPerDoc )
+            nMaxDocs += 1;
+        static_cast<CreateMonitor*>( pProgressDlg.get() )->SetTotalCount( nMaxDocs );
+    }
 
     long nStartRow, nEndRow;
     bool bFreezedLayouts = false;
@@ -2173,7 +2194,7 @@ static bool lcl_ToNextRecord( SwDSParam* pParam, const SwDBNextRecord action )
             else
             {
                 sal_Int32 nPos = 0;
-                pParam->aSelection.getConstArray()[ pParam->nSelectionIndex++ ] >>= nPos;
+                pParam->aSelection.getConstArray()[ pParam->nSelectionIndex ] >>= nPos;
                 pParam->bEndOfDB = !pParam->xResultSet->absolute( nPos );
             }
         }
@@ -2188,11 +2209,11 @@ static bool lcl_ToNextRecord( SwDSParam* pParam, const SwDBNextRecord action )
             if( !pParam->bEndOfDB && nBefore == pParam->xResultSet->getRow() )
             {
                 // next returned true but it didn't move
-                pParam->bEndOfDB = true;
+                ::dbtools::throwFunctionSequenceException( pParam->xResultSet );
             }
-            ++pParam->nSelectionIndex;
         }
 
+        ++pParam->nSelectionIndex;
         bRet = !pParam->bEndOfDB;
     }
     catch( const uno::Exception &e )

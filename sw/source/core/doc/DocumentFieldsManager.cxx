@@ -913,7 +913,6 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
         SwSection* pSect = const_cast<SwSection*>((*it)->GetSection());
         if( pSect )
         {
-
             SwSbxValue aValue = aCalc.Calculate(
                                         pSect->GetCondition() );
             if(!aValue.IsVoidValue())
@@ -1184,6 +1183,38 @@ void DocumentFieldsManager::UpdateUsrFields()
         delete pCalc;
         m_rDoc.getIDocumentState().SetModified();
     }
+}
+
+sal_Int32 DocumentFieldsManager::GetRecordsPerDocument() const
+{
+    sal_Int32 nRecords = 1;
+
+    mpUpdateFields->MakeFieldList( m_rDoc, true, GETFLD_ALL );
+    if( mpUpdateFields->GetSortLst()->empty() )
+        return nRecords;
+
+    for( SetGetExpFields::const_iterator it = mpUpdateFields->GetSortLst()->begin();
+        it != mpUpdateFields->GetSortLst()->end(); ++it )
+    {
+        const SwTextField *pTextField = (*it)->GetTextField();
+        if( !pTextField )
+            continue;
+
+        const SwFormatField &pFormatField = pTextField->GetFormatField();
+        const SwField* pField = pFormatField.GetField();
+
+        switch( pField->GetTyp()->Which() )
+        {
+        case RES_DBNEXTSETFLD:
+        case RES_DBNUMSETFLD:
+            nRecords++;
+            break;
+        default:
+            break;
+        }
+    }
+
+    return nRecords;
 }
 
 void DocumentFieldsManager::UpdatePageFields( SfxPoolItem* pMsgHint )
