@@ -435,6 +435,7 @@ SvXMLImport::SvXMLImport(
     mpXMLErrors( nullptr ),
     mnImportFlags( nImportFlags ),
     mnErrorFlags(SvXMLErrorFlags::NO),
+    isFastContext( false ),
     maNamespaceHandler( new SvXMLImportFastNamespaceHandler() ),
     mxTokenHandler( new FastTokenHandler() ),
     mbIsFormsSupported( true ),
@@ -691,14 +692,9 @@ void SAL_CALL SvXMLImport::endDocument()
     }
 }
 
-void SAL_CALL SvXMLImport::startElement( const OUString& rName,
-                                         const uno::Reference< xml::sax::XAttributeList >& xAttrList )
-    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
+void SvXMLImport::processNSAttributes( const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+                                        SvXMLNamespaceMap *pRewindMap )
 {
-    SvXMLNamespaceMap *pRewindMap = nullptr;
-    //    SAL_INFO("svg", "startElement " << rName);
-    // Process namespace attributes. This must happen before creating the
-    // context, because namespace decaration apply to the element name itself.
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -746,6 +742,17 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
 
         }
     }
+}
+
+void SAL_CALL SvXMLImport::startElement( const OUString& rName,
+                                         const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
+{
+    SvXMLNamespaceMap *pRewindMap = nullptr;
+    //    SAL_INFO("svg", "startElement " << rName);
+    // Process namespace attributes. This must happen before creating the
+    // context, because namespace decaration apply to the element name itself.
+    processNSAttributes( xAttrList, pRewindMap );
 
     // Get element's namespace and local name.
     OUString aLocalName;
@@ -852,6 +859,14 @@ void SAL_CALL SvXMLImport::characters( const OUString& rChars )
     }
 }
 
+void SvXMLImport::Characters( const OUString& rChars )
+{
+    if( !mpContexts->empty() )
+    {
+        mpContexts->back()->Characters( rChars );
+    }
+}
+
 void SAL_CALL SvXMLImport::ignorableWhitespace( const OUString& )
     throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
@@ -888,8 +903,22 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
     if ( !xContext.is() )
         xContext.set( new SvXMLImportContext( *this ) );
 
+    isFastContext = true;
+
     // Call a startElement at the new context.
     xContext->startFastElement( Element, Attribs );
+
+    if ( isFastContext )
+    {
+        rtl::Reference < comphelper::AttributeList > rAttrList = new comphelper::AttributeList;
+        maNamespaceHandler->addNSDeclAttributes( rAttrList );
+        SvXMLNamespaceMap *pRewindMap = nullptr;
+        processNSAttributes( rAttrList.get(), pRewindMap );
+        SvXMLImportContext *pContext = dynamic_cast<SvXMLImportContext*>( xContext.get() );
+        if( pContext && pRewindMap )
+            pContext->PutRewindMap( pRewindMap );
+        mpContexts->push_back( pContext );
+    }
 
     // Push context on stack.
     mpFastContexts->push_back( xContext );
@@ -924,7 +953,11 @@ void SAL_CALL SvXMLImport::endFastElement (sal_Int32 Element)
     {
         uno::Reference< XFastContextHandler > xContext = mpFastContexts->back();
         mpFastContexts->pop_back();
+        isFastContext = true;
         xContext->endFastElement( Element );
+        if ( isFastContext )
+            mpContexts->pop_back();
+
         xContext = nullptr;
     }
 }
