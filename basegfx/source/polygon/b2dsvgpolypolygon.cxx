@@ -620,8 +620,9 @@ namespace basegfx
 
                     default:
                     {
-                        OSL_FAIL("importFromSvgD(): skipping tags in svg:d element (unknown)!");
-                        OSL_TRACE("importFromSvgD(): skipping tags in svg:d element (unknown: \"%c\")!", aCurrChar);
+                        SAL_WARN("basegfx", "importFromSvgD(): skipping tags in svg:d element (unknown: \""
+                                << aCurrChar
+                                << "\")!");
                         ++nPos;
                         break;
                     }
@@ -665,7 +666,7 @@ namespace basegfx
 
         OUString exportToSvgPoints( const B2DPolygon& rPoly )
         {
-            OSL_ENSURE(!rPoly.areControlPointsUsed(), "exportToSvgPoints: Only non-bezier polygons allowed (!)");
+            SAL_WARN_IF(rPoly.areControlPointsUsed(), "basegfx", "exportToSvgPoints: Only non-bezier polygons allowed (!)");
             const sal_uInt32 nPointCount(rPoly.count());
             OUStringBuffer aResult;
 
