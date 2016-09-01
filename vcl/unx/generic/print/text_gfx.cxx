@@ -85,13 +85,12 @@ static int getVerticalDeltaAngle( sal_Unicode nChar )
 void
 PrinterGfx::PSUploadPS1Font (sal_Int32 nFontID)
 {
-    std::list< sal_Int32 >::iterator aFont;
     // already in the document header ?
-    for (aFont = maPS1Font.begin(); aFont != maPS1Font.end(); ++aFont )
-        if( nFontID == *aFont )
+    for ( int i : maPS1Font )
+        if( nFontID == i )
             return;
 
-    // no occurrenc yet, mark for download
+    // no occurrence yet, mark for download
     // add the fontid to the list
     maPS1Font.push_back (nFontID);
 }
@@ -664,18 +663,17 @@ void
 PrinterGfx::writeResources( osl::File* pFile, std::list< OString >& rSuppliedFonts )
 {
     // write all type 1 fonts
-    std::list< sal_Int32 >::iterator aFont;
     // already in the document header ?
-    for (aFont = maPS1Font.begin(); aFont != maPS1Font.end(); ++aFont)
+    for (int aFont : maPS1Font)
     {
-        const OString& rSysPath (mrFontMgr.getFontFileSysPath(*aFont) );
+        const OString& rSysPath (mrFontMgr.getFontFileSysPath(aFont) );
         OUString aUNCPath;
         osl::File::getFileURLFromSystemPath (OStringToOUString (rSysPath, osl_getThreadTextEncoding()), aUNCPath);
         osl::File aFontFile (aUNCPath);
 
         // provide the pfb or pfa font as a (pfa-)font resource
         OString aPostScriptName =
-            OUStringToOString ( mrFontMgr.getPSName(*aFont),
+            OUStringToOString ( mrFontMgr.getPSName(aFont),
                                      RTL_TEXTENCODING_ASCII_US );
 
         WritePS (pFile, "%%BeginResource: font ");
