@@ -429,7 +429,7 @@ AnimationNode::AnimationNode( sal_Int16 nNodeType )
     mnIterateType( css::presentation::ShapeAnimationSubType::AS_WHOLE ),
     mfIterateInterval(0.0)
 {
-    OSL_ENSURE((sal_uInt32)nNodeType < sizeof(mpTypes)/sizeof(Sequence<Type>*), "NodeType out of range");
+    assert((sal_uInt32)nNodeType < sizeof(mpTypes)/sizeof(Sequence<Type>*));
 }
 
 AnimationNode::AnimationNode( const AnimationNode& rNode )
@@ -1215,7 +1215,7 @@ Reference< XCloneable > SAL_CALL AnimationNode::createClone() throw (RuntimeExce
                     }
                     catch(const Exception&)
                     {
-                        OSL_TRACE( "animations::AnimationNode::createClone(), exception caught!" );
+                        SAL_INFO("animations", "animations::AnimationNode::createClone(), exception caught!");
                     }
                 }
             }
@@ -1223,7 +1223,7 @@ Reference< XCloneable > SAL_CALL AnimationNode::createClone() throw (RuntimeExce
     }
     catch(const Exception&)
     {
-        OSL_TRACE( "animations::AnimationNode::createClone(), exception caught!" );
+        SAL_INFO("animations", "animations::AnimationNode::createClone(), exception caught!");
     }
 
     return xNewNode;

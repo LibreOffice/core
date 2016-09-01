@@ -536,6 +536,7 @@ certain functionality.
 @section other
 
 @li @c accessibility
+@li @c animations
 @li @c basegfx
 @li @c binaryurp
 @li @c configmgr
