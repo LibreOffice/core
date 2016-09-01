@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_SCRIPTINFO_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_SCRIPTINFO_HXX
 
-#include <list>
+#include <vector>
 #include <deque>
 #include "swscanner.hxx"
 #include <rtl/ustrbuf.hxx>
@@ -29,7 +29,7 @@
 class SwTextNode;
 class Point;
 class MultiSelection;
-typedef std::list< sal_Int32 > PositionList;
+typedef std::vector< sal_Int32 > PositionList;
 enum class SwFontScript;
 
 #define SPACING_PRECISION_FACTOR 100
