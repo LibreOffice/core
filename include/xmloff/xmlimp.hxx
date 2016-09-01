@@ -61,7 +61,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
 
-#define NAMESPACE_TOKEN( prefixToken ) ( ( prefixToken + 1 ) << NMSP_SHIFT )
+#define NAMESPACE_TOKEN( prefixToken ) ( sal_Int32( prefixToken + 1 ) << NMSP_SHIFT )
 
 const size_t NMSP_SHIFT = 16;
 const sal_Int32 TOKEN_MASK = 0xffff;
@@ -191,6 +191,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper8<
     SvXMLImportFlags  mnImportFlags;
     SvXMLErrorFlags  mnErrorFlags;
     std::set< OUString > embeddedFontUrlsKnown;
+    bool isFastContext;
     css::uno::Reference< css::xml::sax::XFastParser > mxParser;
     rtl::Reference< SvXMLImportFastNamespaceHandler > maNamespaceHandler;
     css::uno::Reference< css::xml::sax::XFastTokenHandler > mxTokenHandler;
@@ -199,6 +200,9 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper8<
     const OUString getNamespacePrefixFromToken( sal_Int32 nToken );
     void registerNamespaces();
     void registerNSHelper(sal_Int32 nToken, sal_Int32 nPrefix, sal_Int32 nNamespace );
+    void processNSAttributes( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+                            SvXMLNamespaceMap *pRewindMap );
+    void Characters(const OUString& aChars);
 
 protected:
 

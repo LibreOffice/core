@@ -44,7 +44,7 @@ struct SvXMLTokenMapEntry
         nPrefixKey( nPrefix ),
         eLocalName( eName ),
         nToken( nTok ),
-        nFastToken( sal_uInt32( nPrefixKey + 1 ) << 16 | eLocalName )
+        nFastToken( sal_Int32( nPrefixKey + 1 ) << 16 | eLocalName )
     {
         if ( nFastTok )     // alternative value for duplicate/dummy tokens
             nFastToken = nFastTok;
