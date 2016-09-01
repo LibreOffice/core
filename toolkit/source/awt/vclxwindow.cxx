@@ -1279,7 +1279,7 @@ namespace toolkit
 }
 
 // Terminated by BASEPROPERTY_NOTFOUND (or 0)
-void VCLXWindow::PushPropertyIds( std::list< sal_uInt16 > &rIds,
+void VCLXWindow::PushPropertyIds( std::vector< sal_uInt16 > &rIds,
                                   int nFirstId, ...)
 {
     va_list pVarArgs;
@@ -1292,7 +1292,7 @@ void VCLXWindow::PushPropertyIds( std::list< sal_uInt16 > &rIds,
     va_end( pVarArgs );
 }
 
-void VCLXWindow::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds, bool bWithDefaults )
+void VCLXWindow::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds, bool bWithDefaults )
 {
     // These are common across ~all VCLXWindow derived classes
     if( bWithDefaults )
@@ -1314,7 +1314,7 @@ void VCLXWindow::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds, bool bWithDe
 
     // lovely hack from:
     // void UnoControlModel::ImplRegisterProperty( sal_uInt16 nPropId )
-    std::list< sal_uInt16 >::const_iterator iter;
+    std::vector< sal_uInt16 >::const_iterator iter;
     for( iter = rIds.begin(); iter != rIds.end(); ++iter) {
         if( *iter == BASEPROPERTY_FONTDESCRIPTOR )
         {
@@ -1331,7 +1331,7 @@ void VCLXWindow::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds, bool bWithDe
     }
 }
 
-void VCLXWindow::GetPropertyIds( std::list< sal_uInt16 >& _out_rIds )
+void VCLXWindow::GetPropertyIds( std::vector< sal_uInt16 >& _out_rIds )
 {
     return ImplGetPropertyIds( _out_rIds, mpImpl->mbWithDefaultProps );
 }
@@ -2551,7 +2551,7 @@ VCLXWindow::GetPropHelper()
     SolarMutexGuard aGuard;
     if ( mpImpl->mpPropHelper == nullptr )
     {
-        std::list< sal_uInt16 > aIDs;
+        std::vector< sal_uInt16 > aIDs;
         GetPropertyIds( aIDs );
         mpImpl->mpPropHelper = new UnoPropertyArrayHelper( aIDs );
     }

@@ -34,7 +34,7 @@
 //  class VCLXContainer
 
 
-void VCLXContainer::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXContainer::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     VCLXWindow::ImplGetPropertyIds( rIds );
 }

@@ -105,8 +105,8 @@ public:
     // css::awt::XWindow
     void SAL_CALL setFocus(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
+    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
 
@@ -159,8 +159,8 @@ public:
 
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value) throw(css::uno::RuntimeException, std::exception) override;
 
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
+    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
 
@@ -209,8 +209,8 @@ protected:
 
     virtual void    SetWindow( const VclPtr< vcl::Window > &_pWindow) override;
 
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
+    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
 
@@ -275,8 +275,8 @@ protected:
     // VCLXGraphicControl overridables
     virtual void    ImplSetNewImage() override;
 
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
+    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
 
@@ -315,8 +315,8 @@ public:
     void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw(css::uno::RuntimeException, std::exception) override;
     sal_Bool SAL_CALL isStrictFormat(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
+    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
 
@@ -359,8 +359,8 @@ public:
     void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw(css::uno::RuntimeException, std::exception) override;
     sal_Bool SAL_CALL isStrictFormat(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
+    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
 
@@ -401,8 +401,8 @@ public:
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
     css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
+    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
 
@@ -417,8 +417,8 @@ public:
     // css::awt::VclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
 
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
+    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
 #endif // INCLUDED_SVTOOLS_SOURCE_INC_UNOIFACE_HXX

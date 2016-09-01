@@ -48,7 +48,7 @@ public:
 
     // css::lang::XTypeProvider
     css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< sal_Int8 >        SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
 
     // css::awt::XVclContainer
     void SAL_CALL addVclContainerListener( const css::uno::Reference< css::awt::XVclContainerListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
@@ -63,8 +63,8 @@ public:
     // css::awt::XVclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
 
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
+    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
 

@@ -44,7 +44,7 @@
 #include <tools/link.hxx>
 
 #include <stdarg.h>
-#include <list>
+#include <vector>
 #include <functional>
 
 
@@ -96,11 +96,11 @@ protected:
     ::toolkit::IAccessibleFactory&  getAccessibleFactory();
 
     // helper ...
-    static void     PushPropertyIds( std::list< sal_uInt16 > &aIds, int nFirstId, ...);
+    static void     PushPropertyIds( std::vector< sal_uInt16 > &aIds, int nFirstId, ...);
     // for use in controls/
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds,
+    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds,
                                         bool bWithDefaults = false );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds );
 
     ::comphelper::OInterfaceContainerHelper2&  GetContainerListeners();
     ::comphelper::OInterfaceContainerHelper2&  GetTopWindowListeners();

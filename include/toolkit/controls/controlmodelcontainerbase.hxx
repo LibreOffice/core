@@ -41,6 +41,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <tools/gen.hxx>
+#include <list>
 
 //  class ControlModelContainerBase
 

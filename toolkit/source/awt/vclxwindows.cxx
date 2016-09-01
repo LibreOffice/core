@@ -204,7 +204,7 @@ namespace toolkit
 //  class VCLXGraphicControl
 
 
-void VCLXGraphicControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXGraphicControl::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
@@ -335,7 +335,7 @@ css::uno::Any VCLXGraphicControl::getProperty( const OUString& PropertyName ) th
 //  class VCLXButton
 
 
-void VCLXButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXButton::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_BACKGROUNDCOLOR,
@@ -618,7 +618,7 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 //  class VCLXImageControl
 
 
-void VCLXImageControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXImageControl::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_BACKGROUNDCOLOR,
@@ -749,7 +749,7 @@ css::uno::Any VCLXImageControl::getProperty( const OUString& PropertyName ) thro
 //  class VCLXCheckBox
 
 
-void VCLXCheckBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXCheckBox::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_DEFAULTCONTROL,
@@ -1049,7 +1049,7 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
 //  class VCLXRadioButton
 
-void VCLXRadioButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXRadioButton::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_DEFAULTCONTROL,
@@ -1332,7 +1332,7 @@ void VCLXRadioButton::ImplClickedOrToggled( bool bToggled )
 
 //  class VCLXSpinField
 
-void VCLXSpinField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXSpinField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
@@ -1465,7 +1465,7 @@ void VCLXSpinField::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
 //  class VCLXListBox
 
-void VCLXListBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXListBox::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_BACKGROUNDCOLOR,
@@ -2154,7 +2154,7 @@ void SAL_CALL VCLXListBox::disposing( const EventObject& i_rEvent ) throw (Runti
 //  class VCLXMessageBox
 
 
-void VCLXMessageBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXMessageBox::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     VCLXTopWindow::ImplGetPropertyIds( rIds );
 }
@@ -2235,7 +2235,7 @@ css::awt::Size SAL_CALL VCLXMessageBox::getMinimumSize() throw(css::uno::Runtime
 
 //  class VCLXDialog
 
-void VCLXDialog::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXDialog::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     VCLXTopWindow::ImplGetPropertyIds( rIds );
 }
@@ -2420,7 +2420,7 @@ VCLXMultiPage::VCLXMultiPage() : maTabListeners( *this ), mTabId( 1 )
     OSL_TRACE("VCLXMultiPage::VCLXMultiPage()" );
 }
 
-void VCLXMultiPage::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXMultiPage::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_BACKGROUNDCOLOR,
@@ -2702,7 +2702,7 @@ VCLXTabPage::VCLXTabPage()
 {
 }
 
-void VCLXTabPage::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXTabPage::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_BACKGROUNDCOLOR,
@@ -3091,7 +3091,7 @@ css::uno::Any VCLXFixedHyperlink::getProperty( const OUString& PropertyName ) th
     return aProp;
 }
 
-void VCLXFixedHyperlink::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXFixedHyperlink::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_ALIGN,
@@ -3120,7 +3120,7 @@ void VCLXFixedHyperlink::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 
 //  class VCLXFixedText
 
-void VCLXFixedText::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXFixedText::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_ALIGN,
@@ -3263,7 +3263,7 @@ css::awt::Size VCLXFixedText::calcAdjustedSize( const css::awt::Size& rMaxSize )
 
 //  class VCLXScrollBar
 
-void VCLXScrollBar::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXScrollBar::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_BACKGROUNDCOLOR,
@@ -3740,7 +3740,7 @@ css::awt::Size SAL_CALL VCLXScrollBar::getMinimumSize() throw(css::uno::RuntimeE
 //  class VCLXEdit
 
 
-void VCLXEdit::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXEdit::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_ALIGN,
@@ -4117,7 +4117,7 @@ void VCLXEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 //  class VCLXComboBox
 
 
-void VCLXComboBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXComboBox::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_AUTOCOMPLETE,
@@ -4612,7 +4612,7 @@ void SAL_CALL VCLXComboBox::disposing( const EventObject& i_rEvent ) throw (Runt
 
 //  class VCLXFormattedSpinField
 
-void VCLXFormattedSpinField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXFormattedSpinField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     // Interestingly in the UnoControl API this is
     // - not derived from XEdit ultimately, (correct ?) - so cut this here ...
@@ -4718,7 +4718,7 @@ css::uno::Any VCLXFormattedSpinField::getProperty( const OUString& PropertyName 
 //  class VCLXDateField
 
 
-void VCLXDateField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXDateField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_ALIGN,
@@ -5067,7 +5067,7 @@ sal_Bool VCLXDateField::isStrictFormat() throw(css::uno::RuntimeException, std::
 //  class VCLXTimeField
 
 
-void VCLXTimeField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXTimeField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_ALIGN,
@@ -5376,7 +5376,7 @@ css::uno::Any VCLXTimeField::getProperty( const OUString& PropertyName ) throw(c
 //  class VCLXNumericField
 
 
-void VCLXNumericField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXNumericField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_ALIGN,
@@ -5720,7 +5720,7 @@ css::uno::Any VCLXNumericField::getProperty( const OUString& PropertyName ) thro
 //    class VCLXMetricField
 //    ----------------------------------------------------
 
-void VCLXMetricField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXMetricField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_ALIGN,
@@ -5969,7 +5969,7 @@ css::uno::Any VCLXMetricField::getProperty( const OUString& PropertyName ) throw
 //  class VCLXCurrencyField
 
 
-void VCLXCurrencyField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXCurrencyField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_ALIGN,
@@ -6326,7 +6326,7 @@ css::uno::Any VCLXCurrencyField::getProperty( const OUString& PropertyName ) thr
 //  class VCLXPatternField
 
 
-void VCLXPatternField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXPatternField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_ALIGN,
@@ -6516,7 +6516,7 @@ VCLXFrame::VCLXFrame()
 {
 }
 
-void VCLXFrame::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXFrame::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_BACKGROUNDCOLOR,

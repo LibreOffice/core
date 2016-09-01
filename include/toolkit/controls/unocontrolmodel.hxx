@@ -40,7 +40,7 @@
 #include <cppuhelper/implbase7.hxx>
 #include <comphelper/uno3.hxx>
 
-#include <list>
+#include <vector>
 #include <map>
 
 typedef std::map<sal_uInt16, css::uno::Any> ImplPropertyTable;
@@ -71,7 +71,7 @@ protected:
 
 protected:
     void                                        ImplRegisterProperty( sal_uInt16 nPropType );
-    void                                        ImplRegisterProperties( const std::list< sal_uInt16 > &rIds );
+    void                                        ImplRegisterProperties( const std::vector< sal_uInt16 > &rIds );
     void                                        ImplRegisterProperty( sal_uInt16 nPropId, const css::uno::Any& rDefault );
     css::uno::Sequence<sal_Int32>  ImplGetPropertyIds() const;
     virtual css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
@@ -176,7 +176,7 @@ public:
 
 #define UNO_CONTROL_MODEL_REGISTER_PROPERTIES(a) \
     do { \
-        std::list< sal_uInt16 > aIds; \
+        std::vector< sal_uInt16 > aIds; \
         a::ImplGetPropertyIds( aIds ); \
         ImplRegisterProperties( aIds ); \
     } while (false)
