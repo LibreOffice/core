@@ -163,7 +163,7 @@ sal_Bool __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
         {
             if (pView->HasMarkablePoints() && pView->IsPointMarkable(*pHdl))
             {
-                sal_Bool bPointMarked=pView->IsPointMarked(*pHdl);
+                sal_Bool bPointMarked=pView->IsPointMarked(pHdl);
 
                 if ( rMEvt.IsShift() )
                 {

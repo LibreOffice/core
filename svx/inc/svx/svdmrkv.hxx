@@ -368,7 +368,7 @@ public:
     sal_Bool MarkPoints(const Rectangle& rRect, sal_Bool bUnmark=sal_False) { return MarkPoints(&rRect,bUnmark); }
     sal_Bool UnmarkPoint(SdrHdl& rHdl) { return MarkPoint(rHdl,sal_True); }
     sal_Bool UnMarkPoint(SdrHdl& rHdl) { return MarkPoint(rHdl,sal_True); }
-    sal_Bool IsPointMarked(const SdrHdl& rHdl) const { ForceUndirtyMrkPnt(); return &rHdl!=NULL && rHdl.IsSelected(); }
+    sal_Bool IsPointMarked(const SdrHdl* pHdl) const { ForceUndirtyMrkPnt(); return pHdl!=NULL && pHdl->IsSelected(); }
     sal_Bool MarkAllPoints() { return MarkPoints(NULL,sal_False); }
     sal_Bool UnmarkAllPoints() { return MarkPoints(NULL,sal_True); }
     sal_Bool UnMarkAllPoints() { return MarkPoints(NULL,sal_True); }
@@ -437,7 +437,7 @@ public:
     // Hdl eines markierten GluePoints holen. Nicht markierte
     // GluePoints haben keine Handles
     SdrHdl* GetGluePointHdl(const SdrObject* pObj, sal_uInt16 nId) const;
-    sal_Bool IsGluePoint(const SdrHdl& rHdl) const { return &rHdl!=NULL && rHdl.GetKind()==HDL_GLUE; }
+    // sal_Bool IsGluePoint(const SdrHdl& rHdl) const { return &rHdl!=NULL && rHdl.GetKind()==HDL_GLUE; }
 
     // alle Punkte innerhalb dieses Rechtecks markieren (Viewkoordinaten)
     sal_Bool MarkGluePoints(const Rectangle& rRect) { return MarkGluePoints(&rRect,sal_False); }

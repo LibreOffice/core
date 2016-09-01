@@ -552,7 +552,7 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
             else
             {
                 SmartHdl* pHdl = &rHdl;
-                if (!mrView.IsPointMarked(*pHdl) || rMEvt.IsShift())
+                if (!mrView.IsPointMarked(pHdl) || rMEvt.IsShift())
                 {
                     if (!rMEvt.IsShift())
                     {
@@ -561,7 +561,7 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
                     }
                     else
                     {
-                        if (mrView.IsPointMarked(*pHdl) )
+                        if (mrView.IsPointMarked(pHdl) )
                         {
                             mrView.UnmarkPoint(*pHdl);
                             pHdl = NULL;
@@ -698,7 +698,7 @@ bool MotionPathTag::OnMarkHandle( const KeyEvent& rKEvt )
         sal_uInt32 nPol(pHdl->GetPolyNum());
         sal_uInt32 nPnt(pHdl->GetPointNum());
 
-        if(mrView.IsPointMarked(*pHdl))
+        if(mrView.IsPointMarked(pHdl))
         {
             if(rKEvt.GetKeyCode().IsShift())
             {

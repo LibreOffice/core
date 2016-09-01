@@ -596,7 +596,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     sal_uInt32 nPol(pHdl->GetPolyNum());
                     sal_uInt32 nPnt(pHdl->GetPointNum());
 
-                    if(mpView->IsPointMarked(*pHdl))
+                    if(mpView->IsPointMarked(pHdl))
                     {
                         if(rKEvt.GetKeyCode().IsShift())
                         {

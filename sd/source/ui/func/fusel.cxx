@@ -497,7 +497,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             /******************************************************************
             * Klebepunkt selektieren
             ******************************************************************/
-            if (!mpView->IsPointMarked(*aVEvt.pHdl) || rMEvt.IsShift())
+            if (!mpView->IsPointMarked(aVEvt.pHdl) || rMEvt.IsShift())
             {
                 if (!rMEvt.IsShift())
                 {
@@ -506,7 +506,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 }
                 else
                 {
-                    if (mpView->IsPointMarked(*aVEvt.pHdl))
+                    if (mpView->IsPointMarked(aVEvt.pHdl))
                     {
                         mpView->UnmarkPoint(*aVEvt.pHdl);
                         pHdl = NULL;

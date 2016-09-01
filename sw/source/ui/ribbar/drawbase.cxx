@@ -182,7 +182,7 @@ sal_Bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                 /******************************************************************
                 * Klebepunkt selektieren
                 ******************************************************************/
-                if (pSdrView->HasMarkablePoints() && (!pSdrView->IsPointMarked(*aVEvt.pHdl) || rMEvt.IsShift()))
+                if (pSdrView->HasMarkablePoints() && (!pSdrView->IsPointMarked(aVEvt.pHdl) || rMEvt.IsShift()))
                 {
                     SdrHdl* pHdl = NULL;
 
@@ -193,7 +193,7 @@ sal_Bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                     }
                     else
                     {
-                        if (pSdrView->IsPointMarked(*aVEvt.pHdl))
+                        if (pSdrView->IsPointMarked(aVEvt.pHdl))
                         {
                             bReturn = pSdrView->UnmarkPoint(*aVEvt.pHdl);
                             pHdl = NULL;

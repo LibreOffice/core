@@ -651,7 +651,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                     sal_uInt32 nPol(pHdl->GetPolyNum());
                     sal_uInt32 nPnt(pHdl->GetPointNum());
 
-                    if(pView->IsPointMarked(*pHdl))
+                    if(pView->IsPointMarked(pHdl))
                     {
                         if(rKEvt.GetKeyCode().IsShift())
                         {
