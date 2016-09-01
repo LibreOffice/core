@@ -204,10 +204,7 @@ namespace
 
 } // namespace
 
-// Align MemPools on 4k boundaries - 64 bytes (4k is a MUST for OS/2)
-
-// Since RawTokens are temporary for the compiler, don't align on 4k and waste memory.
-// ScRawToken size is FixMembers + MAXSTRLEN + ~4 ~= 1036
+// ScRawToken size is OpCode + StackVar + MAXSTRLEN+1 + ~20 ~= 1049
 IMPL_FIXEDMEMPOOL_NEWDEL( ScRawToken )
 
 // Need a whole bunch of ScSingleRefToken
