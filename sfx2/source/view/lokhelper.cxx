@@ -83,6 +83,10 @@ int SfxLokHelper::getView(SfxViewShell* pViewShell)
 {
     if (!pViewShell)
         pViewShell = SfxViewShell::Current();
+    // Still no valid view shell? Then no idea.
+    if (!pViewShell)
+        return -1;
+
     return pViewShell->GetViewShellId();
 }
 

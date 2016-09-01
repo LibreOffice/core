@@ -1365,7 +1365,10 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
 
     // Disable callbacks while we are painting.
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-    std::size_t nView = SfxLokHelper::getView();
+    int nView = SfxLokHelper::getView();
+    if (nView < 0)
+        return;
+
     pDocument->mpCallbackFlushHandlers[nView]->setPartTilePainting(true);
     try
     {
@@ -1438,7 +1441,10 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
     SolarMutexGuard aGuard;
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
-    std::size_t nView = SfxLokHelper::getView();
+    int nView = SfxLokHelper::getView();
+    if (nView < 0)
+        return;
+
     pDocument->mpCallbackFlushHandlers[nView].reset(new CallbackFlushHandler(pThis, pCallback, pData));
 
     if (SfxViewShell* pViewShell = SfxViewFrame::Current()->GetViewShell())
@@ -1507,7 +1513,9 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
     std::vector<beans::PropertyValue> aPropertyValuesVector(jsonToPropertyValuesVector(pArguments));
-    std::size_t nView = SfxLokHelper::getView();
+    int nView = SfxLokHelper::getView();
+    if (nView < 0)
+        return;
 
     // handle potential interaction
     if (gImpl && aCommand == ".uno:Save")
@@ -1593,7 +1601,10 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
     }
 
     LibLODocument_Impl* pLib = static_cast<LibLODocument_Impl*>(pThis);
-    std::size_t nView = SfxLokHelper::getView();
+    int nView = SfxLokHelper::getView();
+    if (nView < 0)
+        return;
+
     if (pLib->mpCallbackFlushHandlers[nView])
     {
         pLib->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_MOUSE_POINTER, aPointerString.getStr());
