@@ -677,7 +677,7 @@ bool SvtOptionsDrawinglayer_Impl::IsAAPossibleOnThisSystem() const
 #endif
 
         // check XRenderExtension
-        if(m_bAllowAA && !Application::GetDefaultDevice()->SupportsOperation( OutDevSupport_TransparentRect ))
+        if(m_bAllowAA && !Application::GetDefaultDevice()->SupportsOperation( OutDevSupportType::TransparentRect ))
         {
             pThat->m_bAllowAA = false;
         }

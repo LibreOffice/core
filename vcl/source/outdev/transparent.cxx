@@ -233,7 +233,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
         InitFillColor();
 
     if((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
-       mpGraphics->supportsOperation(OutDevSupport_B2DDraw) &&
+       mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
        (ROP_OVERPAINT == GetRasterOp()) )
     {
         // b2dpolygon support not implemented yet on non-UNX platforms
@@ -305,7 +305,7 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
     static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA");
 
     if( !pDisableNative &&
-        mpGraphics->supportsOperation( OutDevSupport_B2DDraw )
+        mpGraphics->supportsOperation( OutDevSupportType::B2DDraw )
 #if defined UNX && ! defined MACOSX && ! defined IOS
         && GetBitCount() > 8
 #endif

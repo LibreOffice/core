@@ -436,7 +436,7 @@ void GenPspGraphics::drawPolyPolygon( sal_uInt32           nPoly,
 
 bool GenPspGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon&, double /*fTransparency*/ )
 {
-        // TODO: implement and advertise OutDevSupport_B2DDraw support
+        // TODO: implement and advertise OutDevSupportType::B2DDraw support
         return false;
 }
 
