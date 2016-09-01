@@ -3408,7 +3408,7 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, bool bAfter,
     SwTableNode * pNewTableNd;
     {
         SwEndNode* pOldTableEndNd = pTNd->EndOfSectionNode()->GetEndNode();
-        OSL_ENSURE( pOldTableEndNd, "Where is the EndNode?" );
+        assert(pOldTableEndNd && "Where is the EndNode?");
 
         SwNodeIndex aIdx( *pBox->GetSttNd() );
         new SwEndNode( aIdx, *pTNd );
