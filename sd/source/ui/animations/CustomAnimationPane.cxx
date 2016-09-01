@@ -1678,7 +1678,7 @@ void CustomAnimationPane::onChangeCurrentPage()
     }
 }
 
-bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::list< sal_Int16 >& rParaList )
+bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::vector< sal_Int16 >& rParaList )
 {
     Reference< XTextRange > xSelectedText;
     rSelection >>= xSelectedText;
@@ -1812,13 +1812,13 @@ void CustomAnimationPane::onAdd()
     else if ( maViewSelection.getValueType() == cppu::UnoType<XTextCursor>::get())
     {
         Reference< XShape > xShape;
-        std::list< sal_Int16 > aParaList;
+        std::vector< sal_Int16 > aParaList;
         if( getTextSelection( maViewSelection, xShape, aParaList ) )
         {
             ParagraphTarget aParaTarget;
             aParaTarget.Shape = xShape;
 
-            std::list< sal_Int16 >::iterator aIter( aParaList.begin() );
+            std::vector< sal_Int16 >::iterator aIter( aParaList.begin() );
             for( ; aIter != aParaList.end(); ++aIter )
             {
                 aParaTarget.Paragraph = (*aIter);
