@@ -1247,7 +1247,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         if( pEntry.get( ) )
         {
             boost::optional<PropertyMap::Property> pPropHeight = pEntry->pProperties->getProperty(PROP_CHAR_HEIGHT_ASIAN);
-            if(pProp)
+            if (pPropHeight)
             {
                 double fHeight = 0;
                 if( pPropHeight->second >>= fHeight )
