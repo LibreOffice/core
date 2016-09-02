@@ -686,11 +686,11 @@ IMPL_LINK_TYPED( SwView, ScrollHdl, ScrollBar *, p, void )
     if ( GetWrtShell().ActionPend() )
         return;
 
-    if ( pScrollbar->GetType() == SCROLL_DRAG )
+    if ( pScrollbar->GetType() == ScrollType::Drag )
         m_pWrtShell->EnableSmooth( false );
 
     if(!m_pWrtShell->GetViewOptions()->getBrowseMode() &&
-        pScrollbar->GetType() == SCROLL_DRAG)
+        pScrollbar->GetType() == ScrollType::Drag)
     {
         // Here comment out again if it is not desired to scroll together:
         // The end scrollhandler invalidate the FN_STAT_PAGE,
@@ -746,7 +746,7 @@ IMPL_LINK_TYPED( SwView, ScrollHdl, ScrollBar *, p, void )
     else
         EndScrollHdl(pScrollbar);
 
-    if ( pScrollbar->GetType() == SCROLL_DRAG )
+    if ( pScrollbar->GetType() == ScrollType::Drag )
         m_pWrtShell->EnableSmooth( true );
 }
 

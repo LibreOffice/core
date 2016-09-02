@@ -92,16 +92,16 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     {
         ScrollBar& rHScroll = pScrollWindow->GetHScroll();
         ScrollBar& rVScroll = pScrollWindow->GetVScroll();
-        ScrollType eH = SCROLL_LINEDOWN,eV = SCROLL_LINEDOWN;
+        ScrollType eH = ScrollType::LineDown,eV = ScrollType::LineDown;
         if( rPos.X() < aOutRect.Left() )
-            eH = SCROLL_LINEUP;
+            eH = ScrollType::LineUp;
         else if( rPos.X() <= aOutRect.Right() )
-            eH = SCROLL_DONTKNOW;
+            eH = ScrollType::DontKnow;
 
         if( rPos.Y() < aOutRect.Top() )
-            eV = SCROLL_LINEUP;
+            eV = ScrollType::LineUp;
         else if( rPos.Y() <= aOutRect.Bottom() )
-            eV = SCROLL_DONTKNOW;
+            eV = ScrollType::DontKnow;
 
         rHScroll.DoScrollAction(eH);
         rVScroll.DoScrollAction(eV);

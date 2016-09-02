@@ -220,7 +220,7 @@ IMPL_LINK_TYPED( OWizNameMatching, ButtonClickHdl, Button *, pButton, void )
 
         if(pButton == m_pColumn_down && (nThumbPos+nVisibleSize+1) < nPos)
         {
-            m_pCTRL_LEFT->GetVScroll()->DoScrollAction(SCROLL_LINEDOWN);
+            m_pCTRL_LEFT->GetVScroll()->DoScrollAction(ScrollType::LineDown);
         }
 
         TableListClickHdl(m_pCTRL_LEFT);
@@ -245,7 +245,7 @@ IMPL_LINK_TYPED( OWizNameMatching, RightButtonClickHdl, Button *, pButton, void 
         long nVisibleSize   = m_pCTRL_RIGHT->GetVScroll()->GetVisibleSize();
 
         if(pButton == m_pColumn_down_right && (nThumbPos+nVisibleSize+1) < nPos)
-            m_pCTRL_RIGHT->GetVScroll()->DoScrollAction(SCROLL_LINEDOWN);
+            m_pCTRL_RIGHT->GetVScroll()->DoScrollAction(ScrollType::LineDown);
         TableListRightSelectHdl(m_pCTRL_RIGHT);
     }
 }

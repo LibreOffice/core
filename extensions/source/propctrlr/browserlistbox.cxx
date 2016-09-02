@@ -865,7 +865,7 @@ namespace pcr
         {
             PositionLine((sal_uInt16)nThumbPos);
         }
-        else if (nDelta!=0 || m_aVScroll->GetType() == SCROLL_DONTKNOW)
+        else if (nDelta!=0 || m_aVScroll->GetType() == ScrollType::DontKnow)
         {
             UpdatePlayGround();
         }

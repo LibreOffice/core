@@ -89,7 +89,7 @@ void ScrollBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnDelta             = 0;
     mnDragDraw          = 0;
     mnStateFlags        = 0;
-    meScrollType        = SCROLL_DONTKNOW;
+    meScrollType        = ScrollType::DontKnow;
     mbCalcSize          = true;
     mbFullDrag          = false;
 
@@ -724,19 +724,19 @@ long ScrollBar::ImplDoAction( bool bCallEndScroll )
 
     switch ( meScrollType )
     {
-        case SCROLL_LINEUP:
+        case ScrollType::LineUp:
             nDelta = ImplScroll( mnThumbPos-mnLineSize, bCallEndScroll );
             break;
 
-        case SCROLL_LINEDOWN:
+        case ScrollType::LineDown:
             nDelta = ImplScroll( mnThumbPos+mnLineSize, bCallEndScroll );
             break;
 
-        case SCROLL_PAGEUP:
+        case ScrollType::PageUp:
             nDelta = ImplScroll( mnThumbPos-mnPageSize, bCallEndScroll );
             break;
 
-        case SCROLL_PAGEDOWN:
+        case ScrollType::PageDown:
             nDelta = ImplScroll( mnThumbPos+mnPageSize, bCallEndScroll );
             break;
         default:
@@ -758,7 +758,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
 
     switch ( meScrollType )
     {
-        case SCROLL_LINEUP:
+        case ScrollType::LineUp:
             if ( HitTestNativeControl( ControlType::Scrollbar, bHorizontal? (IsRTLEnabled()? ControlPart::ButtonRight: ControlPart::ButtonLeft): ControlPart::ButtonUp,
                         aControlRegion, rMousePos, bIsInside )?
                     bIsInside:
@@ -771,7 +771,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
                 mnStateFlags &= ~SCRBAR_STATE_BTN1_DOWN;
             break;
 
-        case SCROLL_LINEDOWN:
+        case ScrollType::LineDown:
             if ( HitTestNativeControl( ControlType::Scrollbar, bHorizontal? (IsRTLEnabled()? ControlPart::ButtonLeft: ControlPart::ButtonRight): ControlPart::ButtonDown,
                         aControlRegion, rMousePos, bIsInside )?
                     bIsInside:
@@ -784,7 +784,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
                 mnStateFlags &= ~SCRBAR_STATE_BTN2_DOWN;
             break;
 
-        case SCROLL_PAGEUP:
+        case ScrollType::PageUp:
             // HitTestNativeControl, see remark at top of file
             if ( HitTestNativeControl( ControlType::Scrollbar, bHorizontal? ControlPart::TrackHorzLeft: ControlPart::TrackVertUpper,
                                        maPage1Rect, rMousePos, bIsInside )?
@@ -798,7 +798,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
                 mnStateFlags &= ~SCRBAR_STATE_PAGE1_DOWN;
             break;
 
-        case SCROLL_PAGEDOWN:
+        case ScrollType::PageDown:
             // HitTestNativeControl, see remark at top of file
             if ( HitTestNativeControl( ControlType::Scrollbar, bHorizontal? ControlPart::TrackHorzRight: ControlPart::TrackVertLower,
                                        maPage2Rect, rMousePos, bIsInside )?
@@ -892,7 +892,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
             if (rMEvt.IsLeft() && !(mnStateFlags & SCRBAR_STATE_BTN1_DISABLE) )
             {
                 nTrackFlags     = StartTrackingFlags::ButtonRepeat;
-                meScrollType    = SCROLL_LINEUP;
+                meScrollType    = ScrollType::LineUp;
                 mnDragDraw      = SCRBAR_DRAW_BTN1;
             }
         }
@@ -904,7 +904,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
             if (rMEvt.IsLeft() && !(mnStateFlags & SCRBAR_STATE_BTN2_DISABLE) )
             {
                 nTrackFlags     = StartTrackingFlags::ButtonRepeat;
-                meScrollType    = SCROLL_LINEDOWN;
+                meScrollType    = ScrollType::LineDown;
                 mnDragDraw      = SCRBAR_DRAW_BTN2;
             }
         }
@@ -932,7 +932,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
                 if ( mnVisibleSize < mnMaxRange-mnMinRange )
                 {
                     nTrackFlags     = StartTrackingFlags::NONE;
-                    meScrollType    = SCROLL_DRAG;
+                    meScrollType    = ScrollType::Drag;
                     mnDragDraw      = SCRBAR_DRAW_THUMB;
 
                     // calculate mouse offset
@@ -968,19 +968,19 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
                     bIsInside:
                     maPage1Rect.IsInside( rMousePos ) )
                 {
-                    meScrollType    = SCROLL_PAGEUP;
+                    meScrollType    = ScrollType::PageUp;
                     mnDragDraw      = SCRBAR_DRAW_PAGE1;
                 }
                 else
                 {
-                    meScrollType    = SCROLL_PAGEDOWN;
+                    meScrollType    = ScrollType::PageDown;
                     mnDragDraw      = SCRBAR_DRAW_PAGE2;
                 }
             }
         }
 
         // Should we start Tracking?
-        if ( meScrollType != SCROLL_DONTKNOW )
+        if ( meScrollType != ScrollType::DontKnow )
         {
             // store original position for cancel and EndScroll delta
             mnStartPos = mnThumbPos;
@@ -1018,7 +1018,7 @@ void ScrollBar::Tracking( const TrackingEvent& rTEvt )
             Scroll();
         }
 
-        if ( meScrollType == SCROLL_DRAG )
+        if ( meScrollType == ScrollType::Drag )
         {
             // On a SCROLLDRAG we recalculate the Thumb, so that it's back to a
             // rounded ThumbPosition
@@ -1035,7 +1035,7 @@ void ScrollBar::Tracking( const TrackingEvent& rTEvt )
         mnDelta = mnThumbPos-mnStartPos;
         EndScroll();
         mnDelta = 0;
-        meScrollType = SCROLL_DONTKNOW;
+        meScrollType = ScrollType::DontKnow;
 
         if( mpData )
             mpData->mbHide = false; // re-enable focus blinking
@@ -1057,7 +1057,7 @@ void ScrollBar::Tracking( const TrackingEvent& rTEvt )
         const Point rMousePos = (GetMapMode().GetMapUnit() != MAP_TWIP ? rTEvt.GetMouseEvent().GetPosPixel() : aPosPixel);
 
         // Dragging is treated in a special way
-        if ( meScrollType == SCROLL_DRAG )
+        if ( meScrollType == ScrollType::Drag )
             ImplDragThumb( rMousePos );
         else
             ImplDoMouseAction( rMousePos, rTEvt.IsTrackingRepeat() );
@@ -1085,20 +1085,20 @@ void ScrollBar::KeyInput( const KeyEvent& rKEvt )
 
             case KEY_LEFT:
             case KEY_UP:
-                DoScrollAction( SCROLL_LINEUP );
+                DoScrollAction( ScrollType::LineUp );
                 break;
 
             case KEY_RIGHT:
             case KEY_DOWN:
-                DoScrollAction( SCROLL_LINEDOWN );
+                DoScrollAction( ScrollType::LineDown );
                 break;
 
             case KEY_PAGEUP:
-                DoScrollAction( SCROLL_PAGEUP );
+                DoScrollAction( ScrollType::PageUp );
                 break;
 
             case KEY_PAGEDOWN:
-                DoScrollAction( SCROLL_PAGEDOWN );
+                DoScrollAction( ScrollType::PageDown );
                 break;
 
             default:
@@ -1323,26 +1323,26 @@ void ScrollBar::EndScroll()
 
 long ScrollBar::DoScroll( long nNewPos )
 {
-    if ( meScrollType != SCROLL_DONTKNOW )
+    if ( meScrollType != ScrollType::DontKnow )
         return 0;
 
     SAL_INFO("vcl.scrollbar", "DoScroll(" << nNewPos << ")");
-    meScrollType = SCROLL_DRAG;
+    meScrollType = ScrollType::Drag;
     long nDelta = ImplScroll( nNewPos, true );
-    meScrollType = SCROLL_DONTKNOW;
+    meScrollType = ScrollType::DontKnow;
     return nDelta;
 }
 
 long ScrollBar::DoScrollAction( ScrollType eScrollType )
 {
-    if ( (meScrollType != SCROLL_DONTKNOW) ||
-         (eScrollType == SCROLL_DONTKNOW) ||
-         (eScrollType == SCROLL_DRAG) )
+    if ( (meScrollType != ScrollType::DontKnow) ||
+         (eScrollType == ScrollType::DontKnow) ||
+         (eScrollType == ScrollType::Drag) )
         return 0;
 
     meScrollType = eScrollType;
     long nDelta = ImplDoAction( true );
-    meScrollType = SCROLL_DONTKNOW;
+    meScrollType = ScrollType::DontKnow;
     return nDelta;
 }
 

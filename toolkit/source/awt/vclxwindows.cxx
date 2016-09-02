@@ -3699,15 +3699,15 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
                     // set adjustment type
                     ScrollType aType = pScrollBar->GetType();
-                    if ( aType == SCROLL_LINEUP || aType == SCROLL_LINEDOWN )
+                    if ( aType == ScrollType::LineUp || aType == ScrollType::LineDown )
                     {
                         aEvent.Type = css::awt::AdjustmentType_ADJUST_LINE;
                     }
-                    else if ( aType == SCROLL_PAGEUP || aType == SCROLL_PAGEDOWN )
+                    else if ( aType == ScrollType::PageUp || aType == ScrollType::PageDown )
                     {
                         aEvent.Type = css::awt::AdjustmentType_ADJUST_PAGE;
                     }
-                    else if ( aType == SCROLL_DRAG )
+                    else if ( aType == ScrollType::Drag )
                     {
                         aEvent.Type = css::awt::AdjustmentType_ADJUST_ABS;
                     }

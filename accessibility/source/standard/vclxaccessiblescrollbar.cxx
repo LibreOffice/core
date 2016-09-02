@@ -138,11 +138,11 @@ sal_Bool VCLXAccessibleScrollBar::doAccessibleAction ( sal_Int32 nIndex ) throw 
         ScrollType eScrollType;
         switch ( nIndex )
         {
-            case 0:     eScrollType = SCROLL_LINEUP;    break;
-            case 1:     eScrollType = SCROLL_LINEDOWN;  break;
-            case 2:     eScrollType = SCROLL_PAGEUP;    break;
-            case 3:     eScrollType = SCROLL_PAGEDOWN;  break;
-            default:    eScrollType = SCROLL_DONTKNOW;  break;
+            case 0:     eScrollType = ScrollType::LineUp;    break;
+            case 1:     eScrollType = ScrollType::LineDown;  break;
+            case 2:     eScrollType = ScrollType::PageUp;    break;
+            case 3:     eScrollType = ScrollType::PageDown;  break;
+            default:    eScrollType = ScrollType::DontKnow;  break;
         }
         if ( pScrollBar->DoScrollAction( eScrollType ) )
             bReturn = true;

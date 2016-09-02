@@ -1467,37 +1467,37 @@ bool VclMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
                     case KEY_UP:
                     {
                         if ( pImpVclMEdit->GetVScrollBar() )
-                            pImpVclMEdit->GetVScrollBar()->DoScrollAction( SCROLL_LINEUP );
+                            pImpVclMEdit->GetVScrollBar()->DoScrollAction( ScrollType::LineUp );
                     }
                     break;
                     case KEY_DOWN:
                     {
                         if ( pImpVclMEdit->GetVScrollBar() )
-                            pImpVclMEdit->GetVScrollBar()->DoScrollAction( SCROLL_LINEDOWN );
+                            pImpVclMEdit->GetVScrollBar()->DoScrollAction( ScrollType::LineDown );
                     }
                     break;
                     case KEY_PAGEUP :
                     {
                         if ( pImpVclMEdit->GetVScrollBar() )
-                            pImpVclMEdit->GetVScrollBar()->DoScrollAction( SCROLL_PAGEUP );
+                            pImpVclMEdit->GetVScrollBar()->DoScrollAction( ScrollType::PageUp );
                     }
                     break;
                     case KEY_PAGEDOWN:
                     {
                         if ( pImpVclMEdit->GetVScrollBar() )
-                            pImpVclMEdit->GetVScrollBar()->DoScrollAction( SCROLL_PAGEDOWN );
+                            pImpVclMEdit->GetVScrollBar()->DoScrollAction( ScrollType::PageDown );
                     }
                     break;
                     case KEY_LEFT:
                     {
                         if ( pImpVclMEdit->GetHScrollBar() )
-                            pImpVclMEdit->GetHScrollBar()->DoScrollAction( SCROLL_LINEUP );
+                            pImpVclMEdit->GetHScrollBar()->DoScrollAction( ScrollType::LineUp );
                     }
                     break;
                     case KEY_RIGHT:
                     {
                         if ( pImpVclMEdit->GetHScrollBar() )
-                            pImpVclMEdit->GetHScrollBar()->DoScrollAction( SCROLL_LINEDOWN );
+                            pImpVclMEdit->GetHScrollBar()->DoScrollAction( ScrollType::LineDown );
                     }
                     break;
                     case KEY_HOME:

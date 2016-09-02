@@ -56,7 +56,7 @@ void Slider::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnPageSize          = 1;
     mnDelta             = 0;
     mnStateFlags        = 0;
-    meScrollType        = SCROLL_DONTKNOW;
+    meScrollType        = ScrollType::DontKnow;
     mbCalcSize          = true;
     mbFullDrag          = true;
 
@@ -505,23 +505,23 @@ long Slider::ImplDoAction( bool bCallEndSlide )
 
     switch ( meScrollType )
     {
-        case SCROLL_LINEUP:
+        case ScrollType::LineUp:
             nDelta = ImplSlide( mnThumbPos-mnLineSize, bCallEndSlide );
             break;
 
-        case SCROLL_LINEDOWN:
+        case ScrollType::LineDown:
             nDelta = ImplSlide( mnThumbPos+mnLineSize, bCallEndSlide );
             break;
 
-        case SCROLL_PAGEUP:
+        case ScrollType::PageUp:
             nDelta = ImplSlide( mnThumbPos-mnPageSize, bCallEndSlide );
             break;
 
-        case SCROLL_PAGEDOWN:
+        case ScrollType::PageDown:
             nDelta = ImplSlide( mnThumbPos+mnPageSize, bCallEndSlide );
             break;
 
-        case SCROLL_SET:
+        case ScrollType::Set:
             nDelta = ImplSlide( ImplCalcThumbPos( GetPointerPosPixel().X() ), bCallEndSlide );
             break;
         default:
@@ -538,7 +538,7 @@ void Slider::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
 
     switch ( meScrollType )
     {
-        case SCROLL_SET:
+        case ScrollType::Set:
         {
             const bool bUp = ImplIsPageUp( rMousePos ), bDown = ImplIsPageDown( rMousePos );
 
@@ -552,7 +552,7 @@ void Slider::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
             break;
         }
 
-        case SCROLL_PAGEUP:
+        case ScrollType::PageUp:
             if ( ImplIsPageUp( rMousePos ) )
             {
                 bAction = bCallAction;
@@ -562,7 +562,7 @@ void Slider::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
                 mnStateFlags &= ~SLIDER_STATE_CHANNEL1_DOWN;
             break;
 
-        case SCROLL_PAGEDOWN:
+        case ScrollType::PageDown:
             if ( ImplIsPageDown( rMousePos ) )
             {
                 bAction = bCallAction;
@@ -591,24 +591,24 @@ void Slider::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
 
 void Slider::ImplDoSlide( long nNewPos )
 {
-    if ( meScrollType != SCROLL_DONTKNOW )
+    if ( meScrollType != ScrollType::DontKnow )
         return;
 
-    meScrollType = SCROLL_DRAG;
+    meScrollType = ScrollType::Drag;
     ImplSlide( nNewPos, true );
-    meScrollType = SCROLL_DONTKNOW;
+    meScrollType = ScrollType::DontKnow;
 }
 
 void Slider::ImplDoSlideAction( ScrollType eScrollType )
 {
-    if ( (meScrollType != SCROLL_DONTKNOW) ||
-         (eScrollType == SCROLL_DONTKNOW) ||
-         (eScrollType == SCROLL_DRAG) )
+    if ( (meScrollType != ScrollType::DontKnow) ||
+         (eScrollType == ScrollType::DontKnow) ||
+         (eScrollType == ScrollType::Drag) )
         return;
 
     meScrollType = eScrollType;
     ImplDoAction( true );
-    meScrollType = SCROLL_DONTKNOW;
+    meScrollType = ScrollType::DontKnow;
 }
 
 void Slider::MouseButtonDown( const MouseEvent& rMEvt )
@@ -620,7 +620,7 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
 
         if ( maThumbRect.IsInside( rMousePos ) )
         {
-            meScrollType    = SCROLL_DRAG;
+            meScrollType    = ScrollType::Drag;
 
             // calculate additional values
             Point aCenterPos = maThumbRect.Center();
@@ -632,33 +632,33 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
         else if ( ImplIsPageUp( rMousePos ) )
         {
             if( GetStyle() & WB_SLIDERSET )
-                meScrollType = SCROLL_SET;
+                meScrollType = ScrollType::Set;
             else
             {
                 nTrackFlags = StartTrackingFlags::ButtonRepeat;
-                meScrollType = SCROLL_PAGEUP;
+                meScrollType = ScrollType::PageUp;
             }
         }
         else if ( ImplIsPageDown( rMousePos ) )
         {
             if( GetStyle() & WB_SLIDERSET )
-                meScrollType = SCROLL_SET;
+                meScrollType = ScrollType::Set;
             else
             {
                 nTrackFlags = StartTrackingFlags::ButtonRepeat;
-                meScrollType = SCROLL_PAGEDOWN;
+                meScrollType = ScrollType::PageDown;
             }
         }
 
         // Shall we start Tracking?
-        if( meScrollType != SCROLL_DONTKNOW )
+        if( meScrollType != ScrollType::DontKnow )
         {
             // store Start position for cancel and EndScroll delta
             mnStartPos = mnThumbPos;
-            ImplDoMouseAction( rMousePos, meScrollType != SCROLL_SET );
+            ImplDoMouseAction( rMousePos, meScrollType != ScrollType::Set );
             Update();
 
-            if( meScrollType != SCROLL_SET )
+            if( meScrollType != ScrollType::Set )
                 StartTracking( nTrackFlags );
         }
     }
@@ -666,7 +666,7 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
 
 void Slider::MouseButtonUp( const MouseEvent& )
 {
-    if( SCROLL_SET == meScrollType )
+    if( ScrollType::Set == meScrollType )
     {
         // reset Button and PageRect state
         const sal_uInt16 nOldStateFlags = mnStateFlags;
@@ -678,7 +678,7 @@ void Slider::MouseButtonUp( const MouseEvent& )
             Invalidate(InvalidateFlags::NoChildren | InvalidateFlags::NoErase);
         }
         ImplDoAction( true );
-        meScrollType = SCROLL_DONTKNOW;
+        meScrollType = ScrollType::DontKnow;
     }
 }
 
@@ -704,7 +704,7 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
             Slide();
         }
 
-        if ( meScrollType == SCROLL_DRAG )
+        if ( meScrollType == ScrollType::Drag )
         {
             // after dragging, recalculate to a rounded Thumb position
             ImplCalc();
@@ -721,14 +721,14 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
         mnDelta = mnThumbPos-mnStartPos;
         EndSlide();
         mnDelta = 0;
-        meScrollType = SCROLL_DONTKNOW;
+        meScrollType = ScrollType::DontKnow;
     }
     else
     {
         const Point rMousePos = rTEvt.GetMouseEvent().GetPosPixel();
 
         // special handling for dragging
-        if ( meScrollType == SCROLL_DRAG )
+        if ( meScrollType == ScrollType::Drag )
         {
             long nMovePix;
             Point aCenterPos = maThumbRect.Center();
@@ -784,20 +784,20 @@ void Slider::KeyInput( const KeyEvent& rKEvt )
 
             case KEY_LEFT:
             case KEY_UP:
-                ImplDoSlideAction( SCROLL_LINEUP );
+                ImplDoSlideAction( ScrollType::LineUp );
                 break;
 
             case KEY_RIGHT:
             case KEY_DOWN:
-                ImplDoSlideAction( SCROLL_LINEDOWN );
+                ImplDoSlideAction( ScrollType::LineDown );
                 break;
 
             case KEY_PAGEUP:
-                ImplDoSlideAction( SCROLL_PAGEUP );
+                ImplDoSlideAction( ScrollType::PageUp );
                 break;
 
             case KEY_PAGEDOWN:
-                ImplDoSlideAction( SCROLL_PAGEDOWN );
+                ImplDoSlideAction( ScrollType::PageDown );
                 break;
 
             default:

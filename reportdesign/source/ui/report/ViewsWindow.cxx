@@ -1472,7 +1472,7 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
         OScrollWindowHelper* pScrollWindow = getView()->getScrollWindow();
         ScrollBar& rScrollBar = ( nCode == KEY_LEFT || nCode == KEY_RIGHT ) ? pScrollWindow->GetHScroll() : pScrollWindow->GetVScroll();
         if ( rScrollBar.IsVisible() )
-            rScrollBar.DoScrollAction(( nCode == KEY_RIGHT || nCode == KEY_UP ) ? SCROLL_LINEUP : SCROLL_LINEDOWN );
+            rScrollBar.DoScrollAction(( nCode == KEY_RIGHT || nCode == KEY_UP ) ? ScrollType::LineUp : ScrollType::LineDown );
         return;
     }
     TSectionsMap::const_iterator aIter = m_aSections.begin();

@@ -2161,7 +2161,7 @@ IMPL_LINK_NOARG_TYPED(CustomPropertiesControl, RemovedHdl, void*, void)
     long nLineCount = m_pPropertiesWin->GetVisibleLineCount();
     m_pVertScroll->SetRangeMax(nLineCount + 1);
     if ( m_pPropertiesWin->GetOutputSizePixel().Height() < nLineCount * m_pPropertiesWin->GetLineHeight() )
-        m_pVertScroll->DoScrollAction ( SCROLL_LINEUP );
+        m_pVertScroll->DoScrollAction ( ScrollType::LineUp );
 }
 
 void CustomPropertiesControl::AddLine( const OUString& sName, Any& rAny, bool bInteractive )

@@ -276,7 +276,7 @@ IMPL_LINK_NOARG_TYPED(LicenseDialogImpl, ScrolledHdl, LicenseView&, void)
 
 IMPL_LINK_NOARG_TYPED(LicenseDialogImpl, PageDownHdl, Button*, void)
 {
-    m_pLicense->ScrollDown( SCROLL_PAGEDOWN );
+    m_pLicense->ScrollDown( ScrollType::PageDown );
 }
 
 IMPL_LINK_NOARG_TYPED(LicenseDialogImpl, EndReachedHdl, LicenseView&, void)

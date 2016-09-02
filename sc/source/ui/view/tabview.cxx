@@ -1037,7 +1037,7 @@ IMPL_LINK_TYPED( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
     bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
 
     ScrollType eType = pScroll->GetType();
-    if ( eType == SCROLL_DRAG )
+    if ( eType == ScrollType::Drag )
     {
         if (!bDragging)
         {
@@ -1106,27 +1106,27 @@ IMPL_LINK_TYPED( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
     long nDelta = pScroll->GetDelta();
     switch ( eType )
     {
-        case SCROLL_LINEUP:
+        case ScrollType::LineUp:
             nDelta = -1;
             break;
-        case SCROLL_LINEDOWN:
+        case ScrollType::LineDown:
             nDelta = 1;
             break;
-        case SCROLL_PAGEUP:
+        case ScrollType::PageUp:
             if ( pScroll == aHScrollLeft.get() ) nDelta = -(long) aViewData.PrevCellsX( SC_SPLIT_LEFT );
             if ( pScroll == aHScrollRight.get() ) nDelta = -(long) aViewData.PrevCellsX( SC_SPLIT_RIGHT );
             if ( pScroll == aVScrollTop.get() ) nDelta = -(long) aViewData.PrevCellsY( SC_SPLIT_TOP );
             if ( pScroll == aVScrollBottom.get() ) nDelta = -(long) aViewData.PrevCellsY( SC_SPLIT_BOTTOM );
             if (nDelta==0) nDelta=-1;
             break;
-        case SCROLL_PAGEDOWN:
+        case ScrollType::PageDown:
             if ( pScroll == aHScrollLeft.get() ) nDelta = aViewData.VisibleCellsX( SC_SPLIT_LEFT );
             if ( pScroll == aHScrollRight.get() ) nDelta = aViewData.VisibleCellsX( SC_SPLIT_RIGHT );
             if ( pScroll == aVScrollTop.get() ) nDelta = aViewData.VisibleCellsY( SC_SPLIT_TOP );
             if ( pScroll == aVScrollBottom.get() ) nDelta = aViewData.VisibleCellsY( SC_SPLIT_BOTTOM );
             if (nDelta==0) nDelta=1;
             break;
-        case SCROLL_DRAG:
+        case ScrollType::Drag:
             {
                 // only scroll in the correct direction, do not jitter around hidden ranges
                 long nScrollMin = 0;        // simulate RangeMin
@@ -1158,7 +1158,7 @@ IMPL_LINK_TYPED( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
 
     if (nDelta)
     {
-        bool bUpdate = ( eType != SCROLL_DRAG );    // don't alter the ranges while dragging
+        bool bUpdate = ( eType != ScrollType::Drag );    // don't alter the ranges while dragging
         if ( bHoriz )
             ScrollX( nDelta, (pScroll == aHScrollLeft.get()) ? SC_SPLIT_LEFT : SC_SPLIT_RIGHT, bUpdate );
         else

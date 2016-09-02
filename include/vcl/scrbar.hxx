@@ -27,8 +27,13 @@
 class AutoTimer;
 
 
-enum ScrollType { SCROLL_DONTKNOW, SCROLL_LINEUP, SCROLL_LINEDOWN,
-                  SCROLL_PAGEUP, SCROLL_PAGEDOWN, SCROLL_DRAG, SCROLL_SET };
+enum class ScrollType
+{
+    DontKnow,
+    LineUp, LineDown,
+    PageUp, PageDown,
+    Drag, Set
+};
 
 
 struct ImplScrollBarData;

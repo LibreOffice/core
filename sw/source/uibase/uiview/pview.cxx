@@ -1426,7 +1426,7 @@ IMPL_LINK_TYPED( SwPagePreview, ScrollHdl, ScrollBar *, p, void )
     if(!GetViewShell())
         return;
     if( !pScrollbar->IsHoriScroll() &&
-        pScrollbar->GetType() == SCROLL_DRAG &&
+        pScrollbar->GetType() == ScrollType::Drag &&
         Help::IsQuickHelpEnabled() &&
         GetViewShell()->PagePreviewLayout()->DoesPreviewLayoutRowsFitIntoWindow())
     {
