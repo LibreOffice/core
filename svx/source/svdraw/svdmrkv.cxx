@@ -231,7 +231,7 @@ void SdrMarkView::ModelHasChanged()
             sSelection = aSelection.toString();
         }
 
-        if(SfxViewShell* pViewShell = SfxViewShell::Current())
+        if(SfxViewShell* pViewShell = GetSfxViewShell())
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sSelection.getStr());
     }
 }
@@ -714,7 +714,7 @@ void SdrMarkView::SetMarkHandles()
                     if (bTiledRendering)
                     {
                         // Suppress handles -> empty graphic selection.
-                        if(SfxViewShell* pViewShell = SfxViewShell::Current())
+                        if(SfxViewShell* pViewShell = GetSfxViewShell())
                         {
                             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
                             SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY");
@@ -738,7 +738,7 @@ void SdrMarkView::SetMarkHandles()
                 if (xController.is() && xController->hasSelectedCells())
                 {
                     // The table shape has selected cells, which provide text selection already -> no graphic selection.
-                    if(SfxViewShell* pViewShell = SfxViewShell::Current())
+                    if(SfxViewShell* pViewShell = GetSfxViewShell())
                     {
                         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
                         SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY");
@@ -771,10 +771,10 @@ void SdrMarkView::SetMarkHandles()
                 sSelection = aSelection.toString();
 
                 // hide the text selection too
-                if(SfxViewShell* pViewShell = SfxViewShell::Current())
+                if(SfxViewShell* pViewShell = GetSfxViewShell())
                     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "");
             }
-            if(SfxViewShell* pViewShell = SfxViewShell::Current())
+            if(SfxViewShell* pViewShell = GetSfxViewShell())
             {
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelection.getStr());
                 SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelection);
@@ -1261,6 +1261,11 @@ void SdrMarkView::SetRef2(const Point& rPt)
         if(pH)
             pH->SetPos(rPt);
     }
+}
+
+SfxViewShell* SdrMarkView::GetSfxViewShell() const
+{
+    return SfxViewShell::Current();
 }
 
 bool SdrPageView::IsObjSelectable(SdrObject *pObj) const
