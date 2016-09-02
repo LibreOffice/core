@@ -56,7 +56,7 @@ public:
         const css::uno::Reference< css::frame::XModel > & xChartModel );
 
     //fill list of selection handles 'aHdl'
-    virtual void SetMarkHandles() override;
+    virtual void SetMarkHandles(SfxViewShell* pOtherShell) override;
 
     SdrPageView*    GetPageView() const;
 

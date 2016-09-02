@@ -219,6 +219,8 @@ public:
     OUString RetrieveLabelFromCommand( const OUString& aCmdURL ) const;
     /// See SfxViewShell::getPart().
     int getPart() const override;
+    /// See SfxViewShell::NotifyCursor().
+    void NotifyCursor(SfxViewShell* pViewShell) const override;
 
 protected:
 
