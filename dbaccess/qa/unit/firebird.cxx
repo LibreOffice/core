@@ -88,15 +88,15 @@ void FirebirdTest::testIntegerDatabase()
     uno::Reference< XColumnLocate > xColumnLocate(xRow, UNO_QUERY);
     CPPUNIT_ASSERT(xColumnLocate.is());
 
-    CPPUNIT_ASSERT(sal_Int16(-30000) ==
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(-30000),
         xRow->getShort(xColumnLocate->findColumn("_SMALLINT")));
-    CPPUNIT_ASSERT(sal_Int32(-2100000000) ==
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-2100000000),
         xRow->getInt(xColumnLocate->findColumn("_INT")));
-    CPPUNIT_ASSERT(SAL_CONST_INT64(-9000000000000000000) ==
+    CPPUNIT_ASSERT_EQUAL(SAL_CONST_INT64(-9000000000000000000),
         xRow->getLong(xColumnLocate->findColumn("_BIGINT")));
-    CPPUNIT_ASSERT("5" ==
+    CPPUNIT_ASSERT_EQUAL(OUString("5"),
         xRow->getString(xColumnLocate->findColumn("_CHAR")));
-    CPPUNIT_ASSERT("5" ==
+    CPPUNIT_ASSERT_EQUAL(OUString("5"),
         xRow->getString(xColumnLocate->findColumn("_VARCHAR")));
 
     CPPUNIT_ASSERT(!xResultSet->next()); // Should only be one row
