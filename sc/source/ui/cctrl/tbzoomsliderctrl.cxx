@@ -424,7 +424,7 @@ void ScZoomSliderWnd::DoPaint(vcl::RenderContext& rRenderContext, const Rectangl
 
     Gradient aGradient;
     aGradient.SetAngle(0);
-    aGradient.SetStyle(GradientStyle_LINEAR);
+    aGradient.SetStyle(GradientStyle::Linear);
 
     aGradient.SetStartColor(aStartColor);
     aGradient.SetEndColor(aEndColor);

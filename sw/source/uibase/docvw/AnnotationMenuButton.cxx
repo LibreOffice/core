@@ -141,11 +141,11 @@ void AnnotationMenuButton::Paint(vcl::RenderContext& rRenderContext, const Recta
         //draw button
         Gradient aGradient;
         if (IsMouseOver())
-            aGradient = Gradient(GradientStyle_LINEAR,
+            aGradient = Gradient(GradientStyle::Linear,
                                  ColorFromAlphaColor(80, mrSidebarWin.ColorAnchor(), mrSidebarWin.ColorDark()),
                                  ColorFromAlphaColor(15, mrSidebarWin.ColorAnchor(), mrSidebarWin.ColorDark()));
         else
-            aGradient = Gradient(GradientStyle_LINEAR,
+            aGradient = Gradient(GradientStyle::Linear,
                                  ColorFromAlphaColor(15, mrSidebarWin.ColorAnchor(), mrSidebarWin.ColorDark()),
                                  ColorFromAlphaColor(80, mrSidebarWin.ColorAnchor(), mrSidebarWin.ColorDark()));
         rRenderContext.DrawGradient(aRect, aGradient);

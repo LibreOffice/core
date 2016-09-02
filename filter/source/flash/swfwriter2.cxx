@@ -495,13 +495,13 @@ FillStyle::FillStyleType Impl_getFillStyleType( const Gradient& rGradient )
 {
     switch( rGradient.GetStyle() )
     {
-    case GradientStyle_ELLIPTICAL:
-    case GradientStyle_RADIAL:
+    case GradientStyle::Elliptical:
+    case GradientStyle::Radial:
         return FillStyle::radial_gradient;
-//  case GradientStyle_AXIAL:
-//  case GradientStyle_SQUARE:
-//  case GradientStyle_RECT:
-//  case GradientStyle_LINEAR:
+//  case GradientStyle::Axial:
+//  case GradientStyle::Square:
+//  case GradientStyle::Rect:
+//  case GradientStyle::Linear:
     default:
         return FillStyle::linear_gradient;
     }
@@ -555,8 +555,8 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
 
     switch( maGradient.GetStyle() )
     {
-    case GradientStyle_ELLIPTICAL:
-    case GradientStyle_RADIAL:
+    case GradientStyle::Elliptical:
+    case GradientStyle::Radial:
         {
             aGradientRecords.push_back( GradRecord( 0x00, maGradient.GetEndColor() ) );
             aGradientRecords.push_back( GradRecord( 0xff, maGradient.GetStartColor() ) );
@@ -589,7 +589,7 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
 
         }
         break;
-    case GradientStyle_AXIAL:
+    case GradientStyle::Axial:
         {
             aGradientRecords.push_back( GradRecord( 0x00, maGradient.GetEndColor() ) );
             aGradientRecords.push_back( GradRecord( 0x80, maGradient.GetStartColor() ) );
@@ -603,9 +603,9 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
             m.scale( scalex, scaley );
         }
         break;
-    case GradientStyle_SQUARE:
-    case GradientStyle_RECT:
-    case GradientStyle_LINEAR:
+    case GradientStyle::Square:
+    case GradientStyle::Rect:
+    case GradientStyle::Linear:
         {
             aGradientRecords.push_back( GradRecord( 0x00, maGradient.GetStartColor() ) );
             aGradientRecords.push_back( GradRecord( 0xff, maGradient.GetEndColor() ) );
@@ -617,7 +617,7 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
             m.translate( maBoundRect.GetWidth() / 2.0, maBoundRect.GetHeight() / 2.0 );
         }
         break;
-    case  GradientStyle_FORCE_EQUAL_SIZE: break;
+    case  GradientStyle::FORCE_EQUAL_SIZE: break;
     }
 
     m.translate( maBoundRect.Left(), maBoundRect.Top() );

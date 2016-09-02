@@ -10784,9 +10784,9 @@ void PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
 bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
 {
     // LO internal gradient -> PDF shading type:
-    //  * GradientStyle_LINEAR: axial shading, using sampled-function with 2 samples
+    //  * GradientStyle::Linear: axial shading, using sampled-function with 2 samples
     //                          [t=0:colorStart, t=1:colorEnd]
-    //  * GradientStyle_AXIAL: axial shading, using sampled-function with 3 samples
+    //  * GradientStyle::Axial: axial shading, using sampled-function with 3 samples
     //                          [t=0:colorEnd, t=0.5:colorStart, t=1:colorEnd]
     //  * other styles: function shading with aSize.Width() * aSize.Height() samples
     sal_Int32 nFunctionObject = createObject();
@@ -10816,8 +10816,8 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
                   "<</FunctionType 0\n");
     switch (rObject.m_aGradient.GetStyle())
     {
-        case GradientStyle_LINEAR:
-        case GradientStyle_AXIAL:
+        case GradientStyle::Linear:
+        case GradientStyle::Axial:
             aLine.append("/Domain[ 0 1]\n");
             break;
         default:
@@ -10826,10 +10826,10 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     aLine.append("/Size[ " );
     switch (rObject.m_aGradient.GetStyle())
     {
-        case GradientStyle_LINEAR:
+        case GradientStyle::Linear:
             aLine.append('2');
             break;
-        case GradientStyle_AXIAL:
+        case GradientStyle::Axial:
             aLine.append('3');
             break;
         default:
@@ -10859,13 +10859,13 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     sal_uInt8 aCol[3];
     switch (rObject.m_aGradient.GetStyle())
     {
-        case GradientStyle_AXIAL:
+        case GradientStyle::Axial:
             aCol[0] = rObject.m_aGradient.GetEndColor().GetRed();
             aCol[1] = rObject.m_aGradient.GetEndColor().GetGreen();
             aCol[2] = rObject.m_aGradient.GetEndColor().GetBlue();
             CHECK_RETURN( writeBuffer( aCol, 3 ) );
             SAL_FALLTHROUGH;
-        case GradientStyle_LINEAR:
+        case GradientStyle::Linear:
         {
             aCol[0] = rObject.m_aGradient.GetStartColor().GetRed();
             aCol[1] = rObject.m_aGradient.GetStartColor().GetGreen();
@@ -10916,8 +10916,8 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     aLine.append( " 0 obj\n");
     switch (rObject.m_aGradient.GetStyle())
     {
-        case GradientStyle_LINEAR:
-        case GradientStyle_AXIAL:
+        case GradientStyle::Linear:
+        case GradientStyle::Axial:
             aLine.append("<</ShadingType 2\n");
             break;
         default:
@@ -10938,7 +10938,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     sal_uInt16    nAngle = rObject.m_aGradient.GetAngle() % 3600;
     rObject.m_aGradient.GetBoundRect( aRect, aBoundRect, aCenter );
 
-    const bool bLinear = (rObject.m_aGradient.GetStyle() == GradientStyle_LINEAR);
+    const bool bLinear = (rObject.m_aGradient.GetStyle() == GradientStyle::Linear);
     double fBorder = aBoundRect.GetHeight() * rObject.m_aGradient.GetBorder() / 100.0;
     if ( !bLinear )
     {
@@ -10953,8 +10953,8 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
 
     switch (rObject.m_aGradient.GetStyle())
     {
-        case GradientStyle_LINEAR:
-        case GradientStyle_AXIAL:
+        case GradientStyle::Linear:
+        case GradientStyle::Axial:
         {
             aLine.append("/Domain[ 0 1 ]\n"
                     "/Coords[ " );

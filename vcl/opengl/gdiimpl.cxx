@@ -1957,9 +1957,9 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
         return true;
     }
 
-    if (rGradient.GetStyle() != GradientStyle_LINEAR &&
-        rGradient.GetStyle() != GradientStyle_AXIAL &&
-        rGradient.GetStyle() != GradientStyle_RADIAL )
+    if (rGradient.GetStyle() != GradientStyle::Linear &&
+        rGradient.GetStyle() != GradientStyle::Axial &&
+        rGradient.GetStyle() != GradientStyle::Radial )
     {
         VCL_GL_INFO("::drawGradient unsupported gradient type");
         return false;
@@ -2005,17 +2005,17 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
             DrawRect(aBoundRect);
         }
     }
-    else if (rGradient.GetStyle() == GradientStyle_LINEAR)
+    else if (rGradient.GetStyle() == GradientStyle::Linear)
     {
         VCL_GL_INFO("::drawGradient -> DrawLinearGradient");
         DrawLinearGradient(rGradient, aBoundRect);
     }
-    else if (rGradient.GetStyle() == GradientStyle_AXIAL)
+    else if (rGradient.GetStyle() == GradientStyle::Axial)
     {
         VCL_GL_INFO("::drawGradient -> DrawAxialGradient");
         DrawAxialGradient(rGradient, aBoundRect);
     }
-    else if (rGradient.GetStyle() == GradientStyle_RADIAL)
+    else if (rGradient.GetStyle() == GradientStyle::Radial)
     {
         VCL_GL_INFO("::drawGradient -> DrawRadialGradient");
         DrawRadialGradient(rGradient, aBoundRect);

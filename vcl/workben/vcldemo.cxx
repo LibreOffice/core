@@ -234,7 +234,7 @@ public:
         Gradient aGradient;
         aGradient.SetStartColor(COL_BLUE);
         aGradient.SetEndColor(COL_GREEN);
-        aGradient.SetStyle(GradientStyle_LINEAR);
+        aGradient.SetStyle(GradientStyle::Linear);
         rDev.DrawGradient(r, aGradient);
     }
 
@@ -791,10 +791,10 @@ public:
                     COL_BLUE, COL_BLUE, COL_BLUE, COL_CYAN, COL_CYAN
                 };
                 GradientStyle eStyles[] = {
-                    GradientStyle_LINEAR, GradientStyle_AXIAL, GradientStyle_RADIAL, GradientStyle_ELLIPTICAL, GradientStyle_SQUARE,
-                    GradientStyle_RECT, GradientStyle_FORCE_EQUAL_SIZE, GradientStyle_LINEAR, GradientStyle_RADIAL, GradientStyle_LINEAR,
-                    GradientStyle_LINEAR, GradientStyle_AXIAL, GradientStyle_RADIAL, GradientStyle_ELLIPTICAL, GradientStyle_SQUARE,
-                    GradientStyle_RECT, GradientStyle_FORCE_EQUAL_SIZE, GradientStyle_LINEAR, GradientStyle_RADIAL, GradientStyle_LINEAR
+                    GradientStyle::Linear, GradientStyle::Axial, GradientStyle::Radial, GradientStyle::Elliptical, GradientStyle::Square,
+                    GradientStyle::Rect, GradientStyle::FORCE_EQUAL_SIZE, GradientStyle::Linear, GradientStyle::Radial, GradientStyle::Linear,
+                    GradientStyle::Linear, GradientStyle::Axial, GradientStyle::Radial, GradientStyle::Elliptical, GradientStyle::Square,
+                    GradientStyle::Rect, GradientStyle::FORCE_EQUAL_SIZE, GradientStyle::Linear, GradientStyle::Radial, GradientStyle::Linear
                 };
                 sal_uInt16 nAngles[] = {
                     0, 0, 0, 0, 0,
@@ -832,7 +832,7 @@ public:
                 Gradient aGradient;
                 aGradient.SetStartColor(COL_YELLOW);
                 aGradient.SetEndColor(COL_RED);
-                aGradient.SetStyle(GradientStyle_RECT);
+                aGradient.SetStyle(GradientStyle::Rect);
                 aGradient.SetBorder(r.GetSize().Width()/20);
                 rDev.DrawGradient(r, aGradient);
             }

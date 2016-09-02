@@ -852,32 +852,32 @@ namespace
 
         switch(rGradient.GetStyle())
         {
-            case GradientStyle_LINEAR :
+            case GradientStyle::Linear :
             {
                 aGradientStyle = drawinglayer::attribute::GradientStyle::Linear;
                 break;
             }
-            case GradientStyle_AXIAL :
+            case GradientStyle::Axial :
             {
                 aGradientStyle = drawinglayer::attribute::GradientStyle::Axial;
                 break;
             }
-            case GradientStyle_RADIAL :
+            case GradientStyle::Radial :
             {
                 aGradientStyle = drawinglayer::attribute::GradientStyle::Radial;
                 break;
             }
-            case GradientStyle_ELLIPTICAL :
+            case GradientStyle::Elliptical :
             {
                 aGradientStyle = drawinglayer::attribute::GradientStyle::Elliptical;
                 break;
             }
-            case GradientStyle_SQUARE :
+            case GradientStyle::Square :
             {
                 aGradientStyle = drawinglayer::attribute::GradientStyle::Square;
                 break;
             }
-            default : // GradientStyle_RECT
+            default : // GradientStyle::Rect
             {
                 aGradientStyle = drawinglayer::attribute::GradientStyle::Rect;
                 break;

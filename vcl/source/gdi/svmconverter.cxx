@@ -1898,7 +1898,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm.WriteInt16( GDI_GRADIENT_ACTION );
                 rOStm.WriteInt32( 46 );
                 ImplWriteRect( rOStm, pAct->GetRect() );
-                rOStm.WriteInt16( rGrad.GetStyle() );
+                rOStm.WriteInt16( (sal_Int16)rGrad.GetStyle() );
                 ImplWriteColor( rOStm, rGrad.GetStartColor() );
                 ImplWriteColor( rOStm, rGrad.GetEndColor() );
                 rOStm.WriteInt16( rGrad.GetAngle() );

@@ -139,7 +139,7 @@ void setupMethodStubs( functor_vector_type& res )
     const BitmapEx    aBitmapExAlphaAlien( aBitmapAlien, aBitmapAlien );
 
     const Image       aImage( aBitmapEx );
-    const Gradient    aGradient(GradientStyle_ELLIPTICAL,aBlackColor,aWhiteColor);
+    const Gradient    aGradient(GradientStyle::Elliptical,aBlackColor,aWhiteColor);
     const Hatch       aHatch(HatchStyle::Triple,aBlackColor,4,450);
     const Wallpaper   aWallpaper( aWhiteColor );
 

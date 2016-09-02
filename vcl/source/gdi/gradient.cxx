@@ -27,7 +27,7 @@ Impl_Gradient::Impl_Gradient() :
     maStartColor( COL_BLACK ),
     maEndColor( COL_WHITE )
 {
-    meStyle             = GradientStyle_LINEAR;
+    meStyle             = GradientStyle::Linear;
     mnAngle             = 0;
     mnBorder            = 0;
     mnOfsX              = 50;
@@ -150,7 +150,7 @@ void Gradient::GetBoundRect( const Rectangle& rRect, Rectangle& rBoundRect, Poin
     Rectangle aRect( rRect );
     sal_uInt16 nAngle = GetAngle() % 3600;
 
-    if( GetStyle() == GradientStyle_LINEAR || GetStyle() == GradientStyle_AXIAL )
+    if( GetStyle() == GradientStyle::Linear || GetStyle() == GradientStyle::Axial )
     {
         const double    fAngle = nAngle * F_PI1800;
         const double    fWidth = aRect.GetWidth();
@@ -171,7 +171,7 @@ void Gradient::GetBoundRect( const Rectangle& rRect, Rectangle& rBoundRect, Poin
     }
     else
     {
-        if( GetStyle() == GradientStyle_SQUARE || GetStyle() == GradientStyle_RECT )
+        if( GetStyle() == GradientStyle::Square || GetStyle() == GradientStyle::Rect )
         {
             const double    fAngle = nAngle * F_PI1800;
             const double    fWidth = aRect.GetWidth();
@@ -190,13 +190,13 @@ void Gradient::GetBoundRect( const Rectangle& rRect, Rectangle& rBoundRect, Poin
 
         Size aSize( aRect.GetSize() );
 
-        if( GetStyle() == GradientStyle_RADIAL )
+        if( GetStyle() == GradientStyle::Radial )
         {
             // Calculation of radii for circle
             aSize.Width() = (long)(0.5 + sqrt((double)aSize.Width()*(double)aSize.Width() + (double)aSize.Height()*(double)aSize.Height()));
             aSize.Height() = aSize.Width();
         }
-        else if( GetStyle() == GradientStyle_ELLIPTICAL )
+        else if( GetStyle() == GradientStyle::Elliptical )
         {
             // Calculation of radii for ellipse
             aSize.Width() = (long)( 0.5 + (double) aSize.Width()  * 1.4142 );
@@ -265,7 +265,7 @@ SvStream& WriteGradient( SvStream& rOStm, const Gradient& rGradient )
 {
     VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
 
-    rOStm.WriteUInt16( rGradient.mpImplGradient->meStyle );
+    rOStm.WriteUInt16( (sal_uInt16)rGradient.mpImplGradient->meStyle );
     WriteColor( rOStm, rGradient.mpImplGradient->maStartColor );
     WriteColor( rOStm, rGradient.mpImplGradient->maEndColor );
     rOStm.WriteUInt16( rGradient.mpImplGradient->mnAngle )

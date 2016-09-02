@@ -2043,8 +2043,8 @@ void PDFWriterImpl::writeG4Stream( BitmapReadAccess* i_pBitmap )
 static bool lcl_canUsePDFAxialShading(const Gradient& rGradient) {
     switch (rGradient.GetStyle())
     {
-        case GradientStyle_LINEAR:
-        case GradientStyle_AXIAL:
+        case GradientStyle::Linear:
+        case GradientStyle::Axial:
             break;
         default:
             return false;

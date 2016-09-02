@@ -2118,7 +2118,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
         Rectangle aRect(Point(), Point(aLogoSz.Width() - 1, aOutSz.Height()));
         if (rRenderContext.GetColorCount() >= 256)
         {
-            Gradient aGrad(GradientStyle_LINEAR, pLogo->aStartColor, pLogo->aEndColor);
+            Gradient aGrad(GradientStyle::Linear, pLogo->aStartColor, pLogo->aEndColor);
             aGrad.SetAngle(1800);
             aGrad.SetBorder(15);
             rRenderContext.DrawGradient(aRect, aGrad);

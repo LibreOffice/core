@@ -205,7 +205,7 @@ void Theme::UpdateTheme()
         setPropertyValue(
             maPropertyIdToNameMap[Paint_PanelTitleBarBackground],
             Any(Tools::VclToAwtGradient(Gradient(
-                        GradientStyle_LINEAR,
+                        GradientStyle::Linear,
                         aSecondColor.GetRGBColor(),
                         aBaseBackgroundColor.GetRGBColor()
                         ))));
@@ -337,7 +337,7 @@ void Theme::UpdateTheme()
         setPropertyValue(
             maPropertyIdToNameMap[Paint_ToolBoxBackground],
             Any(Tools::VclToAwtGradient(Gradient(
-                        GradientStyle_LINEAR,
+                        GradientStyle::Linear,
                         aBaseBackgroundColor.GetRGBColor(),
                         aGradientStop2.GetRGBColor()
                         ))));

@@ -316,7 +316,7 @@ void Writer::Impl_writeGradientEx( const tools::PolyPolygon& rPolyPoly, const Gr
         tools::PolyPolygon aPolyPolygon( rPolyPoly );
         map( aPolyPolygon );
 
-        if( (rGradient.GetStyle() == GradientStyle_LINEAR && rGradient.GetAngle() == 900) || (rGradient.GetStyle() == GradientStyle_RADIAL)  )
+        if( (rGradient.GetStyle() == GradientStyle::Linear && rGradient.GetAngle() == 900) || (rGradient.GetStyle() == GradientStyle::Radial)  )
         {
             const Rectangle aBoundRect( aPolyPolygon.GetBoundRect() );
 

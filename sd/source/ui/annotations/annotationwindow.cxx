@@ -132,7 +132,7 @@ void AnnotationTextWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const 
     if ( !bHighContrast )
     {
         DrawGradient(Rectangle(Point(0,0),PixelToLogic(GetSizePixel())),
-            Gradient(GradientStyle_LINEAR,mpAnnotationWindow->maColorLight,mpAnnotationWindow->maColor));
+            Gradient(GradientStyle::Linear,mpAnnotationWindow->maColorLight,mpAnnotationWindow->maColor));
      }
 
     if( mpOutlinerView )
@@ -659,9 +659,9 @@ void AnnotationWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle
             //draw button
             Gradient aGradient;
             if (mbMouseOverButton)
-                aGradient = Gradient(GradientStyle_LINEAR,ColorFromAlphaColor(80,maColorDark,maColor),ColorFromAlphaColor(15,maColorDark,maColor));
+                aGradient = Gradient(GradientStyle::Linear,ColorFromAlphaColor(80,maColorDark,maColor),ColorFromAlphaColor(15,maColorDark,maColor));
             else
-                aGradient = Gradient(GradientStyle_LINEAR,ColorFromAlphaColor(15,maColorDark,maColor),ColorFromAlphaColor(80,maColorDark,maColor));
+                aGradient = Gradient(GradientStyle::Linear,ColorFromAlphaColor(15,maColorDark,maColor),ColorFromAlphaColor(80,maColorDark,maColor));
             DrawGradient(maRectMetaButton,aGradient);
             //draw rect around button
             SetFillColor();

@@ -17,7 +17,7 @@ Bitmap OutputDeviceTestGradient::setupLinearGradient()
 {
     initialSetup(12, 12, constBackgroundColor);
 
-    Gradient aGradient(GradientStyle_LINEAR, Color(0xFF, 0xFF, 0xFF), Color(0x00, 0x00, 0x00));
+    Gradient aGradient(GradientStyle::Linear, Color(0xFF, 0xFF, 0xFF), Color(0x00, 0x00, 0x00));
     aGradient.SetAngle(900);
     Rectangle aDrawRect(maVDRectangle.Left() + 1,  maVDRectangle.Top() + 1,
                         maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
@@ -30,7 +30,7 @@ Bitmap OutputDeviceTestGradient::setupRadialGradient()
 {
     initialSetup(12, 12, constBackgroundColor);
 
-    Gradient aGradient(GradientStyle_RADIAL, Color(0xFF, 0xFF, 0xFF), Color(0x00, 0x00, 0x00));
+    Gradient aGradient(GradientStyle::Radial, Color(0xFF, 0xFF, 0xFF), Color(0x00, 0x00, 0x00));
     Rectangle aDrawRect(maVDRectangle.Left() + 1,  maVDRectangle.Top() + 1,
                         maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
     mpVirtualDevice->DrawGradient(aDrawRect, aGradient);

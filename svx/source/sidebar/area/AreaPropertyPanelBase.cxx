@@ -1220,7 +1220,7 @@ void AreaPropertyPanelBase::Update()
                             mpLbFillGradTo->SelectEntry(aGradient.GetEndColor());
                         }
                         mpGradientStyle->SelectEntryPos(sal::static_int_cast< sal_Int32 >( aGradient.GetGradientStyle() ));
-                        if(mpGradientStyle->GetSelectEntryPos() == GradientStyle_RADIAL)
+                        if(mpGradientStyle->GetSelectEntryPos() == (sal_Int32)GradientStyle::Radial)
                             mpMTRAngle->Disable();
                         else
                             mpMTRAngle->SetValue( aGradient.GetAngle() /10 );

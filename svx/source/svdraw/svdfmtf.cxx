@@ -1357,18 +1357,18 @@ namespace
 
         switch(rGradientStyle)
         {
-            case GradientStyle_LINEAR: aXGradientStyle = css::awt::GradientStyle_LINEAR; break;
-            case GradientStyle_AXIAL: aXGradientStyle = css::awt::GradientStyle_AXIAL; break;
-            case GradientStyle_RADIAL: aXGradientStyle = css::awt::GradientStyle_RADIAL; break;
-            case GradientStyle_ELLIPTICAL: aXGradientStyle = css::awt::GradientStyle_ELLIPTICAL; break;
-            case GradientStyle_SQUARE: aXGradientStyle = css::awt::GradientStyle_SQUARE; break;
-            case GradientStyle_RECT: aXGradientStyle = css::awt::GradientStyle_RECT; break;
+            case GradientStyle::Linear: aXGradientStyle = css::awt::GradientStyle_LINEAR; break;
+            case GradientStyle::Axial: aXGradientStyle = css::awt::GradientStyle_AXIAL; break;
+            case GradientStyle::Radial: aXGradientStyle = css::awt::GradientStyle_RADIAL; break;
+            case GradientStyle::Elliptical: aXGradientStyle = css::awt::GradientStyle_ELLIPTICAL; break;
+            case GradientStyle::Square: aXGradientStyle = css::awt::GradientStyle_SQUARE; break;
+            case GradientStyle::Rect: aXGradientStyle = css::awt::GradientStyle_RECT; break;
 
-            // Needed due to GradientStyle_FORCE_EQUAL_SIZE; this again is needed
+            // Needed due to GradientStyle::FORCE_EQUAL_SIZE; this again is needed
             // to force the enum defines in VCL to a defined size for the compilers,
             // so despite it is never used it cannot be removed (would break the
             // API implementation probably).
-            case GradientStyle_FORCE_EQUAL_SIZE: break;
+            case GradientStyle::FORCE_EQUAL_SIZE: break;
             default:
                 break;
         }

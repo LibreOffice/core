@@ -34,15 +34,15 @@ enum ExtDateFieldFormat { XTDATEF_SYSTEM_SHORT, XTDATEF_SYSTEM_SHORT_YY, XTDATEF
                           XTDATEF_SHORT_DDMMYYYY, XTDATEF_SHORT_MMDDYYYY, XTDATEF_SHORT_YYYYMMDD,
                           XTDATEF_SHORT_YYMMDD_DIN5008, XTDATEF_SHORT_YYYYMMDD_DIN5008, ExtDateFieldFormat_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
 
-enum GradientStyle
+enum class GradientStyle
 {
-    GradientStyle_LINEAR = 0,
-    GradientStyle_AXIAL = 1,
-    GradientStyle_RADIAL = 2,
-    GradientStyle_ELLIPTICAL = 3,
-    GradientStyle_SQUARE = 4,
-    GradientStyle_RECT = 5,
-    GradientStyle_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
+    Linear = 0,
+    Axial = 1,
+    Radial = 2,
+    Elliptical = 3,
+    Square = 4,
+    Rect = 5,
+    FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
 
 enum class HatchStyle

@@ -446,7 +446,7 @@ void DrawingML::WriteGradientFill( awt::Gradient rGradient )
     switch( rGradient.Style )
     {
         default:
-        case GradientStyle_LINEAR:
+        case awt::GradientStyle_LINEAR:
             mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
             WriteGradientStop( 0, ColorWithIntensity( rGradient.StartColor, rGradient.StartIntensity ) );
             WriteGradientStop( 100, ColorWithIntensity( rGradient.EndColor, rGradient.EndIntensity ) );
@@ -456,7 +456,7 @@ void DrawingML::WriteGradientFill( awt::Gradient rGradient )
                     FSEND );
             break;
 
-        case GradientStyle_AXIAL:
+        case awt::GradientStyle_AXIAL:
             mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
             WriteGradientStop( 0, ColorWithIntensity( rGradient.EndColor, rGradient.EndIntensity ) );
             WriteGradientStop( 50, ColorWithIntensity( rGradient.StartColor, rGradient.StartIntensity ) );
@@ -470,10 +470,10 @@ void DrawingML::WriteGradientFill( awt::Gradient rGradient )
             /* I don't see how to apply transformation to gradients, so
              * elliptical will end as radial and square as
              * rectangular. also position offsets are not applied */
-        case GradientStyle_RADIAL:
-        case GradientStyle_ELLIPTICAL:
-        case GradientStyle_RECT:
-        case GradientStyle_SQUARE:
+        case awt::GradientStyle_RADIAL:
+        case awt::GradientStyle_ELLIPTICAL:
+        case awt::GradientStyle_RECT:
+        case awt::GradientStyle_SQUARE:
             mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
             WriteGradientStop( 0, ColorWithIntensity( rGradient.EndColor, rGradient.EndIntensity ) );
             WriteGradientStop( 100, ColorWithIntensity( rGradient.StartColor, rGradient.StartIntensity ) );
