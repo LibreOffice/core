@@ -848,7 +848,7 @@ void PrinterJob::writeJobPatch( osl::File* pFile, const JobData& rJobData )
     }
 
     std::sort(patch_order.begin(), patch_order.end());
-    std::unique(patch_order.begin(), patch_order.end());
+    patch_order.erase(std::unique(patch_order.begin(), patch_order.end()), patch_order.end());
 
     while( !patch_order.empty() )
     {
