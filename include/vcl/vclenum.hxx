@@ -28,12 +28,17 @@ enum ExtTimeFieldFormat { EXTTIMEF_24H_SHORT, EXTTIMEF_24H_LONG,
                           EXTTIMEF_12H_SHORT, EXTTIMEF_12H_LONG,
                           EXTTIMEF_DURATION_SHORT, EXTTIMEF_DURATION_LONG };
 
-enum ExtDateFieldFormat { XTDATEF_SYSTEM_SHORT, XTDATEF_SYSTEM_SHORT_YY, XTDATEF_SYSTEM_SHORT_YYYY,
-                          XTDATEF_SYSTEM_LONG,
-                          XTDATEF_SHORT_DDMMYY, XTDATEF_SHORT_MMDDYY, XTDATEF_SHORT_YYMMDD,
-                          XTDATEF_SHORT_DDMMYYYY, XTDATEF_SHORT_MMDDYYYY, XTDATEF_SHORT_YYYYMMDD,
-                          XTDATEF_SHORT_YYMMDD_DIN5008, XTDATEF_SHORT_YYYYMMDD_DIN5008, ExtDateFieldFormat_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
+enum class ExtDateFieldFormat
+{
+    SystemShort, SystemShortYY, SystemShortYYYY,
+    SystemLong,
+    ShortDDMMYY, ShortMMDDYY, ShortYYMMDD,
+    ShortDDMMYYYY, ShortMMDDYYYY, ShortYYYYMMDD,
+    ShortYYMMDD_DIN5008, ShortYYYYMMDD_DIN5008,
+    FORCE_EQUAL_SIZE=SAL_MAX_ENUM
+};
 
+// this appears to be a direct copy of css::awt::GradientStyle
 enum class GradientStyle
 {
     Linear = 0,

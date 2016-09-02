@@ -281,8 +281,8 @@ private:
     Date                    maMax;
     bool                    mbLongFormat;
     bool                    mbShowDateCentury;
-    sal_uInt16                  mnDateFormat;
-    sal_uLong                   mnExtDateFormat;
+    sal_uInt16              mnDateFormat;
+    ExtDateFieldFormat      mnExtDateFormat;
     bool                    mbEnforceValidValue;
 
     SAL_DLLPRIVATE void     ImplInit();

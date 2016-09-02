@@ -122,7 +122,7 @@ namespace pcr
         pControlWindow->SetLast( ::Date( 1, 1, 9999 ) );
         pControlWindow->SetMax( ::Date( 1, 1, 9999 ) );
 
-        pControlWindow->SetExtDateFormat( XTDATEF_SYSTEM_SHORT_YYYY );
+        pControlWindow->SetExtDateFormat( ExtDateFieldFormat::SystemShortYYYY );
         pControlWindow->EnableEmptyFieldValue( true );
     }
 

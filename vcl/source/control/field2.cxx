@@ -943,9 +943,9 @@ static ExtDateFieldFormat ImplGetExtFormat( DateFormat eOld )
 {
     switch( eOld )
     {
-        case DMY:   return XTDATEF_SHORT_DDMMYY;
-        case MDY:   return XTDATEF_SHORT_MMDDYY;
-        default:    return XTDATEF_SHORT_YYMMDD;
+        case DMY:   return ExtDateFieldFormat::ShortDDMMYY;
+        case MDY:   return ExtDateFieldFormat::ShortMMDDYY;
+        default:    return ExtDateFieldFormat::ShortYYMMDD;
     }
 }
 
@@ -992,7 +992,7 @@ static sal_uInt16 ImplCutMonthFromString( OUString& rStr, const CalendarWrapper&
 
 static OUString ImplGetDateSep( const LocaleDataWrapper& rLocaleDataWrapper, ExtDateFieldFormat eFormat )
 {
-    if ( ( eFormat == XTDATEF_SHORT_YYMMDD_DIN5008 ) || ( eFormat == XTDATEF_SHORT_YYYYMMDD_DIN5008 ) )
+    if ( ( eFormat == ExtDateFieldFormat::ShortYYMMDD_DIN5008 ) || ( eFormat == ExtDateFieldFormat::ShortYYYYMMDD_DIN5008 ) )
         return OUString("-");
     else
         return rLocaleDataWrapper.getDateSep();
@@ -1022,7 +1022,7 @@ static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFor
     bool bError = false;
     OUString aStr( rStr );
 
-    if ( eDateFormat == XTDATEF_SYSTEM_LONG )
+    if ( eDateFormat == ExtDateFieldFormat::SystemLong )
     {
         DateFormat eFormat = rLocaleDataWrapper.getLongDateFormat();
         switch( eFormat )
@@ -1066,8 +1066,8 @@ static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFor
 
         switch ( eDateFormat )
         {
-            case XTDATEF_SHORT_DDMMYY:
-            case XTDATEF_SHORT_DDMMYYYY:
+            case ExtDateFieldFormat::ShortDDMMYY:
+            case ExtDateFieldFormat::ShortDDMMYYYY:
             {
                 nDay = ImplGetNum( pBuf, bError );
                 ImplSkipDelimiters( pBuf );
@@ -1077,8 +1077,8 @@ static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFor
                     nYear = ImplGetNum( pBuf, bError );
             }
             break;
-            case XTDATEF_SHORT_MMDDYY:
-            case XTDATEF_SHORT_MMDDYYYY:
+            case ExtDateFieldFormat::ShortMMDDYY:
+            case ExtDateFieldFormat::ShortMMDDYYYY:
             {
                 nMonth = ImplGetNum( pBuf, bError );
                 ImplSkipDelimiters( pBuf );
@@ -1088,10 +1088,10 @@ static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFor
                     nYear = ImplGetNum( pBuf, bError );
             }
             break;
-            case XTDATEF_SHORT_YYMMDD:
-            case XTDATEF_SHORT_YYYYMMDD:
-            case XTDATEF_SHORT_YYMMDD_DIN5008:
-            case XTDATEF_SHORT_YYYYMMDD_DIN5008:
+            case ExtDateFieldFormat::ShortYYMMDD:
+            case ExtDateFieldFormat::ShortYYYYMMDD:
+            case ExtDateFieldFormat::ShortYYMMDD_DIN5008:
+            case ExtDateFieldFormat::ShortYYYYMMDD_DIN5008:
             {
                 if ( bYear )
                     nYear = ImplGetNum( pBuf, bError );
@@ -1145,12 +1145,12 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
     bool bShowCentury = false;
     switch ( GetExtDateFormat() )
     {
-        case XTDATEF_SYSTEM_SHORT_YYYY:
-        case XTDATEF_SYSTEM_LONG:
-        case XTDATEF_SHORT_DDMMYYYY:
-        case XTDATEF_SHORT_MMDDYYYY:
-        case XTDATEF_SHORT_YYYYMMDD:
-        case XTDATEF_SHORT_YYYYMMDD_DIN5008:
+        case ExtDateFieldFormat::SystemShortYYYY:
+        case ExtDateFieldFormat::SystemLong:
+        case ExtDateFieldFormat::ShortDDMMYYYY:
+        case ExtDateFieldFormat::ShortMMDDYYYY:
+        case ExtDateFieldFormat::ShortYYYYMMDD:
+        case ExtDateFieldFormat::ShortYYYYMMDD_DIN5008:
         {
             bShowCentury = true;
         }
@@ -1186,12 +1186,12 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
 
     switch ( GetExtDateFormat( true ) )
     {
-        case XTDATEF_SYSTEM_LONG:
+        case ExtDateFieldFormat::SystemLong:
         {
             return ImplGetLocaleDataWrapper().getLongDate( rDate, GetCalendarWrapper(), !bShowCentury );
         }
-        case XTDATEF_SHORT_DDMMYY:
-        case XTDATEF_SHORT_DDMMYYYY:
+        case ExtDateFieldFormat::ShortDDMMYY:
+        case ExtDateFieldFormat::ShortDDMMYYYY:
         {
             pBuf = ImplAddNum( pBuf, nDay, 2 );
             pBuf = ImplAddString( pBuf, aDateSep );
@@ -1200,8 +1200,8 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
             pBuf = ImplAddSNum( pBuf, nYear, nYearLen );
         }
         break;
-        case XTDATEF_SHORT_MMDDYY:
-        case XTDATEF_SHORT_MMDDYYYY:
+        case ExtDateFieldFormat::ShortMMDDYY:
+        case ExtDateFieldFormat::ShortMMDDYYYY:
         {
             pBuf = ImplAddNum( pBuf, nMonth, 2 );
             pBuf = ImplAddString( pBuf, aDateSep );
@@ -1210,10 +1210,10 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
             pBuf = ImplAddSNum( pBuf, nYear, nYearLen );
         }
         break;
-        case XTDATEF_SHORT_YYMMDD:
-        case XTDATEF_SHORT_YYYYMMDD:
-        case XTDATEF_SHORT_YYMMDD_DIN5008:
-        case XTDATEF_SHORT_YYYYMMDD_DIN5008:
+        case ExtDateFieldFormat::ShortYYMMDD:
+        case ExtDateFieldFormat::ShortYYYYMMDD:
+        case ExtDateFieldFormat::ShortYYMMDD_DIN5008:
+        case ExtDateFieldFormat::ShortYYYYMMDD_DIN5008:
         {
             pBuf = ImplAddSNum( pBuf, nYear, nYearLen );
             pBuf = ImplAddString( pBuf, aDateSep );
@@ -1338,7 +1338,7 @@ void DateField::ImplDateSpinArea( bool bUp )
             sal_Int8 nDateArea = 0;
 
             ExtDateFieldFormat eFormat = GetExtDateFormat( true );
-            if ( eFormat == XTDATEF_SYSTEM_LONG )
+            if ( eFormat == ExtDateFieldFormat::SystemLong )
             {
                 eFormat = ImplGetExtFormat( ImplGetLocaleDataWrapper().getLongDateFormat() );
                 nDateArea = 1;
@@ -1363,8 +1363,8 @@ void DateField::ImplDateSpinArea( bool bUp )
 
             switch( eFormat )
             {
-                case XTDATEF_SHORT_MMDDYY:
-                case XTDATEF_SHORT_MMDDYYYY:
+                case ExtDateFieldFormat::ShortMMDDYY:
+                case ExtDateFieldFormat::ShortMMDDYYYY:
                 switch( nDateArea )
                 {
                     case 1: ImplDateIncrementMonth( aDate, bUp );
@@ -1375,8 +1375,8 @@ void DateField::ImplDateSpinArea( bool bUp )
                             break;
                 }
                 break;
-                case XTDATEF_SHORT_DDMMYY:
-                case XTDATEF_SHORT_DDMMYYYY:
+                case ExtDateFieldFormat::ShortDDMMYY:
+                case ExtDateFieldFormat::ShortDDMMYYYY:
                 switch( nDateArea )
                 {
                     case 1: ImplDateIncrementDay( aDate, bUp );
@@ -1387,10 +1387,10 @@ void DateField::ImplDateSpinArea( bool bUp )
                             break;
                 }
                 break;
-                case XTDATEF_SHORT_YYMMDD:
-                case XTDATEF_SHORT_YYYYMMDD:
-                case XTDATEF_SHORT_YYMMDD_DIN5008:
-                case XTDATEF_SHORT_YYYYMMDD_DIN5008:
+                case ExtDateFieldFormat::ShortYYMMDD:
+                case ExtDateFieldFormat::ShortYYYYMMDD:
+                case ExtDateFieldFormat::ShortYYMMDD_DIN5008:
+                case ExtDateFieldFormat::ShortYYYYMMDD_DIN5008:
                 switch( nDateArea )
                 {
                     case 1: ImplDateIncrementYear( aDate, bUp );
@@ -1417,7 +1417,7 @@ void DateFormatter::ImplInit()
     mbShowDateCentury   = true;
     mpCalendarWrapper   = nullptr;
     mnDateFormat        = 0xFFFF;
-    mnExtDateFormat     = XTDATEF_SYSTEM_SHORT;
+    mnExtDateFormat     = ExtDateFieldFormat::SystemShort;
 }
 
 DateFormatter::DateFormatter() :
@@ -1464,16 +1464,16 @@ ExtDateFieldFormat DateFormatter::GetExtDateFormat( bool bResolveSystemFormat ) 
 {
     ExtDateFieldFormat eDateFormat = (ExtDateFieldFormat)mnExtDateFormat;
 
-    if ( bResolveSystemFormat && ( eDateFormat <= XTDATEF_SYSTEM_SHORT_YYYY ) )
+    if ( bResolveSystemFormat && ( eDateFormat <= ExtDateFieldFormat::SystemShortYYYY ) )
     {
-        bool bShowCentury = (eDateFormat == XTDATEF_SYSTEM_SHORT_YYYY);
+        bool bShowCentury = (eDateFormat == ExtDateFieldFormat::SystemShortYYYY);
         switch ( ImplGetLocaleDataWrapper().getDateFormat() )
         {
-            case DMY:   eDateFormat = bShowCentury ? XTDATEF_SHORT_DDMMYYYY : XTDATEF_SHORT_DDMMYY;
+            case DMY:   eDateFormat = bShowCentury ? ExtDateFieldFormat::ShortDDMMYYYY : ExtDateFieldFormat::ShortDDMMYY;
                         break;
-            case MDY:   eDateFormat = bShowCentury ? XTDATEF_SHORT_MMDDYYYY : XTDATEF_SHORT_MMDDYY;
+            case MDY:   eDateFormat = bShowCentury ? ExtDateFieldFormat::ShortMMDDYYYY : ExtDateFieldFormat::ShortMMDDYY;
                         break;
-            default:    eDateFormat = bShowCentury ? XTDATEF_SHORT_YYYYMMDD : XTDATEF_SHORT_YYMMDD;
+            default:    eDateFormat = bShowCentury ? ExtDateFieldFormat::ShortYYYYMMDD : ExtDateFieldFormat::ShortYYMMDD;
 
         }
     }
@@ -1507,12 +1507,12 @@ void DateFormatter::SetLongFormat( bool bLong )
     // #91913# Remove LongFormat and DateShowCentury - redundant
     if ( bLong )
     {
-        SetExtDateFormat( XTDATEF_SYSTEM_LONG );
+        SetExtDateFormat( ExtDateFieldFormat::SystemLong );
     }
     else
     {
-        if( mnExtDateFormat == XTDATEF_SYSTEM_LONG )
-            SetExtDateFormat( XTDATEF_SYSTEM_SHORT );
+        if( mnExtDateFormat == ExtDateFieldFormat::SystemLong )
+            SetExtDateFormat( ExtDateFieldFormat::SystemShort );
     }
 
     ReformatAll();
@@ -1527,17 +1527,17 @@ void DateFormatter::SetShowDateCentury( bool bShowDateCentury )
     {
         switch ( GetExtDateFormat() )
         {
-            case XTDATEF_SYSTEM_SHORT:
-            case XTDATEF_SYSTEM_SHORT_YY:
-                SetExtDateFormat( XTDATEF_SYSTEM_SHORT_YYYY );  break;
-            case XTDATEF_SHORT_DDMMYY:
-                SetExtDateFormat( XTDATEF_SHORT_DDMMYYYY );     break;
-            case XTDATEF_SHORT_MMDDYY:
-                SetExtDateFormat( XTDATEF_SHORT_MMDDYYYY );     break;
-            case XTDATEF_SHORT_YYMMDD:
-                SetExtDateFormat( XTDATEF_SHORT_YYYYMMDD );     break;
-            case XTDATEF_SHORT_YYMMDD_DIN5008:
-                SetExtDateFormat( XTDATEF_SHORT_YYYYMMDD_DIN5008 ); break;
+            case ExtDateFieldFormat::SystemShort:
+            case ExtDateFieldFormat::SystemShortYY:
+                SetExtDateFormat( ExtDateFieldFormat::SystemShortYYYY );  break;
+            case ExtDateFieldFormat::ShortDDMMYY:
+                SetExtDateFormat( ExtDateFieldFormat::ShortDDMMYYYY );     break;
+            case ExtDateFieldFormat::ShortMMDDYY:
+                SetExtDateFormat( ExtDateFieldFormat::ShortMMDDYYYY );     break;
+            case ExtDateFieldFormat::ShortYYMMDD:
+                SetExtDateFormat( ExtDateFieldFormat::ShortYYYYMMDD );     break;
+            case ExtDateFieldFormat::ShortYYMMDD_DIN5008:
+                SetExtDateFormat( ExtDateFieldFormat::ShortYYYYMMDD_DIN5008 ); break;
             default:
                 ;
         }
@@ -1546,17 +1546,17 @@ void DateFormatter::SetShowDateCentury( bool bShowDateCentury )
     {
         switch ( GetExtDateFormat() )
         {
-            case XTDATEF_SYSTEM_SHORT:
-            case XTDATEF_SYSTEM_SHORT_YYYY:
-                SetExtDateFormat( XTDATEF_SYSTEM_SHORT_YY );    break;
-            case XTDATEF_SHORT_DDMMYYYY:
-                SetExtDateFormat( XTDATEF_SHORT_DDMMYY );       break;
-            case XTDATEF_SHORT_MMDDYYYY:
-                SetExtDateFormat( XTDATEF_SHORT_MMDDYY );       break;
-            case XTDATEF_SHORT_YYYYMMDD:
-                SetExtDateFormat( XTDATEF_SHORT_YYMMDD );       break;
-            case XTDATEF_SHORT_YYYYMMDD_DIN5008:
-                SetExtDateFormat( XTDATEF_SHORT_YYMMDD_DIN5008 );  break;
+            case ExtDateFieldFormat::SystemShort:
+            case ExtDateFieldFormat::SystemShortYYYY:
+                SetExtDateFormat( ExtDateFieldFormat::SystemShortYY );    break;
+            case ExtDateFieldFormat::ShortDDMMYYYY:
+                SetExtDateFormat( ExtDateFieldFormat::ShortDDMMYY );       break;
+            case ExtDateFieldFormat::ShortMMDDYYYY:
+                SetExtDateFormat( ExtDateFieldFormat::ShortMMDDYY );       break;
+            case ExtDateFieldFormat::ShortYYYYMMDD:
+                SetExtDateFormat( ExtDateFieldFormat::ShortYYMMDD );       break;
+            case ExtDateFieldFormat::ShortYYYYMMDD_DIN5008:
+                SetExtDateFormat( ExtDateFieldFormat::ShortYYMMDD_DIN5008 );  break;
             default:
                 ;
         }
@@ -1745,7 +1745,7 @@ void DateField::dispose()
 bool DateField::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && IsStrictFormat() &&
-         ( GetExtDateFormat() != XTDATEF_SYSTEM_LONG ) &&
+         ( GetExtDateFormat() != ExtDateFieldFormat::SystemLong ) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplDateProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), GetExtDateFormat( true ), ImplGetLocaleDataWrapper() ) )
@@ -1850,7 +1850,7 @@ void DateBox::dispose()
 bool DateBox::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && IsStrictFormat() &&
-         ( GetExtDateFormat() != XTDATEF_SYSTEM_LONG ) &&
+         ( GetExtDateFormat() != ExtDateFieldFormat::SystemLong ) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplDateProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), GetExtDateFormat( true ), ImplGetLocaleDataWrapper() ) )
