@@ -287,10 +287,9 @@ if (WITH_CATB_FONTS==YES)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (WITH_CATB_FONTS == YES)
-    MD5 = 35efabc239af896dfb79be7ebdd6e6b9
-    name = gentiumbasic-fonts-1.10.zip
-    # This seems to be the original host, but the MD5 sum does not match.
-    # URL1 = http://scripts.sil.org/cms/scripts/render_download.php?format=file&media_id=GentiumBasic_110&filename=GentiumBasic_110.zip
+    MD5 = 1725634df4bb3dcb1b2c91a6175f8789
+    name = GentiumBasic_1102.zip
+    URL1 = http://software.sil.org/downloads/gentium/GentiumBasic_1102.zip
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && SYSTEM_HYPH!=YES)
