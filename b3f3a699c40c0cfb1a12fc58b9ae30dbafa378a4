@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da6895a0_b9785f91",
+        "filename": "accessibility/source/extended/textwindowaccessibility.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2016-09-02T08:39:31Z",
+      "side": 1,
+      "message": "Is \"assert(m_pNotifier \u003d\u003d nullptr)\" enough for this type of change?",
+      "parentUuid": "fa6399be_cea7f54d",
+      "revId": "b3f3a699c40c0cfb1a12fc58b9ae30dbafa378a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_ee62f915",
         "filename": "accessibility/source/extended/textwindowaccessibility.cxx",
         "patchSetId": 4
