@@ -1,6 +1,6 @@
-diff -ru misc/Python-2.7.8/Include/pyport.h misc/build/Python-2.7.8/Include/pyport.h
---- misc/Python-2.7.8/Include/pyport.h	2014-06-29 21:05:24.000000000 -0500
-+++ misc/build/Python-2.7.8/Include/pyport.h	2016-01-01 17:49:55.171717963 -0500
+diff -ru misc/Python-2.7.9/Include/pyport.h misc/build/Python-2.7.9/Include/pyport.h
+--- misc/Python-2.7.9/Include/pyport.h	2014-06-29 21:05:24.000000000 -0500
++++ misc/build/Python-2.7.9/Include/pyport.h	2016-01-01 17:49:55.171717963 -0500
 @@ -9,6 +9,30 @@
  #include <inttypes.h>
  #endif
@@ -32,9 +32,9 @@ diff -ru misc/Python-2.7.8/Include/pyport.h misc/build/Python-2.7.8/Include/pypo
  #ifdef HAVE_STDINT_H
  #include <stdint.h>
  #endif
-diff -ru misc/Python-2.7.8/Lib/distutils/ccompiler.py misc/build/Python-2.7.8/Lib/distutils/ccompiler.py
---- misc/Python-2.7.8/Lib/distutils/ccompiler.py	2014-06-29 21:05:25.000000000 -0500
-+++ misc/build/Python-2.7.8/Lib/distutils/ccompiler.py	2016-01-01 17:49:55.172717391 -0500
+diff -ru misc/Python-2.7.9/Lib/distutils/ccompiler.py misc/build/Python-2.7.9/Lib/distutils/ccompiler.py
+--- misc/Python-2.7.9/Lib/distutils/ccompiler.py	2014-06-29 21:05:25.000000000 -0500
++++ misc/build/Python-2.7.9/Lib/distutils/ccompiler.py	2016-01-01 17:49:55.172717391 -0500
 @@ -895,6 +895,7 @@
      # on a cygwin built python we can use gcc like an ordinary UNIXish
      # compiler
@@ -43,9 +43,9 @@ diff -ru misc/Python-2.7.8/Lib/distutils/ccompiler.py misc/build/Python-2.7.8/Li
      ('os2emx', 'emx'),
  
      # OS name mappings
-diff -ru misc/Python-2.7.8/Lib/distutils/command/build_ext.py misc/build/Python-2.7.8/Lib/distutils/command/build_ext.py
---- misc/Python-2.7.8/Lib/distutils/command/build_ext.py	2014-06-29 21:05:25.000000000 -0500
-+++ misc/build/Python-2.7.8/Lib/distutils/command/build_ext.py	2016-01-01 17:49:55.173717798 -0500
+diff -ru misc/Python-2.7.9/Lib/distutils/command/build_ext.py misc/build/Python-2.7.9/Lib/distutils/command/build_ext.py
+--- misc/Python-2.7.9/Lib/distutils/command/build_ext.py	2014-06-29 21:05:25.000000000 -0500
++++ misc/build/Python-2.7.9/Lib/distutils/command/build_ext.py	2016-01-01 17:49:55.173717798 -0500
 @@ -221,7 +221,7 @@
  
          # for extensions under Cygwin and AtheOS Python's library directory must be
@@ -64,9 +64,9 @@ diff -ru misc/Python-2.7.8/Lib/distutils/command/build_ext.py misc/build/Python-
              template = "python%d.%d"
              pythonlib = (template %
                     (sys.hexversion >> 24, (sys.hexversion >> 16) & 0xff))
-diff -ru misc/Python-2.7.8/Lib/distutils/command/install.py misc/build/Python-2.7.8/Lib/distutils/command/install.py
---- misc/Python-2.7.8/Lib/distutils/command/install.py	2014-06-29 21:05:25.000000000 -0500
-+++ misc/build/Python-2.7.8/Lib/distutils/command/install.py	2016-01-01 17:49:55.174717925 -0500
+diff -ru misc/Python-2.7.9/Lib/distutils/command/install.py misc/build/Python-2.7.9/Lib/distutils/command/install.py
+--- misc/Python-2.7.9/Lib/distutils/command/install.py	2014-06-29 21:05:25.000000000 -0500
++++ misc/build/Python-2.7.9/Lib/distutils/command/install.py	2016-01-01 17:49:55.174717925 -0500
 @@ -348,9 +348,10 @@
  
          # Convert directories from Unix /-separated syntax to the local
@@ -102,9 +102,9 @@ diff -ru misc/Python-2.7.8/Lib/distutils/command/install.py misc/build/Python-2.
  
  
      def handle_extra_path (self):
-diff -ru misc/Python-2.7.8/Lib/distutils/spawn.py misc/build/Python-2.7.8/Lib/distutils/spawn.py
---- misc/Python-2.7.8/Lib/distutils/spawn.py	2014-06-29 21:05:26.000000000 -0500
-+++ misc/build/Python-2.7.8/Lib/distutils/spawn.py	2016-01-01 17:49:55.175718681 -0500
+diff -ru misc/Python-2.7.9/Lib/distutils/spawn.py misc/build/Python-2.7.9/Lib/distutils/spawn.py
+--- misc/Python-2.7.9/Lib/distutils/spawn.py	2014-06-29 21:05:26.000000000 -0500
++++ misc/build/Python-2.7.9/Lib/distutils/spawn.py	2016-01-01 17:49:55.175718681 -0500
 @@ -212,7 +212,7 @@
      paths = path.split(os.pathsep)
      base, ext = os.path.splitext(executable)
@@ -114,10 +114,10 @@ diff -ru misc/Python-2.7.8/Lib/distutils/spawn.py misc/build/Python-2.7.8/Lib/di
          executable = executable + '.exe'
  
      if not os.path.isfile(executable):
-diff -ru misc/Python-2.7.8/Lib/distutils/sysconfig.py misc/build/Python-2.7.8/Lib/distutils/sysconfig.py
---- misc/Python-2.7.8/Lib/distutils/sysconfig.py	2014-06-29 21:05:26.000000000 -0500
-+++ misc/build/Python-2.7.8/Lib/distutils/sysconfig.py	2016-01-01 17:49:55.175718681 -0500
-@@ -449,6 +449,9 @@
+diff -ru misc/Python-2.7.9/Lib/distutils/sysconfig.py misc/build/Python-2.7.9/Lib/distutils/sysconfig.py
+--- misc/Python-2.7.9/Lib/distutils/sysconfig.py	2014-06-29 21:05:26.000000000 -0500
++++ misc/build/Python-2.7.9/Lib/distutils/sysconfig.py	2016-01-01 17:49:55.175718681 -0500
+@@ -450,6 +450,9 @@
      global _config_vars
      if _config_vars is None:
          func = globals().get("_init_" + os.name)
@@ -127,9 +127,9 @@ diff -ru misc/Python-2.7.8/Lib/distutils/sysconfig.py misc/build/Python-2.7.8/Li
          if func:
              func()
          else:
-diff -ru misc/Python-2.7.8/Lib/distutils/unixccompiler.py misc/build/Python-2.7.8/Lib/distutils/unixccompiler.py
---- misc/Python-2.7.8/Lib/distutils/unixccompiler.py	2014-06-29 21:05:26.000000000 -0500
-+++ misc/build/Python-2.7.8/Lib/distutils/unixccompiler.py	2016-01-01 17:49:55.176718668 -0500
+diff -ru misc/Python-2.7.9/Lib/distutils/unixccompiler.py misc/build/Python-2.7.9/Lib/distutils/unixccompiler.py
+--- misc/Python-2.7.9/Lib/distutils/unixccompiler.py	2014-06-29 21:05:26.000000000 -0500
++++ misc/build/Python-2.7.9/Lib/distutils/unixccompiler.py	2016-01-01 17:49:55.176718668 -0500
 @@ -80,7 +80,7 @@
      shared_lib_extension = ".so"
      dylib_lib_extension = ".dylib"
@@ -139,9 +139,9 @@ diff -ru misc/Python-2.7.8/Lib/distutils/unixccompiler.py misc/build/Python-2.7.
          exe_extension = ".exe"
  
      def preprocess(self, source,
-diff -ru misc/Python-2.7.8/Lib/os.py misc/build/Python-2.7.8/Lib/os.py
---- misc/Python-2.7.8/Lib/os.py	2014-06-29 21:05:30.000000000 -0500
-+++ misc/build/Python-2.7.8/Lib/os.py	2016-01-01 17:49:55.177718586 -0500
+diff -ru misc/Python-2.7.9/Lib/os.py misc/build/Python-2.7.9/Lib/os.py
+--- misc/Python-2.7.9/Lib/os.py	2014-06-29 21:05:30.000000000 -0500
++++ misc/build/Python-2.7.9/Lib/os.py	2016-01-01 17:49:55.177718586 -0500
 @@ -38,7 +38,21 @@
      except AttributeError:
          return [n for n in dir(module) if n[0] != '_']
@@ -165,9 +165,9 @@ diff -ru misc/Python-2.7.8/Lib/os.py misc/build/Python-2.7.8/Lib/os.py
      name = 'posix'
      linesep = '\n'
      from posix import *
-diff -ru misc/Python-2.7.8/Lib/socket.py misc/build/Python-2.7.8/Lib/socket.py
---- misc/Python-2.7.8/Lib/socket.py	2014-06-29 21:05:30.000000000 -0500
-+++ misc/build/Python-2.7.8/Lib/socket.py	2016-01-01 17:49:55.178717595 -0500
+diff -ru misc/Python-2.7.9/Lib/socket.py misc/build/Python-2.7.9/Lib/socket.py
+--- misc/Python-2.7.9/Lib/socket.py	2014-06-29 21:05:30.000000000 -0500
++++ misc/build/Python-2.7.9/Lib/socket.py	2016-01-01 17:49:55.178717595 -0500
 @@ -153,7 +153,7 @@
      'sendall', 'setblocking',
      'settimeout', 'gettimeout', 'shutdown')
@@ -177,9 +177,9 @@ diff -ru misc/Python-2.7.8/Lib/socket.py misc/build/Python-2.7.8/Lib/socket.py
      _socketmethods = _socketmethods + ('ioctl',)
  
  if sys.platform == "riscos":
-diff -ru misc/Python-2.7.8/Makefile.pre.in misc/build/Python-2.7.8/Makefile.pre.in
---- misc/Python-2.7.8/Makefile.pre.in	2014-06-29 21:05:39.000000000 -0500
-+++ misc/build/Python-2.7.8/Makefile.pre.in	2016-01-01 17:49:55.179718421 -0500
+diff -ru misc/Python-2.7.9/Makefile.pre.in misc/build/Python-2.7.9/Makefile.pre.in
+--- misc/Python-2.7.9/Makefile.pre.in	2014-06-29 21:05:39.000000000 -0500
++++ misc/build/Python-2.7.9/Makefile.pre.in	2016-01-01 17:49:55.179718421 -0500
 @@ -121,6 +121,16 @@
  BLDSHARED=	@BLDSHARED@ $(LDFLAGS)
  LDCXXSHARED=	@LDCXXSHARED@
@@ -197,7 +197,7 @@ diff -ru misc/Python-2.7.8/Makefile.pre.in misc/build/Python-2.7.8/Makefile.pre.
  
  # Executable suffix (.exe on Windows and Mac OS X)
  EXE=		@EXEEXT@
-@@ -211,7 +221,7 @@
+@@ -214,7 +224,7 @@
  # Modules
  MODULE_OBJS=	\
  		Modules/config.o \
@@ -206,7 +206,7 @@ diff -ru misc/Python-2.7.8/Makefile.pre.in misc/build/Python-2.7.8/Makefile.pre.
  		Modules/main.o \
  		Modules/gcmodule.o
  
-@@ -586,6 +596,10 @@
+@@ -599,6 +609,10 @@
  		-DVPATH='"$(VPATH)"' \
  		-o $@ $(srcdir)/Modules/getpath.c
  
@@ -217,7 +217,7 @@ diff -ru misc/Python-2.7.8/Makefile.pre.in misc/build/Python-2.7.8/Makefile.pre.
  Modules/python.o: $(srcdir)/Modules/python.c
  	$(MAINCC) -c $(PY_CFLAGS) -o $@ $(srcdir)/Modules/python.c
  
-@@ -634,6 +648,12 @@
+@@ -647,6 +661,12 @@
  Objects/unicodectype.o:	$(srcdir)/Objects/unicodectype.c \
  				$(srcdir)/Objects/unicodetype_db.h
  
@@ -230,7 +230,7 @@ diff -ru misc/Python-2.7.8/Makefile.pre.in misc/build/Python-2.7.8/Makefile.pre.
  STRINGLIB_HEADERS= \
  		$(srcdir)/Include/bytes_methods.h \
  		$(srcdir)/Objects/stringlib/count.h \
-@@ -829,7 +849,11 @@
+@@ -861,7 +881,11 @@
  # Install shared libraries enabled by Setup
  DESTDIRS=	$(exec_prefix) $(LIBDIR) $(BINLIBDEST) $(DESTSHARED)
  
@@ -242,7 +242,7 @@ diff -ru misc/Python-2.7.8/Makefile.pre.in misc/build/Python-2.7.8/Makefile.pre.
  		@for i in X $(SHAREDMODS); do \
  		  if test $$i != X; then \
  		    echo $(INSTALL_SHARED) $$i $(DESTSHARED)/`basename $$i`; \
-@@ -837,7 +861,11 @@
+@@ -869,7 +893,11 @@
  		  fi; \
  		done
  
@@ -254,7 +254,7 @@ diff -ru misc/Python-2.7.8/Makefile.pre.in misc/build/Python-2.7.8/Makefile.pre.
  		@for i in $(DESTDIRS); \
  		do \
  			if test ! -d $(DESTDIR)$$i; then \
-@@ -949,7 +977,11 @@
+@@ -982,7 +1010,11 @@
  		unittest unittest/test \
  		lib-old \
  		curses pydoc_data $(MACHDEPS)
@@ -266,7 +266,7 @@ diff -ru misc/Python-2.7.8/Makefile.pre.in misc/build/Python-2.7.8/Makefile.pre.
  	@for i in $(SCRIPTDIR) $(LIBDEST); \
  	do \
  		if test ! -d $(DESTDIR)$$i; then \
-@@ -1009,6 +1041,26 @@
+@@ -1042,6 +1074,26 @@
  		$(INSTALL_DATA) $(srcdir)/Modules/xxmodule.c \
  			$(DESTDIR)$(LIBDEST)/distutils/tests ; \
  	fi
@@ -293,7 +293,7 @@ diff -ru misc/Python-2.7.8/Makefile.pre.in misc/build/Python-2.7.8/Makefile.pre.
  	PYTHONPATH=$(DESTDIR)$(LIBDEST)  $(RUNSHARED) \
  		$(PYTHON_FOR_BUILD) -Wi -tt $(DESTDIR)$(LIBDEST)/compileall.py \
  		-d $(LIBDEST) -f \
-@@ -1035,6 +1087,7 @@
+@@ -1068,6 +1120,7 @@
  # Create the PLATDIR source directory, if one wasn't distributed..
  $(srcdir)/Lib/$(PLATDIR):
  	mkdir $(srcdir)/Lib/$(PLATDIR)
@@ -301,7 +301,7 @@ diff -ru misc/Python-2.7.8/Makefile.pre.in misc/build/Python-2.7.8/Makefile.pre.
  	cp $(srcdir)/Lib/plat-generic/regen $(srcdir)/Lib/$(PLATDIR)/regen
  	export PATH; PATH="`pwd`:$$PATH"; \
  	export PYTHONPATH; PYTHONPATH="$(srcdir)/Lib:$(abs_builddir)/`cat pybuilddir.txt`"; \
-@@ -1048,6 +1101,7 @@
+@@ -1081,6 +1134,7 @@
  	  PYTHON_FOR_BUILD="$(PYTHON_FOR_BUILD)"; \
  	fi; \
  	cd $(srcdir)/Lib/$(PLATDIR); $(RUNSHARED) ./regen
@@ -309,7 +309,7 @@ diff -ru misc/Python-2.7.8/Makefile.pre.in misc/build/Python-2.7.8/Makefile.pre.
  
  python-config: $(srcdir)/Misc/python-config.in
  	# Substitution happens here, as the completely-expanded BINDIR
-@@ -1141,6 +1195,15 @@
+@@ -1174,6 +1228,15 @@
  
  # Install the dynamically loadable modules
  # This goes into $(exec_prefix)
@@ -325,7 +325,7 @@ diff -ru misc/Python-2.7.8/Makefile.pre.in misc/build/Python-2.7.8/Makefile.pre.
  sharedinstall: sharedmods
  	$(RUNSHARED) $(PYTHON_FOR_BUILD) $(srcdir)/setup.py install \
  	   	--prefix=$(prefix) \
-@@ -1148,6 +1211,7 @@
+@@ -1181,6 +1244,7 @@
  		--install-platlib=$(DESTSHARED) \
  		--root=$(DESTDIR)/
  	-rm $(DESTDIR)$(DESTSHARED)/_sysconfigdata.py*
@@ -333,9 +333,9 @@ diff -ru misc/Python-2.7.8/Makefile.pre.in misc/build/Python-2.7.8/Makefile.pre.
  
  # Here are a couple of targets for MacOSX again, to install a full
  # framework-based Python. frameworkinstall installs everything, the
-diff -ru misc/Python-2.7.8/Modules/Setup.config.in misc/build/Python-2.7.8/Modules/Setup.config.in
---- misc/Python-2.7.8/Modules/Setup.config.in	2014-06-29 21:05:40.000000000 -0500
-+++ misc/build/Python-2.7.8/Modules/Setup.config.in	2016-01-01 17:49:55.179718421 -0500
+diff -ru misc/Python-2.7.9/Modules/Setup.config.in misc/build/Python-2.7.9/Modules/Setup.config.in
+--- misc/Python-2.7.9/Modules/Setup.config.in	2014-06-29 21:05:40.000000000 -0500
++++ misc/build/Python-2.7.9/Modules/Setup.config.in	2016-01-01 17:49:55.179718421 -0500
 @@ -9,5 +9,9 @@
  # The signal module
  @USE_SIGNAL_MODULE@signal signalmodule.c
@@ -346,9 +346,9 @@ diff -ru misc/Python-2.7.8/Modules/Setup.config.in misc/build/Python-2.7.8/Modul
 +
  # The rest of the modules previously listed in this file are built
  # by the setup.py script in Python 2.1 and later.
-diff -ru misc/Python-2.7.8/Modules/Setup.dist misc/build/Python-2.7.8/Modules/Setup.dist
---- misc/Python-2.7.8/Modules/Setup.dist	2014-06-29 21:05:40.000000000 -0500
-+++ misc/build/Python-2.7.8/Modules/Setup.dist	2016-01-01 17:49:55.180717640 -0500
+diff -ru misc/Python-2.7.9/Modules/Setup.dist misc/build/Python-2.7.9/Modules/Setup.dist
+--- misc/Python-2.7.9/Modules/Setup.dist	2014-06-29 21:05:40.000000000 -0500
++++ misc/build/Python-2.7.9/Modules/Setup.dist	2016-01-01 17:49:55.180717640 -0500
 @@ -114,7 +114,7 @@
  
  posix posixmodule.c		# posix (UNIX) system calls
@@ -358,10 +358,10 @@ diff -ru misc/Python-2.7.8/Modules/Setup.dist misc/build/Python-2.7.8/Modules/Se
  				# if $HOME is not set
  _sre _sre.c			# Fredrik Lundh's new regular expressions
  _codecs _codecsmodule.c		# access to the builtin codecs and codec registry
-diff -ru misc/Python-2.7.8/Modules/_ctypes/libffi/configure misc/build/Python-2.7.8/Modules/_ctypes/libffi/configure
---- misc/Python-2.7.8/Modules/_ctypes/libffi/configure	2014-06-29 21:05:40.000000000 -0500
-+++ misc/build/Python-2.7.8/Modules/_ctypes/libffi/configure	2016-01-01 17:49:55.235718066 -0500
-@@ -14855,6 +14855,12 @@
+diff -ru misc/Python-2.7.9/Modules/_ctypes/libffi/configure misc/build/Python-2.7.9/Modules/_ctypes/libffi/configure
+--- misc/Python-2.7.9/Modules/_ctypes/libffi/configure	2014-06-29 21:05:40.000000000 -0500
++++ misc/build/Python-2.7.9/Modules/_ctypes/libffi/configure	2016-01-01 17:49:55.235718066 -0500
+@@ -18807,6 +18807,12 @@
  fi
  
  
@@ -374,10 +374,10 @@ diff -ru misc/Python-2.7.8/Modules/_ctypes/libffi/configure misc/build/Python-2.
  ac_config_commands="$ac_config_commands include"
  
  ac_config_commands="$ac_config_commands src"
-diff -ru misc/Python-2.7.8/Modules/_ctypes/libffi/configure.ac misc/build/Python-2.7.8/Modules/_ctypes/libffi/configure.ac
---- misc/Python-2.7.8/Modules/_ctypes/libffi/configure.ac	2014-06-29 21:05:40.000000000 -0500
-+++ misc/build/Python-2.7.8/Modules/_ctypes/libffi/configure.ac	2016-01-01 17:49:55.236718053 -0500
-@@ -564,6 +564,12 @@
+diff -ru misc/Python-2.7.9/Modules/_ctypes/libffi/configure.ac misc/build/Python-2.7.9/Modules/_ctypes/libffi/configure.ac
+--- misc/Python-2.7.9/Modules/_ctypes/libffi/configure.ac	2014-06-29 21:05:40.000000000 -0500
++++ misc/build/Python-2.7.9/Modules/_ctypes/libffi/configure.ac	2016-01-01 17:49:55.236718053 -0500
+@@ -613,6 +613,12 @@
  fi
  AC_SUBST(toolexeclibdir)
  
@@ -390,10 +390,10 @@ diff -ru misc/Python-2.7.8/Modules/_ctypes/libffi/configure.ac misc/build/Python
  AC_CONFIG_COMMANDS(include, [test -d include || mkdir include])
  AC_CONFIG_COMMANDS(src, [
  test -d src || mkdir src
-diff -ru misc/Python-2.7.8/Modules/_ctypes/libffi/include/ffi.h.in misc/build/Python-2.7.8/Modules/_ctypes/libffi/include/ffi.h.in
---- misc/Python-2.7.8/Modules/_ctypes/libffi/include/ffi.h.in	2014-06-29 21:05:40.000000000 -0500
-+++ misc/build/Python-2.7.8/Modules/_ctypes/libffi/include/ffi.h.in	2016-01-01 17:49:55.236718053 -0500
-@@ -428,7 +428,11 @@
+diff -ru misc/Python-2.7.9/Modules/_ctypes/libffi/include/ffi.h.in misc/build/Python-2.7.9/Modules/_ctypes/libffi/include/ffi.h.in
+--- misc/Python-2.7.9/Modules/_ctypes/libffi/include/ffi.h.in	2014-06-29 21:05:40.000000000 -0500
++++ misc/build/Python-2.7.9/Modules/_ctypes/libffi/include/ffi.h.in	2016-01-01 17:49:55.236718053 -0500
+@@ -433,7 +433,11 @@
  			    ffi_type *rtype,
  			    ffi_type **atypes);
  
@@ -405,9 +405,9 @@ diff -ru misc/Python-2.7.8/Modules/_ctypes/libffi/include/ffi.h.in misc/build/Py
  	      void (*fn)(void),
  	      void *rvalue,
  	      void **avalue);
-diff -ru misc/Python-2.7.8/Modules/config.c.in misc/build/Python-2.7.8/Modules/config.c.in
---- misc/Python-2.7.8/Modules/config.c.in	2014-06-29 21:05:42.000000000 -0500
-+++ misc/build/Python-2.7.8/Modules/config.c.in	2016-01-01 17:49:55.237718460 -0500
+diff -ru misc/Python-2.7.9/Modules/config.c.in misc/build/Python-2.7.9/Modules/config.c.in
+--- misc/Python-2.7.9/Modules/config.c.in	2014-06-29 21:05:42.000000000 -0500
++++ misc/build/Python-2.7.9/Modules/config.c.in	2016-01-01 17:49:55.237718460 -0500
 @@ -48,6 +48,9 @@
      {"__builtin__", NULL},
      {"sys", NULL},
@@ -418,9 +418,9 @@ diff -ru misc/Python-2.7.8/Modules/config.c.in misc/build/Python-2.7.8/Modules/c
  
      /* This lives in gcmodule.c */
      {"gc", initgc},
-diff -ru misc/Python-2.7.8/Modules/posixmodule.c misc/build/Python-2.7.8/Modules/posixmodule.c
---- misc/Python-2.7.8/Modules/posixmodule.c	2014-06-29 21:05:43.000000000 -0500
-+++ misc/build/Python-2.7.8/Modules/posixmodule.c	2016-01-01 17:49:55.241719248 -0500
+diff -ru misc/Python-2.7.9/Modules/posixmodule.c misc/build/Python-2.7.9/Modules/posixmodule.c
+--- misc/Python-2.7.9/Modules/posixmodule.c	2014-06-29 21:05:43.000000000 -0500
++++ misc/build/Python-2.7.9/Modules/posixmodule.c	2016-01-01 17:49:55.241719248 -0500
 @@ -132,6 +132,15 @@
  #define HAVE_FSYNC      1
  #define fsync _commit
@@ -487,10 +487,10 @@ diff -ru misc/Python-2.7.8/Modules/posixmodule.c misc/build/Python-2.7.8/Modules
  
  /* IsUNCRoot -- test whether the supplied path is of the form \\SERVER\SHARE\,
     where / can be used in place of \ and the trailing slash is optional.
-diff -ru misc/Python-2.7.8/Modules/socketmodule.c misc/build/Python-2.7.8/Modules/socketmodule.c
---- misc/Python-2.7.8/Modules/socketmodule.c	2014-06-29 21:05:43.000000000 -0500
-+++ misc/build/Python-2.7.8/Modules/socketmodule.c	2016-01-01 17:49:55.244718023 -0500
-@@ -313,7 +313,7 @@
+diff -ru misc/Python-2.7.9/Modules/socketmodule.c misc/build/Python-2.7.9/Modules/socketmodule.c
+--- misc/Python-2.7.9/Modules/socketmodule.c	2014-06-29 21:05:43.000000000 -0500
++++ misc/build/Python-2.7.9/Modules/socketmodule.c	2016-01-01 17:49:55.244718023 -0500
+@@ -317,7 +317,7 @@
    /* Do not include addrinfo.h for MSVC7 or greater. 'addrinfo' and
     * EAI_* constants are defined in (the already included) ws2tcpip.h.
     */
@@ -499,10 +499,10 @@ diff -ru misc/Python-2.7.8/Modules/socketmodule.c misc/build/Python-2.7.8/Module
  #  include "addrinfo.h"
  #endif
  
-diff -ru misc/Python-2.7.8/PC/_winreg.c misc/build/Python-2.7.8/PC/_winreg.c
---- misc/Python-2.7.8/PC/_winreg.c	2014-06-29 21:05:46.000000000 -0500
-+++ misc/build/Python-2.7.8/PC/_winreg.c	2016-01-01 17:49:55.246717928 -0500
-@@ -1790,6 +1790,9 @@
+diff -ru misc/Python-2.7.9/PC/_winreg.c misc/build/Python-2.7.9/PC/_winreg.c
+--- misc/Python-2.7.9/PC/_winreg.c	2014-06-29 21:05:46.000000000 -0500
++++ misc/build/Python-2.7.9/PC/_winreg.c	2016-01-01 17:49:55.246717928 -0500
+@@ -1792,6 +1792,9 @@
  }
  
  #define ADD_KEY(val) inskey(d, #val, val)
@@ -512,9 +512,9 @@ diff -ru misc/Python-2.7.8/PC/_winreg.c misc/build/Python-2.7.8/PC/_winreg.c
  
  PyMODINIT_FUNC init_winreg(void)
  {
-diff -ru misc/Python-2.7.8/Python/dynload_win.c misc/build/Python-2.7.8/Python/dynload_win.c
---- misc/Python-2.7.8/Python/dynload_win.c	2014-06-29 21:05:47.000000000 -0500
-+++ misc/build/Python-2.7.8/Python/dynload_win.c	2016-01-01 17:49:55.246717928 -0500
+diff -ru misc/Python-2.7.9/Python/dynload_win.c misc/build/Python-2.7.9/Python/dynload_win.c
+--- misc/Python-2.7.9/Python/dynload_win.c	2014-06-29 21:05:47.000000000 -0500
++++ misc/build/Python-2.7.9/Python/dynload_win.c	2016-01-01 17:49:55.246717928 -0500
 @@ -28,6 +28,7 @@
  /* Case insensitive string compare, to avoid any dependencies on particular
     C RTL implementations */
@@ -531,9 +531,9 @@ diff -ru misc/Python-2.7.8/Python/dynload_win.c misc/build/Python-2.7.8/Python/d
  
  
  /* Function to return the name of the "python" DLL that the supplied module
-diff -ru misc/Python-2.7.8/Python/frozenmain.c misc/build/Python-2.7.8/Python/frozenmain.c
---- misc/Python-2.7.8/Python/frozenmain.c	2014-06-29 21:05:47.000000000 -0500
-+++ misc/build/Python-2.7.8/Python/frozenmain.c	2016-01-01 17:49:55.247717915 -0500
+diff -ru misc/Python-2.7.9/Python/frozenmain.c misc/build/Python-2.7.9/Python/frozenmain.c
+--- misc/Python-2.7.9/Python/frozenmain.c	2014-06-29 21:05:47.000000000 -0500
++++ misc/build/Python-2.7.9/Python/frozenmain.c	2016-01-01 17:49:55.247717915 -0500
 @@ -3,7 +3,7 @@
  
  #include "Python.h"
@@ -567,10 +567,10 @@ diff -ru misc/Python-2.7.8/Python/frozenmain.c misc/build/Python-2.7.8/Python/fr
      PyWinFreeze_ExeTerm();
  #endif
      Py_Finalize();
-diff -ru misc/Python-2.7.8/configure misc/build/Python-2.7.8/configure
---- misc/Python-2.7.8/configure	2014-06-29 21:05:48.000000000 -0500
-+++ misc/build/Python-2.7.8/configure	2016-01-01 17:49:55.307717091 -0500
-@@ -637,8 +637,10 @@
+diff -ru misc/Python-2.7.9/configure misc/build/Python-2.7.9/configure
+--- misc/Python-2.7.9/configure	2014-06-29 21:05:48.000000000 -0500
++++ misc/build/Python-2.7.9/configure	2016-01-01 17:49:55.307717091 -0500
+@@ -638,8 +638,10 @@
  LIBOBJS
  TRUE
  MACHDEP_OBJS
@@ -581,7 +581,7 @@ diff -ru misc/Python-2.7.8/configure misc/build/Python-2.7.8/configure
  THREADOBJ
  LDLAST
  USE_THREAD_MODULE
-@@ -3359,6 +3361,13 @@
+@@ -3367,6 +3369,13 @@
          LDFLAGS="$SGI_ABI $LDFLAGS"
          MACHDEP=`echo "${MACHDEP}${SGI_ABI}" | sed 's/ *//g'`
  fi
@@ -595,7 +595,7 @@ diff -ru misc/Python-2.7.8/configure misc/build/Python-2.7.8/configure
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $MACHDEP" >&5
  $as_echo "$MACHDEP" >&6; }
  
-@@ -5272,7 +5281,7 @@
+@@ -5280,7 +5289,7 @@
  if test -z "$enable_shared"
  then
    case $ac_sys_system in
@@ -604,7 +604,7 @@ diff -ru misc/Python-2.7.8/configure misc/build/Python-2.7.8/configure
      enable_shared="yes";;
    *)
      enable_shared="no";;
-@@ -5341,7 +5350,7 @@
+@@ -5349,7 +5358,7 @@
      BeOS*)
            LDLIBRARY='libpython$(VERSION).so'
            ;;
@@ -613,7 +613,7 @@ diff -ru misc/Python-2.7.8/configure misc/build/Python-2.7.8/configure
            LDLIBRARY='libpython$(VERSION).dll.a'
            DLLLIBRARY='libpython$(VERSION).dll'
            ;;
-@@ -5397,7 +5406,7 @@
+@@ -5405,7 +5413,7 @@
    esac
  else # shared is disabled
    case $ac_sys_system in
@@ -622,7 +622,7 @@ diff -ru misc/Python-2.7.8/configure misc/build/Python-2.7.8/configure
            BLDLIBRARY='$(LIBRARY)'
            LDLIBRARY='libpython$(VERSION).dll.a'
            ;;
-@@ -7812,6 +7821,10 @@
+@@ -7820,6 +7829,10 @@
  
  
  
@@ -633,7 +633,7 @@ diff -ru misc/Python-2.7.8/configure misc/build/Python-2.7.8/configure
  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable large file support" >&5
  $as_echo_n "checking whether to enable large file support... " >&6; }
  if test "$have_long_long" = yes
-@@ -8128,7 +8141,7 @@
+@@ -8136,7 +8149,7 @@
  	  		*)    SO=.sl;;
  		esac
  		;;
@@ -642,7 +642,7 @@ diff -ru misc/Python-2.7.8/configure misc/build/Python-2.7.8/configure
  	*)	   SO=.so;;
  	esac
  else
-@@ -8292,7 +8305,7 @@
+@@ -8300,7 +8313,7 @@
  	SCO_SV*)
  		LDSHARED='$(CC) -Wl,-G,-Bexport'
  		LDCXXSHARED='$(CXX) -Wl,-G,-Bexport';;
@@ -651,7 +651,7 @@ diff -ru misc/Python-2.7.8/configure misc/build/Python-2.7.8/configure
  		LDSHARED="gcc -shared -Wl,--enable-auto-image-base"
  		LDCXXSHARED="g++ -shared -Wl,--enable-auto-image-base";;
  	atheos*)
-@@ -8388,7 +8401,7 @@
+@@ -8396,7 +8409,7 @@
  			LINKFORSHARED="-Xlinker --export-dynamic"
  		    fi;;
  		  esac;;
@@ -660,7 +660,7 @@ diff -ru misc/Python-2.7.8/configure misc/build/Python-2.7.8/configure
  		if test $enable_shared = "no"
  		then
  			LINKFORSHARED='-Wl,--out-implib=$(LDLIBRARY)'
-@@ -8412,7 +8425,7 @@
+@@ -8420,7 +8433,7 @@
  if test ! "$LIBRARY" = "$LDLIBRARY"
  then
  	case $ac_sys_system in
@@ -669,7 +669,7 @@ diff -ru misc/Python-2.7.8/configure misc/build/Python-2.7.8/configure
  		# Cygwin needs CCSHARED when building extension DLLs
  		# but not when building the interpreter DLL.
  		CFLAGSFORSHARED='';;
-@@ -9663,7 +9676,7 @@
+@@ -9671,7 +9684,7 @@
  #define HAVE_PTHREAD_SIGMASK 1
  _ACEOF
   case $ac_sys_system in
@@ -678,7 +678,7 @@ diff -ru misc/Python-2.7.8/configure misc/build/Python-2.7.8/configure
  
  $as_echo "#define HAVE_BROKEN_PTHREAD_SIGMASK 1" >>confdefs.h
  
-@@ -9686,6 +9699,17 @@
+@@ -9694,6 +9707,17 @@
  fi
  
  
@@ -696,7 +696,7 @@ diff -ru misc/Python-2.7.8/configure misc/build/Python-2.7.8/configure
  # Check for enable-ipv6
  
  { $as_echo "$as_me:${as_lineno-$LINENO}: checking if --enable-ipv6 is specified" >&5
-@@ -10120,6 +10144,11 @@
+@@ -10128,6 +10152,11 @@
  	# Use dynload_next.c only on 10.2 and below, which don't have native dlopen()
  	Darwin/[0156]\..*) DYNLOADFILE="dynload_next.o";;
  	atheos*) DYNLOADFILE="dynload_atheos.o";;
@@ -708,7 +708,7 @@ diff -ru misc/Python-2.7.8/configure misc/build/Python-2.7.8/configure
  	*)
  	# use dynload_shlib.c and dlopen() if we have it; otherwise stub
  	# out any dynamic loading
-@@ -10139,6 +10168,21 @@
+@@ -10147,6 +10176,21 @@
  
  fi
  
@@ -730,7 +730,7 @@ diff -ru misc/Python-2.7.8/configure misc/build/Python-2.7.8/configure
  # MACHDEP_OBJS can be set to platform-specific object files needed by Python
  
  
-@@ -11737,6 +11781,20 @@
+@@ -11745,6 +11789,20 @@
  
  fi
  
@@ -751,7 +751,7 @@ diff -ru misc/Python-2.7.8/configure misc/build/Python-2.7.8/configure
  ac_fn_c_check_member "$LINENO" "struct stat" "st_blocks" "ac_cv_member_struct_stat_st_blocks" "$ac_includes_default"
  if test "x$ac_cv_member_struct_stat_st_blocks" = xyes; then :
  
-@@ -11757,6 +11815,8 @@
+@@ -11765,6 +11823,8 @@
  fi
  
  
@@ -760,7 +760,7 @@ diff -ru misc/Python-2.7.8/configure misc/build/Python-2.7.8/configure
  
  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for time.h that defines altzone" >&5
  $as_echo_n "checking for time.h that defines altzone... " >&6; }
-@@ -13140,6 +13200,7 @@
+@@ -13148,6 +13208,7 @@
  
  
  
@@ -768,10 +768,10 @@ diff -ru misc/Python-2.7.8/configure misc/build/Python-2.7.8/configure
  
  if test "$enable_unicode" = "no"
  then
-diff -ru misc/Python-2.7.8/configure.ac misc/build/Python-2.7.8/configure.ac
---- misc/Python-2.7.8/configure.ac	2014-06-29 21:05:48.000000000 -0500
-+++ misc/build/Python-2.7.8/configure.ac	2016-01-01 17:49:55.310717403 -0500
-@@ -488,6 +488,13 @@
+diff -ru misc/Python-2.7.9/configure.ac misc/build/Python-2.7.9/configure.ac
+--- misc/Python-2.7.9/configure.ac	2014-06-29 21:05:48.000000000 -0500
++++ misc/build/Python-2.7.9/configure.ac	2016-01-01 17:49:55.310717403 -0500
+@@ -491,6 +491,13 @@
          LDFLAGS="$SGI_ABI $LDFLAGS"
          MACHDEP=`echo "${MACHDEP}${SGI_ABI}" | sed 's/ *//g'`
  fi
@@ -785,7 +785,7 @@ diff -ru misc/Python-2.7.8/configure.ac misc/build/Python-2.7.8/configure.ac
  AC_MSG_RESULT($MACHDEP)
  
  # And add extra plat-mac for darwin
-@@ -821,7 +828,7 @@
+@@ -824,7 +831,7 @@
  if test -z "$enable_shared"
  then 
    case $ac_sys_system in
@@ -794,7 +794,7 @@ diff -ru misc/Python-2.7.8/configure.ac misc/build/Python-2.7.8/configure.ac
      enable_shared="yes";;
    *)
      enable_shared="no";;
-@@ -873,7 +880,7 @@
+@@ -876,7 +883,7 @@
      BeOS*)
            LDLIBRARY='libpython$(VERSION).so'
            ;;
@@ -803,7 +803,7 @@ diff -ru misc/Python-2.7.8/configure.ac misc/build/Python-2.7.8/configure.ac
            LDLIBRARY='libpython$(VERSION).dll.a'
            DLLLIBRARY='libpython$(VERSION).dll'
            ;;
-@@ -929,7 +936,7 @@
+@@ -932,7 +939,7 @@
    esac
  else # shared is disabled
    case $ac_sys_system in
@@ -812,7 +812,7 @@ diff -ru misc/Python-2.7.8/configure.ac misc/build/Python-2.7.8/configure.ac
            BLDLIBRARY='$(LIBRARY)'
            LDLIBRARY='libpython$(VERSION).dll.a'
            ;;
-@@ -1711,6 +1718,10 @@
+@@ -1714,6 +1721,10 @@
  #endif
  ])
  
@@ -823,7 +823,7 @@ diff -ru misc/Python-2.7.8/configure.ac misc/build/Python-2.7.8/configure.ac
  AC_MSG_CHECKING(whether to enable large file support)
  if test "$have_long_long" = yes
  then
-@@ -1916,7 +1927,7 @@
+@@ -1919,7 +1930,7 @@
  	  		*)    SO=.sl;;
  		esac
  		;;
@@ -832,7 +832,7 @@ diff -ru misc/Python-2.7.8/configure.ac misc/build/Python-2.7.8/configure.ac
  	*)	   SO=.so;;
  	esac
  else
-@@ -2074,7 +2085,7 @@
+@@ -2077,7 +2088,7 @@
  	SCO_SV*)
  		LDSHARED='$(CC) -Wl,-G,-Bexport'
  		LDCXXSHARED='$(CXX) -Wl,-G,-Bexport';;
@@ -841,7 +841,7 @@ diff -ru misc/Python-2.7.8/configure.ac misc/build/Python-2.7.8/configure.ac
  		LDSHARED="gcc -shared -Wl,--enable-auto-image-base"
  		LDCXXSHARED="g++ -shared -Wl,--enable-auto-image-base";;
  	atheos*)
-@@ -2166,7 +2177,7 @@
+@@ -2169,7 +2120,7 @@
  			LINKFORSHARED="-Xlinker --export-dynamic"
  		    fi;;
  		  esac;;
@@ -850,7 +850,7 @@ diff -ru misc/Python-2.7.8/configure.ac misc/build/Python-2.7.8/configure.ac
  		if test $enable_shared = "no"
  		then
  			LINKFORSHARED='-Wl,--out-implib=$(LDLIBRARY)'
-@@ -2188,7 +2199,7 @@
+@@ -2191,7 +2202,7 @@
  if test ! "$LIBRARY" = "$LDLIBRARY"
  then
  	case $ac_sys_system in
@@ -859,7 +859,7 @@ diff -ru misc/Python-2.7.8/configure.ac misc/build/Python-2.7.8/configure.ac
  		# Cygwin needs CCSHARED when building extension DLLs
  		# but not when building the interpreter DLL.
  		CFLAGSFORSHARED='';;
-@@ -2598,7 +2609,7 @@
+@@ -2601,7 +2612,7 @@
        fi
        AC_CHECK_FUNCS(pthread_sigmask,
          [case $ac_sys_system in
@@ -868,7 +868,7 @@ diff -ru misc/Python-2.7.8/configure.ac misc/build/Python-2.7.8/configure.ac
            AC_DEFINE(HAVE_BROKEN_PTHREAD_SIGMASK, 1,
              [Define if pthread_sigmask() does not work on your system.])
              ;;
-@@ -2606,6 +2617,17 @@
+@@ -2609,6 +2620,17 @@
        AC_CHECK_FUNCS(pthread_atfork)
  fi
  
@@ -886,7 +886,7 @@ diff -ru misc/Python-2.7.8/configure.ac misc/build/Python-2.7.8/configure.ac
  
  # Check for enable-ipv6
  AH_TEMPLATE(ENABLE_IPV6, [Define if --enable-ipv6 is specified])
-@@ -2877,6 +2899,11 @@
+@@ -2880,6 +2902,11 @@
  	# Use dynload_next.c only on 10.2 and below, which don't have native dlopen()
  	Darwin/@<:@0156@:>@\..*) DYNLOADFILE="dynload_next.o";;
  	atheos*) DYNLOADFILE="dynload_atheos.o";;
@@ -898,7 +898,7 @@ diff -ru misc/Python-2.7.8/configure.ac misc/build/Python-2.7.8/configure.ac
  	*)
  	# use dynload_shlib.c and dlopen() if we have it; otherwise stub
  	# out any dynamic loading
-@@ -2894,6 +2921,19 @@
+@@ -2897,6 +2924,19 @@
          [Defined when any dynamic module loading is enabled.])
  fi
  
@@ -918,7 +918,7 @@ diff -ru misc/Python-2.7.8/configure.ac misc/build/Python-2.7.8/configure.ac
  # MACHDEP_OBJS can be set to platform-specific object files needed by Python
  
  AC_SUBST(MACHDEP_OBJS)
-@@ -3355,7 +3395,14 @@
+@@ -3358,7 +3398,14 @@
  AC_CHECK_MEMBERS([struct stat.st_flags])
  AC_CHECK_MEMBERS([struct stat.st_gen])
  AC_CHECK_MEMBERS([struct stat.st_birthtime])
@@ -933,7 +933,7 @@ diff -ru misc/Python-2.7.8/configure.ac misc/build/Python-2.7.8/configure.ac
  
  AC_MSG_CHECKING(for time.h that defines altzone)
  AC_CACHE_VAL(ac_cv_header_time_altzone,[
-@@ -3976,6 +4023,7 @@
+@@ -3979,6 +4026,7 @@
  AH_TEMPLATE(PY_UNICODE_TYPE,
    [Define as the integral type used for Unicode representation.])
  
@@ -941,10 +941,10 @@ diff -ru misc/Python-2.7.8/configure.ac misc/build/Python-2.7.8/configure.ac
  AC_SUBST(UNICODE_OBJS)
  if test "$enable_unicode" = "no"
  then
-diff -ru misc/Python-2.7.8/setup.py misc/build/Python-2.7.8/setup.py
---- misc/Python-2.7.8/setup.py	2014-06-29 21:05:48.000000000 -0500
-+++ misc/build/Python-2.7.8/setup.py	2016-01-01 17:49:55.312719892 -0500
-@@ -285,6 +285,18 @@
+diff -ru misc/Python-2.7.9/setup.py misc/build/Python-2.7.9/setup.py
+--- misc/Python-2.7.9/setup.py	2014-06-29 21:05:48.000000000 -0500
++++ misc/build/Python-2.7.9/setup.py	2016-01-01 17:49:55.312719892 -0500
+@@ -287,6 +287,18 @@
              if not self.configure_ctypes(ext):
                  return
  
@@ -963,7 +963,7 @@ diff -ru misc/Python-2.7.8/setup.py misc/build/Python-2.7.8/setup.py
          try:
              build_ext.build_extension(self, ext)
          except (CCompilerError, DistutilsError), why:
-@@ -314,7 +326,7 @@
+@@ -316,7 +328,7 @@
  
          # Workaround for Cygwin: Cygwin currently has fork issues when many
          # modules have been imported
@@ -972,7 +972,7 @@ diff -ru misc/Python-2.7.8/setup.py misc/build/Python-2.7.8/setup.py
              self.announce('WARNING: skipping import check for Cygwin-based "%s"'
                  % ext.name)
              return
-@@ -1233,7 +1245,7 @@
+@@ -1235,7 +1247,7 @@
  
          dbm_order = ['gdbm']
          # The standard Unix dbm module:
@@ -981,7 +981,7 @@ diff -ru misc/Python-2.7.8/setup.py misc/build/Python-2.7.8/setup.py
              config_args = [arg.strip("'")
                             for arg in sysconfig.get_config_var("CONFIG_ARGS").split()]
              dbm_args = [arg for arg in config_args
-@@ -1325,7 +1337,7 @@
+@@ -1327,7 +1339,7 @@
                  missing.append('resource')
  
              # Sun yellow pages. Some systems have the functions in libc.
@@ -990,7 +990,7 @@ diff -ru misc/Python-2.7.8/setup.py misc/build/Python-2.7.8/setup.py
                  find_file('rpcsvc/yp_prot.h', inc_dirs, []) is not None):
                  if (self.compiler.find_library_file(lib_dirs, 'nsl')):
                      libs = ['nsl']
-@@ -1547,7 +1559,7 @@
+@@ -1549,7 +1561,7 @@
              macros = dict()
              libraries = []
  
@@ -999,7 +999,7 @@ diff -ru misc/Python-2.7.8/setup.py misc/build/Python-2.7.8/setup.py
              macros = dict()
              libraries = []
  
-@@ -1569,7 +1581,7 @@
+@@ -1571,7 +1583,7 @@
              macros = dict()
              libraries = ['rt']
  
@@ -1008,7 +1008,7 @@ diff -ru misc/Python-2.7.8/setup.py misc/build/Python-2.7.8/setup.py
              multiprocessing_srcs = [ '_multiprocessing/multiprocessing.c',
                                       '_multiprocessing/semaphore.c',
                                       '_multiprocessing/pipe_connection.c',
-@@ -1588,6 +1600,7 @@
+@@ -1590,6 +1602,7 @@
          if sysconfig.get_config_var('WITH_THREAD'):
              exts.append ( Extension('_multiprocessing', multiprocessing_srcs,
                                      define_macros=macros.items(),
@@ -1016,7 +1016,7 @@ diff -ru misc/Python-2.7.8/setup.py misc/build/Python-2.7.8/setup.py
                                      include_dirs=["Modules/_multiprocessing"]))
          else:
              missing.append('_multiprocessing')
-@@ -1721,6 +1734,10 @@
+@@ -1723,6 +1736,10 @@
                                       '-framework', 'Carbon']) )
  
  
@@ -1027,7 +1027,7 @@ diff -ru misc/Python-2.7.8/setup.py misc/build/Python-2.7.8/setup.py
          self.extensions.extend(exts)
  
          # Call the method for detecting whether _tkinter can be compiled
-@@ -1930,7 +1947,7 @@
+@@ -1932,7 +1949,7 @@
              added_lib_dirs.append('/usr/X11/lib')
  
          # If Cygwin, then verify that X is installed before proceeding
@@ -1036,7 +1036,7 @@ diff -ru misc/Python-2.7.8/setup.py misc/build/Python-2.7.8/setup.py
              x11_inc = find_file('X11/Xlib.h', [], include_dirs)
              if x11_inc is None:
                  return
-@@ -1953,7 +1970,7 @@
+@@ -1955,7 +1972,7 @@
              libs.append('ld')
  
          # Finally, link with the X11 libraries (not appropriate on cygwin)
@@ -1045,7 +1045,7 @@ diff -ru misc/Python-2.7.8/setup.py misc/build/Python-2.7.8/setup.py
              libs.append('X11')
  
          ext = Extension('_tkinter', ['_tkinter.c', 'tkappinit.c'],
-@@ -2023,6 +2040,8 @@
+@@ -2025,6 +2042,8 @@
                                 if (('--host=' in arg) or ('--build=' in arg))]
                  if not self.verbose:
                      config_args.append("-q")
