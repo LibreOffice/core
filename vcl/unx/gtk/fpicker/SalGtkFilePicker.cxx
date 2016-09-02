@@ -1050,6 +1050,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException, std
                 break;
         }
     }
+    gtk_widget_hide(m_pDialog);
 
     if (mnHID_FolderChange)
         g_signal_handler_disconnect(GTK_FILE_CHOOSER( m_pDialog ), mnHID_FolderChange);

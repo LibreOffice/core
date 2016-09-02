@@ -162,6 +162,7 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute() throw( uno::RuntimeException, s
             retVal = 0;
             break;
     }
+    gtk_widget_hide(m_pDialog);
 
     return retVal;
 }
