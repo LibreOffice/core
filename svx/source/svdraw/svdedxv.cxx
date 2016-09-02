@@ -212,11 +212,6 @@ void SdrObjEditView::TakeActionRect(Rectangle& rRect) const
     }
 }
 
-SfxViewShell* SdrObjEditView::GetSfxViewShell() const
-{
-    return nullptr;
-}
-
 void SdrObjEditView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     SdrGlueEditView::Notify(rBC,rHint);

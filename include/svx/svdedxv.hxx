@@ -35,7 +35,6 @@ class ImpSdrEditPara;
 struct PasteOrDropInfos;
 class SdrUndoManager;
 class TextChainCursorManager;
-class SfxViewShell;
 
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;
@@ -160,8 +159,6 @@ public:
 
     SdrPageView* ShowSdrPage(SdrPage* pPage) override;
     void HideSdrPage() override;
-    /// Get access to the view shell owning this draw view, if any.
-    virtual SfxViewShell* GetSfxViewShell() const;
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
     virtual void ModelHasChanged() override;
