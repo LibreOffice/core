@@ -132,7 +132,7 @@ namespace XPath
             ouri    = OUStringToOString(i->second, RTL_TEXTENCODING_UTF8);
             xmlChar const *p = reinterpret_cast<xmlChar const *>(oprefix.getStr());
             xmlChar const *u = reinterpret_cast<xmlChar const *>(ouri.getStr());
-            xmlXPathRegisterNs(ctx, p, u);
+            (void)xmlXPathRegisterNs(ctx, p, u);
             ++i;
         }
     }
