@@ -110,13 +110,11 @@
   <block-list:block block-list:abbreviated-name="Gechichte" block-list:name="Geschichte"/>
   <block-list:block block-list:abbreviated-name="gehn" block-list:name="gehen"/>
   <block-list:block block-list:abbreviated-name="geht´s" block-list:name="geht’s"/>
-  <block-list:block block-list:abbreviated-name="gehts" block-list:name="geht’s"/>
   <block-list:block block-list:abbreviated-name="geht's" block-list:name="geht’s"/>
   <block-list:block block-list:abbreviated-name="Geidcht" block-list:name="Gedicht"/>
   <block-list:block block-list:abbreviated-name="Geschichtne" block-list:name="Geschichten"/>
   <block-list:block block-list:abbreviated-name="Geshichte" block-list:name="Geschichte"/>
   <block-list:block block-list:abbreviated-name="gibt´s" block-list:name="gibt’s"/>
-  <block-list:block block-list:abbreviated-name="gibts" block-list:name="gibt’s"/>
   <block-list:block block-list:abbreviated-name="gibt's" block-list:name="gibt’s"/>
   <block-list:block block-list:abbreviated-name="gnaz" block-list:name="ganz"/>
   <block-list:block block-list:abbreviated-name="Grupe" block-list:name="Gruppe"/>
@@ -241,7 +239,6 @@
   <block-list:block block-list:abbreviated-name="widergeben" block-list:name="wiedergeben"/>
   <block-list:block block-list:abbreviated-name="wiederspiegeln" block-list:name="widerspiegeln"/>
   <block-list:block block-list:abbreviated-name="wird´s" block-list:name="wird’s"/>
-  <block-list:block block-list:abbreviated-name="wirds" block-list:name="wird’s"/>
   <block-list:block block-list:abbreviated-name="wird's" block-list:name="wird’s"/>
   <block-list:block block-list:abbreviated-name="Wrot" block-list:name="Wort"/>
   <block-list:block block-list:abbreviated-name="wüdre" block-list:name="würde"/>
