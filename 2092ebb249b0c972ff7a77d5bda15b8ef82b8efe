@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6895a0_f9ce57b3",
+        "filename": "svl/source/inc/poolio.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-09-02T10:34:41Z",
+      "side": 1,
+      "message": "you\u0027re going to need to call clear() here on maPoolDefaults, so that the various places that have maPoolDefaults.empty() conditions evaluate to true",
+      "revId": "2092ebb249b0c972ff7a77d5bda15b8ef82b8efe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
