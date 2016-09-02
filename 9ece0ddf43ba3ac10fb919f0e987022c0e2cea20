@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6895a0_99047bc7",
+        "filename": "svl/source/items/itempool.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-09-02T12:18:24Z",
+      "side": 1,
+      "message": "this code is not equavilent - the old code was setting the entry in the array to null, and then setting the entry in the array to the new default.\n\nThe new code is only modifying a local variable.",
+      "revId": "9ece0ddf43ba3ac10fb919f0e987022c0e2cea20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6895a0_b9093fe0",
+        "filename": "svl/source/items/itempool.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-09-02T12:18:24Z",
+      "side": 1,
+      "message": "similarly here",
+      "revId": "9ece0ddf43ba3ac10fb919f0e987022c0e2cea20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
