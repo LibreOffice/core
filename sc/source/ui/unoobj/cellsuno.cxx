@@ -7215,7 +7215,7 @@ void SAL_CALL ScTableSheetObj::insertCells( const table::CellRangeAddress& rRang
             OSL_ENSURE( rRangeAddress.Sheet == GetTab_Impl(), "falsche Tabelle in CellRangeAddress" );
             ScRange aScRange;
             ScUnoConversion::FillScRange( aScRange, rRangeAddress );
-            pDocSh->GetDocFunc().InsertCells( aScRange, nullptr, eCmd, true, true );
+            (void)pDocSh->GetDocFunc().InsertCells( aScRange, nullptr, eCmd, true, true );
         }
     }
 }
@@ -7246,7 +7246,7 @@ void SAL_CALL ScTableSheetObj::removeRange( const table::CellRangeAddress& rRang
             OSL_ENSURE( rRangeAddress.Sheet == GetTab_Impl(), "falsche Tabelle in CellRangeAddress" );
             ScRange aScRange;
             ScUnoConversion::FillScRange( aScRange, rRangeAddress );
-            pDocSh->GetDocFunc().DeleteCells( aScRange, nullptr, eCmd, true );
+            (void)pDocSh->GetDocFunc().DeleteCells( aScRange, nullptr, eCmd, true );
         }
     }
 }
@@ -7263,7 +7263,7 @@ void SAL_CALL ScTableSheetObj::moveRange( const table::CellAddress& aDestination
         ScRange aSourceRange;
         ScUnoConversion::FillScRange( aSourceRange, aSource );
         ScAddress aDestPos( (SCCOL)aDestination.Column, (SCROW)aDestination.Row, aDestination.Sheet );
-        pDocSh->GetDocFunc().MoveBlock( aSourceRange, aDestPos, true, true, true, true );
+        (void)pDocSh->GetDocFunc().MoveBlock( aSourceRange, aDestPos, true, true, true, true );
     }
 }
 
@@ -7279,7 +7279,7 @@ void SAL_CALL ScTableSheetObj::copyRange( const table::CellAddress& aDestination
         ScRange aSourceRange;
         ScUnoConversion::FillScRange( aSourceRange, aSource );
         ScAddress aDestPos( (SCCOL)aDestination.Column, (SCROW)aDestination.Row, aDestination.Sheet );
-        pDocSh->GetDocFunc().MoveBlock( aSourceRange, aDestPos, false, true, true, true );
+        (void)pDocSh->GetDocFunc().MoveBlock( aSourceRange, aDestPos, false, true, true, true );
     }
 }
 
