@@ -181,6 +181,12 @@ MapMode& MapMode::operator=( const MapMode& rMapMode )
     return *this;
 }
 
+MapMode& MapMode::operator=( MapMode&& rMapMode )
+{
+    mpImplMapMode = std::move(rMapMode.mpImplMapMode);
+    return *this;
+}
+
 bool MapMode::operator==( const MapMode& rMapMode ) const
 {
    return mpImplMapMode == rMapMode.mpImplMapMode;
