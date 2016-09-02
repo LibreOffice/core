@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "da6895a0_b9085f93",
+        "filename": "accessibility/source/extended/textwindowaccessibility.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-02T15:13:59Z",
+      "side": 1,
+      "message": "the \"area\" parameter can simply be omitted.\n\nthe assert does not have a second parameter for a message,  but there is a trick to give it a message anyway:\n\nyou can write \u0027assert( ... \u0026\u0026 \"message\")\u0027 and the string literal will evaluate to \"true\" so it is effectively the same condition but the message will be printed if it fails!\n\noften it is very obvious what is being checked so the message is superfluous, for example when a pointer is being checked that it is not null and dereferenced in the next line.\n\nbut in this case i\u0027m not so sure, perhaps it\u0027s obvious if you look at endListening or perhaps it\u0027s not obvious because you have to look at endListening :)\n\nso i\u0027ll leave it up to you to decide if it makes sense to include a message here.",
+      "parentUuid": "da6895a0_79b6c73e",
+      "revId": "b3f3a699c40c0cfb1a12fc58b9ae30dbafa378a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_ee62f915",
         "filename": "accessibility/source/extended/textwindowaccessibility.cxx",
         "patchSetId": 4
