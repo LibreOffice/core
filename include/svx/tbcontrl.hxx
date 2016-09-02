@@ -304,8 +304,6 @@ public:
     virtual ~SvxCurrencyToolBoxControl();
     virtual void Select( sal_uInt16 nSelectModifier ) override;
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
-                              const SfxPoolItem* pState) override;
 };
 
 

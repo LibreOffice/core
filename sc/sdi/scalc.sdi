@@ -3773,7 +3773,7 @@ SfxVoidItem NumberFormatCurrency SID_NUMBER_CURRENCY
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    SlotType = SfxUInt32Item
+    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,

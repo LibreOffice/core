@@ -2584,17 +2584,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                 }
                 break;
             case SID_NUMBER_CURRENCY:
-                {
-                    const SfxItemSet& rAttrSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
-                    if( SfxItemState::DONTCARE != rAttrSet.GetItemState( ATTR_VALUE_FORMAT ) )
-                    {
-                        sal_uInt32 nNumberFormat = static_cast<const SfxUInt32Item&>(
-                                                   rAttrSet.Get( ATTR_VALUE_FORMAT ) ).GetValue();
-                        rSet.Put( SfxUInt32Item( nWhich, nNumberFormat ) );
-                    }
-                    else
-                        rSet.InvalidateItem( nWhich );
-                }
+                rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::CURRENCY)) );
                 break;
             case SID_NUMBER_SCIENTIFIC:
                 rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::SCIENTIFIC)) );

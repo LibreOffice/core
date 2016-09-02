@@ -119,7 +119,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxFontNameToolBoxControl, SvxFontItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameToolBoxControl, SvxBoxItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameLineStyleToolBoxControl, SvxLineItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxSimpleUndoRedoController, SfxStringItem );
-SFX_IMPL_TOOLBOX_CONTROL( SvxCurrencyToolBoxControl, SfxUInt32Item );
+SFX_IMPL_TOOLBOX_CONTROL( SvxCurrencyToolBoxControl, SfxBoolItem );
 
 class SvxStyleBox_Impl : public ComboBox
 {
@@ -3057,19 +3057,6 @@ void SvxCurrencyToolBoxControl::Select( sal_uInt16 nSelectModifier )
                                  ".uno:NumberFormatCurrency",
                                  aArgs );
 }
-
-void SvxCurrencyToolBoxControl::StateChanged(
-    sal_uInt16, SfxItemState eState, const SfxPoolItem* )
-{
-    sal_uInt16                  nId     = GetId();
-    ToolBox&                    rTbx    = GetToolBox();
-
-    rTbx.EnableItem( nId, SfxItemState::DISABLED != eState );
-    rTbx.SetItemState( nId, (SfxItemState::DONTCARE == eState)
-                            ? TRISTATE_INDET
-                            : TRISTATE_FALSE );
-}
-
 
 static void lcl_CalcSizeValueSet( vcl::Window &rWin, ValueSet &rValueSet, const Size &aItemSize )
 {
