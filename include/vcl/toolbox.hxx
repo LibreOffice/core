@@ -60,7 +60,7 @@ namespace o3tl
 
 // small or large force an exact toolbox size for proper alignemnt
 // dontcare will let the toolbox decide about its size
-enum ToolBoxButtonSize { TOOLBOX_BUTTONSIZE_DONTCARE, TOOLBOX_BUTTONSIZE_SMALL, TOOLBOX_BUTTONSIZE_LARGE };
+enum class ToolBoxButtonSize { DontCare, Small, Large };
 
 // ToolBoxLayoutMode::Normal   - traditional layout, items are centered in the toolbar
 // ToolBoxLayoutMode::LockVert - special mode (currently used for calc input/formula

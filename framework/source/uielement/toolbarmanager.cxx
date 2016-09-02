@@ -163,7 +163,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_pToolBar->SetDoubleClickHdl( LINK( this, ToolBarManager, DoubleClick ) );
     m_pToolBar->SetStateChangedHdl( LINK( this, ToolBarManager, StateChanged ) );
     m_pToolBar->SetDataChangedHdl( LINK( this, ToolBarManager, DataChanged ) );
-    m_pToolBar->SetToolboxButtonSize( m_bSmallSymbols ? TOOLBOX_BUTTONSIZE_SMALL : TOOLBOX_BUTTONSIZE_LARGE );
+    m_pToolBar->SetToolboxButtonSize( m_bSmallSymbols ? ToolBoxButtonSize::Small : ToolBoxButtonSize::Large );
 
     // enables a menu for clipped items and customization
     SvtCommandOptions aCmdOptions;
@@ -276,7 +276,7 @@ void ToolBarManager::RefreshImages()
     SolarMutexGuard g;
 
     bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
-    m_pToolBar->SetToolboxButtonSize( bBigImages ? TOOLBOX_BUTTONSIZE_LARGE : TOOLBOX_BUTTONSIZE_SMALL );
+    m_pToolBar->SetToolboxButtonSize( bBigImages ? ToolBoxButtonSize::Large : ToolBoxButtonSize::Small );
 
     for ( auto const& it : m_aControllerMap )
     {

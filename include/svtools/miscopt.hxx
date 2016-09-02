@@ -35,6 +35,7 @@
 *//*-*************************************************************************************************************/
 
 class SvtMiscOptions_Impl;
+enum class ToolBoxButtonSize;
 
 /*-************************************************************************************************************
     @short          collect information about misc group
@@ -62,10 +63,10 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
 
         sal_Int16   GetSymbolsSize() const;
         void        SetSymbolsSize( sal_Int16 eSet );
-        sal_Int16   GetSidebarIconSize() const;
-        void        SetSidebarIconSize( sal_Int16 eSet );
-        sal_Int16   GetNotebookbarIconSize() const;
-        void        SetNotebookbarIconSize( sal_Int16 eSet );
+        ToolBoxButtonSize   GetSidebarIconSize() const;
+        void        SetSidebarIconSize( ToolBoxButtonSize eSet );
+        ToolBoxButtonSize   GetNotebookbarIconSize() const;
+        void        SetNotebookbarIconSize( ToolBoxButtonSize eSet );
         sal_Int16   GetCurrentSymbolsSize() const;
         bool        AreCurrentSymbolsLarge() const;
 

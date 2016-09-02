@@ -43,7 +43,7 @@ public:
     virtual ~SidebarToolBox();
     virtual void dispose() override;
 
-    virtual sal_uInt16 GetIconSize() const;
+    virtual ToolBoxButtonSize GetIconSize() const;
 
     using ToolBox::InsertItem;
     virtual void InsertItem(const OUString& rCommand,

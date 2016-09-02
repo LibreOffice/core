@@ -1982,7 +1982,7 @@ bool ToolBox::ImplCalcItem()
         ImplAddButtonBorder( nMaxWidth, nMaxHeight, mpData->mbNativeButtons );
     }
 
-    if( !ImplIsFloatingMode() && GetToolboxButtonSize() != TOOLBOX_BUTTONSIZE_DONTCARE
+    if( !ImplIsFloatingMode() && GetToolboxButtonSize() != ToolBoxButtonSize::DontCare
         && ( meTextPosition == ToolBoxTextPosition::Right ) )
     {
         // make sure all vertical toolbars have the same width and horizontal have the same height

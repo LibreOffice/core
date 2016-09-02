@@ -424,7 +424,7 @@ void SaveToolbarController::updateImage()
     if ( !getToolboxId( nId, &pToolBox ) )
         return;
 
-    bool bLargeIcons = pToolBox->GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE;
+    bool bLargeIcons = pToolBox->GetToolboxButtonSize() == ToolBoxButtonSize::Large;
     Image aImage;
 
     if ( m_bReadOnly )

@@ -30,18 +30,12 @@ public:
     NotebookbarToolBox(vcl::Window* pParentWindow)
     : sfx2::sidebar::SidebarToolBox(pParentWindow)
     {
-        ToolBoxButtonSize eSize = TOOLBOX_BUTTONSIZE_SMALL;
-
-        SvtMiscOptions aMiscOptions;
-
-        sal_uInt16 nSize = GetIconSize();
-        if (nSize <= TOOLBOX_BUTTONSIZE_LARGE)
-            eSize = static_cast<ToolBoxButtonSize>(nSize);
-
+        ToolBoxButtonSize eSize = ToolBoxButtonSize::Small;
+        eSize = GetIconSize();
         SetToolboxButtonSize(eSize);
     }
 
-    virtual sal_uInt16 GetIconSize() const override
+    virtual ToolBoxButtonSize GetIconSize() const override
     {
         SvtMiscOptions aMiscOptions;
         return aMiscOptions.GetNotebookbarIconSize();

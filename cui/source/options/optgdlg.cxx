@@ -767,12 +767,12 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     if( nSidebarSizeLB_InitialSelection != nSidebarSizeLB_NewSelection )
     {
         // from now on it's modified, even if via auto setting the same size was set as now selected in the LB
-        sal_Int16 eSet = TOOLBOX_BUTTONSIZE_DONTCARE;
+        ToolBoxButtonSize eSet = ToolBoxButtonSize::DontCare;
         switch( nSidebarSizeLB_NewSelection )
         {
-            case 0: eSet = TOOLBOX_BUTTONSIZE_DONTCARE;  break;
-            case 1: eSet = TOOLBOX_BUTTONSIZE_SMALL; break;
-            case 2: eSet = TOOLBOX_BUTTONSIZE_LARGE; break;
+            case 0: eSet = ToolBoxButtonSize::DontCare;  break;
+            case 1: eSet = ToolBoxButtonSize::Small; break;
+            case 2: eSet = ToolBoxButtonSize::Large; break;
             default:
                 OSL_FAIL( "OfaViewTabPage::FillItemSet(): This state of m_pSidebarIconSizeLB should not be possible!" );
         }
@@ -783,12 +783,12 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     if( nNotebookbarSizeLB_InitialSelection != nNotebookbarSizeLB_NewSelection )
     {
         // from now on it's modified, even if via auto setting the same size was set as now selected in the LB
-        sal_Int16 eSet = TOOLBOX_BUTTONSIZE_DONTCARE;
+        ToolBoxButtonSize eSet = ToolBoxButtonSize::DontCare;
         switch( nNotebookbarSizeLB_NewSelection )
         {
-            case 0: eSet = TOOLBOX_BUTTONSIZE_DONTCARE;  break;
-            case 1: eSet = TOOLBOX_BUTTONSIZE_SMALL; break;
-            case 2: eSet = TOOLBOX_BUTTONSIZE_LARGE; break;
+            case 0: eSet = ToolBoxButtonSize::DontCare;  break;
+            case 1: eSet = ToolBoxButtonSize::Small; break;
+            case 2: eSet = ToolBoxButtonSize::Large; break;
             default:
                 OSL_FAIL( "OfaViewTabPage::FillItemSet(): This state of m_pNotebookbarIconSizeLB should not be possible!" );
         }
@@ -943,12 +943,20 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
         nSizeLB_InitialSelection = ( aMiscOptions.AreCurrentSymbolsLarge() )? 2 : 1;
     m_pIconSizeLB->SelectEntryPos( nSizeLB_InitialSelection );
     m_pIconSizeLB->SaveValue();
-    if( aMiscOptions.GetSidebarIconSize() != TOOLBOX_BUTTONSIZE_DONTCARE )
-        nSidebarSizeLB_InitialSelection = aMiscOptions.GetSidebarIconSize();
+    if( aMiscOptions.GetSidebarIconSize() == ToolBoxButtonSize::DontCare )
+        ; // do nothing
+    else if( aMiscOptions.GetSidebarIconSize() == ToolBoxButtonSize::Small )
+        nSidebarSizeLB_InitialSelection = 1;
+    else if( aMiscOptions.GetSidebarIconSize() == ToolBoxButtonSize::Large )
+        nSidebarSizeLB_InitialSelection = 2;
     m_pSidebarIconSizeLB->SelectEntryPos( nSidebarSizeLB_InitialSelection );
     m_pSidebarIconSizeLB->SaveValue();
-    if( aMiscOptions.GetNotebookbarIconSize() != TOOLBOX_BUTTONSIZE_DONTCARE )
-        nNotebookbarSizeLB_InitialSelection = aMiscOptions.GetNotebookbarIconSize();
+    if( aMiscOptions.GetNotebookbarIconSize() == ToolBoxButtonSize::DontCare )
+        ; // do nothing
+    else if( aMiscOptions.GetNotebookbarIconSize() == ToolBoxButtonSize::Small )
+        nNotebookbarSizeLB_InitialSelection = 1;
+    else if( aMiscOptions.GetNotebookbarIconSize() == ToolBoxButtonSize::Large )
+        nNotebookbarSizeLB_InitialSelection = 2;
     m_pNotebookbarIconSizeLB->SelectEntryPos( nNotebookbarSizeLB_InitialSelection );
     m_pNotebookbarIconSizeLB->SaveValue();
 

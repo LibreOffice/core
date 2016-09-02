@@ -64,14 +64,12 @@ SidebarToolBox::SidebarToolBox (vcl::Window* pParentWindow)
     SetBackground(Wallpaper());
     SetPaintTransparent(true);
 
-    ToolBoxButtonSize eSize = TOOLBOX_BUTTONSIZE_SMALL;
+    ToolBoxButtonSize eSize = ToolBoxButtonSize::Small;
 
     SvtMiscOptions aMiscOptions;
     aMiscOptions.AddListenerLink(LINK(this, SidebarToolBox, ChangedIconSizeHandler));
 
-    sal_uInt16 nSize = GetIconSize();
-    if (nSize <= TOOLBOX_BUTTONSIZE_LARGE)
-        eSize = static_cast<ToolBoxButtonSize>(nSize);
+    eSize = GetIconSize();
 
     SetToolboxButtonSize(eSize);
 
@@ -117,7 +115,7 @@ void SidebarToolBox::dispose()
     ToolBox::dispose();
 }
 
-sal_uInt16 SidebarToolBox::GetIconSize() const
+ToolBoxButtonSize SidebarToolBox::GetIconSize() const
 {
     SvtMiscOptions aMiscOptions;
     return aMiscOptions.GetSidebarIconSize();
@@ -268,13 +266,9 @@ IMPL_LINK_NOARG_TYPED(SidebarToolBox, ChangedIconSizeHandler, LinkParamNone*, vo
 {
     SolarMutexGuard g;
 
-    ToolBoxButtonSize eSize = TOOLBOX_BUTTONSIZE_SMALL;
+    ToolBoxButtonSize eSize = GetIconSize();
 
-    sal_uInt16 nSize = GetIconSize();
-    if(nSize <= TOOLBOX_BUTTONSIZE_LARGE)
-        eSize = static_cast<ToolBoxButtonSize>(nSize);
-
-    bool bBigImages(eSize == TOOLBOX_BUTTONSIZE_LARGE);
+    bool bBigImages(eSize == ToolBoxButtonSize::Large);
     SetToolboxButtonSize(eSize);
 
     for (auto const& it : maControllers)

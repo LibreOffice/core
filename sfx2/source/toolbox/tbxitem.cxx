@@ -597,7 +597,7 @@ Reference< css::awt::XWindow > SAL_CALL SfxToolBoxControl::createItemWindow( con
 
 bool SfxToolBoxControl::hasBigImages() const
 {
-    return (GetToolBox().GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE);
+    return (GetToolBox().GetToolboxButtonSize() == ToolBoxButtonSize::Large);
 }
 
 void SfxToolBoxControl::SetPopupWindow( SfxPopupWindow* pWindow )

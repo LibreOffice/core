@@ -252,7 +252,7 @@ void DisplayModeController::setToolboxItemImage( sal_uInt16 nImage )
     if (getToolboxId( nId, &pToolBox )) {
         SdResId resId( nImage );
         BitmapEx aBmp( resId );
-        int targetSize = (pToolBox->GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE) ? 32 : 16;
+        int targetSize = (pToolBox->GetToolboxButtonSize() == ToolBoxButtonSize::Large) ? 32 : 16;
         double scale = 1.0f;
         Size size = aBmp.GetSizePixel();
         if (size.Width() > targetSize)

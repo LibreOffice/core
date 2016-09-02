@@ -31,6 +31,7 @@
 #include <svtools/imgdef.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/toolbox.hxx>
 
 #include <list>
 
@@ -79,9 +80,9 @@ private:
     bool        m_bIsPluginsEnabledRO;
     sal_Int16   m_nSymbolsSize;
     bool        m_bIsSymbolsSizeRO;
-    sal_Int16   m_nSidebarIconSize;
+    ToolBoxButtonSize m_nSidebarIconSize;
     bool        m_bIsSidebarIconSizeRO;
-    sal_Int16   m_nNotebookbarIconSize;
+    ToolBoxButtonSize m_nNotebookbarIconSize;
     bool        m_bIsNotebookbarIconSizeRO;
     bool        m_bIsSymbolsStyleRO;
     sal_Int16   m_nToolboxStyle;
@@ -154,17 +155,17 @@ public:
         inline sal_Int16 GetSymbolsSize()
         { return m_nSymbolsSize; }
 
-        inline sal_Int16 GetSidebarIconSize()
+        inline ToolBoxButtonSize GetSidebarIconSize()
         { return m_nSidebarIconSize; }
 
-        inline sal_Int16 GetNotebookbarIconSize()
+        inline ToolBoxButtonSize GetNotebookbarIconSize()
         { return m_nNotebookbarIconSize; }
 
         void SetSymbolsSize( sal_Int16 nSet );
 
-        void SetSidebarIconSize( sal_Int16 nSet );
+        void SetSidebarIconSize( ToolBoxButtonSize nSet );
 
-        void SetNotebookbarIconSize( sal_Int16 nSet );
+        void SetNotebookbarIconSize( ToolBoxButtonSize nSet );
 
         static OUString GetIconTheme();
 
@@ -243,9 +244,9 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     , m_bIsPluginsEnabledRO( false )
     , m_nSymbolsSize( 0 )
     , m_bIsSymbolsSizeRO( false )
-    , m_nSidebarIconSize( 0 )
+    , m_nSidebarIconSize( ToolBoxButtonSize::DontCare )
     , m_bIsSidebarIconSizeRO( false )
-    , m_nNotebookbarIconSize( 0 )
+    , m_nNotebookbarIconSize( ToolBoxButtonSize::DontCare )
     , m_bIsNotebookbarIconSizeRO( false )
     , m_bIsSymbolsStyleRO( false )
     , m_nToolboxStyle( 1 )
@@ -299,20 +300,24 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
 
             case PROPERTYHANDLE_SIDEBARICONSIZE :
             {
-                if( !(seqValues[nProperty] >>= m_nSidebarIconSize) )
+                sal_uInt16 nTmp;
+                if( !(seqValues[nProperty] >>= nTmp) )
                 {
                     OSL_FAIL("Wrong type of \"Misc\\SidebarIconSize\"!" );
-                }
+                } else
+                    m_nSidebarIconSize = (ToolBoxButtonSize)nTmp;
                 m_bIsSidebarIconSizeRO = seqRO[nProperty];
                 break;
             }
 
             case PROPERTYHANDLE_NOTEBOOKBARICONSIZE :
             {
-                if( !(seqValues[nProperty] >>= m_nNotebookbarIconSize) )
+                sal_uInt16 nTmp;
+                if( !(seqValues[nProperty] >>= nTmp) )
                 {
                     OSL_FAIL("Wrong type of \"Misc\\NotebookbarIconSize\"!" );
-                }
+                } else
+                    m_nNotebookbarIconSize = (ToolBoxButtonSize)nTmp;
                 m_bIsNotebookbarIconSizeRO = seqRO[nProperty];
                 break;
             }
@@ -447,17 +452,21 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                         }
                                                     break;
             case PROPERTYHANDLE_SIDEBARICONSIZE     :   {
-                                                            if( !(seqValues[nProperty] >>= m_nSidebarIconSize) )
+                                                            sal_uInt16 nTmp;
+                                                            if( !(seqValues[nProperty] >>= nTmp) )
                                                             {
                                                                 OSL_FAIL("Wrong type of \"Misc\\SidebarIconSize\"!" );
-                                                            }
+                                                            } else
+                                                                m_nSidebarIconSize = (ToolBoxButtonSize)nTmp;
                                                         }
                                                     break;
             case PROPERTYHANDLE_NOTEBOOKBARICONSIZE     :   {
-                                                            if( !(seqValues[nProperty] >>= m_nNotebookbarIconSize) )
+                                                            sal_uInt16 nTmp;
+                                                            if( !(seqValues[nProperty] >>= nTmp ) )
                                                             {
                                                                 OSL_FAIL("Wrong type of \"Misc\\NotebookbarIconSize\"!" );
-                                                            }
+                                                            } else
+                                                                m_nNotebookbarIconSize = (ToolBoxButtonSize)nTmp;
                                                         }
                                                     break;
             case PROPERTYHANDLE_TOOLBOXSTYLE        :   {
@@ -542,14 +551,14 @@ void SvtMiscOptions_Impl::SetSymbolsSize( sal_Int16 nSet )
     CallListeners();
 }
 
-void SvtMiscOptions_Impl::SetSidebarIconSize( sal_Int16 nSet )
+void SvtMiscOptions_Impl::SetSidebarIconSize( ToolBoxButtonSize nSet )
 {
     m_nSidebarIconSize = nSet;
     SetModified();
     CallListeners();
 }
 
-void SvtMiscOptions_Impl::SetNotebookbarIconSize( sal_Int16 nSet )
+void SvtMiscOptions_Impl::SetNotebookbarIconSize( ToolBoxButtonSize nSet )
 {
     m_nNotebookbarIconSize = nSet;
     SetModified();
@@ -626,14 +635,14 @@ void SvtMiscOptions_Impl::ImplCommit()
             case PROPERTYHANDLE_SIDEBARICONSIZE :
             {
                 if ( !m_bIsSidebarIconSizeRO )
-                   seqValues[nProperty] <<= m_nSidebarIconSize;
+                   seqValues[nProperty] <<= (sal_uInt16)m_nSidebarIconSize;
                 break;
             }
 
             case PROPERTYHANDLE_NOTEBOOKBARICONSIZE :
             {
                 if ( !m_bIsNotebookbarIconSizeRO )
-                   seqValues[nProperty] <<= m_nNotebookbarIconSize;
+                   seqValues[nProperty] <<= (sal_uInt16)m_nNotebookbarIconSize;
                 break;
             }
 
@@ -787,22 +796,22 @@ void SvtMiscOptions::SetSymbolsSize( sal_Int16 nSet )
     m_pImpl->SetSymbolsSize( nSet );
 }
 
-sal_Int16 SvtMiscOptions::GetSidebarIconSize() const
+ToolBoxButtonSize SvtMiscOptions::GetSidebarIconSize() const
 {
     return m_pImpl->GetSidebarIconSize();
 }
 
-sal_Int16 SvtMiscOptions::GetNotebookbarIconSize() const
+ToolBoxButtonSize SvtMiscOptions::GetNotebookbarIconSize() const
 {
     return m_pImpl->GetNotebookbarIconSize();
 }
 
-void SvtMiscOptions::SetSidebarIconSize( sal_Int16 nSet )
+void SvtMiscOptions::SetSidebarIconSize( ToolBoxButtonSize nSet )
 {
     m_pImpl->SetSidebarIconSize( nSet );
 }
 
-void SvtMiscOptions::SetNotebookbarIconSize( sal_Int16 nSet )
+void SvtMiscOptions::SetNotebookbarIconSize( ToolBoxButtonSize nSet )
 {
     m_pImpl->SetNotebookbarIconSize( nSet );
 }

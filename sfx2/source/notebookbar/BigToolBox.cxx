@@ -41,7 +41,7 @@ BigToolBox::BigToolBox(vcl::Window* pParent)
     SvtMiscOptions aMiscOptions;
     aMiscOptions.RemoveListenerLink(LINK(this, SidebarToolBox, ChangedIconSizeHandler));
 
-    SetToolboxButtonSize(TOOLBOX_BUTTONSIZE_LARGE);
+    SetToolboxButtonSize(ToolBoxButtonSize::Large);
     SetButtonType(ButtonType::SYMBOLTEXT);
     SetToolBoxTextPosition(ToolBoxTextPosition::Bottom);
 }

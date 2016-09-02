@@ -48,7 +48,7 @@ using namespace vcl;
 ImplToolBoxPrivateData::ImplToolBoxPrivateData() :
         m_pLayoutData( nullptr )
 {
-    meButtonSize = TOOLBOX_BUTTONSIZE_DONTCARE;
+    meButtonSize = ToolBoxButtonSize::DontCare;
     mpMenu = VclPtr<PopupMenu>::Create();
     mnEventId = nullptr;
 
@@ -519,7 +519,7 @@ void ToolBox::InsertItem(const OUString& rCommand, const css::uno::Reference<css
     OUString aLabel(vcl::CommandInfoProvider::Instance().GetLabelForCommand(rCommand, rFrame));
     OUString aTooltip(vcl::CommandInfoProvider::Instance().GetTooltipForCommand(rCommand, rFrame));
     Image aImage(vcl::CommandInfoProvider::Instance().GetImageForCommand(
-        rCommand, (GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE), rFrame));
+        rCommand, (GetToolboxButtonSize() == ToolBoxButtonSize::Large), rFrame));
 
     sal_uInt16 nItemId = GetItemCount() + 1;
     InsertItem(nItemId, aImage, aLabel, nBits, nPos);
@@ -722,7 +722,7 @@ ToolBoxButtonSize ToolBox::GetToolboxButtonSize() const
 
 Size ToolBox::GetDefaultImageSize() const
 {
-    return GetDefaultImageSize( GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE );
+    return GetDefaultImageSize( GetToolboxButtonSize() == ToolBoxButtonSize::Large );
 }
 
 void ToolBox::SetAlign( WindowAlign eNewAlign )
