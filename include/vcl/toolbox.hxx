@@ -69,7 +69,7 @@ enum ToolBoxButtonSize { TOOLBOX_BUTTONSIZE_DONTCARE, TOOLBOX_BUTTONSIZE_SMALL, 
 enum class ToolBoxLayoutMode { Normal, LockVert };
 
 // Position of the text when icon and text are painted
-enum ToolBoxTextPosition { Right, Bottom };
+enum class ToolBoxTextPosition { Right, Bottom };
 
 struct ImplToolSize
 {
