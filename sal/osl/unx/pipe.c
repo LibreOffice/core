@@ -35,8 +35,8 @@
 #define PIPEDEFAULTPATH     "/tmp"
 #define PIPEALTERNATEPATH   "/var/tmp"
 
-#define PIPENAMEMASK    "OSL_PIPE_%s"
-#define SECPIPENAMEMASK "OSL_PIPE_%s_%s"
+#define PIPENAMEMASK    "%s/OSL_PIPE_%s"
+#define SECPIPENAMEMASK "%s/OSL_PIPE_%s_%s"
 
 sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax);
 oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options, oslSecurity Security);
@@ -166,19 +166,17 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     struct sockaddr_un addr;
 
     sal_Char     name[PATH_MAX + 1];
+    const sal_Char   *pPath;
     oslPipe  pPipe;
 
     if (access(PIPEDEFAULTPATH, R_OK|W_OK) == 0)
     {
-        strncpy(name, PIPEDEFAULTPATH, sizeof(name));
+        pPath = PIPEDEFAULTPATH;
     }
     else
     {
-        strncpy(name, PIPEALTERNATEPATH, sizeof(name));
+        pPath = PIPEALTERNATEPATH;
     }
-
-
-    strncat(name, "/", sizeof(name));
 
     if (Security)
     {
@@ -188,11 +186,11 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
 
         OSL_VERIFY(osl_psz_getUserIdent(Security, Ident, sizeof(Ident)));
 
-        snprintf(&name[strlen(name)], sizeof(name), SECPIPENAMEMASK, Ident, pszPipeName);
+        snprintf(name, sizeof(name), SECPIPENAMEMASK, pPath, Ident, pszPipeName);
     }
     else
     {
-        snprintf(&name[strlen(name)], sizeof(name), PIPENAMEMASK, pszPipeName);
+        snprintf(name, sizeof(name), PIPENAMEMASK, pPath, pszPipeName);
     }
 
 
