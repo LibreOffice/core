@@ -73,13 +73,13 @@ public:
     template<typename FuncType, typename ParamType1, typename ParamType2>
     inline void forEachMem(FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2) const
     {
-        forEach( ::boost::bind(pFunc, -1, aParam1, aParam2 ));
+        forEach( ::boost::bind(pFunc, _1, aParam1, aParam2 ));
     }
 
     template<typename FuncType, typename ParamType1, typename ParamType2, typename ParamType3>
-    inline void forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3 ) const
+    inline void forEachMem(FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3 ) const
     {
-        forEach( ::boost::bind(pFunc, _1, aParam2, aParam2, aParam3 ));
+        forEach( ::boost::bind(pFunc, _1, aParam1, aParam2, aParam3 ));
     }
 
     template<typename FuncType>
