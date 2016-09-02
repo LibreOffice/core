@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6895a0_99fe3b04",
+        "filename": "icon-themes/breeze/links.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 1350,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-09-02T06:38:16Z",
+      "side": 1,
+      "message": "If this is no longer used in the original place, you can move the icon to the res/ folder so that you no longer need this links.",
+      "revId": "29e4827125442a81e244472dc0133b3fb9fe2b71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
