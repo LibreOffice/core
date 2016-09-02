@@ -70,6 +70,7 @@ public:
     void testTrackChanges();
     void testTrackChangesCallback();
     void testRedlineUpdateCallback();
+    void testSetViewGraphicSelection();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -105,6 +106,7 @@ public:
     CPPUNIT_TEST(testTrackChanges);
     CPPUNIT_TEST(testTrackChangesCallback);
     CPPUNIT_TEST(testRedlineUpdateCallback);
+    CPPUNIT_TEST(testSetViewGraphicSelection);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -602,6 +604,7 @@ public:
     bool m_bTilesInvalidated;
     bool m_bViewCursorVisible;
     bool m_bGraphicViewSelection;
+    bool m_bGraphicSelection;
     bool m_bViewLock;
 
     ViewCallback()
@@ -612,6 +615,7 @@ public:
           m_bTilesInvalidated(false),
           m_bViewCursorVisible(false),
           m_bGraphicViewSelection(false),
+          m_bGraphicSelection(false),
           m_bViewLock(false)
     {
     }
@@ -623,6 +627,7 @@ public:
 
     void callbackImpl(int nType, const char* pPayload)
     {
+        OString aPayload(pPayload);
         switch (nType)
         {
         case LOK_CALLBACK_INVALIDATE_TILES:
@@ -661,6 +666,11 @@ public:
             boost::property_tree::ptree aTree;
             boost::property_tree::read_json(aStream, aTree);
             m_bGraphicViewSelection = aTree.get_child("selection").get_value<std::string>() != "EMPTY";
+        }
+        break;
+        case LOK_CALLBACK_GRAPHIC_SELECTION:
+        {
+            m_bGraphicSelection = aPayload != "EMPTY";
         }
         break;
         case LOK_CALLBACK_VIEW_LOCK:
@@ -1227,6 +1237,37 @@ void SwTiledRenderingTest::testRedlineUpdateCallback()
     // This was 0, as LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED wasn't sent.
     CPPUNIT_ASSERT_EQUAL(1, m_nRedlineTableEntryModified);
 
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testSetViewGraphicSelection()
+{
+    // Load a document.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("frame.odt");
+    int nView1 = SfxLokHelper::getView();
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    // Create a second view, and switch back to the first view.
+    SfxLokHelper::createView();
+    pXTextDocument->initializeForTiledRendering({});
+    SfxLokHelper::setView(nView1);
+
+    // Mark the textframe in the first view.
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+    SdrView* pView = pWrtShell->GetDrawView();
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    CPPUNIT_ASSERT(aView1.m_bGraphicSelection);
+
+    // Now start to switch to the second view (part of setView()).
+    pWrtShell->ShellLoseFocus();
+    // This failed, mark handles were hidden in the first view.
+    CPPUNIT_ASSERT(!pView->areMarkHandlesHidden());
+
+    mxComponent->dispose();
+    mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
 }
 
