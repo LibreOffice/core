@@ -1525,6 +1525,12 @@ tools::Polygon& Polygon::operator=( const tools::Polygon& rPoly )
     return *this;
 }
 
+tools::Polygon& Polygon::operator=( tools::Polygon&& rPoly )
+{
+    std::swap(mpImplPolygon, rPoly.mpImplPolygon);
+    return *this;
+}
+
 bool Polygon::operator==( const tools::Polygon& rPoly ) const
 {
 

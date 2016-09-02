@@ -536,6 +536,12 @@ PolyPolygon& PolyPolygon::operator=( const tools::PolyPolygon& rPolyPoly )
     return *this;
 }
 
+PolyPolygon& PolyPolygon::operator=( tools::PolyPolygon&& rPolyPoly )
+{
+    std::swap(mpImplPolyPolygon, rPolyPoly.mpImplPolyPolygon);
+    return *this;
+}
+
 bool PolyPolygon::operator==( const tools::PolyPolygon& rPolyPoly ) const
 {
     if ( rPolyPoly.mpImplPolyPolygon == mpImplPolyPolygon )
