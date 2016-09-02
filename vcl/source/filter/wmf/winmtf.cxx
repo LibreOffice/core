@@ -747,7 +747,7 @@ void WinMtfOutput::CreateObjectIndexed( sal_Int32 nIndex, std::unique_ptr<GDIObj
                 Size aSize(pLineStyle->aLineInfo.GetWidth(), 0);
                 pLineStyle->aLineInfo.SetWidth( ImplMap(aSize).Width() );
 
-                if ( pLineStyle->aLineInfo.GetStyle() == LINE_DASH )
+                if ( pLineStyle->aLineInfo.GetStyle() == LineStyle::Dash )
                 {
                     aSize.Width() += 1;
                     long nDotLen = ImplMap( aSize ).Width();
@@ -1065,7 +1065,7 @@ void WinMtfOutput::DrawRect( const Rectangle& rRect, bool bEdge )
     {
         if ( bEdge )
         {
-            if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LINE_DASH ) )
+            if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
             {
                 ImplSetNonPersistentLineColorTransparenz();
                 mpGDIMetaFile->AddAction( new MetaRectAction( ImplMap( rRect ) ) );
@@ -1099,7 +1099,7 @@ void WinMtfOutput::DrawEllipse( const Rectangle& rRect )
     UpdateClipRegion();
     UpdateFillStyle();
 
-    if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LINE_DASH ) )
+    if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
     {
         Point aCenter( ImplMap( rRect.Center() ) );
         Size  aRad( ImplMap( Size( rRect.GetWidth() / 2, rRect.GetHeight() / 2 ) ) );
@@ -1126,7 +1126,7 @@ void WinMtfOutput::DrawArc( const Rectangle& rRect, const Point& rStart, const P
     Point       aStart( ImplMap( rStart ) );
     Point       aEnd( ImplMap( rEnd ) );
 
-    if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LINE_DASH ) )
+    if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
     {
         if ( aStart == aEnd )
         {   // SJ: #i53768# if start & end is identical, then we have to draw a full ellipse
@@ -1154,7 +1154,7 @@ void WinMtfOutput::DrawPie( const Rectangle& rRect, const Point& rStart, const P
     Point       aStart( ImplMap( rStart ) );
     Point       aEnd( ImplMap( rEnd ) );
 
-    if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LINE_DASH ) )
+    if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
     {
         ImplSetNonPersistentLineColorTransparenz();
         mpGDIMetaFile->AddAction( new MetaPieAction( aRect, aStart, aEnd ) );
@@ -1177,7 +1177,7 @@ void WinMtfOutput::DrawChord( const Rectangle& rRect, const Point& rStart, const
     Point       aStart( ImplMap( rStart ) );
     Point       aEnd( ImplMap( rEnd ) );
 
-    if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LINE_DASH ) )
+    if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
     {
         ImplSetNonPersistentLineColorTransparenz();
         mpGDIMetaFile->AddAction( new MetaChordAction( aRect, aStart, aEnd ) );
@@ -1210,7 +1210,7 @@ void WinMtfOutput::DrawPolygon( tools::Polygon& rPolygon, bool bRecordPath )
         }
         else
         {
-            if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LINE_DASH ) )
+            if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
             {
                 sal_uInt16 nCount = rPolygon.GetSize();
                 if ( nCount )
@@ -1285,7 +1285,7 @@ void WinMtfOutput::DrawPolyPolygon( tools::PolyPolygon& rPolyPolygon, bool bReco
         {
             UpdateLineStyle();
             mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( rPolyPolygon ) );
-            if (maLineStyle.aLineInfo.GetWidth() > 0 || maLineStyle.aLineInfo.GetStyle() == LINE_DASH)
+            if (maLineStyle.aLineInfo.GetWidth() > 0 || maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash)
             {
                 for (sal_uInt16 nPoly = 0; nPoly < rPolyPolygon.Count(); ++nPoly)
                 {

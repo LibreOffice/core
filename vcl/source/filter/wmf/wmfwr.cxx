@@ -375,7 +375,7 @@ void WMFWriter::WMFRecord_CreatePenIndirect(const Color& rColor, const LineInfo&
     sal_uInt16 nStyle = rColor == Color( COL_TRANSPARENT ) ? W_PS_NULL : W_PS_SOLID;
     switch( rLineInfo.GetStyle() )
     {
-        case LINE_DASH :
+        case LineStyle::Dash :
         {
             if ( rLineInfo.GetDotCount() )
             {
@@ -393,7 +393,7 @@ void WMFWriter::WMFRecord_CreatePenIndirect(const Color& rColor, const LineInfo&
                 nStyle = W_PS_DASH;
         }
         break;
-        case LINE_NONE :
+        case LineStyle::NONE :
             nStyle = W_PS_NULL;
         break;
         default:

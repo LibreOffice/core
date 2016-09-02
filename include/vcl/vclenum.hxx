@@ -58,17 +58,12 @@ enum HatchStyle
     HatchStyle_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
 
-// to avoid conflicts with enum's declared otherwise
-#define LINE_NONE               LineStyle_NONE
-#define LINE_SOLID              LineStyle_SOLID
-#define LINE_DASH               LineStyle_DASH
-
-enum LineStyle
+enum class LineStyle
 {
-    LINE_NONE = 0,
-    LINE_SOLID = 1,
-    LINE_DASH = 2,
-    LineStyle_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
+    NONE = 0,
+    Solid = 1,
+    Dash = 2,
+    FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
 
 enum class RasterOp { OverPaint, Xor, N0, N1, Invert };

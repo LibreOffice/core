@@ -861,7 +861,7 @@ void drawDataBars(vcl::RenderContext& rRenderContext, const ScDataBarInfo* pOldD
     {
         Point aPoint1(nPosZero, rRect.Top());
         Point aPoint2(nPosZero, rRect.Bottom());
-        LineInfo aLineInfo(LINE_DASH, 1);
+        LineInfo aLineInfo(LineStyle::Dash, 1);
         aLineInfo.SetDashCount( 4 );
         aLineInfo.SetDistance( 3 );
         aLineInfo.SetDashLen( 3 );

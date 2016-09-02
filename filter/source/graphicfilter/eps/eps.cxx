@@ -2277,7 +2277,7 @@ void PSWriter::ImplWriteLineInfo( double fLWidth, double fMLimit,
 void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
 {
     SvtGraphicStroke::DashArray l_aDashArray;
-    if ( rLineInfo.GetStyle() == LINE_DASH )
+    if ( rLineInfo.GetStyle() == LineStyle::Dash )
         l_aDashArray.push_back( 2 );
     const double fLWidth(( ( rLineInfo.GetWidth() + 1 ) + ( rLineInfo.GetWidth() + 1 ) ) * 0.5);
     SvtGraphicStroke::JoinType aJoinType(SvtGraphicStroke::joinMiter);

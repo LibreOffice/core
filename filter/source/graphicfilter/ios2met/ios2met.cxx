@@ -460,12 +460,12 @@ OS2METReader::~OS2METReader()
 
 bool OS2METReader::IsLineInfo()
 {
-    return ( ! ( aLineInfo.IsDefault() || ( aLineInfo.GetStyle() == LINE_NONE ) || ( pVirDev->GetLineColor() == COL_TRANSPARENT ) ) );
+    return ( ! ( aLineInfo.IsDefault() || ( aLineInfo.GetStyle() == LineStyle::NONE ) || ( pVirDev->GetLineColor() == COL_TRANSPARENT ) ) );
 }
 
 void OS2METReader::DrawPolyLine( const tools::Polygon& rPolygon )
 {
-    if ( aLineInfo.GetStyle() == LINE_DASH || ( aLineInfo.GetWidth() > 1 ) )
+    if ( aLineInfo.GetStyle() == LineStyle::Dash || ( aLineInfo.GetWidth() > 1 ) )
         pVirDev->DrawPolyLine( rPolygon, aLineInfo );
     else
         pVirDev->DrawPolyLine( rPolygon );
@@ -683,7 +683,7 @@ void OS2METReader::ChangeBrush(const Color& rPatColor, const Color& /*rBGColor*/
 
 void OS2METReader::SetPen( const Color& rColor, sal_uInt16 nLineWidth, PenStyle ePenStyle )
 {
-    LineStyle eLineStyle( LINE_SOLID );
+    LineStyle eLineStyle( LineStyle::Solid );
 
     if ( pVirDev->GetLineColor() != rColor )
         pVirDev->SetLineColor( rColor );
@@ -694,7 +694,7 @@ void OS2METReader::SetPen( const Color& rColor, sal_uInt16 nLineWidth, PenStyle 
     switch ( ePenStyle )
     {
         case PEN_NULL :
-            eLineStyle = LINE_NONE;
+            eLineStyle = LineStyle::NONE;
         break;
         case PEN_DASHDOT :
             nDashCount++;
@@ -710,7 +710,7 @@ void OS2METReader::SetPen( const Color& rColor, sal_uInt16 nLineWidth, PenStyle 
             aLineInfo.SetDistance( nLineWidth );
             aLineInfo.SetDotLen( nLineWidth );
             aLineInfo.SetDashLen( nLineWidth << 2 );
-            eLineStyle = LINE_DASH;
+            eLineStyle = LineStyle::Dash;
         break;
         case PEN_SOLID:
         break;  // -Wall not handled...

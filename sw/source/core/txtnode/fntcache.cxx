@@ -728,7 +728,7 @@ static void lcl_DrawLineForWrongListData(
                     aStart.Y() +=30;
                     aEnd.Y() +=30;
 
-                    LineInfo aLineInfo( LINE_DASH );
+                    LineInfo aLineInfo( LineStyle::Dash );
                     aLineInfo.SetDistance( 40 );
                     aLineInfo.SetDashLen( 1 );
                     aLineInfo.SetDashCount(1);

@@ -658,7 +658,7 @@ namespace
     {
         if(rLinePolygon.count())
         {
-            const bool bDashDotUsed(LINE_DASH == rLineInfo.GetStyle());
+            const bool bDashDotUsed(LineStyle::Dash == rLineInfo.GetStyle());
             const bool bWidthUsed(rLineInfo.GetWidth() > 1);
 
             if(bDashDotUsed || bWidthUsed)

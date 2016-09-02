@@ -103,7 +103,7 @@ void setupMethodStubs( functor_vector_type& res )
     aPolyPoly.Insert( aPoly2 );
     tools::Polygon aPoly3(aPoly2);
     aPoly3.Rotate( aPoly3.GetBoundRect().Center(), 900 );
-    const LineInfo    aLineInfo(LINE_SOLID,5);
+    const LineInfo    aLineInfo(LineStyle::Solid,5);
 
 #ifdef FIXME_VDEV
     const OUString    aString("This is a test");

@@ -330,7 +330,7 @@ void doTestCode()
     aWriter.EndStructureElement();
     aWriter.EndStructureElement();
 
-    LineInfo aLI( LINE_DASH, 3 );
+    LineInfo aLI( LineStyle::Dash, 3 );
     aLI.SetDashCount( 2 );
     aLI.SetDashLen( 50 );
     aLI.SetDotCount( 2 );
@@ -1604,7 +1604,7 @@ void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& 
 
 bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffer& rBuffer ) const
 {
-    if(LINE_DASH == rInfo.GetStyle() && rInfo.GetDashLen() != rInfo.GetDotLen())
+    if(LineStyle::Dash == rInfo.GetStyle() && rInfo.GetDashLen() != rInfo.GetDotLen())
     {
         // dashed and non-degraded case, check for implementation limits of dash array
         // in PDF reader apps (e.g. acroread)
@@ -1626,7 +1626,7 @@ bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffe
         return false;
     }
 
-    if( rInfo.GetStyle() == LINE_DASH )
+    if( rInfo.GetStyle() == LineStyle::Dash )
     {
         rBuffer.append( "[ " );
         if( rInfo.GetDashLen() == rInfo.GetDotLen() ) // degraded case
@@ -9365,7 +9365,7 @@ void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop, const Lin
     if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) )
         return;
 
-    if( rInfo.GetStyle() == LINE_SOLID && rInfo.GetWidth() < 2 )
+    if( rInfo.GetStyle() == LineStyle::Solid && rInfo.GetWidth() < 2 )
     {
         drawLine( rStart, rStop );
         return;
@@ -10418,7 +10418,7 @@ void PDFWriterImpl::drawPolyLine( const tools::Polygon& rPoly, const LineInfo& r
 
 void PDFWriterImpl::convertLineInfoToExtLineInfo( const LineInfo& rIn, PDFWriter::ExtLineInfo& rOut )
 {
-    SAL_WARN_IF( rIn.GetStyle() != LINE_DASH, "vcl", "invalid conversion" );
+    SAL_WARN_IF( rIn.GetStyle() != LineStyle::Dash, "vcl", "invalid conversion" );
     rOut.m_fLineWidth           = rIn.GetWidth();
     rOut.m_fTransparency        = 0.0;
     rOut.m_eCap                 = PDFWriter::capButt;

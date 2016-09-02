@@ -158,7 +158,7 @@ namespace
             }
         }
 
-        if( LINE_DASH == rLineInfo.GetStyle() )
+        if( LineStyle::Dash == rLineInfo.GetStyle() )
         {
             const ::cppcanvas::internal::OutDevState& rState( rParms.mrStates.getState() );
 
@@ -1890,7 +1890,7 @@ namespace cppcanvas
                                     io_rCurrActionIndex += pLineAction->getActionCount()-1;
                                 }
                             }
-                            else if( LINE_NONE != rLineInfo.GetStyle() )
+                            else if( LineStyle::NONE != rLineInfo.GetStyle() )
                             {
                                 // 'thick' line
                                 rendering::StrokeAttributes aStrokeAttributes;
@@ -2075,7 +2075,7 @@ namespace cppcanvas
                                     io_rCurrActionIndex += pLineAction->getActionCount()-1;
                                 }
                             }
-                            else if( LINE_NONE != rLineInfo.GetStyle() )
+                            else if( LineStyle::NONE != rLineInfo.GetStyle() )
                             {
                                 // 'thick' line polygon
                                 rendering::StrokeAttributes aStrokeAttributes;

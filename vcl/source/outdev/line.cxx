@@ -47,7 +47,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaLineAction( rStartPt, rEndPt, rLineInfo ) );
 
-    if ( !IsDeviceOutputNecessary() || !mbLineColor || ( LINE_NONE == rLineInfo.GetStyle() ) || ImplIsRecordLayout() )
+    if ( !IsDeviceOutputNecessary() || !mbLineColor || ( LineStyle::NONE == rLineInfo.GetStyle() ) || ImplIsRecordLayout() )
         return;
 
     if( !mpGraphics )
@@ -65,7 +65,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
     const Point aStartPt( ImplLogicToDevicePixel( rStartPt ) );
     const Point aEndPt( ImplLogicToDevicePixel( rEndPt ) );
     const LineInfo aInfo( ImplLogicToDevicePixel( rLineInfo ) );
-    const bool bDashUsed(LINE_DASH == aInfo.GetStyle());
+    const bool bDashUsed(LineStyle::Dash == aInfo.GetStyle());
     const bool bLineWidthUsed(aInfo.GetWidth() > 1);
 
     if ( mbInitLineColor )
@@ -163,7 +163,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
         && RasterOp::OverPaint == GetRasterOp()
         && IsLineColor());
     basegfx::B2DPolyPolygon aFillPolyPolygon;
-    const bool bDashUsed(LINE_DASH == rInfo.GetStyle());
+    const bool bDashUsed(LineStyle::Dash == rInfo.GetStyle());
     const bool bLineWidthUsed(rInfo.GetWidth() > 1);
 
     if(bDashUsed && aLinePolyPolygon.count())

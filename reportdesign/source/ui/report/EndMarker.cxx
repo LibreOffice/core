@@ -72,7 +72,7 @@ void OEndMarker::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rR
                          Size(aSize.Width() - nCornerSpace,
                               aSize.Height() - nCornerSpace - nCornerSpace));
         ColorChanger aColors(this, COL_WHITE, COL_WHITE);
-        rRenderContext.DrawPolyLine( tools::Polygon(PixelToLogic(aRect)), LineInfo(LINE_SOLID, 2));
+        rRenderContext.DrawPolyLine( tools::Polygon(PixelToLogic(aRect)), LineInfo(LineStyle::Solid, 2));
     }
 }
 

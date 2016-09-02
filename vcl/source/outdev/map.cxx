@@ -593,7 +593,7 @@ LineInfo OutputDevice::ImplLogicToDevicePixel( const LineInfo& rLineInfo ) const
 {
     LineInfo aInfo( rLineInfo );
 
-    if( aInfo.GetStyle() == LINE_DASH )
+    if( aInfo.GetStyle() == LineStyle::Dash )
     {
         if( aInfo.GetDotCount() && aInfo.GetDotLen() )
             aInfo.SetDotLen( std::max( ImplLogicWidthToDevicePixel( aInfo.GetDotLen() ), 1L ) );
@@ -608,7 +608,7 @@ LineInfo OutputDevice::ImplLogicToDevicePixel( const LineInfo& rLineInfo ) const
         aInfo.SetDistance( ImplLogicWidthToDevicePixel( aInfo.GetDistance() ) );
 
         if( ( !aInfo.GetDashCount() && !aInfo.GetDotCount() ) || !aInfo.GetDistance() )
-            aInfo.SetStyle( LINE_SOLID );
+            aInfo.SetStyle( LineStyle::Solid );
     }
 
     aInfo.SetWidth( ImplLogicWidthToDevicePixel( aInfo.GetWidth() ) );

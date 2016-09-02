@@ -314,7 +314,7 @@ void MyWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
                                 Size(aPaperSize.Width() - 2000, 500)),
                                 aGradient);
 
-    LineInfo aLineInfo(LINE_SOLID, 200);
+    LineInfo aLineInfo(LineStyle::Solid, 200);
     double sind = sin(DELTA * M_PI / 180.0);
     double cosd = cos(DELTA * M_PI / 180.0);
     double factor = 1 + (DELTA / 1000.0);

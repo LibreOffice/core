@@ -121,7 +121,7 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly, const LineInfo& rL
     // #i101491#
     // Try direct Fallback to B2D-Version of DrawPolyLine
     if((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
-       LINE_SOLID == rLineInfo.GetStyle())
+       LineStyle::Solid == rLineInfo.GetStyle())
     {
         DrawPolyLine(
             rPoly.getB2DPolygon(),
@@ -240,7 +240,7 @@ void OutputDevice::drawPolyLine(const tools::Polygon& rPoly, const LineInfo& rLi
 {
     sal_uInt16 nPoints(rPoly.GetSize());
 
-    if ( !IsDeviceOutputNecessary() || !mbLineColor || ( nPoints < 2 ) || ( LINE_NONE == rLineInfo.GetStyle() ) || ImplIsRecordLayout() )
+    if ( !IsDeviceOutputNecessary() || !mbLineColor || ( nPoints < 2 ) || ( LineStyle::NONE == rLineInfo.GetStyle() ) || ImplIsRecordLayout() )
         return;
 
     tools::Polygon aPoly = ImplLogicToDevicePixel( rPoly );
@@ -259,7 +259,7 @@ void OutputDevice::drawPolyLine(const tools::Polygon& rPoly, const LineInfo& rLi
         InitLineColor();
 
     const LineInfo aInfo( ImplLogicToDevicePixel( rLineInfo ) );
-    const bool bDashUsed(LINE_DASH == aInfo.GetStyle());
+    const bool bDashUsed(LineStyle::Dash == aInfo.GetStyle());
     const bool bLineWidthUsed(aInfo.GetWidth() > 1);
 
     if(bDashUsed || bLineWidthUsed)

@@ -806,7 +806,7 @@ void BubbleWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle
 {
     SolarMutexGuard aGuard;
 
-    LineInfo aThickLine( LINE_SOLID, 2 );
+    LineInfo aThickLine( LineStyle::Solid, 2 );
 
     DrawPolyLine( maRectPoly, aThickLine );
     DrawPolyLine( maTriPoly );

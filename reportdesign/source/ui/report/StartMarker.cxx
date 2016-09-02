@@ -147,7 +147,7 @@ void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*
                              aSize.Height() - nCornerHeight - nCornerHeight));
         ColorChanger aColors(&rRenderContext, COL_WHITE, COL_WHITE);
         rRenderContext.DrawPolyLine( tools::Polygon(rRenderContext.PixelToLogic(aRect)),
-                                    LineInfo(LINE_SOLID, 2));
+                                    LineInfo(LineStyle::Solid, 2));
     }
 }
 

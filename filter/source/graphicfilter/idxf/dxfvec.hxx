@@ -36,7 +36,7 @@ public:
     double          fDistance;
 
     DXFLineInfo() :
-        eStyle(LINE_SOLID),
+        eStyle(LineStyle::Solid),
         fWidth(0),
         nDashCount(0),
         fDashLen(0),

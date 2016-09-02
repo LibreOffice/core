@@ -28,7 +28,7 @@
 
 
 ImplLineInfo::ImplLineInfo() :
-    meStyle     ( LINE_SOLID ),
+    meStyle     ( LineStyle::Solid ),
     mnWidth     ( 0 ),
     mnDashCount ( 0 ),
     mnDashLen   ( 0 ),
@@ -157,7 +157,7 @@ void LineInfo::SetLineCap(css::drawing::LineCap eLineCap)
 bool LineInfo::IsDefault() const
 {
     return( !mpImplLineInfo->mnWidth
-        && ( LINE_SOLID == mpImplLineInfo->meStyle )
+        && ( LineStyle::Solid == mpImplLineInfo->meStyle )
         && ( css::drawing::LineCap_BUTT == mpImplLineInfo->meLineCap));
 }
 
@@ -202,7 +202,7 @@ SvStream& WriteLineInfo( SvStream& rOStm, const LineInfo& rLineInfo )
     VersionCompat aCompat( rOStm, StreamMode::WRITE, 4 );
 
     // version 1
-    rOStm.WriteUInt16( rLineInfo.mpImplLineInfo->meStyle )
+    rOStm.WriteUInt16( (sal_uInt16)rLineInfo.mpImplLineInfo->meStyle )
          .WriteInt32( rLineInfo.mpImplLineInfo->mnWidth );
 
     // since version2
@@ -229,7 +229,7 @@ void LineInfo::applyToB2DPolyPolygon(
 
     if(io_rLinePolyPolygon.count())
     {
-        if(LINE_DASH == GetStyle())
+        if(LineStyle::Dash == GetStyle())
         {
             ::std::vector< double > fDotDashArray;
             const double fDashLen(GetDashLen());

@@ -497,7 +497,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
         return;
     }
 
-    LineInfo            aLineInfo( LINE_NONE, 0 );
+    LineInfo            aLineInfo( LineStyle::NONE, 0 );
     ::std::stack< LineInfo* >    aLIStack;
     ScopedVclPtrInstance< VirtualDevice > aFontVDev;
     rtl_TextEncoding    eActualCharSet = osl_getThreadTextEncoding();
@@ -588,7 +588,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         || (aLineInfo.GetDotCount() && aLineInfo.GetDotLen()))
                         && aLineInfo.GetDistance())
                     {
-                        aLineInfo.SetStyle(LINE_DASH);
+                        aLineInfo.SetStyle(LineStyle::Dash);
                     }
                 }
                 break;
@@ -997,7 +997,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     ImplReadColor( rIStm, aActionColor );
                     rIStm.ReadInt32( nPenWidth ).ReadInt16( nPenStyle );
 
-                    aLineInfo.SetStyle( nPenStyle ? LINE_SOLID : LINE_NONE );
+                    aLineInfo.SetStyle( nPenStyle ? LineStyle::Solid : LineStyle::NONE );
                     aLineInfo.SetWidth( nPenWidth );
                     bFatLine = nPenStyle && !aLineInfo.IsDefault();
 
@@ -1154,7 +1154,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     {
                         aLineInfo = *pLineInfo;
                         delete pLineInfo;
-                        bFatLine = ( LINE_NONE != aLineInfo.GetStyle() ) && !aLineInfo.IsDefault();
+                        bFatLine = ( LineStyle::NONE != aLineInfo.GetStyle() ) && !aLineInfo.IsDefault();
                     }
 
                     rMtf.AddAction( new MetaPopAction() );
@@ -1448,10 +1448,10 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 const MetaLineAction* pAct = static_cast<const MetaLineAction*>(pAction);
                 const LineInfo& rInfo = pAct->GetLineInfo();
-                const bool bFatLine(!rInfo.IsDefault() && (LINE_NONE != rInfo.GetStyle()));
+                const bool bFatLine(!rInfo.IsDefault() && (LineStyle::NONE != rInfo.GetStyle()));
                 const bool bLineJoin(bFatLine && basegfx::B2DLineJoin::Round != rInfo.GetLineJoin());
                 const bool bLineCap(bFatLine && css::drawing::LineCap_BUTT != rInfo.GetLineCap());
-                const bool bLineDashDot(LINE_DASH == rInfo.GetStyle());
+                const bool bLineDashDot(LineStyle::Dash == rInfo.GetStyle());
 
                 if( bFatLine )
                 {
@@ -1604,10 +1604,10 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 pAct->GetPolygon().AdaptiveSubdivide(aSimplePoly);
                 const LineInfo& rInfo = pAct->GetLineInfo();
                 const sal_uInt16 nPoints(aSimplePoly.GetSize());
-                const bool bFatLine(!rInfo.IsDefault() && (LINE_NONE != rInfo.GetStyle()));
+                const bool bFatLine(!rInfo.IsDefault() && (LineStyle::NONE != rInfo.GetStyle()));
                 const bool bLineJoin(bFatLine && basegfx::B2DLineJoin::Round != rInfo.GetLineJoin());
                 const bool bLineCap(bFatLine && css::drawing::LineCap_BUTT != rInfo.GetLineCap());
-                const bool bLineDashDot(LINE_DASH == rInfo.GetStyle());
+                const bool bLineDashDot(LineStyle::Dash == rInfo.GetStyle());
 
                 if( bFatLine )
                 {

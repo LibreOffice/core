@@ -71,11 +71,11 @@ DXFLineInfo DXF2GDIMetaFile::LTypeToDXFLineInfo(OString const& rLineType)
 
     pLT = pDXF->aTables.SearchLType(rLineType);
     if (pLT==nullptr || pLT->nDashCount == 0) {
-        aDXFLineInfo.eStyle = LINE_SOLID;
+        aDXFLineInfo.eStyle = LineStyle::Solid;
     }
     else {
         sal_Int32 i;
-        aDXFLineInfo.eStyle = LINE_DASH;
+        aDXFLineInfo.eStyle = LineStyle::Dash;
         for (i=0; i < (pLT->nDashCount); i++) {
             const double x = pLT->fDash[i] * pDXF->getGlobalLineTypeScale();
             if ( x >= 0.0 ) {
@@ -116,7 +116,7 @@ DXFLineInfo DXF2GDIMetaFile::GetEntityDXFLineInfo(const DXFBasicEntity & rE)
 {
     DXFLineInfo aDXFLineInfo;
 
-    aDXFLineInfo.eStyle = LINE_SOLID;
+    aDXFLineInfo.eStyle = LineStyle::Solid;
     aDXFLineInfo.fWidth = 0;
     aDXFLineInfo.nDashCount = 0;
     aDXFLineInfo.fDashLen = 0;
@@ -788,7 +788,7 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
     nMainEntitiesCount=CountEntities(pDXF->aEntities);
 
     nBlockColor=7;
-    aBlockDXFLineInfo.eStyle = LINE_SOLID;
+    aBlockDXFLineInfo.eStyle = LineStyle::Solid;
     aBlockDXFLineInfo.fWidth = 0;
     aBlockDXFLineInfo.nDashCount = 0;
     aBlockDXFLineInfo.fDashLen = 0;
@@ -803,7 +803,7 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
     }
     else {
         nParentLayerColor=7;
-        aParentLayerDXFLineInfo.eStyle = LINE_SOLID;
+        aParentLayerDXFLineInfo.eStyle = LineStyle::Solid;
         aParentLayerDXFLineInfo.fWidth = 0;
         aParentLayerDXFLineInfo.nDashCount = 0;
         aParentLayerDXFLineInfo.fDashLen = 0;

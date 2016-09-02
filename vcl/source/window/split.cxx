@@ -679,7 +679,7 @@ void Splitter::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rPaint
 
     if (mbKbdSplitting)
     {
-        LineInfo aInfo( LINE_DASH );
+        LineInfo aInfo( LineStyle::Dash );
         //aInfo.SetDashLen( 2 );
         //aInfo.SetDashCount( 1 );
         aInfo.SetDistance( 1 );

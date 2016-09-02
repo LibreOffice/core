@@ -632,7 +632,7 @@ void ImplPopupFloatWin::DrawGrip(vcl::RenderContext& rRenderContext)
     {
 #ifdef TEAROFF_DASHED
         // draw single dashed line
-        LineInfo aLineInfo(LINE_DASH);
+        LineInfo aLineInfo(LineStyle::Dash);
         aLineInfo.SetDistance(4);
         aLineInfo.SetDashLen(12);
         aLineInfo.SetDashCount(1);

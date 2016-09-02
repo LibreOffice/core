@@ -2828,7 +2828,7 @@ void SvxIconChoiceCtrl_Impl::DrawFocusRect(vcl::RenderContext& rRenderContext)
     rRenderContext.SetFillColor();
     tools::Polygon aPolygon (aFocus.aRect);
 
-    LineInfo aLineInfo(LINE_DASH);
+    LineInfo aLineInfo(LineStyle::Dash);
 
     aLineInfo.SetDashLen(1);
     aLineInfo.SetDotLen(1L);

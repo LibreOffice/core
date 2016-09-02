@@ -116,10 +116,10 @@ OUString convertLineStyleToString(LineStyle eAlign)
 {
     switch (eAlign)
     {
-        case LINE_NONE:    return OUString("none");
-        case LINE_SOLID:   return OUString("solid");
-        case LINE_DASH:    return OUString("dash");
-        case LineStyle_FORCE_EQUAL_SIZE: return OUString("equalsize");
+        case LineStyle::NONE:    return OUString("none");
+        case LineStyle::Solid:   return OUString("solid");
+        case LineStyle::Dash:    return OUString("dash");
+        default: break;
     }
     return OUString();
 }
