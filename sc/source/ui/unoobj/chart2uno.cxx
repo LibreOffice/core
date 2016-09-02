@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <utility>
 
 #include "chart2uno.hxx"
@@ -2628,7 +2629,8 @@ void ScChart2DataSequence::BuildDataCache()
 
     // convert the hidden cell list to sequence.
     m_aHiddenValues.realloc(aHiddenValues.size());
-    memcpy(m_aHiddenValues.getArray(), aHiddenValues.data(), sizeof(sal_Int32) * aHiddenValues.size());
+    std::copy(
+        aHiddenValues.begin(), aHiddenValues.end(), m_aHiddenValues.begin());
 
     // Clear the data series cache when the array is re-built.
     m_aMixedDataCache.realloc(0);
