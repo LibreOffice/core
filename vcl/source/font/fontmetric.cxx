@@ -48,15 +48,17 @@ FontMetric::~FontMetric()
     mxImplMetric = nullptr;
 }
 
-FontMetric& FontMetric::operator=( const FontMetric& rFontMetric )
+FontMetric& FontMetric::operator=(const FontMetric& rFontMetric)
 {
-    Font::operator=( rFontMetric );
+    Font::operator=(rFontMetric);
+    mxImplMetric = rFontMetric.mxImplMetric;
+    return *this;
+}
 
-    if( mxImplMetric != rFontMetric.mxImplMetric )
-    {
-        mxImplMetric = rFontMetric.mxImplMetric;
-    }
-
+FontMetric& FontMetric::operator=(FontMetric&& rFontMetric)
+{
+    Font::operator=(std::move(rFontMetric));
+    mxImplMetric = std::move(rFontMetric.mxImplMetric);
     return *this;
 }
 
