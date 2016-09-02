@@ -37,6 +37,7 @@ public:
     ~JobSetup();
 
     JobSetup&           operator=( const JobSetup& rJob );
+    JobSetup&           operator=( JobSetup&& rJob );
 
     bool                operator==( const JobSetup& rJobSetup ) const;
     bool                operator!=( const JobSetup& rJobSetup ) const
