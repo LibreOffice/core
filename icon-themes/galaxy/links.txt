@@ -2,6 +2,8 @@ cmd/lc_savesimple.png cmd/lc_save.png
 cmd/sc_savesimple.png cmd/sc_save.png
 cmd/lc_underlinesimple.png cmd/lc_underline.png
 cmd/sc_underlinesimple.png cmd/sc_underline.png
+cmd/lc_numberformatcurrencysimple.png cmd/lc_numberformatcurrency.png
+cmd/sc_numberformatcurrencysimple.png cmd/sc_numberformatcurrency.png
 cmd/lc_datastreamsplay.png avmedia/res/avl02049.png
 cmd/sc_datastreamsplay.png avmedia/res/av02049.png
 cmd/lc_datastreamsstop.png avmedia/res/avl02051.png

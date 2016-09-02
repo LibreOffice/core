@@ -2998,10 +2998,17 @@ SvxCurrencyToolBoxControl::SvxCurrencyToolBoxControl( sal_uInt16 nSlotId, sal_uI
     m_eLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() ),
     m_nFormatKey( NUMBERFORMAT_ENTRY_NOT_FOUND )
 {
-    rBox.SetItemBits( nId, rBox.GetItemBits( nId ) | ToolBoxItemBits::DROPDOWN );
 }
 
 SvxCurrencyToolBoxControl::~SvxCurrencyToolBoxControl() {}
+
+void SvxCurrencyToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
+    throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
+{
+    SfxToolBoxControl::initialize(rArguments);
+    if (GetToolBox().GetItemCommand(GetId()) == m_aCommandURL)
+        GetToolBox().SetItemBits(GetId(), ToolBoxItemBits::DROPDOWN | GetToolBox().GetItemBits(GetId()));
+}
 
 VclPtr<SfxPopupWindow> SvxCurrencyToolBoxControl::CreatePopupWindow()
 {

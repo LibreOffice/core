@@ -2,6 +2,8 @@ cmd/lc_savesimple.png cmd/lc_save.png
 cmd/sc_savesimple.png cmd/sc_save.png
 cmd/lc_underlinesimple.png cmd/lc_underline.png
 cmd/sc_underlinesimple.png cmd/sc_underline.png
+cmd/lc_numberformatcurrencysimple.png cmd/lc_numberformatcurrency.png
+cmd/sc_numberformatcurrencysimple.png cmd/sc_numberformatcurrency.png
 cmd/lc_anchormenu.png cmd/lc_toggleanchortype.png
 cmd/sc_anchormenu.png cmd/sc_toggleanchortype.png
 

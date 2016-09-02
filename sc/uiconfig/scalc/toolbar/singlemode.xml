@@ -33,7 +33,7 @@
  <toolbar:toolbaritem xlink:href=".uno:SpellDialog" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatStandard" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:NumberFormatCurrency"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatCurrencySimple"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatPercent"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatDecimal"/>
  <toolbar:toolbarseparator/>

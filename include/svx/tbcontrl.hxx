@@ -304,6 +304,10 @@ public:
     virtual ~SvxCurrencyToolBoxControl();
     virtual void Select( sal_uInt16 nSelectModifier ) override;
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
+        throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
 };
 
 
