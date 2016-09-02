@@ -271,7 +271,7 @@ void SdrMarkView::SetPlusHandlesAlwaysVisible(bool bOn)
     ForceUndirtyMrkPnt();
     if (bOn!=mbPlusHdlAlways) {
         mbPlusHdlAlways=bOn;
-        SetMarkHandles();
+        SetMarkHandles(nullptr);
         MarkListHasChanged();
     }
 }

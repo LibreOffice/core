@@ -616,7 +616,7 @@ bool SdrMarkView::ImpIsFrameHandles() const
     return bFrmHdl;
 }
 
-void SdrMarkView::SetMarkHandles()
+void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
 {
     // remember old focus handle values to search for it again
     const SdrHdl* pSaveOldFocusHdl = maHdlList.GetFocusHdl();
@@ -767,8 +767,17 @@ void SdrMarkView::SetMarkHandles()
             }
             if(SfxViewShell* pViewShell = GetSfxViewShell())
             {
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelection.getStr());
-                SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelection);
+                if (pOtherShell)
+                    // An other shell wants to know about our existing
+                    // selection.
+                    SfxLokHelper::notifyOtherView(pViewShell, pOtherShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelection);
+                else
+                {
+                    // We have a new selection, so both pViewShell and the
+                    // other views want to know about it.
+                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelection.getStr());
+                    SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelection);
+                }
             }
         }
 
@@ -951,7 +960,7 @@ void SdrMarkView::SetDragMode(SdrDragMode eMode)
     if (meDragMode==SdrDragMode::Resize) meDragMode=SdrDragMode::Move;
     if (meDragMode!=eMode0) {
         ForceRefToMarked();
-        SetMarkHandles();
+        SetMarkHandles(nullptr);
         {
             if (AreObjectsMarked()) MarkListHasChanged();
         }
@@ -1993,11 +2002,11 @@ void SdrMarkView::MarkAllObj(SdrPageView* _pPV)
     }
 }
 
-void SdrMarkView::AdjustMarkHdl()
+void SdrMarkView::AdjustMarkHdl(SfxViewShell* pOtherShell)
 {
     CheckMarked();
     SetMarkRects();
-    SetMarkHandles();
+    SetMarkHandles(pOtherShell);
 }
 
 Rectangle SdrMarkView::GetMarkedObjBoundRect() const

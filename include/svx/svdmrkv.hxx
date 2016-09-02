@@ -142,7 +142,7 @@ private:
 protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
     virtual void ModelHasChanged() override; // Is called by the PaintView
-    virtual void SetMarkHandles();                                           // maHdlList - fill (List of handles)
+    virtual void SetMarkHandles(SfxViewShell* pOtherShell); // maHdlList - fill (List of handles)
     void         SetMarkRects();                                             // Rects at the PageViews
     void         CheckMarked();                                              // Scan MarkList after Del and Lock Layer ...
     void         AddDragModeHdl(SdrDragMode eMode);
@@ -406,7 +406,7 @@ public:
     // AdjustMarkHdl is just called in case of changes; usually this causes an Invalidate
     // At the end of a redraw the handles are drawn automatically.
     // The purpose is to avoid unnecessary flickering. -> This does not yet work, that's why sal_True!
-    void AdjustMarkHdl(); //HMHBOOL bRestraintPaint=sal_True);
+    void AdjustMarkHdl(SfxViewShell* pOtherShell = nullptr); //HMHBOOL bRestraintPaint=sal_True);
 
     const Rectangle& GetMarkedObjRect() const; // SnapRects of Objects, without line width
     Rectangle GetMarkedObjBoundRect() const;   // incl. line width, overlapping rags, ...

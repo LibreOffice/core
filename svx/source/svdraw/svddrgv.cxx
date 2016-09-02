@@ -558,7 +558,7 @@ bool SdrDragView::EndDragObj(bool bCopy)
 
         if (mbInsPolyPoint)
         {
-            SetMarkHandles();
+            SetMarkHandles(nullptr);
             mbInsPolyPoint=false;
             if( bUndo )
             {
@@ -605,7 +605,7 @@ void SdrDragView::BrkDragObj()
             mpInsPointUndo->Undo(); // delete inserted point again
             delete mpInsPointUndo;
             mpInsPointUndo=nullptr;
-            SetMarkHandles();
+            SetMarkHandles(nullptr);
             mbInsPolyPoint=false;
         }
 
@@ -874,12 +874,12 @@ bool SdrDragView::IsOrthoDesired() const
     return false;
 }
 
-void SdrDragView::SetMarkHandles()
+void SdrDragView::SetMarkHandles(SfxViewShell* pOtherShell)
 {
     if( mpDragHdl )
         mpDragHdl = nullptr;
 
-    SdrExchangeView::SetMarkHandles();
+    SdrExchangeView::SetMarkHandles(pOtherShell);
 }
 
 void SdrDragView::SetSolidDragging(bool bOn)

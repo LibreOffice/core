@@ -1409,7 +1409,7 @@ void E3dView::Start3DCreation()
         maRef2.Y() = nY2;
 
         // Turn on marks
-        SetMarkHandles();
+        SetMarkHandles(nullptr);
 
         //HMHif (bVis) ShowMarkHdl();
         if (AreObjectsMarked()) MarkListHasChanged();

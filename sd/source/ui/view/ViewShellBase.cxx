@@ -90,6 +90,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include "fubullet.hxx"
+#include "drawview.hxx"
 
 using namespace sd;
 #define ViewShellBase
@@ -1031,6 +1032,24 @@ int ViewShellBase::getPart() const
     }
 
     return 0;
+}
+
+void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const
+{
+    ViewShell* pThisShell = framework::FrameworkHelper::Instance(*const_cast<ViewShellBase*>(this))->GetViewShell(FrameworkHelper::msCenterPaneURL).get();
+
+    DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pThisShell);
+    if (!pDrawViewShell)
+        return;
+
+    if (this == pOtherShell)
+        return;
+
+    DrawView* pDrawView = pDrawViewShell->GetDrawView();
+    if (!pDrawView)
+        return;
+
+    pDrawView->AdjustMarkHdl(pOtherShell);
 }
 
 //===== ViewShellBase::Implementation =========================================

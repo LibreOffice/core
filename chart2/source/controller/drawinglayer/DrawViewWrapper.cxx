@@ -164,12 +164,12 @@ SdrPageView* DrawViewWrapper::GetPageView() const
     return pSdrPageView;
 };
 
-void DrawViewWrapper::SetMarkHandles()
+void DrawViewWrapper::SetMarkHandles(SfxViewShell* pOtherShell)
 {
     if( m_pMarkHandleProvider && m_pMarkHandleProvider->getMarkHandles( maHdlList ) )
         return;
     else
-        SdrView::SetMarkHandles();
+        SdrView::SetMarkHandles(pOtherShell);
 }
 
 SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
