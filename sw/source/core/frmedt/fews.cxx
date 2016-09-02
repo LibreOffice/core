@@ -18,6 +18,7 @@
  */
 
 #include <svx/svdobj.hxx>
+#include <comphelper/lok.hxx>
 #include <init.hxx>
 #include <fesh.hxx>
 #include <pagefrm.hxx>
@@ -285,7 +286,8 @@ void SwFEShell::ShellGetFocus()
 
     if ( HasDrawView() )
     {
-        Imp()->GetDrawView()->showMarkHandles();
+        if (!comphelper::LibreOfficeKit::isActive())
+            Imp()->GetDrawView()->showMarkHandles();
         if ( Imp()->GetDrawView()->AreObjectsMarked() )
             FrameNotify( this, FLY_DRAG_START );
     }
@@ -297,7 +299,8 @@ void SwFEShell::ShellLoseFocus()
 
     if ( HasDrawView() && Imp()->GetDrawView()->AreObjectsMarked() )
     {
-        Imp()->GetDrawView()->hideMarkHandles();
+        if (!comphelper::LibreOfficeKit::isActive())
+            Imp()->GetDrawView()->hideMarkHandles();
         FrameNotify( this, FLY_DRAG_END );
     }
 }
