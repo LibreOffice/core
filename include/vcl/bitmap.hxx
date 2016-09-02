@@ -247,6 +247,7 @@ public:
     virtual                 ~Bitmap();
 
     Bitmap&                 operator=( const Bitmap& rBitmap );
+    Bitmap&                 operator=( Bitmap&& rBitmap );
     inline bool             operator!() const;
     inline bool             operator==( const Bitmap& rBitmap ) const;
     inline bool             operator!=( const Bitmap& rBitmap ) const;

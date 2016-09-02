@@ -230,6 +230,15 @@ Bitmap& Bitmap::operator=( const Bitmap& rBitmap )
     return *this;
 }
 
+Bitmap& Bitmap::operator=( Bitmap&& rBitmap )
+{
+    maPrefSize = std::move(rBitmap.maPrefSize);
+    maPrefMapMode = std::move(rBitmap.maPrefMapMode);
+    mxImpBmp = std::move(rBitmap.mxImpBmp);
+
+    return *this;
+}
+
 bool Bitmap::IsEqual( const Bitmap& rBmp ) const
 {
     return(IsSameInstance(rBmp) || // Includes both are nullptr
