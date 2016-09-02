@@ -65,6 +65,7 @@ public:
     void                SetBuiltInFontFlag(bool);
 
     FontMetric&         operator=( const FontMetric& rMetric );
+    FontMetric&         operator=( FontMetric&& rMetric );
     bool                operator==( const FontMetric& rMetric ) const;
     bool                operator!=( const FontMetric& rMetric ) const
                             { return !operator==( rMetric ); }
