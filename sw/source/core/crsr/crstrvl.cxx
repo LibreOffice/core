@@ -1429,16 +1429,25 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                         }
                         if( bRet )
                         {
-                            rContentAtPos.sStr = pTextNd->GetExpandText(
-                                pTextAttr->GetStart(),
-                                *pTextAttr->GetEnd() - pTextAttr->GetStart() );
+                            const sal_Int32 nSt = pTextAttr->GetStart();
+                            const sal_Int32 nEnd = *pTextAttr->End();
+
+                            rContentAtPos.sStr = pTextNd->GetExpandText(nSt, nEnd-nSt);
 
                             rContentAtPos.aFnd.pAttr = &pTextAttr->GetAttr();
                             rContentAtPos.eContentAtPos = SwContentAtPos::SW_INETATTR;
                             rContentAtPos.pFndTextAttr = pTextAttr;
 
                             if( pFieldRect && nullptr != ( pFrame = pTextNd->getLayoutFrame( GetLayout(), &aPt ) ) )
-                                pFrame->GetCharRect( *pFieldRect, aPos, &aTmpState );
+                            {
+                                SwRect aStart;
+                                SwPosition aStartPos(*pTextNd, nSt);
+                                pFrame->GetCharRect(aStart, aStartPos, &aTmpState);
+                                SwRect aEnd;
+                                SwPosition aEndPos(*pTextNd, nEnd);
+                                pFrame->GetCharRect(aEnd, aEndPos, &aTmpState);
+                                *pFieldRect = aStart.Union(aEnd);
+                            }
                         }
                     }
                 }
