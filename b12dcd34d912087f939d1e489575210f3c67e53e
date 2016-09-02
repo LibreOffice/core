@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6895a0_39f52f83",
+        "filename": "animations/source/animcore/animcore.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-02T15:34:44Z",
+      "side": 1,
+      "message": "the \"message\" here doesn\u0027t really tell us anything we don\u0027t know already",
+      "revId": "b12dcd34d912087f939d1e489575210f3c67e53e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6895a0_f902d76e",
+        "filename": "animations/source/animcore/animcore.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-02T15:34:44Z",
+      "side": 1,
+      "message": "the \"animations\" log area does not exist in log-areas.dox... actually the animations module is very small so no need for \".animcore\", a single \"animations\" is enough",
+      "revId": "b12dcd34d912087f939d1e489575210f3c67e53e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6895a0_19f86b7c",
+        "filename": "basegfx/source/polygon/b2dsvgpolypolygon.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-02T15:34:44Z",
+      "side": 1,
+      "message": "http://ci.libreoffice.org/job/lo_gerrit/1069/Config\u003dlinux_clang_dbgutil_64/console\n\nit turns out that \"basegfx.polygon\" does not exist yet, only \"polygon\"\n\nsee include/sal/log-areas.dox\n\nso please add it there",
+      "revId": "b12dcd34d912087f939d1e489575210f3c67e53e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
