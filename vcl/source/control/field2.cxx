@@ -2606,41 +2606,41 @@ void TimeField::SetExtFormat( ExtTimeFieldFormat eFormat )
 {
     switch ( eFormat )
     {
-        case EXTTIMEF_24H_SHORT:
+        case ExtTimeFieldFormat::Short24H:
         {
             SetTimeFormat( TimeFormat::Hour24 );
             SetDuration( false );
             SetFormat( TimeFieldFormat::F_NONE );
         }
         break;
-        case EXTTIMEF_24H_LONG:
+        case ExtTimeFieldFormat::Long24H:
         {
             SetTimeFormat( TimeFormat::Hour24 );
             SetDuration( false );
             SetFormat( TimeFieldFormat::F_SEC );
         }
         break;
-        case EXTTIMEF_12H_SHORT:
+        case ExtTimeFieldFormat::Short12H:
         {
             SetTimeFormat( TimeFormat::Hour12 );
             SetDuration( false );
             SetFormat( TimeFieldFormat::F_NONE );
         }
         break;
-        case EXTTIMEF_12H_LONG:
+        case ExtTimeFieldFormat::Long12H:
         {
             SetTimeFormat( TimeFormat::Hour12 );
             SetDuration( false );
             SetFormat( TimeFieldFormat::F_SEC );
         }
         break;
-        case EXTTIMEF_DURATION_SHORT:
+        case ExtTimeFieldFormat::ShortDuration:
         {
             SetDuration( true );
             SetFormat( TimeFieldFormat::F_NONE );
         }
         break;
-        case EXTTIMEF_DURATION_LONG:
+        case ExtTimeFieldFormat::LongDuration:
         {
             SetDuration( true );
             SetFormat( TimeFieldFormat::F_SEC );

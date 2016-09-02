@@ -134,7 +134,7 @@ OfaMemoryOptionsPage::OfaMemoryOptionsPage(vcl::Window* pParent, const SfxItemSe
     m_pQuickStarterFrame->Hide();
 #endif
 
-    m_pTfGraphicObjectTime->SetExtFormat( EXTTIMEF_24H_SHORT );
+    m_pTfGraphicObjectTime->SetExtFormat( ExtTimeFieldFormat::Short24H );
 
     SetExchangeSupport();
 

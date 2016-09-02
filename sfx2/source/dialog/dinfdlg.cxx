@@ -1415,7 +1415,7 @@ CustomPropertyLine::CustomPropertyLine( vcl::Window* pParent ) :
     m_bTypeLostFocus( false )
 
 {
-    m_aTimeField->SetExtFormat( EXTTIMEF_24H_LONG );
+    m_aTimeField->SetExtFormat( ExtTimeFieldFormat::Long24H );
     m_aDateField->SetExtDateFormat( ExtDateFieldFormat::SystemShortYYYY );
 
     m_aRemoveButton->SetModeImage(Image(SfxResId(SFX_IMG_PROPERTY_REMOVE)));

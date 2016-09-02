@@ -24,9 +24,12 @@
 #include <sal/types.h>
 #include <tools/fontenum.hxx>
 
-enum ExtTimeFieldFormat { EXTTIMEF_24H_SHORT, EXTTIMEF_24H_LONG,
-                          EXTTIMEF_12H_SHORT, EXTTIMEF_12H_LONG,
-                          EXTTIMEF_DURATION_SHORT, EXTTIMEF_DURATION_LONG };
+enum class ExtTimeFieldFormat
+{
+    Short24H, Long24H,
+    Short12H, Long12H,
+    ShortDuration, LongDuration
+};
 
 enum class ExtDateFieldFormat
 {
