@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "da6895a0_79b6c73e",
+        "filename": "accessibility/source/extended/textwindowaccessibility.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2016-09-02T09:15:02Z",
+      "side": 1,
+      "message": "Also, if we use \"assert\" what happens to the second and third arguments, namely: \"accessibility\" and \"called more than once\". Do we also omit them?",
+      "parentUuid": "da6895a0_b9785f91",
+      "revId": "b3f3a699c40c0cfb1a12fc58b9ae30dbafa378a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_ee62f915",
         "filename": "accessibility/source/extended/textwindowaccessibility.cxx",
         "patchSetId": 4
@@ -54,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "da6895a0_39652fe1",
+        "filename": "accessibility/source/extended/textwindowaccessibility.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2016-09-02T09:15:02Z",
+      "side": 1,
+      "message": "Also, if we use \"assert\" what happens to the second and third arguments, namely: \"accessibility\" and \"called more than once\". Do we also omit them?",
+      "parentUuid": "fa6399be_ee62f915",
+      "revId": "b3f3a699c40c0cfb1a12fc58b9ae30dbafa378a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6399be_0e680df5",
         "filename": "accessibility/source/extended/textwindowaccessibility.cxx",
         "patchSetId": 4
@@ -65,6 +101,24 @@
       "writtenOn": "2016-09-01T09:42:45Z",
       "side": 1,
       "message": "you can simplify this, no need to further encode rEx.Message which is already OUString",
+      "revId": "b3f3a699c40c0cfb1a12fc58b9ae30dbafa378a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6895a0_19686bba",
+        "filename": "accessibility/source/extended/textwindowaccessibility.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2016-09-02T09:15:02Z",
+      "side": 1,
+      "message": "I did as you instructed but the compiler does not seem to like it (type mismatch errors). Any further suggestions?",
+      "parentUuid": "fa6399be_0e680df5",
       "revId": "b3f3a699c40c0cfb1a12fc58b9ae30dbafa378a4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
