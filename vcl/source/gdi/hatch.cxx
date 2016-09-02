@@ -24,7 +24,7 @@
 
 ImplHatch::ImplHatch() :
     maColor     ( COL_BLACK ),
-    meStyle     ( HATCH_SINGLE ),
+    meStyle     ( HatchStyle::Single ),
     mnDistance  ( 1 ),
     mnAngle     ( 0 )
 {
@@ -114,7 +114,7 @@ SvStream& WriteHatch( SvStream& rOStm, const Hatch& rHatch )
 {
     VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
 
-    rOStm.WriteUInt16( rHatch.mpImplHatch->meStyle );
+    rOStm.WriteUInt16( (sal_uInt16)rHatch.mpImplHatch->meStyle );
     WriteColor( rOStm, rHatch.mpImplHatch->maColor );
     rOStm.WriteInt32( rHatch.mpImplHatch->mnDistance ).WriteUInt16( rHatch.mpImplHatch->mnAngle );
 

@@ -140,7 +140,7 @@ void setupMethodStubs( functor_vector_type& res )
 
     const Image       aImage( aBitmapEx );
     const Gradient    aGradient(GradientStyle_ELLIPTICAL,aBlackColor,aWhiteColor);
-    const Hatch       aHatch(HatchStyle_TRIPLE,aBlackColor,4,450);
+    const Hatch       aHatch(HatchStyle::Triple,aBlackColor,4,450);
     const Wallpaper   aWallpaper( aWhiteColor );
 
     GDIMetaFile       aMtf;

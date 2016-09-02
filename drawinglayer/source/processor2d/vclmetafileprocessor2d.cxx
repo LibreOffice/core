@@ -1537,9 +1537,9 @@ namespace drawinglayer
                     // process(rCandidate.get2DDecomposition(getViewInformation2D()));
                     const ::tools::PolyPolygon aToolsPolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(aLocalPolyPolygon));
                     const HatchStyle aHatchStyle(
-                        attribute::HatchStyle::Single == rFillHatchAttribute.getStyle() ? HATCH_SINGLE :
-                        attribute::HatchStyle::Double == rFillHatchAttribute.getStyle() ? HATCH_DOUBLE :
-                        HATCH_TRIPLE);
+                        attribute::HatchStyle::Single == rFillHatchAttribute.getStyle() ? HatchStyle::Single :
+                        attribute::HatchStyle::Double == rFillHatchAttribute.getStyle() ? HatchStyle::Double :
+                        HatchStyle::Triple);
 
                     mpOutputDevice->DrawHatch(aToolsPolyPolygon,
                         Hatch(aHatchStyle,

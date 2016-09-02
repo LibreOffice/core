@@ -904,17 +904,17 @@ namespace
 
         switch(rHatch.GetStyle())
         {
-            default : // case HATCH_SINGLE :
+            default : // case HatchStyle::Single :
             {
                 aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
                 break;
             }
-            case HATCH_DOUBLE :
+            case HatchStyle::Double :
             {
                 aHatchStyle = drawinglayer::attribute::HatchStyle::Double;
                 break;
             }
-            case HATCH_TRIPLE :
+            case HatchStyle::Triple :
             {
                 aHatchStyle = drawinglayer::attribute::HatchStyle::Triple;
                 break;

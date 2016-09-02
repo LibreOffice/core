@@ -45,17 +45,12 @@ enum GradientStyle
     GradientStyle_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
 
-// to avoid conflicts with enum's declared otherwise
-#define HATCH_SINGLE            HatchStyle_SINGLE
-#define HATCH_DOUBLE            HatchStyle_DOUBLE
-#define HATCH_TRIPLE            HatchStyle_TRIPLE
-
-enum HatchStyle
+enum class HatchStyle
 {
-    HATCH_SINGLE = 0,
-    HATCH_DOUBLE = 1,
-    HATCH_TRIPLE = 2,
-    HatchStyle_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
+    Single = 0,
+    Double = 1,
+    Triple = 2,
+    FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
 
 enum class LineStyle

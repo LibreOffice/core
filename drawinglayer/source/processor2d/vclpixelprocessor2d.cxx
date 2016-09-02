@@ -1122,7 +1122,7 @@ namespace drawinglayer
                         mpOutputDevice->SetLineColor(Color(aHatchColor));
 
                         // get hatch style
-                        HatchStyle eHatchStyle(HATCH_SINGLE);
+                        HatchStyle eHatchStyle(HatchStyle::Single);
 
                         switch(rFillHatchAttributes.getStyle())
                         {
@@ -1132,12 +1132,12 @@ namespace drawinglayer
                             }
                             case attribute::HatchStyle::Double :
                             {
-                                eHatchStyle = HATCH_DOUBLE;
+                                eHatchStyle = HatchStyle::Double;
                                 break;
                             }
                             case attribute::HatchStyle::Triple :
                             {
-                                eHatchStyle = HATCH_TRIPLE;
+                                eHatchStyle = HatchStyle::Triple;
                                 break;
                             }
                         }

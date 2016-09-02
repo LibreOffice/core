@@ -1131,13 +1131,13 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction& rAct )
 
             switch(rHatch.GetStyle())
             {
-                case HATCH_TRIPLE :
+                case HatchStyle::Triple :
                 {
                     eStyle = css::drawing::HatchStyle_TRIPLE;
                     break;
                 }
 
-                case HATCH_DOUBLE :
+                case HatchStyle::Double :
                 {
                     eStyle = css::drawing::HatchStyle_DOUBLE;
                     break;
