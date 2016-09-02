@@ -1114,7 +1114,6 @@ void SdTiledRenderingTest::testCreateViewGraphicSelection()
 
     // Load a document and register a callback.
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
-    pXImpressDocument->initializeForTiledRendering({});
     ViewCallback aView1;
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
 
@@ -1130,9 +1129,19 @@ void SdTiledRenderingTest::testCreateViewGraphicSelection()
     // Now create a new view.
     aView1.m_bGraphicSelectionInvalidated = false;
     SfxLokHelper::createView();
+    pXImpressDocument->initializeForTiledRendering({});
     // This failed, creating a new view affected the graphic selection of an
     // existing view.
     CPPUNIT_ASSERT(!aView1.m_bGraphicSelectionInvalidated);
+
+    // Check that when the first view has a shape selected and we register a
+    // callback on the second view, then it gets a "graphic view selection".
+    ViewCallback aView2;
+    aView2.m_bGraphicViewSelectionInvalidated = false;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    // This failed, the created new view had no "view selection" of the first
+    // view's selected shape.
+    CPPUNIT_ASSERT(aView2.m_bGraphicViewSelectionInvalidated);
 
     mxComponent->dispose();
     mxComponent.clear();

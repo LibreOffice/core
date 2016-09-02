@@ -67,7 +67,7 @@ private:
     SVX_DLLPRIVATE void ImpClearVars();
 
 protected:
-    virtual void SetMarkHandles() override;
+    virtual void SetMarkHandles(SfxViewShell* pOtherShell) override;
     void ShowDragObj();
     void HideDragObj();
     bool ImpBegInsObjPoint(bool bIdxZwang, sal_uInt32 nIdx, const Point& rPnt, bool bNewObj, OutputDevice* pOut);

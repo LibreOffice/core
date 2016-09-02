@@ -56,7 +56,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xChartModel );
 
     //fill list of selection handles 'aHdl'
-    virtual void SetMarkHandles() override;
+    virtual void SetMarkHandles(SfxViewShell* pOtherShell) override;
 
     SdrPageView*    GetPageView() const;
 
