@@ -162,6 +162,12 @@ JobSetup& JobSetup::operator=( const JobSetup& rJobSetup )
     return *this;
 }
 
+JobSetup& JobSetup::operator=( JobSetup&& rJobSetup )
+{
+    mpData = std::move(rJobSetup.mpData);
+    return *this;
+}
+
 bool ImplJobSetup::operator==( const ImplJobSetup& rImplJobSetup ) const
 {
     if ( mnSystem          == rImplJobSetup.mnSystem        &&
