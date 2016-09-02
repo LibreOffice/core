@@ -70,6 +70,7 @@ public:
     void testCursorViews();
     void testViewLock();
     void testUndoLimiting();
+    void testCreateViewGraphicSelection();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -95,6 +96,7 @@ public:
     CPPUNIT_TEST(testCursorViews);
     CPPUNIT_TEST(testViewLock);
     CPPUNIT_TEST(testUndoLimiting);
+    CPPUNIT_TEST(testCreateViewGraphicSelection);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1104,6 +1106,37 @@ void SdTiledRenderingTest::testUndoLimiting()
     pUndoManager->SetViewShell(&rViewShell2);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetUndoActionCount());
     pUndoManager->SetViewShell(nullptr);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testCreateViewGraphicSelection()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    // Load a document and register a callback.
+    SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
+    pXImpressDocument->initializeForTiledRendering({});
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+
+    // Select the only shape in the document and assert that the graphic selection is changed.
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(0);
+    SdrView* pView = pViewShell->GetView();
+    aView1.m_bGraphicSelectionInvalidated = false;
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    CPPUNIT_ASSERT(aView1.m_bGraphicSelectionInvalidated);
+
+    // Now create a new view.
+    aView1.m_bGraphicSelectionInvalidated = false;
+    SfxLokHelper::createView();
+    // This failed, creating a new view affected the graphic selection of an
+    // existing view.
+    CPPUNIT_ASSERT(!aView1.m_bGraphicSelectionInvalidated);
 
     mxComponent->dispose();
     mxComponent.clear();

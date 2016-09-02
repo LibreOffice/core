@@ -27,6 +27,8 @@
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 
+class SfxViewShell;
+
 // The following is not yet implemented, or just partially:
 enum class SdrSearchOptions
 {
@@ -437,6 +439,8 @@ public:
     // End point of the axis of reflextion
     const Point& GetRef2() const { return maRef1; }
     void SetRef2(const Point& rPt);
+    /// Get access to the view shell owning this draw view, if any.
+    virtual SfxViewShell* GetSfxViewShell() const;
 };
 
 
