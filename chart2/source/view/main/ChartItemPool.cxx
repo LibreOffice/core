@@ -190,17 +190,10 @@ ChartItemPool::ChartItemPool(const ChartItemPool& rPool):
 ChartItemPool::~ChartItemPool()
 {
     Delete();
+    // release and delete static pool default items
+    ReleaseDefaults(true);
 
     delete[] pItemInfos;
-
-    const sal_uInt16 nMax = SCHATTR_END - SCHATTR_START + 1;
-    for( sal_uInt16 i=0; i<nMax; ++i )
-    {
-        SetRefCount(*ppPoolDefaults[i], 0);
-        delete ppPoolDefaults[i];
-    }
-
-    delete[] ppPoolDefaults;
 }
 
 SfxItemPool* ChartItemPool::Clone() const
