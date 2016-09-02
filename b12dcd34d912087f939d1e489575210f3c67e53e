@@ -50,6 +50,24 @@
       "revId": "b12dcd34d912087f939d1e489575210f3c67e53e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6895a0_f939f742",
+        "filename": "basegfx/source/polygon/b2dsvgpolypolygon.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-02T15:37:40Z",
+      "side": 1,
+      "message": "i meant only \"basegfx\" of course, not \"polygon\"",
+      "parentUuid": "da6895a0_19f86b7c",
+      "revId": "b12dcd34d912087f939d1e489575210f3c67e53e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
