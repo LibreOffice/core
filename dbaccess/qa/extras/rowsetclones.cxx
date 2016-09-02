@@ -89,11 +89,11 @@ void RowSetClones::test()
     CPPUNIT_ASSERT(xResultSet->isBeforeFirst());
     CPPUNIT_ASSERT(xResultSet->next());
     CPPUNIT_ASSERT(xResultSet->isFirst());
-    CPPUNIT_ASSERT(xResultSet->getRow() == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xResultSet->getRow());
 
     uno::Reference< XRow > xRow(xResultSet, UNO_QUERY);
     CPPUNIT_ASSERT(xRow.is());
-    CPPUNIT_ASSERT(xRow->getInt(1) == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xRow->getInt(1));
 
     uno::Reference< XResultSetAccess > xResultSetAccess(xResultSet, UNO_QUERY);
     CPPUNIT_ASSERT(xResultSetAccess.is());
@@ -107,36 +107,36 @@ void RowSetClones::test()
     // and does not move its source.
     CPPUNIT_ASSERT(xResultSetClone->isFirst());
     CPPUNIT_ASSERT(xResultSet->isFirst());
-    CPPUNIT_ASSERT(xResultSet->getRow() == 1);
-    CPPUNIT_ASSERT(xResultSetClone->getRow() == 1);
-    CPPUNIT_ASSERT(xRow->getInt(1) == 1);
-    CPPUNIT_ASSERT(xRowClone->getInt(1) == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xResultSet->getRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xResultSetClone->getRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xRow->getInt(1));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xRowClone->getInt(1));
 
     // if we move the source, the clone does not move
     CPPUNIT_ASSERT(xResultSet->next());
     CPPUNIT_ASSERT(xResultSetClone->isFirst());
-    CPPUNIT_ASSERT(xResultSet->getRow() == 2);
-    CPPUNIT_ASSERT(xResultSetClone->getRow() == 1);
-    CPPUNIT_ASSERT(xRow->getInt(1) == 2);
-    CPPUNIT_ASSERT(xRowClone->getInt(1) == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xResultSet->getRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xResultSetClone->getRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xRow->getInt(1));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xRowClone->getInt(1));
 
     CPPUNIT_ASSERT(xResultSet->last());
     CPPUNIT_ASSERT(xResultSet->isLast());
     CPPUNIT_ASSERT(xResultSetClone->isFirst());
-    CPPUNIT_ASSERT(xRowClone->getInt(1) == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xRowClone->getInt(1));
 
     // and the other way round
     CPPUNIT_ASSERT(xResultSet->first());
     CPPUNIT_ASSERT(xResultSetClone->next());
     CPPUNIT_ASSERT(xResultSet->isFirst());
-    CPPUNIT_ASSERT(xResultSetClone->getRow() == 2);
-    CPPUNIT_ASSERT(xRowClone->getInt(1) == 2);
-    CPPUNIT_ASSERT(xRow->getInt(1) == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xResultSetClone->getRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xRowClone->getInt(1));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xRow->getInt(1));
 
     CPPUNIT_ASSERT(xResultSetClone->last());
     CPPUNIT_ASSERT(xResultSetClone->isLast());
     CPPUNIT_ASSERT(xResultSet->isFirst());
-    CPPUNIT_ASSERT(xRow->getInt(1) == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xRow->getInt(1));
 
     closeDocument(uno::Reference<lang::XComponent>(xDocument, uno::UNO_QUERY));
 }
