@@ -2378,7 +2378,7 @@ bool appendToBlock(
                     if (aRes.meType == sc::FormulaResultValue::String)
                     {
                         rCxt.ensureStrArray(rColArray, nArrayLen);
-                        (*rColArray.mpStrArray)[nPos] = aRes.maString.getDataIgnoreCase();
+                        (*rColArray.mpStrArray)[nPos] = aRes.maString.getData();
                     }
                     else
                     {
@@ -2516,7 +2516,7 @@ copyFirstFormulaBlock(
                 pStrArray = rCxt.m_StrArrays.back().get();
             }
 
-            (*pStrArray)[nPos] = aRes.maString.getDataIgnoreCase();
+            (*pStrArray)[nPos] = aRes.maString.getData();
         }
     }
 
