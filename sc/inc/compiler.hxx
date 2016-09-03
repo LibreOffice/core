@@ -135,8 +135,8 @@ public:
         short        nJump[ FORMULA_MAXJUMPCOUNT + 1 ];     // If/Chose token
     };
 
-                //! members not initialized
-                ScRawToken() {}
+    // coverity[uninit_member] - members deliberately not initialized
+    ScRawToken() {}
 private:
                 ~ScRawToken() {}                //! only delete via Delete()
 public:
