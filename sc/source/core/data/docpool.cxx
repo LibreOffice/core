@@ -379,14 +379,9 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool)
 ScDocumentPool::~ScDocumentPool()
 {
     Delete();
+    // release and delete static pool default items
+    ReleaseDefaults(true);
 
-    for ( sal_uInt16 i=0; i < ATTR_ENDINDEX-ATTR_STARTINDEX+1; i++ )
-    {
-        SetRefCount( *ppPoolDefaults[i], 0 );
-        delete ppPoolDefaults[i];
-    }
-
-    delete[] ppPoolDefaults;
     SfxItemPool::Free(pSecondary);
 }
 
