@@ -1050,7 +1050,7 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
                     {
                         SAL_INFO( "sw.pageframe", "CheckPageDescs phys: " << pPage->GetPhyPageNum()
                                   << " c: 1+3 - skip next page of p: " << pPage );
-                        if (pPage->GetPageDesc() != pPrevPage->GetPageDesc())
+                        if (pPrevPage && pPage->GetPageDesc() != pPrevPage->GetPageDesc())
                             pPage->SetPageDesc( pPrevPage->GetPageDesc(), nullptr );
                         // We can skip the next page, as all checks were already done!
                         pPage = static_cast<SwPageFrame*>(pNextPage->GetNext());
