@@ -27,7 +27,6 @@ namespace chart
 class ChartItemPool : public SfxItemPool
 {
 private:
-    SfxPoolItem**   ppPoolDefaults;
     SfxItemInfo*    pItemInfos;
 
 public:

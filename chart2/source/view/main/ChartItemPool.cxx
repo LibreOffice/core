@@ -42,7 +42,7 @@ ChartItemPool::ChartItemPool():
     /**************************************************************************
     * PoolDefaults
     **************************************************************************/
-    ppPoolDefaults = new SfxPoolItem*[SCHATTR_END - SCHATTR_START + 1];
+    SfxPoolItem** ppPoolDefaults = new SfxPoolItem*[SCHATTR_END - SCHATTR_START + 1];
 
     ppPoolDefaults[SCHATTR_DATADESCR_SHOW_NUMBER    - SCHATTR_START] = new SfxBoolItem(SCHATTR_DATADESCR_SHOW_NUMBER);
     ppPoolDefaults[SCHATTR_DATADESCR_SHOW_PERCENTAGE- SCHATTR_START] = new SfxBoolItem(SCHATTR_DATADESCR_SHOW_PERCENTAGE);
@@ -183,24 +183,17 @@ ChartItemPool::ChartItemPool():
 }
 
 ChartItemPool::ChartItemPool(const ChartItemPool& rPool):
-    SfxItemPool(rPool), ppPoolDefaults(nullptr), pItemInfos(nullptr)
+    SfxItemPool(rPool), pItemInfos(nullptr)
 {
 }
 
 ChartItemPool::~ChartItemPool()
 {
     Delete();
+    // release and delete static pool default items
+    ReleaseDefaults(true);
 
     delete[] pItemInfos;
-
-    const sal_uInt16 nMax = SCHATTR_END - SCHATTR_START + 1;
-    for( sal_uInt16 i=0; i<nMax; ++i )
-    {
-        SetRefCount(*ppPoolDefaults[i], 0);
-        delete ppPoolDefaults[i];
-    }
-
-    delete[] ppPoolDefaults;
 }
 
 SfxItemPool* ChartItemPool::Clone() const
