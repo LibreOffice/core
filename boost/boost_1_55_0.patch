@@ -326,3 +326,24 @@ diff -ur misc/boost_1_55_0/boost/unordered/detail/unique.hpp misc/build/boost_1_
          }
  
          ////////////////////////////////////////////////////////////////////////
+diff -ur misc/boost_1_55_0/boost/config/compiler/gcc.hpp misc/build/boost_1_55_0/boost/config/compiler/gcc.hpp
+--- misc/boost_1_55_0/boost/config/compiler/gcc.hpp	2013-09-17 09:55:51.000000000 -0700
++++ misc/build/boost_1_55_0/boost/config/compiler/gcc.hpp	2016-09-02 19:15:48.775411000 -0700
+@@ -137,7 +137,7 @@
+ 
+ // C++0x features in 4.3.n and later
+ //
+-#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 2)) && defined(__GXX_EXPERIMENTAL_CXX0X__)
++#if ((__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 2)) && defined(__GXX_EXPERIMENTAL_CXX0X__)) || (__GNUC__ > 6) || (__GNUC__ == 6 && __GNUC_MINOR__ > 0)
+ // C++0x features are only enabled when -std=c++0x or -std=gnu++0x are
+ // passed on the command line, which in turn defines
+ // __GXX_EXPERIMENTAL_CXX0X__.
+@@ -153,7 +153,7 @@
+ 
+ // Variadic templates compiler:
+ //   http://www.generic-programming.org/~dgregor/cpp/variadic-templates.html
+-#  if defined(__VARIADIC_TEMPLATES) || (__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 4) && defined(__GXX_EXPERIMENTAL_CXX0X__))
++#  if defined(__VARIADIC_TEMPLATES) || ((__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 2)) && defined(__GXX_EXPERIMENTAL_CXX0X__)) || (__GNUC__ > 6) || (__GNUC__ == 6 && __GNUC_MINOR__ > 0)
+ #    define BOOST_HAS_VARIADIC_TMPL
+ #  else
+ #    define BOOST_NO_CXX11_VARIADIC_TEMPLATES
