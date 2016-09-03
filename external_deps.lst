@@ -234,9 +234,9 @@ if (SYSTEM_CURL != YES)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (WITH_CATA_FONTS == YES)
-    MD5 = 59eaca5acf5c7c8212e92778e3e01f32
-    name = dejavu-fonts-ttf-2.35.tar.bz2
-    URL1 = http://sourceforge.net/projects/dejavu/files/dejavu/2.35/$(name)/download
+    MD5 = d0efec10b9f110a32e9b8f796e21782c
+    name = dejavu-fonts-ttf-2.37.tar.bz2
+    URL1 = http://sourceforge.net/projects/dejavu/files/dejavu/2.37/$(name)/download
     # URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (WITH_CATA_FONTS==YES)
